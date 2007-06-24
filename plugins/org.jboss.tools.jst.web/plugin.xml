@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+   <extension point="org.jboss.tools.common.model.meta">
+      <meta path="meta/strutstld.meta">
+      </meta>
+      <meta path="meta/strutstld12.meta">
+      </meta>
+      <meta path="meta/tld20.meta">
+      </meta>
+      <meta path="meta/strutswebapp.meta">
+      </meta>
+      <meta path="meta/web.meta">
+      </meta>
+      <meta path="meta/webapp24.meta">
+      </meta>
+      <meta path="meta/web-template.meta">
+      </meta>
+   </extension>
+   <extension point="org.jboss.tools.common.model.keys">
+      <keys path="help/keys-web.properties">
+      </keys>
+   </extension>
+   <extension point="org.jboss.tools.common.model.specialwizard">
+      <specialwizard class="org.jboss.tools.jst.web.project.AddServletSupportWizard" id="org.jboss.tools.jst.web.project.AddServletSupportWizard">
+      </specialwizard>
+   </extension>
+   <extension point="org.eclipse.jdt.core.classpathVariableInitializer">
+      <classpathVariableInitializer class="org.jboss.tools.jst.web.RedHatVariableInitializer" variable="REDHAT_LIB_HOME">
+      </classpathVariableInitializer>
+   </extension>
+
+   <extension point="org.jboss.tools.common.model.jspAdopt">
+      <jspAdopt class="org.jboss.tools.jst.web.tld.model.handlers.JSPAdopt"/>
+      <jspAdopt class="org.jboss.tools.jst.web.model.handlers.JSPAdopt"/>
+   </extension>
+   <extension point="org.jboss.tools.common.model.paletteAdopt">
+      <paletteAdopt class="org.jboss.tools.jst.web.tld.model.handlers.PaletteAdopt"/>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ltk.core.refactoring.renameParticipants">
+      <renameParticipant
+            class="org.jboss.tools.jst.web.refactoring.WebRenameTLDParticipant"
+            id="org.jboss.tools.jst.web.refactoring.WebRenameTLDParticipant"
+            name="web-RenameTLDParticipant">
+         <enablement>
+            <with variable="affectedNatures">
+               <iterate operator="or">
+                  <equals value="org.eclipse.wst.common.modulecore.ModuleCoreNature"/>
+               </iterate>
+            </with>
+            <with variable="element">
+                <or>
+                   <instanceof value="org.eclipse.core.resources.IFile"/>
+                   <instanceof value="org.jboss.tools.common.model.filesystems.impl.FileAnyImpl"/>
+                </or>
+            </with>
+         </enablement>
+      </renameParticipant>
+
+      <renameParticipant
+            class="org.jboss.tools.jst.web.refactoring.WebRenamePagePagesParticipant"
+            id="org.jboss.tools.jst.web.refactoring.WebRenamePagePagesParticipant"
+            name="web-RenamePageParticipant">
+         <enablement>
+            <with variable="affectedNatures">
+               <iterate operator="or">
+                  <equals value="org.eclipse.wst.common.modulecore.ModuleCoreNature"/>
+               </iterate>
+            </with>
+            <with variable="element">
+                <or>
+                   <instanceof value="org.eclipse.core.resources.IFile"/>
+                   <instanceof value="org.jboss.tools.common.model.filesystems.impl.FileAnyImpl"/>
+                </or>
+            </with>
+         </enablement>
+      </renameParticipant>
+
+      <renameParticipant
+            class="org.jboss.tools.jst.web.refactoring.WebRenameFolderPagesParticipant"
+            id="org.jboss.tools.jst.web.refactoring.WebRenameFolderPagesParticipant"
+            name="web-RenameFolderParticipant">
+         <enablement>
+            <with variable="affectedNatures">
+               <iterate operator="or">
+                  <equals value="org.eclipse.wst.common.modulecore.ModuleCoreNature"/>
+               </iterate>
+            </with>
+            <with variable="element">
+                <or>
+                   <instanceof value="org.eclipse.core.resources.IFolder"/>
+<!-- TODO-3.3: why different for 3.3 ? -->
+                   <instanceof value="org.jboss.tools.common.model.filesystems.impl.FolderImpl"/>
+                </or>
+            </with>
+         </enablement>
+      </renameParticipant>
+
+   </extension>
+
+   <extension point="org.jboss.tools.common.model.classes">
+		<xclass id="org.jboss.tools.jst.web.model.XMLEntityRecognizer"
+			class="org.jboss.tools.jst.web.model.XMLEntityRecognizer"/>
+		<xclass id="org.jboss.tools.jst.web.model.handlers.AutolayoutWebProcessHandler"
+			class="org.jboss.tools.jst.web.model.handlers.AutolayoutWebProcessHandler"/>
+		<xclass id="org.jboss.tools.jst.web.model.handlers.CreateJSPFileSupport"
+			class="org.jboss.tools.jst.web.model.handlers.CreateJSPFileSupport"/>
+		<xclass id="org.jboss.tools.jst.web.model.handlers.DeleteTLDHandler"
+			class="org.jboss.tools.jst.web.model.handlers.DeleteTLDHandler"/>
+		<xclass id="org.jboss.tools.jst.web.model.handlers.FindItemOnDiagramHandler"
+			class="org.jboss.tools.jst.web.model.handlers.FindItemOnDiagramHandler"/>
+		<xclass id="org.jboss.tools.jst.web.model.handlers.FindReferringItemHandler"
+			class="org.jboss.tools.jst.web.model.handlers.FindReferringItemHandler"/>
+		<xclass id="org.jboss.tools.jst.web.model.handlers.JSPAdopt"
+			class="org.jboss.tools.jst.web.model.handlers.JSPAdopt"/>
+		<xclass id="org.jboss.tools.jst.web.model.handlers.JumpToTransitionTargetHandler"
+			class="org.jboss.tools.jst.web.model.handlers.JumpToTransitionTargetHandler"/>
+		<xclass id="org.jboss.tools.jst.web.model.handlers.RegisterInServerXmlHandler"
+			class="org.jboss.tools.jst.web.model.handlers.RegisterInServerXmlHandler"/>
+		<xclass id="org.jboss.tools.jst.web.model.handlers.RunOnServerHandler"
+			class="org.jboss.tools.jst.web.model.handlers.RunOnServerHandler"/>
+		<xclass id="org.jboss.tools.jst.web.model.handlers.ServerXmlRedirectHandler"
+			class="org.jboss.tools.jst.web.model.handlers.ServerXmlRedirectHandler"/>
+		<xclass id="org.jboss.tools.jst.web.model.handlers.ShowHideCommentsHandler"
+			class="org.jboss.tools.jst.web.model.handlers.ShowHideCommentsHandler"/>
+		<xclass id="org.jboss.tools.jst.web.model.handlers.UnregisterInServerXmlHandler"
+			class="org.jboss.tools.jst.web.model.handlers.UnregisterInServerXmlHandler"/>
+		<xclass id="org.jboss.tools.jst.web.model.handlers.WebRedirectHandler"
+			class="org.jboss.tools.jst.web.model.handlers.WebRedirectHandler"/>
+		<xclass id="org.jboss.tools.jst.web.model.pv.handler.ProjectsResourceRedirectHandler"
+			class="org.jboss.tools.jst.web.model.pv.handler.ProjectsResourceRedirectHandler"/>
+		<xclass id="org.jboss.tools.jst.web.model.pv.handler.ProjectsTaglibsRedirectHandler"
+			class="org.jboss.tools.jst.web.model.pv.handler.ProjectsTaglibsRedirectHandler"/>
+		<xclass id="org.jboss.tools.jst.web.model.tree.AllTldsTree"
+			class="org.jboss.tools.jst.web.model.tree.AllTldsTree"/>
+		<xclass id="org.jboss.tools.jst.web.model.tree.AllWebPagesTree"
+			class="org.jboss.tools.jst.web.model.tree.AllWebPagesTree"/>
+		<xclass id="org.jboss.tools.jst.web.model.tree.WebPagesTree"
+			class="org.jboss.tools.jst.web.model.tree.WebPagesTree"/>
+		<xclass id="org.jboss.tools.jst.web.project.AddServletSupportWizard"
+			class="org.jboss.tools.jst.web.project.AddServletSupportWizard"/>
+		<xclass id="org.jboss.tools.jst.web.project.FileSystemsRenameListenerContribution"
+			class="org.jboss.tools.jst.web.project.FileSystemsRenameListenerContribution"/>
+		<xclass id="org.jboss.tools.jst.web.project.WebConfigImpl"
+			class="org.jboss.tools.jst.web.project.WebConfigImpl"/>
+		<xclass id="org.jboss.tools.jst.web.project.WebModuleImpl"
+			class="org.jboss.tools.jst.web.project.WebModuleImpl"/>
+		<xclass id="org.jboss.tools.jst.web.project.handlers.CreateTemplateFromPageHandler"
+			class="org.jboss.tools.jst.web.project.handlers.CreateTemplateFromPageHandler"/>
+		<xclass id="org.jboss.tools.jst.web.project.handlers.CreateTemplateFromProjectHandler"
+			class="org.jboss.tools.jst.web.project.handlers.CreateTemplateFromProjectHandler"/>
+		<xclass id="org.jboss.tools.jst.web.project.handlers.CreateWebPrjHandler"
+			class="org.jboss.tools.jst.web.project.handlers.CreateWebPrjHandler"/>
+		<xclass id="org.jboss.tools.jst.web.project.list.WebPromptingProvider"
+			class="org.jboss.tools.jst.web.project.list.WebPromptingProvider"/>
+
+		<xclass id="org.jboss.tools.jst.web.tld.WebProjectFactoryImpl"
+			class="org.jboss.tools.jst.web.tld.WebProjectFactoryImpl"/>
+		<xclass id="org.jboss.tools.jst.web.tld.model.FileSystemsTreeConstraint"
+			class="org.jboss.tools.jst.web.tld.model.FileSystemsTreeConstraint"/>
+		<xclass id="org.jboss.tools.jst.web.tld.model.FileTLD12Impl"
+			class="org.jboss.tools.jst.web.tld.model.FileTLD12Impl"/>
+		<xclass id="org.jboss.tools.jst.web.tld.model.FileTLD12Loader"
+			class="org.jboss.tools.jst.web.tld.model.FileTLD12Loader"/>
+		<xclass id="org.jboss.tools.jst.web.tld.model.FileTLD20Loader"
+			class="org.jboss.tools.jst.web.tld.model.FileTLD20Loader"/>
+		<xclass id="org.jboss.tools.jst.web.tld.model.FileTLD21Loader"
+			class="org.jboss.tools.jst.web.tld.model.FileTLD21Loader"/>
+		<xclass id="org.jboss.tools.jst.web.tld.model.FileTLDImpl"
+			class="org.jboss.tools.jst.web.tld.model.FileTLDImpl"/>
+		<xclass id="org.jboss.tools.jst.web.tld.model.FileTLDLoader"
+			class="org.jboss.tools.jst.web.tld.model.FileTLDLoader"/>
+		<xclass id="org.jboss.tools.jst.web.tld.model.FileTLDRecognizer"
+			class="org.jboss.tools.jst.web.tld.model.FileTLDRecognizer"/>
+		<xclass id="org.jboss.tools.jst.web.tld.model.TLDAttribute21Impl"
+			class="org.jboss.tools.jst.web.tld.model.TLDAttribute21Impl"/>
+		<xclass id="org.jboss.tools.jst.web.tld.model.TLDValidatorImpl"
+			class="org.jboss.tools.jst.web.tld.model.TLDValidatorImpl"/>
+		<xclass id="org.jboss.tools.jst.web.tld.model.TLDVariableImpl"
+			class="org.jboss.tools.jst.web.tld.model.TLDVariableImpl"/>
+		<xclass id="org.jboss.tools.jst.web.tld.model.handlers.CreateInCollapsedHandler"
+			class="org.jboss.tools.jst.web.tld.model.handlers.CreateInCollapsedHandler"/>
+		<xclass id="org.jboss.tools.jst.web.tld.model.handlers.DeleteValidatorHandler"
+			class="org.jboss.tools.jst.web.tld.model.handlers.DeleteValidatorHandler"/>
+		<xclass id="org.jboss.tools.jst.web.tld.model.handlers.ExpandTLDHandler"
+			class="org.jboss.tools.jst.web.tld.model.handlers.ExpandTLDHandler"/>
+		<xclass id="org.jboss.tools.jst.web.tld.model.handlers.JSPAdopt"
+			class="org.jboss.tools.jst.web.tld.model.handlers.JSPAdopt"/>
+		<xclass id="org.jboss.tools.jst.web.tld.model.handlers.PaletteAdopt"
+			class="org.jboss.tools.jst.web.tld.model.handlers.PaletteAdopt"/>
+		<xclass id="org.jboss.tools.jst.web.tld.model.handlers.ValidateTLDHandler"
+			class="org.jboss.tools.jst.web.tld.model.handlers.ValidateTLDHandler"/>
+		<xclass id="org.jboss.tools.jst.web.tomcat.ResetFileDateHandler"
+			class="org.jboss.tools.jst.web.tomcat.ResetFileDateHandler"/>
+
+		<xclass id="org.jboss.tools.jst.web.webapp.model.FileWebApp24Loader"
+			class="org.jboss.tools.jst.web.webapp.model.FileWebApp24Loader"/>
+		<xclass id="org.jboss.tools.jst.web.webapp.model.FileWebAppImpl"
+			class="org.jboss.tools.jst.web.webapp.model.FileWebAppImpl"/>
+		<xclass id="org.jboss.tools.jst.web.webapp.model.FileWebAppLoader"
+			class="org.jboss.tools.jst.web.webapp.model.FileWebAppLoader"/>
+		<xclass id="org.jboss.tools.jst.web.webapp.model.FileWebAppRecognizer"
+			class="org.jboss.tools.jst.web.webapp.model.FileWebAppRecognizer"/>
+		<xclass id="org.jboss.tools.jst.web.webapp.model.WebAppAuthConstraintImpl"
+			class="org.jboss.tools.jst.web.webapp.model.WebAppAuthConstraintImpl"/>
+		<xclass id="org.jboss.tools.jst.web.webapp.model.WebAppErrorPageImpl"
+			class="org.jboss.tools.jst.web.webapp.model.WebAppErrorPageImpl"/>
+		<xclass id="org.jboss.tools.jst.web.webapp.model.WebAppFilterImpl"
+			class="org.jboss.tools.jst.web.webapp.model.WebAppFilterImpl"/>
+		<xclass id="org.jboss.tools.jst.web.webapp.model.WebAppFilterMappingImpl"
+			class="org.jboss.tools.jst.web.webapp.model.WebAppFilterMappingImpl"/>
+		<xclass id="org.jboss.tools.jst.web.webapp.model.WebAppLocaleEncodingMappingImpl"
+			class="org.jboss.tools.jst.web.webapp.model.WebAppLocaleEncodingMappingImpl"/>
+		<xclass id="org.jboss.tools.jst.web.webapp.model.WebAppMessageDestinationImpl"
+			class="org.jboss.tools.jst.web.webapp.model.WebAppMessageDestinationImpl"/>
+		<xclass id="org.jboss.tools.jst.web.webapp.model.WebAppMessageDestinationRefImpl"
+			class="org.jboss.tools.jst.web.webapp.model.WebAppMessageDestinationRefImpl"/>
+		<xclass id="org.jboss.tools.jst.web.webapp.model.WebAppSecurityConstraintImpl"
+			class="org.jboss.tools.jst.web.webapp.model.WebAppSecurityConstraintImpl"/>
+		<xclass id="org.jboss.tools.jst.web.webapp.model.WebAppServiceRefImpl"
+			class="org.jboss.tools.jst.web.webapp.model.WebAppServiceRefImpl"/>
+		<xclass id="org.jboss.tools.jst.web.webapp.model.WebAppServletImpl"
+			class="org.jboss.tools.jst.web.webapp.model.WebAppServletImpl"/>
+		<xclass id="org.jboss.tools.jst.web.webapp.model.WebAppServletMappingImpl"
+			class="org.jboss.tools.jst.web.webapp.model.WebAppServletMappingImpl"/>
+		<xclass id="org.jboss.tools.jst.web.webapp.model.WebAppSessionConfigImpl"
+			class="org.jboss.tools.jst.web.webapp.model.WebAppSessionConfigImpl"/>
+		<xclass id="org.jboss.tools.jst.web.webapp.model.WebAppUserConstraintImpl"
+			class="org.jboss.tools.jst.web.webapp.model.WebAppUserConstraintImpl"/>
+		<xclass id="org.jboss.tools.jst.web.webapp.model.handlers.CreateForWebApp23Handler"
+			class="org.jboss.tools.jst.web.webapp.model.handlers.CreateForWebApp23Handler"/>
+		<xclass id="org.jboss.tools.common.meta.impl.adapters.XAdapterProjectsRoot"
+			class="org.jboss.tools.common.meta.impl.adapters.XAdapterProjectsRoot"/>
+		<xclass id="org.jboss.tools.jst.web.project.AddServletSupportWizard"
+			class="org.jboss.tools.jst.web.project.AddServletSupportWizard"/>
+		<xclass id="org.jboss.tools.jst.web.tld.model.handlers.CreateTLDFileSupport"
+			class="org.jboss.tools.jst.web.tld.model.handlers.CreateTLDFileSupport"/>
+		<xclass id="org.jboss.tools.jst.web.webapp.model.handlers.CreateWebAppErrorPageSupport"
+			class="org.jboss.tools.jst.web.webapp.model.handlers.CreateWebAppErrorPageSupport"/>
+
+		<xclass id="org.jboss.tools.jst.web.tld.model.handlers.DeleteValidatorSignificanceMessage"
+			class="org.jboss.tools.jst.web.tld.model.handlers.DeleteValidatorSignificanceMessage"/>
+			
+		<xclass id="org.jboss.tools.jst.web.tld.model.handlers.ImportTLDToPaletteSupport"
+			class="org.jboss.tools.jst.web.tld.model.handlers.ImportTLDToPaletteSupport"/>
+		<xclass id="org.jboss.tools.jst.web.tld.model.handlers.CreateTLDVariableSupport"
+			class="org.jboss.tools.jst.web.tld.model.handlers.CreateTLDVariableSupport"/>
+		<xclass id="org.jboss.tools.jst.web.project.handlers.AddProjectTemplateSupport"
+			class="org.jboss.tools.jst.web.project.handlers.AddProjectTemplateSupport"/>
+		<xclass id="org.jboss.tools.jst.web.project.handlers.EditProjectTemplateSupport"
+			class="org.jboss.tools.jst.web.project.handlers.EditProjectTemplateSupport"/>
+		<xclass id="org.jboss.tools.jst.web.project.handlers.AddJarToLibrarySetSupport"
+			class="org.jboss.tools.jst.web.project.handlers.AddJarToLibrarySetSupport"/>
+		<xclass id="org.jboss.tools.jst.web.project.handlers.AddLibraryToVersionSupport"
+			class="org.jboss.tools.jst.web.project.handlers.AddLibraryToVersionSupport"/>
+		<xclass id="org.jboss.tools.jst.web.project.handlers.AddPageTemplateSupport"
+			class="org.jboss.tools.jst.web.project.handlers.AddPageTemplateSupport"/>
+		<xclass id="org.jboss.tools.jst.web.project.handlers.AddVersionSupport"
+			class="org.jboss.tools.jst.web.project.handlers.AddVersionSupport"/>
+		<xclass id="org.jboss.tools.jst.web.project.handlers.AddLibrarySetSupport"
+			class="org.jboss.tools.jst.web.project.handlers.AddLibrarySetSupport"/>
+
+			
+   </extension>
+
+</plugin>

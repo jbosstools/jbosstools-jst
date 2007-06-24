@@ -1,0 +1,1087 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE XModelEntityGroup PUBLIC "-//Red Hat, Inc.//DTD Meta 1.0//EN" "meta.dtd">
+<XModelEntityGroup>
+ <VERSION DEPENDS="Model:1.0" MODULE="Struts Editor" VERSION="1.1"/>
+ <MAPPINGS>
+  <MAPPING name="AttributeEditor">
+   <PAIR name="DefinitionsList" value="org.jboss.tools.common.model.ui.attribute.editor.StringEditor"/>
+  </MAPPING>
+  <MAPPING name="FilteredTreeConstraints">
+   <PAIR name="FileSystems$138" value="org.jboss.tools.jst.web.tiles.model.TilesConfigFilteredTreeConstraint"/>
+  </MAPPING>
+  <MAPPING name="ObjectEditor">
+   <PAIR name="STRUTS_TILES" value="org.jboss.tools.jst.web.tiles.ui.editor.TilesCompoundEditor"/>
+  </MAPPING>
+  <MAPPING name="Recognizers">
+   <PAIR name="xml$30" value="org.jboss.tools.jst.web.tiles.model.FileTilesRecognizer"/>
+  </MAPPING>
+ </MAPPINGS>
+ <ICONS>
+  <GROUP name="action">
+   <GROUP name="new">
+    <GROUP name="web">
+     <GROUP name="tiles">
+      <ICON name="add" path="images/struts/pro/new_tiles_add.gif"/>
+      <ICON name="bean" path="images/struts/pro/new_tiles_bean.gif"/>
+      <ICON name="definition" path="images/struts/pro/new_tiles_definition.gif"/>
+      <ICON name="file" path="images/struts/pro/new_tiles_file.gif"/>
+      <ICON name="item" path="images/struts/pro/new_tiles_item.gif"/>
+      <ICON name="list" path="images/struts/pro/new_tiles_putlist.gif"/>
+      <ICON name="put" path="images/struts/pro/new_tiles_put.gif"/>
+     </GROUP>
+    </GROUP>
+   </GROUP>
+  </GROUP>
+  <GROUP name="main">
+   <GROUP name="web">
+    <GROUP name="tiles">
+     <ICON name="add" path="images/struts/pro/tiles_add.gif"/>
+     <ICON name="bean" path="images/struts/pro/tiles_bean.gif"/>
+     <ICON name="definition" path="images/struts/pro/tiles_definition.gif"/>
+     <ICON name="file" path="images/struts/pro/tiles_file.gif"/>
+     <ICON name="item" path="images/struts/pro/tiles_item.gif"/>
+     <ICON name="list" path="images/struts/pro/tiles_putlist.gif"/>
+     <ICON name="put" path="images/struts/pro/tiles_put.gif"/>
+    </GROUP>
+   </GROUP>
+  </GROUP>
+ </ICONS>
+ <GlobalActions kind="list"/>
+ <XModelEntity name="CreateTilesHelper">
+  <XChildrenEntities/>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.jsf.process" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute name="folder">
+    <Constraint loader="FileFilter">
+     <value name="allFiles=false"/>
+     <value name="description=Folder"/>
+     <value name="mode=DIRECTORIES_ONLY"/>
+    </Constraint>
+    <Editor name="ContainerChooser"/>
+   </XModelAttribute>
+   <XModelAttribute name="separator">
+    <Constraint/>
+    <Editor name="Separator"/>
+   </XModelAttribute>
+   <XModelAttribute name="name" visibility="false" xmlname="NAME">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute default="yes" name="register">
+    <Constraint loader="List">
+     <value name="yes"/>
+     <value name="no"/>
+    </Constraint>
+    <Editor name="CheckBox"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list"/>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity
+  ImplementationLoadingClass="org.jboss.tools.jst.web.tiles.model.FileTilesLoader"
+  ImplementingClass="org.jboss.tools.jst.web.tiles.model.FileTilesImpl"
+  ObjectEditorClass="%XML%"
+  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.tiles.ui.editor.form.TilesFormLayoutData"
+  XMLSUBPATH="tiles-definitions" name="FileTiles">
+  <XChildrenEntities>
+   <XChildEntity name="TilesDefinition"/>
+   <XChildEntity maxCount="1" name="TilesProcess" required="yes"/>
+  </XChildrenEntities>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.web.tiles.file" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="tiles definitions" loader="ElementType" name="element type">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="name" xmlname="NAME">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute default="xml" name="extension" xmlname="EXTENSION">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute loader="ElementType" name="_lateload" visibility="false">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute
+    default="-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+    name="publicId" visibility="false">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute
+    default="http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd"
+    name="systemId" visibility="false">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute default="no" name="isIncorrect" visibility="false">
+    <Constraint loader="List">
+     <value name="yes"/>
+     <value name="no"/>
+    </Constraint>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="incorrectBody" visibility="false">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute default="false" name="expanded" visibility="false">
+    <Constraint loader="List">
+     <value name="false"/>
+     <value name="true"/>
+    </Constraint>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
+    <Constraint/>
+    <Editor name="Note"/>
+   </XModelAttribute>
+   <XModelAttribute name="encoding">
+    <Constraint loader="ListString">
+     <value name="ISO-8859-1"/>
+     <value name="UTF-8"/>
+    </Constraint>
+    <Editor name="ListString"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem HIDE="disabled"
+    HandlerClassName="org.jboss.tools.jst.web.tld.model.handlers.ValidateTLDHandler"
+    ICON="action.empty" displayName="Report Problem" kind="action" name="Validate"/>
+   <XActionItem HandlerClassName="%Open%" ICON="action.edit"
+    displayName="Open" kind="action" name="Open"/>
+   <XActionItem displayName="Open With" group="1" kind="list" name="OpenWith">
+    <XActionItem HIDE="always"
+     HandlerClassName="org.jboss.tools.common.meta.action.impl.handlers.OpenWithExternalHandler"
+     ICON="main.file.java_file" PROPERTIES="extension=tiles-definitions"
+     displayName="Open with External Program" kind="action" name="OpenWithSelected"/>
+    <XActionItem HIDE="always"
+     HandlerClassName="org.jboss.tools.common.meta.action.impl.handlers.OpenWithChoiceHandler"
+     ICON="main.file.java_file" displayName="Choose Program..."
+     kind="action" name="OpenWithChoice">
+     <EntityData EntityName="OpenWithHelper">
+      <AttributeData AttributeName="name"/>
+      <AttributeData AttributeName="default"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+   <XActionItem kind="list" name="EditActions">
+    <XActionItem HIDE="always"
+     HandlerClassName="org.jboss.tools.jst.web.tiles.model.handlers.RenameTilesHandler"
+     ICON="action.empty" PROPERTIES="validator.edit=true"
+     WizardClassName="%Default%" displayName="Rename..." kind="action" name="Rename">
+     <EntityData EntityName="FileTiles">
+      <AttributeData AttributeName="name"/>
+     </EntityData>
+    </XActionItem>
+    <XActionItem
+     HandlerClassName="org.jboss.tools.common.model.filesystems.impl.handlers.RenameEclipseFileHandler"
+     ICON="action.empty" displayName="Rename..." kind="action" name="RenameEclipse"/>
+   </XActionItem>
+   <XActionItem kind="list" name="SaveActions">
+    <XActionItem HIDE="always" HandlerClassName="%SaveFile%"
+     ICON="action.save" displayName="Save" kind="action" name="Save"/>
+   </XActionItem>
+   <XActionItem ICON="action.empty" displayName="Create" kind="list" name="CreateActions">
+    <XActionItem HandlerClassName="%Create%"
+     ICON="action.new.web.tiles.definition"
+     PROPERTIES="validator.add=true" WizardClassName="%Default%"
+     displayName="Add Definition..." kind="action" name="CreateDefinition">
+     <EntityData EntityName="TilesDefinition">
+      <AttributeData AttributeName="name"/>
+      <AttributeData AttributeName="path" Mandatory="no"/>
+      <AttributeData AttributeName="extends" Mandatory="no"/>
+      <AttributeData AttributeName="role" Mandatory="no"/>
+      <AttributeData AttributeName="controllerClass" Mandatory="no"/>
+      <AttributeData AttributeName="controllerUrl" Mandatory="no"/>
+      <AttributeData AttributeName="display-name" Mandatory="no"/>
+      <AttributeData AttributeName="id" Mandatory="no"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+   <XActionItem HIDE="always"
+    HandlerClassName="org.jboss.tools.jst.web.tld.model.handlers.ExpandTLDHandler"
+    ICON="action.empty" displayName="Set Expanded" kind="action" name="SetExpanded"/>
+   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
+    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
+     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
+    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
+     ICON="action.cut" displayName="Cut" kind="action" name="Cut"/>
+    <XActionItem BaseActionName="Paste" HandlerClassName="%Paste%"
+     ICON="action.paste" displayName="Paste" kind="action" name="Paste"/>
+   </XActionItem>
+   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
+    <XActionItem BaseActionName="Delete"
+     HandlerClassName="org.jboss.tools.jst.web.tiles.model.handlers.DeleteTilesHandler"
+     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
+   </XActionItem>
+   <XActionItem ICON="action.empty" kind="list" name="Properties">
+    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
+     displayName="Properties..." kind="action" name="Properties"/>
+   </XActionItem>
+   <XActionItem kind="list" name="DiscardActions">
+    <XActionItem HIDE="always"
+     HandlerClassName="org.jboss.tools.common.model.filesystems.impl.DiscardFileHandler"
+     ICON="action.delete"
+     PROPERTIES="significanceMessageClass=org.jboss.tools.common.model.filesystems.impl.DiscardFileSignificanceMessage"
+     displayName="Discard Changes" kind="action" name="Discard"/>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity name="FileTiles_EditorActionList">
+  <XChildrenEntities/>
+  <XEntityRenderer/>
+  <XModelAttributes/>
+  <XActionItem kind="list">
+   <XActionItem kind="list" name="EditActions">
+    <XActionItem HandlerClassName="%RenameFile%" ICON="action.empty"
+     PROPERTIES="validator.edit=true" WizardClassName="%Default%"
+     displayName="Rename..." kind="action" name="Rename">
+     <EntityData EntityName="FileTiles">
+      <AttributeData AttributeName="name"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+   <XActionItem kind="list" name="SaveActions">
+    <XActionItem HIDE="always" HandlerClassName="%SaveFile%"
+     ICON="action.save" displayName="Save" kind="action" name="Save"/>
+   </XActionItem>
+   <XActionItem ICON="action.empty" displayName="Create" kind="list" name="CreateActions">
+    <XActionItem HandlerClassName="%Create%"
+     ICON="action.new.web.tiles.definition"
+     PROPERTIES="validator.add=true" WizardClassName="%Default%"
+     displayName="Add Definition..." kind="action" name="CreateDefinition">
+     <EntityData EntityName="TilesDefinition">
+      <AttributeData AttributeName="name"/>
+      <AttributeData AttributeName="path" Mandatory="no"/>
+      <AttributeData AttributeName="extends" Mandatory="no"/>
+      <AttributeData AttributeName="role" Mandatory="no"/>
+      <AttributeData AttributeName="controllerClass" Mandatory="no"/>
+      <AttributeData AttributeName="controllerUrl" Mandatory="no"/>
+      <AttributeData AttributeName="display-name" Mandatory="no"/>
+      <AttributeData AttributeName="id" Mandatory="no"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
+    <XActionItem BaseActionName="Paste" HandlerClassName="%Paste%"
+     ICON="action.paste" displayName="Paste" kind="action" name="Paste"/>
+   </XActionItem>
+   <XActionItem ICON="action.empty" kind="list" name="Properties">
+    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
+     displayName="Properties..." kind="action" name="Properties"/>
+   </XActionItem>
+   <XActionItem kind="list" name="DiscardActions">
+    <XActionItem HIDE="always"
+     HandlerClassName="org.jboss.tools.common.model.filesystems.impl.DiscardFileHandler"
+     ICON="action.delete"
+     PROPERTIES="significanceMessageClass=org.jboss.tools.common.model.filesystems.impl.DiscardFileSignificanceMessage"
+     displayName="Discard Changes" kind="action" name="Discard"/>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity name="RenameDefinitionWizard">
+  <XChildrenEntities/>
+  <XEntityRenderer/>
+  <XModelAttributes>
+   <XModelAttribute name="name">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute default="true" name="update references">
+    <Constraint loader="List">
+     <value name="true"/>
+     <value name="false"/>
+    </Constraint>
+    <Editor name="CheckBox"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list"/>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity
+  ImplementingClass="org.jboss.tools.jst.web.tiles.model.TilesAddImpl"
+  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.tiles.ui.editor.form.TilesFormLayoutData"
+  XMLSUBPATH="add" name="TilesAdd">
+  <XChildrenEntities/>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.web.tiles.add" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute name="id" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute name="value" xmlname="value|#text">
+    <Constraint/>
+    <Editor name="Note"/>
+   </XModelAttribute>
+   <XModelAttribute name="type" xmlname="type">
+    <Constraint loader="List">
+     <value/>
+     <value name="string"/>
+     <value name="page"/>
+     <value name="template"/>
+     <value name="definition"/>
+    </Constraint>
+    <Editor name="List"/>
+   </XModelAttribute>
+   <XModelAttribute default="false" name="direct" xmlname="direct">
+    <Constraint loader="List">
+     <value name="true"/>
+     <value name="false"/>
+    </Constraint>
+    <Editor name="List"/>
+   </XModelAttribute>
+   <XModelAttribute name="content" xmlname="content|#text">
+    <Constraint/>
+    <Editor name="Note"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
+    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
+     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
+    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
+     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
+   </XActionItem>
+   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
+    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
+     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
+   </XActionItem>
+   <XActionItem ICON="action.empty" kind="list" name="Properties">
+    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
+     displayName="Properties..." kind="action" name="Properties"/>
+   </XActionItem>
+   <XActionItem displayName="move" kind="list" name="MoveActions">
+    <XActionItem HIDE="always" HandlerClassName="%Move%"
+     ICON="action.move" displayName="Move" kind="action" name="Move"/>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity
+  ImplementingClass="org.jboss.tools.jst.web.tiles.model.TilesBeanImpl"
+  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.tiles.ui.editor.form.TilesFormLayoutData"
+  XMLSUBPATH="bean" name="TilesBean">
+  <XChildrenEntities>
+   <XChildEntity name="StrutsSetProperty"/>
+  </XChildrenEntities>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.web.tiles.bean" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute name="id" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="id=true" name="classtype" xmlname="classtype">
+    <Constraint loader="QClassName"/>
+    <Editor name="AccessibleJava"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem kind="list" name="CreateActions">
+    <XActionItem HandlerClassName="%Create%"
+     ICON="action.new.struts.set-property" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%" displayName="Create Set Property..."
+     kind="action" name="CreateSetProperty">
+     <EntityData EntityName="StrutsSetProperty">
+      <AttributeData AttributeName="property"/>
+      <AttributeData AttributeName="value"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
+    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
+     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
+    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
+     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
+   </XActionItem>
+   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
+    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
+     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
+   </XActionItem>
+   <XActionItem ICON="action.empty" kind="list" name="Properties">
+    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
+     displayName="Properties..." kind="action" name="Properties"/>
+   </XActionItem>
+   <XActionItem displayName="move" kind="list" name="MoveActions">
+    <XActionItem HIDE="always" HandlerClassName="%Move%"
+     ICON="action.move" displayName="Move" kind="action" name="Move"/>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity
+  AdoptManagerClass="org.jboss.tools.jst.web.tiles.model.handlers.TilesDefinitionAdopt"
+  ImplementingClass="org.jboss.tools.jst.web.tiles.model.TilesDefinitionImpl"
+  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.tiles.ui.editor.form.TilesFormLayoutData"
+  XMLSUBPATH="definition" name="TilesDefinition">
+  <XChildrenEntities>
+   <XChildEntity name="TilesPut"/>
+   <XChildEntity name="TilesList"/>
+  </XChildrenEntities>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.web.tiles.definition" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="definition" loader="ElementType" name="element type">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="name" xmlname="name">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="linkAction=JumpByPath" name="path" xmlname="path">
+    <Constraint loader="Properties">
+     <value name="linkAction=JumpByPath"/>
+    </Constraint>
+    <Editor name="StrutsPathEditor"/>
+   </XModelAttribute>
+   <XModelAttribute name="page" xmlname="page">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute name="template" xmlname="template">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute name="extends" xmlname="extends">
+    <Constraint loader="ListString"/>
+    <Editor name="DefinitionsList"/>
+   </XModelAttribute>
+   <XModelAttribute name="role" xmlname="role">
+    <Constraint loader="ListString"/>
+    <Editor name="WebRoleList"/>
+   </XModelAttribute>
+   <XModelAttribute name="controllerClass" xmlname="controllerClass">
+    <Constraint loader="QClassName"/>
+    <Editor name="AccessibleJava"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="linkAction=JumpByUrl"
+    name="controllerUrl" xmlname="controllerUrl">
+    <Constraint loader="Properties">
+     <value name="linkAction=JumpByUrl"/>
+    </Constraint>
+    <Editor name="StrutsPathEditor"/>
+   </XModelAttribute>
+   <XModelAttribute name="small-icon" xmlname="icon.small-icon.#text">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute name="large-icon" xmlname="icon.large-icon.#text">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute name="display-name" xmlname="display-name.#text">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute name="description" xmlname="description.#text">
+    <Constraint/>
+    <Editor name="Note"/>
+   </XModelAttribute>
+   <XModelAttribute name="id" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
+    <Constraint/>
+    <Editor name="Note"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem kind="list" name="CreateActions">
+    <XActionItem HandlerClassName="%Create%"
+     ICON="action.new.web.tiles.put" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%" displayName="Add Put..." kind="action" name="CreatePut">
+     <EntityData EntityName="TilesPut">
+      <AttributeData AttributeName="name"/>
+      <AttributeData AttributeName="type" Mandatory="no"/>
+      <AttributeData AttributeName="value" Mandatory="no"/>
+     </EntityData>
+    </XActionItem>
+    <XActionItem HandlerClassName="%Create%"
+     ICON="action.new.web.tiles.list" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%" displayName="Add PutList..."
+     kind="action" name="CreatePutList">
+     <EntityData EntityName="TilesList">
+      <AttributeData AttributeName="name"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+   <XActionItem kind="list" name="EditActions">
+    <XActionItem
+     HandlerClassName="org.jboss.tools.jst.web.tiles.model.handlers.RenameDefinitionHandler"
+     ICON="action.empty"
+     PROPERTIES="validator.edit=true;entity=TilesDefinition"
+     displayName="Rename..." kind="action" name="Rename">
+     <EntityData EntityName="RenameDefinitionWizard">
+      <AttributeData AttributeName="name"/>
+      <AttributeData AttributeName="update references" Mandatory="no"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
+    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
+     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
+    <XActionItem BaseActionName="Paste" HandlerClassName="%Paste%"
+     ICON="action.paste" displayName="Paste" kind="action" name="Paste"/>
+   </XActionItem>
+   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
+    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
+     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
+    <XActionItem BaseActionName="Delete" HIDE="always"
+     HandlerClassName="org.jboss.tools.jst.web.tiles.model.handlers.DeleteDefinitionLinkHandler"
+     ICON="action.delete" displayName="Delete" kind="action" name="DeleteLink"/>
+   </XActionItem>
+   <XActionItem ICON="action.empty" kind="list" name="Properties">
+    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
+     displayName="Properties..." kind="action" name="Properties"/>
+   </XActionItem>
+   <XActionItem displayName="move" kind="list" name="MoveActions">
+    <XActionItem HIDE="always" HandlerClassName="%Move%"
+     ICON="action.move" displayName="Move" kind="action" name="Move"/>
+   </XActionItem>
+   <XActionItem HIDE="always"
+    HandlerClassName="org.jboss.tools.struts.model.handlers.JumpByForwardPathHandler"
+    ICON="action.empty" displayName="Jump by Path" kind="action" name="JumpByPath"/>
+   <XActionItem HIDE="always"
+    HandlerClassName="org.jboss.tools.struts.model.handlers.JumpByForwardPathHandler"
+    ICON="action.empty" PROPERTIES="linkAttr=controllerUrl"
+    displayName="Jump by ControllerUrl" kind="action" name="JumpByUrl"/>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity
+  ImplementingClass="org.jboss.tools.jst.web.tiles.model.TilesItemImpl"
+  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.tiles.ui.editor.form.TilesFormLayoutData"
+  XMLSUBPATH="item" name="TilesItem">
+  <XChildrenEntities/>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.web.tiles.item" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute name="id" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="id=true" name="value" xmlname="value">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute name="link" xmlname="link">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute name="classtype" xmlname="classtype">
+    <Constraint loader="QClassName"/>
+    <Editor name="AccessibleJava"/>
+   </XModelAttribute>
+   <XModelAttribute name="icon" xmlname="icon">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute name="tooltip" xmlname="tooltip">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
+    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
+     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
+    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
+     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
+   </XActionItem>
+   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
+    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
+     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
+   </XActionItem>
+   <XActionItem ICON="action.empty" kind="list" name="Properties">
+    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
+     displayName="Properties..." kind="action" name="Properties"/>
+   </XActionItem>
+   <XActionItem displayName="move" kind="list" name="MoveActions">
+    <XActionItem HIDE="always" HandlerClassName="%Move%"
+     ICON="action.move" displayName="Move" kind="action" name="Move"/>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity
+  ImplementingClass="org.jboss.tools.jst.web.tiles.model.NamedObjectImpl"
+  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.tiles.ui.editor.form.TilesFormLayoutData"
+  XMLSUBPATH="putList" name="TilesList">
+  <XChildrenEntities>
+   <XChildEntity name="TilesAdd"/>
+   <XChildEntity name="TilesItem"/>
+   <XChildEntity name="TilesBean"/>
+   <XChildEntity name="TilesList"/>
+  </XChildrenEntities>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.web.tiles.list" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute name="name" xmlname="name">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute name="id" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem kind="list" name="CreateActions">
+    <XActionItem HandlerClassName="%Create%"
+     ICON="action.new.web.tiles.add" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%" displayName="Add Add..." kind="action" name="CreateAdd">
+     <EntityData EntityName="TilesAdd">
+      <AttributeData AttributeName="type" Mandatory="no"/>
+      <AttributeData AttributeName="value" Mandatory="no"/>
+     </EntityData>
+    </XActionItem>
+    <XActionItem HandlerClassName="%Create%"
+     ICON="action.new.web.tiles.item" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%" displayName="Add Item..." kind="action" name="CreateItem">
+     <EntityData EntityName="TilesItem">
+      <AttributeData AttributeName="value"/>
+      <AttributeData AttributeName="link"/>
+      <AttributeData AttributeName="classtype" Mandatory="no"/>
+     </EntityData>
+    </XActionItem>
+    <XActionItem HandlerClassName="%Create%"
+     ICON="action.new.web.tiles.bean" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%" displayName="Add Bean..." kind="action" name="CreateBean">
+     <EntityData EntityName="TilesBean">
+      <AttributeData AttributeName="classtype"/>
+     </EntityData>
+    </XActionItem>
+    <XActionItem HandlerClassName="%Create%"
+     ICON="action.new.web.tiles.list" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%" displayName="Add PutList..."
+     kind="action" name="CreatePutList">
+     <EntityData EntityName="TilesList">
+      <AttributeData AttributeName="name"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
+    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
+     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
+    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
+     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
+    <XActionItem BaseActionName="Paste" HandlerClassName="%Paste%"
+     ICON="action.paste" displayName="Paste" kind="action" name="Paste"/>
+   </XActionItem>
+   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
+    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
+     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
+   </XActionItem>
+   <XActionItem ICON="action.empty" kind="list" name="Properties">
+    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
+     displayName="Properties..." kind="action" name="Properties"/>
+   </XActionItem>
+   <XActionItem displayName="move" kind="list" name="MoveActions">
+    <XActionItem HIDE="always" HandlerClassName="%Move%"
+     ICON="action.move" displayName="Move" kind="action" name="Move"/>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity
+  ImplementingClass="org.jboss.tools.jst.web.tiles.model.TilesProcessImpl" name="TilesProcess">
+  <XChildrenEntities>
+   <XChildEntity name="TilesProcessItem"/>
+  </XChildrenEntities>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.jsf.process" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="folder" loader="ElementType" name="element type">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute default="process" name="name" visibility="false" xmlname="NAME">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="module" visibility="false" xmlname="MODULE">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute default="no" name="hide comments" visibility="false" xmlname="HIDE_COMMENTS">
+    <Constraint loader="List">
+     <value name="no"/>
+     <value name="yes"/>
+    </Constraint>
+    <Editor name="List"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem ICON="action.empty" displayName="New" kind="list" name="CreateActions">
+    <XActionItem
+     HandlerClassName="org.jboss.tools.jst.web.tiles.model.handlers.TilesProcessRegirectHandler"
+     ICON="action.empty"
+     PROPERTIES="actionpath=CreateActions/CreateDefinition"
+     WizardClassName="%Default%" displayName="New Definition..."
+     kind="action" name="CreateDefinition">
+     <EntityData EntityName="TilesDefinition">
+      <AttributeData AttributeName="name"/>
+      <AttributeData AttributeName="path" Mandatory="no"/>
+      <AttributeData AttributeName="extends" Mandatory="no"/>
+      <AttributeData AttributeName="role" Mandatory="no"/>
+      <AttributeData AttributeName="controllerClass" Mandatory="no"/>
+      <AttributeData AttributeName="controllerUrl" Mandatory="no"/>
+      <AttributeData AttributeName="display-name" Mandatory="no"/>
+      <AttributeData AttributeName="id" Mandatory="no"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
+    <XActionItem BaseActionName="Cut" ICON="action.cut"
+     displayName="Cut" kind="action" name="Cut"/>
+    <XActionItem BaseActionName="Copy" ICON="action.copy"
+     displayName="Copy" kind="action" name="Copy"/>
+    <XActionItem BaseActionName="Paste"
+     HandlerClassName="org.jboss.tools.jst.web.tiles.model.handlers.TilesProcessRegirectHandler"
+     ICON="action.paste" PROPERTIES="actionpath=CopyActions/Paste"
+     displayName="Paste" kind="action" name="Paste"/>
+   </XActionItem>
+   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
+    <XActionItem BaseActionName="Delete" ICON="action.delete"
+     displayName="Delete" kind="action" name="Delete"/>
+   </XActionItem>
+   <XActionItem ICON="action.empty" kind="list" name="Properties">
+    <XActionItem HIDE="always"
+     HandlerClassName="org.jboss.tools.jst.web.tiles.model.handlers.TilesProcessRegirectHandler"
+     ICON="action.empty" PROPERTIES="actionpath=Properties/Properties"
+     displayName="Properties..." kind="action" name="Properties"/>
+    <XActionItem
+     HandlerClassName="org.jboss.tools.jst.web.tiles.model.handlers.ShowPreferenceHandler"
+     ICON="action.empty" displayName="Preferences..." kind="action" name="Preferences"/>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity
+  ImplementingClass="org.jboss.tools.jst.web.tiles.model.TilesProcessItemImpl"
+  XMLSUBPATH="PROCESS-ITEM" name="TilesProcessItem">
+  <XChildrenEntities>
+   <XChildEntity name="TilesProcessItemOutput"/>
+  </XChildrenEntities>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.web.tiles.definition" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="definition" loader="ElementType" name="element type">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="name" xmlname="NAME">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="title" xmlname="TITLE">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="id" xmlname="ID">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="type" xmlname="TYPE">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="subtype" xmlname="SUBTYPE">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="path" xmlname="PATH">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="shape" xmlname="SHAPE">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute COPYABLE="no" default="false" name="confirmed" visibility="false">
+    <Constraint loader="List">
+     <value name="true"/>
+     <value name="false"/>
+    </Constraint>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem HIDE="disabled"
+    HandlerClassName="org.jboss.tools.jst.web.tiles.model.handlers.JumpToItemFromOtherFile"
+    ICON="main.web.tiles.definition" PROPERTIES="actionpath=Open"
+    displayName="Open" kind="action" name="Open"/>
+   <XActionItem kind="list" name="EditActions">
+    <XActionItem
+     HandlerClassName="org.jboss.tools.jst.web.tiles.model.handlers.TilesProcessRegirectHandler"
+     ICON="action.empty" PROPERTIES="actionpath=EditActions/Rename"
+     displayName="Rename..." kind="action" name="Rename"/>
+   </XActionItem>
+   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
+    <XActionItem BaseActionName="Cut"
+     HandlerClassName="org.jboss.tools.jst.web.tiles.model.handlers.TilesProcessRegirectHandler"
+     ICON="action.cut" PROPERTIES="actionpath=CopyActions/Cut"
+     displayName="Cut" kind="action" name="Cut"/>
+    <XActionItem BaseActionName="Copy"
+     HandlerClassName="org.jboss.tools.jst.web.tiles.model.handlers.TilesProcessRegirectHandler"
+     ICON="action.copy" PROPERTIES="actionpath=CopyActions/Copy"
+     displayName="Copy" kind="action" name="Copy"/>
+    <XActionItem BaseActionName="Paste"
+     HandlerClassName="org.jboss.tools.jst.web.tiles.model.handlers.TilesProcessRegirectHandler"
+     ICON="action.paste" PROPERTIES="actionpath=CopyActions/Paste"
+     displayName="Paste" kind="action" name="Paste"/>
+   </XActionItem>
+   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
+    <XActionItem BaseActionName="Delete"
+     HandlerClassName="org.jboss.tools.jst.web.tiles.model.handlers.TilesProcessRegirectHandler"
+     ICON="action.delete" PROPERTIES="actionpath=DeleteActions/Delete"
+     displayName="Delete" kind="action" name="Delete"/>
+   </XActionItem>
+   <XActionItem ICON="action.empty" kind="list" name="Properties">
+    <XActionItem
+     HandlerClassName="org.jboss.tools.jst.web.tiles.model.handlers.TilesProcessRegirectHandler"
+     ICON="action.empty" PROPERTIES="actionpath=Properties/Properties"
+     displayName="Properties..." kind="action" name="Properties"/>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity
+  ImplementingClass="org.jboss.tools.jst.web.tiles.model.TilesProcessItemOutputImpl"
+  XMLSUBPATH="PROCESS-ITEM-OUTPUT" name="TilesProcessItemOutput">
+  <XChildrenEntities/>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.jsf.process-item-output" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="extends" loader="ElementType" name="element type">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="name" xmlname="NAME">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="title" xmlname="TITLE">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="id" xmlname="ID">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="type" xmlname="TYPE">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="subtype" xmlname="SUBTYPE">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="path" xmlname="PATH">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="shape" xmlname="SHAPE">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="target" xmlname="TARGET">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute default="no" name="hidden" xmlname="HIDDEN">
+    <Constraint loader="List">
+     <value name="yes"/>
+     <value name="no"/>
+    </Constraint>
+    <Editor name="List"/>
+   </XModelAttribute>
+   <XModelAttribute default="no" name="shortcut" xmlname="SHORTCUT">
+    <Constraint loader="List">
+     <value name="yes"/>
+     <value name="no"/>
+    </Constraint>
+    <Editor name="List"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
+    <XActionItem
+     HandlerClassName="org.jboss.tools.jst.web.tiles.model.handlers.TilesProcessRegirectHandler"
+     ICON="action.delete"
+     PROPERTIES="actionpath=DeleteActions/DeleteLink"
+     displayName="Delete" kind="action" name="Delete"/>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity
+  ImplementingClass="org.jboss.tools.jst.web.tiles.model.NamedObjectImpl"
+  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.tiles.ui.editor.form.TilesFormLayoutData"
+  XMLSUBPATH="put" name="TilesPut">
+  <XChildrenEntities/>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.web.tiles.put" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute name="name" xmlname="name">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute name="id" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute name="value" xmlname="value|#text">
+    <Constraint/>
+    <Editor name="Note"/>
+   </XModelAttribute>
+   <XModelAttribute name="type" xmlname="type">
+    <Constraint loader="List">
+     <value/>
+     <value name="string"/>
+     <value name="page"/>
+     <value name="template"/>
+     <value name="definition"/>
+    </Constraint>
+    <Editor name="List"/>
+   </XModelAttribute>
+   <XModelAttribute default="false" name="direct" xmlname="direct">
+    <Constraint loader="List">
+     <value name="true"/>
+     <value name="false"/>
+    </Constraint>
+    <Editor name="List"/>
+   </XModelAttribute>
+   <XModelAttribute name="content" xmlname="content|#text">
+    <Constraint/>
+    <Editor name="Note"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
+    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
+     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
+    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
+     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
+   </XActionItem>
+   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
+    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
+     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
+   </XActionItem>
+   <XActionItem ICON="action.empty" kind="list" name="Properties">
+    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
+     displayName="Properties..." kind="action" name="Properties"/>
+   </XActionItem>
+   <XActionItem displayName="move" kind="list" name="MoveActions">
+    <XActionItem HIDE="always" HandlerClassName="%Move%"
+     ICON="action.move" displayName="Move" kind="action" name="Move"/>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XEntityExtension name="FileFolder">
+  <XChildrenEntities>
+   <XChildEntity name="FileTiles"/>
+  </XChildrenEntities>
+  <XActionItem kind="list">
+   <XActionItem displayName="New" group="1" kind="list" name="CreateActions">
+    <XActionItem displayName="File" group="1" kind="list" name="CreateFiles">
+     <XActionItem displayName="Struts" kind="list" name="Struts">
+      <XActionItem HandlerClassName="%SpecialWizard%"
+       ICON="action.new.web.tiles.file"
+       PROPERTIES="support=org.jboss.tools.jst.web.tiles.model.handlers.CreateTilesSupport;entity=FileTiles;extension=xml;validator.addfile=true"
+       displayName="Tiles..." kind="action" name="CreateTiles">
+       <EntityData EntityName="CreateTilesHelper">
+        <AttributeData AttributeName="folder"/>
+        <AttributeData AttributeName="separator" Mandatory="no"/>
+        <AttributeData AttributeName="name"/>
+        <AttributeData AttributeName="register" Mandatory="no"/>
+       </EntityData>
+      </XActionItem>
+     </XActionItem>
+    </XActionItem>
+   </XActionItem>
+  </XActionItem>
+ </XEntityExtension>
+ <XEntityExtension name="FileSystemFolder">
+  <XChildrenEntities>
+   <XChildEntity name="FileTiles"/>
+  </XChildrenEntities>
+  <XActionItem kind="list">
+   <XActionItem displayName="New" group="1" kind="list" name="CreateActions">
+    <XActionItem displayName="File" group="1" kind="list" name="CreateFiles">
+     <XActionItem displayName="Struts" kind="list" name="Struts">
+      <XActionItem HandlerClassName="%SpecialWizard%"
+       ICON="action.new.web.tiles.file"
+       PROPERTIES="support=org.jboss.tools.jst.web.tiles.model.handlers.CreateTilesSupport;entity=FileTiles;extension=xml;validator.addfile=true"
+       displayName="Tiles..." kind="action" name="CreateTiles">
+       <EntityData EntityName="CreateTilesHelper">
+        <AttributeData AttributeName="folder"/>
+        <AttributeData AttributeName="separator" Mandatory="no"/>
+        <AttributeData AttributeName="name"/>
+        <AttributeData AttributeName="register" Mandatory="no"/>
+       </EntityData>
+      </XActionItem>
+     </XActionItem>
+    </XActionItem>
+   </XActionItem>
+  </XActionItem>
+ </XEntityExtension>
+ <XEntityExtension name="FileSystemJar">
+  <XChildrenEntities>
+   <XChildEntity name="FileTiles"/>
+  </XChildrenEntities>
+  <XActionItem kind="list"/>
+ </XEntityExtension>
+ <XEntityExtension name="JarFolder">
+  <XChildrenEntities>
+   <XChildEntity name="FileTiles"/>
+  </XChildrenEntities>
+  <XActionItem kind="list"/>
+ </XEntityExtension>
+</XModelEntityGroup>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+   <extension point="org.jboss.tools.common.model.meta">
+      <meta path="meta/tiles.meta">
+      </meta>
+   </extension>
+   <extension point="org.jboss.tools.common.model.keys">
+      <keys path="help/keys-tiles.properties">
+      </keys>
+   </extension>
+
+   <extension
+         point="org.eclipse.ltk.core.refactoring.renameParticipants">
+
+      <renameParticipant
+            class="org.jboss.tools.jst.web.tiles.model.handlers.refactoring.RenameTilesParticipant"
+            id="org.jboss.tools.jst.web.tiles.model.handlers.refactoring.RenameTilesParticipant"
+            name="tiles-RenameTilesParticipant">
+         <enablement>
+            <with variable="affectedNatures">
+               <iterate operator="or">
+                  <equals value="org.eclipse.wst.common.modulecore.ModuleCoreNature"/>
+               </iterate>
+            </with>
+            <with variable="element">
+                <or>
+                   <instanceof value="org.eclipse.core.resources.IFile"/>
+                </or>
+            </with>
+         </enablement>
+      </renameParticipant>
+
+   </extension>
+
+   <extension point="org.jboss.tools.common.model.classes">
+		<xclass id="org.jboss.tools.jst.web.tiles.model.FileTilesImpl"
+			class="org.jboss.tools.jst.web.tiles.model.FileTilesImpl"/>
+		<xclass id="org.jboss.tools.jst.web.tiles.model.FileTilesLoader"
+			class="org.jboss.tools.jst.web.tiles.model.FileTilesLoader"/>
+		<xclass id="org.jboss.tools.jst.web.tiles.model.FileTilesRecognizer"
+			class="org.jboss.tools.jst.web.tiles.model.FileTilesRecognizer"/>
+		<xclass id="org.jboss.tools.jst.web.tiles.model.NamedObjectImpl"
+			class="org.jboss.tools.jst.web.tiles.model.NamedObjectImpl"/>
+		<xclass id="org.jboss.tools.jst.web.tiles.model.TilesAddImpl"
+			class="org.jboss.tools.jst.web.tiles.model.TilesAddImpl"/>
+		<xclass id="org.jboss.tools.jst.web.tiles.model.TilesBeanImpl"
+			class="org.jboss.tools.jst.web.tiles.model.TilesBeanImpl"/>
+		<xclass id="org.jboss.tools.jst.web.tiles.model.TilesConfigFilteredTreeConstraint"
+			class="org.jboss.tools.jst.web.tiles.model.TilesConfigFilteredTreeConstraint"/>
+		<xclass id="org.jboss.tools.jst.web.tiles.model.TilesDefinitionImpl"
+			class="org.jboss.tools.jst.web.tiles.model.TilesDefinitionImpl"/>
+		<xclass id="org.jboss.tools.jst.web.tiles.model.TilesItemImpl"
+			class="org.jboss.tools.jst.web.tiles.model.TilesItemImpl"/>
+		<xclass id="org.jboss.tools.jst.web.tiles.model.TilesProcessImpl"
+			class="org.jboss.tools.jst.web.tiles.model.TilesProcessImpl"/>
+		<xclass id="org.jboss.tools.jst.web.tiles.model.TilesProcessItemImpl"
+			class="org.jboss.tools.jst.web.tiles.model.TilesProcessItemImpl"/>
+		<xclass id="org.jboss.tools.jst.web.tiles.model.TilesProcessItemOutputImpl"
+			class="org.jboss.tools.jst.web.tiles.model.TilesProcessItemOutputImpl"/>
+		<xclass id="org.jboss.tools.jst.web.tiles.model.handlers.DeleteDefinitionLinkHandler"
+			class="org.jboss.tools.jst.web.tiles.model.handlers.DeleteDefinitionLinkHandler"/>
+		<xclass id="org.jboss.tools.jst.web.tiles.model.handlers.DeleteTilesHandler"
+			class="org.jboss.tools.jst.web.tiles.model.handlers.DeleteTilesHandler"/>
+		<xclass id="org.jboss.tools.jst.web.tiles.model.handlers.JumpToItemFromOtherFile"
+			class="org.jboss.tools.jst.web.tiles.model.handlers.JumpToItemFromOtherFile"/>
+		<xclass id="org.jboss.tools.jst.web.tiles.model.handlers.RenameDefinitionHandler"
+			class="org.jboss.tools.jst.web.tiles.model.handlers.RenameDefinitionHandler"/>
+		<xclass id="org.jboss.tools.jst.web.tiles.model.handlers.RenameTilesHandler"
+			class="org.jboss.tools.jst.web.tiles.model.handlers.RenameTilesHandler"/>
+		<xclass id="org.jboss.tools.jst.web.tiles.model.handlers.ShowPreferenceHandler"
+			class="org.jboss.tools.jst.web.tiles.model.handlers.ShowPreferenceHandler"/>
+		<xclass id="org.jboss.tools.jst.web.tiles.model.handlers.TilesDefinitionAdopt"
+			class="org.jboss.tools.jst.web.tiles.model.handlers.TilesDefinitionAdopt"/>
+		<xclass id="org.jboss.tools.jst.web.tiles.model.handlers.TilesProcessRegirectHandler"
+			class="org.jboss.tools.jst.web.tiles.model.handlers.TilesProcessRegirectHandler"/>
+		<xclass id="org.jboss.tools.jst.web.tiles.model.helpers.TilesUpdateManager"
+			class="org.jboss.tools.jst.web.tiles.model.helpers.TilesUpdateManager"/>
+		
+		<xclass id="org.jboss.tools.jst.web.tiles.model.handlers.CreateTilesSupport"
+			class="org.jboss.tools.jst.web.tiles.model.handlers.CreateTilesSupport"/>
+   </extension>
+</plugin>

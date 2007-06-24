@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+   <extension point="org.jboss.tools.common.model.specialwizard">
+      <specialwizard class="org.jboss.tools.jst.web.ui.wizards.tomcatvm.TomcatVMWizard" id="org.jboss.tools.jst.web.ui.wizards.tomcatvm.TomcatVMWizard">
+      </specialwizard>
+      <specialwizard class="org.jboss.tools.jst.web.ui.wizards.appregister.AppRegisterWizard" id="org.jboss.tools.jst.web.ui.wizards.appregister.AppRegisterWizard">
+      </specialwizard>
+      <specialwizard class="org.jboss.tools.jst.web.ui.wizards.links.HiddenLinksWizard" id="org.jboss.tools.jst.web.ui.wizards.links.HiddenLinksWizard">
+      </specialwizard>
+   </extension>
+   <extension point="org.jboss.tools.common.model.ui.attributeAdapter">
+      <attributeAdapter class="org.jboss.tools.jst.web.ui.attribute.adapter.WebRoleListAdapter" id="WebRoleList">
+      </attributeAdapter>
+      <attributeAdapter class="org.jboss.tools.jst.web.ui.attribute.adapter.WebRoleListAdapter" id="WebRoleChoiceList">
+      </attributeAdapter>
+      <attributeAdapter class="org.jboss.tools.jst.web.ui.attribute.adapter.LibrarySetListAdapter" id="LibrarySetList">
+      </attributeAdapter>
+   </extension>
+   <extension point="org.jboss.tools.common.model.ui.attributeEditor">
+      <attributeEditor class="org.jboss.tools.common.model.ui.attribute.editor.ComboBoxEditor" id="WebRoleList">
+      </attributeEditor>
+      <attributeEditor class="org.jboss.tools.common.model.ui.attribute.editor.MultipleChoiceEditor" id="WebRoleChoiceList">
+      </attributeEditor>
+      <attributeEditor class="org.jboss.tools.common.model.ui.attribute.editor.ComboBoxEditor" id="LibrarySetList">
+      </attributeEditor>
+   </extension>
+   <extension point="org.eclipse.ui.actionSets">
+      <actionSet description="%actionSets_license.description" id="org.jboss.tools.jst.web.license" label="%actionSets_license.label" visible="true">
+         <menu id="org.jboss.tools.common.model.ui.redhat" label="%actionSets.redhatMenu.label">
+            <separator name="c">
+            </separator>
+            <separator name="a">
+            </separator>
+            <separator name="d">
+            </separator>
+            <separator name="b">
+            </separator>
+         </menu>
+         <menu id="license" label="%actionSets.licenseMenu.label" path="org.jboss.tools.common.model.ui.redhat/d">
+            <separator name="group1">
+            </separator>
+         </menu>
+         <action
+               class="org.jboss.tools.jst.web.ui.action.OpenOnlineHelpActionDelegate"
+               id="org.jboss.tools.jst.web.ui.action.OpenOnlineHelpActionDelegate"
+               label="%actionSets_online_help.label"
+               menubarPath="org.jboss.tools.common.model.ui.redhat/b"/>
+      </actionSet>
+      <actionSet description="%actionSets.serverActions.description" id="org.jboss.tools.jst.web.ui.server.actionSet" label="%actionSets.serverActions.label" visible="true">
+         <action class="org.jboss.tools.jst.web.ui.action.server.SelectServerActionDelegate" icon="images/xstudio/actions/tomcat/tomcat.gif" id="org.jboss.tools.jst.web.ui.action.server.SelectServerActionDelegate" label="%actionSets.serverActions.selectServer.label" style="pulldown" toolbarPath="Normal/SelectServer" tooltip="%actionSets.serverActions.selectServer.label">
+         </action>
+         <action class="org.jboss.tools.jst.web.ui.action.server.ChangeTimeStampActionDelegate" icon="images/xstudio/actions/tomcat/tomcat_webxml.gif" id="org.jboss.tools.jst.web.ui.action.server.ChangeTimeStampActionDelegate" label="%actionSets.serverActions.changeWebXmlTimeStamp.label" toolbarPath="Normal/server" tooltip="%actionSets.serverActions.changeWebXmlTimeStamp.label">
+         </action>
+         <action class="org.jboss.tools.jst.web.ui.action.server.RefreshServerActionDelegate" icon="images/xstudio/actions/tomcat/tomcat_reload.gif" id="org.jboss.tools.jst.web.ui.action.server.RefreshServerActionDelegate" label="%actionSets.serverActions.restartServer.label" toolbarPath="Normal/server" tooltip="%actionSets.serverActions.restartServer.label">
+         </action>
+         <action class="org.jboss.tools.jst.web.ui.action.server.StopServerActionDelegate" icon="images/xstudio/actions/tomcat/tomcat_stop.gif" id="org.jboss.tools.jst.web.ui.action.server.StopServerActionDelegate" label="%actionSets.serverActions.stopServer.label" toolbarPath="Normal/server" tooltip="%actionSets.serverActions.stopServer.label">
+         </action>
+         <action class="org.jboss.tools.jst.web.ui.action.server.DebugServerActionDelegate" icon="images/xstudio/actions/tomcat/xpl/tomcat_debug.gif" id="org.jboss.tools.jst.web.ui.action.server.DebugServerActionDelegate" label="%actionSets.serverActions.debugServer.label" toolbarPath="Normal/server" tooltip="%actionSets.serverActions.startServer.label">
+         </action>
+         <action class="org.jboss.tools.jst.web.ui.action.server.RunServerActionDelegate" icon="images/xstudio/actions/tomcat/tomcat_start.gif" id="org.jboss.tools.jst.web.ui.action.server.RunServerActionDelegate" label="%actionSets.serverActions.startServer.label" toolbarPath="Normal/server" tooltip="%actionSets.serverActions.startServer.label">
+         </action>
+      </actionSet>
+   </extension>
+   <extension id="e" name="XML Editors" point="org.jboss.tools.common.model.ui.xmlEditor">
+      <xmlEditor 
+         class="org.jboss.tools.jst.web.ui.editors.WebCompoundEditor" 
+         contributorClass="org.jboss.tools.common.model.ui.texteditors.MultiPageContributor" 
+         entities="FileWebApp,FileWebApp24,FileWebApp25" 
+         icon="images/xstudio/editors/webapp_file.gif" 
+         name="%editors.web.name">
+      </xmlEditor>
+      <xmlEditor class="org.jboss.tools.jst.web.ui.editors.TLDCompoundEditor" contributorClass="org.jboss.tools.common.model.ui.texteditors.MultiPageContributor" entities="FileTLD_PRO,FileTLD_1_2,FileTLD_2_0,FileTLD_2_1" icon="images/xstudio/editors/taglibs_file.gif" name="%editors.tld12.name">
+      </xmlEditor>
+   </extension>
+   <extension point="org.eclipse.ui.preferencePages">
+      <page category="org.jboss.tools.common.model.ui" class="org.jboss.tools.jst.web.ui.internal.preferences.LibrarySetsPreferencePage" id="org.jboss.tools.common.xstudio.libsets" name="Library Sets">
+      </page>
+   </extension>
+   <extension point="org.eclipse.ui.editors">
+      <editor 
+          class="org.jboss.tools.jst.web.ui.editors.TLDCompoundEditor" 
+          contributorClass="org.jboss.tools.common.model.ui.texteditors.MultiPageContributor" default="true" extensions="tld" icon="images/xstudio/editors/taglibs_file.gif" 
+          matchingStrategy = "org.jboss.tools.common.core.resources.MatchingStrategyImpl"
+          id="org.jboss.tools.jst.web.ui.editors.TLDCompoundEditor" 
+          name="%editors.tld12.name">
+      </editor>
+   </extension>
+   <extension point="org.eclipse.ui.actionSets">
+      <actionSet description="%actionSets.modelActions.description" id="com.redhat.studio.actionSet" label="%actionSets.modelActions.label" visible="true">
+         <action class="org.jboss.tools.jst.web.ui.action.RunPageActionDelegate" icon="images/xstudio/actions/run_project.gif" id="org.jboss.tools.jst.web.ui.action.RunPageActionDelegate" label="%actionSets.tomcatActions.runApplicationFromSelectedElement.label" style="pulldown" toolbarPath="Normal/SSRun" tooltip="%actionSets.tomcatActions.runApplicationFromSelectedElement.label">
+         </action>
+      </actionSet>
+   </extension>
+   <!--extension id="textproblemmarker" name="%textProblemName" point="org.eclipse.core.resources.markers">
+      <super type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <super type="org.eclipse.core.resources.textmarker">
+      </super>
+      <persistent value="true">
+      </persistent>
+   </extension-->
+   <extension id="strutsmarker" name="%strutsProblemName" point="org.eclipse.core.resources.markers">
+      <super type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <persistent value="true">
+      </persistent>
+   </extension>
+   <extension id="constraintsmarker" name="%constraintProblemName" point="org.eclipse.core.resources.markers">
+      <super type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <persistent value="true">
+      </persistent>
+   </extension>
+   <extension point="org.jboss.tools.common.model.ui.paletteConstraints">
+      <editorType id="web.xml">
+      </editorType>
+      <editorType id="tld">
+      </editorType>
+      <editorType id="jsp">
+      </editorType>
+      <editorType id="html">
+      </editorType>
+   </extension>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <category id="org.jboss.tools.jst.web" name="Red Hat Developer Studio">
+      </category>
+      <wizard category="org.jboss.tools.jst.web" class="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSFileWizard" icon="images/xstudio/wizards/new_css_file.gif" id="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSFileWizard" name="CSS File" project="false">
+         <selection class="org.eclipse.core.resources.IResource">
+         </selection>
+      </wizard>
+      <wizard category="org.jboss.tools.jst.web" class="org.jboss.tools.jst.web.ui.wizards.newfile.NewJSFileWizard" icon="images/xstudio/wizards/new_js_file.gif" id="org.jboss.tools.jst.web.ui.wizards.newfile.NewJSFileWizard" name="JS File" project="false">
+         <selection class="org.eclipse.core.resources.IResource">
+         </selection>
+      </wizard>
+      <wizard category="org.jboss.tools.jst.web" class="org.jboss.tools.jst.web.ui.wizards.newfile.NewWebFileWizard" icon="images/xstudio/wizards/new_webapp_file.gif" id="org.jboss.tools.jst.web.ui.wizards.newfile.NewWebFileWizard" name="Web Descriptor" project="false">
+         <selection class="org.eclipse.core.resources.IResource">
+         </selection>
+      </wizard>
+      <wizard category="org.jboss.tools.jst.web" class="org.jboss.tools.common.model.ui.wizard.newfile.NewJSPFileWizard" icon="images/xstudio/wizards/new_jsp_file.gif" id="org.jboss.tools.common.model.ui.wizard.newfile.NewJSPFileWizard" name="JSP File" project="false">
+         <selection class="org.eclipse.core.resources.IResource">
+         </selection>
+      </wizard>
+      <wizard 
+         category="org.jboss.tools.jst.web" 
+         class="org.jboss.tools.common.model.ui.wizard.newfile.NewXHTMLFileWizard" 
+         icon="images/xstudio/wizards/new_html_file.gif" 
+         id="org.jboss.tools.common.model.ui.wizard.newfile.NewXHTMLFileWizard" 
+         name="XHTML File" project="false">
+         <selection class="org.eclipse.core.resources.IResource">
+         </selection>
+      </wizard>
+      <wizard category="org.jboss.tools.jst.web" class="org.jboss.tools.common.model.ui.wizard.newfile.NewHTMLFileWizard" icon="images/xstudio/wizards/new_html_file.gif" id="org.jboss.tools.common.model.ui.wizard.newfile.NewHTMLFileWizard" name="HTML File" project="false">
+         <selection class="org.eclipse.core.resources.IResource">
+         </selection>
+      </wizard>
+      <wizard category="org.jboss.tools.jst.web" class="org.jboss.tools.common.model.ui.wizard.newfile.NewPropertiesFileWizard" icon="images/xstudio/wizards/new_properties_file.gif" id="org.jboss.tools.common.model.ui.wizard.newfile.NewPropertiesFileWizard" name="Properties File" project="false">
+         <selection class="org.eclipse.core.resources.IResource">
+         </selection>
+      </wizard>
+      <wizard category="org.jboss.tools.jst.web" class="org.jboss.tools.jst.web.ui.wizards.newfile.NewTLDFileWizard" icon="images/xstudio/wizards/new_taglibs_file.gif" id="org.jboss.tools.jst.web.ui.wizard.newfile.NewTLDFileWizard" name="TLD File" project="false">
+         <selection class="org.eclipse.core.resources.IResource">
+         </selection>
+      </wizard>
+   </extension>
+
+   <extension id="org.jboss.tools.jst.web.ui.views" name="Red Hat Developer Studio" point="org.eclipse.ui.views">
+      <category id="web.views.category.id" name="Red Hat Developer Studio">
+      </category>
+      <view category="web.views.category.id" class="org.jboss.tools.common.model.ui.views.palette.PaletteViewPart" icon="images/xstudio/views/palette.gif" id="com.redhat.palette.swt" name="%paletteViewPart.name">
+      </view>
+      <view category="web.views.category.id" class="org.jboss.tools.jst.web.ui.navigator.WebProjectsNavigator" icon="images/xstudio/views/web_project.gif" id="org.jboss.tools.jst.web.ui.navigator.WebProjectsView" name="Web Projects">
+      </view>
+      <view category="web.views.category.id" class="org.jboss.tools.jst.web.ui.BrowserView" icon="images/xstudio/views/web_help.gif" id="org.jboss.tools.jst.web.ui.action.BrowserView" name="Online Help">
+      </view>
+   </extension>
+
+
+
+   <extension point="org.eclipse.ui.popupMenus">
+      <objectContribution id="RedHatEclipse4Web_IProject" objectClass="org.eclipse.core.resources.IProject">
+         <menu id="RedHat4Web" label="Red Hat Developer Studio" path="additions">
+            <separator name="a">
+            </separator>
+            <separator name="b">
+            </separator>
+            <separator name="c">
+            </separator>
+            <separator name="d">
+            </separator>
+         </menu>
+         <action class="org.jboss.tools.jst.web.ui.action.UnregisterFromServerXmlActionDelegate" enablesFor="*" id="org.jboss.tools.common.xstudio.action.UnregisterFromServerXmlActionDelegate" label="%popupMenus.action.unregisterFromServerXml" menubarPath="RedHat4Web/c">
+         </action>
+         <action class="org.jboss.tools.jst.web.ui.action.RegisterInServerXmlActionDelegate" enablesFor="*" id="org.jboss.tools.common.xstudio.action.RegisterInServerXmlActionDelegate" label="%popupMenus.action.registerInServerXml" menubarPath="RedHat4Web/c">
+         </action>
+         <action class="org.jboss.tools.jst.web.ui.action.SaveProjectAsTemplateActionDelegate" enablesFor="*" id="org.jboss.tools.common.xstudio.action.SaveProjectAsTemplateActionDelegate" label="%popupMenus.action.saveAsTemplate" menubarPath="RedHat4Web/c">
+         </action>
+      </objectContribution>
+      <objectContribution id="RedHatEclipse4Web_IJavaProject" objectClass="org.eclipse.jdt.core.IJavaProject">
+         <menu id="RedHat4Web" label="Red Hat Developer Studio" path="additions">
+            <separator name="a">
+            </separator>
+            <separator name="b">
+            </separator>
+            <separator name="c">
+            </separator>
+            <separator name="d">
+            </separator>
+         </menu>
+         <action class="org.jboss.tools.jst.web.ui.action.UnregisterFromServerXmlActionDelegate" enablesFor="*" id="org.jboss.tools.common.xstudio.action.UnregisterFromServerXmlActionDelegate" label="%popupMenus.action.unregisterFromServerXml" menubarPath="RedHat4Web/c">
+         </action>
+         <action class="org.jboss.tools.jst.web.ui.action.RegisterInServerXmlActionDelegate" enablesFor="*" id="org.jboss.tools.common.xstudio.action.RegisterInServerXmlActionDelegate" label="%popupMenus.action.registerInServerXml" menubarPath="RedHat4Web/c">
+         </action>
+         <action class="org.jboss.tools.jst.web.ui.action.SaveProjectAsTemplateActionDelegate" enablesFor="*" id="org.jboss.tools.common.xstudio.action.SaveProjectAsTemplateActionDelegate" label="%popupMenus.action.saveAsTemplate" menubarPath="RedHat4Web/c">
+         </action>
+      </objectContribution>
+      <objectContribution id="RedHatEclipse4Web_IFile" objectClass="org.eclipse.core.resources.IFile">
+         <menu id="RedHat4Web" label="Red Hat Developer Studio" path="additions">
+            <separator name="a">
+            </separator>
+            <separator name="generate">
+            </separator>
+            <separator name="help">
+            </separator>
+         </menu>
+         
+         <!--action class="org.jboss.tools.common.model.ui.action.file.HelpActionDelegate" enablesFor="*" id="org.jboss.tools.common.model.ui.action.file.HelpActionDelegate" label="Help" menubarPath="RedHat4Web/help">
+         </action-->
+      </objectContribution>
+      <objectContribution id="RedHatEclipse4Web_XModelObject" objectClass="org.jboss.tools.common.model.XModelObject">
+         <menu id="RedHat4Web" label="Red Hat Developer Studio" path="additions">
+            <separator name="a">
+            </separator>
+            <separator name="generate">
+            </separator>
+            <separator name="help">
+            </separator>
+         </menu>
+         <!--action class="org.jboss.tools.common.model.ui.action.file.HelpActionDelegate" enablesFor="*" id="org.jboss.tools.common.model.ui.action.file.HelpActionDelegate" label="Help" menubarPath="RedHat4Web/help">
+         </action-->
+      </objectContribution>
+   </extension>
+   <extension
+         point="org.jboss.tools.common.model.resourceMapping">
+      <mapping
+          loader="org.jboss.tools.jst.web.ui"
+          priority="10"
+          kind="class"
+          paths=""
+      />
+   </extension>
+
+   <extension point="org.eclipse.ui.perspectives">
+      <perspective class="org.jboss.tools.jst.web.ui.RedHat4WebPerspectiveFactory" icon="images/xstudio/perspective.png" id="org.jboss.tools.jst.web.ui.RedHat4WebPerspective" name="%perspective.name">
+      </perspective>
+   </extension>
+
+   <extension point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension targetID="org.jboss.tools.jst.web.ui.RedHat4WebPerspective">
+         <actionSet id="org.jboss.tools.struts.modules"/> 
+         <perspectiveShortcut id="org.eclipse.jdt.ui.JavaPerspective">
+         </perspectiveShortcut>
+         <perspectiveShortcut id="org.eclipse.debug.ui.DebugPerspective">
+         </perspectiveShortcut>
+         <perspectiveShortcut id="org.eclipse.jdt.ui.JavaBrowsingPerspective">
+         </perspectiveShortcut>
+         <newWizardShortcut id="org.eclipse.jdt.ui.wizards.NewPackageCreationWizard">
+         </newWizardShortcut>
+         <newWizardShortcut id="org.eclipse.jdt.ui.wizards.NewClassCreationWizard">
+         </newWizardShortcut>
+         <newWizardShortcut id="org.eclipse.jdt.ui.wizards.NewInterfaceCreationWizard">
+         </newWizardShortcut>
+         <newWizardShortcut id="org.eclipse.jdt.ui.wizards.NewSourceFolderCreationWizard">
+         </newWizardShortcut>
+         <newWizardShortcut id="org.eclipse.jdt.ui.wizards.NewSnippetFileCreationWizard">
+         </newWizardShortcut>
+         <newWizardShortcut id="org.eclipse.ui.wizards.new.folder">
+         </newWizardShortcut>
+         <newWizardShortcut id="org.eclipse.ui.wizards.new.file">
+         </newWizardShortcut>
+         <newWizardShortcut id="org.jboss.tools.struts.ui.wizard.newfile.NewStrutsConfigFileWizard">
+         </newWizardShortcut>
+         <!--newWizardShortcut 
+             id="org.jboss.tools.struts.ui.wizard.newfile.NewStrutsConfigFile10Wizard">
+         </newWizardShortcut-->
+         <newWizardShortcut id="org.jboss.tools.jsf.ui.wizard.newfile.NewFacesConfigFileWizard">
+         </newWizardShortcut>
+         <!--newWizardShortcut id="org.jboss.tools.orm.wizard.newfile.NewHibernateFileWizard">
+         </newWizardShortcut-->
+         <newWizardShortcut 
+             id="org.jboss.tools.jst.web.tiles.ui.wizard.newfile.NewTilesFileWizard">
+         </newWizardShortcut>
+         <newWizardShortcut id="org.jboss.tools.struts.ui.wizard.newfile.NewTilesFileWizard">
+         </newWizardShortcut>
+         <newWizardShortcut id="org.jboss.tools.struts.ui.wizard.newfile.NewValidationFileWizard">
+         </newWizardShortcut>
+         <newWizardShortcut id="org.jboss.tools.jst.web.ui.wizard.newfile.NewTLDFileWizard">
+         </newWizardShortcut>
+         <newWizardShortcut id="org.jboss.tools.common.model.ui.wizard.newfile.NewJSPFileWizard">
+         </newWizardShortcut>
+         <newWizardShortcut id="org.jboss.tools.common.model.ui.wizard.newfile.NewXHTMLFileWizard">
+         </newWizardShortcut>
+         <newWizardShortcut id="org.jboss.tools.common.model.ui.wizard.newfile.NewHTMLFileWizard">
+         </newWizardShortcut>
+         <newWizardShortcut id="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSFileWizard">
+         </newWizardShortcut>
+         <newWizardShortcut id="org.jboss.tools.jst.web.ui.wizards.newfile.NewJSFileWizard">
+         </newWizardShortcut>
+         <!--viewShortcut 
+             id="org.jboss.tools.common.model.ui.navigator.NavigatorViewPart">
+         </viewShortcut-->
+         <newWizardShortcut id="org.jboss.tools.common.model.ui.wizard.newfile.NewPropertiesFileWizard">
+         </newWizardShortcut>
+         <viewShortcut id="com.redhat.palette.swt">
+         </viewShortcut>
+         <viewShortcut id="org.jboss.tools.jst.web.ui.navigator.WebProjectsView">
+         </viewShortcut>
+         <viewShortcut id="org.jboss.tools.jst.web.ui.action.BrowserView">
+         </viewShortcut>
+         <viewShortcut id="org.eclipse.jdt.ui.PackageExplorer">
+         </viewShortcut>
+         <viewShortcut id="org.eclipse.jdt.ui.TypeHierarchy">
+         </viewShortcut>
+         <viewShortcut id="org.eclipse.debug.ui.ConsoleView">
+         </viewShortcut>
+         <viewShortcut id="org.eclipse.ui.views.ContentOutline">
+         </viewShortcut>
+         <viewShortcut id="org.eclipse.ui.views.PropertySheet">
+         </viewShortcut>
+         <viewShortcut id="org.eclipse.ui.views.TaskList">
+         </viewShortcut>
+         <viewShortcut id="org.eclipse.ui.views.ResourceNavigator">
+         </viewShortcut>
+         <!--actionSet id="org.jboss.tools.struts.actionSet">
+         </actionSet>
+         <actionSet id="org.jboss.tools.jsf.actionSet">
+         </actionSet-->
+         <perspectiveShortcut id="org.eclipse.debug.ui.DebugPerspective">
+         </perspectiveShortcut>
+      </perspectiveExtension>
+      <perspectiveExtension targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <perspectiveShortcut id="org.jboss.tools.jst.web.ui.RedHat4WebPerspective">
+         </perspectiveShortcut>
+         <viewShortcut id="org.jboss.tools.common.model.ui.navigator.NavigatorViewPart">
+         </viewShortcut>
+      </perspectiveExtension>
+      <perspectiveExtension targetID="org.eclipse.ui.resourcePerspective">
+         <perspectiveShortcut id="org.jboss.tools.jst.web.ui.RedHat4WebPerspective">
+         </perspectiveShortcut>
+         <viewShortcut id="org.jboss.tools.common.model.ui.navigator.NavigatorViewPart">
+         </viewShortcut>
+      </perspectiveExtension>
+      <perspectiveExtension targetID="org.eclipse.debug.ui.DebugPerspective">
+         <perspectiveShortcut id="org.jboss.tools.jst.web.ui.RedHat4WebPerspective">
+         </perspectiveShortcut>
+         <viewShortcut id="org.jboss.tools.common.model.ui.navigator.NavigatorViewPart">
+         </viewShortcut>
+      </perspectiveExtension>
+      <perspectiveExtension targetID="org.eclipse.jdt.ui.JavaBrowsingPerspective">
+         <perspectiveShortcut id="org.jboss.tools.jst.web.ui.RedHat4WebPerspective">
+         </perspectiveShortcut>
+      </perspectiveExtension>
+      <perspectiveExtension targetID="org.eclipse.jdt.ui.JavaHierarchyPerspective">
+         <perspectiveShortcut id="org.jboss.tools.jst.web.ui.RedHat4WebPerspective">
+         </perspectiveShortcut>
+      </perspectiveExtension>
+   </extension>
+
+<extension point="org.eclipse.ui.navigator.viewer">
+  <viewerContentBinding viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+    <includes>
+      <contentExtension pattern="org.jboss.tools.jst.web.ui.navigator.fileContent" />
+      <contentExtension pattern="org.jboss.tools.jst.web.ui.navigator.projectContent" />
+    </includes>
+  </viewerContentBinding>
+</extension>
+<extension point="org.eclipse.ui.navigator.navigatorContent">
+  <navigatorContent
+            name="Red Hat File Content Provider"
+            priority="normal"
+            icon="images/xstudio/views/web_project.gif"
+            activeByDefault="true"
+            contentProvider="org.jboss.tools.jst.web.ui.navigator.XContentProvider"
+            labelProvider="org.jboss.tools.jst.web.ui.navigator.WebProjectsLabelProvider"   
+            id="org.jboss.tools.jst.web.ui.navigator.fileContent">         
+    <triggerPoints>
+      <or>         
+        <instanceof 
+              value="org.eclipse.core.resources.IFile" /> 
+      </or>
+    </triggerPoints>
+    <possibleChildren>
+       <or>         
+          <instanceof value="org.jboss.tools.common.model.XModelObject" /> 
+       </or>
+    </possibleChildren>
+    <actionProvider
+      class="org.jboss.tools.jst.web.ui.navigator.XActionProvider"
+      id="org.jboss.tools.jst.web.ui.navigator.file.XActionProvider">
+      <enablement>
+        <or>
+          <instanceof value="org.jboss.tools.common.model.XModelObject"/>
+          <instanceof value="org.eclipse.core.resources.IFile"/>
+        </or>
+      </enablement>
+    </actionProvider>
+    <commonSorter id="org.jboss.tools.jst.web.ui.navigator.sorter" class="org.jboss.tools.jst.web.ui.navigator.XSorter" />
+  </navigatorContent>
+</extension>
+
+<extension point="org.eclipse.ui.navigator.navigatorContent">
+  <navigatorContent
+            name="Red Hat Project Content Provider"
+            priority="highest"
+            icon="images/xstudio/views/web_project.gif"
+            activeByDefault="true"
+            contentProvider="org.jboss.tools.jst.web.ui.navigator.XProjectContentProvider"
+            labelProvider="org.jboss.tools.jst.web.ui.navigator.WebProjectsLabelProvider"   
+            id="org.jboss.tools.jst.web.ui.navigator.projectContent">
+    <triggerPoints>
+      <or>         
+        <instanceof 
+              value="org.eclipse.core.resources.IProject" /> 
+        <instanceof value="org.eclipse.jdt.core.IJavaProject" />
+      </or>
+    </triggerPoints>
+    <possibleChildren>
+       <or>         
+          <instanceof value="org.jboss.tools.common.model.XModelObject" /> 
+       </or>
+    </possibleChildren>
+    <actionProvider
+      class="org.jboss.tools.jst.web.ui.navigator.XActionProvider"
+      id="org.jboss.tools.jst.web.ui.navigator.project.XActionProvider">
+      <enablement>
+        <or>
+          <instanceof value="org.jboss.tools.common.model.XModelObject"/>
+        </or>
+      </enablement>
+    </actionProvider>
+    <commonSorter id="org.jboss.tools.jst.web.ui.navigator.sorter" class="org.jboss.tools.jst.web.ui.navigator.XSorter" />
+    <dropAssistant id="xxx" class="org.jboss.tools.jst.web.ui.navigator.XDropAdapterAssistant">
+      <possibleDropTargets>
+          <instanceof value="org.jboss.tools.common.model.XModelObject" /> 
+      </possibleDropTargets>
+    </dropAssistant>
+  </navigatorContent>
+</extension>
+
+   <extension point="org.jboss.tools.common.model.classes">
+		<xclass id="org.jboss.tools.jst.web.ui.WebUiPlugin"
+			class="org.jboss.tools.jst.web.ui.WebUiPlugin"/>
+		<xclass id="org.jboss.tools.jst.web.ui.action.AddOrm2NatureActionHandler"
+			class="org.jboss.tools.jst.web.ui.action.AddOrm2NatureActionHandler"/>
+		<!--xclass id="org.jboss.tools.jst.web.ui.action.BrowserView"
+			class="org.jboss.tools.jst.web.ui.action.BrowserView"/-->
+		<xclass id="org.jboss.tools.jst.web.ui.action.adf.AddADFSupportHandler"
+			class="org.jboss.tools.jst.web.ui.action.adf.AddADFSupportHandler"/>
+		<xclass id="org.jboss.tools.jst.web.ui.editors.TLDCompoundEditor"
+			class="org.jboss.tools.jst.web.ui.editors.TLDCompoundEditor"/>
+		<xclass id="org.jboss.tools.jst.web.ui.editors.TLDEditorMessages"
+			class="org.jboss.tools.jst.web.ui.editors.TLDEditorMessages"/>
+		<xclass id="org.jboss.tools.jst.web.ui.editors.WebCompoundEditor"
+			class="org.jboss.tools.jst.web.ui.editors.WebCompoundEditor"/>
+		<xclass id="org.jboss.tools.jst.web.ui.wizards.appregister.AppRegisterWizard"
+			class="org.jboss.tools.jst.web.ui.wizards.appregister.AppRegisterWizard"/>
+		<xclass id="org.jboss.tools.jst.web.ui.wizards.links.HiddenLinksWizard"
+			class="org.jboss.tools.jst.web.ui.wizards.links.HiddenLinksWizard"/>
+		<xclass id="org.jboss.tools.jst.web.ui.wizards.palette.ImportTLDPage"
+			class="org.jboss.tools.jst.web.ui.wizards.palette.ImportTLDPage"/>
+		<xclass id="org.jboss.tools.jst.web.ui.wizards.project.AddProjectTemplateNameView"
+			class="org.jboss.tools.jst.web.ui.wizards.project.AddProjectTemplateNameView"/>
+		<xclass id="org.jboss.tools.jst.web.ui.wizards.project.AddProjectTemplatePropertiesView"
+			class="org.jboss.tools.jst.web.ui.wizards.project.AddProjectTemplatePropertiesView"/>
+		<xclass id="org.jboss.tools.jst.web.ui.wizards.project.AddProjectTemplateResourcesView"
+			class="org.jboss.tools.jst.web.ui.wizards.project.AddProjectTemplateResourcesView"/>
+		<xclass id="org.jboss.tools.jst.web.ui.wizards.project.AddProjectTemplateVelocityView"
+			class="org.jboss.tools.jst.web.ui.wizards.project.AddProjectTemplateVelocityView"/>
+		<xclass id="org.jboss.tools.jst.web.ui.wizards.project.EditProjectTemplateView"
+			class="org.jboss.tools.jst.web.ui.wizards.project.EditProjectTemplateView"/>
+		<xclass id="org.jboss.tools.jst.web.ui.wizards.tomcatvm.TomcatVMWizard"
+			class="org.jboss.tools.jst.web.ui.wizards.tomcatvm.TomcatVMWizard"/>
+		<xclass id="org.jboss.tools.jst.web.ui.editors.forms.TLDFormLayoutData"
+			class="org.jboss.tools.jst.web.ui.editors.forms.TLDFormLayoutData"/>
+		<xclass id="org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
+			class="org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"/>
+		<xclass id="org.jboss.tools.jst.web.ui.wizards.tomcatvm.TomcatVMWizard"
+			class="org.jboss.tools.jst.web.ui.wizards.tomcatvm.TomcatVMWizard"/>
+		<xclass id="org.jboss.tools.jst.web.ui.wizards.appregister.AppRegisterWizard"
+			class="org.jboss.tools.jst.web.ui.wizards.appregister.AppRegisterWizard"/>
+		<xclass id="org.jboss.tools.jst.web.ui.wizards.links.HiddenLinksWizard"
+			class="org.jboss.tools.jst.web.ui.wizards.links.HiddenLinksWizard"/>
+   </extension>
+
+</plugin>
