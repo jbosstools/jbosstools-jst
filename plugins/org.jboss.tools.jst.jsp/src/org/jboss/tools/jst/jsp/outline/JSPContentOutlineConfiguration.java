@@ -42,6 +42,7 @@ import org.eclipse.wst.xml.core.internal.contentmodel.modelquery.ModelQuery;
 import org.eclipse.wst.xml.core.internal.contentmodel.modelquery.ModelQueryAction;
 import org.eclipse.wst.xml.ui.internal.XMLUIMessages;
 import org.eclipse.wst.xml.ui.internal.contentoutline.XMLNodeActionManager;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.editor.IJSPTextEditor;
 import org.jboss.tools.jst.jsp.editor.IViewerDropAdapterFactory;
 import org.osgi.framework.Bundle;
@@ -64,7 +65,7 @@ public class JSPContentOutlineConfiguration extends HTMLContentOutlineConfigurat
 			dropAdapterFactory = (IViewerDropAdapterFactory)cls.newInstance();
 			
 		} catch (Exception e) {
-			ModelPlugin.log(e);
+			JspEditorPlugin.getPluginLog().logError(e);
 		}
 	}
 	

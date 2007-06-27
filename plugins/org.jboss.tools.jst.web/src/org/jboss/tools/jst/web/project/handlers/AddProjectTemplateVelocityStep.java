@@ -50,7 +50,7 @@ public class AddProjectTemplateVelocityStep extends MultistepWizardStep {
 				sb.append(r.getFullPath().toString());
 			}
 		} catch (Exception e) {
-			WebModelPlugin.log(e);
+			WebModelPlugin.getPluginLog().logError(e);
 		}
 		support.setAttributeValue(id, ATTR_NAME, sb.toString());
 	}

@@ -19,6 +19,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.jboss.tools.jst.web.WebModelPlugin;
+import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 public class RemoveJavaSource {
 	public void execute(IProject project) {
@@ -42,11 +43,11 @@ public class RemoveJavaSource {
 				try {
 					if(rs[i] != null) rs[i].delete(true, null);
 				} catch (Exception ce) {
-					WebModelPlugin.log(ce);
+					WebUiPlugin.getPluginLog().logError(ce);
 				}
 			}
 		} catch (JavaModelException e) {
-			WebModelPlugin.log(e);
+			WebUiPlugin.getPluginLog().logError(e);
 		}
 	}	
 }

@@ -55,7 +55,7 @@ public class AddProjectTemplateResourcesStep extends MultistepWizardStep {
 	        r = root.findMember("WebContent/WEB-INF/classes");
 	        if(r != null) excludedResources.add(r.getFullPath().toString());
 		} catch (Exception e) {
-			WebModelPlugin.log(e);
+			WebModelPlugin.getPluginLog().logError(e);
 		}
 	}
 	
@@ -88,7 +88,7 @@ public class AddProjectTemplateResourcesStep extends MultistepWizardStep {
 		try {
 			matchResources(root, list);
 		} catch (Exception e) {
-			WebModelPlugin.log(e);
+			WebModelPlugin.getPluginLog().logError(e);
 		}
 	}
 	

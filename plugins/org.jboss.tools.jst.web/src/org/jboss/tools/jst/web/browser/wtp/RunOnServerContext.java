@@ -53,7 +53,7 @@ public class RunOnServerContext extends AbstractBrowserContext {
 			try {
 				ModelFeatureFactory.getInstance().createFeatureInstance(pathSources[i]);
 			} catch (Exception e) {
-				WebModelPlugin.log(e);
+				WebModelPlugin.getPluginLog().logError(e);
 			}
 		}
 	}
@@ -97,7 +97,7 @@ public class RunOnServerContext extends AbstractBrowserContext {
 				Object launchable = as[i].getLaunchable(server, resource);
 				if(launchable instanceof HttpLaunchable) return (HttpLaunchable)launchable;
 			} catch (Exception e) {
-				WebModelPlugin.log(e);
+				WebModelPlugin.getPluginLog().logError(e);
 			}
 		}
 		return null;
@@ -128,7 +128,7 @@ public class RunOnServerContext extends AbstractBrowserContext {
 			IClient client = clients[0];
 			client.launch(server, launchable, launchMode, ((Server)server).getExistingLaunch());
 		} catch (Exception e) {
-			WebModelPlugin.log(e);
+			WebModelPlugin.getPluginLog().logError(e);
 			runJustUrl();
 		}
 	}
@@ -159,7 +159,7 @@ public class RunOnServerContext extends AbstractBrowserContext {
 			ServiceDialog d = PreferenceModelUtilities.getPreferenceModel().getService();
 			d.showDialog(WebUIMessages.ERROR, NLS.bind(WebUIMessages.INCORRECT_URL, mue.getMessage()), new String[]{WebUIMessages.OK}, null, ServiceDialog.ERROR); //$NON-NLS-3$
 		} catch (Exception e) {
-			WebModelPlugin.log(e);
+			WebModelPlugin.getPluginLog().logError(e);
 		}
 	}
 	

@@ -25,6 +25,7 @@ import org.jboss.tools.common.model.event.*;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 import org.jboss.tools.jst.web.tiles.TilesPreference;
 import org.jboss.tools.jst.web.tiles.model.helpers.TilesStructureHelper;
+import org.jboss.tools.jst.web.tiles.ui.TilesUIPlugin;
 import org.jboss.tools.jst.web.tiles.ui.editor.model.IDefinition;
 import org.jboss.tools.jst.web.tiles.ui.editor.model.ILink;
 import org.jboss.tools.jst.web.tiles.ui.editor.model.ITilesElement;
@@ -73,7 +74,7 @@ public class TilesModel extends TilesElement implements ITilesModel, PropertyCha
 		try {
 			setName(WebUIMessages.STRUTS_MODEL);
 		} catch (Exception ex) {
-			ModelPlugin.log(ex);
+			TilesUIPlugin.getPluginLog().logError(ex);
 		}
 	}
 
@@ -316,7 +317,7 @@ public class TilesModel extends TilesElement implements ITilesModel, PropertyCha
 			}
 			element.nodeChanged(event);
 		} catch (Exception x) {
-			ModelPlugin.log("Error in processing model event", x);
+			TilesUIPlugin.getPluginLog().logError("Error in processing model event", x);
 		}
 	}
 
@@ -340,7 +341,7 @@ public class TilesModel extends TilesElement implements ITilesModel, PropertyCha
 				element.nodeRemoved(event);
 			}
 		} catch (Exception x) {
-			ModelPlugin.log("Error in processing model event", x);
+			TilesUIPlugin.getPluginLog().logError("Error in processing model event", x);
 		}
 	}
 

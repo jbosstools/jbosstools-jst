@@ -21,6 +21,7 @@ import org.eclipse.ui.IFileEditorInput;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.ui.editor.IModelObjectEditorInput;
+import org.jboss.tools.jst.web.tiles.ui.TilesUIPlugin;
 import org.jboss.tools.jst.web.tiles.ui.editor.model.impl.TilesModel;
 
 public class TilesGuiEditor extends AbstractSectionEditor {
@@ -76,7 +77,7 @@ public class TilesGuiEditor extends AbstractSectionEditor {
 			wrapper.layout();
 			
 		} catch (Exception ex) {
-			ModelPlugin.log(ex);
+			TilesUIPlugin.getPluginLog().logError(ex);
 		}
 	}
 	

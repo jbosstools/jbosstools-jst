@@ -31,7 +31,7 @@ public class WebPromptingProvider implements IWebPromptingProvider {
 				IWebPromptingProvider p = (IWebPromptingProvider)ModelFeatureFactory.getInstance().createFeatureInstance(pns[i]);
 				if(p != null) l.add(p);
 			} catch (Exception e) {
-				WebModelPlugin.log(e);
+				WebModelPlugin.getPluginLog().logError(e);
 			}
 		}
 		providers = l.toArray(new IWebPromptingProvider[0]);

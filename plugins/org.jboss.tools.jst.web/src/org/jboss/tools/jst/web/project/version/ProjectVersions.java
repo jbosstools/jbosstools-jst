@@ -110,7 +110,7 @@ public abstract class ProjectVersions {
 		try {
 			XModelObjectLoaderUtil.serialize(document.getDocumentElement(), file.getAbsolutePath());
 		} catch (Exception e) {
-			WebModelPlugin.log(e);
+			WebModelPlugin.getPluginLog().logError(e);
 		}
 	}
 	

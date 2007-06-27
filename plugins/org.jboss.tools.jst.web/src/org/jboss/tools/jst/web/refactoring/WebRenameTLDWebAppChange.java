@@ -38,7 +38,7 @@ public class WebRenameTLDWebAppChange extends CompositeChange {
 		try {
 			addChanges();
 		} catch (Exception e) {
-			WebModelPlugin.log(e);
+			WebModelPlugin.getPluginLog().logError(e);
 		}
 	}
 

@@ -31,7 +31,7 @@ public class FileSystemsRenameListenerContribution implements FileSystemsRenameL
 					try {
 						updateWebContentNamePropertiesOnly(project, webrootname, null);
 					} catch (Exception e) {
-						WebModelPlugin.log(e);
+						WebModelPlugin.getPluginLog().logError(e);
 					}
 				}
 			});

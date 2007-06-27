@@ -60,7 +60,7 @@ public class JSFPagesRefactoringChange extends CompositeChange {
 		try {
 			addChanges();
 		} catch (Exception e) {
-			WebModelPlugin.log(e);
+			WebModelPlugin.getPluginLog().logError(e);
 		}
 	}
 	

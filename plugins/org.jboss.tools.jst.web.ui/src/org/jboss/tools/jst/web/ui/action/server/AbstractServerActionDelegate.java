@@ -41,7 +41,7 @@ public abstract class AbstractServerActionDelegate implements IWorkbenchWindowAc
 			try {
 				ds[i].update();
 			} catch (Exception e) {
-				WebModelPlugin.log(e);
+				WebModelPlugin.getPluginLog().logError(e);
 			}
 		}		
 	}
@@ -85,7 +85,7 @@ public abstract class AbstractServerActionDelegate implements IWorkbenchWindowAc
 		try {
 			doRun();
 		} catch (Exception e) {
-			WebModelPlugin.log(e);
+			WebModelPlugin.getPluginLog().logError(e);
 		}
 	}
 		

@@ -38,6 +38,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.IUpdate;
 
 import org.jboss.tools.common.model.plugin.ModelPlugin;
+import org.jboss.tools.jst.web.debug.ui.xpl.WebDebugUIPlugin;
 import org.jboss.tools.jst.web.debug.xpl.JspDebugUtils;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 
@@ -84,14 +85,10 @@ public class ToggleBreakpointAction extends Action implements IUpdate
 				int end = start + line.getLength() - 1;
 				JspDebugUtils.createJspLineBreakpoint(getResource(), lineNumber, start, end);
 			}
-		} 
-		catch (BadLocationException ex) 
-		{
-			ModelPlugin.log(ex);
-		} 
-		catch (DebugException ex) 
-		{
-			ModelPlugin.log(ex);
+		} catch (BadLocationException ex)	{
+			WebDebugUIPlugin.getPluginLog().logError(ex);
+		} 	catch (DebugException ex)	{
+			WebDebugUIPlugin.getPluginLog().logError(ex);
 		}
 	}
 	
@@ -106,10 +103,8 @@ public class ToggleBreakpointAction extends Action implements IUpdate
 				IBreakpoint breakpoint = breakpointManager.getBreakpoint((IMarker)iterator.next());
 				breakpointManager.removeBreakpoint(breakpoint, true);
 			}
-		} 
-		catch (CoreException ex) 
-		{
-			ModelPlugin.log(ex);
+		} 	catch (CoreException ex)	{
+			WebDebugUIPlugin.getPluginLog().logError(ex);
 		}
 	}
 	
@@ -145,10 +140,8 @@ public class ToggleBreakpointAction extends Action implements IUpdate
 							breakpoints.add(markers[i]);
 					}
 				}
-			} 
-			catch (CoreException ex) 
-			{
-				ModelPlugin.log(ex);
+			}  catch (CoreException ex)	{
+				WebDebugUIPlugin.getPluginLog().logError(ex);
 			}
 		}
 		return breakpoints;

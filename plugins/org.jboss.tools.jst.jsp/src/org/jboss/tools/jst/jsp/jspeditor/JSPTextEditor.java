@@ -233,7 +233,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			method.setAccessible(true);
 			method.invoke(sheet, new Object[] { sorter });
 		} catch (Exception e) {
-			ModelUIPlugin.log(e);
+			JspEditorPlugin.getPluginLog().logError(e);
 		}
 	}
 
@@ -405,7 +405,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 				if (f != null)
 					f.edit(getSourceViewer().getDocument().get());
 			} catch (Exception e) {
-				ModelUIPlugin.log(e);
+				JspEditorPlugin.getPluginLog().logError(e);
 			} finally {
 				setModified(false);
 				lock = false;
@@ -570,7 +570,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 				wtpTextJspKbConnector.setTaglibManagerProvider(parentEditor);
 			}
 		} catch (Exception x) {
-			JspEditorPlugin.log("Error while installing active prpmpting support", x);
+			JspEditorPlugin.getPluginLog().logError("Error while installing active prpmpting support", x);
 		}
 	}
 
@@ -1033,7 +1033,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 				return b.booleanValue();
 			} catch (Exception e) {
 				firingSelectionFailedCount++;
-				ModelUIPlugin.log(e);
+				JspEditorPlugin.getPluginLog().logError(e);
 			}
 			return false;
 		}

@@ -142,7 +142,7 @@ public class RedHatHtmlContentAssistProcessor extends HTMLContentAssistProcessor
 			try {
 				kbProposals = getWtpKbConnector().getProposals(request);
 			} catch(Exception e) {
-    			ModelPlugin.log(e);
+				JspEditorPlugin.getPluginLog().logError(e);
 			}
 			for (Iterator iter = kbProposals.iterator(); iter.hasNext();) {
 				KbProposal kbProposal = (KbProposal) iter.next();
@@ -240,7 +240,7 @@ public class RedHatHtmlContentAssistProcessor extends HTMLContentAssistProcessor
 		try {
 			kbProposals = getWtpKbConnector().getProposals(request);
 		} catch(Exception e) {
-			ModelPlugin.log(e);
+			JspEditorPlugin.getPluginLog().logError(e);
 		}
 		for (Iterator iter = kbProposals.iterator(); iter.hasNext();) {
 			KbProposal kbProposal = cleanFaceletProposal((KbProposal)iter.next());
@@ -296,7 +296,7 @@ public class RedHatHtmlContentAssistProcessor extends HTMLContentAssistProcessor
 		try {
 			kbProposals = getWtpKbConnector().getProposals(request);
 		} catch(Exception e) {
-			ModelPlugin.log(e);
+			JspEditorPlugin.getPluginLog().logError(e);
 		}
 		for (Iterator iter = kbProposals.iterator(); iter.hasNext();) {
 			KbProposal kbProposal = (KbProposal)iter.next();
@@ -398,7 +398,7 @@ public class RedHatHtmlContentAssistProcessor extends HTMLContentAssistProcessor
 		try {
 			kbProposals = getWtpKbConnector().getProposals(request);
 		} catch(Exception e) {
-			ModelPlugin.log(e);
+			JspEditorPlugin.getPluginLog().logError(e);
 		}
 		for (Iterator iter = kbProposals.iterator(); iter.hasNext();) {
 			KbProposal kbProposal = (KbProposal) iter.next();

@@ -14,6 +14,7 @@ import org.jboss.tools.common.model.*;
 import org.jboss.tools.common.model.filesystems.impl.FileAnyImpl;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.util.XModelObjectUtil;
+import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.model.WebProcess;
 
 public class WebProcessStructureHelper {
@@ -23,7 +24,7 @@ public class WebProcessStructureHelper {
 	public boolean isProcessLoaded(XModelObject process) {
 		if(!(process instanceof WebProcess)) {
 			if(ModelPlugin.isDebugEnabled()) {			
-				ModelPlugin.log("wrong argument in isProcessLoaded");
+				WebModelPlugin.getPluginLog().logInfo("wrong argument in isProcessLoaded");
 			}
 			return false;
 		}

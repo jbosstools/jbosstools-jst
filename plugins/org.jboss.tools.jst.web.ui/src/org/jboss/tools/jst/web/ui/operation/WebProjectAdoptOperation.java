@@ -33,6 +33,7 @@ import org.jboss.tools.common.model.util.XMLUtil;
 import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.jst.web.context.*;
+import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 public abstract class WebProjectAdoptOperation extends WebNatureOperation {
 	protected IImportWebProjectContext context;
@@ -79,7 +80,7 @@ public abstract class WebProjectAdoptOperation extends WebNatureOperation {
 			if(sv == null || sv.length() == 0) sv = getDefaultServletVersion();
 			model.changeObjectAttribute(model.getByPath("Web"), "servlet version", sv);
 		} catch (Exception ex) {
-			ModelUIPlugin.log(ex);
+			WebUiPlugin.getPluginLog().logError(ex);
 		}
 	}
 	
@@ -109,12 +110,12 @@ public abstract class WebProjectAdoptOperation extends WebNatureOperation {
 			ser.asDOMSerializer();
 			ser.serialize(element);	
 		} catch (Exception ex) {
-			ModelUIPlugin.log(ex);
+			WebUiPlugin.getPluginLog().logError(ex);
 		} finally {
 			try {
 				if (fileWriter != null) fileWriter.close();
 			} catch (Exception ex) {
-				ModelUIPlugin.log(ex);
+				WebUiPlugin.getPluginLog().logError(ex);
 			}
 		}
 	}

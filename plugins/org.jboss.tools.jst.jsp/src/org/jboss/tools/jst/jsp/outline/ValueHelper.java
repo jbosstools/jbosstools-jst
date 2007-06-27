@@ -12,6 +12,7 @@ package org.jboss.tools.jst.jsp.outline;
 
 import java.util.*;
 import org.eclipse.core.resources.*;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.jspeditor.*;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jst.jsp.core.internal.contentmodel.*;
@@ -111,7 +112,7 @@ public class ValueHelper {
 		try {
 			result = getPageConnector().getAttributeInformation(query);
 		} catch (KbException e) {
-			ModelPlugin.log(e);
+			JspEditorPlugin.getPluginLog().logError(e);
 		}
 		return result;
 	}
@@ -122,7 +123,7 @@ public class ValueHelper {
 		try {
 			result = getPageConnector().getTagInformation(query);
 		} catch (KbException e) {
-			ModelPlugin.log(e);
+			JspEditorPlugin.getPluginLog().logError(e);
 		}
 		return result;
 	}
@@ -194,7 +195,7 @@ public class ValueHelper {
 ///				wtpTextJspKbConnector.setTaglibManagerProvider(parentEditor);
 			}
 		} catch(Exception x) {
-			ModelPlugin.log("Error in activating prompting suppport", x);
+			JspEditorPlugin.getPluginLog().logError("Error in activating prompting suppport", x);
 		} finally {
 			if(model != null) {
 				model.releaseFromRead();
@@ -215,7 +216,7 @@ public class ValueHelper {
 			pageConnector = (WtpKbConnector)KbConnectorFactory.getIntstance().createConnector(KbConnectorType.JSP_WTP_KB_CONNECTOR, document);
 			registerTaglibs(pageConnector, document);
 		} catch (Exception e) {
-			ModelPlugin.log(e);
+			JspEditorPlugin.getPluginLog().logError(e);
 		}
 	}
 	boolean registerTaglibs(WtpKbConnector wtpKbConnector, IDocument document) {

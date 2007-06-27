@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.jsp.ui.action;
 
 import org.jboss.tools.common.model.plugin.ModelPlugin;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor;
 import org.eclipse.jface.action.IAction;
@@ -41,7 +42,7 @@ public class FormatJSPActionDelegate implements IEditorActionDelegate {
 		try {
 			new JSPFormatter().format(document, textSelection);
 		} catch (Exception e) {
-			ModelPlugin.log(e);
+			JspEditorPlugin.getPluginLog().logError(e);
 		}
 	}
 

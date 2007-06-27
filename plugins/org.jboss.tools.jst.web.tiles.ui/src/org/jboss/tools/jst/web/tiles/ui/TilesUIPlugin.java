@@ -10,14 +10,13 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.tiles.ui;
 
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.jboss.tools.common.log.BaseUIPlugin;
+import org.jboss.tools.common.log.IPluginLog;
 import org.osgi.framework.BundleContext;
 
 
-public class TilesUIPlugin extends AbstractUIPlugin {
+public class TilesUIPlugin extends BaseUIPlugin {
 	/* (non-Javadoc)
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
@@ -38,7 +37,7 @@ public class TilesUIPlugin extends AbstractUIPlugin {
 		try {
 			return TilesUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell();
 		} catch(Exception e){
-			log(new Status(Status.OK, PLUGIN_ID, Status.OK, "Exception:", e));
+			getPluginLog().logError("Exception:", e);
 			return null;
 		}
 	}
@@ -50,20 +49,12 @@ public class TilesUIPlugin extends AbstractUIPlugin {
 	public boolean isDebugEnabled() {
 		return plugin.isDebugging();
 	}
-	
-	public void log(String msg) {
-		if(isDebugEnabled()) plugin.getLog().log(new Status(Status.INFO, PLUGIN_ID, Status.OK, msg, null));		
+
+	/**
+	 * @return IPluginLog object
+	 */
+	public static IPluginLog getPluginLog() {
+		return getDefault();
 	}
-	
-	public void log(IStatus status) {
-		if(isDebugEnabled() || !status.isOK()) plugin.getLog().log(status);
-	}
-	
-	public void log(String message, Exception exception) {
-		getLog().log(new Status(Status.ERROR, PLUGIN_ID, Status.OK, message, exception));		
-	}
-	
-	public void log(Exception ex) {
-		getLog().log(new Status(Status.ERROR, PLUGIN_ID, Status.OK, "No message", ex));
-	}
+
 }

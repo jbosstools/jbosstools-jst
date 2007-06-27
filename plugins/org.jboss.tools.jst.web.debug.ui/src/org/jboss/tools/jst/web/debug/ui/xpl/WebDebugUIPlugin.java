@@ -15,17 +15,16 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPluginDescriptor;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
-
+import org.jboss.tools.common.log.BaseUIPlugin;
+import org.jboss.tools.common.log.IPluginLog;
 import org.jboss.tools.jst.web.debug.ui.internal.views.properties.xpl.WebDataProperties;
 
 /**
  * @author Jeremy
  *
  */
-public class WebDebugUIPlugin extends AbstractUIPlugin {
+public class WebDebugUIPlugin extends BaseUIPlugin {
 	//Resource bundle.
 	private static ResourceBundle resourceBundle;
 
@@ -81,16 +80,22 @@ public class WebDebugUIPlugin extends AbstractUIPlugin {
 		return INSTANCE;
 	}
 
+
 	public static boolean isDebugEnabled() {
 		return INSTANCE.isDebugging();
-	}
-
-	public static void out(String msg) {
-		if(isDebugEnabled()) System.out.println(msg);		
 	}
 
 	protected void initializeDefaultPreferences(IPreferenceStore store) {
 		WebDataProperties.initializeDefaultValues(store);
 	}
+
 	
+	
+	/**
+	 * @return IPluginLog object
+	 */
+	public static IPluginLog getPluginLog() {
+		return getDefault();
+	}
+
 }

@@ -122,7 +122,7 @@ public class RegistrationHelper {
 				server.publish(IServer.PUBLISH_INCREMENTAL, monitor);
 			}
 		} catch (Exception e) {
-			WebModelPlugin.log(e);
+			WebModelPlugin.getPluginLog().logError(e);
 		}
 	}
 	
@@ -158,7 +158,7 @@ public class RegistrationHelper {
 				server.publish(IServer.PUBLISH_INCREMENTAL, monitor);
 			}
 		} catch (Exception e) {
-			WebModelPlugin.log(e);
+			WebModelPlugin.getPluginLog().logError(e);
 		}
 		return true;
 	}

@@ -112,7 +112,7 @@ public class ExtendedStructuredTextViewerConfigurationJSP extends StructuredText
 					result = (IHyperlinkDetector)((IAdaptable)obj).getAdapter(IHyperlinkDetector.class);
 				}
 			} catch (Exception x) {
-				ModelPlugin.log("Error in loading hyperlink detector", x);
+				JspEditorPlugin.getPluginLog().logError("Error in loading hyperlink detector", x);
 			}
 		}
 		return result;

@@ -89,7 +89,7 @@ public class WebUtils {
 					path = classPathVarName + path.substring(classPathVarValue.length());
 				}
 			} catch (Exception e) {
-				WebModelPlugin.log(e);
+				WebModelPlugin.getPluginLog().logError(e);
 			}
 			if(path != null) jars.add(path);
 		}

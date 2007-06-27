@@ -22,6 +22,7 @@ import org.jboss.tools.common.kb.KbProposal;
 import org.jboss.tools.common.kb.KbQuery;
 import org.jboss.tools.common.kb.wtp.WtpKbConnector;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.contentassist.xpl.JSPBaseContentAssistProcessor;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
@@ -143,7 +144,7 @@ public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcess
         		contentAssistRequest.addProposal(proposal);
             }
         } catch (KbException e) {
-			ModelPlugin.log(e);
+        	JspEditorPlugin.getPluginLog().logError(e);
         }
 	}
 

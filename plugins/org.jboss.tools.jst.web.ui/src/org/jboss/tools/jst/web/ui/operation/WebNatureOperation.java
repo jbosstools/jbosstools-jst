@@ -246,7 +246,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 			registerTomcat2(monitor);
 			///registerTomcat(monitor);
 		} catch (CoreException e) {
-			WebModelPlugin.log(e);
+			WebModelPlugin.getPluginLog().logError(e);
 		} finally {
 			if(!monitor.isCanceled()) deleteLockFile();
 			monitor.done();
@@ -333,7 +333,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 					ModelPlugin.getWorkspace().run(new WR(), monitor);
 				}
 			} catch (Exception e) {
-				WebModelPlugin.log(e);
+				WebUiPlugin.getPluginLog().logError(e);
 			}
 			return Status.OK_STATUS;
 		}
@@ -344,7 +344,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 			try {
 				registerTomcat(monitor);
 			} catch (Exception e) {
-				WebModelPlugin.log(e);
+				WebUiPlugin.getPluginLog().logError(e);
 			}
 		}
 		
@@ -375,7 +375,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 			try {
 				ServerCore.setDefaultServer(module, servers[0], null);
 			} catch (CoreException e) {
-				ModelPlugin.log(e);
+				WebUiPlugin.getPluginLog().logError(e);
 			}
 		}
 		if(monitor != null) monitor.worked(20);
@@ -397,7 +397,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 		try {
 			getProject().setSessionProperty(WatcherLoader.LOCK, "true");
 		} catch (Exception e) {
-			WebModelPlugin.log(e);
+			WebUiPlugin.getPluginLog().logError(e);
 		}
 	}
 	
@@ -414,7 +414,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 				}	
 			}
 		} catch (Exception e) {
-			WebModelPlugin.log(e);
+			WebUiPlugin.getPluginLog().logError(e);
 		}
 	}
 
@@ -541,7 +541,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 			IFacetedProject fp = ProjectFacetsManager.create(getProject());
 			fp.setRuntime(findFacetRuntime(null/*runtime*/), monitor);
 		} catch (Exception e) {
-			WebModelPlugin.log(e);
+			WebUiPlugin.getPluginLog().logError(e);
 		}
 		
 	}
@@ -579,7 +579,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 			try {
 				jp.setRawClasspath(new IClasspathEntry[]{entry}, project.getFullPath().append("classes"), null);
 			} catch (Exception e) {
-				WebModelPlugin.log(e);
+				WebUiPlugin.getPluginLog().logError(e);
 			}
 		}
 		if(webroot != null) {

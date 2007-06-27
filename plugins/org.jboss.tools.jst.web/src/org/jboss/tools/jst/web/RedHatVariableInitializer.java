@@ -39,7 +39,7 @@ public class RedHatVariableInitializer extends ClasspathVariableInitializer {
 			try {
 				JavaCore.setClasspathVariable(variable, ssLibPath, new NullProgressMonitor());
 			} catch (JavaModelException ex) {
-				WebModelPlugin.log(ex);
+				WebModelPlugin.getPluginLog().logError(ex);
 			}
 		}
 	}

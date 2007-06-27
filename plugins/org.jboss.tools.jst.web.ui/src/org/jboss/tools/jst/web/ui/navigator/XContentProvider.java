@@ -25,6 +25,7 @@ import org.jboss.tools.common.model.ui.navigator.TreeViewerModelListenerImpl;
 import org.jboss.tools.common.model.ui.views.navigator.FilteredTreesCache;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.util.XModelTreeListenerSWTASync;
+import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 public class XContentProvider implements ITreeContentProvider {
 	protected Viewer viewer = null;
@@ -116,7 +117,7 @@ public class XContentProvider implements ITreeContentProvider {
 					FilteredTreesCache.getInstance().addListener(syncListener, model);
 				}
 			} catch(Exception ex) {
-				ModelUIPlugin.log(ex);							
+				WebUiPlugin.getPluginLog().logError(ex);							
 			}
 		}		
 		return result;

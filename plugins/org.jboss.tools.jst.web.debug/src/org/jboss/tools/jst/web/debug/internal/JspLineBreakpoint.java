@@ -128,7 +128,7 @@ public class JspLineBreakpoint extends JavaPatternBreakpoint implements IBreakpo
 
 				result = receivingTypeName.equals(generatedClassName);
 			} catch (CoreException ex) {
-				ModelPlugin.log(ex);
+				ModelPlugin.getPluginLog().logError(ex);
 			}
 		}
 
@@ -151,7 +151,7 @@ public class JspLineBreakpoint extends JavaPatternBreakpoint implements IBreakpo
 		try {
 			return DebugMessages.getString(BREAKPOINT_LABEL_TEXT_KEY, new String[]{getPattern(), "" + getLineNumber()});
 		} catch (CoreException e) {
-			ModelPlugin.log(e);
+			ModelPlugin.getPluginLog().logError(e);
 			return "error";
 		}
 	}

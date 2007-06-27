@@ -22,6 +22,7 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.jboss.tools.common.gef.outline.xpl.DiagramContentOutlinePage;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 import org.jboss.tools.jst.web.tiles.model.TilesConfigFilteredTreeConstraint;
+import org.jboss.tools.jst.web.tiles.ui.TilesUIPlugin;
 
 public class TilesCompoundEditor extends ObjectMultiPageEditor {
 	protected TilesGuiEditor guiEditor;
@@ -62,7 +63,7 @@ public class TilesCompoundEditor extends ObjectMultiPageEditor {
 			selectionProvider.addHost(
 					"guiEditor", guiEditor.getSelectionProvider()); //$NON-NLS-1$
 		} catch (Exception e) {
-			ModelPlugin.log(e);
+			TilesUIPlugin.getPluginLog().logError(e);
 		}
 	}
 	

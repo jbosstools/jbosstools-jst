@@ -33,7 +33,7 @@ public class TLDRegisterHelper {
 	        	try {
 					resource = (KbTldResource)resource.clone();
 				} catch (CloneNotSupportedException e) {
-					ModelPlugin.log(e);
+					JspEditorPlugin.getPluginLog().logError(e);
 					return;
 				}
 	        	IEditorInput input = JspEditorPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorInput();

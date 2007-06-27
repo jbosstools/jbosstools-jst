@@ -19,26 +19,23 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.ui.text.JavaTextTools;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jst.jsp.ui.internal.JSPUIPlugin;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
-
-import org.jboss.tools.jst.jsp.preferences.JSPOccurrencePreferenceConstants;
-import org.jboss.tools.common.model.plugin.ModelPlugin;
+import org.jboss.tools.common.log.BaseUIPlugin;
+import org.jboss.tools.common.log.IPluginLog;
 import org.jboss.tools.common.text.xml.XmlEditorPlugin;
+import org.jboss.tools.jst.jsp.preferences.JSPOccurrencePreferenceConstants;
 
 /**
  * The main plugin class to be used in the desktop.
  */
-public class JspEditorPlugin extends AbstractUIPlugin {
+public class JspEditorPlugin extends BaseUIPlugin {
 	//The shared instance.
 	private static JspEditorPlugin plugin;
 	//Resource bundle.
@@ -93,14 +90,6 @@ public class JspEditorPlugin extends AbstractUIPlugin {
         Platform.getPlugin("org.jboss.tools.jst.web.debug.ui");
 	}
 	
-	public static void println(String message) {
-		if (isDebugEnabled()) ModelPlugin.log(message);
-	}
-	
-	public static void log(Throwable e) {
-		log(((IStatus) (new Status(4, PLUGIN_ID, 4, "JspEditor Plugin internal error", e))));
-	}
-
 	protected void initializeDefaultPluginPreferences() {
 		IPreferenceStore store = getPreferenceStore();
 		JSPOccurrencePreferenceConstants.initializeDefaultValues(store);
@@ -136,10 +125,8 @@ public class JspEditorPlugin extends AbstractUIPlugin {
 			else
 				s = s1 + File.separator;
 			return new Path(s);
-		}
-		catch(Exception exception)
-		{
-			log(exception);
+		}	catch(Exception exception)	{
+			getDefault().logError(exception);
 		}
 		return null;
 	}
@@ -166,23 +153,10 @@ public class JspEditorPlugin extends AbstractUIPlugin {
 		return JspEditorPlugin.getDefault().isDebugging();
 	}
 
-	/*static class PluginHolder {
-		static JspEditorPlugin INSTANCE = (JspEditorPlugin)Platform.getBundle(PLUGIN_ID); 
-	}*/
-	
-	public static void log(String msg) {
-		if(isDebugEnabled()) JspEditorPlugin.getDefault().getLog().log(new Status(Status.INFO, PLUGIN_ID, Status.OK, msg, null));		
+	/**
+	 * @return IPluginLog object
+	 */
+	public static IPluginLog getPluginLog() {
+		return getDefault();
 	}
-	
-	public static void log(IStatus status) {
-		if(isDebugEnabled() || !status.isOK()) JspEditorPlugin.getDefault().getLog().log(status);
-	}
-	
-	public static void log(String message, Throwable exception) {
-		JspEditorPlugin.getDefault().getLog().log(new Status(Status.ERROR, PLUGIN_ID, Status.OK, message, exception));		
-	}
-	
-	public static void log(Exception ex) {
-		JspEditorPlugin.getDefault().getLog().log(new Status(Status.ERROR, PLUGIN_ID, Status.OK, "No message", ex));
-	}	
 }

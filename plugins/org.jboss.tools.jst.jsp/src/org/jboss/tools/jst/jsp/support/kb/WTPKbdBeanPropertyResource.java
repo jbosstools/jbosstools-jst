@@ -112,7 +112,7 @@ public class WTPKbdBeanPropertyResource extends WTPKbAbstractModelResource {
 				process(proposals, "", "", -1, query.length() - "".length(), query.length(), text, restQuery);
 			}
 		} catch (Exception x) {
-			JspEditorPlugin.log(x);
+			JspEditorPlugin.getPluginLog().logError(x);
 		}
 		return proposals;
 	}

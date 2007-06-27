@@ -82,7 +82,7 @@ class TLDLoader12Util extends XModelObjectLoaderUtil implements TLDConstants {
 					XModelObject q = o.getChildByPath(co.getPathPart());
 					if(q != null) EnginesLoader.merge(q, co, false);
 				} catch (Exception exc) {
-					WebModelPlugin.log(exc);
+					WebModelPlugin.getPluginLog().logError(exc);
 				}
 				continue;
 			} 

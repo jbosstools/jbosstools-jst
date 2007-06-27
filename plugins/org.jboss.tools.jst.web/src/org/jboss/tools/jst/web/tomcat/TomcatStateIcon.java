@@ -30,7 +30,7 @@ public class TomcatStateIcon implements ImageComponent {
                 String s = (b) ? "struts.tomcat.running" : "struts.tomcat.stopped";
                 return obj.getModelEntity().getMetaModel().getIconList().getImage(s, "default.unknown");
             } catch (Exception e) {
-    			WebModelPlugin.log(e);
+            	WebModelPlugin.getPluginLog().logError(e);
                 return null;
             }
     }

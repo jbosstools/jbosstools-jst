@@ -163,7 +163,7 @@ public class NewWebProjectHelper {
                     }
                 }
             } catch (Exception e) {
-    			WebModelPlugin.log(e);
+            	WebModelPlugin.getPluginLog().logError(e);
             }
         }
         return map;
@@ -192,7 +192,7 @@ public class NewWebProjectHelper {
                 }
             }
         } catch (Exception e) {
-			WebModelPlugin.log(e);
+        	WebModelPlugin.getPluginLog().logError(e);
         }
         return modules;
     }
@@ -231,7 +231,7 @@ class WebAppConfig {
 			XMLEntityResolver.registerPublicEntity("-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN", FileLocator.resolve(c.getResource("/meta/web-app_2_2.dtd")).toString());
 			XMLEntityResolver.registerPublicEntity("-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN", FileLocator.resolve(c.getResource("/meta/web-app_2_3.dtd")).toString());
 		} catch (Exception e) {
-			WebModelPlugin.log(e);
+			WebModelPlugin.getPluginLog().logError(e);
 		}
 	}
     

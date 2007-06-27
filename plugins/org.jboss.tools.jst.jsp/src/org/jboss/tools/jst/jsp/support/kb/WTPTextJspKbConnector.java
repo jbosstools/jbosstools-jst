@@ -41,6 +41,7 @@ import org.jboss.tools.common.kb.KbException;
 import org.jboss.tools.common.kb.KbResource;
 import org.jboss.tools.common.kb.TagDescriptor;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.web.tld.TaglibData;
 import org.jboss.tools.jst.web.tld.VpeTaglibListener;
 import org.jboss.tools.jst.web.tld.VpeTaglibManager;
@@ -138,7 +139,7 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
 			}
 			invokeDelayedUpdateKnownTagLists();
 		} catch(Exception e) {
-			ModelPlugin.log(e);
+			JspEditorPlugin.getPluginLog().logError(e);
 		}
 	}
 
@@ -233,7 +234,7 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
 			}
 			invokeDelayedUpdateKnownTagLists();
 		} catch (Exception x) {
-			ModelPlugin.log("Error while processing change in taglib prefixes", x);
+			JspEditorPlugin.getPluginLog().logError("Error while processing change in taglib prefixes", x);
 		}
 	}
 
@@ -269,7 +270,7 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
 					IDOMNode xmlnode = (IDOMNode)children.item(i);
 					update((IDOMNode)xmlnode);
 				} catch (Exception x) {
-					ModelPlugin.log("Error while updating known tag lists", x);
+					JspEditorPlugin.getPluginLog().logError("Error while updating known tag lists", x);
 				}
 			}
 		}
@@ -338,7 +339,7 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
 
 			loadedBundles.put(var, new LoadBundleInfo(node, basename, var));
 		} catch (Exception x) {
-			ModelPlugin.log("Error while registering kb resource", x);
+			JspEditorPlugin.getPluginLog().logError("Error while registering kb resource", x);
 		}
 	}
 
@@ -398,7 +399,7 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
 					}
 			}
 			} catch (Exception x) {
-				ModelPlugin.log("Error in JSF kb connector", x);
+				JspEditorPlugin.getPluginLog().logError("Error in JSF kb connector", x);
 			}
 			invokeDelayedUpdateKnownTagLists();
 		}

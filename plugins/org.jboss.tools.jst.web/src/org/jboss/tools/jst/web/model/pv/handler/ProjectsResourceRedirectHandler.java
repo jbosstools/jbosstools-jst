@@ -28,7 +28,7 @@ public class ProjectsResourceRedirectHandler extends DefaultRedirectHandler {
 			String path = p.getPersistentProperty(n);
 			if(path != null) r = p.getWorkspace().getRoot().findMember(path);
 		} catch (Exception e) {
-			WebModelPlugin.log(e);
+			WebModelPlugin.getPluginLog().logError(e);
 		}
 		if(r == null) r = EclipseResourceUtil.getJavaSourceRoot(p);
 		XModelObject o = EclipseResourceUtil.getObjectByResource(r);

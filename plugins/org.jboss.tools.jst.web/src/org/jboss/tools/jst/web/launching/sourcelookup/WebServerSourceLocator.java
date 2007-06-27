@@ -21,6 +21,7 @@ import org.eclipse.jdt.internal.debug.core.breakpoints.JavaStratumLineBreakpoint
 import org.eclipse.jdt.launching.sourcelookup.JavaSourceLocator;
 
 import org.jboss.tools.common.model.plugin.ModelPlugin;
+import org.jboss.tools.jst.web.WebModelPlugin;
 
 /**
  * @deprecated This class was used for first tomcat luncher. Before Studio 3.0.0
@@ -34,7 +35,7 @@ public class WebServerSourceLocator extends JavaSourceLocator {
 
 	public Object getSourceElement(IStackFrame stackFrame) {
 		if(ModelPlugin.isDebugEnabled()) {			
-			ModelPlugin.log("WebServerSourceLocator.getSourceElement()");
+			WebModelPlugin.getPluginLog().logInfo("WebServerSourceLocator.getSourceElement()");
 		}
 
 		Object result = null;

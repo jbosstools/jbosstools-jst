@@ -26,6 +26,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 
 import org.jboss.tools.common.gef.GEFGraphicalViewer;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
+import org.jboss.tools.jst.web.tiles.ui.TilesUIPlugin;
 import org.jboss.tools.jst.web.tiles.ui.editor.TilesEditor;
 import org.jboss.tools.jst.web.tiles.ui.editor.edit.DefinitionEditPart;
 import org.jboss.tools.jst.web.tiles.ui.editor.figures.xpl.FixedConnectionAnchor;
@@ -400,7 +401,7 @@ public class DefinitionFigure extends NodeFigure implements HandleBounds,
 
 				}
 			} catch (Exception ex) {
-				ModelPlugin.log(ex);
+				TilesUIPlugin.getPluginLog().logError(ex);
 			}
 		}
 

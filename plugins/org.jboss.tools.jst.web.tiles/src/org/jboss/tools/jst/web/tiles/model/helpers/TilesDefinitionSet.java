@@ -36,10 +36,10 @@ public class TilesDefinitionSet implements XModelTreeListener {
     				list.add((ITilesDefinitionSetContributor)watcher);
     			else
 					if(ModelPlugin.isDebugEnabled()) {			
-						ModelPlugin.log("Class is not implemented IWatcherContributor interface!");
+						ModelPlugin.getPluginLog().logInfo("Class is not implemented IWatcherContributor interface!");
 					}
     		} catch (Exception e) {
-    			ModelPlugin.log(e);
+    			ModelPlugin.getPluginLog().logError(e);
     		}
     	}
     	contributors = list.toArray(new ITilesDefinitionSetContributor[0]);
@@ -131,7 +131,7 @@ public class TilesDefinitionSet implements XModelTreeListener {
 				try {
 					ls[i].definitionsChanged(removed, added);
 				} catch (Exception e) {
-					ModelPlugin.log(e);
+					ModelPlugin.getPluginLog().logError(e);
 				}
 			}
 		}

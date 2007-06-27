@@ -36,7 +36,7 @@ public class Items implements WebProcessConstants {
         try {
         	load();
         } catch (Exception e) {
-			WebModelPlugin.log(e);
+        	WebModelPlugin.getPluginLog().logError(e);
         }
     }
 

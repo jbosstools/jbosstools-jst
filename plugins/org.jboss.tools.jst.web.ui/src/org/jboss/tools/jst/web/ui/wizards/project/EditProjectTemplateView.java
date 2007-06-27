@@ -30,6 +30,7 @@ import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.project.helpers.ProjectTemplate;
+import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 public class EditProjectTemplateView extends AbstractSpecialWizardStep {
 	ProjectTemplate projectTemplate;
@@ -79,7 +80,7 @@ public class EditProjectTemplateView extends AbstractSpecialWizardStep {
 				control = null;
 			}
 		} catch (Exception e) {
-			WebModelPlugin.log(e);
+			WebUiPlugin.getPluginLog().logError(e);
 		}
 	}
 	

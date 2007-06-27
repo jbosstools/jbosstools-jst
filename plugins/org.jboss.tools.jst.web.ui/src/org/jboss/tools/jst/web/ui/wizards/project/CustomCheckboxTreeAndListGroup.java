@@ -17,6 +17,7 @@ import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.internal.ide.misc.*;
 import org.jboss.tools.jst.web.WebModelPlugin;
+import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 public class CustomCheckboxTreeAndListGroup extends CheckboxTreeAndListGroup {
 	Class cls = CheckboxTreeAndListGroup.class;
@@ -50,7 +51,7 @@ public class CustomCheckboxTreeAndListGroup extends CheckboxTreeAndListGroup {
     		f.setAccessible(true);
     		return (CheckboxTreeViewer)f.get(this);
     	} catch (Exception e) {
-			WebModelPlugin.log(e);
+    		WebUiPlugin.getPluginLog().logError(e);
     		return null;
     	}
     }
@@ -70,7 +71,7 @@ public class CustomCheckboxTreeAndListGroup extends CheckboxTreeAndListGroup {
     		f.setAccessible(true);
     		f.set(this, element);
     	} catch (Exception e) {
-			WebModelPlugin.log(e);
+    		WebUiPlugin.getPluginLog().logError(e);
     	}
     }
 

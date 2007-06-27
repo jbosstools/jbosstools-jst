@@ -167,7 +167,7 @@ public class TaglibMapping implements ITaglibMapping {
 				url = r.getLocation().toFile().toURL().toString();
 			}
 		} catch (Exception e) {
-			WebModelPlugin.log(e);
+			WebModelPlugin.getPluginLog().logError(e);
 		}
 		if(url != null) findTldsInFolder(webinf, url);
 	}
@@ -205,7 +205,7 @@ public class TaglibMapping implements ITaglibMapping {
 		try {
 			url = "jar:" + new File(location).toURL().toString() + "!/META-INF/";
 		} catch (Exception e) {
-			WebModelPlugin.log("TaglibMapping:findTldsInJar:" + e.getMessage(), e);
+			WebModelPlugin.getPluginLog().logError("TaglibMapping:findTldsInJar:" + e.getMessage(), e);
 			return;
 		}		
 		if(metainf != null) findTldsInFolder(metainf, url);

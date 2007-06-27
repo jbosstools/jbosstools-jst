@@ -20,13 +20,12 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.eclipse.ui.IEditorInput;
-
-import org.jboss.tools.common.model.XModelObject;
-import org.jboss.tools.common.model.plugin.ModelPlugin;
-import org.jboss.tools.common.model.util.ELParser;
-import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
 import org.jboss.tools.common.kb.KbDinamicResource;
 import org.jboss.tools.common.kb.KbProposal;
+import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.util.ELParser;
+import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
 
 /**
@@ -159,7 +158,7 @@ public class WTPKbdBundlePropertyResource extends WTPKbdBeanPropertyResource {
 				process(proposals, "", "", -1, query.length() - "".length(), query.length(), text, restQuery);
 			}
 		} catch (Exception x) {
-			ModelPlugin.log("Error in executing query " + query, x);
+			JspEditorPlugin.getPluginLog().logError("Error in executing query " + query, x);
 		}
 		return proposals;
 	}

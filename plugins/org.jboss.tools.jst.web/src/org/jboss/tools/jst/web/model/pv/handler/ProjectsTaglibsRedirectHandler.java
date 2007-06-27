@@ -28,7 +28,7 @@ public class ProjectsTaglibsRedirectHandler extends DefaultRedirectHandler {
 			String path = p.getPersistentProperty(n);
 			if(path != null) r = p.getWorkspace().getRoot().findMember(path);
 		} catch (Exception e) {
-			WebModelPlugin.log(e);
+			WebModelPlugin.getPluginLog().logError(e);
 		}
 		XModelObject o = EclipseResourceUtil.getObjectByResource(r);
 		return (o == null) ? source.getModel().getByPath("FileSystems/WEB-INF") : o;

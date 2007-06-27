@@ -32,6 +32,7 @@ import org.eclipse.swt.graphics.Cursor;
 
 import org.jboss.tools.common.meta.action.XAction;
 import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.jst.web.tiles.ui.TilesUIPlugin;
 import org.jboss.tools.jst.web.tiles.ui.editor.figures.DefinitionFigure;
 import org.jboss.tools.jst.web.tiles.ui.editor.model.IDefinition;
 import org.jboss.tools.jst.web.tiles.ui.editor.model.IDefinitionListener;
@@ -52,7 +53,7 @@ public class DefinitionEditPart
 				action.executeHandler((XModelObject) getDefinitionModel()
 						.getSource(), null);
 		} catch (Exception e) {
-			ModelPlugin.log(e);
+			TilesUIPlugin.getPluginLog().logError(e);
 		}
 	}
 

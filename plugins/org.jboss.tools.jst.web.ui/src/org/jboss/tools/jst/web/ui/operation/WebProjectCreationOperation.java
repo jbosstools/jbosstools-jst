@@ -40,6 +40,7 @@ import org.jboss.tools.jst.web.context.RegisterTomcatContext;
 import org.jboss.tools.jst.web.model.helpers.WebAppHelper;
 import org.jboss.tools.jst.web.project.helpers.IWebProjectTemplate;
 import org.jboss.tools.jst.web.project.helpers.NewWebProjectContext;
+import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 public abstract class WebProjectCreationOperation extends WebNatureOperation {
 	protected IWebProjectTemplate template = createTemplate();
@@ -72,7 +73,7 @@ public abstract class WebProjectCreationOperation extends WebNatureOperation {
 			createTemplateModel();
 			copyTemplate();
 		} catch (Exception e) {
-			WebModelPlugin.log(e);
+			WebUiPlugin.getPluginLog().logError(e);
 			String message = e.getMessage();
 			if(message == null || message.length() == 0) message = e.getClass().getName(); 
 			throw new CoreException(new Status(IStatus.ERROR, ModelUIPlugin.PLUGIN_ID, 1, message, e));
@@ -148,7 +149,7 @@ public abstract class WebProjectCreationOperation extends WebNatureOperation {
 		try {
 			return new File(fileName).getCanonicalPath();
 		} catch (Exception e) {
-			WebModelPlugin.log("Cannot find folder '" + fileName + "'", null);
+			WebUiPlugin.getPluginLog().logError("Cannot find folder '" + fileName + "'", null);
 			return fileName;
 		}
 	}

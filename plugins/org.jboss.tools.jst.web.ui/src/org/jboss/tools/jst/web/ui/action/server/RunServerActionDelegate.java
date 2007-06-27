@@ -33,6 +33,7 @@ import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 import org.jboss.tools.jst.web.server.*;
 import org.jboss.tools.jst.web.tomcat.TomcatVMHelper;
+import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 public class RunServerActionDelegate extends AbstractServerActionDelegate {
 	static Set startingServers = new HashSet();
@@ -101,7 +102,7 @@ public class RunServerActionDelegate extends AbstractServerActionDelegate {
 		try {
 			return ((Runtime)runtime).getAttribute("vm-install-id", (String)null); //$NON-NLS-1$
 		} catch (Exception e) {
-			WebModelPlugin.log(e);
+			WebModelPlugin.getPluginLog().logError(e);
 		}
 		return null;
 	}
@@ -112,7 +113,7 @@ public class RunServerActionDelegate extends AbstractServerActionDelegate {
 			copy.setAttribute("vm-install-type-id", typeId); //$NON-NLS-1$
 			copy.save(true, new NullProgressMonitor());
 		} catch (Exception e) {
-			WebModelPlugin.log(e);
+			WebUiPlugin.getPluginLog().logError(e);
 		}
 	}
 

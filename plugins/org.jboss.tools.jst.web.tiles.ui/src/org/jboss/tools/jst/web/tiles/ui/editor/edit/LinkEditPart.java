@@ -26,6 +26,7 @@ import org.eclipse.swt.accessibility.AccessibleEvent;
 import org.jboss.tools.common.meta.action.XAction;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.gef.edit.GEFRootEditPart;
+import org.jboss.tools.jst.web.tiles.ui.TilesUIPlugin;
 import org.jboss.tools.jst.web.tiles.ui.editor.figures.ConnectionFigure;
 import org.jboss.tools.jst.web.tiles.ui.editor.figures.FigureFactory;
 import org.jboss.tools.jst.web.tiles.ui.editor.model.ILink;
@@ -57,7 +58,7 @@ public class LinkEditPart extends AbstractConnectionEditPart
 				action.executeHandler(
 						(XModelObject) getLinkModel().getSource(), null);
 		} catch (Exception e) {
-			ModelPlugin.log(e);
+			TilesUIPlugin.getPluginLog().logError(e);
 		}
 	}
 

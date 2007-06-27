@@ -33,7 +33,7 @@ public class WebProjectTemplateFactory {
 			m.setAccessible(true);
 			return (AbstractWebProjectTemplate)m.invoke(null, new Object[0]);
 		} catch (Exception e) {
-			WebModelPlugin.log(e);
+			WebModelPlugin.getPluginLog().logError(e);
 			return null;
 		}
 	}

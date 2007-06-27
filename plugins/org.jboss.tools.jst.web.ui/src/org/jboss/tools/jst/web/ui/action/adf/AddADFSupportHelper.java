@@ -39,7 +39,7 @@ public class AddADFSupportHelper {
 		try {
 			adfLibPath = LibrarySets.getInstance().getLibrarySetsPath() + "/" + ORACLE_ADF_LIB_FOLDER_NAME;
 		} catch (Exception e) {
-			WebModelPlugin.log(e);
+			WebModelPlugin.getPluginLog().logError(e);
 		}
 	}
 	
@@ -121,7 +121,7 @@ public class AddADFSupportHelper {
 				try {
 					FileUtil.unzip(new File(webRoot), fs[i].getAbsolutePath());
 				} catch (Exception e) {
-					WebModelPlugin.log(e);
+					WebModelPlugin.getPluginLog().logError(e);
 				}
 			}
 			monitor.worked(30);
@@ -137,7 +137,7 @@ public class AddADFSupportHelper {
 				ClassPathUpdate cpu = new ClassPathUpdate();
 				cpu.revalidateLibs(model);
 			} catch (Exception e) {
-				WebModelPlugin.log(e);
+				WebModelPlugin.getPluginLog().logError(e);
 			}
 			
 			monitor.worked(20);

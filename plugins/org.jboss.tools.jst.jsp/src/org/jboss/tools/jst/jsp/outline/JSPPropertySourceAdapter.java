@@ -35,6 +35,7 @@ import org.eclipse.wst.xml.core.internal.modelquery.ModelQueryUtil;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.ui.internal.XMLUIMessages;
 import org.eclipse.wst.xml.ui.internal.properties.EnumeratedStringPropertyDescriptor;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.editor.IVisualController;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
@@ -538,7 +539,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 									IVisualController controller = valueHelper.getController(); 
 									if(controller != null) controller.visualRefresh();
 								} catch (Exception e) {
-									ModelPlugin.log(e);
+									JspEditorPlugin.getPluginLog().logError(e);
 								}
 							} else {
 								attr.setValue(valueString);

@@ -131,7 +131,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 					.loadClass("org.jboss.tools.vpe.editor.VpeEditorPartFactory");
 			visualEditorFactory = (IVisualEditorFactory) cls.newInstance();
 		} catch (Exception e) {
-			JspEditorPlugin.log("Error in loading visual editor factory", e);
+			JspEditorPlugin.getPluginLog().logError("Error in loading visual editor factory", e);
 		}
 	}
 
@@ -229,7 +229,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 					((AbstractTextEditor) sourceEditor)
 							.setInput(getEditorInput());
 				} catch (Exception exc) {
-					JspEditorPlugin.log(exc);
+					JspEditorPlugin.getPluginLog().logError(exc);
 				}
 			}
 			visualEditor.setInput(getEditorInput());
@@ -388,7 +388,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 					.getString(VISUALSOURCE_TAB_LABEL));
 			setPartName(visualEditor.getTitle());
 		} catch (PartInitException e) {
-			JspEditorPlugin.log(e);
+			JspEditorPlugin.getPluginLog().logError(e);
 		}
 		try {
 			visualIndex = addPage(visualEditor, getEditorInput());
@@ -396,7 +396,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 					.getString(VISUAL_TAB_LABEL));
 			setPartName(visualEditor.getTitle());
 		} catch (PartInitException e) {
-			JspEditorPlugin.log(e);
+			JspEditorPlugin.getPluginLog().logError(e);
 		}
 
 		try {
@@ -405,7 +405,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 					.getString(SOURCE_TAB_LABEL));
 			setPartName(visualEditor.getTitle());
 		} catch (PartInitException e) {
-			JspEditorPlugin.log(e);
+			JspEditorPlugin.getPluginLog().logError(e);
 		}
 	}
 
@@ -484,7 +484,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 			try {
 				((FolderImpl) o.getParent()).discardChildFile(o);
 			} catch (Exception e) {
-				JspEditorPlugin.log(e);
+				JspEditorPlugin.getPluginLog().logError(e);
 			}
 		}
 	}
@@ -746,7 +746,7 @@ class ResourceChangeListener implements IResourceChangeListener {
 								((AbstractTextEditor) e.sourceEditor)
 										.setInput(e2);
 							} catch (Exception exc) {
-								JspEditorPlugin.log(exc);
+								JspEditorPlugin.getPluginLog().logError(exc);
 							}
 						}
 						((XModelObjectEditorInput) ei).synchronize();

@@ -65,6 +65,7 @@ import org.jboss.tools.common.kb.TagDescriptor;
 import org.jboss.tools.common.kb.wtp.TLDVersionHelper;
 import org.jboss.tools.common.kb.wtp.WtpKbConnector;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.web.tld.TaglibData;
 import org.jboss.tools.jst.web.tld.VpeTaglibListener;
 import org.jboss.tools.jst.web.tld.VpeTaglibManager;
@@ -90,7 +91,7 @@ public class RedHatJSPContentAssistProcessor extends JSPContentAssistProcessor i
 	        int lastCloseTag = text.lastIndexOf('>');
 	        dontOpenTag = lastCloseTag<lastOpenTag;
 	    } catch (Exception e) {
-	        ModelPlugin.log(e);
+	    	JspEditorPlugin.getPluginLog().logError(e);
 	    }
 
 		document = viewer.getDocument();
@@ -124,7 +125,7 @@ public class RedHatJSPContentAssistProcessor extends JSPContentAssistProcessor i
 				}
 			}
 		} catch (Exception e) {
-			ModelPlugin.log(e);
+			JspEditorPlugin.getPluginLog().logError(e);
 		}
 		proposals = getUniqProposals(proposals);
 		return proposals;
@@ -239,7 +240,7 @@ public class RedHatJSPContentAssistProcessor extends JSPContentAssistProcessor i
 				registeredTagsForActiveCAP.add(fullName);
 			}
         } catch (KbException e) {
-            ModelPlugin.log(e);
+        	JspEditorPlugin.getPluginLog().logError(e);
         }
     }
 
@@ -249,11 +250,11 @@ public class RedHatJSPContentAssistProcessor extends JSPContentAssistProcessor i
                 wtpKbConnector = (WtpKbConnector)KbConnectorFactory.getIntstance().createConnector(KbConnectorType.JSP_WTP_KB_CONNECTOR, document);
                 jspActiveCAP.setKbConnector(wtpKbConnector);
             } catch (ClassNotFoundException e) {
-    			ModelPlugin.log(e);
+            	JspEditorPlugin.getPluginLog().logError(e);
             } catch (InstantiationException e) {
-    			ModelPlugin.log(e);
+            	JspEditorPlugin.getPluginLog().logError(e);
             } catch (IllegalAccessException e) {
-    			ModelPlugin.log(e);
+            	JspEditorPlugin.getPluginLog().logError(e);
             }
 	    }
 	    return wtpKbConnector;
@@ -295,7 +296,7 @@ public class RedHatJSPContentAssistProcessor extends JSPContentAssistProcessor i
 							}
 						}
 					} catch (Exception x) {
-		    			ModelPlugin.log("", x);
+						JspEditorPlugin.getPluginLog().logError("", x);
 					}
 					super.generateTag(parent, elementDecl, buffer);
 					return;
@@ -588,7 +589,7 @@ public class RedHatJSPContentAssistProcessor extends JSPContentAssistProcessor i
     						    }
     						}
                         } catch (KbException e) {
-                            ModelPlugin.log(e);
+                        	JspEditorPlugin.getPluginLog().logError(e);
                         }
 						// End Red Hat changes
 					}

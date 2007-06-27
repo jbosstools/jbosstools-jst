@@ -31,7 +31,6 @@ import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.ui.externaltools.internal.model.IExternalToolConstants;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
@@ -41,6 +40,8 @@ import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.core.ServerUtil;
 import org.eclipse.wst.server.core.internal.RuntimeWorkingCopy;
+import org.jboss.tools.common.log.BaseUIPlugin;
+import org.jboss.tools.common.log.IPluginLog;
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelConstants;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
@@ -48,7 +49,7 @@ import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.projecttemplates.ProjectTemplatesPlugin;
 import org.osgi.framework.BundleContext;
 
-public class WebModelPlugin extends AbstractUIPlugin {
+public class WebModelPlugin extends BaseUIPlugin {
 
 	public static final String JBOSS_AS_HOME = "../../../../jbossas"; 	// JBoss AS home directory (relative to plugin)- <RHDS_HOME>/jbossas.
 	// TODO agreement about actual seam-gen location is needed
@@ -100,14 +101,6 @@ public class WebModelPlugin extends AbstractUIPlugin {
 		}
 	}
 
-	public static void log(String message, Throwable exception) {
-		if(instance != null) instance.getLog().log(new Status(Status.ERROR, PLUGIN_ID, Status.OK, message, exception));		
-	}
-
-	static public void log(Exception ex) {
-		getDefault().getLog().log(new Status(Status.ERROR, PLUGIN_ID, Status.OK, "No message", ex));
-	}
-
 	public void stop(BundleContext context) throws Exception {
 //		PreferenceModelUtilities.getPreferenceModel().save();
 		super.stop(context);
@@ -128,7 +121,7 @@ public class WebModelPlugin extends AbstractUIPlugin {
 		try {
 			config = findLaunchConfig("seamgen");
 		} catch (CoreException e1) {
-			WebModelPlugin.log("Exception occured during search in Launch Configuration list.", e1);
+			getPluginLog().logError("Exception occured during search in Launch Configuration list.", e1);
 		}
 		ILaunchConfigurationWorkingCopy wc;
 		if(config==null) {
@@ -147,7 +140,7 @@ public class WebModelPlugin extends AbstractUIPlugin {
 				wc.setAttribute( IExternalToolConstants.ATTR_LOCATION, getSeamGenBuildPath());
 				wc.doSave();
 			} catch (CoreException e) {
-				WebModelPlugin.log("Cannot create configuration for Seam-Gen tool", e);
+				getPluginLog().logError("Cannot create configuration for Seam-Gen tool", e);
 				return;
 			}
 		}
@@ -250,7 +243,7 @@ public class WebModelPlugin extends AbstractUIPlugin {
 				server.save(false, progressMonitor);
 			}
 		} catch (Exception e) {
-			log("Can't create new JBoss Server.", e);
+			getPluginLog().logError("Can't create new JBoss Server.", e);
 		}
 	}
 
@@ -261,4 +254,12 @@ public class WebModelPlugin extends AbstractUIPlugin {
 	public static IPath getTemplateStatePath() {
 		return ProjectTemplatesPlugin.getTemplateStatePath();
 	}
+	
+	/**
+	 * @return IPluginLog object
+	 */
+	public static IPluginLog getPluginLog() {
+		return getDefault();
+	}
+
 }

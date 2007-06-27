@@ -51,7 +51,7 @@ public class TomcatVMHelper {
 			try {
                 JavaRuntime.saveVMConfiguration();
             } catch (CoreException e) {
-    			WebModelPlugin.log(e);
+            	WebModelPlugin.getPluginLog().logError(e);
             }
 
 		}
@@ -107,7 +107,7 @@ public class TomcatVMHelper {
 			IVMInstallType[] jvmType = JavaRuntime.getVMInstallTypes();
 			String selectedJVMName = getJVMNamePreference().getValue();
 			if(ModelPlugin.isDebugEnabled()) {			
-				ModelPlugin.log("Finding selected JVM is " + selectedJVMName);
+				WebModelPlugin.getPluginLog().logInfo("Finding selected JVM is " + selectedJVMName);
 			}		
 			for (int i = 0; i < jvmType.length; i++) {
 				IVMInstall[] jvmInstall = jvmType[i].getVMInstalls();
@@ -124,21 +124,21 @@ public class TomcatVMHelper {
 
 	public static Preference getUseDefaultJVMPreference() {
 		if(ModelPlugin.isDebugEnabled()) {			
-			ModelPlugin.log("SELECTED_SERVER_USE_DEFAULT_JVM = " + WebPreference.USE_DEFAULT_JVM.getValue());
+			WebModelPlugin.getPluginLog().logInfo("SELECTED_SERVER_USE_DEFAULT_JVM = " + WebPreference.USE_DEFAULT_JVM.getValue());
 		}
 		return WebPreference.USE_DEFAULT_JVM; 
 	}
 
 	public static Preference getJVMNamePreference() {
 		if(ModelPlugin.isDebugEnabled()) {			
-			ModelPlugin.log("SELECTED_SERVER_JVM = " + WebPreference.SERVER_JVM.getValue());
+			WebModelPlugin.getPluginLog().logInfo("SELECTED_SERVER_JVM = " + WebPreference.SERVER_JVM.getValue());
 		}
 		return WebPreference.SERVER_JVM; 
 	}
 
 	public static Preference getWarningPreference() {
 		if(ModelPlugin.isDebugEnabled()) {			
-			ModelPlugin.log("SELECTED_SERVER_WARNING = " + WebPreference.SERVER_WARNING.getValue());
+			WebModelPlugin.getPluginLog().logInfo("SELECTED_SERVER_WARNING = " + WebPreference.SERVER_WARNING.getValue());
 		}
 		return WebPreference.SERVER_WARNING; 
 	}

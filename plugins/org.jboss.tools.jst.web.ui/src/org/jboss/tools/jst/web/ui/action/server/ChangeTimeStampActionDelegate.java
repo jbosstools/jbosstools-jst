@@ -19,6 +19,7 @@ import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 import org.jboss.tools.jst.web.model.helpers.WebAppHelper;
+import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 import org.eclipse.core.resources.IResource;
 
@@ -61,7 +62,7 @@ public class ChangeTimeStampActionDelegate implements IWorkbenchWindowActionDele
 		try {
 			doRun();
 		} catch (Exception e) {
-			ModelUIPlugin.log(e);
+			WebUiPlugin.getPluginLog().logError(e);
 		}
 	}
 	

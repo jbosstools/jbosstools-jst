@@ -10,25 +10,32 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.contentassist;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
+
 import org.eclipse.jdt.internal.ui.refactoring.contentassist.JavaPackageCompletionProcessor;
-import org.eclipse.jdt.internal.ui.refactoring.contentassist.JavaTypeCompletionProcessor;
-import org.eclipse.jface.contentassist.*;
+import org.eclipse.jface.contentassist.IContentAssistSubjectControl;
+import org.eclipse.jface.contentassist.ISubjectControlContentAssistProcessor;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.contentassist.*;
-import org.eclipse.wst.sse.core.internal.provisional.text.*;
-import org.eclipse.wst.sse.core.utils.StringUtils;
-import org.eclipse.wst.sse.ui.internal.contentassist.CustomCompletionProposal;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
-import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
-import org.eclipse.wst.xml.ui.internal.contentassist.*;
+import org.eclipse.jface.text.contentassist.ICompletionProposal;
+import org.eclipse.jface.text.contentassist.IContextInformation;
+import org.eclipse.wst.xml.ui.internal.contentassist.XMLRelevanceConstants;
 import org.eclipse.wst.xml.ui.internal.util.SharedXMLEditorPluginImageHelper;
-import org.w3c.dom.*;
-import org.jboss.tools.common.kb.*;
-import org.jboss.tools.common.kb.wtp.*;
-import org.jboss.tools.common.model.plugin.ModelPlugin;
+import org.jboss.tools.common.kb.KbException;
+import org.jboss.tools.common.kb.KbProposal;
+import org.jboss.tools.common.kb.KbQuery;
+import org.jboss.tools.common.kb.wtp.WtpKbConnector;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.outline.ValueHelper;
-import org.jboss.tools.jst.web.tld.*;
+import org.jboss.tools.jst.web.tld.TaglibData;
+import org.jboss.tools.jst.web.tld.VpeTaglibManager;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 public class JSPDialogCellEditorContentAssistProcessor extends JavaPackageCompletionProcessor implements ISubjectControlContentAssistProcessor {
 	Properties context;
@@ -124,7 +131,7 @@ public class JSPDialogCellEditorContentAssistProcessor extends JavaPackageComple
                 }
             }
         } catch (KbException e) {
-			ModelPlugin.log(e);
+        	JspEditorPlugin.getPluginLog().logError(e);
         }
 	}
 	private KbProposal cleanFaceletProposal(KbProposal proposal) {

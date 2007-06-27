@@ -28,6 +28,7 @@ import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.kb.KbDinamicResource;
 import org.jboss.tools.common.kb.KbIcon;
 import org.jboss.tools.common.kb.KbProposal;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.outline.ValueHelper;
 import org.jboss.tools.jst.web.tld.FilePathEncoderFactory;
 import org.jboss.tools.jst.web.tld.IFilePathEncoder;
@@ -182,7 +183,7 @@ public class WTPKbImageFileResource extends WTPKbAbstractModelResource {
 		try {
 			if(resource != null) resource.accept(new ImagesFinder(resources, name, extensions));
 		} catch (CoreException e) {
-			ModelPlugin.log(e);
+			JspEditorPlugin.getPluginLog().logError(e);
 		}
 		ImagePathDescriptor[] filesPathes = new ImagePathDescriptor[resources.size()];
 		for(int i=0; i<filesPathes.length; i++) {
