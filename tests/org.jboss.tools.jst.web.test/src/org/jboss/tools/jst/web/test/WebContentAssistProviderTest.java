@@ -83,7 +83,7 @@ public class WebContentAssistProviderTest extends TestCase {
 		try {
 			project.refreshLocal(IResource.DEPTH_INFINITE, null);
 		} catch (Exception e) {
-			ModelPlugin.log(e);
+			ModelPlugin.getPluginLog().logError(e);
 		}
 		XModelObject xmo = EclipseResourceUtil.getObjectByResource(project);
 		assertNotNull("Can't get XModel Object for test project.", xmo);
