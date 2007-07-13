@@ -29,6 +29,8 @@ import org.eclipse.wst.xml.core.text.IXMLPartitions;
 import org.osgi.framework.Bundle;
 
 import org.jboss.tools.common.model.plugin.ModelPlugin;
+import org.jboss.tools.common.text.xml.contentassist.ContentAssistProcessorBuilder;
+import org.jboss.tools.common.text.xml.contentassist.ContentAssistProcessorDefinition;
 import org.jboss.tools.jst.jsp.contentassist.RedHatHtmlContentAssistProcessor;
 import org.jboss.tools.jst.jsp.contentassist.RedHatJSPContentAssistProcessor;
 
@@ -42,14 +44,32 @@ public class ExtendedStructuredTextViewerConfigurationJSP extends StructuredText
 	}
 
 	protected IContentAssistProcessor[] getContentAssistProcessors(ISourceViewer sourceViewer, String partitionType) {
-		if ((partitionType == IXMLPartitions.XML_DEFAULT) || (partitionType == IHTMLPartitions.HTML_DEFAULT) || (partitionType == IJSPPartitions.JSP_DEFAULT) || (partitionType == IJSPPartitions.JSP_DIRECTIVE) || (partitionType == IJSPPartitions.JSP_CONTENT_DELIMITER)) {
-			return new RedHatJSPContentAssistProcessor[]{new RedHatJSPContentAssistProcessor()};
+		// if we have our own processors we need 
+		// to define them in plugin.xml file of their
+		// plugins using extention point 
+		// "org.jboss.tools.common.text.xml.contentAssistProcessor"
+		
+		ContentAssistProcessorDefinition[] defs = ContentAssistProcessorBuilder.getInstance().getContentAssistProcessorDefinitions(partitionType);
+
+		if(defs==null) return null;
+
+		List processors = new ArrayList();
+		for(int i=0; i<defs.length; i++) {
+		    IContentAssistProcessor processor = defs[i].createContentAssistProcessor();
+		    if(!processors.contains(processor)) {
+			    processors.add(processor);			        
+		    }
 		}
-		if(partitionType == IJSPPartitions.JSP_DEFAULT_EL) {
-			return new RedHatJSPContentAssistProcessor[]{new RedHatJSPContentAssistProcessor()};
-		}
-		if(partitionType == IJSPPartitions.JSP_DEFAULT_EL2) {
-			return new RedHatJSPContentAssistProcessor[]{new RedHatJSPContentAssistProcessor()};
+
+		if ((partitionType == IXMLPartitions.XML_DEFAULT) || 
+				(partitionType == IHTMLPartitions.HTML_DEFAULT) || 
+				(partitionType == IJSPPartitions.JSP_DEFAULT) || 
+				(partitionType == IJSPPartitions.JSP_DIRECTIVE) || 
+				(partitionType == IJSPPartitions.JSP_CONTENT_DELIMITER) ||
+				(partitionType == IJSPPartitions.JSP_DEFAULT_EL) ||
+				(partitionType == IJSPPartitions.JSP_DEFAULT_EL2)) {
+			processors.add(new RedHatJSPContentAssistProcessor());
+			return (IContentAssistProcessor[])processors.toArray(new IContentAssistProcessor[0]);
 		}
 
 		return super.getContentAssistProcessors(sourceViewer, partitionType);
