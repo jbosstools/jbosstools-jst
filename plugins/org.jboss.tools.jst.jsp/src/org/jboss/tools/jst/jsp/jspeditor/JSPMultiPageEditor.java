@@ -22,8 +22,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.QualifiedName;
-import org.jboss.tools.common.core.resources.XModelObjectEditorInput;
-import org.jboss.tools.common.model.util.XModelTreeListenerSWTSync;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.text.IRegion;
@@ -50,7 +48,6 @@ import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
-import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.IStatusField;
@@ -62,27 +59,28 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.eclipse.wst.sse.ui.internal.contentoutline.ConfigurableContentOutlinePage;
-import org.jboss.tools.jst.jsp.JspEditorPlugin;
-import org.jboss.tools.jst.jsp.editor.IVisualContext;
-import org.jboss.tools.jst.jsp.editor.IVisualController;
-import org.jboss.tools.jst.jsp.editor.IVisualEditor;
-import org.jboss.tools.jst.jsp.editor.IVisualEditorFactory;
-import org.jboss.tools.jst.jsp.preferences.VpePreference;
-import org.osgi.framework.Bundle;
-
+import org.jboss.tools.common.core.resources.XModelObjectEditorInput;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.event.XModelTreeEvent;
 import org.jboss.tools.common.model.event.XModelTreeListener;
 import org.jboss.tools.common.model.filesystems.impl.DiscardFileHandler;
 import org.jboss.tools.common.model.filesystems.impl.FolderImpl;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
-import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.model.ui.editor.EditorDescriptor;
 import org.jboss.tools.common.model.ui.editor.IModelObjectEditorInput;
+import org.jboss.tools.common.model.util.EclipseResourceUtil;
+import org.jboss.tools.common.model.util.XModelTreeListenerSWTSync;
 import org.jboss.tools.common.text.ext.IMultiPageEditor;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
+import org.jboss.tools.jst.jsp.editor.IVisualContext;
+import org.jboss.tools.jst.jsp.editor.IVisualController;
+import org.jboss.tools.jst.jsp.editor.IVisualEditor;
+import org.jboss.tools.jst.jsp.editor.IVisualEditorFactory;
+import org.jboss.tools.jst.jsp.preferences.VpePreference;
 import org.jboss.tools.jst.web.tld.VpeTaglibManager;
 import org.jboss.tools.jst.web.tld.VpeTaglibManagerProvider;
+import org.osgi.framework.Bundle;
 
 // Fix for EXIN-232: The IMultiPageEditor interface implementation is added.
 public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
@@ -95,6 +93,9 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	private static final String VISUAL_TAB_LABEL = "JSPMultiPageEditor.TabLabel.Visual";
 
 	private static final String SOURCE_TAB_LABEL = "JSPMultiPageEditor.TabLabel.Source";
+	
+	/** PREVIEW_TAB_LABEL */
+	private static final String PREVIEW_TAB_LABEL = "JSPMultiPageEditor.TabLabel.Preview";
 
 	private IVisualEditor visualEditor;
 
@@ -105,6 +106,12 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	JSPTextEditor sourceEditor;
 
 	private int sourceIndex;
+	
+	/** composite control for default web-browser */
+	private IVisualEditor previewWebBrowser;
+	
+	/** index of tab contain default web-browser */
+	private int previewIndex;
 
 	private boolean osWindows = true;
 
@@ -208,13 +215,17 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 				visualEditor.setVisualMode(IVisualEditor.VISUAL_MODE);
 			else if (newPageIndex == sourceIndex)
 				visualEditor.setVisualMode(IVisualEditor.SOURCE_MODE);
+			else if (newPageIndex == previewIndex) {
+				visualEditor.setVisualMode(IVisualEditor.PREVIEW_MODE); 				
+			}
+				
 			superPageChange(newPageIndex);
 		} else {
 			super.pageChange(newPageIndex);
 		}
 		oldPage = newPageIndex;
 	}
-
+	
 	public void setInput(IEditorInput input) {
 		super.setInput(XModelObjectEditorInput.checkInput(input));
 		if (getEditorInput() instanceof IModelObjectEditorInput) {
@@ -407,6 +418,17 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		} catch (PartInitException e) {
 			JspEditorPlugin.getPluginLog().logError(e);
 		}
+
+		// Add tab contain default web-browser
+		try {
+			previewIndex = addPage(visualEditor, getEditorInput());
+			setPageText(previewIndex, JSPEditorMessages
+					.getString(PREVIEW_TAB_LABEL));
+			setPartName(visualEditor.getTitle());
+		} catch (PartInitException e) {
+			JspEditorPlugin.getPluginLog().logError(e);
+		}
+
 	}
 
 	public void doSave(IProgressMonitor monitor) {
