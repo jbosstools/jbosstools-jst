@@ -31,7 +31,9 @@ public class RedHat4WebPerspectiveFactory implements IPerspectiveFactory {
 		IFolderLayout leftTop = layout.createFolder("leftTop", IPageLayout.LEFT, (float)0.2, editorArea); //$NON-NLS-1$
 		leftTop.addView(JavaUI.ID_PACKAGES);
 		leftTop.addView("org.jboss.tools.jst.web.ui.navigator.WebProjectsView");
+		leftTop.addView("org.jboss.tools.seam.ui.views.SeamComponentsNavigator");
 		leftTop.addPlaceholder(IPageLayout.ID_RES_NAV);
+		
 
 		IFolderLayout leftBottom = layout.createFolder("leftBottom", IPageLayout.BOTTOM, 0.64f, "leftTop");
 		//leftBottom.addView(IPageLayout.ID_OUTLINE);
@@ -53,6 +55,9 @@ public class RedHat4WebPerspectiveFactory implements IPerspectiveFactory {
 		layout.addActionSet(JavaUI.ID_ELEMENT_CREATION_ACTION_SET);
 		layout.addActionSet(IPageLayout.ID_NAVIGATE_ACTION_SET);
 
+		// views - seam
+		layout.addShowViewShortcut("org.jboss.tools.seam.ui.views.SeamComponentsNavigator");
+		
 		// views - java
 		layout.addShowViewShortcut(JavaUI.ID_PACKAGES);
 		layout.addShowViewShortcut(JavaUI.ID_TYPE_HIERARCHY);
