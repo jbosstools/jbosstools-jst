@@ -39,4 +39,9 @@ public class TLDCompoundEditor extends DefaultMultipageEditor {
 
 		return super.getAdapter(adapter);
 	}
+
+	protected String[] getSupportedNatures() {
+		return new String[0];
+	}
+
 }
