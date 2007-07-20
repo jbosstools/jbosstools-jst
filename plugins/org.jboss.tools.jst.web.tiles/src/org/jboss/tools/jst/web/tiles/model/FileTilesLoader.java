@@ -29,8 +29,11 @@ public class FileTilesLoader implements WebProcessLoader, TilesConstants {
 
 	public void load(XModelObject object) {
 		String body = XModelObjectLoaderUtil.getTempBody(object);
-		String[] errors = XMLUtil.getXMLErrors(new StringReader(body));
-		if(errors != null && errors.length > 0) {
+		String[] errors = 
+//			XMLUtil.getXMLErrors(new StringReader(body));
+			XMLUtil.getXMLErrors(new StringReader(body), false, false);
+		boolean hasErrors = (errors != null && errors.length > 0);
+		if(hasErrors) {
 			object.setAttributeValue("isIncorrect", "yes");
 			object.setAttributeValue("incorrectBody", body);
 			object.set("actualBodyTimeStamp", "-1");
@@ -49,6 +52,7 @@ public class FileTilesLoader implements WebProcessLoader, TilesConstants {
 		}
 		Element element = doc.getDocumentElement();
 		util.load(element, object);
+		String loadingError = util.getError();
 		
 		setEncoding(object, body);
 		NodeList nl = doc.getChildNodes();
@@ -61,6 +65,13 @@ public class FileTilesLoader implements WebProcessLoader, TilesConstants {
 		}
 		reloadProcess(object);
 		object.set("actualBodyTimeStamp", "" + object.getTimeStamp());
+
+		((AbstractXMLFileImpl)object).setLoaderError(loadingError);
+		if(!hasErrors && loadingError != null) {
+			object.setAttributeValue("isIncorrect", "yes");
+			object.setAttributeValue("incorrectBody", body);
+			object.set("actualBodyTimeStamp", "" + object.getTimeStamp());
+		}
 	}
     
 	protected void setEncoding(XModelObject object, String body) {
