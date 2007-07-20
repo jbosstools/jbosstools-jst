@@ -16,8 +16,8 @@ import org.jboss.tools.common.xml.XMLEntityResolver;
 public class FileTLDRecognizer implements EntityRecognizer, TLDConstants {
     static {
         try {
-            XMLEntityResolver.registerPublicEntity(TLD_DOC_PUBLICID_1_1, FileTLDRecognizer.class.getResource("/meta/web-jsptaglibrary_1_1.dtd").toString());
-            XMLEntityResolver.registerPublicEntity(TLD_DOC_PUBLICID_1_2, FileTLDRecognizer.class.getResource("/meta/web-jsptaglibrary_1_2.dtd").toString());
+            XMLEntityResolver.registerPublicEntity(TLD_DOC_PUBLICID_1_1, FileTLDRecognizer.class, "/meta/web-jsptaglibrary_1_1.dtd");
+            XMLEntityResolver.registerPublicEntity(TLD_DOC_PUBLICID_1_2, FileTLDRecognizer.class, "/meta/web-jsptaglibrary_1_2.dtd");
         } catch (Exception e) {}
     }
     

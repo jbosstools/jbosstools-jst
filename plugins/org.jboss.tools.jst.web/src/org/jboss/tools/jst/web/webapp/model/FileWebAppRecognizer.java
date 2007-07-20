@@ -10,16 +10,20 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.webapp.model;
 
-import org.eclipse.core.runtime.FileLocator;
+import java.io.IOException;
+
 import org.jboss.tools.common.model.loaders.*;
 import org.jboss.tools.common.xml.XMLEntityResolver;
+import org.jboss.tools.jst.web.WebModelPlugin;
 
 public class FileWebAppRecognizer implements EntityRecognizer {
     static {
         try {
-            XMLEntityResolver.registerPublicEntity(WebAppConstants.DOC_PUBLICID, FileLocator.resolve(FileWebAppRecognizer.class.getResource("/meta/web-app_2_3.dtd")).toString());
-            XMLEntityResolver.registerPublicEntity(WebAppConstants.DOC_PUBLICID_2_3, FileLocator.resolve(FileWebAppRecognizer.class.getResource("/meta/web-app_2_3.dtd")).toString());
-        } catch (Exception e) {}
+            XMLEntityResolver.registerPublicEntity(WebAppConstants.DOC_PUBLICID, FileWebAppRecognizer.class, "/meta/web-app_2_3.dtd");
+            XMLEntityResolver.registerPublicEntity(WebAppConstants.DOC_PUBLICID_2_3, FileWebAppRecognizer.class, "/meta/web-app_2_3.dtd");
+        } catch (IOException e) {
+        	WebModelPlugin.getPluginLog().logError(e);
+        }
     }
 
     public String getEntityName(String ext, String body) {
