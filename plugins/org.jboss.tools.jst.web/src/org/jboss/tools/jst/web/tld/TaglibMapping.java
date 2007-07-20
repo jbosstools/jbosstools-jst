@@ -213,6 +213,7 @@ public class TaglibMapping implements ITaglibMapping {
 
 	private void findTldsInFolder(XModelObject folder, String base) {
 		XModelObject[] cs = folder.getChildren();
+		if(cs==null) return;
 		for (int i = 0; i < cs.length; i++) {
 			if(cs[i].getFileType() == XModelObject.FOLDER) {
 				findTldsInFolder(cs[i], base + cs[i].getAttributeValue("name") + "/");
