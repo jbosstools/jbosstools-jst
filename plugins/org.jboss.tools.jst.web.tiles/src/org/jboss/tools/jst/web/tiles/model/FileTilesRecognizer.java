@@ -10,14 +10,13 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.tiles.model;
 
-import org.eclipse.core.runtime.FileLocator;
 import org.jboss.tools.common.model.loaders.*;
 import org.jboss.tools.common.xml.XMLEntityResolver;
 
 public class FileTilesRecognizer implements EntityRecognizer {
     static {
         try {
-            XMLEntityResolver.registerPublicEntity(TilesConstants.DOC_PUBLICID, FileLocator.resolve( FileTilesRecognizer.class.getResource("/meta/tiles_config_1_1.dtd")).toString());
+            XMLEntityResolver.registerPublicEntity(TilesConstants.DOC_PUBLICID, FileTilesRecognizer.class, "/meta/tiles_config_1_1.dtd");
         } catch (Exception e) {}
     }
 
