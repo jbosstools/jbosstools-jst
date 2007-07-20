@@ -11,7 +11,7 @@
 package org.jboss.tools.jst.web.tld.model;
 
 import org.jboss.tools.common.model.loaders.*;
-import org.jboss.tools.common.model.util.*;
+import org.jboss.tools.common.xml.XMLEntityResolver;
 
 public class FileTLDRecognizer implements EntityRecognizer, TLDConstants {
     static {
