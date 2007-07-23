@@ -10,6 +10,8 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.webapp.model;
 
+import java.util.Set;
+
 import org.w3c.dom.*;
 
 import org.jboss.tools.common.meta.*;
@@ -32,6 +34,22 @@ public class FileWebAppLoader extends SimpleWebFileLoader {
 
 class FWLoaderUtil extends XModelObjectLoaderUtil {
 	boolean schema = false;
+
+    protected Set<String> getAllowedChildren(XModelEntity entity) {
+    	Set<String> children = super.getAllowedChildren(entity);
+    	if("WebAppResourceCollection".equals(entity.getName())) {
+    		children.add("url-pattern");
+    		children.add("http-method");
+    	} else if("WebAppServiceRef".equals(entity.getName())) {
+    		children.add("port-component-ref");
+    		children.add("handler");
+    	} else if("WebAppFilterMapping24".equals(entity.getName())) {
+    		children.add("dispatcher");
+    	} else if(entity.getName().startsWith("FileWebApp")) {
+    		children.add("distributable");
+    	}    	
+    	return children;
+    }
 
     protected boolean isSaveable(XModelEntity entity, String n, String v, String dv) {
         if("load-on-startup".equals(n)) return false;
