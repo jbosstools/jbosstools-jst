@@ -1635,23 +1635,6 @@
     HandlerClassName="org.jboss.tools.jst.web.project.handlers.CreateWebPrjHandler"
     ICON="main.projects.new" SAVE_REQUIRED="yes"
     displayName="Create New Project..." kind="action" name="CreateStrutsProject"/>
-   <XActionItem HIDE="always"
-    HandlerClassName="org.jboss.tools.struts.webprj.model.handlers.ImportWebPrjHandler"
-    ICON="main.projects.item"
-    PROPERTIES="support=org.jboss.tools.struts.webprj.model.handlers.ImportWebPrjSupport"
-    SAVE_REQUIRED="yes" displayName="Adopt Existing Project..."
-    kind="action" name="ImportStrutsProject">
-    <EntityData EntityName="WebPrjCreateStepName">
-     <AttributeData AttributeName="name"/>
-     <AttributeData AttributeName="location"/>
-    </EntityData>
-    <EntityData EntityName="WebPrjCreateStepDirs">
-     <AttributeData AttributeName="webroot"/>
-     <AttributeData AttributeName="classes" Mandatory="no"/>
-     <AttributeData AttributeName="lib" Mandatory="no"/>
-     <AttributeData AttributeName="src" Mandatory="no"/>
-    </EntityData>
-   </XActionItem>
    <XActionItem HandlerClassName="%SpecialWizard%" ICON="action.empty"
     PROPERTIES="support=org.jboss.tools.struts.webprj.model.helpers.sync.SyncProjectSupport"
     displayName="Modules Configuration" kind="action" name="SynchronizeModules"/>

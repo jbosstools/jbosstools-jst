@@ -124,27 +124,6 @@ public class NewWebProjectHelper {
         }
     }
     
-    public static String getWorkspace(File folder) {
-        File[] files = folder.listFiles(new FileFilter() {
-                public boolean accept(File file) {
-                    String name = file.getName().toLowerCase();
-                    return file.isFile() && name.endsWith(".pex");
-                }
-            });
-        return (files != null && files.length > 0) ? files[0].getAbsolutePath() : null;
-    }
-
-    public static void removeWorkspace(File folder) {
-        File[] files = folder.listFiles(new FileFilter() {
-                public boolean accept(File file) {
-                    String name = file.getName().toLowerCase();
-                    return file.isFile() &&
-                           (name.endsWith(".pex"));
-                }
-            });
-        if(files != null) for (int i = 0; i < files.length; i++) files[i].delete();
-    }
-    
     public static Map<String,String> getTemplates(String version, String templ) {
         Map<String,String> map = new HashMap<String,String>();
         File dir = new File(templ, "struts/"+version);
