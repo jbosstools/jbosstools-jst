@@ -13,7 +13,6 @@ package org.jboss.tools.jst.web.ui.wizards.project;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.FileFilter;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -47,7 +46,6 @@ import org.jboss.tools.jst.web.context.ImportWebDirProjectContext;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 
 public class ImportWebProjectWizardPage extends WizardPage {
-	private FileFilter projectFilter;
 	private ImportWebDirProjectContext context;
 	private XAttributeSupport support;
 	private IModelPropertyEditorAdapter projectNameAdapter;
@@ -84,11 +82,6 @@ public class ImportWebProjectWizardPage extends WizardPage {
 			if(getWebXmlFile(context.getInitialLocation()) != null)
 				webXmlLocationAdapter.setValue("" + context.getInitialLocation()); //$NON-NLS-1$
 		} 
-		projectFilter = new FileFilter() {
-			public boolean accept(File pathName) {
-				return pathName.getName().endsWith(".pex"); //$NON-NLS-1$
-			}
-		};
 	}
 	
 	public void dispose() {
@@ -191,25 +184,9 @@ public class ImportWebProjectWizardPage extends WizardPage {
 		projectNameAdapter.addValueChangeListener(updateDataListener);
 	}
 
-	private File getPexFile() {
-		File directory = new File(getWebXmlLocationValue()).getParentFile();
-		if (directory == null || directory.isFile())
-			return null;
-
-		File[] files = directory.listFiles(projectFilter);
-		if (files != null && files.length > 0) {
-			File result = null;
-			for (int i = 0; i < files.length && result == null; i++)
-				if ("workspace.pex".equals(files[i].getName())) result = files[i]; //$NON-NLS-1$
-			if (result == null) result = files[0]; 
-			return result;
-		} else
-			return null;
-	}
-	
 	private void updateProjectNameValue(boolean onProjectNameEdit, boolean onProjectLocationEdit) {
 		if(context.isInitialized()) return;
-		File projectFile = getPexFile();
+		File projectFile = null;
 		projectNameEditor.getFieldEditor((Composite)getControl()).setEnabled(projectFile == null, (Composite)getControl());
 
 		if (onProjectNameEdit) {
