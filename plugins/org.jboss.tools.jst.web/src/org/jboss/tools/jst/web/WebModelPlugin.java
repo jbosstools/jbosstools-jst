@@ -14,23 +14,18 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.Properties;
 
-import org.eclipse.ant.internal.ui.IAntUIConstants;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationType;
-import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
-import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.JavaRuntime;
-import org.eclipse.ui.externaltools.internal.model.IExternalToolConstants;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
@@ -40,6 +35,7 @@ import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.core.ServerUtil;
 import org.eclipse.wst.server.core.internal.RuntimeWorkingCopy;
+import org.jboss.ide.seam.gen.actions.SeamGenAction;
 import org.jboss.tools.common.log.BaseUIPlugin;
 import org.jboss.tools.common.log.IPluginLog;
 import org.jboss.tools.common.model.XModel;
@@ -53,7 +49,7 @@ public class WebModelPlugin extends BaseUIPlugin {
 
 	public static final String JBOSS_AS_HOME = "../../../../jbossas"; 	// JBoss AS home directory (relative to plugin)- <RHDS_HOME>/jbossas.
 	// TODO agreement about actual seam-gen location is needed
-	public static final String SEAM_GEN_HOME = ""; 
+	public static final String SEAM_GEN_HOME = "../../../../jbosseam/seam-gen"; 
 	
 	public static final String JBOSS_AS_RUNTIME_TYPE_ID = "org.jboss.ide.eclipse.as.runtime.42";
 	public static final String JBOSS_AS_TYPE_ID = "org.jboss.ide.eclipse.as.42";
@@ -123,24 +119,13 @@ public class WebModelPlugin extends BaseUIPlugin {
 		} catch (CoreException e1) {
 			getPluginLog().logError("Exception occured during search in Launch Configuration list.", e1);
 		}
-		ILaunchConfigurationWorkingCopy wc;
+		String buildXmlPath = null;
 		if(config==null) {
-			ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
-			ILaunchConfigurationType launchConfigurationType = launchManager.getLaunchConfigurationType( "org.eclipse.ant.AntLaunchConfigurationType" );
 			try {
-				wc = launchConfigurationType.newInstance( null, "seamgen" );
-				wc.setAttribute( "process_factory_id", "org.eclipse.ant.ui.remoteAntProcessFactory" );
-				wc.setAttribute(IAntUIConstants.ATTR_DEFAULT_VM_INSTALL, true);
-				wc.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, "org.eclipse.ant.internal.ui.antsupport.InternalAntRunner");
-				wc.setAttribute("org.eclipse.debug.core.appendEnvironmentVariables", true);
-				wc.setAttribute( "org.eclipse.jdt.launching.CLASSPATH_PROVIDER", "org.eclipse.ant.ui.AntClasspathProvider" );
-				wc.setAttribute( "org.eclipse.jdt.launching.SOURCEPATH_PROVIDER", "org.eclipse.ant.ui.AntClasspathProvider" );
-				wc.setAttribute( "org.eclipse.jdt.launching.VM_INSTALL_TYPE_ID", "org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType");
-
-				wc.setAttribute( IExternalToolConstants.ATTR_LOCATION, getSeamGenBuildPath());
-				wc.doSave();
+				buildXmlPath = getSeamGenBuildPath();
+				SeamGenAction.createSeamgenLaunchConfig(buildXmlPath);
 			} catch (CoreException e) {
-				getPluginLog().logError("Cannot create configuration for Seam-Gen tool", e);
+				getPluginLog().logError("Cannot create configuration for Seam-Gen tool. Seamgen build.xml file: " + buildXmlPath, e);
 				return;
 			}
 		}
@@ -149,20 +134,19 @@ public class WebModelPlugin extends BaseUIPlugin {
 	public String getSeamGenBuildPath() {
 		String pluginLocation = EclipseResourceUtil.getInstallPath(this.getBundle());
 		File seamGenDir = new File(pluginLocation, SEAM_GEN_HOME);
-		File seamGenBuildXml = null;
-		if(seamGenDir.isDirectory()) {
-			seamGenBuildXml = new File(seamGenDir,"build.xml");
+		File seamGenBuildXml = new File(seamGenDir,"build.xml");
+		if(seamGenBuildXml.isFile()) {
 			return seamGenBuildXml.getAbsolutePath();
 		} else {
 			return "";
 		}
 	}
-	
+
 	static public ILaunchConfiguration findLaunchConfig(String name) throws CoreException {
 		ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
 		ILaunchConfigurationType launchConfigurationType = launchManager.getLaunchConfigurationType( "org.eclipse.ant.AntLaunchConfigurationType" );
 		ILaunchConfiguration[] launchConfigurations = launchManager.getLaunchConfigurations( launchConfigurationType );
-	
+
 		for (int i = 0; i < launchConfigurations.length; i++) { // can't believe there is no look up by name API
 			ILaunchConfiguration launchConfiguration = launchConfigurations[i];
 			if(launchConfiguration.getName().equals(name)) {
