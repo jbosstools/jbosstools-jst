@@ -72,6 +72,11 @@ public class XActionProvider extends CommonActionProvider {
 		if(e instanceof IFile) {
 			IFile f = (IFile)e;
 			XModelObject o = EclipseResourceUtil.getObjectByResource(f);
+			if(o == null) {
+				EclipseResourceUtil.createObjectForResource(f.getProject());
+				o = EclipseResourceUtil.createObjectForResource(f);
+			}
+			if(o == null) return;
 			add(o, menu, false);
 		} else if((e instanceof XModelObject)) {
 			XModelObject o = (XModelObject)e;
