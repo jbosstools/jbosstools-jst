@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE XModelEntityGroup PUBLIC "-//Red Hat, Inc.//DTD Meta 1.0//EN" "meta.dtd">
+<!DOCTYPE XModelEntityGroup PUBLIC "-//Red Hat, Inc.//DTD Meta 1.0//EN"
+                                   "meta.dtd">
 <XModelEntityGroup>
  <VERSION DEPENDS="Model:1.0" MODULE="Struts Editor" VERSION="1.0"/>
  <MAPPINGS>
@@ -200,6 +201,10 @@
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Constraint/>
     <Editor name="Note"/>
+   </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
    </XModelAttribute>
    <XModelAttribute PROPERTIES="category=advanced" default="UTF-8" name="encoding">
     <Constraint loader="ListString">
@@ -550,6 +555,10 @@
     <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Constraint/>
     <Editor name="Note"/>
@@ -610,6 +619,10 @@
    <XModelAttribute TRIM="no" name="description" xmlname="description.#text">
     <Constraint/>
     <Editor name="Note"/>
+   </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
    </XModelAttribute>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Constraint/>
@@ -677,6 +690,14 @@
     <Constraint/>
     <Editor/>
    </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
+    <Constraint/>
+    <Editor name="Note"/>
+   </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
    <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
@@ -739,6 +760,14 @@
     <Constraint/>
     <Editor/>
    </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
+    <Constraint/>
+    <Editor name="Note"/>
+   </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
    <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
@@ -798,6 +827,14 @@
     </Constraint>
     <Editor name="ListString"/>
    </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
+    <Constraint/>
+    <Editor name="Note"/>
+   </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
    <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
@@ -852,6 +889,14 @@
      <value name="extensions=jsp,html,htm"/>
     </Constraint>
     <Editor name="TreeChooser"/>
+   </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
+    <Constraint/>
+    <Editor name="Note"/>
    </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
@@ -937,6 +982,10 @@
     <Constraint/>
     <Editor name="AccessibleJava"/>
    </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Constraint/>
     <Editor name="Note"/>
@@ -998,6 +1047,10 @@
     <Editor/>
    </XModelAttribute>
    <XModelAttribute PROPERTIES="id=true;save=always" name="servlet-name" xmlname="servlet-name.#text">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
     <Constraint/>
     <Editor/>
    </XModelAttribute>
@@ -1865,6 +1918,10 @@
     <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Constraint/>
     <Editor name="Note"/>
@@ -1907,6 +1964,10 @@
    <XModelAttribute PROPERTIES="id=true" name="listener-class" xmlname="listener-class.#text">
     <Constraint/>
     <Editor name="AccessibleJava"/>
+   </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
    </XModelAttribute>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Constraint/>
@@ -1977,6 +2038,10 @@
      <value name="extensions=htm,html,jsp"/>
     </Constraint>
     <Editor name="TreeChooser"/>
+   </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
    </XModelAttribute>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Constraint/>
@@ -2051,6 +2116,10 @@
     </Constraint>
     <Editor name="ListString"/>
    </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Constraint/>
     <Editor name="Note"/>
@@ -2116,6 +2185,10 @@
     </Constraint>
     <Editor name="ListAdd"/>
    </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Constraint/>
     <Editor name="Note"/>
@@ -2170,6 +2243,10 @@
     name="resource-env-ref-type" xmlname="resource-env-ref-type.#text">
     <Constraint/>
     <Editor name="AccessibleJava"/>
+   </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
    </XModelAttribute>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Constraint/>
@@ -2238,6 +2315,10 @@
     </Constraint>
     <Editor name="List"/>
    </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Constraint/>
     <Editor name="Note"/>
@@ -2280,6 +2361,10 @@
    <XModelAttribute PROPERTIES="id=true" name="role-name" xmlname="#text">
     <Constraint loader="ListString"/>
     <Editor name="WebRoleList"/>
+   </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
    </XModelAttribute>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Constraint/>
@@ -2328,6 +2413,10 @@
     <Constraint loader="ListString"/>
     <Editor name="WebRoleList"/>
    </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Constraint/>
     <Editor name="Note"/>
@@ -2371,6 +2460,10 @@
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute PROPERTIES="category=general" name="display-name" xmlname="display-name.#text">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
     <Constraint/>
     <Editor/>
    </XModelAttribute>
@@ -2455,6 +2548,10 @@
     </Constraint>
     <Editor name="Name"/>
    </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Constraint/>
     <Editor name="Note"/>
@@ -2507,6 +2604,10 @@
    <XModelAttribute PROPERTIES="save=always" name="role-link" xmlname="role-link.#text">
     <Constraint loader="ListString"/>
     <Editor name="WebRoleList"/>
+   </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
    </XModelAttribute>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Constraint/>
@@ -2598,6 +2699,10 @@
     </Constraint>
     <Editor name="Int"/>
    </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Constraint/>
     <Editor name="Note"/>
@@ -2677,6 +2782,10 @@
     <Constraint/>
     <Editor/>
    </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Constraint/>
     <Editor name="Note"/>
@@ -2719,6 +2828,10 @@
      <value name="mandatory=false"/>
     </Constraint>
     <Editor name="Int"/>
+   </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
    </XModelAttribute>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Constraint/>
@@ -2766,6 +2879,10 @@
      <value name="extensions=tld"/>
     </Constraint>
     <Editor name="TreeChooser"/>
+   </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
    </XModelAttribute>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Constraint/>
@@ -2820,6 +2937,10 @@
     </Constraint>
     <Editor name="ListString"/>
    </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Constraint/>
     <Editor name="Note"/>
@@ -2865,6 +2986,10 @@
      <value name="extensions=jsp,html,htm"/>
     </Constraint>
     <Editor name="TreeChooser"/>
+   </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
    </XModelAttribute>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Constraint/>
@@ -2913,6 +3038,10 @@
     visibility="false" xmlname="NAME">
     <Constraint/>
     <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
    </XModelAttribute>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Constraint/>

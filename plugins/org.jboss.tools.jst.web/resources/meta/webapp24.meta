@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE XModelEntityGroup PUBLIC "-//Red Hat, Inc.//DTD Meta 1.0//EN" "meta.dtd">
+<!DOCTYPE XModelEntityGroup PUBLIC "-//Red Hat, Inc.//DTD Meta 1.0//EN"
+                                   "meta.dtd">
 <XModelEntityGroup>
  <VERSION DEPENDS="Model:1.0" MODULE="Struts Editor" VERSION="1.0"/>
  <MAPPINGS>
@@ -199,6 +200,10 @@
      <value name="no"/>
     </Constraint>
     <Editor name="List"/>
+   </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
    </XModelAttribute>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Constraint/>
@@ -698,6 +703,10 @@
     </Constraint>
     <Editor name="List"/>
    </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Constraint/>
     <Editor name="Note"/>
@@ -1105,6 +1114,10 @@
     </Constraint>
     <Editor name="ListAdd"/>
    </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Constraint/>
     <Editor name="Note"/>
@@ -1281,6 +1294,14 @@
     <Constraint/>
     <Editor/>
    </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
+    <Constraint/>
+    <Editor name="Note"/>
+   </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
    <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
@@ -1324,6 +1345,14 @@
    <XModelAttribute default="JSP Config" name="name" xmlname="NAME">
     <Constraint/>
     <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
+    <Constraint/>
+    <Editor name="Note"/>
    </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
@@ -1390,6 +1419,14 @@
     <Constraint/>
     <Editor/>
    </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
+    <Constraint/>
+    <Editor name="Note"/>
+   </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
    <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
@@ -1434,6 +1471,14 @@
     visibility="false" xmlname="NAME">
     <Constraint/>
     <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
+    <Constraint/>
+    <Editor name="Note"/>
    </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
@@ -1511,6 +1556,14 @@
     <Constraint/>
     <Editor/>
    </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
+    <Constraint/>
+    <Editor name="Note"/>
+   </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
    <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
@@ -1576,6 +1629,14 @@
    <XModelAttribute name="message-destination-link" xmlname="message-destination-link.#text">
     <Constraint/>
     <Editor/>
+   </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
+    <Constraint/>
+    <Editor name="Note"/>
    </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
@@ -1663,6 +1724,14 @@
    <XModelAttribute name="handler" xmlname="handlers">
     <Constraint/>
     <Editor/>
+   </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
+    <Constraint/>
+    <Editor name="Note"/>
    </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
