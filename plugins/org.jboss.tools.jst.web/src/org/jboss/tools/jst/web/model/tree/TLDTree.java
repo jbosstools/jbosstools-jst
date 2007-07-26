@@ -29,7 +29,7 @@ public class TLDTree implements XFilteredTree {
 	}
 
 	public boolean hasChildren(XModelObject object) {
-		return object == root;
+		return object == root || (root != null && object == root.getParent());
 	}
 
 	public XModelObject[] getChildren(XModelObject object) {
