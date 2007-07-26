@@ -51,8 +51,8 @@ public class WebUtils {
 			String path = null;
 			try {
 				path = fs[i].getCanonicalPath();
-			} catch (Exception e) {
-				//ignore
+			} catch (IOException e) {
+				WebModelPlugin.getPluginLog().logError(e);
 			}
 			if(path != null) jars.add(path);
 		}
@@ -88,7 +88,7 @@ public class WebUtils {
 				if(path.startsWith(classPathVarValue)) {
 					path = classPathVarName + path.substring(classPathVarValue.length());
 				}
-			} catch (Exception e) {
+			} catch (IOException e) {
 				WebModelPlugin.getPluginLog().logError(e);
 			}
 			if(path != null) jars.add(path);

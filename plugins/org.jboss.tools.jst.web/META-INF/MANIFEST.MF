@@ -63,7 +63,6 @@ Require-Bundle: org.jboss.tools.common.model;visibility:=reexport,
  org.eclipse.pde.ui,
  org.eclipse.core.runtime,
  org.eclipse.ant.ui,
- org.eclipse.ui.externaltools,
- org.jboss.ide.seam.gen
+ org.eclipse.ui.externaltools
 Bundle-Version: 2.0.0
 

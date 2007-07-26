@@ -35,7 +35,6 @@ import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.core.ServerUtil;
 import org.eclipse.wst.server.core.internal.RuntimeWorkingCopy;
-import org.jboss.ide.seam.gen.actions.SeamGenAction;
 import org.jboss.tools.common.log.BaseUIPlugin;
 import org.jboss.tools.common.log.IPluginLog;
 import org.jboss.tools.common.model.XModel;
@@ -48,8 +47,6 @@ import org.osgi.framework.BundleContext;
 public class WebModelPlugin extends BaseUIPlugin {
 
 	public static final String JBOSS_AS_HOME = "../../../../jbossas"; 	// JBoss AS home directory (relative to plugin)- <RHDS_HOME>/jbossas.
-	// TODO agreement about actual seam-gen location is needed
-	public static final String SEAM_GEN_HOME = "../../../../jbosseam/seam-gen"; 
 	
 	public static final String JBOSS_AS_RUNTIME_TYPE_ID = "org.jboss.ide.eclipse.as.runtime.42";
 	public static final String JBOSS_AS_TYPE_ID = "org.jboss.ide.eclipse.as.42";
@@ -109,38 +106,11 @@ public class WebModelPlugin extends BaseUIPlugin {
 		// when calling of these dialogs is cause of loadind the plugin hierarchy
 		ProjectTemplatesPlugin.getDefault();
 		initJbossAS();
-		initSeamGen();
 	}
 
-	private void initSeamGen() {
-		ILaunchConfiguration config=null;
-		try {
-			config = findLaunchConfig("seamgen");
-		} catch (CoreException e1) {
-			getPluginLog().logError("Exception occured during search in Launch Configuration list.", e1);
-		}
-		String buildXmlPath = null;
-		if(config==null) {
-			try {
-				buildXmlPath = getSeamGenBuildPath();
-				SeamGenAction.createSeamgenLaunchConfig(buildXmlPath);
-			} catch (CoreException e) {
-				getPluginLog().logError("Cannot create configuration for Seam-Gen tool. Seamgen build.xml file: " + buildXmlPath, e);
-				return;
-			}
-		}
-	}
 
-	public String getSeamGenBuildPath() {
-		String pluginLocation = EclipseResourceUtil.getInstallPath(this.getBundle());
-		File seamGenDir = new File(pluginLocation, SEAM_GEN_HOME);
-		File seamGenBuildXml = new File(seamGenDir,"build.xml");
-		if(seamGenBuildXml.isFile()) {
-			return seamGenBuildXml.getAbsolutePath();
-		} else {
-			return "";
-		}
-	}
+
+
 
 	static public ILaunchConfiguration findLaunchConfig(String name) throws CoreException {
 		ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
@@ -226,7 +196,7 @@ public class WebModelPlugin extends BaseUIPlugin {
 				server.setName(JBOSS_AS_NAME);
 				server.save(false, progressMonitor);
 			}
-		} catch (Exception e) {
+		} catch (CoreException e) {
 			getPluginLog().logError("Can't create new JBoss Server.", e);
 		}
 	}
