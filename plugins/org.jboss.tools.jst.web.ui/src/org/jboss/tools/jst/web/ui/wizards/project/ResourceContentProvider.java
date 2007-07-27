@@ -68,11 +68,7 @@ public class ResourceContentProvider implements ITreeContentProvider {
 		if(root != null && !root.equals(newRoot)) {
 			root = newRoot;
 			if(viewer.getControl() != null && !viewer.getControl().isDisposed()) {
-				try {
-					viewer.refresh();
-				} catch(Exception e) {
-					//ignore
-				}
+				viewer.refresh();
 			}
 		} else {
 			root = newRoot;

@@ -74,14 +74,10 @@ public class EditProjectTemplateView extends AbstractSpecialWizardStep {
 	
 	public void dispose() {
 		super.dispose();
-		try {
 			if(control != null && !control.isDisposed()) {
 				control.dispose();
 				control = null;
 			}
-		} catch (Exception e) {
-			WebUiPlugin.getPluginLog().logError(e);
-		}
 	}
 	
 	public void validate() {

@@ -73,7 +73,7 @@ public abstract class NewWebProjectWizard extends Wizard implements INewWizard, 
 			Status status = new Status(IStatus.ERROR, "org.jboss.tools.jst.web.ui", 0, message, e);
 			ProblemReportingHelper.reportProblem(status);
 			result = false;
-		} catch (Exception e) {
+		} catch (InterruptedException e) {
 			String message = WizardKeys.getString(CANNOT_CREATE_LOCATION+".ErrorMessage")+": "+context.getLocationPath();
 			Status status = new Status(IStatus.ERROR, "org.jboss.tools.jst.web.ui", 0, message, e);
 			ProblemReportingHelper.reportProblem(status);

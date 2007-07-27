@@ -18,6 +18,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
@@ -312,7 +313,7 @@ public class ImportWebProjectWizardPage extends WizardPage {
 			project.refreshLocal(IProject.DEPTH_INFINITE, null);
 			hasJavaNature = project.exists() && project.hasNature(JavaCore.NATURE_ID);
 			hasNature = project.exists() && project.hasNature(context.getNatureID());
-		} catch (Exception e) {
+		} catch (CoreException e) {
 			hasNature = project.exists();
 		}
 		if(project.exists() && (!hasNature) && hasJavaNature) {
