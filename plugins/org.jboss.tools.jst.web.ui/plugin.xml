@@ -216,7 +216,7 @@
          <action class="org.jboss.tools.jst.web.ui.action.SaveProjectAsTemplateActionDelegate" enablesFor="*" id="org.jboss.tools.common.xstudio.action.SaveProjectAsTemplateActionDelegate" label="%popupMenus.action.saveAsTemplate" menubarPath="RedHat4Web/c">
          </action>
       </objectContribution>
-      <objectContribution id="RedHatEclipse4Web_IFile" objectClass="org.eclipse.core.resources.IFile">
+      <!--objectContribution id="RedHatEclipse4Web_IFile" objectClass="org.eclipse.core.resources.IFile">
          <menu id="RedHat4Web" label="Red Hat Developer Studio" path="additions">
             <separator name="a">
             </separator>
@@ -226,9 +226,7 @@
             </separator>
          </menu>
          
-         <!--action class="org.jboss.tools.common.model.ui.action.file.HelpActionDelegate" enablesFor="*" id="org.jboss.tools.common.model.ui.action.file.HelpActionDelegate" label="Help" menubarPath="RedHat4Web/help">
-         </action-->
-      </objectContribution>
+      </objectContribution-->
       <objectContribution id="RedHatEclipse4Web_XModelObject" objectClass="org.jboss.tools.common.model.XModelObject">
          <menu id="RedHat4Web" label="Red Hat Developer Studio" path="additions">
             <separator name="a">
