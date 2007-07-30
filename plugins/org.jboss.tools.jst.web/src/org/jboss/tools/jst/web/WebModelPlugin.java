@@ -46,7 +46,7 @@ import org.osgi.framework.BundleContext;
 
 public class WebModelPlugin extends BaseUIPlugin {
 
-	public static final String JBOSS_AS_HOME = "../../../../jbossas"; 	// JBoss AS home directory (relative to plugin)- <RHDS_HOME>/jbossas.
+	public static final String JBOSS_AS_HOME = "../../../../jboss-eap/jboss-as"; 	// JBoss AS home directory (relative to plugin)- <RHDS_HOME>/jbossas.
 	
 	public static final String JBOSS_AS_RUNTIME_TYPE_ID = "org.jboss.ide.eclipse.as.runtime.42";
 	public static final String JBOSS_AS_TYPE_ID = "org.jboss.ide.eclipse.as.42";
