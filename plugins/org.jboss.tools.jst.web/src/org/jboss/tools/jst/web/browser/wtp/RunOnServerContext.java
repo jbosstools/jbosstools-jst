@@ -74,6 +74,8 @@ public class RunOnServerContext extends AbstractBrowserContext {
 		if(p != null && (!p.exists() || !p.isOpen())) p = null;
 		IModule ms = null;
 		try {
+			// TODO Ear project can contain several Web modules, so when ear is selected several options can be shown in
+			// in menu now it throws exception Invalid Artifact Edit access
 			ms = ServerUtil.getModule(p);
 		} catch (Exception e) {
 			// ignore
