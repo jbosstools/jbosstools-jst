@@ -44,15 +44,6 @@ import org.eclipse.wst.xml.ui.internal.contentassist.XMLRelevanceConstants;
 import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImageHelper;
 import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImages;
 import org.eclipse.wst.xml.ui.internal.util.SharedXMLEditorPluginImageHelper;
-import org.jboss.tools.jst.jsp.editor.TLDRegisterHelper;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-
-import org.jboss.tools.common.model.plugin.ModelPlugin;
-import org.jboss.tools.common.model.util.ELParser;
-import org.jboss.tools.common.reporting.ProblemReportingHelper;
 import org.jboss.tools.common.kb.AttributeDescriptor;
 import org.jboss.tools.common.kb.KbConnectorFactory;
 import org.jboss.tools.common.kb.KbConnectorType;
@@ -62,17 +53,23 @@ import org.jboss.tools.common.kb.KbTldResource;
 import org.jboss.tools.common.kb.wtp.JspWtpKbConnector;
 import org.jboss.tools.common.kb.wtp.TLDVersionHelper;
 import org.jboss.tools.common.kb.wtp.WtpKbConnector;
+import org.jboss.tools.common.model.util.ELParser;
+import org.jboss.tools.common.reporting.ProblemReportingHelper;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
+import org.jboss.tools.jst.jsp.editor.TLDRegisterHelper;
 import org.jboss.tools.jst.jsp.outline.ValueHelper;
 import org.jboss.tools.jst.jsp.support.kb.FaceletsJsfCResource;
 import org.jboss.tools.jst.jsp.support.kb.WTPKbdBeanMethodResource;
 import org.jboss.tools.jst.jsp.support.kb.WTPKbdBeanPropertyResource;
 import org.jboss.tools.jst.jsp.support.kb.WTPKbdBundlePropertyResource;
 import org.jboss.tools.jst.web.tld.TaglibData;
-import org.jboss.tools.jst.web.tld.TaglibMapping;
 import org.jboss.tools.jst.web.tld.VpeTaglibListener;
 import org.jboss.tools.jst.web.tld.VpeTaglibManager;
 import org.jboss.tools.jst.web.tld.VpeTaglibManagerProvider;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 /**
  * @author Igels
@@ -82,6 +79,7 @@ public class RedHatHtmlContentAssistProcessor extends HTMLContentAssistProcessor
     private JSPActiveContentAssistProcessor jspActiveCAP;
     private WtpKbConnector wtpKbConnector;
     private IDocument document;
+    private IEditorInput editorInput;
 	private VpeTaglibManager tldManager;
 	private boolean isFacelets = false;
 	public static final String faceletUri = "http://java.sun.com/jsf/facelets";
@@ -93,6 +91,7 @@ public class RedHatHtmlContentAssistProcessor extends HTMLContentAssistProcessor
 
     public ICompletionProposal[] computeCompletionProposals(ITextViewer textViewer, int documentPosition) {
     	document = textViewer.getDocument();
+    	editorInput = JspEditorPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorInput();
     	registerToTldManager(textViewer);
 
     	ICompletionProposal[] proposals = super.computeCompletionProposals(textViewer, documentPosition);
@@ -477,8 +476,8 @@ public class RedHatHtmlContentAssistProcessor extends HTMLContentAssistProcessor
 	public void removeTaglib(String uri, String prefix) {
 	}
 
-	public static void registerTld(TaglibData data, JspWtpKbConnector wtpKbConnector, IDocument document) {
-		TLDRegisterHelper.registerTld(data, wtpKbConnector, document);
+	public static void registerTld(TaglibData data, JspWtpKbConnector wtpKbConnector, IDocument document, IEditorInput input) {
+		TLDRegisterHelper.registerTld(data, wtpKbConnector, document, input);
 	}
 
 	public void updateActiveContentAssistProcessor(IDocument document) {
@@ -502,7 +501,7 @@ public class RedHatHtmlContentAssistProcessor extends HTMLContentAssistProcessor
 			isFacelets = false;
 			for(int i=0; i<list.size(); i++) {
 				TaglibData data = (TaglibData)list.get(i);
-				registerTld(data, (JspWtpKbConnector)getWtpKbConnector(), document);
+				registerTld(data, (JspWtpKbConnector)getWtpKbConnector(), document, editorInput);
 				isFacelets = isFacelets || data.getUri().equals(faceletUri);
 			}
 			if(isFacelets) {

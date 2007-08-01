@@ -52,10 +52,6 @@ import org.eclipse.wst.xml.ui.internal.editor.CMImageUtil;
 import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImageHelper;
 import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImages;
 import org.eclipse.wst.xml.ui.internal.preferences.XMLUIPreferenceNames;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-
 import org.jboss.tools.common.kb.KbConnectorFactory;
 import org.jboss.tools.common.kb.KbConnectorType;
 import org.jboss.tools.common.kb.KbException;
@@ -64,12 +60,15 @@ import org.jboss.tools.common.kb.KbTldResource;
 import org.jboss.tools.common.kb.TagDescriptor;
 import org.jboss.tools.common.kb.wtp.TLDVersionHelper;
 import org.jboss.tools.common.kb.wtp.WtpKbConnector;
-import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
+import org.jboss.tools.jst.web.project.WebProject;
 import org.jboss.tools.jst.web.tld.TaglibData;
 import org.jboss.tools.jst.web.tld.VpeTaglibListener;
 import org.jboss.tools.jst.web.tld.VpeTaglibManager;
 import org.jboss.tools.jst.web.tld.VpeTaglibManagerProvider;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 /**
  * @author Igels
@@ -80,7 +79,6 @@ public class RedHatJSPContentAssistProcessor extends JSPContentAssistProcessor i
     private WtpKbConnector wtpKbConnector;
     private IDocument document;
     private boolean dontOpenTag = false;
-//	private Map trackers = new HashMap();
 	private List registeredTagsForActiveCAP = new ArrayList();
 	private VpeTaglibManager tldManager;
 
@@ -190,7 +188,7 @@ public class RedHatJSPContentAssistProcessor extends JSPContentAssistProcessor i
 
 	public void addTaglib(String uri, String prefix) {
 	}
-	
+
 	public void removeTaglib(String uri, String prefix) {
 	}
 
@@ -213,7 +211,7 @@ public class RedHatJSPContentAssistProcessor extends JSPContentAssistProcessor i
 			List list = tldManager.getTagLibs();
 			for(int i=0; i<list.size(); i++) {
 				TaglibData data = (TaglibData)list.get(i);
-				String version = TLDVersionHelper.getTldVersion(data.getUri(), data.getPrefix(), document);
+				String version = WebProject.getTldVersion(data.getUri(), data.getPrefix(), document, null);
 				KbTldResource resource = new KbTldResource(data.getUri(), "", data.getPrefix(), version);
 		        getWtpKbConnector().registerResource(resource);
 		        addActiveContentAssistProcessorToProcessorMap(data.getUri(), data.getPrefix(), version);
