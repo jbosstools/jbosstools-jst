@@ -19,23 +19,24 @@ import org.jboss.tools.jst.web.WebModelPlugin;
 
 public class FileSystemsRenameListenerContribution implements FileSystemsRenameListener.Contribution {
 
+	//probably this contribution is no more needed at all
 	public void pathRenamed(final FileSystemsRenameListener listener, String oldPath, String newPath) {
-		final IProject project = (IProject)listener.getFileSystems().getModel().getProperties().get("project");
-		if(project == null) return;
-		String webroot = getWebRootWTP(listener.getFileSystems().getModel());
+//		final IProject project = (IProject)listener.getFileSystems().getModel().getProperties().get("project");
+//		if(project == null) return;
+//		String webroot = getWebRootWTP(listener.getFileSystems().getModel());
 
-		if(webroot != null && webroot.toLowerCase().equals(oldPath.toLowerCase())) {
-			final String webrootname = newPath.substring(newPath.lastIndexOf('/') + 1);
-			Display.getDefault().asyncExec(new Runnable() {
-				public void run() {
-					try {
-						updateWebContentNamePropertiesOnly(project, webrootname, null);
-					} catch (Exception e) {
-						WebModelPlugin.getPluginLog().logError(e);
-					}
-				}
-			});
-		}
+//		if(webroot != null && webroot.toLowerCase().equals(oldPath.toLowerCase())) {
+//			final String webrootname = newPath.substring(newPath.lastIndexOf('/') + 1);
+//			Display.getDefault().asyncExec(new Runnable() {
+//				public void run() {
+//					try {
+//						updateWebContentNamePropertiesOnly(project, webrootname, null);
+//					} catch (Exception e) {
+//						WebModelPlugin.getPluginLog().logError(e);
+//					}
+//				}
+//			});
+//		}
 	}
 	
 	private String getWebRootWTP(XModel model) {
