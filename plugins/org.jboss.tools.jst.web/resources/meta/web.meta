@@ -1174,14 +1174,6 @@
    </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
-   <XActionItem
-    HandlerClassName="org.jboss.tools.struts.webprj.model.handlers.SetLocationHandler"
-    ICON="action.webprj.set_location" WizardClassName="%Default%"
-    displayName="Set location..." kind="action" name="SetLocation">
-    <EntityData EntityName="WebPrjCreateStepDirs">
-     <AttributeData AttributeName="location" Mandatory="no"/>
-    </EntityData>
-   </XActionItem>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
