@@ -30,7 +30,6 @@ import org.jboss.tools.common.meta.action.impl.handlers.DefaultCreateHandler;
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.filesystems.impl.FileSystemsImpl;
-import org.jboss.tools.common.model.impl.XModelClassLoader;
 import org.jboss.tools.common.model.impl.XModelImpl;
 import org.jboss.tools.common.model.util.XMLUtil;
 import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
@@ -62,10 +61,10 @@ public class NewWebProjectHelper {
         fss.setAttributeValue("application name", p.getProperty("name"));
 
 		File webInfDir = ((IResource)webinf.getAdapter(IResource.class)).getLocation().toFile();
-        Map modules = getModules(location);
-        Iterator it = modules.entrySet().iterator();
+        Map<String,String> modules = getModules(location);
+        Iterator<Map.Entry<String,String>> it = modules.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry entry = (Map.Entry)it.next();
+            Map.Entry<String,String> entry = it.next();
             String module = (String)entry.getKey();
             String config = (String)entry.getValue();
             String fileName = config.substring(config.indexOf('/', 1) + 1);
@@ -106,8 +105,6 @@ public class NewWebProjectHelper {
 
         model.save();
         model.update();
-        XModelClassLoader cl = (XModelClassLoader)model.getModelClassLoader();
-        cl.validate();
         updateOverlapped(model);
 		registerTLDs(model, p);
 		Watcher.getInstance(model).forceUpdate();
@@ -153,7 +150,7 @@ public class NewWebProjectHelper {
         if(fs != null) fs.updateOverlapped();
     }
 
-    public static Map getModules(String location) {
+    public static Map<String,String> getModules(String location) {
         Map<String,String> modules = new HashMap<String,String>();
         File webXML = new File(location, "web.xml");
         if(!webXML.isFile()) return modules;
@@ -206,7 +203,7 @@ class WebAppConfig {
     
 	static {
 		try {
-			Class c = WebAppConfig.class;
+			Class<?> c = WebAppConfig.class;
 			XMLEntityResolver.registerPublicEntity("-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN", FileLocator.resolve(c.getResource("/meta/web-app_2_2.dtd")).toString());
 			XMLEntityResolver.registerPublicEntity("-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN", FileLocator.resolve(c.getResource("/meta/web-app_2_3.dtd")).toString());
 		} catch (Exception e) {
