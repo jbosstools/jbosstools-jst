@@ -44,17 +44,11 @@ import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.projecttemplates.ProjectTemplatesPlugin;
 import org.osgi.framework.BundleContext;
 
+/**
+ * 
+ */
 public class WebModelPlugin extends BaseUIPlugin {
 
-	public static final String JBOSS_AS_HOME = "../../../../jboss-eap/jboss-as"; 	// JBoss AS home directory (relative to plugin)- <RHDS_HOME>/jbossas.
-	
-	public static final String JBOSS_AS_RUNTIME_TYPE_ID = "org.jboss.ide.eclipse.as.runtime.42";
-	public static final String JBOSS_AS_TYPE_ID = "org.jboss.ide.eclipse.as.42";
-	public static final String JBOSS_AS_NAME = "JBoss Application Server 4.2";
-	public static final String JBOSS_AS_HOST = "localhost";
-	public static final String JBOSS_AS_DEFAULT_CONFIGURATION_NAME = "default";
-
-	public static final String FIRST_START_PREFERENCE_NAME = "FIRST_START";
 	public static final String PLUGIN_ID = "org.jboss.tools.jst.web";
 
 	static WebModelPlugin instance;
@@ -95,22 +89,13 @@ public class WebModelPlugin extends BaseUIPlugin {
 	}
 
 	public void stop(BundleContext context) throws Exception {
-//		PreferenceModelUtilities.getPreferenceModel().save();
 		super.stop(context);
 	}
 
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		// Eskimo
-		// asinc exec removed because registered server dosen't appears in New Project dialog
-		// when calling of these dialogs is cause of loadind the plugin hierarchy
 		ProjectTemplatesPlugin.getDefault();
-		initJbossAS();
 	}
-
-
-
-
 
 	static public ILaunchConfiguration findLaunchConfig(String name) throws CoreException {
 		ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
@@ -124,81 +109,6 @@ public class WebModelPlugin extends BaseUIPlugin {
 			}
 		} 
 		return null;
-	}
-
-	/*
-	 * Init bundled JBoss AS Runtime and Server.
-	 */
-	private void initJbossAS() {
-		try {
-			this.getPreferenceStore().setDefault(FIRST_START_PREFERENCE_NAME, true);
-			boolean firstStart = this.getPreferenceStore().getBoolean(FIRST_START_PREFERENCE_NAME);
-			if(!firstStart) {
-				return;
-			}
-			this.getPreferenceStore().setValue(FIRST_START_PREFERENCE_NAME, false);
-
-			String jbossASLocation = null;
-			String pluginLocation = EclipseResourceUtil.getInstallPath(this.getBundle());
-			File jbossASDir = new File(pluginLocation, JBOSS_AS_HOME);
-			if(jbossASDir.isDirectory()) {
-				jbossASLocation = jbossASDir.getAbsolutePath();
-			} else {
-				return;
-			}
-
-			IPath jbossAsLocationPath = new Path(jbossASLocation);
-			String type = null;
-			String version = null;
-
-			IServer[] servers = ServerCore.getServers();
-			for(int i=0; i<servers.length; i++) {
-				IRuntime runtime = servers[i].getRuntime();
-				if(runtime!=null && runtime.getLocation().equals(jbossAsLocationPath)) {
-					return;
-				}
-			}
-
-			IRuntimeWorkingCopy runtime = null;
-			IRuntime[] runtimes = ServerCore.getRuntimes();
-			String runtimeId = null;
-			for(int i=0; i<runtimes.length; i++) {
-				if(runtimes[0].getLocation().equals(jbossASLocation)) {
-					runtime = runtimes[0].createWorkingCopy();
-					runtimeId = null;
-					break;
-				}
-			}
-
-			IProgressMonitor progressMonitor = new NullProgressMonitor();
-			if(runtime==null) {
-				IRuntimeType[] runtimeTypes = ServerUtil.getRuntimeTypes(type, version, JBOSS_AS_RUNTIME_TYPE_ID);
-				if(runtimeTypes.length>0) {
-					runtime = runtimeTypes[0].createRuntime(runtimeId, progressMonitor);
-					runtime.setLocation(jbossAsLocationPath);
-					IVMInstall defaultVM = JavaRuntime.getDefaultVMInstall();
-					// IJBossServerRuntime.PROPERTY_VM_ID
-					((RuntimeWorkingCopy)runtime).setAttribute("PROPERTY_VM_ID", defaultVM.getId());
-					// IJBossServerRuntime.PROPERTY_VM_TYPE_ID
-					((RuntimeWorkingCopy)runtime).setAttribute("PROPERTY_VM_TYPE_ID", defaultVM.getVMInstallType().getId());
-					// IJBossServerRuntime.PROPERTY_CONFIGURATION_NAME
-					((RuntimeWorkingCopy)runtime).setAttribute("org.jboss.ide.eclipse.as.core.runtime.configurationName", JBOSS_AS_DEFAULT_CONFIGURATION_NAME);
-
-					runtime.save(false, progressMonitor);
-				}
-			}
-
-			if(runtime!=null) {
-				IServerType serverType = ServerCore.findServerType(JBOSS_AS_TYPE_ID);
-				IServerWorkingCopy server = serverType.createServer(null, null, runtime, progressMonitor);
-
-				server.setHost(JBOSS_AS_HOST);
-				server.setName(JBOSS_AS_NAME);
-				server.save(false, progressMonitor);
-			}
-		} catch (CoreException e) {
-			getPluginLog().logError("Can't create new JBoss Server.", e);
-		}
 	}
 
 	public static String getTemplateStateLocation() {
