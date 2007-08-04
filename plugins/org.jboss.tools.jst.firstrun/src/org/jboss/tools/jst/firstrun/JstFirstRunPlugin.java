@@ -11,15 +11,16 @@
 
 package org.jboss.tools.jst.firstrun;
 
-import org.jboss.tools.common.log.BaseUIPlugin;
-import org.jboss.tools.common.log.IPluginLog;
+import org.eclipse.core.runtime.ILog;
+import org.eclipse.core.runtime.Plugin;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 /**
  * @author eskimo
  *
  */
-public class JstFirstRunPlugin extends BaseUIPlugin {
+public class JstFirstRunPlugin extends AbstractUIPlugin {
 
 	static private JstFirstRunPlugin instance;
 	
@@ -32,8 +33,8 @@ public class JstFirstRunPlugin extends BaseUIPlugin {
 	/**
 	 * @return
 	 */
-	public static IPluginLog getPluginLog() {
-		return (IPluginLog)instance;
+	public static ILog getPluginLog() {
+		return instance.getLog();
 	}
 		
 	/**

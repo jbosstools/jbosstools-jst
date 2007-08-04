@@ -18,8 +18,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.ui.IStartup;
@@ -122,9 +124,9 @@ public class JBossASAdapterInitializer implements IStartup {
 				server.save(false, progressMonitor);
 			}
 		} catch (CoreException e) {
-			JstFirstRunPlugin.getPluginLog().logError("Can't create new JBoss Server.", e);
+			JstFirstRunPlugin.getPluginLog().log(new Status(IStatus.ERROR,"org.jboss.tools.jst.first.run","Can't create new JBoss Server.", e));
 		} catch (IOException e) {
-			JstFirstRunPlugin.getPluginLog().logError("Can't create new JBoss Server.", e);
+			JstFirstRunPlugin.getPluginLog().log(new Status(IStatus.ERROR,"org.jboss.tools.jst.first.run","Can't create new JBoss Server.", e));
 		}
 	}
 }
