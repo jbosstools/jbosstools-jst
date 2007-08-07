@@ -48,8 +48,7 @@ public class ExtendedStructuredTextViewerConfigurationJSP extends StructuredText
 		// to define them in plugin.xml file of their
 		// plugins using extention point 
 		// "org.jboss.tools.common.text.xml.contentAssistProcessor"
-		IContentAssistProcessor[] superProcessors = super.getContentAssistProcessors(sourceViewer, partitionType);
-
+		
 		ContentAssistProcessorDefinition[] defs = ContentAssistProcessorBuilder.getInstance().getContentAssistProcessorDefinitions(partitionType);
 
 		if(defs==null) return null;
@@ -70,11 +69,10 @@ public class ExtendedStructuredTextViewerConfigurationJSP extends StructuredText
 				(partitionType == IJSPPartitions.JSP_DEFAULT_EL) ||
 				(partitionType == IJSPPartitions.JSP_DEFAULT_EL2)) {
 			processors.add(new RedHatJSPContentAssistProcessor());
+			return (IContentAssistProcessor[])processors.toArray(new IContentAssistProcessor[0]);
 		}
-		if (superProcessors != null && superProcessors.length > 0)
-			processors.add(superProcessors);
 
-		return (IContentAssistProcessor[])processors.toArray(new IContentAssistProcessor[0]);
+		return super.getContentAssistProcessors(sourceViewer, partitionType);
 	}
 
 	/*
