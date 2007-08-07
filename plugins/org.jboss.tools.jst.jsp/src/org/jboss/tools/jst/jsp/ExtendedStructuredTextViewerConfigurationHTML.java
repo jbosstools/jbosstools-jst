@@ -28,6 +28,8 @@ import org.eclipse.wst.html.ui.StructuredTextViewerConfigurationHTML;
 import org.osgi.framework.Bundle;
 
 import org.jboss.tools.common.model.plugin.ModelPlugin;
+import org.jboss.tools.common.text.xml.contentassist.ContentAssistProcessorBuilder;
+import org.jboss.tools.common.text.xml.contentassist.ContentAssistProcessorDefinition;
 import org.jboss.tools.jst.jsp.contentassist.RedHatHtmlContentAssistProcessor;
 
 public class ExtendedStructuredTextViewerConfigurationHTML extends StructuredTextViewerConfigurationHTML {
@@ -37,16 +39,31 @@ public class ExtendedStructuredTextViewerConfigurationHTML extends StructuredTex
 	}
 
 	protected IContentAssistProcessor[] getContentAssistProcessors(ISourceViewer sourceViewer, String partitionType) {
-		IContentAssistProcessor[] processors = null;
+//		IContentAssistProcessor[] processors = null;
 
-		if (partitionType == IHTMLPartitions.HTML_DEFAULT) {
-			return new RedHatHtmlContentAssistProcessor[]{new RedHatHtmlContentAssistProcessor()};
-		}
-		if(partitionType == IJSPPartitions.JSP_DEFAULT_EL) {
-			return new RedHatHtmlContentAssistProcessor[]{new RedHatHtmlContentAssistProcessor()};
+		// if we have our own processors we need 
+		// to define them in plugin.xml file of their
+		// plugins using extention point 
+		// "org.jboss.tools.common.text.xml.contentAssistProcessor"
+		
+		ContentAssistProcessorDefinition[] defs = ContentAssistProcessorBuilder.getInstance().getContentAssistProcessorDefinitions(partitionType);
+
+		if(defs==null) return null;
+
+		List<IContentAssistProcessor> processors = new ArrayList<IContentAssistProcessor>();
+		for(int i=0; i<defs.length; i++) {
+		    IContentAssistProcessor processor = defs[i].createContentAssistProcessor();
+		    if(!processors.contains(processor)) {
+			    processors.add(processor);			        
+		    }
 		}
 
-		return processors;
+		if (partitionType == IHTMLPartitions.HTML_DEFAULT ||
+				partitionType == IJSPPartitions.JSP_DEFAULT_EL) {
+			processors.add(new RedHatHtmlContentAssistProcessor());
+		}
+
+		return (IContentAssistProcessor[])processors.toArray(new IContentAssistProcessor[0]);
 	}
 
 
