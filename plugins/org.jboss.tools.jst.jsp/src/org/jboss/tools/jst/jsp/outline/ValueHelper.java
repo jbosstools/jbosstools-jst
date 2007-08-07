@@ -115,10 +115,8 @@ public class ValueHelper {
 			List list = seamPromptingProvider.getList(null, "seam.is_seam_project", null, p);
 			if(list != null) {
 				AttributeValueResource resource = AttributeValueResourceFactory.getInstance().createResource(editorInput, wtpTextJspKbConnector, root, "seamVariables");
-				
-				System.out.println("is seam project" + getProject());
-			} else {
-				System.out.println("is not seam project" + getProject());
+				resource.setQuery(query, this);
+				elements.add(resource);
 			}
 		}
 		return root;
