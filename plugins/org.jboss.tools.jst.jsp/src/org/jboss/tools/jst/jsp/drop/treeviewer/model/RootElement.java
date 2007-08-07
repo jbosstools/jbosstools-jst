@@ -10,14 +10,17 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.drop.treeviewer.model;
 
+import java.util.List;
+
+
 /**
  * @author Igels
  */
 public class RootElement extends ModelElement implements IAttributeValueContainer {
 
-	private AttributeValueResource[] children;
+	private List<AttributeValueResource> children;
 
-	public RootElement(String name, AttributeValueResource[] children) {
+	public RootElement(String name, List<AttributeValueResource>  children) {
 		super(name, null);
 		this.children = children;
 	}
@@ -26,7 +29,7 @@ public class RootElement extends ModelElement implements IAttributeValueContaine
 	 * @see IAttributeValueContainer#getChildren()
 	 */
 	public ModelElement[] getChildren() {
-		return children;
+		return children.toArray(new AttributeValueResource[0]);
 	}
 
 	/**

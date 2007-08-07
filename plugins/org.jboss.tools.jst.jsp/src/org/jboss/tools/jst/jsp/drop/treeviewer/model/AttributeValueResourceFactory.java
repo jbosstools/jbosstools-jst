@@ -50,6 +50,8 @@ public class AttributeValueResourceFactory {
 			return new JsfVariablesResourceElement(name, root);
 		} else if(KbDinamicResource.IMAGE_FILE_TYPE.equals(type)) {
 			return new ImageFileResourceElement(editorInput, root);
+		} else if("seamVariables".equals(type)) {
+			return new SeamVariablesResourceElement(editorInput, "Seam Variables", root);
 		}
 		return new UnknownAttributeValueResource("Unknown resource type: " + type, root);
 //		throw new RuntimeException("Unknown resource type:" + type);

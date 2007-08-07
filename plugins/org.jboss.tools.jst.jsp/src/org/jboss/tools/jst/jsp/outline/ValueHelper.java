@@ -43,7 +43,9 @@ import org.jboss.tools.common.kb.TagDescriptor;
 import org.jboss.tools.common.kb.wtp.TLDVersionHelper;
 import org.jboss.tools.common.kb.wtp.WtpKbConnector;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
+import org.jboss.tools.common.model.project.IPromptingProvider;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
+import org.jboss.tools.common.model.util.ModelFeatureFactory;
 import org.jboss.tools.jst.jsp.support.kb.WTPTextJspKbConnector;
 import org.jboss.tools.jst.web.tld.TaglibMapping;
 import org.jboss.tools.jst.web.tld.VpeTaglibManager;
@@ -51,6 +53,16 @@ import org.jboss.tools.jst.web.tld.VpeTaglibManager;
 public class ValueHelper {
 	private IEditorInput editorInput = null;
 	private WTPTextJspKbConnector wtpTextJspKbConnector = null;
+	
+	public static IPromptingProvider seamPromptingProvider;
+	
+	static {
+		Object o = ModelFeatureFactory.getInstance().createFeatureInstance("org.jboss.tools.seam.internal.core.el.SeamPromptingProvider");
+		if(o instanceof IPromptingProvider) {
+			seamPromptingProvider = (IPromptingProvider)o;
+		}
+	}
+	
 //	VpePageContext 
 	IVisualContext pageContext = null;
 	WtpKbConnector pageConnector = null;
@@ -87,15 +99,27 @@ public class ValueHelper {
 
 	public ModelElement getInitalInput(String query) {
 		AttributeDescriptor descriptor = getAttributeDescriptor(query);
-		if(descriptor == null) return new RootElement("root", new AttributeValueResource[0]);
+		if(descriptor == null) return new RootElement("root", new ArrayList<AttributeValueResource>());
 		AttributeValueDescriptor[] valueDescriptors = descriptor.getValueDesriptors();
-		AttributeValueResource[] elements = new AttributeValueResource[valueDescriptors.length];
+		List<AttributeValueResource> elements = new ArrayList<AttributeValueResource>();
 		ModelElement root = new RootElement("root", elements);
 		for (int i = 0; i < valueDescriptors.length; i++) {
 			AttributeValueResource resource = AttributeValueResourceFactory.getInstance().createResource(editorInput, wtpTextJspKbConnector, root, valueDescriptors[i].getType());
 			resource.setParams(valueDescriptors[i].getParams());
 			resource.setQuery(query, this);
-			elements[i] = resource;
+			elements.add(resource);
+		}
+		if(seamPromptingProvider != null && getFile() != null) {
+			Properties p = new Properties();
+			p.put("file", getFile());
+			List list = seamPromptingProvider.getList(null, "seam.is_seam_project", null, p);
+			if(list != null) {
+				AttributeValueResource resource = AttributeValueResourceFactory.getInstance().createResource(editorInput, wtpTextJspKbConnector, root, "seamVariables");
+				
+				System.out.println("is seam project" + getProject());
+			} else {
+				System.out.println("is not seam project" + getProject());
+			}
 		}
 		return root;
 	}
@@ -130,6 +154,11 @@ public class ValueHelper {
 
 	public IEditorInput getEditorInput() {
 		return editorInput;
+	}
+	
+	public IFile getFile() {
+		if(!(editorInput instanceof IFileEditorInput)) return null;
+		return ((IFileEditorInput)editorInput).getFile();
 	}
 
 	public IProject getProject() {
