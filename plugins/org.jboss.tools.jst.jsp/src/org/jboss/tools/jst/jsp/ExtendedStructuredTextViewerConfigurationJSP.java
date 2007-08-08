@@ -71,8 +71,14 @@ public class ExtendedStructuredTextViewerConfigurationJSP extends StructuredText
 			processors.add(new RedHatJSPContentAssistProcessor());
 			return (IContentAssistProcessor[])processors.toArray(new IContentAssistProcessor[0]);
 		}
+		IContentAssistProcessor[] superProcessors = super.getContentAssistProcessors(sourceViewer, partitionType);
 
-		return super.getContentAssistProcessors(sourceViewer, partitionType);
+		if (superProcessors != null && superProcessors.length > 0) {
+			for (int i = 0; i < superProcessors.length; i++)
+				processors.add(superProcessors[i]);
+		}
+		
+		return (IContentAssistProcessor[])processors.toArray(new IContentAssistProcessor[0]);
 	}
 
 	/*
