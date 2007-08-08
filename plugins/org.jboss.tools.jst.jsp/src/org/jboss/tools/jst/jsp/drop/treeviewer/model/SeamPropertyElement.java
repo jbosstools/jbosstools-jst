@@ -10,33 +10,24 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.drop.treeviewer.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-
-import org.eclipse.core.resources.IFile;
-import org.jboss.tools.jst.jsp.outline.ValueHelper;
-
 /**
  * 
  * @author Viacheslav Kabanovich	
  */
-public class SeamVariableElement extends SeamElement {
+public class SeamPropertyElement extends SeamElement {
 
-	public SeamVariableElement(String name, ModelElement parent) {
+	public SeamPropertyElement(String name, ModelElement parent) {
 		super(name, parent);
 	}
-
-	/**
-	 * @see IAttributeValue#getValue()
-	 */
+	
 	public String getValue() {
 		return "#{" + getFullName() + "}";
 	}
 
-	/**
-	 * @see ModelElement#getComparedValue()
-	 */
+	protected String getFullName() {
+		return parent.getFullName() + "." + name;
+	}
+
 	protected String getComparedValue() {
 		return "#{" + getFullName();
 	}

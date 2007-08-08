@@ -37,6 +37,8 @@ import org.jboss.tools.jst.jsp.drop.treeviewer.model.ManagedBeanMethodResourceEl
 import org.jboss.tools.jst.jsp.drop.treeviewer.model.ManagedBeanPropertyElement;
 import org.jboss.tools.jst.jsp.drop.treeviewer.model.ManagedBeansPropertiesResourceElement;
 import org.jboss.tools.jst.jsp.drop.treeviewer.model.ModelElement;
+import org.jboss.tools.jst.jsp.drop.treeviewer.model.SeamMethodElement;
+import org.jboss.tools.jst.jsp.drop.treeviewer.model.SeamPropertyElement;
 import org.jboss.tools.jst.jsp.drop.treeviewer.model.SeamVariableElement;
 import org.jboss.tools.jst.jsp.drop.treeviewer.model.SeamVariablesResourceElement;
 import org.jboss.tools.jst.jsp.drop.treeviewer.model.ViewActionElement;
@@ -80,6 +82,8 @@ public class AttributeValueLabelProvider extends LabelProvider {
 
 		imagesPathes.put(SeamVariablesResourceElement.class, "images/seam/variables_folder.gif");
 		imagesPathes.put(SeamVariableElement.class, "images/seam/variable.gif");
+		imagesPathes.put(SeamPropertyElement.class, "images/navigationtree/property.gif");
+		imagesPathes.put(SeamMethodElement.class, "images/java/method.gif");
 }
 
 	private static Map texts = new HashMap();
