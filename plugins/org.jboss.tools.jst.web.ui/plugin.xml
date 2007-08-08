@@ -257,7 +257,6 @@
 
    <extension point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension targetID="org.jboss.tools.jst.web.ui.RedHat4WebPerspective">
-         <actionSet id="org.jboss.tools.struts.modules"/> 
          <perspectiveShortcut id="org.eclipse.jdt.ui.JavaPerspective">
          </perspectiveShortcut>
          <perspectiveShortcut id="org.eclipse.debug.ui.DebugPerspective">
