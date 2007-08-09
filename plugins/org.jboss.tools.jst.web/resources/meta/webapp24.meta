@@ -24,7 +24,7 @@
       <ICON name="filter_mapping" path="images/webxml/filter_map.gif"/>
       <ICON name="listener" path="images/webxml/listener_new.gif"/>
       <ICON name="login_config" path="images/webxml/login_new.gif"/>
-      <ICON name="message" path="images/process/new_input_message.gif"/>
+      <ICON name="message" path="images/webxml/new_message.gif"/>
       <ICON name="mime_mapping" path="images/webxml/mime_map_new.gif"/>
       <ICON name="param" path="images/webxml/init_param_new.gif"/>
       <ICON name="res_env_ref" path="images/webxml/reference_new.gif"/>
@@ -33,7 +33,7 @@
       <ICON name="run_as" path="images/webxml/run_as_new.gif"/>
       <ICON name="security_constraint" path="images/webxml/security_constraint_new.gif"/>
       <ICON name="security_role" path="images/webxml/security_role_new.gif"/>
-      <ICON name="service" path="images/process/new_service.gif"/>
+      <ICON name="service" path="images/webxml/new_service.gif"/>
       <ICON name="servlet" path="images/webxml/servlet_new.gif"/>
       <ICON name="servlet_mapping" path="images/webxml/servlet_map_new.gif"/>
       <ICON name="session" path="images/webxml/session_config_new.gif"/>
