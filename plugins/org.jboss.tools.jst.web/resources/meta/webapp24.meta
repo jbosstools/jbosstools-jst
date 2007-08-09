@@ -61,7 +61,7 @@
      <ICON name="listener" path="images/webxml/listener.gif"/>
      <ICON name="login_config" path="images/webxml/login.gif"/>
      <ICON name="mapping" path="images/java/attr.gif"/>
-     <ICON name="message" path="images/process/input_message.gif"/>
+     <ICON name="message" path="images/webxml/message.gif"/>
      <ICON name="mime_mapping" path="images/webxml/mime_map.gif"/>
      <ICON name="param" path="images/webxml/init_param.gif"/>
      <ICON name="res_env_ref" path="images/webxml/reference.gif"/>
@@ -70,7 +70,7 @@
      <ICON name="run_as" path="images/webxml/run_as.gif"/>
      <ICON name="security_constraint" path="images/webxml/security_constraint.gif"/>
      <ICON name="security_role" path="images/webxml/security_role.gif"/>
-     <ICON name="service" path="images/process/service.gif"/>
+     <ICON name="service" path="images/webxml/service.gif"/>
      <ICON name="servlet" path="images/webxml/servlet.gif"/>
      <ICON name="servlet_mapping" path="images/webxml/servlet_map.gif"/>
      <ICON name="session" path="images/webxml/session_config.gif"/>
