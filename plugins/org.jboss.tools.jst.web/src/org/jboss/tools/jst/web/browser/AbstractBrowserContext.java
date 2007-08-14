@@ -33,6 +33,10 @@ public abstract class AbstractBrowserContext implements IBrowserContext {
 
 	public abstract String getModelActionPath();
 
+	protected boolean inited = false;
+	public void init() {
+	}
+
 	public void execute(XModelObject object) throws Exception {
 		setLastRunObject(object);
 		if(url == null) throw new Exception("Cannot open " + DefaultCreateHandler.title(object, false));
@@ -87,6 +91,9 @@ public abstract class AbstractBrowserContext implements IBrowserContext {
 	
 	public String computeURL(XModelObject o) {
 		if(o == null || !o.isActive()) return null;
+		if(!inited) {
+			init();
+		}
 		String u = null;
 		for (int i = 0; i < sources.length && u == null; i++) {
 			u = sources[i].computeURL(o);

@@ -46,7 +46,9 @@ public class RunOnServerContext extends AbstractBrowserContext {
 		"org.jboss.tools.jsf.model.handlers.run.RunOnServerHandler" //$NON-NLS-1$
 	};
 
-	static {
+	public void init() {
+		if(inited) return;
+		inited = true;
 		//causes delegating IPathSource to RunOnServerContext
 		//this is temporal implementation
 		for (int i = 0; i < pathSources.length; i++) {
