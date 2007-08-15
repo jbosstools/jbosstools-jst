@@ -81,4 +81,14 @@
 		<xclass id="org.jboss.tools.jst.web.tiles.model.handlers.CreateTilesSupport"
 			class="org.jboss.tools.jst.web.tiles.model.handlers.CreateTilesSupport"/>
    </extension>
+
+
+ <extension point="org.eclipse.wst.xml.core.catalogContributions">
+      <catalogContribution id="default">
+         <public 
+         	publicId="-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN" 
+         	uri="dtds/tiles_config_1_1.dtd"/>
+      </catalogContribution>
+   </extension>
+
 </plugin>
