@@ -12,10 +12,11 @@ package org.jboss.tools.jst.web.server;
 
 import java.util.*;
 
+import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.wst.server.core.*;
-import org.jboss.tools.common.model.*;
-import org.jboss.tools.common.model.options.PreferenceModelUtilities;
-import org.jboss.tools.jst.web.WebPreference;
+import org.jboss.tools.jst.web.WebModelPlugin;
 
 public class ServerManager {
 	private static ServerManager instance;
@@ -27,8 +28,6 @@ public class ServerManager {
 		return instance;
 	}
 	
-	private XModel preferenceModel = PreferenceModelUtilities.getPreferenceModel();
-	private XModelObject runningObject = preferenceModel.getByPath(WebPreference.OPTIONS_RUNNING_PATH);
 	private List<ServerManagerListener> listeners = new ArrayList<ServerManagerListener>();
 	private IServerListener serverListener;
 	protected IServer[] servers = new IServer[0];
@@ -49,11 +48,12 @@ public class ServerManager {
 	}
 	
 	private void loadSelectedServer() {
-		String ds = WebPreference.DEFAULT_WTP_SERVER.getValue();
+		if(servers == null || servers.length == 0) return;
+		String ds = getDefaultWebServer();
 		IServer s = getServer(ds);
 		if(s == null && servers.length > 0) {
 			s = servers[0];
-			WebPreference.DEFAULT_WTP_SERVER.setValue(servers[0].getId());
+			setDefaultWebServer(servers[0].getId());
 		}
 		setSelectedServerInternal(s);
 	}
@@ -90,8 +90,7 @@ public class ServerManager {
 		IServer server = getServer(id);
 		if(server == selected) return;
 		setSelectedServerInternal(server);
-		preferenceModel.changeObjectAttribute(runningObject, "Default WTP Server", id);
-		preferenceModel.saveOptions();
+		setDefaultWebServer(id);
 		fire();
 	}
 	
@@ -103,7 +102,8 @@ public class ServerManager {
 	}
 	
 	public String getSelectedServerId() {
-		return WebPreference.DEFAULT_WTP_SERVER.getValue();
+		String result = getDefaultWebServer();
+		return result == null ? "" : result;
 	}
 
 	public IServer getSelectedServer() {
@@ -149,4 +149,34 @@ public class ServerManager {
 		}
 	}
 	
+	static String DEFAULT_WEB_SERVER = WebModelPlugin.PLUGIN_ID + ".defaultWebServer";
+	
+	static String getDefaultWebServer() {
+		String result = getInstancePreference(DEFAULT_WEB_SERVER);
+		return result;
+	}
+	
+	static void setDefaultWebServer(String value) {
+		getInstancePreferences().put(DEFAULT_WEB_SERVER, value);
+	}
+
+	static IEclipsePreferences getInstancePreferences() {
+		return new InstanceScope().getNode(WebModelPlugin.PLUGIN_ID);
+	}
+
+	static IEclipsePreferences getDefaultPreferences() {
+		return new DefaultScope().getNode(WebModelPlugin.PLUGIN_ID);
+	}
+
+	static String getInstancePreference(String key) {
+		IEclipsePreferences p = getInstancePreferences();
+		String value = p == null ? null : p.get(key, null);
+		return value != null ? value : getDefaultPreference(key);
+	}
+
+	static String getDefaultPreference(String key) {
+		IEclipsePreferences p = getDefaultPreferences();
+		return p == null ? null : p.get(key, null);
+	}
+
 }
