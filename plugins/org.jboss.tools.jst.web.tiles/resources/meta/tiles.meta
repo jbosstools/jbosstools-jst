@@ -86,7 +86,7 @@
   ImplementationLoadingClass="org.jboss.tools.jst.web.tiles.model.FileTilesLoader"
   ImplementingClass="org.jboss.tools.jst.web.tiles.model.FileTilesImpl"
   ObjectEditorClass="%XML%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.tiles.ui.editor.form.TilesFormLayoutData"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.tiles.ui.editor.form.TilesFormLayoutData"
   XMLSUBPATH="tiles-definitions" name="FileTiles">
   <XChildrenEntities>
    <XChildEntity name="TilesDefinition"/>
@@ -315,7 +315,7 @@
  </XModelEntity>
  <XModelEntity
   ImplementingClass="org.jboss.tools.jst.web.tiles.model.TilesAddImpl"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.tiles.ui.editor.form.TilesFormLayoutData"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.tiles.ui.editor.form.TilesFormLayoutData"
   XMLSUBPATH="add" name="TilesAdd">
   <XChildrenEntities/>
   <XEntityRenderer>
@@ -378,7 +378,7 @@
  </XModelEntity>
  <XModelEntity
   ImplementingClass="org.jboss.tools.jst.web.tiles.model.TilesBeanImpl"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.tiles.ui.editor.form.TilesFormLayoutData"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.tiles.ui.editor.form.TilesFormLayoutData"
   XMLSUBPATH="bean" name="TilesBean">
   <XChildrenEntities>
    <XChildEntity name="StrutsSetProperty"/>
@@ -434,7 +434,7 @@
  <XModelEntity
   AdoptManagerClass="org.jboss.tools.jst.web.tiles.model.handlers.TilesDefinitionAdopt"
   ImplementingClass="org.jboss.tools.jst.web.tiles.model.TilesDefinitionImpl"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.tiles.ui.editor.form.TilesFormLayoutData"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.tiles.ui.editor.form.TilesFormLayoutData"
   XMLSUBPATH="definition" name="TilesDefinition">
   <XChildrenEntities>
    <XChildEntity name="TilesPut"/>
@@ -577,7 +577,7 @@
  </XModelEntity>
  <XModelEntity
   ImplementingClass="org.jboss.tools.jst.web.tiles.model.TilesItemImpl"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.tiles.ui.editor.form.TilesFormLayoutData"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.tiles.ui.editor.form.TilesFormLayoutData"
   XMLSUBPATH="item" name="TilesItem">
   <XChildrenEntities/>
   <XEntityRenderer>
@@ -635,7 +635,7 @@
  </XModelEntity>
  <XModelEntity
   ImplementingClass="org.jboss.tools.jst.web.tiles.model.NamedObjectImpl"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.tiles.ui.editor.form.TilesFormLayoutData"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.tiles.ui.editor.form.TilesFormLayoutData"
   XMLSUBPATH="putList" name="TilesList">
   <XChildrenEntities>
    <XChildEntity name="TilesAdd"/>
@@ -959,7 +959,7 @@
  </XModelEntity>
  <XModelEntity
   ImplementingClass="org.jboss.tools.jst.web.tiles.model.NamedObjectImpl"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.tiles.ui.editor.form.TilesFormLayoutData"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.tiles.ui.editor.form.TilesFormLayoutData"
   XMLSUBPATH="put" name="TilesPut">
   <XChildrenEntities/>
   <XEntityRenderer>
