@@ -25,7 +25,7 @@
   ImplementationLoadingClass="org.jboss.tools.jst.web.tld.model.FileTLD12Loader"
   ImplementingClass="org.jboss.tools.jst.web.tld.model.FileTLD12Impl"
   ObjectEditorClass="%XML%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.forms.TLDFormLayoutData"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.forms.TLDFormLayoutData"
   XMLSUBPATH="taglib" name="FileTLD_1_2">
   <XChildrenEntities>
    <XChildEntity maxCount="1" name="TLDListeners" required="yes"/>
@@ -492,7 +492,7 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity ImplementingClass="%Ordered%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.forms.TLDFormLayoutData" name="TLDListeners">
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.forms.TLDFormLayoutData" name="TLDListeners">
   <XChildrenEntities>
    <XChildEntity name="TLDListener"/>
   </XChildrenEntities>
@@ -534,7 +534,7 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity ImplementingClass="%Custom%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.forms.TLDFormLayoutData;children=%EntityOrdered%"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.forms.TLDFormLayoutData;children=%EntityOrdered%"
   XMLSUBPATH="tag" name="TLDTag12">
   <XChildrenEntities>
    <XChildEntity name="TLDVariable"/>
@@ -686,7 +686,7 @@
  </XModelEntity>
  <XModelEntity
   ImplementingClass="org.jboss.tools.jst.web.tld.model.TLDValidatorImpl"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.forms.TLDFormLayoutData"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.forms.TLDFormLayoutData"
   XMLSUBPATH="validator" name="TLDValidator">
   <XChildrenEntities>
    <XChildEntity name="WebAppInitParam"/>

@@ -98,7 +98,7 @@
   ImplementationLoadingClass="org.jboss.tools.jst.web.webapp.model.FileWebAppLoader"
   ImplementingClass="org.jboss.tools.jst.web.webapp.model.FileWebAppImpl"
   ObjectEditorClass="%XML%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
   XMLSUBPATH="web-app" name="FileWebApp">
   <XChildrenEntities>
    <XChildEntity maxCount="1" name="WebAppFolderContextParams" required="yes"/>
@@ -536,7 +536,7 @@
  </XModelEntity>
  <XModelEntity
   ImplementingClass="org.jboss.tools.jst.web.webapp.model.WebAppAuthConstraintImpl"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
   XMLSUBPATH="auth-constraint" name="WebAppAuthConstraint">
   <XChildrenEntities>
    <XChildEntity name="WebAppRoleName"/>
@@ -935,7 +935,7 @@
  </XModelEntity>
  <XModelEntity
   ImplementingClass="org.jboss.tools.jst.web.webapp.model.WebAppFilterImpl"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
   XMLSUBPATH="filter" name="WebAppFilter">
   <XChildrenEntities>
    <XChildEntity name="WebAppInitParam"/>
@@ -1082,7 +1082,7 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity ImplementingClass="%Ordered%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData" name="WebAppFolderContextParams">
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData" name="WebAppFolderContextParams">
   <XChildrenEntities>
    <XChildEntity name="WebAppContextParam"/>
   </XChildrenEntities>
@@ -1136,7 +1136,7 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity ImplementingClass="%Custom%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%" name="WebAppFolderEJB">
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%" name="WebAppFolderEJB">
   <XChildrenEntities>
    <XChildEntity name="WebAppEjbRef"/>
    <XChildEntity name="WebAppEjbLocalRef"/>
@@ -1205,7 +1205,7 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity ImplementingClass="%Custom%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%" name="WebAppFolderEnvEntries">
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%" name="WebAppFolderEnvEntries">
   <XChildrenEntities>
    <XChildEntity name="WebAppEnvEntry"/>
   </XChildrenEntities>
@@ -1260,7 +1260,7 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity ImplementingClass="%Custom%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%" name="WebAppFolderErrorPages">
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%" name="WebAppFolderErrorPages">
   <XChildrenEntities>
    <XChildEntity name="WebAppErrorPage"/>
   </XChildrenEntities>
@@ -1315,7 +1315,7 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity ImplementingClass="%Custom%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%EntityOrdered%" name="WebAppFolderFilters">
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%EntityOrdered%" name="WebAppFolderFilters">
   <XChildrenEntities>
    <XChildEntity name="WebAppFilter"/>
    <XChildEntity name="WebAppFilterMapping"/>
@@ -1381,7 +1381,7 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity ImplementingClass="%Custom%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%" name="WebAppFolderListeners">
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%" name="WebAppFolderListeners">
   <XChildrenEntities>
    <XChildEntity name="WebAppListener"/>
   </XChildrenEntities>
@@ -1434,7 +1434,7 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity ImplementingClass="%Custom%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%EntityOrdered%" name="WebAppFolderMessageDestinations">
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%EntityOrdered%" name="WebAppFolderMessageDestinations">
   <XChildrenEntities>
    <XChildEntity name="WebAppMessageDestinationRef"/>
    <XChildEntity name="WebAppMessageDestination"/>
@@ -1498,7 +1498,7 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity ImplementingClass="%Custom%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%" name="WebAppFolderMimeMappings">
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%" name="WebAppFolderMimeMappings">
   <XChildrenEntities>
    <XChildEntity name="WebAppMimeMapping"/>
   </XChildrenEntities>
@@ -1552,7 +1552,7 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity ImplementingClass="%Custom%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%EntityOrdered%" name="WebAppFolderResources">
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%EntityOrdered%" name="WebAppFolderResources">
   <XChildrenEntities>
    <XChildEntity name="WebAppResourceEnvRef"/>
    <XChildEntity name="WebAppResourceRef"/>
@@ -1617,7 +1617,7 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity ImplementingClass="%Custom%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%" name="WebAppFolderSecurityConstraints">
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%" name="WebAppFolderSecurityConstraints">
   <XChildrenEntities>
    <XChildEntity name="WebAppSecurityConstraint"/>
   </XChildrenEntities>
@@ -1670,7 +1670,7 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity ImplementingClass="%Custom%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%" name="WebAppFolderSecurityRoles">
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%" name="WebAppFolderSecurityRoles">
   <XChildrenEntities>
    <XChildEntity name="WebAppSecurityRole"/>
   </XChildrenEntities>
@@ -1723,7 +1723,7 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity ImplementingClass="%Custom%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%" name="WebAppFolderServices">
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%" name="WebAppFolderServices">
   <XChildrenEntities>
    <XChildEntity name="WebAppServiceRef"/>
   </XChildrenEntities>
@@ -1776,7 +1776,7 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity ImplementingClass="%Custom%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%EntityOrdered%" name="WebAppFolderServlets">
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%EntityOrdered%" name="WebAppFolderServlets">
   <XChildrenEntities>
    <XChildEntity name="WebAppServlet"/>
    <XChildEntity name="WebAppServletMapping"/>
@@ -1841,7 +1841,7 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity ImplementingClass="%Custom%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%" name="WebAppFolderTaglibs">
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%" name="WebAppFolderTaglibs">
   <XChildrenEntities>
    <XChildEntity name="WebAppTaglib"/>
   </XChildrenEntities>
@@ -2442,7 +2442,7 @@
  </XModelEntity>
  <XModelEntity
   ImplementingClass="org.jboss.tools.jst.web.webapp.model.WebAppSecurityConstraintImpl"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
   XMLSUBPATH="security-constraint" name="WebAppSecurityConstraint">
   <XChildrenEntities>
    <XChildEntity name="WebAppResourceCollection"/>
@@ -2638,7 +2638,7 @@
  </XModelEntity>
  <XModelEntity
   ImplementingClass="org.jboss.tools.jst.web.webapp.model.WebAppServletImpl"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
   XMLSUBPATH="servlet" name="WebAppServlet">
   <XChildrenEntities>
    <XChildEntity name="WebAppInitParam"/>
@@ -3019,7 +3019,7 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity ImplementingClass="%Ordered%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
   XMLSUBPATH="welcome-file-list" name="WebAppWelcomFileList">
   <XChildrenEntities>
    <XChildEntity name="WebAppWelcomFile"/>

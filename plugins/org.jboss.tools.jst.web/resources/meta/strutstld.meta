@@ -40,7 +40,7 @@
   ImplementationLoadingClass="org.jboss.tools.jst.web.tld.model.FileTLDLoader"
   ImplementingClass="org.jboss.tools.jst.web.tld.model.FileTLDImpl"
   ObjectEditorClass="%XML%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.forms.TLDFormLayoutData"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.forms.TLDFormLayoutData"
   XMLSUBPATH="taglib" name="FileTLD_PRO">
   <XChildrenEntities>
    <XChildEntity name="TLDTag"/>
@@ -313,7 +313,7 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity ImplementingClass="%Custom%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.forms.TLDFormLayoutData;children=%Ordered%"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.forms.TLDFormLayoutData;children=%Ordered%"
   XMLSUBPATH="tag" name="TLDTag">
   <XChildrenEntities>
    <XChildEntity name="TLDAttribute"/>

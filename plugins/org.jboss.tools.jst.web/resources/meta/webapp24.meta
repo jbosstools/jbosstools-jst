@@ -88,7 +88,7 @@
   ImplementationLoadingClass="org.jboss.tools.jst.web.webapp.model.FileWebApp24Loader"
   ImplementingClass="org.jboss.tools.jst.web.webapp.model.FileWebAppImpl"
   ObjectEditorClass="%XML%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
   XMLSUBPATH="web-app" name="FileWebApp24">
   <XChildrenEntities>
    <XChildEntity maxCount="1" name="WebAppFolderContextParams" required="yes"/>
@@ -581,7 +581,7 @@
   ImplementationLoadingClass="org.jboss.tools.jst.web.webapp.model.FileWebApp24Loader"
   ImplementingClass="org.jboss.tools.jst.web.webapp.model.FileWebAppImpl"
   ObjectEditorClass="%XML%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
   XMLSUBPATH="web-app" name="FileWebApp25">
   <XChildrenEntities>
    <XChildEntity maxCount="1" name="WebAppFolderContextParams" required="yes"/>
@@ -1146,7 +1146,7 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity ImplementingClass="%Custom%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%EntityOrdered%" name="WebAppFolderFilters24">
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%EntityOrdered%" name="WebAppFolderFilters24">
   <XChildrenEntities>
    <XChildEntity name="WebAppFilter"/>
    <XChildEntity name="WebAppFilterMapping24"/>
@@ -1213,7 +1213,7 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity ImplementingClass="%Custom%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
   XMLSUBPATH="jsp-property-group" name="WebAppJSPPropertyGroup">
   <XChildrenEntities/>
   <XEntityRenderer>
@@ -1326,7 +1326,7 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity ImplementingClass="%Ordered%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
   XMLSUBPATH="jsp-config" name="WebAppJspConfig">
   <XChildrenEntities>
    <XChildEntity name="WebAppTaglib"/>
@@ -1451,7 +1451,7 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity ImplementingClass="%Ordered%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
   XMLSUBPATH="locale-encoding-mapping-list" name="WebAppLocaleEncodingMappingList">
   <XChildrenEntities>
    <XChildEntity name="WebAppLocaleEncodingMapping"/>

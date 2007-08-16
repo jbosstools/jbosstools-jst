@@ -17,7 +17,7 @@
   ImplementationLoadingClass="org.jboss.tools.jst.web.tld.model.FileTLD20Loader"
   ImplementingClass="org.jboss.tools.jst.web.tld.model.FileTLD12Impl"
   ObjectEditorClass="%XML%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.forms.TLDFormLayoutData"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.forms.TLDFormLayoutData"
   XMLSUBPATH="taglib" name="FileTLD_2_0">
   <XChildrenEntities>
    <XChildEntity maxCount="1" name="TLDListeners" required="yes"/>
@@ -294,7 +294,7 @@
   ImplementationLoadingClass="org.jboss.tools.jst.web.tld.model.FileTLD21Loader"
   ImplementingClass="org.jboss.tools.jst.web.tld.model.FileTLD12Impl"
   ObjectEditorClass="%XML%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.forms.TLDFormLayoutData"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.forms.TLDFormLayoutData"
   XMLSUBPATH="taglib" name="FileTLD_2_1">
   <XChildrenEntities>
    <XChildEntity maxCount="1" name="TLDListeners" required="yes"/>
@@ -863,7 +863,7 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity ImplementingClass="%Ordered%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.forms.TLDFormLayoutData" name="TLDFunctions">
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.forms.TLDFormLayoutData" name="TLDFunctions">
   <XChildrenEntities>
    <XChildEntity name="TLDFunction"/>
   </XChildrenEntities>
@@ -907,7 +907,7 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity ImplementingClass="%Custom%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.forms.TLDFormLayoutData;children=%EntityOrdered%"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.forms.TLDFormLayoutData;children=%EntityOrdered%"
   XMLSUBPATH="tag" name="TLDTag20">
   <XChildrenEntities>
    <XChildEntity name="TLDVariable"/>
@@ -1032,7 +1032,7 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity ImplementingClass="%Custom%"
-  PROPERTIES="formFactoryClassName=org.jboss.tools.common.model.ui.forms.LayouredFormFactory;formLayoutDataClassName=org.jboss.tools.jst.web.ui.editors.forms.TLDFormLayoutData;children=%EntityOrdered%"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.forms.TLDFormLayoutData;children=%EntityOrdered%"
   XMLSUBPATH="tag" name="TLDTag21">
   <XChildrenEntities>
    <XChildEntity name="TLDVariable"/>
