@@ -153,7 +153,13 @@ public class RedHatJSPContentAssistProcessor extends JSPContentAssistProcessor i
 	private char[] autoActivChars;
 
 	public char[] getCompletionProposalAutoActivationCharacters() {
+		char[] superAutoActivChars = super.getCompletionProposalAutoActivationCharacters();
+		if(superAutoActivChars==null) {
+			return superAutoActivChars;
+		}
+
 		if(autoActivChars==null) {
+			autoActivChars = superAutoActivChars;
 			IPreferenceStore store = JSPUIPlugin.getDefault().getPreferenceStore();
 			if(store.isDefault(JSPUIPreferenceNames.AUTO_PROPOSE_CODE)) {
 				String superDefaultChars = store.getDefaultString(JSPUIPreferenceNames.AUTO_PROPOSE_CODE);
@@ -165,8 +171,6 @@ public class RedHatJSPContentAssistProcessor extends JSPContentAssistProcessor i
 				}
 				autoActivChars = new char[redhatDefaultChars.length()];
 				redhatDefaultChars.getChars(0, redhatDefaultChars.length(), autoActivChars, 0);
-			} else {
-				autoActivChars = super.getCompletionProposalAutoActivationCharacters();
 			}
 		}
 		return autoActivChars;
