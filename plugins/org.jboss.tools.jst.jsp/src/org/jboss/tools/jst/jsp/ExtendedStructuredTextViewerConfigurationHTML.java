@@ -18,6 +18,8 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
+import org.eclipse.jface.text.formatter.IContentFormatter;
+import org.eclipse.jface.text.formatter.MultiPassContentFormatter;
 import org.eclipse.jface.text.hyperlink.IHyperlinkDetector;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jst.jsp.core.text.IJSPPartitions;
@@ -25,12 +27,12 @@ import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
 import org.eclipse.wst.html.core.text.IHTMLPartitions;
 import org.eclipse.wst.html.ui.StructuredTextViewerConfigurationHTML;
-import org.osgi.framework.Bundle;
-
-import org.jboss.tools.common.model.plugin.ModelPlugin;
+import org.eclipse.wst.sse.ui.internal.format.StructuredFormattingStrategy;
 import org.jboss.tools.common.text.xml.contentassist.ContentAssistProcessorBuilder;
 import org.jboss.tools.common.text.xml.contentassist.ContentAssistProcessorDefinition;
 import org.jboss.tools.jst.jsp.contentassist.RedHatHtmlContentAssistProcessor;
+import org.jboss.tools.jst.jsp.format.HTMLFormatProcessor;
+import org.osgi.framework.Bundle;
 
 public class ExtendedStructuredTextViewerConfigurationHTML extends StructuredTextViewerConfigurationHTML {
 
@@ -129,5 +131,15 @@ public class ExtendedStructuredTextViewerConfigurationHTML extends StructuredTex
 			}
 		}
 		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.wst.html.ui.StructuredTextViewerConfigurationHTML#getContentFormatter(org.eclipse.jface.text.source.ISourceViewer)
+	 */
+	public IContentFormatter getContentFormatter(ISourceViewer sourceViewer) {
+		MultiPassContentFormatter formatter = new MultiPassContentFormatter(getConfiguredDocumentPartitioning(sourceViewer), IHTMLPartitions.HTML_DEFAULT);
+		formatter.setMasterStrategy(new StructuredFormattingStrategy(new HTMLFormatProcessor()));
+		return formatter;
 	}
 }
