@@ -12,24 +12,22 @@ package org.jboss.tools.jst.jsp.jspeditor;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import org.eclipse.core.runtime.SafeRunner;
-import org.jboss.tools.common.core.resources.XModelObjectEditorInput;
 
+import org.eclipse.core.runtime.SafeRunner;
+import org.eclipse.jface.util.Assert;
+import org.eclipse.jface.util.SafeRunnable;
+import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.events.*;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Item;
-
-import org.eclipse.jface.util.Assert;
-import org.eclipse.jface.util.SafeRunnable;
-import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-
 import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -39,12 +37,11 @@ import org.eclipse.ui.INestableKeyBindingService;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
-
-import org.eclipse.ui.internal.WorkbenchPlugin;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.ui.part.MultiPageSelectionProvider;
+import org.jboss.tools.common.core.resources.XModelObjectEditorInput;
 
 /**
  * 
@@ -194,7 +191,7 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 		return getItem(pageIndex).getText();
 	}
 
-	private CTabFolder getTabFolder() {
+	protected CTabFolder getTabFolder() {
 		return container;
 	}
 

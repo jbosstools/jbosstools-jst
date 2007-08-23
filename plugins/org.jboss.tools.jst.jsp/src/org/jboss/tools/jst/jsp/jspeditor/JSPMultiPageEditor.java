@@ -158,7 +158,8 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 					selectedPageIndex = 0;
 			else {
 				int qi = Integer.parseInt(q);
-				if (qi >= 0 && qi <= 2)
+				
+				if (qi >= 0 && qi < getTabFolder().getItemCount())
 					selectedPageIndex = qi;
 			}
 
