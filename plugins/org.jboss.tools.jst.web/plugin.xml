@@ -26,10 +26,6 @@
       <specialwizard class="org.jboss.tools.jst.web.project.AddServletSupportWizard" id="org.jboss.tools.jst.web.project.AddServletSupportWizard">
       </specialwizard>
    </extension>
-   <extension point="org.eclipse.jdt.core.classpathVariableInitializer">
-      <classpathVariableInitializer class="org.jboss.tools.jst.web.RedHatVariableInitializer" variable="REDHAT_LIB_HOME">
-      </classpathVariableInitializer>
-   </extension>
 
    <extension point="org.jboss.tools.common.model.jspAdopt">
       <jspAdopt class="org.jboss.tools.jst.web.tld.model.handlers.JSPAdopt"/>
