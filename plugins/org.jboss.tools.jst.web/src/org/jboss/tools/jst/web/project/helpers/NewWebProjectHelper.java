@@ -28,6 +28,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.jboss.tools.common.meta.action.impl.handlers.DefaultCreateHandler;
 import org.jboss.tools.common.model.XModel;
+import org.jboss.tools.common.model.XModelConstants;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.filesystems.impl.FileSystemsImpl;
 import org.jboss.tools.common.model.impl.XModelImpl;
@@ -80,7 +81,7 @@ public class NewWebProjectHelper {
         if (libName != null && libName.length() > 0) {
             File libDir = new File(libName);
             libName = (new File(libName).getParentFile().equals(webInfDir))
-                ? "%redhat.workspace%/lib/" : libName.replace('\\', '/')+"/";
+                ? XModelConstants.WORKSPACE_REF + "/lib/" : libName.replace('\\', '/')+"/";
             File[] jars = libDir.listFiles(new FileFilter() {
                 public boolean accept(File file) {
                     if (!file.isFile()) return false;
