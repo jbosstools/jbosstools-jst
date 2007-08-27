@@ -10,15 +10,19 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.editors.forms;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 
+import org.jboss.tools.common.meta.XModelEntity;
+import org.jboss.tools.common.meta.impl.XModelMetaDataImpl;
 import org.jboss.tools.common.model.ui.attribute.editor.TableStructuredEditor;
 
 import org.jboss.tools.common.model.ui.forms.ArrayToMap;
 import org.jboss.tools.common.model.ui.forms.FormActionData;
 import org.jboss.tools.common.model.ui.forms.FormAttributeData;
 import org.jboss.tools.common.model.ui.forms.FormData;
+import org.jboss.tools.common.model.ui.forms.FormLayoutDataUtil;
 import org.jboss.tools.common.model.ui.forms.IFormActionData;
 import org.jboss.tools.common.model.ui.forms.IFormData;
 import org.jboss.tools.common.model.ui.forms.IFormLayoutData;
@@ -48,13 +52,26 @@ public class TLDFormLayoutData implements IFormLayoutData {
 	
 	private final static String STBFE_CLASS_NAME = "org.jboss.tools.common.model.ui.attribute.editor.JavaHyperlinkLineFieldEditor";
 	
-	static IFormData[] createFileTagDefinitions(String tagEntity) {
+	private static FormAttributeData[] getFileTagAttributes(String entityName) {
+		ArrayList<FormAttributeData> list = new ArrayList<FormAttributeData>();
+		XModelEntity entity = XModelMetaDataImpl.getInstance().getEntity(entityName);
+		if(entity != null) {
+			String[] attributes = {"tlibversion", "jspversion", "shortname", "uri", "display-name", "small-icon", "large-icon"};
+			for (int i = 0; i < attributes.length; i++) {
+				if(entity.getAttribute(attributes[i]) != null) list.add(new FormAttributeData(attributes[i]));
+			}
+			list.add(new FormAttributeData("description", InfoLayoutDataFactory.getInstance()));
+		}
+		
+		return list.toArray(new FormAttributeData[0]);
+	}
+	static IFormData[] createFileTagDefinitions(String entity, String tagEntity) {
 		return new IFormData[] {
 		// Tiles Config Description Form
 		new FormData(
 			"Tag Library Description",
 			"", // "Description, description, description",
-			new FormAttributeData[]{new FormAttributeData("tlibversion"), new FormAttributeData("jspversion"), new FormAttributeData("shortname"), new FormAttributeData("uri"), new FormAttributeData("display-name"), new FormAttributeData("small-icon"), new FormAttributeData("large-icon"), new FormAttributeData("description", InfoLayoutDataFactory.getInstance())}
+			getFileTagAttributes(entity)
 		),
 		// Tiles PutLists Form
 		new FormData(
@@ -194,13 +211,13 @@ public class TLDFormLayoutData implements IFormLayoutData {
 				}
 			),
 			new FormData(
-				"FileTLD_1_2", createFileTagDefinitions("TLDTag12")
+				"FileTLD_1_2", createFileTagDefinitions("FileTLD_1_2", "TLDTag12")
 			),
 			new FormData(
-				"FileTLD_2_0", createFileTagDefinitions("TLDTag20")
+				"FileTLD_2_0", createFileTagDefinitions("FileTLD_2_0", "TLDTag20")
 			),
 			new FormData(
-				"FileTLD_2_1", createFileTagDefinitions("TLDTag21")
+				"FileTLD_2_1", createFileTagDefinitions("FileTLD_2_1", "TLDTag21")
 			),
 			new FormData(
 				"TLDTag12", TAG_DEFINITIONS
