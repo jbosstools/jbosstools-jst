@@ -47,7 +47,7 @@ public class RedHat4WebPerspectiveFactory implements IPerspectiveFactory {
 
 
 		IFolderLayout rightTop = layout.createFolder("right", IPageLayout.RIGHT, (float)0.8, editorArea); //$NON-NLS-1$
-		rightTop.addView("com.redhat.palette.swt");
+		rightTop.addView("org.jboss.tools.common.model.ui.views.palette.PaletteView");
 		IFolderLayout rightBottom = layout.createFolder("rightBottom", IPageLayout.BOTTOM, (float)0.64, "right"); //$NON-NLS-1$
 		rightBottom.addView(IPageLayout.ID_OUTLINE);
 
