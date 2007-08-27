@@ -94,7 +94,7 @@ public class AddADFSupportHelper {
 			XModelObject webinf = FileSystemsHelper.getWebInf(model);
 			File webInfDir = ((IResource)webinf.getAdapter(IResource.class)).getLocation().toFile();
 	        libName = (new File(libLocation).getParentFile().equals(webInfDir))
-	            ? "%redhat.workspace%/lib/" : libLocation.replace('\\', '/')+"/";
+	            ? XModelConstants.WORKSPACE_REF + "/lib/" : libLocation.replace('\\', '/')+"/";
 			for (int i = 0; i < fs.length; i++) {
 				String jarName = fs[i].getName();
 				if(!jarName.endsWith(".jar")) continue;

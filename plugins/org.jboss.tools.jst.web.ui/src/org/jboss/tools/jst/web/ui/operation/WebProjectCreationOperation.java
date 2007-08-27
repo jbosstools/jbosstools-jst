@@ -35,7 +35,6 @@ import org.jboss.tools.common.model.project.ProjectHome;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
-import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.context.RegisterTomcatContext;
 import org.jboss.tools.jst.web.model.helpers.WebAppHelper;
 import org.jboss.tools.jst.web.project.helpers.IWebProjectTemplate;
@@ -121,10 +120,10 @@ public abstract class WebProjectCreationOperation extends WebNatureOperation {
 			text = text.substring(0, i) + "\"./" + getProject().getName() + "/WebContent/WEB-INF\"" + text.substring(i + match.length());
 		}
 		
-		match = "%redhat.workspace%/classes";
+		match = XModelConstants.WORKSPACE_REF + "/classes";
 		i = text.indexOf(match);
 		if(i >= 0) {
-			String replace = "%redhat.workspace%/../../../.deployables/" + getProject().getName() + "/WEB-INF/classes";
+			String replace = XModelConstants.WORKSPACE_REF + "/../../../.deployables/" + getProject().getName() + "/WEB-INF/classes";
 			text = text.substring(0, i) + replace + text.substring(i + match.length());
 		}
 		
@@ -138,6 +137,7 @@ public abstract class WebProjectCreationOperation extends WebNatureOperation {
 		p.putAll(System.getProperties());
 		String workspace = new ProjectHome().getLocation(templateLocation);
 		p.setProperty(XModelConstants.WORKSPACE, workspace);
+		p.setProperty(XModelConstants.WORKSPACE_OLD, workspace);
 		p.setProperty(IModelNature.ECLIPSE_PROJECT, templateLocation);
 		templateModel = XModelFactory.getModel(p);
 	}
