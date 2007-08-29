@@ -47,10 +47,7 @@ public class WebContentAssistProviderTest extends TestCase {
 
 	public void testJsfBeanPropertyList() {
 		// seam beans list
-		List beanList = webPromptingProvider.getList(projectModel, WebPromptingProvider.JSF_BEAN_PROPERTIES, "numberGuess", new Properties());
-		assertTrue("Bean property list does not contain Seam bean property in XModel.", beanList.contains("remainingGuesses"));
-		// jsf beans list
-		beanList = webPromptingProvider.getList(projectModel, WebPromptingProvider.JSF_BEAN_PROPERTIES, "facesManagedBean", new Properties());
+		List beanList = webPromptingProvider.getList(projectModel, WebPromptingProvider.JSF_BEAN_PROPERTIES, "facesManagedBean", new Properties());
 		assertTrue("Bean property list does not contain Managed bean property in XModel.", beanList.contains("property1"));
 	}
 
