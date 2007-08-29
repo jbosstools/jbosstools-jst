@@ -21,6 +21,8 @@ import org.osgi.framework.BundleContext;
  *
  */
 public class JstFirstRunPlugin extends AbstractUIPlugin {
+	
+	public static final String PLUGIN_ID = "org.jboss.tools.jst.firstrun";
 
 	static private JstFirstRunPlugin instance;
 	
