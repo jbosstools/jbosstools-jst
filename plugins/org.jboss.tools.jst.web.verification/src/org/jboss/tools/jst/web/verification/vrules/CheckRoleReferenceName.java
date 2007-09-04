@@ -26,10 +26,17 @@ public class CheckRoleReferenceName extends WebDefaultCheck {
 		if(roleName == null) return null;
 		if(roleName.length() == 0) {
 			return fire(object, "role.empty", attr, null);
-		} else if(findRole(o, roleName) == null) {
+		} else if(!isRoleNameOk(o, roleName)) {
 			return fire(object, "role", attr, roleName);
 		}
 		return null;
+	}
+	
+	boolean isRoleNameOk(XModelObject mapping, String roleName) {
+		if(roleName.equalsIgnoreCase("NONE")) return true;
+		if("*".equals(roleName)) return true;
+		if(findRole(mapping, roleName) != null) return true;
+		return false;
 	}
 	
 	XModelObject findRole(XModelObject mapping, String name) {
