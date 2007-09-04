@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.ui.navigator;
 
 import java.util.*;
 import org.jboss.tools.common.model.ui.navigator.TreeViewerModelListenerImpl;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.jboss.tools.common.model.event.XModelTreeEvent;
 import org.jboss.tools.common.model.util.ModelFeatureFactory;
@@ -21,8 +22,8 @@ import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 public class WebProjectsTreeListener extends TreeViewerModelListenerImpl {
 	static String[][] LISTENERS = new String[][]{
-		{WebProject.JSF_NATURE_ID, "org.jboss.tools.jsf.ui.navigator.JsfProjectsTreeListener"},
-		{WebProject.STRUTS_NATURE_ID, "org.jboss.tools.struts.ui.navigator.StrutsProjectsTreeListener"}
+		{WebProject.JSF_NATURE_ID, "org.jboss.tools.jsf.ui.navigator.JsfProjectsTreeListener", "org.jboss.tools.jsf.ui"},
+		{WebProject.STRUTS_NATURE_ID, "org.jboss.tools.struts.ui.navigator.StrutsProjectsTreeListener", "org.jboss.tools.struts.ui"}
 	};
 	Map<String,TreeViewerModelListenerImpl> listeners = new HashMap<String,TreeViewerModelListenerImpl>();
 	
@@ -30,8 +31,13 @@ public class WebProjectsTreeListener extends TreeViewerModelListenerImpl {
 		for (int i = 0; i < LISTENERS.length; i++) {
 			String nature = LISTENERS[i][0];
 			String classname = LISTENERS[i][1];
+			String plugin = LISTENERS[i][2];
+			if(Platform.getBundle(plugin) == null) {
+				continue;
+			}
 			try {
 				TreeViewerModelListenerImpl impl = (TreeViewerModelListenerImpl)ModelFeatureFactory.getInstance().createFeatureInstance(classname);
+				if(impl == null) continue;
 				listeners.put(nature, impl);
 			} catch (Exception e) {
 				WebUiPlugin.getPluginLog().logError(e);
