@@ -16,6 +16,7 @@ import java.net.URL;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.browser.IWebBrowser;
@@ -29,7 +30,6 @@ import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
-import org.jboss.tools.common.model.util.ClassLoaderUtil;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.util.ModelFeatureFactory;
 import org.jboss.tools.jst.web.WebModelPlugin;
@@ -40,20 +40,25 @@ import org.jboss.tools.jst.web.server.ServerManager;
 public class RunOnServerContext extends AbstractBrowserContext {
 	static RunOnServerContext instance = new RunOnServerContext();
 	
-	static String[] pathSources = new String[]{
-		"org.jboss.tools.jst.web.model.handlers.RunOnServerHandler", //$NON-NLS-1$
-		"org.jboss.tools.struts.model.handlers.page.RunOnServerHandler", //$NON-NLS-1$
-		"org.jboss.tools.jsf.model.handlers.run.RunOnServerHandler" //$NON-NLS-1$
+	static String[][] pathSources = new String[][]{
+		{"org.jboss.tools.jst.web.model.handlers.RunOnServerHandler", "org.jboss.tools.jst.web"},
+		{"org.jboss.tools.struts.model.handlers.page.RunOnServerHandler", "org.jboss.tools.struts"},
+		{"org.jboss.tools.jsf.model.handlers.run.RunOnServerHandler", "org.jboss.tools.jsf"}
 	};
 
 	public void init() {
 		if(inited) return;
 		inited = true;
 		//causes delegating IPathSource to RunOnServerContext
-		//this is temporal implementation
+		//this implementation imitates extension point
 		for (int i = 0; i < pathSources.length; i++) {
+			String plugin = pathSources[i][1];
+			if(Platform.getBundle(plugin) == null) {
+				continue;
+			}
+			String classname = pathSources[i][0];
 			try {
-				ModelFeatureFactory.getInstance().createFeatureInstance(pathSources[i]);
+				ModelFeatureFactory.getInstance().createFeatureInstance(classname);
 			} catch (Exception e) {
 				WebModelPlugin.getPluginLog().logError(e);
 			}
