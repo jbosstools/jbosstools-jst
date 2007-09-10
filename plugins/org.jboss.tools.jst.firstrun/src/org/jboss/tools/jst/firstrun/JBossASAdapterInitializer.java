@@ -170,7 +170,7 @@ public class JBossASAdapterInitializer implements IStartup {
 					String id = prop.getAttribute("id"); //$NON-NLS-1$
 					
 					String value = prop.getAttribute("value"); //$NON-NLS-1$
-					props.setProperty(id, value == null ? new String()
+					props.setProperty(id, value == null ? ""
 							: value);
 				}
 				props.setProperty(DTP_DB_URL_PROPERTY_ID, "jdbc:hsqldb:.");
