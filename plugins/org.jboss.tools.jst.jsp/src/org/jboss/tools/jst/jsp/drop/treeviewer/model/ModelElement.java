@@ -71,8 +71,8 @@ public class ModelElement {
 		return name;
 	}
 
-	public static int EQUAL_VALUES = 0;
-	public static int NOT_EQUAL_VALUES = Integer.MAX_VALUE;
+	public static final int EQUAL_VALUES = 0;
+	public static final int NOT_EQUAL_VALUES = Integer.MAX_VALUE;
 
 	/**
 	 * Returns value of this element for comparison with other value. See compareValue().

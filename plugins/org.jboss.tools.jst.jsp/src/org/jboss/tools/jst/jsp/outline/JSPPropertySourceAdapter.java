@@ -56,7 +56,7 @@ import org.jboss.tools.common.model.plugin.ModelPlugin;
 
 public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, IPropertySourceExtension, IPropertySource2 {//extends XMLPropertySourceAdapter {
 	protected final static String CATEGORY_ATTRIBUTES = XMLUIMessages.XMLPropertySourceAdapter_0;
-	private static final boolean fSetExpertFilter = false;
+	private static final boolean SET_EXPERT_FILTER = false;
 
 	AttributeSorter sorter = null;
 	private Node fNode = null;
@@ -291,7 +291,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 		TextPropertyDescriptor descriptor = new TextPropertyDescriptor(attributeName, attributeName);
 		descriptor.setCategory(getCategory(null));
 		descriptor.setDescription(attributeName);
-//		if (hideOnFilter && fSetExpertFilter)
+//		if (hideOnFilter && SET_EXPERT_FILTER)
 //			descriptor.setFilterFlags(new String[]{IPropertySheetEntry.FILTER_ID_EXPERT});
 		return descriptor;
 	}
@@ -731,7 +731,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 		TextPropertyDescriptor descriptor = new TextPropertyDescriptor(name, name);
 		descriptor.setCategory(category);
 		descriptor.setDescription(name);
-		if (usage != CMAttributeDeclaration.REQUIRED && fSetExpertFilter)
+		if (usage != CMAttributeDeclaration.REQUIRED && SET_EXPERT_FILTER)
 			descriptor.setFilterFlags(new String[]{IPropertySheetEntry.FILTER_ID_EXPERT});
 		return descriptor;
 	}
@@ -741,7 +741,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 		EnumeratedStringPropertyDescriptor descriptor = new EnumeratedStringPropertyDescriptor(attrDecl.getAttrName(), attrDecl.getAttrName(), _getValidStrings(attrDecl, valuesHelper));
 		descriptor.setCategory(getCategory(attrDecl));
 		descriptor.setDescription(attrDecl.getAttrName());
-		if (attrDecl.getUsage() != CMAttributeDeclaration.REQUIRED && fSetExpertFilter)
+		if (attrDecl.getUsage() != CMAttributeDeclaration.REQUIRED && SET_EXPERT_FILTER)
 			descriptor.setFilterFlags(new String[]{IPropertySheetEntry.FILTER_ID_EXPERT});
 		return descriptor;
 	}

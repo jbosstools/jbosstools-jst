@@ -18,6 +18,7 @@ import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
@@ -174,10 +175,11 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 
 	private void saveSelectedTab() {
 		IFile file = getFile();
+		String q = "" + selectedPageIndex;
 		try {
-			String q = "" + selectedPageIndex;
 			file.setPersistentProperty(persistentTabQualifiedName, q);
-		} catch (Exception e) {
+		} catch (CoreException e) {
+			JspEditorPlugin.getPluginLog().logWarning(e);
 		}
 	}
 
@@ -251,12 +253,13 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	}
 
 	private void updateFile() {
-		IFile file = getFile();
-		if (file != null)
-			try {
-				file.refreshLocal(0, null);
-			} catch (Exception e) {
-			}
+		try {
+			IFile file = getFile();
+			if (file != null)
+			file.refreshLocal(0, null);
+		} catch (CoreException e) {
+			JspEditorPlugin.getPluginLog().logWarning(e);
+		}
 	}
 
 	private IFile getFile() {
@@ -377,11 +380,8 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 			// switchOutlineToJSPEditor();
 		}
 		loadSelectedTab();
-		try {
-			setActivePage(selectedPageIndex);
-			pageChange(selectedPageIndex);
-		} catch (Exception e) {
-		}
+		setActivePage(selectedPageIndex);
+		pageChange(selectedPageIndex);
 
 		new ResourceChangeListener(this, getContainer());
 		if (getModelObject() != null) {
@@ -454,12 +454,12 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		sourceEditor.addPropertyListener(pcl);
 		sourceEditor.doSaveAs();
 		sourceEditor.removePropertyListener(pcl);
-		if (old.isModified())
-			try {
+		try {		
+			if (old.isModified())
 				new DiscardFileHandler().executeHandler(old, new Properties());
-			} catch (Exception e) {
-
-			}
+		} catch (Exception e) {
+			JspEditorPlugin.getPluginLog().logError(e);
+		}
 	}
 
 	public void gotoMarker(final IMarker marker) {
@@ -467,8 +467,9 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		pageChange(sourceIndex);
 		IGotoMarker adapter = (IGotoMarker) sourceEditor
 				.getAdapter(IGotoMarker.class);
-		if (adapter != null)
+		if (adapter != null) {
 			adapter.gotoMarker(marker);
+		}
 	}
 
 	public boolean isSaveAsAllowed() {

@@ -271,7 +271,7 @@ abstract class CMNodeImpl implements CMNode {
 
 	public Object getProperty(String propertyName) {
 		if (propertyName.equals(HTMLCMProperties.IS_XHTML))
-			return new Boolean(false);
+			return Boolean.FALSE;
 		return null;
 	}
 
@@ -342,9 +342,9 @@ class HTMLAttrDeclImpl extends CMNodeImpl implements HTMLAttributeDeclaration {
 
 	public Object getProperty(String propertyName) {
 		if (propertyName.equals(HTMLCMProperties.SHOULD_IGNORE_CASE))
-			return new Boolean(true);
+			return Boolean.TRUE;
 		else if (propertyName.equals(HTMLCMProperties.IS_SCRIPTABLE)) {
-			return getAttrType().getDataTypeName() == HTMLCMDataType.SCRIPT ? new Boolean(true) : new Boolean(false);
+			return getAttrType().getDataTypeName() == HTMLCMDataType.SCRIPT ? Boolean.TRUE : Boolean.FALSE;
 		}
 		return super.getProperty(propertyName);
 	}

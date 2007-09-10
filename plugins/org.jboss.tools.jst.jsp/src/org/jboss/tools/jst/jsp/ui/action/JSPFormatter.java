@@ -14,12 +14,12 @@ import java.util.*;
 import org.eclipse.jface.text.*;
 
 public class JSPFormatter {
-	static int ROOT = 0;
-	static int TEXT = 1;
-	static int TAG = 2;
-	static int TAG_CLOSING = 3;
-	static int JSP = 4;
-	static int COMMENT = 5;
+	static final int ROOT = 0;
+	static final int TEXT = 1;
+	static final int TAG = 2;
+	static final int TAG_CLOSING = 3;
+	static final int JSP = 4;
+	static final int COMMENT = 5;
 
 	String text;
 	StringBuffer sb = new StringBuffer();

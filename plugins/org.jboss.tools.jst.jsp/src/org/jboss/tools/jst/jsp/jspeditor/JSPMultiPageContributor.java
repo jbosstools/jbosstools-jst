@@ -188,12 +188,8 @@ public class JSPMultiPageContributor extends AbstractMultiPageContributor {
 			cleanActionBarStatus();
 			actionBars.updateActionBars();
 		}
-
-		try {
-			fToggleOccurencesMarkUp.setEditor(getTextEditor(part));
-			fToggleOccurencesMarkUp.update();
-		} catch (Exception x) {
-		}
+		fToggleOccurencesMarkUp.setEditor(getTextEditor(part));
+		fToggleOccurencesMarkUp.update();
 
 		updateStatus();
 	}

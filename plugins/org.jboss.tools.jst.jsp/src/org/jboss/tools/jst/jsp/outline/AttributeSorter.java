@@ -28,7 +28,7 @@ public class AttributeSorter extends PropertySheetSorter {
 	}
 	
 	public void setWeight(String displayName, int weight) {
-		weights.put(displayName, new Integer(weight));
+		weights.put(displayName, Integer.valueOf(weight));
 	}
 	
 	public int getWeight(String displayName) {
