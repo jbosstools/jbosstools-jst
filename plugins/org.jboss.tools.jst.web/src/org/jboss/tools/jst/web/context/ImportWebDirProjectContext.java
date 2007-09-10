@@ -12,12 +12,15 @@ package org.jboss.tools.jst.web.context;
 
 import java.io.File;
 import java.util.Properties;
+
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.loaders.impl.SerializingLoader;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
 import org.jboss.tools.common.util.FileUtil;
+import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 
 public abstract class ImportWebDirProjectContext extends ImportWebProjectContext {
@@ -189,7 +192,9 @@ public abstract class ImportWebDirProjectContext extends ImportWebProjectContext
 		try {		
 			IProject p = getProjectHandle();		
 			if(p.exists()) p.refreshLocal(IProject.DEPTH_INFINITE, null);
-		} catch (Exception e) {}
+		} catch (CoreException e) {
+			WebModelPlugin.getPluginLog().logError(e);
+		}
 	}
 	
 	public abstract String getNatureID();	

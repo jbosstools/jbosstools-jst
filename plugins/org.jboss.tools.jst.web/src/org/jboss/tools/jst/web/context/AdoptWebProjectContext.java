@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.context;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
@@ -19,6 +20,7 @@ import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
 import org.jboss.tools.common.util.FileUtil;
+import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.project.WebModuleConstants;
 import org.jboss.tools.jst.web.project.WebModuleImpl;
 
@@ -139,7 +141,9 @@ public abstract class AdoptWebProjectContext {
         if(parent.indexOf("..") >= 0) 
         	try { 
         		parent = new File(parent).getCanonicalPath().replace('\\', '/'); 
-        	} catch (Exception t) {}
+        	} catch (IOException t) {
+        		WebModelPlugin.getPluginLog().logError(t);
+        	}
         Properties p = new Properties();
         p.setProperty("name", name);
         p.setProperty("URI", uri);
@@ -200,9 +204,13 @@ public abstract class AdoptWebProjectContext {
 		src = loc + "/../../JavaSource";
 		sf = new File(src);
 		if(sf.isDirectory()) {
-			try {
-				return sf.getCanonicalPath().replace('\\', '/');
-			} catch (Exception e) {}
+
+				try {
+					return sf.getCanonicalPath().replace('\\', '/');
+				} catch (IOException e) {
+					WebModelPlugin.getPluginLog().logError(e);
+				}
+
 			return src;
 		}
     	return null;

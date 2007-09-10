@@ -73,7 +73,7 @@ public abstract class AbstractBrowserContext implements IBrowserContext {
 			}
 		} else updateRunPath();
 		synchronized (monitor) {
-			try { monitor.notifyAll(); } catch (Exception e) {}
+			monitor.notifyAll();
 		}
 	}
     
