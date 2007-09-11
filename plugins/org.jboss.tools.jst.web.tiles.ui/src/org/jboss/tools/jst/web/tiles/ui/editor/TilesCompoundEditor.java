@@ -74,7 +74,11 @@ public class TilesCompoundEditor extends ObjectMultiPageEditor {
 	public void dispose() {
 		if(input != null) {
 			selectionProvider.setHost(null);
-			try { getSite().setSelectionProvider(null); } catch (Exception e) {}
+			try { 
+				getSite().setSelectionProvider(null); 
+			} catch (Exception e) {
+				// Ignore
+			}
 		}
 		super.dispose();
 		if(guiEditor != null) {

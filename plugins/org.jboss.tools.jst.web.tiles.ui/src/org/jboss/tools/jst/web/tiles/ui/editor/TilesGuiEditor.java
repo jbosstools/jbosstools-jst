@@ -18,6 +18,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 
+import org.jboss.tools.common.log.LogHelper;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.ui.editor.IModelObjectEditorInput;
@@ -95,7 +96,11 @@ public class TilesGuiEditor extends AbstractSectionEditor {
 		if(gui != null) {
 			gui.dispose();
 			gui = null;
-			try { control.dispose(); } catch (Exception e) {}
+			try { 
+				control.dispose(); 
+			} catch (Exception e) {
+				TilesUIPlugin.getPluginLog().logError(e);
+			}
 			control = null;
 		}
 	}
