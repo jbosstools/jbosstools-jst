@@ -26,6 +26,8 @@ import org.eclipse.jdt.debug.eval.ICompiledExpression;
 import org.eclipse.jdt.debug.eval.IEvaluationListener;
 import org.eclipse.jdt.debug.eval.IEvaluationResult;
 import org.eclipse.jdt.internal.debug.core.model.JDIStackFrame;
+import org.jboss.tools.jst.web.WebModelPlugin;
+import org.jboss.tools.jst.web.debug.WebDebugPlugin;
 
 /**
  * @author Jeremy
@@ -49,7 +51,7 @@ public class EvaluationSupport {
 			ICompiledExpression compiledExpression = engine.getCompiledExpression(expression, (JDIStackFrame)frame);
 			engine.evaluateExpression(compiledExpression, (IJavaStackFrame)frame, evaluationListener, DebugEvent.EVALUATION_IMPLICIT, false);
 		} catch (Exception x) {
-			//ignore
+			WebDebugPlugin.getPluginLog().logError(x);
 		}
 	}
 
@@ -76,7 +78,11 @@ public class EvaluationSupport {
 			IEvaluationResult result = null;
 			while (IsWaiting()) {
 				Thread.yield();
-				try {Thread.sleep(100);} catch (Exception x) {}
+				try {
+					Thread.sleep(100);
+				} catch (Exception x) {
+					// Ignore
+				}
 			}
 			
 			synchronized (this) {
@@ -113,7 +119,7 @@ public class EvaluationSupport {
 										DebugEvent.EVALUATION_IMPLICIT, false);
 			result = evaluationListener.getResult();
 		} catch (Exception x) {
-			//ignore
+			WebDebugPlugin.getPluginLog().logError(x);
 		}
 		return result;
 	}
@@ -146,6 +152,7 @@ public class EvaluationSupport {
 				}
 			}
 		} catch (Exception e) {
+			WebDebugPlugin.getPluginLog().logError(e);
 		}
 		return null;
 	}
@@ -161,6 +168,7 @@ public class EvaluationSupport {
 				}
 			}
 		} catch (Exception e) {
+			WebDebugPlugin.getPluginLog().logError(e);
 		}
 		return null;
 	}

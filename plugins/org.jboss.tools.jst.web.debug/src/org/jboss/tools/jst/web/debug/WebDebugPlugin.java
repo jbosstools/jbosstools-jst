@@ -13,19 +13,24 @@ package org.jboss.tools.jst.web.debug;
 import org.eclipse.core.runtime.IPluginDescriptor;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.jboss.tools.common.log.BaseUIPlugin;
 
-public class WebDebugPlugin extends AbstractUIPlugin {
+public class WebDebugPlugin extends BaseUIPlugin {
 	static WebDebugPlugin INSTANCE = null;
 
 	public static final String PLUGIN_ID = "org.jboss.tools.jst.web.debug";
 
-	public WebDebugPlugin(IPluginDescriptor descriptor)	{
-		super(descriptor);
+	public WebDebugPlugin()	{
+		super();
 		INSTANCE = this;
 	}
 
 	public static WebDebugPlugin getDefault() {
 		return INSTANCE;
+	}
+
+	public static WebDebugPlugin getPluginLog() {
+		return WebDebugPlugin.getDefault();
 	}
 
     public static boolean isDebugEnabled() {
