@@ -69,7 +69,11 @@ public class JSPAdopt implements XAdoptManager {
     public void adoptAttribute(XModelObject target, XModelObject object, Properties p) {
         if(p == null) return;
         int c = -1;
-        try { c = Integer.parseInt(p.getProperty("pos")); } catch (Exception e) {}
+        try { 
+        	c = Integer.parseInt(p.getProperty("pos")); 
+        } catch (Exception e) {
+        	// Ignore
+        }
         if(c < 0) return;
         String text = p.getProperty("text");
         String pref = (c == 0 || Character.isWhitespace(text.charAt(c - 1))) ? "" : " ";

@@ -80,7 +80,7 @@ public class CreateJSPFileSupport extends CreateFileSupport {
 				defaultPageTemplate = obj.getAttributeValue("Page Template");
 			}
 		} catch (Exception x) {
-			//ignore
+			WebModelPlugin.getPluginLog().logError(x);
 		}
 		return defaultPageTemplate;
 	}

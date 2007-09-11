@@ -12,13 +12,16 @@ package org.jboss.tools.jst.web.tld.model;
 
 import org.jboss.tools.common.model.loaders.*;
 import org.jboss.tools.common.xml.XMLEntityResolver;
+import org.jboss.tools.jst.web.WebModelPlugin;
 
 public class FileTLDRecognizer implements EntityRecognizer, TLDConstants {
     static {
         try {
             XMLEntityResolver.registerPublicEntity(TLD_DOC_PUBLICID_1_1, FileTLDRecognizer.class, "/meta/web-jsptaglibrary_1_1.dtd");
             XMLEntityResolver.registerPublicEntity(TLD_DOC_PUBLICID_1_2, FileTLDRecognizer.class, "/meta/web-jsptaglibrary_1_2.dtd");
-        } catch (Exception e) {}
+        } catch (Exception e) {
+			WebModelPlugin.getPluginLog().logError(e);
+        }
     }
     
     static String VERSION_2_0 = "version=\"2.0\"";

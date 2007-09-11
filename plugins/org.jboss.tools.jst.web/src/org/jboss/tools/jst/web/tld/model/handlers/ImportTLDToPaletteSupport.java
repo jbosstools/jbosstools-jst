@@ -22,6 +22,7 @@ import org.jboss.tools.common.meta.action.impl.WizardDataValidator;
 import org.jboss.tools.common.meta.action.impl.handlers.DefaultCreateHandler;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
+import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 import org.jboss.tools.jst.web.model.tree.AllTldsTree;
 import org.jboss.tools.jst.web.tld.URIConstants;
@@ -108,7 +109,9 @@ public class ImportTLDToPaletteSupport extends SpecialWizardSupport {
     	this.path = path;
     	try {
     		selectedFile = tree.find(path); 
-    	} catch (Exception e) {}
+    	} catch (Exception e) {
+			WebModelPlugin.getPluginLog().logError(e);
+    	}
     	return selectedFile;
     }
     

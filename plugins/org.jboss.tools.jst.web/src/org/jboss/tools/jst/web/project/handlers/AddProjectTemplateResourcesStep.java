@@ -103,7 +103,7 @@ public class AddProjectTemplateResourcesStep extends MultistepWizardStep {
 				try {
 					set.add(f.getCanonicalPath());
 				} catch (Exception e) {
-					//ignore
+					WebModelPlugin.getPluginLog().logError(e);
 				}
 			}
 		}
@@ -118,7 +118,7 @@ public class AddProjectTemplateResourcesStep extends MultistepWizardStep {
 				try {
 					path = pathname.getCanonicalPath();
 				} catch (Exception e) {
-					//ignore
+					WebModelPlugin.getPluginLog().logError(e);
 				}
 				return path != null && !set.contains(path);
 			}    		

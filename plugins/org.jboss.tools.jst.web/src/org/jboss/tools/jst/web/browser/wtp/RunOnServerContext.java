@@ -85,7 +85,7 @@ public class RunOnServerContext extends AbstractBrowserContext {
 			// in menu now it throws exception Invalid Artifact Edit access
 			ms = ServerUtil.getModule(p);
 		} catch (Exception e) {
-			// ignore
+			WebModelPlugin.getPluginLog().logError(e);
 		}
 //		WebResource wr = (ms == null || ms.length == 0) ? null : new WebResource(ms[0], new Path(""));
 		WebResource wr = (ms == null) ? null : new WebResource(ms, new Path("")); //$NON-NLS-1$
@@ -128,7 +128,7 @@ public class RunOnServerContext extends AbstractBrowserContext {
 		try {
 			server.getModules();
 		} catch (Exception e) {
-			//ignore
+			WebModelPlugin.getPluginLog().logError(e);
 		}
 		String launchMode = ILaunchManager.DEBUG_MODE.equals(server.getMode()) ? ILaunchManager.DEBUG_MODE : ILaunchManager.RUN_MODE; 
 		try {

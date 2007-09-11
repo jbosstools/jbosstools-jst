@@ -25,6 +25,7 @@ import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
+import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 import org.jboss.tools.jst.web.project.helpers.AbstractWebProjectTemplate;
 
@@ -126,7 +127,9 @@ public class AddPageTemplateSupport extends SpecialWizardSupport {
     	this.pagePath = pagePath;
     	try {
     		selectedFile = ModelPlugin.getWorkspace().getRoot().getFile(new Path(pagePath)); 
-    	} catch (Exception e) {}
+    	} catch (Exception e) {
+			WebModelPlugin.getPluginLog().logError(e);
+    	}
     	return selectedFile;
     }
 
