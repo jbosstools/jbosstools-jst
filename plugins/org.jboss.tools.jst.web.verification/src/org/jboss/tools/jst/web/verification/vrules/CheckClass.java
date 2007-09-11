@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.verification.vrules;
 
 import org.eclipse.jdt.core.IType;
 
+import org.jboss.tools.common.log.LogHelper;
 import org.jboss.tools.common.meta.constraint.impl.XAttributeConstraintQClassName;
 import org.jboss.tools.common.model.*;
 import org.jboss.tools.common.model.util.EclipseJavaUtil;
@@ -34,10 +35,14 @@ public class CheckClass extends WebDefaultCheck {
 		IType type = object.getModel().getValidType(value);
 		if(type != null) {
 			String mustImpl = null;
-			try { mustImpl = checkImplements(object, type); } catch (Exception e) {}
+			try { mustImpl = checkImplements(object, type); } catch (Exception e) {
+	        	LogHelper.logError("org.jboss.tools.jst.web.verification", e);
+			}
 			if(mustImpl != null) return fireImplements(object, attr, attr, value, mustImpl);
 			String mustExtend = null;
-			try { mustExtend = checkExtends(object, type); } catch (Exception e) {}
+			try { mustExtend = checkExtends(object, type); } catch (Exception e) {
+	        	LogHelper.logError("org.jboss.tools.jst.web.verification", e);
+			}
 			if(mustExtend != null) return fireExtends(object, attr, attr, value, mustExtend);
 			return null;
 		}
