@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.util.*;
 import org.eclipse.ui.IEditorInput;
 import org.jboss.tools.common.kb.*;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
 
 public class WTPKbdJSFIDResource extends WTPKbAbstractModelResource {
@@ -53,7 +54,7 @@ public class WTPKbdJSFIDResource extends WTPKbAbstractModelResource {
 				}
 			}
 		} catch (Exception x) {
-			//ignore
+			JspEditorPlugin.getPluginLog().logError(x);
 		}
 		return proposals;
 	}

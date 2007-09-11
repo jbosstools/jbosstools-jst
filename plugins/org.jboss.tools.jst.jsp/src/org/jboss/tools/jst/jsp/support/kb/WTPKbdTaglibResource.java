@@ -24,6 +24,7 @@ import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.kb.KbDinamicResource;
 import org.jboss.tools.common.kb.KbIcon;
 import org.jboss.tools.common.kb.KbProposal;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
 
 public class WTPKbdTaglibResource extends WTPKbAbstractModelResource {
@@ -61,7 +62,7 @@ public class WTPKbdTaglibResource extends WTPKbAbstractModelResource {
 				}
 			}
 		} catch (Exception x) {
-			//ignore
+			JspEditorPlugin.getPluginLog().logError(x);
 		}
 		return proposals;
 	}
