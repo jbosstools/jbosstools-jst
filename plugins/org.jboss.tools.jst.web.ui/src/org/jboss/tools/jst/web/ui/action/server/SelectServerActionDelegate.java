@@ -28,6 +28,7 @@ import org.eclipse.wst.server.ui.internal.wizard.ClosableWizardDialog;
 import org.eclipse.wst.server.ui.internal.wizard.NewServerWizard;
 import org.jboss.tools.common.model.ui.ModelUIImages;
 import org.jboss.tools.jst.web.server.*;
+import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 
 public class SelectServerActionDelegate extends AbstractServerActionDelegate implements IWorkbenchWindowPulldownDelegate {
@@ -177,6 +178,7 @@ public class SelectServerActionDelegate extends AbstractServerActionDelegate imp
 				imageRegistry.put(typeId, imageDescriptor);		
 				imageDescriptors.put(typeId, imageDescriptor);
 			} catch (Exception t) {
+				WebUiPlugin.getPluginLog().logError(t);
 			}
 		}
 	}

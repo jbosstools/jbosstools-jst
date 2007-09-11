@@ -29,6 +29,7 @@ import org.jboss.tools.common.model.project.ClassPathUpdate;
 import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.project.WebProject;
 import org.jboss.tools.jst.web.project.helpers.*;
+import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 public class AddADFSupportHelper {
 	static String ORACLE_ADF_LIB_FOLDER_NAME = "OracleADF"; 
@@ -128,7 +129,9 @@ public class AddADFSupportHelper {
 			IProject p = EclipseResourceUtil.getProject(model.getRoot());
 			if(p != null) try {
 				p.refreshLocal(IResource.DEPTH_INFINITE, null);
-			} catch (Exception e) {}
+			} catch (Exception e) {
+				WebUiPlugin.getPluginLog().logError(e);
+			}
 			monitor.worked(20);
 			model.update();
 			monitor.worked(10);

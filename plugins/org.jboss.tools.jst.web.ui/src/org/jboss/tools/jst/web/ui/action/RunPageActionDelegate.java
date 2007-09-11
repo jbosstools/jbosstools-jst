@@ -19,6 +19,7 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jface.action.*;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.jboss.tools.common.log.LogHelper;
 import org.jboss.tools.common.model.util.XModelTreeListenerSWTASync;
 import org.jboss.tools.common.model.ui.dnd.DnDUtil;
 import org.eclipse.jface.viewers.*;
@@ -37,6 +38,7 @@ import org.jboss.tools.jst.web.browser.*;
 import org.jboss.tools.jst.web.browser.wtp.RunOnServerContext;
 import org.jboss.tools.jst.web.server.ServerManager;
 import org.jboss.tools.jst.web.server.ServerManagerListener;
+import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 public class RunPageActionDelegate extends AbstractModelActionDelegate implements IWorkbenchWindowPulldownDelegate {
 	static AbstractBrowserContext context = RunOnServerContext.getInstance();
@@ -165,7 +167,11 @@ public class RunPageActionDelegate extends AbstractModelActionDelegate implement
 		public void run() {
 			while(!stopped) {
 				synchronized (context.monitor) {
-					try { context.monitor.wait(); } catch (Exception e) {}					
+					try { 
+						context.monitor.wait(); 
+					} catch (Exception e) {
+			        	WebUiPlugin.getPluginLog().logError(e);
+					}					
 				}
 				if(!stopped) update();
 			}
@@ -181,7 +187,11 @@ public class RunPageActionDelegate extends AbstractModelActionDelegate implement
 		stopped = true;
 		action = null;
 		synchronized (context.monitor) {
-			try { context.monitor.notifyAll(); } catch (Exception e) {}					
+			try { 
+				context.monitor.notifyAll(); 
+			} catch (Exception e) {
+	        	WebUiPlugin.getPluginLog().logError(e);
+			}					
 		}
 		if(sml != null) {
 			ServerManager.getInstance().removeListener(sml);

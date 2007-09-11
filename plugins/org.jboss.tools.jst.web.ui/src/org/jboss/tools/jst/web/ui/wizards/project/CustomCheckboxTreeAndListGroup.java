@@ -41,7 +41,9 @@ public class CustomCheckboxTreeAndListGroup extends CheckboxTreeAndListGroup {
     	setCurrentTreeSelection(listElement.getParentFile());
     	try {
     		super.listItemChecked(listElement, true, true);
-    	} catch (Exception e) {}
+    	} catch (Exception e) {
+			WebUiPlugin.getPluginLog().logError(e);
+    	}
     	setCurrentTreeSelection(null);
     }
     

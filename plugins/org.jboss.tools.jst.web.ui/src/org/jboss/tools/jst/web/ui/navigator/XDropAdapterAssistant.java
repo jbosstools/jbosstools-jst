@@ -48,6 +48,7 @@ public class XDropAdapterAssistant extends CommonDropAdapterAssistant {
 			try {
 				DnDUtil.paste(targetObject, p);
 			} catch (ActionDeclinedException de) {
+				return null;
 			} catch (Exception e) {
 				ProblemReportingHelper.reportProblem(ModelUIPlugin.PLUGIN_ID, e);
 			}

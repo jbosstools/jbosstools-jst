@@ -438,7 +438,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 				EclipseResourceUtil.removeNatureFromProject(getProject(), JavaCore.NATURE_ID);
 				getProject().delete(true, null);
 			} catch (Exception e) {
-				//ignore
+				WebUiPlugin.getPluginLog().logError(e);
 			}
 			throw (t instanceof CoreException) ? (CoreException)t
 				: new CoreException(new org.eclipse.core.runtime.Status(IStatus.ERROR, getNatureID(), org.eclipse.core.runtime.IStatus.ERROR, "" + t.getMessage(), t));

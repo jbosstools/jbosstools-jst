@@ -194,7 +194,7 @@ public abstract class WebProjectCreationOperation extends WebNatureOperation {
 		try {
 			createTemplateModel();
 		} catch (Exception e) {
-			//ignore
+			WebUiPlugin.getPluginLog().logError(e);
 		}
 		if(templateModel != null) {
 			XModelObject o = FileSystemsHelper.getFileSystem(templateModel, "src");

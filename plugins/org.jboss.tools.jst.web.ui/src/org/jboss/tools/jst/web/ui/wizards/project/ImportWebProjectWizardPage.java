@@ -45,6 +45,7 @@ import org.jboss.tools.common.model.util.XMLUtil;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.jst.web.context.ImportWebDirProjectContext;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
+import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 public class ImportWebProjectWizardPage extends WizardPage {
 	private ImportWebDirProjectContext context;
@@ -338,6 +339,7 @@ public class ImportWebProjectWizardPage extends WizardPage {
 			context.setProjectName(getProjectNameValue());
 			context.setWebXmlLocation(getWebXmlLocationValue());
 		} catch (Exception ex) {
+			WebUiPlugin.getPluginLog().logError(ex);
 		}
 	}
 	

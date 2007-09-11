@@ -37,6 +37,7 @@ import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.common.meta.key.WizardKeys;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
+import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 public abstract class SelectWebProcessItemWizardView extends AbstractQueryWizardView {
 	private Properties p; 
@@ -209,7 +210,11 @@ public abstract class SelectWebProcessItemWizardView extends AbstractQueryWizard
 		public void dispose() {}
 
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-			try { viewer.refresh(); } catch (Exception e) {}
+			try { 
+				viewer.refresh(); 
+			} catch (Exception e) {
+				WebUiPlugin.getPluginLog().logError(e);
+			}
 		}
 
 		public Image getColumnImage(Object element, int columnIndex) {
