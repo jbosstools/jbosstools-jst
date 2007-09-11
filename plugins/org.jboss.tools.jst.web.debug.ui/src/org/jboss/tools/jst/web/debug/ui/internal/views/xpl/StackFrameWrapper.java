@@ -94,14 +94,18 @@ public class StackFrameWrapper implements IDebugElement {
 				if (fHasValueChanged) fWebData.updateVariables();
 				vars[count] = fWebData;
 				count++;
-			} catch (Exception e) {  }
+			} catch (Exception e) { 
+	        	WebDebugUIPlugin.getPluginLog().logError(e);
+			}
 		}
 		if (wdp.isEnabledFilter(WebDataProperties.SHOW_STRUTS_VARIABLES_PROPERTY)) {
 			try { 
 				if (fHasValueChanged) fStrutsData.updateVariables();
 				vars[count] = fStrutsData;
 				count++;
-			} catch (Exception e) {  }
+			} catch (Exception e) { 
+	        	WebDebugUIPlugin.getPluginLog().logError(e);
+			}
 		}
 		IVariable[] newVars = new IVariable[count];
 		for (int i = 0; i < count; i++) newVars[i] = vars[i];

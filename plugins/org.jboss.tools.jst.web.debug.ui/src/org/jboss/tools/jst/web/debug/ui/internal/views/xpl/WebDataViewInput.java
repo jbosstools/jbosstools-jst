@@ -17,6 +17,7 @@ import java.util.Map;
 
 import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IThread;
+import org.jboss.tools.jst.web.debug.ui.xpl.WebDebugUIPlugin;
 
 public class WebDataViewInput {
 	
@@ -27,6 +28,7 @@ public class WebDataViewInput {
 		try {
 			if(frame != null && !frame.isTerminated()) thread = frame.getThread();
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 		return create(thread);
 	}

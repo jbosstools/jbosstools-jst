@@ -27,6 +27,7 @@ import org.eclipse.debug.internal.ui.views.IDebugExceptionHandler;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+import org.jboss.tools.jst.web.debug.ui.xpl.WebDebugUIPlugin;
 
 /**
  * Provide the contents for a variables viewer.
@@ -78,7 +79,7 @@ public class WebDataViewContentProvider implements ITreeContentProvider {
 				try {
 					children = ((IVariable)parent).getValue().getVariables();
 				} catch (Exception ee) {
-					//ignore
+		        	WebDebugUIPlugin.getPluginLog().logError(ee);
 				}
 			}
 			if (children != null) {
@@ -86,7 +87,7 @@ public class WebDataViewContentProvider implements ITreeContentProvider {
 				return children;
 			}
 		} catch (Exception e) {
-			//ignore
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 		return new Object[0];
 	}
@@ -208,7 +209,7 @@ public class WebDataViewContentProvider implements ITreeContentProvider {
 			clearCache();
 			this.fViewer = viewer;
 		} catch (Exception x) {
-			//ignore
+        	WebDebugUIPlugin.getPluginLog().logError(x);
 		}
 	}
 	
@@ -216,7 +217,7 @@ public class WebDataViewContentProvider implements ITreeContentProvider {
 		try {
 			fWrapper.doChange();
 		} catch (Exception x) {
-			//ignore
+        	WebDebugUIPlugin.getPluginLog().logError(x);
 		}
 	}
 	

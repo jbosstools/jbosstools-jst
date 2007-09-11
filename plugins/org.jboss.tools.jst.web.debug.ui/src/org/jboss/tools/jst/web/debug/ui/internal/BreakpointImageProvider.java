@@ -16,6 +16,7 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.jdt.debug.core.IJavaBreakpoint;
 import org.eclipse.ui.internal.ide.IMarkerImageProvider;
+import org.jboss.tools.jst.web.debug.ui.xpl.WebDebugUIPlugin;
 
 /**
  * @author Jeremy
@@ -51,7 +52,7 @@ public class BreakpointImageProvider implements IMarkerImageProvider {
                 if (installed) return iconPath + "brkpid_obj.gif"; //$NON-NLS-1$
                 return iconPath + "brkpd_obj.gif";//$NON-NLS-1$
             } catch (CoreException e) {
-            	//ignore
+            	WebDebugUIPlugin.getPluginLog().logError(e);
             }
         }
         return null;

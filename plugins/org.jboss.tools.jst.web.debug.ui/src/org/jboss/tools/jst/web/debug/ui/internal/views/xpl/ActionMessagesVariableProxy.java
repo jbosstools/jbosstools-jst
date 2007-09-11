@@ -20,6 +20,7 @@ import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.jdt.debug.eval.IEvaluationResult;
 import org.eclipse.jdt.internal.debug.core.model.JDINullValue;
 import org.eclipse.jdt.internal.debug.core.model.JDIThread;
+import org.jboss.tools.jst.web.debug.ui.xpl.WebDebugUIPlugin;
 import org.jboss.tools.jst.web.debug.xpl.EvaluationSupport;
 
 /**
@@ -29,22 +30,19 @@ public class ActionMessagesVariableProxy extends VariableProxy {
 
 	ActionMessagesVariableProxy(StackFrameWrapper frameWrapper, IVariable origin) {
 		super(frameWrapper, origin);
-		IValue value = null;
-		try { value = origin.getValue(); } catch (Exception e) { }
+		IValue value = getOriginValue(origin); 
 		initValue(value);
 	}
 
 	ActionMessagesVariableProxy(StackFrameWrapper frameWrapper, IVariable origin, String alias) {
 		super(frameWrapper, origin, alias);
-		IValue value = null;
-		try { value = origin.getValue(); } catch (Exception e) { }
+		IValue value = getOriginValue(origin); 
 		initValue(value);
 	}
 
 	ActionMessagesVariableProxy(StackFrameWrapper frameWrapper, IVariable origin, String alias, String type) {
 		super(frameWrapper, origin, alias, type);
-		IValue value = null;
-		try { value = origin.getValue(); } catch (Exception e) { }
+		IValue value = getOriginValue(origin); 
 		initValue(value);
 	}
 
@@ -52,11 +50,23 @@ public class ActionMessagesVariableProxy extends VariableProxy {
 		super(frameWrapper, result, alias, type);
 		IValue value = null;
 		if (result != null && !result.hasErrors()) {
-			try { value = result.getValue(); } catch (Exception e) { }
+			try { 
+				value = result.getValue(); 
+			} catch (Exception e) {
+	        	WebDebugUIPlugin.getPluginLog().logError(e);
+			}
 		}
 		initValue(value);
 	}
 
+	private IValue getOriginValue(IVariable origin) {
+		try { 
+			return origin.getValue(); 
+		} catch (Exception e) { 
+        	WebDebugUIPlugin.getPluginLog().logError(e);
+        	return null;
+		}
+	}
 	private void initValue (IValue value) {
 		fValue = (value == null || value instanceof JDINullValue ? null : new ActionMessagesValueProxy(fStackFrameWrapper, value));		
 	}
@@ -85,7 +95,9 @@ public class ActionMessagesVariableProxy extends VariableProxy {
 		if(thisFrame == null || thisFrame.isTerminated()) return null;
 		IVariable[] stackVars = null;
 		try { stackVars = fStackFrameWrapper.getFrameVariables(); }
-		catch (Exception e) {}
+		catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
+		}
 		
 		IVariable variable = EvaluationSupport.findVariableForName(stackVars, "errors");
 		if (variable != null) return variable;
@@ -99,7 +111,10 @@ public class ActionMessagesVariableProxy extends VariableProxy {
 			IStackFrame currentFrame = (IStackFrame)frames.get(i);
 			if (!thisFrame.equals(currentFrame)) {
 				try { stackVars = fStackFrameWrapper.getFrameVariables(); }
-				catch (Exception e) {}
+				catch (Exception e) {
+		        	WebDebugUIPlugin.getPluginLog().logError(e);
+				}
+				
 				variable = EvaluationSupport.findVariableForName(stackVars, "errors");
 				if (variable != null) return variable;
 			}

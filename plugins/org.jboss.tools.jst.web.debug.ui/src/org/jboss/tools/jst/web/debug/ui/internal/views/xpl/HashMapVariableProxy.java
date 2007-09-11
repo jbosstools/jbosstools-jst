@@ -14,6 +14,7 @@ package org.jboss.tools.jst.web.debug.ui.internal.views.xpl;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
+import org.jboss.tools.jst.web.debug.ui.xpl.WebDebugUIPlugin;
 
 /**
  * @author Jeremy
@@ -43,6 +44,7 @@ public class HashMapVariableProxy extends VariableProxy {
 			fValue = (value == null ?  null : ValueProxyFactory.createValueProxy(fStackFrameWrapper, value, HashMapValueProxy.class));
 			((HashMapValueProxy)fValue).fVariables = null;
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 		fHasValueChanged = false;
 		return fValue;

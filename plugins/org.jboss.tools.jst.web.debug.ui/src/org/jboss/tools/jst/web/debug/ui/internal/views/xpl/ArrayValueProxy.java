@@ -19,6 +19,7 @@ import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.jdt.debug.core.IJavaVariable;
 import org.eclipse.jdt.internal.debug.core.model.JDIValue;
+import org.jboss.tools.jst.web.debug.ui.xpl.WebDebugUIPlugin;
 
 /**
  * @author Jeremy
@@ -50,6 +51,7 @@ public class ArrayValueProxy extends ValueProxy {
 			}
 			fVariables = (IVariable[])variables.toArray(new IVariable[variables.size()]);
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 	}
 
@@ -88,6 +90,7 @@ public class ArrayValueProxy extends ValueProxy {
 			
 //			text = text.append(type).append('(').append(fVariables.size()).append(')');
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 		return text.toString();
 	}

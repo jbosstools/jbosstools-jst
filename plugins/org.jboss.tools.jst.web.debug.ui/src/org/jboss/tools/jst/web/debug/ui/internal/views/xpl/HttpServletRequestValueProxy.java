@@ -22,6 +22,7 @@ import org.eclipse.jdt.debug.core.IJavaValue;
 import org.eclipse.jdt.debug.eval.IEvaluationResult;
 import org.eclipse.jdt.internal.debug.core.model.JDINullValue;
 import org.jboss.tools.jst.web.debug.ui.internal.views.properties.xpl.WebDataProperties;
+import org.jboss.tools.jst.web.debug.ui.xpl.WebDebugUIPlugin;
 import org.jboss.tools.jst.web.debug.xpl.EvaluationSupport;
 
 /**
@@ -78,7 +79,9 @@ public class HttpServletRequestValueProxy extends ValueProxy {
 						IEvaluationResult resultValue = evaluateSessionVariable();
 						HttpSessionVariableProxy variable = new HttpSessionVariableProxy(fStackFrameWrapper, resultValue, "session", "javax.servlet.http.HttpSession");
 						list.add(variable);
-					} catch (Exception x) {}
+					} catch (Exception x) {
+			        	WebDebugUIPlugin.getPluginLog().logError(x);
+					}
 				}
 			}
 			String stopWords = "inputStream reader";
@@ -86,7 +89,9 @@ public class HttpServletRequestValueProxy extends ValueProxy {
 				try {
 					IVariable var = (IVariable)list.get(i);
 					stopWords += " " + var.getName();
-				} catch (Exception x) {}
+				} catch (Exception x) {
+		        	WebDebugUIPlugin.getPluginLog().logError(x);
+				}
 			}
 			
 			FilteredVariablesEnumeration filtered = 
@@ -117,6 +122,7 @@ public class HttpServletRequestValueProxy extends ValueProxy {
 			}
 			
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 	}
 
@@ -135,6 +141,7 @@ public class HttpServletRequestValueProxy extends ValueProxy {
 			if (result == null || result.hasErrors()) return null;
 			return result;
 		} catch (Exception x) {
+        	WebDebugUIPlugin.getPluginLog().logError(x);
 		}
 		return null;
 	}
@@ -153,6 +160,7 @@ public class HttpServletRequestValueProxy extends ValueProxy {
 			if (result == null || result.hasErrors()) return null;
 			return result;
 		} catch (Exception x) {
+        	WebDebugUIPlugin.getPluginLog().logError(x);
 		}
 		return null;
 	}

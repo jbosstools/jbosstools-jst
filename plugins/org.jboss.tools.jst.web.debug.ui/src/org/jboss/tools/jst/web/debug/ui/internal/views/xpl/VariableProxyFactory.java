@@ -18,6 +18,7 @@ import java.util.Map;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.jdt.debug.core.IJavaType;
 import org.eclipse.jdt.debug.core.IJavaVariable;
+import org.jboss.tools.jst.web.debug.ui.xpl.WebDebugUIPlugin;
 
 /**
  * @author Jeremy
@@ -44,6 +45,7 @@ public class VariableProxyFactory {
 			try {
 				vp = (VariableProxy)cls.getDeclaredConstructor(new Class[]{StackFrameWrapper.class, IVariable.class}).newInstance(new Object[]{frameWrapper, origin});
 			} catch (Exception e) {
+	        	WebDebugUIPlugin.getPluginLog().logError(e);
 			}
 			if(origin != null && vp != null) variableProxies.put(origin, vp);
 		}
@@ -76,6 +78,7 @@ public class VariableProxyFactory {
 				return new ActionMessagesVariableProxy(frameWrapper, origin);	
 			}
 		} catch (Exception ex) {
+        	WebDebugUIPlugin.getPluginLog().logError(ex);
 		}
 		return new VariableProxy(frameWrapper, origin);
 	}

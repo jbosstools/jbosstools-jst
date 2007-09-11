@@ -24,6 +24,7 @@ import org.jboss.tools.common.model.ui.attribute.editor.CheckTreeEditor;
 import org.jboss.tools.common.model.ui.attribute.editor.IFieldEditor;
 import org.jboss.tools.common.model.ui.widgets.IWidgetSettings;
 import org.jboss.tools.common.model.ui.widgets.WhiteSettings;
+import org.jboss.tools.jst.web.debug.ui.xpl.WebDebugUIPlugin;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 
 /**
@@ -142,7 +143,7 @@ public class WebDataPreferencePage extends PreferencePage implements IWorkbenchP
 			gd = new GridData(GridData.FILL_BOTH);
 			control[1].setLayoutData(gd);
 		} catch (Exception e) {
-			//ignore
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 		
 		Control button = buttonController.createButton(treeButtonComposite);

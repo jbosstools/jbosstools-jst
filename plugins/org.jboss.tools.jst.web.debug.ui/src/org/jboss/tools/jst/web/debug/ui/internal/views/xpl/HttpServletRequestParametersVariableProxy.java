@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.debug.ui.internal.views.xpl;
 
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.jdt.debug.eval.IEvaluationResult;
+import org.jboss.tools.jst.web.debug.ui.xpl.WebDebugUIPlugin;
 import org.jboss.tools.jst.web.debug.xpl.EvaluationSupport;
 
 /**
@@ -46,6 +47,7 @@ public class HttpServletRequestParametersVariableProxy extends EnumerationVariab
 			}
 			return result;
 		} catch (Exception x) {
+        	WebDebugUIPlugin.getPluginLog().logError(x);
 		}
 		return null;
 	}

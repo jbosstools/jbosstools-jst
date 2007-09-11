@@ -187,6 +187,7 @@ public class ToggleBreakpointAction extends Action implements IUpdate
 			} 
 			catch (BadLocationException ex) 
 			{
+            	WebDebugUIPlugin.getPluginLog().logError(ex);
 			}
 		}
 		return false;

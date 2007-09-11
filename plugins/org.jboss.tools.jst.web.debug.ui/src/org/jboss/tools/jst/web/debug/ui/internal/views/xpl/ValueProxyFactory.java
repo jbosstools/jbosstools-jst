@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.debug.ui.internal.views.xpl;
 
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.jdt.internal.debug.core.model.JDIValue;
+import org.jboss.tools.jst.web.debug.ui.xpl.WebDebugUIPlugin;
 
 /**
  * @author Jeremy
@@ -40,6 +41,7 @@ public class ValueProxyFactory {
 			try {
 				vp = (IValue)cls.getDeclaredConstructor(new Class[]{StackFrameWrapper.class, IValue.class}).newInstance(new Object[]{frameWrapper, value});
 			} catch (Exception e) {
+	        	WebDebugUIPlugin.getPluginLog().logError(e);
 			}
 //			if(value != null && vp != null) valueProxies.put(value, vp);
 		}
@@ -96,6 +98,7 @@ public class ValueProxyFactory {
 				return new ValueProxy(frameWrapper, value);
 			}
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 		
 		return new ValueProxy(frameWrapper, proxy);
@@ -165,6 +168,7 @@ public class ValueProxyFactory {
 				return new ValueProxy(frameWrapper, value);
 			}
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 		
 		return new ValueProxy(frameWrapper, proxy);

@@ -107,6 +107,7 @@ public class FilteredVariablesEnumeration implements Enumeration {
 					return false;
 				}
 			} catch (Exception x) {
+	        	WebDebugUIPlugin.getPluginLog().logError(x);
 			}
 		}
 		
@@ -117,6 +118,7 @@ public class FilteredVariablesEnumeration implements Enumeration {
 					return true;
 				}
 			} catch (Exception x) {
+	        	WebDebugUIPlugin.getPluginLog().logError(x);
 			}
 		}
 		return false;

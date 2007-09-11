@@ -20,6 +20,7 @@ import java.util.Map;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.jboss.tools.jst.web.debug.ui.xpl.WebDebugUIPlugin;
 
 /**
  * @author Jeremy
@@ -77,7 +78,7 @@ public class WebDataProperties implements IPropertyChangeListener {
 		try {
 			fStore.addPropertyChangeListener(this);
 		} catch (Exception x) {
-			//ignore
+        	WebDebugUIPlugin.getPluginLog().logError(x);
 		}
 
 	}
@@ -149,7 +150,7 @@ public class WebDataProperties implements IPropertyChangeListener {
 				}
 			}
 		} catch (Exception x) {
-			//ignore
+        	WebDebugUIPlugin.getPluginLog().logError(x);
 		}
 	}
 
@@ -225,7 +226,7 @@ public class WebDataProperties implements IPropertyChangeListener {
 			try {
 				listeners[i].propertyChanged(property);
 			} catch (Exception x) {
-				//ignore
+            	WebDebugUIPlugin.getPluginLog().logError(x);
 			}
 		}
 	}

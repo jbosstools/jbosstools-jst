@@ -114,6 +114,7 @@ public class WebDataViewEventHandler extends
 				// TODO-3.3: WTP 2.0
 //				((WebDataViewContentProvider) getWebDataView().getWebDataViewer().getContentProvider()).postChange();
 			} catch (Exception x) {
+	        	WebDebugUIPlugin.getPluginLog().logError(x);
 			}
 //			TODO replace with valid code				
 ///			refresh();
@@ -169,6 +170,7 @@ public class WebDataViewEventHandler extends
 ///			refresh();
 			getWebDataView().populateDetailPane();
 		} catch (Exception x) {
+        	WebDebugUIPlugin.getPluginLog().logError(x);
 		}
 	}
 

@@ -17,6 +17,7 @@ import java.util.List;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
+import org.jboss.tools.jst.web.debug.ui.xpl.WebDebugUIPlugin;
 
 /**
  * @author Jeremy
@@ -61,6 +62,7 @@ public class EnumerationValueProxy extends ValueProxy {
 				fVariables = (IVariable[])list.toArray(new IVariable[list.size()]);
 			}
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 	}
 	
@@ -76,6 +78,7 @@ public class EnumerationValueProxy extends ValueProxy {
 			int size = (vars == null ? 0 : vars.length);
 			text = text.append(type).append('(').append(size).append(')');
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 		return text.toString();
 	}

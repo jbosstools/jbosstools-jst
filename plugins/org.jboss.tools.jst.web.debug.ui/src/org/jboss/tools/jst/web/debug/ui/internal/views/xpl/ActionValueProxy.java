@@ -20,6 +20,7 @@ import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.jdt.debug.core.IJavaValue;
 import org.eclipse.jdt.internal.debug.core.model.JDINullValue;
 import org.jboss.tools.jst.web.debug.ui.internal.views.properties.xpl.WebDataProperties;
+import org.jboss.tools.jst.web.debug.ui.xpl.WebDebugUIPlugin;
 
 /**
  * @author Jeremy
@@ -68,6 +69,7 @@ public class ActionValueProxy extends ValueProxy {
 			}
 			
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 	}
 

@@ -18,6 +18,7 @@ import org.eclipse.jdt.debug.core.IJavaArrayType;
 import org.eclipse.jdt.debug.core.IJavaClassType;
 import org.eclipse.jdt.debug.core.IJavaInterfaceType;
 import org.eclipse.jdt.debug.core.IJavaType;
+import org.jboss.tools.jst.web.debug.ui.xpl.WebDebugUIPlugin;
 
 /**
  * @author Jeremy
@@ -42,6 +43,7 @@ public class TypeSupport {
 		try {
 			return SIMPLE_TYPES.contains(javaType.getName());
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 		return false;
 	}
@@ -52,7 +54,9 @@ public class TypeSupport {
 			if (isClassType(javaType)) {
 				return SIMPLE_TYPE_WRAPPERS.contains(javaType.getName());
 			}
-		} catch (Exception x) { }
+		} catch (Exception x) { 
+        	WebDebugUIPlugin.getPluginLog().logError(x);
+		}
 		return false;
 	}
 	
@@ -118,6 +122,7 @@ public class TypeSupport {
 				} 
 			}
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 		return false;
 	}

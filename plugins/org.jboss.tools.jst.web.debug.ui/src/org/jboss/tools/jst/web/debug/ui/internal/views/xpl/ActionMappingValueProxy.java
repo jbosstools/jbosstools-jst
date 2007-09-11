@@ -18,6 +18,7 @@ import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.jdt.internal.debug.core.model.JDINullValue;
+import org.jboss.tools.jst.web.debug.ui.xpl.WebDebugUIPlugin;
 import org.jboss.tools.jst.web.debug.xpl.EvaluationSupport;
 
 /**
@@ -100,6 +101,7 @@ public class ActionMappingValueProxy extends ValueProxy {
 				fVariables = (IVariable[])list.toArray(new IVariable[list.size()]);
 	
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 	}
 	
@@ -114,6 +116,7 @@ public class ActionMappingValueProxy extends ValueProxy {
 	
 			globalForwards = EvaluationSupport.findVariableForName(mcVars, "forwards");
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 		return globalForwards;
 	}
@@ -129,6 +132,7 @@ public class ActionMappingValueProxy extends ValueProxy {
 			
 			globalExceptions = EvaluationSupport.findVariableForName(mcVars, "exceptions");
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 		return globalExceptions;
 	}

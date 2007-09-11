@@ -111,7 +111,9 @@ public class StrutsData implements IVariable, IValue {
 				if (resultValue instanceof IVariable) {
 					var.setOrigin((IVariable)resultValue);
 					try { var.fAlias = ((IVariable)resultValue).getName(); }
-					catch (Exception e) {  } 
+					catch (Exception e) { 
+			        	WebDebugUIPlugin.getPluginLog().logError(e);
+					} 
 				} else {
 					var.fAlias = "mapping"; //$NON-NLS-1$
 					var.fType = "org.apache.struts.action.ActionMapping"; //$NON-NLS-1$
@@ -262,6 +264,7 @@ public class StrutsData implements IVariable, IValue {
 			if (result == null || result.hasErrors()) return null;
 			return result;
 		} catch (Exception x) {
+        	WebDebugUIPlugin.getPluginLog().logError(x);
 		}
 		return null;
 	}
@@ -272,7 +275,9 @@ public class StrutsData implements IVariable, IValue {
 		if(thisFrame == null || thisFrame.isTerminated()) return null;
 		IVariable[] stackVars = null;
 		try { stackVars = parent.getFrameVariables(); }
-		catch (Exception e) { }
+		catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
+		}
 		
 		IVariable variable = EvaluationSupport.findVariableForName(stackVars, "mapping"); //$NON-NLS-1$
 		if (variable != null) return variable;
@@ -291,7 +296,9 @@ public class StrutsData implements IVariable, IValue {
 			IStackFrame currentFrame = (IStackFrame)frames.get(i);
 			if (!thisFrame.equals(currentFrame)) {
 				try { stackVars = parent.getFrameVariables(); }
-				catch (Exception e) { }
+				catch (Exception e) {
+		        	WebDebugUIPlugin.getPluginLog().logError(e);
+				}
 				variable = EvaluationSupport.findVariableForName(stackVars, "mapping"); //$NON-NLS-1$
 				if (variable != null) return variable;
 				variable = EvaluationSupport.findVariableForName(stackVars, "actionMapping"); //$NON-NLS-1$
@@ -307,7 +314,9 @@ public class StrutsData implements IVariable, IValue {
 		if(thisFrame == null || thisFrame.isTerminated()) return null;
 		IVariable[] stackVars = null;
 		try { stackVars = parent.getFrameVariables(); }
-		catch (Exception e) { }
+		catch (Exception e) { 
+        	WebDebugUIPlugin.getPluginLog().logError(e);
+		}
 
 		IVariable variable = EvaluationSupport.findVariableForName(stackVars, "form"); //$NON-NLS-1$
 		if (variable != null) return variable;
@@ -320,6 +329,7 @@ public class StrutsData implements IVariable, IValue {
 				return thisVariable;
 			}
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 		
 		JDIThread thread = (JDIThread)thisFrame.getThread();
@@ -331,7 +341,9 @@ public class StrutsData implements IVariable, IValue {
 			IStackFrame currentFrame = (IStackFrame)frames.get(i);
 			if (!thisFrame.equals(currentFrame)) {
 				try { stackVars = parent.getFrameVariables(); }
-				catch (Exception e) { }
+				catch (Exception e) { 
+		        	WebDebugUIPlugin.getPluginLog().logError(e);
+				}
 				variable = EvaluationSupport.findVariableForName(stackVars, "form"); //$NON-NLS-1$
 				if (variable != null) return variable;
 			}
@@ -348,6 +360,7 @@ public class StrutsData implements IVariable, IValue {
 			if (result == null || result.hasErrors() || !result.getValue().isAllocated()) return null;
 			return result;
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 		return null;
 	}
@@ -358,7 +371,9 @@ public class StrutsData implements IVariable, IValue {
 			if(thisFrame == null || thisFrame.isTerminated()) return null;
 			IVariable[] stackVars = null;
 			try { stackVars = parent.getFrameVariables(); }
-			catch (Exception e) { }
+			catch (Exception e) {
+	        	WebDebugUIPlugin.getPluginLog().logError(e);
+			}
 
 			IVariable thisVariable = EvaluationSupport.findVariableForName(stackVars, "this"); //$NON-NLS-1$
 			if(thisVariable == null) return null;
@@ -367,6 +382,7 @@ public class StrutsData implements IVariable, IValue {
 				return thisVariable;
 			}
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 		return null;
 	}

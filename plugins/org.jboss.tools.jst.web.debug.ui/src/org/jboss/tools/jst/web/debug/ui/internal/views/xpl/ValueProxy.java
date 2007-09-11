@@ -67,6 +67,7 @@ public class ValueProxy implements IValue {
 				fVariables = (IVariable[])list.toArray(new IVariable[list.size()]);
 			}
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 	}
 	
@@ -141,7 +142,9 @@ public class ValueProxy implements IValue {
 			if (!TypeSupport.isSimpleTypeOrWrapper(((IJavaValue)fOrigin).getJavaType())) {
 				return fOrigin.hasVariables();
 			}
-		} catch (Exception e) { }
+		} catch (Exception e) { 
+        	WebDebugUIPlugin.getPluginLog().logError(e);
+		}
 		return false;
 	}
 

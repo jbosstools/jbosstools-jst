@@ -18,6 +18,7 @@ import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.jdt.internal.debug.core.model.JDINullValue;
+import org.jboss.tools.jst.web.debug.ui.xpl.WebDebugUIPlugin;
 import org.jboss.tools.jst.web.debug.xpl.EvaluationSupport;
 
 /**
@@ -65,6 +66,7 @@ public class ArrayListValueProxy extends ValueProxy {
 			}
 
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 	}
 
@@ -81,6 +83,7 @@ public class ArrayListValueProxy extends ValueProxy {
 			int size = (fVariables == null ? 0 : fVariables.length);
 			text = text.append(type).append('(').append(size).append(')');
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 		return text.toString();
 	}

@@ -20,6 +20,7 @@ import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.jdt.debug.eval.IEvaluationResult;
 import org.eclipse.jdt.internal.debug.core.model.JDINullValue;
 import org.eclipse.jdt.internal.debug.core.model.JDIThread;
+import org.jboss.tools.jst.web.debug.ui.xpl.WebDebugUIPlugin;
 import org.jboss.tools.jst.web.debug.xpl.EvaluationSupport;
 
 /**
@@ -29,34 +30,41 @@ public class HttpServletRequestVariableProxy extends VariableProxy {
 				  
 	HttpServletRequestVariableProxy(StackFrameWrapper frameWrapper, IVariable origin) {
 		super(frameWrapper, origin);
-		IValue value = null;
-		try { value = origin.getValue(); } catch (Exception e) { }
-		initValue(value);
+		initValue(getOriginValue(origin));
 	}
 
 	HttpServletRequestVariableProxy(StackFrameWrapper frameWrapper, IVariable origin, String alias) {
 		super(frameWrapper, origin, alias);
-		IValue value = null;
-		try { value = origin.getValue(); } catch (Exception e) { }
-		initValue(value);
+		initValue(getOriginValue(origin));
 	}
 
 	HttpServletRequestVariableProxy(StackFrameWrapper frameWrapper, IVariable origin, String alias, String type) {
 		super(frameWrapper, origin, alias, type);
-		IValue value = null;
-		try { value = origin.getValue(); } catch (Exception e) { }
-		initValue(value);
+		initValue(getOriginValue(origin));
 	}
 
 	HttpServletRequestVariableProxy(StackFrameWrapper frameWrapper, IEvaluationResult result, String alias, String type) {
 		super(frameWrapper, result, alias, type);
 		IValue value = null;
 		if (result != null && !result.hasErrors()) {
-			try { value = result.getValue(); } catch (Exception e) { }
+			try { 
+				value = result.getValue(); 
+			} catch (Exception e) {
+	        	WebDebugUIPlugin.getPluginLog().logError(e);
+			}
 		}
 		initValue(value);
 	}
 
+	private IValue getOriginValue(IVariable origin) {
+		try { 
+			return origin.getValue(); 
+		} catch (Exception e) { 
+        	WebDebugUIPlugin.getPluginLog().logError(e);
+        	return null;
+		}
+	}
+	
 	private void initValue (IValue value) {
 		fValue = (value == null || value instanceof JDINullValue ? null 
 			: ValueProxyFactory.createValueProxy(fStackFrameWrapper, value, HttpServletRequestValueProxy.class));		
@@ -93,7 +101,9 @@ public class HttpServletRequestVariableProxy extends VariableProxy {
 		if(thisFrame == null || thisFrame.isTerminated()) return null;
 		IVariable[] stackVars = null;
 		try { stackVars = stackFrameWrapper.getFrameVariables(); }
-		catch (Exception e) {}
+		catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
+		}
 		
 		IVariable variable = EvaluationSupport.findVariableForName(stackVars, "request");
 		if (variable != null) {
@@ -109,7 +119,9 @@ public class HttpServletRequestVariableProxy extends VariableProxy {
 			IStackFrame currentFrame = (IStackFrame)frames.get(i);
 			if (!thisFrame.equals(currentFrame)) {
 				try { stackVars = stackFrameWrapper.getFrameVariables(); }
-				catch (Exception e) {}
+				catch (Exception e) {
+		        	WebDebugUIPlugin.getPluginLog().logError(e);
+				}
 				variable = EvaluationSupport.findVariableForName(stackVars, "request");
 				if (variable != null) return substByInternalVariable(variable, "request", "javax.servlet.ServletRequest");
 			}

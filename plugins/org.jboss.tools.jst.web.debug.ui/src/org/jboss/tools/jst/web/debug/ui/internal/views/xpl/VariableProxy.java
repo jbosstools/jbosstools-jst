@@ -139,6 +139,7 @@ public class VariableProxy implements IVariable {
 								getReferenceTypeName()));
 			}
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 		fHasValueChanged = false;
 		setChangeCount(fStackFrameWrapper.getChangeCount());
@@ -149,6 +150,7 @@ public class VariableProxy implements IVariable {
 		try {
 			return fResult.getValue();
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 		return null;
 	}
@@ -157,6 +159,7 @@ public class VariableProxy implements IVariable {
 		try {
 			return fOrigin.getValue();
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 		return null;
 	}
@@ -276,6 +279,7 @@ public class VariableProxy implements IVariable {
 					return v;
 			}
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 		return variable;
 	}

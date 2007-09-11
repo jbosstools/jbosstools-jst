@@ -19,6 +19,7 @@ import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.jdt.debug.core.IJavaVariable;
 import org.eclipse.jdt.internal.debug.core.model.JDINullValue;
+import org.jboss.tools.jst.web.debug.ui.xpl.WebDebugUIPlugin;
 import org.jboss.tools.jst.web.debug.xpl.EvaluationSupport;
 
 /**
@@ -62,6 +63,7 @@ public class HashMapValueProxy extends ValueProxy {
 			}
 
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 	}
 	
@@ -97,6 +99,7 @@ public class HashMapValueProxy extends ValueProxy {
 					count++;
 				}
 			} catch (Exception e) {
+	        	WebDebugUIPlugin.getPluginLog().logError(e);
 			}
 		}
 		return count;
@@ -113,6 +116,7 @@ public class HashMapValueProxy extends ValueProxy {
 			int size = getMapSize();
 			text = text.append(type).append('(').append(size).append(')');
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 		return text.toString();
 	}

@@ -15,6 +15,7 @@ import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.jdt.internal.debug.core.model.JDINullValue;
+import org.jboss.tools.jst.web.debug.ui.xpl.WebDebugUIPlugin;
 import org.jboss.tools.jst.web.debug.xpl.EvaluationSupport;
 
 /**
@@ -62,6 +63,7 @@ public class EnumerationEntryValueProxy extends HashMapEntryValueProxy {
 			fVariables[1] = VariableProxyFactory.createVariable(fStackFrameWrapper, value);
 			((VariableProxy)fVariables[1]).setOrigin(value);
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 	}
 
@@ -78,6 +80,7 @@ public class EnumerationEntryValueProxy extends HashMapEntryValueProxy {
 			String value = fVariables[1].getValue().getValueString();
 			text = text.append('<').append(key).append("> : <").append(value).append('>');
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 		return text.toString();
 	}

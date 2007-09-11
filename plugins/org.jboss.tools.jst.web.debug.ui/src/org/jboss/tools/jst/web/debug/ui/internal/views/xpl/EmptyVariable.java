@@ -23,6 +23,7 @@ import org.eclipse.jdt.internal.debug.core.model.JDIDebugTarget;
 import org.eclipse.jdt.internal.debug.core.model.JDINullValue;
 import org.eclipse.jdt.internal.debug.core.model.JDIStackFrame;
 
+import org.jboss.tools.jst.web.debug.ui.xpl.WebDebugUIPlugin;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 
 /**
@@ -57,6 +58,7 @@ public class EmptyVariable implements IVariable {
 			if (showTypeName) text = text.append(getReferenceTypeName()).append(' ');
 			text = text.append(getName()).append(WebUIMessages.VALUE_NOT_RESOLVED);
 		} catch (Exception x) {
+        	WebDebugUIPlugin.getPluginLog().logError(x);
 		}
 		return text.toString(); 
 	}

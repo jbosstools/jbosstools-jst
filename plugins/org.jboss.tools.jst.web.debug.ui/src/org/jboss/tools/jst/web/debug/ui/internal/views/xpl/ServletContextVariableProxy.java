@@ -24,6 +24,7 @@ import org.eclipse.jdt.debug.core.IJavaValue;
 import org.eclipse.jdt.debug.eval.IEvaluationResult;
 import org.eclipse.jdt.internal.debug.core.model.JDINullValue;
 import org.jboss.tools.jst.web.debug.ui.internal.views.properties.xpl.WebDataProperties;
+import org.jboss.tools.jst.web.debug.ui.xpl.WebDebugUIPlugin;
 import org.jboss.tools.jst.web.debug.xpl.EvaluationSupport;
 
 /**
@@ -35,32 +36,39 @@ public class ServletContextVariableProxy extends VariableProxy {
 
 	ServletContextVariableProxy(StackFrameWrapper frameWrapper, IVariable origin) {
 		super(frameWrapper, origin);
-		IValue value = null;
-		try { value = origin.getValue(); } catch (Exception e) { }
-		initValue(value);
+		initValue(getOriginValue(origin));
 	}
 
 	ServletContextVariableProxy(StackFrameWrapper frameWrapper, IVariable origin, String alias) {
 		super(frameWrapper, origin, alias);
-		IValue value = null;
-		try { value = origin.getValue(); } catch (Exception e) { }
-		initValue(value);
+		initValue(getOriginValue(origin));
 	}
 
 	ServletContextVariableProxy(StackFrameWrapper frameWrapper, IVariable origin, String alias, String type) {
 		super(frameWrapper, origin, alias, type);
-		IValue value = null;
-		try { value = origin.getValue(); } catch (Exception e) { }
-		initValue(value);
+		initValue(getOriginValue(origin));
 	}
 
 	ServletContextVariableProxy(StackFrameWrapper frameWrapper, IEvaluationResult result, String alias, String type) {
 		super(frameWrapper, result, alias, type);
 		IValue value = null;
 		if (result != null && !result.hasErrors()) {
-			try { value = result.getValue(); } catch (Exception e) { }
+			try { 
+				value = result.getValue(); 
+			} catch (Exception e) { 
+	        	WebDebugUIPlugin.getPluginLog().logError(e);
+			}
 		}
 		initValue(value);
+	}
+
+	private IValue getOriginValue(IVariable origin) {
+		try { 
+			return origin.getValue(); 
+		} catch (Exception e) { 
+        	WebDebugUIPlugin.getPluginLog().logError(e);
+        	return null;
+		}
 	}
 
 	private void initValue (IValue value) {
@@ -101,6 +109,7 @@ public class ServletContextVariableProxy extends VariableProxy {
 			if (result == null || result.hasErrors()) return null;
 			return result;
 		} catch (Exception x) {
+        	WebDebugUIPlugin.getPluginLog().logError(x);
 		}
 		return null;
 	}
@@ -148,7 +157,9 @@ class ServletContextValueProxy extends ValueProxy {
 				try {
 					IVariable var = (IVariable)list.get(i);
 					stopWords += " " + var.getName();
-				} catch (Exception x) {}
+				} catch (Exception x) {
+		        	WebDebugUIPlugin.getPluginLog().logError(x);
+				}
 			}
 			
 			FilteredVariablesEnumeration filtered = 
@@ -179,6 +190,7 @@ class ServletContextValueProxy extends ValueProxy {
 			}
 			
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 	}
 

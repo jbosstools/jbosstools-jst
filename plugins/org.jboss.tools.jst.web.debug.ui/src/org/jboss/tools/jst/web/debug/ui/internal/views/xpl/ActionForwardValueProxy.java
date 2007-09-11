@@ -14,6 +14,7 @@ package org.jboss.tools.jst.web.debug.ui.internal.views.xpl;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
+import org.jboss.tools.jst.web.debug.ui.xpl.WebDebugUIPlugin;
 import org.jboss.tools.jst.web.debug.xpl.EvaluationSupport;
 
 /**
@@ -50,6 +51,7 @@ public class ActionForwardValueProxy extends ValueProxy {
 			fVariables[2] = VariableProxyFactory.createVariable(fStackFrameWrapper, redirect, VariableProxy.class);
 			fVariables[3] = VariableProxyFactory.createVariable(fStackFrameWrapper, contextRelative, VariableProxy.class);
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 	}
 

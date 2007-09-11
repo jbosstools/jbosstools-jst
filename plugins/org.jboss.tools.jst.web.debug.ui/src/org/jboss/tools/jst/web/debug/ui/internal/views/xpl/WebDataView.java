@@ -208,6 +208,7 @@ public class WebDataView extends VariablesView implements
 					return getVariableProxyText((IVariable) element, true);
 				}
 			} catch (Exception e) {
+	        	WebDebugUIPlugin.getPluginLog().logError(e);
 			}
 			return super.getText(element);
 		}
@@ -247,6 +248,7 @@ public class WebDataView extends VariablesView implements
 				if (notNull && quoteValue)
 					text = text.append('"');
 			} catch (Exception e) {
+	        	WebDebugUIPlugin.getPluginLog().logError(e);
 			}
 			return text.toString();
 		}
@@ -280,6 +282,7 @@ public class WebDataView extends VariablesView implements
 				if (notNull && quoteValue)
 					text = text.append('"');
 			} catch (Exception e) {
+	        	WebDebugUIPlugin.getPluginLog().logError(e);
 			}
 			return text.toString();
 		}
@@ -293,6 +296,7 @@ public class WebDataView extends VariablesView implements
 							' ');
 				text = text.append(variable.getName());
 			} catch (Exception e) {
+	        	WebDebugUIPlugin.getPluginLog().logError(e);
 			}
 			return text.toString();
 		}
@@ -334,6 +338,7 @@ public class WebDataView extends VariablesView implements
 				try {
 					origin = ((ActionMappingValueProxy) value).getOrigin();
 				} catch (Exception e) {
+		        	WebDebugUIPlugin.getPluginLog().logError(e);
 				}
 				if (origin != null) {
 					ProxyValueDetailListener pl = new ProxyValueDetailListener(
@@ -350,6 +355,7 @@ public class WebDataView extends VariablesView implements
 				try {
 					origin = ((ValueProxy) value).getOrigin();
 				} catch (Exception e) {
+		        	WebDebugUIPlugin.getPluginLog().logError(e);
 				}
 				if (origin != null) {
 					ProxyValueDetailListener pl = new ProxyValueDetailListener(
@@ -670,7 +676,7 @@ public class WebDataView extends VariablesView implements
 
 			loadTree();
 		} catch (Exception x) {
-			//ignore
+        	WebDebugUIPlugin.getPluginLog().logError(x);
 		}
 	}
 
@@ -728,6 +734,7 @@ public class WebDataView extends VariablesView implements
 			try {
 				t = d.getThreads();
 			} catch (Exception e) {
+	        	WebDebugUIPlugin.getPluginLog().logError(e);
 			}
 			for (int i = 0; i < t.length; i++)
 				fExpandedVariables.remove(t[i]);

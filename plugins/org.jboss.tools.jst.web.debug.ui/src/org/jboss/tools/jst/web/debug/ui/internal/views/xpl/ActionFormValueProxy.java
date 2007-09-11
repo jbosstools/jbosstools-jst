@@ -22,6 +22,7 @@ import org.eclipse.jdi.internal.MethodImpl;
 import org.eclipse.jdt.debug.eval.IEvaluationResult;
 import org.eclipse.jdt.internal.debug.core.model.JDIDebugTarget;
 import org.eclipse.jdt.internal.debug.core.model.JDIValue;
+import org.jboss.tools.jst.web.debug.ui.xpl.WebDebugUIPlugin;
 import org.jboss.tools.jst.web.debug.xpl.EvaluationSupport;
 
 import com.sun.jdi.ClassType;
@@ -101,7 +102,7 @@ public class ActionFormValueProxy extends ValueProxy {
 								} 
 			
 							} catch (Exception e) {
-								//ignore
+				            	WebDebugUIPlugin.getPluginLog().logError(e);
 							}
 						}
 					}
@@ -110,6 +111,7 @@ public class ActionFormValueProxy extends ValueProxy {
 			
 			fVariables = (IVariable[])variables.toArray(new IVariable[variables.size()]);
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 	}
 

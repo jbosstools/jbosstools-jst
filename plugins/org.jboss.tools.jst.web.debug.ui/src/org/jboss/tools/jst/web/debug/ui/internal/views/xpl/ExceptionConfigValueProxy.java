@@ -14,6 +14,7 @@ package org.jboss.tools.jst.web.debug.ui.internal.views.xpl;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
+import org.jboss.tools.jst.web.debug.ui.xpl.WebDebugUIPlugin;
 import org.jboss.tools.jst.web.debug.xpl.EvaluationSupport;
 
 /**
@@ -49,6 +50,7 @@ public class ExceptionConfigValueProxy extends ValueProxy {
 			fVariables[2] = new VariableProxy(fStackFrameWrapper, path);
 			fVariables[3] = new VariableProxy(fStackFrameWrapper, scope);
 		} catch (Exception e) {
+        	WebDebugUIPlugin.getPluginLog().logError(e);
 		}
 	}
 
