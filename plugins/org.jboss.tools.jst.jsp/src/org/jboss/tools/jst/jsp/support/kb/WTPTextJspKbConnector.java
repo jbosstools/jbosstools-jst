@@ -180,13 +180,24 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
 	private Map<String,Object> trackers = new HashMap<String,Object>();
 	private Map<String,LoadBundleInfo> loadedBundles = new HashMap<String,LoadBundleInfo>();
 
-	private final static String TRACKERS_TO_WATCH = "http://java.sun.com/jsf/core";
+	private final static String[] TRACKERS_TO_WATCH = {"http://java.sun.com/jsf/core",
+		"https://ajax4jsf.dev.java.net/ajax"
+	};
     private boolean taglibTrackerListenerInstalled = false;
 
 	public void invokeDelayedUpdateKnownTagLists() {
 		timer.schedule(new MyTimerTask(), 500);
 	}
 
+	private boolean isTrackerToWatch(String trackerUri) {
+		for(int i=0; TRACKERS_TO_WATCH != null && i<TRACKERS_TO_WATCH.length; i++) {
+			if (TRACKERS_TO_WATCH[i].equals(trackerUri)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public void initTaglibPrefixes() {
 		trackers.clear();
 		if(taglibManagerProvider==null || taglibManagerProvider.getTaglibManager()==null) {
@@ -195,7 +206,7 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
 				List list = manager.getTaglibTrackers();
 				for(int i=0; i<list.size(); i++) {
 					TaglibTracker tracker = (TaglibTracker)list.get(i);
-					if (TRACKERS_TO_WATCH.equals(tracker.getURI())) {
+					if (isTrackerToWatch(tracker.getURI())) {
 						trackers.put(tracker.getPrefix(), tracker);
 					}
 				}
@@ -204,7 +215,7 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
 			List list = taglibManagerProvider.getTaglibManager().getTagLibs();
 			for(int i=0; i<list.size(); i++) {
 				TaglibData data = (TaglibData)list.get(i);
-				if (TRACKERS_TO_WATCH.equals(data.getUri())) {
+				if (isTrackerToWatch(data.getUri())) {
 					trackers.put(data.getPrefix(), data);
 				}
 			}
@@ -219,7 +230,7 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
 				List list = manager.getTaglibTrackers();
 				for(int i=0; i<list.size(); i++) {
 					TaglibTracker tracker = (TaglibTracker)list.get(i);
-					if (TRACKERS_TO_WATCH.equals(tracker.getURI())) {
+					if (isTrackerToWatch(tracker.getURI())) {
 						trackers.put(tracker.getPrefix(), tracker);
 					}
 				}
@@ -227,7 +238,7 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
 				List list = taglibManagerProvider.getTaglibManager().getTagLibs();
 				for(int i=0; i<list.size(); i++) {
 					TaglibData data = (TaglibData)list.get(i);
-					if (TRACKERS_TO_WATCH.equals(data.getUri())) {
+					if (isTrackerToWatch(data.getUri())) {
 						trackers.put(data.getPrefix(), data);
 					}
 				}
