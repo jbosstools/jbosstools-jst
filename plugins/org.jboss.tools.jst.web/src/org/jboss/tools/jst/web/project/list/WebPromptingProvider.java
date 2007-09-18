@@ -11,6 +11,8 @@
 package org.jboss.tools.jst.web.project.list;
 
 import java.util.*;
+
+import org.eclipse.core.runtime.Platform;
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.util.ModelFeatureFactory;
 import org.jboss.tools.jst.web.WebModelPlugin;
@@ -20,15 +22,17 @@ public class WebPromptingProvider implements IWebPromptingProvider {
 	static IWebPromptingProvider[] providers;
 	
 	static {
-		String[] pns = new String[]{
-			"org.jboss.tools.jsf.model.pv.JSFPromptingProvider",
-			"org.jboss.tools.struts.model.pv.StrutsPromptingProvider",
-			"org.jboss.tools.shale.model.pv.ShalePromptingProvider"
+		String[][] pns = new String[][]{
+			{"org.jboss.tools.jsf.model.pv.JSFPromptingProvider", "org.jboss.tools.jsf"},
+			{"org.jboss.tools.struts.model.pv.StrutsPromptingProvider", "org.jboss.tools.struts"},
+			{"org.jboss.tools.shale.model.pv.ShalePromptingProvider", "org.jboss.tools.shale"}
 		};
 		List<IWebPromptingProvider> l = new ArrayList<IWebPromptingProvider>();
 		for (int i = 0; i < pns.length; i++) {
+			String bundleName = pns[i][1];
+			if(Platform.getBundle(bundleName) == null) continue;
 			try {
-				IWebPromptingProvider p = (IWebPromptingProvider)ModelFeatureFactory.getInstance().createFeatureInstance(pns[i]);
+				IWebPromptingProvider p = (IWebPromptingProvider)ModelFeatureFactory.getInstance().createFeatureInstance(pns[i][0]);
 				if(p != null) l.add(p);
 			} catch (Exception e) {
 				WebModelPlugin.getPluginLog().logError(e);
