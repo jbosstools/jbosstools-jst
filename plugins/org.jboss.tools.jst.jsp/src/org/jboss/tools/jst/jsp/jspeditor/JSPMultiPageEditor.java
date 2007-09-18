@@ -146,8 +146,8 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	private void loadSelectedTab() {
 		IFile file = getFile();
 		try {
-			String q = file.getPersistentProperty(persistentTabQualifiedName);
-			if (q == null)
+			String q = (file == null) ? null : file.getPersistentProperty(persistentTabQualifiedName);
+			if (q == null) {
 				if ("Source".equalsIgnoreCase(VpePreference.EDITOR_VIEW_OPTION
 						.getValue()))
 					selectedPageIndex = 2;
@@ -157,7 +157,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 					selectedPageIndex = 1;
 				else
 					selectedPageIndex = 0;
-			else {
+			} else {
 				int qi = Integer.parseInt(q);
 				
 				if (qi >= 0 && qi < getTabFolder().getItemCount())
@@ -175,6 +175,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 
 	private void saveSelectedTab() {
 		IFile file = getFile();
+		if(file == null) return;
 		String q = "" + selectedPageIndex;
 		try {
 			file.setPersistentProperty(persistentTabQualifiedName, q);
@@ -253,9 +254,9 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	}
 
 	private void updateFile() {
+		IFile file = getFile();
+		if (file == null) return;
 		try {
-			IFile file = getFile();
-			if (file != null)
 			file.refreshLocal(0, null);
 		} catch (CoreException e) {
 			JspEditorPlugin.getPluginLog().logWarning(e);
