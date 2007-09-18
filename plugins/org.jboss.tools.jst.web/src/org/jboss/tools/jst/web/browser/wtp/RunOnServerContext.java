@@ -57,11 +57,7 @@ public class RunOnServerContext extends AbstractBrowserContext {
 				continue;
 			}
 			String classname = pathSources[i][0];
-			try {
-				ModelFeatureFactory.getInstance().createFeatureInstance(classname);
-			} catch (Exception e) {
-				WebModelPlugin.getPluginLog().logError(e);
-			}
+			ModelFeatureFactory.getInstance().createFeatureInstance(classname);
 		}
 	}
 
@@ -79,6 +75,7 @@ public class RunOnServerContext extends AbstractBrowserContext {
 		if(server == null ) return "%server%" + WebUIMessages.CANNOT_RUN_SELECTION_WITHOUT_AVAILABLE_SERVER;
 		IProject p = EclipseResourceUtil.getProject(model.getRoot());
 		if(p != null && (!p.exists() || !p.isOpen())) p = null;
+		if(p == null) return null;
 		IModule ms = null;
 		try {
 			// TODO Ear project can contain several Web modules, so when ear is selected several options can be shown in
@@ -87,7 +84,6 @@ public class RunOnServerContext extends AbstractBrowserContext {
 		} catch (Exception e) {
 			WebModelPlugin.getPluginLog().logError(e);
 		}
-//		WebResource wr = (ms == null || ms.length == 0) ? null : new WebResource(ms[0], new Path(""));
 		WebResource wr = (ms == null) ? null : new WebResource(ms, new Path("")); //$NON-NLS-1$
 
 		HttpLaunchable launchable = getLaunchable(server, wr);
