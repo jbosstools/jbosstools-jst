@@ -32,10 +32,19 @@ public class FileTLDRecognizer implements EntityRecognizer, TLDConstants {
     public FileTLDRecognizer() {}
 
     public String getEntityName(String ext, String body) {
-        return (body == null || !"tld".equals(ext)) ? null :
-               (body.indexOf(TLD_DOC_PUBLICID_1_1) >= 0) ? "FileTLD_PRO" :
-               (body.indexOf(TLD_DOC_PUBLICID_1_2) >= 0) ? "FileTLD_1_2" :
-		       (body.indexOf("<taglib") >= 0 
+    	if((body == null || !"tld".equals(ext))) return null;
+        int i = body.indexOf("<!DOCTYPE");
+        if(i >= 0) {
+        	int j = body.indexOf(">", i);
+        	if(j < 0) return null;
+        	String dt = body.substring(i, j);
+        	if(dt.indexOf("taglib") < 0) return null;
+        	if(dt.indexOf(TLD_DOC_PUBLICID_1_1) > 0) return "FileTLD_PRO";
+        	if(dt.indexOf(TLD_DOC_PUBLICID_1_2) > 0) return "FileTLD_1_2";
+        	if(dt.indexOf("SYSTEM") > 0 && dt.indexOf("web-jsptaglibrary_1_1.dtd") > 0) return "FileTLD_PRO";
+        	if(dt.indexOf("SYSTEM") > 0 && dt.indexOf("web-jsptaglibrary_1_2.dtd") > 0) return "FileTLD_1_2";
+        }
+        return (body.indexOf("<taglib") >= 0 
 		        && body.indexOf(VERSION_2_0) > 0
 		        && body.indexOf("xmlns=" + XMLNS_2_0) > 0) ? "FileTLD_2_0" :
 		       (isTLD20WithNamespace(body, VERSION_2_0, XMLNS_2_0)) ? "FileTLD_2_0" :

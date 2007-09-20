@@ -27,10 +27,19 @@ public class FileWebAppRecognizer implements EntityRecognizer {
     }
 
     public String getEntityName(String ext, String body) {
-        return (body == null || !"xml".equals(ext)) ? null :                 
-               (body.indexOf(WebAppConstants.DOC_PUBLICID) >= 0 ||
-                body.indexOf(WebAppConstants.DOC_PUBLICID_2_3) >= 0) ? "FileWebApp" :
-		       (body.indexOf("<web-app") >= 0 
+    	if((body == null || !"xml".equals(ext))) return null;
+        int i = body.indexOf("<!DOCTYPE");
+        if(i >= 0) {
+        	int j = body.indexOf(">", i);
+        	if(j < 0) return null;
+        	String dt = body.substring(i, j);
+        	if(dt.indexOf("web-app") < 0) return null;
+        	if(dt.indexOf(WebAppConstants.DOC_PUBLICID) > 0) return "FileWebApp";
+        	if(dt.indexOf(WebAppConstants.DOC_PUBLICID_2_3) > 0) return "FileWebApp";
+        	if(dt.indexOf("SYSTEM") > 0 && dt.indexOf("web-app_2_3.dtd") > 0) return "FileWebApp";
+        }
+
+    	return (body.indexOf("<web-app") >= 0 
 		        && body.indexOf("version=\"2.4\"") > 0
 		        && body.indexOf("xmlns=\"http://java.sun.com/xml/ns/j2ee\"") > 0) ? "FileWebApp24" :
 		       (body.indexOf("<web-app") >= 0 
