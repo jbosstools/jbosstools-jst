@@ -23,7 +23,6 @@ import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jst.jsp.core.internal.contentmodel.TaglibController;
 import org.eclipse.jst.jsp.core.internal.contentmodel.tld.TLDCMDocumentManager;
 import org.eclipse.jst.jsp.core.internal.contentmodel.tld.TaglibTracker;
-import org.eclipse.jst.jsp.ui.internal.preferences.JSPUIPreferenceNames;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.wst.html.ui.internal.HTMLUIPlugin;
@@ -511,27 +510,27 @@ public class RedHatHtmlContentAssistProcessor extends HTMLContentAssistProcessor
 		}
 	}
 
-	private char[] autoActivChars;
-
 	public char[] getCompletionProposalAutoActivationCharacters() {
-		if(autoActivChars==null) {
-			IPreferenceStore store = HTMLUIPlugin.getDefault().getPreferenceStore();
-			if(store.isDefault(JSPUIPreferenceNames.AUTO_PROPOSE_CODE)) {
-				String superDefaultChars = store.getDefaultString(HTMLUIPreferenceNames.AUTO_PROPOSE_CODE);
-				StringBuffer customDefaultChars = new StringBuffer(superDefaultChars);
-				if(superDefaultChars.indexOf(".")<0) {
-					customDefaultChars.append('.');
-					store.setDefault(HTMLUIPreferenceNames.AUTO_PROPOSE_CODE, customDefaultChars.toString());
-					store.setValue(HTMLUIPreferenceNames.AUTO_PROPOSE_CODE, customDefaultChars.toString());
-				}
-				if(autoActivChars==null) {
-					autoActivChars = new char[customDefaultChars.length()];
-					customDefaultChars.getChars(0, customDefaultChars.length(), autoActivChars, 0);
-				}
-			} else {
-				return super.getCompletionProposalAutoActivationCharacters();
-			}
+		char[] autoActivChars = null;
+		char[] superAutoActivChars = super.getCompletionProposalAutoActivationCharacters();
+		if(superAutoActivChars==null) {
+			return superAutoActivChars;
 		}
+
+		autoActivChars = superAutoActivChars;
+		IPreferenceStore store = HTMLUIPlugin.getDefault().getPreferenceStore();
+		if(store.isDefault(HTMLUIPreferenceNames.AUTO_PROPOSE_CODE)) {
+//			String superDefaultChars = store.getDefaultString(JSPUIPreferenceNames.AUTO_PROPOSE_CODE);
+			StringBuffer redhatDefaultChars = new StringBuffer(new String(superAutoActivChars));
+			if(redhatDefaultChars.indexOf(".")<0) {
+				redhatDefaultChars.append('.');
+				store.setDefault(HTMLUIPreferenceNames.AUTO_PROPOSE_CODE, redhatDefaultChars.toString());
+				store.setValue(HTMLUIPreferenceNames.AUTO_PROPOSE_CODE, redhatDefaultChars.toString());
+			}
+			autoActivChars = new char[redhatDefaultChars.length()];
+			redhatDefaultChars.getChars(0, redhatDefaultChars.length(), autoActivChars, 0);
+		}
+
 		return autoActivChars;
 	}
 
