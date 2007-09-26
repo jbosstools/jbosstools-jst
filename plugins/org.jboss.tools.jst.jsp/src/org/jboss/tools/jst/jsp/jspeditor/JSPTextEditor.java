@@ -81,7 +81,9 @@ import org.eclipse.wst.xml.core.internal.document.AttrImpl;
 import org.eclipse.wst.xml.core.internal.document.ElementImpl;
 import org.jboss.tools.common.core.resources.XModelObjectEditorInput;
 import org.jboss.tools.common.meta.action.XActionInvoker;
+import org.jboss.tools.common.model.XModelBuffer;
 import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.XModelTransferBuffer;
 import org.jboss.tools.common.model.filesystems.impl.FileAnyImpl;
 import org.jboss.tools.common.model.filesystems.impl.FolderImpl;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
@@ -647,21 +649,31 @@ public class JSPTextEditor extends StructuredTextEditor implements
 	}
 
 	public void runDropCommand(final String flavor, final String data) {
+		XModelBuffer b = XModelTransferBuffer.getInstance().getBuffer();
+		final XModelObject o = b.source();
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				if (parentEditor.getVisualEditor().getController() != null) {
-					DropData dropData = new DropData(flavor,
+					if(!XModelTransferBuffer.getInstance().isEnabled()) {
+						XModelTransferBuffer.getInstance().enable();
+						XModelTransferBuffer.getInstance().getBuffer().addSource(o);
+					}
+					try {
+						DropData dropData = new DropData(flavor,
 							data,
 							parentEditor.getVisualEditor().getController()
 									.getPageContext(),
 							getEditorInput(), getSourceViewer(),
 							getSelectionProvider());
-					dropData.setAttributeName(dropContext.getAttributeName());
-					IDropCommand dropCommand = DropCommandFactory.getInstance().getDropCommand(flavor, JSPTagProposalFactory.getInstance());
+						dropData.setAttributeName(dropContext.getAttributeName());
+						IDropCommand dropCommand = DropCommandFactory.getInstance().getDropCommand(flavor, JSPTagProposalFactory.getInstance());
 
-					boolean promptAttributes = "yes".equals(VpePreference.ALWAYS_REQUEST_FOR_ATTRIBUTE.getValue());
-					dropCommand.getDefaultModel().setPromptForTagAttributesRequired(promptAttributes);
-					dropCommand.execute(dropData);
+						boolean promptAttributes = "yes".equals(VpePreference.ALWAYS_REQUEST_FOR_ATTRIBUTE.getValue());
+						dropCommand.getDefaultModel().setPromptForTagAttributesRequired(promptAttributes);
+						dropCommand.execute(dropData);
+					} finally {
+						XModelTransferBuffer.getInstance().disable();
+					}
 				}
 			}
 		});
