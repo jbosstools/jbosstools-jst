@@ -650,11 +650,11 @@ public class JSPTextEditor extends StructuredTextEditor implements
 
 	public void runDropCommand(final String flavor, final String data) {
 		XModelBuffer b = XModelTransferBuffer.getInstance().getBuffer();
-		final XModelObject o = b.source();
+		final XModelObject o = b == null ? null : b.source();
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
 				if (parentEditor.getVisualEditor().getController() != null) {
-					if(!XModelTransferBuffer.getInstance().isEnabled()) {
+					if(o != null && !XModelTransferBuffer.getInstance().isEnabled()) {
 						XModelTransferBuffer.getInstance().enable();
 						XModelTransferBuffer.getInstance().getBuffer().addSource(o);
 					}
