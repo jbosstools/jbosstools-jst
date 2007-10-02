@@ -125,7 +125,8 @@ public class ChangeTimeStampActionDelegate implements IWorkbenchWindowActionDele
 		List<IFile> fs = getFilesToTouch(project);
 		for (int i = 0; i < fs.size(); i++) {
 			IFile f = (IFile)fs.get(i);
-			f.touch(new NullProgressMonitor());			
+			f.setLocalTimeStamp(System.currentTimeMillis());
+			f.touch(new NullProgressMonitor());	// done so deployers/listeners can detect the actual change.		
 		}
 	}
 
