@@ -98,6 +98,8 @@ public class ImportTLDToPaletteSupport extends SpecialWizardSupport {
 		added.setAttributeValue(URIConstants.LIBRARY_URI, getAttributeValue(0, URIConstants.LIBRARY_URI));
 		added.setAttributeValue(URIConstants.DEFAULT_PREFIX, getAttributeValue(0, URIConstants.DEFAULT_PREFIX)); 
 		PaletteAdopt.add(parent, getTarget(), added);
+
+		parent.getModel().saveOptions();
 	}
 
 	XModelObject selectedFile;
