@@ -71,17 +71,19 @@ public class CreateJSPFileSupport extends CreateFileSupport {
 	protected String getDefaultPageTemplate() {
 		String defaultPageTemplate = null;
 		String nature = getTarget().getModel().getProperties().getProperty("nature");
-		try {
-			if(nature.indexOf("jsf") >= 0) {
-				XModelObject obj = PreferenceModelUtilities.getPreferenceModel().getByPath(NewJSFProjectPath);
-				defaultPageTemplate = obj.getAttributeValue("Page Template");
-			}  else if(nature.indexOf("struts") >= 0) {
-				XModelObject obj = PreferenceModelUtilities.getPreferenceModel().getByPath(NewStrutsProjectPath);
-				defaultPageTemplate = obj.getAttributeValue("Page Template");
-			}
-		} catch (Exception x) {
-			WebModelPlugin.getPluginLog().logError(x);
+		if(nature == null) {
+			return null;
 		}
+		String prefPath = (nature.indexOf("jsf") >= 0) ? NewJSFProjectPath :
+			(nature.indexOf("struts") >= 0) ? NewStrutsProjectPath :
+			null;
+		if(prefPath == null) return null;
+		XModelObject pref = PreferenceModelUtilities.getPreferenceModel().getByPath(prefPath);
+		if(pref == null) {
+			WebModelPlugin.getPluginLog().logError("Cannot find preference object " + prefPath, new Exception());
+			return null;
+		}
+		defaultPageTemplate = pref.getAttributeValue("Page Template");
 		return defaultPageTemplate;
 	}
 
