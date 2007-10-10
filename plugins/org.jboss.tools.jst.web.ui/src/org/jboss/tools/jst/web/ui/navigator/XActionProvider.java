@@ -14,6 +14,7 @@ import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuManager;
@@ -26,12 +27,14 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.actions.ActionContext;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.navigator.CommonActionProvider;
+import org.eclipse.ui.navigator.ICommonActionConstants;
 import org.jboss.tools.common.meta.action.XAction;
 import org.jboss.tools.common.meta.action.XActionList;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.ui.action.XModelObjectAction;
 import org.jboss.tools.common.model.ui.action.XModelObjectActionList;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
+import org.jboss.tools.common.model.util.FindObjectHelper;
 
 public class XActionProvider extends CommonActionProvider {
 
@@ -50,6 +53,7 @@ public class XActionProvider extends CommonActionProvider {
 			registerAction(actionBars, o, "CopyActions.Copy", ActionFactory.COPY.getId());
 			registerAction(actionBars, o, "CopyActions.Paste", ActionFactory.PASTE.getId());
 			registerAction(actionBars, o, "CopyActions.Cut", ActionFactory.CUT.getId());
+			actionBars.setGlobalActionHandler(ICommonActionConstants.OPEN, new XOpenAction(o));
 		}
     }
     
@@ -137,3 +141,17 @@ public class XActionProvider extends CommonActionProvider {
 	}
 }
 
+class XOpenAction extends Action {
+	XModelObject o;
+	
+	public XOpenAction(XModelObject o) {
+		this.o = o;
+	}
+
+	public void run() {
+		if(o != null) {
+			FindObjectHelper.findModelObject(o, FindObjectHelper.IN_EDITOR_ONLY);
+		}
+	}
+
+}

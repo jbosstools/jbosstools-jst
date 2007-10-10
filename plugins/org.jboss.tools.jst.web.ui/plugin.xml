@@ -370,6 +370,7 @@
     <includes>
       <contentExtension pattern="org.jboss.tools.jst.web.ui.navigator.fileContent" />
       <contentExtension pattern="org.jboss.tools.jst.web.ui.navigator.projectContent" />
+	  <contentExtension pattern="org.jboss.tools.jst.web.ui.navigator.XLinkHelper"/>
     </includes>
   </viewerContentBinding>
 </extension>
@@ -445,6 +446,25 @@
     </dropAssistant>
   </navigatorContent>
 </extension>
+
+    <extension
+          point="org.eclipse.ui.navigator.linkHelper">
+       <linkHelper
+             class="org.jboss.tools.jst.web.ui.navigator.XLinkHelper"
+             id="org.jboss.tools.jst.web.ui.navigator.XLinkHelper">
+          <selectionEnablement>
+          	<or>
+             <instanceof value="org.jboss.tools.common.model.XModelObject"/>
+            </or> 
+          </selectionEnablement>
+          <editorInputEnablement>
+          	<or>
+             <instanceof value="org.eclipse.ui.IFileEditorInput"/>
+             <instanceof value="org.jboss.tools.common.model.ui.editor.IModelObjectEditorInput"/>
+            </or> 
+          </editorInputEnablement>
+       </linkHelper>
+    </extension>
 
    <extension point="org.jboss.tools.common.model.classes">
 		<xclass id="org.jboss.tools.jst.web.ui.WebUiPlugin"
