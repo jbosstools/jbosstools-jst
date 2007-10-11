@@ -14,6 +14,7 @@ import java.util.*;
 import org.jboss.tools.common.model.*;
 import org.jboss.tools.common.model.files.handlers.CreateFileSupport;
 import org.jboss.tools.common.model.undo.*;
+import org.jboss.tools.jst.web.tiles.model.TilesConstants;
 import org.jboss.tools.jst.web.tiles.model.TilesProcessImpl;
 import org.jboss.tools.jst.web.tiles.model.helpers.TilesRegistrationHelper;
 
@@ -56,7 +57,14 @@ public class CreateTilesSupport extends CreateFileSupport {
 
 		open(file);	
 	}
-	
+
+	protected XModelObject modifyCreatedObject(XModelObject o) {
+		XModelObject d = o.getModel().createModelObject(TilesConstants.ENT_DEFINITION, null);
+		d.setAttributeValue("name", o.getAttributeValue("name"));
+		o.addChild(d);
+		return o;
+	}
+
 	private boolean canRegisterInternal() {
 		return TilesRegistrationHelper.isEnabled(getTarget().getModel());
 	}
