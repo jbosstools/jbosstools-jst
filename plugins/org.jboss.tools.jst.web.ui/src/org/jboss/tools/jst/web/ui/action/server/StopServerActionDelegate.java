@@ -24,7 +24,7 @@ public class StopServerActionDelegate extends AbstractServerActionDelegate {
 		if(server == null) return;
 		ServiceDialog d = PreferenceModelUtilities.getPreferenceModel().getService();
 		try {
-			server.stop(true);
+			server.stop(false);
 		} catch (Exception e) {
 			d.showDialog(WebUIMessages.ERROR, e.getMessage(), new String[]{WebUIMessages.CLOSE}, null, ServiceDialog.ERROR);
 		}
