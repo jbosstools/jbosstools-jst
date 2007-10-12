@@ -89,7 +89,7 @@
    </extension>
    <extension point="org.eclipse.ui.actionSets">
       <actionSet description="%actionSets.modelActions.description" id="com.redhat.studio.actionSet" label="%actionSets.modelActions.label" visible="true">
-         <action class="org.jboss.tools.jst.web.ui.action.RunPageActionDelegate" icon="images/xstudio/actions/run_project.gif" id="org.jboss.tools.jst.web.ui.action.RunPageActionDelegate" label="%actionSets.tomcatActions.runApplicationFromSelectedElement.label" style="pulldown" toolbarPath="Normal/SSRun" tooltip="%actionSets.tomcatActions.runApplicationFromSelectedElement.label">
+         <action class="org.jboss.tools.jst.web.ui.action.RunPageActionDelegate" icon="images/xstudio/actions/run_project.gif" id="org.jboss.tools.jst.web.ui.action.RunPageActionDelegate" label="%actionSets.serverActions.runApplicationFromSelectedElement.label" style="pulldown" toolbarPath="Normal/SSRun" tooltip="%actionSets.serverActions.runApplicationFromSelectedElement.label">
          </action>
       </actionSet>
    </extension>
