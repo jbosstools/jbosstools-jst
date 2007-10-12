@@ -86,17 +86,11 @@ public class JSPDialogCellEditorContentAssistProcessor extends JavaPackageComple
 		String htmlQuery = null;
 		if(isFacelets && tagName.indexOf(':')<1 && !RedHatHtmlContentAssistProcessor.JSFCAttributeName.equals(attributeName)) {
 			Element element = (Element)node;
-
-			NamedNodeMap attributes = element.getAttributes();
-			Node jsfC = attributes.getNamedItem(RedHatHtmlContentAssistProcessor.JSFCAttributeName);
-			if(jsfC != null && (jsfC instanceof Attr)) {
-				Attr jsfCAttribute = (Attr)jsfC;
-				String jsfTagName = jsfCAttribute.getValue();
-				if(jsfTagName != null && jsfTagName.indexOf(':') > 0) {
-					htmlQuery = new StringBuffer(KbQuery.TAG_SEPARATOR).append(RedHatHtmlContentAssistProcessor.faceletHtmlPrefixStart + tagName).append(KbQuery.ATTRIBUTE_SEPARATOR).append(attributeName).append(KbQuery.ENUMERATION_SEPARATOR).append(matchString).toString();
-					tagName = jsfTagName;
-					faceletJsfTag = true;
-				}
+			String jsfTagName = valueHelper.getFaceletJsfTag(element);
+			if(jsfTagName != null) {
+				faceletJsfTag = true;
+				tagName = jsfTagName;
+				htmlQuery = new StringBuffer(KbQuery.TAG_SEPARATOR).append(RedHatHtmlContentAssistProcessor.faceletHtmlPrefixStart + tagName).append(KbQuery.ATTRIBUTE_SEPARATOR).append(attributeName).append(KbQuery.ENUMERATION_SEPARATOR).append(matchString).toString();
 			}
 		}
 

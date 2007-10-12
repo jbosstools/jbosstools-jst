@@ -40,6 +40,7 @@ import org.jboss.tools.common.kb.AttributeValueDescriptor;
 import org.jboss.tools.common.kb.KbConnectorFactory;
 import org.jboss.tools.common.kb.KbConnectorType;
 import org.jboss.tools.common.kb.KbException;
+import org.jboss.tools.common.kb.KbQuery;
 import org.jboss.tools.common.kb.KbTldResource;
 import org.jboss.tools.common.kb.TagDescriptor;
 import org.jboss.tools.common.kb.wtp.JspWtpKbConnector;
@@ -53,6 +54,10 @@ import org.jboss.tools.jst.jsp.support.kb.WTPTextJspKbConnector;
 import org.jboss.tools.jst.web.tld.TaglibData;
 import org.jboss.tools.jst.web.tld.TaglibMapping;
 import org.jboss.tools.jst.web.tld.VpeTaglibManager;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 public class ValueHelper {
 	private IEditorInput editorInput = null;
@@ -317,5 +322,22 @@ public class ValueHelper {
 			kbConnector.registerResource(RedHatHtmlContentAssistProcessor.faceletHtmlResource);
 			kbConnector.unregisterJspResource();
 		}
+	}
+	
+	public String getFaceletJsfTag(Element element) {
+		if(!isFacelets) return null;
+		String name = element.getNodeName();
+		if(name.indexOf(':') >= 0) return null;
+		
+		NamedNodeMap attributes = element.getAttributes();
+		Node jsfC = attributes.getNamedItem(RedHatHtmlContentAssistProcessor.JSFCAttributeName);
+		if(jsfC != null && (jsfC instanceof Attr)) {
+			Attr jsfCAttribute = (Attr)jsfC;
+			String jsfTagName = jsfCAttribute.getValue();
+			if(jsfTagName != null && jsfTagName.indexOf(':') > 0) {
+				return jsfTagName;
+			}
+		}
+		return null;
 	}
 }
