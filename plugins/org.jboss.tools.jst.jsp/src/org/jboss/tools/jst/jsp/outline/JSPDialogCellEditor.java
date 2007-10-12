@@ -11,6 +11,8 @@
 package org.jboss.tools.jst.jsp.outline;
 
 import java.util.Properties;
+
+import org.jboss.tools.common.kb.wtp.WtpKbConnector;
 import org.jboss.tools.common.model.ui.attribute.editor.DialogCellEditorEx;
 import org.jboss.tools.common.model.ui.objecteditor.AttributeWrapper;
 import org.jboss.tools.common.model.ui.objecteditor.ExtendedCellEditorProvider;
@@ -19,6 +21,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.contentassist.ContentAssistHandler;
 import org.jboss.tools.common.meta.key.WizardKeys;
 import org.jboss.tools.jst.jsp.contentassist.JSPDialogCellEditorContentAssistProcessor;
 import org.jboss.tools.jst.jsp.contentassist.RedHatHtmlContentAssistProcessor;
@@ -34,6 +37,9 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
 	Properties context;
 	ValueHelper valueHelper;
 	JSPDialogCellEditorContentAssistProcessor contentAssistentProcessor;
+	ContentAssistHandler handler = null;
+	
+	boolean hasProposals = false;
 	
 	public JSPDialogCellEditor(Composite parent, Properties context) {
 		super(parent);
@@ -42,13 +48,30 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
 
 		contentAssistentProcessor = new JSPDialogCellEditorContentAssistProcessor();
 		if(valueHelper != null) contentAssistentProcessor.setContext(context);
-		ControlContentAssistHelper.createTextContentAssistant(getTextField(), contentAssistentProcessor);
+		handler = ContentAssistHandler.createHandlerForText(getTextField(), ControlContentAssistHelper.createJavaContentAssistant(contentAssistentProcessor));
 	}
 	
     public void activate() {
+    	checkHasProposals();
     	checkButtonEnablement();
     	super.activate();
 	}
+    
+    void checkHasProposals() {
+    	hasProposals = false;
+		if(context == null) return;
+		valueHelper = (ValueHelper)context.get("valueHelper");
+		if(valueHelper == null) return;
+		String attributeName = "" + context.getProperty("attributeName");
+		String nodeName = "" + context.getProperty("nodeName");
+		String query = "/";
+		if(valueHelper.isFacetets() && nodeName.indexOf(':') < 0) {
+			query += RedHatHtmlContentAssistProcessor.faceletHtmlPrefixStart;
+		}
+		query += nodeName + "@" + attributeName;
+		RootElement root = (RootElement)valueHelper.getInitalInput(query);
+		hasProposals = root != null && root.getChildren().length > 0;
+    }
     
     private void checkButtonEnablement() {
 		if(context == null) return;
@@ -56,16 +79,8 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
 		if(valueHelper == null) return;
 		Button button = getButtonControl();
 		if(button == null || button.isDisposed()) return;
-		String attributeName = "" + context.getProperty("attributeName");
-		String nodeName = "" + context.getProperty("nodeName");
-		String query = "/";
-		if(valueHelper.isFacetets()) {
-			query += RedHatHtmlContentAssistProcessor.faceletHtmlPrefixStart;
-		}
-		query += nodeName + "@" + attributeName;
-		RootElement root = (RootElement)valueHelper.getInitalInput(query);
-		boolean enabled = root != null && root.getChildren().length > 0;
-		getButtonControl().setVisible(enabled);
+		button.setVisible(hasProposals);
+		handler.setEnabled(hasProposals);
     }
 
 	protected Object openDialogBox(Control cellEditorWindow) {
@@ -73,7 +88,7 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
 		String attributeName = "" + context.getProperty("attributeName");
 		String nodeName = "" + context.getProperty("nodeName");
 		String query = "/";
-		if(valueHelper != null && valueHelper.isFacetets()) {
+		if(valueHelper != null && valueHelper.isFacetets() && nodeName.indexOf(":") < 0) {
 			query += RedHatHtmlContentAssistProcessor.faceletHtmlPrefixStart;
 		}
 		query += nodeName + "@" + attributeName;

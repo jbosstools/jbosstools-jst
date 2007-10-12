@@ -105,6 +105,9 @@ public class JSPDialogCellEditorContentAssistProcessor extends JavaPackageComple
 		}
 
 	    String query = new StringBuffer(KbQuery.TAG_SEPARATOR).append(tagName).append(KbQuery.ATTRIBUTE_SEPARATOR).append(attributeName).append(KbQuery.ENUMERATION_SEPARATOR).append(matchString).toString();
+		if(!isFacelets && tagName.indexOf(':') < 0) {
+			query = WtpKbConnector.ADD_HTML_PREFIX + query;
+		}
 	    try {
 			Collection proposals = wtpKbConnector.getProposals(query);
 			if(proposals.size()==0 && htmlQuery!=null) {
