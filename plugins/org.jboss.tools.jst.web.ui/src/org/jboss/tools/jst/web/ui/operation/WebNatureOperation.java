@@ -365,7 +365,10 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 		}
 		for (int i = 0; i < servers.length; i++) {
 			ComponentUtilities.setServerContextRoot(getProject(), registry.getApplicationName());
-			if(monitor != null) monitor.worked(step);
+			if(monitor != null) {
+				monitor.worked(step);
+				monitor.subTask(servers[i].getName());
+			}
 			RegistrationHelper.register(getProject(), servers[i]);
 			if(monitor != null) monitor.worked(step);
 		}
