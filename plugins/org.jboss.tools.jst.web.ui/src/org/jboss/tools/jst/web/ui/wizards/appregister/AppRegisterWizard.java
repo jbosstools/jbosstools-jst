@@ -15,11 +15,18 @@ import org.eclipse.swt.widgets.*;
 import org.eclipse.wst.common.componentcore.internal.util.ComponentUtilities;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspaceRunnable;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.wizard.*;
 import org.jboss.tools.common.meta.action.SpecialWizard;
 import org.jboss.tools.common.meta.key.WizardKeys;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.filesystems.impl.FileSystemImpl;
+import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.reporting.ProblemReportingHelper;
 import org.jboss.tools.common.model.ui.*;
@@ -38,22 +45,63 @@ public class AppRegisterWizard extends Wizard implements SpecialWizard {
 	}
 	
 	public boolean performFinish() {
-		try {
-			IProject p = EclipseResourceUtil.getProject(object);
-			String contextRoot = registry.getApplicationName();
-			if(!contextRoot.equals(ComponentUtilities.getServerContextRoot(p))) {
-				ComponentUtilities.setServerContextRoot(p, contextRoot);
-			}
-			IServer[] is = registry.getTargetServers();				
-			for (int i = 0; i < is.length; i++) {
-				RegistrationHelper.register(p, is[i]);
-			}
-			object.getModel().changeObjectAttribute(object, "application name", registry.getApplicationName());
-		} catch (Exception ex) {
-			ProblemReportingHelper.reportProblem(WebUiPlugin.PLUGIN_ID, "Exception caught in AppRegisterWizard.performFinish(): " + ex.getMessage(), ex);
-			return false;
-		}		
+		Job job = new RegisterServerJob();
+		job.schedule(100);
 		return true;
+	}
+	
+	class RegisterServerJob extends Job {
+
+		public RegisterServerJob() {
+			super("Register in Server");
+		}
+
+		protected IStatus run(IProgressMonitor monitor) {
+			try {
+				ModelPlugin.getWorkspace().run(new WR(), monitor);
+			} catch (Exception e) {
+				WebUiPlugin.getPluginLog().logError(e);
+			}
+			return Status.OK_STATUS;
+		}
+	}
+	
+	class WR implements IWorkspaceRunnable {
+		public void run(IProgressMonitor monitor) throws CoreException {
+			try {
+				register(monitor);
+			} catch (Exception e) {
+				WebUiPlugin.getPluginLog().logError(e);
+			}
+		}
+		
+	}
+
+	private void register(IProgressMonitor monitor) throws Exception {
+		if(monitor != null) monitor.beginTask("", 100);
+		if(monitor != null) monitor.worked(5);
+
+		IServer[] servers = registry.getTargetServers();
+		int step = 70;
+		if(monitor != null) {
+			monitor.worked(5);
+			step = step / (2 * servers.length + 1);
+		}
+		IProject p = EclipseResourceUtil.getProject(object);
+		String contextRoot = registry.getApplicationName();
+		if(!contextRoot.equals(ComponentUtilities.getServerContextRoot(p))) {
+			ComponentUtilities.setServerContextRoot(p, contextRoot);
+		}
+		for (int i = 0; i < servers.length; i++) {
+			if(monitor != null) {
+				monitor.worked(step);
+				monitor.subTask(servers[i].getName());
+			}
+			RegistrationHelper.register(p, servers[i]);
+			if(monitor != null) monitor.worked(step);
+		}
+		object.getModel().changeObjectAttribute(object, "application name", registry.getApplicationName());
+		if(monitor != null) monitor.worked(20);
 	}
 
 	public String getWebRootLocation() {
