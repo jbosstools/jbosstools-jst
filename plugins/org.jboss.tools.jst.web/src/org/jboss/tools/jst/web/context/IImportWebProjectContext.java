@@ -32,7 +32,7 @@ public interface IImportWebProjectContext {
 	public String getServletVersion();
 	public String getTemplateVersion();
 	public String getSuggestedProjectLocation();
-	public RegisterTomcatContext getRegisterTomcatContext();
+	public RegisterServerContext getRegisterServerContext();
 	public String SERVLET_VERSION_WARNING = WebUIMessages.SERVLET_VERSION_WARNING;
 	public boolean isServletVersionConsistentToWebXML();
 	public void convertWebXML(boolean backup);

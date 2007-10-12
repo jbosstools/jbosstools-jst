@@ -40,7 +40,7 @@ public abstract class ImportWebProjectContext implements IImportWebProjectContex
 	protected XModelObject[] modules = new XModelObject[0];
 	protected XModelObject[] allmodules = new XModelObject[0];
 	protected String[] existingSources = new String[0];
-	RegisterTomcatContext registry = new RegisterTomcatContext(RegisterTomcatContext.PROJECT_MODE_IMPORT);
+	RegisterServerContext registry = new RegisterServerContext(RegisterServerContext.PROJECT_MODE_IMPORT);
 	protected boolean addLibraries = false;
 	protected String servletVersion = null;
 	protected String templateVersion = null;
@@ -55,7 +55,7 @@ public abstract class ImportWebProjectContext implements IImportWebProjectContex
 		return target;
 	}
 
-	public RegisterTomcatContext getRegisterTomcatContext() {
+	public RegisterServerContext getRegisterServerContext() {
 		return registry;
 	}
 	

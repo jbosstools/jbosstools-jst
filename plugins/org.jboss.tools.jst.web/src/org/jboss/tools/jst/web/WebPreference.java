@@ -32,7 +32,7 @@ public class WebPreference extends Preference
 	public static final WebPreference SERVER_JVM         		= new WebPreference(OPTIONS_RUNNING_PATH, "JVM");
 	public static final WebPreference SERVER_WARNING         		= new WebPreference(OPTIONS_RUNNING_PATH, "show_warning");
 
-	public static String ATTR_REGISTER_IN_TOMCAT = "Register Web Context in server.xml";
+	public static String ATTR_REGISTER_IN_SERVER = "Register Web Context in server.xml";
 
 	public static final WebPreference DEFAULT_SERVLET_VERSION  = new WebPreference(OPTIONS_NEW_PROJECT_PATH, "Servlet Version");
 

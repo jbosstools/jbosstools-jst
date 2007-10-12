@@ -26,7 +26,7 @@ import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 import org.jboss.tools.jst.web.server.RegistrationHelper;
 import org.jboss.tools.jst.web.server.ServerManager;
 
-public class RegisterTomcatContext {
+public class RegisterServerContext {
 	public static int PROJECT_MODE_NEW = 0;
 	public static int PROJECT_MODE_IMPORT = 1;
 	public static int PROJECT_MODE_EXISTING = 2;
@@ -40,7 +40,7 @@ public class RegisterTomcatContext {
 	IProject project = null;
 	String servletVersion = "";	 //$NON-NLS-1$
 	
-	static final private ResourceBundle MESSAGES = ResourceBundle.getBundle(RegisterTomcatContext.class.getName());
+	static final private ResourceBundle MESSAGES = ResourceBundle.getBundle(RegisterServerContext.class.getName());
 	
 		int mode; 
 	boolean isEnabled = false;
@@ -61,7 +61,7 @@ public class RegisterTomcatContext {
 	private static final String EMPTY_LOCATION = ""; //$NON-NLS-1$
 	
 	
-	public RegisterTomcatContext(int mode) {
+	public RegisterServerContext(int mode) {
 		this.mode = mode;
 		init();
 	}

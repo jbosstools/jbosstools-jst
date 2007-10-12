@@ -13,7 +13,7 @@ package org.jboss.tools.jst.web.project.helpers;
 import java.util.*;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.*;
-import org.jboss.tools.jst.web.context.RegisterTomcatContext;
+import org.jboss.tools.jst.web.context.RegisterServerContext;
 
 public abstract class NewWebProjectContext {
 	public static final String ATTR_NAME                 = "name";
@@ -35,10 +35,10 @@ public abstract class NewWebProjectContext {
 	protected String servletVersion;
 	protected String projectTemplate;
 
-	protected RegisterTomcatContext registry;
+	protected RegisterServerContext registry;
 	
 	public NewWebProjectContext() {
-		registry = new RegisterTomcatContext(RegisterTomcatContext.PROJECT_MODE_NEW);
+		registry = new RegisterServerContext(RegisterServerContext.PROJECT_MODE_NEW);
 		initRegistry();
 	}
 	
@@ -95,7 +95,7 @@ public abstract class NewWebProjectContext {
 		registry.setServletVersion(value);
 	}
 
-	public RegisterTomcatContext getRegisterTomcatContext() {
+	public RegisterServerContext getRegisterServerContext() {
 		return registry;
 	}
 
