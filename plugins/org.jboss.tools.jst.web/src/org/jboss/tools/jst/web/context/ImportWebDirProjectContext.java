@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.context;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
 
 import org.eclipse.core.resources.IProject;
@@ -54,7 +55,7 @@ public abstract class ImportWebDirProjectContext extends ImportWebProjectContext
 	
 	protected void initRegistry() {}
 	
-	public void setWebXmlLocation(String location) throws Exception {
+	public void setWebXmlLocation(String location) {
 		location = location.replace('\\', '/');
 		if(isWebXMLUpToDate(location)) return;
 		webXmlLocation = location;
@@ -65,23 +66,28 @@ public abstract class ImportWebDirProjectContext extends ImportWebProjectContext
 		File f = new File(location);
 		if(!f.isFile())	{
 			webXMLErrorMessage = WebUIMessages.FILE_DOESNOT_EXIST;
-			throw new Exception(webXMLErrorMessage);
+			return;
 		}
 		webXMLTimeStamp = f.lastModified();
 		String body = FileUtil.readFile(f);
 		String entity = getTarget().getModel().getEntityRecognizer().getEntityName("xml", body); //$NON-NLS-1$
 		if(entity == null || !entity.startsWith("FileWebApp")) { //$NON-NLS-1$
 			webXMLErrorMessage = WebUIMessages.FILE_ISNOT_RECOGNIZED_AS_WEBDESCRIPTOR_FILE;
-			throw new Exception(webXMLErrorMessage);
+			return;
 		}
 		try {
 			loadWebXML(body, location);
 		} catch (Exception e) {
 			webXMLErrorMessage = e.getMessage();
-			throw e;
+			return;
 		}
 		File webInfFile = f.getParentFile();
-		webInfLocation = webInfFile.getCanonicalPath().replace('\\', '/');
+		try {
+			webInfLocation = webInfFile.getCanonicalPath().replace('\\', '/');
+		} catch (IOException e) {
+			webXMLErrorMessage = e.getMessage();
+			return;
+		}
 		boolean w_i = webInfFile.getName().equals("WEB-INF"); //$NON-NLS-1$
 		String lib = webInfLocation + "/lib"; //$NON-NLS-1$
 		if(new File(lib).isDirectory()) setLibLocation(lib);
@@ -153,10 +159,9 @@ public abstract class ImportWebDirProjectContext extends ImportWebProjectContext
 	
 	public void setInitialLocation(String initialLocation) {
 		this.initialLocation = initialLocation;
-		if(initialLocation != null) try { 
-			setWebXmlLocation(initialLocation); 
-		} catch (Exception e) {
-			initialLocationErrorMessage = e.getMessage();
+		if(initialLocation != null) { 
+			setWebXmlLocation(initialLocation);
+			initialLocationErrorMessage = webXMLErrorMessage;
 		}
 	}
 
