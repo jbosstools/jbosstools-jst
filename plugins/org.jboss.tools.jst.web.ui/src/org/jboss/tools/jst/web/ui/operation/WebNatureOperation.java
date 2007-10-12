@@ -316,7 +316,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 		long counter = 100;
 
 		public RegisterTomcatJob() {
-			super("Register Tomcat");
+			super("Register in Server");
 		}
 
 		protected IStatus run(IProgressMonitor monitor) {
