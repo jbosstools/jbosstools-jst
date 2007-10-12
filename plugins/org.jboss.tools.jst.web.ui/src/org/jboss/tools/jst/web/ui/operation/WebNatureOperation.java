@@ -242,9 +242,9 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 			monitor.worked(1);
 			createWTPNature2(wcco, monitor);
 			monitor.worked(1);
-			// register tomcat application
-			registerTomcat2(monitor);
-			///registerTomcat(monitor);
+			// register application
+			registerServer2(monitor);
+			///registerServer(monitor);
 		} catch (CoreException e) {
 			WebModelPlugin.getPluginLog().logError(e);
 		} finally {
@@ -299,23 +299,23 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 	/*
 	 * 
 	 */
-	private void registerTomcat2(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+	private void registerServer2(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 		XModelObject fs = FileSystemsHelper.getFileSystems(model);
 		model.changeObjectAttribute(fs, "application name", registry.getApplicationName());
 		fs.setModified(true);
 		model.save();
 		ModelPlugin.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
 			public void run() {
-				Job job = new RegisterTomcatJob();
+				Job job = new RegisterServerJob();
 				job.schedule(100);
 			}
 		});
 	}
 	
-	class RegisterTomcatJob extends Job {
+	class RegisterServerJob extends Job {
 		long counter = 100;
 
-		public RegisterTomcatJob() {
+		public RegisterServerJob() {
 			super("Register in Server");
 		}
 
@@ -342,7 +342,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 	class WR implements IWorkspaceRunnable {
 		public void run(IProgressMonitor monitor) throws CoreException {
 			try {
-				registerTomcat(monitor);
+				registerServer(monitor);
 			} catch (Exception e) {
 				WebUiPlugin.getPluginLog().logError(e);
 			}
@@ -353,7 +353,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 	/*
 	 * 
 	 */
-	private void registerTomcat(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+	private void registerServer(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 		if (!registry.isEnabled()) return;
 		if(monitor != null) monitor.beginTask("", 100);
 		if(monitor != null) monitor.worked(5);
