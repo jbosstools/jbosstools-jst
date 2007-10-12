@@ -39,7 +39,7 @@ import org.jboss.tools.common.meta.action.impl.handlers.HUtil;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.common.model.util.XModelObjectUtil;
-import org.jboss.tools.jst.web.context.RegisterTomcatContext;
+import org.jboss.tools.jst.web.context.RegisterServerContext;
 import org.jboss.tools.jst.web.server.*;
 
 public class AppRegisterComponent {
@@ -51,7 +51,7 @@ public class AppRegisterComponent {
 	static String ATTR_TARGET_SERVER = "target server";
 	static String ATTR_SEPARATOR = "separator";
 	
-	RegisterTomcatContext context;
+	RegisterServerContext context;
 	boolean isEnabling = true;
 	XAttributeSupport enableSupport;
 	private IModelPropertyEditorAdapter enableAdapter;
@@ -82,7 +82,7 @@ public class AppRegisterComponent {
 		isEnabling = b;
 	}
 	
-	public void setContext(RegisterTomcatContext context) {
+	public void setContext(RegisterServerContext context) {
 		this.context = context;
 	}
 	

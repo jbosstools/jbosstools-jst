@@ -14,13 +14,13 @@ import org.eclipse.jface.wizard.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
-import org.jboss.tools.jst.web.context.RegisterTomcatContext;
+import org.jboss.tools.jst.web.context.RegisterServerContext;
 
 public class AppRegisterWizardPage extends WizardPage {
-	protected RegisterTomcatContext context;
+	protected RegisterServerContext context;
 	AppRegisterComponent appRegister = new AppRegisterComponent();
 	
-	public AppRegisterWizardPage(RegisterTomcatContext context) {
+	public AppRegisterWizardPage(RegisterServerContext context) {
 		super("Red Hat Project");
 		this.context = context;
 		appRegister.setContext(context);

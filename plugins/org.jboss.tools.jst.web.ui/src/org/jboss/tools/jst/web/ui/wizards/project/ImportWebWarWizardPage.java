@@ -64,7 +64,7 @@ public class ImportWebWarWizardPage extends WizardPage {
 		nameLocationAdapter = support.getPropertyEditorAdapterByName("name");
 		useDefaultPathAdapter = support.getPropertyEditorAdapterByName("use default path");
 		projectLocationAdapter = support.getPropertyEditorAdapterByName("location");
-		appRegister.setContext(context.getRegisterTomcatContext());
+		appRegister.setContext(context.getRegisterServerContext());
 		appRegister.setEnabling(false);
 		appRegister.init();
 		initListeners();

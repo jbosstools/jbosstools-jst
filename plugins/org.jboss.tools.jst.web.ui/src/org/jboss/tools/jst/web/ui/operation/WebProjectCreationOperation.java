@@ -35,7 +35,7 @@ import org.jboss.tools.common.model.project.ProjectHome;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
-import org.jboss.tools.jst.web.context.RegisterTomcatContext;
+import org.jboss.tools.jst.web.context.RegisterServerContext;
 import org.jboss.tools.jst.web.model.helpers.WebAppHelper;
 import org.jboss.tools.jst.web.project.helpers.IWebProjectTemplate;
 import org.jboss.tools.jst.web.project.helpers.NewWebProjectContext;
@@ -45,12 +45,12 @@ public abstract class WebProjectCreationOperation extends WebNatureOperation {
 	protected IWebProjectTemplate template = createTemplate();
 	protected XModel templateModel = null;
 
-	public WebProjectCreationOperation(IProject project, IPath projectLocation, RegisterTomcatContext registry, Properties properties)	{
+	public WebProjectCreationOperation(IProject project, IPath projectLocation, RegisterServerContext registry, Properties properties)	{
 		super(project, projectLocation, registry, properties);
 	}
 
 	public WebProjectCreationOperation(NewWebProjectContext context) {
-		this(context.getProject(), context.getLocationPath(), context.getRegisterTomcatContext(), context.getActionProperties());
+		this(context.getProject(), context.getLocationPath(), context.getRegisterServerContext(), context.getActionProperties());
 		setProperty(WebNatureOperation.PROJECT_NAME_ID, context.getActionProperties().getProperty(NewWebProjectContext.ATTR_NAME));
 		setProperty(WebNatureOperation.PROJECT_LOCATION_ID, context.getActionProperties().getProperty(NewWebProjectContext.ATTR_LOCATION));
 		setProperty(WebNatureOperation.USE_DEFAULT_LOCATION_ID, context.getActionProperties().getProperty(NewWebProjectContext.ATTR_USE_DEFAULT_LOCATION));
@@ -58,7 +58,7 @@ public abstract class WebProjectCreationOperation extends WebNatureOperation {
 		setProperty(WebNatureOperation.TEMPLATE_VERSION_ID, context.getActionProperties().getProperty(NewWebProjectContext.ATTR_VERSION));
 		setProperty(WebNatureOperation.SERVLET_VERSION_ID, context.getActionProperties().getProperty(NewWebProjectContext.ATTR_SERVLET_VERSION));
 		setProperty(WebNatureOperation.REGISTER_WEB_CONTEXT_ID, context.getActionProperties().getProperty(NewWebProjectContext.ATTR_REGISTER_WEB_CONTEXT));
-		setProperty(WebNatureOperation.RUNTIME_NAME, context.getRegisterTomcatContext().getRuntimeName());
+		setProperty(WebNatureOperation.RUNTIME_NAME, context.getRegisterServerContext().getRuntimeName());
 		setProperty(WebNatureOperation.JAVA_SOURCES_LOCATION_ID, getJavaSources());
 	}
 	

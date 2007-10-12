@@ -48,7 +48,7 @@ public abstract class NewWebProjectWizard extends Wizard implements INewWizard, 
 	}
 	
 	public boolean canFinish() {
-		return super.canFinish() && context.getRegisterTomcatContext().getErrorMessage() == null;
+		return super.canFinish() && context.getRegisterServerContext().getErrorMessage() == null;
 	}
 	
 	public void setInitializationData(IConfigurationElement cfig, String propertyName, Object data)	{

@@ -37,7 +37,7 @@ public class NewProjectRegisterPage extends WizardPage {
 		this.context = context;
 		this.servletPreference = servletPreference;
 		initServletSupport();
-		appRegister.setContext(context.getRegisterTomcatContext());
+		appRegister.setContext(context.getRegisterServerContext());
 
 		//For new WTP
 		appRegister.setEnabling(false);

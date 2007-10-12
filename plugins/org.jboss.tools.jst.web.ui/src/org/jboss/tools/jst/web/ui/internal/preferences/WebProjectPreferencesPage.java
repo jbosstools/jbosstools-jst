@@ -60,8 +60,8 @@ public abstract class WebProjectPreferencesPage extends TabbedPreferencesPage {
 		}
 
 		public void initPageProperties() {
-			defaultRoot = (IPropertyEditor)getSupport().getPropertyEditorByName("Use Default Path"); /* "Use Default Path Under Tomcat" */
-			selectRoot = (IPropertyEditor)getSupport().getPropertyEditorByName("Projects Root"); /* "Projects Root" */
+			defaultRoot = (IPropertyEditor)getSupport().getPropertyEditorByName("Use Default Path");
+			selectRoot = (IPropertyEditor)getSupport().getPropertyEditorByName("Projects Root");
 			defaultRootValueProvider = (IValueProvider)defaultRoot.getAdapter(IValueProvider.class);
 			defaultRootValueProvider.addValueChangeListener(new DefaultRootChangeListener());
 			versionAdapter.addValueChangeListener(
@@ -87,11 +87,7 @@ public abstract class WebProjectPreferencesPage extends TabbedPreferencesPage {
 		boolean auto = a.isAutoStore();
 		a.setAutoStore(false);
 		if(!active || oldRoot.length() == 0) oldRoot = a.getStringValue(true);
-/*
-		String value = (active) ? oldRoot :
-		  (tomcatValueProvider != null) ? tomcatValueProvider.getValue() + "/webapp" 
-		  :	Preference.TOMCAT_ROOT_DIR.getValue() + "/webapp";  
-*/
+
 		String value = (active) ? oldRoot : ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString();
 		a.setValue(value);
 		a.setAutoStore(auto);

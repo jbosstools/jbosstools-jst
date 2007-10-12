@@ -23,14 +23,14 @@ import org.jboss.tools.common.model.filesystems.impl.FileSystemImpl;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.reporting.ProblemReportingHelper;
 import org.jboss.tools.common.model.ui.*;
-import org.jboss.tools.jst.web.context.RegisterTomcatContext;
+import org.jboss.tools.jst.web.context.RegisterServerContext;
 import org.jboss.tools.jst.web.server.RegistrationHelper;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 public class AppRegisterWizard extends Wizard implements SpecialWizard {
 	Properties p;
 	XModelObject object;
-	RegisterTomcatContext registry;	
+	RegisterServerContext registry;	
 	AppRegisterWizardPage page;
 	
 	public AppRegisterWizard() {
@@ -65,7 +65,7 @@ public class AppRegisterWizard extends Wizard implements SpecialWizard {
     
 	public void setObject(Object object) {
 		p = (Properties)object;
-		registry = new RegisterTomcatContext(RegisterTomcatContext.PROJECT_MODE_EXISTING);
+		registry = new RegisterServerContext(RegisterServerContext.PROJECT_MODE_EXISTING);
 		this.object = (XModelObject)p.get("object");
 		registry.setProjectHandle(EclipseResourceUtil.getProject(this.object));
 		registry.init();

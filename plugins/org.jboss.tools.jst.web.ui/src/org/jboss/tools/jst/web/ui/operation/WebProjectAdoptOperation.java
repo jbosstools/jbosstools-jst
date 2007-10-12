@@ -39,7 +39,7 @@ public abstract class WebProjectAdoptOperation extends WebNatureOperation {
 	protected IImportWebProjectContext context;
 
 	public WebProjectAdoptOperation(IImportWebProjectContext context) {
-		super(context.getProjectHandle(), new Path(context.getSuggestedProjectLocation()), context.getRegisterTomcatContext(), new Properties());
+		super(context.getProjectHandle(), new Path(context.getSuggestedProjectLocation()), context.getRegisterServerContext(), new Properties());
 		setProperty(WebNatureOperation.ANT_BUILD_XML_ID, context.getBuildXmlLocation().replace('\\', '/'));
 		setProperty(WebNatureOperation.JAVA_CLASSES_LOCATION_ID, context.getClassesLocation().replace('\\', '/'));
 		setProperty(WebNatureOperation.JAVA_SOURCES_LOCATION_ID, context.getJavaSources());
@@ -51,7 +51,7 @@ public abstract class WebProjectAdoptOperation extends WebNatureOperation {
 		setProperty(WebNatureOperation.WEB_INF_LOCATION_ID, context.getWebInfLocation().replace('\\', '/'));
 		setProperty(WebNatureOperation.WEB_CONTENT_LOCATION_ID, context.getWebRootPath().replace('\\', '/'));
 		setProperty(WebNatureOperation.WEB_XML_LOCATION_ID, context.getWebXmlLocation().replace('\\', '/'));
-		setProperty(WebNatureOperation.RUNTIME_NAME, context.getRegisterTomcatContext().getRuntimeName());
+		setProperty(WebNatureOperation.RUNTIME_NAME, context.getRegisterServerContext().getRuntimeName());
 		this.context = (ImportWebProjectContext)context;
 	}
 	

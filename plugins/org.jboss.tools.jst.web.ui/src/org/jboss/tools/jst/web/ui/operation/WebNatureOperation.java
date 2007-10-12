@@ -73,7 +73,7 @@ import org.jboss.tools.common.model.project.Watcher;
 import org.jboss.tools.common.model.project.WatcherLoader;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.jst.web.WebModelPlugin;
-import org.jboss.tools.jst.web.context.RegisterTomcatContext;
+import org.jboss.tools.jst.web.context.RegisterServerContext;
 import org.jboss.tools.jst.web.project.helpers.NewWebProjectContext;
 import org.jboss.tools.jst.web.server.RegistrationHelper;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
@@ -126,7 +126,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 	private HashMap propertyValue = new HashMap();
 	private HashMap wizardPropertiesForVelocity = new HashMap();
 	private Properties wizardPropertiesAsIs;
-	RegisterTomcatContext registry;
+	RegisterServerContext registry;
 	
 	boolean isCancelled = false;
 	
@@ -137,7 +137,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 	 * @param registry
 	 * @param properties
 	 */
-	public WebNatureOperation(IProject project, IPath projectLocation, RegisterTomcatContext registry, Properties properties)	{
+	public WebNatureOperation(IProject project, IPath projectLocation, RegisterServerContext registry, Properties properties)	{
 		initDefaults();
 		setProject(project);
 		setProperty(PROJECT_NAME_ID, project.getName());
@@ -203,7 +203,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 	 * @param context
 	 */
 	public WebNatureOperation(NewWebProjectContext context) {
-		this(context.getProject(), context.getLocationPath(), context.getRegisterTomcatContext(), context.getActionProperties());
+		this(context.getProject(), context.getLocationPath(), context.getRegisterServerContext(), context.getActionProperties());
 	}
 
 	/**
