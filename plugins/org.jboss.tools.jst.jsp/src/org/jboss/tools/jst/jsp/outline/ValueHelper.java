@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.jsp.outline;
 
 import java.util.*;
+
 import org.eclipse.core.resources.*;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.jspeditor.*;
@@ -29,6 +30,7 @@ import org.jboss.tools.jst.jsp.editor.IVisualContext;
 import org.jboss.tools.jst.jsp.editor.IVisualController;
 import org.jboss.tools.jst.jsp.editor.IVisualEditor;
 
+import org.jboss.tools.jst.jsp.contentassist.RedHatHtmlContentAssistProcessor;
 import org.jboss.tools.jst.jsp.drop.treeviewer.model.AttributeValueResource;
 import org.jboss.tools.jst.jsp.drop.treeviewer.model.AttributeValueResourceFactory;
 import org.jboss.tools.jst.jsp.drop.treeviewer.model.ModelElement;
@@ -40,6 +42,7 @@ import org.jboss.tools.common.kb.KbConnectorType;
 import org.jboss.tools.common.kb.KbException;
 import org.jboss.tools.common.kb.KbTldResource;
 import org.jboss.tools.common.kb.TagDescriptor;
+import org.jboss.tools.common.kb.wtp.JspWtpKbConnector;
 import org.jboss.tools.common.kb.wtp.TLDVersionHelper;
 import org.jboss.tools.common.kb.wtp.WtpKbConnector;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
@@ -47,12 +50,14 @@ import org.jboss.tools.common.model.project.IPromptingProvider;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.model.util.ModelFeatureFactory;
 import org.jboss.tools.jst.jsp.support.kb.WTPTextJspKbConnector;
+import org.jboss.tools.jst.web.tld.TaglibData;
 import org.jboss.tools.jst.web.tld.TaglibMapping;
 import org.jboss.tools.jst.web.tld.VpeTaglibManager;
 
 public class ValueHelper {
 	private IEditorInput editorInput = null;
 	private WTPTextJspKbConnector wtpTextJspKbConnector = null;
+	private boolean isFacelets = false;
 	
 	public static IPromptingProvider seamPromptingProvider;
 	
@@ -94,6 +99,10 @@ public class ValueHelper {
 		editorInput = jspEditor.getEditorInput();
 		
 		wtpTextJspKbConnector = jspEditor.getWTPTextJspKbConnector();
+		
+		if(pageContext != null) {
+			updateFacelets();
+		}
 		return pageContext != null || pageConnector != null;
 	}
 
@@ -285,5 +294,28 @@ public class ValueHelper {
 		IWorkbenchWindow window = (workbench == null) ? null : workbench.getActiveWorkbenchWindow();
 		return (window == null) ? null : window.getActivePage();
 	}	
+	
+	public boolean isFacetets() {
+		return isFacelets;
+	}
 
+	public void updateFacelets() {
+		VpeTaglibManager tldManager = getTaglibManager();
+		if(tldManager == null) return;
+		List<TaglibData> list = tldManager.getTagLibs();
+		if(list == null) return;
+		isFacelets = false;
+		IDocument document = getDocument();
+		JspWtpKbConnector kbConnector = (JspWtpKbConnector)wtpTextJspKbConnector.getConnector();
+		kbConnector.unregisterAllResources(true);
+		for(int i = 0; i < list.size(); i++) {
+			TaglibData data = list.get(i);
+			RedHatHtmlContentAssistProcessor.registerTld(data, kbConnector, document, editorInput);
+			isFacelets = isFacelets || data.getUri().equals(RedHatHtmlContentAssistProcessor.faceletUri);
+		}
+		if(isFacelets) {
+			kbConnector.registerResource(RedHatHtmlContentAssistProcessor.faceletHtmlResource);
+			kbConnector.unregisterJspResource();
+		}
+	}
 }

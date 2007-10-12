@@ -96,6 +96,10 @@ public class VpeProperties implements ExtendedProperties {
 	public String getNodeName() {
 		return node == null ? "" : node.getNodeName();
 	}
+	
+	public Node getNode() {
+		return node;
+	}
 
 	public ExtendedCellEditorProvider createCellEditorProvider() {
 		return new ExtendedCellEditorProviderImpl();

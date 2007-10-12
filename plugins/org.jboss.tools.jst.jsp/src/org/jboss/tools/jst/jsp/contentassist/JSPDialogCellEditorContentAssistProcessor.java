@@ -128,6 +128,17 @@ public class JSPDialogCellEditorContentAssistProcessor extends JavaPackageComple
                 			replacementBeginPosition, replacementLength, cursorPosition, SharedXMLEditorPluginImageHelper.getImage(SharedXMLEditorPluginImageHelper.IMG_OBJ_ATTRIBUTE),
             				kbProposal.getLabel(), null, kbProposal.getContextInfo(), relevance);
             		proposalsList.add(proposal);
+                } else {
+                	StringBuffer replacementStringBuffer = new StringBuffer(kbProposal.getReplacementString());
+                    int replacementBeginPosition = 0;
+                	int replacementLength = text.length();
+                	int cursorPositionDelta = 0;
+                	String replacementString = replacementStringBuffer.toString();
+                	int cursorPosition = kbProposal.getPosition() + cursorPositionDelta;
+                	RedHatCustomCompletionProposal proposal = new RedHatCustomCompletionProposal(kbProposal.autoActivationContentAssistantAfterApplication(), replacementString,
+                			replacementBeginPosition, replacementLength, cursorPosition, SharedXMLEditorPluginImageHelper.getImage(SharedXMLEditorPluginImageHelper.IMG_OBJ_ATTRIBUTE),
+            				kbProposal.getLabel(), null, kbProposal.getContextInfo(), relevance);
+                	proposalsList.add(proposal);
                 }
             }
         } catch (KbException e) {
@@ -149,15 +160,8 @@ public class JSPDialogCellEditorContentAssistProcessor extends JavaPackageComple
 	}
 
 	void updateFacelets() {
-		VpeTaglibManager tldManager = valueHelper.getTaglibManager();
-		if(tldManager == null) return;
-		List list = tldManager.getTagLibs();
-		if(list == null) return;
-		isFacelets = false;
-		for(int i = 0; i < list.size(); i++) {
-			TaglibData data = (TaglibData)list.get(i);
-			isFacelets = isFacelets || data.getUri().equals(RedHatHtmlContentAssistProcessor.faceletUri);
-		}
+		valueHelper.updateFacelets();
+		isFacelets = valueHelper.isFacetets();
 	}
 
 }

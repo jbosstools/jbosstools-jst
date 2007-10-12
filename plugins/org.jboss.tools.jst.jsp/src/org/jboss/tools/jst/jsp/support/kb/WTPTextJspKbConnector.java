@@ -168,6 +168,10 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
 	public boolean registerResource(KbResource resource) {
 		return kbConnector.registerResource(resource);
 	}
+	
+	public KbConnector getConnector() {
+		return kbConnector;
+	}
 
 	/**
 	 * @see org.jboss.tools.common.kb.KbConnector#unregisterResource(org.jboss.tools.common.kb.KbResource)

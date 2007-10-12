@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.common.meta.key.WizardKeys;
 import org.jboss.tools.jst.jsp.contentassist.JSPDialogCellEditorContentAssistProcessor;
+import org.jboss.tools.jst.jsp.contentassist.RedHatHtmlContentAssistProcessor;
 import org.jboss.tools.jst.jsp.drop.treeviewer.model.RootElement;
 
 /**
@@ -57,7 +58,11 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
 		if(button == null || button.isDisposed()) return;
 		String attributeName = "" + context.getProperty("attributeName");
 		String nodeName = "" + context.getProperty("nodeName");
-		String query = "/" + nodeName + "@" + attributeName;
+		String query = "/";
+		if(valueHelper.isFacetets()) {
+			query += RedHatHtmlContentAssistProcessor.faceletHtmlPrefixStart;
+		}
+		query += nodeName + "@" + attributeName;
 		RootElement root = (RootElement)valueHelper.getInitalInput(query);
 		boolean enabled = root != null && root.getChildren().length > 0;
 		getButtonControl().setVisible(enabled);
@@ -67,7 +72,11 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
 		externalEditing = true;
 		String attributeName = "" + context.getProperty("attributeName");
 		String nodeName = "" + context.getProperty("nodeName");
-		String query = "/" + nodeName + "@" + attributeName;
+		String query = "/";
+		if(valueHelper != null && valueHelper.isFacetets()) {
+			query += RedHatHtmlContentAssistProcessor.faceletHtmlPrefixStart;
+		}
+		query += nodeName + "@" + attributeName;
 		context.setProperty("query", query);
 		context.setProperty("help", query);
 		context.setProperty("title", "Edit " + WizardKeys.toDisplayName(attributeName));
