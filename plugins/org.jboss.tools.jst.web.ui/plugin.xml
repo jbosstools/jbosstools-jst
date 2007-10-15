@@ -191,10 +191,10 @@
             <separator name="d">
             </separator>
          </menu>
-         <action class="org.jboss.tools.jst.web.ui.action.UnregisterFromServerXmlActionDelegate" enablesFor="*" id="org.jboss.tools.common.xstudio.action.UnregisterFromServerXmlActionDelegate" label="%popupMenus.action.unregisterFromServerXml" menubarPath="RedHat4Web/c">
-         </action>
-         <action class="org.jboss.tools.jst.web.ui.action.RegisterInServerXmlActionDelegate" enablesFor="*" id="org.jboss.tools.common.xstudio.action.RegisterInServerXmlActionDelegate" label="%popupMenus.action.registerInServerXml" menubarPath="RedHat4Web/c">
-         </action>
+         <!--action class="org.jboss.tools.jst.web.ui.action.UnregisterFromServerXmlActionDelegate" enablesFor="*" id="org.jboss.tools.common.xstudio.action.UnregisterFromServerXmlActionDelegate" label="%popupMenus.action.unregisterFromServerXml" menubarPath="RedHat4Web/c">
+         </action-->
+         <!--action class="org.jboss.tools.jst.web.ui.action.RegisterInServerXmlActionDelegate" enablesFor="*" id="org.jboss.tools.common.xstudio.action.RegisterInServerXmlActionDelegate" label="%popupMenus.action.registerInServerXml" menubarPath="RedHat4Web/c">
+         </action-->
          <action class="org.jboss.tools.jst.web.ui.action.SaveProjectAsTemplateActionDelegate" enablesFor="*" id="org.jboss.tools.common.xstudio.action.SaveProjectAsTemplateActionDelegate" label="%popupMenus.action.saveAsTemplate" menubarPath="RedHat4Web/c">
          </action>
       </objectContribution>
@@ -209,10 +209,10 @@
             <separator name="d">
             </separator>
          </menu>
-         <action class="org.jboss.tools.jst.web.ui.action.UnregisterFromServerXmlActionDelegate" enablesFor="*" id="org.jboss.tools.common.xstudio.action.UnregisterFromServerXmlActionDelegate" label="%popupMenus.action.unregisterFromServerXml" menubarPath="RedHat4Web/c">
-         </action>
-         <action class="org.jboss.tools.jst.web.ui.action.RegisterInServerXmlActionDelegate" enablesFor="*" id="org.jboss.tools.common.xstudio.action.RegisterInServerXmlActionDelegate" label="%popupMenus.action.registerInServerXml" menubarPath="RedHat4Web/c">
-         </action>
+         <!--action class="org.jboss.tools.jst.web.ui.action.UnregisterFromServerXmlActionDelegate" enablesFor="*" id="org.jboss.tools.common.xstudio.action.UnregisterFromServerXmlActionDelegate" label="%popupMenus.action.unregisterFromServerXml" menubarPath="RedHat4Web/c">
+         </action-->
+         <!--action class="org.jboss.tools.jst.web.ui.action.RegisterInServerXmlActionDelegate" enablesFor="*" id="org.jboss.tools.common.xstudio.action.RegisterInServerXmlActionDelegate" label="%popupMenus.action.registerInServerXml" menubarPath="RedHat4Web/c">
+         </action-->
          <action class="org.jboss.tools.jst.web.ui.action.SaveProjectAsTemplateActionDelegate" enablesFor="*" id="org.jboss.tools.common.xstudio.action.SaveProjectAsTemplateActionDelegate" label="%popupMenus.action.saveAsTemplate" menubarPath="RedHat4Web/c">
          </action>
       </objectContribution>
@@ -505,8 +505,6 @@
 			class="org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"/>
 		<xclass id="org.jboss.tools.jst.web.ui.wizards.tomcatvm.TomcatVMWizard"
 			class="org.jboss.tools.jst.web.ui.wizards.tomcatvm.TomcatVMWizard"/>
-		<xclass id="org.jboss.tools.jst.web.ui.wizards.appregister.AppRegisterWizard"
-			class="org.jboss.tools.jst.web.ui.wizards.appregister.AppRegisterWizard"/>
 		<xclass id="org.jboss.tools.jst.web.ui.wizards.links.HiddenLinksWizard"
 			class="org.jboss.tools.jst.web.ui.wizards.links.HiddenLinksWizard"/>
    </extension>
