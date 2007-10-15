@@ -88,10 +88,10 @@
       </editor>
    </extension>
    <extension point="org.eclipse.ui.actionSets">
-      <actionSet description="%actionSets.modelActions.description" id="com.redhat.studio.actionSet" label="%actionSets.modelActions.label" visible="true">
+      <!--actionSet description="%actionSets.modelActions.description" id="com.redhat.studio.actionSet" label="%actionSets.modelActions.label" visible="true">
          <action class="org.jboss.tools.jst.web.ui.action.RunPageActionDelegate" icon="images/xstudio/actions/run_project.gif" id="org.jboss.tools.jst.web.ui.action.RunPageActionDelegate" label="%actionSets.serverActions.runApplicationFromSelectedElement.label" style="pulldown" toolbarPath="Normal/SSRun" tooltip="%actionSets.serverActions.runApplicationFromSelectedElement.label">
          </action>
-      </actionSet>
+      </actionSet-->
    </extension>
    <!--extension id="textproblemmarker" name="%textProblemName" point="org.eclipse.core.resources.markers">
       <super type="org.eclipse.core.resources.problemmarker">
