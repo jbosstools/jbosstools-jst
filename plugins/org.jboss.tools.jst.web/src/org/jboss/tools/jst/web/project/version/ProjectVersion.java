@@ -36,6 +36,8 @@ public class ProjectVersion {
 	String projectTemplatesLocation;
 	String[] order = new String[0];
 	
+	String preferredServletVersion = null;
+	
 	ProjectVersion(ProjectVersions versions) {
 		this.versions = versions;
 	}
@@ -58,6 +60,10 @@ public class ProjectVersion {
 	
 	public String getProjectTemplatesLocation() {
 		return projectTemplatesLocation;
+	}
+	
+	public String getPreferredServletVersion() {
+		return preferredServletVersion;
 	}
 	
 	public String getErrorMessage() {
@@ -94,6 +100,10 @@ public class ProjectVersion {
 	void load(Element e) {
 		element = e;
 		name = e.getAttribute("displayName"); //$NON-NLS-1$
+		String sv = e.getAttribute("servlet-version");
+		if(sv != null && sv.trim().length() > 0) {
+			preferredServletVersion = sv.trim();
+		}
 		ArrayList<LibraryReference> ls = new ArrayList<LibraryReference>();
 		NodeList nl = e.getChildNodes();
 		for (int i = 0; i < nl.getLength(); i++) {

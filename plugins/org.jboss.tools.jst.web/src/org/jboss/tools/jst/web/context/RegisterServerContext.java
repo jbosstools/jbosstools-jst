@@ -70,6 +70,10 @@ public class RegisterServerContext {
 		servletVersion = v;
 	}
 	
+	public String getServletVersion() {
+		return servletVersion;
+	}
+
 	public void setProjectHandle(IProject p) {
 		project = p;
 	}

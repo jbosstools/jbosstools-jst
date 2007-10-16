@@ -39,6 +39,10 @@ public class ProjectTemplate {
 		this.projectVersion = version;
 	}
 	
+	public ProjectVersion getProjectVersion() {
+		return projectVersion;
+	}
+	
 	public void init(String name, String root) {
 		this.root = new File(root);
 		this.location = new File(root, name);

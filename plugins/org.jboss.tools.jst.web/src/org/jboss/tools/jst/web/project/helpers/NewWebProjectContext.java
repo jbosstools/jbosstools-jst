@@ -14,6 +14,7 @@ import java.util.*;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.*;
 import org.jboss.tools.jst.web.context.RegisterServerContext;
+import org.jboss.tools.jst.web.project.version.ProjectVersion;
 
 public abstract class NewWebProjectContext {
 	public static final String ATTR_NAME                 = "name";
@@ -94,6 +95,10 @@ public abstract class NewWebProjectContext {
 		servletVersion = value;
 		registry.setServletVersion(value);
 	}
+	
+	public String getServletVersion() {
+		return servletVersion;
+	}
 
 	public RegisterServerContext getRegisterServerContext() {
 		return registry;
@@ -115,6 +120,32 @@ public abstract class NewWebProjectContext {
 	
 	public ProjectTemplate getProjectTemplate() {
 		return projectTemplateEdit;
+	}
+	
+	public String validateServletVersion() {
+		if(projectTemplateEdit == null) return null;
+		ProjectVersion v = projectTemplateEdit.getProjectVersion();
+		if(v == null) return null;
+		String pref = v.getPreferredServletVersion();
+		if(pref == null) return null;
+		int c = compareServletVersions(pref, servletVersion);
+		if(c > 0) {
+			return "Servlet version must be at least " + pref;
+		}
+		return null;
+	}
+	
+	public int compareServletVersions(String sv1, String sv2) {
+		if(sv1.equals(sv2)) return 0;
+		if(sv1.length() == 0 || sv2.length() == 0) return 0;
+		int i1 = sv1.indexOf('.');
+		int i2 = sv2.indexOf('.');
+		if(i1 < 0 || i2 < 0) return sv1.compareTo(sv2);
+		String p1 = sv1.substring(0, i1);
+		String p2 = sv2.substring(0, i2);
+		int r = p1.compareTo(p2);
+		if(r != 0) return r;
+		return compareServletVersions(sv1.substring(i1 + 1), sv2.substring(i2 + 1));
 	}
 	
 }
