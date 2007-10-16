@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.project.helpers;
 
 import java.util.*;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.*;
 import org.jboss.tools.jst.web.context.RegisterServerContext;
@@ -37,6 +38,8 @@ public abstract class NewWebProjectContext {
 	protected String projectTemplate;
 
 	protected RegisterServerContext registry;
+	
+	Map<String, String> prefs = new HashMap<String, String>();
 	
 	public NewWebProjectContext() {
 		registry = new RegisterServerContext(RegisterServerContext.PROJECT_MODE_NEW);
@@ -94,6 +97,9 @@ public abstract class NewWebProjectContext {
 	public void setServletVersion(String value) {
 		servletVersion = value;
 		registry.setServletVersion(value);
+		if(version != null) {
+			prefs.put(version, value);
+		}
 	}
 	
 	public String getServletVersion() {
@@ -112,6 +118,18 @@ public abstract class NewWebProjectContext {
 		if(version != null && version.equals(value)) return; 
 		version = value;
 		projectTemplateEdit = template.getProjectTemplate(version, projectTemplate);
+		
+		String sv = prefs.get(version);
+		if(sv != null) {
+			setServletVersion(sv);
+		}
+
+		String pref = projectTemplateEdit.getProjectVersion().getPreferredServletVersion();
+		if(pref != null && compareServletVersions(pref, servletVersion) > 0) {
+			setServletVersion(pref);
+		} else if(servletVersion != null) {
+			prefs.put(version, servletVersion);
+		}
 	}
 	
 	public IWebProjectTemplate getTemplate() {
