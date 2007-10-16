@@ -11,10 +11,19 @@
 package org.jboss.tools.jst.web.server;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.runtime.*;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.wst.common.componentcore.internal.util.ComponentUtilities;
 import org.eclipse.wst.server.core.*;
 import org.eclipse.wst.server.core.internal.ServerType;
+import org.jboss.tools.common.model.XModel;
+import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.filesystems.FileSystemsHelper;
+import org.jboss.tools.common.model.plugin.ModelPlugin;
+import org.jboss.tools.common.model.project.IModelNature;
+import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 
@@ -180,6 +189,92 @@ public class RegistrationHelper {
 	public static IModule findModule(IProject project) {
 		return ServerUtil.getModule(project);
 		
+	}
+
+	public static void runRegisterInServerJob(IProject p, IServer server) {
+		runRegisterInServerJob(p, new IServer[]{server}, null);
+	}
+
+	public static void runRegisterInServerJob(IProject p, IServer[] servers, String contextRoot) {
+		RegisterServerJob job = new RegisterServerJob(p, servers, contextRoot);
+		job.schedule(100);
+	}
+	
+	// registerInJob
+	
+	private static class RegisterServerJob extends Job {
+		long counter = 100;
+		IProject p;
+		IServer[] servers;
+		String contextRoot;
+		public RegisterServerJob(IProject p, IServer[] servers, String contextRoot) {
+			super("Register in Server");
+			this.p = p;
+			this.servers = servers;
+			this.contextRoot = contextRoot;
+		}
+
+		protected IStatus run(IProgressMonitor monitor) {
+			try {
+				if(RegistrationHelper.findModule(p) == null) {
+					counter *= 2;
+					if(counter > 10000) {
+						String mesage = "Timeout expired for registering project " + p + " in server. Please check the project and try context menu action.";
+						return new Status(IStatus.ERROR, "org.jboss.tools.jst.web", 0, mesage, null);
+					} else {
+						schedule(counter);
+					}
+				} else {
+					ModelPlugin.getWorkspace().run(new WR(), monitor);
+				}
+			} catch (Exception e) {
+				WebModelPlugin.getPluginLog().logError(e);
+			}
+			return Status.OK_STATUS;
+		}
+
+		class WR implements IWorkspaceRunnable {
+			public void run(IProgressMonitor monitor) throws CoreException {
+				try {
+					register(p, servers, contextRoot, monitor);
+				} catch (Exception e) {
+					WebModelPlugin.getPluginLog().logError(e);
+				}
+			}
+			
+		}
+	}
+
+	private static void register(IProject p, IServer[] servers, String contextRoot, IProgressMonitor monitor) throws Exception {
+		if(monitor != null) monitor.beginTask("", 100);
+		if(monitor != null) monitor.worked(5);
+
+		int step = 70;
+		if(monitor != null) {
+			monitor.worked(5);
+			step = step / (2 * servers.length + 1);
+		}
+		if(contextRoot != null && !contextRoot.equals(ComponentUtilities.getServerContextRoot(p))) {
+			ComponentUtilities.setServerContextRoot(p, contextRoot);
+		}
+		for (int i = 0; i < servers.length; i++) {
+			if(monitor != null) {
+				monitor.worked(step);
+				monitor.subTask(servers[i].getName());
+			}
+			RegistrationHelper.register(p, servers[i]);
+			if(monitor != null) monitor.worked(step);
+		}
+		
+		if(contextRoot != null) {
+			IModelNature n = EclipseResourceUtil.getModelNature(p);
+			XModel model = n == null ? null : n.getModel();
+			if(model != null) {
+				XModelObject object = FileSystemsHelper.getFileSystems(model);
+				if(object != null) model.changeObjectAttribute(object, "application name", contextRoot);
+			}
+		}
+		if(monitor != null) monitor.worked(20);
 	}
 
 }
