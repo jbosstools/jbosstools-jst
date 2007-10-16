@@ -398,23 +398,25 @@ public class RedHatHtmlContentAssistProcessor extends HTMLContentAssistProcessor
 		} catch(Exception e) {
 			JspEditorPlugin.getPluginLog().logError(e);
 		}
-		for (Iterator iter = kbProposals.iterator(); iter.hasNext();) {
-			KbProposal kbProposal = (KbProposal) iter.next();
-			if(ignoreProposal(kbProposal)) {
-				continue;
+		if(kbProposals!=null) {
+			for (Iterator iter = kbProposals.iterator(); iter.hasNext();) {
+				KbProposal kbProposal = (KbProposal) iter.next();
+				if(ignoreProposal(kbProposal)) {
+					continue;
+				}
+				String proposedInfo = kbProposal.getContextInfo();
+				String kbReplacementString = kbProposal.getReplacementString();
+				String replacementString = kbReplacementString + ">";
+				String displayString = kbProposal.getLabel();
+				boolean autoContentAssistant = replacementString.indexOf('\"')>-1 && replacementString.indexOf("=")>-1;
+				int cursorAdjustment = replacementString.length();
+				if(!kbReplacementString.endsWith("/")) {
+					replacementString = replacementString + "</" + displayString + ">";
+				}
+				Image image = XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_TAG_GENERIC);
+				RedHatCustomCompletionProposal proposal = new RedHatCustomCompletionProposal(autoContentAssistant, replacementString, contentAssistRequest.getReplacementBeginPosition(), contentAssistRequest.getReplacementLength(), cursorAdjustment, image, displayString, null, proposedInfo, XMLRelevanceConstants.R_TAG_NAME);
+				contentAssistRequest.addProposal(proposal);
 			}
-			String proposedInfo = kbProposal.getContextInfo();
-			String kbReplacementString = kbProposal.getReplacementString();
-			String replacementString = kbReplacementString + ">";
-			String displayString = kbProposal.getLabel();
-			boolean autoContentAssistant = replacementString.indexOf('\"')>-1 && replacementString.indexOf("=")>-1;
-			int cursorAdjustment = replacementString.length();
-			if(!kbReplacementString.endsWith("/")) {
-				replacementString = replacementString + "</" + displayString + ">";
-			}
-			Image image = XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_TAG_GENERIC);
-			RedHatCustomCompletionProposal proposal = new RedHatCustomCompletionProposal(autoContentAssistant, replacementString, contentAssistRequest.getReplacementBeginPosition(), contentAssistRequest.getReplacementLength(), cursorAdjustment, image, displayString, null, proposedInfo, XMLRelevanceConstants.R_TAG_NAME);
-			contentAssistRequest.addProposal(proposal);
 		}
 		super.addTagNameProposals(contentAssistRequest, childPosition);
 	}
@@ -471,7 +473,7 @@ public class RedHatHtmlContentAssistProcessor extends HTMLContentAssistProcessor
 
 	public void addTaglib(String uri, String prefix) {
 	}
-	
+
 	public void removeTaglib(String uri, String prefix) {
 	}
 
