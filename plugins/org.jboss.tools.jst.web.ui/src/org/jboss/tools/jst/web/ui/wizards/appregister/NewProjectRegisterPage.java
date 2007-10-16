@@ -106,6 +106,12 @@ public class NewProjectRegisterPage extends WizardPage {
 	public void loadServletVersion() {
 		String currentServletVersion = support.getPropertyEditorAdapterByName("servletVersion").getStringValue(true);
 		
+		String vs = context.getServletVersion();
+		if(vs != null && vs.length() > 0 && !vs.equals(currentServletVersion)) {
+			context.setServletVersion(vs);
+			support.getPropertyEditorAdapterByName("servletVersion").setValue(vs);
+		}
+		
 		if(context != null && context.getProjectTemplate() != null) {
 			String prefServletVersion = context.getProjectTemplate().getProjectVersion().getPreferredServletVersion();
 			if(prefServletVersion != null) {
