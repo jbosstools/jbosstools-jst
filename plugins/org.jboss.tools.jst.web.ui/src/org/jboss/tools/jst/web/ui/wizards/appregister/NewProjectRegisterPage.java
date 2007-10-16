@@ -61,6 +61,7 @@ public class NewProjectRegisterPage extends WizardPage {
 
 	private void initServletSupport() {
 		String defaultServletVersion = servletPreference.getValue();
+		
 		XEntityData entityData = XEntityDataImpl.create(
 			new String[][]{{"WebPrjCreateStepDirs", ""}, {"servletVersion", ""}});
 		entityData.setValue("servletVersion", defaultServletVersion);
@@ -94,11 +95,27 @@ public class NewProjectRegisterPage extends WizardPage {
 	public void setVisible(boolean visible)	{
 		if (visible) {
 			lock = true;
+			loadServletVersion();
 			appRegister.loadApplicationName();
 			lock = false;
 		}
 		setPageComplete(validatePage());
 		super.setVisible(visible);
+	}
+	
+	public void loadServletVersion() {
+		String currentServletVersion = support.getPropertyEditorAdapterByName("servletVersion").getStringValue(true);
+		
+		if(context != null && context.getProjectTemplate() != null) {
+			String prefServletVersion = context.getProjectTemplate().getProjectVersion().getPreferredServletVersion();
+			if(prefServletVersion != null) {
+				int i = context.compareServletVersions(prefServletVersion, currentServletVersion);
+				if(i > 0) {
+					context.setServletVersion(prefServletVersion);
+					support.getPropertyEditorAdapterByName("servletVersion").setValue(prefServletVersion);
+				}
+			}
+		}
 	}
 	
 	private boolean lock = false;
@@ -108,6 +125,9 @@ public class NewProjectRegisterPage extends WizardPage {
 		try {
 			appRegister.commit();
 			String msg = appRegister.getErrorMessage();
+			if(msg == null) {
+				msg = context.validateServletVersion();
+			}
 			if(msg != null) {
 				setErrorMessage(msg);
 				return false;
