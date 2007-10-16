@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.0"?>
 <plugin>
-
    <extension point="org.eclipse.ui.editorActions">
       <editorContribution id="org.jboss.tools.jst.web.ui.jspEditorContribution" targetID="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
          <action actionID="RulerDoubleClick" class="org.jboss.tools.jst.web.debug.ui.internal.ToggleBreakpointActionDelegate" id="org.jboss.tools.jst.web.debug.ui.internal.ToggleBreakpointActionDelegate" label="Toggle Breakpoint">
@@ -16,22 +15,4 @@
       <imageprovider class="org.jboss.tools.jst.web.debug.ui.internal.BreakpointImageProvider" id="org.jboss.tools.jst.web.debug.ui.breakpointImageProvider" markertype="org.jboss.tools.jst.web.debug.jspLineBreakpointMarker">
       </imageprovider>
    </extension>
-   <extension point="org.eclipse.ui.views">
-      <category id="org.eclipse.debug.ui" name="debug"/> 
-      <view category="org.eclipse.debug.ui" class="org.jboss.tools.jst.web.debug.ui.internal.views.xpl.WebDataView" icon="images/xstudio/debug/web_data_view.gif" id="org.jboss.tools.jst.web.debug.ui.internal.views.WebDataView" name="Web Data"/> 
-   </extension>
-   <extension point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension targetID="org.eclipse.debug.ui.DebugPerspective">
-         <perspectiveShortcut id="org.eclipse.debug.ui.DebugPerspective"/>
-      </perspectiveExtension>
-      <perspectiveExtension targetID="org.eclipse.debug.ui.DebugPerspective">
-         <view closeable="true" id="org.jboss.tools.jst.web.debug.ui.internal.views.WebDataView" moveable="true" relationship="stack" relative="org.eclipse.debug.ui.VariableView" showTitle="true" standalone="true" visible="true"/>
-      </perspectiveExtension>
-   </extension>
-   
-   <extension point="org.eclipse.ui.preferencePages">
-      <page category="org.jboss.tools.common.model.ui" class="org.jboss.tools.jst.web.debug.ui.internal.views.properties.WebDataPreferencePage" id="org.jboss.tools.jst.web.debug.ui.internal.views.properties.WebData" name="WebData">
-      </page>
-   </extension>
-
 </plugin>
