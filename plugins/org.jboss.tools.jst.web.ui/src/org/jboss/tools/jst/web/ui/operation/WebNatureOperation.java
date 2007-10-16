@@ -304,87 +304,12 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 		model.changeObjectAttribute(fs, "application name", registry.getApplicationName());
 		fs.setModified(true);
 		model.save();
-		ModelPlugin.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
+		if(registry.isEnabled()) ModelPlugin.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
 			public void run() {
-				Job job = new RegisterServerJob();
-				job.schedule(100);
+				RegistrationHelper.runRegisterInServerJob(getProject(), registry.getTargetServers(), null);
 			}
 		});
 	}
-	
-	class RegisterServerJob extends Job {
-		long counter = 100;
-
-		public RegisterServerJob() {
-			super("Register in Server");
-		}
-
-		protected IStatus run(IProgressMonitor monitor) {
-			try {
-				if(RegistrationHelper.findModule(getProject()) == null) {
-					counter *= 2;
-					if(counter > 10000) {
-						String mesage = "Timeout expired for registering project " + getProject() + " in server. Please check the project and try context menu action.";
-						return new Status(IStatus.ERROR, "org.jboss.tools.jst.web", 0, mesage, null);
-					} else {
-						schedule(counter);
-					}
-				} else {
-					ModelPlugin.getWorkspace().run(new WR(), monitor);
-				}
-			} catch (Exception e) {
-				WebUiPlugin.getPluginLog().logError(e);
-			}
-			return Status.OK_STATUS;
-		}
-	}
-	
-	class WR implements IWorkspaceRunnable {
-		public void run(IProgressMonitor monitor) throws CoreException {
-			try {
-				registerServer(monitor);
-			} catch (Exception e) {
-				WebUiPlugin.getPluginLog().logError(e);
-			}
-		}
-		
-	}
-
-	/*
-	 * 
-	 */
-	private void registerServer(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-		if (!registry.isEnabled()) return;
-		if(monitor != null) monitor.beginTask("", 100);
-		if(monitor != null) monitor.worked(5);
-		IServer[] servers = registry.getTargetServers();
-		int step = 70;
-		if(monitor != null) {
-			monitor.worked(5);
-			step = step / (2 * servers.length + 1);
-		}
-		for (int i = 0; i < servers.length; i++) {
-			ComponentUtilities.setServerContextRoot(getProject(), registry.getApplicationName());
-			if(monitor != null) {
-				monitor.worked(step);
-				monitor.subTask(servers[i].getName());
-			}
-			RegistrationHelper.register(getProject(), servers[i]);
-			if(monitor != null) monitor.worked(step);
-		}
-		if(servers.length > 0) {
-			IModule module = ServerUtil.getModule("com.ibm.wtp.web.server:" + getProject().getName());
-			if(module == null) return;
-			try {
-				ServerCore.setDefaultServer(module, servers[0], null);
-			} catch (CoreException e) {
-				WebUiPlugin.getPluginLog().logError(e);
-			}
-		}
-		if(monitor != null) monitor.worked(20);
-	}
-	
-	
 	
 	protected boolean checkOverwrite() {
 		return true;
