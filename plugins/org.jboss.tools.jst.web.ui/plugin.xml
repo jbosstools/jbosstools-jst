@@ -125,7 +125,7 @@
    </extension>
 
    <extension point="org.eclipse.ui.newWizards">
-      <category id="org.jboss.tools.jst.web" name="Red Hat Developer Studio">
+      <category id="org.jboss.tools.jst.web" name="JBoss Tools">
       </category>
       <wizard category="org.jboss.tools.jst.web" class="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSFileWizard" icon="images/xstudio/wizards/new_css_file.gif" id="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSFileWizard" name="CSS File" project="false">
          <selection class="org.eclipse.core.resources.IResource">
@@ -166,8 +166,8 @@
       </wizard>
    </extension>
 
-   <extension id="org.jboss.tools.jst.web.ui.views" name="Red Hat Developer Studio" point="org.eclipse.ui.views">
-      <category id="web.views.category.id" name="Red Hat Developer Studio">
+   <extension id="org.jboss.tools.jst.web.ui.views" name="JBoss Tools" point="org.eclipse.ui.views">
+      <category id="web.views.category.id" name="JBoss Tools">
       </category>
       <view category="web.views.category.id" class="org.jboss.tools.common.model.ui.views.palette.PaletteViewPart" icon="images/xstudio/views/palette.gif" id="org.jboss.tools.common.model.ui.views.palette.PaletteView" name="%paletteViewPart.name">
       </view>
@@ -181,7 +181,7 @@
 
    <extension point="org.eclipse.ui.popupMenus">
       <objectContribution id="RedHatEclipse4Web_IProject" objectClass="org.eclipse.core.resources.IProject">
-         <menu id="RedHat4Web" label="Red Hat Developer Studio" path="additions">
+         <menu id="RedHat4Web" label="JBoss Tools Developer Studio" path="additions">
             <separator name="a">
             </separator>
             <separator name="b">
@@ -199,7 +199,7 @@
          </action>
       </objectContribution>
       <objectContribution id="RedHatEclipse4Web_IJavaProject" objectClass="org.eclipse.jdt.core.IJavaProject">
-         <menu id="RedHat4Web" label="Red Hat Developer Studio" path="additions">
+         <menu id="RedHat4Web" label="JBoss Tools Developer Studio" path="additions">
             <separator name="a">
             </separator>
             <separator name="b">
@@ -217,7 +217,7 @@
          </action>
       </objectContribution>
       <!--objectContribution id="RedHatEclipse4Web_IFile" objectClass="org.eclipse.core.resources.IFile">
-         <menu id="RedHat4Web" label="Red Hat Developer Studio" path="additions">
+         <menu id="RedHat4Web" label="JBoss Tools" path="additions">
             <separator name="a">
             </separator>
             <separator name="generate">
@@ -228,7 +228,7 @@
          
       </objectContribution-->
       <objectContribution id="RedHatEclipse4Web_XModelObject" objectClass="org.jboss.tools.common.model.XModelObject">
-         <menu id="RedHat4Web" label="Red Hat Developer Studio" path="additions">
+         <menu id="RedHat4Web" label="JBoss Tools" path="additions">
             <separator name="a">
             </separator>
             <separator name="generate">
@@ -376,7 +376,7 @@
 </extension>
 <extension point="org.eclipse.ui.navigator.navigatorContent">
   <navigatorContent
-            name="Red Hat File Content Provider"
+            name="JBoss Tools File Content Provider"
             priority="normal"
             icon="images/xstudio/views/web_project.gif"
             activeByDefault="true"
@@ -410,7 +410,7 @@
 
 <extension point="org.eclipse.ui.navigator.navigatorContent">
   <navigatorContent
-            name="Red Hat Project Content Provider"
+            name="JBoss Tools Project Content Provider"
             priority="highest"
             icon="images/xstudio/views/web_project.gif"
             activeByDefault="true"
