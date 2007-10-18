@@ -124,8 +124,10 @@
       </editorType>
    </extension>
 
-   <extension point="org.eclipse.ui.newWizards">
-      <category id="org.jboss.tools.jst.web" name="JBoss Tools">
+   <extension point="org.eclipse.ui.newWizards">      
+      <category name="JBoss Tools Web" 
+                parentCategory="org.eclipse.wst.web.ui" 
+                id="org.jboss.tools.jst.web">
       </category>
       <wizard category="org.jboss.tools.jst.web" class="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSFileWizard" icon="images/xstudio/wizards/new_css_file.gif" id="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSFileWizard" name="CSS File" project="false">
          <selection class="org.eclipse.core.resources.IResource">
@@ -167,7 +169,7 @@
    </extension>
 
    <extension id="org.jboss.tools.jst.web.ui.views" name="JBoss Tools" point="org.eclipse.ui.views">
-      <category id="web.views.category.id" name="JBoss Tools">
+      <category id="web.views.category.id" name="JBoss Tools Web">
       </category>
       <view category="web.views.category.id" class="org.jboss.tools.common.model.ui.views.palette.PaletteViewPart" icon="images/xstudio/views/palette.gif" id="org.jboss.tools.common.model.ui.views.palette.PaletteView" name="%paletteViewPart.name">
       </view>
