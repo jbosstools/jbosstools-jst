@@ -20,12 +20,10 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.eclipse.ui.IEditorInput;
-
-import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
-
 import org.jboss.tools.common.kb.KbDinamicResource;
 import org.jboss.tools.common.kb.KbIcon;
 import org.jboss.tools.common.kb.KbProposal;
+import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
 import org.jboss.tools.jst.web.project.list.IWebPromptingProvider;
 import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
 
@@ -35,7 +33,6 @@ import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
 public class WTPKbdActionResource extends WTPKbAbstractModelResource {
 	private String fPath;
 	public static String SUPPORTED_ID = WebPromptingProvider.JSF_VIEW_ACTIONS;
-	public static String SUPPORTED_ID_SHALE = WebPromptingProvider.SHALE_VIEW_DIALOGS;
 
 	public WTPKbdActionResource(IEditorInput editorInput, WTPTextJspKbConnector connector) {
 		super(editorInput);
@@ -58,14 +55,7 @@ public class WTPKbdActionResource extends WTPKbAbstractModelResource {
 		view.put(IWebPromptingProvider.VIEW_PATH, fPath); 
 
 		List<Object> sourceList = fProvider.getList(fXModelObject.getModel(), SUPPORTED_ID, "", view);
-		if(view != null) {
-			List shaleDialogList = (List)fProvider.getList(fXModelObject.getModel(), SUPPORTED_ID_SHALE, "", view);
-			if(shaleDialogList != null) {
-				Iterator it = shaleDialogList.iterator();
-				while(it.hasNext())	sourceList.add(it.next());
-			}
-		}
-		
+
 		if (sourceList != null && !sourceList.isEmpty()) {
 			Set<String> sorted = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
 			Iterator it = sourceList.iterator();

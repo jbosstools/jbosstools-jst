@@ -57,11 +57,6 @@ public interface IWebPromptingProvider extends IPromptingProvider {
 	static String STRUTS_OPEN_TAG_LIBRARY = "struts.open.taglibrary";
 	static String STRUTS_OPEN_METHOD = "struts.open.method";
 
-	static String SHALE_OPEN_COMPONENT = "shale.open.component";
-	static String SHALE_COMPONENTS = "shale.components";
-	static String SHALE_OPEN_DIALOG = "shale.open.dialog";
-	static String SHALE_VIEW_DIALOGS = "shale.view.dialogs";
-
 	static String PROPERTY_TYPE = "propertyType";
 	static String PROPERTY_BEAN_ONLY = "bean-only";
 	static String PARAMETER_TYPES = "parameterTypes";  // String[]

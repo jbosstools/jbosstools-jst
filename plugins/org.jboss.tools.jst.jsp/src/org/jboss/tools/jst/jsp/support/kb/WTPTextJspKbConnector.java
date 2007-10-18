@@ -28,24 +28,22 @@ import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.xml.core.internal.document.NodeContainer;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import org.jboss.tools.common.kb.KbConnector;
 import org.jboss.tools.common.kb.KbConnectorFactory;
 import org.jboss.tools.common.kb.KbConnectorType;
 import org.jboss.tools.common.kb.KbException;
 import org.jboss.tools.common.kb.KbResource;
 import org.jboss.tools.common.kb.TagDescriptor;
-import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.web.tld.TaglibData;
 import org.jboss.tools.jst.web.tld.VpeTaglibListener;
 import org.jboss.tools.jst.web.tld.VpeTaglibManager;
 import org.jboss.tools.jst.web.tld.VpeTaglibManagerProvider;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * @author Jeremy
@@ -71,7 +69,6 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
 	private WTPKbdBeanMethodResource fBeanMethodResourceRegistered = null;
 	private WTPKbImageFileResource fImageFileResourced = null;
 	private WTPKbdManagedBeanNameResource fManagedBeanNameResourceRegistered = null;
-	private WTPKbdJSFIDResource fJSFIDResource = null;
 	private WTPKbJsfValuesResource fJSFValuesResource = null;
 	WTPKbdTaglibResource fTaglibResource = null;
 
@@ -121,11 +118,6 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
 			if(managedBeanNameResource.isReadyToUse()) {
 				fManagedBeanNameResourceRegistered = managedBeanNameResource;
 				registerResource(fManagedBeanNameResourceRegistered);
-			}
-			WTPKbdJSFIDResource jsfIDResource = new WTPKbdJSFIDResource(editorInput);
-			if(jsfIDResource.isReadyToUse()) {
-				fJSFIDResource = jsfIDResource;
-				registerResource(fJSFIDResource);
 			}
 			WTPKbJsfValuesResource resource = new WTPKbJsfValuesResource(editorInput, this);
 			if(resource.isReadyToUse()) {

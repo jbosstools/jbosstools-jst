@@ -24,8 +24,7 @@ public class WebPromptingProvider implements IWebPromptingProvider {
 	static {
 		String[][] pns = new String[][]{
 			{"org.jboss.tools.jsf.model.pv.JSFPromptingProvider", "org.jboss.tools.jsf"},
-			{"org.jboss.tools.struts.model.pv.StrutsPromptingProvider", "org.jboss.tools.struts"},
-			{"org.jboss.tools.shale.model.pv.ShalePromptingProvider", "org.jboss.tools.shale"}
+			{"org.jboss.tools.struts.model.pv.StrutsPromptingProvider", "org.jboss.tools.struts"}
 		};
 		List<IWebPromptingProvider> l = new ArrayList<IWebPromptingProvider>();
 		for (int i = 0; i < pns.length; i++) {
