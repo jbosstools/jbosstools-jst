@@ -125,11 +125,11 @@ public class TilesMultiPageContributor extends AbstractMultiPageContributor {
 		updateStatus();
 	}
 
-	public static void registerKeyBindings(IHandlerService handler, String[] actions, ActionRegistry registry) {
+	public void registerKeyBindings(IHandlerService handler, String[] actions, ActionRegistry registry) {
 		for (int i = 0; i < actions.length; i++) {
 			IAction action = registry.getAction(actions[i]);
 			if(action == null) continue;
-			handler.activateHandler(actions[i], new ActionHandler(action));
+			registerKeyBinding(handler, actions[i], action);
 		}
 	}
 
