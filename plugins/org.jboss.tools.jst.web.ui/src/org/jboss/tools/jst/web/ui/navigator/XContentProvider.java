@@ -13,6 +13,9 @@ package org.jboss.tools.jst.web.ui.navigator;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
@@ -46,6 +49,13 @@ public class XContentProvider implements ITreeContentProvider {
 			return o.getChildrenForSave();
 		} else if(parentElement instanceof IFile) {
 			IFile f = (IFile)parentElement;
+			if(!f.isSynchronized(IResource.DEPTH_ZERO)) {
+				IPath p = f.getLocation();
+				if(p != null) {
+					if(!p.toFile().isFile()) return null;
+				}
+			}
+			if(!f.isAccessible()) return null;
 			XModelObject o = EclipseResourceUtil.getObjectByResource(f);
 			XFilteredTree filteredTree = getFilteredTree(o);
 			if(filteredTree != null) {
