@@ -15,6 +15,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.core.IJavaProject;
 import org.jboss.tools.common.model.XFilteredTree;
 import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.project.IModelNature;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 
 public class XProjectContentProvider extends XContentProvider {
@@ -32,7 +33,10 @@ public class XProjectContentProvider extends XContentProvider {
 				parentElement = ((IJavaProject)parentElement).getProject();
 			}
 			IProject f = (IProject)parentElement;
+			IModelNature n = EclipseResourceUtil.getModelNature(f);
+			if(n == null) return null;
 			XModelObject o = EclipseResourceUtil.getObjectByResource(f);
+			if(o == null) o = EclipseResourceUtil.createObjectForResource(f);
 			XFilteredTree filteredTree = getFilteredTree(o);
 			if(filteredTree == null) {
 				filteredTree = getFilteredTree(o);
