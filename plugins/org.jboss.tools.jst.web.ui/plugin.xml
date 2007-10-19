@@ -126,7 +126,6 @@
 
    <extension point="org.eclipse.ui.newWizards">      
       <category name="JBoss Tools Web" 
-                parentCategory="org.eclipse.wst.web.ui" 
                 id="org.jboss.tools.jst.web">
       </category>
       <wizard category="org.jboss.tools.jst.web" class="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSFileWizard" icon="images/xstudio/wizards/new_css_file.gif" id="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSFileWizard" name="CSS File" project="false">
