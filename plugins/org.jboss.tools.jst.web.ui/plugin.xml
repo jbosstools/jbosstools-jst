@@ -128,40 +128,97 @@
       <category name="JBoss Tools Web" 
                 id="org.jboss.tools.jst.web">
       </category>
-      <wizard category="org.jboss.tools.jst.web" class="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSFileWizard" icon="images/xstudio/wizards/new_css_file.gif" id="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSFileWizard" name="CSS File" project="false">
+      <wizard
+            category="org.jboss.tools.jst.web"
+            class="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSFileWizard"
+            finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
+            icon="images/xstudio/wizards/new_css_file.gif"
+            id="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSFileWizard"
+            name="CSS File"
+            preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
+            project="false">
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
       </wizard>
-      <wizard category="org.jboss.tools.jst.web" class="org.jboss.tools.jst.web.ui.wizards.newfile.NewJSFileWizard" icon="images/xstudio/wizards/new_js_file.gif" id="org.jboss.tools.jst.web.ui.wizards.newfile.NewJSFileWizard" name="JS File" project="false">
+      <wizard
+            category="org.jboss.tools.jst.web"
+            class="org.jboss.tools.jst.web.ui.wizards.newfile.NewJSFileWizard"
+            finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
+            icon="images/xstudio/wizards/new_js_file.gif"
+            id="org.jboss.tools.jst.web.ui.wizards.newfile.NewJSFileWizard"
+            name="JS File"
+            preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
+            project="false">
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
       </wizard>
-      <wizard category="org.jboss.tools.jst.web" class="org.jboss.tools.jst.web.ui.wizards.newfile.NewWebFileWizard" icon="images/xstudio/wizards/new_webapp_file.gif" id="org.jboss.tools.jst.web.ui.wizards.newfile.NewWebFileWizard" name="Web Descriptor" project="false">
+      <wizard
+            category="org.jboss.tools.jst.web"
+            class="org.jboss.tools.jst.web.ui.wizards.newfile.NewWebFileWizard"
+            finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
+            icon="images/xstudio/wizards/new_webapp_file.gif"
+            id="org.jboss.tools.jst.web.ui.wizards.newfile.NewWebFileWizard"
+            name="Web Descriptor"
+            preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
+            project="false">
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
       </wizard>
-      <wizard category="org.jboss.tools.jst.web" class="org.jboss.tools.common.model.ui.wizard.newfile.NewJSPFileWizard" icon="images/xstudio/wizards/new_jsp_file.gif" id="org.jboss.tools.common.model.ui.wizard.newfile.NewJSPFileWizard" name="JSP File" project="false">
+      <wizard
+            category="org.jboss.tools.jst.web"
+            class="org.jboss.tools.common.model.ui.wizard.newfile.NewJSPFileWizard"
+            finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
+            icon="images/xstudio/wizards/new_jsp_file.gif"
+            id="org.jboss.tools.common.model.ui.wizard.newfile.NewJSPFileWizard"
+            name="JSP File"
+            preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
+            project="false">
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
       </wizard>
-      <wizard 
-         category="org.jboss.tools.jst.web" 
-         class="org.jboss.tools.common.model.ui.wizard.newfile.NewXHTMLFileWizard" 
-         icon="images/xstudio/wizards/new_html_file.gif" 
-         id="org.jboss.tools.common.model.ui.wizard.newfile.NewXHTMLFileWizard" 
-         name="XHTML File" project="false">
+      <wizard
+            category="org.jboss.tools.jst.web"
+            class="org.jboss.tools.common.model.ui.wizard.newfile.NewXHTMLFileWizard"
+            finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
+            icon="images/xstudio/wizards/new_html_file.gif"
+            id="org.jboss.tools.common.model.ui.wizard.newfile.NewXHTMLFileWizard"
+            name="XHTML File"
+            preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
+            project="false">
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
       </wizard>
-      <wizard category="org.jboss.tools.jst.web" class="org.jboss.tools.common.model.ui.wizard.newfile.NewHTMLFileWizard" icon="images/xstudio/wizards/new_html_file.gif" id="org.jboss.tools.common.model.ui.wizard.newfile.NewHTMLFileWizard" name="HTML File" project="false">
+      <wizard
+            category="org.jboss.tools.jst.web"
+            class="org.jboss.tools.common.model.ui.wizard.newfile.NewHTMLFileWizard"
+            finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
+            icon="images/xstudio/wizards/new_html_file.gif"
+            id="org.jboss.tools.common.model.ui.wizard.newfile.NewHTMLFileWizard"
+            name="HTML File"
+            preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
+            project="false">
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
       </wizard>
-      <wizard category="org.jboss.tools.jst.web" class="org.jboss.tools.common.model.ui.wizard.newfile.NewPropertiesFileWizard" icon="images/xstudio/wizards/new_properties_file.gif" id="org.jboss.tools.common.model.ui.wizard.newfile.NewPropertiesFileWizard" name="Properties File" project="false">
+      <wizard
+            category="org.jboss.tools.jst.web"
+            class="org.jboss.tools.common.model.ui.wizard.newfile.NewPropertiesFileWizard"
+            icon="images/xstudio/wizards/new_properties_file.gif"
+            id="org.jboss.tools.common.model.ui.wizard.newfile.NewPropertiesFileWizard"
+            name="Properties File"
+            project="false">
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
       </wizard>
-      <wizard category="org.jboss.tools.jst.web" class="org.jboss.tools.jst.web.ui.wizards.newfile.NewTLDFileWizard" icon="images/xstudio/wizards/new_taglibs_file.gif" id="org.jboss.tools.jst.web.ui.wizard.newfile.NewTLDFileWizard" name="TLD File" project="false">
+      <wizard
+            category="org.jboss.tools.jst.web"
+            class="org.jboss.tools.jst.web.ui.wizards.newfile.NewTLDFileWizard"
+            finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
+            icon="images/xstudio/wizards/new_taglibs_file.gif"
+            id="org.jboss.tools.jst.web.ui.wizard.newfile.NewTLDFileWizard"
+            name="TLD File"
+            preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
+            project="false">
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
       </wizard>
@@ -252,12 +309,12 @@
    </extension>
 
    <extension point="org.eclipse.ui.perspectives">
-      <perspective class="org.jboss.tools.jst.web.ui.RedHat4WebPerspectiveFactory" icon="images/xstudio/perspective.png" id="org.jboss.tools.jst.web.ui.RedHat4WebPerspective" name="%perspective.name">
+      <perspective class="org.jboss.tools.jst.web.ui.WebDevelopmentPerspectiveFactory" icon="images/xstudio/perspective.png" id="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective" name="%perspective.name">
       </perspective>
    </extension>
 
    <extension point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension targetID="org.jboss.tools.jst.web.ui.RedHat4WebPerspective">
+      <perspectiveExtension targetID="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective">
          <perspectiveShortcut id="org.eclipse.jdt.ui.JavaPerspective">
          </perspectiveShortcut>
          <perspectiveShortcut id="org.eclipse.debug.ui.DebugPerspective">
@@ -339,29 +396,29 @@
          </perspectiveShortcut>
       </perspectiveExtension>
       <perspectiveExtension targetID="org.eclipse.jdt.ui.JavaPerspective">
-         <perspectiveShortcut id="org.jboss.tools.jst.web.ui.RedHat4WebPerspective">
+         <perspectiveShortcut id="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective">
          </perspectiveShortcut>
          <viewShortcut id="org.jboss.tools.common.model.ui.navigator.NavigatorViewPart">
          </viewShortcut>
       </perspectiveExtension>
       <perspectiveExtension targetID="org.eclipse.ui.resourcePerspective">
-         <perspectiveShortcut id="org.jboss.tools.jst.web.ui.RedHat4WebPerspective">
+         <perspectiveShortcut id="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective">
          </perspectiveShortcut>
          <viewShortcut id="org.jboss.tools.common.model.ui.navigator.NavigatorViewPart">
          </viewShortcut>
       </perspectiveExtension>
       <perspectiveExtension targetID="org.eclipse.debug.ui.DebugPerspective">
-         <perspectiveShortcut id="org.jboss.tools.jst.web.ui.RedHat4WebPerspective">
+         <perspectiveShortcut id="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective">
          </perspectiveShortcut>
          <viewShortcut id="org.jboss.tools.common.model.ui.navigator.NavigatorViewPart">
          </viewShortcut>
       </perspectiveExtension>
       <perspectiveExtension targetID="org.eclipse.jdt.ui.JavaBrowsingPerspective">
-         <perspectiveShortcut id="org.jboss.tools.jst.web.ui.RedHat4WebPerspective">
+         <perspectiveShortcut id="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective">
          </perspectiveShortcut>
       </perspectiveExtension>
       <perspectiveExtension targetID="org.eclipse.jdt.ui.JavaHierarchyPerspective">
-         <perspectiveShortcut id="org.jboss.tools.jst.web.ui.RedHat4WebPerspective">
+         <perspectiveShortcut id="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective">
          </perspectiveShortcut>
       </perspectiveExtension>
    </extension>
