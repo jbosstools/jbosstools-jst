@@ -20,7 +20,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
 import org.jboss.tools.common.model.ui.views.palette.PaletteViewPart;
 import org.jboss.tools.jst.web.ui.BrowserView;
-import org.jboss.tools.jst.web.ui.RedHat4WebPerspectiveFactory;
+import org.jboss.tools.jst.web.ui.WebDevelopmentPerspectiveFactory;
 import org.jboss.tools.jst.web.ui.navigator.WebProjectsNavigator;
 
 /**
@@ -35,9 +35,9 @@ public class WebViewsTest extends TestCase {
 	protected void setUp() throws Exception {
 		IWorkbench workbench = PlatformUI.getWorkbench();
 		try {
-			workbench.showPerspective(RedHat4WebPerspectiveFactory.PERSPECTIVE_ID,workbench.getActiveWorkbenchWindow());
+			workbench.showPerspective(WebDevelopmentPerspectiveFactory.PERSPECTIVE_ID,workbench.getActiveWorkbenchWindow());
 		} catch (WorkbenchException e) {
-			fail("Cannot load perspective '" +RedHat4WebPerspectiveFactory.PERSPECTIVE_ID + "'");
+			fail("Cannot load perspective '" +WebDevelopmentPerspectiveFactory.PERSPECTIVE_ID + "'");
 		}
 	}
 
@@ -46,7 +46,7 @@ public class WebViewsTest extends TestCase {
 	 */
 	public void testRhdsPerspectiveIsDefined() {
 		IPerspectiveDescriptor perspective = getRhdsPerspective();
-		assertNotNull("Cannot find perspective '" +RedHat4WebPerspectiveFactory.PERSPECTIVE_ID + "'",perspective);		
+		assertNotNull("Cannot find perspective '" +WebDevelopmentPerspectiveFactory.PERSPECTIVE_ID + "'",perspective);		
 	}
 	
 	
@@ -54,9 +54,9 @@ public class WebViewsTest extends TestCase {
 		IPerspectiveDescriptor perspective = getRhdsPerspective();
 		IWorkbench workbench =PlatformUI.getWorkbench();
 		try {
-			workbench.showPerspective(RedHat4WebPerspectiveFactory.PERSPECTIVE_ID, workbench.getActiveWorkbenchWindow());
+			workbench.showPerspective(WebDevelopmentPerspectiveFactory.PERSPECTIVE_ID, workbench.getActiveWorkbenchWindow());
 		} catch (WorkbenchException e) {
-			fail("Cannot show perspective '" +RedHat4WebPerspectiveFactory.PERSPECTIVE_ID + "'");
+			fail("Cannot show perspective '" +WebDevelopmentPerspectiveFactory.PERSPECTIVE_ID + "'");
 		}
 	}
 	/**
@@ -89,7 +89,7 @@ public class WebViewsTest extends TestCase {
 	 */
 	private IPerspectiveDescriptor getRhdsPerspective() {
 		IPerspectiveRegistry reg = getPerspectiveRegistry();
-		return reg.findPerspectiveWithId(RedHat4WebPerspectiveFactory.PERSPECTIVE_ID);
+		return reg.findPerspectiveWithId(WebDevelopmentPerspectiveFactory.PERSPECTIVE_ID);
 	}
 
 	/*
