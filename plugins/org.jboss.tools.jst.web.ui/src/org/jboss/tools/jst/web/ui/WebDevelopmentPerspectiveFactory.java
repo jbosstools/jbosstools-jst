@@ -19,7 +19,7 @@ import org.eclipse.ui.IPerspectiveFactory;
 /**
  * @author Igels
  */
-public class RedHat4WebPerspectiveFactory implements IPerspectiveFactory {
+public class WebDevelopmentPerspectiveFactory implements IPerspectiveFactory {
 
 	public static final String PERSPECTIVE_ID = "org.jboss.tools.jst.web.ui.RedHat4WebPerspective";
 
