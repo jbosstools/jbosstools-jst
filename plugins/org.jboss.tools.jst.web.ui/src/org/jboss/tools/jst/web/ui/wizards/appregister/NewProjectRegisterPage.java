@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.ui.wizards.appregister;
 
 import org.jboss.tools.common.model.ui.attribute.XAttributeSupport;
 import org.jboss.tools.common.model.ui.util.ModelUtilities;
+import org.eclipse.jface.dialogs.DialogPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -131,15 +132,20 @@ public class NewProjectRegisterPage extends WizardPage {
 		try {
 			appRegister.commit();
 			String msg = appRegister.getErrorMessage();
+			String wrn = null;
 			if(msg == null) {
-				msg = context.validateServletVersion();
+				wrn = context.validateServletVersion();
 			}
 			if(msg != null) {
 				setErrorMessage(msg);
 				return false;
+			} else if(wrn != null) {
+				setErrorMessage(null);
+				setMessage(wrn, DialogPage.WARNING);
+			} else {
+				setErrorMessage(null);
+				setMessage(null);
 			}
-			setErrorMessage(null);
-			setMessage(null);
 			return true;
 		} finally {
 			lock = false;
