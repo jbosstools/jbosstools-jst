@@ -52,12 +52,12 @@ public abstract class ImportWebProjectWizard extends Wizard implements IImportWi
 	
 	public ImportWebProjectWizard() {
 		setNeedsProgressMonitor(true);
+		setHelpAvailable(true);
 	}
 	
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		this.workbench = workbench;
 		this.selection = selection;
-		setHelpAvailable(true);
 	}
 	
 	protected void installMainPage() {
