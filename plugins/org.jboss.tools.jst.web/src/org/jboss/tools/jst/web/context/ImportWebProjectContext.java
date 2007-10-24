@@ -13,7 +13,10 @@ package org.jboss.tools.jst.web.context;
 import java.io.File;
 import java.util.*;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.osgi.util.NLS;
 
 import org.jboss.tools.common.meta.XAttribute;
@@ -95,7 +98,11 @@ public abstract class ImportWebProjectContext implements IImportWebProjectContex
 	
 	public IProject getProjectHandle() {
 		String n = getProjectName();
-		return (n == null) ? null : ResourcesPlugin.getWorkspace().getRoot().getProject(n);
+		if(n == null || n.length() == 0) return null;
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		IStatus nameStatus = workspace.validateName(projectName, IResource.PROJECT);
+		if (!nameStatus.isOK()) return null;
+		return ResourcesPlugin.getWorkspace().getRoot().getProject(n);
 	}
 
 	public String getApplicationName() {
