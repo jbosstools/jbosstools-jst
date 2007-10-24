@@ -21,7 +21,7 @@ import org.eclipse.ui.IPerspectiveFactory;
  */
 public class WebDevelopmentPerspectiveFactory implements IPerspectiveFactory {
 
-	public static final String PERSPECTIVE_ID = "org.jboss.tools.jst.web.ui.RedHat4WebPerspective";
+	public static final String PERSPECTIVE_ID = "org.jboss.tools.jst.web.ui.WebDevelopmentPerspective";
 
 	/* (non-Javadoc)
      * @see org.eclipse.ui.IPerspectiveFactory#createInitialLayout(org.eclipse.ui.IPageLayout)
