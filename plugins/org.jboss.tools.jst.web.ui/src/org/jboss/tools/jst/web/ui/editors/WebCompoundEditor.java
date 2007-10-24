@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.ui.editors;
 
 import org.jboss.tools.common.editor.TreeFormPage;
+import org.jboss.tools.common.meta.key.WizardKeys;
 import org.jboss.tools.common.model.ui.editor.EditorDescriptor;
 import org.jboss.tools.common.model.ui.editors.multipage.DefaultMultipageEditor;
 import org.jboss.tools.jst.web.tld.model.EditorTreeConstraint;
@@ -20,7 +21,13 @@ public class WebCompoundEditor extends DefaultMultipageEditor {
 	protected void doCreatePages() {
 		if(isAppropriateNature()) {
 			treeFormPage = createTreeFormPage();
-			treeFormPage.setTitle("Web XML Editor");
+			String title = "Web XML Editor"; 
+			if(object != null) {
+				String key = object.getModelEntity().getName() + ".editorTitle";
+				String s = WizardKeys.getString(key);
+				if(s != null) title = s;
+			}
+			treeFormPage.setTitle(title);
 			((TreeFormPage)treeFormPage).addFilter(new EditorTreeConstraint());
 			treeFormPage.initialize(object);
 			addFormPage(treeFormPage);
