@@ -186,4 +186,5 @@ public class WebUIMessages extends NLS {
 	public static String CANNOT_FIND_TOOLSJAR;
 	public static String CHECK_JVM;
 	public static String CONTEXT_ROOT_CANNOT_CONTAIN_CHARACTER;
+	public static String WEB_RESOURCES;
 }
