@@ -559,7 +559,7 @@ public class TilesModel extends TilesElement implements ITilesModel, PropertyCha
 				return DEFAULT_VERTICAL_SPACING;
 			if (str.indexOf("default") >= 0)return DEFAULT_VERTICAL_SPACING; //$NON-NLS-1$
 			try {
-				return new Integer(str).intValue();
+				return Integer.parseInt(str);
 			} catch (Exception ex) {
 				return DEFAULT_VERTICAL_SPACING;
 			}
@@ -571,7 +571,7 @@ public class TilesModel extends TilesElement implements ITilesModel, PropertyCha
 				return DEFAULT_HORIZONTAL_SPACING;
 			if (str.indexOf("default") >= 0)return DEFAULT_HORIZONTAL_SPACING; //$NON-NLS-1$
 			try {
-				return new Integer(str).intValue();
+				return Integer.parseInt(str);
 			} catch (Exception ex) {
 				return DEFAULT_HORIZONTAL_SPACING;
 			}
@@ -603,23 +603,20 @@ public class TilesModel extends TilesElement implements ITilesModel, PropertyCha
 				if (pos2 >= 0) {
 					pos3 = str.indexOf(",", pos2); //$NON-NLS-1$
 					if (pos3 < 0)
-						size = new Integer(str
-								.substring(pos2 + 5, str.length())).intValue();
+						size = Integer.parseInt(str
+								.substring(pos2 + 5, str.length()));
 					else
-						size = new Integer(str.substring(pos2 + 5, pos3))
-								.intValue();
+						size = Integer.parseInt(str.substring(pos2 + 5, pos3));
 				}
 				pos2 = str.indexOf("style="); //$NON-NLS-1$
 				if (pos2 >= 0) {
 					pos3 = str.indexOf(",", pos2); //$NON-NLS-1$
 					if (pos3 < 0)
-						style = new Integer(str.substring(pos2 + 6, str
-								.length())).intValue();
+						style = Integer.parseInt(str.substring(pos2 + 6, str
+								.length()));
 					else
-						style = new Integer(str.substring(pos2 + 6, pos3))
-								.intValue();
+						style = Integer.parseInt(str.substring(pos2 + 6, pos3));
 				}
-
 			}
 
 			if (definitionNameFont == null) {
