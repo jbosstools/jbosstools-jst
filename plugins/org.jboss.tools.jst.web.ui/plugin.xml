@@ -473,7 +473,7 @@
             icon="images/xstudio/views/web_project.gif"
             activeByDefault="true"
             contentProvider="org.jboss.tools.jst.web.ui.navigator.XProjectContentProvider"
-            labelProvider="org.jboss.tools.jst.web.ui.navigator.WebProjectsLabelProvider"   
+            labelProvider="org.jboss.tools.jst.web.ui.navigator.XLabelProvider"   
             id="org.jboss.tools.jst.web.ui.navigator.projectContent">
     <triggerPoints>
       <or>         
