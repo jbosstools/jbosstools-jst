@@ -53,7 +53,9 @@ public class XActionProvider extends CommonActionProvider {
 			registerAction(actionBars, o, "CopyActions.Copy", ActionFactory.COPY.getId());
 			registerAction(actionBars, o, "CopyActions.Paste", ActionFactory.PASTE.getId());
 			registerAction(actionBars, o, "CopyActions.Cut", ActionFactory.CUT.getId());
-			actionBars.setGlobalActionHandler(ICommonActionConstants.OPEN, new XOpenAction(o));
+			if(o.getFileType() <= XModelObject.FILE) {
+				actionBars.setGlobalActionHandler(ICommonActionConstants.OPEN, new XOpenAction(o));
+			}
 		}
     }
     
