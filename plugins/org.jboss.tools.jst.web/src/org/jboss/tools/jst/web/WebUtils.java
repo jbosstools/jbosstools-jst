@@ -10,13 +10,27 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.*;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionPoint;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.JavaCore;
-
+import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
+import org.eclipse.wst.common.componentcore.ComponentCore;
+import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
 import org.jboss.tools.common.model.project.IModelNature;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.jst.web.project.WebProject;
@@ -127,4 +141,46 @@ public class WebUtils {
 		return EclipseResourceUtil.getDefaultJRELibrary();
 	}
 
+	public static void changeTimeStamp(IProject project) throws CoreException {
+		if(project == null || !project.isAccessible()) return;
+		List<IFile> fs = getFilesToTouch(project);
+		for (int i = 0; i < fs.size(); i++) {
+			IFile f = (IFile)fs.get(i);
+			f.setLocalTimeStamp(System.currentTimeMillis());
+			f.touch(new NullProgressMonitor());	// done so deployers/listeners can detect the actual change.		
+		}
+	}
+
+	private static List<IFile> getFilesToTouch(IProject project) {
+		List<IFile> fs = new ArrayList<IFile>();
+		if(project == null || !project.isAccessible()) return fs;
+		boolean isWar = J2EEProjectUtilities.isDynamicWebProject(project);
+		boolean isEar = J2EEProjectUtilities.isEARProject(project);
+
+		boolean isReferencedByEar = false;
+		if(!isEar) {
+			IProject[] ps = J2EEProjectUtilities.getReferencingEARProjects(project);
+			for (int i = 0; i < ps.length; i++) {
+				fs.addAll(getFilesToTouch(ps[i]));
+				isReferencedByEar = true;
+			}
+		}
+		if(isEar) {
+			IVirtualComponent component = ComponentCore.createComponent(project);
+			IPath path = component.getRootFolder().getProjectRelativePath();
+			IFile f = project.getFile(path.append("META-INF").append("application.xml"));
+			if(f != null && f.exists()) {
+				fs.add(f);
+			}
+		}
+		if(isWar && !isReferencedByEar) {
+			IVirtualComponent component = ComponentCore.createComponent(project);
+			IPath path = component.getRootFolder().getProjectRelativePath();
+			IFile f = project.getFile(path.append("WEB-INF").append("web.xml"));
+			if(f != null && f.exists()) {
+				fs.add(f);
+			}
+		}
+		return fs;
+	}	
 }
