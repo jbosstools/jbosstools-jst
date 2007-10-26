@@ -10,36 +10,30 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.action.server;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.jface.action.*;
-import org.eclipse.jface.viewers.*;
-import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
-import org.eclipse.ui.*;
-import org.eclipse.wst.common.componentcore.ComponentCore;
-import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
-import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
-import org.jboss.tools.jst.web.ui.WebUiPlugin;
-
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.IWorkbenchWindowActionDelegate;
+import org.jboss.tools.jst.web.WebUtils;
+import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
+import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 public class ChangeTimeStampActionDelegate implements IWorkbenchWindowActionDelegate {
-	
+
 	protected IWorkbenchWindow window;
 	String tooltip = null;
-	
+
 	IProject project = null;
 
 	protected String getActionPath() {
 		return "SaveActions.ChangeTimeStamp";  //$NON-NLS-1$
 	}
-		
+
 	public void init(IWorkbenchWindow window) {
 		this.window = window;
 	}
@@ -58,9 +52,8 @@ public class ChangeTimeStampActionDelegate implements IWorkbenchWindowActionDele
 		} else {
 			action.setToolTipText(WebUIMessages.CHANGE_TIME_STAMP + project.getName());
 		}
-		
 	}
-	
+
 	IProject getProject(Object selection) {
 		if(selection instanceof IResource) {
 			return ((IResource)selection).getProject();
@@ -70,7 +63,7 @@ public class ChangeTimeStampActionDelegate implements IWorkbenchWindowActionDele
 		}
 		return null;
 	}
-	
+
 	protected boolean computeEnabled() {
 		if(project == null || !project.isAccessible()) return false;
 		boolean isWar = J2EEProjectUtilities.isDynamicWebProject(project);
@@ -78,60 +71,16 @@ public class ChangeTimeStampActionDelegate implements IWorkbenchWindowActionDele
 		boolean isEJB = J2EEProjectUtilities.isEJBProject(project);
 		return isEar || isEJB || isWar;
 	}
-	
-	List<IFile> getFilesToTouch(IProject project) {
-		List<IFile> fs = new ArrayList<IFile>();
-		if(project == null || !project.isAccessible()) return fs;
-		boolean isWar = J2EEProjectUtilities.isDynamicWebProject(project);
-		boolean isEar = J2EEProjectUtilities.isEARProject(project);
-		
-		boolean isReferencedByEar = false;
-		if(!isEar) {
-			IProject[] ps = J2EEProjectUtilities.getReferencingEARProjects(project);
-			for (int i = 0; i < ps.length; i++) {
-				fs.addAll(getFilesToTouch(ps[i]));
-				isReferencedByEar = true;
-			}
-		}
-		if(isEar) {
-			IVirtualComponent component = ComponentCore.createComponent(project);
-			IPath path = component.getRootFolder().getProjectRelativePath();
-			IFile f = project.getFile(path.append("META-INF").append("application.xml"));
-			if(f != null && f.exists()) {
-				fs.add(f);
-			}
-		}
-		if(isWar && !isReferencedByEar) {
-			IVirtualComponent component = ComponentCore.createComponent(project);
-			IPath path = component.getRootFolder().getProjectRelativePath();
-			IFile f = project.getFile(path.append("WEB-INF").append("web.xml"));
-			if(f != null && f.exists()) {
-				fs.add(f);
-			}
-		}
-		return fs;
-	}	
 
 	public void run(IAction action) {
 		try {
-			doRun();
+			WebUtils.changeTimeStamp(project);
 		} catch (Exception e) {
 			WebUiPlugin.getPluginLog().logError(e);
-		}
-	}
-
-	protected void doRun() throws Exception {
-		if(project == null || !project.isAccessible()) return;
-		List<IFile> fs = getFilesToTouch(project);
-		for (int i = 0; i < fs.size(); i++) {
-			IFile f = (IFile)fs.get(i);
-			f.setLocalTimeStamp(System.currentTimeMillis());
-			f.touch(new NullProgressMonitor());	// done so deployers/listeners can detect the actual change.		
 		}
 	}
 
 	public void dispose() {
 		window = null;
 	}
-	
 }
