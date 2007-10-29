@@ -231,8 +231,6 @@
       </view>
       <view category="web.views.category.id" class="org.jboss.tools.jst.web.ui.navigator.WebProjectsNavigator" icon="images/xstudio/views/web_project.gif" id="org.jboss.tools.jst.web.ui.navigator.WebProjectsView" name="Web Projects">
       </view>
-      <view category="web.views.category.id" class="org.jboss.tools.jst.web.ui.BrowserView" icon="images/xstudio/views/web_help.gif" id="org.jboss.tools.jst.web.ui.action.BrowserView" name="Online Help">
-      </view>
    </extension>
 
 

@@ -42,7 +42,6 @@ public class WebDevelopmentPerspectiveFactory implements IPerspectiveFactory {
 		
 
 		IFolderLayout bottom = layout.createFolder("bottom", IPageLayout.BOTTOM, (float)0.78, editorArea); //$NON-NLS-1$
-		bottom.addView(BrowserView.ID);
 		bottom.addView(IPageLayout.ID_PROBLEM_VIEW);
 		bottom.addView(IPageLayout.ID_TASK_LIST);
 
