@@ -120,7 +120,7 @@ public abstract class ImportWebProjectWizard extends Wizard implements IImportWi
 	}
 
 	protected String getFinalPerspective() {
-		return "org.jboss.tools.jst.web.ui.RedHat4WebPerspective"; //$NON-NLS-1$
+		return "org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"; //$NON-NLS-1$
 	}
 	
 	private boolean checkServletVersion() {
