@@ -19,7 +19,6 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
 import org.jboss.tools.common.model.ui.views.palette.PaletteViewPart;
-import org.jboss.tools.jst.web.ui.BrowserView;
 import org.jboss.tools.jst.web.ui.WebDevelopmentPerspectiveFactory;
 import org.jboss.tools.jst.web.ui.navigator.WebProjectsNavigator;
 
@@ -58,13 +57,6 @@ public class WebViewsTest extends TestCase {
 		} catch (WorkbenchException e) {
 			fail("Cannot show perspective '" +WebDevelopmentPerspectiveFactory.PERSPECTIVE_ID + "'");
 		}
-	}
-	/**
-	 * 
-	 */
-	public void testBrowserViewIsShowed() {
-		IViewPart browserView = findView(BrowserView.ID);
-		assertNotNull("Browser View hasn't been loaded",browserView);
 	}
 	
 	public void testWebProjectsViewIsShowed() {
