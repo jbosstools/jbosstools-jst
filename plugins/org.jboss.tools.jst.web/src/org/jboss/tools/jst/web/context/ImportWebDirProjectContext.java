@@ -23,6 +23,7 @@ import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
 import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
+import org.jboss.tools.jst.web.model.helpers.WebAppHelper;
 
 public abstract class ImportWebDirProjectContext extends ImportWebProjectContext {
 	public static final String PAGE_NAME = "WebPrjAdoptStepName"; //$NON-NLS-1$
@@ -96,6 +97,12 @@ public abstract class ImportWebDirProjectContext extends ImportWebProjectContext
 		modules = createAdoptContext().createModulesInfo(webxml, webInfFile);
 		createAllModules();
 		setProjectJavaSrc();
+		if(webxml != null) {
+			String sv = WebAppHelper.getServletVersion(webxml);
+			if(sv != null && sv.length() > 0) {
+				setServletVersion(sv);
+			}
+		}
 	}
 
 	protected void setProjectJavaSrc() {
