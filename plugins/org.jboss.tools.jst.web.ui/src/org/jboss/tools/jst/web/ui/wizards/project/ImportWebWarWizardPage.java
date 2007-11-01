@@ -135,6 +135,7 @@ public class ImportWebWarWizardPage extends WizardPage {
 		lock = true;
 		try {
 			context.setProjectName(nameLocationAdapter.getStringValue(true));
+			appRegister.loadApplicationName();
 			if(!isDefaultPath()) return;
 			context.setCustomerLocation(getDefaultLocation());
 			projectLocationAdapter.setValue(getDefaultLocation());

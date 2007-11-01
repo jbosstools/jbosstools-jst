@@ -51,6 +51,7 @@ import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.model.ui.widgets.DefaultSettings;
 import org.jboss.tools.common.model.ui.widgets.IWidgetSettings;
+import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.jst.web.project.helpers.IWebProjectTemplate;
 import org.jboss.tools.jst.web.project.helpers.NewWebProjectContext;
 import org.jboss.tools.jst.web.project.version.ProjectVersion;
@@ -298,14 +299,7 @@ public class NewWebProjectWizardPage extends WizardPage {
 	
 	private boolean projectExistsIgnoreCase() {
 		String name = getProjectName();
-		if(name == null || name.length() == 0) return false;
-		IProject[] ps = ModelPlugin.getWorkspace().getRoot().getProjects();
-		for (int i = 0; i < ps.length; i++) {
-			if(ps[i].getName().equalsIgnoreCase(name)) {
-				return true;
-			}
-		}
-		return false;
+		return EclipseResourceUtil.projectExistsIgnoreCase(name);
 	}
 	
 	private IProject overlaps(String projectLocation) {
