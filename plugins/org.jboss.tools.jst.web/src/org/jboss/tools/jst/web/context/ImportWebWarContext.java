@@ -20,11 +20,15 @@ import java.util.StringTokenizer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.osgi.util.NLS;
 
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.plugin.ModelPlugin;
+import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 import org.jboss.tools.jst.web.project.WebModuleImpl;
@@ -43,11 +47,6 @@ public abstract class ImportWebWarContext extends ImportWebProjectContext {
 		customerLocation = location;
 	}
 	
-	public IProject getProjectHandle() {
-		String n = getProjectName();
-		return (n == null || n.length() == 0) ? null : ResourcesPlugin.getWorkspace().getRoot().getProject(n);
-	}
-
 	public String getProjectLocation() {
 		IProject p = getProjectHandle();
 		return (p == null || p.getLocation() == null) ? null : p.getLocation().toString();
@@ -116,13 +115,21 @@ public abstract class ImportWebWarContext extends ImportWebProjectContext {
 		registry.setApplicationName(value);
 		if(value == null || value.length() == 0) {
 			nameError = WebUIMessages.NAME_MUST_BE_SET;
-		} else if(getProjectHandle() != null && getProjectHandle().exists()) {
-			nameError = NLS.bind(WebUIMessages.PROJECT_ALREADY_EXISTS_IN_THE_WORKSPACE, value); //$NON-NLS-2$
 		} else {
-			nameError = null;
+			IStatus nameStatus = ModelPlugin.getWorkspace().validateName(projectName, IResource.PROJECT);
+			if (!nameStatus.isOK()) {
+				nameError = nameStatus.getMessage();
+			} else if(getProjectHandle() != null && getProjectHandle().exists()) {
+				nameError = NLS.bind(WebUIMessages.PROJECT_ALREADY_EXISTS_IN_THE_WORKSPACE, value); //$NON-NLS-2$
+			} else if(EclipseResourceUtil.projectExistsIgnoreCase(projectName)) {
+				nameError = NLS.bind(WebUIMessages.PROJECT_ALREADY_EXISTS_IN_THE_WORKSPACE, value); //$NON-NLS-2$
+			} else {
+				nameError = null;
+			}
 		}
 		projectName = value;
 	}
+	
 	
 	private void loadEntries() {
 		Enumeration en = zip.entries();
