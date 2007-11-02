@@ -13,6 +13,7 @@ package org.jboss.tools.jst.jsp.editor;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.jboss.tools.common.kb.KbTldResource;
 import org.jboss.tools.common.kb.wtp.JspWtpKbConnector;
@@ -51,12 +52,16 @@ public class TLDRegisterHelper {
 					JspEditorPlugin.getPluginLog().logError(e);
 					return;
 				}
-	        	IEditorInput input = JspEditorPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorInput();
-	        	String tldContent = DropUtils.getTldContent(input, data.getUri());
-	        	if(tldContent!=null) {
-	        		resource.setTldContent(tldContent);
-	        		wtpKbConnector.registerResource(resource, true);
-	        	}
+	        	
+	        		IEditorPart editorPart = JspEditorPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+	        		if(editorPart!=null) {
+	        				IEditorInput input = editorPart.getEditorInput();
+	        				String tldContent = DropUtils.getTldContent(input, data.getUri());
+	        				if(tldContent!=null) {
+	        	        		resource.setTldContent(tldContent);
+	        	        		wtpKbConnector.registerResource(resource, true);
+	        	        	}
+	        		}
 	        }
 		} else {
 			wtpKbConnector.registerResource(resource);
