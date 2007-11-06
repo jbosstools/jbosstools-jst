@@ -41,6 +41,7 @@ import org.jboss.tools.common.meta.action.XEntityData;
 import org.jboss.tools.common.meta.action.impl.XEntityDataImpl;
 import org.jboss.tools.common.meta.key.WizardKeys;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
+import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.util.XMLUtil;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.jst.web.context.ImportWebDirProjectContext;
@@ -307,6 +308,15 @@ public class ImportWebProjectWizardPage extends WizardPage {
 			setErrorMessage(WebUIMessages.PROJECT_EXISTS_IN_WORKSPACE + getProjectNameValue() + " exists in workspace and is closed. To use the project, please open it."); //$NON-NLS-2$
 			return false;
 		}
+		if(project == null || !project.exists()) {
+			IProject p1 = EclipseResourceUtil.findProjectIgnoreCase(projectName);
+			if(p1 != null) {
+				String message = NLS.bind(WebUIMessages.PROJECT_ALREADY_EXISTS_IN_THE_WORKSPACE, p1.getName());
+				setErrorMessage(message);
+				return false;
+			}
+		}
+
 		if(context.isInitialized()) return true;
 		boolean hasNature = false;
 		boolean hasJavaNature = false;
