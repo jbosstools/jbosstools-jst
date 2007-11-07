@@ -55,7 +55,7 @@ public class AttributeValueLabelProvider extends LabelProvider {
 		imagesPathes.put(BundlesNameResourceElement.class, "images/jdo/db_fields_folder.gif");
 		imagesPathes.put(BundleNameElement.class, "images/navigationtree/properties.gif");
 
-		imagesPathes.put(BundlesPropertiesResourceElement.class, "images/jdo/db_fields_folder.gif");
+		imagesPathes.put(BundlesPropertiesResourceElement.class, "images/file/closed_folder.gif");
 		imagesPathes.put(BundleAliasElement.class, "images/navigationtree/properties.gif");
 		imagesPathes.put(BundlePropertyElement.class, "images/navigationtree/property.gif");
 
