@@ -379,7 +379,7 @@
      ICON="action.save" displayName="Save" kind="action" name="Save"/>
     <XActionItem
      HandlerClassName="org.jboss.tools.jst.web.tomcat.ResetFileDateHandler"
-     ICON="action.save" displayName="Change Time Stamp" kind="action" name="ChangeTimeStamp"/>
+     ICON="action.save" displayName="Change Timestamp" kind="action" name="ChangeTimeStamp"/>
    </XActionItem>
    <XActionItem HIDE="always"
     HandlerClassName="org.jboss.tools.jst.web.tld.model.handlers.ExpandTLDHandler"
@@ -553,7 +553,7 @@
      ICON="action.save" displayName="Save" kind="action" name="Save"/>
     <XActionItem
      HandlerClassName="org.jboss.tools.jst.web.tomcat.ResetFileDateHandler"
-     ICON="action.save" displayName="Change Time Stamp" kind="action" name="ChangeTimeStamp"/>
+     ICON="action.save" displayName="Change Timestamp" kind="action" name="ChangeTimeStamp"/>
    </XActionItem>
    <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
     <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
@@ -881,7 +881,7 @@
      ICON="action.save" displayName="Save" kind="action" name="Save"/>
     <XActionItem
      HandlerClassName="org.jboss.tools.jst.web.tomcat.ResetFileDateHandler"
-     ICON="action.save" displayName="Change Time Stamp" kind="action" name="ChangeTimeStamp"/>
+     ICON="action.save" displayName="Change Timestamp" kind="action" name="ChangeTimeStamp"/>
    </XActionItem>
    <XActionItem HIDE="always"
     HandlerClassName="org.jboss.tools.jst.web.tld.model.handlers.ExpandTLDHandler"
@@ -1055,7 +1055,7 @@
      ICON="action.save" displayName="Save" kind="action" name="Save"/>
     <XActionItem
      HandlerClassName="org.jboss.tools.jst.web.tomcat.ResetFileDateHandler"
-     ICON="action.save" displayName="Change Time Stamp" kind="action" name="ChangeTimeStamp"/>
+     ICON="action.save" displayName="Change Timestamp" kind="action" name="ChangeTimeStamp"/>
    </XActionItem>
    <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
     <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
