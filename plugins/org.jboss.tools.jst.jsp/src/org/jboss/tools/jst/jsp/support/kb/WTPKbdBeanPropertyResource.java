@@ -38,6 +38,7 @@ public class WTPKbdBeanPropertyResource extends WTPKbAbstractModelResource {
 
 	public static String SUPPORTED_ID = WebPromptingProvider.JSF_BEAN_PROPERTIES;
 	public Properties type = new Properties();
+	protected String query;
 
 	public WTPKbdBeanPropertyResource(IEditorInput editorInput, WTPTextJspKbConnector connector) {
 		super(editorInput);
@@ -48,6 +49,7 @@ public class WTPKbdBeanPropertyResource extends WTPKbAbstractModelResource {
 	}
 
 	public Collection<KbProposal> queryProposal(String query) {
+		this.query = query;
 		Collection<KbProposal> proposals = new ArrayList<KbProposal>();
 		proposals.clear();
 		try {
