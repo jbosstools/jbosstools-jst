@@ -47,6 +47,7 @@ import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.core.ServerUtil;
 import org.eclipse.wst.server.core.internal.RuntimeWorkingCopy;
+import org.eclipse.wst.server.core.internal.ServerWorkingCopy;
 
 /**
  * @author eskimo
@@ -85,6 +86,12 @@ public class JBossASAdapterInitializer implements IStartup {
 	 */
 	public void earlyStartup() {
 
+		/*
+		 * If there are any problems with EAP not functioning the same as 
+		 * servers created from scratch, THIS is the method to go to.
+		 * 
+		 * Compare this method with JBossServerWizardFragment#performFinish()
+		 */
 		try {
 			
 			JstFirstRunPlugin.getDefault().getPreferenceStore().setDefault(FIRST_START_PREFERENCE_NAME, true);
@@ -150,6 +157,18 @@ public class JBossASAdapterInitializer implements IStartup {
 
 				server.setHost(JBOSS_AS_HOST);
 				server.setName(JBOSS_AS_NAME);
+				// JBossServer.DEPLOY_DIRECTORY
+				String deployVal = runtime.getLocation().append( "server").append(JBOSS_AS_DEFAULT_CONFIGURATION_NAME).append("deploy").toOSString();
+				((ServerWorkingCopy)server).setAttribute("org.jboss.ide.eclipse.as.core.server.deployDirectory", deployVal);
+				
+				// IDeployableServer.TEMP_DEPLOY_DIRECTORY
+				String deployTmpFolderVal = runtime.getLocation().append( "server").append(JBOSS_AS_DEFAULT_CONFIGURATION_NAME).append("tmp").append("jbosstoolsTemp").toOSString();
+				((ServerWorkingCopy)server).setAttribute("org.jboss.ide.eclipse.as.core.server.tempDeployDirectory", deployTmpFolderVal);
+
+				// If we'd need to set up a username / pw for JMX, do it here.
+//				((ServerWorkingCopy)serverWC).setAttribute(JBossServer.SERVER_USERNAME, authUser);
+//				((ServerWorkingCopy)serverWC).setAttribute(JBossServer.SERVER_PASSWORD, authPass);
+
 				server.save(false, progressMonitor);
 			}
 			
