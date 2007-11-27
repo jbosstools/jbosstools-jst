@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+<!-- contributorClass="org.jboss.tools.jst.web.tiles.editor.action.TilesActionBarContributor" -->
+   <extension id="e" name="XML Editors" point="org.jboss.tools.common.model.ui.xmlEditor">
+      <xmlEditor class="org.jboss.tools.jst.web.tiles.ui.editor.TilesCompoundEditor" contributorClass="org.jboss.tools.jst.web.tiles.ui.editor.action.TilesMultiPageContributor" entities="FileTiles" icon="images/xstudio/editors/tiles_definition.gif" name="%editors.tiles.name">
+      </xmlEditor>
+   </extension>
+   <extension point="org.jboss.tools.common.model.ui.attributeAdapter">
+      <attributeAdapter class="org.jboss.tools.jst.web.tiles.ui.attribute.adapter.DefinitionListAdapter" id="DefinitionsList">
+      </attributeAdapter>
+   </extension>
+   <extension point="org.jboss.tools.common.model.ui.attributeEditor">
+      <attributeEditor class="org.jboss.tools.common.model.ui.attribute.editor.ComboBoxEditor" id="DefinitionsList">
+      </attributeEditor>
+   </extension>
+
+   <extension point="org.jboss.tools.common.model.ui.attributeAdapter">
+      <attributeAdapter class="org.jboss.tools.jst.web.tiles.ui.attribute.adapter.DefinitionListAdapter" id="DefinitionsList">
+      </attributeAdapter>
+   </extension>
+   <extension point="org.jboss.tools.common.model.ui.attributeEditor">
+      <attributeEditor class="org.jboss.tools.common.model.ui.attribute.editor.ComboBoxEditor" id="DefinitionsList">
+      </attributeEditor>
+   </extension>
+
+   <extension
+         point="org.jboss.tools.common.model.resourceMapping">
+      <mapping
+          loader="org.jboss.tools.jst.web.tiles.ui"
+          priority="3"
+          kind="class"
+          paths=".web.tiles."
+      />
+   </extension>
+
+   <extension point="org.eclipse.ui.preferencePages">
+      <page category="org.jboss.tools.common.xstudio.editors" class="org.jboss.tools.jst.web.tiles.ui.preferences.TilesEditorTabbedPreferencesPage" id="org.jboss.tools.common.xstudio.editors.tilesdiagram" name="Tiles Diagram">
+      </page>
+   </extension>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <category id="org.jboss.tools.struts" name="Struts" parentCategory="org.jboss.tools.jst.web">
+      </category>
+      <wizard category="org.jboss.tools.jst.web/org.jboss.tools.struts" class="org.jboss.tools.jst.web.tiles.ui.wizard.newfile.NewTilesFileWizard" icon="images/xstudio/wizards/new_tiles_file.gif" id="org.jboss.tools.jst.web.tiles.ui.wizard.newfile.NewTilesFileWizard" name="%new.tiles" project="false">
+         <selection class="org.eclipse.core.resources.IResource">
+         </selection>
+      </wizard>
+   </extension>
+
+   <extension point="org.jboss.tools.common.model.classes">
+		<xclass id="org.jboss.tools.jst.web.tiles.ui.editor.TilesCompoundEditor"
+			class="org.jboss.tools.jst.web.tiles.ui.editor.TilesCompoundEditor"/>
+		<xclass id="org.jboss.tools.jst.web.tiles.ui.editor.TilesEditorMessages"
+			class="org.jboss.tools.jst.web.tiles.ui.editor.TilesEditorMessages"/>
+		<xclass id="org.jboss.tools.jst.web.tiles.ui.preferences.OpenTilesEditorPreferencePage"
+			class="org.jboss.tools.jst.web.tiles.ui.preferences.OpenTilesEditorPreferencePage"/>
+		<xclass id="org.jboss.tools.jst.web.tiles.ui.editor.form.TilesFormLayoutData"
+			class="org.jboss.tools.jst.web.tiles.ui.editor.form.TilesFormLayoutData"/>
+   </extension>
+
+   <extension point="org.jboss.tools.common.model.classes">
+
+   </extension>
+
+</plugin>

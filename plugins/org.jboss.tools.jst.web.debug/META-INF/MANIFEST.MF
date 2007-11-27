@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+Eclipse-LazyStart: true
+Bundle-Name: Web Debug
+Bundle-ClassPath: debug.jar
+Bundle-Vendor: %providerName
+Bundle-SymbolicName: org.jboss.tools.jst.web.debug;singleton:=true
+Bundle-Localization: plugin
+Provide-Package: org.jboss.tools.jst.web.debug,
+ org.jboss.tools.jst.web.debug.internal,
+ org.jboss.tools.jst.web.debug.internal.xpl,
+ org.jboss.tools.jst.web.debug.xpl
+Require-Bundle: org.jboss.tools.jst.web,
+ org.jboss.tools.common,
+ org.jboss.tools.common.model,
+ org.eclipse.core.resources,
+ org.eclipse.debug.core,
+ org.eclipse.jdt.core,
+ org.eclipse.jdt.debug,
+ org.eclipse.ui.workbench,
+ org.eclipse.jface,
+ org.eclipse.jdt.debug.ui,
+ org.eclipse.debug.ui,
+ org.eclipse.jdt.ui,
+ org.eclipse.ui,
+ org.eclipse.core.runtime
+Bundle-Version: 2.0.0
+

@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+Eclipse-LazyStart: true
+Bundle-Name: Web Tiles
+Bundle-ClassPath: web-tiles.jar
+Bundle-Vendor: %providerName
+Bundle-SymbolicName: org.jboss.tools.jst.web.tiles;singleton:=true
+Bundle-Localization: plugin
+Provide-Package: org.jboss.tools.jst.web.tiles,
+ org.jboss.tools.jst.web.tiles.model,
+ org.jboss.tools.jst.web.tiles.model.handlers,
+ org.jboss.tools.jst.web.tiles.model.helpers
+Require-Bundle: org.jboss.tools.common,
+ org.eclipse.jdt.core,
+ org.eclipse.ui,
+ org.eclipse.debug.core,
+ org.eclipse.jdt.launching,
+ org.eclipse.jdt.ui,
+ org.eclipse.debug.ui,
+ org.jboss.tools.common.model,
+ org.jboss.tools.jst.web,
+ org.eclipse.jdt.debug,
+ org.eclipse.ltk.core.refactoring,
+ org.eclipse.ltk.ui.refactoring,
+ org.eclipse.core.resources,
+ org.eclipse.core.runtime
+Bundle-Version: 2.0.0
+
