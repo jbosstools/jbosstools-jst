@@ -27,27 +27,6 @@
       </attributeEditor>
    </extension>
    <extension point="org.eclipse.ui.actionSets">
-      <actionSet description="%actionSets_license.description" id="org.jboss.tools.jst.web.license" label="%actionSets_license.label" visible="true">
-         <menu id="org.jboss.tools.common.model.ui.redhat" label="%actionSets.redhatMenu.label">
-            <separator name="c">
-            </separator>
-            <separator name="a">
-            </separator>
-            <separator name="d">
-            </separator>
-            <separator name="b">
-            </separator>
-         </menu>
-         <menu id="license" label="%actionSets.licenseMenu.label" path="org.jboss.tools.common.model.ui.redhat/d">
-            <separator name="group1">
-            </separator>
-         </menu>
-         <!-- action
-               class="org.jboss.tools.jst.web.ui.action.OpenOnlineHelpActionDelegate"
-               id="org.jboss.tools.jst.web.ui.action.OpenOnlineHelpActionDelegate"
-               label="%actionSets_online_help.label"
-               menubarPath="org.jboss.tools.common.model.ui.redhat/b"/ -->
-      </actionSet>
       <actionSet description="%actionSets.serverActions.description" id="org.jboss.tools.jst.web.ui.server.actionSet" label="%actionSets.serverActions.label" visible="true">
          <action class="org.jboss.tools.jst.web.ui.action.server.SelectServerActionDelegate" icon="images/xstudio/actions/tomcat/tomcat.gif" id="org.jboss.tools.jst.web.ui.action.server.SelectServerActionDelegate" label="%actionSets.serverActions.selectServer.label" style="pulldown" toolbarPath="Normal/SelectServer" tooltip="%actionSets.serverActions.selectServer.label">
          </action>
