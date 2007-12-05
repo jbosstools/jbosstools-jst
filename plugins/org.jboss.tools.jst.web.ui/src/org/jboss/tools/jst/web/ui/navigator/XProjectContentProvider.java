@@ -53,7 +53,7 @@ public class XProjectContentProvider extends XContentProvider {
 		if(element instanceof XModelObject) {
 			XModelObject o = (XModelObject)element;
 			XFilteredTree filteredTree = getFilteredTree(o);
-			if(o == filteredTree.getRoot()) {
+			if(filteredTree != null && o == filteredTree.getRoot()) {
 				return EclipseResourceUtil.getProject(o);
 			}
 			return o.getParent();
