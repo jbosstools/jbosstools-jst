@@ -56,7 +56,7 @@ public abstract class WebProjectAdoptOperation extends WebNatureOperation {
 	}
 	
 	protected boolean isLinkingToProjectOutsideWorkspace() {
-		return true;
+		return true; //TODO modify
 	}
 		
 	protected boolean hasJavaSource() {

@@ -39,7 +39,7 @@ public abstract class NewWebProjectWizard extends Wizard implements INewWizard, 
 	
 	public NewWebProjectWizard() {
 		setNeedsProgressMonitor(true);
-		setHelpAvailable(true);
+		setHelpAvailable(false);
 	}
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {

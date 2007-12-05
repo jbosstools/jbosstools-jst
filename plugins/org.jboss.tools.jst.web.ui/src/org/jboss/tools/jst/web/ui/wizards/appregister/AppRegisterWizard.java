@@ -41,7 +41,7 @@ public class AppRegisterWizard extends Wizard implements SpecialWizard {
 	AppRegisterWizardPage page;
 	
 	public AppRegisterWizard() {
-		setHelpAvailable(true);
+		setHelpAvailable(false);
 	}
 	
 	public boolean performFinish() {

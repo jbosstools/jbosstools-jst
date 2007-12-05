@@ -37,7 +37,7 @@ public abstract class ImportWebWarWizard extends Wizard implements IImportWizard
 	protected ImportWebWarContext context;
 	
 	public ImportWebWarWizard() {
-		setHelpAvailable(true);
+		setHelpAvailable(false);
 	}
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
