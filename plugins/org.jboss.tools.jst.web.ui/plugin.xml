@@ -116,6 +116,9 @@
             name="CSS File"
             preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
             project="false">
+         <description>
+            	Create a CSS File
+         </description>
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
       </wizard>
@@ -128,6 +131,9 @@
             name="JS File"
             preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
             project="false">
+         <description>
+            	Create a JS File
+         </description>
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
       </wizard>
@@ -140,6 +146,9 @@
             name="Web Descriptor"
             preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
             project="false">
+         <description>
+            	Create a Web Descriptor
+         </description>
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
       </wizard>
@@ -152,6 +161,9 @@
             name="JSP File"
             preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
             project="false">
+         <description>
+            	Create a JSP File
+         </description>
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
       </wizard>
@@ -164,6 +176,9 @@
             name="XHTML File"
             preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
             project="false">
+         <description>
+            	Create a XHTML File
+         </description>
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
       </wizard>
@@ -176,6 +191,9 @@
             name="HTML File"
             preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
             project="false">
+         <description>
+            	Create a HTML File
+         </description>
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
       </wizard>
@@ -186,6 +204,9 @@
             id="org.jboss.tools.common.model.ui.wizard.newfile.NewPropertiesFileWizard"
             name="Properties File"
             project="false">
+         <description>
+            	Create a Properties File
+         </description>
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
       </wizard>
@@ -198,6 +219,9 @@
             name="TLD File"
             preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
             project="false">
+         <description>
+            	Create a TLD File
+         </description>
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
       </wizard>
