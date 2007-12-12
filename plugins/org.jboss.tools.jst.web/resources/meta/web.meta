@@ -79,10 +79,7 @@
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
-   <XModelAttribute default="Bundle List" name="name" xmlname="NAME">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute default="Bundle List" name="name" xmlname="NAME"/>
   </XModelAttributes>
   <XActionItem kind="list">
    <XActionItem ICON="action.empty" displayName="Create" kind="list" name="CreateActions">
@@ -111,23 +108,12 @@
   <XModelAttributes>
    <XModelAttribute default="file" loader="ElementType"
     name="element type" visibility="false">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute name="name" xmlname="NAME">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute TRIM="no" name="body" visibility="false">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute default="css" name="extension" xmlname="EXTENSION">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="name" xmlname="NAME"/>
+   <XModelAttribute TRIM="no" name="body" visibility="false"/>
+   <XModelAttribute default="css" name="extension" xmlname="EXTENSION"/>
    <XModelAttribute loader="ElementType" name="_lateload" visibility="false">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -200,23 +186,12 @@
   <XModelAttributes>
    <XModelAttribute default="file" loader="ElementType"
     name="element type" visibility="false">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute name="name" xmlname="NAME">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute TRIM="no" name="body" visibility="false">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute default="js" name="extension" xmlname="EXTENSION">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="name" xmlname="NAME"/>
+   <XModelAttribute TRIM="no" name="body" visibility="false"/>
+   <XModelAttribute default="js" name="extension" xmlname="EXTENSION"/>
    <XModelAttribute loader="ElementType" name="_lateload" visibility="false">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -289,23 +264,14 @@
   <XModelAttributes>
    <XModelAttribute default="tld" loader="ElementType"
     name="element type" visibility="false">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute name="name" xmlname="NAME">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute TRIM="no" name="body" visibility="false">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="name" xmlname="NAME"/>
+   <XModelAttribute TRIM="no" name="body" visibility="false"/>
    <XModelAttribute default="tld" name="extension" xmlname="EXTENSION">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute loader="ElementType" name="_lateload" visibility="false">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -357,13 +323,9 @@
   <XModelAttributes>
    <XModelAttribute default="tld" loader="ElementType"
     name="element type" visibility="false">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute name="name" xmlname="NAME">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="name" xmlname="NAME"/>
    <XModelAttribute default="no" name="isIncorrect" visibility="false">
     <Constraint loader="List">
      <value name="yes"/>
@@ -371,16 +333,11 @@
     </Constraint>
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute TRIM="no" name="body" visibility="false">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute TRIM="no" name="body" visibility="false"/>
    <XModelAttribute default="xml" name="extension" xmlname="EXTENSION">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute loader="ElementType" name="_lateload" visibility="false">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -451,23 +408,15 @@
   <XModelAttributes>
    <XModelAttribute default="partition" loader="ElementType"
     name="element type" visibility="false">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute default="Web" name="name" xmlname="NAME">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute name="model path" xmlname="MODEL_PATH">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute default="Web" name="name" xmlname="NAME"/>
+   <XModelAttribute name="model path" xmlname="MODEL_PATH"/>
    <XModelAttribute name="servlet version" visibility="false" xmlname="SERVLET_VERSION">
     <Constraint loader="List">
      <value name="2.2"/>
      <value name="2.3"/>
      <value name="2.4"/>
-     <value name="2.5"/>
     </Constraint>
     <Editor name="List"/>
    </XModelAttribute>
@@ -487,17 +436,12 @@
   <XModelAttributes>
    <XModelAttribute default="config" loader="ElementType"
     name="element type" visibility="false">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute name="name" xmlname="NAME">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute name="URI" xmlname="URI">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="URI" xmlname="URI"/>
    <XModelAttribute name="path on disk">
     <Constraint loader="FileFilter">
      <value name="allFiles=false"/>
@@ -507,10 +451,7 @@
     </Constraint>
     <Editor name="FileChooser"/>
    </XModelAttribute>
-   <XModelAttribute name="model path" xmlname="MODEL_PATH">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="model path" xmlname="MODEL_PATH"/>
   </XModelAttributes>
   <XActionItem kind="list"/>
   <XDependencies/>
@@ -529,17 +470,12 @@
   <XModelAttributes>
    <XModelAttribute default="module" loader="ElementType"
     name="element type" visibility="false">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute name="name" xmlname="NAME">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute name="URI" xmlname="URI">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="URI" xmlname="URI"/>
    <XModelAttribute name="path on disk">
     <Constraint loader="FileFilter">
      <value name="allFiles=false"/>
@@ -565,18 +501,9 @@
     </Constraint>
     <Editor name="FolderChooser"/>
    </XModelAttribute>
-   <XModelAttribute name="model path" xmlname="MODEL_PATH">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute name="root file system" xmlname="ROOT">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute name="src file system" xmlname="SRC">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="model path" xmlname="MODEL_PATH"/>
+   <XModelAttribute name="root file system" xmlname="ROOT"/>
+   <XModelAttribute name="src file system" xmlname="SRC"/>
   </XModelAttributes>
   <XActionItem kind="list"/>
   <XDependencies/>
@@ -590,7 +517,6 @@
   </XEntityRenderer>
   <XModelAttributes>
    <XModelAttribute default="run page helper" loader="ElementType" name="element type">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute name="url" xmlname="url">
@@ -624,10 +550,7 @@
   <XChildrenEntities/>
   <XEntityRenderer/>
   <XModelAttributes>
-   <XModelAttribute name="filter">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="filter"/>
   </XModelAttributes>
   <XActionItem kind="list"/>
   <XDependencies/>
@@ -636,10 +559,7 @@
   <XChildrenEntities/>
   <XEntityRenderer/>
   <XModelAttributes>
-   <XModelAttribute name="name" xmlname="NAME">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="name" xmlname="NAME"/>
    <XModelAttribute name="path">
     <Constraint loader="FileFilter">
      <value name="allFiles=false"/>
@@ -676,13 +596,9 @@
    </XModelAttribute>
    <XModelAttribute default="org.apache.struts.action.ActionServlet"
     name="servlet class" xmlname="servlet_class">
-    <Constraint/>
     <Editor name="EclipseClassChooser"/>
    </XModelAttribute>
-   <XModelAttribute default="*.do" name="url pattern" xmlname="url_pattern">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute default="*.do" name="url pattern" xmlname="url_pattern"/>
    <XModelAttribute name="tld files" xmlname="tld_files">
     <Constraint loader="ListAdd"/>
     <Editor name="ListAdd"/>
@@ -750,7 +666,6 @@
     <Constraint loader="List">
      <value name="2.3"/>
      <value name="2.4"/>
-     <value name="2.5"/>
     </Constraint>
     <Editor name="List"/>
    </XModelAttribute>
@@ -781,7 +696,6 @@
   <XModelAttributes>
    <XModelAttribute default="WebProject" name="name" xmlname="NAME">
     <Constraint loader="FolderName"/>
-    <Editor/>
    </XModelAttribute>
    <XModelAttribute name="web.xml location" visibility="false" xmlname="LOCATION">
     <Constraint loader="FileFilter">
@@ -807,10 +721,7 @@
     </Constraint>
     <Editor name="FileChooser"/>
    </XModelAttribute>
-   <XModelAttribute name="name">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="name"/>
    <XModelAttribute default="true" name="use default path">
     <Constraint loader="List">
      <value name="true"/>
@@ -850,15 +761,12 @@
   <XModelAttributes>
    <XModelAttribute default="folder" loader="ElementType"
     name="element type" visibility="false">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute default="Classes" name="name" xmlname="NAME">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute name="location" xmlname="LOCATION">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -877,15 +785,12 @@
   <XModelAttributes>
    <XModelAttribute default="folder" loader="ElementType"
     name="element type" visibility="false">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute default="Classpath" name="name" xmlname="NAME">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute name="location" visibility="false" xmlname="LOCATION">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -902,13 +807,9 @@
   <XModelAttributes>
    <XModelAttribute default="partition" loader="ElementType"
     name="element type" visibility="false">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute default="WebProject" name="name" xmlname="NAME">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute default="WebProject" name="name" xmlname="NAME"/>
    <XModelAttribute name="webroot" visibility="false" xmlname="LOCATION">
     <Constraint loader="FileFilter">
      <value name="allFiles=false"/>
@@ -962,7 +863,6 @@
     <Constraint loader="List">
      <value name="2.3"/>
      <value name="2.4"/>
-     <value name="2.5"/>
     </Constraint>
     <Editor name="List"/>
    </XModelAttribute>
@@ -980,13 +880,9 @@
   <XModelAttributes>
    <XModelAttribute default="partition" loader="ElementType"
     name="element type" visibility="false">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute default="WebProject" name="name" xmlname="NAME">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute default="WebProject" name="name" xmlname="NAME"/>
    <XModelAttribute default="1.1" name="version" xmlname="VERSION">
     <Constraint loader="List">
      <value name="1.0"/>
@@ -995,7 +891,6 @@
     <Editor name="List"/>
    </XModelAttribute>
    <XModelAttribute name="use default path">
-    <Constraint/>
     <Editor name="CheckBox"/>
    </XModelAttribute>
    <XModelAttribute name="location" xmlname="LOCATION">
@@ -1024,12 +919,10 @@
   <XModelAttributes>
    <XModelAttribute default="partition" loader="ElementType"
     name="element type" visibility="false">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute default="WebProject" name="name" xmlname="NAME">
     <Constraint loader="FolderName"/>
-    <Editor/>
    </XModelAttribute>
    <XModelAttribute default="1.1" name="version" xmlname="VERSION">
     <Constraint loader="List">
@@ -1060,11 +953,9 @@
   <XModelAttributes>
    <XModelAttribute default="partition" loader="ElementType"
     name="element type" visibility="false">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute name="TLDs">
-    <Constraint/>
     <Editor name="ListAdd"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -1083,15 +974,12 @@
   <XModelAttributes>
    <XModelAttribute default="folder" loader="ElementType"
     name="element type" visibility="false">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute name="name" xmlname="NAME">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute name="location" xmlname="LOCATION">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -1110,15 +998,12 @@
   <XModelAttributes>
    <XModelAttribute default="jar file" loader="ElementType"
     name="element type" visibility="false">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute name="name" xmlname="NAME">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute name="location" xmlname="LOCATION">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -1137,15 +1022,12 @@
   <XModelAttributes>
    <XModelAttribute default="partition" loader="ElementType"
     name="element type" visibility="false">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute default="Lib" name="name" xmlname="NAME">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute name="location" xmlname="LOCATION">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -1164,19 +1046,24 @@
   <XModelAttributes>
    <XModelAttribute default="folder" loader="ElementType"
     name="element type" visibility="false">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute default="Meta-Inf" name="name" xmlname="NAME">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute name="location" xmlname="LOCATION">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
+   <XActionItem
+    HandlerClassName="org.jboss.tools.struts.webprj.model.handlers.SetLocationHandler"
+    ICON="action.webprj.set_location" WizardClassName="%Default%"
+    displayName="Set location..." kind="action" name="SetLocation">
+    <EntityData EntityName="WebPrjCreateStepDirs">
+     <AttributeData AttributeName="location" Mandatory="no"/>
+    </EntityData>
+   </XActionItem>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -1193,7 +1080,6 @@
    </XModelAttribute>
    <XModelAttribute name="application name" xmlname="NAME">
     <Constraint loader="FolderName"/>
-    <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute name="location" visibility="false" xmlname="LOCATION">
     <Constraint loader="FileFilter">
@@ -1216,7 +1102,6 @@
     <Editor name="MutableMultipleChoice"/>
    </XModelAttribute>
    <XModelAttribute name="separator">
-    <Constraint/>
     <Editor name="Separator"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -1239,13 +1124,9 @@
   <XModelAttributes>
    <XModelAttribute default="partition" loader="ElementType"
     name="element type" visibility="false">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute default="WebProject" name="name" xmlname="NAME">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute default="WebProject" name="name" xmlname="NAME"/>
    <XModelAttribute name="location" visibility="false" xmlname="LOCATION">
     <Constraint loader="FileFilter">
      <value name="allFiles=false"/>
@@ -1273,15 +1154,12 @@
   <XModelAttributes>
    <XModelAttribute default="folder" loader="ElementType"
     name="element type" visibility="false">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute name="name" xmlname="NAME">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute name="location" xmlname="LOCATION">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute default="none" name="build" xmlname="BUILD">
@@ -1300,10 +1178,7 @@
     </Constraint>
     <Editor name="FolderChooser"/>
    </XModelAttribute>
-   <XModelAttribute name="create jar" xmlname="JAR">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="create jar" xmlname="JAR"/>
   </XModelAttributes>
   <XActionItem kind="list"/>
   <XDependencies/>
@@ -1320,15 +1195,12 @@
   <XModelAttributes>
    <XModelAttribute default="folder" loader="ElementType"
     name="element type" visibility="false">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute default="Sources" name="name" xmlname="NAME">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute name="location" xmlname="LOCATION">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -1349,15 +1221,12 @@
   <XModelAttributes>
    <XModelAttribute default="folder" loader="ElementType"
     name="element type" visibility="false">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute default="Web-Inf" name="name" xmlname="NAME">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute name="location" xmlname="LOCATION">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -1378,15 +1247,12 @@
   <XModelAttributes>
    <XModelAttribute default="folder" loader="ElementType"
     name="element type" visibility="false">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute default="Web-Root" name="name" xmlname="NAME">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute name="location" xmlname="LOCATION">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -1398,7 +1264,6 @@
   <XEntityRenderer/>
   <XModelAttributes>
    <XModelAttribute default="Eclipse Workspace" name="name" xmlname="NAME">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -1439,7 +1304,7 @@
     <XActionItem ICON="action.newattribute" displayName="File" group="1"
      kind="list" name="CreateFiles">
      <XActionItem kind="list" name="Web">
-      <XActionItem HandlerClassName="%SpecialWizard%"
+      <XActionItem HIDE="always" HandlerClassName="%SpecialWizard%"
        ICON="action.new.file.jsp_file"
        PROPERTIES="support=org.jboss.tools.jst.web.model.handlers.CreateJSPFileSupport;entity=FileJSP;extension=jsp;validator.addfile=true"
        displayName="JSP..." kind="action" name="CreateFileJSP">
@@ -1453,7 +1318,7 @@
         <AttributeData AttributeName="taglibs" Mandatory="no"/>
        </EntityData>
       </XActionItem>
-      <XActionItem HandlerClassName="%SpecialWizard%"
+      <XActionItem HIDE="always" HandlerClassName="%SpecialWizard%"
        ICON="action.new.file.html_file"
        PROPERTIES="support=org.jboss.tools.common.model.files.handlers.CreateFileSupport;entity=FileHTML;extension=html;validator.addfile=true"
        displayName="HTML..." kind="action" name="CreateFileHTML">
@@ -1463,7 +1328,7 @@
         <AttributeData AttributeName="name"/>
        </EntityData>
       </XActionItem>
-      <XActionItem HandlerClassName="%SpecialWizard%"
+      <XActionItem HIDE="always" HandlerClassName="%SpecialWizard%"
        ICON="action.new.file.css_file"
        PROPERTIES="support=org.jboss.tools.common.model.files.handlers.CreateFileSupport;entity=FileCSS;extension=css;validator.addfile=true"
        displayName="CSS..." kind="action" name="CreateFileCSS">
@@ -1473,7 +1338,7 @@
         <AttributeData AttributeName="name"/>
        </EntityData>
       </XActionItem>
-      <XActionItem HandlerClassName="%SpecialWizard%"
+      <XActionItem HIDE="always" HandlerClassName="%SpecialWizard%"
        ICON="action.new.file.js_file"
        PROPERTIES="support=org.jboss.tools.common.model.files.handlers.CreateFileSupport;entity=FileJS;extension=js;validator.addfile=true"
        displayName="JS..." kind="action" name="CreateFileJS">
@@ -1483,7 +1348,7 @@
         <AttributeData AttributeName="name"/>
        </EntityData>
       </XActionItem>
-      <XActionItem HandlerClassName="%SpecialWizard%"
+      <XActionItem HIDE="always" HandlerClassName="%SpecialWizard%"
        ICON="action.new.file.xhtml_file"
        PROPERTIES="support=org.jboss.tools.jst.web.model.handlers.CreateJSPFileSupport;entity=FileXHTML;extension=xhtml;validator.addfile=true"
        displayName="XHTML..." kind="action" name="CreateFileXHTML">
@@ -1505,6 +1370,26 @@
         <AttributeData AttributeName="name"/>
        </EntityData>
       </XActionItem>
+      <XActionItem HandlerClassName="%WizardInvoker%"
+       ICON="action.new.file.jsp_file"
+       PROPERTIES="plugin=org.jboss.tools.jst.web.ui;wizard=org.jboss.tools.common.model.ui.wizard.newfile.NewJSPFileWizard"
+       displayName="JSP..." kind="action" name="CreateFileJSPV"/>
+      <XActionItem HandlerClassName="%WizardInvoker%"
+       ICON="action.new.file.html_file"
+       PROPERTIES="plugin=org.jboss.tools.jst.web.ui;wizard=org.jboss.tools.common.model.ui.wizard.newfile.NewHTMLFileWizard"
+       displayName="HTML..." kind="action" name="CreateFileHTMLV"/>
+      <XActionItem HandlerClassName="%WizardInvoker%"
+       ICON="action.new.file.css_file"
+       PROPERTIES="plugin=org.jboss.tools.jst.web.ui;wizard=org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSFileWizard"
+       displayName="CSS..." kind="action" name="CreateFileCSSV"/>
+      <XActionItem HandlerClassName="%WizardInvoker%"
+       ICON="action.new.file.js_file"
+       PROPERTIES="plugin=org.jboss.tools.jst.web.ui;wizard=org.jboss.tools.jst.web.ui.wizards.newfile.NewJSFileWizard"
+       displayName="JS..." kind="action" name="CreateFileJSV"/>
+      <XActionItem HandlerClassName="%WizardInvoker%"
+       ICON="action.new.file.xhtml_file"
+       PROPERTIES="plugin=org.jboss.tools.jst.web.ui;wizard=org.jboss.tools.common.model.ui.wizard.newfile.NewXHTMLFileWizard"
+       displayName="XHTML..." kind="action" name="CreateFileXHTMLV"/>
      </XActionItem>
     </XActionItem>
    </XActionItem>
@@ -1543,7 +1428,7 @@
     <XActionItem ICON="action.newattribute" displayName="File" group="1"
      kind="list" name="CreateFiles">
      <XActionItem kind="list" name="Web">
-      <XActionItem HandlerClassName="%SpecialWizard%"
+      <XActionItem HIDE="always" HandlerClassName="%SpecialWizard%"
        ICON="action.new.file.jsp_file"
        PROPERTIES="support=org.jboss.tools.jst.web.model.handlers.CreateJSPFileSupport;entity=FileJSP;extension=jsp;validator.addfile=true"
        displayName="JSP..." kind="action" name="CreateFileJSP">
@@ -1557,7 +1442,7 @@
         <AttributeData AttributeName="taglibs" Mandatory="no"/>
        </EntityData>
       </XActionItem>
-      <XActionItem HandlerClassName="%SpecialWizard%"
+      <XActionItem HIDE="always" HandlerClassName="%SpecialWizard%"
        ICON="action.new.file.html_file"
        PROPERTIES="support=org.jboss.tools.common.model.files.handlers.CreateFileSupport;entity=FileHTML;extension=html;validator.addfile=true"
        displayName="HTML..." kind="action" name="CreateFileHTML">
@@ -1567,7 +1452,7 @@
         <AttributeData AttributeName="name"/>
        </EntityData>
       </XActionItem>
-      <XActionItem HandlerClassName="%SpecialWizard%"
+      <XActionItem HIDE="always" HandlerClassName="%SpecialWizard%"
        ICON="action.new.file.css_file"
        PROPERTIES="support=org.jboss.tools.common.model.files.handlers.CreateFileSupport;entity=FileCSS;extension=css;validator.addfile=true"
        displayName="CSS..." kind="action" name="CreateFileCSS">
@@ -1577,7 +1462,7 @@
         <AttributeData AttributeName="name"/>
        </EntityData>
       </XActionItem>
-      <XActionItem HandlerClassName="%SpecialWizard%"
+      <XActionItem HIDE="always" HandlerClassName="%SpecialWizard%"
        ICON="action.new.file.js_file"
        PROPERTIES="support=org.jboss.tools.common.model.files.handlers.CreateFileSupport;entity=FileJS;extension=js;validator.addfile=true"
        displayName="JS..." kind="action" name="CreateFileJS">
@@ -1587,7 +1472,7 @@
         <AttributeData AttributeName="name"/>
        </EntityData>
       </XActionItem>
-      <XActionItem HandlerClassName="%SpecialWizard%"
+      <XActionItem HIDE="always" HandlerClassName="%SpecialWizard%"
        ICON="action.new.file.xhtml_file"
        PROPERTIES="support=org.jboss.tools.jst.web.model.handlers.CreateJSPFileSupport;entity=FileXHTML;extension=xhtml;validator.addfile=true"
        displayName="XHTML..." kind="action" name="CreateFileXHTML">
@@ -1609,6 +1494,26 @@
         <AttributeData AttributeName="name"/>
        </EntityData>
       </XActionItem>
+      <XActionItem HandlerClassName="%WizardInvoker%"
+       ICON="action.new.file.jsp_file"
+       PROPERTIES="plugin=org.jboss.tools.jst.web.ui;wizard=org.jboss.tools.common.model.ui.wizard.newfile.NewJSPFileWizard"
+       displayName="JSP..." kind="action" name="CreateFileJSPV"/>
+      <XActionItem HandlerClassName="%WizardInvoker%"
+       ICON="action.new.file.html_file"
+       PROPERTIES="plugin=org.jboss.tools.jst.web.ui;wizard=org.jboss.tools.common.model.ui.wizard.newfile.NewHTMLFileWizard"
+       displayName="HTML..." kind="action" name="CreateFileHTMLV"/>
+      <XActionItem HandlerClassName="%WizardInvoker%"
+       ICON="action.new.file.css_file"
+       PROPERTIES="plugin=org.jboss.tools.jst.web.ui;wizard=org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSFileWizard"
+       displayName="CSS..." kind="action" name="CreateFileCSSV"/>
+      <XActionItem HandlerClassName="%WizardInvoker%"
+       ICON="action.new.file.js_file"
+       PROPERTIES="plugin=org.jboss.tools.jst.web.ui;wizard=org.jboss.tools.jst.web.ui.wizards.newfile.NewJSFileWizard"
+       displayName="JS..." kind="action" name="CreateFileJSV"/>
+      <XActionItem HandlerClassName="%WizardInvoker%"
+       ICON="action.new.file.xhtml_file"
+       PROPERTIES="plugin=org.jboss.tools.jst.web.ui;wizard=org.jboss.tools.common.model.ui.wizard.newfile.NewXHTMLFileWizard"
+       displayName="XHTML..." kind="action" name="CreateFileXHTMLV"/>
      </XActionItem>
     </XActionItem>
    </XActionItem>
@@ -1630,15 +1535,32 @@
     HandlerClassName="org.jboss.tools.jst.web.project.handlers.CreateWebPrjHandler"
     ICON="main.projects.new" SAVE_REQUIRED="yes"
     displayName="Create New Project..." kind="action" name="CreateStrutsProject"/>
+   <XActionItem HIDE="always"
+    HandlerClassName="org.jboss.tools.struts.webprj.model.handlers.ImportWebPrjHandler"
+    ICON="main.projects.item"
+    PROPERTIES="support=org.jboss.tools.struts.webprj.model.handlers.ImportWebPrjSupport"
+    SAVE_REQUIRED="yes" displayName="Adopt Existing Project..."
+    kind="action" name="ImportStrutsProject">
+    <EntityData EntityName="WebPrjCreateStepName">
+     <AttributeData AttributeName="name"/>
+     <AttributeData AttributeName="location"/>
+    </EntityData>
+    <EntityData EntityName="WebPrjCreateStepDirs">
+     <AttributeData AttributeName="webroot"/>
+     <AttributeData AttributeName="classes" Mandatory="no"/>
+     <AttributeData AttributeName="lib" Mandatory="no"/>
+     <AttributeData AttributeName="src" Mandatory="no"/>
+    </EntityData>
+   </XActionItem>
    <XActionItem HandlerClassName="%SpecialWizard%" ICON="action.empty"
     PROPERTIES="support=org.jboss.tools.struts.webprj.model.helpers.sync.SyncProjectSupport"
     displayName="Modules Configuration" kind="action" name="SynchronizeModules"/>
    <XActionItem kind="list" name="Registration">
-    <XActionItem HIDE="always"
+    <XActionItem HIDE="disabled"
      HandlerClassName="org.jboss.tools.jst.web.model.handlers.UnregisterInServerXmlHandler"
      ICON="action.empty"
      displayName="Unregister Web Context from server.xml" kind="action" name="UnregisterInServerXML"/>
-    <XActionItem HIDE="always"
+    <XActionItem
      HandlerClassName="org.jboss.tools.jst.web.model.handlers.RegisterInServerXmlHandler"
      ICON="action.empty"
      displayName="Register Web Context in server.xml" kind="action" name="RegisterInServerXML"/>

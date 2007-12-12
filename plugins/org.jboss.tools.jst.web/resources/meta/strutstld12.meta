@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE XModelEntityGroup PUBLIC "-//Red Hat, Inc.//DTD Meta 1.0//EN" "meta.dtd">
+<!DOCTYPE XModelEntityGroup PUBLIC "-//Red Hat, Inc.//DTD Meta 1.0//EN"
+                                   "meta.dtd">
 <XModelEntityGroup>
  <VERSION DEPENDS="Model:1.0" MODULE="Struts Editor" VERSION="1.1"/>
  <MAPPINGS>
@@ -40,33 +41,21 @@
   <XModelAttributes>
    <XModelAttribute default="tag library descriptor"
     loader="ElementType" name="element type">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute name="name" xmlname="NAME">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="name" xmlname="NAME"/>
    <XModelAttribute default="tld" name="extension" xmlname="EXTENSION">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute loader="ElementType" name="_lateload" visibility="false">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute
     default="-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
-    name="publicId" visibility="false">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+    name="publicId" visibility="false"/>
    <XModelAttribute
     default="http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd"
-    name="systemId" visibility="false">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+    name="systemId" visibility="false"/>
    <XModelAttribute default="no" name="isIncorrect" visibility="false">
     <Constraint loader="List">
      <value name="yes"/>
@@ -74,10 +63,7 @@
     </Constraint>
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute name="incorrectBody" visibility="false">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="incorrectBody" visibility="false"/>
    <XModelAttribute default="false" name="expanded" visibility="false">
     <Constraint loader="List">
      <value name="false"/>
@@ -86,10 +72,7 @@
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute PROPERTIES="save=always" default="1.0"
-    name="tlibversion" xmlname="tlib-version.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+    name="tlibversion" xmlname="tlib-version.#text"/>
    <XModelAttribute PROPERTIES="save=always" default="1.2"
     name="jspversion" xmlname="jsp-version.#text">
     <Constraint loader="ListString">
@@ -100,36 +83,16 @@
     </Constraint>
     <Editor name="ListString"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="save=always" name="shortname" xmlname="short-name.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute name="uri" xmlname="uri.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute name="display-name" xmlname="display-name.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute name="small-icon" xmlname="small-icon.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute name="large-icon" xmlname="large-icon.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute PROPERTIES="save=always" name="shortname" xmlname="short-name.#text"/>
+   <XModelAttribute name="uri" xmlname="uri.#text"/>
+   <XModelAttribute name="display-name" xmlname="display-name.#text"/>
+   <XModelAttribute name="small-icon" xmlname="small-icon.#text"/>
+   <XModelAttribute name="large-icon" xmlname="large-icon.#text"/>
    <XModelAttribute name="description" xmlname="description.#text">
-    <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
-   <XModelAttribute name="id" xmlname="id">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="id" xmlname="id"/>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
-    <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
    <XModelAttribute default="UTF-8" name="encoding">
@@ -285,10 +248,7 @@
   <XChildrenEntities/>
   <XEntityRenderer/>
   <XModelAttributes>
-   <XModelAttribute name="name">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="name"/>
    <XModelAttribute name="tld">
     <Constraint loader="Tree">
      <value name="AllTldsTree"/>
@@ -297,14 +257,8 @@
     </Constraint>
     <Editor name="TreeChooser"/>
    </XModelAttribute>
-   <XModelAttribute name="default prefix">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute name="library uri">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="default prefix"/>
+   <XModelAttribute name="library uri"/>
   </XModelAttributes>
   <XActionItem kind="list">
    <XActionItem kind="list" name="CreateActions">
@@ -335,19 +289,13 @@
     </Constraint>
     <Editor name="ContainerChooser"/>
    </XModelAttribute>
-   <XModelAttribute name="name" xmlname="NAME">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="name" xmlname="NAME"/>
    <XModelAttribute name="version">
     <Constraint loader="ListString"/>
     <Editor name="DropDown"/>
    </XModelAttribute>
    <XModelAttribute PROPERTIES="save=always" default="1.0"
-    name="tlibversion" xmlname="tlib-version.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+    name="tlibversion" xmlname="tlib-version.#text"/>
    <XModelAttribute PROPERTIES="save=always" default="1.2"
     name="jspversion" xmlname="jsp-version.#text">
     <Constraint loader="ListString">
@@ -358,20 +306,12 @@
     </Constraint>
     <Editor name="ListString"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="save=always" name="shortname" xmlname="short-name.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute name="uri" xmlname="uri.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute PROPERTIES="save=always" name="shortname" xmlname="short-name.#text"/>
+   <XModelAttribute name="uri" xmlname="uri.#text"/>
    <XModelAttribute name="separator">
-    <Constraint/>
     <Editor name="Separator"/>
    </XModelAttribute>
    <XModelAttribute name="separator2">
-    <Constraint/>
     <Editor name="Separator"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -387,13 +327,9 @@
   </XEntityRenderer>
   <XModelAttributes>
    <XModelAttribute default="attribute" loader="ElementType" name="element type">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="id=true" name="name" xmlname="name.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute PROPERTIES="id=true" name="name" xmlname="name.#text"/>
    <XModelAttribute default="false" name="required" xmlname="required.#text">
     <Constraint loader="List">
      <value name="true"/>
@@ -414,15 +350,12 @@
     <Editor name="List"/>
    </XModelAttribute>
    <XModelAttribute name="type" xmlname="type.#text">
-    <Constraint/>
     <Editor name="AccessibleJava"/>
    </XModelAttribute>
    <XModelAttribute name="description" xmlname="description.#text">
-    <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
-    <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -455,19 +388,13 @@
   </XEntityRenderer>
   <XModelAttributes>
    <XModelAttribute default="listener" loader="ElementType" name="element type">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute PROPERTIES="id=true" name="listener-class" xmlname="listener-class.#text">
-    <Constraint/>
     <Editor name="AccessibleJava"/>
    </XModelAttribute>
-   <XModelAttribute name="id" xmlname="id">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="id" xmlname="id"/>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
-    <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -503,11 +430,9 @@
   </XEntityRenderer>
   <XModelAttributes>
    <XModelAttribute default="listeners list" loader="ElementType" name="element type">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute default="Listeners" name="name" visibility="false" xmlname="NAME">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -547,13 +472,9 @@
   </XEntityRenderer>
   <XModelAttributes>
    <XModelAttribute default="tag" loader="ElementType" name="element type">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="save=always;id=true" name="name" xmlname="name.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute PROPERTIES="save=always;id=true" name="name" xmlname="name.#text"/>
    <XModelAttribute PROPERTIES="save=always" name="tagclass" xmlname="tag-class.#text">
     <Constraint loader="QClassName"/>
     <Editor name="AccessibleJava"/>
@@ -570,32 +491,17 @@
     </Constraint>
     <Editor name="ListString"/>
    </XModelAttribute>
-   <XModelAttribute name="display-name" xmlname="display-name.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute name="small-icon" xmlname="small-icon.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute name="large-icon" xmlname="large-icon.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="display-name" xmlname="display-name.#text"/>
+   <XModelAttribute name="small-icon" xmlname="small-icon.#text"/>
+   <XModelAttribute name="large-icon" xmlname="large-icon.#text"/>
    <XModelAttribute name="description" xmlname="description.#text">
-    <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
    <XModelAttribute name="example" xmlname="example.#text">
-    <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
-   <XModelAttribute name="id" xmlname="id">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="id" xmlname="id"/>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
-    <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -657,11 +563,9 @@
   </XEntityRenderer>
   <XModelAttributes>
    <XModelAttribute default="tags list" loader="ElementType" name="element type">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute default="Tags" name="name" visibility="false" xmlname="NAME">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -698,23 +602,16 @@
   </XEntityRenderer>
   <XModelAttributes>
    <XModelAttribute default="validator" loader="ElementType" name="element type">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute name="validator-class" xmlname="validator-class.#text">
-    <Constraint/>
     <Editor name="AccessibleJava"/>
    </XModelAttribute>
    <XModelAttribute name="description" xmlname="description.#text">
-    <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
-   <XModelAttribute name="id" visibility="false" xmlname="id">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id"/>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
-    <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -773,25 +670,12 @@
   </XEntityRenderer>
   <XModelAttributes>
    <XModelAttribute default="validator" loader="ElementType" name="element type">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="save=always;id=true" name="name-given" xmlname="name-given.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute PROPERTIES="id=true" name="name-from-attribute" xmlname="name-from-attribute.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute name="variable-class" xmlname="variable-class.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute name="declare" xmlname="declare.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute PROPERTIES="save=always;id=true" name="name-given" xmlname="name-given.#text"/>
+   <XModelAttribute PROPERTIES="id=true" name="name-from-attribute" xmlname="name-from-attribute.#text"/>
+   <XModelAttribute name="variable-class" xmlname="variable-class.#text"/>
+   <XModelAttribute name="declare" xmlname="declare.#text"/>
    <XModelAttribute name="scope" xmlname="scope.#text">
     <Constraint loader="List">
      <value/>
@@ -802,11 +686,9 @@
     <Editor name="List"/>
    </XModelAttribute>
    <XModelAttribute name="description" xmlname="description.#text">
-    <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
-    <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -865,7 +747,7 @@
     <XActionItem ICON="action.newattribute" displayName="File" group="1"
      kind="list" name="CreateFiles">
      <XActionItem displayName="Web" kind="list" name="Web">
-      <XActionItem HandlerClassName="%SpecialWizard%"
+      <XActionItem HIDE="always" HandlerClassName="%SpecialWizard%"
        ICON="main.tld.taglib"
        PROPERTIES="entity=FileTLD_1_2;extensions=.tld.;validator.addfile=true;extension=tld;support=org.jboss.tools.jst.web.tld.model.handlers.CreateTLDFileSupport;entityVersion=TLD"
        displayName="Tag Library..." kind="action" name="CreateFileTLD">
@@ -881,6 +763,10 @@
         <AttributeData AttributeName="uri" Mandatory="no"/>
        </EntityData>
       </XActionItem>
+      <XActionItem HandlerClassName="%WizardInvoker%"
+       ICON="main.tld.taglib"
+       PROPERTIES="plugin=org.jboss.tools.jst.web.ui;wizard=org.jboss.tools.jst.web.ui.wizard.newfile.NewTLDFileWizard"
+       displayName="Tag Library..." kind="action" name="CreateFileTLDV"/>
      </XActionItem>
     </XActionItem>
    </XActionItem>
@@ -896,7 +782,7 @@
     <XActionItem ICON="action.newattribute" displayName="File" group="1"
      kind="list" name="CreateFiles">
      <XActionItem displayName="Web" kind="list" name="Web">
-      <XActionItem HandlerClassName="%SpecialWizard%"
+      <XActionItem HIDE="always" HandlerClassName="%SpecialWizard%"
        ICON="main.tld.taglib"
        PROPERTIES="entity=FileTLD_1_2;extensions=.tld.;validator.addfile=true;extension=tld;support=org.jboss.tools.jst.web.tld.model.handlers.CreateTLDFileSupport;entityVersion=TLD"
        displayName="Tag Library..." kind="action" name="CreateFileTLD">
@@ -912,6 +798,10 @@
         <AttributeData AttributeName="uri" Mandatory="no"/>
        </EntityData>
       </XActionItem>
+      <XActionItem HandlerClassName="%WizardInvoker%"
+       ICON="main.tld.taglib"
+       PROPERTIES="plugin=org.jboss.tools.jst.web.ui;wizard=org.jboss.tools.jst.web.ui.wizards.newfile.NewTLDFileWizard"
+       displayName="Tag Library..." kind="action" name="CreateFileTLDV"/>
      </XActionItem>
     </XActionItem>
    </XActionItem>
