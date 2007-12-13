@@ -25,7 +25,7 @@ public class RemoveJavaSource {
 	public void execute(IProject project) {
 		IJavaProject javaProject = JavaCore.create(project);
 		try {
-			IClasspathEntry[] oldEntries = javaProject.getRawClasspath();
+			IClasspathEntry[] oldEntries = javaProject.getResolvedClasspath(true);
 			ArrayList list = new ArrayList();
 			ArrayList src = new ArrayList();
 			for (int i = 0; i < oldEntries.length; i++) {
