@@ -78,7 +78,9 @@ import org.eclipse.wst.sse.ui.internal.properties.ConfigurablePropertySheetPage;
 import org.eclipse.wst.sse.ui.internal.provisional.extensions.ConfigurationPointCalculator;
 import org.eclipse.wst.sse.ui.views.contentoutline.ContentOutlineConfiguration;
 import org.eclipse.wst.xml.core.internal.document.AttrImpl;
+import org.eclipse.wst.xml.core.internal.document.DOMModelImpl;
 import org.eclipse.wst.xml.core.internal.document.ElementImpl;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.jboss.tools.common.core.resources.XModelObjectEditorInput;
 import org.jboss.tools.common.meta.action.XActionInvoker;
 import org.jboss.tools.common.model.XModelBuffer;
@@ -109,6 +111,7 @@ import org.jboss.tools.jst.jsp.ExtendedStructuredTextViewerConfigurationJSP;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.editor.IJSPTextEditor;
 import org.jboss.tools.jst.jsp.editor.ITextFormatter;
+import org.jboss.tools.jst.jsp.editor.IVisualContext;
 import org.jboss.tools.jst.jsp.editor.IVisualController;
 import org.jboss.tools.jst.jsp.outline.JSPContentOutlineConfiguration;
 import org.jboss.tools.jst.jsp.outline.JSPPropertySheetConfiguration;
@@ -123,6 +126,7 @@ import org.jboss.tools.jst.web.tld.VpeTaglibManagerProvider;
 import org.w3c.dom.DocumentType;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
 /**
@@ -409,6 +413,9 @@ public class JSPTextEditor extends StructuredTextEditor implements
 	}
 
 	public void updateModification() {
+		//
+		getPageContext().refreshBundleValues();
+		//
 		XModelObject object = getModelObject();
 		if (object != null && !object.isModified() && isModified()) {
 			setModified(false);
@@ -601,8 +608,8 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		}
 
 		public VpeTaglibManager getTaglibManager() {
-			if (provider != null) {
-				return provider.getTaglibManager();
+			if (editor != null) {
+				return editor.getPageContext();
 			}
 			return null;
 		}
@@ -1129,5 +1136,18 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			i = i2 + END.length();
 		}
 		return false;
+	}
+	
+	protected JSPTextEditorPageContext pageContext = null;
+
+	public IVisualContext getPageContext() {
+		if (null == pageContext) {
+			pageContext = new JSPTextEditorPageContext();
+		}
+		//IDocument document = getTextViewer().getDocument();
+		//pageContext.setDocument(document);
+		IDOMDocument document = ((DOMModelImpl)getModel()).getDocument();
+		pageContext.setDocument(document);
+		return pageContext;
 	}
 }
