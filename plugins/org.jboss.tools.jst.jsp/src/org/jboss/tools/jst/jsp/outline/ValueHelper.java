@@ -96,11 +96,8 @@ public class ValueHelper {
 		IEditorPart editor = ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		if(!(editor instanceof JSPMultiPageEditor)) return false;
 		JSPTextEditor jspEditor = ((JSPMultiPageEditor)editor).getJspEditor();
-		IVisualEditor v = ((JSPMultiPageEditor)editor).getVisualEditor();
-		if(v == null) return false;
-		IVisualController c = v.getController();
-		if(c == null) return false;
-		pageContext = c.getPageContext();
+		// vitali: new version - here we use original org.jboss.tools.jst.jsp this plugin page context
+		pageContext = jspEditor.getPageContext();
 		editorInput = jspEditor.getEditorInput();
 		
 		wtpTextJspKbConnector = jspEditor.getWTPTextJspKbConnector();
