@@ -39,4 +39,11 @@ public class VpePreference extends Preference {
 	protected VpePreference(String optionPath, String attributeName) {
 		super(optionPath, attributeName);
 	}
+
+	public static boolean isAbsolutePosition() {
+		if ("yes".equals(VpePreference.USE_ABSOLUTE_POSITION.getValue())) {
+			return true;
+		}
+		return false;
+	}
 }
