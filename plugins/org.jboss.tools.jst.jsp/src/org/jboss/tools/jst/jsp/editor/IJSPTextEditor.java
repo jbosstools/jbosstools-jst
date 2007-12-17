@@ -19,4 +19,5 @@ public interface IJSPTextEditor extends IDNDTextEditor {
 	public void runDropCommand(String flavor, String data);
 	public void setVPEController(IVisualController c);	
 	public IVisualController getVPEController();
+	public IVisualContext getPageContext();
 }
