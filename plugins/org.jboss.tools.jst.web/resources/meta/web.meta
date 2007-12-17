@@ -627,7 +627,7 @@
     </Constraint>
     <Editor name="FolderChooser"/>
    </XModelAttribute>
-   <XModelAttribute name="build" visibility="false" xmlname="LOCATION">
+   <XModelAttribute name="build" visibility="false" xmlname="location">
     <Constraint loader="FileFilter">
      <value name="allFiles=false"/>
      <value name="description=Ant's build file"/>
@@ -677,7 +677,7 @@
   <XChildrenEntities/>
   <XEntityRenderer/>
   <XModelAttributes>
-   <XModelAttribute name="location" visibility="false" xmlname="LOCATION">
+   <XModelAttribute name="location" visibility="false" xmlname="location">
     <Constraint loader="FileFilter">
      <value name="allFiles=false"/>
      <value name="extensions=xml"/>
@@ -697,7 +697,7 @@
    <XModelAttribute default="WebProject" name="name" xmlname="NAME">
     <Constraint loader="FolderName"/>
    </XModelAttribute>
-   <XModelAttribute name="web.xml location" visibility="false" xmlname="LOCATION">
+   <XModelAttribute name="web.xml location" visibility="false" xmlname="location">
     <Constraint loader="FileFilter">
      <value name="allFiles=false"/>
      <value name="description=Select folder where Struts configuration file is located"/>
@@ -713,7 +713,7 @@
   <XChildrenEntities/>
   <XEntityRenderer/>
   <XModelAttributes>
-   <XModelAttribute name="*.war location" visibility="false" xmlname="LOCATION">
+   <XModelAttribute name="*.war location" visibility="false" xmlname="location">
     <Constraint loader="FileFilter">
      <value name="allFiles=false"/>
      <value name="description=Select war file with web application"/>
@@ -729,7 +729,7 @@
     </Constraint>
     <Editor name="CheckBox"/>
    </XModelAttribute>
-   <XModelAttribute name="location" visibility="false" xmlname="LOCATION">
+   <XModelAttribute name="location" visibility="false" xmlname="location">
     <Constraint loader="FileFilter">
      <value name="allFiles=false"/>
      <value name="extensions=xml"/>
@@ -766,7 +766,7 @@
    <XModelAttribute default="Classes" name="name" xmlname="NAME">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute name="location" xmlname="LOCATION">
+   <XModelAttribute name="location" xmlname="location">
     <Editor name="Uneditable"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -790,7 +790,7 @@
    <XModelAttribute default="Classpath" name="name" xmlname="NAME">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute name="location" visibility="false" xmlname="LOCATION">
+   <XModelAttribute name="location" visibility="false" xmlname="location">
     <Editor name="Uneditable"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -810,7 +810,7 @@
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute default="WebProject" name="name" xmlname="NAME"/>
-   <XModelAttribute name="webroot" visibility="false" xmlname="LOCATION">
+   <XModelAttribute name="webroot" visibility="false" xmlname="location">
     <Constraint loader="FileFilter">
      <value name="allFiles=false"/>
      <value name="description=Web Root Folder"/>
@@ -818,7 +818,7 @@
     </Constraint>
     <Editor name="FolderChooser"/>
    </XModelAttribute>
-   <XModelAttribute name="classes" visibility="false" xmlname="LOCATION">
+   <XModelAttribute name="classes" visibility="false" xmlname="location">
     <Constraint loader="FileFilter">
      <value name="allFiles=false"/>
      <value name="description=Classes Folder"/>
@@ -826,7 +826,7 @@
     </Constraint>
     <Editor name="FolderChooser"/>
    </XModelAttribute>
-   <XModelAttribute name="lib" visibility="false" xmlname="LOCATION">
+   <XModelAttribute name="lib" visibility="false" xmlname="location">
     <Constraint loader="FileFilter">
      <value name="allFiles=false"/>
      <value name="description=Lib Folder"/>
@@ -834,7 +834,7 @@
     </Constraint>
     <Editor name="FolderChooser"/>
    </XModelAttribute>
-   <XModelAttribute name="src" visibility="false" xmlname="LOCATION">
+   <XModelAttribute name="src" visibility="false" xmlname="location">
     <Constraint loader="FileFilter">
      <value name="allFiles=false"/>
      <value name="description=Src Folder"/>
@@ -893,7 +893,7 @@
    <XModelAttribute name="use default path">
     <Editor name="CheckBox"/>
    </XModelAttribute>
-   <XModelAttribute name="location" xmlname="LOCATION">
+   <XModelAttribute name="location" xmlname="location">
     <Constraint loader="FileFilter">
      <value name="allFiles=false"/>
      <value name="description=Project Root Folder"/>
@@ -931,7 +931,7 @@
     </Constraint>
     <Editor name="List"/>
    </XModelAttribute>
-   <XModelAttribute name="location" visibility="false" xmlname="LOCATION">
+   <XModelAttribute name="location" visibility="false" xmlname="location">
     <Constraint loader="FileFilter">
      <value name="allFiles=false"/>
      <value name="extensions=xml"/>
@@ -979,7 +979,7 @@
    <XModelAttribute name="name" xmlname="NAME">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute name="location" xmlname="LOCATION">
+   <XModelAttribute name="location" xmlname="location">
     <Editor name="Uneditable"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -1003,7 +1003,7 @@
    <XModelAttribute name="name" xmlname="NAME">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute name="location" xmlname="LOCATION">
+   <XModelAttribute name="location" xmlname="location">
     <Editor name="Uneditable"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -1027,7 +1027,7 @@
    <XModelAttribute default="Lib" name="name" xmlname="NAME">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute name="location" xmlname="LOCATION">
+   <XModelAttribute name="location" xmlname="location">
     <Editor name="Uneditable"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -1051,7 +1051,7 @@
    <XModelAttribute default="Meta-Inf" name="name" xmlname="NAME">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute name="location" xmlname="LOCATION">
+   <XModelAttribute name="location" xmlname="location">
     <Editor name="Uneditable"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -1081,7 +1081,7 @@
    <XModelAttribute name="application name" xmlname="NAME">
     <Constraint loader="FolderName"/>
    </XModelAttribute>
-   <XModelAttribute name="location" visibility="false" xmlname="LOCATION">
+   <XModelAttribute name="location" visibility="false" xmlname="location">
     <Constraint loader="FileFilter">
      <value name="allFiles=false"/>
      <value name="description=Select folder where Server configuration file is located"/>
@@ -1127,7 +1127,7 @@
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute default="WebProject" name="name" xmlname="NAME"/>
-   <XModelAttribute name="location" visibility="false" xmlname="LOCATION">
+   <XModelAttribute name="location" visibility="false" xmlname="location">
     <Constraint loader="FileFilter">
      <value name="allFiles=false"/>
      <value name="description=WEB-INF Folder"/>
@@ -1159,7 +1159,7 @@
    <XModelAttribute name="name" xmlname="NAME">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute name="location" xmlname="LOCATION">
+   <XModelAttribute name="location" xmlname="location">
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute default="none" name="build" xmlname="BUILD">
@@ -1200,7 +1200,7 @@
    <XModelAttribute default="Sources" name="name" xmlname="NAME">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute name="location" xmlname="LOCATION">
+   <XModelAttribute name="location" xmlname="location">
     <Editor name="Uneditable"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -1226,7 +1226,7 @@
    <XModelAttribute default="Web-Inf" name="name" xmlname="NAME">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute name="location" xmlname="LOCATION">
+   <XModelAttribute name="location" xmlname="location">
     <Editor name="Uneditable"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -1252,7 +1252,7 @@
    <XModelAttribute default="Web-Root" name="name" xmlname="NAME">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute name="location" xmlname="LOCATION">
+   <XModelAttribute name="location" xmlname="location">
     <Editor name="Uneditable"/>
    </XModelAttribute>
   </XModelAttributes>
