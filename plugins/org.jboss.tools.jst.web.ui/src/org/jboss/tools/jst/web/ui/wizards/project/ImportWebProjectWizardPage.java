@@ -47,6 +47,7 @@ import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.jst.web.context.ImportWebDirProjectContext;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
+import org.w3c.dom.Element;
 
 public class ImportWebProjectWizardPage extends WizardPage {
 	private ImportWebDirProjectContext context;
@@ -222,7 +223,13 @@ public class ImportWebProjectWizardPage extends WizardPage {
 		}
 		
 		if(projectFile != null) {
-			appName = XMLUtil.getElement(projectFile).getAttribute("APPLICATION_NAME"); //$NON-NLS-1$
+			Element element = XMLUtil.getElement(projectFile);
+			if(element.hasAttribute("APPLICATION_NAME")) { //$NON-NLS-1$
+				appName = element.getAttribute("APPLICATION_NAME"); //$NON-NLS-1$
+			} else if(element.hasAttribute("application-name")) { //$NON-NLS-1$
+				appName = element.getAttribute("application-name"); //$NON-NLS-1$
+			}
+			
 			context.setApplicationName(appName);
 		}
 	}
