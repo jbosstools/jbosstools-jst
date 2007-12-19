@@ -36,4 +36,5 @@ public interface IImportWebProjectContext {
 	public String SERVLET_VERSION_WARNING = WebUIMessages.SERVLET_VERSION_WARNING;
 	public boolean isServletVersionConsistentToWebXML();
 	public void convertWebXML(boolean backup);
+	public boolean isLinkingToProjectOutsideWorkspace();
 }

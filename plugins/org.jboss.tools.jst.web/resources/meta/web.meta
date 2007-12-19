@@ -705,6 +705,13 @@
     </Constraint>
     <Editor name="FileChooser"/>
    </XModelAttribute>
+   <XModelAttribute default="true" name="link">
+    <Constraint loader="List">
+     <value name="true"/>
+     <value name="false"/>
+    </Constraint>
+    <Editor name="CheckBox"/>
+   </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list"/>
   <XDependencies/>

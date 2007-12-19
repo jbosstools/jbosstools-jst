@@ -31,6 +31,7 @@ public abstract class ImportWebDirProjectContext extends ImportWebProjectContext
 	
 	public static final String ATTR_NAME = "name"; //$NON-NLS-1$
 	public static final String ATTR_LOCATON = "web.xml location"; //$NON-NLS-1$
+	public static final String ATTR_LINK = "link"; //$NON-NLS-1$
 	public static final String ATTR_CLASSES = "classes"; //$NON-NLS-1$
 	
 	public static final String ATTR_LIB = "lib"; //$NON-NLS-1$

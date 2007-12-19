@@ -47,6 +47,7 @@ public abstract class ImportWebProjectContext implements IImportWebProjectContex
 	protected boolean addLibraries = false;
 	protected String servletVersion = null;
 	protected String templateVersion = null;
+	protected boolean isLinkingToProjectOutsideWorkspace = true;
 	
 	public ImportWebProjectContext() {}
 	
@@ -108,30 +109,30 @@ public abstract class ImportWebProjectContext implements IImportWebProjectContex
 	public String getApplicationName() {
 		return registry.getApplicationName();
 	}
-	
+
 	public void setApplicationName(String value) {
 		registry.setApplicationName(value);
 	}
-	
+
 	public String getClassesLocation() {
 		return classesLocation;
 	}
-	
+
 	public void setClassesLocation(String value) {
 		classesLocation = value;
 	}
-	
+
 	public String getLibLocation() {
 		if((libLocation == null || libLocation.trim().length() == 0) && addLibraries) {
 			return getDefaultLibLocation();
 		}
 		return libLocation;
 	}
-	
+
 	public void setLibLocation(String value) {
 		libLocation = value;
 	}
-	
+
 	/**
 	 * Called if libLocation is not set, but addLibraries flag is true.
 	 * @return
@@ -139,19 +140,19 @@ public abstract class ImportWebProjectContext implements IImportWebProjectContex
 	public String getDefaultLibLocation() {
 		return webInfLocation == null ? "" : webInfLocation + "/lib";
 	}
-	
+
 	public String getBuildXmlLocation() {
 		return buildXmlLocation;
 	}
-	
+
 	public void setBuildXmlLocation(String value) {
 		buildXmlLocation = value;
 	}
-	
+
 	public String getWebInfLocation() {
 		return webInfLocation;	
 	}
-	
+
 	public String getWebRootPath() {
 		String result = null;
 		for (int i = 0; i < modules.length && result == null; i++)
@@ -159,7 +160,7 @@ public abstract class ImportWebProjectContext implements IImportWebProjectContex
 				result = modules[i].getAttributeValue("root"); //$NON-NLS-1$
 		return result;
 	}
-	
+
 	public String[] getJavaSources() {
 		ArrayList<String> list = new ArrayList<String>();
 		String path = null;
@@ -169,16 +170,16 @@ public abstract class ImportWebProjectContext implements IImportWebProjectContex
 		}
 		return list.toArray(new String[list.size()]);
 	}
-	
+
 	private String getModuleName(XModelObject module) {
 		String n = module.getAttributeValue("name"); //$NON-NLS-1$
 		return (n.length() == 0) ? "<default>" : n; //$NON-NLS-1$
 	}
-	
+
 	private String getJavaSource(XModelObject module) {
 		return module.getAttributeValue("java src"); //$NON-NLS-1$
 	}
-	
+
 	public String[] getExistingSources() {
 		return existingSources;
 	}
@@ -186,28 +187,36 @@ public abstract class ImportWebProjectContext implements IImportWebProjectContex
 	public void setAddLibraries(boolean b) {
 		addLibraries = b;
 	}
-	
+
 	public boolean getAddLibraries() {
 		return addLibraries;
 	}
-	
+
 	public void setServletVersion(String version) {
 		this.servletVersion = version;
 		registry.setServletVersion(version);
 	}
-	
+
 	public String getServletVersion() {
 		return servletVersion;
 	}
-	
+
 	public void setTemplateVersion(String version) {
 		this.templateVersion = version;
 	}
-	
+
 	public String getTemplateVersion() {
 		return templateVersion;
 	}
-	
+
+	public boolean isLinkingToProjectOutsideWorkspace() {
+		return isLinkingToProjectOutsideWorkspace;
+	}
+
+	public void setLinkingToProjectOutsideWorkspace(boolean b) {
+		isLinkingToProjectOutsideWorkspace = b;
+	}
+
 	protected boolean isWebXMLUpToDate(String location) {
 		if(location == null) return webXmlLocation == null;
 		if(!location.equals(webXmlLocation)) return false;
@@ -219,7 +228,7 @@ public abstract class ImportWebProjectContext implements IImportWebProjectContex
 			return webXMLTimeStamp == -1;
 		}
 	}
-	
+
 	protected void loadWebXML(String body, String location) throws Exception {
 		String entity = getTarget().getModel().getEntityRecognizer().getEntityName("xml", body); //$NON-NLS-1$
 		if(entity == null || !entity.startsWith("FileWebApp")) { //$NON-NLS-1$
@@ -242,9 +251,9 @@ public abstract class ImportWebProjectContext implements IImportWebProjectContex
 			throw new Exception(webXMLErrorMessage);
 		}
 	}
-	
+
 	public abstract String getNatureID();	
-	
+
 	public boolean isServletVersionConsistentToWebXML() {
 		if(webxml == null) return true;
 		String entity = webxml.getModelEntity().getName();
@@ -253,7 +262,7 @@ public abstract class ImportWebProjectContext implements IImportWebProjectContex
 		if("2.5".equals(servletVersion) && !entity.equals("FileWebApp25")) return false; //$NON-NLS-1$ //$NON-NLS-2$
 		return true;		
 	}
-	
+
 	public void convertWebXML(boolean backup) {
 		if(webxml == null) return;
 		String entity = webxml.getModelEntity().getName();
@@ -273,7 +282,7 @@ public abstract class ImportWebProjectContext implements IImportWebProjectContex
 	public String getWebXMLVersion() {
 		return WebAppHelper.getServletVersion(webxml);
 	}
-	
+
 	private void convertWebXML(String entity, boolean backup) {
 		if(backup) backUp();
 		XModelObject newweb = XModelObjectLoaderUtil.createValidObject(webxml.getModel(), entity);
@@ -317,7 +326,7 @@ public abstract class ImportWebProjectContext implements IImportWebProjectContex
 		String text = ((FileAnyImpl)newweb).getAsText();
 		FileUtil.writeFile(new File(webXmlLocation), text);
 	}
-	
+
 	private void backUp() {
 		if(webXmlLocation == null) return;
 		File source = new File(webXmlLocation);
