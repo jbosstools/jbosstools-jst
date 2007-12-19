@@ -54,8 +54,10 @@ public class ImportWebProjectWizardPage extends WizardPage {
 	private XAttributeSupport support;
 	private IModelPropertyEditorAdapter projectNameAdapter;
 	private IModelPropertyEditorAdapter webXmlLocationAdapter;
+	private IModelPropertyEditorAdapter linkAdapter;
 	private PropertyChangeListener updateDataListener;
 	private IPropertyEditor projectNameEditor;
+	private IPropertyEditor linkEditor;
 	
 //	private static final int DIALOG_WIDTH = 540;
 //	private static final int DIALOG_HEIGHT = 600;
@@ -65,13 +67,21 @@ public class ImportWebProjectWizardPage extends WizardPage {
 		super("Wizard Page"); //$NON-NLS-1$
 		
 		this.context = context;
-		XEntityData entityData = XEntityDataImpl.create(
+		XEntityData entityData =
+			(context.isInitialized())
+			? XEntityDataImpl.create(
 			new String[][] {
 				{ImportWebDirProjectContext.PAGE_NAME, ""}, //$NON-NLS-1$
+				{ImportWebDirProjectContext.ATTR_NAME, "yes"}, //$NON-NLS-1$
 				{ImportWebDirProjectContext.ATTR_LOCATON, "yes"}, //$NON-NLS-1$
-				{ImportWebDirProjectContext.ATTR_NAME, "yes"} //$NON-NLS-1$
-			}
-		);
+			})
+			: XEntityDataImpl.create(
+			new String[][] {
+				{ImportWebDirProjectContext.PAGE_NAME, ""}, //$NON-NLS-1$
+				{ImportWebDirProjectContext.ATTR_NAME, "yes"}, //$NON-NLS-1$
+				{ImportWebDirProjectContext.ATTR_LOCATON, "yes"}, //$NON-NLS-1$
+				{ImportWebDirProjectContext.ATTR_LINK, "no"} //$NON-NLS-1$
+			});
 		
 		support = new XAttributeSupport(ModelUtilities.getPreferenceModel().getRoot(), entityData);
 		support.setLayout(getLayoutForSupport());
@@ -79,13 +89,14 @@ public class ImportWebProjectWizardPage extends WizardPage {
 		projectNameAdapter.setValue(""); //$NON-NLS-1$
 		webXmlLocationAdapter = support.getPropertyEditorAdapterByName(ImportWebDirProjectContext.ATTR_LOCATON);
 		webXmlLocationAdapter.setValue(""); //$NON-NLS-1$
-//		IPropertyEditor editor = support.getPropertyEditorByName(ImportWebDirProjectContext.ATTR_LOCATON);
-		//editor.setLabelText("Location*");
 		if(context.isInitialized()) {
 			projectNameAdapter.setValue("" + context.getProjectName()); //$NON-NLS-1$
 			if(getWebXmlFile(context.getInitialLocation()) != null)
 				webXmlLocationAdapter.setValue("" + context.getInitialLocation()); //$NON-NLS-1$
-		} 
+		} else {
+			linkAdapter = support.getPropertyEditorAdapterByName(ImportWebDirProjectContext.ATTR_LINK);
+			linkAdapter.setValue("true");
+		}
 	}
 	
 	public void dispose() {
@@ -97,6 +108,8 @@ public class ImportWebProjectWizardPage extends WizardPage {
 		if (webXmlLocationAdapter!=null) webXmlLocationAdapter.dispose();
 		webXmlLocationAdapter = null;
 		if (projectNameEditor!=null) projectNameEditor.dispose();
+		if(linkAdapter != null) linkAdapter.dispose();
+		linkAdapter = null;
 		projectNameEditor = null;
 		updateDataListener = null;
 	}
@@ -112,6 +125,9 @@ public class ImportWebProjectWizardPage extends WizardPage {
 		setControl(control);
 		projectNameEditor = (IPropertyEditor)support.getPropertyEditorByName(ImportWebDirProjectContext.ATTR_NAME);
 		projectNameEditor.getFieldEditor((Composite)getControl()).setEnabled(false, (Composite)getControl());
+		if(linkAdapter != null) {
+			linkEditor = (IPropertyEditor)support.getPropertyEditorByName(ImportWebDirProjectContext.ATTR_LINK);
+		}
 		initListeners();
 		setErrorMessage(null);
 		setMessage(null);
@@ -160,6 +176,9 @@ public class ImportWebProjectWizardPage extends WizardPage {
 				updateContext(true, false);
 				setPageComplete(validatePage());
 				getContainer().updateButtons();
+				if(linkAdapter != null) {
+					support.getFieldEditorByName(ImportWebDirProjectContext.ATTR_LINK).setEnabled(mayNeedLink(), (Composite)getControl());
+				}
 			}
 		};
 		projectNameAdapter.addValueChangeListener(updateDataListener);
@@ -169,8 +188,19 @@ public class ImportWebProjectWizardPage extends WizardPage {
 					updateContext(false, true);
 					setPageComplete(validatePage());
 					getContainer().updateButtons();
+					if(linkAdapter != null) {
+						support.getFieldEditorByName(ImportWebDirProjectContext.ATTR_LINK).setEnabled(mayNeedLink(), (Composite)getControl());
+					}
 				}
 			}
+		);
+		if(linkAdapter != null) linkAdapter.addValueChangeListener(
+				new PropertyChangeListener() {
+					public void propertyChange(PropertyChangeEvent evt) {
+						String v = linkAdapter.getStringValue(false);
+						context.setLinkingToProjectOutsideWorkspace(!"false".equals(v));
+					}
+				}
 		);
 	}
 
@@ -186,6 +216,16 @@ public class ImportWebProjectWizardPage extends WizardPage {
 		projectNameAdapter.removeValueChangeListener(updateDataListener);
 		projectNameAdapter.setValue(value);
 		projectNameAdapter.addValueChangeListener(updateDataListener);
+	}
+	
+	private boolean mayNeedLink() {
+		String location = getWebXmlLocationValue();
+		if(location == null || location.trim().length() == 0) return false;
+		String workspace = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString().replace('\\', '/') + '/';
+		location = location.replace('\\', '/');
+		if(!location.startsWith(workspace)) return true;
+		
+		return false;
 	}
 
 	private void updateProjectNameValue(boolean onProjectNameEdit, boolean onProjectLocationEdit) {

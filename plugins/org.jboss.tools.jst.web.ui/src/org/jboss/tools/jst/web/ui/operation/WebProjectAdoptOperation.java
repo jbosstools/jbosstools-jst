@@ -31,7 +31,6 @@ import org.jboss.tools.common.model.project.IModelNature;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.util.XMLUtil;
 import org.jboss.tools.common.util.FileUtil;
-import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.jst.web.context.*;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
@@ -52,11 +51,11 @@ public abstract class WebProjectAdoptOperation extends WebNatureOperation {
 		setProperty(WebNatureOperation.WEB_CONTENT_LOCATION_ID, context.getWebRootPath().replace('\\', '/'));
 		setProperty(WebNatureOperation.WEB_XML_LOCATION_ID, context.getWebXmlLocation().replace('\\', '/'));
 		setProperty(WebNatureOperation.RUNTIME_NAME, context.getRegisterServerContext().getRuntimeName());
-		this.context = (ImportWebProjectContext)context;
+		this.context = context;
 	}
 	
 	protected boolean isLinkingToProjectOutsideWorkspace() {
-		return true; //TODO modify
+		return context.isLinkingToProjectOutsideWorkspace();
 	}
 		
 	protected boolean hasJavaSource() {
