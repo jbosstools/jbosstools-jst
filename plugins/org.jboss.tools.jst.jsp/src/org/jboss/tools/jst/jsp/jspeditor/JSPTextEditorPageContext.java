@@ -13,9 +13,11 @@ package org.jboss.tools.jst.jsp.jspeditor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
@@ -39,6 +41,9 @@ import org.w3c.dom.NodeList;
 public class JSPTextEditorPageContext implements IVisualContext {
 
 	protected ArrayList<TaglibData> taglibs = new ArrayList<TaglibData>();
+	protected Map<String, String> taglibMap = new HashMap<String, String>();
+	// this is just reference to VpeTemplateManager.templateTaglibs
+	private Map<String,String> templateTaglibs = null;
 	protected WtpKbConnector connector = null;
 	//protected IDocument document = null;
 	protected IDOMDocument document = null;
@@ -47,10 +52,25 @@ public class JSPTextEditorPageContext implements IVisualContext {
 	protected ArrayList<VpeTaglibListener> taglibListeners = new ArrayList<VpeTaglibListener>();
 	
 	public JSPTextEditorPageContext() {
+		// simple tests
 		//addTaglib(123, "vitaliNewUri", "vitaliNewPrefix", true);
 		//addTaglib(123, "http://java.sun.com/jsf/facelets", "1xmlns:ui11", true);
 		//addTaglib(234, "http://java.sun.com/jsf/html", "2xmlns:ui22", true);
 		//addTaglib(345, "http://richfaces.org/rich", "3xmlns:ui33", true);
+	}
+
+	public void clearAll() {
+		taglibs.clear();
+		taglibMap.clear();
+		templateTaglibs = null;
+	}
+	
+	public void dispose() {
+		clearAll();
+		connector = null;
+		document = null;
+		referenceNode = null;
+		taglibListeners = null;
 	}
 
 	public void setReferenceNode(Node refNode) {
@@ -162,6 +182,46 @@ public class JSPTextEditorPageContext implements IVisualContext {
 		for (Iterator<VpeTaglibListener> it = taglibListeners.iterator(); it.hasNext(); ) {
 			it.next().taglibPrefixChanged(null);
 		}
+		rebuildTaglibMap();
+	}
+
+	private boolean rebuildTaglibMap() {
+		taglibMap.clear();
+		if (null == templateTaglibs) {
+			return false;
+		}
+		Set<String> prefixSet = new HashSet<String>();
+		for (int i = 0; i < taglibs.size(); i++) {
+			TaglibData taglib = (TaglibData)taglibs.get(i);
+			String prefix = taglib.getPrefix();
+			if (!prefixSet.contains(prefix)) {
+				String templatePrefix = templateTaglibs.get(taglib.getUri());
+				if (templatePrefix != null) {
+					taglibMap.put(prefix, templatePrefix);
+				}
+				prefixSet.add(prefix);
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * This is a way to use templateTaglibs from
+	 * org.jboss.tools.vpe.editor.template.VpeTemplateManager;
+	 * this is just reference to VpeTemplateManager.templateTaglibs
+	 * getter is prohibited here 
+	 **/
+	public void setTemplateTaglibs(Map<String,String> templateTaglibs) {
+		this.templateTaglibs = templateTaglibs;
+		rebuildTaglibMap();
+	}
+
+	/**
+	 * Return template taglib prefix using prefix as a key.
+	 * @return
+	 */
+	public String getTemplateTaglibPrefix(String sourceTaglibPrefix) {
+		return taglibMap.get(sourceTaglibPrefix);
 	}
 
 	// adds new tag library
