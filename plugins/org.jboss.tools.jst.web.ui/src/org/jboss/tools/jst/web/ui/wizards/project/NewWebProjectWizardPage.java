@@ -322,7 +322,7 @@ public class NewWebProjectWizardPage extends WizardPage {
 	}
 
 	class LocalValueProvider implements IValueProvider, IValueChangeListener, IAdaptable {
-		protected Object value = new String("");
+		protected Object value = "";
 		protected PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
 		// listeners
