@@ -35,7 +35,7 @@ public class DeleteTilesHandler extends DeleteFileHandler {
 			String message = WebUIMessages.DELETE + FileAnyImpl.toFileName(object);
 			pd.setProperty(ServiceDialog.DIALOG_MESSAGE, message);
 			pd.setProperty(ServiceDialog.CHECKBOX_MESSAGE, checkboxMessage);
-			pd.put(ServiceDialog.CHECKED, new Boolean(true));
+			pd.put(ServiceDialog.CHECKED, Boolean.TRUE);
 			if(!d.openConfirm(pd)) return;
 			Boolean b = (Boolean)pd.get(ServiceDialog.CHECKED);
 			unregister = b.booleanValue();
