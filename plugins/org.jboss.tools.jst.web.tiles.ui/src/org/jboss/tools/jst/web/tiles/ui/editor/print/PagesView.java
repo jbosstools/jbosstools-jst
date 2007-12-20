@@ -258,7 +258,7 @@ public class PagesView extends Composite implements MouseListener,PaintListener{
 	while(tmp>0){
 		g2.drawLine(tmp - pW+zeroX,zeroY,tmp - pW+zeroX,ymax+zeroY);
 		tmp = tmp - pW;
-		xx.add(new Integer(tmp));
+		xx.add(Integer.valueOf(tmp));
 	}
 	
 	List<Rectangle> rec = new ArrayList<Rectangle>();

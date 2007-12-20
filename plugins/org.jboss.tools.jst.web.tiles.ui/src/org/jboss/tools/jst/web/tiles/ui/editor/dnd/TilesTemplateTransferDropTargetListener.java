@@ -27,7 +27,7 @@ public class TilesTemplateTransferDropTargetListener
 
 	class TilesTemplateFactory implements CreationFactory {
 		public Object getNewObject() {
-			return new String("definition");
+			return "definition";
 		}
 
 		public Object getObjectType() {
