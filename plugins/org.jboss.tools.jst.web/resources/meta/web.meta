@@ -396,7 +396,7 @@
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
- <XModelEntity ImplementingClass="%Regular%" XMLSUBPATH="WEB" name="JstWeb">
+ <XModelEntity ImplementingClass="%Regular%" XMLSUBPATH="web" name="JstWeb">
   <XChildrenEntities>
    <XChildEntity name="JstWebModule"/>
   </XChildrenEntities>
@@ -411,7 +411,7 @@
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute default="Web" name="name" xmlname="NAME"/>
-   <XModelAttribute name="model path" xmlname="MODEL_PATH"/>
+   <XModelAttribute name="model path" xmlname="model-path"/>
    <XModelAttribute name="servlet version" visibility="false" xmlname="SERVLET_VERSION">
     <Constraint loader="List">
      <value name="2.2"/>
@@ -426,7 +426,7 @@
  </XModelEntity>
  <XModelEntity
   ImplementingClass="org.jboss.tools.jst.web.project.WebConfigImpl"
-  XMLSUBPATH="MODULE" name="JstWebConfig">
+  XMLSUBPATH="module" name="JstWebConfig">
   <XChildrenEntities/>
   <XEntityRenderer>
    <ICONS>
@@ -451,14 +451,14 @@
     </Constraint>
     <Editor name="FileChooser"/>
    </XModelAttribute>
-   <XModelAttribute name="model path" xmlname="MODEL_PATH"/>
+   <XModelAttribute name="model path" xmlname="model-path"/>
   </XModelAttributes>
   <XActionItem kind="list"/>
   <XDependencies/>
  </XModelEntity>
  <XModelEntity
   ImplementingClass="org.jboss.tools.jst.web.project.WebModuleImpl"
-  XMLSUBPATH="MODULE" name="JstWebModule">
+  XMLSUBPATH="module" name="JstWebModule">
   <XChildrenEntities>
    <XChildEntity name="JstWebConfig"/>
   </XChildrenEntities>
@@ -501,9 +501,9 @@
     </Constraint>
     <Editor name="FolderChooser"/>
    </XModelAttribute>
-   <XModelAttribute name="model path" xmlname="MODEL_PATH"/>
-   <XModelAttribute name="root file system" xmlname="ROOT"/>
-   <XModelAttribute name="src file system" xmlname="SRC"/>
+   <XModelAttribute name="model path" xmlname="model-path"/>
+   <XModelAttribute name="root file system" xmlname="root"/>
+   <XModelAttribute name="src file system" xmlname="src"/>
   </XModelAttributes>
   <XActionItem kind="list"/>
   <XDependencies/>
