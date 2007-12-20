@@ -38,7 +38,6 @@ import org.eclipse.wst.xml.ui.internal.properties.EnumeratedStringPropertyDescri
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.contentassist.RedHatHtmlContentAssistProcessor;
 import org.jboss.tools.jst.jsp.editor.IVisualController;
-import org.jboss.tools.jst.jsp.jspeditor.JSPTextEditorPageContext;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
@@ -78,12 +77,6 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 	public void setTarget(INodeNotifier target) {
 		if(fNode == target) return;
 		fNode = (target instanceof Node) ? (Node) target : null;
-		// BEGIN
-		JSPTextEditorPageContext pageContext = (JSPTextEditorPageContext)valueHelper.getTaglibManager();
-		if (null != pageContext) {
-			pageContext.setReferenceNode(fNode);
-		}
-		// END
 		if (fNode instanceof IDOMNode) {
 			Document ownerDocument = fNode.getOwnerDocument();
 			if (ownerDocument == null && fNode instanceof Document) {
