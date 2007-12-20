@@ -195,22 +195,9 @@ public class RegistrationHelper {
 		runRegisterInServerJob(p, new IServer[]{server}, null);
 	}
 
-	public static void runRegisterInServerJob(final IProject p, final IServer[] servers, final String contextRoot) {
-		Job startRegistration = new Job("Starting deployment to server") {
-			/* (non-Javadoc)
-			 * @see org.eclipse.core.runtime.jobs.Job#run(org.eclipse.core.runtime.IProgressMonitor)
-			 */
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				RegisterServerJob job = new RegisterServerJob(p, servers, contextRoot);
-				job.schedule(100);
-				return Status.OK_STATUS;
-			}
-		};
-		startRegistration.setUser(true);
-		startRegistration.setRule(p);
-		startRegistration.setPriority(Job.DECORATE);
-		startRegistration.schedule();
+	public static void runRegisterInServerJob(IProject p, IServer[] servers, String contextRoot) {
+		RegisterServerJob job = new RegisterServerJob(p, servers, contextRoot);
+		job.schedule(100);
 	}
 	
 	// registerInJob
