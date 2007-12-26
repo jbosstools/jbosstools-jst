@@ -56,29 +56,28 @@ import org.eclipse.wst.server.core.internal.ServerWorkingCopy;
 public class JBossASAdapterInitializer implements IStartup {
 
 	public static final String JBOSS_AS_HOME = "../../../../jboss-eap/jboss-as"; 	// JBoss AS home directory (relative to plugin)- <RHDS_HOME>/jbossas.
-	
+
 	public static final String JBOSS_AS_RUNTIME_TYPE_ID 
 										= "org.jboss.ide.eclipse.as.runtime.42";
-	
+
 	public static final String JBOSS_AS_TYPE_ID = "org.jboss.ide.eclipse.as.42";
-	
+
 	public static final String JBOSS_AS_NAME = "JBoss Application Server 4.2";
-	
+
 	public static final String JBOSS_AS_HOST = "localhost";
-	
+
 	public static final String JBOSS_AS_DEFAULT_CONFIGURATION_NAME = "default";
 
 	public static final String FIRST_START_PREFERENCE_NAME = "FIRST_START";
-	
-	
+
 	public static final String HSQL_DRIVER_DEFINITION_ID 
 												= "DriverDefn.Hypersonic DB";
-	
+
 	public static final String HSQL_DRIVER_NAME = "Hypersonic DB";
 
 	public static final String HSQL_DRIVER_TEMPLATE_ID 
 						= "org.eclipse.datatools.enablement.hsqldb.1_8.driver";
-	
+
 	public static final String DTP_DB_URL_PROPERTY_ID 
 								= "org.eclipse.datatools.connectivity.db.URL";
 	/**
@@ -93,7 +92,6 @@ public class JBossASAdapterInitializer implements IStartup {
 		 * Compare this method with JBossServerWizardFragment#performFinish()
 		 */
 		try {
-			
 			JstFirstRunPlugin.getDefault().getPreferenceStore().setDefault(FIRST_START_PREFERENCE_NAME, true);
 			boolean firstStart = JstFirstRunPlugin.getDefault().getPreferenceStore().getBoolean(FIRST_START_PREFERENCE_NAME);
 			if(!firstStart) {
@@ -111,8 +109,6 @@ public class JBossASAdapterInitializer implements IStartup {
 			}
 
 			IPath jbossAsLocationPath = new Path(jbossASLocation);
-			String type = null;
-			String version = null;
 
 			IServer[] servers = ServerCore.getServers();
 			for(int i=0; i<servers.length; i++) {
@@ -124,120 +120,22 @@ public class JBossASAdapterInitializer implements IStartup {
 
 			IRuntimeWorkingCopy runtime = null;
 			IRuntime[] runtimes = ServerCore.getRuntimes();
-			String runtimeId = null;
 			for(int i=0; i<runtimes.length; i++) {
 				if(runtimes[0].getLocation().equals(jbossASLocation)) {
 					runtime = runtimes[0].createWorkingCopy();
-					runtimeId = null;
 					break;
 				}
 			}
 
 			IProgressMonitor progressMonitor = new NullProgressMonitor();
 			if(runtime==null) {
-				IRuntimeType[] runtimeTypes = ServerUtil.getRuntimeTypes(type, version, JBOSS_AS_RUNTIME_TYPE_ID);
-				if(runtimeTypes.length>0) {
-					runtime = runtimeTypes[0].createRuntime(runtimeId, progressMonitor);
-					runtime.setLocation(jbossAsLocationPath);
-					IVMInstall defaultVM = JavaRuntime.getDefaultVMInstall();
-					// IJBossServerRuntime.PROPERTY_VM_ID
-					((RuntimeWorkingCopy)runtime).setAttribute("PROPERTY_VM_ID", defaultVM.getId());
-					// IJBossServerRuntime.PROPERTY_VM_TYPE_ID
-					((RuntimeWorkingCopy)runtime).setAttribute("PROPERTY_VM_TYPE_ID", defaultVM.getVMInstallType().getId());
-					// IJBossServerRuntime.PROPERTY_CONFIGURATION_NAME
-					((RuntimeWorkingCopy)runtime).setAttribute("org.jboss.ide.eclipse.as.core.runtime.configurationName", JBOSS_AS_DEFAULT_CONFIGURATION_NAME);
-
-					runtime.save(false, progressMonitor);
-				}
+				runtime = createRuntime(jbossASLocation, progressMonitor);
 			}
-
 			if(runtime!=null) {
-				IServerType serverType = ServerCore.findServerType(JBOSS_AS_TYPE_ID);
-				IServerWorkingCopy server = serverType.createServer(null, null, runtime, progressMonitor);
-
-				server.setHost(JBOSS_AS_HOST);
-				server.setName(JBOSS_AS_NAME);
-				// JBossServer.DEPLOY_DIRECTORY
-				String deployVal = runtime.getLocation().append( "server").append(JBOSS_AS_DEFAULT_CONFIGURATION_NAME).append("deploy").toOSString();
-				((ServerWorkingCopy)server).setAttribute("org.jboss.ide.eclipse.as.core.server.deployDirectory", deployVal);
-				
-				// IDeployableServer.TEMP_DEPLOY_DIRECTORY
-				String deployTmpFolderVal = runtime.getLocation().append( "server").append(JBOSS_AS_DEFAULT_CONFIGURATION_NAME).append("tmp").append("jbosstoolsTemp").toOSString();
-				((ServerWorkingCopy)server).setAttribute("org.jboss.ide.eclipse.as.core.server.tempDeployDirectory", deployTmpFolderVal);
-
-				// If we'd need to set up a username / pw for JMX, do it here.
-//				((ServerWorkingCopy)serverWC).setAttribute(JBossServer.SERVER_USERNAME, authUser);
-//				((ServerWorkingCopy)serverWC).setAttribute(JBossServer.SERVER_PASSWORD, authPass);
-
-				server.save(false, progressMonitor);
+				createServer(progressMonitor, runtime);
 			}
-			
-			DriverInstance driver = DriverManager.getInstance()
-									.getDriverInstanceByName(HSQL_DRIVER_NAME);
-			if(driver==null) { 
-				TemplateDescriptor descr = TemplateDescriptor
-				.getDriverTemplateDescriptor(HSQL_DRIVER_TEMPLATE_ID);
-				IPropertySet instance = new PropertySetImpl(
-									HSQL_DRIVER_NAME,HSQL_DRIVER_DEFINITION_ID);
-				instance.setName(HSQL_DRIVER_NAME);
-				instance.setID(HSQL_DRIVER_DEFINITION_ID);
-				Properties props = new Properties();
 
-				IConfigurationElement[] template = descr.getProperties();
-				for (int i = 0; i < template.length; i++) {
-					IConfigurationElement prop = template[i];
-					String id = prop.getAttribute("id"); //$NON-NLS-1$
-					
-					String value = prop.getAttribute("value"); //$NON-NLS-1$
-					props.setProperty(id, value == null ? ""
-							: value);
-				}
-				props.setProperty(DTP_DB_URL_PROPERTY_ID, "jdbc:hsqldb:.");
-				props.setProperty(IDriverMgmtConstants.PROP_DEFN_TYPE,
-						descr.getId());
-				props.setProperty(IDriverMgmtConstants.PROP_DEFN_JARLIST,
-						jbossASLocation+"/server/default/lib/hsqldb.jar");
-
-				instance.setBaseProperties(props);
-				DriverManager.getInstance().removeDriverInstance(instance.getID());
-				System.gc();
-				DriverManager.getInstance().addDriverInstance(instance);
-				
-			}		
-			
-			driver = DriverManager.getInstance().getDriverInstanceByName(HSQL_DRIVER_NAME);
-			if(driver!=null) {
-				// create profile
-				Properties props = new Properties();
-				props.setProperty(ConnectionProfileConstants.PROP_DRIVER_DEFINITION_ID,
-						HSQL_DRIVER_DEFINITION_ID);
-				props.setProperty(
-						IDBConnectionProfileConstants.CONNECTION_PROPERTIES_PROP_ID,
-						"");
-				props.setProperty(IDBDriverDefinitionConstants.DRIVER_CLASS_PROP_ID, 
-						driver.getProperty(IDBDriverDefinitionConstants.DRIVER_CLASS_PROP_ID));
-				props.setProperty(IDBDriverDefinitionConstants.DATABASE_VENDOR_PROP_ID, 
-						driver.getProperty(IDBDriverDefinitionConstants.DATABASE_VENDOR_PROP_ID));		
-				props.setProperty(IDBDriverDefinitionConstants.DATABASE_VERSION_PROP_ID,
-						driver.getProperty(IDBDriverDefinitionConstants.DATABASE_VERSION_PROP_ID));			
-				props.setProperty(IDBDriverDefinitionConstants.DATABASE_NAME_PROP_ID, 
-						"Default");
-				props.setProperty(IDBDriverDefinitionConstants.PASSWORD_PROP_ID, "");
-				props.setProperty(
-						IDBConnectionProfileConstants.SAVE_PASSWORD_PROP_ID, "false");
-				props.setProperty(IDBDriverDefinitionConstants.USERNAME_PROP_ID, 
-						driver.getProperty(IDBDriverDefinitionConstants.USERNAME_PROP_ID));
-				props.setProperty(IDBDriverDefinitionConstants.URL_PROP_ID,
-						driver.getProperty(IDBDriverDefinitionConstants.URL_PROP_ID));
-
-				ProfileManager.getInstance().createProfile(
-						"DefaultDS",
-						"The JBoss AS Hypersonic embedded database",
-						IDBConnectionProfileConstants.CONNECTION_PROFILE_ID,
-						props,
-						"", false);
-			}
-			
+			createDriver(jbossASLocation);
 		} catch (CoreException e) {
 			JstFirstRunPlugin.getPluginLog().log(new Status(IStatus.ERROR,
 					JstFirstRunPlugin.PLUGIN_ID,"Can't create new JBoss Server", e));
@@ -249,5 +147,135 @@ public class JBossASAdapterInitializer implements IStartup {
 					JstFirstRunPlugin.PLUGIN_ID,"Can't create new DTP " +
 					"Connection Profile for JBoss AS Hypersonic embedded database", e));
 		}
+	}
+
+	/**
+	 * Creates new JBoss AS Runtime, Server and hsqldb driver
+	 * @param jbossASLocation location of JBoss Server
+	 * @param progressMonitor
+	 * @return server working copy
+	 * @throws CoreException
+	 * @throws ConnectionProfileException
+	 */
+	public static IServerWorkingCopy initJBossAS(String jbossASLocation, IProgressMonitor progressMonitor) throws CoreException, ConnectionProfileException {
+		IRuntimeWorkingCopy runtime = createRuntime(jbossASLocation, progressMonitor);
+		IServerWorkingCopy server = null;
+		if(runtime!=null) {
+			createServer(progressMonitor, runtime);
+		}
+		createDriver(jbossASLocation);
+		return server;
+	}
+
+	/**
+	 * Creates new JBoss AS Runtime
+	 * @param jbossASLocation location of JBoss AS
+	 * @param progressMonitor
+	 * @return runtime working copy
+	 * @throws CoreException
+	 */
+	private static IRuntimeWorkingCopy createRuntime(String jbossASLocation, IProgressMonitor progressMonitor) throws CoreException {
+		IRuntimeWorkingCopy runtime = null;
+		String type = null;
+		String version = null;
+		String runtimeId = null;
+		IPath jbossAsLocationPath = new Path(jbossASLocation);
+		IRuntimeType[] runtimeTypes = ServerUtil.getRuntimeTypes(type, version, JBOSS_AS_RUNTIME_TYPE_ID);
+		if(runtimeTypes.length>0) {
+			runtime = runtimeTypes[0].createRuntime(runtimeId, progressMonitor);
+			runtime.setLocation(jbossAsLocationPath);
+			IVMInstall defaultVM = JavaRuntime.getDefaultVMInstall();
+			// IJBossServerRuntime.PROPERTY_VM_ID
+			((RuntimeWorkingCopy)runtime).setAttribute("PROPERTY_VM_ID", defaultVM.getId());
+			// IJBossServerRuntime.PROPERTY_VM_TYPE_ID
+			((RuntimeWorkingCopy)runtime).setAttribute("PROPERTY_VM_TYPE_ID", defaultVM.getVMInstallType().getId());
+			// IJBossServerRuntime.PROPERTY_CONFIGURATION_NAME
+			((RuntimeWorkingCopy)runtime).setAttribute("org.jboss.ide.eclipse.as.core.runtime.configurationName", JBOSS_AS_DEFAULT_CONFIGURATION_NAME);
+
+			runtime.save(false, progressMonitor);
+		}
+		return runtime;
+	}
+
+	/**
+	 * Creates new JBoss Server
+	 * @param progressMonitor
+	 * @param runtime parent JBoss AS Runtime
+	 * @return server working copy
+	 * @throws CoreException
+	 */
+	private static IServerWorkingCopy createServer(IProgressMonitor progressMonitor, IRuntimeWorkingCopy runtime) throws CoreException {
+		IServerType serverType = ServerCore.findServerType(JBOSS_AS_TYPE_ID);
+		IServerWorkingCopy server = serverType.createServer(null, null, runtime, progressMonitor);
+
+		server.setHost(JBOSS_AS_HOST);
+		server.setName(JBOSS_AS_NAME);
+		// JBossServer.DEPLOY_DIRECTORY
+		String deployVal = runtime.getLocation().append("server").append(JBOSS_AS_DEFAULT_CONFIGURATION_NAME).append("deploy").toOSString();
+		((ServerWorkingCopy)server).setAttribute("org.jboss.ide.eclipse.as.core.server.deployDirectory", deployVal);
+
+		// IDeployableServer.TEMP_DEPLOY_DIRECTORY
+		String deployTmpFolderVal = runtime.getLocation().append("server").append(JBOSS_AS_DEFAULT_CONFIGURATION_NAME).append("tmp").append("jbosstoolsTemp").toOSString();
+		((ServerWorkingCopy)server).setAttribute("org.jboss.ide.eclipse.as.core.server.tempDeployDirectory", deployTmpFolderVal);
+
+		// If we'd need to set up a username / pw for JMX, do it here.
+//		((ServerWorkingCopy)serverWC).setAttribute(JBossServer.SERVER_USERNAME, authUser);
+//		((ServerWorkingCopy)serverWC).setAttribute(JBossServer.SERVER_PASSWORD, authPass);
+
+		server.save(false, progressMonitor);
+		return server;
+	}
+
+	/**
+	 * Creates HSQL DB Driver
+	 * @param jbossASLocation location of JBoss AS
+	 * @throws ConnectionProfileException
+	 * @return driver instance
+	 */
+	private static DriverInstance createDriver(String jbossASLocation) throws ConnectionProfileException {
+		DriverInstance driver = DriverManager.getInstance().getDriverInstanceByName(HSQL_DRIVER_NAME);
+		if (driver == null) {
+			TemplateDescriptor descr = TemplateDescriptor.getDriverTemplateDescriptor(HSQL_DRIVER_TEMPLATE_ID);
+			IPropertySet instance = new PropertySetImpl(HSQL_DRIVER_NAME, HSQL_DRIVER_DEFINITION_ID);
+			instance.setName(HSQL_DRIVER_NAME);
+			instance.setID(HSQL_DRIVER_DEFINITION_ID);
+			Properties props = new Properties();
+
+			IConfigurationElement[] template = descr.getProperties();
+			for (int i = 0; i < template.length; i++) {
+				IConfigurationElement prop = template[i];
+				String id = prop.getAttribute("id"); //$NON-NLS-1$
+
+				String value = prop.getAttribute("value"); //$NON-NLS-1$
+				props.setProperty(id, value == null ? "" : value);
+			}
+			props.setProperty(DTP_DB_URL_PROPERTY_ID, "jdbc:hsqldb:.");
+			props.setProperty(IDriverMgmtConstants.PROP_DEFN_TYPE, descr.getId());
+			props.setProperty(IDriverMgmtConstants.PROP_DEFN_JARLIST, jbossASLocation + "/server/default/lib/hsqldb.jar");
+
+			instance.setBaseProperties(props);
+			DriverManager.getInstance().removeDriverInstance(instance.getID());
+			System.gc();
+			DriverManager.getInstance().addDriverInstance(instance);
+		}
+
+		driver = DriverManager.getInstance().getDriverInstanceByName(HSQL_DRIVER_NAME);
+		if (driver != null) {
+			// create profile
+			Properties props = new Properties();
+			props.setProperty(ConnectionProfileConstants.PROP_DRIVER_DEFINITION_ID, HSQL_DRIVER_DEFINITION_ID);
+			props.setProperty(IDBConnectionProfileConstants.CONNECTION_PROPERTIES_PROP_ID, "");
+			props.setProperty(IDBDriverDefinitionConstants.DRIVER_CLASS_PROP_ID, driver.getProperty(IDBDriverDefinitionConstants.DRIVER_CLASS_PROP_ID));
+			props.setProperty(IDBDriverDefinitionConstants.DATABASE_VENDOR_PROP_ID,	driver.getProperty(IDBDriverDefinitionConstants.DATABASE_VENDOR_PROP_ID));
+			props.setProperty(IDBDriverDefinitionConstants.DATABASE_VERSION_PROP_ID, driver.getProperty(IDBDriverDefinitionConstants.DATABASE_VERSION_PROP_ID));
+			props.setProperty(IDBDriverDefinitionConstants.DATABASE_NAME_PROP_ID, "Default");
+			props.setProperty(IDBDriverDefinitionConstants.PASSWORD_PROP_ID, "");
+			props.setProperty(IDBConnectionProfileConstants.SAVE_PASSWORD_PROP_ID, "false");
+			props.setProperty(IDBDriverDefinitionConstants.USERNAME_PROP_ID, driver.getProperty(IDBDriverDefinitionConstants.USERNAME_PROP_ID));
+			props.setProperty(IDBDriverDefinitionConstants.URL_PROP_ID, driver.getProperty(IDBDriverDefinitionConstants.URL_PROP_ID));
+
+			ProfileManager.getInstance().createProfile("DefaultDS",	"The JBoss AS Hypersonic embedded database", IDBConnectionProfileConstants.CONNECTION_PROFILE_ID, props, "", false);
+		}
+		return driver;
 	}
 }
