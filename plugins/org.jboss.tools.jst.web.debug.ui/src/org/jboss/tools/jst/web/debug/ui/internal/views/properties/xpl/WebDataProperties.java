@@ -71,7 +71,7 @@ public class WebDataProperties implements IPropertyChangeListener {
 	private static Map enablements = new HashMap(12);
 	private static Map filters = new HashMap(2);
 	
-	private IPreferenceStore fStore;
+	private final IPreferenceStore fStore;
 
 	public WebDataProperties (IPreferenceStore store) {
 		this.fStore = store;
@@ -87,7 +87,7 @@ public class WebDataProperties implements IPropertyChangeListener {
 		try {
 			Boolean value = (Boolean)enablements.get(filter);
 			if (value == null && fStore != null) {
-				value = new Boolean(fStore.getBoolean(filter));
+				value = Boolean.valueOf(fStore.getBoolean(filter));
 				synchronized (this) {
 					enablements.put(filter, value);
 				}
@@ -135,7 +135,7 @@ public class WebDataProperties implements IPropertyChangeListener {
 							newValue= false;
 					}
 					
-					enablements.put(p, new Boolean(newValue));
+					enablements.put(p, Boolean.valueOf(newValue));
 					fireWebDataPropertyChanged(p);
 				}
 				if (filters.containsKey(p)) {
@@ -213,7 +213,7 @@ public class WebDataProperties implements IPropertyChangeListener {
 		store.setDefault(SHOW_STRUTS_DYNAACTIONFORM_FILTER+VALUE_POSTFIX, "*");
 
 	}
-	private List fListeners = new ArrayList();
+	private final List fListeners = new ArrayList();
 	public void addWebDataPropertyChangeListener (IWebDataPropertyChangeListener listener) {
 		if (!fListeners.contains(listener)) fListeners.add(listener);
 	}
