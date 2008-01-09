@@ -19,6 +19,7 @@ import junit.framework.TestSuite;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
@@ -46,6 +47,7 @@ public class WebContentAssistProviderTest extends TestCase {
 	}
 
 	public void testJsfBeanPropertyList() {
+		waitForJobs();
 		// seam beans list
 		List beanList = webPromptingProvider.getList(projectModel, WebPromptingProvider.JSF_BEAN_PROPERTIES, "facesManagedBean", new Properties());
 		assertTrue("Bean property list does not contain Managed bean property in XModel.", beanList.contains("property1"));
@@ -77,11 +79,9 @@ public class WebContentAssistProviderTest extends TestCase {
 	public void setUp() throws Exception {
 		provider = new TestProjectProvider("org.jboss.tools.jst.web.test", null, "TestsWebArtefacts", makeCopy); 
 		project = provider.getProject();
-		try {
-			project.refreshLocal(IResource.DEPTH_INFINITE, null);
-		} catch (Exception e) {
-			ModelPlugin.getPluginLog().logError(e);
-		}
+		project.refreshLocal(IResource.DEPTH_INFINITE, null);
+		project.build(IncrementalProjectBuilder.FULL_BUILD,null);
+		waitForJobs();
 		XModelObject xmo = EclipseResourceUtil.getObjectByResource(project);
 		assertNotNull("Can't get XModel Object for test project.", xmo);
 		projectModel = xmo.getModel();
