@@ -94,7 +94,7 @@ public class JBossASAdapterInitializer implements IStartup {
 		try {
 			JstFirstRunPlugin.getDefault().getPreferenceStore().setDefault(FIRST_START_PREFERENCE_NAME, true);
 			boolean firstStart = JstFirstRunPlugin.getDefault().getPreferenceStore().getBoolean(FIRST_START_PREFERENCE_NAME);
-			if(!firstStart) {
+			if (!firstStart) {
 				return;
 			}
 			JstFirstRunPlugin.getDefault().getPreferenceStore().setValue(FIRST_START_PREFERENCE_NAME, false);
@@ -102,7 +102,7 @@ public class JBossASAdapterInitializer implements IStartup {
 			String jbossASLocation = null;
 			String pluginLocation = FileLocator.resolve(JstFirstRunPlugin.getDefault().getBundle().getEntry("/")).getPath();
 			File jbossASDir = new File(pluginLocation, JBOSS_AS_HOME);
-			if(jbossASDir.isDirectory()) {
+			if (jbossASDir.isDirectory()) {
 				jbossASLocation = jbossASDir.getAbsolutePath();
 			} else {
 				return;
@@ -111,48 +111,48 @@ public class JBossASAdapterInitializer implements IStartup {
 			IPath jbossAsLocationPath = new Path(jbossASLocation);
 
 			IServer[] servers = ServerCore.getServers();
-			for(int i=0; i<servers.length; i++) {
+			for (int i = 0; i < servers.length; i++) {
 				IRuntime runtime = servers[i].getRuntime();
-				if(runtime!=null && runtime.getLocation().equals(jbossAsLocationPath)) {
+				if(runtime != null && runtime.getLocation().equals(jbossAsLocationPath)) {
 					return;
 				}
 			}
 
 			IRuntimeWorkingCopy runtime = null;
 			IRuntime[] runtimes = ServerCore.getRuntimes();
-			for(int i=0; i<runtimes.length; i++) {
-				if(runtimes[0].getLocation().equals(jbossASLocation)) {
+			for (int i = 0; i < runtimes.length; i++) {
+				if (runtimes[0].getLocation().equals(jbossASLocation)) {
 					runtime = runtimes[0].createWorkingCopy();
 					break;
 				}
 			}
 
 			IProgressMonitor progressMonitor = new NullProgressMonitor();
-			if(runtime==null) {
+			if (runtime == null) {
 				runtime = createRuntime(jbossASLocation, progressMonitor);
 			}
-			if(runtime!=null) {
+			if (runtime != null) {
 				createServer(progressMonitor, runtime);
 			}
 
 			createDriver(jbossASLocation);
 		} catch (CoreException e) {
 			JstFirstRunPlugin.getPluginLog().log(new Status(IStatus.ERROR,
-					JstFirstRunPlugin.PLUGIN_ID,"Can't create new JBoss Server", e));
+					JstFirstRunPlugin.PLUGIN_ID, "Can't create new JBoss Server", e));
 		} catch (IOException e) {
 			JstFirstRunPlugin.getPluginLog().log(new Status(IStatus.ERROR,
-					JstFirstRunPlugin.PLUGIN_ID,"Can't create new JBoss Server", e));
+					JstFirstRunPlugin.PLUGIN_ID, "Can't create new JBoss Server", e));
 		} catch (ConnectionProfileException e) {
 			JstFirstRunPlugin.getPluginLog().log(new Status(IStatus.ERROR,
-					JstFirstRunPlugin.PLUGIN_ID,"Can't create new DTP " +
-					"Connection Profile for JBoss AS Hypersonic embedded database", e));
+					JstFirstRunPlugin.PLUGIN_ID, "Can't create new DTP "
+					+ "Connection Profile for JBoss AS Hypersonic embedded database", e));
 		}
 	}
 
 	/**
 	 * Creates new JBoss AS Runtime, Server and hsqldb driver
 	 * @param jbossASLocation location of JBoss Server
-	 * @param progressMonitor
+	 * @param progressMonitor to report progress
 	 * @return server working copy
 	 * @throws CoreException
 	 * @throws ConnectionProfileException
@@ -160,8 +160,8 @@ public class JBossASAdapterInitializer implements IStartup {
 	public static IServerWorkingCopy initJBossAS(String jbossASLocation, IProgressMonitor progressMonitor) throws CoreException, ConnectionProfileException {
 		IRuntimeWorkingCopy runtime = createRuntime(jbossASLocation, progressMonitor);
 		IServerWorkingCopy server = null;
-		if(runtime!=null) {
-			createServer(progressMonitor, runtime);
+		if (runtime != null) {
+			server = createServer(progressMonitor, runtime);
 		}
 		createDriver(jbossASLocation);
 		return server;
@@ -181,16 +181,16 @@ public class JBossASAdapterInitializer implements IStartup {
 		String runtimeId = null;
 		IPath jbossAsLocationPath = new Path(jbossASLocation);
 		IRuntimeType[] runtimeTypes = ServerUtil.getRuntimeTypes(type, version, JBOSS_AS_RUNTIME_TYPE_ID);
-		if(runtimeTypes.length>0) {
+		if (runtimeTypes.length > 0) {
 			runtime = runtimeTypes[0].createRuntime(runtimeId, progressMonitor);
 			runtime.setLocation(jbossAsLocationPath);
 			IVMInstall defaultVM = JavaRuntime.getDefaultVMInstall();
 			// IJBossServerRuntime.PROPERTY_VM_ID
-			((RuntimeWorkingCopy)runtime).setAttribute("PROPERTY_VM_ID", defaultVM.getId());
+			((RuntimeWorkingCopy) runtime).setAttribute("PROPERTY_VM_ID", defaultVM.getId());
 			// IJBossServerRuntime.PROPERTY_VM_TYPE_ID
-			((RuntimeWorkingCopy)runtime).setAttribute("PROPERTY_VM_TYPE_ID", defaultVM.getVMInstallType().getId());
+			((RuntimeWorkingCopy) runtime).setAttribute("PROPERTY_VM_TYPE_ID", defaultVM.getVMInstallType().getId());
 			// IJBossServerRuntime.PROPERTY_CONFIGURATION_NAME
-			((RuntimeWorkingCopy)runtime).setAttribute("org.jboss.ide.eclipse.as.core.runtime.configurationName", JBOSS_AS_DEFAULT_CONFIGURATION_NAME);
+			((RuntimeWorkingCopy) runtime).setAttribute("org.jboss.ide.eclipse.as.core.runtime.configurationName", JBOSS_AS_DEFAULT_CONFIGURATION_NAME);
 
 			runtime.save(false, progressMonitor);
 		}
@@ -212,11 +212,11 @@ public class JBossASAdapterInitializer implements IStartup {
 		server.setName(JBOSS_AS_NAME);
 		// JBossServer.DEPLOY_DIRECTORY
 		String deployVal = runtime.getLocation().append("server").append(JBOSS_AS_DEFAULT_CONFIGURATION_NAME).append("deploy").toOSString();
-		((ServerWorkingCopy)server).setAttribute("org.jboss.ide.eclipse.as.core.server.deployDirectory", deployVal);
+		((ServerWorkingCopy) server).setAttribute("org.jboss.ide.eclipse.as.core.server.deployDirectory", deployVal);
 
 		// IDeployableServer.TEMP_DEPLOY_DIRECTORY
 		String deployTmpFolderVal = runtime.getLocation().append("server").append(JBOSS_AS_DEFAULT_CONFIGURATION_NAME).append("tmp").append("jbosstoolsTemp").toOSString();
-		((ServerWorkingCopy)server).setAttribute("org.jboss.ide.eclipse.as.core.server.tempDeployDirectory", deployTmpFolderVal);
+		((ServerWorkingCopy) server).setAttribute("org.jboss.ide.eclipse.as.core.server.tempDeployDirectory", deployTmpFolderVal);
 
 		// If we'd need to set up a username / pw for JMX, do it here.
 //		((ServerWorkingCopy)serverWC).setAttribute(JBossServer.SERVER_USERNAME, authUser);
@@ -260,7 +260,7 @@ public class JBossASAdapterInitializer implements IStartup {
 		}
 
 		driver = DriverManager.getInstance().getDriverInstanceByName(HSQL_DRIVER_NAME);
-		if (driver != null) {
+		if (driver != null && ProfileManager.getInstance().getProfileByName("DefaultDS") == null) {
 			// create profile
 			Properties props = new Properties();
 			props.setProperty(ConnectionProfileConstants.PROP_DRIVER_DEFINITION_ID, HSQL_DRIVER_DEFINITION_ID);
