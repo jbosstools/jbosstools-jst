@@ -28,9 +28,11 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.wst.html.ui.internal.HTMLUIPlugin;
 import org.eclipse.wst.html.ui.internal.contentassist.HTMLContentAssistProcessor;
 import org.eclipse.wst.html.ui.internal.preferences.HTMLUIPreferenceNames;
+import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegionList;
+import org.eclipse.wst.sse.ui.internal.contentassist.ContentAssistUtils;
 import org.eclipse.wst.xml.core.internal.contentmodel.CMAttributeDeclaration;
 import org.eclipse.wst.xml.core.internal.contentmodel.CMElementDeclaration;
 import org.eclipse.wst.xml.core.internal.contentmodel.CMNamedNodeMap;
@@ -541,4 +543,38 @@ public class RedHatHtmlContentAssistProcessor extends HTMLContentAssistProcessor
 		jspActiveCAP = new JSPActiveContentAssistProcessor();
 		jspActiveCAP.init();
 	}
+	
+	
+	/**
+	 * StructuredTextViewer must be set before using this.
+	 */
+	public IStructuredDocumentRegion getStructuredDocumentRegion(int pos) {
+		IStructuredDocumentRegion sdRegion = ContentAssistUtils.getStructuredDocumentRegion(fTextViewer, pos);
+		ITextRegion region = sdRegion.getRegionAtCharacterOffset(pos);
+		if (region == null) {
+			return null;
+		}
+
+		if (sdRegion.getStartOffset(region) == pos) {
+			// The offset is at the beginning of the region
+			if ((sdRegion.getStartOffset(region) == sdRegion.getStartOffset()) && (sdRegion.getPrevious() != null) && (!sdRegion.getPrevious().isEnded())) {
+				// Is the region also the start of the node? If so, the
+				// previous IStructuredDocumentRegion is
+				// where to look for a useful region.
+				sdRegion = sdRegion.getPrevious();
+			}
+			else {
+				// Is there no separating whitespace from the previous region?
+				// If not,
+				// then that region is the important one
+				ITextRegion previousRegion = sdRegion.getRegionAtCharacterOffset(pos - 1);
+				if ((previousRegion != null) && (previousRegion != region) && (previousRegion.getTextLength() == previousRegion.getLength())) {
+					sdRegion = sdRegion.getPrevious();
+				}
+			}
+		}
+
+		return sdRegion;
+	}
+
 }

@@ -622,4 +622,37 @@ public class RedHatJSPContentAssistProcessor extends JSPContentAssistProcessor i
 	private boolean isCommentNode(IDOMNode node) {
 		return (node != null && node instanceof IDOMElement && ((IDOMElement) node).isCommentTag());
 	}
+	
+	/**
+	 * StructuredTextViewer must be set before using this.
+	 */
+	public IStructuredDocumentRegion getStructuredDocumentRegion(int pos) {
+		IStructuredDocumentRegion sdRegion = ContentAssistUtils.getStructuredDocumentRegion(fTextViewer, pos);
+		ITextRegion region = sdRegion.getRegionAtCharacterOffset(pos);
+		if (region == null) {
+			return null;
+		}
+
+		if (sdRegion.getStartOffset(region) == pos) {
+			// The offset is at the beginning of the region
+			if ((sdRegion.getStartOffset(region) == sdRegion.getStartOffset()) && (sdRegion.getPrevious() != null) && (!sdRegion.getPrevious().isEnded())) {
+				// Is the region also the start of the node? If so, the
+				// previous IStructuredDocumentRegion is
+				// where to look for a useful region.
+				sdRegion = sdRegion.getPrevious();
+			}
+			else {
+				// Is there no separating whitespace from the previous region?
+				// If not,
+				// then that region is the important one
+				ITextRegion previousRegion = sdRegion.getRegionAtCharacterOffset(pos - 1);
+				if ((previousRegion != null) && (previousRegion != region) && (previousRegion.getTextLength() == previousRegion.getLength())) {
+					sdRegion = sdRegion.getPrevious();
+				}
+			}
+		}
+
+		return sdRegion;
+	}
+
 }
