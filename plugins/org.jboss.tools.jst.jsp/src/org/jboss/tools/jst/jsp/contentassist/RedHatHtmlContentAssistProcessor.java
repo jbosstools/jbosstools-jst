@@ -555,7 +555,8 @@ public class RedHatHtmlContentAssistProcessor extends HTMLContentAssistProcessor
 			return null;
 		}
 
-		if (sdRegion.getStartOffset(region) == pos) {
+		if (region.getType() == DOMRegionContext.XML_TAG_OPEN &&  
+				sdRegion.getStartOffset(region) == pos) {
 			// The offset is at the beginning of the region
 			if ((sdRegion.getStartOffset(region) == sdRegion.getStartOffset()) && (sdRegion.getPrevious() != null) && (!sdRegion.getPrevious().isEnded())) {
 				// Is the region also the start of the node? If so, the

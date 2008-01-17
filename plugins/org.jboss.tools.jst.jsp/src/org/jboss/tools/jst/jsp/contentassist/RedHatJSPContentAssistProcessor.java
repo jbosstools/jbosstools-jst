@@ -43,6 +43,7 @@ import org.eclipse.wst.xml.core.internal.contentmodel.modelquery.ModelQueryActio
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
+import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 import org.eclipse.wst.xml.ui.internal.XMLUIMessages;
 import org.eclipse.wst.xml.ui.internal.XMLUIPlugin;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
@@ -633,7 +634,8 @@ public class RedHatJSPContentAssistProcessor extends JSPContentAssistProcessor i
 			return null;
 		}
 
-		if (sdRegion.getStartOffset(region) == pos) {
+		if (region.getType() == DOMRegionContext.XML_TAG_OPEN &&  
+				sdRegion.getStartOffset(region) == pos) {
 			// The offset is at the beginning of the region
 			if ((sdRegion.getStartOffset(region) == sdRegion.getStartOffset()) && (sdRegion.getPrevious() != null) && (!sdRegion.getPrevious().isEnded())) {
 				// Is the region also the start of the node? If so, the
