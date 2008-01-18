@@ -550,7 +550,7 @@ public class RedHatHtmlContentAssistProcessor extends HTMLContentAssistProcessor
 	 */
 	public IStructuredDocumentRegion getStructuredDocumentRegion(int pos) {
 		IStructuredDocumentRegion sdRegion = ContentAssistUtils.getStructuredDocumentRegion(fTextViewer, pos);
-		ITextRegion region = sdRegion.getRegionAtCharacterOffset(pos);
+		ITextRegion region = (sdRegion == null ? null : sdRegion.getRegionAtCharacterOffset(pos));
 		if (region == null) {
 			return null;
 		}
