@@ -151,7 +151,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		super
 				.setSourceViewerConfiguration(new ExtendedStructuredTextViewerConfigurationJSP());
 	}
-
+	
 	protected void setSourceViewerConfiguration(SourceViewerConfiguration config) {
 		if (config instanceof StructuredTextViewerConfigurationJSP) {
 			if (!(config instanceof ExtendedStructuredTextViewerConfigurationJSP)) {
@@ -167,6 +167,10 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		super.setSourceViewerConfiguration(config);
 	}
 
+	public SourceViewerConfiguration getSVConfiguration () {
+		return getSourceViewerConfiguration();
+	}
+	
 	protected void initializeDrop(ITextViewer textViewer) {
 
 		Composite c = textViewer.getTextWidget();
