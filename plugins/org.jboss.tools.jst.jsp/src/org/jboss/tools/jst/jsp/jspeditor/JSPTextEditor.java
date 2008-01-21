@@ -167,7 +167,8 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		super.setSourceViewerConfiguration(config);
 	}
 
-	public SourceViewerConfiguration getSVConfiguration () {
+	/** This is *only* for allowing unit tests to access the source configuration. */
+	public SourceViewerConfiguration getSourceViewerConfigurationForTest () {
 		return getSourceViewerConfiguration();
 	}
 	
