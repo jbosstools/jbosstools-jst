@@ -36,8 +36,8 @@ public class JstJspJbide1585Test extends TestCase {
 	TestProjectProvider provider = null;
 	IProject project = null;
 	boolean makeCopy = false;
-	private static final String PROJECT_NAME = "Jbide1585Test";
-	private static final String PAGE_NAME = "/WebContent/login.xhtml";
+	private static final String PROJECT_NAME = "JsfJbide1585Test";
+	private static final String PAGE_NAME = "/WebContent/pages/inputname.xhtml";
 	private static final String TAG_OPEN_STRING = "<";
 	private static final String PREFIX_STRING = "ui:in";
 	private static final String INSERTION_STRING = TAG_OPEN_STRING + PREFIX_STRING;
