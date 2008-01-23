@@ -26,6 +26,7 @@ import org.jboss.tools.common.test.util.TestProjectProvider;
 import org.jboss.tools.jst.jsp.contentassist.RedHatCustomCompletionProposal;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor;
+import org.jboss.tools.jst.jsp.test.JstJspTestUtil;
 import org.jboss.tools.test.util.xpl.EditorTestHelper;
 
 import junit.framework.Test;
@@ -102,7 +103,7 @@ public class JstJspJbide1585Test extends TestCase {
 			e.printStackTrace();
 			assertTrue("Waiting for the jobs to complete has failed.", false);
 		} 
-		delay(3000);
+		JstJspTestUtil.delay(3000);
 
 		JSPTextEditor jspTextEditor = jspEditor.getJspEditor();
 		StructuredTextViewer viewer = jspTextEditor.getTextViewer();
@@ -125,7 +126,7 @@ public class JstJspJbide1585Test extends TestCase {
 		ICompletionProposal[] result= null;
 		String errorMessage = null;
 
-		IContentAssistProcessor p= getProcessor(viewer, offsetToTest, contentAssistant);
+		IContentAssistProcessor p= JstJspTestUtil.getProcessor(viewer, offsetToTest, contentAssistant);
 		if (p != null) {
 			try {
 				result= p.computeCompletionProposals(viewer, offsetToTest);
@@ -160,44 +161,4 @@ public class JstJspJbide1585Test extends TestCase {
 		.closeEditor(editorPart, false);
 	}
 
-	private IContentAssistProcessor getProcessor(ITextViewer viewer, int offset, IContentAssistant ca) {
-		try {
-			IDocument document= viewer.getDocument();
-			String type= TextUtilities.getContentType(document, ((IContentAssistantExtension)ca).getDocumentPartitioning(), offset, true);
-
-			return ca.getContentAssistProcessor(type);
-		} catch (BadLocationException x) {
-		}
-
-		return null;
-	}
-
-	/**
-     * Process UI input but do not return for the specified time interval.
-     * 
-     * @param waitTimeMillis
-     *                the number of milliseconds
-     */
-    protected void delay(long waitTimeMillis) {
-		Display display = Display.getCurrent();
-	
-		// If this is the UI thread,
-		// then process input.
-		if (display != null) {
-		    long endTimeMillis = System.currentTimeMillis() + waitTimeMillis;
-		    while (System.currentTimeMillis() < endTimeMillis) {
-			if (!display.readAndDispatch())
-			    display.sleep();
-		    }
-		    display.update();
-		}
-		// Otherwise, perform a simple sleep.
-		else {
-		    try {
-			Thread.sleep(waitTimeMillis);
-		    } catch (InterruptedException e) {
-			// Ignored.
-		    }
-		}
-    }
 }
