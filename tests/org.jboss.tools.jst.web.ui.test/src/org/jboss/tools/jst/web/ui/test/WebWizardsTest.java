@@ -16,6 +16,7 @@ import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.PlatformUI;
+import org.jboss.common.model.ui.test.ModelNewWizardTest;
 import org.jboss.tools.common.model.ui.wizard.newfile.NewHTMLFileWizard;
 import org.jboss.tools.common.model.ui.wizard.newfile.NewJSPFileWizard;
 import org.jboss.tools.common.model.ui.wizard.newfile.NewPropertiesFileWizard;
@@ -31,25 +32,7 @@ import org.jboss.tools.jst.web.ui.wizards.newfile.NewWebFileWizard;
  * @author eskimo
  *
  */
-public class WebWizardsTest extends TestCase {
-	
-	private void testNewWizardInstanceIsCreated(String id) {
-		IWizard
-		aWizard = WorkbenchUtils.findWizardByDefId(
-				id);
-		
-		WizardDialog dialog = new WizardDialog(
-				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-				aWizard);
-		dialog.setBlockOnOpen(false);
-		try {
-			dialog.open();
-			IWizardPage page = dialog.getCurrentPage();
-			assertTrue("Start page is not loaded",page instanceof DefaultStandardStep);
-		} finally {
-			dialog.close();
-		}
-	}
+public class WebWizardsTest extends ModelNewWizardTest {
 	
 	public void testNewCssWizardInstanceIsCreated() {
 		testNewWizardInstanceIsCreated(NewCSSFileWizard.class.getName());
