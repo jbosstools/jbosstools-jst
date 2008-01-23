@@ -23,6 +23,7 @@ public class JstWebUiAllTests {
 	public static Test suite() {
 		TestSuite suite = new TestSuite(JstWebUiAllTests.class.getName());
 		suite.addTestSuite(WebViewsTest.class);
+		suite.addTestSuite(WebWizardsTest.class);
 		return suite;
 	}
 }
