@@ -215,7 +215,7 @@
             class="org.jboss.tools.jst.web.ui.wizards.newfile.NewTLDFileWizard"
             finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
             icon="images/xstudio/wizards/new_taglibs_file.gif"
-            id="org.jboss.tools.jst.web.ui.wizard.newfile.NewTLDFileWizard"
+            id="org.jboss.tools.jst.web.ui.wizards.newfile.NewTLDFileWizard"
             name="TLD File"
             preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
             project="false">
