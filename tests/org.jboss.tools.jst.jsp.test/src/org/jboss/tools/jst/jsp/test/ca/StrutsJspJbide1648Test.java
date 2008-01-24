@@ -105,7 +105,7 @@ public class StrutsJspJbide1648Test extends TestCase {
 		JSPTextEditor jspTextEditor = jspEditor.getJspEditor();
 		StructuredTextViewer viewer = jspTextEditor.getTextViewer();
 		IDocument document = viewer.getDocument();
-		IContentAssistant contentAssistant = jspTextEditor.getSVConfiguration().getContentAssistant(viewer);
+		IContentAssistant contentAssistant = jspTextEditor.getSourceViewerConfigurationForTest().getContentAssistant(viewer);
 
 		ICompletionProposal[] result= null;
 		String errorMessage = null;

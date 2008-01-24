@@ -108,7 +108,7 @@ public class JstJspJbide1585Test extends TestCase {
 		JSPTextEditor jspTextEditor = jspEditor.getJspEditor();
 		StructuredTextViewer viewer = jspTextEditor.getTextViewer();
 		IDocument document = viewer.getDocument();
-		IContentAssistant contentAssistant = jspTextEditor.getSVConfiguration().getContentAssistant(viewer);
+		IContentAssistant contentAssistant = jspTextEditor.getSourceViewerConfigurationForTest().getContentAssistant(viewer);
 
 		
 		// Find start of <ui:define> tag
