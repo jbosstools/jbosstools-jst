@@ -7,6 +7,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContentAssistant;
+import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -16,7 +17,7 @@ import org.jboss.tools.common.test.util.TestProjectProvider;
 import org.jboss.tools.jst.jsp.contentassist.RedHatCustomCompletionProposal;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor;
-import org.jboss.tools.jst.jsp.test.JstJspTestUtil;
+import org.jboss.tools.jst.jsp.test.TestUtil;
 import org.jboss.tools.test.util.xpl.EditorTestHelper;
 
 import junit.framework.Test;
@@ -84,7 +85,7 @@ public class StrutsJspJbide1648Test extends TestCase {
 		} catch (PartInitException ex) {
 			exception = ex;
 			ex.printStackTrace();
-			assertTrue("The JSP Visual Editor couln'd be initialized.", false);
+			assertTrue("The JSP Visual Editor couldn't be initialized.", false);
 		}
 
 		JSPMultiPageEditor jspEditor = null;
@@ -100,18 +101,21 @@ public class StrutsJspJbide1648Test extends TestCase {
 			e.printStackTrace();
 			assertTrue("Waiting for the jobs to complete has failed.", false);
 		} 
-		JstJspTestUtil.delay(3000);
+		TestUtil.delay(3000);
 
 		JSPTextEditor jspTextEditor = jspEditor.getJspEditor();
 		StructuredTextViewer viewer = jspTextEditor.getTextViewer();
 		IDocument document = viewer.getDocument();
-		IContentAssistant contentAssistant = jspTextEditor.getSourceViewerConfigurationForTest().getContentAssistant(viewer);
+		SourceViewerConfiguration config = TestUtil.getSourceViewerConfiguration(jspTextEditor);
+		IContentAssistant contentAssistant = (config == null ? null : config.getContentAssistant(viewer));
+
+		assertTrue("Cannot get the Content Assistant instance for the editor for page \"" + pageName + "\"", (contentAssistant != null));
 
 		ICompletionProposal[] result= null;
 		String errorMessage = null;
 
 		try {
-			IContentAssistProcessor p= JstJspTestUtil.getProcessor(viewer, 0, contentAssistant);
+			IContentAssistProcessor p= TestUtil.getProcessor(viewer, 0, contentAssistant);
 			if (p != null) {
 				result= p.computeCompletionProposals(viewer, 0);
 				errorMessage= p.getErrorMessage();

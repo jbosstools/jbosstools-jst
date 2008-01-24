@@ -1,5 +1,7 @@
 package org.jboss.tools.jst.jsp.test;
 
+import java.lang.reflect.Method;
+
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
@@ -7,9 +9,11 @@ import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContentAssistant;
 import org.eclipse.jface.text.contentassist.IContentAssistantExtension;
+import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.texteditor.AbstractTextEditor;
 
-public class JstJspTestUtil {
+public class TestUtil {
 
 
 	/**
@@ -60,5 +64,25 @@ public class JstJspTestUtil {
 		    }
 		}
     }
+
+	public static SourceViewerConfiguration getSourceViewerConfiguration(AbstractTextEditor editor) {
+		Class editorClass = editor.getClass();
+		while (editorClass != null) {
+			try {
+				Method m = editorClass.getDeclaredMethod("getSourceViewerConfiguration", new Class[] {});
+				
+				if(m != null) {  
+					m.setAccessible(true);
+					Object result = m.invoke(editor, new Object[]{});
+					return (result instanceof SourceViewerConfiguration ? (SourceViewerConfiguration)result : null);
+				}
+			} catch (NoSuchMethodException ne) {
+			} catch (Exception e) {
+			}
+			editorClass = editorClass.getSuperclass();
+		}
+		return null;
+		
+	}	
 
 }

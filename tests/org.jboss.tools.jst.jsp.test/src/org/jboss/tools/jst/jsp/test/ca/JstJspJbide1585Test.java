@@ -16,6 +16,7 @@ import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContentAssistant;
 import org.eclipse.jface.text.contentassist.IContentAssistantExtension;
+import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
@@ -26,7 +27,7 @@ import org.jboss.tools.common.test.util.TestProjectProvider;
 import org.jboss.tools.jst.jsp.contentassist.RedHatCustomCompletionProposal;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor;
-import org.jboss.tools.jst.jsp.test.JstJspTestUtil;
+import org.jboss.tools.jst.jsp.test.TestUtil;
 import org.jboss.tools.test.util.xpl.EditorTestHelper;
 
 import junit.framework.Test;
@@ -87,7 +88,7 @@ public class JstJspJbide1585Test extends TestCase {
 		} catch (PartInitException ex) {
 			exception = ex;
 			ex.printStackTrace();
-			assertTrue("The JSP Visual Editor couln'd be initialized.", false);
+			assertTrue("The JSP Visual Editor couldn't be initialized.", false);
 		}
 
 		JSPMultiPageEditor jspEditor = null;
@@ -103,12 +104,15 @@ public class JstJspJbide1585Test extends TestCase {
 			e.printStackTrace();
 			assertTrue("Waiting for the jobs to complete has failed.", false);
 		} 
-		JstJspTestUtil.delay(3000);
+		TestUtil.delay(3000);
 
 		JSPTextEditor jspTextEditor = jspEditor.getJspEditor();
 		StructuredTextViewer viewer = jspTextEditor.getTextViewer();
 		IDocument document = viewer.getDocument();
-		IContentAssistant contentAssistant = jspTextEditor.getSourceViewerConfigurationForTest().getContentAssistant(viewer);
+		SourceViewerConfiguration config = TestUtil.getSourceViewerConfiguration(jspTextEditor);
+		IContentAssistant contentAssistant = (config == null ? null : config.getContentAssistant(viewer));
+
+		assertTrue("Cannot get the Content Assistant instance for the editor for page \"" + PAGE_NAME + "\"", (contentAssistant != null));
 
 		
 		// Find start of <ui:define> tag
@@ -126,7 +130,7 @@ public class JstJspJbide1585Test extends TestCase {
 		ICompletionProposal[] result= null;
 		String errorMessage = null;
 
-		IContentAssistProcessor p= JstJspTestUtil.getProcessor(viewer, offsetToTest, contentAssistant);
+		IContentAssistProcessor p= TestUtil.getProcessor(viewer, offsetToTest, contentAssistant);
 		if (p != null) {
 			try {
 				result= p.computeCompletionProposals(viewer, offsetToTest);
