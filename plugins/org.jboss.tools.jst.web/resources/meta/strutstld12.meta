@@ -768,7 +768,7 @@
       </XActionItem>
       <XActionItem HandlerClassName="%WizardInvoker%"
        ICON="main.tld.taglib"
-       PROPERTIES="plugin=org.jboss.tools.jst.web.ui;wizard=org.jboss.tools.jst.web.ui.wizard.newfile.NewTLDFileWizard"
+       PROPERTIES="plugin=org.jboss.tools.jst.web.ui;wizard=org.jboss.tools.jst.web.ui.wizards.newfile.NewTLDFileWizard"
        displayName="Tag Library..." kind="action" name="CreateFileTLDV"/>
      </XActionItem>
     </XActionItem>
@@ -803,7 +803,7 @@
       </XActionItem>
       <XActionItem HandlerClassName="%WizardInvoker%"
        ICON="main.tld.taglib"
-       PROPERTIES="plugin=org.jboss.tools.jst.web.ui;wizard=org.jboss.tools.jst.web.ui.wizard.newfile.NewTLDFileWizard"
+       PROPERTIES="plugin=org.jboss.tools.jst.web.ui;wizard=org.jboss.tools.jst.web.ui.wizards.newfile.NewTLDFileWizard"
        displayName="Tag Library..." kind="action" name="CreateFileTLDV"/>
      </XActionItem>
     </XActionItem>
