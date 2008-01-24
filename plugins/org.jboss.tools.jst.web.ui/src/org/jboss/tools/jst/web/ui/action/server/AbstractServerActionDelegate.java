@@ -10,15 +10,20 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.action.server;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.*;
-
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.jboss.tools.common.model.util.ClassLoaderUtil;
 import org.jboss.tools.jst.web.WebModelPlugin;
-import org.jboss.tools.jst.web.server.*;
+import org.jboss.tools.jst.web.server.ServerManager;
+import org.jboss.tools.jst.web.server.ServerManagerListener;
 
 public abstract class AbstractServerActionDelegate implements IWorkbenchWindowActionDelegate, ServerManagerListener {
 	static {
@@ -123,4 +128,22 @@ public abstract class AbstractServerActionDelegate implements IWorkbenchWindowAc
 		return null;
 	}	
 
+	
+	// a stub that can be used by subclasses
+	protected static ISelectionProvider getSelectionProvider() {
+		return new ISelectionProvider() {
+			public void addSelectionChangedListener(
+					ISelectionChangedListener listener) {
+			}
+			public ISelection getSelection() {
+				return null;
+			}
+			public void removeSelectionChangedListener(
+					ISelectionChangedListener listener) {
+			}
+			public void setSelection(ISelection selection) {
+			}
+		};
+	}
+	
 }

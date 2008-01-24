@@ -10,24 +10,28 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.action.server;
 
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.wst.server.core.IServer;
-
+import org.eclipse.wst.server.ui.internal.view.servers.StopAction;
 import org.jboss.tools.common.model.ServiceDialog;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
-import org.jboss.tools.jst.web.server.*;
+import org.jboss.tools.jst.web.server.ServerManager;
 
 public class StopServerActionDelegate extends AbstractServerActionDelegate {
+	protected StopAction delegate;
+
+	public void init(IWorkbenchWindow window) {
+		super.init(window);
+		update();
+		delegate = new StopAction(window.getShell(), getSelectionProvider());
+	}
 
 	protected void doRun() {
 		IServer server = ServerManager.getInstance().getSelectedServer();
 		if(server == null) return;
-		ServiceDialog d = PreferenceModelUtilities.getPreferenceModel().getService();
-		try {
-			server.stop(false);
-		} catch (Exception e) {
-			d.showDialog(WebUIMessages.ERROR, e.getMessage(), new String[]{WebUIMessages.CLOSE}, null, ServiceDialog.ERROR);
-		}
+		if( delegate.accept(server))
+			delegate.perform(server);
 	}
 
 	protected boolean isActionEnabled() {

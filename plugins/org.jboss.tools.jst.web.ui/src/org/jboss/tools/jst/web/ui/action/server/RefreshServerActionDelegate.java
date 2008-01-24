@@ -10,25 +10,21 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.action.server;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.wst.server.core.IServer;
-import org.jboss.tools.common.model.ServiceDialog;
-import org.jboss.tools.common.model.options.PreferenceModelUtilities;
+import org.eclipse.wst.server.ui.internal.view.servers.StartAction;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
-import org.jboss.tools.jst.web.server.*;
+import org.jboss.tools.jst.web.server.ServerManager;
 
 public class RefreshServerActionDelegate extends AbstractServerActionDelegate {
+	private StartAction delegate;
 
 	protected void doRun() {
 		IServer server = ServerManager.getInstance().getSelectedServer();
 		if(server == null) return;
-		ServiceDialog d = PreferenceModelUtilities.getPreferenceModel().getService();
-		try {
-			server.restart(getLaunchMode(server), new NullProgressMonitor());
-		} catch (Exception e) {
-			d.showDialog(WebUIMessages.ERROR, e.getMessage(), new String[]{WebUIMessages.CLOSE}, null, ServiceDialog.ERROR);
-		}
+		delegate = new StartAction(window.getShell(), getSelectionProvider(), getLaunchMode(server));
+		if( delegate.accept(server))
+			delegate.perform(server);
 	}
 
 	protected String getLaunchMode(IServer server) {
