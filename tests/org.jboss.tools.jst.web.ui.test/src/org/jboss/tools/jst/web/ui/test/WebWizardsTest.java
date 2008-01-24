@@ -16,7 +16,7 @@ import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.PlatformUI;
-import org.jboss.common.model.ui.test.ModelNewWizardTest;
+import org.jboss.tools.common.model.ui.test.ModelNewWizardTest;
 import org.jboss.tools.common.model.ui.wizard.newfile.NewHTMLFileWizard;
 import org.jboss.tools.common.model.ui.wizard.newfile.NewJSPFileWizard;
 import org.jboss.tools.common.model.ui.wizard.newfile.NewPropertiesFileWizard;
