@@ -32,6 +32,7 @@ public class WebAppFormLayoutData implements IFormLayoutData {
 		WebAppFoldersFormLayoutData.FILTER_FOLDER_DEFINITION,
 		WebAppFoldersFormLayoutData.FILTER_FOLDER_24_DEFINITION,
 		WebAppFoldersFormLayoutData.LISTENER_FOLDER_DEFINITION,
+		WebAppFoldersFormLayoutData.LISTENER_FOLDER_24_DEFINITION,
 		WebAppFoldersFormLayoutData.SERVLET_FOLDER_DEFINITION,
 		WebAppFoldersFormLayoutData.MIME_FOLDER_DEFINITION,
 		WebAppFoldersFormLayoutData.ERROR_FOLDER_DEFINITION,

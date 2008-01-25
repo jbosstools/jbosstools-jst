@@ -20,6 +20,7 @@ public class WebAppFoldersFormLayoutData {
 	static String FILTER_FOLDER_ENTITY = "WebAppFolderFilters"; //$NON-NLS-1$
 	static String FILTER_FOLDER_24_ENTITY = "WebAppFolderFilters24"; //$NON-NLS-1$
 	static String LISTENER_FOLDER_ENTITY = "WebAppFolderListeners"; //$NON-NLS-1$
+	static String LISTENER_FOLDER_24_ENTITY = "WebAppFolderListeners24"; //$NON-NLS-1$
 	static String SERVLET_FOLDER_ENTITY = "WebAppFolderServlets"; //$NON-NLS-1$
 	static String MIME_FOLDER_ENTITY = "WebAppFolderMimeMappings"; //$NON-NLS-1$
 	static String ERROR_FOLDER_ENTITY = "WebAppFolderErrorPages"; //$NON-NLS-1$
@@ -89,6 +90,18 @@ public class WebAppFoldersFormLayoutData {
 
 	static IFormData[] LISTENER_FOLDER_DEFINITIONS = new IFormData[]{
 		LISTENER_LIST_DEFINITION
+	};
+
+	static IFormData LISTENER_24_LIST_DEFINITION = new FormData(
+		"Listeners",
+		EMPTY_DESCRIPTION,
+		new FormAttributeData[]{new FormAttributeData("listener-class", 100)}, //$NON-NLS-1$
+		new String[]{WebAppHelper.LISTENER_24_ENTITY},
+		FormLayoutDataUtil.createDefaultFormActionData("CreateActions.CreateListener") //$NON-NLS-1$
+	);
+
+	static IFormData[] LISTENER_FOLDER_24_DEFINITIONS = new IFormData[]{
+		LISTENER_24_LIST_DEFINITION
 	};
 
 	static IFormData SERVLET_LIST_DEFINITION = new FormData(
@@ -263,6 +276,9 @@ public class WebAppFoldersFormLayoutData {
 
 	final static IFormData LISTENER_FOLDER_DEFINITION = new FormData(
 		LISTENER_FOLDER_ENTITY, new String[]{null}, LISTENER_FOLDER_DEFINITIONS);
+
+	final static IFormData LISTENER_FOLDER_24_DEFINITION = new FormData(
+		LISTENER_FOLDER_24_ENTITY, new String[]{null}, LISTENER_FOLDER_24_DEFINITIONS);
 
 	final static IFormData SERVLET_FOLDER_DEFINITION = new FormData(
 		SERVLET_FOLDER_ENTITY, new String[]{null}, SERVLET_FOLDER_DEFINITIONS);
