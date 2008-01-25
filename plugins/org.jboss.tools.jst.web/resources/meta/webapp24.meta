@@ -93,7 +93,7 @@
   <XChildrenEntities>
    <XChildEntity maxCount="1" name="WebAppFolderContextParams" required="yes"/>
    <XChildEntity maxCount="1" name="WebAppFolderFilters24" required="yes"/>
-   <XChildEntity maxCount="1" name="WebAppFolderListeners" required="yes"/>
+   <XChildEntity maxCount="1" name="WebAppFolderListeners24" required="yes"/>
    <XChildEntity maxCount="1" name="WebAppFolderServlets" required="yes"/>
    <XChildEntity maxCount="1" name="WebAppSessionConfig" required="yes"/>
    <XChildEntity maxCount="1" name="WebAppFolderMimeMappings" required="yes"/>
@@ -117,19 +117,13 @@
   </XEntityRenderer>
   <XModelAttributes>
    <XModelAttribute default="deployment descriptor" loader="ElementType" name="element type">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="category=general" name="name" xmlname="NAME">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general" name="name" xmlname="NAME"/>
    <XModelAttribute default="xml" name="extension" xmlname="EXTENSION">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute loader="ElementType" name="_lateload" visibility="false">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute default="no" name="isIncorrect" visibility="false">
@@ -139,10 +133,7 @@
     </Constraint>
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute name="incorrectBody" visibility="false">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="incorrectBody" visibility="false"/>
    <XModelAttribute default="false" name="expanded" visibility="false">
     <Constraint loader="List">
      <value name="false"/>
@@ -151,26 +142,14 @@
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute PROPERTIES="save=always"
-    default="http://java.sun.com/xml/ns/j2ee" name="xmlns" xmlname="xmlns">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+    default="http://java.sun.com/xml/ns/j2ee" name="xmlns" xmlname="xmlns"/>
    <XModelAttribute PROPERTIES="save=always"
-    default="http://www.w3.org/2001/XMLSchema-instance" name="xmlns:xsi" xmlname="xmlns:xsi">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+    default="http://www.w3.org/2001/XMLSchema-instance" name="xmlns:xsi" xmlname="xmlns:xsi"/>
    <XModelAttribute PROPERTIES="save=always"
     default="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
-    name="xsi:schemaLocation" xmlname="xsi:schemaLocation">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+    name="xsi:schemaLocation" xmlname="xsi:schemaLocation"/>
    <XModelAttribute PROPERTIES="save=always" default="2.4"
-    name="version" visibility="false" xmlname="version">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+    name="version" visibility="false" xmlname="version"/>
    <XModelAttribute PROPERTIES="category=advanced" name="small-icon" xmlname="icon.small-icon.#text">
     <Constraint loader="Tree">
      <value name="WebPageTree"/>
@@ -185,12 +164,8 @@
     </Constraint>
     <Editor name="TreeChooser"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="category=general" name="display-name" xmlname="display-name.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general" name="display-name" xmlname="display-name.#text"/>
    <XModelAttribute PROPERTIES="category=general" name="description" xmlname="description.#text">
-    <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
    <XModelAttribute PROPERTIES="category=advanced" default="no"
@@ -201,12 +176,8 @@
     </Constraint>
     <Editor name="List"/>
    </XModelAttribute>
-   <XModelAttribute name="id" visibility="false" xmlname="id">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id"/>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
-    <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
    <XModelAttribute PROPERTIES="category=advanced" default="UTF-8" name="encoding">
@@ -586,7 +557,7 @@
   <XChildrenEntities>
    <XChildEntity maxCount="1" name="WebAppFolderContextParams" required="yes"/>
    <XChildEntity maxCount="1" name="WebAppFolderFilters24" required="yes"/>
-   <XChildEntity maxCount="1" name="WebAppFolderListeners" required="yes"/>
+   <XChildEntity maxCount="1" name="WebAppFolderListeners24" required="yes"/>
    <XChildEntity maxCount="1" name="WebAppFolderServlets" required="yes"/>
    <XChildEntity maxCount="1" name="WebAppSessionConfig" required="yes"/>
    <XChildEntity maxCount="1" name="WebAppFolderMimeMappings" required="yes"/>
@@ -610,19 +581,13 @@
   </XEntityRenderer>
   <XModelAttributes>
    <XModelAttribute default="deployment descriptor" loader="ElementType" name="element type">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="category=general" name="name" xmlname="NAME">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general" name="name" xmlname="NAME"/>
    <XModelAttribute default="xml" name="extension" xmlname="EXTENSION">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute loader="ElementType" name="_lateload" visibility="false">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute default="no" name="isIncorrect" visibility="false">
@@ -632,10 +597,7 @@
     </Constraint>
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute name="incorrectBody" visibility="false">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="incorrectBody" visibility="false"/>
    <XModelAttribute default="false" name="expanded" visibility="false">
     <Constraint loader="List">
      <value name="false"/>
@@ -644,26 +606,14 @@
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute PROPERTIES="save=always"
-    default="http://java.sun.com/xml/ns/javaee" name="xmlns" xmlname="xmlns">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+    default="http://java.sun.com/xml/ns/javaee" name="xmlns" xmlname="xmlns"/>
    <XModelAttribute PROPERTIES="save=always"
-    default="http://www.w3.org/2001/XMLSchema-instance" name="xmlns:xsi" xmlname="xmlns:xsi">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+    default="http://www.w3.org/2001/XMLSchema-instance" name="xmlns:xsi" xmlname="xmlns:xsi"/>
    <XModelAttribute PROPERTIES="save=always"
     default="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-    name="xsi:schemaLocation" xmlname="xsi:schemaLocation">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+    name="xsi:schemaLocation" xmlname="xsi:schemaLocation"/>
    <XModelAttribute PROPERTIES="save=always" default="2.4"
-    name="version" visibility="false" xmlname="version">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+    name="version" visibility="false" xmlname="version"/>
    <XModelAttribute PROPERTIES="category=advanced" name="small-icon" xmlname="icon.small-icon.#text">
     <Constraint loader="Tree">
      <value name="WebPageTree"/>
@@ -678,12 +628,8 @@
     </Constraint>
     <Editor name="TreeChooser"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="category=general" name="display-name" xmlname="display-name.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general" name="display-name" xmlname="display-name.#text"/>
    <XModelAttribute PROPERTIES="category=general" name="description" xmlname="description.#text">
-    <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
    <XModelAttribute PROPERTIES="category=advanced" default="no"
@@ -703,12 +649,8 @@
     </Constraint>
     <Editor name="List"/>
    </XModelAttribute>
-   <XModelAttribute name="id" visibility="false" xmlname="id">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id"/>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
-    <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
    <XModelAttribute PROPERTIES="category=advanced" default="UTF-8" name="encoding">
@@ -1090,21 +1032,11 @@
   </XEntityRenderer>
   <XModelAttributes>
    <XModelAttribute default="filter mapping" loader="ElementType" name="element type">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="id=true;save=always" name="filter-name" xmlname="filter-name.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute PROPERTIES="id=true" name="url-pattern" xmlname="url-pattern.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute PROPERTIES="id=true;save=always" name="servlet-name" xmlname="servlet-name.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute PROPERTIES="id=true;save=always" name="filter-name" xmlname="filter-name.#text"/>
+   <XModelAttribute PROPERTIES="id=true" name="url-pattern" xmlname="url-pattern.#text"/>
+   <XModelAttribute PROPERTIES="id=true;save=always" name="servlet-name" xmlname="servlet-name.#text"/>
    <XModelAttribute name="dispatchers" xmlname="dispatchers">
     <Constraint loader="ListAdd">
      <value name="FORWARD"/>
@@ -1114,12 +1046,8 @@
     </Constraint>
     <Editor name="ListAdd"/>
    </XModelAttribute>
-   <XModelAttribute name="id" visibility="false" xmlname="id">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id"/>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
-    <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -1158,11 +1086,9 @@
   </XEntityRenderer>
   <XModelAttributes>
    <XModelAttribute default="filters" loader="ElementType" name="element type">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute PROPERTIES="id=true;" default="Filters" name="name" xmlname="NAME">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -1213,6 +1139,57 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity ImplementingClass="%Custom%"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%" name="WebAppFolderListeners24">
+  <XChildrenEntities>
+   <XChildEntity name="WebAppListener24"/>
+  </XChildrenEntities>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.jsf.components" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="listeners" loader="ElementType" name="element type">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="id=true;" default="Listeners"
+    name="name" xmlname="NAME">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem ICON="action.empty" displayName="New" group="1"
+    kind="list" name="CreateActions">
+    <XActionItem HandlerClassName="%CreateForWeb23%"
+     ICON="action.new.struts.webapp.listener"
+     PROPERTIES="validator.add=true" WizardClassName="%Default%"
+     displayName="Listener..." kind="action" name="CreateListener">
+     <EntityData EntityName="WebAppListener24">
+      <AttributeData AttributeName="listener-class"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
+    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
+     ICON="action.cut" displayName="Cut" kind="action" name="Cut"/>
+    <XActionItem BaseActionName="Copy" HandlerClassName="%CopyChildren%"
+     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
+    <XActionItem BaseActionName="Paste" HandlerClassName="%Paste%"
+     ICON="action.paste" displayName="Paste" kind="action" name="Paste"/>
+   </XActionItem>
+   <XActionItem kind="list" name="DeleteActions">
+    <XActionItem BaseActionName="Delete"
+     HandlerClassName="%DeleteChildren%" ICON="action.delete"
+     displayName="Delete" kind="action" name="Delete"/>
+   </XActionItem>
+   <XActionItem ICON="action.empty" kind="list" name="Properties">
+    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
+     displayName="Properties..." kind="action" name="Properties"/>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%Custom%"
   PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
   XMLSUBPATH="jsp-property-group" name="WebAppJSPPropertyGroup">
   <XChildrenEntities/>
@@ -1223,21 +1200,15 @@
   </XEntityRenderer>
   <XModelAttributes>
    <XModelAttribute default="jsp property group" loader="ElementType" name="element type">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute name="name" visibility="false" xmlname="#text">
-    <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
    <XModelAttribute PROPERTIES="category=advanced" name="description" xmlname="description.#text">
-    <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="category=advanced" name="display-name" xmlname="display-name.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=advanced" name="display-name" xmlname="display-name.#text"/>
    <XModelAttribute PROPERTIES="category=advanced" name="small-icon" xmlname="icon.small-icon.#text">
     <Constraint loader="Tree">
      <value name="WebPageTree"/>
@@ -1253,10 +1224,7 @@
     <Editor name="TreeChooser"/>
    </XModelAttribute>
    <XModelAttribute PROPERTIES="id=true;save=always;category=general"
-    name="url-pattern" xmlname="url-pattern.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+    name="url-pattern" xmlname="url-pattern.#text"/>
    <XModelAttribute PROPERTIES="category=general" name="el-ignored" xmlname="el-ignored.#text">
     <Constraint loader="List">
      <value name="true"/>
@@ -1265,10 +1233,7 @@
     </Constraint>
     <Editor name="List"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="category=general" name="page-encoding" xmlname="page-encoding.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general" name="page-encoding" xmlname="page-encoding.#text"/>
    <XModelAttribute PROPERTIES="category=general"
     name="scripting-invalid" xmlname="scripting-invalid.#text">
     <Constraint loader="List">
@@ -1286,20 +1251,10 @@
     </Constraint>
     <Editor name="List"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="category=general" name="include-prelude" xmlname="include-prelude.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute PROPERTIES="category=general" name="include-coda" xmlname="include-coda.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute name="id" visibility="false" xmlname="id">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general" name="include-prelude" xmlname="include-prelude.#text"/>
+   <XModelAttribute PROPERTIES="category=general" name="include-coda" xmlname="include-coda.#text"/>
+   <XModelAttribute name="id" visibility="false" xmlname="id"/>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
-    <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -1339,19 +1294,13 @@
   </XEntityRenderer>
   <XModelAttributes>
    <XModelAttribute default="jsp config" loader="ElementType" name="element type">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute default="JSP Config" name="name" xmlname="NAME">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute name="id" visibility="false" xmlname="id">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id"/>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
-    <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -1396,6 +1345,63 @@
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
+ <XModelEntity ImplementingClass="%Custom%" XMLSUBPATH="listener" name="WebAppListener24">
+  <XChildrenEntities/>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.struts.webapp.listener" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="listener" loader="ElementType" name="element type">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="description" xmlname="description.#text">
+    <Editor name="Note"/>
+   </XModelAttribute>
+   <XModelAttribute name="display-name" xmlname="display-name.#text"/>
+   <XModelAttribute name="small-icon" xmlname="icon.small-icon.#text">
+    <Constraint loader="Tree">
+     <value name="WebPageTree"/>
+     <value name="extensions=gif,jpg"/>
+    </Constraint>
+    <Editor name="TreeChooser"/>
+   </XModelAttribute>
+   <XModelAttribute name="large-icon" xmlname="icon.large-icon.#text">
+    <Constraint loader="Tree">
+     <value name="WebPageTree"/>
+     <value name="extensions=gif,jpg"/>
+    </Constraint>
+    <Editor name="TreeChooser"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="id=true" name="listener-class" xmlname="listener-class.#text">
+    <Editor name="AccessibleJava"/>
+   </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id"/>
+   <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
+    <Editor name="Note"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
+    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
+     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
+   </XActionItem>
+   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
+    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
+     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
+   </XActionItem>
+   <XActionItem ICON="action.empty" kind="list" name="Properties">
+    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
+     displayName="Properties..." kind="action" name="Properties"/>
+   </XActionItem>
+   <XActionItem displayName="move" kind="list" name="MoveActions">
+    <XActionItem HIDE="always" HandlerClassName="%Move%"
+     ICON="action.move" displayName="Move" kind="action" name="Move"/>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
  <XModelEntity
   ImplementingClass="org.jboss.tools.jst.web.webapp.model.WebAppLocaleEncodingMappingImpl"
   XMLSUBPATH="locale-encoding-mapping" name="WebAppLocaleEncodingMapping">
@@ -1408,23 +1414,12 @@
   <XModelAttributes>
    <XModelAttribute default="locale-encoding-mapping"
     loader="ElementType" name="element type">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute name="locale" xmlname="locale.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute name="encoding" xmlname="encoding.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute name="id" visibility="false" xmlname="id">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="locale" xmlname="locale.#text"/>
+   <XModelAttribute name="encoding" xmlname="encoding.#text"/>
+   <XModelAttribute name="id" visibility="false" xmlname="id"/>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
-    <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -1464,20 +1459,14 @@
   <XModelAttributes>
    <XModelAttribute default="locale-encoding-mapping-list"
     loader="ElementType" name="element type">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute default="locale-encoding-mapping-list" name="name"
     visibility="false" xmlname="NAME">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute name="id" visibility="false" xmlname="id">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id"/>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
-    <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -1526,17 +1515,12 @@
   </XEntityRenderer>
   <XModelAttributes>
    <XModelAttribute default="message destination" loader="ElementType" name="element type">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute name="description" xmlname="description.#text">
-    <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
-   <XModelAttribute name="display-name" xmlname="display-name.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="display-name" xmlname="display-name.#text"/>
    <XModelAttribute name="small-icon" xmlname="icon.small-icon.#text">
     <Constraint loader="Tree">
      <value name="WebPageTree"/>
@@ -1552,16 +1536,9 @@
     <Editor name="TreeChooser"/>
    </XModelAttribute>
    <XModelAttribute PROPERTIES="save=always;id=true"
-    name="message-destination-name" xmlname="message-destination-name.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute name="id" visibility="false" xmlname="id">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+    name="message-destination-name" xmlname="message-destination-name.#text"/>
+   <XModelAttribute name="id" visibility="false" xmlname="id"/>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
-    <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -1599,21 +1576,15 @@
   <XModelAttributes>
    <XModelAttribute default="message destination reference"
     loader="ElementType" name="element type">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute name="description" xmlname="description.#text">
-    <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
    <XModelAttribute PROPERTIES="save=always;id=true"
-    name="message-destination-ref-name" xmlname="message-destination-ref-name.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+    name="message-destination-ref-name" xmlname="message-destination-ref-name.#text"/>
    <XModelAttribute PROPERTIES="save=always"
     name="message-destination-type" xmlname="message-destination-type.#text">
-    <Constraint/>
     <Editor name="AccessibleJava"/>
    </XModelAttribute>
    <XModelAttribute PROPERTIES="save=always"
@@ -1626,16 +1597,9 @@
     </Constraint>
     <Editor name="List"/>
    </XModelAttribute>
-   <XModelAttribute name="message-destination-link" xmlname="message-destination-link.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute name="id" visibility="false" xmlname="id">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="message-destination-link" xmlname="message-destination-link.#text"/>
+   <XModelAttribute name="id" visibility="false" xmlname="id"/>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
-    <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
   </XModelAttributes>
@@ -1672,17 +1636,12 @@
   </XEntityRenderer>
   <XModelAttributes>
    <XModelAttribute default="service reference" loader="ElementType" name="element type">
-    <Constraint/>
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute name="description" xmlname="description.#text">
-    <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
-   <XModelAttribute name="display-name" xmlname="display-name.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="display-name" xmlname="display-name.#text"/>
    <XModelAttribute name="small-icon" xmlname="icon.small-icon.#text">
     <Constraint loader="Tree">
      <value name="WebPageTree"/>
@@ -1697,40 +1656,17 @@
     </Constraint>
     <Editor name="TreeChooser"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="save=always" name="service-ref-name" xmlname="service-ref-name.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute PROPERTIES="save=always" name="service-ref-name" xmlname="service-ref-name.#text"/>
    <XModelAttribute PROPERTIES="save=always" name="service-interface" xmlname="service-interface.#text">
-    <Constraint/>
     <Editor name="AccessibleJava"/>
    </XModelAttribute>
-   <XModelAttribute name="wsdl-file" xmlname="wsdl-file.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute name="jaxrpc-mapping-file" xmlname="jaxrpc-mapping-file.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute name="service-qname" xmlname="service-qname.#text">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute name="port-component-ref" xmlname="port-component-refs">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute name="handler" xmlname="handlers">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute name="id" visibility="false" xmlname="id">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
+   <XModelAttribute name="wsdl-file" xmlname="wsdl-file.#text"/>
+   <XModelAttribute name="jaxrpc-mapping-file" xmlname="jaxrpc-mapping-file.#text"/>
+   <XModelAttribute name="service-qname" xmlname="service-qname.#text"/>
+   <XModelAttribute name="port-component-ref" xmlname="port-component-refs"/>
+   <XModelAttribute name="handler" xmlname="handlers"/>
+   <XModelAttribute name="id" visibility="false" xmlname="id"/>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
-    <Constraint/>
     <Editor name="Note"/>
    </XModelAttribute>
   </XModelAttributes>

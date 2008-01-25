@@ -24,6 +24,7 @@ public class WebAppHelper {
     public static String FILTER_MAPPING_ENTITY = "WebAppFilterMapping";
     public static String FILTER_MAPPING_24_ENTITY = "WebAppFilterMapping24";
     public static String LISTENER_ENTITY = "WebAppListener";
+    public static String LISTENER_24_ENTITY = "WebAppListener24";
     public static String SERVLET_ENTITY = "WebAppServlet";
     public static String SERVLET_MAPPING_ENTITY = "WebAppServletMapping";
     public static String TAGLIB_ENTITY = "WebAppTaglib";
