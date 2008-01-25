@@ -352,7 +352,7 @@ public class ImportWebProjectWizardPage extends WizardPage {
 		}
 		
 		if(project != null && project.exists() && !project.isOpen()) {
-			setErrorMessage(WebUIMessages.PROJECT_EXISTS_IN_WORKSPACE + getProjectNameValue() + " exists in workspace and is closed. To use the project, please open it."); //$NON-NLS-2$
+			setErrorMessage(NLS.bind(WebUIMessages.PROJECT_EXISTS_IN_WORKSPACE, getProjectNameValue()) );
 			return false;
 		}
 		if(project == null || !project.exists()) {
