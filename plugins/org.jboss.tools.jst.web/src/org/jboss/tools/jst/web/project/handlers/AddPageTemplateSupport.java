@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.project.handlers;
 import java.util.Map;
 import java.util.Properties;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.osgi.util.NLS;
 
@@ -126,9 +127,15 @@ public class AddPageTemplateSupport extends SpecialWizardSupport {
     	if(pagePath.equals(this.pagePath)) return selectedFile;
     	this.pagePath = pagePath;
     	try {
-    		selectedFile = ModelPlugin.getWorkspace().getRoot().getFile(new Path(pagePath)); 
+    		IResource r = ModelPlugin.getWorkspace().getRoot().findMember(new Path(pagePath));
+    		if(r instanceof IFile) {
+    			selectedFile = (IFile)r;
+    		} else {
+    			selectedFile = null;
+    		}
     	} catch (Exception e) {
 			WebModelPlugin.getPluginLog().logError(e);
+			selectedFile = null;
     	}
     	return selectedFile;
     }
