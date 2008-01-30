@@ -33,6 +33,7 @@ import org.eclipse.wst.javascript.ui.internal.common.contentassist.JavaScriptCon
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
+import org.eclipse.wst.sse.core.utils.StringUtils;
 import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
 import org.eclipse.wst.sse.ui.internal.contentassist.ContentAssistUtils;
 import org.eclipse.wst.sse.ui.internal.contentassist.CustomCompletionProposal;
@@ -622,6 +623,26 @@ public class RedHatJSPContentAssistProcessor extends JSPContentAssistProcessor i
 
 	private boolean isCommentNode(IDOMNode node) {
 		return (node != null && node instanceof IDOMElement && ((IDOMElement) node).isCommentTag());
+	}
+	
+	protected void addAttributeValueProposals(ContentAssistRequest contentAssistRequest) {
+		// JBIDE-1704:
+		// Check the position in the value:
+		// The following position: 
+		//     <nodeName attrName="attrValue"| .../> 
+		// is marked as attribute value, but the value itself is complete.
+		// There are no proposals to be correct at this position. 
+
+		String text = contentAssistRequest.getText();
+		String matchString = contentAssistRequest.getMatchString();
+
+		if (matchString.length() > StringUtils.strip(text).length() && 
+				( (matchString.startsWith("\"") && matchString.endsWith("\"")) 
+						|| (matchString.startsWith("'") && matchString.endsWith("\"")))) {
+			return;
+		}
+
+		super.addAttributeValueProposals(contentAssistRequest);
 	}
 	
 	/**

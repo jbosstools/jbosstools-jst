@@ -32,6 +32,7 @@ import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegionList;
+import org.eclipse.wst.sse.core.utils.StringUtils;
 import org.eclipse.wst.sse.ui.internal.contentassist.ContentAssistUtils;
 import org.eclipse.wst.xml.core.internal.contentmodel.CMAttributeDeclaration;
 import org.eclipse.wst.xml.core.internal.contentmodel.CMElementDeclaration;
@@ -324,6 +325,22 @@ public class RedHatHtmlContentAssistProcessor extends HTMLContentAssistProcessor
 	}
 
 	protected void addAttributeValueProposals(ContentAssistRequest contentAssistRequest) {
+		// JBIDE-1704:
+		// Check the position in the value:
+		// The following position: 
+		//     <nodeName attrName="attrValue"| .../> 
+		// is marked as attribute value, but the value itself is complete.
+		// There are no proposals to be correct at this position. 
+
+		String text = contentAssistRequest.getText();
+		String matchString = contentAssistRequest.getMatchString();
+
+		if (matchString.length() > StringUtils.strip(text).length() && 
+				( (matchString.startsWith("\"") && matchString.endsWith("\"")) 
+						|| (matchString.startsWith("'") && matchString.endsWith("\"")))) {
+			return;
+		}
+
 		if (jspActiveCAP != null) {
 			jspActiveCAP.setFacelets(isFacelets);
 			jspActiveCAP.addAttributeValueProposals(contentAssistRequest);
