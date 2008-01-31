@@ -182,7 +182,10 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
     private boolean taglibTrackerListenerInstalled = false;
 
 	public void invokeDelayedUpdateKnownTagLists() {
-		timer.schedule(new MyTimerTask(), 500);
+		// Previous code is 
+		// timer.schedule(new MyTimerTask(), 500);
+		initTaglibPrefixes();
+		updateKnownTagLists();
 	}
 
 	private boolean isTrackerToWatch(String trackerUri) {
@@ -219,30 +222,26 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
 	}
 
 	public void taglibPrefixChanged(String[] prefixs) {
-		try {
-			trackers.clear();
-			if(taglibManagerProvider==null || taglibManagerProvider.getTaglibManager()==null) {
-				TLDCMDocumentManager manager = TaglibController.getTLDCMDocumentManager(fDocument);
-				List list = manager.getTaglibTrackers();
-				for(int i=0; i<list.size(); i++) {
-					TaglibTracker tracker = (TaglibTracker)list.get(i);
-					if (isTrackerToWatch(tracker.getURI())) {
-						trackers.put(tracker.getPrefix(), tracker);
-					}
-				}
-			} else {
-				List list = taglibManagerProvider.getTaglibManager().getTagLibs();
-				for(int i=0; i<list.size(); i++) {
-					TaglibData data = (TaglibData)list.get(i);
-					if (isTrackerToWatch(data.getUri())) {
-						trackers.put(data.getPrefix(), data);
-					}
+		trackers.clear();
+		if(taglibManagerProvider==null || taglibManagerProvider.getTaglibManager()==null) {
+			TLDCMDocumentManager manager = TaglibController.getTLDCMDocumentManager(fDocument);
+			List list = manager.getTaglibTrackers();
+			for(int i=0; i<list.size(); i++) {
+				TaglibTracker tracker = (TaglibTracker)list.get(i);
+				if (isTrackerToWatch(tracker.getURI())) {
+					trackers.put(tracker.getPrefix(), tracker);
 				}
 			}
-			invokeDelayedUpdateKnownTagLists();
-		} catch (Exception x) {
-			JspEditorPlugin.getPluginLog().logError("Error while processing change in taglib prefixes", x);
+		} else {
+			List list = taglibManagerProvider.getTaglibManager().getTagLibs();
+			for(int i=0; i<list.size(); i++) {
+				TaglibData data = (TaglibData)list.get(i);
+				if (isTrackerToWatch(data.getUri())) {
+					trackers.put(data.getPrefix(), data);
+				}
+			}
 		}
+		invokeDelayedUpdateKnownTagLists();
 	}
 
 	public void addTaglib(String uri, String prefix) {
@@ -359,7 +358,6 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
 		}
 
 		public void notifyChanged(INodeNotifier notifier, int eventType, Object feature, Object oldValue, Object newValue, int index) {
-			try {
 			switch (eventType) {
 				case INodeNotifier.ADD :
 					{
@@ -404,9 +402,6 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
 						}
 						break;
 					}
-			}
-			} catch (Exception x) {
-				JspEditorPlugin.getPluginLog().logError("Error in JSF kb connector", x);
 			}
 			invokeDelayedUpdateKnownTagLists();
 		}
