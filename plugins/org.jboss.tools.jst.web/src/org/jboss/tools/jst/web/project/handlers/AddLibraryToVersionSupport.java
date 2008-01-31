@@ -65,7 +65,7 @@ public class AddLibraryToVersionSupport extends SpecialWizardSupport {
 	}
 
 	public void action(String name) throws Exception {
-		if(OK.equals(name)) {
+		if(OK.equals(name) || FINISH.equals(name)) {
 			execute();
 			setFinished(true);
 		} else if(CANCEL.equals(name)) {
