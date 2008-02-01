@@ -23,16 +23,22 @@ import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jst.jsp.core.internal.contentmodel.TaglibController;
 import org.eclipse.jst.jsp.core.internal.contentmodel.tld.TLDCMDocumentManager;
 import org.eclipse.jst.jsp.core.internal.contentmodel.tld.TaglibTracker;
+import org.eclipse.jst.jsp.core.internal.regions.DOMJSPRegionContexts;
+import org.eclipse.jst.jsp.core.text.IJSPPartitions;
 import org.eclipse.jst.jsp.ui.internal.JSPUIPlugin;
 import org.eclipse.jst.jsp.ui.internal.contentassist.JSPContentAssistProcessor;
 import org.eclipse.jst.jsp.ui.internal.preferences.JSPUIPreferenceNames;
+import org.eclipse.jst.jsp.ui.internal.templates.TemplateContextTypeIdsJSP;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.css.ui.internal.contentassist.CSSContentAssistProcessor;
+import org.eclipse.wst.html.core.text.IHTMLPartitions;
 import org.eclipse.wst.javascript.ui.internal.common.contentassist.JavaScriptContentAssistProcessor;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
+import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
+import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegionContainer;
 import org.eclipse.wst.sse.core.utils.StringUtils;
 import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
 import org.eclipse.wst.sse.ui.internal.contentassist.ContentAssistUtils;
@@ -48,6 +54,7 @@ import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 import org.eclipse.wst.xml.ui.internal.XMLUIMessages;
 import org.eclipse.wst.xml.ui.internal.XMLUIPlugin;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
+import org.eclipse.wst.xml.ui.internal.contentassist.XMLContentAssistUtilities;
 import org.eclipse.wst.xml.ui.internal.contentassist.XMLContentModelGenerator;
 import org.eclipse.wst.xml.ui.internal.contentassist.XMLRelevanceConstants;
 import org.eclipse.wst.xml.ui.internal.editor.CMImageUtil;
@@ -625,6 +632,71 @@ public class RedHatJSPContentAssistProcessor extends JSPContentAssistProcessor i
 		return (node != null && node instanceof IDOMElement && ((IDOMElement) node).isCommentTag());
 	}
 	
+	protected void addAttributeNameProposals(ContentAssistRequest contentAssistRequest) {
+
+		// JBIDE-1717 Workaround: 
+		// The WTP processes the Attribute Containers in a different way comparing to how it does for 
+		// the simple attributes. 
+		// Also the whitespace-text placed after the attribute value is the part of that attribute value. 
+		// These facts both are the reason of the JBIDE-1717 issue appeared. 
+		// This workaround tries to add the attribute name proposals in case of WTP itself doesn't adds them 
+		// because it faced the attribute container (In other words, some JSF-variable is used as the 
+		// attribute's value 
+		if (fViewer != null) {
+			int documentPosition = contentAssistRequest.getReplacementBeginPosition();
+			// check the actual partition type
+			String partitionType = getPartitionType((StructuredTextViewer) fViewer, documentPosition);
+
+			IStructuredDocument structuredDocument = (IStructuredDocument) fViewer.getDocument();
+			IStructuredDocumentRegion fn = structuredDocument.getRegionAtCharacterOffset(documentPosition);
+			// check if it's in an attribute value, if so, don't add CDATA
+			// proposal
+			ITextRegion attrContainer = (fn != null) ? fn.getRegionAtCharacterOffset(documentPosition) : null;
+			boolean doPerformProposalsComputing = false;
+			
+			if (attrContainer != null && attrContainer instanceof ITextRegionContainer) {
+				if (attrContainer.getType() == DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE) {
+					// test location of the cursor
+					// return null if it's in the middle of an open/close
+					// delimeter
+					Iterator attrRegions = ((ITextRegionContainer) attrContainer).getRegions().iterator();
+					ITextRegion testRegion = null;
+					while (attrRegions.hasNext()) {
+						testRegion = (ITextRegion) attrRegions.next();
+						// need to check for other valid attribute regions
+						if (XMLContentAssistUtilities.isJSPOpenDelimiter(testRegion.getType())) {
+							if (!(((ITextRegionContainer) attrContainer).getEndOffset(testRegion) <= documentPosition))
+								break;
+						}
+						else if (XMLContentAssistUtilities.isJSPCloseDelimiter(testRegion.getType())) {
+							if (!(((ITextRegionContainer) attrContainer).getStartOffset(testRegion) >= documentPosition))
+								break;
+						}
+					}
+					if (!(testRegion.getType().equals(DOMJSPRegionContexts.JSP_CONTENT)))
+						doPerformProposalsComputing = true;
+				}
+			}
+			//
+			
+			if (doPerformProposalsComputing) {
+				ICompletionProposal[] embeddedResults = null;
+				IContentAssistProcessor p = (IContentAssistProcessor) fPartitionToProcessorMap.get(partitionType);
+				if (p != null) {
+					embeddedResults = p.computeCompletionProposals(fViewer, documentPosition);
+					// TODO: Probably it's needed to get bean methods, objects, and constants if there are any...
+					// as it's done in JSPContentAssistProcessor but...
+				}
+				else {
+					// the partition type is probably not mapped 
+				}
+				for (int i = 0; embeddedResults != null && i < embeddedResults.length; i++)
+					contentAssistRequest.addProposal(embeddedResults[i]);
+			}
+		}
+		super.addAttributeNameProposals(contentAssistRequest);
+	}
+
 	protected void addAttributeValueProposals(ContentAssistRequest contentAssistRequest) {
 		// JBIDE-1704:
 		// Check the position in the value:
