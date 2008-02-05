@@ -228,13 +228,16 @@
   <XModelAttributes/>
   <XActionItem kind="list">
    <XActionItem kind="list" name="EditActions">
-    <XActionItem HandlerClassName="%RenameFile%" ICON="action.empty"
-     PROPERTIES="validator.edit=true" WizardClassName="%Default%"
-     displayName="Rename..." kind="action" name="Rename">
+    <XActionItem HIDE="always" HandlerClassName="%RenameFile%"
+     ICON="action.empty" PROPERTIES="validator.edit=true"
+     WizardClassName="%Default%" displayName="Rename..." kind="action" name="Rename">
      <EntityData EntityName="FileTiles">
       <AttributeData AttributeName="name"/>
      </EntityData>
     </XActionItem>
+    <XActionItem
+     HandlerClassName="org.jboss.tools.common.model.filesystems.impl.handlers.RenameEclipseFileHandler"
+     ICON="action.empty" displayName="Rename..." kind="action" name="RenameEclipse"/>
    </XActionItem>
    <XActionItem kind="list" name="SaveActions">
     <XActionItem HIDE="always" HandlerClassName="%SaveFile%"
