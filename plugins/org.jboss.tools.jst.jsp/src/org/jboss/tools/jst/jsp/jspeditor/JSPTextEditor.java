@@ -78,7 +78,9 @@ import org.eclipse.wst.sse.ui.internal.properties.ConfigurablePropertySheetPage;
 import org.eclipse.wst.sse.ui.internal.provisional.extensions.ConfigurationPointCalculator;
 import org.eclipse.wst.sse.ui.views.contentoutline.ContentOutlineConfiguration;
 import org.eclipse.wst.xml.core.internal.document.AttrImpl;
+import org.eclipse.wst.xml.core.internal.document.DOMModelImpl;
 import org.eclipse.wst.xml.core.internal.document.ElementImpl;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.jboss.tools.common.core.resources.XModelObjectEditorInput;
 import org.jboss.tools.common.meta.action.XActionInvoker;
 import org.jboss.tools.common.model.XModelBuffer;
@@ -109,6 +111,7 @@ import org.jboss.tools.jst.jsp.ExtendedStructuredTextViewerConfigurationJSP;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.editor.IJSPTextEditor;
 import org.jboss.tools.jst.jsp.editor.ITextFormatter;
+import org.jboss.tools.jst.jsp.editor.IVisualContext;
 import org.jboss.tools.jst.jsp.editor.IVisualController;
 import org.jboss.tools.jst.jsp.outline.JSPContentOutlineConfiguration;
 import org.jboss.tools.jst.jsp.outline.JSPPropertySheetConfiguration;
@@ -143,6 +146,9 @@ public class JSPTextEditor extends StructuredTextEditor implements
 	long savedTimeStamp = -1;
 
 	IVisualController vpeController;
+	//Added By Max Areshkau
+	//Fix for JBIDE-788
+	protected SourceEditorPageContext pageContext = null;
 
 	public JSPTextEditor(JSPMultiPageEditor parentEditor) {
 		JspEditorPlugin.getDefault().initDefaultPluginPreferences();
@@ -167,6 +173,24 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		super.setSourceViewerConfiguration(config);
 	}
 
+	/** This is *only* for allowing unit tests to access the source configuration. */
+	public SourceViewerConfiguration getSourceViewerConfigurationForTest () {
+		return getSourceViewerConfiguration();
+	}
+	//Added By Max Areshkau
+	//Fix for JBIDE-788
+    public IVisualContext getPageContext() {
+    	
+		if (pageContext==null) {
+			pageContext = new SourceEditorPageContext();
+		}
+		// IDocument document = getTextViewer().getDocument();
+		// pageContext.setDocument(document);
+		IDOMDocument document = ((DOMModelImpl) getModel()).getDocument();
+		pageContext.setDocument(document);
+		return pageContext;
+	}
+	
 	protected void initializeDrop(ITextViewer textViewer) {
 
 		Composite c = textViewer.getTextWidget();
@@ -407,8 +431,12 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			super.firePropertyChange(IEditorPart.PROP_DIRTY);
 		}
 	}
-
+	
 	public void updateModification() {
+		//added by Max Areshkau
+		//Fix for JBIDE-788
+		getPageContext().refreshBundleValues();
+		
 		XModelObject object = getModelObject();
 		if (object != null && !object.isModified() && isModified()) {
 			setModified(false);
@@ -601,8 +629,12 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		}
 
 		public VpeTaglibManager getTaglibManager() {
-			if (provider != null) {
-				return provider.getTaglibManager();
+			//added by Max Areshkau
+			//Fix for JBIDE-788
+			if (getEditor() != null) {
+				if(getEditor().getPageContext() instanceof VpeTaglibManager)
+					
+				return (VpeTaglibManager)getEditor().getPageContext();
 			}
 			return null;
 		}
@@ -634,7 +666,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 				}
 			}
 		}
-		
+				
 		protected void handleDispose() {
 			if (editor != null && editor.getSourceViewer() != null && editor.getSourceViewer().getTextWidget() != null && editor.getVPEController() != null) {
 				StyledText widget = editor.getSourceViewer().getTextWidget();
@@ -642,8 +674,27 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			}
 			super.handleDispose();
 		}
-	}
+	
 
+		/**
+		 * @return the editor
+		 */
+		//Added By Max Areshkau
+		//Fix for JBIDE-788
+		public JSPTextEditor getEditor() {
+			return editor;
+		}
+
+		/**
+		 * @param editor the editor to set
+		 */
+		//Added By Max Areshkau
+		//Fix for JBIDE-788
+		public void setEditor(JSPTextEditor editor) {
+			this.editor = editor;
+		}
+	
+	}
 	public JSPMultiPageEditor getParentEditor() {
 		return parentEditor;
 	}
@@ -669,8 +720,6 @@ public class JSPTextEditor extends StructuredTextEditor implements
 					try {
 						DropData dropData = new DropData(flavor,
 							data,
-							parentEditor.getVisualEditor().getController()
-									.getPageContext(),
 							getEditorInput(), getSourceViewer(),
 							getSelectionProvider());
 						dropData.setAttributeName(dropContext.getAttributeName());

@@ -89,12 +89,16 @@ public class RedHatHtmlContentAssistProcessor extends HTMLContentAssistProcessor
 	public static final String faceletHtmlPrefix = "0fHP";
 	public static final String JSFCAttributeName = "jsfc";
 	public static final String faceletHtmlPrefixStart = faceletHtmlPrefix + ":";
+	//Added by Max Areshkau JBIDE-788
 	public static final KbTldResource faceletHtmlResource = new KbTldResource(faceletHtmlUri, "", faceletHtmlPrefix, null);
 
     public ICompletionProposal[] computeCompletionProposals(ITextViewer textViewer, int documentPosition) {
     	document = textViewer.getDocument();
     	editorInput = JspEditorPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorInput();
-    	registerToTldManager(textViewer);
+    	//added by Max Areshkau JBIDE-788
+    	IndexedRegion treeNode = ContentAssistUtils.getNodeAt(textViewer, documentPosition);
+    	IDOMNode node = (IDOMNode) treeNode;
+    	registerToTldManager(textViewer, node);
 
     	ICompletionProposal[] proposals = super.computeCompletionProposals(textViewer, documentPosition);
     	if(proposals!=null) {
@@ -476,13 +480,17 @@ public class RedHatHtmlContentAssistProcessor extends HTMLContentAssistProcessor
 	    return wtpKbConnector;
 	}
 
-	private void registerToTldManager(ITextViewer viewer) {
+	private void registerToTldManager(ITextViewer viewer,IDOMNode node) {
 		if((tldManager==null) && (viewer instanceof VpeTaglibManagerProvider)) {
 			tldManager = ((VpeTaglibManagerProvider)viewer).getTaglibManager();
+			tldManager.setReferenceNode(node);
 			if(tldManager!=null) {
 				tldManager.addTaglibListener(this);
 				updateActiveContentAssistProcessor(document);
 			}
+		} else if(tldManager!=null)  {
+			tldManager.setReferenceNode(node);
+			updateActiveContentAssistProcessor(document);
 		}
 	}
 

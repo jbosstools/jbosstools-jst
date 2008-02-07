@@ -13,7 +13,7 @@ package org.jboss.tools.jst.jsp.editor;
 import org.jboss.tools.common.kb.wtp.WtpKbConnector;
 import org.jboss.tools.jst.web.tld.VpeTaglibManager;
 
-public interface IVisualContext extends VpeTaglibManager {
+public interface IVisualContext  {
 	public void refreshBundleValues();
 	public WtpKbConnector getConnector();
 

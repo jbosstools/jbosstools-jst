@@ -360,8 +360,6 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 								.addPostSelectionChangedListener(getPostSelectionChangedListener());
 					}
 				}
-				
-				
 			}
 
 			public Object getService(Class api) {
@@ -651,7 +649,8 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 			if (controller != null) {
 				IVisualContext context = controller.getPageContext();
 				if (context != null) {
-					return context;
+					if(context instanceof VpeTaglibManager)
+					return (VpeTaglibManager)context;
 				}
 			}
 		}

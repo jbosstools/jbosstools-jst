@@ -96,11 +96,11 @@ public class ValueHelper {
 		IEditorPart editor = ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		if(!(editor instanceof JSPMultiPageEditor)) return false;
 		JSPTextEditor jspEditor = ((JSPMultiPageEditor)editor).getJspEditor();
-		IVisualEditor v = ((JSPMultiPageEditor)editor).getVisualEditor();
-		if(v == null) return false;
-		IVisualController c = v.getController();
-		if(c == null) return false;
-		pageContext = c.getPageContext();
+		
+		//Added By Max Areshkau
+		//Fix for JBIDE-788
+		pageContext = jspEditor.getPageContext();
+		
 		editorInput = jspEditor.getEditorInput();
 		
 		wtpTextJspKbConnector = jspEditor.getWTPTextJspKbConnector();
@@ -185,7 +185,13 @@ public class ValueHelper {
 
 	public VpeTaglibManager getTaglibManager() {
 		init();
-		return pageContext;
+		if(pageContext!=null && pageContext instanceof VpeTaglibManager) {
+		
+			return (VpeTaglibManager)pageContext;
+		} else {
+			
+			return null;
+		}
 	}
 	
 	public WtpKbConnector getPageConnector() {

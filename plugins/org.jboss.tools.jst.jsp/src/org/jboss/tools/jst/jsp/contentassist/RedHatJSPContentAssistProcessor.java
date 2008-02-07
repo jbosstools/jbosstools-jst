@@ -82,14 +82,13 @@ import org.w3c.dom.Node;
 /**
  * @author Igels
  */
-public class RedHatJSPContentAssistProcessor extends JSPContentAssistProcessor implements VpeTaglibListener {
+public class RedHatJSPContentAssistProcessor extends JSPContentAssistProcessor{
 
     private JSPActiveContentAssistProcessor jspActiveCAP;
     private WtpKbConnector wtpKbConnector;
     private IDocument document;
     private boolean dontOpenTag = false;
-	private List registeredTagsForActiveCAP = new ArrayList();
-	private VpeTaglibManager tldManager;
+
 
 	public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer, int documentPosition) {
 	    try {
@@ -102,7 +101,7 @@ public class RedHatJSPContentAssistProcessor extends JSPContentAssistProcessor i
 	    }
 
 		document = viewer.getDocument();
-		registerToTldManager(viewer);
+		
 		ICompletionProposal[] proposals = super.computeCompletionProposals(viewer, documentPosition);
 		// If proposal list from super is empty to try to get it from Red Hat dinamic jsp content assist processor.
 		try {
@@ -182,75 +181,6 @@ public class RedHatJSPContentAssistProcessor extends JSPContentAssistProcessor i
 		return autoActivChars;
 	}
 
-	private void registerToTldManager(ITextViewer viewer) {
-		if((tldManager==null) && (viewer instanceof VpeTaglibManagerProvider)) {
-			tldManager = ((VpeTaglibManagerProvider)viewer).getTaglibManager();
-			if(tldManager!=null) {
-				tldManager.addTaglibListener(this);
-				updateActiveContentAssistProcessor(document);
-			}
-		}
-	}
-
-	public void taglibPrefixChanged(String[] prefixs) {
-		updateActiveContentAssistProcessor(document);
-	}
-
-	public void addTaglib(String uri, String prefix) {
-	}
-
-	public void removeTaglib(String uri, String prefix) {
-	}
-
-	public void updateActiveContentAssistProcessor(IDocument document) {
-		unregisterTagsFromActiveCAP();
-		if(tldManager == null) {
-			TLDCMDocumentManager manager = TaglibController.getTLDCMDocumentManager(document);
-			if (manager != null) {
-				List list = manager.getTaglibTrackers();
-				for(int i=0; i<list.size(); i++) {
-					TaglibTracker tracker = (TaglibTracker)list.get(i);
-
-					String version = TLDVersionHelper.getTldVersion(tracker);
-					KbTldResource resource = new KbTldResource(tracker.getURI(), "", tracker.getPrefix(), version);
-			        getWtpKbConnector().registerResource(resource);
-			        addActiveContentAssistProcessorToProcessorMap(tracker.getURI(), tracker.getPrefix(), version);
-				}
-			}
-		} else {
-			List list = tldManager.getTagLibs();
-			for(int i=0; i<list.size(); i++) {
-				TaglibData data = (TaglibData)list.get(i);
-				String version = WebProject.getTldVersion(data.getUri(), data.getPrefix(), document, null);
-				KbTldResource resource = new KbTldResource(data.getUri(), "", data.getPrefix(), version);
-		        getWtpKbConnector().registerResource(resource);
-		        addActiveContentAssistProcessorToProcessorMap(data.getUri(), data.getPrefix(), version);
-			}
-		}
-	}
-
-	private void unregisterTagsFromActiveCAP() {
-		if(document!=null) {
-            for(int i=0; i<registeredTagsForActiveCAP.size(); i++) {
-                String fullName = (String)registeredTagsForActiveCAP.get(i);
-           		fNameToProcessorMap.remove(fullName);
-            }
-			registeredTagsForActiveCAP.clear();
-		}
-	}
-
-    private void addActiveContentAssistProcessorToProcessorMap(String uri, String prefix, String version) {
-        try {
-            List names = getWtpKbConnector().getAllTagNamesFromTldByUri(uri, version);
-            for(Iterator iter = names.iterator(); iter.hasNext();) {
-                String fullName = prefix + ":" + iter.next();
-           		fNameToProcessorMap.put(fullName, jspActiveCAP);
-				registeredTagsForActiveCAP.add(fullName);
-			}
-        } catch (KbException e) {
-        	JspEditorPlugin.getPluginLog().logError(e);
-        }
-    }
 
 	private WtpKbConnector getWtpKbConnector() {
 	    if(wtpKbConnector == null && document != null) {
