@@ -109,7 +109,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	private int sourceIndex;
 	
 	/** composite control for default web-browser */
-	private IVisualEditor previewWebBrowser;
+	//private IVisualEditor previewWebBrowser;
 	
 	/** index of tab contain default web-browser */
 	private int previewIndex;
@@ -213,13 +213,24 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	protected void pageChange(int newPageIndex) {
 		selectedPageIndex = newPageIndex;
 		if (osWindows) {
-			if (newPageIndex == visualSourceIndex)
+			if (newPageIndex == visualSourceIndex) {
+				if (visualEditor.getVisualEditor() == null) {
+					visualEditor.createVisualEditor();
+				}
 				visualEditor.setVisualMode(IVisualEditor.VISUALSOURCE_MODE);
-			else if (newPageIndex == visualIndex)
+			}
+			else if (newPageIndex == visualIndex) {
+				if (visualEditor.getVisualEditor() == null) {
+					visualEditor.createVisualEditor();
+				}
 				visualEditor.setVisualMode(IVisualEditor.VISUAL_MODE);
+			}
 			else if (newPageIndex == sourceIndex)
 				visualEditor.setVisualMode(IVisualEditor.SOURCE_MODE);
 			else if (newPageIndex == previewIndex) {
+				if (visualEditor.getPreviewWebBrowser() == null) {
+					visualEditor.createPreviewBrowser();
+				}
 				visualEditor.setVisualMode(IVisualEditor.PREVIEW_MODE); 				
 			}
 				
@@ -278,8 +289,10 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	 */
 	private ISelectionProvider selectionProvider = null;
 
+	private JSPMultiPageEditorSite site;
+
 	protected IEditorSite createSite(IEditorPart editor) {
-		JSPMultiPageEditorSite site = new JSPMultiPageEditorSite(this, editor) {
+		site = new JSPMultiPageEditorSite(this, editor) {
 			private ISelectionChangedListener postSelectionChangedListener = null;
 
 			private ISelectionChangedListener getPostSelectionChangedListener() {
@@ -347,6 +360,8 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 								.addPostSelectionChangedListener(getPostSelectionChangedListener());
 					}
 				}
+				
+				
 			}
 
 			public Object getService(Class api) {
@@ -357,6 +372,17 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 			public boolean hasService(Class api) {
 				// TODO megration to eclipse 3.2
 				return false;
+			}
+
+			public void dispose() {
+				ISelectionProvider provider = getSelectionProvider();
+				if (provider instanceof IPostSelectionProvider && postSelectionChangedListener != null) {
+						((IPostSelectionProvider) provider)
+								.removePostSelectionChangedListener(postSelectionChangedListener);
+						
+				}
+				postSelectionChangedListener = null;
+				super.dispose();
 			}
 		};
 		return site;
@@ -501,10 +527,14 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		saveSelectedTab();
 		XModelObject o = getModelObject();
 		visualEditor.dispose();
+		site.dispose();
 		super.dispose();
 		if (o != null) {
 			o.getModel().removeModelTreeListener(syncListener);
 		}
+		if (syncListener != null)
+			syncListener.dispose();
+		syncListener=null;
 		if (o != null && o.isModified() && o.isActive()) {
 			try {
 				((FolderImpl) o.getParent()).discardChildFile(o);

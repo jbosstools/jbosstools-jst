@@ -275,7 +275,8 @@ public class JSPTextEditorPageContext implements IVisualContext {
 		Iterator<TaglibData> iter = taglibs.iterator();
 		while (iter.hasNext()) {
 			TaglibData taglib = (TaglibData)iter.next();
-			if (!taglib.inList(clone)) {
+			//if (!taglib.inList(clone)) {
+			if (!clone.contains(taglib)) {
 				clone.add(taglib);
 			}
 		}

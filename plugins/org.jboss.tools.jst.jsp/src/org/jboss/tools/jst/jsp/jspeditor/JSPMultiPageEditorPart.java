@@ -69,22 +69,23 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 
 	public int addPage(IEditorPart editor, IEditorInput input)
 			throws PartInitException {
-		IEditorSite site = createSite(editor);
-		editor.init(site, input);
 		Composite parent2;
-		if (ppp != null) {
-			parent2 = ppp;
-		} else {
+		if (ppp == null) {
+			IEditorSite site = createSite(editor);
+			editor.init(site, input);
 			parent2 = new Composite(getContainer(), SWT.NONE);
 			ppp = parent2;
+			parent2.setLayout(new FillLayout());
+			editor.createPartControl(parent2);
+			editor.addPropertyListener(new IPropertyListener() {
+				public void propertyChanged(Object source, int propertyId) {
+					JSPMultiPageEditorPart.this
+							.handlePropertyChange(propertyId);
+				}
+			});
+		} else {
+			parent2 = ppp;
 		}
-		parent2.setLayout(new FillLayout());
-		editor.createPartControl(parent2);
-		editor.addPropertyListener(new IPropertyListener() {
-			public void propertyChanged(Object source, int propertyId) {
-				JSPMultiPageEditorPart.this.handlePropertyChange(propertyId);
-			}
-		});
 		Item item = createItem(parent2);
 		item.setData(editor);
 		nestedEditors.add(editor);

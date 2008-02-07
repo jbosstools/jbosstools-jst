@@ -634,6 +634,14 @@ public class JSPTextEditor extends StructuredTextEditor implements
 				}
 			}
 		}
+		
+		protected void handleDispose() {
+			if (editor != null && editor.getSourceViewer() != null && editor.getSourceViewer().getTextWidget() != null && editor.getVPEController() != null) {
+				StyledText widget = editor.getSourceViewer().getTextWidget();
+				widget.removeSelectionListener(editor.getVPEController());
+			}
+			super.handleDispose();
+		}
 	}
 
 	public JSPMultiPageEditor getParentEditor() {
@@ -1069,11 +1077,28 @@ public class JSPTextEditor extends StructuredTextEditor implements
 	}
 
 	public void dispose() {
+		// some things in the configuration need to clean
+		// up after themselves
+		getSourceViewer().removeTextListener(this);
+		if (fOutlinePage != null) {
+			if (fOutlinePage instanceof ConfigurableContentOutlinePage && fOutlinePageListener != null) {
+				((ConfigurableContentOutlinePage) fOutlinePage).removeDoubleClickListener(fOutlinePageListener);
+			}
+			if (fOutlinePageListener != null) {
+				fOutlinePage.removeSelectionChangedListener(fOutlinePageListener);
+			}
+		}
+		fOutlinePage=null;
+		fOutlinePageListener=null;
 		if (fOccurrenceModelUpdater != null) {
 			fOccurrenceModelUpdater.uninstall();
 			fOccurrenceModelUpdater = null;
 		}
 		super.dispose();
+		if (wtpTextJspKbConnector != null) {
+			wtpTextJspKbConnector.setTaglibManagerProvider(null);
+			wtpTextJspKbConnector = null;
+		}
 		if (listener != null)
 			listener.dispose();
 		listener = null;

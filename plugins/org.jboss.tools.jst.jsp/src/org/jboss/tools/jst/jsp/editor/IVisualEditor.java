@@ -23,5 +23,9 @@ public interface IVisualEditor extends ITextEditor, IReusableEditor {
 
 	public void setVisualMode(int mode);
 	public IVisualController getController();
+	public Object getPreviewWebBrowser();
+	public void createPreviewBrowser();
+	public Object getVisualEditor();
+	public void createVisualEditor();
 
 }

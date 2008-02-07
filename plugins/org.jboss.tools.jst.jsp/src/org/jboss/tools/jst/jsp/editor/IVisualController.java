@@ -11,11 +11,12 @@
 package org.jboss.tools.jst.jsp.editor;
 
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.w3c.dom.Node;
 
 
-public interface IVisualController {
+public interface IVisualController extends SelectionListener {
 	public IStructuredModel getModel();
 	public void drop(Node node, Node parentNode, int offset);
 	public IVisualContext getPageContext();

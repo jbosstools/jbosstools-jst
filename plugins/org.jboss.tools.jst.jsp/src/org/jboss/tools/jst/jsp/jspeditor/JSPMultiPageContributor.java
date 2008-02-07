@@ -213,4 +213,19 @@ public class JSPMultiPageContributor extends AbstractMultiPageContributor {
 						.get(STATUSFIELDS[i]), STATUSFIELDS[i]);
 		}
 	}
+
+	public void dispose() {
+		if (fToggleOccurencesMarkUp != null) {
+			fToggleOccurencesMarkUp.setEditor(null);
+			fToggleOccurencesMarkUp = null;
+		}
+		super.dispose();
+		fActiveEditorPart=null;
+		mainPart=null;
+		fContentAssist=null;
+		fContentAssistProposal=null;
+		fContentAssistTip=null;
+		fShowTooltipAction=null;
+		
+	}
 }
