@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
@@ -101,7 +100,8 @@ public class RedHatJSPContentAssistProcessor extends JSPContentAssistProcessor{
 	    }
 
 		document = viewer.getDocument();
-		
+    	//added by Max Areshkau JBIDE-788
+		updateActiveContentAssistProcessor(document);
 		ICompletionProposal[] proposals = super.computeCompletionProposals(viewer, documentPosition);
 		// If proposal list from super is empty to try to get it from Red Hat dinamic jsp content assist processor.
 		try {
@@ -109,9 +109,10 @@ public class RedHatJSPContentAssistProcessor extends JSPContentAssistProcessor{
 				String partitionType = getPartitionType((StructuredTextViewer) viewer, documentPosition);
 				IContentAssistProcessor p = (IContentAssistProcessor) fPartitionToProcessorMap.get(partitionType);
 				if (!(p instanceof JavaScriptContentAssistProcessor || p instanceof CSSContentAssistProcessor)) {
-					IndexedRegion treeNode = ContentAssistUtils.getNodeAt((StructuredTextViewer) viewer, documentPosition);
 
+					IndexedRegion treeNode = ContentAssistUtils.getNodeAt((StructuredTextViewer) viewer, documentPosition);
 					Node node = (Node) treeNode;
+					
 					while (node != null && node.getNodeType() == Node.TEXT_NODE && node.getParentNode() != null)
 						node = node.getParentNode();
 					IDOMNode xmlnode = (IDOMNode) node;
@@ -181,6 +182,32 @@ public class RedHatJSPContentAssistProcessor extends JSPContentAssistProcessor{
 		return autoActivChars;
 	}
 
+	public void updateActiveContentAssistProcessor(IDocument document) {
+			TLDCMDocumentManager manager = TaglibController.getTLDCMDocumentManager(document);
+			if (manager != null) {
+				List list = manager.getTaglibTrackers();
+				for(int i=0; i<list.size(); i++) {
+					TaglibTracker tracker = (TaglibTracker)list.get(i);
+
+					String version = TLDVersionHelper.getTldVersion(tracker);
+					KbTldResource resource = new KbTldResource(tracker.getURI(), "", tracker.getPrefix(), version);
+			        getWtpKbConnector().registerResource(resource);
+			        addActiveContentAssistProcessorToProcessorMap(tracker.getURI(), tracker.getPrefix(), version);
+			}
+		}
+	} 
+
+    private void addActiveContentAssistProcessorToProcessorMap(String uri, String prefix, String version) {
+        try {
+            List names = getWtpKbConnector().getAllTagNamesFromTldByUri(uri, version);
+            for(Iterator iter = names.iterator(); iter.hasNext();) {
+                String fullName = prefix + ":" + iter.next();
+           		fNameToProcessorMap.put(fullName, jspActiveCAP);
+			}
+        } catch (KbException e) {
+        	JspEditorPlugin.getPluginLog().logError(e);
+        }
+    }
 
 	private WtpKbConnector getWtpKbConnector() {
 	    if(wtpKbConnector == null && document != null) {
