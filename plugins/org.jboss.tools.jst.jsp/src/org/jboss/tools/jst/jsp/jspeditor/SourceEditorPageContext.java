@@ -69,7 +69,7 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 		if ((refNode==null)||(refNode.equals(getReferenceNode()))) {
 			return;
 		}
-			setReferenceNode(refNode);
+			referenceNode = refNode;
 			updateTagLibs();
 	
 	}
