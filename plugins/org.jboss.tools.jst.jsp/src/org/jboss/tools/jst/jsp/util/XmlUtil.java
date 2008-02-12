@@ -15,6 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jst.jsp.core.internal.contentmodel.TaglibController;
+import org.eclipse.jst.jsp.core.internal.contentmodel.tld.TLDCMDocumentManager;
+import org.eclipse.jst.jsp.core.internal.contentmodel.tld.TaglibTracker;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.web.tld.TaglibData;
 import org.w3c.dom.Attr;
@@ -91,6 +96,24 @@ public class XmlUtil {
 		} while(currentNode!=null);
 
 		return taglibs;
+	}
+	
+	/**
+	 * Finds and returns taglibs for JSP documents
+	 * @return
+	 */
+	public static List<TaglibData> getTaglibsForJSPDocument(IDocument document) {
+		
+		List<TaglibData> taglibData = new ArrayList<TaglibData>();
+		
+		TLDCMDocumentManager tldcmDocumentManager= TaglibController.getTLDCMDocumentManager(document);
+		if(tldcmDocumentManager!=null) {
+				List<TaglibTracker> taglibs_JSP =  tldcmDocumentManager.getTaglibTrackers();
+				for (TaglibTracker taglibTracker : taglibs_JSP) {
+					addTaglib(taglibData, taglibTracker.getURI(), taglibTracker.getPrefix(), true,false);
+				}
+		}
+		return taglibData;
 	}
 	/**
 	 * Processes taglib attribute

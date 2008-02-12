@@ -10,49 +10,54 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.outline;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
-import org.eclipse.core.resources.*;
-import org.jboss.tools.jst.jsp.JspEditorPlugin;
-import org.jboss.tools.jst.jsp.jspeditor.*;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jst.jsp.core.internal.contentmodel.*;
-import org.eclipse.jst.jsp.core.internal.contentmodel.tld.*;
-import org.eclipse.ui.*;
-import org.eclipse.ui.texteditor.AbstractTextEditor;
-import org.eclipse.ui.texteditor.ITextEditor;
+import org.eclipse.jst.jsp.core.internal.contentmodel.TaglibController;
+import org.eclipse.jst.jsp.core.internal.contentmodel.tld.TLDCMDocumentManager;
+import org.eclipse.jst.jsp.core.internal.contentmodel.tld.TaglibTracker;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
-import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
-import org.eclipse.wst.sse.ui.internal.IModelProvider;
-import org.jboss.tools.jst.jsp.editor.IVisualContext;
-import org.jboss.tools.jst.jsp.editor.IVisualController;
-import org.jboss.tools.jst.jsp.editor.IVisualEditor;
-
-import org.jboss.tools.jst.jsp.contentassist.RedHatHtmlContentAssistProcessor;
-import org.jboss.tools.jst.jsp.drop.treeviewer.model.AttributeValueResource;
-import org.jboss.tools.jst.jsp.drop.treeviewer.model.AttributeValueResourceFactory;
-import org.jboss.tools.jst.jsp.drop.treeviewer.model.ModelElement;
-import org.jboss.tools.jst.jsp.drop.treeviewer.model.RootElement;
 import org.jboss.tools.common.kb.AttributeDescriptor;
 import org.jboss.tools.common.kb.AttributeValueDescriptor;
 import org.jboss.tools.common.kb.KbConnectorFactory;
 import org.jboss.tools.common.kb.KbConnectorType;
 import org.jboss.tools.common.kb.KbException;
-import org.jboss.tools.common.kb.KbQuery;
 import org.jboss.tools.common.kb.KbTldResource;
 import org.jboss.tools.common.kb.TagDescriptor;
 import org.jboss.tools.common.kb.wtp.JspWtpKbConnector;
 import org.jboss.tools.common.kb.wtp.TLDVersionHelper;
 import org.jboss.tools.common.kb.wtp.WtpKbConnector;
-import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.project.IPromptingProvider;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.model.util.ModelFeatureFactory;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
+import org.jboss.tools.jst.jsp.contentassist.RedHatHtmlContentAssistProcessor;
+import org.jboss.tools.jst.jsp.drop.treeviewer.model.AttributeValueResource;
+import org.jboss.tools.jst.jsp.drop.treeviewer.model.AttributeValueResourceFactory;
+import org.jboss.tools.jst.jsp.drop.treeviewer.model.ModelElement;
+import org.jboss.tools.jst.jsp.drop.treeviewer.model.RootElement;
+import org.jboss.tools.jst.jsp.editor.IVisualContext;
+import org.jboss.tools.jst.jsp.editor.IVisualController;
+import org.jboss.tools.jst.jsp.editor.IVisualEditor;
+import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
+import org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor;
 import org.jboss.tools.jst.jsp.support.kb.WTPTextJspKbConnector;
 import org.jboss.tools.jst.web.tld.TaglibData;
-import org.jboss.tools.jst.web.tld.TaglibMapping;
 import org.jboss.tools.jst.web.tld.VpeTaglibManager;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
@@ -73,8 +78,7 @@ public class ValueHelper {
 		}
 	}
 	
-//	VpePageContext 
-	IVisualContext pageContext = null;
+	IVisualContext iVisualContext = null;
 	WtpKbConnector pageConnector = null;
 
 	public ValueHelper() {
@@ -92,23 +96,23 @@ public class ValueHelper {
 	}
 
 	boolean init() {
-		if(pageContext != null || pageConnector != null) return true;
+		if(iVisualContext != null || pageConnector != null) return true;
 		IEditorPart editor = ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		if(!(editor instanceof JSPMultiPageEditor)) return false;
 		JSPTextEditor jspEditor = ((JSPMultiPageEditor)editor).getJspEditor();
 		
 		//Added By Max Areshkau
 		//Fix for JBIDE-788
-		pageContext = jspEditor.getPageContext();
+		iVisualContext = jspEditor.getPageContext();
 		
 		editorInput = jspEditor.getEditorInput();
 		
 		wtpTextJspKbConnector = jspEditor.getWTPTextJspKbConnector();
 		
-		if(pageContext != null) {
+		if(iVisualContext != null) {
 			updateFacelets();
 		}
-		return pageContext != null || pageConnector != null;
+		return iVisualContext != null || pageConnector != null;
 	}
 
 	public ModelElement getInitalInput(String query) {
@@ -185,9 +189,9 @@ public class ValueHelper {
 
 	public VpeTaglibManager getTaglibManager() {
 		init();
-		if(pageContext!=null && pageContext instanceof VpeTaglibManager) {
+		if(iVisualContext!=null && iVisualContext instanceof VpeTaglibManager) {
 		
-			return (VpeTaglibManager)pageContext;
+			return (VpeTaglibManager)iVisualContext;
 		} else {
 			
 			return null;
@@ -195,7 +199,7 @@ public class ValueHelper {
 	}
 	
 	public WtpKbConnector getPageConnector() {
-		if(pageContext != null) return pageContext.getConnector();
+		if(iVisualContext != null) return iVisualContext.getConnector();
 		return pageConnector;
 	}
 	
@@ -214,7 +218,7 @@ public class ValueHelper {
 	
 	//Support of StructuredTextEditor
 	boolean init2() {
-		if(pageContext != null || pageConnector != null) return true;
+		if(iVisualContext != null || pageConnector != null) return true;
 		IEditorPart editor = ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		if(!(editor instanceof StructuredTextEditor)) return false;
 		StructuredTextEditor jspEditor = ((StructuredTextEditor)editor);
@@ -223,7 +227,7 @@ public class ValueHelper {
 		if(document == null) return false;
 		installActivePropmtSupport(jspEditor, document);
 		getConnector(document);
-		return pageContext != null || pageConnector != null;
+		return iVisualContext != null || pageConnector != null;
 	}
 
 	private void installActivePropmtSupport(StructuredTextEditor jspEditor, IDocument document) {

@@ -184,9 +184,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		if (pageContext==null) {
 			pageContext = new SourceEditorPageContext();
 		}
-		// IDocument document = getTextViewer().getDocument();
-		// pageContext.setDocument(document);
-		IDOMDocument document = ((DOMModelImpl) getModel()).getDocument();
+		IDocument document = getTextViewer().getDocument();
 		pageContext.setDocument(document);
 		return pageContext;
 	}

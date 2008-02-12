@@ -14,6 +14,8 @@ package org.jboss.tools.jst.jsp.jspeditor;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import org.eclipse.jface.text.IDocument;
 import org.jboss.tools.common.kb.KbConnectorFactory;
 import org.jboss.tools.common.kb.KbConnectorType;
 import org.jboss.tools.common.kb.wtp.WtpKbConnector;
@@ -34,9 +36,17 @@ import org.w3c.dom.NodeList;
  */
 public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager {
 
-	protected List<TaglibData> taglibs = null;
-	
+	/**
+	 * Contains information about taglibs on edited page
+	 */
+	private List<TaglibData> taglibs = null;
+	/**
+	 * Kb connector
+	 */
 	private WtpKbConnector connector = null;
+	/**
+	 * references node
+	 */
 	private Node referenceNode = null;
 	
 	public void clearAll() {
@@ -46,8 +56,8 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 	
 	public void dispose() {
 		clearAll();
-		connector = null;
-		referenceNode = null;
+		setConnector(null);
+		setReferenceNode(null);
 
 	}
 	/**
@@ -56,19 +66,22 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 	 */
 	public void setReferenceNode(Node refNode) {
 	
-		if ((refNode==null)||(refNode.equals(referenceNode))) {
+		if ((refNode==null)||(refNode.equals(getReferenceNode()))) {
 			return;
 		}
-			referenceNode = refNode;
+			setReferenceNode(refNode);
 			updateTagLibs();
 	
 	}
-	
-	public void setDocument(Document doc) {
-		
-//		setReferenceNode(doc);
+	/**
+	 * This method will be called if we work with jsp pages
+	 * @param iDocument
+	 */
+	public void setDocument(IDocument iDocument) {
+
+		setTaglibs(XmlUtil.getTaglibsForJSPDocument(iDocument));
 		try {
-			connector = (WtpKbConnector)KbConnectorFactory.getIntstance().createConnector(KbConnectorType.JSP_WTP_KB_CONNECTOR, doc);
+			connector = (WtpKbConnector)KbConnectorFactory.getIntstance().createConnector(KbConnectorType.JSP_WTP_KB_CONNECTOR, iDocument);
 		} catch (InstantiationException e) {
 			JspEditorPlugin.getPluginLog().logError(e);
 		} catch (IllegalAccessException e) {
@@ -80,12 +93,12 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 
 	public void collectRefNodeTagLibs() {
 		
-		if(referenceNode==null) {
+		if(getReferenceNode()==null) {
 			return;
 		}
 			
-		if(referenceNode.getNodeType()==Node.DOCUMENT_NODE) {
-			NodeList nodes =referenceNode.getChildNodes();
+		if(getReferenceNode().getNodeType()==Node.DOCUMENT_NODE) {
+			NodeList nodes =getReferenceNode().getChildNodes();
 			
 			for(int i=0;i<nodes.getLength();i++) {
 				Node node =nodes.item(i);
@@ -97,7 +110,7 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 			}
 		} else {
 			
-			setTaglibs(XmlUtil.processNode(referenceNode));
+			setTaglibs(XmlUtil.processNode(getReferenceNode()));
 		}
 	}
 	
@@ -157,6 +170,20 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 	 */
 	private void setTaglibs(List<TaglibData> taglibs) {
 		this.taglibs = taglibs;
+	}
+
+	/**
+	 * @return the referenceNode
+	 */
+	public Node getReferenceNode() {
+		return referenceNode;
+	}
+
+	/**
+	 * @param connector the connector to set
+	 */
+	public void setConnector(WtpKbConnector connector) {
+		this.connector = connector;
 	}
 
 }
