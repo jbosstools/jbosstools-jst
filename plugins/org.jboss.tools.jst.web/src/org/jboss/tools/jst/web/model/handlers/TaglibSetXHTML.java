@@ -43,7 +43,11 @@ public class TaglibSetXHTML extends TaglibSet {
 	protected boolean doModifyBody(String body, String[] selected, StringBuffer sb) {
 		if(body == null || body.length() == 0) {
 			body = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">" + "\n" +
-				   "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n" +				
+				   "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n" +	
+				   "\t<body>\n" +
+				   "\t\t<form action=\"\">\n" +
+				   "\t\t</form>\n" +
+				   "\t</body>\n" +
 				   "</html>";			
 		}
 		int ib = body.toLowerCase().indexOf("<html");
