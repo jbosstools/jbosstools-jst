@@ -644,15 +644,10 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	}
 
 	public VpeTaglibManager getTaglibManager() {
-		if (visualEditor != null) {
-			IVisualController controller = visualEditor.getController();
-			if (controller != null) {
-				IVisualContext context = controller.getPageContext();
-				if (context != null) {
-					if(context instanceof VpeTaglibManager)
-					return (VpeTaglibManager)context;
-				}
-			}
+		if(sourceEditor!=null) {
+			if(sourceEditor.getPageContext() instanceof VpeTaglibManager)
+		 
+				return	(VpeTaglibManager)sourceEditor.getPageContext();
 		}
 		return null;
 	}

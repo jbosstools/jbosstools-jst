@@ -31,6 +31,10 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 public class XmlUtil {
+	
+	private static final String XMLNS = "xmlns";
+	
+	private static final String XMLNS_WITH_PREFIX = "xmlns:";
 
 	public static Element getDocumentElement(String xmlFileName) throws Exception {
 		FileInputStream inStream = null;
@@ -123,12 +127,18 @@ public class XmlUtil {
 	 */	
 	private static void processAttribute(List<TaglibData> taglibs, Attr attr, boolean bScopePrefix) {
 
-		String startStr = "xmlns:";
 		String name = attr.getName();
-		if (!name.startsWith(startStr)) {
+		if (!name.startsWith(XMLNS)) {
 			return;
 		}
-		name = name.substring(startStr.length());
+		
+		if(XMLNS.equals(name)) {
+
+			name="";
+		} else {
+			
+			name=name.substring(XMLNS_WITH_PREFIX.length());
+		}
 		addTaglib(taglibs , attr.getValue(), name, true, bScopePrefix);
 		return;
 	}

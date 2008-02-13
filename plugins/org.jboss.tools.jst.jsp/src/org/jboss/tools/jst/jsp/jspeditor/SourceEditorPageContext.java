@@ -78,8 +78,13 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 	 * @param iDocument
 	 */
 	public void setDocument(IDocument iDocument) {
-
-		setTaglibs(XmlUtil.getTaglibsForJSPDocument(iDocument));
+		
+		List<TaglibData> taglibs =XmlUtil.getTaglibsForJSPDocument(iDocument);
+		//if we on jsp page we will set taglibs 
+		//TODO Max Areshkau Find other passability to check if we on jsp page
+		if(taglibs!=null && taglibs.size()>0) {
+			setTaglibs(XmlUtil.getTaglibsForJSPDocument(iDocument));
+		}
 		try {
 			connector = (WtpKbConnector)KbConnectorFactory.getIntstance().createConnector(KbConnectorType.JSP_WTP_KB_CONNECTOR, iDocument);
 		} catch (InstantiationException e) {
@@ -139,7 +144,7 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 		while (iter.hasNext()) {
 			TaglibData taglib = (TaglibData)iter.next();
 			if (!taglib.inList(clone)) {
-				clone.add(taglib);
+					clone.add(taglib);
 			}
 		}
 		return clone;
