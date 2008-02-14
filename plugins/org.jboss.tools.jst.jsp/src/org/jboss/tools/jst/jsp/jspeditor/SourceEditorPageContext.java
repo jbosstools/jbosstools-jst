@@ -25,7 +25,6 @@ import org.jboss.tools.jst.jsp.util.XmlUtil;
 import org.jboss.tools.jst.web.tld.TaglibData;
 import org.jboss.tools.jst.web.tld.VpeTaglibListener;
 import org.jboss.tools.jst.web.tld.VpeTaglibManager;
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -143,10 +142,13 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 		Iterator<TaglibData> iter = getTaglibs() .iterator();
 		while (iter.hasNext()) {
 			TaglibData taglib = (TaglibData)iter.next();
-			if (!taglib.inList(clone)) {
-					clone.add(taglib);
-			}
+			//Max Areshkau we doesn't need double check
+//			if (!taglib.inList(clone)) {
+//					clone.add(taglib.clone());
+//			}
+			clone.add(taglib);
 		}
+
 		return clone;
 	}
 

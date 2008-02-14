@@ -73,14 +73,13 @@ import org.eclipse.wst.sse.ui.StructuredTextViewerConfiguration;
 import org.eclipse.wst.sse.ui.internal.IModelProvider;
 import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
 import org.eclipse.wst.sse.ui.internal.actions.StructuredTextEditorActionConstants;
+import org.eclipse.wst.sse.ui.internal.contentassist.ContentAssistUtils;
 import org.eclipse.wst.sse.ui.internal.contentoutline.ConfigurableContentOutlinePage;
 import org.eclipse.wst.sse.ui.internal.properties.ConfigurablePropertySheetPage;
 import org.eclipse.wst.sse.ui.internal.provisional.extensions.ConfigurationPointCalculator;
 import org.eclipse.wst.sse.ui.views.contentoutline.ContentOutlineConfiguration;
 import org.eclipse.wst.xml.core.internal.document.AttrImpl;
-import org.eclipse.wst.xml.core.internal.document.DOMModelImpl;
 import org.eclipse.wst.xml.core.internal.document.ElementImpl;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.jboss.tools.common.core.resources.XModelObjectEditorInput;
 import org.jboss.tools.common.meta.action.XActionInvoker;
 import org.jboss.tools.common.model.XModelBuffer;
@@ -88,7 +87,6 @@ import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.XModelTransferBuffer;
 import org.jboss.tools.common.model.filesystems.impl.FileAnyImpl;
 import org.jboss.tools.common.model.filesystems.impl.FolderImpl;
-import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.model.ui.dnd.ModelTransfer;
 import org.jboss.tools.common.model.ui.editor.IModelObjectEditorInput;
 import org.jboss.tools.common.model.ui.editors.dnd.DropCommandFactory;
@@ -185,7 +183,12 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			pageContext = new SourceEditorPageContext();
 		}
 		IDocument document = getTextViewer().getDocument();
-		pageContext.setDocument(document);
+		int offset = this.getTextViewer().getTextWidget().getCaretOffset();
+    	IndexedRegion treeNode = ContentAssistUtils.getNodeAt(this.getTextViewer(), offset);
+    	Node node = (Node) treeNode;
+		pageContext.setReferenceNode(node);
+    	pageContext.setDocument(document);
+		
 		return pageContext;
 	}
 	
@@ -631,6 +634,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			//Fix for JBIDE-788
 			if (getEditor() != null) {
 				if(getEditor().getPageContext() instanceof VpeTaglibManager)
+				
 					
 				return (VpeTaglibManager)getEditor().getPageContext();
 			}
