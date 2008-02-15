@@ -104,8 +104,8 @@ import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
 import org.jboss.tools.common.text.xml.IOccurrencePreferenceProvider;
 import org.jboss.tools.common.text.xml.XmlEditorPlugin;
 import org.jboss.tools.common.text.xml.ui.FreeCaretStyledText;
-import org.jboss.tools.jst.jsp.ExtendedStructuredTextViewerConfigurationHTML;
-import org.jboss.tools.jst.jsp.ExtendedStructuredTextViewerConfigurationJSP;
+import org.jboss.tools.jst.jsp.HTMLTextViewerConfiguration;
+import org.jboss.tools.jst.jsp.JSPTextViewerConfiguration;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.editor.IJSPTextEditor;
 import org.jboss.tools.jst.jsp.editor.ITextFormatter;
@@ -153,20 +153,20 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		dnd.setTextEditorDropProvider(new TextEditorDropProviderImpl());
 		this.parentEditor = parentEditor;
 		super
-				.setSourceViewerConfiguration(new ExtendedStructuredTextViewerConfigurationJSP());
+				.setSourceViewerConfiguration(new JSPTextViewerConfiguration());
 	}
 	
 	protected void setSourceViewerConfiguration(SourceViewerConfiguration config) {
 		if (config instanceof StructuredTextViewerConfigurationJSP) {
-			if (!(config instanceof ExtendedStructuredTextViewerConfigurationJSP)) {
-				config = new ExtendedStructuredTextViewerConfigurationJSP();
+			if (!(config instanceof JSPTextViewerConfiguration)) {
+				config = new JSPTextViewerConfiguration();
 			}
 		} else if (config instanceof StructuredTextViewerConfigurationHTML) {
-			if (!(config instanceof ExtendedStructuredTextViewerConfigurationHTML)) {
-				config = new ExtendedStructuredTextViewerConfigurationHTML();
+			if (!(config instanceof HTMLTextViewerConfiguration)) {
+				config = new HTMLTextViewerConfiguration();
 			}
 		} else {
-			config = new ExtendedStructuredTextViewerConfigurationJSP();
+			config = new JSPTextViewerConfiguration();
 		}
 		super.setSourceViewerConfiguration(config);
 	}

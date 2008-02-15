@@ -20,8 +20,8 @@ import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegionList;
 import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
 import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 import org.jboss.tools.common.test.util.TestProjectProvider;
-import org.jboss.tools.jst.jsp.contentassist.RedHatCustomCompletionProposal;
-import org.jboss.tools.jst.jsp.contentassist.RedHatJSPContentAssistProcessor;
+import org.jboss.tools.jst.jsp.contentassist.AutoContentAssistantProposal;
+import org.jboss.tools.jst.jsp.contentassist.ExtendedJSPContentAssistProcessor;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor;
 import org.jboss.tools.jst.jsp.test.TestUtil;
@@ -169,7 +169,7 @@ public class JsfJspJbide1704Test extends TestCase {
 
 						for (int k = 0; result != null && k < result.length; k++) {
 							// There should not be a proposal of type Red.Proposal in the result
-							assertFalse("Content Assistant peturned proposals of type (" + result[k].getClass().getName() + ").", (result[k] instanceof RedHatCustomCompletionProposal));
+							assertFalse("Content Assistant peturned proposals of type (" + result[k].getClass().getName() + ").", (result[k] instanceof AutoContentAssistantProposal));
 						}
 					}
 				}

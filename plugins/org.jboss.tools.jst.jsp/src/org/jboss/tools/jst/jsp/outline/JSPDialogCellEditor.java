@@ -24,7 +24,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.contentassist.ContentAssistHandler;
 import org.jboss.tools.common.meta.key.WizardKeys;
 import org.jboss.tools.jst.jsp.contentassist.JSPDialogCellEditorContentAssistProcessor;
-import org.jboss.tools.jst.jsp.contentassist.RedHatHtmlContentAssistProcessor;
+import org.jboss.tools.jst.jsp.contentassist.FaceletsHtmlContentAssistProcessor;
 import org.jboss.tools.jst.jsp.drop.treeviewer.model.RootElement;
 
 /**
@@ -66,7 +66,7 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
 		String nodeName = "" + context.getProperty("nodeName");
 		String query = "/";
 		if(valueHelper.isFacetets() && nodeName.indexOf(':') < 0) {
-			query += RedHatHtmlContentAssistProcessor.faceletHtmlPrefixStart;
+			query += FaceletsHtmlContentAssistProcessor.faceletHtmlPrefixStart;
 		}
 		query += nodeName + "@" + attributeName;
 		RootElement root = (RootElement)valueHelper.getInitalInput(query);
@@ -89,7 +89,7 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
 		String nodeName = "" + context.getProperty("nodeName");
 		String query = "/";
 		if(valueHelper != null && valueHelper.isFacetets() && nodeName.indexOf(":") < 0) {
-			query += RedHatHtmlContentAssistProcessor.faceletHtmlPrefixStart;
+			query += FaceletsHtmlContentAssistProcessor.faceletHtmlPrefixStart;
 		}
 		query += nodeName + "@" + attributeName;
 		context.setProperty("query", query);

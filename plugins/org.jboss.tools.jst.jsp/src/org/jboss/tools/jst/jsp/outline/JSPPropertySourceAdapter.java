@@ -36,7 +36,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.ui.internal.XMLUIMessages;
 import org.eclipse.wst.xml.ui.internal.properties.EnumeratedStringPropertyDescriptor;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
-import org.jboss.tools.jst.jsp.contentassist.RedHatHtmlContentAssistProcessor;
+import org.jboss.tools.jst.jsp.contentassist.FaceletsHtmlContentAssistProcessor;
 import org.jboss.tools.jst.jsp.editor.IVisualController;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
@@ -126,8 +126,8 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 			jsfTagName = valueHelper.getFaceletJsfTag((Element)fNode);
 		}
 		if(jsfTagName != null) tagName = jsfTagName;
-		if(jsfTagName == null && valueHelper.isFacetets() && tagName.indexOf(':') < 0 && !RedHatHtmlContentAssistProcessor.JSFCAttributeName.equals(attributeName)) {
-			tagName = RedHatHtmlContentAssistProcessor.faceletHtmlPrefixStart + tagName;
+		if(jsfTagName == null && valueHelper.isFacetets() && tagName.indexOf(':') < 0 && !FaceletsHtmlContentAssistProcessor.JSFCAttributeName.equals(attributeName)) {
+			tagName = FaceletsHtmlContentAssistProcessor.faceletHtmlPrefixStart + tagName;
 		}
 		return "/" + tagName + "@" + attributeName;
 	}	

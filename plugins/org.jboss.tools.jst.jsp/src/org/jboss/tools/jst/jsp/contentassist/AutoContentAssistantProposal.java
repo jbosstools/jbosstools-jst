@@ -22,20 +22,20 @@ import org.eclipse.wst.sse.ui.internal.contentassist.IRelevanceConstants;
 /**
  * @author Igels
  */
-public class RedHatCustomCompletionProposal extends CustomCompletionProposal {
+public class AutoContentAssistantProposal extends CustomCompletionProposal {
 
     private boolean autoContentAssistant = false;
 
-	public RedHatCustomCompletionProposal(String replacementString, int replacementOffset, int replacementLength, int cursorPosition, Image image, String displayString, IContextInformation contextInformation, String additionalProposalInfo) {
+	public AutoContentAssistantProposal(String replacementString, int replacementOffset, int replacementLength, int cursorPosition, Image image, String displayString, IContextInformation contextInformation, String additionalProposalInfo) {
 		super(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString,  contextInformation, additionalProposalInfo, IRelevanceConstants.R_NONE);
 	}
 
-	public RedHatCustomCompletionProposal(boolean autoContentAssistant, String replacementString, int replacementOffset, int replacementLength, int cursorPosition, Image image, String displayString, IContextInformation contextInformation, String additionalProposalInfo, int relevance) {
+	public AutoContentAssistantProposal(boolean autoContentAssistant, String replacementString, int replacementOffset, int replacementLength, int cursorPosition, Image image, String displayString, IContextInformation contextInformation, String additionalProposalInfo, int relevance) {
 	    super(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, contextInformation, additionalProposalInfo, relevance);
 	    this.autoContentAssistant = autoContentAssistant;
 	}
 
-	public RedHatCustomCompletionProposal(String replacementString, int replacementOffset, int replacementLength, int cursorPosition, Image image, String displayString, IContextInformation contextInformation, String additionalProposalInfo, int relevance, boolean updateReplacementLengthOnValidate) {
+	public AutoContentAssistantProposal(String replacementString, int replacementOffset, int replacementLength, int cursorPosition, Image image, String displayString, IContextInformation contextInformation, String additionalProposalInfo, int relevance, boolean updateReplacementLengthOnValidate) {
 	    super(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, contextInformation, additionalProposalInfo, relevance, updateReplacementLengthOnValidate);
 	}
 
@@ -51,7 +51,7 @@ public class RedHatCustomCompletionProposal extends CustomCompletionProposal {
 	}
 
 	/**
-	 * Red Hat. Return cursor position of proposal replasement string.
+	 * Return cursor position of proposal replacement string.
 	 */
 	public int getCursorPosition() {
 	    int cursorPosition = -1;

@@ -81,7 +81,7 @@ import org.w3c.dom.Node;
 /**
  * @author Igels
  */
-public class RedHatJSPContentAssistProcessor extends JSPContentAssistProcessor{
+public class ExtendedJSPContentAssistProcessor extends JSPContentAssistProcessor{
 
     private JSPActiveContentAssistProcessor jspActiveCAP;
     private WtpKbConnector wtpKbConnector;
@@ -310,7 +310,7 @@ public class RedHatJSPContentAssistProcessor extends JSPContentAssistProcessor{
 						}
 						String proposedInfo = getAdditionalInfo(parentDecl, childType);
 						for (int i = 0; i < childStrings.length; i++) {
-							CustomCompletionProposal textProposal = new RedHatCustomCompletionProposal(childStrings[i].indexOf("=")>-1, childStrings[i], begin, length, childStrings[i].length(), XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_ENUM), childStrings[i], null, proposedInfo, XMLRelevanceConstants.R_TAG_INSERTION);
+							CustomCompletionProposal textProposal = new AutoContentAssistantProposal(childStrings[i].indexOf("=")>-1, childStrings[i], begin, length, childStrings[i].length(), XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_ENUM), childStrings[i], null, proposedInfo, XMLRelevanceConstants.R_TAG_INSERTION);
 							contentAssistRequest.addProposal(textProposal);
 						}
 					}
@@ -376,7 +376,7 @@ public class RedHatJSPContentAssistProcessor extends JSPContentAssistProcessor{
 
 							String proposedInfo = getAdditionalInfo(parentDecl, elementDecl);
 							int relevance = isStrictCMNodeSuggestion ? XMLRelevanceConstants.R_STRICTLY_VALID_TAG_INSERTION : XMLRelevanceConstants.R_TAG_INSERTION;
-							CustomCompletionProposal proposal = new RedHatCustomCompletionProposal(true, proposedText, contentAssistRequest.getReplacementBeginPosition(), contentAssistRequest.getReplacementLength(), markupAdjustment, image, tagname, null, proposedInfo, relevance);
+							CustomCompletionProposal proposal = new AutoContentAssistantProposal(true, proposedText, contentAssistRequest.getReplacementBeginPosition(), contentAssistRequest.getReplacementLength(), markupAdjustment, image, tagname, null, proposedInfo, relevance);
 							contentAssistRequest.addProposal(proposal);
 						}
 					}
@@ -424,7 +424,7 @@ public class RedHatJSPContentAssistProcessor extends JSPContentAssistProcessor{
 						// account for the &lt; and &gt;
 						int markupAdjustment = getContentGenerator().getMinimalStartTagLength(parent, ed);
 						String proposedInfo = getAdditionalInfo(null, ed);
-						CustomCompletionProposal proposal = new RedHatCustomCompletionProposal(false, proposedText, contentAssistRequest.getReplacementBeginPosition(), contentAssistRequest.getReplacementLength(), markupAdjustment, image, tagname, null, proposedInfo, XMLRelevanceConstants.R_TAG_INSERTION);
+						CustomCompletionProposal proposal = new AutoContentAssistantProposal(false, proposedText, contentAssistRequest.getReplacementBeginPosition(), contentAssistRequest.getReplacementLength(), markupAdjustment, image, tagname, null, proposedInfo, XMLRelevanceConstants.R_TAG_INSERTION);
 
 						contentAssistRequest.addProposal(proposal);
 					}
@@ -529,7 +529,7 @@ public class RedHatJSPContentAssistProcessor extends JSPContentAssistProcessor{
 							image = XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_TAG_GENERIC);
 						}
 						String proposedInfo = getAdditionalInfo(getCMElementDeclaration(parent), elementDecl);
-						CustomCompletionProposal proposal = new RedHatCustomCompletionProposal(proposedText.indexOf('\"')>-1 && proposedText.indexOf("=")>-1, proposedText, contentAssistRequest.getReplacementBeginPosition(), contentAssistRequest.getReplacementLength(), cursorAdjustment, image, getRequiredName(parent, elementDecl), null, proposedInfo, XMLRelevanceConstants.R_TAG_NAME);
+						CustomCompletionProposal proposal = new AutoContentAssistantProposal(proposedText.indexOf('\"')>-1 && proposedText.indexOf("=")>-1, proposedText, contentAssistRequest.getReplacementBeginPosition(), contentAssistRequest.getReplacementLength(), cursorAdjustment, image, getRequiredName(parent, elementDecl), null, proposedInfo, XMLRelevanceConstants.R_TAG_NAME);
 						contentAssistRequest.addProposal(proposal);
 					}
 				}
@@ -577,7 +577,7 @@ public class RedHatJSPContentAssistProcessor extends JSPContentAssistProcessor{
 					if (image == null) {
 						image = XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_TAG_GENERIC);
 					}
-					CustomCompletionProposal proposal = new RedHatCustomCompletionProposal(proposedText.indexOf('\"')>-1, proposedText, contentAssistRequest.getReplacementBeginPosition(), contentAssistRequest.getReplacementLength(), cursorAdjustment, image, getRequiredName(parent, ed), null, proposedInfo, XMLRelevanceConstants.R_TAG_NAME);
+					CustomCompletionProposal proposal = new AutoContentAssistantProposal(proposedText.indexOf('\"')>-1, proposedText, contentAssistRequest.getReplacementBeginPosition(), contentAssistRequest.getReplacementLength(), cursorAdjustment, image, getRequiredName(parent, ed), null, proposedInfo, XMLRelevanceConstants.R_TAG_NAME);
 					contentAssistRequest.addProposal(proposal);
 					contentAssistRequest.addProposal(proposal);
 				}

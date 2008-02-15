@@ -46,7 +46,7 @@ import org.jboss.tools.common.model.project.IPromptingProvider;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.model.util.ModelFeatureFactory;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
-import org.jboss.tools.jst.jsp.contentassist.RedHatHtmlContentAssistProcessor;
+import org.jboss.tools.jst.jsp.contentassist.FaceletsHtmlContentAssistProcessor;
 import org.jboss.tools.jst.jsp.drop.treeviewer.model.AttributeValueResource;
 import org.jboss.tools.jst.jsp.drop.treeviewer.model.AttributeValueResourceFactory;
 import org.jboss.tools.jst.jsp.drop.treeviewer.model.ModelElement;
@@ -325,11 +325,11 @@ public class ValueHelper {
 		kbConnector.unregisterAllResources(true);
 		for(int i = 0; i < list.size(); i++) {
 			TaglibData data = list.get(i);
-			RedHatHtmlContentAssistProcessor.registerTld(data, kbConnector, document, editorInput);
-			isFacelets = isFacelets || data.getUri().equals(RedHatHtmlContentAssistProcessor.faceletUri);
+			FaceletsHtmlContentAssistProcessor.registerTld(data, kbConnector, document, editorInput);
+			isFacelets = isFacelets || data.getUri().equals(FaceletsHtmlContentAssistProcessor.faceletUri);
 		}
 		if(isFacelets) {
-			kbConnector.registerResource(RedHatHtmlContentAssistProcessor.faceletHtmlResource);
+			kbConnector.registerResource(FaceletsHtmlContentAssistProcessor.faceletHtmlResource);
 			kbConnector.unregisterJspResource();
 		}
 	}
@@ -340,7 +340,7 @@ public class ValueHelper {
 		if(name.indexOf(':') >= 0) return null;
 		
 		NamedNodeMap attributes = element.getAttributes();
-		Node jsfC = attributes.getNamedItem(RedHatHtmlContentAssistProcessor.JSFCAttributeName);
+		Node jsfC = attributes.getNamedItem(FaceletsHtmlContentAssistProcessor.JSFCAttributeName);
 		if(jsfC != null && (jsfC instanceof Attr)) {
 			Attr jsfCAttribute = (Attr)jsfC;
 			String jsfTagName = jsfCAttribute.getValue();

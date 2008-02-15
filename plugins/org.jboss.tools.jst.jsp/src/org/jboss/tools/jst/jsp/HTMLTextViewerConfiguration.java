@@ -30,13 +30,13 @@ import org.eclipse.wst.html.ui.StructuredTextViewerConfigurationHTML;
 import org.eclipse.wst.sse.ui.internal.format.StructuredFormattingStrategy;
 import org.jboss.tools.common.text.xml.contentassist.ContentAssistProcessorBuilder;
 import org.jboss.tools.common.text.xml.contentassist.ContentAssistProcessorDefinition;
-import org.jboss.tools.jst.jsp.contentassist.RedHatHtmlContentAssistProcessor;
+import org.jboss.tools.jst.jsp.contentassist.FaceletsHtmlContentAssistProcessor;
 import org.jboss.tools.jst.jsp.format.HTMLFormatProcessor;
 import org.osgi.framework.Bundle;
 
-public class ExtendedStructuredTextViewerConfigurationHTML extends StructuredTextViewerConfigurationHTML {
+public class HTMLTextViewerConfiguration extends StructuredTextViewerConfigurationHTML {
 
-	public ExtendedStructuredTextViewerConfigurationHTML() {
+	public HTMLTextViewerConfiguration() {
 		super();
 	}
 
@@ -62,7 +62,7 @@ public class ExtendedStructuredTextViewerConfigurationHTML extends StructuredTex
 
 		if (partitionType == IHTMLPartitions.HTML_DEFAULT ||
 				partitionType == IJSPPartitions.JSP_DEFAULT_EL) {
-			processors.add(new RedHatHtmlContentAssistProcessor());
+			processors.add(new FaceletsHtmlContentAssistProcessor());
 		}
 
 		return (IContentAssistProcessor[])processors.toArray(new IContentAssistProcessor[0]);

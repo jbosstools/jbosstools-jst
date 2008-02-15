@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.jboss.tools.common.reporting.ProblemReportingHelper;
-import org.jboss.tools.jst.jsp.contentassist.RedHatHtmlContentAssistProcessor;
+import org.jboss.tools.jst.jsp.contentassist.FaceletsHtmlContentAssistProcessor;
 import org.jboss.tools.common.kb.KbDinamicResource;
 import org.jboss.tools.common.kb.KbException;
 import org.jboss.tools.common.kb.KbProposal;
@@ -90,7 +90,7 @@ public class FaceletsJsfCResource implements KbDinamicResource {
 	}
 
 	private boolean ignoreProposal(KbProposal proposal) {
-		return proposal.getLabel().startsWith(RedHatHtmlContentAssistProcessor.faceletHtmlPrefixStart) || proposal.getLabel().indexOf(':')<0;
+		return proposal.getLabel().startsWith(FaceletsHtmlContentAssistProcessor.faceletHtmlPrefixStart) || proposal.getLabel().indexOf(':')<0;
 	}
 
 	/**

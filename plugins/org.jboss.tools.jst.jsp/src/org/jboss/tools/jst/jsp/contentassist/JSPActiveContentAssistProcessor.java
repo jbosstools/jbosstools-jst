@@ -53,16 +53,16 @@ public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcess
 		boolean faceletJsfTag = false;
 
 		String htmlQuery = null;
-		if(isFacelets && tagName.indexOf(':')<1 && !RedHatHtmlContentAssistProcessor.JSFCAttributeName.equals(attributeName)) {
+		if(isFacelets && tagName.indexOf(':')<1 && !FaceletsHtmlContentAssistProcessor.JSFCAttributeName.equals(attributeName)) {
 			Element element = (Element)node;
 
 			NamedNodeMap attributes = element.getAttributes();
-			Node jsfC = attributes.getNamedItem(RedHatHtmlContentAssistProcessor.JSFCAttributeName);
+			Node jsfC = attributes.getNamedItem(FaceletsHtmlContentAssistProcessor.JSFCAttributeName);
 			if(jsfC!=null && (jsfC instanceof Attr)) {
 				Attr jsfCAttribute = (Attr)jsfC;
 				String jsfTagName = jsfCAttribute.getValue();
 				if(jsfTagName!=null && jsfTagName.indexOf(':')>0) {
-					htmlQuery = new StringBuffer(KbQuery.TAG_SEPARATOR).append(RedHatHtmlContentAssistProcessor.faceletHtmlPrefixStart + tagName).append(KbQuery.ATTRIBUTE_SEPARATOR).append(attributeName).append(KbQuery.ENUMERATION_SEPARATOR).append(matchString).toString();
+					htmlQuery = new StringBuffer(KbQuery.TAG_SEPARATOR).append(FaceletsHtmlContentAssistProcessor.faceletHtmlPrefixStart + tagName).append(KbQuery.ATTRIBUTE_SEPARATOR).append(attributeName).append(KbQuery.ENUMERATION_SEPARATOR).append(matchString).toString();
 					tagName = jsfTagName;
 					faceletJsfTag = true;
 				}
@@ -70,7 +70,7 @@ public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcess
 		}
 
 		if(!faceletJsfTag && isFacelets && tagName.indexOf(':')<0) {
-			tagName = RedHatHtmlContentAssistProcessor.faceletHtmlPrefixStart + tagName;
+			tagName = FaceletsHtmlContentAssistProcessor.faceletHtmlPrefixStart + tagName;
 		}
 
 	    String query = new StringBuffer(KbQuery.TAG_SEPARATOR).append(tagName).append(KbQuery.ATTRIBUTE_SEPARATOR).append(attributeName).append(KbQuery.ENUMERATION_SEPARATOR).append(matchString).toString();
@@ -107,7 +107,7 @@ public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcess
             			replacementString += ("\"");
             		}
                 	int cursorPosition = kbProposal.getPosition() + cursorPositionDelta;
-                	RedHatCustomCompletionProposal proposal = new RedHatCustomCompletionProposal(kbProposal.autoActivationContentAssistantAfterApplication(), replacementString,
+                	AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(kbProposal.autoActivationContentAssistantAfterApplication(), replacementString,
                 			replacementBeginPosition, replacementLength, cursorPosition, SharedXMLEditorPluginImageHelper.getImage(SharedXMLEditorPluginImageHelper.IMG_OBJ_ATTRIBUTE),
             				kbProposal.getLabel(), null, kbProposal.getContextInfo(), relevance);
             		contentAssistRequest.addProposal(proposal);
@@ -138,7 +138,7 @@ public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcess
         		}
             	String replacementString = replacementStringBuffer.toString();
             	int cursorPosition = kbProposal.getPosition() + cursorPositionDelta;
-            	RedHatCustomCompletionProposal proposal = new RedHatCustomCompletionProposal(kbProposal.autoActivationContentAssistantAfterApplication(), replacementString,
+            	AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(kbProposal.autoActivationContentAssistantAfterApplication(), replacementString,
             			replacementBeginPosition, replacementLength, cursorPosition, SharedXMLEditorPluginImageHelper.getImage(SharedXMLEditorPluginImageHelper.IMG_OBJ_ATTRIBUTE),
         				kbProposal.getLabel(), null, kbProposal.getContextInfo(), relevance);
         		contentAssistRequest.addProposal(proposal);
@@ -157,8 +157,8 @@ public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcess
 	}
 
 	private String removeFaceletsPrefix(String tagName) {
-		if(tagName.startsWith(RedHatHtmlContentAssistProcessor.faceletHtmlPrefixStart)) {
-			return tagName.substring(RedHatHtmlContentAssistProcessor.faceletHtmlPrefixStart.length());
+		if(tagName.startsWith(FaceletsHtmlContentAssistProcessor.faceletHtmlPrefixStart)) {
+			return tagName.substring(FaceletsHtmlContentAssistProcessor.faceletHtmlPrefixStart.length());
 		}
 		return tagName;
 	}

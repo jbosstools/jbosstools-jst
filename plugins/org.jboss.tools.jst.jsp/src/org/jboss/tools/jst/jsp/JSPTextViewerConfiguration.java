@@ -31,15 +31,15 @@ import org.osgi.framework.Bundle;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.text.xml.contentassist.ContentAssistProcessorBuilder;
 import org.jboss.tools.common.text.xml.contentassist.ContentAssistProcessorDefinition;
-import org.jboss.tools.jst.jsp.contentassist.RedHatHtmlContentAssistProcessor;
-import org.jboss.tools.jst.jsp.contentassist.RedHatJSPContentAssistProcessor;
+import org.jboss.tools.jst.jsp.contentassist.FaceletsHtmlContentAssistProcessor;
+import org.jboss.tools.jst.jsp.contentassist.ExtendedJSPContentAssistProcessor;
 
 /**
  * @author Igels
  */
-public class ExtendedStructuredTextViewerConfigurationJSP extends StructuredTextViewerConfigurationJSP {
+public class JSPTextViewerConfiguration extends StructuredTextViewerConfigurationJSP {
 
-	public ExtendedStructuredTextViewerConfigurationJSP() {
+	public JSPTextViewerConfiguration() {
 		super();
 	}
 
@@ -68,7 +68,7 @@ public class ExtendedStructuredTextViewerConfigurationJSP extends StructuredText
 				(partitionType == IJSPPartitions.JSP_CONTENT_DELIMITER) ||
 				(partitionType == IJSPPartitions.JSP_DEFAULT_EL) ||
 				(partitionType == IJSPPartitions.JSP_DEFAULT_EL2)) {
-			processors.add(new RedHatJSPContentAssistProcessor());
+			processors.add(new ExtendedJSPContentAssistProcessor());
 			return (IContentAssistProcessor[])processors.toArray(new IContentAssistProcessor[0]);
 		}
 		IContentAssistProcessor[] superProcessors = super.getContentAssistProcessors(sourceViewer, partitionType);
