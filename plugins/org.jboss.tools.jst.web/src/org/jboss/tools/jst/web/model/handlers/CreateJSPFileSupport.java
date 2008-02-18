@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.model.handlers;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import org.jboss.tools.common.meta.action.impl.WizardDataValidator;
 import org.jboss.tools.common.model.XModel;
@@ -168,7 +169,7 @@ public class CreateJSPFileSupport extends CreateFileSupport {
 		setValueList(1, "taglibs", s);
 	}
 	
-	void initSelectedTaglibs() throws Exception {
+	void initSelectedTaglibs() throws IOException {
 		String template = getAttributeValue(0, "template");
 		String value = template == null ? null : (String)selectedTaglibs.get(template.trim());
 		if(value != null && template.trim().length() > 0) {
@@ -188,15 +189,17 @@ public class CreateJSPFileSupport extends CreateFileSupport {
 		setAttributeValue(1, "taglibs", value);
 	}
 
-	protected String modifyBody(String body) {
+	protected String modifyBody(String body) throws IOException {
 		if(getEntityData().length < 2 || taglibs == null) return body;
+		if(taglibs == null) return body;
+		if(getStepId() == 0) initSelectedTaglibs();
 		String ts = getAttributeValue(1, "taglibs");
-		if(ts.length() == 0 && getStepId() == 0) return body;
 		String[] selected = toArray(ts);
 		return taglibs.modifyBody(body, selected);
 	}
 	
 	String[] toArray(String s) {
+		if(s == null || s.length() == 0) return new String[0];
 		StringTokenizer st = new StringTokenizer(s, ";,");
 		String[] a = new String[st.countTokens()];
 		for (int i = 0; i < a.length; i++) a[i] = st.nextToken();
