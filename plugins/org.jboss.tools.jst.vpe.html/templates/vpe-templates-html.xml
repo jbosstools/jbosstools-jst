@@ -1,0 +1,2784 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<vpe:templates>
+	<vpe:tag name="a" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class">
+				<vpe:attribute name="href" value="javascript:return false;"/>
+			</vpe:copy>
+			<vpe:dnd>
+				<vpe:drag start-enable="yes" />
+				<vpe:drop container="yes">
+					<vpe:container-child tag-name="#text" />
+				</vpe:drop>
+			</vpe:dnd>
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="deny"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="abbr" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="deny"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler">
+				</vpe:format>
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="acronym" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="deny"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler">
+				</vpe:format>
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>				
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="address" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat" addChildren="allow" addParent="deny" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addChildren="allow" addParent="deny" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat" setDefault="true">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addChildren="allow"
+					addParent="deny" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler">
+				</vpe:format>
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="applet" case-sensitive="no">
+		<vpe:template children="no" modify="no">
+			<img src="/applet.gif" />
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="area" case-sensitive="no">
+		<vpe:template children="no" modify="no">
+			<!--vpe:copy attrs="style,class,shape,coords"/-->
+			<vpe:dnd>
+				<vpe:drag start-enable="yes" />
+			</vpe:dnd>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="b" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:dnd>
+				<vpe:drag start-enable="yes" />
+				<vpe:drop container="yes">
+					<vpe:container-child tag-name="#text" />
+				</vpe:drop>
+			</vpe:dnd>
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="deny"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="ItalicFormat" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="base" case-sensitive="no">
+		<vpe:template children="yes" modify="no"></vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="basefont" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,size,color,face" />
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="bdo" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class,dir,lang" />
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="deny"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler">
+				</vpe:format>
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="bgsound" case-sensitive="no">
+		<vpe:template children="no" modify="no">
+			<img src="/bgsound.gif" />
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="big" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="deny"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="blockquote" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addParent="deny" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addChildren="allow" addParent="deny" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="blink" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy />
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="body" case-sensitive="yes">
+		<vpe:template children="yes" modify="yes"
+			class="org.jboss.tools.jst.vpe.html.template.HtmlBodyTemplate">
+			<vpe:resize>
+				<vpe:width width-attr="style.width" />
+				<vpe:height height-attr="style.height" />
+			</vpe:resize>
+			<vpe:dnd>
+				<vpe:drag start-enable="yes" />
+				<vpe:drop container="no"></vpe:drop>
+			</vpe:dnd>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="br" case-sensitive="no">
+		<vpe:template children="no" modify="yes">
+			<vpe:copy attrs="id,style,class,clear" />
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="button" case-sensitive="no">
+		<vpe:template children="yes" modify="no">
+			<vpe:copy attrs="id,style,class,value">
+				<!--vpe:attribute name="disabled" value="on"/-->
+			</vpe:copy>
+			<!--span class="__button__tag" style="{@style}">
+				<nobr><vpe:value expr="{@value}"/></nobr>
+				</span-->
+			<vpe:resize>
+				<vpe:width width-attr="style.width" />
+				<vpe:height height-attr="style.height" />
+			</vpe:resize>
+			<vpe:dnd>
+				<vpe:drag start-enable="yes" />
+				<vpe:drop container="yes">
+					<vpe:container-child tag-name="#text" />
+					<vpe:container-child tag-name="abbr" />
+					<vpe:container-child tag-name="acronym" />
+					<vpe:container-child tag-name="address" />
+					<vpe:container-child tag-name="applet" />
+					<vpe:container-child tag-name="b" />
+					<vpe:container-child tag-name="basefont" />
+					<vpe:container-child tag-name="bdo" />
+					<vpe:container-child tag-name="bgsound" />
+					<vpe:container-child tag-name="big" />
+					<vpe:container-child tag-name="blink" />
+					<vpe:container-child tag-name="blockquote" />
+					<vpe:container-child tag-name="br" />
+					<vpe:container-child tag-name="center" />
+					<vpe:container-child tag-name="cite" />
+					<vpe:container-child tag-name="code" />
+					<vpe:container-child tag-name="del" />
+					<vpe:container-child tag-name="dfn" />
+					<vpe:container-child tag-name="dl" />
+					<vpe:container-child tag-name="em" />
+					<vpe:container-child tag-name="embed" />
+					<vpe:container-child tag-name="font" />
+					<vpe:container-child tag-name="h1" />
+					<vpe:container-child tag-name="h2" />
+					<vpe:container-child tag-name="h3" />
+					<vpe:container-child tag-name="h4" />
+					<vpe:container-child tag-name="h5" />
+					<vpe:container-child tag-name="h6" />
+					<vpe:container-child tag-name="hr" />
+					<vpe:container-child tag-name="i" />
+					<vpe:container-child tag-name="img" />
+					<vpe:container-child tag-name="ins" />
+					<vpe:container-child tag-name="kbd" />
+					<vpe:container-child tag-name="map" />
+					<vpe:container-child tag-name="marquee" />
+					<vpe:container-child tag-name="menu" />
+					<vpe:container-child tag-name="nobr" />
+					<vpe:container-child tag-name="noframes" />
+					<vpe:container-child tag-name="noscript" />
+					<vpe:container-child tag-name="object" />
+					<vpe:container-child tag-name="ol" />
+					<vpe:container-child tag-name="p" />
+					<vpe:container-child tag-name="pre" />
+					<vpe:container-child tag-name="q" />
+					<vpe:container-child tag-name="s" />
+					<vpe:container-child tag-name="samp" />
+					<vpe:container-child tag-name="script" />
+					<vpe:container-child tag-name="small" />
+					<vpe:container-child tag-name="span" />
+					<vpe:container-child tag-name="strike" />
+					<vpe:container-child tag-name="strong" />
+					<vpe:container-child tag-name="sub" />
+					<vpe:container-child tag-name="sup" />
+					<vpe:container-child tag-name="table" />
+					<vpe:container-child tag-name="tt" />
+					<vpe:container-child tag-name="u" />
+					<vpe:container-child tag-name="ul" />
+					<vpe:container-child tag-name="var" />
+					<vpe:container-child tag-name="wbr" />
+				</vpe:drop>
+			</vpe:dnd>
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addParent="deny" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style"/>
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style"/>
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style"/>
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style"/>
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style"/>
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="caption" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class" />
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="center" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addParent="deny" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="cite" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="deny"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat"  setDefault="true">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="code" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="deny"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="col" case-sensitive="no">
+		<vpe:template children="no" modify="no">
+			<vpe:copy
+				attrs="style,class,span,width,align,char,charoff,valign" />
+			<vpe:dnd>
+				<vpe:drop container="no" />
+			</vpe:dnd>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="colgroup" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy
+				attrs="style,class,span,width,align,char,charoff,valign" />
+			<vpe:dnd>
+				<vpe:drop container="yes">
+					<vpe:container-child tag-name="col" />
+					<vpe:container-child tag-name="del" />
+					<vpe:container-child tag-name="ins" />
+				</vpe:drop>
+			</vpe:dnd>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="dd" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="allow" addParent="deny"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="del" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />				
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="dfn" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="deny"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat" setDefault="true">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="dir" case-sensitive="no">
+		<vpe:template children="yes" modify="no">
+			<vpe:copy attrs="id,style,class" />
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="div" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class,align" />
+			<vpe:resize>
+				<vpe:width width-attr="style.width" />
+				<vpe:height height-attr="style.height" />
+			</vpe:resize>
+			<vpe:dnd>
+				<vpe:drag start-enable="yes" />
+				<vpe:drop container="yes" />
+			</vpe:dnd>
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="allow" addParent="deny"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="dl" case-sensitive="no">
+		<vpe:template children="yes" modify="no">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="deny" addParent="deny"/>
+				<vpe:format type="BoldFormat" addParent="deny" addChildren="deny">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addParent="deny" addChildren="deny">
+					<vpe:formatAttribute type="style"/>
+				</vpe:format>
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="dt" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="deny" addParent="deny"/>
+				<vpe:format type="BoldFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="em" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="deny"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat" setDefault="true">
+					<vpe:formatAttribute type="style"/>
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="fieldset" case-sensitive="no">
+		<vpe:template children="yes" modify="no">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:resize>
+				<vpe:width width-attr="style.width" />
+				<vpe:height height-attr="style.height" />
+			</vpe:resize>
+			<vpe:dnd>
+				<vpe:drag start-enable="yes" />
+				<vpe:drop container="yes" />
+			</vpe:dnd>
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="allow" addParent="deny"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style"/>
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="font" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class,size,color,face" />
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="deny"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style"/>
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="form" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<div />
+			<vpe:dnd>
+				<vpe:drag start-enable="yes" />
+				<vpe:drop container="yes" />
+			</vpe:dnd>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="frame" case-sensitive="no">
+		<vpe:template children="yes" modify="no" />
+	</vpe:tag>
+
+	<vpe:tag name="frameset" case-sensitive="no">
+		<vpe:template children="yes" modify="no" />
+	</vpe:tag>
+
+	<vpe:tag name="h1" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class,align" />
+			<vpe:dnd>
+				<vpe:drag start-enable="yes" />
+				<vpe:drop container="yes" />
+			</vpe:dnd>
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="BoldFormat" setDefault="true">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style"/>
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="h2" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class,align" />
+			<vpe:dnd>
+				<vpe:drag start-enable="yes" />
+				<vpe:drop container="yes" />
+			</vpe:dnd>
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="BoldFormat" setDefault="true">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style"/>
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="h3" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class,align" />
+			<vpe:dnd>
+				<vpe:drag start-enable="yes" />
+				<vpe:drop container="yes" />
+			</vpe:dnd>
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="BoldFormat" setDefault="true">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style"/>
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="h4" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class,align" />
+			<vpe:dnd>
+				<vpe:drag start-enable="yes" />
+				<vpe:drop container="yes" />
+			</vpe:dnd>
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="BoldFormat" setDefault="true">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style"/>
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="h5" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class,align" />
+			<vpe:dnd>
+				<vpe:drag start-enable="yes" />
+				<vpe:drop container="yes" />
+			</vpe:dnd>
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="BoldFormat" setDefault="true">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style"/>
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="h6" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class,align" />
+			<vpe:dnd>
+				<vpe:drag start-enable="yes" />
+				<vpe:drop container="yes" />
+			</vpe:dnd>
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="BoldFormat" setDefault="true">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style"/>
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="head" case-sensitive="no">
+		<vpe:template children="yes" modify="no">
+			<div style="display:none;" />
+			<vpe:dnd>
+				<vpe:drop container="yes" />
+			</vpe:dnd>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="hr" case-sensitive="no">
+		<vpe:template children="no" modify="no">
+			<vpe:copy attrs="id,style,class,align,size,width" />
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="html" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<div/>
+			<vpe:dnd>
+				<vpe:drop container="yes" />
+			</vpe:dnd>
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addParent="deny" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="ItalicFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="UnderlineFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="i" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:dnd>
+				<vpe:drag start-enable="yes" />
+				<vpe:drop container="yes" />
+			</vpe:dnd>
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="deny"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="ItalicFormat" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="UnderlineFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="iframe" case-sensitive="no">
+		<vpe:template children="yes" modify="no">
+			<vpe:dnd>
+				<vpe:drag start-enable="yes" />
+			</vpe:dnd>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="img" case-sensitive="no">
+		<vpe:template children="no" modify="no">
+			<vpe:copy
+				attrs="style,class,width,height,border,hspace,vspace">
+				<vpe:attribute name="src" value="{src(@src)}" />
+			</vpe:copy>
+			<vpe:resize>
+				<vpe:width width-attr="style.width" />
+				<vpe:height height-attr="style.height" />
+			</vpe:resize>
+			<vpe:dnd>
+				<vpe:drag start-enable="yes" />
+			</vpe:dnd>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="input" case-sensitive="no">
+		<vpe:if test="(@type='text')">
+			<vpe:template children="no" modify="no">
+				<vpe:copy attrs="id,type,style,class,value,size" />
+				<!--span class="__input__tag" style="{@style}">
+					<nobr><vpe:value expr="{@value}"/></nobr>
+					</span-->
+				<vpe:resize>
+					<vpe:width width-attr="style.width" />
+					<vpe:height height-attr="style.height" />
+				</vpe:resize>
+				<vpe:dnd>
+					<vpe:drag start-enable="yes" />
+				</vpe:dnd>
+				<vpe:textFormating>
+					<vpe:format type="BoldFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="UnderlineFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="ItalicFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="FontNameFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="FontSizeFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="BackgroundColorFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="ForegroundColorFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+				</vpe:textFormating>
+			</vpe:template>
+		</vpe:if>
+		<vpe:if test="@type='password'">
+			<vpe:template children="no" modify="no">
+				<vpe:copy attrs="id,type,style,class,value,size" />
+				<!--span class="__input__tag" style="{@style}">
+					<nobr><vpe:value expr="{@value}"/></nobr>
+					</span-->
+				<vpe:resize>
+					<vpe:width width-attr="style.width" />
+					<vpe:height height-attr="style.height" />
+				</vpe:resize>
+				<vpe:dnd>
+					<vpe:drag start-enable="yes" />
+				</vpe:dnd>
+				<vpe:textFormating>
+					<vpe:format type="BoldFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="UnderlineFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="ItalicFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="FontNameFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="FontSizeFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="BackgroundColorFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="ForegroundColorFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+				</vpe:textFormating>
+			</vpe:template>
+		</vpe:if>
+		<vpe:if test="(@type='checkbox')|(@type='radio')">
+			<vpe:template children="no" modify="no">
+				<vpe:copy attrs="id,style,class,type,checked">
+					<!--vpe:attribute name="disabled" value="disabled"/-->
+				</vpe:copy>
+				<vpe:dnd>
+					<vpe:drag start-enable="yes" />
+				</vpe:dnd>
+			</vpe:template>
+		</vpe:if>
+		<vpe:if test="(@type='submit')|(@type='button')">
+			<vpe:template children="yes" modify="yes">
+				<vpe:copy attrs="id,type,value,style,class" />
+				<!--span class="__button__tag" style="{@style}">
+					<nobr><vpe:value expr="{@value}"/></nobr>
+					</span-->
+				<vpe:resize>
+					<vpe:width width-attr="style.width" />
+					<vpe:height height-attr="style.height" />
+				</vpe:resize>
+				<vpe:dnd>
+					<vpe:drag start-enable="yes" />
+				</vpe:dnd>
+				<vpe:textFormating>
+					<vpe:format type="BoldFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="UnderlineFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="ItalicFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="FontNameFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="FontSizeFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="BackgroundColorFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="ForegroundColorFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+				</vpe:textFormating>
+			</vpe:template>
+		</vpe:if>
+		<vpe:if test="@type='reset'">
+			<vpe:if test="@value=''">
+				<vpe:template children="yes" modify="yes">
+					<vpe:copy attrs="id,type,checked,class,style">
+						<vpe:attribute name="value" value="Reset" />
+					</vpe:copy>
+					<!--span class="__button__tag" style="{@style}">
+						<nobr><vpe:value expr="Reset"/></nobr>
+						</span-->
+					<vpe:dnd>
+						<vpe:drag start-enable="yes" />
+					</vpe:dnd>
+					<vpe:textFormating>
+						<vpe:format type="BoldFormat">
+							<vpe:formatAttribute type="style" />
+						</vpe:format>
+						<vpe:format type="UnderlineFormat">
+							<vpe:formatAttribute type="style" />
+						</vpe:format>
+						<vpe:format type="ItalicFormat">
+							<vpe:formatAttribute type="style" />
+						</vpe:format>
+						<vpe:format type="FontNameFormat">
+							<vpe:formatAttribute type="style" />
+						</vpe:format>
+						<vpe:format type="FontSizeFormat">
+							<vpe:formatAttribute type="style" />
+						</vpe:format>
+						<vpe:format type="BackgroundColorFormat">
+							<vpe:formatAttribute type="style" />
+						</vpe:format>
+						<vpe:format type="ForegroundColorFormat">
+							<vpe:formatAttribute type="style" />
+						</vpe:format>
+					</vpe:textFormating>
+				</vpe:template>
+			</vpe:if>
+			<vpe:if test="not(@value='')">
+				<vpe:template children="yes" modify="yes">
+					<vpe:copy attrs="id,type,checked,value,class,style" />
+					<!--span class="__button__tag" style="{@style}">
+						<nobr><vpe:value expr="{@value}"/></nobr>
+						</span-->
+					<vpe:textFormating>
+						<vpe:format type="BoldFormat">
+							<vpe:formatAttribute type="style" />
+						</vpe:format>
+						<vpe:format type="UnderlineFormat">
+							<vpe:formatAttribute type="style" />
+						</vpe:format>
+						<vpe:format type="ItalicFormat">
+							<vpe:formatAttribute type="style" />
+						</vpe:format>
+						<vpe:format type="FontNameFormat">
+							<vpe:formatAttribute type="style" />
+						</vpe:format>
+						<vpe:format type="FontSizeFormat">
+							<vpe:formatAttribute type="style" />
+						</vpe:format>
+						<vpe:format type="BackgroundColorFormat">
+							<vpe:formatAttribute type="style" />
+						</vpe:format>
+						<vpe:format type="ForegroundColorFormat">
+							<vpe:formatAttribute type="style" />
+						</vpe:format>
+					</vpe:textFormating>
+				</vpe:template>
+			</vpe:if>
+		</vpe:if>
+		<vpe:if test="@type='file'">
+			<vpe:template children="no" modify="no">
+				<input type="file" value="{@value}"
+					class="{@styleClass}" style="{@style}" size="{@size}" />
+				<vpe:resize>
+					<vpe:width width-attr="style.width" />
+					<vpe:height height-attr="style.height" />
+				</vpe:resize>
+				<vpe:dnd>
+					<vpe:drag start-enable="yes" />
+					<vpe:drop container="no" />
+				</vpe:dnd>
+			</vpe:template>
+		</vpe:if>
+		<vpe:if test="@type='hidden'">
+			<vpe:template children="no" modify="no">
+				<!--input type="text" value="{@value}" class="{@class}" size="{@size}" style="{@style}border-style:dotted;"/-->
+				<!--span class="__input__tag" style="{@style}">
+					<nobr><vpe:value expr="{@value}"/></nobr>
+					</span-->
+			</vpe:template>
+		</vpe:if>
+		<vpe:if test="@type='image'">
+			<vpe:template children="no" modify="no">
+				<img src="{@src}" width="20" height="20" />
+			</vpe:template>
+		</vpe:if>
+		<vpe:template children="no" modify="no">
+			<vpe:copy attrs="id,type,style,class,value,size" />
+			<!--span class="__input__tag" style="{@style}">
+				<nobr><vpe:value expr="{@value}"/></nobr>
+				</span-->
+			<vpe:resize>
+				<vpe:width width-attr="style.width" />
+				<vpe:height height-attr="style.height" />
+			</vpe:resize>
+			<vpe:dnd>
+				<vpe:drag start-enable="yes" />
+			</vpe:dnd>
+			<vpe:textFormating>
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="ins" case-sensitive="no">
+		<vpe:template children="yes" modify="no">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:textFormating>
+				
+				<vpe:format type="BlockFormat" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" setDefault="true">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="isindex" case-sensitive="no">
+		<vpe:template children="yes" modify="no">
+			<vpe:copy attrs="id,style,class,prompt" />
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="kbd" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="label" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class,for" />
+			<vpe:dnd>
+				<vpe:drag start-enable="yes" />
+				<vpe:drop container="yes">
+					<vpe:container-child tag-name="#text" />
+					<vpe:container-child tag-name="a" />
+					<vpe:container-child tag-name="abbr" />
+					<vpe:container-child tag-name="acronym" />
+					<vpe:container-child tag-name="applet" />
+					<vpe:container-child tag-name="b" />
+					<vpe:container-child tag-name="baseform" />
+					<vpe:container-child tag-name="bdo" />
+					<vpe:container-child tag-name="bgsound" />
+					<vpe:container-child tag-name="big" />
+					<vpe:container-child tag-name="blink" />
+					<vpe:container-child tag-name="br" />
+					<vpe:container-child tag-name="button" />
+					<vpe:container-child tag-name="cite" />
+					<vpe:container-child tag-name="code" />
+					<vpe:container-child tag-name="del" />
+					<vpe:container-child tag-name="dfn" />
+					<vpe:container-child tag-name="em" />
+					<vpe:container-child tag-name="embed" />
+					<vpe:container-child tag-name="font" />
+					<vpe:container-child tag-name="i" />
+					<vpe:container-child tag-name="iframe" />
+					<vpe:container-child tag-name="img" />
+					<vpe:container-child tag-name="input" />
+					<vpe:container-child tag-name="ins" />
+					<vpe:container-child tag-name="kbd" />
+					<vpe:container-child tag-name="map" />
+					<vpe:container-child tag-name="marguee" />
+					<vpe:container-child tag-name="nobr" />
+					<vpe:container-child tag-name="object" />
+					<vpe:container-child tag-name="q" />
+					<vpe:container-child tag-name="s" />
+					<vpe:container-child tag-name="samp" />
+					<vpe:container-child tag-name="script" />
+					<vpe:container-child tag-name="select" />
+					<vpe:container-child tag-name="small" />
+					<vpe:container-child tag-name="span" />
+					<vpe:container-child tag-name="strike" />
+					<vpe:container-child tag-name="strong" />
+					<vpe:container-child tag-name="sub" />
+					<vpe:container-child tag-name="sup" />
+					<vpe:container-child tag-name="textarea" />
+					<vpe:container-child tag-name="tt" />
+					<vpe:container-child tag-name="u" />
+					<vpe:container-child tag-name="var" />
+					<vpe:container-child tag-name="wbr" />
+				</vpe:drop>
+			</vpe:dnd>
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="legend" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class,align" />
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="li" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class,type,value" />
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="allow" addParent="deny"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addParent="deny" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="link" case-sensitive="no">
+		<vpe:template children="no" modify="no">
+			<vpe:link rel="{@rel}" href="{href(@href)}" />
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="map" case-sensitive="no">
+		<vpe:template children="yes" modify="no">
+			<vpe:copy attrs="id,style,class,name" />
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="menu" case-sensitive="no">
+		<vpe:template children="yes" modify="no">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:textFormating>
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="meta" case-sensitive="no">
+		<vpe:template children="no" modify="no" />
+	</vpe:tag>
+
+	<vpe:tag name="nobr" case-sensitive="no">
+		<vpe:template children="no" modify="no" />
+	</vpe:tag>
+
+	<vpe:tag name="noframes" case-sensitive="no">
+		<vpe:template children="yes" modify="no" />
+	</vpe:tag>
+
+	<vpe:tag name="noscript" case-sensitive="no">
+		<vpe:template children="no" modify="no" />
+	</vpe:tag>
+
+	<vpe:tag name="object" case-sensitive="no">
+		<vpe:template children="no" modify="no" />
+	</vpe:tag>
+
+	<vpe:tag name="ol" case-sensitive="no">
+		<vpe:template children="yes" modify="no">
+			<vpe:copy attrs="id,style,class,type,start" />
+			<vpe:dnd>
+				<vpe:drop container="yes">
+					<vpe:container-child tag-name="del" />
+					<vpe:container-child tag-name="ins" />
+					<vpe:container-child tag-name="li" />
+				</vpe:drop>
+			</vpe:dnd>
+			<vpe:textFormating>
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="optgroup" case-sensitive="no">
+		<vpe:template children="yes" modify="no">
+			<vpe:copy attrs="id,style,class,label" />
+			<vpe:dnd>
+				<vpe:drop container="yes">
+					<vpe:container-child tag-name="del" />
+					<vpe:container-child tag-name="ins" />
+					<vpe:container-child tag-name="option" />
+				</vpe:drop>
+			</vpe:dnd>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="option" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class,value,label" />
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="p" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class,align" />
+			<vpe:dnd>
+				<vpe:drag start-enable="yes" />
+				<vpe:drop container="yes" />
+			</vpe:dnd>
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="allow" addParent="deny"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<!-- vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format -->
+				<vpe:format type="BoldFormat" addParent="deny" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BoldFormatHandler" />
+				<vpe:format type="UnderlineFormat" addParent="deny" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addParent="deny" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="param" case-sensitive="no">
+		<vpe:template children="no" modify="no" />
+	</vpe:tag>
+
+	<vpe:tag name="pre" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class,width" />
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="deny" addParent = "deny"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addParent="deny" addChildren="deny" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addParent="deny" addChildren= "allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="q" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="s" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="samp" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="allow" 
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addChildren="allow"
+					handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="script" case-sensitive="no">
+		<vpe:template children="no" modify="no" />
+	</vpe:tag>
+
+	<vpe:tag name="select" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class,size" />
+			<vpe:resize>
+				<vpe:width width-attr="style.width" />
+				<vpe:height height-attr="style.height" />
+			</vpe:resize>
+			<vpe:dnd>
+				<vpe:drag start-enable="yes" />
+				<vpe:drop container="yes">
+					<vpe:container-child tag-name="del" />
+					<vpe:container-child tag-name="ins" />
+					<vpe:container-child tag-name="optgroup" />
+					<vpe:container-child tag-name="option" />
+				</vpe:drop>
+			</vpe:dnd>
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="deny" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addChildren="deny" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addChildren="deny" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="small" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="span" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:dnd>
+				<vpe:drag start-enable="yes" />
+				<vpe:drop container="yes" />
+			</vpe:dnd>
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />				
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="strike" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class" />
+		<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />				
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="strong" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="deny" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat" setDefault="true">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />				
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="style" case-sensitive="no">
+		<vpe:template children="no" modify="no">
+			<vpe:style />
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="sub" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />				
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="sup" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:textFormating>
+				<vpe:format type="BlockFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />				
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="table" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy
+				attrs="style,class,width,border,frame,rules,cellspacing,cellpadding,align,bgcolor,background" />
+			<vpe:resize>
+				<vpe:width width-attr="style.width" />
+				<vpe:height height-attr="style.height" />
+			</vpe:resize>
+			<vpe:dnd>
+				<vpe:drag start-enable="yes" />
+				<vpe:drop container="yes">
+					<vpe:container-child tag-name="caption" />
+					<vpe:container-child tag-name="col" />
+					<vpe:container-child tag-name="colgroup" />
+					<vpe:container-child tag-name="del" />
+					<vpe:container-child tag-name="ins" />
+					<vpe:container-child tag-name="tbody" />
+					<vpe:container-child tag-name="tfoot" />
+					<vpe:container-child tag-name="thead" />
+				</vpe:drop>
+			</vpe:dnd>
+			<vpe:textFormating>
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="tbody" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class,align,char,charoff,valign" />
+			<vpe:dnd>
+				<vpe:drop container="yes">
+					<vpe:container-child tag-name="del" />
+					<vpe:container-child tag-name="ins" />
+					<vpe:container-child tag-name="tr" />
+				</vpe:drop>
+			</vpe:dnd>
+			<vpe:textFormating>
+					<vpe:format type="UnderlineFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="BoldFormat">
+						<vpe:formatAttribute type="style"/>
+					</vpe:format>
+					<vpe:format type="ItalicFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="FontNameFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="FontSizeFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="BackgroundColorFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="ForegroundColorFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+				</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="td" case-sensitive="no">
+		<vpe:if test="attrpresent('background')">
+			<vpe:template children="yes" modify="yes">
+				<vpe:copy
+					attrs="style,class,rowspan,colspan,headers,abbr,scope,axis,align,char,charoff,valign,width,height,bgcolor">
+					<vpe:attribute name="background"
+						value="{src(@background)}" />
+				</vpe:copy>
+				<vpe:resize>
+					<vpe:width width-attr="width"
+						disable-absolute-position="yes" />
+					<vpe:height height-attr="style.height"
+						tag-xpath="tr" test="{hasinparents('tr')}"
+						disable-absolute-position="yes" />
+					<vpe:height height-attr="style.height"
+						disable-absolute-position="yes" />
+				</vpe:resize>
+				<vpe:dnd>
+					<vpe:drag start-enable="no" />
+					<vpe:drop container="yes" />
+				</vpe:dnd>
+				<vpe:textFormating>
+					<vpe:format type="BlockFormat" addChildren="allow" addParent="deny" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+					<vpe:format type="UnderlineFormat" addChildren="allow" addParent="deny" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+					<vpe:format type="UnderlineFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="BoldFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="ItalicFormat" addChildren="allow" addParent="deny" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />				
+					<vpe:format type="ItalicFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="FontNameFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="FontSizeFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="BackgroundColorFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="ForegroundColorFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+				</vpe:textFormating>
+			</vpe:template>
+		</vpe:if>
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy
+				attrs="style,class,rowspan,colspan,headers,abbr,scope,axis,align,char,charoff,valign,width,height,bgcolor" />
+			<vpe:resize>
+				<vpe:width width-attr="width"
+					disable-absolute-position="yes" />
+				<vpe:height height-attr="style.height" tag-xpath="tr"
+					test="{hasinparents('tr')}" disable-absolute-position="yes" />
+				<vpe:height height-attr="style.height"
+					disable-absolute-position="yes" />
+			</vpe:resize>
+			<vpe:dnd>
+				<vpe:drag start-enable="no" />
+				<vpe:drop container="yes" />
+			</vpe:dnd>
+			<vpe:textFormating>
+					<vpe:format type="BlockFormat" addChildren="allow" addParent="deny" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+					<vpe:format type="UnderlineFormat" addChildren="allow" addParent="deny" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+					<vpe:format type="UnderlineFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="BoldFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="ItalicFormat" addChildren="allow" addParent="deny"
+						handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />				
+					<vpe:format type="ItalicFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="FontNameFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="FontSizeFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="BackgroundColorFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="ForegroundColorFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+				</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="textarea" case-sensitive="no">
+		<vpe:template children="yes" modify="no">
+			<vpe:copy attrs="id,style,class,rows,cols" />
+			<vpe:resize>
+				<vpe:width width-attr="style.width" />
+				<vpe:height height-attr="style.height" />
+			</vpe:resize>
+			<vpe:dnd>
+				<vpe:drag start-enable="yes" />
+				<vpe:drop container="yes">
+					<vpe:container-child tag-name="#text" />
+				</vpe:drop>
+			</vpe:dnd>
+			<vpe:textFormating>
+				<vpe:format type="UnderlineFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BoldFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ItalicFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontNameFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="FontSizeFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="BackgroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+				<vpe:format type="ForegroundColorFormat">
+					<vpe:formatAttribute type="style" />
+				</vpe:format>
+			</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="tfoot" case-sensitive="no">
+		<vpe:template children="yes" modify="no">
+			<vpe:copy attrs="id,style,class,align,char,charoff,valign" />
+			<vpe:textFormating>
+					<vpe:format type="UnderlineFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="BoldFormat">
+						<vpe:formatAttribute type="style"/>
+					</vpe:format>
+					<vpe:format type="ItalicFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="FontNameFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="FontSizeFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="BackgroundColorFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="ForegroundColorFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+				</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="th" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy
+				attrs="style,class,rowspan,colspan,headers,abbr,scope,axis,align,char,charoff,valign,width,height,bgcolor" />
+			<vpe:textFormating>
+					<vpe:format type="BlockFormat" addChildren="allow" addParent="deny" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+					<vpe:format type="UnderlineFormat" addChildren="allow" addParent="deny" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+					<vpe:format type="UnderlineFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="BoldFormat" setDefault = "true">
+						<vpe:formatAttribute type="style"/>
+					</vpe:format>
+					<vpe:format type="ItalicFormat" addChildren="allow" addParent="deny" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />				
+					<vpe:format type="ItalicFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="FontNameFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="FontSizeFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="BackgroundColorFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="ForegroundColorFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+				</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="thead" case-sensitive="no">
+		<vpe:template children="yes" modify="no">
+			<vpe:copy attrs="id,style,class,align,char,charoff,valign" />
+			<vpe:dnd>
+				<vpe:drop container="yes">
+					<vpe:container-child tag-name="del" />
+					<vpe:container-child tag-name="ins" />
+					<vpe:container-child tag-name="tr" />
+				</vpe:drop>
+			</vpe:dnd>
+			<vpe:textFormating>
+					<vpe:format type="UnderlineFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="BoldFormat">
+						<vpe:formatAttribute type="style"/>
+					</vpe:format>
+					<vpe:format type="ItalicFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="FontNameFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="FontSizeFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="BackgroundColorFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="ForegroundColorFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+				</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="title" case-sensitive="no">
+		<vpe:template children="no" modify="no" />
+	</vpe:tag>
+
+	<vpe:tag name="tr" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy
+				attrs="style,class,align,char,charoff,valign,bgcolor" />
+			<vpe:resize>
+				<vpe:width width-attr="style.width"
+					disable-absolute-position="yes" />
+				<vpe:height height-attr="style.height"
+					disable-absolute-position="yes" />
+			</vpe:resize>
+			<vpe:dnd>
+				<vpe:drop container="yes">
+					<vpe:container-child tag-name="del" />
+					<vpe:container-child tag-name="ins" />
+					<vpe:container-child tag-name="td" />
+					<vpe:container-child tag-name="th" />
+				</vpe:drop>
+			</vpe:dnd>
+			<vpe:breaker type="ignore" />
+			<vpe:textFormating>
+					<vpe:format type="UnderlineFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="BoldFormat">
+						<vpe:formatAttribute type="style"/>
+					</vpe:format>
+					<vpe:format type="ItalicFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="FontNameFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="FontSizeFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="BackgroundColorFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="ForegroundColorFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+				</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="tt" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:textFormating>
+					<vpe:format type="BlockFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+					<vpe:format type="UnderlineFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+					<vpe:format type="UnderlineFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="BoldFormat">
+						<vpe:formatAttribute type="style"/>
+					</vpe:format>
+					<vpe:format type="ItalicFormat" addChildren="allow" 
+						handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />				
+					<vpe:format type="ItalicFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="FontNameFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="FontSizeFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="BackgroundColorFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="ForegroundColorFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+				</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="u" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:textFormating>
+					<vpe:format type="BlockFormat" addChildren="allow"
+						handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+					<vpe:format type="UnderlineFormat" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+					<vpe:format type="UnderlineFormat" setDefault="true">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="BoldFormat">
+						<vpe:formatAttribute type="style"/>
+					</vpe:format>
+					<vpe:format type="ItalicFormat" addChildren="allow"
+						handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />				
+					<vpe:format type="ItalicFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="FontNameFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="FontSizeFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="BackgroundColorFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="ForegroundColorFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+				</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="ul" case-sensitive="no">
+		<vpe:template children="yes" modify="yes">
+			<vpe:copy attrs="id,style,class,type" />
+			<vpe:dnd>
+				<vpe:drop container="yes">
+					<vpe:container-child tag-name="del" />
+					<vpe:container-child tag-name="ins" />
+					<vpe:container-child tag-name="li" />
+				</vpe:drop>
+			</vpe:dnd>
+			<vpe:textFormating>
+					<vpe:format type="UnderlineFormat" >
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="BoldFormat">
+						<vpe:formatAttribute type="style"/>
+					</vpe:format>
+					<vpe:format type="ItalicFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="FontNameFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="FontSizeFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="BackgroundColorFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="ForegroundColorFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+				</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="var" case-sensitive="no">
+		<vpe:template children="yes" modify="no">
+			<vpe:copy attrs="id,style,class" />
+			<vpe:textFormating>
+					<vpe:format type="BlockFormat" addChildren="allow"
+						handler="org.jboss.tools.vpe.editor.toolbar.format.handler.BlockFormatHandler" />
+					<vpe:format type="UnderlineFormat" addChildren="allow" handler="org.jboss.tools.vpe.editor.toolbar.format.handler.UnderlineFormatHandler" />
+					<vpe:format type="UnderlineFormat" >
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="BoldFormat">
+						<vpe:formatAttribute type="style"/>
+					</vpe:format>
+					<vpe:format type="ItalicFormat" addChildren="allow"
+						handler="org.jboss.tools.vpe.editor.toolbar.format.handler.ItalicFormatHandler" />				
+					<vpe:format type="ItalicFormat" setDefault="true">
+						<vpe:formatAttribute type="style"/>
+					</vpe:format>
+					<vpe:format type="FontNameFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="FontSizeFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="BackgroundColorFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+					<vpe:format type="ForegroundColorFormat">
+						<vpe:formatAttribute type="style" />
+					</vpe:format>
+				</vpe:textFormating>
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:tag name="#comment" case-sensitive="no">
+		<vpe:template children="no" modify="yes">
+			<vpe:comment />
+		</vpe:template>
+	</vpe:tag>
+
+	<vpe:template children="yes" modify="yes">
+		<vpe:any value="{name()}" title="{tagstring()}" />
+	</vpe:template>
+</vpe:templates>
