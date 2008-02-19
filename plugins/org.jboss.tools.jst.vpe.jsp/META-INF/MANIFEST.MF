@@ -13,3 +13,4 @@ Require-Bundle: org.eclipse.ui,
  org.jboss.tools.jst.jsp,
  org.jboss.tools.common
 Eclipse-LazyStart: true
+Bundle-Localization: plugin
