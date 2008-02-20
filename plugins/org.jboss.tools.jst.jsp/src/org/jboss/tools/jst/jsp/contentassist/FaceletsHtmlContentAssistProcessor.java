@@ -61,6 +61,7 @@ import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.editor.TLDRegisterHelper;
 import org.jboss.tools.jst.jsp.outline.ValueHelper;
 import org.jboss.tools.jst.jsp.support.kb.FaceletsJsfCResource;
+import org.jboss.tools.jst.jsp.support.kb.WTPKbJsfValuesResource;
 import org.jboss.tools.jst.jsp.support.kb.WTPKbdBeanMethodResource;
 import org.jboss.tools.jst.jsp.support.kb.WTPKbdBeanPropertyResource;
 import org.jboss.tools.jst.jsp.support.kb.WTPKbdBundlePropertyResource;
@@ -191,7 +192,9 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
 			proposals.addAll(r2.queryProposal(matchString));
 			WTPKbdBundlePropertyResource r3 = new WTPKbdBundlePropertyResource(input, h.getConnector());
 			proposals.addAll(r3.queryProposal(matchString));
-			
+			WTPKbJsfValuesResource r4 = new WTPKbJsfValuesResource(input, h.getConnector());
+			proposals.addAll(r4.queryProposal(matchString));
+
             for (Iterator iter = proposals.iterator(); iter.hasNext();) {
             	KbProposal kbProposal = cleanFaceletProposal((KbProposal)iter.next());
             	kbProposal.postProcess(currentValue, offset);
