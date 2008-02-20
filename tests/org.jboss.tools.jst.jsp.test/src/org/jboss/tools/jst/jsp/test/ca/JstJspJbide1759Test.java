@@ -32,7 +32,8 @@ public class JstJspJbide1759Test extends TestCase {
 	IProject project = null;
 	boolean makeCopy = false;
 	private static final String PROJECT_NAME = "JsfJbide1704Test";
-	private static final String PAGE_NAME = "/WebContent/pages/greeting.jsp";
+	private static final String PAGE_NAME = "/WebContent/pages/greeting";
+	private static final String[] PAGE_EXTS = {".jsp", ".xhtml"};
 	private static final String INSERT_BEFORE_STRING = "<h:outputText";
 	private static final String INSERTION_BEGIN_STRING = "<h:outputText value=\"";
 	private static final String INSERTION_END_STRING = "\"  />";
@@ -69,10 +70,17 @@ public class JstJspJbide1759Test extends TestCase {
 		} 
 		assertTrue("Test project \"" + PROJECT_NAME + "\" is not loaded", (project != null));
 
-		IFile jspFile = project.getFile(PAGE_NAME);
+		for (int i = 0; i < PAGE_EXTS.length; i++) {
+			testJstJspJbide1641(PAGE_NAME + PAGE_EXTS[i]);
+		}
+	}
+	
+	private void testJstJspJbide1641(String pageName) {
 
-		assertTrue("The file \"" + PAGE_NAME + "\" is not found", (jspFile != null));
-		assertTrue("The file \"" + PAGE_NAME + "\" is not found", (jspFile.exists()));
+		IFile jspFile = project.getFile(pageName);
+
+		assertTrue("The file \"" + pageName + "\" is not found", (jspFile != null));
+		assertTrue("The file \"" + pageName + "\" is not found", (jspFile.exists()));
 
 		FileEditorInput editorInput = new FileEditorInput(jspFile);
 		Throwable exception = null;
@@ -106,13 +114,13 @@ public class JstJspJbide1759Test extends TestCase {
 		SourceViewerConfiguration config = TestUtil.getSourceViewerConfiguration(jspTextEditor);
 		IContentAssistant contentAssistant = (config == null ? null : config.getContentAssistant(viewer));
 
-		assertTrue("Cannot get the Content Assistant instance for the editor for page \"" + PAGE_NAME + "\"", (contentAssistant != null));
+		assertTrue("Cannot get the Content Assistant instance for the editor for page \"" + pageName + "\"", (contentAssistant != null));
 		
 		// Find start of <h:outputText> tag
 		String documentContent = document.get();
 		int start = (documentContent == null ? -1 : documentContent.indexOf(INSERT_BEFORE_STRING));
 
-		assertTrue("Cannot find the starting point in the test file  \"" + PAGE_NAME + "\"", (start != -1));
+		assertTrue("Cannot find the starting point in the test file  \"" + pageName + "\"", (start != -1));
 		
 		// First of all perform the test on a region placed in one space behind empty-valued attribute - 
 		// this is to return normal list of attribute names proposal list 
