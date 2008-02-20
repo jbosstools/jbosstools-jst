@@ -32,14 +32,8 @@ public class WTPKbJsfValuesResource extends WTPKbdBeanPropertyResource {
 	}
 
 	protected void fillSortedProposalStrings(Set sorted, String beanName, boolean hasProperty) {
-		if((query.indexOf("#{")>-1 || query.indexOf("${")>-1)
-				&& (!query.trim().endsWith("."))
-				&& (!query.endsWith(")"))
-				&& (!query.endsWith("]"))
-				&& (beanName == null || beanName.length() == 0 || !hasProperty)) {
-			for (int i = 0; i < fixedJsfValues.length; i++) {
-				sorted.add(fixedJsfValues[i]);
-			}
+		for (int i = 0; i < fixedJsfValues.length; i++) {
+			sorted.add(fixedJsfValues[i]);
 		}
 	}
 
