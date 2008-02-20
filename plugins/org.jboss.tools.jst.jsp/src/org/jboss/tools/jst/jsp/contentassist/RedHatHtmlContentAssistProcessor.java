@@ -336,8 +336,10 @@ public class RedHatHtmlContentAssistProcessor extends HTMLContentAssistProcessor
 		String matchString = contentAssistRequest.getMatchString();
 
 		if (matchString.length() > StringUtils.strip(text).length() && 
-				( (matchString.startsWith("\"") && matchString.endsWith("\"")) 
-						|| (matchString.startsWith("'") && matchString.endsWith("\"")))) {
+				( (matchString.startsWith("\"") && matchString.endsWith("\"") &&
+				(matchString.indexOf("\"") != matchString.lastIndexOf("\"")))
+				 || (matchString.startsWith("'") && matchString.endsWith("\"") &&
+				 (matchString.indexOf("\"") != matchString.lastIndexOf("\""))))) {
 			return;
 		}
 
