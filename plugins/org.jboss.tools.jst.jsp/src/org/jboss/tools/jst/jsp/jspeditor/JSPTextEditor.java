@@ -714,7 +714,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		final XModelObject o = b == null ? null : b.source();
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-				if (parentEditor.getVisualEditor().getController() != null) {
+//				if (parentEditor.getVisualEditor().getController() != null) {
 					if(o != null && !XModelTransferBuffer.getInstance().isEnabled()) {
 						XModelTransferBuffer.getInstance().enable();
 						XModelTransferBuffer.getInstance().getBuffer().addSource(o);
@@ -734,7 +734,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 						XModelTransferBuffer.getInstance().disable();
 					}
 				}
-			}
+//			}
 		});
 	}
 
