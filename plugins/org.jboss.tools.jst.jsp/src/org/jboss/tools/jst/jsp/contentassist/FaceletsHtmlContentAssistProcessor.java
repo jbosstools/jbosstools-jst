@@ -250,25 +250,27 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
 		} catch(Exception e) {
 			JspEditorPlugin.getPluginLog().logError(e);
 		}
-		for (Iterator iter = kbProposals.iterator(); iter.hasNext();) {
-			KbProposal kbProposal = cleanFaceletProposal((KbProposal)iter.next());
-			String proposedInfo = kbProposal.getContextInfo();
-			String replacementString = kbProposal.getReplacementString() + "=\"\"";
-			String displayString = kbProposal.getLabel();
-			AttrImpl attr = (AttrImpl)attributes.getNamedItem(displayString);
-			if(attr!=null) {
-				ITextRegion region = attr.getNameRegion();
-				IStructuredDocumentRegion docRegion = contentAssistRequest.getDocumentRegion();
-				if(docRegion.getStartOffset(region)>contentAssistRequest.getReplacementBeginPosition() ||
-						docRegion.getEndOffset(region)< contentAssistRequest.getReplacementBeginPosition() + contentAssistRequest.getReplacementLength()) {
-					continue;
+		if(kbProposals!=null) {
+			for (Iterator iter = kbProposals.iterator(); iter.hasNext();) {
+				KbProposal kbProposal = cleanFaceletProposal((KbProposal)iter.next());
+				String proposedInfo = kbProposal.getContextInfo();
+				String replacementString = kbProposal.getReplacementString() + "=\"\"";
+				String displayString = kbProposal.getLabel();
+				AttrImpl attr = (AttrImpl)attributes.getNamedItem(displayString);
+				if(attr!=null) {
+					ITextRegion region = attr.getNameRegion();
+					IStructuredDocumentRegion docRegion = contentAssistRequest.getDocumentRegion();
+					if(docRegion.getStartOffset(region)>contentAssistRequest.getReplacementBeginPosition() ||
+							docRegion.getEndOffset(region)< contentAssistRequest.getReplacementBeginPosition() + contentAssistRequest.getReplacementLength()) {
+						continue;
+					}
 				}
+				boolean autoContentAssistant = true;
+				int cursorAdjustment = replacementString.length() - 1;
+				Image image = XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_ATTRIBUTE);
+				AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(autoContentAssistant, replacementString, contentAssistRequest.getReplacementBeginPosition(), contentAssistRequest.getReplacementLength(), cursorAdjustment, image, displayString, null, proposedInfo, XMLRelevanceConstants.R_TAG_NAME);
+				contentAssistRequest.addProposal(proposal);
 			}
-			boolean autoContentAssistant = true;
-			int cursorAdjustment = replacementString.length() - 1;
-			Image image = XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_ATTRIBUTE);
-			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(autoContentAssistant, replacementString, contentAssistRequest.getReplacementBeginPosition(), contentAssistRequest.getReplacementLength(), cursorAdjustment, image, displayString, null, proposedInfo, XMLRelevanceConstants.R_TAG_NAME);
-			contentAssistRequest.addProposal(proposal);
 		}
 		addJsfAttributeNameProposalsForFaceletTag(contentAssistRequest);
 		super.addAttributeNameProposals(contentAssistRequest);
