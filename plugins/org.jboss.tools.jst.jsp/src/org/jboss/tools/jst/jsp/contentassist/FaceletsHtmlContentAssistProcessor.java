@@ -121,15 +121,18 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
     	if(proposals==null) {
     		return null;
     	}
-		HashMap uniqProposals = new HashMap(proposals.length);
-		ArrayList uniqProposalList = new ArrayList(proposals.length);
+		HashMap<String, ICompletionProposal> uniqProposals = new HashMap<String, ICompletionProposal>(proposals.length);
+		ArrayList<ICompletionProposal> uniqProposalList = new ArrayList<ICompletionProposal>(proposals.length);
 		for(int i=0; i<proposals.length; i++) {
-			int eq = proposals[i].getDisplayString().indexOf('=');
-			String str = proposals[i].getDisplayString();;
+			String str = proposals[i].getDisplayString();
+			if(str.startsWith("\"") && str.endsWith("\"") && str.length()>2) {
+				str = str.substring(0, str.length()-1).substring(1);
+			}
+			int eq = str.indexOf('=');
 			if(eq>0) {
 				str = str.substring(0, eq);				
 			}
-			Object proposal = uniqProposals.get(str);
+			ICompletionProposal proposal = uniqProposals.get(str);
 			if(proposal==null || proposals[i] instanceof AutoContentAssistantProposal) {
 				uniqProposals.put(str, proposals[i]);
 				uniqProposalList.add(proposals[i]);
