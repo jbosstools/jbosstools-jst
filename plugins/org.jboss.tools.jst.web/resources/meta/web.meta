@@ -1079,6 +1079,7 @@
    </XModelAttribute>
    <XModelAttribute name="application name" xmlname="NAME">
     <Constraint loader="FolderName"/>
+    <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute name="location" visibility="false" xmlname="location">
     <Constraint loader="FileFilter">
