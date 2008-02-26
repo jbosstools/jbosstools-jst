@@ -100,7 +100,7 @@ public class ContentAssistantTestCase extends TestCase {
 			}
 		}
 
-		assertTrue("Content Assistant peturned no proposals", (result != null && result.length > 0));
+		assertTrue("Content Assistant returned no proposals", (result != null && result.length > 0));
 		
 		for (int i = 0; i < proposals.length; i++) {
 			assertTrue("Proposal "+proposals[i]+" not found!", compareProposal(proposals[i], result));

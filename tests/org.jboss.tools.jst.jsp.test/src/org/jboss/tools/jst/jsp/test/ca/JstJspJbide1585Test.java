@@ -71,7 +71,7 @@ public class JstJspJbide1585Test extends ContentAssistantTestCase {
 			errorMessage= p.getErrorMessage();
 		}
 
-		assertTrue("Content Assistant peturned no proposals", (result != null && result.length > 0));
+		assertTrue("Content Assistant returned no proposals", (result != null && result.length > 0));
 		
 		for (int i = 0; i < result.length; i++) {
 			assertTrue("Content Assistant returned proposals which type (" + result[i].getClass().getName() + ") differs from RedHatCustomCompletionProposal", (result[i] instanceof AutoContentAssistantProposal));
