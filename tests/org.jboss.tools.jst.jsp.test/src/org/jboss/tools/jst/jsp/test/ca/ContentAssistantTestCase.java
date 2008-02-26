@@ -1,0 +1,99 @@
+package org.jboss.tools.jst.jsp.test.ca;
+
+import junit.framework.TestCase;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.contentassist.IContentAssistant;
+import org.eclipse.jface.text.source.SourceViewerConfiguration;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
+import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
+import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
+import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
+import org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor;
+import org.jboss.tools.jst.jsp.test.TestUtil;
+import org.jboss.tools.test.util.xpl.EditorTestHelper;
+
+public class ContentAssistantTestCase extends TestCase {
+	protected IProject project = null;
+	protected JSPMultiPageEditor jspEditor = null;
+	protected JSPTextEditor jspTextEditor = null;
+	protected StructuredTextViewer viewer = null;
+	protected IStructuredDocumentRegion[] regions = null;
+	protected IContentAssistant contentAssistant = null;
+	protected IDocument document = null;
+
+	protected void openEditor(String fileName) {
+
+		try {
+			EditorTestHelper.joinBackgroundActivities();
+		} catch (Exception e) {
+			e.printStackTrace();
+			assertTrue("Waiting for the jobs to complete has failed.", false);
+		}
+
+		IFile jspFile = project.getFile(fileName);
+
+		assertTrue("The file \"" + fileName + "\" is not found",
+				(jspFile != null));
+		assertTrue("The file \"" + fileName + "\" is not found", (jspFile
+				.exists()));
+
+		FileEditorInput editorInput = new FileEditorInput(jspFile);
+		IEditorPart editorPart = null;
+		try {
+			editorPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+					.getActivePage().openEditor(editorInput,
+							"org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor");
+		} catch (PartInitException ex) {
+			ex.printStackTrace();
+			assertTrue("The JSP Visual Editor couldn't be initialized.", false);
+		}
+
+		if (editorPart instanceof JSPMultiPageEditor)
+			jspEditor = (JSPMultiPageEditor) editorPart;
+
+		// Delay for 3 seconds so that
+		// the Favorites view can be seen.
+		try {
+			EditorTestHelper.joinBackgroundActivities();
+		} catch (Exception e) {
+			e.printStackTrace();
+			assertTrue("Waiting for the jobs to complete has failed.", false);
+		}
+		TestUtil.delay(3000);
+
+		jspTextEditor = jspEditor.getJspEditor();
+		viewer = jspTextEditor.getTextViewer();
+		document = viewer.getDocument();
+		SourceViewerConfiguration config = TestUtil
+				.getSourceViewerConfiguration(jspTextEditor);
+		contentAssistant = (config == null ? null : config
+				.getContentAssistant(viewer));
+
+		assertTrue(
+				"Cannot get the Content Assistant instance for the editor for page \""
+						+ fileName + "\"", (contentAssistant != null));
+
+		assertTrue("The IDocument is not instance of IStructuredDocument",
+				(document instanceof IStructuredDocument));
+
+		IStructuredDocument sDocument = (IStructuredDocument) document;
+		regions = sDocument.getStructuredDocumentRegions();
+	}
+
+	protected void closeEditor() {
+		if (jspEditor != null) {
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+					.getActivePage().closeEditor(jspEditor, false);
+			jspEditor = null;
+		}
+
+	}
+
+}
