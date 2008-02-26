@@ -5,6 +5,8 @@ import junit.framework.TestCase;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.contentassist.ICompletionProposal;
+import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContentAssistant;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.ui.IEditorPart;
@@ -82,6 +84,37 @@ public class ContentAssistantTestCase extends TestCase {
 		assertTrue("The IDocument is not instance of IStructuredDocument",
 				(document instanceof IStructuredDocument));
 
+	}
+	
+	protected void contentAssistantCommonTest(String fileName, int offset, String[] proposals, boolean exactly){
+		openEditor(fileName);
+		
+		ICompletionProposal[] result= null;
+
+		IContentAssistProcessor p= TestUtil.getProcessor(viewer, offset, contentAssistant);
+		if (p != null) {
+			try {
+				result= p.computeCompletionProposals(viewer, offset);
+			} catch (Throwable x) {
+				x.printStackTrace();
+			}
+		}
+
+		assertTrue("Content Assistant peturned no proposals", (result != null && result.length > 0));
+		
+		for (int i = 0; i < proposals.length; i++) {
+			assertTrue("Proposal "+proposals[i]+" not found!", compareProposal(proposals[i], result));
+		}
+		
+		if(exactly)
+			assertTrue("Some other proposals was found!", result.length == proposals.length);
+	}
+	
+	protected boolean compareProposal(String proposalName, ICompletionProposal[] proposals){
+		for (int i = 0; i < proposals.length; i++) {
+			if(proposals[i].getDisplayString().equals(proposalName)) return true;
+		}
+		return false;
 	}
 
 	protected void closeEditor() {
