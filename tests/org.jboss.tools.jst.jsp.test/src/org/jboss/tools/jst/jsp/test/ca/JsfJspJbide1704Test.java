@@ -7,6 +7,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegionList;
@@ -67,6 +68,7 @@ public class JsfJspJbide1704Test extends ContentAssistantTestCase {
 
 		openEditor(pageName);
 		
+		IStructuredDocumentRegion[] regions = ((IStructuredDocument)document).getStructuredDocumentRegions();
 		
 		boolean fLoadBundleTagIsFound = false;
 		for (int i = 0; i < regions.length; i++) {
@@ -118,13 +120,6 @@ public class JsfJspJbide1704Test extends ContentAssistantTestCase {
 			
 		}
 		
-//		try {
-//			EditorTestHelper.joinBackgroundActivities();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			assertTrue("Waiting for the jobs to complete has failed.", false);
-//		} 
-
 		closeEditor();
 	}
 

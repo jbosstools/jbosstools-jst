@@ -79,7 +79,6 @@ public class JsfJspJbide1717Test extends ContentAssistantTestCase {
 			}
 			errorMessage= p.getErrorMessage();
 		}
-		
 
 		List<String> customCompletionProposals = new ArrayList<String>();
 		for (int i = 0; i < result.length; i++) {

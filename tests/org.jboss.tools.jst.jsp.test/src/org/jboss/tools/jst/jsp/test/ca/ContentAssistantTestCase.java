@@ -24,7 +24,6 @@ public class ContentAssistantTestCase extends TestCase {
 	protected JSPMultiPageEditor jspEditor = null;
 	protected JSPTextEditor jspTextEditor = null;
 	protected StructuredTextViewer viewer = null;
-	protected IStructuredDocumentRegion[] regions = null;
 	protected IContentAssistant contentAssistant = null;
 	protected IDocument document = null;
 
@@ -83,8 +82,6 @@ public class ContentAssistantTestCase extends TestCase {
 		assertTrue("The IDocument is not instance of IStructuredDocument",
 				(document instanceof IStructuredDocument));
 
-		IStructuredDocument sDocument = (IStructuredDocument) document;
-		regions = sDocument.getStructuredDocumentRegions();
 	}
 
 	protected void closeEditor() {
