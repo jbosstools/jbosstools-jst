@@ -85,22 +85,35 @@ public class ContentAssistantTestCase extends TestCase {
 				(document instanceof IStructuredDocument));
 
 	}
-	
 	protected void contentAssistantCommonTest(String fileName, int offset, String[] proposals, boolean exactly){
+		contentAssistantCommonTest(fileName, null, offset, proposals, exactly);
+	}
+	
+	protected void contentAssistantCommonTest(String fileName, String substring, int offset, String[] proposals, boolean exactly){
 		openEditor(fileName);
+		
+		int position = 0;
+		if(substring != null){
+			String documentContent = document.get();
+			position = documentContent.indexOf(substring);
+		}
 		
 		ICompletionProposal[] result= null;
 
-		IContentAssistProcessor p= TestUtil.getProcessor(viewer, offset, contentAssistant);
+		IContentAssistProcessor p= TestUtil.getProcessor(viewer, position+offset, contentAssistant);
 		if (p != null) {
 			try {
-				result= p.computeCompletionProposals(viewer, offset);
+				result= p.computeCompletionProposals(viewer, position+offset);
 			} catch (Throwable x) {
 				x.printStackTrace();
 			}
 		}
 
 		assertTrue("Content Assistant returned no proposals", (result != null && result.length > 0));
+		
+//		for (int i = 0; i < result.length; i++) {
+//			System.out.println("proposal - "+result[i].getDisplayString());
+//		}
 		
 		for (int i = 0; i < proposals.length; i++) {
 			assertTrue("Proposal "+proposals[i]+" not found!", compareProposal(proposals[i], result));
