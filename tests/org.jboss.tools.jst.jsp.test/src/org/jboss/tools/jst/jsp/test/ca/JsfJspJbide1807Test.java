@@ -7,8 +7,7 @@ public class JsfJspJbide1807Test extends ContentAssistantTestCase{
 	TestProjectProvider provider = null;
 	boolean makeCopy = false;
 	private static final String PROJECT_NAME = "JsfJspJbide1807Test";
-	private static final String PAGE_NAME = "/WebContent/pages/greeting";
-	private static final String[] PAGE_EXTENSIONS = { ".xhtml", ".jsp" };
+	private static final String PAGE_NAME = "/WebContent/pages/greeting.xhtml";
 	
 	public void setUp() throws Exception {
 		provider = new TestProjectProvider("org.jboss.tools.jst.jsp.test", null, PROJECT_NAME, makeCopy); 
@@ -30,8 +29,7 @@ public class JsfJspJbide1807Test extends ContentAssistantTestCase{
 	}
 	
 	public void testJsfJspJbide1807Test(){
-		String[][] proposals={
-				{
+		String[] proposals={
 					"#{applicationScope}",
 					"#{cookie}",
 					"#{facesContext}",
@@ -43,23 +41,8 @@ public class JsfJspJbide1807Test extends ContentAssistantTestCase{
 					"#{requestScope}",
 					"#{sessionScope}",
 					"#{view}"
-				},
-				{
-					"jsp:attribute",
-					"jsp:body",
-					"jsp:element",
-					"jsp:getProperty",
-					"jsp:include",
-					"jsp:output",
-					"jsp:param",
-					"JSP expression - JSP expression <%=..%>"
-				}
 		};
 		
-		for(int i = 0; i < PAGE_EXTENSIONS.length; i++){
-			System.out.println("Testing file "+PAGE_NAME+PAGE_EXTENSIONS[i]+"...");
-			contentAssistantCommonTest(PAGE_NAME+PAGE_EXTENSIONS[i], "<input type=\"image\" src=\"", 25, proposals[i], true);
-			
-		}
+		contentAssistantCommonTest(PAGE_NAME, "<input type=\"image\" src=\"", 25, proposals, true);
 	}
 }
