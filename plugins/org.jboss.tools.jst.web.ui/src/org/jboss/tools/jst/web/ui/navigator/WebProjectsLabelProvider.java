@@ -11,6 +11,9 @@
 package org.jboss.tools.jst.web.ui.navigator;
 
 import org.jboss.tools.common.model.ui.navigator.NavigatorLabelProvider;
+import org.jboss.tools.common.model.ui.navigator.decorator.DecoratorManager;
+import org.jboss.tools.common.model.ui.navigator.decorator.DecoratorPart;
+import org.jboss.tools.common.model.ui.navigator.decorator.XModelObjectDecorator;
 
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.util.*;
@@ -22,6 +25,13 @@ public class WebProjectsLabelProvider extends NavigatorLabelProvider {
 		XModelObject o = (XModelObject)element;
 		if(o.getFileType() != XModelObject.FILE) return super.getText(element);
 		String entity = o.getModelEntity().getName();
+		
+		XModelObjectDecorator d = DecoratorManager.getInstance().getDecoratorByEntity(entity);
+		if(d != null) {
+			String label = d.getLabel(o);
+			return applyModification(o, label);
+		}
+		
 		if("FilePROPERTIES".equals(entity)) {
 			XModelObject fs = o;
 			while(fs != null && fs.getFileType() != XModelObject.SYSTEM) fs = fs.getParent();
@@ -33,7 +43,18 @@ public class WebProjectsLabelProvider extends NavigatorLabelProvider {
 		} else if("FileSystemFolder".equals(entity)) {
 			String s = o.getAttributeValue("location").replace('\\', '/');
 			return s.substring(s.lastIndexOf('/') + 1);			
-		}		
+		} else if(entity.startsWith("FileTLD")) {
+			String s = super.getText(element);
+			String shortname = o.getAttributeValue("shortname");
+			if(shortname != null) {
+				s += " " + shortname;
+			}
+			String uri = o.getAttributeValue("uri");
+			if(uri != null && uri.length() > 0) {
+				s += " " + uri;
+			}
+			return s;
+		}
 		return super.getText(element);
 	}
 	

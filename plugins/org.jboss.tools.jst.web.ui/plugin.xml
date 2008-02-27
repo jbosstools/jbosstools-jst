@@ -567,5 +567,17 @@
 		<xclass id="org.jboss.tools.jst.web.ui.wizards.links.HiddenLinksWizard"
 			class="org.jboss.tools.jst.web.ui.wizards.links.HiddenLinksWizard"/>
    </extension>
+   
+   <extension
+         point="org.jboss.tools.common.model.ui.labelDecorator">
+      <labelDecorator
+            entities="FileTLD_PRO,FileTLD_1_2,FileTLD_2_0,FileTLD_2_1"
+            name="File TLD"
+            partition="Tag Libraries"
+            variables="shortname,uri,display-name"
+            defaultValue="{name} [{shortname}]"
+            >
+      </labelDecorator>
+   </extension>
 
 </plugin>
