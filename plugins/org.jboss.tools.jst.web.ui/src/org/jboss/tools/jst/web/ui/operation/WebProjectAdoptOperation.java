@@ -67,9 +67,14 @@ public abstract class WebProjectAdoptOperation extends WebNatureOperation {
 		return false;
 	}
 	
-	protected void createWebNature() throws CoreException {
+	protected void preCreateWebNature() throws CoreException {
 		setWorkspaceHome(getProperty(WebNatureOperation.WEB_INF_LOCATION_ID));
 		copyLibraries();
+	}
+
+	protected void createWebNature() throws CoreException {
+//		setWorkspaceHome(getProperty(WebNatureOperation.WEB_INF_LOCATION_ID));
+//		copyLibraries();
 		EclipseResourceUtil.addNatureToProject(getProject(), getNatureID());
 		IModelNature nature = (IModelNature)getProject().getNature(getNatureID());
 		model = nature.getModel(); // model is XModel
@@ -83,6 +88,10 @@ public abstract class WebProjectAdoptOperation extends WebNatureOperation {
 		}
 	}
 	
+	protected void postCreateWebNature() {
+		
+	}
+
 	protected void copyLibraries() {}
 	
 	protected String getDefaultServletVersion() {

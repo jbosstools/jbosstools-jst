@@ -65,7 +65,7 @@ public abstract class WebProjectCreationOperation extends WebNatureOperation {
 	protected abstract IWebProjectTemplate createTemplate();
 	protected abstract void copyTemplate() throws Exception;
 
-	protected void createWebNature() throws CoreException {
+	protected void preCreateWebNature() throws CoreException {
 		Properties properties = this.getWizardPropertiesAsIs();
 		properties.setProperty(NewWebProjectContext.ATTR_LOCATION, getProject().getLocation().toString());
 		try	{
@@ -78,6 +78,21 @@ public abstract class WebProjectCreationOperation extends WebNatureOperation {
 			throw new CoreException(new Status(IStatus.ERROR, ModelUIPlugin.PLUGIN_ID, 1, message, e));
 		}
 		copyProjectFile(properties);
+	}
+
+	protected void createWebNature() throws CoreException {
+		Properties properties = this.getWizardPropertiesAsIs();
+		properties.setProperty(NewWebProjectContext.ATTR_LOCATION, getProject().getLocation().toString());
+//		try	{
+//			createTemplateModel();
+//			copyTemplate();
+//		} catch (Exception e) {
+//			WebUiPlugin.getPluginLog().logError(e);
+//			String message = e.getMessage();
+//			if(message == null || message.length() == 0) message = e.getClass().getName(); 
+//			throw new CoreException(new Status(IStatus.ERROR, ModelUIPlugin.PLUGIN_ID, 1, message, e));
+//		}
+//		copyProjectFile(properties);
 		EclipseResourceUtil.addNatureToProject(getProject(), getNatureID());
 		IModelNature strutsProject = (IModelNature)getProject().getNature(getNatureID());
 		model = strutsProject.getModel();
@@ -95,6 +110,12 @@ public abstract class WebProjectCreationOperation extends WebNatureOperation {
 		}
 	}
 	
+	protected void postCreateWebNature() {
+		
+	}
+	
+	protected File projectFile = null;
+	
 	protected void copyProjectFile(Properties p) {
 		String templateFolder = template.getProjectTemplatesLocation(
 				getProperty(TEMPLATE_VERSION_ID)) + "/" + 
@@ -103,33 +124,12 @@ public abstract class WebProjectCreationOperation extends WebNatureOperation {
 		String tf = p.getProperty(NewWebProjectContext.ATTR_LOCATION) + "/" + IModelNature.PROJECT_FILE;
 		if(sf.exists())	{
 			FileUtil.copyFile(sf, new File(tf), true);
+			projectFile = new File(tf);
 		} else {
 			throw new RuntimeException("Project template must have model configuration file");
 		}
-///for wtp Dynamic Project
-		adjustProjectFile(new File(tf));
 	}
-	private void adjustProjectFile(File f) {
-		if(!isMultipleModulesProject()) return;
-		
-		String text = FileUtil.readFile(f);
-		if(text == null || text.length() == 0) return;
-		String match = "\"./WebContent/WEB-INF\"";
-		int i = text.indexOf(match);
-		if(i >= 0) {
-			text = text.substring(0, i) + "\"./" + getProject().getName() + "/WebContent/WEB-INF\"" + text.substring(i + match.length());
-		}
-		
-		match = XModelConstants.WORKSPACE_REF + "/classes";
-		i = text.indexOf(match);
-		if(i >= 0) {
-			String replace = XModelConstants.WORKSPACE_REF + "/../../../.deployables/" + getProject().getName() + "/WEB-INF/classes";
-			text = text.substring(0, i) + replace + text.substring(i + match.length());
-		}
-		
-		FileUtil.writeFile(f, text);
-	}
-	
+
 	protected void createTemplateModel() throws Exception {
 		if(templateModel != null) return;
 		String templateLocation = getTemplateLocation();

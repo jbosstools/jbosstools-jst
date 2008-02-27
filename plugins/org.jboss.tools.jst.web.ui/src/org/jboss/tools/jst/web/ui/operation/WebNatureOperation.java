@@ -22,7 +22,6 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -30,7 +29,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
@@ -44,18 +42,13 @@ import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetDataModel
 import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties;
 import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties.FacetDataModelMap;
 import org.eclipse.wst.common.componentcore.internal.operation.FacetProjectCreationOperation;
-import org.eclipse.wst.common.componentcore.internal.util.ComponentUtilities;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelFactory;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.internal.operations.IProjectCreationPropertiesNew;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.eclipse.wst.common.project.facet.core.runtime.RuntimeManager;
-import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IRuntime;
-import org.eclipse.wst.server.core.IServer;
-import org.eclipse.wst.server.core.ServerCore;
-import org.eclipse.wst.server.core.ServerUtil;
 import org.osgi.framework.Bundle;
 
 import org.jboss.tools.common.meta.action.SpecialWizard;
@@ -224,18 +217,24 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 			createLockFile();
 			monitor.worked(1);
 			// create Red Hat Web Nature
-			createWebNature();
+			preCreateWebNature();
+//			createWebNature();
 			monitor.worked(4);
 			// create Java Nature
-			createJavaNature(); // create java nature now migrate into create WTP nature @see createWTPNature()
+			JavaCore.create(getProject());
+//			createJavaNature(); // create java nature now migrate into create WTP nature @see createWTPNature()
 			monitor.worked(3);
 			// update version of FileSystem object
-			updateVersion();
+//			updateVersion();
 			monitor.worked(1);
 			// refresh project resource
 			getProject().refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 			monitor.worked(3);
 			// update model
+				createWebNature();
+				updateJavaNature(); // create java nature now migrate into create WTP nature @see createWTPNature()
+				updateVersion();
+
 			model.update();
 			monitor.worked(2);
 			model.save();
@@ -245,6 +244,8 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 			// register application
 			registerServer2(monitor);
 			///registerServer(monitor);
+			
+			postCreateWebNature();
 		} catch (CoreException e) {
 			WebModelPlugin.getPluginLog().logError(e);
 		} finally {
@@ -252,11 +253,6 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 			monitor.done();
 		}
 
-	}
-	
-	protected boolean isMultipleModulesProject() {
-		// Commented for migration to new WTP
-		return false; //FlexibleJavaProjectPreferenceUtil.getMultipleModulesPerProjectProp();
 	}
 	
 	protected String[] dotFilesList = {
@@ -316,7 +312,9 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 	}
 	
 	protected abstract String getNatureID();
+	protected abstract void preCreateWebNature() throws CoreException;
 	protected abstract void createWebNature() throws CoreException;
+	protected abstract void postCreateWebNature();
 	
 	/*
 	 * 
@@ -349,8 +347,8 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 	/*
 	 * 
 	 */
-	private void createJavaNature() throws CoreException {
-		JavaCore.create(getProject());
+	private void updateJavaNature() throws CoreException {
+//		JavaCore.create(getProject());
 		EclipseResourceUtil.addNatureToProject(getProject(), JavaCore.NATURE_ID);
 		try {
 			SpecialWizard w = SpecialWizardFactory.createSpecialWizard("org.jboss.tools.common.model.project.ClassPathUpdateWizard");
