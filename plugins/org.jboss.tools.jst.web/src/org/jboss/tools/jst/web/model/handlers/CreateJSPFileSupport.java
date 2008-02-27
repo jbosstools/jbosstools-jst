@@ -191,7 +191,6 @@ public class CreateJSPFileSupport extends CreateFileSupport {
 
 	protected String modifyBody(String body) throws IOException {
 		if(getEntityData().length < 2 || taglibs == null) return body;
-		if(taglibs == null) return body;
 		if(getStepId() == 0) initSelectedTaglibs();
 		String ts = getAttributeValue(1, "taglibs");
 		String[] selected = toArray(ts);
