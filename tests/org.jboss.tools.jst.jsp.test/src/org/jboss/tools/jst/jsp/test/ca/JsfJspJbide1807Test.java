@@ -42,7 +42,7 @@ public class JsfJspJbide1807Test extends ContentAssistantTestCase{
 					"#{sessionScope}",
 					"#{view}"
 		};
-		
-		contentAssistantCommonTest(PAGE_NAME, "<input type=\"image\" src=\"", 25, proposals, true);
+
+		checkProposals(PAGE_NAME, "<input type=\"image\" src=\"", 25, proposals, true);
 	}
 }

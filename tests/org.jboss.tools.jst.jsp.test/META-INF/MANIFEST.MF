@@ -16,5 +16,6 @@ Require-Bundle: org.junit,
  org.jboss.tools.jst.jsp,
  org.jboss.tools.common.text.ext,
  org.jboss.tools.jst.web
-Export-Package: org.jboss.tools.jst.jsp.test
+Export-Package: org.jboss.tools.jst.jsp.test,
+ org.jboss.tools.jst.jsp.test.ca
 Bundle-ClassPath: jst-jsp-test.jar

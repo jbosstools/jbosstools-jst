@@ -85,19 +85,20 @@ public class ContentAssistantTestCase extends TestCase {
 				(document instanceof IStructuredDocument));
 
 	}
-	protected void contentAssistantCommonTest(String fileName, int offset, String[] proposals, boolean exactly){
-		contentAssistantCommonTest(fileName, null, offset, proposals, exactly);
+
+	protected void checkProposals(String fileName, int offset, String[] proposals, boolean exactly){
+		checkProposals(fileName, null, offset, proposals, exactly);
 	}
-	
-	protected void contentAssistantCommonTest(String fileName, String substring, int offset, String[] proposals, boolean exactly){
+
+	protected void checkProposals(String fileName, String substring, int offset, String[] proposals, boolean exactly){
 		openEditor(fileName);
-		
+
 		int position = 0;
 		if(substring != null){
 			String documentContent = document.get();
 			position = documentContent.indexOf(substring);
 		}
-		
+
 		ICompletionProposal[] result= null;
 
 		IContentAssistProcessor p= TestUtil.getProcessor(viewer, position+offset, contentAssistant);
@@ -110,19 +111,19 @@ public class ContentAssistantTestCase extends TestCase {
 		}
 
 		assertTrue("Content Assistant returned no proposals", (result != null && result.length > 0));
-		
+
 //		for (int i = 0; i < result.length; i++) {
 //			System.out.println("proposal - "+result[i].getDisplayString());
 //		}
-		
+
 		for (int i = 0; i < proposals.length; i++) {
 			assertTrue("Proposal "+proposals[i]+" not found!", compareProposal(proposals[i], result));
 		}
-		
+
 		if(exactly)
 			assertTrue("Some other proposals was found!", result.length == proposals.length);
 	}
-	
+
 	protected boolean compareProposal(String proposalName, ICompletionProposal[] proposals){
 		for (int i = 0; i < proposals.length; i++) {
 			if(proposals[i].getDisplayString().equals(proposalName)) return true;
@@ -136,7 +137,5 @@ public class ContentAssistantTestCase extends TestCase {
 					.getActivePage().closeEditor(jspEditor, false);
 			jspEditor = null;
 		}
-
 	}
-
 }
