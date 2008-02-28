@@ -11,14 +11,18 @@
 package org.jboss.tools.jst.web.ui.navigator;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jface.viewers.StructuredViewer;
+import org.eclipse.jface.viewers.Viewer;
 
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.project.IModelNature;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.ui.navigator.TreeViewerModelListenerImpl;
+import org.jboss.tools.common.model.ui.preferences.DecoratorPreferencesListener;
 import org.jboss.tools.common.model.ui.views.navigator.NavigatorContentProvider;
 
 public class WebProjectsContentProvider extends NavigatorContentProvider {
+	DecoratorPreferencesListener decoratorListener = null;
 
 	protected TreeViewerModelListenerImpl createListener() {
 		return new WebProjectsTreeListener();
@@ -40,4 +44,22 @@ public class WebProjectsContentProvider extends NavigatorContentProvider {
 		}
 	}
 
+	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		super.inputChanged(viewer, oldInput, newInput);
+		if(viewer instanceof StructuredViewer) {
+			if(decoratorListener == null) {
+				decoratorListener = new DecoratorPreferencesListener();
+				decoratorListener.init();
+			}
+			decoratorListener.setViewer((StructuredViewer)viewer);
+		}
+	}
+	
+	public void dispose() {
+		if(decoratorListener != null) {
+			decoratorListener.dispose();
+			decoratorListener = null;
+		}
+		super.dispose();
+	}
 }

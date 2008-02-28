@@ -12,13 +12,15 @@ package org.jboss.tools.jst.web.ui.navigator;
 
 import org.jboss.tools.common.model.ui.navigator.NavigatorLabelProvider;
 import org.jboss.tools.common.model.ui.navigator.decorator.DecoratorManager;
-import org.jboss.tools.common.model.ui.navigator.decorator.DecoratorPart;
 import org.jboss.tools.common.model.ui.navigator.decorator.XModelObjectDecorator;
 
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.util.*;
 
 public class WebProjectsLabelProvider extends NavigatorLabelProvider {
+	
+	public WebProjectsLabelProvider() {
+	}
 	
 	public String getText(Object element) {
 		if(!(element instanceof XModelObject)) return "";
@@ -43,19 +45,10 @@ public class WebProjectsLabelProvider extends NavigatorLabelProvider {
 		} else if("FileSystemFolder".equals(entity)) {
 			String s = o.getAttributeValue("location").replace('\\', '/');
 			return s.substring(s.lastIndexOf('/') + 1);			
-		} else if(entity.startsWith("FileTLD")) {
-			String s = super.getText(element);
-			String shortname = o.getAttributeValue("shortname");
-			if(shortname != null) {
-				s += " " + shortname;
-			}
-			String uri = o.getAttributeValue("uri");
-			if(uri != null && uri.length() > 0) {
-				s += " " + uri;
-			}
-			return s;
 		}
 		return super.getText(element);
 	}
 	
+	public void dispose() {}
+
 }

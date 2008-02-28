@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.jboss.tools.common.model.XFilteredTree;
@@ -25,6 +26,7 @@ import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.project.IModelNature;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.model.ui.navigator.TreeViewerModelListenerImpl;
+import org.jboss.tools.common.model.ui.preferences.DecoratorPreferencesListener;
 import org.jboss.tools.common.model.ui.views.navigator.FilteredTreesCache;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.util.XModelTreeListenerSWTASync;
@@ -34,7 +36,9 @@ public class XContentProvider implements ITreeContentProvider {
 	protected Viewer viewer = null;
 	protected TreeViewerModelListenerImpl listener = createListener();
 	protected XModelTreeListenerSWTASync syncListener = new XModelTreeListenerSWTASync(listener);
-	
+
+	DecoratorPreferencesListener decoratorListener = null;
+
 	protected TreeViewerModelListenerImpl createListener() {
 		return new TreeViewerModelListenerImpl();
 	}
@@ -104,12 +108,23 @@ public class XContentProvider implements ITreeContentProvider {
 			syncListener = null;
 			listener = null;
 		}
+		if(decoratorListener != null) {
+			decoratorListener.dispose();
+			decoratorListener = null;
+		}
 	}
 
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 		this.viewer = viewer;
 		if(listener != null && viewer instanceof TreeViewer) {
 			listener.setViewer((TreeViewer)viewer);
+		}
+		if(viewer instanceof StructuredViewer) {
+			if(decoratorListener == null) {
+				decoratorListener = new DecoratorPreferencesListener();
+				decoratorListener.init();
+			}
+			decoratorListener.setViewer((StructuredViewer)viewer);
 		}
 	}
 

@@ -574,9 +574,16 @@
             entities="FileTLD_PRO,FileTLD_1_2,FileTLD_2_0,FileTLD_2_1"
             name="File TLD"
             partition="Tag Libraries"
-            variables="shortname,uri,display-name"
-            defaultValue="{name} [{shortname}]"
-            >
+            defaultValue="{name} [{shortname}]">
+            <variable name="shortname" description="attribute of taglib node"/>
+            <variable name="uri" description="attribute of taglib node"/>
+            <variable name="display-name" description="attribute of taglib node"/>
+            <example entity="FileTLD_1_2">
+               <put name="name" value="taglib"/>
+               <put name="shortname" value="c"/>
+               <put name="uri" value="http://java.sun.com/jstl/core"/>
+               <put name="display-name" value="JSTL Core"/>
+            </example>
       </labelDecorator>
    </extension>
 
