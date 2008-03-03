@@ -25,14 +25,15 @@ public class WebProjectsLabelProvider extends NavigatorLabelProvider {
 	public String getText(Object element) {
 		if(!(element instanceof XModelObject)) return "";
 		XModelObject o = (XModelObject)element;
-		if(o.getFileType() != XModelObject.FILE) return super.getText(element);
 		String entity = o.getModelEntity().getName();
-		
+
 		XModelObjectDecorator d = DecoratorManager.getInstance().getDecoratorByEntity(entity);
 		if(d != null) {
 			String label = d.getLabel(o);
 			return applyModification(o, label);
 		}
+		
+		if(o.getFileType() != XModelObject.FILE) return super.getText(element);
 		
 		if("FilePROPERTIES".equals(entity)) {
 			XModelObject fs = o;

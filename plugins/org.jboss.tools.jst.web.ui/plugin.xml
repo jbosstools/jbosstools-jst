@@ -585,6 +585,95 @@
                <put name="display-name" value="JSTL Core"/>
             </example>
       </labelDecorator>
+
+      <labelDecorator
+            entities="TLDTag12,TLDTag20,TLDTag21"
+            name="Tag"
+            partition="Tag Libraries"
+            defaultValue="{display-name}">
+            <variable name="display-name" description="attribute of tag node"/>
+            <example entity="TLDTag12">
+               <put name="name" value="tag1"/>
+            </example>
+            <example entity="TLDTag12">
+               <put name="name" value="tag2"/>
+               <put name="display-name" value="Second Tag"/>
+            </example>
+      </labelDecorator>
+
+      <labelDecorator
+            entities="TLDTagFile"
+            name="Tag File"
+            partition="Tag Libraries"
+            defaultValue="{display-name}">
+            <variable name="display-name" description="attribute of tag-file node"/>
+            <variable name="path" description="attribute of tag-file node"/>
+            <example entity="TLDTagFile">
+               <put name="name" value="f"/>
+               <put name="display-name" value="File"/>
+               <put name="path" value="/a/b/c.tag"/>
+            </example>
+      </labelDecorator>
+
+      <labelDecorator
+            entities="TLDAttribute,TLDAttribute12,TLDAttribute20,TLDAttribute21,TLDAttribute2F"
+            name="Attribute"
+            partition="Tag Libraries"
+            defaultValue="{name}{required( REQUIRED)}">
+            <variable name="required(value)"
+            		  class="org.jboss.tools.jst.web.ui.navigator.decorator.TLDAttributeDecorator" 
+            		  description="inserts 'value' if attribute 'required' is set to 'true'"/>
+            <example entity="TLDAttribute12">
+               <put name="name" value="attr1"/>
+               <put name="required" value="true"/>
+            </example>
+            <example entity="TLDAttribute12">
+               <put name="name" value="attr2"/>
+               <put name="required" value="false"/>
+            </example>
+      </labelDecorator>
+
+      <labelDecorator
+            entities="TLDFunction"
+            name="Function"
+            partition="Tag Libraries"
+            defaultValue="{display-name}">
+            <variable name="function-class" description="attribute of function node"/>
+            <variable name="display-name" description="attribute of function node"/>
+            <example entity="TLDFunction">
+               <put name="name" value="func"/>
+               <put name="display-name" value="Custom Function"/>
+               <put name="function-class" value="a.b.C"/>
+            </example>
+      </labelDecorator>
+
+      <labelDecorator
+            entities="TLDVariable"
+            name="Variable"
+            partition="Tag Libraries"
+            defaultValue="{name}">
+            <variable name="scope" description="attribute of variable node"/>
+            <example entity="TLDVariable">
+               <put name="name-given" value="var1"/>
+               <put name="scope" value="NESTED"/>
+            </example>
+            <example entity="TLDVariable">
+               <put name="name-from-attribute" value="var2"/>
+               <put name="scope" value="AT_BEGIN"/>
+            </example>
+      </labelDecorator>
+
+      <labelDecorator
+            entities="TLDValidator"
+            name="Validator"
+            partition="Tag Libraries"
+            defaultValue="{name}">
+            <variable name="validator-class" description="attribute of validator node"/>
+            <example entity="TLDValidator">
+               <put name="validator-class" value="a.b.C"/>
+            </example>
+      </labelDecorator>
+
    </extension>
 
 </plugin>
