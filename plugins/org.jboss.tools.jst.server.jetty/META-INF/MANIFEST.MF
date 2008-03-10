@@ -29,5 +29,5 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jst.server.ui,
  org.eclipse.ui
 Export-Package: org.jboss.tools.jst.server.jetty
-Bundle-Version: 2.0.0
+Bundle-Version: 2.0.1
 
