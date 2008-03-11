@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:ServerRuntime
+	xmlns:tns="http://eclipse.org/jst/server/generic/ServerTypeDefinition"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://eclipse.org/jst/server/generic/ServerTypeDefinition ServerTypeDefinitionSchema.xsd "
+	name="Jetty 5" version="v5.1">
+
+	<property id="jettyHome"
+		label="%jettyHome"
+		type="directory"
+		context="runtime"
+		default="" />
+
+	<property id="serverAddress"
+		label="%serverAddress"
+		type="string"
+		context="server"
+		default="localhost" />
+
+	<property id="port"
+		label="%port"
+		type="string"
+		context="server"
+		default="8080" />		
+		
+		
+	<property id="javaHome"
+    	label="%javaHome"
+	    type="directory"
+    	context="runtime"
+	    default="" />
+	    
+	 <property id ="antHome"
+	 	label="%antHome"	 
+	    type="directory"
+    	context="runtime"
+	    default=""/>   
+
+	<port>
+		<no>${port}</no>
+		<name>Http</name>
+		<protocol>http</protocol>
+	</port>
+
+	<module>
+		<type>jst.web</type>
+		<publishDir>${jettyHome}/webapps</publishDir>
+		<publisherReference>org.eclipse.jst.server.generic.antpublisher</publisherReference>
+	</module>
+
+	<module>
+		<type>jst.ejb</type>
+		<publishDir>${jettyHome}/webapps</publishDir>
+		<publisherReference>org.eclipse.jst.server.generic.antpublisher</publisherReference>
+	</module>
+
+	<module>
+		<type>jst.ear</type>
+		<publishDir>${jettyHome}/webapps</publishDir>
+		<publisherReference>org.eclipse.jst.server.generic.antpublisher</publisherReference>
+	</module>
+
+	<project>
+		<classpathReference>jetty.project</classpathReference>
+	</project>
+
+	<start>
+		<mainClass>org.mortbay.start.Main</mainClass>
+		<workingDirectory>${jettyHome}</workingDirectory>
+		<programArguments></programArguments>
+		<vmParameters></vmParameters>
+		<classpathReference>jetty</classpathReference>
+	</start>
+
+	<stop>
+		<mainClass>org.mortbay.stop.Main</mainClass>
+		<workingDirectory>${jettyHome}</workingDirectory>
+		<programArguments></programArguments>
+		<vmParameters></vmParameters>
+		<classpathReference>jetty</classpathReference>
+	</stop>
+
+	<publisher id="org.eclipse.jst.server.generic.antpublisher">
+		<publisherdata>
+			<dataname>build.file</dataname>
+			<datavalue>/serverdef/scripts/jetty.5.xml</datavalue>
+		</publisherdata>
+		<publisherdata>
+			<dataname>target.publish.jst.web</dataname>
+			<datavalue>deploy.j2ee.web</datavalue>
+		</publisherdata>
+		<publisherdata>
+			<dataname>target.publish.jst.ejb</dataname>
+			<datavalue>deploy.j2ee.ejb</datavalue>
+		</publisherdata>
+		<publisherdata>
+			<dataname>target.unpublish.jst.web</dataname>
+			<datavalue>undeploy.j2ee.web</datavalue>
+		</publisherdata>
+		<publisherdata>
+			<dataname>target.unpublish.jst.ejb</dataname>
+			<datavalue>undeploy.j2ee.ejb</datavalue>
+		</publisherdata>
+		<publisherdata>
+			<dataname>target.publish.jst.ear</dataname>
+			<datavalue>deploy.j2ee.ear</datavalue>
+		</publisherdata>
+		<publisherdata>
+			<dataname>target.unpublish.jst.ear</dataname>
+			<datavalue>undeploy.j2ee.ear</datavalue>
+		</publisherdata>					
+	</publisher>
+
+	<classpath id="jetty">
+        <archive path="${jettyHome}/lib/org.mortbay.jetty.jar"/>
+        <archive path="${jettyHome}/lib/javax.servlet.jar"/>
+        <archive path="${jettyHome}/ext/jasper-runtime.jar"/>
+        <archive path="${jettyHome}/ext/jasper-compiler.jar"/>        
+        <archive path="${jettyHome}/ext/xercesImpl.jar"/>
+        <archive path="${jettyHome}/ext/commons-logging.jar"/>       
+		<archive path="${jettyHome}/ext/ant.jar"/>           	
+        <archive path="${jettyHome}/ext/commons-el.jar"/>        
+    	<archive path="${jettyHome}/start.jar"/>
+        <archive path="${jettyHome}/stop.jar"/>     
+        <archive path="${javaHome}/lib/tools.jar"/>
+        <archive path="${antHome}/lib/ant-launcher.jar"/>
+	</classpath>
+
+	<classpath id="jetty.project">
+		<archive path="${jettyHome}/lib/org.mortbay.jetty.jar"/>
+        <archive path="${jettyHome}/lib/javax.servlet.jar"/>
+	</classpath>
+
+	<jndiConnection>
+		<providerUrl>iiop://${serverAddress}:2001</providerUrl>
+		<initialContextFactory>org.objectweb.carol.jndi.spi.MultiOrbInitialContextFactory</initialContextFactory>
+		<jndiProperty>
+			<name></name>
+			<value></value>
+		</jndiProperty>
+	</jndiConnection>
+</tns:ServerRuntime>

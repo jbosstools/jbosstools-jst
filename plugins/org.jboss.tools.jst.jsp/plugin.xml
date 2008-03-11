@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+  <extension-point id="occurrenceStructureProviders" 
+  		name="%occurrenceStructureProvidersExtensionPoint" /> 
+
+	<extension point="org.eclipse.wst.sse.ui.editorConfiguration"> 
+		<sourceViewerConfiguration
+			class="org.jboss.tools.jst.jsp.ExtendedStructuredTextViewerConfigurationJSP"
+			target="org.eclipse.jst.jsp.core.jspsource"/>
+		<contentOutlineConfiguration
+			class="org.eclipse.jst.jsp.ui.views.contentoutline.JSPContentOutlineConfiguration"
+			target="org.eclipse.jst.jsp.core.jspsource"/>
+		<propertySheetConfiguration
+			class="org.eclipse.wst.xml.ui.views.properties.XMLPropertySheetConfiguration"
+			target="org.eclipse.jst.jsp.core.jspsource"/>
+		<provisionalConfiguration 
+      		type="sourceeditingtexttools"
+			class="org.eclipse.jst.jsp.ui.internal.editor.JSPSourceEditingTextTools"
+			target="org.eclipse.jst.jsp.core.jspsource"/>
+		<provisionalConfiguration
+      		type="characterpairmatcher"
+			class="org.eclipse.jst.jsp.ui.internal.text.JSPDocumentRegionEdgeMatcher"
+			target="org.eclipse.jst.jsp.core.jspsource"/>
+	    <provisionalConfiguration
+      		type="structuredtextfoldingprovider"
+            class="org.eclipse.jst.jsp.ui.internal.projection.StructuredTextFoldingProviderJSP"
+            target="org.eclipse.jst.jsp.core.jspsource"/>
+		<provisionalDefinition 
+      		type="preferencepages"
+            value="org.eclipse.wst.sse.ui.preferences.jsp"
+			target="org.eclipse.jst.jsp.core.jspsource"/>
+		<provisionalDefinition
+      		type="preferencepages"
+            value="org.eclipse.wst.sse.ui.preferences.jsp.source"
+			target="org.eclipse.jst.jsp.core.jspsource"/>
+		<provisionalDefinition
+      		type="preferencepages"
+            value="org.eclipse.wst.sse.ui.preferences.jsp.templates"
+			target="org.eclipse.jst.jsp.core.jspsource"/>
+		<provisionalDefinition
+      		type="preferencepages"
+            value="org.eclipse.wst.sse.ui.preferences.jsp.styles"
+			target="org.eclipse.jst.jsp.core.jspsource"/>
+		<provisionalDefinition
+      		type="showintarget"
+            value="org.eclipse.jdt.ui.PackageExplorer"
+			target="org.eclipse.jst.jsp.core.jspsource"/>
+      <provisionalDefinition
+      		type="preferencepages"
+            value="org.eclipse.wst.sse.ui.preferences.jsp.occurrences"
+			target="org.eclipse.jst.jsp.core.jspsource"/>
+			
+	      <sourceViewerConfiguration
+				class="org.jboss.tools.jst.jsp.ExtendedStructuredTextViewerConfigurationHTML"
+	            target="org.eclipse.wst.html.core.htmlsource"/>
+	      <contentOutlineConfiguration
+	            class="org.eclipse.wst.html.ui.views.contentoutline.HTMLContentOutlineConfiguration"
+	            target="org.eclipse.wst.html.core.htmlsource"/>
+	      <propertySheetConfiguration
+	            class="org.eclipse.wst.xml.ui.views.properties.XMLPropertySheetConfiguration"
+	            target="org.eclipse.wst.html.core.htmlsource"/>
+	      <provisionalConfiguration
+	      		type="sourceeditingtexttools"
+	            class="org.eclipse.wst.xml.ui.internal.provisional.XMLSourceEditingTextTools"
+	            target="org.eclipse.wst.html.core.htmlsource"/>
+	      <provisionalConfiguration
+	      		type="characterpairmatcher"
+	            class="org.eclipse.wst.html.ui.internal.text.HTMLDocumentRegionEdgeMatcher"
+	            target="org.eclipse.wst.html.core.htmlsource"/>
+	      <provisionalConfiguration
+	      		type="structuredtextfoldingprovider"
+	            class="org.eclipse.wst.html.ui.internal.projection.StructuredTextFoldingProviderHTML"
+	            target="org.eclipse.wst.html.core.htmlsource"/>
+	      <provisionalDefinition 
+	      		type="preferencepages"
+	            value="org.eclipse.wst.html.ui.preferences"
+	            target="org.eclipse.wst.html.core.htmlsource"/>
+	      <provisionalDefinition 
+	      		type="preferencepages"
+	            value="org.eclipse.wst.html.ui.preferences.source"
+	            target="org.eclipse.wst.html.core.htmlsource"/>
+	      <provisionalDefinition 
+	      		type="preferencepages"
+	            value="org.eclipse.wst.html.ui.preferences.templates"
+	            target="org.eclipse.wst.html.core.htmlsource"/>
+	      <provisionalDefinition 
+	      		type="preferencepages"
+	            value="org.eclipse.wst.html.ui.preferences.styles"
+	            target="org.eclipse.wst.html.core.htmlsource"/>
+      <provisionalDefinition
+      		type="preferencepages"
+            value="org.eclipse.wst.sse.ui.preferences.jsp.occurrences"
+            target="org.eclipse.wst.html.core.htmlsource"/>
+			
+	</extension>
+
+	<extension point="org.eclipse.ui.preferencePages">
+		<!-- Additional JSP/HTML PREFERENCE PAGES -->
+		<page
+			name="%JSP_Occurrences.name"
+			category="org.eclipse.wst.sse.ui.preferences.jsp"
+			class="org.jboss.tools.jst.jsp.preferences.JSPOccurrencesPreferencePage"
+			id="org.eclipse.wst.sse.ui.preferences.jsp.occurrences">
+		</page>
+	</extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <editor
+            icon="images/xstudio/editors/jsp.gif"
+            class="org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor"
+            default="true"
+            name="%editors.jsp.name"
+            contributorClass="org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageContributor"
+            id="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor"
+            matchingStrategy = "org.jboss.tools.common.core.resources.MatchingStrategyImpl"
+            extensions="jsp, jsf, jspf, jspx, tag, tagf, inc">
+         <contentTypeBinding contentTypeId="org.eclipse.jst.jsp.core.jspsource"/>
+      </editor>
+      <editor 
+            class="org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor" 
+            contributorClass="org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageContributor" 
+            extensions="html, htm" 
+            icon="images/xstudio/editors/html_file.gif" 
+            id="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor" 
+            matchingStrategy = "org.jboss.tools.common.core.resources.MatchingStrategyImpl"
+            name="%editors.html.name" 
+            default="true">
+         <contentTypeBinding contentTypeId="org.eclipse.wst.html.core.htmlsource"/>
+      </editor>
+   </extension>
+
+   <extension point="org.eclipse.ui.editorActions">
+      <editorContribution id="formatJSPActionContribution" targetID="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
+           <action actionID="formatJSPAction" class="org.jboss.tools.jst.jsp.ui.action.FormatJSPActionDelegate" id="formatJSPAction" label="Format" menubarPath="edit/additions">
+           </action>
+      </editorContribution>
+
+      <editorContribution 
+         id="AStructureSelectNext" 
+         targetID="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
+           <action
+                 actionID="org.eclipse.wst.sse.ui.structure.select.next"
+                 class="org.eclipse.wst.xml.ui.internal.selection.StructuredSelectNextXMLActionDelegate"
+                 definitionId="org.eclipse.wst.sse.ui.structure.select.next"
+                 id="StructureSelectNext"
+                 label="Next Element">
+           </action>
+      </editorContribution>
+      <editorContribution 
+         id="ACleanupDocument" 
+         targetID="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
+           <action
+                 actionID="org.eclipse.wst.sse.ui.cleanup.document"
+                 class="org.eclipse.wst.html.ui.internal.edit.ui.CleanupActionHTMLDelegate"
+                 definitionId="org.eclipse.wst.sse.ui.cleanup.document"
+                 id="CleanupDocument"
+                 label="Cleanup Document...">
+           </action>
+      </editorContribution>
+      <editorContribution 
+         id="AToggleComment" 
+         targetID="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
+           <action
+                 actionID="org.eclipse.wst.sse.ui.toggle.comment"
+                 class="org.eclipse.wst.xml.ui.internal.actions.ToggleCommentActionXMLDelegate"
+                 definitionId="org.eclipse.wst.sse.ui.toggle.comment"
+                 id="ToggleComment"
+                 label="Toggle Comment">
+           </action>
+      </editorContribution>
+      <editorContribution 
+         id="AAddBlockComment" 
+         targetID="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
+           <action
+                 actionID="org.eclipse.wst.sse.ui.add.block.comment"
+                 class="org.eclipse.wst.xml.ui.internal.actions.AddBlockCommentActionXMLDelegate"
+                 definitionId="org.eclipse.wst.sse.ui.add.block.comment"
+                 id="AddBlockComment"
+                 label="Add Block Comment">
+           </action>
+      </editorContribution>
+      <editorContribution 
+         id="ARemoveBlockComment" 
+         targetID="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
+           <action
+                 actionID="org.eclipse.wst.sse.ui.remove.block.comment"
+                 class="org.eclipse.wst.xml.ui.internal.actions.RemoveBlockCommentActionXMLDelegate"
+                 definitionId="org.eclipse.wst.sse.ui.remove.block.comment"
+                 id="RemoveBlockComment"
+                 label="Remove Block Comment">
+           </action>
+      </editorContribution>
+      <editorContribution 
+         id="ARenameElement" 
+         targetID="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
+           <action
+                 actionID="org.eclipse.jst.jsp.ui.refactor.rename"
+                 class="org.eclipse.jst.jsp.ui.internal.java.refactoring.JSPRenameElementActionDelegate"
+                 definitionId="org.eclipse.jst.jsp.ui.refactor.rename"
+                 id="RenameElement"
+                 label="Rename">
+           </action>
+      </editorContribution>
+      <editorContribution 
+         id="AMoveElement" 
+         targetID="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
+           <action
+                 actionID="org.eclipse.jst.jsp.ui.refactor.move"
+                 class="org.eclipse.jst.jsp.ui.internal.java.refactoring.JSPMoveElementActionDelegate"
+                 definitionId="org.eclipse.jst.jsp.ui.refactor.move"
+                 id="MoveElement"
+                 label="Move">
+           </action>
+      </editorContribution>
+      <editorContribution 
+         id="AFindOccurrences" 
+         targetID="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
+           <action
+                 actionID="org.eclipse.wst.sse.ui.search.find.occurrences"
+                 class="org.eclipse.jst.jsp.ui.internal.java.search.JSPFindOccurrencesActionDelegate"
+                 definitionId="org.eclipse.wst.sse.ui.search.find.occurrences"
+                 id="FindOccurrences"
+                 label="Occurrences in File">
+           </action>
+      </editorContribution>
+      <editorContribution 
+         id="AStructureSelectEnclosing" 
+         targetID="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
+           <action
+                 actionID="org.eclipse.wst.sse.ui.structure.select.enclosing"
+                 class="org.eclipse.wst.xml.ui.internal.selection.StructuredSelectEnclosingXMLActionDelegate"
+                 definitionId="org.eclipse.wst.sse.ui.structure.select.enclosing"
+                 id="StructureSelectEnclosing"
+                 label="Enclosing Element">
+           </action>
+      </editorContribution>
+      <editorContribution 
+         id="AStructureSelectPrevious" 
+         targetID="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
+           <action
+                 actionID="org.eclipse.wst.sse.ui.structure.select.previous"
+                 class="org.eclipse.wst.xml.ui.internal.selection.StructuredSelectPreviousXMLActionDelegate"
+                 definitionId="org.eclipse.wst.sse.ui.structure.select.previous"
+                 id="StructureSelectPrevious"
+                 label="Previous Element">
+           </action>
+      </editorContribution>
+      <editorContribution 
+         id="AStructureSelectHistory" 
+         targetID="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
+           <action
+                 actionID="org.eclipse.wst.sse.ui.structure.select.last"
+                 class="org.eclipse.wst.sse.ui.internal.selection.StructuredSelectHistoryActionDelegate"
+                 definitionId="org.eclipse.wst.sse.ui.structure.select.last"
+                 id="StructureSelectHistory"
+                 label="Restore Last Selection">
+           </action>
+      </editorContribution>
+   </extension>
+
+   <!--extension point="org.jboss.tools.common.verification.rules">
+      <rule-set path="meta/.rule-sets.xml"/>
+   </extension-->
+   
+    <extension point="org.jboss.tools.jst.jsp.occurrenceStructureProviders">
+  	<provider 
+  		class="org.jboss.tools.jst.jsp.text.JSPOccurrenceProvider" 
+  		editorId="org.jboss.tools.jst.jsp" 
+  		name="%defaultOccurrenceStructureProviderName" /> 
+  </extension>
+    <extension
+          point="org.eclipse.core.runtime.contentTypes">
+       <file-association
+             content-type="org.eclipse.jst.jsp.core.jspsource"
+             file-extensions="inc"/>
+    </extension>
+   
+   <extension
+         point="org.jboss.tools.common.model.resourceMapping">
+      <mapping
+          loader="org.jboss.tools.jst.jsp"
+          priority="4"
+          kind="class"
+          paths=".texteditors.jsp.,org.jboss.tools.jst.jsp."
+      />
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors.templates">
+      <include
+            file="templates/facelets-templates.xml"
+            translations="$nl$/templates/facelets-templates.properties"/>
+   </extension>
+
+   <extension point="org.jboss.tools.common.model.classes">
+		<xclass id="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor"
+			class="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor"/>
+		<xclass id="org.jboss.tools.jst.jsp.outline.JSPCellEditorProviderImpl"
+			class="org.jboss.tools.jst.jsp.outline.JSPCellEditorProviderImpl"/>
+		<xclass id="org.jboss.tools.jst.jsp.outline.VpeProperties"
+			class="org.jboss.tools.jst.jsp.outline.VpeProperties"/>
+   </extension>
+    
+</plugin>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin id="org.jboss.tools.jst.web.debug" name="Web Debug" provider-name="%providerName" version="2.0.0">
+
+   <runtime>
+      <library name="debug.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="org.jboss.tools.jst.web"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.debug.core"/>
+      <import plugin="org.eclipse.jdt.core"/>
+      <import plugin="org.eclipse.jdt.debug"/>
+      <import plugin="org.jboss.tools.common.model"/>
+      <import plugin="org.eclipse.ui.workbench"/>
+      <import plugin="org.eclipse.jface"/>
+      <import plugin="org.eclipse.jdt.debug.ui"/>
+      <import plugin="org.eclipse.debug.ui"/>
+
+      <import plugin="org.eclipse.jdt.ui"/>
+      <import plugin="org.eclipse.ui"/>
+      
+      <!--import plugin="org.eclipse.jdt.debug" version="2.9.9"/-->
+   </requires>
+
+   <extension id="jspLineBreakpointMarker" point="org.eclipse.core.resources.markers">
+      <super type="org.eclipse.jdt.debug.commonJavaLineBreakpointMarker">
+      </super>
+      <super type="org.jboss.tools.common.model.modelBreakpointMarker">
+      </super>
+      <persistent value="true">
+      </persistent>
+      <attribute name="org.eclipse.jdt.debug.core.sourceName">
+      </attribute>
+   </extension>
+   <extension point="org.eclipse.debug.core.breakpoints">
+      <breakpoint class="org.jboss.tools.jst.web.debug.internal.JspLineBreakpoint" id="jspLineBreakpoint" markerType="org.jboss.tools.jst.web.debug.jspLineBreakpointMarker">
+      </breakpoint>
+   </extension>
+   <extension point="org.eclipse.debug.ui.debugModelPresentations">
+      <debugModelPresentation class="org.jboss.tools.jst.web.debug.WebDebugModelPresentation" detailsViewerConfiguration="org.eclipse.jdt.internal.debug.ui.display.DetailsViewerConfiguration" id="org.jboss.tools.jst.web.debug">
+      </debugModelPresentation>
+   </extension>
+
+</plugin>

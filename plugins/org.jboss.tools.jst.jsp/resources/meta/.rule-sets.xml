@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rule-sets>
+	<rule-set bundle="org.jboss.tools.jst.jsp.preview.verification.verification" description="JSP Rules Description" 
+	name="JSP Verification Rules" url="http://www.redhat.com" vendor="Red Hat Inc" version="1.0">
+		<rule action="org.jboss.tools.jst.jsp.preview.verification.JspParserAction" category="jsp" 
+		description="Check JSP syntax" entities="JspConfig" name="Check JSP syntax">
+			<result-template description="Check that JSP page is compilable" 
+			id="example" message-id="jsf.example.exists" name="Check Example"/> 
+		</rule>
+		<rule action="org.jboss.tools.jst.jsp.preview.verification.RequiredAttributesAction" category="jsp" 
+		description="Check the mandatory attributes for the tags" entities="JspConfig" name="Check the mandatory attributes">
+			<result-template description="Check the mandatory attributes for the tags" 
+			id="example" message-id="jsf.example.exists" name="Check Example"/> 
+		</rule>
+	</rule-set>
+</rule-sets>
+
