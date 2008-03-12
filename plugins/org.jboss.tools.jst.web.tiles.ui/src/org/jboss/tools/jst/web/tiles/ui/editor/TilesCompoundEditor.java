@@ -10,18 +10,19 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.tiles.ui.editor;
 
+import org.eclipse.gef.ui.actions.ActionRegistry;
+import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.jboss.tools.common.editor.AbstractSelectionProvider;
 import org.jboss.tools.common.editor.ObjectMultiPageEditor;
 import org.jboss.tools.common.editor.ObjectTextEditor;
-import org.jboss.tools.common.model.plugin.ModelPlugin;
-import org.jboss.tools.common.model.ui.texteditors.XMLTextEditorComponent;
-import org.eclipse.gef.ui.actions.ActionRegistry;
-import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
-
 import org.jboss.tools.common.gef.outline.xpl.DiagramContentOutlinePage;
+import org.jboss.tools.common.model.ui.texteditors.XMLTextEditorComponent;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 import org.jboss.tools.jst.web.tiles.model.TilesConfigFilteredTreeConstraint;
+import org.jboss.tools.jst.web.tiles.ui.ITilesHelpContextIds;
 import org.jboss.tools.jst.web.tiles.ui.TilesUIPlugin;
 
 public class TilesCompoundEditor extends ObjectMultiPageEditor {
@@ -31,7 +32,13 @@ public class TilesCompoundEditor extends ObjectMultiPageEditor {
 	public TilesCompoundEditor() {
 		outline.addFilter(constraint);
 	}
-
+	
+	protected Composite createPageContainer(Composite parent) {
+		Composite composite = super.createPageContainer(parent);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(parent, ITilesHelpContextIds.TILES_EDITOR);
+		return composite;
+	}
+	
 	protected void doCreatePages() {
 		if (isAppropriateNature()) {
 			treeFormPage = createTreeFormPage();
