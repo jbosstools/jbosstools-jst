@@ -29,6 +29,7 @@ import org.jboss.tools.common.model.ui.attribute.adapter.IModelPropertyEditorAda
 import org.jboss.tools.common.model.ui.attribute.editor.ExtendedFieldEditor;
 import org.jboss.tools.common.model.ui.attribute.editor.IMutableFieldEditor;
 import org.jboss.tools.common.model.ui.attribute.editor.IPropertyEditor;
+import org.jboss.tools.common.model.ui.attribute.editor.MutableComboBoxFieldEditor;
 import org.jboss.tools.common.model.ui.attribute.editor.MutableMultipleChoiceFieldEditor;
 import org.eclipse.jface.window.Window;
 
@@ -338,6 +339,13 @@ public class AppRegisterComponent {
 			Shell shell = (Shell)p.get("shell");
 			IServer server = newServer(shell);
 			if(server == null) return -1;
+
+			IModelPropertyEditorAdapter a = support.getPropertyEditorAdapterByName(ATTR_RUNTIME);
+			if(server.getRuntime() != null && !server.getRuntime().getName().equals(a.getValue())) {
+				MutableComboBoxFieldEditor ed1 = (MutableComboBoxFieldEditor)support.getFieldEditorByName(ATTR_RUNTIME);
+				ed1.setNewValue(server.getRuntime().getName());
+			}			
+			
 			p.setProperty("value", server.getName());
 			initTargetServerValue();
 			MutableMultipleChoiceFieldEditor ed = (MutableMultipleChoiceFieldEditor)support.getFieldEditorByName(ATTR_TARGET_SERVER);
