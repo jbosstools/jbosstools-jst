@@ -117,7 +117,7 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
 		return proposals;
 	}
 
-    private ICompletionProposal[] getUniqProposals(ICompletionProposal[] proposals) {
+    static ICompletionProposal[] getUniqProposals(ICompletionProposal[] proposals) {
     	if(proposals==null) {
     		return null;
     	}

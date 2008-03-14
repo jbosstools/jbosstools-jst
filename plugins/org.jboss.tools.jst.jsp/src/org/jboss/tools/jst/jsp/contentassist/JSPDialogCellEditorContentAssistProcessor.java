@@ -56,7 +56,8 @@ public class JSPDialogCellEditorContentAssistProcessor extends JavaPackageComple
 		IDocument document = contentAssistSubjectControl.getDocument();
 		String text = document.get();
 		addAttributeValueProposals(proposals, text, documentOffset);
-		return (ICompletionProposal[])proposals.toArray(new ICompletionProposal[0]);
+		ICompletionProposal[] ps = (ICompletionProposal[])proposals.toArray(new ICompletionProposal[0]);
+		return FaceletsHtmlContentAssistProcessor.getUniqProposals(ps);
 	}
 
 	//not implemented
