@@ -1143,11 +1143,17 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			fOccurrenceModelUpdater.uninstall();
 			fOccurrenceModelUpdater = null;
 		}
-		super.dispose();
+		if (pageContext != null) {
+			pageContext.dispose();
+			pageContext = null;
+		}
+		
 		if (wtpTextJspKbConnector != null) {
 			wtpTextJspKbConnector.setTaglibManagerProvider(null);
+			wtpTextJspKbConnector.dispose();
 			wtpTextJspKbConnector = null;
 		}
+		super.dispose();
 		if (listener != null)
 			listener.dispose();
 		listener = null;

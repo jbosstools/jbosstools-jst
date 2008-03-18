@@ -349,6 +349,9 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
 		}
 	}
 
+	public void dispose() {
+		KbConnectorFactory.getIntstance().removeConnector(KbConnectorType.JSP_WTP_KB_CONNECTOR, fDocument);
+	}
 	/**
 	 * This class listens to the changes in the CMDocument and triggers a CMDocument load
 	 */
