@@ -82,6 +82,7 @@ public class ValueProxy implements IValue {
 			IJavaModifiers jm = ((IJavaModifiers)variable);
 			return jm.isStatic();
 		} catch (Exception e) {
+			WebDebugUIPlugin.getPluginLog().logError(e);
 			return false;
 		}
 	}

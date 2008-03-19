@@ -18,6 +18,7 @@ import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.jdt.debug.eval.IEvaluationResult;
+import org.jboss.tools.jst.web.debug.ui.xpl.WebDebugUIPlugin;
 import org.jboss.tools.jst.web.debug.xpl.EvaluationSupport;
 
 
@@ -63,6 +64,7 @@ public class EvaluatedVariable implements IVariable {
 			} 
 			
 		} catch (Exception e) {
+			WebDebugUIPlugin.getPluginLog().logError(e);
 			fResult = null;
 			fValue = null;
 		}

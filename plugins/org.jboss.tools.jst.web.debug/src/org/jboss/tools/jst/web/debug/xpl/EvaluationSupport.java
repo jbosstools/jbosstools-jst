@@ -81,7 +81,7 @@ public class EvaluationSupport {
 				try {
 					Thread.sleep(100);
 				} catch (Exception x) {
-					// Ignore
+					WebDebugPlugin.getPluginLog().logError(x);
 				}
 			}
 			

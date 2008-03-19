@@ -113,7 +113,10 @@ public class HttpServletRequestVariableProxy extends VariableProxy {
 		JDIThread thread = (JDIThread)thisFrame.getThread();
 		List frames = null;
 		try { frames = thread.computeNewStackFrames(); } 
-		catch (Exception x) { return null; }
+		catch (Exception x) {
+			WebDebugUIPlugin.getPluginLog().logError(x);
+			return null;
+		}
 		
 		for (int i = 0; frames != null && i < frames.size(); i++) {
 			IStackFrame currentFrame = (IStackFrame)frames.get(i);

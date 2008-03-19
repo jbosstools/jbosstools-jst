@@ -58,6 +58,7 @@ public class StackFrameWrapper implements IDebugElement {
 			try {
 				return frameVariables = fFrame.getVariables();
 			} catch (Exception e) {
+				WebDebugUIPlugin.getPluginLog().logError(e);
 				return null;
 			}
 		} else if(frameVariables == null) {

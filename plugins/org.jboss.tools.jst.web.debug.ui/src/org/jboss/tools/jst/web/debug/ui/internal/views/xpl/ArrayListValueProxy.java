@@ -42,8 +42,12 @@ public class ArrayListValueProxy extends ValueProxy {
 			if (!fOrigin.hasVariables()) return;
 			vars = fOrigin.getVariables(); 
 			IVariable sizeVar = EvaluationSupport.findVariableForName(vars, "size");
-			try { fSize = Integer.parseInt(sizeVar.getValue().getValueString()); } 
-			catch (Exception ex) { fSize = 0; }
+			try {
+				fSize = Integer.parseInt(sizeVar.getValue().getValueString());
+			}catch (Exception ex) {
+				WebDebugUIPlugin.getPluginLog().logError(ex);
+				fSize = 0;
+			}
 			
 			IVariable table = EvaluationSupport.findVariableForName(vars, "elementData");
 

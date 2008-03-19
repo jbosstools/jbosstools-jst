@@ -27,6 +27,7 @@ import org.jboss.tools.common.meta.key.WizardKeys;
 import org.jboss.tools.common.reporting.ProblemReportingHelper;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.jst.web.project.helpers.NewWebProjectContext;
+import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.operation.WebNatureOperation;
 
 public abstract class NewWebProjectWizard extends Wizard implements INewWizard, IExecutableExtension {
@@ -69,11 +70,13 @@ public abstract class NewWebProjectWizard extends Wizard implements INewWizard, 
 				result = false;
 			}
 		} catch (InvocationTargetException e) {
+			WebUiPlugin.getPluginLog().logError(e);
 			String message = WizardKeys.getString(CANNOT_CREATE_LOCATION + ".ErrorMessage") + ": " + context.getLocationPath();
 			Status status = new Status(IStatus.ERROR, "org.jboss.tools.jst.web.ui", 0, message, e);
 			ProblemReportingHelper.reportProblem(status);
 			result = false;
 		} catch (InterruptedException e) {
+			WebUiPlugin.getPluginLog().logError(e);
 			String message = WizardKeys.getString(CANNOT_CREATE_LOCATION+".ErrorMessage")+": "+context.getLocationPath();
 			Status status = new Status(IStatus.ERROR, "org.jboss.tools.jst.web.ui", 0, message, e);
 			ProblemReportingHelper.reportProblem(status);

@@ -52,6 +52,7 @@ public class JspEditorPlugin extends BaseUIPlugin {
 		try {
 			resourceBundle= ResourceBundle.getBundle("org.jboss.tools.jst.jsp.JspEditorPluginResources");
 		} catch (MissingResourceException x) {
+			getPluginLog().logError(x);
 			resourceBundle = null;
 		}
 	}
@@ -73,6 +74,7 @@ public class JspEditorPlugin extends BaseUIPlugin {
 		try {
 			return bundle.getString(key);
 		} catch (MissingResourceException e) {
+			getPluginLog().logError(e);
 			return key;
 		}
 	}

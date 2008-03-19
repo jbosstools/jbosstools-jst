@@ -94,6 +94,7 @@ import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.reporting.ProblemReportingHelper;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 import org.jboss.tools.jst.web.tiles.model.helpers.TilesStructureHelper;
+import org.jboss.tools.jst.web.tiles.ui.TilesUIPlugin;
 import org.jboss.tools.jst.web.tiles.ui.editor.action.TilesCopyAction;
 import org.jboss.tools.jst.web.tiles.ui.editor.action.TilesCutAction;
 import org.jboss.tools.jst.web.tiles.ui.editor.action.TilesDeleteAction;
@@ -512,6 +513,7 @@ public class TilesEditor extends GEFEditor implements ITilesModelListener {
 				printer.getDPI();
 				printer.getClientArea();
 			} catch (Exception ee) {
+				TilesUIPlugin.getPluginLog().logError(ee);
 				ex = ee;
 				printer.dispose();
 				d = null;

@@ -80,6 +80,7 @@ public abstract class ImportWebDirProjectContext extends ImportWebProjectContext
 		try {
 			loadWebXML(body, location);
 		} catch (Exception e) {
+			WebModelPlugin.getPluginLog().logError(e);
 			webXMLErrorMessage = e.getMessage();
 			return;
 		}
@@ -87,6 +88,7 @@ public abstract class ImportWebDirProjectContext extends ImportWebProjectContext
 		try {
 			webInfLocation = webInfFile.getCanonicalPath().replace('\\', '/');
 		} catch (IOException e) {
+			WebModelPlugin.getPluginLog().logError(e);
 			webXMLErrorMessage = e.getMessage();
 			return;
 		}

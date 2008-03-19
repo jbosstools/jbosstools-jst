@@ -13,6 +13,8 @@ package org.jboss.tools.jst.web.ui.editors;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import org.jboss.tools.jst.web.ui.WebUiPlugin;
+
 public class TLDEditorMessages {
 	private static final String RESOURCE_BUNDLE= "org.jboss.tools.jst.web.ui.editors.TLDEditorMessages";
 	
@@ -24,6 +26,7 @@ public class TLDEditorMessages {
 		try {
 			return resourceBundle.getString(key);
 		} catch (MissingResourceException e) {
+			WebUiPlugin.getPluginLog().logError(e);
 			return "%" + key + "%";
 		}
 	}

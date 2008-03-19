@@ -30,6 +30,7 @@ import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.util.FileUtil;
+import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 import org.jboss.tools.jst.web.project.WebModuleImpl;
 
@@ -74,6 +75,7 @@ public abstract class ImportWebWarContext extends ImportWebProjectContext {
 			zip = new ZipFile(f);
 			loadEntries();
 		} catch (Exception e) {
+			WebModelPlugin.getPluginLog().logError(e);
 			warError = NLS.bind(WebUIMessages.FILE_ISNOT_CORRECT,location); 
 			return;
 		}
@@ -92,12 +94,14 @@ public abstract class ImportWebWarContext extends ImportWebProjectContext {
 			InputStream s = zip.getInputStream(entry);
 			body = FileUtil.readStream(s);
 		} catch (Exception e) {
+			WebModelPlugin.getPluginLog().logError(e);
 			warError = NLS.bind(WebUIMessages.CANNOT_READ_WEBXML, location); //$NON-NLS-2$
 			return;
 		}
 		try {
 			loadWebXML(body, "WEB-INF/web.xml"); //$NON-NLS-1$
 		} catch (Exception e) {
+			WebModelPlugin.getPluginLog().logError(e);
 			warError = e.getMessage();
 			return;
 		}

@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Control;
 
 import org.jboss.tools.common.model.*;
 import org.jboss.tools.common.meta.*;
+import org.jboss.tools.jst.web.tiles.ui.TilesUIPlugin;
 import org.jboss.tools.jst.web.tiles.ui.editor.model.ITilesElement;
 import org.jboss.tools.jst.web.tiles.ui.editor.model.ITilesModel;
 
@@ -110,6 +111,7 @@ public class TilesElement implements ITilesElement{
 					;
 				getTilesModel().setModified(true);
 			} catch (Exception exception) {
+				TilesUIPlugin.getPluginLog().logError(exception);
 				if (newValue != null)
 					getTilesModel().setModified(true);
 			}

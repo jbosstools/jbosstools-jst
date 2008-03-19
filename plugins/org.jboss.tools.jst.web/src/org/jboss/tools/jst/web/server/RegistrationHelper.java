@@ -95,6 +95,7 @@ public class RegistrationHelper {
 			try {
 				server.getRootModules(m, null);
 			} catch (CoreException ce) {
+				WebModelPlugin.getPluginLog().logError(ce);
 				return ce.getStatus().getMessage();
 			}
 
@@ -104,7 +105,7 @@ public class RegistrationHelper {
 			if(status != null && !status.isOK()) return status.getMessage();
 			return null;
 		} catch (Exception e) {
-			//ignore
+			WebModelPlugin.getPluginLog().logError(e);
 			return WebUIMessages.CANNOT_REGISTER_IN_THIS_SERVER;
 		}
 	}

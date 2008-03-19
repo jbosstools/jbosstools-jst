@@ -64,7 +64,12 @@ public class ValueProxyFactory {
 		IValue proxy = value;
 		int arrayLength = -1;
 		
-		try { arrayLength = ((JDIValue) value).getArrayLength(); } catch (Exception e) { arrayLength = -1; }
+		try {
+			arrayLength = ((JDIValue) value).getArrayLength();
+		} catch (Exception e) {
+			WebDebugUIPlugin.getPluginLog().logError(e);
+			arrayLength = -1;
+		}
 		
 		try {
 			String type = value.getReferenceTypeName();
@@ -121,7 +126,12 @@ public class ValueProxyFactory {
 		IValue proxy = value;
 		int arrayLength = -1;
 		
-		try { arrayLength = ((JDIValue) value).getArrayLength(); } catch (Exception e) { arrayLength = -1; }
+		try {
+			arrayLength = ((JDIValue) value).getArrayLength();
+		} catch (Exception e) {
+			WebDebugUIPlugin.getPluginLog().logError(e);
+			arrayLength = -1;
+		}
 	
 		try {
 			String type = value.getReferenceTypeName();

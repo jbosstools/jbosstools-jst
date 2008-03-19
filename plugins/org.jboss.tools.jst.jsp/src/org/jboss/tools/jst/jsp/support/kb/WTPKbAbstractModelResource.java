@@ -20,6 +20,7 @@ import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.kb.KbDinamicResource;
 import org.jboss.tools.common.kb.KbProposal;
 import org.jboss.tools.common.model.ui.editor.IModelObjectEditorInput;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
 
 public abstract class WTPKbAbstractModelResource implements KbDinamicResource {
@@ -40,6 +41,7 @@ public abstract class WTPKbAbstractModelResource implements KbDinamicResource {
 			}
 			fXModel = (fXModelObject == null) ? null : fXModelObject.getModel();
 		} catch (Exception x) {
+			JspEditorPlugin.getPluginLog().logError(x);
 			this.fProvider = null;
 			this.fXModel = null;
 		}

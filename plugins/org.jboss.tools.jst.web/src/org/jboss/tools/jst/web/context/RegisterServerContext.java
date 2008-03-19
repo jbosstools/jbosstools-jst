@@ -22,6 +22,7 @@ import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.core.internal.*;
 
 import org.jboss.tools.common.model.options.Preference;
+import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 import org.jboss.tools.jst.web.server.RegistrationHelper;
 import org.jboss.tools.jst.web.server.ServerManager;
@@ -194,6 +195,7 @@ public class RegisterServerContext {
 			try {
 				Integer.parseInt(t);
 			} catch (Exception e) {
+				WebModelPlugin.getPluginLog().logError(e);
 				return false;
 			}
 		}			

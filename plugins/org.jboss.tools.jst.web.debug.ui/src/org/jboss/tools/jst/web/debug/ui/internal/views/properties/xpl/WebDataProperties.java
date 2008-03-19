@@ -94,7 +94,7 @@ public class WebDataProperties implements IPropertyChangeListener {
 			}
 			return (value == null ? false : value.booleanValue());
 		} catch (Exception x) {
-			//ignore
+			WebDebugUIPlugin.getPluginLog().logError(x);
 			return false;
 		}
 	}
@@ -110,7 +110,7 @@ public class WebDataProperties implements IPropertyChangeListener {
 			}
 			return (value == null ? "" : value);
 		} catch (Exception x) {
-			//ignore
+			WebDebugUIPlugin.getPluginLog().logError(x);
 			return "";
 		}
 	}

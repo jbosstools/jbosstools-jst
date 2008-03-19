@@ -42,6 +42,7 @@ public abstract class ProjectVersions {
 		try {
 			return new File(path).getCanonicalPath().replace('\\', '/');
 		} catch (Exception e) {
+			WebModelPlugin.getPluginLog().logError(e);
 			return path;
 		}
 	}
@@ -66,6 +67,7 @@ public abstract class ProjectVersions {
 				errorMessage = (errors == null || errors.length == 0) ? WebUIMessages.CANNOT_PARSE_PROJECT_VERSIONS_DESCRIPTORFILE + file.getAbsolutePath()
 				   : WebUIMessages.CANNOT_PARSE_PROJECT_VERSIONS_DESCRIPTORFILE + file.getAbsolutePath() + ":\n" + errors[0]; //$NON-NLS-2$
 			} catch (Exception exc) {
+				WebModelPlugin.getPluginLog().logError(exc);
 				errorMessage = WebUIMessages.CANNOT_READ_PROJECT_VERSIONS_DESCRIPTORFILE + file.getAbsolutePath();
 			}
 		} else {
@@ -101,6 +103,7 @@ public abstract class ProjectVersions {
 		try {
 			return f.getCanonicalPath().replace('\\', '/');
 		} catch (Exception e) {
+			WebModelPlugin.getPluginLog().logError(e);
 			return f.getAbsolutePath().replace('\\', '/');
 		}
 	}

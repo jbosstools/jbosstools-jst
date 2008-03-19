@@ -78,6 +78,7 @@ public class HashMapValueProxy extends ValueProxy {
 				fSize = 0; 
 			}
 		} catch (Exception ex) { 
+			WebDebugUIPlugin.getPluginLog().logError(ex);
 			fSize = 0;
 		}
 		return fSize;

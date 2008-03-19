@@ -10,18 +10,28 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.tiles.model;
 
-import java.io.*;
+import java.io.StringReader;
+import java.io.StringWriter;
 
-import org.w3c.dom.*;
-
-import org.jboss.tools.common.meta.*;
+import org.jboss.tools.common.meta.XModelEntity;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.XModelObjectConstants;
 import org.jboss.tools.common.model.filesystems.FileAuxiliary;
-import org.jboss.tools.common.model.filesystems.impl.*;
+import org.jboss.tools.common.model.filesystems.impl.AbstractExtendedXMLFileImpl;
+import org.jboss.tools.common.model.filesystems.impl.AbstractXMLFileImpl;
+import org.jboss.tools.common.model.filesystems.impl.FileAnyImpl;
+import org.jboss.tools.common.model.filesystems.impl.FolderLoader;
 import org.jboss.tools.common.model.loaders.impl.SimpleWebFileLoader;
-import org.jboss.tools.common.model.util.*;
+import org.jboss.tools.common.model.plugin.ModelPlugin;
+import org.jboss.tools.common.model.util.EntityXMLRegistration;
+import org.jboss.tools.common.model.util.XMLUtil;
+import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
 import org.jboss.tools.jst.web.model.WebProcessLoader;
+import org.w3c.dom.Document;
+import org.w3c.dom.DocumentType;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class FileTilesLoader implements WebProcessLoader, TilesConstants {
 	private FileAuxiliary aux = new FileAuxiliary("l4t", false);
@@ -143,6 +153,7 @@ public class FileTilesLoader implements WebProcessLoader, TilesConstants {
 			aux.write(object.getParent(), object, process);
 			return true;
 		} catch (Exception exc) {
+			ModelPlugin.getPluginLog().logError(exc);
 			return false;
 		}
 	}    
@@ -161,6 +172,7 @@ public class FileTilesLoader implements WebProcessLoader, TilesConstants {
 			util.saveChildren(element, object);
             return SimpleWebFileLoader.serialize(element, object);
 		} catch (Exception e) {
+			ModelPlugin.getPluginLog().logError(e);
 			return null;
 		}
 	}

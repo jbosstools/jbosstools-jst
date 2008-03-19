@@ -27,6 +27,7 @@ public class DebugMessages {
 		try {
 			return resourceBundle.getString(key);
 		} catch (MissingResourceException e) {
+			WebDebugPlugin.getPluginLog().logError(e);
 			return "%"+key+"%";
 		}
 	}

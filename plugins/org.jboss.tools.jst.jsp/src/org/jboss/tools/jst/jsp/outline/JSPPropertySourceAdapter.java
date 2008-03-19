@@ -576,9 +576,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 			}
 		}
 		catch (DOMException e) {
-			Display d = PlatformUI.getWorkbench().getDisplay();
-			if (d != null)
-				d.beep();
+			JspEditorPlugin.getPluginLog().logError(e);
 		}
 		fValuesBeingSet.pop();
 	}
@@ -677,9 +675,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 					attrMap.removeNamedItem(propertyObject.toString());
 				}
 				catch (DOMException e) {
-					if (e.code != DOMException.INVALID_MODIFICATION_ERR) {
-///						Logger.logException(e);
-					}
+					JspEditorPlugin.getPluginLog().logError(e);
 				}
 			}
 		}

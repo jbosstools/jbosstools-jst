@@ -84,7 +84,7 @@ public class FaceletsJsfCResource implements KbDinamicResource {
 				}
 			}
 		} catch (KbException e) {
-			ProblemReportingHelper.reportProblem(JspEditorPlugin.PLUGIN_ID, "ERROR: Can't process query: " + query, e);
+			JspEditorPlugin.getPluginLog().logError(e);
 		}
 		return proposalsWithoutHtmlTags;
 	}

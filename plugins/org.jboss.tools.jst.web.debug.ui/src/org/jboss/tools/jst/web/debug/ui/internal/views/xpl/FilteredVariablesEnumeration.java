@@ -72,6 +72,7 @@ public class FilteredVariablesEnumeration implements Enumeration {
 
 			return (patterns.size() == 0 ? null : patterns);
 		} catch (Exception x) {
+			WebDebugUIPlugin.getPluginLog().logError(x);
 			return null;
 		}
 	}
@@ -89,6 +90,7 @@ public class FilteredVariablesEnumeration implements Enumeration {
 				}
 			}
 		} catch (Exception x) {
+			WebDebugUIPlugin.getPluginLog().logError(x);
 			fVariables = null; // For sure
 		}
 	}
@@ -97,7 +99,10 @@ public class FilteredVariablesEnumeration implements Enumeration {
 		String varName = null; 
 		try {
 			varName = var.getName();
-		} catch (Exception x) { return false; }
+		} catch (Exception x) {
+			WebDebugUIPlugin.getPluginLog().logError(x);
+			return false;
+		}
 		if (varName == null || varName.length() == 0) return false;
 		
 		for (int i = 0; fStopPatterns != null && i < fStopPatterns.size(); i++) {
@@ -180,6 +185,7 @@ class Pattern {
 
 			return (sequence.size() == 0 ? null : (Element[])sequence.toArray(new Element[sequence.size()]));
 		} catch (Exception x) {
+			WebDebugUIPlugin.getPluginLog().logError(x);
 			return null;
 		}
 	}

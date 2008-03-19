@@ -84,7 +84,7 @@ public class TilesCompoundEditor extends ObjectMultiPageEditor {
 			try { 
 				getSite().setSelectionProvider(null); 
 			} catch (Exception e) {
-				// Ignore
+				TilesUIPlugin.getPluginLog().logError(e);
 			}
 		}
 		super.dispose();

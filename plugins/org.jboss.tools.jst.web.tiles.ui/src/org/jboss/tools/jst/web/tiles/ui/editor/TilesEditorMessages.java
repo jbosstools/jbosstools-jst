@@ -13,6 +13,8 @@ package org.jboss.tools.jst.web.tiles.ui.editor;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import org.jboss.tools.jst.web.tiles.ui.TilesUIPlugin;
+
 /**
  * @author Igels
  *
@@ -31,6 +33,7 @@ public class TilesEditorMessages {
 		try {
 			return resourceBundle.getString(key);
 		} catch (MissingResourceException e) {
+			TilesUIPlugin.getPluginLog().logError(e);
 			return "%" + key + "%";
 		}
 	}

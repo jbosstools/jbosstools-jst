@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.tld.model.handlers;
 import java.util.*;
 import org.jboss.tools.common.model.*;
 import org.jboss.tools.common.meta.*;
+import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.tld.URIConstants;
 import org.jboss.tools.jst.web.tld.model.*;
 import org.jboss.tools.jst.web.tld.model.helpers.*;
@@ -72,7 +73,7 @@ public class JSPAdopt implements XAdoptManager {
         try { 
         	c = Integer.parseInt(p.getProperty("pos")); 
         } catch (Exception e) {
-        	// Ignore
+        	WebModelPlugin.getPluginLog().logError(e);
         }
         if(c < 0) return;
         String text = p.getProperty("text");

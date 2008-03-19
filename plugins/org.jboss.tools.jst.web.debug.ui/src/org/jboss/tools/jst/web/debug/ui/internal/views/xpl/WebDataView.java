@@ -811,6 +811,7 @@ public class WebDataView extends VariablesView implements
 			try {
 				svc = mp.newDetailsViewerConfiguration();
 			} catch (CoreException e) {
+				WebDebugUIPlugin.getPluginLog().logError(e);
 				DebugUIPlugin
 						.errorDialog(
 								getSite().getShell(),
@@ -950,7 +951,7 @@ public class WebDataView extends VariablesView implements
 //			return variablesViewer;
 			return null;
 		} catch (Exception x) {
-			//ignore
+			WebDebugUIPlugin.getPluginLog().logError(x);
 			return null;
 		}
 	}

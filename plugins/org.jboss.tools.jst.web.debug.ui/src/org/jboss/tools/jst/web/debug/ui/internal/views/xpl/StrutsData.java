@@ -201,6 +201,7 @@ public class StrutsData implements IVariable, IValue {
 			v.getVariables();
 			return true;
 		} catch (Exception e) {
+			WebDebugUIPlugin.getPluginLog().logError(e);
 			return false;
 		}
 	}
@@ -290,7 +291,10 @@ public class StrutsData implements IVariable, IValue {
 		JDIThread thread = (JDIThread)thisFrame.getThread();
 		List frames = null;
 		try { frames = thread.computeNewStackFrames(); } 
-		catch (Exception x) { return null; }
+		catch (Exception x) {
+			WebDebugUIPlugin.getPluginLog().logError(x);
+			return null;
+		}
 		
 		for (int i = 0; frames != null && i < frames.size(); i++) {
 			IStackFrame currentFrame = (IStackFrame)frames.get(i);
@@ -335,7 +339,10 @@ public class StrutsData implements IVariable, IValue {
 		JDIThread thread = (JDIThread)thisFrame.getThread();
 		List frames = null;
 		try { frames = thread.computeNewStackFrames(); } 
-		catch (Exception x) { return null; }
+		catch (Exception x) {
+			WebDebugUIPlugin.getPluginLog().logError(x);
+			return null;
+		}
 		
 		for (int i = 0; frames != null && i < frames.size(); i++) {
 			IStackFrame currentFrame = (IStackFrame)frames.get(i);
@@ -392,7 +399,9 @@ public class StrutsData implements IVariable, IValue {
 		if(thisFrame == null || thisFrame.isTerminated()) return null;
 		IVariable[] stackVars = null;
 		try { stackVars = parent.getFrameVariables(); }
-		catch (Exception e) {  }
+		catch (Exception e) {
+			WebDebugUIPlugin.getPluginLog().logError(e);
+		}
 		
 		IVariable variable = EvaluationSupport.findVariableForName(stackVars, "forward"); //$NON-NLS-1$
 		if (variable != null) return variable;
@@ -400,13 +409,18 @@ public class StrutsData implements IVariable, IValue {
 		JDIThread thread = (JDIThread)thisFrame.getThread();
 		List frames = null;
 		try { frames = thread.computeNewStackFrames(); } 
-		catch (Exception x) { return null; }
+		catch (Exception x) {
+			WebDebugUIPlugin.getPluginLog().logError(x);
+			return null;
+		}
 		
 		for (int i = 0; frames != null && i < frames.size(); i++) {
 			IStackFrame currentFrame = (IStackFrame)frames.get(i);
 			if (!thisFrame.equals(currentFrame)) {
 				try { stackVars = parent.getFrameVariables(); }
-				catch (Exception e) { }
+				catch (Exception e) {
+					WebDebugUIPlugin.getPluginLog().logError(e);
+				}
 				variable = EvaluationSupport.findVariableForName(stackVars, "forward"); //$NON-NLS-1$
 				if (variable != null) return variable;
 			}

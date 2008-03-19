@@ -18,6 +18,7 @@ import org.eclipse.gef.commands.Command;
 import org.jboss.tools.common.meta.action.XAction;
 import org.jboss.tools.common.meta.action.XActionInvoker;
 import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.jst.web.tiles.ui.TilesUIPlugin;
 
 public class TilesCompoundCommand extends Command {
 	private List<Object> elements = new ArrayList<Object>();
@@ -44,6 +45,7 @@ public class TilesCompoundCommand extends Command {
 				else
 					return false;
 			} catch (Exception ex) {
+				TilesUIPlugin.getPluginLog().logError(ex);
 				return false;
 			}
 

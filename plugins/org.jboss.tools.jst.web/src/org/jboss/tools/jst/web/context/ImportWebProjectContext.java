@@ -26,6 +26,7 @@ import org.jboss.tools.common.model.filesystems.impl.AbstractXMLFileImpl;
 import org.jboss.tools.common.model.filesystems.impl.FileAnyImpl;
 import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
 import org.jboss.tools.common.util.FileUtil;
+import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 import org.jboss.tools.jst.web.model.helpers.WebAppHelper;
 
@@ -225,6 +226,7 @@ public abstract class ImportWebProjectContext implements IImportWebProjectContex
 			long last = f.isFile() ? f.lastModified() : -1;
 			return webXMLTimeStamp == last;
 		} catch (Exception e) {
+			WebModelPlugin.getPluginLog().logError(e);
 			return webXMLTimeStamp == -1;
 		}
 	}

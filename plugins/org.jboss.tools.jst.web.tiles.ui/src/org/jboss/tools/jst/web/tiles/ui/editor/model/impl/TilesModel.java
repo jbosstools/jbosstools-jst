@@ -561,6 +561,7 @@ public class TilesModel extends TilesElement implements ITilesModel, PropertyCha
 			try {
 				return Integer.parseInt(str);
 			} catch (Exception ex) {
+				TilesUIPlugin.getPluginLog().logError(ex);
 				return DEFAULT_VERTICAL_SPACING;
 			}
 		}
@@ -573,6 +574,7 @@ public class TilesModel extends TilesElement implements ITilesModel, PropertyCha
 			try {
 				return Integer.parseInt(str);
 			} catch (Exception ex) {
+				TilesUIPlugin.getPluginLog().logError(ex);
 				return DEFAULT_HORIZONTAL_SPACING;
 			}
 		}

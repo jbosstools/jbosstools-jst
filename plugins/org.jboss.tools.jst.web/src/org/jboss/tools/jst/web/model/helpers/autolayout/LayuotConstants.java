@@ -10,8 +10,10 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.model.helpers.autolayout;
 
-import org.jboss.tools.common.model.*;
-import org.jboss.tools.common.model.options.*;
+import org.jboss.tools.common.model.XModel;
+import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.options.PreferenceModelUtilities;
+import org.jboss.tools.jst.web.WebModelPlugin;
 
 public class LayuotConstants {
 	static int DELTA_X = 200;
@@ -62,6 +64,7 @@ public class LayuotConstants {
 				incY = Y_INC;
 			}
 		} catch (Exception e) {
+			WebModelPlugin.getPluginLog().logError(e);
 			deltaX = DELTA_X;
 			deltaY = DELTA_Y;
 			incX = X_INC;

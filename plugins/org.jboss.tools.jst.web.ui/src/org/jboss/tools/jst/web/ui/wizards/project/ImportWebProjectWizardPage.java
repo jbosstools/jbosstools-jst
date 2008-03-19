@@ -347,6 +347,7 @@ public class ImportWebProjectWizardPage extends WizardPage {
 		try {
 			project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		} catch (Exception e) {
+			WebUiPlugin.getPluginLog().logError(e);
 			setErrorMessage(e.getMessage());
 			return false;
 		}
@@ -372,6 +373,7 @@ public class ImportWebProjectWizardPage extends WizardPage {
 			hasJavaNature = project.exists() && project.hasNature(JavaCore.NATURE_ID);
 			hasNature = project.exists() && project.hasNature(context.getNatureID());
 		} catch (CoreException e) {
+			WebUiPlugin.getPluginLog().logError(e);
 			hasNature = project.exists();
 		}
 		if(project.exists() && (!hasNature) && hasJavaNature) {

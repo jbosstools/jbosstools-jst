@@ -95,6 +95,7 @@ public class WebProcessStructureHelper {
 			try {
 				result[i] = Integer.parseInt(s[i]);
 			} catch (Exception e) {
+				WebModelPlugin.getPluginLog().logError(e);
 				result[i] = 0;
 			}
 		}

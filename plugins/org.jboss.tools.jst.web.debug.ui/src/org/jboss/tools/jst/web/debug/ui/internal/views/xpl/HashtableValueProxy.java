@@ -48,7 +48,10 @@ public class HashtableValueProxy extends ValueProxy {
 			try { 
 				fSize = Integer.parseInt(sizeVar.getValue().getValueString()); 
 			} 
-			catch (Exception ex) { fSize = 0; }
+			catch (Exception ex) {
+				WebDebugUIPlugin.getPluginLog().logError(ex);
+				fSize = 0;
+			}
 	
 			IVariable table = EvaluationSupport.findVariableForName(vars, "table");
 

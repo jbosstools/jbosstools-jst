@@ -33,6 +33,7 @@ import org.jboss.tools.common.model.ServiceDialog;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.common.reporting.ProblemReportingHelper;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
+import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.context.ImportWebDirProjectContext;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
@@ -89,7 +90,7 @@ public abstract class ImportWebProjectWizard extends Wizard implements IImportWi
 			updatePerspective();
 			BasicNewResourceWizard.selectAndReveal(context.getProjectHandle(), ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow());
 		} catch (Exception ex) {
-			ProblemReportingHelper.reportProblem(WebUiPlugin.PLUGIN_ID, ex);
+			WebUiPlugin.getPluginLog().logError(ex);
 			result = false;
 		}		
 		return result;

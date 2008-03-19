@@ -74,7 +74,7 @@ public abstract class ImportWebWarWizard extends Wizard implements IImportWizard
 			updatePerspective();
 			BasicNewResourceWizard.selectAndReveal(context.getProjectHandle(), ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow());
 		} catch (Exception ex) {
-			ProblemReportingHelper.reportProblem(WebUiPlugin.PLUGIN_ID, ex);
+			WebUiPlugin.getPluginLog().logError(ex);
 			result = false;
 		}		
 		return result;

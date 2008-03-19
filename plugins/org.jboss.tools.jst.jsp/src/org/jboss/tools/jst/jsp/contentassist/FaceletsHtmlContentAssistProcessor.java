@@ -401,7 +401,7 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
 		try {
 			ad = getWtpKbConnector().getAttributeInformation(query);
 		} catch(Exception e) {
-			ProblemReportingHelper.reportProblem(JspEditorPlugin.PLUGIN_ID, "ERROR: Can't get Attribute Descriptor from KB by " + query + "", e);
+			JspEditorPlugin.getPluginLog().logError(e);
 		}
 		if(ad!=null) {
 			CMAttributeDeclaration attrDecl = null;
@@ -484,7 +484,7 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
                 FaceletsJsfCResource fsfCResource = new FaceletsJsfCResource(wtpKbConnector);
                 wtpKbConnector.registerResource(fsfCResource);
             } catch(Exception e) {
-            	ProblemReportingHelper.reportProblem(JspEditorPlugin.PLUGIN_ID, "ERROR: Can't create WtpKbConnector.", e);
+            	JspEditorPlugin.getPluginLog().logError(e);
             }
 	    }
 	    return wtpKbConnector;

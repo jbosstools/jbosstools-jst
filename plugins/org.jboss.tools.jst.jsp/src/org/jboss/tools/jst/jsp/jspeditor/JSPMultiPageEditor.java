@@ -165,6 +165,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 			}
 
 		} catch (Exception e) {
+			JspEditorPlugin.getPluginLog().logError(e);
 			selectedPageIndex = 0;
 		}
 	}

@@ -12,6 +12,8 @@ package org.jboss.tools.jst.jsp.jspeditor;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
+
 /**
  * @author Jeremy
  *
@@ -30,6 +32,7 @@ public class JSPEditorMessages {
 		try {
 			return fgResourceBundle.getString(key);
 		} catch (MissingResourceException e) {
+			JspEditorPlugin.getPluginLog().logError(e);
 			return "!!!" + key + "!!!";//$NON-NLS-2$ //$NON-NLS-1$
 		}
 	}

@@ -47,7 +47,7 @@ public class WebDebugUIPlugin extends BaseUIPlugin {
 		try {
 			return getResourceBundle().getString(key);
 		} catch (MissingResourceException e) {
-			//ignore
+			getPluginLog().logError(e);
 			return key;
 		}
 	}
@@ -60,7 +60,7 @@ public class WebDebugUIPlugin extends BaseUIPlugin {
 			try {
 				resourceBundle= ResourceBundle.getBundle("org.jboss.tools.jst.web.debug.ui.xpl.WebDebugUIResources");
 			} catch (Exception x) {
-				//ignore
+				getPluginLog().logError(x);
 				resourceBundle = null;
 			}
 		}

@@ -21,6 +21,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.ui.model.*;
 import org.jboss.tools.jst.web.project.handlers.*;
+import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 public class AddProjectTemplateResourcesView extends AbstractSpecialWizardStep {
     private final static int SIZING_SELECTION_WIDGET_WIDTH = 400;
@@ -86,6 +87,7 @@ public class AddProjectTemplateResourcesView extends AbstractSpecialWizardStep {
                     try {
                         members = ((IContainer) o).members();
                     } catch (CoreException e) {
+                    	WebUiPlugin.getPluginLog().logError(e);
                         //just return an empty set of children
                         return new Object[0];
                     }

@@ -13,6 +13,8 @@ package org.jboss.tools.jst.jsp.drop.treeviewer.ui;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
+
 public class TreeViewerMessages {
 
 	private static final String RESOURCE_BUNDLE = "org.jboss.tools.jst.jsp.drop.treeviewer.ui.TreeViewerMessages";
@@ -23,6 +25,7 @@ public class TreeViewerMessages {
 		try {
 			return resourceBundle.getString(key);
 		} catch (MissingResourceException e) {
+			JspEditorPlugin.getPluginLog().logError(e);
 			return "%" + key + "%";
 		}
 	}

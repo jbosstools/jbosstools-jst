@@ -333,6 +333,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 									if (c < 0)
 										c = 0;
 								} catch (Exception ex) {
+									JspEditorPlugin.getPluginLog().logError(ex);
 									c = t.getOffsetAtLine(lineIndex + 1)
 											- (t.getLineDelimiter() == null ? 0
 													: t.getLineDelimiter()
@@ -341,6 +342,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 								return c;
 							}
 						} catch (Exception e) {
+							JspEditorPlugin.getPluginLog().logError(e);
 							return 0;
 						}
 					}
@@ -866,6 +868,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 					if (c < 0)
 						c = 0;
 				} catch (Exception ex) {
+					JspEditorPlugin.getPluginLog().logError(ex);
 					c = t.getOffsetAtLine(lineIndex + 1)
 							- (t.getLineDelimiter() == null ? 0 : t
 									.getLineDelimiter().length());
@@ -873,6 +876,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 				return c;
 			}
 		} catch (Exception e) {
+			JspEditorPlugin.getPluginLog().logError(e);
 			return 0;
 		}
 	}
