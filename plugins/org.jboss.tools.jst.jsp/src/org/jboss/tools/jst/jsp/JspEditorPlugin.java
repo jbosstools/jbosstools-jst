@@ -38,8 +38,6 @@ import org.jboss.tools.jst.jsp.preferences.JSPOccurrencePreferenceConstants;
 public class JspEditorPlugin extends BaseUIPlugin {
 	//The shared instance.
 	private static JspEditorPlugin plugin;
-	//Resource bundle.
-	private ResourceBundle resourceBundle;
 	
 	public static final String PLUGIN_ID = "org.jboss.tools.jst.jsp"; 
 
@@ -49,12 +47,6 @@ public class JspEditorPlugin extends BaseUIPlugin {
 	 */
 	public JspEditorPlugin() {
 		plugin = this;
-		try {
-			resourceBundle= ResourceBundle.getBundle("org.jboss.tools.jst.jsp.JspEditorPluginResources");
-		} catch (MissingResourceException x) {
-			getPluginLog().logError(x);
-			resourceBundle = null;
-		}
 	}
 
 
@@ -65,26 +57,6 @@ public class JspEditorPlugin extends BaseUIPlugin {
 		return ResourcesPlugin.getWorkspace();
 	}
 
-	/**
-	 * Returns the string from the plugin's resource bundle,
-	 * or 'key' if not found.
-	 */
-	public static String getResourceString(String key) {
-		ResourceBundle bundle= JspEditorPlugin.getDefault().getResourceBundle();
-		try {
-			return bundle.getString(key);
-		} catch (MissingResourceException e) {
-			getPluginLog().logError(e);
-			return key;
-		}
-	}
-
-	/**
-	 * Returns the plugin's resource bundle,
-	 */
-	public ResourceBundle getResourceBundle() {
-		return resourceBundle;
-	}
 	
 	public void startup() throws CoreException {
 		super.startup();
