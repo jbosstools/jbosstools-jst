@@ -219,7 +219,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 			// create Red Hat Web Nature
 			preCreateWebNature();
 //			createWebNature();
-			monitor.worked(4);
+//			monitor.worked(4);
 			// create Java Nature
 			JavaCore.create(getProject());
 //			createJavaNature(); // create java nature now migrate into create WTP nature @see createWTPNature()
@@ -228,10 +228,15 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 //			updateVersion();
 			monitor.worked(1);
 			// refresh project resource
-			getProject().refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
-			monitor.worked(3);
+//			getProject().refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+//			monitor.worked(3);
 			// update model
 				createWebNature();
+				monitor.worked(4);
+
+				getProject().refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+				monitor.worked(3);
+
 				updateJavaNature(); // create java nature now migrate into create WTP nature @see createWTPNature()
 				updateVersion();
 
