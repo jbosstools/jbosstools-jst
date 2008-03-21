@@ -934,7 +934,7 @@
     <XActionItem HandlerClassName="%Create%" ICON="action.empty"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Add Attribute..." kind="action" name="CreateAttribute">
-     <EntityData EntityName="TLDAttribute12">
+     <EntityData EntityName="TLDAttribute21">
       <AttributeData AttributeName="name"/>
       <AttributeData AttributeName="required" Mandatory="no"/>
       <AttributeData AttributeName="rtexprvalue" Mandatory="no"/>
