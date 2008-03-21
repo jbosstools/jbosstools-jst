@@ -317,36 +317,6 @@ public class JSPTextEditor extends StructuredTextEditor implements
 						return null;
 					}
 
-					private int getPosition(StyledText t, int x, int y) {
-						try {
-							Point pp = t.toControl(x, y);
-							x = pp.x;
-							y = pp.y;
-							int lineIndex = (t.getTopPixel() + y)
-									/ t.getLineHeight();
-							if (lineIndex >= t.getLineCount()) {
-								return t.getCharCount();
-							} else {
-								int c = 0;
-								try {
-									c = t.getOffsetAtLocation(new Point(x, y));
-									if (c < 0)
-										c = 0;
-								} catch (Exception ex) {
-									JspEditorPlugin.getPluginLog().logError(ex);
-									c = t.getOffsetAtLine(lineIndex + 1)
-											- (t.getLineDelimiter() == null ? 0
-													: t.getLineDelimiter()
-															.length());
-								}
-								return c;
-							}
-						} catch (Exception e) {
-							JspEditorPlugin.getPluginLog().logError(e);
-							return 0;
-						}
-					}
-
 					public void dragEnter(DropTargetEvent event) {
 						getFreeCaretControl(event.widget).enableFreeCaret(true);
 					}
@@ -852,12 +822,16 @@ public class JSPTextEditor extends StructuredTextEditor implements
 	}
 
 	private int getPosition(int x, int y) {
+		ISourceViewer v = getSourceViewer();
+		return v == null ? 0 : getPosition(v.getTextWidget(), x, y);
+	}
+
+	private int getPosition(StyledText t, int x, int y) {
+		if(t == null || t.isDisposed()) return 0;
+		Point pp = t.toControl(x, y);
+		x = pp.x;
+		y = pp.y;
 		try {
-			ISourceViewer v = getSourceViewer();
-			StyledText t = v.getTextWidget();
-			Point pp = t.toControl(x, y);
-			x = pp.x;
-			y = pp.y;
 			int lineIndex = (t.getTopPixel() + y) / t.getLineHeight();
 			if (lineIndex >= t.getLineCount()) {
 				return t.getCharCount();
@@ -867,14 +841,18 @@ public class JSPTextEditor extends StructuredTextEditor implements
 					c = t.getOffsetAtLocation(new Point(x, y));
 					if (c < 0)
 						c = 0;
-				} catch (Exception ex) {
-					JspEditorPlugin.getPluginLog().logError(ex);
+				} catch (IllegalArgumentException ex) {
+					//do not log, catching that exception is 
+					//the way to know that we are out of line. 
 					c = t.getOffsetAtLine(lineIndex + 1)
-							- (t.getLineDelimiter() == null ? 0 : t
-									.getLineDelimiter().length());
+							- (t.getLineDelimiter() == null ? 0
+									: t.getLineDelimiter().length());
 				}
 				return c;
 			}
+		} catch (IllegalArgumentException ex) {
+			//do not log, now we know are out of input area.
+			return 0;
 		} catch (Exception e) {
 			JspEditorPlugin.getPluginLog().logError(e);
 			return 0;
