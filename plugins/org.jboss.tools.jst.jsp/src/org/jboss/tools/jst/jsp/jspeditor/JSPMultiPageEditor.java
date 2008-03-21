@@ -176,7 +176,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 
 	private void saveSelectedTab() {
 		IFile file = getFile();
-		if(file == null) return;
+		if(file == null || !file.exists()) return;
 		String q = "" + selectedPageIndex;
 		try {
 			file.setPersistentProperty(persistentTabQualifiedName, q);
