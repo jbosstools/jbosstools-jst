@@ -831,31 +831,25 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		Point pp = t.toControl(x, y);
 		x = pp.x;
 		y = pp.y;
-		try {
-			int lineIndex = (t.getTopPixel() + y) / t.getLineHeight();
-			if (lineIndex >= t.getLineCount()) {
-				return t.getCharCount();
-			} else {
-				int c = 0;
-				try {
-					c = t.getOffsetAtLocation(new Point(x, y));
-					if (c < 0)
-						c = 0;
-				} catch (IllegalArgumentException ex) {
-					//do not log, catching that exception is 
-					//the way to know that we are out of line. 
-					c = t.getOffsetAtLine(lineIndex + 1)
-							- (t.getLineDelimiter() == null ? 0
-									: t.getLineDelimiter().length());
-				}
-				return c;
+		int lineIndex = (t.getTopPixel() + y) / t.getLineHeight();
+		if (lineIndex >= t.getLineCount()) {
+			return t.getCharCount();
+		} else {
+			int c = 0;
+			try {
+				c = t.getOffsetAtLocation(new Point(x, y));
+				if (c < 0) c = 0;
+			} catch (IllegalArgumentException ex) {
+				//do not log, catching that exception is 
+				//the way to know that we are out of line. 
+            	if (lineIndex + 1 >= t.getLineCount()) {
+                    return t.getCharCount();
+                }
+				c = t.getOffsetAtLine(lineIndex + 1)
+						- (t.getLineDelimiter() == null 
+							? 0 : t.getLineDelimiter().length());
 			}
-		} catch (IllegalArgumentException ex) {
-			//do not log, now we know are out of input area.
-			return 0;
-		} catch (Exception e) {
-			JspEditorPlugin.getPluginLog().logError(e);
-			return 0;
+			return c;
 		}
 	}
 
