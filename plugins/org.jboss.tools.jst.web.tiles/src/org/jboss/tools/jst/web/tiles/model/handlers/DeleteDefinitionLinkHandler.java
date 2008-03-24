@@ -14,12 +14,13 @@ import java.util.Properties;
 
 import org.jboss.tools.common.meta.action.impl.AbstractHandler;
 import org.jboss.tools.common.model.ServiceDialog;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 
 public class DeleteDefinitionLinkHandler extends AbstractHandler {
 
-    public void executeHandler(XModelObject object, Properties p) throws Exception {
+    public void executeHandler(XModelObject object, Properties p) throws XModelException {
     	String s = object.getAttributeValue("extends"); //$NON-NLS-1$
         if(s == null || s.length() == 0) return;
         ServiceDialog d = object.getModel().getService();

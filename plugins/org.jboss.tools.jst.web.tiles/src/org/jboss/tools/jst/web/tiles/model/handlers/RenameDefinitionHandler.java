@@ -26,7 +26,7 @@ public class RenameDefinitionHandler extends DefaultEditHandler {
     	return true;
     }
 
-    public void executeHandler(XModelObject object, Properties p) throws Exception {
+    public void executeHandler(XModelObject object, Properties p) throws XModelException {
     	if(!isEnabled(object)) return;
     	int q = DefaultRenameSupport.run(object, data[0], p);
     	if(q != 0) return;

@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.tiles.model.handlers;
 import java.util.Properties;
 import org.jboss.tools.common.meta.action.*;
 import org.jboss.tools.common.meta.action.impl.AbstractHandler;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 
 public class ShowPreferenceHandler extends AbstractHandler {
@@ -22,7 +23,7 @@ public class ShowPreferenceHandler extends AbstractHandler {
         return wizard != null;
     }
 
-    public void executeHandler(XModelObject object, Properties p) throws Exception {
+    public void executeHandler(XModelObject object, Properties p) throws XModelException {
     	if(wizard != null) wizard.execute();
     }
 

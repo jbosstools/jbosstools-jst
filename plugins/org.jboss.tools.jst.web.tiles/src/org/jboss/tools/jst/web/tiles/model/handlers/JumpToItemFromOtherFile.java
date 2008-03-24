@@ -23,7 +23,7 @@ public class JumpToItemFromOtherFile extends AbstractHandler {
 		    TilesStructureHelper.instance.isNotDefinedInThisFile(object));
     }
 
-    public void executeHandler(XModelObject object, Properties p) throws Exception {
+    public void executeHandler(XModelObject object, Properties p) throws XModelException {
         XModelObject item = TilesStructureHelper.instance.findItemInOtherFile(object);
         if(item == null) return;
         XModelObject r = TilesStructureHelper.instance.getReference(item);
