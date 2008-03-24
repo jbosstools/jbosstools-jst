@@ -15,6 +15,7 @@ import java.util.*;
 import org.eclipse.osgi.util.NLS;
 
 import org.jboss.tools.common.meta.action.impl.*;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 import org.jboss.tools.jst.web.project.helpers.*;
 
@@ -54,7 +55,7 @@ public class EditProjectTemplateSupport extends MultistepWizardSupport {
 		}
 	}
 	
-	public void action(String name) throws Exception {
+	public void action(String name) throws XModelException {
 		if("Save".equals(name)) { //$NON-NLS-1$
 			name = FINISH;
 		}
@@ -65,7 +66,7 @@ public class EditProjectTemplateSupport extends MultistepWizardSupport {
 		return new String[]{"Save", CANCEL}; //$NON-NLS-1$
 	}
 
-	protected void execute() throws Exception {
+	protected void execute() throws XModelException {
 		projectTemplate.commit();
 		getProperties().setProperty("name", projectTemplate.getName()); //$NON-NLS-1$
 	}

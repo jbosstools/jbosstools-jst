@@ -22,6 +22,7 @@ import org.jboss.tools.common.meta.action.impl.DefaultWizardDataValidator;
 import org.jboss.tools.common.meta.action.impl.SpecialWizardSupport;
 import org.jboss.tools.common.meta.action.impl.WizardDataValidator;
 import org.jboss.tools.common.model.XModel;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
@@ -61,7 +62,7 @@ public class AddPageTemplateSupport extends SpecialWizardSupport {
 		setAttributeValue(0, "name", selection.getAttributeValue("name")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	public void action(String name) throws Exception {
+	public void action(String name) throws XModelException {
 		if(OK.equals(name) || FINISH.equals(name)) {
 			execute();
 			setFinished(true);
@@ -70,7 +71,7 @@ public class AddPageTemplateSupport extends SpecialWizardSupport {
 		}
 	}
 	
-	protected void execute() throws Exception {
+	protected void execute() throws XModelException {
 		Properties p0 = extractStepData(0);
 		String name = p0.getProperty("name"); //$NON-NLS-1$
 		String path = p0.getProperty("page path"); //$NON-NLS-1$

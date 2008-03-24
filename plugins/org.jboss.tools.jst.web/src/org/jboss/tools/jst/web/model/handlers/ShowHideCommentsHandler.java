@@ -29,7 +29,7 @@ public class ShowHideCommentsHandler extends AbstractHandler {
         return true;
     }
 
-    public void executeHandler(XModelObject object, Properties p) throws Exception {
+    public void executeHandler(XModelObject object, Properties p) throws XModelException {
         if(!isEnabled(object)) return;
         String attr = object.getAttributeValue("hide comments");
         attr = ("no".equals(attr)) ? "yes" : "no";

@@ -32,7 +32,7 @@ public class AddLibrarySetSupport extends SpecialWizardSupport {
 		return p.getProperty("name"); //$NON-NLS-1$
 	}
 
-	public void action(String name) throws Exception {
+	public void action(String name) throws XModelException {
 		if(OK.equals(name) || FINISH.equals(name)) {
 			execute();
 			setFinished(true);
@@ -41,7 +41,7 @@ public class AddLibrarySetSupport extends SpecialWizardSupport {
 		}
 	}
 	
-	protected void execute() throws Exception {
+	protected void execute() throws XModelException {
 		String name = extractStepData(0).getProperty("name"); //$NON-NLS-1$
 		LibrarySets.getInstance().addLibrarySet(name);
 		getProperties().setProperty("name", name); //$NON-NLS-1$

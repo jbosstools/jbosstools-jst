@@ -40,7 +40,7 @@ public class AddJarToLibrarySetSupport extends SpecialWizardSupport {
 		librarySet = (LibrarySet)getProperties().get("librarySet"); //$NON-NLS-1$
 	}
 
-	public void action(String name) throws Exception {
+	public void action(String name) throws XModelException {
 		if(OK.equals(name) || FINISH.equals(name)) {
 			execute();
 			setFinished(true);
@@ -49,7 +49,7 @@ public class AddJarToLibrarySetSupport extends SpecialWizardSupport {
 		}
 	}
 	
-	protected void execute() throws Exception {
+	protected void execute() throws XModelException {
 		String location = extractStepData(0).getProperty("location"); //$NON-NLS-1$
 		String jarname = librarySet.addJar(location);
 		getProperties().setProperty("jarname", jarname); //$NON-NLS-1$

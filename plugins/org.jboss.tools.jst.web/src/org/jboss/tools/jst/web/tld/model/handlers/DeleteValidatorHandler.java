@@ -17,7 +17,7 @@ import org.jboss.tools.jst.web.tld.model.TLDValidatorImpl;
 
 public class DeleteValidatorHandler extends AbstractHandler {
 
-	public void executeHandler(XModelObject object, Properties p) throws Exception {
+	public void executeHandler(XModelObject object, Properties p) throws XModelException {
 		if(!isEnabled(object)) return;
 		((TLDValidatorImpl)object).delete();
 	}

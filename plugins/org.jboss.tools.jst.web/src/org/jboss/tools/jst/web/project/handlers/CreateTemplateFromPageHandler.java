@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.project.handlers;
 import java.util.Properties;
 
 import org.jboss.tools.common.meta.action.impl.AbstractHandler;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.jst.web.project.helpers.AbstractWebProjectTemplate;
@@ -25,7 +26,7 @@ public class CreateTemplateFromPageHandler extends AbstractHandler {
         return EclipseResourceUtil.getModelNature(EclipseResourceUtil.getProject(object)) != null;
     }
 
-    public void executeHandler(XModelObject object, Properties p) throws Exception {
+    public void executeHandler(XModelObject object, Properties p) throws XModelException {
     	AbstractWebProjectTemplate template = WebProjectTemplateFactory.getTemplate(object);
     	if(template != null) {
     		template.addPageTemplate(object);

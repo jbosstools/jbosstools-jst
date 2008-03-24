@@ -17,6 +17,7 @@ import java.util.StringTokenizer;
 
 import org.jboss.tools.common.meta.action.impl.SpecialWizardSupport;
 import org.jboss.tools.common.model.XModel;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
 import org.jboss.tools.common.util.FileUtil;
@@ -100,15 +101,15 @@ public abstract class AdoptWebProjectContext {
         }
     }
 
-    public void setWebXMLLocation(String location) throws Exception {
+    public void setWebXMLLocation(String location) throws XModelException {
         location = location.replace('\\', '/');
         if(location.equals(webxmlLocation)) return;
         modules = new XModelObject[0];
         File f = new File(location);
-        if(!f.isFile()) throw new Exception("File " + location + " does not exist.");
+        if(!f.isFile()) throw new XModelException("File " + location + " does not exist.");
         String body = FileUtil.readFile(f);
         String entity = support.getTarget().getModel().getEntityRecognizer().getEntityName("xml", body);
-        if(entity == null || !entity.startsWith("FileWebApp")) throw new Exception("File " + location + "is not recognized as web descriptor file.");
+        if(entity == null || !entity.startsWith("FileWebApp")) throw new XModelException("File " + location + "is not recognized as web descriptor file.");
         XModelObject webxml = null;
         try {
             webxml = support.getTarget().getModel().createModelObject(entity, null);
@@ -117,10 +118,10 @@ public abstract class AdoptWebProjectContext {
             XModelObjectLoaderUtil.getObjectLoader(webxml).load(webxml);
             webxml.getChildren();
         } catch (Exception e) {
-            throw new Exception("Cannot load web descriptor file " + location + ".");
+            throw new XModelException("Cannot load web descriptor file " + location + ".");
         }
         if("yes".equals(webxml.getAttributeValue("isIncorrect")))
-          throw new Exception("Web descriptor file " + location + "is corrupted.");
+          throw new XModelException("Web descriptor file " + location + "is corrupted.");
         webxmlLocation = location;
         modules = createModulesInfo(webxml, new File(webinfLocation));
     }
@@ -216,16 +217,16 @@ public abstract class AdoptWebProjectContext {
     	return null;
     }
     
-    public void validateModules() throws Exception {
+    public void validateModules() throws XModelException {
         for (int i = 0; i < modules.length; i++) {
             String n = getModuleName(modules[i]);
             String uri = modules[i].getAttributeValue("URI");
             String path = modules[i].getAttributeValue("path on disk");
-            if(path.length() == 0) throw new Exception("Path on disk for URI " + uri + " is not set.");
-            if(!new File(path).isFile()) throw new Exception("Path on disk " + path + "\nfor URI " + uri + " does not exist.");
+            if(path.length() == 0) throw new XModelException("Path on disk for URI " + uri + " is not set.");
+            if(!new File(path).isFile()) throw new XModelException("Path on disk " + path + "\nfor URI " + uri + " does not exist.");
             path = modules[i].getAttributeValue("root");
-            if(path.length() == 0) throw new Exception("Root for " + n + " is not set.");
-            if(!new File(path).isDirectory()) throw new Exception("Root " + path + "\nfor " + n + " does not exist.");
+            if(path.length() == 0) throw new XModelException("Root for " + n + " is not set.");
+            if(!new File(path).isDirectory()) throw new XModelException("Root " + path + "\nfor " + n + " does not exist.");
         }
     }
 

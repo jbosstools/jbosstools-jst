@@ -13,7 +13,6 @@ package org.jboss.tools.jst.web.model.handlers;
 import java.util.*;
 import org.jboss.tools.common.model.*;
 import org.jboss.tools.common.model.impl.XModelImpl;
-import org.jboss.tools.common.model.util.ClassLoaderUtil;
 import org.jboss.tools.common.model.util.ModelFeatureFactory;
 import org.jboss.tools.common.meta.action.impl.*;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
@@ -29,7 +28,7 @@ public class AutolayoutWebProcessHandler extends AbstractHandler {
         return (object != null || object.isObjectEditable());
     }
 
-    public void executeHandler(XModelObject object, Properties p) throws Exception {
+    public void executeHandler(XModelObject object, Properties p) throws XModelException {
         if(!isEnabled(object)) return;
         ServiceDialog d = object.getModel().getService();
         String mes = WebUIMessages.YOU_WANT_TO_REARRANGE_THE_DIAGRAM_ELEMENTS;
@@ -52,7 +51,7 @@ public class AutolayoutWebProcessHandler extends AbstractHandler {
 		}
     }
     
-    protected Items getItemsInstance() throws Exception {
+    protected Items getItemsInstance() {
     	String clsname = action.getProperty("items-class"); //$NON-NLS-1$
     	return (Items)ModelFeatureFactory.getInstance().createFeatureInstance(clsname);
     }

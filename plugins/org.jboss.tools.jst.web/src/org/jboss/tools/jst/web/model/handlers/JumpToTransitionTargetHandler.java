@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.model.handlers;
 
 import java.util.Properties;
 import org.jboss.tools.common.meta.action.impl.AbstractHandler;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.util.FindObjectHelper;
 import org.jboss.tools.jst.web.model.helpers.WebProcessStructureHelper;
@@ -27,7 +28,7 @@ public class JumpToTransitionTargetHandler extends AbstractHandler {
         return true;
     }
 
-    public void executeHandler(XModelObject object, Properties p) throws Exception {
+    public void executeHandler(XModelObject object, Properties p) throws XModelException {
     	p = new Properties();
     	p.put("object", object);
     	p.put("help", "JSFProcess_SelectItem");

@@ -32,7 +32,7 @@ public class ExpandTLDHandler extends AbstractHandler {
         return true;
     }
 
-    public void executeHandler(XModelObject object, Properties p) throws Exception {
+    public void executeHandler(XModelObject object, Properties p) throws XModelException {
         if(!isEnabled(object)) return;
         String v = ("true".equals(object.get("expanded"))) ? "false" : "true";
         object.setAttributeValue("expanded", v);
@@ -40,7 +40,7 @@ public class ExpandTLDHandler extends AbstractHandler {
         m.fireStructureChanged(object);
     }
 
-    public void executeHandler(XModelObject object, XModelObject[] objects, java.util.Properties p) throws Exception {
+    public void executeHandler(XModelObject object, XModelObject[] objects, java.util.Properties p) throws XModelException {
         if(!isEnabled(object, objects)) return;
         if(object == null || objects == null || objects.length < 2) {
             executeHandler(object, p);

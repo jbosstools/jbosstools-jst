@@ -18,6 +18,7 @@ import org.eclipse.osgi.util.NLS;
 import org.jboss.tools.common.meta.action.XActionInvoker;
 import org.jboss.tools.common.meta.action.impl.*;
 import org.jboss.tools.common.model.XModel;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.project.IModelNature;
@@ -142,7 +143,7 @@ public class AddProjectTemplateSupport extends MultistepWizardSupport {
 		}
 	}
 
-	protected void prepareStep(int nextStep) throws Exception {
+	protected void prepareStep(int nextStep) throws XModelException {
 		if(nextStep == RESOURCES_STEP) {
 			getProperties().put("ResourcesStep", steps[RESOURCES_STEP]); //$NON-NLS-1$
 			resourcesStep.init();			
@@ -152,7 +153,7 @@ public class AddProjectTemplateSupport extends MultistepWizardSupport {
 		}
 	}	
 
-	protected void execute() throws Exception {
+	protected void execute() throws XModelException {
 		Properties p0 = extractStepData(0);
 		String name = p0.getProperty("name"); //$NON-NLS-1$
 		IProject project = getSelectedProject();

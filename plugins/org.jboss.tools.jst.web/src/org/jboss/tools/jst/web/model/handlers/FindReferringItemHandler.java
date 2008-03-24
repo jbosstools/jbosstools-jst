@@ -26,7 +26,7 @@ public class FindReferringItemHandler extends AbstractHandler {
 		return (object != null && object.isActive());
 	}
 
-	public void executeHandler(XModelObject object, Properties p) throws Exception {
+	public void executeHandler(XModelObject object, Properties p) throws XModelException {
 		if(!isEnabled(object)) return;
 		XModelObject[] os = getReferringObjects(object);
 		if(os.length == 0) {

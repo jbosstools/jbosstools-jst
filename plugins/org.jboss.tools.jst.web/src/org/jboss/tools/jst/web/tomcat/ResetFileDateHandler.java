@@ -21,7 +21,7 @@ public class ResetFileDateHandler extends AbstractHandler {
         return (object != null && getParentFolder(object) != null);
     }
 
-    public void executeHandler(XModelObject object, Properties p) throws Exception {
+    public void executeHandler(XModelObject object, Properties p) throws XModelException {
         FolderImpl f = getParentFolder(object);
         if(f != null) f.changeChildTimeStamp(object);
     }

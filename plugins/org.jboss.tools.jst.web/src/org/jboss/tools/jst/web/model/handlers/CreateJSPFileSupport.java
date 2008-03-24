@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.*;
 import org.jboss.tools.common.meta.action.impl.WizardDataValidator;
 import org.jboss.tools.common.model.XModel;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.files.handlers.*;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
@@ -49,9 +50,13 @@ public class CreateJSPFileSupport extends CreateFileSupport {
 		return new String[]{BACK, FINISH, CANCEL, HELP};
 	}
 
-	public void action(String name) throws Exception {
+	public void action(String name) throws XModelException {
 		if(NEXT.equals(name)) {
-			initSelectedTaglibs();
+			try {
+				initSelectedTaglibs();
+			} catch (IOException e) {
+				throw new XModelException(e);
+			}
 			setStepId(1);
 		} else if(BACK.equals(name)) {
 			saveSelectedTaglibs();
@@ -177,9 +182,9 @@ public class CreateJSPFileSupport extends CreateFileSupport {
 			return;
 		}
 		String body = getTemplateBody();
-		Set existing = taglibs.getTaglibsFromTemplate(body);
+		Set<String> existing = taglibs.getTaglibsFromTemplate(body);
 		StringBuffer sb = new StringBuffer();
-		Iterator it = existing.iterator();
+		Iterator<String> it = existing.iterator();
 		while(it.hasNext()) {
 			String s = it.next().toString();
 			if(sb.length() > 0) sb.append(";");

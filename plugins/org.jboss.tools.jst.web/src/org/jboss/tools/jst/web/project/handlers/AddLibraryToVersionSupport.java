@@ -17,6 +17,7 @@ import org.eclipse.osgi.util.NLS;
 import org.jboss.tools.common.meta.action.XActionInvoker;
 import org.jboss.tools.common.meta.action.impl.*;
 import org.jboss.tools.common.model.XModel;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 import org.jboss.tools.jst.web.project.helpers.*;
@@ -64,7 +65,7 @@ public class AddLibraryToVersionSupport extends SpecialWizardSupport {
 		if(pl.length > 0) setAttributeValue(0, "name", pl[0]); //$NON-NLS-1$
 	}
 
-	public void action(String name) throws Exception {
+	public void action(String name) throws XModelException {
 		if(OK.equals(name) || FINISH.equals(name)) {
 			execute();
 			setFinished(true);
@@ -73,7 +74,7 @@ public class AddLibraryToVersionSupport extends SpecialWizardSupport {
 		}
 	}
 	
-	protected void execute() throws Exception {
+	protected void execute() throws XModelException {
 		String name = extractStepData(0).getProperty("name"); //$NON-NLS-1$
 		version.addLibrary(name);
 		getProperties().setProperty("name", name); //$NON-NLS-1$

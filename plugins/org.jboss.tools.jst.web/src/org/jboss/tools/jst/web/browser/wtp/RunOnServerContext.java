@@ -27,6 +27,7 @@ import org.eclipse.wst.server.core.util.*;
 
 import org.jboss.tools.common.model.ServiceDialog;
 import org.jboss.tools.common.model.XModel;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
@@ -108,7 +109,7 @@ public class RunOnServerContext extends AbstractBrowserContext {
 		return null;
 	}
 
-	protected void doExecute(String lastRunUrl) throws Exception {
+	protected void doExecute(String lastRunUrl) throws XModelException {
 		ServiceDialog d = PreferenceModelUtilities.getPreferenceModel().getService();
 		IServer server = ServerManager.getInstance().getSelectedServer();
 		if(server == null) {

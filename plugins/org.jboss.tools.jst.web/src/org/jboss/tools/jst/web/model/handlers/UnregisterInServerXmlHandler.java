@@ -19,6 +19,7 @@ import org.eclipse.wst.server.core.IServer;
 import org.jboss.tools.common.meta.action.impl.AbstractHandler;
 import org.jboss.tools.common.meta.action.impl.XActionImpl;
 import org.jboss.tools.common.model.ServiceDialog;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
@@ -48,7 +49,7 @@ public class UnregisterInServerXmlHandler extends AbstractHandler {
         return false;
     }
 
-    public void executeHandler(XModelObject object, Properties p) throws Exception {
+    public void executeHandler(XModelObject object, Properties p) throws XModelException {
 		String name = object.getAttributeValue("application name"); //$NON-NLS-1$
 		if(p != null && "true".equals(p.getProperty("unregisterFromAllServers"))) {
 			unregisterFromAllServers(object);
@@ -68,7 +69,7 @@ public class UnregisterInServerXmlHandler extends AbstractHandler {
 		return RegistrationHelper.isRegistered(EclipseResourceUtil.getProject(object));
 	}
 	
-	void unregisterFromAllServers(XModelObject object) throws Exception {
+	void unregisterFromAllServers(XModelObject object) throws XModelException {
 		IProject project = EclipseResourceUtil.getProject(object);
 		IServer[] ss = ServerManager.getInstance().getServers();
 		for (int i = 0; i < ss.length; i++) {

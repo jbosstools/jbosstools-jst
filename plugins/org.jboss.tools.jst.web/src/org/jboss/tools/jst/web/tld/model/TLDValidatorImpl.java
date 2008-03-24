@@ -28,7 +28,7 @@ public class TLDValidatorImpl extends OrderedObjectImpl {
 		return true; 
     }
     
-    public void delete() throws Exception {
+    public void delete() throws XModelException {
     	XModelObject[] cs = getChildren();
     	for (int i = 0; i < cs.length; i++) {
     		DefaultRemoveHandler.removeFromParent(cs[i]);

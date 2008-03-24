@@ -19,7 +19,7 @@ import org.jboss.tools.jst.web.project.WebProject;
 
 public class DeleteTLDHandler extends DeleteFileHandler {
 
-	public void executeHandler(XModelObject object, Properties p) throws Exception {
+	public void executeHandler(XModelObject object, Properties p) throws XModelException {
 		boolean unregister = false;
 		if(getHelper(object).isRegistered(object.getModel(), object)) {
 			String checkboxMessage = WebUIMessages.DELETE_REFERENCE_FROM_WEBDESCRIPTOR;

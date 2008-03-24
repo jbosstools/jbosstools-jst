@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.browser;
 
 import org.jboss.tools.common.meta.action.impl.handlers.DefaultCreateHandler;
 import org.jboss.tools.common.model.XModel;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 
 public abstract class AbstractBrowserContext implements IBrowserContext {
@@ -37,9 +38,9 @@ public abstract class AbstractBrowserContext implements IBrowserContext {
 	public void init() {
 	}
 
-	public void execute(XModelObject object) throws Exception {
+	public void execute(XModelObject object) throws XModelException {
 		setLastRunObject(object);
-		if(url == null) throw new Exception("Cannot open " + DefaultCreateHandler.title(object, false));
+		if(url == null) throw new XModelException("Cannot open " + DefaultCreateHandler.title(object, false));
 		doExecute(lastRunUrl);
 		if(lastRunUrl.equals(url)) {
 			history.add(lastRunObject, url);
@@ -48,7 +49,7 @@ public abstract class AbstractBrowserContext implements IBrowserContext {
 		}
 	}
 	
-	protected abstract void doExecute(String lastRunUrl) throws Exception;
+	protected abstract void doExecute(String lastRunUrl) throws XModelException;
 	
 	boolean isLastRunObjectUpToDate(XModelObject o) {
 		if(o == null) return (lastRunObject == null);

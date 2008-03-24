@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.osgi.util.NLS;
 
 import org.jboss.tools.common.meta.XAttribute;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.engines.impl.EnginesLoader;
 import org.jboss.tools.common.model.filesystems.impl.AbstractXMLFileImpl;
@@ -231,10 +232,10 @@ public abstract class ImportWebProjectContext implements IImportWebProjectContex
 		}
 	}
 
-	protected void loadWebXML(String body, String location) throws Exception {
+	protected void loadWebXML(String body, String location) throws XModelException {
 		String entity = getTarget().getModel().getEntityRecognizer().getEntityName("xml", body); //$NON-NLS-1$
 		if(entity == null || !entity.startsWith("FileWebApp")) { //$NON-NLS-1$
-			throw new Exception(NLS.bind(WebUIMessages.FILE_ISNOT_RECOGNIZED, location));
+			throw new XModelException(NLS.bind(WebUIMessages.FILE_ISNOT_RECOGNIZED, location));
 		}
 		try {
 			webxml = getTarget().getModel().createModelObject(entity, null);
@@ -244,13 +245,13 @@ public abstract class ImportWebProjectContext implements IImportWebProjectContex
 			webxml.getChildren();
 		} catch (Exception e) {
 			String webXMLErrorMessage = NLS.bind(WebUIMessages.CANNOT_LOAD_WEBDESCRIPTOR,location); 
-			throw new Exception(webXMLErrorMessage);
+			throw new XModelException(webXMLErrorMessage);
 		}
 		if("yes".equals(webxml.getAttributeValue("isIncorrect"))) { //$NON-NLS-1$ //$NON-NLS-2$
 			String[] errors = ((AbstractXMLFileImpl)webxml).getErrors();
 			String error = (errors == null || errors.length == 0) ? "" : ": " + errors[0]; //$NON-NLS-1$ //$NON-NLS-2$
 			String webXMLErrorMessage = NLS.bind(WebUIMessages.WEBDESCRIPTOR_FILE_IS_CORRUPTED, error); 
-			throw new Exception(webXMLErrorMessage);
+			throw new XModelException(webXMLErrorMessage);
 		}
 	}
 

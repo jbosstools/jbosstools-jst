@@ -14,6 +14,7 @@ import java.util.*;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 /**
@@ -25,12 +26,16 @@ public class CreateWebPrjHandler extends AbstractHandler {
 
     public CreateWebPrjHandler() {}
 
-    public void executeHandler(XModelObject object, Properties p) throws Exception {
+    public void executeHandler(XModelObject object, Properties p) throws XModelException {
         if (p == null) p = new Properties();
         
         helper.createProject(object, p);
 		IProject project = (IProject)object.getModel().getProperties().get("project");
-		project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+		try {
+			project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+		} catch (CoreException e) {
+			throw new XModelException(e);
+		}
     }
 
 }

@@ -44,7 +44,7 @@ public class RunOnServerHandler extends AbstractHandler {
 		}
     }
     
-    public void executeHandler(XModelObject object, Properties p) throws Exception {
+    public void executeHandler(XModelObject object, Properties p) throws XModelException {
         if(!isEnabled(object)) return;
         context.execute(object);
     }

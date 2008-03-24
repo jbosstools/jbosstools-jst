@@ -29,6 +29,7 @@ import org.w3c.dom.Node;
 import org.jboss.tools.common.meta.action.impl.handlers.DefaultCreateHandler;
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelConstants;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.filesystems.impl.FileSystemsImpl;
 import org.jboss.tools.common.model.impl.XModelImpl;
@@ -48,12 +49,12 @@ public class NewWebProjectHelper {
     
     public NewWebProjectHelper() {}
     
-    public void createProject(XModelObject object, Properties p) throws Exception {
+    public void createProject(XModelObject object, Properties p) throws XModelException {
         XModel model = object.getModel();
 		((XModelImpl)model).waitForLoading();
         XModelObject webxml = WebAppHelper.getWebApp(model);
         
-        if(webxml == null) throw new Exception("Cannot find web.xml");
+        if(webxml == null) throw new XModelException("Cannot find web.xml");
 		String location = ((IFile)webxml.getAdapter(IFile.class)).getLocation().toString();
 
 		XModelObject webinf = model.getByPath("FileSystems/WEB-INF");

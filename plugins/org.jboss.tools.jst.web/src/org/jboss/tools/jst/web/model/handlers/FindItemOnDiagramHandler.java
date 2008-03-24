@@ -25,7 +25,7 @@ public class FindItemOnDiagramHandler extends AbstractHandler {
         return (object != null && object.isActive());
     }
 
-    public void executeHandler(XModelObject object, Properties p) throws Exception {
+    public void executeHandler(XModelObject object, Properties p) throws XModelException {
     	p = new Properties();
     	p.put("object", object);
     	String help = action.getProperty("help");

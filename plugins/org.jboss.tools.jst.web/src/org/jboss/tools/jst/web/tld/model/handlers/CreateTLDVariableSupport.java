@@ -17,6 +17,7 @@ import org.jboss.tools.common.meta.action.impl.*;
 import org.jboss.tools.common.meta.action.impl.handlers.DefaultCreateHandler;
 import org.jboss.tools.common.meta.action.impl.handlers.DefaultEditHandler;
 import org.jboss.tools.common.meta.key.WizardKeys;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
@@ -36,7 +37,7 @@ public class CreateTLDVariableSupport extends SpecialWizardSupport {
         return new String[]{FINISH, CANCEL, HELP};
     }
 
-	public void action(String name) throws Exception {
+	public void action(String name) throws XModelException {
 		if(FINISH.equals(name)) {
 			execute();
 			setFinished(true);
@@ -47,7 +48,7 @@ public class CreateTLDVariableSupport extends SpecialWizardSupport {
 		}
 	}
 	
-	void execute() throws Exception {
+	void execute() throws XModelException {
 		Properties p = extractStepData(0);
 		if(action != null && action.getName().equals("Edit")) { //$NON-NLS-1$
 			edit(p);
@@ -57,12 +58,12 @@ public class CreateTLDVariableSupport extends SpecialWizardSupport {
 		getProperties().setProperty("done", "true"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
-	void create(Properties p) throws Exception {
+	void create(Properties p) throws XModelException {
         XModelObject c = XModelObjectLoaderUtil.createValidObject(getTarget().getModel(), getEntityData()[0].getModelEntity().getName(), p);
         DefaultCreateHandler.addCreatedObject(getTarget(), c, getProperties());
 	}
 	
-	void edit(Properties p) throws Exception {
+	void edit(Properties p) throws XModelException {
 		DefaultEditHandler.edit(getTarget(), p);
 	}
 

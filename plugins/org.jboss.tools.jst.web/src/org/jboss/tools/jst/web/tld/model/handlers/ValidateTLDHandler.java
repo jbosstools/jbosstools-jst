@@ -25,7 +25,7 @@ public class ValidateTLDHandler extends AbstractHandler {
 		return (e != null && e.length() > 0);
 	}
 
-	public void executeHandler(XModelObject object, Properties p) throws Exception {
+	public void executeHandler(XModelObject object, Properties p) throws XModelException {
 		if(p == null) p = new Properties();
 		p.setProperty("toErrorTab", "true");
 		XActionInvoker.invoke("Open", object, p);
