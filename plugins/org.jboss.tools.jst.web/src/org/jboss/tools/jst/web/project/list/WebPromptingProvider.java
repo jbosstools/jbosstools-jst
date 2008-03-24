@@ -33,7 +33,7 @@ public class WebPromptingProvider implements IWebPromptingProvider {
 			try {
 				IWebPromptingProvider p = (IWebPromptingProvider)ModelFeatureFactory.getInstance().createFeatureInstance(pns[i][0]);
 				if(p != null) l.add(p);
-			} catch (Exception e) {
+			} catch (ClassCastException e) {
 				WebModelPlugin.getPluginLog().logError(e);
 			}
 		}
