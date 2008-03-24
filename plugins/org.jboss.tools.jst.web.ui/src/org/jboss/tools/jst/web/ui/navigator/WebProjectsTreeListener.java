@@ -16,7 +16,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.jboss.tools.common.model.event.XModelTreeEvent;
 import org.jboss.tools.common.model.util.ModelFeatureFactory;
-import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.project.WebProject;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
@@ -39,7 +38,7 @@ public class WebProjectsTreeListener extends TreeViewerModelListenerImpl {
 				TreeViewerModelListenerImpl impl = (TreeViewerModelListenerImpl)ModelFeatureFactory.getInstance().createFeatureInstance(classname);
 				if(impl == null) continue;
 				listeners.put(nature, impl);
-			} catch (Exception e) {
+			} catch (ClassCastException e) {
 				WebUiPlugin.getPluginLog().logError(e);
 			}
 		}
