@@ -65,7 +65,7 @@ public class AddADFSupportHelper {
 		return false;
 	}
 	
-	public void execute() throws Exception {
+	public void execute() throws InvocationTargetException, InterruptedException {
 		ModelPlugin.getDefault().getWorkbench().getProgressService().run(false, true, new RunImpl());
 	}
 

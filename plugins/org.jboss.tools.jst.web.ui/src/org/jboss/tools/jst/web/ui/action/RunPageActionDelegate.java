@@ -335,7 +335,7 @@ class RunSelectorSupport extends SpecialWizardSupport {
 		return new String[]{FINISH, CANCEL};
 	}
 
-	public void action(String name) throws Exception {
+	public void action(String name) throws XModelException {
 		if(name.equals(FINISH)) {
 			returnCode = 0;
 			setFinished(true);

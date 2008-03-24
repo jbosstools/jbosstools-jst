@@ -17,6 +17,7 @@ import org.eclipse.jface.viewers.*;
 import org.eclipse.ui.*;
 import org.osgi.framework.Bundle;
 import org.jboss.tools.common.meta.action.impl.*;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
@@ -48,11 +49,24 @@ public class AddOrm2NatureActionHandler extends AbstractHandler {
     	return hasNature ? REMOVE_CLASS_NAME : ADD_CLASS_NAME;
     }
 
-    public void executeHandler(XModelObject object, Properties p) throws Exception {
+    public void executeHandler(XModelObject object, Properties p) throws XModelException {
     	Bundle b = Platform.getBundle(PLUGIN_ID);
     	if(b == null) return;
-    	Class c = b.loadClass(getClassName(object));
-    	IObjectActionDelegate actionDelegate = (IObjectActionDelegate)c.newInstance();
+    	
+    	Class c = null;
+    	try {
+    		c = b.loadClass(getClassName(object));
+    	} catch (ClassNotFoundException e) {
+    		throw new XModelException(e);
+    	}
+    	IObjectActionDelegate actionDelegate = null;
+    	try {
+    		actionDelegate = (IObjectActionDelegate)c.newInstance();
+    	} catch (InstantiationException e1) {
+    		throw new XModelException(e1);
+    	} catch (IllegalAccessException e2) {
+    		throw new XModelException(e2);
+    	}
     	Action action = new Action() {};
     	action.setEnabled(true);
     	IWorkbenchPart part = ModelPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getPartService().getActivePart();

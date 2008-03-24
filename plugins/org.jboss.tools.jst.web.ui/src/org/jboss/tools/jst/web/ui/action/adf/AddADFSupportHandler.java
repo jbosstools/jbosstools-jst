@@ -10,8 +10,10 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.action.adf;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import org.jboss.tools.common.meta.action.impl.AbstractHandler;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 
 public class AddADFSupportHandler extends AbstractHandler {
@@ -22,8 +24,15 @@ public class AddADFSupportHandler extends AbstractHandler {
         return helper.isEnabled();
     }
 	
-    public void executeHandler(XModelObject object, Properties p) throws Exception {
-    	if(isEnabled(object)) helper.execute();
+    public void executeHandler(XModelObject object, Properties p) throws XModelException {
+    	if(!isEnabled(object)) return;
+    	try {
+    		helper.execute();
+    	} catch (InvocationTargetException e1) {
+    		throw new XModelException(e1);
+    	} catch (InterruptedException e2) {
+    		throw new XModelException(e2);
+    	}
     }
 
 
