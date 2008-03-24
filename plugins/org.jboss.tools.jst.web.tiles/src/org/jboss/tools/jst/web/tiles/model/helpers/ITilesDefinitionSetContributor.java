@@ -13,9 +13,10 @@ package org.jboss.tools.jst.web.tiles.model.helpers;
 import java.util.*;
 
 import org.jboss.tools.common.model.XModel;
+import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.event.XModelTreeEvent;
 
 public interface ITilesDefinitionSetContributor {
-	Set getTileFiles(XModel model);
+	Set<XModelObject> getTileFiles(XModel model);
 	boolean isRelevant(XModelTreeEvent event);
 }

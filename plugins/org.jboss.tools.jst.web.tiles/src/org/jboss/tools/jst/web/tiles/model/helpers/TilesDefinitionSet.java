@@ -30,17 +30,13 @@ public class TilesDefinitionSet implements XModelTreeListener {
     static void loadContributors() {
     	ArrayList<ITilesDefinitionSetContributor> list = new ArrayList<ITilesDefinitionSetContributor>();
     	for (int i = 0; i < CONTRIBUTORS.length; i++) {
-    		try {
-    			Object watcher = ModelFeatureFactory.getInstance().createFeatureInstance(CONTRIBUTORS[i]);
-    			if(watcher instanceof ITilesDefinitionSetContributor)
-    				list.add((ITilesDefinitionSetContributor)watcher);
-    			else
-					if(ModelPlugin.isDebugEnabled()) {			
-						ModelPlugin.getPluginLog().logInfo("Class is not implemented IWatcherContributor interface!");
-					}
-    		} catch (Exception e) {
-    			ModelPlugin.getPluginLog().logError(e);
-    		}
+   			Object watcher = ModelFeatureFactory.getInstance().createFeatureInstance(CONTRIBUTORS[i]);
+   			if(watcher instanceof ITilesDefinitionSetContributor)
+   				list.add((ITilesDefinitionSetContributor)watcher);
+   			else
+				if(ModelPlugin.isDebugEnabled()) {			
+					ModelPlugin.getPluginLog().logInfo("Class is not implemented IWatcherContributor interface!");
+				}
     	}
     	contributors = list.toArray(new ITilesDefinitionSetContributor[0]);
     }
@@ -57,8 +53,8 @@ public class TilesDefinitionSet implements XModelTreeListener {
     }
 
 	XModel model;
-	Set tiles = new HashSet();
-	Map definitions = new HashMap();
+	Set<XModelObject> tiles = new HashSet<XModelObject>();
+	Map<String,XModelObject> definitions = new HashMap<String,XModelObject>();
 	Set<ITilesDefinitionSetListener> listeners = new HashSet<ITilesDefinitionSetListener>();
 	
 	void setModel(XModel model) {
@@ -66,7 +62,7 @@ public class TilesDefinitionSet implements XModelTreeListener {
 		update();
 	}
 	
-	public Map getDefinitions() {
+	public Map<String,XModelObject> getDefinitions() {
 		return definitions;
 	}
 	
@@ -95,7 +91,7 @@ public class TilesDefinitionSet implements XModelTreeListener {
 	}
 	
 	public void update() {
-		Set s = new HashSet();
+		Set<XModelObject> s = new HashSet<XModelObject>();
 		for (int i = 0; i < contributors.length; i++) {
 			s.addAll(contributors[i].getTileFiles(model));
 		}
@@ -104,25 +100,25 @@ public class TilesDefinitionSet implements XModelTreeListener {
 	}
 	
 	void updateDefinitions() {
-		Map d = new HashMap();
-		Iterator it = tiles.iterator();
+		Map<String,XModelObject> d = new HashMap<String,XModelObject>();
+		Iterator<XModelObject> it = tiles.iterator();
 		while(it.hasNext()) {
 			XModelObject o = (XModelObject)it.next();
 			XModelObject[] cs = o.getChildren(TilesConstants.ENT_DEFINITION);
 			for (int i = 0; i < cs.length; i++) d.put(cs[i].getAttributeValue("name"), cs[i]);
 		}
-		Map old = definitions;
+		Map<String,XModelObject> old = definitions;
 		definitions = d;
-		Set removed = new HashSet();
-		Set added = new HashSet();
-		it = old.keySet().iterator();
+		Set<XModelObject> removed = new HashSet<XModelObject>();
+		Set<XModelObject> added = new HashSet<XModelObject>();
+		Iterator<String> it2 = old.keySet().iterator();
 		while(it.hasNext()) {
-			String key = it.next().toString();
+			String key = it2.next();
 			if(!d.containsKey(key)) removed.add(old.get(key));
 		}
-		it = d.keySet().iterator();
-		while(it.hasNext()) {
-			String key = it.next().toString();
+		Iterator<String> kit = d.keySet().iterator();
+		while(kit.hasNext()) {
+			String key = kit.next();
 			if(!old.containsKey(key)) added.add(d.get(key));
 		}
 		if(!removed.isEmpty() || !added.isEmpty()) {
