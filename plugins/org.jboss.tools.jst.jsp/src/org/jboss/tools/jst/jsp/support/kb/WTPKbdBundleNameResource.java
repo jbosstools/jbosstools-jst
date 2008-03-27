@@ -19,11 +19,9 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.eclipse.ui.IEditorInput;
-
-import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.kb.KbDinamicResource;
-import org.jboss.tools.common.kb.KbIcon;
 import org.jboss.tools.common.kb.KbProposal;
+import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
 
 /**
@@ -60,7 +58,6 @@ public class WTPKbdBundleNameResource extends WTPKbAbstractModelResource {
 					KbProposal proposal = new KbProposal();
 					proposal.setLabel(text);
 					proposal.setReplacementString(text);
-					proposal.setIcon(KbIcon.ENUM_ITEM);
 					proposal.setPosition(text.length());
 					proposals.add(proposal);
 				}

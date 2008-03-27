@@ -11,7 +11,14 @@
 package org.jboss.tools.jst.jsp.support.kb;
 
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Properties;
+import java.util.Set;
+import java.util.StringTokenizer;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -20,14 +27,11 @@ import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
-
+import org.jboss.tools.common.kb.KbDinamicResource;
+import org.jboss.tools.common.kb.KbProposal;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.filesystems.FileSystemsHelper;
-import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
-import org.jboss.tools.common.kb.KbDinamicResource;
-import org.jboss.tools.common.kb.KbIcon;
-import org.jboss.tools.common.kb.KbProposal;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.outline.ValueHelper;
 import org.jboss.tools.jst.web.tld.FilePathEncoderFactory;
@@ -121,7 +125,6 @@ public class WTPKbImageFileResource extends WTPKbAbstractModelResource {
 			}
 			proposal.setReplacementString(replacementString);
 			proposal.setPosition(replacementString.length());
-			proposal.setIcon(KbIcon.ENUM_ITEM);
 			proposals.add(proposal);
 		}
 		return proposals;

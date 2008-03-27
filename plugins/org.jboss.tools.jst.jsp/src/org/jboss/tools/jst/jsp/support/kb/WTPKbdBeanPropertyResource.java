@@ -20,13 +20,11 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.eclipse.ui.IEditorInput;
-
-import org.jboss.tools.common.model.XModel;
-import org.jboss.tools.common.model.util.ELParser;
 import org.jboss.tools.common.kb.KbDinamicResource;
-import org.jboss.tools.common.kb.KbIcon;
 import org.jboss.tools.common.kb.KbProposal;
 import org.jboss.tools.common.kb.KbProposal.PostProcessing;
+import org.jboss.tools.common.model.XModel;
+import org.jboss.tools.common.model.util.ELParser;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.web.project.list.IWebPromptingProvider;
 import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
@@ -145,7 +143,6 @@ public class WTPKbdBeanPropertyResource extends WTPKbAbstractModelResource {
 			KbProposal proposal = new KbProposal();
 			proposal.setLabel(prefix + text + suffix);
 			proposal.setReplacementString(text);
-			proposal.setIcon(KbIcon.ENUM_ITEM);
 			proposals.add(proposal);
 			proposal.setPosition(cursor);
 			proposal.setPostProcessing(postProcessing);
