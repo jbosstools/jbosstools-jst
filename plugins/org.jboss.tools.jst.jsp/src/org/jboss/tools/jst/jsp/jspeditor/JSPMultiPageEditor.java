@@ -104,7 +104,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 
 	private int visualIndex;
 
-	JSPTextEditor sourceEditor;
+	private JSPTextEditor sourceEditor;
 
 	private int sourceIndex;
 	
@@ -123,7 +123,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 
 	private ConfigurableContentOutlinePage outlinePage = null;
 
-	XModelObject object;
+	private XModelObject object;
 
 	private QualifiedName persistentTabQualifiedName = new QualifiedName("",
 			"Selected_tab");
@@ -375,6 +375,10 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 
 			public void dispose() {
 				ISelectionProvider provider = getSelectionProvider();
+				if (provider != null) {
+					provider
+							.removeSelectionChangedListener(getSelectionChangedListener());
+				}
 				if (provider instanceof IPostSelectionProvider && postSelectionChangedListener != null) {
 						((IPostSelectionProvider) provider)
 								.removePostSelectionChangedListener(postSelectionChangedListener);
@@ -524,10 +528,17 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 
 	public void dispose() {
 		saveSelectedTab();
-		XModelObject o = getModelObject();
+		IEditorActionBarContributor contributor = getEditorSite()
+				.getActionBarContributor();
+		if (contributor != null
+				&& contributor instanceof MultiPageEditorActionBarContributor) {
+			((MultiPageEditorActionBarContributor) contributor)
+					.setActivePage(null);
+		}
 		visualEditor.dispose();
 		site.dispose();
-		super.dispose();
+		outlinePage = null;
+		XModelObject o = getModelObject();
 		if (o != null) {
 			o.getModel().removeModelTreeListener(syncListener);
 		}
@@ -541,6 +552,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 				JspEditorPlugin.getPluginLog().logError(e);
 			}
 		}
+		super.dispose();
 	}
 
 	public Object getAdapter(Class adapter) {
@@ -788,12 +800,12 @@ class ResourceChangeListener implements IResourceChangeListener {
 					IEditorInput e2 = XModelObjectEditorInput.createInstance(o);
 					e.setInput(e2);
 					e.updateTitle();
-					if (e.sourceEditor instanceof AbstractTextEditor) {
-						if (e.sourceEditor != null
-								&& e.sourceEditor.getEditorInput() != e
+					if (e.getJspEditor() instanceof AbstractTextEditor) {
+						if (e.getJspEditor() != null
+								&& e.getJspEditor().getEditorInput() != e
 										.getEditorInput()) {
 							try {
-								((AbstractTextEditor) e.sourceEditor)
+								((AbstractTextEditor) e.getJspEditor())
 										.setInput(e2);
 							} catch (Exception exc) {
 								JspEditorPlugin.getPluginLog().logError(exc);

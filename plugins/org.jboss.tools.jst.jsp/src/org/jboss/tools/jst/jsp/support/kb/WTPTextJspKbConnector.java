@@ -71,6 +71,7 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
 	private WTPKbdManagedBeanNameResource fManagedBeanNameResourceRegistered = null;
 	private WTPKbJsfValuesResource fJSFValuesResource = null;
 	WTPKbdTaglibResource fTaglibResource = null;
+	private MyDocumentAdapter documentAdapter;
 
 	public WTPTextJspKbConnector(IEditorInput editorInput, IDocument document, IStructuredModel model) {
 		try {
@@ -81,7 +82,7 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
 			this.dom = (model instanceof IDOMModel) ? ((IDOMModel) model).getDocument() : null;
 
 			if (dom != null) {
-				new MyDocumentAdapter(dom);
+				documentAdapter = new MyDocumentAdapter(dom);
 			}
 			kbConnector = KbConnectorFactory.getIntstance().createConnector(KbConnectorType.JSP_WTP_KB_CONNECTOR, document);
 			WTPKbdBundleNameResource bundleNameResource = new WTPKbdBundleNameResource(fEditorInput, this);
@@ -350,8 +351,14 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
 	}
 
 	public void dispose() {
+		if (documentAdapter != null && dom != null) {
+			((INodeNotifier) dom).removeAdapter(documentAdapter);
+		}
+		documentAdapter=null;
+		dom=null;
 		KbConnectorFactory.getIntstance().removeConnector(KbConnectorType.JSP_WTP_KB_CONNECTOR, fDocument);
 	}
+	
 	/**
 	 * This class listens to the changes in the CMDocument and triggers a CMDocument load
 	 */

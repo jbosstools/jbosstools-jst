@@ -215,10 +215,12 @@ public class JSPMultiPageContributor extends AbstractMultiPageContributor {
 	}
 
 	public void dispose() {
+		setActiveEditor(null);
 		if (fToggleOccurencesMarkUp != null) {
 			fToggleOccurencesMarkUp.setEditor(null);
 			fToggleOccurencesMarkUp = null;
 		}
+		
 		super.dispose();
 		fActiveEditorPart=null;
 		mainPart=null;

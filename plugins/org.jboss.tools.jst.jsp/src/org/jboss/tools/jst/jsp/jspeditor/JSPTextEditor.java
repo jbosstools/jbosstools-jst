@@ -32,6 +32,7 @@ import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jst.jsp.ui.StructuredTextViewerConfigurationJSP;
@@ -148,9 +149,12 @@ public class JSPTextEditor extends StructuredTextEditor implements
 	//Fix for JBIDE-788
 	protected SourceEditorPageContext pageContext = null;
 
+	private TextEditorDropProviderImpl textEditorDropProvider;
+
 	public JSPTextEditor(JSPMultiPageEditor parentEditor) {
 		JspEditorPlugin.getDefault().initDefaultPluginPreferences();
-		dnd.setTextEditorDropProvider(new TextEditorDropProviderImpl());
+		textEditorDropProvider = new TextEditorDropProviderImpl();
+		dnd.setTextEditorDropProvider(textEditorDropProvider);
 		this.parentEditor = parentEditor;
 		super
 				.setSourceViewerConfiguration(new JSPTextViewerConfiguration());
@@ -647,6 +651,8 @@ public class JSPTextEditor extends StructuredTextEditor implements
 				widget.removeSelectionListener(editor.getVPEController());
 			}
 			super.handleDispose();
+			editor = null;
+			provider = null;
 		}
 	
 
@@ -1104,6 +1110,11 @@ public class JSPTextEditor extends StructuredTextEditor implements
 	public void dispose() {
 		// some things in the configuration need to clean
 		// up after themselves
+		if (dnd != null) {
+			dnd.setTextEditorDropProvider(null);
+			dnd=null;
+		}
+		textEditorDropProvider=null;
 		getSourceViewer().removeTextListener(this);
 		if (fOutlinePage != null) {
 			if (fOutlinePage instanceof ConfigurableContentOutlinePage && fOutlinePageListener != null) {
@@ -1119,6 +1130,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			fOccurrenceModelUpdater.uninstall();
 			fOccurrenceModelUpdater = null;
 		}
+		fPropertySheetPage = null;
 		if (pageContext != null) {
 			pageContext.dispose();
 			pageContext = null;
@@ -1133,6 +1145,10 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		if (listener != null)
 			listener.dispose();
 		listener = null;
+		ISelectionProvider provider = getSelectionProvider();
+		if (provider != null) {
+			provider.removeSelectionChangedListener(getSelectionChangedListener());
+		}
 	}
 
 	BodyListenerImpl listener = null;

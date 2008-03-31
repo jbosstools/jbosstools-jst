@@ -75,7 +75,8 @@ class JSPTreeDialogView extends AbstractQueryWizardView {
 		treeViewer.getControl().setLayoutData(layoutData);
 
 		String query = context.getProperty("query");
-		ValueHelper valueHelper = (ValueHelper)context.get("valueHelper");
+		//ValueHelper valueHelper = (ValueHelper)context.get("valueHelper");
+		ValueHelper valueHelper = new ValueHelper();
 		root = valueHelper.getInitalInput(query);
 		treeViewer.setInput(root);
 		treeViewer.setSorter(new AttributeValueSorter());

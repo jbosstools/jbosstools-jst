@@ -23,8 +23,8 @@ import org.eclipse.wst.xml.ui.views.properties.XMLPropertySheetConfiguration;
  */
 
 public class JSPPropertySheetConfiguration extends XMLPropertySheetConfiguration {
-	AttributeSorter sorter = new AttributeSorter();
-	IPropertySheetPage fPropertySheetPage = null;
+	private AttributeSorter sorter = new AttributeSorter();
+	private IPropertySheetPage fPropertySheetPage = null;
 	private JSPPropertySourceProvider0 fPropertySourceProvider = null;
 
 	public IPropertySourceProvider getPropertySourceProvider(IPropertySheetPage page) {
@@ -64,5 +64,12 @@ public class JSPPropertySheetConfiguration extends XMLPropertySheetConfiguration
 		public void setSorter(AttributeSorter sorter) {
 			this.sorter = sorter;
 		}
+	}
+
+	public void unconfigure() {
+		super.unconfigure();
+		fPropertySheetPage = null;
+		fPropertySourceProvider = null;
+		
 	}
 }

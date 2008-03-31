@@ -83,12 +83,12 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 							.handlePropertyChange(propertyId);
 				}
 			});
+			nestedEditors.add(editor);
 		} else {
 			parent2 = ppp;
 		}
 		Item item = createItem(parent2);
 		item.setData(editor);
-		nestedEditors.add(editor);
 		return getPageCount() - 1;
 	}
 
@@ -132,6 +132,7 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 	protected abstract IEditorSite createSite(IEditorPart editor);
 
 	public void dispose() {
+		getSite().setSelectionProvider(null);
 		for (int i = 0; i < nestedEditors.size(); ++i) {
 			IEditorPart editor = (IEditorPart) nestedEditors.get(i);
 			disposePart(editor);

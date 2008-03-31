@@ -39,14 +39,14 @@ import org.w3c.dom.Node;
 
 public class JSPDialogCellEditorContentAssistProcessor extends JavaPackageCompletionProcessor implements ISubjectControlContentAssistProcessor {
 	Properties context;
-	ValueHelper valueHelper;
+	//ValueHelper valueHelper;
 	boolean isFacelets = false; 
 	
 	public JSPDialogCellEditorContentAssistProcessor() {}
 	
 	public void setContext(Properties context) {
 		this.context = context;
-		valueHelper = (ValueHelper)context.get("valueHelper");
+		//valueHelper = (ValueHelper)context.get("valueHelper");
 		updateFacelets();		
 	}
 
@@ -70,6 +70,7 @@ public class JSPDialogCellEditorContentAssistProcessor extends JavaPackageComple
 	//JSPActiveContentAssistProcessor
 	
 	public void addAttributeValueProposals(List proposalsList, String text, int offset) {
+		ValueHelper valueHelper = new ValueHelper();
 		WtpKbConnector wtpKbConnector = valueHelper.getPageConnector();
 		if(wtpKbConnector == null) return;
 		Node node = (Node)context.get("node");
@@ -158,6 +159,7 @@ public class JSPDialogCellEditorContentAssistProcessor extends JavaPackageComple
 	}
 
 	void updateFacelets() {
+		ValueHelper valueHelper = new ValueHelper();
 		valueHelper.updateFacelets();
 		isFacelets = valueHelper.isFacetets();
 	}

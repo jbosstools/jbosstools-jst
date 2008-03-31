@@ -35,7 +35,7 @@ import org.jboss.tools.jst.jsp.drop.treeviewer.model.RootElement;
 
 public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedCellEditorProvider.StoppableCellEditor {
 	Properties context;
-	ValueHelper valueHelper;
+	//ValueHelper valueHelper;
 	JSPDialogCellEditorContentAssistProcessor contentAssistentProcessor;
 	ContentAssistHandler handler = null;
 	
@@ -44,10 +44,10 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
 	public JSPDialogCellEditor(Composite parent, Properties context) {
 		super(parent);
 		this.context = context;
-		valueHelper = (ValueHelper)context.get("valueHelper");
+		//valueHelper = (ValueHelper)context.get("valueHelper");
 
 		contentAssistentProcessor = new JSPDialogCellEditorContentAssistProcessor();
-		if(valueHelper != null) contentAssistentProcessor.setContext(context);
+		//if(valueHelper != null) contentAssistentProcessor.setContext(context);
 		handler = ContentAssistHandler.createHandlerForText(getTextField(), ControlContentAssistHelper.createJavaContentAssistant(contentAssistentProcessor));
 	}
 	
@@ -60,8 +60,9 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
     void checkHasProposals() {
     	hasProposals = false;
 		if(context == null) return;
-		valueHelper = (ValueHelper)context.get("valueHelper");
-		if(valueHelper == null) return;
+		//valueHelper = (ValueHelper)context.get("valueHelper");
+		//if(valueHelper == null) return;
+		ValueHelper valueHelper = new ValueHelper();
 		String attributeName = "" + context.getProperty("attributeName");
 		String nodeName = "" + context.getProperty("nodeName");
 		String query = "/";
@@ -75,8 +76,9 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
     
     private void checkButtonEnablement() {
 		if(context == null) return;
-		valueHelper = (ValueHelper)context.get("valueHelper");
-		if(valueHelper == null) return;
+		//valueHelper = (ValueHelper)context.get("valueHelper");
+		//if(valueHelper == null) return;
+		ValueHelper valueHelper = new ValueHelper();
 		Button button = getButtonControl();
 		if(button == null || button.isDisposed()) return;
 		button.setVisible(hasProposals);
@@ -88,6 +90,7 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
 		String attributeName = "" + context.getProperty("attributeName");
 		String nodeName = "" + context.getProperty("nodeName");
 		String query = "/";
+		ValueHelper valueHelper = new ValueHelper();
 		if(valueHelper != null && valueHelper.isFacetets() && nodeName.indexOf(":") < 0) {
 			query += FaceletsHtmlContentAssistProcessor.faceletHtmlPrefixStart;
 		}

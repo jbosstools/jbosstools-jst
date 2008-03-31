@@ -20,8 +20,8 @@ import org.eclipse.swt.widgets.Control;
 public class ExtendedCellEditorProviderImpl implements ExtendedCellEditorProvider {
 
 	public CellEditor createCellEditor(Composite parent, Properties context) {
-		ValueHelper valueHelper = new ValueHelper();
-		context.put("valueHelper", valueHelper);
+		//ValueHelper valueHelper = new ValueHelper();
+		//context.put("valueHelper", valueHelper);
 		return new ExtendedJSPDialogCellEditor(parent, context);
 	}
 

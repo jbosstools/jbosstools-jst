@@ -59,12 +59,12 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 	protected final static String CATEGORY_ATTRIBUTES = XMLUIMessages.XMLPropertySourceAdapter_0;
 	private static final boolean SET_EXPERT_FILTER = false;
 
-	AttributeSorter sorter = null;
+	private AttributeSorter sorter = null;
 	private Node fNode = null;
 	private boolean fCaseSensitive = true;
 	private IPropertyDescriptor[] fDescriptors = null;
-	ValueHelper valueHelper = new ValueHelper();
-	Set attributeNames = new HashSet();
+	//private ValueHelper valueHelper = new ValueHelper();
+	private Set attributeNames = new HashSet();
 
 	public JSPPropertySourceAdapter(INodeNotifier target) {
 		setTarget(target);
@@ -122,6 +122,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 	private String getQuery(String attributeName) {
 		String tagName = fNode.getNodeName();
 		String jsfTagName = null;
+		ValueHelper valueHelper = new ValueHelper();
 		if(fNode instanceof Element) {
 			jsfTagName = valueHelper.getFaceletJsfTag((Element)fNode);
 		}
@@ -144,7 +145,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 		List<String> names = new ArrayList<String>();
 		List<String> namesLow = new ArrayList<String>();
 		IPropertyDescriptor descriptor;
-		
+		ValueHelper valueHelper = new ValueHelper();
 		TagDescriptor td = valueHelper.getTagDescriptor("/" + fNode.getNodeName());
 		if(td != null) {
 			List list = td.getAttributesDescriptors();
@@ -274,6 +275,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 	}
 
 	private IPropertyDescriptor createJSPPropertyDescriptor(String query, String attributeName, boolean hideOnFilter) {
+		ValueHelper valueHelper = new ValueHelper();
 		AttributeDescriptor d = valueHelper.getAttributeDescriptor(query);
 		return createJSPPropertyDescriptor(d, attributeName, hideOnFilter);
 	}
@@ -288,7 +290,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 		context.put("node", fNode);
 		context.setProperty("nodeName", fNode.getNodeName());
 		context.setProperty("attributeName", attributeName);
-		context.put("valueHelper", valueHelper);
+		//context.put("valueHelper", valueHelper);
 		JSPPropertyDescriptor descriptor = new JSPPropertyDescriptor(context, attributeName, attributeName);
 		descriptor.setCategory(getCategory(null));
 		descriptor.setDescription(attributeName);
@@ -331,7 +333,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 
 	protected void updatePropertyDescriptors() {
 		if (fDescriptors == null || fDescriptors.length == 0) return;
-
+		ValueHelper valueHelper = new ValueHelper();
 		// List of all names encountered in the tag and defined by the element
 		List<String> declaredNames = new ArrayList<String>();
 		// New descriptor list that will become fDescriptors after all
@@ -546,6 +548,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 							if (attr instanceof IDOMNode) {
 								((IDOMNode) attr).setValueSource(valueString);
 								try {
+									ValueHelper valueHelper = new ValueHelper();
 									IVisualController controller = valueHelper.getController(); 
 									if(controller != null) controller.visualRefresh();
 								} catch (Exception e) {
@@ -583,6 +586,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 	
 	boolean isRequiredAttribute(String attributeName) {
 		String query = getQuery(attributeName);
+		ValueHelper valueHelper = new ValueHelper();
 		AttributeDescriptor d = valueHelper.getAttributeDescriptor(query);
 		if(d == null) return false; // do not remove unknown attribute? Remove it!
 		return d.isRequired();
