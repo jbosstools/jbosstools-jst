@@ -10,19 +10,11 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.test;
 
-import junit.framework.TestCase;
-
-import org.eclipse.jface.wizard.IWizard;
-import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.ui.PlatformUI;
 import org.jboss.tools.common.model.ui.test.ModelNewWizardTest;
 import org.jboss.tools.common.model.ui.wizard.newfile.NewHTMLFileWizard;
 import org.jboss.tools.common.model.ui.wizard.newfile.NewJSPFileWizard;
 import org.jboss.tools.common.model.ui.wizard.newfile.NewPropertiesFileWizard;
 import org.jboss.tools.common.model.ui.wizard.newfile.NewXHTMLFileWizard;
-import org.jboss.tools.common.model.ui.wizards.standard.DefaultStandardStep;
-import org.jboss.tools.common.util.WorkbenchUtils;
 import org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSFileWizard;
 import org.jboss.tools.jst.web.ui.wizards.newfile.NewJSFileWizard;
 import org.jboss.tools.jst.web.ui.wizards.newfile.NewTLDFileWizard;
