@@ -16,6 +16,9 @@ import java.util.Properties;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextListener;
@@ -57,6 +60,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.actions.ContributionItemFactory;
 import org.eclipse.ui.editors.text.ILocationProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
@@ -127,6 +131,8 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
+import com.sun.org.apache.xpath.internal.operations.Minus;
+
 /**
  * @author Jeremy
  *
@@ -150,6 +156,8 @@ public class JSPTextEditor extends StructuredTextEditor implements
 	protected SourceEditorPageContext pageContext = null;
 
 	private TextEditorDropProviderImpl textEditorDropProvider;
+	
+	private static final String SHOW_IN_MENU = "JSPMultiPageEditor.ContextMenu.ShowInMenu"; //$NON-NLS-1$
 
 	public JSPTextEditor(JSPMultiPageEditor parentEditor) {
 		JspEditorPlugin.getDefault().initDefaultPluginPreferences();
@@ -1201,5 +1209,32 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			i = i2 + END.length();
 		}
 		return false;
+	}
+	
+	@Override
+	public void editorContextMenuAboutToShow(IMenuManager menu) {
+
+		super.editorContextMenuAboutToShow(menu);
+
+		/*
+		 * added by Dmitrovich Sergey JBIDE-1373 so as StructuredTextEditor
+		 * create context menu by hard code. The easiest way to add "show in"
+		 * menu is insert to prepared by
+		 * StructuredTextEditorStructuredTextEditor
+		 */
+
+		MenuManager showInSubMenu = new MenuManager(getShowInMenuLabel());
+		showInSubMenu.add(ContributionItemFactory.VIEWS_SHOW_IN
+				.create(getEditorSite().getWorkbenchWindow()));
+		menu.insertBefore(ITextEditorActionConstants.GROUP_COPY, new Separator(
+				ITextEditorActionConstants.GROUP_SHOW_IN));
+		menu.appendToGroup(ITextEditorActionConstants.GROUP_SHOW_IN,
+				showInSubMenu);
+
+	}
+
+	private String getShowInMenuLabel() {
+
+		return JSPEditorMessages.getString(SHOW_IN_MENU);
 	}
 }
