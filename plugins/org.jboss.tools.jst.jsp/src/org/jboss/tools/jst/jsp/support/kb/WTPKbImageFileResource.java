@@ -269,7 +269,10 @@ class ImagesFinder implements IResourceVisitor {
 	}
 	
 	boolean acceptExtension(String ext) {
-		if(ext != null) ext = FilePathHelper.toPathPath(ext);
+		if(ext != null) {
+//			ext = FilePathHelper.toPathPath(ext); What about UNIX?
+	        ext = ext.toLowerCase();
+		}
 		return (extensions == null || extensions.contains(ext));
 	}
 
