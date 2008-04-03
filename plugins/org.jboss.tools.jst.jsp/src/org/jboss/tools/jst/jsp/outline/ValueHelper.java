@@ -16,7 +16,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.text.IDocument;
@@ -65,7 +64,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 public class ValueHelper {
-	private IEditorInput editorInput = null;
+	
 	private WTPTextJspKbConnector wtpTextJspKbConnector = null;
 	private boolean isFacelets = false;
 	
@@ -77,9 +76,10 @@ public class ValueHelper {
 			seamPromptingProvider = (IPromptingProvider)o;
 		}
 	}
-	
-	IVisualContext iVisualContext = null;
-	WtpKbConnector pageConnector = null;
+	 //JBIDE-1983, coused a memmory link
+//	IVisualContext iVisualContext = null;
+	private boolean isVisualContextInitialized = false;
+	private WtpKbConnector pageConnector = null;
 
 	public ValueHelper() {
 		boolean b = init();
@@ -96,25 +96,31 @@ public class ValueHelper {
 	}
 
 	boolean init() {
-		if(iVisualContext != null || pageConnector != null) return true;
+		if(isVisualContextInitialized || pageConnector != null) return true;
 		IEditorPart editor = ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		if(!(editor instanceof JSPMultiPageEditor)) return false;
 		JSPTextEditor jspEditor = ((JSPMultiPageEditor)editor).getJspEditor();
 		
-		//Added By Max Areshkau
-		//Fix for JBIDE-788
-		iVisualContext = jspEditor.getPageContext();
-		
-		editorInput = jspEditor.getEditorInput();
+		isVisualContextInitialized = true;
 		
 		wtpTextJspKbConnector = jspEditor.getWTPTextJspKbConnector();
 		
-		if(iVisualContext != null) {
+		if(getIVisualContext() != null) {
 			updateFacelets();
 		}
-		return iVisualContext != null || pageConnector != null;
+		return getIVisualContext() != null || pageConnector != null;
 	}
 
+	private IVisualContext getIVisualContext(){
+		
+		IEditorPart editor = ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		if(!(editor instanceof JSPMultiPageEditor)) return null;
+		JSPTextEditor jspEditor = ((JSPMultiPageEditor)editor).getJspEditor();
+		
+		return jspEditor.getPageContext();
+	}
+	
+	
 	public ModelElement getInitalInput(String query) {
 		AttributeDescriptor descriptor = getAttributeDescriptor(query);
 		if(descriptor == null) return new RootElement("root", new ArrayList<AttributeValueResource>());
@@ -122,7 +128,7 @@ public class ValueHelper {
 		List<AttributeValueResource> elements = new ArrayList<AttributeValueResource>();
 		ModelElement root = new RootElement("root", elements);
 		for (int i = 0; i < valueDescriptors.length; i++) {
-			AttributeValueResource resource = AttributeValueResourceFactory.getInstance().createResource(editorInput, wtpTextJspKbConnector, root, valueDescriptors[i].getType());
+			AttributeValueResource resource = AttributeValueResourceFactory.getInstance().createResource(getEditorInput(), wtpTextJspKbConnector, root, valueDescriptors[i].getType());
 			resource.setParams(valueDescriptors[i].getParams());
 			resource.setQuery(query, this);
 			elements.add(resource);
@@ -132,7 +138,7 @@ public class ValueHelper {
 			p.put("file", getFile());
 			List list = seamPromptingProvider.getList(null, "seam.is_seam_project", null, p);
 			if(list != null) {
-				AttributeValueResource resource = AttributeValueResourceFactory.getInstance().createResource(editorInput, wtpTextJspKbConnector, root, "seamVariables");
+				AttributeValueResource resource = AttributeValueResourceFactory.getInstance().createResource(getEditorInput(), wtpTextJspKbConnector, root, "seamVariables");
 				resource.setQuery(query, this);
 				elements.add(resource);
 			}
@@ -169,17 +175,20 @@ public class ValueHelper {
 	}
 
 	public IEditorInput getEditorInput() {
-		return editorInput;
+
+		IEditorPart editor = ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+	
+		return editor.getEditorInput();
 	}
 	
 	public IFile getFile() {
-		if(!(editorInput instanceof IFileEditorInput)) return null;
-		return ((IFileEditorInput)editorInput).getFile();
+		if(!(getEditorInput() instanceof IFileEditorInput)) return null;
+		return ((IFileEditorInput)getEditorInput()).getFile();
 	}
 
 	public IProject getProject() {
-		if(!(editorInput instanceof IFileEditorInput)) return null;
-		IFile file = ((IFileEditorInput)editorInput).getFile();
+		if(!(getEditorInput() instanceof IFileEditorInput)) return null;
+		IFile file = ((IFileEditorInput)getEditorInput()).getFile();
 		return file == null ? null : file.getProject();
 	}
 
@@ -189,6 +198,9 @@ public class ValueHelper {
 
 	public VpeTaglibManager getTaglibManager() {
 		init();
+		
+		IVisualContext iVisualContext = getIVisualContext();
+		
 		if(iVisualContext!=null && iVisualContext instanceof VpeTaglibManager) {
 		
 			return (VpeTaglibManager)iVisualContext;
@@ -199,7 +211,7 @@ public class ValueHelper {
 	}
 	
 	public WtpKbConnector getPageConnector() {
-		if(iVisualContext != null) return iVisualContext.getConnector();
+		if(getIVisualContext() != null) return getIVisualContext().getConnector();
 		return pageConnector;
 	}
 	
@@ -218,16 +230,15 @@ public class ValueHelper {
 	
 	//Support of StructuredTextEditor
 	boolean init2() {
-		if(iVisualContext != null || pageConnector != null) return true;
+		if(isVisualContextInitialized || pageConnector != null) return true;
 		IEditorPart editor = ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		if(!(editor instanceof StructuredTextEditor)) return false;
 		StructuredTextEditor jspEditor = ((StructuredTextEditor)editor);
-		editorInput = jspEditor.getEditorInput();
-		IDocument document = jspEditor.getDocumentProvider().getDocument(editorInput);
+		IDocument document = jspEditor.getDocumentProvider().getDocument(getEditorInput());
 		if(document == null) return false;
 		installActivePropmtSupport(jspEditor, document);
 		getConnector(document);
-		return iVisualContext != null || pageConnector != null;
+		return getIVisualContext() != null || pageConnector != null;
 	}
 
 	private void installActivePropmtSupport(StructuredTextEditor jspEditor, IDocument document) {
@@ -238,10 +249,10 @@ public class ValueHelper {
 					(getContentType(model).toLowerCase().indexOf("jsp") != -1 || 
 					getContentType(model).toLowerCase().indexOf("html") != -1)) {
 				clearTextConnectors();
-				wtpTextJspKbConnector = (WTPTextJspKbConnector)wtpTextConnectors.get(editorInput);
+				wtpTextJspKbConnector = (WTPTextJspKbConnector)wtpTextConnectors.get(getEditorInput());
 				if(wtpTextJspKbConnector == null) {
 					wtpTextJspKbConnector = new WTPTextJspKbConnector(jspEditor.getEditorInput(), document, model);
-					wtpTextConnectors.put(editorInput, wtpTextJspKbConnector);
+					wtpTextConnectors.put(getEditorInput(), wtpTextJspKbConnector);
 				}
 ///				wtpTextJspKbConnector.setTaglibManagerProvider(parentEditor);
 			}
@@ -315,6 +326,7 @@ public class ValueHelper {
 	}
 
 	public void updateFacelets() {
+
 		VpeTaglibManager tldManager = getTaglibManager();
 		if(tldManager == null) return;
 		List<TaglibData> list = tldManager.getTagLibs();
@@ -325,7 +337,7 @@ public class ValueHelper {
 		kbConnector.unregisterAllResources(true);
 		for(int i = 0; i < list.size(); i++) {
 			TaglibData data = list.get(i);
-			FaceletsHtmlContentAssistProcessor.registerTld(data, kbConnector, document, editorInput);
+			FaceletsHtmlContentAssistProcessor.registerTld(data, kbConnector, document, getEditorInput());
 			isFacelets = isFacelets || data.getUri().equals(FaceletsHtmlContentAssistProcessor.faceletUri);
 		}
 		if(isFacelets) {
