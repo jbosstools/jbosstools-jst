@@ -742,11 +742,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 	DropTarget target = new DropTarget(getSourceViewer().getTextWidget(),
 		DND.DROP_MOVE | DND.DROP_COPY);
 	Transfer[] types = new Transfer[] {
-		/*
-		 * Added by Dzmitry Sakovich (dsakovich@exadel.com) Fix for
-		 * JBIDE-1836
-		 */
-		// ModelTransfer.getInstance(),
+		ModelTransfer.getInstance(),
 		HTMLTransfer.getInstance(), TextTransfer.getInstance(),
 		FileTransfer.getInstance() };
 	target.setTransfer(types);
