@@ -55,6 +55,7 @@ import org.jboss.tools.common.meta.action.SpecialWizard;
 import org.jboss.tools.common.meta.action.SpecialWizardFactory;
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelConstants;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.filesystems.FileSystemsHelper;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
@@ -287,7 +288,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 	/*
 	 * 
 	 */
-	private void updateVersion() {
+	private void updateVersion() throws XModelException {
 		Bundle bundle = ModelUIPlugin.getDefault().getBundle();
 		String version = (String) bundle.getHeaders().get(org.osgi.framework.Constants.BUNDLE_VERSION);
 		model.changeObjectAttribute(
@@ -302,7 +303,11 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 	 */
 	private void registerServer2(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 		XModelObject fs = FileSystemsHelper.getFileSystems(model);
-		model.changeObjectAttribute(fs, "application name", registry.getApplicationName());
+		try {
+			model.changeObjectAttribute(fs, "application name", registry.getApplicationName());
+		} catch (XModelException e) {
+			throw new InvocationTargetException(e);
+		}
 		fs.setModified(true);
 		model.save();
 		if(registry.isEnabled()) ModelPlugin.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {

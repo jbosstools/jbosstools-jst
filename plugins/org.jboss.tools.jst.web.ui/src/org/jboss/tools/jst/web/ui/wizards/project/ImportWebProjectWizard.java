@@ -30,6 +30,7 @@ import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
 
 import org.jboss.tools.common.meta.key.WizardKeys;
 import org.jboss.tools.common.model.ServiceDialog;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.common.reporting.ProblemReportingHelper;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
@@ -124,7 +125,7 @@ public abstract class ImportWebProjectWizard extends Wizard implements IImportWi
 		return "org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"; //$NON-NLS-1$
 	}
 	
-	private boolean checkServletVersion() {
+	private boolean checkServletVersion() throws XModelException {
 		if(context.isServletVersionConsistentToWebXML()) return true;
 		ServiceDialog d = PreferenceModelUtilities.getPreferenceModel().getService();
 		String servletVersion = context.getServletVersion();

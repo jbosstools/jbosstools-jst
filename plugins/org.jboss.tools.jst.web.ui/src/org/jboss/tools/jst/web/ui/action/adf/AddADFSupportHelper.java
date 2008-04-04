@@ -108,7 +108,11 @@ public class AddADFSupportHelper {
 	                fsProp.setProperty("info", "hidden=yes");
 	                XModelObject fsJar = XModelObjectLoaderUtil.createValidObject(model, "FileSystemJar", fsProp);
 	                if(fss.getChildByPath(fsJar.getPathPart()) == null) {
-	                	DefaultCreateHandler.addCreatedObject(fss, fsJar, false, -1);
+	                	try {
+	                		DefaultCreateHandler.addCreatedObject(fss, fsJar, false, -1);
+	                	} catch (XModelException e) {
+	                		throw new InvocationTargetException(e);
+	                	}
 	                }
 				}
 			}
