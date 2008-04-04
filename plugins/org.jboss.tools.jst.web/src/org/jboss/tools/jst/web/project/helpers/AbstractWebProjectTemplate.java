@@ -97,12 +97,12 @@ public abstract class AbstractWebProjectTemplate implements IWebProjectTemplate 
 		getTemplates(templateDir, getNatureDir(), pages); 
 	}
 
-	public Map getPageTemplates() {
+	public Map<String,File> getPageTemplates() {
 		return pages; 
 	}
 	
 	public String[] getPageTemplateList() {
-		return (String[])pages.keySet().toArray(new String[0]);
+		return pages.keySet().toArray(new String[0]);
 	}
 
 	private void getTemplates(File parent, String name, Map<String,File> templates) {
