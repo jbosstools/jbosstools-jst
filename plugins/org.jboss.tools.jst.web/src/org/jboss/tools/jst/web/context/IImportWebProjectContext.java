@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.context;
 
 import org.eclipse.core.resources.IProject;
 
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 
@@ -35,6 +36,6 @@ public interface IImportWebProjectContext {
 	public RegisterServerContext getRegisterServerContext();
 	public String SERVLET_VERSION_WARNING = WebUIMessages.SERVLET_VERSION_WARNING;
 	public boolean isServletVersionConsistentToWebXML();
-	public void convertWebXML(boolean backup);
+	public void convertWebXML(boolean backup) throws XModelException;
 	public boolean isLinkingToProjectOutsideWorkspace();
 }

@@ -266,7 +266,7 @@ public abstract class ImportWebProjectContext implements IImportWebProjectContex
 		return true;		
 	}
 
-	public void convertWebXML(boolean backup) {
+	public void convertWebXML(boolean backup) throws XModelException {
 		if(webxml == null) return;
 		String entity = webxml.getModelEntity().getName();
 		if("2.3".equals(servletVersion) && !entity.equals("FileWebApp")) { //$NON-NLS-1$ //$NON-NLS-2$
@@ -286,7 +286,7 @@ public abstract class ImportWebProjectContext implements IImportWebProjectContex
 		return WebAppHelper.getServletVersion(webxml);
 	}
 
-	private void convertWebXML(String entity, boolean backup) {
+	private void convertWebXML(String entity, boolean backup) throws XModelException {
 		if(backup) backUp();
 		XModelObject newweb = XModelObjectLoaderUtil.createValidObject(webxml.getModel(), entity);
 		XAttribute[] as = newweb.getModelEntity().getAttributes();

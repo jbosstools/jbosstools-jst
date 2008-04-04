@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.webapp.model;
 
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.impl.*;
 
 public class WebAppFilterMappingImpl extends RegularObjectImpl {
@@ -22,7 +23,7 @@ public class WebAppFilterMappingImpl extends RegularObjectImpl {
         return getAttributeValue("filter-name") + ":" + v;
     }
 
-	protected void onAttributeValueEdit(String name, String oldValue, String newValue) {
+	protected void onAttributeValueEdit(String name, String oldValue, String newValue) throws XModelException {
 		if(WebAppConstants.URL_PATTERN.equals(name) && newValue != null && newValue.length() > 0) {
 			setAttributeValue(WebAppConstants.SERVLET_NAME, "");
 		} else if(WebAppConstants.SERVLET_NAME.equals(name) && newValue != null && newValue.length() > 0) {

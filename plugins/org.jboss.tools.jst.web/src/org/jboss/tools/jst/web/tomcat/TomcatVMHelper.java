@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.tomcat;
 import java.io.File;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.launching.*;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.options.Preference;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.jst.web.*;
@@ -32,7 +33,7 @@ public class TomcatVMHelper {
 		return null;
 	}
 	
-	public static String createVM(String path) {		
+	public static String createVM(String path) throws XModelException {		
 		String jvm = findVM(path);
 		if(jvm == null) {
 			jvm = new File(path).getName();

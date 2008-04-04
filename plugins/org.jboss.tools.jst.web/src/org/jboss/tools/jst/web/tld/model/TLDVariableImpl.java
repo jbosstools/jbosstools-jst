@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.tld.model;
 import java.util.Properties;
 
 import org.jboss.tools.common.meta.action.XActionInvoker;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.impl.*;
 
 //See WebAppErrorPageImpl
@@ -32,7 +33,7 @@ public class TLDVariableImpl extends RegularObjectImpl implements TLDConstants {
         return "variable:" + ((ng != null && ng.length() > 0) ? ng : na);
     }
 
-	protected void onAttributeValueEdit(String name, String oldValue, String newValue) {
+	protected void onAttributeValueEdit(String name, String oldValue, String newValue) throws XModelException {
 		if(NAME_GIVEN.equals(name) && newValue != null && newValue.length() > 0) {
 			if(getAttributeValue(NAME_FROM_ATTRIBUTE).length() > 0) {
 				Properties p = new Properties();

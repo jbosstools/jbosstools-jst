@@ -14,6 +14,7 @@ import org.eclipse.core.runtime.*;
 import org.eclipse.jdt.core.*;
 import org.jboss.tools.common.meta.action.SpecialWizard;
 import org.jboss.tools.common.model.*;
+import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.project.ClassPathUpdate;
 import org.jboss.tools.jst.web.*;
 
@@ -27,11 +28,17 @@ public class AddServletSupportWizard implements SpecialWizard {
 	}
 
 	public int execute() {
-		addServletSupport();
+		try {
+			addServletSupport();
+		} catch (XModelException e) {
+			//TODO probably wizard should throw XModelException?
+			ModelPlugin.getPluginLog().logError(e);
+			return 1;
+		}
 		return 0;
 	}
 
-	private void addServletSupport() {
+	private void addServletSupport() throws XModelException {
 		XModelObject web = model.getByPath("Web");
 		if(web == null) return;
 		String servletVersion = web.getAttributeValue("servlet version");

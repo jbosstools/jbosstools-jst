@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.tld.model;
 
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.impl.CustomizedObjectImpl;
 
 public class TLDAttribute21Impl extends CustomizedObjectImpl {
@@ -17,7 +18,7 @@ public class TLDAttribute21Impl extends CustomizedObjectImpl {
 	static String DEFERRED_VALUE = "deferred-value type";
 	static String DEFERRED_METHOD = "deferred-method signature";
 
-	protected void onAttributeValueEdit(String name, String oldValue, String newValue) {
+	protected void onAttributeValueEdit(String name, String oldValue, String newValue) throws XModelException {
 		if(DEFERRED_VALUE.equals(name)) {
 			setAttributeValue(DEFERRED_METHOD, "");
 		} else if(DEFERRED_METHOD.equals(name)) {

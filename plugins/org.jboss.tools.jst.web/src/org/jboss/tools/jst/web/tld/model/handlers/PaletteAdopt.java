@@ -29,7 +29,7 @@ public class PaletteAdopt implements XAdoptManager {
         return isAdoptableTag(target, object) || isAdoptableTaglib(target, object);
     }
 
-    public void adopt(XModelObject target, XModelObject object, java.util.Properties p) {
+    public void adopt(XModelObject target, XModelObject object, java.util.Properties p) throws XModelException {
         if(isAdoptableTag(target, object)) adoptTag(target, object);
         else if(isAdoptableTaglib(target, object)) adoptTaglib(target, object);
     }
@@ -53,7 +53,7 @@ public class PaletteAdopt implements XAdoptManager {
         return true;
     }
     
-    public void adoptTag(XModelObject target, XModelObject object) {
+    public void adoptTag(XModelObject target, XModelObject object) throws XModelException {
     	if(target.getModelEntity().getName().startsWith("SharableMacro")) target = target.getParent(); //$NON-NLS-1$
         add(target, object, helper.createMacroByTag(object, target.getModel()));
     }
@@ -83,7 +83,7 @@ public class PaletteAdopt implements XAdoptManager {
 		XActionInvoker.invoke("ImportTLDToPaletteWizard", "CreateActions.ImportTLD", paletteRoot, p); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
-    static void add(XModelObject target, XModelObject object, XModelObject created) {
+    static void add(XModelObject target, XModelObject object, XModelObject created) throws XModelException {
         if(created == null) return;
         XModelObject old = target.getChildByPath(created.getPathPart());
         if(old != null) {

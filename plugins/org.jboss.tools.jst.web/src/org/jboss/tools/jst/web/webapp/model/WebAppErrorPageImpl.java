@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.webapp.model;
 import java.util.Properties;
 
 import org.jboss.tools.common.meta.action.XActionInvoker;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.impl.*;
 
 public class WebAppErrorPageImpl extends RegularObjectImpl {
@@ -23,7 +24,7 @@ public class WebAppErrorPageImpl extends RegularObjectImpl {
         return (code != null && code.length() > 0) ? code : getAttributeValue(WebAppConstants.EXCEPTION_TYPE);
     }
 
-	protected void onAttributeValueEdit(String name, String oldValue, String newValue) {
+	protected void onAttributeValueEdit(String name, String oldValue, String newValue) throws XModelException {
 		if(WebAppConstants.ERROR_CODE.equals(name) && newValue != null && newValue.length() > 0) {
 			if(getAttributeValue(WebAppConstants.EXCEPTION_TYPE).length() > 0) {
 				Properties p = new Properties();

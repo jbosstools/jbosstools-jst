@@ -30,7 +30,7 @@ public abstract class AbstractWebFileImpl extends AbstractExtendedXMLFileImpl {
 		return process;
 	}
 	
-	protected void mergeAll(XModelObject f, boolean update) {
+	protected void mergeAll(XModelObject f, boolean update) throws XModelException {
 		WebProcess process = provideWebProcess();
 		merge(f, !update);
 

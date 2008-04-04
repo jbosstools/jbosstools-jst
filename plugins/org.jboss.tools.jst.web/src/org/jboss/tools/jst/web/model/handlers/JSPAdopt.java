@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.model.handlers;
 
 import java.util.*;
 import org.jboss.tools.common.meta.XAdoptManager;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
 
@@ -22,7 +23,7 @@ public class JSPAdopt implements XAdoptManager {
 		return isAdoptableBundle(object);
 	}
 
-	public void adopt(XModelObject target, XModelObject object, java.util.Properties p) {
+	public void adopt(XModelObject target, XModelObject object, java.util.Properties p) throws XModelException {
 		if(!isAcceptableTarget(target)) return;
 		if(isAdoptableBundle(object)) adoptBundle(target, object, p);
 	}

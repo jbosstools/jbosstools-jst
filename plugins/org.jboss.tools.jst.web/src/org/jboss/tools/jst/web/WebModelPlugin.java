@@ -39,7 +39,9 @@ import org.jboss.tools.common.log.BaseUIPlugin;
 import org.jboss.tools.common.log.IPluginLog;
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelConstants;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
+import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.projecttemplates.ProjectTemplatesPlugin;
 import org.osgi.framework.BundleContext;
@@ -81,7 +83,11 @@ public class WebModelPlugin extends BaseUIPlugin {
 			while(preferences.hasNext()) {
 				Object preference = preferences.next();
 				if(preference instanceof WebPreference) {
-					PreferenceModelUtilities.initPreferenceValue(initialModel,(WebPreference)preference);
+					try {
+						PreferenceModelUtilities.initPreferenceValue(initialModel,(WebPreference)preference);
+					} catch (XModelException e) {
+						ModelPlugin.getPluginLog().logError(e);
+					}
 				}
 			}
 			PreferenceModelUtilities.getPreferenceModel().save();

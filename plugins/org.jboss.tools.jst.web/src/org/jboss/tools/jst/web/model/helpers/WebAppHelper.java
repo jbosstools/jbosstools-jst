@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.model.helpers;
 
 import org.jboss.tools.common.meta.action.impl.handlers.DefaultCreateHandler;
 import org.jboss.tools.common.model.XModel;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.util.XModelObjectUtil;
 
@@ -99,7 +100,7 @@ public class WebAppHelper {
 	 * @param loadOnStartUp
 	 * @return
 	 */	
-	public static XModelObject findOrCreateServlet(XModelObject webxml, String className, String servletName, int loadOnStartUp) {
+	public static XModelObject findOrCreateServlet(XModelObject webxml, String className, String servletName, int loadOnStartUp) throws XModelException {
         if(webxml == null) return null;
         XModelObject s = findServlet(webxml, className, servletName);
         if(s == null) {
@@ -142,7 +143,7 @@ public class WebAppHelper {
      * @param value
      * @return
      */    
-    public static XModelObject setWebAppInitParam(XModelObject servlet, String name, String value) {
+    public static XModelObject setWebAppInitParam(XModelObject servlet, String name, String value) throws XModelException {
         if(servlet == null) return null;
         XModelObject p = findWebAppInitParam(servlet, name);
         if(p == null) {
@@ -162,7 +163,7 @@ public class WebAppHelper {
      * @param value
      * @return
      */    
-    public static XModelObject appendToWebAppInitParam(XModelObject servlet, String name, String valuePart) {
+    public static XModelObject appendToWebAppInitParam(XModelObject servlet, String name, String valuePart) throws XModelException {
     	if(servlet == null) return null;
 		XModelObject p = findWebAppInitParam(servlet, name);
 		if(p == null) {
@@ -177,7 +178,7 @@ public class WebAppHelper {
 		return p;
     }
     
-    private static XModelObject createWebAppInitParam(XModelObject servlet, String name, String value) {
+    private static XModelObject createWebAppInitParam(XModelObject servlet, String name, String value) throws XModelException {
     	if(servlet == null) return null;
 		XModelObject p = servlet.getModel().createModelObject("WebAppInitParam", null);
 		p.setAttributeValue("param-name", name);
@@ -224,7 +225,7 @@ public class WebAppHelper {
      * @param value
      * @return
      */    
-    public static XModelObject setWebAppContextParam(XModelObject webxml, String name, String value) {
+    public static XModelObject setWebAppContextParam(XModelObject webxml, String name, String value) throws XModelException {
         if(webxml == null) return null;
         XModelObject p = findWebAppContextParam(webxml, name);
         if(p == null) {
@@ -244,7 +245,7 @@ public class WebAppHelper {
      * @param value
      * @return
      */    
-    public static XModelObject appendToWebAppContextParam(XModelObject webxml, String name, String valuePart) {
+    public static XModelObject appendToWebAppContextParam(XModelObject webxml, String name, String valuePart) throws XModelException {
     	if(webxml == null) return null;
 		XModelObject p = findWebAppContextParam(webxml, name);
 		if(p == null) {
@@ -259,7 +260,7 @@ public class WebAppHelper {
 		return p;
     }
     
-    private static XModelObject createWebAppContextParam(XModelObject webxml, String name, String value) {
+    private static XModelObject createWebAppContextParam(XModelObject webxml, String name, String value) throws XModelException {
     	if(webxml == null) return null;
         XModelObject folder = webxml.getChildByPath("Context Params");
         if(folder == null) folder = webxml;

@@ -29,7 +29,7 @@ public class JSPAdopt implements XAdoptManager {
 		|| isAdoptableTaglib(object) || isAdoptableMacro(object) || isAdoptableGroup(object);
     }
 
-    public void adopt(XModelObject target, XModelObject object, java.util.Properties p) {
+    public void adopt(XModelObject target, XModelObject object, java.util.Properties p) throws XModelException {
         if(!isAcceptableTarget(target)) return;
         if(isAdoptableTag(object)) adoptTag(target, object, p);
         else if(isAdoptableAttribute(object)) adoptAttribute(target, object, p);

@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.webapp.model;
 
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.impl.*;
 
 public class WebAppServletImpl extends OrderedObjectImpl {
@@ -29,7 +30,7 @@ public class WebAppServletImpl extends OrderedObjectImpl {
         return "" + getAttributeValue("servlet-name") + ":" + c;
     }
 
-	protected void onAttributeValueEdit(String name, String oldValue, String newValue) {
+	protected void onAttributeValueEdit(String name, String oldValue, String newValue) throws XModelException {
 		if(WebAppConstants.SERVLET_CLASS.equals(name) && newValue != null && newValue.length() > 0) {
 			setAttributeValue(WebAppConstants.JSP_FILE, "");
 		} else if(WebAppConstants.JSP_FILE.equals(name) && newValue != null && newValue.length() > 0) {
