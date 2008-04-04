@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.tiles.ui.editor.model.commands;
 
 import org.eclipse.gef.commands.Command;
 
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.jst.web.tiles.ui.editor.edit.TilesEditPart;
 import org.jboss.tools.jst.web.tiles.ui.editor.model.IDefinition;
@@ -57,9 +58,13 @@ public class ConnectionCommand extends Command {
 	public void execute() {
 		if (((IDefinition) target.getModel()).isCollapsed())
 			((IDefinition) target.getModel()).expand();
+		try {
 		((IDefinition) source.getModel()).getTilesModel().getHelper().makeLink(
 				(XModelObject) ((IDefinition) source.getModel()).getSource(),
 				(XModelObject) ((IDefinition) target.getModel()).getSource());
+		} catch (XModelException e) {
+			throw new IllegalArgumentException(e);
+		}
 	}
 
 	public String getLabel() {
