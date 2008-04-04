@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.Platform;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.ui.dnd.ModelTransfer;
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.dnd.DropTargetEvent;
@@ -80,6 +81,7 @@ public class JSPContentOutlineConfiguration extends HTMLContentOutlineConfigurat
 			Transfer[] transfers = new Transfer[]{
 				ModelTransfer.getInstance(),
 				HTMLTransfer.getInstance(),
+				LocalSelectionTransfer.getTransfer(),
 				ObjectTransfer.getInstance(),
 				FileTransfer.getInstance(),
 				TextTransfer.getInstance()

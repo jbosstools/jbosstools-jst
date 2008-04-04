@@ -88,10 +88,12 @@ import org.eclipse.wst.xml.core.internal.document.ElementImpl;
 import org.jboss.tools.common.core.resources.XModelObjectEditorInput;
 import org.jboss.tools.common.meta.action.XActionInvoker;
 import org.jboss.tools.common.model.XModelBuffer;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.XModelTransferBuffer;
 import org.jboss.tools.common.model.filesystems.impl.FileAnyImpl;
 import org.jboss.tools.common.model.filesystems.impl.FolderImpl;
+import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.ui.dnd.ModelTransfer;
 import org.jboss.tools.common.model.ui.editor.IModelObjectEditorInput;
 import org.jboss.tools.common.model.ui.editors.dnd.DropCommandFactory;
@@ -481,7 +483,11 @@ public class JSPTextEditor extends StructuredTextEditor implements
 	    if (getEditorInput() instanceof ILocationProvider) {
 		XModelObject p = o.getParent();
 		if (p instanceof FolderImpl) {
-		    ((FolderImpl) p).saveChild(o);
+			try {
+				((FolderImpl) p).saveChild(o);
+			} catch (XModelException e) {
+				ModelPlugin.getPluginLog().logError(e);
+			}
 		}
 	    } else {
 		o.setModified(false);
