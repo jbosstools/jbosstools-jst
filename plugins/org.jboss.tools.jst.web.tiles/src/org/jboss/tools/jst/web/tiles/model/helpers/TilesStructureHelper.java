@@ -91,7 +91,7 @@ public class TilesStructureHelper extends WebProcessStructureHelper implements T
 		return true;
 	}
 
-	public void makeLink(XModelObject sourceItem, XModelObject targetItem) {
+	public void makeLink(XModelObject sourceItem, XModelObject targetItem) throws XModelException {
 		XModelObject sourceReference = getReference(sourceItem);
 		if(sourceReference == null) return;
 		sourceReference.getModel().editObjectAttribute(sourceReference, ATT_EXTENDS, targetItem.getAttributeValue(ATT_NAME));

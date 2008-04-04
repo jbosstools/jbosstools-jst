@@ -14,6 +14,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 
 import org.jboss.tools.common.meta.XModelEntity;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.XModelObjectConstants;
 import org.jboss.tools.common.model.filesystems.FileAuxiliary;
@@ -117,6 +118,9 @@ public class FileTilesLoader implements WebProcessLoader, TilesConstants {
 		f.setUpdateLock();
 		try {
 			f.edit(body, true);
+		} catch (XModelException e) {
+			//TODO throw XModelException
+			throw new RuntimeException(e);
 		} finally {
 			f.releaseUpdateLock();
 		}

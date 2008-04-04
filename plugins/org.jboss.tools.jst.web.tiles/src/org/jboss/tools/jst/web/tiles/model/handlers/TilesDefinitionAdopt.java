@@ -24,13 +24,13 @@ public class TilesDefinitionAdopt implements XAdoptManager {
                (entity.equals("FileJSP") || entity.startsWith("FileHTML")));
     }
 
-    public void adopt(XModelObject target, XModelObject object, java.util.Properties p) {
+    public void adopt(XModelObject target, XModelObject object, java.util.Properties p) throws XModelException {
         String entity = object.getModelEntity().getName();
         if(entity.startsWith("StrutsAction")) adoptAction(target, object);
         if(entity.equals("FileJSP") || entity.startsWith("FileHTML")) adoptPage(target, object);
     }
 
-    private void adoptAction(XModelObject target, XModelObject object) {
+    private void adoptAction(XModelObject target, XModelObject object) throws XModelException {
         String path = object.getAttributeValue("path");
         XModelObject cg = object;
         while(cg != null && !cg.getModelEntity().getName().startsWith("StrutsConfig")) cg = cg.getParent();
@@ -38,7 +38,7 @@ public class TilesDefinitionAdopt implements XAdoptManager {
         target.getModel().changeObjectAttribute(target, "controllerUrl", path);
     }
 
-    private void adoptPage(XModelObject target, XModelObject object) {
+    private void adoptPage(XModelObject target, XModelObject object) throws XModelException {
         String path = XModelObjectLoaderUtil.getResourcePath(object);
         if(path == null) return;
         XModelObject fs = object;
