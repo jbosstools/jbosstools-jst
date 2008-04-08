@@ -109,7 +109,7 @@ public class FileTilesLoader implements WebProcessLoader, TilesConstants {
 		process.firePrepared();
 	}
     
-	public boolean update(XModelObject object) {
+	public boolean update(XModelObject object) throws XModelException {
 		XModelObject p = object.getParent();
 		if (p == null) return true;
 		FolderLoader fl = (FolderLoader)p;
@@ -118,9 +118,6 @@ public class FileTilesLoader implements WebProcessLoader, TilesConstants {
 		f.setUpdateLock();
 		try {
 			f.edit(body, true);
-		} catch (XModelException e) {
-			//TODO throw XModelException
-			throw new RuntimeException(e);
 		} finally {
 			f.releaseUpdateLock();
 		}
