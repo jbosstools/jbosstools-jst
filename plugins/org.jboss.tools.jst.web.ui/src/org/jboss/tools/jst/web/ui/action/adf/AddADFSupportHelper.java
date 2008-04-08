@@ -137,7 +137,11 @@ public class AddADFSupportHelper {
 				WebUiPlugin.getPluginLog().logError(e);
 			}
 			monitor.worked(20);
-			model.update();
+			try {
+				model.update();
+			} catch (XModelException e) {
+				throw new InvocationTargetException(e);
+			}
 			monitor.worked(10);
 			
 			try {
