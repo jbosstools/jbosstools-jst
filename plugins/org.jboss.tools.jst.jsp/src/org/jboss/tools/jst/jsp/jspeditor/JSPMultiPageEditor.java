@@ -432,7 +432,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		} catch (PartInitException e) {
 			JspEditorPlugin.getPluginLog().logError(e);
 		}
-		try {
+		/*try {
 			visualIndex = addPage(visualEditor, getEditorInput());
 			setPageText(visualIndex, JSPEditorMessages
 					.getString(VISUAL_TAB_LABEL));
@@ -448,7 +448,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 			setPartName(visualEditor.getTitle());
 		} catch (PartInitException e) {
 			JspEditorPlugin.getPluginLog().logError(e);
-		}
+		}*/
 
 		// Add tab contain default web-browser
 		try {
