@@ -36,9 +36,6 @@ import org.jboss.tools.common.text.xml.xpl.ToggleOccurencesMarkUpAction;
  * 
  */
 public class JSPMultiPageContributor extends AbstractMultiPageContributor {
-	protected RetargetTextEditorAction fShowTooltipAction = null; // show
-
-	protected RetargetTextEditorAction fContentAssist = null;
 
 	public JSPMultiPageContributor() {
 		fToggleOccurencesMarkUp = new ToggleOccurencesMarkUpAction();
@@ -48,19 +45,6 @@ public class JSPMultiPageContributor extends AbstractMultiPageContributor {
 		super.init(bars);
 		initEditMenu(bars);
 		ResourceBundle resourceBundle = ResourceHandler.getResourceBundle();
-
-		fShowTooltipAction = new RetargetTextEditorAction(resourceBundle,
-				StructuredTextEditorActionConstants.ACTION_NAME_INFORMATION
-						+ StructuredTextEditorActionConstants.DOT);
-		fShowTooltipAction
-				.setActionDefinitionId(ActionDefinitionIds.INFORMATION);
-
-		fContentAssist = new RetargetTextEditorAction(
-				resourceBundle,
-				StructuredTextEditorActionConstants.ACTION_NAME_CONTENTASSIST_PROPOSALS
-						+ StructuredTextEditorActionConstants.DOT);
-		fContentAssist
-				.setActionDefinitionId(ITextEditorActionDefinitionIds.CONTENT_ASSIST_PROPOSALS);
 
 		//TODO-3.3: keep checking if 'quick fix' action appears in WTP
 //		fQuickFix = new RetargetTextEditorAction(resourceBundle,
@@ -72,18 +56,22 @@ public class JSPMultiPageContributor extends AbstractMultiPageContributor {
 	protected void createAssistObjects() {
 		ResourceBundle resourceBundle = ResourceHandler.getResourceBundle();
 
-		fContentAssistProposal = new RetargetTextEditorAction(
+		if(fContentAssistProposal == null) {
+			fContentAssistProposal = new RetargetTextEditorAction(
 				resourceBundle,
 				StructuredTextEditorActionConstants.ACTION_NAME_CONTENTASSIST_PROPOSALS
-						+ StructuredTextEditorActionConstants.DOT);
-		fContentAssistProposal
+						+ StructuredTextEditorActionConstants.UNDERSCORE);
+			fContentAssistProposal
 				.setActionDefinitionId(ITextEditorActionDefinitionIds.CONTENT_ASSIST_PROPOSALS);
+		}
 
-		fContentAssistTip = new RetargetTextEditorAction(resourceBundle,
-				StructuredTextEditorActionConstants.ACTION_NAME_INFORMATION
-						+ StructuredTextEditorActionConstants.DOT);
-		fContentAssistTip
+		if(fContentAssistTip == null) {
+			fContentAssistTip = new RetargetTextEditorAction(resourceBundle,
+					StructuredTextEditorActionConstants.ACTION_NAME_INFORMATION
+					+ StructuredTextEditorActionConstants.UNDERSCORE);
+			fContentAssistTip
 				.setActionDefinitionId(ActionDefinitionIds.INFORMATION);
+		}
 	}
 
 	public void setActiveEditor(IEditorPart part) {
@@ -148,14 +136,6 @@ public class JSPMultiPageContributor extends AbstractMultiPageContributor {
 				actionBars.setGlobalActionHandler(ActionFactory.SAVE.getId(),
 						getAction(editor, ITextEditorActionConstants.SAVE));
 
-				fShowTooltipAction
-						.setAction(getAction(
-								editor,
-								StructuredTextEditorActionConstants.ACTION_NAME_INFORMATION));
-				fContentAssist
-						.setAction(getAction(
-								editor,
-								StructuredTextEditorActionConstants.ACTION_NAME_CONTENTASSIST_PROPOSALS));
 				//TODO-3.3: keep checking if 'quick fix' action appears in WTP
                                 //				fQuickFix
 				//		.setAction(getAction(
@@ -176,13 +156,13 @@ public class JSPMultiPageContributor extends AbstractMultiPageContributor {
 				}
 				if (editor != null && handler != null) {
 					// editor
-					registerKeyBindings(handler, ACTIONS_2, editor);
+//					registerKeyBindings(handler, ACTIONS_2, editor);
 					String[] ACTIONS_3 = {
-							StructuredTextEditorActionConstants.ACTION_NAME_INFORMATION,
-							StructuredTextEditorActionConstants.ACTION_NAME_CONTENTASSIST_PROPOSALS,
+//							StructuredTextEditorActionConstants.ACTION_NAME_INFORMATION,
+//							StructuredTextEditorActionConstants.ACTION_NAME_CONTENTASSIST_PROPOSALS,
 // TODO-3.3							StructuredTextEditorActionConstants.ACTION_NAME_QUICK_FIX 
 					};
-					registerKeyBindings(handler, ACTIONS_3, editor);
+//					registerKeyBindings(handler, ACTIONS_3, editor);
 				}
 			}
 			cleanActionBarStatus();
@@ -224,10 +204,7 @@ public class JSPMultiPageContributor extends AbstractMultiPageContributor {
 		super.dispose();
 		fActiveEditorPart=null;
 		mainPart=null;
-		fContentAssist=null;
 		fContentAssistProposal=null;
 		fContentAssistTip=null;
-		fShowTooltipAction=null;
-		
 	}
 }

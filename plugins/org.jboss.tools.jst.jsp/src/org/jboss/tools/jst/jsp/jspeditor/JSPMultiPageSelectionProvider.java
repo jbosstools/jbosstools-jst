@@ -63,7 +63,6 @@ public class JSPMultiPageSelectionProvider implements IPostSelectionProvider,
 		if (activeEditor != null) {
 			ISelectionProvider selectionProvider = activeEditor.getSite()
 					.getSelectionProvider();
-			System.out.println(selectionProvider);
 			if (selectionProvider != null)
 				return selectionProvider.getSelection();
 		}
