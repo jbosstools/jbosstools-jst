@@ -196,19 +196,31 @@ public class JSPTextEditor extends StructuredTextEditor implements
     // Fix for JBIDE-788
     public IVisualContext getPageContext() {
 
-	if (pageContext == null) {
-	    pageContext = new SourceEditorPageContext();
+		if (pageContext == null) {
+			pageContext = new SourceEditorPageContext();
+		}
+		// JBIDE-2046
+		Runnable runnable = new Runnable() {
+			public void run() {
+				IDocument document = getTextViewer().getDocument();
+				int offset = JSPTextEditor.this.getTextViewer().getTextWidget()
+						.getCaretOffset();
+				IndexedRegion treeNode = ContentAssistUtils.getNodeAt(
+						JSPTextEditor.this.getTextViewer(), offset);
+				Node node = (Node) treeNode;
+				pageContext.setReferenceNode(node);
+				pageContext.setDocument(document);
+			}
+		};
+		Display display = Display.getCurrent();
+		if (display != null && (Thread.currentThread() == display.getThread())) {
+			// we are in the UI thread
+			runnable.run();
+		} else {
+			Display.getDefault().syncExec(runnable);
+		}
+		return pageContext;
 	}
-	IDocument document = getTextViewer().getDocument();
-	int offset = this.getTextViewer().getTextWidget().getCaretOffset();
-	IndexedRegion treeNode = ContentAssistUtils.getNodeAt(this
-		.getTextViewer(), offset);
-	Node node = (Node) treeNode;
-	pageContext.setReferenceNode(node);
-	pageContext.setDocument(document);
-
-	return pageContext;
-    }
 
     protected void initializeDrop(ITextViewer textViewer) {
 
