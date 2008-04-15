@@ -16,6 +16,7 @@ import java.util.Properties;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.loaders.impl.SerializingLoader;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
@@ -79,8 +80,8 @@ public abstract class ImportWebDirProjectContext extends ImportWebProjectContext
 		}
 		try {
 			loadWebXML(body, location);
-		} catch (Exception e) {
-			WebModelPlugin.getPluginLog().logError(e);
+		} catch (XModelException e) {
+			//Do not log this exception. It will be shown in wizard.
 			webXMLErrorMessage = e.getMessage();
 			return;
 		}
@@ -88,7 +89,7 @@ public abstract class ImportWebDirProjectContext extends ImportWebProjectContext
 		try {
 			webInfLocation = webInfFile.getCanonicalPath().replace('\\', '/');
 		} catch (IOException e) {
-			WebModelPlugin.getPluginLog().logError(e);
+			//Do not log this exception. It will be shown in wizard.
 			webXMLErrorMessage = e.getMessage();
 			return;
 		}
@@ -206,7 +207,7 @@ public abstract class ImportWebDirProjectContext extends ImportWebProjectContext
 		FileUtil.writeFile(f, text);
 		try {		
 			IProject p = getProjectHandle();		
-			if(p.exists()) p.refreshLocal(IProject.DEPTH_INFINITE, null);
+			if(p.exists() && p.isAccessible()) p.refreshLocal(IProject.DEPTH_INFINITE, null);
 		} catch (CoreException e) {
 			WebModelPlugin.getPluginLog().logError(e);
 		}
