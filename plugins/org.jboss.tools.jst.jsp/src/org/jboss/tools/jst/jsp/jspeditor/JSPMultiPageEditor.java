@@ -423,10 +423,11 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 			if (visualEditor != null)
 				visualEditor.maximizeVisual();
 			selectedPageIndex=0;
+		} else {
+			selectedPageIndex=0;
+			setActivePage(selectedPageIndex);
+			pageChange(selectedPageIndex);
 		}
-		//setActivePage(selectedPageIndex);
-		//pageChange(selectedPageIndex);
-
 		new ResourceChangeListener(this, getContainer());
 		if (getModelObject() != null) {
 			getModelObject().getModel().addModelTreeListener(syncListener);
