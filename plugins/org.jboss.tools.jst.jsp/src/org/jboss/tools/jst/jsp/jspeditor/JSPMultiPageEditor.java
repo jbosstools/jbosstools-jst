@@ -410,8 +410,22 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 			// switchOutlineToJSPEditor();
 		}
 		loadSelectedTab();
-		setActivePage(selectedPageIndex);
-		pageChange(selectedPageIndex);
+		
+		if (selectedPageIndex == 2) {
+			setActivePage(0);
+			pageChange(0);
+			if (visualEditor != null)
+				visualEditor.maximizeSource();
+			selectedPageIndex=0;
+		} else if (selectedPageIndex == 1) {
+			setActivePage(0);
+			pageChange(0);
+			if (visualEditor != null)
+				visualEditor.maximizeVisual();
+			selectedPageIndex=0;
+		}
+		//setActivePage(selectedPageIndex);
+		//pageChange(selectedPageIndex);
 
 		new ResourceChangeListener(this, getContainer());
 		if (getModelObject() != null) {

@@ -27,5 +27,7 @@ public interface IVisualEditor extends ITextEditor, IReusableEditor {
 	public void createPreviewBrowser();
 	public Object getVisualEditor();
 	public void createVisualEditor();
+	public void maximizeSource();
+	public void maximizeVisual();
 
 }
