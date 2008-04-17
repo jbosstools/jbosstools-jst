@@ -53,8 +53,12 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 	 */
 	private IVisualContext pageContext;
 	
-	public SourceEditorPageContext(IVisualContext pageContext) {
-		setPageContext(pageContext);
+	public SourceEditorPageContext(JSPMultiPageEditor externalEditor) {
+		
+		if((externalEditor!=null)&& (externalEditor.getVisualEditor()!=null)
+				&&(externalEditor.getVisualEditor().getController()!=null))
+			
+		setPageContext(externalEditor.getVisualEditor().getController().getPageContext());
 	}
 
 	public void clearAll() {
@@ -217,8 +221,12 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 	}
 
 	public List<TaglibData> getIncludeTaglibs() {
-		
-		return getPageContext().getIncludeTaglibs();
+		if(getPageContext()!=null) {
+			
+			return getPageContext().getIncludeTaglibs();
+		} else {
+			return new ArrayList<TaglibData>();
+		}
 	}
 		
 }

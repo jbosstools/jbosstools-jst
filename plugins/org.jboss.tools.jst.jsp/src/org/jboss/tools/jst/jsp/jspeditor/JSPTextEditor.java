@@ -197,7 +197,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
     public IVisualContext getPageContext() {
 
 		if (pageContext == null) {
-			pageContext = new SourceEditorPageContext(parentEditor.getVisualEditor().getController().getPageContext());
+			pageContext = new SourceEditorPageContext(parentEditor);
 		}
 		// JBIDE-2046
 		Runnable runnable = new Runnable() {
