@@ -47,7 +47,16 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 	 * references node
 	 */
 	private Node referenceNode = null;
+	/**
+	 * Reference page context 
+	 * @param pageContext
+	 */
+	private IVisualContext pageContext;
 	
+	public SourceEditorPageContext(IVisualContext pageContext) {
+		setPageContext(pageContext);
+	}
+
 	public void clearAll() {
 		
 		setTaglibs(null);
@@ -78,11 +87,11 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 	 */
 	public void setDocument(IDocument iDocument) {
 		
-		List<TaglibData> taglibs =XmlUtil.getTaglibsForJSPDocument(iDocument);
+		List<TaglibData> taglibs =XmlUtil.getTaglibsForJSPDocument(iDocument,getIncludeTaglibs());
 		//if we on jsp page we will set taglibs 
 		//TODO Max Areshkau Find other passability to check if we on jsp page
 		if(taglibs!=null && taglibs.size()>0) {
-			setTaglibs(XmlUtil.getTaglibsForJSPDocument(iDocument));
+			setTaglibs(taglibs);
 		}
 		try {
 			connector = (WtpKbConnector)KbConnectorFactory.getIntstance().createConnector(KbConnectorType.JSP_WTP_KB_CONNECTOR, iDocument);
@@ -106,7 +115,7 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 			
 			for(int i=0;i<nodes.getLength();i++) {
 				Node node =nodes.item(i);
-				List<TaglibData> result =XmlUtil.processNode(node);
+				List<TaglibData> result =XmlUtil.processNode(node, getIncludeTaglibs());
 				if(result!=null&&result.size()>0) {
 					setTaglibs(result);
 					break;
@@ -114,7 +123,7 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 			}
 		} else {
 			
-			setTaglibs(XmlUtil.processNode(getReferenceNode()));
+			setTaglibs(XmlUtil.processNode(getReferenceNode(), getIncludeTaglibs()));
 		}
 	}
 	
@@ -193,4 +202,23 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 		this.connector = connector;
 	}
 
+	/**
+	 * @return the pageContext
+	 */
+	private IVisualContext getPageContext() {
+		return pageContext;
+	}
+
+	/**
+	 * @param pageContext the pageContext to set
+	 */
+	private void setPageContext(IVisualContext pageContext) {
+		this.pageContext = pageContext;
+	}
+
+	public List<TaglibData> getIncludeTaglibs() {
+		
+		return getPageContext().getIncludeTaglibs();
+	}
+		
 }

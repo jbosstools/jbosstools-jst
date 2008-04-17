@@ -32,9 +32,9 @@ import org.xml.sax.InputSource;
 
 public class XmlUtil {
 	
-	private static final String XMLNS = "xmlns";
+	private static final String XMLNS = "xmlns"; //$NON-NLS-1$
 	
-	private static final String XMLNS_WITH_PREFIX = "xmlns:";
+	private static final String XMLNS_WITH_PREFIX = "xmlns:"; //$NON-NLS-1$
 
 	public static Element getDocumentElement(String xmlFileName) throws Exception {
 		FileInputStream inStream = null;
@@ -77,7 +77,7 @@ public class XmlUtil {
 	 * @param node
 	 * @return
 	 */
-	public static List<TaglibData> processNode(Node node) {
+	public static List<TaglibData> processNode(Node node, List<TaglibData> includeTaglibData) {
 		
 		List<TaglibData> taglibs = new ArrayList<TaglibData>();
 		
@@ -99,6 +99,9 @@ public class XmlUtil {
 
 		} while(currentNode!=null);
 
+		for (TaglibData taglibData : includeTaglibData) {
+			addTaglib(taglibs, taglibData.getUri(),taglibData.getPrefix(), true, false);
+		}
 		return taglibs;
 	}
 	
@@ -106,7 +109,7 @@ public class XmlUtil {
 	 * Finds and returns taglibs for JSP documents
 	 * @return
 	 */
-	public static List<TaglibData> getTaglibsForJSPDocument(IDocument document) {
+	public static List<TaglibData> getTaglibsForJSPDocument(IDocument document,List<TaglibData> includeTaglibs) {
 		
 		List<TaglibData> taglibData = new ArrayList<TaglibData>();
 		
@@ -116,6 +119,11 @@ public class XmlUtil {
 				for (TaglibTracker taglibTracker : taglibs_JSP) {
 					addTaglib(taglibData, taglibTracker.getURI(), taglibTracker.getPrefix(), true,false);
 				}
+		}
+		//add inner taglibs
+		for (TaglibData taglib : includeTaglibs) {
+			
+			addTaglib(taglibData, taglib.getUri(), taglib.getPrefix(), true, false);
 		}
 		return taglibData;
 	}
@@ -134,7 +142,7 @@ public class XmlUtil {
 		
 		if(XMLNS.equals(name)) {
 
-			name="";
+			name=""; //$NON-NLS-1$
 		} else {
 			
 			name=name.substring(XMLNS_WITH_PREFIX.length());
