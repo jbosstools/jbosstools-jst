@@ -74,8 +74,6 @@ import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.util.XModelTreeListenerSWTSync;
 import org.jboss.tools.common.text.ext.IMultiPageEditor;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
-import org.jboss.tools.jst.jsp.editor.IVisualContext;
-import org.jboss.tools.jst.jsp.editor.IVisualController;
 import org.jboss.tools.jst.jsp.editor.IVisualEditor;
 import org.jboss.tools.jst.jsp.editor.IVisualEditorFactory;
 import org.jboss.tools.jst.jsp.preferences.VpePreference;
@@ -89,14 +87,15 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		IReusableEditor, ITextEditorExtension, ITextEditorExtension2,
 		ITextEditorExtension3, INavigationLocationProvider, IMultiPageEditor {
 	
-	private static final String VISUALSOURCE_TAB_LABEL = "JSPMultiPageEditor.TabLabel.VisualSource";
+	private static final String VISUALSOURCE_TAB_LABEL = "JSPMultiPageEditor.TabLabel.VisualSource"; //$NON-NLS-1$
 
-	private static final String VISUAL_TAB_LABEL = "JSPMultiPageEditor.TabLabel.Visual";
-
-	private static final String SOURCE_TAB_LABEL = "JSPMultiPageEditor.TabLabel.Source";
-	
 	/** PREVIEW_TAB_LABEL */
-	private static final String PREVIEW_TAB_LABEL = "JSPMultiPageEditor.TabLabel.Preview";
+	private static final String PREVIEW_TAB_LABEL = "JSPMultiPageEditor.TabLabel.Preview"; //$NON-NLS-1$
+	
+	//option loads preview tab
+	private static final String PREVIEW_TAB="Preview"; //$NON-NLS-1$
+	//visual tab
+	private static final String VISUAL_SOURCE_TAB="Visual/Source"; //$NON-NLS-1$
 
 	private IVisualEditor visualEditor;
 
@@ -106,27 +105,25 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 
 	private JSPTextEditor sourceEditor;
 
-	private int sourceIndex;
-	
 	/** composite control for default web-browser */
 	//private IVisualEditor previewWebBrowser;
 	
 	/** index of tab contain default web-browser */
 	private int previewIndex;
 
-	private boolean osWindows = true;
+//	private boolean osWindows = true;
 
 	protected XModelTreeListenerSWTSync syncListener = new XModelTreeListenerSWTSync(
 			this);
 
-	private int oldPage = -1;
+//	private int oldPage = -1;
 
 	private ConfigurableContentOutlinePage outlinePage = null;
 
 	private XModelObject object;
 
-	private QualifiedName persistentTabQualifiedName = new QualifiedName("",
-			"Selected_tab");
+	private QualifiedName persistentTabQualifiedName = new QualifiedName("", //$NON-NLS-1$
+			"Selected_tab"); //$NON-NLS-1$
 
 	int selectedPageIndex = 0;
 
@@ -134,12 +131,12 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 
 	static {
 		try {
-			Bundle b = Platform.getBundle("org.jboss.tools.vpe");
+			Bundle b = Platform.getBundle("org.jboss.tools.vpe"); //$NON-NLS-1$
 			Class cls = b
-					.loadClass("org.jboss.tools.vpe.editor.VpeEditorPartFactory");
+					.loadClass("org.jboss.tools.vpe.editor.VpeEditorPartFactory"); //$NON-NLS-1$
 			visualEditorFactory = (IVisualEditorFactory) cls.newInstance();
 		} catch (Exception e) {
-			JspEditorPlugin.getPluginLog().logError("Error in loading visual editor factory", e);
+			JspEditorPlugin.getPluginLog().logError("Error in loading visual editor factory", e); //$NON-NLS-1$
 		}
 	}
 
@@ -148,10 +145,10 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		try {
 			String q = (file == null) ? null : file.getPersistentProperty(persistentTabQualifiedName);
 			if (q == null) {
-				if ("Source".equalsIgnoreCase(VpePreference.EDITOR_VIEW_OPTION
+				if (VISUAL_SOURCE_TAB.equalsIgnoreCase(VpePreference.EDITOR_VIEW_OPTION
 						.getValue()))
-					selectedPageIndex = 2;
-				else if ("Visual"
+					selectedPageIndex = 0;
+				else if (PREVIEW_TAB
 						.equalsIgnoreCase(VpePreference.EDITOR_VIEW_OPTION
 								.getValue()))
 					selectedPageIndex = 1;
@@ -170,14 +167,10 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		}
 	}
 
-	protected int getSourcePageIndex() {
-		return sourceIndex;
-	}
-
 	private void saveSelectedTab() {
 		IFile file = getFile();
 		if(file == null || !file.exists()) return;
-		String q = "" + selectedPageIndex;
+		String q = "" + selectedPageIndex; //$NON-NLS-1$
 		try {
 			file.setPersistentProperty(persistentTabQualifiedName, q);
 		} catch (CoreException e) {
@@ -213,33 +206,21 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 
 	protected void pageChange(int newPageIndex) {
 		selectedPageIndex = newPageIndex;
-		if (osWindows) {
-			if (newPageIndex == visualSourceIndex) {
+
+		if (newPageIndex == visualSourceIndex) {
 				if (visualEditor.getVisualEditor() == null) {
 					visualEditor.createVisualEditor();
 				}
 				visualEditor.setVisualMode(IVisualEditor.VISUALSOURCE_MODE);
-			}
-			else if (newPageIndex == visualIndex) {
-				if (visualEditor.getVisualEditor() == null) {
-					visualEditor.createVisualEditor();
-				}
-				visualEditor.setVisualMode(IVisualEditor.VISUAL_MODE);
-			}
-			else if (newPageIndex == sourceIndex)
-				visualEditor.setVisualMode(IVisualEditor.SOURCE_MODE);
-			else if (newPageIndex == previewIndex) {
+			}else if (newPageIndex == previewIndex) {
 				if (visualEditor.getPreviewWebBrowser() == null) {
 					visualEditor.createPreviewBrowser();
 				}
 				visualEditor.setVisualMode(IVisualEditor.PREVIEW_MODE); 				
 			}
 				
-			superPageChange(newPageIndex);
-		} else {
-			super.pageChange(newPageIndex);
-		}
-		oldPage = newPageIndex;
+		superPageChange(newPageIndex);
+ 
 	}
 	
 	public void setInput(IEditorInput input) {
@@ -282,7 +263,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	}
 
 	public String getContentDescription() {
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 	/**
@@ -398,35 +379,50 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		 * TODO to author of this class VPE work on linux! this check not need
 		 * in future
 		 */
-		// String os_name = System.getProperty("os.name");
-		if (true) {// (os_name.startsWith("Windows")){
-			osWindows = true;
-			createPagesForWindows();
-		} else {
-			osWindows = false;
-		}
-		if (selectedPageIndex == sourceIndex) {
-			visualEditor.setVisualMode(IVisualEditor.SOURCE_MODE);
-			// switchOutlineToJSPEditor();
-		}
+		createPagesForVPE();
 		loadSelectedTab();
+
+//		if (selectedPageIndex == sourceIndex) {
+//			visualEditor.setVisualMode(IVisualEditor.SOURCE_MODE);
+//			// switchOutlineToJSPEditor();
+//		}
+//		if (selectedPageIndex == 2) {
+//			setActivePage(0);
+//			pageChange(0);
+//			if (visualEditor != null)
+//				visualEditor.maximizeSource();
+//			selectedPageIndex=0;
+//		} else if (selectedPageIndex == 1) {
+//			setActivePage(0);
+//			pageChange(0);
+//			if (visualEditor != null)
+//				visualEditor.maximizeVisual();
+//			selectedPageIndex=0;
+//		} else {
+//			selectedPageIndex=0;
+//			setActivePage(selectedPageIndex);
+//			pageChange(selectedPageIndex);
+//		}
+		switch (selectedPageIndex) {
 		
-		if (selectedPageIndex == 2) {
-			setActivePage(0);
-			pageChange(0);
-			if (visualEditor != null)
-				visualEditor.maximizeSource();
-			selectedPageIndex=0;
-		} else if (selectedPageIndex == 1) {
-			setActivePage(0);
-			pageChange(0);
-			if (visualEditor != null)
-				visualEditor.maximizeVisual();
-			selectedPageIndex=0;
-		} else {
-			selectedPageIndex=0;
+		case 0: {
+		//source/visual mode
 			setActivePage(selectedPageIndex);
 			pageChange(selectedPageIndex);
+			break;
+			}
+		case 1: {
+		//preview mode
+			setActivePage(selectedPageIndex);
+			pageChange(selectedPageIndex);
+			break;
+		}
+		default: {
+		//by default we sets source/visual mode	
+			setActivePage(0);
+			pageChange(0);		
+			break;
+		}
 		}
 		new ResourceChangeListener(this, getContainer());
 		if (getModelObject() != null) {
@@ -434,7 +430,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		}
 	}
 
-	private void createPagesForWindows() {
+	private void createPagesForVPE() {
 		sourceEditor = new JSPTextEditor(this);
 		visualEditor = visualEditorFactory.createVisualEditor(this,
 				sourceEditor, false);
@@ -508,8 +504,8 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	}
 
 	public void gotoMarker(final IMarker marker) {
-		setActivePage(sourceIndex);
-		pageChange(sourceIndex);
+		setActivePage(IVisualEditor.VISUALSOURCE_MODE);
+		pageChange(IVisualEditor.VISUALSOURCE_MODE);
 		IGotoMarker adapter = (IGotoMarker) sourceEditor
 				.getAdapter(IGotoMarker.class);
 		if (adapter != null) {
@@ -572,23 +568,19 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 
 	public Object getAdapter(Class adapter) {
 		if (IContentOutlinePage.class.equals(adapter)) {
-			if (osWindows) {
-				if (visualEditor != null) {
-					if (outlinePage == null)
-						outlinePage = (ConfigurableContentOutlinePage) visualEditor
-								.getAdapter(adapter);
-					return outlinePage;
-				}
-			} else {
-				if (sourceEditor != null) {
-					return sourceEditor.getAdapter(adapter);
-				}
+			
+		if (visualEditor != null) {
+				if (outlinePage == null)
+					outlinePage = (ConfigurableContentOutlinePage) visualEditor
+							.getAdapter(adapter);
+				return outlinePage;
 			}
+			
 		} else if (IPropertySheetPage.class.equals(adapter)) {
 			if (sourceEditor != null)
 				return sourceEditor.getAdapter(adapter);
 		} else if (adapter == EditorDescriptor.class)
-			return new EditorDescriptor(new String[] { "jsp", "html" });
+			return new EditorDescriptor(new String[] { "jsp", "html" }); //$NON-NLS-1$ //$NON-NLS-2$
 
 		if (sourceEditor != null) {
 			return sourceEditor.getAdapter(adapter);
