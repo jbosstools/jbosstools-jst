@@ -268,23 +268,27 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
 
 	public void updateKnownTagLists() {
 		loadedBundles.clear();
-		Element element = dom.getDocumentElement();
-		NodeList children = (NodeContainer)dom.getChildNodes();
+
 		installTaglibTrackerListener();
-		if (element != null) {
-			for (int i = 0; children != null && i < children.getLength(); i++) {
-				try {
-					IDOMNode xmlnode = (IDOMNode)children.item(i);
-					update((IDOMNode)xmlnode);
-				} catch (Exception x) {
-					JspEditorPlugin.getPluginLog().logError("Error while updating known tag lists", x);
+		
+		if (dom != null) {
+			Element element = dom.getDocumentElement();
+			NodeList children = (NodeContainer)dom.getChildNodes();
+			if (element != null) {
+				for (int i = 0; children != null && i < children.getLength(); i++) {
+					try {
+						IDOMNode xmlnode = (IDOMNode)children.item(i);
+						update((IDOMNode)xmlnode);
+					} catch (Exception x) {
+						JspEditorPlugin.getPluginLog().logError("Error while updating known tag lists", x);
+					}
 				}
 			}
 		}
 	}
 
 	private void update(IDOMNode element) {
-		if (element != null) {
+		if (element !=  null) {
 			registerKbResourceForNode(element);
 			for (Node child = element.getFirstChild(); child != null; child = child.getNextSibling()) {
 				if (child instanceof IDOMNode) {
