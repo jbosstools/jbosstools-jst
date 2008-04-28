@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE XModelEntityGroup PUBLIC "-//Red Hat, Inc.//DTD Meta 1.0//EN" "meta.dtd">
+<XModelEntityGroup>
+ <VERSION DEPENDS="Model:1.0" MODULE="Web" VERSION="1.0"/>
+ <MAPPINGS/>
+ <ICONS>
+  <GROUP name="action"/>
+  <GROUP name="main"/>
+ </ICONS>
+ <GlobalActions kind="list"/>
+ <XModelEntity ImplementingClass="%Regular%" name="LibraryJar">
+  <XChildrenEntities/>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="action.empty" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="library jar" loader="ElementType" name="element type">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="location" visibility="false" xmlname="LOCATION">
+    <Constraint loader="FileFilter">
+     <value name="allFiles=false"/>
+     <value name="extensions=jar"/>
+    </Constraint>
+    <Editor name="FileChooser"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem kind="list" name="CreateActions">
+    <XActionItem HandlerClassName="%SpecialWizard%" ICON="action.empty"
+     PROPERTIES="support=org.jboss.tools.jst.web.project.handlers.AddLibrarySetSupport"
+     displayName="Add Library Set" kind="action" name="CreateLibrarySet">
+     <EntityData EntityName="LibrarySet">
+      <AttributeData AttributeName="name"/>
+     </EntityData>
+    </XActionItem>
+    <XActionItem HandlerClassName="%SpecialWizard%" ICON="action.empty"
+     PROPERTIES="support=org.jboss.tools.jst.web.project.handlers.AddJarToLibrarySetSupport"
+     displayName="Add Jar" kind="action" name="AddJar"/>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%Regular%" name="LibraryReference">
+  <XChildrenEntities/>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="action.empty" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="library reference" loader="ElementType" name="element type">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="name">
+    <Constraint loader="ListString"/>
+    <Editor name="ListString"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem kind="list" name="CreateActions">
+    <XActionItem HandlerClassName="%SpecialWizard%" ICON="action.empty"
+     PROPERTIES="support=org.jboss.tools.jst.web.project.handlers.AddLibraryToVersionSupport"
+     displayName="Add Library Reference" kind="action" name="CreateLibraryReference">
+     <EntityData EntityName="LibraryReference">
+      <AttributeData AttributeName="name"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%Regular%" name="LibrarySet">
+  <XChildrenEntities/>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="action.empty" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="library set" loader="ElementType" name="element type">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="name">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem kind="list" name="CreateActions">
+    <XActionItem HandlerClassName="%SpecialWizard%" ICON="action.empty"
+     PROPERTIES="support=org.jboss.tools.jst.web.project.handlers.AddLibrarySetSupport"
+     displayName="Add Library Set" kind="action" name="CreateLibrarySet">
+     <EntityData EntityName="LibrarySet">
+      <AttributeData AttributeName="name"/>
+     </EntityData>
+    </XActionItem>
+    <XActionItem HandlerClassName="%SpecialWizard%" ICON="action.empty"
+     PROPERTIES="support=org.jboss.tools.jst.web.project.handlers.AddJarToLibrarySetSupport"
+     displayName="Add Jar" kind="action" name="AddJar">
+     <EntityData EntityName="LibraryJar">
+      <AttributeData AttributeName="location"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%Regular%" name="PageTemplateJSF">
+  <XChildrenEntities/>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="action.empty" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="page template" loader="ElementType" name="element type">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="name">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute name="page path">
+    <Constraint loader="Tree">
+     <value name="AllWebPages"/>
+     <value name="extensions=jsp,htm,html"/>
+     <value name="nature=org.jboss.tools.jsf.jsfnature"/>
+     <value name="hideRoot=true"/>
+    </Constraint>
+    <Editor name="TreeChooser"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem kind="list" name="CreateActions">
+    <XActionItem HandlerClassName="%SpecialWizard%" ICON="action.empty"
+     PROPERTIES="support=org.jboss.tools.jst.web.project.handlers.AddPageTemplateSupport"
+     displayName="Add Page Template" kind="action" name="CreatePageTemplate">
+     <EntityData EntityName="PageTemplateJSF">
+      <AttributeData AttributeName="name"/>
+      <AttributeData AttributeName="page path"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%Regular%" name="PageTemplateStruts">
+  <XChildrenEntities/>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="action.empty" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="page template" loader="ElementType" name="element type">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="name">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute name="page path">
+    <Constraint loader="Tree">
+     <value name="AllWebPages"/>
+     <value name="extensions=jsp,htm,html"/>
+     <value name="nature=org.jboss.tools.struts.strutsnature"/>
+     <value name="hideRoot=true"/>
+    </Constraint>
+    <Editor name="TreeChooser"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem kind="list" name="CreateActions">
+    <XActionItem HandlerClassName="%SpecialWizard%" ICON="action.empty"
+     PROPERTIES="support=org.jboss.tools.jst.web.project.handlers.AddPageTemplateSupport"
+     displayName="Add Page Template" kind="action" name="CreatePageTemplate">
+     <EntityData EntityName="PageTemplateStruts">
+      <AttributeData AttributeName="name"/>
+      <AttributeData AttributeName="page path"/>
+     </EntityData>
+     <EntityData EntityName="ProjectTemplateVelocity">
+      <AttributeData AttributeName="velocity templates" Mandatory="no"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%Regular%" name="ProjectTemplateJSF">
+  <XChildrenEntities/>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="action.empty" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="project template" loader="ElementType" name="element type">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="name">
+    <Constraint loader="FolderName"/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="greedy=always" name="project">
+    <Constraint loader="List"/>
+    <Editor name="ListSelection"/>
+   </XModelAttribute>
+   <XModelAttribute default="org.jboss.tools.jsf.jsfnature"
+    loader="ElementType" name="nature" visibility="false">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="implementation">
+    <Constraint loader="List"/>
+    <Editor name="List"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem kind="list" name="CreateActions">
+    <XActionItem HandlerClassName="%SpecialWizard%" ICON="action.empty"
+     PROPERTIES="support=org.jboss.tools.jst.web.project.handlers.AddProjectTemplateSupport"
+     displayName="Add JSF Project Template" kind="action" name="CreateProjectTemplate">
+     <EntityData EntityName="ProjectTemplateJSF">
+      <AttributeData AttributeName="name"/>
+      <AttributeData AttributeName="project"/>
+     </EntityData>
+     <EntityData EntityName="ProjectTemplateResources"/>
+     <EntityData EntityName="ProjectTemplateVelocity">
+      <AttributeData AttributeName="velocity templates" Mandatory="no"/>
+     </EntityData>
+    </XActionItem>
+    <XActionItem HandlerClassName="%SpecialWizard%" ICON="action.empty"
+     PROPERTIES="support=org.jboss.tools.jst.web.project.handlers.AddProjectTemplateSupport"
+     displayName="Add JSF Project Template" kind="action" name="CreateProjectTemplate2">
+     <EntityData EntityName="ProjectTemplateJSF">
+      <AttributeData AttributeName="name"/>
+      <AttributeData AttributeName="implementation"/>
+     </EntityData>
+     <EntityData EntityName="ProjectTemplateResources"/>
+     <EntityData EntityName="ProjectTemplateVelocity">
+      <AttributeData AttributeName="velocity templates" Mandatory="no"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+   <XActionItem kind="list" name="EditActions">
+    <XActionItem HandlerClassName="%SpecialWizard%" ICON="action.empty"
+     PROPERTIES="support=org.jboss.tools.jst.web.project.handlers.EditProjectTemplateSupport"
+     displayName="Edit JSF Project Template" kind="action" name="EditProjectTemplate">
+     <EntityData EntityName="ProjectTemplateJSF">
+      <AttributeData AttributeName="name"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%Regular%" name="ProjectTemplateResources">
+  <XChildrenEntities/>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="action.empty" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes/>
+  <XActionItem kind="list"/>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%Regular%" name="ProjectTemplateStruts">
+  <XChildrenEntities/>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="action.empty" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="project template" loader="ElementType" name="element type">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="name">
+    <Constraint loader="FolderName"/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="greedy=always" name="project">
+    <Constraint loader="List"/>
+    <Editor name="ListSelection"/>
+   </XModelAttribute>
+   <XModelAttribute default="org.jboss.tools.struts.strutsnature"
+    loader="ElementType" name="nature" visibility="false">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="implementation">
+    <Constraint loader="List"/>
+    <Editor name="List"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem kind="list" name="CreateActions">
+    <XActionItem HandlerClassName="%SpecialWizard%" ICON="action.empty"
+     PROPERTIES="support=org.jboss.tools.jst.web.project.handlers.AddProjectTemplateSupport"
+     displayName="Add Struts Project Template" kind="action" name="CreateProjectTemplate">
+     <EntityData EntityName="ProjectTemplateStruts">
+      <AttributeData AttributeName="name"/>
+      <AttributeData AttributeName="project"/>
+     </EntityData>
+     <EntityData EntityName="ProjectTemplateResources"/>
+     <EntityData EntityName="ProjectTemplateVelocity">
+      <AttributeData AttributeName="velocity templates" Mandatory="no"/>
+     </EntityData>
+    </XActionItem>
+    <XActionItem HandlerClassName="%SpecialWizard%" ICON="action.empty"
+     PROPERTIES="support=org.jboss.tools.jst.web.project.handlers.AddProjectTemplateSupport"
+     displayName="Add Struts Project Template" kind="action" name="CreateProjectTemplate2">
+     <EntityData EntityName="ProjectTemplateStruts">
+      <AttributeData AttributeName="name"/>
+      <AttributeData AttributeName="implementation"/>
+     </EntityData>
+     <EntityData EntityName="ProjectTemplateResources"/>
+     <EntityData EntityName="ProjectTemplateVelocity">
+      <AttributeData AttributeName="velocity templates" Mandatory="no"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+   <XActionItem kind="list" name="EditActions">
+    <XActionItem HandlerClassName="%SpecialWizard%" ICON="action.empty"
+     PROPERTIES="support=org.jboss.tools.jst.web.project.handlers.EditProjectTemplateSupport"
+     displayName="Edit JSF Project Template" kind="action" name="EditProjectTemplate">
+     <EntityData EntityName="ProjectTemplateStruts">
+      <AttributeData AttributeName="name"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%Regular%" name="ProjectTemplateVelocity">
+  <XChildrenEntities/>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="action.empty" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute name="velocity templates">
+    <Constraint loader="ListString"/>
+    <Editor name="MutableList"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list"/>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%Regular%" name="ProjectVersionJSF">
+  <XChildrenEntities/>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="action.empty" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="project template" loader="ElementType" name="element type">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="name">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute name="templates location">
+    <Constraint loader="FileFilter">
+     <value name="allFiles=false"/>
+     <value name="mode=DIRECTORIES_ONLY"/>
+     <value name="description=Project Version Location"/>
+    </Constraint>
+    <Editor name="FolderChooser"/>
+   </XModelAttribute>
+   <XModelAttribute name="core library">
+    <Constraint loader="List"/>
+    <Editor name="List"/>
+   </XModelAttribute>
+   <XModelAttribute name="common library">
+    <Constraint loader="List"/>
+    <Editor name="List"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem kind="list" name="CreateActions">
+    <XActionItem HandlerClassName="%SpecialWizard%" ICON="action.empty"
+     PROPERTIES="support=org.jboss.tools.jst.web.project.handlers.AddVersionSupport"
+     displayName="Add JSF Project Version" kind="action" name="CreateProjectVersion">
+     <EntityData EntityName="ProjectVersionJSF">
+      <AttributeData AttributeName="name"/>
+      <AttributeData AttributeName="templates location"/>
+      <AttributeData AttributeName="core library"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%Regular%" name="ProjectVersionStruts">
+  <XChildrenEntities/>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="action.empty" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="project template" loader="ElementType" name="element type">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="name">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute name="templates location">
+    <Constraint loader="FileFilter">
+     <value name="allFiles=false"/>
+     <value name="mode=DIRECTORIES_ONLY"/>
+     <value name="description=Project Version Location"/>
+    </Constraint>
+    <Editor name="FolderChooser"/>
+   </XModelAttribute>
+   <XModelAttribute name="core library">
+    <Constraint loader="List"/>
+    <Editor name="List"/>
+   </XModelAttribute>
+   <XModelAttribute name="common library">
+    <Constraint loader="List"/>
+    <Editor name="List"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem kind="list" name="CreateActions">
+    <XActionItem HandlerClassName="%SpecialWizard%" ICON="action.empty"
+     PROPERTIES="support=org.jboss.tools.jst.web.project.handlers.AddVersionSupport"
+     displayName="Add Struts Project Version" kind="action" name="CreateProjectVersion">
+     <EntityData EntityName="ProjectVersionStruts">
+      <AttributeData AttributeName="name"/>
+      <AttributeData AttributeName="templates location"/>
+      <AttributeData AttributeName="core library"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+</XModelEntityGroup>
