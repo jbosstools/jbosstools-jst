@@ -69,8 +69,8 @@ public abstract class JSPMultiPageEditorSite implements IEditorSite {
 			}
 			fService = null;
 		}
-		fEditor = null;
-		fEditorPart = null;
+		//fEditor = null;
+		//fEditorPart = null;
 		if (fSelChangeListener != null) {
 			getSelectionProvider().removeSelectionChangedListener(fSelChangeListener);
 			fSelChangeListener = null;
