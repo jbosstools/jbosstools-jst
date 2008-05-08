@@ -32,6 +32,8 @@ import org.jboss.tools.common.model.ui.attribute.editor.IPropertyEditor;
 import org.jboss.tools.common.model.ui.attribute.editor.MutableComboBoxFieldEditor;
 import org.jboss.tools.common.model.ui.attribute.editor.MutableMultipleChoiceFieldEditor;
 import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.WizardDialog;
+
 
 import org.jboss.tools.common.meta.action.SpecialWizard;
 import org.jboss.tools.common.meta.action.XEntityData;
@@ -357,7 +359,8 @@ public class AppRegisterComponent {
 	
 	private IServer newServer(Shell shell) {
 		NewServerWizard wizard = new NewServerWizard();
-		ClosableWizardDialog dialog = new ClosableWizardDialog(shell, wizard);
+		WizardDialog dialog = new WizardDialog(shell, wizard);
+		
 		if (dialog.open() == Window.CANCEL) {
 			return null;
 		}
@@ -396,7 +399,7 @@ public class AppRegisterComponent {
 		};
 		TaskWizard wizard = new TaskWizard(title, fragment);
 		wizard.setForcePreviousAndNextButtons(true);
-		ClosableWizardDialog dialog = new ClosableWizardDialog(shell, wizard);
+		WizardDialog dialog = new WizardDialog(shell, wizard);
 		int result = dialog.open();
 		if(Window.OK != result) return null;
 		return (IRuntime)wizard.getRootFragment().getTaskModel().getObject(TaskModel.TASK_RUNTIME);

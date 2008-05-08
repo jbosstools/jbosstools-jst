@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.launching.sourcelookup;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.jdt.core.IJavaProject;
@@ -29,7 +30,7 @@ import org.jboss.tools.jst.web.WebModelPlugin;
  */
 public class WebServerSourceLocator extends JavaSourceLocator {
 
-    public WebServerSourceLocator(IJavaProject[] projects, boolean includeRequired)	throws JavaModelException {
+    public WebServerSourceLocator(IJavaProject[] projects, boolean includeRequired)	throws CoreException {
 		super(projects, includeRequired);
 	}
 

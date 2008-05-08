@@ -67,10 +67,9 @@ public class JSPMultiPageContributor extends AbstractMultiPageContributor {
 
 		if(fContentAssistTip == null) {
 			fContentAssistTip = new RetargetTextEditorAction(resourceBundle,
-					StructuredTextEditorActionConstants.ACTION_NAME_INFORMATION
-					+ StructuredTextEditorActionConstants.UNDERSCORE);
+					ITextEditorActionConstants.SHOW_INFORMATION);
 			fContentAssistTip
-				.setActionDefinitionId(ActionDefinitionIds.INFORMATION);
+				.setActionDefinitionId(ITextEditorActionDefinitionIds.SHOW_INFORMATION);
 		}
 	}
 
@@ -184,7 +183,7 @@ public class JSPMultiPageContributor extends AbstractMultiPageContributor {
 			fContentAssistTip
 					.setAction(getAction(
 							textEditor,
-							StructuredTextEditorActionConstants.ACTION_NAME_INFORMATION));
+							ITextEditorActionConstants.SHOW_INFORMATION));
 		}
 		if (fActiveEditorPart instanceof ITextEditorExtension) {
 			ITextEditorExtension extension = (ITextEditorExtension) fActiveEditorPart;

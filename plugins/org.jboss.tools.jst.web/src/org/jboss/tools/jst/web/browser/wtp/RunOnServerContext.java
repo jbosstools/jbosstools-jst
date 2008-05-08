@@ -132,7 +132,7 @@ public class RunOnServerContext extends AbstractBrowserContext {
 			Object launchable = new HttpLaunchable(new URL(lastRunUrl));
 			IClient[] clients = getClients(server, launchable, launchMode);
 			IClient client = clients[0];
-			client.launch(server, launchable, launchMode, ((Server)server).getExistingLaunch());
+			client.launch(server, launchable, launchMode, server.getLaunch());
 		} catch (Exception e) {
 			WebModelPlugin.getPluginLog().logError(e);
 			runJustUrl();

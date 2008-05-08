@@ -16,6 +16,7 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.resource.*;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.*;
 import org.eclipse.swt.graphics.Image;
@@ -24,7 +25,6 @@ import org.eclipse.ui.*;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.TaskModel;
-import org.eclipse.wst.server.ui.internal.wizard.ClosableWizardDialog;
 import org.eclipse.wst.server.ui.internal.wizard.NewServerWizard;
 import org.jboss.tools.common.model.ui.ModelUIImages;
 import org.jboss.tools.jst.web.server.*;
@@ -129,7 +129,7 @@ public class SelectServerActionDelegate extends AbstractServerActionDelegate imp
 	
 	private void newServer() {
 		NewServerWizard wizard = new NewServerWizard();
-		ClosableWizardDialog dialog = new ClosableWizardDialog(window.getShell(), wizard);
+		WizardDialog dialog = new WizardDialog(window.getShell(), wizard);
 		if (dialog.open() != Window.CANCEL) {
 			IServer server = (IServer)wizard.getRootFragment().getTaskModel().getObject(TaskModel.TASK_SERVER);
 			if(server != null) {

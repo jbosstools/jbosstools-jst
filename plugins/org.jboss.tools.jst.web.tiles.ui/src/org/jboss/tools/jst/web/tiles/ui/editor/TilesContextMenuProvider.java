@@ -57,10 +57,7 @@ public class TilesContextMenuProvider	extends org.eclipse.gef.ContextMenuProvide
 		actionRegistry = registry;
 	}
 
-	private boolean menuExist() {
-		return getMenu() != null && !getMenu().isDisposed();
-	}
-
+	
 	protected void update(boolean force, boolean recursive) {
 		if(!isDirty() && !force) return;
 		if(!menuExist()) return;
