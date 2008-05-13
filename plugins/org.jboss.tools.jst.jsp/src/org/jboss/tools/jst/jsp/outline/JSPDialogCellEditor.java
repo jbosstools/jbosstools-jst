@@ -44,10 +44,10 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
 	public JSPDialogCellEditor(Composite parent, Properties context) {
 		super(parent);
 		this.context = context;
-		//valueHelper = (ValueHelper)context.get("valueHelper");
+		ValueHelper valueHelper = (ValueHelper)context.get("valueHelper");
 
 		contentAssistentProcessor = new JSPDialogCellEditorContentAssistProcessor();
-		//if(valueHelper != null) contentAssistentProcessor.setContext(context);
+		if(valueHelper != null) contentAssistentProcessor.setContext(context);
 		handler = ContentAssistHandler.createHandlerForText(getTextField(), ControlContentAssistHelper.createJavaContentAssistant(contentAssistentProcessor));
 	}
 	
