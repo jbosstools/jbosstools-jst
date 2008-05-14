@@ -62,7 +62,7 @@ public class JBossASAdapterInitializer implements IStartup {
 
 	public static final String JBOSS_AS_TYPE_ID = "org.jboss.ide.eclipse.as.42";
 
-	public static final String JBOSS_AS_NAME = "JBoss Application Server 4.3";
+	public static final String JBOSS_AS_NAME = "JBoss Application Server 4.2";
 
 	public static final String JBOSS_AS_HOST = "localhost";
 
