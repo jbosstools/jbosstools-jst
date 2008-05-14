@@ -26,6 +26,8 @@
       <attributeEditor class="org.jboss.tools.common.model.ui.attribute.editor.ComboBoxEditor" id="LibrarySetList">
       </attributeEditor>
    </extension>
+   
+   <!--
    <extension point="org.eclipse.ui.actionSets">
       <actionSet description="%actionSets.serverActions.description" id="org.jboss.tools.jst.web.ui.server.actionSet" label="%actionSets.serverActions.label" visible="true">
          <action class="org.jboss.tools.jst.web.ui.action.server.SelectServerActionDelegate" icon="images/xstudio/actions/tomcat/tomcat.gif" id="org.jboss.tools.jst.web.ui.action.server.SelectServerActionDelegate" label="%actionSets.serverActions.selectServer.label" style="pulldown" toolbarPath="Normal/SelectServer" tooltip="%actionSets.serverActions.selectServer.label">
@@ -42,6 +44,8 @@
          </action>
       </actionSet>
    </extension>
+   -->
+   
    <extension id="e" name="XML Editors" point="org.jboss.tools.common.model.ui.xmlEditor">
       <xmlEditor 
          class="org.jboss.tools.jst.web.ui.editors.WebCompoundEditor" 
