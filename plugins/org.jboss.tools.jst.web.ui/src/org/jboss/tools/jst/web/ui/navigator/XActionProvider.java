@@ -14,6 +14,7 @@ import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.jdt.ui.actions.JdtActionConstants;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.action.IContributionItem;
@@ -54,7 +55,9 @@ public class XActionProvider extends CommonActionProvider {
 			registerAction(actionBars, o, "CopyActions.Paste", ActionFactory.PASTE.getId());
 			registerAction(actionBars, o, "CopyActions.Cut", ActionFactory.CUT.getId());
 			if(o.getFileType() <= XModelObject.FILE) {
-				actionBars.setGlobalActionHandler(ICommonActionConstants.OPEN, new XOpenAction(o));
+				XOpenAction x = new XOpenAction(o);
+				actionBars.setGlobalActionHandler(ICommonActionConstants.OPEN, x);
+				actionBars.setGlobalActionHandler(JdtActionConstants.OPEN, x);
 			}
 		}
     }
