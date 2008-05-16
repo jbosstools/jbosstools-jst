@@ -539,6 +539,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 
 	public void dispose() {
 		saveSelectedTab();
+		XModelObject o = getModelObject();
 		IEditorActionBarContributor contributor = getEditorSite()
 				.getActionBarContributor();
 		if (contributor != null
@@ -549,7 +550,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		visualEditor.dispose();
 		site.dispose();
 		outlinePage = null;
-		XModelObject o = getModelObject();
+		super.dispose();
 		if (o != null) {
 			o.getModel().removeModelTreeListener(syncListener);
 		}
@@ -563,7 +564,6 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 				JspEditorPlugin.getPluginLog().logError(e);
 			}
 		}
-		super.dispose();
 	}
 
 	public Object getAdapter(Class adapter) {
