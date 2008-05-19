@@ -147,6 +147,8 @@ public abstract class JSPMultiPageEditorSite implements IEditorSite {
 	}
 
 	public IWorkbenchWindow getWorkbenchWindow() {
+		if(getMultiPageEditor().getSite() == null) // fix JBIDE-2218
+			return null;						   // fix JBIDE-2218
 		return getMultiPageEditor().getSite().getWorkbenchWindow();
 	}
 
