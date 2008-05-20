@@ -1,0 +1,44 @@
+<project name="deployextension"  default="deploy.j2ee.web"  basedir=".">
+
+	<target name="deploy.j2ee.web">
+		<jar destfile="${module.name}.war">
+			<zipfileset dir="${module.dir}">
+				<include name="**/*"/>
+				<exclude name="**/*.war"/>
+			</zipfileset>
+		</jar>
+		<move file="${module.name}.war" todir="${server.publish.dir}"/>
+	</target>
+
+	<target name="deploy.j2ee.ejb">
+		<jar destfile="${module.name}.jar">
+			<zipfileset dir="${module.dir}">
+				<include name="**/*"/>
+				<exclude name="**/*.jar"/>
+			</zipfileset>
+		</jar>
+		<move file="${module.name}.jar" todir="${server.publish.dir}"/>
+	</target>
+
+	<target name="deploy.j2ee.ear">
+		<jar destfile="${module.name}.ear"> 
+			<zipfileset dir="${module.dir}">
+				<include name="**/*.*"/>
+				<exclude name="**/*.java"/>
+			</zipfileset>
+		</jar>
+		<move file="${module.name}.ear" todir="${server.publish.dir}"/>
+	</target>
+
+	<target name="undeploy.j2ee.web">
+		<delete file="${server.publish.dir}/${module.name}.war"/>
+	</target>
+
+	<target name="undeploy.j2ee.ejb">
+		<delete file="${server.publish.dir}/${module.name}.jar"/>
+	</target>   
+
+	<target name="undeploy.j2ee.ear">
+		<delete file="${server.publish.dir}/${module.name}.ear"/>
+	</target>
+</project>
