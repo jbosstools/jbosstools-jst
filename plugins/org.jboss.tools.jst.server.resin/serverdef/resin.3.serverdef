@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:ServerRuntime
+	xmlns:tns="http://eclipse.org/jst/server/generic/ServerTypeDefinition"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://eclipse.org/jst/server/generic/ServerTypeDefinition ServerTypeDefinitionSchema.xsd "
+	name="Resin 3.0.x" version="v3">
+
+	<property id="resinHome"
+		label="%resinHome"
+		type="directory"
+		context="runtime"
+		default="" />
+
+	<property id="serverAddress"
+		label="%serverAddress"
+		type="string"
+		context="server"
+		default="localhost" />
+
+	<property id="port"
+		label="%port"
+		type="string"
+		context="server"
+		default="8080" />
+
+	<property id="javaHome"
+    	label="%javaHome"
+	    type="directory"
+    	context="runtime"
+	    default="" />
+
+	<port>
+		<no>${port}</no>
+		<name>Http</name>
+		<protocol>http</protocol>
+	</port>
+
+	<module>
+		<type>jst.web</type>
+		<publishDir>${resinHome}/webapps</publishDir>
+		<publisherReference>org.eclipse.jst.server.generic.antpublisher</publisherReference>
+	</module>
+
+	<module>
+		<type>jst.ejb</type>
+		<publishDir>${resinHome}/webapps</publishDir>
+		<publisherReference>org.eclipse.jst.server.generic.antpublisher</publisherReference>
+	</module>
+
+	<module>
+		<type>jst.ear</type>
+		<publishDir>${resinHome}/webapps</publishDir>
+		<publisherReference>org.eclipse.jst.server.generic.antpublisher</publisherReference>
+	</module>
+
+	<project>
+		<classpathReference>resin.project</classpathReference>
+	</project>
+
+	<start>
+		<mainClass>com.caucho.server.http.ResinServer</mainClass>
+		<workingDirectory>${resinHome}</workingDirectory>
+		<programArguments></programArguments>
+		<vmParameters>-Djava.util.logging.manager=com.caucho.log.LogManagerImpl -Dresin.home="${resinHome}"</vmParameters>
+		<classpathReference>resin</classpathReference>
+	</start>
+
+	<!--stop>
+		<mainClass>com.caucho.server.http.ResinServer</mainClass>
+		<workingDirectory>${resinHome}</workingDirectory>
+		<programArguments>-conf conf/resin.conf stop</programArguments>
+		<vmParameters>-Djava.util.logging.manager=com.caucho.log.LogManagerImpl</vmParameters>
+		<classpathReference>resin</classpathReference>
+	</stop-->
+
+	<publisher id="org.eclipse.jst.server.generic.antpublisher">
+		<publisherdata>
+			<dataname>build.file</dataname>
+			<datavalue>/serverdef/scripts/resin.3.xml</datavalue>
+		</publisherdata>
+		<publisherdata>
+			<dataname>target.publish.jst.web</dataname>
+			<datavalue>deploy.j2ee.web</datavalue>
+		</publisherdata>
+		<publisherdata>
+			<dataname>target.publish.jst.ejb</dataname>
+			<datavalue>deploy.j2ee.ejb</datavalue>
+		</publisherdata>
+		<publisherdata>
+			<dataname>target.unpublish.jst.web</dataname>
+			<datavalue>undeploy.j2ee.web</datavalue>
+		</publisherdata>
+		<publisherdata>
+			<dataname>target.unpublish.jst.ejb</dataname>
+			<datavalue>undeploy.j2ee.ejb</datavalue>
+		</publisherdata>
+		<publisherdata>
+			<dataname>target.publish.jst.ear</dataname>
+			<datavalue>deploy.j2ee.ear</datavalue>
+		</publisherdata>
+		<publisherdata>
+			<dataname>target.unpublish.jst.ear</dataname>
+			<datavalue>undeploy.j2ee.ear</datavalue>
+		</publisherdata>					
+	</publisher>
+
+	<classpath id="resin">
+	    <archive path="${resinHome}/lib/resin.jar"/>
+   	    <archive path="${resinHome}/lib/jsdk-24.jar"/>
+   	    <archive path="${resinHome}/lib/jstl-11.jar"/>
+   	    <archive path="${resinHome}/lib/jca-15.jar"/>
+   	    <archive path="${resinHome}/lib/jta-101.jar"/>
+   	    <archive path="${resinHome}/lib/jms-11.jar"/>
+   	    <archive path="${resinHome}/lib/jmx-12.jar"/>
+   	    <archive path="${resinHome}/lib/resin-jdk15.jar"/>
+        <archive path="${javaHome}/lib/tools.jar"/>
+	</classpath>
+
+	<classpath id="resin.project">
+   	    <archive path="${resinHome}/lib/jsdk-24.jar" />
+	</classpath>
+
+	<jndiConnection>
+		<providerUrl>iiop://${serverAddress}:2001</providerUrl>
+		<initialContextFactory>org.objectweb.carol.jndi.spi.MultiOrbInitialContextFactory</initialContextFactory>
+		<jndiProperty>
+			<name></name>
+			<value></value>
+		</jndiProperty>
+	</jndiConnection>
+</tns:ServerRuntime>
