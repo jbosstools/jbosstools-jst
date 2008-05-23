@@ -48,7 +48,7 @@ public class JsfJspJbide1717Test extends ContentAssistantTestCase {
 		}
 	}
 
-	public void testJstJspJbide1641() {
+	public void testJstJspJbide1717() {
 		openEditor(PAGE_NAME);
 
 		// Find start of <h:outputText> tag
