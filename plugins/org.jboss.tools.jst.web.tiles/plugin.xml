@@ -82,7 +82,6 @@
 			class="org.jboss.tools.jst.web.tiles.model.handlers.CreateTilesSupport"/>
    </extension>
 
-
  <extension point="org.eclipse.wst.xml.core.catalogContributions">
       <catalogContribution id="default">
          <public 
