@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:ServerRuntime
+	xmlns:tns="http://eclipse.org/jst/server/generic/ServerTypeDefinition"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://eclipse.org/jst/server/generic/ServerTypeDefinition ServerTypeDefinitionSchema.xsd "
+	name="JRun 4" version="v4">
+
+	<property id="jrunHome"
+		label="%jrunHome"
+		type="directory"
+		context="runtime"
+		default="" />
+
+	<property id="serverAddress"
+		label="%serverAddress"
+		type="string"
+		context="server"
+		default="localhost" />
+
+	<property id="port"
+		label="%port"
+		type="string"
+		context="server"
+		default="8100" />
+
+	<property id="server"
+		label="%server"
+		type="string"
+		context="server"
+		default="default" />
+
+	<port>
+		<no>${port}</no>
+		<name>Http</name>
+		<protocol>http</protocol>
+	</port>
+
+	<module>
+		<type>jst.web</type>
+		<publishDir>${jrunHome}/servers/${server}</publishDir>
+		<publisherReference>org.eclipse.jst.server.generic.antpublisher</publisherReference>
+	</module>
+
+	<module>
+		<type>jst.ejb</type>
+		<publishDir>${jrunHome}/servers/${server}</publishDir>
+		<publisherReference>org.eclipse.jst.server.generic.antpublisher</publisherReference>
+	</module>
+
+	<module>
+		<type>jst.ear</type>
+		<publishDir>${jrunHome}/servers/${server}</publishDir>
+		<publisherReference>org.eclipse.jst.server.generic.antpublisher</publisherReference>
+	</module>
+
+	<project>
+		<classpathReference>jrun.project</classpathReference>
+	</project>
+
+	<start>
+		<mainClass>jrunx.kernel.JRun</mainClass>
+		<workingDirectory>${jrunHome}/bin</workingDirectory>
+		<programArguments> -start ${server}</programArguments>
+		<vmParameters>-Xms32m -Xmx128m -Dsun.io.useCanonCaches=false -Djmx.invoke.getters=true</vmParameters>
+		<classpathReference>jrun</classpathReference>
+	</start>
+
+	<stop>
+		<mainClass>jrunx.kernel.JRun</mainClass>
+		<workingDirectory>${jrunHome}/bin</workingDirectory>
+		<programArguments> -stop ${server}</programArguments>
+		<vmParameters></vmParameters>
+		<classpathReference>jrun</classpathReference>
+	</stop>
+
+	<publisher id="org.eclipse.jst.server.generic.antpublisher">
+		<publisherdata>
+			<dataname>build.file</dataname>
+			<datavalue>/serverdef/scripts/jrun.4.xml</datavalue>
+		</publisherdata>
+		<publisherdata>
+			<dataname>target.publish.jst.web</dataname>
+			<datavalue>deploy.j2ee.web</datavalue>
+		</publisherdata>
+		<publisherdata>
+			<dataname>target.publish.jst.ejb</dataname>
+			<datavalue>deploy.j2ee.ejb</datavalue>
+		</publisherdata>
+		<publisherdata>
+			<dataname>target.unpublish.jst.web</dataname>
+			<datavalue>undeploy.j2ee.web</datavalue>
+		</publisherdata>
+		<publisherdata>
+			<dataname>target.unpublish.jst.ejb</dataname>
+			<datavalue>undeploy.j2ee.ejb</datavalue>
+		</publisherdata>
+		<publisherdata>
+			<dataname>target.publish.jst.ear</dataname>
+			<datavalue>deploy.j2ee.ear</datavalue>
+		</publisherdata>
+		<publisherdata>
+			<dataname>target.unpublish.jst.ear</dataname>
+			<datavalue>undeploy.j2ee.ear</datavalue>
+		</publisherdata>					
+	</publisher>
+
+	<classpath id="jrun" >
+	    <!--archive path="${jrunHome}/lib/jrun-ant-tasks.jar" /-->
+	    <archive path="${jrunHome}/lib/jrun.jar" />
+        <!--archive path="${classPath}/server/${serverConfig}/conf"/-->
+	</classpath>
+
+	<classpath id="jrun.project">
+		<archive path="${jrunHome}/lib/jrun.jar" />
+	</classpath>
+
+	<jndiConnection>
+		<providerUrl>iiop://${serverAddress}:2001</providerUrl>
+		<initialContextFactory>org.objectweb.carol.jndi.spi.MultiOrbInitialContextFactory</initialContextFactory>
+		<jndiProperty>
+			<name></name>
+			<value></value>
+		</jndiProperty>
+	</jndiConnection>
+</tns:ServerRuntime>

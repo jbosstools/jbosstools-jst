@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension point="org.eclipse.ui.editorActions">
+      <editorContribution id="org.jboss.tools.jst.web.ui.jspEditorContribution" targetID="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
+         <action actionID="RulerDoubleClick" class="org.jboss.tools.jst.web.debug.ui.internal.ToggleBreakpointActionDelegate" id="org.jboss.tools.jst.web.debug.ui.internal.ToggleBreakpointActionDelegate" label="Toggle Breakpoint">
+         </action>
+         <action actionID="Properties" class="org.eclipse.jdt.internal.debug.ui.actions.JavaBreakpointPropertiesRulerActionDelegate" id="JavaBreakpointPropertiesRulerActionDelegate" label="Properties">
+         </action>
+         <action actionID="Enablement" class="org.eclipse.jdt.internal.debug.ui.actions.EnableDisableBreakpointRulerActionDelegate" id="EnableDisableBreakpointRulerActionDelegate" label="Enable/Disable">
+         </action>
+      </editorContribution>
+   </extension>
+   <extension point="org.eclipse.ui.ide.markerImageProviders">
+      <imageprovider class="org.jboss.tools.jst.web.debug.ui.internal.BreakpointImageProvider" id="org.jboss.tools.jst.web.debug.ui.breakpointImageProvider" markertype="org.jboss.tools.jst.web.debug.jspLineBreakpointMarker">
+      </imageprovider>
+   </extension>
+</plugin>

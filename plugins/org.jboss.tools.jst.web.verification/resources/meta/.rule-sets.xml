@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rule-sets>
+ <rule-set bundle="org.jboss.tools.jst.web.verification.vrules.webrules"
+  description="Web Rules" name="Web Rules"
+  url="http://www.redhat.com" vendor="Red Hat Inc" version="1.0">
+
+  <rule-set bundle="org.jboss.tools.jst.web.verification.vrules.webrules"
+   description="Web Descriptor Rules" name="Web Descriptor Rules"
+   url="http://www.redhat.com" vendor="Red Hat Inc" version="1.0">
+
+   <rule-set bundle="org.jboss.tools.jst.web.verification.vrules.webrules"
+    description="Resource Location Rules" name="Resource Location Rules"
+    url="http://www.redhat.com" vendor="Red Hat Inc" version="1.0">
+
+    <rule action="org.jboss.tools.jst.web.verification.vrules.CheckResource"
+     category="web.location" description="Check that taglib-location references to tag library"
+     entities="WebAppTaglib" name="Check taglib-location attribute"
+     properties="attribute=taglib-location,extensions=.tld">
+     <result-template
+      description="Check that taglib-location is not empty"
+      id="taglib-location.empty" message-id="web.path.empty" name="Check taglib-location attribute"/>
+     <result-template
+      description="Check that taglib-location references to existent resource"
+      id="taglib-location.exists" message-id="web.path.exists" name="Check taglib-location attribute"/>
+     <result-template
+      description="Check that taglib-location references to tag library"
+      id="taglib-location.extension" message-id="web.path.taglib" name="Check taglib-location attribute"/>
+    </rule>
+
+    <rule action="org.jboss.tools.jst.web.verification.vrules.CheckResource" enabled="false"
+     category="web.location" description="Check that welcome-file references to existent resource"
+     entities="WebAppWelcomFile" name="Check welcome-file attribute"
+     properties="attribute=file name,extensions=.jsp .html .htm .jspx">
+     <result-template
+      description="Check that welcome-file is not empty"
+      id="file name.empty" message-id="web.path.empty" name="Check welcome-file attribute" significance="5"/>
+     <result-template
+      description="Check that welcome-file references to existent resource"
+      id="file name.exists" message-id="web.path.exists" name="Check welcome-file attribute" significance="5"/>
+     <result-template
+      description="Check that taglib-location references to page file"
+      id="file name.extension" message-id="web.path.page" name="Check welcome-file attribute" significance="5"/>
+    </rule>
+
+
+    <rule action="org.jboss.tools.jst.web.verification.vrules.CheckResource"
+     category="web.location" description="Check that error page location references to existent resource"
+     entities="WebAppErrorPage" name="Check error page location"
+     properties="attribute=location">
+     <result-template
+      description="Check that error page location is not empty"
+      id="location.empty" message-id="web.path.empty" name="Check error page location"/>
+     <result-template
+      description="Check that error page location references to existent resource"
+      id="location.exists" message-id="web.path.exists" name="Check error page location"/>
+    </rule>
+
+    <rule action="org.jboss.tools.jst.web.verification.vrules.CheckResource"
+     category="web.location" description="Check that form-error-page references to existent resource"
+     entities="WebAppLoginConfig" name="Check form-error-page attribute"
+     properties="attribute=form-error-page,acceptEmpty=true">
+     <result-template
+      description="Check that form-error-page attribute references to existent resource"
+      id="form-error-page.exists" message-id="web.path.exists" name="Check form-error-page attribute"/>
+    </rule>
+
+    <rule action="org.jboss.tools.jst.web.verification.vrules.CheckResource"
+     category="web.location" description="Check that form-login-page references to existent resource"
+     entities="WebAppLoginConfig" name="Check form-login-page attribute"
+     properties="attribute=form-login-page,acceptEmpty=true">
+     <result-template
+      description="Check that form-login-page attribute references to existent resource"
+      id="form-login-page.exists" message-id="web.path.exists" name="Check form-login-page attribute"/>
+    </rule>
+
+    <rule action="org.jboss.tools.jst.web.verification.vrules.CheckResource"
+     category="web.location" description="Check that jsp-file references to existent resource"
+     entities="WebAppServlet" name="Check jsp-file attribute"
+     properties="attribute=jsp-file,acceptEmpty=true">
+     <result-template
+      description="Check that jsp-file attribute references to existent resource"
+      id="jsp-file.exists" message-id="web.path.exists" name="Check jsp-file attribute"/>
+    </rule>
+
+    <rule action="org.jboss.tools.jst.web.verification.vrules.CheckResource"
+     category="web.location" description="Check that large-icon references to existent resource"
+     entities="WebAppServlet,WebAppFilter,FileWebApp,FileWebApp24,FileWebApp25,WebAppMessageDestination,WebAppServiceRef,WebAppJSPPropertyGroup" 
+     name="Check large-icon attribute"
+     properties="attribute=large-icon,acceptEmpty=true,extensions=.jpg .gif">
+     <result-template
+      description="Check that large-icon attribute references to existent resource"
+      id="large-icon.exists" message-id="web.path.exists" name="Check large-icon attribute"/>
+     <result-template
+      description="Check that large-icon references to icon file"
+      id="large-icon.extension" message-id="web.path.icon" name="Check large-icon attribute"/>
+    </rule>
+
+    <rule action="org.jboss.tools.jst.web.verification.vrules.CheckResource"
+     category="web.location" description="Check that small-icon references to existent resource"
+     entities="WebAppServlet,WebAppFilter,FileWebApp,FileWebApp24,FileWebApp25,WebAppMessageDestination,WebAppServiceRef,WebAppJSPPropertyGroup" 
+     name="Check small-icon attribute"
+     properties="attribute=small-icon,acceptEmpty=true,extensions=.jpg .gif">
+     <result-template
+      description="Check that small-icon attribute references to existent resource"
+      id="small-icon.exists" message-id="web.path.exists" name="Check small-icon attribute"/>
+     <result-template
+      description="Check that small-icon references to icon file"
+      id="small-icon.extension" message-id="web.path.icon" name="Check small-icon attribute"/>
+    </rule>
+
+   </rule-set>
+
+   <rule-set bundle="org.jboss.tools.jst.web.verification.vrules.webrules"
+    description="Java Class Rules" name="Java Class Rules" enabled="false"
+    url="http://www.redhat.com" vendor="Red Hat Inc" version="1.0">
+
+    <rule action="org.jboss.tools.jst.web.verification.vrules.CheckClass"
+     category="web.class" description="Check servlet-class attribute"
+     entities="WebAppServlet" name="Check servlet-class attribute"
+     properties="attribute=servlet-class,implements=javax.servlet.Servlet">
+     <result-template
+      description="Check that attribute servlet-class is valid"
+      id="servlet-class.valid" message-id="web.class.valid" name="Check servlet-class attribute"/>
+     <result-template
+      description="Check that attribute servlet-class references existent java class"
+      id="servlet-class" message-id="web.class.exists" name="Check servlet-class attribute"/>
+     <result-template
+      description="Check that servlet-class implements javax.servlet.Servlet"
+      id="servlet-class.implements" message-id="web.class.implements" name="Check servlet-class attribute"/>
+    </rule>
+
+    <rule action="org.jboss.tools.jst.web.verification.vrules.CheckClass"
+     category="web.class" description="Check exception-type attribute"
+     entities="WebAppErrorPage" name="Check exception-type attribute"
+     properties="attribute=exception-type,extends=java.lang.Exception">
+     <result-template
+      description="Check that attribute exception-type is valid"
+      id="exception-type.valid" message-id="web.class.valid" name="Check exception-type attribute"/>
+     <result-template
+      description="Check that attribute exception-type references existent java class"
+      id="exception-type" message-id="web.class.exists" name="Check exception-type attribute"/>
+     <result-template
+      description="Check that exception-type extends java.lang.Exception"
+      id="exception-type.extends" message-id="web.class.implements" name="Check exception-type attribute"/>
+    </rule>
+
+    <rule action="org.jboss.tools.jst.web.verification.vrules.CheckClass"
+     category="web.class" description="Check filter-class attribute"
+     entities="WebAppFilter" name="Check filter-class attribute"
+     properties="attribute=filter-class">
+     <result-template
+      description="Check that attribute filter-class is valid"
+      id="filter-class.valid" message-id="web.class.valid" name="Check filter-class attribute"/>
+     <result-template
+      description="Check that attribute filter-class references existent java class"
+      id="filter-class" message-id="web.class.exists" name="Check filter-class attribute"/>
+    </rule>
+
+    <rule action="org.jboss.tools.jst.web.verification.vrules.CheckClass"
+     category="web.class" description="Check listener-class attribute"
+     entities="WebAppListener" name="Check listener-class attribute"
+     properties="attribute=listener-class">
+     <result-template
+      description="Check that attribute listener-class is valid"
+      id="listener-class.valid" message-id="web.class.valid" name="Check listener-class attribute"/>
+     <result-template
+      description="Check that attribute listener-class references existent java class"
+      id="listener-class" message-id="web.class.exists" name="Check listener-class attribute"/>
+    </rule>
+
+    <rule action="org.jboss.tools.jst.web.verification.vrules.CheckClass"
+     category="web.class" description="Check res-type attribute"
+     entities="WebAppResourceRef" name="Check res-type attribute"
+     properties="attribute=res-type">
+     <result-template
+      description="Check that attribute res-type is valid"
+      id="res-type.valid" message-id="web.class.valid" name="Check res-type attribute"/>
+     <result-template
+      description="Check that attribute res-type references existent java class"
+      id="res-type" message-id="web.class.exists" name="Check res-type attribute"/>
+    </rule>
+
+    <rule action="org.jboss.tools.jst.web.verification.vrules.CheckClass"
+     category="web.class" description="Check message-destination-type attribute"
+     entities="WebAppMessageDestinationRef" name="Check message-destination-type attribute"
+     properties="attribute=message-destination-type">
+     <result-template
+      description="Check that attribute message-destination-type is valid"
+      id="message-destination-type.valid" message-id="web.class.valid" name="Check message-destination-type attribute"/>
+     <result-template
+      description="Check that attribute message-destination-type references existent java class"
+      id="message-destination-type" message-id="web.class.exists" name="Check message-destination-type attribute"/>
+    </rule>
+
+   </rule-set>
+
+   <rule action="org.jboss.tools.jst.web.verification.vrules.CheckServletMappingName"
+    category="web" description="Check servlet-mapping attribute"
+    entities="WebAppServletMapping" name="Check servlet-name attribute in servlet-mapping">
+    <result-template
+     description="Check that attribute servlet-name is not empty"
+     id="servlet-mapping.empty" message-id="web.empty" name="Check servlet-name attribute in servlet-mapping"/>
+    <result-template
+     description="Check that attribute servlet-mapping references existent servlet"
+     id="servlet-mapping" message-id="web.servlet.mapping.exists" name="Check servlet-name attribute in servlet-mapping"/>
+   </rule>
+
+   <rule action="org.jboss.tools.jst.web.verification.vrules.CheckFilterMappingName"
+    category="web" description="Check filter-mapping attribute"
+    entities="WebAppFilterMapping" name="Check filter-name attribute in filter-mapping">
+    <result-template
+     description="Check that attribute filter-name is not empty"
+     id="filter-mapping.empty" message-id="web.empty" name="Check filter-name attribute in filter-mapping"/>
+    <result-template
+     description="Check that attribute filter-name references existent filter"
+     id="filter-mapping" message-id="web.filter.mapping.exists" name="Check filter-name attribute in filter-mapping"/>
+   </rule>
+
+   <rule action="org.jboss.tools.jst.web.verification.vrules.CheckServletMappingName"
+    category="web" description="Check servlet-mapping attribute"
+    entities="WebAppFilterMapping" name="Check servlet-name attribute in filter-mapping"
+    properties="acceptEmpty=true">
+    <result-template
+     description="Check that attribute servlet-mapping references existent servlet"
+     id="servlet-mapping" message-id="web.servlet.mapping.exists" name="Check servlet-name attribute in filter-mapping"/>
+   </rule>
+
+   <rule action="org.jboss.tools.jst.web.verification.vrules.CheckRoleReferenceName"
+    category="web" description="Check role-link attribute"
+    entities="WebAppSecurityRoleRef" name="Check role-link attribute"
+    properties="attribute=role-link">
+    <result-template
+     description="Check that attribute role-link is not empty"
+     id="role.empty" message-id="web.empty" name="Check role-link attribute"/>
+    <result-template
+     description="Check that attribute role-link references existent role"
+     id="role" message-id="web.role.exists" name="Check role-link attribute"/>
+   </rule>
+
+   <rule action="org.jboss.tools.jst.web.verification.vrules.CheckRoleReferenceName"
+    category="web" description="Check role-name attribute"
+    entities="WebAppRunAs,WebAppRoleName" name="Check role-name attribute"
+    properties="attribute=role-name">
+    <result-template
+     description="Check that attribute role-name is not empty"
+     id="role.empty" message-id="web.empty" name="Check role-name attribute"/>
+    <result-template
+     description="Check that attribute role-name references existent role"
+     id="role" message-id="web.role.exists" name="Check role-name attribute"/>
+   </rule>
+
+  </rule-set>
+ </rule-set>
+
+</rule-sets>

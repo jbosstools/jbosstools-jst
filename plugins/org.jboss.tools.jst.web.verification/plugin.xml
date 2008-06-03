@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+   <!--extension point="org.jboss.tools.common.model.meta">
+      <meta path="meta/web-verification.meta">
+      </meta>
+   </extension-->
+   
+   <extension point="org.jboss.tools.common.verification.rules">
+      <rule-set path="meta/.rule-sets.xml"/>
+   </extension>
+
+   <extension
+         point="org.jboss.tools.common.model.resourceMapping">
+      <mapping
+          loader="org.jboss.tools.jst.web.verification"
+          priority="0"
+          kind="class"
+          paths=".web.verification."
+      />
+   </extension>
+
+	<extension point="org.jboss.tools.common.model.classes">
+		<xclass id="org.jboss.tools.jst.web.verification.vrules.BundleLoader"
+			class="org.jboss.tools.jst.web.verification.vrules.BundleLoader"/>
+		<xclass id="org.jboss.tools.jst.web.verification.vrules.CheckFilterMappingName"
+			class="org.jboss.tools.jst.web.verification.vrules.CheckFilterMappingName"/>
+		<xclass id="org.jboss.tools.jst.web.verification.vrules.CheckRoleReferenceName"
+			class="org.jboss.tools.jst.web.verification.vrules.CheckRoleReferenceName"/>
+		<xclass id="org.jboss.tools.jst.web.verification.vrules.CheckServletMappingName"
+			class="org.jboss.tools.jst.web.verification.vrules.CheckServletMappingName"/>
+		<xclass id="org.jboss.tools.jst.web.verification.vrules.CheckClass"
+			class="org.jboss.tools.jst.web.verification.vrules.CheckClass"/>
+		<xclass id="org.jboss.tools.jst.web.verification.vrules.CheckResource"
+			class="org.jboss.tools.jst.web.verification.vrules.CheckResource"/>
+	</extension>    
+</plugin>
