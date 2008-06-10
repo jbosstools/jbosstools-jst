@@ -27,25 +27,6 @@
       </attributeEditor>
    </extension>
    
-   <!--
-   <extension point="org.eclipse.ui.actionSets">
-      <actionSet description="%actionSets.serverActions.description" id="org.jboss.tools.jst.web.ui.server.actionSet" label="%actionSets.serverActions.label" visible="true">
-         <action class="org.jboss.tools.jst.web.ui.action.server.SelectServerActionDelegate" icon="images/xstudio/actions/tomcat/tomcat.gif" id="org.jboss.tools.jst.web.ui.action.server.SelectServerActionDelegate" label="%actionSets.serverActions.selectServer.label" style="pulldown" toolbarPath="Normal/SelectServer" tooltip="%actionSets.serverActions.selectServer.label">
-         </action>
-         <action class="org.jboss.tools.jst.web.ui.action.server.ChangeTimeStampActionDelegate" icon="images/xstudio/actions/tomcat/tomcat_webxml.gif" id="org.jboss.tools.jst.web.ui.action.server.ChangeTimeStampActionDelegate" label="%actionSets.serverActions.changeWebXmlTimeStamp.label" toolbarPath="Normal/server" tooltip="%actionSets.serverActions.changeWebXmlTimeStamp.label">
-         </action>
-         <action class="org.jboss.tools.jst.web.ui.action.server.RefreshServerActionDelegate" icon="images/xstudio/actions/tomcat/tomcat_reload.gif" id="org.jboss.tools.jst.web.ui.action.server.RefreshServerActionDelegate" label="%actionSets.serverActions.restartServer.label" toolbarPath="Normal/server" tooltip="%actionSets.serverActions.restartServer.label">
-         </action>
-         <action class="org.jboss.tools.jst.web.ui.action.server.StopServerActionDelegate" icon="images/xstudio/actions/tomcat/tomcat_stop.gif" id="org.jboss.tools.jst.web.ui.action.server.StopServerActionDelegate" label="%actionSets.serverActions.stopServer.label" toolbarPath="Normal/server" tooltip="%actionSets.serverActions.stopServer.label">
-         </action>
-         <action class="org.jboss.tools.jst.web.ui.action.server.DebugServerActionDelegate" icon="images/xstudio/actions/tomcat/xpl/tomcat_debug.gif" id="org.jboss.tools.jst.web.ui.action.server.DebugServerActionDelegate" label="%actionSets.serverActions.debugServer.label" toolbarPath="Normal/server" tooltip="%actionSets.serverActions.startServer.label">
-         </action>
-         <action class="org.jboss.tools.jst.web.ui.action.server.RunServerActionDelegate" icon="images/xstudio/actions/tomcat/tomcat_start.gif" id="org.jboss.tools.jst.web.ui.action.server.RunServerActionDelegate" label="%actionSets.serverActions.startServer.label" toolbarPath="Normal/server" tooltip="%actionSets.serverActions.startServer.label">
-         </action>
-      </actionSet>
-   </extension>
-   -->
-   
    <extension id="e" name="XML Editors" point="org.jboss.tools.common.model.ui.xmlEditor">
       <xmlEditor 
          class="org.jboss.tools.jst.web.ui.editors.WebCompoundEditor" 
