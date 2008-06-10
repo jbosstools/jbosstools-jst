@@ -25,6 +25,8 @@ import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jst.jsp.core.text.IJSPPartitions;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
+import org.eclipse.wst.css.core.text.ICSSPartitions;
+import org.eclipse.wst.css.ui.internal.contentassist.CSSContentAssistProcessor;
 import org.eclipse.wst.html.core.text.IHTMLPartitions;
 import org.eclipse.wst.html.ui.StructuredTextViewerConfigurationHTML;
 import org.eclipse.wst.sse.ui.internal.format.StructuredFormattingStrategy;
@@ -40,7 +42,8 @@ public class HTMLTextViewerConfiguration extends StructuredTextViewerConfigurati
 		super();
 	}
 
-	protected IContentAssistProcessor[] getContentAssistProcessors(ISourceViewer sourceViewer, String partitionType) {
+	@SuppressWarnings("restriction")
+    protected IContentAssistProcessor[] getContentAssistProcessors(ISourceViewer sourceViewer, String partitionType) {
 //		IContentAssistProcessor[] processors = null;
 
 		// if we have our own processors we need 
@@ -63,6 +66,11 @@ public class HTMLTextViewerConfiguration extends StructuredTextViewerConfigurati
 		if (partitionType == IHTMLPartitions.HTML_DEFAULT ||
 				partitionType == IJSPPartitions.JSP_DEFAULT_EL) {
 			processors.add(new FaceletsHtmlContentAssistProcessor());
+		}
+		//added by estherbin
+		//fix http://jira.jboss.com/jira/browse/JBIDE-1791
+		if(partitionType.equals(ICSSPartitions.STYLE)){
+		    processors.add(new CSSContentAssistProcessor());
 		}
 
 		return (IContentAssistProcessor[])processors.toArray(new IContentAssistProcessor[0]);
