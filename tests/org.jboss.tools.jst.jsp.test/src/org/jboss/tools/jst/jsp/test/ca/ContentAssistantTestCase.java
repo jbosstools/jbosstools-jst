@@ -14,7 +14,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
-import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor;
@@ -86,42 +85,44 @@ public class ContentAssistantTestCase extends TestCase {
 
 	}
 
-	protected void checkProposals(String fileName, int offset, String[] proposals, boolean exactly){
-		checkProposals(fileName, null, offset, proposals, exactly);
-	}
+	protected ICompletionProposal[] checkProposals(String fileName, int offset, String[] proposals, boolean exactly) {
+        return checkProposals(fileName, null, offset, proposals, exactly);
+    }
 
-	protected void checkProposals(String fileName, String substring, int offset, String[] proposals, boolean exactly){
+	protected ICompletionProposal[] checkProposals(String fileName, String substring, int offset, String[] proposals, boolean exactly){
 		openEditor(fileName);
 
-		int position = 0;
-		if(substring != null){
-			String documentContent = document.get();
-			position = documentContent.indexOf(substring);
-		}
+        int position = 0;
+        if (substring != null) {
+            String documentContent = document.get();
+            position = documentContent.indexOf(substring);
+        }
 
-		ICompletionProposal[] result= null;
+        ICompletionProposal[] result = null;
 
-		IContentAssistProcessor p= TestUtil.getProcessor(viewer, position+offset, contentAssistant);
-		if (p != null) {
-			try {
-				result= p.computeCompletionProposals(viewer, position+offset);
-			} catch (Throwable x) {
-				x.printStackTrace();
-			}
-		}
+        IContentAssistProcessor p = TestUtil.getProcessor(viewer, position + offset, contentAssistant);
+        if (p != null) {
+            try {
+                result = p.computeCompletionProposals(viewer, position + offset);
+            } catch (Throwable x) {
+                x.printStackTrace();
+            }
+        }
 
-		assertTrue("Content Assistant returned no proposals", (result != null && result.length > 0));
+        assertTrue("Content Assistant returned no proposals", (result != null && result.length > 0));
 
-//		for (int i = 0; i < result.length; i++) {
-//			System.out.println("proposal - "+result[i].getDisplayString());
-//		}
+        // for (int i = 0; i < result.length; i++) {
+        // System.out.println("proposal - "+result[i].getDisplayString());
+        // }
 
-		for (int i = 0; i < proposals.length; i++) {
-			assertTrue("Proposal "+proposals[i]+" not found!", compareProposal(proposals[i], result));
-		}
+        for (int i = 0; i < proposals.length; i++) {
+            assertTrue("Proposal " + proposals[i] + " not found!", compareProposal(proposals[i], result));
+        }
 
-		if(exactly)
-			assertTrue("Some other proposals was found!", result.length == proposals.length);
+        if (exactly) {
+            assertTrue("Some other proposals was found!", result.length == proposals.length);
+        }
+		return result;
 	}
 
 	protected boolean compareProposal(String proposalName, ICompletionProposal[] proposals){
