@@ -10,12 +10,12 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.model.handlers;
 
-import java.util.*;
+import java.util.Properties;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.core.IServer;
-
+import org.eclipse.wst.server.core.ServerCore;
 import org.jboss.tools.common.meta.action.impl.AbstractHandler;
 import org.jboss.tools.common.meta.action.impl.XActionImpl;
 import org.jboss.tools.common.model.ServiceDialog;
@@ -24,7 +24,6 @@ import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 import org.jboss.tools.jst.web.server.RegistrationHelper;
-import org.jboss.tools.jst.web.server.ServerManager;
 
 public class UnregisterInServerXmlHandler extends AbstractHandler {
 	String textTemplate = null;
@@ -71,7 +70,7 @@ public class UnregisterInServerXmlHandler extends AbstractHandler {
 	
 	void unregisterFromAllServers(XModelObject object) throws XModelException {
 		IProject project = EclipseResourceUtil.getProject(object);
-		IServer[] ss = ServerManager.getInstance().getServers();
+		IServer[] ss = ServerCore.getServers();
 		for (int i = 0; i < ss.length; i++) {
 			if(RegistrationHelper.isRegistered(project, ss[i])) {
 				RegistrationHelper.unregister(project, ss[i]);
