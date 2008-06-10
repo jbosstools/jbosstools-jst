@@ -659,24 +659,32 @@ public class JSPTextEditor extends StructuredTextEditor implements
 	}
 
 	public void doOperation(int operation) {
-	    if (operation == UNDO || operation == REDO
-		    || operation == FORMAT_DOCUMENT
-		    || operation == FORMAT_ACTIVE_ELEMENTS) {
-		if (editor.getVPEController() != null) {
-		    editor.getVPEController().preLongOperation();
+			if (operation == UNDO || operation == REDO
+					|| operation == FORMAT_DOCUMENT
+					|| operation == FORMAT_ACTIVE_ELEMENTS) {
+				if (editor.getVPEController() != null) {
+					editor.getVPEController().preLongOperation();
+				}
+			}
+			/*
+			 * Fixes http://jira.jboss.com/jira/browse/JBIDE-2030
+			 * Stops ActiveEditorSwitcher in any case.
+			 * Author: dmaliarevich
+			 */
+			try {
+				super.doOperation(operation);
+			} catch (Exception e) {
+				JspEditorPlugin.getPluginLog().logError(e);
+			} finally {
+				if (operation == UNDO || operation == REDO
+						|| operation == FORMAT_DOCUMENT
+						|| operation == FORMAT_ACTIVE_ELEMENTS) {
+					if (editor.getVPEController() != null) {
+						editor.getVPEController().postLongOperation();
+					}
+				}
+			}
 		}
-	    }
-
-	    super.doOperation(operation);
-
-	    if (operation == UNDO || operation == REDO
-		    || operation == FORMAT_DOCUMENT
-		    || operation == FORMAT_ACTIVE_ELEMENTS) {
-		if (editor.getVPEController() != null) {
-		    editor.getVPEController().postLongOperation();
-		}
-	    }
-	}
 
 	protected void handleDispose() {
 	    if (editor != null && editor.getSourceViewer() != null
