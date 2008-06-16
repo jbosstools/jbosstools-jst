@@ -14,7 +14,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
-import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor;
@@ -86,11 +85,11 @@ public class ContentAssistantTestCase extends TestCase {
 
 	}
 
-	protected void checkProposals(String fileName, int offset, String[] proposals, boolean exactly){
-		checkProposals(fileName, null, offset, proposals, exactly);
+	protected ICompletionProposal[] checkProposals(String fileName, int offset, String[] proposals, boolean exactly){
+		return checkProposals(fileName, null, offset, proposals, exactly);
 	}
 
-	protected void checkProposals(String fileName, String substring, int offset, String[] proposals, boolean exactly){
+	protected ICompletionProposal[] checkProposals(String fileName, String substring, int offset, String[] proposals, boolean exactly){
 		openEditor(fileName);
 
 		int position = 0;
@@ -122,6 +121,7 @@ public class ContentAssistantTestCase extends TestCase {
 
 		if(exactly)
 			assertTrue("Some other proposals was found!", result.length == proposals.length);
+		return result;
 	}
 
 	protected boolean compareProposal(String proposalName, ICompletionProposal[] proposals){
