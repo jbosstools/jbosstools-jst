@@ -200,18 +200,22 @@ public class WTPKbdBeanPropertyResource extends WTPKbAbstractModelResource {
 			if(callStart != null) proposal.setStart(callStart.start); else proposal.setStart(offset);
 			ELParser.Token callEnd = ELParser.getCallEnd(c);
 			if(callEnd != null && callEnd.end >= offset) proposal.setEnd(callEnd.end); else proposal.setEnd(offset);
-			String[][] ws = getWrappers();
 			int pos = proposal.getReplacementString().length();
+			
+			// JBIDE-2334: JSPAciveContentAssistProcessor (a class which calls this method)
+			// is to process opening and closing EL charachers 
+/*			
+			String[][] ws = getWrappers();
 			if(ws.length > 0 && ws[0][0].length() > 0) {
 				ELParser.Token open = ELParser.getPrecedingOpen(c, offset);
 				if(open == null && !proposal.getReplacementString().startsWith(ws[0][0])) {
-					pos += ws[0][0].length();
-					proposal.setReplacementString(ws[0][0] + proposal.getReplacementString());
-					proposal.setLabel(ws[0][0] + proposal.getLabel() + ws[0][1]);
+//					pos += ws[0][0].length();
+//					proposal.setReplacementString(ws[0][0] + proposal.getReplacementString());
+//					proposal.setLabel(ws[0][0] + proposal.getLabel() + ws[0][1]);
 				} else if(open != null && !proposal.getReplacementString().startsWith(ws[0][0]) && open.end - open.start == 1) {
 					if(ws[0][0].endsWith("{")) {
-						pos += 1;
-						proposal.setReplacementString("{" + proposal.getReplacementString());
+//						pos += 1;
+//						proposal.setReplacementString("{" + proposal.getReplacementString());
 					}					
 				} else if(open != null && open.end - open.start == 2 && offset < open.end && offset > open.start) {
 					proposal.setStart(proposal.getStart() + 1);
@@ -219,9 +223,10 @@ public class WTPKbdBeanPropertyResource extends WTPKbAbstractModelResource {
 					proposal.setPosition(proposal.getStart());
 				}
 				if(!ELParser.isFollowedByClose(c, offset) && !proposal.getReplacementString().endsWith(ws[0][1])) {
-					proposal.setReplacementString(proposal.getReplacementString() + ws[0][1]);
+//					proposal.setReplacementString(proposal.getReplacementString() + ws[0][1]);
 				}
 			}
+*/			
 			proposal.setPosition(pos);
 		}
 	}

@@ -67,16 +67,19 @@ public class JSPBaseContentAssistProcessor extends
 		}
 
 		String matchString = null;
+		
+		// JBIDE-2334: Do not need any fix-ups here 
+		
 		// fixups
-		if (currentValue.length() > StringUtils.strip(currentValue).length() && (currentValue.startsWith("\"") || currentValue.startsWith("'")) && contentAssistRequest.getMatchString().length() > 0) {
-			matchString = currentValue.substring(1, contentAssistRequest.getMatchString().length());
-			strippedValue = currentValue.substring(1);
-			offset = contentAssistRequest.getMatchString().length() - 1;
-		} else {
+//		if (currentValue.length() > StringUtils.strip(currentValue).length() && (currentValue.startsWith("\"") || currentValue.startsWith("'")) && contentAssistRequest.getMatchString().length() > 0) {
+//			matchString = currentValue.substring(0, contentAssistRequest.getMatchString().length());
+//			strippedValue = currentValue;
+//			offset = contentAssistRequest.getMatchString().length();
+//	} else {
 			matchString = currentValue.substring(0, contentAssistRequest.getMatchString().length());
 			strippedValue = currentValue;
 			offset = contentAssistRequest.getMatchString().length();
-		}
+//		}
 		addFaceletAttributeValueProposals(
 				contentAssistRequest,tagName,node, attributeName,matchString,strippedValue,offset,currentValue);
 	}
