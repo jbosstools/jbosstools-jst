@@ -77,7 +77,7 @@ public class JSPBaseContentAssistProcessor extends
 //			offset = contentAssistRequest.getMatchString().length();
 //	} else {
 			matchString = currentValue.substring(0, contentAssistRequest.getMatchString().length());
-			strippedValue = currentValue;
+			strippedValue = StringUtils.strip(currentValue);
 			offset = contentAssistRequest.getMatchString().length();
 //		}
 		addFaceletAttributeValueProposals(

@@ -202,6 +202,12 @@ public class WTPKbdBeanPropertyResource extends WTPKbAbstractModelResource {
 			if(callEnd != null && callEnd.end >= offset) proposal.setEnd(callEnd.end); else proposal.setEnd(offset);
 			int pos = proposal.getReplacementString().length();
 			
+			// JBIDE-2437: Because of the issue add EL open/close brackets to the proposal replacement string
+			// This will allow us to separate EL-proposals from all the others.
+			proposal.setReplacementString("#{" + proposal.getReplacementString() + "}");
+			proposal.setLabel("#{" + proposal.getLabel() + "}");
+			
+			
 			// JBIDE-2334: JSPAciveContentAssistProcessor (a class which calls this method)
 			// is to process opening and closing EL charachers 
 /*			
