@@ -118,6 +118,43 @@ public class WebAppHelper {
 	}
 	
 	/**
+	 * Returns model object representing <servlet-mapping> with  
+	 * <servlet-name> = servletName
+	 * @param webxml 
+	 * @param name - <servlet-name> value or null
+	 * @return
+	 */
+	public static XModelObject findServletMapping(XModelObject webxml, String servletName) {
+        if(webxml == null) return null;
+        XModelObject[] s = getServletMappings(webxml);
+        for (int i = 0; i < s.length; i++) {
+        	if(servletName != null && servletName.equals(s[i].getAttributeValue("servlet-name"))) return s[i];
+        }
+        return null;
+	}
+	
+	/**
+	 * Returns model object of entity WebAppServlet, either found
+	 * by findServletMapping method or new object. 
+	 * @param webxml
+	 * @param servletName
+	 * @return
+	 */	
+	public static XModelObject findOrCreateServletMapping(XModelObject webxml, String servletName) throws XModelException {
+        if(webxml == null) return null;
+        XModelObject s = findServletMapping(webxml, servletName);
+        if(s == null) {
+        	XModelObject folder = webxml.getChildByPath(SERVLET_FOLDER);
+        	if(folder == null) folder = webxml;
+        	s = webxml.getModel().createModelObject(SERVLET_MAPPING_ENTITY, null);
+        	s.setAttributeValue("servlet-name", servletName);
+        	s.setAttributeValue("url-pattern", "*.jsf");
+            DefaultCreateHandler.addCreatedObject(folder, s, -1);
+        }
+        return s;
+	}
+	
+	/**
 	 * Returns model object representing <init-param> in <servlet> with 
 	 * param-name = name.
 	 * @param servlet
