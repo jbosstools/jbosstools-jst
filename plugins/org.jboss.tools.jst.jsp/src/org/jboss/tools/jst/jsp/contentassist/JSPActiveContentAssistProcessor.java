@@ -78,7 +78,6 @@ public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcess
     		return;
     	}
 
-//		String strippedValueForQuery = strippedValue;
 		int elStartPosition = getELStartPosition(matchString);
 		int delta = 0;
 		String elProposalPrefix = "";
@@ -87,7 +86,6 @@ public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcess
 		if (elStartPosition == -1) {
 			queryString = matchString;
 			elQueryString = "#{";
-//			strippedValueForQuery = "";
 			delta = matchString.length();
 			if(isCharSharp(matchString, offset-1)) {
 				elProposalPrefix = "{";  //$NON-NLS-1$
@@ -104,13 +102,11 @@ public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcess
 			// in case of EL-expression 
 			queryString = null;
 			elQueryString = matchString.substring(elStartPosition);
-//			strippedValueForQuery = elQueryString;
 	    	delta = matchString.length() - elQueryString.length();
 		}
 		
     	// Correct delta if matchString starts with a quote (exclude that quote)
 		if (matchString.startsWith("\"") || matchString.startsWith("'")) {
-//			strippedValueForQuery = matchString.substring(0,1) + strippedValueForQuery;
 			delta--;
 		}
 
@@ -301,7 +297,7 @@ public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcess
 	}
 
 	/*
-	 * Checks if the EL operand starting characters are present
+	 * Checks if the EL operand ending character is present
 	 * @return
 	 */
 	private int getELEndPosition(String matchString, String currentValue) {
