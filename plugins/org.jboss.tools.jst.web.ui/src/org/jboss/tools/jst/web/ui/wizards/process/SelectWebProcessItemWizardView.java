@@ -152,7 +152,7 @@ public abstract class SelectWebProcessItemWizardView extends AbstractQueryWizard
 	
 	private void readSelection() {
 		int i = tableViewer.getTable().getSelectionIndex();
-		selected = (i < 0) ? null : (XModelObject)provider.items.get(i);
+		selected = (i < 0 || provider == null) ? null : (XModelObject)provider.items.get(i);
 	}
 	
 	private void makeSelection() {
@@ -188,17 +188,21 @@ public abstract class SelectWebProcessItemWizardView extends AbstractQueryWizard
 
 	class TContentProvider implements IListContentProvider, ITableLabelProvider {
 		XModelObject[] l = new XModelObject[0];
-		ArrayList items = new ArrayList();
+		ArrayList<XModelObject> items = new ArrayList<XModelObject>();
 		
 		public void setObjects(XModelObject[] l) {
 			this.l = l;
 		}
 		
 		public void setPattern(String s) {
-			s = s.toLowerCase();
+			s = s == null ? "" : s.toLowerCase();
 			items.clear();
 			for (int i = 0; i < l.length; i++) {
-				if(s.length() == 0 || getKey(l[i]).toLowerCase().indexOf(s) >= 0) items.add(l[i]);
+				String key = getKey(l[i]);
+				if(key == null) {
+					continue;
+				}
+				if(s.length() == 0 || key.toLowerCase().indexOf(s) >= 0) items.add(l[i]);
 			}
 			makeSelection();
 		}
