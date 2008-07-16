@@ -11,9 +11,8 @@
 package org.jboss.tools.jst.jsp;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -23,6 +22,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.ui.text.JavaTextTools;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jst.jsp.ui.internal.JSPUIPlugin;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
@@ -31,6 +31,7 @@ import org.jboss.tools.common.log.BaseUIPlugin;
 import org.jboss.tools.common.log.IPluginLog;
 import org.jboss.tools.common.text.xml.XmlEditorPlugin;
 import org.jboss.tools.jst.jsp.preferences.JSPOccurrencePreferenceConstants;
+import org.osgi.framework.Bundle;
 
 /**
  * The main plugin class to be used in the desktop.
@@ -41,6 +42,7 @@ public class JspEditorPlugin extends BaseUIPlugin {
 	
 	public static final String PLUGIN_ID = "org.jboss.tools.jst.jsp"; 
 
+	public static final String PLUGIN_CSSDIALOG_RESOURCES = "/resources/org/jboss/tools/jst/jsp/outline/cssdialog";
 
 	/**
 	 * The constructor.
@@ -133,4 +135,34 @@ public class JspEditorPlugin extends BaseUIPlugin {
 	public static IPluginLog getPluginLog() {
 		return getDefault();
 	}
+	
+	/**
+	     * Returns an image descriptor for the image file at the given plug-in
+	     * relative path
+	     * 
+	     * @param path
+	     *                the path
+	     * @return the image descriptor
+	     */
+	    public static ImageDescriptor getImageDescriptor(String path) {
+		return imageDescriptorFromPlugin(PLUGIN_ID, path);
+	    }
+
+	    /**
+	     * Get plug-in resource path
+	     * 
+	     * @return path
+	     */
+	    public static String getPluginCSSDialogResourcePath() {
+		Bundle bundle = Platform.getBundle(PLUGIN_ID);
+		URL url = null;
+		try {
+		    url = bundle == null ? null : FileLocator.resolve(bundle
+			    .getEntry(PLUGIN_CSSDIALOG_RESOURCES));
+
+		} catch (IOException e) {
+		    url = bundle.getEntry(PLUGIN_CSSDIALOG_RESOURCES);
+		}
+		return (url == null) ? null : url.getPath();
+	    }
 }

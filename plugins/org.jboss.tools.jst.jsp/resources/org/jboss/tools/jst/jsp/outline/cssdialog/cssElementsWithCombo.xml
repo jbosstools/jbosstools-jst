@@ -1,0 +1,572 @@
+<elements>
+
+	<color>
+		<value name="none"/>
+	</color>
+	
+	<background-color>
+		<value name="none"/>
+	</background-color>
+	
+	<border-bottom-color>
+		<value name="none"/>
+	</border-bottom-color>
+	
+	<border-color>
+		<value name="none"/>
+	</border-color>
+	
+	<border-left-color>
+		<value name="none"/>
+	</border-left-color>
+	
+	<border-right-color>
+		<value name="none"/>
+	</border-right-color>
+	
+	<border-top-color>
+		<value name="none"/>
+	</border-top-color>
+	
+	<outline-color>
+		<value name="none"/>
+	</outline-color>
+	
+	<letter-spacing>
+		<value name="normal"/>
+	</letter-spacing>
+	
+	<text-align>
+		<value name="left"/>
+		<value name="right"/>
+		<value name="center"/>
+		<value name="justify"/>
+	</text-align>
+	
+	<text-decoration>
+		<value name="none"/>
+		<value name="underline"/>
+		<value name="overline"/>
+		<value name="line-through"/>
+		<value name="blink"/>
+	</text-decoration>
+	
+	<text-transform>
+		<value name="none"/>
+		<value name="capitalize"/>
+		<value name="uppercase"/>
+		<value name="lowercase"/>
+	</text-transform>
+	
+	<white-space>
+		<value name="normal"/>
+		<value name="pre"/>
+		<value name="nowrap"/>
+	</white-space>
+	
+	<word-spacing>
+		<value name="normal"/>
+	</word-spacing>
+	
+	<font-size>
+		<value name="xx-small"/>
+		<value name="x-small"/>
+		<value name="small"/>
+		<value name="medium"/>
+		<value name="large"/>
+		<value name="x-large"/>
+		<value name="xx-large"/>
+		<value name="smaller"/>
+		<value name="larger"/>
+	</font-size>
+	
+	<font-size-adjust>
+		<value name="none"/>
+	</font-size-adjust>
+	
+	<font-stretch>
+		<value name="normal"/>
+		<value name="wider"/>
+		<value name="narrower"/>
+		<value name="ultra-condensed"/>
+		<value name="extra-condensed"/>
+		<value name="condensed"/>
+		<value name="semi-condensed"/>
+		<value name="semi-expanded"/>
+		<value name="expanded"/>
+		<value name="extra-expanded"/>
+		<value name="ultra-expanded"/>
+	</font-stretch>
+	
+	<font-style>
+		<value name="normal"/>
+		<value name="italic"/>
+		<value name="oblique"/>		
+	</font-style>
+	
+	<font-variant>
+		<value name="normal"/>
+		<value name="small-caps"/>
+	</font-variant>
+	
+	<font-weight>
+		<value name="normal"/>
+		<value name="bold"/>
+		<value name="bolder"/>
+		<value name="lighter"/>
+	</font-weight>
+	
+	<background-attachment>
+		<value name="scroll"/>
+		<value name="fixed"/>
+	</background-attachment>
+	
+	<background-image>
+		<value name="none"/>
+	</background-image>
+	
+	<background-repeat>
+		<value name="repeat"/>
+		<value name="repeat-x"/>
+		<value name="repeat-y"/>
+		<value name="no-repeat"/>
+	</background-repeat>
+	
+	<border-bottom-style>
+		<value name="solid"/>
+		<value name="none"/>
+		<value name="hidden"/>
+		<value name="dotted"/>
+		<value name="dashed"/>
+		<value name="double"/>
+		<value name="groove"/>
+		<value name="ridge"/>
+		<value name="inset"/>
+		<value name="outset"/>
+	</border-bottom-style>
+	
+	<border-bottom-width>
+		<value name="medium"/>
+		<value name="thin"/>
+		<value name="thick"/>
+	</border-bottom-width>
+	
+	<border-left-style>
+		<value name="solid"/>
+		<value name="none"/>
+		<value name="hidden"/>
+		<value name="dotted"/>
+		<value name="dashed"/>
+		<value name="double"/>
+		<value name="groove"/>
+		<value name="ridge"/>
+		<value name="inset"/>
+		<value name="outset"/>
+	</border-left-style>
+	
+	<border-left-width>
+		<value name="medium"/>
+		<value name="thin"/>
+		<value name="thick"/>
+	</border-left-width>
+	
+	<border-right-style>
+		<value name="solid"/>
+		<value name="none"/>
+		<value name="hidden"/>
+		<value name="dotted"/>
+		<value name="dashed"/>
+		<value name="double"/>
+		<value name="groove"/>
+		<value name="ridge"/>
+		<value name="inset"/>
+		<value name="outset"/>
+	</border-right-style>
+	
+	<border-right-width>
+		<value name="medium"/>
+		<value name="thin"/>
+		<value name="thick"/>
+	</border-right-width>
+	
+	<border-style>
+		<value name="solid"/>
+		<value name="none"/>
+		<value name="hidden"/>
+		<value name="dotted"/>
+		<value name="dashed"/>
+		<value name="double"/>
+		<value name="groove"/>
+		<value name="ridge"/>
+		<value name="inset"/>
+		<value name="outset"/>
+	</border-style>
+	
+	<border-top-style>
+		<value name="solid"/>
+		<value name="none"/>
+		<value name="hidden"/>
+		<value name="dotted"/>
+		<value name="dashed"/>
+		<value name="double"/>
+		<value name="groove"/>
+		<value name="ridge"/>
+		<value name="inset"/>
+		<value name="outset"/>
+	</border-top-style>
+	
+	<border-top-width>
+		<value name="medium"/>
+		<value name="thin"/>
+		<value name="thick"/>
+	</border-top-width>
+	
+	<border-width>
+		<value name="medium"/>
+		<value name="thin"/>
+		<value name="thick"/>
+	</border-width>
+	
+	<margin-bottom>
+		<value name="auto"/>
+	</margin-bottom>
+	
+	<margin-left>
+		<value name="auto"/>
+	</margin-left>
+	
+	<margin-right>
+		<value name="auto"/>
+	</margin-right>
+	
+	<margin-top>
+		<value name="auto"/>
+	</margin-top>
+	
+	<list-style-image>
+		<value name="none"/>
+	</list-style-image>
+	
+	<list-style-position>
+		<value name="inside"/>
+		<value name="outside"/>
+	</list-style-position>
+	
+	<list-style-type>
+		<value name="disk"/>
+		<value name="circle"/>
+		<value name="square"/>
+		<value name="decimal"/>
+		<value name="decimal-leading-zero"/>
+		<value name="lower-roman"/>
+		<value name="upper-roman"/>
+		<value name="lower-alpha"/>
+		<value name="upper-alpha"/>
+		<value name="lower-greek"/>
+		<value name="lower-latin"/>
+		<value name="upper-latin"/>
+		<value name="hebrew"/>
+		<value name="armenian"/>
+		<value name="georgian"/>
+		<value name="cjk-ideographic"/>
+		<value name="hiragana"/>
+		<value name="katakana"/>
+		<value name="hiragana-iroha"/>
+		<value name="katakana-iroha"/>
+		<value name="none"/>
+	</list-style-type>
+	
+	<marker-offset>
+		<value name="auto"/>
+	</marker-offset>
+	
+	<line-height>
+		<value name="normal"/>
+	</line-height>
+	
+	<max-height>
+		<value name="none"/>
+	</max-height>
+	
+	<max-width>
+		<value name="none"/>
+	</max-width>
+	
+	<vertical-align>
+		<value name="baseline"/>
+		<value name="sub"/>
+		<value name="super"/>
+		<value name="top"/>
+		<value name="text-top"/>
+		<value name="middle"/>
+		<value name="bottom"/>
+		<value name="text-bottom"/>
+	</vertical-align>
+	
+	<bottom>
+		<value name="auto"/>
+	</bottom>
+	
+	<clear>
+		<value name="none"/>
+		<value name="left"/>
+		<value name="right"/>
+		<value name="both"/>
+	</clear>
+	
+	<clip>
+		<value name="auto"/>
+	</clip>
+	
+	<direction>
+		<value name="ltr"/>
+		<value name="rtl"/>
+	</direction>
+	
+	<display>
+		<value name="none"/>
+		<value name="inline"/>
+		<value name="block"/>
+		<value name="list-item"/>
+		<value name="run-in"/>
+		<value name="compact"/>
+		<value name="marker"/>
+		<value name="table"/>
+		<value name="inline-table"/>
+		<value name="table-row-group"/>
+		<value name="table-header-group"/>
+		<value name="table-footer-group"/>
+		<value name="table-row"/>
+		<value name="table-column-group"/>
+		<value name="table-column"/>
+		<value name="table-cell"/>
+		<value name="table-caption"/>
+	</display>
+	
+	<float>
+		<value name="left"/>
+		<value name="right"/>
+		<value name="none"/>
+	</float>
+	
+	<left>
+		<value name="auto"/>
+	</left>
+	
+	<overflow>
+		<value name="visible"/>
+		<value name="hidden"/>
+		<value name="scroll"/>
+		<value name="auto"/>
+	</overflow>
+	
+	<position>
+		<value name="static"/>
+		<value name="relative"/>
+		<value name="absolute"/>
+		<value name="fixed"/>
+	</position>
+	
+	<right>
+		<value name="auto"/>
+	</right>
+	
+	<top>
+		<value name="auto"/>
+	</top>
+	
+	<unicode-bidi>
+		<value name="normal"/>
+		<value name="embed"/>
+		<value name="bidi-override"/>
+	</unicode-bidi>
+	
+	<visibility>
+		<value name="visible"/>
+		<value name="hidden"/>
+		<value name="collapse"/>
+	</visibility>
+	
+	<z-index>
+		<value name="auto"/>
+	</z-index>
+	
+	<marks>
+		<value name="crop"/>
+		<value name="cross"/>
+		<value name="none"/>
+	</marks>
+	
+	<page-break-after>
+		<value name="auto"/>
+		<value name="always"/>
+		<value name="avoid"/>
+		<value name="left"/>
+		<value name="right"/>
+	</page-break-after>
+	
+	<page-break-before>
+		<value name="auto"/>
+		<value name="always"/>
+		<value name="avoid"/>
+		<value name="left"/>
+		<value name="right"/>
+	</page-break-before>
+	
+	<page-break-inside>
+		<value name="avoid"/>
+		<value name="auto"/>
+	</page-break-inside>
+	
+	<size>
+		<value name="auto"/>
+		<value name="portrait"/>
+		<value name="landscape"/>
+	</size>
+	
+	<border-collapse>
+		<value name="collapse"/>
+		<value name="separate"/>
+	</border-collapse>
+	
+	<caption-side>
+		<value name="top"/>
+		<value name="bottom"/>
+		<value name="left"/>
+		<value name="right"/>
+	</caption-side>
+	
+	<empty-cells>
+		<value name="show"/>
+		<value name="hide"/>
+	</empty-cells>
+	
+	<speak-header>
+		<value name="once"/>
+		<value name="always"/>
+	</speak-header>
+	
+	<table-layout>
+		<value name="auto"/>
+		<value name="fixed"/>
+	</table-layout>
+	
+	<cursor>
+		<value name="auto"/>
+		<value name="crosshair"/>
+		<value name="default"/>
+		<value name="pointer"/>
+		<value name="move"/>
+		<value name="e-resize"/>
+		<value name="ne-resize"/>
+		<value name="nw-resize"/>
+		<value name="n-resize"/>
+		<value name="se-resize"/>
+		<value name="sw-resize"/>
+		<value name="s-resize"/>
+		<value name="w-resize"/>
+		<value name="text"/>
+		<value name="wait"/>
+		<value name="help"/>
+	</cursor>
+	
+	<outline-style>
+		<value name="solid"/>
+		<value name="none"/>
+		<value name="hidden"/>
+		<value name="dotted"/>
+		<value name="dashed"/>
+		<value name="double"/>
+		<value name="groove"/>
+		<value name="ridge"/>
+		<value name="inset"/>
+		<value name="outset"/>
+	</outline-style>
+	
+	<outline-width>
+		<value name="medium"/>
+		<value name="thin"/>
+		<value name="thick"/>
+	</outline-width>
+	
+	<azimuth>
+		<value name="left-side"/>
+		<value name="far-left"/>
+		<value name="left"/>
+		<value name="center-left"/>
+		<value name="center"/>
+		<value name="center-right"/>
+		<value name="right"/>
+		<value name="far-right"/>
+		<value name="rigth-side"/>
+		<value name="behind"/>
+		<value name="leftwards"/>
+		<value name="rightwards"/>
+	</azimuth>
+	
+	<cue-after>
+		<value name="none"/>
+	</cue-after>
+	
+	<cue-before>
+		<value name="none"/>
+	</cue-before>
+	
+	<elevation>
+		<value name="below"/>
+		<value name="level"/>
+		<value name="above"/>
+		<value name="higher"/>
+		<value name="lower"/>
+	</elevation>
+	
+	<pitch>
+		<value name="x-low"/>
+		<value name="low"/>
+		<value name="medium"/>
+		<value name="high"/>
+		<value name="x-high"/>
+	</pitch>
+	
+	<play-during>
+		<value name="mix"/>
+		<value name="repeat"/>
+		<value name="auto"/>
+		<value name="none"/>
+	</play-during>
+	
+	<speak>
+		<value name="normal"/>
+		<value name="none"/>
+		<value name="spell-out"/>
+	</speak>
+	
+	<speak-numeral>
+		<value name="digits"/>
+		<value name="continuous"/>
+	</speak-numeral>
+	
+	<speak-punctuation>
+		<value name="code"/>
+		<value name="none"/>
+	</speak-punctuation>
+	
+	<speech-rate>
+		<value name="x-slow"/>
+		<value name="slow"/>
+		<value name="medium"/>
+		<value name="fast"/>
+		<value name="x-fast"/>
+		<value name="faster"/>
+		<value name="slower"/>
+	</speech-rate>
+	
+	<volumn>
+		<value name="silent"/>
+		<value name="x-soft"/>
+		<value name="soft"/>
+		<value name="medium"/>
+		<value name="loud"/>
+		<value name="x-loud"/>
+	</volumn>
+</elements>

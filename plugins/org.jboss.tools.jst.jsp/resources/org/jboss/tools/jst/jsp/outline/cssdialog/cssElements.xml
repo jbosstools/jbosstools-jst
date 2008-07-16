@@ -1,0 +1,167 @@
+<elements>
+
+	<!-- ################### Block elements #################### -->
+	<Aural>
+		<element name="azimuth"/>
+		<element name="cue"/>
+		<element name="cue-after"/>
+		<element name="cue-before"/>
+		<element name="elevation"/>
+		<element name="pause"/>
+		<element name="pause-after"/>
+		<element name="pause-before"/>
+		<element name="pitch"/>
+		<element name="pitch-range"/>
+		<element name="play-during"/>
+		<element name="richness"/>
+		<element name="speak"/>
+		<element name="speak-numeral"/>
+		<element name="speak-punctuation"/>
+		<element name="speech-rate"/>
+		<element name="stress"/>
+		<element name="voice-family"/>
+		<element name="volumn"/> 
+	</Aural>
+	
+	<Background>
+		<element name="background"/>
+		<element name="background-attachment"/>
+		<element name="background-color"/>
+		<element name="background-image"/>
+		<element name="background-position"/>
+		<element name="background-repeat"/>
+	</Background>
+	
+	<Boxes>
+		<element name="border"/>
+		<element name="border-bottom"/>
+		<element name="border-bottom-color"/>
+		<element name="border-bottom-style"/>
+		<element name="border-bottom-width"/>
+		<element name="border-color"/>
+		<element name="border-left"/>
+		<element name="border-left-color"/>
+		<element name="border-left-style"/>
+		<element name="border-left-width"/>
+		<element name="border-right"/>
+		<element name="border-right-color"/>
+		<element name="border-right-style"/>
+		<element name="border-right-width"/>
+		<element name="border-style"/>
+		<element name="border-top"/>
+		<element name="border-top-color"/>
+		<element name="border-top-style"/>
+		<element name="border-top-width"/>
+		<element name="border-width"/>
+		<element name="margin"/>
+		<element name="margin-bottom"/>
+		<element name="margin-left"/>
+		<element name="margin-right"/>
+		<element name="margin-top"/>
+		<element name="padding"/>
+		<element name="padding-bottom"/>
+		<element name="padding-left"/>
+		<element name="padding-right"/>
+		<element name="padding-top"/>
+	</Boxes>
+	
+	<Dimension>
+		<element name="height"/>
+		<element name="line-height"/>
+		<element name="max-height"/>
+		<element name="max-width"/>
+		<element name="min-height"/>
+		<element name="min-width"/>
+		<element name="vertical-align"/>
+		<element name="width"/>
+	</Dimension>
+	
+	<Font>
+		<element name="font"/>
+		<element name="font-family"/>
+		<element name="font-size"/>
+		<element name="font-size-adjust"/>
+		<element name="font-stretch"/>
+		<element name="font-style"/>
+		<element name="font-variant"/>
+		<element name="font-weight"/>
+	</Font>
+	
+	<Interface>
+		<element name="cursor"/>
+		<element name="outline"/>
+		<element name="outline-color"/>
+		<element name="outline-style"/>
+		<element name="outline-width"/>
+	</Interface>
+	
+	<List>
+		<element name="list-style"/>
+		<element name="list-style-image"/>
+		<element name="list-style-position"/>
+		<element name="list-style-type"/>
+		<element name="marker-offset"/>
+	</List>
+	
+	<Miscellaneous>
+		<element name="content"/>
+		<element name="counter-increment"/>
+		<element name="counter-reset"/>
+		<element name="quotes"/>
+		<element name="counter-increment"/>
+		<element name="counter-reset"/>
+		<element name="quotes"/>
+	</Miscellaneous>
+	
+	
+	<Paging>
+		<element name="marks"/>
+		<element name="orphans"/>
+		<element name="page"/>
+		<element name="page-break-after"/>
+		<element name="page-break-before"/>
+		<element name="page-break-inside"/>
+		<element name="size"/>
+		<element name="widows"/>
+	</Paging>
+	
+	<Positioning>
+		<element name="bottom"/>
+		<element name="clear"/>
+		<element name="clip"/>
+		<element name="direction"/>
+		<element name="display"/>
+		<element name="float"/>
+		<element name="left"/>
+		<element name="overflow"/>
+		<element name="position"/>
+		<element name="right"/>
+		<element name="top"/>
+		<element name="unicode-bidi"/>
+		<element name="visibility"/>
+		<element name="z-index"/>
+	</Positioning>
+	
+	<Tables>
+		<element name="border-collapse"/>
+		<element name="border-spacing"/>
+		<element name="caption-side"/>
+		<element name="empty-cells"/>
+		<element name="speak-header"/>
+		<element name="table-layout"/>
+	</Tables>
+	
+	<Text>
+		<element name="color"/>
+		<element name="letter-spacing"/>
+		<element name="text-align"/>
+		<element name="text-decoration"/>
+		<element name="text-indent"/>
+		<element name="text-shadow"/>
+		<element name="text-transform"/>
+		<element name="white-space"/>
+		<element name="word-spacing"/>
+	</Text>
+	<!-- ############################################################ -->
+	
+</elements>
