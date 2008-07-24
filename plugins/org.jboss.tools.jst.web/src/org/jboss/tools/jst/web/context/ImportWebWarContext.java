@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.context;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -18,6 +19,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -26,6 +28,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.osgi.util.NLS;
 
 import org.jboss.tools.common.model.XModel;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
@@ -74,7 +77,11 @@ public abstract class ImportWebWarContext extends ImportWebProjectContext {
 		try {
 			zip = new ZipFile(f);
 			loadEntries();
-		} catch (Exception e) {
+		} catch (ZipException e) {
+			WebModelPlugin.getPluginLog().logError(e);
+			warError = NLS.bind(WebUIMessages.FILE_ISNOT_CORRECT,location); 
+			return;
+		} catch (IOException e) {
 			WebModelPlugin.getPluginLog().logError(e);
 			warError = NLS.bind(WebUIMessages.FILE_ISNOT_CORRECT,location); 
 			return;
@@ -82,8 +89,8 @@ public abstract class ImportWebWarContext extends ImportWebProjectContext {
 		ZipEntry entry = null;
 		try {
 			entry = zip.getEntry("WEB-INF/web.xml"); 
-		} catch (Exception e) {
-			//ignore and check entry == null later
+		} catch (IllegalStateException e) {
+			WebModelPlugin.getPluginLog().logError(e);
 		}
 		if(entry == null) {
 			warError = NLS.bind(WebUIMessages.FILE_DOESNOT_CONTAIN_WEBXML,location); 
@@ -93,14 +100,18 @@ public abstract class ImportWebWarContext extends ImportWebProjectContext {
 		try {
 			InputStream s = zip.getInputStream(entry);
 			body = FileUtil.readStream(s);
-		} catch (Exception e) {
+		} catch (ZipException e) {
+			WebModelPlugin.getPluginLog().logError(e);
+			warError = NLS.bind(WebUIMessages.CANNOT_READ_WEBXML, location); //$NON-NLS-2$
+			return;
+		} catch (IOException e) {
 			WebModelPlugin.getPluginLog().logError(e);
 			warError = NLS.bind(WebUIMessages.CANNOT_READ_WEBXML, location); //$NON-NLS-2$
 			return;
 		}
 		try {
 			loadWebXML(body, "WEB-INF/web.xml"); //$NON-NLS-1$
-		} catch (Exception e) {
+		} catch (XModelException e) {
 			WebModelPlugin.getPluginLog().logError(e);
 			warError = e.getMessage();
 			return;

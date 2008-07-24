@@ -332,7 +332,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 	private void createLockFile() {
 		try {
 			getProject().setSessionProperty(WatcherLoader.LOCK, "true");
-		} catch (Exception e) {
+		} catch (CoreException e) {
 			WebUiPlugin.getPluginLog().logError(e);
 		}
 	}
@@ -349,7 +349,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 					Watcher.getInstance(model).forceUpdate();
 				}	
 			}
-		} catch (Exception e) {
+		} catch (CoreException e) {
 			WebUiPlugin.getPluginLog().logError(e);
 		}
 	}
@@ -360,25 +360,13 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 	private void updateJavaNature() throws CoreException {
 //		JavaCore.create(getProject());
 		EclipseResourceUtil.addNatureToProject(getProject(), JavaCore.NATURE_ID);
-		try {
-			SpecialWizard w = SpecialWizardFactory.createSpecialWizard("org.jboss.tools.common.model.project.ClassPathUpdateWizard");
-			Properties p = new Properties();
-			p.put("model", model);
-			p.put("classes", new Path(getProperty(JAVA_CLASSES_LOCATION_ID)));
-			//webInfLocation.append("classes"));
-			w.setObject(p);
-			w.execute();
-		} catch (Exception t) {
-			try {
-				EclipseResourceUtil.removeNatureFromProject(getProject(), getNatureID());
-				EclipseResourceUtil.removeNatureFromProject(getProject(), JavaCore.NATURE_ID);
-				getProject().delete(true, null);
-			} catch (Exception e) {
-				WebUiPlugin.getPluginLog().logError(e);
-			}
-			throw (t instanceof CoreException) ? (CoreException)t
-				: new CoreException(new org.eclipse.core.runtime.Status(IStatus.ERROR, getNatureID(), org.eclipse.core.runtime.IStatus.ERROR, "" + t.getMessage(), t));
-		}
+		SpecialWizard w = SpecialWizardFactory.createSpecialWizard("org.jboss.tools.common.model.project.ClassPathUpdateWizard");
+		Properties p = new Properties();
+		p.put("model", model);
+		p.put("classes", new Path(getProperty(JAVA_CLASSES_LOCATION_ID)));
+		//webInfLocation.append("classes"));
+		w.setObject(p);
+		w.execute();
 	}
 	
 	/**
@@ -387,7 +375,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 	 * @throws CoreException
 	 */
 	protected AbstractOperation createWTPNature(IProgressMonitor monitor) throws CoreException {
-		try {
+
 			boolean exists = getProject().exists();
 			String projectName = getProperty(PROJECT_NAME_ID);
 			String projectLocation = getProperty(PROJECT_LOCATION_ID);
@@ -464,10 +452,6 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 			} else {
 				return null;
 			}
-
-		} catch (Exception e) {
-			throw new CoreException(new Status(Status.ERROR,WebUiPlugin.PLUGIN_ID,0,"No message",e));
-		}
 	}
 	
 	//https://bugs.eclipse.org/bugs/show_bug.cgi?id=119066
@@ -495,7 +479,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 		return (projectLocation.replace('\\','/') + "/").startsWith(root + "/" + getProject().getName() + "/");
 	}
 	
-	private String createLinks(String projectLocation) throws Exception {
+	private String createLinks(String projectLocation) throws CoreException {
 		IProject project = getProject();
 		String root = ModelPlugin.getWorkspace().getRoot().getLocation().toString().replace('\\', '/');
 		if((projectLocation.replace('\\','/') + "/").startsWith(root + "/" + project.getName() + "/")) return projectLocation;
@@ -514,7 +498,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 			IClasspathEntry entry = new ClassPathUpdate().createNewClasspathEntry(project.getFullPath().append("src"), IClasspathEntry.CPE_SOURCE);
 			try {
 				jp.setRawClasspath(new IClasspathEntry[]{entry}, project.getFullPath().append("classes"), null);
-			} catch (Exception e) {
+			} catch (CoreException e) {
 				WebUiPlugin.getPluginLog().logError(e);
 			}
 		}

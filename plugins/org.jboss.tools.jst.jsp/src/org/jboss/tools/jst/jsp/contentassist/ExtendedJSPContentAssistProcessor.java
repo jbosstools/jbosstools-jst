@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
@@ -95,7 +96,7 @@ public class ExtendedJSPContentAssistProcessor extends JSPContentAssistProcessor
 	        int lastOpenTag = text.lastIndexOf('<');
 	        int lastCloseTag = text.lastIndexOf('>');
 	        dontOpenTag = lastCloseTag<lastOpenTag;
-	    } catch (Exception e) {
+	    } catch (BadLocationException e) {
 	    	JspEditorPlugin.getPluginLog().logError(e);
 	    }
 
@@ -260,7 +261,7 @@ public class ExtendedJSPContentAssistProcessor extends JSPContentAssistProcessor
 								return;
 							}
 						}
-					} catch (Exception x) {
+					} catch (KbException x) {
 						JspEditorPlugin.getPluginLog().logError("", x);
 					}
 					super.generateTag(parent, elementDecl, buffer);

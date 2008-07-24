@@ -131,7 +131,11 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
 				registerResource(fTaglibResource);
 			}
 			invokeDelayedUpdateKnownTagLists();
-		} catch(Exception e) {
+		} catch(ClassNotFoundException e) {
+			JspEditorPlugin.getPluginLog().logError(e);
+		} catch (InstantiationException e) {
+			JspEditorPlugin.getPluginLog().logError(e);
+		} catch (IllegalAccessException e) {
 			JspEditorPlugin.getPluginLog().logError(e);
 		}
 	}
@@ -276,12 +280,8 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
 			NodeList children = (NodeContainer)dom.getChildNodes();
 			if (element != null) {
 				for (int i = 0; children != null && i < children.getLength(); i++) {
-					try {
-						IDOMNode xmlnode = (IDOMNode)children.item(i);
-						update((IDOMNode)xmlnode);
-					} catch (Exception x) {
-						JspEditorPlugin.getPluginLog().logError("Error while updating known tag lists", x);
-					}
+					IDOMNode xmlnode = (IDOMNode)children.item(i);
+					update((IDOMNode)xmlnode);
 				}
 			}
 		}
@@ -331,27 +331,23 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
 	}
 
 	private void registerKbResourceForNode(IDOMNode node) {
-		try {
-			if (node == null) return;
-			String name = node.getNodeName();
-			if (name == null) return;
-			if (!name.endsWith("loadBundle")) return;
-			if (name.indexOf(':') == -1) return;
-			String prefix = name.substring(0, name.indexOf(':'));
+		if (node == null) return;
+		String name = node.getNodeName();
+		if (name == null) return;
+		if (!name.endsWith("loadBundle")) return;
+		if (name.indexOf(':') == -1) return;
+		String prefix = name.substring(0, name.indexOf(':'));
 
-			if (!trackers.containsKey(prefix)) return;
+		if (!trackers.containsKey(prefix)) return;
 
-			NamedNodeMap attributes = node.getAttributes();
-			if (attributes == null) return;
-			String basename = (attributes.getNamedItem("basename") == null ? null : attributes.getNamedItem("basename").getNodeValue());
-			String var = (attributes.getNamedItem("var") == null ? null : attributes.getNamedItem("var").getNodeValue());
-			if (basename == null || basename.length() == 0 ||
-				var == null || var.length() == 0) return;
+		NamedNodeMap attributes = node.getAttributes();
+		if (attributes == null) return;
+		String basename = (attributes.getNamedItem("basename") == null ? null : attributes.getNamedItem("basename").getNodeValue());
+		String var = (attributes.getNamedItem("var") == null ? null : attributes.getNamedItem("var").getNodeValue());
+		if (basename == null || basename.length() == 0 ||
+			var == null || var.length() == 0) return;
 
-			loadedBundles.put(var, new LoadBundleInfo(node, basename, var));
-		} catch (Exception x) {
-			JspEditorPlugin.getPluginLog().logError("Error while registering kb resource", x);
-		}
+		loadedBundles.put(var, new LoadBundleInfo(node, basename, var));
 	}
 
 	public void dispose() {

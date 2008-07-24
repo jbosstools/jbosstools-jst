@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.ui.operation;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Properties;
 import java.util.ResourceBundle;
@@ -25,6 +26,7 @@ import org.eclipse.core.runtime.Path;
 import org.w3c.dom.Element;
 
 import org.jboss.tools.common.model.ServiceDialog;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.project.IModelNature;
@@ -83,7 +85,7 @@ public abstract class WebProjectAdoptOperation extends WebNatureOperation {
 			String sv = context.getServletVersion();
 			if(sv == null || sv.length() == 0) sv = getDefaultServletVersion();
 			model.changeObjectAttribute(model.getByPath("Web"), "servlet version", sv);
-		} catch (Exception ex) {
+		} catch (XModelException ex) {
 			WebUiPlugin.getPluginLog().logError(ex);
 		}
 	}
@@ -98,7 +100,7 @@ public abstract class WebProjectAdoptOperation extends WebNatureOperation {
 		return "";
 	}
 	
-	protected abstract void execute() throws Exception;
+	protected abstract void execute() throws XModelException;
 
 	void setWorkspaceHome(String path) {
 		String relativePath = FileUtil.getRelativePath(getProject().getLocation().toString(), path);
@@ -117,12 +119,12 @@ public abstract class WebProjectAdoptOperation extends WebNatureOperation {
 			XMLSerializer ser = new XMLSerializer(fileWriter, format);
 			ser.asDOMSerializer();
 			ser.serialize(element);	
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			WebUiPlugin.getPluginLog().logError(ex);
 		} finally {
 			try {
 				if (fileWriter != null) fileWriter.close();
-			} catch (Exception ex) {
+			} catch (IOException ex) {
 				WebUiPlugin.getPluginLog().logError(ex);
 			}
 		}

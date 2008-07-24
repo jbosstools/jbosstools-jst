@@ -226,7 +226,7 @@ public abstract class ImportWebProjectContext implements IImportWebProjectContex
 			File f = new File(location);
 			long last = f.isFile() ? f.lastModified() : -1;
 			return webXMLTimeStamp == last;
-		} catch (Exception e) {
+		} catch (SecurityException e) {
 			WebModelPlugin.getPluginLog().logError(e);
 			return webXMLTimeStamp == -1;
 		}
@@ -237,16 +237,12 @@ public abstract class ImportWebProjectContext implements IImportWebProjectContex
 		if(entity == null || !entity.startsWith("FileWebApp")) { //$NON-NLS-1$
 			throw new XModelException(NLS.bind(WebUIMessages.FILE_ISNOT_RECOGNIZED, location));
 		}
-		try {
-			webxml = getTarget().getModel().createModelObject(entity, null);
-			webxml.setAttributeValue("name", "web"); //$NON-NLS-1$ //$NON-NLS-2$
-			XModelObjectLoaderUtil.setTempBody(webxml, body);
-			XModelObjectLoaderUtil.getObjectLoader(webxml).load(webxml);
-			webxml.getChildren();
-		} catch (Exception e) {
-			String webXMLErrorMessage = NLS.bind(WebUIMessages.CANNOT_LOAD_WEBDESCRIPTOR,location); 
-			throw new XModelException(webXMLErrorMessage);
-		}
+		webxml = getTarget().getModel().createModelObject(entity, null);
+		webxml.setAttributeValue("name", "web"); //$NON-NLS-1$ //$NON-NLS-2$
+		XModelObjectLoaderUtil.setTempBody(webxml, body);
+		XModelObjectLoaderUtil.getObjectLoader(webxml).load(webxml);
+		webxml.getChildren();
+
 		if("yes".equals(webxml.getAttributeValue("isIncorrect"))) { //$NON-NLS-1$ //$NON-NLS-2$
 			String[] errors = ((AbstractXMLFileImpl)webxml).getErrors();
 			String error = (errors == null || errors.length == 0) ? "" : ": " + errors[0]; //$NON-NLS-1$ //$NON-NLS-2$

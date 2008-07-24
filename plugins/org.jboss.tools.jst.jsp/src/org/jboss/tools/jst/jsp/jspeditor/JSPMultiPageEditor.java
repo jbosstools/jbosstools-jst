@@ -61,6 +61,7 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.eclipse.wst.sse.ui.internal.contentoutline.ConfigurableContentOutlinePage;
 import org.jboss.tools.common.core.resources.XModelObjectEditorInput;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.event.XModelTreeEvent;
 import org.jboss.tools.common.model.event.XModelTreeListener;
@@ -161,7 +162,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 					selectedPageIndex = qi;
 			}
 
-		} catch (Exception e) {
+		} catch (CoreException e) {
 			JspEditorPlugin.getPluginLog().logError(e);
 			selectedPageIndex = 0;
 		}
@@ -233,12 +234,8 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 				&& sourceEditor.getEditorInput() != getEditorInput()
 				&& sourceEditor.getEditorInput() != null) {
 			if (sourceEditor instanceof AbstractTextEditor) {
-				try {
 					((AbstractTextEditor) sourceEditor)
 							.setInput(getEditorInput());
-				} catch (Exception exc) {
-					JspEditorPlugin.getPluginLog().logError(exc);
-				}
 			}
 			visualEditor.setInput(getEditorInput());
 			updateTitle();
@@ -498,7 +495,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		try {		
 			if (old.isModified())
 				new DiscardFileHandler().executeHandler(old, new Properties());
-		} catch (Exception e) {
+		} catch (XModelException e) {
 			JspEditorPlugin.getPluginLog().logError(e);
 		}
 	}
@@ -559,7 +556,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		if (o != null && o.isModified() && o.isActive()) {
 			try {
 				((FolderImpl) o.getParent()).discardChildFile(o);
-			} catch (Exception e) {
+			} catch (XModelException e) {
 				JspEditorPlugin.getPluginLog().logError(e);
 			}
 		}
@@ -811,12 +808,8 @@ class ResourceChangeListener implements IResourceChangeListener {
 						if (e.getJspEditor() != null
 								&& e.getJspEditor().getEditorInput() != e
 										.getEditorInput()) {
-							try {
 								((AbstractTextEditor) e.getJspEditor())
 										.setInput(e2);
-							} catch (Exception exc) {
-								JspEditorPlugin.getPluginLog().logError(exc);
-							}
 						}
 						((XModelObjectEditorInput) ei).synchronize();
 					}

@@ -194,7 +194,7 @@ public class RegisterServerContext {
 			String t = st.nextToken().trim();
 			try {
 				Integer.parseInt(t);
-			} catch (Exception e) {
+			} catch (NumberFormatException e) {
 				WebModelPlugin.getPluginLog().logError(e);
 				return false;
 			}

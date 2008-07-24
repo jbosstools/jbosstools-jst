@@ -49,6 +49,7 @@ import org.eclipse.wst.xml.ui.internal.util.SharedXMLEditorPluginImageHelper;
 import org.jboss.tools.common.kb.AttributeDescriptor;
 import org.jboss.tools.common.kb.KbConnectorFactory;
 import org.jboss.tools.common.kb.KbConnectorType;
+import org.jboss.tools.common.kb.KbException;
 import org.jboss.tools.common.kb.KbProposal;
 import org.jboss.tools.common.kb.KbQuery;
 import org.jboss.tools.common.kb.KbTldResource;
@@ -150,7 +151,7 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
 			Collection kbProposals = null;
 			try {
 				kbProposals = getWtpKbConnector().getProposals(request);
-			} catch(Exception e) {
+			} catch(KbException e) {
 				JspEditorPlugin.getPluginLog().logError(e);
 			}
 			for (Iterator iter = kbProposals.iterator(); iter.hasNext();) {
@@ -250,7 +251,7 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
 		Collection kbProposals = null;
 		try {
 			kbProposals = getWtpKbConnector().getProposals(request);
-		} catch(Exception e) {
+		} catch(KbException e) {
 			JspEditorPlugin.getPluginLog().logError(e);
 		}
 		if(kbProposals!=null) {
@@ -308,7 +309,7 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
 		Collection kbProposals = null;
 		try {
 			kbProposals = getWtpKbConnector().getProposals(request);
-		} catch(Exception e) {
+		} catch(KbException e) {
 			JspEditorPlugin.getPluginLog().logError(e);
 		}
 		for (Iterator iter = kbProposals.iterator(); iter.hasNext();) {
@@ -400,7 +401,7 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
 		AttributeDescriptor ad = null;
 		try {
 			ad = getWtpKbConnector().getAttributeInformation(query);
-		} catch(Exception e) {
+		} catch(KbException e) {
 			JspEditorPlugin.getPluginLog().logError(e);
 		}
 		if(ad!=null) {
@@ -428,7 +429,7 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
 		Collection kbProposals = null;
 		try {
 			kbProposals = getWtpKbConnector().getProposals(request);
-		} catch(Exception e) {
+		} catch(KbException e) {
 			JspEditorPlugin.getPluginLog().logError(e);
 		}
 		if(kbProposals!=null) {
@@ -483,9 +484,13 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
                 jspActiveCAP.setKbConnector(wtpKbConnector);
                 FaceletsJsfCResource fsfCResource = new FaceletsJsfCResource(wtpKbConnector);
                 wtpKbConnector.registerResource(fsfCResource);
-            } catch(Exception e) {
+            } catch(ClassNotFoundException e) {
             	JspEditorPlugin.getPluginLog().logError(e);
-            }
+            } catch (InstantiationException e) {
+            	JspEditorPlugin.getPluginLog().logError(e);
+			} catch (IllegalAccessException e) {
+				JspEditorPlugin.getPluginLog().logError(e);
+			}
 	    }
 	    return wtpKbConnector;
 	}

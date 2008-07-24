@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.ui.operation;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Properties;
 import java.util.ResourceBundle;
@@ -130,7 +131,7 @@ public abstract class WebProjectCreationOperation extends WebNatureOperation {
 		}
 	}
 
-	protected void createTemplateModel() throws Exception {
+	protected void createTemplateModel() {
 		if(templateModel != null) return;
 		String templateLocation = getTemplateLocation();
 		Properties p = new Properties();
@@ -142,13 +143,13 @@ public abstract class WebProjectCreationOperation extends WebNatureOperation {
 		templateModel = XModelFactory.getModel(p);
 	}
 	
-	protected String getTemplateLocation() throws Exception {
+	protected String getTemplateLocation() {
 		String fileName = template.getProjectTemplatesLocation(
 				getProperty(TEMPLATE_VERSION_ID)) + "/" +
 				getProperty(TEMPLATE_ID) + "/";
 		try {
 			return new File(fileName).getCanonicalPath();
-		} catch (Exception e) {
+		} catch (IOException e) {
 			WebUiPlugin.getPluginLog().logError("Cannot find folder '" + fileName + "'", null);
 			return fileName;
 		}
