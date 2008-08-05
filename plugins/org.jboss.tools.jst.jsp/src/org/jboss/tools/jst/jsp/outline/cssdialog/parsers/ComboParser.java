@@ -10,15 +10,13 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.outline.cssdialog.parsers;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.xml.sax.SAXException;
 
@@ -29,7 +27,7 @@ import org.xml.sax.SAXException;
  */
 public class ComboParser {
 
-    private String FILE_NAME = "cssElementsWithCombo.xml";
+    private String FILE_NAME = "cssdialog/cssElementsWithCombo.xml";
 
     private BaseListener listener;
 
@@ -41,33 +39,21 @@ public class ComboParser {
 	    saxParser = SAXParserFactory.newInstance().newSAXParser();
 
 	} catch (ParserConfigurationException e) {
-	    // TODO Evgeny Zheleznyakov remove all printStackTrace
-	    e.printStackTrace();
+	    JspEditorPlugin.getPluginLog().logError(e);
 	} catch (SAXException e) {
-	    // TODO Evgeny Zheleznyakov remove all printStackTrace
-	    e.printStackTrace();
+	    JspEditorPlugin.getPluginLog().logError(e);
 	}
     }
 
     public void parse() {
-
-	String pluginPath = JspEditorPlugin.getPluginCSSDialogResourcePath();
-	IPath pluginFile = new Path(pluginPath);
-	String path = pluginFile.append(FILE_NAME).toFile().getAbsolutePath();
-	File file = new File(path);
-	if (!file.exists())
-	    throw new RuntimeException();
-
 	try {
-	    saxParser.parse(file, listener);
+	    InputStream is = JspEditorPlugin.getDefault().getBundle().getResource(FILE_NAME).openStream();
+	    saxParser.parse(is, listener);
 	} catch (SAXException e) {
-	    // TODO Evgeny Zheleznyakov remove all printStackTrace
-	    e.printStackTrace();
+	    JspEditorPlugin.getPluginLog().logError(e);
 	} catch (IOException e) {
-	    // TODO Evgeny Zheleznyakov remove all printStackTrace
-	    e.printStackTrace();
+	    JspEditorPlugin.getPluginLog().logError(e);
 	}
-
     }
 
     public void setListener(BaseListener listener) {

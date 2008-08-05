@@ -68,6 +68,7 @@ import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 import org.eclipse.ui.dialogs.SelectionStatusDialog;
 import org.eclipse.ui.internal.WorkbenchMessages;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.MessageUtil;
 
 /**
@@ -709,7 +710,7 @@ public class ImageSelectionDialog extends SelectionStatusDialog {
 			    return true;
 		    }
 		} catch (CoreException e) {
-		    // TODO Sakovich exception
+		    JspEditorPlugin.getPluginLog().logError(e);
 		}
 	    }
 	    return false;

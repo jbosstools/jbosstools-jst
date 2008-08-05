@@ -42,7 +42,7 @@ public class JspEditorPlugin extends BaseUIPlugin {
 	
 	public static final String PLUGIN_ID = "org.jboss.tools.jst.jsp"; 
 
-	public static final String PLUGIN_CSSDIALOG_RESOURCES = "/resources/org/jboss/tools/jst/jsp/outline/cssdialog";
+	public static final String RESOURCES_PATH = "/resources";
 
 	/**
 	 * The constructor.
@@ -153,15 +153,15 @@ public class JspEditorPlugin extends BaseUIPlugin {
 	     * 
 	     * @return path
 	     */
-	    public static String getPluginCSSDialogResourcePath() {
+	    public static String getPluginResourcePath() {
 		Bundle bundle = Platform.getBundle(PLUGIN_ID);
 		URL url = null;
 		try {
 		    url = bundle == null ? null : FileLocator.resolve(bundle
-			    .getEntry(PLUGIN_CSSDIALOG_RESOURCES));
+			    .getEntry(RESOURCES_PATH));
 
 		} catch (IOException e) {
-		    url = bundle.getEntry(PLUGIN_CSSDIALOG_RESOURCES);
+		    url = bundle.getEntry(RESOURCES_PATH);
 		}
 		return (url == null) ? null : url.getPath();
 	    }

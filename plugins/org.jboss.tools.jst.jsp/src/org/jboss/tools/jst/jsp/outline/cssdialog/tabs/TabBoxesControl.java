@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
- ******************************************************************************/ 
+ ******************************************************************************/
 package org.jboss.tools.jst.jsp.outline.cssdialog.tabs;
 
 import java.util.ArrayList;
@@ -59,13 +59,13 @@ public class TabBoxesControl extends Composite {
     private Combo extBorderWidthCombo;
     private Combo borderStyleCombo;
     private Combo extMarginCombo;
-    
+
     private ImageCombo borderColorCombo;
 
     private Text widthText;
     private Text heightText;
     private Text marginText;
-    private Text paddingText;  
+    private Text paddingText;
 
     private ArrayList<String> list;
     private HashMap<String, String> attributesMap;
@@ -221,22 +221,22 @@ public class TabBoxesControl extends Composite {
 	label.setText(MessageUtil.getString("BORDER_STYLE"));
 
 	borderStyleCombo = new Combo(this, SWT.BORDER);
-	
+
 	borderStyleCombo.addModifyListener(new ModifyListener() {
-	    
+
 	    public void modifyText(ModifyEvent event) {
 		String tmp = borderStyleCombo.getText().trim();
-		if(tmp != null)
-		  if(!tmp.equals(Constants.EMPTY_STRING)) {
-		      attributesMap.put(CSSConstants.BORDER_STYLE, tmp);
-		      cssDialog.setStyleForPreview();
-		      return;
-		  }
-		  attributesMap.remove(CSSConstants.BORDER_STYLE);
-		  cssDialog.setStyleForPreview();
+		if (tmp != null)
+		    if (!tmp.equals(Constants.EMPTY_STRING)) {
+			attributesMap.put(CSSConstants.BORDER_STYLE, tmp);
+			cssDialog.setStyleForPreview();
+			return;
+		    }
+		attributesMap.remove(CSSConstants.BORDER_STYLE);
+		cssDialog.setStyleForPreview();
 	    }
 	});
-	
+
 	borderStyleCombo.setLayoutData(new GridData(GridData.FILL,
 		GridData.CENTER, false, false));
 	list = comboMap.get(CSSConstants.BORDER_STYLE);
@@ -255,22 +255,22 @@ public class TabBoxesControl extends Composite {
 	label.setText(MessageUtil.getString("BORDER_COLOR"));
 
 	borderColorCombo = new ImageCombo(this, SWT.BORDER);
-	
+
 	borderColorCombo.addModifyListener(new ModifyListener() {
-	    
+
 	    public void modifyText(ModifyEvent event) {
 		String tmp = borderColorCombo.getText().trim();
-		if(tmp != null)
-		  if(!tmp.equals(Constants.EMPTY_STRING)) {
-		      attributesMap.put(CSSConstants.BORDER_COLOR, tmp);
-		      cssDialog.setStyleForPreview();
-		      return;
-		  }
-		  attributesMap.remove(CSSConstants.BORDER_COLOR);
-		  cssDialog.setStyleForPreview();
+		if (tmp != null)
+		    if (!tmp.equals(Constants.EMPTY_STRING)) {
+			attributesMap.put(CSSConstants.BORDER_COLOR, tmp);
+			cssDialog.setStyleForPreview();
+			return;
+		    }
+		attributesMap.remove(CSSConstants.BORDER_COLOR);
+		cssDialog.setStyleForPreview();
 	    }
 	});
-	
+
 	borderColorCombo.setLayoutData(new GridData(GridData.FILL,
 		GridData.CENTER, true, false));
 	Set<Entry<String, String>> set = ColorParserListener.getMap()
@@ -365,7 +365,7 @@ public class TabBoxesControl extends Composite {
 	}
 
 	extBorderWidthCombo = new Combo(this, SWT.BORDER | SWT.READ_ONLY);
-	
+
 	extBorderWidthCombo.addModifyListener(new ModifyListener() {
 	    public void modifyText(ModifyEvent event) {
 		String borderWidth = borderWidthCombo.getText().trim();
@@ -377,12 +377,13 @@ public class TabBoxesControl extends Composite {
 		String tmp = extBorderWidthCombo.getText();
 
 		if (tmp != null) {
-		    attributesMap.put(CSSConstants.BORDER_WIDTH, borderWidth + tmp);
+		    attributesMap.put(CSSConstants.BORDER_WIDTH, borderWidth
+			    + tmp);
 		    cssDialog.setStyleForPreview();
 		}
 	    }
 	});
-	
+
 	extBorderWidthCombo.setLayoutData(new GridData(GridData.FILL,
 		GridData.CENTER, false, false));
 	for (int i = 0; i < Constants.extSizes.length; i++) {
@@ -534,147 +535,73 @@ public class TabBoxesControl extends Composite {
      */
     public void updateData(boolean param) {
 	String tmp;
-	
-	//TODO Evgeny Zheleznyakov remove block comment
-	/*if (param) {
-	    tmp = widthText.getText();
-	    if (tmp != null) {
-		if (tmp.trim().length() > 0)
-		    attributesMap
-			    .put(
-				    CSSConstants.WIDTH,
-				    tmp
-					    + (extWidthCombo.getText() == null ? Constants.EMPTY_STRING
-						    : extWidthCombo.getText()));
-		else
-		    attributesMap.remove(CSSConstants.WIDTH);
-	    }
-	    tmp = heightText.getText();
-	    if (tmp != null) {
-		if (tmp.trim().length() > 0)
-		    attributesMap
-			    .put(
-				    CSSConstants.HEIGHT,
-				    tmp
-					    + (extHeightCombo.getText() == null ? Constants.EMPTY_STRING
-						    : extHeightCombo.getText()));
-		else
-		    attributesMap.remove(CSSConstants.HEIGHT);
-	    }
-	    tmp = borderStyleCombo.getText();
-	    if (tmp != null && tmp.trim().length() > 0) {
-		attributesMap.put(CSSConstants.BORDER_STYLE, tmp);
-	    }
-	    tmp = borderColorCombo.getText();
-	    if (tmp != null && tmp.trim().length() > 0) {
-		attributesMap.put(CSSConstants.BORDER_COLOR, tmp);
-	    }
-	    tmp = borderWidthCombo.getText();
-	    if (tmp != null) {
-		if (tmp.trim().length() > 0)
-		    attributesMap
-			    .put(
-				    CSSConstants.BORDER_WIDTH,
-				    tmp
-					    + (extBorderWidthCombo.getText() == null ? Constants.EMPTY_STRING
-						    : extBorderWidthCombo
-							    .getText()));
-		else
-		    attributesMap.remove(CSSConstants.BORDER_WIDTH);
-	    }
-	    tmp = marginText.getText();
-	    if (tmp != null) {
-		if (tmp.trim().length() > 0)
-		    attributesMap
-			    .put(
-				    CSSConstants.MARGIN,
-				    tmp
-					    + (extMarginCombo.getText() == null ? Constants.EMPTY_STRING
-						    : extMarginCombo.getText()));
-		else
-		    attributesMap.remove(CSSConstants.MARGIN);
-	    }
-	    tmp = paddingText.getText();
-	    if (tmp != null) {
-		if (tmp.trim().length() > 0)
-		    attributesMap
-			    .put(
-				    CSSConstants.PADDING,
-				    tmp
-					    + (extPaddingCombo.getText() == null ? Constants.EMPTY_STRING
-						    : extPaddingCombo.getText()));
-		else
-		    attributesMap.remove(CSSConstants.PADDING);
-	    }
-	} else {*/
-	    if ((tmp = attributesMap.get(CSSConstants.WIDTH)) != null) {
-		String[] str = Util.convertExtString(tmp);
-		widthText.setText(str[0]);
-		if (extWidthCombo.indexOf(str[1]) != -1) {
-		    extWidthCombo.setText(str[1]);
-		    extWidthCombo.select(extWidthCombo.indexOf(str[1]));
-		} else
-		    extWidthCombo.select(0);
-	    } else {
-		widthText.setText(Constants.EMPTY_STRING);
+	if ((tmp = attributesMap.get(CSSConstants.WIDTH)) != null) {
+	    String[] str = Util.convertExtString(tmp);
+	    widthText.setText(str[0]);
+	    if (extWidthCombo.indexOf(str[1]) != -1) {
+		extWidthCombo.setText(str[1]);
+		extWidthCombo.select(extWidthCombo.indexOf(str[1]));
+	    } else
 		extWidthCombo.select(0);
-	    }
-	    if ((tmp = attributesMap.get(CSSConstants.HEIGHT)) != null) {
-		String[] str = Util.convertExtString(tmp);
-		heightText.setText(str[0]);
-		if (extHeightCombo.indexOf(str[1]) != -1) {
-		    extHeightCombo.setText(str[1]);
-		    extHeightCombo.select(extHeightCombo.indexOf(str[1]));
-		} else
-		    extHeightCombo.select(0);
-	    } else {
-		heightText.setText(Constants.EMPTY_STRING);
+	} else {
+	    widthText.setText(Constants.EMPTY_STRING);
+	    extWidthCombo.select(0);
+	}
+	if ((tmp = attributesMap.get(CSSConstants.HEIGHT)) != null) {
+	    String[] str = Util.convertExtString(tmp);
+	    heightText.setText(str[0]);
+	    if (extHeightCombo.indexOf(str[1]) != -1) {
+		extHeightCombo.setText(str[1]);
+		extHeightCombo.select(extHeightCombo.indexOf(str[1]));
+	    } else
 		extHeightCombo.select(0);
-	    }
-	    if ((tmp = attributesMap.get(CSSConstants.BORDER_STYLE)) != null)
-		borderStyleCombo.setText(tmp);
-	    else
-		borderStyleCombo.setText(Constants.EMPTY_STRING);
-	    if ((tmp = attributesMap.get(CSSConstants.BORDER_COLOR)) != null)
-		borderColorCombo.setText(tmp);
-	    else
-		borderColorCombo.setText(Constants.EMPTY_STRING);
-	    if ((tmp = attributesMap.get(CSSConstants.BORDER_WIDTH)) != null) {
-		String[] str = Util.convertExtString(tmp);
-		borderWidthCombo.setText(str[0]);
-		if (extBorderWidthCombo.indexOf(str[1]) != -1) {
-		    extBorderWidthCombo.setText(str[1]);
-		    extBorderWidthCombo.select(extBorderWidthCombo
-			    .indexOf(str[1]));
-		} else
-		    extBorderWidthCombo.select(0);
-	    } else {
-		borderWidthCombo.setText(Constants.EMPTY_STRING);
+	} else {
+	    heightText.setText(Constants.EMPTY_STRING);
+	    extHeightCombo.select(0);
+	}
+	if ((tmp = attributesMap.get(CSSConstants.BORDER_STYLE)) != null)
+	    borderStyleCombo.setText(tmp);
+	else
+	    borderStyleCombo.setText(Constants.EMPTY_STRING);
+	if ((tmp = attributesMap.get(CSSConstants.BORDER_COLOR)) != null)
+	    borderColorCombo.setText(tmp);
+	else
+	    borderColorCombo.setText(Constants.EMPTY_STRING);
+	if ((tmp = attributesMap.get(CSSConstants.BORDER_WIDTH)) != null) {
+	    String[] str = Util.convertExtString(tmp);
+	    borderWidthCombo.setText(str[0]);
+	    if (extBorderWidthCombo.indexOf(str[1]) != -1) {
+		extBorderWidthCombo.setText(str[1]);
+		extBorderWidthCombo.select(extBorderWidthCombo.indexOf(str[1]));
+	    } else
 		extBorderWidthCombo.select(0);
-	    }
-	    if ((tmp = attributesMap.get(CSSConstants.MARGIN)) != null) {
-		String[] str = Util.convertExtString(tmp);
-		marginText.setText(str[0]);
-		if (extMarginCombo.indexOf(str[1]) != -1) {
-		    extMarginCombo.setText(str[1]);
-		    extMarginCombo.select(extMarginCombo.indexOf(str[1]));
-		} else
-		    extMarginCombo.select(0);
-	    } else {
-		marginText.setText(Constants.EMPTY_STRING);
+	} else {
+	    borderWidthCombo.setText(Constants.EMPTY_STRING);
+	    extBorderWidthCombo.select(0);
+	}
+	if ((tmp = attributesMap.get(CSSConstants.MARGIN)) != null) {
+	    String[] str = Util.convertExtString(tmp);
+	    marginText.setText(str[0]);
+	    if (extMarginCombo.indexOf(str[1]) != -1) {
+		extMarginCombo.setText(str[1]);
+		extMarginCombo.select(extMarginCombo.indexOf(str[1]));
+	    } else
 		extMarginCombo.select(0);
-	    }
-	    if ((tmp = attributesMap.get(CSSConstants.PADDING)) != null) {
-		String[] str = Util.convertExtString(tmp);
-		paddingText.setText(str[0]);
-		if (extPaddingCombo.indexOf(str[1]) != -1) {
-		    extPaddingCombo.setText(str[1]);
-		    extPaddingCombo.select(extPaddingCombo.indexOf(str[1]));
-		} else
-		    extPaddingCombo.select(0);
-	    } else {
-		paddingText.setText(Constants.EMPTY_STRING);
+	} else {
+	    marginText.setText(Constants.EMPTY_STRING);
+	    extMarginCombo.select(0);
+	}
+	if ((tmp = attributesMap.get(CSSConstants.PADDING)) != null) {
+	    String[] str = Util.convertExtString(tmp);
+	    paddingText.setText(str[0]);
+	    if (extPaddingCombo.indexOf(str[1]) != -1) {
+		extPaddingCombo.setText(str[1]);
+		extPaddingCombo.select(extPaddingCombo.indexOf(str[1]));
+	    } else
 		extPaddingCombo.select(0);
-	    }
+	} else {
+	    paddingText.setText(Constants.EMPTY_STRING);
+	    extPaddingCombo.select(0);
+	}
     }
 }

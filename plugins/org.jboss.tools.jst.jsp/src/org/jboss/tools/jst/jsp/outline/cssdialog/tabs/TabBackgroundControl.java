@@ -264,31 +264,6 @@ public class TabBackgroundControl extends Composite {
      */
     public void updateData(boolean param) {
 	String tmp;
-	
-	//TODO Evgeny Zheleznyakov remove block comment
-	/*if (param) {
-	    tmp = colorCombo.getText();
-	    if (tmp != null) {
-		if (tmp.trim().length() > 0)
-		    attributesMap.put(CSSConstants.BACKGROUND_COLOR, tmp);
-		else
-		    attributesMap.remove(CSSConstants.BACKGROUND_COLOR);
-	    }
-	    tmp = backgroundImageCombo.getText();
-	    if (tmp != null) {
-		if (tmp.trim().length() > 0)
-		    attributesMap.put(CSSConstants.BACKGROUND_IMAGE, tmp);
-		else
-		    attributesMap.remove(CSSConstants.BACKGROUND_IMAGE);
-	    }
-	    tmp = backgroundRepeatCombo.getText();
-	    if (tmp != null) {
-		if (tmp.trim().length() > 0)
-		    attributesMap.put(CSSConstants.BACKGROUND_REPEAT, tmp);
-		else
-		    attributesMap.remove(CSSConstants.BACKGROUND_REPEAT);
-	    }
-	} else {*/
 	    if ((tmp = attributesMap.get(CSSConstants.BACKGROUND_COLOR)) != null)
 		colorCombo.setText(tmp);
 	    else

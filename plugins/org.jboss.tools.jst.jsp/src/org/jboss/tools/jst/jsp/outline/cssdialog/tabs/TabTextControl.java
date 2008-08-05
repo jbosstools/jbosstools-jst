@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
- ******************************************************************************/ 
+ ******************************************************************************/
 package org.jboss.tools.jst.jsp.outline.cssdialog.tabs;
 
 import java.util.ArrayList;
@@ -154,7 +154,8 @@ public class TabTextControl extends Composite {
 	    }
 	});
 
-	// ////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////
+	// //
 	Set<Entry<String, String>> set = ColorParserListener.getMap()
 		.entrySet();
 
@@ -162,7 +163,8 @@ public class TabTextControl extends Composite {
 	    RGB rgb = Util.getColor(me.getKey());
 	    colorCombo.add(me.getValue(), rgb);
 	}
-	// ///////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////
+	// /
 
 	button = new Button(this, SWT.PUSH);
 	button.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
@@ -412,99 +414,42 @@ public class TabTextControl extends Composite {
      */
     public void updateData(boolean param) {
 	String tmp;
-	//TODO Evgeny Zheleznyakov remove block comment
-	/*if (param) {
-	    tmp = fontFamilyText.getText();
-	    if (tmp != null) {
-		if (tmp.trim().length() > 0)
-		    attributesMap.put(CSSConstants.FONT_FAMILY, tmp);
-		else
-		    attributesMap.remove(CSSConstants.FONT_FAMILY);
-	    }
-	    tmp = colorCombo.getText();
-	    if (tmp != null) {
-		if (tmp.trim().length() > 0)
-		    attributesMap.put(CSSConstants.COLOR, tmp);
-		else
-		    attributesMap.remove(CSSConstants.COLOR);
-	    }
-	    tmp = fontSizeCombo.getText();
-	    if (tmp != null) {
-		if (tmp.trim().length() > 0)
-		    attributesMap
-			    .put(
-				    CSSConstants.FONT_SIZE,
-				    tmp
-					    + (extFontSizeCombo.getText() == null ? Constants.EMPTY_STRING
-						    : extFontSizeCombo
-							    .getText()));
-		else
-		    attributesMap.remove(CSSConstants.FONT_SIZE);
-	    }
-	    tmp = textDecorationCombo.getText();
-	    if (tmp != null) {
-		if (tmp.trim().length() > 0)
-		    attributesMap.put(CSSConstants.TEXT_DECORATION, tmp);
-		else
-		    attributesMap.remove(CSSConstants.TEXT_DECORATION);
-	    }
-	    tmp = fontStyleCombo.getText();
-	    if (tmp != null) {
-		if (tmp.trim().length() > 0)
-		    attributesMap.put(CSSConstants.FONT_STYLE, tmp);
-		else
-		    attributesMap.remove(CSSConstants.FONT_STYLE);
-	    }
-	    tmp = fontWeigthCombo.getText();
-	    if (tmp != null) {
-		if (tmp.trim().length() > 0)
-		    attributesMap.put(CSSConstants.FONT_WEIGHT, tmp);
-		else
-		    attributesMap.remove(CSSConstants.FONT_WEIGHT);
-	    }
-	    tmp = textAlignCombo.getText();
-	    if (tmp != null) {
-		if (tmp.trim().length() > 0)
-		    attributesMap.put(CSSConstants.TEXT_ALIGN, tmp);
-		else
-		    attributesMap.remove(CSSConstants.TEXT_ALIGN);
-	    }
-	} else {*/
-	    if ((tmp = attributesMap.get(CSSConstants.FONT_FAMILY)) != null)
-		fontFamilyText.setText(tmp);
-	    else
-		fontFamilyText.setText(Constants.EMPTY_STRING);
-	    if ((tmp = attributesMap.get(CSSConstants.COLOR)) != null)
-		colorCombo.setText(tmp);
-	    else
-		colorCombo.setText(Constants.EMPTY_STRING);
-	    if ((tmp = attributesMap.get(CSSConstants.FONT_SIZE)) != null) {
-		String[] str = Util.convertExtString(tmp);
-		fontSizeCombo.setText(str[0]);
-		if (extFontSizeCombo.indexOf(str[1]) != -1) {
-		    extFontSizeCombo.setText(str[1]);
-		    extFontSizeCombo.select(extFontSizeCombo.indexOf(str[1]));
-		} else
-		    extFontSizeCombo.select(0);
-	    } else {
-		fontSizeCombo.setText(Constants.EMPTY_STRING);
+
+	if ((tmp = attributesMap.get(CSSConstants.FONT_FAMILY)) != null)
+	    fontFamilyText.setText(tmp);
+	else
+	    fontFamilyText.setText(Constants.EMPTY_STRING);
+	if ((tmp = attributesMap.get(CSSConstants.COLOR)) != null)
+	    colorCombo.setText(tmp);
+	else
+	    colorCombo.setText(Constants.EMPTY_STRING);
+	if ((tmp = attributesMap.get(CSSConstants.FONT_SIZE)) != null) {
+	    String[] str = Util.convertExtString(tmp);
+	    fontSizeCombo.setText(str[0]);
+	    if (extFontSizeCombo.indexOf(str[1]) != -1) {
+		extFontSizeCombo.setText(str[1]);
+		extFontSizeCombo.select(extFontSizeCombo.indexOf(str[1]));
+	    } else
 		extFontSizeCombo.select(0);
-	    }
-	    if ((tmp = attributesMap.get(CSSConstants.TEXT_DECORATION)) != null)
-		textDecorationCombo.setText(tmp);
-	    else
-		textDecorationCombo.setText(Constants.EMPTY_STRING);
-	    if ((tmp = attributesMap.get(CSSConstants.FONT_STYLE)) != null)
-		fontStyleCombo.setText(tmp);
-	    else
-		fontStyleCombo.setText(Constants.EMPTY_STRING);
-	    if ((tmp = attributesMap.get(CSSConstants.FONT_WEIGHT)) != null)
-		fontWeigthCombo.setText(tmp);
-	    else
-		fontWeigthCombo.setText(Constants.EMPTY_STRING);
-	    if ((tmp = attributesMap.get(CSSConstants.TEXT_ALIGN)) != null)
-		textAlignCombo.setText(tmp);
-	    else
-		textAlignCombo.setText(Constants.EMPTY_STRING);
+	} else {
+	    fontSizeCombo.setText(Constants.EMPTY_STRING);
+	    extFontSizeCombo.select(0);
+	}
+	if ((tmp = attributesMap.get(CSSConstants.TEXT_DECORATION)) != null)
+	    textDecorationCombo.setText(tmp);
+	else
+	    textDecorationCombo.setText(Constants.EMPTY_STRING);
+	if ((tmp = attributesMap.get(CSSConstants.FONT_STYLE)) != null)
+	    fontStyleCombo.setText(tmp);
+	else
+	    fontStyleCombo.setText(Constants.EMPTY_STRING);
+	if ((tmp = attributesMap.get(CSSConstants.FONT_WEIGHT)) != null)
+	    fontWeigthCombo.setText(tmp);
+	else
+	    fontWeigthCombo.setText(Constants.EMPTY_STRING);
+	if ((tmp = attributesMap.get(CSSConstants.TEXT_ALIGN)) != null)
+	    textAlignCombo.setText(tmp);
+	else
+	    textAlignCombo.setText(Constants.EMPTY_STRING);
     }
 }

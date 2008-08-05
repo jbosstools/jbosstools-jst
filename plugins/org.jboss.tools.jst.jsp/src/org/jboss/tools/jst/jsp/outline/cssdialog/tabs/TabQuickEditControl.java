@@ -296,22 +296,6 @@ public class TabQuickEditControl extends Composite {
 		    extCombo.add(Constants.extSizes[i]);
 		extCombo.select(extCombo.indexOf(values[EXT_VALUE_NUMBER]));
 
-		//TODO Evgeny Zheleznyakov remove block comment
-		/*extCombo.addSelectionListener(new SelectionAdapter() {
-
-		    String key = name;
-
-		    public void widgetSelected(SelectionEvent event) {
-
-			if (!attributesMap.get(key).trim().equals(
-				Constants.EMPTY_STRING)) {
-			    attributesMap.put(key, combo.getText()
-				    + extCombo.getText());
-			    dialog.setStyleForPreview();
-			}
-		    }
-		});*/
-
 		extCombo.addModifyListener(new ModifyListener() {
 
 		    String key = name;
@@ -470,22 +454,6 @@ public class TabQuickEditControl extends Composite {
 		for (int i = 0; i < Constants.extSizes.length; i++)
 		    extCombo.add(Constants.extSizes[i]);
 		extCombo.select(extCombo.indexOf(values[EXT_VALUE_NUMBER]));
-
-		//TODO Evgeny Zheleznyakov remove block comment
-		/*extCombo.addSelectionListener(new SelectionAdapter() {
-
-		    String key = name;
-
-		    public void widgetSelected(SelectionEvent event) {
-
-			if (!attributesMap.get(key).trim().equals(
-				Constants.EMPTY_STRING)) {
-			    attributesMap.put(key, text.getText()
-				    + extCombo.getText());
-			    dialog.setStyleForPreview();
-			}
-		    }
-		});*/
 
 		extCombo.addModifyListener(new ModifyListener() {
 
