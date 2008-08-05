@@ -24,7 +24,7 @@ public class VpePreference extends Preference {
 	public static String ATT_SOURCE_VISUAL_EDITORS_WEIGHTS = "Source-Visual Editors Weights";
 	public static String ATT_SHOW_SELECTION_TAG_BAR = "show selection tag bar";
 	public static String ATT_ALWAYS_HIDE_SELECTION_BAR_WITHOUT_PROMT="always hide selection bar without prompt";
-
+	public static String SHOW_COMMENTS_VALUE;
 	public static String VPE_EDITOR_PATH = "%Options%/Struts Studio/Editors/Visual Page Editor"; //$NON-NLS-1$
 	public static final Preference SHOW_COMMENTS = new VpePreference(VPE_EDITOR_PATH, ATT_SHOW_COMMENTS);
 	public static final Preference SHOW_BORDER_FOR_UNKNOWN_TAGS = new VpePreference(VPE_EDITOR_PATH, ATT_SHOW_BORDER_FOR_UNKNOWN_TAGS);
@@ -38,6 +38,9 @@ public class VpePreference extends Preference {
 	public static final Preference SHOW_SELECTION_TAG_BAR = new VpePreference(VPE_EDITOR_PATH,ATT_SHOW_SELECTION_TAG_BAR);
 	public static final Preference ALWAYS_HIDE_SELECTION_BAR_WITHOUT_PROMT = new VpePreference(VPE_EDITOR_PATH,ATT_ALWAYS_HIDE_SELECTION_BAR_WITHOUT_PROMT);
 	
+	static {
+		SHOW_COMMENTS_VALUE =SHOW_COMMENTS.getValue();
+	}
 	protected VpePreference(String optionPath, String attributeName) {
 		super(optionPath, attributeName);
 	}
