@@ -21,7 +21,7 @@ public class VpePreference extends Preference {
 	public static String ATT_USE_ABSOLUTE_POSITION = "";
 	public static String ATT_ALWAYS_PROMPT_FOR_TAG_ATTRIBUTES_DURING_TAG_INSERT = "always prompt for tag attributes during tag insert";
 	public static String ATT_OPTION_LIST = "option list";
-	public static String ATT_SOURCE_VISUAL_EDITORS_WEIGHTS = "Source-Visual Editors Weights";
+	public static String ATT_SOURCE_VISUAL_EDITORS_WEIGHTS = "Size of Visual Editor pane 0-100%";
 	public static String ATT_SHOW_SELECTION_TAG_BAR = "show selection tag bar";
 	public static String ATT_ALWAYS_HIDE_SELECTION_BAR_WITHOUT_PROMT="always hide selection bar without prompt";
 	public static String SHOW_COMMENTS_VALUE;

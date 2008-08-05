@@ -15,11 +15,11 @@ import org.eclipse.ui.texteditor.ITextEditor;
 
 public interface IVisualEditor extends ITextEditor, IReusableEditor {
 	public static final int VISUALSOURCE_MODE = 0;
-	public static final int VISUAL_MODE = 1;
-	public static final int SOURCE_MODE = 2;
+	//public static final int VISUAL_MODE = 1;
+	public static final int SOURCE_MODE = 1;
 	
 	/** PREVIEW_MODE */
-	public static final int PREVIEW_MODE = 3;
+	public static final int PREVIEW_MODE = 2;
 
 	public void setVisualMode(int mode);
 	public IVisualController getController();
