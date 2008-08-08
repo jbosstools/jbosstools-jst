@@ -228,8 +228,6 @@
 			class="org.jboss.tools.jst.web.webapp.model.WebAppUserConstraintImpl"/>
 		<xclass id="org.jboss.tools.jst.web.webapp.model.handlers.CreateForWebApp23Handler"
 			class="org.jboss.tools.jst.web.webapp.model.handlers.CreateForWebApp23Handler"/>
-		<xclass id="org.jboss.tools.common.meta.impl.adapters.XAdapterProjectsRoot"
-			class="org.jboss.tools.common.meta.impl.adapters.XAdapterProjectsRoot"/>
 		<xclass id="org.jboss.tools.jst.web.project.AddServletSupportWizard"
 			class="org.jboss.tools.jst.web.project.AddServletSupportWizard"/>
 		<xclass id="org.jboss.tools.jst.web.tld.model.handlers.CreateTLDFileSupport"
