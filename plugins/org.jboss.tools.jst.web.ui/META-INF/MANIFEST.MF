@@ -27,7 +27,8 @@ Provide-Package: org.jboss.tools.jst.web.ui.internal.preferences,
  org.jboss.tools.jst.web.ui.wizards.tomcatvm,
  org.jboss.tools.jst.jsp.jspeditor.jsppreview,
  org.jboss.tools.common.model.ui.texteditors.preferences,
- org.jboss.tools.jst.web.ui.editors.webapp.form
+ org.jboss.tools.jst.web.ui.editors.webapp.form,
+ org.jboss.tools.vpe
 Require-Bundle: org.jboss.tools.common,
  org.eclipse.ui.ide,
  org.eclipse.ui.views,
@@ -84,4 +85,5 @@ Require-Bundle: org.jboss.tools.common,
  org.eclipse.core.runtime,
  org.eclipse.debug.ui
 Bundle-Version: 2.0.0
+Import-Package: org.jboss.tools.vpe.editor.css
 
