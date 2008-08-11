@@ -23,7 +23,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
+import org.jboss.tools.vpe.editor.css.GlobalELReferenceList;
 import org.jboss.tools.vpe.editor.css.GlobalElVariablesComposite;
+import org.jboss.tools.vpe.editor.css.ResourceReference;
 import org.jboss.tools.vpe.editor.css.VpeResourcesDialog;
 
 /**
@@ -33,9 +35,24 @@ import org.jboss.tools.vpe.editor.css.VpeResourcesDialog;
  */
 public class ELVariablesPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
     
+
+    private static final ResourceReference[] EMPTY_RESOURCE = new ResourceReference[0];
     /** The el. */
     private GlobalElVariablesComposite   el  = new GlobalElVariablesComposite();
     
+    @Override
+    protected void performApply() {
+        super.performApply();
+        this.performOk();
+    }
+
+    @Override
+    protected void performDefaults() {
+        super.performDefaults();
+        el.clearAll();
+        el.update();
+    }
+
     /**
      * Creates the contents.
      * 
@@ -71,6 +88,7 @@ public class ELVariablesPreferencePage extends PreferencePage implements IWorkbe
     @Override
     public boolean performOk() {
         boolean rst = super.performOk();
+        
         el.commit();
         return rst;
     }
@@ -84,9 +102,9 @@ public class ELVariablesPreferencePage extends PreferencePage implements IWorkbe
         final VpeResourcesDialog dialog = new VpeResourcesDialog();
         final Properties p = new Properties();
         
-        p.setProperty("help", "VpeResourcesDialog");
-        p.put("path", Platform.getLocation());
-        p.put("model", PreferenceModelUtilities.getPreferenceModel());
+        p.setProperty("help", "VpeResourcesDialog"); //$NON-NLS-1$ //$NON-NLS-2$
+        p.put("path", Platform.getLocation()); //$NON-NLS-1$
+        p.put("model", PreferenceModelUtilities.getPreferenceModel()); //$NON-NLS-1$
         dialog.setObject(p);
         el.setObject(p);
     }
