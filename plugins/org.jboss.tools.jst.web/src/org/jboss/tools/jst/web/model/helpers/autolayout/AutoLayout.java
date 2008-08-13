@@ -13,16 +13,16 @@ package org.jboss.tools.jst.web.model.helpers.autolayout;
 import org.jboss.tools.common.model.*;
 
 public class AutoLayout {
-	LayuotConstants constants = new LayuotConstants();
+	LayuotConstants constants;
     protected Items items;
 
     public AutoLayout() {
-		constants.update();
     }
-    
+
     public void setItems(Items items) {
     	this.items = items;
-		items.constants = constants;
+    	constants = items.constants;
+    	constants.update();
     }
 
     public void setOverride(boolean b) {
@@ -50,7 +50,9 @@ public class AutoLayout {
             XModelObject o = is[i].object;
             int x = is[i].ix * constants.deltaX + constants.indentX;
             int y = is[i].iy * constants.deltaY + constants.indentY;
-            if(is[i].ix % 2 == 1) y += 16;
+            if(items.isZigzagging()) {
+            	if(is[i].ix % 2 == 1) y += 16;
+            }
             x += is[i].group.xDeltas[is[i].ix] * constants.incX;
             y += yDeltas[is[i].iy] * constants.incY + is[i].yIndent;
             o.setAttributeValue("shape", "" + x + "," + y + ",0,0");

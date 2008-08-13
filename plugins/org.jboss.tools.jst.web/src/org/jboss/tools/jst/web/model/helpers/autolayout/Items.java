@@ -17,7 +17,7 @@ import org.jboss.tools.jst.web.model.helpers.WebProcessStructureHelper;
 import org.jboss.tools.jst.web.model.process.WebProcessConstants;
 
 public class Items implements WebProcessConstants {
-	protected LayuotConstants constants;
+	protected LayuotConstants constants = createConstants();
     protected WebProcessStructureHelper h = new WebProcessStructureHelper();
     protected XModelObject process;
     protected Item[] items;
@@ -26,6 +26,14 @@ public class Items implements WebProcessConstants {
     protected boolean override = false;
 
     public Items() {}
+
+    protected LayuotConstants createConstants() {
+    	return new LayuotConstants();
+    }
+
+	public boolean isZigzagging() {
+		return true;
+	}
 
     public void setOverride(boolean b) {
         override = b;
