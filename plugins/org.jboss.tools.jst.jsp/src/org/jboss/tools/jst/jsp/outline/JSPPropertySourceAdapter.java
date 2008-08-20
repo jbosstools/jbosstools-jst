@@ -157,7 +157,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 				} else {
 					if (namesLow.contains(attrName.toLowerCase())) continue;
 				}
-				if(valueHelper.isAvailable(getQuery(attrName))) {
+				if(valueHelper.isAvailable(getQuery(attrName)) || attrName.equals("style")) {
 					descriptor = createJSPPropertyDescriptor(d, attrName, false);
 				} else {
 					descriptor = createTextPropertyDescriptor(attrName, CATEGORY_ATTRIBUTES, 0);
@@ -744,7 +744,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 
 	private IPropertyDescriptor createEnumeratedPropertyDescriptor(CMAttributeDeclaration attrDecl, CMDataType valuesHelper) {
 		// the displayName MUST be set
-		EnumeratedStringPropertyDescriptor descriptor = new EnumeratedStringPropertyDescriptor(attrDecl.getAttrName(), attrDecl.getAttrName(), _getValidStrings(attrDecl, valuesHelper));
+	    	EnumeratedStringPropertyDescriptor descriptor = new EnumeratedStringPropertyDescriptor(attrDecl.getAttrName(), attrDecl.getAttrName(), _getValidStrings(attrDecl, valuesHelper));
 		descriptor.setCategory(getCategory(attrDecl));
 		descriptor.setDescription(attrDecl.getAttrName());
 		if (attrDecl.getUsage() != CMAttributeDeclaration.REQUIRED && SET_EXPERT_FILTER)

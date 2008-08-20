@@ -41,6 +41,7 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements
     ContentAssistHandler handler = null;
 
     boolean hasProposals = false;
+      
 
     public JSPDialogCellEditor(Composite parent, Properties context) {
 	super(parent);
@@ -76,7 +77,7 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements
 	}
 	query += nodeName + "@" + attributeName;
 	RootElement root = (RootElement) valueHelper.getInitalInput(query);
-	hasProposals = root != null && root.getChildren().length > 0;
+	hasProposals = (root != null && root.getChildren().length > 0) || attributeName.equals("style");
     }
 
     private void checkButtonEnablement() {
