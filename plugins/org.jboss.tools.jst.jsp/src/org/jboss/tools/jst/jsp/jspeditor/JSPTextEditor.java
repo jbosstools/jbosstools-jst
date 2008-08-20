@@ -95,6 +95,7 @@ import org.jboss.tools.common.model.XModelTransferBuffer;
 import org.jboss.tools.common.model.filesystems.impl.FileAnyImpl;
 import org.jboss.tools.common.model.filesystems.impl.FolderImpl;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
+import org.jboss.tools.common.model.ui.dnd.DnDUtil;
 import org.jboss.tools.common.model.ui.dnd.ModelTransfer;
 import org.jboss.tools.common.model.ui.editor.IModelObjectEditorInput;
 import org.jboss.tools.common.model.ui.editors.dnd.DropCommandFactory;
@@ -864,9 +865,10 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		}
 
 		public void drop(DropTargetEvent event) {
-			int offset = getPosition(event.x, event.y);
-			selectAndReveal(offset, 0);
-			dropContext.runDropCommand(JSPTextEditor.this, event);
+		    int offset = getPosition(event.x, event.y);
+            selectAndReveal(offset, 0);
+			DnDUtil.fireDnDEvent(dropContext,JSPTextEditor.this,event);
+			
 		}
 
 		public void dropAccept(DropTargetEvent event) {
