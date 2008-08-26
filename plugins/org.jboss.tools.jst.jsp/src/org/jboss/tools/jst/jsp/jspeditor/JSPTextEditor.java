@@ -95,7 +95,6 @@ import org.jboss.tools.common.model.XModelTransferBuffer;
 import org.jboss.tools.common.model.filesystems.impl.FileAnyImpl;
 import org.jboss.tools.common.model.filesystems.impl.FolderImpl;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
-import org.jboss.tools.common.model.ui.dnd.DnDUtil;
 import org.jboss.tools.common.model.ui.dnd.ModelTransfer;
 import org.jboss.tools.common.model.ui.editor.IModelObjectEditorInput;
 import org.jboss.tools.common.model.ui.editors.dnd.DropCommandFactory;
@@ -134,8 +133,6 @@ import org.w3c.dom.DocumentType;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
-
-import com.sun.org.apache.xpath.internal.operations.Minus;
 
 /**
  * @author Jeremy
@@ -865,14 +862,13 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		}
 
 		public void drop(DropTargetEvent event) {
-		    int offset = getPosition(event.x, event.y);
+            int offset = getPosition(event.x, event.y);
             selectAndReveal(offset, 0);
-			DnDUtil.fireDnDEvent(dropContext,JSPTextEditor.this,event);
-			
-		}
+            dropContext.runDropCommand(JSPTextEditor.this, event);
+        }
 
-		public void dropAccept(DropTargetEvent event) {
-		}
+        public void dropAccept(DropTargetEvent event) {
+        }
 
 	}
 
