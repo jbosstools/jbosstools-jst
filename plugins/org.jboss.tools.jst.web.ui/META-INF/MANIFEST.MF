@@ -83,7 +83,8 @@ Require-Bundle: org.jboss.tools.common,
  org.eclipse.wst.common.project.facet.ui,
  org.eclipse.core.resources,
  org.eclipse.core.runtime,
- org.eclipse.debug.ui
+ org.eclipse.debug.ui,
+ org.jboss.tools.jsf.vpe.jsf
 Bundle-Version: 2.0.0
 Import-Package: org.jboss.tools.vpe.editor.css
 

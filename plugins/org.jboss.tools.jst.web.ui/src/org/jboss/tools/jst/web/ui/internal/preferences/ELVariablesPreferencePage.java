@@ -22,11 +22,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.jboss.tools.common.editor.el.GlobalELReferenceList;
-import org.jboss.tools.common.editor.el.GlobalElVariablesComposite;
-import org.jboss.tools.common.editor.rreferences.ResourceReference;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
-import org.jboss.tools.vpe.editor.css.VpeResourcesDialog;
+import org.jboss.tools.jst.web.el.GlobalElVariablesComposite;
+import org.jboss.tools.jst.web.rreferences.ResourceReference;
+import org.jboss.tools.jst.web.rreferences.VpeResourcesDialog;
 
 /**
  * Page for the El preferences.
