@@ -65,6 +65,9 @@ Require-Bundle: org.jboss.tools.common.model;visibility:=reexport,
  org.eclipse.ant.ui,
  org.eclipse.ui.externaltools,
  org.jboss.tools.common.kb,
- org.eclipse.wst.common.project.facet.core
+ org.eclipse.wst.common.project.facet.core,
+ org.jboss.tools.common.model.ui
 Bundle-Version: 2.0.0
+Export-Package: org.jboss.tools.jst.web.el,
+ org.jboss.tools.jst.web.rreferences
 
