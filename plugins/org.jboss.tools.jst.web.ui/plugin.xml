@@ -41,8 +41,6 @@
    <extension point="org.eclipse.ui.preferencePages">
       <page category="org.jboss.tools.common.model.ui" class="org.jboss.tools.jst.web.ui.internal.preferences.LibrarySetsPreferencePage" id="org.jboss.tools.common.xstudio.libsets" name="Library Sets">
       </page>
-      <page category="org.jboss.tools.common.model.ui" class="org.jboss.tools.jst.web.ui.internal.preferences.ELVariablesPreferencePage" id="org.jboss.tools.common.xstudio.elvariables" name="El Variables">
-      </page>
    </extension>
    <extension point="org.eclipse.ui.editors">
       <editor 
