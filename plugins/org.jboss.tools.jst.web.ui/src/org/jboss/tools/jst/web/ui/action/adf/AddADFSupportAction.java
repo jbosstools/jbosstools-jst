@@ -32,7 +32,7 @@ public class AddADFSupportAction extends AbstractModelActionDelegate implements 
 		return helper.isEnabled();
 	}
 
-	protected void doRun() throws Exception {
+	protected void doRun() throws XModelException {
 		helper.execute();
 	}
 
