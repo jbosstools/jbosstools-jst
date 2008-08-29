@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
@@ -24,15 +25,12 @@ import org.eclipse.jst.jsp.core.internal.contentmodel.TaglibController;
 import org.eclipse.jst.jsp.core.internal.contentmodel.tld.TLDCMDocumentManager;
 import org.eclipse.jst.jsp.core.internal.contentmodel.tld.TaglibTracker;
 import org.eclipse.jst.jsp.core.internal.regions.DOMJSPRegionContexts;
-import org.eclipse.jst.jsp.core.text.IJSPPartitions;
 import org.eclipse.jst.jsp.ui.internal.JSPUIPlugin;
 import org.eclipse.jst.jsp.ui.internal.contentassist.JSPContentAssistProcessor;
 import org.eclipse.jst.jsp.ui.internal.preferences.JSPUIPreferenceNames;
-import org.eclipse.jst.jsp.ui.internal.templates.TemplateContextTypeIdsJSP;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.css.ui.internal.contentassist.CSSContentAssistProcessor;
-import org.eclipse.wst.html.core.text.IHTMLPartitions;
 import org.eclipse.wst.javascript.ui.internal.common.contentassist.JavaScriptContentAssistProcessor;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
@@ -70,11 +68,6 @@ import org.jboss.tools.common.kb.TagDescriptor;
 import org.jboss.tools.common.kb.wtp.TLDVersionHelper;
 import org.jboss.tools.common.kb.wtp.WtpKbConnector;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
-import org.jboss.tools.jst.web.project.WebProject;
-import org.jboss.tools.jst.web.tld.TaglibData;
-import org.jboss.tools.jst.web.tld.VpeTaglibListener;
-import org.jboss.tools.jst.web.tld.VpeTaglibManager;
-import org.jboss.tools.jst.web.tld.VpeTaglibManagerProvider;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -215,11 +208,7 @@ public class ExtendedJSPContentAssistProcessor extends JSPContentAssistProcessor
 	        try {
                 wtpKbConnector = (WtpKbConnector)KbConnectorFactory.getIntstance().createConnector(KbConnectorType.JSP_WTP_KB_CONNECTOR, document);
                 jspActiveCAP.setKbConnector(wtpKbConnector);
-            } catch (ClassNotFoundException e) {
-            	JspEditorPlugin.getPluginLog().logError(e);
-            } catch (InstantiationException e) {
-            	JspEditorPlugin.getPluginLog().logError(e);
-            } catch (IllegalAccessException e) {
+            } catch (KbException e) {
             	JspEditorPlugin.getPluginLog().logError(e);
             }
 	    }

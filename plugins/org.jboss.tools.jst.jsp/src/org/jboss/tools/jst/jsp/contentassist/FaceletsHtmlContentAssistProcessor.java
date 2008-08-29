@@ -57,7 +57,6 @@ import org.jboss.tools.common.kb.wtp.JspWtpKbConnector;
 import org.jboss.tools.common.kb.wtp.TLDVersionHelper;
 import org.jboss.tools.common.kb.wtp.WtpKbConnector;
 import org.jboss.tools.common.model.util.ELParser;
-import org.jboss.tools.common.reporting.ProblemReportingHelper;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.editor.TLDRegisterHelper;
 import org.jboss.tools.jst.jsp.outline.ValueHelper;
@@ -484,11 +483,7 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
                 jspActiveCAP.setKbConnector(wtpKbConnector);
                 FaceletsJsfCResource fsfCResource = new FaceletsJsfCResource(wtpKbConnector);
                 wtpKbConnector.registerResource(fsfCResource);
-            } catch(ClassNotFoundException e) {
-            	JspEditorPlugin.getPluginLog().logError(e);
-            } catch (InstantiationException e) {
-            	JspEditorPlugin.getPluginLog().logError(e);
-			} catch (IllegalAccessException e) {
+			} catch (KbException e) {
 				JspEditorPlugin.getPluginLog().logError(e);
 			}
 	    }

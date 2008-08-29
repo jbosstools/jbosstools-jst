@@ -10,31 +10,44 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.action;
 
-import java.util.*;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.*;
-import org.eclipse.swt.widgets.*;
-import org.eclipse.ui.*;
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jface.action.*;
+import java.util.Properties;
+import java.util.Set;
+import java.util.TreeSet;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.jboss.tools.common.log.LogHelper;
-import org.jboss.tools.common.model.util.XModelTreeListenerSWTASync;
-import org.jboss.tools.common.model.ui.dnd.DnDUtil;
-import org.eclipse.jface.viewers.*;
-
-import org.jboss.tools.common.meta.action.*;
-import org.jboss.tools.common.meta.action.impl.*;
-import org.jboss.tools.common.model.*;
-import org.jboss.tools.common.model.event.*;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.IWorkbenchWindowPulldownDelegate;
+import org.jboss.tools.common.meta.action.XActionInvoker;
+import org.jboss.tools.common.meta.action.XEntityData;
+import org.jboss.tools.common.meta.action.impl.SpecialWizardSupport;
+import org.jboss.tools.common.meta.action.impl.XEntityDataImpl;
+import org.jboss.tools.common.model.XModel;
+import org.jboss.tools.common.model.XModelException;
+import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.event.XModelTreeEvent;
+import org.jboss.tools.common.model.event.XModelTreeListener;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.project.IModelNature;
-import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
-import org.jboss.tools.common.model.ui.action.*;
-import org.jboss.tools.jst.web.browser.*;
+import org.jboss.tools.common.model.ui.action.AbstractModelActionDelegate;
+import org.jboss.tools.common.model.ui.dnd.DnDUtil;
+import org.jboss.tools.common.model.util.EclipseResourceUtil;
+import org.jboss.tools.common.model.util.XModelTreeListenerSWTASync;
+import org.jboss.tools.jst.web.browser.AbstractBrowserContext;
 import org.jboss.tools.jst.web.browser.wtp.RunOnServerContext;
 import org.jboss.tools.jst.web.server.ServerManager;
 import org.jboss.tools.jst.web.server.ServerManagerListener;
@@ -147,7 +160,7 @@ public class RunPageActionDelegate extends AbstractModelActionDelegate implement
 		return context.getModelActionPath();
 	}
 
-	protected void doRun() throws Exception {
+	protected void doRun() {
 		if(context.isJustUrl(context.getLastRunURL())) {
 			if(!saveAllEditors()) return;
 			context.runJustUrl();

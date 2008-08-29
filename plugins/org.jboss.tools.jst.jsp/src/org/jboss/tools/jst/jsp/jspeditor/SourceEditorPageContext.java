@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.jface.text.IDocument;
 import org.jboss.tools.common.kb.KbConnectorFactory;
 import org.jboss.tools.common.kb.KbConnectorType;
+import org.jboss.tools.common.kb.KbException;
 import org.jboss.tools.common.kb.wtp.WtpKbConnector;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.editor.IVisualContext;
@@ -99,11 +100,7 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 		}
 		try {
 			connector = (WtpKbConnector)KbConnectorFactory.getIntstance().createConnector(KbConnectorType.JSP_WTP_KB_CONNECTOR, iDocument);
-		} catch (InstantiationException e) {
-			JspEditorPlugin.getPluginLog().logError(e);
-		} catch (IllegalAccessException e) {
-			JspEditorPlugin.getPluginLog().logError(e);
-		} catch (ClassNotFoundException e) {
+		} catch (KbException e) {
 			JspEditorPlugin.getPluginLog().logError(e);
 		}
 	}

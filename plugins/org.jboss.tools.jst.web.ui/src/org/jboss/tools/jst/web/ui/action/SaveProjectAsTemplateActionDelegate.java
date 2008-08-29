@@ -24,7 +24,7 @@ public class SaveProjectAsTemplateActionDelegate extends AbstractModelActionDele
 		return true;
 	}
 
-	protected void doRun() throws Exception {
+	protected void doRun() {
 		XActionInvoker.invoke("WebWorkspace", "SaveAsTemplate", object, null);
 	}
 

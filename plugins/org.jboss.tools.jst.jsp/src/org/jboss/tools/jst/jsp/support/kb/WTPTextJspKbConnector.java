@@ -130,12 +130,7 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
 				fTaglibResource = taglibResource;
 				registerResource(fTaglibResource);
 			}
-			invokeDelayedUpdateKnownTagLists();
-		} catch(ClassNotFoundException e) {
-			JspEditorPlugin.getPluginLog().logError(e);
-		} catch (InstantiationException e) {
-			JspEditorPlugin.getPluginLog().logError(e);
-		} catch (IllegalAccessException e) {
+		} catch (KbException e) {
 			JspEditorPlugin.getPluginLog().logError(e);
 		}
 	}

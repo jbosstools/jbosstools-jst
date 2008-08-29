@@ -10,11 +10,15 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.action.adf;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.ui.action.*;
+import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 public class AddADFSupportAction extends AbstractModelActionDelegate implements IObjectActionDelegate {
 	AddADFSupportHelper helper = new AddADFSupportHelper();
@@ -33,7 +37,13 @@ public class AddADFSupportAction extends AbstractModelActionDelegate implements 
 	}
 
 	protected void doRun() throws XModelException {
-		helper.execute();
+		try {
+			helper.execute();
+		} catch (InvocationTargetException e) {
+			WebUiPlugin.getPluginLog().logError(e);
+		} catch (InterruptedException e) {
+			WebUiPlugin.getPluginLog().logError(e);
+		}
 	}
 
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {}
