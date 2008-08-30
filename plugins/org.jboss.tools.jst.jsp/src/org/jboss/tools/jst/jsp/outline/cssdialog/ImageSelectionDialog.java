@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.jsp.outline.cssdialog;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -599,7 +600,7 @@ public class ImageSelectionDialog extends SelectionStatusDialog {
 			    .getDisplay(), SWT.CURSOR_WAIT);
 		    Point previewPoint = new Point(0, 0);
 		    Point labelPoint = canvas.getSize();
-		    InputStream stream;
+		    InputStream stream=null;
 		    try {
 			getShell().setCursor(waitCursor);
 			stream = new FileInputStream(file.getLocation()
@@ -653,10 +654,17 @@ public class ImageSelectionDialog extends SelectionStatusDialog {
 			    image.dispose();
 			    gc.dispose();
 			}
-		    } catch (Exception ev) {
+		    } catch (IOException ev) {
 
 		    } finally {
-			getShell().setCursor(parentCursor);
+		    	getShell().setCursor(parentCursor);
+		    	if(stream != null) {
+		    		try {
+						stream.close();
+					} catch (IOException e1) {
+						// ignore
+					}
+		    	}
 		    }
 		}
 	    }
