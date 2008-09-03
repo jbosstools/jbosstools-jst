@@ -293,7 +293,8 @@ public class FontFamilyDialog extends Dialog implements SelectionListener {
 	    public void dragFinished(DragSourceEvent event) {
 		if (event.detail == DND.DROP_MOVE) {
 		    int selectedItem = fontFamilyList.getSelectionIndex();
-		    fontFamilyList.remove(selectedItem);
+		    if (fontFamilyList.getItemCount() > selectedItem && selectedItem >=0)
+			fontFamilyList.remove(selectedItem);
 		}
 	    }
 
