@@ -83,14 +83,17 @@ public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcess
 		String elProposalPrefix = "";
 		String elQueryString = null;
 		String queryString = null;
+		String elStartChar = "#";
 		if (elStartPosition == -1) {
 			queryString = matchString;
 			elQueryString = "#{";
 			delta = matchString.length();
-			if(isCharSharp(matchString, offset-1)) {
+			if(isCharSharp(matchString, offset-1) || isCharDollar(matchString, offset-1)) {
 				elProposalPrefix = "{";  //$NON-NLS-1$
 				queryString = null; // Do not request for ordinar attr-value proposals 
-									// in case of starting EL-expression 
+									// in case of starting EL-expression
+				if (isCharDollar(matchString, offset-1)) 
+					elStartChar = "$";
 			} else {
 				elProposalPrefix = "#{";  //$NON-NLS-1$
 			}
@@ -212,6 +215,10 @@ public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcess
 	                	String displayString = elProposalPrefix == null || elProposalPrefix.length() == 0 ? 
 	                			kbProposal.getReplacementString().substring(2,kbProposal.getReplacementString().length() - 1) :
 	                			elProposalPrefix + kbProposal.getReplacementString().substring(2,kbProposal.getReplacementString().length() - 1) + "}" ;
+
+	                	if ('#' == displayString.charAt(0) || '$' == displayString.charAt(0))
+	                		displayString = elStartChar + displayString.substring(1);
+
 	                	AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(
 	                			kbProposal.autoActivationContentAssistantAfterApplication(), 
 	                			replacementString,
@@ -292,8 +299,16 @@ public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcess
 		if (matchString == null || offset > matchString.length() || offset < 0) {
 			return false;
 		}
+		return ('#' == matchString.charAt(offset));
+	}
 
-		return '#' == matchString.charAt(offset);
+	/*  Checks if the preceding character is a Dollar-character
+	 */
+	private boolean isCharDollar(String matchString, int offset) {
+		if (matchString == null || offset > matchString.length() || offset < 0) {
+			return false;
+		}
+		return ('$' == matchString.charAt(offset));
 	}
 
 	/*
