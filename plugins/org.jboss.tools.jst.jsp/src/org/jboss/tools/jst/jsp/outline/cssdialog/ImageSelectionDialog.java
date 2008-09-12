@@ -42,6 +42,7 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTException;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
@@ -655,7 +656,9 @@ public class ImageSelectionDialog extends SelectionStatusDialog {
 			    gc.dispose();
 			}
 		    } catch (IOException ev) {
-
+			//ignore
+		    } catch (SWTException ex) {
+			//ignore (if select not image file) 
 		    } finally {
 		    	getShell().setCursor(parentCursor);
 		    	if(stream != null) {
