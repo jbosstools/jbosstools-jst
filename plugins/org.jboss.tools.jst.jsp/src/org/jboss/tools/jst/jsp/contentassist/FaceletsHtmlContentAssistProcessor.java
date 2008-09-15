@@ -198,6 +198,9 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
 			WTPKbJsfValuesResource r4 = new WTPKbJsfValuesResource(input, h.getConnector());
 			proposals.addAll(r4.queryProposal(matchString));
 
+			int elStart = getELStartPosition(matchString);
+			int elEnd   = getELEndPosition(matchString, currentValue);
+			
             for (Iterator iter = proposals.iterator(); iter.hasNext();) {
             	KbProposal kbProposal = cleanFaceletProposal((KbProposal)iter.next());
             	kbProposal.postProcess(currentValue, offset);
@@ -208,13 +211,29 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
                 
                 if(kbProposal.getStart() >= 0) {
         			String replacementString = kbProposal.getReplacementString();
+                	String label = kbProposal.getLabel();
+                	int cursorPositionDelta = 0;
+        			if (elStart > -1) {
+        				replacementString = replacementString.substring(2);
+        				if (matchString.charAt(elStart) != label.charAt(0)) {
+        					label = matchString.charAt(elStart) + label.substring(1);
+        				}
+        			} else if (matchString.endsWith("#") || matchString.endsWith("$")) {
+        				replacementString = replacementString.substring(1);
+        				cursorPositionDelta += 1;
+        				if (matchString.charAt(matchString.length() - 1) != label.charAt(0)) {
+        					label = matchString.charAt(matchString.length() - 1) + label.substring(1);
+        				}
+					}
+        			if (elStart> -1 && elEnd > -1) {
+        				replacementString = replacementString.substring(0, replacementString.length() - 1);
+        			}
                     int replacementBeginPosition = start + kbProposal.getStart();
                     int replacementLength = kbProposal.getEnd() - kbProposal.getStart();
-                	int cursorPositionDelta = 0;
                 	int cursorPosition = kbProposal.getPosition() + cursorPositionDelta;
                 	AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(kbProposal.autoActivationContentAssistantAfterApplication(), replacementString,
                 			replacementBeginPosition, replacementLength, cursorPosition, SharedXMLEditorPluginImageHelper.getImage(SharedXMLEditorPluginImageHelper.IMG_OBJ_ATTRIBUTE),
-            				kbProposal.getLabel(), null, kbProposal.getContextInfo(), relevance);
+            				label, null, kbProposal.getContextInfo(), relevance);
             		contentAssistRequest.addProposal(proposal);
             		continue;
                 } else {
@@ -223,10 +242,27 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
                 	int replacementLength = 0;
                 	int cursorPositionDelta = 0;
                 	String replacementString = replacementStringBuffer.toString();
+                	String label = kbProposal.getLabel();
+        			if (elStart > -1) {
+        				replacementString = replacementString.substring(2);
+        				if (matchString.charAt(elStart) != label.charAt(0)) {
+        					label = matchString.charAt(elStart) + label.substring(1);
+        				}
+        			} else if (matchString.endsWith("#") || matchString.endsWith("$")) {
+        				replacementString = replacementString.substring(1);
+        				cursorPositionDelta += 1;
+        				if (matchString.charAt(matchString.length() - 1) != label.charAt(0)) {
+        					label = matchString.charAt(matchString.length() - 1) + label.substring(1);
+        				}
+        			}
+        			if (elStart> -1 && elEnd > -1) {
+        				replacementString = replacementString.substring(0, replacementString.length() - 1);
+        			}
+        			
                 	int cursorPosition = kbProposal.getPosition() + cursorPositionDelta;
                 	AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(kbProposal.autoActivationContentAssistantAfterApplication(), replacementString,
                 			replacementBeginPosition, replacementLength, cursorPosition, SharedXMLEditorPluginImageHelper.getImage(SharedXMLEditorPluginImageHelper.IMG_OBJ_ATTRIBUTE),
-            				kbProposal.getLabel(), null, kbProposal.getContextInfo(), relevance);
+            				label, null, kbProposal.getContextInfo(), relevance);
             		contentAssistRequest.addProposal(proposal);
                 }
             }
@@ -238,6 +274,114 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
 		return false;
 	}
 
+	/*
+	 * Checks if the EL operand starting characters are present
+	 * @return
+	 */
+	private int getELStartPosition(String matchString) {
+		if (matchString == null || matchString.length() == 0)
+			return -1;
+
+		int offset = matchString.length();
+
+		while (--offset >= 0) {
+			if ('}' == matchString.charAt(offset))
+				return -1;
+
+			if ('"' == matchString.charAt(offset) || '\'' == matchString.charAt(offset)) {
+                int backslashCount = 0;
+                while ((offset - 1 - backslashCount) >= 0 && matchString.charAt(offset - 1 - backslashCount) == '\\') {
+                    backslashCount++;
+                }
+                
+                if (backslashCount % 2 == 0)
+                    return -1;
+            }
+
+			if ('{' == matchString.charAt(offset) &&
+					(offset - 1) >= 0 && 
+					('#' == matchString.charAt(offset - 1) || 
+							'$' == matchString.charAt(offset - 1))) {
+				return (offset - 1);
+			}
+		}
+		return -1;
+	}
+	
+	/*
+	 * Checks if the EL operand ending character is present
+	 * @return
+	 */
+	private int getELEndPosition(String matchString, String currentValue) {
+		if (matchString == null || matchString.length() == 0 ||
+				currentValue == null || currentValue.length() == 0 || 
+				currentValue.length() < matchString.length())
+			return -1;
+
+		String restOfCurrentValue = currentValue.substring(matchString.length());
+		int offset = -1;
+
+		char inQuotesChar = 0;
+		while (++offset < restOfCurrentValue.length()) {
+			if (inQuotesChar == 0) {
+				if ('}' == restOfCurrentValue.charAt(offset))
+					return matchString.length() + offset;
+
+				if ('#' == restOfCurrentValue.charAt(offset))
+					return -1;
+
+				if ('"' == restOfCurrentValue.charAt(offset) || 
+                				'\'' == restOfCurrentValue.charAt(offset)) {
+					inQuotesChar = restOfCurrentValue.charAt(offset);
+				}
+
+				if ('\\' == restOfCurrentValue.charAt(offset)) {
+	                int backslashCount = 1;
+	                
+	                while ((offset + backslashCount) < restOfCurrentValue.length() && 
+	                		restOfCurrentValue.charAt(offset + backslashCount) == '\\') {
+	                    backslashCount++;
+	                }
+
+	                if (offset + backslashCount >= restOfCurrentValue.length())
+	                	return -1;
+	                
+	                if (backslashCount % 2 == 1 && 
+	                		('"' == restOfCurrentValue.charAt(offset + backslashCount) || 
+	                				'\'' == restOfCurrentValue.charAt(offset + backslashCount))) {
+	                    inQuotesChar = restOfCurrentValue.charAt(offset + backslashCount);
+	                    offset += backslashCount;
+	                }
+				}
+			} else {
+				if ('"' == restOfCurrentValue.charAt(offset) || 
+        				'\'' == restOfCurrentValue.charAt(offset)) {
+					inQuotesChar = 0;
+				}
+
+				if ('\\' == restOfCurrentValue.charAt(offset)) {
+	                int backslashCount = 1;
+	                
+	                while ((offset + backslashCount) < restOfCurrentValue.length() && 
+	                		restOfCurrentValue.charAt(offset + backslashCount) == '\\') {
+	                    backslashCount++;
+	                }
+
+	                if (offset + backslashCount >= restOfCurrentValue.length())
+	                	return -1;
+	                
+	                if (backslashCount % 2 == 1 && 
+	                		('"' == restOfCurrentValue.charAt(offset + backslashCount) || 
+	                				'\'' == restOfCurrentValue.charAt(offset + backslashCount))) {
+	                    inQuotesChar = 0;
+	                    offset += backslashCount;
+	                }
+				}
+			}
+		}
+		return -1;
+	}
+	
 	protected void addAttributeNameProposals(ContentAssistRequest contentAssistRequest) {
 		Element element = (Element)contentAssistRequest.getNode();
 		NamedNodeMap attributes = element.getAttributes();
