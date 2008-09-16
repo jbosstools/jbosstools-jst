@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
@@ -42,7 +41,8 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.ImageCombo;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.MessageUtil;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Util;
-import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParserListener;
+import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParser;
+
 
 /**
  * Class for creating control in Box tab
@@ -96,9 +96,9 @@ public class TabBoxesControl extends Composite {
 
 	label.setFont(JFaceResources.getFontRegistry().get(
 		JFaceResources.BANNER_FONT));
-	label.setText(MessageUtil.getString("DIMENSION_TITLE"));
+	label.setText(MessageUtil.getString("DIMENSION_TITLE")); //$NON-NLS-1$
 	label = new Label(this, SWT.LEFT);
-	label.setText(MessageUtil.getString("WIDTH"));
+	label.setText(MessageUtil.getString("WIDTH")); //$NON-NLS-1$
 	label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
 		false));
 
@@ -154,7 +154,7 @@ public class TabBoxesControl extends Composite {
 	}
 
 	label = new Label(this, SWT.LEFT);
-	label.setText(MessageUtil.getString("HEIGHT"));
+	label.setText(MessageUtil.getString("HEIGHT")); //$NON-NLS-1$
 	label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
 		false));
 
@@ -213,12 +213,12 @@ public class TabBoxesControl extends Composite {
 		false, false, 3, 1));
 	label.setFont(JFaceResources.getFontRegistry().get(
 		JFaceResources.BANNER_FONT));
-	label.setText(MessageUtil.getString("BORDER_TITLE"));
+	label.setText(MessageUtil.getString("BORDER_TITLE")); //$NON-NLS-1$
 
 	label = new Label(this, SWT.LEFT);
 	label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
 		false));
-	label.setText(MessageUtil.getString("BORDER_STYLE"));
+	label.setText(MessageUtil.getString("BORDER_STYLE")); //$NON-NLS-1$
 
 	borderStyleCombo = new Combo(this, SWT.BORDER);
 
@@ -252,7 +252,7 @@ public class TabBoxesControl extends Composite {
 	label = new Label(this, SWT.LEFT);
 	label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
 		false));
-	label.setText(MessageUtil.getString("BORDER_COLOR"));
+	label.setText(MessageUtil.getString("BORDER_COLOR")); //$NON-NLS-1$
 
 	borderColorCombo = new ImageCombo(this, SWT.BORDER);
 
@@ -273,7 +273,7 @@ public class TabBoxesControl extends Composite {
 
 	borderColorCombo.setLayoutData(new GridData(GridData.FILL,
 		GridData.CENTER, true, false));
-	Set<Entry<String, String>> set = ColorParserListener.getMap()
+	Set<Entry<String, String>> set = ColorParser.getInstance().getMap()
 		.entrySet();
 
 	for (Map.Entry<String, String> me : set) {
@@ -284,7 +284,7 @@ public class TabBoxesControl extends Composite {
 	final Button button = new Button(this, SWT.PUSH);
 	button.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
 		false));
-	button.setToolTipText(MessageUtil.getString("BORDER_COLOR_TIP"));
+	button.setToolTipText(MessageUtil.getString("BORDER_COLOR_TIP")); //$NON-NLS-1$
 	ImageDescriptor colorDesc = JspEditorPlugin
 		.getImageDescriptor(Constants.IMAGE_COLORLARGE_FILE_LOCATION);
 	Image im = colorDesc.createImage();
@@ -303,7 +303,7 @@ public class TabBoxesControl extends Composite {
 			.setRGB(Util.getColor((borderColorCombo.getText()
 				.trim())) == null ? Constants.RGB_BLACK : Util
 				.getColor((borderColorCombo.getText().trim())));
-		dlg.setText(MessageUtil.getString("COLOR_DIALOG_TITLE"));
+		dlg.setText(MessageUtil.getString("COLOR_DIALOG_TITLE")); //$NON-NLS-1$
 		RGB rgb = dlg.open();
 		if (rgb != null) {
 		    String colorStr = Util.createColorString(rgb);
@@ -313,7 +313,7 @@ public class TabBoxesControl extends Composite {
 	});
 
 	label = new Label(this, SWT.LEFT);
-	label.setText(MessageUtil.getString("BORDER_WIDTH"));
+	label.setText(MessageUtil.getString("BORDER_WIDTH")); //$NON-NLS-1$
 	label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
 		false));
 
@@ -412,10 +412,10 @@ public class TabBoxesControl extends Composite {
 		false, false, 3, 1));
 	label.setFont(JFaceResources.getFontRegistry().get(
 		JFaceResources.BANNER_FONT));
-	label.setText(MessageUtil.getString("MARGIN_PADDING_TITLE"));
+	label.setText(MessageUtil.getString("MARGIN_PADDING_TITLE")); //$NON-NLS-1$
 
 	label = new Label(this, SWT.LEFT);
-	label.setText(MessageUtil.getString("MARGIN"));
+	label.setText(MessageUtil.getString("MARGIN")); //$NON-NLS-1$
 	label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
 		false));
 
@@ -471,7 +471,7 @@ public class TabBoxesControl extends Composite {
 	}
 
 	label = new Label(this, SWT.LEFT);
-	label.setText(MessageUtil.getString("PADDING"));
+	label.setText(MessageUtil.getString("PADDING")); //$NON-NLS-1$
 	label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
 		false));
 

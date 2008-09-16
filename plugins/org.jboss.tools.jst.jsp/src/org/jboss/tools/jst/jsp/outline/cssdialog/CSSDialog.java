@@ -34,8 +34,6 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.MessageUtil;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.BaseListener;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.CSSElementsParser;
-import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParser;
-import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParserListener;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ComboParser;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.Parser;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ParserListener;
@@ -141,11 +139,6 @@ public class CSSDialog extends Dialog {
 
 	});
 	cssParser.parse();
-
-	ColorParserListener colorListener = new ColorParserListener();
-	ColorParser colorParser = new ColorParser();
-	colorParser.setListener(colorListener);
-	colorParser.parse();
 
     }
 

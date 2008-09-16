@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -48,7 +47,8 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.ImageCombo;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.MessageUtil;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Util;
-import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParserListener;
+import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParser;
+
 
 /**
  * Class for creating control in Background tab
@@ -83,13 +83,13 @@ public class TabBackgroundControl extends Composite {
 	Label label = new Label(this, SWT.LEFT);
 	label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
 		false));
-	label.setText(MessageUtil.getString("BACKGROUND_COLOR"));
+	label.setText(MessageUtil.getString("BACKGROUND_COLOR")); //$NON-NLS-1$
 
 	colorCombo = new ImageCombo(this, SWT.BORDER);
 	colorCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER,
 		true, false));
 	// ////////////////////////////////////////////////////////////////////////
-	Set<Entry<String, String>> set = ColorParserListener.getMap()
+	Set<Entry<String, String>> set = ColorParser.getInstance().getMap()
 		.entrySet();
 
 	for (Map.Entry<String, String> me : set) {
@@ -113,7 +113,7 @@ public class TabBackgroundControl extends Composite {
 	Button button = new Button(this, SWT.PUSH);
 	button.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
 		false));
-	button.setToolTipText(MessageUtil.getString("BACKGROUND_COLOR_TIP"));
+	button.setToolTipText(MessageUtil.getString("BACKGROUND_COLOR_TIP")); //$NON-NLS-1$
 	ImageDescriptor colorDesc = JspEditorPlugin
 		.getImageDescriptor(Constants.IMAGE_COLORLARGE_FILE_LOCATION);
 	Image im = colorDesc.createImage();
@@ -132,7 +132,7 @@ public class TabBackgroundControl extends Composite {
 			.setRGB(Util.getColor((colorCombo.getText().trim())) == null ? new RGB(
 				0, 0, 0)
 				: Util.getColor((colorCombo.getText().trim())));
-		dlg.setText(MessageUtil.getString("COLOR_DIALOG_TITLE"));
+		dlg.setText(MessageUtil.getString("COLOR_DIALOG_TITLE")); //$NON-NLS-1$
 		RGB rgb = dlg.open();
 		if (rgb != null) {
 		    String colorStr = Util.createColorString(rgb);
@@ -144,7 +144,7 @@ public class TabBackgroundControl extends Composite {
 	label = new Label(this, SWT.LEFT);
 	label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
 		false));
-	label.setText(MessageUtil.getString("BACKGROUND_IMAGE"));
+	label.setText(MessageUtil.getString("BACKGROUND_IMAGE")); //$NON-NLS-1$
 
 	backgroundImageCombo = new Combo(this, SWT.BORDER);
 	final GridData backgroundImageGridData = new GridData(GridData.FILL,
@@ -168,7 +168,7 @@ public class TabBackgroundControl extends Composite {
 	button = new Button(this, SWT.PUSH);
 	button.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
 		false));
-	button.setToolTipText(MessageUtil.getString("BACKGROUND_IMAGE"));
+	button.setToolTipText(MessageUtil.getString("BACKGROUND_IMAGE")); //$NON-NLS-1$
 	ImageDescriptor imageDesc = JspEditorPlugin
 		.getImageDescriptor(Constants.IMAGE_FOLDERLARGE_FILE_LOCATION);
 	Image image = imageDesc.createImage();
@@ -185,12 +185,12 @@ public class TabBackgroundControl extends Composite {
 		ImageSelectionDialog dialog = new ImageSelectionDialog(
 			getShell(), new WorkbenchLabelProvider(),
 			new WorkbenchContentProvider());
-		dialog.setTitle(MessageUtil.getString("IMAGE_DIALOG_TITLE"));
+		dialog.setTitle(MessageUtil.getString("IMAGE_DIALOG_TITLE")); //$NON-NLS-1$
 		dialog
 			.setMessage(MessageUtil
-				.getString("IMAGE_DIALOG_MESSAGE"));
+				.getString("IMAGE_DIALOG_MESSAGE")); //$NON-NLS-1$
 		dialog.setEmptyListMessage(MessageUtil
-			.getString("IMAGE_DIALOG_EMPTY_MESSAGE"));
+			.getString("IMAGE_DIALOG_EMPTY_MESSAGE")); //$NON-NLS-1$
 		dialog.setAllowMultiple(false);
 		dialog.setInput(project);
 		if (dialog.open() == ImageSelectionDialog.OK) {
@@ -205,7 +205,7 @@ public class TabBackgroundControl extends Composite {
 	label = new Label(this, SWT.LEFT);
 	label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
 		false));
-	label.setText(MessageUtil.getString("BACKGROUND_REPEAT"));
+	label.setText(MessageUtil.getString("BACKGROUND_REPEAT")); //$NON-NLS-1$
 
 	backgroundRepeatCombo = new Combo(this, SWT.BORDER);
 	backgroundRepeatCombo.setLayoutData(new GridData(GridData.FILL,

@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -43,7 +42,8 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.ImageCombo;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.MessageUtil;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Util;
-import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParserListener;
+import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParser;
+
 
 /**
  * Class for creating Text tab controls
@@ -88,7 +88,7 @@ public class TabTextControl extends Composite {
 	setLayout(gridLayout);
 
 	Label label = new Label(this, SWT.LEFT);
-	label.setText(MessageUtil.getString("FONT_FAMILY"));
+	label.setText(MessageUtil.getString("FONT_FAMILY")); //$NON-NLS-1$
 	label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
 		false));
 
@@ -112,7 +112,7 @@ public class TabTextControl extends Composite {
 	Button button = new Button(this, SWT.PUSH);
 	button.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
 		false));
-	button.setToolTipText(MessageUtil.getString("FONT_FAMILY_TIP"));
+	button.setToolTipText(MessageUtil.getString("FONT_FAMILY_TIP")); //$NON-NLS-1$
 	ImageDescriptor fontDesc = JspEditorPlugin
 		.getImageDescriptor(Constants.IMAGE_FONTLARGE_FILE_LOCATION);
 	Image fontImage = fontDesc.createImage();
@@ -135,7 +135,7 @@ public class TabTextControl extends Composite {
 	label = new Label(this, SWT.LEFT);
 	label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
 		false));
-	label.setText(MessageUtil.getString("COLOR"));
+	label.setText(MessageUtil.getString("COLOR")); //$NON-NLS-1$
 
 	colorCombo = new ImageCombo(this, SWT.BORDER);
 	colorCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER,
@@ -156,7 +156,7 @@ public class TabTextControl extends Composite {
 
 	////////////////////////////////////////////////////////////////////////
 	// //
-	Set<Entry<String, String>> set = ColorParserListener.getMap()
+	Set<Entry<String, String>> set = ColorParser.getInstance().getMap()
 		.entrySet();
 
 	for (Map.Entry<String, String> me : set) {
@@ -169,7 +169,7 @@ public class TabTextControl extends Composite {
 	button = new Button(this, SWT.PUSH);
 	button.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
 		false));
-	button.setToolTipText(MessageUtil.getString("COLOR_TIP"));
+	button.setToolTipText(MessageUtil.getString("COLOR_TIP")); //$NON-NLS-1$
 	ImageDescriptor colorDesc = JspEditorPlugin
 		.getImageDescriptor(Constants.IMAGE_COLORLARGE_FILE_LOCATION);
 	Image im = colorDesc.createImage();
@@ -187,7 +187,7 @@ public class TabTextControl extends Composite {
 		dlg
 			.setRGB(Util.getColor((colorCombo.getText().trim())) == null ? Constants.RGB_BLACK
 				: Util.getColor((colorCombo.getText().trim())));
-		dlg.setText(MessageUtil.getString("COLOR_DIALOG_TITLE"));
+		dlg.setText(MessageUtil.getString("COLOR_DIALOG_TITLE")); //$NON-NLS-1$
 		RGB rgb = dlg.open();
 		if (rgb != null) {
 		    String colorStr = Util.createColorString(rgb);
@@ -199,7 +199,7 @@ public class TabTextControl extends Composite {
 	label = new Label(this, SWT.LEFT);
 	label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
 		false));
-	label.setText(MessageUtil.getString("FONT_SIZE"));
+	label.setText(MessageUtil.getString("FONT_SIZE")); //$NON-NLS-1$
 
 	fontSizeCombo = new Combo(this, SWT.BORDER | SWT.SINGLE);
 
@@ -275,7 +275,7 @@ public class TabTextControl extends Composite {
 	label = new Label(this, SWT.LEFT);
 	label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
 		false));
-	label.setText(MessageUtil.getString("FONT_STYLE"));
+	label.setText(MessageUtil.getString("FONT_STYLE")); //$NON-NLS-1$
 
 	fontStyleCombo = new Combo(this, SWT.BORDER);
 
@@ -308,7 +308,7 @@ public class TabTextControl extends Composite {
 	label = new Label(this, SWT.LEFT);
 	label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
 		false));
-	label.setText(MessageUtil.getString("FONT_WEIGHT"));
+	label.setText(MessageUtil.getString("FONT_WEIGHT")); //$NON-NLS-1$
 
 	fontWeigthCombo = new Combo(this, SWT.BORDER);
 
@@ -341,7 +341,7 @@ public class TabTextControl extends Composite {
 	label = new Label(this, SWT.LEFT);
 	label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
 		false));
-	label.setText(MessageUtil.getString("TEXT_DECORATION"));
+	label.setText(MessageUtil.getString("TEXT_DECORATION")); //$NON-NLS-1$
 
 	textDecorationCombo = new Combo(this, SWT.BORDER);
 
@@ -374,7 +374,7 @@ public class TabTextControl extends Composite {
 	label = new Label(this, SWT.LEFT);
 	label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
 		false));
-	label.setText(MessageUtil.getString("TEXT_ALIGN"));
+	label.setText(MessageUtil.getString("TEXT_ALIGN")); //$NON-NLS-1$
 
 	textAlignCombo = new Combo(this, SWT.BORDER);
 

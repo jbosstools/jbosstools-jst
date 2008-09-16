@@ -14,9 +14,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.StringTokenizer;
-
 import org.eclipse.swt.graphics.RGB;
-import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParserListener;
+import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParser;
 
 /**
  * 
@@ -27,13 +26,13 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParserListener;
  */
 public class Util {
 
-    private static String RGB = "rgb";
+    private static String RGB = "rgb"; //$NON-NLS-1$
 
-    private static String NONE = "none";
+    private static String NONE = "none"; //$NON-NLS-1$
 
-    private static String THIN = "thin";
+    private static String THIN = "thin"; //$NON-NLS-1$
 
-    private static String COMMA = ",";
+    private static String COMMA = ","; //$NON-NLS-1$
 
     private static int START_INDEX_RED = 1;
     private static int END_INDEX_RED = 3;
@@ -57,9 +56,9 @@ public class Util {
     private static char CLOSE_BRACKET = '}';
 
     private static char SHARP = '#';
-    private static String SHARP_STRING = "#";
+    private static String SHARP_STRING = "#"; //$NON-NLS-1$
 
-    private static String ZERO_STR = "0";
+    private static String ZERO_STR = "0"; //$NON-NLS-1$
     private static int NORMAL_MIN_VALUE = 10;
 
     /**
@@ -190,7 +189,7 @@ public class Util {
 	    if (j == COUNT_COLORS)
 		return convertColorRGB(color);
 	} else {
-	    HashMap<String, String> colorMap = ColorParserListener.getMap();
+	    HashMap<String, String> colorMap = ColorParser.getInstance().getMap();
 
 	    for (String key : colorMap.keySet())
 		if (colorMap.get(key).equalsIgnoreCase(color))
@@ -319,8 +318,8 @@ public class Util {
 			: Constants.EMPTY_STRING)
 		+ Integer.toHexString(rgb.blue);
 	colorStr = colorStr.toUpperCase();
-	if (ColorParserListener.getMap().get(colorStr) != null)
-	    return ColorParserListener.getMap().get(colorStr);
+	if (ColorParser.getInstance().getMap().get(colorStr) != null)
+	    return ColorParser.getInstance().getMap().get(colorStr);
 	return colorStr;
     }
 }

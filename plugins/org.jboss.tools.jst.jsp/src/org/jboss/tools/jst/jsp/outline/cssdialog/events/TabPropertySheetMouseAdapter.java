@@ -45,7 +45,6 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
-
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.outline.cssdialog.CSSDialog;
 import org.jboss.tools.jst.jsp.outline.cssdialog.FontFamilyDialog;
@@ -55,7 +54,7 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.ImageCombo;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.MessageUtil;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Util;
-import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParserListener;
+import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParser;
 import org.jboss.tools.jst.jsp.outline.cssdialog.tabs.TabPropertySheetControl;
 
 /**
@@ -163,7 +162,7 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
 	    // create combo for color
 	    colorCombo = new ImageCombo(panel, SWT.BORDER);
 
-	    HashMap<String, String> colorMap = ColorParserListener.getMap();
+	    HashMap<String, String> colorMap = ColorParser.getInstance().getMap();
 
 	    for (String key : colorMap.keySet()) {
 		RGB rgb = Util.getColor(key);
@@ -208,7 +207,7 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
 		    button.getImage().dispose();
 		}
 	    });
-	    btn.setToolTipText(MessageUtil.getString("COLOR_DIALOG_TITLE"));
+	    btn.setToolTipText(MessageUtil.getString("COLOR_DIALOG_TITLE")); //$NON-NLS-1$
 
 	    btn.addSelectionListener(new SelectionAdapter() {
 
@@ -223,15 +222,15 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
 		    ColorDialog colorDialog = new ColorDialog(tree.getShell());
 		    colorDialog.setRGB(startRgb);
 		    colorDialog.setText(MessageUtil
-			    .getString("COLOR_DIALOG_TITLE"));
+			    .getString("COLOR_DIALOG_TITLE")); //$NON-NLS-1$
 		    RGB rgb = colorDialog.open();
 		    if (rgb != null) {
 
 			String str = Util.createColorString(rgb);
 
-			if (ColorParserListener.getMap().get(str) != null)
+			if (ColorParser.getInstance().getMap().get(str) != null)
 			    item.setText(Constants.SECOND_COLUMN,
-				    ColorParserListener.getMap().get(str));
+			    		ColorParser.getInstance().getMap().get(str));
 			else
 			    item.setText(Constants.SECOND_COLUMN, str);
 			
@@ -258,7 +257,7 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
 		    button.getImage().dispose();
 		}
 	    });
-	    btn.setToolTipText(MessageUtil.getString("IMAGE_DIALOG_MESSAGE"));
+	    btn.setToolTipText(MessageUtil.getString("IMAGE_DIALOG_MESSAGE")); //$NON-NLS-1$
 
 	    btn.addSelectionListener(new SelectionAdapter() {
 		public void widgetSelected(SelectionEvent event) {
@@ -269,11 +268,11 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
 			    new WorkbenchContentProvider());
 		    dialog
 			    .setTitle(MessageUtil
-				    .getString("IMAGE_DIALOG_TITLE"));
+				    .getString("IMAGE_DIALOG_TITLE")); //$NON-NLS-1$
 		    dialog.setMessage(MessageUtil
-			    .getString("IMAGE_DIALOG_MESSAGE"));
+			    .getString("IMAGE_DIALOG_MESSAGE")); //$NON-NLS-1$
 		    dialog.setEmptyListMessage(MessageUtil
-			    .getString("IMAGE_DIALOG_EMPTY_MESSAGE"));
+			    .getString("IMAGE_DIALOG_EMPTY_MESSAGE")); //$NON-NLS-1$
 		    dialog.setAllowMultiple(false);
 		    dialog.setInput(project);
 		    if (dialog.open() == ImageSelectionDialog.OK) {
@@ -390,7 +389,7 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
 		    button.getImage().dispose();
 		}
 	    });
-	    btn.setToolTipText(MessageUtil.getString("FONT_FAMILY_TIP"));
+	    btn.setToolTipText(MessageUtil.getString("FONT_FAMILY_TIP")); //$NON-NLS-1$
 
 	    btn.addSelectionListener(new SelectionAdapter() {
 		public void widgetSelected(SelectionEvent event) {
