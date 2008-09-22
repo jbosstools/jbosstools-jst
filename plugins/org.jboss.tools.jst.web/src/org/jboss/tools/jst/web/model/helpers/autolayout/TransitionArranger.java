@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import org.jboss.tools.common.model.XModelObject;
 
 public class TransitionArranger {
-	Item[] items;
+	protected Item[] items;
 	
 	public void setItems(Item[] items) {
 		this.items = items;

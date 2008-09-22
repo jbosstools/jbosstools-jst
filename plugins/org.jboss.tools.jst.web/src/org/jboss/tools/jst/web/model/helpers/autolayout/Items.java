@@ -119,6 +119,10 @@ public class Items implements WebProcessConstants {
         }
     }
 
+    protected TransitionArranger createTransitionArranger() {
+    	return new TransitionArranger();
+    }
+
    private void print() {
        for (int i = 0; i < items.length; i++)
          items[i].print();

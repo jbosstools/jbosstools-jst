@@ -34,7 +34,7 @@ public class AutoLayout {
         items.setProcess(process);
         apply();
         if(items.override) {
-			TransitionArranger a = new TransitionArranger();
+			TransitionArranger a = items.createTransitionArranger();
 			a.setItems(items.items);
 			a.execute();
         }
