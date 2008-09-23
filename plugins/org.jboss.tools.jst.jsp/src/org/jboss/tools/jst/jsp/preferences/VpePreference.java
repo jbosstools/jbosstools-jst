@@ -24,7 +24,7 @@ public class VpePreference extends Preference {
 	public static String ATT_SOURCE_VISUAL_EDITORS_WEIGHTS = "Size of Visual Editor pane 0-100%";
 	public static String ATT_SHOW_SELECTION_TAG_BAR = "show selection tag bar";
 	public static String ATT_ALWAYS_HIDE_SELECTION_BAR_WITHOUT_PROMT="always hide selection bar without prompt";
-	public static String ATT_SHOW_INVISIBLE_TAGS="show invisible tags";
+	public static String ATT_SHOW_INVISIBLE_TAGS="show non-visual tags";
 	public static String SHOW_COMMENTS_VALUE;
 	public static String VPE_EDITOR_PATH = "%Options%/Struts Studio/Editors/Visual Page Editor"; //$NON-NLS-1$
 	public static final Preference SHOW_COMMENTS = new VpePreference(VPE_EDITOR_PATH, ATT_SHOW_COMMENTS);
