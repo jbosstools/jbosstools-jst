@@ -20,10 +20,14 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.eclipse.ui.IEditorInput;
+import org.jboss.tools.common.el.core.model.ELInstance;
+import org.jboss.tools.common.el.core.model.ELInvocationExpression;
+import org.jboss.tools.common.el.core.model.ELModel;
+import org.jboss.tools.common.el.core.parser.ELParser;
+import org.jboss.tools.common.el.core.parser.ELParserFactory;
 import org.jboss.tools.common.kb.KbDinamicResource;
 import org.jboss.tools.common.kb.KbProposal;
 import org.jboss.tools.common.model.XModelObject;
-import org.jboss.tools.common.model.util.ELParser;
 import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
@@ -45,61 +49,37 @@ public class WTPKbdBundlePropertyResource extends WTPKbdBeanPropertyResource {
 		try {
 			if (!isReadyToUse()) return proposals;
 
-			ELParser p = new ELParser();
-			ELParser.Token token = p.parse(query);
+			ELParser p = ELParserFactory.createDefaultParser();
+			ELModel model = p.parse(query);
+
+			List<ELInstance> is = model.getInstances();
+
+			ELInvocationExpression expr = null;
+			ELInvocationExpression current = null;
 			boolean hasProperty = false;
-//			boolean isArgument = false;
-			ELParser.Token arg = null;
-			
-			ArrayList<ELParser.Token> beans = new ArrayList<ELParser.Token>();
-			
-			ELParser.Token c = token;
-			boolean insideSL = false;
-			while(c != null) {
-				if(c.kind == ELParser.SPACES) {
-					if(!insideSL) {
-						beans.clear();
-						hasProperty = false;
-					} else {
-						//do nothing
-					}
-				} else if(c.kind == ELParser.NONE || c.kind == ELParser.OPEN || c.kind == ELParser.CLOSE) {
-					if(c.kind == ELParser.OPEN) insideSL = true;
-					else if(c.kind == ELParser.CLOSE) insideSL = false;
-					beans.clear();
-					hasProperty = false;
-					arg = null;
-				} else if(c.kind == ELParser.ARGUMENT) {
+
+			for (ELInstance i: is) {
+				if(!(i.getExpression() instanceof ELInvocationExpression)) continue;
+				expr = (ELInvocationExpression)i.getExpression();
+				ELInvocationExpression inv = expr;
+				current = inv;
+				if(inv.getLeft() != null) {
 					hasProperty = true;
-//					isArgument = true;
-					arg = c;
-				} else if(c.kind == ELParser.DOT || c.kind == ELParser.OPEN_ARG) {
-					hasProperty = true;
-				} else if(c.kind == ELParser.NAME) {
-					if(beans.size() > 0 && (c.next == null || (c.next.kind != ELParser.DOT && c.next.kind != ELParser.OPEN_ARG))) {
-						hasProperty = true;
-						arg = c;
-					} else {
-						beans.add(c);
-						hasProperty = false;
-					}
+					current = inv.getLeft(); //bean
 				}
-				c = c.next;
 			}
 
-			ELParser.Token b = (beans.size() == 0) ? null : (ELParser.Token)beans.get(0);
-			ELParser.Token e = (beans.size() == 0) ? null : (ELParser.Token)beans.get(beans.size() - 1);
+			String beanNameFromQuery = current == null ? null : current.getText();
 
-			String beanNameFromQuery = b == null ? null : query.substring(b.start, e.end);
-
-			StringBuffer sb = new StringBuffer();
-			ELParser.Token bi = b;
-			while(bi != null) {
-				if(bi.kind != ELParser.SPACES) sb.append(query.substring(bi.start, bi.end));
-				bi = bi.next;
+			String restQuery = expr == null ? "" : expr.getText();
+			String argName = expr == null ? "" : expr.getMemberName();
+			if(argName == null) argName = "";
+			if(argName.startsWith("\"") || argName.startsWith("'")) {
+				argName = argName.substring(1);
 			}
-			String restQuery = b == null ? "" : sb.toString();
-			String argName = arg == null ? "" : query.substring(arg.start, arg.end);
+			if(argName.endsWith("\"") || argName.endsWith("'")) {
+				argName = argName.substring(0, argName.length() - 1);
+			}
 			
 			Set<String> sorted = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
 

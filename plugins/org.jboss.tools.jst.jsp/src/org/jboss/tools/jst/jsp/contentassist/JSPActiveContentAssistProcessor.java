@@ -12,12 +12,18 @@ package org.jboss.tools.jst.jsp.contentassist;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.wst.sse.core.utils.StringUtils;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
 import org.eclipse.wst.xml.ui.internal.contentassist.XMLRelevanceConstants;
 import org.eclipse.wst.xml.ui.internal.util.SharedXMLEditorPluginImageHelper;
+import org.jboss.tools.common.el.core.model.ELInstance;
+import org.jboss.tools.common.el.core.model.ELModel;
+import org.jboss.tools.common.el.core.model.ELUtil;
+import org.jboss.tools.common.el.core.parser.ELParser;
+import org.jboss.tools.common.el.core.parser.ELParserFactory;
 import org.jboss.tools.common.kb.KbException;
 import org.jboss.tools.common.kb.KbProposal;
 import org.jboss.tools.common.kb.KbQuery;
@@ -264,33 +270,10 @@ public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcess
 	 * @return
 	 */
 	private int getELStartPosition(String matchString) {
-		if (matchString == null || matchString.length() == 0)
-			return -1;
-
-		int offset = matchString.length();
-
-		while (--offset >= 0) {
-			if ('}' == matchString.charAt(offset))
-				return -1;
-
-			if ('"' == matchString.charAt(offset) || '\'' == matchString.charAt(offset)) {
-                int backslashCount = 0;
-                while ((offset - 1 - backslashCount) >= 0 && matchString.charAt(offset - 1 - backslashCount) == '\\') {
-                    backslashCount++;
-                }
-                
-                if (backslashCount % 2 == 0)
-                    return -1;
-            }
-
-			if ('{' == matchString.charAt(offset) &&
-					(offset - 1) >= 0 && 
-					('#' == matchString.charAt(offset - 1) || 
-							'$' == matchString.charAt(offset - 1))) {
-				return (offset - 1);
-			}
-		}
-		return -1;
+		ELParser p = ELParserFactory.createJbossParser();
+		ELModel model = p.parse(matchString);
+		ELInstance is = ELUtil.findInstance(model, matchString.length());
+		return is == null ? -1 : is.getStartPosition();
 	}
 
 	/*  Checks if the preceding character is a Sharp-character
@@ -321,68 +304,12 @@ public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcess
 				currentValue.length() < matchString.length())
 			return -1;
 
-		String restOfCurrentValue = currentValue.substring(matchString.length());
-		int offset = -1;
+		ELParser p = ELParserFactory.createJbossParser();
+		ELModel model = p.parse(currentValue);
+		ELInstance is = ELUtil.findInstance(model, matchString.length());
+		if(is == null || is.getCloseInstanceToken() == null) return -1;
 
-		char inQuotesChar = 0;
-		while (++offset < restOfCurrentValue.length()) {
-			if (inQuotesChar == 0) {
-				if ('}' == restOfCurrentValue.charAt(offset))
-					return matchString.length() + offset;
-
-				if ('#' == restOfCurrentValue.charAt(offset))
-					return -1;
-
-				if ('"' == restOfCurrentValue.charAt(offset) || 
-                				'\'' == restOfCurrentValue.charAt(offset)) {
-					inQuotesChar = restOfCurrentValue.charAt(offset);
-				}
-
-				if ('\\' == restOfCurrentValue.charAt(offset)) {
-	                int backslashCount = 1;
-	                
-	                while ((offset + backslashCount) < restOfCurrentValue.length() && 
-	                		restOfCurrentValue.charAt(offset + backslashCount) == '\\') {
-	                    backslashCount++;
-	                }
-
-	                if (offset + backslashCount >= restOfCurrentValue.length())
-	                	return -1;
-	                
-	                if (backslashCount % 2 == 1 && 
-	                		('"' == restOfCurrentValue.charAt(offset + backslashCount) || 
-	                				'\'' == restOfCurrentValue.charAt(offset + backslashCount))) {
-	                    inQuotesChar = restOfCurrentValue.charAt(offset + backslashCount);
-	                    offset += backslashCount;
-	                }
-				}
-			} else {
-				if ('"' == restOfCurrentValue.charAt(offset) || 
-        				'\'' == restOfCurrentValue.charAt(offset)) {
-					inQuotesChar = 0;
-				}
-
-				if ('\\' == restOfCurrentValue.charAt(offset)) {
-	                int backslashCount = 1;
-	                
-	                while ((offset + backslashCount) < restOfCurrentValue.length() && 
-	                		restOfCurrentValue.charAt(offset + backslashCount) == '\\') {
-	                    backslashCount++;
-	                }
-
-	                if (offset + backslashCount >= restOfCurrentValue.length())
-	                	return -1;
-	                
-	                if (backslashCount % 2 == 1 && 
-	                		('"' == restOfCurrentValue.charAt(offset + backslashCount) || 
-	                				'\'' == restOfCurrentValue.charAt(offset + backslashCount))) {
-	                    inQuotesChar = 0;
-	                    offset += backslashCount;
-	                }
-				}
-			}
-		}
-		return -1;
+		return is.getEndPosition();
 	}
 
 }

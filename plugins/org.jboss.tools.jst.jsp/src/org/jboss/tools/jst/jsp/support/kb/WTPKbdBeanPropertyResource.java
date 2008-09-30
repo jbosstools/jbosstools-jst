@@ -20,11 +20,17 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.eclipse.ui.IEditorInput;
+import org.jboss.tools.common.el.core.model.ELExpression;
+import org.jboss.tools.common.el.core.model.ELInstance;
+import org.jboss.tools.common.el.core.model.ELInvocationExpression;
+import org.jboss.tools.common.el.core.model.ELModel;
+import org.jboss.tools.common.el.core.model.ELPropertyInvocation;
+import org.jboss.tools.common.el.core.parser.ELParser;
+import org.jboss.tools.common.el.core.parser.ELParserFactory;
 import org.jboss.tools.common.kb.KbDinamicResource;
 import org.jboss.tools.common.kb.KbProposal;
 import org.jboss.tools.common.kb.KbProposal.PostProcessing;
 import org.jboss.tools.common.model.XModel;
-import org.jboss.tools.common.model.util.ELParser;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.web.project.list.IWebPromptingProvider;
 import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
@@ -53,53 +59,32 @@ public class WTPKbdBeanPropertyResource extends WTPKbAbstractModelResource {
 		try {
 			if (!isReadyToUse()) return proposals;
 
-			ELParser p = new ELParser();
-			ELParser.Token token = p.parse(query);
+			ELParser p = ELParserFactory.createDefaultParser();
+			ELModel model = p.parse(query);
 
-			ArrayList<ELParser.Token> beans = new ArrayList<ELParser.Token>();
+			List<ELInstance> is = model.getInstances();
+
+			ELInvocationExpression expr = null;
+			ELInvocationExpression current = null;
 			boolean hasProperty = false;
 
-			ELParser.Token c = token;
-			boolean insideSL = false;
-			while(c != null) {
-				if(c.kind == ELParser.SPACES) {
-					if(!insideSL) {
-						beans.clear();
-						hasProperty = false;
-					} else {
-						//do nothing
-					}
-				} else if(c.kind == ELParser.NONE || c.kind == ELParser.OPEN || c.kind == ELParser.CLOSE) {
-					if(c.kind == ELParser.OPEN) insideSL = true;
-					else if(c.kind == ELParser.CLOSE) insideSL = false;
-					beans.clear();
-					hasProperty = false;
-				} else if(c.kind == ELParser.ARGUMENT) {
+			for (ELInstance i: is) {
+				if(!(i.getExpression() instanceof ELInvocationExpression)) continue;
+				expr = (ELInvocationExpression)i.getExpression();
+				ELInvocationExpression inv = expr;
+				current = inv;
+				if(inv.getLeft() != null) {
 					hasProperty = true;
-				} else if(c.kind == ELParser.DOT || c.kind == ELParser.OPEN_ARG) {
-					hasProperty = true;
-				} else if(c.kind == ELParser.NAME) {
-					if(beans.size() > 0 && (c.next == null || (c.next.kind != ELParser.DOT && c.next.kind != ELParser.OPEN_ARG))) {
-						hasProperty = true;
-					} else {
-						beans.add(c);
-						hasProperty = false;
-					}
+					current = inv.getLeft(); //bean
 				}
-				c = c.next;
 			}
 
-			ELParser.Token b = (beans.size() == 0) ? null : (ELParser.Token)beans.get(0);
-			ELParser.Token e = (beans.size() == 0) ? null : (ELParser.Token)beans.get(beans.size() - 1);
+			String beanNameFromQuery = current == null ? null : current.getText();
 
-			String beanNameFromQuery = b == null ? null : query.substring(b.start, e.end);
-			StringBuffer sb = new StringBuffer();
-			ELParser.Token bi = b;
-			while(bi != null) {
-				if(bi.kind != ELParser.SPACES) sb.append(query.substring(bi.start, bi.end));
-				bi = bi.next;
+			String restQuery = expr == null ? null : expr.getText();
+			if(expr instanceof ELPropertyInvocation) {
+//				restQuery = ((ELPropertyInvocation)expr).getQualifiedName();
 			}
-			String restQuery = b == null ? "" : sb.toString();
 
 			Set<String> sorted = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
 			fillSortedProposalStrings(sorted, beanNameFromQuery, hasProperty);
@@ -193,13 +178,27 @@ public class WTPKbdBeanPropertyResource extends WTPKbAbstractModelResource {
 	class PostProcessingImpl implements PostProcessing {
 
 		public void process(KbProposal proposal, String value, int offset) {
-			ELParser p = new ELParser();
-			ELParser.Token token = p.parse(value);
-			ELParser.Token c = ELParser.getTokenAt(token, offset);
-			ELParser.Token callStart = ELParser.getCallStart(c);
-			if(callStart != null) proposal.setStart(callStart.start); else proposal.setStart(offset);
-			ELParser.Token callEnd = ELParser.getCallEnd(c);
-			if(callEnd != null && callEnd.end >= offset) proposal.setEnd(callEnd.end); else proposal.setEnd(offset);
+			ELParser p = ELParserFactory.createDefaultParser();
+			ELModel model = p.parse(value);
+			List<ELInstance> is = model.getInstances();
+			ELInvocationExpression expr = null;
+			for (ELInstance i: is) {
+				if(i.getExpression() instanceof ELInvocationExpression) {
+					expr = (ELInvocationExpression)i.getExpression();
+					break;
+				}
+			}
+			if(expr != null) {
+				proposal.setStart(expr.getStartPosition()); 
+			} else {
+				proposal.setStart(offset);
+			}
+			
+			if(expr != null && expr.getEndPosition() >= offset) {
+				proposal.setEnd(expr.getEndPosition());
+			} else {
+				proposal.setEnd(offset);
+			}
 			int pos = proposal.getReplacementString().length();
 			
 			// JBIDE-2437: Because of the issue add EL open/close brackets to the proposal replacement string
