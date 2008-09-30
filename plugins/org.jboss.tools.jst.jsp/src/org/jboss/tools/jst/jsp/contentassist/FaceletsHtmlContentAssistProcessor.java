@@ -46,6 +46,11 @@ import org.eclipse.wst.xml.ui.internal.contentassist.XMLRelevanceConstants;
 import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImageHelper;
 import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImages;
 import org.eclipse.wst.xml.ui.internal.util.SharedXMLEditorPluginImageHelper;
+import org.jboss.tools.common.el.core.model.ELInstance;
+import org.jboss.tools.common.el.core.model.ELModel;
+import org.jboss.tools.common.el.core.model.ELUtil;
+import org.jboss.tools.common.el.core.parser.ELParser;
+import org.jboss.tools.common.el.core.parser.ELParserFactory;
 import org.jboss.tools.common.kb.AttributeDescriptor;
 import org.jboss.tools.common.kb.KbConnectorFactory;
 import org.jboss.tools.common.kb.KbConnectorType;
@@ -56,7 +61,6 @@ import org.jboss.tools.common.kb.KbTldResource;
 import org.jboss.tools.common.kb.wtp.JspWtpKbConnector;
 import org.jboss.tools.common.kb.wtp.TLDVersionHelper;
 import org.jboss.tools.common.kb.wtp.WtpKbConnector;
-import org.jboss.tools.common.model.util.ELParser;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.editor.TLDRegisterHelper;
 import org.jboss.tools.jst.jsp.outline.ValueHelper;
@@ -266,10 +270,14 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
             		contentAssistRequest.addProposal(proposal);
                 }
             }
-            ELParser p = new ELParser();
-            ELParser.Token root = p.parse(currentValue);
-            ELParser.Token c = root == null ? null : ELParser.getTokenAt(root, offset);
-            if(ELParser.getPrecedingOpen(c, offset) != null) return true;
+            
+            // No JBoss parser ?
+            ELParser p = ELParserFactory.createDefaultParser();
+            ELModel model = p.parse(currentValue);
+            ELInstance instance = ELUtil.findInstance(model, offset);
+            if(instance != null && instance.getStartPosition() + 2 <= offset) {
+            	return true;
+            }
 		}
 		return false;
 	}
