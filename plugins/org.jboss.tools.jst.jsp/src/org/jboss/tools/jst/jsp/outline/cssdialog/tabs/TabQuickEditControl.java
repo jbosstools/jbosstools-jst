@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.StringTokenizer;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -33,15 +34,12 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
-import org.jboss.tools.jst.jsp.outline.cssdialog.CSSDialog;
 import org.jboss.tools.jst.jsp.outline.cssdialog.FontFamilyDialog;
 import org.jboss.tools.jst.jsp.outline.cssdialog.ImageSelectionDialog;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSConstants;
@@ -49,6 +47,7 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.ImageCombo;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.MessageUtil;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Util;
+import org.jboss.tools.jst.jsp.outline.cssdialog.events.StyleAttributes;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParser;
 
 
@@ -77,9 +76,10 @@ public class TabQuickEditControl extends Composite {
     private Label label = null;
 
     private HashMap<String, ArrayList<String>> comboMap;
-    private HashMap<String, String> attributesMap;
-
-    private CSSDialog dialog;
+    private StyleAttributes styleAttributes;
+    
+  //TODO Dzmitry Sakovich
+    //private CSSDialog dialog;
 
     /**
      * Constructor for creating controls
@@ -89,11 +89,12 @@ public class TabQuickEditControl extends Composite {
      */
     public TabQuickEditControl(Composite sc,
 	    HashMap<String, ArrayList<String>> comboMap,
-	    HashMap<String, String> attributesMap, CSSDialog dialog) {
+	    StyleAttributes styleAttributes) {
 	super(sc, SWT.NONE);
 
-	this.dialog = dialog;
-	this.attributesMap = attributesMap;
+	//TODO Dzmitry Sakovich
+	//this.dialog = dialog;
+	this.styleAttributes = styleAttributes;
 	this.comboMap = comboMap;
 	GridLayout gridLayout = new GridLayout();
 	gridLayout.numColumns = GRID_NUM_COLUMNS;
@@ -101,7 +102,7 @@ public class TabQuickEditControl extends Composite {
 
 	ArrayList<String> listKeys = new ArrayList<String>();
 
-	for (String key : attributesMap.keySet())
+	for (String key : styleAttributes.keySet())
 	    listKeys.add(key);
 
 	Collections.sort(listKeys);
@@ -113,10 +114,43 @@ public class TabQuickEditControl extends Composite {
 	    label.setLayoutData(new GridData(GridData.END, GridData.CENTER,
 		    false, false));
 	    if (Util.searchInCombo(key, comboMap.keySet()))
-		createCombo(this, key, attributesMap.get(key));
+		createCombo(this, key, styleAttributes.getAttribute(key));
 	    else
-		createText(this, key, attributesMap.get(key));
+		createText(this, key, styleAttributes.getAttribute(key));
 	}
+    }
+    
+    public void updateData() {
+	
+	Control[] controls = this.getChildren();
+	if (controls!= null) {
+	    for (int i=0; i<controls.length; i++) {
+		if (!controls[i].isDisposed()) {
+		    controls[i].dispose();
+		}
+	    }
+	}
+	
+	
+	ArrayList<String> listKeys = new ArrayList<String>();
+
+	for (String key : styleAttributes.keySet())
+	    listKeys.add(key);
+
+	Collections.sort(listKeys);
+
+	for (String key : listKeys) {
+
+	    label = new Label(this, SWT.LEFT);
+	    label.setText(format(key));
+	    label.setLayoutData(new GridData(GridData.END, GridData.CENTER,
+		    false, false));
+	    if (Util.searchInCombo(key, comboMap.keySet()))
+		createCombo(this, key, styleAttributes.getAttribute(key));
+	    else
+		createText(this, key, styleAttributes.getAttribute(key));
+	}
+	this.layout();
     }
 
     /**
@@ -192,11 +226,11 @@ public class TabQuickEditControl extends Composite {
 
 		    if (!colorCombo.getText().trim().equals(
 			    Constants.EMPTY_STRING))
-			attributesMap.put(key, colorCombo.getText().trim());
+			styleAttributes.addAttribute(key, colorCombo.getText().trim());
 		    else
-			attributesMap.remove(key);
-
-		    dialog.setStyleForPreview();
+			styleAttributes.removeAttribute(key);
+		  //TODO Dzmitry Sakovich
+		    //dialog.setStyleForPreview();
 		}
 	    });
 
@@ -238,7 +272,7 @@ public class TabQuickEditControl extends Composite {
 
 	    btn.addSelectionListener(new SelectionAdapter() {
 		public void widgetSelected(SelectionEvent event) {
-		    IProject project = getCurrentProject();
+		    IProject project = Util.getCurrentProject();
 		    ImageSelectionDialog dialog = new ImageSelectionDialog(
 			    composite.getShell(), new WorkbenchLabelProvider(),
 			    new WorkbenchContentProvider());
@@ -266,11 +300,12 @@ public class TabQuickEditControl extends Composite {
 
 		public void modifyText(ModifyEvent event) {
 		    if (!combo.getText().trim().equals(Constants.EMPTY_STRING))
-			attributesMap.put(key, combo.getText().trim());
+			styleAttributes.addAttribute(key, combo.getText().trim());
 		    else
-			attributesMap.remove(key);
+			styleAttributes.removeAttribute(key);
 
-		    dialog.setStyleForPreview();
+		  //TODO Dzmitry Sakovich
+		    //dialog.setStyleForPreview();
 		}
 	    });
 
@@ -310,8 +345,9 @@ public class TabQuickEditControl extends Composite {
 			String tmpExt = extCombo.getText();
 
 			if (tmpExt != null) {
-			    attributesMap.put(key, tmpCombo + tmpExt);
-			    dialog.setStyleForPreview();
+			    styleAttributes.addAttribute(key, tmpCombo + tmpExt);
+			  //TODO Dzmitry Sakovich
+			    //dialog.setStyleForPreview();
 			}
 		    }
 		});
@@ -330,8 +366,9 @@ public class TabQuickEditControl extends Composite {
 			    if (currentText.equalsIgnoreCase(items[i])) {
 				extCombo.select(VALUE_NUMBER);
 				extCombo.setEnabled(false);
-				attributesMap.put(key, currentText);
-				dialog.setStyleForPreview();
+				styleAttributes.addAttribute(key, currentText);
+				//TODO Dzmitry Sakovich
+				//dialog.setStyleForPreview();
 				return;
 			    }
 			}
@@ -342,15 +379,16 @@ public class TabQuickEditControl extends Composite {
 			    if (!tmp.equals(Constants.EMPTY_STRING)) {
 				String extTmp = extCombo.getText().trim();
 				if (extTmp != null)
-				    attributesMap.put(key, tmp + extTmp);
+				    styleAttributes.addAttribute(key, tmp + extTmp);
 				else
-				    attributesMap.put(key, tmp);
+				    styleAttributes.addAttribute(key, tmp);
 
 			    } else
-				attributesMap.remove(key);
+				styleAttributes.removeAttribute(key);
 			} else
-			    attributesMap.remove(key);
-			dialog.setStyleForPreview();
+			    styleAttributes.removeAttribute(key);
+			//TODO Dzmitry Sakovich
+			//dialog.setStyleForPreview();
 		    }
 		});
 
@@ -365,11 +403,12 @@ public class TabQuickEditControl extends Composite {
 
 			if (!combo.getText().trim().equals(
 				Constants.EMPTY_STRING))
-			    attributesMap.put(key, combo.getText().trim());
+			    styleAttributes.addAttribute(key, combo.getText().trim());
 			else
-			    attributesMap.remove(key);
+			    styleAttributes.removeAttribute(key);
 
-			dialog.setStyleForPreview();
+			//TODO Dzmitry Sakovich
+			//dialog.setStyleForPreview();
 		    }
 		});
 	    }
@@ -432,11 +471,12 @@ public class TabQuickEditControl extends Composite {
 		public void modifyText(ModifyEvent event) {
 
 		    if (!text.getText().trim().equals(Constants.EMPTY_STRING))
-			attributesMap.put(key, text.getText().trim());
+			styleAttributes.addAttribute(key, text.getText().trim());
 		    else
-			attributesMap.remove(key);
+			styleAttributes.removeAttribute(key);
 
-		    dialog.setStyleForPreview();
+		  //TODO Dzmitry Sakovich
+		    //dialog.setStyleForPreview();
 		}
 	    });
 	}
@@ -469,8 +509,9 @@ public class TabQuickEditControl extends Composite {
 			String tmpExt = extCombo.getText();
 
 			if (tmpExt != null) {
-			    attributesMap.put(key, tmpCombo + tmpExt);
-			    dialog.setStyleForPreview();
+			    styleAttributes.addAttribute(key, tmpCombo + tmpExt);
+			  //TODO Dzmitry Sakovich
+			    //dialog.setStyleForPreview();
 			}
 		    }
 		});
@@ -486,15 +527,16 @@ public class TabQuickEditControl extends Composite {
 			    if (!tmp.equals(Constants.EMPTY_STRING)) {
 				String extTmp = extCombo.getText().trim();
 				if (extTmp != null)
-				    attributesMap.put(key, tmp + extTmp);
+				    styleAttributes.addAttribute(key, tmp + extTmp);
 				else
-				    attributesMap.put(key, tmp);
+				    styleAttributes.addAttribute(key, tmp);
 
 			    } else
-				attributesMap.remove(key);
+				styleAttributes.removeAttribute(key);
 			} else
-			    attributesMap.remove(key);
-			dialog.setStyleForPreview();
+			    styleAttributes.removeAttribute(key);
+			//TODO Dzmitry Sakovich
+			//dialog.setStyleForPreview();
 		    }
 		});
 
@@ -510,11 +552,12 @@ public class TabQuickEditControl extends Composite {
 
 			if (!text.getText().trim().equals(
 				Constants.EMPTY_STRING))
-			    attributesMap.put(key, text.getText().trim());
+			    styleAttributes.addAttribute(key, text.getText().trim());
 			else
-			    attributesMap.remove(key);
+			    styleAttributes.removeAttribute(key);
 
-			dialog.setStyleForPreview();
+			//TODO Dzmitry Sakovich
+			//dialog.setStyleForPreview();
 		    }
 		});
 
@@ -525,27 +568,6 @@ public class TabQuickEditControl extends Composite {
 	    text.setText(values[VALUE_NUMBER]);
 	else
 	    text.setText(value);
-    }
-
-    /**
-     * Method for get current project
-     * 
-     * @return IProject
-     */
-    public static IProject getCurrentProject() {
-	IEditorPart editor = JspEditorPlugin.getDefault().getWorkbench()
-		.getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-	IEditorInput input = editor.getEditorInput();
-	IFile file = null;
-	if (input instanceof IFileEditorInput) {
-	    file = ((IFileEditorInput) input).getFile();
-	}
-	if (file == null)
-	    return null;
-
-	IProject project = file.getProject();
-	return project;
-
     }
 
     /**

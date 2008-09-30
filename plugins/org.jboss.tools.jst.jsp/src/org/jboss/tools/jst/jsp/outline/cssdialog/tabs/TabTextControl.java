@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -35,13 +36,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
-import org.jboss.tools.jst.jsp.outline.cssdialog.CSSDialog;
 import org.jboss.tools.jst.jsp.outline.cssdialog.FontFamilyDialog;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSConstants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.ImageCombo;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.MessageUtil;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Util;
+import org.jboss.tools.jst.jsp.outline.cssdialog.events.StyleAttributes;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParser;
 
 
@@ -65,11 +66,14 @@ public class TabTextControl extends Composite {
 
     private ArrayList<String> list;
 
-    private HashMap<String, String> attributesMap;
+    
+    private StyleAttributes styleAttributes;
+    //private HashMap<String, String> attributesMap;
 
     private static final int numColumns = 3;
-
-    private CSSDialog cssDialog;
+  
+    //TODO Dzmitry Sakovich
+    //private Browser browser = null;
 
     /**
      * Constructor for creating controls
@@ -78,10 +82,11 @@ public class TabTextControl extends Composite {
      */
     public TabTextControl(final Composite composite,
 	    final HashMap<String, ArrayList<String>> comboMap,
-	    final HashMap<String, String> attributesMap, CSSDialog dialog) {
+	    final StyleAttributes styleAttributes) {
 	super(composite, SWT.NONE);
-	this.attributesMap = attributesMap;
-	this.cssDialog = dialog;
+	this.styleAttributes = styleAttributes;
+	//TODO Dzmitry Sakovich 
+	//this.browser = dialog;
 
 	final GridLayout gridLayout = new GridLayout();
 	gridLayout.numColumns = numColumns;
@@ -101,11 +106,12 @@ public class TabTextControl extends Composite {
 		String tmp = fontFamilyText.getText();
 		if (tmp != null) {
 		    if (tmp.trim().length() > 0)
-			attributesMap.put(CSSConstants.FONT_FAMILY, tmp);
+			styleAttributes.addAttribute(CSSConstants.FONT_FAMILY, tmp);
 		    else
-			attributesMap.remove(CSSConstants.FONT_FAMILY);
+			styleAttributes.removeAttribute(CSSConstants.FONT_FAMILY);
 		}
-		cssDialog.setStyleForPreview();
+		//TODO Dzmitry Sakovich
+		//cssDialog.setStyleForPreview();
 	    }
 	});
 
@@ -146,11 +152,12 @@ public class TabTextControl extends Composite {
 		String tmp = colorCombo.getText();
 		if (tmp != null) {
 		    if (tmp.trim().length() > 0)
-			attributesMap.put(CSSConstants.COLOR, tmp);
+			styleAttributes.addAttribute(CSSConstants.COLOR, tmp);
 		    else
-			attributesMap.remove(CSSConstants.COLOR);
+			styleAttributes.removeAttribute(CSSConstants.COLOR);
 		}
-		cssDialog.setStyleForPreview();
+		//TODO Dzmitry Sakovich
+		//cssDialog.setStyleForPreview();
 	    }
 	});
 
@@ -225,8 +232,9 @@ public class TabTextControl extends Composite {
 		String tmp = extFontSizeCombo.getText();
 
 		if (tmp != null) {
-		    attributesMap.put(CSSConstants.FONT_SIZE, fontSize + tmp);
-		    cssDialog.setStyleForPreview();
+		    styleAttributes.addAttribute(CSSConstants.FONT_SIZE, fontSize + tmp);
+		    //TODO Dzmitry Sakovich
+		    //cssDialog.setStyleForPreview();
 		}
 	    }
 	});
@@ -247,8 +255,9 @@ public class TabTextControl extends Composite {
 		    if (currentText.equals(str)) {
 			extFontSizeCombo.select(0);
 			extFontSizeCombo.setEnabled(false);
-			attributesMap.put(CSSConstants.FONT_SIZE, currentText);
-			cssDialog.setStyleForPreview();
+			styleAttributes.addAttribute(CSSConstants.FONT_SIZE, currentText);
+			//TODO Dzmitry Sakovich
+			//cssDialog.setStyleForPreview();
 			return;
 		    }
 		}
@@ -260,15 +269,16 @@ public class TabTextControl extends Composite {
 		    if (tmp.trim().length() > 0) {
 			String extFont = extFontSizeCombo.getText().trim();
 			if (extFont != null)
-			    attributesMap.put(CSSConstants.FONT_SIZE, tmp
+			    styleAttributes.addAttribute(CSSConstants.FONT_SIZE, tmp
 				    + extFont);
 			else
-			    attributesMap.put(CSSConstants.FONT_SIZE, tmp);
+			    styleAttributes.addAttribute(CSSConstants.FONT_SIZE, tmp);
 		    } else
-			attributesMap.remove(CSSConstants.FONT_SIZE);
+			styleAttributes.removeAttribute(CSSConstants.FONT_SIZE);
 		} else
-		    attributesMap.remove(CSSConstants.FONT_SIZE);
-		cssDialog.setStyleForPreview();
+		    styleAttributes.removeAttribute(CSSConstants.FONT_SIZE);
+		//TODO Dzmitry Sakovich
+		//cssDialog.setStyleForPreview();
 	    }
 	});
 
@@ -284,11 +294,12 @@ public class TabTextControl extends Composite {
 		String tmp = fontStyleCombo.getText();
 		if (tmp != null) {
 		    if (tmp.trim().length() > 0)
-			attributesMap.put(CSSConstants.FONT_STYLE, tmp);
+			styleAttributes.addAttribute(CSSConstants.FONT_STYLE, tmp);
 		    else
-			attributesMap.remove(CSSConstants.FONT_STYLE);
+			styleAttributes.removeAttribute(CSSConstants.FONT_STYLE);
 		}
-		cssDialog.setStyleForPreview();
+		//TODO Dzmitry Sakovich
+		//cssDialog.setStyleForPreview();
 	    }
 	});
 
@@ -317,11 +328,12 @@ public class TabTextControl extends Composite {
 		String tmp = fontWeigthCombo.getText();
 		if (tmp != null) {
 		    if (tmp.trim().length() > 0)
-			attributesMap.put(CSSConstants.FONT_WEIGHT, tmp);
+			styleAttributes.addAttribute(CSSConstants.FONT_WEIGHT, tmp);
 		    else
-			attributesMap.remove(CSSConstants.FONT_WEIGHT);
+			styleAttributes.removeAttribute(CSSConstants.FONT_WEIGHT);
 		}
-		cssDialog.setStyleForPreview();
+		//TODO Dzmitry Sakovich
+		//cssDialog.setStyleForPreview();
 	    }
 	});
 
@@ -350,11 +362,12 @@ public class TabTextControl extends Composite {
 		String tmp = textDecorationCombo.getText();
 		if (tmp != null) {
 		    if (tmp.trim().length() > 0)
-			attributesMap.put(CSSConstants.TEXT_DECORATION, tmp);
+			styleAttributes.addAttribute(CSSConstants.TEXT_DECORATION, tmp);
 		    else
-			attributesMap.remove(CSSConstants.TEXT_DECORATION);
+			styleAttributes.removeAttribute(CSSConstants.TEXT_DECORATION);
 		}
-		cssDialog.setStyleForPreview();
+		//TODO Dzmitry Sakovich
+		//cssDialog.setStyleForPreview();
 	    }
 	});
 
@@ -383,11 +396,12 @@ public class TabTextControl extends Composite {
 		String tmp = textAlignCombo.getText();
 		if (tmp != null) {
 		    if (tmp.trim().length() > 0)
-			attributesMap.put(CSSConstants.TEXT_ALIGN, tmp);
+			styleAttributes.addAttribute(CSSConstants.TEXT_ALIGN, tmp);
 		    else
-			attributesMap.remove(CSSConstants.TEXT_ALIGN);
+			styleAttributes.removeAttribute(CSSConstants.TEXT_ALIGN);
 		}
-		cssDialog.setStyleForPreview();
+		//TODO Dzmitry Sakovich
+		//cssDialog.setStyleForPreview();
 	    }
 	});
 
@@ -415,15 +429,15 @@ public class TabTextControl extends Composite {
     public void updateData(boolean param) {
 	String tmp;
 
-	if ((tmp = attributesMap.get(CSSConstants.FONT_FAMILY)) != null)
+	if ((tmp = styleAttributes.getAttribute(CSSConstants.FONT_FAMILY)) != null)
 	    fontFamilyText.setText(tmp);
 	else
 	    fontFamilyText.setText(Constants.EMPTY_STRING);
-	if ((tmp = attributesMap.get(CSSConstants.COLOR)) != null)
+	if ((tmp = styleAttributes.getAttribute(CSSConstants.COLOR)) != null)
 	    colorCombo.setText(tmp);
 	else
 	    colorCombo.setText(Constants.EMPTY_STRING);
-	if ((tmp = attributesMap.get(CSSConstants.FONT_SIZE)) != null) {
+	if ((tmp = styleAttributes.getAttribute(CSSConstants.FONT_SIZE)) != null) {
 	    String[] str = Util.convertExtString(tmp);
 	    fontSizeCombo.setText(str[0]);
 	    if (extFontSizeCombo.indexOf(str[1]) != -1) {
@@ -435,19 +449,19 @@ public class TabTextControl extends Composite {
 	    fontSizeCombo.setText(Constants.EMPTY_STRING);
 	    extFontSizeCombo.select(0);
 	}
-	if ((tmp = attributesMap.get(CSSConstants.TEXT_DECORATION)) != null)
+	if ((tmp = styleAttributes.getAttribute(CSSConstants.TEXT_DECORATION)) != null)
 	    textDecorationCombo.setText(tmp);
 	else
 	    textDecorationCombo.setText(Constants.EMPTY_STRING);
-	if ((tmp = attributesMap.get(CSSConstants.FONT_STYLE)) != null)
+	if ((tmp = styleAttributes.getAttribute(CSSConstants.FONT_STYLE)) != null)
 	    fontStyleCombo.setText(tmp);
 	else
 	    fontStyleCombo.setText(Constants.EMPTY_STRING);
-	if ((tmp = attributesMap.get(CSSConstants.FONT_WEIGHT)) != null)
+	if ((tmp = styleAttributes.getAttribute(CSSConstants.FONT_WEIGHT)) != null)
 	    fontWeigthCombo.setText(tmp);
 	else
 	    fontWeigthCombo.setText(Constants.EMPTY_STRING);
-	if ((tmp = attributesMap.get(CSSConstants.TEXT_ALIGN)) != null)
+	if ((tmp = styleAttributes.getAttribute(CSSConstants.TEXT_ALIGN)) != null)
 	    textAlignCombo.setText(tmp);
 	else
 	    textAlignCombo.setText(Constants.EMPTY_STRING);

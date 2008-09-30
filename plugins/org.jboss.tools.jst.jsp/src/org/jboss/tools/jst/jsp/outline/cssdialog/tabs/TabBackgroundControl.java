@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -34,19 +35,16 @@ import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
-import org.jboss.tools.jst.jsp.outline.cssdialog.CSSDialog;
 import org.jboss.tools.jst.jsp.outline.cssdialog.ImageSelectionDialog;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSConstants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.ImageCombo;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.MessageUtil;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Util;
+import org.jboss.tools.jst.jsp.outline.cssdialog.events.StyleAttributes;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParser;
 
 
@@ -63,18 +61,20 @@ public class TabBackgroundControl extends Composite {
     private Combo backgroundImageCombo;
     private Combo backgroundRepeatCombo;
 
-    private HashMap<String, String> attributesMap;
+    private StyleAttributes styleAttributes;
 
     private static final int numColumns = 3;
 
-    private CSSDialog cssDialog;
+    //TODO Dzmitry Sakovich
+    //private CSSDialog cssDialog;
 
     public TabBackgroundControl(final Composite composite,
 	    HashMap<String, ArrayList<String>> comboMap,
-	    final HashMap<String, String> attributesMap, CSSDialog dialog) {
+	    final StyleAttributes styleAttributes) {
 	super(composite, SWT.NONE);
-	this.attributesMap = attributesMap;
-	this.cssDialog = dialog;
+	this.styleAttributes = styleAttributes;
+	//TODO Dzmitry Sakovich
+	//this.cssDialog = dialog;
 
 	final GridLayout gridLayout = new GridLayout();
 	gridLayout.numColumns = numColumns;
@@ -102,11 +102,12 @@ public class TabBackgroundControl extends Composite {
 		String tmp = colorCombo.getText();
 		if (tmp != null) {
 		    if (tmp.trim().length() > 0)
-			attributesMap.put(CSSConstants.BACKGROUND_COLOR, tmp);
+			styleAttributes.addAttribute(CSSConstants.BACKGROUND_COLOR, tmp);
 		    else
-			attributesMap.remove(CSSConstants.BACKGROUND_COLOR);
+			styleAttributes.removeAttribute(CSSConstants.BACKGROUND_COLOR);
 		}
-		cssDialog.setStyleForPreview();
+		//TODO Dzmitry Sakovich
+		//cssDialog.setStyleForPreview();
 	    }
 	});
 
@@ -157,11 +158,12 @@ public class TabBackgroundControl extends Composite {
 		String tmp = backgroundImageCombo.getText();
 		if (tmp != null) {
 		    if (tmp.trim().length() > 0)
-			attributesMap.put(CSSConstants.BACKGROUND_IMAGE, tmp);
+			styleAttributes.addAttribute(CSSConstants.BACKGROUND_IMAGE, tmp);
 		    else
-			attributesMap.remove(CSSConstants.BACKGROUND_IMAGE);
+			styleAttributes.removeAttribute(CSSConstants.BACKGROUND_IMAGE);
 		}
-		cssDialog.setStyleForPreview();
+		//TODO Dzmitry Sakovich
+		//cssDialog.setStyleForPreview();
 	    }
 	});
 
@@ -181,7 +183,7 @@ public class TabBackgroundControl extends Composite {
 	});
 	button.addSelectionListener(new SelectionAdapter() {
 	    public void widgetSelected(SelectionEvent event) {
-		IProject project = getCurrentProject();
+		IProject project = Util.getCurrentProject();
 		ImageSelectionDialog dialog = new ImageSelectionDialog(
 			getShell(), new WorkbenchLabelProvider(),
 			new WorkbenchContentProvider());
@@ -216,11 +218,12 @@ public class TabBackgroundControl extends Composite {
 		String tmp = backgroundRepeatCombo.getText();
 		if (tmp != null) {
 		    if (tmp.trim().length() > 0)
-			attributesMap.put(CSSConstants.BACKGROUND_REPEAT, tmp);
+			styleAttributes.addAttribute(CSSConstants.BACKGROUND_REPEAT, tmp);
 		    else
-			attributesMap.remove(CSSConstants.BACKGROUND_REPEAT);
+			styleAttributes.removeAttribute(CSSConstants.BACKGROUND_REPEAT);
 		}
-		cssDialog.setStyleForPreview();
+		//TODO Dzmitry Sakovich
+		//cssDialog.setStyleForPreview();
 	    }
 	});
 
@@ -240,21 +243,7 @@ public class TabBackgroundControl extends Composite {
      * 
      * @return IProject
      */
-    public static IProject getCurrentProject() {
-	IEditorPart editor = JspEditorPlugin.getDefault().getWorkbench()
-		.getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-	IEditorInput input = editor.getEditorInput();
-	IFile file = null;
-	if (input instanceof IFileEditorInput) {
-	    file = ((IFileEditorInput) input).getFile();
-	}
-	if (file == null)
-	    return null;
-
-	IProject project = file.getProject();
-	return project;
-
-    }
+   
 
     /**
      * Method for get data in controls (if param equal true ), or set data (if
@@ -264,15 +253,15 @@ public class TabBackgroundControl extends Composite {
      */
     public void updateData(boolean param) {
 	String tmp;
-	    if ((tmp = attributesMap.get(CSSConstants.BACKGROUND_COLOR)) != null)
+	    if ((tmp = styleAttributes.getAttribute(CSSConstants.BACKGROUND_COLOR)) != null)
 		colorCombo.setText(tmp);
 	    else
 		colorCombo.setText(Constants.EMPTY_STRING);
-	    if ((tmp = attributesMap.get(CSSConstants.BACKGROUND_IMAGE)) != null)
+	    if ((tmp = styleAttributes.getAttribute(CSSConstants.BACKGROUND_IMAGE)) != null)
 		backgroundImageCombo.setText(tmp);
 	    else
 		backgroundImageCombo.setText(Constants.EMPTY_STRING);
-	    if ((tmp = attributesMap.get(CSSConstants.BACKGROUND_REPEAT)) != null)
+	    if ((tmp = styleAttributes.getAttribute(CSSConstants.BACKGROUND_REPEAT)) != null)
 		backgroundRepeatCombo.setText(tmp);
 	    else
 		backgroundRepeatCombo.setText(Constants.EMPTY_STRING);

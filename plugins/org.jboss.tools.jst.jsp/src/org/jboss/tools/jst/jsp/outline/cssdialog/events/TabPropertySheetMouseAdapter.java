@@ -40,13 +40,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
-import org.jboss.tools.jst.jsp.outline.cssdialog.CSSDialog;
 import org.jboss.tools.jst.jsp.outline.cssdialog.FontFamilyDialog;
 import org.jboss.tools.jst.jsp.outline.cssdialog.ImageSelectionDialog;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSConstants;
@@ -81,18 +77,18 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
     private static int GRID_MARGIN_WIDTH = 0;
     private static int GRID_HORIZONTAL_SPASING = 0;
     
-    private CSSDialog cssDialog;
+    //Dzmitry Sakovich
+    //private CSSDialog cssDialog;
     
     private TabPropertySheetControl tabPropertySheetControl;
 
     public TabPropertySheetMouseAdapter(Tree tree,
 	    HashMap<String, ArrayList<String>> elementsMap,
 	    HashMap<String, ArrayList<String>> comboMap,
-	    TabPropertySheetControl tabPropertySheetControl,
-	    CSSDialog dialog) {
+	    TabPropertySheetControl tabPropertySheetControl) {
 	
 	this.tabPropertySheetControl = tabPropertySheetControl;
-	this.cssDialog = dialog;
+	//this.cssDialog = dialog;
 	this.tree = tree;
 	this.comboMap = comboMap;
 	this.elementsMap = elementsMap;
@@ -183,7 +179,8 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
 		    item.setText(Constants.SECOND_COLUMN, colorCombo.getText());
 		    panel.dispose();
 		    tabPropertySheetControl.updateData(true);
-		    cssDialog.setStyleForPreview();
+		    //Dzmitry Sakovich
+		    //cssDialog.setStyleForPreview();
 		}
 	    });
 
@@ -191,7 +188,8 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
 		public void modifyText(ModifyEvent event) {
 		    item.setText(Constants.SECOND_COLUMN, colorCombo.getText());
 		    tabPropertySheetControl.updateData(true);
-		    cssDialog.setStyleForPreview();
+		    //TODO Dzmitry Sakovich
+		    //cssDialog.setStyleForPreview();
 		}
 	    });
 
@@ -235,7 +233,8 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
 			    item.setText(Constants.SECOND_COLUMN, str);
 			
 			tabPropertySheetControl.updateData(true);
-			cssDialog.setStyleForPreview();
+			 //TODO Dzmitry Sakovich
+			//cssDialog.setStyleForPreview();
 		    }
 		    panel.dispose();
 		}
@@ -261,7 +260,7 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
 
 	    btn.addSelectionListener(new SelectionAdapter() {
 		public void widgetSelected(SelectionEvent event) {
-		    IProject project = getCurrentProject();
+		    IProject project = Util.getCurrentProject();
 
 		    ImageSelectionDialog dialog = new ImageSelectionDialog(tree
 			    .getShell(), new WorkbenchLabelProvider(),
@@ -281,7 +280,8 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
 			item.setText(Constants.SECOND_COLUMN, value);
 			panel.dispose();
 			tabPropertySheetControl.updateData(true);
-			cssDialog.setStyleForPreview();
+			 //TODO Dzmitry Sakovich
+			//cssDialog.setStyleForPreview();
 		    }
 		}
 	    });
@@ -320,7 +320,8 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
 		    item.setText(col, combo.getText());
 		    panel.dispose();
 		    tabPropertySheetControl.updateData(true);
-		    cssDialog.setStyleForPreview();
+		    //TODO Dzmitry Sakovich
+		    //cssDialog.setStyleForPreview();
 		}
 	    });
 
@@ -328,7 +329,8 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
 		public void modifyText(ModifyEvent event) {
 		    item.setText(col, combo.getText());
 		    tabPropertySheetControl.updateData(true);
-		    cssDialog.setStyleForPreview();
+		    //TODO Dzmitry Sakovich
+		    //cssDialog.setStyleForPreview();
 		}
 	    });
 	} else {
@@ -400,7 +402,8 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
 				.getFontFamily());
 			panel.dispose();
 			tabPropertySheetControl.updateData(true);
-			cssDialog.setStyleForPreview();
+			 //TODO Dzmitry Sakovich
+			//cssDialog.setStyleForPreview();
 		    }
 		}
 	    });
@@ -439,28 +442,9 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
 		// into the cell
 		item.setText(col, text.getText());
 		tabPropertySheetControl.updateData(true);
-		cssDialog.setStyleForPreview();
+		 //TODO Dzmitry Sakovich
+		//cssDialog.setStyleForPreview();
 	    }
 	});
-    }
-
-    /**
-     * Method for get current project
-     * 
-     * @return IProject
-     */
-    public static IProject getCurrentProject() {
-	IEditorPart editor = JspEditorPlugin.getDefault().getWorkbench()
-		.getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-	IEditorInput input = editor.getEditorInput();
-	IFile file = null;
-	if (input instanceof IFileEditorInput) {
-	    file = ((IFileEditorInput) input).getFile();
-	}
-	if (file == null)
-	    return null;
-
-	IProject project = file.getProject();
-	return project;
     }
 }

@@ -7,14 +7,21 @@
  *
  * Contributors:
  *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
- ******************************************************************************/ 
+ ******************************************************************************/
 package org.jboss.tools.jst.jsp.outline.cssdialog.common;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.StringTokenizer;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.graphics.RGB;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IFileEditorInput;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParser;
 
 /**
@@ -65,7 +72,7 @@ public class Util {
      * Method for checking contain or not css attribute folder
      * 
      * @param name
-     *                Name css attribute
+     *            Name css attribute
      * @return true - contain, or else - dont contain
      */
     public static boolean containFolder(String name) {
@@ -80,9 +87,9 @@ public class Util {
      * Method for search css attribute in block elements (Aural, Boxes,....)
      * 
      * @param name
-     *                Name css attribute
+     *            Name css attribute
      * @param set
-     *                Set of block elemnts
+     *            Set of block elemnts
      * @return true - find, or else - dont find
      */
     public static boolean searchOnBlock(String name, Set<String> set) {
@@ -99,9 +106,9 @@ public class Util {
      * font-weight,....)
      * 
      * @param name
-     *                Name css attribute
+     *            Name css attribute
      * @param set
-     *                Set of combo elemnts
+     *            Set of combo elemnts
      * @return true - find, or else - dont find
      */
     public static boolean searchInCombo(String name, Set<String> set) {
@@ -117,9 +124,9 @@ public class Util {
      * Method for search string into css attributes
      * 
      * @param name
-     *                Name
+     *            Name
      * @param elementMap
-     *                Map of css attributes
+     *            Map of css attributes
      * @return true - find, or else - dont find
      */
     public static boolean searchInElement(String name,
@@ -142,7 +149,7 @@ public class Util {
      * Method for get RGB from string
      * 
      * @param color
-     *                Color string
+     *            Color string
      * @return RGB color, or null, if color invalid
      */
     public static RGB getColor(String color) {
@@ -189,7 +196,8 @@ public class Util {
 	    if (j == COUNT_COLORS)
 		return convertColorRGB(color);
 	} else {
-	    HashMap<String, String> colorMap = ColorParser.getInstance().getMap();
+	    HashMap<String, String> colorMap = ColorParser.getInstance()
+		    .getMap();
 
 	    for (String key : colorMap.keySet())
 		if (colorMap.get(key).equalsIgnoreCase(color))
@@ -203,7 +211,7 @@ public class Util {
      * Method for convert string(123px) into two string (123 and px)
      * 
      * @param str
-     *                String for convert
+     *            String for convert
      * @return Array two strings, or null, if str uncorrect
      */
     public static String[] convertExtString(String str) {
@@ -241,7 +249,7 @@ public class Util {
      * Method for search css attribute into extElements
      * 
      * @param name
-     *                Name of css attribute
+     *            Name of css attribute
      * @return true - find, or else - dont find
      */
     public static boolean searchInExtElement(String name) {
@@ -256,7 +264,7 @@ public class Util {
      * Method for getting RGB color from string color
      * 
      * @param color
-     *                String color
+     *            String color
      * @return RGB color
      */
     public static RGB convertColorRGB(String color) {
@@ -280,7 +288,7 @@ public class Util {
      * Method for getting RGB color from hex string
      * 
      * @param color
-     *                String color
+     *            String color
      * @return RGB color
      */
     public static RGB convertColorHEX(String color) {
@@ -302,7 +310,7 @@ public class Util {
      * Method for convert RGB to String
      * 
      * @param rgb
-     *                RGB color
+     *            RGB color
      * @return String color
      */
     public static String createColorString(RGB rgb) {
@@ -321,5 +329,26 @@ public class Util {
 	if (ColorParser.getInstance().getMap().get(colorStr) != null)
 	    return ColorParser.getInstance().getMap().get(colorStr);
 	return colorStr;
+    }
+
+    /**
+     * Get current project
+     * 
+     * @return
+     */
+    public static IProject getCurrentProject() {
+	IEditorPart editor = JspEditorPlugin.getDefault().getWorkbench()
+		.getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+	IEditorInput input = editor.getEditorInput();
+	IFile file = null;
+	if (input instanceof IFileEditorInput) {
+	    file = ((IFileEditorInput) input).getFile();
+	}
+	if (file == null)
+	    return null;
+
+	IProject project = file.getProject();
+	return project;
+
     }
 }

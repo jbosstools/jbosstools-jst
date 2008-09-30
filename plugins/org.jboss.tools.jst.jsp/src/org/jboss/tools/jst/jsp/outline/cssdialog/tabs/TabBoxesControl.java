@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
@@ -35,14 +36,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
-import org.jboss.tools.jst.jsp.outline.cssdialog.CSSDialog;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSConstants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.ImageCombo;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.MessageUtil;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Util;
+import org.jboss.tools.jst.jsp.outline.cssdialog.events.StyleAttributes;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParser;
-
 
 /**
  * Class for creating control in Box tab
@@ -68,11 +68,12 @@ public class TabBoxesControl extends Composite {
     private Text paddingText;
 
     private ArrayList<String> list;
-    private HashMap<String, String> attributesMap;
+    private StyleAttributes styleAttributes;
 
     private static final int numColumns = 3;
 
-    private CSSDialog cssDialog;
+    // TODO Dzmitry Sakovich
+    // private CSSDialog cssDialog;
 
     /**
      * Constructor for creating controls
@@ -81,10 +82,12 @@ public class TabBoxesControl extends Composite {
      */
     public TabBoxesControl(final Composite composite,
 	    final HashMap<String, ArrayList<String>> comboMap,
-	    final HashMap<String, String> attributesMap, CSSDialog dialog) {
+	    final StyleAttributes styleAttributes) {
 	super(composite, SWT.NONE);
-	this.attributesMap = attributesMap;
-	this.cssDialog = dialog;
+	this.styleAttributes = styleAttributes;
+
+	// TODO Dzmitry Sakovich
+	// this.cssDialog = dialog;
 
 	final GridLayout gridLayout = new GridLayout();
 	gridLayout.numColumns = numColumns;
@@ -113,15 +116,18 @@ public class TabBoxesControl extends Composite {
 		    if (tmp.trim().length() > 0) {
 			String extWidth = extWidthCombo.getText().trim();
 			if (extWidth != null)
-			    attributesMap.put(CSSConstants.WIDTH, tmp
-				    + extWidth);
+			    styleAttributes.addAttribute(CSSConstants.WIDTH,
+				    tmp + extWidth);
 			else
-			    attributesMap.put(CSSConstants.WIDTH, tmp);
+			    styleAttributes.addAttribute(CSSConstants.WIDTH,
+				    tmp);
 		    } else
-			attributesMap.remove(CSSConstants.WIDTH);
+			styleAttributes.removeAttribute(CSSConstants.WIDTH);
 		} else
-		    attributesMap.remove(CSSConstants.WIDTH);
-		cssDialog.setStyleForPreview();
+		    styleAttributes.removeAttribute(CSSConstants.WIDTH);
+
+		// TODO Dzmitry Sakovich
+		// cssDialog.setStyleForPreview();
 	    }
 	});
 
@@ -141,8 +147,10 @@ public class TabBoxesControl extends Composite {
 		String tmp = extWidthCombo.getText();
 
 		if (tmp != null) {
-		    attributesMap.put(CSSConstants.WIDTH, width + tmp);
-		    cssDialog.setStyleForPreview();
+		    styleAttributes.addAttribute(CSSConstants.WIDTH, width
+			    + tmp);
+		    // TODO Dzmitry Sakovich
+		    // cssDialog.setStyleForPreview();
 		}
 	    }
 	});
@@ -168,15 +176,17 @@ public class TabBoxesControl extends Composite {
 		    if (tmp.trim().length() > 0) {
 			String extHeight = extHeightCombo.getText().trim();
 			if (extHeight != null)
-			    attributesMap.put(CSSConstants.HEIGHT, tmp
-				    + extHeight);
+			    styleAttributes.addAttribute(CSSConstants.HEIGHT,
+				    tmp + extHeight);
 			else
-			    attributesMap.put(CSSConstants.HEIGHT, tmp);
+			    styleAttributes.addAttribute(CSSConstants.HEIGHT,
+				    tmp);
 		    } else
-			attributesMap.remove(CSSConstants.HEIGHT);
+			styleAttributes.removeAttribute(CSSConstants.HEIGHT);
 		} else
-		    attributesMap.remove(CSSConstants.HEIGHT);
-		cssDialog.setStyleForPreview();
+		    styleAttributes.removeAttribute(CSSConstants.HEIGHT);
+		// TODO Dzmitry Sakovich
+		// cssDialog.setStyleForPreview();
 	    }
 	});
 
@@ -196,8 +206,10 @@ public class TabBoxesControl extends Composite {
 		String tmp = extHeightCombo.getText();
 
 		if (tmp != null) {
-		    attributesMap.put(CSSConstants.HEIGHT, height + tmp);
-		    cssDialog.setStyleForPreview();
+		    styleAttributes.addAttribute(CSSConstants.HEIGHT, height
+			    + tmp);
+		    // TODO Dzmitry Sakovich
+		    // cssDialog.setStyleForPreview();
 		}
 	    }
 	});
@@ -228,12 +240,15 @@ public class TabBoxesControl extends Composite {
 		String tmp = borderStyleCombo.getText().trim();
 		if (tmp != null)
 		    if (!tmp.equals(Constants.EMPTY_STRING)) {
-			attributesMap.put(CSSConstants.BORDER_STYLE, tmp);
-			cssDialog.setStyleForPreview();
+			styleAttributes.addAttribute(CSSConstants.BORDER_STYLE,
+				tmp);
+			// TODO Dzmitry Sakovich
+			// cssDialog.setStyleForPreview();
 			return;
 		    }
-		attributesMap.remove(CSSConstants.BORDER_STYLE);
-		cssDialog.setStyleForPreview();
+		styleAttributes.removeAttribute(CSSConstants.BORDER_STYLE);
+		// TODO Dzmitry Sakovich
+		// cssDialog.setStyleForPreview();
 	    }
 	});
 
@@ -262,12 +277,16 @@ public class TabBoxesControl extends Composite {
 		String tmp = borderColorCombo.getText().trim();
 		if (tmp != null)
 		    if (!tmp.equals(Constants.EMPTY_STRING)) {
-			attributesMap.put(CSSConstants.BORDER_COLOR, tmp);
-			cssDialog.setStyleForPreview();
+			styleAttributes.addAttribute(CSSConstants.BORDER_COLOR,
+				tmp);
+
+			// TODO Dzmitry Sakovich
+			// cssDialog.setStyleForPreview();
 			return;
 		    }
-		attributesMap.remove(CSSConstants.BORDER_COLOR);
-		cssDialog.setStyleForPreview();
+		styleAttributes.removeAttribute(CSSConstants.BORDER_COLOR);
+		// TODO Dzmitry Sakovich
+		// cssDialog.setStyleForPreview();
 	    }
 	});
 
@@ -329,9 +348,10 @@ public class TabBoxesControl extends Composite {
 		    if (currentText.equals(str)) {
 			extBorderWidthCombo.select(0);
 			extBorderWidthCombo.setEnabled(false);
-			attributesMap.put(CSSConstants.BORDER_WIDTH,
+			styleAttributes.addAttribute(CSSConstants.BORDER_WIDTH,
 				currentText);
-			cssDialog.setStyleForPreview();
+			// TODO Dzmitry Sakovich
+			// cssDialog.setStyleForPreview();
 			return;
 		    }
 		}
@@ -344,15 +364,20 @@ public class TabBoxesControl extends Composite {
 			String extBorderWidth = extBorderWidthCombo.getText()
 				.trim();
 			if (extBorderWidth != null)
-			    attributesMap.put(CSSConstants.BORDER_WIDTH, tmp
-				    + extBorderWidth);
+			    styleAttributes.addAttribute(
+				    CSSConstants.BORDER_WIDTH, tmp
+					    + extBorderWidth);
 			else
-			    attributesMap.put(CSSConstants.BORDER_WIDTH, tmp);
+			    styleAttributes.addAttribute(
+				    CSSConstants.BORDER_WIDTH, tmp);
 		    } else
-			attributesMap.remove(CSSConstants.BORDER_WIDTH);
+			styleAttributes
+				.removeAttribute(CSSConstants.BORDER_WIDTH);
 		} else
-		    attributesMap.remove(CSSConstants.BORDER_WIDTH);
-		cssDialog.setStyleForPreview();
+		    styleAttributes.removeAttribute(CSSConstants.BORDER_WIDTH);
+
+		// TODO Dzmitry Sakovich
+		// cssDialog.setStyleForPreview();
 	    }
 	});
 
@@ -377,9 +402,10 @@ public class TabBoxesControl extends Composite {
 		String tmp = extBorderWidthCombo.getText();
 
 		if (tmp != null) {
-		    attributesMap.put(CSSConstants.BORDER_WIDTH, borderWidth
-			    + tmp);
-		    cssDialog.setStyleForPreview();
+		    styleAttributes.addAttribute(CSSConstants.BORDER_WIDTH,
+			    borderWidth + tmp);
+		    // TODO Dzmitry Sakovich
+		    // cssDialog.setStyleForPreview();
 		}
 	    }
 	});
@@ -430,15 +456,17 @@ public class TabBoxesControl extends Composite {
 		    if (tmp.trim().length() > 0) {
 			String extMargin = extMarginCombo.getText().trim();
 			if (extMargin != null)
-			    attributesMap.put(CSSConstants.MARGIN, tmp
-				    + extMargin);
+			    styleAttributes.addAttribute(CSSConstants.MARGIN,
+				    tmp + extMargin);
 			else
-			    attributesMap.put(CSSConstants.MARGIN, tmp);
+			    styleAttributes.addAttribute(CSSConstants.MARGIN,
+				    tmp);
 		    } else
-			attributesMap.remove(CSSConstants.MARGIN);
+			styleAttributes.removeAttribute(CSSConstants.MARGIN);
 		} else
-		    attributesMap.remove(CSSConstants.MARGIN);
-		cssDialog.setStyleForPreview();
+		    styleAttributes.removeAttribute(CSSConstants.MARGIN);
+		// TODO Dzmitry Sakovich
+		// cssDialog.setStyleForPreview();
 	    }
 	});
 
@@ -458,8 +486,10 @@ public class TabBoxesControl extends Composite {
 		String tmp = extMarginCombo.getText();
 
 		if (tmp != null) {
-		    attributesMap.put(CSSConstants.MARGIN, margin + tmp);
-		    cssDialog.setStyleForPreview();
+		    styleAttributes.addAttribute(CSSConstants.MARGIN, margin
+			    + tmp);
+		    // TODO Dzmitry Sakovich
+		    // cssDialog.setStyleForPreview();
 		}
 	    }
 	});
@@ -486,15 +516,17 @@ public class TabBoxesControl extends Composite {
 		    if (tmp.trim().length() > 0) {
 			String extPadding = extPaddingCombo.getText().trim();
 			if (extPadding != null)
-			    attributesMap.put(CSSConstants.PADDING, tmp
-				    + extPadding);
+			    styleAttributes.addAttribute(CSSConstants.PADDING,
+				    tmp + extPadding);
 			else
-			    attributesMap.put(CSSConstants.PADDING, tmp);
+			    styleAttributes.addAttribute(CSSConstants.PADDING,
+				    tmp);
 		    } else
-			attributesMap.remove(CSSConstants.PADDING);
+			styleAttributes.removeAttribute(CSSConstants.PADDING);
 		} else
-		    attributesMap.remove(CSSConstants.PADDING);
-		cssDialog.setStyleForPreview();
+		    styleAttributes.removeAttribute(CSSConstants.PADDING);
+		// TODO Dzmitry Sakovich
+		// cssDialog.setStyleForPreview();
 	    }
 	});
 
@@ -514,8 +546,10 @@ public class TabBoxesControl extends Composite {
 		String tmp = extPaddingCombo.getText();
 
 		if (tmp != null) {
-		    attributesMap.put(CSSConstants.PADDING, padding + tmp);
-		    cssDialog.setStyleForPreview();
+		    styleAttributes.addAttribute(CSSConstants.PADDING, padding
+			    + tmp);
+		    // TODO Dzmitry Sakovich
+		    // cssDialog.setStyleForPreview();
 		}
 	    }
 	});
@@ -535,7 +569,7 @@ public class TabBoxesControl extends Composite {
      */
     public void updateData(boolean param) {
 	String tmp;
-	if ((tmp = attributesMap.get(CSSConstants.WIDTH)) != null) {
+	if ((tmp = styleAttributes.getAttribute(CSSConstants.WIDTH)) != null) {
 	    String[] str = Util.convertExtString(tmp);
 	    widthText.setText(str[0]);
 	    if (extWidthCombo.indexOf(str[1]) != -1) {
@@ -547,7 +581,7 @@ public class TabBoxesControl extends Composite {
 	    widthText.setText(Constants.EMPTY_STRING);
 	    extWidthCombo.select(0);
 	}
-	if ((tmp = attributesMap.get(CSSConstants.HEIGHT)) != null) {
+	if ((tmp = styleAttributes.getAttribute(CSSConstants.HEIGHT)) != null) {
 	    String[] str = Util.convertExtString(tmp);
 	    heightText.setText(str[0]);
 	    if (extHeightCombo.indexOf(str[1]) != -1) {
@@ -559,15 +593,15 @@ public class TabBoxesControl extends Composite {
 	    heightText.setText(Constants.EMPTY_STRING);
 	    extHeightCombo.select(0);
 	}
-	if ((tmp = attributesMap.get(CSSConstants.BORDER_STYLE)) != null)
+	if ((tmp = styleAttributes.getAttribute(CSSConstants.BORDER_STYLE)) != null)
 	    borderStyleCombo.setText(tmp);
 	else
 	    borderStyleCombo.setText(Constants.EMPTY_STRING);
-	if ((tmp = attributesMap.get(CSSConstants.BORDER_COLOR)) != null)
+	if ((tmp = styleAttributes.getAttribute(CSSConstants.BORDER_COLOR)) != null)
 	    borderColorCombo.setText(tmp);
 	else
 	    borderColorCombo.setText(Constants.EMPTY_STRING);
-	if ((tmp = attributesMap.get(CSSConstants.BORDER_WIDTH)) != null) {
+	if ((tmp = styleAttributes.getAttribute(CSSConstants.BORDER_WIDTH)) != null) {
 	    String[] str = Util.convertExtString(tmp);
 	    borderWidthCombo.setText(str[0]);
 	    if (extBorderWidthCombo.indexOf(str[1]) != -1) {
@@ -579,7 +613,7 @@ public class TabBoxesControl extends Composite {
 	    borderWidthCombo.setText(Constants.EMPTY_STRING);
 	    extBorderWidthCombo.select(0);
 	}
-	if ((tmp = attributesMap.get(CSSConstants.MARGIN)) != null) {
+	if ((tmp = styleAttributes.getAttribute(CSSConstants.MARGIN)) != null) {
 	    String[] str = Util.convertExtString(tmp);
 	    marginText.setText(str[0]);
 	    if (extMarginCombo.indexOf(str[1]) != -1) {
@@ -591,7 +625,7 @@ public class TabBoxesControl extends Composite {
 	    marginText.setText(Constants.EMPTY_STRING);
 	    extMarginCombo.select(0);
 	}
-	if ((tmp = attributesMap.get(CSSConstants.PADDING)) != null) {
+	if ((tmp = styleAttributes.getAttribute(CSSConstants.PADDING)) != null) {
 	    String[] str = Util.convertExtString(tmp);
 	    paddingText.setText(str[0]);
 	    if (extPaddingCombo.indexOf(str[1]) != -1) {

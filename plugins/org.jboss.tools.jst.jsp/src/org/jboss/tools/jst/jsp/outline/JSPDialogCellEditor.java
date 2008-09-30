@@ -26,7 +26,8 @@ import org.jboss.tools.common.model.ui.objecteditor.ExtendedCellEditorProvider;
 import org.jboss.tools.jst.jsp.contentassist.FaceletsHtmlContentAssistProcessor;
 import org.jboss.tools.jst.jsp.contentassist.JSPDialogCellEditorContentAssistProcessor;
 import org.jboss.tools.jst.jsp.drop.treeviewer.model.RootElement;
-import org.jboss.tools.jst.jsp.outline.cssdialog.CSSDialog;
+import org.jboss.tools.jst.jsp.outline.cssdialog.CSSClassDialog;
+import org.jboss.tools.jst.jsp.outline.cssdialog.CSSStyleDialog;
 
 /**
  * @author Kabanovich Cell Editor for JSP attributes, of which values can be
@@ -116,15 +117,22 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements
 			: "";
 
 	context.put("value", value);
-	if (attributeName.equals("style")) {
-	    CSSDialog dialog = new CSSDialog(cellEditorWindow.getShell(), (value == null ? ""
+	if (attributeName.equals("style") || attributeName.endsWith("Style")) {
+	    CSSStyleDialog dialog = new CSSStyleDialog(cellEditorWindow.getShell(), (value == null ? ""
 			: value));
 		if (dialog.open() == Window.OK) {
 		    externalEditing = false;
 		    return dialog.getNewStyle();
 		    
 		}
-	} else {
+	} else if (attributeName.endsWith("Class") || attributeName.endsWith("class") ) {
+	    CSSClassDialog dialog = new CSSClassDialog(cellEditorWindow.getShell());
+		if (dialog.open() == Window.OK) {
+		    externalEditing = false;
+		    return dialog.getSelectorName();
+		}
+	}
+	else {
 
 	    JSPTreeDialog dialog = new JSPTreeDialog();
 	    dialog.setObject(context);

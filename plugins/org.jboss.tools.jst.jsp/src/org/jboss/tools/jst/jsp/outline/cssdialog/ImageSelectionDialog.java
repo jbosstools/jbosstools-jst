@@ -18,12 +18,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -37,7 +33,6 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.viewers.ViewerSorter;
@@ -70,7 +65,7 @@ import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 import org.eclipse.ui.dialogs.SelectionStatusDialog;
 import org.eclipse.ui.internal.WorkbenchMessages;
-import org.jboss.tools.jst.jsp.JspEditorPlugin;
+import org.jboss.tools.jst.jsp.outline.cssdialog.common.FileExtensionFilter;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.MessageUtil;
 
 /**
@@ -687,45 +682,4 @@ public class ImageSelectionDialog extends SelectionStatusDialog {
 	}
 	return elements.length == 0;
     }
-
-    /**
-     * Class for creates filter by file extensions
-     * 
-     * @author dsakovich
-     */
-    private class FileExtensionFilter extends ViewerFilter {
-
-	private String[] fTargetExtension;
-
-	public FileExtensionFilter(String[] targetExtension) {
-	    fTargetExtension = targetExtension;
-	}
-
-	public boolean select(Viewer viewer, Object parent, Object element) {
-	    if (element instanceof IFile) {
-		for (int i = 0; i < fTargetExtension.length; i++) {
-		    if (((IFile) element).getName().toLowerCase().endsWith(
-			    "." + fTargetExtension[i])) {
-			return true;
-		    }
-		}
-		return false;
-	    }
-	    if (element instanceof IProject && ((IProject) element).isOpen())
-		return true;
-	    if (element instanceof IContainer) { // i.e. IProject, IFolder
-		try {
-		    IResource[] resources = ((IContainer) element).members();
-		    for (int i = 0; i < resources.length; i++) {
-			if (select(viewer, parent, resources[i]))
-			    return true;
-		    }
-		} catch (CoreException e) {
-		    JspEditorPlugin.getPluginLog().logError(e);
-		}
-	    }
-	    return false;
-	}
-    }
-
 }

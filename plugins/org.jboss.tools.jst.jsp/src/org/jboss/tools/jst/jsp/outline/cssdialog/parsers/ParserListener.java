@@ -10,7 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.outline.cssdialog.parsers;
 
-import java.util.HashMap;
+import org.jboss.tools.jst.jsp.outline.cssdialog.events.StyleAttributes;
 
 /**
  * 
@@ -21,17 +21,17 @@ import java.util.HashMap;
  */
 public class ParserListener implements IListener {
 
-    private HashMap<String, String> map;
+    private StyleAttributes attributes;
 
-    public ParserListener(HashMap<String, String> map) {
-	this.map = map;
+    public ParserListener(StyleAttributes styleAttributes) {
+	this.attributes = styleAttributes;
     }
 
     public void nextElement(String name, String value) {
-	map.put(name, value);
+	attributes.addAttribute(name, value);
     }
 
-    public HashMap<String, String> getMap() {
-	return map;
+    public StyleAttributes getStyleAttributes() {
+	return attributes;
     }
 }

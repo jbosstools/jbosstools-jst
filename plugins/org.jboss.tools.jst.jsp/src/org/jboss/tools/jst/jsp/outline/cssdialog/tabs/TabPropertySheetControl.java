@@ -22,8 +22,8 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
-import org.jboss.tools.jst.jsp.outline.cssdialog.CSSDialog;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
+import org.jboss.tools.jst.jsp.outline.cssdialog.events.StyleAttributes;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.TabPropertySheetMouseAdapter;
 
 /**
@@ -39,8 +39,8 @@ public class TabPropertySheetControl extends Composite {
 
     private Tree tree;
 
-    private HashMap<String, String> attributesMap;
-
+    private StyleAttributes styleAttributes;
+    
     /**
      * Constructor for creating controls
      * 
@@ -50,11 +50,10 @@ public class TabPropertySheetControl extends Composite {
     public TabPropertySheetControl(TabFolder tabFolder,
 	    HashMap<String, ArrayList<String>> elementMap,
 	    HashMap<String, ArrayList<String>> comboMap,
-	    HashMap<String, String> attributesMap,
-	    CSSDialog dialog) {
+	    StyleAttributes styleAttributes) {
 	super(tabFolder, SWT.NONE);
 
-	this.attributesMap = attributesMap;
+	this.styleAttributes = styleAttributes;
 
 	setLayout(new FillLayout());
 
@@ -87,7 +86,7 @@ public class TabPropertySheetControl extends Composite {
 	updateData(false);
 
 	tree.addMouseListener(new TabPropertySheetMouseAdapter(tree,
-		elementMap, comboMap, this, dialog));
+		elementMap, comboMap, this));
 
 	for (int i = 0; i < tree.getColumnCount(); i++)
 	    tree.getColumn(i).pack();
@@ -106,15 +105,15 @@ public class TabPropertySheetControl extends Composite {
 		for (int j = 0; j < tree.getItem(i).getItemCount(); j++) {
 		    if (tree.getItem(i).getItem(j).getText(
 			    Constants.SECOND_COLUMN) == null) {
-			attributesMap.remove(tree.getItem(i).getItem(j)
+			styleAttributes.removeAttribute(tree.getItem(i).getItem(j)
 				.getText(Constants.FIRST_COLUMN));
 		    } else if (tree.getItem(i).getItem(j).getText(
 			    Constants.SECOND_COLUMN).trim().equals(
 			    Constants.EMPTY_STRING)) {
-			attributesMap.remove(tree.getItem(i).getItem(j)
+			styleAttributes.removeAttribute(tree.getItem(i).getItem(j)
 				.getText(Constants.FIRST_COLUMN));
 		    } else {
-			attributesMap.put(tree.getItem(i).getItem(j).getText(
+			styleAttributes.addAttribute(tree.getItem(i).getItem(j).getText(
 				Constants.FIRST_COLUMN), tree.getItem(i)
 				.getItem(j).getText(Constants.SECOND_COLUMN));
 		    }
@@ -127,7 +126,7 @@ public class TabPropertySheetControl extends Composite {
 		    tree.getItem(i).getItem(j).setText(Constants.SECOND_COLUMN,
 			    Constants.EMPTY_STRING);
 
-	    Set<String> set = attributesMap.keySet();
+	    Set<String> set = styleAttributes.keySet();
 	    for (String str : set) {
 
 		for (int i = 0; i < tree.getItemCount(); i++)
@@ -136,7 +135,7 @@ public class TabPropertySheetControl extends Composite {
 				Constants.FIRST_COLUMN).equals(str))
 			    tree.getItem(i).getItem(j).setText(
 				    Constants.SECOND_COLUMN,
-				    attributesMap.get(str));
+				    styleAttributes.getAttribute(str));
 	    }	   
 	    setExpanded();
 	}
@@ -153,7 +152,7 @@ public class TabPropertySheetControl extends Composite {
 	for (int i = 0; i < tree.getItemCount(); i++)
 	    tree.getItem(i).setExpanded(false);
 
-	Set<String> set = attributesMap.keySet();
+	Set<String> set = styleAttributes.keySet();
 
 	for (String attr : set)
 	    if ((item = find(attr)) != null) {

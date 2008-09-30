@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
- ******************************************************************************/ 
+ ******************************************************************************/
 package org.jboss.tools.jst.jsp.outline.cssdialog;
 
 import java.util.ArrayList;
@@ -16,22 +16,19 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
-import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
-import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.MessageUtil;
+import org.jboss.tools.jst.jsp.outline.cssdialog.events.StyleAttributes;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.BaseListener;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.CSSElementsParser;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ComboParser;
@@ -45,32 +42,14 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.tabs.TabTextControl;
 import org.xml.sax.Attributes;
 
 /**
- * Class for CSS editor dialog
+ * Class for creating style tabs
  * 
  * @author Dzmitry Sakovich (dsakovich@exadel.com)
  */
-public class CSSDialog extends Dialog {
-    
-    private static int MIN_HEIGHT_FOR_BROWSER = 60;
+public class StyleComposite extends Composite {
 
-    private static int TAB_TEXT_FONT_NUMBER = 0;
-    private static int TAB_QUICK_EDIT_NUMBER = 4;
-
-    private static int SIZE_NULL = 0;
-
-    private static int FIRST_SELECTION = 0;
-
-    private static String NODE_NAME_ELEMENTS = "elements";
-    private static String NODE_NAME_VALUE = "value";
-    private static String NODE_NAME_ELEMENT = "element";
-    private static String NODE_ATTRIBUTE_NAME = "name";
-
-    private Browser browser = null;
-
-    private String oldStyle;
     private String newStyle;
-
-    private TabItem lastSelectedTab = null;
+    private String oldStyle;
 
     private TabTextControl tabTextControl;
     private TabBackgroundControl tabBackgroundControl;
@@ -78,22 +57,131 @@ public class CSSDialog extends Dialog {
     private TabPropertySheetControl tabPropertySheetControl;
     private TabQuickEditControl tabQuickEditControl;
 
+    private TabFolder tabFolder;
     private TabItem tabTextFont;
     private TabItem tabBackground;
     private TabItem tabBoxes;
     private TabItem tabPropertySheet;
     private TabItem tabQuickEdit;
 
+    private TabItem lastSelectedTab = null;
+
+    private StyleAttributes styleAttributes;
+    private Parser parser;
     private HashMap<String, ArrayList<String>> comboMap = new HashMap<String, ArrayList<String>>();
     private HashMap<String, ArrayList<String>> elementsMap = new HashMap<String, ArrayList<String>>();
-    private HashMap<String, String> attributesMap = new HashMap<String, String>();
 
-    public CSSDialog(final Shell parentShell, String oldStyle) {
-	super(parentShell);
-	setShellStyle(getShellStyle() | SWT.RESIZE | SWT.MAX
-		| SWT.APPLICATION_MODAL);
+    private static String NODE_NAME_ELEMENTS = "elements";
+    private static String NODE_NAME_VALUE = "value";
+    private static String NODE_NAME_ELEMENT = "element";
+    private static String NODE_ATTRIBUTE_NAME = "name";
+    private static int TAB_TEXT_FONT_NUMBER = 0;
+    private static int TAB_QUICK_EDIT_NUMBER = 4;
+    private static int FIRST_SELECTION = 0;
+    private static int SIZE_NULL = 0;
+
+    public StyleComposite(Composite parent, StyleAttributes styleAttributes,
+	    String oldStyle) {
+	super(parent, SWT.NONE);
 	this.oldStyle = oldStyle;
+	this.styleAttributes = styleAttributes;
+	createTabs();
 
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public String getNewStyle() {
+	return newStyle;
+    }
+
+    public void updateStyle() {
+	if (lastSelectedTab == tabTextFont) {
+	    tabTextControl.updateData(true);
+	} else if (lastSelectedTab == tabBackground) {
+	    tabBackgroundControl.updateData(true);
+	} else if (lastSelectedTab == tabBoxes) {
+	    tabBoxesControl.updateData(true);
+	} else if (lastSelectedTab == tabPropertySheet) {
+	    tabPropertySheetControl.updateData(true);
+	}
+	StringBuffer buf = new StringBuffer();
+	Set<Entry<String, String>> set = styleAttributes.entrySet();
+	for (Map.Entry<String, String> me : set) {
+	    buf.append(me.getKey() + Constants.COLON_STRING + me.getValue()
+		    + Constants.SEMICOLON_STRING);
+	}
+	newStyle = buf.toString();
+    }
+
+    /**
+     * Method for creating text tab
+     * 
+     * @param tabFolder
+     * @return composite
+     */
+    private Control createTabTextControl(TabFolder tabFolder) {
+
+	ScrolledComposite sc = new ScrolledComposite(tabFolder, SWT.H_SCROLL
+		| SWT.V_SCROLL);
+
+	sc.setExpandHorizontal(true);
+	sc.setExpandVertical(true);
+
+	tabTextControl = new TabTextControl(sc, comboMap, styleAttributes);
+	sc.setContent(tabTextControl);
+
+	sc.setMinSize(tabTextControl.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+
+	return sc;
+    }
+
+    /**
+     * Method for creating background tab
+     * 
+     * @param tabFolder
+     * @return composite
+     */
+    private Control createTabBackgroundControl(TabFolder tabFolder) {
+	ScrolledComposite sc = new ScrolledComposite(tabFolder, SWT.H_SCROLL
+		| SWT.V_SCROLL);
+
+	sc.setExpandHorizontal(true);
+	sc.setExpandVertical(true);
+
+	tabBackgroundControl = new TabBackgroundControl(sc, comboMap,
+		styleAttributes);
+	sc.setContent(tabBackgroundControl);
+	sc.setMinSize(tabBackgroundControl
+		.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+
+	return sc;
+    }
+
+    /**
+     * Method for creating boxes tab
+     * 
+     * @param tabFolder
+     * @return composite
+     */
+    private Control createTabBoxesControl(TabFolder tabFolder) {
+
+	ScrolledComposite sc = new ScrolledComposite(tabFolder, SWT.H_SCROLL
+		| SWT.V_SCROLL);
+
+	sc.setExpandHorizontal(true);
+	sc.setExpandVertical(true);
+
+	tabBoxesControl = new TabBoxesControl(sc, comboMap, styleAttributes);
+	sc.setContent(tabBoxesControl);
+	sc.setMinSize(tabBoxesControl.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+
+	return sc;
+    }
+
+    private void createTabs() {
 	ComboParser comboParser = new ComboParser();
 	comboParser.setListener(new BaseListener(comboMap) {
 
@@ -140,59 +228,21 @@ public class CSSDialog extends Dialog {
 	});
 	cssParser.parse();
 
-    }
-
-    /**
-     * Getter for newStyle attribute
-     * 
-     * @return
-     */
-    public String getNewStyle() {
-	return newStyle;
-    }
-
-    /**
-     * Setter for newStyle attribute
-     * 
-     * @param newStyle
-     */
-    public void setNewStyle(String newStyle) {
-	this.newStyle = newStyle;
-    }
-
-    /**
-     * Method for creating dialog area
-     * 
-     * @param parent
-     */
-    protected Control createDialogArea(final Composite parent) {
-		
-	ParserListener listener = new ParserListener(attributesMap);
-	Parser parser = new Parser(elementsMap);
+	// HashMap<String, String> attributesMap = new HashMap<String,
+	// String>();
+	ParserListener listener = new ParserListener(styleAttributes);
+	parser = new Parser(elementsMap);
 	parser.addListener(listener);
-	parser.parse(oldStyle);
+	parser.parse(this.oldStyle);
 
-	final Composite composite = (Composite) super.createDialogArea(parent);
+	final GridLayout gridLayout = new GridLayout();
+	gridLayout.numColumns = 1;
+	setLayout(gridLayout);
+	setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 
-	final GridData gridData = new GridData(GridData.FILL, GridData.FILL,
-		true, true);
-
-	composite.setLayoutData(gridData);
-	GridData gd = new GridData(GridData.FILL_BOTH
-		| GridData.GRAB_HORIZONTAL | GridData.GRAB_VERTICAL);
-
-	final TabFolder tabFolder = new TabFolder(composite, SWT.NONE);
-	tabFolder.setLayoutData(gd);
-
-	// ------------------------Browser-----------------------------------
-
-	browser = new Browser(composite, SWT.BORDER);
-	GridData gridBrowser = new GridData(GridData.FILL_BOTH);
-	gridBrowser.minimumHeight = MIN_HEIGHT_FOR_BROWSER;
-	browser.setLayoutData(gridBrowser);
-	//browser.se
-	setStyleForPreview();
-	// ------------------------------------------------------------------
+	tabFolder = new TabFolder(this, SWT.NONE);
+	tabFolder.setLayoutData(new GridData(GridData.FILL, GridData.FILL,
+		true, true));
 
 	// Create each tab and set its text, tool tip text,
 	tabTextFont = new TabItem(tabFolder, SWT.NONE);
@@ -220,7 +270,7 @@ public class CSSDialog extends Dialog {
 	tabPropertySheet.setControl(createTabPropertySheetControl(tabFolder));
 
 	tabFolder.setSelection(TAB_TEXT_FONT_NUMBER);
-	if (attributesMap.size() > SIZE_NULL) {
+	if (styleAttributes.getAttributeMap().size() > SIZE_NULL) {
 	    tabQuickEdit = new TabItem(tabFolder, SWT.NONE);
 	    tabQuickEdit.setText(MessageUtil.getString("QUICK_EDIT_TAB-NAME"));
 	    tabQuickEdit.setToolTipText(MessageUtil
@@ -233,7 +283,6 @@ public class CSSDialog extends Dialog {
 
 	    public void widgetSelected(SelectionEvent se) {
 
-		
 		if (tabFolder.getSelection()[FIRST_SELECTION] == tabQuickEdit) {
 		    tabQuickEditControl.dispose();
 		    tabQuickEdit
@@ -254,104 +303,6 @@ public class CSSDialog extends Dialog {
 		}
 	    }
 	});
-
-	return composite;
-    }
-
-    /**
-     * Method for setting title for dialog
-     * 
-     * @param newShell
-     */
-    protected void configureShell(Shell newShell) {
-	super.configureShell(newShell);
-	newShell.setText(MessageUtil.getString("CSS_DIALOG_TITLE"));
-    }
-
-    protected void okPressed() {
-
-	if (lastSelectedTab == tabTextFont) {
-	    tabTextControl.updateData(true);
-	} else if (lastSelectedTab == tabBackground) {
-	    tabBackgroundControl.updateData(true);
-	} else if (lastSelectedTab == tabBoxes) {
-	    tabBoxesControl.updateData(true);
-	} else if (lastSelectedTab == tabPropertySheet) {
-	    tabPropertySheetControl.updateData(true);
-	}
-	StringBuffer buf = new StringBuffer();
-	Set<Entry<String, String>> set = attributesMap.entrySet();
-	for (Map.Entry<String, String> me : set) {
-	    buf.append(me.getKey() + Constants.COLON_STRING + me.getValue()
-		    + Constants.SEMICOLON_STRING);
-	}
-	setNewStyle(buf.toString());
-	super.okPressed();
-    }
-
-    /**
-     * Method for creating text tab
-     * 
-     * @param tabFolder
-     * @return composite
-     */
-    private Control createTabTextControl(TabFolder tabFolder) {
-
-	ScrolledComposite sc = new ScrolledComposite(tabFolder, SWT.H_SCROLL
-		| SWT.V_SCROLL);
-
-	sc.setExpandHorizontal(true);
-	sc.setExpandVertical(true);
-
-	tabTextControl = new TabTextControl(sc, comboMap, attributesMap, this);
-	sc.setContent(tabTextControl);
-
-	sc.setMinSize(tabTextControl.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-
-	return sc;
-    }
-
-    /**
-     * Method for creating background tab
-     * 
-     * @param tabFolder
-     * @return composite
-     */
-    private Control createTabBackgroundControl(TabFolder tabFolder) {
-	ScrolledComposite sc = new ScrolledComposite(tabFolder, SWT.H_SCROLL
-		| SWT.V_SCROLL);
-
-	sc.setExpandHorizontal(true);
-	sc.setExpandVertical(true);
-
-	tabBackgroundControl = new TabBackgroundControl(sc, comboMap,
-		attributesMap, this);
-	sc.setContent(tabBackgroundControl);
-	sc.setMinSize(tabBackgroundControl
-		.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-
-	return sc;
-    }
-
-    /**
-     * Method for creating boxes tab
-     * 
-     * @param tabFolder
-     * @return composite
-     */
-    private Control createTabBoxesControl(TabFolder tabFolder) {
-
-	ScrolledComposite sc = new ScrolledComposite(tabFolder, SWT.H_SCROLL
-		| SWT.V_SCROLL);
-
-	sc.setExpandHorizontal(true);
-	sc.setExpandVertical(true);
-
-	tabBoxesControl = new TabBoxesControl(sc, comboMap, attributesMap, this);
-	sc.setContent(tabBoxesControl);
-	sc.setMinSize(tabBoxesControl.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-
-	return sc;
     }
 
     /**
@@ -363,8 +314,38 @@ public class CSSDialog extends Dialog {
      */
     private Control createTabPropertySheetControl(TabFolder tabFolder) {
 	tabPropertySheetControl = new TabPropertySheetControl(tabFolder,
-		elementsMap, comboMap, attributesMap, this);
+		elementsMap, comboMap, styleAttributes);
 	return tabPropertySheetControl;
+    }
+
+    public void recreateStyleComposite(String style) {
+	styleAttributes.clear();
+	parser.parse(style);
+
+	tabBackgroundControl.updateData(false);
+	tabBoxesControl.updateData(false);
+	tabPropertySheetControl.updateData(false);
+	tabTextControl.updateData(false);
+	if (styleAttributes.getAttributeMap().size() > SIZE_NULL) {
+	    if (tabQuickEdit == null || tabQuickEdit.isDisposed()) {
+		tabQuickEdit = new TabItem(tabFolder, SWT.NONE);
+		tabQuickEdit.setText(MessageUtil
+			.getString("QUICK_EDIT_TAB-NAME"));
+		tabQuickEdit.setToolTipText(MessageUtil
+			.getString("QUICK_EDIT_TAB-NAME"));
+		tabQuickEdit.setControl(createTabQuickEditContol(tabFolder));
+	    } else {
+		// update quick edit
+		tabQuickEditControl.updateData();
+	    }
+	    tabFolder.setSelection(TAB_QUICK_EDIT_NUMBER);
+	    lastSelectedTab = tabQuickEdit;
+	} else {
+	    if (tabQuickEdit != null || !tabQuickEdit.isDisposed()) {
+		tabQuickEdit.dispose();
+		tabFolder.redraw();
+	    }
+	}
     }
 
     /**
@@ -383,37 +364,12 @@ public class CSSDialog extends Dialog {
 	sc.setExpandVertical(true);
 
 	tabQuickEditControl = new TabQuickEditControl(sc, comboMap,
-		attributesMap, this);
+		styleAttributes);
 	sc.setContent(tabQuickEditControl);
 
 	sc
 		.setMinSize(tabQuickEditControl.computeSize(SWT.DEFAULT,
 			SWT.DEFAULT));
 	return sc;
-    }
-
-    @Override
-    protected IDialogSettings getDialogBoundsSettings() {
-	return JspEditorPlugin.getDefault().getDialogSettings();
-    }
-
-    /**
-     * 
-     * Set style for preview
-     */
-    public void setStyleForPreview() {
-
-	String styleForSpan = "";
-	String html = "";
-
-	Set<String> keySet = attributesMap.keySet();
-
-	for (String key : keySet)
-	    styleForSpan += key + Constants.COLON_STRING
-		    + attributesMap.get(key) + Constants.SEMICOLON_STRING;
-
-	html = Constants.OPEN_SPAN_TAG + styleForSpan
-		+ Constants.TEXT_FOR_PREVIEW + Constants.CLOSE_SPAN_TAG;
-	browser.setText(html);
     }
 }
