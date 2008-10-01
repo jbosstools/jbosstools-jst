@@ -135,6 +135,7 @@ public class CSSClassDialog extends Dialog {
 		.getImageDescriptor(Constants.IMAGE_FOLDERLARGE_FILE_LOCATION);
 	Image image = imageDesc.createImage();
 	button.setImage(image);
+	button.setToolTipText(MessageUtil.getString("CSS_BROWSE_BUTTON_TOOLTIP"));
 	button.addDisposeListener(new DisposeListener() {
 	    public void widgetDisposed(DisposeEvent e) {
 		Button button = (Button) e.getSource();
@@ -154,12 +155,12 @@ public class CSSClassDialog extends Dialog {
 	classCombo.addSelectionListener(new SelectionListener() {
 
 	    public void widgetDefaultSelected(SelectionEvent e) {
-		// TODO Auto-generated method stub
 		
 	    }
 
 	    public void widgetSelected(SelectionEvent e) {
-		String style = cssModel.getStyle(classCombo.getText());	
+		String style = cssModel.getStyle(classCombo.getText());
+		classCombo.setToolTipText(cssModel.getCSSText(classCombo.getText()));
 		styleComposite.recreateStyleComposite(style);
 	    }
 	    
@@ -202,8 +203,8 @@ public class CSSClassDialog extends Dialog {
 			    + styleAttributes.getAttribute(key)
 			    + Constants.SEMICOLON_STRING;
 
-		html = Constants.OPEN_SPAN_TAG + styleForSpan
-			+ Constants.TEXT_FOR_PREVIEW + Constants.CLOSE_SPAN_TAG;
+		html = Constants.OPEN_DIV_TAG + styleForSpan
+			+ Constants.TEXT_FOR_PREVIEW + Constants.CLOSE_DIV_TAG;
 		browser.setText(html);
 	    }
 	});

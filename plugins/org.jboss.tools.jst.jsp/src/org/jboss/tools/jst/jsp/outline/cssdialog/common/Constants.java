@@ -63,6 +63,9 @@ public class Constants {
     
     public static String OPEN_SPAN_TAG = "<span style=\"width: 100%;";
     public static String CLOSE_SPAN_TAG = "</span>";
+    public static String OPEN_DIV_TAG = "<div style=\"width: 100%;";
+    public static String CLOSE_DIV_TAG = "</div>";
+    
     public static String TEXT_FOR_PREVIEW = "\">Text for preview";
     
     public static String COLON_STRING = ":";

@@ -81,6 +81,21 @@ public class CSSModel {
 	return selectors;
     }
     
+    
+    public String getCSSText(String selector) {
+	if (styleSheet != null) {
+	    CSSRuleList list = styleSheet.getCssRules();
+	    if (list != null) {
+		for (int i = 0; i < list.getLength(); i++) {
+		    if (list.item(i) instanceof CSSStyleRule && ((CSSStyleRule)list.item(i)).getSelectorText().equals(selector)) {
+			return ((CSSStyleRule)list.item(i)).getCssText();
+		    }
+		}
+	    }
+	}
+	return null;
+    }
+    
     /**
      * Get style by selectorName
      * 

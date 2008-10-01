@@ -88,8 +88,8 @@ public class CSSStyleDialog extends Dialog {
 		    styleForSpan += key + Constants.COLON_STRING
 			    + styleAttributes.getAttribute(key) + Constants.SEMICOLON_STRING;
 
-		html = Constants.OPEN_SPAN_TAG + styleForSpan
-			+ Constants.TEXT_FOR_PREVIEW + Constants.CLOSE_SPAN_TAG;
+		html = Constants.OPEN_DIV_TAG + styleForSpan
+			+ Constants.TEXT_FOR_PREVIEW + Constants.CLOSE_DIV_TAG;
 		browser.setText(html);
 	    }
 	});
