@@ -51,6 +51,7 @@ import org.jboss.tools.common.el.core.model.ELModel;
 import org.jboss.tools.common.el.core.model.ELUtil;
 import org.jboss.tools.common.el.core.parser.ELParser;
 import org.jboss.tools.common.el.core.parser.ELParserFactory;
+import org.jboss.tools.common.el.core.parser.ELParserUtil;
 import org.jboss.tools.common.kb.AttributeDescriptor;
 import org.jboss.tools.common.kb.KbConnectorFactory;
 import org.jboss.tools.common.kb.KbConnectorType;
@@ -272,7 +273,7 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
             }
             
             // No JBoss parser ?
-            ELParser p = ELParserFactory.createDefaultParser();
+            ELParser p = ELParserUtil.getDefaultFactory().createParser();
             ELModel model = p.parse(currentValue);
             ELInstance instance = ELUtil.findInstance(model, offset);
             if(instance != null && instance.getStartPosition() + 2 <= offset) {

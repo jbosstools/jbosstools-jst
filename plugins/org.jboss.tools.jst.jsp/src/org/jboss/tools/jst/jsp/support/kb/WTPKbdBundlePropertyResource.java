@@ -25,6 +25,7 @@ import org.jboss.tools.common.el.core.model.ELInvocationExpression;
 import org.jboss.tools.common.el.core.model.ELModel;
 import org.jboss.tools.common.el.core.parser.ELParser;
 import org.jboss.tools.common.el.core.parser.ELParserFactory;
+import org.jboss.tools.common.el.core.parser.ELParserUtil;
 import org.jboss.tools.common.kb.KbDinamicResource;
 import org.jboss.tools.common.kb.KbProposal;
 import org.jboss.tools.common.model.XModelObject;
@@ -49,7 +50,7 @@ public class WTPKbdBundlePropertyResource extends WTPKbdBeanPropertyResource {
 		try {
 			if (!isReadyToUse()) return proposals;
 
-			ELParser p = ELParserFactory.createDefaultParser();
+			ELParser p = ELParserUtil.getDefaultFactory().createParser();
 			ELModel model = p.parse(query);
 
 			List<ELInstance> is = model.getInstances();

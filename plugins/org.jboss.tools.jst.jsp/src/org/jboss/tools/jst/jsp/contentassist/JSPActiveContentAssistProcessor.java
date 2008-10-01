@@ -24,6 +24,7 @@ import org.jboss.tools.common.el.core.model.ELModel;
 import org.jboss.tools.common.el.core.model.ELUtil;
 import org.jboss.tools.common.el.core.parser.ELParser;
 import org.jboss.tools.common.el.core.parser.ELParserFactory;
+import org.jboss.tools.common.el.core.parser.ELParserUtil;
 import org.jboss.tools.common.kb.KbException;
 import org.jboss.tools.common.kb.KbProposal;
 import org.jboss.tools.common.kb.KbQuery;
@@ -270,7 +271,7 @@ public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcess
 	 * @return
 	 */
 	private int getELStartPosition(String matchString) {
-		ELParser p = ELParserFactory.createJbossParser();
+		ELParser p = ELParserUtil.getJbossFactory().createParser();
 		ELModel model = p.parse(matchString);
 		ELInstance is = ELUtil.findInstance(model, matchString.length());
 		return is == null ? -1 : is.getStartPosition();
@@ -304,7 +305,7 @@ public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcess
 				currentValue.length() < matchString.length())
 			return -1;
 
-		ELParser p = ELParserFactory.createJbossParser();
+		ELParser p = ELParserUtil.getJbossFactory().createParser();
 		ELModel model = p.parse(currentValue);
 		ELInstance is = ELUtil.findInstance(model, matchString.length());
 		if(is == null || is.getCloseInstanceToken() == null) return -1;
