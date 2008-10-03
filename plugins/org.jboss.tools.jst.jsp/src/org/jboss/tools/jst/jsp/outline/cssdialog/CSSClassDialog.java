@@ -16,6 +16,8 @@ import java.util.Set;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
@@ -60,6 +62,7 @@ public class CSSClassDialog extends Dialog {
     private Combo classCombo;
     private CSSModel cssModel;
     private String selectorName;
+    private boolean allProject;
 
     final static int MIN_HEIGHT_FOR_BROWSER = 60;
     final static String[] fileExtensions = { "css" };
@@ -68,22 +71,25 @@ public class CSSClassDialog extends Dialog {
     final static String CSS_FILE_SELECT_DIALOG_EMPTY_MESSAGE = "No CSS file in the current project";
     final static String SKIP_FIRST_CHAR = ".";
     
-    public CSSClassDialog(Shell parentShell) {
+    /**
+     * 
+     * @param parentShell
+     * @param allProject (if allProject is true - browse css file in all projects, else only in current project)
+     */
+    public CSSClassDialog(Shell parentShell,boolean allProject) {
 	super(parentShell);
+	this.allProject = allProject;
 	setShellStyle(getShellStyle() | SWT.RESIZE | SWT.MAX
 		| SWT.APPLICATION_MODAL);
 	styleAttributes = new StyleAttributes();
     }
 
     /**
-     * Method for creating dialog area
      * 
      * @param parent
+     * @return
      */
-    protected Control createDialogArea(final Composite parent) {
-
-	final Composite composite = (Composite) super.createDialogArea(parent);
-
+    public Control createDialogComposite(Composite composite) {
 	GridLayout layout = new GridLayout();
 	layout.numColumns = 1;
 	composite.setLayout(layout);
@@ -110,8 +116,18 @@ public class CSSClassDialog extends Dialog {
 	text.addModifyListener(new ModifyListener() {
 	    public void modifyText(ModifyEvent e) {
 
-		IProject project = Util.getCurrentProject();
-		IResource res = project.findMember(text.getText());
+		IResource res = null;
+		if (allProject) {
+		    IWorkspace workspace = Util.getCurrentWorkspace();
+		    if(workspace!=null) {
+			res = workspace.getRoot().findMember(text.getText());
+		    } 
+		} else {
+		    IProject project = Util.getCurrentProject();
+		    if (project!=null)
+			res = project.findMember(text.getText());
+		}
+		
 		if (res != null) {
 		    if (res instanceof IFile) {
 			    file = (IFile) res;
@@ -171,7 +187,10 @@ public class CSSClassDialog extends Dialog {
 	button.addSelectionListener(new SelectionAdapter() {
 	    public void widgetSelected(SelectionEvent event) {
 
-		IProject project = Util.getCurrentProject();
+		IAdaptable project = Util.getCurrentWorkspace();
+		if (!allProject) {
+		    project = Util.getCurrentProject();
+		}
 
 		ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(
 			getShell(), new WorkbenchLabelProvider(),
@@ -185,8 +204,11 @@ public class CSSClassDialog extends Dialog {
 			.setEmptyListMessage(CSS_FILE_SELECT_DIALOG_EMPTY_MESSAGE);
 		dialog.open();
 		IResource res = (IResource) dialog.getFirstResult();
-		text.setText(res.getProjectRelativePath().toOSString());
-
+		if (allProject) {
+		    text.setText(res.getFullPath().toOSString());
+		} else {
+		    text.setText(res.getProjectRelativePath().toOSString());
+		}
 	    }
 	});
 
@@ -216,6 +238,30 @@ public class CSSClassDialog extends Dialog {
 
 	return composite;
     }
+    
+    public void saveChanges() {
+	styleComposite.updateStyle();
+	String newStyle = styleComposite.getNewStyle();
+	cssModel.setCSS(classCombo.getText(), newStyle);
+	cssModel.saveModel();
+    }
+
+    public String getSelectorName() {
+        return selectorName;
+    }
+    
+    /**
+     * Method for creating dialog area
+     * 
+     * @param parent
+     * 
+     */
+    protected Control createDialogArea(final Composite parent) {
+	
+	final Composite composite = (Composite) super.createDialogArea(parent);
+	
+	return createDialogComposite(composite);
+    }
 
     /**
      * Method for setting title for dialog
@@ -228,10 +274,7 @@ public class CSSClassDialog extends Dialog {
     }
 
     protected void okPressed() {
-	styleComposite.updateStyle();
-	String newStyle = styleComposite.getNewStyle();
-	cssModel.setCSS(classCombo.getText(), newStyle);
-	cssModel.saveModel();
+	saveChanges();
 	String sel = classCombo.getText();
 	if (sel.trim().startsWith(SKIP_FIRST_CHAR)) {
 	    sel = sel.substring(1);
@@ -239,9 +282,7 @@ public class CSSClassDialog extends Dialog {
 	selectorName = sel;
 	super.okPressed();
     }
-
-    public String getSelectorName() {
-        return selectorName;
-    }
+    
+    
 
 }

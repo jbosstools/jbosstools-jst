@@ -17,6 +17,7 @@ import java.util.StringTokenizer;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -349,6 +350,24 @@ public class Util {
 
 	IProject project = file.getProject();
 	return project;
-
+    }
+    
+    /**
+     * Get current workspace
+     * 
+     * @return
+     */
+    public static IWorkspace getCurrentWorkspace() {
+	IEditorPart editor = JspEditorPlugin.getDefault().getWorkbench()
+		.getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+	IEditorInput input = editor.getEditorInput();
+	IFile file = null;
+	if (input instanceof IFileEditorInput) {
+	    file = ((IFileEditorInput) input).getFile();
+	}
+	if (file == null)
+	    return null;
+	IWorkspace workspace = file.getWorkspace();
+	return workspace;
     }
 }

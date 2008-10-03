@@ -126,7 +126,7 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements
 		    
 		}
 	} else if (attributeName.endsWith("Class") || attributeName.endsWith("class") ) {
-	    CSSClassDialog dialog = new CSSClassDialog(cellEditorWindow.getShell());
+	    CSSClassDialog dialog = new CSSClassDialog(cellEditorWindow.getShell(),false);
 		if (dialog.open() == Window.OK) {
 		    externalEditing = false;
 		    return dialog.getSelectorName();

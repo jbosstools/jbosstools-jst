@@ -109,6 +109,21 @@
       </wizard>
       <wizard
             category="org.jboss.tools.jst.web"
+            class="org.jboss.tools.jst.web.ui.wizards.css.NewCSSClassWizard"
+            finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
+            icon="images/xstudio/wizards/new_css_class.gif"
+            id="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSClassWizard"
+            name="CSS Class"
+            preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
+            project="false">
+         <description>
+            	Create a CSS Class
+         </description>
+         <selection class="org.eclipse.core.resources.IResource">
+         </selection>
+      </wizard>
+      <wizard
+            category="org.jboss.tools.jst.web"
             class="org.jboss.tools.jst.web.ui.wizards.newfile.NewJSFileWizard"
             finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
             icon="images/xstudio/wizards/new_js_file.gif"
