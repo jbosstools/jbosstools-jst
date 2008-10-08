@@ -113,10 +113,11 @@ public class TabQuickEditControl extends Composite {
 	    label.setText(format(key));
 	    label.setLayoutData(new GridData(GridData.END, GridData.CENTER,
 		    false, false));
-	    if (Util.searchInCombo(key, comboMap.keySet()))
-		createCombo(this, key, styleAttributes.getAttribute(key));
-	    else
-		createText(this, key, styleAttributes.getAttribute(key));
+	    if (comboMap.keySet().contains(key)) {
+	    	createCombo(this, key, styleAttributes.getAttribute(key));
+	    } else {
+	    	createText(this, key, styleAttributes.getAttribute(key));
+	    }
 	}
     }
     
@@ -145,10 +146,11 @@ public class TabQuickEditControl extends Composite {
 	    label.setText(format(key));
 	    label.setLayoutData(new GridData(GridData.END, GridData.CENTER,
 		    false, false));
-	    if (Util.searchInCombo(key, comboMap.keySet()))
-		createCombo(this, key, styleAttributes.getAttribute(key));
-	    else
-		createText(this, key, styleAttributes.getAttribute(key));
+	    if (comboMap.keySet().contains(key)) {
+	    	createCombo(this, key, styleAttributes.getAttribute(key));
+	    } else {
+	    	createText(this, key, styleAttributes.getAttribute(key));
+	    }
 	}
 	this.layout();
     }

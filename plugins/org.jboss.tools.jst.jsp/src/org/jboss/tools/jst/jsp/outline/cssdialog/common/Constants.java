@@ -10,6 +10,11 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.outline.cssdialog.common;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.eclipse.swt.graphics.RGB;
 
 /**
@@ -24,11 +29,11 @@ public class Constants {
     public static final String extSizes[] = new String[] { "", "em", "ex",
 	    "px", "in", "cm", "mm", "pt", "pc" };
 
-    public static final String elemFolder[] = new String[] {
+    public static final Set elemFolder = Collections.unmodifiableSet(new HashSet(Arrays.asList(new String[] {
 	    "background-image", "list-style-image", "cursor", "cue-after",
-	    "cue-before" };
+	    "cue-before" })));
 
-    public static final String extElem[] = new String[] {
+    public static final Set extElem = Collections.unmodifiableSet(new HashSet(Arrays.asList(new String[] {
 	    "border-bottom-width", "border-left-width", "borer-right-width",
 	    "border-top-width", "border-width", "bottom", "font-size",
 	    "height", "left", "letter-spacing", "line-height", "margin",
@@ -37,7 +42,7 @@ public class Constants {
 	    "min-height", "min-width", "outline-width", "padding",
 	    "padding-bottom", "padding-left", "padding-right", "padding-top",
 	    "right", "size", "text-indent", "top", "vertical-align", "width",
-	    "word-spacing" };
+	    "word-spacing" })));
 
     public static final String NONE = "none";
 

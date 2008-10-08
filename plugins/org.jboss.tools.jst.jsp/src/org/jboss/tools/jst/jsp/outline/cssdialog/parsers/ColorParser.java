@@ -50,12 +50,8 @@ public class ColorParser {
     
     private static final String FILE_NAME = "cssdialog/colors.xml"; //$NON-NLS-1$
 
-    public static synchronized ColorParser getInstance() {
-    	
-    	if(colorParser==null) {
-    		colorParser = new ColorParser();
-    	}
-    	return colorParser;
+    public static ColorParser getInstance() {
+    	return ColorParserHolder.INSTANCE;
     }
     /**
      * Constructor for Color parser
@@ -106,5 +102,9 @@ public class ColorParser {
 			map = new HashMap<String, String>();
 		}
 		return map;
+	}
+	
+	private static class ColorParserHolder {
+		private static final ColorParser INSTANCE = new ColorParser(); 
 	}
 }

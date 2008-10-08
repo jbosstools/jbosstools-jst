@@ -88,6 +88,8 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		IReusableEditor, ITextEditorExtension, ITextEditorExtension2,
 		ITextEditorExtension3, INavigationLocationProvider, IMultiPageEditor {
 	
+	public static final String EDITOR_ID = "org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor";
+	
 	private static final String VISUALSOURCE_TAB_LABEL = "JSPMultiPageEditor.TabLabel.VisualSource"; //$NON-NLS-1$
 
 	private static final String SOURCE_TAB_LABEL = "JSPMultiPageEditor.TabLabel.Source"; //$NON-NLS-1$

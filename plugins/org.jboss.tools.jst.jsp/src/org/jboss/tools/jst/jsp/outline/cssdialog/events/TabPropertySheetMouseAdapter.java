@@ -103,29 +103,29 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
      */
     public void mouseDown(MouseEvent event) {
 
-	for (int i = 0; i < tree.getColumnCount(); i++)
-	    tree.getColumn(i).pack();
-
-	Control old = editor.getEditor();
-	if (old != null)
-	    old.dispose();
-
-	Point pt = new Point(event.x, event.y);
-
-	final TreeItem item = tree.getItem(pt);
-
-	if (item != null) {
-
-	    if (Util.searchOnBlock(item.getText(Constants.FIRST_COLUMN).trim(),
-		    elementsMap.keySet()))
-		return;
-
-	    if (Util.searchInCombo(item.getText(Constants.FIRST_COLUMN).trim(),
-		    comboMap.keySet()))
-		createCombo(item, Constants.SECOND_COLUMN);
-	    else
-		createText(item, Constants.SECOND_COLUMN);
-	}
+		for (int i = 0; i < tree.getColumnCount(); i++)
+		    tree.getColumn(i).pack();
+	
+		Control old = editor.getEditor();
+		if (old != null)
+		    old.dispose();
+	
+		Point pt = new Point(event.x, event.y);
+	
+		final TreeItem item = tree.getItem(pt);
+	
+		if (item != null) {
+	
+		    if (elementsMap.keySet().contains(item.getText(Constants.FIRST_COLUMN).trim())) {
+		    	return;
+		    }
+	
+		    if (comboMap.keySet().contains(item.getText(Constants.FIRST_COLUMN).trim())) {
+		    	createCombo(item, Constants.SECOND_COLUMN);
+		    } else {
+		    	createText(item, Constants.SECOND_COLUMN);	
+		    }
+		}
     }
 
     /**

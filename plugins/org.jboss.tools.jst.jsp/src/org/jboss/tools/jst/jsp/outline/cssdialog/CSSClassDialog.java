@@ -17,6 +17,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -118,10 +119,8 @@ public class CSSClassDialog extends Dialog {
 
 		IResource res = null;
 		if (allProject) {
-		    IWorkspace workspace = Util.getCurrentWorkspace();
-		    if(workspace!=null) {
+		    IWorkspace workspace = ResourcesPlugin.getWorkspace();
 			res = workspace.getRoot().findMember(text.getText());
-		    } 
 		} else {
 		    IProject project = Util.getCurrentProject();
 		    if (project!=null)
@@ -187,7 +186,7 @@ public class CSSClassDialog extends Dialog {
 	button.addSelectionListener(new SelectionAdapter() {
 	    public void widgetSelected(SelectionEvent event) {
 
-		IAdaptable project = Util.getCurrentWorkspace();
+		IAdaptable project = ResourcesPlugin.getWorkspace();
 		if (!allProject) {
 		    project = Util.getCurrentProject();
 		}
