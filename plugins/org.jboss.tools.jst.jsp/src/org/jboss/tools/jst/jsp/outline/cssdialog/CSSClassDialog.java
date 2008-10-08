@@ -21,6 +21,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.events.DisposeEvent;
@@ -71,13 +72,15 @@ public class CSSClassDialog extends Dialog {
     final static String CSS_FILE_SELECT_DIALOG = "Select CSS file from the tree:";
     final static String CSS_FILE_SELECT_DIALOG_EMPTY_MESSAGE = "No CSS file in the current project";
     final static String SKIP_FIRST_CHAR = ".";
-    
+
     /**
      * 
      * @param parentShell
-     * @param allProject (if allProject is true - browse css file in all projects, else only in current project)
+     * @param allProject
+     *            (if allProject is true - browse css file in all projects, else
+     *            only in current project)
      */
-    public CSSClassDialog(Shell parentShell,boolean allProject) {
+    public CSSClassDialog(Shell parentShell, boolean allProject) {
 	super(parentShell);
 	this.allProject = allProject;
 	setShellStyle(getShellStyle() | SWT.RESIZE | SWT.MAX
@@ -120,22 +123,22 @@ public class CSSClassDialog extends Dialog {
 		IResource res = null;
 		if (allProject) {
 		    IWorkspace workspace = ResourcesPlugin.getWorkspace();
-			res = workspace.getRoot().findMember(text.getText());
+		    res = workspace.getRoot().findMember(text.getText());
 		} else {
 		    IProject project = Util.getCurrentProject();
-		    if (project!=null)
+		    if (project != null)
 			res = project.findMember(text.getText());
 		}
-		
+
 		if (res != null) {
 		    if (res instanceof IFile) {
-			    file = (IFile) res;
-			    cssModel = new CSSModel(file);
-			    classCombo.removeAll();
-			    List<String> selectors = cssModel.getSelectors();
-			    for (String selector : selectors) {
-				classCombo.add(selector);
-			    }
+			file = (IFile) res;
+			cssModel = new CSSModel(file);
+			classCombo.removeAll();
+			List<String> selectors = cssModel.getSelectors();
+			for (String selector : selectors) {
+			    classCombo.add(selector);
+			}
 		    }
 		}
 	    }
@@ -150,7 +153,8 @@ public class CSSClassDialog extends Dialog {
 		.getImageDescriptor(Constants.IMAGE_FOLDERLARGE_FILE_LOCATION);
 	Image image = imageDesc.createImage();
 	button.setImage(image);
-	button.setToolTipText(MessageUtil.getString("CSS_BROWSE_BUTTON_TOOLTIP"));
+	button.setToolTipText(MessageUtil
+		.getString("CSS_BROWSE_BUTTON_TOOLTIP"));
 	button.addDisposeListener(new DisposeListener() {
 	    public void widgetDisposed(DisposeEvent e) {
 		Button button = (Button) e.getSource();
@@ -170,19 +174,18 @@ public class CSSClassDialog extends Dialog {
 	classCombo.addSelectionListener(new SelectionListener() {
 
 	    public void widgetDefaultSelected(SelectionEvent e) {
-		
+
 	    }
 
 	    public void widgetSelected(SelectionEvent e) {
 		String style = cssModel.getStyle(classCombo.getText());
-		classCombo.setToolTipText(cssModel.getCSSText(classCombo.getText()));
+		classCombo.setToolTipText(cssModel.getCSSText(classCombo
+			.getText()));
 		styleComposite.recreateStyleComposite(style);
 	    }
-	    
+
 	});
-	
-	
-	
+
 	button.addSelectionListener(new SelectionAdapter() {
 	    public void widgetSelected(SelectionEvent event) {
 
@@ -201,12 +204,13 @@ public class CSSClassDialog extends Dialog {
 		dialog.setAllowMultiple(false);
 		dialog
 			.setEmptyListMessage(CSS_FILE_SELECT_DIALOG_EMPTY_MESSAGE);
-		dialog.open();
-		IResource res = (IResource) dialog.getFirstResult();
-		if (allProject) {
-		    text.setText(res.getFullPath().toOSString());
-		} else {
-		    text.setText(res.getProjectRelativePath().toOSString());
+		if (dialog.open() == Window.OK) {
+		    IResource res = (IResource) dialog.getFirstResult();
+		    if (allProject) {
+			text.setText(res.getFullPath().toOSString());
+		    } else {
+			text.setText(res.getProjectRelativePath().toOSString());
+		    }
 		}
 	    }
 	});
@@ -237,7 +241,7 @@ public class CSSClassDialog extends Dialog {
 
 	return composite;
     }
-    
+
     public void saveChanges() {
 	styleComposite.updateStyle();
 	String newStyle = styleComposite.getNewStyle();
@@ -246,9 +250,9 @@ public class CSSClassDialog extends Dialog {
     }
 
     public String getSelectorName() {
-        return selectorName;
+	return selectorName;
     }
-    
+
     /**
      * Method for creating dialog area
      * 
@@ -256,9 +260,9 @@ public class CSSClassDialog extends Dialog {
      * 
      */
     protected Control createDialogArea(final Composite parent) {
-	
+
 	final Composite composite = (Composite) super.createDialogArea(parent);
-	
+
 	return createDialogComposite(composite);
     }
 
@@ -281,7 +285,4 @@ public class CSSClassDialog extends Dialog {
 	selectorName = sel;
 	super.okPressed();
     }
-    
-    
-
 }
