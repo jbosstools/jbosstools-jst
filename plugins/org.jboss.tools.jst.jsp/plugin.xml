@@ -304,11 +304,11 @@
    </extension-->
    
     <extension point="org.jboss.tools.jst.jsp.occurrenceStructureProviders">
-  	<provider 
-  		class="org.jboss.tools.jst.jsp.text.JSPOccurrenceProvider" 
-  		editorId="org.jboss.tools.jst.jsp" 
-  		name="%defaultOccurrenceStructureProviderName" /> 
-  </extension>
+	  	<provider 
+	  		class="org.jboss.tools.jst.jsp.text.JSPOccurrenceProvider" 
+	  		editorId="org.jboss.tools.jst.jsp" 
+	  		name="%defaultOccurrenceStructureProviderName" /> 
+	</extension>
     <extension
           point="org.eclipse.core.runtime.contentTypes">
        <file-association
@@ -340,5 +340,65 @@
 		<xclass id="org.jboss.tools.jst.jsp.outline.VpeProperties"
 			class="org.jboss.tools.jst.jsp.outline.VpeProperties"/>
    </extension>
+    
+   <extension 
+		point="org.jboss.tools.common.text.xml.contentAssistProcessor"
+		id="org.jboss.tools.jst.jsp.contentAssistProcessor"
+		name="org.jboss.tools.jst.jsp.contentAssistProcessor">
+
+		<contentAssistProcessor 
+				class="org.jboss.tools.jst.jsp.contentassist.ExtendedJSPContentAssistProcessor" 
+				id="org.jboss.tools.jst.jsp.contentassist.ExtendedJSPContentAssistProcessor">
+			<contenttype id="org.eclipse.jst.jsp.core.jspsource">
+				<partitiontype id="org.eclipse.wst.xml.XML_DEFAULT" />
+				<partitiontype id="org.eclipse.wst.html.HTML_DEFAULT" />
+				<partitiontype id="org.eclipse.jst.jsp.DEFAULT_JSP" />
+				<partitiontype id="org.eclipse.jst.jsp.JSP_DIRECTIVE" />
+				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.DELIMITER" />
+				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
+				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
+			</contenttype>
+			<contenttype id="org.eclipse.wst.html.core.htmlsource">
+				<partitiontype id="org.eclipse.wst.xml.XML_DEFAULT" />
+				<partitiontype id="org.eclipse.wst.html.HTML_DEFAULT" />
+				<partitiontype id="org.eclipse.jst.jsp.DEFAULT_JSP" />
+				<partitiontype id="org.eclipse.jst.jsp.JSP_DIRECTIVE" />
+				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.DELIMITER" />
+				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
+				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
+			</contenttype>
+		</contentAssistProcessor>
+		
+		<contentAssistProcessor 
+				class="org.jboss.tools.jst.jsp.contentassist.FaceletsHtmlContentAssistProcessor" 
+				id="org.jboss.tools.jst.jsp.contentassist.FaceletsHtmlContentAssistProcessor">
+			<contenttype id="org.eclipse.jst.jsp.core.jspsource">
+				<partitiontype id="org.eclipse.wst.html.HTML_DEFAULT" />
+				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
+				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" /> <!-- Is this forgotten? -->
+			</contenttype>
+			<contenttype id="org.eclipse.wst.html.core.htmlsource">
+				<partitiontype id="org.eclipse.wst.html.HTML_DEFAULT" />
+				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
+				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" /> <!-- Is this forgotten? -->
+			</contenttype>
+		</contentAssistProcessor>
+
+		<!-- 
+			//added by estherbin
+			//fix http://jira.jboss.com/jira/browse/JBIDE-1791
+		-->
+		<contentAssistProcessor 
+				class="org.eclipse.wst.css.ui.internal.contentassist.CSSContentAssistProcessor" 
+				id="org.eclipse.wst.css.ui.internal.contentassist.CSSContentAssistProcessor">
+			<contenttype id="org.eclipse.jst.jsp.core.jspsource">
+				<partitiontype id="org.eclipse.wst.css.STYLE" />
+			</contenttype>
+			<contenttype id="org.eclipse.wst.html.core.htmlsource">
+				<partitiontype id="org.eclipse.wst.css.STYLE" />
+			</contenttype>
+		</contentAssistProcessor>
+		
+  </extension>
     
 </plugin>
