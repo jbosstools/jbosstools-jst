@@ -32,6 +32,7 @@ import org.eclipse.wst.html.ui.StructuredTextViewerConfigurationHTML;
 import org.eclipse.wst.sse.ui.internal.format.StructuredFormattingStrategy;
 import org.jboss.tools.common.text.xml.contentassist.ContentAssistProcessorBuilder;
 import org.jboss.tools.common.text.xml.contentassist.ContentAssistProcessorDefinition;
+import org.jboss.tools.common.text.xml.contentassist.SortingCompoundContentAssistProcessor;
 import org.jboss.tools.jst.jsp.contentassist.FaceletsHtmlContentAssistProcessor;
 import org.jboss.tools.jst.jsp.format.HTMLFormatProcessor;
 import org.osgi.framework.Bundle;
@@ -44,12 +45,22 @@ public class HTMLTextViewerConfiguration extends StructuredTextViewerConfigurati
 
 	@SuppressWarnings("restriction")
     protected IContentAssistProcessor[] getContentAssistProcessors(ISourceViewer sourceViewer, String partitionType) {
+		SortingCompoundContentAssistProcessor sortingCompoundProcessor = new SortingCompoundContentAssistProcessor(sourceViewer, partitionType);
+		List<IContentAssistProcessor> processors = new ArrayList<IContentAssistProcessor>();
+		
+//		if (sortingCompoundProcessor.size() > 0) {
+		if (sortingCompoundProcessor.supportsPartitionType(partitionType)) {
+			processors.add(sortingCompoundProcessor);
+		}
+
+/*		
 //		IContentAssistProcessor[] processors = null;
 
 		// if we have our own processors we need 
 		// to define them in plugin.xml file of their
 		// plugins using extention point 
 		// "org.jboss.tools.common.text.xml.contentAssistProcessor"
+		
 		
 		ContentAssistProcessorDefinition[] defs = ContentAssistProcessorBuilder.getInstance().getContentAssistProcessorDefinitions(partitionType);
 
@@ -73,6 +84,7 @@ public class HTMLTextViewerConfiguration extends StructuredTextViewerConfigurati
 		    processors.add(new CSSContentAssistProcessor());
 		}
 
+*/
 		return (IContentAssistProcessor[])processors.toArray(new IContentAssistProcessor[0]);
 	}
 

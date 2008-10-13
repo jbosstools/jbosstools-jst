@@ -31,6 +31,7 @@ import org.osgi.framework.Bundle;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.text.xml.contentassist.ContentAssistProcessorBuilder;
 import org.jboss.tools.common.text.xml.contentassist.ContentAssistProcessorDefinition;
+import org.jboss.tools.common.text.xml.contentassist.SortingCompoundContentAssistProcessor;
 import org.jboss.tools.jst.jsp.contentassist.FaceletsHtmlContentAssistProcessor;
 import org.jboss.tools.jst.jsp.contentassist.ExtendedJSPContentAssistProcessor;
 
@@ -44,6 +45,16 @@ public class JSPTextViewerConfiguration extends StructuredTextViewerConfiguratio
 	}
 
 	protected IContentAssistProcessor[] getContentAssistProcessors(ISourceViewer sourceViewer, String partitionType) {
+		SortingCompoundContentAssistProcessor sortingCompoundProcessor = new SortingCompoundContentAssistProcessor(sourceViewer, partitionType);
+		List<IContentAssistProcessor> processors = new ArrayList<IContentAssistProcessor>();
+		
+//		if (sortingCompoundProcessor.size() > 0) {
+		if (sortingCompoundProcessor.supportsPartitionType(partitionType)) {
+			processors.add(sortingCompoundProcessor);
+			return (IContentAssistProcessor[])processors.toArray(new IContentAssistProcessor[0]);
+		}
+
+		/*
 		// if we have our own processors we need 
 		// to define them in plugin.xml file of their
 		// plugins using extention point 
@@ -71,6 +82,8 @@ public class JSPTextViewerConfiguration extends StructuredTextViewerConfiguratio
 			processors.add(new ExtendedJSPContentAssistProcessor());
 			return (IContentAssistProcessor[])processors.toArray(new IContentAssistProcessor[0]);
 		}
+		*/
+		
 		IContentAssistProcessor[] superProcessors = super.getContentAssistProcessors(sourceViewer, partitionType);
 
 		if (superProcessors != null && superProcessors.length > 0) {
