@@ -47,7 +47,6 @@ public class WebContentAssistProviderTest extends TestCase {
 	}
 
 	public void testJsfBeanPropertyList() {
-		waitForJobs();
 		// seam beans list
 		List beanList = webPromptingProvider.getList(projectModel, WebPromptingProvider.JSF_BEAN_PROPERTIES, "facesManagedBean", new Properties());
 		assertTrue("Bean property list does not contain Managed bean property in XModel.", beanList.contains("property1"));
@@ -61,17 +60,8 @@ public class WebContentAssistProviderTest extends TestCase {
 		List bundlePropertyList = webPromptingProvider.getList(projectModel, WebPromptingProvider.JSF_BUNDLE_PROPERTIES, "org.jboss.seam.example.numberguess.test", null);
 		assertTrue("Bundle property list does not contain expected property in XModel.", bundlePropertyList.contains("bundleProperty1"));
 	}
-	
-	void waitForJobs() {
-		try {
-			XJob.waitForJob();
-		} catch (InterruptedException e) {
-			fail("Interrupted");
-		}
-	}
 
 	public void testTlds() {
-		waitForJobs();
 		List tldList = webPromptingProvider.getList(projectModel, WebPromptingProvider.JSF_GET_TAGLIBS, "", null);
 		assertTrue("TLD list does not contain expected TLD in XModel.", tldList.contains("http://jboss.com/products/seam/taglib"));
 	}
@@ -81,7 +71,6 @@ public class WebContentAssistProviderTest extends TestCase {
 		project = provider.getProject();
 		project.refreshLocal(IResource.DEPTH_INFINITE, null);
 		project.build(IncrementalProjectBuilder.FULL_BUILD,null);
-		waitForJobs();
 		XModelObject xmo = EclipseResourceUtil.getObjectByResource(project);
 		assertNotNull("Can't get XModel Object for test project.", xmo);
 		projectModel = xmo.getModel();

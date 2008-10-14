@@ -6,11 +6,10 @@ import junit.framework.TestSuite;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
-import org.eclipse.ui.PlatformUI;
 import org.jboss.tools.common.test.util.TestProjectProvider;
 import org.jboss.tools.jst.jsp.contentassist.AutoContentAssistantProposal;
 import org.jboss.tools.jst.jsp.test.TestUtil;
-import org.jboss.tools.test.util.xpl.EditorTestHelper;
+import org.jboss.tools.test.util.JobUtils;
 
 public class JstJspJbide1641Test extends ContentAssistantTestCase {
 	TestProjectProvider provider = null;
@@ -98,7 +97,7 @@ public class JstJspJbide1641Test extends ContentAssistantTestCase {
 		assertTrue("The proposal to apply not found.", bPropoosalToApplyFound);
 
 		try {
-			EditorTestHelper.joinBackgroundActivities();
+			JobUtils.waitForIdle();
 		} catch (Exception e) {
 			e.printStackTrace();
 			assertTrue("Waiting for the jobs to complete has failed.", false);

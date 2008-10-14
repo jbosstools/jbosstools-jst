@@ -18,7 +18,7 @@ import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor;
 import org.jboss.tools.jst.jsp.test.TestUtil;
-import org.jboss.tools.test.util.xpl.EditorTestHelper;
+import org.jboss.tools.test.util.JobUtils;
 
 public class ContentAssistantTestCase extends TestCase {
 	protected IProject project = null;
@@ -31,7 +31,7 @@ public class ContentAssistantTestCase extends TestCase {
 	protected void openEditor(String fileName) {
 
 		try {
-			EditorTestHelper.joinBackgroundActivities();
+			JobUtils.waitForIdle();
 		} catch (Exception e) {
 			e.printStackTrace();
 			assertTrue("Waiting for the jobs to complete has failed.", false);
@@ -61,7 +61,7 @@ public class ContentAssistantTestCase extends TestCase {
 		// Delay for 3 seconds so that
 		// the Favorites view can be seen.
 		try {
-			EditorTestHelper.joinBackgroundActivities();
+			JobUtils.waitForIdle();;
 		} catch (Exception e) {
 			e.printStackTrace();
 			assertTrue("Waiting for the jobs to complete has failed.", false);

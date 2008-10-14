@@ -8,11 +8,10 @@ import junit.framework.TestSuite;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.sse.ui.internal.contentassist.CustomCompletionProposal;
 import org.jboss.tools.common.test.util.TestProjectProvider;
 import org.jboss.tools.jst.jsp.test.TestUtil;
-import org.jboss.tools.test.util.xpl.EditorTestHelper;
+import org.jboss.tools.test.util.JobUtils;
 
 
 public class JsfJspJbide1717Test extends ContentAssistantTestCase {
@@ -90,7 +89,7 @@ public class JsfJspJbide1717Test extends ContentAssistantTestCase {
 		assertFalse("Content Assistant returned no proposals of type CustomCompletionProposal.",customCompletionProposals.isEmpty());
 
 		try {
-			EditorTestHelper.joinBackgroundActivities();
+			JobUtils.waitForIdle();
 		} catch (Exception e) {
 			e.printStackTrace();
 			assertTrue("Waiting for the jobs to complete has failed.", false);
