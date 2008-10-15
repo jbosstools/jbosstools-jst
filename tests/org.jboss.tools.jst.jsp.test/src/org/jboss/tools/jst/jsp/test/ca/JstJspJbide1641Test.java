@@ -79,7 +79,7 @@ public class JstJspJbide1641Test extends ContentAssistantTestCase {
 		}
 		
 
-		assertTrue("Content Assistant peturned no proposals", (result != null && result.length > 0));
+		assertTrue("Content Assistant returned no proposals", (result != null && result.length > 0));
 
 		boolean bPropoosalToApplyFound = false;
 		for (int i = 0; i < result.length; i++) {
