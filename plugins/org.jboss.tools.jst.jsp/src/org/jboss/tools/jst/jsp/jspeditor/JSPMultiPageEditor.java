@@ -144,6 +144,9 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 				Class cls = b
 						.loadClass("org.jboss.tools.vpe.editor.VpeEditorPartFactory"); //$NON-NLS-1$
 				visualEditorFactory = (IVisualEditorFactory) cls.newInstance();
+			} else {
+				JspEditorPlugin.getPluginLog().logError("Plugin org.jboss.tools.vpe not available," + //$NON-NLS-1$
+						" visual page editor will be not available"); //$NON-NLS-1$
 			}
 		} catch (Exception e) {
 			JspEditorPlugin.getPluginLog().logError("Error in loading visual editor factory", e); //$NON-NLS-1$
