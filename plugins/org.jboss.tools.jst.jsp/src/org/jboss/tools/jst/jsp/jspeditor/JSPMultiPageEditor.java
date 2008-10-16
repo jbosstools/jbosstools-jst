@@ -88,7 +88,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		IReusableEditor, ITextEditorExtension, ITextEditorExtension2,
 		ITextEditorExtension3, INavigationLocationProvider, IMultiPageEditor {
 	
-	public static final String EDITOR_ID = "org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor";
+	public static final String EDITOR_ID = "org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor"; //$NON-NLS-1$
 	
 	private static final String VISUALSOURCE_TAB_LABEL = "JSPMultiPageEditor.TabLabel.VisualSource"; //$NON-NLS-1$
 
@@ -107,8 +107,6 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	private IVisualEditor visualEditor;
 
 	private int visualSourceIndex;
-
-	private int visualIndex;
 
 	private JSPTextEditor sourceEditor;
 
@@ -141,9 +139,12 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	static {
 		try {
 			Bundle b = Platform.getBundle("org.jboss.tools.vpe"); //$NON-NLS-1$
-			Class cls = b
-					.loadClass("org.jboss.tools.vpe.editor.VpeEditorPartFactory"); //$NON-NLS-1$
-			visualEditorFactory = (IVisualEditorFactory) cls.newInstance();
+			//FIX for JBIDE-2248
+			if(b!=null) {
+				Class cls = b
+						.loadClass("org.jboss.tools.vpe.editor.VpeEditorPartFactory"); //$NON-NLS-1$
+				visualEditorFactory = (IVisualEditorFactory) cls.newInstance();
+			}
 		} catch (Exception e) {
 			JspEditorPlugin.getPluginLog().logError("Error in loading visual editor factory", e); //$NON-NLS-1$
 		}
@@ -219,22 +220,22 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 
 	protected void pageChange(int newPageIndex) {
 		selectedPageIndex = newPageIndex;
-
-		if (newPageIndex == visualSourceIndex) {
-				if (visualEditor.getVisualEditor() == null) {
-					visualEditor.createVisualEditor();
-				}
-				visualEditor.setVisualMode(IVisualEditor.VISUALSOURCE_MODE);
-			
-			}else if (newPageIndex == sourceIndex)
-				visualEditor.setVisualMode(IVisualEditor.SOURCE_MODE);
-		    else if (newPageIndex == previewIndex) {
-				if (visualEditor.getPreviewWebBrowser() == null) {
-					visualEditor.createPreviewBrowser();
-				}
-				visualEditor.setVisualMode(IVisualEditor.PREVIEW_MODE); 				
-			}
+		if(visualEditor!=null) {
+			if (newPageIndex == visualSourceIndex) {
+					if (visualEditor.getVisualEditor() == null) {
+						visualEditor.createVisualEditor();
+					}
+					visualEditor.setVisualMode(IVisualEditor.VISUALSOURCE_MODE);
 				
+				}else if (newPageIndex == sourceIndex)
+					visualEditor.setVisualMode(IVisualEditor.SOURCE_MODE);
+			    else if (newPageIndex == previewIndex) {
+					if (visualEditor.getPreviewWebBrowser() == null) {
+						visualEditor.createPreviewBrowser();
+					}
+					visualEditor.setVisualMode(IVisualEditor.PREVIEW_MODE); 				
+				}
+		}	
 		superPageChange(newPageIndex);
  
 	}
@@ -252,7 +253,9 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 					((AbstractTextEditor) sourceEditor)
 							.setInput(getEditorInput());
 			}
-			visualEditor.setInput(getEditorInput());
+			if(visualEditor!=null) {
+				visualEditor.setInput(getEditorInput());
+			}
 			updateTitle();
 		}
 		updateFile();
@@ -450,14 +453,17 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 
 	private void createPagesForVPE() {
 		sourceEditor = new JSPTextEditor(this);
-		visualEditor = visualEditorFactory.createVisualEditor(this,
-				sourceEditor, false);
-
+		if(visualEditorFactory!=null) {
+			visualEditor = visualEditorFactory.createVisualEditor(this,
+					sourceEditor, false);
+		}
 		try {
-			visualSourceIndex = addPage(visualEditor, getEditorInput());
-			setPageText(visualSourceIndex, JSPEditorMessages
-					.getString(VISUALSOURCE_TAB_LABEL));
-			setPartName(visualEditor.getTitle());
+			if(visualEditor!=null) {
+				visualSourceIndex = addPage(visualEditor, getEditorInput());
+				setPageText(visualSourceIndex, JSPEditorMessages
+						.getString(VISUALSOURCE_TAB_LABEL));
+				setPartName(visualEditor.getTitle());
+			}
 		} catch (PartInitException e) {
 			JspEditorPlugin.getPluginLog().logError(e);
 		}
@@ -471,20 +477,29 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		}*/
 
 		try {
-			sourceIndex = addPage(visualEditor, getEditorInput());
-			setPageText(sourceIndex, JSPEditorMessages
-					.getString(SOURCE_TAB_LABEL));
-			setPartName(visualEditor.getTitle());
+			if(visualEditor!=null) {
+				sourceIndex = addPage(visualEditor, getEditorInput());
+				setPageText(sourceIndex, JSPEditorMessages
+						.getString(SOURCE_TAB_LABEL));
+				setPartName(visualEditor.getTitle());
+			} else {
+				sourceIndex = addPage(sourceEditor, getEditorInput());
+				setPageText(sourceIndex, JSPEditorMessages
+						.getString(SOURCE_TAB_LABEL));
+				setPartName(sourceEditor.getTitle());
+			}
 		} catch (PartInitException e) {
 			JspEditorPlugin.getPluginLog().logError(e);
 		}
 
 		// Add tab contain default web-browser
 		try {
-			previewIndex = addPage(visualEditor, getEditorInput());
-			setPageText(previewIndex, JSPEditorMessages
-					.getString(PREVIEW_TAB_LABEL));
-			setPartName(visualEditor.getTitle());
+			if(visualEditor!=null) {
+				previewIndex = addPage(visualEditor, getEditorInput());
+				setPageText(previewIndex, JSPEditorMessages
+						.getString(PREVIEW_TAB_LABEL));
+				setPartName(visualEditor.getTitle());
+			}
 		} catch (PartInitException e) {
 			JspEditorPlugin.getPluginLog().logError(e);
 		}
@@ -566,7 +581,9 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 			((MultiPageEditorActionBarContributor) contributor)
 					.setActivePage(null);
 		}
-		visualEditor.dispose();
+		if(visualEditor!=null) {
+			visualEditor.dispose();
+		}
 		site.dispose();
 		outlinePage = null;
 		XModelObject o = getModelObject();

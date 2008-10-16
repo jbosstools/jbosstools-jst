@@ -62,9 +62,10 @@ public class JSPContentOutlineConfiguration extends HTMLContentOutlineConfigurat
 	static {
 		try {
 			Bundle b = Platform.getBundle("org.jboss.tools.vpe");
-			Class cls = b.loadClass("org.jboss.tools.vpe.editor.dnd.context.ViewerDropAdapterFactory");
-			dropAdapterFactory = (IViewerDropAdapterFactory)cls.newInstance();
-			
+			if(b!=null) {
+				Class cls = b.loadClass("org.jboss.tools.vpe.editor.dnd.context.ViewerDropAdapterFactory");
+				dropAdapterFactory = (IViewerDropAdapterFactory)cls.newInstance();
+			}
 		} catch (Exception e) {
 			JspEditorPlugin.getPluginLog().logError(e);
 		}
@@ -86,12 +87,13 @@ public class JSPContentOutlineConfiguration extends HTMLContentOutlineConfigurat
 				FileTransfer.getInstance(),
 				TextTransfer.getInstance()
 			};
+			if(dropAdapterFactory!=null) {
 			fTransferDropTargetListeners = new TransferDropTargetListener[transfers.length];
 			for (int i = 0; i < transfers.length; i++) {
 				final Transfer transfer = transfers[i];
 				DropContext dropContext = new DropContext();
-				final ViewerDropAdapter dropAdapter = dropAdapterFactory.createDropAdapter(transfer, treeViewer, editor, transfer, dropContext);
-				fTransferDropTargetListeners[i] = new TransferDropTargetListener() {
+					final ViewerDropAdapter dropAdapter = dropAdapterFactory.createDropAdapter(transfer, treeViewer, editor, transfer, dropContext);
+					fTransferDropTargetListeners[i] = new TransferDropTargetListener() {
 					public void dragEnter(DropTargetEvent event) {
 						dropAdapter.dragEnter(event);
 					}
@@ -124,6 +126,9 @@ public class JSPContentOutlineConfiguration extends HTMLContentOutlineConfigurat
 						return getTransfer().isSupportedType(event.currentDataType);
 					}
 				};
+				}
+			} else {
+				fTransferDropTargetListeners = new TransferDropTargetListener[0];
 			}
 		}
 		return fTransferDropTargetListeners;
