@@ -48,6 +48,7 @@ import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.core.ServerUtil;
 import org.eclipse.wst.server.core.internal.RuntimeWorkingCopy;
 import org.eclipse.wst.server.core.internal.ServerWorkingCopy;
+import org.jboss.tools.common.util.FileUtil;
 
 /**
  * @author eskimo
@@ -56,6 +57,8 @@ import org.eclipse.wst.server.core.internal.ServerWorkingCopy;
 public class JBossASAdapterInitializer implements IStartup {
 
 	public static final String JBOSS_AS_HOME = "../../../../jboss-eap/jboss-as"; 	// JBoss AS home directory (relative to plugin)- <RHDS_HOME>/jbossas.
+	
+	public static final String SERVERS_FILE = "../../../application_platforms.properties";
 
 	public static final String JBOSS_AS_RUNTIME_TYPE_ID 
 										= "org.jboss.ide.eclipse.as.runtime.42";
@@ -98,6 +101,50 @@ public class JBossASAdapterInitializer implements IStartup {
 				return;
 			}
 			JstFirstRunPlugin.getDefault().getPreferenceStore().setValue(FIRST_START_PREFERENCE_NAME, false);
+			
+			File serversFile = new File(SERVERS_FILE);
+			if(serversFile.exists()){
+				String str = FileUtil.readFile(serversFile);
+				int position = 0;
+				while(true){
+					String jbossASLocation = null;
+					
+					position = str.indexOf("=",position);
+					if(position < 0) break;
+					
+					// server name
+					position = str.indexOf(",",position);
+					if(position < 0) break;
+
+					// server type
+					position = str.indexOf(",",position);
+					if(position < 0) break;
+					
+					// server location
+					position = str.indexOf(",",position);
+					if(position < 0) break;
+					
+					int next = str.indexOf("server",position);
+					
+					if(next < 0)
+						jbossASLocation = str.substring(position+1,str.length()-1);
+					else
+						jbossASLocation = str.substring(position+1,next);
+					
+					jbossASLocation = jbossASLocation.trim();
+					
+					IRuntimeWorkingCopy runtime = null;
+					IProgressMonitor progressMonitor = new NullProgressMonitor();
+					if (runtime == null) {
+						runtime = createRuntime(jbossASLocation, progressMonitor);
+					}
+					if (runtime != null) {
+						createServer(progressMonitor, runtime);
+					}
+
+					createDriver(jbossASLocation);
+				}
+			}
 
 			String jbossASLocation = null;
 			String pluginLocation = FileLocator.resolve(JstFirstRunPlugin.getDefault().getBundle().getEntry("/")).getPath();
