@@ -19,6 +19,8 @@ import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
@@ -80,7 +82,6 @@ import org.jboss.tools.jst.jsp.editor.IVisualEditorFactory;
 import org.jboss.tools.jst.jsp.preferences.VpePreference;
 import org.jboss.tools.jst.web.tld.VpeTaglibManager;
 import org.jboss.tools.jst.web.tld.VpeTaglibManagerProvider;
-import org.osgi.framework.Bundle;
 
 // Fix for EXIN-232: The IMultiPageEditor interface implementation is added.
 public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
@@ -101,8 +102,12 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	private static final String PREVIEW_TAB="Preview"; //$NON-NLS-1$
 	//visual tab
 	private static final String VISUAL_SOURCE_TAB="Visual/Source"; //$NON-NLS-1$
+	
+	private static final String VPE_VISUAL_EDITOR_IMPL_ID="org.jboss.tools.vpe.org.jboss.tools.vpe.editor.VpeEditorPartFactory"; //$NON-NLS-1$
 	//source tab
 	private static final String SOURCE_TAB="Source"; //$NON-NLS-1$
+	
+	private static final String VISUAL_EDITOR_IMPL_EXTENSION_POINT_NAME="visulaEditorImplementations"; //$NON-NLS-1$
 
 	private IVisualEditor visualEditor;
 
@@ -137,19 +142,32 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	static IVisualEditorFactory visualEditorFactory;
 
 	static {
+		//Fix For JBIDE-2674
 		try {
-			Bundle b = Platform.getBundle("org.jboss.tools.vpe"); //$NON-NLS-1$
-			//FIX for JBIDE-2248
-			if(b!=null) {
-				Class cls = b
-						.loadClass("org.jboss.tools.vpe.editor.VpeEditorPartFactory"); //$NON-NLS-1$
-				visualEditorFactory = (IVisualEditorFactory) cls.newInstance();
+			IExtension visualEditorExtension = Platform.getExtensionRegistry()
+					.getExtension(JspEditorPlugin.PLUGIN_ID,
+							VISUAL_EDITOR_IMPL_EXTENSION_POINT_NAME,
+							VPE_VISUAL_EDITOR_IMPL_ID);
+			if (visualEditorExtension != null) {
+				IConfigurationElement[] configurationElements = visualEditorExtension
+						.getConfigurationElements();
+				if (configurationElements != null
+						&& configurationElements.length == 1) {
+					visualEditorFactory = (IVisualEditorFactory) configurationElements[0]
+							.createExecutableExtension("class"); //$NON-NLS-1$
+				} else {
+					JspEditorPlugin
+							.getPluginLog()
+							.logError(
+									"Visual Editor Extension Point not configured correctly"); //$NON-NLS-1$
+				}
 			} else {
-				JspEditorPlugin.getPluginLog().logError("Plugin org.jboss.tools.vpe not available," + //$NON-NLS-1$
-						" visual page editor will be not available"); //$NON-NLS-1$
+				JspEditorPlugin.getPluginLog().logError(
+						"Visual Editor Implementation not available"); //$NON-NLS-1$
 			}
-		} catch (Exception e) {
-			JspEditorPlugin.getPluginLog().logError("Error in loading visual editor factory", e); //$NON-NLS-1$
+		} catch (CoreException e) {
+			JspEditorPlugin.getPluginLog().logError(
+					"Visual Editor Implementation not available" + e); //$NON-NLS-1$
 		}
 	}
 
