@@ -71,6 +71,7 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 		clearAll();
 		setConnector(null);
 		setReferenceNode(null);
+		setPageContext(null);
 
 	}
 	/**
