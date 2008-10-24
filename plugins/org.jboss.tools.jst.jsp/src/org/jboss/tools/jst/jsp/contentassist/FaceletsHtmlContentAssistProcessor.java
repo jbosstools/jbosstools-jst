@@ -211,7 +211,7 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
             	kbProposal.postProcess(currentValue, offset);
                 int relevance = kbProposal.getRelevance();
                 if(relevance==KbProposal.R_NONE) {
-                    relevance = XMLRelevanceConstants.R_XML_ATTRIBUTE_VALUE;
+                    relevance = KbProposal.R_XML_ATTRIBUTE_VALUE;
                 }
                 
                 if(kbProposal.getStart() >= 0) {
