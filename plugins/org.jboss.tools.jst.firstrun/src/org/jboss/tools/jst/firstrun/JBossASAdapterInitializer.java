@@ -109,22 +109,22 @@ public class JBossASAdapterInitializer implements IStartup {
 				while(true){
 					String jbossASLocation = null;
 					
-					position = str.indexOf("=",position);
+					position = str.indexOf("=",position+1);
 					if(position < 0) break;
 					
 					// server name
-					position = str.indexOf(",",position);
+					position = str.indexOf(",",position+1);
 					if(position < 0) break;
 
 					// server type
-					position = str.indexOf(",",position);
+					position = str.indexOf(",",position+1);
 					if(position < 0) break;
 					
 					// server location
-					position = str.indexOf(",",position);
+					position = str.indexOf(",",position+1);
 					if(position < 0) break;
 					
-					int next = str.indexOf("server",position);
+					int next = str.indexOf("server",position+1);
 					
 					if(next < 0)
 						jbossASLocation = str.substring(position+1,str.length()-1);
