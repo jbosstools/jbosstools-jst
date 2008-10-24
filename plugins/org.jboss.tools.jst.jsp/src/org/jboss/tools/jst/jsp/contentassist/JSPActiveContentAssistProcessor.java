@@ -138,7 +138,7 @@ public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcess
 		            	
 		                int relevance = kbProposal.getRelevance();
 		                if(relevance==KbProposal.R_NONE) {
-		                    relevance = XMLRelevanceConstants.R_XML_ATTRIBUTE_VALUE;
+		                    relevance = KbProposal.R_XML_ATTRIBUTE_VALUE;
 		                }
 		                
 		                if(kbProposal.getStart() < 0) {
@@ -190,7 +190,7 @@ public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcess
 	            		continue; // Process the only EL-proposals here!!!
 	                int relevance = kbProposal.getRelevance();
 	                if(relevance==KbProposal.R_NONE) {
-	                    relevance = XMLRelevanceConstants.R_XML_ATTRIBUTE_VALUE;
+	                    relevance = KbProposal.R_JSP_JSF_EL_VARIABLE_ATTRIBUTE_VALUE;
 	                }
 	                
 	                if(kbProposal.getStart() >= 0) {
