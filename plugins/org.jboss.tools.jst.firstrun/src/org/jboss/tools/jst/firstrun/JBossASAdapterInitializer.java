@@ -58,14 +58,30 @@ public class JBossASAdapterInitializer implements IStartup {
 
 	public static final String JBOSS_AS_HOME = "../../../../jboss-eap/jboss-as"; 	// JBoss AS home directory (relative to plugin)- <RHDS_HOME>/jbossas.
 	
-	public static final String SERVERS_FILE = "../../../application_platforms.properties";
+	public static final String SERVERS_FILE = "../../../../studio/application_platforms.properties";
+	
+	// This constants are made to avoid dependency with org.jboss.ide.eclipse.as.core plugin
+	public static final String JBOSS_AS_RUNTIME_TYPE_ID[] = {
+		"org.jboss.ide.eclipse.as.runtime.32",
+		"org.jboss.ide.eclipse.as.runtime.40",
+		"org.jboss.ide.eclipse.as.runtime.42",
+		"org.jboss.ide.eclipse.as.runtime.50"
+		};
 
-	public static final String JBOSS_AS_RUNTIME_TYPE_ID 
-										= "org.jboss.ide.eclipse.as.runtime.42";
+	public static final String JBOSS_AS_TYPE_ID[] = {
+		"org.jboss.ide.eclipse.as.32",
+		"org.jboss.ide.eclipse.as.40",
+		"org.jboss.ide.eclipse.as.42",
+		"org.jboss.ide.eclipse.as.50"
+		};
+	
 
-	public static final String JBOSS_AS_TYPE_ID = "org.jboss.ide.eclipse.as.42";
-
-	public static final String JBOSS_AS_NAME = "JBoss Application Server 4.2";
+	public static final String JBOSS_AS_NAME[] = {
+		"JBoss Application Server 3.2",
+		"JBoss Application Server 4.0",
+		"JBoss Application Server 4.2",
+		"JBoss Application Server 5.0"
+		};
 
 	public static final String JBOSS_AS_HOST = "localhost";
 
@@ -109,20 +125,34 @@ public class JBossASAdapterInitializer implements IStartup {
 				while(true){
 					String jbossASLocation = null;
 					
+					// server name
 					position = str.indexOf("=",position+1);
 					if(position < 0) break;
 					
-					// server name
-					position = str.indexOf(",",position+1);
-					if(position < 0) break;
-
 					// server type
 					position = str.indexOf(",",position+1);
 					if(position < 0) break;
+
+					// server version
+					int versionPosition = str.indexOf(",",position+1);
+					if(versionPosition < 0) break;
 					
 					// server location
-					position = str.indexOf(",",position+1);
+					position = str.indexOf(",",versionPosition+1);
 					if(position < 0) break;
+					
+					String version = str.substring(versionPosition+1,position);
+					
+					int index = 0;
+					
+					if(version.startsWith("3.2"))
+						index = 0;
+					else if(version.startsWith("4.0"))
+						index = 1;
+					else if(version.startsWith("4.2"))
+						index = 2;
+					else if(version.startsWith("5.0"))
+						index = 3;
 					
 					int next = str.indexOf("server",position+1);
 					
@@ -136,10 +166,10 @@ public class JBossASAdapterInitializer implements IStartup {
 					IRuntimeWorkingCopy runtime = null;
 					IProgressMonitor progressMonitor = new NullProgressMonitor();
 					if (runtime == null) {
-						runtime = createRuntime(jbossASLocation, progressMonitor);
+						runtime = createRuntime(jbossASLocation, progressMonitor, index);
 					}
 					if (runtime != null) {
-						createServer(progressMonitor, runtime);
+						createServer(progressMonitor, runtime, index);
 					}
 
 					createDriver(jbossASLocation);
@@ -176,10 +206,10 @@ public class JBossASAdapterInitializer implements IStartup {
 
 			IProgressMonitor progressMonitor = new NullProgressMonitor();
 			if (runtime == null) {
-				runtime = createRuntime(jbossASLocation, progressMonitor);
+				runtime = createRuntime(jbossASLocation, progressMonitor, 2);
 			}
 			if (runtime != null) {
-				createServer(progressMonitor, runtime);
+				createServer(progressMonitor, runtime, 2);
 			}
 
 			createDriver(jbossASLocation);
@@ -205,10 +235,10 @@ public class JBossASAdapterInitializer implements IStartup {
 	 * @throws ConnectionProfileException
 	 */
 	public static IServerWorkingCopy initJBossAS(String jbossASLocation, IProgressMonitor progressMonitor) throws CoreException, ConnectionProfileException {
-		IRuntimeWorkingCopy runtime = createRuntime(jbossASLocation, progressMonitor);
+		IRuntimeWorkingCopy runtime = createRuntime(jbossASLocation, progressMonitor, 2);
 		IServerWorkingCopy server = null;
 		if (runtime != null) {
-			server = createServer(progressMonitor, runtime);
+			server = createServer(progressMonitor, runtime, 2);
 		}
 		createDriver(jbossASLocation);
 		return server;
@@ -221,13 +251,13 @@ public class JBossASAdapterInitializer implements IStartup {
 	 * @return runtime working copy
 	 * @throws CoreException
 	 */
-	private static IRuntimeWorkingCopy createRuntime(String jbossASLocation, IProgressMonitor progressMonitor) throws CoreException {
+	private static IRuntimeWorkingCopy createRuntime(String jbossASLocation, IProgressMonitor progressMonitor, int index) throws CoreException {
 		IRuntimeWorkingCopy runtime = null;
 		String type = null;
 		String version = null;
 		String runtimeId = null;
 		IPath jbossAsLocationPath = new Path(jbossASLocation);
-		IRuntimeType[] runtimeTypes = ServerUtil.getRuntimeTypes(type, version, JBOSS_AS_RUNTIME_TYPE_ID);
+		IRuntimeType[] runtimeTypes = ServerUtil.getRuntimeTypes(type, version, JBOSS_AS_RUNTIME_TYPE_ID[index]);
 		if (runtimeTypes.length > 0) {
 			runtime = runtimeTypes[0].createRuntime(runtimeId, progressMonitor);
 			runtime.setLocation(jbossAsLocationPath);
@@ -251,12 +281,12 @@ public class JBossASAdapterInitializer implements IStartup {
 	 * @return server working copy
 	 * @throws CoreException
 	 */
-	private static IServerWorkingCopy createServer(IProgressMonitor progressMonitor, IRuntimeWorkingCopy runtime) throws CoreException {
-		IServerType serverType = ServerCore.findServerType(JBOSS_AS_TYPE_ID);
+	private static IServerWorkingCopy createServer(IProgressMonitor progressMonitor, IRuntimeWorkingCopy runtime, int index) throws CoreException {
+		IServerType serverType = ServerCore.findServerType(JBOSS_AS_TYPE_ID[index]);
 		IServerWorkingCopy server = serverType.createServer(null, null, runtime, progressMonitor);
 
 		server.setHost(JBOSS_AS_HOST);
-		server.setName(JBOSS_AS_NAME);
+		server.setName(JBOSS_AS_NAME[2]);
 		// JBossServer.DEPLOY_DIRECTORY
 		String deployVal = runtime.getLocation().append("server").append(JBOSS_AS_DEFAULT_CONFIGURATION_NAME).append("deploy").toOSString();
 		((ServerWorkingCopy) server).setAttribute("org.jboss.ide.eclipse.as.core.server.deployDirectory", deployVal);
