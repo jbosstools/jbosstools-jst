@@ -104,6 +104,7 @@ public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcess
 			} else {
 				elProposalPrefix = "#{";  //$NON-NLS-1$
 			}
+	    	delta = matchString.length() - elQueryString.length();
 			if (matchString.startsWith("\"") || matchString.startsWith("'")) { 
 				queryString = matchString.substring(1);
 			}
