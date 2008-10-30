@@ -171,7 +171,7 @@ public class JBossASAdapterInitializer implements IStartup {
 					IRuntimeWorkingCopy runtime = null;
 					IProgressMonitor progressMonitor = new NullProgressMonitor();
 					if (runtime == null) {
-						runtime = createRuntime(jbossASLocation, progressMonitor, index);
+						runtime = createRuntime(name + " Runtime", jbossASLocation, progressMonitor, index);
 					}
 					if (runtime != null) {
 						createServer(progressMonitor, runtime, index, name);
@@ -211,7 +211,7 @@ public class JBossASAdapterInitializer implements IStartup {
 
 			IProgressMonitor progressMonitor = new NullProgressMonitor();
 			if (runtime == null) {
-				runtime = createRuntime(jbossASLocation, progressMonitor, 2);
+				runtime = createRuntime(null, jbossASLocation, progressMonitor, 2);
 			}
 			if (runtime != null) {
 				createServer(progressMonitor, runtime, 2, null);
@@ -240,7 +240,7 @@ public class JBossASAdapterInitializer implements IStartup {
 	 * @throws ConnectionProfileException
 	 */
 	public static IServerWorkingCopy initJBossAS(String jbossASLocation, IProgressMonitor progressMonitor) throws CoreException, ConnectionProfileException {
-		IRuntimeWorkingCopy runtime = createRuntime(jbossASLocation, progressMonitor, 2);
+		IRuntimeWorkingCopy runtime = createRuntime(null, jbossASLocation, progressMonitor, 2);
 		IServerWorkingCopy server = null;
 		if (runtime != null) {
 			server = createServer(progressMonitor, runtime, 2, null);
@@ -256,7 +256,7 @@ public class JBossASAdapterInitializer implements IStartup {
 	 * @return runtime working copy
 	 * @throws CoreException
 	 */
-	private static IRuntimeWorkingCopy createRuntime(String jbossASLocation, IProgressMonitor progressMonitor, int index) throws CoreException {
+	private static IRuntimeWorkingCopy createRuntime(String runtimeName, String jbossASLocation, IProgressMonitor progressMonitor, int index) throws CoreException {
 		IRuntimeWorkingCopy runtime = null;
 		String type = null;
 		String version = null;
@@ -266,6 +266,9 @@ public class JBossASAdapterInitializer implements IStartup {
 		if (runtimeTypes.length > 0) {
 			runtime = runtimeTypes[0].createRuntime(runtimeId, progressMonitor);
 			runtime.setLocation(jbossAsLocationPath);
+			if(runtime!=null) {
+				runtime.setName(runtimeName);				
+			}
 			IVMInstall defaultVM = JavaRuntime.getDefaultVMInstall();
 			// IJBossServerRuntime.PROPERTY_VM_ID
 			((RuntimeWorkingCopy) runtime).setAttribute("PROPERTY_VM_ID", defaultVM.getId());
