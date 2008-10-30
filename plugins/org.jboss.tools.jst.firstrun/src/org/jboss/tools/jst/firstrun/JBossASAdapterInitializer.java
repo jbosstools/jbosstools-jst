@@ -117,8 +117,8 @@ public class JBossASAdapterInitializer implements IStartup {
 				return;
 			}
 			JstFirstRunPlugin.getDefault().getPreferenceStore().setValue(FIRST_START_PREFERENCE_NAME, false);
-			
-			File serversFile = new File(SERVERS_FILE);
+			String pluginLocation = FileLocator.resolve(JstFirstRunPlugin.getDefault().getBundle().getEntry("/")).getPath();
+			File serversFile = new File(pluginLocation, SERVERS_FILE);
 			if(serversFile.exists()){
 				String str = FileUtil.readFile(serversFile);
 				int position = 0;
@@ -177,7 +177,7 @@ public class JBossASAdapterInitializer implements IStartup {
 			}
 
 			String jbossASLocation = null;
-			String pluginLocation = FileLocator.resolve(JstFirstRunPlugin.getDefault().getBundle().getEntry("/")).getPath();
+			
 			File jbossASDir = new File(pluginLocation, JBOSS_AS_HOME);
 			if (jbossASDir.isDirectory()) {
 				jbossASLocation = jbossASDir.getAbsolutePath();
