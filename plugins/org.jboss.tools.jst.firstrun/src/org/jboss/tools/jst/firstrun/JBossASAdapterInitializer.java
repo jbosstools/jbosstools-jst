@@ -168,7 +168,7 @@ public class JBossASAdapterInitializer implements IStartup {
 					
 					jbossASLocation = jbossASLocation.trim();
 					
-					IRuntimeWorkingCopy runtime = null;
+					IRuntime runtime = null;
 					IProgressMonitor progressMonitor = new NullProgressMonitor();
 					if (runtime == null) {
 						runtime = createRuntime(name + " Runtime", jbossASLocation, progressMonitor, index);
@@ -200,7 +200,7 @@ public class JBossASAdapterInitializer implements IStartup {
 				}
 			}
 
-			IRuntimeWorkingCopy runtime = null;
+			IRuntime runtime = null;
 			IRuntime[] runtimes = ServerCore.getRuntimes();
 			for (int i = 0; i < runtimes.length; i++) {
 				if (runtimes[0].getLocation().equals(jbossASLocation)) {
@@ -240,7 +240,7 @@ public class JBossASAdapterInitializer implements IStartup {
 	 * @throws ConnectionProfileException
 	 */
 	public static IServerWorkingCopy initJBossAS(String jbossASLocation, IProgressMonitor progressMonitor) throws CoreException, ConnectionProfileException {
-		IRuntimeWorkingCopy runtime = createRuntime(null, jbossASLocation, progressMonitor, 2);
+		IRuntime runtime = createRuntime(null, jbossASLocation, progressMonitor, 2);
 		IServerWorkingCopy server = null;
 		if (runtime != null) {
 			server = createServer(progressMonitor, runtime, 2, null);
@@ -256,7 +256,7 @@ public class JBossASAdapterInitializer implements IStartup {
 	 * @return runtime working copy
 	 * @throws CoreException
 	 */
-	private static IRuntimeWorkingCopy createRuntime(String runtimeName, String jbossASLocation, IProgressMonitor progressMonitor, int index) throws CoreException {
+	private static IRuntime createRuntime(String runtimeName, String jbossASLocation, IProgressMonitor progressMonitor, int index) throws CoreException {
 		IRuntimeWorkingCopy runtime = null;
 		String type = null;
 		String version = null;
@@ -277,7 +277,7 @@ public class JBossASAdapterInitializer implements IStartup {
 			// IJBossServerRuntime.PROPERTY_CONFIGURATION_NAME
 			((RuntimeWorkingCopy) runtime).setAttribute("org.jboss.ide.eclipse.as.core.runtime.configurationName", JBOSS_AS_DEFAULT_CONFIGURATION_NAME);
 
-			runtime.save(false, progressMonitor);
+			return runtime.save(false, progressMonitor);
 		}
 		return runtime;
 	}
@@ -289,7 +289,7 @@ public class JBossASAdapterInitializer implements IStartup {
 	 * @return server working copy
 	 * @throws CoreException
 	 */
-	private static IServerWorkingCopy createServer(IProgressMonitor progressMonitor, IRuntimeWorkingCopy runtime, int index, String name) throws CoreException {
+	private static IServerWorkingCopy createServer(IProgressMonitor progressMonitor, IRuntime runtime, int index, String name) throws CoreException {
 		IServerType serverType = ServerCore.findServerType(JBOSS_AS_TYPE_ID[index]);
 		IServerWorkingCopy server = serverType.createServer(null, null, runtime, progressMonitor);
 
