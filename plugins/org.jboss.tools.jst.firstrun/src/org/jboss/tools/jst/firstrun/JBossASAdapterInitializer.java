@@ -312,13 +312,19 @@ public class JBossASAdapterInitializer implements IStartup {
 		return server;
 	}
 
+	private static boolean driverIsCreated = false;
+
 	/**
 	 * Creates HSQL DB Driver
 	 * @param jbossASLocation location of JBoss AS
 	 * @throws ConnectionProfileException
 	 * @return driver instance
 	 */
-	private static DriverInstance createDriver(String jbossASLocation) throws ConnectionProfileException {
+	private static void createDriver(String jbossASLocation) throws ConnectionProfileException {
+		if(driverIsCreated) {
+			// Don't create the driver a few times
+			return;
+		}
 		DriverInstance driver = DriverManager.getInstance().getDriverInstanceByName(HSQL_DRIVER_NAME);
 		if (driver == null) {
 			TemplateDescriptor descr = TemplateDescriptor.getDriverTemplateDescriptor(HSQL_DRIVER_TEMPLATE_ID);
@@ -362,6 +368,8 @@ public class JBossASAdapterInitializer implements IStartup {
 
 			ProfileManager.getInstance().createProfile("DefaultDS",	"The JBoss AS Hypersonic embedded database", IDBConnectionProfileConstants.CONNECTION_PROFILE_ID, props, "", false);
 		}
-		return driver;
+		if(driver!=null) {
+			driverIsCreated = true;
+		}
 	}
 }
