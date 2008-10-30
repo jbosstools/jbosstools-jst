@@ -266,7 +266,7 @@ public class JBossASAdapterInitializer implements IStartup {
 		if (runtimeTypes.length > 0) {
 			runtime = runtimeTypes[0].createRuntime(runtimeId, progressMonitor);
 			runtime.setLocation(jbossAsLocationPath);
-			if(runtime!=null) {
+			if(runtimeName!=null) {
 				runtime.setName(runtimeName);				
 			}
 			IVMInstall defaultVM = JavaRuntime.getDefaultVMInstall();
