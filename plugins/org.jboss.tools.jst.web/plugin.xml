@@ -19,8 +19,8 @@
       </meta>
    </extension>
    <extension point="org.jboss.tools.common.model.keys">
-      <keys path="help/keys-web.properties">
-      </keys>
+      <keys path="help/keys-web.properties"/>
+      <keys path="help/keys-web-attrs.properties"/>
    </extension>
    <extension point="org.jboss.tools.common.model.specialwizard">
       <specialwizard class="org.jboss.tools.jst.web.project.AddServletSupportWizard" id="org.jboss.tools.jst.web.project.AddServletSupportWizard">
