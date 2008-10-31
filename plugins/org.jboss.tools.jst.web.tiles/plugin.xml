@@ -7,8 +7,8 @@
       </meta>
    </extension>
    <extension point="org.jboss.tools.common.model.keys">
-      <keys path="help/keys-tiles.properties">
-      </keys>
+      <keys path="help/keys-tiles.properties"/>
+      <keys path="help/keys-tiles-attrs.properties"/>
    </extension>
 
    <extension
