@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.model.handlers;
 import java.util.*;
 import org.jboss.tools.common.meta.action.*;
 import org.jboss.tools.common.meta.action.impl.*;
+import org.jboss.tools.common.meta.key.WizardKeys;
 import org.jboss.tools.common.model.*;
 
 public class RegisterInServerXmlHandler extends AbstractHandler {
@@ -41,7 +42,8 @@ public class RegisterInServerXmlHandler extends AbstractHandler {
 	public void executeHandler(XModelObject object, Properties p) throws XModelException {
 		SpecialWizard wizard = SpecialWizardFactory.createSpecialWizard("org.jboss.tools.jst.web.ui.wizards.appregister.AppRegisterWizard");
 		if(p == null) p = new Properties();
-		p.setProperty("title", action.getDisplayName());
+		String displayName = WizardKeys.getMenuItemDisplayName(action, object == null ? null : object.getModelEntity());
+		p.setProperty("title", displayName);
 		p.setProperty("wtp", "true");
 		p.put("object", object);
 		String nature = object.getModel().getProperties().getProperty("nature");

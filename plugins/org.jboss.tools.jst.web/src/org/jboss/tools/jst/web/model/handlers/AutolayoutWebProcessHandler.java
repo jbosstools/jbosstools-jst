@@ -15,6 +15,7 @@ import org.jboss.tools.common.model.*;
 import org.jboss.tools.common.model.impl.XModelImpl;
 import org.jboss.tools.common.model.util.ModelFeatureFactory;
 import org.jboss.tools.common.meta.action.impl.*;
+import org.jboss.tools.common.meta.key.WizardKeys;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 import org.jboss.tools.jst.web.model.helpers.WebProcessStructureHelper;
 import org.jboss.tools.jst.web.model.helpers.autolayout.AutoLayout;
@@ -32,7 +33,8 @@ public class AutolayoutWebProcessHandler extends AbstractHandler {
         if(!isEnabled(object)) return;
         ServiceDialog d = object.getModel().getService();
         String mes = WebUIMessages.YOU_WANT_TO_REARRANGE_THE_DIAGRAM_ELEMENTS;
-        int i = d.showDialog(action.getDisplayName(), mes, new String[]{WebUIMessages.OK, WebUIMessages.CANCEL}, null, ServiceDialog.QUESTION);
+		String displayName = WizardKeys.getMenuItemDisplayName(action, object == null ? null : object.getModelEntity());
+        int i = d.showDialog(displayName, mes, new String[]{WebUIMessages.OK, WebUIMessages.CANCEL}, null, ServiceDialog.QUESTION);
         if(i != 0) return;
         AutoLayout a = new AutoLayout();
         a.setItems(getItemsInstance());
