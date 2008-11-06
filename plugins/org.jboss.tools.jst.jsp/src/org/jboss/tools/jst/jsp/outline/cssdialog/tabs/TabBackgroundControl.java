@@ -157,8 +157,11 @@ public class TabBackgroundControl extends Composite {
 	    public void modifyText(ModifyEvent event) {
 		String tmp = backgroundImageCombo.getText();
 		if (tmp != null) {
-		    if (tmp.trim().length() > 0)
-			styleAttributes.addAttribute(CSSConstants.BACKGROUND_IMAGE, tmp);
+		    if (tmp.trim().length() > 0){
+			
+		      tmp = adjustBackgroundURL(tmp);		    
+			  styleAttributes.addAttribute(CSSConstants.BACKGROUND_IMAGE, tmp);
+		    }
 		    else
 			styleAttributes.removeAttribute(CSSConstants.BACKGROUND_IMAGE);
 		}
@@ -199,6 +202,7 @@ public class TabBackgroundControl extends Composite {
 		    IFile file = (IFile) dialog.getFirstResult();
 		    String value = file.getFullPath().toString();
 		    backgroundImageCombo.add(value);
+		    value = adjustBackgroundURL(value);
 		    backgroundImageCombo.setText(value);
 		}
 	    }
@@ -265,5 +269,13 @@ public class TabBackgroundControl extends Composite {
 		backgroundRepeatCombo.setText(tmp);
 	    else
 		backgroundRepeatCombo.setText(Constants.EMPTY_STRING);
+    }
+    //Fix for JBIDE-3084
+    //in css background image should always be wraped into url(*);
+    private static String adjustBackgroundURL(String backgroundURL) {
+	    if(backgroundURL!=null && backgroundURL.matches("(url)\\(.*\\)")==false) { //$NON-NLS-1$
+	    	return "url("+backgroundURL+")";  //$NON-NLS-1$//$NON-NLS-2$
+	    }
+	    return backgroundURL;
     }
 }
