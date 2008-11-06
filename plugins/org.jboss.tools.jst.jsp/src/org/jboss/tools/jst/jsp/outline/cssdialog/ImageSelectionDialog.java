@@ -416,6 +416,20 @@ public class ImageSelectionDialog extends SelectionStatusDialog {
 	    messageLabel.setEnabled(false);
 	    treeWidget.setEnabled(false);
 	}
+	//JBIDE-3084, implementation of default validator
+	fValidator = new ISelectionStatusValidator(){
+
+		public IStatus validate(Object[] selection) {
+
+			if(selection!=null && selection.length==1){
+				Object selecObject = selection[0]; 
+				if(selecObject instanceof  IFile) {
+					return Status.OK_STATUS;
+				}
+			}
+			return new Status(IStatus.ERROR, PlatformUI.PLUGIN_ID,
+					IStatus.ERROR, "Invalid Image FIle", null);
+		}};
 	return composite;
     }
 
