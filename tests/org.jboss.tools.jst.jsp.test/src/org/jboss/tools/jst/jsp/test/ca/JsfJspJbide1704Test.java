@@ -33,7 +33,6 @@ public class JsfJspJbide1704Test extends ContentAssistantTestCase {
 	public void setUp() throws Exception {
 		provider = new TestProjectProvider("org.jboss.tools.jst.jsp.test", null, PROJECT_NAME, makeCopy); 
 		project = provider.getProject();
-		Throwable exception = null;
 	}
 
 	protected void tearDown() throws Exception {

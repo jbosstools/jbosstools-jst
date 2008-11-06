@@ -19,6 +19,7 @@ import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor;
 import org.jboss.tools.jst.jsp.test.TestUtil;
 import org.jboss.tools.test.util.JobUtils;
+import org.jboss.tools.test.util.WorkbenchUtils;
 
 public class ContentAssistantTestCase extends TestCase {
 	protected IProject project = null;
@@ -29,31 +30,7 @@ public class ContentAssistantTestCase extends TestCase {
 	protected IDocument document = null;
 
 	protected void openEditor(String fileName) {
-
-		try {
-			JobUtils.waitForIdle();
-		} catch (Exception e) {
-			e.printStackTrace();
-			assertTrue("Waiting for the jobs to complete has failed.", false);
-		}
-
-		IFile jspFile = project.getFile(fileName);
-
-		assertTrue("The file \"" + fileName + "\" is not found",
-				(jspFile != null));
-		assertTrue("The file \"" + fileName + "\" is not found", (jspFile
-				.exists()));
-
-		FileEditorInput editorInput = new FileEditorInput(jspFile);
-		IEditorPart editorPart = null;
-		try {
-			editorPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-					.getActivePage().openEditor(editorInput,
-							"org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor");
-		} catch (PartInitException ex) {
-			ex.printStackTrace();
-			assertTrue("The JSP Visual Editor couldn't be initialized.", false);
-		}
+		IEditorPart editorPart = WorkbenchUtils.openEditor(project.getName()+"/"+ fileName);
 
 		if (editorPart instanceof JSPMultiPageEditor)
 			jspEditor = (JSPMultiPageEditor) editorPart;

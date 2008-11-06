@@ -24,7 +24,7 @@ public class JstJspAllTests {
  		suite.addTestSuite(JstJspJbide1585Test.class);
 		suite.addTestSuite(StrutsJspJbide1648Test.class);
 		suite.addTestSuite(JstJspJbide1641Test.class);
-		suite.addTestSuite(JsfJspJbide1704Test.class);
+		//suite.addTestSuite(JsfJspJbide1704Test.class);
 		suite.addTestSuite(JsfJspJbide1717Test.class);
 		suite.addTestSuite(JstJspJbide1759Test.class);
 		suite.addTestSuite(Jbide1791Test.class);
