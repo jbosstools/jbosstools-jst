@@ -37,14 +37,6 @@ public abstract class CommonContentAssistantTestCase extends ContentAssistantTes
     public void setUp() throws Exception {
         provider = new TestProjectProvider("org.jboss.tools.seam.ui.test", null, getSetUpProjectName(), makeCopy);
         project = provider.getProject();
-        Throwable exception = null;
-        try {
-            project.refreshLocal(IResource.DEPTH_INFINITE, null);
-        } catch (Exception x) {
-            exception = x;
-            x.printStackTrace();
-        }
-        assertNull("An exception caught: " + (exception != null ? exception.getMessage() : ""), exception);
     }
 
     @Override

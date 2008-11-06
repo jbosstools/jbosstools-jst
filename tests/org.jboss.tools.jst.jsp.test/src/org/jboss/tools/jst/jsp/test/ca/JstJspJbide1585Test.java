@@ -28,12 +28,7 @@ public class JstJspJbide1585Test extends ContentAssistantTestCase {
 		provider = new TestProjectProvider("org.jboss.tools.jst.jsp.test", null, PROJECT_NAME, makeCopy); 
 		project = provider.getProject();
 		Throwable exception = null;
-		try {
-			project.refreshLocal(IResource.DEPTH_INFINITE, null);
-		} catch (Exception x) {
-			exception = x;
-			x.printStackTrace();
-		}
+
 		assertNull("An exception caught: " + (exception != null? exception.getMessage() : ""), exception);
 	}
 
