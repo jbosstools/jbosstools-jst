@@ -35,16 +35,6 @@ public class ContentAssistantTestCase extends TestCase {
 		if (editorPart instanceof JSPMultiPageEditor)
 			jspEditor = (JSPMultiPageEditor) editorPart;
 
-		// Delay for 3 seconds so that
-		// the Favorites view can be seen.
-		try {
-			JobUtils.waitForIdle();;
-		} catch (Exception e) {
-			e.printStackTrace();
-			assertTrue("Waiting for the jobs to complete has failed.", false);
-		}
-		TestUtil.delay(3000);
-
 		jspTextEditor = jspEditor.getJspEditor();
 		viewer = jspTextEditor.getTextViewer();
 		document = viewer.getDocument();

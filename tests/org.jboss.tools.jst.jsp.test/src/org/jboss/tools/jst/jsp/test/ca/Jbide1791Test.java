@@ -13,7 +13,9 @@ package org.jboss.tools.jst.jsp.test.ca;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.eclipse.core.resources.IResource;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.FindReplaceDocumentAdapter;
+import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.jboss.tools.common.test.util.TestProjectProvider;
 
@@ -31,6 +33,7 @@ public class Jbide1791Test extends ContentAssistantTestCase {
     public static Test suite() {
         return new TestSuite(Jbide1791Test.class);
     }
+    
     public void setUp() throws Exception {
         provider = new TestProjectProvider("org.jboss.tools.jst.jsp.test", null, PROJECT_NAME,false); 
         project = provider.getProject();
@@ -52,9 +55,17 @@ public class Jbide1791Test extends ContentAssistantTestCase {
                 "h6",
                 "hr"
         };
-        final ICompletionProposal[] rst = checkProposals(PAGE_NAME,353, proposals, false);
+        openEditor(PAGE_NAME);
+        IRegion reg=null;
+		try {
+			reg = new FindReplaceDocumentAdapter(this.document).find(0, "</style>", true, false, false, false);
+		} catch (BadLocationException e) {
+			fail(e.getMessage());
+		}
+        final ICompletionProposal[] rst = checkProposals(PAGE_NAME,reg.getOffset(), proposals, false);
         
         checkResult(rst,proposals);
+        closeEditor();
     }
     /**
      * @param rst
