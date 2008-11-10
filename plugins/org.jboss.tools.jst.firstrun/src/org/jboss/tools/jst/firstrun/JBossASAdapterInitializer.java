@@ -133,14 +133,16 @@ public class JBossASAdapterInitializer implements IStartup {
 					if(namePosition < 0) break;
 					
 					// server type
-					position = str.indexOf(",",namePosition+1);
+					int typePosition = str.indexOf(",",namePosition+1);
 					if(position < 0) break;
 					
-					String name = str.substring(namePosition+1,position).trim();
+					String name = str.substring(namePosition+1,typePosition).trim();
 
 					// server version
-					int versionPosition = str.indexOf(",",position+1);
+					int versionPosition = str.indexOf(",",typePosition+1);
 					if(versionPosition < 0) break;
+					
+					String type = str.substring(typePosition+1,versionPosition).trim();
 					
 					// server location
 					position = str.indexOf(",",versionPosition+1);
@@ -149,15 +151,17 @@ public class JBossASAdapterInitializer implements IStartup {
 					String version = str.substring(versionPosition+1,position);
 					
 					int index = 0;
-					
-					if(version.startsWith("3.2"))
-						index = 0;
-					else if(version.startsWith("4.0"))
-						index = 1;
-					else if(version.startsWith("4.2"))
+					if(type.startsWith("AS")){
+						if(version.startsWith("3.2"))
+							index = 0;
+						else if(version.startsWith("4.0"))
+							index = 1;
+						else if(version.startsWith("4.2"))
+							index = 2;
+						else if(version.startsWith("5.0"))
+							index = 3;
+					}else
 						index = 2;
-					else if(version.startsWith("5.0"))
-						index = 3;
 					
 					int next = str.indexOf("server",position+1);
 					
