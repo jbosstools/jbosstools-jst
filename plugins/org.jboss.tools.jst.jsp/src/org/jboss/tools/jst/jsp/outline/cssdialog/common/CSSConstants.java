@@ -7,33 +7,31 @@
  *
  * Contributors:
  *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
- ******************************************************************************/ 
+ ******************************************************************************/
 package org.jboss.tools.jst.jsp.outline.cssdialog.common;
+
 
 /**
  * This class contains CSS constants
- * 
+ *
  * @author dsakovich@exadel.com
- * 
  */
 public class CSSConstants {
-
-    public static final String BACKGROUND_REPEAT = "background-repeat";
-    public static final String BACKGROUND_COLOR = "background-color";
-    public static final String BACKGROUND_IMAGE = "background-image";
-    public static final String BORDER_STYLE = "border-style";
-    public static final String BORDER_WIDTH = "border-width";
-    public static final String WIDTH = "width";
-    public static final String HEIGHT = "height";
-    public static final String BORDER_COLOR = "border-color";
-    public static final String MARGIN = "margin";
-    public static final String PADDING = "padding";
-    public static final String FONT_SIZE = "font-size";
-    public static final String FONT_STYLE = "font-style";
-    public static final String FONT_WEIGHT = "font-weight";
-    public static final String TEXT_DECORATION = "text-decoration";
-    public static final String TEXT_ALIGN = "text-align";
-    public static final String FONT_FAMILY = "font-family";
-    public static final String COLOR = "color";
-
+    public static final String BACKGROUND_REPEAT = "background-repeat"; //$NON-NLS-1$
+    public static final String BACKGROUND_COLOR = "background-color"; //$NON-NLS-1$
+    public static final String BACKGROUND_IMAGE = "background-image"; //$NON-NLS-1$
+    public static final String BORDER_STYLE = "border-style"; //$NON-NLS-1$
+    public static final String BORDER_WIDTH = "border-width"; //$NON-NLS-1$
+    public static final String WIDTH = "width"; //$NON-NLS-1$
+    public static final String HEIGHT = "height"; //$NON-NLS-1$
+    public static final String BORDER_COLOR = "border-color"; //$NON-NLS-1$
+    public static final String MARGIN = "margin"; //$NON-NLS-1$
+    public static final String PADDING = "padding"; //$NON-NLS-1$
+    public static final String FONT_SIZE = "font-size"; //$NON-NLS-1$
+    public static final String FONT_STYLE = "font-style"; //$NON-NLS-1$
+    public static final String FONT_WEIGHT = "font-weight"; //$NON-NLS-1$
+    public static final String TEXT_DECORATION = "text-decoration"; //$NON-NLS-1$
+    public static final String TEXT_ALIGN = "text-align"; //$NON-NLS-1$
+    public static final String FONT_FAMILY = "font-family"; //$NON-NLS-1$
+    public static final String COLOR = "color"; //$NON-NLS-1$
 }
