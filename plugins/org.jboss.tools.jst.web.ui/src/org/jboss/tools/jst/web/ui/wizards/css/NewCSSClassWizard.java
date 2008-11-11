@@ -14,37 +14,37 @@ import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+
 import org.jboss.tools.jst.jsp.outline.cssdialog.CSSClassDialog;
 
+
 public class NewCSSClassWizard extends Wizard implements INewWizard {
-   
     private NewCSSClassWizardPage page;
-    
-    
 
     /**
      * Constructor for SampleNewWizard.
      */
     public NewCSSClassWizard() {
-	super();
+        super();
     }
 
+    /** {@link org.eclipse.ui.IWorkbenchWizard#init(IWorkbench, IStructuredSelection)} */
     public void init(IWorkbench workbench, IStructuredSelection selection) {
-
     }
 
     /**
      * Adding the page to the wizard.
      */
-
     public void addPages() {
-	page = new NewCSSClassWizardPage();
-	addPage(page);
+        page = new NewCSSClassWizardPage();
+        addPage(page);
     }
 
     /**
@@ -52,44 +52,47 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
      * will create an operation and run it using wizard as execution context.
      */
     public boolean performFinish() {
-	page.saveChanges();
-	return true;
+        page.saveChanges();
+
+        return true;
     }
 
     private class NewCSSClassWizardPage extends WizardPage {
 
-	private CSSClassDialog dialog;
-	
-	final static String WIZARD_TITLE = "Create New CSS Class";
-	final static String WIZARD_DESCRIPTION = "Create New CSS Class";
+    	// TODO: take out to the property manager file
+        final static String WIZARD_WINDOW_TITLE = "New CSS Class";
+        final static String WIZARD_TITLE = "CSS Class";
+        final static String WIZARD_DESCRIPTION = "Create New CSS Class.";
 
-	/**
-	 * Constructor for SampleNewWizardPage.
-	 * 
-	 * @param pageName
-	 */
-	public NewCSSClassWizardPage() {
-	    super("newCSSClassWizard");
-	    setTitle(WIZARD_TITLE);
-	    setDescription(WIZARD_DESCRIPTION);
-	}
+        private CSSClassDialog dialog;
 
-	/**
-	 * @see IDialogPage#createControl(Composite)
-	 */
-	public void createControl(Composite parent) {
-	    Composite container = new Composite(parent, SWT.NULL);
-	    GridLayout layout = new GridLayout();
-	    container.setLayout(layout);
+        /**
+         * Constructor for SampleNewWizardPage.
+         *
+         * @param pageName
+         */
+        public NewCSSClassWizardPage() {
+            super("newCSSClassWizard");
+            setWindowTitle(WIZARD_WINDOW_TITLE);
+            setTitle(WIZARD_TITLE);
+            setDescription(WIZARD_DESCRIPTION);
+        }
 
-	    dialog = new CSSClassDialog(getShell(), true);
-	    dialog.createDialogComposite(container);
-	    setControl(container);
-	}
-	
-	public void saveChanges() {
-	    dialog.saveChanges();
-	}
+        /**
+         * @see IDialogPage#createControl(Composite)
+         */
+        public void createControl(Composite parent) {
+            Composite container = new Composite(parent, SWT.NULL);
+            GridLayout layout = new GridLayout();
+            container.setLayout(layout);
+
+            dialog = new CSSClassDialog(getShell(), true);
+            dialog.createDialogComposite(container);
+            setControl(container);
+        }
+
+        public void saveChanges() {
+            dialog.saveChanges();
+        }
     }
-
 }

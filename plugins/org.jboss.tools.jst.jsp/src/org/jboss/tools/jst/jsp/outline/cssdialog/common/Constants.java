@@ -59,8 +59,13 @@ public class Constants {
     public static final int FIRST_COLUMN = 0;
     public static final int SECOND_COLUMN = 1;
 
-    public static final String EMPTY_STRING = "";
-    
+    public static final String EMPTY = ""; //$NON-NLS-1$
+	public static final String WHITE_SPACE = " "; //$NON-NLS-1$
+    public static String COLON = ":"; //$NON-NLS-1$
+    public static String SEMICOLON = ";"; //$NON-NLS-1$
+    public static String COMMA = ";"; //$NON-NLS-1$
+    public static String DASH = "-"; //$NON-NLS-1$
+
     public static final RGB RGB_BLACK = new RGB(0,0,0);
     public static final RGB RGB_WHITE = new RGB(0xFF, 0xFF, 0xFF);
 
@@ -72,7 +77,4 @@ public class Constants {
     public static String CLOSE_DIV_TAG = "</div>";
     
     public static String TEXT_FOR_PREVIEW = "\">Text for preview";
-    
-    public static String COLON_STRING = ":";
-    public static String SEMICOLON_STRING = ";";
 }

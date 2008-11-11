@@ -7,15 +7,12 @@
  *
  * Contributors:
  *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
- ******************************************************************************/ 
+ ******************************************************************************/
 package org.jboss.tools.jst.jsp.outline.cssdialog;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.resource.ImageDescriptor;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
@@ -44,455 +41,488 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
+import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
-import org.jboss.tools.jst.jsp.outline.cssdialog.common.MessageUtil;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Class for choosing CCS font-family attribute
- * 
+ *
  * @author dsakovich@exadel.com
  */
 public class FontFamilyDialog extends Dialog implements SelectionListener {
 
-    /** Font family string */
-    private String fontFamily;
-
-    /** Existing font family */
-    private String existFontFamily;
-
-    private List fontFamilyList;
-    private List allFontFamilyList;
-
-    private Button rightButton;
-    private Button leftButton;
-
-    private static final String COMMA = ",";
-
     private static final int HEIGHT = 300;
-
     private static final int BUTTON_TOP_OFFSET = 20;
     private static final int BUTTON_LEFT_OFFSET = 20;
     private static final int BUTTON_RIGHT_OFFSET = -20;
     private static final int BUTTON_RIGHT = 60;
     private static final int RIGHT_BUTTON_TOP = 30;
     private static final int LEFT_BUTTON_TOP = 40;
-
     private static final int LIST_TOP_OFFSET = 10;
     private static final int LIST_RIGHT_OFFSET = -10;
     private static final int LIST_LEFT_OFFSET = 10;
     private static final int LIST_BOTTOM_OFFSET = -10;
     private static final int LIST_TOP = 5;
     private static final int LIST_BOTTOM = 100;
-
     private static final int ALL_FONTS_LIST_LEFT = 0;
     private static final int ALL_FONTS_LIST_RIGHT = 40;
     private static final int SELECTED_FONT_LIST_LEFT = 60;
     private static final int SELECTED_FONT_LIST_RIGHT = 100;
 
+    /** Font family string */
+    private String fontFamily;
+
+    /** Existing font family */
+    private String existFontFamily;
+    private List fontFamilyList;
+    private List allFontFamilyList;
+    private Button rightButton;
+    private Button leftButton;
+
     /**
      * Constructor
-     * 
-     * @param parentShell
-     *                parent shell
-     * @param existingFontFamily
-     *                existing font family
+     *
+     * @param parentShell parent shell
+     * @param existingFontFamily existing font family
      */
     public FontFamilyDialog(Shell parentShell, String existingFontFamily) {
-	super(parentShell);
-	this.existFontFamily = existingFontFamily;
+        super(parentShell);
+        this.existFontFamily = existingFontFamily;
     }
 
     /**
-     * Create Dialog area
-     * 
-     * @param Composite
+     * @see org.eclipse.jface.dialogs.Dialog#createDialogArea(Composite)
      */
+    @Override
     protected Control createDialogArea(Composite parent) {
-	final Composite composite = (Composite) super.createDialogArea(parent);
+        final Composite composite = (Composite) super.createDialogArea(parent);
 
-	composite.setLayout(new FormLayout());
+        composite.setLayout(new FormLayout());
 
-	allFontFamilyList = new List(composite, SWT.MULTI | SWT.BORDER
-		| SWT.V_SCROLL);
-	FormData fd = new FormData();
-	fd.top = new FormAttachment(LIST_TOP, LIST_TOP_OFFSET);
-	fd.left = new FormAttachment(ALL_FONTS_LIST_LEFT, LIST_LEFT_OFFSET);
-	fd.bottom = new FormAttachment(LIST_BOTTOM, LIST_BOTTOM_OFFSET);
-	fd.right = new FormAttachment(ALL_FONTS_LIST_RIGHT, LIST_RIGHT_OFFSET);
-	fd.height = HEIGHT;
-	allFontFamilyList.setLayoutData(fd);
+        allFontFamilyList = new List(composite, SWT.MULTI | SWT.BORDER | SWT.V_SCROLL);
 
-	Set<String> s = new HashSet<String>();
-	FontData[] fds = composite.getDisplay().getFontList(null, false);
-	for (int i = 0; i < fds.length; ++i)
-	    s.add(fds[i].getName());
-	fds = composite.getDisplay().getFontList(null, true);
-	for (int i = 0; i < fds.length; ++i)
-	    s.add(fds[i].getName());
-	String[] existFonts = fontFamilyParser();
-	Arrays.sort(existFonts);
+        FormData fd = new FormData();
+        fd.top = new FormAttachment(LIST_TOP, LIST_TOP_OFFSET);
+        fd.left = new FormAttachment(ALL_FONTS_LIST_LEFT, LIST_LEFT_OFFSET);
+        fd.bottom = new FormAttachment(LIST_BOTTOM, LIST_BOTTOM_OFFSET);
+        fd.right = new FormAttachment(ALL_FONTS_LIST_RIGHT, LIST_RIGHT_OFFSET);
+        fd.height = HEIGHT;
+        allFontFamilyList.setLayoutData(fd);
 
-	String[] answer = new String[s.size()];
-	s.toArray(answer);
-	Arrays.sort(answer);
+        Set<String> s = new HashSet<String>();
+        FontData[] fds = composite.getDisplay().getFontList(null, false);
 
-	for (int i = 0; i < answer.length; i++) {
-	    allFontFamilyList.add(answer[i]);
-	}
+        for (int i = 0; i < fds.length; ++i) {
+            s.add(fds[i].getName());
+        }
+        fds = composite.getDisplay().getFontList(null, true);
 
-	rightButton = new Button(composite, SWT.PUSH);
-	fd = new FormData();
-	fd.top = new FormAttachment(RIGHT_BUTTON_TOP, BUTTON_TOP_OFFSET);
-	fd.left = new FormAttachment(allFontFamilyList, BUTTON_LEFT_OFFSET);
-	fd.right = new FormAttachment(BUTTON_RIGHT, BUTTON_RIGHT_OFFSET);
-	rightButton.setLayoutData(fd);
-	rightButton
-		.setToolTipText(MessageUtil.getString("ADD_FONT_FAMILY_TIP"));
-	ImageDescriptor rightDesc = JspEditorPlugin
-		.getImageDescriptor(Constants.IMAGE_RIGHT_FILE_LOCATION);
-	Image rightImage = rightDesc.createImage();
-	rightButton.setImage(rightImage);
-	rightButton.setEnabled(false);
-	rightButton.addDisposeListener(new DisposeListener() {
-	    public void widgetDisposed(DisposeEvent e) {
-		Button button = (Button) e.getSource();
-		button.getImage().dispose();
-	    }
-	});
-	leftButton = new Button(composite, SWT.PUSH);
-	fd = new FormData();
-	fd.top = new FormAttachment(LEFT_BUTTON_TOP, BUTTON_TOP_OFFSET);
-	fd.left = new FormAttachment(allFontFamilyList, BUTTON_LEFT_OFFSET);
-	fd.right = new FormAttachment(BUTTON_RIGHT, BUTTON_RIGHT_OFFSET);
-	leftButton.setLayoutData(fd);
-	leftButton.setToolTipText(MessageUtil
-		.getString("REMOVE_FONT_FAMILY_TIP"));
-	ImageDescriptor leftDesc = JspEditorPlugin
-		.getImageDescriptor(Constants.IMAGE_LEFT_FILE_LOCATION);
-	Image leftImage = leftDesc.createImage();
-	leftButton.setImage(leftImage);
-	leftButton.setEnabled(false);
-	leftButton.addDisposeListener(new DisposeListener() {
-	    public void widgetDisposed(DisposeEvent e) {
-		Button button = (Button) e.getSource();
-		button.getImage().dispose();
-	    }
-	});
+        for (int i = 0; i < fds.length; ++i) {
+            s.add(fds[i].getName());
+        }
+        String[] existFonts = fontFamilyParser();
+        Arrays.sort(existFonts);
 
-	fontFamilyList = new List(composite, SWT.SINGLE | SWT.BORDER
-		| SWT.V_SCROLL);
-	fd = new FormData();
-	fd.top = new FormAttachment(LIST_TOP, LIST_TOP_OFFSET);
-	fd.left = new FormAttachment(SELECTED_FONT_LIST_LEFT, LIST_LEFT_OFFSET);
-	fd.bottom = new FormAttachment(LIST_BOTTOM, LIST_BOTTOM_OFFSET);
-	fd.right = new FormAttachment(SELECTED_FONT_LIST_RIGHT,
-		LIST_RIGHT_OFFSET);
-	fd.height = HEIGHT;
-	fontFamilyList.setLayoutData(fd);
-	if (existFontFamily != null
-		&& !existFontFamily.equals(Constants.EMPTY_STRING)) {
-	    for (int i = 0; i < existFonts.length; i++) {
-		fontFamilyList.add(existFonts[i]);
-	    }
-	}
+        String[] answer = new String[s.size()];
+        s.toArray(answer);
+        Arrays.sort(answer);
 
-	/** Control listeners */
-	allFontFamilyList.addMouseListener(new MouseListener() {
+        for (int i = 0; i < answer.length; i++) {
+            allFontFamilyList.add(answer[i]);
+        }
 
-	    public void mouseDoubleClick(MouseEvent e) {
-		int selectedItem = allFontFamilyList.getSelectionIndex();
-		addFont(fontFamilyList, allFontFamilyList.getItem(selectedItem));
-		allFontFamilyList.remove(selectedItem);
-		rightButton.setEnabled(false);
-	    }
+        rightButton = new Button(composite, SWT.PUSH);
+        fd = new FormData();
+        fd.top = new FormAttachment(RIGHT_BUTTON_TOP, BUTTON_TOP_OFFSET);
+        fd.left = new FormAttachment(allFontFamilyList, BUTTON_LEFT_OFFSET);
+        fd.right = new FormAttachment(BUTTON_RIGHT, BUTTON_RIGHT_OFFSET);
+        rightButton.setLayoutData(fd);
+        rightButton.setToolTipText(JstUIMessages.ADD_FONT_FAMILY_TIP);
 
-	    public void mouseDown(MouseEvent e) {
-		if (allFontFamilyList.getSelectionCount() > 0) {
-		    fontFamilyList.deselectAll();
-		    leftButton.setEnabled(false);
-		    rightButton.setEnabled(true);
-		}
-	    }
+        ImageDescriptor rightDesc = JspEditorPlugin.getImageDescriptor(Constants.IMAGE_RIGHT_FILE_LOCATION);
+        Image rightImage = rightDesc.createImage();
+        rightButton.setImage(rightImage);
+        rightButton.setEnabled(false);
+        rightButton.addDisposeListener(new DisposeListener() {
+                public void widgetDisposed(DisposeEvent e) {
+                    Button button = (Button) e.getSource();
+                    button.getImage().dispose();
+                }
+            });
+        leftButton = new Button(composite, SWT.PUSH);
+        fd = new FormData();
+        fd.top = new FormAttachment(LEFT_BUTTON_TOP, BUTTON_TOP_OFFSET);
+        fd.left = new FormAttachment(allFontFamilyList, BUTTON_LEFT_OFFSET);
+        fd.right = new FormAttachment(BUTTON_RIGHT, BUTTON_RIGHT_OFFSET);
+        leftButton.setLayoutData(fd);
+        leftButton.setToolTipText(JstUIMessages.REMOVE_FONT_FAMILY_TIP);
 
-	    public void mouseUp(MouseEvent e) {
-	    }
-	});
+        ImageDescriptor leftDesc = JspEditorPlugin.getImageDescriptor(Constants.IMAGE_LEFT_FILE_LOCATION);
+        Image leftImage = leftDesc.createImage();
+        leftButton.setImage(leftImage);
+        leftButton.setEnabled(false);
+        leftButton.addDisposeListener(new DisposeListener() {
+                public void widgetDisposed(DisposeEvent e) {
+                    Button button = (Button) e.getSource();
+                    button.getImage().dispose();
+                }
+            });
 
-	fontFamilyList.addMouseListener(new MouseListener() {
+        fontFamilyList = new List(composite, SWT.SINGLE | SWT.BORDER | SWT.V_SCROLL);
+        fd = new FormData();
+        fd.top = new FormAttachment(LIST_TOP, LIST_TOP_OFFSET);
+        fd.left = new FormAttachment(SELECTED_FONT_LIST_LEFT, LIST_LEFT_OFFSET);
+        fd.bottom = new FormAttachment(LIST_BOTTOM, LIST_BOTTOM_OFFSET);
+        fd.right = new FormAttachment(SELECTED_FONT_LIST_RIGHT, LIST_RIGHT_OFFSET);
+        fd.height = HEIGHT;
+        fontFamilyList.setLayoutData(fd);
 
-	    public void mouseDoubleClick(MouseEvent e) {
-		leftButton.setEnabled(false);
-		int selectedItem = fontFamilyList.getSelectionIndex();
-		fontFamilyList.deselectAll();
-		addFont(allFontFamilyList, fontFamilyList.getItem(selectedItem));
-		fontFamilyList.remove(selectedItem);
-	    }
+        if ((existFontFamily != null) && !existFontFamily.equals(Constants.EMPTY)) {
+            for (int i = 0; i < existFonts.length; i++) {
+                fontFamilyList.add(existFonts[i]);
+            }
+        }
 
-	    public void mouseDown(MouseEvent e) {
-		if (fontFamilyList.getSelectionCount() > 0) {
-		    allFontFamilyList.deselectAll();
-		    rightButton.setEnabled(false);
-		    leftButton.setEnabled(true);
-		}
-	    }
+        /** Control listeners */
+        allFontFamilyList.addMouseListener(new MouseListener() {
+                public void mouseDoubleClick(MouseEvent e) {
+                    int selectedItem = allFontFamilyList.getSelectionIndex();
+                    addFont(fontFamilyList, allFontFamilyList.getItem(selectedItem));
+                    allFontFamilyList.remove(selectedItem);
+                    rightButton.setEnabled(false);
+                }
 
-	    public void mouseUp(MouseEvent e) {
-	    }
+                public void mouseDown(MouseEvent e) {
+                    if (allFontFamilyList.getSelectionCount() > 0) {
+                        fontFamilyList.deselectAll();
+                        leftButton.setEnabled(false);
+                        rightButton.setEnabled(true);
+                    }
+                }
 
-	});
+                public void mouseUp(MouseEvent e) {
+                }
+            });
 
-	rightButton.addSelectionListener(this);
+        fontFamilyList.addMouseListener(new MouseListener() {
+                public void mouseDoubleClick(MouseEvent e) {
+                    leftButton.setEnabled(false);
 
-	leftButton.addSelectionListener(this);
+                    int selectedItem = fontFamilyList.getSelectionIndex();
+                    fontFamilyList.deselectAll();
+                    addFont(allFontFamilyList, fontFamilyList.getItem(selectedItem));
+                    fontFamilyList.remove(selectedItem);
+                }
 
-	/** Add drag and drop */
-	Transfer[] types = new Transfer[] { TextTransfer.getInstance() };
+                public void mouseDown(MouseEvent e) {
+                    if (fontFamilyList.getSelectionCount() > 0) {
+                        allFontFamilyList.deselectAll();
+                        rightButton.setEnabled(false);
+                        leftButton.setEnabled(true);
+                    }
+                }
 
-	final DragSource source = new DragSource(allFontFamilyList,
-		DND.DROP_MOVE);
-	source.setTransfer(types);
-	source.addDragListener(new DragSourceListener() {
+                public void mouseUp(MouseEvent e) {
+                }
+            });
 
-	    public void dragFinished(DragSourceEvent event) {
-		if (event.detail == DND.DROP_MOVE) {
-		    int selectedItem = allFontFamilyList.getSelectionIndex();
-		    if (allFontFamilyList.getItemCount() > selectedItem && selectedItem >=0)
-			allFontFamilyList.remove(selectedItem);
-		}
-	    }
+        rightButton.addSelectionListener(this);
+        leftButton.addSelectionListener(this);
 
-	    public void dragSetData(DragSourceEvent event) {
-		int selectedItem = allFontFamilyList.getSelectionIndex();
-		event.data = allFontFamilyList.getItem(selectedItem);
-	    }
+        /** Add drag and drop */
+        Transfer[] types = new Transfer[] { TextTransfer.getInstance() };
 
-	    public void dragStart(DragSourceEvent event) {
-		event.doit = (allFontFamilyList.getSelectionCount() != 0);
-	    }
+        final DragSource source = new DragSource(allFontFamilyList, DND.DROP_MOVE);
+        source.setTransfer(types);
+        source.addDragListener(new DragSourceListener() {
+                public void dragFinished(DragSourceEvent event) {
+                    if (event.detail == DND.DROP_MOVE) {
+                        int selectedItem = allFontFamilyList.getSelectionIndex();
 
-	});
+                        if ((allFontFamilyList.getItemCount() > selectedItem) && (selectedItem >= 0)) {
+                            allFontFamilyList.remove(selectedItem);
+                        }
+                    }
+                }
 
-	DropTarget target = new DropTarget(fontFamilyList, DND.DROP_MOVE);
-	target.setTransfer(types);
-	target.addDropListener(new DropTargetAdapter() {
-	    public void drop(DropTargetEvent event) {
-		if (event.data == null) {
-		    event.detail = DND.DROP_NONE;
-		    return;
-		}
-		addFont(fontFamilyList, ((String) event.data));
-		rightButton.setEnabled(false);
-	    }
-	});
+                public void dragSetData(DragSourceEvent event) {
+                    int selectedItem = allFontFamilyList.getSelectionIndex();
+                    event.data = allFontFamilyList.getItem(selectedItem);
+                }
 
-	final DragSource sourceBack = new DragSource(fontFamilyList,
-		DND.DROP_MOVE);
-	sourceBack.setTransfer(types);
-	sourceBack.addDragListener(new DragSourceListener() {
+                public void dragStart(DragSourceEvent event) {
+                    event.doit = (allFontFamilyList.getSelectionCount() != 0);
+                }
+            });
 
-	    public void dragFinished(DragSourceEvent event) {
-		if (event.detail == DND.DROP_MOVE) {
-		    int selectedItem = fontFamilyList.getSelectionIndex();
-		    if (fontFamilyList.getItemCount() > selectedItem && selectedItem >=0)
-			fontFamilyList.remove(selectedItem);
-		}
-	    }
+        DropTarget target = new DropTarget(fontFamilyList, DND.DROP_MOVE);
+        target.setTransfer(types);
+        target.addDropListener(new DropTargetAdapter() {
+                public void drop(DropTargetEvent event) {
+                    if (event.data == null) {
+                        event.detail = DND.DROP_NONE;
 
-	    public void dragSetData(DragSourceEvent event) {
-		int selectedItem = fontFamilyList.getSelectionIndex();
-		event.data = fontFamilyList.getItem(selectedItem);
-	    }
+                        return;
+                    }
 
-	    public void dragStart(DragSourceEvent event) {
-		event.doit = (fontFamilyList.getSelectionCount() != 0);
-	    }
+                    addFont(fontFamilyList, ((String) event.data));
+                    rightButton.setEnabled(false);
+                }
+            });
 
-	});
+        final DragSource sourceBack = new DragSource(fontFamilyList, DND.DROP_MOVE);
+        sourceBack.setTransfer(types);
+        sourceBack.addDragListener(new DragSourceListener() {
+                public void dragFinished(DragSourceEvent event) {
+                    if (event.detail == DND.DROP_MOVE) {
+                        int selectedItem = fontFamilyList.getSelectionIndex();
 
-	DropTarget targetBack = new DropTarget(allFontFamilyList, DND.DROP_MOVE);
-	targetBack.setTransfer(types);
-	targetBack.addDropListener(new DropTargetAdapter() {
-	    public void drop(DropTargetEvent event) {
-		if (event.data == null) {
-		    event.detail = DND.DROP_NONE;
-		    return;
-		}
-		addFont(allFontFamilyList, ((String) event.data));
-		leftButton.setEnabled(false);
-	    }
-	});
+                        if ((fontFamilyList.getItemCount() > selectedItem) && (selectedItem >= 0)) {
+                            fontFamilyList.remove(selectedItem);
+                        }
+                    }
+                }
 
-	return composite;
+                public void dragSetData(DragSourceEvent event) {
+                    int selectedItem = fontFamilyList.getSelectionIndex();
+                    event.data = fontFamilyList.getItem(selectedItem);
+                }
 
+                public void dragStart(DragSourceEvent event) {
+                    event.doit = (fontFamilyList.getSelectionCount() != 0);
+                }
+            });
+
+        DropTarget targetBack = new DropTarget(allFontFamilyList, DND.DROP_MOVE);
+        targetBack.setTransfer(types);
+        targetBack.addDropListener(new DropTargetAdapter() {
+                public void drop(DropTargetEvent event) {
+                    if (event.data == null) {
+                        event.detail = DND.DROP_NONE;
+
+                        return;
+                    }
+
+                    addFont(allFontFamilyList, ((String) event.data));
+                    leftButton.setEnabled(false);
+                }
+            });
+
+        return composite;
     }
 
     /**
      * Set title for dialog
      */
     protected void configureShell(Shell newShell) {
-	super.configureShell(newShell);
-	newShell.setText(MessageUtil.getString("FONT_FAMILY_DIALOG_TITLE"));
+        super.configureShell(newShell);
+        newShell.setText(JstUIMessages.FONT_FAMILY_DIALOG_TITLE);
     }
 
+    /**
+     * @see org.eclipse.jface.dialogs.Dialog#okPressed()
+     */
+    @Override
     protected void okPressed() {
-	String[] items = fontFamilyList.getItems();
-	StringBuffer buf = new StringBuffer();
-	for (int i = 0; i < items.length; i++) {
-	    buf.append((i == 0 ? Constants.EMPTY_STRING : COMMA) + items[i]);
-	}
-	fontFamily = buf.toString();
-	super.okPressed();
+        String[] items = fontFamilyList.getItems();
+        StringBuffer buf = new StringBuffer();
+
+        for (int i = 0; i < items.length; i++) {
+            buf.append(((i == 0) ? Constants.EMPTY : Constants.COMMA) + items[i]);
+        }
+
+        fontFamily = buf.toString();
+        super.okPressed();
     }
 
     /**
      * Method for add to font to sorted list
-     * 
+     *
      * @param list
      * @param font
      */
     private void addFont(List list, String font) {
-	Set<String> s = new HashSet<String>();
-	String[] items = list.getItems();
-	list.removeAll();
-	for (int i = 0; i < items.length; i++) {
-	    s.add(items[i]);
-	}
-	s.add(font);
-	String[] answer = new String[s.size()];
-	s.toArray(answer);
-	Arrays.sort(answer);
-	for (int i = 0; i < answer.length; i++) {
-	    list.add(answer[i]);
-	}
+        Set<String> s = new HashSet<String>();
+        String[] items = list.getItems();
+        list.removeAll();
+
+        for (int i = 0; i < items.length; i++) {
+            s.add(items[i]);
+        }
+
+        s.add(font);
+
+        String[] answer = new String[s.size()];
+        s.toArray(answer);
+        Arrays.sort(answer);
+
+        for (int i = 0; i < answer.length; i++) {
+            list.add(answer[i]);
+        }
     }
 
     /**
      * Getter for fontFamily attribute
-     * 
+     *
      * @return fontFamily
      */
     public String getFontFamily() {
-	return fontFamily;
+        return fontFamily;
     }
 
     /**
      * Setter for fontFamily attribute
-     * 
+     *
      * @param fontFamily
      */
     public void setFontFamily(String fontFamily) {
-	this.fontFamily = fontFamily;
+        this.fontFamily = fontFamily;
     }
 
     /**
      * Method for parse font family string
-     * 
+     *
      * @param font
      *                family string
      * @return list font family
      */
     private String[] fontFamilyParser() {
-	existFontFamily = existFontFamily.trim();
-	return existFontFamily.split(COMMA);
+        existFontFamily = existFontFamily.trim();
+
+        return existFontFamily.split(Constants.COMMA);
     }
 
     /**
      * Selection listener
+     *
+     * @see org.eclipse.swt.events.SelectionListener#widgetDefaultSelected(SelectionEvent)
      */
     public void widgetDefaultSelected(SelectionEvent e) {
-	Object ob = e.getSource();
-	if (ob.equals(leftButton)) {
-	    int[] selectedItems = fontFamilyList.getSelectionIndices();
-	    String[] items = allFontFamilyList.getItems();
-	    Set<String> s = new HashSet<String>();
-	    for (int i = 0; i < items.length; i++) {
-		s.add(items[i]);
-	    }
-	    for (int i = 0; i < selectedItems.length; i++) {
-		s.add(fontFamilyList.getItem(selectedItems[i]));
-	    }
-	    allFontFamilyList.removeAll();
-	    String[] answer = new String[s.size()];
-	    s.toArray(answer);
-	    Arrays.sort(answer);
-	    for (int i = 0; i < answer.length; i++) {
-		allFontFamilyList.add(answer[i]);
-	    }
-	    fontFamilyList.remove(selectedItems);
-	    leftButton.setEnabled(false);
-	} else if (ob.equals(rightButton)) {
-	    int[] selectedItems = allFontFamilyList.getSelectionIndices();
-	    String[] items = fontFamilyList.getItems();
-	    Set<String> s = new HashSet<String>();
-	    for (int i = 0; i < items.length; i++) {
-		s.add(items[i]);
-	    }
-	    for (int i = 0; i < selectedItems.length; i++) {
-		s.add(allFontFamilyList.getItem(selectedItems[i]));
-	    }
-	    fontFamilyList.removeAll();
-	    String[] answer = new String[s.size()];
-	    s.toArray(answer);
-	    Arrays.sort(answer);
-	    for (int i = 0; i < answer.length; i++) {
-		fontFamilyList.add(answer[i]);
-	    }
-	    allFontFamilyList.remove(selectedItems);
-	    rightButton.setEnabled(false);
-	} else if (ob.equals(allFontFamilyList)) {
-	    fontFamilyList.deselectAll();
-	    leftButton.setEnabled(false);
-	    rightButton.setEnabled(true);
-	} else if (ob.equals(fontFamilyList)) {
-	    allFontFamilyList.deselectAll();
-	    rightButton.setEnabled(false);
-	    leftButton.setEnabled(true);
-	}
+        Object ob = e.getSource();
+
+        if (ob.equals(leftButton)) {
+            int[] selectedItems = fontFamilyList.getSelectionIndices();
+            String[] items = allFontFamilyList.getItems();
+            Set<String> s = new HashSet<String>();
+
+            for (int i = 0; i < items.length; i++) {
+                s.add(items[i]);
+            }
+
+            for (int i = 0; i < selectedItems.length; i++) {
+                s.add(fontFamilyList.getItem(selectedItems[i]));
+            }
+
+            allFontFamilyList.removeAll();
+
+            String[] answer = new String[s.size()];
+            s.toArray(answer);
+            Arrays.sort(answer);
+
+            for (int i = 0; i < answer.length; i++) {
+                allFontFamilyList.add(answer[i]);
+            }
+
+            fontFamilyList.remove(selectedItems);
+            leftButton.setEnabled(false);
+        } else if (ob.equals(rightButton)) {
+            int[] selectedItems = allFontFamilyList.getSelectionIndices();
+            String[] items = fontFamilyList.getItems();
+            Set<String> s = new HashSet<String>();
+
+            for (int i = 0; i < items.length; i++) {
+                s.add(items[i]);
+            }
+
+            for (int i = 0; i < selectedItems.length; i++) {
+                s.add(allFontFamilyList.getItem(selectedItems[i]));
+            }
+
+            fontFamilyList.removeAll();
+
+            String[] answer = new String[s.size()];
+            s.toArray(answer);
+            Arrays.sort(answer);
+
+            for (int i = 0; i < answer.length; i++) {
+                fontFamilyList.add(answer[i]);
+            }
+
+            allFontFamilyList.remove(selectedItems);
+            rightButton.setEnabled(false);
+        } else if (ob.equals(allFontFamilyList)) {
+            fontFamilyList.deselectAll();
+            leftButton.setEnabled(false);
+            rightButton.setEnabled(true);
+        } else if (ob.equals(fontFamilyList)) {
+            allFontFamilyList.deselectAll();
+            rightButton.setEnabled(false);
+            leftButton.setEnabled(true);
+        }
     }
 
     /**
      * Selection listener
+     *
+     * @see org.eclipse.swt.events.SelectionListener#widgetSelected(SelectionEvent)
      */
     public void widgetSelected(SelectionEvent e) {
-	Object ob = e.getSource();
-	if (ob.equals(leftButton)) {
-	    int[] selectedItems = fontFamilyList.getSelectionIndices();
-	    String[] items = allFontFamilyList.getItems();
-	    Set<String> s = new HashSet<String>();
-	    for (int i = 0; i < items.length; i++) {
-		s.add(items[i]);
-	    }
-	    for (int i = 0; i < selectedItems.length; i++) {
-		s.add(fontFamilyList.getItem(selectedItems[i]));
-	    }
-	    allFontFamilyList.removeAll();
-	    String[] answer = new String[s.size()];
-	    s.toArray(answer);
-	    Arrays.sort(answer);
-	    for (int i = 0; i < answer.length; i++) {
-		allFontFamilyList.add(answer[i]);
-	    }
-	    fontFamilyList.remove(selectedItems);
-	    leftButton.setEnabled(false);
-	} else if (ob.equals(rightButton)) {
-	    int[] selectedItems = allFontFamilyList.getSelectionIndices();
-	    String[] items = fontFamilyList.getItems();
-	    Set<String> s = new HashSet<String>();
-	    for (int i = 0; i < items.length; i++) {
-		s.add(items[i]);
-	    }
-	    for (int i = 0; i < selectedItems.length; i++) {
-		s.add(allFontFamilyList.getItem(selectedItems[i]));
-	    }
-	    fontFamilyList.removeAll();
-	    String[] answer = new String[s.size()];
-	    s.toArray(answer);
-	    Arrays.sort(answer);
-	    for (int i = 0; i < answer.length; i++) {
-		fontFamilyList.add(answer[i]);
-	    }
-	    allFontFamilyList.remove(selectedItems);
-	    rightButton.setEnabled(false);
-	}
+        Object ob = e.getSource();
+
+        if (ob.equals(leftButton)) {
+            int[] selectedItems = fontFamilyList.getSelectionIndices();
+            String[] items = allFontFamilyList.getItems();
+            Set<String> s = new HashSet<String>();
+
+            for (int i = 0; i < items.length; i++) {
+                s.add(items[i]);
+            }
+
+            for (int i = 0; i < selectedItems.length; i++) {
+                s.add(fontFamilyList.getItem(selectedItems[i]));
+            }
+
+            allFontFamilyList.removeAll();
+
+            String[] answer = new String[s.size()];
+            s.toArray(answer);
+            Arrays.sort(answer);
+
+            for (int i = 0; i < answer.length; i++) {
+                allFontFamilyList.add(answer[i]);
+            }
+
+            fontFamilyList.remove(selectedItems);
+            leftButton.setEnabled(false);
+        } else if (ob.equals(rightButton)) {
+            int[] selectedItems = allFontFamilyList.getSelectionIndices();
+            String[] items = fontFamilyList.getItems();
+            Set<String> s = new HashSet<String>();
+
+            for (int i = 0; i < items.length; i++) {
+                s.add(items[i]);
+            }
+
+            for (int i = 0; i < selectedItems.length; i++) {
+                s.add(allFontFamilyList.getItem(selectedItems[i]));
+            }
+
+            fontFamilyList.removeAll();
+
+            String[] answer = new String[s.size()];
+            s.toArray(answer);
+            Arrays.sort(answer);
+
+            for (int i = 0; i < answer.length; i++) {
+                fontFamilyList.add(answer[i]);
+            }
+
+            allFontFamilyList.remove(selectedItems);
+            rightButton.setEnabled(false);
+        }
     }
 }

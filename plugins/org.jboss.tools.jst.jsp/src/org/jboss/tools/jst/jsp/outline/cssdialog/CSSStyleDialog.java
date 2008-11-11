@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
- ******************************************************************************/ 
+ ******************************************************************************/
 package org.jboss.tools.jst.jsp.outline.cssdialog;
 
 import java.util.Set;
@@ -22,104 +22,105 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
+import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
-import org.jboss.tools.jst.jsp.outline.cssdialog.common.MessageUtil;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.ChangeStyleEvent;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.ChangeStyleListener;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.StyleAttributes;
 
 /**
  * Class for CSS editor dialog
- * 
+ *
  * @author Dzmitry Sakovich (dsakovich@exadel.com)
  */
 public class CSSStyleDialog extends Dialog {
-    
-   
-    //TODO Dzmitry Sakovich
+
+    final static int MIN_HEIGHT_FOR_BROWSER = 60;
+
     private Browser browser = null;
     private StyleComposite styleComposite = null;
+    private StyleAttributes styleAttributes = null;
     private String oldStyle;
-    private StyleAttributes styleAttributes = new StyleAttributes();
-
-    
-    final static int MIN_HEIGHT_FOR_BROWSER = 60; 
 
     public CSSStyleDialog(final Shell parentShell, String oldStyle) {
-	super(parentShell);
-	setShellStyle(getShellStyle() | SWT.RESIZE | SWT.MAX
-		| SWT.APPLICATION_MODAL);
-	this.oldStyle = oldStyle;
+        super(parentShell);
+        setShellStyle(getShellStyle() | SWT.RESIZE | SWT.MAX | SWT.APPLICATION_MODAL);
+        this.oldStyle = oldStyle;
+        styleAttributes = new StyleAttributes();
     }
 
     /**
      * Getter for newStyle attribute
-     * 
-     * @return
+     *
+     * @return new style string value
      */
     public String getNewStyle() {
-	return styleComposite==null?oldStyle:styleComposite.getNewStyle();
+        return (styleComposite == null) ? oldStyle : styleComposite.getNewStyle();
     }
 
     /**
-     * Method for creating dialog area
-     * 
-     * @param parent
+     * @see org.eclipse.jface.dialogs.Dialog#createDialogArea(Composite)
      */
+    @Override
     protected Control createDialogArea(final Composite parent) {
-	
-		
-	final Composite composite = (Composite) super.createDialogArea(parent);
-	
-	GridLayout layout = new GridLayout();
-	layout.numColumns = 1;
-	browser = new Browser(composite,SWT.BORDER);
-	
-	composite.setLayout(layout);
-	
-	styleAttributes.addChangeStyleListener(new ChangeStyleListener() {
-	    public void styleChanged(ChangeStyleEvent event) {
-		String styleForSpan = "";
-		String html = "";
+        final Composite composite = (Composite) super.createDialogArea(parent);
 
-		Set<String> keySet = styleAttributes.keySet();
+        GridLayout layout = new GridLayout();
+        layout.numColumns = 1;
+        browser = new Browser(composite, SWT.BORDER);
 
-		for (String key : keySet)
-		    styleForSpan += key + Constants.COLON_STRING
-			    + styleAttributes.getAttribute(key) + Constants.SEMICOLON_STRING;
+        composite.setLayout(layout);
 
-		html = Constants.OPEN_DIV_TAG + styleForSpan
-			+ Constants.TEXT_FOR_PREVIEW + Constants.CLOSE_DIV_TAG;
-		browser.setText(html);
-	    }
-	});
-	styleComposite = new StyleComposite(composite,styleAttributes,oldStyle);
-	
-	GridData gridData = new GridData(GridData.FILL, GridData.FILL, true,
-		true);
-	gridData.minimumHeight = MIN_HEIGHT_FOR_BROWSER;
-	browser.setLayoutData(gridData);
-	
-	return composite;
+        styleAttributes.addChangeStyleListener(new ChangeStyleListener() {
+                public void styleChanged(ChangeStyleEvent event) {
+                    String styleForSpan = Constants.EMPTY;
+                    String html = Constants.EMPTY;
+
+                    Set<String> keySet = styleAttributes.keySet();
+                    for (String key : keySet) {
+                        styleForSpan += (key + Constants.COLON + styleAttributes.getAttribute(key) +
+                        		Constants.SEMICOLON);
+                    }
+                    html = Constants.OPEN_DIV_TAG + styleForSpan + Constants.TEXT_FOR_PREVIEW +
+                        Constants.CLOSE_DIV_TAG;
+                    browser.setText(html);
+                }
+            });
+        styleComposite = new StyleComposite(composite, styleAttributes, oldStyle);
+
+        GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
+        gridData.minimumHeight = MIN_HEIGHT_FOR_BROWSER;
+        browser.setLayoutData(gridData);
+
+        return composite;
     }
 
     /**
      * Method for setting title for dialog
-     * 
-     * @param newShell
+     *
+     * @param newShell Shell object
+     * @see org.eclipse.jface.window.Window#configureShell(Shell)
      */
+    @Override
     protected void configureShell(Shell newShell) {
-	super.configureShell(newShell);
-	newShell.setText(MessageUtil.getString("CSS_STYLE_DIALOG_TITLE"));
+        super.configureShell(newShell);
+        newShell.setText(JstUIMessages.CSS_STYLE_CLASS_DIALOG_TITLE);
     }
 
+    /**
+     * @see org.eclipse.jface.dialogs.Dialog#okPressed()
+     */
+    @Override
     protected void okPressed() {
-	styleComposite.updateStyle();
-	super.okPressed();
+        styleComposite.updateStyle();
+        super.okPressed();
     }
 
+    /**
+     * @see org.eclipse.jface.dialogs.Dialog#getDialogBoundsSettings()
+     */
     @Override
     protected IDialogSettings getDialogBoundsSettings() {
-	return JspEditorPlugin.getDefault().getDialogSettings();
+        return JspEditorPlugin.getDefault().getDialogSettings();
     }
 }

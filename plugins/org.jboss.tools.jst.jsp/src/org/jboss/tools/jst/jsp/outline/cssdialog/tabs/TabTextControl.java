@@ -10,14 +10,9 @@
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.outline.cssdialog.tabs;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -35,27 +30,33 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
+import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.cssdialog.FontFamilyDialog;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSConstants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.ImageCombo;
-import org.jboss.tools.jst.jsp.outline.cssdialog.common.MessageUtil;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Util;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.StyleAttributes;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParser;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * Class for creating Text tab controls
- * 
+ *
  * @author dsakovich@exadel.com
- * 
  */
 public class TabTextControl extends Composite {
 
+    //private HashMap<String, String> attributesMap;
+    private static final int numColumns = 3;
     private Text fontFamilyText;
-
     private ImageCombo colorCombo;
     private Combo fontSizeCombo;
     private Combo extFontSizeCombo;
@@ -63,407 +64,410 @@ public class TabTextControl extends Composite {
     private Combo fontWeigthCombo;
     private Combo textDecorationCombo;
     private Combo textAlignCombo;
-
     private ArrayList<String> list;
-
-    
     private StyleAttributes styleAttributes;
-    //private HashMap<String, String> attributesMap;
 
-    private static final int numColumns = 3;
-  
     //TODO Dzmitry Sakovich
     //private Browser browser = null;
 
     /**
      * Constructor for creating controls
-     * 
+     *
      * @param composite
      */
-    public TabTextControl(final Composite composite,
-	    final HashMap<String, ArrayList<String>> comboMap,
-	    final StyleAttributes styleAttributes) {
-	super(composite, SWT.NONE);
-	this.styleAttributes = styleAttributes;
-	//TODO Dzmitry Sakovich 
-	//this.browser = dialog;
+    public TabTextControl(final Composite composite, final HashMap<String, ArrayList<String>> comboMap,
+        final StyleAttributes styleAttributes) {
+        super(composite, SWT.NONE);
+        this.styleAttributes = styleAttributes;
 
-	final GridLayout gridLayout = new GridLayout();
-	gridLayout.numColumns = numColumns;
-	setLayout(gridLayout);
+        //TODO Dzmitry Sakovich 
+        //this.browser = dialog;
+        final GridLayout gridLayout = new GridLayout();
+        gridLayout.numColumns = numColumns;
+        setLayout(gridLayout);
 
-	Label label = new Label(this, SWT.LEFT);
-	label.setText(MessageUtil.getString("FONT_FAMILY")); //$NON-NLS-1$
-	label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
-		false));
+        Label label = new Label(this, SWT.LEFT);
+        label.setText(JstUIMessages.FONT_FAMILY);
+        label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
 
-	fontFamilyText = new Text(this, SWT.BORDER | SWT.SINGLE);
-	fontFamilyText.setLayoutData(new GridData(GridData.FILL,
-		GridData.CENTER, true, false));
+        fontFamilyText = new Text(this, SWT.BORDER | SWT.SINGLE);
+        fontFamilyText.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 
-	fontFamilyText.addModifyListener(new ModifyListener() {
-	    public void modifyText(ModifyEvent event) {
-		String tmp = fontFamilyText.getText();
-		if (tmp != null) {
-		    if (tmp.trim().length() > 0)
-			styleAttributes.addAttribute(CSSConstants.FONT_FAMILY, tmp);
-		    else
-			styleAttributes.removeAttribute(CSSConstants.FONT_FAMILY);
-		}
-		//TODO Dzmitry Sakovich
-		//cssDialog.setStyleForPreview();
-	    }
-	});
+        fontFamilyText.addModifyListener(new ModifyListener() {
+                public void modifyText(ModifyEvent event) {
+                    String tmp = fontFamilyText.getText();
+                    if (tmp != null) {
+                        if (tmp.trim().length() > 0) {
+                            styleAttributes.addAttribute(CSSConstants.FONT_FAMILY, tmp);
+                        } else {
+                            styleAttributes.removeAttribute(CSSConstants.FONT_FAMILY);
+                        }
+                    }
+                    //TODO Dzmitry Sakovich
+                    //cssDialog.setStyleForPreview();
+                }
+            });
 
-	Button button = new Button(this, SWT.PUSH);
-	button.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
-		false));
-	button.setToolTipText(MessageUtil.getString("FONT_FAMILY_TIP")); //$NON-NLS-1$
-	ImageDescriptor fontDesc = JspEditorPlugin
-		.getImageDescriptor(Constants.IMAGE_FONTLARGE_FILE_LOCATION);
-	Image fontImage = fontDesc.createImage();
-	button.setImage(fontImage);
-	button.addDisposeListener(new DisposeListener() {
-	    public void widgetDisposed(DisposeEvent e) {
-		Button button = (Button) e.getSource();
-		button.getImage().dispose();
-	    }
-	});
-	button.addSelectionListener(new SelectionAdapter() {
-	    public void widgetSelected(SelectionEvent event) {
-		FontFamilyDialog dialog = new FontFamilyDialog(getShell(),
-			fontFamilyText.getText());
-		if (dialog.open() == Window.OK) {
-		    fontFamilyText.setText(dialog.getFontFamily());
-		}
-	    }
-	});
-	label = new Label(this, SWT.LEFT);
-	label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
-		false));
-	label.setText(MessageUtil.getString("COLOR")); //$NON-NLS-1$
+        Button button = new Button(this, SWT.PUSH);
+        button.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
+        button.setToolTipText(JstUIMessages.FONT_FAMILY_TIP);
 
-	colorCombo = new ImageCombo(this, SWT.BORDER);
-	colorCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER,
-		true, false));
+        ImageDescriptor fontDesc = JspEditorPlugin.getImageDescriptor(Constants.IMAGE_FONTLARGE_FILE_LOCATION);
+        Image fontImage = fontDesc.createImage();
+        button.setImage(fontImage);
+        button.addDisposeListener(new DisposeListener() {
+                public void widgetDisposed(DisposeEvent e) {
+                    Button button = (Button) e.getSource();
+                    button.getImage().dispose();
+                }
+            });
+        button.addSelectionListener(new SelectionAdapter() {
+                public void widgetSelected(SelectionEvent event) {
+                    FontFamilyDialog dialog = new FontFamilyDialog(getShell(), fontFamilyText.getText());
 
-	colorCombo.addModifyListener(new ModifyListener() {
-	    public void modifyText(ModifyEvent event) {
-		String tmp = colorCombo.getText();
-		if (tmp != null) {
-		    if (tmp.trim().length() > 0)
-			styleAttributes.addAttribute(CSSConstants.COLOR, tmp);
-		    else
-			styleAttributes.removeAttribute(CSSConstants.COLOR);
-		}
-		//TODO Dzmitry Sakovich
-		//cssDialog.setStyleForPreview();
-	    }
-	});
+                    if (dialog.open() == Window.OK) {
+                        fontFamilyText.setText(dialog.getFontFamily());
+                    }
+                }
+            });
+        label = new Label(this, SWT.LEFT);
+        label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
+        label.setText(JstUIMessages.COLOR);
 
-	////////////////////////////////////////////////////////////////////////
-	// //
-	Set<Entry<String, String>> set = ColorParser.getInstance().getMap()
-		.entrySet();
+        colorCombo = new ImageCombo(this, SWT.BORDER);
+        colorCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 
-	for (Map.Entry<String, String> me : set) {
-	    RGB rgb = Util.getColor(me.getKey());
-	    colorCombo.add(me.getValue(), rgb);
-	}
-	////////////////////////////////////////////////////////////////////////
-	// /
+        colorCombo.addModifyListener(new ModifyListener() {
+                public void modifyText(ModifyEvent event) {
+                    String tmp = colorCombo.getText();
+                    if (tmp != null) {
+                        if (tmp.trim().length() > 0) {
+                            styleAttributes.addAttribute(CSSConstants.COLOR, tmp);
+                        } else {
+                            styleAttributes.removeAttribute(CSSConstants.COLOR);
+                        }
+                    }
+                    //TODO Dzmitry Sakovich
+                    //cssDialog.setStyleForPreview();
+                }
+            });
 
-	button = new Button(this, SWT.PUSH);
-	button.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
-		false));
-	button.setToolTipText(MessageUtil.getString("COLOR_TIP")); //$NON-NLS-1$
-	ImageDescriptor colorDesc = JspEditorPlugin
-		.getImageDescriptor(Constants.IMAGE_COLORLARGE_FILE_LOCATION);
-	Image im = colorDesc.createImage();
-	button.setImage(im);
-	button.addDisposeListener(new DisposeListener() {
-	    public void widgetDisposed(DisposeEvent e) {
-		Button button = (Button) e.getSource();
-		button.getImage().dispose();
-	    }
-	});
-	button.addSelectionListener(new SelectionAdapter() {
-	    public void widgetSelected(SelectionEvent event) {
-		ColorDialog dlg = new ColorDialog(getShell());
+        ////////////////////////////////////////////////////////////////////////
+        // //
+        Set<Entry<String, String>> set = ColorParser.getInstance().getMap().entrySet();
 
-		dlg
-			.setRGB(Util.getColor((colorCombo.getText().trim())) == null ? Constants.RGB_BLACK
-				: Util.getColor((colorCombo.getText().trim())));
-		dlg.setText(MessageUtil.getString("COLOR_DIALOG_TITLE")); //$NON-NLS-1$
-		RGB rgb = dlg.open();
-		if (rgb != null) {
-		    String colorStr = Util.createColorString(rgb);
-		    colorCombo.setText(colorStr);
-		}
-	    }
-	});
+        for (Map.Entry<String, String> me : set) {
+            RGB rgb = Util.getColor(me.getKey());
+            colorCombo.add(me.getValue(), rgb);
+        }
 
-	label = new Label(this, SWT.LEFT);
-	label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
-		false));
-	label.setText(MessageUtil.getString("FONT_SIZE")); //$NON-NLS-1$
+        ////////////////////////////////////////////////////////////////////////
+        // /
+        button = new Button(this, SWT.PUSH);
+        button.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
+        button.setToolTipText(JstUIMessages.COLOR_TIP);
 
-	fontSizeCombo = new Combo(this, SWT.BORDER | SWT.SINGLE);
+        ImageDescriptor colorDesc = JspEditorPlugin.getImageDescriptor(Constants.IMAGE_COLORLARGE_FILE_LOCATION);
+        Image im = colorDesc.createImage();
+        button.setImage(im);
+        button.addDisposeListener(new DisposeListener() {
+                public void widgetDisposed(DisposeEvent e) {
+                    Button button = (Button) e.getSource();
+                    button.getImage().dispose();
+                }
+            });
+        button.addSelectionListener(new SelectionAdapter() {
+                public void widgetSelected(SelectionEvent event) {
+                    ColorDialog dlg = new ColorDialog(getShell());
 
-	final GridData fontSizeGridData = new GridData(GridData.FILL,
-		GridData.CENTER, true, false);
-	fontSizeCombo.setLayoutData(fontSizeGridData);
+                    dlg.setRGB((Util.getColor((colorCombo.getText().trim())) == null)
+                        ? Constants.RGB_BLACK : Util.getColor((colorCombo.getText().trim())));
+                    dlg.setText(JstUIMessages.COLOR_DIALOG_TITLE);
 
-	list = comboMap.get(CSSConstants.FONT_SIZE);
-	for (String str : list) {
-	    fontSizeCombo.add(str);
-	}
+                    RGB rgb = dlg.open();
 
-	extFontSizeCombo = new Combo(this, SWT.BORDER | SWT.READ_ONLY);
+                    if (rgb != null) {
+                        String colorStr = Util.createColorString(rgb);
+                        colorCombo.setText(colorStr);
+                    }
+                }
+            });
 
-	extFontSizeCombo.addModifyListener(new ModifyListener() {
-	    public void modifyText(ModifyEvent event) {
-		String fontSize = fontSizeCombo.getText().trim();
-		if (fontSize == null)
-		    return;
-		if (fontSize.equals(Constants.EMPTY_STRING))
-		    return;
+        label = new Label(this, SWT.LEFT);
+        label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
+        label.setText(JstUIMessages.FONT_SIZE);
 
-		String tmp = extFontSizeCombo.getText();
+        fontSizeCombo = new Combo(this, SWT.BORDER | SWT.SINGLE);
 
-		if (tmp != null) {
-		    styleAttributes.addAttribute(CSSConstants.FONT_SIZE, fontSize + tmp);
-		    //TODO Dzmitry Sakovich
-		    //cssDialog.setStyleForPreview();
-		}
-	    }
-	});
+        final GridData fontSizeGridData = new GridData(GridData.FILL, GridData.CENTER, true, false);
+        fontSizeCombo.setLayoutData(fontSizeGridData);
 
-	extFontSizeCombo.setLayoutData(new GridData(GridData.FILL,
-		GridData.CENTER, false, false));
-	for (int i = 0; i < Constants.extSizes.length; i++) {
-	    extFontSizeCombo.add(Constants.extSizes[i]);
-	}
+        list = comboMap.get(CSSConstants.FONT_SIZE);
 
-	fontSizeCombo.addModifyListener(new ModifyListener() {
+        for (String str : list) {
+            fontSizeCombo.add(str);
+        }
 
-	    public void modifyText(ModifyEvent e) {
-		String currentText = fontSizeCombo.getText();
+        extFontSizeCombo = new Combo(this, SWT.BORDER | SWT.READ_ONLY);
 
-		list = comboMap.get(CSSConstants.FONT_SIZE);
-		for (String str : list) {
-		    if (currentText.equals(str)) {
-			extFontSizeCombo.select(0);
-			extFontSizeCombo.setEnabled(false);
-			styleAttributes.addAttribute(CSSConstants.FONT_SIZE, currentText);
-			//TODO Dzmitry Sakovich
-			//cssDialog.setStyleForPreview();
-			return;
-		    }
-		}
-		extFontSizeCombo.setEnabled(true);
+        extFontSizeCombo.addModifyListener(new ModifyListener() {
+                public void modifyText(ModifyEvent event) {
+                    String fontSize = fontSizeCombo.getText().trim();
+                    if (fontSize == null) {
+                        return;
+                    }
+                    if (fontSize.equals(Constants.EMPTY)) {
+                        return;
+                    }
+                    String tmp = extFontSizeCombo.getText();
+                    if (tmp != null) {
+                        styleAttributes.addAttribute(CSSConstants.FONT_SIZE, fontSize + tmp);
+                        //TODO Dzmitry Sakovich
+                        //cssDialog.setStyleForPreview();
+                    }
+                }
+            });
 
-		String tmp = fontSizeCombo.getText();
+        extFontSizeCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
 
-		if (tmp != null) {
-		    if (tmp.trim().length() > 0) {
-			String extFont = extFontSizeCombo.getText().trim();
-			if (extFont != null)
-			    styleAttributes.addAttribute(CSSConstants.FONT_SIZE, tmp
-				    + extFont);
-			else
-			    styleAttributes.addAttribute(CSSConstants.FONT_SIZE, tmp);
-		    } else
-			styleAttributes.removeAttribute(CSSConstants.FONT_SIZE);
-		} else
-		    styleAttributes.removeAttribute(CSSConstants.FONT_SIZE);
-		//TODO Dzmitry Sakovich
-		//cssDialog.setStyleForPreview();
-	    }
-	});
+        for (int i = 0; i < Constants.extSizes.length; i++) {
+            extFontSizeCombo.add(Constants.extSizes[i]);
+        }
 
-	label = new Label(this, SWT.LEFT);
-	label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
-		false));
-	label.setText(MessageUtil.getString("FONT_STYLE")); //$NON-NLS-1$
+        fontSizeCombo.addModifyListener(new ModifyListener() {
+                public void modifyText(ModifyEvent e) {
+                    String currentText = fontSizeCombo.getText();
 
-	fontStyleCombo = new Combo(this, SWT.BORDER);
+                    list = comboMap.get(CSSConstants.FONT_SIZE);
 
-	fontStyleCombo.addModifyListener(new ModifyListener() {
-	    public void modifyText(ModifyEvent event) {
-		String tmp = fontStyleCombo.getText();
-		if (tmp != null) {
-		    if (tmp.trim().length() > 0)
-			styleAttributes.addAttribute(CSSConstants.FONT_STYLE, tmp);
-		    else
-			styleAttributes.removeAttribute(CSSConstants.FONT_STYLE);
-		}
-		//TODO Dzmitry Sakovich
-		//cssDialog.setStyleForPreview();
-	    }
-	});
+                    for (String str : list) {
+                        if (currentText.equals(str)) {
+                            extFontSizeCombo.select(0);
+                            extFontSizeCombo.setEnabled(false);
+                            styleAttributes.addAttribute(CSSConstants.FONT_SIZE, currentText);
 
-	fontStyleCombo.setLayoutData(new GridData(GridData.FILL,
-		GridData.CENTER, false, false));
+                            //TODO Dzmitry Sakovich
+                            //cssDialog.setStyleForPreview();
+                            return;
+                        }
+                    }
 
-	list = comboMap.get(CSSConstants.FONT_STYLE);
-	for (String str : list) {
-	    fontStyleCombo.add(str);
-	}
+                    extFontSizeCombo.setEnabled(true);
 
-	label = new Label(this, SWT.LEFT);
-	label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
-		false));
-	label.setText(Constants.EMPTY_STRING);
+                    String tmp = fontSizeCombo.getText();
 
-	label = new Label(this, SWT.LEFT);
-	label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
-		false));
-	label.setText(MessageUtil.getString("FONT_WEIGHT")); //$NON-NLS-1$
+                    if (tmp != null) {
+                        if (tmp.trim().length() > 0) {
+                            String extFont = extFontSizeCombo.getText().trim();
 
-	fontWeigthCombo = new Combo(this, SWT.BORDER);
+                            if (extFont != null) {
+                                styleAttributes.addAttribute(CSSConstants.FONT_SIZE, tmp + extFont);
+                            } else {
+                                styleAttributes.addAttribute(CSSConstants.FONT_SIZE, tmp);
+                            }
+                        } else {
+                            styleAttributes.removeAttribute(CSSConstants.FONT_SIZE);
+                        }
+                    } else {
+                        styleAttributes.removeAttribute(CSSConstants.FONT_SIZE);
+                    }
 
-	fontWeigthCombo.addModifyListener(new ModifyListener() {
-	    public void modifyText(ModifyEvent event) {
-		String tmp = fontWeigthCombo.getText();
-		if (tmp != null) {
-		    if (tmp.trim().length() > 0)
-			styleAttributes.addAttribute(CSSConstants.FONT_WEIGHT, tmp);
-		    else
-			styleAttributes.removeAttribute(CSSConstants.FONT_WEIGHT);
-		}
-		//TODO Dzmitry Sakovich
-		//cssDialog.setStyleForPreview();
-	    }
-	});
+                    //TODO Dzmitry Sakovich
+                    //cssDialog.setStyleForPreview();
+                }
+            });
 
-	fontWeigthCombo.setLayoutData(new GridData(GridData.FILL,
-		GridData.CENTER, false, false));
+        label = new Label(this, SWT.LEFT);
+        label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
+        label.setText(JstUIMessages.FONT_STYLE);
 
-	list = comboMap.get(CSSConstants.FONT_WEIGHT);
-	for (String str : list) {
-	    fontWeigthCombo.add(str);
-	}
+        fontStyleCombo = new Combo(this, SWT.BORDER);
 
-	label = new Label(this, SWT.LEFT);
-	label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
-		false));
-	label.setText(Constants.EMPTY_STRING);
+        fontStyleCombo.addModifyListener(new ModifyListener() {
+                public void modifyText(ModifyEvent event) {
+                    String tmp = fontStyleCombo.getText();
+                    if (tmp != null) {
+                        if (tmp.trim().length() > 0) {
+                            styleAttributes.addAttribute(CSSConstants.FONT_STYLE, tmp);
+                        } else {
+                            styleAttributes.removeAttribute(CSSConstants.FONT_STYLE);
+                        }
+                    }
+                    //TODO Dzmitry Sakovich
+                    //cssDialog.setStyleForPreview();
+                }
+            });
 
-	label = new Label(this, SWT.LEFT);
-	label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
-		false));
-	label.setText(MessageUtil.getString("TEXT_DECORATION")); //$NON-NLS-1$
+        fontStyleCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
 
-	textDecorationCombo = new Combo(this, SWT.BORDER);
+        list = comboMap.get(CSSConstants.FONT_STYLE);
 
-	textDecorationCombo.addModifyListener(new ModifyListener() {
-	    public void modifyText(ModifyEvent event) {
-		String tmp = textDecorationCombo.getText();
-		if (tmp != null) {
-		    if (tmp.trim().length() > 0)
-			styleAttributes.addAttribute(CSSConstants.TEXT_DECORATION, tmp);
-		    else
-			styleAttributes.removeAttribute(CSSConstants.TEXT_DECORATION);
-		}
-		//TODO Dzmitry Sakovich
-		//cssDialog.setStyleForPreview();
-	    }
-	});
+        for (String str : list) {
+            fontStyleCombo.add(str);
+        }
 
-	textDecorationCombo.setLayoutData(new GridData(GridData.FILL,
-		GridData.CENTER, false, false));
+        label = new Label(this, SWT.LEFT);
+        label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
+        label.setText(Constants.EMPTY);
 
-	list = comboMap.get(CSSConstants.TEXT_DECORATION);
-	for (String str : list) {
-	    textDecorationCombo.add(str);
-	}
+        label = new Label(this, SWT.LEFT);
+        label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
+        label.setText(JstUIMessages.FONT_WEIGHT);
 
-	label = new Label(this, SWT.LEFT);
-	label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
-		false));
-	label.setText(Constants.EMPTY_STRING);
+        fontWeigthCombo = new Combo(this, SWT.BORDER);
 
-	label = new Label(this, SWT.LEFT);
-	label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
-		false));
-	label.setText(MessageUtil.getString("TEXT_ALIGN")); //$NON-NLS-1$
+        fontWeigthCombo.addModifyListener(new ModifyListener() {
+                public void modifyText(ModifyEvent event) {
+                    String tmp = fontWeigthCombo.getText();
+                    if (tmp != null) {
+                        if (tmp.trim().length() > 0) {
+                            styleAttributes.addAttribute(CSSConstants.FONT_WEIGHT, tmp);
+                        } else {
+                            styleAttributes.removeAttribute(CSSConstants.FONT_WEIGHT);
+                        }
+                    }
+                    //TODO Dzmitry Sakovich
+                    //cssDialog.setStyleForPreview();
+                }
+            });
 
-	textAlignCombo = new Combo(this, SWT.BORDER);
+        fontWeigthCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
 
-	textAlignCombo.addModifyListener(new ModifyListener() {
-	    public void modifyText(ModifyEvent event) {
-		String tmp = textAlignCombo.getText();
-		if (tmp != null) {
-		    if (tmp.trim().length() > 0)
-			styleAttributes.addAttribute(CSSConstants.TEXT_ALIGN, tmp);
-		    else
-			styleAttributes.removeAttribute(CSSConstants.TEXT_ALIGN);
-		}
-		//TODO Dzmitry Sakovich
-		//cssDialog.setStyleForPreview();
-	    }
-	});
+        list = comboMap.get(CSSConstants.FONT_WEIGHT);
 
-	textAlignCombo.setLayoutData(new GridData(GridData.FILL,
-		GridData.CENTER, false, false));
+        for (String str : list) {
+            fontWeigthCombo.add(str);
+        }
 
-	list = comboMap.get(CSSConstants.TEXT_ALIGN);
-	for (String str : list) {
-	    textAlignCombo.add(str);
-	}
+        label = new Label(this, SWT.LEFT);
+        label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
+        label.setText(Constants.EMPTY);
 
-	label = new Label(this, SWT.LEFT);
-	label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false,
-		false));
-	label.setText(Constants.EMPTY_STRING);
+        label = new Label(this, SWT.LEFT);
+        label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
+        label.setText(JstUIMessages.TEXT_DECORATION);
 
+        textDecorationCombo = new Combo(this, SWT.BORDER);
+
+        textDecorationCombo.addModifyListener(new ModifyListener() {
+                public void modifyText(ModifyEvent event) {
+                    String tmp = textDecorationCombo.getText();
+                    if (tmp != null) {
+                        if (tmp.trim().length() > 0) {
+                            styleAttributes.addAttribute(CSSConstants.TEXT_DECORATION, tmp);
+                        } else {
+                            styleAttributes.removeAttribute(CSSConstants.TEXT_DECORATION);
+                        }
+                    }
+                    //TODO Dzmitry Sakovich
+                    //cssDialog.setStyleForPreview();
+                }
+            });
+
+        textDecorationCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
+
+        list = comboMap.get(CSSConstants.TEXT_DECORATION);
+
+        for (String str : list) {
+            textDecorationCombo.add(str);
+        }
+
+        label = new Label(this, SWT.LEFT);
+        label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
+        label.setText(Constants.EMPTY);
+
+        label = new Label(this, SWT.LEFT);
+        label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
+        label.setText(JstUIMessages.TEXT_ALIGN);
+
+        textAlignCombo = new Combo(this, SWT.BORDER);
+
+        textAlignCombo.addModifyListener(new ModifyListener() {
+                public void modifyText(ModifyEvent event) {
+                    String tmp = textAlignCombo.getText();
+                    if (tmp != null) {
+                        if (tmp.trim().length() > 0) {
+                            styleAttributes.addAttribute(CSSConstants.TEXT_ALIGN, tmp);
+                        } else {
+                            styleAttributes.removeAttribute(CSSConstants.TEXT_ALIGN);
+                        }
+                    }
+                    //TODO Dzmitry Sakovich
+                    //cssDialog.setStyleForPreview();
+                }
+            });
+
+        textAlignCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
+
+        list = comboMap.get(CSSConstants.TEXT_ALIGN);
+
+        for (String str : list) {
+            textAlignCombo.add(str);
+        }
+
+        label = new Label(this, SWT.LEFT);
+        label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
+        label.setText(Constants.EMPTY);
     }
 
     /**
      * Method for get data in controls (if param equal true ), or set data (if
      * param equal false).
-     * 
+     *
      * @param param
      */
     public void updateData(boolean param) {
-	String tmp;
+        String tmp;
 
-	if ((tmp = styleAttributes.getAttribute(CSSConstants.FONT_FAMILY)) != null)
-	    fontFamilyText.setText(tmp);
-	else
-	    fontFamilyText.setText(Constants.EMPTY_STRING);
-	if ((tmp = styleAttributes.getAttribute(CSSConstants.COLOR)) != null)
-	    colorCombo.setText(tmp);
-	else
-	    colorCombo.setText(Constants.EMPTY_STRING);
-	if ((tmp = styleAttributes.getAttribute(CSSConstants.FONT_SIZE)) != null) {
-	    String[] str = Util.convertExtString(tmp);
-	    fontSizeCombo.setText(str[0]);
-	    if (extFontSizeCombo.indexOf(str[1]) != -1) {
-		extFontSizeCombo.setText(str[1]);
-		extFontSizeCombo.select(extFontSizeCombo.indexOf(str[1]));
-	    } else
-		extFontSizeCombo.select(0);
-	} else {
-	    fontSizeCombo.setText(Constants.EMPTY_STRING);
-	    extFontSizeCombo.select(0);
-	}
-	if ((tmp = styleAttributes.getAttribute(CSSConstants.TEXT_DECORATION)) != null)
-	    textDecorationCombo.setText(tmp);
-	else
-	    textDecorationCombo.setText(Constants.EMPTY_STRING);
-	if ((tmp = styleAttributes.getAttribute(CSSConstants.FONT_STYLE)) != null)
-	    fontStyleCombo.setText(tmp);
-	else
-	    fontStyleCombo.setText(Constants.EMPTY_STRING);
-	if ((tmp = styleAttributes.getAttribute(CSSConstants.FONT_WEIGHT)) != null)
-	    fontWeigthCombo.setText(tmp);
-	else
-	    fontWeigthCombo.setText(Constants.EMPTY_STRING);
-	if ((tmp = styleAttributes.getAttribute(CSSConstants.TEXT_ALIGN)) != null)
-	    textAlignCombo.setText(tmp);
-	else
-	    textAlignCombo.setText(Constants.EMPTY_STRING);
+        if ((tmp = styleAttributes.getAttribute(CSSConstants.FONT_FAMILY)) != null) {
+            fontFamilyText.setText(tmp);
+        } else {
+            fontFamilyText.setText(Constants.EMPTY);
+        }
+
+        if ((tmp = styleAttributes.getAttribute(CSSConstants.COLOR)) != null) {
+            colorCombo.setText(tmp);
+        } else {
+            colorCombo.setText(Constants.EMPTY);
+        }
+
+        if ((tmp = styleAttributes.getAttribute(CSSConstants.FONT_SIZE)) != null) {
+            String[] str = Util.convertExtString(tmp);
+            fontSizeCombo.setText(str[0]);
+
+            if (extFontSizeCombo.indexOf(str[1]) != -1) {
+                extFontSizeCombo.setText(str[1]);
+                extFontSizeCombo.select(extFontSizeCombo.indexOf(str[1]));
+            } else {
+                extFontSizeCombo.select(0);
+            }
+        } else {
+            fontSizeCombo.setText(Constants.EMPTY);
+            extFontSizeCombo.select(0);
+        }
+
+        if ((tmp = styleAttributes.getAttribute(CSSConstants.TEXT_DECORATION)) != null) {
+            textDecorationCombo.setText(tmp);
+        } else {
+            textDecorationCombo.setText(Constants.EMPTY);
+        }
+
+        if ((tmp = styleAttributes.getAttribute(CSSConstants.FONT_STYLE)) != null) {
+            fontStyleCombo.setText(tmp);
+        } else {
+            fontStyleCombo.setText(Constants.EMPTY);
+        }
+
+        if ((tmp = styleAttributes.getAttribute(CSSConstants.FONT_WEIGHT)) != null) {
+            fontWeigthCombo.setText(tmp);
+        } else {
+            fontWeigthCombo.setText(Constants.EMPTY);
+        }
+
+        if ((tmp = styleAttributes.getAttribute(CSSConstants.TEXT_ALIGN)) != null) {
+            textAlignCombo.setText(tmp);
+        } else {
+            textAlignCombo.setText(Constants.EMPTY);
+        }
     }
 }

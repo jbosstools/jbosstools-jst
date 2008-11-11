@@ -41,7 +41,7 @@ public class Parser {
 
 	if (str == null)
 	    return;
-	if (str.trim().equals(Constants.EMPTY_STRING))
+	if (str.trim().equals(Constants.EMPTY))
 	    return;
 
 	StringTokenizer st = new StringTokenizer(str, SEPARATE_SYMBOLS);
@@ -58,8 +58,8 @@ public class Parser {
 	    else
 		continue;
 
-	    if (name.equals(Constants.EMPTY_STRING)
-		    || value.equals(Constants.EMPTY_STRING))
+	    if (name.equals(Constants.EMPTY)
+		    || value.equals(Constants.EMPTY))
 		continue;
 
 	    for (IListener listener : list) {

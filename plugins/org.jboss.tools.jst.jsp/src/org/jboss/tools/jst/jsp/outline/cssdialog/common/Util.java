@@ -25,21 +25,14 @@ import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParser;
 
 /**
- * 
  * Utility class
- * 
+ *
  * @author Evgeny Zheleznyakov
- * 
  */
 public class Util {
 
 	private static String RGB = "rgb"; //$NON-NLS-1$
-
-	private static String NONE = "none"; //$NON-NLS-1$
-
 	private static String THIN = "thin"; //$NON-NLS-1$
-
-	private static String COMMA = ","; //$NON-NLS-1$
 
 	private static int START_INDEX_RED = 1;
 	private static int END_INDEX_RED = 3;
@@ -70,10 +63,9 @@ public class Util {
 
 	/**
 	 * Method for checking contain or not css attribute folder
-	 * 
-	 * @param name
-	 *            Name css attribute
-	 * @return true - contain, or else - dont contain
+	 *
+	 * @param name Name css attribute
+	 * @return true - contain, or else - don't contain
 	 */
 	public static boolean containFolder(String name) {
 		return Constants.elemFolder.contains(name);
@@ -81,12 +73,10 @@ public class Util {
 
 	/**
 	 * Method for search string into css attributes
-	 * 
-	 * @param name
-	 *            Name
-	 * @param elementMap
-	 *            Map of css attributes
-	 * @return true - find, or else - dont find
+	 *
+	 * @param name Name
+	 * @param elementMap Map of css attributes
+	 * @return true - find, or else - don't find
 	 */
 	public static boolean searchInElement(String name,
 			HashMap<String, ArrayList<String>> elementMap) {
@@ -105,19 +95,16 @@ public class Util {
 
 	/**
 	 * Method for get RGB from string
-	 * 
-	 * @param color
-	 *            Color string
+	 *
+	 * @param color Color string
 	 * @return RGB color, or null, if color invalid
 	 */
 	public static RGB getColor(String color) {
-
-		if (color.equals(Constants.EMPTY_STRING) || color.equals(NONE)) {
+		if (color.equals(Constants.EMPTY) || color.equals(Constants.NONE)) {
 			return null;
 		}
 
-		if (color.charAt(START_COLOR_INDEX) == SHARP
-				&& color.length() == COLOR_LENGTH) {
+		if (color.charAt(START_COLOR_INDEX) == SHARP && color.length() == COLOR_LENGTH) {
 
 			String strR = color.substring(START_INDEX_RED, END_INDEX_RED);
 			String strG = color.substring(START_INDEX_GRENN, END_INDEX_GREEN);
@@ -137,7 +124,7 @@ public class Util {
 			int end = color.indexOf(CLOSE_BRACKET);
 			String str = color.substring(start + 1, end);
 
-			StringTokenizer st = new StringTokenizer(str, COMMA);
+			StringTokenizer st = new StringTokenizer(str, Constants.COMMA);
 
 			int j = 0;
 			while (st.hasMoreTokens()) {
@@ -155,8 +142,7 @@ public class Util {
 				return convertColorRGB(color);
 			}
 		} else {
-			HashMap<String, String> colorMap = ColorParser.getInstance()
-					.getMap();
+			HashMap<String, String> colorMap = ColorParser.getInstance().getMap();
 
 			for (String key : colorMap.keySet()) {
 				if (colorMap.get(key).equalsIgnoreCase(color)) {
@@ -170,35 +156,33 @@ public class Util {
 
 	/**
 	 * Method for convert string(123px) into two string (123 and px)
-	 * 
-	 * @param str
-	 *            String for convert
-	 * @return Array two strings, or null, if str uncorrect
+	 *
+	 * @param str String for convert
+	 * @return Array two strings, or null, if str incorrect
 	 */
 	public static String[] convertExtString(String str) {
-
-		if (str.equalsIgnoreCase(THIN))
-			return new String[] { THIN, Constants.EMPTY_STRING };
-
-		if (str == null)
+		if (str.equalsIgnoreCase(THIN)) {
+			return new String[] { THIN, Constants.EMPTY };
+		}
+		if (str == null) {
 			return null;
-
-		if (str.trim().equals(Constants.EMPTY_STRING))
-			return new String[] { Constants.EMPTY_STRING,
-					Constants.EMPTY_STRING };
-
-		String newStr = str.toLowerCase().trim();
-
-		int index = -1;
-		for (int i = 1; i < Constants.extSizes.length; i++) {
-
-			index = newStr.indexOf(Constants.extSizes[i]);
-			if (index != -1)
-				break;
+		}
+		if (str.trim().equals(Constants.EMPTY)) {
+			return new String[] { Constants.EMPTY, Constants.EMPTY };
 		}
 
-		if (index == -1)
-			return new String[] { newStr, Constants.EMPTY_STRING };
+		String newStr = str.toLowerCase().trim();
+		int index = -1;
+		for (int i = 1; i < Constants.extSizes.length; i++) {
+			index = newStr.indexOf(Constants.extSizes[i]);
+			if (index != -1) {
+				break;
+			}
+		}
+
+		if (index == -1) {
+			return new String[] { newStr, Constants.EMPTY };
+		}
 
 		String number = newStr.substring(0, index);
 		String ext = newStr.substring(index, index + 2);
@@ -208,10 +192,9 @@ public class Util {
 
 	/**
 	 * Method for search css attribute into extElements
-	 * 
-	 * @param name
-	 *            Name of css attribute
-	 * @return true - find, or else - dont find
+	 *
+	 * @param name Name of css attribute
+	 * @return true - find, or else - don't find
 	 */
 	public static boolean searchInExtElement(String name) {
 		return Constants.extElem.contains(name);
@@ -219,9 +202,8 @@ public class Util {
 
 	/**
 	 * Method for getting RGB color from string color
-	 * 
-	 * @param color
-	 *            String color
+	 *
+	 * @param color String color
 	 * @return RGB color
 	 */
 	public static RGB convertColorRGB(String color) {
@@ -234,18 +216,18 @@ public class Util {
 		int end = newStr.indexOf(CLOSE_BRACKET);
 		String str = newStr.substring(start + 1, end);
 
-		StringTokenizer st = new StringTokenizer(str, COMMA);
+		StringTokenizer st = new StringTokenizer(str, Constants.COMMA);
 		int i = 0;
-		while (st.hasMoreTokens())
+		while (st.hasMoreTokens()) {
 			rgb[i++] = Integer.parseInt(st.nextToken().trim());
+		}
 		return new RGB(rgb[0], rgb[1], rgb[2]);
 	}
 
 	/**
 	 * Method for getting RGB color from hex string
-	 * 
-	 * @param color
-	 *            String color
+	 *
+	 * @param color String color
 	 * @return RGB color
 	 */
 	public static RGB convertColorHEX(String color) {
@@ -265,33 +247,33 @@ public class Util {
 
 	/**
 	 * Method for convert RGB to String
-	 * 
-	 * @param rgb
-	 *            RGB color
+	 *
+	 * @param rgb RGB color
 	 * @return String color
 	 */
 	public static String createColorString(RGB rgb) {
 		String colorStr = SHARP_STRING
 				+ (rgb.red < NORMAL_MIN_VALUE ? ZERO_STR
-						: Constants.EMPTY_STRING)
+						: Constants.EMPTY)
 				+ Integer.toHexString(rgb.red)
 				+ (rgb.green < NORMAL_MIN_VALUE ? ZERO_STR
-						: Constants.EMPTY_STRING)
+						: Constants.EMPTY)
 				+ Integer.toHexString(rgb.green)
-				+ Constants.EMPTY_STRING
+				+ Constants.EMPTY
 				+ (rgb.blue < NORMAL_MIN_VALUE ? ZERO_STR
-						: Constants.EMPTY_STRING)
+						: Constants.EMPTY)
 				+ Integer.toHexString(rgb.blue);
 		colorStr = colorStr.toUpperCase();
-		if (ColorParser.getInstance().getMap().get(colorStr) != null)
+		if (ColorParser.getInstance().getMap().get(colorStr) != null) {
 			return ColorParser.getInstance().getMap().get(colorStr);
+		}
 		return colorStr;
 	}
 
 	/**
 	 * Get current project for opened editor
-	 * 
-	 * @return
+	 *
+	 * @return IProject object
 	 */
 	public static IProject getCurrentProject() {
 		IEditorPart editor = JspEditorPlugin.getDefault().getWorkbench()
@@ -304,5 +286,4 @@ public class Util {
 		}
 		return project;
 	}
-
 }

@@ -109,7 +109,7 @@ public class TabPropertySheetControl extends Composite {
 				.getText(Constants.FIRST_COLUMN));
 		    } else if (tree.getItem(i).getItem(j).getText(
 			    Constants.SECOND_COLUMN).trim().equals(
-			    Constants.EMPTY_STRING)) {
+			    Constants.EMPTY)) {
 			styleAttributes.removeAttribute(tree.getItem(i).getItem(j)
 				.getText(Constants.FIRST_COLUMN));
 		    } else {
@@ -124,7 +124,7 @@ public class TabPropertySheetControl extends Composite {
 	    for (int i = 0; i < tree.getItemCount(); i++)
 		for (int j = 0; j < tree.getItem(i).getItemCount(); j++)
 		    tree.getItem(i).getItem(j).setText(Constants.SECOND_COLUMN,
-			    Constants.EMPTY_STRING);
+			    Constants.EMPTY);
 
 	    Set<String> set = styleAttributes.keySet();
 	    for (String str : set) {

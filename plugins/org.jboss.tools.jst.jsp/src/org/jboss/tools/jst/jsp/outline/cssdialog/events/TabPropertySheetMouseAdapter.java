@@ -7,16 +7,15 @@
  *
  * Contributors:
  *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
- ******************************************************************************/ 
+ ******************************************************************************/
 package org.jboss.tools.jst.jsp.outline.cssdialog.events;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TreeEditor;
 import org.eclipse.swt.events.DisposeEvent;
@@ -40,411 +39,392 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+
 import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
+
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
+import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.cssdialog.FontFamilyDialog;
 import org.jboss.tools.jst.jsp.outline.cssdialog.ImageSelectionDialog;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSConstants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.ImageCombo;
-import org.jboss.tools.jst.jsp.outline.cssdialog.common.MessageUtil;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Util;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParser;
 import org.jboss.tools.jst.jsp.outline.cssdialog.tabs.TabPropertySheetControl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 /**
- * 
  * Listener for tree in tab property sheet
- * 
+ *
  * @author Evgeny Zheleznyakov
- * 
  */
 public class TabPropertySheetMouseAdapter extends MouseAdapter {
-
-    private Tree tree;
-
-    private TreeEditor editor;
-
-    private Combo combo = null;
-    private ImageCombo colorCombo = null;
-
-    private HashMap<String, ArrayList<String>> comboMap;
-    private HashMap<String, ArrayList<String>> elementsMap;
 
     private static int GRID_NUM_COLUMNS = 2;
     private static int GRID_MARGIN_HEIGHT = 0;
     private static int GRID_MARGIN_WIDTH = 0;
     private static int GRID_HORIZONTAL_SPASING = 0;
-    
+    private Tree tree;
+    private TreeEditor editor;
+    private Combo combo = null;
+    private ImageCombo colorCombo = null;
+    private HashMap<String, ArrayList<String>> comboMap;
+    private HashMap<String, ArrayList<String>> elementsMap;
+
     //Dzmitry Sakovich
     //private CSSDialog cssDialog;
-    
     private TabPropertySheetControl tabPropertySheetControl;
 
-    public TabPropertySheetMouseAdapter(Tree tree,
-	    HashMap<String, ArrayList<String>> elementsMap,
-	    HashMap<String, ArrayList<String>> comboMap,
-	    TabPropertySheetControl tabPropertySheetControl) {
-	
-	this.tabPropertySheetControl = tabPropertySheetControl;
-	//this.cssDialog = dialog;
-	this.tree = tree;
-	this.comboMap = comboMap;
-	this.elementsMap = elementsMap;
+    public TabPropertySheetMouseAdapter(Tree tree, HashMap<String, ArrayList<String>> elementsMap,
+        HashMap<String, ArrayList<String>> comboMap, TabPropertySheetControl tabPropertySheetControl) {
+        this.tabPropertySheetControl = tabPropertySheetControl;
+        //this.cssDialog = dialog;
+        this.tree = tree;
+        this.comboMap = comboMap;
+        this.elementsMap = elementsMap;
 
-	editor = new TreeEditor(tree);
-	editor.horizontalAlignment = SWT.LEFT;
-	editor.grabHorizontal = true;
+        editor = new TreeEditor(tree);
+        editor.horizontalAlignment = SWT.LEFT;
+        editor.grabHorizontal = true;
     }
 
     /**
      * Invoke then mouse pressed
      */
     public void mouseDown(MouseEvent event) {
+        for (int i = 0; i < tree.getColumnCount(); i++) {
+            tree.getColumn(i).pack();
+        }
+        Control old = editor.getEditor();
+        if (old != null) {
+            old.dispose();
+        }
 
-		for (int i = 0; i < tree.getColumnCount(); i++)
-		    tree.getColumn(i).pack();
-	
-		Control old = editor.getEditor();
-		if (old != null)
-		    old.dispose();
-	
-		Point pt = new Point(event.x, event.y);
-	
-		final TreeItem item = tree.getItem(pt);
-	
-		if (item != null) {
-	
-		    if (elementsMap.keySet().contains(item.getText(Constants.FIRST_COLUMN).trim())) {
-		    	return;
-		    }
-	
-		    if (comboMap.keySet().contains(item.getText(Constants.FIRST_COLUMN).trim())) {
-		    	createCombo(item, Constants.SECOND_COLUMN);
-		    } else {
-		    	createText(item, Constants.SECOND_COLUMN);	
-		    }
-		}
+        Point pt = new Point(event.x, event.y);
+
+        final TreeItem item = tree.getItem(pt);
+        if (item != null) {
+            if (elementsMap.keySet().contains(item.getText(Constants.FIRST_COLUMN).trim())) {
+                return;
+            }
+
+            if (comboMap.keySet().contains(item.getText(Constants.FIRST_COLUMN).trim())) {
+                createCombo(item, Constants.SECOND_COLUMN);
+            } else {
+                createText(item, Constants.SECOND_COLUMN);
+            }
+        }
     }
 
     /**
      * Method for create combo editor
-     * 
-     * @param item
-     *                Tree item for editing
-     * @param column
-     *                Number of column for editing
+     *
+     * @param item Tree item for editing
+     * @param column Number of column for editing
      */
     private void createCombo(final TreeItem item, int column) {
+        final Composite panel = new Composite(tree, SWT.NONE);
+        GridLayout grid = new GridLayout();
+        grid.numColumns = GRID_NUM_COLUMNS;
+        grid.marginHeight = GRID_MARGIN_HEIGHT;
+        grid.marginWidth = GRID_MARGIN_WIDTH;
+        grid.horizontalSpacing = GRID_HORIZONTAL_SPASING;
+        panel.setLayout(grid);
 
-	final Composite panel = new Composite(tree, SWT.NONE);
-	GridLayout grid = new GridLayout();
-	grid.numColumns = GRID_NUM_COLUMNS;
-	grid.marginHeight = GRID_MARGIN_HEIGHT;
-	grid.marginWidth = GRID_MARGIN_WIDTH;
-	grid.horizontalSpacing = GRID_HORIZONTAL_SPASING;
-	panel.setLayout(grid);
+        Button btn = null;
 
-	Button btn = null;
+        boolean color = false;
 
-	boolean color = false;
+        // color element
+        if (item.getText(Constants.FIRST_COLUMN).trim().indexOf(CSSConstants.COLOR) != Constants.DONT_CONTAIN) {
+            color = true;
 
-	// color element
-	if (item.getText(Constants.FIRST_COLUMN).trim().indexOf(
-		CSSConstants.COLOR) != Constants.DONT_CONTAIN) {
-	    color = true;
+            // create combo for color
+            colorCombo = new ImageCombo(panel, SWT.BORDER);
 
-	    // create combo for color
-	    colorCombo = new ImageCombo(panel, SWT.BORDER);
+            HashMap<String, String> colorMap = ColorParser.getInstance().getMap();
+            for (String key : colorMap.keySet()) {
+                RGB rgb = Util.getColor(key);
+                colorCombo.add(colorMap.get(key), rgb);
+            }
 
-	    HashMap<String, String> colorMap = ColorParser.getInstance().getMap();
+            if (colorCombo.indexOf(item.getText(Constants.SECOND_COLUMN).trim().toLowerCase()) != Constants.DONT_CONTAIN) {
+                colorCombo.select(colorCombo.indexOf(item.getText(Constants.SECOND_COLUMN).trim()
+                                                         .toLowerCase()));
+            } else {
+                colorCombo.setText(item.getText(Constants.SECOND_COLUMN).trim());
+            }
 
-	    for (String key : colorMap.keySet()) {
-		RGB rgb = Util.getColor(key);
-		colorCombo.add(colorMap.get(key), rgb);
-	    }
+            colorCombo.addSelectionListener(new SelectionAdapter() {
+                    public void widgetSelected(SelectionEvent event) {
+                        item.setText(Constants.SECOND_COLUMN, colorCombo.getText());
+                        panel.dispose();
+                        tabPropertySheetControl.updateData(true);
 
-	    if (colorCombo.indexOf(item.getText(Constants.SECOND_COLUMN).trim()
-		    .toLowerCase()) != Constants.DONT_CONTAIN)
-		colorCombo.select(colorCombo.indexOf(item.getText(
-			Constants.SECOND_COLUMN).trim().toLowerCase()));
-	    else
-		colorCombo
-			.setText(item.getText(Constants.SECOND_COLUMN).trim());
+                        //Dzmitry Sakovich
+                        //cssDialog.setStyleForPreview();
+                    }
+                });
 
-	    colorCombo.addSelectionListener(new SelectionAdapter() {
+            colorCombo.addModifyListener(new ModifyListener() {
+                    public void modifyText(ModifyEvent event) {
+                        item.setText(Constants.SECOND_COLUMN, colorCombo.getText());
+                        tabPropertySheetControl.updateData(true);
 
-		public void widgetSelected(SelectionEvent event) {
-		    item.setText(Constants.SECOND_COLUMN, colorCombo.getText());
-		    panel.dispose();
-		    tabPropertySheetControl.updateData(true);
-		    //Dzmitry Sakovich
-		    //cssDialog.setStyleForPreview();
-		}
-	    });
+                        //TODO Dzmitry Sakovich
+                        //cssDialog.setStyleForPreview();
+                    }
+                });
 
-	    colorCombo.addModifyListener(new ModifyListener() {
-		public void modifyText(ModifyEvent event) {
-		    item.setText(Constants.SECOND_COLUMN, colorCombo.getText());
-		    tabPropertySheetControl.updateData(true);
-		    //TODO Dzmitry Sakovich
-		    //cssDialog.setStyleForPreview();
-		}
-	    });
+            // create color button
+            btn = new Button(panel, SWT.NONE);
 
-	    // create color button
-	    btn = new Button(panel, SWT.NONE);
-	    ImageDescriptor imageDes = JspEditorPlugin
-		    .getImageDescriptor(Constants.IMAGE_COLOR_FILE_LOCATION);
-	    Image colorImage = imageDes.createImage();
-	    btn.setImage(colorImage);
-	    btn.addDisposeListener(new DisposeListener() {
-		public void widgetDisposed(DisposeEvent e) {
-		    Button button = (Button) e.getSource();
-		    button.getImage().dispose();
-		}
-	    });
-	    btn.setToolTipText(MessageUtil.getString("COLOR_DIALOG_TITLE")); //$NON-NLS-1$
+            ImageDescriptor imageDes = JspEditorPlugin.getImageDescriptor(Constants.IMAGE_COLOR_FILE_LOCATION);
+            Image colorImage = imageDes.createImage();
+            btn.setImage(colorImage);
+            btn.addDisposeListener(new DisposeListener() {
+                    public void widgetDisposed(DisposeEvent e) {
+                        Button button = (Button) e.getSource();
+                        button.getImage().dispose();
+                    }
+                });
+            btn.setToolTipText(JstUIMessages.COLOR_DIALOG_TITLE);
 
-	    btn.addSelectionListener(new SelectionAdapter() {
+            btn.addSelectionListener(new SelectionAdapter() {
+                    public void widgetSelected(SelectionEvent event) {
+                        RGB startRgb = Util.getColor(item.getText(Constants.SECOND_COLUMN).toLowerCase()
+                                                         .trim());
 
-		public void widgetSelected(SelectionEvent event) {
+                        if (startRgb == null) {
+                            startRgb = Constants.RGB_BLACK;
+                        }
 
-		    RGB startRgb = Util.getColor(item.getText(
-			    Constants.SECOND_COLUMN).toLowerCase().trim());
+                        ColorDialog colorDialog = new ColorDialog(tree.getShell());
+                        colorDialog.setRGB(startRgb);
+                        colorDialog.setText(JstUIMessages.COLOR_DIALOG_TITLE);
 
-		    if (startRgb == null)
-			startRgb = Constants.RGB_BLACK;
+                        RGB rgb = colorDialog.open();
+                        if (rgb != null) {
+                            String str = Util.createColorString(rgb);
 
-		    ColorDialog colorDialog = new ColorDialog(tree.getShell());
-		    colorDialog.setRGB(startRgb);
-		    colorDialog.setText(MessageUtil
-			    .getString("COLOR_DIALOG_TITLE")); //$NON-NLS-1$
-		    RGB rgb = colorDialog.open();
-		    if (rgb != null) {
+                            if (ColorParser.getInstance().getMap().get(str) != null) {
+                                item.setText(Constants.SECOND_COLUMN,
+                                    ColorParser.getInstance().getMap().get(str));
+                            } else {
+                                item.setText(Constants.SECOND_COLUMN, str);
+                            }
 
-			String str = Util.createColorString(rgb);
+                            tabPropertySheetControl.updateData(true);
 
-			if (ColorParser.getInstance().getMap().get(str) != null)
-			    item.setText(Constants.SECOND_COLUMN,
-			    		ColorParser.getInstance().getMap().get(str));
-			else
-			    item.setText(Constants.SECOND_COLUMN, str);
-			
-			tabPropertySheetControl.updateData(true);
-			 //TODO Dzmitry Sakovich
-			//cssDialog.setStyleForPreview();
-		    }
-		    panel.dispose();
-		}
-	    });
-	} else if (Util.containFolder(item.getText(Constants.FIRST_COLUMN)
-		.trim())) {
+                            //TODO Dzmitry Sakovich
+                            //cssDialog.setStyleForPreview();
+                        }
 
-	    combo = new Combo(panel, SWT.NONE);
+                        panel.dispose();
+                    }
+                });
+        } else if (Util.containFolder(item.getText(Constants.FIRST_COLUMN).trim())) {
+            combo = new Combo(panel, SWT.NONE);
 
-	    // create chooser button
-	    btn = new Button(panel, SWT.NONE);
-	    ImageDescriptor imageDes = JspEditorPlugin
-		    .getImageDescriptor(Constants.IMAGE_FOLDER_FILE_LOCATION);
-	    Image chooserImage = imageDes.createImage();
-	    btn.setImage(chooserImage);
-	    btn.addDisposeListener(new DisposeListener() {
-		public void widgetDisposed(DisposeEvent e) {
-		    Button button = (Button) e.getSource();
-		    button.getImage().dispose();
-		}
-	    });
-	    btn.setToolTipText(MessageUtil.getString("IMAGE_DIALOG_MESSAGE")); //$NON-NLS-1$
+            // create chooser button
+            btn = new Button(panel, SWT.NONE);
 
-	    btn.addSelectionListener(new SelectionAdapter() {
-		public void widgetSelected(SelectionEvent event) {
-		    IProject project = Util.getCurrentProject();
+            ImageDescriptor imageDes = JspEditorPlugin.getImageDescriptor(Constants.IMAGE_FOLDER_FILE_LOCATION);
+            Image chooserImage = imageDes.createImage();
+            btn.setImage(chooserImage);
+            btn.addDisposeListener(new DisposeListener() {
+                    public void widgetDisposed(DisposeEvent e) {
+                        Button button = (Button) e.getSource();
+                        button.getImage().dispose();
+                    }
+                });
+            btn.setToolTipText(JstUIMessages.IMAGE_DIALOG_MESSAGE);
 
-		    ImageSelectionDialog dialog = new ImageSelectionDialog(tree
-			    .getShell(), new WorkbenchLabelProvider(),
-			    new WorkbenchContentProvider());
-		    dialog
-			    .setTitle(MessageUtil
-				    .getString("IMAGE_DIALOG_TITLE")); //$NON-NLS-1$
-		    dialog.setMessage(MessageUtil
-			    .getString("IMAGE_DIALOG_MESSAGE")); //$NON-NLS-1$
-		    dialog.setEmptyListMessage(MessageUtil
-			    .getString("IMAGE_DIALOG_EMPTY_MESSAGE")); //$NON-NLS-1$
-		    dialog.setAllowMultiple(false);
-		    dialog.setInput(project);
-		    if (dialog.open() == ImageSelectionDialog.OK) {
-			IFile file = (IFile) dialog.getFirstResult();
-			String value = file.getFullPath().toString();
-			item.setText(Constants.SECOND_COLUMN, value);
-			panel.dispose();
-			tabPropertySheetControl.updateData(true);
-			 //TODO Dzmitry Sakovich
-			//cssDialog.setStyleForPreview();
-		    }
-		}
-	    });
+            btn.addSelectionListener(new SelectionAdapter() {
+                    public void widgetSelected(SelectionEvent event) {
+                        IProject project = Util.getCurrentProject();
 
-	} else {
-	    combo = new Combo(panel, SWT.NONE);
-	}
+                        ImageSelectionDialog dialog = new ImageSelectionDialog(tree.getShell(),
+                                new WorkbenchLabelProvider(), new WorkbenchContentProvider());
+                        dialog.setTitle(JstUIMessages.IMAGE_DIALOG_TITLE);
+                        dialog.setMessage(JstUIMessages.IMAGE_DIALOG_MESSAGE);
+                        dialog.setEmptyListMessage(JstUIMessages.IMAGE_DIALOG_EMPTY_MESSAGE);
+                        dialog.setAllowMultiple(false);
+                        dialog.setInput(project);
 
-	// add items
-	if (!color) {
-	    ArrayList<String> list = comboMap.get(item.getText(
-		    Constants.FIRST_COLUMN).trim());
+                        if (dialog.open() == ImageSelectionDialog.OK) {
+                            IFile file = (IFile) dialog.getFirstResult();
+                            String value = file.getFullPath().toString();
+                            item.setText(Constants.SECOND_COLUMN, value);
+                            panel.dispose();
+                            tabPropertySheetControl.updateData(true);
 
-	    for (String str : list)
-		combo.add(str);
+                            //TODO Dzmitry Sakovich
+                            //cssDialog.setStyleForPreview();
+                        }
+                    }
+                });
+        } else {
+            combo = new Combo(panel, SWT.NONE);
+        }
 
-	    if (btn != null)
-		btn.setLayoutData(new GridData(GridData.END, GridData.CENTER,
-			false, false));
+        // add items
+        if (!color) {
+            ArrayList<String> list = comboMap.get(item.getText(Constants.FIRST_COLUMN).trim());
 
-	    combo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER,
-		    true, false));
+            for (String str : list)
+                combo.add(str);
 
-	    combo.setFocus();
-	    if (combo.indexOf(item.getText(column)) == Constants.DONT_CONTAIN
-		    && !item.getText(column).equals(Constants.EMPTY_STRING))
-		combo.setText(item.getText(column));
-	    else
-		combo.select(combo.indexOf(item.getText(column)));
+            if (btn != null) {
+                btn.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
+            }
 
-	    // Add a listener to set the selected item back into the
-	    // cell
-	    final int col = column;
-	    combo.addSelectionListener(new SelectionAdapter() {
-		public void widgetSelected(SelectionEvent event) {
-		    item.setText(col, combo.getText());
-		    panel.dispose();
-		    tabPropertySheetControl.updateData(true);
-		    //TODO Dzmitry Sakovich
-		    //cssDialog.setStyleForPreview();
-		}
-	    });
+            combo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 
-	    combo.addModifyListener(new ModifyListener() {
-		public void modifyText(ModifyEvent event) {
-		    item.setText(col, combo.getText());
-		    tabPropertySheetControl.updateData(true);
-		    //TODO Dzmitry Sakovich
-		    //cssDialog.setStyleForPreview();
-		}
-	    });
-	} else {
-	    colorCombo.setLayoutData(new GridData(GridData.FILL,
-		    GridData.CENTER, true, false));
+            combo.setFocus();
 
-	    btn.setLayoutData(new GridData(GridData.END, GridData.CENTER,
-		    false, false));
+            if ((combo.indexOf(item.getText(column)) == Constants.DONT_CONTAIN) &&
+                    !item.getText(column).equals(Constants.EMPTY)) {
+                combo.setText(item.getText(column));
+            } else {
+                combo.select(combo.indexOf(item.getText(column)));
+            }
 
-	    colorCombo.setFocus();
-	}
+            // Add a listener to set the selected item back into the
+            // cell
+            final int col = column;
+            combo.addSelectionListener(new SelectionAdapter() {
+                    public void widgetSelected(SelectionEvent event) {
+                        item.setText(col, combo.getText());
+                        panel.dispose();
+                        tabPropertySheetControl.updateData(true);
 
-	// Compute the width for the editor
-	// Also, compute the column width, so that the dropdown
-	// fits
-	editor.minimumWidth = panel.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
-	editor.minimumHeight = panel.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+                        //TODO Dzmitry Sakovich
+                        //cssDialog.setStyleForPreview();
+                    }
+                });
 
-	tree.getColumn(column).setWidth(editor.minimumWidth);
+            combo.addModifyListener(new ModifyListener() {
+                    public void modifyText(ModifyEvent event) {
+                        item.setText(col, combo.getText());
+                        tabPropertySheetControl.updateData(true);
 
-	// Set the focus on the dropdown and set into the editor
-	editor.setEditor(panel, item, column);
+                        //TODO Dzmitry Sakovich
+                        //cssDialog.setStyleForPreview();
+                    }
+                });
+        } else {
+            colorCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
+
+            btn.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
+
+            colorCombo.setFocus();
+        }
+
+        // Compute the width for the editor
+        // Also, compute the column width, so that the dropdown
+        // fits
+        editor.minimumWidth = panel.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
+        editor.minimumHeight = panel.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+
+        tree.getColumn(column).setWidth(editor.minimumWidth);
+
+        // Set the focus on the dropdown and set into the editor
+        editor.setEditor(panel, item, column);
     }
 
     /**
      * Method for create text editor
-     * 
+     *
      * @param item
      *                Tree item for editing
      * @param column
      *                Number of column for editing
      */
     private void createText(final TreeItem item, int column) {
+        final Composite panel = new Composite(tree, SWT.NONE);
+        GridLayout grid = new GridLayout();
+        grid.numColumns = GRID_NUM_COLUMNS;
+        grid.marginHeight = GRID_MARGIN_HEIGHT;
+        grid.marginWidth = GRID_MARGIN_WIDTH;
+        grid.horizontalSpacing = GRID_HORIZONTAL_SPASING;
+        panel.setLayout(grid);
 
-	final Composite panel = new Composite(tree, SWT.NONE);
-	GridLayout grid = new GridLayout();
-	grid.numColumns = GRID_NUM_COLUMNS;
-	grid.marginHeight = GRID_MARGIN_HEIGHT;
-	grid.marginWidth = GRID_MARGIN_WIDTH;
-	grid.horizontalSpacing = GRID_HORIZONTAL_SPASING;
-	panel.setLayout(grid);
+        Button btn = null;
 
-	Button btn = null;
+        final Text text = new Text(panel, SWT.BORDER);
 
-	final Text text = new Text(panel, SWT.BORDER);
+        if (item.getText(Constants.FIRST_COLUMN).trim().equalsIgnoreCase(CSSConstants.FONT_FAMILY)) {
+            btn = new Button(panel, SWT.NONE);
 
-	if (item.getText(Constants.FIRST_COLUMN).trim().equalsIgnoreCase(
-		CSSConstants.FONT_FAMILY)) {
+            ImageDescriptor imageDes = JspEditorPlugin.getImageDescriptor(Constants.IMAGE_FONT_FILE_LOCATION);
+            Image fontImage = imageDes.createImage();
+            btn.setImage(fontImage);
+            btn.addDisposeListener(new DisposeListener() {
+                    public void widgetDisposed(DisposeEvent e) {
+                        Button button = (Button) e.getSource();
+                        button.getImage().dispose();
+                    }
+                });
+            btn.setToolTipText(JstUIMessages.FONT_FAMILY_TIP);
 
-	    btn = new Button(panel, SWT.NONE);
-	    ImageDescriptor imageDes = JspEditorPlugin
-		    .getImageDescriptor(Constants.IMAGE_FONT_FILE_LOCATION);
-	    Image fontImage = imageDes.createImage();
-	    btn.setImage(fontImage);
-	    btn.addDisposeListener(new DisposeListener() {
-		public void widgetDisposed(DisposeEvent e) {
-		    Button button = (Button) e.getSource();
-		    button.getImage().dispose();
-		}
-	    });
-	    btn.setToolTipText(MessageUtil.getString("FONT_FAMILY_TIP")); //$NON-NLS-1$
+            btn.addSelectionListener(new SelectionAdapter() {
+                    public void widgetSelected(SelectionEvent event) {
+                        FontFamilyDialog dialog = new FontFamilyDialog(tree.getShell(),
+                                item.getText(Constants.SECOND_COLUMN));
 
-	    btn.addSelectionListener(new SelectionAdapter() {
-		public void widgetSelected(SelectionEvent event) {
-		    FontFamilyDialog dialog = new FontFamilyDialog(tree
-			    .getShell(), item.getText(Constants.SECOND_COLUMN));
-		    if (dialog.open() == Window.OK) {
-			item.setText(Constants.SECOND_COLUMN, dialog
-				.getFontFamily());
-			panel.dispose();
-			tabPropertySheetControl.updateData(true);
-			 //TODO Dzmitry Sakovich
-			//cssDialog.setStyleForPreview();
-		    }
-		}
-	    });
-	}
+                        if (dialog.open() == Window.OK) {
+                            item.setText(Constants.SECOND_COLUMN, dialog.getFontFamily());
+                            panel.dispose();
+                            tabPropertySheetControl.updateData(true);
 
-	if (btn != null)
-	    btn.setLayoutData(new GridData(GridData.END, GridData.CENTER,
-		    false, false));
+                            //TODO Dzmitry Sakovich
+                            //cssDialog.setStyleForPreview();
+                        }
+                    }
+                });
+        }
 
-	text.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true,
-		false));
+        if (btn != null) {
+            btn.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
+        }
 
-	// Compute the width for the editor
-	// Also, compute the column width, so that the dropdown
-	// fits
-	editor.minimumWidth = panel.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
-	editor.minimumHeight = panel.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
+        text.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 
-	tree.getColumn(column).setWidth(editor.minimumWidth);
+        // Compute the width for the editor
+        // Also, compute the column width, so that the dropdown
+        // fits
+        editor.minimumWidth = panel.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
+        editor.minimumHeight = panel.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
 
-	// Set the focus on the dropdown and set into the editor
-	editor.setEditor(panel, item, column);
+        tree.getColumn(column).setWidth(editor.minimumWidth);
 
-	// Transfer any text from the cell to the Text control,
-	// set the color to match this row, select the text,
-	// and set focus to the control
-	text.setText(item.getText(column));
-	text.setFocus();
+        // Set the focus on the dropdown and set into the editor
+        editor.setEditor(panel, item, column);
 
-	// Add a handler to transfer the text back to the cell
-	// any time it's modified
-	final int col = column;
-	text.addModifyListener(new ModifyListener() {
-	    public void modifyText(ModifyEvent event) {
-		// Set the text of the editor's control back
-		// into the cell
-		item.setText(col, text.getText());
-		tabPropertySheetControl.updateData(true);
-		 //TODO Dzmitry Sakovich
-		//cssDialog.setStyleForPreview();
-	    }
-	});
+        // Transfer any text from the cell to the Text control,
+        // set the color to match this row, select the text,
+        // and set focus to the control
+        text.setText(item.getText(column));
+        text.setFocus();
+
+        // Add a handler to transfer the text back to the cell
+        // any time it's modified
+        final int col = column;
+        text.addModifyListener(new ModifyListener() {
+                public void modifyText(ModifyEvent event) {
+                    // Set the text of the editor's control back
+                    // into the cell
+                    item.setText(col, text.getText());
+                    tabPropertySheetControl.updateData(true);
+
+                    //TODO Dzmitry Sakovich
+                    //cssDialog.setStyleForPreview();
+                }
+            });
     }
 }
