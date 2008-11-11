@@ -194,6 +194,7 @@ public class CSSClassDialog extends Dialog {
         gridData.horizontalSpan = 2;
         classCombo = new Combo(classComposite, SWT.BORDER);
         classCombo.setLayoutData(gridData);
+
         classCombo.addSelectionListener(new SelectionListener() {
                 public void widgetDefaultSelected(SelectionEvent e) {
                 }

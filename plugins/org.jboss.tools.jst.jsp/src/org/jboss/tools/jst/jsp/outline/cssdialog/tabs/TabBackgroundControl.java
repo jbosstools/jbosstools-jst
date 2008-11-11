@@ -10,11 +10,15 @@
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.outline.cssdialog.tabs;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-
 import org.eclipse.jface.resource.ImageDescriptor;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -31,10 +35,8 @@ import org.eclipse.swt.widgets.ColorDialog;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-
 import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
-
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.cssdialog.ImageSelectionDialog;
@@ -44,12 +46,6 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.common.ImageCombo;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Util;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.StyleAttributes;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParser;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 
 /**
@@ -67,6 +63,12 @@ public class TabBackgroundControl extends Composite {
 
     //TODO Dzmitry Sakovich
     //private CSSDialog cssDialog;
+
+    /**
+     * Constructor for creating controls
+     *
+     * @param composite Composite element
+     */
     public TabBackgroundControl(final Composite composite, HashMap<String, ArrayList<String>> comboMap,
         final StyleAttributes styleAttributes) {
         super(composite, SWT.NONE);
@@ -78,20 +80,15 @@ public class TabBackgroundControl extends Composite {
         gridLayout.numColumns = numColumns;
         setLayout(gridLayout);
 
+        // =====================================================================================
+        // Add BACKGROUND_COLOR element
+        // =====================================================================================
         Label label = new Label(this, SWT.LEFT);
         label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
         label.setText(JstUIMessages.BACKGROUND_COLOR);
 
         colorCombo = new ImageCombo(this, SWT.BORDER);
         colorCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
-
-        // ////////////////////////////////////////////////////////////////////////
-        Set<Entry<String, String>> set = ColorParser.getInstance().getMap().entrySet();
-
-        for (Map.Entry<String, String> me : set) {
-            RGB rgb = Util.getColor(me.getKey());
-            colorCombo.add(me.getValue(), rgb);
-        }
 
         colorCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
@@ -107,6 +104,11 @@ public class TabBackgroundControl extends Composite {
                     //cssDialog.setStyleForPreview();
                 }
             });
+        Set<Entry<String, String>> set = ColorParser.getInstance().getMap().entrySet();
+        for (Map.Entry<String, String> me : set) {
+            RGB rgb = Util.getColor(me.getKey());
+            colorCombo.add(me.getValue(), rgb);
+        }
 
         Button button = new Button(this, SWT.PUSH);
         button.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
@@ -138,6 +140,9 @@ public class TabBackgroundControl extends Composite {
         	}
         });
 
+        // =====================================================================================
+        // Add BACKGROUND_IMAGE element
+        // =====================================================================================
         label = new Label(this, SWT.LEFT);
         label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
         label.setText(JstUIMessages.BACKGROUND_IMAGE);
@@ -199,12 +204,17 @@ public class TabBackgroundControl extends Composite {
         	}
         });
 
+        // =====================================================================================
+        // Add BACKGROUND_REPEAT element
+        // =====================================================================================
         label = new Label(this, SWT.LEFT);
         label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
         label.setText(JstUIMessages.BACKGROUND_REPEAT);
 
+        GridData gridData = new GridData(GridData.FILL, GridData.CENTER, true, false);
+        gridData.horizontalSpan = 2;
         backgroundRepeatCombo = new Combo(this, SWT.BORDER);
-        backgroundRepeatCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
+        backgroundRepeatCombo.setLayoutData(gridData);
 
         backgroundRepeatCombo.addModifyListener(new ModifyListener() {
         	public void modifyText(ModifyEvent event) {
@@ -221,14 +231,10 @@ public class TabBackgroundControl extends Composite {
         		//cssDialog.setStyleForPreview();
         	}
         });
-
         ArrayList<String> list = comboMap.get(CSSConstants.BACKGROUND_REPEAT);
         for (String str : list) {
             backgroundRepeatCombo.add(str);
         }
-        label = new Label(this, SWT.LEFT);
-        label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
-        label.setText(Constants.EMPTY);
     }
 
     /**

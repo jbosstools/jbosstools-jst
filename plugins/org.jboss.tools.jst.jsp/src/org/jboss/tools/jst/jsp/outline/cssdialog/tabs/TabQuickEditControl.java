@@ -54,7 +54,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
-
 /**
  * Class for creating control in Quick edit tab
  *
@@ -73,7 +72,6 @@ public class TabQuickEditControl extends Composite {
 
     //TODO Dzmitry Sakovich
     //private CSSDialog dialog;
-
     /**
      * Constructor for creating controls
      *
@@ -93,25 +91,26 @@ public class TabQuickEditControl extends Composite {
         setLayout(gridLayout);
 
         ArrayList<String> listKeys = new ArrayList<String>();
-
-        for (String key : styleAttributes.keySet())
+        for (String key : styleAttributes.keySet()) {
             listKeys.add(key);
-
+        }
         Collections.sort(listKeys);
-
         for (String key : listKeys) {
             label = new Label(this, SWT.LEFT);
             label.setText(format(key));
             label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
 
             if (comboMap.keySet().contains(key)) {
-                createCombo(this, key, styleAttributes.getAttribute(key));
+                createCombo(key, styleAttributes.getAttribute(key));
             } else {
-                createText(this, key, styleAttributes.getAttribute(key));
+                createText(key, styleAttributes.getAttribute(key));
             }
         }
     }
 
+    /**
+     * Update data method.
+     */
     public void updateData() {
         Control[] controls = this.getChildren();
 
@@ -124,21 +123,20 @@ public class TabQuickEditControl extends Composite {
         }
 
         ArrayList<String> listKeys = new ArrayList<String>();
-
-        for (String key : styleAttributes.keySet())
+        for (String key : styleAttributes.keySet()) {
             listKeys.add(key);
+        }
 
         Collections.sort(listKeys);
-
         for (String key : listKeys) {
             label = new Label(this, SWT.LEFT);
             label.setText(format(key));
             label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
 
             if (comboMap.keySet().contains(key)) {
-                createCombo(this, key, styleAttributes.getAttribute(key));
+                createCombo(key, styleAttributes.getAttribute(key));
             } else {
-                createText(this, key, styleAttributes.getAttribute(key));
+                createText(key, styleAttributes.getAttribute(key));
             }
         }
 
@@ -146,25 +144,23 @@ public class TabQuickEditControl extends Composite {
     }
 
     /**
-     * Method for creating combo controls
+     * Method for creating combo controls.
      *
-     * @param composite
-     *                The parent composite for tab
-     * @param name
-     *                Name of css element
-     * @param value
-     *                Value of css element
+     * @param composite The parent composite for tab
+     * @param name Name of css element
+     * @param value Value of css element
      */
-    private void createCombo(final Composite composite, final String name, final String value) {
+    private void createCombo(final String name, final String value) {
         Button btn = null;
-
-        //if css attribute with color combo
+        // if css attribute with color combo
         if (name.indexOf(CSSConstants.COLOR) != Constants.DONT_CONTAIN) {
-            final ImageCombo colorCombo = new ImageCombo(composite, SWT.BORDER);
+            Composite tmpComposite = getCompositeElement();
+
+            final ImageCombo colorCombo = new ImageCombo(tmpComposite, SWT.BORDER);
             colorCombo.setText(value);
             colorCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 
-            btn = new Button(composite, SWT.NONE);
+            btn = new Button(tmpComposite, SWT.NONE);
             btn.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
 
             ImageDescriptor imageDes = JspEditorPlugin.getImageDescriptor(Constants.IMAGE_COLOR_FILE_LOCATION);
@@ -185,7 +181,7 @@ public class TabQuickEditControl extends Composite {
                             startRgb = Constants.RGB_BLACK;
                         }
 
-                        ColorDialog colorDialog = new ColorDialog(composite.getShell());
+                        ColorDialog colorDialog = new ColorDialog(getShell());
                         colorDialog.setRGB(startRgb);
                         colorDialog.setText(JstUIMessages.COLOR_DIALOG_TITLE);
 
@@ -223,16 +219,18 @@ public class TabQuickEditControl extends Composite {
             }
 
             if (btn == null) {
-                new Label(composite, SWT.NONE);
+                new Label(this, SWT.NONE);
             }
 
             colorCombo.setText(value);
 
             //if css attribute contain choose_folder button
         } else if (Util.containFolder(name)) {
-            final Combo combo = new Combo(composite, SWT.NONE);
+            Composite tmpComposite = getCompositeElement();
+
+        	final Combo combo = new Combo(tmpComposite, SWT.NONE);
             combo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
-            btn = new Button(composite, SWT.NONE);
+            btn = new Button(tmpComposite, SWT.NONE);
             btn.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
 
             ImageDescriptor imageDes = JspEditorPlugin.getImageDescriptor(Constants.IMAGE_FOLDER_FILE_LOCATION);
@@ -247,14 +245,14 @@ public class TabQuickEditControl extends Composite {
             btn.setToolTipText(JstUIMessages.COLOR_DIALOG_TITLE);
 
             ArrayList<String> list = comboMap.get(name);
-
-            for (String str : list)
+            for (String str : list) {
                 combo.add(str);
+            }
 
             btn.addSelectionListener(new SelectionAdapter() {
                     public void widgetSelected(SelectionEvent event) {
                         IProject project = Util.getCurrentProject();
-                        ImageSelectionDialog dialog = new ImageSelectionDialog(composite.getShell(),
+                        ImageSelectionDialog dialog = new ImageSelectionDialog(getShell(),
                                 new WorkbenchLabelProvider(), new WorkbenchContentProvider());
                         String title = JstUIMessages.IMAGE_DIALOG_TITLE;
                         dialog.setTitle(title);
@@ -286,26 +284,29 @@ public class TabQuickEditControl extends Composite {
                     }
                 });
         } else {
-            final Combo combo = new Combo(composite, SWT.CENTER);
-            combo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
+            final Combo combo = new Combo(this, SWT.CENTER);
+            GridData gridData = new GridData(GridData.FILL, GridData.CENTER, true, false);
+            if (!Util.searchInExtElement(name)) {
+            	gridData.horizontalSpan = 2;
+            }
+            combo.setLayoutData(gridData);
 
             ArrayList<String> list = comboMap.get(name);
-
-            for (String str : list)
+            for (String str : list) {
                 combo.add(str);
-
+            }
             final Combo extCombo;
             String[] values = null;
             boolean ext = false;
-
             if (Util.searchInExtElement(name)) {
                 ext = true;
                 values = Util.convertExtString(value);
-                extCombo = new Combo(composite, SWT.BORDER | SWT.READ_ONLY);
+                extCombo = new Combo(this, SWT.BORDER | SWT.READ_ONLY);
                 extCombo.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
 
-                for (int i = 0; i < Constants.extSizes.length; i++)
+                for (int i = 0; i < Constants.extSizes.length; i++) {
                     extCombo.add(Constants.extSizes[i]);
+                }
 
                 extCombo.select(extCombo.indexOf(values[EXT_VALUE_NUMBER]));
 
@@ -351,7 +352,6 @@ public class TabQuickEditControl extends Composite {
                             extCombo.setEnabled(true);
 
                             String tmp = combo.getText().trim();
-
                             if (tmp != null) {
                                 if (!tmp.equals(Constants.EMPTY)) {
                                     String extTmp = extCombo.getText().trim();
@@ -372,11 +372,9 @@ public class TabQuickEditControl extends Composite {
                         }
                     });
             } else {
-                new Label(composite, SWT.NONE).setLayoutData(new GridData(GridData.END, GridData.CENTER,
-                        false, false));
+//                new Label(this, SWT.NONE).setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
                 combo.addModifyListener(new ModifyListener() {
                         String key = name;
-
                         public void modifyText(ModifyEvent event) {
                             if (!combo.getText().trim().equals(Constants.EMPTY)) {
                                 styleAttributes.addAttribute(key, combo.getText().trim());
@@ -388,7 +386,6 @@ public class TabQuickEditControl extends Composite {
                         }
                     });
             }
-
             if (ext) {
                 combo.setText(values[VALUE_NUMBER]);
             } else {
@@ -400,21 +397,22 @@ public class TabQuickEditControl extends Composite {
     /**
      * Method for creating text controls
      *
-     * @param composite
-     *                The parent composite for tab
-     * @param name
-     *                Name of css element
-     * @param value
-     *                Value of css element
+     * @param composite The parent composite for tab
+     * @param name Name of css element
+     * @param value Value of css element
      */
-    private void createText(final Composite composite, final String name, final String value) {
+    private void createText(final String name, final String value) {
         Button btn = null;
 
-        final Text text = new Text(composite, SWT.BORDER);
-        text.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
+        final Text text;
 
+        // create "button" in case of FONT_FAMILY style property
         if (name.equalsIgnoreCase(CSSConstants.FONT_FAMILY)) {
-            btn = new Button(composite, SWT.NONE);
+            Composite tmpComposite = getCompositeElement();
+            text = new Text(tmpComposite, SWT.BORDER);
+            text.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
+
+            btn = new Button(tmpComposite, SWT.NONE);
             btn.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
 
             ImageDescriptor imageDes = JspEditorPlugin.getImageDescriptor(Constants.IMAGE_FONT_FILE_LOCATION);
@@ -429,8 +427,7 @@ public class TabQuickEditControl extends Composite {
                 });
             btn.addSelectionListener(new SelectionAdapter() {
                     public void widgetSelected(SelectionEvent event) {
-                        FontFamilyDialog dialog = new FontFamilyDialog(composite.getShell(),
-                                text.getText());
+                        FontFamilyDialog dialog = new FontFamilyDialog(getShell(), text.getText());
 
                         if (dialog.open() == Window.OK) {
                             text.setText(dialog.getFontFamily());
@@ -451,21 +448,23 @@ public class TabQuickEditControl extends Composite {
                         //dialog.setStyleForPreview();
                     }
                 });
+        } else {
+            text = new Text(this, SWT.BORDER);
+            text.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
         }
 
-        final Combo extCombo;
         String[] values = null;
         boolean ext = false;
-
         if (btn == null) {
             if (Util.searchInExtElement(name)) {
                 values = Util.convertExtString(value);
                 ext = true;
-                extCombo = new Combo(composite, SWT.BORDER | SWT.READ_ONLY);
+                final Combo extCombo = new Combo(this, SWT.BORDER | SWT.READ_ONLY);
                 extCombo.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
 
-                for (int i = 0; i < Constants.extSizes.length; i++)
+                for (int i = 0; i < Constants.extSizes.length; i++) {
                     extCombo.add(Constants.extSizes[i]);
+                }
 
                 extCombo.select(extCombo.indexOf(values[EXT_VALUE_NUMBER]));
 
@@ -516,8 +515,7 @@ public class TabQuickEditControl extends Composite {
                         }
                     });
             } else {
-                new Label(composite, SWT.NONE).setLayoutData(new GridData(GridData.END, GridData.CENTER,
-                        false, false));
+//                new Label(this, SWT.NONE).setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
 
                 text.addModifyListener(new ModifyListener() {
                         String key = name;
@@ -543,10 +541,25 @@ public class TabQuickEditControl extends Composite {
     }
 
     /**
+     * Create container that take up 2 cells and contains fontSizeCombo and extFontSizeCombo elements.
+     */
+    private Composite getCompositeElement() {
+        GridData gridData = new GridData(GridData.FILL, GridData.CENTER, true, false);
+        gridData.horizontalSpan = 2;
+        GridLayout gridLayoutTmp = new GridLayout(2, false);
+        gridLayoutTmp.marginHeight = 0;
+        gridLayoutTmp.marginWidth = 0;
+        Composite classComposite = new Composite(this, SWT.CENTER);
+        classComposite.setLayoutData(gridData);
+        classComposite.setLayout(gridLayoutTmp);
+
+        return classComposite;
+    }
+
+    /**
      * Method for format css names (text-decoration : Text Decoration)
      *
-     * @param str
-     *                CSS name
+     * @param str CSS name
      * @return Format ss name
      */
     private String format(String str) {

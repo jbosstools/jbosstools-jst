@@ -52,10 +52,12 @@ public class StyleComposite extends Composite {
     private static String NODE_NAME_VALUE = "value";
     private static String NODE_NAME_ELEMENT = "element";
     private static String NODE_ATTRIBUTE_NAME = "name";
+
     private static int TAB_TEXT_FONT_NUMBER = 0;
     private static int TAB_QUICK_EDIT_NUMBER = 4;
     private static int FIRST_SELECTION = 0;
     private static int SIZE_NULL = 0;
+
     private String newStyle;
     private String oldStyle;
     private TabTextControl tabTextControl;
@@ -131,7 +133,6 @@ public class StyleComposite extends Composite {
 
         tabTextControl = new TabTextControl(sc, comboMap, styleAttributes);
         sc.setContent(tabTextControl);
-
         sc.setMinSize(tabTextControl.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
         return sc;

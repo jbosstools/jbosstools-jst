@@ -10,9 +10,14 @@
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.outline.cssdialog.tabs;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -30,7 +35,6 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.cssdialog.FontFamilyDialog;
@@ -40,12 +44,6 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.common.ImageCombo;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Util;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.StyleAttributes;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParser;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 /**
  * Class for creating Text tab controls
@@ -73,7 +71,7 @@ public class TabTextControl extends Composite {
     /**
      * Constructor for creating controls
      *
-     * @param composite
+     * @param composite Composite element
      */
     public TabTextControl(final Composite composite, final HashMap<String, ArrayList<String>> comboMap,
         final StyleAttributes styleAttributes) {
@@ -86,9 +84,12 @@ public class TabTextControl extends Composite {
         gridLayout.numColumns = numColumns;
         setLayout(gridLayout);
 
+        // =====================================================================================
+        // Add FONT_FAMILY element
+        // =====================================================================================
         Label label = new Label(this, SWT.LEFT);
-        label.setText(JstUIMessages.FONT_FAMILY);
         label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
+        label.setText(JstUIMessages.FONT_FAMILY);
 
         fontFamilyText = new Text(this, SWT.BORDER | SWT.SINGLE);
         fontFamilyText.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
@@ -130,6 +131,10 @@ public class TabTextControl extends Composite {
                     }
                 }
             });
+
+        // =====================================================================================
+        // Add COLOR element
+        // =====================================================================================
         label = new Label(this, SWT.LEFT);
         label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
         label.setText(JstUIMessages.COLOR);
@@ -151,18 +156,12 @@ public class TabTextControl extends Composite {
                     //cssDialog.setStyleForPreview();
                 }
             });
-
-        ////////////////////////////////////////////////////////////////////////
-        // //
         Set<Entry<String, String>> set = ColorParser.getInstance().getMap().entrySet();
-
         for (Map.Entry<String, String> me : set) {
             RGB rgb = Util.getColor(me.getKey());
             colorCombo.add(me.getValue(), rgb);
         }
 
-        ////////////////////////////////////////////////////////////////////////
-        // /
         button = new Button(this, SWT.PUSH);
         button.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
         button.setToolTipText(JstUIMessages.COLOR_TIP);
@@ -193,22 +192,21 @@ public class TabTextControl extends Composite {
                 }
             });
 
+        // =====================================================================================
+        // Add FONT_SIZE element
+        // =====================================================================================
         label = new Label(this, SWT.LEFT);
         label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
         label.setText(JstUIMessages.FONT_SIZE);
 
-        fontSizeCombo = new Combo(this, SWT.BORDER | SWT.SINGLE);
+        // Create container that take up 2 cells and contains fontSizeCombo and extFontSizeCombo elements.
+        // Is created for correct layout.
+        Composite tmpComposite = getCompositeElement();
+        fontSizeCombo = new Combo(tmpComposite, SWT.BORDER | SWT.SINGLE);
+        fontSizeCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 
-        final GridData fontSizeGridData = new GridData(GridData.FILL, GridData.CENTER, true, false);
-        fontSizeCombo.setLayoutData(fontSizeGridData);
-
-        list = comboMap.get(CSSConstants.FONT_SIZE);
-
-        for (String str : list) {
-            fontSizeCombo.add(str);
-        }
-
-        extFontSizeCombo = new Combo(this, SWT.BORDER | SWT.READ_ONLY);
+        extFontSizeCombo = new Combo(tmpComposite, SWT.BORDER | SWT.READ_ONLY);
+        extFontSizeCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
 
         extFontSizeCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
@@ -227,9 +225,6 @@ public class TabTextControl extends Composite {
                     }
                 }
             });
-
-        extFontSizeCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
-
         for (int i = 0; i < Constants.extSizes.length; i++) {
             extFontSizeCombo.add(Constants.extSizes[i]);
         }
@@ -276,12 +271,22 @@ public class TabTextControl extends Composite {
                     //cssDialog.setStyleForPreview();
                 }
             });
+        list = comboMap.get(CSSConstants.FONT_SIZE);
+        for (String str : list) {
+            fontSizeCombo.add(str);
+        }
 
+        // =====================================================================================
+        // Add FONT_STYLE element
+        // =====================================================================================
         label = new Label(this, SWT.LEFT);
         label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
         label.setText(JstUIMessages.FONT_STYLE);
 
+        GridData gridData = new GridData(GridData.FILL, GridData.CENTER, true, false);
+        gridData.horizontalSpan = 2;
         fontStyleCombo = new Combo(this, SWT.BORDER);
+        fontStyleCombo.setLayoutData(gridData);
 
         fontStyleCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
@@ -297,24 +302,22 @@ public class TabTextControl extends Composite {
                     //cssDialog.setStyleForPreview();
                 }
             });
-
-        fontStyleCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
-
         list = comboMap.get(CSSConstants.FONT_STYLE);
-
         for (String str : list) {
             fontStyleCombo.add(str);
         }
 
-        label = new Label(this, SWT.LEFT);
-        label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
-        label.setText(Constants.EMPTY);
-
+        // =====================================================================================
+        // Add FONT_WEIGHT element
+        // =====================================================================================
         label = new Label(this, SWT.LEFT);
         label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
         label.setText(JstUIMessages.FONT_WEIGHT);
 
+        gridData = new GridData(GridData.FILL, GridData.CENTER, true, false);
+        gridData.horizontalSpan = 2;
         fontWeigthCombo = new Combo(this, SWT.BORDER);
+        fontWeigthCombo.setLayoutData(gridData);
 
         fontWeigthCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
@@ -330,24 +333,22 @@ public class TabTextControl extends Composite {
                     //cssDialog.setStyleForPreview();
                 }
             });
-
-        fontWeigthCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
-
         list = comboMap.get(CSSConstants.FONT_WEIGHT);
-
         for (String str : list) {
             fontWeigthCombo.add(str);
         }
 
-        label = new Label(this, SWT.LEFT);
-        label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
-        label.setText(Constants.EMPTY);
-
+        // =====================================================================================
+        // Add TEXT_DECORATION element
+        // =====================================================================================
         label = new Label(this, SWT.LEFT);
         label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
         label.setText(JstUIMessages.TEXT_DECORATION);
 
+        gridData = new GridData(GridData.FILL, GridData.CENTER, true, false);
+        gridData.horizontalSpan = 2;
         textDecorationCombo = new Combo(this, SWT.BORDER);
+        textDecorationCombo.setLayoutData(gridData);
 
         textDecorationCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
@@ -363,24 +364,22 @@ public class TabTextControl extends Composite {
                     //cssDialog.setStyleForPreview();
                 }
             });
-
-        textDecorationCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
-
         list = comboMap.get(CSSConstants.TEXT_DECORATION);
-
         for (String str : list) {
             textDecorationCombo.add(str);
         }
 
-        label = new Label(this, SWT.LEFT);
-        label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
-        label.setText(Constants.EMPTY);
-
+        // =====================================================================================
+        // Add TEXT_ALIGN element
+        // =====================================================================================
         label = new Label(this, SWT.LEFT);
         label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
         label.setText(JstUIMessages.TEXT_ALIGN);
 
+        gridData = new GridData(GridData.FILL, GridData.CENTER, true, false);
+        gridData.horizontalSpan = 2;
         textAlignCombo = new Combo(this, SWT.BORDER);
+        textAlignCombo.setLayoutData(gridData);
 
         textAlignCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
@@ -396,18 +395,26 @@ public class TabTextControl extends Composite {
                     //cssDialog.setStyleForPreview();
                 }
             });
-
-        textAlignCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
-
         list = comboMap.get(CSSConstants.TEXT_ALIGN);
-
         for (String str : list) {
             textAlignCombo.add(str);
         }
+    }
 
-        label = new Label(this, SWT.LEFT);
-        label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
-        label.setText(Constants.EMPTY);
+    /**
+     * Create container that take up 2 cells and contains fontSizeCombo and extFontSizeCombo elements.
+     */
+    private Composite getCompositeElement() {
+        GridData gridData = new GridData(GridData.FILL, GridData.CENTER, true, false);
+        gridData.horizontalSpan = 2;
+        GridLayout gridLayoutTmp = new GridLayout(2, false);
+        gridLayoutTmp.marginHeight = 0;
+        gridLayoutTmp.marginWidth = 0;
+        Composite classComposite = new Composite(this, SWT.CENTER);
+        classComposite.setLayoutData(gridData);
+        classComposite.setLayout(gridLayoutTmp);
+
+        return classComposite;
     }
 
     /**

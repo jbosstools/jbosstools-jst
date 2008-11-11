@@ -91,14 +91,21 @@ public class TabBoxesControl extends Composite {
 
         Label label = new Label(this, SWT.NONE);
         label.setLayoutData(new GridData(GridData.BEGINNING, GridData.CENTER, false, false, 3, 1));
-
         label.setFont(JFaceResources.getFontRegistry().get(JFaceResources.BANNER_FONT));
         label.setText(JstUIMessages.DIMENSION_TITLE);
+
+        // =====================================================================================
+        // Add WIDTH element
+        // =====================================================================================
         label = new Label(this, SWT.LEFT);
-        label.setText(JstUIMessages.WIDTH);
         label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
+        label.setText(JstUIMessages.WIDTH);
 
         widthText = new Text(this, SWT.BORDER | SWT.SINGLE);
+        widthText.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
+
+        extWidthCombo = new Combo(this, SWT.BORDER | SWT.READ_ONLY);
+        extWidthCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
 
         widthText.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
@@ -124,25 +131,16 @@ public class TabBoxesControl extends Composite {
                     // cssDialog.setStyleForPreview();
                 }
             });
-
-        widthText.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
-
-        extWidthCombo = new Combo(this, SWT.BORDER | SWT.READ_ONLY);
-
         extWidthCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
                     String width = widthText.getText().trim();
-
                     if (width == null) {
                         return;
                     }
-
                     if (width.equals(Constants.EMPTY)) {
                         return;
                     }
-
                     String tmp = extWidthCombo.getText();
-
                     if (tmp != null) {
                         styleAttributes.addAttribute(CSSConstants.WIDTH, width + tmp);
 
@@ -151,27 +149,29 @@ public class TabBoxesControl extends Composite {
                     }
                 }
             });
-
-        extWidthCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
-
         for (int i = 0; i < Constants.extSizes.length; i++) {
             extWidthCombo.add(Constants.extSizes[i]);
         }
 
+        // =====================================================================================
+        // Add HEIGHT element
+        // =====================================================================================
         label = new Label(this, SWT.LEFT);
-        label.setText(JstUIMessages.HEIGHT);
         label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
+        label.setText(JstUIMessages.HEIGHT);
 
         heightText = new Text(this, SWT.BORDER | SWT.SINGLE);
+        heightText.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
+
+        extHeightCombo = new Combo(this, SWT.BORDER | SWT.READ_ONLY);
+        extHeightCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
 
         heightText.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
                     String tmp = heightText.getText();
-
                     if (tmp != null) {
                         if (tmp.trim().length() > 0) {
                             String extHeight = extHeightCombo.getText().trim();
-
                             if (extHeight != null) {
                                 styleAttributes.addAttribute(CSSConstants.HEIGHT, tmp + extHeight);
                             } else {
@@ -188,36 +188,23 @@ public class TabBoxesControl extends Composite {
                     // cssDialog.setStyleForPreview();
                 }
             });
-
-        heightText.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
-
-        extHeightCombo = new Combo(this, SWT.BORDER | SWT.READ_ONLY);
-
         extHeightCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
                     String height = heightText.getText().trim();
-
                     if (height == null) {
                         return;
                     }
-
                     if (height.equals(Constants.EMPTY)) {
                         return;
                     }
-
                     String tmp = extHeightCombo.getText();
-
                     if (tmp != null) {
                         styleAttributes.addAttribute(CSSConstants.HEIGHT, height + tmp);
-
                         // TODO Dzmitry Sakovich
                         // cssDialog.setStyleForPreview();
                     }
                 }
             });
-
-        extHeightCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
-
         for (int i = 0; i < Constants.extSizes.length; i++) {
             extHeightCombo.add(Constants.extSizes[i]);
         }
@@ -227,81 +214,73 @@ public class TabBoxesControl extends Composite {
         label.setFont(JFaceResources.getFontRegistry().get(JFaceResources.BANNER_FONT));
         label.setText(JstUIMessages.BORDER_TITLE);
 
+        // =====================================================================================
+        // Add BORDER_STYLE element
+        // =====================================================================================
         label = new Label(this, SWT.LEFT);
         label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
         label.setText(JstUIMessages.BORDER_STYLE);
 
+        GridData gridData = new GridData(GridData.FILL, GridData.CENTER, true, false);
+        gridData.horizontalSpan = 2;
         borderStyleCombo = new Combo(this, SWT.BORDER);
+        borderStyleCombo.setLayoutData(gridData);
 
         borderStyleCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
                     String tmp = borderStyleCombo.getText().trim();
-
                     if (tmp != null) {
                         if (!tmp.equals(Constants.EMPTY)) {
                             styleAttributes.addAttribute(CSSConstants.BORDER_STYLE, tmp);
-
                             // TODO Dzmitry Sakovich
                             // cssDialog.setStyleForPreview();
                             return;
                         }
                     }
-
                     styleAttributes.removeAttribute(CSSConstants.BORDER_STYLE);
-
                     // TODO Dzmitry Sakovich
                     // cssDialog.setStyleForPreview();
                 }
             });
-
-        borderStyleCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
         list = comboMap.get(CSSConstants.BORDER_STYLE);
-
         for (String str : list) {
             borderStyleCombo.add(str);
         }
 
-        label = new Label(this, SWT.LEFT);
-        label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
-        label.setText(Constants.EMPTY);
-
+        // =====================================================================================
+        // Add BORDER_COLOR element
+        // =====================================================================================
         label = new Label(this, SWT.LEFT);
         label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
         label.setText(JstUIMessages.BORDER_COLOR);
 
-        borderColorCombo = new ImageCombo(this, SWT.BORDER);
+        Composite tmpComposite = getCompositeElement();
+        borderColorCombo = new ImageCombo(tmpComposite, SWT.BORDER);
+        borderColorCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 
         borderColorCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
                     String tmp = borderColorCombo.getText().trim();
-
                     if (tmp != null) {
                         if (!tmp.equals(Constants.EMPTY)) {
                             styleAttributes.addAttribute(CSSConstants.BORDER_COLOR, tmp);
-
                             // TODO Dzmitry Sakovich
                             // cssDialog.setStyleForPreview();
                             return;
                         }
                     }
-
                     styleAttributes.removeAttribute(CSSConstants.BORDER_COLOR);
-
                     // TODO Dzmitry Sakovich
                     // cssDialog.setStyleForPreview();
                 }
             });
-
-        borderColorCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
-
         Set<Entry<String, String>> set = ColorParser.getInstance().getMap().entrySet();
-
         for (Map.Entry<String, String> me : set) {
             RGB rgb = Util.getColor(me.getKey());
             borderColorCombo.add(me.getValue(), rgb);
         }
 
-        final Button button = new Button(this, SWT.PUSH);
+        final Button button = new Button(tmpComposite, SWT.PUSH);
         button.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
         button.setToolTipText(JstUIMessages.BORDER_COLOR_TIP);
 
@@ -317,13 +296,11 @@ public class TabBoxesControl extends Composite {
         button.addSelectionListener(new SelectionAdapter() {
                 public void widgetSelected(SelectionEvent event) {
                     ColorDialog dlg = new ColorDialog(getShell());
-
                     dlg.setRGB((Util.getColor((borderColorCombo.getText().trim())) == null)
                         ? Constants.RGB_BLACK : Util.getColor((borderColorCombo.getText().trim())));
                     dlg.setText(JstUIMessages.COLOR_DIALOG_TITLE);
 
                     RGB rgb = dlg.open();
-
                     if (rgb != null) {
                         String colorStr = Util.createColorString(rgb);
                         borderColorCombo.setText(colorStr);
@@ -331,24 +308,28 @@ public class TabBoxesControl extends Composite {
                 }
             });
 
+        // =====================================================================================
+        // Add BORDER_WIDTH element
+        // =====================================================================================
         label = new Label(this, SWT.LEFT);
-        label.setText(JstUIMessages.BORDER_WIDTH);
         label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
+        label.setText(JstUIMessages.BORDER_WIDTH);
 
         borderWidthCombo = new Combo(this, SWT.BORDER | SWT.SINGLE);
+        borderWidthCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
+
+        extBorderWidthCombo = new Combo(this, SWT.BORDER | SWT.READ_ONLY);
+        extBorderWidthCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
 
         borderWidthCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent e) {
                     String currentText = borderWidthCombo.getText();
-
                     list = comboMap.get(CSSConstants.BORDER_WIDTH);
-
                     for (String str : list) {
                         if (currentText.equals(str)) {
                             extBorderWidthCombo.select(0);
                             extBorderWidthCombo.setEnabled(false);
                             styleAttributes.addAttribute(CSSConstants.BORDER_WIDTH, currentText);
-
                             // TODO Dzmitry Sakovich
                             // cssDialog.setStyleForPreview();
                             return;
@@ -358,7 +339,6 @@ public class TabBoxesControl extends Composite {
                     extBorderWidthCombo.setEnabled(true);
 
                     String tmp = borderWidthCombo.getText();
-
                     if (tmp != null) {
                         if (tmp.trim().length() > 0) {
                             String extBorderWidth = extBorderWidthCombo.getText().trim();
@@ -375,80 +355,52 @@ public class TabBoxesControl extends Composite {
                     } else {
                         styleAttributes.removeAttribute(CSSConstants.BORDER_WIDTH);
                     }
-
                     // TODO Dzmitry Sakovich
                     // cssDialog.setStyleForPreview();
                 }
             });
-
-        borderWidthCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
-
         list = comboMap.get(CSSConstants.BORDER_WIDTH);
-
         for (String str : list) {
             borderWidthCombo.add(str);
         }
-
-        extBorderWidthCombo = new Combo(this, SWT.BORDER | SWT.READ_ONLY);
-
         extBorderWidthCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
                     String borderWidth = borderWidthCombo.getText().trim();
-
                     if (borderWidth == null) {
                         return;
                     }
-
                     if (borderWidth.equals(Constants.EMPTY)) {
                         return;
                     }
-
                     String tmp = extBorderWidthCombo.getText();
-
                     if (tmp != null) {
                         styleAttributes.addAttribute(CSSConstants.BORDER_WIDTH, borderWidth + tmp);
-
                         // TODO Dzmitry Sakovich
                         // cssDialog.setStyleForPreview();
                     }
                 }
             });
-
-        extBorderWidthCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
-
         for (int i = 0; i < Constants.extSizes.length; i++) {
             extBorderWidthCombo.add(Constants.extSizes[i]);
         }
-
-        borderWidthCombo.addModifyListener(new ModifyListener() {
-                public void modifyText(ModifyEvent e) {
-                    String currentText = borderWidthCombo.getText();
-
-                    list = comboMap.get(CSSConstants.BORDER_WIDTH);
-
-                    for (String str : list) {
-                        if (currentText.equals(str)) {
-                            extBorderWidthCombo.select(0);
-                            extBorderWidthCombo.setEnabled(false);
-
-                            return;
-                        }
-
-                        extBorderWidthCombo.setEnabled(true);
-                    }
-                }
-            });
 
         label = new Label(this, SWT.NONE);
         label.setLayoutData(new GridData(GridData.BEGINNING, GridData.CENTER, false, false, 3, 1));
         label.setFont(JFaceResources.getFontRegistry().get(JFaceResources.BANNER_FONT));
         label.setText(JstUIMessages.MARGIN_PADDING_TITLE);
 
+        // =====================================================================================
+        // Add MARGIN element
+        // =====================================================================================
         label = new Label(this, SWT.LEFT);
-        label.setText(JstUIMessages.MARGIN);
         label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
+        label.setText(JstUIMessages.MARGIN);
 
         marginText = new Text(this, SWT.BORDER | SWT.SINGLE);
+        marginText.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
+
+        extMarginCombo = new Combo(this, SWT.BORDER | SWT.READ_ONLY);
+        extMarginCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
 
         marginText.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
@@ -474,11 +426,6 @@ public class TabBoxesControl extends Composite {
                     // cssDialog.setStyleForPreview();
                 }
             });
-
-        marginText.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
-
-        extMarginCombo = new Combo(this, SWT.BORDER | SWT.READ_ONLY);
-
         extMarginCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
                     String margin = marginText.getText().trim();
@@ -501,18 +448,22 @@ public class TabBoxesControl extends Composite {
                     }
                 }
             });
-
-        extMarginCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
-
         for (int i = 0; i < Constants.extSizes.length; i++) {
             extMarginCombo.add(Constants.extSizes[i]);
         }
 
+        // =====================================================================================
+        // Add PADDING element
+        // =====================================================================================
         label = new Label(this, SWT.LEFT);
-        label.setText(JstUIMessages.PADDING);
         label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
+        label.setText(JstUIMessages.PADDING);
 
         paddingText = new Text(this, SWT.BORDER | SWT.SINGLE);
+        paddingText.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
+
+        extPaddingCombo = new Combo(this, SWT.BORDER | SWT.READ_ONLY);
+        extPaddingCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
 
         paddingText.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
@@ -538,11 +489,6 @@ public class TabBoxesControl extends Composite {
                     // cssDialog.setStyleForPreview();
                 }
             });
-
-        paddingText.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
-
-        extPaddingCombo = new Combo(this, SWT.BORDER | SWT.READ_ONLY);
-
         extPaddingCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
                     String padding = paddingText.getText().trim();
@@ -565,12 +511,25 @@ public class TabBoxesControl extends Composite {
                     }
                 }
             });
-
-        extPaddingCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
-
         for (int i = 0; i < Constants.extSizes.length; i++) {
             extPaddingCombo.add(Constants.extSizes[i]);
         }
+    }
+
+    /**
+     * Create container that take up 2 cells and contains fontSizeCombo and extFontSizeCombo elements.
+     */
+    private Composite getCompositeElement() {
+        GridData gridData = new GridData(GridData.FILL, GridData.CENTER, true, false);
+        gridData.horizontalSpan = 2;
+        GridLayout gridLayoutTmp = new GridLayout(2, false);
+        gridLayoutTmp.marginHeight = 0;
+        gridLayoutTmp.marginWidth = 0;
+        Composite classComposite = new Composite(this, SWT.CENTER);
+        classComposite.setLayoutData(gridData);
+        classComposite.setLayout(gridLayoutTmp);
+
+        return classComposite;
     }
 
     /**
