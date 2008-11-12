@@ -22,6 +22,7 @@
       <keys path="help/keys-web.properties"/>
       <keys path="help/keys-web-attrs.properties"/>
       <keys path="help/keys-web-menu.properties"/>
+      <keys path="help/keys-web-lists.properties"/>
    </extension>
    <extension point="org.jboss.tools.common.model.specialwizard">
       <specialwizard class="org.jboss.tools.jst.web.project.AddServletSupportWizard" id="org.jboss.tools.jst.web.project.AddServletSupportWizard">
