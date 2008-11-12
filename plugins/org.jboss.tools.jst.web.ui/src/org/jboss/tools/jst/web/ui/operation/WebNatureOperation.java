@@ -398,7 +398,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 				exists = fp0 != null;
 			}
 
-			if(sv != null && sv.indexOf("2.3") >= 0) {
+			if(sv != null && (sv.indexOf("2.3") >= 0 || sv.indexOf("2.5") >= 0)) {
 				configDM.setProperty(IFacetDataModelProperties.FACET_VERSION_STR, sv);
 			}
 			
