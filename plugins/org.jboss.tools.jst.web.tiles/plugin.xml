@@ -10,6 +10,7 @@
       <keys path="help/keys-tiles.properties"/>
       <keys path="help/keys-tiles-attrs.properties"/>
       <keys path="help/keys-tiles-menu.properties"/>
+      <keys path="help/keys-tiles-lists.properties"/>
    </extension>
 
    <extension
