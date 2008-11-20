@@ -13,8 +13,6 @@
 package org.jboss.tools.jst.jsp.test.ca;
 
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.jboss.tools.common.test.util.TestProjectProvider;
 
 

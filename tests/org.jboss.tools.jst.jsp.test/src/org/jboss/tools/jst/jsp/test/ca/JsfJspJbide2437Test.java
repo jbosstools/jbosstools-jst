@@ -3,17 +3,11 @@ package org.jboss.tools.jst.jsp.test.ca;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.FindReplaceDocumentAdapter;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
-import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
-import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
-import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
-import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegionList;
-import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 import org.jboss.tools.common.test.util.TestProjectProvider;
 import org.jboss.tools.jst.jsp.contentassist.AutoContentAssistantProposal;
 import org.jboss.tools.jst.jsp.test.TestUtil;
@@ -41,11 +35,11 @@ public class JsfJspJbide2437Test extends ContentAssistantTestCase {
 
 	public void testJsfJspJbide2437 () throws BadLocationException {
 		openEditor(PAGE_NAME);
-
+		JobUtils.waitForIdle();
 		ICompletionProposal[] result= null;
 		String errorMessage = null;
 		
-		IRegion reg = new FindReplaceDocumentAdapter(document).find(0, "/templates/common.xhtml", true, false, false, false);
+		IRegion reg = new FindReplaceDocumentAdapter(document).find(0, "/templates/common.xhtml", true, true, false, false);
 		
 		IContentAssistProcessor p= TestUtil.getProcessor(viewer, reg.getOffset(), contentAssistant);
 		assertNotNull("Cannot obtain IContentAssistProcessor instance",p);

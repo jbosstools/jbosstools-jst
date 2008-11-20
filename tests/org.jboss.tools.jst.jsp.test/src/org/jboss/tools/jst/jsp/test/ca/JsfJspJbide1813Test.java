@@ -1,6 +1,5 @@
 package org.jboss.tools.jst.jsp.test.ca;
 
-import org.eclipse.core.resources.IResource;
 import org.jboss.tools.common.test.util.TestProjectProvider;
 
 public class JsfJspJbide1813Test extends ContentAssistantTestCase{
