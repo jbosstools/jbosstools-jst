@@ -121,7 +121,7 @@ public class JBossASAdapterInitializer implements IStartup {
 			}
 			JstFirstRunPlugin.getDefault().getPreferenceStore().setValue(FIRST_START_PREFERENCE_NAME, false);
 			String pluginLocation = FileLocator.resolve(JstFirstRunPlugin.getDefault().getBundle().getEntry("/")).getPath();
-			File serversFile = new File(pluginLocation, SERVERS_FILE);
+			File serversFile = new File(pluginLocation, SERVERS_FILE).getCanonicalFile();
 			if(serversFile.exists()){
 				String str = FileUtil.readFile(serversFile);
 				int position = 0;
@@ -187,7 +187,7 @@ public class JBossASAdapterInitializer implements IStartup {
 
 			String jbossASLocation = null;
 			
-			File jbossASDir = new File(pluginLocation, JBOSS_AS_HOME);
+			File jbossASDir = new File(pluginLocation, JBOSS_AS_HOME).getCanonicalFile();
 			if (jbossASDir.isDirectory()) {
 				jbossASLocation = jbossASDir.getAbsolutePath();
 			} else {
@@ -332,6 +332,15 @@ public class JBossASAdapterInitializer implements IStartup {
 			// Don't create the driver a few times
 			return;
 		}
+		String driverPath;
+		try {
+			driverPath = new File(jbossASLocation + "/server/default/lib/hsqldb.jar").getCanonicalPath();
+		} catch (IOException e) {
+			JstFirstRunPlugin.getPluginLog().log(new Status(IStatus.ERROR,
+					JstFirstRunPlugin.PLUGIN_ID, "Can't create new HSQL DB Driver.", e));
+			return;
+		}
+
 		DriverInstance driver = DriverManager.getInstance().getDriverInstanceByName(HSQL_DRIVER_NAME);
 		if (driver == null) {
 			TemplateDescriptor descr = TemplateDescriptor.getDriverTemplateDescriptor(HSQL_DRIVER_TEMPLATE_ID);
@@ -350,7 +359,7 @@ public class JBossASAdapterInitializer implements IStartup {
 			}
 			props.setProperty(DTP_DB_URL_PROPERTY_ID, "jdbc:hsqldb:.");
 			props.setProperty(IDriverMgmtConstants.PROP_DEFN_TYPE, descr.getId());
-			props.setProperty(IDriverMgmtConstants.PROP_DEFN_JARLIST, jbossASLocation + "/server/default/lib/hsqldb.jar");
+			props.setProperty(IDriverMgmtConstants.PROP_DEFN_JARLIST, driverPath);
 
 			instance.setBaseProperties(props);
 			DriverManager.getInstance().removeDriverInstance(instance.getID());
