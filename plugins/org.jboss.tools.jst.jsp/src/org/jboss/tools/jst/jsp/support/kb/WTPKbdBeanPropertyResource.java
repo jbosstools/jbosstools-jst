@@ -25,6 +25,7 @@ import org.jboss.tools.common.el.core.model.ELInstance;
 import org.jboss.tools.common.el.core.model.ELInvocationExpression;
 import org.jboss.tools.common.el.core.model.ELModel;
 import org.jboss.tools.common.el.core.model.ELPropertyInvocation;
+import org.jboss.tools.common.el.core.model.ELUtil;
 import org.jboss.tools.common.el.core.parser.ELParser;
 import org.jboss.tools.common.el.core.parser.ELParserFactory;
 import org.jboss.tools.common.el.core.parser.ELParserUtil;
@@ -182,24 +183,27 @@ public class WTPKbdBeanPropertyResource extends WTPKbAbstractModelResource {
 			ELParser p = ELParserUtil.getDefaultFactory().createParser();
 			ELModel model = p.parse(value);
 			List<ELInstance> is = model.getInstances();
-			ELInvocationExpression expr = null;
-			for (ELInstance i: is) {
-				if(i.getExpression() instanceof ELInvocationExpression) {
-					expr = (ELInvocationExpression)i.getExpression();
-					break;
-				}
+			ELExpression expr = null;
+			
+			// JBIDE-3189: CA remove first entered el expression
+			// The following fixes the issue
+			ELInstance i = ELUtil.findInstance(model, offset);
+			if (i != null) {
+				expr = (ELExpression)i.getExpression();
 			}
+			// JBIDE-3189
+
 			if(expr != null) {
 				proposal.setStart(expr.getStartPosition()); 
 			} else {
 				proposal.setStart(offset);
 			}
 			
-			if(expr != null && expr.getEndPosition() >= offset) {
-				proposal.setEnd(expr.getEndPosition());
-			} else {
-				proposal.setEnd(offset);
-			}
+			// JBIDE-3189: CA remove first entered el expression
+			// The following fixes the issue
+			proposal.setEnd(offset);
+			// JBIDE-3189
+
 			int pos = proposal.getReplacementString().length();
 			
 			// JBIDE-2437: Because of the issue add EL open/close brackets to the proposal replacement string
