@@ -14,19 +14,15 @@ import java.io.StringReader;
 import java.io.StringWriter;
 
 import org.jboss.tools.common.meta.XModelEntity;
-import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
-import org.jboss.tools.common.model.XModelObjectConstants;
 import org.jboss.tools.common.model.filesystems.FileAuxiliary;
-import org.jboss.tools.common.model.filesystems.impl.AbstractExtendedXMLFileImpl;
 import org.jboss.tools.common.model.filesystems.impl.AbstractXMLFileImpl;
-import org.jboss.tools.common.model.filesystems.impl.FileAnyImpl;
-import org.jboss.tools.common.model.filesystems.impl.FolderLoader;
 import org.jboss.tools.common.model.loaders.impl.SimpleWebFileLoader;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.util.EntityXMLRegistration;
 import org.jboss.tools.common.model.util.XMLUtil;
 import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
+import org.jboss.tools.jst.web.model.AbstractWebDiagramLoader;
 import org.jboss.tools.jst.web.model.WebProcessLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
@@ -34,9 +30,15 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class FileTilesLoader implements WebProcessLoader, TilesConstants {
-	private FileAuxiliary aux = new FileAuxiliary("l4t", false);
-	XModelObjectLoaderUtil util = createUtil();
+public class FileTilesLoader extends AbstractWebDiagramLoader implements WebProcessLoader, TilesConstants {
+
+    protected FileAuxiliary createFileAuxiliary() {
+    	return new FileAuxiliary("l4t", false);
+    }
+
+    protected XModelObjectLoaderUtil createUtil() {
+        return new FTLoaderUtil();
+    }
 
 	public void load(XModelObject object) {
 		String body = XModelObjectLoaderUtil.getTempBody(object);
@@ -49,8 +51,6 @@ public class FileTilesLoader implements WebProcessLoader, TilesConstants {
 			object.setAttributeValue("isIncorrect", "yes");
 			object.setAttributeValue("incorrectBody", body);
 			object.set("actualBodyTimeStamp", "-1");
-//			XModelObjectLoaderUtil.addRequiredChildren(object);
-//			return;
 		} else {
 			object.setAttributeValue("isIncorrect", "no");
 			object.set("correctBody", body);
@@ -64,7 +64,6 @@ public class FileTilesLoader implements WebProcessLoader, TilesConstants {
 		}
 		Element element = doc.getDocumentElement();
 		util.load(element, object);
-		String loadingError = util.getError();
 		
 		setEncoding(object, body);
 		NodeList nl = doc.getChildNodes();
@@ -75,21 +74,16 @@ public class FileTilesLoader implements WebProcessLoader, TilesConstants {
 				object.setAttributeValue("systemId", dt.getSystemId());
 			}
 		}
+		String loadingError = util.getError();
 		reloadProcess(object);
-		object.set("actualBodyTimeStamp", "" + object.getTimeStamp());
 
+		object.set("actualBodyTimeStamp", "" + object.getTimeStamp());
 		((AbstractXMLFileImpl)object).setLoaderError(loadingError);
 		if(!hasErrors && loadingError != null) {
 			object.setAttributeValue("isIncorrect", "yes");
 			object.setAttributeValue("incorrectBody", body);
 			object.set("actualBodyTimeStamp", "" + object.getTimeStamp());
 		}
-	}
-    
-	protected void setEncoding(XModelObject object, String body) {
-		String encoding = XModelObjectLoaderUtil.getEncoding(body);
-		if(encoding == null) encoding = "";
-		object.setAttributeValue(XModelObjectConstants.ATTR_NAME_ENCODING, encoding);
 	}
     
 	public void reloadProcess(XModelObject object) {
@@ -107,33 +101,6 @@ public class FileTilesLoader implements WebProcessLoader, TilesConstants {
 		}
 		process.setReference(null);
 		process.firePrepared();
-	}
-    
-	public boolean update(XModelObject object) throws XModelException {
-		XModelObject p = object.getParent();
-		if (p == null) return true;
-		FolderLoader fl = (FolderLoader)p;
-		String body = fl.getBodySource(FileAnyImpl.toFileName(object)).get();
-		AbstractExtendedXMLFileImpl f = (AbstractExtendedXMLFileImpl)object;
-		f.setUpdateLock();
-		try {
-			f.edit(body, true);
-		} finally {
-			f.releaseUpdateLock();
-		}
-		object.setModified(false);
-		XModelObjectLoaderUtil.updateModifiedOnSave(object);
-		return true;
-	}
-
-	public boolean save(XModelObject object) {
-		if (!object.isModified()) return true;
-		FileAnyImpl file = (FileAnyImpl)object;
-		XModelObjectLoaderUtil.setTempBody(object, file.getAsText());
-		if("yes".equals(object.get("isIncorrect"))) {
-			return true;
-		}
-		return saveLayout(object);
 	}
     
 	static boolean DO_NOT_SAVE = true;
@@ -176,22 +143,6 @@ public class FileTilesLoader implements WebProcessLoader, TilesConstants {
 			ModelPlugin.getPluginLog().logError(e);
 			return null;
 		}
-	}
-
-	public String mainObjectToString(XModelObject object) {
-		return "" + serializeMainObject(object);
-	}
-
-	public String serializeObject(XModelObject object) {
-		return serializeMainObject(object);
-	}
-
-    protected XModelObjectLoaderUtil createUtil() {
-        return new FTLoaderUtil();
-    }
-
-	public void loadFragment(XModelObject object, Element element) {
-		util.load(element, object);		
 	}
 
 }
