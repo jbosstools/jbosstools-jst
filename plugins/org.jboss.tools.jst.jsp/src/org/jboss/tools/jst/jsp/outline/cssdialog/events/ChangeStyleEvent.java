@@ -12,13 +12,19 @@ package org.jboss.tools.jst.jsp.outline.cssdialog.events;
 
 import java.util.EventObject;
 
+/**
+ * An event which indicates that a style change action occurred.
+ */
 public class ChangeStyleEvent extends EventObject {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 3260787731782837929L;
 
+	private static final long serialVersionUID = 3260787731782837929L;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param source the Component that originated the event
+	 */
     public ChangeStyleEvent(Object source) {
-	super(source);
+        super(source);
     }
 }

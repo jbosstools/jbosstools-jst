@@ -12,70 +12,130 @@ package org.jboss.tools.jst.jsp.outline.cssdialog.events;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
+/**
+ * Class is used to store an array of style attributes and support listeners.
+ */
 public class StyleAttributes {
 
     private HashMap<String, String> attributeMap;
     private ArrayList<ChangeStyleListener> listeners = new ArrayList<ChangeStyleListener>();
 
+    /**
+     * Default constructor.
+     */
     public StyleAttributes() {
-	this.attributeMap = new HashMap<String, String>();
+        this.attributeMap = new HashMap<String, String>();
     }
 
+    /**
+     * Gets attribute map.
+     *
+     * @return map of attributes
+     */
     public HashMap<String, String> getAttributeMap() {
-	return attributeMap;
+        return attributeMap;
     }
 
+    /**
+     * Sets attribute map.
+     *
+     * @param attributeMap value
+     */
     public void setAttributeMap(HashMap<String, String> attributeMap) {
-	this.attributeMap = attributeMap;
-	addNewListener();
+        this.attributeMap = attributeMap;
+        notifyListeners();
     }
 
+    /**
+     * Add ChangeStyleListener object.
+     *
+     * @param listener ChangeStyleListener object to be added
+     */
     public void addChangeStyleListener(ChangeStyleListener listener) {
-	listeners.add(listener);
+        listeners.add(listener);
     }
 
+    /**
+     * Gets an array of ChangeStyleListener object.
+     *
+     * @return an array of ChangeStyleListener object
+     */
     public ChangeStyleListener[] getChangeStyleListeners() {
-	return listeners.toArray(new ChangeStyleListener[listeners.size()]);
+        return listeners.toArray(new ChangeStyleListener[listeners.size()]);
     }
 
+    /**
+     * Remove ChangeStyleListener object passed by parameter.
+     *
+     * @param listener ChangeStyleListener object to be removed
+     */
     public void removeChangeStyleListener(ChangeStyleListener listener) {
-	listeners.remove(listener);
+        listeners.remove(listener);
     }
 
-    private void addNewListener() {
-	ChangeStyleEvent event = new ChangeStyleEvent(this);
-	for (ChangeStyleListener listener : listeners)
-	    listener.styleChanged(event);
-    }
-
+    /**
+     * Add attribute with the given name and value.
+     *
+     * @param name the name of attribute
+     * @param value the value of attribute
+     */
     public void addAttribute(String name, String value) {
-	attributeMap.put(name, value);
-	addNewListener();
+        attributeMap.put(name, value);
+        notifyListeners();
     }
 
+    /**
+     * Remove attribute with the given name.
+     *
+     * @param name the name of attribute to be removed
+     */
     public void removeAttribute(String name) {
-	attributeMap.remove(name);
-	addNewListener();
+        attributeMap.remove(name);
+        notifyListeners();
     }
 
+    /**
+     * @see java.util.HashMap#entrySet()
+     */
     public Set<Entry<String, String>> entrySet() {
-	return attributeMap.entrySet();
+        return attributeMap.entrySet();
     }
 
+    /**
+     * Get attribute value with the given name.
+     *
+     * @param name the name of attribute to be returned
+     * @return attribute value
+     */
     public String getAttribute(String name) {
-	return attributeMap.get(name);
+        return attributeMap.get(name);
     }
 
+    /**
+     * @see java.util.HashMap#keySet()
+     */
     public Set<String> keySet() {
-	return attributeMap.keySet();
-    }
-    
-    public void clear() {
-	attributeMap.clear();
-	addNewListener();
+        return attributeMap.keySet();
     }
 
+    /**
+     * Clear cache of attributes.
+     */
+    public void clear() {
+        attributeMap.clear();
+        notifyListeners();
+    }
+
+    /**
+     * Method is used to notify all subscribed listeners about any changes within style attribute map.
+     */
+    private void notifyListeners() {
+        ChangeStyleEvent event = new ChangeStyleEvent(this);
+        for (ChangeStyleListener listener : listeners) {
+            listener.styleChanged(event);
+        }
+    }
 }

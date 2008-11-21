@@ -12,15 +12,23 @@ package org.jboss.tools.jst.jsp.outline.cssdialog.common;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.wst.css.core.internal.provisional.document.ICSSNode;
+import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
+import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleSheet;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParser;
 
@@ -275,15 +283,76 @@ public class Util {
 	 *
 	 * @return IProject object
 	 */
-	public static IProject getCurrentProject() {
-		IEditorPart editor = JspEditorPlugin.getDefault().getWorkbench()
-				.getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		IEditorInput input = editor.getEditorInput();
-		IProject project = null;
-		if (input instanceof IFileEditorInput) {
-			IFile file = ((IFileEditorInput) input).getFile();
-			project = file.getProject();
+	public static IResource getCurrentProject() {
+		IResource result = null;
+		IWorkbenchPage page = JspEditorPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		if (page != null && page.getActiveEditor() != null) {
+			IEditorPart editor = page.getActiveEditor();
+			IEditorInput input = editor.getEditorInput();
+			if (input instanceof IFileEditorInput) {
+				IFile file = ((IFileEditorInput) input).getFile();
+				result = file.getProject();
+			}
+		} else {
+			result = ResourcesPlugin.getWorkspace().getRoot();
 		}
-		return project;
+		return result;
+	}
+
+	/**
+	 * Get current opened CSS file. If file is not CSS file - return null instead.
+	 *
+	 * @return IFile CSS file
+	 */
+	public static IFile getActiveCssFile() {
+		IWorkbenchPage page = JspEditorPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		if (page != null && page.getActiveEditor() != null) {
+			IEditorInput input = page.getActiveEditor().getEditorInput();
+			if (input instanceof IFileEditorInput) {
+				IFile file = ((IFileEditorInput) input).getFile();
+				if (file.getName().toLowerCase().endsWith("css")) {
+					return file;
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 *
+	 */
+	public static String getActivePageCSSSelectorIfAny() {
+		IWorkbenchPage page = JspEditorPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		ISelection selection = page.getSelection();
+		String sText = null;
+		if (selection instanceof IStructuredSelection) {
+			IStructuredSelection ss = (IStructuredSelection)selection;
+			for (Iterator iterator = ss.iterator(); iterator.hasNext();) {
+				Object node = iterator.next();
+				if (node instanceof ICSSNode) {
+					return getSelector((ICSSNode)node);
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 *
+	 */
+	private static String getSelector(ICSSNode node) {
+		if (node != null) {
+			short nodeType = node.getNodeType();
+			if (nodeType == ICSSNode.STYLESHEET_NODE) {
+				ICSSStyleSheet styleSheet = (ICSSStyleSheet) node;
+				return getSelector(styleSheet.getFirstChild());
+			} else if (nodeType == ICSSNode.STYLERULE_NODE) {
+				ICSSStyleRule styleRule = (ICSSStyleRule) node;
+				return styleRule.getSelectorText();
+			} else {
+				return getSelector(node.getParentNode());
+			}
+		}
+		return null;
 	}
 }

@@ -157,7 +157,9 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 				} else {
 					if (namesLow.contains(attrName.toLowerCase())) continue;
 				}
-				if(valueHelper.isAvailable(getQuery(attrName)) || attrName.equals("style")) {
+				if(valueHelper.isAvailable(getQuery(attrName))
+						|| attrName.equals("style")
+						|| attrName.equals("class")) {
 					descriptor = createJSPPropertyDescriptor(d, attrName, false);
 				} else {
 					descriptor = createTextPropertyDescriptor(attrName, CATEGORY_ATTRIBUTES, 0);

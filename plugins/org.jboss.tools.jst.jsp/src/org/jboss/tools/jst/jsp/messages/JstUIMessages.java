@@ -46,6 +46,7 @@ public class JstUIMessages extends NLS {
 	public static String CSS_CLASS_DIALOG_FILE_LABEL;
 	public static String CSS_BROWSE_BUTTON_TOOLTIP;
 	public static String CSS_CLASS_DIALOG_STYLE_CLASS_LABEL;
+	public static String CSS_CLEAR_STYLE_SHEET;
 	public static String ADD_FONT_FAMILY_TIP;
 	public static String REMOVE_FONT_FAMILY_TIP;
 	public static String FONT_SIZE;
@@ -86,4 +87,6 @@ public class JstUIMessages extends NLS {
 	public static String COLOR_TIP;
 	public static String TEXT_DECORATION;
 	public static String TEXT_ALIGN;
+	public static String BUTTON_CLEAR;
+	public static String PREVIEW_SHEET_TAB_NAME;
 }

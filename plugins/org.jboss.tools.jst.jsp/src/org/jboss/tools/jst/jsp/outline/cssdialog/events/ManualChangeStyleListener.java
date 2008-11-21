@@ -11,9 +11,9 @@
 package org.jboss.tools.jst.jsp.outline.cssdialog.events;
 
 /**
- * Defines an object which listens for ChangeStyleEvent. 
+ * Defines an object which listens for ManualChangeStyleEvent.
  */
-public interface ChangeStyleListener  {
+public interface ManualChangeStyleListener  {
 
 	/**
 	 * Invoked when the target of the listener has changed its state.

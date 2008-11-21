@@ -10,27 +10,37 @@
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.outline.cssdialog;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -39,52 +49,164 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 import org.eclipse.ui.model.BaseWorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
+import org.jboss.tools.common.model.ui.widgets.Split;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSModel;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.FileExtensionFilter;
+import org.jboss.tools.jst.jsp.outline.cssdialog.common.Selector;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Util;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.ChangeStyleEvent;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.ChangeStyleListener;
+import org.jboss.tools.jst.jsp.outline.cssdialog.events.ManualChangeStyleListener;
+import org.jboss.tools.jst.jsp.outline.cssdialog.events.MessageDialogEvent;
+import org.jboss.tools.jst.jsp.outline.cssdialog.events.MessageDialogListener;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.StyleAttributes;
 
 /**
  * This dialog represents CSSClass dialog.
  */
-public class CSSClassDialog extends Dialog {
+public class CSSClassDialog extends TitleAreaDialog implements MouseListener, FocusListener {
 
-    final static int MIN_HEIGHT_FOR_BROWSER = 60;
+	// TODO: take out to the property manager file
+    public final static String WIZARD_TITLE = "CSS Class";
+    public final static String WIZARD_DESCRIPTION = "Create New CSS Class.";
+    public final static String EMPTY_CSS_FILE_PATH_MESSAGE = "Choose any CSS file";
+    public final static String EMPTY_STYLE_CLASS_MESSAGE = "Style class is empty";
 
-    final static String[] fileExtensions = { "css" };  //$NON-NLS-1$
+    private static final String CSS_FILE_EXTENTION = "css"; //$NON-NLS-1$
+    final static String[] fileExtensions = { CSS_FILE_EXTENTION };
     final static String SKIP_FIRST_CHAR = "."; //$NON-NLS-1$
 
+    private Composite browserContainer = null;
     private Browser browser = null;
+    private Text textBrowser = null;
+    private String previewBrowserValue = Constants.TEXT_FOR_PREVIEW;
+
     private StyleComposite styleComposite = null;
     private StyleAttributes styleAttributes = null;
+    // css file path
     private Text text;
-    private IFile file;
+    // css style classes
     private Combo classCombo;
+
+    // model is the core of the CSS Class Dialog, it manages style attributes 
     private CSSModel cssModel;
-    private String selectorName;
-    private boolean allProject;
+
+    // file is "current" in case of the following priority order:
+    // 	1	-	this is selected css file in eclipse project tree
+    //	2	-	this is opened and active css file
+    private IFile currentFile;
+    private String currentClassStyle = null;
+
+	// workbench selection when the wizard was started
+	protected IStructuredSelection selection;
+
+	private boolean styleChanged = false;
+
+	// Status variables for the possible errors on this page.
+	// 1. timeStatus holds an error if CSS file is not specified
+	private IStatus filePathStatus = null;
+	// 2. holds an error if the destination class style is empty
+	private IStatus classNameStatus = null;
+
+	// an array of subscribed message dialog listener 
+    private ArrayList<MessageDialogListener> errorListeners = new ArrayList<MessageDialogListener>();
+
+    private final boolean callFromWizard;
 
     /**
      * Constructor.
      *
      * @param parentShell Shell object
      * @param allProject (if allProject is true - browse css file in all projects, else only in current project)
+     * @param callFromWizard indicates if CSS dialog is created within Wizard page
      */
-    public CSSClassDialog(Shell parentShell, boolean allProject) {
+    public CSSClassDialog(Shell parentShell, IStructuredSelection selection, boolean callFromWizard) {
         super(parentShell);
-        this.allProject = allProject;
+        
         setShellStyle(getShellStyle() | SWT.RESIZE | SWT.MAX | SWT.APPLICATION_MODAL);
+
+        filePathStatus = new Status(IStatus.ERROR, "not_used", 0, EMPTY_CSS_FILE_PATH_MESSAGE, null); //$NON-NLS-1$
+        classNameStatus = new Status(IStatus.ERROR, "not_used", 0, EMPTY_STYLE_CLASS_MESSAGE, null); //$NON-NLS-1$
+
         styleAttributes = new StyleAttributes();
+        this.callFromWizard = callFromWizard;
+    	this.selection = selection;
+    	init();
+    }
+
+    /**
+     * Initialize method.
+     */
+    private void init() {
+		if (selection != null && !selection.isEmpty()) {
+			for (Iterator<?> iterator = selection.iterator(); iterator.hasNext();) {
+				Object element = iterator.next();
+				if (element instanceof IResource) {
+					if (element instanceof IFile) {
+						if (((IFile) element).getName().toLowerCase().endsWith(CSS_FILE_EXTENTION)) {
+							currentFile = (IFile)element;
+						}
+					}
+				}
+			}
+		}
+		// if any CSS file is currently opened and has active page status this method should return style class
+		// within this file where cursor is located
+		if (currentFile == null) {
+			currentFile = Util.getActiveCssFile();
+			currentClassStyle = Util.getActivePageCSSSelectorIfAny();
+		}
+    }
+
+    /**
+     * Sets current style class value.
+     *
+     * @param currentClassStyle String value
+     */
+    public void setCurrentStyleClass(String currentClassStyle) {
+    	if (currentClassStyle != null && !currentClassStyle.equals(Constants.EMPTY)) {
+    		String[] styleClasses = currentClassStyle.split("\\s++"); //$NON-NLS-1$
+    		StringBuffer sb = new StringBuffer();
+    		for (int i = 0; i < styleClasses.length; i++) {
+    			String value = styleClasses[i];
+    			// check if first symbol doesn't specify some special CSS symbols
+				if (!value.startsWith("#")) { //$NON-NLS-1$
+					sb.append(SKIP_FIRST_CHAR);
+				}
+				sb.append(value);
+				if (i != (styleClasses.length - 1)) {
+					sb.append(Constants.WHITE_SPACE);
+				}
+			}
+	    	this.currentClassStyle = sb.toString().trim();
+    	}
+    }
+
+    /**
+     * @see org.eclipse.jface.dialogs.Dialog#createDialogArea(Composite)
+     */
+    @Override
+    protected Control createDialogArea(final Composite parent) {
+        final Composite composite = (Composite) super.createDialogArea(parent);
+        return createDialogComposite(composite);
+    }
+
+    /**
+     * @see org.eclipse.jface.dialogs.Dialog#createButtonsForButtonBar(Composite)
+     */
+    @Override
+    protected void createButtonsForButtonBar(Composite parent) {
+    	super.createButtonsForButtonBar(parent);
+    	updateOKButtonState();
     }
 
     /**
@@ -94,14 +216,28 @@ public class CSSClassDialog extends Dialog {
      * @return eclipse Control object
      */
     public Control createDialogComposite(Composite composite) {
-        GridLayout layout = new GridLayout();
+        if (!this.callFromWizard) {
+            setTitle(WIZARD_TITLE);
+            setMessage(WIZARD_DESCRIPTION);
+        }
+
+		Split split = new Split(composite, SWT.VERTICAL);
+
+    	GridLayout layout = new GridLayout();
         layout.numColumns = 1;
         composite.setLayout(layout);
-        browser = new Browser(composite, SWT.BORDER);
+
+        // initialize browser container
+        browserContainer = getCompositeElement(split);
+        createBrowserComponent();
 
         /* ============================================= */
-        Composite classComposite = new Composite(composite, SWT.BORDER);
-        GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, false);
+        Composite downSplitPane = getCompositeElement(split);
+        Color veryLightGray = new Color(null, 127, 127, 127);
+        downSplitPane.setForeground(veryLightGray);
+
+        Composite classComposite = new Composite(downSplitPane, SWT.BORDER);
+        GridData gridData = new GridData(GridData.FILL, GridData.BEGINNING, true, false);
         classComposite.setLayoutData(gridData);
 
         final GridLayout gridLayout = new GridLayout();
@@ -112,37 +248,25 @@ public class CSSClassDialog extends Dialog {
         label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
         label.setText(JstUIMessages.CSS_CLASS_DIALOG_FILE_LABEL);
 
+        // Text field contains path to the CSS file
         text = new Text(classComposite, SWT.BORDER);
         text.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
+        text.setEditable(false);
         text.addModifyListener(new ModifyListener() {
-                public void modifyText(ModifyEvent e) {
-                    IResource res = null;
-                    if (allProject) {
-                        IWorkspace workspace = ResourcesPlugin.getWorkspace();
-                        res = workspace.getRoot().findMember(text.getText());
-                    } else {
-                        IProject project = Util.getCurrentProject();
-
-                        if (project != null) {
-                            res = project.findMember(text.getText());
-                        }
-                    }
-
-                    if (res != null) {
-                        if (res instanceof IFile) {
-                            file = (IFile) res;
-                            cssModel = new CSSModel(file);
-                            classCombo.removeAll();
-
-                            List<String> selectors = cssModel.getSelectors();
-
-                            for (String selector : selectors) {
-                                classCombo.add(selector);
-                            }
-                        }
-                    }
-                }
-            });
+    		@Override
+            public void modifyText(ModifyEvent e) {
+    			String cssFile = text.getText().trim();
+    			// Initialize a variable with the no error status
+				filePathStatus = new Status(IStatus.ERROR, "not_used", 0, EMPTY_CSS_FILE_PATH_MESSAGE, null); //$NON-NLS-1$
+    			if (cssFile != null && !cssFile.equals(Constants.EMPTY)) {
+        			filePathStatus = new Status(IStatus.OK, "not_used", 0, WIZARD_DESCRIPTION, null); //$NON-NLS-1$
+    			}
+    			// show corresponding message
+    			IStatus status = findMostSevere();
+    			notifyListeners(text, status);
+    			applyToStatusLine(status);
+            }
+        });
 
         Button button = new Button(classComposite, SWT.PUSH);
         button.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
@@ -159,30 +283,50 @@ public class CSSClassDialog extends Dialog {
             });
         button.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
-                IAdaptable project = ResourcesPlugin.getWorkspace();
+    			IResource project = Util.getCurrentProject();
 
-                if (!allProject) {
-                    project = Util.getCurrentProject();
-                }
+    			ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(getShell(),
+    					new WorkbenchLabelProvider(), new BaseWorkbenchContentProvider());
+    			dialog.addFilter(new FileExtensionFilter(fileExtensions));
+    			dialog.setTitle(JstUIMessages.CSS_FILE_SELECT_DIALOG_TITLE);
+    			dialog.setMessage(JstUIMessages.CSS_FILE_SELECT_DIALOG_LABEL);
+    			dialog.setInput(project);
+    			dialog.setAllowMultiple(false);
+    			dialog.setDoubleClickSelects(false);
+    			dialog.setEmptyListMessage(JstUIMessages.CSS_FILE_SELECT_DIALOG_EMPTY_MESSAGE);
 
-                ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(getShell(),
-                        new WorkbenchLabelProvider(), new BaseWorkbenchContentProvider());
-                dialog.addFilter(new FileExtensionFilter(fileExtensions));
-                dialog.setTitle(JstUIMessages.CSS_FILE_SELECT_DIALOG_TITLE);
-                dialog.setMessage(JstUIMessages.CSS_FILE_SELECT_DIALOG_LABEL);
-                dialog.setInput(project);
-                dialog.setAllowMultiple(false);
-                dialog.setEmptyListMessage(JstUIMessages.CSS_FILE_SELECT_DIALOG_EMPTY_MESSAGE);
-
-                if (dialog.open() == Window.OK) {
-                    IResource res = (IResource) dialog.getFirstResult();
-
-                    if (allProject) {
-                        text.setText(res.getFullPath().toOSString());
-                    } else {
-                        text.setText(res.getProjectRelativePath().toOSString());
-                    }
-                }
+    			if (dialog.open() == Window.OK) {
+    				// make some important saving actions
+            		if (styleChanged && currentFile != null) {
+            			MessageBox messageBox = new MessageBox(getParentShell(), SWT.YES | SWT.NO | SWT.ICON_QUESTION);
+            			messageBox.setText("Save CSS file");
+            			messageBox.setMessage("'" + currentFile + "'" + //$NON-NLS-1$ //$NON-NLS-2$
+            					" CSS file has been changed.\nWould you like to save changes?");
+            			int result = messageBox.open();
+            			if (result == SWT.YES) {
+            				saveChanges();
+            			} else {
+        			    	styleComposite.closePreview(false);
+        			    	if (cssModel != null) {
+        			    		cssModel.releaseModel();
+        			    	}
+        		            updateStyleComposite();
+        		        	styleComposite.updatePreviewCssFile(currentFile);
+            			}
+            		}
+        			// open new CSS file and initialize dialog
+    				IResource res = (IResource) dialog.getFirstResult();
+    				if (res instanceof IFile) {
+    					boolean useRelativePath = true;
+    					if (project instanceof IWorkspaceRoot) {
+    						useRelativePath = false;
+    					}
+    					currentFile = (IFile)res;
+    					initCSSModel(currentFile, useRelativePath);
+    					updateOKButtonState();
+    				}
+        			styleChanged = false;
+        		}
             }
         });
 
@@ -192,64 +336,316 @@ public class CSSClassDialog extends Dialog {
 
         gridData = new GridData(GridData.FILL, GridData.CENTER, true, false);
         gridData.horizontalSpan = 2;
+
+//        classCombo = new ComboViewer(classComposite, SWT.BORDER);
         classCombo = new Combo(classComposite, SWT.BORDER);
         classCombo.setLayoutData(gridData);
+        classCombo.setEnabled(false);
+//        classCombo.setLabelProvider(new LabelProvider() {
+//        		@Override
+//        		public String getText(Object element) {
+//        			return ((Selector)element).getValue();
+//        		}
+//        });
+//        classCombo.addSelectionChangedListener(new ISelectionChangedListener() {
+//        	public void widgetSelected(SelectionEvent e) {
+//    			if (currentFile != null && !currentFile.equals(Constants.EMPTY)) {
+//            		if (styleChanged) {
+//            			if (currentClassStyle != null && !currentClassStyle.equals(Constants.EMPTY)) {
+//            				String newStyle = styleComposite.updateStyle();
+//            				if (newStyle != null) {
+//            					cssModel.setCSS(currentClassStyle, newStyle);
+//            					// update ComboBox element list
+//            					int currentIndex = classCombo.indexOf(currentClassStyle);
+//            					if (currentIndex == -1) {
+//            						classCombo.add(currentClassStyle);
+//            					}
+//            				}
+//            			}
+//        			}
+//            		// update current class style value
+//            		currentClassStyle = classCombo.getText();
+//            		updateStyleComposite();
+//            		updateOKButtonState();
+//            		styleChanged = false;
+//        		} else {
+//        			currentClassStyle = classCombo.getText();
+//        		}
+//        	}
+//			@Override
+//			public void selectionChanged(SelectionChangedEvent event) {
+//    			if (currentFile != null && !currentFile.equals(Constants.EMPTY)) {
+//            		if (styleChanged) {
+//            			if (currentClassStyle != null && !currentClassStyle.equals(Constants.EMPTY)) {
+//            				String newStyle = styleComposite.updateStyle();
+//            				if (newStyle != null) {
+//            					cssModel.setCSS(currentClassStyle, newStyle);
+//            					// update ComboBox element list
+//            					int currentIndex = classCombo.getCombo().indexOf(currentClassStyle);
+//            					if (currentIndex == -1) {
+//            						classCombo.add(currentClassStyle);
+//            					}
+//            				}
+//            			}
+//        			}
+//            		// update current class style value
+//            		currentClassStyle = classCombo.getInput() != null ? classCombo.getInput().toString() : null;
+//            		updateStyleComposite();
+//            		updateOKButtonState();
+//            		styleChanged = false;
+//        		} else {
+//        			currentClassStyle = classCombo.getInput().toString();
+//        		}
+//			}
+//        });
 
-        classCombo.addSelectionListener(new SelectionListener() {
-                public void widgetDefaultSelected(SelectionEvent e) {
-                }
-                public void widgetSelected(SelectionEvent e) {
-                    String style = cssModel.getStyle(classCombo.getText());
-                    classCombo.setToolTipText(cssModel.getCSSText(classCombo.getText()));
-                    styleComposite.recreateStyleComposite(style);
-                }
-            });
+        classCombo.addSelectionListener(new SelectionAdapter() {
+        	public void widgetSelected(SelectionEvent e) {
+    			if (currentFile != null && !currentFile.equals(Constants.EMPTY)) {
+            		if (styleChanged) {
+            			if (currentClassStyle != null && !currentClassStyle.equals(Constants.EMPTY)) {
+            				String newStyle = styleComposite.updateStyle();
+            				if (newStyle != null) {
+            					cssModel.setCSS(currentClassStyle, newStyle);
+            					// update ComboBox element list
+            					int currentIndex = classCombo.indexOf(currentClassStyle);
+            					if (currentIndex == -1) {
+            						classCombo.add(currentClassStyle);
+            					}
+            				}
+            			}
+        			}
+            		// update current class style value
+            		currentClassStyle = classCombo.getText();
+            		updateStyleComposite();
+            		updateOKButtonState();
+            		styleChanged = false;
+        		} else {
+        			currentClassStyle = classCombo.getText();
+        		}
+        	}
+        });
+        classCombo.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// update current class style value
+				currentClassStyle = classCombo.getText().trim();
+				updateOKButtonState();
+			}
+        });
+    	classCombo.addModifyListener(new ModifyListener() {
+    		@Override
+            public void modifyText(ModifyEvent e) {
+    			String cssClass = classCombo.getText().trim();
+    			// Initialize a variable with the no error status
+				classNameStatus = new Status(IStatus.ERROR, "not_used", 0, EMPTY_STYLE_CLASS_MESSAGE, null); //$NON-NLS-1$
+    			if (cssClass != null && !cssClass.equals(Constants.EMPTY)) {
+        			classNameStatus = new Status(IStatus.OK, "not_used", 0, WIZARD_DESCRIPTION, null); //$NON-NLS-1$
+    			}
+    			// show corresponding message
+    			IStatus status = findMostSevere();
+    			notifyListeners(classCombo, status);
+    			applyToStatusLine(status);
+            }
+        });
 
         /* ============================================ */
         styleAttributes.addChangeStyleListener(new ChangeStyleListener() {
                 public void styleChanged(ChangeStyleEvent event) {
-                    String styleForSpan = Constants.EMPTY;
-                    String html = Constants.EMPTY;
-
-                    Set<String> keySet = styleAttributes.keySet();
-                    for (String key : keySet) {
-                        styleForSpan += (key + Constants.COLON + styleAttributes.getAttribute(key) +
-                        		Constants.SEMICOLON);
-                    }
-
-                    html = Constants.OPEN_DIV_TAG + styleForSpan + Constants.TEXT_FOR_PREVIEW +
-                        Constants.CLOSE_DIV_TAG;
-                    browser.setText(html);
+                	if (!browser.isDisposed()) {
+                		browser.setText(getTextForBrowser());
+                	}
+                	if (cssModel != null && currentClassStyle != null) {
+                        classCombo.setToolTipText(cssModel.getCSSText(currentClassStyle));
+                	}
                 }
             });
-        styleComposite = new StyleComposite(composite, styleAttributes, Constants.EMPTY);
+        // create style composite component
+        styleComposite = new StyleComposite(downSplitPane, styleAttributes, Constants.EMPTY);
+        styleComposite.addManualChangeStyleListener(new ManualChangeStyleListener() {
+            public void styleChanged(ChangeStyleEvent event) {
+           		styleChanged = true;
+           		if (currentClassStyle != null && !currentClassStyle.equals(Constants.EMPTY)
+        				&& currentFile != null && !currentFile.equals(Constants.EMPTY)) {
+           			String newStyle = styleComposite.updateStyle();
+           			if (newStyle != null) {
+           				cssModel.setCSS(currentClassStyle, newStyle);
+           			}
+           		}
+            }
+        });
 
-        gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
-        gridData.minimumHeight = MIN_HEIGHT_FOR_BROWSER;
-        browser.setLayoutData(gridData);
+        // add clear button
+        Button clearButton = new Button(downSplitPane, SWT.PUSH);
+        clearButton.setText(JstUIMessages.BUTTON_CLEAR);
+        clearButton.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
+        clearButton.setToolTipText(JstUIMessages.CSS_CLEAR_STYLE_SHEET);
+        clearButton.addSelectionListener(new SelectionAdapter() {
+            public void widgetSelected(SelectionEvent event) {
+                styleComposite.clearStyleComposite();
+                styleChanged = true;
+            }
+        });
+
+        if (currentFile != null) {
+        	initCSSModel(currentFile, true);
+        } else if (currentClassStyle != null) {
+        	classCombo.setText(currentClassStyle);
+        }
+
+        split.setWeights(new int[]{15, 85});
+        split.setLayoutData(new GridData(GridData.FILL, GridData.BEGINNING, true, true));
 
         return composite;
     }
 
-    public void saveChanges() {
-        styleComposite.updateStyle();
+    /**
+     * Initialize CSS model with active opened CSS file.
+     *
+     * @param file IFile object
+     * @param useRelativePathPath
+     */
+    private void initCSSModel(IFile file, boolean useRelativePathPath) {
+        if (file != null) {
+        	// create CSS Model
+        	cssModel = new CSSModel(file);
+        	classCombo.setEnabled(true);
+            classCombo.removeAll();
+            boolean useCurrentStyleSettings = false;
+            if (text.getText() == null || text.getText().equals(Constants.EMPTY)) {
+            	useCurrentStyleSettings = true;
+            }
+            if (useRelativePathPath) {
+            	text.setText(file.getProjectRelativePath().toOSString());
+            } else {
+            	text.setText(file.getFullPath().toOSString());
+            }
 
-        String newStyle = styleComposite.getNewStyle();
-        cssModel.setCSS(classCombo.getText(), newStyle);
-        cssModel.saveModel();
-    }
+            List<Selector> selectors = cssModel.getSelectors();
+            int selectedIndex = -1;
+            for (int i = 0; i < selectors.size(); i++) {
+            	Selector value = selectors.get(i);
+            	classCombo.add(value.getValue());
+            	if (currentClassStyle != null && currentClassStyle.equals(value.getValue())) {
+            		selectedIndex = i;
+            	}
+            }
+//            if (useCurrentStyleSettings && currentClassStyle != null && selectedIndex == -1) {
+//            	classCombo.setText(currentClassStyle);
+//            } else {
+//            	classCombo.select(selectedIndex);
+//            }
+//            if (currentClassStyle != null) {
+//            	classCombo.setInput(currentClassStyle);
+//            }
+            classCombo.select(selectedIndex);
 
-    public String getSelectorName() {
-        return selectorName;
+            updateStyleComposite();
+        	styleComposite.updatePreviewCssFile(currentFile);
+        }
     }
 
     /**
-     * @see org.eclipse.jface.dialogs.Dialog#createDialogArea(Composite)
+     * Method return the most serious error occurs on the page and that should be displayed.
+     *
+     * @return IStatus object
      */
-    @Override
-    protected Control createDialogArea(final Composite parent) {
-        final Composite composite = (Composite) super.createDialogArea(parent);
-        return createDialogComposite(composite);
+	private IStatus findMostSevere() {
+		if (filePathStatus.matches(IStatus.ERROR)) {
+			return filePathStatus;
+		}
+		if (classNameStatus.matches(IStatus.ERROR)) {
+			return classNameStatus;
+		}
+		if (filePathStatus.getSeverity() > classNameStatus.getSeverity()) {
+			return filePathStatus;
+		}
+		else return classNameStatus;	
+	}
+
+    /**
+     * This method takes affect to OK button when dialog is opened in "dialog" mode and not in "wizard".
+     * In case of "wizard" mode OK button is not available.
+     */
+    private void updateOKButtonState() {
+    	Button okButton = getButton(IDialogConstants.OK_ID);
+    	if (okButton != null) {
+    		if (currentClassStyle == null || currentClassStyle.equals(Constants.EMPTY) || currentFile == null) {
+    			okButton.setEnabled(false);
+    		} else {
+    			okButton.setEnabled(true);
+    		}
+    	}
+    }
+
+    /**
+     * Method is used to create browser component to display preview html.
+     */
+    private void createBrowserComponent() {
+        GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
+        browser = new Browser(browserContainer, SWT.BORDER | SWT.MOZILLA);
+        browser.setText(getTextForBrowser());
+        browser.addMouseListener(this);
+        browser.setLayoutData(gridData);
+    }
+
+    /**
+     * Update style composite component in accordance with the attributes of selected CSS selector.
+     */
+    private void updateStyleComposite() {
+        String style = cssModel.getStyle(currentClassStyle);
+//        classCombo.setToolTipText(cssModel.getCSSText(currentClassStyle));
+        styleComposite.recreateStyleComposite(style);
+    }
+
+    /**
+     * Method is used to build html body that is appropriate to browse.
+     *
+     * @return String html text representation
+     */
+    private String getTextForBrowser() {
+        String styleForSpan = Constants.EMPTY;
+        Set<String> keySet = styleAttributes.keySet();
+        for (String key : keySet) {
+            styleForSpan += (key + Constants.COLON + styleAttributes.getAttribute(key) + Constants.SEMICOLON);
+        }
+        String html = Constants.OPEN_DIV_TAG + styleForSpan + "\">" + previewBrowserValue + Constants.CLOSE_DIV_TAG; //$NON-NLS-1$
+
+        return html;
+    }
+
+    /**
+     * Create container that take up 2 cells and contains fontSizeCombo and extFontSizeCombo elements.
+     */
+    private Composite getCompositeElement(Composite parent) {
+        GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
+        GridLayout gridLayoutTmp = new GridLayout();
+        gridLayoutTmp.marginHeight = 0;
+        gridLayoutTmp.marginWidth = 0;
+        Composite classComposite = new Composite(parent, SWT.FILL);
+        classComposite.setLayout(gridLayoutTmp);
+        classComposite.setLayoutData(gridData);
+
+        return classComposite;
+    }
+
+    /**
+     * Method should be called in case of dialog closure operation.
+     */
+    public void saveChanges() {
+    	String newStyle = styleComposite.updateStyle();
+        cssModel.setCSS(currentClassStyle, newStyle);
+        cssModel.saveModel();
+    	styleComposite.closePreview(true);
+    }
+
+    /**
+     * Gets current selected style class value.
+     *
+     * @return selector name
+     */
+    public String getSelectorName() {
+        return currentClassStyle;
     }
 
     /**
@@ -265,18 +661,150 @@ public class CSSClassDialog extends Dialog {
     }
 
     /**
-     * @see org.eclipse.jface.dialogs.Dialog#okPressed()
+     * This method close the dialog.
+     *
+     * @return true if dialog was closed, false - otherwise
      */
-    @Override
-    protected void okPressed() {
-        saveChanges();
-
-        String sel = classCombo.getText();
-        if (sel.trim().startsWith(SKIP_FIRST_CHAR)) {
-            sel = sel.substring(1);
-        }
-
-        selectorName = sel;
-        super.okPressed();
+    public boolean closeDialog() {
+    	setReturnCode(Window.CANCEL);
+    	return close();
     }
+
+    /**
+     * @see org.eclipse.jface.dialogs.Dialog#close()
+     */
+    public boolean close() {
+    	int code = getReturnCode();
+    	switch (code) {
+			case OK:
+		        saveChanges();
+		        super.okPressed();
+				break;
+			case CANCEL:
+			default:
+		    	// make some closure operation
+		    	styleComposite.closePreview(false);
+		    	if (cssModel != null) {
+		    		cssModel.releaseModel();
+		    	}
+		}
+    	return super.close();
+    }
+    
+	/**
+	 * @see org.eclipse.swt.events.MouseListener#mouseDoubleClick(org.eclipse.swt.events.MouseEvent)
+	 */
+	@Override
+	public void mouseDoubleClick(MouseEvent e) {
+		if (e.widget == browser) {
+	        browser.removeMouseListener(this);
+	        browser.dispose();
+	        // create Text area component instead of HTML Browser
+	        GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
+	        textBrowser = new Text(browserContainer, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+	        textBrowser.setText(previewBrowserValue);
+	        textBrowser.addFocusListener(this);
+	        textBrowser.setLayoutData(gridData);
+	        textBrowser.setEditable(true);
+	        textBrowser.setFocus();
+		}
+		browserContainer.layout();
+	}
+
+	/**
+	 * @see org.eclipse.swt.events.FocusListener#focusLost(org.eclipse.swt.events.FocusEvent)
+	 */
+	@Override
+	public void focusLost(FocusEvent e) {
+		if (e.widget == textBrowser) {
+			previewBrowserValue = textBrowser.getText();
+			textBrowser.removeFocusListener(this);
+			textBrowser.dispose();
+			// create Browse component instead of text area
+			createBrowserComponent();
+		}
+		browserContainer.layout();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.swt.events.MouseListener#mouseDown(org.eclipse.swt.events.MouseEvent)
+	 */
+	@Override
+	public void mouseDown(MouseEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.swt.events.MouseListener#mouseUp(org.eclipse.swt.events.MouseEvent)
+	 */
+	@Override
+	public void mouseUp(MouseEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.swt.events.FocusListener#focusGained(org.eclipse.swt.events.FocusEvent)
+	 */
+	@Override
+	public void focusGained(FocusEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+    /**
+     * Add MessageDialogListener object.
+     *
+     * @param listener MessageDialogListener object to be added
+     */
+    public void addMessageDialogListener(MessageDialogListener listener) {
+        errorListeners.add(listener);
+    }
+
+    /**
+     * Remove ManualChangeStyleListener object passed by parameter.
+     *
+     * @param listener ManualChangeStyleListener object to be removed
+     */
+    public void removeMessageDialogListener(MessageDialogListener listener) {
+    	errorListeners.remove(listener);
+    }
+
+    /**
+     * Method is used to notify all subscribed listeners about possible any errors on the page.
+     */
+    private void notifyListeners(Object source, IStatus operationStatus) {
+    	MessageDialogEvent event = new MessageDialogEvent(source, operationStatus);
+        for (MessageDialogListener listener : errorListeners) {
+            listener.throwMessage(event);
+        }
+    }
+
+	/**
+	 * Applies the status to the status line of a dialog page.
+	 */
+	private void applyToStatusLine(IStatus status) {
+		if (!callFromWizard) {
+			String message= status.getMessage();
+			if (message.length() == 0) {
+				message = null;
+			}
+			switch (status.getSeverity()) {
+				case IStatus.OK:
+					setErrorMessage(null);
+					setMessage(message);
+					break;
+				case IStatus.WARNING:
+					setErrorMessage(null);
+					setMessage(message, WizardPage.WARNING);
+					break;
+				case IStatus.INFO:
+					setErrorMessage(null);
+					setMessage(message, WizardPage.INFORMATION);
+					break;			
+				default:
+					setErrorMessage(message);
+					setMessage(null);
+					break;		
+			}
+		}
+	}
 }

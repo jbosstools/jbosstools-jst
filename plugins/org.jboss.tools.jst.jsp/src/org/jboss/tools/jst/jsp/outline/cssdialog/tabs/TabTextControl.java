@@ -42,6 +42,8 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSConstants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.ImageCombo;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Util;
+import org.jboss.tools.jst.jsp.outline.cssdialog.events.ChangeStyleEvent;
+import org.jboss.tools.jst.jsp.outline.cssdialog.events.ManualChangeStyleListener;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.StyleAttributes;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParser;
 
@@ -65,8 +67,8 @@ public class TabTextControl extends Composite {
     private ArrayList<String> list;
     private StyleAttributes styleAttributes;
 
-    //TODO Dzmitry Sakovich
-    //private Browser browser = null;
+    private ArrayList<ManualChangeStyleListener> listeners = new ArrayList<ManualChangeStyleListener>();
+    private boolean updateDataFromStyleAttributes = false;
 
     /**
      * Constructor for creating controls
@@ -78,8 +80,6 @@ public class TabTextControl extends Composite {
         super(composite, SWT.NONE);
         this.styleAttributes = styleAttributes;
 
-        //TODO Dzmitry Sakovich 
-        //this.browser = dialog;
         final GridLayout gridLayout = new GridLayout();
         gridLayout.numColumns = numColumns;
         setLayout(gridLayout);
@@ -93,19 +93,17 @@ public class TabTextControl extends Composite {
 
         fontFamilyText = new Text(this, SWT.BORDER | SWT.SINGLE);
         fontFamilyText.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
-
         fontFamilyText.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
                     String tmp = fontFamilyText.getText();
-                    if (tmp != null) {
-                        if (tmp.trim().length() > 0) {
-                            styleAttributes.addAttribute(CSSConstants.FONT_FAMILY, tmp);
-                        } else {
-                            styleAttributes.removeAttribute(CSSConstants.FONT_FAMILY);
-                        }
+                    if (tmp != null && tmp.trim().length() > 0) {
+                    	styleAttributes.addAttribute(CSSConstants.FONT_FAMILY, tmp);
+                    } else {
+                        styleAttributes.removeAttribute(CSSConstants.FONT_FAMILY);
                     }
-                    //TODO Dzmitry Sakovich
-                    //cssDialog.setStyleForPreview();
+            		if (!updateDataFromStyleAttributes) {
+            			notifyListeners();
+            		}
                 }
             });
 
@@ -125,7 +123,6 @@ public class TabTextControl extends Composite {
         button.addSelectionListener(new SelectionAdapter() {
                 public void widgetSelected(SelectionEvent event) {
                     FontFamilyDialog dialog = new FontFamilyDialog(getShell(), fontFamilyText.getText());
-
                     if (dialog.open() == Window.OK) {
                         fontFamilyText.setText(dialog.getFontFamily());
                     }
@@ -141,19 +138,17 @@ public class TabTextControl extends Composite {
 
         colorCombo = new ImageCombo(this, SWT.BORDER);
         colorCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
-
         colorCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
                     String tmp = colorCombo.getText();
-                    if (tmp != null) {
-                        if (tmp.trim().length() > 0) {
-                            styleAttributes.addAttribute(CSSConstants.COLOR, tmp);
-                        } else {
-                            styleAttributes.removeAttribute(CSSConstants.COLOR);
-                        }
+                    if (tmp != null && tmp.trim().length() > 0) {
+                    	styleAttributes.addAttribute(CSSConstants.COLOR, tmp);
+                    } else {
+                        styleAttributes.removeAttribute(CSSConstants.COLOR);
                     }
-                    //TODO Dzmitry Sakovich
-                    //cssDialog.setStyleForPreview();
+            		if (!updateDataFromStyleAttributes) {
+            			notifyListeners();
+            		}
                 }
             });
         Set<Entry<String, String>> set = ColorParser.getInstance().getMap().entrySet();
@@ -184,7 +179,6 @@ public class TabTextControl extends Composite {
                     dlg.setText(JstUIMessages.COLOR_DIALOG_TITLE);
 
                     RGB rgb = dlg.open();
-
                     if (rgb != null) {
                         String colorStr = Util.createColorString(rgb);
                         colorCombo.setText(colorStr);
@@ -207,22 +201,18 @@ public class TabTextControl extends Composite {
 
         extFontSizeCombo = new Combo(tmpComposite, SWT.BORDER | SWT.READ_ONLY);
         extFontSizeCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
-
         extFontSizeCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
                     String fontSize = fontSizeCombo.getText().trim();
-                    if (fontSize == null) {
-                        return;
+                    if (fontSize != null && !fontSize.equals(Constants.EMPTY)) {
+                        String tmp = extFontSizeCombo.getText();
+                        if (tmp != null) {
+                            styleAttributes.addAttribute(CSSConstants.FONT_SIZE, fontSize + tmp);
+                        }
                     }
-                    if (fontSize.equals(Constants.EMPTY)) {
-                        return;
-                    }
-                    String tmp = extFontSizeCombo.getText();
-                    if (tmp != null) {
-                        styleAttributes.addAttribute(CSSConstants.FONT_SIZE, fontSize + tmp);
-                        //TODO Dzmitry Sakovich
-                        //cssDialog.setStyleForPreview();
-                    }
+            		if (!updateDataFromStyleAttributes) {
+            			notifyListeners();
+            		}
                 }
             });
         for (int i = 0; i < Constants.extSizes.length; i++) {
@@ -232,43 +222,34 @@ public class TabTextControl extends Composite {
         fontSizeCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent e) {
                     String currentText = fontSizeCombo.getText();
-
                     list = comboMap.get(CSSConstants.FONT_SIZE);
-
                     for (String str : list) {
                         if (currentText.equals(str)) {
                             extFontSizeCombo.select(0);
                             extFontSizeCombo.setEnabled(false);
                             styleAttributes.addAttribute(CSSConstants.FONT_SIZE, currentText);
-
-                            //TODO Dzmitry Sakovich
-                            //cssDialog.setStyleForPreview();
+                    		if (!updateDataFromStyleAttributes) {
+                    			notifyListeners();
+                    		}
                             return;
                         }
                     }
 
                     extFontSizeCombo.setEnabled(true);
-
                     String tmp = fontSizeCombo.getText();
-
-                    if (tmp != null) {
-                        if (tmp.trim().length() > 0) {
-                            String extFont = extFontSizeCombo.getText().trim();
-
-                            if (extFont != null) {
-                                styleAttributes.addAttribute(CSSConstants.FONT_SIZE, tmp + extFont);
-                            } else {
-                                styleAttributes.addAttribute(CSSConstants.FONT_SIZE, tmp);
-                            }
-                        } else {
-                            styleAttributes.removeAttribute(CSSConstants.FONT_SIZE);
-                        }
+                    if (tmp != null && tmp.trim().length() > 0) {
+                    	String extFont = extFontSizeCombo.getText().trim();
+                    	if (extFont != null) {
+                    		styleAttributes.addAttribute(CSSConstants.FONT_SIZE, tmp + extFont);
+                    	} else {
+                    		styleAttributes.addAttribute(CSSConstants.FONT_SIZE, tmp);
+                    	}
                     } else {
                         styleAttributes.removeAttribute(CSSConstants.FONT_SIZE);
                     }
-
-                    //TODO Dzmitry Sakovich
-                    //cssDialog.setStyleForPreview();
+            		if (!updateDataFromStyleAttributes) {
+            			notifyListeners();
+            		}
                 }
             });
         list = comboMap.get(CSSConstants.FONT_SIZE);
@@ -287,19 +268,17 @@ public class TabTextControl extends Composite {
         gridData.horizontalSpan = 2;
         fontStyleCombo = new Combo(this, SWT.BORDER);
         fontStyleCombo.setLayoutData(gridData);
-
         fontStyleCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
                     String tmp = fontStyleCombo.getText();
-                    if (tmp != null) {
-                        if (tmp.trim().length() > 0) {
-                            styleAttributes.addAttribute(CSSConstants.FONT_STYLE, tmp);
-                        } else {
-                            styleAttributes.removeAttribute(CSSConstants.FONT_STYLE);
-                        }
+                    if (tmp != null && tmp.trim().length() > 0) {
+                    	styleAttributes.addAttribute(CSSConstants.FONT_STYLE, tmp);
+                    } else {
+                        styleAttributes.removeAttribute(CSSConstants.FONT_STYLE);
                     }
-                    //TODO Dzmitry Sakovich
-                    //cssDialog.setStyleForPreview();
+            		if (!updateDataFromStyleAttributes) {
+            			notifyListeners();
+            		}
                 }
             });
         list = comboMap.get(CSSConstants.FONT_STYLE);
@@ -318,19 +297,17 @@ public class TabTextControl extends Composite {
         gridData.horizontalSpan = 2;
         fontWeigthCombo = new Combo(this, SWT.BORDER);
         fontWeigthCombo.setLayoutData(gridData);
-
         fontWeigthCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
                     String tmp = fontWeigthCombo.getText();
-                    if (tmp != null) {
-                        if (tmp.trim().length() > 0) {
-                            styleAttributes.addAttribute(CSSConstants.FONT_WEIGHT, tmp);
-                        } else {
-                            styleAttributes.removeAttribute(CSSConstants.FONT_WEIGHT);
-                        }
+                    if (tmp != null && tmp.trim().length() > 0) {
+                    	styleAttributes.addAttribute(CSSConstants.FONT_WEIGHT, tmp);
+                    } else {
+                        styleAttributes.removeAttribute(CSSConstants.FONT_WEIGHT);
                     }
-                    //TODO Dzmitry Sakovich
-                    //cssDialog.setStyleForPreview();
+            		if (!updateDataFromStyleAttributes) {
+            			notifyListeners();
+            		}
                 }
             });
         list = comboMap.get(CSSConstants.FONT_WEIGHT);
@@ -349,19 +326,17 @@ public class TabTextControl extends Composite {
         gridData.horizontalSpan = 2;
         textDecorationCombo = new Combo(this, SWT.BORDER);
         textDecorationCombo.setLayoutData(gridData);
-
         textDecorationCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
                     String tmp = textDecorationCombo.getText();
-                    if (tmp != null) {
-                        if (tmp.trim().length() > 0) {
-                            styleAttributes.addAttribute(CSSConstants.TEXT_DECORATION, tmp);
-                        } else {
-                            styleAttributes.removeAttribute(CSSConstants.TEXT_DECORATION);
-                        }
+                    if (tmp != null && tmp.trim().length() > 0) {
+                    	styleAttributes.addAttribute(CSSConstants.TEXT_DECORATION, tmp);
+                    } else {
+                        styleAttributes.removeAttribute(CSSConstants.TEXT_DECORATION);
                     }
-                    //TODO Dzmitry Sakovich
-                    //cssDialog.setStyleForPreview();
+            		if (!updateDataFromStyleAttributes) {
+            			notifyListeners();
+            		}
                 }
             });
         list = comboMap.get(CSSConstants.TEXT_DECORATION);
@@ -380,19 +355,17 @@ public class TabTextControl extends Composite {
         gridData.horizontalSpan = 2;
         textAlignCombo = new Combo(this, SWT.BORDER);
         textAlignCombo.setLayoutData(gridData);
-
         textAlignCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
                     String tmp = textAlignCombo.getText();
-                    if (tmp != null) {
-                        if (tmp.trim().length() > 0) {
-                            styleAttributes.addAttribute(CSSConstants.TEXT_ALIGN, tmp);
-                        } else {
-                            styleAttributes.removeAttribute(CSSConstants.TEXT_ALIGN);
-                        }
+                    if (tmp != null && tmp.trim().length() > 0) {
+                    	styleAttributes.addAttribute(CSSConstants.TEXT_ALIGN, tmp);
+                    } else {
+                        styleAttributes.removeAttribute(CSSConstants.TEXT_ALIGN);
                     }
-                    //TODO Dzmitry Sakovich
-                    //cssDialog.setStyleForPreview();
+            		if (!updateDataFromStyleAttributes) {
+            			notifyListeners();
+            		}
                 }
             });
         list = comboMap.get(CSSConstants.TEXT_ALIGN);
@@ -418,26 +391,26 @@ public class TabTextControl extends Composite {
     }
 
     /**
-     * Method for get data in controls (if param equal true ), or set data (if
-     * param equal false).
+     * Method for get data in controls (if parameter equal true ), or set data (if parameter equal false).
      *
      * @param param
      */
     public void updateData(boolean param) {
+    	updateDataFromStyleAttributes = true;
         String tmp;
-
+        // set FONT_FAMILY attribute
         if ((tmp = styleAttributes.getAttribute(CSSConstants.FONT_FAMILY)) != null) {
             fontFamilyText.setText(tmp);
         } else {
             fontFamilyText.setText(Constants.EMPTY);
         }
-
+        // set COLOR attribute
         if ((tmp = styleAttributes.getAttribute(CSSConstants.COLOR)) != null) {
             colorCombo.setText(tmp);
         } else {
             colorCombo.setText(Constants.EMPTY);
         }
-
+        // set FONT_SIZE and EXTENSION_FONT_SIZE attributes
         if ((tmp = styleAttributes.getAttribute(CSSConstants.FONT_SIZE)) != null) {
             String[] str = Util.convertExtString(tmp);
             fontSizeCombo.setText(str[0]);
@@ -452,29 +425,67 @@ public class TabTextControl extends Composite {
             fontSizeCombo.setText(Constants.EMPTY);
             extFontSizeCombo.select(0);
         }
-
+        // set TEXT_DECORATION attribute
         if ((tmp = styleAttributes.getAttribute(CSSConstants.TEXT_DECORATION)) != null) {
             textDecorationCombo.setText(tmp);
         } else {
             textDecorationCombo.setText(Constants.EMPTY);
         }
-
+        // set FONT_STYLE attribute
         if ((tmp = styleAttributes.getAttribute(CSSConstants.FONT_STYLE)) != null) {
             fontStyleCombo.setText(tmp);
         } else {
             fontStyleCombo.setText(Constants.EMPTY);
         }
-
+        // set FONT_WEIGHT attribute
         if ((tmp = styleAttributes.getAttribute(CSSConstants.FONT_WEIGHT)) != null) {
             fontWeigthCombo.setText(tmp);
         } else {
             fontWeigthCombo.setText(Constants.EMPTY);
         }
-
+        // set TEXT_ALIGN attribute
         if ((tmp = styleAttributes.getAttribute(CSSConstants.TEXT_ALIGN)) != null) {
             textAlignCombo.setText(tmp);
         } else {
             textAlignCombo.setText(Constants.EMPTY);
+        }
+        updateDataFromStyleAttributes = false;
+    }
+
+    /**
+     * Add ManualChangeStyleListener object.
+     *
+     * @param listener ManualChangeStyleListener object to be added
+     */
+    public void addManualChangeStyleListener(ManualChangeStyleListener listener) {
+        listeners.add(listener);
+    }
+
+    /**
+     * Gets an array of ChangeStyleListener object.
+     *
+     * @return an array of ChangeStyleListener object
+     */
+    public ManualChangeStyleListener[] getManualChangeStyleListeners() {
+        return listeners.toArray(new ManualChangeStyleListener[listeners.size()]);
+    }
+
+    /**
+     * Remove ManualChangeStyleListener object passed by parameter.
+     *
+     * @param listener ManualChangeStyleListener object to be removed
+     */
+    public void removeManualChangeStyleListener(ManualChangeStyleListener listener) {
+        listeners.remove(listener);
+    }
+
+    /**
+     * Method is used to notify all subscribed listeners about any changes within style attribute map.
+     */
+    private void notifyListeners() {
+        ChangeStyleEvent event = new ChangeStyleEvent(this);
+        for (ManualChangeStyleListener listener : listeners) {
+            listener.styleChanged(event);
         }
     }
 }

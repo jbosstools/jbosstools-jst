@@ -34,4 +34,7 @@ public class CSSConstants {
     public static final String TEXT_ALIGN = "text-align"; //$NON-NLS-1$
     public static final String FONT_FAMILY = "font-family"; //$NON-NLS-1$
     public static final String COLOR = "color"; //$NON-NLS-1$
+
+    public static final String STYLE = "style"; //$NON-NLS-1$
+    public static final String CLASS = "class"; //$NON-NLS-1$
 }

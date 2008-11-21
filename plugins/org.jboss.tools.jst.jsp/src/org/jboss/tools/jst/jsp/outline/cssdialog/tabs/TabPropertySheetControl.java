@@ -18,11 +18,11 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
+import org.jboss.tools.jst.jsp.outline.cssdialog.events.ManualChangeStyleListener;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.StyleAttributes;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.TabPropertySheetMouseAdapter;
 
@@ -37,12 +37,15 @@ public class TabPropertySheetControl extends Composite {
     private Tree tree;
     private StyleAttributes styleAttributes;
 
+    private TabPropertySheetMouseAdapter propertySheetMouseAdapter = null;
+    boolean updateDataFromStyleAttributes = false;
+
     /**
      * Constructor for creating controls
      *
      * @param composite The parent composite for tab
      */
-    public TabPropertySheetControl(TabFolder tabFolder, HashMap<String, ArrayList<String>> elementMap,
+    public TabPropertySheetControl(Composite tabFolder, HashMap<String, ArrayList<String>> elementMap,
         HashMap<String, ArrayList<String>> comboMap, StyleAttributes styleAttributes) {
         super(tabFolder, SWT.NONE);
         this.styleAttributes = styleAttributes;
@@ -65,7 +68,6 @@ public class TabPropertySheetControl extends Composite {
             item.setFont(Constants.FIRST_COLUMN, JFaceResources.getFontRegistry().get(JFaceResources.TEXT_FONT));
 
             ArrayList<String> list = elementMap.get(str);
-
             for (String strList : list) {
                 TreeItem subItem = new TreeItem(item, SWT.NONE);
                 subItem.setText(Constants.FIRST_COLUMN, strList);
@@ -74,8 +76,8 @@ public class TabPropertySheetControl extends Composite {
 
         updateData(false);
 
-        tree.addMouseListener(new TabPropertySheetMouseAdapter(tree, elementMap, comboMap, this));
-
+        propertySheetMouseAdapter = new TabPropertySheetMouseAdapter(tree, elementMap, comboMap, this);
+        tree.addMouseListener(propertySheetMouseAdapter);
         for (int i = 0; i < tree.getColumnCount(); i++) {
             tree.getColumn(i).pack();
         }
@@ -105,9 +107,12 @@ public class TabPropertySheetControl extends Composite {
                 }
             }
         } else {
-            for (int i = 0; i < tree.getItemCount(); i++)
-                for (int j = 0; j < tree.getItem(i).getItemCount(); j++)
+        	updateDataFromStyleAttributes = true;
+            for (int i = 0; i < tree.getItemCount(); i++) {
+                for (int j = 0; j < tree.getItem(i).getItemCount(); j++) {
                     tree.getItem(i).getItem(j).setText(Constants.SECOND_COLUMN, Constants.EMPTY);
+                }
+            }
 
             Set<String> set = styleAttributes.keySet();
             for (String str : set) {
@@ -121,6 +126,7 @@ public class TabPropertySheetControl extends Composite {
                 }
             }
             setExpanded();
+            updateDataFromStyleAttributes = false;
         }
     }
 
@@ -129,18 +135,15 @@ public class TabPropertySheetControl extends Composite {
      */
     private void setExpanded() {
         TreeItem item = null;
-
         for (int i = 0; i < tree.getItemCount(); i++) {
             tree.getItem(i).setExpanded(false);
         }
-
         Set<String> set = styleAttributes.keySet();
         for (String attr : set) {
             if ((item = find(attr)) != null) {
                 item.setExpanded(true);
             }
         }
-
         for (int i = 0; i < tree.getColumnCount(); i++) {
             tree.getColumn(i).pack();
         }
@@ -155,13 +158,10 @@ public class TabPropertySheetControl extends Composite {
     private TreeItem find(String attr) {
         TreeItem item = null;
         TreeItem subItem = null;
-
         for (int i = 0; i < tree.getItemCount(); i++) {
             item = tree.getItem(i);
-
             for (int j = 0; j < item.getItemCount(); j++) {
                 subItem = item.getItem(j);
-
                 if (subItem.getText().equals(attr)) {
                     return item;
                 }
@@ -169,5 +169,25 @@ public class TabPropertySheetControl extends Composite {
         }
 
         return null;
+    }
+
+    /**
+     * Gets the getUpdateDataFromStyleAttributes parameter value.
+     *
+     * @return boolean value
+     */
+    public boolean getUpdateDataFromStyleAttributes() {
+    	return updateDataFromStyleAttributes;
+    }
+
+    /**
+     * Add ManualChangeStyleListener object.
+     *
+     * @param listener ChangeStyleListener object to be added
+     */
+    public void addManualChangeStyleListener(ManualChangeStyleListener listener) {
+    	if (propertySheetMouseAdapter != null) {
+    		propertySheetMouseAdapter.addManualChangeStyleListener(listener);
+    	}
     }
 }

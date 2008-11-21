@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -28,6 +29,7 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
+import org.jboss.tools.jst.jsp.outline.cssdialog.events.ManualChangeStyleListener;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.StyleAttributes;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.BaseListener;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.CSSElementsParser;
@@ -36,6 +38,7 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.Parser;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ParserListener;
 import org.jboss.tools.jst.jsp.outline.cssdialog.tabs.TabBackgroundControl;
 import org.jboss.tools.jst.jsp.outline.cssdialog.tabs.TabBoxesControl;
+import org.jboss.tools.jst.jsp.outline.cssdialog.tabs.TabPreviewControl;
 import org.jboss.tools.jst.jsp.outline.cssdialog.tabs.TabPropertySheetControl;
 import org.jboss.tools.jst.jsp.outline.cssdialog.tabs.TabQuickEditControl;
 import org.jboss.tools.jst.jsp.outline.cssdialog.tabs.TabTextControl;
@@ -54,23 +57,27 @@ public class StyleComposite extends Composite {
     private static String NODE_ATTRIBUTE_NAME = "name";
 
     private static int TAB_TEXT_FONT_NUMBER = 0;
-    private static int TAB_QUICK_EDIT_NUMBER = 4;
+    private static int TAB_QUICK_EDIT_NUMBER = 5;
     private static int FIRST_SELECTION = 0;
     private static int SIZE_NULL = 0;
 
     private String newStyle;
     private String oldStyle;
+
     private TabTextControl tabTextControl;
     private TabBackgroundControl tabBackgroundControl;
     private TabBoxesControl tabBoxesControl;
     private TabPropertySheetControl tabPropertySheetControl;
     private TabQuickEditControl tabQuickEditControl;
+    private TabPreviewControl tabPreviewControl;
+
     private TabFolder tabFolder;
     private TabItem tabTextFont;
     private TabItem tabBackground;
     private TabItem tabBoxes;
     private TabItem tabPropertySheet;
     private TabItem tabQuickEdit;
+    private TabItem tabPreview;
     private TabItem lastSelectedTab = null;
     private StyleAttributes styleAttributes;
     private Parser parser;
@@ -99,7 +106,12 @@ public class StyleComposite extends Composite {
         return newStyle;
     }
 
-    public void updateStyle() {
+    /**
+     * Update new style in accordance with the style attribute values.
+     *
+     * @return string representation of attribute of current CSS selector
+     */
+    public String updateStyle() {
         if (lastSelectedTab == tabTextFont) {
             tabTextControl.updateData(true);
         } else if (lastSelectedTab == tabBackground) {
@@ -117,6 +129,128 @@ public class StyleComposite extends Composite {
         }
 
         newStyle = buf.toString();
+        return newStyle;
+    }
+
+    /**
+     * Method is used to create it child subtabs.
+     */
+    private void createTabs() {
+        ComboParser comboParser = new ComboParser();
+        comboParser.setListener(new BaseListener(comboMap) {
+                private ArrayList<String> list = null;
+
+                public void startElement(String uri, String localName, String nodeName, Attributes attrs) {
+                    if (nodeName.trim().equalsIgnoreCase(NODE_NAME_ELEMENTS)) {
+                        return;
+                    }
+
+                    if (!nodeName.trim().equalsIgnoreCase(NODE_NAME_VALUE)) {
+                        String name = nodeName;
+                        list = new ArrayList<String>();
+                        map.put(name, list);
+                    } else {
+                        list.add(attrs.getValue(NODE_ATTRIBUTE_NAME));
+                    }
+                }
+            });
+        comboParser.parse();
+
+        CSSElementsParser cssParser = new CSSElementsParser();
+        cssParser.setListener(new BaseListener(elementsMap) {
+                private ArrayList<String> list = null;
+
+                public void startElement(String uri, String localName, String nodeName, Attributes attrs) {
+                    if (nodeName.trim().equalsIgnoreCase(NODE_NAME_ELEMENTS)) {
+                        return;
+                    }
+
+                    if (!nodeName.trim().equalsIgnoreCase(NODE_NAME_ELEMENT)) {
+                        String name = nodeName;
+                        list = new ArrayList<String>();
+                        map.put(name, list);
+                    } else {
+                        list.add(attrs.getValue(NODE_ATTRIBUTE_NAME));
+                    }
+                }
+            });
+        cssParser.parse();
+
+        // HashMap<String, String> attributesMap = new HashMap<String, String>();
+        ParserListener listener = new ParserListener(styleAttributes);
+        parser = new Parser(elementsMap);
+        parser.addListener(listener);
+        parser.parse(this.oldStyle);
+
+        final GridLayout gridLayout = new GridLayout();
+        gridLayout.numColumns = 1;
+        setLayout(gridLayout);
+        setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
+
+        tabFolder = new TabFolder(this, SWT.NONE);
+        tabFolder.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
+
+        // Create each tab and set its text, tool tip text,
+        tabTextFont = new TabItem(tabFolder, SWT.NONE);
+        tabTextFont.setText(JstUIMessages.TEXT_FONT_TAB_NAME);
+        tabTextFont.setToolTipText(tabTextFont.getText());
+        tabTextFont.setControl(createTabTextControl(tabFolder));
+        lastSelectedTab = tabTextFont;
+
+        tabBackground = new TabItem(tabFolder, SWT.NONE);
+        tabBackground.setText(JstUIMessages.BACKGROUND_TAB_NAME);
+        tabBackground.setToolTipText(JstUIMessages.BACKGROUND_TAB_NAME);
+        tabBackground.setControl(createTabBackgroundControl(tabFolder));
+
+        tabBoxes = new TabItem(tabFolder, SWT.NONE);
+        tabBoxes.setText(JstUIMessages.BOXES_TAB_NAME);
+        tabBoxes.setToolTipText(JstUIMessages.BOXES_TAB_NAME);
+        tabBoxes.setControl(createTabBoxesControl(tabFolder));
+
+        tabPropertySheet = new TabItem(tabFolder, SWT.NONE);
+        tabPropertySheet.setText(JstUIMessages.PROPERTY_SHEET_TAB_NAME);
+        tabPropertySheet.setToolTipText(JstUIMessages.PROPERTY_SHEET_TAB_NAME);
+        tabPropertySheet.setControl(createTabPropertySheetControl(tabFolder));
+
+        tabPreview = new TabItem(tabFolder, SWT.NONE);
+        tabPreview.setText(JstUIMessages.PREVIEW_SHEET_TAB_NAME);
+        tabPreview.setToolTipText(JstUIMessages.PREVIEW_SHEET_TAB_NAME);
+        tabPreview.setControl(createPreviewContol(tabFolder));
+
+        tabFolder.setSelection(TAB_TEXT_FONT_NUMBER);
+
+        if (styleAttributes.getAttributeMap().size() > SIZE_NULL) {
+            tabQuickEdit = new TabItem(tabFolder, SWT.NONE);
+            tabQuickEdit.setText(JstUIMessages.QUICK_EDIT_TAB_NAME);
+            tabQuickEdit.setToolTipText(JstUIMessages.QUICK_EDIT_TAB_NAME);
+            tabQuickEdit.setControl(createTabQuickEditContol(tabFolder));
+            tabFolder.setSelection(TAB_QUICK_EDIT_NUMBER);
+            lastSelectedTab = tabQuickEdit;
+        }
+
+        tabFolder.addSelectionListener(new SelectionAdapter() {
+                public void widgetSelected(SelectionEvent se) {
+                    if (tabFolder.getSelection()[FIRST_SELECTION] == tabQuickEdit) {
+                        tabQuickEditControl.dispose();
+                        tabQuickEdit.setControl(createTabQuickEditContol(tabFolder));
+                        lastSelectedTab = tabQuickEdit;
+                    } else if (tabFolder.getSelection()[FIRST_SELECTION] == tabTextFont) {
+                        tabTextControl.updateData(false);
+                        lastSelectedTab = tabTextFont;
+                    } else if (tabFolder.getSelection()[FIRST_SELECTION] == tabBackground) {
+                        tabBackgroundControl.updateData(false);
+                        lastSelectedTab = tabBackground;
+                    } else if (tabFolder.getSelection()[FIRST_SELECTION] == tabBoxes) {
+                        tabBoxesControl.updateData(false);
+                        lastSelectedTab = tabBoxes;
+                    } else if (tabFolder.getSelection()[FIRST_SELECTION] == tabPreview) {
+                        lastSelectedTab = tabPreview;
+                    } else if (tabFolder.getSelection()[FIRST_SELECTION] == tabPropertySheet) {
+//                        tabPropertySheetControl.updateData(false);
+                        lastSelectedTab = tabPropertySheet;
+                    }
+                }
+            });
     }
 
     /**
@@ -176,160 +310,36 @@ public class StyleComposite extends Composite {
         return sc;
     }
 
-    private void createTabs() {
-        ComboParser comboParser = new ComboParser();
-        comboParser.setListener(new BaseListener(comboMap) {
-                private ArrayList<String> list = null;
+    /**
+     * Method for creating quick edit tab
+     *
+     * @param tabFolder
+     * @return
+     */
+    private Control createPreviewContol(TabFolder tabFolder) {
+        ScrolledComposite sc = new ScrolledComposite(tabFolder, SWT.H_SCROLL | SWT.V_SCROLL);
 
-                public void startElement(String uri, String localName, String nodeName, Attributes attrs) {
-                    if (nodeName.trim().equalsIgnoreCase(NODE_NAME_ELEMENTS)) {
-                        return;
-                    }
+        sc.setExpandHorizontal(true);
+        sc.setExpandVertical(true);
 
-                    if (!nodeName.trim().equalsIgnoreCase(NODE_NAME_VALUE)) {
-                        String name = nodeName;
-                        list = new ArrayList<String>();
-                        map.put(name, list);
-                    } else {
-                        list.add(attrs.getValue(NODE_ATTRIBUTE_NAME));
-                    }
-                }
-            });
-        comboParser.parse();
+        tabPreviewControl = new TabPreviewControl(sc, styleAttributes);
+        sc.setContent(tabPreviewControl);
 
-        CSSElementsParser cssParser = new CSSElementsParser();
-        cssParser.setListener(new BaseListener(elementsMap) {
-                private ArrayList<String> list = null;
+        sc.setMinSize(tabPreviewControl.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
-                public void startElement(String uri, String localName, String nodeName, Attributes attrs) {
-                    if (nodeName.trim().equalsIgnoreCase(NODE_NAME_ELEMENTS)) {
-                        return;
-                    }
-
-                    if (!nodeName.trim().equalsIgnoreCase(NODE_NAME_ELEMENT)) {
-                        String name = nodeName;
-                        list = new ArrayList<String>();
-                        map.put(name, list);
-                    } else {
-                        list.add(attrs.getValue(NODE_ATTRIBUTE_NAME));
-                    }
-                }
-            });
-        cssParser.parse();
-
-        // HashMap<String, String> attributesMap = new HashMap<String,
-        // String>();
-        ParserListener listener = new ParserListener(styleAttributes);
-        parser = new Parser(elementsMap);
-        parser.addListener(listener);
-        parser.parse(this.oldStyle);
-
-        final GridLayout gridLayout = new GridLayout();
-        gridLayout.numColumns = 1;
-        setLayout(gridLayout);
-        setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
-
-        tabFolder = new TabFolder(this, SWT.NONE);
-        tabFolder.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
-
-        // Create each tab and set its text, tool tip text,
-        tabTextFont = new TabItem(tabFolder, SWT.NONE);
-        tabTextFont.setText(JstUIMessages.TEXT_FONT_TAB_NAME);
-        tabTextFont.setToolTipText(tabTextFont.getText());
-        tabTextFont.setControl(createTabTextControl(tabFolder));
-        lastSelectedTab = tabTextFont;
-
-        tabBackground = new TabItem(tabFolder, SWT.NONE);
-        tabBackground.setText(JstUIMessages.BACKGROUND_TAB_NAME);
-        tabBackground.setToolTipText(JstUIMessages.BACKGROUND_TAB_NAME);
-        tabBackground.setControl(createTabBackgroundControl(tabFolder));
-
-        tabBoxes = new TabItem(tabFolder, SWT.NONE);
-        tabBoxes.setText(JstUIMessages.BOXES_TAB_NAME);
-        tabBoxes.setToolTipText(JstUIMessages.BOXES_TAB_NAME);
-        tabBoxes.setControl(createTabBoxesControl(tabFolder));
-
-        tabPropertySheet = new TabItem(tabFolder, SWT.NONE);
-        tabPropertySheet.setText(JstUIMessages.PROPERTY_SHEET_TAB_NAME);
-        tabPropertySheet.setToolTipText(JstUIMessages.PROPERTY_SHEET_TAB_NAME);
-        tabPropertySheet.setControl(createTabPropertySheetControl(tabFolder));
-
-        tabFolder.setSelection(TAB_TEXT_FONT_NUMBER);
-
-        if (styleAttributes.getAttributeMap().size() > SIZE_NULL) {
-            tabQuickEdit = new TabItem(tabFolder, SWT.NONE);
-            tabQuickEdit.setText(JstUIMessages.QUICK_EDIT_TAB_NAME);
-            tabQuickEdit.setToolTipText(JstUIMessages.QUICK_EDIT_TAB_NAME);
-            tabQuickEdit.setControl(createTabQuickEditContol(tabFolder));
-            tabFolder.setSelection(TAB_QUICK_EDIT_NUMBER);
-            lastSelectedTab = tabQuickEdit;
-        }
-
-        tabFolder.addSelectionListener(new SelectionAdapter() {
-                public void widgetSelected(SelectionEvent se) {
-                    if (tabFolder.getSelection()[FIRST_SELECTION] == tabQuickEdit) {
-                        tabQuickEditControl.dispose();
-                        tabQuickEdit.setControl(createTabQuickEditContol(tabFolder));
-                        lastSelectedTab = tabQuickEdit;
-                    } else if (tabFolder.getSelection()[FIRST_SELECTION] == tabTextFont) {
-                        tabTextControl.updateData(false);
-                        lastSelectedTab = tabTextFont;
-                    } else if (tabFolder.getSelection()[FIRST_SELECTION] == tabBackground) {
-                        tabBackgroundControl.updateData(false);
-                        lastSelectedTab = tabBackground;
-                    } else if (tabFolder.getSelection()[FIRST_SELECTION] == tabBoxes) {
-                        tabBoxesControl.updateData(false);
-                        lastSelectedTab = tabBoxes;
-                    } else if (tabFolder.getSelection()[FIRST_SELECTION] == tabPropertySheet) {
-                        tabPropertySheetControl.updateData(false);
-                        lastSelectedTab = tabPropertySheet;
-                    }
-                }
-            });
+        return sc;
     }
 
     /**
-     *
      * Method for creating property sheet tab
      *
      * @param tabFolder
      * @return
      */
     private Control createTabPropertySheetControl(TabFolder tabFolder) {
-        tabPropertySheetControl = new TabPropertySheetControl(tabFolder, elementsMap, comboMap,
-                styleAttributes);
+    	tabPropertySheetControl = new TabPropertySheetControl(tabFolder, elementsMap, comboMap, styleAttributes);
 
         return tabPropertySheetControl;
-    }
-
-    public void recreateStyleComposite(String style) {
-        styleAttributes.clear();
-        parser.parse(style);
-
-        tabBackgroundControl.updateData(false);
-        tabBoxesControl.updateData(false);
-        tabPropertySheetControl.updateData(false);
-        tabTextControl.updateData(false);
-
-        if (styleAttributes.getAttributeMap().size() > SIZE_NULL) {
-            if ((tabQuickEdit == null) || tabQuickEdit.isDisposed()) {
-                tabQuickEdit = new TabItem(tabFolder, SWT.NONE);
-                tabQuickEdit.setText(JstUIMessages.QUICK_EDIT_TAB_NAME);
-                tabQuickEdit.setToolTipText(JstUIMessages.QUICK_EDIT_TAB_NAME);
-                tabQuickEdit.setControl(createTabQuickEditContol(tabFolder));
-            } else {
-                // update quick edit
-                tabQuickEditControl.updateData();
-            }
-
-            tabFolder.setSelection(TAB_QUICK_EDIT_NUMBER);
-            lastSelectedTab = tabQuickEdit;
-        } else {
-            if ((tabQuickEdit != null) || !tabQuickEdit.isDisposed()) {
-                tabQuickEdit.dispose();
-                tabFolder.redraw();
-            }
-        }
     }
 
     /**
@@ -350,5 +360,95 @@ public class StyleComposite extends Composite {
         sc.setMinSize(tabQuickEditControl.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
         return sc;
+    }
+
+    /**
+     * Clear whole style composite component.
+     */
+    public void clearStyleComposite() {
+        styleAttributes.clear();
+
+        tabBackgroundControl.updateData(false);
+        tabBoxesControl.updateData(false);
+        tabPropertySheetControl.updateData(false);
+        tabTextControl.updateData(false);
+
+        if (tabQuickEdit != null) {
+            tabQuickEditControl.updateData();
+        }
+    }
+
+    /**
+     * Update Preview tab with content from the passed CSS file.
+     *
+     * @param cssFile CSS file to be shown on Preview tab
+     */
+    public void updatePreviewCssFile(IFile cssFile) {
+    	tabPreviewControl.updateDataFile(cssFile);
+    }
+
+    /**
+     * Recreate style composite tab widgets.
+     *
+     * @param style CSS style
+     */
+    public void recreateStyleComposite(String style) {
+        styleAttributes.clear();
+        parser.parse(style);
+
+        tabBackgroundControl.updateData(false);
+        tabBoxesControl.updateData(false);
+        tabPropertySheetControl.updateData(false);
+        tabTextControl.updateData(false);
+
+        if (styleAttributes.getAttributeMap().size() > SIZE_NULL) {
+            if ((tabQuickEdit == null) || tabQuickEdit.isDisposed()) {
+                tabQuickEdit = new TabItem(tabFolder, SWT.NONE);
+                tabQuickEdit.setText(JstUIMessages.QUICK_EDIT_TAB_NAME);
+                tabQuickEdit.setToolTipText(JstUIMessages.QUICK_EDIT_TAB_NAME);
+                tabQuickEdit.setControl(createTabQuickEditContol(tabFolder));
+                ManualChangeStyleListener[] listeners = tabBackgroundControl.getManualChangeStyleListeners();
+                if (listeners != null && listeners.length > 0) {
+                	tabQuickEditControl.addManualChangeStyleListener(listeners[0]);
+                }
+            } else {
+                // update quick edit
+                tabQuickEditControl.updateData();
+            }
+
+            tabFolder.setSelection(TAB_QUICK_EDIT_NUMBER);
+            lastSelectedTab = tabQuickEdit;
+        } else {
+            if (tabQuickEdit != null && !tabQuickEdit.isDisposed()) {
+                tabQuickEdit.dispose();
+            }
+            tabFolder.redraw();
+        }
+    }
+
+    /**
+     * Method is used to close preview tab correctly.
+     *
+     * @param save close editor with saving or not
+     */
+    public void closePreview(boolean save) {
+    	if (tabPreviewControl != null) {
+    		tabPreviewControl.closeEditor(save);
+    	}
+    }
+
+    /**
+     * Add ManualChangeStyleListener object.
+     *
+     * @param listener ChangeStyleListener object to be added
+     */
+    public void addManualChangeStyleListener(ManualChangeStyleListener listener) {
+        tabBackgroundControl.addManualChangeStyleListener(listener);
+        tabBoxesControl.addManualChangeStyleListener(listener);
+        tabPropertySheetControl.addManualChangeStyleListener(listener);
+        tabTextControl.addManualChangeStyleListener(listener);
+        if (tabQuickEditControl != null) {
+        	tabQuickEditControl.addManualChangeStyleListener(listener);
+        }
     }
 }

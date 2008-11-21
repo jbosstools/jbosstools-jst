@@ -63,8 +63,9 @@ public class Constants {
 	public static final String WHITE_SPACE = " "; //$NON-NLS-1$
     public static String COLON = ":"; //$NON-NLS-1$
     public static String SEMICOLON = ";"; //$NON-NLS-1$
-    public static String COMMA = ";"; //$NON-NLS-1$
+    public static String COMMA = ","; //$NON-NLS-1$
     public static String DASH = "-"; //$NON-NLS-1$
+    public static String SLASH = "/"; //$NON-NLS-1$
 
     public static final RGB RGB_BLACK = new RGB(0,0,0);
     public static final RGB RGB_WHITE = new RGB(0xFF, 0xFF, 0xFF);
@@ -76,5 +77,5 @@ public class Constants {
     public static String OPEN_DIV_TAG = "<div style=\"width: 100%;";
     public static String CLOSE_DIV_TAG = "</div>";
     
-    public static String TEXT_FOR_PREVIEW = "\">Text for preview";
+    public static String TEXT_FOR_PREVIEW = "Double click to edit preview.";
 }

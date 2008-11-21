@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.Map.Entry;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -44,6 +44,8 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSConstants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.ImageCombo;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Util;
+import org.jboss.tools.jst.jsp.outline.cssdialog.events.ChangeStyleEvent;
+import org.jboss.tools.jst.jsp.outline.cssdialog.events.ManualChangeStyleListener;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.StyleAttributes;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParser;
 
@@ -61,8 +63,8 @@ public class TabBackgroundControl extends Composite {
     private Combo backgroundRepeatCombo;
     private StyleAttributes styleAttributes;
 
-    //TODO Dzmitry Sakovich
-    //private CSSDialog cssDialog;
+    private ArrayList<ManualChangeStyleListener> listeners = new ArrayList<ManualChangeStyleListener>();
+    private boolean updateDataFromStyleAttributes = false;
 
     /**
      * Constructor for creating controls
@@ -74,8 +76,6 @@ public class TabBackgroundControl extends Composite {
         super(composite, SWT.NONE);
         this.styleAttributes = styleAttributes;
 
-        //TODO Dzmitry Sakovich
-        //this.cssDialog = dialog;
         final GridLayout gridLayout = new GridLayout();
         gridLayout.numColumns = numColumns;
         setLayout(gridLayout);
@@ -89,19 +89,17 @@ public class TabBackgroundControl extends Composite {
 
         colorCombo = new ImageCombo(this, SWT.BORDER);
         colorCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
-
         colorCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
                     String tmp = colorCombo.getText();
-                    if (tmp != null) {
-                        if (tmp.trim().length() > 0) {
-                            styleAttributes.addAttribute(CSSConstants.BACKGROUND_COLOR, tmp);
-                        } else {
-                            styleAttributes.removeAttribute(CSSConstants.BACKGROUND_COLOR);
-                        }
+                    if (tmp != null && tmp.trim().length() > 0) {
+                    	styleAttributes.addAttribute(CSSConstants.BACKGROUND_COLOR, tmp);
+                    } else {
+                        styleAttributes.removeAttribute(CSSConstants.BACKGROUND_COLOR);
                     }
-                    //TODO Dzmitry Sakovich
-                    //cssDialog.setStyleForPreview();
+            		if (!updateDataFromStyleAttributes) {
+            			notifyListeners();
+            		}
                 }
             });
         Set<Entry<String, String>> set = ColorParser.getInstance().getMap().entrySet();
@@ -132,7 +130,6 @@ public class TabBackgroundControl extends Composite {
         		dlg.setText(JstUIMessages.COLOR_DIALOG_TITLE);
 
         		RGB rgb = dlg.open();
-
         		if (rgb != null) {
         			String colorStr = Util.createColorString(rgb);
         			colorCombo.setText(colorStr);
@@ -148,25 +145,21 @@ public class TabBackgroundControl extends Composite {
         label.setText(JstUIMessages.BACKGROUND_IMAGE);
 
         backgroundImageCombo = new Combo(this, SWT.BORDER);
-
         final GridData backgroundImageGridData = new GridData(GridData.FILL, GridData.CENTER, true, false);
         backgroundImageCombo.setLayoutData(backgroundImageGridData);
         backgroundImageCombo.add(Constants.NONE);
-
         backgroundImageCombo.addModifyListener(new ModifyListener() {
         	public void modifyText(ModifyEvent event) {
         		String tmp = backgroundImageCombo.getText();
-
-        		if (tmp != null) {
-        			if (tmp.trim().length() > 0) {
-        				tmp = adjustBackgroundURL(tmp);
-        				styleAttributes.addAttribute(CSSConstants.BACKGROUND_IMAGE, tmp);
-        			} else {
-        				styleAttributes.removeAttribute(CSSConstants.BACKGROUND_IMAGE);
-        			}
+        		if (tmp != null && tmp.trim().length() > 0) {
+        			tmp = adjustBackgroundURL(tmp);
+        			styleAttributes.addAttribute(CSSConstants.BACKGROUND_IMAGE, tmp);
+        		} else {
+    				styleAttributes.removeAttribute(CSSConstants.BACKGROUND_IMAGE);
         		}
-        		//TODO Dzmitry Sakovich
-        		//cssDialog.setStyleForPreview();
+        		if (!updateDataFromStyleAttributes) {
+        			notifyListeners();
+        		}
         	}
         });
 
@@ -185,7 +178,7 @@ public class TabBackgroundControl extends Composite {
         });
         button.addSelectionListener(new SelectionAdapter() {
         	public void widgetSelected(SelectionEvent event) {
-        		IProject project = Util.getCurrentProject();
+        		IAdaptable project = Util.getCurrentProject();
         		ImageSelectionDialog dialog = new ImageSelectionDialog(getShell(),
         				new WorkbenchLabelProvider(), new WorkbenchContentProvider());
         		dialog.setTitle(JstUIMessages.IMAGE_DIALOG_TITLE);
@@ -215,20 +208,17 @@ public class TabBackgroundControl extends Composite {
         gridData.horizontalSpan = 2;
         backgroundRepeatCombo = new Combo(this, SWT.BORDER);
         backgroundRepeatCombo.setLayoutData(gridData);
-
         backgroundRepeatCombo.addModifyListener(new ModifyListener() {
         	public void modifyText(ModifyEvent event) {
         		String tmp = backgroundRepeatCombo.getText();
-
-        		if (tmp != null) {
-        			if (tmp.trim().length() > 0) {
-        				styleAttributes.addAttribute(CSSConstants.BACKGROUND_REPEAT, tmp);
-                    } else {
-                    	styleAttributes.removeAttribute(CSSConstants.BACKGROUND_REPEAT);
-                    }
+        		if (tmp != null && tmp.trim().length() > 0) {
+        			styleAttributes.addAttribute(CSSConstants.BACKGROUND_REPEAT, tmp);
+        		} else {
+                	styleAttributes.removeAttribute(CSSConstants.BACKGROUND_REPEAT);
         		}
-        		//TODO Dzmitry Sakovich
-        		//cssDialog.setStyleForPreview();
+        		if (!updateDataFromStyleAttributes) {
+        			notifyListeners();
+        		}
         	}
         });
         ArrayList<String> list = comboMap.get(CSSConstants.BACKGROUND_REPEAT);
@@ -244,25 +234,27 @@ public class TabBackgroundControl extends Composite {
      * @param param
      */
     public void updateData(boolean param) {
+    	updateDataFromStyleAttributes = true;
         String tmp;
-
+        // set BACKGROUND_COLOR attribute
         if ((tmp = styleAttributes.getAttribute(CSSConstants.BACKGROUND_COLOR)) != null) {
             colorCombo.setText(tmp);
         } else {
             colorCombo.setText(Constants.EMPTY);
         }
-
+        // set BACKGROUND_IMAGE attribute
         if ((tmp = styleAttributes.getAttribute(CSSConstants.BACKGROUND_IMAGE)) != null) {
             backgroundImageCombo.setText(tmp);
         } else {
             backgroundImageCombo.setText(Constants.EMPTY);
         }
-
+        // set BACKGROUND_REPEAT attribute
         if ((tmp = styleAttributes.getAttribute(CSSConstants.BACKGROUND_REPEAT)) != null) {
             backgroundRepeatCombo.setText(tmp);
         } else {
             backgroundRepeatCombo.setText(Constants.EMPTY);
         }
+        updateDataFromStyleAttributes = false;
     }
 
     //Fix for JBIDE-3084
@@ -274,5 +266,42 @@ public class TabBackgroundControl extends Composite {
         }
 
         return backgroundURL;
+    }
+
+    /**
+     * Add ManualChangeStyleListener object.
+     *
+     * @param listener ManualChangeStyleListener object to be added
+     */
+    public void addManualChangeStyleListener(ManualChangeStyleListener listener) {
+        listeners.add(listener);
+    }
+
+    /**
+     * Gets an array of ChangeStyleListener object.
+     *
+     * @return an array of ChangeStyleListener object
+     */
+    public ManualChangeStyleListener[] getManualChangeStyleListeners() {
+        return listeners.toArray(new ManualChangeStyleListener[listeners.size()]);
+    }
+
+    /**
+     * Remove ManualChangeStyleListener object passed by parameter.
+     *
+     * @param listener ManualChangeStyleListener object to be removed
+     */
+    public void removeManualChangeStyleListener(ManualChangeStyleListener listener) {
+        listeners.remove(listener);
+    }
+
+    /**
+     * Method is used to notify all subscribed listeners about any changes within style attribute map.
+     */
+    private void notifyListeners() {
+        ChangeStyleEvent event = new ChangeStyleEvent(this);
+        for (ManualChangeStyleListener listener : listeners) {
+            listener.styleChanged(event);
+        }
     }
 }

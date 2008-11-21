@@ -10,12 +10,13 @@
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.outline.cssdialog.events;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
+import java.util.ArrayList;
+import java.util.HashMap;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TreeEditor;
 import org.eclipse.swt.events.DisposeEvent;
@@ -39,10 +40,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
-
 import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
-
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.cssdialog.FontFamilyDialog;
@@ -53,9 +52,6 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.common.ImageCombo;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Util;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParser;
 import org.jboss.tools.jst.jsp.outline.cssdialog.tabs.TabPropertySheetControl;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Listener for tree in tab property sheet
@@ -75,10 +71,18 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
     private HashMap<String, ArrayList<String>> comboMap;
     private HashMap<String, ArrayList<String>> elementsMap;
 
-    //Dzmitry Sakovich
-    //private CSSDialog cssDialog;
     private TabPropertySheetControl tabPropertySheetControl;
 
+    private ArrayList<ManualChangeStyleListener> listeners = new ArrayList<ManualChangeStyleListener>();
+
+    /**
+     * Constructor.
+     *
+     * @param tree
+     * @param elementsMap
+     * @param comboMap
+     * @param tabPropertySheetControl
+     */
     public TabPropertySheetMouseAdapter(Tree tree, HashMap<String, ArrayList<String>> elementsMap,
         HashMap<String, ArrayList<String>> comboMap, TabPropertySheetControl tabPropertySheetControl) {
         this.tabPropertySheetControl = tabPropertySheetControl;
@@ -164,19 +168,18 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
                         item.setText(Constants.SECOND_COLUMN, colorCombo.getText());
                         panel.dispose();
                         tabPropertySheetControl.updateData(true);
-
-                        //Dzmitry Sakovich
-                        //cssDialog.setStyleForPreview();
+                        if (!tabPropertySheetControl.getUpdateDataFromStyleAttributes()) {
+                        	notifyListeners();
+                        }
                     }
                 });
-
             colorCombo.addModifyListener(new ModifyListener() {
                     public void modifyText(ModifyEvent event) {
                         item.setText(Constants.SECOND_COLUMN, colorCombo.getText());
                         tabPropertySheetControl.updateData(true);
-
-                        //TODO Dzmitry Sakovich
-                        //cssDialog.setStyleForPreview();
+                        if (!tabPropertySheetControl.getUpdateDataFromStyleAttributes()) {
+                        	notifyListeners();
+                        }
                     }
                 });
 
@@ -193,12 +196,9 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
                     }
                 });
             btn.setToolTipText(JstUIMessages.COLOR_DIALOG_TITLE);
-
             btn.addSelectionListener(new SelectionAdapter() {
                     public void widgetSelected(SelectionEvent event) {
-                        RGB startRgb = Util.getColor(item.getText(Constants.SECOND_COLUMN).toLowerCase()
-                                                         .trim());
-
+                        RGB startRgb = Util.getColor(item.getText(Constants.SECOND_COLUMN).toLowerCase().trim());
                         if (startRgb == null) {
                             startRgb = Constants.RGB_BLACK;
                         }
@@ -210,18 +210,15 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
                         RGB rgb = colorDialog.open();
                         if (rgb != null) {
                             String str = Util.createColorString(rgb);
-
                             if (ColorParser.getInstance().getMap().get(str) != null) {
-                                item.setText(Constants.SECOND_COLUMN,
-                                    ColorParser.getInstance().getMap().get(str));
+                                item.setText(Constants.SECOND_COLUMN, ColorParser.getInstance().getMap().get(str));
                             } else {
                                 item.setText(Constants.SECOND_COLUMN, str);
                             }
-
                             tabPropertySheetControl.updateData(true);
-
-                            //TODO Dzmitry Sakovich
-                            //cssDialog.setStyleForPreview();
+                            if (!tabPropertySheetControl.getUpdateDataFromStyleAttributes()) {
+                            	notifyListeners();
+                            }
                         }
 
                         panel.dispose();
@@ -243,10 +240,9 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
                     }
                 });
             btn.setToolTipText(JstUIMessages.IMAGE_DIALOG_MESSAGE);
-
             btn.addSelectionListener(new SelectionAdapter() {
                     public void widgetSelected(SelectionEvent event) {
-                        IProject project = Util.getCurrentProject();
+                    	IAdaptable project = Util.getCurrentProject();
 
                         ImageSelectionDialog dialog = new ImageSelectionDialog(tree.getShell(),
                                 new WorkbenchLabelProvider(), new WorkbenchContentProvider());
@@ -262,9 +258,9 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
                             item.setText(Constants.SECOND_COLUMN, value);
                             panel.dispose();
                             tabPropertySheetControl.updateData(true);
-
-                            //TODO Dzmitry Sakovich
-                            //cssDialog.setStyleForPreview();
+                            if (!tabPropertySheetControl.getUpdateDataFromStyleAttributes()) {
+                            	notifyListeners();
+                            }
                         }
                     }
                 });
@@ -276,17 +272,15 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
         if (!color) {
             ArrayList<String> list = comboMap.get(item.getText(Constants.FIRST_COLUMN).trim());
 
-            for (String str : list)
+            for (String str : list) {
                 combo.add(str);
-
+            }
             if (btn != null) {
                 btn.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
             }
 
             combo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
-
             combo.setFocus();
-
             if ((combo.indexOf(item.getText(column)) == Constants.DONT_CONTAIN) &&
                     !item.getText(column).equals(Constants.EMPTY)) {
                 combo.setText(item.getText(column));
@@ -294,34 +288,29 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
                 combo.select(combo.indexOf(item.getText(column)));
             }
 
-            // Add a listener to set the selected item back into the
-            // cell
+            // Add a listener to set the selected item back into the cell
             final int col = column;
             combo.addSelectionListener(new SelectionAdapter() {
                     public void widgetSelected(SelectionEvent event) {
                         item.setText(col, combo.getText());
                         panel.dispose();
                         tabPropertySheetControl.updateData(true);
-
-                        //TODO Dzmitry Sakovich
-                        //cssDialog.setStyleForPreview();
+                        if (!tabPropertySheetControl.getUpdateDataFromStyleAttributes()) {
+                        	notifyListeners();
+                        }
                     }
                 });
-
             combo.addModifyListener(new ModifyListener() {
                     public void modifyText(ModifyEvent event) {
                         item.setText(col, combo.getText());
-                        tabPropertySheetControl.updateData(true);
-
-                        //TODO Dzmitry Sakovich
-                        //cssDialog.setStyleForPreview();
+                        if (!tabPropertySheetControl.getUpdateDataFromStyleAttributes()) {
+                        	notifyListeners();
+                        }
                     }
                 });
         } else {
             colorCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
-
             btn.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
-
             colorCombo.setFocus();
         }
 
@@ -357,7 +346,6 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
         Button btn = null;
 
         final Text text = new Text(panel, SWT.BORDER);
-
         if (item.getText(Constants.FIRST_COLUMN).trim().equalsIgnoreCase(CSSConstants.FONT_FAMILY)) {
             btn = new Button(panel, SWT.NONE);
 
@@ -371,19 +359,17 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
                     }
                 });
             btn.setToolTipText(JstUIMessages.FONT_FAMILY_TIP);
-
             btn.addSelectionListener(new SelectionAdapter() {
                     public void widgetSelected(SelectionEvent event) {
                         FontFamilyDialog dialog = new FontFamilyDialog(tree.getShell(),
                                 item.getText(Constants.SECOND_COLUMN));
-
                         if (dialog.open() == Window.OK) {
                             item.setText(Constants.SECOND_COLUMN, dialog.getFontFamily());
                             panel.dispose();
                             tabPropertySheetControl.updateData(true);
-
-                            //TODO Dzmitry Sakovich
-                            //cssDialog.setStyleForPreview();
+                            if (!tabPropertySheetControl.getUpdateDataFromStyleAttributes()) {
+                            	notifyListeners();
+                            }
                         }
                     }
                 });
@@ -417,14 +403,50 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
         final int col = column;
         text.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
-                    // Set the text of the editor's control back
-                    // into the cell
+                    // Set the text of the editor's control back into the cell
                     item.setText(col, text.getText());
                     tabPropertySheetControl.updateData(true);
-
-                    //TODO Dzmitry Sakovich
-                    //cssDialog.setStyleForPreview();
+                    if (!tabPropertySheetControl.getUpdateDataFromStyleAttributes()) {
+                    	notifyListeners();
+                    }
                 }
             });
+    }
+
+    /**
+     * Add ManualChangeStyleListener object.
+     *
+     * @param listener ManualChangeStyleListener object to be added
+     */
+    public void addManualChangeStyleListener(ManualChangeStyleListener listener) {
+        listeners.add(listener);
+    }
+
+    /**
+     * Gets an array of ChangeStyleListener object.
+     *
+     * @return an array of ChangeStyleListener object
+     */
+    public ManualChangeStyleListener[] getManualChangeStyleListeners() {
+        return listeners.toArray(new ManualChangeStyleListener[listeners.size()]);
+    }
+
+    /**
+     * Remove ManualChangeStyleListener object passed by parameter.
+     *
+     * @param listener ManualChangeStyleListener object to be removed
+     */
+    public void removeManualChangeStyleListener(ManualChangeStyleListener listener) {
+        listeners.remove(listener);
+    }
+
+    /**
+     * Method is used to notify all subscribed listeners about any changes within style attribute map.
+     */
+    private void notifyListeners() {
+        ChangeStyleEvent event = new ChangeStyleEvent(this);
+        for (ManualChangeStyleListener listener : listeners) {
+            listener.styleChanged(event);
+        }
     }
 }

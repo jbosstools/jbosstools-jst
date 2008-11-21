@@ -37,6 +37,8 @@ public class CSSStyleDialog extends Dialog {
 
     final static int MIN_HEIGHT_FOR_BROWSER = 60;
 
+    private String previewBrowserValue = Constants.TEXT_FOR_PREVIEW;
+
     private Browser browser = null;
     private StyleComposite styleComposite = null;
     private StyleAttributes styleAttributes = null;
@@ -73,17 +75,7 @@ public class CSSStyleDialog extends Dialog {
 
         styleAttributes.addChangeStyleListener(new ChangeStyleListener() {
                 public void styleChanged(ChangeStyleEvent event) {
-                    String styleForSpan = Constants.EMPTY;
-                    String html = Constants.EMPTY;
-
-                    Set<String> keySet = styleAttributes.keySet();
-                    for (String key : keySet) {
-                        styleForSpan += (key + Constants.COLON + styleAttributes.getAttribute(key) +
-                        		Constants.SEMICOLON);
-                    }
-                    html = Constants.OPEN_DIV_TAG + styleForSpan + Constants.TEXT_FOR_PREVIEW +
-                        Constants.CLOSE_DIV_TAG;
-                    browser.setText(html);
+            		browser.setText(getTextForBrowser());
                 }
             });
         styleComposite = new StyleComposite(composite, styleAttributes, oldStyle);
@@ -91,8 +83,25 @@ public class CSSStyleDialog extends Dialog {
         GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
         gridData.minimumHeight = MIN_HEIGHT_FOR_BROWSER;
         browser.setLayoutData(gridData);
+        browser.setText(getTextForBrowser());
 
         return composite;
+    }
+
+    /**
+     * Method is used to build html body that is appropriate to browse.
+     *
+     * @return String html text representation
+     */
+    private String getTextForBrowser() {
+        String styleForSpan = Constants.EMPTY;
+        Set<String> keySet = styleAttributes.keySet();
+        for (String key : keySet) {
+            styleForSpan += (key + Constants.COLON + styleAttributes.getAttribute(key) + Constants.SEMICOLON);
+        }
+        String html = Constants.OPEN_DIV_TAG + styleForSpan + "\">" + previewBrowserValue + Constants.CLOSE_DIV_TAG;
+
+        return html;
     }
 
     /**
