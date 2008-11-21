@@ -127,7 +127,6 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
             // Also it can be used separately without integration to wizard component.
             dialog = new CSSClassDialog(getShell(), selection, true);
             dialog.addMessageDialogListener(new MessageDialogListener() {
-				@Override
 				public void throwMessage(MessageDialogEvent event) {
 					if (event != null) {
 						IStatus status = event.getOperationStatus();

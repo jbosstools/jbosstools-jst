@@ -253,7 +253,6 @@ public class CSSClassDialog extends TitleAreaDialog implements MouseListener, Fo
         text.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
         text.setEditable(false);
         text.addModifyListener(new ModifyListener() {
-    		@Override
             public void modifyText(ModifyEvent e) {
     			String cssFile = text.getText().trim();
     			// Initialize a variable with the no error status
@@ -434,7 +433,6 @@ public class CSSClassDialog extends TitleAreaDialog implements MouseListener, Fo
 			}
         });
     	classCombo.addModifyListener(new ModifyListener() {
-    		@Override
             public void modifyText(ModifyEvent e) {
     			String cssClass = classCombo.getText().trim();
     			// Initialize a variable with the no error status
@@ -694,7 +692,6 @@ public class CSSClassDialog extends TitleAreaDialog implements MouseListener, Fo
 	/**
 	 * @see org.eclipse.swt.events.MouseListener#mouseDoubleClick(org.eclipse.swt.events.MouseEvent)
 	 */
-	@Override
 	public void mouseDoubleClick(MouseEvent e) {
 		if (e.widget == browser) {
 	        browser.removeMouseListener(this);
@@ -714,7 +711,6 @@ public class CSSClassDialog extends TitleAreaDialog implements MouseListener, Fo
 	/**
 	 * @see org.eclipse.swt.events.FocusListener#focusLost(org.eclipse.swt.events.FocusEvent)
 	 */
-	@Override
 	public void focusLost(FocusEvent e) {
 		if (e.widget == textBrowser) {
 			previewBrowserValue = textBrowser.getText();
@@ -729,7 +725,6 @@ public class CSSClassDialog extends TitleAreaDialog implements MouseListener, Fo
 	/* (non-Javadoc)
 	 * @see org.eclipse.swt.events.MouseListener#mouseDown(org.eclipse.swt.events.MouseEvent)
 	 */
-	@Override
 	public void mouseDown(MouseEvent e) {
 		// TODO Auto-generated method stub
 	}
@@ -737,7 +732,6 @@ public class CSSClassDialog extends TitleAreaDialog implements MouseListener, Fo
 	/* (non-Javadoc)
 	 * @see org.eclipse.swt.events.MouseListener#mouseUp(org.eclipse.swt.events.MouseEvent)
 	 */
-	@Override
 	public void mouseUp(MouseEvent e) {
 		// TODO Auto-generated method stub
 	}
@@ -745,7 +739,6 @@ public class CSSClassDialog extends TitleAreaDialog implements MouseListener, Fo
 	/* (non-Javadoc)
 	 * @see org.eclipse.swt.events.FocusListener#focusGained(org.eclipse.swt.events.FocusEvent)
 	 */
-	@Override
 	public void focusGained(FocusEvent e) {
 		// TODO Auto-generated method stub
 	}
