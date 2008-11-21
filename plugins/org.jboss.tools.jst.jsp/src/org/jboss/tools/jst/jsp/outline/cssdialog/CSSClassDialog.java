@@ -75,6 +75,8 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.events.StyleAttributes;
  */
 public class CSSClassDialog extends TitleAreaDialog implements MouseListener, FocusListener {
 
+	public static final String ID = "org.jboss.tools.jst.jsp.outline.cssdialog.CSSClassDialog"; //$NON-NLS-1$
+
 	// TODO: take out to the property manager file
     public final static String WIZARD_TITLE = "CSS Class";
     public final static String WIZARD_DESCRIPTION = "Create New CSS Class.";
@@ -292,6 +294,9 @@ public class CSSClassDialog extends TitleAreaDialog implements MouseListener, Fo
     			dialog.setInput(project);
     			dialog.setAllowMultiple(false);
     			dialog.setDoubleClickSelects(false);
+    			if (currentFile != null) {
+    				dialog.setInitialSelection(currentFile);
+    			}
     			dialog.setEmptyListMessage(JstUIMessages.CSS_FILE_SELECT_DIALOG_EMPTY_MESSAGE);
 
     			if (dialog.open() == Window.OK) {
