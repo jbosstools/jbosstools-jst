@@ -324,13 +324,15 @@ public class Util {
 	public static String getActivePageCSSSelectorIfAny() {
 		IWorkbenchPage page = JspEditorPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		ISelection selection = page.getSelection();
-		String sText = null;
 		if (selection instanceof IStructuredSelection) {
 			IStructuredSelection ss = (IStructuredSelection)selection;
 			for (Iterator iterator = ss.iterator(); iterator.hasNext();) {
 				Object node = iterator.next();
 				if (node instanceof ICSSNode) {
-					return getSelector((ICSSNode)node);
+					ICSSStyleRule styleRule = getSelector((ICSSNode)node, null, 0);
+					if (styleRule != null) {
+						return styleRule.getSelectorText();
+					}
 				}
 			}
 		}
@@ -338,19 +340,40 @@ public class Util {
 	}
 
 	/**
-	 *
+	 * 
+	 * @param node
+	 * @param selector
+	 * @param index
+	 * @return
 	 */
-	private static String getSelector(ICSSNode node) {
+	public static ICSSStyleRule getSelector(ICSSNode node, String selector, int index) {
 		if (node != null) {
+			// NOTE: if needed this method should be extended regarding other properties of ICSSNode class
 			short nodeType = node.getNodeType();
-			if (nodeType == ICSSNode.STYLESHEET_NODE) {
+			switch (nodeType) {
+			case ICSSNode.STYLESHEET_NODE:
 				ICSSStyleSheet styleSheet = (ICSSStyleSheet) node;
-				return getSelector(styleSheet.getFirstChild());
-			} else if (nodeType == ICSSNode.STYLERULE_NODE) {
+				return getSelector(styleSheet.getFirstChild(), selector, index);
+			case ICSSNode.STYLERULE_NODE:
 				ICSSStyleRule styleRule = (ICSSStyleRule) node;
-				return styleRule.getSelectorText();
-			} else {
-				return getSelector(node.getParentNode());
+				boolean selectorFound = true;
+				if (selector != null) {
+					if (styleRule.getSelectorText().equals(selector)) {
+						if (index > 0) {
+							index--;
+							selectorFound = false;
+						}
+					} else {
+						selectorFound = false;
+					}
+				}
+				if (selectorFound) {
+					return styleRule;
+				} else {
+					return getSelector(styleRule.getNextSibling(), selector, index);
+				}
+			default:
+				return getSelector(node.getParentNode(), selector, index);
 			}
 		}
 		return null;

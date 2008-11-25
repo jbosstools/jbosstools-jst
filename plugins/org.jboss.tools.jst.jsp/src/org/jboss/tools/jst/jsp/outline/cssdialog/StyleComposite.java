@@ -12,11 +12,7 @@ package org.jboss.tools.jst.jsp.outline.cssdialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -28,7 +24,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
-import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
+import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSModel;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.ManualChangeStyleListener;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.StyleAttributes;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.BaseListener;
@@ -47,7 +43,7 @@ import org.xml.sax.Attributes;
 /**
  * Class for creating style tabs
  *
- * @author Dzmitry Sakovich (dsakovich@exadel.com)
+ * @author Igor Zhukov (izhukov@exadel.com)
  */
 public class StyleComposite extends Composite {
 
@@ -99,8 +95,9 @@ public class StyleComposite extends Composite {
     }
 
     /**
+     * Gets updated style.
      *
-     * @return
+     * @return new style value
      */
     public String getNewStyle() {
         return newStyle;
@@ -108,10 +105,8 @@ public class StyleComposite extends Composite {
 
     /**
      * Update new style in accordance with the style attribute values.
-     *
-     * @return string representation of attribute of current CSS selector
      */
-    public String updateStyle() {
+    public void updateStyle() {
         if (lastSelectedTab == tabTextFont) {
             tabTextControl.updateData(true);
         } else if (lastSelectedTab == tabBackground) {
@@ -121,15 +116,8 @@ public class StyleComposite extends Composite {
         } else if (lastSelectedTab == tabPropertySheet) {
             tabPropertySheetControl.updateData(true);
         }
-
-        StringBuffer buf = new StringBuffer();
-        Set<Entry<String, String>> set = styleAttributes.entrySet();
-        for (Map.Entry<String, String> me : set) {
-            buf.append(me.getKey() + Constants.COLON + me.getValue() + Constants.SEMICOLON);
-        }
-
-        newStyle = buf.toString();
-        return newStyle;
+        // update newStyle value
+        newStyle = styleAttributes.getStyle();
     }
 
     /**
@@ -244,9 +232,11 @@ public class StyleComposite extends Composite {
                         tabBoxesControl.updateData(false);
                         lastSelectedTab = tabBoxes;
                     } else if (tabFolder.getSelection()[FIRST_SELECTION] == tabPreview) {
+                    	tabPreviewControl.selectEditorArea(styleAttributes.getCssSelector(), 0);
                         lastSelectedTab = tabPreview;
                     } else if (tabFolder.getSelection()[FIRST_SELECTION] == tabPropertySheet) {
-//                        tabPropertySheetControl.updateData(false);
+                    	// TODO: changes on property sheet tag should reflect changes to another tabs
+                    	tabPropertySheetControl.updateData(false);
                         lastSelectedTab = tabPropertySheet;
                     }
                 }
@@ -365,8 +355,9 @@ public class StyleComposite extends Composite {
     /**
      * Clear whole style composite component.
      */
-    public void clearStyleComposite() {
+    public void clearStyleComposite(String cssSelector) {
         styleAttributes.clear();
+        styleAttributes.setCssSelector(cssSelector);
 
         tabBackgroundControl.updateData(false);
         tabBoxesControl.updateData(false);
@@ -379,21 +370,13 @@ public class StyleComposite extends Composite {
     }
 
     /**
-     * Update Preview tab with content from the passed CSS file.
-     *
-     * @param cssFile CSS file to be shown on Preview tab
-     */
-    public void updatePreviewCssFile(IFile cssFile) {
-    	tabPreviewControl.updateDataFile(cssFile);
-    }
-
-    /**
      * Recreate style composite tab widgets.
      *
      * @param style CSS style
      */
-    public void recreateStyleComposite(String style) {
+    public void recreateStyleComposite(String style, String cssSelector) {
         styleAttributes.clear();
+        styleAttributes.setCssSelector(cssSelector);
         parser.parse(style);
 
         tabBackgroundControl.updateData(false);
@@ -424,6 +407,17 @@ public class StyleComposite extends Composite {
             }
             tabFolder.redraw();
         }
+    }
+
+    /**
+     * Method is used to update preview tab with corresponding CSS file.
+     *
+     * @param cssModel model associated with the file that should be displayed in preview tab
+     */
+    public void updatePreview(CSSModel cssModel) {
+    	if (tabPreviewControl != null) {
+    		tabPreviewControl.updatePreview(cssModel);
+    	}
     }
 
     /**

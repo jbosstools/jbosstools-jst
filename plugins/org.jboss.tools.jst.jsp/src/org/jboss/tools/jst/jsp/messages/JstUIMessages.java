@@ -42,7 +42,13 @@ public class JstUIMessages extends NLS {
 	public static String CSS_FILE_SELECT_DIALOG_TITLE;
 	public static String CSS_FILE_SELECT_DIALOG_LABEL;
 	public static String CSS_FILE_SELECT_DIALOG_EMPTY_MESSAGE;
-	public static String CSS_STYLE_CLASS_DIALOG_TITLE;
+	public static String CSS_STYLE_CLASS_EDITOR_HEADER_TITLE;
+	public static String CSS_STYLE_CLASS_EDITOR_DESCRIPTION;
+	public static String CSS_STYLE_CLASS_EDITOR_TITLE;
+    public static String CSS_EMPTY_FILE_PATH_MESSAGE;
+    public static String CSS_EMPTY_STYLE_CLASS_MESSAGE;
+    public static String CSS_SAVE_DIALOG_TITLE;
+    public static String CSS_SAVE_DIALOG_MESSAGE;
 	public static String CSS_CLASS_DIALOG_FILE_LABEL;
 	public static String CSS_BROWSE_BUTTON_TOOLTIP;
 	public static String CSS_CLASS_DIALOG_STYLE_CLASS_LABEL;
@@ -89,4 +95,5 @@ public class JstUIMessages extends NLS {
 	public static String TEXT_ALIGN;
 	public static String BUTTON_CLEAR;
 	public static String PREVIEW_SHEET_TAB_NAME;
+	public static String DEFAULT_PREVIEW_TEXT;
 }

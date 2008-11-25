@@ -13,16 +13,23 @@ package org.jboss.tools.jst.jsp.outline.cssdialog.common;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.wst.css.core.internal.format.FormatProcessorCSS;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSDocument;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSModel;
+import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
+import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleSheet;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
+import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
+import org.jboss.tools.jst.jsp.outline.cssdialog.events.StyleAttributes;
 import org.w3c.dom.css.CSSRuleList;
 import org.w3c.dom.css.CSSStyleDeclaration;
 import org.w3c.dom.css.CSSStyleRule;
@@ -35,12 +42,15 @@ public class CSSModel {
 
     private static String startBraces = "{"; //$NON-NLS-1$
     private static String endBraces = "}"; //$NON-NLS-1$
+
     private FormatProcessorCSS formatProcessorCSS = null;
-    private CSSStyleSheet styleSheet = null;
     private IStructuredModel model = null;
     private IFile styleFile = null;
 
-    /**
+    private CSSStyleSheet styleSheet = null;
+    private ICSSStyleSheet eclipseStyleSheet = null;
+
+	/**
      * Constructor.
      *
      * @param styleFile CSS style class that should initialize CSS model
@@ -55,16 +65,39 @@ public class CSSModel {
             if (model instanceof ICSSModel) {
                 ICSSModel cssModel = (ICSSModel) model;
                 ICSSDocument document = cssModel.getDocument();
-
                 if (document instanceof CSSStyleSheet) {
                     styleSheet = (CSSStyleSheet) document;
                 }
+				if (document instanceof ICSSStyleSheet) {
+					eclipseStyleSheet = (ICSSStyleSheet) document;
+				}
             }
         } catch (IOException e) {
             JspEditorPlugin.getPluginLog().logError(e.getMessage());
         } catch (CoreException e) {
             JspEditorPlugin.getPluginLog().logError(e.getMessage());
         }
+    }
+
+    /**
+     * Method is used to select area that corresponds to specific selector.
+     *
+     * @param selector the selector that should be selected in editor area
+     * @param index if CSS file contains more then one elements with the same selector name,
+     * 		then index is serial number of this selector
+     */
+    public IndexedRegion getSelectorRegion(String selector, int index) {
+    	if (eclipseStyleSheet != null) {
+			if (selector != null && !selector.equals(Constants.EMPTY)) {
+				ICSSStyleRule styleRule = Util.getSelector(eclipseStyleSheet, selector, index);
+				if (styleRule != null) {
+					if (styleRule instanceof IndexedRegion) {
+						return (IndexedRegion) styleRule;
+					}
+				}
+			}
+    	}
+    	return null;
     }
 
     /**
@@ -83,7 +116,6 @@ public class CSSModel {
                     if (list.item(i) instanceof CSSStyleRule) {
                     	CSSStyleRule rule = ((CSSStyleRule) list.item(i));
                     	Selector selector = new Selector(rule.toString(), rule.getSelectorText());
-//                        selectors.add(((CSSStyleRule) list.item(i)).getSelectorText());
                     	selectors.add(selector);
                     }
                 }
@@ -94,12 +126,13 @@ public class CSSModel {
     }
 
     /**
-     * 
-     * @param selector
-     * @return
+     * Gets CSS attributes for the given selector in string representation.
+     *
+     * @param selector CSS selector value
+     * @return CSS attributes string representation
      */
     public String getCSSText(String selector) {
-        if (styleSheet != null) {
+        if (styleSheet != null && selector != null) {
             CSSRuleList list = styleSheet.getCssRules();
 
             if (list != null) {
@@ -139,11 +172,12 @@ public class CSSModel {
     }
 
     /**
+     * Sets CSS style for the given selector.
      *
-     * @param selector
-     * @param style
+     * @param selector CSS selector value
+     * @param styleAttribute the style to be set
      */
-    public void setCSS(String selector, String style) {
+    public void setCSS(String selector, StyleAttributes styleAttributes) {
         if (styleSheet != null) {
         	CSSRuleList list = styleSheet.getCssRules();
 
@@ -152,40 +186,50 @@ public class CSSModel {
                 for (int i = 0; i < list.getLength(); i++) {
                     if (list.item(i) instanceof CSSStyleRule &&
                             ((CSSStyleRule) list.item(i)).getSelectorText().equals(selector)) {
+
                         CSSStyleRule rule = (CSSStyleRule) list.item(i);
                         CSSStyleDeclaration declaration = rule.getStyle();
-                        declaration.setCssText(style);
+                        // previously before updating remove all existing properties
+                        while (declaration.getLength() > 0) {
+							declaration.removeProperty(declaration.item(0));
+						}
+                        // set properties
+                        Set<Entry<String, String>> set = styleAttributes.entrySet();
+                        for (Map.Entry<String, String> me : set) {
+                        	declaration.setProperty(me.getKey(), me.getValue(), Constants.EMPTY);
+                        }
 
                         return;
                     }
                 }
                 // insert NEW selector to style sheet
-                styleSheet.insertRule(selector + startBraces + style + endBraces, list.getLength());
+                styleSheet.insertRule(selector + startBraces + styleAttributes.getStyle() + endBraces, list.getLength());
                 formatProcessorCSS.formatModel(model);
             }
         }
     }
 
     /**
-     * Save model to file
+     * Gets file associated with current model.
+     *
+	 * @return the styleFile
+	 */
+	public IFile getStyleFile() {
+		return this.styleFile;
+	}
+
+    /**
+     * Release CSS model correctly from editing.
      */
     public void releaseModel() {
     	model.releaseFromEdit();
     }
 
     /**
-     * Save model to file
+     * Save model. Associate file will be saved automatically.
      */
     public void saveModel() {
-//        ICSSModel cssModel = (ICSSModel) model;
-//        ICSSDocument document = cssModel.getDocument();
-
-//        if (document instanceof CSSStyleSheet) {
-//            styleSheet = (CSSStyleSheet) document;
-//        }
-//        formatProcessorCSS.formatModel(model);
         try {
-            formatProcessorCSS.formatFile(styleFile);
             model.save();
         } catch (IOException e) {
             JspEditorPlugin.getPluginLog().logError(e.getMessage());

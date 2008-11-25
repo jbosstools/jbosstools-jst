@@ -99,7 +99,7 @@ public class CSSStyleDialog extends Dialog {
         for (String key : keySet) {
             styleForSpan += (key + Constants.COLON + styleAttributes.getAttribute(key) + Constants.SEMICOLON);
         }
-        String html = Constants.OPEN_DIV_TAG + styleForSpan + "\">" + previewBrowserValue + Constants.CLOSE_DIV_TAG;
+        String html = Constants.OPEN_DIV_TAG + styleForSpan + "\">" + previewBrowserValue + Constants.CLOSE_DIV_TAG; //$NON-NLS-1$
 
         return html;
     }
@@ -113,7 +113,7 @@ public class CSSStyleDialog extends Dialog {
     @Override
     protected void configureShell(Shell newShell) {
         super.configureShell(newShell);
-        newShell.setText(JstUIMessages.CSS_STYLE_CLASS_DIALOG_TITLE);
+        newShell.setText(JstUIMessages.CSS_STYLE_CLASS_EDITOR_TITLE);
     }
 
     /**

@@ -183,20 +183,6 @@ public class TabQuickEditControl extends Composite {
                         }
                     }
                 });
-
-            colorCombo.addModifyListener(new ModifyListener() {
-                    String key = name;
-                    public void modifyText(ModifyEvent event) {
-                        if (!colorCombo.getText().trim().equals(Constants.EMPTY)) {
-                            styleAttributes.addAttribute(key, colorCombo.getText().trim());
-                        } else {
-                            styleAttributes.removeAttribute(key);
-                        }
-                        if (!updateDataFromStyleAttributes) {
-                        	notifyListeners();
-                        }
-                    }
-                });
             HashMap<String, String> colorMap = ColorParser.getInstance().getMap();
             for (String key : colorMap.keySet()) {
                 RGB rgb = Util.getColor(key);
@@ -207,7 +193,20 @@ public class TabQuickEditControl extends Composite {
             }
 
             colorCombo.setText(value);
-            //if css attribute contain choose_folder button
+            colorCombo.addModifyListener(new ModifyListener() {
+                String key = name;
+                public void modifyText(ModifyEvent event) {
+                    if (!colorCombo.getText().trim().equals(Constants.EMPTY)) {
+                        styleAttributes.addAttribute(key, colorCombo.getText().trim());
+                    } else {
+                        styleAttributes.removeAttribute(key);
+                    }
+                    if (!updateDataFromStyleAttributes) {
+                    	notifyListeners();
+                    }
+                }
+            });
+            // if css attribute contain choose_folder button
         } else if (Util.containFolder(name)) {
             Composite tmpComposite = getCompositeElement();
 

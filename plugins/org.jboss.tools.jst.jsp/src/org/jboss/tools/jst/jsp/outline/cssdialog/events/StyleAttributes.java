@@ -12,15 +12,19 @@ package org.jboss.tools.jst.jsp.outline.cssdialog.events;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+
+import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 
 /**
  * Class is used to store an array of style attributes and support listeners.
  */
 public class StyleAttributes {
 
-    private HashMap<String, String> attributeMap;
+	private String cssSelector = null;
+    private HashMap<String, String> attributeMap = null;
     private ArrayList<ChangeStyleListener> listeners = new ArrayList<ChangeStyleListener>();
 
     /**
@@ -126,6 +130,7 @@ public class StyleAttributes {
      */
     public void clear() {
         attributeMap.clear();
+        cssSelector = null;
         notifyListeners();
     }
 
@@ -138,4 +143,33 @@ public class StyleAttributes {
             listener.styleChanged(event);
         }
     }
+
+	/**
+	 * @param cssSelector the cssSelector to set
+	 */
+	public void setCssSelector(String cssSelector) {
+		this.cssSelector = cssSelector;
+	}
+
+	/**
+	 * @return the cssSelector
+	 */
+	public String getCssSelector() {
+		return cssSelector;
+	}
+
+	/**
+	 * String representation of style attributes.
+	 *
+	 * @return style string representation
+	 */
+	public String getStyle() {
+        // update newStyle value
+        StringBuffer buf = new StringBuffer();
+        Set<Entry<String, String>> set = entrySet();
+        for (Map.Entry<String, String> me : set) {
+            buf.append(me.getKey() + Constants.COLON + me.getValue() + Constants.SEMICOLON);
+        }
+        return buf.toString();
+	}
 }

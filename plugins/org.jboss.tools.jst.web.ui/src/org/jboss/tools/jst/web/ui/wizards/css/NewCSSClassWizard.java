@@ -30,7 +30,7 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.events.MessageDialogListener;
  */
 public class NewCSSClassWizard extends Wizard implements INewWizard {
 
-    private static final String WIZARD_WINDOW_TITLE = "New CSS Class";
+    private static final String WIZARD_WINDOW_TITLE = "CSS Style Class Editor";
 
 	// workbench selection when the wizard was started
 	protected IStructuredSelection selection;
@@ -98,7 +98,7 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 
     	// TODO: take out to the property manager file
         final static String WIZARD_TITLE = "CSS Class";
-        final static String WIZARD_DESCRIPTION = "Create New CSS Class.";
+        final static String WIZARD_DESCRIPTION = "Create New CSS Class";
 
         private CSSClassDialog dialog;
 
