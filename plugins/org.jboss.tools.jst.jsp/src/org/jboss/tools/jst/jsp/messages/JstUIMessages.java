@@ -45,6 +45,7 @@ public class JstUIMessages extends NLS {
 	public static String CSS_STYLE_CLASS_EDITOR_HEADER_TITLE;
 	public static String CSS_STYLE_CLASS_EDITOR_DESCRIPTION;
 	public static String CSS_STYLE_CLASS_EDITOR_TITLE;
+	public static String CSS_STYLE_EDITOR_TITLE;
     public static String CSS_EMPTY_FILE_PATH_MESSAGE;
     public static String CSS_EMPTY_STYLE_CLASS_MESSAGE;
     public static String CSS_SAVE_DIALOG_TITLE;

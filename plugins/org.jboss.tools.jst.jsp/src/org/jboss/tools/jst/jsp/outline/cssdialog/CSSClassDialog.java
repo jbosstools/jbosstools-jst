@@ -40,7 +40,6 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -159,8 +158,8 @@ public class CSSClassDialog extends TitleAreaDialog implements MouseListener, Fo
 		// within this file where cursor is located
 		if (currentFile == null) {
 			currentFile = Util.getActiveCssFile();
-			currentClassStyle = Util.getActivePageCSSSelectorIfAny();
 		}
+		currentClassStyle = Util.getActivePageCSSSelectorIfAny();
     }
 
     /**
@@ -229,8 +228,6 @@ public class CSSClassDialog extends TitleAreaDialog implements MouseListener, Fo
 
         /* ============================================= */
         Composite downSplitPane = getCompositeElement(split);
-        Color veryLightGray = new Color(null, 127, 127, 127);
-        downSplitPane.setForeground(veryLightGray);
 
         Composite classComposite = new Composite(downSplitPane, SWT.BORDER);
         GridData gridData = new GridData(GridData.FILL, GridData.BEGINNING, true, false);
