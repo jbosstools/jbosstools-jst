@@ -138,17 +138,8 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
 
         context.put("value", value);
 
-        if (attributeName.equalsIgnoreCase(CSSConstants.STYLE)
-        		|| attributeName.endsWith(CSSConstants.STYLE.toLowerCase())) {
-            CSSStyleDialog dialog = new CSSStyleDialog(cellEditorWindow.getShell(),
-                    ((value == null) ? Constants.EMPTY : value));
-
-            if (dialog.open() == Window.OK) {
-                externalEditing = false;
-
-                return dialog.getNewStyle();
-            }
-        } else if (attributeName.equalsIgnoreCase(CSSConstants.CLASS)
+        attributeName = attributeName.toLowerCase();
+        if (attributeName.equalsIgnoreCase(CSSConstants.CLASS)
         		|| attributeName.endsWith(CSSConstants.CLASS.toLowerCase())) {
             CSSClassDialog dialog = new CSSClassDialog(cellEditorWindow.getShell(), null, false);
             dialog.setCurrentStyleClass(value);
@@ -157,6 +148,16 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
                 externalEditing = false;
 
                 return dialog.getSelectorName();
+            }
+        } else if (attributeName.equalsIgnoreCase(CSSConstants.STYLE)
+        		|| attributeName.endsWith(CSSConstants.STYLE.toLowerCase())) {
+            CSSStyleDialog dialog = new CSSStyleDialog(cellEditorWindow.getShell(),
+                    ((value == null) ? Constants.EMPTY : value));
+
+            if (dialog.open() == Window.OK) {
+                externalEditing = false;
+
+                return dialog.getNewStyle();
             }
         } else {
             JSPTreeDialog dialog = new JSPTreeDialog();
