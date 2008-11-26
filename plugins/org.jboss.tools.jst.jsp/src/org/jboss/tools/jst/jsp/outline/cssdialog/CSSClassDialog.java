@@ -78,8 +78,7 @@ public class CSSClassDialog extends TitleAreaDialog implements MouseListener, Fo
 	public static final String ID = "org.jboss.tools.jst.jsp.outline.cssdialog.CSSClassDialog"; //$NON-NLS-1$
 
 	private static String notUsed = "not_used"; //$NON-NLS-1$
-    private static final String CSS_FILE_EXTENTION = "css"; //$NON-NLS-1$
-    private final static String[] fileExtensions = { CSS_FILE_EXTENTION };
+    private final static String[] fileExtensions = { Util.CSS_FILE_EXTENTION };
     private final static String SKIP_FIRST_CHAR = "."; //$NON-NLS-1$
 
     private Composite browserContainer = null;
@@ -149,7 +148,7 @@ public class CSSClassDialog extends TitleAreaDialog implements MouseListener, Fo
 				Object element = iterator.next();
 				if (element instanceof IResource) {
 					if (element instanceof IFile) {
-						if (((IFile) element).getName().toLowerCase().endsWith(CSS_FILE_EXTENTION)) {
+						if (((IFile) element).getName().toLowerCase().endsWith(Util.CSS_FILE_EXTENTION)) {
 							currentFile = (IFile)element;
 						}
 					}
@@ -581,7 +580,14 @@ public class CSSClassDialog extends TitleAreaDialog implements MouseListener, Fo
      * @return selector name
      */
     public String getSelectorName() {
-        return currentClassStyle;
+    	String className = currentClassStyle;
+    	if (currentClassStyle != null) {
+            className = currentClassStyle.replaceAll("\\.", Constants.EMPTY); //$NON-NLS-1$
+            className = className.replaceAll("\\,", Constants.EMPTY);
+            className = className.replaceAll("\\s++", Constants.WHITE_SPACE); //$NON-NLS-1$
+    	}
+
+        return className;
     }
 
     /**

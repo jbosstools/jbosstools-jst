@@ -39,6 +39,8 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParser;
  */
 public class Util {
 
+    public static final String CSS_FILE_EXTENTION = "css"; //$NON-NLS-1$
+
 	private static String RGB = "rgb"; //$NON-NLS-1$
 	private static String THIN = "thin"; //$NON-NLS-1$
 
@@ -310,7 +312,7 @@ public class Util {
 			IEditorInput input = page.getActiveEditor().getEditorInput();
 			if (input instanceof IFileEditorInput) {
 				IFile file = ((IFileEditorInput) input).getFile();
-				if (file.getName().toLowerCase().endsWith("css")) {
+				if (file.getName().toLowerCase().endsWith(CSS_FILE_EXTENTION)) {
 					return file;
 				}
 			}
@@ -319,7 +321,9 @@ public class Util {
 	}
 
 	/**
+	 * Method return the name of CSS selector in opened CSS file.
 	 *
+	 * @return selector name
 	 */
 	public static String getActivePageCSSSelectorIfAny() {
 		IWorkbenchPage page = JspEditorPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage();

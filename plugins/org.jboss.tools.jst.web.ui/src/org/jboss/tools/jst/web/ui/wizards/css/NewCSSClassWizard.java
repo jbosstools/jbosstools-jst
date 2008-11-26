@@ -79,7 +79,7 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
      */
     @Override
 	public boolean canFinish() {
-    	return page.showFinish;
+    	return page.canFinish;
 	}
 
     /**
@@ -102,7 +102,7 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 
         private CSSClassDialog dialog;
 
-        boolean showFinish = false;
+        boolean canFinish = false;
 
         /**
          * Constructor for SampleNewWizardPage.
@@ -167,22 +167,22 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
     			case IStatus.OK:
     				setErrorMessage(null);
     				setMessage(message);
-    				showFinish = true;
+    				canFinish = true;
     				break;
     			case IStatus.WARNING:
     				setErrorMessage(null);
-    				showFinish = true;
+    				canFinish = true;
     				setMessage(message, WizardPage.WARNING);
     				break;				
     			case IStatus.INFO:
     				setErrorMessage(null);
-    				showFinish = true;
+    				canFinish = true;
     				setMessage(message, WizardPage.INFORMATION);
     				break;			
     			default:
     				setErrorMessage(message);
     				setMessage(null);
-    				showFinish = false;
+    				canFinish = false;
     				break;		
     		}
     	}

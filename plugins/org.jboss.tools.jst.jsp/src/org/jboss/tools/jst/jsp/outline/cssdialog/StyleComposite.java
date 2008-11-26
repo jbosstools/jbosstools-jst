@@ -344,7 +344,14 @@ public class StyleComposite extends Composite {
         sc.setExpandHorizontal(true);
         sc.setExpandVertical(true);
 
+        ManualChangeStyleListener[] listeners = null;
+        if (tabQuickEditControl != null) {
+        	listeners = tabQuickEditControl.getManualChangeStyleListeners();
+        }
         tabQuickEditControl = new TabQuickEditControl(sc, comboMap, styleAttributes);
+        if (listeners != null && listeners.length > 0) {
+        	tabQuickEditControl.addManualChangeStyleListener(listeners[0]);
+        }
         sc.setContent(tabQuickEditControl);
 
         sc.setMinSize(tabQuickEditControl.computeSize(SWT.DEFAULT, SWT.DEFAULT));
