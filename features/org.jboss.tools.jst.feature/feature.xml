@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.jboss.tools.jst_feature"
-      label="Jst Feature"
+      label="JBoss Tools Java Standard Tools"
       version="2.0.0">
 
    <description url="http://www.jboss.org/tools">
-      JBossTools JST Feature
+      JBoss Tools Java Standard Tools
    </description>
 
    <copyright>
