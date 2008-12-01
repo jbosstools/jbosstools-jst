@@ -379,6 +379,8 @@ public class TabQuickEditControl extends Composite {
         Button btn = null;
         final Text text;
 
+        String[] values = null;
+        boolean ext = false;
         // create "button" in case of FONT_FAMILY style property
         if (name.equalsIgnoreCase(CSSConstants.FONT_FAMILY)) {
             Composite tmpComposite = getCompositeElement();
@@ -422,14 +424,10 @@ public class TabQuickEditControl extends Composite {
                     }
                 });
         } else {
-            text = new Text(this, SWT.BORDER);
-            text.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
-        }
-
-        String[] values = null;
-        boolean ext = false;
-        if (btn == null) {
             if (Util.searchInExtElement(name)) {
+                text = new Text(this, SWT.BORDER);
+                text.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
+
                 values = Util.convertExtString(value);
                 ext = true;
                 final Combo extCombo = new Combo(this, SWT.BORDER | SWT.READ_ONLY);
@@ -478,6 +476,10 @@ public class TabQuickEditControl extends Composite {
                         }
                     });
             } else {
+                Composite tmpComposite = getCompositeElement();
+                text = new Text(tmpComposite, SWT.BORDER);
+                text.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
+
                 text.addModifyListener(new ModifyListener() {
                         String key = name;
 
