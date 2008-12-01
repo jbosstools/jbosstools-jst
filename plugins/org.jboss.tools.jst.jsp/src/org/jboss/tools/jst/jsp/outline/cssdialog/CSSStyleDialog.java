@@ -43,7 +43,7 @@ public class CSSStyleDialog extends Dialog implements MouseListener, FocusListen
 
     final static int MIN_HEIGHT_FOR_BROWSER = 60;
 
-    private String previewBrowserValue = Constants.TEXT_FOR_PREVIEW;
+    private String previewBrowserValue = JstUIMessages.DEFAULT_TEXT_FOR_BROWSER_PREVIEW;
 
     private Composite browserContainer = null;
     private Browser browser = null;

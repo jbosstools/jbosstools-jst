@@ -10,9 +10,14 @@
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.outline.cssdialog.tabs;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -30,7 +35,6 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSConstants;
@@ -41,12 +45,6 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.events.ChangeStyleEvent;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.ManualChangeStyleListener;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.StyleAttributes;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParser;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 
 /**
@@ -468,10 +466,14 @@ public class TabBoxesControl extends Composite {
      */
     public void updateData(boolean param) {
         updateDataFromStyleAttributes = true;
-        String tmp;
         // set WIDTH and EXTENSION_WIDTH attributes
-        if ((tmp = styleAttributes.getAttribute(CSSConstants.WIDTH)) != null) {
-            String[] str = Util.convertExtString(tmp);
+        String tmp = styleAttributes.getAttribute(CSSConstants.WIDTH);
+        if (tmp == null) {
+        	tmp = Constants.EMPTY;
+        	extWidthCombo.select(0);
+        }
+        String[] str = Util.convertExtString(tmp);
+        if (!str[0].equals(widthText.getText())) {
             widthText.setText(str[0]);
             if (extWidthCombo.indexOf(str[1]) != -1) {
                 extWidthCombo.setText(str[1]);
@@ -479,81 +481,86 @@ public class TabBoxesControl extends Composite {
             } else {
                 extWidthCombo.select(0);
             }
-        } else {
-            widthText.setText(Constants.EMPTY);
-            extWidthCombo.select(0);
         }
         // set HEIGHT and EXTENSION_HEIGHT attributes
-        if ((tmp = styleAttributes.getAttribute(CSSConstants.HEIGHT)) != null) {
-            String[] str = Util.convertExtString(tmp);
-            heightText.setText(str[0]);
-
+        tmp = styleAttributes.getAttribute(CSSConstants.HEIGHT);
+        if (tmp == null) {
+        	tmp = Constants.EMPTY;
+        	extHeightCombo.select(0);
+        }
+        str = Util.convertExtString(tmp);
+        if (!str[0].equals(heightText.getText())) {
+        	heightText.setText(str[0]);
             if (extHeightCombo.indexOf(str[1]) != -1) {
-                extHeightCombo.setText(str[1]);
-                extHeightCombo.select(extHeightCombo.indexOf(str[1]));
+            	extHeightCombo.setText(str[1]);
+            	extHeightCombo.select(extHeightCombo.indexOf(str[1]));
             } else {
-                extHeightCombo.select(0);
+            	extHeightCombo.select(0);
             }
-        } else {
-            heightText.setText(Constants.EMPTY);
-            extHeightCombo.select(0);
         }
         // set BORDER_STYLE attribute
-        if ((tmp = styleAttributes.getAttribute(CSSConstants.BORDER_STYLE)) != null) {
-            borderStyleCombo.setText(tmp);
-        } else {
-            borderStyleCombo.setText(Constants.EMPTY);
+        tmp = styleAttributes.getAttribute(CSSConstants.BORDER_STYLE);
+        if (tmp == null) {
+        	tmp = Constants.EMPTY;
+        }
+        if (!tmp.equals(borderStyleCombo.getText())) {
+        	borderStyleCombo.setText(tmp);
         }
         // set BORDER_COLOR attribute
-        if ((tmp = styleAttributes.getAttribute(CSSConstants.BORDER_COLOR)) != null) {
-            borderColorCombo.setText(tmp);
-        } else {
-            borderColorCombo.setText(Constants.EMPTY);
+        tmp = styleAttributes.getAttribute(CSSConstants.BORDER_COLOR);
+        if (tmp == null) {
+        	tmp = Constants.EMPTY;
+        }
+        if (!tmp.equals(borderColorCombo.getText())) {
+        	borderColorCombo.setText(tmp);
         }
         // set BORDER_WIDTH and EXTENSION_BORDER_WIDTH attributes
-        if ((tmp = styleAttributes.getAttribute(CSSConstants.BORDER_WIDTH)) != null) {
-            String[] str = Util.convertExtString(tmp);
-            borderWidthCombo.setText(str[0]);
-
+        tmp = styleAttributes.getAttribute(CSSConstants.BORDER_WIDTH);
+        if (tmp == null) {
+        	tmp = Constants.EMPTY;
+        	extBorderWidthCombo.select(0);
+        }
+        str = Util.convertExtString(tmp);
+        if (!str[0].equals(borderWidthCombo.getText())) {
+        	borderWidthCombo.setText(str[0]);
             if (extBorderWidthCombo.indexOf(str[1]) != -1) {
-                extBorderWidthCombo.setText(str[1]);
-                extBorderWidthCombo.select(extBorderWidthCombo.indexOf(str[1]));
+            	extBorderWidthCombo.setText(str[1]);
+            	extBorderWidthCombo.select(extBorderWidthCombo.indexOf(str[1]));
             } else {
-                extBorderWidthCombo.select(0);
+            	extBorderWidthCombo.select(0);
             }
-        } else {
-            borderWidthCombo.setText(Constants.EMPTY);
-            extBorderWidthCombo.select(0);
         }
         // set MARGIN and EXTENSION_MARGIN attributes
-        if ((tmp = styleAttributes.getAttribute(CSSConstants.MARGIN)) != null) {
-            String[] str = Util.convertExtString(tmp);
-            marginText.setText(str[0]);
-
+        tmp = styleAttributes.getAttribute(CSSConstants.MARGIN);
+        if (tmp == null) {
+        	tmp = Constants.EMPTY;
+        	extMarginCombo.select(0);
+        }
+        str = Util.convertExtString(tmp);
+        if (!str[0].equals(marginText.getText())) {
+        	marginText.setText(str[0]);
             if (extMarginCombo.indexOf(str[1]) != -1) {
-                extMarginCombo.setText(str[1]);
-                extMarginCombo.select(extMarginCombo.indexOf(str[1]));
+            	extMarginCombo.setText(str[1]);
+            	extMarginCombo.select(extMarginCombo.indexOf(str[1]));
             } else {
-                extMarginCombo.select(0);
+            	extMarginCombo.select(0);
             }
-        } else {
-            marginText.setText(Constants.EMPTY);
-            extMarginCombo.select(0);
         }
         // set PADDING and EXTENSION_PADDING attributes
-        if ((tmp = styleAttributes.getAttribute(CSSConstants.PADDING)) != null) {
-            String[] str = Util.convertExtString(tmp);
-            paddingText.setText(str[0]);
-
+        tmp = styleAttributes.getAttribute(CSSConstants.PADDING);
+        if (tmp == null) {
+        	tmp = Constants.EMPTY;
+        	extPaddingCombo.select(0);
+        }
+        str = Util.convertExtString(tmp);
+        if (!str[0].equals(paddingText.getText())) {
+        	paddingText.setText(str[0]);
             if (extPaddingCombo.indexOf(str[1]) != -1) {
-                extPaddingCombo.setText(str[1]);
-                extPaddingCombo.select(extPaddingCombo.indexOf(str[1]));
+            	extPaddingCombo.setText(str[1]);
+            	extPaddingCombo.select(extPaddingCombo.indexOf(str[1]));
             } else {
-                extPaddingCombo.select(0);
+            	extPaddingCombo.select(0);
             }
-        } else {
-            paddingText.setText(Constants.EMPTY);
-            extPaddingCombo.select(0);
         }
         updateDataFromStyleAttributes = false;
     }

@@ -145,7 +145,7 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
          * Save page model.
          */
         public void saveChanges() {
-            dialog.saveChanges();
+            dialog.saveChanges(true);
         }
 
         /**

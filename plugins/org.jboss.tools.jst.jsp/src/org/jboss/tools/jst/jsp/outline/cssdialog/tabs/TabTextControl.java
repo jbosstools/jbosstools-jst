@@ -397,57 +397,69 @@ public class TabTextControl extends Composite {
      */
     public void updateData(boolean param) {
     	updateDataFromStyleAttributes = true;
-        String tmp;
         // set FONT_FAMILY attribute
-        if ((tmp = styleAttributes.getAttribute(CSSConstants.FONT_FAMILY)) != null) {
-            fontFamilyText.setText(tmp);
-        } else {
-            fontFamilyText.setText(Constants.EMPTY);
+    	String tmp = styleAttributes.getAttribute(CSSConstants.FONT_FAMILY);
+        if (tmp == null) {
+        	tmp = Constants.EMPTY;
+        }
+        if (!tmp.equals(fontFamilyText.getText())) {
+        	fontFamilyText.setText(tmp);
         }
         // set COLOR attribute
-        if ((tmp = styleAttributes.getAttribute(CSSConstants.COLOR)) != null) {
-            colorCombo.setText(tmp);
-        } else {
-            colorCombo.setText(Constants.EMPTY);
+    	tmp = styleAttributes.getAttribute(CSSConstants.COLOR);
+        if (tmp == null) {
+        	tmp = Constants.EMPTY;
+        }
+        if (!tmp.equals(colorCombo.getText())) {
+        	colorCombo.setText(tmp);
         }
         // set FONT_SIZE and EXTENSION_FONT_SIZE attributes
-        if ((tmp = styleAttributes.getAttribute(CSSConstants.FONT_SIZE)) != null) {
-            String[] str = Util.convertExtString(tmp);
-            fontSizeCombo.setText(str[0]);
-
+        tmp = styleAttributes.getAttribute(CSSConstants.FONT_SIZE);
+        if (tmp == null) {
+        	tmp = Constants.EMPTY;
+        	extFontSizeCombo.select(0);
+        }
+        String[] str = Util.convertExtString(tmp);
+        if (!str[0].equals(fontSizeCombo.getText())) {
+        	fontSizeCombo.setText(str[0]);
             if (extFontSizeCombo.indexOf(str[1]) != -1) {
-                extFontSizeCombo.setText(str[1]);
-                extFontSizeCombo.select(extFontSizeCombo.indexOf(str[1]));
+            	extFontSizeCombo.setText(str[1]);
+            	extFontSizeCombo.select(extFontSizeCombo.indexOf(str[1]));
             } else {
-                extFontSizeCombo.select(0);
+            	extFontSizeCombo.select(0);
             }
-        } else {
-            fontSizeCombo.setText(Constants.EMPTY);
-            extFontSizeCombo.select(0);
         }
         // set TEXT_DECORATION attribute
-        if ((tmp = styleAttributes.getAttribute(CSSConstants.TEXT_DECORATION)) != null) {
-            textDecorationCombo.setText(tmp);
-        } else {
-            textDecorationCombo.setText(Constants.EMPTY);
+    	tmp = styleAttributes.getAttribute(CSSConstants.TEXT_DECORATION);
+        if (tmp == null) {
+        	tmp = Constants.EMPTY;
+        }
+        if (!tmp.equals(textDecorationCombo.getText())) {
+        	textDecorationCombo.setText(tmp);
         }
         // set FONT_STYLE attribute
-        if ((tmp = styleAttributes.getAttribute(CSSConstants.FONT_STYLE)) != null) {
-            fontStyleCombo.setText(tmp);
-        } else {
-            fontStyleCombo.setText(Constants.EMPTY);
+    	tmp = styleAttributes.getAttribute(CSSConstants.FONT_STYLE);
+        if (tmp == null) {
+        	tmp = Constants.EMPTY;
+        }
+        if (!tmp.equals(fontStyleCombo.getText())) {
+        	fontStyleCombo.setText(tmp);
         }
         // set FONT_WEIGHT attribute
-        if ((tmp = styleAttributes.getAttribute(CSSConstants.FONT_WEIGHT)) != null) {
-            fontWeigthCombo.setText(tmp);
-        } else {
-            fontWeigthCombo.setText(Constants.EMPTY);
+    	tmp = styleAttributes.getAttribute(CSSConstants.FONT_WEIGHT);
+        if (tmp == null) {
+        	tmp = Constants.EMPTY;
+        }
+        if (!tmp.equals(fontWeigthCombo.getText())) {
+        	fontWeigthCombo.setText(tmp);
         }
         // set TEXT_ALIGN attribute
-        if ((tmp = styleAttributes.getAttribute(CSSConstants.TEXT_ALIGN)) != null) {
-            textAlignCombo.setText(tmp);
-        } else {
-            textAlignCombo.setText(Constants.EMPTY);
+    	tmp = styleAttributes.getAttribute(CSSConstants.TEXT_ALIGN);
+        if (tmp == null) {
+        	tmp = Constants.EMPTY;
+        }
+        if (!tmp.equals(textAlignCombo.getText())) {
+        	textAlignCombo.setText(tmp);
         }
         updateDataFromStyleAttributes = false;
     }

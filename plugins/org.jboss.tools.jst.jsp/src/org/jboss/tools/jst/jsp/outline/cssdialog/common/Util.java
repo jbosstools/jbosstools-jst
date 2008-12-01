@@ -382,4 +382,48 @@ public class Util {
 		}
 		return null;
 	}
+
+	/**
+	 * Method is used to convert style class value to its CSS file view presentation.
+	 * Example: class="value1, value2, value3" => ".value1 .value2 .value3"
+	 *
+	 * @param styleClass the value of class attribute
+	 * @return style class presentation in CSS file
+	 */
+	public static String formatStyleClassToCSSView (String styleClass) {
+    	if (styleClass != null && !styleClass.equals(Constants.EMPTY)) {
+    		String[] styleClasses = styleClass.split("\\s++"); //$NON-NLS-1$
+    		StringBuffer sb = new StringBuffer();
+    		for (int i = 0; i < styleClasses.length; i++) {
+    			String value = styleClasses[i];
+    			// check if first symbol doesn't specify some special CSS symbols
+				if (!value.startsWith("#")) { //$NON-NLS-1$
+					sb.append("."); //$NON-NLS-1$
+				}
+				sb.append(value);
+				if (i != (styleClasses.length - 1)) {
+					sb.append(Constants.WHITE_SPACE);
+				}
+			}
+	    	return sb.toString().trim();
+    	}
+    	return null;
+	}
+
+	/**
+	 * This method is handle input parameter in reverse way as <code>formatStyleClassToCSSView</code> method.
+	 * Example: ".value1 .value2 .value3" => "value1, value2, value3"
+	 *
+	 * @return String value
+	 */
+    public static String formatCSSSelectorToStyleClassView(String cssSelector) {
+    	String className = cssSelector;
+    	if (cssSelector != null) {
+            className = cssSelector.replaceAll("\\.", Constants.EMPTY); //$NON-NLS-1$
+            className = className.replaceAll("\\,", Constants.EMPTY); //$NON-NLS-1$
+            className = className.replaceAll("\\s++", Constants.WHITE_SPACE); //$NON-NLS-1$
+    	}
+
+        return className;
+    }
 }

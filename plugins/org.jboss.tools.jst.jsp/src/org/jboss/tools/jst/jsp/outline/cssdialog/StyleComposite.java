@@ -53,7 +53,6 @@ public class StyleComposite extends Composite {
     private static String NODE_ATTRIBUTE_NAME = "name";
 
     private static int TAB_TEXT_FONT_NUMBER = 0;
-    private static int TAB_QUICK_EDIT_NUMBER = 5;
     private static int FIRST_SELECTION = 0;
     private static int SIZE_NULL = 0;
 
@@ -79,6 +78,8 @@ public class StyleComposite extends Composite {
     private Parser parser;
     private HashMap<String, ArrayList<String>> comboMap = new HashMap<String, ArrayList<String>>();
     private HashMap<String, ArrayList<String>> elementsMap = new HashMap<String, ArrayList<String>>();
+
+    private boolean showPreviewTab = false;
 
     /**
      * StyleComposite constructor.
@@ -200,10 +201,12 @@ public class StyleComposite extends Composite {
         tabPropertySheet.setToolTipText(JstUIMessages.PROPERTY_SHEET_TAB_NAME);
         tabPropertySheet.setControl(createTabPropertySheetControl(tabFolder));
 
-        tabPreview = new TabItem(tabFolder, SWT.NONE);
-        tabPreview.setText(JstUIMessages.PREVIEW_SHEET_TAB_NAME);
-        tabPreview.setToolTipText(JstUIMessages.PREVIEW_SHEET_TAB_NAME);
-        tabPreview.setControl(createPreviewContol(tabFolder));
+        if (showPreviewTab) {
+        	tabPreview = new TabItem(tabFolder, SWT.NONE);
+        	tabPreview.setText(JstUIMessages.PREVIEW_SHEET_TAB_NAME);
+        	tabPreview.setToolTipText(JstUIMessages.PREVIEW_SHEET_TAB_NAME);
+        	tabPreview.setControl(createPreviewContol(tabFolder));
+        }
 
         tabFolder.setSelection(TAB_TEXT_FONT_NUMBER);
 
@@ -212,7 +215,7 @@ public class StyleComposite extends Composite {
             tabQuickEdit.setText(JstUIMessages.QUICK_EDIT_TAB_NAME);
             tabQuickEdit.setToolTipText(JstUIMessages.QUICK_EDIT_TAB_NAME);
             tabQuickEdit.setControl(createTabQuickEditContol(tabFolder));
-            tabFolder.setSelection(TAB_QUICK_EDIT_NUMBER);
+            tabFolder.setSelection(tabQuickEdit);
             lastSelectedTab = tabQuickEdit;
         }
 
@@ -406,7 +409,7 @@ public class StyleComposite extends Composite {
                 tabQuickEditControl.updateData();
             }
 
-            tabFolder.setSelection(TAB_QUICK_EDIT_NUMBER);
+            tabFolder.setSelection(tabQuickEdit);
             lastSelectedTab = tabQuickEdit;
         } else {
             if (tabQuickEdit != null && !tabQuickEdit.isDisposed()) {
@@ -421,9 +424,41 @@ public class StyleComposite extends Composite {
      *
      * @param cssModel model associated with the file that should be displayed in preview tab
      */
-    public void updatePreview(CSSModel cssModel) {
+    public void initPreview(CSSModel cssModel) {
+        if (showPreviewTab && ((tabPreview == null) || tabPreview.isDisposed())) {
+        	tabPreview = new TabItem(tabFolder, SWT.NONE);
+        	tabPreview.setText(JstUIMessages.PREVIEW_SHEET_TAB_NAME);
+        	tabPreview.setToolTipText(JstUIMessages.PREVIEW_SHEET_TAB_NAME);
+        	tabPreview.setControl(createPreviewContol(tabFolder));
+        }
     	if (tabPreviewControl != null) {
-    		tabPreviewControl.updatePreview(cssModel);
+    		tabPreviewControl.initPreview(cssModel);
+        	tabPreviewControl.selectEditorArea(styleAttributes.getCssSelector(), 0);
+    	}
+    }
+
+    /**
+     * Method is used to update preview selection area.
+     */
+    public void updatePreview() {
+    	if (tabPreviewControl != null) {
+        	tabPreviewControl.selectEditorArea(styleAttributes.getCssSelector(), 0);
+    	}
+    }
+
+    /**
+     * Method is used to revert preview to before-saved state.
+     */
+    public void revertPreview() {
+        if (showPreviewTab && ((tabPreview == null) || tabPreview.isDisposed())) {
+        	tabPreview = new TabItem(tabFolder, SWT.NONE);
+        	tabPreview.setText(JstUIMessages.PREVIEW_SHEET_TAB_NAME);
+        	tabPreview.setToolTipText(JstUIMessages.PREVIEW_SHEET_TAB_NAME);
+        	tabPreview.setControl(createPreviewContol(tabFolder));
+        }
+    	if (tabPreviewControl != null) {
+    		tabPreviewControl.doRevertToSaved();
+        	tabPreviewControl.selectEditorArea(styleAttributes.getCssSelector(), 0);
     	}
     }
 
@@ -437,6 +472,20 @@ public class StyleComposite extends Composite {
     		tabPreviewControl.closeEditor(save);
     	}
     }
+
+	/**
+	 * @param showPreviewTab the showPreviewTab to set
+	 */
+	public void setShowPreviewTab(boolean showPreviewTab) {
+		this.showPreviewTab = showPreviewTab;
+	}
+
+	/**
+	 * @return the showPreviewTab
+	 */
+	public boolean isShowPreviewTab() {
+		return showPreviewTab;
+	}
 
     /**
      * Add ManualChangeStyleListener object.

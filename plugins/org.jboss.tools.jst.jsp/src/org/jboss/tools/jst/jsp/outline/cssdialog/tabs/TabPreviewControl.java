@@ -58,7 +58,7 @@ public class TabPreviewControl extends Composite {
      *
      * @param cssFile CSS file to be displayed in preview area
      */
-    public void updatePreview(CSSModel cssModel) {
+    public void initPreview(CSSModel cssModel) {
     	this.cssModel = cssModel;
     	if (cssModel != null) {
     		IEditorInput input = new FileEditorInput(cssModel.getStyleFile());
@@ -75,6 +75,10 @@ public class TabPreviewControl extends Composite {
        				for (Control control : getChildren()) {
        					control.dispose();
         			}
+       				if (editor != null) {
+       					editor.doRevertToSaved();
+       					editor.close(false);
+       				}
     				editor = (StructuredTextEditor)ref.getEditor(true);
         			editor.createPartControl(this);
         			editor.getTextViewer().setEditable(false);
@@ -87,6 +91,12 @@ public class TabPreviewControl extends Composite {
     	}
     }
 
+    public void doRevertToSaved() {
+    	if (editor != null) {
+    		editor.doRevertToSaved();
+    	}
+    }
+    
     /**
      * Method is used to select area that corresponds to specific selector.
      *
@@ -95,9 +105,11 @@ public class TabPreviewControl extends Composite {
      * 		then index is serial number of this selector
      */
     public void selectEditorArea(String selector, int index) {
-    	IndexedRegion indexedRegion = cssModel.getSelectorRegion(selector, index);
-    	if (editor != null && indexedRegion != null) {
-    		editor.selectAndReveal(indexedRegion.getStartOffset(), indexedRegion.getLength());
+    	if (cssModel != null) {
+    		IndexedRegion indexedRegion = cssModel.getSelectorRegion(selector, index);
+    		if (editor != null && indexedRegion != null) {
+    			editor.selectAndReveal(indexedRegion.getStartOffset(), indexedRegion.getLength());
+    		}
     	}
     }
 
@@ -110,6 +122,7 @@ public class TabPreviewControl extends Composite {
     	if (editor != null) {
     		editor.doRevertToSaved();
     		editor.close(save);
+    		editor = null;
     	}
     	if (cssModel != null) {
     		cssModel.releaseModel();

@@ -65,7 +65,7 @@ public class TabPropertySheetControl extends Composite {
         for (String str : set) {
             TreeItem item = new TreeItem(tree, SWT.NONE);
             item.setText(str);
-            item.setFont(Constants.FIRST_COLUMN, JFaceResources.getFontRegistry().get(JFaceResources.TEXT_FONT));
+//            item.setFont(Constants.FIRST_COLUMN, JFaceResources.getFontRegistry().get(JFaceResources.TEXT_FONT));
 
             ArrayList<String> list = elementMap.get(str);
             for (String strList : list) {

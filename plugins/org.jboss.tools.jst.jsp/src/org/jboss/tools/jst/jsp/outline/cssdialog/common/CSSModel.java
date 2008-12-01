@@ -56,9 +56,15 @@ public class CSSModel {
      * @param styleFile CSS style class that should initialize CSS model
      */
     public CSSModel(IFile styleFile) {
+    	init(styleFile);
+    }
+
+    public void init(IFile styleFile) {
         try {
         	this.styleFile = styleFile;
-
+        	if (model != null) {
+        		releaseModel();
+        	}
         	formatProcessorCSS = new FormatProcessorCSS();
             IModelManager modelManager = StructuredModelManager.getModelManager();
             model = modelManager.getModelForEdit(styleFile);
@@ -196,9 +202,15 @@ public class CSSModel {
                         // set properties
                         Set<Entry<String, String>> set = styleAttributes.entrySet();
                         for (Map.Entry<String, String> me : set) {
-                        	declaration.setProperty(me.getKey(), me.getValue(), Constants.EMPTY);
+                        	try {
+                        		declaration.setProperty(me.getKey(), me.getValue(), Constants.EMPTY);
+                        	} catch (Exception e) {
+//                        		declaration.removeProperty(me.getKey());
+//                        		e.printStackTrace();
+                        	}
                         }
 
+                        formatProcessorCSS.formatModel(model);
                         return;
                     }
                 }

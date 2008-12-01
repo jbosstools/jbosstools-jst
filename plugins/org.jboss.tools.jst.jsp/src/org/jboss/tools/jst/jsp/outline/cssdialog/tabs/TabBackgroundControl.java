@@ -235,24 +235,29 @@ public class TabBackgroundControl extends Composite {
      */
     public void updateData(boolean param) {
     	updateDataFromStyleAttributes = true;
-        String tmp;
         // set BACKGROUND_COLOR attribute
-        if ((tmp = styleAttributes.getAttribute(CSSConstants.BACKGROUND_COLOR)) != null) {
+        String tmp = styleAttributes.getAttribute(CSSConstants.BACKGROUND_COLOR);
+        if (tmp == null) {
+        	tmp = Constants.EMPTY;
+        }
+        if (!tmp.equals(colorCombo.getText())) {
             colorCombo.setText(tmp);
-        } else {
-            colorCombo.setText(Constants.EMPTY);
         }
         // set BACKGROUND_IMAGE attribute
-        if ((tmp = styleAttributes.getAttribute(CSSConstants.BACKGROUND_IMAGE)) != null) {
+        tmp = styleAttributes.getAttribute(CSSConstants.BACKGROUND_IMAGE);
+        if (tmp == null) {
+        	tmp = Constants.EMPTY;
+        }
+        if (!tmp.equals(backgroundImageCombo.getText())) {
             backgroundImageCombo.setText(tmp);
-        } else {
-            backgroundImageCombo.setText(Constants.EMPTY);
         }
         // set BACKGROUND_REPEAT attribute
-        if ((tmp = styleAttributes.getAttribute(CSSConstants.BACKGROUND_REPEAT)) != null) {
+        tmp = styleAttributes.getAttribute(CSSConstants.BACKGROUND_REPEAT);
+        if (tmp == null) {
+        	tmp = Constants.EMPTY;
+        }
+        if (!tmp.equals(backgroundRepeatCombo.getText())) {
             backgroundRepeatCombo.setText(tmp);
-        } else {
-            backgroundRepeatCombo.setText(Constants.EMPTY);
         }
         updateDataFromStyleAttributes = false;
     }
