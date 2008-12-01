@@ -175,7 +175,11 @@ public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcess
 		}
 
 		Collection elProposals = null;
-		if (elQueryString != null) {
+		if (elQueryString != null 
+				// JBIDE-3290 Quick-fix - this supresses the EL-proposals suggestions
+				// in case of no "#{"-prefix is typed
+				&& elStartPosition != -1 
+				) {
 			// Query to request for EL-proposals
 			try {
 			    String query = new StringBuffer(KbQuery.TAG_SEPARATOR).append(tagName).append(KbQuery.ATTRIBUTE_SEPARATOR).append(attributeName).append(KbQuery.ENUMERATION_SEPARATOR).append(elQueryString).toString();
