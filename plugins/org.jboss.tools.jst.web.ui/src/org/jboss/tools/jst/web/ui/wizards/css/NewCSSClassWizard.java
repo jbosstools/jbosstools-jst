@@ -46,6 +46,7 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
     public NewCSSClassWizard() {
         super();
         setWindowTitle(WIZARD_WINDOW_TITLE);
+        
     }
 
 	/**
@@ -59,7 +60,8 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
     /**
      * Adding the page to the wizard.
      */
-    public void addPages() {
+    @Override
+	public void addPages() {
         page = new NewCSSClassWizardPage();
         addPage(page);
     }
@@ -68,7 +70,8 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
      * This method is called when 'Finish' button is pressed in the wizard. We
      * will create an operation and run it using wizard as execution context.
      */
-    public boolean performFinish() {
+    @Override
+	public boolean performFinish() {
         page.saveChanges();
 
         return true;

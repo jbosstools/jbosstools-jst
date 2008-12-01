@@ -10,11 +10,11 @@
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.outline.cssdialog;
 
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -47,12 +47,15 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
@@ -191,16 +194,26 @@ public class CSSClassDialog extends TitleAreaDialog {
     @Override
     protected Control createDialogArea(final Composite parent) {
         final Composite composite = (Composite) super.createDialogArea(parent);
-        return createDialogComposite(composite);
+        final Control control =createDialogComposite(composite); 
+        return control;
     }
+    private void setCentered(Shell dialogShell) {
+    	  Display display = dialogShell.getDisplay();
+    	  int width = display.getClientArea().width;
+    	  int height = display.getClientArea().height;
+    	  dialogShell.setLocation(((width - dialogShell.getSize().x) / 2), ((height - dialogShell.getSize().y) / 2));
+    	 }
 
     /**
      * @see org.eclipse.jface.dialogs.Dialog#createButtonsForButtonBar(Composite)
-     */
+//     */
     @Override
     protected void createButtonsForButtonBar(Composite parent) {
     	super.createButtonsForButtonBar(parent);
     	updateOKButtonState();
+    	getShell().setSize(550, 660);
+        setCentered(getShell());
+        getShell().layout(true);
     }
 
     private Split split;
@@ -216,7 +229,7 @@ public class CSSClassDialog extends TitleAreaDialog {
             setMessage(JstUIMessages.CSS_STYLE_CLASS_EDITOR_DESCRIPTION);
         }
         composite.setLayout(new GridLayout());
-
+        
         // ===============================================================================
         // Create split component that separates dialog on 2 parts
         // ===============================================================================
@@ -733,7 +746,8 @@ public class CSSClassDialog extends TitleAreaDialog {
     /**
      * @see org.eclipse.jface.dialogs.Dialog#close()
      */
-    public boolean close() {
+    @Override
+	public boolean close() {
     	int code = getReturnCode();
     	switch (code) {
 			case OK:
