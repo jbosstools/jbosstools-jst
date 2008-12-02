@@ -122,9 +122,9 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
          * @see IDialogPage#createControl(Composite)
          */
         public void createControl(Composite parent) {
-            Composite container = new Composite(parent, SWT.NULL);
+            Composite container = new Composite(parent, SWT.NONE);
             GridLayout layout = new GridLayout();
-            container.setLayout(layout);
+    		container.setLayout(layout);
 
             // Initialize CSS dialog that is integrated to CSS wizard.
             // Also it can be used separately without integration to wizard component.
@@ -140,8 +140,9 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 					}
 				}
             });
-            dialog.createDialogComposite(container);
+            dialog.createDialog(container);
             setControl(container);
+
         }
 
         /**

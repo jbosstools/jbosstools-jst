@@ -54,7 +54,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
@@ -200,6 +199,10 @@ public class CSSClassDialog extends TitleAreaDialog {
         final Control control = createDialogComposite(composite); 
         return control;
     }
+    
+    public Control createDialog(final Composite parent) {
+    	return  createDialogArea(parent);
+	}
 
     /**
      * @see org.eclipse.jface.dialogs.Dialog#createButtonsForButtonBar(Composite)
@@ -217,7 +220,7 @@ public class CSSClassDialog extends TitleAreaDialog {
      * @param composite parent window
      * @return eclipse Control object
      */
-    public Control createDialogComposite(Composite composite) {
+    private Control createDialogComposite(Composite composite) {
         if (!this.callFromWizard) {
             setTitle(JstUIMessages.CSS_STYLE_CLASS_EDITOR_TITLE);
             setMessage(JstUIMessages.CSS_STYLE_CLASS_EDITOR_DESCRIPTION);
