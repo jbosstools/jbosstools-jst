@@ -62,14 +62,12 @@ public class TabPreviewControl extends Composite {
     	this.cssModel = cssModel;
     	if (cssModel != null) {
     		IEditorInput input = new FileEditorInput(cssModel.getStyleFile());
-
     		try {
     			WorkbenchWindow workbenchWindow = (WorkbenchWindow)PlatformUI.getWorkbench().getActiveWorkbenchWindow();
     			EditorAreaHelper editorPresentation = new EditorAreaHelper((WorkbenchPage) workbenchWindow.getActivePage());
     			EditorManager editorManager = new EditorManager(workbenchWindow, (WorkbenchPage) workbenchWindow.getActivePage(), editorPresentation);
 
     			IEditorReference ref = editorManager.openEditor(EDITOR_ID, input, true, null);
-
     			if (ref != null) {
     				// all preview tab editors should be disposed before adding new editor compoment
        				for (Control control : getChildren()) {

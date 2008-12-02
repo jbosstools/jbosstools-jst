@@ -296,12 +296,15 @@ public class TabQuickEditControl extends Composite {
                         String key = name;
 
                         public void modifyText(ModifyEvent event) {
-                            String tmpCombo = combo.getText().trim();
-                            if (tmpCombo != null && !tmpCombo.equals(Constants.EMPTY)) {
+                            String tmpCombo = combo.getText();
+                            if (tmpCombo != null && !tmpCombo.trim().equals(Constants.EMPTY)) {
                                 String tmpExt = extCombo.getText();
                                 if (tmpExt != null) {
                                     styleAttributes.addAttribute(key, tmpCombo + tmpExt);
                                 }
+                            } else {
+                            	extCombo.select(0);
+                            	return;
                             }
                             if (!updateDataFromStyleAttributes) {
                             	notifyListeners();
@@ -328,14 +331,13 @@ public class TabQuickEditControl extends Composite {
                             }
 
                             extCombo.setEnabled(true);
-                            String tmp = combo.getText().trim();
-                            if (tmp != null && !tmp.equals(Constants.EMPTY)) {
-                            	String extTmp = extCombo.getText().trim();
+                            String tmp = combo.getText();
+                            if (tmp != null && !tmp.trim().equals(Constants.EMPTY)) {
+                            	String extTmp = extCombo.getText();
                             	if (extTmp != null) {
-                            		styleAttributes.addAttribute(key, tmp + extTmp);
-                            	} else {
-                            		styleAttributes.addAttribute(key, tmp);
+                            		tmp += extTmp;
                             	}
+                            	styleAttributes.addAttribute(key, tmp);
                             } else {
                                 styleAttributes.removeAttribute(key);
                             }
@@ -449,6 +451,9 @@ public class TabQuickEditControl extends Composite {
                                 if (tmpExt != null) {
                                     styleAttributes.addAttribute(key, tmpCombo + tmpExt);
                                 }
+                            } else {
+                            	extCombo.select(0);
+                            	return;
                             }
                             if (!updateDataFromStyleAttributes) {
                             	notifyListeners();
@@ -459,14 +464,13 @@ public class TabQuickEditControl extends Composite {
                         String key = name;
 
                         public void modifyText(ModifyEvent e) {
-                            String tmp = text.getText().trim();
-                            if (tmp != null && !tmp.equals(Constants.EMPTY)) {
-                            	String extTmp = extCombo.getText().trim();
+                            String tmp = text.getText();
+                            if (tmp != null && !tmp.trim().equals(Constants.EMPTY)) {
+                            	String extTmp = extCombo.getText();
                             	if (extTmp != null) {
-                            		styleAttributes.addAttribute(key, tmp + extTmp);
-                            	} else {
-                            		styleAttributes.addAttribute(key, tmp);
+                            		tmp += extTmp;
                             	}
+                            	styleAttributes.addAttribute(key, tmp);
                             } else {
                                 styleAttributes.removeAttribute(key);
                             }

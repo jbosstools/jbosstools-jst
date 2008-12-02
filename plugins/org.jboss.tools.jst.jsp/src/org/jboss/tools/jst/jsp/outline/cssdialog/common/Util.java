@@ -402,6 +402,7 @@ public class Util {
 				}
 				sb.append(value);
 				if (i != (styleClasses.length - 1)) {
+					sb.append(Constants.COMMA);
 					sb.append(Constants.WHITE_SPACE);
 				}
 			}

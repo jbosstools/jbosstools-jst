@@ -13,8 +13,8 @@ package org.jboss.tools.jst.jsp.outline.cssdialog.events;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 
@@ -115,7 +115,8 @@ public class StyleAttributes {
      * @return attribute value
      */
     public String getAttribute(String name) {
-        return attributeMap.get(name);
+    	String value = attributeMap.get(name);
+        return value != null ? value : Constants.EMPTY;
     }
 
     /**

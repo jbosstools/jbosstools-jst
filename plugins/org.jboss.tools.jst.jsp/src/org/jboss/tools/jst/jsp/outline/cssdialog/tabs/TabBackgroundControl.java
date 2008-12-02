@@ -93,7 +93,7 @@ public class TabBackgroundControl extends Composite {
                 public void modifyText(ModifyEvent event) {
                     String tmp = colorCombo.getText();
                     if (tmp != null && tmp.trim().length() > 0) {
-                    	styleAttributes.addAttribute(CSSConstants.BACKGROUND_COLOR, tmp);
+                    	styleAttributes.addAttribute(CSSConstants.BACKGROUND_COLOR, tmp.trim());
                     } else {
                         styleAttributes.removeAttribute(CSSConstants.BACKGROUND_COLOR);
                     }
@@ -153,7 +153,7 @@ public class TabBackgroundControl extends Composite {
         		String tmp = backgroundImageCombo.getText();
         		if (tmp != null && tmp.trim().length() > 0) {
         			tmp = adjustBackgroundURL(tmp);
-        			styleAttributes.addAttribute(CSSConstants.BACKGROUND_IMAGE, tmp);
+        			styleAttributes.addAttribute(CSSConstants.BACKGROUND_IMAGE, tmp.trim());
         		} else {
     				styleAttributes.removeAttribute(CSSConstants.BACKGROUND_IMAGE);
         		}
@@ -212,7 +212,7 @@ public class TabBackgroundControl extends Composite {
         	public void modifyText(ModifyEvent event) {
         		String tmp = backgroundRepeatCombo.getText();
         		if (tmp != null && tmp.trim().length() > 0) {
-        			styleAttributes.addAttribute(CSSConstants.BACKGROUND_REPEAT, tmp);
+        			styleAttributes.addAttribute(CSSConstants.BACKGROUND_REPEAT, tmp.trim());
         		} else {
                 	styleAttributes.removeAttribute(CSSConstants.BACKGROUND_REPEAT);
         		}
@@ -237,36 +237,26 @@ public class TabBackgroundControl extends Composite {
     	updateDataFromStyleAttributes = true;
         // set BACKGROUND_COLOR attribute
         String tmp = styleAttributes.getAttribute(CSSConstants.BACKGROUND_COLOR);
-        if (tmp == null) {
-        	tmp = Constants.EMPTY;
-        }
         if (!tmp.equals(colorCombo.getText())) {
             colorCombo.setText(tmp);
         }
         // set BACKGROUND_IMAGE attribute
         tmp = styleAttributes.getAttribute(CSSConstants.BACKGROUND_IMAGE);
-        if (tmp == null) {
-        	tmp = Constants.EMPTY;
-        }
         if (!tmp.equals(backgroundImageCombo.getText())) {
             backgroundImageCombo.setText(tmp);
         }
         // set BACKGROUND_REPEAT attribute
         tmp = styleAttributes.getAttribute(CSSConstants.BACKGROUND_REPEAT);
-        if (tmp == null) {
-        	tmp = Constants.EMPTY;
-        }
         if (!tmp.equals(backgroundRepeatCombo.getText())) {
             backgroundRepeatCombo.setText(tmp);
         }
         updateDataFromStyleAttributes = false;
     }
 
-    //Fix for JBIDE-3084
-    //in css background image should always be wraped into url(*);
+    // Fix for JBIDE-3084
+    // in css background image should always be wrapped into url(*);
     private static String adjustBackgroundURL(String backgroundURL) {
         if ((backgroundURL != null) && (backgroundURL.matches("(url)\\(.*\\)") == false)) { //$NON-NLS-1$
-
             return "url(" + backgroundURL + ")"; //$NON-NLS-1$//$NON-NLS-2$
         }
 

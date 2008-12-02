@@ -83,8 +83,6 @@ public class TabBoxesControl extends Composite {
         super(composite, SWT.NONE);
         this.styleAttributes = styleAttributes;
 
-        // TODO Dzmitry Sakovich
-        // this.cssDialog = dialog;
         final GridLayout gridLayout = new GridLayout();
         gridLayout.numColumns = numColumns;
         setLayout(gridLayout);
@@ -107,14 +105,14 @@ public class TabBoxesControl extends Composite {
                 public void modifyText(ModifyEvent event) {
                     String tmp = widthText.getText();
                     if (tmp != null && tmp.trim().length() > 0) {
-                    	String extWidth = extWidthCombo.getText().trim();
+                    	String extWidth = extWidthCombo.getText();
                     	if (extWidth != null) {
-                    		styleAttributes.addAttribute(CSSConstants.WIDTH, tmp + extWidth);
-                    	} else {
-                    		styleAttributes.addAttribute(CSSConstants.WIDTH, tmp);
+                    		tmp += extWidth;
                     	}
+                    	styleAttributes.addAttribute(CSSConstants.WIDTH, tmp);
                     } else {
                         styleAttributes.removeAttribute(CSSConstants.WIDTH);
+                        extWidthCombo.select(0);
                     }
                     if (!updateDataFromStyleAttributes) {
                     	notifyListeners();
@@ -125,12 +123,15 @@ public class TabBoxesControl extends Composite {
         extWidthCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
         extWidthCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
-                    String width = widthText.getText().trim();
-                    if (width != null && !width.equals(Constants.EMPTY)) {
+                    String width = widthText.getText();
+                    if (width != null && !width.trim().equals(Constants.EMPTY)) {
                         String tmp = extWidthCombo.getText();
                         if (tmp != null) {
                             styleAttributes.addAttribute(CSSConstants.WIDTH, width + tmp);
                         }
+                    } else {
+                    	extWidthCombo.select(0);
+                    	return;
                     }
                     if (!updateDataFromStyleAttributes) {
                     	notifyListeners();
@@ -154,14 +155,14 @@ public class TabBoxesControl extends Composite {
                 public void modifyText(ModifyEvent event) {
                     String tmp = heightText.getText();
                     if (tmp != null && tmp.trim().length() > 0) {
-                    	String extHeight = extHeightCombo.getText().trim();
-                        if (extHeight != null) {
-                        	styleAttributes.addAttribute(CSSConstants.HEIGHT, tmp + extHeight);
-                        } else {
-                        	styleAttributes.addAttribute(CSSConstants.HEIGHT, tmp);
-                        }
+                    	String extHeight = extHeightCombo.getText();
+                    	if (extHeight != null) {
+                    		tmp += extHeight;
+                    	}
+                    	styleAttributes.addAttribute(CSSConstants.HEIGHT, tmp);
                     } else {
                         styleAttributes.removeAttribute(CSSConstants.HEIGHT);
+                        extHeightCombo.select(0);
                     }
                     if (!updateDataFromStyleAttributes) {
                     	notifyListeners();
@@ -172,12 +173,15 @@ public class TabBoxesControl extends Composite {
         extHeightCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
         extHeightCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
-                    String height = heightText.getText().trim();
-                    if (height != null && !height.equals(Constants.EMPTY)) {
+                    String height = heightText.getText();
+                    if (height != null && !height.trim().equals(Constants.EMPTY)) {
                         String tmp = extHeightCombo.getText();
                         if (tmp != null) {
                             styleAttributes.addAttribute(CSSConstants.HEIGHT, height + tmp);
                         }
+                    } else {
+                    	extHeightCombo.select(0);
+                    	return;
                     }
                     if (!updateDataFromStyleAttributes) {
                     	notifyListeners();
@@ -206,9 +210,9 @@ public class TabBoxesControl extends Composite {
         borderStyleCombo.setLayoutData(gridData);
         borderStyleCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
-                    String tmp = borderStyleCombo.getText().trim();
-                    if (tmp != null && !tmp.equals(Constants.EMPTY)) {
-                    	styleAttributes.addAttribute(CSSConstants.BORDER_STYLE, tmp);
+                    String tmp = borderStyleCombo.getText();
+                    if (tmp != null && !tmp.trim().equals(Constants.EMPTY)) {
+                    	styleAttributes.addAttribute(CSSConstants.BORDER_STYLE, tmp.trim());
                     } else {
                     	styleAttributes.removeAttribute(CSSConstants.BORDER_STYLE);
                     }
@@ -235,8 +239,8 @@ public class TabBoxesControl extends Composite {
         borderColorCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
                     String tmp = borderColorCombo.getText().trim();
-                    if (tmp != null && !tmp.equals(Constants.EMPTY)) {
-                    	styleAttributes.addAttribute(CSSConstants.BORDER_COLOR, tmp);
+                    if (tmp != null && !tmp.trim().equals(Constants.EMPTY)) {
+                    	styleAttributes.addAttribute(CSSConstants.BORDER_COLOR, tmp.trim());
                     } else {
                     	styleAttributes.removeAttribute(CSSConstants.BORDER_COLOR);
                     }
@@ -306,13 +310,13 @@ public class TabBoxesControl extends Composite {
                     String tmp = borderWidthCombo.getText();
                     if (tmp != null && tmp.trim().length() > 0) {
                     	String extBorderWidth = extBorderWidthCombo.getText();
-                        if (extBorderWidth != null) {
-                        	styleAttributes.addAttribute(CSSConstants.BORDER_WIDTH, tmp + extBorderWidth);
-                        } else {
-                        	styleAttributes.addAttribute(CSSConstants.BORDER_WIDTH, tmp);
-                        }
+                    	if (extBorderWidth != null) {
+                    		tmp += extBorderWidth;
+                    	}
+                    	styleAttributes.addAttribute(CSSConstants.BORDER_WIDTH, tmp);
                     } else {
                         styleAttributes.removeAttribute(CSSConstants.BORDER_WIDTH);
+                        extBorderWidthCombo.select(0);
                     }
                     if (!updateDataFromStyleAttributes) {
                     	notifyListeners();
@@ -327,12 +331,15 @@ public class TabBoxesControl extends Composite {
         extBorderWidthCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
         extBorderWidthCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
-                    String borderWidth = borderWidthCombo.getText().trim();
-                    if (borderWidth != null && !borderWidth.equals(Constants.EMPTY)) {
+                    String borderWidth = borderWidthCombo.getText();
+                    if (borderWidth != null && !borderWidth.trim().equals(Constants.EMPTY)) {
                         String tmp = extBorderWidthCombo.getText();
                         if (tmp != null) {
                             styleAttributes.addAttribute(CSSConstants.BORDER_WIDTH, borderWidth + tmp);
                         }
+                    } else {
+                    	extBorderWidthCombo.select(0);
+                    	return;
                     }
                     if (!updateDataFromStyleAttributes) {
                     	notifyListeners();
@@ -361,14 +368,14 @@ public class TabBoxesControl extends Composite {
                 public void modifyText(ModifyEvent event) {
                     String tmp = marginText.getText();
                     if (tmp != null && tmp.trim().length() > 0) {
-                    	String extMargin = extMarginCombo.getText().trim();
+                    	String extMargin = extMarginCombo.getText();
                     	if (extMargin != null) {
-                    		styleAttributes.addAttribute(CSSConstants.MARGIN, tmp + extMargin);
-                    	} else {
-                    		styleAttributes.addAttribute(CSSConstants.MARGIN, tmp);
+                    		tmp += extMargin;
                     	}
+                    	styleAttributes.addAttribute(CSSConstants.MARGIN, tmp);
                     } else {
                         styleAttributes.removeAttribute(CSSConstants.MARGIN);
+                        extMarginCombo.select(0);
                     }
                     if (!updateDataFromStyleAttributes) {
                     	notifyListeners();
@@ -379,12 +386,15 @@ public class TabBoxesControl extends Composite {
         extMarginCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
         extMarginCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
-                    String margin = marginText.getText().trim();
-                    if (margin != null && !margin.equals(Constants.EMPTY)) {
+                    String margin = marginText.getText();
+                    if (margin != null && !margin.trim().equals(Constants.EMPTY)) {
                         String tmp = extMarginCombo.getText();
                         if (tmp != null) {
                             styleAttributes.addAttribute(CSSConstants.MARGIN, margin + tmp);
                         }
+                    } else {
+                    	extMarginCombo.select(0);
+                    	return;
                     }
                     if (!updateDataFromStyleAttributes) {
                     	notifyListeners();
@@ -408,14 +418,14 @@ public class TabBoxesControl extends Composite {
                 public void modifyText(ModifyEvent event) {
                     String tmp = paddingText.getText();
                     if (tmp != null && tmp.trim().length() > 0) {
-                    	String extPadding = extPaddingCombo.getText().trim();
+                    	String extPadding = extPaddingCombo.getText();
                     	if (extPadding != null) {
-                    		styleAttributes.addAttribute(CSSConstants.PADDING, tmp + extPadding);
-                    	} else {
-                    		styleAttributes.addAttribute(CSSConstants.PADDING, tmp);
+                    		tmp += extPadding;
                     	}
+                    	styleAttributes.addAttribute(CSSConstants.PADDING, tmp);
                     } else {
                         styleAttributes.removeAttribute(CSSConstants.PADDING);
+                        extPaddingCombo.select(0);
                     }
                     if (!updateDataFromStyleAttributes) {
                     	notifyListeners();
@@ -426,12 +436,15 @@ public class TabBoxesControl extends Composite {
         extPaddingCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
         extPaddingCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
-                    String padding = paddingText.getText().trim();
-                    if (padding != null && !padding.equals(Constants.EMPTY)) {
+                    String padding = paddingText.getText();
+                    if (padding != null && !padding.trim().equals(Constants.EMPTY)) {
                         String tmp = extPaddingCombo.getText();
                         if (tmp != null) {
                             styleAttributes.addAttribute(CSSConstants.PADDING, padding + tmp);
                         }
+                    } else {
+                        extPaddingCombo.select(0);
+                    	return;
                     }
                     if (!updateDataFromStyleAttributes) {
                     	notifyListeners();
@@ -468,98 +481,62 @@ public class TabBoxesControl extends Composite {
         updateDataFromStyleAttributes = true;
         // set WIDTH and EXTENSION_WIDTH attributes
         String tmp = styleAttributes.getAttribute(CSSConstants.WIDTH);
-        if (tmp == null) {
-        	tmp = Constants.EMPTY;
-        	extWidthCombo.select(0);
-        }
         String[] str = Util.convertExtString(tmp);
         if (!str[0].equals(widthText.getText())) {
             widthText.setText(str[0]);
             if (extWidthCombo.indexOf(str[1]) != -1) {
                 extWidthCombo.setText(str[1]);
                 extWidthCombo.select(extWidthCombo.indexOf(str[1]));
-            } else {
-                extWidthCombo.select(0);
             }
         }
         // set HEIGHT and EXTENSION_HEIGHT attributes
         tmp = styleAttributes.getAttribute(CSSConstants.HEIGHT);
-        if (tmp == null) {
-        	tmp = Constants.EMPTY;
-        	extHeightCombo.select(0);
-        }
         str = Util.convertExtString(tmp);
         if (!str[0].equals(heightText.getText())) {
         	heightText.setText(str[0]);
             if (extHeightCombo.indexOf(str[1]) != -1) {
             	extHeightCombo.setText(str[1]);
             	extHeightCombo.select(extHeightCombo.indexOf(str[1]));
-            } else {
-            	extHeightCombo.select(0);
             }
         }
         // set BORDER_STYLE attribute
         tmp = styleAttributes.getAttribute(CSSConstants.BORDER_STYLE);
-        if (tmp == null) {
-        	tmp = Constants.EMPTY;
-        }
         if (!tmp.equals(borderStyleCombo.getText())) {
         	borderStyleCombo.setText(tmp);
         }
         // set BORDER_COLOR attribute
         tmp = styleAttributes.getAttribute(CSSConstants.BORDER_COLOR);
-        if (tmp == null) {
-        	tmp = Constants.EMPTY;
-        }
         if (!tmp.equals(borderColorCombo.getText())) {
         	borderColorCombo.setText(tmp);
         }
         // set BORDER_WIDTH and EXTENSION_BORDER_WIDTH attributes
         tmp = styleAttributes.getAttribute(CSSConstants.BORDER_WIDTH);
-        if (tmp == null) {
-        	tmp = Constants.EMPTY;
-        	extBorderWidthCombo.select(0);
-        }
         str = Util.convertExtString(tmp);
         if (!str[0].equals(borderWidthCombo.getText())) {
         	borderWidthCombo.setText(str[0]);
             if (extBorderWidthCombo.indexOf(str[1]) != -1) {
             	extBorderWidthCombo.setText(str[1]);
             	extBorderWidthCombo.select(extBorderWidthCombo.indexOf(str[1]));
-            } else {
-            	extBorderWidthCombo.select(0);
             }
         }
         // set MARGIN and EXTENSION_MARGIN attributes
         tmp = styleAttributes.getAttribute(CSSConstants.MARGIN);
-        if (tmp == null) {
-        	tmp = Constants.EMPTY;
-        	extMarginCombo.select(0);
-        }
         str = Util.convertExtString(tmp);
         if (!str[0].equals(marginText.getText())) {
         	marginText.setText(str[0]);
             if (extMarginCombo.indexOf(str[1]) != -1) {
             	extMarginCombo.setText(str[1]);
             	extMarginCombo.select(extMarginCombo.indexOf(str[1]));
-            } else {
-            	extMarginCombo.select(0);
             }
         }
         // set PADDING and EXTENSION_PADDING attributes
         tmp = styleAttributes.getAttribute(CSSConstants.PADDING);
-        if (tmp == null) {
-        	tmp = Constants.EMPTY;
-        	extPaddingCombo.select(0);
-        }
         str = Util.convertExtString(tmp);
         if (!str[0].equals(paddingText.getText())) {
         	paddingText.setText(str[0]);
             if (extPaddingCombo.indexOf(str[1]) != -1) {
             	extPaddingCombo.setText(str[1]);
             	extPaddingCombo.select(extPaddingCombo.indexOf(str[1]));
-            } else {
-            	extPaddingCombo.select(0);
             }
         }
         updateDataFromStyleAttributes = false;

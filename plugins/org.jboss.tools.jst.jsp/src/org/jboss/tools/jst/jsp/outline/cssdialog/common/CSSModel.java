@@ -202,12 +202,12 @@ public class CSSModel {
                         // set properties
                         Set<Entry<String, String>> set = styleAttributes.entrySet();
                         for (Map.Entry<String, String> me : set) {
-                        	try {
+//                        	try {
                         		declaration.setProperty(me.getKey(), me.getValue(), Constants.EMPTY);
-                        	} catch (Exception e) {
+//                        	} catch (Exception e) {
 //                        		declaration.removeProperty(me.getKey());
 //                        		e.printStackTrace();
-                        	}
+//                        	}
                         }
 
                         formatProcessorCSS.formatModel(model);

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -47,8 +48,6 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -194,19 +193,13 @@ public class CSSClassDialog extends TitleAreaDialog {
     @Override
     protected Control createDialogArea(final Composite parent) {
         final Composite composite = (Composite) super.createDialogArea(parent);
-        final Control control =createDialogComposite(composite); 
+        final Control control = createDialogComposite(composite); 
         return control;
     }
-    private void setCentered(Shell dialogShell) {
-    	  Display display = dialogShell.getDisplay();
-    	  int width = display.getClientArea().width;
-    	  int height = display.getClientArea().height;
-    	  dialogShell.setLocation(((width - dialogShell.getSize().x) / 2), ((height - dialogShell.getSize().y) / 2));
-    	 }
 
     /**
      * @see org.eclipse.jface.dialogs.Dialog#createButtonsForButtonBar(Composite)
-//     */
+     */
     @Override
     protected void createButtonsForButtonBar(Composite parent) {
     	super.createButtonsForButtonBar(parent);
@@ -214,6 +207,13 @@ public class CSSClassDialog extends TitleAreaDialog {
     	getShell().setSize(550, 660);
         setCentered(getShell());
         getShell().layout(true);
+    }
+
+    private void setCentered(Shell dialogShell) {
+    	Display display = dialogShell.getDisplay();
+    	int width = display.getClientArea().width;
+    	int height = display.getClientArea().height;
+    	dialogShell.setLocation(((width - dialogShell.getSize().x) / 2), ((height - dialogShell.getSize().y) / 2));
     }
 
     private Split split;
@@ -266,7 +266,7 @@ public class CSSClassDialog extends TitleAreaDialog {
            		styleChanged = true;
            		if (currentClassStyle != null && !currentClassStyle.equals(Constants.EMPTY)
         				&& currentFile != null && !currentFile.equals(Constants.EMPTY)) {
-           			styleComposite.updateStyle();
+//           			styleComposite.updateStyle();
            			cssModel.setCSS(currentClassStyle, styleAttributes);
                		applyButton.setEnabled(true);
            		}
@@ -301,7 +301,7 @@ public class CSSClassDialog extends TitleAreaDialog {
 		contentAssistAdapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
 		contentAssistAdapter.addContentProposalListener(new IContentProposalListener() {
 			public void proposalAccepted(IContentProposal proposal) {
-				cssStyleClassChanged();
+				cssStyleClassChanged(true);
 				applyButton.setEnabled(false);
 				keyInputSelector = false;
 			}
@@ -438,7 +438,7 @@ public class CSSClassDialog extends TitleAreaDialog {
         				return;
         			}
         		}
-        		cssStyleClassChanged();
+        		cssStyleClassChanged(true);
         		applyButton.setEnabled(false);
         		keyInputSelector = false;
         	}
@@ -449,11 +449,10 @@ public class CSSClassDialog extends TitleAreaDialog {
 				if (currentClassStyle != null && currentClassStyle.equals(classCombo.getText().trim())) {
 					return;
 				}
-				cssStyleClassChanged();
+				cssStyleClassChanged(true);
 				applyButton.setEnabled(true);
 				keyInputSelector = true;
 			}
-
         });
         // this listener is responsible for processing dialog header message events
     	classCombo.addModifyListener(new ModifyListener() {
@@ -504,8 +503,12 @@ public class CSSClassDialog extends TitleAreaDialog {
         clearButton.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
                 styleComposite.clearStyleComposite(currentClassStyle);
+       			styleComposite.revertPreview();
        			styleComposite.updateStyle();
-       			cssModel.setCSS(currentClassStyle, styleAttributes);
+       			if (currentClassStyle != null && !currentClassStyle.equals(Constants.EMPTY)) {
+       				cssModel.setCSS(currentClassStyle, styleAttributes);
+       			}
+            	applyButton.setEnabled(true);
                 styleChanged = true;
             }
         });
@@ -529,7 +532,7 @@ public class CSSClassDialog extends TitleAreaDialog {
 	/**
 	 * Method is used to correctly process style class change operation.
 	 */
-	private void cssStyleClassChanged() {
+	private void cssStyleClassChanged(boolean updateStyleComposite) {
 		if (currentFile != null && !currentFile.equals(Constants.EMPTY)) {
 			if (styleChanged && currentClassStyle != null && !currentClassStyle.equals(Constants.EMPTY)) {
 				MessageBox messageBox = new MessageBox(getParentShell(), SWT.YES | SWT.NO | SWT.ICON_QUESTION);
@@ -541,7 +544,7 @@ public class CSSClassDialog extends TitleAreaDialog {
            			if (classCombo.indexOf(currentClassStyle) == -1) {
            				classCombo.add(currentClassStyle);
            			}
-                	saveChanges(false);
+                	saveChanges(!updateStyleComposite);
                 	// update content assist proposals
             		SimpleContentProposalProvider proposalProvider =
             			(SimpleContentProposalProvider)contentAssistAdapter.getContentProposalProvider();
@@ -553,16 +556,20 @@ public class CSSClassDialog extends TitleAreaDialog {
     		// update current class style value
     		currentClassStyle = classCombo.getText().trim();
     		styleComposite.revertPreview();
+			if (updateStyleComposite) {
     		updateStyleComposite();
-    		cssModel.setCSS(currentClassStyle, styleAttributes);
-    		styleComposite.updatePreview();
-
+    		styleAttributes.setCssSelector(currentClassStyle);
+    		if (currentClassStyle != null && !currentClassStyle.equals(Constants.EMPTY)) {
+    			cssModel.setCSS(currentClassStyle, styleAttributes);
+    			styleComposite.updatePreview();
+    		}
     		updateOKButtonState();
+			}
 		} else {
 			currentClassStyle = classCombo.getText().trim();
+			styleAttributes.setCssSelector(currentClassStyle);
 		}
 		styleChanged = false;
-		styleAttributes.setCssSelector(currentClassStyle);
 	}
 
     /**
@@ -638,12 +645,18 @@ public class CSSClassDialog extends TitleAreaDialog {
         	        browser.dispose();
         	        // create Text area component instead of HTML Browser
         	        GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
-        	        textBrowser = new Text(browserContainer, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+//        	        textBrowser = new Text(browserContainer, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+        	        textBrowser = new Text(browserContainer, SWT.NONE | SWT.H_SCROLL);
         	        textBrowser.setText(previewBrowserValue);
         	        textBrowser.addFocusListener(new FocusAdapter() {
         	        	public void focusLost(FocusEvent e) {
         	        		if (e.widget == textBrowser) {
-        	        			previewBrowserValue = textBrowser.getText();
+        	        			String text = textBrowser.getText();
+        	        			if (text == null || text.equals(Constants.EMPTY)) {
+        	        				previewBrowserValue = JstUIMessages.DEFAULT_TEXT_FOR_BROWSER_PREVIEW;
+        	        			} else {
+        	        				previewBrowserValue = text;
+        	        			}
         	        			textBrowser.dispose();
         	        			// create Browse component instead of text area
         	        			createBrowserComponent();
@@ -751,7 +764,8 @@ public class CSSClassDialog extends TitleAreaDialog {
     	int code = getReturnCode();
     	switch (code) {
 			case OK:
-		        saveChanges(true);
+				cssStyleClassChanged(false);
+				styleComposite.closePreview(true);
 				break;
 			case CANCEL:
 			default:

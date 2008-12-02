@@ -97,7 +97,7 @@ public class TabTextControl extends Composite {
                 public void modifyText(ModifyEvent event) {
                     String tmp = fontFamilyText.getText();
                     if (tmp != null && tmp.trim().length() > 0) {
-                    	styleAttributes.addAttribute(CSSConstants.FONT_FAMILY, tmp);
+                    	styleAttributes.addAttribute(CSSConstants.FONT_FAMILY, tmp.trim());
                     } else {
                         styleAttributes.removeAttribute(CSSConstants.FONT_FAMILY);
                     }
@@ -142,7 +142,7 @@ public class TabTextControl extends Composite {
                 public void modifyText(ModifyEvent event) {
                     String tmp = colorCombo.getText();
                     if (tmp != null && tmp.trim().length() > 0) {
-                    	styleAttributes.addAttribute(CSSConstants.COLOR, tmp);
+                    	styleAttributes.addAttribute(CSSConstants.COLOR, tmp.trim());
                     } else {
                         styleAttributes.removeAttribute(CSSConstants.COLOR);
                     }
@@ -203,12 +203,15 @@ public class TabTextControl extends Composite {
         extFontSizeCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
         extFontSizeCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
-                    String fontSize = fontSizeCombo.getText().trim();
-                    if (fontSize != null && !fontSize.equals(Constants.EMPTY)) {
+                    String fontSize = fontSizeCombo.getText();
+                    if (fontSize != null && !fontSize.trim().equals(Constants.EMPTY)) {
                         String tmp = extFontSizeCombo.getText();
                         if (tmp != null) {
                             styleAttributes.addAttribute(CSSConstants.FONT_SIZE, fontSize + tmp);
                         }
+                    } else {
+                    	extFontSizeCombo.select(0);
+                    	return;
                     }
             		if (!updateDataFromStyleAttributes) {
             			notifyListeners();
@@ -238,12 +241,11 @@ public class TabTextControl extends Composite {
                     extFontSizeCombo.setEnabled(true);
                     String tmp = fontSizeCombo.getText();
                     if (tmp != null && tmp.trim().length() > 0) {
-                    	String extFont = extFontSizeCombo.getText().trim();
+                    	String extFont = extFontSizeCombo.getText();
                     	if (extFont != null) {
-                    		styleAttributes.addAttribute(CSSConstants.FONT_SIZE, tmp + extFont);
-                    	} else {
-                    		styleAttributes.addAttribute(CSSConstants.FONT_SIZE, tmp);
+                    		tmp += extFont;
                     	}
+                    	styleAttributes.addAttribute(CSSConstants.FONT_SIZE, tmp);
                     } else {
                         styleAttributes.removeAttribute(CSSConstants.FONT_SIZE);
                     }
@@ -272,7 +274,7 @@ public class TabTextControl extends Composite {
                 public void modifyText(ModifyEvent event) {
                     String tmp = fontStyleCombo.getText();
                     if (tmp != null && tmp.trim().length() > 0) {
-                    	styleAttributes.addAttribute(CSSConstants.FONT_STYLE, tmp);
+                    	styleAttributes.addAttribute(CSSConstants.FONT_STYLE, tmp.trim());
                     } else {
                         styleAttributes.removeAttribute(CSSConstants.FONT_STYLE);
                     }
@@ -301,7 +303,7 @@ public class TabTextControl extends Composite {
                 public void modifyText(ModifyEvent event) {
                     String tmp = fontWeigthCombo.getText();
                     if (tmp != null && tmp.trim().length() > 0) {
-                    	styleAttributes.addAttribute(CSSConstants.FONT_WEIGHT, tmp);
+                    	styleAttributes.addAttribute(CSSConstants.FONT_WEIGHT, tmp.trim());
                     } else {
                         styleAttributes.removeAttribute(CSSConstants.FONT_WEIGHT);
                     }
@@ -330,7 +332,7 @@ public class TabTextControl extends Composite {
                 public void modifyText(ModifyEvent event) {
                     String tmp = textDecorationCombo.getText();
                     if (tmp != null && tmp.trim().length() > 0) {
-                    	styleAttributes.addAttribute(CSSConstants.TEXT_DECORATION, tmp);
+                    	styleAttributes.addAttribute(CSSConstants.TEXT_DECORATION, tmp.trim());
                     } else {
                         styleAttributes.removeAttribute(CSSConstants.TEXT_DECORATION);
                     }
@@ -359,7 +361,7 @@ public class TabTextControl extends Composite {
                 public void modifyText(ModifyEvent event) {
                     String tmp = textAlignCombo.getText();
                     if (tmp != null && tmp.trim().length() > 0) {
-                    	styleAttributes.addAttribute(CSSConstants.TEXT_ALIGN, tmp);
+                    	styleAttributes.addAttribute(CSSConstants.TEXT_ALIGN, tmp.trim());
                     } else {
                         styleAttributes.removeAttribute(CSSConstants.TEXT_ALIGN);
                     }
@@ -399,65 +401,41 @@ public class TabTextControl extends Composite {
     	updateDataFromStyleAttributes = true;
         // set FONT_FAMILY attribute
     	String tmp = styleAttributes.getAttribute(CSSConstants.FONT_FAMILY);
-        if (tmp == null) {
-        	tmp = Constants.EMPTY;
-        }
         if (!tmp.equals(fontFamilyText.getText())) {
         	fontFamilyText.setText(tmp);
         }
         // set COLOR attribute
     	tmp = styleAttributes.getAttribute(CSSConstants.COLOR);
-        if (tmp == null) {
-        	tmp = Constants.EMPTY;
-        }
         if (!tmp.equals(colorCombo.getText())) {
         	colorCombo.setText(tmp);
         }
         // set FONT_SIZE and EXTENSION_FONT_SIZE attributes
         tmp = styleAttributes.getAttribute(CSSConstants.FONT_SIZE);
-        if (tmp == null) {
-        	tmp = Constants.EMPTY;
-        	extFontSizeCombo.select(0);
-        }
         String[] str = Util.convertExtString(tmp);
         if (!str[0].equals(fontSizeCombo.getText())) {
         	fontSizeCombo.setText(str[0]);
             if (extFontSizeCombo.indexOf(str[1]) != -1) {
             	extFontSizeCombo.setText(str[1]);
             	extFontSizeCombo.select(extFontSizeCombo.indexOf(str[1]));
-            } else {
-            	extFontSizeCombo.select(0);
             }
         }
         // set TEXT_DECORATION attribute
     	tmp = styleAttributes.getAttribute(CSSConstants.TEXT_DECORATION);
-        if (tmp == null) {
-        	tmp = Constants.EMPTY;
-        }
         if (!tmp.equals(textDecorationCombo.getText())) {
         	textDecorationCombo.setText(tmp);
         }
         // set FONT_STYLE attribute
     	tmp = styleAttributes.getAttribute(CSSConstants.FONT_STYLE);
-        if (tmp == null) {
-        	tmp = Constants.EMPTY;
-        }
         if (!tmp.equals(fontStyleCombo.getText())) {
         	fontStyleCombo.setText(tmp);
         }
         // set FONT_WEIGHT attribute
     	tmp = styleAttributes.getAttribute(CSSConstants.FONT_WEIGHT);
-        if (tmp == null) {
-        	tmp = Constants.EMPTY;
-        }
         if (!tmp.equals(fontWeigthCombo.getText())) {
         	fontWeigthCombo.setText(tmp);
         }
         // set TEXT_ALIGN attribute
     	tmp = styleAttributes.getAttribute(CSSConstants.TEXT_ALIGN);
-        if (tmp == null) {
-        	tmp = Constants.EMPTY;
-        }
         if (!tmp.equals(textAlignCombo.getText())) {
         	textAlignCombo.setText(tmp);
         }
