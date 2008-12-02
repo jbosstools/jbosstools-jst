@@ -193,6 +193,10 @@ public class CSSClassDialog extends TitleAreaDialog {
     @Override
     protected Control createDialogArea(final Composite parent) {
         final Composite composite = (Composite) super.createDialogArea(parent);
+        if(composite.getLayoutData()!=null && composite.getLayoutData() instanceof GridData) {
+        	((GridData)composite.getLayoutData()).widthHint=500;
+        	((GridData)composite.getLayoutData()).heightHint=500;
+        }
         final Control control = createDialogComposite(composite); 
         return control;
     }
@@ -204,18 +208,8 @@ public class CSSClassDialog extends TitleAreaDialog {
     protected void createButtonsForButtonBar(Composite parent) {
     	super.createButtonsForButtonBar(parent);
     	updateOKButtonState();
-    	getShell().setSize(550, 660);
-        setCentered(getShell());
-        getShell().layout(true);
-    }
 
-    private void setCentered(Shell dialogShell) {
-    	Display display = dialogShell.getDisplay();
-    	int width = display.getClientArea().width;
-    	int height = display.getClientArea().height;
-    	dialogShell.setLocation(((width - dialogShell.getSize().x) / 2), ((height - dialogShell.getSize().y) / 2));
     }
-
     private Split split;
     /**
      * Create the dialog itself.
