@@ -80,6 +80,7 @@ public class StyleComposite extends Composite {
     private HashMap<String, ArrayList<String>> elementsMap = new HashMap<String, ArrayList<String>>();
 
     private boolean showPreviewTab = false;
+    private CSSModel cssModel = null;
 
     /**
      * StyleComposite constructor.
@@ -235,6 +236,7 @@ public class StyleComposite extends Composite {
                         tabBoxesControl.updateData(false);
                         lastSelectedTab = tabBoxes;
                     } else if (tabFolder.getSelection()[FIRST_SELECTION] == tabPreview) {
+                    	cssModel.setCSS(styleAttributes.getCssSelector(), styleAttributes);
                     	tabPreviewControl.selectEditorArea(styleAttributes.getCssSelector(), 0);
                         lastSelectedTab = tabPreview;
                     } else if (tabFolder.getSelection()[FIRST_SELECTION] == tabPropertySheet) {
@@ -433,7 +435,10 @@ public class StyleComposite extends Composite {
         }
     	if (tabPreviewControl != null) {
     		tabPreviewControl.initPreview(cssModel);
-        	tabPreviewControl.selectEditorArea(styleAttributes.getCssSelector(), 0);
+    		if (lastSelectedTab == tabPreview) {
+            	cssModel.setCSS(styleAttributes.getCssSelector(), styleAttributes);
+    			tabPreviewControl.selectEditorArea(styleAttributes.getCssSelector(), 0);
+    		}
     	}
     }
 
@@ -441,7 +446,8 @@ public class StyleComposite extends Composite {
      * Method is used to update preview selection area.
      */
     public void updatePreview() {
-    	if (tabPreviewControl != null) {
+    	if (tabPreviewControl != null && lastSelectedTab == tabPreview) {
+        	cssModel.setCSS(styleAttributes.getCssSelector(), styleAttributes);
         	tabPreviewControl.selectEditorArea(styleAttributes.getCssSelector(), 0);
     	}
     }
@@ -478,6 +484,13 @@ public class StyleComposite extends Composite {
 	 */
 	public void setShowPreviewTab(boolean showPreviewTab) {
 		this.showPreviewTab = showPreviewTab;
+	}
+
+	/**
+	 * @param cssModel the cssModel to set
+	 */
+	public void setCSSModel(CSSModel cssModel) {
+		this.cssModel = cssModel;
 	}
 
 	/**

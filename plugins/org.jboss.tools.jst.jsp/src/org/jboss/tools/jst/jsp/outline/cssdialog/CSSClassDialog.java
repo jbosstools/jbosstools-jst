@@ -264,7 +264,7 @@ public class CSSClassDialog extends TitleAreaDialog {
            		if (currentClassStyle != null && !currentClassStyle.equals(Constants.EMPTY)
         				&& currentFile != null && !currentFile.equals(Constants.EMPTY)) {
 //           			styleComposite.updateStyle();
-           			cssModel.setCSS(currentClassStyle, styleAttributes);
+//           			cssModel.setCSS(currentClassStyle, styleAttributes);
                		applyButton.setEnabled(true);
            		}
             }
@@ -298,7 +298,7 @@ public class CSSClassDialog extends TitleAreaDialog {
 		contentAssistAdapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
 		contentAssistAdapter.addContentProposalListener(new IContentProposalListener() {
 			public void proposalAccepted(IContentProposal proposal) {
-				cssStyleClassChanged(true);
+				cssStyleClassChanged();
 				applyButton.setEnabled(false);
 				keyInputSelector = false;
 			}
@@ -435,7 +435,7 @@ public class CSSClassDialog extends TitleAreaDialog {
         				return;
         			}
         		}
-        		cssStyleClassChanged(true);
+        		cssStyleClassChanged();
         		applyButton.setEnabled(false);
         		keyInputSelector = false;
         	}
@@ -446,7 +446,7 @@ public class CSSClassDialog extends TitleAreaDialog {
 				if (currentClassStyle != null && currentClassStyle.equals(classCombo.getText().trim())) {
 					return;
 				}
-				cssStyleClassChanged(true);
+				cssStyleClassChanged();
 				applyButton.setEnabled(true);
 				keyInputSelector = true;
 			}
@@ -502,9 +502,9 @@ public class CSSClassDialog extends TitleAreaDialog {
                 styleComposite.clearStyleComposite(currentClassStyle);
        			styleComposite.revertPreview();
        			styleComposite.updateStyle();
-       			if (currentClassStyle != null && !currentClassStyle.equals(Constants.EMPTY)) {
-       				cssModel.setCSS(currentClassStyle, styleAttributes);
-       			}
+//       			if (currentClassStyle != null && !currentClassStyle.equals(Constants.EMPTY)) {
+//       				cssModel.setCSS(currentClassStyle, styleAttributes);
+//       			}
             	applyButton.setEnabled(true);
                 styleChanged = true;
             }
@@ -529,7 +529,7 @@ public class CSSClassDialog extends TitleAreaDialog {
 	/**
 	 * Method is used to correctly process style class change operation.
 	 */
-	private void cssStyleClassChanged(boolean updateStyleComposite) {
+	private void cssStyleClassChanged() {
 		if (currentFile != null && !currentFile.equals(Constants.EMPTY)) {
 			if (styleChanged && currentClassStyle != null && !currentClassStyle.equals(Constants.EMPTY)) {
 				MessageBox messageBox = new MessageBox(getParentShell(), SWT.YES | SWT.NO | SWT.ICON_QUESTION);
@@ -541,7 +541,7 @@ public class CSSClassDialog extends TitleAreaDialog {
            			if (classCombo.indexOf(currentClassStyle) == -1) {
            				classCombo.add(currentClassStyle);
            			}
-                	saveChanges(!updateStyleComposite);
+                	saveChanges(false);
                 	// update content assist proposals
             		SimpleContentProposalProvider proposalProvider =
             			(SimpleContentProposalProvider)contentAssistAdapter.getContentProposalProvider();
@@ -553,15 +553,13 @@ public class CSSClassDialog extends TitleAreaDialog {
     		// update current class style value
     		currentClassStyle = classCombo.getText().trim();
     		styleComposite.revertPreview();
-			if (updateStyleComposite) {
     		updateStyleComposite();
     		styleAttributes.setCssSelector(currentClassStyle);
     		if (currentClassStyle != null && !currentClassStyle.equals(Constants.EMPTY)) {
-    			cssModel.setCSS(currentClassStyle, styleAttributes);
+//    			cssModel.setCSS(currentClassStyle, styleAttributes);
     			styleComposite.updatePreview();
     		}
     		updateOKButtonState();
-			}
 		} else {
 			currentClassStyle = classCombo.getText().trim();
 			styleAttributes.setCssSelector(currentClassStyle);
@@ -605,6 +603,7 @@ public class CSSClassDialog extends TitleAreaDialog {
             classCombo.setToolTipText(cssModel.getCSSText(currentClassStyle));
 
 	        styleComposite.setShowPreviewTab(true);
+	        styleComposite.setCSSModel(cssModel);
             // update style composite component with the values from new CSS file
             if (updateCSSModel) {
             	updateStyleComposite();
@@ -761,8 +760,7 @@ public class CSSClassDialog extends TitleAreaDialog {
     	int code = getReturnCode();
     	switch (code) {
 			case OK:
-				cssStyleClassChanged(false);
-				styleComposite.closePreview(true);
+				saveChanges(true);
 				break;
 			case CANCEL:
 			default:
