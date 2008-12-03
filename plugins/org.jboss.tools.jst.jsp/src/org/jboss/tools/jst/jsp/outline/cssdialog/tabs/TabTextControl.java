@@ -385,7 +385,7 @@ public class TabTextControl extends Composite {
         GridLayout gridLayoutTmp = new GridLayout(2, false);
         gridLayoutTmp.marginHeight = 0;
         gridLayoutTmp.marginWidth = 0;
-        Composite classComposite = new Composite(this, SWT.CENTER);
+        Composite classComposite = new Composite(this, SWT.NONE);
         classComposite.setLayoutData(gridData);
         classComposite.setLayout(gridLayoutTmp);
 
