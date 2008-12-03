@@ -156,7 +156,7 @@ public class JBossASAdapterInitializer implements IStartup {
 							index = 0;
 						else if(version.startsWith("4.0"))
 							index = 1;
-						else if(version.startsWith("4.2"))
+						else if(version.startsWith("4.2") || version.startsWith("4.3"))
 							index = 2;
 						else if(version.startsWith("5.0"))
 							index = 3;
