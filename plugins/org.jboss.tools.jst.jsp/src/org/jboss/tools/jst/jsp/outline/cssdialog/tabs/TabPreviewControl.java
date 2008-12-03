@@ -105,8 +105,12 @@ public class TabPreviewControl extends Composite {
     public void selectEditorArea(String selector, int index) {
     	if (cssModel != null) {
     		IndexedRegion indexedRegion = cssModel.getSelectorRegion(selector, index);
-    		if (editor != null && indexedRegion != null) {
-    			editor.selectAndReveal(indexedRegion.getStartOffset(), indexedRegion.getLength());
+    		if (editor != null) {
+    			if (indexedRegion != null) {
+    				editor.selectAndReveal(indexedRegion.getStartOffset(), indexedRegion.getLength());
+    			} else {
+    				editor.selectAndReveal(0, 0);
+    			}
     		}
     	}
     }

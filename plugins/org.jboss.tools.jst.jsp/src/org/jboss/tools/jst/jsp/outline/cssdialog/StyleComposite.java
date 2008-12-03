@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSModel;
+import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.ManualChangeStyleListener;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.StyleAttributes;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.BaseListener;
@@ -444,11 +445,13 @@ public class StyleComposite extends Composite {
 
     /**
      * Method is used to update preview selection area.
+     *
+     * @param selector CSS selector
      */
-    public void updatePreview() {
+    public void updatePreview(String selector) {
     	if (tabPreviewControl != null && lastSelectedTab == tabPreview) {
-        	cssModel.setCSS(styleAttributes.getCssSelector(), styleAttributes);
-        	tabPreviewControl.selectEditorArea(styleAttributes.getCssSelector(), 0);
+    		cssModel.setCSS(selector, styleAttributes);
+        	tabPreviewControl.selectEditorArea(selector, 0);
     	}
     }
 

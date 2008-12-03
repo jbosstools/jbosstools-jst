@@ -184,7 +184,7 @@ public class CSSModel {
      * @param styleAttribute the style to be set
      */
     public void setCSS(String selector, StyleAttributes styleAttributes) {
-        if (styleSheet != null) {
+        if (styleSheet != null && selector != null && !selector.equals(Constants.EMPTY)) {
         	CSSRuleList list = styleSheet.getCssRules();
 
             if (list != null) {

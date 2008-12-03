@@ -555,10 +555,7 @@ public class CSSClassDialog extends TitleAreaDialog {
     		styleComposite.revertPreview();
     		updateStyleComposite();
     		styleAttributes.setCssSelector(currentClassStyle);
-    		if (currentClassStyle != null && !currentClassStyle.equals(Constants.EMPTY)) {
-//    			cssModel.setCSS(currentClassStyle, styleAttributes);
-    			styleComposite.updatePreview();
-    		}
+			styleComposite.updatePreview(currentClassStyle);
     		updateOKButtonState();
 		} else {
 			currentClassStyle = classCombo.getText().trim();
