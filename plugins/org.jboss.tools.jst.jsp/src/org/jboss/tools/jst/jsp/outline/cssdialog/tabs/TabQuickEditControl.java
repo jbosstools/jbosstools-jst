@@ -305,7 +305,9 @@ public class TabQuickEditControl extends Composite {
                                     styleAttributes.addAttribute(key, tmpCombo + tmpExt);
                                 }
                             } else {
-                            	extCombo.select(0);
+                            	if (extCombo.getSelectionIndex() > 0) {
+                            		extCombo.select(0);
+                            	}
                             	return;
                             }
                             if (!updateDataFromStyleAttributes) {
@@ -455,7 +457,9 @@ public class TabQuickEditControl extends Composite {
                                     styleAttributes.addAttribute(key, tmpCombo + tmpExt);
                                 }
                             } else {
-                            	extCombo.select(0);
+                            	if (extCombo.getSelectionIndex() > 0) {
+                            		extCombo.select(0);
+                            	}
                             	return;
                             }
                             if (!updateDataFromStyleAttributes) {

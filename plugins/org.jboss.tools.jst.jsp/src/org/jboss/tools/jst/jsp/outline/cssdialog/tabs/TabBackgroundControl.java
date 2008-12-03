@@ -90,18 +90,10 @@ public class TabBackgroundControl extends Composite {
         colorCombo = new ImageCombo(this, SWT.BORDER);
         colorCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
         colorCombo.addModifyListener(new ModifyListener() {
-                public void modifyText(ModifyEvent event) {
-                    String tmp = colorCombo.getText();
-                    if (tmp != null && tmp.trim().length() > 0) {
-                    	styleAttributes.addAttribute(CSSConstants.BACKGROUND_COLOR, tmp.trim());
-                    } else {
-                        styleAttributes.removeAttribute(CSSConstants.BACKGROUND_COLOR);
-                    }
-            		if (!updateDataFromStyleAttributes) {
-            			notifyListeners();
-            		}
-                }
-            });
+        	public void modifyText(ModifyEvent event) {
+        		modifyAttribute(colorCombo.getText(), CSSConstants.BACKGROUND_COLOR);
+        	}
+        });
         Set<Entry<String, String>> set = ColorParser.getInstance().getMap().entrySet();
         for (Map.Entry<String, String> me : set) {
             RGB rgb = Util.getColor(me.getKey());
@@ -151,7 +143,7 @@ public class TabBackgroundControl extends Composite {
         backgroundImageCombo.addModifyListener(new ModifyListener() {
         	public void modifyText(ModifyEvent event) {
         		String tmp = backgroundImageCombo.getText();
-        		if (tmp != null && tmp.trim().length() > 0) {
+        		if (tmp != null && !tmp.trim().equals(Constants.EMPTY)) {
         			tmp = adjustBackgroundURL(tmp);
         			styleAttributes.addAttribute(CSSConstants.BACKGROUND_IMAGE, tmp.trim());
         		} else {
@@ -210,15 +202,7 @@ public class TabBackgroundControl extends Composite {
         backgroundRepeatCombo.setLayoutData(gridData);
         backgroundRepeatCombo.addModifyListener(new ModifyListener() {
         	public void modifyText(ModifyEvent event) {
-        		String tmp = backgroundRepeatCombo.getText();
-        		if (tmp != null && tmp.trim().length() > 0) {
-        			styleAttributes.addAttribute(CSSConstants.BACKGROUND_REPEAT, tmp.trim());
-        		} else {
-                	styleAttributes.removeAttribute(CSSConstants.BACKGROUND_REPEAT);
-        		}
-        		if (!updateDataFromStyleAttributes) {
-        			notifyListeners();
-        		}
+        		modifyAttribute(backgroundRepeatCombo.getText(), CSSConstants.BACKGROUND_REPEAT);
         	}
         });
         ArrayList<String> list = comboMap.get(CSSConstants.BACKGROUND_REPEAT);
@@ -251,6 +235,23 @@ public class TabBackgroundControl extends Composite {
             backgroundRepeatCombo.setText(tmp);
         }
         updateDataFromStyleAttributes = false;
+    }
+
+    /**
+     * Method is used to correctly process modify event occurred on specify CSS attribute control.
+     *
+     * @param attributeValue changed value of control were action takes place
+     * @param attributeName CSS name of the first parameter
+     */
+    private void modifyAttribute(String attributeValue, String attributeName) {
+        if (attributeValue != null && !attributeValue.trim().equals(Constants.EMPTY)) {
+        	styleAttributes.addAttribute(attributeName, attributeValue.trim());
+        } else {
+        	styleAttributes.removeAttribute(attributeName);
+        }
+        if (!updateDataFromStyleAttributes) {
+        	notifyListeners();
+        }
     }
 
     // Fix for JBIDE-3084

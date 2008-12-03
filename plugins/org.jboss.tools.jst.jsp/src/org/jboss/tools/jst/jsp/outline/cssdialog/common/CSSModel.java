@@ -194,20 +194,15 @@ public class CSSModel {
                             ((CSSStyleRule) list.item(i)).getSelectorText().equals(selector)) {
 
                         CSSStyleRule rule = (CSSStyleRule) list.item(i);
+                        styleSheet.deleteRule(i);
+
+                        i = styleSheet.insertRule(selector + startBraces + styleAttributes.getStyle() + endBraces, i);
+                        rule = (CSSStyleRule) list.item(i);
                         CSSStyleDeclaration declaration = rule.getStyle();
-                        // previously before updating remove all existing properties
-                        while (declaration.getLength() > 0) {
-							declaration.removeProperty(declaration.item(0));
-						}
                         // set properties
                         Set<Entry<String, String>> set = styleAttributes.entrySet();
                         for (Map.Entry<String, String> me : set) {
-//                        	try {
-                        		declaration.setProperty(me.getKey(), me.getValue(), Constants.EMPTY);
-//                        	} catch (Exception e) {
-//                        		declaration.removeProperty(me.getKey());
-//                        		e.printStackTrace();
-//                        	}
+                        	declaration.setProperty(me.getKey(), me.getValue(), Constants.EMPTY);
                         }
 
                         formatProcessorCSS.formatModel(model);
