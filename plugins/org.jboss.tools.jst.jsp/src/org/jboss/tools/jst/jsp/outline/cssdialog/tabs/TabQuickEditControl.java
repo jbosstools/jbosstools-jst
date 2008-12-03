@@ -216,7 +216,8 @@ public class TabQuickEditControl extends Composite {
             btn = new Button(tmpComposite, SWT.NONE);
             btn.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
 
-            ImageDescriptor imageDes = JspEditorPlugin.getImageDescriptor(Constants.IMAGE_FOLDER_FILE_LOCATION);
+            ImageDescriptor imageDes = JspEditorPlugin
+					.getImageDescriptor(/* Constants.IMAGE_FOLDER_FILE_LOCATION */Constants.IMAGE_FOLDERLARGE_FILE_LOCATION);
             Image chooserImage = imageDes.createImage();
             btn.setImage(chooserImage);
             btn.addDisposeListener(new DisposeListener() {
@@ -393,7 +394,8 @@ public class TabQuickEditControl extends Composite {
             btn = new Button(tmpComposite, SWT.NONE);
             btn.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
 
-            ImageDescriptor imageDes = JspEditorPlugin.getImageDescriptor(Constants.IMAGE_FONT_FILE_LOCATION);
+            ImageDescriptor imageDes = JspEditorPlugin
+					.getImageDescriptor(/* Constants.IMAGE_FONT_FILE_LOCATION */Constants.IMAGE_FONTLARGE_FILE_LOCATION);
             Image fontImage = imageDes.createImage();
             btn.setImage(fontImage);
             btn.setToolTipText(JstUIMessages.FONT_FAMILY_TIP);
