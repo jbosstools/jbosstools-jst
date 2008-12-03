@@ -151,7 +151,8 @@ public class TabQuickEditControl extends Composite {
             btn = new Button(tmpComposite, SWT.NONE);
             btn.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
 
-            ImageDescriptor imageDes = JspEditorPlugin.getImageDescriptor(Constants.IMAGE_COLOR_FILE_LOCATION);
+            ImageDescriptor imageDes = JspEditorPlugin
+					.getImageDescriptor(/* Constants.IMAGE_COLOR_FILE_LOCATION */Constants.IMAGE_COLORLARGE_FILE_LOCATION);
             Image colorImage = imageDes.createImage();
             btn.setImage(colorImage);
             btn.setToolTipText(JstUIMessages.COLOR_DIALOG_TITLE);
