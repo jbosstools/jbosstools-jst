@@ -300,7 +300,8 @@ public class ExtendedJSPContentAssistProcessor extends JSPContentAssistProcessor
 						}
 						String proposedInfo = getAdditionalInfo(parentDecl, childType);
 						for (int i = 0; i < childStrings.length; i++) {
-							CustomCompletionProposal textProposal = new AutoContentAssistantProposal(childStrings[i].indexOf("=")>-1, childStrings[i], begin, length, childStrings[i].length(), XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_ENUM), childStrings[i], null, proposedInfo, XMLRelevanceConstants.R_TAG_INSERTION);
+							Image image = XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_ENUM);
+							CustomCompletionProposal textProposal = new AutoContentAssistantProposal(childStrings[i].indexOf("=")>-1, childStrings[i], begin, length, childStrings[i].length(), image, childStrings[i], null, proposedInfo, XMLRelevanceConstants.R_TAG_INSERTION);
 							contentAssistRequest.addProposal(textProposal);
 						}
 					}

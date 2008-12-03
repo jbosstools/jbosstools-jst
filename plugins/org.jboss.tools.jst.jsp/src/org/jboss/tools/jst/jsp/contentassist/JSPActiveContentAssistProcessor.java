@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.sse.core.utils.StringUtils;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
@@ -40,7 +41,6 @@ import org.w3c.dom.Node;
  * @author Igels
  */
 public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcessor {
-
     private WtpKbConnector wtpKbConnector;
     private boolean isFacelets = false;
 
@@ -161,8 +161,15 @@ public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcess
 		            		
 		                	String replacementString = replacementStringBuffer.toString();
 		                	int cursorPosition = kbProposal.getPosition() + cursorPositionDelta;
+
+		        			// JBIDE-3133: New icons for proposals in JSF/Seam Code Assist
+		                	Image image = kbProposal.hasImage() ? 
+		                					kbProposal.getImage() : 
+		                					SharedXMLEditorPluginImageHelper
+		                						.getImage(SharedXMLEditorPluginImageHelper.IMG_OBJ_ATTRIBUTE);
+
 		                	AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(kbProposal.autoActivationContentAssistantAfterApplication(), replacementString,
-		                			replacementBeginPosition, replacementLength, cursorPosition, SharedXMLEditorPluginImageHelper.getImage(SharedXMLEditorPluginImageHelper.IMG_OBJ_ATTRIBUTE),
+		                			replacementBeginPosition, replacementLength, cursorPosition, image,
 		            				kbProposal.getLabel(), null, kbProposal.getContextInfo(), relevance);
 		            		contentAssistRequest.addProposal(proposal);
 
@@ -231,11 +238,16 @@ public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcess
 	                	if ('#' == displayString.charAt(0) || '$' == displayString.charAt(0))
 	                		displayString = elStartChar + displayString.substring(1);
 
+	        			// JBIDE-3133: New icons for proposals in JSF/Seam Code Assist
+	                	Image image = kbProposal.hasImage() ? 
+            					kbProposal.getImage() : 
+            						JspEditorPlugin.getDefault().getImage(JspEditorPlugin.CA_JSF_EL_IMAGE_PATH);
+
 	                	AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(
 	                			kbProposal.autoActivationContentAssistantAfterApplication(), 
 	                			replacementString,
 	                			replacementBeginPosition, replacementLength, cursorPosition, 
-	                			SharedXMLEditorPluginImageHelper.getImage(SharedXMLEditorPluginImageHelper.IMG_OBJ_ATTRIBUTE),
+	                			image,
 	            				displayString, null, kbProposal.getContextInfo(), relevance);
 	            		contentAssistRequest.addProposal(proposal);
 	                }

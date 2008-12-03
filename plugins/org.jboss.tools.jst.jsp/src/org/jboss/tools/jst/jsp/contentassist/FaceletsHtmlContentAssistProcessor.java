@@ -236,8 +236,14 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
                     int replacementBeginPosition = start + kbProposal.getStart();
                     int replacementLength = kbProposal.getEnd() - kbProposal.getStart();
                 	int cursorPosition = kbProposal.getPosition() + cursorPositionDelta;
+                	
+        			// JBIDE-3133: New icons for proposals in JSF/Seam Code Assist
+                	Image image = kbProposal.hasImage() ? kbProposal.getImage() : 
+                		JspEditorPlugin.getDefault().getImage(JspEditorPlugin.CA_JSF_EL_IMAGE_PATH);
+
                 	AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(kbProposal.autoActivationContentAssistantAfterApplication(), replacementString,
-                			replacementBeginPosition, replacementLength, cursorPosition, SharedXMLEditorPluginImageHelper.getImage(SharedXMLEditorPluginImageHelper.IMG_OBJ_ATTRIBUTE),
+                			replacementBeginPosition, replacementLength, cursorPosition, 
+                			image,
             				label, null, kbProposal.getContextInfo(), relevance);
             		contentAssistRequest.addProposal(proposal);
             		continue;
@@ -265,8 +271,14 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
         			}
         			
                 	int cursorPosition = kbProposal.getPosition() + cursorPositionDelta;
+                	
+        			// JBIDE-3133: New icons for proposals in JSF/Seam Code Assist
+                	Image image = kbProposal.hasImage() ? kbProposal.getImage() : 
+                		JspEditorPlugin.getDefault().getImage(JspEditorPlugin.CA_JSF_EL_IMAGE_PATH);
+                	
                 	AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(kbProposal.autoActivationContentAssistantAfterApplication(), replacementString,
-                			replacementBeginPosition, replacementLength, cursorPosition, SharedXMLEditorPluginImageHelper.getImage(SharedXMLEditorPluginImageHelper.IMG_OBJ_ATTRIBUTE),
+                			replacementBeginPosition, replacementLength, cursorPosition, 
+                			image,
             				label, null, kbProposal.getContextInfo(), relevance);
             		contentAssistRequest.addProposal(proposal);
                 }

@@ -126,6 +126,7 @@ public class WTPKbImageFileResource extends WTPKbAbstractModelResource {
 			}
 			proposal.setReplacementString(replacementString);
 			proposal.setPosition(replacementString.length());
+			proposal.setImage(JspEditorPlugin.getDefault().getImage(JspEditorPlugin.CA_RESOURCES_IMAGE_PATH));
 			proposals.add(proposal);
 		}
 		return proposals;

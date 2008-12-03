@@ -22,6 +22,7 @@ import org.eclipse.ui.IEditorInput;
 import org.jboss.tools.common.kb.KbDinamicResource;
 import org.jboss.tools.common.kb.KbProposal;
 import org.jboss.tools.common.model.XModel;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
 
 /**
@@ -59,6 +60,7 @@ public class WTPKbdBundleNameResource extends WTPKbAbstractModelResource {
 					proposal.setLabel(text);
 					proposal.setReplacementString(text);
 					proposal.setPosition(text.length());
+					proposal.setImage(JspEditorPlugin.getDefault().getImage(JspEditorPlugin.CA_JSF_MESSAGES_IMAGE_PATH));
 					proposals.add(proposal);
 				}
 			}

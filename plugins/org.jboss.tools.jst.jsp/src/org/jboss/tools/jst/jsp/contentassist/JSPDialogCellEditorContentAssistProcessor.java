@@ -22,6 +22,7 @@ import org.eclipse.jface.contentassist.ISubjectControlContentAssistProcessor;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContextInformation;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.xml.ui.internal.contentassist.XMLRelevanceConstants;
 import org.eclipse.wst.xml.ui.internal.util.SharedXMLEditorPluginImageHelper;
 import org.jboss.tools.common.kb.KbException;
@@ -123,10 +124,17 @@ public class JSPDialogCellEditorContentAssistProcessor extends JavaPackageComple
                     int replacementLength = kbProposal.getEnd() - kbProposal.getStart();
                 	int cursorPositionDelta = 0;
                 	int cursorPosition = kbProposal.getPosition() + cursorPositionDelta;
+                	
+                	Image image = kbProposal.hasImage() ? 
+                				kbProposal.getImage() :  
+                				SharedXMLEditorPluginImageHelper.getImage(SharedXMLEditorPluginImageHelper.IMG_OBJ_ATTRIBUTE);
+
                 	AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(kbProposal.autoActivationContentAssistantAfterApplication(), replacementString,
-                			replacementBeginPosition, replacementLength, cursorPosition, SharedXMLEditorPluginImageHelper.getImage(SharedXMLEditorPluginImageHelper.IMG_OBJ_ATTRIBUTE),
+                			replacementBeginPosition, replacementLength, cursorPosition, 
+                			image,
             				kbProposal.getLabel(), null, kbProposal.getContextInfo(), relevance);
-            		proposalsList.add(proposal);
+
+                	proposalsList.add(proposal);
                 } else {
                 	StringBuffer replacementStringBuffer = new StringBuffer(kbProposal.getReplacementString());
                     int replacementBeginPosition = 0;
@@ -134,9 +142,16 @@ public class JSPDialogCellEditorContentAssistProcessor extends JavaPackageComple
                 	int cursorPositionDelta = 0;
                 	String replacementString = replacementStringBuffer.toString();
                 	int cursorPosition = kbProposal.getPosition() + cursorPositionDelta;
+                	
+                	Image image = kbProposal.hasImage() ? 
+            				kbProposal.getImage() :  
+            				SharedXMLEditorPluginImageHelper.getImage(SharedXMLEditorPluginImageHelper.IMG_OBJ_ATTRIBUTE);
+
                 	AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(kbProposal.autoActivationContentAssistantAfterApplication(), replacementString,
-                			replacementBeginPosition, replacementLength, cursorPosition, SharedXMLEditorPluginImageHelper.getImage(SharedXMLEditorPluginImageHelper.IMG_OBJ_ATTRIBUTE),
+                			replacementBeginPosition, replacementLength, cursorPosition, 
+                			image,
             				kbProposal.getLabel(), null, kbProposal.getContextInfo(), relevance);
+
                 	proposalsList.add(proposal);
                 }
             }

@@ -19,6 +19,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorInput;
 import org.jboss.tools.common.el.core.model.ELExpression;
 import org.jboss.tools.common.el.core.model.ELInstance;
@@ -41,7 +42,6 @@ import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
  * @author Jeremy
  */
 public class WTPKbdBeanPropertyResource extends WTPKbAbstractModelResource {
-
 	public static String SUPPORTED_ID = WebPromptingProvider.JSF_BEAN_PROPERTIES;
 	public Properties type = new Properties();
 	protected String query;
@@ -96,7 +96,8 @@ public class WTPKbdBeanPropertyResource extends WTPKbAbstractModelResource {
 			Iterator<String> it = sorted.iterator();
 			while(it.hasNext()) {
 				String text = it.next();
-				process(proposals, "", "", -1, query.length() - "".length(), query.length(), text, restQuery);
+				process(proposals, "", "", -1, query.length() - "".length(), query.length(), text, restQuery,
+						JspEditorPlugin.getDefault().getImage(JspEditorPlugin.CA_JSF_EL_IMAGE_PATH));
 			}
 		} catch (Exception x) {
 			JspEditorPlugin.getPluginLog().logError(x);
@@ -125,7 +126,7 @@ public class WTPKbdBeanPropertyResource extends WTPKbAbstractModelResource {
 		return BEAN_PROPERTY_WRAPPERS;
 	}
 
-	protected boolean process(Collection<KbProposal> proposals, String prefix, String suffix, int start, int cursor, int end, String text, String query) {
+	protected boolean process(Collection<KbProposal> proposals, String prefix, String suffix, int start, int cursor, int end, String text, String query, Image image) {
 		if ((prefix + text).toLowerCase().startsWith((prefix + query).toLowerCase())) {
 			KbProposal proposal = new KbProposal();
 			proposal.setLabel(prefix + text + suffix);
@@ -134,6 +135,7 @@ public class WTPKbdBeanPropertyResource extends WTPKbAbstractModelResource {
 			proposal.setPosition(cursor);
 			proposal.setPostProcessing(postProcessing);
 			proposal.setRelevance(getKbProposalRelevance());
+			proposal.setImage(image);
 			return true;
 		} else {
 			return false;
@@ -210,7 +212,6 @@ public class WTPKbdBeanPropertyResource extends WTPKbAbstractModelResource {
 			// This will allow us to separate EL-proposals from all the others.
 			proposal.setReplacementString("#{" + proposal.getReplacementString() + "}");
 			proposal.setLabel("#{" + proposal.getLabel() + "}");
-			
 			
 			// JBIDE-2334: JSPAciveContentAssistProcessor (a class which calls this method)
 			// is to process opening and closing EL charachers 

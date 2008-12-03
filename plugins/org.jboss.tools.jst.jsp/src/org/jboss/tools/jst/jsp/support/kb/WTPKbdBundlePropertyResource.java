@@ -136,7 +136,8 @@ public class WTPKbdBundlePropertyResource extends WTPKbdBeanPropertyResource {
 			Iterator it = sorted.iterator();
 			while(it.hasNext()) {
 				String text = (String)it.next();
-				process(proposals, "", "", -1, query.length() - "".length(), query.length(), text, restQuery);
+				process(proposals, "", "", -1, query.length() - "".length(), query.length(), text, restQuery,
+						JspEditorPlugin.getDefault().getImage(JspEditorPlugin.CA_JSF_MESSAGES_IMAGE_PATH));
 			}
 		} catch (Exception x) {
 			JspEditorPlugin.getPluginLog().logError("Error in executing query " + query, x);
