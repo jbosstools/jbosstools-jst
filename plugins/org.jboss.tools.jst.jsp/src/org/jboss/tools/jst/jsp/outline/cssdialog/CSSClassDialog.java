@@ -760,7 +760,11 @@ public class CSSClassDialog extends TitleAreaDialog {
     	int code = getReturnCode();
     	switch (code) {
 			case OK:
-				saveChanges(true);
+				if (styleChanged || classCombo.indexOf(currentClassStyle) == -1) {
+					saveChanges(true);
+				} else {
+		        	styleComposite.closePreview(true);
+				}
 				break;
 			case CANCEL:
 			default:
