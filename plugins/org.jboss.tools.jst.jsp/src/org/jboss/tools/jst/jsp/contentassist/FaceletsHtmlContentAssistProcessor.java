@@ -98,7 +98,12 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
 	//Added by Max Areshkau JBIDE-788
 	public static final KbTldResource faceletHtmlResource = new KbTldResource(faceletHtmlUri, "", faceletHtmlPrefix, null);
 
+	public FaceletsHtmlContentAssistProcessor() {}
+
     public ICompletionProposal[] computeCompletionProposals(ITextViewer textViewer, int documentPosition) {
+    	if(this.document != textViewer.getDocument()) {
+    		wtpKbConnector = null;
+    	}
     	document = textViewer.getDocument();
     	editorInput = JspEditorPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorInput();
     	//added by Max Areshkau JBIDE-788
@@ -778,4 +783,8 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
 		return sdRegion;
 	}
 
+	public void release() {
+		super.release();
+		wtpKbConnector = null;
+	}
 }

@@ -93,6 +93,9 @@ public class ExtendedJSPContentAssistProcessor extends JSPContentAssistProcessor
 	    	JspEditorPlugin.getPluginLog().logError(e);
 	    }
 
+	    if(this.document != viewer.getDocument()) {
+	    	wtpKbConnector = null;
+	    }
 		document = viewer.getDocument();
     	//added by Max Areshkau JBIDE-788
 		updateActiveContentAssistProcessor(document);
