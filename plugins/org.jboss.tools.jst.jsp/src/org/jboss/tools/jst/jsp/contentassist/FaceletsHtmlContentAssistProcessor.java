@@ -246,6 +246,15 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
                 	Image image = kbProposal.hasImage() ? kbProposal.getImage() : 
                 		JspEditorPlugin.getDefault().getImage(JspEditorPlugin.CA_JSF_EL_IMAGE_PATH);
 
+                	if (!replacementString.startsWith("#{") && !replacementString.startsWith("${")) {
+                		if (label.startsWith("#") || label.startsWith("$"))
+                			label = label.substring(1);
+                		if (label.startsWith("{"))
+                			label = label.substring(1);
+                		if (label.endsWith("}"))
+                			label = label.substring(0, label.length() - 1);
+                	}
+
                 	AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(kbProposal.autoActivationContentAssistantAfterApplication(), replacementString,
                 			replacementBeginPosition, replacementLength, cursorPosition, 
                 			image,
@@ -280,6 +289,15 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
         			// JBIDE-3133: New icons for proposals in JSF/Seam Code Assist
                 	Image image = kbProposal.hasImage() ? kbProposal.getImage() : 
                 		JspEditorPlugin.getDefault().getImage(JspEditorPlugin.CA_JSF_EL_IMAGE_PATH);
+                	
+                	if (!replacementString.startsWith("#{") && !replacementString.startsWith("${")) {
+                		if (label.startsWith("#") || label.startsWith("$"))
+                			label = label.substring(1);
+                		if (label.startsWith("{"))
+                			label = label.substring(1);
+                		if (label.endsWith("}"))
+                			label = label.substring(0, label.length() - 1);
+                	}
                 	
                 	AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(kbProposal.autoActivationContentAssistantAfterApplication(), replacementString,
                 			replacementBeginPosition, replacementLength, cursorPosition, 
