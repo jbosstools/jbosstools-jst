@@ -276,8 +276,6 @@ public class CSSClassDialog extends TitleAreaDialog {
            		styleChanged = true;
            		if (currentClassStyle != null && !currentClassStyle.equals(Constants.EMPTY)
         				&& currentFile != null && !currentFile.equals(Constants.EMPTY)) {
-//           			styleComposite.updateStyle();
-//           			cssModel.setCSS(currentClassStyle, styleAttributes);
                		applyButton.setEnabled(true);
            		}
             }
@@ -362,7 +360,6 @@ public class CSSClassDialog extends TitleAreaDialog {
             });
         button.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
-            	// TODO:
 //    			IResource project = Util.getCurrentProject();
     			IResource project = ResourcesPlugin.getWorkspace().getRoot();
 
@@ -422,7 +419,7 @@ public class CSSClassDialog extends TitleAreaDialog {
             }
         });
     }
-    
+
 	/**
 	 * This method is used to create and initialize style class comboBox component.
 	 *
@@ -448,19 +445,13 @@ public class CSSClassDialog extends TitleAreaDialog {
         				return;
         			}
         		}
-        		cssStyleClassChanged();
-        		applyButton.setEnabled(false);
         		keyInputSelector = false;
         	}
         });
         // add key modified listener
         classCombo.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
-				if ((currentClassStyle != null && currentClassStyle.equals(classCombo.getText().trim()))
-						|| (currentClassStyle == null && classCombo.getText().trim().equals(Constants.EMPTY))) {
-					return;
-				}
-				notifyKeyChanged();
+				keyInputSelector = true;
 			}
         });
         // this listener is responsible for processing dialog header message events
@@ -476,14 +467,21 @@ public class CSSClassDialog extends TitleAreaDialog {
     			IStatus status = findMostSevere();
     			notifyListeners(classCombo, status);
     			applyToStatusLine(status);
+    			// update CSS style cmposite if needed
+				if ((currentClassStyle != null && currentClassStyle.equals(classCombo.getText().trim()))
+						|| (currentClassStyle == null && classCombo.getText().trim().equals(Constants.EMPTY))) {
+					return;
+				}
+				notifyStyleClassChanged();
+				applyButton.setEnabled(false);
             }
         });
 	}
 
 	/**
-	 * This method is invoked to correctly process class style combo key event.
+	 * This method is invoked to correctly process class style combo modify event.
 	 */
-	private void notifyKeyChanged() {
+	private void notifyStyleClassChanged() {
 		Display display = null;
 		if (PlatformUI.isWorkbenchRunning()) {
 			display = PlatformUI.getWorkbench().getDisplay();
@@ -500,8 +498,6 @@ public class CSSClassDialog extends TitleAreaDialog {
 
 						// start operation
 						cssStyleClassChanged();
-						applyButton.setEnabled(true);
-						keyInputSelector = true;
 						// end operation
 
 						monitor.done();
@@ -550,11 +546,8 @@ public class CSSClassDialog extends TitleAreaDialog {
         clearButton.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
                 styleComposite.clearStyleComposite(currentClassStyle);
-       			styleComposite.revertPreview();
+       			styleComposite.updatePreview(currentClassStyle);
        			styleComposite.updateStyle();
-//       			if (currentClassStyle != null && !currentClassStyle.equals(Constants.EMPTY)) {
-//       				cssModel.setCSS(currentClassStyle, styleAttributes);
-//       			}
             	applyButton.setEnabled(true);
                 styleChanged = true;
             }
