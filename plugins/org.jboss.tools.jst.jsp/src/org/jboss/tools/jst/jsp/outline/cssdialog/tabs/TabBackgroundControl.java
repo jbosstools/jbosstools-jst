@@ -22,8 +22,6 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -44,8 +42,7 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSConstants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.ImageCombo;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Util;
-import org.jboss.tools.jst.jsp.outline.cssdialog.events.ChangeStyleEvent;
-import org.jboss.tools.jst.jsp.outline.cssdialog.events.ManualChangeStyleListener;
+import org.jboss.tools.jst.jsp.outline.cssdialog.events.AttributeModifyListener;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.StyleAttributes;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParser;
 
@@ -53,23 +50,21 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParser;
 /**
  * Class for creating control in Background tab
  *
- * @author dsakovich@exadel.com
+ * @author Igor Zhukov (izhukov@exadel.com)
  */
-public class TabBackgroundControl extends Composite {
+public class TabBackgroundControl extends BaseTabControl {
 
     private static final int numColumns = 3;
     private ImageCombo colorCombo;
     private Combo backgroundImageCombo;
     private Combo backgroundRepeatCombo;
-    private StyleAttributes styleAttributes;
-
-    private ArrayList<ManualChangeStyleListener> listeners = new ArrayList<ManualChangeStyleListener>();
-    private boolean updateDataFromStyleAttributes = false;
 
     /**
      * Constructor for creating controls
      *
      * @param composite Composite element
+     * @param comboMap
+     * @param styleAttributes the StyleAttributes object
      */
     public TabBackgroundControl(final Composite composite, HashMap<String, ArrayList<String>> comboMap,
         final StyleAttributes styleAttributes) {
@@ -89,11 +84,8 @@ public class TabBackgroundControl extends Composite {
 
         colorCombo = new ImageCombo(this, SWT.BORDER);
         colorCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
-        colorCombo.addModifyListener(new ModifyListener() {
-        	public void modifyText(ModifyEvent event) {
-        		modifyAttribute(colorCombo.getText(), CSSConstants.BACKGROUND_COLOR);
-        	}
-        });
+        colorCombo.addModifyListener(new AttributeModifyListener(this, CSSConstants.BACKGROUND_COLOR,
+        		AttributeModifyListener.MODIFY_SIMPLE_ATTRIBUTE_FIELD));
         Set<Entry<String, String>> set = ColorParser.getInstance().getMap().entrySet();
         for (Map.Entry<String, String> me : set) {
             RGB rgb = Util.getColor(me.getKey());
@@ -140,18 +132,11 @@ public class TabBackgroundControl extends Composite {
         final GridData backgroundImageGridData = new GridData(GridData.FILL, GridData.CENTER, true, false);
         backgroundImageCombo.setLayoutData(backgroundImageGridData);
         backgroundImageCombo.add(Constants.NONE);
-        backgroundImageCombo.addModifyListener(new ModifyListener() {
-        	public void modifyText(ModifyEvent event) {
-        		String tmp = backgroundImageCombo.getText();
-        		if (tmp != null && !tmp.trim().equals(Constants.EMPTY)) {
-        			tmp = adjustBackgroundURL(tmp);
-        			styleAttributes.addAttribute(CSSConstants.BACKGROUND_IMAGE, tmp.trim());
-        		} else {
-    				styleAttributes.removeAttribute(CSSConstants.BACKGROUND_IMAGE);
-        		}
-        		if (!updateDataFromStyleAttributes) {
-        			notifyListeners();
-        		}
+        backgroundImageCombo.addModifyListener(new AttributeModifyListener(this, CSSConstants.BACKGROUND_IMAGE,
+        		AttributeModifyListener.MODIFY_SIMPLE_ATTRIBUTE_FIELD) {
+        	@Override
+        	protected String adjustAttributeValue(String attribute) {
+        		return adjustBackgroundURL(attribute);
         	}
         });
 
@@ -200,11 +185,8 @@ public class TabBackgroundControl extends Composite {
         gridData.horizontalSpan = 2;
         backgroundRepeatCombo = new Combo(this, SWT.BORDER);
         backgroundRepeatCombo.setLayoutData(gridData);
-        backgroundRepeatCombo.addModifyListener(new ModifyListener() {
-        	public void modifyText(ModifyEvent event) {
-        		modifyAttribute(backgroundRepeatCombo.getText(), CSSConstants.BACKGROUND_REPEAT);
-        	}
-        });
+        backgroundRepeatCombo.addModifyListener(new AttributeModifyListener(this, CSSConstants.BACKGROUND_REPEAT,
+        		AttributeModifyListener.MODIFY_SIMPLE_ATTRIBUTE_FIELD));
         ArrayList<String> list = comboMap.get(CSSConstants.BACKGROUND_REPEAT);
         for (String str : list) {
             backgroundRepeatCombo.add(str);
@@ -237,67 +219,14 @@ public class TabBackgroundControl extends Composite {
         updateDataFromStyleAttributes = false;
     }
 
-    /**
-     * Method is used to correctly process modify event occurred on specify CSS attribute control.
-     *
-     * @param attributeValue changed value of control were action takes place
-     * @param attributeName CSS name of the first parameter
-     */
-    private void modifyAttribute(String attributeValue, String attributeName) {
-        if (attributeValue != null && !attributeValue.trim().equals(Constants.EMPTY)) {
-        	styleAttributes.addAttribute(attributeName, attributeValue.trim());
-        } else {
-        	styleAttributes.removeAttribute(attributeName);
-        }
-        if (!updateDataFromStyleAttributes) {
-        	notifyListeners();
-        }
-    }
-
     // Fix for JBIDE-3084
     // in css background image should always be wrapped into url(*);
     private static String adjustBackgroundURL(String backgroundURL) {
-        if ((backgroundURL != null) && (backgroundURL.matches("(url)\\(.*\\)") == false)) { //$NON-NLS-1$
+        if ((backgroundURL != null && !backgroundURL.trim().equals(Constants.EMPTY))
+        		&& (backgroundURL.matches("(url)\\(.*\\)") == false)) { //$NON-NLS-1$
             return "url(" + backgroundURL + ")"; //$NON-NLS-1$//$NON-NLS-2$
         }
 
         return backgroundURL;
-    }
-
-    /**
-     * Add ManualChangeStyleListener object.
-     *
-     * @param listener ManualChangeStyleListener object to be added
-     */
-    public void addManualChangeStyleListener(ManualChangeStyleListener listener) {
-        listeners.add(listener);
-    }
-
-    /**
-     * Gets an array of ChangeStyleListener object.
-     *
-     * @return an array of ChangeStyleListener object
-     */
-    public ManualChangeStyleListener[] getManualChangeStyleListeners() {
-        return listeners.toArray(new ManualChangeStyleListener[listeners.size()]);
-    }
-
-    /**
-     * Remove ManualChangeStyleListener object passed by parameter.
-     *
-     * @param listener ManualChangeStyleListener object to be removed
-     */
-    public void removeManualChangeStyleListener(ManualChangeStyleListener listener) {
-        listeners.remove(listener);
-    }
-
-    /**
-     * Method is used to notify all subscribed listeners about any changes within style attribute map.
-     */
-    private void notifyListeners() {
-        ChangeStyleEvent event = new ChangeStyleEvent(this);
-        for (ManualChangeStyleListener listener : listeners) {
-            listener.styleChanged(event);
-        }
     }
 }

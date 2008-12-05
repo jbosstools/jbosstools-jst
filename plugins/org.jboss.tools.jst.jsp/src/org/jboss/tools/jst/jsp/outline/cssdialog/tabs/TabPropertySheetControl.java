@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -31,23 +30,24 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.events.TabPropertySheetMouseAda
  *
  * @author Evgeny Zheleznyakov
  */
-public class TabPropertySheetControl extends Composite {
+public class TabPropertySheetControl extends BaseTabControl {
 
 	private String[] columns = new String[] { "Attribute", "Value" };
     private Tree tree;
-    private StyleAttributes styleAttributes;
 
     private TabPropertySheetMouseAdapter propertySheetMouseAdapter = null;
-    boolean updateDataFromStyleAttributes = false;
 
     /**
      * Constructor for creating controls
      *
      * @param composite The parent composite for tab
+     * @param elementMap
+     * @param comboMap
+     * @param styleAttributes the StyleAttributes object
      */
-    public TabPropertySheetControl(Composite tabFolder, HashMap<String, ArrayList<String>> elementMap,
+    public TabPropertySheetControl(Composite parent, HashMap<String, ArrayList<String>> elementMap,
         HashMap<String, ArrayList<String>> comboMap, StyleAttributes styleAttributes) {
-        super(tabFolder, SWT.NONE);
+        super(parent, SWT.NONE);
         this.styleAttributes = styleAttributes;
         setLayout(new FillLayout());
 
@@ -169,15 +169,6 @@ public class TabPropertySheetControl extends Composite {
         }
 
         return null;
-    }
-
-    /**
-     * Gets the getUpdateDataFromStyleAttributes parameter value.
-     *
-     * @return boolean value
-     */
-    public boolean getUpdateDataFromStyleAttributes() {
-    	return updateDataFromStyleAttributes;
     }
 
     /**

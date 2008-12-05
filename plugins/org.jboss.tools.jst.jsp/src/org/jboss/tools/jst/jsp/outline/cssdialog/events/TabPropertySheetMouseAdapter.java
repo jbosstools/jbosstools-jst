@@ -115,7 +115,6 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
             if (elementsMap.keySet().contains(item.getText(Constants.FIRST_COLUMN).trim())) {
                 return;
             }
-
             if (comboMap.keySet().contains(item.getText(Constants.FIRST_COLUMN).trim())) {
                 createCombo(item, Constants.SECOND_COLUMN);
             } else {
@@ -168,7 +167,7 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
                         item.setText(Constants.SECOND_COLUMN, colorCombo.getText());
                         panel.dispose();
                         tabPropertySheetControl.updateData(true);
-                        if (!tabPropertySheetControl.getUpdateDataFromStyleAttributes()) {
+                        if (!tabPropertySheetControl.isUpdateDataFromStyleAttributes()) {
                         	notifyListeners();
                         }
                     }
@@ -177,7 +176,7 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
                     public void modifyText(ModifyEvent event) {
                         item.setText(Constants.SECOND_COLUMN, colorCombo.getText());
                         tabPropertySheetControl.updateData(true);
-                        if (!tabPropertySheetControl.getUpdateDataFromStyleAttributes()) {
+                        if (!tabPropertySheetControl.isUpdateDataFromStyleAttributes()) {
                         	notifyListeners();
                         }
                     }
@@ -216,7 +215,7 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
                                 item.setText(Constants.SECOND_COLUMN, str);
                             }
                             tabPropertySheetControl.updateData(true);
-                            if (!tabPropertySheetControl.getUpdateDataFromStyleAttributes()) {
+                            if (!tabPropertySheetControl.isUpdateDataFromStyleAttributes()) {
                             	notifyListeners();
                             }
                         }
@@ -258,7 +257,7 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
                             item.setText(Constants.SECOND_COLUMN, value);
                             panel.dispose();
                             tabPropertySheetControl.updateData(true);
-                            if (!tabPropertySheetControl.getUpdateDataFromStyleAttributes()) {
+                            if (!tabPropertySheetControl.isUpdateDataFromStyleAttributes()) {
                             	notifyListeners();
                             }
                         }
@@ -267,7 +266,6 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
         } else {
             combo = new Combo(panel, SWT.NONE);
         }
-
         // add items
         if (!color) {
             ArrayList<String> list = comboMap.get(item.getText(Constants.FIRST_COLUMN).trim());
@@ -295,7 +293,7 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
                         item.setText(col, combo.getText());
                         panel.dispose();
                         tabPropertySheetControl.updateData(true);
-                        if (!tabPropertySheetControl.getUpdateDataFromStyleAttributes()) {
+                        if (!tabPropertySheetControl.isUpdateDataFromStyleAttributes()) {
                         	notifyListeners();
                         }
                     }
@@ -303,7 +301,7 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
             combo.addModifyListener(new ModifyListener() {
                     public void modifyText(ModifyEvent event) {
                         item.setText(col, combo.getText());
-                        if (!tabPropertySheetControl.getUpdateDataFromStyleAttributes()) {
+                        if (!tabPropertySheetControl.isUpdateDataFromStyleAttributes()) {
                         	notifyListeners();
                         }
                     }
@@ -315,8 +313,7 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
         }
 
         // Compute the width for the editor
-        // Also, compute the column width, so that the dropdown
-        // fits
+        // Also, compute the column width, so that the dropdown fits
         editor.minimumWidth = panel.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
         editor.minimumHeight = panel.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
 
@@ -329,10 +326,8 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
     /**
      * Method for create text editor
      *
-     * @param item
-     *                Tree item for editing
-     * @param column
-     *                Number of column for editing
+     * @param item Tree item for editing
+     * @param column Number of column for editing
      */
     private void createText(final TreeItem item, int column) {
         final Composite panel = new Composite(tree, SWT.NONE);
@@ -367,7 +362,7 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
                             item.setText(Constants.SECOND_COLUMN, dialog.getFontFamily());
                             panel.dispose();
                             tabPropertySheetControl.updateData(true);
-                            if (!tabPropertySheetControl.getUpdateDataFromStyleAttributes()) {
+                            if (!tabPropertySheetControl.isUpdateDataFromStyleAttributes()) {
                             	notifyListeners();
                             }
                         }
@@ -382,8 +377,7 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
         text.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
 
         // Compute the width for the editor
-        // Also, compute the column width, so that the dropdown
-        // fits
+        // Also, compute the column width, so that the dropdown fits
         editor.minimumWidth = panel.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
         editor.minimumHeight = panel.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
 
@@ -392,21 +386,19 @@ public class TabPropertySheetMouseAdapter extends MouseAdapter {
         // Set the focus on the dropdown and set into the editor
         editor.setEditor(panel, item, column);
 
-        // Transfer any text from the cell to the Text control,
-        // set the color to match this row, select the text,
+        // Transfer any text from the cell to the Text control, set the color to match this row, select the text,
         // and set focus to the control
         text.setText(item.getText(column));
         text.setFocus();
 
-        // Add a handler to transfer the text back to the cell
-        // any time it's modified
+        // Add a handler to transfer the text back to the cell any time it's modified
         final int col = column;
         text.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent event) {
                     // Set the text of the editor's control back into the cell
                     item.setText(col, text.getText());
                     tabPropertySheetControl.updateData(true);
-                    if (!tabPropertySheetControl.getUpdateDataFromStyleAttributes()) {
+                    if (!tabPropertySheetControl.isUpdateDataFromStyleAttributes()) {
                     	notifyListeners();
                     }
                 }

@@ -45,6 +45,7 @@ public class TabPreviewControl extends Composite {
      * Constructor for creating controls
      *
      * @param composite The parent composite for tab
+     * @param styleAttributes the StyleAttributes object
      */
     public TabPreviewControl(Composite tabFolder, StyleAttributes styleAttributes) {
         super(tabFolder, SWT.NONE);

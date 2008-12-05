@@ -21,8 +21,6 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -42,19 +40,17 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSConstants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.ImageCombo;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Util;
-import org.jboss.tools.jst.jsp.outline.cssdialog.events.ChangeStyleEvent;
-import org.jboss.tools.jst.jsp.outline.cssdialog.events.ManualChangeStyleListener;
+import org.jboss.tools.jst.jsp.outline.cssdialog.events.AttributeModifyListener;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.StyleAttributes;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParser;
 
 /**
  * Class for creating Text tab controls
  *
- * @author dsakovich@exadel.com
+ * @author Igor Zhukov (izhukov@exadel.com)
  */
-public class TabTextControl extends Composite {
+public class TabTextControl extends BaseTabControl {
 
-    //private HashMap<String, String> attributesMap;
     private static final int numColumns = 3;
     private Text fontFamilyText;
     private ImageCombo colorCombo;
@@ -65,15 +61,13 @@ public class TabTextControl extends Composite {
     private Combo textDecorationCombo;
     private Combo textAlignCombo;
     private ArrayList<String> list;
-    private StyleAttributes styleAttributes;
-
-    private ArrayList<ManualChangeStyleListener> listeners = new ArrayList<ManualChangeStyleListener>();
-    private boolean updateDataFromStyleAttributes = false;
 
     /**
      * Constructor for creating controls
      *
      * @param composite Composite element
+     * @param comboMap
+     * @param styleAttributes the StyleAttributes object
      */
     public TabTextControl(final Composite composite, final HashMap<String, ArrayList<String>> comboMap,
         final StyleAttributes styleAttributes) {
@@ -93,11 +87,8 @@ public class TabTextControl extends Composite {
 
         fontFamilyText = new Text(this, SWT.BORDER | SWT.SINGLE);
         fontFamilyText.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
-        fontFamilyText.addModifyListener(new ModifyListener() {
-        	public void modifyText(ModifyEvent event) {
-        		modifyAttribute(fontFamilyText.getText(), CSSConstants.FONT_FAMILY);
-        	}
-        });
+        fontFamilyText.addModifyListener(new AttributeModifyListener(this, CSSConstants.FONT_FAMILY,
+        		AttributeModifyListener.MODIFY_SIMPLE_ATTRIBUTE_FIELD));
         Button button = new Button(this, SWT.PUSH);
         button.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
         button.setToolTipText(JstUIMessages.FONT_FAMILY_TIP);
@@ -129,11 +120,8 @@ public class TabTextControl extends Composite {
 
         colorCombo = new ImageCombo(this, SWT.BORDER);
         colorCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
-        colorCombo.addModifyListener(new ModifyListener() {
-        	public void modifyText(ModifyEvent event) {
-        		modifyAttribute(colorCombo.getText(), CSSConstants.COLOR);
-        	}
-        });
+        colorCombo.addModifyListener(new AttributeModifyListener(this, CSSConstants.COLOR,
+        		AttributeModifyListener.MODIFY_SIMPLE_ATTRIBUTE_FIELD));
         Set<Entry<String, String>> set = ColorParser.getInstance().getMap().entrySet();
         for (Map.Entry<String, String> me : set) {
             RGB rgb = Util.getColor(me.getKey());
@@ -184,35 +172,14 @@ public class TabTextControl extends Composite {
 
         extFontSizeCombo = new Combo(tmpComposite, SWT.BORDER | SWT.READ_ONLY);
         extFontSizeCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, false, false));
-        extFontSizeCombo.addModifyListener(new ModifyListener() {
-        	public void modifyText(ModifyEvent event) {
-        		modifyExtAttribute(fontSizeCombo.getText(), extFontSizeCombo, CSSConstants.FONT_SIZE);
-        	}
-        });
+        extFontSizeCombo.addModifyListener(new AttributeModifyListener(this, fontSizeCombo, CSSConstants.FONT_SIZE,
+        		AttributeModifyListener.MODIFY_COMBO_EXTENSION_ATTRIBUTE_FIELD));
         for (int i = 0; i < Constants.extSizes.length; i++) {
             extFontSizeCombo.add(Constants.extSizes[i]);
         }
 
-        fontSizeCombo.addModifyListener(new ModifyListener() {
-                public void modifyText(ModifyEvent e) {
-                    String currentText = fontSizeCombo.getText();
-                    list = comboMap.get(CSSConstants.FONT_SIZE);
-                    for (String str : list) {
-                        if (currentText.equals(str)) {
-                            extFontSizeCombo.select(0);
-                            extFontSizeCombo.setEnabled(false);
-                            styleAttributes.addAttribute(CSSConstants.FONT_SIZE, currentText);
-                    		if (!updateDataFromStyleAttributes) {
-                    			notifyListeners();
-                    		}
-                            return;
-                        }
-                    }
-
-                    extFontSizeCombo.setEnabled(true);
-                    modifyAttribute(fontSizeCombo.getText(), extFontSizeCombo, CSSConstants.BORDER_WIDTH);
-                }
-            });
+        fontSizeCombo.addModifyListener(new AttributeModifyListener(this, extFontSizeCombo, CSSConstants.FONT_SIZE,
+        		AttributeModifyListener.MODIFY_COMBO_ATTRIBUTE_FIELD_WITH_COMBO_EXTENSION));
         list = comboMap.get(CSSConstants.FONT_SIZE);
         for (String str : list) {
             fontSizeCombo.add(str);
@@ -229,11 +196,8 @@ public class TabTextControl extends Composite {
         gridData.horizontalSpan = 2;
         fontStyleCombo = new Combo(this, SWT.BORDER);
         fontStyleCombo.setLayoutData(gridData);
-        fontStyleCombo.addModifyListener(new ModifyListener() {
-        	public void modifyText(ModifyEvent event) {
-        		modifyAttribute(fontStyleCombo.getText(), CSSConstants.FONT_STYLE);
-        	}
-        });
+        fontStyleCombo.addModifyListener(new AttributeModifyListener(this, CSSConstants.FONT_STYLE,
+        		AttributeModifyListener.MODIFY_SIMPLE_ATTRIBUTE_FIELD));
         list = comboMap.get(CSSConstants.FONT_STYLE);
         for (String str : list) {
             fontStyleCombo.add(str);
@@ -250,11 +214,8 @@ public class TabTextControl extends Composite {
         gridData.horizontalSpan = 2;
         fontWeigthCombo = new Combo(this, SWT.BORDER);
         fontWeigthCombo.setLayoutData(gridData);
-        fontWeigthCombo.addModifyListener(new ModifyListener() {
-        	public void modifyText(ModifyEvent event) {
-        		modifyAttribute(fontWeigthCombo.getText(), CSSConstants.FONT_WEIGHT);
-        	}
-        });
+        fontWeigthCombo.addModifyListener(new AttributeModifyListener(this, CSSConstants.FONT_WEIGHT,
+        		AttributeModifyListener.MODIFY_SIMPLE_ATTRIBUTE_FIELD));
         list = comboMap.get(CSSConstants.FONT_WEIGHT);
         for (String str : list) {
             fontWeigthCombo.add(str);
@@ -271,11 +232,8 @@ public class TabTextControl extends Composite {
         gridData.horizontalSpan = 2;
         textDecorationCombo = new Combo(this, SWT.BORDER);
         textDecorationCombo.setLayoutData(gridData);
-        textDecorationCombo.addModifyListener(new ModifyListener() {
-        	public void modifyText(ModifyEvent event) {
-        		modifyAttribute(textDecorationCombo.getText(), CSSConstants.TEXT_DECORATION);
-        	}
-        });
+        textDecorationCombo.addModifyListener(new AttributeModifyListener(this, CSSConstants.TEXT_DECORATION,
+        		AttributeModifyListener.MODIFY_SIMPLE_ATTRIBUTE_FIELD));
         list = comboMap.get(CSSConstants.TEXT_DECORATION);
         for (String str : list) {
             textDecorationCombo.add(str);
@@ -292,11 +250,8 @@ public class TabTextControl extends Composite {
         gridData.horizontalSpan = 2;
         textAlignCombo = new Combo(this, SWT.BORDER);
         textAlignCombo.setLayoutData(gridData);
-        textAlignCombo.addModifyListener(new ModifyListener() {
-        	public void modifyText(ModifyEvent event) {
-        		modifyAttribute(textAlignCombo.getText(), CSSConstants.TEXT_ALIGN);
-        	}
-        });
+        textAlignCombo.addModifyListener(new AttributeModifyListener(this, CSSConstants.TEXT_ALIGN,
+        		AttributeModifyListener.MODIFY_SIMPLE_ATTRIBUTE_FIELD));
         list = comboMap.get(CSSConstants.TEXT_ALIGN);
         for (String str : list) {
             textAlignCombo.add(str);
@@ -367,106 +322,5 @@ public class TabTextControl extends Composite {
         	textAlignCombo.setText(tmp);
         }
         updateDataFromStyleAttributes = false;
-    }
-
-    /**
-     * Method is used to correctly process modify event occurred on specify CSS attribute control.
-     *
-     * @param attributeValue changed value of control were action takes place
-     * @param extAttribute the attribute extension control that might be also affected
-     * @param attributeName CSS name of the first parameter
-     */
-    private void modifyAttribute(String attributeValue, Combo extAttribute, String attributeName) {
-    	if (attributeValue != null && !attributeValue.trim().equals(Constants.EMPTY)) {
-    		String extWidth = extAttribute.getText();
-    		if (extWidth != null) {
-    			attributeValue += extWidth;
-    		}
-    		styleAttributes.addAttribute(attributeName, attributeValue);
-    	} else {
-    		styleAttributes.removeAttribute(attributeName);
-    		extAttribute.select(0);
-    	}
-    	if (!updateDataFromStyleAttributes) {
-    		notifyListeners();
-    	}
-    }
-
-    /**
-     * Method is used to correctly process modify event occurred on specify CSS extension attribute control.
-     *
-     * @param attributeValue current value of attribute control
-     * @param extAttribute the attribute extension control were action takes place
-     * @param attributeName CSS name of the first parameter
-     */
-    private void modifyExtAttribute(String attributeValue, Combo extAttribute, String attributeName) {
-        if (attributeValue != null && !attributeValue.trim().equals(Constants.EMPTY)) {
-            String tmp = extAttribute.getText();
-            if (tmp != null) {
-                styleAttributes.addAttribute(attributeName, attributeValue + tmp);
-            }
-        } else {
-        	if (extAttribute.getSelectionIndex() > 0) {
-        		extAttribute.select(0);
-        	}
-        	return;
-        }
-        if (!updateDataFromStyleAttributes) {
-        	notifyListeners();
-        }
-    }
-
-    /**
-     * Method is used to correctly process modify event occurred on specify CSS attribute control.
-     *
-     * @param attributeValue changed value of control were action takes place
-     * @param attributeName CSS name of the first parameter
-     */
-    private void modifyAttribute(String attributeValue, String attributeName) {
-        if (attributeValue != null && !attributeValue.trim().equals(Constants.EMPTY)) {
-        	styleAttributes.addAttribute(attributeName, attributeValue.trim());
-        } else {
-        	styleAttributes.removeAttribute(attributeName);
-        }
-        if (!updateDataFromStyleAttributes) {
-        	notifyListeners();
-        }
-    }
-
-    /**
-     * Add ManualChangeStyleListener object.
-     *
-     * @param listener ManualChangeStyleListener object to be added
-     */
-    public void addManualChangeStyleListener(ManualChangeStyleListener listener) {
-        listeners.add(listener);
-    }
-
-    /**
-     * Gets an array of ChangeStyleListener object.
-     *
-     * @return an array of ChangeStyleListener object
-     */
-    public ManualChangeStyleListener[] getManualChangeStyleListeners() {
-        return listeners.toArray(new ManualChangeStyleListener[listeners.size()]);
-    }
-
-    /**
-     * Remove ManualChangeStyleListener object passed by parameter.
-     *
-     * @param listener ManualChangeStyleListener object to be removed
-     */
-    public void removeManualChangeStyleListener(ManualChangeStyleListener listener) {
-        listeners.remove(listener);
-    }
-
-    /**
-     * Method is used to notify all subscribed listeners about any changes within style attribute map.
-     */
-    private void notifyListeners() {
-        ChangeStyleEvent event = new ChangeStyleEvent(this);
-        for (ManualChangeStyleListener listener : listeners) {
-            listener.styleChanged(event);
-        }
     }
 }
