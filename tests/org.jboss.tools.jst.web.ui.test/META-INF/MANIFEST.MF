@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: WEB UI Test Plug-in
 Bundle-SymbolicName: org.jboss.tools.jst.web.ui.test
 Bundle-Version: 1.0.0
-Bundle-Vendor: Red Hat, Inc.
+Bundle-Vendor: JBoss, a division of Red Hat
 Require-Bundle: org.jboss.tools.jst.web.ui,
  org.junit,
  org.eclipse.ui,
