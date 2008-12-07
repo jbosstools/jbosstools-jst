@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: JBoss AS Initialization Plug-in
 Bundle-SymbolicName: org.jboss.tools.jst.firstrun;singleton:=true
 Bundle-Version: 2.0.0
-Bundle-Vendor: Red Hat, Inc.
+Bundle-Vendor: JBoss, a division of Red Hat
 Require-Bundle: org.eclipse.ui.workbench,
  org.eclipse.wst.server.core,
  org.eclipse.core.runtime,
