@@ -21,3 +21,4 @@ Export-Package:
  org.jboss.tools.jst.jsp.test,
  org.jboss.tools.jst.jsp.test.ca
 Bundle-ClassPath: jst-jsp-test.jar
+Bundle-Vendor: JBoss, a division of Red Hat
