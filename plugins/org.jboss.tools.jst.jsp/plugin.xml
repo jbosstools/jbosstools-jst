@@ -121,13 +121,13 @@
             contributorClass="org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageContributor"
             id="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor"
             matchingStrategy = "org.jboss.tools.common.core.resources.MatchingStrategyImpl"
-            extensions="jsp, jsf, jspf, jspx, tag, tagf, inc">
+            extensions="jsp, jspf, jspx, tag, tagf, inc">
          <contentTypeBinding contentTypeId="org.eclipse.jst.jsp.core.jspsource"/>
       </editor>
       <editor 
             class="org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor" 
             contributorClass="org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageContributor" 
-            extensions="html, htm" 
+            extensions="html, htm, jsf" 
             icon="images/xstudio/editors/html_file.gif" 
             id="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor" 
             matchingStrategy = "org.jboss.tools.common.core.resources.MatchingStrategyImpl"
