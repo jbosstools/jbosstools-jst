@@ -350,6 +350,9 @@
        <file-association
              content-type="org.eclipse.jst.jsp.core.jspsource"
              file-extensions="inc"/>
+       <file-association
+             content-type="org.eclipse.wst.html.core.htmlsource"
+             file-extensions="jsf"/>
     </extension>
    
    <extension
