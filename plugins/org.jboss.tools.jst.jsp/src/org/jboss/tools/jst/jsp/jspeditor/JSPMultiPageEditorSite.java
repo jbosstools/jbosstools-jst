@@ -11,19 +11,35 @@
 package org.jboss.tools.jst.jsp.jspeditor;
 
 import java.util.ArrayList;
+
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.util.Assert;
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jst.jsp.core.internal.provisional.contenttype.ContentTypeIdForJSP;
-
-import org.eclipse.ui.*;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IEditorActionBarContributor;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IKeyBindingService;
+import org.eclipse.ui.INestableKeyBindingService;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.internal.PartSite;
 import org.eclipse.ui.internal.PopupMenuExtender;
 import org.eclipse.ui.internal.WorkbenchPlugin;
+import org.eclipse.ui.internal.services.IServiceLocatorCreator;
+import org.eclipse.ui.internal.services.IWorkbenchLocationService;
+import org.eclipse.ui.internal.services.ServiceLocator;
+import org.eclipse.ui.internal.services.WorkbenchLocationService;
+import org.eclipse.ui.services.IDisposable;
+import org.eclipse.ui.services.IServiceScopes;
 
 /**
  * 
@@ -44,12 +60,33 @@ public abstract class JSPMultiPageEditorSite implements IEditorSite {
 
 	private ArrayList fMenuExts;
 
+	private final ServiceLocator serviceLocator;
+	
 	public JSPMultiPageEditorSite(JSPMultiPageEditorPart multiPageEditor,
 			IEditorPart editor) {
 		Assert.isNotNull(multiPageEditor);
 		Assert.isNotNull(editor);
 		this.fEditor = multiPageEditor;
 		this.fEditorPart = editor;
+		
+		this.serviceLocator = (ServiceLocator) ((IServiceLocatorCreator) multiPageEditor
+				.getSite().getService(IServiceLocatorCreator.class))
+				.createServiceLocator(multiPageEditor.getSite(), null,
+						new IDisposable() {
+							public void dispose() {
+								final Control control = ((PartSite) getMultiPageEditor()
+										.getSite()).getPane().getControl();
+								if (control != null && !control.isDisposed()) {
+									((PartSite) getMultiPageEditor().getSite())
+											.getPane().doHide();
+								}
+							}
+						});
+		serviceLocator.registerService(IWorkbenchLocationService.class,
+				new WorkbenchLocationService(IServiceScopes.MPESITE_SCOPE,
+						getWorkbenchWindow().getWorkbench(),
+						getWorkbenchWindow(), multiPageEditor.getSite(), this,
+						null, 3));
 	}
 
 	public void dispose() {
@@ -168,10 +205,13 @@ public abstract class JSPMultiPageEditorSite implements IEditorSite {
 		if (fMenuExts == null) {
 			fMenuExts = new ArrayList(1);
 		}
+		PopupMenuExtender extender = findMenuExtender(menuMgr, selProvider);
 		if (findMenuExtender(menuMgr, selProvider) == null) {
-			PopupMenuExtender extender = new PopupMenuExtender(menuID, menuMgr,
+			extender = new PopupMenuExtender(menuID, menuMgr,
 					selProvider, fEditorPart);
 			fMenuExts.add(extender);
+		}else {
+			extender.addMenuId(menuID);
 		}
 	}
 
@@ -203,7 +243,7 @@ public abstract class JSPMultiPageEditorSite implements IEditorSite {
 	}
 
 	public IWorkbenchPart getPart() {
-		return null;
+		return this.fEditor;
 	}
 
 	public final void registerContextMenu(final MenuManager menuManager,
@@ -221,4 +261,16 @@ public abstract class JSPMultiPageEditorSite implements IEditorSite {
 			fMenuExts = new ArrayList(1);
 		}
 	}
+	
+	public Object getService(Class api) {
+		// TODO megration to eclipse 3.2
+		return this.serviceLocator.getService(api);
+	}
+
+	public boolean hasService(Class api) {
+		// TODO megration to eclipse 3.2
+		return this.serviceLocator.hasService(api);
+	}
+	
+
 }

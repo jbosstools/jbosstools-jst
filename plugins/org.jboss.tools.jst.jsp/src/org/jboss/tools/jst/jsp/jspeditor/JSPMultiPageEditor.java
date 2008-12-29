@@ -380,15 +380,6 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 				}
 			}
 
-			public Object getService(Class api) {
-				// TODO megration to eclipse 3.2
-				return null;
-			}
-
-			public boolean hasService(Class api) {
-				// TODO megration to eclipse 3.2
-				return false;
-			}
 
 			public void dispose() {
 				ISelectionProvider provider = getSelectionProvider();
