@@ -12,6 +12,8 @@ package org.jboss.tools.jst.jsp.outline.cssdialog.common;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -22,7 +24,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.wst.css.core.internal.format.FormatProcessorCSS;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSDocument;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSModel;
-import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleSheet;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
@@ -37,6 +38,8 @@ import org.w3c.dom.css.CSSStyleSheet;
 
 /**
  * CSS class model.
+ * 
+ * 
  */
 public class CSSModel {
 
@@ -49,6 +52,8 @@ public class CSSModel {
 
     private CSSStyleSheet styleSheet = null;
     private ICSSStyleSheet eclipseStyleSheet = null;
+    
+    
 
 	/**
      * Constructor.
@@ -77,6 +82,8 @@ public class CSSModel {
 				if (document instanceof ICSSStyleSheet) {
 					eclipseStyleSheet = (ICSSStyleSheet) document;
 				}
+				
+		        
             }
         } catch (IOException e) {
             JspEditorPlugin.getPluginLog().logError(e.getMessage());
@@ -93,18 +100,40 @@ public class CSSModel {
      * 		then index is serial number of this selector
      */
     public IndexedRegion getSelectorRegion(String selector, int index) {
-    	if (eclipseStyleSheet != null) {
-			if (selector != null && !selector.equals(Constants.EMPTY)) {
-				ICSSStyleRule styleRule = Util.getSelector(eclipseStyleSheet, selector, index);
-				if (styleRule != null) {
-					if (styleRule instanceof IndexedRegion) {
-						return (IndexedRegion) styleRule;
-					}
+    	//FIXED by sdzmitrovich - JBIDE-3148
+//    	if (eclipseStyleSheet != null) {
+//			if (selector != null && !selector.equals(Constants.EMPTY)) {
+//				ICSSStyleRule styleRule = Util.getSelector(eclipseStyleSheet, selector, index);
+//				if (styleRule != null) {
+//					if (styleRule instanceof IndexedRegion) {
+//						return (IndexedRegion) styleRule;
+//					}
+//				}
+//			}
+//    	}
+    	
+    	if ( selector != null) {
+			CSSStyleRule rule = getRulesMapping().get(selector);
+			if (rule != null)
+				if (rule instanceof IndexedRegion) {
+					return (IndexedRegion) rule;
 				}
-			}
-    	}
+
+		}
     	return null;
     }
+    
+    
+    public List<String> getSelectorLabels() {
+
+		List<String> selectorLabels;
+
+		selectorLabels = new ArrayList<String>(getRulesMapping().keySet());
+
+		Collections.sort(selectorLabels);
+
+		return selectorLabels;
+	}
 
     /**
      * Get selectors
@@ -130,6 +159,8 @@ public class CSSModel {
 
         return selectors;
     }
+    
+    
 
     /**
      * Gets CSS attributes for the given selector in string representation.
@@ -138,18 +169,25 @@ public class CSSModel {
      * @return CSS attributes string representation
      */
     public String getCSSText(String selector) {
-        if (styleSheet != null && selector != null) {
-            CSSRuleList list = styleSheet.getCssRules();
+    	//FIXED by sdzmitrovich - JBIDE-3148
+//        if (styleSheet != null && selector != null) {
+//            CSSRuleList list = styleSheet.getCssRules();
+//
+//            if (list != null) {
+//                for (int i = 0; i < list.getLength(); i++) {
+//                    if (list.item(i) instanceof CSSStyleRule &&
+//                            ((CSSStyleRule) list.item(i)).getSelectorText().equals(selector)) {
+//                        return ((CSSStyleRule) list.item(i)).getCssText();
+//                    }
+//                }
+//            }
+//    }
+		if ( selector != null) {
+			CSSStyleRule rule = getRulesMapping().get(selector);
+			if (rule != null)
+				return rule.getCssText();
 
-            if (list != null) {
-                for (int i = 0; i < list.getLength(); i++) {
-                    if (list.item(i) instanceof CSSStyleRule &&
-                            ((CSSStyleRule) list.item(i)).getSelectorText().equals(selector)) {
-                        return ((CSSStyleRule) list.item(i)).getCssText();
-                    }
-                }
-            }
-        }
+		}
 
         return null;
     }
@@ -161,18 +199,25 @@ public class CSSModel {
      * @return style
      */
     public String getStyle(String selectorName) {
-        if (styleSheet != null) {
-            CSSRuleList list = styleSheet.getCssRules();
+    	//FIXED by sdzmitrovich - JBIDE-3148
+//        if (styleSheet != null) {
+//            CSSRuleList list = styleSheet.getCssRules();
+//
+//            if (list != null) {
+//                for (int i = 0; i < list.getLength(); i++) {
+//                    if (list.item(i) instanceof CSSStyleRule &&
+//                            ((CSSStyleRule) list.item(i)).getSelectorText().equals(selectorName)) {
+//                        return ((CSSStyleRule) list.item(i)).getStyle().getCssText();
+//                    }
+//                }
+//            }
+//        }
+    	if (selectorName != null) {
+			CSSStyleRule rule = getRulesMapping().get(selectorName);
+			if (rule != null)
+				return rule.getStyle().getCssText();
 
-            if (list != null) {
-                for (int i = 0; i < list.getLength(); i++) {
-                    if (list.item(i) instanceof CSSStyleRule &&
-                            ((CSSStyleRule) list.item(i)).getSelectorText().equals(selectorName)) {
-                        return ((CSSStyleRule) list.item(i)).getStyle().getCssText();
-                    }
-                }
-            }
-        }
+		}
 
         return null;
     }
@@ -186,33 +231,50 @@ public class CSSModel {
     public void setCSS(String selector, StyleAttributes styleAttributes) {
         if (styleSheet != null && selector != null && !selector.equals(Constants.EMPTY)) {
         	CSSRuleList list = styleSheet.getCssRules();
+        	//FIXED by sdzmitrovich - JBIDE-3148
+//            if (list != null) {
+//            	// check if selector passed by parameter already exists in CSS
+//                for (int i = 0; i < list.getLength(); i++) {
+//                    if (list.item(i) instanceof CSSStyleRule &&
+//                            ((CSSStyleRule) list.item(i)).getSelectorText().equals(selector)) {
+//
+//                        CSSStyleRule rule = (CSSStyleRule) list.item(i);
+//                        styleSheet.deleteRule(i);
+//
+//                        i = styleSheet.insertRule(selector + startBraces + styleAttributes.getStyle() + endBraces, i);
+//                        rule = (CSSStyleRule) list.item(i);
+//                        CSSStyleDeclaration declaration = rule.getStyle();
+//                        // set properties
+//                        Set<Entry<String, String>> set = styleAttributes.entrySet();
+//                        for (Map.Entry<String, String> me : set) {
+//                        	declaration.setProperty(me.getKey(), me.getValue(), Constants.EMPTY);
+//                        }
+//
+//                        formatProcessorCSS.formatModel(model);
+//                        return;
+//                    }
+//                }
+//                // insert NEW selector to style sheet
+//                styleSheet.insertRule(selector + startBraces + styleAttributes.getStyle() + endBraces, list.getLength());
+//                formatProcessorCSS.formatModel(model);
+			CSSStyleRule rule = getRulesMapping().get(selector);
+			if (rule == null) {
+				styleSheet.insertRule(selector + startBraces
+						+ styleAttributes.getStyle() + endBraces, list
+						.getLength());
+			} else {
 
-            if (list != null) {
-            	// check if selector passed by parameter already exists in CSS
-                for (int i = 0; i < list.getLength(); i++) {
-                    if (list.item(i) instanceof CSSStyleRule &&
-                            ((CSSStyleRule) list.item(i)).getSelectorText().equals(selector)) {
+				CSSStyleDeclaration declaration = rule.getStyle();
+				// set properties
+				Set<Entry<String, String>> set = styleAttributes.entrySet();
+				for (Map.Entry<String, String> me : set) {
+					declaration.setProperty(me.getKey(), me.getValue(),
+							Constants.EMPTY);
+				}
+			}
 
-                        CSSStyleRule rule = (CSSStyleRule) list.item(i);
-                        styleSheet.deleteRule(i);
-
-                        i = styleSheet.insertRule(selector + startBraces + styleAttributes.getStyle() + endBraces, i);
-                        rule = (CSSStyleRule) list.item(i);
-                        CSSStyleDeclaration declaration = rule.getStyle();
-                        // set properties
-                        Set<Entry<String, String>> set = styleAttributes.entrySet();
-                        for (Map.Entry<String, String> me : set) {
-                        	declaration.setProperty(me.getKey(), me.getValue(), Constants.EMPTY);
-                        }
-
-                        formatProcessorCSS.formatModel(model);
-                        return;
-                    }
-                }
-                // insert NEW selector to style sheet
-                styleSheet.insertRule(selector + startBraces + styleAttributes.getStyle() + endBraces, list.getLength());
-                formatProcessorCSS.formatModel(model);
-            }
+			formatProcessorCSS.formatModel(model);
+        	
         }
     }
 
@@ -244,4 +306,48 @@ public class CSSModel {
             JspEditorPlugin.getPluginLog().logError(e.getMessage());
         }
     }
+    
+    /**
+	 * get mapping key is label ( label = class name + sequence number of such
+	 * css class ) value is CSSStyleRule
+	 * 
+	 * now rule mapping is generated always ... keeping of ruleMapping is more
+	 * right but it demands more complex synchronization data
+	 * 
+	 */
+    private Map<String, CSSStyleRule> getRulesMapping() {
+
+		Map<String, CSSStyleRule> rulesMapping = new HashMap<String, CSSStyleRule>();
+		if (styleSheet != null) {
+			CSSRuleList list = styleSheet.getCssRules();
+
+			Map<String, Integer> frequencyMap = new HashMap<String, Integer>();
+
+			if (list != null) {
+				for (int i = 0; i < list.getLength(); i++) {
+					if (list.item(i) instanceof CSSStyleRule) {
+
+						CSSStyleRule rule = ((CSSStyleRule) list.item(i));
+
+						Integer freq = frequencyMap.get(rule.getSelectorText());
+
+						freq = freq == null ? 1 : freq + 1;
+
+						frequencyMap.put(rule.getSelectorText(), freq);
+
+						String ruleLabel = rule.getSelectorText()
+								+ (freq > 1 ? Constants.START_BRACKET + freq
+										+ Constants.END_BRACKET
+										: Constants.EMPTY);
+
+						rulesMapping.put(ruleLabel, rule);
+
+					}
+				}
+			}
+
+		}
+
+		return rulesMapping;
+	}
 }

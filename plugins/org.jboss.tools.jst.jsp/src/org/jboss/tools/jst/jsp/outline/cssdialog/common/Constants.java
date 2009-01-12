@@ -66,6 +66,9 @@ public class Constants {
     public static String COMMA = ","; //$NON-NLS-1$
     public static String DASH = "-"; //$NON-NLS-1$
     public static String SLASH = "/"; //$NON-NLS-1$
+	public static final String START_BRACKET = "("; //$NON-NLS-1$
+	public static final String END_BRACKET = ")"; //$NON-NLS-1$
+
 
     public static final RGB RGB_BLACK = new RGB(0,0,0);
     public static final RGB RGB_WHITE = new RGB(0xFF, 0xFF, 0xFF);

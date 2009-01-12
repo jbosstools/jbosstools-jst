@@ -626,12 +626,14 @@ public class CSSClassDialog extends TitleAreaDialog {
             	text.setText(file.getFullPath().toOSString());
             }
             // fill in ComboBox component with CSS model selectors
-            List<Selector> selectors = cssModel.getSelectors();
+//            List<Selector> selectors = cssModel.getSelectors();
+            List<String> selectors = cssModel.getSelectorLabels();
             int selectedIndex = -1;
             for (int i = 0; i < selectors.size(); i++) {
-            	Selector value = selectors.get(i);
-            	classCombo.add(value.getValue());
-            	if (currentClassStyle != null && currentClassStyle.equals(value.getValue())) {
+//            	Selector value = selectors.get(i);
+            	String label = selectors.get(i);
+            	classCombo.add(/*value.getValue()*/ label);
+            	if (currentClassStyle != null && currentClassStyle.equals(/*value.getValue()*/label)) {
             		selectedIndex = i;
             	}
             }
@@ -880,4 +882,5 @@ public class CSSClassDialog extends TitleAreaDialog {
 			}
 		}
 	}
+	
 }
