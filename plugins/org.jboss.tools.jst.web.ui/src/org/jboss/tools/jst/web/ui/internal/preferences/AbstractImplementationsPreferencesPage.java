@@ -36,8 +36,8 @@ import org.jboss.tools.jst.web.project.version.ProjectVersion;
 public class AbstractImplementationsPreferencesPage extends PreferencePage implements
 		IWorkbenchPreferencePage {
 
-	public static final String BUNDLE_NAME = "preferences"; 
-	public static final ResourceBundle BUNDLE = ResourceBundle.getBundle(AbstractImplementationsPreferencesPage.class.getPackage().getName() + "." + BUNDLE_NAME);	
+	public static final String BUNDLE_NAME = "preferences";  //$NON-NLS-1$
+	public static final ResourceBundle BUNDLE = ResourceBundle.getBundle(AbstractImplementationsPreferencesPage.class.getPackage().getName() + "." + BUNDLE_NAME);	 //$NON-NLS-1$
 	
 	private AbstractWebProjectTemplate helper;
 	private String[] implementations;	
@@ -121,10 +121,10 @@ public class AbstractImplementationsPreferencesPage extends PreferencePage imple
 		heightHint = convertVerticalDLUsToPixels(14 /*IDialogConstants.BUTTON_HEIGHT*/);
 		widthHint = convertHorizontalDLUsToPixels(IDialogConstants.BUTTON_WIDTH);		
 		
-		addButtonImpl = createButton(impl, BUNDLE.getString("ImplementationsPreferencesPage.Add"));
+		addButtonImpl = createButton(impl, BUNDLE.getString("ImplementationsPreferencesPage.Add")); //$NON-NLS-1$
 		if (errorMessage != null) addButtonImpl.setEnabled(false);
 
-		removeButtonImpl = createButton(impl, BUNDLE.getString("ImplementationsPreferencesPage.Remove"));
+		removeButtonImpl = createButton(impl, BUNDLE.getString("ImplementationsPreferencesPage.Remove")); //$NON-NLS-1$
 		removeButtonImpl.setEnabled(false);		
 
 		// TabFolder
@@ -133,10 +133,10 @@ public class AbstractImplementationsPreferencesPage extends PreferencePage imple
 		tabbedComposite.setLayoutData(gridDataTab);
 		
 		TabItem librariesTab = new TabItem(tabbedComposite,SWT.NULL);
-		librariesTab.setText(BUNDLE.getString("ImplementationsPreferencesPage.Library.Sets"));
+		librariesTab.setText(BUNDLE.getString("ImplementationsPreferencesPage.Library.Sets")); //$NON-NLS-1$
 		
 		TabItem projectTab = new TabItem(tabbedComposite,SWT.NULL);
-		projectTab.setText(BUNDLE.getString("ImplementationsPreferencesPage.Project.Templates"));
+		projectTab.setText(BUNDLE.getString("ImplementationsPreferencesPage.Project.Templates")); //$NON-NLS-1$
 
 		// listLibraries		
 		Composite entryLibraries = new Composite(tabbedComposite, SWT.NULL);
@@ -150,10 +150,10 @@ public class AbstractImplementationsPreferencesPage extends PreferencePage imple
 		listLibraries.setLayoutData(gridDataListLibraries);
 			
 
-		addButtonLibraries = createButton(entryLibraries, BUNDLE.getString("ImplementationsPreferencesPage.Add"));
+		addButtonLibraries = createButton(entryLibraries, BUNDLE.getString("ImplementationsPreferencesPage.Add")); //$NON-NLS-1$
 		addButtonLibraries.setEnabled(false);		
 
-		removeButtonLibraries = createButton(entryLibraries, BUNDLE.getString("ImplementationsPreferencesPage.Remove"));
+		removeButtonLibraries = createButton(entryLibraries, BUNDLE.getString("ImplementationsPreferencesPage.Remove")); //$NON-NLS-1$
 		removeButtonLibraries.setEnabled(false);		
 
 		librariesTab.setControl(entryLibraries);
@@ -170,21 +170,23 @@ public class AbstractImplementationsPreferencesPage extends PreferencePage imple
 		listProject.setLayoutData(gridDataListProject);
 			
 
-		addButtonProject = createButton(entryProject, BUNDLE.getString("ImplementationsPreferencesPage.Add"));
+		addButtonProject = createButton(entryProject, BUNDLE.getString("ImplementationsPreferencesPage.Add")); //$NON-NLS-1$
 		addButtonProject.setEnabled(false);
 		
-		editButtonProject = createButton(entryProject, BUNDLE.getString("ImplementationsPreferencesPage.Edit"));
+		editButtonProject = createButton(entryProject, BUNDLE.getString("ImplementationsPreferencesPage.Edit")); //$NON-NLS-1$
 		editButtonProject.setEnabled(false);
 		
-		upButtonProject = createButton(entryProject, "Up");
+		upButtonProject = createButton(entryProject, BUNDLE
+				.getString("ImplementationsPreferencesPage.Up")); //$NON-NLS-1$
 		upButtonProject.setEnabled(false);
 		GridData d = (GridData)upButtonProject.getLayoutData();
 		d.verticalIndent = 5;
 
-		downButtonProject = createButton(entryProject, "Down");
+		downButtonProject = createButton(entryProject, BUNDLE
+				.getString("ImplementationsPreferencesPage.Down")); //$NON-NLS-1$
 		downButtonProject.setEnabled(false);
 
-		removeButtonProject = createButton(entryProject, BUNDLE.getString("ImplementationsPreferencesPage.Remove"));
+		removeButtonProject = createButton(entryProject, BUNDLE.getString("ImplementationsPreferencesPage.Remove")); //$NON-NLS-1$
 		removeButtonProject.setEnabled(false);
 		d = (GridData)removeButtonProject.getLayoutData();
 		d.verticalIndent = 5;

@@ -39,7 +39,8 @@
       </xmlEditor>
    </extension>
    <extension point="org.eclipse.ui.preferencePages">
-      <page category="org.jboss.tools.common.model.ui" class="org.jboss.tools.jst.web.ui.internal.preferences.LibrarySetsPreferencePage" id="org.jboss.tools.common.xstudio.libsets" name="Library Sets">
+      <page category="org.jboss.tools.common.model.ui" class="org.jboss.tools.jst.web.ui.internal.preferences.LibrarySetsPreferencePage" id="org.jboss.tools.common.xstudio.libsets" 
+      name="%PreferencePage_LibrarySets">
       </page>
    </extension>
    <extension point="org.eclipse.ui.editors">
@@ -89,7 +90,7 @@
    </extension>
 
    <extension point="org.eclipse.ui.newWizards">      
-      <category name="JBoss Tools Web" 
+      <category name="%NewWizardCat_JBossToolsWeb" 
                 id="org.jboss.tools.jst.web">
       </category>
       <wizard
@@ -98,11 +99,11 @@
             finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
             icon="images/xstudio/wizards/new_css_file.gif"
             id="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSFileWizard"
-            name="CSS File"
+            name="%NewWizard_CSSFile"
             preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
             project="false">
          <description>
-            	Create a CSS File
+            	%NewWizardDescription_CSSFile
          </description>
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
@@ -113,11 +114,11 @@
             finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
             icon="images/xstudio/wizards/new_css_class.gif"
             id="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSClassWizard"
-            name="CSS Class"
+            name="%NewWizard_CSSClass"
             preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
             project="false">
          <description>
-            	Create a CSS Class
+            	%NewWizardDescription_CSSClass
          </description>
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
@@ -128,11 +129,11 @@
             finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
             icon="images/xstudio/wizards/new_js_file.gif"
             id="org.jboss.tools.jst.web.ui.wizards.newfile.NewJSFileWizard"
-            name="JS File"
+            name="%NewWizard_JSFile"
             preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
             project="false">
          <description>
-            	Create a JS File
+            	%NewWizardDescription_JSFile
          </description>
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
@@ -143,11 +144,11 @@
             finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
             icon="images/xstudio/wizards/new_webapp_file.gif"
             id="org.jboss.tools.jst.web.ui.wizards.newfile.NewWebFileWizard"
-            name="Web Descriptor"
+            name="%NewWizard_WebDescriptor"
             preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
             project="false">
          <description>
-            	Create a Web Descriptor
+            	%NewWizardDescription_WebDescriptor
          </description>
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
@@ -158,11 +159,11 @@
             finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
             icon="images/xstudio/wizards/new_jsp_file.gif"
             id="org.jboss.tools.common.model.ui.wizard.newfile.NewJSPFileWizard"
-            name="JSP File"
+            name="%NewWizard_JSPFile"
             preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
             project="false">
          <description>
-            	Create a JSP File
+            	%NewWizardDescription_JSPFile
          </description>
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
@@ -173,11 +174,11 @@
             finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
             icon="images/xstudio/wizards/new_html_file.gif"
             id="org.jboss.tools.common.model.ui.wizard.newfile.NewXHTMLFileWizard"
-            name="XHTML File"
+            name="%NewWizard_XHTMLFile"
             preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
             project="false">
          <description>
-            	Create a XHTML File
+            	%NewWizardDescription_XHTMLFile
          </description>
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
@@ -188,11 +189,11 @@
             finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
             icon="images/xstudio/wizards/new_html_file.gif"
             id="org.jboss.tools.common.model.ui.wizard.newfile.NewHTMLFileWizard"
-            name="HTML File"
+            name="%NewWizard_HTMLFile"
             preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
             project="false">
          <description>
-            	Create a HTML File
+            	%NewWizardDescription_HTMLFile
          </description>
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
@@ -202,10 +203,10 @@
             class="org.jboss.tools.common.model.ui.wizard.newfile.NewPropertiesFileWizard"
             icon="images/xstudio/wizards/new_properties_file.gif"
             id="org.jboss.tools.common.model.ui.wizard.newfile.NewPropertiesFileWizard"
-            name="Properties File"
+            name="%NewWizard_PropertiesFile"
             project="false">
          <description>
-            	Create a Properties File
+            	%NewWizardDescription_PropertiesFile
          </description>
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
@@ -216,11 +217,11 @@
             finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
             icon="images/xstudio/wizards/new_taglibs_file.gif"
             id="org.jboss.tools.jst.web.ui.wizards.newfile.NewTLDFileWizard"
-            name="TLD File"
+            name="%NewWizard_TLDFile"
             preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
             project="false">
          <description>
-            	Create a TLD File
+            	%NewWizardDescription_TLDFile
          </description>
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
@@ -228,11 +229,11 @@
    </extension>
 
    <extension id="org.jboss.tools.jst.web.ui.views" name="JBoss Tools" point="org.eclipse.ui.views">
-      <category id="web.views.category.id" name="JBoss Tools Web">
+      <category id="web.views.category.id" name="%ViewCategory_JBossToolsWeb">
       </category>
       <view category="web.views.category.id" class="org.jboss.tools.common.model.ui.views.palette.PaletteViewPart" icon="images/xstudio/views/palette.gif" id="org.jboss.tools.common.model.ui.views.palette.PaletteView" name="%paletteViewPart.name">
       </view>
-      <view category="web.views.category.id" class="org.jboss.tools.jst.web.ui.navigator.WebProjectsNavigator" icon="images/xstudio/views/web_project.gif" id="org.jboss.tools.jst.web.ui.navigator.WebProjectsView" name="Web Projects">
+      <view category="web.views.category.id" class="org.jboss.tools.jst.web.ui.navigator.WebProjectsNavigator" icon="images/xstudio/views/web_project.gif" id="org.jboss.tools.jst.web.ui.navigator.WebProjectsView" name="%ViewName_WebProjects">
       </view>
    </extension>
 

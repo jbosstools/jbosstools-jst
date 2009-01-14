@@ -36,18 +36,19 @@
    </extension>
 
    <extension point="org.eclipse.ui.preferencePages">
-      <page category="org.jboss.tools.common.xstudio.editors" class="org.jboss.tools.jst.web.tiles.ui.preferences.TilesEditorTabbedPreferencesPage" id="org.jboss.tools.common.xstudio.editors.tilesdiagram" name="Tiles Diagram">
+      <page category="org.jboss.tools.common.xstudio.editors" class="org.jboss.tools.jst.web.tiles.ui.preferences.TilesEditorTabbedPreferencesPage" id="org.jboss.tools.common.xstudio.editors.tilesdiagram" 
+            name="%PreferencePage_TilesDiagram">
       </page>
    </extension>
 
    <extension point="org.eclipse.ui.newWizards">
-      <category id="org.jboss.tools.struts" name="Struts" parentCategory="org.jboss.tools.jst.web">
+      <category id="org.jboss.tools.struts" name="%NewWizardCat_Struts" parentCategory="org.jboss.tools.jst.web">
       </category>
       <wizard category="org.jboss.tools.jst.web/org.jboss.tools.struts" class="org.jboss.tools.jst.web.tiles.ui.wizard.newfile.NewTilesFileWizard" icon="images/xstudio/wizards/new_tiles_file.gif" id="org.jboss.tools.jst.web.tiles.ui.wizard.newfile.NewTilesFileWizard" name="%new.tiles" project="false">
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
          <description>
-            	Create a Tiles File
+            	%NewWizardDescription_Tiles
          </description>
       </wizard>
    </extension>
