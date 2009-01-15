@@ -72,7 +72,9 @@ public class CSSModel {
         	}
         	formatProcessorCSS = new FormatProcessorCSS();
             IModelManager modelManager = StructuredModelManager.getModelManager();
-            model = modelManager.getModelForEdit(styleFile);
+            model = modelManager.getExistingModelForEdit(styleFile);
+			if (model == null)
+				model = modelManager.getModelForEdit(styleFile);
             if (model instanceof ICSSModel) {
                 ICSSModel cssModel = (ICSSModel) model;
                 ICSSDocument document = cssModel.getDocument();
@@ -291,6 +293,8 @@ public class CSSModel {
      * Release CSS model correctly from editing.
      */
     public void releaseModel() {
+    	IModelManager modelManager = StructuredModelManager.getModelManager();
+    	if(!modelManager.isShared(model.getId()))
     	model.releaseFromEdit();
     }
 
