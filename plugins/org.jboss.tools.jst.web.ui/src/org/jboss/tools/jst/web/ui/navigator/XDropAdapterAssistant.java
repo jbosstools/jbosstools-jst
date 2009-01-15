@@ -22,6 +22,7 @@ import org.eclipse.ui.navigator.CommonDropAdapter;
 import org.eclipse.ui.navigator.CommonDropAdapterAssistant;
 import org.eclipse.ui.views.navigator.LocalSelectionTransfer;
 import org.jboss.tools.common.model.XModelBuffer;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.event.ActionDeclinedException;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
@@ -50,7 +51,7 @@ public class XDropAdapterAssistant extends CommonDropAdapterAssistant {
 				DnDUtil.paste(targetObject, p);
 			} catch (ActionDeclinedException de) {
 				return null;
-			} catch (Exception e) {
+			} catch (XModelException e) {
 				ProblemReportingHelper.reportProblem(ModelUIPlugin.PLUGIN_ID, e);
 			}
 		}
