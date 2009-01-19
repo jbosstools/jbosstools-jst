@@ -269,10 +269,14 @@ public class CSSModel {
 				CSSStyleDeclaration declaration = rule.getStyle();
 				// set properties
 				Set<Entry<String, String>> set = styleAttributes.entrySet();
-				for (Map.Entry<String, String> me : set) {
-					declaration.setProperty(me.getKey(), me.getValue(),
-							Constants.EMPTY);
-				}
+				
+				if ((set.size() == 0) && (declaration.getLength()>0))
+					declaration.setCssText(Constants.EMPTY);
+				else
+					for (Map.Entry<String, String> me : set) {
+						declaration.setProperty(me.getKey(), me.getValue(),
+								Constants.EMPTY);
+					}
 			}
 
 			formatProcessorCSS.formatModel(model);
