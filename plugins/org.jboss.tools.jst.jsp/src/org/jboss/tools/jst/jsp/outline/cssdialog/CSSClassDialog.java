@@ -599,9 +599,10 @@ public class CSSClassDialog extends TitleAreaDialog {
 			
 			boolean inputNewClass = classCombo.indexOf(currentClassStyle) == -1;
 			// if new css was added
-			applyButton.setEnabled(inputNewClass);
-			classCombo.add(currentClassStyle);
-			
+			if (inputNewClass) {
+				applyButton.setEnabled(inputNewClass);
+				classCombo.add(currentClassStyle);
+			}
     		styleComposite.revertPreview();
     		updateStyleComposite();
     		styleAttributes.setCssSelector(currentClassStyle);
