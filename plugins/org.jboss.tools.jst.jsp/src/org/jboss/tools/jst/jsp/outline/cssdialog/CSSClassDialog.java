@@ -12,6 +12,7 @@ package org.jboss.tools.jst.jsp.outline.cssdialog;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -594,7 +595,14 @@ public class CSSClassDialog extends TitleAreaDialog {
 				}
 			}
     		// update current class style value
-    		currentClassStyle = classCombo.getText().trim();
+			currentClassStyle = classCombo.getText().trim();
+			
+			boolean inputNewClass = Arrays.binarySearch(classCombo.getItems(),
+					currentClassStyle) < 0;
+			// if new css was added
+			applyButton.setEnabled(inputNewClass);
+			classCombo.add(currentClassStyle);
+			
     		styleComposite.revertPreview();
     		updateStyleComposite();
     		styleAttributes.setCssSelector(currentClassStyle);
