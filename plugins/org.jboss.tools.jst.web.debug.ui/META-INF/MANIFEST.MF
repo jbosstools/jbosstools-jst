@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Eclipse-LazyStart: true
-Bundle-Name: Web Debug UI
+Bundle-Name: %Bundle-Name.0
 Bundle-ClassPath: ui.jar
 Bundle-Activator: org.jboss.tools.jst.web.debug.ui.xpl.WebDebugUIPlugin
 Bundle-Vendor: %providerName

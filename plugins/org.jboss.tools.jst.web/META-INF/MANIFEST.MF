@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Web
+Bundle-Name: %Bundle-Name.0
 Bundle-ClassPath: web.jar
 Bundle-Activator: org.jboss.tools.jst.web.WebModelPlugin
 Bundle-Vendor: %providerName

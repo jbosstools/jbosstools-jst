@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Eclipse-LazyStart: true
-Bundle-Name: Web Tiles
+Bundle-Name: %Bundle-Name.0
 Bundle-ClassPath: web-tiles.jar
 Bundle-Vendor: %providerName
 Bundle-SymbolicName: org.jboss.tools.jst.web.tiles;singleton:=true

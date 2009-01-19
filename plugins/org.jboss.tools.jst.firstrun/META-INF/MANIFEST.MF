@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: JBoss AS Initialization Plug-in
+Bundle-Name: %Bundle-Name.0
 Bundle-SymbolicName: org.jboss.tools.jst.firstrun;singleton:=true
 Bundle-Version: 2.0.0
-Bundle-Vendor: JBoss, a division of Red Hat
+Bundle-Vendor: %Bundle-Vendor.0
 Require-Bundle: org.eclipse.ui.workbench,
  org.eclipse.wst.server.core,
  org.eclipse.core.runtime,
@@ -17,3 +17,4 @@ Bundle-Activator: org.jboss.tools.jst.firstrun.JstFirstRunPlugin
 Eclipse-LazyStart: true
 Export-Package: org.jboss.tools.jst.firstrun
 Bundle-ClassPath: jst-firstrun.jar
+Bundle-Localization: plugin

@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: WEB UI Test Plug-in
+Bundle-Name: %Bundle-Name.0
 Bundle-SymbolicName: org.jboss.tools.jst.web.ui.test
 Bundle-Version: 1.0.0
-Bundle-Vendor: JBoss, a division of Red Hat
+Bundle-Vendor: %Bundle-Vendor.0
 Require-Bundle: org.jboss.tools.jst.web.ui,
  org.junit,
  org.eclipse.ui,
@@ -13,3 +13,4 @@ Require-Bundle: org.jboss.tools.jst.web.ui,
  org.jboss.tools.common.model.test
 Export-Package: org.jboss.tools.jst.web.ui.test
 Bundle-ClassPath: jst-web-ui.jar
+Bundle-Localization: plugin
