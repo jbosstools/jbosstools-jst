@@ -332,7 +332,6 @@
          <action
                class="org.jboss.tools.jst.jsp.outline.cssdialog.OpenCSSDialogActionDelegate"
                definitionId="org.jboss.tools.jst.jsp.commands.openCSSDialog"
-               enablesFor="+"
                hoverIcon="images/cssdialog/color_large.gif"
                icon="images/cssdialog/color_large.gif"
                id="org.jboss.tools.jst.jsp.openCSSDialogEditor"
