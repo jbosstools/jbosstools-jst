@@ -298,7 +298,7 @@ public class AppRegisterComponent {
 			onRuntimeChange(value);
 		}
 	}
-	
+
 	void onRuntimeChange(String value) {
 		value = (value == null) ? "" : value.trim();
 		if(value.equals(context.getRuntimeName())) return;
@@ -383,6 +383,7 @@ public class AppRegisterComponent {
 			if(runtime == null) return -1;
 			p.setProperty("value", runtime.getName());
 			initRuntimeValue();
+			context.setRuntimeName("");  //prepare for change
 			return 0;
 		}
 		
