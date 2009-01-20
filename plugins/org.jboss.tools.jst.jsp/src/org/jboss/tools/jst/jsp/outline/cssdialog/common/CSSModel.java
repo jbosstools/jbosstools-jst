@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.outline.cssdialog.common;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,6 +22,7 @@ import java.util.Map.Entry;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.wst.css.core.internal.format.FormatProcessorCSS;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSDocument;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSModel;
@@ -73,6 +75,7 @@ public class CSSModel {
         	formatProcessorCSS = new FormatProcessorCSS();
             IModelManager modelManager = StructuredModelManager.getModelManager();
             model = modelManager.getExistingModelForEdit(styleFile);
+            
 			if (model == null)
 				model = modelManager.getModelForEdit(styleFile);
             if (model instanceof ICSSModel) {
@@ -357,5 +360,18 @@ public class CSSModel {
 		}
 
 		return rulesMapping;
+	}
+
+	public IDocument getStructuredDocument() {
+		return model.getStructuredDocument();
+	}
+
+	public void reload() {
+		try {
+			model.reload(new FileInputStream(styleFile.getLocation().toFile()));
+		} catch (Exception e) {
+			JspEditorPlugin.getPluginLog().logError(e.getMessage());
+		}
+
 	}
 }

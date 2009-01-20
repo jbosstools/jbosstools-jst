@@ -12,7 +12,6 @@ package org.jboss.tools.jst.jsp.outline.cssdialog;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -74,7 +73,6 @@ import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSModel;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.FileExtensionFilter;
-import org.jboss.tools.jst.jsp.outline.cssdialog.common.Selector;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Util;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.ChangeStyleEvent;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.ChangeStyleListener;
@@ -597,10 +595,9 @@ public class CSSClassDialog extends TitleAreaDialog {
     		// update current class style value
 			currentClassStyle = classCombo.getText().trim();
 			
-			boolean inputNewClass = classCombo.indexOf(currentClassStyle) == -1;
 			// if new css was added
-			if (inputNewClass) {
-				applyButton.setEnabled(inputNewClass);
+			if (classCombo.indexOf(currentClassStyle) == -1) {
+				applyButton.setEnabled(true);
 				classCombo.add(currentClassStyle);
 			}
     		styleComposite.revertPreview();
