@@ -589,7 +589,9 @@ public class CSSClassDialog extends TitleAreaDialog {
             			(SimpleContentProposalProvider)contentAssistAdapter.getContentProposalProvider();
             		proposalProvider.setProposals(classCombo.getItems());
 				} else {
-					cssModel.init(currentFile);
+					// FOR https://jira.jboss.org/jira/browse/JBIDE-3542
+					// cssModel.init(currentFile);
+					// styleComposite.revertPreview();
 				}
 			}
     		// update current class style value
@@ -600,7 +602,7 @@ public class CSSClassDialog extends TitleAreaDialog {
 				applyButton.setEnabled(true);
 				classCombo.add(currentClassStyle);
 			}
-    		styleComposite.revertPreview();
+    		
     		updateStyleComposite();
     		styleAttributes.setCssSelector(currentClassStyle);
 			styleComposite.updatePreview(currentClassStyle);
