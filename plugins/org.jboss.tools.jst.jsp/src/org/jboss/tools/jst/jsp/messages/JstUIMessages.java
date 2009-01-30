@@ -100,4 +100,5 @@ public class JstUIMessages extends NLS {
 	public static String PREVIEW_SHEET_TAB_NAME;
 	public static String DEFAULT_PREVIEW_TEXT;
 	public static String DEFAULT_TEXT_FOR_BROWSER_PREVIEW;
+	public static String CSS_NO_EDITED_PROPERTIES;
 }

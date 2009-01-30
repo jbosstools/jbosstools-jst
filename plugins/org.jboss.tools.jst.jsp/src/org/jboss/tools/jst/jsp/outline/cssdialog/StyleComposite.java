@@ -25,7 +25,6 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSModel;
-import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.ManualChangeStyleListener;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.StyleAttributes;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.BaseListener;
@@ -212,11 +211,12 @@ public class StyleComposite extends Composite {
 
         tabFolder.setSelection(TAB_TEXT_FONT_NUMBER);
 
-        if (styleAttributes.getAttributeMap().size() > SIZE_NULL) {
-            tabQuickEdit = new TabItem(tabFolder, SWT.NONE);
-            tabQuickEdit.setText(JstUIMessages.QUICK_EDIT_TAB_NAME);
-            tabQuickEdit.setToolTipText(JstUIMessages.QUICK_EDIT_TAB_NAME);
-            tabQuickEdit.setControl(createTabQuickEditContol(tabFolder));
+        tabQuickEdit = new TabItem(tabFolder, SWT.NONE);
+      	tabQuickEdit.setText(JstUIMessages.QUICK_EDIT_TAB_NAME);
+      	tabQuickEdit.setToolTipText(JstUIMessages.QUICK_EDIT_TAB_NAME);
+      	tabQuickEdit.setControl(createTabQuickEditContol(tabFolder));
+ 
+      	if (styleAttributes.getAttributeMap().size() > SIZE_NULL) {       
             tabFolder.setSelection(tabQuickEdit);
             lastSelectedTab = tabQuickEdit;
         }
@@ -416,7 +416,8 @@ public class StyleComposite extends Composite {
             lastSelectedTab = tabQuickEdit;
         } else {
             if (tabQuickEdit != null && !tabQuickEdit.isDisposed()) {
-                tabQuickEdit.dispose();
+//            	tabQuickEdit.dispose();
+            	tabQuickEditControl.updateData();            	
             }
             tabFolder.redraw();
         }

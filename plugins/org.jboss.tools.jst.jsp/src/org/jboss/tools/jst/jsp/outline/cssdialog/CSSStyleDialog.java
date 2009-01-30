@@ -75,7 +75,10 @@ public class CSSStyleDialog extends Dialog implements MouseListener, FocusListen
     @Override
     protected Control createDialogArea(final Composite parent) {
     	final Composite composite = (Composite) super.createDialogArea(parent);
-
+        if(composite.getLayoutData()!=null && composite.getLayoutData() instanceof GridData) {
+        	((GridData)composite.getLayoutData()).widthHint=500;
+        	((GridData)composite.getLayoutData()).heightHint=500;
+        }
 		Split split = new Split(composite, SWT.VERTICAL);
 
         GridLayout layout = new GridLayout();
@@ -202,7 +205,7 @@ public class CSSStyleDialog extends Dialog implements MouseListener, FocusListen
 		}
 		browserContainer.layout();
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see org.eclipse.swt.events.MouseListener#mouseDown(org.eclipse.swt.events.MouseEvent)
 	 */
