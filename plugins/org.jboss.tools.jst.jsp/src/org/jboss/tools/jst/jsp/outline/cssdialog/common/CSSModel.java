@@ -368,7 +368,9 @@ public class CSSModel {
 
 	public void reload() {
 		try {
-			model.reload(new FileInputStream(styleFile.getLocation().toFile()));
+			if(model.isDirty()) {
+				model.reload(new FileInputStream(styleFile.getLocation().toFile()));
+			}
 		} catch (Exception e) {
 			JspEditorPlugin.getPluginLog().logError(e.getMessage());
 		}
