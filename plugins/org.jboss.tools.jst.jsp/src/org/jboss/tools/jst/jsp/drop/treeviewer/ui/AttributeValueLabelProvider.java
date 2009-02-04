@@ -107,7 +107,7 @@ public class AttributeValueLabelProvider extends LabelProvider {
 		if (image == null) {
 			Object path = imagesPathes.get(element.getClass());
 			if(path==null) {
-				path = "images/process/error.gif";
+				path = "images/java/error.gif";
 			}
 			image = EclipseResourceUtil.getImage((String)path);
 			imageCache.put(element, image);
