@@ -47,6 +47,17 @@ public class WebProjectsLabelProvider extends NavigatorLabelProvider {
 			String s = o.getAttributeValue("location").replace('\\', '/');
 			return s.substring(s.lastIndexOf('/') + 1);			
 		}
+
+		//of jar
+		XModelObject p = o.getParent();
+		while(p != null && p.getFileType() != XModelObject.SYSTEM) p = p.getParent();
+		if(p != null && p.getModelEntity().getName().equals("FileSystemJar")) {
+			String n = p.getAttributeValue("name");
+			if(n != null && n.startsWith("lib-")) n = n.substring(4);
+			String addition = (n != null) ? " - " + n : "";
+			return super.getText(element) + addition;
+		}
+		
 		return super.getText(element);
 	}
 	
