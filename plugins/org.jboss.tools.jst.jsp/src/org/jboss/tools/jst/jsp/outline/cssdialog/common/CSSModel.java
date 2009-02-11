@@ -20,17 +20,25 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import org.eclipse.core.filebuffers.FileBuffers;
+import org.eclipse.core.filebuffers.IFileBuffer;
+import org.eclipse.core.filebuffers.LocationKind;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IDocumentExtension3;
+import org.eclipse.jface.text.IDocumentPartitioner;
 import org.eclipse.wst.css.core.internal.format.FormatProcessorCSS;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSDocument;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSModel;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleSheet;
+import org.eclipse.wst.css.core.internal.text.StructuredTextPartitionerForCSS;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
+import org.eclipse.wst.sse.core.internal.provisional.exceptions.ResourceInUse;
+import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredPartitioning;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.StyleAttributes;
 import org.w3c.dom.css.CSSRuleList;
@@ -54,9 +62,9 @@ public class CSSModel {
 
     private CSSStyleSheet styleSheet = null;
     private ICSSStyleSheet eclipseStyleSheet = null;
+    private String COPY_SUFFIX = "_copy";
     
     
-
 	/**
      * Constructor.
      *
@@ -76,9 +84,30 @@ public class CSSModel {
             IModelManager modelManager = StructuredModelManager.getModelManager();
             model = modelManager.getExistingModelForEdit(styleFile);
             
+            
 			if (model == null)
 				model = modelManager.getModelForEdit(styleFile);
-            if (model instanceof ICSSModel) {
+			else {
+				
+				// copy the model 
+				model = modelManager.copyModelForEdit(model.getId(), model
+						.getId()
+						+ COPY_SUFFIX);
+				
+				// set the correct location 
+				model.setBaseLocation(styleFile.getLocation().toString());
+				
+				// some steps to prepare document ( it is necessary to correct
+				// work of highlight in preview tab )
+				IDocumentPartitioner partitioner = new StructuredTextPartitionerForCSS();
+				((IDocumentExtension3) model.getStructuredDocument())
+						.setDocumentPartitioner(
+								IStructuredPartitioning.DEFAULT_STRUCTURED_PARTITIONING,
+								partitioner);
+				partitioner.connect(model.getStructuredDocument());
+				
+			}
+			if (model instanceof ICSSModel) {
                 ICSSModel cssModel = (ICSSModel) model;
                 ICSSDocument document = cssModel.getDocument();
                 if (document instanceof CSSStyleSheet) {
@@ -94,7 +123,9 @@ public class CSSModel {
             JspEditorPlugin.getPluginLog().logError(e.getMessage());
         } catch (CoreException e) {
             JspEditorPlugin.getPluginLog().logError(e.getMessage());
-        }
+        } catch (ResourceInUse e) {
+        	JspEditorPlugin.getPluginLog().logError(e.getMessage());
+		}
     }
 
     /**
@@ -301,8 +332,8 @@ public class CSSModel {
      */
     public void releaseModel() {
     	IModelManager modelManager = StructuredModelManager.getModelManager();
-    	if(!modelManager.isShared(model.getId()))
-    	model.releaseFromEdit();
+    	if (!modelManager.isShared(model.getId()))
+			model.releaseFromEdit();
     }
 
     /**
@@ -310,7 +341,15 @@ public class CSSModel {
      */
     public void saveModel() {
         try {
-            model.save();
+        	
+        	// it is necessary not to dialog appears when "dirty" css file is
+			// being saved
+			IFileBuffer buffer = FileBuffers.getTextFileBufferManager()
+					.getFileBuffer(styleFile.getFullPath(),
+							LocationKind.NORMALIZE);
+			buffer.setDirty(false);
+        	
+        	model.save();
         } catch (IOException e) {
             JspEditorPlugin.getPluginLog().logError(e.getMessage());
         } catch (CoreException e) {

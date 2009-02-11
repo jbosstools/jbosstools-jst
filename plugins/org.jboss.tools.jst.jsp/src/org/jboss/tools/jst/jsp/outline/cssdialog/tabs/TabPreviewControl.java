@@ -11,9 +11,7 @@
 package org.jboss.tools.jst.jsp.outline.cssdialog.tabs;
 
 import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewer;
-import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -23,10 +21,8 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.wst.css.ui.StructuredTextViewerConfigurationCSS;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
-import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.eclipse.wst.sse.ui.StructuredTextViewerConfiguration;
 import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
-import org.eclipse.wst.sse.ui.internal.provisional.style.LineStyleProvider;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSModel;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.StyleAttributes;
@@ -39,12 +35,6 @@ public class TabPreviewControl extends Composite {
     /** Editor in which we open visual page. */
     protected final static String EDITOR_ID = "org.eclipse.wst.css.core.csssource.source"; //$NON-NLS-1$
 
-    
-    /**
-     * TODO remove the field
-     * @deprecated
-     */
-    private StructuredTextEditor editor = null;
     SourceViewer viewer = null;
     private CSSModel cssModel = null;
 
@@ -67,70 +57,31 @@ public class TabPreviewControl extends Composite {
      * @param cssFile CSS file to be displayed in preview area
      */
     public void initPreview(CSSModel cssModel) {
-    	this.cssModel = cssModel;
-    	if (cssModel != null) {
-    		IEditorInput input = new FileEditorInput(cssModel.getStyleFile());
-//    		try {
-//    			WorkbenchWindow workbenchWindow = (WorkbenchWindow)PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-//    			EditorAreaHelper editorPresentation = new EditorAreaHelper((WorkbenchPage) workbenchWindow.getActivePage());
-//    			EditorManager editorManager = new EditorManager(workbenchWindow, (WorkbenchPage) workbenchWindow.getActivePage(), editorPresentation);
+		this.cssModel = cssModel;
+		if (cssModel != null) {
+			IEditorInput input = new FileEditorInput(cssModel.getStyleFile());
+			for (Control control : getChildren()) {
+				control.dispose();
+			}
 
-//    			IEditorReference ref = editorManager.openEditor(EDITOR_ID, input, true, null);
-//    			if (ref != null) {
-    				// all preview tab editors should be disposed before adding new editor compoment
-       				for (Control control : getChildren()) {
-       					control.dispose();
-        			}
-//       				if (editor != null) {
-//       					editor.doRevertToSaved();
-//       					editor.close(false);
-//       				}
-//    				editor = (StructuredTextEditor)ref.getEditor(true);
-//        			editor.createPartControl(this);
-//        			editor.getTextViewer().setEditable(false);
-       				
-       			SourceViewerConfiguration sourceViewerConfiguration = new StructuredTextViewerConfiguration() {
-				StructuredTextViewerConfiguration baseConfiguration = new StructuredTextViewerConfigurationCSS();
+			StructuredTextViewerConfiguration baseConfiguration = new StructuredTextViewerConfigurationCSS();
 
-				public String[] getConfiguredContentTypes(
-						ISourceViewer sourceViewer) {
-					return baseConfiguration
-							.getConfiguredContentTypes(sourceViewer);
-				}
-
-				public LineStyleProvider[] getLineStyleProviders(
-						ISourceViewer sourceViewer, String partitionType) {
-					return baseConfiguration.getLineStyleProviders(
-							sourceViewer, partitionType);
-				}
-			};
-			 viewer = new StructuredTextViewer(this, null, null,
-					false, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+			viewer = new StructuredTextViewer(this, null, null, false,
+					SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 			((StructuredTextViewer) viewer).getTextWidget().setFont(
 					JFaceResources.getFont("org.eclipse.wst.sse.ui.textfont")); //$NON-NLS-1$
-			
-			// IStructuredModel scratchModel =
-			// StructuredModelManager.getModelManager().createUnManagedStructuredModelFor(ContentTypeIdForCSS.ContentTypeID_CSS);
-			// IDocument document = scratchModel.getStructuredDocument();
-			viewer.configure(sourceViewerConfiguration);
+
+			viewer.configure(baseConfiguration);
 			viewer.setDocument(cssModel.getStructuredDocument());
 			viewer.setEditable(false);
-//    			}
 
-    			layout();
-//    		} catch (PartInitException e) {
-//    			e.printStackTrace();
-//    		}
-    	}
-    }
+			layout();
+		}
+	}
 
     public void doRevertToSaved() {
 
     	cssModel.reload();
-
-//		if (editor != null) {
-//			editor.doRevertToSaved();
-//		}
 
 	}
     
@@ -169,13 +120,10 @@ public class TabPreviewControl extends Composite {
      * @param save true if close editor with closure operation; false - otherwise
      */
     public void closeEditor(boolean save) {
-//    	if (editor != null) {
-//    		editor.doRevertToSaved();
-//    		editor.close(save);
-//    		editor = null;
-//    	}
-    	if(!save)
-    		doRevertToSaved();
+    	
+    	// TODO if copy of model is used then reverting will not be required
+		if (!save)
+			doRevertToSaved();
     	
     	if (cssModel != null) {
     		cssModel.releaseModel();
