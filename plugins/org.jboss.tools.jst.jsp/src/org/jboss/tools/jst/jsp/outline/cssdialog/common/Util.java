@@ -21,14 +21,24 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.editors.text.TextEditor;
+import org.eclipse.ui.internal.EditorAreaHelper;
+import org.eclipse.ui.internal.WorkbenchPage;
+import org.eclipse.ui.internal.WorkbenchWindow;
+import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSNode;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleSheet;
+import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParser;
 
@@ -70,6 +80,7 @@ public class Util {
 
 	private static String ZERO_STR = "0"; //$NON-NLS-1$
 	private static int NORMAL_MIN_VALUE = 10;
+	private final static String EDITOR_ID = "org.eclipse.wst.css.core.csssource.source"; //$NON-NLS-1$
 
 	/**
 	 * Method for checking contain or not css attribute folder
@@ -427,4 +438,21 @@ public class Util {
 
         return className;
     }
+    
+    public static Point getSelectionInFile(IFile file) {
+
+		IEditorReference[] editorReference = PlatformUI.getWorkbench()
+				.getActiveWorkbenchWindow().getActivePage().findEditors(
+						new FileEditorInput(file), EDITOR_ID,
+						IWorkbenchPage.MATCH_INPUT | IWorkbenchPage.MATCH_ID);
+		Point point = new Point(0, 0);
+		if ((editorReference != null) && (editorReference.length > 0)) {
+
+			IEditorPart editorPart = editorReference[0].getEditor(false);
+			if (editorPart != null)
+				point = ((StructuredTextEditor) editorPart).getTextViewer()
+						.getSelectedRange();
+		}
+		return point;
+	}
 }

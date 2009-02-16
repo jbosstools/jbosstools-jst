@@ -472,17 +472,6 @@ public class StyleComposite extends Composite {
     	}
     }
 
-    /**
-     * Method is used to close preview tab correctly.
-     *
-     * @param save close editor with saving or not
-     */
-    public void closePreview(boolean save) {
-    	if (tabPreviewControl != null) {
-    		tabPreviewControl.closeEditor(save);
-    	}
-    }
-
 	/**
 	 * @param showPreviewTab the showPreviewTab to set
 	 */

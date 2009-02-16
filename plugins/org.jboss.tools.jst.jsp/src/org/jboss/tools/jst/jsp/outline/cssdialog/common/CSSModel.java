@@ -28,9 +28,11 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentExtension3;
 import org.eclipse.jface.text.IDocumentPartitioner;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.wst.css.core.internal.format.FormatProcessorCSS;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSDocument;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSModel;
+import org.eclipse.wst.css.core.internal.provisional.document.ICSSNode;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleSheet;
 import org.eclipse.wst.css.core.internal.text.StructuredTextPartitionerForCSS;
 import org.eclipse.wst.sse.core.StructuredModelManager;
@@ -331,10 +333,11 @@ public class CSSModel {
      * Release CSS model correctly from editing.
      */
     public void releaseModel() {
-    	IModelManager modelManager = StructuredModelManager.getModelManager();
-    	if (!modelManager.isShared(model.getId()))
+		IModelManager modelManager = StructuredModelManager.getModelManager();
+		if (model != null && !modelManager.isShared(model.getId()))
 			model.releaseFromEdit();
-    }
+		model = null;
+	}
 
     /**
      * Save model. Associate file will be saved automatically.
@@ -414,5 +417,31 @@ public class CSSModel {
 			JspEditorPlugin.getPluginLog().logError(e.getMessage());
 		}
 
+	}
+
+	public String getSelectorByPosition(Point selectionInFile) {
+
+		ICSSNode node = (ICSSNode) model.getIndexedRegion(selectionInFile.x);
+
+		while (node != null) {
+
+			if (node.getNodeType() == ICSSNode.STYLERULE_NODE) {
+				break;
+			} else if (node.getNodeType() == ICSSNode.STYLESHEET_NODE) {
+				node = ((ICSSStyleSheet) node).getFirstChild();
+				break;
+			}
+
+			node = node.getParentNode();
+		}
+		
+		Object rules=  getRulesMapping();
+		if (node != null)
+			for (Entry<String, CSSStyleRule> rule : getRulesMapping()
+					.entrySet()) {
+				if (node.equals(rule.getValue()))
+					return rule.getKey();
+			}
+		return null;
 	}
 }

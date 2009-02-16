@@ -33,8 +33,6 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.events.StyleAttributes;
 public class TabPreviewControl extends Composite {
 
     /** Editor in which we open visual page. */
-    protected final static String EDITOR_ID = "org.eclipse.wst.css.core.csssource.source"; //$NON-NLS-1$
-
     SourceViewer viewer = null;
     private CSSModel cssModel = null;
 
@@ -114,19 +112,4 @@ public class TabPreviewControl extends Composite {
 		}
 	}
 
-    /**
-     * Method is used to close CSS file editor correctly.
-     *
-     * @param save true if close editor with closure operation; false - otherwise
-     */
-    public void closeEditor(boolean save) {
-    	
-    	// TODO if copy of model is used then reverting will not be required
-		if (!save)
-			doRevertToSaved();
-    	
-    	if (cssModel != null) {
-    		cssModel.releaseModel();
-    	}
-    }
 }

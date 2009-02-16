@@ -50,6 +50,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -387,11 +388,11 @@ public class CSSClassDialog extends TitleAreaDialog {
     						if (result == SWT.YES) {
     							saveChanges(true);
     						} else {
-    							styleComposite.closePreview(false);
     							updateStyleComposite();
     						}
     					}
     		    		styleComposite.revertPreview();
+    		    		releaseResources();
 
     					// open new CSS file and initialize dialog
     					boolean useRelativePath = true;
@@ -632,6 +633,11 @@ public class CSSClassDialog extends TitleAreaDialog {
             } else {
             	text.setText(file.getFullPath().toOSString());
             }
+            
+            Point selectionInFile = Util.getSelectionInFile(file);
+
+            currentClassStyle = cssModel.getSelectorByPosition(selectionInFile);
+            
             // fill in ComboBox component with CSS model selectors
 //            List<Selector> selectors = cssModel.getSelectors();
             List<String> selectors = cssModel.getSelectorLabels();
@@ -757,6 +763,11 @@ public class CSSClassDialog extends TitleAreaDialog {
 
         return classComposite;
     }
+    
+    public void releaseResources(){
+    	
+    	cssModel.releaseModel();
+    }
 
     /**
      * Method should be called in case of dialog closure operation.
@@ -765,9 +776,6 @@ public class CSSClassDialog extends TitleAreaDialog {
     	styleComposite.updateStyle();
         cssModel.setCSS(currentClassStyle, styleAttributes);
         cssModel.saveModel();
-        if (close) {
-        	styleComposite.closePreview(true);
-        }
     }
 
     /**
@@ -806,22 +814,20 @@ public class CSSClassDialog extends TitleAreaDialog {
      */
     @Override
 	public boolean close() {
-    	int code = getReturnCode();
-    	switch (code) {
-			case OK:
-				if (styleChanged || classCombo.indexOf(currentClassStyle) == -1) {
-					saveChanges(true);
-				} else {
-		        	styleComposite.closePreview(true);
-				}
-				break;
-			case CANCEL:
-			default:
-		    	// make some closure operation
-		    	styleComposite.closePreview(false);
+		int code = getReturnCode();
+		switch (code) {
+		case OK:
+			if (styleChanged || classCombo.indexOf(currentClassStyle) == -1) {
+				saveChanges(true);
+			}
+			break;
+		case CANCEL:
+		default:
+			// make some closure operation
 		}
-    	return super.close();
-    }
+		releaseResources();
+		return super.close();
+	}
 
     /**
      * Add MessageDialogListener object.
