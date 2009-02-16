@@ -602,6 +602,9 @@ public class CSSClassDialog extends TitleAreaDialog {
 			if (classCombo.indexOf(currentClassStyle) == -1) {
 				applyButton.setEnabled(true);
 				classCombo.add(currentClassStyle);
+				styleChanged = true;
+			} else {
+				styleChanged = false;
 			}
     		
     		updateStyleComposite();
@@ -611,8 +614,9 @@ public class CSSClassDialog extends TitleAreaDialog {
 		} else {
 			currentClassStyle = classCombo.getText().trim();
 			styleAttributes.setCssSelector(currentClassStyle);
+			styleChanged = false;
 		}
-		styleChanged = false;
+		
 	}
 
     /**
