@@ -20,8 +20,11 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
@@ -99,6 +102,8 @@ public class CSSStyleDialog extends Dialog implements MouseListener, FocusListen
         split.setWeights(new int[]{15, 85});
         split.setLayoutData(new GridData(GridData.FILL, GridData.BEGINNING, true, true));
 
+        createClearButton(parent);
+        
         return composite;
     }
 
@@ -127,7 +132,31 @@ public class CSSStyleDialog extends Dialog implements MouseListener, FocusListen
         browser.addMouseListener(this);
         browser.setLayoutData(gridData);
     }
+    
+    /**
+     * create clear button
+     * @param parent
+     */
+    private void createClearButton(Composite parent){
+    	//add clear button to dialog 
+        Composite buttonComposite = new Composite(parent, SWT.None);
+		GridLayout gridLayoutTmp = new GridLayout();
+		gridLayoutTmp.marginHeight = 0;
+		gridLayoutTmp.marginRight = 5;
+		buttonComposite.setLayout(gridLayoutTmp);
+		buttonComposite.setLayoutData(new GridData(GridData.END, GridData.END,
+				false, false));
 
+		Button clearButton = new Button(buttonComposite, SWT.None);
+		clearButton.setText(JstUIMessages.BUTTON_CLEAR);
+		
+		clearButton.addSelectionListener(new SelectionAdapter() {
+            public void widgetSelected(SelectionEvent event) {
+            	styleComposite.clearStyleComposite(null);
+            }
+        });
+    }
+    
     /**
      * Method is used to build html body that is appropriate to browse.
      *
