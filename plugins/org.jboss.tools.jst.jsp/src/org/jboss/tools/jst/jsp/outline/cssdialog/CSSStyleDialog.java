@@ -79,7 +79,7 @@ public class CSSStyleDialog extends Dialog implements MouseListener, FocusListen
     protected Control createDialogArea(final Composite parent) {
     	final Composite composite = (Composite) super.createDialogArea(parent);
         if(composite.getLayoutData()!=null && composite.getLayoutData() instanceof GridData) {
-        	((GridData)composite.getLayoutData()).widthHint=500;
+        	((GridData)composite.getLayoutData()).widthHint=700;
         	((GridData)composite.getLayoutData()).heightHint=500;
         }
 		Split split = new Split(composite, SWT.VERTICAL);
