@@ -174,33 +174,6 @@ public class CSSModel {
 	}
 
     /**
-     * Get selectors
-     *
-     * @return List<String>
-     */
-    public List<Selector> getSelectors() {
-        List<Selector> selectors = new ArrayList<Selector>();
-
-        if (styleSheet != null) {
-            CSSRuleList list = styleSheet.getCssRules();
-
-            if (list != null) {
-                for (int i = 0; i < list.getLength(); i++) {
-                    if (list.item(i) instanceof CSSStyleRule) {
-                    	CSSStyleRule rule = ((CSSStyleRule) list.item(i));
-                    	Selector selector = new Selector(rule.toString(), rule.getSelectorText());
-                    	selectors.add(selector);
-                    }
-                }
-            }
-        }
-
-        return selectors;
-    }
-    
-    
-
-    /**
      * Gets CSS attributes for the given selector in string representation.
      *
      * @param selector CSS selector value
