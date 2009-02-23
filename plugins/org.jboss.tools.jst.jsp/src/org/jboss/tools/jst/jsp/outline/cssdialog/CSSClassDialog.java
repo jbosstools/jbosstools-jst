@@ -768,10 +768,11 @@ public class CSSClassDialog extends TitleAreaDialog {
         return classComposite;
     }
     
-    public void releaseResources(){
-    	
-    	cssModel.releaseModel();
-    }
+    public void releaseResources() {
+
+		if (cssModel != null)
+			cssModel.releaseModel();
+	}
 
     /**
      * Method should be called in case of dialog closure operation.
