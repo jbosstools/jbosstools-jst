@@ -383,7 +383,7 @@ public class CSSClassDialog extends TitleAreaDialog {
     					if (styleChanged && currentFile != null) {
     						MessageBox messageBox = new MessageBox(getParentShell(), SWT.YES | SWT.NO | SWT.ICON_QUESTION);
     						messageBox.setText(JstUIMessages.CSS_SAVE_DIALOG_TITLE);
-    						messageBox.setMessage("'" + currentFile + "' " + JstUIMessages.CSS_SAVE_DIALOG_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
+    						messageBox.setMessage(CSSClassDialog.getMessageForSaveDialog(currentFile));
     						int result = messageBox.open();
     						if (result == SWT.YES) {
     							saveChanges(true);
@@ -577,7 +577,7 @@ public class CSSClassDialog extends TitleAreaDialog {
 			if (styleChanged && currentClassStyle != null && !currentClassStyle.equals(Constants.EMPTY)) {
 				MessageBox messageBox = new MessageBox(getParentShell(), SWT.YES | SWT.NO | SWT.ICON_QUESTION);
 				messageBox.setText(JstUIMessages.CSS_SAVE_DIALOG_TITLE);
-				messageBox.setMessage("'" + currentFile + "' " + JstUIMessages.CSS_SAVE_DIALOG_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
+				messageBox.setMessage(CSSClassDialog.getMessageForSaveDialog(currentFile));
 				int result = messageBox.open();
 				if (result == SWT.YES) {
            			// update ComboBox element list
@@ -900,5 +900,13 @@ public class CSSClassDialog extends TitleAreaDialog {
 			}
 		}
 	}
-	
+	/**
+	 * Create a message string for user 
+	 * @param currentFile
+	 * @return
+	 */
+	private static final String  getMessageForSaveDialog(IFile currentFile){
+		String userMessage ="'" + currentFile.getFullPath().toOSString() + "' " + JstUIMessages.CSS_SAVE_DIALOG_MESSAGE;   //$NON-NLS-1$//$NON-NLS-2$
+		return userMessage;
+	}
 }
