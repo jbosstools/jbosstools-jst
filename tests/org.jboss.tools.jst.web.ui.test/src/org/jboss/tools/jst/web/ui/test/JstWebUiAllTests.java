@@ -24,6 +24,7 @@ public class JstWebUiAllTests {
 		TestSuite suite = new TestSuite(JstWebUiAllTests.class.getName());
 		suite.addTestSuite(WebViewsTest.class);
 		suite.addTestSuite(WebWizardsTest.class);
+		suite.addTestSuite(JstWebUiPreferencesPagesTest.class);
 		return suite;
 	}
 }
