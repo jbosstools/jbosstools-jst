@@ -584,7 +584,7 @@ public class CSSClassDialog extends TitleAreaDialog {
 //           			if (classCombo.indexOf(currentClassStyle) == -1) {
 //           				classCombo.add(currentClassStyle);
 //           			}
-//                	saveChanges(false);
+					cssModel.setCSS(currentClassStyle, styleAttributes);
 //                	// update content assist proposals
 //            		SimpleContentProposalProvider proposalProvider =
 //            			(SimpleContentProposalProvider)contentAssistAdapter.getContentProposalProvider();
