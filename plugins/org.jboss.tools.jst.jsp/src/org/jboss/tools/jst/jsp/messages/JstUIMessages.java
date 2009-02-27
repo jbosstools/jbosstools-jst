@@ -101,4 +101,7 @@ public class JstUIMessages extends NLS {
 	public static String DEFAULT_PREVIEW_TEXT;
 	public static String DEFAULT_TEXT_FOR_BROWSER_PREVIEW;
 	public static String CSS_NO_EDITED_PROPERTIES;
+	public static String BUTTON_ADD_NEW_STYLE_CLASS;
+	public static String ENTER_CSS_CLASS_NAME;
+	public static String CSS_CLASS_NAME_NOT_VALID;
 }

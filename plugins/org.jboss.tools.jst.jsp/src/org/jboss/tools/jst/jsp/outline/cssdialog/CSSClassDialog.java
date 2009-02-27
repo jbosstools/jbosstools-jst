@@ -25,6 +25,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.IInputValidator;
+import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.fieldassist.ComboContentAdapter;
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
@@ -325,11 +327,14 @@ public class CSSClassDialog extends TitleAreaDialog {
         Label label = new Label(parent, SWT.LEFT);
         label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
         label.setText(JstUIMessages.CSS_CLASS_DIALOG_FILE_LABEL);
-
+        
         // Text field contains path to the CSS file
-        text = new Text(parent, SWT.BORDER);
-        text.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false));
-        text.setEditable(false);
+        text = new Text(parent, SWT.BORDER|SWT.READ_ONLY);
+        GridData gridData =new GridData(GridData.FILL, GridData.CENTER, true, false);
+        gridData.grabExcessHorizontalSpace=true;
+        gridData.horizontalSpan=2;
+        text.setLayoutData(gridData);
+//        text.setEditable(false);
         text.addModifyListener(new ModifyListener() {
             public void modifyText(ModifyEvent e) {
     			String cssFile = text.getText().trim();
@@ -345,79 +350,79 @@ public class CSSClassDialog extends TitleAreaDialog {
             }
         });
 
-        Button button = new Button(parent, SWT.PUSH);
-        button.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
-
-        ImageDescriptor imageDesc = JspEditorPlugin.getImageDescriptor(Constants.IMAGE_FOLDERLARGE_FILE_LOCATION);
-        Image image = imageDesc.createImage();
-        button.setImage(image);
-        button.setToolTipText(JstUIMessages.CSS_BROWSE_BUTTON_TOOLTIP);
-        button.addDisposeListener(new DisposeListener() {
-                public void widgetDisposed(DisposeEvent e) {
-                    Button button = (Button) e.getSource();
-                    button.getImage().dispose();
-                }
-            });
-        button.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent event) {
-//    			IResource project = Util.getCurrentProject();
-    			IResource project = ResourcesPlugin.getWorkspace().getRoot();
-
-    			ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(getShell(),
-    					new WorkbenchLabelProvider(), new BaseWorkbenchContentProvider());
-    			dialog.addFilter(new FileExtensionFilter(fileExtensions));
-    			dialog.setTitle(JstUIMessages.CSS_FILE_SELECT_DIALOG_TITLE);
-    			dialog.setMessage(JstUIMessages.CSS_FILE_SELECT_DIALOG_LABEL);
-    			dialog.setInput(project);
-    			dialog.setAllowMultiple(false);
-    			dialog.setDoubleClickSelects(false);
-    			if (currentFile != null) {
-    				dialog.setInitialSelection(currentFile);
-    			}
-    			dialog.setEmptyListMessage(JstUIMessages.CSS_FILE_SELECT_DIALOG_EMPTY_MESSAGE);
-
-    			if (dialog.open() == Window.OK) {
-    				IResource res = (IResource) dialog.getFirstResult();
-    				// make some important saving actions
-    				if (res instanceof IFile) {
-    					if (styleChanged && currentFile != null) {
-    						MessageBox messageBox = new MessageBox(getParentShell(), SWT.YES | SWT.NO | SWT.ICON_QUESTION);
-    						messageBox.setText(JstUIMessages.CSS_SAVE_DIALOG_TITLE);
-    						messageBox.setMessage(CSSClassDialog.getMessageForSaveDialog(currentFile));
-    						int result = messageBox.open();
-    						if (result == SWT.YES) {
-    							saveChanges(true);
-    						} else {
-    							updateStyleComposite();
-    						}
-    					}
-    		    		styleComposite.revertPreview();
-    		    		releaseResources();
-
-    					// open new CSS file and initialize dialog
-    					boolean useRelativePath = true;
-    					if (project instanceof IWorkspaceRoot) {
-    						useRelativePath = false;
-    					}
-    					boolean updateCSSModel = false;
-    					if (currentFile != null && !currentFile.equals(Constants.EMPTY)) {
-    		            	currentClassStyle = null;
-    		            	updateCSSModel = true;
-    					}
-    					currentFile = (IFile)res;
-    					initCSSModel(currentFile, useRelativePath, updateCSSModel);
-    					updateOKButtonState();
-    					applyButton.setEnabled(false);
-            			styleChanged = false;
-
-	                	// update content assist proposals
-	            		SimpleContentProposalProvider proposalProvider =
-	            			(SimpleContentProposalProvider)contentAssistAdapter.getContentProposalProvider();
-	            		proposalProvider.setProposals(classCombo.getItems());
-    				}
-        		}
-            }
-        });
+//        Button button = new Button(parent, SWT.PUSH);
+//        button.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
+//
+//        ImageDescriptor imageDesc = JspEditorPlugin.getImageDescriptor(Constants.IMAGE_FOLDERLARGE_FILE_LOCATION);
+//        Image image = imageDesc.createImage();
+//        button.setImage(image);
+//        button.setToolTipText(JstUIMessages.CSS_BROWSE_BUTTON_TOOLTIP);
+//        button.addDisposeListener(new DisposeListener() {
+//                public void widgetDisposed(DisposeEvent e) {
+//                    Button button = (Button) e.getSource();
+//                    button.getImage().dispose();
+//                }
+//            });
+//        button.addSelectionListener(new SelectionAdapter() {
+//            public void widgetSelected(SelectionEvent event) {
+////    			IResource project = Util.getCurrentProject();
+//    			IResource project = ResourcesPlugin.getWorkspace().getRoot();
+//
+//    			ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(getShell(),
+//    					new WorkbenchLabelProvider(), new BaseWorkbenchContentProvider());
+//    			dialog.addFilter(new FileExtensionFilter(fileExtensions));
+//    			dialog.setTitle(JstUIMessages.CSS_FILE_SELECT_DIALOG_TITLE);
+//    			dialog.setMessage(JstUIMessages.CSS_FILE_SELECT_DIALOG_LABEL);
+//    			dialog.setInput(project);
+//    			dialog.setAllowMultiple(false);
+//    			dialog.setDoubleClickSelects(false);
+//    			if (currentFile != null) {
+//    				dialog.setInitialSelection(currentFile);
+//    			}
+//    			dialog.setEmptyListMessage(JstUIMessages.CSS_FILE_SELECT_DIALOG_EMPTY_MESSAGE);
+//
+//    			if (dialog.open() == Window.OK) {
+//    				IResource res = (IResource) dialog.getFirstResult();
+//    				// make some important saving actions
+//    				if (res instanceof IFile) {
+//    					if (styleChanged && currentFile != null) {
+//    						MessageBox messageBox = new MessageBox(getParentShell(), SWT.YES | SWT.NO | SWT.ICON_QUESTION);
+//    						messageBox.setText(JstUIMessages.CSS_SAVE_DIALOG_TITLE);
+//    						messageBox.setMessage(CSSClassDialog.getMessageForSaveDialog(currentFile));
+//    						int result = messageBox.open();
+//    						if (result == SWT.YES) {
+//    							saveChanges(true);
+//    						} else {
+//    							updateStyleComposite();
+//    						}
+//    					}
+//    		    		styleComposite.revertPreview();
+//    		    		releaseResources();
+//
+//    					// open new CSS file and initialize dialog
+//    					boolean useRelativePath = true;
+//    					if (project instanceof IWorkspaceRoot) {
+//    						useRelativePath = false;
+//    					}
+//    					boolean updateCSSModel = false;
+//    					if (currentFile != null && !currentFile.equals(Constants.EMPTY)) {
+//    		            	currentClassStyle = null;
+//    		            	updateCSSModel = true;
+//    					}
+//    					currentFile = (IFile)res;
+//    					initCSSModel(currentFile, useRelativePath, updateCSSModel);
+//    					updateOKButtonState();
+//    					applyButton.setEnabled(false);
+//            			styleChanged = false;
+//
+//	                	// update content assist proposals
+//	            		SimpleContentProposalProvider proposalProvider =
+//	            			(SimpleContentProposalProvider)contentAssistAdapter.getContentProposalProvider();
+//	            		proposalProvider.setProposals(classCombo.getItems());
+//    				}
+//        		}
+//            }
+//        });
     }
 
 	/**
@@ -425,35 +430,34 @@ public class CSSClassDialog extends TitleAreaDialog {
 	 *
 	 * @param parent Composite component
 	 */
-	private void createStyleClassCombo(Composite parent) {
+	private void createStyleClassCombo(final Composite parent) {
         Label label = new Label(parent, SWT.LEFT);
         label.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
         label.setText(JstUIMessages.CSS_CLASS_DIALOG_STYLE_CLASS_LABEL);
 
 		GridData gridData = new GridData(GridData.FILL, GridData.CENTER, true, false);
-        gridData.horizontalSpan = 2;
+        gridData.horizontalSpan = 1;
 
-        classCombo = new Combo(parent, SWT.BORDER);
+        classCombo = new Combo(parent, SWT.BORDER|SWT.READ_ONLY);
         classCombo.setLayoutData(gridData);
-        classCombo.setEnabled(false);
         // add selection listener
-        classCombo.addSelectionListener(new SelectionAdapter() {
-        	public void widgetSelected(SelectionEvent e) {
-        		if (keyInputSelector) {
-        			keyInputSelector = false;
-        			if (currentClassStyle != null && classCombo.indexOf(currentClassStyle) != -1) {
-        				return;
-        			}
-        		}
-        		keyInputSelector = false;
-        	}
-        });
+//        classCombo.addSelectionListener(new SelectionAdapter() {
+//        	public void widgetSelected(SelectionEvent e) {
+//        		if (keyInputSelector) {
+//        			keyInputSelector = false;
+//        			if (currentClassStyle != null && classCombo.indexOf(currentClassStyle) != -1) {
+//        				return;
+//        			}
+//        		}
+//        		keyInputSelector = false;
+//        	}
+//        });
         // add key modified listener
-        classCombo.addKeyListener(new KeyAdapter() {
-			public void keyReleased(KeyEvent e) {
-				keyInputSelector = true;
-			}
-        });
+//        classCombo.addKeyListener(new KeyAdapter() {
+//			public void keyReleased(KeyEvent e) {
+//				keyInputSelector = true;
+//			}
+//        });
         // this listener is responsible for processing dialog header message events
     	classCombo.addModifyListener(new ModifyListener() {
             public void modifyText(ModifyEvent e) {
@@ -476,8 +480,48 @@ public class CSSClassDialog extends TitleAreaDialog {
 				applyButton.setEnabled(false);
             }
         });
+    	//creates a button for add new class
+    	 Button show = new Button(parent, SWT.PUSH);
+    	 show.setText(JstUIMessages.BUTTON_ADD_NEW_STYLE_CLASS);
+    	 show.addSelectionListener(new SelectionAdapter() {
+    	      public void widgetSelected(SelectionEvent event) {
+    	          InputDialog dlg = new InputDialog(parent.getShell(),
+    	              JstUIMessages.ENTER_CSS_CLASS_NAME, JstUIMessages.ENTER_CSS_CLASS_NAME, classCombo.getText(),
+    	              new IInputValidator(){
+    	        	  	/**
+    	        	  	 * Simple validation of new CSS Class Name, now we just check that it's not empty string
+    	        	  	 */
+						public String isValid(String newText) {
+							if(newText==null || newText.trim().length()==0){
+								return JstUIMessages.CSS_CLASS_NAME_NOT_VALID;
+							}
+							return null;
+						}
+    	        	  
+    	          });
+    	          if (dlg.open() == Window.OK) {
+    	        	  addNewStyleClass(dlg.getValue().trim());
+    	    		}
+    	        }
+    	      });
 	}
-
+	/**
+	 * Add New Class to CSS Class Dialog
+	 * @param styleClassName - name of new style class
+	 */
+	protected void addNewStyleClass(String styleClassName) {
+		applyButton.setEnabled(true);
+		styleChanged = true;
+		currentClassStyle = styleClassName;
+		updateStyleComposite();
+		styleAttributes.setCssSelector(currentClassStyle);
+		styleComposite.updatePreview(currentClassStyle);
+		updateOKButtonState();
+		// add new class to end of list
+		classCombo.add(currentClassStyle);
+		// end select it
+		classCombo.select(classCombo.getItemCount() - 1);
+	}
 	/**
 	 * This method is invoked to correctly process class style combo modify event.
 	 */
