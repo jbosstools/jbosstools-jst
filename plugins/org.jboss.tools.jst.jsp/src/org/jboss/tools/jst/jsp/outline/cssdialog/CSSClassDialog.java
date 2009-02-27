@@ -600,12 +600,13 @@ public class CSSClassDialog extends TitleAreaDialog {
 			
 			// if new css was added
 			if (classCombo.indexOf(currentClassStyle) == -1) {
-				applyButton.setEnabled(true);
 				classCombo.add(currentClassStyle);
-				styleChanged = true;
-			} else {
+//				styleChanged = true;
+			} /*else {
 				styleChanged = false;
-			}
+			}*/
+			applyButton.setEnabled(true);
+			styleChanged = true;
     		
     		updateStyleComposite();
     		styleAttributes.setCssSelector(currentClassStyle);
