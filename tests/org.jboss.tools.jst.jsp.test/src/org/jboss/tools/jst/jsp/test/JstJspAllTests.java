@@ -29,6 +29,7 @@ public class JstJspAllTests {
 		suite.addTestSuite(JstJspJbide1759Test.class);
 		suite.addTestSuite(Jbide1791Test.class);
 		suite.addTestSuite(JsfJspJbide2437Test.class);
+		suite.addTestSuite(JspPreferencesPageTest.class);
 		
 		return suite;
 	}
