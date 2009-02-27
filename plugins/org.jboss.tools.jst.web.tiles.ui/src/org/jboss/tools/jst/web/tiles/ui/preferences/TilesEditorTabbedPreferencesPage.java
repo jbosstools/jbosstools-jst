@@ -41,7 +41,13 @@ public class TilesEditorTabbedPreferencesPage extends TabbedPreferencesPage impl
 	}
 	
 	public static void openPreferenceDialog() {
-		new TilesEditorPreferenceDialog().open();
+		openPreferenceDialog(true);
+	}
+	
+	public static void openPreferenceDialog(boolean block) {
+		TilesEditorPreferenceDialog dialog = new TilesEditorPreferenceDialog();
+		dialog.setBlockOnOpen(block);
+		dialog.open();
 	}
 
 	private static class TilesEditorPreferenceDialog extends PreferenceDialog {
