@@ -574,27 +574,27 @@ public class CSSClassDialog extends TitleAreaDialog {
 	 */
 	private void cssStyleClassChanged() {
 		if (currentFile != null && !currentFile.equals(Constants.EMPTY)) {
-			if (styleChanged && currentClassStyle != null && !currentClassStyle.equals(Constants.EMPTY)) {
-				MessageBox messageBox = new MessageBox(getParentShell(), SWT.YES | SWT.NO | SWT.ICON_QUESTION);
-				messageBox.setText(JstUIMessages.CSS_SAVE_DIALOG_TITLE);
-				messageBox.setMessage(CSSClassDialog.getMessageForSaveDialog(currentFile));
-				int result = messageBox.open();
-				if (result == SWT.YES) {
-           			// update ComboBox element list
-           			if (classCombo.indexOf(currentClassStyle) == -1) {
-           				classCombo.add(currentClassStyle);
-           			}
-                	saveChanges(false);
-                	// update content assist proposals
-            		SimpleContentProposalProvider proposalProvider =
-            			(SimpleContentProposalProvider)contentAssistAdapter.getContentProposalProvider();
-            		proposalProvider.setProposals(classCombo.getItems());
-				} else {
-					// FOR https://jira.jboss.org/jira/browse/JBIDE-3542
-					// cssModel.init(currentFile);
-					// styleComposite.revertPreview();
-				}
-			}
+//			if (styleChanged && currentClassStyle != null && !currentClassStyle.equals(Constants.EMPTY)) {
+//				MessageBox messageBox = new MessageBox(getParentShell(), SWT.YES | SWT.NO | SWT.ICON_QUESTION);
+//				messageBox.setText(JstUIMessages.CSS_SAVE_DIALOG_TITLE);
+//				messageBox.setMessage(CSSClassDialog.getMessageForSaveDialog(currentFile));
+//				int result = messageBox.open();
+//				if (result == SWT.YES) {
+//           			// update ComboBox element list
+//           			if (classCombo.indexOf(currentClassStyle) == -1) {
+//           				classCombo.add(currentClassStyle);
+//           			}
+//                	saveChanges(false);
+//                	// update content assist proposals
+//            		SimpleContentProposalProvider proposalProvider =
+//            			(SimpleContentProposalProvider)contentAssistAdapter.getContentProposalProvider();
+//            		proposalProvider.setProposals(classCombo.getItems());
+//				} else {
+//					// FOR https://jira.jboss.org/jira/browse/JBIDE-3542
+//					// cssModel.init(currentFile);
+//					// styleComposite.revertPreview();
+//				}
+//			}
     		// update current class style value
 			currentClassStyle = classCombo.getText().trim();
 			
