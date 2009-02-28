@@ -15,43 +15,28 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
-import org.eclipse.jface.fieldassist.ComboContentAdapter;
-import org.eclipse.jface.fieldassist.ContentProposalAdapter;
-import org.eclipse.jface.fieldassist.IContentProposal;
-import org.eclipse.jface.fieldassist.IContentProposalListener;
 import org.eclipse.jface.fieldassist.SimpleContentProposalProvider;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -59,23 +44,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
-import org.eclipse.ui.fieldassist.ContentAssistCommandAdapter;
-import org.eclipse.ui.model.BaseWorkbenchContentProvider;
-import org.eclipse.ui.model.WorkbenchLabelProvider;
-import org.eclipse.ui.progress.UIJob;
 import org.jboss.tools.common.model.ui.widgets.Split;
-import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSModel;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
-import org.jboss.tools.jst.jsp.outline.cssdialog.common.FileExtensionFilter;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Util;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.ChangeStyleEvent;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.ChangeStyleListener;
@@ -94,7 +69,7 @@ public class CSSClassDialog extends TitleAreaDialog {
 	public static final String ID = "org.jboss.tools.jst.jsp.outline.cssdialog.CSSClassDialog"; //$NON-NLS-1$
 
 	private static String notUsed = "not_used"; //$NON-NLS-1$
-    private final static String[] fileExtensions = { Util.CSS_FILE_EXTENTION };
+//    private final static String[] fileExtensions = { Util.CSS_FILE_EXTENTION };
 
     private Composite browserContainer = null;
     private Browser browser = null;
@@ -108,7 +83,7 @@ public class CSSClassDialog extends TitleAreaDialog {
     // css style classes
     private Combo classCombo;
     // combo box content assist
-	private ContentAssistCommandAdapter contentAssistAdapter = null;
+//	private ContentAssistCommandAdapter contentAssistAdapter = null;
     // apply button
     private Button applyButton;
 
@@ -126,7 +101,7 @@ public class CSSClassDialog extends TitleAreaDialog {
 
 	private boolean styleChanged = false;
 
-	private boolean keyInputSelector = false;
+//	private boolean keyInputSelector = false;
 
 	// Status variables for the possible errors on this page.
 	// 1. timeStatus holds an error if CSS file is not specified
@@ -141,11 +116,11 @@ public class CSSClassDialog extends TitleAreaDialog {
     private final boolean callFromWizard;
 
     // this job is used to correctly process change style class combo text with delay
-	private UIJob uiJob = null;
+//	private UIJob uiJob = null;
 	// the job name
-	private String jobName = "Update CSS Composite"; //$NON-NLS-1$
-	// delay for job in milliseconds
-	private int delay = 1000;
+//	private String jobName = "Update CSS Composite"; //$NON-NLS-1$
+//	// delay for job in milliseconds
+//	private int delay = 1000;
 
     /**
      * Constructor.
@@ -306,16 +281,16 @@ public class CSSClassDialog extends TitleAreaDialog {
     	// add content assist to style COMBO component
 		SimpleContentProposalProvider proposalProvider = new SimpleContentProposalProvider(classCombo.getItems());
 		proposalProvider.setFiltering(true);
-		contentAssistAdapter = new ContentAssistCommandAdapter(
-				classCombo, new ComboContentAdapter(), proposalProvider, null, null, true);
-		contentAssistAdapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
-		contentAssistAdapter.addContentProposalListener(new IContentProposalListener() {
-			public void proposalAccepted(IContentProposal proposal) {
-				cssStyleClassChanged();
-				applyButton.setEnabled(false);
-				keyInputSelector = false;
-			}
-		});
+//		contentAssistAdapter = new ContentAssistCommandAdapter(
+//				classCombo, new ComboContentAdapter(), proposalProvider, null, null, true);
+//		contentAssistAdapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
+//		contentAssistAdapter.addContentProposalListener(new IContentProposalListener() {
+//			public void proposalAccepted(IContentProposal proposal) {
+//				cssStyleClassChanged();
+//				applyButton.setEnabled(false);
+//				keyInputSelector = false;
+//			}
+//		});
 
         split.setWeights(new int[]{15, 85});
         split.setLayoutData(new GridData(GridData.FILL, GridData.BEGINNING, true, true));
@@ -476,7 +451,7 @@ public class CSSClassDialog extends TitleAreaDialog {
 						|| (currentClassStyle == null && classCombo.getText().trim().equals(Constants.EMPTY))) {
 					return;
 				}
-				notifyStyleClassChanged();
+				cssStyleClassChanged();
 				applyButton.setEnabled(false);
             }
         });
@@ -522,41 +497,41 @@ public class CSSClassDialog extends TitleAreaDialog {
 		// end select it
 		classCombo.select(classCombo.getItemCount() - 1);
 	}
-	/**
-	 * This method is invoked to correctly process class style combo modify event.
-	 */
-	private void notifyStyleClassChanged() {
-		Display display = null;
-		if (PlatformUI.isWorkbenchRunning()) {
-			display = PlatformUI.getWorkbench().getDisplay();
-		}
-		if (display != null && (Thread.currentThread() == display.getThread())) {
-			if (uiJob == null) {
-				uiJob = new UIJob(jobName) {
-					@Override
-					public IStatus runInUIThread(IProgressMonitor monitor) {
-						if (monitor.isCanceled()) {
-							return Status.CANCEL_STATUS;
-						}
-						monitor.beginTask(jobName, IProgressMonitor.UNKNOWN);
-
-						// start operation
-						cssStyleClassChanged();
-						// end operation
-
-						monitor.done();
-
-						return Status.OK_STATUS;
-					}
-				};
-			}
-
-			uiJob.setPriority(Job.SHORT);
-			uiJob.schedule(delay);
-
-			return;
-		}
-	}
+//	/**
+//	 * This method is invoked to correctly process class style combo modify event.
+//	 */
+//	private void notifyStyleClassChanged() {
+//		Display display = null;
+//		if (PlatformUI.isWorkbenchRunning()) {
+//			display = PlatformUI.getWorkbench().getDisplay();
+//		}
+//		if (display != null && (Thread.currentThread() == display.getThread())) {
+//			if (uiJob == null) {
+//				uiJob = new UIJob(jobName) {
+//					@Override
+//					public IStatus runInUIThread(IProgressMonitor monitor) {
+//						if (monitor.isCanceled()) {
+//							return Status.CANCEL_STATUS;
+//						}
+//						monitor.beginTask(jobName, IProgressMonitor.UNKNOWN);
+//
+//						// start operation
+//						cssStyleClassChanged();
+//						// end operation
+//
+//						monitor.done();
+//
+//						return Status.OK_STATUS;
+//					}
+//				};
+//			}
+//
+//			uiJob.setPriority(Job.SHORT);
+//			uiJob.schedule(delay);
+//
+//			return;
+//		}
+//	}
 
 	/**
 	 * This method is used to create custom button panel.
@@ -945,13 +920,13 @@ public class CSSClassDialog extends TitleAreaDialog {
 			}
 		}
 	}
-	/**
-	 * Create a message string for user 
-	 * @param currentFile
-	 * @return
-	 */
-	private static final String  getMessageForSaveDialog(IFile currentFile){
-		String userMessage ="'" + currentFile.getFullPath().toOSString() + "' " + JstUIMessages.CSS_SAVE_DIALOG_MESSAGE;   //$NON-NLS-1$//$NON-NLS-2$
-		return userMessage;
-	}
+//	/**
+//	 * Create a message string for user 
+//	 * @param currentFile
+//	 * @return
+//	 */
+//	private static final String  getMessageForSaveDialog(IFile currentFile){
+//		String userMessage ="'" + currentFile.getFullPath().toOSString() + "' " + JstUIMessages.CSS_SAVE_DIALOG_MESSAGE;   //$NON-NLS-1$//$NON-NLS-2$
+//		return userMessage;
+//	}
 }
