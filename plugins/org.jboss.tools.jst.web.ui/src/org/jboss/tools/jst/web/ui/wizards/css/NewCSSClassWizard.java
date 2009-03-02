@@ -192,6 +192,7 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 		 */
 		public void saveChanges() {
 			dialog.saveChanges(true);
+			dialog.close();
 		}
 
 		/**
