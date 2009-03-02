@@ -920,13 +920,4 @@ public class CSSClassDialog extends TitleAreaDialog {
 			}
 		}
 	}
-//	/**
-//	 * Create a message string for user 
-//	 * @param currentFile
-//	 * @return
-//	 */
-//	private static final String  getMessageForSaveDialog(IFile currentFile){
-//		String userMessage ="'" + currentFile.getFullPath().toOSString() + "' " + JstUIMessages.CSS_SAVE_DIALOG_MESSAGE;   //$NON-NLS-1$//$NON-NLS-2$
-//		return userMessage;
-//	}
 }

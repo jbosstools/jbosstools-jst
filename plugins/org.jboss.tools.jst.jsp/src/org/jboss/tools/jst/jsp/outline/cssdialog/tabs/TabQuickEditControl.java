@@ -115,7 +115,6 @@ public class TabQuickEditControl extends BaseTabControl {
         	label =  new Label(this, SWT.CENTER);
         	label.setText(JstUIMessages.CSS_NO_EDITED_PROPERTIES);
         }
-        System.out.println();      
         Collections.sort(listKeys);
         updateDataFromStyleAttributes = true;
         for (String key : listKeys) {
