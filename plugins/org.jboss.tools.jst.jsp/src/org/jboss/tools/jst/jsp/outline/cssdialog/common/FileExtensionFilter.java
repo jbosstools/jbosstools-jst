@@ -41,8 +41,7 @@ public class FileExtensionFilter extends ViewerFilter {
 		    }
 		}
 		return false;
-	    }
-	    if (element instanceof IProject && ((IProject) element).isOpen())
+	    } if (element instanceof IProject && ((IProject) element).isOpen())
 		return true;
 	    if (element instanceof IContainer) { // i.e. IProject, IFolder
 		try {

@@ -13,6 +13,7 @@ public class WebUIMessages extends NLS {
 	public static String WIZARD_WINDOW_TITLE;
 	public static String WIZARD_TITLE;
 	public static String WIZARD_DESCRIPTION;
+	public static String WIZARD_ERROR_FILE_SELECTION;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, WebUIMessages.class);

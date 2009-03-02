@@ -14,6 +14,8 @@ package org.jboss.tools.jst.web.ui.wizards.css;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardPage;
@@ -28,7 +30,9 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
+import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 import org.eclipse.ui.model.BaseWorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.FileExtensionFilter;
@@ -100,6 +104,20 @@ public class WizardNewCssClassPage extends WizardPage implements ModifyListener 
 				dialog.setInput(ResourcesPlugin.getWorkspace().getRoot());
 				dialog.setAllowMultiple(false);
 				dialog.setDoubleClickSelects(true);
+				dialog.setValidator(new ISelectionStatusValidator(){
+
+					public IStatus validate(Object[] selection) {
+						if(selection!=null && selection.length==1) {
+							if(selection[0] instanceof IFile) {
+								return new Status(IStatus.OK, PlatformUI.PLUGIN_ID,
+				                        IStatus.OK, "", //$NON-NLS-1$
+				                        null);
+							}
+						}
+						return new Status(IStatus.ERROR, PlatformUI.PLUGIN_ID,
+		                        IStatus.ERROR, WebUIMessages.WIZARD_ERROR_FILE_SELECTION, //$NON-NLS-1$
+		                        null);
+					}});
 				if (currentFile != null) {
 					dialog.setInitialSelection(currentFile);
 				}
