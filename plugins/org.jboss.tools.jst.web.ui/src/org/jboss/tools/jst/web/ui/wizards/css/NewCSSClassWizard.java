@@ -177,7 +177,7 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 
 					//set console configuration as treeViewer input
 					public void pageChanged(PageChangedEvent event) {
-						if (event.getSelectedPage() == NewCSSClassWizardPage.this){
+						if (event.getSelectedPage() == editFilePage){
 							dialog.setCurrentFile(classDescription.getCssFile());
 							dialog.reinit();
 							dialog.addNewStyleClass(classDescription.cssClassName);
@@ -191,7 +191,7 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 		 * Save page model.
 		 */
 		public void saveChanges() {
-			dialog.saveChanges(true);
+//			dialog.saveChanges(true);
 			dialog.close();
 		}
 
