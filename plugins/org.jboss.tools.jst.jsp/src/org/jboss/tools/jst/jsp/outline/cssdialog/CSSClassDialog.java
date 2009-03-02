@@ -493,7 +493,8 @@ public class CSSClassDialog extends TitleAreaDialog {
 		styleComposite.updatePreview(currentClassStyle);
 		updateOKButtonState();
 		// add new class to end of list
-		classCombo.add(currentClassStyle);
+		if (classCombo.indexOf(currentClassStyle) == -1)
+			classCombo.add(currentClassStyle);
 		// end select it
 		classCombo.select(classCombo.getItemCount() - 1);
 	}
@@ -618,12 +619,12 @@ public class CSSClassDialog extends TitleAreaDialog {
 			currentClassStyle = classCombo.getText().trim();
 			
 			// if new css was added
-			if (classCombo.indexOf(currentClassStyle) == -1) {
-				classCombo.add(currentClassStyle);
+//			if (classCombo.indexOf(currentClassStyle) == -1) {
+//				classCombo.add(currentClassStyle);
 //				styleChanged = true;
-			} /*else {
-				styleChanged = false;
-			}*/
+//			} else {
+//				styleChanged = false;
+//			}
 			applyButton.setEnabled(true);
 			styleChanged = true;
     		
