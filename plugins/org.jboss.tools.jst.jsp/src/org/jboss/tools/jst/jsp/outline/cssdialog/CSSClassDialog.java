@@ -164,7 +164,7 @@ public class CSSClassDialog extends TitleAreaDialog {
 		if (currentFile == null) {
 			currentFile = Util.getActiveCssFile();
 		}
-		currentClassStyle = Util.getActivePageCSSSelectorIfAny();
+//		currentClassStyle = Util.getActivePageCSSSelectorIfAny();
     }
 
     /**
@@ -484,7 +484,7 @@ public class CSSClassDialog extends TitleAreaDialog {
 	 * Add New Class to CSS Class Dialog
 	 * @param styleClassName - name of new style class
 	 */
-	protected void addNewStyleClass(String styleClassName) {
+	public void addNewStyleClass(String styleClassName) {
 		applyButton.setEnabled(true);
 		styleChanged = true;
 		currentClassStyle = styleClassName;
@@ -649,8 +649,9 @@ public class CSSClassDialog extends TitleAreaDialog {
         if (file != null) {
         	// create CSS Model
         	cssModel = new CSSModel(file);
-            classCombo.setEnabled(true);
+        	currentClassStyle = null;
             classCombo.removeAll();
+            classCombo.setEnabled(true);
             // set file path to corresponding text field
             if (useRelativePathPath) {
             	text.setText(file.getProjectRelativePath().toOSString());
@@ -665,19 +666,19 @@ public class CSSClassDialog extends TitleAreaDialog {
             // fill in ComboBox component with CSS model selectors
 //            List<Selector> selectors = cssModel.getSelectors();
             List<String> selectors = cssModel.getSelectorLabels();
-            int selectedIndex = -1;
             for (int i = 0; i < selectors.size(); i++) {
 //            	Selector value = selectors.get(i);
             	String label = selectors.get(i);
             	classCombo.add(/*value.getValue()*/ label);
-            	if (currentClassStyle != null && currentClassStyle.equals(/*value.getValue()*/label)) {
-            		selectedIndex = i;
-            	}
+            	
             }
-            if (currentClassStyle != null && selectedIndex == -1) {
+            /*
+             * 
+             */
+            if (currentClassStyle != null) {
             	classCombo.setText(currentClassStyle);
             } else {
-            	classCombo.select(selectedIndex);
+            	classCombo.select(0);
             }
             classCombo.setToolTipText(cssModel.getCSSText(currentClassStyle));
 
@@ -790,8 +791,10 @@ public class CSSClassDialog extends TitleAreaDialog {
     
     public void releaseResources() {
 
-		if (cssModel != null)
+		if (cssModel != null){
 			cssModel.releaseModel();
+			cssModel = null;
+		}
 	}
 
     /**
@@ -919,5 +922,14 @@ public class CSSClassDialog extends TitleAreaDialog {
 					break;
 			}
 		}
+	}
+
+	public void reinit(){
+		releaseResources();
+		initCSSModel(currentFile, true,true);
+	}
+
+	public void setCurrentFile(IFile currentFile) {
+		this.currentFile = currentFile;
 	}
 }
