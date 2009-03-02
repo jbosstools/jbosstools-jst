@@ -497,6 +497,7 @@ public class CSSClassDialog extends TitleAreaDialog {
 			classCombo.add(currentClassStyle);
 		// end select it
 		classCombo.select(classCombo.getItemCount() - 1);
+		cssModel.setCSS(currentClassStyle, styleAttributes);
 	}
 //	/**
 //	 * This method is invoked to correctly process class style combo modify event.
