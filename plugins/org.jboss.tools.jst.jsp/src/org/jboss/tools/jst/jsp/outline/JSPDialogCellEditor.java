@@ -26,7 +26,6 @@ import org.jboss.tools.common.model.ui.objecteditor.ExtendedCellEditorProvider;
 import org.jboss.tools.jst.jsp.contentassist.FaceletsHtmlContentAssistProcessor;
 import org.jboss.tools.jst.jsp.contentassist.JSPDialogCellEditorContentAssistProcessor;
 import org.jboss.tools.jst.jsp.drop.treeviewer.model.RootElement;
-import org.jboss.tools.jst.jsp.outline.cssdialog.CSSClassDialog;
 import org.jboss.tools.jst.jsp.outline.cssdialog.CSSStyleDialog;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSConstants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
@@ -139,17 +138,18 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
         context.put("value", value);
 
         attributeName = attributeName.toLowerCase();
-        if (attributeName.equalsIgnoreCase(CSSConstants.CLASS)
-        		|| attributeName.endsWith(CSSConstants.CLASS.toLowerCase())) {
-            CSSClassDialog dialog = new CSSClassDialog(cellEditorWindow.getShell(), null, false);
-            dialog.setCurrentStyleClass(value);
-
-            if (dialog.open() == Window.OK) {
-                externalEditing = false;
-
-                return dialog.getSelectorName();
-            }
-        } else if (attributeName.equalsIgnoreCase(CSSConstants.STYLE)
+//        if (attributeName.equalsIgnoreCase(CSSConstants.CLASS)
+//        		|| attributeName.endsWith(CSSConstants.CLASS.toLowerCase())) {
+//            CSSClassDialog dialog = new CSSClassDialog(cellEditorWindow.getShell(), null, false);
+//            dialog.setCurrentStyleClass(value);
+//
+//            if (dialog.open() == Window.OK) {
+//                externalEditing = false;
+//
+//                return dialog.getSelectorName();
+//            }
+//        } else
+        	if (attributeName.equalsIgnoreCase(CSSConstants.STYLE)
         		|| attributeName.endsWith(CSSConstants.STYLE.toLowerCase())) {
             CSSStyleDialog dialog = new CSSStyleDialog(cellEditorWindow.getShell(),
                     ((value == null) ? Constants.EMPTY : value));
