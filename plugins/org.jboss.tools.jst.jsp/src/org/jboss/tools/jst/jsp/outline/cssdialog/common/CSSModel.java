@@ -65,6 +65,7 @@ public class CSSModel {
     private CSSStyleSheet styleSheet = null;
     private ICSSStyleSheet eclipseStyleSheet = null;
     private String COPY_SUFFIX = "_copy";
+    private boolean copy = false;
     
     
 	/**
@@ -82,6 +83,7 @@ public class CSSModel {
         	if (model != null) {
         		releaseModel();
         	}
+        	copy = false;
         	formatProcessorCSS = new FormatProcessorCSS();
             IModelManager modelManager = StructuredModelManager.getModelManager();
             model = modelManager.getExistingModelForEdit(styleFile);
@@ -90,7 +92,8 @@ public class CSSModel {
 			if (model == null)
 				model = modelManager.getModelForEdit(styleFile);
 			else {
-				
+
+				copy = true;
 				// copy the model 
 				model = modelManager.copyModelForEdit(model.getId(), model
 						.getId()
@@ -318,12 +321,21 @@ public class CSSModel {
     public void saveModel() {
         try {
         	
-        	// it is necessary not to dialog appears when "dirty" css file is
-			// being saved
-			IFileBuffer buffer = FileBuffers.getTextFileBufferManager()
-					.getFileBuffer(styleFile.getFullPath(),
-							LocationKind.NORMALIZE);
-			buffer.setDirty(false);
+        	/*
+			 * it is necessary not to dialog appears when "dirty" css file is
+			 * being saved ( test case : 1) open css file 2) make same changes
+			 * 3) open css dialog 4) make some changes 5)press ok )
+			 * 
+			 * 
+			 * it is necessary to distinguish real model from copy. For real
+			 * model next step reject all changes
+			 */
+			if (copy) {
+				IFileBuffer buffer = FileBuffers.getTextFileBufferManager()
+						.getFileBuffer(styleFile.getFullPath(),
+								LocationKind.NORMALIZE);
+				buffer.setDirty(false);
+			}
         	
         	model.save();
         } catch (IOException e) {

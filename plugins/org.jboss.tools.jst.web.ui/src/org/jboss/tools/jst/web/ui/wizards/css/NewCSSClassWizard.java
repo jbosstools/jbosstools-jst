@@ -10,10 +10,14 @@
  ******************************************************************************/
 package org.jboss.tools.jst.web.ui.wizards.css;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IDialogPage;
+import org.eclipse.jface.dialogs.IPageChangedListener;
+import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
@@ -24,13 +28,14 @@ import org.eclipse.ui.IWorkbenchWizard;
 import org.jboss.tools.jst.jsp.outline.cssdialog.CSSClassDialog;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.MessageDialogEvent;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.MessageDialogListener;
+import org.jboss.tools.jst.web.ui.wizards.messages.WebUIMessages;
 
 /**
  * New CSS class wizard.
  */
 public class NewCSSClassWizard extends Wizard implements INewWizard {
 
-    private static final String WIZARD_WINDOW_TITLE = "CSS Style Class Editor";
+	private CSSClassDescription classDescription = new  CSSClassDescription();
 
 	// workbench selection when the wizard was started
 	protected IStructuredSelection selection;
@@ -38,17 +43,19 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 	protected IWorkbench workbench;
 
 	// wizard contains only one page
-	private NewCSSClassWizardPage page;
+	private NewCSSClassWizardPage editFilePage;
 
-    /**
-     * Constructor for SampleNewWizard.
-     */
-    public NewCSSClassWizard() {
-        super();
-        setWindowTitle(WIZARD_WINDOW_TITLE);
-        
-    }
+	private WizardNewCssClassPage selectFilePage;
 
+	/**
+	 * Constructor for SampleNewWizard.
+	 */
+	public NewCSSClassWizard() {
+		super();
+		setWindowTitle(WebUIMessages.WIZARD_WINDOW_TITLE);
+	}
+
+	
 	/**
 	 * @see IWorkbenchWizard#init(IWorkbench, IStructuredSelection)
 	 */
@@ -57,138 +64,175 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 		this.selection = selection;
 	}
 
-    /**
-     * Adding the page to the wizard.
-     */
-    @Override
+	/**
+	 * Adding the page to the wizard.
+	 */
+	@Override
 	public void addPages() {
-        page = new NewCSSClassWizardPage();
-        addPage(page);
-    }
 
-    /**
-     * This method is called when 'Finish' button is pressed in the wizard. We
-     * will create an operation and run it using wizard as execution context.
-     */
-    @Override
-	public boolean performFinish() {
-        page.saveChanges();
-
-        return true;
-    }
-
-    /**
-     * @see org.eclipse.jface.wizard.IWizard#canFinish()
-     */
-    @Override
-	public boolean canFinish() {
-    	return page.canFinish;
+		selectFilePage = new WizardNewCssClassPage(classDescription);
+		editFilePage = new NewCSSClassWizardPage();
+		addPage(selectFilePage);
+		addPage(editFilePage);
 	}
 
-    /**
-     * @see org.eclipse.jface.wizard.IWizard#performCancel()
-     */
-    @Override
-    public boolean performCancel() {
-    	page.cancel();
-        return true;
-    }
+	/**
+	 * This method is called when 'Finish' button is pressed in the wizard. We
+	 * will create an operation and run it using wizard as execution context.
+	 */
+	@Override
+	public boolean performFinish() {
+		editFilePage.saveChanges();
 
-    /**
-     * Class representing the first page of the wizard.
-     */
-    private class NewCSSClassWizardPage extends WizardPage {
+		return true;
+	}
 
-    	// TODO: take out to the property manager file
-        final static String WIZARD_TITLE = "CSS Class";
-        final static String WIZARD_DESCRIPTION = "Create New CSS Class";
+	/**
+	 * @see org.eclipse.jface.wizard.IWizard#canFinish()
+	 */
+	@Override
+	public boolean canFinish() {
+		return selectFilePage.canFlipToNextPage()
+				&& getContainer().getCurrentPage() == editFilePage
+				&& editFilePage.canFinish;
+	}
 
-        private CSSClassDialog dialog;
+	/**
+	 * @see org.eclipse.jface.wizard.IWizard#performCancel()
+	 */
+	@Override
+	public boolean performCancel() {
+		editFilePage.cancel();
+		return true;
+	}
+	
+	public class CSSClassDescription{
+		private IFile cssFile;
+		private String cssClassName;
+		public IFile getCssFile() {
+			return cssFile;
+		}
+		public void setCssFile(IFile cssFile) {
+			this.cssFile = cssFile;
+		}
+		public String getCssClassName() {
+			return cssClassName;
+		}
+		public void setCssClassName(String cssClassName) {
+			this.cssClassName = cssClassName;
+		}
+	}
 
-        boolean canFinish = false;
+	/**
+	 * Class representing the first page of the wizard.
+	 */
+	private class NewCSSClassWizardPage extends WizardPage {
 
-        /**
-         * Constructor for SampleNewWizardPage.
-         *
-         * @param pageName
-         */
-        public NewCSSClassWizardPage() {
-            super("newCSSClassWizard");
-            setTitle(WIZARD_TITLE);
-            setDescription(WIZARD_DESCRIPTION);
-        }
+		private CSSClassDialog dialog;
 
-        /**
-         * @see IDialogPage#createControl(Composite)
-         */
-        public void createControl(Composite parent) {
-            Composite container = new Composite(parent, SWT.NONE);
-            GridLayout layout = new GridLayout();
-    		container.setLayout(layout);
+		boolean canFinish = false;
 
-            // Initialize CSS dialog that is integrated to CSS wizard.
-            // Also it can be used separately without integration to wizard component.
-            dialog = new CSSClassDialog(getShell(), selection, true);
-            dialog.addMessageDialogListener(new MessageDialogListener() {
+		/**
+		 * Constructor for SampleNewWizardPage.
+		 * 
+		 * @param pageName
+		 */
+		public NewCSSClassWizardPage() {
+			super("newCSSClassWizard");
+			setTitle(WebUIMessages.WIZARD_TITLE);
+			setDescription(WebUIMessages.WIZARD_DESCRIPTION);
+			
+		}
+
+		/**
+		 * @see IDialogPage#createControl(Composite)
+		 */
+		public void createControl(Composite parent) {
+			Composite container = new Composite(parent, SWT.NONE);
+			GridLayout layout = new GridLayout();
+			container.setLayout(layout);
+
+			// Initialize CSS dialog that is integrated to CSS wizard.
+			// Also it can be used separately without integration to wizard
+			// component.
+			dialog = new CSSClassDialog(getShell(), selection, true);
+			dialog.addMessageDialogListener(new MessageDialogListener() {
 				public void throwMessage(MessageDialogEvent event) {
 					if (event != null) {
 						IStatus status = event.getOperationStatus();
 						if (status != null) {
 							applyToStatusLine(status);
 						}
-                		getWizard().getContainer().updateButtons();
+						getWizard().getContainer().updateButtons();
 					}
 				}
-            });
-            dialog.createDialog(container);
-            setControl(container);
+			});
 
-        }
+			dialog.createDialog(container);
+			setControl(container);
+			
+			if (getWizard().getContainer() instanceof WizardDialog){
+				WizardDialog wd = (WizardDialog) getWizard().getContainer();
+				wd.addPageChangedListener(new IPageChangedListener(){
 
-        /**
-         * Save page model.
-         */
-        public void saveChanges() {
-            dialog.saveChanges(true);
-        }
+					//set console configuration as treeViewer input
+					public void pageChanged(PageChangedEvent event) {
+						if (event.getSelectedPage() == editFilePage){
+							dialog.setCurrentFile(classDescription.getCssFile());
+							dialog.reinit();
+							dialog.addNewStyleClass(classDescription.cssClassName);
+						}
+					}});
+			}
 
-        /**
-         * Handle cancel operation correctly.
-         */
-        public void cancel() {
-        	dialog.closeDialog();
-        }
+		}
 
-    	/**
-    	 * Applies the status to the status line of a dialog page.
-    	 */
-    	private void applyToStatusLine(IStatus status) {
-    		String message= status.getMessage();
-    		if (message.length() == 0) {
-    			message = null;
-    		}
-    		switch (status.getSeverity()) {
-    			case IStatus.OK:
-    				setErrorMessage(null);
-    				setMessage(message);
-    				canFinish = true;
-    				break;
-    			case IStatus.WARNING:
-    				setErrorMessage(null);
-    				canFinish = true;
-    				setMessage(message, WizardPage.WARNING);
-    				break;				
-    			case IStatus.INFO:
-    				setErrorMessage(null);
-    				canFinish = true;
-    				setMessage(message, WizardPage.INFORMATION);
-    				break;			
-    			default:
-    				setErrorMessage(message);
-    				setMessage(null);
-    				canFinish = false;
-    				break;		
-    		}
-    	}
-    }
+		/**
+		 * Save page model.
+		 */
+		public void saveChanges() {
+//			dialog.saveChanges(true);
+			dialog.close();
+		}
+
+		/**
+		 * Handle cancel operation correctly.
+		 */
+		public void cancel() {
+			dialog.closeDialog();
+		}
+
+		/**
+		 * Applies the status to the status line of a dialog page.
+		 */
+		private void applyToStatusLine(IStatus status) {
+			String message = status.getMessage();
+			if (message.length() == 0) {
+				message = null;
+			}
+			switch (status.getSeverity()) {
+			case IStatus.OK:
+				setErrorMessage(null);
+				setMessage(message);
+				canFinish = true;
+				break;
+			case IStatus.WARNING:
+				setErrorMessage(null);
+				canFinish = true;
+				setMessage(message, WizardPage.WARNING);
+				break;
+			case IStatus.INFO:
+				setErrorMessage(null);
+				canFinish = true;
+				setMessage(message, WizardPage.INFORMATION);
+				break;
+			default:
+				setErrorMessage(message);
+				setMessage(null);
+				canFinish = false;
+				break;
+			}
+		}
+	}
+
 }
