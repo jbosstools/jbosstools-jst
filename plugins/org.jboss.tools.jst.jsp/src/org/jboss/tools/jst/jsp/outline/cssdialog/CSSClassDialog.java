@@ -842,8 +842,11 @@ public class CSSClassDialog extends TitleAreaDialog implements ChangeStyleListen
 			if (!this.styleAttributes.isValid()) {
 				cssValueStatus = new Status(IStatus.ERROR, notUsed, 0,
 						JstUIMessages.CSS_INVALID_STYLE_PROPERTY, null);
+				notifyListeners(event, cssValueStatus);
 			} else {
 				cssValueStatus = null;
+				notifyListeners(event, new Status(IStatus.OK, notUsed, 0,
+						JstUIMessages.CSS_STYLE_CLASS_EDITOR_DESCRIPTION, null));
 			}
 			if (cssValueStatus != null && classCombo != null) {
 				classCombo.setEnabled(false);
