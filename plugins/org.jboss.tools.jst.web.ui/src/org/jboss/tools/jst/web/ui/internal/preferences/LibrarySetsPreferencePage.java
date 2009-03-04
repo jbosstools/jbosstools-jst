@@ -27,7 +27,7 @@ import org.jboss.tools.jst.web.project.helpers.LibrarySets;
 
 public class LibrarySetsPreferencePage extends PreferencePage implements
 		IWorkbenchPreferencePage {
-	public static final String ID = "org.jboss.tools.jst.web.ui.internal.preferences.LibrarySetsPreferencePage";
+	public static final String ID = "org.jboss.tools.common.xstudio.libsets";
 	public static final String BUNDLE_NAME = "preferences"; 
 	public static final ResourceBundle BUNDLE = ResourceBundle.getBundle(LibrarySetsPreferencePage.class.getPackage().getName() + "." + BUNDLE_NAME); 
 	String[] librarySets;
