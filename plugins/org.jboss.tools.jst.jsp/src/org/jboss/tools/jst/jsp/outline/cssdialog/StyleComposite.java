@@ -237,6 +237,11 @@ public class StyleComposite extends Composite {
                         tabBoxesControl.updateData(false);
                         lastSelectedTab = tabBoxes;
                     } else if (tabFolder.getSelection()[FIRST_SELECTION] == tabPreview) {
+                    	if(!styleAttributes.isValid()){
+                    		//mareshkau, if styles attributes not valid we cann't create
+                    		//correct preview
+                    		return;
+                    	}
                     	cssModel.setCSS(styleAttributes.getCssSelector(), styleAttributes);
                     	tabPreviewControl.selectEditorArea(styleAttributes.getCssSelector(), 0);
                         lastSelectedTab = tabPreview;

@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSValidator;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 
 /**
@@ -26,12 +27,13 @@ public class StyleAttributes {
 	private String cssSelector = null;
     private HashMap<String, String> attributeMap = null;
     private ArrayList<ChangeStyleListener> listeners = new ArrayList<ChangeStyleListener>();
-
+    private CSSValidator cssValidator;
     /**
      * Default constructor.
      */
     public StyleAttributes() {
         this.attributeMap = new HashMap<String, String>();
+        cssValidator = new CSSValidator();
     }
 
     /**
@@ -158,7 +160,7 @@ public class StyleAttributes {
 	public String getCssSelector() {
 		return cssSelector;
 	}
-
+	
 	/**
 	 * String representation of style attributes.
 	 *
@@ -172,5 +174,17 @@ public class StyleAttributes {
             buf.append(me.getKey() + Constants.COLON + me.getValue() + Constants.SEMICOLON);
         }
         return buf.toString();
+	}
+	/**
+	 * Checks if attributes that has been entered to style valid
+	 * @return
+	 */
+	public boolean isValid() {
+		for(String value : getAttributeMap().values()) {
+			if(!cssValidator.isValidValue(value)) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

@@ -50,6 +50,7 @@ import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.common.model.ui.widgets.Split;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSModel;
+import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSValidator;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Util;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.ChangeStyleEvent;
@@ -64,7 +65,7 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.events.StyleAttributes;
  *
  * @author Igor Zhukov (izhukov@exadel.com)
  */
-public class CSSClassDialog extends TitleAreaDialog {
+public class CSSClassDialog extends TitleAreaDialog implements ChangeStyleListener {
 
 	public static final String ID = "org.jboss.tools.jst.jsp.outline.cssdialog.CSSClassDialog"; //$NON-NLS-1$
 
@@ -108,6 +109,8 @@ public class CSSClassDialog extends TitleAreaDialog {
 	private IStatus filePathStatus = null;
 	// 2. holds an error if the destination class style is empty
 	private IStatus classNameStatus = null;
+	// 3. holds an error if inccorrect property was specified
+	private IStatus cssValueStatus =null;
 
 	// an array of subscribed message dialog listener 
     private ArrayList<MessageDialogListener> errorListeners = new ArrayList<MessageDialogListener>();
@@ -115,12 +118,6 @@ public class CSSClassDialog extends TitleAreaDialog {
     // parameter indicates if dialog was opened from Wizard
     private final boolean callFromWizard;
 
-    // this job is used to correctly process change style class combo text with delay
-//	private UIJob uiJob = null;
-	// the job name
-//	private String jobName = "Update CSS Composite"; //$NON-NLS-1$
-//	// delay for job in milliseconds
-//	private int delay = 1000;
 
     /**
      * Constructor.
@@ -138,6 +135,7 @@ public class CSSClassDialog extends TitleAreaDialog {
         classNameStatus = new Status(IStatus.ERROR, notUsed, 0, JstUIMessages.CSS_EMPTY_STYLE_CLASS_MESSAGE, null);
 
         styleAttributes = new StyleAttributes();
+        styleAttributes.addChangeStyleListener(this);
         this.callFromWizard = callFromWizard;
     	this.selection = selection;
     	init();
@@ -164,7 +162,6 @@ public class CSSClassDialog extends TitleAreaDialog {
 		if (currentFile == null) {
 			currentFile = Util.getActiveCssFile();
 		}
-//		currentClassStyle = Util.getActivePageCSSSelectorIfAny();
     }
 
     /**
@@ -253,7 +250,7 @@ public class CSSClassDialog extends TitleAreaDialog {
            		styleChanged = true;
            		if (currentClassStyle != null && !currentClassStyle.equals(Constants.EMPTY)
         				&& currentFile != null && !currentFile.equals(Constants.EMPTY)) {
-               		applyButton.setEnabled(true);
+               		updateApplyButton(true);
            		}
             }
         });
@@ -281,16 +278,6 @@ public class CSSClassDialog extends TitleAreaDialog {
     	// add content assist to style COMBO component
 		SimpleContentProposalProvider proposalProvider = new SimpleContentProposalProvider(classCombo.getItems());
 		proposalProvider.setFiltering(true);
-//		contentAssistAdapter = new ContentAssistCommandAdapter(
-//				classCombo, new ComboContentAdapter(), proposalProvider, null, null, true);
-//		contentAssistAdapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
-//		contentAssistAdapter.addContentProposalListener(new IContentProposalListener() {
-//			public void proposalAccepted(IContentProposal proposal) {
-//				cssStyleClassChanged();
-//				applyButton.setEnabled(false);
-//				keyInputSelector = false;
-//			}
-//		});
 
         split.setWeights(new int[]{15, 85});
         split.setLayoutData(new GridData(GridData.FILL, GridData.BEGINNING, true, true));
@@ -324,80 +311,6 @@ public class CSSClassDialog extends TitleAreaDialog {
     			applyToStatusLine(status);
             }
         });
-
-//        Button button = new Button(parent, SWT.PUSH);
-//        button.setLayoutData(new GridData(GridData.END, GridData.CENTER, false, false));
-//
-//        ImageDescriptor imageDesc = JspEditorPlugin.getImageDescriptor(Constants.IMAGE_FOLDERLARGE_FILE_LOCATION);
-//        Image image = imageDesc.createImage();
-//        button.setImage(image);
-//        button.setToolTipText(JstUIMessages.CSS_BROWSE_BUTTON_TOOLTIP);
-//        button.addDisposeListener(new DisposeListener() {
-//                public void widgetDisposed(DisposeEvent e) {
-//                    Button button = (Button) e.getSource();
-//                    button.getImage().dispose();
-//                }
-//            });
-//        button.addSelectionListener(new SelectionAdapter() {
-//            public void widgetSelected(SelectionEvent event) {
-////    			IResource project = Util.getCurrentProject();
-//    			IResource project = ResourcesPlugin.getWorkspace().getRoot();
-//
-//    			ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(getShell(),
-//    					new WorkbenchLabelProvider(), new BaseWorkbenchContentProvider());
-//    			dialog.addFilter(new FileExtensionFilter(fileExtensions));
-//    			dialog.setTitle(JstUIMessages.CSS_FILE_SELECT_DIALOG_TITLE);
-//    			dialog.setMessage(JstUIMessages.CSS_FILE_SELECT_DIALOG_LABEL);
-//    			dialog.setInput(project);
-//    			dialog.setAllowMultiple(false);
-//    			dialog.setDoubleClickSelects(false);
-//    			if (currentFile != null) {
-//    				dialog.setInitialSelection(currentFile);
-//    			}
-//    			dialog.setEmptyListMessage(JstUIMessages.CSS_FILE_SELECT_DIALOG_EMPTY_MESSAGE);
-//
-//    			if (dialog.open() == Window.OK) {
-//    				IResource res = (IResource) dialog.getFirstResult();
-//    				// make some important saving actions
-//    				if (res instanceof IFile) {
-//    					if (styleChanged && currentFile != null) {
-//    						MessageBox messageBox = new MessageBox(getParentShell(), SWT.YES | SWT.NO | SWT.ICON_QUESTION);
-//    						messageBox.setText(JstUIMessages.CSS_SAVE_DIALOG_TITLE);
-//    						messageBox.setMessage(CSSClassDialog.getMessageForSaveDialog(currentFile));
-//    						int result = messageBox.open();
-//    						if (result == SWT.YES) {
-//    							saveChanges(true);
-//    						} else {
-//    							updateStyleComposite();
-//    						}
-//    					}
-//    		    		styleComposite.revertPreview();
-//    		    		releaseResources();
-//
-//    					// open new CSS file and initialize dialog
-//    					boolean useRelativePath = true;
-//    					if (project instanceof IWorkspaceRoot) {
-//    						useRelativePath = false;
-//    					}
-//    					boolean updateCSSModel = false;
-//    					if (currentFile != null && !currentFile.equals(Constants.EMPTY)) {
-//    		            	currentClassStyle = null;
-//    		            	updateCSSModel = true;
-//    					}
-//    					currentFile = (IFile)res;
-//    					initCSSModel(currentFile, useRelativePath, updateCSSModel);
-//    					updateOKButtonState();
-//    					applyButton.setEnabled(false);
-//            			styleChanged = false;
-//
-//	                	// update content assist proposals
-//	            		SimpleContentProposalProvider proposalProvider =
-//	            			(SimpleContentProposalProvider)contentAssistAdapter.getContentProposalProvider();
-//	            		proposalProvider.setProposals(classCombo.getItems());
-//    				}
-//        		}
-//            }
-//        });
     }
 
 	/**
@@ -415,24 +328,6 @@ public class CSSClassDialog extends TitleAreaDialog {
 
         classCombo = new Combo(parent, SWT.BORDER|SWT.READ_ONLY);
         classCombo.setLayoutData(gridData);
-        // add selection listener
-//        classCombo.addSelectionListener(new SelectionAdapter() {
-//        	public void widgetSelected(SelectionEvent e) {
-//        		if (keyInputSelector) {
-//        			keyInputSelector = false;
-//        			if (currentClassStyle != null && classCombo.indexOf(currentClassStyle) != -1) {
-//        				return;
-//        			}
-//        		}
-//        		keyInputSelector = false;
-//        	}
-//        });
-        // add key modified listener
-//        classCombo.addKeyListener(new KeyAdapter() {
-//			public void keyReleased(KeyEvent e) {
-//				keyInputSelector = true;
-//			}
-//        });
         // this listener is responsible for processing dialog header message events
     	classCombo.addModifyListener(new ModifyListener() {
             public void modifyText(ModifyEvent e) {
@@ -452,7 +347,7 @@ public class CSSClassDialog extends TitleAreaDialog {
 					return;
 				}
 				cssStyleClassChanged();
-				applyButton.setEnabled(false);
+				updateApplyButton(false);
             }
         });
     	//creates a button for add new class
@@ -485,7 +380,7 @@ public class CSSClassDialog extends TitleAreaDialog {
 	 * @param styleClassName - name of new style class
 	 */
 	public void addNewStyleClass(String styleClassName) {
-		applyButton.setEnabled(true);
+		updateApplyButton(true);
 		styleChanged = true;
 		currentClassStyle = styleClassName;
 		updateStyleComposite();
@@ -546,7 +441,7 @@ public class CSSClassDialog extends TitleAreaDialog {
         buttonComposite.setLayout(new GridLayout());
         // add APPLY button
         applyButton = createCustomButton(buttonComposite, JstUIMessages.BUTTON_APPLY);
-    	applyButton.setEnabled(false);
+    	updateApplyButton(false);
         applyButton.setToolTipText(JstUIMessages.CSS_APPLY_CHANGES);
         applyButton.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
@@ -556,7 +451,7 @@ public class CSSClassDialog extends TitleAreaDialog {
            				classCombo.add(currentClassStyle);
            			}
                 	saveChanges(false);
-                	applyButton.setEnabled(false);
+                	updateApplyButton(false);
                     styleChanged = false;
             	}
             }
@@ -569,7 +464,7 @@ public class CSSClassDialog extends TitleAreaDialog {
                 styleComposite.clearStyleComposite(currentClassStyle);
        			styleComposite.updatePreview(currentClassStyle);
        			styleComposite.updateStyle();
-            	applyButton.setEnabled(true);
+            	updateApplyButton(true);
                 styleChanged = true;
             }
         });
@@ -626,7 +521,7 @@ public class CSSClassDialog extends TitleAreaDialog {
 //			} else {
 //				styleChanged = false;
 //			}
-			applyButton.setEnabled(true);
+			updateApplyButton(true);
 			styleChanged = true;
     		
     		updateStyleComposite();
@@ -701,7 +596,7 @@ public class CSSClassDialog extends TitleAreaDialog {
     private void updateOKButtonState() {
     	Button okButton = getButton(IDialogConstants.OK_ID);
     	if (okButton != null) {
-    		if (currentClassStyle == null || currentClassStyle.equals(Constants.EMPTY) || currentFile == null) {
+    		if (findMostSevere()!=null&&findMostSevere().getSeverity()==IStatus.ERROR) {
     			okButton.setEnabled(false);
     		} else {
     			okButton.setEnabled(true);
@@ -890,10 +785,15 @@ public class CSSClassDialog extends TitleAreaDialog {
 		if (classNameStatus.matches(IStatus.ERROR)) {
 			return classNameStatus;
 		}
-		if (filePathStatus.getSeverity() > classNameStatus.getSeverity()) {
-			return filePathStatus;
+		if(cssValueStatus!=null && cssValueStatus.matches(IStatus.ERROR)){
+			return cssValueStatus;
 		}
-		else return classNameStatus;
+		if(cssValueStatus!=null && cssValueStatus.matches(IStatus.ERROR)){
+					return cssValueStatus;
+	 	}	else {
+	 				return classNameStatus;
+	 	}
+
 	}
 
 	/**
@@ -933,5 +833,39 @@ public class CSSClassDialog extends TitleAreaDialog {
 
 	public void setCurrentFile(IFile currentFile) {
 		this.currentFile = currentFile;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.jboss.tools.jst.jsp.outline.cssdialog.events.ChangeStyleListener#styleChanged(org.jboss.tools.jst.jsp.outline.cssdialog.events.ChangeStyleEvent)
+	 */
+	public void styleChanged(ChangeStyleEvent event) {
+			if (!this.styleAttributes.isValid()) {
+				cssValueStatus = new Status(IStatus.ERROR, notUsed, 0,
+						JstUIMessages.CSS_INVALID_STYLE_PROPERTY, null);
+			} else {
+				cssValueStatus = null;
+			}
+			if (cssValueStatus != null && classCombo != null) {
+				classCombo.setEnabled(false);
+			} else {
+				classCombo.setEnabled(true);
+
+			}
+			updateApplyButton(true);
+			updateOKButtonState();
+			applyToStatusLine(findMostSevere());
+	}
+	/**
+	 * Update upplyButtonState
+	 * @param available
+	 */
+	private void updateApplyButton(boolean enabled){
+		if(cssValueStatus!=null
+				&&cssValueStatus.matches(IStatus.ERROR)) {
+			applyButton.setEnabled(false);
+		}else {
+			applyButton.setEnabled(enabled);
+		}
+		
 	}
 }
