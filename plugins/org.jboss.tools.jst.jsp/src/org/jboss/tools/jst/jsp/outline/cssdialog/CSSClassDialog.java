@@ -117,6 +117,8 @@ public class CSSClassDialog extends TitleAreaDialog implements ChangeStyleListen
 
     // parameter indicates if dialog was opened from Wizard
     private final boolean callFromWizard;
+    
+    private Button addNewClass;
 
 
     /**
@@ -351,9 +353,9 @@ public class CSSClassDialog extends TitleAreaDialog implements ChangeStyleListen
             }
         });
     	//creates a button for add new class
-    	 Button show = new Button(parent, SWT.PUSH);
-    	 show.setText(JstUIMessages.BUTTON_ADD_NEW_STYLE_CLASS);
-    	 show.addSelectionListener(new SelectionAdapter() {
+    	 addNewClass = new Button(parent, SWT.PUSH);
+    	 addNewClass.setText(JstUIMessages.BUTTON_ADD_NEW_STYLE_CLASS);
+    	 addNewClass.addSelectionListener(new SelectionAdapter() {
     	      public void widgetSelected(SelectionEvent event) {
     	          InputDialog dlg = new InputDialog(parent.getShell(),
     	              JstUIMessages.ENTER_CSS_CLASS_NAME, JstUIMessages.ENTER_CSS_CLASS_NAME, classCombo.getText(),
@@ -843,8 +845,10 @@ public class CSSClassDialog extends TitleAreaDialog implements ChangeStyleListen
 				cssValueStatus = new Status(IStatus.ERROR, notUsed, 0,
 						JstUIMessages.CSS_INVALID_STYLE_PROPERTY, null);
 				notifyListeners(event, cssValueStatus);
+				addNewClass.setEnabled(false);
 			} else {
 				cssValueStatus = null;
+				addNewClass.setEnabled(true);
 				notifyListeners(event, new Status(IStatus.OK, notUsed, 0,
 						JstUIMessages.CSS_STYLE_CLASS_EDITOR_DESCRIPTION, null));
 			}
