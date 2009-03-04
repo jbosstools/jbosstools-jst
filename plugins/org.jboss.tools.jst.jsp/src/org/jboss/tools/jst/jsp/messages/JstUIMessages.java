@@ -104,4 +104,5 @@ public class JstUIMessages extends NLS {
 	public static String BUTTON_ADD_NEW_STYLE_CLASS;
 	public static String ENTER_CSS_CLASS_NAME;
 	public static String CSS_CLASS_NAME_NOT_VALID;
+	public static String CSS_INVALID_STYLE_PROPERTY;
 }
