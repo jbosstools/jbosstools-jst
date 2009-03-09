@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IStatus;
@@ -50,7 +51,6 @@ import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.common.model.ui.widgets.Split;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSModel;
-import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSValidator;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Util;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.ChangeStyleEvent;
@@ -271,7 +271,7 @@ public class CSSClassDialog extends TitleAreaDialog implements ChangeStyleListen
         });
 
         if (currentFile != null) {
-        	initCSSModel(currentFile, true, true);
+        	initCSSModel(currentFile, true);
         } else if (currentClassStyle != null) {
         	classCombo.setText(currentClassStyle);
     		styleAttributes.setCssSelector(currentClassStyle);
@@ -544,7 +544,7 @@ public class CSSClassDialog extends TitleAreaDialog implements ChangeStyleListen
      * @param file IFile object
      * @param useRelativePathPath
      */
-    private void initCSSModel(IFile file, boolean useRelativePathPath, boolean updateCSSModel) {
+    private void initCSSModel(IFile file, boolean updateCSSModel) {
         if (file != null) {
         	// create CSS Model
         	cssModel = new CSSModel(file);
@@ -552,11 +552,7 @@ public class CSSClassDialog extends TitleAreaDialog implements ChangeStyleListen
             classCombo.removeAll();
             classCombo.setEnabled(true);
             // set file path to corresponding text field
-            if (useRelativePathPath) {
-            	text.setText(file.getProjectRelativePath().toOSString());
-            } else {
-            	text.setText(file.getFullPath().toOSString());
-            }
+           	text.setText(file.getFullPath().toOSString());
             
             Point selectionInFile = Util.getSelectionInFile(file);
 
@@ -830,7 +826,7 @@ public class CSSClassDialog extends TitleAreaDialog implements ChangeStyleListen
 
 	public void reinit(){
 		releaseResources();
-		initCSSModel(currentFile, true,true);
+		initCSSModel(currentFile,true);
 	}
 
 	public void setCurrentFile(IFile currentFile) {
