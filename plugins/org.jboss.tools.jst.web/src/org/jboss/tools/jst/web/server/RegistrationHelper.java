@@ -188,8 +188,18 @@ public class RegistrationHelper {
 	static String MODULE_NAME_PREFIX = "org.eclipse.jst.j2ee.server.web:"; //$NON-NLS-1$
 	
 	public static IModule findModule(IProject project) {
-		return ServerUtil.getModule(project);
-		
+		// https://jira.jboss.org/jira/browse/JBIDE-3972
+		// There may be a few modules for resources from the same project.
+		// Ignore module with jboss.singlefile type if there are other module types.
+		IModule[] modules = ServerUtil.getModules(project);
+		if(modules.length>0) {
+			for (int i = 0; i < modules.length; i++) {
+				if(!"jboss.singlefile".equals(modules[i].getModuleType().getId())) {
+					return modules[i];
+				}
+			}
+		}
+		return modules[0];
 	}
 
 	public static void runRegisterInServerJob(IProject p, IServer server) {
