@@ -192,14 +192,14 @@ public class RegistrationHelper {
 		// There may be a few modules for resources from the same project.
 		// Ignore module with jboss.singlefile type if there are other module types.
 		IModule[] modules = ServerUtil.getModules(project);
-		if(modules.length>0) {
+		if(modules != null && modules.length>0) {
 			for (int i = 0; i < modules.length; i++) {
 				if(!"jboss.singlefile".equals(modules[i].getModuleType().getId())) {
 					return modules[i];
 				}
 			}
 		}
-		return modules[0];
+		return null;
 	}
 
 	public static void runRegisterInServerJob(IProject p, IServer server) {
