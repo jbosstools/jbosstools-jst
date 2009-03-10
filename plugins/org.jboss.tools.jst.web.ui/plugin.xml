@@ -436,7 +436,7 @@
 </extension>
 <extension point="org.eclipse.ui.navigator.navigatorContent">
   <navigatorContent
-            name="JBoss Tools File Content Provider"
+            name="%NavigatorContent_FileContentProvider"
             priority="normal"
             icon="images/xstudio/views/web_project.gif"
             activeByDefault="true"
@@ -470,7 +470,7 @@
 
 <extension point="org.eclipse.ui.navigator.navigatorContent">
   <navigatorContent
-            name="JBoss Tools Project Content Provider"
+            name="%NavigatorContent_ProjectContentProvider"
             priority="highest"
             icon="images/xstudio/views/web_project.gif"
             activeByDefault="true"
