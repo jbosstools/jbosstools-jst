@@ -178,6 +178,9 @@ public class ImportWebProjectWizardPage extends WizardPage {
 				getContainer().updateButtons();
 				if(linkAdapter != null) {
 					support.getFieldEditorByName(ImportWebDirProjectContext.ATTR_LINK).setEnabled(mayNeedLink(), (Composite)getControl());
+					if(!mayNeedLink() && linkAdapter != null) {
+						linkAdapter.setValue("false");
+					}
 				}
 			}
 		};
@@ -191,6 +194,9 @@ public class ImportWebProjectWizardPage extends WizardPage {
 					if(linkAdapter != null) {
 						support.getFieldEditorByName(ImportWebDirProjectContext.ATTR_LINK).setEnabled(mayNeedLink(), (Composite)getControl());
 					}
+					if(!mayNeedLink() && linkAdapter != null) {
+						linkAdapter.setValue("false");
+					}
 				}
 			}
 		);
@@ -198,7 +204,7 @@ public class ImportWebProjectWizardPage extends WizardPage {
 				new PropertyChangeListener() {
 					public void propertyChange(PropertyChangeEvent evt) {
 						String v = linkAdapter.getStringValue(false);
-						context.setLinkingToProjectOutsideWorkspace(!"false".equals(v));
+						context.setLinkingToProjectOutsideWorkspace(!"false".equals(v) && mayNeedLink());
 					}
 				}
 		);

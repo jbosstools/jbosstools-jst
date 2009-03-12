@@ -473,7 +473,8 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 	
 	private boolean isDefaultLocation(String projectLocation) {
 		String root = ModelPlugin.getWorkspace().getRoot().getLocation().toString().replace('\\', '/');
-		return (projectLocation.replace('\\','/') + "/").startsWith(root + "/" + getProject().getName() + "/");
+		return (projectLocation.replace('\\','/') + "/").equals(root + "/" + getProject().getName() + "/");
+//		return (projectLocation.replace('\\','/') + "/").startsWith(root + "/" + getProject().getName() + "/");
 	}
 	
 	private String createLinks(String projectLocation) throws CoreException {

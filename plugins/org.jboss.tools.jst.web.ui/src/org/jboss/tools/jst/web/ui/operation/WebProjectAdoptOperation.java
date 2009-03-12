@@ -168,7 +168,7 @@ public abstract class WebProjectAdoptOperation extends WebNatureOperation {
 		String location = getProperty(PROJECT_LOCATION_ID).replace('\\', '/');
 		String root = ModelPlugin.getWorkspace().getRoot().getLocation().toString().replace('\\', '/');
 		String wsProjectLocation = (root + "/" + getProject().getName()).replace('\\', '/');;
-		if(location.equals(wsProjectLocation)) return true;
+		if(location.equals(wsProjectLocation) || location.startsWith(wsProjectLocation + "/")) return true;
 		File wsf = new File(wsProjectLocation); 
 		if(!wsf.isDirectory()) return true;
 		File[] cs = wsf.listFiles();
