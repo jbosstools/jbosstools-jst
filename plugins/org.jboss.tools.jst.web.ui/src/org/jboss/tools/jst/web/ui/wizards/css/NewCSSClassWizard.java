@@ -163,7 +163,9 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 						if (status != null) {
 							applyToStatusLine(status);
 						}
-						getWizard().getContainer().updateButtons();
+						if(getWizard().getContainer().getCurrentPage()!=null) {
+							getWizard().getContainer().updateButtons();
+						}
 					}
 				}
 			});
