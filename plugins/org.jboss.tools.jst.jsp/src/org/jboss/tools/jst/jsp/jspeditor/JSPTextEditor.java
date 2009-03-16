@@ -59,8 +59,10 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.ContributionItemFactory;
 import org.eclipse.ui.editors.text.ILocationProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -270,7 +272,19 @@ public class JSPTextEditor extends StructuredTextEditor implements
 					|| fPropertySheetPage.getControl().isDisposed()) {
 				JSPPropertySheetConfiguration cfg = new JSPPropertySheetConfiguration();
 				if (cfg != null) {
-					ConfigurablePropertySheetPage propertySheetPage = new ConfigurablePropertySheetPage();
+					ConfigurablePropertySheetPage propertySheetPage = new ConfigurablePropertySheetPage() {
+						@Override
+						public void setActionBars(IActionBars actionBars) {
+							super.setActionBars(actionBars);
+							
+							// yradtsevich: fix of JBIDE-3442: VPE - properties view - Ctrl-Z - Ctrl-Y 
+							// - undo/redo combinations doesn't work for property change
+							actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(),
+									JSPTextEditor.this.getAction(ITextEditorActionConstants.UNDO));
+							actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(),
+									JSPTextEditor.this.getAction(ITextEditorActionConstants.REDO));
+						}
+					};
 					propertySheetPage.setConfiguration(cfg);
 					fPropertySheetPage = propertySheetPage;
 					setSorter(cfg.getSorter(), propertySheetPage);
