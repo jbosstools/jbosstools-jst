@@ -177,7 +177,7 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
 	private Map<String,LoadBundleInfo> loadedBundles = new HashMap<String,LoadBundleInfo>();
 
 	private final static String[] TRACKERS_TO_WATCH = {"http://java.sun.com/jsf/core",
-		"https://ajax4jsf.dev.java.net/ajax"
+		"https://ajax4jsf.dev.java.net/ajax", "http://richfaces.org/a4j"
 	};
     private boolean taglibTrackerListenerInstalled = false;
 
