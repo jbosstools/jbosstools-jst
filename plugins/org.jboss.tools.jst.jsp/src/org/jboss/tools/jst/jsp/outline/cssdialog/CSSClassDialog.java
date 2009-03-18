@@ -51,6 +51,7 @@ import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.common.model.ui.widgets.Split;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSModel;
+import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSValidator;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Util;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.ChangeStyleEvent;
@@ -360,14 +361,16 @@ public class CSSClassDialog extends TitleAreaDialog implements ChangeStyleListen
     	          InputDialog dlg = new InputDialog(parent.getShell(),
     	              JstUIMessages.ENTER_CSS_CLASS_NAME, JstUIMessages.ENTER_CSS_CLASS_NAME, classCombo.getText(),
     	              new IInputValidator(){
+    	        	  	private CSSValidator cssValidator = CSSValidator.getInstance();
     	        	  	/**
     	        	  	 * Simple validation of new CSS Class Name, now we just check that it's not empty string
     	        	  	 */
 						public String isValid(String newText) {
-							if(newText==null || newText.trim().length()==0){
+							if (cssValidator.isValidSelector(newText)) {
+								return null;
+							} else {
 								return JstUIMessages.CSS_CLASS_NAME_NOT_VALID;
 							}
-							return null;
 						}
     	        	  
     	          });
