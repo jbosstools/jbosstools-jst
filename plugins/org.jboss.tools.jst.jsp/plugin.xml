@@ -148,7 +148,8 @@
    </extension>
 
    <extension point="org.eclipse.ui.editorActions">
-      <editorContribution id="formatJSPActionContribution" targetID="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
+   <!-- necessary menu items -->
+   <!--<editorContribution id="formatJSPActionContribution" targetID="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
            <action actionID="formatJSPAction" class="org.jboss.tools.jst.jsp.ui.action.FormatJSPActionDelegate" id="formatJSPAction" label="Format" menubarPath="edit/additions">
            </action>
       </editorContribution>
@@ -314,7 +315,7 @@
                  id="StructureSelectHistory"
                  label="Restore Last Selection">
            </action>
-      </editorContribution>
+      </editorContribution>-->
       <editorContribution
             id="org.jboss.tools.jst.jsp.cssClassDialogEditorContribution"
             targetID="org.eclipse.wst.css.core.csssource.source">
@@ -342,8 +343,100 @@
                tooltip="Open CSS Dialog based on the active CSS file">
          </action>
       </editorContribution>
+      
    </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+         <menuContribution locationURI="menu:sourceMenuId?after=sourceBegin">
+         
+          <action
+                 actionID="org.eclipse.wst.sse.ui.toggle.comment"
+                 class="org.eclipse.wst.xml.ui.internal.actions.ToggleCommentActionXMLDelegate"
+                 definitionId="org.eclipse.wst.sse.ui.toggle.comment"
+                 id="ToggleComment"
+                 menubarPath="sourceMenuId/sourceBegin"
+                 label="Toggle Comment">
+           </action>
+			<command commandId="org.eclipse.wst.sse.ui.toggle.comment"
+			         id="ToggleComment"
+			         mnemonic="%command.toggle.comment.mnemonic"
+			         style="push">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="org.jboss.tools.ui.comments"/>
+				</visibleWhen>
+			</command>
+			<command commandId="org.eclipse.wst.sse.ui.add.block.comment"
+			         id="AddBlockComment"
+			         mnemonic="%command.add.block.comment.mnemonic"
+			         style="push">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="org.jboss.tools.ui.comments"/>
+				</visibleWhen>
+			</command>
+			<command commandId="org.eclipse.wst.sse.ui.remove.block.comment"
+			         id="RemoveBlockComment"
+			         mnemonic="%command.remove.block.comment.mnemonic"
+			         style="push">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="org.jboss.tools.ui.comments"/>
+				</visibleWhen>
+			</command>
+			</menuContribution>
+   </extension>
+   
+       <extension
+       point="org.eclipse.ui.handlers">
+       <handler
+             class="org.eclipse.wst.xml.ui.internal.handlers.ToggleCommentHandler"
+             commandId="org.eclipse.wst.sse.ui.toggle.comment">
+          <activeWhen>
+              <reference definitionId="org.jboss.tools.ui.comments"/>
+          </activeWhen>
+          <enabledWhen>
+              <reference definitionId="org.jboss.tools.ui.comments"/>
+          </enabledWhen>
+       </handler>
+       <handler
+             class="org.eclipse.wst.xml.ui.internal.handlers.AddBlockCommentHandler"
+             commandId="org.eclipse.wst.sse.ui.add.block.comment">
+          <activeWhen>
+              <reference definitionId="org.jboss.tools.ui.comments"/>
+          </activeWhen>
+          <enabledWhen>
+              <reference definitionId="org.jboss.tools.ui.comments"/>
+          </enabledWhen>
+       </handler>
+       <handler
+             class="org.eclipse.wst.xml.ui.internal.handlers.RemoveBlockCommentHandler"
+             commandId="org.eclipse.wst.sse.ui.remove.block.comment">
+          <activeWhen>
+              <reference definitionId="org.jboss.tools.ui.comments"/>
+          </activeWhen>
+          <enabledWhen>
+              <reference definitionId="org.jboss.tools.ui.comments"/>
+          </enabledWhen>
+       </handler>
+       </extension>
 
+	<extension point="org.eclipse.core.expressions.definitions">
+			<definition id="org.jboss.tools.ui.comments">
+				<and>
+					<with variable="activeContexts">
+						<iterate operator="or">
+							<equals value="org.eclipse.wst.sse.ui.structuredTextEditorScope"/>
+						</iterate>
+					</with>
+					<or>
+					<with variable="activeEditorId">
+							<equals value="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor"/>
+					</with>
+					<with variable="activeEditorId">
+							<equals value="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor"/>
+					</with>
+					</or>
+				</and>			
+			</definition>
+		</extension>
    <!--extension point="org.jboss.tools.common.verification.rules">
       <rule-set path="meta/.rule-sets.xml"/>
    </extension-->
