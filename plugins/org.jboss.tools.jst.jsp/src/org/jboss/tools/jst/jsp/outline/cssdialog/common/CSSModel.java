@@ -33,6 +33,7 @@ import org.eclipse.wst.css.core.internal.format.FormatProcessorCSS;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSDocument;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSModel;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSNode;
+import org.eclipse.wst.css.core.internal.provisional.document.ICSSRuleContainer;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleSheet;
 import org.eclipse.wst.css.core.internal.text.StructuredTextPartitionerForCSS;
 import org.eclipse.wst.sse.core.StructuredModelManager;
@@ -273,9 +274,9 @@ public class CSSModel {
 //                formatProcessorCSS.formatModel(model);
 			CSSStyleRule rule = getRulesMapping().get(selector);
 			if (rule == null) {
-				styleSheet.insertRule(selector + startBraces
-						+ styleAttributes.getStyle() + endBraces, list
-						.getLength());
+				rule = (CSSStyleRule)((ICSSDocument)styleSheet).createCSSRule(
+						selector + startBraces + styleAttributes.getStyle() + endBraces);
+				((ICSSStyleSheet)styleSheet).appendRule(rule);
 			} else {
 
 				CSSStyleDeclaration declaration = rule.getStyle();
@@ -290,9 +291,6 @@ public class CSSModel {
 								Constants.EMPTY);
 					}
 			}
-
-			formatProcessorCSS.formatModel(model);
-        	
         }
     }
 

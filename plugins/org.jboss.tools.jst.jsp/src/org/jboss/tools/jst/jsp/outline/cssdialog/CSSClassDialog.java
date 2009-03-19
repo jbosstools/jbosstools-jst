@@ -360,16 +360,17 @@ public class CSSClassDialog extends TitleAreaDialog implements ChangeStyleListen
     	          InputDialog dlg = new InputDialog(parent.getShell(),
     	              JstUIMessages.ENTER_CSS_CLASS_NAME, JstUIMessages.ENTER_CSS_CLASS_NAME, classCombo.getText(),
     	              new IInputValidator(){
+    	        	  	private CSSValidator cssValidator = CSSValidator.getInstance();
     	        	  	/**
-    	        	  	 * Simple validation of new CSS Class Name, now we just check that it's not empty string
+    	        	  	 * Validation of new CSS Class Name
     	        	  	 */
 						public String isValid(String newText) {
-							if(newText==null || newText.trim().length()==0){
+							if (cssValidator.isValidSelector(newText)) {
+								return null;
+							} else {
 								return JstUIMessages.CSS_CLASS_NAME_NOT_VALID;
 							}
-							return null;
 						}
-    	        	  
     	          });
     	          if (dlg.open() == Window.OK) {
     	        	  addNewStyleClass(dlg.getValue().trim());

@@ -33,7 +33,7 @@ public class StyleAttributes {
      */
     public StyleAttributes() {
         this.attributeMap = new HashMap<String, String>();
-        cssValidator = new CSSValidator();
+        cssValidator = CSSValidator.getInstance();
     }
 
     /**
