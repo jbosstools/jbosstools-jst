@@ -96,7 +96,9 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 		List<TaglibData> taglibs =XmlUtil.getTaglibsForJSPDocument(iDocument,getIncludeTaglibs());
 		//if we on jsp page we will set taglibs 
 		//TODO Max Areshkau Find other passability to check if we on jsp page
-		if(taglibs!=null && taglibs.size()>0) {
+		// FIX FOR https://jira.jboss.org/jira/browse/JBIDE-3888 
+		// in some cases list of taglibs is not refreshed
+		if(taglibs!=null /*&& taglibs.size()>0*/) {
 			setTaglibs(taglibs);
 		}
 		try {
