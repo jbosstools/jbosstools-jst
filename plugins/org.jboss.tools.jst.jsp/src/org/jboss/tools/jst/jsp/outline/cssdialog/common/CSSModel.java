@@ -33,7 +33,6 @@ import org.eclipse.wst.css.core.internal.format.FormatProcessorCSS;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSDocument;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSModel;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSNode;
-import org.eclipse.wst.css.core.internal.provisional.document.ICSSRuleContainer;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleSheet;
 import org.eclipse.wst.css.core.internal.text.StructuredTextPartitionerForCSS;
 import org.eclipse.wst.sse.core.StructuredModelManager;
@@ -44,6 +43,7 @@ import org.eclipse.wst.sse.core.internal.provisional.exceptions.ResourceInUse;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredPartitioning;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.outline.cssdialog.events.StyleAttributes;
+import org.w3c.dom.css.CSSRule;
 import org.w3c.dom.css.CSSRuleList;
 import org.w3c.dom.css.CSSStyleDeclaration;
 import org.w3c.dom.css.CSSStyleRule;
@@ -118,12 +118,13 @@ public class CSSModel {
                 ICSSDocument document = cssModel.getDocument();
                 if (document instanceof CSSStyleSheet) {
                     styleSheet = (CSSStyleSheet) document;
+                    prepareModel(styleSheet);
                 }
 				if (document instanceof ICSSStyleSheet) {
 					eclipseStyleSheet = (ICSSStyleSheet) document;
 				}
 				
-		        
+		       
             }
         } catch (IOException e) {
             JspEditorPlugin.getPluginLog().logError(e.getMessage());
@@ -418,7 +419,6 @@ public class CSSModel {
 			node = node.getParentNode();
 		}
 		
-		Object rules=  getRulesMapping();
 		if (node != null)
 			for (Entry<String, CSSStyleRule> rule : getRulesMapping()
 					.entrySet()) {
@@ -426,5 +426,17 @@ public class CSSModel {
 					return rule.getKey();
 			}
 		return null;
+	}
+	
+	private void prepareModel(CSSStyleSheet styleSheet) {
+
+		CSSRuleList rules = styleSheet.getCssRules();
+		if ((rules != null) && (rules.getLength() > 0)) {
+			CSSRule rule = rules.item(rules.getLength() - 1);
+			String text = rule.getCssText();
+			if ((text != null) && (!text.endsWith(endBraces))) {
+				rule.setCssText(text + "\n"+ endBraces); //$NON-NLS-1$
+			}
+		}
 	}
 }
