@@ -209,8 +209,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 				IndexedRegion treeNode = ContentAssistUtils.getNodeAt(
 						JSPTextEditor.this.getTextViewer(), offset);
 				Node node = (Node) treeNode;
-				pageContext.setReferenceNode(node);
-				pageContext.setDocument(document);
+				pageContext.setDocument(document, node);
 			}
 		};
 		Display display = Display.getCurrent();

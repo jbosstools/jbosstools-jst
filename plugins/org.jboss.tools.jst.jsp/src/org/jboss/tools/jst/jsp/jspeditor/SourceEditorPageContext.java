@@ -55,15 +55,13 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 	private IVisualContext pageContext;
 	
 	public SourceEditorPageContext(JSPMultiPageEditor externalEditor) {
-		
-		if((externalEditor!=null)&& (externalEditor.getVisualEditor()!=null)
-				&&(externalEditor.getVisualEditor().getController()!=null))
-			
-		setPageContext(externalEditor.getVisualEditor().getController().getPageContext());
+		if(externalEditor != null && externalEditor.getVisualEditor() != null 
+				&& externalEditor.getVisualEditor().getController() != null) {			
+			setPageContext(externalEditor.getVisualEditor().getController().getPageContext());
+		}
 	}
 
-	public void clearAll() {
-		
+	public void clearAll() {		
 		setTaglibs(null);
 	}
 	
@@ -72,34 +70,37 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 		setConnector(null);
 		setReferenceNode(null);
 		setPageContext(null);
-
 	}
+
 	/**
 	 * Sets current node in scope of which we will be call context assistent
 	 * @param refNode
 	 */
-	public void setReferenceNode(Node refNode) {
-	
-		if ((refNode==null)||(refNode.equals(getReferenceNode()))) {
+	public void setReferenceNode(Node refNode) {	
+		if (refNode == null || refNode.equals(getReferenceNode())) {
 			return;
 		}
-			referenceNode = refNode;
-			updateTagLibs();
-	
+		referenceNode = refNode;
+		updateTagLibs();	
 	}
+
 	/**
 	 * This method will be called if we work with jsp pages
 	 * @param iDocument
 	 */
-	public void setDocument(IDocument iDocument) {
-		
-		List<TaglibData> taglibs =XmlUtil.getTaglibsForJSPDocument(iDocument,getIncludeTaglibs());
+	public void setDocument(IDocument iDocument, Node refNode) {
+		if(refNode != null) {
+			referenceNode = null; //TODO study when we really need refresh
+			setReferenceNode(refNode);			
+		} else {
+			List<TaglibData> taglibs = XmlUtil.getTaglibsForJSPDocument(iDocument, getIncludeTaglibs());
 		//if we on jsp page we will set taglibs 
-		//TODO Max Areshkau Find other passability to check if we on jsp page
+		//TODO Max Areshkau Find other possibility to check if we on jsp page
 		// FIX FOR https://jira.jboss.org/jira/browse/JBIDE-3888 
 		// in some cases list of taglibs is not refreshed
-		if(taglibs!=null /*&& taglibs.size()>0*/) {
-			setTaglibs(taglibs);
+			if(taglibs != null /*&& taglibs.size()>0*/) {
+				setTaglibs(taglibs);
+			}
 		}
 		try {
 			connector = (WtpKbConnector)KbConnectorFactory.getIntstance().createConnector(KbConnectorType.JSP_WTP_KB_CONNECTOR, iDocument);
@@ -109,8 +110,7 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 	}
 
 	public void collectRefNodeTagLibs() {
-		
-		if(getReferenceNode()==null) {
+		if(getReferenceNode() == null) {
 			return;
 		}
 			
@@ -126,7 +126,6 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 				}
 			}
 		} else {
-			
 			setTaglibs(XmlUtil.processNode(getReferenceNode(), getIncludeTaglibs()));
 		}
 	}
@@ -134,8 +133,6 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 	public void updateTagLibs() {
 		collectRefNodeTagLibs();
 	}
-
-
 
 	// implements IVisualContext
 	public WtpKbConnector getConnector() {
@@ -149,7 +146,6 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 
 	// implements IVisualContext
 	public List<TaglibData> getTagLibs() {
-
 		List<TaglibData> clone = new ArrayList<TaglibData>();
 
 		Iterator<TaglibData> iter = getTaglibs() .iterator();
@@ -179,8 +175,8 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 	 * @return the taglibs
 	 */
 	private List<TaglibData> getTaglibs() {
-		if(taglibs==null) {
-			taglibs= new ArrayList<TaglibData>();
+		if(taglibs == null) {
+			taglibs = new ArrayList<TaglibData>();
 		}
 		return taglibs;
 	}
@@ -221,8 +217,7 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 	}
 
 	public List<TaglibData> getIncludeTaglibs() {
-		if(getPageContext()!=null) {
-			
+		if(getPageContext() != null) {
 			return getPageContext().getIncludeTaglibs();
 		} else {
 			return new ArrayList<TaglibData>();
