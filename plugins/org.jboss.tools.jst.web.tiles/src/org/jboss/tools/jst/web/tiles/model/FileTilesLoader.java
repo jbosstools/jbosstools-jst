@@ -161,8 +161,8 @@ class FTLoaderUtil extends XModelObjectLoaderUtil {
 
     public String getAttribute(Element element, String xmlname, XAttribute attr) {
         int i = xmlname.indexOf('|');
-        if(i < 0 || xmlname.startsWith("content|")) return super.getAttribute(element, xmlname);
-        String v = super.getAttribute(element, xmlname.substring(0, i));
+        if(i < 0 || xmlname.startsWith("content|")) return super.getAttribute(element, xmlname, attr);
+        String v = super.getAttribute(element, xmlname.substring(0, i), attr);
         return (v != null && v.length() > 0) ? v :
                super.getAttribute(element, xmlname.substring(i + 1), attr);
     }
