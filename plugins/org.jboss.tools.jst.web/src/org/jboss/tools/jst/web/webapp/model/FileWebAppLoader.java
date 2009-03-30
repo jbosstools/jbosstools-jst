@@ -61,7 +61,7 @@ class FWLoaderUtil extends XModelObjectLoaderUtil {
 		return super.isSaveable(entity, n, v, dv);
     }
 
-    public String getAttribute(Element element, String xmlname) {
+    public String getAttribute(Element element, String xmlname, XAttribute attr) {
         if("distributable".equals(xmlname))
           return (XMLUtil.getUniqueChild(element, "distributable") != null) ? "yes" : "no";
         if("role-names".equals(xmlname))
@@ -76,7 +76,7 @@ class FWLoaderUtil extends XModelObjectLoaderUtil {
 		  return loadArray(element, "port-component-ref");
 		if("dispatchers".equals(xmlname))
 		  return loadArray(element, "dispatcher");
-        return super.getAttribute(element, xmlname);
+        return super.getAttribute(element, xmlname, attr);
     }
 
     public void saveAttributes(Element element, XModelObject o) {

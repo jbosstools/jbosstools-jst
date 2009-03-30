@@ -88,7 +88,7 @@
    <XModelAttribute name="display-name" xmlname="display-name.#text"/>
    <XModelAttribute name="small-icon" xmlname="small-icon.#text"/>
    <XModelAttribute name="large-icon" xmlname="large-icon.#text"/>
-   <XModelAttribute name="description" xmlname="description.#text">
+   <XModelAttribute TRIM="no" name="description" xmlname="description.#text">
     <Editor name="Note"/>
    </XModelAttribute>
    <XModelAttribute name="id" xmlname="id"/>
@@ -355,7 +355,7 @@
    <XModelAttribute name="type" xmlname="type.#text">
     <Editor name="AccessibleJava"/>
    </XModelAttribute>
-   <XModelAttribute name="description" xmlname="description.#text">
+   <XModelAttribute TRIM="no" name="description" xmlname="description.#text">
     <Editor name="Note"/>
    </XModelAttribute>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
@@ -497,7 +497,7 @@
    <XModelAttribute name="display-name" xmlname="display-name.#text"/>
    <XModelAttribute name="small-icon" xmlname="small-icon.#text"/>
    <XModelAttribute name="large-icon" xmlname="large-icon.#text"/>
-   <XModelAttribute name="description" xmlname="description.#text">
+   <XModelAttribute TRIM="no" name="description" xmlname="description.#text">
     <Editor name="Note"/>
    </XModelAttribute>
    <XModelAttribute name="example" xmlname="example.#text">
@@ -610,7 +610,7 @@
    <XModelAttribute name="validator-class" xmlname="validator-class.#text">
     <Editor name="AccessibleJava"/>
    </XModelAttribute>
-   <XModelAttribute name="description" xmlname="description.#text">
+   <XModelAttribute TRIM="no" name="description" xmlname="description.#text">
     <Editor name="Note"/>
    </XModelAttribute>
    <XModelAttribute name="id" visibility="false" xmlname="id"/>
@@ -688,7 +688,7 @@
     </Constraint>
     <Editor name="List"/>
    </XModelAttribute>
-   <XModelAttribute name="description" xmlname="description.#text">
+   <XModelAttribute TRIM="no" name="description" xmlname="description.#text">
     <Editor name="Note"/>
    </XModelAttribute>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">

@@ -68,12 +68,12 @@
     name="xsi:schemaLocation" xmlname="xsi:schemaLocation"/>
    <XModelAttribute PROPERTIES="save=always" default="2.0"
     name="version" visibility="false" xmlname="version"/>
-   <XModelAttribute name="description" xmlname="description.#text">
+   <XModelAttribute TRIM="no" name="description" xmlname="description.#text">
     <Editor name="Note"/>
    </XModelAttribute>
    <XModelAttribute name="display-name" xmlname="display-name.#text"/>
-   <XModelAttribute name="small-icon" xmlname="small-icon.#text"/>
-   <XModelAttribute name="large-icon" xmlname="large-icon.#text"/>
+   <XModelAttribute name="small-icon" xmlname="icon.small-icon.#text"/>
+   <XModelAttribute name="large-icon" xmlname="icon.large-icon.#text"/>
    <XModelAttribute PROPERTIES="save=always" default="1.1"
     name="tlibversion" xmlname="tlib-version.#text"/>
    <XModelAttribute PROPERTIES="save=always" name="shortname" xmlname="short-name.#text"/>
@@ -301,12 +301,12 @@
     name="xsi:schemaLocation" xmlname="xsi:schemaLocation"/>
    <XModelAttribute PROPERTIES="save=always" default="2.1"
     name="version" visibility="false" xmlname="version"/>
-   <XModelAttribute name="description" xmlname="description.#text">
+   <XModelAttribute TRIM="no" name="description" xmlname="description.#text">
     <Editor name="Note"/>
    </XModelAttribute>
    <XModelAttribute name="display-name" xmlname="display-name.#text"/>
-   <XModelAttribute name="small-icon" xmlname="small-icon.#text"/>
-   <XModelAttribute name="large-icon" xmlname="large-icon.#text"/>
+   <XModelAttribute name="small-icon" xmlname="icon.small-icon.#text"/>
+   <XModelAttribute name="large-icon" xmlname="icon.large-icon.#text"/>
    <XModelAttribute PROPERTIES="save=always" default="1.1"
     name="tlibversion" xmlname="tlib-version.#text"/>
    <XModelAttribute PROPERTIES="save=always" name="shortname" xmlname="short-name.#text"/>
@@ -491,7 +491,7 @@
    <XModelAttribute default="attribute" loader="ElementType" name="element type">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute name="description" xmlname="description.#text">
+   <XModelAttribute TRIM="no" name="description" xmlname="description.#text">
     <Editor name="Note"/>
    </XModelAttribute>
    <XModelAttribute PROPERTIES="id=true" name="name" xmlname="name.#text"/>
@@ -555,7 +555,7 @@
    <XModelAttribute default="attribute" loader="ElementType" name="element type">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute name="description" xmlname="description.#text">
+   <XModelAttribute TRIM="no" name="description" xmlname="description.#text">
     <Editor name="Note"/>
    </XModelAttribute>
    <XModelAttribute PROPERTIES="id=true" name="name" xmlname="name.#text"/>
@@ -622,7 +622,7 @@
    <XModelAttribute default="attribute" loader="ElementType" name="element type">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute name="description" xmlname="description.#text">
+   <XModelAttribute TRIM="no" name="description" xmlname="description.#text">
     <Editor name="Note"/>
    </XModelAttribute>
    <XModelAttribute PROPERTIES="id=true" name="name" xmlname="name.#text"/>
@@ -679,7 +679,7 @@
    <XModelAttribute default="function" loader="ElementType" name="element type">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute name="description" xmlname="description.#text">
+   <XModelAttribute TRIM="no" name="description" xmlname="description.#text">
     <Editor name="Note"/>
    </XModelAttribute>
    <XModelAttribute name="display-name" xmlname="display-name.#text"/>
@@ -779,6 +779,12 @@
    <XModelAttribute default="tag" loader="ElementType" name="element type">
     <Editor name="Uneditable"/>
    </XModelAttribute>
+   <XModelAttribute TRIM="no" name="description" xmlname="description.#text">
+    <Editor name="Note"/>
+   </XModelAttribute>
+   <XModelAttribute name="display-name" xmlname="display-name.#text"/>
+   <XModelAttribute name="small-icon" xmlname="icon.small-icon.#text"/>
+   <XModelAttribute name="large-icon" xmlname="icon.large-icon.#text"/>
    <XModelAttribute PROPERTIES="save=always;id=true" name="name" xmlname="name.#text"/>
    <XModelAttribute PROPERTIES="save=always" name="tagclass" xmlname="tag-class.#text">
     <Constraint loader="QClassName"/>
@@ -796,12 +802,6 @@
      <value name="scriptless"/>
     </Constraint>
     <Editor name="List"/>
-   </XModelAttribute>
-   <XModelAttribute name="display-name" xmlname="display-name.#text"/>
-   <XModelAttribute name="small-icon" xmlname="small-icon.#text"/>
-   <XModelAttribute name="large-icon" xmlname="large-icon.#text"/>
-   <XModelAttribute name="description" xmlname="description.#text">
-    <Editor name="Note"/>
    </XModelAttribute>
    <XModelAttribute name="example" xmlname="example.#text">
     <Editor name="Note"/>
@@ -885,6 +885,12 @@
    <XModelAttribute default="tag" loader="ElementType" name="element type">
     <Editor name="Uneditable"/>
    </XModelAttribute>
+   <XModelAttribute TRIM="no" name="description" xmlname="description.#text">
+    <Editor name="Note"/>
+   </XModelAttribute>
+   <XModelAttribute name="display-name" xmlname="display-name.#text"/>
+   <XModelAttribute name="small-icon" xmlname="icon.small-icon.#text"/>
+   <XModelAttribute name="large-icon" xmlname="icon.large-icon.#text"/>
    <XModelAttribute PROPERTIES="save=always;id=true" name="name" xmlname="name.#text"/>
    <XModelAttribute PROPERTIES="save=always" name="tagclass" xmlname="tag-class.#text">
     <Constraint loader="QClassName"/>
@@ -902,12 +908,6 @@
      <value name="scriptless"/>
     </Constraint>
     <Editor name="List"/>
-   </XModelAttribute>
-   <XModelAttribute name="display-name" xmlname="display-name.#text"/>
-   <XModelAttribute name="small-icon" xmlname="small-icon.#text"/>
-   <XModelAttribute name="large-icon" xmlname="large-icon.#text"/>
-   <XModelAttribute name="description" xmlname="description.#text">
-    <Editor name="Note"/>
    </XModelAttribute>
    <XModelAttribute name="example" xmlname="example.#text">
     <Editor name="Note"/>
@@ -985,7 +985,7 @@
    <XModelAttribute default="tag-file" loader="ElementType" name="element type">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute name="description" xmlname="description.#text">
+   <XModelAttribute TRIM="no" name="description" xmlname="description.#text">
     <Editor name="Note"/>
    </XModelAttribute>
    <XModelAttribute name="display-name" xmlname="display-name.#text"/>
