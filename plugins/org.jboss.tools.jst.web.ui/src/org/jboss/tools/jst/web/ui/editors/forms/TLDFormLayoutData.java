@@ -60,7 +60,7 @@ public class TLDFormLayoutData implements IFormLayoutData {
 			for (int i = 0; i < attributes.length; i++) {
 				if(entity.getAttribute(attributes[i]) != null) list.add(new FormAttributeData(attributes[i]));
 			}
-			list.add(new FormAttributeData("description", InfoLayoutDataFactory.getInstance()));
+			list.add(new FormAttributeData("description", InfoLayoutDataFactory.getHighInstance()));
 		}
 		
 		return list.toArray(new FormAttributeData[0]);
@@ -93,10 +93,11 @@ public class TLDFormLayoutData implements IFormLayoutData {
 	);
 	
 	static IFormData TAG_GENERAL = new FormData(
-		"Tag Description",
+		"Tag Descriptio",
 		"", // "Description, description, description",
-		new FormAttributeData[]{new FormAttributeData("name"), new FormAttributeData("tagclass", null, STBFE_CLASS_NAME), new FormAttributeData("teiclass", null, STBFE_CLASS_NAME), new FormAttributeData("bodycontent"), new FormAttributeData("display-name"), new FormAttributeData("small-icon"), new FormAttributeData("large-icon"), new FormAttributeData("description", InfoLayoutDataFactory.getInstance()), new FormAttributeData("example", InfoLayoutDataFactory.getInstance())}
+		new FormAttributeData[]{new FormAttributeData("name"), new FormAttributeData("tagclass", null, STBFE_CLASS_NAME), new FormAttributeData("teiclass", null, STBFE_CLASS_NAME), new FormAttributeData("bodycontent"), new FormAttributeData("display-name"), new FormAttributeData("small-icon"), new FormAttributeData("large-icon"), new FormAttributeData("description", InfoLayoutDataFactory.getHighInstance()), new FormAttributeData("example", InfoLayoutDataFactory.getInstance())}
 	);
+
 	
 	static IFormData[] TAG_DEFINITIONS = new IFormData[] {
 		TAG_GENERAL,
@@ -198,7 +199,7 @@ public class TLDFormLayoutData implements IFormLayoutData {
 					new FormData(
 						"Validator",
 						"", // "Description, description, description",
-						new FormAttributeData[]{new FormAttributeData("validator-class", null, STBFE_CLASS_NAME), new FormAttributeData("description", InfoLayoutDataFactory.getInstance())}
+						new FormAttributeData[]{new FormAttributeData("validator-class", null, STBFE_CLASS_NAME), new FormAttributeData("description", InfoLayoutDataFactory.getHighInstance())}
 					),
 					// Tiles Put List Adds Form
 					new FormData(
