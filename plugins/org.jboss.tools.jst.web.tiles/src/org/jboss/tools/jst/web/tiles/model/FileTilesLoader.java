@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.tiles.model;
 import java.io.StringReader;
 import java.io.StringWriter;
 
+import org.jboss.tools.common.meta.XAttribute;
 import org.jboss.tools.common.meta.XModelEntity;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.filesystems.FileAuxiliary;
@@ -158,12 +159,12 @@ class FTLoaderUtil extends XModelObjectLoaderUtil {
         return super.isSaveable(entity, n, v, dv);
     }
 
-    public String getAttribute(Element element, String xmlname) {
+    public String getAttribute(Element element, String xmlname, XAttribute attr) {
         int i = xmlname.indexOf('|');
         if(i < 0 || xmlname.startsWith("content|")) return super.getAttribute(element, xmlname);
         String v = super.getAttribute(element, xmlname.substring(0, i));
         return (v != null && v.length() > 0) ? v :
-               super.getAttribute(element, xmlname.substring(i + 1));
+               super.getAttribute(element, xmlname.substring(i + 1), attr);
     }
 
     public void saveAttribute(Element element, String xmlname, String value) {
