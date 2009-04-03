@@ -84,7 +84,7 @@ public abstract class WebProjectAdoptOperation extends WebNatureOperation {
 			execute();
 			String sv = context.getServletVersion();
 			if(sv == null || sv.length() == 0) sv = getDefaultServletVersion();
-			model.changeObjectAttribute(model.getByPath("Web"), "servlet version", sv);
+			model.changeObjectAttribute(model.getByPath("Web"), "servlet version", sv); //$NON-NLS-1$ //$NON-NLS-2$
 		} catch (XModelException ex) {
 			WebUiPlugin.getPluginLog().logError(ex);
 		}
@@ -104,18 +104,18 @@ public abstract class WebProjectAdoptOperation extends WebNatureOperation {
 
 	void setWorkspaceHome(String path) {
 		String relativePath = FileUtil.getRelativePath(getProject().getLocation().toString(), path);
-		if (relativePath != null) path = "." + relativePath;
-		Element element = XMLUtil.createDocumentElement("struts");
-		element = XMLUtil.createElement(element, "workspace_home");
+		if (relativePath != null) path = "." + relativePath; //$NON-NLS-1$
+		Element element = XMLUtil.createDocumentElement("struts"); //$NON-NLS-1$
+		element = XMLUtil.createElement(element, "workspace_home"); //$NON-NLS-1$
 		element.appendChild(element.getOwnerDocument().createTextNode(path));
 
-		OutputFormat format = new OutputFormat("xml", "UTF-8", true);
-		format.setLineSeparator("\n");
+		OutputFormat format = new OutputFormat("xml", "UTF-8", true); //$NON-NLS-1$ //$NON-NLS-2$
+		format.setLineSeparator("\n"); //$NON-NLS-1$
 		format.setIndent(2);
 
 		FileWriter fileWriter = null;
 		try {
-			fileWriter = new FileWriter(getProject().getLocation().toString() + "/" + IModelNature.PROJECT_TEMP);
+			fileWriter = new FileWriter(getProject().getLocation().toString() + "/" + IModelNature.PROJECT_TEMP); //$NON-NLS-1$
 			XMLSerializer ser = new XMLSerializer(fileWriter, format);
 			ser.asDOMSerializer();
 			ser.serialize(element);	
@@ -137,8 +137,8 @@ public abstract class WebProjectAdoptOperation extends WebNatureOperation {
 		String projectLocation = getProperty(PROJECT_LOCATION_ID);
 		if(isLinkingToProjectOutsideWorkspace()) {
 			String root = ModelPlugin.getWorkspace().getRoot().getLocation().toString().replace('\\', '/');
-			if(!projectLocation.replace('\\','/').startsWith(root + "/")) {
-				projectLocation = root + "/" + project.getName();
+			if(!projectLocation.replace('\\','/').startsWith(root + "/")) { //$NON-NLS-1$
+				projectLocation = root + "/" + project.getName(); //$NON-NLS-1$
 			}
 		}
 		IPath path = new Path(projectLocation);
@@ -152,7 +152,7 @@ public abstract class WebProjectAdoptOperation extends WebNatureOperation {
 		ServiceDialog d = PreferenceModelUtilities.getPreferenceModel().getService();
 		ResourceBundle bundle = ResourceBundle.getBundle(WebProjectCreationOperation.class.getName());
 		String message = MessageFormat.format(
-	        bundle.getString("ADOPT_WILL_OVERWRITE_DOT_FILES_MESSAGE"),new Object[]{dots}
+	        bundle.getString("ADOPT_WILL_OVERWRITE_DOT_FILES_MESSAGE"),new Object[]{dots} //$NON-NLS-1$
 		);			
 		int q = d.showDialog("Warning", message, new String[]{"Continue", "Cancel"}, null, ServiceDialog.WARNING);
 		if(q != 0) return false;
@@ -167,8 +167,8 @@ public abstract class WebProjectAdoptOperation extends WebNatureOperation {
 		
 		String location = getProperty(PROJECT_LOCATION_ID).replace('\\', '/');
 		String root = ModelPlugin.getWorkspace().getRoot().getLocation().toString().replace('\\', '/');
-		String wsProjectLocation = (root + "/" + getProject().getName()).replace('\\', '/');;
-		if(location.equals(wsProjectLocation) || location.startsWith(wsProjectLocation + "/")) return true;
+		String wsProjectLocation = (root + "/" + getProject().getName()).replace('\\', '/');; //$NON-NLS-1$
+		if(location.equals(wsProjectLocation) || location.startsWith(wsProjectLocation + "/")) return true; //$NON-NLS-1$
 		File wsf = new File(wsProjectLocation); 
 		if(!wsf.isDirectory()) return true;
 		File[] cs = wsf.listFiles();
@@ -177,7 +177,7 @@ public abstract class WebProjectAdoptOperation extends WebNatureOperation {
 		ServiceDialog d = PreferenceModelUtilities.getPreferenceModel().getService();
 		ResourceBundle bundle = ResourceBundle.getBundle(WebProjectCreationOperation.class.getName());
 		String message = MessageFormat.format(
-		    bundle.getString("ADOPT_WILL_CLEAR_WORKSPACE_MESSAGE"),new Object[]{getProject().getName()}
+		    bundle.getString("ADOPT_WILL_CLEAR_WORKSPACE_MESSAGE"),new Object[]{getProject().getName()} //$NON-NLS-1$
 		);			
 		int q = d.showDialog("Warning", message, new String[]{"Continue", "Cancel"}, null, ServiceDialog.WARNING);
 		if(q != 0) return false;
