@@ -155,10 +155,10 @@ public abstract class WebProjectCreationOperation extends WebNatureOperation {
 		}
 	}
 
-	public static final String WARNING_MESSAGE = "COD_MESSAGE";
-	public static final String WARNING_TITLE   = "COD_TITLE";
-	public static final String BTN_CANCEL      = "BTN_CANCEL";
-	public static final String BTN_OK          = "BTN_OK";
+	public static final String WARNING_MESSAGE = "COD_MESSAGE"; //$NON-NLS-1$
+	public static final String WARNING_TITLE   = "COD_TITLE"; //$NON-NLS-1$
+	public static final String BTN_CANCEL      = "BTN_CANCEL"; //$NON-NLS-1$
+	public static final String BTN_OK          = "BTN_OK"; //$NON-NLS-1$
 	
 	protected boolean checkOverwrite() {
 		String location = getProperty(PROJECT_LOCATION_ID);
