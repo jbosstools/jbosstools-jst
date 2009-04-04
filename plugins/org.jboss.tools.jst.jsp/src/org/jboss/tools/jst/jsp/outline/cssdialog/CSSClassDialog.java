@@ -373,6 +373,9 @@ public class CSSClassDialog extends TitleAreaDialog implements ChangeStyleListen
 						}
     	          });
     	          if (dlg.open() == Window.OK) {
+    	        	  if (classNameStatus.matches(IStatus.ERROR))
+  						classNameStatus = new Status(IStatus.OK, notUsed, 0,
+  								JstUIMessages.CSS_STYLE_CLASS_EDITOR_DESCRIPTION, null);
     	        	  addNewStyleClass(dlg.getValue().trim());
     	    		}
     	        }
