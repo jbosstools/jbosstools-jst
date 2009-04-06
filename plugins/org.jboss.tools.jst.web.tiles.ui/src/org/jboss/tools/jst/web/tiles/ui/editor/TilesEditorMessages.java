@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.tiles.ui.editor;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import org.eclipse.osgi.util.NLS;
 import org.jboss.tools.jst.web.tiles.ui.TilesUIPlugin;
 
 /**
@@ -23,22 +24,20 @@ import org.jboss.tools.jst.web.tiles.ui.TilesUIPlugin;
  */
 public class TilesEditorMessages {
 
-	private static final String RESOURCE_BUNDLE= "org.jboss.tools.jst.web.tiles.ui.editor.TilesEditorMessages";
+	private static final String BUNDLE_NAME= "org.jboss.tools.jst.web.tiles.ui.editor.TilesEditorMessages";
+	
+	public static String TilesDiagram_select;
+	
+	public static String TilesDiagram_marquee;
+	
+	public static String TilesDiagram_create_new_connection;
+	
+	public static String TilesDiagram_defenition_template;
 
-	private static ResourceBundle resourceBundle= ResourceBundle.getBundle(RESOURCE_BUNDLE);
 
-	private TilesEditorMessages() {}
-
-	public static String getString(String key) {
-		try {
-			return resourceBundle.getString(key);
-		} catch (MissingResourceException e) {
-			TilesUIPlugin.getPluginLog().logError(e);
-			return "%" + key + "%";
-		}
+	static {
+		// load message values from bundle file
+		NLS.initializeMessages(BUNDLE_NAME, TilesEditorMessages.class);		
 	}
-
-	public static ResourceBundle getResourceBundle() {
-		return resourceBundle;
-	}
+	
 }

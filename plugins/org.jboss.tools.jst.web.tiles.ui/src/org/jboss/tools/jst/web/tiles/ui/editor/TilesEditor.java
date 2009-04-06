@@ -356,14 +356,12 @@ public class TilesEditor extends GEFEditor implements ITilesModelListener {
 		List<PaletteEntry> entries = new ArrayList<PaletteEntry>();
 
 		ToolEntry tool = new SelectionToolEntry();
-		tool.setDescription(TilesEditorMessages
-				.getString("TilesDiagram.select")); //$NON-NLS-1$
+		tool.setDescription(TilesEditorMessages.TilesDiagram_select);
 		entries.add(tool);
 		root.setDefaultEntry(tool);
 
 		tool = new MarqueeToolEntry();
-		tool.setDescription(TilesEditorMessages
-				.getString("TilesDiagram.marquee")); //$NON-NLS-1$
+		tool.setDescription(TilesEditorMessages.TilesDiagram_marquee);
 		entries.add(tool);
 
 		PaletteSeparator sep = new PaletteSeparator("separator"); //$NON-NLS-1$
@@ -372,10 +370,8 @@ public class TilesEditor extends GEFEditor implements ITilesModelListener {
 		entries.add(sep); //$NON-NLS-1$
 
 		connectionCreationTool = new GEFConnectionCreationToolEntry(
-				TilesEditorMessages
-						.getString("TilesDiagram.create-new-connection"), //$NON-NLS-1$
-				TilesEditorMessages
-						.getString("TilesDiagram.create-new-connection"), //$NON-NLS-1$
+				TilesEditorMessages.TilesDiagram_create_new_connection,
+				TilesEditorMessages.TilesDiagram_create_new_connection,
 				null, ImageDescriptor.createFromFile(TilesEditor.class,
 						"icons/new_transition.gif"),//$NON-NLS-1$
 				null//$NON-NLS-1$
@@ -390,10 +386,8 @@ public class TilesEditor extends GEFEditor implements ITilesModelListener {
 		entries.add(sep);
 
 		CombinedTemplateCreationEntry combined = new CombinedTemplateCreationEntry(
-				TilesEditorMessages
-						.getString("TilesDiagram.defenition-template"), //$NON-NLS-1$
-				TilesEditorMessages
-						.getString("TilesDiagram.defenition-template"), //$NON-NLS-1$
+				TilesEditorMessages.TilesDiagram_defenition_template,
+				TilesEditorMessages.TilesDiagram_defenition_template,
 				TemplateConstants.TEMPLATE_DEFINITION, new SimpleFactory(
 						String.class), ImageDescriptor.createFromFile(
 						TilesEditor.class, "icons/new_definition.gif"), //$NON-NLS-1$
