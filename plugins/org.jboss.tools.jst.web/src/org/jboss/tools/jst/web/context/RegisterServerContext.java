@@ -134,19 +134,20 @@ public class RegisterServerContext {
 		return applicationName;
 	}
 
+	@SuppressWarnings("restriction")
 	public String getErrorMessage() {
 		if(runtimeName == null || runtimeName.length() == 0) return WebUIMessages.RUNTIME_IS_REQUIRED;
 		if(runtime == null) return WebUIMessages.SPECIFIED_RUNTIME_DOESNOT_EXIST;
 
 		if(!isEnabled()) {
 			if(servletVersion != null && servletVersion.length() == 0) {
-				return Messages.getString("ERR_SERVLET_VERSION_IS_NOT_SET"); //$NON-NLS-1$
+				return Messages.ERR_SERVLET_VERSION_IS_NOT_SET; 
 			}
 		    return null;
 		}
 
 		if(applicationName == null || applicationName.length() == 0) {
-		    return Messages.getString("ERR_APP_NAME_IS_NOT_SPECIFIED"); //$NON-NLS-1$
+		    return Messages.ERR_APP_NAME_IS_NOT_SPECIFIED; 
 		}
 		
 		if(true) {
@@ -154,7 +155,7 @@ public class RegisterServerContext {
 			if(contextRootError != null) return contextRootError;
 			for (int i = 0; i < targetServers.length; i++) {
 				if(RegistrationHelper.isRegistered(applicationName, targetServers[i])) {
-					return NLS.bind(WebUIMessages.APPLICATION_IS_ALREADY_REGISTERED, applicationName, targetServers[i].getName()); //$NON-NLS-2$
+					return NLS.bind(WebUIMessages.APPLICATION_IS_ALREADY_REGISTERED, applicationName, targetServers[i].getName());
 				}
 				if(this.project != null /*&& !this.project.exists()*/ && servletVersion != null && servletVersion.length() > 0) {
 					if(project.exists() && RegistrationHelper.isRegistered(project)) {
@@ -170,9 +171,9 @@ public class RegisterServerContext {
 				}
 			}
 			if(servletVersion != null && servletVersion.length() == 0) {
-				return Messages.getString("ERR_SERVLET_VERSION_IS_NOT_SET"); //$NON-NLS-1$
+				return Messages.ERR_SERVLET_VERSION_IS_NOT_SET; 
 			} else if(!checkServletVersionFormat()) {
-				return Messages.getString("ERR_SERVLET_VERSION_IS_NOT_VALID");				 //$NON-NLS-1$
+				return Messages.ERR_SERVLET_VERSION_IS_NOT_VALID;				 
 			}
 			return null;
 		}
@@ -182,7 +183,7 @@ public class RegisterServerContext {
 	
 	boolean checkServletVersionFormat() {
 		if(servletVersion == null || servletVersion.length() == 0) return true;
-		StringTokenizer st = new StringTokenizer(servletVersion, ".");
+		StringTokenizer st = new StringTokenizer(servletVersion, "."); //$NON-NLS-1$
 		if(st.countTokens() < 2 || st.countTokens() > 3) return false;
 		while(st.hasMoreTokens()) {
 			String t = st.nextToken().trim();
