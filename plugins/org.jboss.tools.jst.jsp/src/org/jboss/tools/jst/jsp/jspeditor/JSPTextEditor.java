@@ -1288,6 +1288,6 @@ public class JSPTextEditor extends StructuredTextEditor implements
 	}
 
 	private String getShowInMenuLabel() {
-		return JSPEditorMessages.getString("JSPMultiPageEditor.ContextMenu.ShowInMenu"); //$NON-NLS-1$
+		return JSPEditorMessages.JSPMultiPageEditor_ContextMenu_ShowInMenu; 
 	}
 }

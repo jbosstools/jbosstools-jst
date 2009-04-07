@@ -7,38 +7,35 @@
  *
  * Contributors:
  *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
- ******************************************************************************/ 
+ ******************************************************************************/
 package org.jboss.tools.jst.jsp.jspeditor;
-import java.util.MissingResourceException;
+
 import java.util.ResourceBundle;
 
-import org.jboss.tools.jst.jsp.JspEditorPlugin;
+import org.eclipse.osgi.util.NLS;
 
-/**
- * @author Jeremy
- *
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
- */
-public class JSPEditorMessages {
-	private static final String RESOURCE_BUNDLE= "org.jboss.tools.jst.jsp.jspeditor.JSPEditorMessages";//$NON-NLS-1$
+public final class JSPEditorMessages extends NLS {
 
-	private static ResourceBundle fgResourceBundle= ResourceBundle.getBundle(RESOURCE_BUNDLE);
+	private static final String BUNDLE_NAME = "org.jboss.tools.jst.jsp.jspeditor.JSPEditorMessages";//$NON-NLS-1$
 
 	private JSPEditorMessages() {
+		// Do not instantiate
 	}
 
-	public static String getString(String key) {
-		try {
-			return fgResourceBundle.getString(key);
-		} catch (MissingResourceException e) {
-			JspEditorPlugin.getPluginLog().logError(e);
-			return "!!!" + key + "!!!";//$NON-NLS-2$ //$NON-NLS-1$
-		}
+	public static String JSPMultiPageEditor_TabLabel_VisualSource;
+	public static String JSPMultiPageEditor_TabLabel_Source;
+	public static String JSPMultiPageEditor_TabLabel_Preview;
+	public static String JSPMultiPageEditor_ContextMenu_ShowInMenu;
+
+	static {
+		NLS.initializeMessages(BUNDLE_NAME, JSPEditorMessages.class);
 	}
-	
+
+	/**
+	 * @deprecated use the string fields of the NLS subclass
+	 */
 	public static ResourceBundle getResourceBundle() {
-		return fgResourceBundle;
+		return ResourceBundle.getBundle(BUNDLE_NAME);
 	}
 
 }
