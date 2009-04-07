@@ -160,8 +160,6 @@ public class JSPTextEditor extends StructuredTextEditor implements
 
 	private TextEditorDropProviderImpl textEditorDropProvider;
 
-	private static final String SHOW_IN_MENU = "JSPMultiPageEditor.ContextMenu.ShowInMenu"; //$NON-NLS-1$
-
 	public JSPTextEditor(JSPMultiPageEditor parentEditor) {
 		JspEditorPlugin.getDefault().initDefaultPluginPreferences();
 		textEditorDropProvider = new TextEditorDropProviderImpl();
@@ -298,7 +296,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			ConfigurablePropertySheetPage sheet) {
 		try {
 			Method method = PropertySheetPage.class.getDeclaredMethod(
-					"setSorter", new Class[] { PropertySheetSorter.class });
+					"setSorter", new Class[] { PropertySheetSorter.class }); //$NON-NLS-1$
 			method.setAccessible(true);
 			method.invoke(sheet, new Object[] { sorter });
 		} catch (InvocationTargetException e) {
@@ -341,7 +339,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		getSourceViewer().removeTextListener(this);
 		getSourceViewer().addTextListener(this);
 
-		Object dtid = getSourceViewer().getTextWidget().getData("DropTarget");
+		Object dtid = getSourceViewer().getTextWidget().getData("DropTarget"); //$NON-NLS-1$
 		if (dtid != null) {
 			if (dtid instanceof DropTarget) {
 				DropTarget dropTarget = (DropTarget) dtid;
@@ -571,8 +569,8 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			return;
 		}
 		Properties p = new Properties();
-		XActionInvoker.invoke("DiscardActions.Discard", o, p);
-		if (!"true".equals(p.getProperty("done")))
+		XActionInvoker.invoke("DiscardActions.Discard", o, p); //$NON-NLS-1$
+		if (!"true".equals(p.getProperty("done"))) //$NON-NLS-1$ //$NON-NLS-2$
 			return;
 		super.doRevertToSaved();
 		if (o.isModified())
@@ -601,8 +599,8 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		}
 		if (wtpTextJspKbConnector == null
 				&& model != null
-				&& (getContentType().toLowerCase().indexOf("jsp") != -1 || getContentType()
-						.toLowerCase().indexOf("html") != -1)) {
+				&& (getContentType().toLowerCase().indexOf("jsp") != -1 || getContentType() //$NON-NLS-1$
+						.toLowerCase().indexOf("html") != -1)) { //$NON-NLS-1$
 			wtpTextJspKbConnector = new WTPTextJspKbConnector(getEditorInput(),
 					document, model);
 			wtpTextJspKbConnector.setTaglibManagerProvider(parentEditor);
@@ -615,7 +613,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			type = getModel().getContentTypeIdentifier();
 		} finally {
 			if (type == null)
-				type = "";
+				type = ""; //$NON-NLS-1$
 		}
 		return type;
 	}
@@ -758,7 +756,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 							.getDropCommand(flavor,
 									JSPTagProposalFactory.getInstance());
 
-					boolean promptAttributes = "yes"
+					boolean promptAttributes = "yes" //$NON-NLS-1$
 							.equals(VpePreference.ALWAYS_REQUEST_FOR_ATTRIBUTE
 									.getValue());
 					dropCommand
@@ -813,7 +811,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 				return;
 			}
 			// Drop from VPE to Source is forbidden
-			if (dropContext.getFlavor().equals("text/html")) {
+			if (dropContext.getFlavor().equals("text/html")) { //$NON-NLS-1$
 				if (InnerDragBuffer.object != null) {
 					event.detail = DND.DROP_NONE;
 				}
@@ -1115,7 +1113,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			try {
 				if (m == null) {
 					Class c = getSelectionProvider().getClass();
-					m = c.getDeclaredMethod("isFiringSelection", new Class[0]);
+					m = c.getDeclaredMethod("isFiringSelection", new Class[0]); //$NON-NLS-1$
 					m.setAccessible(true);
 				}
 				Boolean b = (Boolean) m.invoke(getSelectionProvider(),
@@ -1251,8 +1249,8 @@ public class JSPTextEditor extends StructuredTextEditor implements
 	boolean isInsideResponseRedirect(Text textNode, int off) {
 		if (off < 0)
 			return false;
-		String START = "response.sendRedirect(\"";
-		String END = "\")";
+		String START = "response.sendRedirect(\""; //$NON-NLS-1$
+		String END = "\")"; //$NON-NLS-1$
 		String text = textNode.getNodeValue();
 		int i = 0;
 		while (i < text.length() && i < off) {
@@ -1290,7 +1288,6 @@ public class JSPTextEditor extends StructuredTextEditor implements
 	}
 
 	private String getShowInMenuLabel() {
-
-		return JSPEditorMessages.getString(SHOW_IN_MENU);
+		return JSPEditorMessages.getString("JSPMultiPageEditor.ContextMenu.ShowInMenu"); //$NON-NLS-1$
 	}
 }

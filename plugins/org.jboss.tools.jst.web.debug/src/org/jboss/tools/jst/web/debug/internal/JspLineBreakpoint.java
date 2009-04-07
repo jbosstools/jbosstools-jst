@@ -34,9 +34,7 @@ import com.sun.jdi.event.Event;
 
 public class JspLineBreakpoint extends JavaPatternBreakpoint implements IBreakpointSourceFinder, IBreakpointPresentation {
 
-	private static final String JSP_BREAKPOINT = "org.jboss.tools.jst.web.debug.jspLineBreakpointMarker";
-	private static final String BREAKPOINT_LABEL_TEXT_KEY = "JspLineBreakpoint.name";
-
+	private static final String JSP_BREAKPOINT = "org.jboss.tools.jst.web.debug.jspLineBreakpointMarker"; //$NON-NLS-1$
 	private JDIDebugTarget debugTarget = null;
 	private boolean startServer = false;
 
@@ -79,7 +77,7 @@ public class JspLineBreakpoint extends JavaPatternBreakpoint implements IBreakpo
 		if (debugTarget != null) {
 			result = JspDebugUtils.getGeneratedJavaClassName(
 						super.getPattern(),
-						debugTarget.getLaunch().getLaunchConfiguration().getAttribute(WebUtils.ATTR_WEB_SERVER_NAME, "") 
+						debugTarget.getLaunch().getLaunchConfiguration().getAttribute(WebUtils.ATTR_WEB_SERVER_NAME, "")  //$NON-NLS-1$
 					);
 		}
 		if(result==null) {
@@ -123,7 +121,7 @@ public class JspLineBreakpoint extends JavaPatternBreakpoint implements IBreakpo
 			IJavaStackFrame javaStackFrame = (IJavaStackFrame)stackFrame;
 			try {
 				String receivingTypeName = javaStackFrame.getReceivingTypeName();
-				String configName = javaStackFrame.getLaunch().getLaunchConfiguration().getAttribute(WebUtils.ATTR_WEB_SERVER_NAME, "");
+				String configName = javaStackFrame.getLaunch().getLaunchConfiguration().getAttribute(WebUtils.ATTR_WEB_SERVER_NAME, ""); //$NON-NLS-1$
 				String generatedClassName = JspDebugUtils.getGeneratedJavaClassName(super.getPattern(), configName);
 
 				result = receivingTypeName.equals(generatedClassName);
@@ -149,7 +147,7 @@ public class JspLineBreakpoint extends JavaPatternBreakpoint implements IBreakpo
 
 	public String getLabelText() {
 		try {
-			return DebugMessages.getString(BREAKPOINT_LABEL_TEXT_KEY, new String[]{getPattern(), "" + getLineNumber()});
+			return DebugMessages.getString("JspLineBreakpoint.name", new String[]{getPattern(), "" + getLineNumber()}); //$NON-NLS-1$ //$NON-NLS-2$
 		} catch (CoreException e) {
 			ModelPlugin.getPluginLog().logError(e);
 			return "error";

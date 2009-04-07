@@ -91,13 +91,6 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	
 	public static final String EDITOR_ID = "org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor"; //$NON-NLS-1$
 	
-	private static final String VISUALSOURCE_TAB_LABEL = "JSPMultiPageEditor.TabLabel.VisualSource"; //$NON-NLS-1$
-
-	private static final String SOURCE_TAB_LABEL = "JSPMultiPageEditor.TabLabel.Source"; //$NON-NLS-1$
-	
-	/** PREVIEW_TAB_LABEL */
-	private static final String PREVIEW_TAB_LABEL = "JSPMultiPageEditor.TabLabel.Preview"; //$NON-NLS-1$
-	
 	//option loads preview tab
 	private static final String PREVIEW_TAB="Preview"; //$NON-NLS-1$
 	//visual tab
@@ -473,7 +466,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 			if(visualEditor!=null) {
 				visualSourceIndex = addPage(visualEditor, getEditorInput());
 				setPageText(visualSourceIndex, JSPEditorMessages
-						.getString(VISUALSOURCE_TAB_LABEL));
+						.getString("JSPMultiPageEditor.TabLabel.VisualSource")); //$NON-NLS-1$
 				setPartName(visualEditor.getTitle());
 			}
 		} catch (PartInitException e) {
@@ -489,15 +482,15 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		}*/
 
 		try {
+			String sourceTabLabel = JSPEditorMessages.getString(
+					"JSPMultiPageEditor.TabLabel.Source"); //$NON-NLS-1$
 			if(visualEditor!=null) {
 				sourceIndex = addPage(visualEditor, getEditorInput());
-				setPageText(sourceIndex, JSPEditorMessages
-						.getString(SOURCE_TAB_LABEL));
+				setPageText(sourceIndex, sourceTabLabel);
 				setPartName(visualEditor.getTitle());
 			} else {
 				sourceIndex = addPage(sourceEditor, getEditorInput());
-				setPageText(sourceIndex, JSPEditorMessages
-						.getString(SOURCE_TAB_LABEL));
+				setPageText(sourceIndex, sourceTabLabel);
 				setPartName(sourceEditor.getTitle());
 			}
 		} catch (PartInitException e) {
@@ -509,7 +502,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 			if(visualEditor!=null) {
 				previewIndex = addPage(visualEditor, getEditorInput());
 				setPageText(previewIndex, JSPEditorMessages
-						.getString(PREVIEW_TAB_LABEL));
+						.getString("JSPMultiPageEditor.TabLabel.Preview")); //$NON-NLS-1$
 				setPartName(visualEditor.getTitle());
 			}
 		} catch (PartInitException e) {

@@ -10,7 +10,6 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.context;
 
-import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 
 import org.eclipse.core.resources.IProject;
@@ -19,8 +18,9 @@ import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.ServerCore;
-import org.eclipse.wst.server.core.internal.*;
-
+import org.eclipse.wst.server.core.internal.Module;
+import org.eclipse.wst.server.core.internal.ModuleFactory;
+import org.eclipse.wst.server.core.internal.ServerPlugin;
 import org.jboss.tools.common.model.options.Preference;
 import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
@@ -34,14 +34,8 @@ public class RegisterServerContext {
 	
 	static String HELP_KEY_BASE = "FileSystems_RegisterInServerXML"; //$NON-NLS-1$
 	
-	static final private String ERR_APP_NAME_IS_NOT_SPECIFIED     = "ERR_APP_NAME_IS_NOT_SPECIFIED"; //$NON-NLS-1$
-	static final private String ERR_SERVLET_VERSION_IS_NOT_SET    = "ERR_SERVLET_VERSION_IS_NOT_SET"; //$NON-NLS-1$
-	static final private String ERR_SERVLET_VERSION_IS_NOT_VALID  = "ERR_SERVLET_VERSION_IS_NOT_VALID"; //$NON-NLS-1$
-
 	IProject project = null;
 	String servletVersion = "";	 //$NON-NLS-1$
-	
-	static final private ResourceBundle MESSAGES = ResourceBundle.getBundle(RegisterServerContext.class.getName());
 	
 		int mode; 
 	boolean isEnabled = false;
@@ -146,13 +140,13 @@ public class RegisterServerContext {
 
 		if(!isEnabled()) {
 			if(servletVersion != null && servletVersion.length() == 0) {
-				return MESSAGES.getString(ERR_SERVLET_VERSION_IS_NOT_SET);
+				return Messages.getString("ERR_SERVLET_VERSION_IS_NOT_SET"); //$NON-NLS-1$
 			}
 		    return null;
 		}
 
 		if(applicationName == null || applicationName.length() == 0) {
-		    return MESSAGES.getString(ERR_APP_NAME_IS_NOT_SPECIFIED);
+		    return Messages.getString("ERR_APP_NAME_IS_NOT_SPECIFIED"); //$NON-NLS-1$
 		}
 		
 		if(true) {
@@ -176,9 +170,9 @@ public class RegisterServerContext {
 				}
 			}
 			if(servletVersion != null && servletVersion.length() == 0) {
-				return MESSAGES.getString(ERR_SERVLET_VERSION_IS_NOT_SET);
+				return Messages.getString("ERR_SERVLET_VERSION_IS_NOT_SET"); //$NON-NLS-1$
 			} else if(!checkServletVersionFormat()) {
-				return MESSAGES.getString(ERR_SERVLET_VERSION_IS_NOT_VALID);				
+				return Messages.getString("ERR_SERVLET_VERSION_IS_NOT_VALID");				 //$NON-NLS-1$
 			}
 			return null;
 		}

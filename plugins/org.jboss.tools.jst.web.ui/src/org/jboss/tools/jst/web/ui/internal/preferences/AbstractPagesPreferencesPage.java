@@ -34,7 +34,13 @@ import org.jboss.tools.jst.web.project.helpers.AbstractWebProjectTemplate;
  * @author Gavrs
  */
 public abstract class AbstractPagesPreferencesPage  extends PreferencePage implements IWorkbenchPreferencePage {
+	/**
+	 * @deprecated use bundle via Messages.getString()
+	 */
 	public static final String BUNDLE_NAME = "preferences"; 
+	/**
+	 * @deprecated use bundle via Messages.getString()
+	 */
 	public static  ResourceBundle BUNDLE = ResourceBundle.getBundle(AbstractPagesPreferencesPage.class.getPackage().getName() + "." + BUNDLE_NAME); 
 	protected AbstractWebProjectTemplate helper;
 	protected String[] pages;
@@ -77,7 +83,7 @@ public abstract class AbstractPagesPreferencesPage  extends PreferencePage imple
 		String[] pageLabels = new String[pages == null ? 0 : pages.length];
 		for (int i = 0; pageLabels != null && i < pageLabels.length; i++) {
 			pageLabels[i] = pages[i];
-			if (pages[i].equals(defaultPage)) pageLabels[i] += " " + BUNDLE.getString("AbstractPagesPreferencePage.3");
+			if (pages[i].equals(defaultPage)) pageLabels[i] += " " + Messages.getString("AbstractPagesPreferencePage.3");
 		}
 		return pageLabels;
  	}
@@ -109,14 +115,14 @@ public abstract class AbstractPagesPreferencesPage  extends PreferencePage imple
 		listPages.setLayoutData(gridDataList);
 		
 	    addButtonPages = new Button(entryPage, SWT.PUSH);
-		addButtonPages.setText(BUNDLE.getString("AbstractPagesPreferencePage.0"));
+		addButtonPages.setText(Messages.getString("AbstractPagesPreferencePage.0"));
 		GridData gridDataAddButton = new GridData(GridData.HORIZONTAL_ALIGN_END);
 		gridDataAddButton.widthHint = widthHint;
 		gridDataAddButton.heightHint=heightHint;
 		addButtonPages.setLayoutData(gridDataAddButton);
 
 		removeButton = new Button(entryPage, SWT.PUSH);
-		removeButton.setText(BUNDLE.getString("AbstractPagesPreferencePage.1"));
+		removeButton.setText(Messages.getString("AbstractPagesPreferencePage.1"));
 		GridData gridDataRemoveButton = new GridData(GridData.HORIZONTAL_ALIGN_END);
 		gridDataRemoveButton.widthHint = widthHint;
 		gridDataRemoveButton.heightHint=heightHint;
@@ -127,7 +133,7 @@ public abstract class AbstractPagesPreferencesPage  extends PreferencePage imple
 		
 		if (isSetDefaultAllowed()) {
 			setDefaultButton = new Button(entryPage, SWT.PUSH);
-			setDefaultButton.setText(BUNDLE.getString("AbstractPagesPreferencePage.2"));
+			setDefaultButton.setText(Messages.getString("AbstractPagesPreferencePage.2"));
 			GridData gridDataSetDefaultButton = new GridData(GridData.HORIZONTAL_ALIGN_END);
 			gridDataSetDefaultButton.widthHint = widthHint;
 			gridDataSetDefaultButton.heightHint=heightHint;

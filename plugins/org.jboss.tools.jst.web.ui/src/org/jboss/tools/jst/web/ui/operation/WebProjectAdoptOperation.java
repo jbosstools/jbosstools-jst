@@ -15,7 +15,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Properties;
-import java.util.ResourceBundle;
 
 import org.apache.xml.serialize.OutputFormat;
 import org.apache.xml.serialize.XMLSerializer;
@@ -23,8 +22,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.w3c.dom.Element;
-
 import org.jboss.tools.common.model.ServiceDialog;
 import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
@@ -33,8 +30,9 @@ import org.jboss.tools.common.model.project.IModelNature;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.util.XMLUtil;
 import org.jboss.tools.common.util.FileUtil;
-import org.jboss.tools.jst.web.context.*;
+import org.jboss.tools.jst.web.context.IImportWebProjectContext;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
+import org.w3c.dom.Element;
 
 public abstract class WebProjectAdoptOperation extends WebNatureOperation {
 	protected IImportWebProjectContext context;
@@ -150,9 +148,8 @@ public abstract class WebProjectAdoptOperation extends WebNatureOperation {
 		if(dots == null) return true;
 
 		ServiceDialog d = PreferenceModelUtilities.getPreferenceModel().getService();
-		ResourceBundle bundle = ResourceBundle.getBundle(WebProjectCreationOperation.class.getName());
 		String message = MessageFormat.format(
-	        bundle.getString("ADOPT_WILL_OVERWRITE_DOT_FILES_MESSAGE"),new Object[]{dots} //$NON-NLS-1$
+	        Messages.getString("ADOPT_WILL_OVERWRITE_DOT_FILES_MESSAGE"),new Object[]{dots} //$NON-NLS-1$
 		);			
 		int q = d.showDialog("Warning", message, new String[]{"Continue", "Cancel"}, null, ServiceDialog.WARNING);
 		if(q != 0) return false;
@@ -175,9 +172,8 @@ public abstract class WebProjectAdoptOperation extends WebNatureOperation {
 		if(cs == null || cs.length == 0) return true;
 		
 		ServiceDialog d = PreferenceModelUtilities.getPreferenceModel().getService();
-		ResourceBundle bundle = ResourceBundle.getBundle(WebProjectCreationOperation.class.getName());
 		String message = MessageFormat.format(
-		    bundle.getString("ADOPT_WILL_CLEAR_WORKSPACE_MESSAGE"),new Object[]{getProject().getName()} //$NON-NLS-1$
+		    Messages.getString("ADOPT_WILL_CLEAR_WORKSPACE_MESSAGE"),new Object[]{getProject().getName()} //$NON-NLS-1$
 		);			
 		int q = d.showDialog("Warning", message, new String[]{"Continue", "Cancel"}, null, ServiceDialog.WARNING);
 		if(q != 0) return false;

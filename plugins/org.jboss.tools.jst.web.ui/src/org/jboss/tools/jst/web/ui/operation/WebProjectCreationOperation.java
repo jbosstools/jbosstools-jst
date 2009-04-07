@@ -14,14 +14,12 @@ import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Properties;
-import java.util.ResourceBundle;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-
 import org.jboss.tools.common.meta.action.XActionInvoker;
 import org.jboss.tools.common.model.ServiceDialog;
 import org.jboss.tools.common.model.XModel;
@@ -33,9 +31,9 @@ import org.jboss.tools.common.model.filesystems.impl.FileSystemImpl;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.common.model.project.IModelNature;
 import org.jboss.tools.common.model.project.ProjectHome;
+import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.util.FileUtil;
-import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.jst.web.context.RegisterServerContext;
 import org.jboss.tools.jst.web.model.helpers.WebAppHelper;
 import org.jboss.tools.jst.web.project.helpers.IWebProjectTemplate;
@@ -98,16 +96,16 @@ public abstract class WebProjectCreationOperation extends WebNatureOperation {
 		IModelNature strutsProject = (IModelNature)getProject().getNature(getNatureID());
 		model = strutsProject.getModel();
 		XModelObject fso = FileSystemsHelper.getFileSystems(model);
-		properties.setProperty("skipWizard", "yes");
-		properties.setProperty("name", getProject().getName());
-		XActionInvoker.invoke("CreateStrutsProject", fso, properties);
+		properties.setProperty("skipWizard", "yes");  //$NON-NLS-1$//$NON-NLS-2$
+		properties.setProperty("name", getProject().getName()); //$NON-NLS-1$
+		XActionInvoker.invoke("CreateStrutsProject", fso, properties); //$NON-NLS-1$
 		
-		XModelObject web = model.getByPath("Web");
+		XModelObject web = model.getByPath("Web"); //$NON-NLS-1$
 		if (web != null && properties.containsKey(NewWebProjectContext.ATTR_SERVLET_VERSION))
-			model.changeObjectAttribute(web, NewWebProjectContext.ATTR_SERVLET_VERSION, properties.getProperty("servlet version"));
+			model.changeObjectAttribute(web, NewWebProjectContext.ATTR_SERVLET_VERSION, properties.getProperty("servlet version")); //$NON-NLS-1$
 		XModelObject webxml = WebAppHelper.getWebApp(model);
 		if(webxml != null) {
-			model.changeObjectAttribute(webxml, "display-name", "" + getProject().getName());
+			model.changeObjectAttribute(webxml, "display-name", "" + getProject().getName()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 	
@@ -119,10 +117,10 @@ public abstract class WebProjectCreationOperation extends WebNatureOperation {
 	
 	protected void copyProjectFile(Properties p) {
 		String templateFolder = template.getProjectTemplatesLocation(
-				getProperty(TEMPLATE_VERSION_ID)) + "/" + 
-				getProperty(TEMPLATE_ID) + "/";
+				getProperty(TEMPLATE_VERSION_ID)) + "/" +  //$NON-NLS-1$
+				getProperty(TEMPLATE_ID) + "/"; //$NON-NLS-1$
 		File sf =  new File(templateFolder + IModelNature.PROJECT_FILE);
-		String tf = p.getProperty(NewWebProjectContext.ATTR_LOCATION) + "/" + IModelNature.PROJECT_FILE;
+		String tf = p.getProperty(NewWebProjectContext.ATTR_LOCATION) + "/" + IModelNature.PROJECT_FILE; //$NON-NLS-1$
 		if(sf.exists())	{
 			FileUtil.copyFile(sf, new File(tf), true);
 			projectFile = new File(tf);
@@ -145,8 +143,8 @@ public abstract class WebProjectCreationOperation extends WebNatureOperation {
 	
 	protected String getTemplateLocation() {
 		String fileName = template.getProjectTemplatesLocation(
-				getProperty(TEMPLATE_VERSION_ID)) + "/" +
-				getProperty(TEMPLATE_ID) + "/";
+				getProperty(TEMPLATE_VERSION_ID)) + "/" + //$NON-NLS-1$
+				getProperty(TEMPLATE_ID) + "/"; //$NON-NLS-1$
 		try {
 			return new File(fileName).getCanonicalPath();
 		} catch (IOException e) {
@@ -155,9 +153,21 @@ public abstract class WebProjectCreationOperation extends WebNatureOperation {
 		}
 	}
 
+	/**
+	 * @deprecated use bundle via Messages.getString()
+	 */
 	public static final String WARNING_MESSAGE = "COD_MESSAGE"; //$NON-NLS-1$
+	/**
+	 * @deprecated use bundle via Messages.getString()
+	 */
 	public static final String WARNING_TITLE   = "COD_TITLE"; //$NON-NLS-1$
+	/**
+	 * @deprecated use bundle via Messages.getString()
+	 */
 	public static final String BTN_CANCEL      = "BTN_CANCEL"; //$NON-NLS-1$
+	/**
+	 * @deprecated use bundle via Messages.getString()
+	 */
 	public static final String BTN_OK          = "BTN_OK"; //$NON-NLS-1$
 	
 	protected boolean checkOverwrite() {
@@ -171,16 +181,15 @@ public abstract class WebProjectCreationOperation extends WebNatureOperation {
 		if(cs != null && cs.length > 0) {
 			ServiceDialog dlg = PreferenceModelUtilities.getPreferenceModel().getService();
 			
-			ResourceBundle bundle = ResourceBundle.getBundle(WebProjectCreationOperation.class.getName());
 			
 			String message = MessageFormat.format(
-			        bundle.getString(WARNING_MESSAGE),new Object[]{location}
+			        Messages.getString("COD_MESSAGE"),new Object[]{location} //$NON-NLS-1$
 				);			
 			
 			int selAction = dlg.showDialog(
-				bundle.getString(WARNING_TITLE), 
+				Messages.getString("COD_TITLE"),  //$NON-NLS-1$
 				message, 
-				new String[]{bundle.getString(BTN_OK),bundle.getString(BTN_CANCEL)}, 
+				new String[]{Messages.getString("BTN_OK"),Messages.getString("BTN_CANCEL")},   //$NON-NLS-1$//$NON-NLS-2$
 				null, 
 				ServiceDialog.WARNING
 			);
@@ -198,7 +207,7 @@ public abstract class WebProjectCreationOperation extends WebNatureOperation {
 			WebUiPlugin.getPluginLog().logError(e);
 		}
 		if(templateModel != null) {
-			XModelObject o = FileSystemsHelper.getFileSystem(templateModel, "src");
+			XModelObject o = FileSystemsHelper.getFileSystem(templateModel, "src"); //$NON-NLS-1$
 			if(o instanceof FileSystemImpl) {
 				String s = ((FileSystemImpl)o).getAbsoluteLocation();
 				File f = new File(s);

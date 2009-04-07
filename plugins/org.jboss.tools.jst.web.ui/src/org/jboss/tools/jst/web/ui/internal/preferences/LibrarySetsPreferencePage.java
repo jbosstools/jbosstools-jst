@@ -28,7 +28,13 @@ import org.jboss.tools.jst.web.project.helpers.LibrarySets;
 public class LibrarySetsPreferencePage extends PreferencePage implements
 		IWorkbenchPreferencePage {
 	public static final String ID = "org.jboss.tools.common.xstudio.libsets";
+	/**
+	 * @deprecated use bundle via Messages.getString()
+	 */
 	public static final String BUNDLE_NAME = "preferences"; 
+	/**
+	 * @deprecated use bundle via Messages.getString()
+	 */
 	public static final ResourceBundle BUNDLE = ResourceBundle.getBundle(LibrarySetsPreferencePage.class.getPackage().getName() + "." + BUNDLE_NAME); 
 	String[] librarySets;
 	LibrarySets helper;
@@ -70,7 +76,7 @@ public class LibrarySetsPreferencePage extends PreferencePage implements
 		listLib.setLayoutData(gridDataList);
 		
 		Button addButtonLib = new Button(entryLib, SWT.PUSH);
-		addButtonLib.setText(BUNDLE.getString("LibrarySetsPreferencePage.0"));
+		addButtonLib.setText(Messages.getString("LibrarySetsPreferencePage.0"));
 		//addButtonLib.setText("Add");
 		GridData gridDataAddButton = new GridData(GridData.BEGINNING);
 		gridDataAddButton.widthHint = widthHint;
@@ -78,7 +84,7 @@ public class LibrarySetsPreferencePage extends PreferencePage implements
 		addButtonLib.setLayoutData(gridDataAddButton);
 
 	    removeButtonLib = new Button(entryLib, SWT.PUSH);
-		removeButtonLib.setText(BUNDLE.getString("LibrarySetsPreferencePage.1"));
+		removeButtonLib.setText(Messages.getString("LibrarySetsPreferencePage.1"));
 		GridData gridDataRemoveButton = new GridData(GridData.BEGINNING);
 		gridDataRemoveButton.widthHint = widthHint;
 		gridDataRemoveButton.heightHint = heightHint;
@@ -87,7 +93,7 @@ public class LibrarySetsPreferencePage extends PreferencePage implements
 		removeButtonLib.setEnabled(false);
 		
 		Label jarsIncludedLabel = new Label(entryLib, SWT.NONE);
-		jarsIncludedLabel.setText(BUNDLE.getString("LibrarySetsPreferencePage.jarsIncluded"));
+		jarsIncludedLabel.setText(Messages.getString("LibrarySetsPreferencePage.jarsIncluded"));
 		data = new GridData(GridData.FILL_HORIZONTAL);
 		data.horizontalSpan = 2;
 		jarsIncludedLabel.setLayoutData(data);
@@ -104,7 +110,7 @@ public class LibrarySetsPreferencePage extends PreferencePage implements
 		listLibJar.setLayoutData(gridDatalistLibJar);
 
 		addButtonLibJar = new Button(entryLib, SWT.PUSH);
-		addButtonLibJar.setText(BUNDLE.getString("LibrarySetsPreferencePage.0"));
+		addButtonLibJar.setText(Messages.getString("LibrarySetsPreferencePage.0"));
 		GridData gridDataAddButtonLibJar = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
 		gridDataAddButtonLibJar.widthHint = widthHint;
 		gridDataAddButtonLibJar.heightHint = heightHint;
@@ -112,7 +118,7 @@ public class LibrarySetsPreferencePage extends PreferencePage implements
 		addButtonLibJar.setEnabled(false);
 		
 		removeButtonLibJar = new Button(entryLib, SWT.PUSH);
-		removeButtonLibJar.setText(BUNDLE.getString("LibrarySetsPreferencePage.1"));
+		removeButtonLibJar.setText(Messages.getString("LibrarySetsPreferencePage.1"));
 		GridData gridDataRemoveButtonLibJar = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
 		gridDataRemoveButtonLibJar.widthHint = widthHint;
 		gridDataRemoveButtonLibJar.heightHint = heightHint;
