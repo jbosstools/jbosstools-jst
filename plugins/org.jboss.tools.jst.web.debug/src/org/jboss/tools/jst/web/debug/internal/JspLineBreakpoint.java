@@ -20,6 +20,7 @@ import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.internal.debug.core.breakpoints.JavaPatternBreakpoint;
 import org.eclipse.jdt.internal.debug.core.model.JDIDebugTarget;
 import org.eclipse.jdt.internal.debug.core.model.JDIThread;
+import org.eclipse.osgi.util.NLS;
 
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.jst.web.WebUtils;
@@ -147,7 +148,7 @@ public class JspLineBreakpoint extends JavaPatternBreakpoint implements IBreakpo
 
 	public String getLabelText() {
 		try {
-			return DebugMessages.getString("JspLineBreakpoint.name", new String[]{getPattern(), "" + getLineNumber()}); //$NON-NLS-1$ //$NON-NLS-2$
+			return NLS.bind(DebugMessages.JspLineBreakpoint_name, (new String[]{getPattern(), "" + getLineNumber()})); 
 		} catch (CoreException e) {
 			ModelPlugin.getPluginLog().logError(e);
 			return "error";

@@ -10,33 +10,40 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.debug;
 
-import java.text.MessageFormat;
-import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-public class DebugMessages {
+import org.eclipse.osgi.util.NLS;
 
-	private static final String RESOURCE_BUNDLE = "org.jboss.tools.jst.web.debug.DebugMessages";
+public final class DebugMessages extends NLS {
 
-	private static ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BUNDLE);
+	private static final String BUNDLE_NAME = "org.jboss.tools.jst.web.debug.DebugMessages";//$NON-NLS-1$
 
 	private DebugMessages() {
+		// Do not instantiate
 	}
 
-	public static String getString(String key) {
-		try {
-			return resourceBundle.getString(key);
-		} catch (MissingResourceException e) {
-			WebDebugPlugin.getPluginLog().logError(e);
-			return "%"+key+"%";
-		}
+	public static String ActionEnterBreakpoint_name;
+	public static String ActionFormPopulateBreakpoint_name;
+	public static String ActionFormValidateBreakpoint_name;
+	public static String ActionForwardBreakpoint_name;
+	public static String ActionTilesDefinitionForwardBreakpoint_name;
+	public static String ActionIncludeBreakpoint_name;
+	public static String ActionExceptionBreakpoint_name;
+	public static String GlobalExceptionBreakpoint_name;
+	public static String GlobalForwardBreakpoint_name;
+	public static String TilesDefinitionGlobalForwardBreakpoint_name;
+	public static String PageEnterBreakpoint_name;
+	public static String JspLineBreakpoint_name;
+
+	static {
+		NLS.initializeMessages(BUNDLE_NAME, DebugMessages.class);
 	}
 
-	public static String getString(String key, String[] args) {
-		return MessageFormat.format(getString(key), args);	
-	}	
-
+	/**
+	 * @deprecated use the string fields of the NLS subclass
+	 */
 	public static ResourceBundle getResourceBundle() {
-		return resourceBundle;
+		return ResourceBundle.getBundle(BUNDLE_NAME);
 	}
+
 }
