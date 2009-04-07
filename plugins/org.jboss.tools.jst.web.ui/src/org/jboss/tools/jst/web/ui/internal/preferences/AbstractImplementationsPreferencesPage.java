@@ -127,10 +127,10 @@ public class AbstractImplementationsPreferencesPage extends PreferencePage imple
 		heightHint = convertVerticalDLUsToPixels(14 /*IDialogConstants.BUTTON_HEIGHT*/);
 		widthHint = convertHorizontalDLUsToPixels(IDialogConstants.BUTTON_WIDTH);		
 		
-		addButtonImpl = createButton(impl, Messages.getString("ImplementationsPreferencesPage.Add")); //$NON-NLS-1$
+		addButtonImpl = createButton(impl, Messages.ImplementationsPreferencesPage_Add); //$NON-NLS-1$
 		if (errorMessage != null) addButtonImpl.setEnabled(false);
 
-		removeButtonImpl = createButton(impl, Messages.getString("ImplementationsPreferencesPage.Remove")); //$NON-NLS-1$
+		removeButtonImpl = createButton(impl, Messages.ImplementationsPreferencesPage_Remove); //$NON-NLS-1$
 		removeButtonImpl.setEnabled(false);		
 
 		// TabFolder
@@ -139,10 +139,10 @@ public class AbstractImplementationsPreferencesPage extends PreferencePage imple
 		tabbedComposite.setLayoutData(gridDataTab);
 		
 		TabItem librariesTab = new TabItem(tabbedComposite,SWT.NULL);
-		librariesTab.setText(Messages.getString("ImplementationsPreferencesPage.Library.Sets")); //$NON-NLS-1$
+		librariesTab.setText(Messages.ImplementationsPreferencesPage_Library_Sets); //$NON-NLS-1$
 		
 		TabItem projectTab = new TabItem(tabbedComposite,SWT.NULL);
-		projectTab.setText(Messages.getString("ImplementationsPreferencesPage.Project.Templates")); //$NON-NLS-1$
+		projectTab.setText(Messages.ImplementationsPreferencesPage_Project_Templates); //$NON-NLS-1$
 
 		// listLibraries		
 		Composite entryLibraries = new Composite(tabbedComposite, SWT.NULL);
@@ -156,10 +156,10 @@ public class AbstractImplementationsPreferencesPage extends PreferencePage imple
 		listLibraries.setLayoutData(gridDataListLibraries);
 			
 
-		addButtonLibraries = createButton(entryLibraries, Messages.getString("ImplementationsPreferencesPage.Add")); //$NON-NLS-1$
+		addButtonLibraries = createButton(entryLibraries, Messages.ImplementationsPreferencesPage_Add); //$NON-NLS-1$
 		addButtonLibraries.setEnabled(false);		
 
-		removeButtonLibraries = createButton(entryLibraries, Messages.getString("ImplementationsPreferencesPage.Remove")); //$NON-NLS-1$
+		removeButtonLibraries = createButton(entryLibraries, Messages.ImplementationsPreferencesPage_Remove); //$NON-NLS-1$
 		removeButtonLibraries.setEnabled(false);		
 
 		librariesTab.setControl(entryLibraries);
@@ -176,23 +176,21 @@ public class AbstractImplementationsPreferencesPage extends PreferencePage imple
 		listProject.setLayoutData(gridDataListProject);
 			
 
-		addButtonProject = createButton(entryProject, Messages.getString("ImplementationsPreferencesPage.Add")); //$NON-NLS-1$
+		addButtonProject = createButton(entryProject, Messages.ImplementationsPreferencesPage_Add); //$NON-NLS-1$
 		addButtonProject.setEnabled(false);
 		
-		editButtonProject = createButton(entryProject, Messages.getString("ImplementationsPreferencesPage.Edit")); //$NON-NLS-1$
+		editButtonProject = createButton(entryProject, Messages.ImplementationsPreferencesPage_Edit); //$NON-NLS-1$
 		editButtonProject.setEnabled(false);
 		
-		upButtonProject = createButton(entryProject, Messages
-				.getString("ImplementationsPreferencesPage.Up")); //$NON-NLS-1$
+		upButtonProject = createButton(entryProject, Messages.ImplementationsPreferencesPage_Up); //$NON-NLS-1$
 		upButtonProject.setEnabled(false);
 		GridData d = (GridData)upButtonProject.getLayoutData();
 		d.verticalIndent = 5;
 
-		downButtonProject = createButton(entryProject, Messages
-				.getString("ImplementationsPreferencesPage.Down")); //$NON-NLS-1$
+		downButtonProject = createButton(entryProject, Messages.ImplementationsPreferencesPage_Down); //$NON-NLS-1$
 		downButtonProject.setEnabled(false);
 
-		removeButtonProject = createButton(entryProject, Messages.getString("ImplementationsPreferencesPage.Remove")); //$NON-NLS-1$
+		removeButtonProject = createButton(entryProject, Messages.ImplementationsPreferencesPage_Remove); //$NON-NLS-1$
 		removeButtonProject.setEnabled(false);
 		d = (GridData)removeButtonProject.getLayoutData();
 		d.verticalIndent = 5;

@@ -83,7 +83,7 @@ public abstract class AbstractPagesPreferencesPage  extends PreferencePage imple
 		String[] pageLabels = new String[pages == null ? 0 : pages.length];
 		for (int i = 0; pageLabels != null && i < pageLabels.length; i++) {
 			pageLabels[i] = pages[i];
-			if (pages[i].equals(defaultPage)) pageLabels[i] += " " + Messages.getString("AbstractPagesPreferencePage.3");
+			if (pages[i].equals(defaultPage)) pageLabels[i] += " " + Messages.AbstractPagesPreferencePage_3;
 		}
 		return pageLabels;
  	}
@@ -115,14 +115,14 @@ public abstract class AbstractPagesPreferencesPage  extends PreferencePage imple
 		listPages.setLayoutData(gridDataList);
 		
 	    addButtonPages = new Button(entryPage, SWT.PUSH);
-		addButtonPages.setText(Messages.getString("AbstractPagesPreferencePage.0"));
+		addButtonPages.setText(Messages.AbstractPagesPreferencePage_0);
 		GridData gridDataAddButton = new GridData(GridData.HORIZONTAL_ALIGN_END);
 		gridDataAddButton.widthHint = widthHint;
 		gridDataAddButton.heightHint=heightHint;
 		addButtonPages.setLayoutData(gridDataAddButton);
 
 		removeButton = new Button(entryPage, SWT.PUSH);
-		removeButton.setText(Messages.getString("AbstractPagesPreferencePage.1"));
+		removeButton.setText(Messages.AbstractPagesPreferencePage_1);
 		GridData gridDataRemoveButton = new GridData(GridData.HORIZONTAL_ALIGN_END);
 		gridDataRemoveButton.widthHint = widthHint;
 		gridDataRemoveButton.heightHint=heightHint;
@@ -133,7 +133,7 @@ public abstract class AbstractPagesPreferencesPage  extends PreferencePage imple
 		
 		if (isSetDefaultAllowed()) {
 			setDefaultButton = new Button(entryPage, SWT.PUSH);
-			setDefaultButton.setText(Messages.getString("AbstractPagesPreferencePage.2"));
+			setDefaultButton.setText(Messages.AbstractPagesPreferencePage_2);
 			GridData gridDataSetDefaultButton = new GridData(GridData.HORIZONTAL_ALIGN_END);
 			gridDataSetDefaultButton.widthHint = widthHint;
 			gridDataSetDefaultButton.heightHint=heightHint;
