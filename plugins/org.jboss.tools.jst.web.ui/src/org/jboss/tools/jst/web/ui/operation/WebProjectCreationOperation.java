@@ -183,13 +183,13 @@ public abstract class WebProjectCreationOperation extends WebNatureOperation {
 			
 			
 			String message = MessageFormat.format(
-			        Messages.getString("COD_MESSAGE"),new Object[]{location} //$NON-NLS-1$
+			        Messages.COD_MESSAGE,new Object[]{location} 
 				);			
 			
 			int selAction = dlg.showDialog(
-				Messages.getString("COD_TITLE"),  //$NON-NLS-1$
+				Messages.COD_TITLE,  
 				message, 
-				new String[]{Messages.getString("BTN_OK"),Messages.getString("BTN_CANCEL")},   //$NON-NLS-1$//$NON-NLS-2$
+				new String[]{Messages.BTN_OK,Messages.BTN_CANCEL},   
 				null, 
 				ServiceDialog.WARNING
 			);

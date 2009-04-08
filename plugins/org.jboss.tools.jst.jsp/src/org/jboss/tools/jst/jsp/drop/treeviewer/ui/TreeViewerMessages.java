@@ -7,30 +7,40 @@
  *
  * Contributors:
  *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
- ******************************************************************************/ 
+ ******************************************************************************/
 package org.jboss.tools.jst.jsp.drop.treeviewer.ui;
 
-import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import org.jboss.tools.jst.jsp.JspEditorPlugin;
+import org.eclipse.osgi.util.NLS;
 
-public class TreeViewerMessages {
+public final class TreeViewerMessages extends NLS {
 
-	private static final String RESOURCE_BUNDLE = "org.jboss.tools.jst.jsp.drop.treeviewer.ui.TreeViewerMessages";
+	private static final String BUNDLE_NAME = "org.jboss.tools.jst.jsp.drop.treeviewer.ui.TreeViewerMessages";//$NON-NLS-1$
 
-	private static ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BUNDLE);
-
-	public static String getString(String key) {
-		try {
-			return resourceBundle.getString(key);
-		} catch (MissingResourceException e) {
-			JspEditorPlugin.getPluginLog().logError(e);
-			return "%" + key + "%";
-		}
+	private TreeViewerMessages() {
+		// Do not instantiate
 	}
 
+	public static String BundlesNameResourceElement_name;
+	public static String BundlesPropertiesResourceElement_name;
+	public static String EnumerationResourceElement_name;
+	public static String JsfVariablesResourceElement_name;
+	public static String ManagedBeanMethodResourceElement_name;
+	public static String ManagedBeansPropertiesResourceElement_name;
+	public static String ViewActionsResorceElement_name;
+
+	static {
+		NLS.initializeMessages(BUNDLE_NAME, TreeViewerMessages.class);
+	}
+	
+
+	/**
+	 * @deprecated use the string fields
+	 * @return
+	 */
 	public static ResourceBundle getResourceBundle() {
-		return resourceBundle;
+		return ResourceBundle.getBundle(BUNDLE_NAME);
 	}
+
 }

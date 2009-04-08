@@ -149,7 +149,7 @@ public abstract class WebProjectAdoptOperation extends WebNatureOperation {
 
 		ServiceDialog d = PreferenceModelUtilities.getPreferenceModel().getService();
 		String message = MessageFormat.format(
-	        Messages.getString("ADOPT_WILL_OVERWRITE_DOT_FILES_MESSAGE"),new Object[]{dots} //$NON-NLS-1$
+	        Messages.ADOPT_WILL_OVERWRITE_DOT_FILES_MESSAGE,new Object[]{dots} 
 		);			
 		int q = d.showDialog("Warning", message, new String[]{"Continue", "Cancel"}, null, ServiceDialog.WARNING);
 		if(q != 0) return false;
@@ -173,7 +173,7 @@ public abstract class WebProjectAdoptOperation extends WebNatureOperation {
 		
 		ServiceDialog d = PreferenceModelUtilities.getPreferenceModel().getService();
 		String message = MessageFormat.format(
-		    Messages.getString("ADOPT_WILL_CLEAR_WORKSPACE_MESSAGE"),new Object[]{getProject().getName()} //$NON-NLS-1$
+		    Messages.ADOPT_WILL_CLEAR_WORKSPACE_MESSAGE,new Object[]{getProject().getName()} 
 		);			
 		int q = d.showDialog("Warning", message, new String[]{"Continue", "Cancel"}, null, ServiceDialog.WARNING);
 		if(q != 0) return false;

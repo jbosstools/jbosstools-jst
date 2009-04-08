@@ -88,13 +88,13 @@ public class AttributeValueLabelProvider extends LabelProvider {
 
 	private static Map texts = new HashMap();
 	static {
-		texts.put(BundlesNameResourceElement.class, TreeViewerMessages.getString("BundlesNameResourceElement.name"));
-		texts.put(BundlesPropertiesResourceElement.class, TreeViewerMessages.getString("BundlesPropertiesResourceElement.name"));
-		texts.put(EnumerationResourceElement.class, TreeViewerMessages.getString("EnumerationResourceElement.name"));
-		texts.put(JsfVariablesResourceElement.class, TreeViewerMessages.getString("JsfVariablesResourceElement.name"));
-		texts.put(ManagedBeanMethodResourceElement.class, TreeViewerMessages.getString("ManagedBeanMethodResourceElement.name"));
-		texts.put(ManagedBeansPropertiesResourceElement.class, TreeViewerMessages.getString("ManagedBeansPropertiesResourceElement.name"));
-		texts.put(ViewActionsResorceElement.class, TreeViewerMessages.getString("ViewActionsResorceElement.name"));
+		texts.put(BundlesNameResourceElement.class, TreeViewerMessages.BundlesNameResourceElement_name);
+		texts.put(BundlesPropertiesResourceElement.class, TreeViewerMessages.BundlesPropertiesResourceElement_name);
+		texts.put(EnumerationResourceElement.class, TreeViewerMessages.EnumerationResourceElement_name);
+		texts.put(JsfVariablesResourceElement.class, TreeViewerMessages.JsfVariablesResourceElement_name);
+		texts.put(ManagedBeanMethodResourceElement.class, TreeViewerMessages.ManagedBeanMethodResourceElement_name);
+		texts.put(ManagedBeansPropertiesResourceElement.class, TreeViewerMessages.ManagedBeansPropertiesResourceElement_name);
+		texts.put(ViewActionsResorceElement.class, TreeViewerMessages.ViewActionsResorceElement_name);
 	}
 
 	private Map imageCache = new HashMap();

@@ -15,6 +15,11 @@ import java.util.ResourceBundle;
 
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
+/*
+ * NB: The only reference to this file is an xclass in plugin.xml,
+ * and TLDEditorMessages.properties is empty.
+ */
+
 public class TLDEditorMessages {
 	private static final String RESOURCE_BUNDLE= "org.jboss.tools.jst.web.ui.editors.TLDEditorMessages";
 	
