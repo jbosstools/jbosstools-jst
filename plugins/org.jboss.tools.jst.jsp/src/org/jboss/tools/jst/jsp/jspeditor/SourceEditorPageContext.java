@@ -40,6 +40,8 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 	 * Contains information about taglibs on edited page
 	 */
 	private List<TaglibData> taglibs = null;
+	
+	private IDocument iDocument;
 	/**
 	 * Kb connector
 	 */
@@ -70,6 +72,7 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 		setConnector(null);
 		setReferenceNode(null);
 		setPageContext(null);
+		iDocument = null;
 	}
 
 	/**
@@ -89,16 +92,18 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 	 * @param iDocument
 	 */
 	public void setDocument(IDocument iDocument, Node refNode) {
+		this.iDocument = iDocument;
 		if(refNode != null) {
 			referenceNode = null; //TODO study when we really need refresh
 			setReferenceNode(refNode);			
 		} else {
-			List<TaglibData> taglibs = XmlUtil.getTaglibsForJSPDocument(iDocument, getIncludeTaglibs());
+			List<TaglibData> taglibs = getIncludeTaglibs();
 		//if we on jsp page we will set taglibs 
 		//TODO Max Areshkau Find other possibility to check if we on jsp page
 		// FIX FOR https://jira.jboss.org/jira/browse/JBIDE-3888 
 		// in some cases list of taglibs is not refreshed
-			if(taglibs != null /*&& taglibs.size()>0*/) {
+//			if(taglibs != null /*&& taglibs.size()>0*/) {
+			if(taglibs != null && taglibs.size()>0) {
 				setTaglibs(taglibs);
 			}
 		}
@@ -217,11 +222,16 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 	}
 
 	public List<TaglibData> getIncludeTaglibs() {
+		List<TaglibData> result = null;
 		if(getPageContext() != null) {
-			return getPageContext().getIncludeTaglibs();
+			result = getPageContext().getIncludeTaglibs();
 		} else {
-			return new ArrayList<TaglibData>();
+			result = new ArrayList<TaglibData>();
 		}
+		if(iDocument != null) {
+			result = XmlUtil.getTaglibsForJSPDocument(iDocument, result);
+		}
+		return result;
 	}
 		
 }
