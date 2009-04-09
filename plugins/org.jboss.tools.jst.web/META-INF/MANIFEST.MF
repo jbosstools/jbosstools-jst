@@ -1,9 +1,11 @@
 Manifest-Version: 1.0
+Eclipse-LazyStart: true
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name.0
 Bundle-ClassPath: web.jar
 Bundle-Activator: org.jboss.tools.jst.web.WebModelPlugin
 Bundle-Vendor: %providerName
+Plugin-Class: org.jboss.tools.jst.web.WebModelPlugin
 Bundle-SymbolicName: org.jboss.tools.jst.web;singleton:=true
 Bundle-Localization: plugin
 Require-Bundle: org.jboss.tools.common.model;visibility:=reexport,

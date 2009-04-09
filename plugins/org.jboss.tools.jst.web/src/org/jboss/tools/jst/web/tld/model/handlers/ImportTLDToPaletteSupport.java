@@ -14,6 +14,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
 
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.osgi.util.NLS;
 
 import org.jboss.tools.common.meta.action.impl.DefaultWizardDataValidator;
@@ -139,7 +142,13 @@ public class ImportTLDToPaletteSupport extends SpecialWizardSupport {
     class ImportTLDValidator extends DefaultWizardDataValidator {
     	public void validate(Properties data) {
     		message = null;
-    		XModelObject s = getSelectedResource(data.getProperty("tld")); //$NON-NLS-1$
+    		String tld = data.getProperty("tld");
+    		IStatus status = ResourcesPlugin.getWorkspace().validatePath(tld, IResource.FILE);
+    		if(status != null && !status.isOK()) {
+    			message = status.getMessage();
+    			return;
+    		}
+    		XModelObject s = getSelectedResource(tld); //$NON-NLS-1$
     		super.validate(data);
     		if(message != null) return;
     		String name = data.getProperty("name"); //$NON-NLS-1$
