@@ -155,102 +155,6 @@
       </editorContribution>
 
       <editorContribution 
-         id="AStructureSelectNext" 
-         targetID="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
-           <action
-                 actionID="org.eclipse.wst.sse.ui.structure.select.next"
-                 class="org.eclipse.wst.xml.ui.internal.selection.StructuredSelectNextXMLActionDelegate"
-                 definitionId="org.eclipse.wst.sse.ui.structure.select.next"
-                 id="StructureSelectNext"
-                 label="Next Element">
-           </action>
-      </editorContribution>
-      <editorContribution 
-         id="ACleanupDocument" 
-         targetID="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
-           <action
-                 actionID="org.eclipse.wst.sse.ui.cleanup.document"
-                 class="org.eclipse.wst.html.ui.internal.edit.ui.CleanupActionHTMLDelegate"
-                 definitionId="org.eclipse.wst.sse.ui.cleanup.document"
-                 id="CleanupDocument"
-                 label="Cleanup Document...">
-           </action>
-      </editorContribution>
-      <editorContribution 
-         id="AToggleComment" 
-         targetID="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
-           <action
-                 actionID="org.eclipse.wst.sse.ui.toggle.comment"
-                 class="org.eclipse.wst.xml.ui.internal.actions.ToggleCommentActionXMLDelegate"
-                 definitionId="org.eclipse.wst.sse.ui.toggle.comment"
-                 id="ToggleComment"
-                 menubarPath="sourceMenuId/sourceBegin"
-                 label="Toggle Comment">
-           </action>
-      </editorContribution>
-      <editorContribution 
-         id="AAddBlockComment" 
-         targetID="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
-           <action
-                 actionID="org.eclipse.wst.sse.ui.add.block.comment"
-                 class="org.eclipse.wst.xml.ui.internal.actions.AddBlockCommentActionXMLDelegate"
-                 definitionId="org.eclipse.wst.sse.ui.add.block.comment"
-                 id="AddBlockComment"
-                 menubarPath="sourceMenuId/sourceBegin"
-                 label="Add Block Comment">
-           </action>
-      </editorContribution>
-      <editorContribution 
-         id="ARemoveBlockComment" 
-         targetID="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
-           <action
-                 actionID="org.eclipse.wst.sse.ui.remove.block.comment"
-                 class="org.eclipse.wst.xml.ui.internal.actions.RemoveBlockCommentActionXMLDelegate"
-                 definitionId="org.eclipse.wst.sse.ui.remove.block.comment"
-                 id="RemoveBlockComment"
-                 menubarPath="sourceMenuId/sourceBegin"
-                 label="Remove Block Comment">
-           </action>
-      </editorContribution>
-      
-      <editorContribution 
-         id="HTMLToggleComment" 
-         targetID="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor">
-           <action
-                 actionID="org.eclipse.wst.sse.ui.toggle.comment"
-                 class="org.eclipse.wst.xml.ui.internal.actions.ToggleCommentActionXMLDelegate"
-                 definitionId="org.eclipse.wst.sse.ui.toggle.comment"
-                 id="ToggleComment"
-                 menubarPath="sourceMenuId/sourceBegin"
-                 label="Toggle Comment">
-           </action>
-      </editorContribution>
-      <editorContribution 
-         id="HTMLAddBlockComment" 
-         targetID="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor">
-           <action
-                 actionID="org.eclipse.wst.sse.ui.add.block.comment"
-                 class="org.eclipse.wst.xml.ui.internal.actions.AddBlockCommentActionXMLDelegate"
-                 definitionId="org.eclipse.wst.sse.ui.add.block.comment"
-                 id="AddBlockComment"
-                 menubarPath="sourceMenuId/sourceBegin"
-                 label="Add Block Comment">
-           </action>
-      </editorContribution>
-      <editorContribution 
-         id="HTMLRemoveBlockComment" 
-         targetID="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor">
-           <action
-                 actionID="org.eclipse.wst.sse.ui.remove.block.comment"
-                 class="org.eclipse.wst.xml.ui.internal.actions.RemoveBlockCommentActionXMLDelegate"
-                 definitionId="org.eclipse.wst.sse.ui.remove.block.comment"
-                 id="RemoveBlockComment"
-                 menubarPath="sourceMenuId/sourceBegin"
-                 label="Remove Block Comment">
-           </action>
-      </editorContribution>
-      
-      <editorContribution 
          id="ARenameElement" 
          targetID="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
            <action
@@ -270,50 +174,6 @@
                  definitionId="org.eclipse.jst.jsp.ui.refactor.move"
                  id="MoveElement"
                  label="Move">
-           </action>
-      </editorContribution>
-      <editorContribution 
-         id="AFindOccurrences" 
-         targetID="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
-           <action
-                 actionID="org.eclipse.wst.sse.ui.search.find.occurrences"
-                 class="org.eclipse.jst.jsp.ui.internal.java.search.JSPFindOccurrencesActionDelegate"
-                 definitionId="org.eclipse.wst.sse.ui.search.find.occurrences"
-                 id="FindOccurrences"
-                 label="Occurrences in File">
-           </action>
-      </editorContribution>
-      <editorContribution 
-         id="AStructureSelectEnclosing" 
-         targetID="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
-           <action
-                 actionID="org.eclipse.wst.sse.ui.structure.select.enclosing"
-                 class="org.eclipse.wst.xml.ui.internal.selection.StructuredSelectEnclosingXMLActionDelegate"
-                 definitionId="org.eclipse.wst.sse.ui.structure.select.enclosing"
-                 id="StructureSelectEnclosing"
-                 label="Enclosing Element">
-           </action>
-      </editorContribution>
-      <editorContribution 
-         id="AStructureSelectPrevious" 
-         targetID="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
-           <action
-                 actionID="org.eclipse.wst.sse.ui.structure.select.previous"
-                 class="org.eclipse.wst.xml.ui.internal.selection.StructuredSelectPreviousXMLActionDelegate"
-                 definitionId="org.eclipse.wst.sse.ui.structure.select.previous"
-                 id="StructureSelectPrevious"
-                 label="Previous Element">
-           </action>
-      </editorContribution>
-      <editorContribution 
-         id="AStructureSelectHistory" 
-         targetID="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
-           <action
-                 actionID="org.eclipse.wst.sse.ui.structure.select.last"
-                 class="org.eclipse.wst.sse.ui.internal.selection.StructuredSelectHistoryActionDelegate"
-                 definitionId="org.eclipse.wst.sse.ui.structure.select.last"
-                 id="StructureSelectHistory"
-                 label="Restore Last Selection">
            </action>
       </editorContribution>-->
       <editorContribution
@@ -353,7 +213,7 @@
 			         mnemonic="%command.toggle.comment.mnemonic"
 			         style="push">
 				<visibleWhen checkEnabled="false">
-					<reference definitionId="org.jboss.tools.ui.sourceMenu"/>
+					<reference definitionId="org.jboss.tools.ui.structuredEditor"/>
 				</visibleWhen>
 			</command>
 			<command commandId="org.eclipse.wst.sse.ui.add.block.comment"
@@ -361,7 +221,7 @@
 			         mnemonic="%command.add.block.comment.mnemonic"
 			         style="push">
 				<visibleWhen checkEnabled="false">
-					<reference definitionId="org.jboss.tools.ui.sourceMenu"/>
+					<reference definitionId="org.jboss.tools.ui.structuredEditor"/>
 				</visibleWhen>
 			</command>
 			<command commandId="org.eclipse.wst.sse.ui.remove.block.comment"
@@ -369,7 +229,7 @@
 			         mnemonic="%command.remove.block.comment.mnemonic"
 			         style="push">
 				<visibleWhen checkEnabled="false">
-					<reference definitionId="org.jboss.tools.ui.sourceMenu"/>
+					<reference definitionId="org.jboss.tools.ui.structuredEditor"/>
 				</visibleWhen>
 			</command>
 			</menuContribution>
@@ -381,56 +241,96 @@
              class="org.eclipse.wst.xml.ui.internal.handlers.ToggleCommentHandler"
              commandId="org.eclipse.wst.sse.ui.toggle.comment">
           <activeWhen>
-              <reference definitionId="org.jboss.tools.ui.sourceMenu"/>
+              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
           </activeWhen>
           <enabledWhen>
-              <reference definitionId="org.jboss.tools.ui.sourceMenu"/>
+              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
           </enabledWhen>
        </handler>
        <handler
              class="org.eclipse.wst.xml.ui.internal.handlers.AddBlockCommentHandler"
              commandId="org.eclipse.wst.sse.ui.add.block.comment">
           <activeWhen>
-              <reference definitionId="org.jboss.tools.ui.sourceMenu"/>
+              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
           </activeWhen>
           <enabledWhen>
-              <reference definitionId="org.jboss.tools.ui.sourceMenu"/>
+              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
           </enabledWhen>
        </handler>
        <handler
              class="org.eclipse.wst.xml.ui.internal.handlers.RemoveBlockCommentHandler"
              commandId="org.eclipse.wst.sse.ui.remove.block.comment">
           <activeWhen>
-              <reference definitionId="org.jboss.tools.ui.sourceMenu"/>
+              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
           </activeWhen>
           <enabledWhen>
-              <reference definitionId="org.jboss.tools.ui.sourceMenu"/>
+              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
           </enabledWhen>
        </handler>
        <handler
              class="org.eclipse.jst.jsp.ui.internal.handlers.JSPFindOccurrencesHandler"
              commandId="org.eclipse.wst.sse.ui.search.find.occurrences">
              <activeWhen>
-              <reference definitionId="org.jboss.tools.ui.sourceMenu"/>
+              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
           </activeWhen>
           <enabledWhen>
-              <reference definitionId="org.jboss.tools.ui.sourceMenu"/>
+              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
           </enabledWhen>
        </handler>
        <handler
              class="org.eclipse.wst.html.ui.internal.edit.ui.CleanupDocumentHandler"
              commandId="org.eclipse.wst.sse.ui.cleanup.document">
              <activeWhen>
-                    <reference definitionId="org.jboss.tools.ui.sourceMenu"/>
+                    <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
              </activeWhen>
              <enabledWhen>
-                    <reference definitionId="org.jboss.tools.ui.sourceMenu"/>
+                    <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
              </enabledWhen>
+       </handler>
+              <handler
+             class="org.eclipse.wst.xml.ui.internal.handlers.StructuredSelectEnclosingXMLHandler"
+             commandId="org.eclipse.wst.sse.ui.structure.select.enclosing">
+          <activeWhen>
+              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
+          </activeWhen>
+          <enabledWhen>
+              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
+          </enabledWhen>
+       </handler>
+       <handler
+             class="org.eclipse.wst.xml.ui.internal.handlers.StructuredSelectNextXMLHandler"
+             commandId="org.eclipse.wst.sse.ui.structure.select.next">
+          <activeWhen>
+              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
+          </activeWhen>
+          <enabledWhen>
+              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
+          </enabledWhen>
+       </handler>
+       <handler
+             class="org.eclipse.wst.xml.ui.internal.handlers.StructuredSelectPreviousXMLHandler"
+             commandId="org.eclipse.wst.sse.ui.structure.select.previous">
+          <activeWhen>
+              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
+          </activeWhen>
+          <enabledWhen>
+              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
+          </enabledWhen>
+       </handler>
+       <handler
+             class="org.eclipse.wst.sse.ui.internal.handlers.StructuredSelectHistoryHandler"
+             commandId="org.eclipse.wst.sse.ui.structure.select.last">
+          <activeWhen>
+              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
+          </activeWhen>
+          <enabledWhen>
+              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
+          </enabledWhen>
        </handler>
        </extension>
 
 	<extension point="org.eclipse.core.expressions.definitions">
-			<definition id="org.jboss.tools.ui.sourceMenu">
+			<definition id="org.jboss.tools.ui.structuredEditor">
 				<and>
 					<with variable="activeContexts">
 						<iterate operator="or">
