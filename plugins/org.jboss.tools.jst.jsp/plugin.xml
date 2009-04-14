@@ -348,21 +348,12 @@
    <extension
          point="org.eclipse.ui.menus">
          <menuContribution locationURI="menu:sourceMenuId?after=sourceBegin">
-         
-          <action
-                 actionID="org.eclipse.wst.sse.ui.toggle.comment"
-                 class="org.eclipse.wst.xml.ui.internal.actions.ToggleCommentActionXMLDelegate"
-                 definitionId="org.eclipse.wst.sse.ui.toggle.comment"
-                 id="ToggleComment"
-                 menubarPath="sourceMenuId/sourceBegin"
-                 label="Toggle Comment">
-           </action>
 			<command commandId="org.eclipse.wst.sse.ui.toggle.comment"
 			         id="ToggleComment"
 			         mnemonic="%command.toggle.comment.mnemonic"
 			         style="push">
 				<visibleWhen checkEnabled="false">
-					<reference definitionId="org.jboss.tools.ui.comments"/>
+					<reference definitionId="org.jboss.tools.ui.sourceMenu"/>
 				</visibleWhen>
 			</command>
 			<command commandId="org.eclipse.wst.sse.ui.add.block.comment"
@@ -370,7 +361,7 @@
 			         mnemonic="%command.add.block.comment.mnemonic"
 			         style="push">
 				<visibleWhen checkEnabled="false">
-					<reference definitionId="org.jboss.tools.ui.comments"/>
+					<reference definitionId="org.jboss.tools.ui.sourceMenu"/>
 				</visibleWhen>
 			</command>
 			<command commandId="org.eclipse.wst.sse.ui.remove.block.comment"
@@ -378,7 +369,7 @@
 			         mnemonic="%command.remove.block.comment.mnemonic"
 			         style="push">
 				<visibleWhen checkEnabled="false">
-					<reference definitionId="org.jboss.tools.ui.comments"/>
+					<reference definitionId="org.jboss.tools.ui.sourceMenu"/>
 				</visibleWhen>
 			</command>
 			</menuContribution>
@@ -390,36 +381,56 @@
              class="org.eclipse.wst.xml.ui.internal.handlers.ToggleCommentHandler"
              commandId="org.eclipse.wst.sse.ui.toggle.comment">
           <activeWhen>
-              <reference definitionId="org.jboss.tools.ui.comments"/>
+              <reference definitionId="org.jboss.tools.ui.sourceMenu"/>
           </activeWhen>
           <enabledWhen>
-              <reference definitionId="org.jboss.tools.ui.comments"/>
+              <reference definitionId="org.jboss.tools.ui.sourceMenu"/>
           </enabledWhen>
        </handler>
        <handler
              class="org.eclipse.wst.xml.ui.internal.handlers.AddBlockCommentHandler"
              commandId="org.eclipse.wst.sse.ui.add.block.comment">
           <activeWhen>
-              <reference definitionId="org.jboss.tools.ui.comments"/>
+              <reference definitionId="org.jboss.tools.ui.sourceMenu"/>
           </activeWhen>
           <enabledWhen>
-              <reference definitionId="org.jboss.tools.ui.comments"/>
+              <reference definitionId="org.jboss.tools.ui.sourceMenu"/>
           </enabledWhen>
        </handler>
        <handler
              class="org.eclipse.wst.xml.ui.internal.handlers.RemoveBlockCommentHandler"
              commandId="org.eclipse.wst.sse.ui.remove.block.comment">
           <activeWhen>
-              <reference definitionId="org.jboss.tools.ui.comments"/>
+              <reference definitionId="org.jboss.tools.ui.sourceMenu"/>
           </activeWhen>
           <enabledWhen>
-              <reference definitionId="org.jboss.tools.ui.comments"/>
+              <reference definitionId="org.jboss.tools.ui.sourceMenu"/>
           </enabledWhen>
+       </handler>
+       <handler
+             class="org.eclipse.jst.jsp.ui.internal.handlers.JSPFindOccurrencesHandler"
+             commandId="org.eclipse.wst.sse.ui.search.find.occurrences">
+             <activeWhen>
+              <reference definitionId="org.jboss.tools.ui.sourceMenu"/>
+          </activeWhen>
+          <enabledWhen>
+              <reference definitionId="org.jboss.tools.ui.sourceMenu"/>
+          </enabledWhen>
+       </handler>
+       <handler
+             class="org.eclipse.wst.html.ui.internal.edit.ui.CleanupDocumentHandler"
+             commandId="org.eclipse.wst.sse.ui.cleanup.document">
+             <activeWhen>
+                    <reference definitionId="org.jboss.tools.ui.sourceMenu"/>
+             </activeWhen>
+             <enabledWhen>
+                    <reference definitionId="org.jboss.tools.ui.sourceMenu"/>
+             </enabledWhen>
        </handler>
        </extension>
 
 	<extension point="org.eclipse.core.expressions.definitions">
-			<definition id="org.jboss.tools.ui.comments">
+			<definition id="org.jboss.tools.ui.sourceMenu">
 				<and>
 					<with variable="activeContexts">
 						<iterate operator="or">
