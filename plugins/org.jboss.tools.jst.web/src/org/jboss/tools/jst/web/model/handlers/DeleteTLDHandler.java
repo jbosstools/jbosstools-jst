@@ -11,6 +11,8 @@
 package org.jboss.tools.jst.web.model.handlers;
 
 import java.util.Properties;
+
+import org.eclipse.osgi.util.NLS;
 import org.jboss.tools.common.model.*;
 import org.jboss.tools.common.model.filesystems.impl.*;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
@@ -25,7 +27,7 @@ public class DeleteTLDHandler extends DeleteFileHandler {
 			String checkboxMessage = WebUIMessages.DELETE_REFERENCE_FROM_WEBDESCRIPTOR;
 			ServiceDialog d = object.getModel().getService();
 			Properties pd = new Properties();
-			String message = WebUIMessages.DELETE + FileAnyImpl.toFileName(object);
+			String message = NLS.bind(WebUIMessages.DELETE_FILENAME, FileAnyImpl.toFileName(object));
 			pd.setProperty(ServiceDialog.DIALOG_MESSAGE, message);
 			pd.setProperty(ServiceDialog.CHECKBOX_MESSAGE, checkboxMessage);
 			pd.put(ServiceDialog.CHECKED, Boolean.TRUE);

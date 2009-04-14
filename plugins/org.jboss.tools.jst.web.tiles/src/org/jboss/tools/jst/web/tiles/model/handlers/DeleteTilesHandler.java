@@ -11,6 +11,8 @@
 package org.jboss.tools.jst.web.tiles.model.handlers;
 
 import java.util.Properties;
+
+import org.eclipse.osgi.util.NLS;
 import org.jboss.tools.common.model.ServiceDialog;
 import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
@@ -26,14 +28,14 @@ public class DeleteTilesHandler extends DeleteFileHandler {
 		if(TilesRegistrationHelper.isRegistered(object.getModel(), object)) {
 			String nature = TilesRegistrationHelper.getRegistratorNature(object.getModel());
 			String checkboxMessage = null;
-			if(nature != null && nature.indexOf("jsf") >= 0) { 
+			if(nature != null && nature.indexOf("jsf") >= 0) {  //$NON-NLS-1$
 				checkboxMessage = WebUIMessages.DELETE_REFERENCE_FROM_WEBDESCRIPTOR;
 			} else {
 				checkboxMessage = WebUIMessages.DELETE_REFERENCE_FROM_STRUTS_CONFIGURATION_FILE;
 			}
 			ServiceDialog d = object.getModel().getService();
 			Properties pd = new Properties();
-			String message = WebUIMessages.DELETE + FileAnyImpl.toFileName(object);
+			String message = NLS.bind(WebUIMessages.DELETE_FILENAME, FileAnyImpl.toFileName(object));
 			pd.setProperty(ServiceDialog.DIALOG_MESSAGE, message);
 			pd.setProperty(ServiceDialog.CHECKBOX_MESSAGE, checkboxMessage);
 			pd.put(ServiceDialog.CHECKED, Boolean.TRUE);

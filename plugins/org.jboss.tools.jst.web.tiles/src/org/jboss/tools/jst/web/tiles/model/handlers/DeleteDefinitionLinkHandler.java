@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.tiles.model.handlers;
 
 import java.util.Properties;
 
+import org.eclipse.osgi.util.NLS;
 import org.jboss.tools.common.meta.action.impl.AbstractHandler;
 import org.jboss.tools.common.model.ServiceDialog;
 import org.jboss.tools.common.model.XModelException;
@@ -24,7 +25,7 @@ public class DeleteDefinitionLinkHandler extends AbstractHandler {
     	String s = object.getAttributeValue("extends"); //$NON-NLS-1$
         if(s == null || s.length() == 0) return;
         ServiceDialog d = object.getModel().getService();
-        int i = d.showDialog(WebUIMessages.CONFIRMATION, WebUIMessages.YOU_WANT_TO_DELETE_LINK_TO + s, new String[]{WebUIMessages.OK, WebUIMessages.CANCEL}, null, ServiceDialog.QUESTION);
+        int i = d.showDialog(WebUIMessages.CONFIRMATION, NLS.bind(WebUIMessages.YOU_WANT_TO_DELETE_LINK_TO, s), new String[]{WebUIMessages.OK, WebUIMessages.CANCEL}, null, ServiceDialog.QUESTION);
         if(i != 0) return;
     	object.getModel().editObjectAttribute(object, "extends", ""); //$NON-NLS-1$ //$NON-NLS-2$
     }

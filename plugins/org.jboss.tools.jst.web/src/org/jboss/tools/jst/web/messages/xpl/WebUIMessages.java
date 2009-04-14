@@ -51,7 +51,7 @@ public class WebUIMessages extends NLS {
 	public static String CANCEL;
 	public static String YOU_WANT_TO_REARRANGE_THE_DIAGRAM_ELEMENTS;
 	public static String DELETE_REFERENCE_FROM_WEBDESCRIPTOR;
-	public static String DELETE;
+	public static String DELETE_FILENAME;
 	public static String APPLICATION_HAS_BEEN_UNREGISTERED_FROM;
 	public static String MESSAGE;
 	public static String LIBRARY_SET_IS_ALREADY_ADDED;

@@ -55,7 +55,7 @@ public abstract class ProjectVersions {
 		versions.clear();
 		errorMessage = null;
 		if(!file.isFile()) {
-			errorMessage = WebUIMessages.CANNOT_FIND_PROJECT_VERSIONS_DESCRIPTORFILE + file.getAbsolutePath();
+			errorMessage = NLS.bind(WebUIMessages.CANNOT_FIND_PROJECT_VERSIONS_DESCRIPTORFILE, file.getAbsolutePath());
 			return;
 		}
 		Element e = XMLUtil.getElement(file);
@@ -64,11 +64,11 @@ public abstract class ProjectVersions {
 			try {
 				FileReader reader = new FileReader(file);
 				String[] errors = XMLUtil.getXMLErrors(reader, false);
-				errorMessage = (errors == null || errors.length == 0) ? WebUIMessages.CANNOT_PARSE_PROJECT_VERSIONS_DESCRIPTORFILE + file.getAbsolutePath()
-				   : WebUIMessages.CANNOT_PARSE_PROJECT_VERSIONS_DESCRIPTORFILE + file.getAbsolutePath() + ":\n" + errors[0]; //$NON-NLS-2$
+				errorMessage = (errors == null || errors.length == 0) ? NLS.bind(WebUIMessages.CANNOT_PARSE_PROJECT_VERSIONS_DESCRIPTORFILE, file.getAbsolutePath())
+				   : NLS.bind(WebUIMessages.CANNOT_PARSE_PROJECT_VERSIONS_DESCRIPTORFILE, file.getAbsolutePath()) + ":\n" + errors[0]; //$NON-NLS-1$
 			} catch (Exception exc) {
 				WebModelPlugin.getPluginLog().logError(exc);
-				errorMessage = WebUIMessages.CANNOT_READ_PROJECT_VERSIONS_DESCRIPTORFILE + file.getAbsolutePath();
+				errorMessage = NLS.bind(WebUIMessages.CANNOT_READ_PROJECT_VERSIONS_DESCRIPTORFILE, file.getAbsolutePath());
 			}
 		} else {
 			Element[] vs = XMLUtil.getChildren(e, "version"); //$NON-NLS-1$
