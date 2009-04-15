@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
 Bundle-Name: %Bundle-Name.0
 Bundle-ClassPath: jspeditor.jar
 Bundle-Activator: org.jboss.tools.jst.jsp.JspEditorPlugin
@@ -47,8 +47,6 @@ Require-Bundle: org.jboss.tools.common,
  org.eclipse.jst.jsp.ui,
  org.eclipse.wst.css.core,
  org.eclipse.wst.css.ui,
- org.eclipse.wst.javascript.core,
- org.eclipse.wst.javascript.ui,
  org.eclipse.help,
  org.eclipse.help.ui,
  org.eclipse.help.appserver,
