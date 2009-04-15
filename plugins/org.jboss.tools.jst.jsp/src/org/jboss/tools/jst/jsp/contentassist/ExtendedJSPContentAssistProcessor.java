@@ -31,7 +31,6 @@ import org.eclipse.jst.jsp.ui.internal.preferences.JSPUIPreferenceNames;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.css.ui.internal.contentassist.CSSContentAssistProcessor;
-import org.eclipse.wst.javascript.ui.internal.common.contentassist.JavaScriptContentAssistProcessor;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
@@ -82,7 +81,6 @@ public class ExtendedJSPContentAssistProcessor extends JSPContentAssistProcessor
     private IDocument document;
     private boolean dontOpenTag = false;
 
-
 	public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer, int documentPosition) {
 	    try {
 	        String text = viewer.getDocument().get(0, documentPosition);
@@ -105,7 +103,7 @@ public class ExtendedJSPContentAssistProcessor extends JSPContentAssistProcessor
 			if(proposals.length == 0) {
 				String partitionType = getPartitionType((StructuredTextViewer) viewer, documentPosition);
 				IContentAssistProcessor p = (IContentAssistProcessor) fPartitionToProcessorMap.get(partitionType);
-				if (!(p instanceof JavaScriptContentAssistProcessor || p instanceof CSSContentAssistProcessor)) {
+				if (!(p instanceof CSSContentAssistProcessor)) {
 
 					IndexedRegion treeNode = ContentAssistUtils.getNodeAt((StructuredTextViewer) viewer, documentPosition);
 					Node node = (Node) treeNode;
