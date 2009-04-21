@@ -21,6 +21,7 @@ public class VpePreference extends Preference {
 	public static String ATT_USE_ABSOLUTE_POSITION = "";
 	public static String ATT_ALWAYS_PROMPT_FOR_TAG_ATTRIBUTES_DURING_TAG_INSERT = "always prompt for tag attributes during tag insert";
 	public static String ATT_OPTION_LIST = "option list";
+	public static String ATT_VISUAL_SOURCE_EDITORS_SPLITTING = "Visual/Source editors splitting";
 	public static String ATT_SOURCE_VISUAL_EDITORS_WEIGHTS = "Size of Visual Editor pane 0-100%";
 	public static String ATT_SHOW_SELECTION_TAG_BAR = "show selection tag bar";
 	public static String ATT_ALWAYS_HIDE_SELECTION_BAR_WITHOUT_PROMT="always hide selection bar without prompt";
@@ -35,6 +36,7 @@ public class VpePreference extends Preference {
 	public static final Preference USE_ABSOLUTE_POSITION = new VpePreference(VPE_EDITOR_PATH, ATT_USE_ABSOLUTE_POSITION);
 	public static final Preference ALWAYS_REQUEST_FOR_ATTRIBUTE = new VpePreference(VPE_EDITOR_PATH, ATT_ALWAYS_PROMPT_FOR_TAG_ATTRIBUTES_DURING_TAG_INSERT);
 	public static final Preference EDITOR_VIEW_OPTION = new VpePreference(VPE_EDITOR_PATH, ATT_OPTION_LIST);	
+	public static final Preference VISUAL_SOURCE_EDITORS_SPLITTING= new VpePreference(VPE_EDITOR_PATH, ATT_VISUAL_SOURCE_EDITORS_SPLITTING);	
 	public static final Preference SOURCE_VISUAL_EDITORS_WEIGHTS= new VpePreference(VPE_EDITOR_PATH, ATT_SOURCE_VISUAL_EDITORS_WEIGHTS);	
 	public static final Preference SHOW_SELECTION_TAG_BAR = new VpePreference(VPE_EDITOR_PATH,ATT_SHOW_SELECTION_TAG_BAR);
 	public static final Preference ALWAYS_HIDE_SELECTION_BAR_WITHOUT_PROMT = new VpePreference(VPE_EDITOR_PATH,ATT_ALWAYS_HIDE_SELECTION_BAR_WITHOUT_PROMT);
