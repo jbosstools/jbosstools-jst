@@ -24,7 +24,8 @@ public class WebPromptingProvider implements IWebPromptingProvider {
 	static {
 		String[][] pns = new String[][]{
 			{"org.jboss.tools.jsf.model.pv.JSFPromptingProvider", "org.jboss.tools.jsf"},
-			{"org.jboss.tools.struts.model.pv.StrutsPromptingProvider", "org.jboss.tools.struts"}
+			{"org.jboss.tools.struts.model.pv.StrutsPromptingProvider", "org.jboss.tools.struts"},
+			{"org.jboss.tools.seam.xml.components.model.SeamPromptingProvider", "org.jboss.tools.seam.xml"}
 		};
 		List<IWebPromptingProvider> l = new ArrayList<IWebPromptingProvider>();
 		for (int i = 0; i < pns.length; i++) {
@@ -52,8 +53,20 @@ public class WebPromptingProvider implements IWebPromptingProvider {
 	}
 
 	public List<Object> getList(XModel model, String id, String prefix, Properties properties) {
+		String error = null;
 		for (int i = 0; i < providers.length; i++) {
-			if(providers[i].isSupporting(id)) return providers[i].getList(model, id, prefix, properties);
+			if(providers[i].isSupporting(id)) {
+				List<Object> result = providers[i].getList(model, id, prefix, properties);
+				String err = properties == null ? null : (String)properties.remove(ERROR);
+				if(err == null) {
+					return result;
+				} else if(error == null) {
+					error = err;
+				}
+			}
+		}
+		if(properties != null && error != null) {
+			properties.setProperty(ERROR, error);
 		}
 		return EMPTY_LIST;
 	}
