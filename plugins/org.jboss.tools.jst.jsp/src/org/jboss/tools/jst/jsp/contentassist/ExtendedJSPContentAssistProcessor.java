@@ -167,6 +167,7 @@ public class ExtendedJSPContentAssistProcessor extends JSPContentAssistProcessor
 			StringBuffer redhatDefaultChars = new StringBuffer(new String(superAutoActivChars));
 			if(redhatDefaultChars.indexOf(".")<0) {
 				redhatDefaultChars.append('.');
+				redhatDefaultChars.append('[');
 				store.setDefault(JSPUIPreferenceNames.AUTO_PROPOSE_CODE, redhatDefaultChars.toString());
 				store.setValue(JSPUIPreferenceNames.AUTO_PROPOSE_CODE, redhatDefaultChars.toString());
 			}

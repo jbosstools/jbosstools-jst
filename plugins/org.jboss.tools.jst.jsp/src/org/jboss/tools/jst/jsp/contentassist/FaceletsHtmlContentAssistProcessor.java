@@ -751,6 +751,7 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
 			StringBuffer redhatDefaultChars = new StringBuffer(new String(superAutoActivChars));
 			if(redhatDefaultChars.indexOf(".")<0) {
 				redhatDefaultChars.append('.');
+				redhatDefaultChars.append('[');
 				store.setDefault(HTMLUIPreferenceNames.AUTO_PROPOSE_CODE, redhatDefaultChars.toString());
 				store.setValue(HTMLUIPreferenceNames.AUTO_PROPOSE_CODE, redhatDefaultChars.toString());
 			}
