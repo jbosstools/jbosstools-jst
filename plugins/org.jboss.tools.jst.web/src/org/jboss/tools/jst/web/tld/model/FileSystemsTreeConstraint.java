@@ -28,7 +28,8 @@ public class FileSystemsTreeConstraint implements XFilteredTreeConstraint {
         String entity = object.getModelEntity().getName();
         if(!entity.startsWith("File")) return false;
         if(!entity.startsWith("FileTLD") &&
-           !entity.startsWith("FileValidationRules")
+           !entity.startsWith("FileValidationRules") &&
+           !entity.startsWith("FileFaceletTaglib")
 ///        && !entity.equals("FileTiles")
         ) return false;
         return (!"true".equals(object.getAttributeValue("expanded")));
