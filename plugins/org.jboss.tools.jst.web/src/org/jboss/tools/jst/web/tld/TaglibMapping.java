@@ -79,12 +79,32 @@ public class TaglibMapping implements ITaglibMapping {
                 }
             }
         }
+        getFaceletTaglibs(webxml);
 		loadTldsInWebInf();
 		findTldsInJars();
 		taglibObjectsCopy = null;
 		isLoading = false;
     }
-    
+
+	private void getFaceletTaglibs(XModelObject webxml) {
+		XModelObject webRoot = FileSystemsHelper.getWebRoot(model);
+		if(webxml == null || webRoot == null) return;
+		XModelObject cp = WebAppHelper.findWebAppContextParam(webxml, "facelets.LIBRARIES");
+		if(cp == null) return;
+		String path = cp.getAttributeValue("param-value");
+		if(path == null || path.length() == 0) return;
+		String modelPath = path;
+		if(modelPath.startsWith("/")) modelPath = modelPath.substring(1);
+		XModelObject facelet = webRoot.getChildByPath(modelPath);
+		if(facelet == null) return;
+		String uri = facelet.getAttributeValue("uri");
+		if(uri != null) {
+			resolvedURIs.put(path, uri);
+			taglibObjects.put(uri, facelet);
+		}
+	}
+
+
     public Map<String,XModelObject> getTaglibObjects() {
     	Map<String,XModelObject> result = taglibObjectsCopy;
     	if(result == null) {
