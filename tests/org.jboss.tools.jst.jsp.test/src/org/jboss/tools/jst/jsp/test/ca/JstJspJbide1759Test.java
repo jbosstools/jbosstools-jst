@@ -39,7 +39,7 @@ public class JstJspJbide1759Test extends ContentAssistantTestCase {
 		}
 	}
 
-	public void testJstJspJbide1641() {
+	public void testJstJspJbide1759() {
 		try {
 			JobUtils.waitForIdle();
 		} catch (Exception e) {
@@ -48,11 +48,11 @@ public class JstJspJbide1759Test extends ContentAssistantTestCase {
 		assertTrue("Test project \"" + PROJECT_NAME + "\" is not loaded", (project != null));
 
 		for (int i = 0; i < PAGE_EXTS.length; i++) {
-			testJstJspJbide1641(PAGE_NAME + PAGE_EXTS[i]);
+			testJstJspJbide1759(PAGE_NAME + PAGE_EXTS[i]);
 		}
 	}
 	
-	private void testJstJspJbide1641(String pageName) {
+	private void testJstJspJbide1759(String pageName) {
 		
 		openEditor(pageName);
 
