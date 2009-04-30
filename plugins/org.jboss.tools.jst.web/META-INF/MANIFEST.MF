@@ -34,13 +34,16 @@ Require-Bundle: org.jboss.tools.common.model;visibility:=reexport,
  org.eclipse.ant.ui,
  org.eclipse.ui.externaltools,
  org.jboss.tools.common.kb,
- org.eclipse.wst.common.project.facet.core
+ org.eclipse.wst.common.project.facet.core,
+ org.jboss.tools.common.el.core;bundle-version="2.0.0"
 Bundle-Version: 2.0.0
 Export-Package: 
  org.jboss.tools.jst.web,
  org.jboss.tools.jst.web.browser,
  org.jboss.tools.jst.web.browser.wtp,
  org.jboss.tools.jst.web.context,
+ org.jboss.tools.jst.web.kb,
+ org.jboss.tools.jst.web.kb.taglib,
  org.jboss.tools.jst.web.launching.sourcelookup,
  org.jboss.tools.jst.web.launching.sourcelookup.xpl,
  org.jboss.tools.jst.web.messages.xpl,
