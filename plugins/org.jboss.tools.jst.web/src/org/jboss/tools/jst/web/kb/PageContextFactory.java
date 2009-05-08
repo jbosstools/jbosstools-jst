@@ -23,7 +23,7 @@ public class PageContextFactory {
 	 * @param offset
 	 * @return
 	 */
-	public static PageContext createPageContext(IFile file, int offset) {
+	public static IPageContext createPageContext(IFile file, int offset) {
 		// TODO
 		return null;
 	}

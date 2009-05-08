@@ -10,31 +10,18 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb;
 
-import org.jboss.tools.common.el.core.resolver.ELContext;
-import org.jboss.tools.common.el.core.resolver.ELResolver;
-import org.jboss.tools.jst.web.kb.taglib.TagLibrary;
-
 /**
- * Page context
  * @author Alexey Kazakov
  */
-public interface PageContext extends ELContext {
+public interface IResourceBundle {
 
 	/**
-	 * Returns libraries which should be used in this context  
-	 * @return
+	 * @return var attribute value
 	 */
-	TagLibrary[] getLibraries();
+	String getVar();
 
 	/**
-	 * Returns EL Resolvers which are declared for this page
-	 * @return
+	 * @return basename attribute value
 	 */
-	ELResolver[] getElResolvers();
-
-	/**
-	 * Returns resource bundles
-	 * @return
-	 */
-	ResourceBundle[] getResourceBundles();
+	String getBasename();
 }

@@ -8,28 +8,32 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.jboss.tools.jst.web.kb;
+package org.jboss.tools.jst.web.kb.taglib;
 
-import java.util.Map;
+import org.jboss.tools.jst.web.kb.IProposalProcessor;
 
 /**
  * @author Alexey Kazakov
  */
-public interface FaceletPageContext extends PageContext {
+public interface IAttribute extends IProposalProcessor {
 
 	/**
-	 * Returns parent page context. For example if some this facelet page is used in a template then
-	 * this method will return a page context for that template.
-	 * May return null. 
-	 * @return
+	 * @return name of attribute
 	 */
-	FaceletPageContext getParentContext();
+	String getName();
 
 	/**
-	 * Returns parameters which are declared in the parent context and are available within this page.
-	 * Key - name of Parameter.
-	 * Value - value of Parameter. 
-	 * @return
+	 * @return description
 	 */
-	Map<String, String> getParams();
+	String getDesription();
+
+	/**
+	 * @return true if the attribute is required.
+	 */
+	boolean isRequired();
+
+	/**
+	 * @return true if the attribute is preferable. E.g. <h:outputText value=""/>
+	 */
+	boolean isPreferable();
 }

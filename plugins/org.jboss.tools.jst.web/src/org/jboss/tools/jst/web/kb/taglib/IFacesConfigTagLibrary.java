@@ -8,20 +8,33 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.jboss.tools.jst.web.kb;
+package org.jboss.tools.jst.web.kb.taglib;
 
 /**
  * @author Alexey Kazakov
  */
-public interface ResourceBundle {
+public interface IFacesConfigTagLibrary extends ITagLibrary {
 
 	/**
-	 * @return var attribute value
+	 * @param type
+	 * @return component by type
 	 */
-	String getVar();
+	IComponent getComponentByType(String type);
 
 	/**
-	 * @return basename attribute value
+	 * @return all facets of this component
 	 */
-	String getBasename();
+	Facet[] getFacets();
+
+	/**
+	 * @param nameTemplate
+	 * @return facets with names which start with given template.
+	 */
+	Facet[] getFacets(String nameTemplate);
+
+	/**
+	 * @param name
+	 * @return facet by name
+	 */
+	Facet getFacet(String name);
 }

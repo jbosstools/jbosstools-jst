@@ -10,20 +10,23 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.taglib;
 
-import org.eclipse.core.resources.IFile;
-
 /**
  * @author Alexey Kazakov
  */
-public class TagLibriryManager {
+public interface ITLDLibrary extends ITagLibrary {
 
 	/**
-	 * Returns all tag libraries which are available in the page.
-	 * @param page
-	 * @return
+	 * @return version of TLD
 	 */
-	public static ITagLibrary[] getLibraries(IFile page) {
-		//TODO
-		return null;
-	}
+	String getVersion();
+
+	/**
+	 * @return display name
+	 */
+	String displayName();
+
+	/**
+	 * @return short name
+	 */
+	String getShortName();
 }

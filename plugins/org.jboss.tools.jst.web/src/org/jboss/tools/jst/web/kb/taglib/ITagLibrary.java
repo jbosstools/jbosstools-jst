@@ -11,12 +11,15 @@
 package org.jboss.tools.jst.web.kb.taglib;
 
 import org.eclipse.core.resources.IResource;
+import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.IPageContext;
+import org.jboss.tools.jst.web.kb.IProposalProcessor;
 
 /**
  * Represents a tag library.
  * @author Alexey Kazakov
  */
-public interface TagLibrary {
+public interface ITagLibrary extends IProposalProcessor {
 
 	/**
 	 * @return URI of the tag lib.
@@ -31,17 +34,24 @@ public interface TagLibrary {
 	/**
 	 * @return all tags
 	 */
-	Component[] getAllComponents();
+	IComponent[] getComponents();
 
 	/**
 	 * @param nameTemplate
 	 * @return tags with names which start with given template
 	 */
-	Component[] getComponents(String nameTemplate);
+	IComponent[] getComponents(String nameTemplate);
 
 	/**
 	 * @param name
 	 * @return tag by name
 	 */
-	Component getComponent(String name);
+	IComponent getComponent(String name);
+
+	/**
+	 * @param query
+	 * @param context
+	 * @return components
+	 */
+	public IComponent[] getComponents(KbQuery query, IPageContext context);
 }

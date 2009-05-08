@@ -10,15 +10,19 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.taglib;
 
+import org.jboss.tools.jst.web.kb.IPageContext;
+import org.jboss.tools.jst.web.kb.IProposalProcessor;
+import org.jboss.tools.jst.web.kb.KbQuery;
+
 /**
  * @author Alexey Kazakov
  */
-public interface Component {
+public interface IComponent extends IProposalProcessor {
 
 	/**
 	 * @return name space
 	 */
-	NameSpace getNameSpace();
+	INameSpace getNameSpace();
 
 	/**
 	 * @return component name
@@ -28,7 +32,7 @@ public interface Component {
 	/**
 	 * @return description
 	 */
-	String getDesription();
+	String getDescription();
 
 	/**
 	 * @return true if the tag can have a body
@@ -48,17 +52,35 @@ public interface Component {
 	/**
 	 * @return all attributes of this component
 	 */
-	Attribute[] getAttributes();
+	IAttribute[] getAttributes();
 
 	/**
 	 * @param nameTemplate
 	 * @return attributes with names which start with given template.
 	 */
-	Attribute[] getAttributes(String nameTemplate);
+	IAttribute[] getAttributes(String nameTemplate);
+
+	/**
+	 * @return all required attributes of this component
+	 */
+	IAttribute[] getRequiredAttributes();
+
+	/**
+	 * @return all preferable attributes of this component
+	 */
+	IAttribute[] getPreferableAttributes();
 
 	/**
 	 * @param name
 	 * @return attribute by name
 	 */
-	Attribute getAttribute(String name);
+	IAttribute getAttribute(String name);
+
+	/**
+	 * Return attributes
+	 * @param query
+	 * @param context
+	 * @return
+	 */
+	public IAttribute[] getAttributes(KbQuery query, IPageContext context);
 }

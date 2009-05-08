@@ -8,30 +8,30 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.jboss.tools.jst.web.kb.internal.text;
+package org.jboss.tools.jst.web.kb.internal;
 
 import java.util.Map;
 
-import org.jboss.tools.jst.web.kb.FaceletPageContext;
+import org.jboss.tools.jst.web.kb.IFaceletPageContext;
 
 /**
  * Facelet page context
  * @author Alexey Kazakov
  */
-public class FaceletContextImpl extends JspContextImpl implements FaceletPageContext {
+public class FaceletContextImpl extends JspContextImpl implements IFaceletPageContext {
 
-	private FaceletPageContext parentContext;
+	private IFaceletPageContext parentContext;
 	private Map<String, String> params;
 
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.common.kb.text.FaceletPageContext#getParentContext()
 	 */
-	public FaceletPageContext getParentContext() {
+	public IFaceletPageContext getParentContext() {
 		return parentContext;
 	}
 
-	public void setParentContext(FaceletPageContext parentContext) {
+	public void setParentContext(IFaceletPageContext parentContext) {
 		this.parentContext = parentContext;
 	}
 

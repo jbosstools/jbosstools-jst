@@ -13,15 +13,10 @@ package org.jboss.tools.jst.web.kb.taglib;
 /**
  * @author Alexey Kazakov
  */
-public interface NameSpace {
+public interface IFaceletTagLibrary extends ITagLibrary {
 
 	/**
-	 * @return URI
+	 * @return EL functions
 	 */
-	String getURI();
-
-	/**
-	 * @return prefix
-	 */
-	String getPrefix();
+	IELFunction[] getFunctions();
 }

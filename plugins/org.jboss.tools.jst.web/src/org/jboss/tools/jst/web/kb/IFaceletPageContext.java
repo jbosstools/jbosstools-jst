@@ -8,25 +8,28 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.jboss.tools.jst.web.kb.taglib;
+package org.jboss.tools.jst.web.kb;
+
+import java.util.Map;
 
 /**
  * @author Alexey Kazakov
  */
-public interface TLDLibrary extends TagLibrary {
+public interface IFaceletPageContext extends IPageContext {
 
 	/**
-	 * @return version of TLD
+	 * Returns parent page context. For example if some this facelet page is used in a template then
+	 * this method will return a page context for that template.
+	 * May return null. 
+	 * @return
 	 */
-	String getVersion();
+	IFaceletPageContext getParentContext();
 
 	/**
-	 * @return display name
+	 * Returns parameters which are declared in the parent context and are available within this page.
+	 * Key - name of Parameter.
+	 * Value - value of Parameter. 
+	 * @return
 	 */
-	String displayName();
-
-	/**
-	 * @return short name
-	 */
-	String getShortName();
+	Map<String, String> getParams();
 }

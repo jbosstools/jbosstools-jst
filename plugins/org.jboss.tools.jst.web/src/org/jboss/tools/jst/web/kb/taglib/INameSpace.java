@@ -13,28 +13,15 @@ package org.jboss.tools.jst.web.kb.taglib;
 /**
  * @author Alexey Kazakov
  */
-public interface FacesConfigTagLibrary extends TagLibrary {
+public interface INameSpace {
 
 	/**
-	 * @param type
-	 * @return component by type
+	 * @return URI
 	 */
-	Component getComponentByType(String type);
+	String getURI();
 
 	/**
-	 * @return all facets of this component
+	 * @return prefix
 	 */
-	Facet[] getFacets();
-
-	/**
-	 * @param nameTemplate
-	 * @return facets with names which start with given template.
-	 */
-	Facet[] getFacets(String nameTemplate);
-
-	/**
-	 * @param name
-	 * @return facet by name
-	 */
-	Facet getFacet(String name);
+	String getPrefix();
 }

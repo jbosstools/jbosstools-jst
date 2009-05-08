@@ -13,6 +13,6 @@ package org.jboss.tools.jst.web.kb.taglib;
 /**
  * @author Alexey Kazakov
  */
-public interface CustomTagLibrary extends TagLibrary {
+public interface ICustomTagLibrary extends ITagLibrary {
 
 }

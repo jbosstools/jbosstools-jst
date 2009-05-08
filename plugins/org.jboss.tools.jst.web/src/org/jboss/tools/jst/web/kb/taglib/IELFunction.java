@@ -13,6 +13,15 @@ package org.jboss.tools.jst.web.kb.taglib;
 /**
  * @author Alexey Kazakov
  */
-public interface FaceletTagLibrary extends TagLibrary {
+public interface IELFunction {
 
+	/**
+	 * @return the name of EL function
+	 */
+	String getName();
+
+	/**
+	 * @return the signature
+	 */
+	String getFunctionSignature();
 }

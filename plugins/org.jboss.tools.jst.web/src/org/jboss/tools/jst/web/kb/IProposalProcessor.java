@@ -8,30 +8,18 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.jboss.tools.jst.web.kb.taglib;
+package org.jboss.tools.jst.web.kb;
+
+import org.jboss.tools.common.text.TextProposal;
 
 /**
  * @author Alexey Kazakov
  */
-public interface Attribute {
+public interface IProposalProcessor {
 
 	/**
-	 * @return name of attribute
+	 * @return proposals
 	 */
-	String getName();
+	TextProposal[] getProposals(KbQuery query, IPageContext context);
 
-	/**
-	 * @return description
-	 */
-	String getDesription();
-
-	/**
-	 * @return true if the attribute is required.
-	 */
-	boolean isRequired();
-
-	/**
-	 * @return true if the attribute is preferable. E.g. <h:outputText value=""/>
-	 */
-	boolean isPreferable();
 }
