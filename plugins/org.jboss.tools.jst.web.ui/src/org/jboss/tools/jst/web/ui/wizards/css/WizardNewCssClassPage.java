@@ -16,7 +16,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -38,7 +37,6 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.FileExtensionFilter;
 import org.jboss.tools.jst.web.ui.wizards.css.NewCSSClassWizard.CSSClassDescription;
 import org.jboss.tools.jst.web.ui.wizards.messages.WebUIMessages;
-import org.w3c.dom.css.CSSFontFaceRule;
 
 /**
  * @author Sergey Dzmitrovich
@@ -47,10 +45,9 @@ import org.w3c.dom.css.CSSFontFaceRule;
 public class WizardNewCssClassPage extends WizardPage implements ModifyListener {
 
 	private final static String REQUIRED_FIELD_SIGN = "*"; //$NON-NLS-1$
-	private final static String CSS_FILE_EXTENSION = "css"; //$NON-NLS-1$
+	public final static String CSS_FILE_EXTENSION = "css"; //$NON-NLS-1$
 	private CSSClassDescription classDescription;
 	private final static String[] fileExtensions = { CSS_FILE_EXTENSION };
-	private IFile currentFile;
 	private int numColumns = 3;
 	private Text selectFileText;
 	private Text classNameText;
@@ -104,30 +101,33 @@ public class WizardNewCssClassPage extends WizardPage implements ModifyListener 
 				dialog.setInput(ResourcesPlugin.getWorkspace().getRoot());
 				dialog.setAllowMultiple(false);
 				dialog.setDoubleClickSelects(true);
-				dialog.setValidator(new ISelectionStatusValidator(){
+				dialog.setValidator(new ISelectionStatusValidator() {
 
 					public IStatus validate(Object[] selection) {
-						if(selection!=null && selection.length==1) {
-							if(selection[0] instanceof IFile) {
-								return new Status(IStatus.OK, PlatformUI.PLUGIN_ID,
-				                        IStatus.OK, "", //$NON-NLS-1$
-				                        null);
+						if (selection != null && selection.length == 1) {
+							if (selection[0] instanceof IFile) {
+								return new Status(IStatus.OK,
+										PlatformUI.PLUGIN_ID, IStatus.OK, "", //$NON-NLS-1$
+										null);
 							}
 						}
 						return new Status(IStatus.ERROR, PlatformUI.PLUGIN_ID,
-		                        IStatus.ERROR, WebUIMessages.WIZARD_ERROR_FILE_SELECTION, //$NON-NLS-1$
-		                        null);
-					}});
-				if (currentFile != null) {
-					dialog.setInitialSelection(currentFile);
+								IStatus.ERROR,
+								WebUIMessages.WIZARD_ERROR_FILE_SELECTION, 
+								null);
+					}
+				});
+				if (classDescription.getCssFile() != null) {
+					dialog.setInitialSelection(classDescription.getCssFile());
 				}
 				dialog
 						.setEmptyListMessage(WebUIMessages.FILE_SELECT_DIALOG_EMPTY_MESSAGE);
 
 				if (dialog.open() == Window.OK) {
-					currentFile = (IFile) dialog.getFirstResult();
-					selectFileText
-							.setText(currentFile.getFullPath().toString());
+					classDescription.setCssFile((IResource) dialog
+							.getFirstResult());
+					selectFileText.setText(classDescription.getCssFile()
+							.getFullPath().toString());
 				}
 
 			}
@@ -141,6 +141,10 @@ public class WizardNewCssClassPage extends WizardPage implements ModifyListener 
 		classNameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		classNameText.setFont(parent.getFont());
 		classNameText.addModifyListener(this);
+
+		if (classDescription.getCssFile() != null)
+			selectFileText.setText(classDescription.getCssFile().getFullPath()
+					.toString());
 
 		setControl(container);
 	}
@@ -157,21 +161,27 @@ public class WizardNewCssClassPage extends WizardPage implements ModifyListener 
 	public void modifyText(ModifyEvent e) {
 
 		classDescription.setCssClassName(classNameText.getText());
-		classDescription.setCssFile(getCssFile(selectFileText.getText()));
+		classDescription.setCssFile(getResource(selectFileText.getText()));
 		getContainer().updateButtons();
 
 	}
 
 	private IFile getCssFile(String path) {
-		if (path != null) {
-			IResource cssFile = ResourcesPlugin.getWorkspace().getRoot()
-					.findMember(path);
-			if ((cssFile != null)
-					&& (CSS_FILE_EXTENSION.equals(cssFile.getFileExtension()))) {
-				return (IFile) cssFile;
-			}
+		IResource cssFile = getResource(path);
+		if ((cssFile != null)
+				&& (CSS_FILE_EXTENSION.equals(cssFile.getFileExtension()))) {
+			return (IFile) cssFile;
 		}
 		return null;
+	}
+
+	private IResource getResource(String path) {
+		IResource resource = null;
+		if (path != null) {
+			resource = ResourcesPlugin.getWorkspace().getRoot()
+					.findMember(path);
+		}
+		return resource;
 	}
 
 }

@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.ui.wizards.css;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.dialogs.IPageChangedListener;
@@ -62,6 +63,17 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		this.workbench = workbench;
 		this.selection = selection;
+		
+		IResource selectedResource = (IResource) selection.getFirstElement();
+		if (selectedResource != null) {
+			if (selectedResource.getType() == IFile.FILE
+					&& !WizardNewCssClassPage.CSS_FILE_EXTENSION
+							.equals(selectedResource.getFileExtension())) {
+				selectedResource = selectedResource.getParent();
+			}
+			classDescription.setCssFile(selectedResource);
+		}
+		
 	}
 
 	/**
@@ -107,12 +119,12 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 	}
 	
 	public class CSSClassDescription{
-		private IFile cssFile;
+		private IResource cssFile;
 		private String cssClassName;
-		public IFile getCssFile() {
+		public IResource getCssFile() {
 			return cssFile;
 		}
-		public void setCssFile(IFile cssFile) {
+		public void setCssFile(IResource cssFile) {
 			this.cssFile = cssFile;
 		}
 		public String getCssClassName() {
@@ -138,7 +150,7 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 		 * @param pageName
 		 */
 		public NewCSSClassWizardPage() {
-			super("newCSSClassWizard");
+			super("newCSSClassWizard"); //$NON-NLS-1$
 			setTitle(WebUIMessages.WIZARD_TITLE);
 			setDescription(WebUIMessages.WIZARD_DESCRIPTION);
 			
@@ -180,7 +192,7 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 					//set console configuration as treeViewer input
 					public void pageChanged(PageChangedEvent event) {
 						if (event.getSelectedPage() == editFilePage){
-							dialog.setCurrentFile(classDescription.getCssFile());
+							dialog.setCurrentFile((IFile) classDescription.getCssFile());
 							dialog.reinit();
 							dialog.addNewStyleClass(classDescription.cssClassName);
 						}
