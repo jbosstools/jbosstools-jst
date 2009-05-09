@@ -25,7 +25,6 @@ public final class JSPEditorMessages extends NLS {
 	public static String JSPMultiPageEditor_TabLabel_VisualSource;
 	public static String JSPMultiPageEditor_TabLabel_Source;
 	public static String JSPMultiPageEditor_TabLabel_Preview;
-	public static String JSPMultiPageEditor_ContextMenu_ShowInMenu;
 
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, JSPEditorMessages.class);
