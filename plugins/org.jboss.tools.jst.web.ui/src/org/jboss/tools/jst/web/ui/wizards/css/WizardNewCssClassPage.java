@@ -84,7 +84,7 @@ public class WizardNewCssClassPage extends WizardPage implements ModifyListener 
 		selectFileText = new Text(container, SWT.SINGLE | SWT.BORDER);
 		selectFileText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		selectFileText.setFont(parent.getFont());
-		selectFileText.addModifyListener(this);
+		
 
 		Button selectFileButton = new Button(container, SWT.NONE);
 		selectFileButton.setText(WebUIMessages.FILE_SELECT_BUTTON);
@@ -146,6 +146,7 @@ public class WizardNewCssClassPage extends WizardPage implements ModifyListener 
 			selectFileText.setText(classDescription.getCssFile().getFullPath()
 					.toString());
 
+		selectFileText.addModifyListener(this);
 		setControl(container);
 	}
 
