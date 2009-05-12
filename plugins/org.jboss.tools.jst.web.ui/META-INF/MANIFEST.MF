@@ -28,7 +28,6 @@ Provide-Package: org.jboss.tools.common.model.ui.texteditors.preferences,
  org.jboss.tools.jst.web.ui.wizards.palette,
  org.jboss.tools.jst.web.ui.wizards.process,
  org.jboss.tools.jst.web.ui.wizards.project,
- org.jboss.tools.jst.web.ui.wizards.tomcatvm,
  org.jboss.tools.vpe
 Require-Bundle: org.jboss.tools.common,
  org.eclipse.ui.ide,
