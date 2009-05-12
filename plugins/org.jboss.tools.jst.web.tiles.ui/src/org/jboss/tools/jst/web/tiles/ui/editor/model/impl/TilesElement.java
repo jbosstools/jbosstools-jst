@@ -106,14 +106,8 @@ public class TilesElement implements ITilesElement{
 
 	public void updateModelModifiedProperty(Object oldValue, Object newValue) {
 		if (getTilesModel() != null) {
-			try {
-				if (!oldValue.equals(newValue))
-					;
+			if (!oldValue.equals(newValue)) {
 				getTilesModel().setModified(true);
-			} catch (Exception exception) {
-				TilesUIPlugin.getPluginLog().logError(exception);
-				if (newValue != null)
-					getTilesModel().setModified(true);
 			}
 		}
 	}

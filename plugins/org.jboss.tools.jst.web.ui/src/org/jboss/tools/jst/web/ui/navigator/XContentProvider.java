@@ -131,18 +131,14 @@ public class XContentProvider implements ITreeContentProvider {
 	protected XFilteredTree getFilteredTree(Object object)	{
 		XFilteredTree result = null;		
 		if (result == null && object instanceof XModelObject) {			
-			try	{
-				XModel model = ((XModelObject)object).getModel();
-				String n = getFilteredTreeName(model);
-				result = FilteredTreesCache.getInstance().getFilteredTree(n, model);
-				if(result == null) return null;
-				if(result.getRoot() == null) {
-					result = null; 
-				} else { 
-					FilteredTreesCache.getInstance().addListener(syncListener, model);
-				}
-			} catch(Exception ex) {
-				WebUiPlugin.getPluginLog().logError(ex);							
+			XModel model = ((XModelObject)object).getModel();
+			String n = getFilteredTreeName(model);
+			result = FilteredTreesCache.getInstance().getFilteredTree(n, model);
+			if(result == null) return null;
+			if(result.getRoot() == null) {
+				result = null; 
+			} else { 
+				FilteredTreesCache.getInstance().addListener(syncListener, model);
 			}
 		}		
 		return result;

@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.tiles.ui.editor;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.jboss.tools.common.editor.AbstractSelectionProvider;
@@ -69,7 +70,7 @@ public class TilesCompoundEditor extends ObjectMultiPageEditor {
 			guiEditor.addErrorSelectionListener(createErrorSelectionListener());
 			selectionProvider.addHost(
 					"guiEditor", guiEditor.getSelectionProvider()); //$NON-NLS-1$
-		} catch (Exception e) {
+		} catch (PartInitException e) {
 			TilesUIPlugin.getPluginLog().logError(e);
 		}
 	}
@@ -81,11 +82,7 @@ public class TilesCompoundEditor extends ObjectMultiPageEditor {
 	public void dispose() {
 		if(input != null) {
 			selectionProvider.setHost(null);
-			try { 
-				getSite().setSelectionProvider(null); 
-			} catch (Exception e) {
-				TilesUIPlugin.getPluginLog().logError(e);
-			}
+			getSite().setSelectionProvider(null); 
 		}
 		super.dispose();
 		if(guiEditor != null) {

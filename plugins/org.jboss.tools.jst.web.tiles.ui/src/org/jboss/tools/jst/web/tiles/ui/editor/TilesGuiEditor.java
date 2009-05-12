@@ -10,20 +10,19 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.tiles.ui.editor;
 
-import org.jboss.tools.common.editor.AbstractSectionEditor;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
-
-import org.jboss.tools.common.log.LogHelper;
+import org.eclipse.ui.PartInitException;
+import org.jboss.tools.common.editor.AbstractSectionEditor;
 import org.jboss.tools.common.model.XModelObject;
-import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.ui.editor.IModelObjectEditorInput;
 import org.jboss.tools.jst.web.tiles.ui.TilesUIPlugin;
 import org.jboss.tools.jst.web.tiles.ui.editor.model.impl.TilesModel;
+import org.xml.sax.SAXException;
 
 public class TilesGuiEditor extends AbstractSectionEditor {
 	private TilesEditor gui = null;
@@ -77,7 +76,9 @@ public class TilesGuiEditor extends AbstractSectionEditor {
 			wrapper.update();
 			wrapper.layout();
 			
-		} catch (Exception ex) {
+		} catch (SAXException ex) {
+			TilesUIPlugin.getPluginLog().logError(ex);
+		} catch (PartInitException ex) {
 			TilesUIPlugin.getPluginLog().logError(ex);
 		}
 	}
@@ -96,11 +97,7 @@ public class TilesGuiEditor extends AbstractSectionEditor {
 		if(gui != null) {
 			gui.dispose();
 			gui = null;
-			try { 
-				control.dispose(); 
-			} catch (Exception e) {
-				TilesUIPlugin.getPluginLog().logError(e);
-			}
+			control.dispose(); 
 			control = null;
 		}
 	}

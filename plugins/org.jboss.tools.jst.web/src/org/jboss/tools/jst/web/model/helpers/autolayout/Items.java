@@ -10,9 +10,10 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.model.helpers.autolayout;
 
-import java.util.*;
-import org.jboss.tools.common.model.*;
-import org.jboss.tools.jst.web.WebModelPlugin;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.jst.web.model.helpers.WebProcessStructureHelper;
 import org.jboss.tools.jst.web.model.process.WebProcessConstants;
 
@@ -41,11 +42,7 @@ public class Items implements WebProcessConstants {
 
     public void setProcess(XModelObject process) {
         this.process = process;
-        try {
-        	load();
-        } catch (Exception e) {
-        	WebModelPlugin.getPluginLog().logError(e);
-        }
+        load();
     }
 
     private void load() {

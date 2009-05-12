@@ -19,22 +19,26 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.Stack;
 
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySheetEntry;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySource2;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
-import org.eclipse.wst.sse.core.internal.provisional.*;
+import org.eclipse.wst.sse.core.internal.provisional.INodeAdapter;
+import org.eclipse.wst.sse.core.internal.provisional.INodeNotifier;
 import org.eclipse.wst.sse.ui.views.properties.IPropertySourceExtension;
-import org.eclipse.wst.xml.core.internal.contentmodel.*;
+import org.eclipse.wst.xml.core.internal.contentmodel.CMAttributeDeclaration;
+import org.eclipse.wst.xml.core.internal.contentmodel.CMDataType;
+import org.eclipse.wst.xml.core.internal.contentmodel.CMElementDeclaration;
+import org.eclipse.wst.xml.core.internal.contentmodel.CMNamedNodeMap;
 import org.eclipse.wst.xml.core.internal.contentmodel.modelquery.ModelQuery;
 import org.eclipse.wst.xml.core.internal.document.DocumentTypeAdapter;
 import org.eclipse.wst.xml.core.internal.modelquery.ModelQueryUtil;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.ui.internal.XMLUIMessages;
 import org.eclipse.wst.xml.ui.internal.properties.EnumeratedStringPropertyDescriptor;
+import org.jboss.tools.common.kb.AttributeDescriptor;
+import org.jboss.tools.common.kb.TagDescriptor;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.contentassist.FaceletsHtmlContentAssistProcessor;
 import org.jboss.tools.jst.jsp.editor.IVisualController;
@@ -44,10 +48,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-
-import org.jboss.tools.common.kb.AttributeDescriptor;
-import org.jboss.tools.common.kb.TagDescriptor;
-import org.jboss.tools.common.model.plugin.ModelPlugin;
 
 /**
  * @author Kabanovich
@@ -547,12 +547,8 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 						} else {
 							if (attr instanceof IDOMNode) {
 								((IDOMNode) attr).setValueSource(valueString);
-								try {
-									IVisualController controller = valueHelper.getController(); 
-									if(controller != null) controller.visualRefresh();
-								} catch (Exception e) {
-									JspEditorPlugin.getPluginLog().logError(e);
-								}
+								IVisualController controller = valueHelper.getController(); 
+								if(controller != null) controller.visualRefresh();
 							} else {
 								attr.setValue(valueString);
 							}

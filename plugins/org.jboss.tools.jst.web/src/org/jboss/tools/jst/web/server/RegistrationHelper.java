@@ -19,6 +19,7 @@ import org.eclipse.wst.common.componentcore.internal.util.ComponentUtilities;
 import org.eclipse.wst.server.core.*;
 import org.eclipse.wst.server.core.internal.ServerType;
 import org.jboss.tools.common.model.XModel;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.filesystems.FileSystemsHelper;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
@@ -92,22 +93,17 @@ public class RegistrationHelper {
 		IModule[] add = new IModule[]{m};
 		IModule[] remove = new IModule[0];
 		try {
-			try {
-				server.getRootModules(m, null);
-			} catch (CoreException ce) {
-				WebModelPlugin.getPluginLog().logError(ce);
-				return ce.getStatus().getMessage();
-			}
-
-			IProgressMonitor monitor = new NullProgressMonitor();
-			IServerWorkingCopy copy = server.createWorkingCopy();
-			IStatus status = copy.canModifyModules(add, remove, monitor);
-			if(status != null && !status.isOK()) return status.getMessage();
-			return null;
-		} catch (Exception e) {
-			WebModelPlugin.getPluginLog().logError(e);
-			return WebUIMessages.CANNOT_REGISTER_IN_THIS_SERVER;
+			server.getRootModules(m, null);
+		} catch (CoreException ce) {
+			WebModelPlugin.getPluginLog().logError(ce);
+			return ce.getStatus().getMessage();
 		}
+
+		IProgressMonitor monitor = new NullProgressMonitor();
+		IServerWorkingCopy copy = server.createWorkingCopy();
+		IStatus status = copy.canModifyModules(add, remove, monitor);
+		if(status != null && !status.isOK()) return status.getMessage();
+		return null;
 	}
 	
 	public static void register(IProject project) {
@@ -131,7 +127,7 @@ public class RegistrationHelper {
 			if(canPublish(server)) {
 				server.publish(IServer.PUBLISH_INCREMENTAL, monitor);
 			}
-		} catch (Exception e) {
+		} catch (CoreException e) {
 			WebModelPlugin.getPluginLog().logError(e);
 		}
 	}
@@ -167,7 +163,7 @@ public class RegistrationHelper {
 			if(canPublish(server)) {
 				server.publish(IServer.PUBLISH_INCREMENTAL, monitor);
 			}
-		} catch (Exception e) {
+		} catch (CoreException e) {
 			WebModelPlugin.getPluginLog().logError(e);
 		}
 		return true;
@@ -238,7 +234,7 @@ public class RegistrationHelper {
 				} else {
 					ModelPlugin.getWorkspace().run(new WR(), monitor);
 				}
-			} catch (Exception e) {
+			} catch (CoreException e) {
 				WebModelPlugin.getPluginLog().logError(e);
 			}
 			return Status.OK_STATUS;
@@ -248,7 +244,7 @@ public class RegistrationHelper {
 			public void run(IProgressMonitor monitor) throws CoreException {
 				try {
 					register(p, servers, contextRoot, monitor);
-				} catch (Exception e) {
+				} catch (XModelException e) {
 					WebModelPlugin.getPluginLog().logError(e);
 				}
 			}
@@ -256,7 +252,7 @@ public class RegistrationHelper {
 		}
 	}
 
-	private static void register(IProject p, IServer[] servers, String contextRoot, IProgressMonitor monitor) throws Exception {
+	private static void register(IProject p, IServer[] servers, String contextRoot, IProgressMonitor monitor) throws XModelException {
 		if(monitor != null) monitor.beginTask("", 100);
 		if(monitor != null) monitor.worked(5);
 

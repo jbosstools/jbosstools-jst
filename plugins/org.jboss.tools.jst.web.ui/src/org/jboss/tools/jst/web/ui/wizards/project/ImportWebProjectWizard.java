@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.wizards.project;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
 
 import org.eclipse.core.runtime.CoreException;
@@ -82,7 +83,7 @@ public abstract class ImportWebProjectWizard extends Wizard implements IImportWi
 
 	public boolean performFinish() {
 		if(!checkOldVersion()) return false;
-		boolean result = true;		
+		boolean result = false;		
 		try	{
 			if(!checkServletVersion()) return false;
 			context.commitSupportDelta();
@@ -90,9 +91,15 @@ public abstract class ImportWebProjectWizard extends Wizard implements IImportWi
 			getContainer().run(false, true, op);
 			updatePerspective();
 			BasicNewResourceWizard.selectAndReveal(context.getProjectHandle(), ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow());
-		} catch (Exception ex) {
+			result = true;
+		} catch (XModelException ex) {
 			WebUiPlugin.getPluginLog().logError(ex);
-			result = false;
+		} catch (CoreException ex) {
+			WebUiPlugin.getPluginLog().logError(ex);
+		} catch (InvocationTargetException ex) {
+			WebUiPlugin.getPluginLog().logError(ex);
+		} catch (InterruptedException ex) {
+			WebUiPlugin.getPluginLog().logError(ex);
 		}		
 		return result;
 	}

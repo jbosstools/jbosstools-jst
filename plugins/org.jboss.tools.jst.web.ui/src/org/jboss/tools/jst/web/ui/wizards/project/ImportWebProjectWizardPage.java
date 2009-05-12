@@ -349,14 +349,7 @@ public class ImportWebProjectWizardPage extends WizardPage {
 			setErrorMessage(nameStatus.getMessage());
 			return false;
 		}		
-		IProject project = null;
-		try {
-			project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
-		} catch (Exception e) {
-			WebUiPlugin.getPluginLog().logError(e);
-			setErrorMessage(e.getMessage());
-			return false;
-		}
+		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		
 		if(project != null && project.exists() && !project.isOpen()) {
 			setErrorMessage(NLS.bind(WebUIMessages.PROJECT_EXISTS_IN_WORKSPACE, getProjectNameValue()) );
@@ -399,13 +392,9 @@ public class ImportWebProjectWizardPage extends WizardPage {
 	}
 	
 	private void updateContext(boolean onProjectNameEdit, boolean onProjectLocationEdit) {
- 		try	{
 			if (getWebXmlFile() != null) updateProjectNameValue(onProjectNameEdit, onProjectLocationEdit);
 			context.setProjectName(getProjectNameValue());
 			context.setWebXmlLocation(getWebXmlLocationValue());
-		} catch (Exception ex) {
-			WebUiPlugin.getPluginLog().logError(ex);
-		}
 	}
 	
 }

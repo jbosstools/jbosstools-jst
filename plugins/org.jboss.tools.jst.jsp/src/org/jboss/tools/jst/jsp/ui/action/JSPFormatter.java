@@ -31,7 +31,7 @@ public class JSPFormatter {
 	int start = -1;
 	int end = -1;
 	
-	public void format(IDocument document, TextSelection textSelection) throws Exception {
+	public void format(IDocument document, TextSelection textSelection) throws BadLocationException {
 		selectionStart = textSelection.getOffset();
 		selectionEnd = selectionStart + textSelection.getLength();
 		text = document.get();

@@ -99,34 +99,30 @@ public class ExtendedJSPContentAssistProcessor extends JSPContentAssistProcessor
 		updateActiveContentAssistProcessor(document);
 		ICompletionProposal[] proposals = super.computeCompletionProposals(viewer, documentPosition);
 		// If proposal list from super is empty to try to get it from Red Hat dinamic jsp content assist processor.
-		try {
-			if(proposals.length == 0) {
-				String partitionType = getPartitionType((StructuredTextViewer) viewer, documentPosition);
-				IContentAssistProcessor p = (IContentAssistProcessor) fPartitionToProcessorMap.get(partitionType);
-				if (!(p instanceof CSSContentAssistProcessor)) {
+		if(proposals.length == 0) {
+			String partitionType = getPartitionType((StructuredTextViewer) viewer, documentPosition);
+			IContentAssistProcessor p = (IContentAssistProcessor) fPartitionToProcessorMap.get(partitionType);
+			if (!(p instanceof CSSContentAssistProcessor)) {
 
-					IndexedRegion treeNode = ContentAssistUtils.getNodeAt((StructuredTextViewer) viewer, documentPosition);
-					Node node = (Node) treeNode;
-					
-					while (node != null && node.getNodeType() == Node.TEXT_NODE && node.getParentNode() != null)
-						node = node.getParentNode();
-					IDOMNode xmlnode = (IDOMNode) node;
-					if(xmlnode!=null) {
-						fTextViewer = viewer;
-						IStructuredDocumentRegion sdRegion = getStructuredDocumentRegion(documentPosition);
-						ITextRegion completionRegion = getCompletionRegion(documentPosition, node);
-						if(completionRegion!=null) {
-							String matchString = getMatchString(sdRegion, completionRegion, documentPosition);
-							ContentAssistRequest contentAssistRequest = computeCompletionProposals(documentPosition, matchString, completionRegion, (IDOMNode) treeNode, xmlnode);
-							if(contentAssistRequest!=null) {
-								proposals = contentAssistRequest.getCompletionProposals();
-							}
+				IndexedRegion treeNode = ContentAssistUtils.getNodeAt((StructuredTextViewer) viewer, documentPosition);
+				Node node = (Node) treeNode;
+				
+				while (node != null && node.getNodeType() == Node.TEXT_NODE && node.getParentNode() != null)
+					node = node.getParentNode();
+				IDOMNode xmlnode = (IDOMNode) node;
+				if(xmlnode!=null) {
+					fTextViewer = viewer;
+					IStructuredDocumentRegion sdRegion = getStructuredDocumentRegion(documentPosition);
+					ITextRegion completionRegion = getCompletionRegion(documentPosition, node);
+					if(completionRegion!=null) {
+						String matchString = getMatchString(sdRegion, completionRegion, documentPosition);
+						ContentAssistRequest contentAssistRequest = computeCompletionProposals(documentPosition, matchString, completionRegion, (IDOMNode) treeNode, xmlnode);
+						if(contentAssistRequest!=null) {
+							proposals = contentAssistRequest.getCompletionProposals();
 						}
 					}
 				}
 			}
-		} catch (Exception e) {
-			JspEditorPlugin.getPluginLog().logError(e);
 		}
 		proposals = getUniqProposals(proposals);
 		return proposals;

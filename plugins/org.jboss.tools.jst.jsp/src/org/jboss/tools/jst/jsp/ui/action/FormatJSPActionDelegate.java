@@ -15,6 +15,7 @@ import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
@@ -41,7 +42,7 @@ public class FormatJSPActionDelegate implements IEditorActionDelegate {
 		IDocument document = te.getTextViewer().getDocument();
 		try {
 			new JSPFormatter().format(document, textSelection);
-		} catch (Exception e) {
+		} catch (BadLocationException e) {
 			JspEditorPlugin.getPluginLog().logError(e);
 		}
 	}

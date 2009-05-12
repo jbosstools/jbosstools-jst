@@ -10,18 +10,24 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.tiles.ui.editor.model.impl;
 
-import java.util.*;
-
-import org.xml.sax.*;
-
-import java.beans.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyVetoException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Vector;
 
 import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Control;
-
-import org.jboss.tools.common.model.*;
-import org.jboss.tools.common.model.event.*;
+import org.eclipse.swt.widgets.Menu;
+import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.event.XModelTreeEvent;
+import org.jboss.tools.common.model.event.XModelTreeListener;
+import org.jboss.tools.common.model.ui.action.XModelObjectActionList;
+import org.jboss.tools.common.model.ui.util.ModelUtilities;
+import org.jboss.tools.common.model.util.XModelTreeListenerSWTSync;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 import org.jboss.tools.jst.web.tiles.TilesPreference;
 import org.jboss.tools.jst.web.tiles.model.helpers.TilesStructureHelper;
@@ -34,11 +40,7 @@ import org.jboss.tools.jst.web.tiles.ui.editor.model.ITilesModel;
 import org.jboss.tools.jst.web.tiles.ui.editor.model.ITilesModelListener;
 import org.jboss.tools.jst.web.tiles.ui.editor.model.ITilesOptions;
 import org.jboss.tools.jst.web.tiles.ui.preferences.TilesEditorTabbedPreferencesPage;
-
-import org.jboss.tools.common.model.plugin.ModelPlugin;
-import org.jboss.tools.common.model.ui.action.*;
-import org.jboss.tools.common.model.ui.util.ModelUtilities;
-import org.jboss.tools.common.model.util.XModelTreeListenerSWTSync;
+import org.xml.sax.SAXException;
 
 public class TilesModel extends TilesElement implements ITilesModel, PropertyChangeListener, XModelTreeListener {
 	List<IDefinition> visibleDefinitions = new Vector<IDefinition>();
@@ -73,7 +75,7 @@ public class TilesModel extends TilesElement implements ITilesModel, PropertyCha
 	public TilesModel() {
 		try {
 			setName(WebUIMessages.STRUTS_MODEL);
-		} catch (Exception ex) {
+		} catch (PropertyVetoException ex) {
 			TilesUIPlugin.getPluginLog().logError(ex);
 		}
 	}
@@ -102,7 +104,7 @@ public class TilesModel extends TilesElement implements ITilesModel, PropertyCha
 		return options;
 	}
 
-	public TilesModel(Object data) throws SAXException, Exception {
+	public TilesModel(Object data) throws SAXException {
 		this();
 		setData(data);
 		map.setData((XModelObject) data);
@@ -181,7 +183,7 @@ public class TilesModel extends TilesElement implements ITilesModel, PropertyCha
 
 	XModelTreeListenerSWTSync listener = null;
 
-	public void setData(Object data) throws Exception {
+	public void setData(Object data) {
 		source = helper.getProcess((XModelObject) data);
 		if (source == null) {
 			return;
@@ -300,7 +302,6 @@ public class TilesModel extends TilesElement implements ITilesModel, PropertyCha
 	}
 
 	public void nodeChanged(XModelTreeEvent event) {
-		try {
 			if (map == null)
 				return;
 			fireProcessChanged();
@@ -316,32 +317,25 @@ public class TilesModel extends TilesElement implements ITilesModel, PropertyCha
 				return;
 			}
 			element.nodeChanged(event);
-		} catch (Exception x) {
-			TilesUIPlugin.getPluginLog().logError("Error in processing model event", x);
-		}
 	}
 
 	public void structureChanged(XModelTreeEvent event) {
 		TilesElement element;
-		try {
-			Object obj = event.getModelObject().getPath();
-			if (obj == null)
-				return;
-			if (map == null)
-				return;
-			element = (TilesElement) map.get(obj);
-			if (element == null) {
-				return;
-			}
-			if (event.kind() == XModelTreeEvent.STRUCTURE_CHANGED) {
-				element.structureChanged(event);
-			} else if (event.kind() == XModelTreeEvent.CHILD_ADDED) {
-				element.nodeAdded(event);
-			} else if (event.kind() == XModelTreeEvent.CHILD_REMOVED) {
-				element.nodeRemoved(event);
-			}
-		} catch (Exception x) {
-			TilesUIPlugin.getPluginLog().logError("Error in processing model event", x);
+		Object obj = event.getModelObject().getPath();
+		if (obj == null)
+			return;
+		if (map == null)
+			return;
+		element = (TilesElement) map.get(obj);
+		if (element == null) {
+			return;
+		}
+		if (event.kind() == XModelTreeEvent.STRUCTURE_CHANGED) {
+			element.structureChanged(event);
+		} else if (event.kind() == XModelTreeEvent.CHILD_ADDED) {
+			element.nodeAdded(event);
+		} else if (event.kind() == XModelTreeEvent.CHILD_REMOVED) {
+			element.nodeRemoved(event);
 		}
 	}
 
@@ -560,7 +554,7 @@ public class TilesModel extends TilesElement implements ITilesModel, PropertyCha
 			if (str.indexOf("default") >= 0)return DEFAULT_VERTICAL_SPACING; //$NON-NLS-1$
 			try {
 				return Integer.parseInt(str);
-			} catch (Exception ex) {
+			} catch (NumberFormatException ex) {
 				TilesUIPlugin.getPluginLog().logError(ex);
 				return DEFAULT_VERTICAL_SPACING;
 			}
@@ -573,7 +567,7 @@ public class TilesModel extends TilesElement implements ITilesModel, PropertyCha
 			if (str.indexOf("default") >= 0)return DEFAULT_HORIZONTAL_SPACING; //$NON-NLS-1$
 			try {
 				return Integer.parseInt(str);
-			} catch (Exception ex) {
+			} catch (NumberFormatException ex) {
 				TilesUIPlugin.getPluginLog().logError(ex);
 				return DEFAULT_HORIZONTAL_SPACING;
 			}

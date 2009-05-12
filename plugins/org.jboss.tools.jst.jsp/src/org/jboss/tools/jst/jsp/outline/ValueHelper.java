@@ -256,8 +256,6 @@ public class ValueHelper {
 				}
 ///				wtpTextJspKbConnector.setTaglibManagerProvider(parentEditor);
 			}
-		} catch(Exception x) {
-			JspEditorPlugin.getPluginLog().logError("Error in activating prompting suppport", x);
 		} finally {
 			if(model != null) {
 				model.releaseFromRead();
@@ -277,7 +275,7 @@ public class ValueHelper {
 		try {
 			pageConnector = (WtpKbConnector)KbConnectorFactory.getIntstance().createConnector(KbConnectorType.JSP_WTP_KB_CONNECTOR, document);
 			registerTaglibs(pageConnector, document);
-		} catch (Exception e) {
+		} catch (KbException e) {
 			JspEditorPlugin.getPluginLog().logError(e);
 		}
 	}

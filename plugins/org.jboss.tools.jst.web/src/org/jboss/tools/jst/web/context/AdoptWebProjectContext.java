@@ -111,15 +111,11 @@ public abstract class AdoptWebProjectContext {
         String entity = support.getTarget().getModel().getEntityRecognizer().getEntityName("xml", body);
         if(entity == null || !entity.startsWith("FileWebApp")) throw new XModelException("File " + location + "is not recognized as web descriptor file.");
         XModelObject webxml = null;
-        try {
-            webxml = support.getTarget().getModel().createModelObject(entity, null);
-            webxml.setAttributeValue("name", "web");
-            XModelObjectLoaderUtil.setTempBody(webxml, body);
-            XModelObjectLoaderUtil.getObjectLoader(webxml).load(webxml);
-            webxml.getChildren();
-        } catch (Exception e) {
-            throw new XModelException("Cannot load web descriptor file " + location + ".");
-        }
+        webxml = support.getTarget().getModel().createModelObject(entity, null);
+        webxml.setAttributeValue("name", "web");
+        XModelObjectLoaderUtil.setTempBody(webxml, body);
+        XModelObjectLoaderUtil.getObjectLoader(webxml).load(webxml);
+        webxml.getChildren();
         if("yes".equals(webxml.getAttributeValue("isIncorrect")))
           throw new XModelException("Web descriptor file " + location + "is corrupted.");
         webxmlLocation = location;

@@ -66,7 +66,11 @@ public class JSPContentOutlineConfiguration extends HTMLContentOutlineConfigurat
 				Class cls = b.loadClass("org.jboss.tools.vpe.editor.dnd.context.ViewerDropAdapterFactory");
 				dropAdapterFactory = (IViewerDropAdapterFactory)cls.newInstance();
 			}
-		} catch (Exception e) {
+		} catch (IllegalAccessException e) {
+			JspEditorPlugin.getPluginLog().logError(e);
+		} catch (ClassNotFoundException e) {
+			JspEditorPlugin.getPluginLog().logError(e);
+		} catch (InstantiationException e) {
 			JspEditorPlugin.getPluginLog().logError(e);
 		}
 	}

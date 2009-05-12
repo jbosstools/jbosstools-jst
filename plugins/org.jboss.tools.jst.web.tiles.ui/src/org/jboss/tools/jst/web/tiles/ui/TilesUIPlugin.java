@@ -34,12 +34,7 @@ public class TilesUIPlugin extends BaseUIPlugin {
 	}
 
 	public Shell getShell() {
-		try {
-			return TilesUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell();
-		} catch(Exception e){
-			getPluginLog().logError("Exception:", e);
-			return null;
-		}
+		return TilesUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell();
 	}
 
 	public static TilesUIPlugin getDefault() {

@@ -10,6 +10,8 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.wizards.project;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IContributor;
@@ -61,7 +63,6 @@ public abstract class ImportWebWarWizard extends Wizard implements IImportWizard
 
 	public boolean performFinish() {
 		boolean result = true;		
-		try	{
 			mainPage.commit();
 			
 			context.setServletVersion("2.4");
@@ -70,19 +71,21 @@ public abstract class ImportWebWarWizard extends Wizard implements IImportWizard
 			}
 			
 			IRunnableWithProgress op =  new WorkspaceModifyDelegatingOperation(createOperation());
-			getContainer().run(false, true, op);
+			try {
+				getContainer().run(false, true, op);
+			} catch (InvocationTargetException e) {
+				WebUiPlugin.getPluginLog().logError(e);
+			} catch (InterruptedException e) {
+				WebUiPlugin.getPluginLog().logError(e);
+			}
 			updatePerspective();
 			BasicNewResourceWizard.selectAndReveal(context.getProjectHandle(), ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow());
-		} catch (Exception ex) {
-			WebUiPlugin.getPluginLog().logError(ex);
-			result = false;
-		}		
 		return result;
 	}
 
 	protected abstract IRunnableWithProgress createOperation();
 
-	protected void updatePerspective() throws CoreException {
+	protected void updatePerspective() {
 		BasicNewProjectResourceWizard.updatePerspective(new ConfigurationElementInternal());
 	}
 

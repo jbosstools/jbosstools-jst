@@ -1115,7 +1115,16 @@ public class JSPTextEditor extends StructuredTextEditor implements
 				Boolean b = (Boolean) m.invoke(getSelectionProvider(),
 						new Object[0]);
 				return b.booleanValue();
-			} catch (Exception e) {
+			} catch (NoSuchMethodException e) {
+				firingSelectionFailedCount++;
+				JspEditorPlugin.getPluginLog().logError(e);
+			} catch (IllegalArgumentException e) {
+				firingSelectionFailedCount++;
+				JspEditorPlugin.getPluginLog().logError(e);
+			} catch (IllegalAccessException e) {
+				firingSelectionFailedCount++;
+				JspEditorPlugin.getPluginLog().logError(e);
+			} catch (InvocationTargetException e) {
 				firingSelectionFailedCount++;
 				JspEditorPlugin.getPluginLog().logError(e);
 			}

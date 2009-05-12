@@ -10,8 +10,9 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.tiles.model;
 
-import org.jboss.tools.common.log.LogHelper;
-import org.jboss.tools.common.model.loaders.*;
+import java.io.IOException;
+
+import org.jboss.tools.common.model.loaders.EntityRecognizer;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.xml.XMLEntityResolver;
 
@@ -19,7 +20,7 @@ public class FileTilesRecognizer implements EntityRecognizer {
     static {
         try {
             XMLEntityResolver.registerPublicEntity(TilesConstants.DOC_PUBLICID, FileTilesRecognizer.class, "/meta/tiles_config_1_1.dtd");
-        } catch (Exception e) {
+        } catch (IOException e) {
         	ModelPlugin.getPluginLog().logError(e);
         }
     }

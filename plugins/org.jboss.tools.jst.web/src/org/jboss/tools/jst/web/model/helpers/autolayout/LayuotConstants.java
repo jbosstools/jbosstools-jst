@@ -29,47 +29,39 @@ public class LayuotConstants {
 	public int indentY = 16;
 	
 	public void update() {
-		try {
-			XModel model = PreferenceModelUtilities.getPreferenceModel();
-			XModelObject o = model.getByPath("%Options%/Struts Studio/Editors/Web Flow Diagram");
-			String g = o.getAttributeValue("Grid Step");
-			int step = Integer.parseInt(g);
-			indentX = (step < 24) ? 24 : step;
-			indentY = (step < 16) ? 16 : step;
-			if(step == 16) {
-				deltaX = 208;
-				deltaY = 112;
-				incX = 16;
-				incY = 32;
-				indentX = 32;
-			} else if(step == 24) {
-				deltaX = 240;
-				deltaY = 120;
-				incX = 24;
-				incY = 24;
-			} else if(step == 32) {
-				deltaX = 256;
-				deltaY = 128;
-				incX = 32;
-				incY = 32;
-			} else if(step == 40) {
-				deltaX = 240;
-				deltaY = 120;
-				incX = 40;
-				incY = 40;
-			} else {
-				deltaX = DELTA_X;
-				deltaY = DELTA_Y;
-				incX = X_INC;
-				incY = Y_INC;
-			}
-		} catch (Exception e) {
-			WebModelPlugin.getPluginLog().logError(e);
+		XModel model = PreferenceModelUtilities.getPreferenceModel();
+		XModelObject o = model.getByPath("%Options%/Struts Studio/Editors/Web Flow Diagram");
+		String g = o.getAttributeValue("Grid Step");
+		int step = Integer.parseInt(g);
+		indentX = (step < 24) ? 24 : step;
+		indentY = (step < 16) ? 16 : step;
+		if(step == 16) {
+			deltaX = 208;
+			deltaY = 112;
+			incX = 16;
+			incY = 32;
+			indentX = 32;
+		} else if(step == 24) {
+			deltaX = 240;
+			deltaY = 120;
+			incX = 24;
+			incY = 24;
+		} else if(step == 32) {
+			deltaX = 256;
+			deltaY = 128;
+			incX = 32;
+			incY = 32;
+		} else if(step == 40) {
+			deltaX = 240;
+			deltaY = 120;
+			incX = 40;
+			incY = 40;
+		} else {
 			deltaX = DELTA_X;
 			deltaY = DELTA_Y;
 			incX = X_INC;
 			incY = Y_INC;
-		}	
+		}
 	}
 	
 }

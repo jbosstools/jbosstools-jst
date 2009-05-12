@@ -10,11 +10,13 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.tiles.model;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 
 import org.jboss.tools.common.meta.XAttribute;
 import org.jboss.tools.common.meta.XModelEntity;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.filesystems.FileAuxiliary;
 import org.jboss.tools.common.model.filesystems.impl.AbstractXMLFileImpl;
@@ -121,7 +123,7 @@ public class FileTilesLoader extends AbstractWebDiagramLoader implements WebProc
 			XModelObjectLoaderUtil.setTempBody(process, sw.toString());
 			aux.write(object.getParent(), object, process);
 			return true;
-		} catch (Exception exc) {
+		} catch (IOException exc) {
 			ModelPlugin.getPluginLog().logError(exc);
 			return false;
 		}
@@ -133,17 +135,19 @@ public class FileTilesLoader extends AbstractWebDiagramLoader implements WebProc
 		if(systemId == null || systemId.length() == 0) systemId = DOC_EXTDTD;
 		String publicId = DOC_PUBLICID;
 		Element element = XMLUtil.createDocumentElement(object.getModelEntity().getXMLSubPath(), DOC_QUALIFIEDNAME, publicId, systemId, null);
-
+		String result = null;
 		try {
 			util.setup(null, false);
 			String att = object.getAttributeValue("comment");
 			if (att.length() > 0) util.saveAttribute(element, "#comment", att);
 			util.saveChildren(element, object);
-            return SimpleWebFileLoader.serialize(element, object);
-		} catch (Exception e) {
+			result = SimpleWebFileLoader.serialize(element, object);
+		} catch (IOException e) {
 			ModelPlugin.getPluginLog().logError(e);
-			return null;
+		} catch (XModelException e) {
+			ModelPlugin.getPluginLog().logError(e);
 		}
+		return result;
 	}
 
 }

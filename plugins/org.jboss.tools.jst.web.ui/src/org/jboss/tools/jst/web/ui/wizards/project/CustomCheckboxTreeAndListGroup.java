@@ -38,24 +38,26 @@ public class CustomCheckboxTreeAndListGroup extends CheckboxTreeAndListGroup {
     }
 
     public void initialCheckListItem(File listElement) {
-    	setCurrentTreeSelection(listElement.getParentFile());
-    	try {
-    		super.listItemChecked(listElement, true, true);
-    	} catch (Exception e) {
-			WebUiPlugin.getPluginLog().logError(e);
-    	}
+   		super.listItemChecked(listElement, true, true);
     	setCurrentTreeSelection(null);
     }
     
     public CheckboxTreeViewer getTreeViewer() {
+    	CheckboxTreeViewer viewer = null;
     	try {
     		Field f = cls.getDeclaredField("treeViewer");
     		f.setAccessible(true);
-    		return (CheckboxTreeViewer)f.get(this);
-    	} catch (Exception e) {
-    		WebUiPlugin.getPluginLog().logError(e);
-    		return null;
-    	}
+    		viewer = (CheckboxTreeViewer)f.get(this);
+		} catch (SecurityException e) {
+			WebUiPlugin.getPluginLog().logError(e);
+		} catch (NoSuchFieldException e) {
+			WebUiPlugin.getPluginLog().logError(e);
+		} catch (IllegalArgumentException e) {
+			WebUiPlugin.getPluginLog().logError(e);
+		} catch (IllegalAccessException e) {
+			WebUiPlugin.getPluginLog().logError(e);
+		}
+		return viewer;
     }
     
     public void setExpansions() {
@@ -68,13 +70,19 @@ public class CustomCheckboxTreeAndListGroup extends CheckboxTreeAndListGroup {
     }
     
     private void setCurrentTreeSelection(Object element) {
-    	try {
-    		Field f = cls.getDeclaredField("currentTreeSelection");
+		Field f;
+		try {
+			f = cls.getDeclaredField("currentTreeSelection");
     		f.setAccessible(true);
     		f.set(this, element);
-    	} catch (Exception e) {
-    		WebUiPlugin.getPluginLog().logError(e);
-    	}
+		} catch (SecurityException e) {
+			WebUiPlugin.getPluginLog().logError(e);
+		} catch (NoSuchFieldException e) {
+			WebUiPlugin.getPluginLog().logError(e);
+		} catch (IllegalArgumentException e) {
+			WebUiPlugin.getPluginLog().logError(e);
+		} catch (IllegalAccessException e) {
+			WebUiPlugin.getPluginLog().logError(e);
+		}
     }
-
 }
