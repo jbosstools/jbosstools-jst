@@ -195,8 +195,25 @@ public abstract class AbstractComponent implements IComponent {
 	 * @see org.jboss.tools.jst.web.kb.IProposalProcessor#getProposals(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.IPageContext)
 	 */
 	public TextProposal[] getProposals(KbQuery query, IPageContext context) {
-		// TODO Auto-generated method stub
-		return null;
+		List<TextProposal> proposals = new ArrayList<TextProposal>();
+		IAttribute[] attributes = getAttributes(query, context);
+		if(query.getType() == KbQuery.Type.ATTRIBUTE_NAME) {
+			for (int i = 0; i < attributes.length; i++) {
+				TextProposal proposal = new TextProposal();
+				proposal.setContextInfo(attributes[i].getDescription());
+				proposal.setReplacementString(attributes[i].getName());
+				proposal.setLabel(attributes[i].getName());
+				proposals.add(proposal);
+			}
+		} else if(query.getType() == KbQuery.Type.ATTRIBUTE_VALUE) {
+			for (int i = 0; i < attributes.length; i++) {
+				TextProposal[] attributeProposals  = attributes[i].getProposals(query, context);
+				for (int j = 0; j < attributeProposals.length; j++) {
+					proposals.add(attributeProposals[j]);
+				}
+			}
+		}
+		return proposals.toArray(new TextProposal[proposals.size()]);
 	}
 
 	/**

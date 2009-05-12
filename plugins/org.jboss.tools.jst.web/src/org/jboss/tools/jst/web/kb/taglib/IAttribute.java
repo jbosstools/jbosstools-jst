@@ -25,7 +25,7 @@ public interface IAttribute extends IProposalProcessor {
 	/**
 	 * @return description
 	 */
-	String getDesription();
+	String getDescription();
 
 	/**
 	 * @return true if the attribute is required.
