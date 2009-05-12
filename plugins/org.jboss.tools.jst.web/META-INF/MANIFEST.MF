@@ -66,6 +66,5 @@ Export-Package:
  org.jboss.tools.jst.web.tld.model,
  org.jboss.tools.jst.web.tld.model.handlers,
  org.jboss.tools.jst.web.tld.model.helpers,
- org.jboss.tools.jst.web.tomcat,
  org.jboss.tools.jst.web.webapp.model,
  org.jboss.tools.jst.web.webapp.model.handlers
