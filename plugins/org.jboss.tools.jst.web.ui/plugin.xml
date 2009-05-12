@@ -3,8 +3,6 @@
 <plugin>
 
    <extension point="org.jboss.tools.common.model.specialwizard">
-      <specialwizard class="org.jboss.tools.jst.web.ui.wizards.tomcatvm.TomcatVMWizard" id="org.jboss.tools.jst.web.ui.wizards.tomcatvm.TomcatVMWizard">
-      </specialwizard>
       <specialwizard class="org.jboss.tools.jst.web.ui.wizards.appregister.AppRegisterWizard" id="org.jboss.tools.jst.web.ui.wizards.appregister.AppRegisterWizard">
       </specialwizard>
       <specialwizard class="org.jboss.tools.jst.web.ui.wizards.links.HiddenLinksWizard" id="org.jboss.tools.jst.web.ui.wizards.links.HiddenLinksWizard">
@@ -557,14 +555,10 @@
 			class="org.jboss.tools.jst.web.ui.wizards.project.AddProjectTemplateVelocityView"/>
 		<xclass id="org.jboss.tools.jst.web.ui.wizards.project.EditProjectTemplateView"
 			class="org.jboss.tools.jst.web.ui.wizards.project.EditProjectTemplateView"/>
-		<xclass id="org.jboss.tools.jst.web.ui.wizards.tomcatvm.TomcatVMWizard"
-			class="org.jboss.tools.jst.web.ui.wizards.tomcatvm.TomcatVMWizard"/>
 		<xclass id="org.jboss.tools.jst.web.ui.editors.forms.TLDFormLayoutData"
 			class="org.jboss.tools.jst.web.ui.editors.forms.TLDFormLayoutData"/>
 		<xclass id="org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
 			class="org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"/>
-		<xclass id="org.jboss.tools.jst.web.ui.wizards.tomcatvm.TomcatVMWizard"
-			class="org.jboss.tools.jst.web.ui.wizards.tomcatvm.TomcatVMWizard"/>
 		<xclass id="org.jboss.tools.jst.web.ui.wizards.links.HiddenLinksWizard"
 			class="org.jboss.tools.jst.web.ui.wizards.links.HiddenLinksWizard"/>
    </extension>
