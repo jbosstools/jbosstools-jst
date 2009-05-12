@@ -334,7 +334,7 @@
     <XActionItem HIDE="always" HandlerClassName="%SaveFile%"
      ICON="action.save" displayName="Save" kind="action" name="Save"/>
     <XActionItem
-     HandlerClassName="org.jboss.tools.jst.web.tomcat.ResetFileDateHandler"
+     HandlerClassName="org.jboss.tools.jst.web.model.handlers.ResetFileDateHandler"
      ICON="action.save" displayName="Change Timestamp" kind="action" name="ChangeTimeStamp"/>
    </XActionItem>
    <XActionItem HIDE="always"
@@ -490,7 +490,7 @@
     <XActionItem HIDE="always" HandlerClassName="%SaveFile%"
      ICON="action.save" displayName="Save" kind="action" name="Save"/>
     <XActionItem
-     HandlerClassName="org.jboss.tools.jst.web.tomcat.ResetFileDateHandler"
+     HandlerClassName="org.jboss.tools.jst.web.model.handlers.ResetFileDateHandler"
      ICON="action.save" displayName="Change Timestamp" kind="action" name="ChangeTimeStamp"/>
    </XActionItem>
    <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">

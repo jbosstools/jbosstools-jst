@@ -191,8 +191,8 @@
 			class="org.jboss.tools.jst.web.tld.model.handlers.PaletteAdopt"/>
 		<xclass id="org.jboss.tools.jst.web.tld.model.handlers.ValidateTLDHandler"
 			class="org.jboss.tools.jst.web.tld.model.handlers.ValidateTLDHandler"/>
-		<xclass id="org.jboss.tools.jst.web.tomcat.ResetFileDateHandler"
-			class="org.jboss.tools.jst.web.tomcat.ResetFileDateHandler"/>
+		<xclass id="org.jboss.tools.jst.web.model.handlers.ResetFileDateHandler"
+			class="org.jboss.tools.jst.web.model.handlers.ResetFileDateHandler"/>
 
 		<xclass id="org.jboss.tools.jst.web.webapp.model.FileWebApp24Loader"
 			class="org.jboss.tools.jst.web.webapp.model.FileWebApp24Loader"/>

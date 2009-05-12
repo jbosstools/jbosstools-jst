@@ -8,7 +8,7 @@
  * Contributors:
  *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
  ******************************************************************************/ 
-package org.jboss.tools.jst.web.tomcat;
+package org.jboss.tools.jst.web.model.handlers;
 
 import java.util.*;
 import org.jboss.tools.common.model.*;
