@@ -25,17 +25,18 @@ import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.xml.ui.internal.contentassist.XMLRelevanceConstants;
 import org.eclipse.wst.xml.ui.internal.util.SharedXMLEditorPluginImageHelper;
+import org.jboss.tools.common.el.core.model.ELInstance;
+import org.jboss.tools.common.el.core.model.ELModel;
+import org.jboss.tools.common.el.core.model.ELUtil;
+import org.jboss.tools.common.el.core.parser.ELParser;
+import org.jboss.tools.common.el.core.parser.ELParserUtil;
 import org.jboss.tools.common.kb.KbException;
 import org.jboss.tools.common.kb.KbProposal;
 import org.jboss.tools.common.kb.KbQuery;
 import org.jboss.tools.common.kb.wtp.WtpKbConnector;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.outline.ValueHelper;
-import org.jboss.tools.jst.web.tld.TaglibData;
-import org.jboss.tools.jst.web.tld.VpeTaglibManager;
-import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 public class JSPDialogCellEditorContentAssistProcessor extends JavaPackageCompletionProcessor implements ISubjectControlContentAssistProcessor {
@@ -84,6 +85,18 @@ public class JSPDialogCellEditorContentAssistProcessor extends JavaPackageComple
 		matchString = currentValue.substring(0, offset);
 		strippedValue = currentValue;
 
+		String elProposalPrefix = "";
+
+		ELParser p = ELParserUtil.getJbossFactory().createParser();
+		ELModel model = p.parse(matchString);
+		ELInstance is = ELUtil.findInstance(model, matchString.length());
+
+		ELParser p1 = ELParserUtil.getJbossFactory().createParser();
+		ELModel model1 = p1.parse(currentValue);
+		ELInstance is1 = ELUtil.findInstance(model1, matchString.length());
+
+		int elStartPosition = is == null ? -1 : is.getStartPosition();
+
 		boolean faceletJsfTag = false;
 
 		String htmlQuery = null;
@@ -119,12 +132,26 @@ public class JSPDialogCellEditorContentAssistProcessor extends JavaPackageComple
                 }
                 
                 if(kbProposal.getStart() >= 0) {
-        			String replacementString = kbProposal.getReplacementString();
-                    int replacementBeginPosition = 0/*contentAssistRequest.getReplacementBeginPosition()*/ + kbProposal.getStart();
+        			String replacementString = kbProposal.getReplacementString().substring(2,kbProposal.getReplacementString().length() - 1);
+                    int replacementBeginPosition = /*contentAssistRequest.getReplacementBeginPosition() + */kbProposal.getStart();
                     int replacementLength = kbProposal.getEnd() - kbProposal.getStart();
                 	int cursorPositionDelta = 0;
-                	int cursorPosition = kbProposal.getPosition() + cursorPositionDelta;
                 	
+                	// Add an EL-starting quotation characters if needed
+                	if (elStartPosition == -1) {
+                		replacementString = elProposalPrefix + replacementString;
+            			cursorPositionDelta += elProposalPrefix.length();
+                	}
+  
+                		if(is1 == null || is1.getCloseInstanceToken() == null) {
+                			replacementString += "}";
+                		}
+
+                	int cursorPosition = kbProposal.getPosition() + cursorPositionDelta;
+                	String displayString = elProposalPrefix == null || elProposalPrefix.length() == 0 ? 
+                			kbProposal.getReplacementString().substring(2,kbProposal.getReplacementString().length() - 1) :
+                			elProposalPrefix + kbProposal.getReplacementString().substring(2,kbProposal.getReplacementString().length() - 1) + "}" ;
+
                 	Image image = kbProposal.hasImage() ? 
                 				kbProposal.getImage() :  
                 				SharedXMLEditorPluginImageHelper.getImage(SharedXMLEditorPluginImageHelper.IMG_OBJ_ATTRIBUTE);
