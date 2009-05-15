@@ -29,6 +29,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.jboss.tools.common.model.project.ext.event.Change;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.xml.XMLUtilities;
 import org.jboss.tools.jst.web.WebModelPlugin;
@@ -500,17 +501,49 @@ public class KbProject implements IKbProject {
 	 * @param source
 	 */
 	public void pathRemoved(IPath source) {
+		if(!sourcePaths.contains(source) && !sourcePaths2.containsKey(source)) return;
+		sourcePaths.remove(source);
+		sourcePaths2.remove(source);
+
+		List<Change> changes = null;
 		//TODO
+		
+		Set<ITagLibrary> ls = libraries.removePath(source);
+		if(ls != null) for (ITagLibrary l: ls) {
+			changes = Change.addChange(changes, new Change(this, null, l, null));
+		}
+		fireChanges(changes);
+		
+//		firePathRemovedToDependentProjects(source);
 	}
 
+	List<Change> postponedChanges = null;
+
 	public void postponeFiring() {
-		//TODO
+		if(postponedChanges == null) {
+			postponedChanges = new ArrayList<Change>();
+		}
 	}
 
 	public void fireChanges() {
-		//TODO
+		if(postponedChanges == null) return;
+		List<Change> changes = postponedChanges;
+		postponedChanges = null;
+		fireChanges(changes);
 	}
 
+	/**
+	 * 
+	 * @param changes
+	 */
+	void fireChanges(List<Change> changes) {
+		if(changes == null || changes.isEmpty()) return;
+		if(postponedChanges != null) {
+			postponedChanges.addAll(changes);
+			return;
+		}
+		//TODO
+	}
 	class LibraryStorage {
 		private Set<ITagLibrary> allFactories = new HashSet<ITagLibrary>();
 		private ITagLibrary[] allFactoriesArray = null;

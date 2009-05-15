@@ -10,26 +10,12 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal.scanner;
 
-import java.io.ByteArrayInputStream;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.jdt.core.IClassFile;
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.IPackageFragment;
-import org.eclipse.jdt.core.IPackageFragmentRoot;
-import org.eclipse.jdt.core.IParent;
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.JavaModelException;
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.filesystems.impl.FileSystemsImpl;
-import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
-import org.jboss.tools.common.model.util.XModelObjectUtil;
 import org.jboss.tools.jst.web.kb.IKbProject;
 import org.jboss.tools.jst.web.model.helpers.InnerModelHelper;
 
@@ -81,25 +67,26 @@ public class LibraryScanner implements IFileScanner {
 
 	public boolean isLikelyComponentSource(XModelObject o) {
 		if(o == null) return false;
-		if(o.getChildByPath("seam.properties") != null) return true; //$NON-NLS-1$
-		if(o.getChildByPath("META-INF/seam.properties") != null) return true; //$NON-NLS-1$
-		if(o.getChildByPath("META-INF/components.xml") != null) return true; //$NON-NLS-1$
+		if(o.getChildByPath("META-INF") != null) return true; //$NON-NLS-1$
 		return false;
 	}
 
 	public LoadedDeclarations parse(XModelObject o, IPath path, IKbProject sp) throws ScannerException {
 		if(o == null) return null;
 		sourcePath = path;
-		XModelObject seamProperties = o.getChildByPath("META-INF/seam.properties"); //$NON-NLS-1$
-		if(seamProperties == null) seamProperties = o.getChildByPath("seam.properties"); //$NON-NLS-1$
-		XModelObject componentsXML = o.getChildByPath("META-INF/components.xml"); //$NON-NLS-1$
-		if(componentsXML == null && seamProperties == null) return null;
+		XModelObject metaInf = o.getChildByPath("META-INF"); //$NON-NLS-1$
+		if(metaInf == null) return null;
 		
 		LoadedDeclarations ds = new LoadedDeclarations();
 
-		if(componentsXML != null) {
-			LoadedDeclarations ds1 = new XMLScanner().parse(componentsXML, path, sp);
-			if(ds1 != null) ds.add(ds1);
+		if(metaInf != null) {
+			XModelObject[] tlds = metaInf.getChildren();
+			for (XModelObject tld: tlds) {
+				XMLScanner s = new XMLScanner();
+				//TODO check that tld object is correct.
+				LoadedDeclarations ds1 = s.parse(tld, path, sp);
+				if(ds1 != null) ds.add(ds1);
+			}
 		}
 		
 		return ds;

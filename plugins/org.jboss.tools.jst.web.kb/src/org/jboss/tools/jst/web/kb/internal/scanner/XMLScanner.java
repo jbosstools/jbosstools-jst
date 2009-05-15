@@ -66,6 +66,7 @@ public class XMLScanner implements IFileScanner {
 		if(model == null) return false;
 		XModelObject o = EclipseResourceUtil.getObjectByResource(model, f);
 		if(o == null) return false;
+		//TODO
 		if(o.getModelEntity().getName().startsWith("FileSeamComponent")) return true; //$NON-NLS-1$
 		return false;
 	}
