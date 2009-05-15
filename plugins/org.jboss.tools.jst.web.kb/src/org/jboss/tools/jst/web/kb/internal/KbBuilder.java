@@ -16,7 +16,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.jboss.tools.jst.web.kb.Activator;
+import org.jboss.tools.jst.web.kb.WebKbPlugin;
 
 /**
  * 
@@ -24,7 +24,7 @@ import org.jboss.tools.jst.web.kb.Activator;
  *
  */
 public class KbBuilder extends IncrementalProjectBuilder {
-	public static String BUILDER_ID = Activator.PLUGIN_ID + ".kbbuilder"; //$NON-NLS-1$
+	public static String BUILDER_ID = WebKbPlugin.PLUGIN_ID + ".kbbuilder"; //$NON-NLS-1$
 
 	protected IProject[] build(int kind, Map args, IProgressMonitor monitor)
 			throws CoreException {

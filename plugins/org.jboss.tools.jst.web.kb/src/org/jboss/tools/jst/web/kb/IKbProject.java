@@ -19,7 +19,7 @@ import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
  *
  */
 public interface IKbProject extends IProjectNature {
-	public static String NATURE_ID = Activator.PLUGIN_ID + ".kbnature"; //$NON-NLS-1$
+	public static String NATURE_ID = WebKbPlugin.PLUGIN_ID + ".kbnature"; //$NON-NLS-1$
 
 	public ITagLibrary[] getTagLibraries();
 
