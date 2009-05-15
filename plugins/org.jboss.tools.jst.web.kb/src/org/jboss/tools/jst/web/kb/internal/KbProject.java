@@ -10,23 +10,35 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import org.eclipse.core.resources.ICommand;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
+import org.jboss.tools.common.xml.XMLUtilities;
 import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.kb.IKbProject;
+import org.jboss.tools.jst.web.kb.KbProjectFactory;
+import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.internal.scanner.ClassPathMonitor;
 import org.jboss.tools.jst.web.kb.internal.scanner.LoadedDeclarations;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
+import org.w3c.dom.Element;
 
 /**
  * 
@@ -166,10 +178,237 @@ public class KbProject implements IKbProject {
 	public void load() {
 		if(isStorageResolved) return;
 		isStorageResolved = true;
-	
-		//TODO
+		
+		postponeFiring();
+		
+		try {
+		
+			boolean b = getClassPath().update();
+			if(b) {
+				getClassPath().validateProjectDependencies();
+			}
+			File file = getStorageFile();
+			Element root = null;
+			if(file != null && file.isFile()) {
+				root = XMLUtilities.getElement(file, null);
+				if(root != null) {
+					loadProjectDependencies(root);
+					if(XMLUtilities.getUniqueChild(root, "paths") != null) {
+						loadSourcePaths2(root);
+					}
+				}
+			}
+
+			if(b) {
+				getClassPath().process();
+			}
+
+		} finally {
+			fireChanges();
+		}
+
 	}
 
+	public void clean() {
+		File file = getStorageFile();
+		if(file != null && file.isFile()) {
+			file.delete();
+		}
+		classPath.clean();
+		postponeFiring();
+		IPath[] ps = sourcePaths2.keySet().toArray(new IPath[0]);
+		for (int i = 0; i < ps.length; i++) {
+			pathRemoved(ps[i]);
+		}
+		fireChanges();
+	}
+	
+	public long fullBuildTime;
+	public List<Long> statistics;
+
+
+	/**
+	 * Method testing how long it takes to load Seam model
+	 * serialized previously.
+	 * This approach makes sure, that all other services 
+	 * (JDT, XModel, etc) are already loaded at first start of 
+	 * Seam model, so that now it is more or less pure time 
+	 * to be computed.
+	 * 
+	 * @return
+	 */
+	public long reload() {
+		statistics = new ArrayList<Long>();
+		classPath = new ClassPathMonitor(this);
+		sourcePaths.clear();
+		sourcePaths2.clear();
+		isStorageResolved = false;
+		dependsOn.clear();
+		usedBy.clear();
+		libraries.clear();
+		
+		long begin = System.currentTimeMillis();
+
+		classPath.init();
+		resolve();
+
+		long end = System.currentTimeMillis();
+		return end - begin;
+	}
+
+	/**
+	 * Stores results of last build, so that on exit/enter Eclipse
+	 * load them without rebuilding project
+	 * @throws IOException 
+	 */
+	public void store() throws IOException {
+		File file = getStorageFile();
+		file.getParentFile().mkdirs();
+		
+		Element root = XMLUtilities.createDocumentElement("seam-project"); //$NON-NLS-1$
+		storeProjectDependencies(root);
+
+//		storeSourcePaths(root);
+		storeSourcePaths2(root);
+		
+		XMLUtilities.serialize(root, file.getAbsolutePath());
+	}
+
+	/*
+	 * 
+	 */
+	private File getStorageFile() {
+		IPath path = WebKbPlugin.getDefault().getStateLocation();
+		File file = new File(path.toFile(), "projects/" + project.getName()); //$NON-NLS-1$
+		return file;
+	}
+	
+	public void clearStorage() {
+		File f = getStorageFile();
+		if(f != null && f.isFile()) f.delete();
+	}
+
+	/*
+	 * 
+	 */
+	private void loadProjectDependencies(Element root) {
+		Element dependsOnElement = XMLUtilities.getUniqueChild(root, "depends-on-projects"); //$NON-NLS-1$
+		if(dependsOnElement != null) {
+			Element[] paths = XMLUtilities.getChildren(dependsOnElement, "project"); //$NON-NLS-1$
+			for (int i = 0; i < paths.length; i++) {
+				String p = paths[i].getAttribute("name"); //$NON-NLS-1$
+				if(p == null || p.trim().length() == 0) continue;
+				IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(p);
+				if(project == null || !project.isAccessible()) continue;
+				KbProject sp = (KbProject)KbProjectFactory.getKbProject(project, false);
+				if(sp != null) {
+					dependsOn.add(sp);
+					sp.addDependentSeamProject(this);
+				}
+			}
+		}
+
+		Element usedElement = XMLUtilities.getUniqueChild(root, "used-by-projects"); //$NON-NLS-1$
+		if(usedElement != null) {
+			Element[] paths = XMLUtilities.getChildren(usedElement, "project"); //$NON-NLS-1$
+			for (int i = 0; i < paths.length; i++) {
+				String p = paths[i].getAttribute("name"); //$NON-NLS-1$
+				if(p == null || p.trim().length() == 0) continue;
+				IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(p);
+				if(project == null || !project.isAccessible()) continue;
+				KbProject sp = (KbProject)KbProjectFactory.getKbProject(project, false);
+				if(sp != null) usedBy.add(sp);
+			}
+		}
+	
+	}
+
+	private void loadSourcePaths2(Element root) {
+		Properties context = new Properties();
+		context.put("seamProject", this);
+		Element sourcePathsElement = XMLUtilities.getUniqueChild(root, "paths"); //$NON-NLS-1$
+		if(sourcePathsElement == null) return;
+		Element[] paths = XMLUtilities.getChildren(sourcePathsElement, "path"); //$NON-NLS-1$
+		if(paths != null) for (int i = 0; i < paths.length; i++) {
+			String p = paths[i].getAttribute("value"); //$NON-NLS-1$
+			if(p == null || p.trim().length() == 0) continue;
+			IPath path = new Path(p.trim());
+			if(sourcePaths2.containsKey(path)) continue;
+
+			if(!getClassPath().hasPath(path)) {
+				IFile f = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
+				if(f == null || !f.exists() || !f.isSynchronized(IResource.DEPTH_ZERO)) continue;
+			}
+			
+			//TODO
+
+			long t1 = System.currentTimeMillis();
+			LoadedDeclarations ds = new LoadedDeclarations();
+
+			Element libraries = XMLUtilities.getUniqueChild(paths[i], "libraries");
+			if(libraries != null) {
+
+				//TODO
+				
+			}
+
+			getClassPath().pathLoaded(path);
+
+			registerComponents(ds, path);
+			long t2 = System.currentTimeMillis();
+			if(statistics != null) {
+				statistics.add(new Long(t2 - t1));
+				if(t2 - t1 > 30) {
+					System.out.println("--->" + statistics.size() + " " + (t2 - t1));
+					System.out.println("stop");
+				}
+			}
+		}
+	}
+
+	private void storeSourcePaths2(Element root) {
+		Properties context = new Properties();
+		Element sourcePathsElement = XMLUtilities.createElement(root, "paths"); //$NON-NLS-1$
+		for (IPath path : sourcePaths2.keySet()) {
+			IFile f = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
+			if(f != null && f.exists() && f.getProject() != project) {
+				continue;
+			}
+			//TODO
+//			context.put(SeamXMLConstants.ATTR_PATH, path);
+			LoadedDeclarations ds = sourcePaths2.get(path);
+			Element pathElement = XMLUtilities.createElement(sourcePathsElement, "path"); //$NON-NLS-1$
+			pathElement.setAttribute("value", path.toString()); //$NON-NLS-1$
+
+			List<ITagLibrary> fs = ds.getLibraries();
+			if(fs != null && !fs.isEmpty()) {
+				Element cse = XMLUtilities.createElement(pathElement, "factories"); //$NON-NLS-1$
+				for (ITagLibrary d: fs) {
+					//TODO
+//					SeamObject o = (SeamObject)d;
+//					o.toXML(cse, context);
+				}
+			}
+		}
+	}
+	/*
+	 * 
+	 */
+	private void storeProjectDependencies(Element root) {
+		Element dependsOnElement = XMLUtilities.createElement(root, "depends-on-projects"); //$NON-NLS-1$
+		for (IKbProject p : dependsOn) {
+			if(!p.getProject().isAccessible()) continue;
+			Element pathElement = XMLUtilities.createElement(dependsOnElement, "project"); //$NON-NLS-1$
+			pathElement.setAttribute("name", p.getProject().getName()); //$NON-NLS-1$
+		}
+		Element usedElement = XMLUtilities.createElement(root, "used-by-projects"); //$NON-NLS-1$
+		for (IKbProject p : usedBy) {
+			if(!p.getProject().isAccessible()) continue;
+			Element pathElement = XMLUtilities.createElement(usedElement, "project"); //$NON-NLS-1$
+			pathElement.setAttribute("name", p.getProject().getName()); //$NON-NLS-1$
+		}
+	}
+	
 	/**
 	 * 
 	 * @return
@@ -264,6 +503,13 @@ public class KbProject implements IKbProject {
 		//TODO
 	}
 
+	public void postponeFiring() {
+		//TODO
+	}
+
+	public void fireChanges() {
+		//TODO
+	}
 
 	class LibraryStorage {
 		private Set<ITagLibrary> allFactories = new HashSet<ITagLibrary>();

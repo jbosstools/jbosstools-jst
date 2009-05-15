@@ -1,0 +1,149 @@
+package org.jboss.tools.jst.web.kb.internal;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceVisitor;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.jdt.core.IClasspathEntry;
+import org.eclipse.jdt.core.IJavaProject;
+import org.jboss.tools.common.model.XModel;
+import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.filesystems.FileSystemsHelper;
+import org.jboss.tools.common.model.plugin.ModelPlugin;
+import org.jboss.tools.common.model.util.EclipseResourceUtil;
+import org.jboss.tools.jst.web.kb.WebKbPlugin;
+import org.jboss.tools.jst.web.kb.internal.scanner.IFileScanner;
+import org.jboss.tools.jst.web.kb.internal.scanner.LoadedDeclarations;
+import org.jboss.tools.jst.web.kb.internal.scanner.ScannerException;
+import org.jboss.tools.jst.web.kb.internal.scanner.XMLScanner;
+import org.jboss.tools.jst.web.model.helpers.InnerModelHelper;
+
+public class KbResourceVisitor implements IResourceVisitor {
+	static IFileScanner[] FILE_SCANNERS = {
+		new XMLScanner(), 
+	};
+	
+	KbProject p;
+
+	IPath[] outs = new IPath[0];
+	IPath[] srcs = new IPath[0];
+	IPath webinf = null;
+
+	public KbResourceVisitor(KbProject p) {
+		this.p = p;
+
+		if(p.getProject() != null && p.getProject().isOpen()) {
+			getJavaSourceRoots(p.getProject());
+
+			XModel model = InnerModelHelper.createXModel(p.getProject());
+			if(model != null) {
+				XModelObject wio = FileSystemsHelper.getWebInf(model);
+				if(wio != null) {
+					IResource wir = (IResource)wio.getAdapter(IResource.class);
+					if(wir != null) {
+						webinf = wir.getFullPath();
+					}
+				}
+			}
+		}
+	}
+
+	public IResourceVisitor getVisitor() {
+		return this;
+	}
+
+	public boolean visit(IResource resource) {
+		if(resource instanceof IFile) {
+			IFile f = (IFile)resource;
+			for (int i = 0; i < outs.length; i++) {
+				if(outs[i].isPrefixOf(resource.getFullPath())) {
+					return false;
+				}
+			}
+			for (int i = 0; i < FILE_SCANNERS.length; i++) {
+				IFileScanner scanner = FILE_SCANNERS[i];
+				if(scanner.isRelevant(f)) {
+					long t = System.currentTimeMillis();
+					if(!scanner.isLikelyComponentSource(f)) {
+						p.pathRemoved(f.getFullPath());
+						return false;
+					}
+					LoadedDeclarations c = null;
+					try {
+						c = scanner.parse(f, p);
+					} catch (ScannerException e) {
+						WebKbPlugin.getDefault().logError(e);
+					}
+					if(c != null) componentsLoaded(c, f);
+					long dt = System.currentTimeMillis() - t;
+//					timeUsed += dt;
+//					System.out.println("Time=" + timeUsed);
+				}
+			}
+		}
+		if(resource instanceof IFolder) {
+			IPath path = resource.getFullPath();
+			for (int i = 0; i < outs.length; i++) {
+				if(outs[i].isPrefixOf(path)) {
+					return false;
+				}
+			}
+			for (int i = 0; i < srcs.length; i++) {
+				if(srcs[i].isPrefixOf(path) || path.isPrefixOf(srcs[i])) {
+					return true;
+				}
+			}
+			if(webinf != null) {
+				if(webinf.isPrefixOf(path) || path.isPrefixOf(webinf)) {
+					return true;
+				}
+			}
+			if(resource == resource.getProject()) {
+				return true;
+			}
+			return false;
+		}
+		//return true to continue visiting children.
+		return true;
+	}
+	
+	void componentsLoaded(LoadedDeclarations c, IFile resource) {
+		if(c == null || c.getLibraries().size() == 0) return;
+		p.registerComponents(c, resource.getFullPath());
+	}
+
+	void getJavaSourceRoots(IProject project) {
+		IJavaProject javaProject = EclipseResourceUtil.getJavaProject(project);
+		if(javaProject == null) return;
+		List<IPath> ps = new ArrayList<IPath>();
+		List<IPath> os = new ArrayList<IPath>();
+		try {
+			IPath output = javaProject.getOutputLocation();
+			if(output != null) os.add(output);
+			IClasspathEntry[] es = javaProject.getResolvedClasspath(true);
+			for (int i = 0; i < es.length; i++) {
+				if(es[i].getEntryKind() == IClasspathEntry.CPE_SOURCE) {
+					IResource findMember = ModelPlugin.getWorkspace().getRoot().findMember(es[i].getPath());
+					if(findMember != null && findMember.exists()) {
+						ps.add(findMember.getFullPath());
+					}
+					IPath out = es[i].getOutputLocation();
+					if(out != null && !os.contains(out)) {
+						os.add(out);
+					}
+				} 
+			}
+			srcs = ps.toArray(new IPath[0]);
+			outs = os.toArray(new IPath[0]);
+		} catch(CoreException ce) {
+			ModelPlugin.getPluginLog().logError("Error while locating java source roots for " + project, ce);
+		}
+	}
+
+}

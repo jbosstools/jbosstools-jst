@@ -17,7 +17,7 @@ public class KbProjectFactory {
 	 * @param resolve if true and results of last build have not been resolved they are loaded.
 	 * @return
 	 */
-	public static IKbProject getSeamProject(IProject project, boolean resolve) {
+	public static IKbProject getKbProject(IProject project, boolean resolve) {
 		if(project == null || !project.exists() || !project.isOpen()) return null;
 		try {
 			if(!project.hasNature(IKbProject.NATURE_ID)) return null;

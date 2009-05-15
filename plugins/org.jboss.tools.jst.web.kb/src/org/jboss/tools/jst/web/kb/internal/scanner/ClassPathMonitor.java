@@ -261,7 +261,7 @@ public class ClassPathMonitor {
 			if(es[i].getEntryKind() == IClasspathEntry.CPE_PROJECT) {
 				IProject p = ResourcesPlugin.getWorkspace().getRoot().getProject(es[i].getPath().lastSegment());
 				if(p == null || !p.isAccessible()) continue;
-				IKbProject sp = KbProjectFactory.getSeamProject(p, false);
+				IKbProject sp = KbProjectFactory.getKbProject(p, false);
 				if(sp != null) list.add((KbProject)sp);
 			}
 		}
