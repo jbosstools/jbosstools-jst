@@ -53,6 +53,7 @@ Export-Package:
  org.jboss.tools.jst.web.model.pv,
  org.jboss.tools.jst.web.model.pv.handler,
  org.jboss.tools.jst.web.model.tree,
+ org.jboss.tools.jst.web.model.project.ext.store,
  org.jboss.tools.jst.web.project,
  org.jboss.tools.jst.web.project.handlers,
  org.jboss.tools.jst.web.project.helpers,
