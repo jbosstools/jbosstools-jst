@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.kb.taglib;
 
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IPath;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.IProposalProcessor;
@@ -20,6 +21,8 @@ import org.jboss.tools.jst.web.kb.IProposalProcessor;
  * @author Alexey Kazakov
  */
 public interface ITagLibrary extends IProposalProcessor {
+
+	public IPath getSourcePath();
 
 	/**
 	 * @return URI of the tag lib.
@@ -54,4 +57,7 @@ public interface ITagLibrary extends IProposalProcessor {
 	 * @return components
 	 */
 	public IComponent[] getComponents(KbQuery query, IPageContext context);
+
+	public ITagLibrary clone() throws CloneNotSupportedException;
+
 }

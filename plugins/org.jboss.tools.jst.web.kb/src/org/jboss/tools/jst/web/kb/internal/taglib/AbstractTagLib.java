@@ -17,6 +17,7 @@ import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IPath;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
@@ -100,6 +101,14 @@ public abstract class AbstractTagLib implements ITagLibrary {
 		this.components = components;
 	}
 
+	public IPath getSourcePath() {
+		//TODO
+		if(resource != null) {
+			return resource.getFullPath();
+		}
+		return null;
+	}
+
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.TagLibrary#getResource()
 	 */
@@ -175,5 +184,12 @@ public abstract class AbstractTagLib implements ITagLibrary {
 			}
 		}
 		return proposals.toArray(new TextProposal[proposals.size()]);
+	}
+
+	public AbstractTagLib clone() throws CloneNotSupportedException {
+		AbstractTagLib t = (AbstractTagLib)super.clone();
+		t.components = new HashMap<String, IComponent>();
+		t.components.putAll(components);
+		return t;
 	}
 }

@@ -1,0 +1,108 @@
+/******************************************************************************* 
+ * Copyright (c) 2007 Red Hat, Inc. 
+ * Distributed under license by Red Hat, Inc. All rights reserved. 
+ * This program is made available under the terms of the 
+ * Eclipse Public License v1.0 which accompanies this distribution, 
+ * and is available at http://www.eclipse.org/legal/epl-v10.html 
+ * 
+ * Contributors: 
+ * Red Hat, Inc. - initial API and implementation 
+ ******************************************************************************/ 
+package org.jboss.tools.jst.web.kb.internal.scanner;
+
+import java.io.ByteArrayInputStream;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.jdt.core.IClassFile;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IPackageFragment;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.IParent;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
+import org.jboss.tools.common.model.XModel;
+import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.filesystems.impl.FileSystemsImpl;
+import org.jboss.tools.common.model.plugin.ModelPlugin;
+import org.jboss.tools.common.model.util.EclipseResourceUtil;
+import org.jboss.tools.common.model.util.XModelObjectUtil;
+import org.jboss.tools.jst.web.kb.IKbProject;
+import org.jboss.tools.jst.web.model.helpers.InnerModelHelper;
+
+/**
+ * @author Viacheslav Kabanovich
+ */
+public class LibraryScanner implements IFileScanner {
+	ClassPathMonitor classPath = null;
+	
+	//Now it is absolute file on disk
+	IPath sourcePath = null;
+	
+	public LibraryScanner() {}
+	
+	public void setClassPath(ClassPathMonitor classPath) {
+		this.classPath = classPath;
+	}
+
+	public boolean isRelevant(IFile f) {
+		if(EclipseResourceUtil.isJar(f.getName())) return true;
+		return false;
+	}
+
+	public boolean isLikelyComponentSource(IFile f) {
+		XModel model = InnerModelHelper.createXModel(f.getProject());
+		if(model == null) return false;
+		XModelObject o = EclipseResourceUtil.getObjectByResource(model, f);
+		if(o == null) return false;
+		if(!o.getModelEntity().getName().equals("FileSystemJar")) { //$NON-NLS-1$
+			((FileSystemsImpl)o.getModel().getByPath("FileSystems")).updateOverlapped(); //$NON-NLS-1$
+			o = EclipseResourceUtil.getObjectByResource(f);
+			if(o == null || !o.getModelEntity().getName().equals("FileSystemJar")) return false; //$NON-NLS-1$
+		}
+		return isLikelyComponentSource(o);
+	}
+
+	public LoadedDeclarations parse(IFile f, IKbProject sp) throws ScannerException {
+		XModel model = InnerModelHelper.createXModel(f.getProject());
+		if(model == null) return null;
+		XModelObject o = EclipseResourceUtil.getObjectByResource(model, f);
+		if(o == null) return null;
+		if(!o.getModelEntity().getName().equals("FileSystemJar")) { //$NON-NLS-1$
+			((FileSystemsImpl)o.getModel().getByPath("FileSystems")).updateOverlapped(); //$NON-NLS-1$
+			o = EclipseResourceUtil.getObjectByResource(f);
+			if(o == null || !o.getModelEntity().getName().equals("FileSystemJar")) return null; //$NON-NLS-1$
+		}
+		return parse(o, f.getFullPath(), sp);
+	}
+
+	public boolean isLikelyComponentSource(XModelObject o) {
+		if(o == null) return false;
+		if(o.getChildByPath("seam.properties") != null) return true; //$NON-NLS-1$
+		if(o.getChildByPath("META-INF/seam.properties") != null) return true; //$NON-NLS-1$
+		if(o.getChildByPath("META-INF/components.xml") != null) return true; //$NON-NLS-1$
+		return false;
+	}
+
+	public LoadedDeclarations parse(XModelObject o, IPath path, IKbProject sp) throws ScannerException {
+		if(o == null) return null;
+		sourcePath = path;
+		XModelObject seamProperties = o.getChildByPath("META-INF/seam.properties"); //$NON-NLS-1$
+		if(seamProperties == null) seamProperties = o.getChildByPath("seam.properties"); //$NON-NLS-1$
+		XModelObject componentsXML = o.getChildByPath("META-INF/components.xml"); //$NON-NLS-1$
+		if(componentsXML == null && seamProperties == null) return null;
+		
+		LoadedDeclarations ds = new LoadedDeclarations();
+
+		if(componentsXML != null) {
+			LoadedDeclarations ds1 = new XMLScanner().parse(componentsXML, path, sp);
+			if(ds1 != null) ds.add(ds1);
+		}
+		
+		return ds;
+	}
+	
+}

@@ -2,7 +2,9 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name.0
 Bundle-SymbolicName: org.jboss.tools.jst.web.kb;singleton:=true
+Bundle-Localization: plugin
 Bundle-Version: 1.0.0
+Bundle-ClassPath: webKb.jar
 Bundle-Activator: org.jboss.tools.jst.web.kb.WebKbPlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -13,4 +15,5 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Vendor: %providerName
 Export-Package: org.jboss.tools.jst.web.kb,
+ org.jboss.tools.jst.web.kb.internal,
  org.jboss.tools.jst.web.kb.taglib
