@@ -272,29 +272,4 @@
 		
     </extension>
 
-   <extension
-         id="kbbuilder"
-         name="KB Builder"
-         point="org.eclipse.core.resources.builders">
-      <builder
-            hasNature="false">
-         <run
-               class="org.jboss.tools.jst.web.kb.internal.KbBuilder">
-         </run>
-      </builder>
-   </extension>
-   <extension
-         id="kbnature"
-         name="KB Project Nature"
-         point="org.eclipse.core.resources.natures">
-      <runtime>
-         <run
-               class="org.jboss.tools.jst.web.kb.internal.KbProject">
-         </run>
-      </runtime>
-      <builder
-            id="org.jboss.tools.jst.web.kbbuilder">
-      </builder>
-   </extension>
-
 </plugin>
