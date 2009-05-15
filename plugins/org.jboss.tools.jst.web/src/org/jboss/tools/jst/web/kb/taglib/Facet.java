@@ -17,7 +17,7 @@ package org.jboss.tools.jst.web.kb.taglib;
 public class Facet {
 
 	private String description;
-	private String name;
+	private String name; 
 
 	/**
 	 * @return the description
