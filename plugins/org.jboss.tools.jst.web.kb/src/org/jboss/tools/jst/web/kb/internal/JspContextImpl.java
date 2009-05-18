@@ -27,10 +27,10 @@ import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
  */
 public class JspContextImpl extends ELContextImpl implements IPageContext {
 
-	private IDocument document;
-	private ITagLibrary[] libs;
-	private Map<Region, Map<String, INameSpace>> nameSpaces = new HashMap<Region, Map<String, INameSpace>>();
-	private IResourceBundle[] bundles;
+	protected IDocument document;
+	protected ITagLibrary[] libs;
+	protected Map<Region, Map<String, INameSpace>> nameSpaces = new HashMap<Region, Map<String, INameSpace>>();
+	protected IResourceBundle[] bundles;
 
 	/*
 	 * (non-Javadoc)
