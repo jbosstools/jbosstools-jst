@@ -11,16 +11,11 @@
 package org.jboss.tools.jst.web.kb.internal;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Region;
-import org.jboss.tools.common.el.core.resolver.ELResolver;
-import org.jboss.tools.common.el.core.resolver.ElVarSearcher;
-import org.jboss.tools.common.el.core.resolver.Var;
+import org.jboss.tools.common.el.core.resolver.ELContextImpl;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.IResourceBundle;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
@@ -30,29 +25,12 @@ import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
  * JSP page context
  * @author Alexey Kazakov
  */
-public class JspContextImpl implements IPageContext {
+public class JspContextImpl extends ELContextImpl implements IPageContext {
 
-	private IFile resource;
 	private IDocument document;
-	private ElVarSearcher varSearcher;
 	private ITagLibrary[] libs;
-	private ELResolver[] elResolvers;
-	private Map<Region, Set<Var>> vars = new HashMap<Region, Set<Var>>();
 	private Map<Region, Map<String, INameSpace>> nameSpaces = new HashMap<Region, Map<String, INameSpace>>();
-	private Set<Var> allVars = new HashSet<Var>();
 	private IResourceBundle[] bundles;
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.common.kb.text.PageContext#getResource()
-	 */
-	public IFile getResource() {
-		return resource;
-	}
-
-	public void setResource(IFile resource) {
-		this.resource = resource;
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -64,42 +42,6 @@ public class JspContextImpl implements IPageContext {
 
 	public void setLibraries(ITagLibrary[] libs) {
 		this.libs = libs;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.common.kb.text.PageContext#getElResolvers()
-	 */
-	public ELResolver[] getElResolvers() {
-		return elResolvers;
-	}
-
-	public void setElResolvers(ELResolver[] elResolvers) {
-		this.elResolvers = elResolvers;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.common.kb.text.PageContext#getVars(int)
-	 */
-	public Var[] getVars(int offset) {
-		Set<Var> result = new HashSet<Var>();
-		for (Region region : vars.keySet()) {
-			if(offset>=region.getOffset() && offset<=region.getOffset() + region.getLength()) {
-				result.addAll(vars.get(region));
-			}
-		}
-		return result.toArray(new Var[result.size()]);
-	}
-
-	/**
-	 * Adds new Var to the context
-	 * @param region
-	 * @param vars
-	 */
-	public void addVar(Region region, Var var) {
-		this.vars.get(region).add(var);
-		allVars.add(var);
 	}
 
 	/*
@@ -139,35 +81,12 @@ public class JspContextImpl implements IPageContext {
 		this.document = document;
 	}
 
-	/**
-	 * @param varSearcher the varSearcher to set
-	 */
-	public void setVarSearcher(ElVarSearcher varSearcher) {
-		this.varSearcher = varSearcher;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.PageContext#getDocument()
 	 */
 	public IDocument getDocument() {
 		return document;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.common.el.core.resolver.ELContext#getVarSearcher()
-	 */
-	public ElVarSearcher getVarSearcher() {
-		return varSearcher;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.common.el.core.resolver.ELContext#getVars()
-	 */
-	public Var[] getVars() {
-		return allVars.toArray(new Var[allVars.size()]);
 	}
 
 	/* (non-Javadoc)

@@ -14,7 +14,6 @@ import java.util.Map;
 
 import org.eclipse.jface.text.IDocument;
 import org.jboss.tools.common.el.core.resolver.ELContext;
-import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.Var;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
@@ -30,12 +29,6 @@ public interface IPageContext extends ELContext {
 	 * @return
 	 */
 	ITagLibrary[] getLibraries();
-
-	/**
-	 * Returns EL Resolvers which are declared for this page
-	 * @return
-	 */
-	ELResolver[] getElResolvers();
 
 	/**
 	 * Returns resource bundles
