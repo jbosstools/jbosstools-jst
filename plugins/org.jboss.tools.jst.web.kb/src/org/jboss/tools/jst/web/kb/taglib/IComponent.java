@@ -20,11 +20,6 @@ import org.jboss.tools.jst.web.kb.KbQuery;
 public interface IComponent extends IProposalProcessor {
 
 	/**
-	 * @return name space
-	 */
-	INameSpace getNameSpace();
-
-	/**
 	 * @return component name
 	 */
 	String getName();

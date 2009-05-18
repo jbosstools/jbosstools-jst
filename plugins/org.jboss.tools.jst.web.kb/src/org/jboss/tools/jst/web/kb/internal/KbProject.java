@@ -85,6 +85,7 @@ public class KbProject implements IKbProject {
 
 	public void setProject(IProject project) {
 		this.project = project;
+		classPath.init();
 	}
 
 	/**

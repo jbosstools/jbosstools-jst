@@ -33,7 +33,6 @@ public abstract class AbstractComponent implements IComponent {
 	protected String componentType;
 	protected String description;
 	protected String name;
-	protected INameSpace nameSpace;
 	protected Map<String, IAttribute> attributes = new HashMap<String, IAttribute>();
 	protected Map<String, IAttribute> preferableAttributes = new HashMap<String, IAttribute>();
 	protected Map<String, IAttribute> requiredAttributes = new HashMap<String, IAttribute>();
@@ -157,20 +156,6 @@ public abstract class AbstractComponent implements IComponent {
 	 */
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getNameSpace()
-	 */
-	public INameSpace getNameSpace() {
-		return nameSpace;
-	}
-
-	/**
-	 * @param nameSpace the name space to set
-	 */
-	public void setNameSpace(INameSpace nameSpace) {
-		this.nameSpace = nameSpace;
 	}
 
 	/* (non-Javadoc)

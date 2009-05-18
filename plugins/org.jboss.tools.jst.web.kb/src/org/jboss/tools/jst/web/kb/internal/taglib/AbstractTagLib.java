@@ -18,11 +18,13 @@ import java.util.Map;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
+import org.jboss.tools.common.model.project.ext.IValueInfo;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
+import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 
 /**
@@ -31,9 +33,13 @@ import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
  */
 public abstract class AbstractTagLib implements ITagLibrary {
 
+	protected INameSpace nameSpace;
 	protected String uri;
 	protected IFile resource;
 	protected Map<String, IComponent> components = new HashMap<String, IComponent>();
+
+	//locations of xml attributes
+	protected Map<String,IValueInfo> attributes = new HashMap<String, IValueInfo>();
 
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.TagLibrary#getAllComponents()
@@ -124,6 +130,20 @@ public abstract class AbstractTagLib implements ITagLibrary {
 	}
 
 	/* (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getNameSpace()
+	 */
+	public INameSpace getDefaultNameSpace() {
+		return nameSpace;
+	}
+
+	/**
+	 * @param nameSpace the name space to set
+	 */
+	public void setDefaultNameSpace(INameSpace nameSpace) {
+		this.nameSpace = nameSpace;
+	}
+
+	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.TagLibrary#getURI()
 	 */
 	public String getURI() {
@@ -136,6 +156,12 @@ public abstract class AbstractTagLib implements ITagLibrary {
 	public void setURI(String uri) {
 		this.uri = uri;
 	}
+
+	public void setURI(IValueInfo s) {
+		uri = s == null ? null : s.getValue();
+		attributes.put("uri", s);
+	}
+
 
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.ProposalProcessor#getProposals(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.PageContext)

@@ -174,7 +174,6 @@ public class ClassPathMonitor {
 			processedPaths.add(p);
 
 			LibraryScanner scanner = new LibraryScanner();
-			scanner.setClassPath(this);
 
 			String fileName = new File(p).getName();
 			if(SYSTEM_JAR_SET.contains(fileName)) continue;

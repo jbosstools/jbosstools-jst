@@ -23,17 +23,11 @@ import org.jboss.tools.jst.web.model.helpers.InnerModelHelper;
  * @author Viacheslav Kabanovich
  */
 public class LibraryScanner implements IFileScanner {
-	ClassPathMonitor classPath = null;
-	
 	//Now it is absolute file on disk
 	IPath sourcePath = null;
 	
 	public LibraryScanner() {}
 	
-	public void setClassPath(ClassPathMonitor classPath) {
-		this.classPath = classPath;
-	}
-
 	public boolean isRelevant(IFile f) {
 		if(EclipseResourceUtil.isJar(f.getName())) return true;
 		return false;
@@ -82,14 +76,30 @@ public class LibraryScanner implements IFileScanner {
 		if(metaInf != null) {
 			XModelObject[] tlds = metaInf.getChildren();
 			for (XModelObject tld: tlds) {
-				XMLScanner s = new XMLScanner();
-				//TODO check that tld object is correct.
-				LoadedDeclarations ds1 = s.parse(tld, path, sp);
-				if(ds1 != null) ds.add(ds1);
+				if(isFaceletTaglibFile(tld) || isTLDFile(tld)) {
+					XMLScanner s = new XMLScanner();				
+					LoadedDeclarations ds1 = s.parse(tld, path, sp);
+					if(ds1 != null) ds.add(ds1);
+				}
 			}
 		}
 		
 		return ds;
 	}
+
+	public static boolean isTLDFile(XModelObject o) {
+		if(o == null) return false;
+		String entity = o.getModelEntity().getName();
+		if(entity.startsWith("FileTLD")) return true;
+		return false;
+	}
+
+	public static boolean isFaceletTaglibFile(XModelObject o) {
+		if(o == null) return false;
+		String entity = o.getModelEntity().getName();
+		if(entity.startsWith("FileFaceletTaglib")) return true;
+		return false;
+	}
 	
 }
+

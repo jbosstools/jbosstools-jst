@@ -25,6 +25,10 @@ public interface ITagLibrary extends IProposalProcessor {
 	public IPath getSourcePath();
 
 	/**
+	 * @return name space
+	 */
+	INameSpace getDefaultNameSpace();
+	/**
 	 * @return URI of the tag lib.
 	 */
 	String getURI();

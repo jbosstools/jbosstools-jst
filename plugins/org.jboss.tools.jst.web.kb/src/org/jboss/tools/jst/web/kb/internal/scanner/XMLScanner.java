@@ -33,7 +33,10 @@ import org.jboss.tools.common.model.util.EclipseJavaUtil;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.util.NamespaceMapping;
 import org.jboss.tools.jst.web.kb.IKbProject;
+import org.jboss.tools.jst.web.kb.internal.taglib.AbstractComponent;
+import org.jboss.tools.jst.web.kb.internal.taglib.TLDLibrary;
 import org.jboss.tools.jst.web.model.helpers.InnerModelHelper;
+import org.jboss.tools.jst.web.model.project.ext.store.XMLValueInfo;
 
 /**
  * @author Viacheslav Kabanovich
@@ -49,8 +52,7 @@ public class XMLScanner implements IFileScanner {
 	 * @return
 	 */	
 	public boolean isRelevant(IFile resource) {
-		if(resource.getName().equals("components.xml")) return true; //$NON-NLS-1$
-		if(resource.getName().endsWith(".component.xml")) return true; //$NON-NLS-1$
+		if(resource.getName().endsWith(".xml")) return true; //$NON-NLS-1$
 		return false;
 	}
 	
@@ -66,8 +68,7 @@ public class XMLScanner implements IFileScanner {
 		if(model == null) return false;
 		XModelObject o = EclipseResourceUtil.getObjectByResource(model, f);
 		if(o == null) return false;
-		//TODO
-		if(o.getModelEntity().getName().startsWith("FileSeamComponent")) return true; //$NON-NLS-1$
+		if(LibraryScanner.isTLDFile(o) || LibraryScanner.isFaceletTaglibFile(o)) return true;
 		return false;
 	}
 
@@ -113,21 +114,66 @@ public class XMLScanner implements IFileScanner {
 		}
 		
 		LoadedDeclarations ds = new LoadedDeclarations();
-		XModelObject[] os = o.getChildren();
-		for (int i = 0; i < os.length; i++) {
-			XModelEntity componentEntity = os[i].getModelEntity();
-			//TODO
-//			if(os[i].getModelEntity().getName().startsWith("SeamFactory")) { //$NON-NLS-1$
-//				SeamXmlFactory factory = new SeamXmlFactory();
-//				factory.setId(os[i]);
-//				factory.setSourcePath(source);
-//				factory.setName(new XMLValueInfo(os[i], ISeamXmlComponentDeclaration.NAME));
-//				factory.setValue(new XMLValueInfo(os[i], "value")); //$NON-NLS-1$
-//				factory.setMethod(new XMLValueInfo(os[i], "method")); //$NON-NLS-1$
-//				ds.getLibraries().add(factory);
-//			}
+		if(LibraryScanner.isTLDFile(o)) {
+			parseTLD(o, source, sp, ds);
+		} else if(LibraryScanner.isFaceletTaglibFile(o)) {
+			parseFaceletTaglib(o, source, sp, ds);
 		}
 		return ds;
 	}
-	
+
+	private void parseTLD(XModelObject o, IPath source, IKbProject sp, LoadedDeclarations ds) {
+		TLDLibrary library = new TLDLibrary();
+		library.setURI(new XMLValueInfo(o, "uri"));
+		library.setDisplayName(new XMLValueInfo(o, "display-name"));
+		library.setShortName(new XMLValueInfo(o, "shortname"));
+		String version = o.getAttributeValue("version");
+		if(version == null) {
+			if("FileTLD_1_2".equals(o.getModelEntity().getName())) {
+				version = "1.2";
+			} else {
+				version = "1.1";
+			}
+		}
+		library.setVersion(version);
+
+		ds.getLibraries().add(library);
+
+		XModelObject[] ts = o.getChildren();
+		for (XModelObject t: ts) {
+			if(t.getModelEntity().getName().startsWith("TLDTag")) {
+				AbstractComponent tag = new AbstractComponent() {}; //TODO
+
+				String name = t.getAttributeValue("name");
+				tag.setName(name);
+
+				String description = t.getAttributeValue("description");
+				if(description != null) {
+					//in version 1.1 this attribute is not available
+					tag.setDescription(description);
+				}
+
+				String cls = t.getAttributeValue("tagclass");
+				tag.setComponentClass(cls);
+
+				String bodycontent = t.getAttributeValue("bodycontent");
+				boolean canHaveBody = !"empty".equals(bodycontent);
+				tag.setCanHaveBody(canHaveBody);
+				
+				//TODO
+				
+				XModelObject[] as = t.getChildren();
+				for(XModelObject a: as) {
+					//TODO
+				}
+			}
+		}
+		
+	}
+
+	private void parseFaceletTaglib(XModelObject o, IPath source, IKbProject sp, LoadedDeclarations ds) {
+		XModelObject[] os = o.getChildren();
+		
+	}
+
 }
