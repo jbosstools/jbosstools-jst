@@ -40,6 +40,7 @@ public class JspContextImpl implements IPageContext {
 	private Map<Region, Set<Var>> vars = new HashMap<Region, Set<Var>>();
 	private Map<Region, Map<String, INameSpace>> nameSpaces = new HashMap<Region, Map<String, INameSpace>>();
 	private Set<Var> allVars = new HashSet<Var>();
+	private IResourceBundle[] bundles;
 
 	/*
 	 * (non-Javadoc)
@@ -106,8 +107,15 @@ public class JspContextImpl implements IPageContext {
 	 * @see org.jboss.tools.common.kb.text.PageContext#getResourceBundles()
 	 */
 	public IResourceBundle[] getResourceBundles() {
-		// TODO
-		return null;
+		return bundles;
+	}
+
+	/**
+	 * Sets resource bundles
+	 * @param bundles
+	 */
+	public void setResourceBundles(IResourceBundle[] bundles) {
+		this.bundles = bundles;
 	}
 
 	/**
