@@ -23,6 +23,7 @@ import org.jboss.tools.common.el.core.resolver.ElVarSearcher;
 import org.jboss.tools.common.el.core.resolver.Var;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.IResourceBundle;
+import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 
 /**
@@ -36,7 +37,8 @@ public class JspContextImpl implements IPageContext {
 	private ElVarSearcher varSearcher;
 	private ITagLibrary[] libs;
 	private ELResolver[] elResolvers;
-	private Map<Region, Var[]> vars = new HashMap<Region, Var[]>();
+	private Map<Region, Set<Var>> vars = new HashMap<Region, Set<Var>>();
+	private Map<Region, Map<String, INameSpace>> nameSpaces = new HashMap<Region, Map<String, INameSpace>>();
 	private Set<Var> allVars = new HashSet<Var>();
 
 	/*
@@ -75,19 +77,18 @@ public class JspContextImpl implements IPageContext {
 		this.elResolvers = elResolvers;
 	}
 
-	private final static Var[] EMPTY_VAR_ARRAY = new Var[0]; 
-
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.common.kb.text.PageContext#getVars(int)
 	 */
 	public Var[] getVars(int offset) {
+		Set<Var> result = new HashSet<Var>();
 		for (Region region : vars.keySet()) {
 			if(offset>=region.getOffset() && offset<=region.getOffset() + region.getLength()) {
-				return vars.get(region);
+				result.addAll(vars.get(region));
 			}
 		}
-		return EMPTY_VAR_ARRAY;
+		return result.toArray(new Var[result.size()]);
 	}
 
 	/**
@@ -95,11 +96,9 @@ public class JspContextImpl implements IPageContext {
 	 * @param region
 	 * @param vars
 	 */
-	public void addVars(Region region, Var[] vars) {
-		this.vars.put(region, vars);
-		for (int i = 0; i < vars.length; i++) {
-			allVars.add(vars[i]);
-		}
+	public void addVar(Region region, Var var) {
+		this.vars.get(region).add(var);
+		allVars.add(var);
 	}
 
 	/*
@@ -161,5 +160,27 @@ public class JspContextImpl implements IPageContext {
 	 */
 	public Var[] getVars() {
 		return allVars.toArray(new Var[allVars.size()]);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.IPageContext#getNameSpaces(int)
+	 */
+	public Map<String, INameSpace> getNameSpaces(int offset) {
+		Map<String, INameSpace> result = new HashMap<String, INameSpace>();
+		for (Region region : nameSpaces.keySet()) {
+			if(offset>=region.getOffset() && offset<=region.getOffset() + region.getLength()) {
+				result.putAll(nameSpaces.get(region));
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Adds new name space to the context
+	 * @param region
+	 * @param name space
+	 */
+	public void addNameSpace(Region region, INameSpace nameSpace) {
+		nameSpaces.get(region).put(nameSpace.getPrefix(), nameSpace);
 	}
 }

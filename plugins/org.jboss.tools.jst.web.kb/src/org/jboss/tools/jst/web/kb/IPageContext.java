@@ -10,10 +10,13 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb;
 
+import java.util.Map;
+
 import org.eclipse.jface.text.IDocument;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.Var;
+import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 
 /**
@@ -52,4 +55,10 @@ public interface IPageContext extends ELContext {
 	 * @return
 	 */
 	Var[] getVars(int offset);
+
+	/**
+	 * Returns map of name spaces which are set in particular offset.
+	 * @return
+	 */
+	Map<String, INameSpace> getNameSpaces(int offset);
 }
