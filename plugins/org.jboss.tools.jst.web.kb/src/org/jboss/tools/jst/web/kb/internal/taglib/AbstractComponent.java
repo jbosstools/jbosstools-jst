@@ -14,13 +14,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
+import org.jboss.tools.common.model.project.ext.store.XMLStoreConstants;
 import org.jboss.tools.common.text.TextProposal;
+import org.jboss.tools.common.xml.XMLUtilities;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.internal.KbXMLStoreConstants;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
+import org.w3c.dom.Element;
 
 /**
  * Abstract implementation of IComponent
@@ -224,4 +229,22 @@ public abstract class AbstractComponent implements IComponent {
 		preferableAttributes.remove(attribute.getName());
 		requiredAttributes.remove(attribute.getName());
 	}
+
+	public String getXMLClass() {
+		return null;
+	}
+	
+	public Element toXML(Element parent, Properties context) {
+		Element element = XMLUtilities.createElement(parent, KbXMLStoreConstants.TAG_COMPONENT);
+		if(getXMLClass() != null) {
+			element.setAttribute(XMLStoreConstants.ATTR_CLASS, getXMLClass());
+		}
+		
+		return element;
+	}
+
+	public void loadXML(Element element, Properties context) {
+
+	}
+
 }

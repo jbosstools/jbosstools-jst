@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.jboss.tools.common.model.project.ext.event.Change;
+import org.jboss.tools.common.model.project.ext.store.XMLStoreConstants;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.xml.XMLUtilities;
 import org.jboss.tools.jst.web.WebModelPlugin;
@@ -38,6 +39,8 @@ import org.jboss.tools.jst.web.kb.KbProjectFactory;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.internal.scanner.ClassPathMonitor;
 import org.jboss.tools.jst.web.kb.internal.scanner.LoadedDeclarations;
+import org.jboss.tools.jst.web.kb.internal.taglib.AbstractTagLib;
+import org.jboss.tools.jst.web.kb.internal.taglib.TLDLibrary;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 import org.w3c.dom.Element;
 
@@ -281,7 +284,7 @@ public class KbProject implements IKbProject {
 	 */
 	private File getStorageFile() {
 		IPath path = WebKbPlugin.getDefault().getStateLocation();
-		File file = new File(path.toFile(), "projects/" + project.getName()); //$NON-NLS-1$
+		File file = new File(path.toFile(), "projects/" + project.getName() + ".xml"); //$NON-NLS-1$
 		return file;
 	}
 	
@@ -342,16 +345,27 @@ public class KbProject implements IKbProject {
 				if(f == null || !f.exists() || !f.isSynchronized(IResource.DEPTH_ZERO)) continue;
 			}
 			
-			//TODO
+			context.put(XMLStoreConstants.ATTR_PATH, path);
 
 			long t1 = System.currentTimeMillis();
 			LoadedDeclarations ds = new LoadedDeclarations();
 
 			Element libraries = XMLUtilities.getUniqueChild(paths[i], "libraries");
 			if(libraries != null) {
-
-				//TODO
-				
+				Element[] cs = XMLUtilities.getChildren(libraries, KbXMLStoreConstants.TAG_LIBRARY);
+				for (Element library: cs) {
+					String cls = library.getAttribute(XMLStoreConstants.ATTR_CLASS);
+					AbstractTagLib tagLib = null;
+					if(KbXMLStoreConstants.CLS_TLD_LIBRARY.equals(cls)) {
+						tagLib = new TLDLibrary();
+					} else {
+						//consider other cases;
+					}
+					if(tagLib != null) {
+						tagLib.loadXML(library, context);
+						ds.getLibraries().add(tagLib);
+					}
+				}
 			}
 
 			getClassPath().pathLoaded(path);
@@ -376,23 +390,23 @@ public class KbProject implements IKbProject {
 			if(f != null && f.exists() && f.getProject() != project) {
 				continue;
 			}
-			//TODO
-//			context.put(SeamXMLConstants.ATTR_PATH, path);
+
+			context.put(XMLStoreConstants.ATTR_PATH, path);
 			LoadedDeclarations ds = sourcePaths2.get(path);
 			Element pathElement = XMLUtilities.createElement(sourcePathsElement, "path"); //$NON-NLS-1$
 			pathElement.setAttribute("value", path.toString()); //$NON-NLS-1$
 
 			List<ITagLibrary> fs = ds.getLibraries();
 			if(fs != null && !fs.isEmpty()) {
-				Element cse = XMLUtilities.createElement(pathElement, "factories"); //$NON-NLS-1$
+				Element cse = XMLUtilities.createElement(pathElement, "libraries"); //$NON-NLS-1$
 				for (ITagLibrary d: fs) {
-					//TODO
-//					SeamObject o = (SeamObject)d;
-//					o.toXML(cse, context);
+					AbstractTagLib t = (AbstractTagLib)d;
+					t.toXML(cse, context);
 				}
 			}
 		}
 	}
+
 	/*
 	 * 
 	 */

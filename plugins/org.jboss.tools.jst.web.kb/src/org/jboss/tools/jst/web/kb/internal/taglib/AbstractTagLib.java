@@ -14,18 +14,27 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
+import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.project.ext.IValueInfo;
+import org.jboss.tools.common.model.project.ext.store.XMLStoreConstants;
 import org.jboss.tools.common.text.TextProposal;
+import org.jboss.tools.common.xml.XMLUtilities;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.internal.KbXMLStoreConstants;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
+import org.jboss.tools.jst.web.model.project.ext.store.XMLStoreHelper;
+import org.w3c.dom.Element;
 
 /**
  * Abstract implementation of ITagLibrary
@@ -33,8 +42,11 @@ import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
  */
 public abstract class AbstractTagLib implements ITagLibrary {
 
+	Object id;
+
 	protected INameSpace nameSpace;
 	protected String uri;
+	protected IPath source;
 	protected IFile resource;
 	protected Map<String, IComponent> components = new HashMap<String, IComponent>();
 
@@ -108,17 +120,21 @@ public abstract class AbstractTagLib implements ITagLibrary {
 	}
 
 	public IPath getSourcePath() {
-		//TODO
-		if(resource != null) {
-			return resource.getFullPath();
-		}
-		return null;
+		return source;
+	}
+
+	public void setSourcePath(IPath source) {
+		this.source = source;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.TagLibrary#getResource()
 	 */
 	public IResource getResource() {
+		if(resource != null) return resource;
+		if(source != null) {
+			resource = ResourcesPlugin.getWorkspace().getRoot().getFile(source);
+		}
 		return resource;
 	}
 
@@ -212,10 +228,83 @@ public abstract class AbstractTagLib implements ITagLibrary {
 		return proposals.toArray(new TextProposal[proposals.size()]);
 	}
 
+	public void setID(Object id) {
+		this.id = id;
+	}
+
+	public Object getID() {
+		return id;
+	}
+
+	public String getXMLClass() {
+		return null;
+	}
+	
 	public AbstractTagLib clone() throws CloneNotSupportedException {
 		AbstractTagLib t = (AbstractTagLib)super.clone();
 		t.components = new HashMap<String, IComponent>();
 		t.components.putAll(components);
 		return t;
 	}
+
+	public Element toXML(Element parent, Properties context) {
+		Element element = XMLUtilities.createElement(parent, KbXMLStoreConstants.TAG_LIBRARY);
+		if(getXMLClass() != null) {
+			element.setAttribute(XMLStoreConstants.ATTR_CLASS, getXMLClass());
+		}
+		IPath source = getSourcePath();
+		if(source != null && !source.equals(context.get(XMLStoreConstants.ATTR_PATH))) {
+			element.setAttribute(XMLStoreConstants.ATTR_PATH, source.toString());
+		}
+		if(id != null) {
+			if(id instanceof XModelObject) {
+				XModelObject o = (XModelObject)id;
+				XMLStoreHelper.saveModelObject(element, o, XMLStoreConstants.TAG_ID, context);
+			} else {
+				//TODO consider other kinds of id
+			}
+		}
+
+		saveAttributeValues(element);
+
+		for (IComponent c: components.values()) {
+			//TODO save component
+		}
+
+		return element;
+	}
+
+	protected void saveAttributeValues(Element element) {
+		if(uri != null) element.setAttribute(KbXMLStoreConstants.ATTR_URI, uri);
+	}
+
+	public void loadXML(Element element, Properties context) {
+		String s = element.getAttribute(XMLStoreConstants.ATTR_PATH);
+		if(s != null && s.length() > 0) {
+			source = new Path(s);
+		} else {
+			source = (IPath)context.get(XMLStoreConstants.ATTR_PATH);
+		}
+		Element e_id = XMLUtilities.getUniqueChild(element, XMLStoreConstants.TAG_ID);
+		if(e_id != null) {
+			String cls = e_id.getAttribute(XMLStoreConstants.ATTR_CLASS);
+			if(XMLStoreConstants.CLS_MODEL_OBJECT.equals(cls)) {
+				id = XMLStoreHelper.loadModelObject(e_id, context);
+			} else {
+				//TODO consider other kinds of id
+			}
+		}
+
+		loadAttributeValues(element);
+
+		//TODO load components
+
+	}
+
+	protected void loadAttributeValues(Element element) {
+		if(element.hasAttribute(KbXMLStoreConstants.ATTR_URI)) {
+			uri = element.getAttribute(KbXMLStoreConstants.ATTR_URI);
+		}
+	}
+
 }

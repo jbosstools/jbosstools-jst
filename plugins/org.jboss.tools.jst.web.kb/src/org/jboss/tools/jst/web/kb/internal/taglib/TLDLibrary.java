@@ -11,7 +11,9 @@
 package org.jboss.tools.jst.web.kb.internal.taglib;
 
 import org.jboss.tools.common.model.project.ext.IValueInfo;
+import org.jboss.tools.jst.web.kb.internal.KbXMLStoreConstants;
 import org.jboss.tools.jst.web.kb.taglib.ITLDLibrary;
+import org.w3c.dom.Element;
 
 /**
  * @author Viacheslav Kabanovich
@@ -50,4 +52,23 @@ public class TLDLibrary extends AbstractTagLib implements ITLDLibrary {
 	public void createDefaultNameSpace() {
 		
 	}
+
+	public String getXMLClass() {
+		return KbXMLStoreConstants.CLS_TLD_LIBRARY;
+	}
+
+	protected void saveAttributeValues(Element element) {
+		super.saveAttributeValues(element);
+		if(shortName != null) element.setAttribute(KbXMLStoreConstants.ATTR_SHORT_NAME, shortName);
+		//TODO
+	}
+
+	protected void loadAttributeValues(Element element) {
+		super.loadAttributeValues(element);
+		if(element.hasAttribute(KbXMLStoreConstants.ATTR_SHORT_NAME)) {
+			shortName = element.getAttribute(KbXMLStoreConstants.ATTR_SHORT_NAME);
+		}
+		//TODO
+	}
+
 }
