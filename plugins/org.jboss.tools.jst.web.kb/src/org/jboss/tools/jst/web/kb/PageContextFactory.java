@@ -27,4 +27,15 @@ public class PageContextFactory {
 		// TODO
 		return null;
 	}
+
+	/**
+	 * Creates a facelet context for given resource and offset.
+	 * @param file
+	 * @param offset
+	 * @return
+	 */
+	public static IFaceletPageContext createFaceletPageContext(IFile file, int offset) {
+		// TODO
+		return null;
+	}
 }
