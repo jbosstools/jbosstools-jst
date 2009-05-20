@@ -20,20 +20,13 @@ public class JsfJspJbide1813Test extends ContentAssistantTestCase{
 	}
 	
 	public void testJsfJspJbide1813Test(){
+		
+		// JBIDE-4341: the EL proposals are not to be returned (and tested) here anymore.
+		//   The EL-proposals are removed from the test-list.
+		//
 		String[] proposals={
 					"ltr",
 					"rtl",
-					"#{applicationScope}",
-					"#{cookie}",
-					"#{facesContext}",
-					"#{header}",
-					"#{headerValues}",
-					"#{initParam}",
-					"#{param}",
-					"#{paramValues}",
-					"#{requestScope}",
-					"#{sessionScope}",
-					"#{view}"
 		};
 
 		checkProposals(PAGE_NAME, "dir=\"\"", 5, proposals, true);
