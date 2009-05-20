@@ -12,7 +12,16 @@ import org.eclipse.wst.sse.ui.internal.contentassist.CustomCompletionProposal;
 import org.jboss.tools.common.test.util.TestProjectProvider;
 import org.jboss.tools.jst.jsp.test.TestUtil;
 import org.jboss.tools.test.util.JobUtils;
-
+/**
+ * JBIDE-4341 JstJspAllTests/testJsfJspJbide1813Test failing with missing applicationScope in completions
+ * 
+ * The #{ characters are added to INSERTION_BEGIN_STRING, but it is a subject to rollback in the future.
+ * The current EL-prompting rules don't allow to call prompting on EL when there is no EL-starting 
+ * char sequence in the text. This doing this test to be completely useless. 
+ *  
+ * @author Jeremy
+ *
+ */
 public class JstJspJbide1759Test extends ContentAssistantTestCase {
 	TestProjectProvider provider = null;
 	boolean makeCopy = false;
@@ -20,7 +29,7 @@ public class JstJspJbide1759Test extends ContentAssistantTestCase {
 	private static final String PAGE_NAME = "/WebContent/pages/greeting";
 	private static final String[] PAGE_EXTS = {".jsp", ".xhtml"};
 	private static final String INSERT_BEFORE_STRING = "<h:outputText";
-	private static final String INSERTION_BEGIN_STRING = "<h:outputText value=\"";
+	private static final String INSERTION_BEGIN_STRING = "<h:outputText value=\"#{";
 	private static final String INSERTION_END_STRING = "\"  />";
 	private static final String WHITESPACE_INSERTION_STRING = "";
 	
@@ -132,7 +141,7 @@ public class JstJspJbide1759Test extends ContentAssistantTestCase {
 				customCompletionProposals.remove(((CustomCompletionProposal)result[i]).getReplacementString());
 			}
 		}
-		assertTrue("Content Assistant didn't returned some proposals.",customCompletionProposals.isEmpty());
+		assertTrue("Content Assistant didn't return some of the required proposals.",customCompletionProposals.isEmpty());
 
 		closeEditor();
 	}
