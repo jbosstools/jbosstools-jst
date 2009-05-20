@@ -4,7 +4,7 @@ import org.jboss.tools.common.test.util.TestProjectProvider;
 
 public class JsfJspJbide1807Test extends ContentAssistantTestCase{
 	TestProjectProvider provider = null;
-	boolean makeCopy = false;
+	boolean makeCopy = true;
 	private static final String PROJECT_NAME = "JsfJspJbide1807Test";
 	private static final String PAGE_NAME = "/WebContent/pages/greeting.xhtml";
 	
@@ -20,18 +20,13 @@ public class JsfJspJbide1807Test extends ContentAssistantTestCase{
 	}
 	
 	public void testJsfJspJbide1807Test(){
+		
+		// JBIDE-4341: the EL proposals are not to be returned (and tested) here anymore.
+		//  - The EL-proposals are removed from the test-list.
+		//  - The "/pages" proposal is added as the main case to test 
 		String[] proposals={
-					"#{applicationScope}",
-					"#{cookie}",
-					"#{facesContext}",
-					"#{header}",
-					"#{headerValues}",
-					"#{initParam}",
-					"#{param}",
-					"#{paramValues}",
-					"#{requestScope}",
-					"#{sessionScope}",
-					"#{view}"
+					"/pages",
+					"/templates"
 		};
 
 		checkProposals(PAGE_NAME, "<input type=\"image\" src=\"", 25, proposals, true);
