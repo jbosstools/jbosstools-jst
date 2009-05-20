@@ -68,8 +68,13 @@ public class JsfJspJbide2437Test extends ContentAssistantTestCase {
 			
 		// There should be proposals for template paths 
 		assertTrue("Content Assistant peturned no proposals for template paths.", bTemplatePathProposalsFound);
-		// There should be proposals for EL-expresions 
-		assertTrue("Content Assistant peturned no proposals for template paths.", bELProposalsFound);
+		// There should be proposals for EL-expresions
+		
+		// JBIDE-4341: JstJspAllTests/testJsfJspJbide1813Test failing with missing applicationScope in completions
+		// Due to the current EL-prompting rules there is no EL-proposals allowed if there are no EL-starting char 
+		// sequence in the text. So, The following code line is commented out. This is the subject to rollback in the future.
+		//
+//		assertTrue("Content Assistant peturned no proposals for EL.", bELProposalsFound);
 		
 		closeEditor();
 	}
