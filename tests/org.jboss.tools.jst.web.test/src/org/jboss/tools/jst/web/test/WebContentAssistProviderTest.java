@@ -26,6 +26,7 @@ import org.jboss.tools.common.model.project.Watcher;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.test.util.TestProjectProvider;
 import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
+import org.jboss.tools.test.util.JobUtils;
 
 public class WebContentAssistProviderTest extends TestCase {
 
@@ -37,6 +38,14 @@ public class WebContentAssistProviderTest extends TestCase {
 
 	public static Test suite() {
 		return new TestSuite(WebContentAssistProviderTest.class);
+	}
+
+	public void testTlds() {
+		// Wait all the builders to finish
+		JobUtils.waitForIdle(2000);
+
+		List tldList = webPromptingProvider.getList(projectModel, WebPromptingProvider.JSF_GET_TAGLIBS, "", null);
+		assertTrue("TLD list does not contain expected TLD in XModel.", tldList.contains("http://jboss.com/products/seam/taglib"));
 	}
 
 	public void testJsfBeanPropertyList() {
@@ -54,11 +63,6 @@ public class WebContentAssistProviderTest extends TestCase {
 		assertTrue("Bundle property list does not contain expected property in XModel.", bundlePropertyList.contains("bundleProperty1"));
 	}
 
-	public void testTlds() {
-		List tldList = webPromptingProvider.getList(projectModel, WebPromptingProvider.JSF_GET_TAGLIBS, "", null);
-		assertTrue("TLD list does not contain expected TLD in XModel.", tldList.contains("http://jboss.com/products/seam/taglib"));
-	}
-
 	public void setUp() throws Exception {
 		provider = new TestProjectProvider("org.jboss.tools.jst.web.test", null, "TestsWebArtefacts", makeCopy); 
 		project = provider.getProject();
@@ -70,6 +74,10 @@ public class WebContentAssistProviderTest extends TestCase {
 		Watcher.getInstance(projectModel).forceUpdate();
 		projectModel.update();
 		assertNotNull("Can't get XModel for test project.", projectModel);
+
+		// Wait all the builders to finish
+		JobUtils.waitForIdle(2000);
+		
 		webPromptingProvider = WebPromptingProvider.getInstance();
 	}
 
