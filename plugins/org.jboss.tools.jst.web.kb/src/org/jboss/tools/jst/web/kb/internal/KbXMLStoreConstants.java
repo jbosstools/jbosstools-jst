@@ -19,6 +19,7 @@ public interface KbXMLStoreConstants extends XMLStoreConstants {
 
 	public String TAG_LIBRARY = "library"; //$NON-NLS-1$
 	public String TAG_COMPONENT = "component"; //$NON-NLS-1$
+	public String TAG_ATTRIBUTE = "attribute"; //$NON-NLS-1$
 
 	public String CLS_TLD_LIBRARY = "tld"; //$NON-NLS-1$
 

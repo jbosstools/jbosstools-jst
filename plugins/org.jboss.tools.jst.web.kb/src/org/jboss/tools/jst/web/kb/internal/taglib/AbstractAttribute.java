@@ -12,22 +12,29 @@ package org.jboss.tools.jst.web.kb.internal.taglib;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import org.jboss.tools.common.el.core.resolver.ELResolver;
+import org.jboss.tools.common.model.project.ext.IValueInfo;
+import org.jboss.tools.common.model.project.ext.event.Change;
+import org.jboss.tools.common.model.project.ext.store.XMLStoreConstants;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.internal.KbObject;
+import org.jboss.tools.jst.web.kb.internal.KbXMLStoreConstants;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
+import org.w3c.dom.Element;
 
 /**
  * Abstract implementation of IAttribute
  * @author Alexey Kazakov
  */
-public abstract class AbstractAttribute implements IAttribute {
+public abstract class AbstractAttribute extends KbObject implements IAttribute {
+	public static final String REQUIRED = "required";
 
 	protected String description;
 	protected String name;
-	protected boolean preferable;
 	protected boolean required;
 
 	/* (non-Javadoc)
@@ -44,6 +51,11 @@ public abstract class AbstractAttribute implements IAttribute {
 		this.description = description;
 	}
 
+	public void setDescription(IValueInfo s) {
+		description = s == null ? null : s.getValue();
+		attributesInfo.put(AbstractComponent.DESCRIPTION, s);
+	}
+
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IAttribute#getName()
 	 */
@@ -58,18 +70,16 @@ public abstract class AbstractAttribute implements IAttribute {
 		this.name = name;
 	}
 
+	public void setName(IValueInfo s) {
+		name = s == null ? null : s.getValue();
+		attributesInfo.put(XMLStoreConstants.ATTR_NAME, s);
+	}
+
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IAttribute#isPreferable()
 	 */
 	public boolean isPreferable() {
-		return preferable;
-	}
-
-	/**
-	 * @param preferable the preferable to set
-	 */
-	public void setPreferable(boolean preferable) {
-		this.preferable = preferable;
+		return isRequired();
 	}
 
 	/* (non-Javadoc)
@@ -86,6 +96,11 @@ public abstract class AbstractAttribute implements IAttribute {
 		this.required = required;
 	}
 
+	public void setRequired(IValueInfo s) {
+		required = s != null && "true".equals(s.getValue());
+		attributesInfo.put(REQUIRED, s);
+	}
+
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.IProposalProcessor#getProposals(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.IPageContext)
 	 */
@@ -97,4 +112,52 @@ public abstract class AbstractAttribute implements IAttribute {
 		}
 		return proposals.toArray(new TextProposal[proposals.size()]);
 	}
+
+	public List<Change> merge(KbObject s) {
+		List<Change> changes = super.merge(s);
+		
+		AbstractAttribute a = (AbstractAttribute)s;
+		if(!stringsEqual(name, a.name)) {
+			changes = Change.addChange(changes, new Change(this, XMLStoreConstants.ATTR_NAME, name, a.name));
+			name = a.name;
+		}
+		if(!stringsEqual(description, a.description)) {
+			changes = Change.addChange(changes, new Change(this, AbstractComponent.DESCRIPTION, description, a.description));
+			description = a.description;
+		}
+		if(required != a.required) {
+			changes = Change.addChange(changes, new Change(this, REQUIRED, "" + required, "" + a.required));
+			required = a.required;
+		}
+		
+		return changes;
+	}
+
+	public String getXMLName() {
+		return KbXMLStoreConstants.TAG_ATTRIBUTE;
+	}
+	
+	public Element toXML(Element parent, Properties context) {
+		Element element = super.toXML(parent, context);
+		
+		if(attributesInfo.get(XMLStoreConstants.ATTR_NAME) == null && name != null) {
+			element.setAttribute(XMLStoreConstants.ATTR_NAME, name);
+		}
+
+		return element;
+	}
+
+	public void loadXML(Element element, Properties context) {
+		super.loadXML(element, context);
+
+		if(name == null && element.hasAttribute(XMLStoreConstants.ATTR_NAME)) {
+			name = element.getAttribute(XMLStoreConstants.ATTR_NAME);
+		}
+
+		setName(attributesInfo.get(XMLStoreConstants.ATTR_NAME));
+		setDescription(attributesInfo.get(AbstractComponent.DESCRIPTION));
+		setRequired(attributesInfo.get(REQUIRED));
+		//TODO
+	}
+
 }

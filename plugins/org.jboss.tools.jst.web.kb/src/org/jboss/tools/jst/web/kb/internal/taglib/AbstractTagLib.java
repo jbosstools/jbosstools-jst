@@ -20,7 +20,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.project.ext.IValueInfo;
 import org.jboss.tools.common.model.project.ext.store.XMLStoreConstants;
@@ -28,30 +27,24 @@ import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.common.xml.XMLUtilities;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.internal.KbObject;
 import org.jboss.tools.jst.web.kb.internal.KbXMLStoreConstants;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
-import org.jboss.tools.jst.web.model.project.ext.store.XMLStoreHelper;
 import org.w3c.dom.Element;
 
 /**
  * Abstract implementation of ITagLibrary
  * @author Alexey Kazakov
  */
-public abstract class AbstractTagLib implements ITagLibrary {
-
-	Object id;
+public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
+	public static String URI = "uri";
 
 	protected INameSpace nameSpace;
 	protected String uri;
-	protected IPath source;
-	protected IFile resource;
 	protected Map<String, IComponent> components = new HashMap<String, IComponent>();
-
-	//locations of xml attributes
-	protected Map<String,IValueInfo> attributes = new HashMap<String, IValueInfo>();
 
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.TagLibrary#getAllComponents()
@@ -109,6 +102,7 @@ public abstract class AbstractTagLib implements ITagLibrary {
 	 * @param component
 	 */
 	public void addComponent(IComponent component) {
+		adopt((KbObject)component);
 		components.put(component.getName(), component);
 	}
 
@@ -175,7 +169,7 @@ public abstract class AbstractTagLib implements ITagLibrary {
 
 	public void setURI(IValueInfo s) {
 		uri = s == null ? null : s.getValue();
-		attributes.put("uri", s);
+		attributesInfo.put(URI, s);
 	}
 
 
@@ -228,18 +222,6 @@ public abstract class AbstractTagLib implements ITagLibrary {
 		return proposals.toArray(new TextProposal[proposals.size()]);
 	}
 
-	public void setID(Object id) {
-		this.id = id;
-	}
-
-	public Object getID() {
-		return id;
-	}
-
-	public String getXMLClass() {
-		return null;
-	}
-	
 	public AbstractTagLib clone() throws CloneNotSupportedException {
 		AbstractTagLib t = (AbstractTagLib)super.clone();
 		t.components = new HashMap<String, IComponent>();
@@ -247,64 +229,55 @@ public abstract class AbstractTagLib implements ITagLibrary {
 		return t;
 	}
 
+	public String getXMLName() {
+		return KbXMLStoreConstants.TAG_LIBRARY;
+	}
+	
 	public Element toXML(Element parent, Properties context) {
-		Element element = XMLUtilities.createElement(parent, KbXMLStoreConstants.TAG_LIBRARY);
-		if(getXMLClass() != null) {
-			element.setAttribute(XMLStoreConstants.ATTR_CLASS, getXMLClass());
-		}
-		IPath source = getSourcePath();
-		if(source != null && !source.equals(context.get(XMLStoreConstants.ATTR_PATH))) {
-			element.setAttribute(XMLStoreConstants.ATTR_PATH, source.toString());
-		}
-		if(id != null) {
-			if(id instanceof XModelObject) {
-				XModelObject o = (XModelObject)id;
-				XMLStoreHelper.saveModelObject(element, o, XMLStoreConstants.TAG_ID, context);
-			} else {
-				//TODO consider other kinds of id
-			}
-		}
+		Element element = super.toXML(parent, context);
+
+		XModelObject old = pushModelObject(context);
 
 		saveAttributeValues(element);
 
 		for (IComponent c: components.values()) {
-			//TODO save component
+			((KbObject)c).toXML(parent, context);
 		}
 
+		popModelObject(context, old);
 		return element;
 	}
 
 	protected void saveAttributeValues(Element element) {
-		if(uri != null) element.setAttribute(KbXMLStoreConstants.ATTR_URI, uri);
 	}
 
 	public void loadXML(Element element, Properties context) {
-		String s = element.getAttribute(XMLStoreConstants.ATTR_PATH);
-		if(s != null && s.length() > 0) {
-			source = new Path(s);
-		} else {
-			source = (IPath)context.get(XMLStoreConstants.ATTR_PATH);
-		}
-		Element e_id = XMLUtilities.getUniqueChild(element, XMLStoreConstants.TAG_ID);
-		if(e_id != null) {
-			String cls = e_id.getAttribute(XMLStoreConstants.ATTR_CLASS);
-			if(XMLStoreConstants.CLS_MODEL_OBJECT.equals(cls)) {
-				id = XMLStoreHelper.loadModelObject(e_id, context);
-			} else {
-				//TODO consider other kinds of id
-			}
-		}
+		super.loadXML(element, context);
+
+		XModelObject old = pushModelObject(context);
 
 		loadAttributeValues(element);
 
-		//TODO load components
+		Element[] cs = XMLUtilities.getChildren(element, KbXMLStoreConstants.TAG_COMPONENT);
+		for (Element e: cs) {
+			String cls = e.getAttribute(XMLStoreConstants.ATTR_CLASS);
+			AbstractComponent c = null;
+			if(KbXMLStoreConstants.CLS_TLD_LIBRARY.equals(cls)) {
+				c = new TLDTag();
+			} else {
+				//consider other cases;
+			}
+			if(c != null) {
+				c.loadXML(e, context);
+				addComponent(c);
+			}
+		}
 
+		popModelObject(context, old);
 	}
 
 	protected void loadAttributeValues(Element element) {
-		if(element.hasAttribute(KbXMLStoreConstants.ATTR_URI)) {
-			uri = element.getAttribute(KbXMLStoreConstants.ATTR_URI);
-		}
+		setURI(attributesInfo.get(URI));
 	}
 
 }

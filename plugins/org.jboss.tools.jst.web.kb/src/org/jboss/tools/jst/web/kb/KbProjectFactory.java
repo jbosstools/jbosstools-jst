@@ -17,12 +17,12 @@ import org.jboss.tools.jst.web.WebModelPlugin;
 public class KbProjectFactory {
 
 	/**
-	 * Factory method creating seam project instance by project resource.
+	 * Factory method creating kb project instance by project resource.
 	 * Returns null if 
 	 * (1) project does not exist 
 	 * (2) project is closed 
-	 * (3) project has no seam nature
-	 * (4) creating seam project failed.
+	 * (3) project has no kb nature
+	 * (4) creating kb project failed.
 	 * @param project
 	 * @param resolve if true and results of last build have not been resolved they are loaded.
 	 * @return

@@ -29,12 +29,17 @@ import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.filesystems.impl.FolderImpl;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
+import org.jboss.tools.common.model.project.ext.store.XMLStoreConstants;
 import org.jboss.tools.common.model.util.EclipseJavaUtil;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.util.NamespaceMapping;
 import org.jboss.tools.jst.web.kb.IKbProject;
+import org.jboss.tools.jst.web.kb.internal.taglib.AbstractAttribute;
 import org.jboss.tools.jst.web.kb.internal.taglib.AbstractComponent;
+import org.jboss.tools.jst.web.kb.internal.taglib.AbstractTagLib;
+import org.jboss.tools.jst.web.kb.internal.taglib.TLDAttribute;
 import org.jboss.tools.jst.web.kb.internal.taglib.TLDLibrary;
+import org.jboss.tools.jst.web.kb.internal.taglib.TLDTag;
 import org.jboss.tools.jst.web.model.helpers.InnerModelHelper;
 import org.jboss.tools.jst.web.model.project.ext.store.XMLValueInfo;
 
@@ -124,48 +129,51 @@ public class XMLScanner implements IFileScanner {
 
 	private void parseTLD(XModelObject o, IPath source, IKbProject sp, LoadedDeclarations ds) {
 		TLDLibrary library = new TLDLibrary();
-		library.setURI(new XMLValueInfo(o, "uri"));
-		library.setDisplayName(new XMLValueInfo(o, "display-name"));
+		library.setId(o);
+		library.setURI(new XMLValueInfo(o, AbstractTagLib.URI));
+		library.setDisplayName(new XMLValueInfo(o, TLDLibrary.DISPLAY_NAME));
 		library.setShortName(new XMLValueInfo(o, "shortname"));
-		String version = o.getAttributeValue("version");
+		String version = o.getAttributeValue(TLDLibrary.VERSION);
 		if(version == null) {
 			if("FileTLD_1_2".equals(o.getModelEntity().getName())) {
 				version = "1.2";
 			} else {
 				version = "1.1";
 			}
+			library.setVersion(version);
+		} else {
+			library.setVersion(new XMLValueInfo(o, TLDLibrary.VERSION));
 		}
-		library.setVersion(version);
 
 		ds.getLibraries().add(library);
 
 		XModelObject[] ts = o.getChildren();
 		for (XModelObject t: ts) {
 			if(t.getModelEntity().getName().startsWith("TLDTag")) {
-				AbstractComponent tag = new AbstractComponent() {}; //TODO
+				AbstractComponent tag = new TLDTag();
+				tag.setId(t);
 
-				String name = t.getAttributeValue("name");
-				tag.setName(name);
-
-				String description = t.getAttributeValue("description");
-				if(description != null) {
-					//in version 1.1 this attribute is not available
-					tag.setDescription(description);
-				}
-
-				String cls = t.getAttributeValue("tagclass");
-				tag.setComponentClass(cls);
-
-				String bodycontent = t.getAttributeValue("bodycontent");
-				boolean canHaveBody = !"empty".equals(bodycontent);
-				tag.setCanHaveBody(canHaveBody);
-				
+				tag.setName(new XMLValueInfo(t, XMLStoreConstants.ATTR_NAME));
+				tag.setDescription(new XMLValueInfo(t, AbstractComponent.DESCRIPTION));
+				tag.setComponentClass(new XMLValueInfo(t, "tagclass"));
+				tag.setCanHaveBody(new XMLValueInfo(t, "bodycontent"));
 				//TODO
+//				tag.setComponentType(componentType);
 				
 				XModelObject[] as = t.getChildren();
 				for(XModelObject a: as) {
-					//TODO
+					if(a.getModelEntity().getName().startsWith("TLDAttribute")) {
+						AbstractAttribute attr = new TLDAttribute();
+						attr.setId(a);
+						attr.setName(new XMLValueInfo(a, XMLStoreConstants.ATTR_NAME));
+						attr.setDescription(new XMLValueInfo(a, AbstractComponent.DESCRIPTION));
+						attr.setRequired(new XMLValueInfo(a, AbstractAttribute.REQUIRED));
+						
+						tag.addAttribute(attr);
+					}
 				}
+				
+				library.addComponent(tag);
 			}
 		}
 		

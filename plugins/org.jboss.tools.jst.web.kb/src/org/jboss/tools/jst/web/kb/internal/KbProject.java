@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -49,12 +50,12 @@ import org.w3c.dom.Element;
  * @author V.Kabanovich
  *
  */
-public class KbProject implements IKbProject {
+public class KbProject extends KbObject implements IKbProject {
 	IProject project;
 
 	ClassPathMonitor classPath = new ClassPathMonitor(this);
 
-	Set<IPath> sourcePaths = new HashSet<IPath>();
+//	Set<IPath> sourcePaths = new HashSet<IPath>();
 	
 	Map<IPath, LoadedDeclarations> sourcePaths2 = new HashMap<IPath, LoadedDeclarations>();
 	
@@ -67,7 +68,7 @@ public class KbProject implements IKbProject {
 	LibraryStorage libraries = new LibraryStorage();
 
 	public ITagLibrary[] getTagLibraries() {
-		return libraries.getAllFactoriesArray();
+		return libraries.getAllLibrariesArray();
 	}
 
 	public void configure() throws CoreException {
@@ -82,12 +83,14 @@ public class KbProject implements IKbProject {
 		return project;
 	}
 
-	public IPath getSourcePath() {
-		return project == null ? null : project.getFullPath();
+	public IKbProject getKbProject() {
+		return this;
 	}
 
 	public void setProject(IProject project) {
 		this.project = project;
+		setSourcePath(project.getFullPath());
+		resource = project;
 		classPath.init();
 	}
 
@@ -95,10 +98,10 @@ public class KbProject implements IKbProject {
 	 * 
 	 * @param p
 	 */
-	public void addSeamProject(KbProject p) {
+	public void addKbProject(KbProject p) {
 		if(dependsOn.contains(p)) return;
 		dependsOn.add(p);
-		p.addDependentSeamProject(this);
+		p.addDependentKbProject(this);
 		if(!p.isStorageResolved) {
 			p.resolve();
 		} else {
@@ -119,7 +122,7 @@ public class KbProject implements IKbProject {
 	 * 
 	 * @return
 	 */
-	public Set<KbProject> getSeamProjects() {
+	public Set<KbProject> getKbProjects() {
 		return dependsOn;
 	}
 	
@@ -127,7 +130,7 @@ public class KbProject implements IKbProject {
 	 * 
 	 * @param p
 	 */
-	public void addDependentSeamProject(KbProject p) {
+	public void addDependentKbProject(KbProject p) {
 		usedBy.add(p);
 	}
 
@@ -135,7 +138,7 @@ public class KbProject implements IKbProject {
 	 * 
 	 * @param p
 	 */
-	public void removeSeamProject(KbProject p) {
+	public void removeKbProject(KbProject p) {
 		if(!dependsOn.contains(p)) return;
 		p.usedBy.remove(this);
 		dependsOn.remove(p);
@@ -233,11 +236,11 @@ public class KbProject implements IKbProject {
 
 
 	/**
-	 * Method testing how long it takes to load Seam model
+	 * Method testing how long it takes to load Kb model
 	 * serialized previously.
 	 * This approach makes sure, that all other services 
 	 * (JDT, XModel, etc) are already loaded at first start of 
-	 * Seam model, so that now it is more or less pure time 
+	 * Kb model, so that now it is more or less pure time 
 	 * to be computed.
 	 * 
 	 * @return
@@ -245,7 +248,7 @@ public class KbProject implements IKbProject {
 	public long reload() {
 		statistics = new ArrayList<Long>();
 		classPath = new ClassPathMonitor(this);
-		sourcePaths.clear();
+//		sourcePaths.clear();
 		sourcePaths2.clear();
 		isStorageResolved = false;
 		dependsOn.clear();
@@ -270,10 +273,9 @@ public class KbProject implements IKbProject {
 		File file = getStorageFile();
 		file.getParentFile().mkdirs();
 		
-		Element root = XMLUtilities.createDocumentElement("seam-project"); //$NON-NLS-1$
+		Element root = XMLUtilities.createDocumentElement("kb-project"); //$NON-NLS-1$
 		storeProjectDependencies(root);
 
-//		storeSourcePaths(root);
 		storeSourcePaths2(root);
 		
 		XMLUtilities.serialize(root, file.getAbsolutePath());
@@ -308,7 +310,7 @@ public class KbProject implements IKbProject {
 				KbProject sp = (KbProject)KbProjectFactory.getKbProject(project, false);
 				if(sp != null) {
 					dependsOn.add(sp);
-					sp.addDependentSeamProject(this);
+					sp.addDependentKbProject(this);
 				}
 			}
 		}
@@ -330,7 +332,7 @@ public class KbProject implements IKbProject {
 
 	private void loadSourcePaths2(Element root) {
 		Properties context = new Properties();
-		context.put("seamProject", this);
+		context.put("kbProject", this);
 		Element sourcePathsElement = XMLUtilities.getUniqueChild(root, "paths"); //$NON-NLS-1$
 		if(sourcePathsElement == null) return;
 		Element[] paths = XMLUtilities.getChildren(sourcePathsElement, "path"); //$NON-NLS-1$
@@ -503,9 +505,70 @@ public class KbProject implements IKbProject {
 	 * @param source
 	 */	
 	public void registerComponents(LoadedDeclarations ds, IPath source) {
+		ITagLibrary[] libraries = ds.getLibraries().toArray(new ITagLibrary[0]);
+
+		if(libraries.length == 0) {
+			pathRemoved(source);
+			if(EclipseResourceUtil.isJar(source.toString())) {
+//				if(!sourcePaths.contains(source)) sourcePaths.add(source);
+				sourcePaths2.put(source, ds);
+			}
+			return;
+		}
+		sourcePaths2.put(source, ds);
+
+		Map<Object,ITagLibrary> currentLibraries = findLibraryDeclarations(source);
+		List<Change> addedLibraries = null;
+		
+		for (ITagLibrary library: libraries) {
+			AbstractTagLib loaded = (AbstractTagLib)library;
+			AbstractTagLib current = (AbstractTagLib)currentLibraries.remove(loaded.getId());
+			if(current != null && current.getClass() != loaded.getClass()) {
+				this.libraries.removeLibrary((ITagLibrary)current);
+				current = null;
+			}
+			if(current != null) {
+				List<Change> changes = current.merge(loaded);
+				fireChanges(changes);
+				continue;
+			}
+			if(((KbObject)library).getParent() == null) {
+				adopt((KbObject)library);
+			}
+			this.libraries.addLibrary(library);
+			addedLibraries = Change.addChange(addedLibraries, new Change(this, null, null, loaded));
+		}
+		fireChanges(addedLibraries); 
+		
+		libraryDeclarationsRemoved(currentLibraries);
 		//TODO
+		try {
+			registerComponentsInDependentProjects(ds, source);
+		} catch (CloneNotSupportedException e) {
+			WebModelPlugin.getPluginLog().logError(e);
+		}
 	}
 
+	/**
+	 * 
+	 * @param ds
+	 * @param source
+	 * @throws CloneNotSupportedException
+	 */
+	public void registerComponentsInDependentProjects(LoadedDeclarations ds, IPath source) throws CloneNotSupportedException {
+		if(usedBy.isEmpty()) return;
+		if(EclipseResourceUtil.isJar(source.toString())) return;
+		
+		for (KbProject p : usedBy) {
+			p.resolve();
+			LoadedDeclarations ds1 = new LoadedDeclarations();
+			for (ITagLibrary f : ds.getLibraries()) {
+				ds1.getLibraries().add(f.clone());
+			}
+			p.registerComponents(ds1, source);
+		}
+	}
+	
 	public boolean isPathLoaded(IPath source) {
 		return sourcePaths2.containsKey(source);
 	}
@@ -516,12 +579,10 @@ public class KbProject implements IKbProject {
 	 * @param source
 	 */
 	public void pathRemoved(IPath source) {
-		if(!sourcePaths.contains(source) && !sourcePaths2.containsKey(source)) return;
-		sourcePaths.remove(source);
+		if(!sourcePaths2.containsKey(source)) return;
 		sourcePaths2.remove(source);
 
 		List<Change> changes = null;
-		//TODO
 		
 		Set<ITagLibrary> ls = libraries.removePath(source);
 		if(ls != null) for (ITagLibrary l: ls) {
@@ -529,7 +590,48 @@ public class KbProject implements IKbProject {
 		}
 		fireChanges(changes);
 		
-//		firePathRemovedToDependentProjects(source);
+		firePathRemovedToDependentProjects(source);
+	}
+
+	public void firePathRemovedToDependentProjects(IPath source) {
+		if(usedBy.isEmpty()) return;
+		if(EclipseResourceUtil.isJar(source.toString())) return;
+		
+		for (KbProject p : usedBy) {
+			p.resolve();
+			p.pathRemoved(source);
+		}
+	}
+
+	/**
+	 * 
+	 * @param source
+	 * @return
+	 */
+	public Map<Object,ITagLibrary> findLibraryDeclarations(IPath source) {
+		Map<Object,ITagLibrary> map = new HashMap<Object, ITagLibrary>();
+		Set<ITagLibrary> fs = libraries.getLibrariesBySource(source);
+		if(fs != null) for (ITagLibrary c: fs) {
+			KbObject ci = (KbObject)c;
+			map.put(ci.getId(), c);
+		}		
+		return map;
+	}
+	
+	/**
+	 * 
+	 * @param removed
+	 */
+	void libraryDeclarationsRemoved(Map<Object,ITagLibrary> removed) {
+		if(removed == null || removed.isEmpty()) return;
+		Iterator<ITagLibrary> iterator = removed.values().iterator();
+		List<Change> changes = null;
+		while(iterator.hasNext()) {
+			ITagLibrary c = iterator.next();
+			libraries.removeLibrary(c);
+			changes = Change.addChange(changes, new Change(this, null, c, null));
+		}
+		fireChanges(changes);
 	}
 
 	List<Change> postponedChanges = null;
@@ -559,77 +661,78 @@ public class KbProject implements IKbProject {
 		}
 		//TODO
 	}
+
 	class LibraryStorage {
-		private Set<ITagLibrary> allFactories = new HashSet<ITagLibrary>();
-		private ITagLibrary[] allFactoriesArray = null;
-		Map<IPath, Set<ITagLibrary>> factoriesBySource = new HashMap<IPath, Set<ITagLibrary>>();
+		private Set<ITagLibrary> allLibraries = new HashSet<ITagLibrary>();
+		private ITagLibrary[] allLibrariesArray = null;
+		Map<IPath, Set<ITagLibrary>> librariesBySource = new HashMap<IPath, Set<ITagLibrary>>();
 
 		public void clear() {
-			synchronized(allFactories) {
-				allFactories.clear();
-				allFactoriesArray = null;
+			synchronized(allLibraries) {
+				allLibraries.clear();
+				allLibrariesArray = null;
 			}
-			factoriesBySource.clear();
+			librariesBySource.clear();
 		}
 
-		public ITagLibrary[] getAllFactoriesArray() {
-			ITagLibrary[] result = allFactoriesArray;
+		public ITagLibrary[] getAllLibrariesArray() {
+			ITagLibrary[] result = allLibrariesArray;
 			if(result == null) {
-				synchronized(allFactories) {
-					allFactoriesArray = allFactories.toArray(new ITagLibrary[0]);
-					result = allFactoriesArray;
+				synchronized(allLibraries) {
+					allLibrariesArray = allLibraries.toArray(new ITagLibrary[0]);
+					result = allLibrariesArray;
 				}
 			}
 			return result;
 		}
 
-		public Set<ITagLibrary> getFactoriesBySource(IPath path) {
-			return factoriesBySource.get(path);
+		public Set<ITagLibrary> getLibrariesBySource(IPath path) {
+			return librariesBySource.get(path);
 		}
 		
-		public void addFactory(ITagLibrary f) {
-			synchronized(allFactories) {
-				allFactories.add(f);
-				allFactoriesArray = null;
+		public void addLibrary(ITagLibrary f) {
+			synchronized(allLibraries) {
+				allLibraries.add(f);
+				allLibrariesArray = null;
 			}
 			IPath path = f.getSourcePath();
 			if(path != null) {
-				Set<ITagLibrary> fs = factoriesBySource.get(path);
+				Set<ITagLibrary> fs = librariesBySource.get(path);
 				if(fs == null) {
 					fs = new HashSet<ITagLibrary>();
-					factoriesBySource.put(path, fs);
+					librariesBySource.put(path, fs);
 				}
 				fs.add(f);
 			}
 		}
 		
-		public void removeFactory(ITagLibrary f) {
-			synchronized(allFactories) {
-				allFactories.remove(f);
-				allFactoriesArray = null;
+		public void removeLibrary(ITagLibrary f) {
+			synchronized(allLibraries) {
+				allLibraries.remove(f);
+				allLibrariesArray = null;
 			}
 			IPath path = f.getSourcePath();
 			if(path != null) {
-				Set<ITagLibrary> fs = factoriesBySource.get(path);
+				Set<ITagLibrary> fs = librariesBySource.get(path);
 				if(fs != null) {
 					fs.remove(f);
 				}
 				if(fs.isEmpty()) {
-					factoriesBySource.remove(fs);
+					librariesBySource.remove(fs);
 				}
 			}
 		}
 
 		public Set<ITagLibrary> removePath(IPath path) {
-			Set<ITagLibrary> fs = factoriesBySource.get(path);
+			Set<ITagLibrary> fs = librariesBySource.get(path);
 			if(fs == null) return null;
 			for (ITagLibrary f: fs) {
-				synchronized(allFactories) {
-					allFactories.remove(f);
-					allFactoriesArray = null;
+				synchronized(allLibraries) {
+					allLibraries.remove(f);
+					allLibrariesArray = null;
 				}
 			}
-			factoriesBySource.remove(path);
+			librariesBySource.remove(path);
 			return fs;
 		}
 		

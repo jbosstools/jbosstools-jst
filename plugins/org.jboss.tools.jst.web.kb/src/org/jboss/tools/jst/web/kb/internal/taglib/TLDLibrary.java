@@ -19,6 +19,10 @@ import org.w3c.dom.Element;
  * @author Viacheslav Kabanovich
  */
 public class TLDLibrary extends AbstractTagLib implements ITLDLibrary {
+	public static final String DISPLAY_NAME = "display-name";
+	public static final String SHORT_NAME = "short-name";
+	public static final String VERSION = "version";
+
 	String displayName = null;
 	String shortName = null;
 	String version = null;
@@ -37,16 +41,21 @@ public class TLDLibrary extends AbstractTagLib implements ITLDLibrary {
 
 	public void setDisplayName(IValueInfo s) {
 		displayName = s == null ? null : s.getValue();
-		attributes.put("display-name", s);
+		attributesInfo.put(DISPLAY_NAME, s);
 	}
 
 	public void setShortName(IValueInfo s) {
 		shortName = s == null ? null : s.getValue();
-		attributes.put("short-name", s);
+		attributesInfo.put(SHORT_NAME, s);
 	}
 
 	public void setVersion(String version) {
 		this.version = version;
+	}
+
+	public void setVersion(IValueInfo s) {
+		version = s == null ? null : s.getValue();
+		attributesInfo.put(VERSION, s);
 	}
 
 	public void createDefaultNameSpace() {
@@ -59,14 +68,18 @@ public class TLDLibrary extends AbstractTagLib implements ITLDLibrary {
 
 	protected void saveAttributeValues(Element element) {
 		super.saveAttributeValues(element);
-		if(shortName != null) element.setAttribute(KbXMLStoreConstants.ATTR_SHORT_NAME, shortName);
-		//TODO
+		if(attributesInfo.get(VERSION) == null && version != null) {
+			element.setAttribute(VERSION, version);
+		}
 	}
 
 	protected void loadAttributeValues(Element element) {
 		super.loadAttributeValues(element);
-		if(element.hasAttribute(KbXMLStoreConstants.ATTR_SHORT_NAME)) {
-			shortName = element.getAttribute(KbXMLStoreConstants.ATTR_SHORT_NAME);
+		setShortName(attributesInfo.get(SHORT_NAME));
+		setDisplayName(attributesInfo.get(DISPLAY_NAME));
+		setVersion(attributesInfo.get(VERSION));
+		if(version == null && element.hasAttribute(VERSION)) {
+			version = element.getAttribute(VERSION);
 		}
 		//TODO
 	}

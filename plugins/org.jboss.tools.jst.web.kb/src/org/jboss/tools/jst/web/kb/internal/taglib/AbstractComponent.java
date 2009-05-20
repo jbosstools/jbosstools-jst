@@ -16,11 +16,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.jboss.tools.common.model.project.ext.IValueInfo;
+import org.jboss.tools.common.model.project.ext.event.Change;
 import org.jboss.tools.common.model.project.ext.store.XMLStoreConstants;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.common.xml.XMLUtilities;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.internal.KbObject;
 import org.jboss.tools.jst.web.kb.internal.KbXMLStoreConstants;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
@@ -31,7 +34,11 @@ import org.w3c.dom.Element;
  * Abstract implementation of IComponent
  * @author Alexey Kazakov
  */
-public abstract class AbstractComponent implements IComponent {
+public abstract class AbstractComponent extends KbObject implements IComponent {
+	public static final String DESCRIPTION = "description";
+	public static final String COMPONENT_CLASS = "component-class";
+	public static final String COMPONENT_TYPE = "component-type";
+	public static final String BODY_CONTENT = "bodycontent";
 
 	protected boolean canHaveBody;
 	protected String componentClass;
@@ -54,6 +61,11 @@ public abstract class AbstractComponent implements IComponent {
 	 */
 	public void setCanHaveBody(boolean canHaveBody) {
 		this.canHaveBody = canHaveBody;
+	}
+
+	public void setCanHaveBody(IValueInfo s) {
+		canHaveBody = s == null || "empty".equals(s.getValue());
+		attributesInfo.put(BODY_CONTENT, s);
 	}
 
 	/* (non-Javadoc)
@@ -121,6 +133,11 @@ public abstract class AbstractComponent implements IComponent {
 		this.componentClass = componentClass;
 	}
 
+	public void setComponentClass(IValueInfo s) {
+		componentClass = s == null ? null : s.getValue();
+		attributesInfo.put(COMPONENT_CLASS, s);
+	}
+
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getComponentType()
 	 */
@@ -149,6 +166,11 @@ public abstract class AbstractComponent implements IComponent {
 		this.description = description;
 	}
 
+	public void setDescription(IValueInfo s) {
+		description = s == null ? null : s.getValue();
+		attributesInfo.put(DESCRIPTION, s);
+	}
+
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getName()
 	 */
@@ -161,6 +183,11 @@ public abstract class AbstractComponent implements IComponent {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public void setName(IValueInfo s) {
+		name = s == null ? null : s.getValue();
+		attributesInfo.put(XMLStoreConstants.ATTR_NAME, s);
 	}
 
 	/* (non-Javadoc)
@@ -211,6 +238,7 @@ public abstract class AbstractComponent implements IComponent {
 	 * @param attribute
 	 */
 	public void addAttribute(IAttribute attribute) {
+		adopt((KbObject)attribute);
 		attributes.put(attribute.getName(), attribute);
 		if(attribute.isPreferable()) {
 			preferableAttributes.put(attribute.getName(), attribute);
@@ -230,21 +258,105 @@ public abstract class AbstractComponent implements IComponent {
 		requiredAttributes.remove(attribute.getName());
 	}
 
-	public String getXMLClass() {
-		return null;
+	public List<Change> merge(KbObject s) {
+		List<Change> changes = super.merge(s);
+	
+		AbstractComponent c = (AbstractComponent)s;
+		if(!stringsEqual(name, c.name)) {
+			changes = Change.addChange(changes, new Change(this, XMLStoreConstants.ATTR_NAME, name, c.name));
+			name = c.name;
+		}
+		if(!stringsEqual(description, c.description)) {
+			changes = Change.addChange(changes, new Change(this, DESCRIPTION, description, c.description));
+			description = c.description;
+		}
+		if(!stringsEqual(componentClass, c.componentClass)) {
+			changes = Change.addChange(changes, new Change(this, COMPONENT_CLASS, componentClass, c.componentClass));
+			componentClass = c.componentClass;
+		}
+		if(!stringsEqual(componentType, c.componentType)) {
+			changes = Change.addChange(changes, new Change(this, COMPONENT_CLASS, componentType, c.componentType));
+			componentType = c.componentType;
+		}
+		if(canHaveBody != c.canHaveBody) {
+			changes = Change.addChange(changes, new Change(this, BODY_CONTENT, "" + canHaveBody, "" + c.canHaveBody));
+			canHaveBody = c.canHaveBody;
+		}
+
+		Change children = new Change(this, null, null, null);
+		mergeAttributes(c, children);
+		changes = Change.addChange(changes, children);
+
+		return changes;
+	}
+
+	public void mergeAttributes(AbstractComponent c, Change children) {
+		Map<Object,AbstractAttribute> attributeMap = new HashMap<Object, AbstractAttribute>();
+		for (IAttribute a: attributes.values()) attributeMap.put(((KbObject)a).getId(), (AbstractAttribute)a);
+		for (IAttribute a: c.attributes.values()) {
+			AbstractAttribute loaded = (AbstractAttribute)a;
+			AbstractAttribute current = attributeMap.get(loaded.getId());
+			if(current == null) {
+				addAttribute(loaded);
+				Change change = new Change(this, null, null, loaded);
+				children.addChildren(Change.addChange(null, change));
+			} else {
+				List<Change> rc = current.merge(loaded);
+				if(rc != null) children.addChildren(rc);
+			}
+		}
+		for (IAttribute a: attributeMap.values()) {
+			AbstractAttribute removed = (AbstractAttribute)a;
+			if(attributes.get(removed.getName()) == removed) {
+				attributes.remove(removed.getName());
+				Change change = new Change(this, null, removed, null);
+				children.addChildren(Change.addChange(null, change));
+			}
+		}
+	}
+
+	public String getXMLName() {
+		return KbXMLStoreConstants.TAG_COMPONENT;
 	}
 	
 	public Element toXML(Element parent, Properties context) {
-		Element element = XMLUtilities.createElement(parent, KbXMLStoreConstants.TAG_COMPONENT);
-		if(getXMLClass() != null) {
-			element.setAttribute(XMLStoreConstants.ATTR_CLASS, getXMLClass());
+		Element element = super.toXML(parent, context);
+
+		if(attributesInfo.get(XMLStoreConstants.ATTR_NAME) == null && name != null) {
+			element.setAttribute(XMLStoreConstants.ATTR_NAME, name);
 		}
-		
+
+		for (IAttribute c: attributes.values()) {
+			((KbObject)c).toXML(parent, context);
+		}
+
 		return element;
 	}
 
 	public void loadXML(Element element, Properties context) {
+		super.loadXML(element, context);
+	
+		setName(attributesInfo.get(XMLStoreConstants.ATTR_NAME));
+		if(name == null && element.hasAttribute(XMLStoreConstants.ATTR_NAME)) {
+			name = element.getAttribute(XMLStoreConstants.ATTR_NAME);
+		}
 
+		//TODO
+		//componentType?
+		Element[] cs = XMLUtilities.getChildren(element, KbXMLStoreConstants.TAG_ATTRIBUTE);
+		for (Element e: cs) {
+			String cls = e.getAttribute(XMLStoreConstants.ATTR_CLASS);
+			AbstractAttribute c = null;
+			if(KbXMLStoreConstants.CLS_TLD_LIBRARY.equals(cls)) {
+				c = new TLDAttribute();
+			} else {
+				//consider other cases;
+			}
+			if(c != null) {
+				c.loadXML(e, context);
+				addAttribute(c);
+			}
+		}
 	}
 
 }

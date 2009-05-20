@@ -40,7 +40,7 @@ import org.jboss.tools.jst.web.kb.internal.KbProject;
 import org.jboss.tools.jst.web.model.helpers.InnerModelHelper;
 
 /**
- * Monitors class path of project and loads seam components of it.
+ * Monitors class path of project and loads kb components of it.
  *  
  * @author Viacheslav Kabanovich
  */
@@ -54,7 +54,7 @@ public class ClassPathMonitor {
 	Set<String> processedPaths = new HashSet<String>();
 	
 	/**
-	 * Creates instance of class path for seam project
+	 * Creates instance of class path for kb project
 	 * @param project
 	 */
 	public ClassPathMonitor(KbProject project) {
@@ -62,7 +62,7 @@ public class ClassPathMonitor {
 	}
 	
 	/**
-	 * Returns seam project
+	 * Returns kb project
 	 * @return
 	 */
 	public KbProject getProject() {
@@ -158,7 +158,7 @@ public class ClassPathMonitor {
 	}
 	
 	/**
-	 * Loads seam components from items recently added to class path. 
+	 * Loads kb components from items recently added to class path. 
 	 */
 	public void process() {
 		Iterator<String> it = processedPaths.iterator();
@@ -204,21 +204,21 @@ public class ClassPathMonitor {
 		List<KbProject> ps = null;
 		
 		try {
-			ps = getSeamProjects(project.getProject());
+			ps = getKbProjects(project.getProject());
 		} catch (CoreException e) {
 			WebModelPlugin.getPluginLog().logError(e);
 		}
 		if(ps != null) {
-			Set<KbProject> set = project.getSeamProjects();
+			Set<KbProject> set = project.getKbProjects();
 			Set<KbProject> removable = new HashSet<KbProject>();
 			removable.addAll(set);
 			removable.removeAll(ps);
 			ps.removeAll(set);
 			for (KbProject p : ps) {
-				project.addSeamProject(p);
+				project.addKbProject(p);
 			}
 			for (KbProject p : removable) {
-				project.removeSeamProject(p);
+				project.removeKbProject(p);
 			}
 		}
 	}
@@ -227,12 +227,12 @@ public class ClassPathMonitor {
 		List<KbProject> ps = null;
 		
 		try {
-			ps = getSeamProjects(project.getProject());
+			ps = getKbProjects(project.getProject());
 		} catch (CoreException e) {
 			WebModelPlugin.getPluginLog().logError(e);
 		}
 		if(ps != null) {
-			Set<KbProject> set = project.getSeamProjects();
+			Set<KbProject> set = project.getKbProjects();
 			Set<KbProject> removable = new HashSet<KbProject>();
 			removable.addAll(set);
 			removable.removeAll(ps);
@@ -252,7 +252,7 @@ public class ClassPathMonitor {
 		project.registerComponents(c, path);
 	}
 
-	List<KbProject> getSeamProjects(IProject project) throws CoreException {
+	List<KbProject> getKbProjects(IProject project) throws CoreException {
 		List<KbProject> list = new ArrayList<KbProject>();
 		IJavaProject javaProject = JavaCore.create(project);
 		IClasspathEntry[] es = javaProject.getResolvedClasspath(true);
