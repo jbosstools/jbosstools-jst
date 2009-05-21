@@ -41,6 +41,7 @@ import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.internal.scanner.ClassPathMonitor;
 import org.jboss.tools.jst.web.kb.internal.scanner.LoadedDeclarations;
 import org.jboss.tools.jst.web.kb.internal.taglib.AbstractTagLib;
+import org.jboss.tools.jst.web.kb.internal.taglib.FaceletTagLibrary;
 import org.jboss.tools.jst.web.kb.internal.taglib.TLDLibrary;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 import org.w3c.dom.Element;
@@ -360,6 +361,8 @@ public class KbProject extends KbObject implements IKbProject {
 					AbstractTagLib tagLib = null;
 					if(KbXMLStoreConstants.CLS_TLD_LIBRARY.equals(cls)) {
 						tagLib = new TLDLibrary();
+					} else if(KbXMLStoreConstants.CLS_FACELET_LIBRARY.equals(cls)) {
+						tagLib = new FaceletTagLibrary();
 					} else {
 						//consider other cases;
 					}

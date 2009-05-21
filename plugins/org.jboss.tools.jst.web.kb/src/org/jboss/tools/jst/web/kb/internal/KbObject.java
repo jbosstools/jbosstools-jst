@@ -180,9 +180,13 @@ public class KbObject {
 			}
 		}
 		XModelObject old = pushModelObject(context);
-		XMLStoreHelper.saveMap(element, attributesInfo, "attributes", context);
+		saveAttributesInfo(element, context);
 		popModelObject(context, old);
 		return element;
+	}
+
+	protected void saveAttributesInfo(Element element, Properties context) {
+		XMLStoreHelper.saveMap(element, attributesInfo, "attributes", context);
 	}
 
 	public void loadXML(Element element, Properties context) {
@@ -204,8 +208,12 @@ public class KbObject {
 			}
 		}
 		XModelObject old = pushModelObject(context);
-		XMLStoreHelper.loadMap(element, attributesInfo, "attributes", context);
+		loadAttributesInfo(element, context);
 		popModelObject(context, old);
+	}
+
+	protected void loadAttributesInfo(Element element, Properties context) {
+		XMLStoreHelper.loadMap(element, attributesInfo, "attributes", context);
 	}
 
 	protected XModelObject pushModelObject(Properties context) {

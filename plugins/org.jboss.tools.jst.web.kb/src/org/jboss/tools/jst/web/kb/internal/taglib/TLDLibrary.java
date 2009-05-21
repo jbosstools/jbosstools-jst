@@ -62,6 +62,10 @@ public class TLDLibrary extends AbstractTagLib implements ITLDLibrary {
 		
 	}
 
+	public TLDLibrary clone() throws CloneNotSupportedException {
+		return (TLDLibrary)super.clone();
+	}
+
 	public String getXMLClass() {
 		return KbXMLStoreConstants.CLS_TLD_LIBRARY;
 	}

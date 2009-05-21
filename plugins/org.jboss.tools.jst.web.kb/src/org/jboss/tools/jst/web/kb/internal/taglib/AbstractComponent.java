@@ -327,7 +327,7 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		}
 
 		for (IAttribute c: attributes.values()) {
-			((KbObject)c).toXML(parent, context);
+			((KbObject)c).toXML(element, context);
 		}
 
 		return element;
@@ -340,6 +340,9 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		if(name == null && element.hasAttribute(XMLStoreConstants.ATTR_NAME)) {
 			name = element.getAttribute(XMLStoreConstants.ATTR_NAME);
 		}
+		setDescription(attributesInfo.get(DESCRIPTION));
+		setComponentClass(attributesInfo.get(COMPONENT_CLASS));
+		setCanHaveBody(attributesInfo.get(BODY_CONTENT));
 
 		//TODO
 		//componentType?

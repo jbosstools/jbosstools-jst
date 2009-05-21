@@ -11,32 +11,24 @@
 package org.jboss.tools.jst.web.kb.internal.scanner;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaModelException;
-import org.jboss.tools.common.meta.XAttribute;
-import org.jboss.tools.common.meta.XModelEntity;
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.filesystems.impl.FolderImpl;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.project.ext.store.XMLStoreConstants;
-import org.jboss.tools.common.model.util.EclipseJavaUtil;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
-import org.jboss.tools.common.model.util.NamespaceMapping;
 import org.jboss.tools.jst.web.kb.IKbProject;
 import org.jboss.tools.jst.web.kb.internal.taglib.AbstractAttribute;
 import org.jboss.tools.jst.web.kb.internal.taglib.AbstractComponent;
 import org.jboss.tools.jst.web.kb.internal.taglib.AbstractTagLib;
+import org.jboss.tools.jst.web.kb.internal.taglib.FaceletTag;
+import org.jboss.tools.jst.web.kb.internal.taglib.FaceletTagLibrary;
 import org.jboss.tools.jst.web.kb.internal.taglib.TLDAttribute;
 import org.jboss.tools.jst.web.kb.internal.taglib.TLDLibrary;
 import org.jboss.tools.jst.web.kb.internal.taglib.TLDTag;
@@ -47,6 +39,8 @@ import org.jboss.tools.jst.web.model.project.ext.store.XMLValueInfo;
  * @author Viacheslav Kabanovich
  */
 public class XMLScanner implements IFileScanner {
+	public static final String ATTR_TAGCLASS ="tagclass"; //$NON-NLS-1$
+	public static final String ATTR_BODY_CONTENT = "bodycontent"; //$NON-NLS-1$
 	
 	public XMLScanner() {}
 
@@ -155,8 +149,8 @@ public class XMLScanner implements IFileScanner {
 
 				tag.setName(new XMLValueInfo(t, XMLStoreConstants.ATTR_NAME));
 				tag.setDescription(new XMLValueInfo(t, AbstractComponent.DESCRIPTION));
-				tag.setComponentClass(new XMLValueInfo(t, "tagclass"));
-				tag.setCanHaveBody(new XMLValueInfo(t, "bodycontent"));
+				tag.setComponentClass(new XMLValueInfo(t, ATTR_TAGCLASS));
+				tag.setCanHaveBody(new XMLValueInfo(t, ATTR_BODY_CONTENT));
 				//TODO
 //				tag.setComponentType(componentType);
 				
@@ -180,8 +174,26 @@ public class XMLScanner implements IFileScanner {
 	}
 
 	private void parseFaceletTaglib(XModelObject o, IPath source, IKbProject sp, LoadedDeclarations ds) {
+		FaceletTagLibrary library = new FaceletTagLibrary();
+		library.setId(o);
+		library.setURI(new XMLValueInfo(o, AbstractTagLib.URI));
+
+		ds.getLibraries().add(library);
+
 		XModelObject[] os = o.getChildren();
-		
+		for (XModelObject t: os) {
+			String entity = t.getModelEntity().getName();
+			if(entity.startsWith("FaceletTaglibTag")) {
+				FaceletTag tag = new FaceletTag();
+				tag.setId(t);
+				tag.setName(new XMLValueInfo(t, "tag-name"));
+				//what else?
+				
+				library.addComponent(tag);
+			} else if(entity.startsWith("FaceletTaglibFunction")) {
+				//TODO
+			}
+		}
 	}
 
 }

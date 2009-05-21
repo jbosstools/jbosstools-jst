@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.jboss.tools.common.el.core.resolver.ELResolver;
+import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.project.ext.IValueInfo;
 import org.jboss.tools.common.model.project.ext.event.Change;
 import org.jboss.tools.common.model.project.ext.store.XMLStoreConstants;
@@ -24,6 +25,7 @@ import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.internal.KbObject;
 import org.jboss.tools.jst.web.kb.internal.KbXMLStoreConstants;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
+import org.jboss.tools.jst.web.model.project.ext.store.XMLValueInfo;
 import org.w3c.dom.Element;
 
 /**
@@ -158,6 +160,27 @@ public abstract class AbstractAttribute extends KbObject implements IAttribute {
 		setDescription(attributesInfo.get(AbstractComponent.DESCRIPTION));
 		setRequired(attributesInfo.get(REQUIRED));
 		//TODO
+	}
+
+	@Override
+	protected void saveAttributesInfo(Element element, Properties context) {
+		if(context.get(XMLStoreConstants.KEY_MODEL_OBJECT) == getId()) {
+			
+		} else {
+			super.saveAttributesInfo(element, context);
+		}
+	}
+
+	@Override
+	protected void loadAttributesInfo(Element element, Properties context) {
+		if(context.get(XMLStoreConstants.KEY_MODEL_OBJECT) == getId()) {
+			XModelObject a = (XModelObject)getId();
+			attributesInfo.put(XMLStoreConstants.ATTR_NAME, new XMLValueInfo(a, XMLStoreConstants.ATTR_NAME));
+			attributesInfo.put(AbstractComponent.DESCRIPTION, new XMLValueInfo(a, AbstractComponent.DESCRIPTION));
+			attributesInfo.put(REQUIRED, new XMLValueInfo(a, REQUIRED));
+		} else {
+			super.loadAttributesInfo(element, context);
+		}
 	}
 
 }

@@ -100,7 +100,9 @@ public class KbResourceVisitor implements IResourceVisitor {
 				}
 			}
 			if(webinf != null) {
-				if(webinf.isPrefixOf(path) || path.isPrefixOf(webinf)) {
+				if(webinf.isPrefixOf(path) || path.isPrefixOf(webinf)
+						|| webinf.removeLastSegments(1).isPrefixOf(path) //Webroot
+				) {
 					return true;
 				}
 			}

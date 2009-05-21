@@ -241,7 +241,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		saveAttributeValues(element);
 
 		for (IComponent c: components.values()) {
-			((KbObject)c).toXML(parent, context);
+			((KbObject)c).toXML(element, context);
 		}
 
 		popModelObject(context, old);
@@ -264,6 +264,8 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 			AbstractComponent c = null;
 			if(KbXMLStoreConstants.CLS_TLD_LIBRARY.equals(cls)) {
 				c = new TLDTag();
+			} else if(KbXMLStoreConstants.CLS_FACELET_LIBRARY.equals(cls)) {
+				c = new FaceletTag();
 			} else {
 				//consider other cases;
 			}
