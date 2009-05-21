@@ -10,7 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.taglib;
 
-import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 
 /**
  * @author Alexey Kazakov
@@ -18,11 +18,12 @@ import org.eclipse.core.resources.IFile;
 public class TagLibriryManager {
 
 	/**
-	 * Returns all tag libraries which are available in the page.
-	 * @param page
+	 * Returns all tag libraries which have given URI and which are available in the project.
+	 * @param project
+	 * @param uri
 	 * @return
 	 */
-	public static ITagLibrary[] getLibraries(IFile page) {
+	public static ITagLibrary[] getLibraries(IProject project, String uri) {
 		//TODO
 		return null;
 	}
