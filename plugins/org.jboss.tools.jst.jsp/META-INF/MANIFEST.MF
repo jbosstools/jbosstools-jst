@@ -57,7 +57,8 @@ Require-Bundle: org.jboss.tools.common,
  org.eclipse.wst.common.uriresolver,
  org.eclipse.core.resources,
  org.eclipse.core.runtime,
- org.eclipse.ui.views
+ org.eclipse.ui.views,
+ org.jboss.tools.jst.web.kb;bundle-version="1.0.0"
 Bundle-Version: 2.0.0
 Export-Package: org.jboss.tools.jst.jsp.outline.cssdialog.common,
  org.jboss.tools.jst.jsp.outline.cssdialog.events,
