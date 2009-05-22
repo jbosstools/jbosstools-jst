@@ -22,8 +22,8 @@ import org.w3c.dom.NodeList;
 public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor {
 
 	@Override
-	protected IPageContext getContext() {
-		IPageContext superContext = super.getContext();
+	protected IPageContext createContext() {
+		IPageContext superContext = super.createContext();
 		
 		
 		FaceletPageContextImpl context = new FaceletPageContextImpl();

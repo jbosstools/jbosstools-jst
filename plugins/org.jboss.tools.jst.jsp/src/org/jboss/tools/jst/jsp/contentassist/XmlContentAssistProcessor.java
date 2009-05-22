@@ -9,7 +9,7 @@ import org.jboss.tools.common.el.core.resolver.ElVarSearcher;
 public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor {
 
 	@Override
-	protected ELContext getContext() {
+	protected ELContext createContext() {
 		IFile file = getResource();
 		ElVarSearcher varSearcher = null; // TODO
 		ELResolver[] elResolvers = getELResolvers(file);

@@ -33,11 +33,13 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	
 	private IDocument fDocument;
 	private int fDocumentPosition;
+	private ELContext fContext;
 	
 	public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer,
 			int offset) {
 		this.fDocument = (viewer == null ? null : viewer.getDocument());
 		this.fDocumentPosition = offset;
+		this.fContext = createContext();
 		
 		System.out.println("AbstractXMLContentAssistProcessor: computeCompletionProposals() invoked");
 		try {
@@ -49,7 +51,9 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 
 	public IContextInformation[] computeContextInformation(ITextViewer viewer,
 			int offset) {
+		this.fDocument = (viewer == null ? null : viewer.getDocument());
 		this.fDocumentPosition = offset;
+		this.fContext = createContext();
 		
 		return super.computeContextInformation(viewer, offset);
 	}
@@ -190,8 +194,12 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 		return contentAssistRequest;
 	}
 	
-	abstract protected ELContext getContext();
+	abstract protected ELContext createContext();
 
+	protected ELContext getContext() {
+		return this.fContext;
+	}
+	
 	protected int getOffset() {
 		return this.fDocumentPosition;
 	}

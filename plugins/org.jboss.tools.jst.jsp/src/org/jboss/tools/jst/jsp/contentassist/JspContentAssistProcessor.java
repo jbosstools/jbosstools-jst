@@ -26,8 +26,8 @@ import org.w3c.dom.Document;
 public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 
 	@Override
-	protected IPageContext getContext() {
-		ELContext superContext = super.getContext();
+	protected IPageContext createContext() {
+		ELContext superContext = super.createContext();
 		
 		IFile file = getResource();
 		
