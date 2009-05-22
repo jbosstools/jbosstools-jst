@@ -1,3 +1,13 @@
+/******************************************************************************* 
+ * Copyright (c) 2009 Red Hat, Inc. 
+ * Distributed under license by Red Hat, Inc. All rights reserved. 
+ * This program is made available under the terms of the 
+ * Eclipse Public License v1.0 which accompanies this distribution, 
+ * and is available at http://www.eclipse.org/legal/epl-v10.html 
+ * 
+ * Contributors: 
+ * Red Hat, Inc. - initial API and implementation 
+ ******************************************************************************/
 package org.jboss.tools.jst.jsp.contentassist;
 
 import java.util.Map;
@@ -21,6 +31,10 @@ import org.w3c.dom.NodeList;
 
 public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor {
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor#createContext()
+	 */
 	@Override
 	protected IPageContext createContext() {
 		IPageContext superContext = super.createContext();
@@ -28,7 +42,6 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 		
 		FaceletPageContextImpl context = new FaceletPageContextImpl();
 		context.setResource(superContext.getResource());
-		context.setVarSearcher(superContext.getVarSearcher());
 		context.setElResolvers(superContext.getElResolvers());
 		setVars(context);
 

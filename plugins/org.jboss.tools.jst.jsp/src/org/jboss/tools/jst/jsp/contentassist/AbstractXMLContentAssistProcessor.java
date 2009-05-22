@@ -1,3 +1,13 @@
+/******************************************************************************* 
+ * Copyright (c) 2009 Red Hat, Inc. 
+ * Distributed under license by Red Hat, Inc. All rights reserved. 
+ * This program is made available under the terms of the 
+ * Eclipse Public License v1.0 which accompanies this distribution, 
+ * and is available at http://www.eclipse.org/legal/epl-v10.html 
+ * 
+ * Contributors: 
+ * Red Hat, Inc. - initial API and implementation 
+ ******************************************************************************/
 package org.jboss.tools.jst.jsp.contentassist;
 
 import org.eclipse.core.filebuffers.FileBuffers;
@@ -34,7 +44,12 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	private IDocument fDocument;
 	private int fDocumentPosition;
 	private ELContext fContext;
-	
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.wst.xml.ui.internal.contentassist.AbstractContentAssistProcessor#computeCompletionProposals(org.eclipse.jface.text.ITextViewer, int)
+	 */
+	@Override
 	public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer,
 			int offset) {
 		this.fDocument = (viewer == null ? null : viewer.getDocument());
@@ -49,6 +64,11 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.wst.xml.ui.internal.contentassist.AbstractContentAssistProcessor#computeContextInformation(org.eclipse.jface.text.ITextViewer, int)
+	 */
+	@Override
 	public IContextInformation[] computeContextInformation(ITextViewer viewer,
 			int offset) {
 		this.fDocument = (viewer == null ? null : viewer.getDocument());
@@ -58,18 +78,38 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 		return super.computeContextInformation(viewer, offset);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.wst.xml.ui.internal.contentassist.AbstractContentAssistProcessor#getCompletionProposalAutoActivationCharacters()
+	 */
+	@Override
 	public char[] getCompletionProposalAutoActivationCharacters() {
 		return PROPOSAL_AUTO_ACTIVATION_CHARS;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.wst.xml.ui.internal.contentassist.AbstractContentAssistProcessor#getContextInformationAutoActivationCharacters()
+	 */
+	@Override
 	public char[] getContextInformationAutoActivationCharacters() {
 		return super.getContextInformationAutoActivationCharacters();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.wst.xml.ui.internal.contentassist.AbstractContentAssistProcessor#getContextInformationValidator()
+	 */
+	@Override
 	public IContextInformationValidator getContextInformationValidator() {
 		return super.getContextInformationValidator();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.wst.xml.ui.internal.contentassist.AbstractContentAssistProcessor#getErrorMessage()
+	 */
+	@Override
 	public String getErrorMessage() {
 		return super.getErrorMessage();
 	}

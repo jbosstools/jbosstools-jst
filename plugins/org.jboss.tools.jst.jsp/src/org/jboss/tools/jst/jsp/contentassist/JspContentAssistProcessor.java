@@ -1,7 +1,16 @@
+/******************************************************************************* 
+ * Copyright (c) 2009 Red Hat, Inc. 
+ * Distributed under license by Red Hat, Inc. All rights reserved. 
+ * This program is made available under the terms of the 
+ * Eclipse Public License v1.0 which accompanies this distribution, 
+ * and is available at http://www.eclipse.org/legal/epl-v10.html 
+ * 
+ * Contributors: 
+ * Red Hat, Inc. - initial API and implementation 
+ ******************************************************************************/
 package org.jboss.tools.jst.jsp.contentassist;
 
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.IRegion;
@@ -13,9 +22,6 @@ import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.jboss.tools.common.el.core.resolver.ELContext;
-import org.jboss.tools.common.el.core.resolver.ELResolver;
-import org.jboss.tools.common.el.core.resolver.ElVarSearcher;
-import org.jboss.tools.common.el.core.resolver.Var;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.IResourceBundle;
 import org.jboss.tools.jst.web.kb.internal.JspContextImpl;
@@ -25,6 +31,10 @@ import org.w3c.dom.Document;
 
 public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.jsp.contentassist.XmlContentAssistProcessor#createContext()
+	 */
 	@Override
 	protected IPageContext createContext() {
 		ELContext superContext = super.createContext();
@@ -33,7 +43,6 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 		
 		JspContextImpl context = new JspContextImpl();
 		context.setResource(superContext.getResource());
-		context.setVarSearcher(superContext.getVarSearcher());
 		context.setElResolvers(superContext.getElResolvers());
 		setVars(context);
 		context.setResourceBundles(getResourceBundles());
