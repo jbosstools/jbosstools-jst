@@ -703,16 +703,18 @@ public class KbProject extends KbObject implements IKbProject {
 		private ITagLibrary[] allLibrariesArray = null;
 		Map<IPath, Set<ITagLibrary>> librariesBySource = new HashMap<IPath, Set<ITagLibrary>>();
 		Map<String, Set<ITagLibrary>> librariesByUri = new HashMap<String, Set<ITagLibrary>>();
-		private ITagLibrary[] librariesByUriArray = null;
+		private Map<String,ITagLibrary[]> librariesByUriArray = new HashMap<String, ITagLibrary[]>();
 
 		public void clear() {
 			synchronized(allLibraries) {
 				allLibraries.clear();
 				allLibrariesArray = null;
-				librariesByUriArray = null;
 			}
 			librariesBySource.clear();
-			librariesByUri.clear();
+			synchronized (librariesByUri) {
+				librariesByUri.clear();
+				librariesByUriArray.clear();
+			}
 		}
 
 		public ITagLibrary[] getAllLibrariesArray() {
@@ -725,17 +727,19 @@ public class KbProject extends KbObject implements IKbProject {
 		}
 
 		public ITagLibrary[] getLibrariesArray(String uri) {
-			if(librariesByUriArray == null) {
+			ITagLibrary[] result = librariesByUriArray.get(uri);
+			if(result == null) {
 				synchronized(librariesByUri) {
 					Set<ITagLibrary> libs = librariesByUri.get(uri);
 					if(libs!=null) {
-						librariesByUriArray = libs.toArray(new ITagLibrary[0]);
+						result = libs.toArray(new ITagLibrary[0]);
 					} else {
-						librariesByUriArray = new ITagLibrary[0]; 
+						result = new ITagLibrary[0]; 
 					}
+					librariesByUriArray.put(uri, result);
 				}
 			}
-			return librariesByUriArray;
+			return result;
 		}
 
 		public Set<ITagLibrary> getLibrariesBySource(IPath path) {
@@ -746,7 +750,6 @@ public class KbProject extends KbObject implements IKbProject {
 			synchronized(allLibraries) {
 				allLibraries.add(f);
 				allLibrariesArray = null;
-				librariesByUriArray = null;
 			}
 			IPath path = f.getSourcePath();
 			if(path != null) {
@@ -758,19 +761,21 @@ public class KbProject extends KbObject implements IKbProject {
 				fs.add(f);
 			}
 			String uri = f.getURI();
-			Set<ITagLibrary> ul = librariesByUri.get(uri);
-			if(ul==null) {
-				ul = new HashSet<ITagLibrary>();
-				librariesByUri.put(uri, ul);
+			synchronized (librariesByUri) {
+				librariesByUriArray.remove(uri);
+				Set<ITagLibrary> ul = librariesByUri.get(uri);
+				if (ul == null) {
+					ul = new HashSet<ITagLibrary>();
+					librariesByUri.put(uri, ul);
+				}
+				ul.add(f);
 			}
-			ul.add(f);
 		}
 
 		public void removeLibrary(ITagLibrary f) {
 			synchronized(allLibraries) {
 				allLibraries.remove(f);
 				allLibrariesArray = null;
-				librariesByUriArray = null;
 			}
 			IPath path = f.getSourcePath();
 			if(path != null) {
@@ -783,12 +788,15 @@ public class KbProject extends KbObject implements IKbProject {
 				}
 			}
 			String uri = f.getURI();
-			Set<ITagLibrary> ul = librariesByUri.get(uri);
-			if(ul!=null) {
-				ul.remove(f);
-			}
-			if(ul.isEmpty()) {
-				librariesByUri.remove(uri);
+			synchronized (librariesByUri) {
+				Set<ITagLibrary> ul = librariesByUri.get(uri);
+				librariesByUriArray.remove(uri);
+				if (ul != null) {
+					ul.remove(f);
+					if (ul.isEmpty()) {
+						librariesByUri.remove(uri);
+					}
+				}
 			}
 		}
 
@@ -798,12 +806,16 @@ public class KbProject extends KbObject implements IKbProject {
 			for (ITagLibrary f: fs) {
 				synchronized(allLibraries) {
 					allLibraries.remove(f);
+					allLibrariesArray = null;
 				}
 				synchronized (librariesByUri) {
-					librariesByUri.remove(f.getURI());
+					Set<ITagLibrary> s = librariesByUri.get(f.getURI());
+					if(s != null) s.remove(f);
+					if(s != null && s.isEmpty()) {
+						librariesByUri.remove(f.getURI());
+					}
+					librariesByUriArray.remove(f.getURI());
 				}
-				allLibrariesArray = null;
-				librariesByUriArray = null;
 			}
 			librariesBySource.remove(path);
 			return fs;
