@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Region;
 import org.jboss.tools.common.el.core.resolver.ELContextImpl;
 import org.jboss.tools.jst.web.kb.IPageContext;
@@ -26,12 +27,13 @@ import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
  * @author Alexey Kazakov
  */
 public class JspContextImpl extends ELContextImpl implements IPageContext {
-
 	protected IDocument document;
 	protected ITagLibrary[] libs;
-	protected Map<Region, Map<String, INameSpace>> nameSpaces = new HashMap<Region, Map<String, INameSpace>>();
+	protected Map<IRegion, Map<String, INameSpace>> nameSpaces = new HashMap<IRegion, Map<String, INameSpace>>();
 	protected IResourceBundle[] bundles;
 
+	
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.common.kb.text.PageContext#getLibraries()
@@ -80,7 +82,7 @@ public class JspContextImpl extends ELContextImpl implements IPageContext {
 	 */
 	public Map<String, INameSpace> getNameSpaces(int offset) {
 		Map<String, INameSpace> result = new HashMap<String, INameSpace>();
-		for (Region region : nameSpaces.keySet()) {
+		for (IRegion region : nameSpaces.keySet()) {
 			if(offset>=region.getOffset() && offset<=region.getOffset() + region.getLength()) {
 				result.putAll(nameSpaces.get(region));
 			}
@@ -93,7 +95,7 @@ public class JspContextImpl extends ELContextImpl implements IPageContext {
 	 * @param region
 	 * @param name space
 	 */
-	public void addNameSpace(Region region, INameSpace nameSpace) {
+	public void addNameSpace(IRegion region, INameSpace nameSpace) {
 		nameSpaces.get(region).put(nameSpace.getPrefix(), nameSpace);
 	}
 }
