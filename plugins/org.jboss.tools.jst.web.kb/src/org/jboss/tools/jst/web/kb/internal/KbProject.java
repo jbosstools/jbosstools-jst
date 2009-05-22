@@ -740,5 +740,13 @@ public class KbProject extends KbObject implements IKbProject {
 		}
 		
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.IKbProject#getTagLibraries(java.lang.String)
+	 */
+	public ITagLibrary[] getTagLibraries(String uri) {
+		// TODO
+		return null;
+	}
 }
