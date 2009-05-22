@@ -11,6 +11,8 @@
 package org.jboss.tools.jst.web.kb.taglib;
 
 import org.eclipse.core.resources.IProject;
+import org.jboss.tools.jst.web.kb.IKbProject;
+import org.jboss.tools.jst.web.kb.KbProjectFactory;
 
 /**
  * @author Alexey Kazakov
@@ -24,7 +26,7 @@ public class TagLibriryManager {
 	 * @return
 	 */
 	public static ITagLibrary[] getLibraries(IProject project, String uri) {
-		//TODO
-		return null;
+		IKbProject kbProject = KbProjectFactory.getKbProject(project, true);
+		return kbProject.getTagLibraries(uri);
 	}
 }

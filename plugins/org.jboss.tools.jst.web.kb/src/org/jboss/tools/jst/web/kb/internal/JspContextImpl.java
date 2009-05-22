@@ -61,20 +61,6 @@ public class JspContextImpl extends ELContextImpl implements IPageContext {
 	}
 
 	/**
-	 * @return the libs
-	 */
-	public ITagLibrary[] getLibs() {
-		return libs;
-	}
-
-	/**
-	 * @param libs the libs to set
-	 */
-	public void setLibs(ITagLibrary[] libs) {
-		this.libs = libs;
-	}
-
-	/**
 	 * @param document the document to set
 	 */
 	public void setDocument(IDocument document) {

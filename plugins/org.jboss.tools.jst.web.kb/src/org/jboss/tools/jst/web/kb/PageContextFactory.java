@@ -11,6 +11,9 @@
 package org.jboss.tools.jst.web.kb;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.jface.text.IDocument;
+import org.jboss.tools.common.el.core.resolver.ELResolverFactoryManager;
+import org.jboss.tools.jst.web.kb.internal.JspContextImpl;
 
 /**
  * @author Alexey Kazakov
@@ -19,7 +22,7 @@ public class PageContextFactory {
 
 	/**
 	 * Creates a page context for given resource and offset.
-	 * @param file
+	 * @param file JSP or Facelet
 	 * @param offset
 	 * @return
 	 */
@@ -29,8 +32,37 @@ public class PageContextFactory {
 	}
 
 	/**
+	 * Creates a jsp context for given resource and offset.
+	 * @param file JSP
+	 * @param offset
+	 * @return
+	 */
+	public static IPageContext createJSPContext(IFile file, int offset) {
+		JspContextImpl context = new JspContextImpl();
+//		context.s
+		// TODO
+		return null;
+	}
+
+	/**
+	 * Creates a jsp context for given resource, document and offset.
+	 * @param file JSP
+	 * @param offset
+	 * @param document
+	 * @return
+	 */
+	public static IPageContext createJSPContext(IFile file, IDocument document, int offset) {
+		JspContextImpl context = new JspContextImpl();
+		context.setDocument(document);
+		context.setElResolvers(ELResolverFactoryManager.getInstance().getResolvers(file));
+//		context.s
+		// TODO
+		return null;
+	}
+
+	/**
 	 * Creates a facelet context for given resource and offset.
-	 * @param file
+	 * @param file Facelet
 	 * @param offset
 	 * @return
 	 */

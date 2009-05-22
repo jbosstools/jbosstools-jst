@@ -68,26 +68,59 @@ public class KbProject extends KbObject implements IKbProject {
 	
 	LibraryStorage libraries = new LibraryStorage();
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.IKbProject#getTagLibraries()
+	 */
 	public ITagLibrary[] getTagLibraries() {
 		return libraries.getAllLibrariesArray();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.IKbProject#getTagLibraries(java.lang.String)
+	 */
+	public ITagLibrary[] getTagLibraries(String uri) {
+		return libraries.getLibrariesArray(uri);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.core.resources.IProjectNature#configure()
+	 */
 	public void configure() throws CoreException {
 		addToBuildSpec(KbBuilder.BUILDER_ID);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.core.resources.IProjectNature#deconfigure()
+	 */
 	public void deconfigure() throws CoreException {
 		removeFromBuildSpec(KbBuilder.BUILDER_ID);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.core.resources.IProjectNature#getProject()
+	 */
 	public IProject getProject() {
 		return project;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.KbObject#getKbProject()
+	 */
+	@Override
 	public IKbProject getKbProject() {
 		return this;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.core.resources.IProjectNature#setProject(org.eclipse.core.resources.IProject)
+	 */
 	public void setProject(IProject project) {
 		this.project = project;
 		setSourcePath(project.getFullPath());
@@ -669,34 +702,51 @@ public class KbProject extends KbObject implements IKbProject {
 		private Set<ITagLibrary> allLibraries = new HashSet<ITagLibrary>();
 		private ITagLibrary[] allLibrariesArray = null;
 		Map<IPath, Set<ITagLibrary>> librariesBySource = new HashMap<IPath, Set<ITagLibrary>>();
+		Map<String, Set<ITagLibrary>> librariesByUri = new HashMap<String, Set<ITagLibrary>>();
+		private ITagLibrary[] librariesByUriArray = null;
 
 		public void clear() {
 			synchronized(allLibraries) {
 				allLibraries.clear();
 				allLibrariesArray = null;
+				librariesByUriArray = null;
 			}
 			librariesBySource.clear();
+			librariesByUri.clear();
 		}
 
 		public ITagLibrary[] getAllLibrariesArray() {
-			ITagLibrary[] result = allLibrariesArray;
-			if(result == null) {
+			if(allLibrariesArray == null) {
 				synchronized(allLibraries) {
 					allLibrariesArray = allLibraries.toArray(new ITagLibrary[0]);
-					result = allLibrariesArray;
 				}
 			}
-			return result;
+			return allLibrariesArray;
+		}
+
+		public ITagLibrary[] getLibrariesArray(String uri) {
+			if(librariesByUriArray == null) {
+				synchronized(librariesByUri) {
+					Set<ITagLibrary> libs = librariesByUri.get(uri);
+					if(libs!=null) {
+						librariesByUriArray = libs.toArray(new ITagLibrary[0]);
+					} else {
+						librariesByUriArray = new ITagLibrary[0]; 
+					}
+				}
+			}
+			return librariesByUriArray;
 		}
 
 		public Set<ITagLibrary> getLibrariesBySource(IPath path) {
 			return librariesBySource.get(path);
 		}
-		
+
 		public void addLibrary(ITagLibrary f) {
 			synchronized(allLibraries) {
 				allLibraries.add(f);
 				allLibrariesArray = null;
+				librariesByUriArray = null;
 			}
 			IPath path = f.getSourcePath();
 			if(path != null) {
@@ -707,12 +757,20 @@ public class KbProject extends KbObject implements IKbProject {
 				}
 				fs.add(f);
 			}
+			String uri = f.getURI();
+			Set<ITagLibrary> ul = librariesByUri.get(uri);
+			if(ul==null) {
+				ul = new HashSet<ITagLibrary>();
+				librariesByUri.put(uri, ul);
+			}
+			ul.add(f);
 		}
-		
+
 		public void removeLibrary(ITagLibrary f) {
 			synchronized(allLibraries) {
 				allLibraries.remove(f);
 				allLibrariesArray = null;
+				librariesByUriArray = null;
 			}
 			IPath path = f.getSourcePath();
 			if(path != null) {
@@ -724,6 +782,14 @@ public class KbProject extends KbObject implements IKbProject {
 					librariesBySource.remove(fs);
 				}
 			}
+			String uri = f.getURI();
+			Set<ITagLibrary> ul = librariesByUri.get(uri);
+			if(ul!=null) {
+				ul.remove(f);
+			}
+			if(ul.isEmpty()) {
+				librariesByUri.remove(uri);
+			}
 		}
 
 		public Set<ITagLibrary> removePath(IPath path) {
@@ -732,21 +798,16 @@ public class KbProject extends KbObject implements IKbProject {
 			for (ITagLibrary f: fs) {
 				synchronized(allLibraries) {
 					allLibraries.remove(f);
-					allLibrariesArray = null;
 				}
+				synchronized (librariesByUri) {
+					librariesByUri.remove(f.getURI());
+				}
+				allLibrariesArray = null;
+				librariesByUriArray = null;
 			}
 			librariesBySource.remove(path);
 			return fs;
 		}
-		
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.IKbProject#getTagLibraries(java.lang.String)
-	 */
-	public ITagLibrary[] getTagLibraries(String uri) {
-		// TODO
-		return null;
-	}
 }
