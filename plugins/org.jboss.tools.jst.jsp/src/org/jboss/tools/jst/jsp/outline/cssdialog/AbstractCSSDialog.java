@@ -186,6 +186,8 @@ public abstract class AbstractCSSDialog extends TitleAreaDialog {
 					} else {
 						setPreviewContent(text);
 					}
+					
+					browser.setText(generateBrowserPage());
 					previewText.setVisible(false);
 					browser.setVisible(true);
 					previewComposite.layout();
