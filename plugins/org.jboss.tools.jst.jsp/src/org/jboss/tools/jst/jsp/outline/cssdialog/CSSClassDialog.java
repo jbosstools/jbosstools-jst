@@ -249,6 +249,7 @@ public class CSSClassDialog extends AbstractCSSDialog {
 	 *            - name of new style class
 	 */
 	public void addNewClass(String styleClassName) {
+		getStyleComposite().clearStyleComposite();
 		cssModel.updateCSSStyle(selectorLabel, getStyleAttributes());
 		selectorLabel = cssModel.addCSSRule(styleClassName);
 		preview.setSelector(selectorLabel);
