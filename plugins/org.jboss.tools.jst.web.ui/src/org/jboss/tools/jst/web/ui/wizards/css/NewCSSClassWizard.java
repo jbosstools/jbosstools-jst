@@ -92,8 +92,10 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 	 */
 	@Override
 	public boolean performFinish() {
-		editFilePage.dialog.save();
-		editFilePage.dialog.releaseResources();
+		if (editFilePage.dialog != null) {
+			editFilePage.dialog.save();
+			editFilePage.dialog.releaseResources();
+		}
 		return true;
 	}
 
@@ -112,7 +114,9 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 	 */
 	@Override
 	public boolean performCancel() {
-		editFilePage.dialog.releaseResources();
+		if (editFilePage.dialog != null) {
+			editFilePage.dialog.releaseResources();
+		}
 		return true;
 	}
 
@@ -164,9 +168,10 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 		public void createControl(final Composite parent) {
 
 			final Composite container = new Composite(parent, SWT.NONE);
-			
+
 			container.setLayout(new GridLayout(1, true));
-			GridData gridData = new GridData(GridData.FILL,GridData.FILL,true,true);
+			GridData gridData = new GridData(GridData.FILL, GridData.FILL,
+					true, true);
 			container.setLayoutData(gridData);
 
 			if (getWizard().getContainer() instanceof WizardDialog) {
@@ -178,8 +183,8 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 					public void pageChanged(PageChangedEvent event) {
 						if (event.getSelectedPage() == editFilePage) {
 
-								if (dialog == null) {
-							dialog = new CSSClassDialog(getShell(),
+							if (dialog == null) {
+								dialog = new CSSClassDialog(getShell(),
 										(IFile) classDescription.getCssFile(),
 										selection) {
 									protected void handleStatusChanged(
@@ -201,7 +206,7 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 								};
 								dialog.createControlPane(container);
 								container.layout();
-							}else {
+							} else {
 								dialog.setFile((IFile) classDescription
 										.getCssFile());
 							}
