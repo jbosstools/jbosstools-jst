@@ -157,7 +157,7 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
             if (dialog.open() == Window.OK) {
                 externalEditing = false;
 
-                return dialog.getNewStyle();
+                return dialog.getStyle();
             }
         } else {
             JSPTreeDialog dialog = new JSPTreeDialog();

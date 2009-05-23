@@ -21,14 +21,13 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.jboss.tools.jst.jsp.outline.cssdialog.CSSClassDialog;
-import org.jboss.tools.jst.jsp.outline.cssdialog.events.MessageDialogEvent;
-import org.jboss.tools.jst.jsp.outline.cssdialog.events.MessageDialogListener;
 import org.jboss.tools.jst.web.ui.wizards.messages.WebUIMessages;
 
 /**
@@ -36,7 +35,7 @@ import org.jboss.tools.jst.web.ui.wizards.messages.WebUIMessages;
  */
 public class NewCSSClassWizard extends Wizard implements INewWizard {
 
-	private CSSClassDescription classDescription = new  CSSClassDescription();
+	private CSSClassDescription classDescription = new CSSClassDescription();
 
 	// workbench selection when the wizard was started
 	protected IStructuredSelection selection;
@@ -56,14 +55,13 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 		setWindowTitle(WebUIMessages.WIZARD_WINDOW_TITLE);
 	}
 
-	
 	/**
 	 * @see IWorkbenchWizard#init(IWorkbench, IStructuredSelection)
 	 */
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		this.workbench = workbench;
 		this.selection = selection;
-		
+
 		IResource selectedResource = (IResource) selection.getFirstElement();
 		if (selectedResource != null) {
 			if (selectedResource.getType() == IFile.FILE
@@ -73,7 +71,7 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 			}
 			classDescription.setCssFile(selectedResource);
 		}
-		
+
 	}
 
 	/**
@@ -94,8 +92,8 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 	 */
 	@Override
 	public boolean performFinish() {
-		editFilePage.saveChanges();
-
+		editFilePage.dialog.save();
+		editFilePage.dialog.releaseResources();
 		return true;
 	}
 
@@ -114,22 +112,26 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 	 */
 	@Override
 	public boolean performCancel() {
-		editFilePage.cancel();
+		editFilePage.dialog.releaseResources();
 		return true;
 	}
-	
-	public class CSSClassDescription{
+
+	public class CSSClassDescription {
 		private IResource cssFile;
 		private String cssClassName;
+
 		public IResource getCssFile() {
 			return cssFile;
 		}
+
 		public void setCssFile(IResource cssFile) {
 			this.cssFile = cssFile;
 		}
+
 		public String getCssClassName() {
 			return cssClassName;
 		}
+
 		public void setCssClassName(String cssClassName) {
 			this.cssClassName = cssClassName;
 		}
@@ -142,7 +144,7 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 
 		private CSSClassDialog dialog;
 
-		boolean canFinish = false;
+		boolean canFinish = true;
 
 		/**
 		 * Constructor for SampleNewWizardPage.
@@ -153,100 +155,67 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 			super("newCSSClassWizard"); //$NON-NLS-1$
 			setTitle(WebUIMessages.WIZARD_TITLE);
 			setDescription(WebUIMessages.WIZARD_DESCRIPTION);
-			
+
 		}
 
 		/**
 		 * @see IDialogPage#createControl(Composite)
 		 */
-		public void createControl(Composite parent) {
-			Composite container = new Composite(parent, SWT.NONE);
-			GridLayout layout = new GridLayout();
-			container.setLayout(layout);
+		public void createControl(final Composite parent) {
 
-			// Initialize CSS dialog that is integrated to CSS wizard.
-			// Also it can be used separately without integration to wizard
-			// component.
-			dialog = new CSSClassDialog(getShell(), selection, true);
-			dialog.addMessageDialogListener(new MessageDialogListener() {
-				public void throwMessage(MessageDialogEvent event) {
-					if (event != null) {
-						IStatus status = event.getOperationStatus();
-						if (status != null) {
-							applyToStatusLine(status);
-						}
-						if(getWizard().getContainer().getCurrentPage()!=null) {
-							getWizard().getContainer().updateButtons();
+			final Composite container = new Composite(parent, SWT.NONE);
+			
+			container.setLayout(new GridLayout(1, true));
+			GridData gridData = new GridData(GridData.FILL,GridData.FILL,true,true);
+			container.setLayoutData(gridData);
+
+			if (getWizard().getContainer() instanceof WizardDialog) {
+				final WizardDialog wd = (WizardDialog) getWizard()
+						.getContainer();
+				wd.addPageChangedListener(new IPageChangedListener() {
+
+					// set console configuration as treeViewer input
+					public void pageChanged(PageChangedEvent event) {
+						if (event.getSelectedPage() == editFilePage) {
+
+								if (dialog == null) {
+							dialog = new CSSClassDialog(getShell(),
+										(IFile) classDescription.getCssFile(),
+										selection) {
+									protected void handleStatusChanged(
+											IStatus newStatus) {
+										if (newStatus.isOK()
+												&& !getStatus().isOK()) {
+											NewCSSClassWizardPage.this
+													.setErrorMessage(null);
+											canFinish = true;
+										} else if (newStatus.getSeverity() == IStatus.ERROR) {
+											NewCSSClassWizardPage.this
+													.setErrorMessage(newStatus
+															.getMessage());
+											canFinish = false;
+										}
+
+										setStatus(newStatus);
+									};
+								};
+								dialog.createControlPane(container);
+								container.layout();
+							}else {
+								dialog.setFile((IFile) classDescription
+										.getCssFile());
+							}
+							dialog.reinit();
+							dialog.addNewClass(classDescription.cssClassName);
 						}
 					}
-				}
-			});
+				});
+			}
 
-			dialog.createDialog(container);
 			setControl(container);
-			
-			if (getWizard().getContainer() instanceof WizardDialog){
-				WizardDialog wd = (WizardDialog) getWizard().getContainer();
-				wd.addPageChangedListener(new IPageChangedListener(){
-
-					//set console configuration as treeViewer input
-					public void pageChanged(PageChangedEvent event) {
-						if (event.getSelectedPage() == editFilePage){
-							dialog.setCurrentFile((IFile) classDescription.getCssFile());
-							dialog.reinit();
-							dialog.addNewStyleClass(classDescription.cssClassName);
-						}
-					}});
-			}
 
 		}
 
-		/**
-		 * Save page model.
-		 */
-		public void saveChanges() {
-//			dialog.saveChanges(true);
-			dialog.close();
-		}
-
-		/**
-		 * Handle cancel operation correctly.
-		 */
-		public void cancel() {
-			dialog.closeDialog();
-		}
-
-		/**
-		 * Applies the status to the status line of a dialog page.
-		 */
-		private void applyToStatusLine(IStatus status) {
-			String message = status.getMessage();
-			if (message.length() == 0) {
-				message = null;
-			}
-			switch (status.getSeverity()) {
-			case IStatus.OK:
-				setErrorMessage(null);
-				setMessage(message);
-				canFinish = true;
-				break;
-			case IStatus.WARNING:
-				setErrorMessage(null);
-				canFinish = true;
-				setMessage(message, WizardPage.WARNING);
-				break;
-			case IStatus.INFO:
-				setErrorMessage(null);
-				canFinish = true;
-				setMessage(message, WizardPage.INFORMATION);
-				break;
-			default:
-				setErrorMessage(message);
-				setMessage(null);
-				canFinish = false;
-				break;
-			}
-		}
 	}
 
 }

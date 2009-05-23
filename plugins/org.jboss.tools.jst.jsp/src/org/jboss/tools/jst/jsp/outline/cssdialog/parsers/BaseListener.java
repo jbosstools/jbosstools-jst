@@ -7,11 +7,12 @@
  *
  * Contributors:
  *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
- ******************************************************************************/ 
+ ******************************************************************************/
 package org.jboss.tools.jst.jsp.outline.cssdialog.parsers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -23,26 +24,26 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class BaseListener extends DefaultHandler {
 
-    protected HashMap<String, ArrayList<String>> map;
+	protected Map<String, ArrayList<String>> map;
 
-    /**
-     * 
-     * Constructor for listener
-     * 
-     * @param map
-     *                Map for writing
-     */
-    public BaseListener(HashMap<String, ArrayList<String>> map) {
-	this.map = map;
-    }
+	/**
+	 * 
+	 * Constructor for listener
+	 * 
+	 * @param map
+	 *            Map for writing
+	 */
+	public BaseListener(Map<String, ArrayList<String>> map) {
+		this.map = map;
+	}
 
-    /**
-     * 
-     * Getter for map
-     * 
-     * @return Map
-     */
-    public HashMap<String, ArrayList<String>> getMap() {
-	return map;
-    }
+	/**
+	 * 
+	 * Getter for map
+	 * 
+	 * @return Map
+	 */
+	public Map<String, ArrayList<String>> getMap() {
+		return map;
+	}
 }

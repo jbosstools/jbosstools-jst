@@ -8,32 +8,25 @@
  * Contributors:
  *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.jboss.tools.jst.jsp.outline.cssdialog.events;
+package org.jboss.tools.jst.jsp.outline.cssdialog.common;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
-import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSValidator;
-import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
+import org.eclipse.core.databinding.observable.map.WritableMap;
 
 /**
  * Class is used to store an array of style attributes and support listeners.
  */
 public class StyleAttributes {
 
-	private String cssSelector = null;
-    private HashMap<String, String> attributeMap = null;
-    private ArrayList<ChangeStyleListener> listeners = new ArrayList<ChangeStyleListener>();
-    private CSSValidator cssValidator;
+    private Map<String, String> attributeMap = null;
     /**
      * Default constructor.
      */
     public StyleAttributes() {
-        this.attributeMap = new HashMap<String, String>();
-        cssValidator = CSSValidator.getInstance();
+        this.attributeMap = new WritableMap();
     }
 
     /**
@@ -41,46 +34,11 @@ public class StyleAttributes {
      *
      * @return map of attributes
      */
-    public HashMap<String, String> getAttributeMap() {
+    public Map<String, String> getAttributeMap() {
         return attributeMap;
     }
 
-    /**
-     * Sets attribute map.
-     *
-     * @param attributeMap value
-     */
-    public void setAttributeMap(HashMap<String, String> attributeMap) {
-        this.attributeMap = attributeMap;
-        notifyListeners();
-    }
 
-    /**
-     * Add ChangeStyleListener object.
-     *
-     * @param listener ChangeStyleListener object to be added
-     */
-    public void addChangeStyleListener(ChangeStyleListener listener) {
-        listeners.add(listener);
-    }
-
-    /**
-     * Gets an array of ChangeStyleListener object.
-     *
-     * @return an array of ChangeStyleListener object
-     */
-    public ChangeStyleListener[] getChangeStyleListeners() {
-        return listeners.toArray(new ChangeStyleListener[listeners.size()]);
-    }
-
-    /**
-     * Remove ChangeStyleListener object passed by parameter.
-     *
-     * @param listener ChangeStyleListener object to be removed
-     */
-    public void removeChangeStyleListener(ChangeStyleListener listener) {
-        listeners.remove(listener);
-    }
 
     /**
      * Add attribute with the given name and value.
@@ -90,7 +48,6 @@ public class StyleAttributes {
      */
     public void addAttribute(String name, String value) {
         attributeMap.put(name, value);
-        notifyListeners();
     }
 
     /**
@@ -100,7 +57,6 @@ public class StyleAttributes {
      */
     public void removeAttribute(String name) {
         attributeMap.remove(name);
-        notifyListeners();
     }
 
     /**
@@ -133,33 +89,15 @@ public class StyleAttributes {
      */
     public void clear() {
         attributeMap.clear();
-        cssSelector = null;
-        notifyListeners();
     }
-
+    
     /**
-     * Method is used to notify all subscribed listeners about any changes within style attribute map.
+     * 
      */
-    private void notifyListeners() {
-        ChangeStyleEvent event = new ChangeStyleEvent(this);
-        for (ChangeStyleListener listener : listeners) {
-            listener.styleChanged(event);
-        }
+    public void setStyleProperties(Map<String, String> properties){
+    	attributeMap.clear();
+    	attributeMap.putAll(properties);
     }
-
-	/**
-	 * @param cssSelector the cssSelector to set
-	 */
-	public void setCssSelector(String cssSelector) {
-		this.cssSelector = cssSelector;
-	}
-
-	/**
-	 * @return the cssSelector
-	 */
-	public String getCssSelector() {
-		return cssSelector;
-	}
 	
 	/**
 	 * String representation of style attributes.
@@ -174,17 +112,5 @@ public class StyleAttributes {
             buf.append(me.getKey() + Constants.COLON + me.getValue() + Constants.SEMICOLON);
         }
         return buf.toString();
-	}
-	/**
-	 * Checks if attributes that has been entered to style valid
-	 * @return
-	 */
-	public boolean isValid() {
-		for(String value : getAttributeMap().values()) {
-			if(!cssValidator.isValidValue(value)) {
-				return false;
-			}
-		}
-		return true;
 	}
 }

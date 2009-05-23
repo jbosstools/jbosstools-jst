@@ -201,6 +201,9 @@
                style="push"
                toolbarPath="Normal/additions"
                tooltip="Open CSS Dialog based on the active CSS file">
+               <!--<selection
+                     class="org.eclipse.core.resources.IFile">
+               </selection>-->
          </action>
       </editorContribution>
       

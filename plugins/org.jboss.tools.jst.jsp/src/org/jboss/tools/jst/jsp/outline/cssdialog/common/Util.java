@@ -11,8 +11,8 @@
 package org.jboss.tools.jst.jsp.outline.cssdialog.common;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -29,18 +29,12 @@ import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.editors.text.TextEditor;
-import org.eclipse.ui.internal.EditorAreaHelper;
-import org.eclipse.ui.internal.WorkbenchPage;
-import org.eclipse.ui.internal.WorkbenchWindow;
 import org.eclipse.ui.part.FileEditorInput;
-import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSNode;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleSheet;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
-import org.jboss.tools.jst.jsp.outline.cssdialog.parsers.ColorParser;
 
 /**
  * Utility class
@@ -100,7 +94,7 @@ public class Util {
 	 * @return true - find, or else - don't find
 	 */
 	public static boolean searchInElement(String name,
-			HashMap<String, ArrayList<String>> elementMap) {
+			Map<String, ArrayList<String>> elementMap) {
 
 		Set<String> set = elementMap.keySet();
 
@@ -163,7 +157,7 @@ public class Util {
 				return convertColorRGB(color);
 			}
 		} else {
-			HashMap<String, String> colorMap = ColorParser.getInstance().getMap();
+			Map<String, String> colorMap = CSSConstants.COLORS;
 
 			for (String key : colorMap.keySet()) {
 				if (colorMap.get(key).equalsIgnoreCase(color)) {
@@ -285,8 +279,8 @@ public class Util {
 						: Constants.EMPTY)
 				+ Integer.toHexString(rgb.blue);
 		colorStr = colorStr.toUpperCase();
-		if (ColorParser.getInstance().getMap().get(colorStr) != null) {
-			return ColorParser.getInstance().getMap().get(colorStr);
+		if (CSSConstants.COLORS.get(colorStr) != null) {
+			return CSSConstants.COLORS.get(colorStr);
 		}
 		return colorStr;
 	}
