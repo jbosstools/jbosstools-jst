@@ -34,6 +34,7 @@ import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 import org.eclipse.ui.model.BaseWorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
+import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSSelectorValidator;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.FileExtensionFilter;
 import org.jboss.tools.jst.web.ui.wizards.css.NewCSSClassWizard.CSSClassDescription;
 import org.jboss.tools.jst.web.ui.wizards.messages.WebUIMessages;
@@ -84,7 +85,6 @@ public class WizardNewCssClassPage extends WizardPage implements ModifyListener 
 		selectFileText = new Text(container, SWT.SINGLE | SWT.BORDER);
 		selectFileText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		selectFileText.setFont(parent.getFont());
-		
 
 		Button selectFileButton = new Button(container, SWT.NONE);
 		selectFileButton.setText(WebUIMessages.FILE_SELECT_BUTTON);
@@ -113,8 +113,7 @@ public class WizardNewCssClassPage extends WizardPage implements ModifyListener 
 						}
 						return new Status(IStatus.ERROR, PlatformUI.PLUGIN_ID,
 								IStatus.ERROR,
-								WebUIMessages.WIZARD_ERROR_FILE_SELECTION, 
-								null);
+								WebUIMessages.WIZARD_ERROR_FILE_SELECTION, null);
 					}
 				});
 				if (classDescription.getCssFile() != null) {
@@ -162,7 +161,21 @@ public class WizardNewCssClassPage extends WizardPage implements ModifyListener 
 	public void modifyText(ModifyEvent e) {
 
 		classDescription.setCssClassName(classNameText.getText());
+
 		classDescription.setCssFile(getResource(selectFileText.getText()));
+
+		if (getCssFile(selectFileText.getText()) == null) {
+			setErrorMessage(WebUIMessages.WIZARD_ERROR_FILE_SELECTION);
+		} else if ((classNameText.getText() == null)
+				|| (classNameText.getText().length() == 0)) {
+			setErrorMessage(WebUIMessages.WIZARD_ERROR_EMPTY_CLASSNAME);
+		} else if (!CSSSelectorValidator.getInstance().isValidSelector(
+				classNameText.getText())) {
+			setErrorMessage(WebUIMessages.WIZARD_ERROR_INVALID_CLASSNAME);
+		} else {
+			setErrorMessage(null);
+		}
+
 		getContainer().updateButtons();
 
 	}
