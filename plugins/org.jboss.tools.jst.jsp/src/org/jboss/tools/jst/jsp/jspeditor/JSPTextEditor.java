@@ -24,6 +24,7 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.TextEvent;
 import org.eclipse.jface.text.formatter.IContentFormatter;
+import org.eclipse.jface.text.hyperlink.IHyperlinkDetector;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.text.source.IOverviewRuler;
 import org.eclipse.jface.text.source.ISourceViewer;
@@ -164,6 +165,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		super.setSourceViewerConfiguration(new JSPTextViewerConfiguration());
 	}
 
+	@Override
 	protected void setSourceViewerConfiguration(SourceViewerConfiguration config) {
 		if (config instanceof StructuredTextViewerConfigurationJSP) {
 			if (!(config instanceof JSPTextViewerConfiguration)) {
@@ -190,7 +192,6 @@ public class JSPTextEditor extends StructuredTextEditor implements
 	// Added By Max Areshkau
 	// Fix for JBIDE-788
 	public IVisualContext getPageContext() {
-
 		if (pageContext == null) {
 			pageContext = new SourceEditorPageContext(parentEditor);
 		}
@@ -1268,6 +1269,14 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			i = i2 + END.length();
 		}
 		return false;
+	}
+	/**
+	 * 
+	 * @return HyperLinkDetectors for sourceRegion
+	 */
+	public IHyperlinkDetector[] getHyperlinkDetectors() {
+		
+		return getSourceViewerConfiguration().getHyperlinkDetectors(getSourceViewer());
 	}
 
 }
