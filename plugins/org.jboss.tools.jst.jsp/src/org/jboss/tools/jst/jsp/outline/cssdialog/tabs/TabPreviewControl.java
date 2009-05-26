@@ -81,7 +81,13 @@ public class TabPreviewControl extends Composite implements ICSSTabControl {
 	}
 
 	public void reinit(ICSSDialogModel cssModel) {
+		this.cssModel = cssModel;
 		viewer.setDocument(cssModel.getDocument());
+	}
+
+	public void releaseModel() {
+		viewer.setDocument(null);
+		cssModel = null;
 	}
 
 	/**

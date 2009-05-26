@@ -258,7 +258,9 @@ public class CSSClassDialog extends AbstractCSSDialog {
 	}
 
 	public void releaseResources() {
-
+		
+		preview.releaseModel();
+		
 		if (cssModel != null) {
 			cssModel.release();
 			cssModel = null;
@@ -301,6 +303,7 @@ public class CSSClassDialog extends AbstractCSSDialog {
 	}
 
 	public void reinit() {
+		preview.releaseModel();
 		cssModel.setFile(file);
 		cssModel.reinit();
 		preview.reinit(cssModel);

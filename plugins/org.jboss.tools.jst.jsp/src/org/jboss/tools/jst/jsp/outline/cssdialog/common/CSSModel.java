@@ -220,7 +220,7 @@ public class CSSModel implements ICSSDialogModel {
 	public void release() {
 		IModelManager modelManager = StructuredModelManager.getModelManager();
 
-		if ((model != null) && !modelManager.isShared(model.getId()) /* copy */) {
+		if ((model != null) /* && !modelManager.isShared(model.getId()) */) {
 			model.releaseFromEdit();
 		}
 		model = null;
