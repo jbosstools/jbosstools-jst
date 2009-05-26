@@ -95,6 +95,10 @@ public class JspContextImpl extends ELContextImpl implements IPageContext {
 	 * @param name space
 	 */
 	public void addNameSpace(IRegion region, INameSpace nameSpace) {
+		if (nameSpaces.get(region) == null) {
+			Map<String, INameSpace> nameSpaceMap = new HashMap<String, INameSpace>();
+			nameSpaces.put(region, nameSpaceMap);
+		}
 		nameSpaces.get(region).put(nameSpace.getPrefix(), nameSpace);
 	}
 }
