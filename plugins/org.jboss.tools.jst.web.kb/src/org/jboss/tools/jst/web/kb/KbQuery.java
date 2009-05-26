@@ -43,7 +43,8 @@ public class KbQuery {
 	}
 
 	/**
-	 * URI of tag library
+	 * Returns URI of tag library for the current tag (type==TAG_NAME or type==ATTRIBUTE_NAME or type==ATTRIBUTE_VALE) or parent tag (type==TEXT)
+	 *
 	 * @return
 	 */
 	public String getUri() {
@@ -80,8 +81,8 @@ public class KbQuery {
 	}
 
 	/**
-	 * @return the name of parent tag (type==TAG_NAME) or attribute (type==ATTRIBUTE_NAME or type==ATTRIBUTE_VALE) to set
-	 */
+	* @return the name of parent tag (type==TAG_NAME or type==ATTRIBUTE_NAME or type==TEXT) or attribute (type==ATTRIBUTE_VALE)
+	*/
 	public String getParent() {
 		if(type == Type.TAG_NAME) {
 			return getLastParentTag();
