@@ -178,6 +178,14 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	 * @see org.jboss.tools.jst.web.kb.ProposalProcessor#getProposals(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.PageContext)
 	 */
 	public TextProposal[] getProposals(KbQuery query, IPageContext context) {
+		String prefix = null;
+		Map<String, INameSpace> nameSpaces = context.getNameSpaces(query.getOffset());
+		if(nameSpaces!=null) {
+			INameSpace nameSpace = nameSpaces.get(getURI());
+			if(nameSpace!=null) {
+				prefix = nameSpace.getPrefix();
+			}
+		}
 		List<TextProposal> proposals = new ArrayList<TextProposal>();
 		IComponent[] components = getComponents(query, context);
 		if(query.getType() == KbQuery.Type.TAG_NAME) {
@@ -185,7 +193,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 				TextProposal proposal = new TextProposal();
 				proposal.setContextInfo(components[i].getDescription());
 				StringBuffer label = new StringBuffer();
-				if(query.getPrefix()!=null) {
+				if(prefix!=null) {
 					label.append(query.getPrefix() + KbQuery.PREFIX_SEPARATOR);
 				}
 				label.append(components[i].getName());

@@ -27,7 +27,6 @@ import org.jboss.tools.jst.web.kb.internal.KbObject;
 import org.jboss.tools.jst.web.kb.internal.KbXMLStoreConstants;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
-import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 import org.w3c.dom.Element;
 
 /**

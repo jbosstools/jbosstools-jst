@@ -51,6 +51,7 @@ public interface IPageContext extends ELContext {
 
 	/**
 	 * Returns map of name spaces which are set in particular offset.
+	 * Key is URI of name space.
 	 * @return
 	 */
 	Map<String, INameSpace> getNameSpaces(int offset);
