@@ -42,7 +42,7 @@ public class PageProcessor implements IProposalProcessor {
 	public TextProposal[] getProposals(KbQuery query, IPageContext context) {
 		ArrayList<TextProposal> proposals = new ArrayList<TextProposal>();
 		ITagLibrary[] libs =  context.getLibraries();
-		for (int i = 0; i < libs.length; i++) {
+		for (int i = 0; libs != null && i < libs.length; i++) {
 			TextProposal[] libProposals = libs[i].getProposals(query, context);
 			for (int j = 0; j < libProposals.length; j++) {
 				proposals.add(libProposals[i]);
@@ -53,7 +53,7 @@ public class PageProcessor implements IProposalProcessor {
 			 //TODO convert value to EL string.
 			String elString = value;
 			ELResolver[] resolvers =  context.getElResolvers();
-			for (int i = 0; i < resolvers.length; i++) {
+			for (int i = 0; resolvers != null && i < resolvers.length; i++) {
 				proposals.addAll(resolvers[i].getCompletions(elString, !query.isMask(), query.getOffset(), context));
 			}
 		}
