@@ -22,6 +22,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.project.ext.IValueInfo;
+import org.jboss.tools.common.model.project.ext.event.Change;
 import org.jboss.tools.common.model.project.ext.store.XMLStoreConstants;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.common.xml.XMLUtilities;
@@ -227,6 +228,12 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		t.components = new HashMap<String, IComponent>();
 		t.components.putAll(components);
 		return t;
+	}
+
+	public List<Change> merge(KbObject s) {
+		List<Change> changes = super.merge(s);
+		//TODO
+		return changes;
 	}
 
 	public String getXMLName() {

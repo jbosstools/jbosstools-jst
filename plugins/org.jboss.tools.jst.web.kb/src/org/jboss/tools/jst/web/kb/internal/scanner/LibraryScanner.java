@@ -101,5 +101,12 @@ public class LibraryScanner implements IFileScanner {
 		return false;
 	}
 	
+	public static boolean isFacesConfigFile(XModelObject o) {
+		if(o == null) return false;
+		String entity = o.getModelEntity().getName();
+		if(entity.startsWith("FacesConfig")) return true;
+		return false;
+	}
+	
 }
 

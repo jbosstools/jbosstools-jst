@@ -117,6 +117,8 @@ public class XMLScanner implements IFileScanner {
 			parseTLD(o, source, sp, ds);
 		} else if(LibraryScanner.isFaceletTaglibFile(o)) {
 			parseFaceletTaglib(o, source, sp, ds);
+		} else if(LibraryScanner.isFacesConfigFile(o)) {
+			parseFacesConfig(o, source, sp, ds);
 		}
 		return ds;
 	}
@@ -194,6 +196,10 @@ public class XMLScanner implements IFileScanner {
 				//TODO
 			}
 		}
+	}
+
+	private void parseFacesConfig(XModelObject o, IPath source, IKbProject sp, LoadedDeclarations ds) {
+		
 	}
 
 }

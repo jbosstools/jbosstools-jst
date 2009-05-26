@@ -10,7 +10,11 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal.taglib;
 
+import java.util.List;
+
 import org.jboss.tools.common.model.project.ext.IValueInfo;
+import org.jboss.tools.common.model.project.ext.event.Change;
+import org.jboss.tools.jst.web.kb.internal.KbObject;
 import org.jboss.tools.jst.web.kb.internal.KbXMLStoreConstants;
 import org.jboss.tools.jst.web.kb.taglib.ITLDLibrary;
 import org.w3c.dom.Element;
@@ -64,6 +68,12 @@ public class TLDLibrary extends AbstractTagLib implements ITLDLibrary {
 
 	public TLDLibrary clone() throws CloneNotSupportedException {
 		return (TLDLibrary)super.clone();
+	}
+
+	public List<Change> merge(KbObject s) {
+		List<Change> changes = super.merge(s);
+		//TODO
+		return changes;
 	}
 
 	public String getXMLClass() {
