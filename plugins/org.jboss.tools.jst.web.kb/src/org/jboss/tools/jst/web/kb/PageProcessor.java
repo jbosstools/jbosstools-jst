@@ -23,6 +23,15 @@ import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
  */
 public class PageProcessor implements IProposalProcessor {
 
+	private static final PageProcessor INSTANCE = new PageProcessor();
+
+	public static PageProcessor getInstance() {
+		return INSTANCE;
+	}
+
+	private PageProcessor() {
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.ProposalProcessor#getProposals(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.PageContext)
