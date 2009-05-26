@@ -194,7 +194,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 				proposal.setContextInfo(components[i].getDescription());
 				StringBuffer label = new StringBuffer();
 				if(prefix!=null) {
-					label.append(query.getPrefix() + KbQuery.PREFIX_SEPARATOR);
+					label.append(prefix + KbQuery.PREFIX_SEPARATOR);
 				}
 				label.append(components[i].getName());
 				proposal.setLabel(label.toString());
