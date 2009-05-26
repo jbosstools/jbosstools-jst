@@ -25,6 +25,9 @@ public class PageProcessor implements IProposalProcessor {
 
 	private static final PageProcessor INSTANCE = new PageProcessor();
 
+	/**
+	 * @return instance of PageProcessor
+	 */
 	public static PageProcessor getInstance() {
 		return INSTANCE;
 	}

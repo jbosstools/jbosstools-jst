@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.kb.taglib;
 import org.eclipse.core.resources.IProject;
 import org.jboss.tools.jst.web.kb.IKbProject;
 import org.jboss.tools.jst.web.kb.KbProjectFactory;
+import org.jboss.tools.jst.web.kb.WebKbPlugin;
 
 /**
  * @author Alexey Kazakov
@@ -27,6 +28,10 @@ public class TagLibriryManager {
 	 */
 	public static ITagLibrary[] getLibraries(IProject project, String uri) {
 		IKbProject kbProject = KbProjectFactory.getKbProject(project, true);
+		if(kbProject==null) {
+			WebKbPlugin.getDefault().logWarning("Project " + project.getName() + " doesn't have KB nature.");
+			return new ITagLibrary[0];
+		}
 		return kbProject.getTagLibraries(uri);
 	}
 }
