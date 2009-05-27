@@ -81,19 +81,69 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	 * @see org.jboss.tools.jst.web.kb.taglib.TagLibrary#getComponents(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.PageContext)
 	 */
 	public IComponent[] getComponents(KbQuery query, IPageContext context) {
-		String tagName = null;
+		String prefix = getPrefix(query, context);
+		return getComponents(query, prefix, context);
+	}
+
+	private String getPrefix(KbQuery query, IPageContext context) {
+		String prefix = null;
+		Map<String, INameSpace> nameSpaces = context.getNameSpaces(query.getOffset());
+		if(nameSpaces!=null) {
+			INameSpace nameSpace = nameSpaces.get(getURI());
+			if(nameSpace!=null) {
+				prefix = nameSpace.getPrefix();
+			}
+		}
+		return prefix;
+	}
+
+	private static final IComponent[] EMPTY_ARRAY = new IComponent[0];
+
+	private IComponent[] getComponents(KbQuery query, String prefix, IPageContext context) {
+		String fullTagName = null;
 		boolean mask = false;
 		if(query.getType()==KbQuery.Type.TAG_NAME) {
-			tagName = query.getValue();
+			fullTagName = query.getValue();
 			mask = query.isMask();
 		} else {
-			tagName = query.getLastParentTag();
+			fullTagName = query.getLastParentTag();
 		}
-		if(tagName == null) {
+		if(fullTagName == null) {
 			return null;
 		}
 		if(mask) {
-			return getComponents(tagName);
+			if(fullTagName.length()==0) {
+				return getComponents();
+			}
+			if(prefix==null) {
+				return getComponents(fullTagName);
+			}
+		}
+		String tagName = fullTagName;
+		int prefixIndex = fullTagName.indexOf(':');
+		String queryPrefix = null;
+		if(prefix!=null && prefixIndex>-1) {
+			queryPrefix = fullTagName.substring(0, prefixIndex);
+			if(prefixIndex<fullTagName.length()-1) {
+				tagName = fullTagName.substring(prefixIndex+1);
+			} else {
+				tagName = null;
+			}
+		}
+		if(mask) {
+			if(prefixIndex<0) {
+				if(prefix.startsWith(tagName)) {
+					return getComponents();
+				}
+				return EMPTY_ARRAY;
+			}
+			if(prefix.equals(queryPrefix)) {
+				if(tagName == null) {
+					return getComponents();
+				}
+				return getComponents(tagName);
+			}
+			return EMPTY_ARRAY;
 		}
 		return new IComponent[]{getComponent(tagName)};
 	}
@@ -173,21 +223,13 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		attributesInfo.put(URI, s);
 	}
 
-
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.ProposalProcessor#getProposals(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.PageContext)
 	 */
 	public TextProposal[] getProposals(KbQuery query, IPageContext context) {
-		String prefix = null;
-		Map<String, INameSpace> nameSpaces = context.getNameSpaces(query.getOffset());
-		if(nameSpaces!=null) {
-			INameSpace nameSpace = nameSpaces.get(getURI());
-			if(nameSpace!=null) {
-				prefix = nameSpace.getPrefix();
-			}
-		}
+		String prefix = getPrefix(query, context);
 		List<TextProposal> proposals = new ArrayList<TextProposal>();
-		IComponent[] components = getComponents(query, context);
+		IComponent[] components = getComponents(query, prefix, context);
 		if(query.getType() == KbQuery.Type.TAG_NAME) {
 			for (int i = 0; i < components.length; i++) {
 				TextProposal proposal = new TextProposal();
@@ -296,5 +338,4 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	protected void loadAttributeValues(Element element) {
 		setURI(attributesInfo.get(URI));
 	}
-
 }
