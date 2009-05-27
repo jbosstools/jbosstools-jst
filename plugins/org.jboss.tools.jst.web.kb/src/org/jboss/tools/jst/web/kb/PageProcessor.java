@@ -45,7 +45,7 @@ public class PageProcessor implements IProposalProcessor {
 		for (int i = 0; libs != null && i < libs.length; i++) {
 			TextProposal[] libProposals = libs[i].getProposals(query, context);
 			for (int j = 0; libProposals != null && j < libProposals.length; j++) {
-				proposals.add(libProposals[i]);
+				proposals.add(libProposals[j]);
 			}
 		}
 		if(query.getType() == KbQuery.Type.ATTRIBUTE_VALUE || query.getType() == KbQuery.Type.TEXT) {
