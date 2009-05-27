@@ -44,7 +44,7 @@ public class PageProcessor implements IProposalProcessor {
 		ITagLibrary[] libs =  context.getLibraries();
 		for (int i = 0; libs != null && i < libs.length; i++) {
 			TextProposal[] libProposals = libs[i].getProposals(query, context);
-			for (int j = 0; j < libProposals.length; j++) {
+			for (int j = 0; libProposals != null && j < libProposals.length; j++) {
 				proposals.add(libProposals[i]);
 			}
 		}
