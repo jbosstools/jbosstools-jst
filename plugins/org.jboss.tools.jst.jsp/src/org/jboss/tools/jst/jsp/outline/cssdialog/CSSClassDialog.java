@@ -307,6 +307,7 @@ public class CSSClassDialog extends AbstractCSSDialog {
 		cssModel.setFile(file);
 		cssModel.reinit();
 		preview.reinit(cssModel);
+		getStyleComposite().clearStyleComposite();
 		updateControlPane();
 
 	}
@@ -360,4 +361,17 @@ public class CSSClassDialog extends AbstractCSSDialog {
 		applyButton.setEnabled(false);
 
 	}
+	
+	protected Button getApplyButton() {
+		return applyButton;
+	}
+	
+	protected Button getAddNewClassButton() {
+		return addNewClassButton;
+	}
+	
+	protected Combo getClassCombo() {
+		return classCombo;
+	}
+	
 }

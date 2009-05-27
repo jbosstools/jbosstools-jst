@@ -186,7 +186,7 @@ public abstract class AbstractCSSDialog extends TitleAreaDialog {
 					} else {
 						setPreviewContent(text);
 					}
-					
+
 					browser.setText(generateBrowserPage());
 					previewText.setVisible(false);
 					browser.setVisible(true);
@@ -209,11 +209,11 @@ public abstract class AbstractCSSDialog extends TitleAreaDialog {
 	}
 
 	protected void handleStatusChanged(IStatus newStatus) {
-		if (newStatus.isOK() && !status.isOK())
+		if (newStatus.isOK() && !status.isOK()) {
 			setErrorMessage(null);
-		else if (newStatus.getSeverity() == IStatus.ERROR)
+		} else if (newStatus.getSeverity() == IStatus.ERROR) {
 			setErrorMessage(newStatus.getMessage());
-
+		}
 		if (newStatus.getSeverity() != status.getSeverity()) {
 			getButton(OK).setEnabled(newStatus.isOK());
 		}

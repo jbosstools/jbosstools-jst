@@ -189,6 +189,7 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 										selection) {
 									protected void handleStatusChanged(
 											IStatus newStatus) {
+
 										if (newStatus.isOK()
 												&& !getStatus().isOK()) {
 											NewCSSClassWizardPage.this
@@ -201,6 +202,26 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 											canFinish = false;
 										}
 
+										if (newStatus.getSeverity() != getStatus()
+												.getSeverity()) {
+											if (!getApplyButton().isDisposed()) {
+												getApplyButton().setEnabled(
+														newStatus.isOK());
+											}
+											if (!getClassCombo().isDisposed()) {
+												getClassCombo().setEnabled(
+														newStatus.isOK());
+											}
+											if (!getAddNewClassButton()
+													.isDisposed()) {
+												getAddNewClassButton()
+														.setEnabled(newStatus
+																		.isOK());
+											}
+										}
+										if (getContainer() != null) {
+											getContainer().updateButtons();
+										}
 										setStatus(newStatus);
 									};
 								};
@@ -220,7 +241,6 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 			setControl(container);
 
 		}
-
 	}
 
 }
