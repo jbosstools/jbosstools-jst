@@ -48,7 +48,7 @@ public class PageProcessor implements IProposalProcessor {
 				proposals.add(libProposals[j]);
 			}
 		}
-		if(query.getType() == KbQuery.Type.ATTRIBUTE_VALUE || query.getType() == KbQuery.Type.TEXT) {
+		if(query.getType() == KbQuery.Type.ATTRIBUTE_VALUE || ((query.getType() == KbQuery.Type.TEXT )&& context instanceof IFaceletPageContext)) {
 			String value = query.getValue();
 			 //TODO convert value to EL string.
 			String elString = value;
