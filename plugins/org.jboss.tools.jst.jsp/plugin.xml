@@ -438,6 +438,46 @@
 			</contenttype>
 		</contentAssistProcessor>
 		
+		<!--
+		<contentAssistProcessor 
+				class="org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor" 
+				id="org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor">
+			<contenttype id="org.eclipse.jst.jsp.core.jspsource">
+				<partitiontype id="org.eclipse.wst.xml.XML_DEFAULT" />
+				<partitiontype id="org.eclipse.wst.html.HTML_DEFAULT" />
+				<partitiontype id="org.eclipse.jst.jsp.DEFAULT_JSP" />
+				<partitiontype id="org.eclipse.jst.jsp.JSP_DIRECTIVE" />
+				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.DELIMITER" />
+				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
+				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
+			</contenttype>
+		</contentAssistProcessor>
+			
+		<contentAssistProcessor 
+				class="org.jboss.tools.jst.jsp.contentassist.XmlContentAssistProcessor" 
+				id="org.jboss.tools.jst.jsp.contentassist.XmlContentAssistProcessor">
+			<contenttype id="org.eclipse.wst.xml.core.xmlsource">
+				<partitiontype id="org.eclipse.wst.xml.XML_DEFAULT" />
+				<partitiontype id="org.eclipse.wst.xml.XML_CDATA" />
+				<partitiontype id="org.eclipse.wst.xml.XML_PI" />
+				<partitiontype id="org.eclipse.wst.xml.XML_DECL" />
+				<partitiontype id="org.eclipse.wst.xml.XML_COMMENT" />
+				<partitiontype id="org.eclipse.wst.xml.dtd.internal_subset" />
+				<partitiontype id="org.eclipse.wst.sse.ST_DEFAULT" />
+				<partitiontype id="org.eclipse.wst.sse.UNKNOWN_PARTITION_TYPE" />
+			</contenttype>
+		</contentAssistProcessor>
+
+		<contentAssistProcessor 
+				class="org.jboss.tools.jst.jsp.contentassist.FaceletPageContectAssistProcessor" 
+				id="org.jboss.tools.jst.jsp.contentassist.FaceletPageContectAssistProcessor">
+			<contenttype id="org.eclipse.wst.html.core.htmlsource">
+				<partitiontype id="org.eclipse.wst.html.HTML_DEFAULT" />
+				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
+				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
+			</contenttype>
+		</contentAssistProcessor>
+		-->	
   </extension>
   <extension
         point="org.eclipse.ui.popupMenus">
