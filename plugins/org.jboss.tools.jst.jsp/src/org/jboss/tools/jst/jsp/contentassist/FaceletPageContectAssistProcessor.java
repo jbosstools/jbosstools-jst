@@ -17,6 +17,7 @@ import org.eclipse.jface.text.Region;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.jboss.tools.jst.web.kb.IFaceletPageContext;
@@ -100,18 +101,24 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 						final String uri = a.getValue();
 						if (prefix != null && prefix.trim().length() > 0 &&
 								uri != null && uri.trim().length() > 0) {
+
+							int start = ((IndexedRegion)n).getStartOffset();
+							int length = ((IndexedRegion)n).getLength();
+							
+							IDOMElement domElement = (n instanceof IDOMElement ? (IDOMElement)n : null);
+							if (domElement != null) {
+								start = domElement.getStartOffset();
+								length = (domElement.hasEndTag() ? 
+											domElement.getEndStructuredDocumentRegion().getEnd() :
+												domElement.getLength());
 								
-							// TODO: Check the IRegion instance creation
-							IRegion region = new Region(
-									((IndexedRegion)n).getStartOffset(),
-									((IndexedRegion)n).getLength());
-							
+							}
+
+							Region region = new Region(start, length);
 							INameSpace nameSpace = new INameSpace(){
-							
 								public String getURI() {
 									return uri.trim();
 								}
-							
 								public String getPrefix() {
 									return prefix.trim();
 								}
