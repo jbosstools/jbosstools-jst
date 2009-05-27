@@ -19,6 +19,7 @@ import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
+import org.jboss.tools.jst.web.kb.IFaceletPageContext;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.internal.FaceletPageContextImpl;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
@@ -132,39 +133,8 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 	}
 	
 	
-	/* Utility functions */
-	private Node findNodeForOffset(IDOMNode node, int offset) {
-		if(node == null) return null;
-		if (!node.contains(offset)) return null;
-			
-		if (node.hasChildNodes()) {
-			// Try to find the node in children
-			NodeList children = node.getChildNodes();
-			for (int i = 0; children != null && i < children.getLength(); i++) {
-				IDOMNode child = (IDOMNode)children.item(i);
-				if (child.contains(offset)) {
-					return findNodeForOffset(child, offset);
-				}
-			}
-		}
-			// Not found in children or nave no children
-		if (node.hasAttributes()) {
-			// Try to find in the node attributes
-			NamedNodeMap attributes = node.getAttributes();
-			
-			for (int i = 0; attributes != null && i < attributes.getLength(); i++) {
-				IDOMNode attr = (IDOMNode)attributes.item(i);
-				if (attr.contains(offset)) {
-					return attr;
-				}
-			}
-		}
-		// Return the node itself
-		return node;
+	@Override
+	protected IFaceletPageContext getContext() {
+		return (IFaceletPageContext)super.getContext();
 	}
-
-	private Node findNodeForOffset(Node node, int offset) {
-		return (node instanceof IDOMNode) ? findNodeForOffset((IDOMNode)node, offset) : null;
-	}
-
 }

@@ -10,23 +10,31 @@
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.contentassist;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.jface.text.contentassist.IContextInformationValidator;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
+import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegionList;
 import org.eclipse.wst.xml.core.internal.contentmodel.CMElementDeclaration;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 import org.eclipse.wst.xml.ui.internal.contentassist.AbstractContentAssistProcessor;
@@ -34,7 +42,16 @@ import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.ELResolverFactoryManager;
+import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.PageProcessor;
+import org.jboss.tools.jst.web.kb.KbQuery.Type;
+import org.jboss.tools.jst.web.kb.taglib.INameSpace;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 abstract public class AbstractXMLContentAssistProcessor extends AbstractContentAssistProcessor {
 	private static final char[] PROPOSAL_AUTO_ACTIVATION_CHARS = new char[] {
@@ -54,11 +71,18 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 			int offset) {
 		this.fDocument = (viewer == null ? null : viewer.getDocument());
 		this.fDocumentPosition = offset;
-		this.fContext = createContext();
-		
+		try {
+			this.fContext = createContext();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ICompletionProposal[0];
+		}
 		System.out.println("AbstractXMLContentAssistProcessor: computeCompletionProposals() invoked");
 		try {
 			return super.computeCompletionProposals(viewer, offset);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ICompletionProposal[0];
 		} finally {
 			System.out.println("AbstractXMLContentAssistProcessor: computeCompletionProposals() exited");
 		}
@@ -117,11 +141,19 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	
 
 	/* the methods to be overriden in derived classes */
+
 	
+
+	/*
+	 * Calculates and adds the attribute name proposals to the Content Assist Request object
+	 */
 	protected void addAttributeNameProposals(ContentAssistRequest contentAssistRequest) {
 		System.out.println("AbstractXMLContentAssistProcessor: addAttributeNameProposals() invoked");
 	}
 
+	/*
+	 * Calculates and adds the attribute value proposals to the Content Assist Request object
+	 */
 	protected void addAttributeValueProposals(ContentAssistRequest contentAssistRequest) {
 
 		IDOMNode node = (IDOMNode) contentAssistRequest.getNode();
@@ -173,50 +205,88 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 		}
 	}
 	
+	/*
+	 * Calculates and adds the comment proposals to the Content Assist Request object
+	 */
 	protected void addCommentProposal(ContentAssistRequest contentAssistRequest) {
 		System.out.println("AbstractXMLContentAssistProcessor: addCommentProposal() invoked");
 	}
 	
+	/*
+	 * Calculates and adds the doc type proposals to the Content Assist Request object
+	 */
 	protected void addDocTypeProposal(ContentAssistRequest contentAssistRequest) {
 		System.out.println("AbstractXMLContentAssistProcessor: addDocTypeProposal() invoked");
 	}
 	
+	/*
+	 * Calculates and adds the empty document proposals to the Content Assist Request object
+	 */
 	protected void addEmptyDocumentProposals(ContentAssistRequest contentAssistRequest) {
 		System.out.println("AbstractXMLContentAssistProcessor: addEmptyDocumentProposals() invoked");
 	}
 	
+	/*
+	 * Calculates and adds the tag name proposals to the Content Assist Request object
+	 */
 	protected void addEndTagNameProposals(ContentAssistRequest contentAssistRequest) {
 		System.out.println("AbstractXMLContentAssistProcessor: addEndTagNameProposals() invoked");
 	}
 	
+	/*
+	 * Calculates and adds the end tag proposals to the Content Assist Request object
+	 */
 	protected void addEndTagProposals(ContentAssistRequest contentAssistRequest) {
 		System.out.println("AbstractXMLContentAssistProcessor: addEndTagProposals() invoked");
 	}
 	
+	/*
+	 * Calculates and adds the enttity proposals to the Content Assist Request object
+	 */
 	protected void addEntityProposals(ContentAssistRequest contentAssistRequest, int documentPosition, ITextRegion completionRegion, IDOMNode treeNode) {
 		System.out.println("AbstractXMLContentAssistProcessor: addEntityProposals() invoked");
 	}
 	
+	/*
+	 * Calculates and adds the PCDATA proposals to the Content Assist Request object
+	 */
 	protected void addPCDATAProposal(String nodeName, ContentAssistRequest contentAssistRequest) {
 		System.out.println("AbstractXMLContentAssistProcessor: addPCDATAProposal() invoked");
 	}
 	
+	/*
+	 * Calculates and adds the start document proposals to the Content Assist Request object
+	 */
 	protected void addStartDocumentProposals(ContentAssistRequest contentAssistRequest) {
 		System.out.println("AbstractXMLContentAssistProcessor: addStartDocumentProposals() invoked");
 	}
 	
+	/*
+	 * Calculates and adds the tag close proposals to the Content Assist Request object
+	 */
 	protected void addTagCloseProposals(ContentAssistRequest contentAssistRequest) {
 		System.out.println("AbstractXMLContentAssistProcessor: addTagCloseProposals() invoked");
 	}
 	
+	/*
+	 * Calculates and adds the tag insertion proposals to the Content Assist Request object
+	 */
 	protected void addTagInsertionProposals(ContentAssistRequest contentAssistRequest, int childPosition) {
 		System.out.println("AbstractXMLContentAssistProcessor: addTagInsertionProposals() invoked");
 	}
 	
-	protected void addTagNameProposals(ContentAssistRequest contentAssistRequest, int childPosition) {
-		System.out.println("AbstractXMLContentAssistProcessor: addTagNameProposals() invoked");
-	}
-	
+	/**
+	 * Calculates and adds the tag name proposals to the Content Assist Request object
+	 * 
+	 * @param contentAssistRequest 
+	 * @param childPosition  	
+	 */
+	abstract protected void addTagNameProposals(ContentAssistRequest contentAssistRequest, int childPosition);
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.wst.xml.ui.internal.contentassist.AbstractContentAssistProcessor#computeCompletionProposals(int, java.lang.String, org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion, org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode, org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode)
+	 */
 	protected ContentAssistRequest computeCompletionProposals(int documentPosition, String matchString, ITextRegion completionRegion, IDOMNode treeNode, IDOMNode xmlnode) {
 		ContentAssistRequest contentAssistRequest = super.computeCompletionProposals(documentPosition, matchString, completionRegion, treeNode, xmlnode);
 		
@@ -234,22 +304,70 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 		return contentAssistRequest;
 	}
 	
+	/**
+	 * Creates and fulfills the <code>org.jboss.tools.common.el.core.resolver.ELContext</code> 
+	 * instance
+	 * 
+	 * @return
+	 */
 	abstract protected ELContext createContext();
 
+	/**
+	 * Creates and fulfills the <code>org.jboss.tools.jst.web.kb.KbQuery</code> 
+	 * instance
+	 * Important: the Context is to be set before any call to createKbQuery
+	 * 
+	 * @return
+	 */
+	
+	void a() {}
+	///
+	
+
+	/**
+	 * Returns the <code>org.jboss.tools.jst.web.kb.KbQuery</code> instance
+	 * 
+	 * @param type One of the <code>org.jboss.tools.jst.web.kb.KbQuery.Type</code> values
+	 * @param query The value for query
+	 * @param stringQuery the full text of the query value
+	 * 
+	 * @return The <code>org.jboss.tools.jst.web.kb.KbQuery</code> instance
+	 */
+	abstract protected KbQuery createKbQuery(Type type, String query, String stringQuery);
+	
+	/**
+	 * Returns the <code>org.jboss.tools.common.el.core.resolver.ELContext</code> instance
+	 * 
+	 * @return
+	 */
 	protected ELContext getContext() {
 		return this.fContext;
 	}
 	
+	/**
+	 * Returns the document position where the CA is invoked
+	 * @return
+	 */
 	protected int getOffset() {
 		return this.fDocumentPosition;
 	}
 	
+	/**
+	 * Returns the document
+	 * 
+	 * @return
+	 */
 	protected IDocument getDocument() {
 		return this.fDocument;
 	}
 	
+	/**
+	 * Returns IFile resource of the document
+	 * 
+	 * @return
+	 */
 	protected IFile getResource() {
-		IStructuredModel sModel = StructuredModelManager.getModelManager().getExistingModelForRead(fTextViewer.getDocument());
+		IStructuredModel sModel = StructuredModelManager.getModelManager().getExistingModelForRead(getDocument());
 		try {
 			if (sModel != null) {
 				String baseLocation = sModel.getBaseLocation();
@@ -266,8 +384,257 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 		return null;
 	}
 
-	ELResolver[] getELResolvers(IResource resource) {
+	/**
+	 * Returns array of the <code>org.jboss.tools.common.el.core.resolver.ELResolver</code> 
+	 * instances.
+	 * 
+	 * @param resource
+	 * @return
+	 */
+	protected ELResolver[] getELResolvers(IResource resource) {
 		ELResolverFactoryManager elrfm = ELResolverFactoryManager.getInstance();
 		return elrfm.getResolvers(resource);
+	}
+	
+	private static final String[] EMPTY_TAGS = new String[0];
+	/**
+	 * Returns array of the parent tags 
+	 * 
+	 * @return
+	 */
+	protected String[] getParentTags() {
+		List<String> parentTags = new ArrayList<String>();
+		
+		IStructuredModel sModel = StructuredModelManager
+									.getModelManager()
+									.getExistingModelForRead(getDocument());
+		try {
+			if (sModel == null) 
+				return EMPTY_TAGS;
+			
+			Document xmlDocument = (sModel instanceof IDOMModel) 
+					? ((IDOMModel) sModel).getDocument()
+							: null;
+
+			if (xmlDocument == null)
+				return EMPTY_TAGS;
+			
+			Node n = findNodeForOffset(xmlDocument, getOffset());
+			if (n == null)
+				return EMPTY_TAGS;
+
+			// Find the first parent tag 
+			if (!(n instanceof Element)) {
+				if (n instanceof Attr) {
+					n = ((Attr) n).getOwnerElement();
+				} else {
+					n = n.getParentNode();
+				}
+			} else {
+				n = n.getParentNode();
+			}
+
+			// Store all the parents
+			while (n != null) {
+				String tagName = n.getNodeName();
+				parentTags.add(0, tagName);
+				n = n.getParentNode();
+			}	
+
+			return (String[])parentTags.toArray(new String[parentTags.size()]);
+		} finally {
+			if (sModel != null) {
+				sModel.releaseFromRead();
+			}
+		}
+	}
+	
+	/**
+	 * For internal use only!
+	 * Returns the parent Element for the Attribute or TEXT nodes
+	 * 
+	 * @param xmlDocument
+	 * @return
+	 */
+	protected Node _getParentElement(Document xmlDocument) {
+		Node n = findNodeForOffset(xmlDocument, getOffset());
+		if (n == null)
+			return null;
+
+		if (n instanceof Element)
+			return n;
+		
+		if (n instanceof Attr) {
+			return ((Attr) n).getOwnerElement();
+		} else {
+			return n.getParentNode();
+		}
+	}
+	
+	/**
+	 * Returns name of the parent attribute/tag name
+	 * 
+	 * @return
+	 */
+	protected String getParent(boolean returnAttributeName) {
+		IStructuredModel sModel = StructuredModelManager
+									.getModelManager()
+									.getExistingModelForRead(getDocument());
+		try {
+			if (sModel == null) 
+				return null;
+			
+			Document xmlDocument = (sModel instanceof IDOMModel) 
+					? ((IDOMModel) sModel).getDocument()
+							: null;
+
+			if (xmlDocument == null)
+				return null;
+			
+			Node n = findNodeForOffset(xmlDocument, getOffset());
+			if (n == null)
+				return null;
+
+			// Find the first parent tag 
+			if (!(n instanceof Element)) {
+				if (n instanceof Attr) {
+					if (returnAttributeName) {
+						String parentAttrName = n.getNodeName();
+						return parentAttrName;
+					}
+					n = ((Attr) n).getOwnerElement();
+				} else {
+					n = n.getParentNode();
+				}
+			} else {
+				n = n.getParentNode();
+			}
+			if (n == null)
+				return null;
+			
+			String parentTagName = n.getNodeName();
+			return parentTagName;
+		} finally {
+			if (sModel != null) {
+				sModel.releaseFromRead();
+			}
+		}
+	}
+
+	/**
+	 * Returns URI for the current/parent tag
+	 * @return
+	 */
+	protected String getTagPrefix() {
+		IStructuredModel sModel = StructuredModelManager
+									.getModelManager()
+									.getExistingModelForRead(getDocument());
+		try {
+			if (sModel == null) 
+				return null;
+			
+			Document xmlDocument = (sModel instanceof IDOMModel) 
+					? ((IDOMModel) sModel).getDocument()
+							: null;
+
+			if (xmlDocument == null)
+				return null;
+			
+			Node n = findNodeForOffset(xmlDocument, getOffset());
+			if (n == null)
+				return null;
+
+			
+			if (!(n instanceof Element) && !(n instanceof Attr))
+				return null;
+			
+			if (n instanceof Attr) {
+				n = ((Attr) n).getOwnerElement();
+			}
+
+			if (n == null)
+				return null;
+
+			String nodePrefix = ((Element)n).getPrefix();
+			return nodePrefix;
+		} finally {
+			if (sModel != null) {
+				sModel.releaseFromRead();
+			}
+		}
+	}
+
+	/**
+	 * Returns URI for the current/parent tag
+	 * @return
+	 */
+	protected String getTagUri() {
+		String nodePrefix = getTagPrefix();
+		return getUri(nodePrefix);
+	}
+	
+	/**
+	 * Returns URI string for the prefix specified 
+	 * 
+	 * @param prefix
+	 * @return
+	 */
+	abstract protected String getUri(String prefix); 
+	
+	/* Utility functions */
+	Node findNodeForOffset(IDOMNode node, int offset) {
+		if(node == null) return null;
+		if (!node.contains(offset)) return null;
+			
+		if (node.hasChildNodes()) {
+			// Try to find the node in children
+			NodeList children = node.getChildNodes();
+			for (int i = 0; children != null && i < children.getLength(); i++) {
+				IDOMNode child = (IDOMNode)children.item(i);
+				if (child.contains(offset)) {
+					return findNodeForOffset(child, offset);
+				}
+			}
+		}
+			// Not found in children or nave no children
+		if (node.hasAttributes()) {
+			// Try to find in the node attributes
+			NamedNodeMap attributes = node.getAttributes();
+			
+			for (int i = 0; attributes != null && i < attributes.getLength(); i++) {
+				IDOMNode attr = (IDOMNode)attributes.item(i);
+				if (attr.contains(offset)) {
+					return attr;
+				}
+			}
+		}
+		// Return the node itself
+		return node;
+	}
+
+	Node findNodeForOffset(Node node, int offset) {
+		return (node instanceof IDOMNode) ? findNodeForOffset((IDOMNode)node, offset) : null;
+	}
+
+	/**
+	 * this is the position the cursor should be in after the proposal is
+	 * applied
+	 * 
+	 * @param proposedText
+	 * @return the position the cursor should be in after the proposal is
+	 *         applied
+	 */
+	protected int getCursorPositionForProposedText(String proposedText) {
+		int cursorAdjustment;
+		cursorAdjustment = proposedText.indexOf("\"\"") + 1; //$NON-NLS-1$
+		// otherwise, after the first tag
+		if (cursorAdjustment == 0) {
+			cursorAdjustment = proposedText.indexOf('>') + 1;
+		}
+		if (cursorAdjustment == 0) {
+			cursorAdjustment = proposedText.length();
+		}
+
+		return cursorAdjustment;
 	}
 }

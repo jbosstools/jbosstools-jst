@@ -11,9 +11,13 @@
 package org.jboss.tools.jst.jsp.contentassist;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.ELContextImpl;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
+import org.jboss.tools.jst.web.kb.IFaceletPageContext;
+import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.KbQuery.Type;
 
 public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor {
 
@@ -36,5 +40,42 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 
 	protected void setVars(ELContext context) {
 		// TODO
+	}
+
+	@Override 
+	protected KbQuery createKbQuery(Type type, String query, String stringQuery) {
+		KbQuery kbQuery = new KbQuery();
+
+		String prefix = getTagPrefix();
+		String  uri = getTagUri();
+		String[] parentTags = getParentTags();
+		String	parent = getParent(type == Type.ATTRIBUTE_VALUE);
+		String queryValue = query;
+		String queryStringValue = stringQuery;
+		
+		kbQuery.setPrefix(prefix);
+		kbQuery.setUri(uri);
+		kbQuery.setParentTags(parentTags);
+		kbQuery.setParent(parent); 
+		kbQuery.setMask(true); 
+		kbQuery.setType(type);
+		kbQuery.setOffset(getOffset());
+		kbQuery.setValue(queryValue); 
+		kbQuery.setStringQuery(queryStringValue);
+		
+		return kbQuery;
+	}
+
+	@Override
+	protected String getUri(String prefix) {
+		return null;
+	}
+
+
+	@Override
+	protected void addTagNameProposals(
+			ContentAssistRequest contentAssistRequest, int childPosition) {
+		// TODO Auto-generated method stub
+		
 	}
 }
