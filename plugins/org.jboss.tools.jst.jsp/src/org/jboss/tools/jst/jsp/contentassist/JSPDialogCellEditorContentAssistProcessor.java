@@ -75,9 +75,9 @@ public class JSPDialogCellEditorContentAssistProcessor extends JavaPackageComple
 		ValueHelper valueHelper = new ValueHelper();
 		WtpKbConnector wtpKbConnector = valueHelper.getPageConnector();
 		if(wtpKbConnector == null) return;
-		Node node = (Node)context.get("node");
-		String tagName = "" + context.getProperty("nodeName");
-		String attributeName = "" + context.getProperty("attributeName");
+		Node node = (Node)context.get("node"); //$NON-NLS-1$
+		String tagName = "" + context.getProperty("nodeName"); //$NON-NLS-1$ //$NON-NLS-2$
+		String attributeName = "" + context.getProperty("attributeName"); //$NON-NLS-1$ //$NON-NLS-2$
 		String currentValue = text;
 		String strippedValue = null;
 		String matchString = null;
@@ -85,7 +85,7 @@ public class JSPDialogCellEditorContentAssistProcessor extends JavaPackageComple
 		matchString = currentValue.substring(0, offset);
 		strippedValue = currentValue;
 
-		String elProposalPrefix = "";
+		String elProposalPrefix = ""; //$NON-NLS-1$
 
 		ELParser p = ELParserUtil.getJbossFactory().createParser();
 		ELModel model = p.parse(matchString);
@@ -144,13 +144,13 @@ public class JSPDialogCellEditorContentAssistProcessor extends JavaPackageComple
                 	}
   
                 		if(is1 == null || is1.getCloseInstanceToken() == null) {
-                			replacementString += "}";
+                			replacementString += "}"; //$NON-NLS-1$
                 		}
 
                 	int cursorPosition = kbProposal.getPosition() + cursorPositionDelta;
                 	String displayString = elProposalPrefix == null || elProposalPrefix.length() == 0 ? 
                 			kbProposal.getReplacementString().substring(2,kbProposal.getReplacementString().length() - 1) :
-                			elProposalPrefix + kbProposal.getReplacementString().substring(2,kbProposal.getReplacementString().length() - 1) + "}" ;
+                			elProposalPrefix + kbProposal.getReplacementString().substring(2,kbProposal.getReplacementString().length() - 1) + "}" ; //$NON-NLS-1$
 
                 	Image image = kbProposal.hasImage() ? 
                 				kbProposal.getImage() :  
