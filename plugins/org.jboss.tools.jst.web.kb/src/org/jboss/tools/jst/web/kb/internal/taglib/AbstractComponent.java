@@ -351,6 +351,8 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 			AbstractAttribute c = null;
 			if(KbXMLStoreConstants.CLS_TLD_LIBRARY.equals(cls)) {
 				c = new TLDAttribute();
+			} else if(KbXMLStoreConstants.CLS_FACESCONFIG_LIBRARY.equals(cls)) {
+				c = new FacesConfigAttribute();
 			} else {
 				//consider other cases;
 			}

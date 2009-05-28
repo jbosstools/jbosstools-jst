@@ -29,6 +29,9 @@ import org.jboss.tools.jst.web.kb.internal.taglib.AbstractComponent;
 import org.jboss.tools.jst.web.kb.internal.taglib.AbstractTagLib;
 import org.jboss.tools.jst.web.kb.internal.taglib.FaceletTag;
 import org.jboss.tools.jst.web.kb.internal.taglib.FaceletTagLibrary;
+import org.jboss.tools.jst.web.kb.internal.taglib.FacesConfigAttribute;
+import org.jboss.tools.jst.web.kb.internal.taglib.FacesConfigComponent;
+import org.jboss.tools.jst.web.kb.internal.taglib.FacesConfigTagLibrary;
 import org.jboss.tools.jst.web.kb.internal.taglib.TLDAttribute;
 import org.jboss.tools.jst.web.kb.internal.taglib.TLDLibrary;
 import org.jboss.tools.jst.web.kb.internal.taglib.TLDTag;
@@ -199,6 +202,38 @@ public class XMLScanner implements IFileScanner {
 	}
 
 	private void parseFacesConfig(XModelObject o, IPath source, IKbProject sp, LoadedDeclarations ds) {
+		FacesConfigTagLibrary library = new FacesConfigTagLibrary();
+		library.setId(o);
+		library.setURI("TODO"); //TODO what is the URI?
+		
+		ds.getLibraries().add(library);
+
+		XModelObject componentFolder = o.getChildByPath("Components");
+		if(componentFolder == null) return;
+		XModelObject[] os = componentFolder.getChildren();
+		for (XModelObject c: os) {
+			FacesConfigComponent component = new FacesConfigComponent();
+			component.setId(c);
+			component.setName(new XMLValueInfo(c, "component-type"));
+			//TODO what else can we take for the name? only attribute 'component-type' is available
+			
+			component.setComponentClass(new XMLValueInfo(c, "component-class"));
+			component.setComponentType(c.getAttributeValue("component-type"));
+			component.setDescription(new XMLValueInfo(c, "description"));
+			
+			XModelObject[] as = c.getChildren();
+			for (XModelObject child: as) {
+				String entity = child.getModelEntity().getName();
+				if(entity.startsWith("JSFAttribute")) {
+					FacesConfigAttribute attr = new FacesConfigAttribute();
+					
+					component.addAttribute(attr);
+				} else if(entity.startsWith("JSFFacet")) {
+					//TODO
+				}
+			}
+			library.addComponent(component);
+		}
 		
 	}
 
