@@ -58,6 +58,8 @@ public abstract class AbstractCSSDialog extends TitleAreaDialog {
 	private StyleComposite styleComposite;
 
 	private DataBindingContext bindingContext = new DataBindingContext();
+	
+	private AggregateValidationStatus aggregateStatus;
 
 	private IStatus status = Status.OK_STATUS;
 
@@ -114,7 +116,7 @@ public abstract class AbstractCSSDialog extends TitleAreaDialog {
 
 				});
 
-		AggregateValidationStatus aggregateStatus = new AggregateValidationStatus(
+		aggregateStatus = new AggregateValidationStatus(
 				getBindingContext().getValidationStatusProviders(),
 				AggregateValidationStatus.MAX_SEVERITY);
 		aggregateStatus.addValueChangeListener(new IValueChangeListener() {
@@ -244,9 +246,14 @@ public abstract class AbstractCSSDialog extends TitleAreaDialog {
 
 		return html.toString();
 	}
+	
+	public void releaseResources() {
+		aggregateStatus.dispose();
+	}
 
 	@Override
 	public boolean close() {
+		releaseResources();
 		return super.close();
 	}
 

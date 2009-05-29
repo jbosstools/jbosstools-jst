@@ -257,8 +257,11 @@ public class CSSClassDialog extends AbstractCSSDialog {
 		classCombo.select(classCombo.getItemCount() - 1);
 	}
 
+
+	@Override
 	public void releaseResources() {
 		
+		super.releaseResources();
 		preview.releaseModel();
 		
 		if (cssModel != null) {
@@ -298,7 +301,6 @@ public class CSSClassDialog extends AbstractCSSDialog {
 		default:
 			// make some closure operation
 		}
-		releaseResources();
 		return super.close();
 	}
 
@@ -320,7 +322,8 @@ public class CSSClassDialog extends AbstractCSSDialog {
 	protected void handleStyleChanged() {
 		super.handleStyleChanged();
 
-		applyButton.setEnabled(true);
+		if (getStatus().isOK())
+			applyButton.setEnabled(true);
 
 	}
 
