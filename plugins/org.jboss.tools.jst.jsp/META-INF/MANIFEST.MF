@@ -61,7 +61,7 @@ Require-Bundle: org.jboss.tools.common,
  org.eclipse.core.databinding,
  org.eclipse.jface.databinding,
  org.eclipse.core.databinding.property,
- org.jboss.tools.jst.web.kb;bundle-version="1.0.0"
+ org.jboss.tools.jst.web.kb
 Bundle-Version: 2.0.0
 Export-Package: org.jboss.tools.jst.jsp.outline.cssdialog.common,
  org.jboss.tools.jst.jsp.outline.cssdialog.parsers
