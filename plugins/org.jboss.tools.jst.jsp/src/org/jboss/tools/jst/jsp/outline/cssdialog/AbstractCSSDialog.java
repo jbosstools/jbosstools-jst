@@ -86,8 +86,6 @@ public abstract class AbstractCSSDialog extends TitleAreaDialog {
 		gridData.heightHint = DEFAULT_DIALOG_HEIGHT;
 		gridData.widthHint = DEFAULT_DIALOG_WIDTH;
 
-		setTitle(JstUIMessages.CSS_STYLE_CLASS_EDITOR_TITLE);
-
 		createControlPane(parentComposite);
 
 		return parentComposite;

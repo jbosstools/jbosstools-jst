@@ -77,13 +77,20 @@ public class CSSClassDialog extends AbstractCSSDialog {
 	public CSSClassDialog(Shell parentShell, IFile file,
 			IStructuredSelection selection) {
 		super(parentShell);
-
 		setShellStyle(getShellStyle() | SWT.RESIZE | SWT.MAX
 				| SWT.APPLICATION_MODAL);
 
 		this.file = file;
 		this.cssModel = new CSSModel(file);
 		this.selection = selection;
+
+	}
+
+	@Override
+	protected void configureShell(Shell newShell) {
+		super.configureShell(newShell);
+		newShell.setText(JstUIMessages.CSS_STYLE_CLASS_EDITOR_TITLE);
+
 	}
 
 	@Override
@@ -91,6 +98,12 @@ public class CSSClassDialog extends AbstractCSSDialog {
 		Control contents = super.createContents(parent);
 		updateControlPane();
 		return contents;
+	}
+
+	@Override
+	protected Control createDialogArea(Composite parent) {
+		setTitle(JstUIMessages.CSS_STYLE_CLASS_EDITOR_TITLE);
+		return super.createDialogArea(parent);
 	}
 
 	@Override
@@ -257,13 +270,12 @@ public class CSSClassDialog extends AbstractCSSDialog {
 		classCombo.select(classCombo.getItemCount() - 1);
 	}
 
-
 	@Override
 	public void releaseResources() {
-		
+
 		super.releaseResources();
 		preview.releaseModel();
-		
+
 		if (cssModel != null) {
 			cssModel.release();
 			cssModel = null;
@@ -364,17 +376,17 @@ public class CSSClassDialog extends AbstractCSSDialog {
 		applyButton.setEnabled(false);
 
 	}
-	
+
 	protected Button getApplyButton() {
 		return applyButton;
 	}
-	
+
 	protected Button getAddNewClassButton() {
 		return addNewClassButton;
 	}
-	
+
 	protected Combo getClassCombo() {
 		return classCombo;
 	}
-	
+
 }

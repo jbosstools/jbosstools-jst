@@ -14,7 +14,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
+import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSConstants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Util;
@@ -60,5 +63,17 @@ public class CSSStyleDialog extends AbstractCSSDialog {
 
 		}
 		return properties;
+	}
+
+	@Override
+	protected void configureShell(Shell newShell) {
+		super.configureShell(newShell);
+		newShell.setText(JstUIMessages.CSS_STYLE_EDITOR_TITLE);
+	}
+
+	@Override
+	protected Control createDialogArea(Composite parent) {
+		setTitle(JstUIMessages.CSS_STYLE_EDITOR_TITLE);
+		return super.createDialogArea(parent);
 	}
 }
