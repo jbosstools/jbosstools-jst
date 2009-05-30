@@ -38,32 +38,25 @@ public class FacesConfigTagLibrary extends AbstractTagLib implements
 		return componentsByType.get(type);
 	}
 
-	public Facet getFacet(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Facet[] getFacets() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Facet[] getFacets(String nameTemplate) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public FacesConfigTagLibrary clone() throws CloneNotSupportedException {
 		FacesConfigTagLibrary copy = (FacesConfigTagLibrary)super.clone();
-		//TODO
+		
 		return copy;
 	}
 
 	public List<Change> merge(KbObject s) {
 		List<Change> changes = super.merge(s);
 		FacesConfigTagLibrary t = (FacesConfigTagLibrary)s;
-		//TODO
+
+		Change children = new Change(this, null, null, null);
+		mergeFunctions(t, children);
+		changes = Change.addChange(changes, children);
+
 		return changes;
+	}
+
+	public void mergeFunctions(FacesConfigTagLibrary c, Change children) {
+		//TODO
 	}
 
 	public String getXMLClass() {

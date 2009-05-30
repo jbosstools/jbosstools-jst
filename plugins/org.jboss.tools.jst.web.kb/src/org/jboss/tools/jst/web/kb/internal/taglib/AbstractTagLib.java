@@ -276,6 +276,9 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	public AbstractTagLib clone() throws CloneNotSupportedException {
 		AbstractTagLib t = (AbstractTagLib)super.clone();
 		t.components = new HashMap<String, IComponent>();
+		for (IComponent c: components.values()) {
+			t.addComponent(((AbstractComponent)c).clone());
+		}
 		t.components.putAll(components);
 		return t;
 	}

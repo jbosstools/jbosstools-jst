@@ -27,6 +27,7 @@ import org.jboss.tools.jst.web.kb.IKbProject;
 import org.jboss.tools.jst.web.kb.internal.taglib.AbstractAttribute;
 import org.jboss.tools.jst.web.kb.internal.taglib.AbstractComponent;
 import org.jboss.tools.jst.web.kb.internal.taglib.AbstractTagLib;
+import org.jboss.tools.jst.web.kb.internal.taglib.ELFunction;
 import org.jboss.tools.jst.web.kb.internal.taglib.FaceletTag;
 import org.jboss.tools.jst.web.kb.internal.taglib.FaceletTagLibrary;
 import org.jboss.tools.jst.web.kb.internal.taglib.FacesConfigAttribute;
@@ -35,6 +36,7 @@ import org.jboss.tools.jst.web.kb.internal.taglib.FacesConfigTagLibrary;
 import org.jboss.tools.jst.web.kb.internal.taglib.TLDAttribute;
 import org.jboss.tools.jst.web.kb.internal.taglib.TLDLibrary;
 import org.jboss.tools.jst.web.kb.internal.taglib.TLDTag;
+import org.jboss.tools.jst.web.kb.taglib.Facet;
 import org.jboss.tools.jst.web.model.helpers.InnerModelHelper;
 import org.jboss.tools.jst.web.model.project.ext.store.XMLValueInfo;
 
@@ -44,6 +46,10 @@ import org.jboss.tools.jst.web.model.project.ext.store.XMLValueInfo;
 public class XMLScanner implements IFileScanner {
 	public static final String ATTR_TAGCLASS ="tagclass"; //$NON-NLS-1$
 	public static final String ATTR_BODY_CONTENT = "bodycontent"; //$NON-NLS-1$
+	public static final String ATTR_FACET_NAME = "facet-name"; //$NON-NLS-1$
+	public static final String ATTR_ATTRIBUTE_NAME = "attribute-name"; //$NON-NLS-1$
+	public static final String ATTR_FUNC_SIGN = "function-signature"; //$NON-NLS-1$
+	public static final String ATTR_FUNC_NAME = "function-name"; //$NON-NLS-1$
 	
 	public XMLScanner() {}
 
@@ -192,11 +198,13 @@ public class XMLScanner implements IFileScanner {
 				FaceletTag tag = new FaceletTag();
 				tag.setId(t);
 				tag.setName(new XMLValueInfo(t, "tag-name"));
-				//what else?
-				
 				library.addComponent(tag);
 			} else if(entity.startsWith("FaceletTaglibFunction")) {
-				//TODO
+				ELFunction f = new ELFunction();
+				f.setId(t);
+				f.setName(new XMLValueInfo(t, ATTR_FUNC_NAME));
+				f.setSignature(new XMLValueInfo(t, ATTR_FUNC_SIGN));
+				library.addFunction(f);
 			}
 		}
 	}
@@ -214,8 +222,8 @@ public class XMLScanner implements IFileScanner {
 		for (XModelObject c: os) {
 			FacesConfigComponent component = new FacesConfigComponent();
 			component.setId(c);
+			//what else can we take for the name? only attribute 'component-type' is available
 			component.setName(new XMLValueInfo(c, "component-type"));
-			//TODO what else can we take for the name? only attribute 'component-type' is available
 			
 			component.setComponentClass(new XMLValueInfo(c, "component-class"));
 			component.setComponentType(c.getAttributeValue("component-type"));
@@ -226,10 +234,16 @@ public class XMLScanner implements IFileScanner {
 				String entity = child.getModelEntity().getName();
 				if(entity.startsWith("JSFAttribute")) {
 					FacesConfigAttribute attr = new FacesConfigAttribute();
+					attr.setId(child);
+					attr.setName(new XMLValueInfo(child, ATTR_ATTRIBUTE_NAME));
 					
 					component.addAttribute(attr);
 				} else if(entity.startsWith("JSFFacet")) {
-					//TODO
+					Facet f = new Facet();
+					f.setId(child);
+					f.setName(new XMLValueInfo(child, ATTR_FACET_NAME));
+					f.setDescription(new XMLValueInfo(child, AbstractComponent.DESCRIPTION));
+					component.addFacet(f);
 				}
 			}
 			library.addComponent(component);

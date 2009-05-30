@@ -16,10 +16,11 @@ import org.jboss.tools.common.text.TextProposal;
  * @author Alexey Kazakov
  */
 public interface IProposalProcessor {
+	public TextProposal[] EMPTY_PROPOSAL_LIST = new TextProposal[0];
 
 	/**
 	 * @return proposals
 	 */
-	TextProposal[] getProposals(KbQuery query, IPageContext context);
+	public TextProposal[] getProposals(KbQuery query, IPageContext context);
 
 }

@@ -1,14 +1,4 @@
-/******************************************************************************* 
- * Copyright (c) 2009 Red Hat, Inc. 
- * Distributed under license by Red Hat, Inc. All rights reserved. 
- * This program is made available under the terms of the 
- * Eclipse Public License v1.0 which accompanies this distribution, 
- * and is available at http://www.eclipse.org/legal/epl-v10.html 
- * 
- * Contributors: 
- * Red Hat, Inc. - initial API and implementation 
- ******************************************************************************/ 
-package org.jboss.tools.jst.web.kb.taglib;
+package org.jboss.tools.jst.web.kb.internal.taglib;
 
 import java.util.Properties;
 
@@ -18,39 +8,23 @@ import org.jboss.tools.common.model.project.ext.store.XMLStoreConstants;
 import org.jboss.tools.jst.web.kb.internal.KbObject;
 import org.jboss.tools.jst.web.kb.internal.KbXMLStoreConstants;
 import org.jboss.tools.jst.web.kb.internal.scanner.XMLScanner;
-import org.jboss.tools.jst.web.kb.internal.taglib.AbstractComponent;
+import org.jboss.tools.jst.web.kb.taglib.IELFunction;
 import org.jboss.tools.jst.web.model.project.ext.store.XMLValueInfo;
 import org.w3c.dom.Element;
 
-/**
- * JSF Facet Component
- * @author Alexey Kazakov
- */
-public class Facet extends KbObject {
-
-	private String description;
+public class ELFunction extends KbObject implements IELFunction {
+	public static final String SIGNATURE = "signature";
 	private String name;
+	private String signature;
 
-	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
+	public ELFunction() {}
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	/**
-	 * @return the name
-	 */
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public String getFunctionSignature() {
+		return signature;
 	}
 
 	public void setName(IValueInfo s) {
@@ -58,13 +32,17 @@ public class Facet extends KbObject {
 		attributesInfo.put(XMLStoreConstants.ATTR_NAME, s);
 	}
 
-	public void setDescription(IValueInfo s) {
-		description = s == null ? null : s.getValue();
-		attributesInfo.put(AbstractComponent.DESCRIPTION, s);
+	public void setSignature(IValueInfo s) {
+		signature = s == null ? null : s.getValue();
+		attributesInfo.put(SIGNATURE, s);
+	}
+
+	public ELFunction clone() throws CloneNotSupportedException {
+		return (ELFunction)super.clone();
 	}
 
 	public String getXMLName() {
-		return KbXMLStoreConstants.TAG_FACET;
+		return KbXMLStoreConstants.TAG_FUNCTION;
 	}
 	
 	public Element toXML(Element parent, Properties context) {
@@ -81,7 +59,7 @@ public class Facet extends KbObject {
 		super.loadXML(element, context);
 
 		setName(attributesInfo.get(XMLStoreConstants.ATTR_NAME));
-		setDescription(attributesInfo.get(AbstractComponent.DESCRIPTION));
+		setSignature(attributesInfo.get(SIGNATURE));
 
 		if(name == null && element.hasAttribute(XMLStoreConstants.ATTR_NAME)) {
 			name = element.getAttribute(XMLStoreConstants.ATTR_NAME);
@@ -101,8 +79,8 @@ public class Facet extends KbObject {
 	protected void loadAttributesInfo(Element element, Properties context) {
 		if(context.get(XMLStoreConstants.KEY_MODEL_OBJECT) == getId()) {
 			XModelObject a = (XModelObject)getId();
-			attributesInfo.put(XMLStoreConstants.ATTR_NAME, new XMLValueInfo(a, XMLScanner.ATTR_FACET_NAME));
-			attributesInfo.put(AbstractComponent.DESCRIPTION, new XMLValueInfo(a, AbstractComponent.DESCRIPTION));
+			attributesInfo.put(XMLStoreConstants.ATTR_NAME, new XMLValueInfo(a, XMLScanner.ATTR_FUNC_NAME));
+			attributesInfo.put(SIGNATURE, new XMLValueInfo(a, XMLScanner.ATTR_FUNC_SIGN));
 		} else {
 			super.loadAttributesInfo(element, context);
 		}

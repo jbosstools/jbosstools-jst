@@ -25,6 +25,7 @@ import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.internal.KbObject;
 import org.jboss.tools.jst.web.kb.internal.KbXMLStoreConstants;
+import org.jboss.tools.jst.web.kb.taglib.Facet;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
 import org.w3c.dom.Element;
@@ -207,13 +208,36 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		}
 	}
 
+	/**
+	 * Facets are a feature of JSF only, they are included into 
+	 * the base interface and implementation
+	 * for the sake of common approach.
+	 */
+	public Facet getFacet(String name) {
+		return null;
+	}
+	
+	public static final Facet[] EMPTY_FACET_SET = new Facet[0];
+
+	public Facet[] getFacets() {
+		return EMPTY_FACET_SET;
+	}
+
+	public Facet[] getFacets(String nameTemplate) {
+		return EMPTY_FACET_SET;
+	}
+
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.IProposalProcessor#getProposals(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.IPageContext)
 	 */
 	public TextProposal[] getProposals(KbQuery query, IPageContext context) {
-		List<TextProposal> proposals = new ArrayList<TextProposal>();
 		IAttribute[] attributes = getAttributes(query, context);
+		if(attributes.length == 0) {
+			return EMPTY_PROPOSAL_LIST;
+		}
+		List<TextProposal> proposals = null;
 		if(query.getType() == KbQuery.Type.ATTRIBUTE_NAME) {
+			proposals = new ArrayList<TextProposal>();
 			for (int i = 0; i < attributes.length; i++) {
 				TextProposal proposal = new TextProposal();
 				proposal.setContextInfo(attributes[i].getDescription());
@@ -224,10 +248,16 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		} else if(query.getType() == KbQuery.Type.ATTRIBUTE_VALUE) {
 			for (int i = 0; i < attributes.length; i++) {
 				TextProposal[] attributeProposals  = attributes[i].getProposals(query, context);
+				if(attributeProposals.length > 0 && proposals == null) {
+					proposals = new ArrayList<TextProposal>();
+				}
 				for (int j = 0; j < attributeProposals.length; j++) {
 					proposals.add(attributeProposals[j]);
 				}
 			}
+		}
+		if(proposals == null || proposals.isEmpty()) {
+			return EMPTY_PROPOSAL_LIST;
 		}
 		return proposals.toArray(new TextProposal[proposals.size()]);
 	}
@@ -314,6 +344,9 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		}
 	}
 
+	public AbstractComponent clone() throws CloneNotSupportedException {
+		return (AbstractComponent)super.clone();
+	}
 	public String getXMLName() {
 		return KbXMLStoreConstants.TAG_COMPONENT;
 	}

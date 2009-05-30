@@ -15,6 +15,7 @@ import java.util.Properties;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.project.ext.store.XMLStoreConstants;
 import org.jboss.tools.jst.web.kb.internal.KbXMLStoreConstants;
+import org.jboss.tools.jst.web.kb.internal.scanner.XMLScanner;
 import org.jboss.tools.jst.web.model.project.ext.store.XMLValueInfo;
 import org.w3c.dom.Element;
 
@@ -31,9 +32,9 @@ public class FacesConfigAttribute extends AbstractAttribute {
 	protected void loadAttributesInfo(Element element, Properties context) {
 		if(context.get(XMLStoreConstants.KEY_MODEL_OBJECT) == getId()) {
 			XModelObject a = (XModelObject)getId();
-			attributesInfo.put(XMLStoreConstants.ATTR_NAME, new XMLValueInfo(a, "attribute-name"));
-			//TODO how to define required?
+			attributesInfo.put(XMLStoreConstants.ATTR_NAME, new XMLValueInfo(a, XMLScanner.ATTR_ATTRIBUTE_NAME));
 			attributesInfo.put(AbstractComponent.DESCRIPTION, new XMLValueInfo(a, AbstractComponent.DESCRIPTION));
+			//TODO how to define required?
 //			attributesInfo.put(REQUIRED, new XMLValueInfo(a, REQUIRED));
 		} else {
 			super.loadAttributesInfo(element, context);

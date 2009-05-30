@@ -78,4 +78,24 @@ public interface IComponent extends IProposalProcessor {
 	 * @return
 	 */
 	public IAttribute[] getAttributes(KbQuery query, IPageContext context);
+
+	/**
+	 * Facets are a feature of JSF only, they are included into 
+	 * the base interface for the sake of common approach.
+	 * 
+	 * @return all facets of this component
+	 */
+	Facet[] getFacets();
+
+	/**
+	 * @param nameTemplate
+	 * @return facets with names which start with given template.
+	 */
+	Facet[] getFacets(String nameTemplate);
+
+	/**
+	 * @param name
+	 * @return facet by name
+	 */
+	Facet getFacet(String name);
 }

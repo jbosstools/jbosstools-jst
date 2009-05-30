@@ -21,20 +21,4 @@ public interface IFacesConfigTagLibrary extends ITagLibrary {
 	 */
 	IComponent getComponentByType(String type);
 
-	/**
-	 * @return all facets of this component
-	 */
-	Facet[] getFacets();
-
-	/**
-	 * @param nameTemplate
-	 * @return facets with names which start with given template.
-	 */
-	Facet[] getFacets(String nameTemplate);
-
-	/**
-	 * @param name
-	 * @return facet by name
-	 */
-	Facet getFacet(String name);
 }
