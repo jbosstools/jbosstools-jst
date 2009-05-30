@@ -505,7 +505,7 @@ public abstract class BaseTabControl extends Composite implements
 
 	}
 
-	public void tabSelected() {
+	public void update() {
 
 	}
 

@@ -69,10 +69,7 @@ public class StyleComposite extends Composite {
 		tabFolder.addSelectionListener(new SelectionListener() {
 
 			public void widgetSelected(SelectionEvent e) {
-
-				final TabItem tabItem = (TabItem) e.item;
-				if (tabItem.getData() instanceof ICSSTabControl)
-					((ICSSTabControl) tabItem.getData()).tabSelected();
+				updateTab((TabItem) e.item);
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -145,6 +142,8 @@ public class StyleComposite extends Composite {
 		tabComposite.setContent(baseTabControl);
 		tabComposite.setMinSize(baseTabControl.computeSize(SWT.DEFAULT,
 				SWT.DEFAULT));
+		
+		tabFolder.setSelection(DEFAULT_START_TAB);
 
 	}
 
@@ -195,9 +194,17 @@ public class StyleComposite extends Composite {
 
 		tabFolder.setSelection(index);
 		TabItem item = tabFolder.getItem(index);
-		if (item.getData() instanceof ICSSTabControl)
-			((ICSSTabControl) item.getData()).tabSelected();
+		updateTab(item);
 
+	}
+
+	public void updateCurrentTab() {
+		updateTab(tabFolder.getSelection()[0]);
+	}
+
+	private void updateTab(TabItem item) {
+		if (item.getData() instanceof ICSSTabControl)
+			((ICSSTabControl) item.getData()).update();
 	}
 
 }

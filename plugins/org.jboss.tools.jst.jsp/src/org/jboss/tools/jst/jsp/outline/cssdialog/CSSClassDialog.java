@@ -218,6 +218,7 @@ public class CSSClassDialog extends AbstractCSSDialog {
 		clearButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				getStyleComposite().clearStyleComposite();
+				getStyleComposite().updateCurrentTab();
 			}
 		});
 	}
@@ -252,7 +253,7 @@ public class CSSClassDialog extends AbstractCSSDialog {
 		classCombo.setToolTipText(cssModel.getCSSRuleText(selectorLabel));
 		getStyleComposite().setStyleProperties(
 				cssModel.getClassProperties(selectorLabel));
-		getStyleComposite().selectTab(StyleComposite.DEFAULT_START_TAB);
+		getStyleComposite().updateCurrentTab();
 	}
 
 	/**

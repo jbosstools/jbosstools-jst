@@ -45,24 +45,6 @@ public class TabQuickEditControl extends BaseTabControl {
 	}
 
 	/**
-	 * Update data method.
-	 */
-	protected void updateData() {
-
-		Control[] controls = this.getChildren();
-		if (controls != null) {
-			for (int i = 0; i < controls.length; i++) {
-				if (!controls[i].isDisposed()) {
-					controls[i].dispose();
-				}
-			}
-		}
-
-		addContent();
-		this.layout();
-	}
-
-	/**
 	 * Initialize method.s
 	 */
 	private void addContent() {
@@ -81,19 +63,25 @@ public class TabQuickEditControl extends BaseTabControl {
 
 			String value = getStyleAttributes().getAttribute(key);
 			if (value != null && value.length() > 0) {
-				addLabel(this, getLabel(key));
+				addLabel(this, key);
 				createControl(this, key);
 			}
 		}
 	}
 
 	@Override
-	public void tabSelected() {
-		updateData();
-	}
+	public void update() {
+		Control[] controls = this.getChildren();
+		if (controls != null) {
+			for (int i = 0; i < controls.length; i++) {
+				if (!controls[i].isDisposed()) {
+					controls[i].dispose();
+				}
+			}
+		}
 
-	private String getLabel(String key) {
-		return key;
+		addContent();
+		this.layout();
 	}
 
 }

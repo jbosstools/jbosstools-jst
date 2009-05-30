@@ -111,7 +111,7 @@ public class TabPreviewControl extends Composite implements ICSSTabControl {
 		}
 	}
 
-	public void tabSelected() {
+	public void update() {
 		cssModel.updateCSSStyle(selector, styleAttributes);
 		selectClass(selector);
 
