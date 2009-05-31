@@ -14,6 +14,10 @@ import org.jboss.tools.jst.web.kb.internal.KbXMLStoreConstants;
 
 public class TLDAttribute extends AbstractAttribute {
 
+	public TLDAttribute clone() throws CloneNotSupportedException {
+		return (TLDAttribute)super.clone();
+	}
+
 	public String getXMLClass() {
 		return KbXMLStoreConstants.CLS_TLD_LIBRARY;
 	}

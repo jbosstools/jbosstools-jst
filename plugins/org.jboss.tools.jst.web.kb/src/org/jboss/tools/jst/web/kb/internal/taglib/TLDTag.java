@@ -36,13 +36,12 @@ public class TLDTag extends AbstractComponent {
 
 	@Override
 	protected void loadAttributesInfo(Element element, Properties context) {
-		if(context.get(XMLStoreConstants.KEY_MODEL_OBJECT) == getId()) {
+		if(context.get(XMLStoreConstants.KEY_MODEL_OBJECT) == getId() && getId() != null) {
 			XModelObject a = (XModelObject)getId();
 			attributesInfo.put(XMLStoreConstants.ATTR_NAME, new XMLValueInfo(a, XMLStoreConstants.ATTR_NAME));
 			attributesInfo.put(AbstractComponent.DESCRIPTION, new XMLValueInfo(a, AbstractComponent.DESCRIPTION));
 			attributesInfo.put(COMPONENT_CLASS, new XMLValueInfo(a, XMLScanner.ATTR_TAGCLASS));
 			attributesInfo.put(BODY_CONTENT, new XMLValueInfo(a, XMLScanner.ATTR_BODY_CONTENT));
-			//TODO other attributes as in XMLScanner
 		} else {
 			super.loadAttributesInfo(element, context);
 		}

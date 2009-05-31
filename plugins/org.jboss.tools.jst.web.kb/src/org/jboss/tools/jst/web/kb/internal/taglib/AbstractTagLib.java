@@ -326,6 +326,8 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 				c = new TLDTag();
 			} else if(KbXMLStoreConstants.CLS_FACELET_LIBRARY.equals(cls)) {
 				c = new FaceletTag();
+			} else if(KbXMLStoreConstants.CLS_FACESCONFIG_LIBRARY.equals(cls)) {
+				c = new FacesConfigComponent();
 			} else {
 				//consider other cases;
 			}

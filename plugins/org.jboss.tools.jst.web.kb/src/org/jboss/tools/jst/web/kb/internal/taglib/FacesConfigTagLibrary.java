@@ -17,7 +17,6 @@ import java.util.Map;
 import org.jboss.tools.common.model.project.ext.event.Change;
 import org.jboss.tools.jst.web.kb.internal.KbObject;
 import org.jboss.tools.jst.web.kb.internal.KbXMLStoreConstants;
-import org.jboss.tools.jst.web.kb.taglib.Facet;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
 import org.jboss.tools.jst.web.kb.taglib.IFacesConfigTagLibrary;
 
@@ -46,17 +45,9 @@ public class FacesConfigTagLibrary extends AbstractTagLib implements
 
 	public List<Change> merge(KbObject s) {
 		List<Change> changes = super.merge(s);
-		FacesConfigTagLibrary t = (FacesConfigTagLibrary)s;
-
-		Change children = new Change(this, null, null, null);
-		mergeFunctions(t, children);
-		changes = Change.addChange(changes, children);
+//		FacesConfigTagLibrary t = (FacesConfigTagLibrary)s;
 
 		return changes;
-	}
-
-	public void mergeFunctions(FacesConfigTagLibrary c, Change children) {
-		//TODO
 	}
 
 	public String getXMLClass() {

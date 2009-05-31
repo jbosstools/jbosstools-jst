@@ -43,6 +43,7 @@ import org.jboss.tools.jst.web.kb.internal.scanner.LoadedDeclarations;
 import org.jboss.tools.jst.web.kb.internal.taglib.AbstractTagLib;
 import org.jboss.tools.jst.web.kb.internal.taglib.FaceletTagLibrary;
 import org.jboss.tools.jst.web.kb.internal.taglib.TLDLibrary;
+import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibrary;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 import org.w3c.dom.Element;
 
@@ -438,6 +439,7 @@ public class KbProject extends KbObject implements IKbProject {
 			if(fs != null && !fs.isEmpty()) {
 				Element cse = XMLUtilities.createElement(pathElement, "libraries"); //$NON-NLS-1$
 				for (ITagLibrary d: fs) {
+					if(d instanceof ICustomTagLibrary) continue;
 					AbstractTagLib t = (AbstractTagLib)d;
 					t.toXML(cse, context);
 				}
@@ -577,7 +579,7 @@ public class KbProject extends KbObject implements IKbProject {
 		fireChanges(addedLibraries); 
 		
 		libraryDeclarationsRemoved(currentLibraries);
-		//TODO
+
 		try {
 			registerComponentsInDependentProjects(ds, source);
 		} catch (CloneNotSupportedException e) {
@@ -695,7 +697,7 @@ public class KbProject extends KbObject implements IKbProject {
 			postponedChanges.addAll(changes);
 			return;
 		}
-		//TODO
+		//TODO Implement if it will be needed events and listeners. and fire events to them.
 	}
 
 	class LibraryStorage {

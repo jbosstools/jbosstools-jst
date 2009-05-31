@@ -10,9 +10,6 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal.scanner;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
@@ -44,7 +41,9 @@ import org.jboss.tools.jst.web.model.project.ext.store.XMLValueInfo;
  * @author Viacheslav Kabanovich
  */
 public class XMLScanner implements IFileScanner {
-	public static final String ATTR_TAGCLASS ="tagclass"; //$NON-NLS-1$
+	public static final String ATTR_SHORTNAME = "shortname"; //$NON-NLS-1$
+	public static final String ATTR_TAGCLASS = "tagclass"; //$NON-NLS-1$
+	public static final String ATTR_TAG_NAME = "tag-name"; //$NON-NLS-1$
 	public static final String ATTR_BODY_CONTENT = "bodycontent"; //$NON-NLS-1$
 	public static final String ATTR_FACET_NAME = "facet-name"; //$NON-NLS-1$
 	public static final String ATTR_ATTRIBUTE_NAME = "attribute-name"; //$NON-NLS-1$
@@ -76,7 +75,9 @@ public class XMLScanner implements IFileScanner {
 		if(model == null) return false;
 		XModelObject o = EclipseResourceUtil.getObjectByResource(model, f);
 		if(o == null) return false;
-		if(LibraryScanner.isTLDFile(o) || LibraryScanner.isFaceletTaglibFile(o)) return true;
+		if(LibraryScanner.isTLDFile(o) 
+				|| LibraryScanner.isFaceletTaglibFile(o)
+				|| LibraryScanner.isFacesConfigFile(o)) return true;
 		return false;
 	}
 
@@ -91,14 +92,6 @@ public class XMLScanner implements IFileScanner {
 		if(model == null) return null;
 		XModelObject o = EclipseResourceUtil.getObjectByResource(model, f);
 		return parse(o, f.getFullPath(), sp);
-	}
-	
-	static Set<String> INTERNAL_ATTRIBUTES = new HashSet<String>();
-	
-	static {
-		INTERNAL_ATTRIBUTES.add("NAME"); //$NON-NLS-1$
-		INTERNAL_ATTRIBUTES.add("EXTENSION"); //$NON-NLS-1$
-		INTERNAL_ATTRIBUTES.add("#comment"); //$NON-NLS-1$
 	}
 	
 	public LoadedDeclarations parse(XModelObject o, IPath source, IKbProject sp) {
@@ -137,7 +130,7 @@ public class XMLScanner implements IFileScanner {
 		library.setId(o);
 		library.setURI(new XMLValueInfo(o, AbstractTagLib.URI));
 		library.setDisplayName(new XMLValueInfo(o, TLDLibrary.DISPLAY_NAME));
-		library.setShortName(new XMLValueInfo(o, "shortname"));
+		library.setShortName(new XMLValueInfo(o, ATTR_SHORTNAME));
 		String version = o.getAttributeValue(TLDLibrary.VERSION);
 		if(version == null) {
 			if("FileTLD_1_2".equals(o.getModelEntity().getName())) {
@@ -162,8 +155,6 @@ public class XMLScanner implements IFileScanner {
 				tag.setDescription(new XMLValueInfo(t, AbstractComponent.DESCRIPTION));
 				tag.setComponentClass(new XMLValueInfo(t, ATTR_TAGCLASS));
 				tag.setCanHaveBody(new XMLValueInfo(t, ATTR_BODY_CONTENT));
-				//TODO
-//				tag.setComponentType(componentType);
 				
 				XModelObject[] as = t.getChildren();
 				for(XModelObject a: as) {
@@ -197,7 +188,7 @@ public class XMLScanner implements IFileScanner {
 			if(entity.startsWith("FaceletTaglibTag")) {
 				FaceletTag tag = new FaceletTag();
 				tag.setId(t);
-				tag.setName(new XMLValueInfo(t, "tag-name"));
+				tag.setName(new XMLValueInfo(t, ATTR_TAG_NAME));
 				library.addComponent(tag);
 			} else if(entity.startsWith("FaceletTaglibFunction")) {
 				ELFunction f = new ELFunction();
@@ -223,11 +214,11 @@ public class XMLScanner implements IFileScanner {
 			FacesConfigComponent component = new FacesConfigComponent();
 			component.setId(c);
 			//what else can we take for the name? only attribute 'component-type' is available
-			component.setName(new XMLValueInfo(c, "component-type"));
+			component.setName(new XMLValueInfo(c, AbstractComponent.COMPONENT_TYPE));
 			
-			component.setComponentClass(new XMLValueInfo(c, "component-class"));
-			component.setComponentType(c.getAttributeValue("component-type"));
-			component.setDescription(new XMLValueInfo(c, "description"));
+			component.setComponentClass(new XMLValueInfo(c, AbstractComponent.COMPONENT_CLASS));
+			component.setComponentType(new XMLValueInfo(c, AbstractComponent.COMPONENT_TYPE));
+			component.setDescription(new XMLValueInfo(c, AbstractComponent.DESCRIPTION));
 			
 			XModelObject[] as = c.getChildren();
 			for (XModelObject child: as) {
@@ -235,8 +226,7 @@ public class XMLScanner implements IFileScanner {
 				if(entity.startsWith("JSFAttribute")) {
 					FacesConfigAttribute attr = new FacesConfigAttribute();
 					attr.setId(child);
-					attr.setName(new XMLValueInfo(child, ATTR_ATTRIBUTE_NAME));
-					
+					attr.setName(new XMLValueInfo(child, ATTR_ATTRIBUTE_NAME));					
 					component.addAttribute(attr);
 				} else if(entity.startsWith("JSFFacet")) {
 					Facet f = new Facet();

@@ -11,11 +11,11 @@
 package org.jboss.tools.jst.web.kb.internal.taglib;
 
 import java.util.List;
-
 import org.jboss.tools.common.model.project.ext.IValueInfo;
 import org.jboss.tools.common.model.project.ext.event.Change;
 import org.jboss.tools.jst.web.kb.internal.KbObject;
 import org.jboss.tools.jst.web.kb.internal.KbXMLStoreConstants;
+import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 import org.jboss.tools.jst.web.kb.taglib.ITLDLibrary;
 import org.w3c.dom.Element;
 
@@ -63,7 +63,16 @@ public class TLDLibrary extends AbstractTagLib implements ITLDLibrary {
 	}
 
 	public void createDefaultNameSpace() {
+		setDefaultNameSpace(new INameSpace() {
 		
+			public String getURI() {
+				return uri;
+			}
+		
+			public String getPrefix() {
+				return shortName;
+			}
+		});
 	}
 
 	public TLDLibrary clone() throws CloneNotSupportedException {
@@ -72,7 +81,19 @@ public class TLDLibrary extends AbstractTagLib implements ITLDLibrary {
 
 	public List<Change> merge(KbObject s) {
 		List<Change> changes = super.merge(s);
-		//TODO
+		TLDLibrary l = (TLDLibrary)s;
+		if(!stringsEqual(displayName, l.displayName)) {
+			changes = Change.addChange(changes, new Change(this, DISPLAY_NAME, displayName, l.displayName));
+			displayName = l.displayName;
+		}
+		if(!stringsEqual(shortName, l.shortName)) {
+			changes = Change.addChange(changes, new Change(this, SHORT_NAME, shortName, l.shortName));
+			shortName = l.shortName;
+		}
+		if(!stringsEqual(version, l.version)) {
+			changes = Change.addChange(changes, new Change(this, VERSION, version, l.version));
+			version = l.version;
+		}
 		return changes;
 	}
 
@@ -95,7 +116,6 @@ public class TLDLibrary extends AbstractTagLib implements ITLDLibrary {
 		if(version == null && element.hasAttribute(VERSION)) {
 			version = element.getAttribute(VERSION);
 		}
-		//TODO
 	}
 
 }

@@ -152,6 +152,11 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		this.componentType = componentType;
 	}
 
+	public void setComponentType(IValueInfo s) {
+		componentType = s == null ? null : s.getValue();
+		attributesInfo.put(COMPONENT_TYPE, s);
+	}
+
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getDescription()
 	 */
@@ -287,6 +292,18 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		requiredAttributes.remove(attribute.getName());
 	}
 
+	public AbstractComponent clone() throws CloneNotSupportedException {
+		AbstractComponent copy = (AbstractComponent)super.clone();
+		copy.attributes = new HashMap<String, IAttribute>();
+		copy.preferableAttributes = new HashMap<String, IAttribute>();
+		copy.requiredAttributes = new HashMap<String, IAttribute>();
+		IAttribute[] as = getAttributes();
+		for (IAttribute a: as) {
+			copy.addAttribute(((AbstractAttribute)a).clone());
+		}
+		return copy;
+	}
+
 	public List<Change> merge(KbObject s) {
 		List<Change> changes = super.merge(s);
 	
@@ -321,8 +338,8 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 
 	public void mergeAttributes(AbstractComponent c, Change children) {
 		Map<Object,AbstractAttribute> attributeMap = new HashMap<Object, AbstractAttribute>();
-		for (IAttribute a: attributes.values()) attributeMap.put(((KbObject)a).getId(), (AbstractAttribute)a);
-		for (IAttribute a: c.attributes.values()) {
+		for (IAttribute a: getAttributes()) attributeMap.put(((KbObject)a).getId(), (AbstractAttribute)a);
+		for (IAttribute a: c.getAttributes()) {
 			AbstractAttribute loaded = (AbstractAttribute)a;
 			AbstractAttribute current = attributeMap.get(loaded.getId());
 			if(current == null) {
@@ -344,9 +361,6 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		}
 	}
 
-	public AbstractComponent clone() throws CloneNotSupportedException {
-		return (AbstractComponent)super.clone();
-	}
 	public String getXMLName() {
 		return KbXMLStoreConstants.TAG_COMPONENT;
 	}
@@ -358,7 +372,7 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 			element.setAttribute(XMLStoreConstants.ATTR_NAME, name);
 		}
 
-		for (IAttribute c: attributes.values()) {
+		for (IAttribute c: getAttributes()) {
 			((KbObject)c).toXML(element, context);
 		}
 
@@ -375,9 +389,8 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		setDescription(attributesInfo.get(DESCRIPTION));
 		setComponentClass(attributesInfo.get(COMPONENT_CLASS));
 		setCanHaveBody(attributesInfo.get(BODY_CONTENT));
+		setComponentType(attributesInfo.get(COMPONENT_TYPE));
 
-		//TODO
-		//componentType?
 		Element[] cs = XMLUtilities.getChildren(element, KbXMLStoreConstants.TAG_ATTRIBUTE);
 		for (Element e: cs) {
 			String cls = e.getAttribute(XMLStoreConstants.ATTR_CLASS);

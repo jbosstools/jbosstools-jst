@@ -123,6 +123,10 @@ public abstract class AbstractAttribute extends KbObject implements IAttribute {
 		return proposals.toArray(new TextProposal[proposals.size()]);
 	}
 
+	public AbstractAttribute clone() throws CloneNotSupportedException {
+		return (AbstractAttribute)super.clone();
+	}
+
 	public List<Change> merge(KbObject s) {
 		List<Change> changes = super.merge(s);
 		
@@ -160,14 +164,14 @@ public abstract class AbstractAttribute extends KbObject implements IAttribute {
 	public void loadXML(Element element, Properties context) {
 		super.loadXML(element, context);
 
+		setName(attributesInfo.get(XMLStoreConstants.ATTR_NAME));
+		setDescription(attributesInfo.get(AbstractComponent.DESCRIPTION));
+		setRequired(attributesInfo.get(REQUIRED));
+
 		if(name == null && element.hasAttribute(XMLStoreConstants.ATTR_NAME)) {
 			name = element.getAttribute(XMLStoreConstants.ATTR_NAME);
 		}
 
-		setName(attributesInfo.get(XMLStoreConstants.ATTR_NAME));
-		setDescription(attributesInfo.get(AbstractComponent.DESCRIPTION));
-		setRequired(attributesInfo.get(REQUIRED));
-		//TODO
 	}
 
 	@Override
@@ -181,7 +185,7 @@ public abstract class AbstractAttribute extends KbObject implements IAttribute {
 
 	@Override
 	protected void loadAttributesInfo(Element element, Properties context) {
-		if(context.get(XMLStoreConstants.KEY_MODEL_OBJECT) == getId()) {
+		if(context.get(XMLStoreConstants.KEY_MODEL_OBJECT) == getId() && getId() != null) {
 			XModelObject a = (XModelObject)getId();
 			attributesInfo.put(XMLStoreConstants.ATTR_NAME, new XMLValueInfo(a, XMLStoreConstants.ATTR_NAME));
 			attributesInfo.put(AbstractComponent.DESCRIPTION, new XMLValueInfo(a, AbstractComponent.DESCRIPTION));

@@ -10,10 +10,12 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.taglib;
 
+import java.util.List;
 import java.util.Properties;
 
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.project.ext.IValueInfo;
+import org.jboss.tools.common.model.project.ext.event.Change;
 import org.jboss.tools.common.model.project.ext.store.XMLStoreConstants;
 import org.jboss.tools.jst.web.kb.internal.KbObject;
 import org.jboss.tools.jst.web.kb.internal.KbXMLStoreConstants;
@@ -63,6 +65,24 @@ public class Facet extends KbObject {
 		attributesInfo.put(AbstractComponent.DESCRIPTION, s);
 	}
 
+	public Facet clone() throws CloneNotSupportedException {
+		return (Facet)super.clone();
+	}
+
+	public List<Change> merge(KbObject s) {
+		List<Change> changes = super.merge(s);
+		Facet f = (Facet)s;
+		if(!stringsEqual(name, f.name)) {
+			changes = Change.addChange(changes, new Change(this, XMLStoreConstants.ATTR_NAME, name, f.name));
+			name = f.name;
+		}
+		if(!stringsEqual(description, f.description)) {
+			changes = Change.addChange(changes, new Change(this, AbstractComponent.DESCRIPTION, description, f.description));
+			description = f.description;
+		}
+		return changes;
+	}
+
 	public String getXMLName() {
 		return KbXMLStoreConstants.TAG_FACET;
 	}
@@ -99,7 +119,7 @@ public class Facet extends KbObject {
 
 	@Override
 	protected void loadAttributesInfo(Element element, Properties context) {
-		if(context.get(XMLStoreConstants.KEY_MODEL_OBJECT) == getId()) {
+		if(context.get(XMLStoreConstants.KEY_MODEL_OBJECT) == getId() && getId() != null) {
 			XModelObject a = (XModelObject)getId();
 			attributesInfo.put(XMLStoreConstants.ATTR_NAME, new XMLValueInfo(a, XMLScanner.ATTR_FACET_NAME));
 			attributesInfo.put(AbstractComponent.DESCRIPTION, new XMLValueInfo(a, AbstractComponent.DESCRIPTION));

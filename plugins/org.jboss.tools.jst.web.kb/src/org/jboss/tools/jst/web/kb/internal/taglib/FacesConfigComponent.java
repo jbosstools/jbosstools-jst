@@ -38,10 +38,12 @@ public class FacesConfigComponent extends AbstractComponent {
 
 	public Facet[] getFacets() {
 		if(facetArray == null) {
-			if(facets.isEmpty()) {
-				facetArray = EMPTY_FACET_SET;
-			} else {
-				facetArray = facets.values().toArray(new Facet[0]);
+			synchronized (facets) {
+				if (facets.isEmpty()) {
+					facetArray = EMPTY_FACET_SET;
+				} else {
+					facetArray = facets.values().toArray(new Facet[0]);
+				}
 			}
 		}
 		return facetArray;
@@ -49,11 +51,12 @@ public class FacesConfigComponent extends AbstractComponent {
 
 	public Facet[] getFacets(String nameTemplate) {
 		Facet[] fs = getFacets();
-		if(fs == null || fs.length == 0) return EMPTY_FACET_SET;
+		if(fs.length == 0) return EMPTY_FACET_SET;
 		List<Facet> result = new ArrayList<Facet>();
 		for (Facet f: fs) {
 			String name = f.getName();
-			boolean match = false;	//TODO implement
+			//TODO implement better matching name and nameTemplate
+			boolean match = name.startsWith(nameTemplate);
 			if(match) result.add(f);
 		}
 		return result.isEmpty() ? EMPTY_FACET_SET : result.toArray(new Facet[0]);
@@ -61,8 +64,19 @@ public class FacesConfigComponent extends AbstractComponent {
 
 	public void addFacet(Facet f) {
 		adopt((KbObject)f);
-		facets.put(f.getName(), f);
-		facetArray = null;
+		synchronized(facets) {
+			facets.put(f.getName(), f);
+			facetArray = null;
+		}
+	}
+
+	public FacesConfigComponent clone() throws CloneNotSupportedException {
+		FacesConfigComponent copy = new FacesConfigComponent();
+		copy.facets = new HashMap<String, Facet>();
+		for (Facet f: getFacets()) {
+			copy.addFacet(f.clone());
+		}		
+		return copy;
 	}
 
 	public String getXMLClass() {
@@ -82,9 +96,9 @@ public class FacesConfigComponent extends AbstractComponent {
 
 	public void mergeFacets(FacesConfigComponent c, Change children) {
 		Map<Object,Facet> facetMap = new HashMap<Object, Facet>();
-		for (Facet a: facets.values()) facetMap.put(((KbObject)a).getId(), a);
-		for (Facet a: c.facets.values()) {
-			Facet loaded = (Facet)a;
+		for (Facet f: getFacets()) facetMap.put(f.getId(), f);
+		for (Facet f: c.getFacets()) {
+			Facet loaded = f;
 			Facet current = facetMap.get(loaded.getId());
 			if(current == null) {
 				addFacet(loaded);
@@ -95,14 +109,17 @@ public class FacesConfigComponent extends AbstractComponent {
 				if(rc != null) children.addChildren(rc);
 			}
 		}
-		for (Facet a: facetMap.values()) {
-			Facet removed = a;
-			if(facets.get(removed.getName()) == removed) {
+		for (Facet f: facetMap.values()) {
+			Facet removed = f;
+			synchronized (facets) {
+				if(facets.get(removed.getName()) != removed) {
+					continue;
+				}
 				facets.remove(removed.getName());
 				facetArray = null;
-				Change change = new Change(this, null, removed, null);
-				children.addChildren(Change.addChange(null, change));
 			}
+			Change change = new Change(this, null, removed, null);
+			children.addChildren(Change.addChange(null, change));
 		}
 	}
 
@@ -110,7 +127,7 @@ public class FacesConfigComponent extends AbstractComponent {
 		Element element = super.toXML(parent, context);
 
 		for (Facet f: getFacets()) {
-			((KbObject)f).toXML(element, context);
+			f.toXML(element, context);
 		}
 
 		return element;

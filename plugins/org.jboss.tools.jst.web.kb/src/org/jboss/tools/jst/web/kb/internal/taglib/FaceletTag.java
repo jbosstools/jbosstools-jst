@@ -21,4 +21,8 @@ public class FaceletTag extends AbstractComponent {
 		return KbXMLStoreConstants.CLS_FACELET_LIBRARY;
 	}
 
+	public FaceletTag clone() throws CloneNotSupportedException {
+		return (FaceletTag)super.clone();
+	}
+
 }

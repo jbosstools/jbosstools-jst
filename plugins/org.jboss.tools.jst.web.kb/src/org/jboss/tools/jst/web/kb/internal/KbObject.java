@@ -176,7 +176,7 @@ public class KbObject {
 				XModelObject o = (XModelObject)id;
 				XMLStoreHelper.saveModelObject(element, o, XMLStoreConstants.TAG_ID, context);
 			} else {
-				//TODO consider other kinds of id
+				//consider other kinds of id
 			}
 		}
 		XModelObject old = pushModelObject(context);
@@ -204,7 +204,7 @@ public class KbObject {
 			} else if(XMLStoreConstants.CLS_MODEL_OBJECT.equals(cls)) {
 				id = XMLStoreHelper.loadModelObject(e_id, context);
 			} else {
-				//TODO consider other kinds of id
+				//consider other kinds of id
 			}
 		}
 		XModelObject old = pushModelObject(context);

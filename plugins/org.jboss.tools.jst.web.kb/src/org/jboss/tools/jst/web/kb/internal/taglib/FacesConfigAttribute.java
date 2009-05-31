@@ -30,7 +30,7 @@ public class FacesConfigAttribute extends AbstractAttribute {
 	
 	@Override
 	protected void loadAttributesInfo(Element element, Properties context) {
-		if(context.get(XMLStoreConstants.KEY_MODEL_OBJECT) == getId()) {
+		if(context.get(XMLStoreConstants.KEY_MODEL_OBJECT) == getId() && getId() != null) {
 			XModelObject a = (XModelObject)getId();
 			attributesInfo.put(XMLStoreConstants.ATTR_NAME, new XMLValueInfo(a, XMLScanner.ATTR_ATTRIBUTE_NAME));
 			attributesInfo.put(AbstractComponent.DESCRIPTION, new XMLValueInfo(a, AbstractComponent.DESCRIPTION));
