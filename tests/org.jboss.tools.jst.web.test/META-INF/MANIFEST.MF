@@ -6,6 +6,7 @@ Bundle-Version: 2.0.0
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.jboss.tools.jst.web,
+ org.jboss.tools.jst.web.kb,
  org.junit,
  org.jboss.tools.common.test,
  org.eclipse.core.resources,
