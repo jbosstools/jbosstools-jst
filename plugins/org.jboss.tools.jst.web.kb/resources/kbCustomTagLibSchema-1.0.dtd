@@ -12,7 +12,7 @@
 	uri - URI of this tag lib.
 	dafault-prefix - Default prefix.
 -->
-<!ELEMENT tag-lib  (component*, componentExtension?) >
+<!ELEMENT tag-lib (component*, componentExtension?)>
 
 <!ATTLIST schema dafault-prefix CDATA #IMPLIED>
 
@@ -24,12 +24,14 @@
 	closeTag - "true" - Component can have a body.
 	           "false" - Component cannot have a body. Used by default.
 	extended - "true" - Component is relevant only if this component exists in other tag-libs (tld, faclets, ...). Set to "true" by default.
+	description
 -->
-<!ELEMENT component (attribute*) >
+<!ELEMENT component (attribute*)>
 
 <!ATTLIST component name CDATA #REQUIRED>
 <!ATTLIST component closeTag %Boolean; #IMPLIED>
 <!ATTLIST component extended %Boolean; #IMPLIED>
+<!ATTLIST component description CDATA #IMPLIED>
 
 <!--
 	Describes attribute of component.
@@ -38,20 +40,22 @@
 	required - "true" - attribute of element is required. "false" by default.
 	defaultValue - default value of attribute.
 	extended - "true" - Attribute is relevant only if this attribute exists in other tag-libs (tld, faclets, ...). Set to "true" by default.
+	description
 -->
-<!ELEMENT attribute (proposal*) >
+<!ELEMENT attribute (proposal*)>
 
 <!ATTLIST attribute name CDATA #REQUIRED>
 <!ATTLIST attribute required %Boolean; #REQUIRED>
 <!ATTLIST attribute defaultValue CDATA #IMPLIED>
 <!ATTLIST attribute extended %Boolean; #IMPLIED>
+<!ATTLIST attribute description CDATA #IMPLIED>
 
 <!--
 	Describe content assist proposal for value of attribute.
 	Attributes:
 	type - Type of proposal.
 -->
-<!ELEMENT proposal (param*) >
+<!ELEMENT proposal (param*)>
 
 <!ATTLIST proposal type CDATA #REQUIRED>
 
@@ -61,7 +65,7 @@
 	value - Value of param.
 	name - Name of param.
 -->
-<!ELEMENT param >
+<!ELEMENT param ()>
 
 <!ATTLIST param value CDATA #REQUIRED>
 <!ATTLIST param name CDATA #IMPLIED>
