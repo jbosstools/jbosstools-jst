@@ -1,0 +1,923 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tag-lib PUBLIC "-//Red Hat, Inc//DTD Knowledge Base 2.0//EN" "http://anonsvn.jboss.org/repos/jbosstools/trunk/jst/plugins/org.jboss.tools.jst.web.kb/resources/kbCustomTagLibSchema-1.0.dtd">
+<tag-lib defaultPrefix="rich">
+	<customExtension>
+		<attribute name="disableDefault">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="ignoreDupResponses">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="limitToList">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="bypassUpdates">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="ajaxSingle">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="limitToList">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</customExtension>
+	<component name="extendedDataTable">
+		<attribute name="align">
+			<proposal type="enumeration">
+				<param value="left" />
+				<param value="center" />
+				<param value="right" />
+			</proposal>
+		</attribute>
+		<attribute name="frame">
+			<proposal type="enumeration">
+				<param value="void" />
+				<param value="above" />
+				<param value="below" />
+				<param value="hsides" />
+				<param value="lhs" />
+				<param value="rhs" />
+				<param value="vsides" />
+				<param value="box" />
+				<param value="lhs" />
+				<param value="border" />
+			</proposal>
+		</attribute>
+		<attribute name="sortMode">
+			<proposal type="enumeration">
+				<param value="single" />
+				<param value="multi" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="hotKey">
+		<attribute name="checkParent">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="disableInInput">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="disableInInputTypes">
+			<proposal type="enumeration">
+				<param value="buttons" />
+				<param value="texts" />
+				<param value="all" />
+			</proposal>
+		</attribute>
+		<attribute name="timing">
+			<proposal type="enumeration">
+				<param value="immediate" />
+				<param value="onload" />
+				<param value="onregistercall" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="calendar">
+		<attribute name="direction">
+			<proposal type="enumeration">
+				<param value="top-right" />
+				<param value="top-left" />
+				<param value="bottom-right" />
+				<param value="bottom-left" />
+				<param value="auto" />
+			</proposal>
+		</attribute>
+		<attribute name="enableManualInput">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="mode">
+			<proposal type="enumeration">
+				<param value="ajax" />
+				<param value="client" />
+			</proposal>
+		</attribute>
+		<attribute name="showApplyButton">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="showFooter">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="showHeader">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="showInput">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="showWeekDaysBar">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="showWeeksBar">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="column">
+		<attribute name="selfSorted">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="sortOrder">
+			<proposal type="enumeration">
+				<param value="ASCENDING" />
+				<param value="DESCENDING" />
+				<param value="UNSORTED" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="columnGroup">
+		<attribute name="selfSorted">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="sortOrder">
+			<proposal type="enumeration">
+				<param value="ASCENDING" />
+				<param value="DESCENDING" />
+				<param value="UNSORTED" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="columns">
+		<attribute name="end">
+			<proposal type="enumeration">
+				<param value="LTR" />
+				<param value="RTL" />
+			</proposal>
+		</attribute>
+		<attribute name="selfSorted">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="sortOrder">
+			<proposal type="enumeration">
+				<param value="ASCENDING" />
+				<param value="DESCENDING" />
+				<param value="UNSORTED" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="comboBox">
+		<attribute name="align">
+			<proposal type="enumeration">
+				<param value="left" />
+				<param value="center" />
+				<param value="right" />
+				<param value="justify" />
+			</proposal>
+		</attribute>
+		<attribute name="enableManualInput">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="contextMenu">
+		<attribute name="attached">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="submitMode">
+			<proposal type="enumeration">
+				<param value="ajax" />
+				<param value="server" />
+				<param value="none" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="dataGrid">
+		<attribute name="align">
+			<proposal type="enumeration">
+				<param value="left" />
+				<param value="center" />
+				<param value="right" />
+			</proposal>
+		</attribute>
+		<attribute name="frame">
+			<proposal type="enumeration">
+				<param value="void" />
+				<param value="above" />
+				<param value="below" />
+				<param value="hsides" />
+				<param value="lhs" />
+				<param value="rhs" />
+				<param value="vsides" />
+				<param value="box" />
+				<param value="lhs" />
+				<param value="border" />
+			</proposal>
+		</attribute>
+		<attribute name="rules">
+			<proposal type="enumeration">
+				<param value="none" />
+				<param value="groups" />
+				<param value="rows" />
+				<param value="cols" />
+				<param value="all" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="dataTable">
+		<attribute name="align">
+			<proposal type="enumeration">
+				<param value="left" />
+				<param value="center" />
+				<param value="right" />
+				<param value="justify" />
+			</proposal>
+		</attribute>
+		<attribute name="frame">
+			<proposal type="enumeration">
+				<param value="void" />
+				<param value="above" />
+				<param value="below" />
+				<param value="hsides" />
+				<param value="lhs" />
+				<param value="rhs" />
+				<param value="vsides" />
+				<param value="box" />
+				<param value="lhs" />
+				<param value="border" />
+			</proposal>
+		</attribute>
+		<attribute name="rules">
+			<proposal type="enumeration">
+				<param value="none" />
+				<param value="groups" />
+				<param value="rows" />
+				<param value="cols" />
+				<param value="all" />
+			</proposal>
+		</attribute>
+		<attribute name="sortMode">
+			<proposal type="enumeration">
+				<param value="single" />
+				<param value="multi" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="datascroller">
+		<attribute name="align">
+			<proposal type="enumeration">
+				<param value="left" />
+				<param value="center" />
+				<param value="right" />
+			</proposal>
+		</attribute>
+		<attribute name="boundaryControls">
+			<proposal type="enumeration">
+				<param value="show" />
+				<param value="hide" />
+				<param value="auto" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="dropDownMenu">
+		<attribute name="direction">
+			<proposal type="enumeration">
+				<param value="top-right" />
+				<param value="top-left" />
+				<param value="bottom-right" />
+				<param value="bottom-left" />
+				<param value="auto" />
+			</proposal>
+		</attribute>
+		<attribute name="submitMode">
+			<proposal type="enumeration">
+				<param value="ajax" />
+				<param value="server" />
+				<param value="none" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="editor">
+		<attribute name="autoResize">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="useSeamText">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="effect">
+		<attribute name="type">
+			<proposal type="enumeration">
+				<param value="Fade" />
+				<param value="Blind" />
+				<param value="BlindUp" />
+				<param value="Opacity" />
+				<param value="SwitchOff" />
+				<param value="DropOut" />
+				<param value="Highlight" />
+				<param value="Fold" />
+				<param value="Squish" />
+				<param value="Appear" />
+				<param value="BlindDown" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="gmap">
+		<attribute name="showGLargeMapControl">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="showGMapTypeControl">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="showGScaleControl">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="inplaceInput">
+		<attribute name="showControls">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="validator">
+			<proposal type="beanMethodBySignature">
+				<param name="returnType" value="void" />
+				<param name="paramType" value="javax.faces.context.FacesContext" />
+				<param name="paramType" value="javax.faces.component.UIComponent" />
+				<param name="paramType" value="java.lang.Object" />
+			</proposal>
+		</attribute>
+		<attribute name="valueChangeListener">
+			<proposal type="beanMethodBySignature">
+				<param name="returnType" value="void" />
+				<param name="paramType" value="javax.faces.event.ValueChangeEvent" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="inplaceSelect">
+		<attribute name="showControls">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="validator">
+			<proposal type="beanMethodBySignature">
+				<param name="returnType" value="void" />
+				<param name="paramType" value="javax.faces.context.FacesContext" />
+				<param name="paramType" value="javax.faces.component.UIComponent" />
+				<param name="paramType" value="java.lang.Object" />
+			</proposal>
+		</attribute>
+		<attribute name="valueChangeListener">
+			<proposal type="beanMethodBySignature">
+				<param name="returnType" value="void" />
+				<param name="paramType" value="javax.faces.event.ValueChangeEvent" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="inputNumberSlider">
+		<attribute name="orientation">
+			<proposal type="enumeration">
+				<param value="vertical" />
+				<param value="horizontal" />
+			</proposal>
+		</attribute>
+		<attribute name="enableManualInput">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="showBoundaryValues">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="showInput">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="showToolTip">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="inputNumberSpinner">
+		<attribute name="enableManualInput">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="jQuery">
+		<attribute name="query" required="true" />
+		<attribute name="timing">
+			<proposal type="enumeration">
+				<param value="immediate" />
+				<param value="onload" />
+				<param value="onJScall" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="listShuttle">
+		<attribute name="showButtonLabels">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="sourceRequired">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="switchByClick">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="menuGroup">
+		<attribute name="direction">
+			<proposal type="enumeration">
+				<param value="right" />
+				<param value="left" />
+				<param value="auto" />
+				<param value="left-down" />
+				<param value="left-up" />
+				<param value="right-down" />
+				<param value="right-up" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="menuItem">
+		<attribute name="submitMode">
+			<proposal type="enumeration">
+				<param value="ajax" />
+				<param value="server" />
+				<param value="none" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="message">
+		<attribute name="showSummary">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="messages">
+		<attribute name="showDetail">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="showSummary">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="modalPanel">
+		<attribute name="showWhenRendered">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="orderingList">
+		<attribute name="showButtonLabels">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="paint2D">
+		<attribute name="align">
+			<proposal type="enumeration">
+				<param value="bottom" />
+				<param value="middle" />
+				<param value="top" />
+				<param value="left" />
+				<param value="right" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="panelMenu">
+		<attribute name="expandMode">
+			<proposal type="enumeration">
+				<param value="ajax" />
+				<param value="server" />
+				<param value="none" />
+			</proposal>
+		</attribute>
+		<attribute name="expandSingle">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="mode">
+			<proposal type="enumeration">
+				<param value="ajax" />
+				<param value="server" />
+				<param value="node" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="panelMenuGroup">
+		<attribute name="align">
+			<proposal type="enumeration">
+				<param value="left" />
+				<param value="center" />
+				<param value="right" />
+				<param value="justify" />
+			</proposal>
+		</attribute>
+		<attribute name="expandMode">
+			<proposal type="enumeration">
+				<param value="ajax" />
+				<param value="server" />
+				<param value="none" />
+			</proposal>
+		</attribute>
+		<attribute name="expanded">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="panelMenuItem">
+		<attribute name="mode">
+			<proposal type="enumeration">
+				<param value="ajax" />
+				<param value="server" />
+				<param value="node" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="pickList">
+		<attribute name="showButtonsLabel">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="switchByClick">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="progressBar">
+		<attribute name="mode">
+			<proposal type="enumeration">
+				<param value="ajax" />
+				<param value="client" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="recursiveTreeNodesAdaptor">
+		<attribute name="included">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="includedNode">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="includedRoot">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="scrollableDataTable">
+		<attribute name="bypassUpdates">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="hideWhenScrolling">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="sortMode">
+			<proposal type="enumeration">
+				<param value="single" />
+				<param value="multi" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="separator">
+		<attribute name="align">
+			<proposal type="enumeration">
+				<param value="left" />
+				<param value="center" />
+				<param value="right" />
+			</proposal>
+		</attribute>
+		<attribute name="lineType">
+			<proposal type="enumeration">
+				<param value="beveled" />
+				<param value="dotted" />
+				<param value="dashed" />
+				<param value="double" />
+				<param value="solid" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="simpleTogglePanel">
+		<attribute name="opened">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="switchType">
+			<proposal type="enumeration">
+				<param value="client" />
+				<param value="server" />
+				<param value="ajax" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="subTable">
+		<attribute name="selfSorted">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="sortMode">
+			<proposal type="enumeration">
+				<param value="single" />
+				<param value="multi" />
+			</proposal>
+		</attribute>
+		<attribute name="sortOrder">
+			<proposal type="enumeration">
+				<param value="ASCENDING" />
+				<param value="DESCENDING" />
+				<param value="UNSORTED" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="suggestionbox">
+		<attribute name="frame">
+			<proposal type="enumeration">
+				<param value="void" />
+				<param value="above" />
+				<param value="below" />
+				<param value="hsides" />
+				<param value="lhs" />
+				<param value="rhs" />
+				<param value="vsides" />
+				<param value="box" />
+				<param value="lhs" />
+				<param value="border" />
+			</proposal>
+		</attribute>
+		<attribute name="rules">
+			<proposal type="enumeration">
+				<param value="none" />
+				<param value="groups" />
+				<param value="rows" />
+				<param value="cols" />
+				<param value="all" />
+			</proposal>
+		</attribute>
+		<attribute name="usingSuggestObjects">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="width" required="true" />
+	</component>
+	<component name="tab">
+		<attribute name="switchType">
+			<proposal type="enumeration">
+				<param value="client" />
+				<param value="server" />
+				<param value="ajax" />
+				<param value="page" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="tabPanel">
+		<attribute name="headerAlignment">
+			<proposal type="enumeration">
+				<param value="left" />
+				<param value="right" />
+			</proposal>
+		</attribute>
+		<attribute name="switchType">
+			<proposal type="enumeration">
+				<param value="client" />
+				<param value="server" />
+				<param value="ajax" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="togglePanel">
+		<attribute name="switchType">
+			<proposal type="enumeration">
+				<param value="client" />
+				<param value="server" />
+				<param value="ajax" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="toolBar">
+		<attribute name="itemSeparator">
+			<proposal type="enumeration">
+				<param value="none" />
+				<param value="line" />
+				<param value="square" />
+				<param value="disc" />
+				<param value="grid" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="toolBarGroup">
+		<attribute name="itemSeparator">
+			<proposal type="enumeration">
+				<param value="none" />
+				<param value="line" />
+				<param value="square" />
+				<param value="disc" />
+				<param value="grid" />
+			</proposal>
+		</attribute>
+		<attribute name="location">
+			<proposal type="enumeration">
+				<param value="left" />
+				<param value="right" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="toolTip">
+		<attribute name="attached">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="direction">
+			<proposal type="enumeration">
+				<param value="top-right" />
+				<param value="top-left" />
+				<param value="bottom-right" />
+				<param value="bottom-left" />
+				<param value="auto" />
+			</proposal>
+		</attribute>
+		<attribute name="followMouse">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="mode">
+			<proposal type="enumeration">
+				<param value="ajax" />
+				<param value="client" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="tree">
+		<attribute name="ajaxSubmitSelection">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="preserveDataInRequest">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="preserveModel">
+			<proposal type="enumeration">
+				<param value="state" />
+				<param value="request" />
+				<param value="none" />
+			</proposal>
+		</attribute>
+		<attribute name="showConnectingLines">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="switchType">
+			<proposal type="enumeration">
+				<param value="client" />
+				<param value="server" />
+				<param value="ajax" />
+			</proposal>
+		</attribute>
+		<attribute name="toggleOnClick">
+			<proposal type="enumeration">
+				<param value="false" />
+				<param value="true" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="treeNode">
+		<attribute name="ajaxSubmitSelection">
+			<proposal type="enumeration">
+				<param value="inherit" />
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+</tag-lib>

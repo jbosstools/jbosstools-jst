@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tag-lib PUBLIC "-//Red Hat, Inc//DTD Knowledge Base 2.0//EN" "http://anonsvn.jboss.org/repos/jbosstools/trunk/jst/plugins/org.jboss.tools.jst.web.kb/resources/kbCustomTagLibSchema-1.0.dtd">
+<tag-lib defaultPrefix="a4j">
+	<customExtension>
+		<attribute name="ajaxSingle">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="bypassUpdates">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="ignoreDupResponses">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="limitToList">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="selfRendered">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="ajaxRendered">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</customExtension>
+
+	<component name="actionparam">
+		<attribute name="noEscape">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="commandButton">
+		<attribute name="image">
+			<proposal type="file">
+				<param name="extensions" value="%image%" />
+				<param name="pathType" value="absolute" />
+				<param name="pathAddition"
+					value="#{facesContext.externalContext.requestContextPath}" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="commandLink">
+		<attribute name="shape">
+			<proposal type="enumeration">
+				<param value="default" />
+				<param value="rect" />
+				<param value="circle" />
+				<param value="poly" />
+			</proposal>
+		</attribute>
+		<attribute name="value" required="true" />
+	</component>
+	<component body-content="allowed" name="form">
+		<attribute name="ajaxSubmit">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+	<component body-content="allowed" name="htmlCommandLink">
+		<attribute name="shape">
+			<proposal type="enumeration">
+				<param value="default" />
+				<param value="rect" />
+				<param value="circle" />
+				<param value="poly" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="include">
+		<attribute name="keepTransient">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="layout">
+			<proposal type="enumeration">
+				<param value="block" />
+				<param value="inline" />
+				<param value="none" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="keepAlive">
+		<attribute name="ajaxOnly">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="loadStyle">
+		<attribute name="media">
+			<proposal type="enumeration">
+				<param value="all" />
+				<param value="screen" />
+				<param value="print" />
+				<param value="projection" />
+				<param value="braille" />
+				<param value="speech" />
+			</proposal>
+		</attribute>
+		<attribute name="src" required="true" />
+	</component>
+	<component name="log">
+		<attribute name="level">
+			<proposal type="enumeration">
+				<param value="FATAL" />
+				<param value="ERROR" />
+				<param value="WARN" />
+				<param value="INFO" />
+				<param value="DEBUG" />
+				<param value="ALL" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="mediaOutput">
+		<attribute name="align">
+			<proposal type="enumeration">
+				<param value="bottom" />
+				<param value="middle" />
+				<param value="top" />
+			</proposal>
+		</attribute>
+		<attribute name="cacheable">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="session">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="shape">
+			<proposal type="enumeration">
+				<param value="default" />
+				<param value="rect" />
+				<param value="circle" />
+				<param value="poly" />
+			</proposal>
+		</attribute>
+	</component>
+	<component body-content="allowed" name="outputPanel">
+		<attribute name="keepTransient">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="layout">
+			<proposal type="enumeration">
+				<param value="block" />
+				<param value="inline" />
+				<param value="none" />
+			</proposal>
+		</attribute>
+	</component>
+	<component name="queue">
+		<attribute name="sizeExceededBehavior">
+			<proposal type="enumeration">
+				<param value="dropNext" />
+				<param value="dropNew" />
+				<param value="fireNext" />
+				<param value="fireNew" />
+			</proposal>
+		</attribute>
+	</component>
+	<component body-content="allowed" name="region">
+		<attribute name="renderRegionOnly">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+	<component body-content="allowed" name="status">
+		<attribute name="forceId">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="layout">
+			<proposal type="enumeration">
+				<param value="block" />
+				<param value="inline" />
+			</proposal>
+		</attribute>
+	</component>
+</tag-lib>

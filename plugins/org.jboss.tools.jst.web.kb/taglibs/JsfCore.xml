@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tag-lib PUBLIC "-//Red Hat, Inc//DTD Knowledge Base 2.0//EN" "http://anonsvn.jboss.org/repos/jbosstools/trunk/jst/plugins/org.jboss.tools.jst.web.kb/resources/kbCustomTagLibSchema-1.0.dtd">
+<tag-lib defaultPrefix="f">
+	<component closeTag="true" name="convertDateTime">
+		<attribute name="dateStyle" required="false">
+			<proposal type="enumeration">
+				<param value="default" />
+				<param value="short" />
+				<param value="medium" />
+				<param value="long" />
+				<param value="full" />
+			</proposal>
+		</attribute>
+		<attribute name="timeStyle" required="false">
+			<proposal type="enumeration">
+				<param value="default" />
+				<param value="short" />
+				<param value="medium" />
+				<param value="long" />
+				<param value="full" />
+			</proposal>
+		</attribute>
+		<attribute name="type" required="false">
+			<proposal type="enumeration">
+				<param value="date" />
+				<param value="time" />
+				<param value="both" />
+			</proposal>
+		</attribute>
+	</component>
+	<component closeTag="true" name="convertNumber">
+		<attribute name="groupingUsed" required="false">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="integerOnly" required="false">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="type" required="false">
+			<proposal type="enumeration">
+				<param value="number" />
+				<param value="currency" />
+				<param value="percentage" />
+			</proposal>
+		</attribute>
+	</component>
+
+	<component closeTag="true" name="selectItem">
+		<attribute name="itemDisabled" required="false">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+</tag-lib>

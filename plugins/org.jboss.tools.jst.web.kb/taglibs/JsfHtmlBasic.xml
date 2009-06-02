@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tag-lib PUBLIC "-//Red Hat, Inc//DTD Knowledge Base 2.0//EN" "http://anonsvn.jboss.org/repos/jbosstools/trunk/jst/plugins/org.jboss.tools.jst.web.kb/resources/kbCustomTagLibSchema-1.0.dtd">
+<tag-lib defaultPrefix="h">
+	<component closeTag="true" name="commandButton">
+		<attribute name="action" required="true" />
+		<attribute name="value" required="true" />
+		<attribute name="image">
+			<proposal type="file">
+				<param name="extensions" value="%image%" />
+				<param name="pathType" value="absolute" />
+				<param name="pathAddition"
+					value="#{facesContext.externalContext.requestContextPath}" />
+			</proposal>
+		</attribute>
+		<attribute name="type" required="false">
+			<proposal type="enumeration">
+				<param value="submit" />
+				<param value="reset" />
+			</proposal>
+		</attribute>
+	</component>
+
+	<component closeTag="true" name="commandLink">
+		<attribute name="action" required="true" />
+		<attribute name="value" required="true" />
+		<attribute name="shape">
+			<proposal type="enumeration">
+				<param value="default" />
+				<param value="rect" />
+				<param value="circle" />
+				<param value="poly" />
+			</proposal>
+		</attribute>
+	</component>
+
+	<component name="dataTable">
+		<attribute name="frame">
+			<proposal type="enumeration">
+				<param value="none" />
+				<param value="above" />
+				<param value="below" />
+				<param value="hsides" />
+				<param value="vsides" />
+				<param value="lhs" />
+				<param value="rhs" />
+				<param value="box" />
+				<param value="border" />
+			</proposal>
+		</attribute>
+		<attribute name="rules">
+			<proposal type="enumeration">
+				<param value="none" />
+				<param value="groups" />
+				<param value="rows" />
+				<param value="cols" />
+				<param value="all" />
+			</proposal>
+		</attribute>
+	</component>
+
+	<component closeTag="true" name="graphicImage">
+		<attribute name="url">
+			<proposal type="file">
+				<param name="extensions" value="%image%" />
+			</proposal>
+		</attribute>
+		<attribute name="value" required="true">
+			<proposal type="file">
+				<param name="extensions" value="%image%" />
+			</proposal>
+		</attribute>
+		<attribute name="ismap">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+
+	<component closeTag="true" name="inputHidden">
+		<attribute name="value" required="true" />
+	</component>
+
+	<component closeTag="true" name="inputSecret">
+		<attribute name="value" required="true" />
+		<attribute name="redisplay">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+
+	<component closeTag="true" name="inputText">
+		<attribute name="value" required="true" />
+	</component>
+
+	<component closeTag="true" name="inputTextarea">
+		<attribute name="value" required="true" />
+	</component>
+
+	<component closeTag="true" name="message">
+		<attribute name="showDetail">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="showSummary">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="tooltip">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+
+	<component closeTag="true" name="messages">
+		<attribute name="globalOnly">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="showDetail">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="showSummary">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="tooltip">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="layout">
+			<proposal type="enumeration">
+				<param value="horizontal" />
+				<param value="vertical" />
+			</proposal>
+		</attribute>
+	</component>
+
+	<component closeTag="true" name="outputFormat">
+		<attribute name="value" required="true" />
+	</component>
+
+	<component closeTag="true" name="outputLabel">
+		<attribute name="value" required="true" />
+	</component>
+
+	<component name="outputLink">
+		<attribute name="shape">
+			<proposal type="enumeration">
+				<param value="default" />
+				<param value="rect" />
+				<param value="circle" />
+				<param value="poly" />
+			</proposal>
+		</attribute>
+	</component>
+
+	<component closeTag="true" name="outputText">
+		<attribute name="value" required="true" />
+	</component>
+
+	<component name="panelGrid">
+		<attribute name="frame">
+			<proposal type="enumeration">
+				<param value="none" />
+				<param value="above" />
+				<param value="below" />
+				<param value="hsides" />
+				<param value="vsides" />
+				<param value="lhs" />
+				<param value="rhs" />
+				<param value="box" />
+				<param value="border" />
+			</proposal>
+		</attribute>
+		<attribute name="rules">
+			<proposal type="enumeration">
+				<param value="none" />
+				<param value="groups" />
+				<param value="rows" />
+				<param value="cols" />
+				<param value="all" />
+			</proposal>
+		</attribute>
+	</component>
+
+	<component name="panelGroup">
+		<attribute name="layout">
+			<proposal type="enumeration">
+				<param value="horizontal" />
+				<param value="vertical" />
+			</proposal>
+		</attribute>
+	</component>
+
+	<component closeTag="true" name="selectBooleanCheckbox">
+		<attribute name="value" required="true" />
+	</component>
+
+	<component name="selectManyCheckbox">
+		<attribute name="value" required="true" />
+		<attribute name="layout">
+			<proposal type="enumeration">
+				<param value="pageDirection" />
+				<param value="lineDirection" />
+			</proposal>
+		</attribute>
+	</component>
+
+	<component name="selectManyListbox">
+		<attribute name="value" required="true" />
+	</component>
+
+	<component name="selectManyMenu">
+		<attribute name="value" required="true" />
+	</component>
+
+	<component name="selectOneListbox">
+		<attribute name="value" required="true" />
+	</component>
+
+	<component name="selectOneMenu">
+		<attribute name="value" required="true" />
+	</component>
+
+	<component name="selectOneRadio">
+		<attribute name="value" required="true" />
+		<attribute name="layout">
+			<proposal type="enumeration">
+				<param value="pageDirection" />
+				<param value="lineDirection" />
+			</proposal>
+		</attribute>
+	</component>
+</tag-lib>
