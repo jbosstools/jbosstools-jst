@@ -1,0 +1,71 @@
+<!--
+     <!DOCTYPE kb-custom-tag-lib PUBLIC
+       "-//Red Hat, Inc//DTD Knowledge Base 2.0//EN"
+       "http://www.redhat.com/dtds/kbCustomTagLibSchema-1.0.dtd">
+-->
+
+<!ENTITY % Boolean "(true|false)">
+
+<!--
+	tag-lib is a root element. May contain component
+	Attributes:
+	uri - URI of this tag lib.
+	dafault-prefix - Default prefix.
+-->
+<!ELEMENT tag-lib  (component*, componentExtension?) >
+
+<!ATTLIST tag-lib uri CDATA #REQUIRED>
+<!ATTLIST schema dafault-prefix CDATA #IMPLIED>
+
+<!--
+	component describes a component.
+	component can contain attributes.
+	Attributes:
+	name - name of component
+	closeTag - "true" - Component can have a body.
+	           "false" - Component cannot have a body. Used by default.
+-->
+<!ELEMENT component (attribute*) >
+
+<!ATTLIST component name CDATA #REQUIRED>
+<!ATTLIST component closeTag %Boolean #IMPLIED>
+
+<!--
+	Describes attribute of component.
+	Attributes:
+	name - Name of attribute type.
+	required - "true" - attribute of element is required. "false" by default.
+	defaultValue - default value of attribute.
+-->
+<!ELEMENT attribute (proposal*) >
+
+<!ATTLIST attribute name CDATA #REQUIRED>
+<!ATTLIST attribute required %Boolean #REQUIRED>
+<!ATTLIST attribute defaultValue CDATA #IMPLIED>
+
+<!--
+	Describe content assist proposal for value of attribute.
+	Attributes:
+	type - Type of proposal.
+-->
+<!ELEMENT proposal (param*) >
+
+<!ATTLIST proposal type CDATA #REQUIRED>
+
+<!--
+	Describes parameter of proposal.
+	Attributes:
+	value - Value of param.
+	name - Name of param.
+-->
+<!ELEMENT param >
+
+<!ATTLIST param value CDATA #REQUIRED>
+<!ATTLIST param name CDATA #IMPLIED>
+
+<!--
+	component extension describes common attributes with additional meta information
+	for component attributes in case these attributes are present in other types of tag libs.
+	For example this element could add proposals for every "rendered" attributes for any tag lib.
+-->
+<!ELEMENT componentExtension (attribute*) >
