@@ -264,6 +264,8 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 			}
 		} else {
 			for (int i = 0; i < components.length; i++) {
+				if (components[i] == null)
+					continue;
 				TextProposal[] componentProposals  = components[i].getProposals(query, context);
 				for (int j = 0; j < componentProposals.length; j++) {
 					proposals.add(componentProposals[j]);
