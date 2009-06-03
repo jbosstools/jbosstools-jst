@@ -39,11 +39,14 @@ import org.jboss.tools.jst.web.kb.internal.JspContextImpl;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 import org.jboss.tools.jst.web.kb.taglib.TagLibriryManager;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 
-	/*
+	/**
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.jsp.contentassist.XmlContentAssistProcessor#createContext()
 	 */
@@ -65,6 +68,11 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 		return context;
 	}
 
+	/**
+	 * Collects the namespaces over the JSP-page and sets them up to the context specified.
+	 * 
+	 * @param context
+	 */
 	protected void setNameSpaces(JspContextImpl context) {
 		IStructuredModel sModel = StructuredModelManager
 									.getModelManager()
@@ -114,9 +122,14 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 	}
 
 	private static final ITagLibrary[] EMPTY_LIBRARIES = new ITagLibrary[0];
-	/**
-	*/
 	
+	/**
+	 * Returns the Tag Libraries for the namespaces collected in the context.
+	 * Important: The context must be created using createContext() method before using this method.
+	 * 
+	 * @param context The context object instance
+	 * @return
+	 */
 	protected ITagLibrary[] getTagLibraries(IPageContext context) {
 		Map<String, INameSpace> nameSpaces =  context.getNameSpaces(getOffset());
 		if (nameSpaces == null || nameSpaces.isEmpty())
@@ -135,60 +148,233 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 				(ITagLibrary[])tagLibraries.toArray(new ITagLibrary[tagLibraries.size()]));
 	}
 	
+	/**
+	 * Returns the resource bundles  
+	 * 
+	 * @return
+	 */
 	protected IResourceBundle[] getResourceBundles() {
 		// TODO
 		return null;
 	}
 	
+	/**
+	 * Returns the <code>org.jboss.tools.common.el.core.resolver.ELContext</code> instance
+	 * 
+	 * @return
+	 */
 	@Override
 	protected IPageContext getContext() {
 		return (IPageContext)super.getContext();
 	}
+
+	/**
+	 * Returns URI string for the prefix specified using the namespaces collected for 
+	 * the {@link IPageContext} context.
+	 * Important: The context must be created using createContext() method before using this method.
+	 * 
+	 * @param prefix
+	 * @return
+	 */
+	@Override
+	protected String getUri(String prefix) {
+		if (prefix == null || prefix.length() == 0)
+			return null;
+		
+		Map<String, INameSpace> nameSpaces = getContext().getNameSpaces(getOffset());
+		if (nameSpaces == null || nameSpaces.isEmpty())
+			return null;
+		
+		for (INameSpace nameSpace : nameSpaces.values()) {
+			if (prefix.equals(nameSpace.getPrefix())) {
+				return nameSpace.getURI();
+			}
+		}
+		return null;
+	}
+
+	/*
+	 * Checks if the specified attribute exists 
+	 * 
+	 * @param attrName Name of attribute to check
+	 */
+	private boolean isExistingAttribute(String attrName) {
+		IStructuredModel sModel = StructuredModelManager.getModelManager()
+				.getExistingModelForRead(getDocument());
+		try {
+			if (sModel == null)
+				return false;
+
+			Document xmlDocument = (sModel instanceof IDOMModel) ? ((IDOMModel) sModel)
+					.getDocument()
+					: null;
+
+			if (xmlDocument == null)
+				return false;
+
+			Node n = findNodeForOffset(xmlDocument, getOffset());
+			if (n == null)
+				return false;
+
+			// Find the first parent tag
+			if (!(n instanceof Element)) {
+				if (n instanceof Attr) {
+					n = ((Attr) n).getOwnerElement();
+				} else {
+					return false;
+				}
+			}
+			
+			if (n == null)
+				return false;
+
+			return (((Element)n).getAttribute(attrName) != null);
+		} finally {
+			if (sModel != null) {
+				sModel.releaseFromRead();
+			}
+		}
+
+	}
+
+	/**
+	 * Calculates and adds the attribute name proposals to the Content Assist Request object
+	 * 
+	 * @param contentAssistRequest Content Assist Request object
+	 * @param childPosition the 
+	 */
 
 	@Override
 	protected void addTagNameProposals(
 			ContentAssistRequest contentAssistRequest, int childPosition) {
 		// TODO Auto-generated method stub
 		System.out.println("JspContentAssistProcessor: addTagNameProposals() invoked");
-		String matchString = contentAssistRequest.getMatchString();
-		String query = matchString;
-		if (query == null)
-			query = "";
-		if (query.indexOf(KbQuery.PREFIX_SEPARATOR) > -1) {
-			query = matchString.substring(query.indexOf(KbQuery.PREFIX_SEPARATOR) + 1);
-		}
-		String stringQuery = "<" + matchString;
+		try {
+			String matchString = contentAssistRequest.getMatchString();
+			String query = matchString;
+			if (query == null)
+				query = "";
+			String stringQuery = "<" + matchString;
+					
+			KbQuery kbQuery = createKbQuery(Type.TAG_NAME, query, stringQuery);
+			TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext());
+			
+			for (int i = 0; proposals != null && i < proposals.length; i++) {
+				TextProposal textProposal = proposals[i];
 				
-		KbQuery kbQuery = createKbQuery(Type.TAG_NAME, query, stringQuery);
-		TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext());
-		
-		for (int i = 0; proposals != null && i < proposals.length; i++) {
-			TextProposal textProposal = proposals[i];
-			System.out.println("Tag Name proposal [" + (i + 1) + "/" + proposals.length + "]: " + textProposal.getReplacementString());
-			
-			String replacementString = textProposal.getReplacementString() + ">";
-			
-			int replacementOffset = contentAssistRequest.getReplacementBeginPosition();
-			int replacementLength = contentAssistRequest.getReplacementLength();
-			int cursorPosition = getCursorPositionForProposedText(replacementString);
-			Image image = textProposal.getImage();
-			String displayString = textProposal.getLabel();
-			IContextInformation contextInformation = null;
-			String additionalProposalInfo = textProposal.getContextInfo();
-			int relevance = textProposal.getRelevance() + 10000;
-			
-			
-//			cursorAdjustment = proposedText.length() +
-							// 1;
-							// proposedText += "></" +
-							// getRequiredName(parent, elementDecl) + ">";
-							// //$NON-NLS-2$//$NON-NLS-1$
-			
-			
-			CustomCompletionProposal proposal = new CustomCompletionProposal(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, contextInformation, additionalProposalInfo, relevance);
-			contentAssistRequest.addProposal(proposal);
+				System.out.println("Tag Name proposal [" + (i + 1) + "/" + proposals.length + "]: " + textProposal.getReplacementString());
+				
+				String replacementString = textProposal.getReplacementString() + ">";
+				if (!replacementString.endsWith("/>")) {
+					replacementString += "</" + textProposal.getLabel() + ">";
+				}
+				
+				int replacementOffset = contentAssistRequest.getReplacementBeginPosition();
+				int replacementLength = contentAssistRequest.getReplacementLength();
+				int cursorPosition = getCursorPositionForProposedText(replacementString);
+				Image image = textProposal.getImage();
+				String displayString = textProposal.getLabel();
+				IContextInformation contextInformation = null;
+				String additionalProposalInfo = textProposal.getContextInfo();
+				int relevance = textProposal.getRelevance() + 10000;
+				
+				
+				CustomCompletionProposal proposal = new CustomCompletionProposal(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, contextInformation, additionalProposalInfo, relevance);
+				contentAssistRequest.addProposal(proposal);
+			}
+		} finally {
+			System.out.println("JspContentAssistProcessor: addTagNameProposals() exited");
 		}
 		return;
+	}
+	
+	/**
+	 * Calculates and adds the attribute name proposals to the Content Assist Request object
+	 * 
+	 * @param contentAssistRequest Content Assist Request object
+	 * @param childPosition the 
+	 */
+	protected void addAttributeNameProposals(ContentAssistRequest contentAssistRequest) {
+		System.out.println("JspContentAssistProcessor: addAttributeNameProposals() invoked");
+		try {
+			String matchString = contentAssistRequest.getMatchString();
+			String query = matchString;
+			if (query == null)
+				query = "";
+			String stringQuery = matchString;
+					
+			KbQuery kbQuery = createKbQuery(Type.ATTRIBUTE_NAME, query, stringQuery);
+			TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext());
+			
+			for (int i = 0; proposals != null && i < proposals.length; i++) {
+				TextProposal textProposal = proposals[i];
+				
+				System.out.println("Tag Attribute proposal [" + (i + 1) + "/" + proposals.length + "]: " + textProposal.getReplacementString());
+				
+				if (isExistingAttribute(textProposal.getLabel())) 
+					continue;
+				
+				String replacementString = textProposal.getReplacementString() + "=\"\"";
+				
+				int replacementOffset = contentAssistRequest.getReplacementBeginPosition();
+				int replacementLength = contentAssistRequest.getReplacementLength();
+				int cursorPosition = getCursorPositionForProposedText(replacementString);
+				Image image = textProposal.getImage();
+				String displayString = textProposal.getLabel();
+				IContextInformation contextInformation = null;
+				String additionalProposalInfo = textProposal.getContextInfo();
+				int relevance = textProposal.getRelevance() + 10000;
+				
+				
+				CustomCompletionProposal proposal = new CustomCompletionProposal(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, contextInformation, additionalProposalInfo, relevance);
+				contentAssistRequest.addProposal(proposal);
+			}
+		} finally {
+			System.out.println("JspContentAssistProcessor: addAttributeNameProposals() exited");
+		}
+	}
+
+	/**
+	 * Calculates and adds the attribute value proposals to the Content Assist Request object
+	 */
+	protected void addAttributeValueProposals(ContentAssistRequest contentAssistRequest) {
+		System.out.println("JspContentAssistProcessor: addAttributeValueProposals() invoked");
+		try {
+			String matchString = contentAssistRequest.getMatchString();
+			String query = matchString;
+			if (query == null)
+				query = "";
+			String stringQuery = matchString;
+					
+			KbQuery kbQuery = createKbQuery(Type.ATTRIBUTE_VALUE, query, stringQuery);
+			TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext());
+			
+			for (int i = 0; proposals != null && i < proposals.length; i++) {
+				TextProposal textProposal = proposals[i];
+				
+				System.out.println("Tag Attribute Value proposal [" + (i + 1) + "/" + proposals.length + "]: " + textProposal.getReplacementString());
+				
+				if (isExistingAttribute(textProposal.getLabel())) 
+					continue;
+				
+				String replacementString = textProposal.getReplacementString() + "=\"\"";
+				
+				int replacementOffset = contentAssistRequest.getReplacementBeginPosition();
+				int replacementLength = contentAssistRequest.getReplacementLength();
+				int cursorPosition = getCursorPositionForProposedText(replacementString);
+				Image image = textProposal.getImage();
+				String displayString = textProposal.getLabel();
+				IContextInformation contextInformation = null;
+				String additionalProposalInfo = textProposal.getContextInfo();
+				int relevance = textProposal.getRelevance() + 10000;
+				
+				
+				CustomCompletionProposal proposal = new CustomCompletionProposal(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, contextInformation, additionalProposalInfo, relevance);
+				contentAssistRequest.addProposal(proposal);
+			}
+		} finally {
+			System.out.println("JspContentAssistProcessor: addAttributeValueProposals() exited");
+		}
 	}
 
 }

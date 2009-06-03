@@ -144,18 +144,19 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 
 	
 
-	/*
+	/**
 	 * Calculates and adds the attribute name proposals to the Content Assist Request object
 	 */
 	protected void addAttributeNameProposals(ContentAssistRequest contentAssistRequest) {
 		System.out.println("AbstractXMLContentAssistProcessor: addAttributeNameProposals() invoked");
 	}
 
-	/*
+	/**
 	 * Calculates and adds the attribute value proposals to the Content Assist Request object
 	 */
 	protected void addAttributeValueProposals(ContentAssistRequest contentAssistRequest) {
-
+		System.out.println("AbstractXMLContentAssistProcessor: addAttributeValueProposals() invoked");
+/*
 		IDOMNode node = (IDOMNode) contentAssistRequest.getNode();
 
 		// Find the attribute region and name for which this position should
@@ -203,6 +204,7 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 		else {
 			setErrorMessage(UNKNOWN_CONTEXT);
 		}
+		*/
 	}
 	
 	/*
@@ -320,10 +322,6 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	 * @return
 	 */
 	
-	void a() {}
-	///
-	
-
 	/**
 	 * Returns the <code>org.jboss.tools.jst.web.kb.KbQuery</code> instance
 	 * 
@@ -446,28 +444,6 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 			if (sModel != null) {
 				sModel.releaseFromRead();
 			}
-		}
-	}
-	
-	/**
-	 * For internal use only!
-	 * Returns the parent Element for the Attribute or TEXT nodes
-	 * 
-	 * @param xmlDocument
-	 * @return
-	 */
-	protected Node _getParentElement(Document xmlDocument) {
-		Node n = findNodeForOffset(xmlDocument, getOffset());
-		if (n == null)
-			return null;
-
-		if (n instanceof Element)
-			return n;
-		
-		if (n instanceof Attr) {
-			return ((Attr) n).getOwnerElement();
-		} else {
-			return n.getParentNode();
 		}
 	}
 	

@@ -16,8 +16,10 @@ import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.ELContextImpl;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.jst.web.kb.IFaceletPageContext;
+import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
+import org.jboss.tools.jst.web.kb.internal.JspContextImpl;
 
 public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor {
 
@@ -66,7 +68,12 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 		return kbQuery;
 	}
 
-	@Override
+	/**
+	 * Returns URI string for the prefix specified using the namespaces collected for 
+	 * the {@link IPageContext} context.
+	 * 
+	 * 	@Override org.jboss.tools.jst.jsp.contentassist.AbstractXMLContentAssistProcessor#getUri(String)
+	 */
 	protected String getUri(String prefix) {
 		return null;
 	}
