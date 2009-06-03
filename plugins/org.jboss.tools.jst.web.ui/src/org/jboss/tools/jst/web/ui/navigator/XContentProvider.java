@@ -67,7 +67,7 @@ public class XContentProvider implements ITreeContentProvider {
 			}
 			return getChildren(o);
 		}
-		return null;
+		return new Object[0];
 	}
 
 	public Object getParent(Object element) {

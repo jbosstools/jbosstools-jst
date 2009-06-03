@@ -34,7 +34,7 @@ public class XProjectContentProvider extends XContentProvider {
 			}
 			IProject f = (IProject)parentElement;
 			IModelNature n = EclipseResourceUtil.getModelNature(f);
-			if(n == null) return null;
+			if(n == null) return new Object[0];
 			XModelObject o = EclipseResourceUtil.getObjectByResource(f);
 			if(o == null) o = EclipseResourceUtil.createObjectForResource(f);
 			XFilteredTree filteredTree = getFilteredTree(o);
@@ -44,9 +44,9 @@ public class XProjectContentProvider extends XContentProvider {
 			if(filteredTree != null) {
 				return new Object[]{filteredTree.getRoot()};
 			}
-			return null;
+			return new Object[0];
 		}
-		return null;
+		return new Object[0];
 	}
 
 	public Object getParent(Object element) {
