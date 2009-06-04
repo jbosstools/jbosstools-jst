@@ -12,7 +12,7 @@
 -->
 <!ELEMENT tag-lib (component*, componentExtension?)>
 
-<!ATTLIST schema dafault-prefix CDATA #IMPLIED>
+<!ATTLIST tag-lib dafaultPrefix CDATA #IMPLIED>
 
 <!--
 	component describes a component.

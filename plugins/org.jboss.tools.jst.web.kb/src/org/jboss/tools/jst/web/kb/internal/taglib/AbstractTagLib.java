@@ -164,10 +164,20 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		this.components = components;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.KbObject#getSourcePath()
+	 */
+	@Override
 	public IPath getSourcePath() {
 		return source;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.KbObject#setSourcePath(org.eclipse.core.runtime.IPath)
+	 */
+	@Override
 	public void setSourcePath(IPath source) {
 		this.source = source;
 	}
@@ -275,6 +285,11 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		return proposals.toArray(new TextProposal[proposals.size()]);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.KbObject#clone()
+	 */
+	@Override
 	public AbstractTagLib clone() throws CloneNotSupportedException {
 		AbstractTagLib t = (AbstractTagLib)super.clone();
 		t.components = new HashMap<String, IComponent>();
@@ -285,16 +300,31 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		return t;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.KbObject#merge(org.jboss.tools.jst.web.kb.internal.KbObject)
+	 */
+	@Override
 	public List<Change> merge(KbObject s) {
 		List<Change> changes = super.merge(s);
 		//TODO
 		return changes;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.KbObject#getXMLName()
+	 */
+	@Override
 	public String getXMLName() {
 		return KbXMLStoreConstants.TAG_LIBRARY;
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.KbObject#toXML(org.w3c.dom.Element, java.util.Properties)
+	 */
+	@Override
 	public Element toXML(Element parent, Properties context) {
 		Element element = super.toXML(parent, context);
 
@@ -313,6 +343,11 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	protected void saveAttributeValues(Element element) {
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.KbObject#loadXML(org.w3c.dom.Element, java.util.Properties)
+	 */
+	@Override
 	public void loadXML(Element element, Properties context) {
 		super.loadXML(element, context);
 

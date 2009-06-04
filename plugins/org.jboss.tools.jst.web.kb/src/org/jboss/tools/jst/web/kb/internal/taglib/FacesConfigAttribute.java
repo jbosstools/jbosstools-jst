@@ -24,10 +24,19 @@ import org.w3c.dom.Element;
  */
 public class FacesConfigAttribute extends AbstractAttribute {
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.KbObject#getXMLClass()
+	 */
+	@Override
 	public String getXMLClass() {
 		return KbXMLStoreConstants.CLS_FACESCONFIG_LIBRARY;
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.taglib.AbstractAttribute#loadAttributesInfo(org.w3c.dom.Element, java.util.Properties)
+	 */
 	@Override
 	protected void loadAttributesInfo(Element element, Properties context) {
 		if(context.get(XMLStoreConstants.KEY_MODEL_OBJECT) == getId() && getId() != null) {
@@ -40,5 +49,4 @@ public class FacesConfigAttribute extends AbstractAttribute {
 			super.loadAttributesInfo(element, context);
 		}
 	}
-
 }

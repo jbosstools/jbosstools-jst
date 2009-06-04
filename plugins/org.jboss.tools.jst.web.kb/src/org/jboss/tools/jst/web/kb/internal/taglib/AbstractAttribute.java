@@ -123,10 +123,20 @@ public abstract class AbstractAttribute extends KbObject implements IAttribute {
 		return proposals.toArray(new TextProposal[proposals.size()]);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.KbObject#clone()
+	 */
+	@Override
 	public AbstractAttribute clone() throws CloneNotSupportedException {
 		return (AbstractAttribute)super.clone();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.KbObject#merge(org.jboss.tools.jst.web.kb.internal.KbObject)
+	 */
+	@Override
 	public List<Change> merge(KbObject s) {
 		List<Change> changes = super.merge(s);
 		
@@ -147,10 +157,20 @@ public abstract class AbstractAttribute extends KbObject implements IAttribute {
 		return changes;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.KbObject#getXMLName()
+	 */
+	@Override
 	public String getXMLName() {
 		return KbXMLStoreConstants.TAG_ATTRIBUTE;
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.KbObject#toXML(org.w3c.dom.Element, java.util.Properties)
+	 */
+	@Override
 	public Element toXML(Element parent, Properties context) {
 		Element element = super.toXML(parent, context);
 		
@@ -161,6 +181,11 @@ public abstract class AbstractAttribute extends KbObject implements IAttribute {
 		return element;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.KbObject#loadXML(org.w3c.dom.Element, java.util.Properties)
+	 */
+	@Override
 	public void loadXML(Element element, Properties context) {
 		super.loadXML(element, context);
 
@@ -171,9 +196,12 @@ public abstract class AbstractAttribute extends KbObject implements IAttribute {
 		if(name == null && element.hasAttribute(XMLStoreConstants.ATTR_NAME)) {
 			name = element.getAttribute(XMLStoreConstants.ATTR_NAME);
 		}
-
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.KbObject#saveAttributesInfo(org.w3c.dom.Element, java.util.Properties)
+	 */
 	@Override
 	protected void saveAttributesInfo(Element element, Properties context) {
 		if(context.get(XMLStoreConstants.KEY_MODEL_OBJECT) == getId()) {
@@ -183,6 +211,10 @@ public abstract class AbstractAttribute extends KbObject implements IAttribute {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.KbObject#loadAttributesInfo(org.w3c.dom.Element, java.util.Properties)
+	 */
 	@Override
 	protected void loadAttributesInfo(Element element, Properties context) {
 		if(context.get(XMLStoreConstants.KEY_MODEL_OBJECT) == getId() && getId() != null) {
@@ -194,5 +226,4 @@ public abstract class AbstractAttribute extends KbObject implements IAttribute {
 			super.loadAttributesInfo(element, context);
 		}
 	}
-
 }

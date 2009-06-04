@@ -30,12 +30,22 @@ public class FacesConfigComponent extends AbstractComponent {
 	Map<String,Facet> facets = new HashMap<String, Facet>();
 	Facet[] facetArray = EMPTY_FACET_SET;
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.taglib.AbstractComponent#getFacet(java.lang.String)
+	 */
+	@Override
 	public Facet getFacet(String name) {
 		return facets.get(name);
 	}
 	
 	public static final Facet[] EMPTY_FACET_SET = new Facet[0];
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.taglib.AbstractComponent#getFacets()
+	 */
+	@Override
 	public Facet[] getFacets() {
 		if(facetArray == null) {
 			synchronized (facets) {
@@ -49,6 +59,11 @@ public class FacesConfigComponent extends AbstractComponent {
 		return facetArray;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.taglib.AbstractComponent#getFacets(java.lang.String)
+	 */
+	@Override
 	public Facet[] getFacets(String nameTemplate) {
 		Facet[] fs = getFacets();
 		if(fs.length == 0) return EMPTY_FACET_SET;
@@ -70,6 +85,11 @@ public class FacesConfigComponent extends AbstractComponent {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.taglib.AbstractComponent#clone()
+	 */
+	@Override
 	public FacesConfigComponent clone() throws CloneNotSupportedException {
 		FacesConfigComponent copy = new FacesConfigComponent();
 		copy.facets = new HashMap<String, Facet>();
@@ -79,10 +99,20 @@ public class FacesConfigComponent extends AbstractComponent {
 		return copy;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.KbObject#getXMLClass()
+	 */
+	@Override
 	public String getXMLClass() {
 		return KbXMLStoreConstants.CLS_FACESCONFIG_LIBRARY;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.taglib.AbstractComponent#merge(org.jboss.tools.jst.web.kb.internal.KbObject)
+	 */
+	@Override
 	public List<Change> merge(KbObject s) {
 		List<Change> changes = super.merge(s);
 		FacesConfigComponent c = (FacesConfigComponent)s;
@@ -123,6 +153,11 @@ public class FacesConfigComponent extends AbstractComponent {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.taglib.AbstractComponent#toXML(org.w3c.dom.Element, java.util.Properties)
+	 */
+	@Override
 	public Element toXML(Element parent, Properties context) {
 		Element element = super.toXML(parent, context);
 
@@ -133,6 +168,11 @@ public class FacesConfigComponent extends AbstractComponent {
 		return element;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.taglib.AbstractComponent#loadXML(org.w3c.dom.Element, java.util.Properties)
+	 */
+	@Override
 	public void loadXML(Element element, Properties context) {
 		super.loadXML(element, context);
 		
@@ -143,5 +183,4 @@ public class FacesConfigComponent extends AbstractComponent {
 			addFacet(f);
 		}
 	}
-
 }
