@@ -1,7 +1,5 @@
 <!--
-     <!DOCTYPE kb-custom-tag-lib PUBLIC
-       "-//Red Hat, Inc//DTD Knowledge Base 2.0//EN"
-       "http://www.redhat.com/dtds/kbCustomTagLibSchema-1.0.dtd">
+<!DOCTYPE tag-lib PUBLIC "-//Red Hat, Inc//DTD Knowledge Base 2.0//EN" "http://anonsvn.jboss.org/repos/jbosstools/trunk/jst/plugins/org.jboss.tools.jst.web.kb/resources/kbCustomTagLibSchema-1.0.dtd">
 -->
 
 <!ENTITY % Boolean "(true|false)">
@@ -26,7 +24,7 @@
 	extended - "true" - Component is relevant only if this component exists in other tag-libs (tld, faclets, ...). Set to "true" by default.
 	description
 -->
-<!ELEMENT component (attribute*)>
+<!ELEMENT component (component*, attribute*)>
 
 <!ATTLIST component name CDATA #REQUIRED>
 <!ATTLIST component closeTag %Boolean; #IMPLIED>
