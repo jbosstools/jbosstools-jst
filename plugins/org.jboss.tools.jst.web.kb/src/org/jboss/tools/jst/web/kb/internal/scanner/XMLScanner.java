@@ -60,6 +60,7 @@ public class XMLScanner implements IFileScanner {
 	 */	
 	public boolean isRelevant(IFile resource) {
 		if(resource.getName().endsWith(".xml")) return true; //$NON-NLS-1$
+		if(resource.getName().endsWith(".tld")) return true; //$NON-NLS-1$
 		return false;
 	}
 	
