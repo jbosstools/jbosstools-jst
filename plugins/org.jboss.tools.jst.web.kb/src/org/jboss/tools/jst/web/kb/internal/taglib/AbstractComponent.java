@@ -285,11 +285,11 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 			}
 		} else if(query.getType() == KbQuery.Type.ATTRIBUTE_VALUE) {
 			for (int i = 0; i < attributes.length; i++) {
-				TextProposal[] attributeProposals  = attributes[i].getProposals(query, context);
-				if(attributeProposals.length > 0 && proposals == null) {
+				TextProposal[] attributeProposals  = (attributes[i] == null ? null : attributes[i].getProposals(query, context));
+				if(attributeProposals != null && attributeProposals.length > 0 && proposals == null) {
 					proposals = new ArrayList<TextProposal>();
 				}
-				for (int j = 0; j < attributeProposals.length; j++) {
+				for (int j = 0; attributeProposals != null && j < attributeProposals.length; j++) {
 					proposals.add(attributeProposals[j]);
 				}
 			}
