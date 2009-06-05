@@ -226,4 +226,21 @@ public abstract class AbstractAttribute extends KbObject implements IAttribute {
 			super.loadAttributesInfo(element, context);
 		}
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.taglib.IAttribute#isExtended()
+	 */
+	public boolean isExtended() {
+		// Return false by default
+		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.taglib.IAttribute#setExtended(boolean)
+	 */
+	public void setExtended(boolean extended) {
+		// Do nothing by default
+	}
 }

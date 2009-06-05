@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
+import org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibAttribute;
 import org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibrary;
 import org.osgi.framework.Bundle;
 
@@ -85,5 +86,10 @@ public class CustomTagLibManager {
 			libs = libSet.toArray(new ICustomTagLibrary[0]);
 		}
 		return libs;
+	}
+
+	public CustomTagLibAttribute[] getComponentExtensions() {
+		//TODO
+		return null;
 	}
 }

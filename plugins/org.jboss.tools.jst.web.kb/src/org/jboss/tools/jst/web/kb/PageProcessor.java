@@ -14,8 +14,11 @@ import java.util.ArrayList;
 
 import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.text.TextProposal;
+import org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibAttribute;
+import org.jboss.tools.jst.web.kb.taglib.CustomTagLibManager;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
+import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibrary;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 
 /**
@@ -24,6 +27,8 @@ import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 public class PageProcessor implements IProposalProcessor {
 
 	private static final PageProcessor INSTANCE = new PageProcessor();
+	private ICustomTagLibrary[] customTagLibs;
+	private CustomTagLibAttribute[] componentExtensions;
 
 	/**
 	 * @return instance of PageProcessor
@@ -33,6 +38,8 @@ public class PageProcessor implements IProposalProcessor {
 	}
 
 	private PageProcessor() {
+		customTagLibs = CustomTagLibManager.getInstance().getLibraries();
+		componentExtensions = CustomTagLibManager.getInstance().getComponentExtensions();
 	}
 
 	/*
@@ -47,6 +54,9 @@ public class PageProcessor implements IProposalProcessor {
 			for (int j = 0; libProposals != null && j < libProposals.length; j++) {
 				proposals.add(libProposals[j]);
 			}
+		}
+		for (int i = 0; i < customTagLibs.length; i++) {
+			// TODO			
 		}
 		if(query.getType() == KbQuery.Type.ATTRIBUTE_VALUE || ((query.getType() == KbQuery.Type.TEXT )&& context instanceof IFaceletPageContext)) {
 			String value = query.getValue();

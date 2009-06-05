@@ -36,4 +36,16 @@ public interface IAttribute extends IProposalProcessor {
 	 * @return true if the attribute is preferable. E.g. <h:outputText value=""/>
 	 */
 	boolean isPreferable();
+
+	/**
+	 * Returns "true" if the attribute is relevant only if this attribute exists in other components with the same name in other tag-libs (tld, faclets, ...).
+	 * If there are not any other attributes with the same name in the same component in other tag libs then this attribute should be ignored.
+	 * @return
+	 */
+	boolean isExtended();
+
+	/**
+	 * @param extended
+	 */
+	void setExtended(boolean extended);
 }

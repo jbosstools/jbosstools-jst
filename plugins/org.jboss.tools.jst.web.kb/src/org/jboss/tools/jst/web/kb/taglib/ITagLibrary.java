@@ -22,16 +22,25 @@ import org.jboss.tools.jst.web.kb.IProposalProcessor;
  */
 public interface ITagLibrary extends IProposalProcessor {
 
+	/**
+	 * @return source path
+	 */
 	public IPath getSourcePath();
 
 	/**
 	 * @return name space
 	 */
 	INameSpace getDefaultNameSpace();
+
 	/**
 	 * @return URI of the tag lib.
 	 */
 	String getURI();
+
+	/**
+	 * @return version of the tag lib.
+	 */
+	String getVersion();
 
 	/**
 	 * @return resource of this tag lib.
@@ -62,6 +71,10 @@ public interface ITagLibrary extends IProposalProcessor {
 	 */
 	public IComponent[] getComponents(KbQuery query, IPageContext context);
 
+	/**
+	 * Clone the lib
+	 * @return
+	 * @throws CloneNotSupportedException
+	 */
 	public ITagLibrary clone() throws CloneNotSupportedException;
-
 }

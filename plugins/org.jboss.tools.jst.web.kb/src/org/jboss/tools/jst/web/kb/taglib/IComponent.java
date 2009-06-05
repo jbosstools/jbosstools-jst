@@ -98,4 +98,11 @@ public interface IComponent extends IProposalProcessor {
 	 * @return facet by name
 	 */
 	Facet getFacet(String name);
+
+	/**
+	 * Returns "true" if the component is relevant only if this component exists in other tag-libs (tld, faclets, ...).
+	 * If there are not any other components with the same name in other tag libs then this component should be ignored.
+	 * @return
+	 */
+	boolean isExtended();
 }

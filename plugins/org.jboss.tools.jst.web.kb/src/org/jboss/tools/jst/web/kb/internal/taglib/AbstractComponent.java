@@ -45,9 +45,12 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	protected String componentType;
 	protected String description;
 	protected String name;
-	protected Map<String, IAttribute> attributes = new HashMap<String, IAttribute>();
-	protected Map<String, IAttribute> preferableAttributes = new HashMap<String, IAttribute>();
-	protected Map<String, IAttribute> requiredAttributes = new HashMap<String, IAttribute>();
+	private Map<String, IAttribute> attributes = new HashMap<String, IAttribute>();
+	private IAttribute[] attributesArray;
+	private Map<String, IAttribute> preferableAttributes = new HashMap<String, IAttribute>();
+	private IAttribute[] preferableAttributesArray;
+	private Map<String, IAttribute> requiredAttributes = new HashMap<String, IAttribute>();
+	private IAttribute[] requiredAttributesArray;
 
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#canHaveBody()
@@ -79,9 +82,12 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getAttributes()
 	 */
 	public IAttribute[] getAttributes() {
-		synchronized (attributes) {
-			return attributes.values().toArray(new IAttribute[attributes.size()]);
+		if(attributesArray==null) {
+			synchronized (attributes) {
+				attributesArray = attributes.values().toArray(new IAttribute[attributes.size()]);
+			}
 		}
+		return attributesArray;
 	}
 
 	/* (non-Javadoc)
@@ -199,18 +205,24 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getPreferableAttributes()
 	 */
 	public IAttribute[] getPreferableAttributes() {
-		synchronized (preferableAttributes) {
-			return preferableAttributes.values().toArray(new IAttribute[preferableAttributes.size()]);
+		if(preferableAttributesArray==null) {
+			synchronized (preferableAttributes) {
+				preferableAttributesArray = preferableAttributes.values().toArray(new IAttribute[preferableAttributes.size()]);
+			}
 		}
+		return preferableAttributesArray;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getRequiredAttributes()
 	 */
 	public IAttribute[] getRequiredAttributes() {
-		synchronized (requiredAttributes) {
-			return requiredAttributes.values().toArray(new IAttribute[requiredAttributes.size()]);
+		if(requiredAttributesArray==null) {
+			synchronized (requiredAttributes) {
+				requiredAttributesArray = requiredAttributes.values().toArray(new IAttribute[requiredAttributes.size()]);
+			}
 		}
+		return requiredAttributesArray;
 	}
 
 	/**
@@ -280,6 +292,13 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		if(attribute.isRequired()) {
 			requiredAttributes.put(attribute.getName(), attribute);
 		}
+		clearAttributeArrays();
+	}
+
+	private void clearAttributeArrays() {
+		attributesArray = null;
+		preferableAttributesArray = null;
+		requiredAttributesArray = null;
 	}
 
 	/**
@@ -290,6 +309,23 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		attributes.remove(attribute.getName());
 		preferableAttributes.remove(attribute.getName());
 		requiredAttributes.remove(attribute.getName());
+		clearAttributeArrays();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#isExtended()
+	 */
+	public boolean isExtended() {
+		// Return false by default
+		return false;
+	}
+
+	/**
+	 * @param extended
+	 */
+	public void setExtended(boolean extended) {
+		// Do nothing
 	}
 
 	public AbstractComponent clone() throws CloneNotSupportedException {
@@ -357,6 +393,7 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 				attributes.remove(removed.getName());
 				Change change = new Change(this, null, removed, null);
 				children.addChildren(Change.addChange(null, change));
+				clearAttributeArrays();
 			}
 		}
 	}
@@ -408,5 +445,4 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 			}
 		}
 	}
-
 }

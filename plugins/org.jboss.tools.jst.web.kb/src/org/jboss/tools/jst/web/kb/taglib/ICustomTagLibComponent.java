@@ -10,20 +10,8 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.taglib;
 
-import java.util.Set;
-
-import org.jboss.tools.jst.web.kb.IPageContext;
-import org.jboss.tools.jst.web.kb.KbQuery;
-
 /**
  * @author Alexey Kazakov
  */
-public interface ICustomTagLibrary extends ITagLibrary {
-
-	/**
-	 * @param query
-	 * @param context
-	 * @return Components with "extended" flag. See org.jboss.tools.jst.web.kb.taglib.ICustomTagLibComponent#isExtended()
-	 */
-	Set<ICustomTagLibComponent> getExtendedComponents(KbQuery query, IPageContext context);
+public interface ICustomTagLibComponent extends IComponent {
 }

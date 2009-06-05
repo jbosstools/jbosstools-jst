@@ -8,22 +8,29 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.jboss.tools.jst.web.kb.taglib;
+package org.jboss.tools.jst.web.kb.internal.taglib;
 
-import java.util.Set;
-
-import org.jboss.tools.jst.web.kb.IPageContext;
-import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibComponent;
 
 /**
  * @author Alexey Kazakov
  */
-public interface ICustomTagLibrary extends ITagLibrary {
+public class CustomTagLibComponent extends AbstractComponent implements ICustomTagLibComponent {
+
+	protected boolean extended = true;
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#isExtended()
+	 */
+	public boolean isExtended() {
+		return extended;
+	}
 
 	/**
-	 * @param query
-	 * @param context
-	 * @return Components with "extended" flag. See org.jboss.tools.jst.web.kb.taglib.ICustomTagLibComponent#isExtended()
+	 * @param extended
 	 */
-	Set<ICustomTagLibComponent> getExtendedComponents(KbQuery query, IPageContext context);
+	public void setExtended(boolean extended) {
+		this.extended = extended;
+	}
 }

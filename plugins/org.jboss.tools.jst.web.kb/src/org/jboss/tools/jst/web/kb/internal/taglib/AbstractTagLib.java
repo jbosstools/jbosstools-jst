@@ -45,15 +45,20 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 
 	protected INameSpace nameSpace;
 	protected String uri;
-	protected Map<String, IComponent> components = new HashMap<String, IComponent>();
+	protected String version;
+	private Map<String, IComponent> components = new HashMap<String, IComponent>();
+	private IComponent[] componentsArray;
 
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.TagLibrary#getAllComponents()
 	 */
 	public IComponent[] getComponents() {
-		synchronized (components) {
-			return components.values().toArray(new IComponent[components.size()]);
+		if(componentsArray==null) {
+			synchronized (components) {
+				componentsArray = components.values().toArray(new IComponent[components.size()]);
+			}
 		}
+		return componentsArray;
 	}
 
 	/* (non-Javadoc)
@@ -85,7 +90,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		return getComponents(query, prefix, context);
 	}
 
-	private String getPrefix(KbQuery query, IPageContext context) {
+	protected String getPrefix(KbQuery query, IPageContext context) {
 		String prefix = null;
 		Map<String, INameSpace> nameSpaces = context.getNameSpaces(query.getOffset());
 		if(nameSpaces!=null) {
@@ -99,7 +104,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 
 	private static final IComponent[] EMPTY_ARRAY = new IComponent[0];
 
-	private IComponent[] getComponents(KbQuery query, String prefix, IPageContext context) {
+	protected IComponent[] getComponents(KbQuery query, String prefix, IPageContext context) {
 		String fullTagName = null;
 		boolean mask = false;
 		if(query.getType()==KbQuery.Type.TAG_NAME) {
@@ -155,6 +160,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	public void addComponent(IComponent component) {
 		adopt((KbObject)component);
 		components.put(component.getName(), component);
+		componentsArray=null;
 	}
 
 	/**
@@ -162,6 +168,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	 */
 	protected void setComponents(Map<String, IComponent> components) {
 		this.components = components;
+		componentsArray=null;
 	}
 
 	/*
@@ -233,6 +240,21 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		attributesInfo.put(URI, s);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.taglib.ITagLibrary#getVersion()
+	 */
+	public String getVersion() {
+		return version;
+	}
+
+	/**
+	 * @param version the version to set
+	 */
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.ProposalProcessor#getProposals(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.PageContext)
 	 */
@@ -242,35 +264,9 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		IComponent[] components = getComponents(query, prefix, context);
 		if(query.getType() == KbQuery.Type.TAG_NAME) {
 			for (int i = 0; i < components.length; i++) {
-				TextProposal proposal = new TextProposal();
-				proposal.setContextInfo(components[i].getDescription());
-				StringBuffer label = new StringBuffer();
-				if(prefix!=null) {
-					label.append(prefix + KbQuery.PREFIX_SEPARATOR);
+				if(!components[i].isExtended() || checkExtended(components[i], prefix, query, context)) {
+					proposals.add(getProposal(prefix, components[i]));
 				}
-				label.append(components[i].getName());
-				proposal.setLabel(label.toString());
-
-				IAttribute[] attributes = components[i].getPreferableAttributes();
-				StringBuffer attributeSB = new StringBuffer();
-				for (int j = 0; j < attributes.length; j++) {
-					attributeSB.append(" ").append(attributes[j].getName()).append("=\"\"");
-				}
-				label.append(attributeSB);
-				if(!components[i].canHaveBody()) {
-					label.append(" /");
-				}
-
-				proposal.setReplacementString(label.toString());
-
-				int position = proposal.getReplacementString().indexOf('"');
-				if(position!=-1) {
-					position ++;
-				} else {
-					position = proposal.getReplacementString().length();
-				}
-				proposal.setPosition(position);
-				proposals.add(proposal);
 			}
 		} else {
 			for (int i = 0; i < components.length; i++) {
@@ -285,6 +281,43 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		return proposals.toArray(new TextProposal[proposals.size()]);
 	}
 
+	protected boolean checkExtended(IComponent component, String prefix, KbQuery query, IPageContext context) {
+		// TODO
+		return false;
+	}
+
+	protected TextProposal getProposal(String prefix, IComponent component) {
+		TextProposal proposal = new TextProposal();
+		proposal.setContextInfo(component.getDescription());
+		StringBuffer label = new StringBuffer();
+		if(prefix!=null) {
+			label.append(prefix + KbQuery.PREFIX_SEPARATOR);
+		}
+		label.append(component.getName());
+		proposal.setLabel(label.toString());
+
+		IAttribute[] attributes = component.getPreferableAttributes();
+		StringBuffer attributeSB = new StringBuffer();
+		for (int j = 0; j < attributes.length; j++) {
+			attributeSB.append(" ").append(attributes[j].getName()).append("=\"\"");
+		}
+		label.append(attributeSB);
+		if(!component.canHaveBody()) {
+			label.append(" /");
+		}
+
+		proposal.setReplacementString(label.toString());
+
+		int position = proposal.getReplacementString().indexOf('"');
+		if(position!=-1) {
+			position ++;
+		} else {
+			position = proposal.getReplacementString().length();
+		}
+		proposal.setPosition(position);
+		return proposal;
+		
+	}
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.internal.KbObject#clone()
