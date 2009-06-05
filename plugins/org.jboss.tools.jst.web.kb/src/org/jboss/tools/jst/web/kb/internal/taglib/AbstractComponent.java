@@ -66,6 +66,9 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		this.canHaveBody = canHaveBody;
 	}
 
+	/**
+	 * @param s
+	 */
 	public void setCanHaveBody(IValueInfo s) {
 		canHaveBody = s == null || "empty".equals(s.getValue());
 		attributesInfo.put(BODY_CONTENT, s);
@@ -158,6 +161,10 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		this.componentType = componentType;
 	}
 
+	/**
+	 * 
+	 * @param s
+	 */
 	public void setComponentType(IValueInfo s) {
 		componentType = s == null ? null : s.getValue();
 		attributesInfo.put(COMPONENT_TYPE, s);
@@ -177,6 +184,9 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		this.description = description;
 	}
 
+	/**
+	 * @param s
+	 */
 	public void setDescription(IValueInfo s) {
 		description = s == null ? null : s.getValue();
 		attributesInfo.put(DESCRIPTION, s);
@@ -196,6 +206,9 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		this.name = name;
 	}
 
+	/**
+	 * @param s
+	 */
 	public void setName(IValueInfo s) {
 		name = s == null ? null : s.getValue();
 		attributesInfo.put(XMLStoreConstants.ATTR_NAME, s);
@@ -236,10 +249,18 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	
 	public static final Facet[] EMPTY_FACET_SET = new Facet[0];
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getFacets()
+	 */
 	public Facet[] getFacets() {
 		return EMPTY_FACET_SET;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getFacets(java.lang.String)
+	 */
 	public Facet[] getFacets(String nameTemplate) {
 		return EMPTY_FACET_SET;
 	}
@@ -328,6 +349,11 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		// Do nothing
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.KbObject#clone()
+	 */
+	@Override
 	public AbstractComponent clone() throws CloneNotSupportedException {
 		AbstractComponent copy = (AbstractComponent)super.clone();
 		copy.attributes = new HashMap<String, IAttribute>();
@@ -340,6 +366,11 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		return copy;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.KbObject#merge(org.jboss.tools.jst.web.kb.internal.KbObject)
+	 */
+	@Override
 	public List<Change> merge(KbObject s) {
 		List<Change> changes = super.merge(s);
 	
@@ -372,6 +403,10 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		return changes;
 	}
 
+	/**
+	 * @param c
+	 * @param children
+	 */
 	public void mergeAttributes(AbstractComponent c, Change children) {
 		Map<Object,AbstractAttribute> attributeMap = new HashMap<Object, AbstractAttribute>();
 		for (IAttribute a: getAttributes()) attributeMap.put(((KbObject)a).getId(), (AbstractAttribute)a);
@@ -398,10 +433,20 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.KbObject#getXMLName()
+	 */
+	@Override
 	public String getXMLName() {
 		return KbXMLStoreConstants.TAG_COMPONENT;
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.KbObject#toXML(org.w3c.dom.Element, java.util.Properties)
+	 */
+	@Override
 	public Element toXML(Element parent, Properties context) {
 		Element element = super.toXML(parent, context);
 
@@ -416,6 +461,11 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		return element;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.KbObject#loadXML(org.w3c.dom.Element, java.util.Properties)
+	 */
+	@Override
 	public void loadXML(Element element, Properties context) {
 		super.loadXML(element, context);
 	
