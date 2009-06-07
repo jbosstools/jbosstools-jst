@@ -164,19 +164,14 @@ public abstract class AbstractCSSDialog extends TitleAreaDialog {
 		browser.addMouseListener(new MouseAdapter() {
 			public void mouseDoubleClick(MouseEvent e) {
 				if (e.widget == browser) {
-					browser.setVisible(false);
-					previewText.setVisible(true);
-					previewText.setFocus();
+					previewComposite.setMaximizedControl(previewText);
 				}
-				previewComposite.layout();
 			}
 		});
 
 		previewText = new Text(previewComposite, SWT.NONE | SWT.H_SCROLL);
 		previewText.setLayoutData(gridData);
 		previewText.setText(getPreviewContent());
-		previewText.setEditable(true);
-		previewText.setVisible(false);
 		previewText.addFocusListener(new FocusAdapter() {
 			public void focusLost(FocusEvent e) {
 				if (e.widget == previewText) {
@@ -188,14 +183,12 @@ public abstract class AbstractCSSDialog extends TitleAreaDialog {
 					}
 
 					browser.setText(generateBrowserPage());
-					previewText.setVisible(false);
-					browser.setVisible(true);
-					previewComposite.layout();
+					previewComposite.setMaximizedControl(browser);
 				}
 			}
 		});
 
-		previewComposite.layout();
+		previewComposite.setMaximizedControl(browser);
 		return previewComposite;
 	}
 
