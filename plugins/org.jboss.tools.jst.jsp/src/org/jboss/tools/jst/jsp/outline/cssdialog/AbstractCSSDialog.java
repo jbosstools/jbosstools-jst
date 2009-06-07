@@ -164,7 +164,9 @@ public abstract class AbstractCSSDialog extends TitleAreaDialog {
 		browser.addMouseListener(new MouseAdapter() {
 			public void mouseDoubleClick(MouseEvent e) {
 				if (e.widget == browser) {
+					browser.setEnabled(false);
 					previewComposite.setMaximizedControl(previewText);
+					previewText.setFocus();
 				}
 			}
 		});
@@ -182,6 +184,7 @@ public abstract class AbstractCSSDialog extends TitleAreaDialog {
 						setPreviewContent(text);
 					}
 
+					browser.setEnabled(true);
 					browser.setText(generateBrowserPage());
 					previewComposite.setMaximizedControl(browser);
 				}
