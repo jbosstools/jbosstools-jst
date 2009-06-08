@@ -22,11 +22,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.jboss.tools.jst.web.kb.IPageContext;
-import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
-import org.jboss.tools.jst.web.kb.taglib.IComponent;
-import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibComponent;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibrary;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
@@ -235,21 +231,5 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 	 */
 	public CustomTagLibAttribute[] getExtendedAttributes() {
 		return extendedAttributes;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.taglib.ICustomTagLibrary#getExtendedComponents(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.IPageContext)
-	 */
-	public Set<ICustomTagLibComponent> getExtendedComponents(KbQuery query, IPageContext context) {
-		Set<ICustomTagLibComponent> set = new HashSet<ICustomTagLibComponent>();
-		IComponent[] components = getComponents(query, context);
-		for (int i = 0; i < components.length; i++) {
-			ICustomTagLibComponent component = (ICustomTagLibComponent)components[i];
-			if(component.isExtended()) {
-				set.add(component);
-			}
-		}
-		return set;
 	}
 }

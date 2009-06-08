@@ -56,7 +56,7 @@ public class PageProcessor implements IProposalProcessor {
 			}
 		}
 		for (int i = 0; customTagLibs != null && i < customTagLibs.length; i++) {
-			// TODO			
+			// TODO
 		}
 		if(query.getType() == KbQuery.Type.ATTRIBUTE_VALUE || ((query.getType() == KbQuery.Type.TEXT )&& context instanceof IFaceletPageContext)) {
 			String value = query.getValue();

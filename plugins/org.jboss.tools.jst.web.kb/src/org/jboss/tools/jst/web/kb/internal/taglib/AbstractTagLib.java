@@ -12,9 +12,11 @@ package org.jboss.tools.jst.web.kb.internal.taglib;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -46,6 +48,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	protected INameSpace nameSpace;
 	protected String uri;
 	protected String version;
+	protected boolean hasExtenededComponents = false;
 	private Map<String, IComponent> components = new HashMap<String, IComponent>();
 	private IComponent[] componentsArray;
 
@@ -72,10 +75,14 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	 * @see org.jboss.tools.jst.web.kb.taglib.TagLibrary#getComponents(java.lang.String)
 	 */
 	public IComponent[] getComponents(String nameTemplate) {
+		return getComponents(nameTemplate, null);
+	}
+
+	public IComponent[] getComponents(String nameTemplate, IPageContext context) {
 		List<IComponent> list = new ArrayList<IComponent>();
 		IComponent[] comps = getComponents();
 		for (int i = 0; i < comps.length; i++) {
-			if(comps[i].getName().startsWith(nameTemplate)) {
+			if(comps[i].getName().startsWith(nameTemplate) && (context==null || checkExtended(comps[i], context))) {
 				list.add(comps[i]);
 			}
 		}
@@ -114,14 +121,14 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 			fullTagName = query.getLastParentTag();
 		}
 		if(fullTagName == null) {
-			return null;
+			return EMPTY_ARRAY;
 		}
 		if(mask) {
 			if(fullTagName.length()==0) {
-				return getComponents();
+				return getExtendedComponents(context);
 			}
 			if(prefix==null) {
-				return getComponents(fullTagName);
+				return getComponents(fullTagName, context);
 			}
 		}
 		String tagName = fullTagName;
@@ -138,19 +145,54 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		if(mask) {
 			if(prefixIndex<0) {
 				if(prefix.startsWith(tagName)) {
-					return getComponents();
+					return getExtendedComponents(context);
 				}
 				return EMPTY_ARRAY;
 			}
 			if(prefix.equals(queryPrefix)) {
 				if(tagName == null) {
-					return getComponents();
+					return getExtendedComponents(context);
 				}
-				return getComponents(tagName);
+				return getComponents(tagName, context);
 			}
 			return EMPTY_ARRAY;
 		}
-		return new IComponent[]{getComponent(tagName)};
+		IComponent comp = getComponent(tagName);
+		if(checkExtended(comp, context)) {
+			return new IComponent[]{comp};
+		}
+		return EMPTY_ARRAY;
+	}
+
+	protected IComponent[] getExtendedComponents(IPageContext context) {
+		if(hasExtenededComponents) {
+			Set<IComponent> comps = new HashSet<IComponent>();
+			synchronized(components) {
+				for (IComponent component : components.values()) {
+					if(checkExtended(component, context)) {
+						comps.add(component);
+					}
+				}
+			}
+			return comps.toArray(new IComponent[0]);
+		}
+		return getComponents();
+	}
+
+	protected boolean checkExtended(IComponent component, IPageContext context) {
+		if(!component.isExtended()) {
+			return true;
+		}
+		ITagLibrary[] libs = context.getLibraries();
+		for (int i = 0; i < libs.length; i++) {
+			if(libs[i]!=this && libs[i].getURI().equals(uri)) {
+				IComponent ac = libs[i].getComponent(component.getName());
+				if(!ac.isExtended()) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -161,6 +203,9 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		adopt((KbObject)component);
 		components.put(component.getName(), component);
 		componentsArray=null;
+		if(component.isExtended()) {
+			hasExtenededComponents = true;
+		}
 	}
 
 	/**
@@ -168,6 +213,12 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	 */
 	protected void setComponents(Map<String, IComponent> components) {
 		this.components = components;
+		for (IComponent component : components.values()) {
+			if(component.isExtended()) {
+				hasExtenededComponents = true;
+				break;
+			}
+		}
 		componentsArray=null;
 	}
 
@@ -264,9 +315,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		IComponent[] components = getComponents(query, prefix, context);
 		if(query.getType() == KbQuery.Type.TAG_NAME) {
 			for (int i = 0; i < components.length; i++) {
-				if(!components[i].isExtended() || checkExtended(components[i], prefix, query, context)) {
-					proposals.add(getProposal(prefix, components[i]));
-				}
+				proposals.add(getProposal(prefix, components[i]));
 			}
 		} else {
 			for (int i = 0; i < components.length; i++) {
@@ -279,11 +328,6 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 			}
 		}
 		return proposals.toArray(new TextProposal[proposals.size()]);
-	}
-
-	protected boolean checkExtended(IComponent component, String prefix, KbQuery query, IPageContext context) {
-		// TODO
-		return false;
 	}
 
 	protected TextProposal getProposal(String prefix, IComponent component) {
@@ -316,8 +360,8 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		}
 		proposal.setPosition(position);
 		return proposal;
-		
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.internal.KbObject#clone()
@@ -327,6 +371,9 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		AbstractTagLib t = (AbstractTagLib)super.clone();
 		t.components = new HashMap<String, IComponent>();
 		for (IComponent c: components.values()) {
+			if(c.isExtended()) {
+				t.hasExtenededComponents = true;
+			}
 			t.addComponent(((AbstractComponent)c).clone());
 		}
 		t.components.putAll(components);
