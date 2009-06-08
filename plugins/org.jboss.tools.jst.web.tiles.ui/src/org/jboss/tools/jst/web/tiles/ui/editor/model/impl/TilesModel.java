@@ -199,8 +199,10 @@ public class TilesModel extends TilesElement implements ITilesModel, PropertyCha
 	public void disconnectFromModel() {
 		if (listener != null)
 			source.getModel().removeModelTreeListener(listener);
-		options.disconnectFromModel();
-		map.disconnectFromModel();
+		if (options != null)
+			options.disconnectFromModel();
+		if (map != null)
+			map.disconnectFromModel();
 	}
 
 	public boolean isEditable() {
