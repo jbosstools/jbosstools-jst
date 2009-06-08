@@ -5,9 +5,13 @@ Bundle-SymbolicName: org.jboss.tools.jst.web.kb.test
 Bundle-Version: 1.0.0
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
+ org.eclipse.core.resources,
  org.jboss.tools.jst.web.kb,
- org.junit
+ org.junit,
+ org.jboss.tools.common.test,
+ org.jboss.tools.tests;bundle-version="2.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Vendor: %Bundle-Vendor.0
 Export-Package: org.jboss.tools.jst.web.kb.test
+Bundle-ClassPath: jst-web-kb-tests.jar
