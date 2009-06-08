@@ -263,11 +263,12 @@ public class CSSClassDialog extends AbstractCSSDialog {
 	 *            - name of new style class
 	 */
 	public void addNewClass(String styleClassName) {
-		getStyleComposite().clearStyleComposite();
-		cssModel.updateCSSStyle(selectorLabel, getStyleAttributes());
-		selectorLabel = cssModel.addCSSRule(styleClassName);
-		preview.setSelector(selectorLabel);
-		classCombo.add(selectorLabel);
+		// add new css class
+		String newSelectorLabel = cssModel.addCSSRule(styleClassName);
+		// add it to combobox
+		classCombo.add(newSelectorLabel);
+		// select new class, after it in handleSelectorSwitched() dialog will be
+		// updated
 		classCombo.select(classCombo.getItemCount() - 1);
 	}
 
@@ -372,6 +373,10 @@ public class CSSClassDialog extends AbstractCSSDialog {
 			if (label.equals(selectorLabel))
 				classCombo.select(i);
 
+		}
+		
+		if(classCombo.getSelectionIndex() == -1 ){
+			classCombo.select(0);
 		}
 
 		applyButton.setEnabled(false);
