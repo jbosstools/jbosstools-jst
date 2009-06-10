@@ -58,7 +58,7 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 
 	protected String name;
 	protected String defaultPrefix;
-	protected CustomTagLibAttribute[] extendedAttributes;
+	protected CustomComponentExtension componentExtension;
 
 	public CustomTagLibrary(File file, String uri, String version, String name) {
 		setURI(uri);
@@ -85,7 +85,13 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 					CustomTagLibComponent component = parseComponent((Element)child);
 					addComponent(component);
 				} else if (child.getNodeName().equals(COMPONET_EXTENSION)) {
-					extendedAttributes = getAttributes((Element)child);
+					if(componentExtension==null) {
+						componentExtension = new CustomComponentExtension();
+						// TODO what we should do with this fake components?
+//						addComponent(componentExtension);
+						componentExtension.setParentTagLib(this);
+					}
+					componentExtension.addAttributes(getAttributes((Element)child));
 				}
 			}
 		}
@@ -231,7 +237,7 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 	/**
 	 * @return the extendedAttributes
 	 */
-	public CustomTagLibAttribute[] getExtendedAttributes() {
-		return extendedAttributes;
+	public CustomComponentExtension getComponentExtension() {
+		return componentExtension;
 	}
 }
