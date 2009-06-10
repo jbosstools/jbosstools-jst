@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.StringTokenizer;
 
 import org.eclipse.core.resources.IResource;
 
@@ -91,16 +92,22 @@ public class TaglibMapping implements ITaglibMapping {
 		if(webxml == null || webRoot == null) return;
 		XModelObject cp = WebAppHelper.findWebAppContextParam(webxml, "facelets.LIBRARIES");
 		if(cp == null) return;
-		String path = cp.getAttributeValue("param-value");
-		if(path == null || path.length() == 0) return;
-		String modelPath = path;
-		if(modelPath.startsWith("/")) modelPath = modelPath.substring(1);
-		XModelObject facelet = webRoot.getChildByPath(modelPath);
-		if(facelet == null) return;
-		String uri = facelet.getAttributeValue("uri");
-		if(uri != null) {
-			resolvedURIs.put(path, uri);
-			taglibObjects.put(uri, facelet);
+		String paths = cp.getAttributeValue("param-value");
+		if(paths == null || paths.length() == 0) return;
+		StringTokenizer st = new StringTokenizer(paths, ";,");
+		while(st.hasMoreTokens()) {
+			String path = st.nextToken();
+			String modelPath = path;
+			if (modelPath.startsWith("/"))
+				modelPath = modelPath.substring(1);
+			XModelObject facelet = webRoot.getChildByPath(modelPath);
+			if (facelet == null)
+				continue;
+			String uri = facelet.getAttributeValue("uri");
+			if (uri != null) {
+				resolvedURIs.put(path, uri);
+				taglibObjects.put(uri, facelet);
+			}
 		}
 	}
 
