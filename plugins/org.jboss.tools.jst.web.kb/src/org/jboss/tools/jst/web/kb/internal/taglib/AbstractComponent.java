@@ -12,9 +12,11 @@ package org.jboss.tools.jst.web.kb.internal.taglib;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import org.jboss.tools.common.model.project.ext.IValueInfo;
 import org.jboss.tools.common.model.project.ext.event.Change;
@@ -28,6 +30,7 @@ import org.jboss.tools.jst.web.kb.internal.KbXMLStoreConstants;
 import org.jboss.tools.jst.web.kb.taglib.Facet;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
+import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 import org.w3c.dom.Element;
 
 /**
@@ -45,6 +48,7 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	protected String componentType;
 	protected String description;
 	protected String name;
+	protected boolean hasExtendedAttributes = false;
 	private Map<String, IAttribute> attributes = new HashMap<String, IAttribute>();
 	private IAttribute[] attributesArray;
 	private Map<String, IAttribute> preferableAttributes = new HashMap<String, IAttribute>();
@@ -97,15 +101,63 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getAttributes(java.lang.String)
 	 */
 	public IAttribute[] getAttributes(String nameTemplate) {
+		return getAttributes(nameTemplate, null);
+	}
+
+	public IAttribute[] getAttributes(String nameTemplate, IPageContext context) {
 		List<IAttribute> list = new ArrayList<IAttribute>();
 		IAttribute[] atts = getAttributes();
 		for (int i = 0; i < atts.length; i++) {
-			if(atts[i].getName().startsWith(nameTemplate)) {
+			if(atts[i].getName().startsWith(nameTemplate) && (context==null || checkExtended(atts[i], context))) {
 				list.add(atts[i]);
 			}
 		}
 		return list.toArray(new IAttribute[list.size()]);
 	}
+
+	protected IAttribute[] getExtendedAttributes(IPageContext context) {
+		if(hasExtendedAttributes) {
+			Set<IAttribute> attrs = new HashSet<IAttribute>();
+			synchronized(attributes) {
+				for (IAttribute attribute : attributes.values()) {
+					if(checkExtended(attribute, context)) {
+						attrs.add(attribute);
+					}
+				}
+			}
+			return attrs.toArray(new IAttribute[0]);
+		}
+		return getAttributes();
+	}
+
+	protected boolean checkExtended(IAttribute attribute, IPageContext context) {
+		if(!attribute.isExtended()) {
+			return true;
+		}
+		IComponent parentComponent = attribute.getComponent();
+		if(parentComponent==null) {
+			return true;
+		}
+		ITagLibrary[] libs = context.getLibraries();
+		for (int i = 0; i < libs.length; i++) {
+			ITagLibrary thisLib = this.getTagLib();
+			if(thisLib==null) {
+				return true;
+			}
+			if(libs[i].getURI().equals(thisLib.getURI())) {
+				IComponent ac = libs[i].getComponent(parentComponent.getName());
+				if(ac!=null && ac!=this) {
+					IAttribute at = ac.getAttribute(attribute.getName());
+					if(at!=null && !at.isExtended()) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	private static final IAttribute[] EMPTY_ARRAY = new IAttribute[0];
 
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getAttributes(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.IPageContext)
@@ -123,9 +175,13 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 			return null;
 		}
 		if(mask) {
-			return getAttributes(attrName);
+			return getAttributes(attrName, context);
 		}
-		return new IAttribute[]{getAttribute(attrName)};
+		IAttribute attr = getAttribute(attrName);
+		if(attr!=null && checkExtended(attr, context)) {
+			return new IAttribute[]{getAttribute(attrName)};
+		}
+		return EMPTY_ARRAY;
 	}
 
 	/* (non-Javadoc)
@@ -307,6 +363,9 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	public void addAttribute(IAttribute attribute) {
 		adopt((KbObject)attribute);
 		attributes.put(attribute.getName(), attribute);
+		if(attribute.isExtended()) {
+			hasExtendedAttributes = true;
+		}
 		if(attribute.isPreferable()) {
 			preferableAttributes.put(attribute.getName(), attribute);
 		}
@@ -330,6 +389,9 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		attributes.remove(attribute.getName());
 		preferableAttributes.remove(attribute.getName());
 		requiredAttributes.remove(attribute.getName());
+		if(hasExtendedAttributes) {
+			initExtendedAttributeFlag();
+		}
 		clearAttributeArrays();
 	}
 
@@ -342,11 +404,12 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		return false;
 	}
 
-	/**
-	 * @param extended
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getTagLib()
 	 */
-	public void setExtended(boolean extended) {
-		// Do nothing
+	public ITagLibrary getTagLib() {
+		return (ITagLibrary)parent;
 	}
 
 	/*
@@ -362,8 +425,21 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		IAttribute[] as = getAttributes();
 		for (IAttribute a: as) {
 			copy.addAttribute(((AbstractAttribute)a).clone());
+			if(a.isExtended()) {
+				copy.hasExtendedAttributes = true;
+			}
 		}
 		return copy;
+	}
+
+	private void initExtendedAttributeFlag() {
+		synchronized (attributes) {
+			for (IAttribute a : attributes.values()) {
+				if(a.isExtended()) {
+					hasExtendedAttributes = true;
+				}
+			}
+		}
 	}
 
 	/*

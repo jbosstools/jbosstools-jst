@@ -25,6 +25,7 @@ import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.internal.KbObject;
 import org.jboss.tools.jst.web.kb.internal.KbXMLStoreConstants;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
+import org.jboss.tools.jst.web.kb.taglib.IComponent;
 import org.jboss.tools.jst.web.model.project.ext.store.XMLValueInfo;
 import org.w3c.dom.Element;
 
@@ -101,6 +102,14 @@ public abstract class AbstractAttribute extends KbObject implements IAttribute {
 	public void setRequired(IValueInfo s) {
 		required = s != null && "true".equals(s.getValue());
 		attributesInfo.put(REQUIRED, s);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.taglib.IAttribute#getComponent()
+	 */
+	public IComponent getComponent() {
+		return (IComponent)parent;
 	}
 
 	/* (non-Javadoc)

@@ -105,4 +105,9 @@ public interface IComponent extends IProposalProcessor {
 	 * @return
 	 */
 	boolean isExtended();
+
+	/**
+	 * @return parent tag lib.
+	 */
+	ITagLibrary getTagLib();
 }

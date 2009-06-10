@@ -10,6 +10,8 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal.taglib;
 
+import org.jboss.tools.jst.web.kb.taglib.IComponent;
+
 /**
  * @author Alexey Kazakov
  */
@@ -18,6 +20,7 @@ public class CustomTagLibAttribute extends AbstractAttribute {
 	protected boolean extended = true;
 	protected String defaultValue;
 	protected Proposal[] proposals;
+	protected CustomTagLibComponent parentComponent;
 
 	/*
 	 * (non-Javadoc)
@@ -140,5 +143,21 @@ public class CustomTagLibAttribute extends AbstractAttribute {
 		public void setValue(String value) {
 			this.value = value;
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.taglib.IAttribute#getComponent()
+	 */
+	@Override
+	public IComponent getComponent() {
+		return parentComponent;
+	}
+
+	/**
+	 * @param parentComponent the parent component to set
+	 */
+	public void setParentComponent(CustomTagLibComponent parentComponent) {
+		this.parentComponent = parentComponent;
 	}
 }

@@ -102,11 +102,13 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 		newComponent.setCanHaveBody(!closeTag);
 		newComponent.setDescription(description);
 		newComponent.setExtended(extended);
+		newComponent.setParentTagLib(this);
 
 		// Extract attributes
 		CustomTagLibAttribute[] attributes = getAttributes(component);
 		for (int i = 0; i < attributes.length; i++) {
 			newComponent.addAttribute(attributes[i]);
+			attributes[i].setParentComponent(newComponent);
 		}
 
 		return newComponent;

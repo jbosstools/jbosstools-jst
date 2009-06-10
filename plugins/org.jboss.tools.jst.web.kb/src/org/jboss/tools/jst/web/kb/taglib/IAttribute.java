@@ -45,7 +45,7 @@ public interface IAttribute extends IProposalProcessor {
 	boolean isExtended();
 
 	/**
-	 * @param extended
+	 * @return parent component
 	 */
-	void setExtended(boolean extended);
+	IComponent getComponent();
 }

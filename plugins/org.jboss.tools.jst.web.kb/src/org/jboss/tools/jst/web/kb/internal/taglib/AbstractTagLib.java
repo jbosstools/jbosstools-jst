@@ -48,7 +48,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	protected INameSpace nameSpace;
 	protected String uri;
 	protected String version;
-	protected boolean hasExtenededComponents = false;
+	protected boolean hasExtendedComponents = false;
 	private Map<String, IComponent> components = new HashMap<String, IComponent>();
 	private IComponent[] componentsArray;
 
@@ -90,7 +90,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.taglib.TagLibrary#getComponents(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.PageContext)
+	 * @see org.jboss.tools.jst.web.kb.taglib.ITagLibrary#getComponents(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.PageContext)
 	 */
 	public IComponent[] getComponents(KbQuery query, IPageContext context) {
 		String prefix = getPrefix(query, context);
@@ -165,7 +165,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	}
 
 	protected IComponent[] getExtendedComponents(IPageContext context) {
-		if(hasExtenededComponents) {
+		if(hasExtendedComponents) {
 			Set<IComponent> comps = new HashSet<IComponent>();
 			synchronized(components) {
 				for (IComponent component : components.values()) {
@@ -187,7 +187,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		for (int i = 0; i < libs.length; i++) {
 			if(libs[i]!=this && libs[i].getURI().equals(uri)) {
 				IComponent ac = libs[i].getComponent(component.getName());
-				if(!ac.isExtended()) {
+				if(ac!=null && !ac.isExtended()) {
 					return true;
 				}
 			}
@@ -204,7 +204,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		components.put(component.getName(), component);
 		componentsArray=null;
 		if(component.isExtended()) {
-			hasExtenededComponents = true;
+			hasExtendedComponents = true;
 		}
 	}
 
@@ -215,7 +215,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		this.components = components;
 		for (IComponent component : components.values()) {
 			if(component.isExtended()) {
-				hasExtenededComponents = true;
+				hasExtendedComponents = true;
 				break;
 			}
 		}
@@ -372,7 +372,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		t.components = new HashMap<String, IComponent>();
 		for (IComponent c: components.values()) {
 			if(c.isExtended()) {
-				t.hasExtenededComponents = true;
+				t.hasExtendedComponents = true;
 			}
 			t.addComponent(((AbstractComponent)c).clone());
 		}

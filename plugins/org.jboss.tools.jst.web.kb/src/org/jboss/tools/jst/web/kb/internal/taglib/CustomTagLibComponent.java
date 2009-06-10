@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.kb.internal.taglib;
 
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibComponent;
+import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 
 /**
  * @author Alexey Kazakov
@@ -18,11 +19,13 @@ import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibComponent;
 public class CustomTagLibComponent extends AbstractComponent implements ICustomTagLibComponent {
 
 	protected boolean extended = true;
+	protected CustomTagLibrary parentTagLib;
 
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#isExtended()
 	 */
+	@Override
 	public boolean isExtended() {
 		return extended;
 	}
@@ -32,5 +35,21 @@ public class CustomTagLibComponent extends AbstractComponent implements ICustomT
 	 */
 	public void setExtended(boolean extended) {
 		this.extended = extended;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getTagLib()
+	 */
+	@Override
+	public ITagLibrary getTagLib() {
+		return parentTagLib;
+	}
+
+	/**
+	 * @param parentTagLib the parent tag lib to set
+	 */
+	public void setParentTagLib(CustomTagLibrary parentTagLib) {
+		this.parentTagLib = parentTagLib;
 	}
 }
