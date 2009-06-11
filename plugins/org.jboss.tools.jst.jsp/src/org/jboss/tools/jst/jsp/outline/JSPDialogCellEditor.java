@@ -51,13 +51,9 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
         super(parent);
         this.context = context;
 
-        ValueHelper valueHelper = (ValueHelper) context.get("valueHelper");
-
         contentAssistentProcessor = new JSPDialogCellEditorContentAssistProcessor();
 
-        if (valueHelper != null) {
-            contentAssistentProcessor.setContext(context);
-        }
+        contentAssistentProcessor.setContext(context);
 
         handler = ContentAssistHandler.createHandlerForText(getTextField(),
                 ControlContentAssistHelper.createJavaContentAssistant(contentAssistentProcessor));
