@@ -17,10 +17,7 @@ import java.util.List;
 import java.util.Vector;
 
 import org.eclipse.core.runtime.Platform;
-import org.jboss.tools.common.model.plugin.ModelPlugin;
-import org.jboss.tools.common.model.ui.dnd.ModelTransfer;
 import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.dnd.DropTargetEvent;
@@ -43,16 +40,16 @@ import org.eclipse.wst.xml.core.internal.contentmodel.modelquery.ModelQuery;
 import org.eclipse.wst.xml.core.internal.contentmodel.modelquery.ModelQueryAction;
 import org.eclipse.wst.xml.ui.internal.XMLUIMessages;
 import org.eclipse.wst.xml.ui.internal.contentoutline.XMLNodeActionManager;
+import org.jboss.tools.common.kb.AttributeDescriptor;
+import org.jboss.tools.common.kb.TagDescriptor;
+import org.jboss.tools.common.model.ui.dnd.ModelTransfer;
+import org.jboss.tools.common.model.ui.editors.dnd.context.DropContext;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.editor.IJSPTextEditor;
 import org.jboss.tools.jst.jsp.editor.IViewerDropAdapterFactory;
 import org.osgi.framework.Bundle;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-
-import org.jboss.tools.common.kb.AttributeDescriptor;
-import org.jboss.tools.common.kb.TagDescriptor;
-import org.jboss.tools.common.model.ui.editors.dnd.context.DropContext;
 
 public class JSPContentOutlineConfiguration extends HTMLContentOutlineConfiguration {
 	IJSPTextEditor editor;
@@ -81,60 +78,51 @@ public class JSPContentOutlineConfiguration extends HTMLContentOutlineConfigurat
 
 	private TransferDropTargetListener[] fTransferDropTargetListeners;
 
-	public TransferDropTargetListener[] getTransferDropTargetListeners(TreeViewer treeViewer) {
+	public TransferDropTargetListener[] getTransferDropTargetListeners(
+			TreeViewer treeViewer) {
+
 		if (fTransferDropTargetListeners == null) {
-			Transfer[] transfers = new Transfer[]{
-				ModelTransfer.getInstance(),
-				HTMLTransfer.getInstance(),
-				LocalSelectionTransfer.getTransfer(),
-				ObjectTransfer.getInstance(),
-				FileTransfer.getInstance(),
-				TextTransfer.getInstance()
-			};
-			if(dropAdapterFactory!=null) {
-			fTransferDropTargetListeners = new TransferDropTargetListener[transfers.length];
-			for (int i = 0; i < transfers.length; i++) {
-				final Transfer transfer = transfers[i];
-				DropContext dropContext = new DropContext();
-					final ViewerDropAdapter dropAdapter = dropAdapterFactory.createDropAdapter(transfer, treeViewer, editor, transfer, dropContext);
-					fTransferDropTargetListeners[i] = new TransferDropTargetListener() {
-					public void dragEnter(DropTargetEvent event) {
-						dropAdapter.dragEnter(event);
-					}
+			final TransferDropTargetListener[] defaultListeners =
+				super.getTransferDropTargetListeners(treeViewer);
 
-					public void dragLeave(DropTargetEvent event) {
-						dropAdapter.dragLeave(event);
-					}
 
-					public void dragOperationChanged(DropTargetEvent event) {
-						dropAdapter.dragOperationChanged(event);
-					}
-
-					public void dragOver(DropTargetEvent event) {
-						dropAdapter.dragOver(event);
-					}
-
-					public void drop(DropTargetEvent event) {
-						dropAdapter.drop(event);
-					}
-
-					public void dropAccept(DropTargetEvent event) {
-						dropAdapter.dropAccept(event);
-					}
-
-					public Transfer getTransfer() {
-						return transfer;
-					}
-
-					public boolean isEnabled(DropTargetEvent event) {
-						return getTransfer().isSupportedType(event.currentDataType);
-					}
+			if(dropAdapterFactory != null) {
+				Transfer[] transfers = new Transfer[]{
+						ModelTransfer.getInstance(),
+						HTMLTransfer.getInstance(),
+						// Commented as fix of JBIDE-4142.
+						// The default implementation of the listener should
+						// be used for local DnD events
+						// LocalSelectionTransfer.getTransfer(),
+						ObjectTransfer.getInstance(),
+						FileTransfer.getInstance(),
+						TextTransfer.getInstance()
 				};
+				fTransferDropTargetListeners = new TransferDropTargetListener[
+						transfers.length + defaultListeners.length];
+
+				for (int i = 0; i < transfers.length; i++) {
+					final Transfer transfer = transfers[i];
+					final DropContext dropContext = new DropContext();
+					final ViewerDropAdapter dropAdapter
+							= dropAdapterFactory.createDropAdapter(
+									transfer, treeViewer,
+									editor, transfer, dropContext);
+
+					fTransferDropTargetListeners[i]
+							= new OutlineTransferDropTargetListener(
+									transfer, dropAdapter);
 				}
+
+				// add default listeners to the end of the array (JBIDE-4142)
+				System.arraycopy(defaultListeners, 0,
+						fTransferDropTargetListeners,
+						transfers.length, defaultListeners.length);
 			} else {
-				fTransferDropTargetListeners = new TransferDropTargetListener[0];
+				fTransferDropTargetListeners = defaultListeners;
 			}
 		}
+
 		return fTransferDropTargetListeners;
 	}
 
@@ -209,6 +197,42 @@ public class JSPContentOutlineConfiguration extends HTMLContentOutlineConfigurat
 		};
 	}
 
+	public static class OutlineTransferDropTargetListener implements
+			TransferDropTargetListener {
+
+		private final Transfer transfer;
+		private final ViewerDropAdapter dropAdapter;
+
+		public OutlineTransferDropTargetListener(Transfer transfer,
+				ViewerDropAdapter dropAdapter) {
+			this.transfer = transfer;
+			this.dropAdapter = dropAdapter;
+		}
+		public void dragEnter(DropTargetEvent event) {
+			dropAdapter.dragEnter(event);
+		}
+		public void dragLeave(DropTargetEvent event) {
+			dropAdapter.dragLeave(event);
+		}
+		public void dragOperationChanged(DropTargetEvent event) {
+			dropAdapter.dragOperationChanged(event);
+		}
+		public void dragOver(DropTargetEvent event) {
+			dropAdapter.dragOver(event);
+		}
+		public void drop(DropTargetEvent event) {
+			dropAdapter.drop(event);
+		}
+		public void dropAccept(DropTargetEvent event) {
+			dropAdapter.dropAccept(event);
+		}
+		public Transfer getTransfer() {
+			return transfer;
+		}
+		public boolean isEnabled(DropTargetEvent event) {
+			return getTransfer().isSupportedType(event.currentDataType);
+		}
+	}
 }
 
 
