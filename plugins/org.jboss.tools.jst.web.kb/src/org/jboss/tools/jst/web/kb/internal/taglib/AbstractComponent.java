@@ -326,7 +326,7 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	 */
 	public TextProposal[] getProposals(KbQuery query, IPageContext context) {
 		IAttribute[] attributes = getAttributes(query, context);
-		if(attributes.length == 0) {
+		if(attributes == null || attributes.length == 0) {
 			return EMPTY_PROPOSAL_LIST;
 		}
 		List<TextProposal> proposals = null;

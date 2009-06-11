@@ -158,7 +158,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 			return EMPTY_ARRAY;
 		}
 		IComponent comp = getComponent(tagName);
-		if(checkExtended(comp, context)) {
+		if(comp != null && checkExtended(comp, context)) {
 			return new IComponent[]{comp};
 		}
 		return EMPTY_ARRAY;

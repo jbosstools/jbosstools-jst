@@ -48,30 +48,43 @@ public class PageProcessor implements IProposalProcessor {
 	 */
 	public TextProposal[] getProposals(KbQuery query, IPageContext context) {
 		ArrayList<TextProposal> proposals = new ArrayList<TextProposal>();
-		ITagLibrary[] libs =  context.getLibraries();
-		for (int i = 0; libs != null && i < libs.length; i++) {
-			TextProposal[] libProposals = libs[i].getProposals(query, context);
-			for (int j = 0; libProposals != null && j < libProposals.length; j++) {
-				proposals.add(libProposals[j]);
-			}
-		}
-		for (int i = 0; customTagLibs != null && i < customTagLibs.length; i++) {
-			// TODO
-		}
-		if(query.getType() == KbQuery.Type.ATTRIBUTE_VALUE || ((query.getType() == KbQuery.Type.TEXT )&& context instanceof IFaceletPageContext)) {
-			String value = query.getValue();
-			 //TODO convert value to EL string.
-			String elString = value;
-			ELResolver[] resolvers =  context.getElResolvers();
-			for (int i = 0; resolvers != null && i < resolvers.length; i++) {
-				proposals.addAll(resolvers[i].getCompletions(elString, !query.isMask(), query.getOffset(), context));
-			}
-		}
 
+		if (!isQueryForELProposals(query)) {
+			ITagLibrary[] libs =  context.getLibraries();
+			for (int i = 0; libs != null && i < libs.length; i++) {
+				TextProposal[] libProposals = libs[i].getProposals(query, context);
+				for (int j = 0; libProposals != null && j < libProposals.length; j++) {
+					proposals.add(libProposals[j]);
+				}
+			}
+			for (int i = 0; customTagLibs != null && i < customTagLibs.length; i++) {
+				// TODO
+			}
+		} else {
+			if(query.getType() == KbQuery.Type.ATTRIBUTE_VALUE || ((query.getType() == KbQuery.Type.TEXT )&& context instanceof IFaceletPageContext)) {
+				String value = query.getValue();
+				 //TODO convert value to EL string.
+				String elString = value;
+				ELResolver[] resolvers =  context.getElResolvers();
+				for (int i = 0; resolvers != null && i < resolvers.length; i++) {
+					proposals.addAll(resolvers[i].getCompletions(elString, !query.isMask(), query.getOffset(), context));
+				}
+			}
+		}
 		return proposals.toArray(new TextProposal[proposals.size()]);
 	}
 
-	/**
+	private boolean isQueryForELProposals(KbQuery query) {
+		if (query.getType() != KbQuery.Type.ATTRIBUTE_VALUE &&
+				query.getType() != KbQuery.Type.TEXT) 
+			return false;
+
+		return (query.getValue() != null && 
+				( query.getValue().startsWith("#{") ||
+					query.getValue().startsWith("${") ) );
+	}
+	
+ 	/**
 	 * Returns components
 	 * @param query
 	 * @param context
