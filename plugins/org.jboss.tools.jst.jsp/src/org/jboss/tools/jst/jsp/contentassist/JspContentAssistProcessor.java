@@ -198,7 +198,7 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 	 * 
 	 * @param attrName Name of attribute to check
 	 */
-	private boolean isExistingAttribute(String attrName) {
+	protected boolean isExistingAttribute(String attrName) {
 		IStructuredModel sModel = StructuredModelManager.getModelManager()
 				.getExistingModelForRead(getDocument());
 		try {
@@ -368,12 +368,66 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 				String additionalProposalInfo = textProposal.getContextInfo();
 				int relevance = textProposal.getRelevance() + 10000;
 				
-				
 				CustomCompletionProposal proposal = new CustomCompletionProposal(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, contextInformation, additionalProposalInfo, relevance);
 				contentAssistRequest.addProposal(proposal);
 			}
 		} finally {
 			System.out.println("JspContentAssistProcessor: addAttributeValueProposals() exited");
+		}
+	}
+
+	/**
+	 * Calculates and adds the EL proposals to the Content Assist Request object
+	 */
+	@Override
+	protected void addTextELProposals(ContentAssistRequest contentAssistRequest) {
+		// TODO Auto-generated method stub
+		System.out.println("JspContentAssistProcessor: addTextELProposals() invoked");
+		try {
+			System.out.println("JspContentAssistProcessor: No EL allowed in TEXT");
+		} finally {
+			System.out.println("JspContentAssistProcessor: addTextELProposals() exited");
+		}
+	}
+
+	/**
+	 * Calculates and adds the EL proposals to the Content Assist Request object
+	 */
+	@Override
+	protected void addAttributeValueELProposals(ContentAssistRequest contentAssistRequest) {
+		// TODO Auto-generated method stub
+		System.out.println("JspContentAssistProcessor: addAttributeValueELProposals() invoked");
+		try {
+			String matchString = getELPrefix();
+			String query = matchString;
+			if (query == null)
+				query = "";
+			String stringQuery = matchString;
+					
+			KbQuery kbQuery = createKbQuery(Type.ATTRIBUTE_VALUE, query, stringQuery);
+			TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext());
+			
+			for (int i = 0; proposals != null && i < proposals.length; i++) {
+				TextProposal textProposal = proposals[i];
+				
+				System.out.println("Tag Attribute Value EL proposal [" + (i + 1) + "/" + proposals.length + "]: " + textProposal.getReplacementString());
+				
+				String replacementString = textProposal.getReplacementString();
+				
+				int replacementOffset = contentAssistRequest.getReplacementBeginPosition();
+				int replacementLength = contentAssistRequest.getReplacementLength();
+				int cursorPosition = getCursorPositionForProposedText(replacementString);
+				Image image = textProposal.getImage();
+				String displayString = (textProposal.getLabel() == null ? replacementString : textProposal.getLabel());
+				IContextInformation contextInformation = null;
+				String additionalProposalInfo = (textProposal.getContextInfo() == null ? "" : textProposal.getContextInfo());
+				int relevance = textProposal.getRelevance() + 10000;
+				
+				CustomCompletionProposal proposal = new CustomCompletionProposal(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, contextInformation, additionalProposalInfo, relevance);
+				contentAssistRequest.addProposal(proposal);
+			}
+		} finally {
+			System.out.println("JspContentAssistProcessor: addAttributeELProposals() exited");
 		}
 	}
 

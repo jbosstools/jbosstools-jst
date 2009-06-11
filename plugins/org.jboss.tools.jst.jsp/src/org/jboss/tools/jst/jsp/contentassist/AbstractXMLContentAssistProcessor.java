@@ -36,9 +36,15 @@ import org.eclipse.wst.xml.core.internal.contentmodel.CMElementDeclaration;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMText;
 import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 import org.eclipse.wst.xml.ui.internal.contentassist.AbstractContentAssistProcessor;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
+import org.jboss.tools.common.el.core.model.ELInstance;
+import org.jboss.tools.common.el.core.model.ELModel;
+import org.jboss.tools.common.el.core.model.ELUtil;
+import org.jboss.tools.common.el.core.parser.ELParser;
+import org.jboss.tools.common.el.core.parser.ELParserUtil;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.ELResolverFactoryManager;
@@ -247,6 +253,7 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	 */
 	protected void addEntityProposals(ContentAssistRequest contentAssistRequest, int documentPosition, ITextRegion completionRegion, IDOMNode treeNode) {
 		System.out.println("AbstractXMLContentAssistProcessor: addEntityProposals() invoked");
+		super.addEntityProposals(contentAssistRequest, documentPosition, completionRegion, treeNode);
 	}
 	
 	/*
@@ -285,6 +292,21 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	 */
 	abstract protected void addTagNameProposals(ContentAssistRequest contentAssistRequest, int childPosition);
 
+	
+	/**
+	 * Calculates and adds the EL proposals in attribute value to the Content Assist Request object
+	 * 
+	 * @param contentAssistRequest 
+	 */
+	abstract protected void addAttributeValueELProposals(ContentAssistRequest contentAssistRequest);
+	
+	/**
+	 * Calculates and adds the EL proposals in text to the Content Assist Request object
+	 * 
+	 * @param contentAssistRequest 
+	 */
+	abstract protected void addTextELProposals(ContentAssistRequest contentAssistRequest);
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.wst.xml.ui.internal.contentassist.AbstractContentAssistProcessor#computeCompletionProposals(int, java.lang.String, org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion, org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode, org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode)
@@ -301,11 +323,29 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 		if ((xmlnode.getNodeType() == Node.ELEMENT_NODE) || (xmlnode.getNodeType() == Node.DOCUMENT_NODE)) {
 			if (regionType == DOMRegionContext.XML_EMPTY_TAG_CLOSE) {
 				addAttributeNameProposals(contentAssistRequest);
+			} else if ((regionType == DOMRegionContext.XML_CONTENT) || (regionType == DOMRegionContext.XML_CHAR_REFERENCE) || (regionType == DOMRegionContext.XML_ENTITY_REFERENCE) || (regionType == DOMRegionContext.XML_PE_REFERENCE)) {
+				addTextELProposals(contentAssistRequest);
+			}
+		}
+
+		return contentAssistRequest;
+	}
+	
+	
+	protected ContentAssistRequest computeAttributeValueProposals(int documentPosition, String matchString, ITextRegion completionRegion, IDOMNode nodeAtOffset, IDOMNode node) {
+		ContentAssistRequest contentAssistRequest = super.computeAttributeValueProposals(documentPosition, matchString, completionRegion, nodeAtOffset, node);
+		
+		IStructuredDocumentRegion sdRegion = getStructuredDocumentRegion(documentPosition);
+		if ((documentPosition <= sdRegion.getStartOffset(completionRegion) + completionRegion.getTextLength()) || 
+				(sdRegion.getStartOffset(completionRegion) + completionRegion.getTextLength() == sdRegion.getStartOffset(completionRegion) + completionRegion.getLength())) {
+			// setup to replace the existing value
+			if (nodeAtOffset.getFirstStructuredDocumentRegion().isEnded() || (documentPosition >= sdRegion.getStartOffset(completionRegion))) {
+				addAttributeValueELProposals(contentAssistRequest);
 			}
 		}
 		return contentAssistRequest;
 	}
-	
+
 	/**
 	 * Creates and fulfills the <code>org.jboss.tools.common.el.core.resolver.ELContext</code> 
 	 * instance
@@ -613,4 +653,95 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 
 		return cursorAdjustment;
 	}
+	
+	/**
+	 * Returns URI for the current/parent tag
+	 * @return
+	 */
+	protected String getELPrefix() {
+		IStructuredModel sModel = StructuredModelManager
+									.getModelManager()
+									.getExistingModelForRead(getDocument());
+		try {
+			if (sModel == null) 
+				return null;
+			
+			Document xmlDocument = (sModel instanceof IDOMModel) 
+					? ((IDOMModel) sModel).getDocument()
+							: null;
+
+			if (xmlDocument == null)
+				return null;
+			
+			Node n = findNodeForOffset(xmlDocument, getOffset());
+			if (n == null)
+				return null;
+
+			String text = null;
+			ITextRegion region = null;
+			int startOffset = -1;
+			if (n instanceof IDOMAttr) {
+				text = ((IDOMAttr)n).getValueRegionText();
+				region = ((IDOMAttr)n).getValueRegion();
+				startOffset = ((IndexedRegion)((IDOMAttr)n).getOwnerElement()).getStartOffset(); 
+				startOffset += 	region.getStart();
+			} else if (n instanceof IDOMText) {
+				text = ((IDOMText)n).getNodeValue();
+				region = ((IDOMText)n).getFirstStructuredDocumentRegion();
+				startOffset = ((IndexedRegion)((IDOMAttr)n).getOwnerElement()).getStartOffset(); 
+			} else {
+				// The EL may appear only in TEXT and ATTRIBUTE VALUE types of node 
+				return null;
+			}
+
+			int inValueOffset = getOffset() - startOffset;
+			if (text.length() < inValueOffset) // probably, the attribute value ends before the document position
+				return null;
+			
+			String matchString = text.substring(0, inValueOffset);
+			
+			ELParser p = ELParserUtil.getJbossFactory().createParser();
+			ELModel model = p.parse(matchString);
+			ELInstance is = ELUtil.findInstance(model, inValueOffset);
+			
+			String elPrefix = is.getText();
+			
+			
+			return elPrefix;
+		} finally {
+			if (sModel != null) {
+				sModel.releaseFromRead();
+			}
+		}
+	}
+
+	/*
+	 * Checks if the EL operand starting characters are present
+	 * @return
+	 */
+	private int getELStartPosition(String matchString) {
+		ELParser p = ELParserUtil.getJbossFactory().createParser();
+		ELModel model = p.parse(matchString);
+		ELInstance is = ELUtil.findInstance(model, matchString.length());
+		return is == null ? -1 : is.getStartPosition();
+	}
+	
+	/*
+	 * Checks if the EL operand ending character is present
+	 * @return
+	 */
+	private int getELEndPosition(String matchString, String currentValue) {
+		if (matchString == null || matchString.length() == 0 ||
+				currentValue == null || currentValue.length() == 0 || 
+				currentValue.length() < matchString.length())
+			return -1;
+
+		ELParser p = ELParserUtil.getJbossFactory().createParser();
+		ELModel model = p.parse(currentValue);
+		ELInstance is = ELUtil.findInstance(model, matchString.length());
+		if(is == null || is.getCloseInstanceToken() == null) return -1;
+
+		return is.getEndPosition();
+	}
+	
 }

@@ -85,4 +85,18 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	protected void addAttributeValueELProposals(ContentAssistRequest contentAssistRequest) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void addTextELProposals(ContentAssistRequest contentAssistRequest) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
 }
