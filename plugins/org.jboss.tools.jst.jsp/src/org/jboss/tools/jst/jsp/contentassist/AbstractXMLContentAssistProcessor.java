@@ -688,7 +688,7 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 			} else if (n instanceof IDOMText) {
 				text = ((IDOMText)n).getNodeValue();
 				region = ((IDOMText)n).getFirstStructuredDocumentRegion();
-				startOffset = ((IndexedRegion)((IDOMAttr)n).getOwnerElement()).getStartOffset(); 
+				startOffset = ((IDOMText)n).getStartOffset(); 
 			} else {
 				// The EL may appear only in TEXT and ATTRIBUTE VALUE types of node 
 				return null;
