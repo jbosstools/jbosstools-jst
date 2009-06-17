@@ -49,7 +49,7 @@ public class PageProcessor implements IProposalProcessor {
 	public TextProposal[] getProposals(KbQuery query, IPageContext context) {
 		ArrayList<TextProposal> proposals = new ArrayList<TextProposal>();
 
-		if (!isQueryForELProposals(query)) {
+		if (!isQueryForELProposals(query, context)) {
 			ITagLibrary[] libs =  context.getLibraries();
 			for (int i = 0; libs != null && i < libs.length; i++) {
 				TextProposal[] libProposals = libs[i].getProposals(query, context);
@@ -61,27 +61,26 @@ public class PageProcessor implements IProposalProcessor {
 				// TODO
 			}
 		} else {
-			if(query.getType() == KbQuery.Type.ATTRIBUTE_VALUE || ((query.getType() == KbQuery.Type.TEXT )&& context instanceof IFaceletPageContext)) {
-				String value = query.getValue();
-				 //TODO convert value to EL string.
-				String elString = value;
-				ELResolver[] resolvers =  context.getElResolvers();
-				for (int i = 0; resolvers != null && i < resolvers.length; i++) {
-					proposals.addAll(resolvers[i].getCompletions(elString, !query.isMask(), query.getOffset(), context));
-				}
+			String value = query.getValue();
+			 //TODO convert value to EL string.
+			String elString = value;
+			ELResolver[] resolvers =  context.getElResolvers();
+			for (int i = 0; resolvers != null && i < resolvers.length; i++) {
+				proposals.addAll(resolvers[i].getCompletions(elString, !query.isMask(), query.getOffset(), context));
 			}
 		}
 		return proposals.toArray(new TextProposal[proposals.size()]);
 	}
 
-	private boolean isQueryForELProposals(KbQuery query) {
+	private boolean isQueryForELProposals(KbQuery query, IPageContext context) {
 		if (query.getType() != KbQuery.Type.ATTRIBUTE_VALUE &&
-				query.getType() != KbQuery.Type.TEXT) 
+				((query.getType() != KbQuery.Type.TEXT ) || !(context instanceof IFaceletPageContext))) { 
 			return false;
+		}
 
 		return (query.getValue() != null && 
-				( query.getValue().startsWith("#{") ||
-					query.getValue().startsWith("${") ) );
+				(query.getValue().startsWith("#{") ||
+					query.getValue().startsWith("${")));
 	}
 	
  	/**
