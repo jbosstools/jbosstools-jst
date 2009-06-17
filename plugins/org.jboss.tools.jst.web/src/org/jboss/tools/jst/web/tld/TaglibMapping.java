@@ -246,7 +246,11 @@ public class TaglibMapping implements ITaglibMapping {
 				findTldsInFolder(cs[i], base + cs[i].getAttributeValue("name") + "/");
 			} else if(cs[i].getFileType() == XModelObject.FILE) {
 				String entity = cs[i].getModelEntity().getName();
-				if(!entity.startsWith("FileTLD")) continue;
+				boolean ok = entity.startsWith("FileTLD");
+				if(!ok && "META-INF".equals(folder.getAttributeValue("name")) && entity.startsWith("FileFaceletTaglib")) {
+					ok = true;
+				}
+				if(!ok) continue;
 				String uri = cs[i].getAttributeValue("uri");
 				String location = base + FileAnyImpl.toFileName(cs[i]);
 				if(folder instanceof FolderImpl) {
