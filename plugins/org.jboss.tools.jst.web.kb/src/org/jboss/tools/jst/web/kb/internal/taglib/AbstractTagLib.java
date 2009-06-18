@@ -115,7 +115,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	protected IComponent[] getComponents(KbQuery query, String prefix, IPageContext context) {
 		String fullTagName = null;
 		boolean mask = false;
-		if(query.getType()==KbQuery.Type.TAG_NAME) {
+		if(query.getType()==KbQuery.Type.TAG_NAME || query.getType()==KbQuery.Type.TEXT) {
 			fullTagName = query.getValue();
 			mask = query.isMask();
 		} else {
@@ -318,10 +318,10 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		String prefix = getPrefix(query, context);
 		List<TextProposal> proposals = new ArrayList<TextProposal>();
 		IComponent[] components = getComponents(query, prefix, context);
-		if(query.getType() == KbQuery.Type.TAG_NAME) {
+		if(query.getType() == KbQuery.Type.TAG_NAME || query.getType() == KbQuery.Type.TEXT) {
 			for (int i = 0; i < components.length; i++) {
 				if(!(components[i] instanceof CustomComponentExtension)) {
-					proposals.add(getProposal(prefix, components[i]));					
+					proposals.add(getProposal(prefix, components[i]));
 				}
 			}
 		} else {
@@ -341,7 +341,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		TextProposal proposal = new TextProposal();
 		proposal.setContextInfo(component.getDescription());
 		proposal.setSource(component);
-		StringBuffer label = new StringBuffer();
+		StringBuffer label = new StringBuffer("<");
 		if(prefix!=null) {
 			label.append(prefix + KbQuery.PREFIX_SEPARATOR);
 		}
@@ -357,6 +357,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		if(!component.canHaveBody()) {
 			label.append(" /");
 		}
+		label.append(">");
 
 		proposal.setReplacementString(label.toString());
 
