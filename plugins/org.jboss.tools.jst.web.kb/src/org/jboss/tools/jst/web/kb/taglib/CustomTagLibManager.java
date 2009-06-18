@@ -79,7 +79,7 @@ public class CustomTagLibManager {
 		Set<ICustomTagLibrary> libSet = new HashSet<ICustomTagLibrary>();
 		Set<CustomTagLibAttribute> extensionSet = new HashSet<CustomTagLibAttribute>();
         IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IExtensionPoint extensionPoint = registry.getExtensionPoint("org.jboss.tools.jst.web.kb.KbTagLib"); //$NON-NLS-1$
+		IExtensionPoint extensionPoint = registry.getExtensionPoint("org.jboss.tools.jst.web.kb.tagLib"); //$NON-NLS-1$
 		if (extensionPoint != null) { 
 			IExtension[] extensions = extensionPoint.getExtensions();
 			for (int i=0; i<extensions.length; i++) {
