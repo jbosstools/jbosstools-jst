@@ -15,6 +15,10 @@ package org.jboss.tools.jst.web.kb.internal.taglib;
  */
 public class CustomComponentExtension extends CustomTagLibComponent {
 
+	public CustomComponentExtension() {
+		setName("*");
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#isExtended()

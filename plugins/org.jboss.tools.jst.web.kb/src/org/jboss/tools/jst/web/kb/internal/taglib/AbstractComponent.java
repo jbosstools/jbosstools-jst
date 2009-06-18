@@ -334,6 +334,7 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 			proposals = new ArrayList<TextProposal>();
 			for (int i = 0; i < attributes.length; i++) {
 				TextProposal proposal = new TextProposal();
+				proposal.setSource(attributes[i]);
 				proposal.setContextInfo(attributes[i].getDescription());
 				proposal.setReplacementString(attributes[i].getName());
 				proposal.setLabel(attributes[i].getName());

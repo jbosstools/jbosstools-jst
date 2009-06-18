@@ -10,12 +10,20 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal.taglib;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jboss.tools.common.text.TextProposal;
+import org.jboss.tools.jst.web.kb.IPageContext;
+import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
 
 /**
  * @author Alexey Kazakov
  */
 public class CustomTagLibAttribute extends AbstractAttribute {
+
+	private final static String ENUMERATION_TYPE = "enumeration"; //$NON-NLS-1$
 
 	protected boolean extended = true;
 	protected String defaultValue;
@@ -52,6 +60,20 @@ public class CustomTagLibAttribute extends AbstractAttribute {
 	 */
 	public void setDefaultValue(String defaultValue) {
 		this.defaultValue = defaultValue;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.taglib.AbstractAttribute#getProposals(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.IPageContext)
+	 */
+	@Override
+	public TextProposal[] getProposals(KbQuery query, IPageContext context) {
+		Proposal[] prDefs = getProposals();
+		List<TextProposal> proposals = new ArrayList<TextProposal>();
+		for (int i = 0; i < prDefs.length; i++) {
+			// TODO
+		}
+		return proposals.toArray(new TextProposal[0]);
 	}
 
 	/**

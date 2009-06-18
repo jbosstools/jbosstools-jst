@@ -58,7 +58,6 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 
 	protected String name;
 	protected String defaultPrefix;
-	protected CustomComponentExtension componentExtension;
 
 	public CustomTagLibrary(File file, String uri, String version, String name) {
 		setURI(uri);
@@ -87,8 +86,7 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 				} else if (child.getNodeName().equals(COMPONET_EXTENSION)) {
 					if(componentExtension==null) {
 						componentExtension = new CustomComponentExtension();
-						// TODO what we should do with this fake components?
-//						addComponent(componentExtension);
+						addComponent(componentExtension);
 						componentExtension.setParentTagLib(this);
 					}
 					componentExtension.addAttributes(getAttributes((Element)child));
@@ -120,7 +118,7 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 		return newComponent;
 	}
 
-	protected CustomTagLibAttribute[] getAttributes(Element component) {
+	public static CustomTagLibAttribute[] getAttributes(Element component) {
 		Set<CustomTagLibAttribute> newAttributes = new HashSet<CustomTagLibAttribute>();
 		NodeList children = component.getChildNodes();
 		for (int i = 0; i < children.getLength(); i++) {
@@ -175,7 +173,7 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 		return newAttributes.toArray(new CustomTagLibAttribute[0]);
 	}
 
-	private String getDescription(Element element) {
+	public static String getDescription(Element element) {
 		NodeList list = element.getChildNodes();
 		for(int i=0; i<list.getLength(); i++) {
 			Node node = list.item(i);
@@ -188,7 +186,7 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 		return null;
 	}
 
-	private String getElementBody(Element element) {
+	public static String getElementBody(Element element) {
 		StringBuffer sb = new StringBuffer();
 		NodeList nl = element.getChildNodes();
 		for (int i = 0; i < nl.getLength(); i++) {
@@ -201,7 +199,7 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 		return sb.toString();
 	}
 
-	private DocumentBuilder createDocumentBuilder(boolean validate) throws ParserConfigurationException {
+	public static DocumentBuilder createDocumentBuilder(boolean validate) throws ParserConfigurationException {
 		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 		documentBuilderFactory.setValidating(validate);
 		DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();

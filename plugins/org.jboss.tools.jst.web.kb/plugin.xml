@@ -27,5 +27,38 @@
             id="org.jboss.tools.jst.web.kb.kbbuilder">
       </builder>
    </extension>
+   <extension
+         point="org.jboss.tools.jst.web.kb.tagLib">
+      <tag-lib
+            location="taglibs/Ajax4jsf.xml"
+            name="JBoss Ajax4jsf"
+            uri="http://richfaces.org/a4j"/>
+      <tag-lib
+            location="taglibs/Richfaces.xml"
+            name="JBoss RichFaces"
+            uri="http://richfaces.org/rich"/>
+      <tag-lib
+            location="taglibs/JsfCore.xml"
+            name="JSF Core"
+            uri="http://java.sun.com/jsf/core"/>
+      <tag-lib
+            location="taglibs/JsfHtmlBasic.xml"
+            name="JSF HTML Basic"
+            uri="http://java.sun.com/jsf/html"/>
+      <tag-lib
+            location="taglibs/Facelets.xml"
+            name="Facelets UI"
+            uri="http://java.sun.com/jsf/facelets"/>
+      <tag-lib
+            location="taglibs/FaceletsHtml.xml"
+            name="Facelets Html"
+            uri="http://www.w3.org/1999/xhtml/facelets"/>
+      <tag-lib
+            location="taglibs/JBossSeam.xml"
+            name="JBoss Seam"
+            uri="http://jboss.com/products/seam/taglib"/>
+      <component-extension
+            location="taglibs/componentExtension.xml"/>
+   </extension>
 
 </plugin>

@@ -34,7 +34,7 @@ import org.w3c.dom.Element;
  * @author Alexey Kazakov
  */
 public abstract class AbstractAttribute extends KbObject implements IAttribute {
-	public static final String REQUIRED = "required";
+	public static final String REQUIRED = "required"; //$NON-NLS-1$
 
 	protected String description;
 	protected String name;
@@ -100,7 +100,7 @@ public abstract class AbstractAttribute extends KbObject implements IAttribute {
 	}
 
 	public void setRequired(IValueInfo s) {
-		required = s != null && "true".equals(s.getValue());
+		required = s != null && "true".equals(s.getValue()); //$NON-NLS-1$
 		attributesInfo.put(REQUIRED, s);
 	}
 
@@ -117,19 +117,24 @@ public abstract class AbstractAttribute extends KbObject implements IAttribute {
 	 */
 	public TextProposal[] getProposals(KbQuery query, IPageContext context) {
 		List<TextProposal> proposals = null;
-		ELResolver[] resolvers = context.getElResolvers();
-		for (int i = 0; i < resolvers.length; i++) {
-			List<TextProposal> list = resolvers[i].getCompletions(query.getValue(), false, query.getValue().length(), context);
-			if(list == null || list.isEmpty()) continue;
-			if(proposals == null) {
-				proposals = new ArrayList<TextProposal>();
-			}
-			proposals.addAll(list);
-		}
-		if(proposals == null || proposals.isEmpty()) {
-			return EMPTY_PROPOSAL_LIST;
-		}
-		return proposals.toArray(new TextProposal[proposals.size()]);
+//		ELResolver[] resolvers = context.getElResolvers();
+//		for (int i = 0; i < resolvers.length; i++) {
+//			List<TextProposal> list = resolvers[i].getCompletions(query.getValue(), false, query.getValue().length(), context);
+//			if(list == null || list.isEmpty()) continue;
+//			if(proposals == null) {
+//				proposals = new ArrayList<TextProposal>();
+//			}
+//			for (TextProposal textProposal : list) {
+//				textProposal.setSource(this);
+//				proposals.add(textProposal);
+//			}
+//		}
+//		if(proposals == null || proposals.isEmpty()) {
+//			return EMPTY_PROPOSAL_LIST;
+//		}
+//		return proposals.toArray(new TextProposal[proposals.size()]);
+		// TODO
+		return EMPTY_PROPOSAL_LIST;
 	}
 
 	/*

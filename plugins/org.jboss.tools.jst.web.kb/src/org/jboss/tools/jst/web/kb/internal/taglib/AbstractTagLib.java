@@ -51,6 +51,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	protected boolean hasExtendedComponents = false;
 	private Map<String, IComponent> components = new HashMap<String, IComponent>();
 	private IComponent[] componentsArray;
+	protected CustomComponentExtension componentExtension;
 
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.TagLibrary#getAllComponents()
@@ -82,7 +83,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		List<IComponent> list = new ArrayList<IComponent>();
 		IComponent[] comps = getComponents();
 		for (int i = 0; i < comps.length; i++) {
-			if(comps[i].getName().startsWith(nameTemplate) && (context==null || checkExtended(comps[i], context))) {
+			if(!(comps[i] instanceof CustomComponentExtension) && comps[i].getName().startsWith(nameTemplate) && (context==null || checkExtended(comps[i], context))) {
 				list.add(comps[i]);
 			}
 		}
@@ -158,10 +159,14 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 			return EMPTY_ARRAY;
 		}
 		IComponent comp = getComponent(tagName);
+		List<IComponent> result = new ArrayList<IComponent>();
 		if(comp != null && checkExtended(comp, context)) {
-			return new IComponent[]{comp};
+			result.add(comp);
 		}
-		return EMPTY_ARRAY;
+		if(componentExtension!=null) {
+			result.add(componentExtension);
+		}
+		return result.isEmpty()?EMPTY_ARRAY:result.toArray(new IComponent[0]);
 	}
 
 	protected IComponent[] getExtendedComponents(IPageContext context) {
@@ -180,7 +185,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	}
 
 	protected boolean checkExtended(IComponent component, IPageContext context) {
-		if(!component.isExtended()) {
+		if(!component.isExtended() || component instanceof CustomComponentExtension) {
 			return true;
 		}
 		ITagLibrary[] libs = context.getLibraries();
@@ -315,7 +320,9 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		IComponent[] components = getComponents(query, prefix, context);
 		if(query.getType() == KbQuery.Type.TAG_NAME) {
 			for (int i = 0; i < components.length; i++) {
-				proposals.add(getProposal(prefix, components[i]));
+				if(!(components[i] instanceof CustomComponentExtension)) {
+					proposals.add(getProposal(prefix, components[i]));					
+				}
 			}
 		} else {
 			for (int i = 0; i < components.length; i++) {
@@ -333,6 +340,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	protected TextProposal getProposal(String prefix, IComponent component) {
 		TextProposal proposal = new TextProposal();
 		proposal.setContextInfo(component.getDescription());
+		proposal.setSource(component);
 		StringBuffer label = new StringBuffer();
 		if(prefix!=null) {
 			label.append(prefix + KbQuery.PREFIX_SEPARATOR);
