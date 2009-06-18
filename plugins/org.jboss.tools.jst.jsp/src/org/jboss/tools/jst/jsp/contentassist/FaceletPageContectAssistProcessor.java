@@ -42,7 +42,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor {
-
+	private static final String UI_URI_JSF_FACELETS = "http://java.sun.com/jsf/facelets";
+	private static final String UI_URI_XHTML_FACELETS = "http://www.w3.org/1999/xhtml/facelets";
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor#createContext()
@@ -134,6 +135,17 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 								}
 							};
 							context.addNameSpace(region, nameSpace);
+							if (UI_URI_JSF_FACELETS.equals(uri)) {
+								nameSpace = new INameSpace(){
+									public String getURI() {
+										return UI_URI_XHTML_FACELETS;
+									}
+									public String getPrefix() {
+										return "";
+									}
+								};
+								context.addNameSpace(region, nameSpace);
+							}
 						}
 					}
 				}
