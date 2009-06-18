@@ -55,6 +55,7 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	private IAttribute[] preferableAttributesArray;
 	private Map<String, IAttribute> requiredAttributes = new HashMap<String, IAttribute>();
 	private IAttribute[] requiredAttributesArray;
+	protected boolean ignoreCase;
 
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#canHaveBody()
@@ -108,7 +109,11 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		List<IAttribute> list = new ArrayList<IAttribute>();
 		IAttribute[] atts = getAttributes();
 		for (int i = 0; i < atts.length; i++) {
-			if(atts[i].getName().startsWith(nameTemplate) && (context==null || checkExtended(atts[i], context))) {
+			if(ignoreCase) {
+				if(atts[i].getName().toLowerCase().startsWith(nameTemplate.toLowerCase()) && (context==null || checkExtended(atts[i], context))) {
+					list.add(atts[i]);
+				}
+			} else if(atts[i].getName().startsWith(nameTemplate) && (context==null || checkExtended(atts[i], context))) {
 				list.add(atts[i]);
 			}
 		}
@@ -411,6 +416,13 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	 */
 	public ITagLibrary getTagLib() {
 		return (ITagLibrary)parent;
+	}
+
+	/**
+	 * @param ignoreCase the ignoreCase to set
+	 */
+	protected void setIgnoreCase(boolean ignoreCase) {
+		this.ignoreCase = ignoreCase;
 	}
 
 	/*

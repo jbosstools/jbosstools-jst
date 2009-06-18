@@ -55,6 +55,7 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 	protected static final String DEFAULT_VALUE = "defaultValue"; //$NON-NLS-1$
 	protected static final String EXTENDED = "extended"; //$NON-NLS-1$
 	protected static final String DESCRIPTION = "description"; //$NON-NLS-1$
+	protected static final String IGNORE_CASE = "ignoreCase"; //$NON-NLS-1$
 
 	protected String name;
 	protected String defaultPrefix;
@@ -74,14 +75,16 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 		} catch (ParserConfigurationException e) {
 			WebKbPlugin.getDefault().logError(e);
 		}
-		defaultPrefix = document.getDocumentElement().getAttribute(DEFAULT_PREFIX);
 		Element tagLib = document.getDocumentElement();
+		defaultPrefix = tagLib.getAttribute(DEFAULT_PREFIX);
+		ignoreCase = "true".equals(tagLib.getAttribute(IGNORE_CASE)); //$NON-NLS-1$
 		NodeList children = tagLib.getChildNodes();
 		for (int i = 0; i < children.getLength(); i++) {
 			Node child = children.item(i);
 			if(child instanceof Element) {
 				if(child.getNodeName().equals(COMPONENT)) {
 					CustomTagLibComponent component = parseComponent((Element)child);
+					component.setIgnoreCase(ignoreCase);
 					addComponent(component);
 				} else if (child.getNodeName().equals(COMPONET_EXTENSION)) {
 					if(componentExtension==null) {
@@ -89,7 +92,7 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 						addComponent(componentExtension);
 						componentExtension.setParentTagLib(this);
 					}
-					componentExtension.addAttributes(getAttributes((Element)child));
+					componentExtension.addAttributes(getAttributes((Element)child, ignoreCase));
 				}
 			}
 		}
@@ -109,7 +112,7 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 		newComponent.setParentTagLib(this);
 
 		// Extract attributes
-		CustomTagLibAttribute[] attributes = getAttributes(component);
+		CustomTagLibAttribute[] attributes = getAttributes(component, ignoreCase);
 		for (int i = 0; i < attributes.length; i++) {
 			newComponent.addAttribute(attributes[i]);
 			attributes[i].setParentComponent(newComponent);
@@ -119,6 +122,10 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 	}
 
 	public static CustomTagLibAttribute[] getAttributes(Element component) {
+		return getAttributes(component, false);
+	}
+
+	public static CustomTagLibAttribute[] getAttributes(Element component, boolean ignoreCase) {
 		Set<CustomTagLibAttribute> newAttributes = new HashSet<CustomTagLibAttribute>();
 		NodeList children = component.getChildNodes();
 		for (int i = 0; i < children.getLength(); i++) {
@@ -129,6 +136,7 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 					String attributeName = attribute.getAttribute(NAME);
 					boolean required = TRUE.equalsIgnoreCase(attribute.getAttribute(REQUIRED));
 					CustomTagLibAttribute newAttribute = new CustomTagLibAttribute();
+					newAttribute.setIgnoreCase(ignoreCase);
 					newAttribute.setName(attributeName);
 					newAttribute.setRequired(required);
 					String atrDescription = getDescription(attribute);

@@ -10,11 +10,9 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal.taglib;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.project.ext.IValueInfo;
 import org.jboss.tools.common.model.project.ext.event.Change;
@@ -39,6 +37,7 @@ public abstract class AbstractAttribute extends KbObject implements IAttribute {
 	protected String description;
 	protected String name;
 	protected boolean required;
+	protected boolean ignoreCase;
 
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IAttribute#getDescription()
@@ -135,6 +134,13 @@ public abstract class AbstractAttribute extends KbObject implements IAttribute {
 //		return proposals.toArray(new TextProposal[proposals.size()]);
 		// TODO
 		return EMPTY_PROPOSAL_LIST;
+	}
+
+	/**
+	 * @param ignoreCase the ignoreCase to set
+	 */
+	protected void setIgnoreCase(boolean ignoreCase) {
+		this.ignoreCase = ignoreCase;
 	}
 
 	/*

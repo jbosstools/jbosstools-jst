@@ -52,6 +52,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	private Map<String, IComponent> components = new HashMap<String, IComponent>();
 	private IComponent[] componentsArray;
 	protected CustomComponentExtension componentExtension;
+	protected boolean ignoreCase;
 
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.TagLibrary#getAllComponents()
@@ -69,6 +70,9 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	 * @see org.jboss.tools.jst.web.kb.taglib.TagLibrary#getComponent(java.lang.String)
 	 */
 	public IComponent getComponent(String name) {
+		if(ignoreCase) {
+			name = name.toLowerCase();
+		}
 		return components.get(name);
 	}
 
@@ -83,7 +87,11 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		List<IComponent> list = new ArrayList<IComponent>();
 		IComponent[] comps = getComponents();
 		for (int i = 0; i < comps.length; i++) {
-			if(!(comps[i] instanceof CustomComponentExtension) && comps[i].getName().startsWith(nameTemplate) && (context==null || checkExtended(comps[i], context))) {
+			if(ignoreCase) {
+				if(!(comps[i] instanceof CustomComponentExtension) && comps[i].getName().toLowerCase().startsWith(nameTemplate.toLowerCase()) && (context==null || checkExtended(comps[i], context))) {
+					list.add(comps[i]);
+				}
+			} else if(!(comps[i] instanceof CustomComponentExtension) && comps[i].getName().startsWith(nameTemplate) && (context==null || checkExtended(comps[i], context))) {
 				list.add(comps[i]);
 			}
 		}
@@ -145,7 +153,11 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		}
 		if(mask) {
 			if(prefixIndex<0) {
-				if(prefix.startsWith(tagName)) {
+				if(ignoreCase) {
+					if(prefix.toLowerCase().startsWith(tagName.toLowerCase())) {
+						return getExtendedComponents(context);
+					}
+				} else if(prefix.startsWith(tagName)) {
 					return getExtendedComponents(context);
 				}
 				return EMPTY_ARRAY;
@@ -342,7 +354,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		proposal.setContextInfo(component.getDescription());
 		proposal.setSource(component);
 		StringBuffer label = new StringBuffer("<");
-		if(prefix!=null) {
+		if(prefix!=null && prefix.length()>0) {
 			label.append(prefix + KbQuery.PREFIX_SEPARATOR);
 		}
 		label.append(component.getName());
