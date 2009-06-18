@@ -440,7 +440,7 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	 * 
 	 * @return
 	 */
-	protected String[] getParentTags() {
+	protected String[] getParentTags(boolean includeThisTag) {
 		List<String> parentTags = new ArrayList<String>();
 		
 		IStructuredModel sModel = StructuredModelManager
@@ -468,7 +468,7 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 				} else {
 					n = n.getParentNode();
 				}
-			} else {
+			} else if (!includeThisTag) {
 				n = n.getParentNode();
 			}
 
@@ -704,7 +704,7 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 			ELModel model = p.parse(text);
 			ELInstance is = ELUtil.findInstance(model, inValueOffset);// ELInstance
 			model.toString(); model.getSyntaxErrors();
-			boolean isELClosed = (model != null && model.toString().endsWith("}"));
+			boolean isELClosed = (is == null) || (model != null && model.toString().endsWith("}"));
 			TextRegion tr = new TextRegion(startOffset,  is == null ? inValueOffset : is.getStartPosition(), is == null ? 0 : inValueOffset - is.getStartPosition(), is == null ? "" : is.getText(), isELClosed);
 			
 			return tr;
