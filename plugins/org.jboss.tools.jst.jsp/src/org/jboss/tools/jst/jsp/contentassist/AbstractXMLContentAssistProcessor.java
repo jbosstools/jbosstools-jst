@@ -658,7 +658,7 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	 * Returns URI for the current/parent tag
 	 * @return
 	 */
-	protected String getELPrefix() {
+	protected TextRegion getELPrefix() {
 		IStructuredModel sModel = StructuredModelManager
 									.getModelManager()
 									.getExistingModelForRead(getDocument());
@@ -701,13 +701,13 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 			String matchString = text.substring(0, inValueOffset);
 			
 			ELParser p = ELParserUtil.getJbossFactory().createParser();
-			ELModel model = p.parse(matchString);
-			ELInstance is = ELUtil.findInstance(model, inValueOffset);
+			ELModel model = p.parse(text);
+			ELInstance is = ELUtil.findInstance(model, inValueOffset);// ELInstance
+			model.toString(); model.getSyntaxErrors();
+			boolean isELClosed = (model != null && model.toString().endsWith("}"));
+			TextRegion tr = new TextRegion(startOffset,  is == null ? inValueOffset : is.getStartPosition(), is == null ? 0 : inValueOffset - is.getStartPosition(), is == null ? "" : is.getText(), isELClosed);
 			
-			String elPrefix = is.getText();
-			
-			
-			return elPrefix;
+			return tr;
 		} finally {
 			if (sModel != null) {
 				sModel.releaseFromRead();
@@ -715,6 +715,44 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 		}
 	}
 
+	protected class TextRegion {
+		private int startOffset;
+		private int offset;
+		private int length;
+		private String text;
+		private boolean isELClosed;
+		
+		TextRegion(int startOffset, int offset, int length, String text, boolean isELClosed) {
+			this.startOffset = startOffset;
+			this.offset = offset;
+			this.length = length;
+			this.text = text;
+			this.isELClosed = isELClosed;
+		}
+		
+		public int getStartOffset() {
+			return startOffset;
+		}
+		
+		public int getOffset() {
+			return offset;
+		}
+		
+		public int getLength() {
+			return length;
+		}
+		
+		public String getText() {
+			StringBuffer sb = new StringBuffer(length);
+			sb = sb.append(text.substring(0, length));
+			sb.setLength(length);
+			return sb.toString();
+		}
+		
+		public boolean isELClosed() {
+			return isELClosed;
+		}
+	}
 	/*
 	 * Checks if the EL operand starting characters are present
 	 * @return

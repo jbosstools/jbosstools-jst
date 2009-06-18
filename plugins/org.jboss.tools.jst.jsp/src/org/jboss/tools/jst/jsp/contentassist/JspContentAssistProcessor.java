@@ -398,7 +398,8 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 		// TODO Auto-generated method stub
 		System.out.println("JspContentAssistProcessor: addAttributeValueELProposals() invoked");
 		try {
-			String matchString = getELPrefix();
+			TextRegion prefix = getELPrefix();
+			String matchString = prefix.getText();
 			String query = matchString;
 			if (query == null)
 				query = "";

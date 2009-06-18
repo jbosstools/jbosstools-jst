@@ -19,12 +19,14 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
+import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
 import org.eclipse.wst.sse.ui.internal.contentassist.CustomCompletionProposal;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
 import org.jboss.tools.common.text.TextProposal;
+import org.jboss.tools.jst.jsp.contentassist.AbstractXMLContentAssistProcessor.TextRegion;
 import org.jboss.tools.jst.web.kb.IFaceletPageContext;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
@@ -163,12 +165,16 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 		// TODO Auto-generated method stub
 		System.out.println("FaceletPageContectAssistProcessor: addTextELProposals() invoked");
 		try {
-			String matchString = getELPrefix();
+			TextRegion prefix = getELPrefix();
+			String matchString = prefix.getText();
 			String query = matchString;
 			if (query == null)
 				query = "";
 			String stringQuery = matchString;
-					
+			
+			int beginChangeOffset = prefix.getStartOffset() + prefix.getOffset();
+
+			
 			KbQuery kbQuery = createKbQuery(Type.TEXT, query, stringQuery);
 			TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext());
 			
@@ -177,19 +183,27 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 				
 				System.out.println("Tag Text EL proposal [" + (i + 1) + "/" + proposals.length + "]: " + textProposal.getReplacementString());
 				
-				String replacementString = textProposal.getReplacementString();
-				
-				int replacementOffset = contentAssistRequest.getReplacementBeginPosition();
-				int replacementLength = contentAssistRequest.getReplacementLength();
-				int cursorPosition = getCursorPositionForProposedText(replacementString);
+				int replacementOffset = beginChangeOffset;
+				int replacementLength = prefix.getLength();
+				String replacementString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString();
+				int cursorPosition = replacementString.length();
 				Image image = textProposal.getImage();
-				String displayString = (textProposal.getLabel() == null ? replacementString : textProposal.getLabel());
+				
+				String displayString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString() + "}"; 
 				IContextInformation contextInformation = null;
 				String additionalProposalInfo = textProposal.getContextInfo();
 				int relevance = textProposal.getRelevance() + 10000;
 				
 				CustomCompletionProposal proposal = new CustomCompletionProposal(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, contextInformation, additionalProposalInfo, relevance);
 				contentAssistRequest.addProposal(proposal);
+			}
+			
+			if (proposals == null || proposals.length == 0) {
+				if (!prefix.isELClosed()) {
+					CustomCompletionProposal proposal = new CustomCompletionProposal("}", contentAssistRequest.getReplacementBeginPosition(),
+							0, 1, null, "}", null, "Close EL Expression", 10000);
+					contentAssistRequest.addProposal(proposal);
+				}
 			}
 		} finally {
 			System.out.println("FaceletPageContectAssistProcessor: addTextELProposals() exited");
