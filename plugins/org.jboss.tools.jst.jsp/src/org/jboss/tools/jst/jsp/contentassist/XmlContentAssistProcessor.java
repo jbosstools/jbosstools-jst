@@ -50,7 +50,7 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 
 		String prefix = getTagPrefix();
 		String  uri = getTagUri();
-		String[] parentTags = getParentTags();
+		String[] parentTags = getParentTags(type == Type.ATTRIBUTE_NAME || type == Type.ATTRIBUTE_VALUE);
 		String	parent = getParent(type == Type.ATTRIBUTE_VALUE);
 		String queryValue = query;
 		String queryStringValue = stringQuery;
