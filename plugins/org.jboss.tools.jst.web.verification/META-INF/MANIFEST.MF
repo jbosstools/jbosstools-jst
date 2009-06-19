@@ -1,6 +1,5 @@
 Manifest-Version: 1.0
 Bundle-Name: %Bundle-Name.0
-Bundle-ClassPath: web-verification.jar
 Bundle-Activator: org.eclipse.core.internal.compatibility.PluginActiva
  tor
 Bundle-ManifestVersion: 2
