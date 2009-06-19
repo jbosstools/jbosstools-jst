@@ -178,6 +178,12 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 		System.out.println("FaceletPageContectAssistProcessor: addTextELProposals() invoked");
 		try {
 			TextRegion prefix = getELPrefix();
+			if (prefix == null || !prefix.isELStarted()) {
+				CustomCompletionProposal proposal = new CustomCompletionProposal("#{}", contentAssistRequest.getReplacementBeginPosition(),
+						0, 2, null, "#{}", null, "New EL Expression", 10000);
+				contentAssistRequest.addProposal(proposal);
+				return;
+			}
 			String matchString = prefix.getText();
 			String query = matchString;
 			if (query == null)
@@ -211,7 +217,7 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 			}
 			
 			if (proposals == null || proposals.length == 0) {
-				if (!prefix.isELClosed()) {
+				if (prefix.isELStarted() && !prefix.isELClosed()) {
 					CustomCompletionProposal proposal = new CustomCompletionProposal("}", contentAssistRequest.getReplacementBeginPosition(),
 							0, 1, null, "}", null, "Close EL Expression", 10000);
 					contentAssistRequest.addProposal(proposal);

@@ -236,9 +236,66 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 		}
 
 	}
+	
+	/**
+	 * Calculates and adds the tag proposals to the Content Assist Request object
+	 * 
+	 * @param contentAssistRequest Content Assist Request object
+	 * @param childPosition the 
+	 */
+
+	@Override
+	protected void addTagInsertionProposals(
+			ContentAssistRequest contentAssistRequest, int childPosition) {
+		// TODO Auto-generated method stub
+		System.out.println("JspContentAssistProcessor: addTagInsertionProposals() invoked");
+		try {
+			String matchString = contentAssistRequest.getMatchString();
+			String query = matchString;
+			if (query == null)
+				query = "";
+			String stringQuery = "<" + matchString;
+					
+			KbQuery kbQuery = createKbQuery(Type.TAG_NAME, query, stringQuery);
+			TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext());
+			
+			for (int i = 0; proposals != null && i < proposals.length; i++) {
+				TextProposal textProposal = proposals[i];
+				
+				String replacementString = textProposal.getReplacementString();
+				if (!replacementString.endsWith("/>")) {
+					String closingTag = textProposal.getLabel();
+					if (closingTag != null && closingTag.startsWith("<")) {
+						closingTag = closingTag.substring(1);
+					}
+					
+					replacementString += "</" + closingTag + ">";
+				}
+
+				System.out.println("Tag Name proposal [" + (i + 1) + "/" + proposals.length + "]: " + replacementString);
+
+				int replacementOffset = contentAssistRequest.getReplacementBeginPosition();
+				int replacementLength = contentAssistRequest.getReplacementLength();
+				int cursorPosition = getCursorPositionForProposedText(replacementString);
+				Image image = textProposal.getImage();
+				String displayString = textProposal.getLabel() + ">";
+				IContextInformation contextInformation = null;
+				String additionalProposalInfo = textProposal.getContextInfo();
+				int relevance = textProposal.getRelevance() + 10000;
+				
+				
+				CustomCompletionProposal proposal = new CustomCompletionProposal(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, contextInformation, additionalProposalInfo, relevance);
+				contentAssistRequest.addProposal(proposal);
+			}
+		} finally {
+			System.out.println("JspContentAssistProcessor: addTagInsertionProposals() exited");
+		}
+		return;
+	}
+
 
 	/**
-	 * Calculates and adds the attribute name proposals to the Content Assist Request object
+	 * Calculates and adds the tag name proposals to the Content Assist Request object
 	 * 
 	 * @param contentAssistRequest Content Assist Request object
 	 * @param childPosition the 
@@ -262,18 +319,27 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 			for (int i = 0; proposals != null && i < proposals.length; i++) {
 				TextProposal textProposal = proposals[i];
 				
-				System.out.println("Tag Name proposal [" + (i + 1) + "/" + proposals.length + "]: " + textProposal.getReplacementString());
-				
-				String replacementString = textProposal.getReplacementString() + ">";
-				if (!replacementString.endsWith("/>")) {
-					replacementString += "</" + textProposal.getLabel() + ">";
+				String replacementString = textProposal.getReplacementString();
+				if (replacementString.startsWith("<")) {
+					// Because the tag starting char is already in the text
+					replacementString = replacementString.substring(1);
 				}
+				if (!replacementString.endsWith("/>")) {
+					String closingTag = textProposal.getLabel();
+					if (closingTag != null && closingTag.startsWith("<")) {
+						closingTag = closingTag.substring(1);
+					}
+					
+					replacementString += "</" + closingTag + ">";
+				}
+
+				System.out.println("Tag Name proposal [" + (i + 1) + "/" + proposals.length + "]: " + replacementString);
 				
 				int replacementOffset = contentAssistRequest.getReplacementBeginPosition();
 				int replacementLength = contentAssistRequest.getReplacementLength();
 				int cursorPosition = getCursorPositionForProposedText(replacementString);
 				Image image = textProposal.getImage();
-				String displayString = textProposal.getLabel();
+				String displayString = textProposal.getLabel() + ">";
 				IContextInformation contextInformation = null;
 				String additionalProposalInfo = textProposal.getContextInfo();
 				int relevance = textProposal.getRelevance() + 10000;
@@ -287,6 +353,7 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 		}
 		return;
 	}
+	
 	
 	/**
 	 * Calculates and adds the attribute name proposals to the Content Assist Request object

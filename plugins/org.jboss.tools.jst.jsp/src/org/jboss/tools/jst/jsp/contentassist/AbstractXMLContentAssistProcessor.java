@@ -704,8 +704,11 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 			ELModel model = p.parse(text);
 			ELInstance is = ELUtil.findInstance(model, inValueOffset);// ELInstance
 			model.toString(); model.getSyntaxErrors();
+			
+			boolean isELStarted = (is != null) && (model != null && (model.toString().startsWith("#{") || 
+					model.toString().startsWith("${")));
 			boolean isELClosed = (is == null) || (model != null && model.toString().endsWith("}"));
-			TextRegion tr = new TextRegion(startOffset,  is == null ? inValueOffset : is.getStartPosition(), is == null ? 0 : inValueOffset - is.getStartPosition(), is == null ? "" : is.getText(), isELClosed);
+			TextRegion tr = new TextRegion(startOffset,  is == null ? inValueOffset : is.getStartPosition(), is == null ? 0 : inValueOffset - is.getStartPosition(), is == null ? "" : is.getText(), isELStarted, isELClosed);
 			
 			return tr;
 		} finally {
@@ -720,13 +723,15 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 		private int offset;
 		private int length;
 		private String text;
+		private boolean isELStarted;
 		private boolean isELClosed;
 		
-		TextRegion(int startOffset, int offset, int length, String text, boolean isELClosed) {
+		TextRegion(int startOffset, int offset, int length, String text, boolean isELStarted, boolean isELClosed) {
 			this.startOffset = startOffset;
 			this.offset = offset;
 			this.length = length;
 			this.text = text;
+			this.isELStarted = isELStarted;
 			this.isELClosed = isELClosed;
 		}
 		
@@ -749,6 +754,10 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 			return sb.toString();
 		}
 		
+		public boolean isELStarted() {
+			return isELStarted;
+		}
+
 		public boolean isELClosed() {
 			return isELClosed;
 		}
