@@ -27,7 +27,6 @@ import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.ui.internal.contentassist.CustomCompletionProposal;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
-import org.eclipse.wst.xml.ui.internal.contentassist.XMLRelevanceConstants;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.IPageContext;
@@ -247,6 +246,14 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 	@Override
 	protected void addTagInsertionProposals(
 			ContentAssistRequest contentAssistRequest, int childPosition) {
+		
+		// Need to check if an EL Expression is opened here.
+		// If it is true we don't need to start any new tag proposals
+		TextRegion prefix = getELPrefix();
+		if (prefix != null && prefix.isELStarted()) {
+			return;
+		}
+		
 		// TODO Auto-generated method stub
 		System.out.println("JspContentAssistProcessor: addTagInsertionProposals() invoked");
 		try {

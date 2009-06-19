@@ -12,7 +12,6 @@ package org.jboss.tools.jst.jsp.contentassist;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.resources.IFile;
@@ -20,9 +19,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextViewer;
-import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.jface.text.contentassist.IContextInformationValidator;
@@ -31,8 +28,6 @@ import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
-import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegionList;
-import org.eclipse.wst.xml.core.internal.contentmodel.CMElementDeclaration;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
@@ -41,6 +36,7 @@ import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 import org.eclipse.wst.xml.ui.internal.contentassist.AbstractContentAssistProcessor;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
 import org.jboss.tools.common.el.core.model.ELInstance;
+import org.jboss.tools.common.el.core.model.ELInvocationExpression;
 import org.jboss.tools.common.el.core.model.ELModel;
 import org.jboss.tools.common.el.core.model.ELUtil;
 import org.jboss.tools.common.el.core.parser.ELParser;
@@ -49,9 +45,7 @@ import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.ELResolverFactoryManager;
 import org.jboss.tools.jst.web.kb.KbQuery;
-import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
-import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -702,13 +696,13 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 			
 			ELParser p = ELParserUtil.getJbossFactory().createParser();
 			ELModel model = p.parse(text);
-			ELInstance is = ELUtil.findInstance(model, inValueOffset);// ELInstance
-			model.toString(); model.getSyntaxErrors();
 			
-			boolean isELStarted = (is != null) && (model != null && (model.toString().startsWith("#{") || 
+			ELInvocationExpression ie = ELUtil.findExpression(model, inValueOffset);// ELInstance
+			
+			boolean isELStarted = (model != null && (model.toString().startsWith("#{") || 
 					model.toString().startsWith("${")));
-			boolean isELClosed = (is == null) || (model != null && model.toString().endsWith("}"));
-			TextRegion tr = new TextRegion(startOffset,  is == null ? inValueOffset : is.getStartPosition(), is == null ? 0 : inValueOffset - is.getStartPosition(), is == null ? "" : is.getText(), isELStarted, isELClosed);
+			boolean isELClosed = (model != null && model.toString().endsWith("}"));
+			TextRegion tr = new TextRegion(startOffset,  ie == null ? inValueOffset : ie.getStartPosition(), ie == null ? 0 : inValueOffset - ie.getStartPosition(), ie == null ? "" : ie.getText(), isELStarted, isELClosed);
 			
 			return tr;
 		} finally {

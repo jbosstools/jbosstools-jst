@@ -19,14 +19,11 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
-import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
 import org.eclipse.wst.sse.ui.internal.contentassist.CustomCompletionProposal;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
 import org.jboss.tools.common.text.TextProposal;
-import org.jboss.tools.jst.jsp.contentassist.AbstractXMLContentAssistProcessor.TextRegion;
 import org.jboss.tools.jst.web.kb.IFaceletPageContext;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
@@ -39,7 +36,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor {
 	private static final String UI_URI_JSF_FACELETS = "http://java.sun.com/jsf/facelets";
@@ -184,7 +180,7 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 				contentAssistRequest.addProposal(proposal);
 				return;
 			}
-			String matchString = prefix.getText();
+			String matchString = "#{" + prefix.getText();
 			String query = matchString;
 			if (query == null)
 				query = "";
@@ -207,7 +203,7 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 				int cursorPosition = replacementString.length();
 				Image image = textProposal.getImage();
 				
-				String displayString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString() + "}"; 
+				String displayString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString(); 
 				IContextInformation contextInformation = null;
 				String additionalProposalInfo = textProposal.getContextInfo();
 				int relevance = textProposal.getRelevance() + 10000;
