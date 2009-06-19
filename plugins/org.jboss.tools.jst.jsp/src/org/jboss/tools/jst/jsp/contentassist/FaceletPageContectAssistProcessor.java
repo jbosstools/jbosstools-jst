@@ -212,12 +212,10 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 				contentAssistRequest.addProposal(proposal);
 			}
 			
-			if (proposals == null || proposals.length == 0) {
-				if (prefix.isELStarted() && !prefix.isELClosed()) {
-					CustomCompletionProposal proposal = new CustomCompletionProposal("}", contentAssistRequest.getReplacementBeginPosition(),
-							0, 1, null, "}", null, "Close EL Expression", 10000);
-					contentAssistRequest.addProposal(proposal);
-				}
+			if (prefix.isELStarted() && !prefix.isELClosed()) {
+				CustomCompletionProposal proposal = new CustomCompletionProposal("}", getOffset(),
+						0, 1, null, "}", null, "Close EL Expression", 10001);
+				contentAssistRequest.addProposal(proposal);
 			}
 		} finally {
 			System.out.println("FaceletPageContectAssistProcessor: addTextELProposals() exited");

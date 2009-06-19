@@ -29,6 +29,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.text.TextProposal;
+import org.jboss.tools.jst.jsp.contentassist.AbstractXMLContentAssistProcessor.TextRegion;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.IResourceBundle;
 import org.jboss.tools.jst.web.kb.KbQuery;
@@ -412,6 +413,14 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 	 * Calculates and adds the attribute value proposals to the Content Assist Request object
 	 */
 	protected void addAttributeValueProposals(ContentAssistRequest contentAssistRequest) {
+		
+		// Need to check if an EL Expression is opened here.
+		// If it is true we don't need to start any new tag proposals
+		TextRegion prefix = getELPrefix();
+		if (prefix != null && prefix.isELStarted()) {
+			return;
+		}
+		
 		System.out.println("JspContentAssistProcessor: addAttributeValueProposals() invoked");
 		try {
 			String matchString = contentAssistRequest.getMatchString();
@@ -473,11 +482,23 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 		System.out.println("JspContentAssistProcessor: addAttributeValueELProposals() invoked");
 		try {
 			TextRegion prefix = getELPrefix();
-			String matchString = prefix.getText();
+			if (prefix == null) {
+				return;
+			}
+
+			if(!prefix.isELStarted()) {
+				CustomCompletionProposal proposal = new CustomCompletionProposal("#{}", getOffset(),
+						0, 2, null, "#{}", null, "New EL Expression", 10000);
+				contentAssistRequest.addProposal(proposal);
+				return;
+			}
+			String matchString = "#{" + prefix.getText();
 			String query = matchString;
 			if (query == null)
 				query = "";
 			String stringQuery = matchString;
+			
+			int beginChangeOffset = prefix.getStartOffset() + prefix.getOffset();
 					
 			KbQuery kbQuery = createKbQuery(Type.ATTRIBUTE_VALUE, query, stringQuery);
 			TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext());
@@ -487,18 +508,24 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 				
 				System.out.println("Tag Attribute Value EL proposal [" + (i + 1) + "/" + proposals.length + "]: " + textProposal.getReplacementString());
 				
-				String replacementString = textProposal.getReplacementString();
-				
-				int replacementOffset = contentAssistRequest.getReplacementBeginPosition();
-				int replacementLength = contentAssistRequest.getReplacementLength();
-				int cursorPosition = getCursorPositionForProposedText(replacementString);
+				int replacementOffset = beginChangeOffset;
+				int replacementLength = prefix.getLength();
+				String replacementString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString();
+				int cursorPosition = replacementString.length();
 				Image image = textProposal.getImage();
-				String displayString = (textProposal.getLabel() == null ? replacementString : textProposal.getLabel());
+				
+				String displayString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString(); 
 				IContextInformation contextInformation = null;
 				String additionalProposalInfo = (textProposal.getContextInfo() == null ? "" : textProposal.getContextInfo());
 				int relevance = textProposal.getRelevance() + 10000;
-				
+
 				CustomCompletionProposal proposal = new CustomCompletionProposal(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, contextInformation, additionalProposalInfo, relevance);
+				contentAssistRequest.addProposal(proposal);
+			}
+
+			if (prefix.isELStarted() && !prefix.isELClosed()) {
+				CustomCompletionProposal proposal = new CustomCompletionProposal("}", getOffset(),
+						0, 1, null, "}", null, "Close EL Expression", 10001);
 				contentAssistRequest.addProposal(proposal);
 			}
 		} finally {
