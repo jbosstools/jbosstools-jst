@@ -16,5 +16,4 @@ Require-Bundle: org.eclipse.ui.workbench,
 Bundle-Activator: org.jboss.tools.jst.firstrun.JstFirstRunPlugin
 Eclipse-LazyStart: true
 Export-Package: org.jboss.tools.jst.firstrun
-Bundle-ClassPath: jst-firstrun.jar
 Bundle-Localization: plugin
