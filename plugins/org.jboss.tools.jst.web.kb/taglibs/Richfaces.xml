@@ -558,6 +558,13 @@
 				<param value="false" />
 			</proposal>
 		</attribute>
+        <attribute name="domElementAttachment">
+            <proposal type="enumeration">
+                <param value="body"/>
+                <param value="form"/>
+                <param value="parent"/>
+            </proposal>
+        </attribute>
 	</component>
 	<component name="orderingList">
 		<attribute name="showButtonLabels">
