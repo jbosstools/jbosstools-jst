@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.contentassist.IContextInformation;
@@ -25,24 +27,30 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.ui.internal.contentassist.CustomCompletionProposal;
+import org.eclipse.wst.xml.core.internal.document.NodeContainer;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.jsp.contentassist.AbstractXMLContentAssistProcessor.TextRegion;
+import org.jboss.tools.jst.jsp.support.kb.WTPTextJspKbConnector.LoadBundleInfo;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.IResourceBundle;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.internal.JspContextImpl;
+import org.jboss.tools.jst.web.kb.internal.ResourceBundle;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 import org.jboss.tools.jst.web.kb.taglib.TagLibriryManager;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 
@@ -59,11 +67,11 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 		JspContextImpl context = new JspContextImpl();
 		context.setResource(superContext.getResource());
 		context.setElResolvers(superContext.getElResolvers());
-		setVars(context);
-		context.setResourceBundles(getResourceBundles());
 		context.setDocument(getDocument());
+		setVars(context);
 		setNameSpaces(context);
 		context.setLibraries(getTagLibraries(context));
+		context.setResourceBundles(getResourceBundles(context));
 		
 		return context;
 	}
@@ -153,11 +161,72 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 	 * 
 	 * @return
 	 */
-	protected IResourceBundle[] getResourceBundles() {
-		// TODO
-		return null;
+	protected IResourceBundle[] getResourceBundles(IPageContext context) {
+		List<IResourceBundle> list = new ArrayList<IResourceBundle>();
+		IStructuredModel sModel = StructuredModelManager.getModelManager().getExistingModelForRead(getDocument());
+		if (sModel == null) 
+			return new IResourceBundle[0];
+		try {
+			Document dom = (sModel instanceof IDOMModel) ? ((IDOMModel) sModel).getDocument() : null;
+			if (dom != null) {
+				Element element = dom.getDocumentElement();
+				NodeList children = (NodeContainer)dom.getChildNodes();
+				if (element != null) {
+					for (int i = 0; children != null && i < children.getLength(); i++) {
+						IDOMNode xmlnode = (IDOMNode)children.item(i);
+						update((IDOMNode)xmlnode, context, list);
+					}
+				}
+			}
+		}
+		finally {
+			if (sModel != null) {
+				sModel.releaseFromRead();
+			}
+		}
+			
+		return list.toArray(new IResourceBundle[list.size()]);
 	}
+
+	private void update(IDOMNode element, IPageContext context, List<IResourceBundle> list) {
+		if (element !=  null) {
+			registerBundleForNode(element, context, list);
+			for (Node child = element.getFirstChild(); child != null; child = child.getNextSibling()) {
+				if (child instanceof IDOMNode) {
+					update((IDOMNode)child, context, list);
+				}
+			}
+		}
+	}
+	private void registerBundleForNode(IDOMNode node, IPageContext context, List<IResourceBundle> list) {
+		if (node == null) return;
+		String name = node.getNodeName();
+		if (name == null) return;
+		if (!name.endsWith("loadBundle")) return;
+		if (name.indexOf(':') == -1) return;
+		String prefix = name.substring(0, name.indexOf(':'));
+
+		Map<String, INameSpace> ns = context.getNameSpaces(node.getStartOffset());
+		if (!containsPrefix(ns, prefix)) return;
+
+		NamedNodeMap attributes = node.getAttributes();
+		if (attributes == null) return;
+		String basename = (attributes.getNamedItem("basename") == null ? null : attributes.getNamedItem("basename").getNodeValue());
+		String var = (attributes.getNamedItem("var") == null ? null : attributes.getNamedItem("var").getNodeValue());
+		if (basename == null || basename.length() == 0 ||
+			var == null || var.length() == 0) return;
+
+		list.add(new ResourceBundle(basename, var));
+	}
+	private boolean containsPrefix(Map<String, INameSpace> ns, String prefix) {
+		for (INameSpace n: ns.values()) {
+			if(prefix.equals(n.getPrefix())) return true;
+		}
+		return false;
+	}
+
 	
+
 	/**
 	 * Returns the <code>org.jboss.tools.common.el.core.resolver.ELContext</code> instance
 	 * 
