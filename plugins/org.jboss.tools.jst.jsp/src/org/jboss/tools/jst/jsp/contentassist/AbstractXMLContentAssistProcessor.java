@@ -697,11 +697,14 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 			ELParser p = ELParserUtil.getJbossFactory().createParser();
 			ELModel model = p.parse(text);
 			
-			ELInvocationExpression ie = ELUtil.findExpression(model, inValueOffset);// ELInstance
+			ELInstance is = ELUtil.findInstance(model, inValueOffset);// ELInstance
+			ELInvocationExpression ie = ELUtil.findExpression(model, inValueOffset);// ELExpression
 			
-			boolean isELStarted = (model != null && (model.toString().startsWith("#{") || 
+			boolean isELStarted = (model != null && is != null && (model.toString().startsWith("#{") || 
 					model.toString().startsWith("${")));
-			boolean isELClosed = (model != null && model.toString().endsWith("}"));
+			boolean isELClosed = (model != null && is != null && model.toString().endsWith("}"));
+			
+//			boolean insideEL = startOffset + model.toString().length() 
 			TextRegion tr = new TextRegion(startOffset,  ie == null ? inValueOffset : ie.getStartPosition(), ie == null ? 0 : inValueOffset - ie.getStartPosition(), ie == null ? "" : ie.getText(), isELStarted, isELClosed);
 			
 			return tr;
