@@ -422,7 +422,7 @@
 			<contenttype id="org.eclipse.wst.html.core.htmlsource">
 				<partitiontype id="org.eclipse.wst.html.HTML_DEFAULT" />
 				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
-				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" /> <!-- Is this forgotten? -->
+				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
 			</contenttype>
 		</contentAssistProcessor>
 
@@ -430,7 +430,7 @@
 			//added by estherbin
 			//fix http://jira.jboss.com/jira/browse/JBIDE-1791
 		-->
-		<contentAssistProcessor 
+		<!--contentAssistProcessor 
 				class="org.eclipse.wst.css.ui.internal.contentassist.CSSContentAssistProcessor" 
 				id="org.eclipse.wst.css.ui.internal.contentassist.CSSContentAssistProcessor">
 			<contenttype id="org.eclipse.wst.html.core.htmlsource">
@@ -438,7 +438,6 @@
 			</contenttype>
 		</contentAssistProcessor>
 		
-		<!--
 		<contentAssistProcessor 
 				class="org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor" 
 				id="org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor">
@@ -476,8 +475,7 @@
 				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
 				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
 			</contenttype>
-		</contentAssistProcessor>
-		-->	
+		</contentAssistProcessor -->
   </extension>
   <extension
         point="org.eclipse.ui.popupMenus">
