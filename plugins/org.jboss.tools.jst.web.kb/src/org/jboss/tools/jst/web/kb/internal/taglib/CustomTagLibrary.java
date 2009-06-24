@@ -149,32 +149,34 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 					newAttributes.add(newAttribute);
 
 					// Extract proposals
-					List<CustomTagLibAttribute.Proposal> newProposals = new ArrayList<CustomTagLibAttribute.Proposal>();
+					List<CustomProposalType> newProposals = new ArrayList<CustomProposalType>();
 					NodeList proposals = attribute.getElementsByTagName(PROPOSAL);
 					for (int j = 0; j < proposals.getLength(); j++) {
 						Element proposal = (Element)proposals.item(j);
 						String type = proposal.getAttribute(TYPE);
-						CustomTagLibAttribute.Proposal newProposal = new CustomTagLibAttribute.Proposal();
-						newProposal.setType(type);
-						newProposals.add(newProposal);
+						CustomProposalType newProposal = CustomProposalTypeFactory.getInstance().createProposalType(type);
+						if(newProposal!=null) {
+							newProposal.setType(type);
+							newProposals.add(newProposal);
 
-						List<CustomTagLibAttribute.Param> newParams = new ArrayList<CustomTagLibAttribute.Param>();
-						// Extract params
-						NodeList params = proposal.getElementsByTagName(PARAM);
-						for (int c = 0; c < params.getLength(); c++) {
-							Element param = (Element)params.item(c);
-							String paramName = param.getAttribute(NAME);
-							String paramValue = param.getAttribute(VALUE);
-							CustomTagLibAttribute.Param newParam = new CustomTagLibAttribute.Param();
-							if(paramName!=null && paramName.length()>0) {
-								newParam.setName(paramName);
+							List<CustomProposalType.Param> newParams = new ArrayList<CustomProposalType.Param>();
+							// Extract params
+							NodeList params = proposal.getElementsByTagName(PARAM);
+							for (int c = 0; c < params.getLength(); c++) {
+								Element param = (Element)params.item(c);
+								String paramName = param.getAttribute(NAME);
+								String paramValue = param.getAttribute(VALUE);
+								CustomProposalType.Param newParam = new CustomProposalType.Param();
+								if(paramName!=null && paramName.length()>0) {
+									newParam.setName(paramName);
+								}
+								newParam.setValue(paramValue);
+								newParams.add(newParam);
 							}
-							newParam.setValue(paramValue);
-							newParams.add(newParam);
+							newProposal.setParams(newParams.toArray(new CustomProposalType.Param[0]));
 						}
-						newProposal.setParams(newParams.toArray(new CustomTagLibAttribute.Param[0]));
 					}
-					newAttribute.setProposals(newProposals.toArray(new CustomTagLibAttribute.Proposal[0]));
+					newAttribute.setProposals(newProposals.toArray(new CustomProposalType[0]));
 				}
 			}
 		}

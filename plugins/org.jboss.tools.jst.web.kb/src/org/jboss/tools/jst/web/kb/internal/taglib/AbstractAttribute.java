@@ -115,24 +115,6 @@ public abstract class AbstractAttribute extends KbObject implements IAttribute {
 	 * @see org.jboss.tools.jst.web.kb.IProposalProcessor#getProposals(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.IPageContext)
 	 */
 	public TextProposal[] getProposals(KbQuery query, IPageContext context) {
-		List<TextProposal> proposals = null;
-//		ELResolver[] resolvers = context.getElResolvers();
-//		for (int i = 0; i < resolvers.length; i++) {
-//			List<TextProposal> list = resolvers[i].getCompletions(query.getValue(), false, query.getValue().length(), context);
-//			if(list == null || list.isEmpty()) continue;
-//			if(proposals == null) {
-//				proposals = new ArrayList<TextProposal>();
-//			}
-//			for (TextProposal textProposal : list) {
-//				textProposal.setSource(this);
-//				proposals.add(textProposal);
-//			}
-//		}
-//		if(proposals == null || proposals.isEmpty()) {
-//			return EMPTY_PROPOSAL_LIST;
-//		}
-//		return proposals.toArray(new TextProposal[proposals.size()]);
-		// TODO
 		return EMPTY_PROPOSAL_LIST;
 	}
 

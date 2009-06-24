@@ -31,8 +31,6 @@ public class JspContextImpl extends ELContextImpl implements IPageContext {
 	protected Map<IRegion, Map<String, INameSpace>> nameSpaces = new HashMap<IRegion, Map<String, INameSpace>>();
 	protected IResourceBundle[] bundles;
 
-	
-	
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.common.kb.text.PageContext#getLibraries()

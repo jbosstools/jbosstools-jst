@@ -27,7 +27,7 @@ public class CustomTagLibAttribute extends AbstractAttribute {
 
 	protected boolean extended = true;
 	protected String defaultValue;
-	protected Proposal[] proposals;
+	protected CustomProposalType[] proposals;
 	protected CustomTagLibComponent parentComponent;
 
 	/*
@@ -68,9 +68,9 @@ public class CustomTagLibAttribute extends AbstractAttribute {
 	 */
 	@Override
 	public TextProposal[] getProposals(KbQuery query, IPageContext context) {
-		Proposal[] prDefs = getProposals();
+		CustomProposalType[] types = getProposals();
 		List<TextProposal> proposals = new ArrayList<TextProposal>();
-		for (int i = 0; i < prDefs.length; i++) {
+		for (int i = 0; i < types.length; i++) {
 			// TODO
 		}
 		return proposals.toArray(new TextProposal[0]);
@@ -79,9 +79,9 @@ public class CustomTagLibAttribute extends AbstractAttribute {
 	/**
 	 * @return the proposals
 	 */
-	public Proposal[] getProposals() {
+	public CustomProposalType[] getProposals() {
 		if(proposals==null) {
-			proposals = new Proposal[0];
+			proposals = new CustomProposalType[0];
 		}
 		return proposals;
 	}
@@ -89,82 +89,8 @@ public class CustomTagLibAttribute extends AbstractAttribute {
 	/**
 	 * @param proposals the proposals to set
 	 */
-	public void setProposals(Proposal[] proposals) {
+	public void setProposals(CustomProposalType[] proposals) {
 		this.proposals = proposals;
-	}
-
-	/**
-	 * @author Alexey Kazakov
-	 */
-	public static class Proposal {
-
-		private Param[] params;
-		private String type;
-
-		/**
-		 * @return the type
-		 */
-		public String getType() {
-			return type;
-		}
-
-		/**
-		 * @param type the type to set
-		 */
-		public void setType(String type) {
-			this.type = type;
-		}
-
-		/**
-		 * @return the params
-		 */
-		public Param[] getParams() {
-			if(params==null) {
-				params = new Param[0];
-			}
-			return params;
-		}
-
-		/**
-		 * @param params the params to set
-		 */
-		public void setParams(Param[] params) {
-			this.params = params;
-		}
-	}
-
-	public static class Param {
-
-		private String name;
-		private String value;
-
-		/**
-		 * @return the name
-		 */
-		public String getName() {
-			return name;
-		}
-
-		/**
-		 * @param name the name to set
-		 */
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		/**
-		 * @return the value
-		 */
-		public String getValue() {
-			return value;
-		}
-
-		/**
-		 * @param value the value to set
-		 */
-		public void setValue(String value) {
-			this.value = value;
-		}
 	}
 
 	/*

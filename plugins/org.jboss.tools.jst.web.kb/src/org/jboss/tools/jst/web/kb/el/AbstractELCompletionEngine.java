@@ -1,4 +1,14 @@
-package org.jboss.tools.jst.web.kb;
+/******************************************************************************* 
+ * Copyright (c) 2007-2009 Red Hat, Inc. 
+ * Distributed under license by Red Hat, Inc. All rights reserved. 
+ * This program is made available under the terms of the 
+ * Eclipse Public License v1.0 which accompanies this distribution, 
+ * and is available at http://www.eclipse.org/legal/epl-v10.html 
+ * 
+ * Contributors: 
+ * Red Hat, Inc. - initial API and implementation 
+ ******************************************************************************/ 
+package org.jboss.tools.jst.web.kb.el;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +39,7 @@ import org.jboss.tools.common.el.core.resolver.ElVarSearcher;
 import org.jboss.tools.common.el.core.resolver.TypeInfoCollector;
 import org.jboss.tools.common.el.core.resolver.Var;
 import org.jboss.tools.common.text.TextProposal;
+import org.jboss.tools.jst.web.kb.IPageContext;
 
 public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionEngine.IVariable> implements ELResolver, ELCompletionEngine {
 
@@ -125,7 +136,7 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 
 	public ELExpression parseOperand(String operand) {
 		if(operand == null) return null;
-		String el = (operand.indexOf("#{") < 0 && operand.indexOf("${") < 0) ? "#{" + operand + "}" : operand;
+		String el = (operand.indexOf("#{") < 0 && operand.indexOf("${") < 0) ? "#{" + operand + "}" : operand; //$NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
 		ELParser p = getParserFactory().createParser();
 		ELModel model = p.parse(el);
 		List<ELInstance> is = model.getInstances();
@@ -133,8 +144,8 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 		return is.get(0).getExpression();
 	}
 
-	protected static final String collectionAdditionForCollectionDataModel = ".iterator().next()";
-	protected static final String collectionAdditionForMapDataModel = ".entrySet().iterator().next()";
+	protected static final String collectionAdditionForCollectionDataModel = ".iterator().next()"; //$NON-NLS-1$
+	protected static final String collectionAdditionForMapDataModel = ".entrySet().iterator().next()"; //$NON-NLS-1$
 
 	protected List<String> getVarNameProposals(List <Var> vars, String prefix) {
 		List<String> proposals = new ArrayList<String>();
@@ -172,9 +183,9 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 					IType type = member.getMemberType();
 					if(type!=null) {
 						try {
-							if(TypeInfoCollector.isInstanceofType(type, "java.util.Map")) {
+							if(TypeInfoCollector.isInstanceofType(type, "java.util.Map")) { //$NON-NLS-1$
 								suffix = collectionAdditionForMapDataModel;
-							} else if(TypeInfoCollector.isInstanceofType(type, "java.util.Collection")) {
+							} else if(TypeInfoCollector.isInstanceofType(type, "java.util.Collection")) { //$NON-NLS-1$
 								suffix = collectionAdditionForCollectionDataModel;
 							}
 						} catch (JavaModelException e) {
@@ -225,7 +236,7 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 		}
 
 		if(prefixWasChanged) {
-			var.resolveValue("#{" + var.getElToken().getText() + suffix + "}");
+			var.resolveValue("#{" + var.getElToken().getText() + suffix + "}"); //$NON-NLS-1$ $NON-NLS-2$
 		}
 
 		if(!returnEqualedVariablesOnly && vars!=null) {
@@ -369,7 +380,7 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 			left = (ELInvocationExpression)left.getParent();
 			if (left != expr) { // inside expression
 				if(left instanceof ELArgumentInvocation) {
-					String s = "#{" + left.getLeft().toString() + collectionAdditionForCollectionDataModel + "}";
+					String s = "#{" + left.getLeft().toString() + collectionAdditionForCollectionDataModel + "}"; //$NON-NLS-1$ $NON-NLS-2$
 					ELParser p = getParserFactory().createParser();
 					ELInvocationExpression expr1 = (ELInvocationExpression)p.parse(s).getInstances().get(0).getExpression();
 					members = resolveSegment(expr1.getLeft(), members, status, returnEqualedVariablesOnly, varIsUsed);
@@ -417,7 +428,7 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 					: (expr instanceof ELMethodInvocation) 
 					? ((ELMethodInvocation)expr).getName()
 							: null;
-		String name = lt != null ? lt.getText() : ""; // token.getText();
+		String name = lt != null ? lt.getText() : ""; // token.getText(); //$NON-NLS-1$
 		if (expr.getType() == ELObjectType.EL_PROPERTY_INVOCATION) {
 			// Find properties for the token
 			List<TypeInfoCollector.MemberInfo> newMembers = new ArrayList<TypeInfoCollector.MemberInfo>();
@@ -580,7 +591,7 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 				}
 				if (mbr.getMemberType() == null) continue;
 				try {
-					if(TypeInfoCollector.isInstanceofType(mbr.getMemberType(), "java.util.Map")) {
+					if(TypeInfoCollector.isInstanceofType(mbr.getMemberType(), "java.util.Map")) { //$NON-NLS-1$
 						status.setMapOrCollectionOrBundleAmoungTheTokens();
 						//if map/collection is parameterized, we might return member info for value type. 
 						return;
