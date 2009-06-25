@@ -19,9 +19,6 @@ import java.util.TreeSet;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
-import org.jboss.tools.common.model.XModelObject;
-import org.jboss.tools.common.model.util.EclipseResourceUtil;
-import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
@@ -47,7 +44,7 @@ public class ActionProposalType extends ModelProposalType {
 			return EMPTY_PROPOSAL_LIST;
 		}
 		Properties view = new Properties();
-		view.put(IWebPromptingProvider.VIEW_PATH, context.getResource().getFullPath());
+		view.put(IWebPromptingProvider.VIEW_PATH, context.getResource().getFullPath().removeFirstSegments(1).toString());
 		List<Object> sourceList = provider.getList(xModel, WebPromptingProvider.JSF_VIEW_ACTIONS, "", view);
 		if (sourceList != null && !sourceList.isEmpty()) {
 			Set<String> sorted = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);

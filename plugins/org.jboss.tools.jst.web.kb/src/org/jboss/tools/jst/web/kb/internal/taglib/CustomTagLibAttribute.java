@@ -23,8 +23,6 @@ import org.jboss.tools.jst.web.kb.taglib.IComponent;
  */
 public class CustomTagLibAttribute extends AbstractAttribute {
 
-	private final static String ENUMERATION_TYPE = "enumeration"; //$NON-NLS-1$
-
 	protected boolean extended = true;
 	protected String defaultValue;
 	protected CustomProposalType[] proposals;
