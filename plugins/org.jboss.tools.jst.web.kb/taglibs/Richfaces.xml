@@ -400,40 +400,12 @@
 				<param value="false" />
 			</proposal>
 		</attribute>
-		<attribute name="validator">
-			<proposal type="beanMethodBySignature">
-				<param name="returnType" value="void" />
-				<param name="paramType" value="javax.faces.context.FacesContext" />
-				<param name="paramType" value="javax.faces.component.UIComponent" />
-				<param name="paramType" value="java.lang.Object" />
-			</proposal>
-		</attribute>
-		<attribute name="valueChangeListener">
-			<proposal type="beanMethodBySignature">
-				<param name="returnType" value="void" />
-				<param name="paramType" value="javax.faces.event.ValueChangeEvent" />
-			</proposal>
-		</attribute>
 	</component>
 	<component name="inplaceSelect">
 		<attribute name="showControls">
 			<proposal type="enumeration">
 				<param value="true" />
 				<param value="false" />
-			</proposal>
-		</attribute>
-		<attribute name="validator">
-			<proposal type="beanMethodBySignature">
-				<param name="returnType" value="void" />
-				<param name="paramType" value="javax.faces.context.FacesContext" />
-				<param name="paramType" value="javax.faces.component.UIComponent" />
-				<param name="paramType" value="java.lang.Object" />
-			</proposal>
-		</attribute>
-		<attribute name="valueChangeListener">
-			<proposal type="beanMethodBySignature">
-				<param name="returnType" value="void" />
-				<param name="paramType" value="javax.faces.event.ValueChangeEvent" />
 			</proposal>
 		</attribute>
 	</component>
