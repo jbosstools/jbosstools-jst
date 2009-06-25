@@ -69,6 +69,9 @@ public class CustomTagLibAttribute extends AbstractAttribute {
 	@Override
 	public TextProposal[] getProposals(KbQuery query, IPageContext context) {
 		CustomProposalType[] types = getProposals();
+		if(types.length==0) {
+			return EMPTY_PROPOSAL_LIST;
+		}
 		if(types.length==1) {
 			return types[0].getProposals(query, context);
 		}
