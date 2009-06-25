@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.contentassist.IContextInformation;
@@ -33,8 +31,6 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.text.TextProposal;
-import org.jboss.tools.jst.jsp.contentassist.AbstractXMLContentAssistProcessor.TextRegion;
-import org.jboss.tools.jst.jsp.support.kb.WTPTextJspKbConnector.LoadBundleInfo;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.IResourceBundle;
 import org.jboss.tools.jst.web.kb.KbQuery;
@@ -52,6 +48,11 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+/**
+ * 
+ * @author Jeremy
+ *
+ */
 public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 
 	/**
@@ -68,7 +69,7 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 		context.setResource(superContext.getResource());
 		context.setElResolvers(superContext.getElResolvers());
 		context.setDocument(getDocument());
-		setVars(context);
+		setVars(context, file);
 		setNameSpaces(context);
 		context.setLibraries(getTagLibraries(context));
 		context.setResourceBundles(getResourceBundles(context));

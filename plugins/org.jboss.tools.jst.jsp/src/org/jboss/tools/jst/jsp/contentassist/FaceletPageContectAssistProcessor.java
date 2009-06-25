@@ -37,6 +37,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
+/**
+ * 
+ * @author Jeremy
+ *
+ */
 public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor {
 	private static final String UI_URI_JSF_FACELETS = "http://java.sun.com/jsf/facelets";
 	private static final String UI_URI_XHTML_FACELETS = "http://www.w3.org/1999/xhtml/facelets";
@@ -52,7 +57,7 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 		FaceletPageContextImpl context = new FaceletPageContextImpl();
 		context.setResource(superContext.getResource());
 		context.setElResolvers(superContext.getElResolvers());
-		setVars(context);
+		setVars(context, superContext.getResource());
 
 		context.setResourceBundles(superContext.getResourceBundles());
 		context.setDocument(getDocument());

@@ -10,17 +10,31 @@
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.contentassist;
 
+import java.util.List;
+
 import org.eclipse.core.resources.IFile;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.Region;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
+import org.jboss.tools.common.el.core.model.ELExpression;
+import org.jboss.tools.common.el.core.parser.ELParserFactory;
+import org.jboss.tools.common.el.core.parser.ELParserUtil;
+import org.jboss.tools.common.el.core.resolver.ELCompletionEngine;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.ELContextImpl;
+import org.jboss.tools.common.el.core.resolver.ELOperandResolveStatus;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
-import org.jboss.tools.jst.web.kb.IFaceletPageContext;
+import org.jboss.tools.common.el.core.resolver.ElVarSearcher;
+import org.jboss.tools.common.el.core.resolver.Var;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
-import org.jboss.tools.jst.web.kb.internal.JspContextImpl;
 
+/**
+ * 
+ * @author Jeremy
+ *
+ */
 public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor {
 
 	/*
@@ -35,13 +49,33 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 		ELContextImpl context = new ELContextImpl();
 		context.setResource(getResource());
 		context.setElResolvers(elResolvers);
-		setVars(context);
+		setVars(context, file);
 
 		return context;
 	}
 
-	protected void setVars(ELContext context) {
-		// TODO
+	protected void setVars(ELContextImpl context, IFile file) {
+		ELCompletionEngine fakeEngine = new ELCompletionEngine(){
+		
+			public ELOperandResolveStatus resolveELOperand(IFile file,
+					ELExpression operand, boolean returnEqualedVariablesOnly,
+					List<Var> vars, ElVarSearcher varSearcher)
+					throws BadLocationException, StringIndexOutOfBoundsException {
+				return null;
+			}
+		
+			public ELParserFactory getParserFactory() {
+				return ELParserUtil.getJbossFactory();
+			}
+		};
+		ElVarSearcher varSearcher = new ElVarSearcher(file, fakeEngine);
+		List<Var> vars = varSearcher.findAllVars(file, getOffset());
+
+		if (vars != null) {
+			for (Var var : vars) {
+				context.addVar(new Region(getOffset(), 0), var);
+			}
+		}
 	}
 
 	@Override 
