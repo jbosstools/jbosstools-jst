@@ -67,6 +67,10 @@ public class PageProcessor implements IProposalProcessor {
 						attrbMap.put(att.getName(), att);
 					}
 				}
+				IAttribute[] attrs = getAttributes(query, context, false);
+				for (int i = 0; i < attrs.length; i++) {
+					attrbMap.put(attrs[i].getName(), attrs[i]);
+				}
 				for (int i = 0; i < componentExtensions.length; i++) {
 					if(attrbMap.containsKey(componentExtensions[i].getName())) {
 						TextProposal[] attProposals = componentExtensions[i].getProposals(query, context);
@@ -84,7 +88,6 @@ public class PageProcessor implements IProposalProcessor {
 			}
 		} else {
 			String value = query.getValue();
-			 //TODO convert value to EL string.
 			String elString = value;
 			ELResolver[] resolvers =  context.getElResolvers();
 			for (int i = 0; resolvers != null && i < resolvers.length; i++) {
@@ -121,16 +124,16 @@ public class PageProcessor implements IProposalProcessor {
 		for (int i = 0; i < libs.length; i++) {
 			IComponent[] libComponents = libs[i].getComponents(query, context);
 			for (int j = 0; j < libComponents.length; j++) {
-				if(includeComponentExtensions || !libComponents[i].isExtended()) {
-					components.add(libComponents[i]);
+				if(includeComponentExtensions || !libComponents[j].isExtended()) {
+					components.add(libComponents[j]);
 				}
 			}
 		}
 		for (int i = 0; customTagLibs != null && i < customTagLibs.length; i++) {
 			IComponent[] libComponents = customTagLibs[i].getComponents(query, context);
 			for (int j = 0; j < libComponents.length; j++) {
-				if(includeComponentExtensions || !libComponents[i].isExtended()) {
-					components.add(libComponents[i]);
+				if(includeComponentExtensions || !libComponents[j].isExtended()) {
+					components.add(libComponents[j]);
 				}
 			}
 		}
@@ -146,20 +149,26 @@ public class PageProcessor implements IProposalProcessor {
 	 * @return attributes
 	 */
 	public IAttribute[] getAttributes(KbQuery query, IPageContext context) {
+		return getAttributes(query, context, true);
+	}
+
+	private IAttribute[] getAttributes(KbQuery query, IPageContext context, boolean includeComponentExtensions) {
 		if(query.getType() == KbQuery.Type.ATTRIBUTE_NAME || query.getType() == KbQuery.Type.ATTRIBUTE_VALUE) {
 			ArrayList<IAttribute> attributes = new ArrayList<IAttribute>();
 			Map<String, IAttribute> attrbMap = new HashMap<String, IAttribute>();
-			IComponent[] components  = getComponents(query, context, true);
+			IComponent[] components  = getComponents(query, context, includeComponentExtensions);
 			for (int i = 0; i < components.length; i++) {
 				IAttribute[] libAttributess = components[i].getAttributes(query, context);
 				for (int j = 0; j < libAttributess.length; j++) {
-					attributes.add(libAttributess[i]);
-					attrbMap.put(libAttributess[i].getName(), libAttributess[i]);
+					attributes.add(libAttributess[j]);
+					attrbMap.put(libAttributess[j].getName(), libAttributess[j]);
 				}
 			}
-			for (int i = 0; i < componentExtensions.length; i++) {
-				if(attrbMap.containsKey(componentExtensions[i].getName())) {
-					attributes.add(componentExtensions[i]);
+			if(includeComponentExtensions) {
+				for (int i = 0; i < componentExtensions.length; i++) {
+					if(attrbMap.containsKey(componentExtensions[i].getName())) {
+						attributes.add(componentExtensions[i]);
+					}
 				}
 			}
 			return attributes.toArray(new IAttribute[attributes.size()]);
