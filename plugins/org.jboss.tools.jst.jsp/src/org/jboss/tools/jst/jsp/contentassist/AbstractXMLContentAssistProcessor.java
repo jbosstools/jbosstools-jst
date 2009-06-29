@@ -62,6 +62,8 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	private int fDocumentPosition;
 	private ELContext fContext;
 
+	protected final static ICompletionProposal[] EMPTY_PROPOSAL_LIST = new ICompletionProposal[0];
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.wst.xml.ui.internal.contentassist.AbstractContentAssistProcessor#computeCompletionProposals(org.eclipse.jface.text.ITextViewer, int)
@@ -71,21 +73,8 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 			int offset) {
 		this.fDocument = (viewer == null ? null : viewer.getDocument());
 		this.fDocumentPosition = offset;
-		try {
-			this.fContext = createContext();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ICompletionProposal[0];
-		}
-		System.out.println("AbstractXMLContentAssistProcessor: computeCompletionProposals() invoked");
-		try {
-			return super.computeCompletionProposals(viewer, offset);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ICompletionProposal[0];
-		} finally {
-			System.out.println("AbstractXMLContentAssistProcessor: computeCompletionProposals() exited");
-		}
+		this.fContext = createContext();
+		return super.computeCompletionProposals(viewer, offset);
 	}
 
 	/*
@@ -98,7 +87,7 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 		this.fDocument = (viewer == null ? null : viewer.getDocument());
 		this.fDocumentPosition = offset;
 		this.fContext = createContext();
-		
+
 		return super.computeContextInformation(viewer, offset);
 	}
 
@@ -715,7 +704,7 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 		}
 	}
 
-	protected class TextRegion {
+	protected static class TextRegion {
 		private int startOffset;
 		private int offset;
 		private int length;
@@ -787,5 +776,4 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 
 		return is.getEndPosition();
 	}
-	
 }
