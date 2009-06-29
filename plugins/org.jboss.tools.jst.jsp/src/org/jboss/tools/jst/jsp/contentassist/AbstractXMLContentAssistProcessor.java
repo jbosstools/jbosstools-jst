@@ -692,8 +692,12 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 			}
 
 			int inValueOffset = getOffset() - startOffset;
-			if (text.length() < inValueOffset) // probably, the attribute value ends before the document position
+			if (text.length() < inValueOffset) { // probably, the attribute value ends before the document position
 				return null;
+			}
+			if (inValueOffset<0) {
+				return null;
+			}
 			
 			String matchString = text.substring(0, inValueOffset);
 			
