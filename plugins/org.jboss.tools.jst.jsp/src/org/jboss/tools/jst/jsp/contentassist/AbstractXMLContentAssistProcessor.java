@@ -93,6 +93,20 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 
 	/*
 	 * (non-Javadoc)
+	 * @see org.eclipse.wst.xml.ui.internal.contentassist.AbstractContentAssistProcessor#getMatchString(org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion, org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion, int)
+	 */
+	@Override
+	protected String getMatchString(IStructuredDocumentRegion parent, ITextRegion aRegion, int offset) {
+		String matchString =  super.getMatchString(parent, aRegion, offset);
+		String regionType = aRegion.getType();
+		if(regionType == DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE && matchString.equals("\"")) {
+			matchString = ""; //$NON-NLS-1$
+		}
+		return matchString;
+	}
+
+	/*
+	 * (non-Javadoc)
 	 * @see org.eclipse.wst.xml.ui.internal.contentassist.AbstractContentAssistProcessor#getCompletionProposalAutoActivationCharacters()
 	 */
 	@Override
