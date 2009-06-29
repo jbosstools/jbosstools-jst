@@ -12,7 +12,10 @@ package org.jboss.tools.jst.web.project.helpers;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -140,7 +143,7 @@ public class NewWebProjectHelper {
                         map.put(name.substring(0, ext.length()-1), file.toURL().toString());
                     }
                 }
-            } catch (Exception e) {
+            } catch (MalformedURLException e) {
             	WebModelPlugin.getPluginLog().logError(e);
             }
         }
@@ -157,21 +160,22 @@ public class NewWebProjectHelper {
         File webXML = new File(location, "web.xml");
         if(!webXML.isFile()) return modules;
         try {
-            WebAppConfig config = new WebAppConfig(webXML);
-            Element[] servlets = config.getServletsByClass("org.apache.struts.action.ActionServlet");
-            for (int i = 0; i < servlets.length; i++) {
-                Map<String,String> params = config.getInitParamsAsMap(servlets[i]);
-                Iterator<String> it = params.keySet().iterator();
-                while (it.hasNext()) {
-                    String name = it.next();
-                    if (!name.startsWith("config/") && !name.equals("config")) continue;
-                    String value = params.get(name);
-                    modules.put(name.substring(6), value);
-                }
-            }
-        } catch (Exception e) {
-        	WebModelPlugin.getPluginLog().logError(e);
-        }
+	        WebAppConfig config = new WebAppConfig(webXML);
+	        Element[] servlets = config.getServletsByClass("org.apache.struts.action.ActionServlet");
+	        for (int i = 0; i < servlets.length; i++) {
+	            Map<String,String> params = config.getInitParamsAsMap(servlets[i]);
+	            Iterator<String> it = params.keySet().iterator();
+	            while (it.hasNext()) {
+	                String name = it.next();
+	                if (!name.startsWith("config/") && !name.equals("config")) continue;
+	                String value = params.get(name);
+	                modules.put(name.substring(6), value);
+	            }
+	        }
+	    } catch (FileNotFoundException e) {
+	    	WebModelPlugin.getPluginLog().logError(e);
+	    }
+
         return modules;
     }
     
@@ -208,7 +212,7 @@ class WebAppConfig {
 			Class<?> c = WebAppConfig.class;
 			XMLEntityResolver.registerPublicEntity("-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN", FileLocator.resolve(c.getResource("/meta/web-app_2_2.dtd")).toString());
 			XMLEntityResolver.registerPublicEntity("-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN", FileLocator.resolve(c.getResource("/meta/web-app_2_3.dtd")).toString());
-		} catch (Exception e) {
+		} catch (IOException e) {
 			WebModelPlugin.getPluginLog().logError(e);
 		}
 	}
@@ -220,11 +224,11 @@ class WebAppConfig {
 	public WebAppConfig() {
 	}
     
-	public WebAppConfig(File confFile) throws Exception {
+	public WebAppConfig(File confFile) throws FileNotFoundException {
 		load(confFile);
 	}
     
-	public void load(File confFile) throws Exception {
+	public void load(File confFile) throws FileNotFoundException {
 		conf = XMLUtil.getDocument(new FileReader(confFile));
 		webApp = conf.getDocumentElement();
 	}

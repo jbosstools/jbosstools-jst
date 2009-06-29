@@ -39,18 +39,14 @@ public class AddProjectTemplateVelocityStep extends MultistepWizardStep {
 		root = p;
 		if(root == null || !root.isOpen()) return;
 		StringBuffer sb = new StringBuffer();
-		try {
-			IResource r = p.findMember("WebContent/WEB-INF/web.xml");
-			if(r != null) {
-				sb.append(r.getFullPath().toString());
-			}
-			r = p.findMember("ant/build.xml");
-			if(r != null) {
-				if(sb.length() > 0) sb.append(';');
-				sb.append(r.getFullPath().toString());
-			}
-		} catch (Exception e) {
-			WebModelPlugin.getPluginLog().logError(e);
+		IResource r = p.findMember("WebContent/WEB-INF/web.xml");
+		if(r != null) {
+			sb.append(r.getFullPath().toString());
+		}
+		r = p.findMember("ant/build.xml");
+		if(r != null) {
+			if(sb.length() > 0) sb.append(';');
+			sb.append(r.getFullPath().toString());
 		}
 		support.setAttributeValue(id, ATTR_NAME, sb.toString());
 	}

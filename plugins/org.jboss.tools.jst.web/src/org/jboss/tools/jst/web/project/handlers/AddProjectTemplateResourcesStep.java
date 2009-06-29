@@ -61,7 +61,7 @@ public class AddProjectTemplateResourcesStep extends MultistepWizardStep {
 		}
 	}
 	
-	void matchResources(IContainer r, Set included) throws Exception {
+	void matchResources(IContainer r, Set included) throws CoreException {
 		String path = r.getFullPath().toString();
 		if(!included.contains(path)) {
 			excludedResources.add(path);
@@ -89,7 +89,7 @@ public class AddProjectTemplateResourcesStep extends MultistepWizardStep {
 		excludedResources.clear();
 		try {
 			matchResources(root, list);
-		} catch (Exception e) {
+		} catch (CoreException e) {
 			WebModelPlugin.getPluginLog().logError(e);
 		}
 	}

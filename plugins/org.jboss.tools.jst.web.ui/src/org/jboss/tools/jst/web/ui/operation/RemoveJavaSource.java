@@ -14,11 +14,11 @@ import java.util.ArrayList;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
-import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 public class RemoveJavaSource {
@@ -42,7 +42,7 @@ public class RemoveJavaSource {
 			for (int i = 0; i < rs.length; i++) {
 				try {
 					if(rs[i] != null) rs[i].delete(true, null);
-				} catch (Exception ce) {
+				} catch (CoreException ce) {
 					WebUiPlugin.getPluginLog().logError(ce);
 				}
 			}

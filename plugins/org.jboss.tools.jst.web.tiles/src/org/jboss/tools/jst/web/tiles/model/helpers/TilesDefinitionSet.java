@@ -124,11 +124,7 @@ public class TilesDefinitionSet implements XModelTreeListener {
 		if(!removed.isEmpty() || !added.isEmpty()) {
 			ITilesDefinitionSetListener[] ls = listeners.toArray(new ITilesDefinitionSetListener[0]);
 			for (int i = 0; i < ls.length; i++) {
-				try {
-					ls[i].definitionsChanged(removed, added);
-				} catch (Exception e) {
-					ModelPlugin.getPluginLog().logError(e);
-				}
+				ls[i].definitionsChanged(removed, added);
 			}
 		}
 	}

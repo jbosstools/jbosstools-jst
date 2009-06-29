@@ -10,16 +10,22 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.project.version;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Map;
+import java.util.Properties;
+import java.util.TreeMap;
 
 import org.eclipse.osgi.util.NLS;
-import org.w3c.dom.*;
-import org.jboss.tools.common.model.util.*;
+import org.jboss.tools.common.model.util.XMLUtil;
+import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
 import org.jboss.tools.common.xml.XMLUtilities;
 import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 import org.jboss.tools.jst.web.project.handlers.AddVersionSupport;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 public abstract class ProjectVersions {
 	protected String descriptorFileName;
@@ -41,7 +47,7 @@ public abstract class ProjectVersions {
 	public String getPath() {
 		try {
 			return new File(path).getCanonicalPath().replace('\\', '/');
-		} catch (Exception e) {
+		} catch (IOException e) {
 			WebModelPlugin.getPluginLog().logError(e);
 			return path;
 		}
@@ -66,7 +72,7 @@ public abstract class ProjectVersions {
 				String[] errors = XMLUtil.getXMLErrors(reader, false);
 				errorMessage = (errors == null || errors.length == 0) ? NLS.bind(WebUIMessages.CANNOT_PARSE_PROJECT_VERSIONS_DESCRIPTORFILE, file.getAbsolutePath())
 				   : NLS.bind(WebUIMessages.CANNOT_PARSE_PROJECT_VERSIONS_DESCRIPTORFILE, file.getAbsolutePath()) + ":\n" + errors[0]; //$NON-NLS-1$
-			} catch (Exception exc) {
+			} catch (IOException exc) {
 				WebModelPlugin.getPluginLog().logError(exc);
 				errorMessage = NLS.bind(WebUIMessages.CANNOT_READ_PROJECT_VERSIONS_DESCRIPTORFILE, file.getAbsolutePath());
 			}
@@ -102,7 +108,7 @@ public abstract class ProjectVersions {
 		}
 		try {
 			return f.getCanonicalPath().replace('\\', '/');
-		} catch (Exception e) {
+		} catch (IOException e) {
 			WebModelPlugin.getPluginLog().logError(e);
 			return f.getAbsolutePath().replace('\\', '/');
 		}
@@ -112,7 +118,7 @@ public abstract class ProjectVersions {
 		if(document == null) return;
 		try {
 			XModelObjectLoaderUtil.serialize(document.getDocumentElement(), file.getAbsolutePath());
-		} catch (Exception e) {
+		} catch (IOException e) {
 			WebModelPlugin.getPluginLog().logError(e);
 		}
 	}

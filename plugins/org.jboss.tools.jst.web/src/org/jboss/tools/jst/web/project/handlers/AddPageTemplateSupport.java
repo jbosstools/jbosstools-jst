@@ -127,17 +127,12 @@ public class AddPageTemplateSupport extends SpecialWizardSupport {
     	if(pagePath == null) return null;
     	if(pagePath.equals(this.pagePath)) return selectedFile;
     	this.pagePath = pagePath;
-    	try {
-    		IResource r = ModelPlugin.getWorkspace().getRoot().findMember(new Path(pagePath));
-    		if(r instanceof IFile) {
-    			selectedFile = (IFile)r;
-    		} else {
-    			selectedFile = null;
-    		}
-    	} catch (Exception e) {
-			WebModelPlugin.getPluginLog().logError(e);
+		IResource r = ModelPlugin.getWorkspace().getRoot().findMember(new Path(pagePath));
+		if(r instanceof IFile) {
+			selectedFile = (IFile)r;
+		} else {
 			selectedFile = null;
-    	}
+		}
     	return selectedFile;
     }
 
