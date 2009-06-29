@@ -15,10 +15,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.browser.IWebBrowser;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import org.eclipse.wst.server.core.*;
@@ -102,7 +104,7 @@ public class RunOnServerContext extends AbstractBrowserContext {
 			try {
 				Object launchable = as[i].getLaunchable(server, resource);
 				if(launchable instanceof HttpLaunchable) return (HttpLaunchable)launchable;
-			} catch (Exception e) {
+			} catch (CoreException e) {
 				WebModelPlugin.getPluginLog().logError(e);
 			}
 		}
@@ -122,18 +124,16 @@ public class RunOnServerContext extends AbstractBrowserContext {
 			return;
 		}
 		if(!checkUrl()) return;
-		try {
-			server.getModules();
-		} catch (Exception e) {
-			WebModelPlugin.getPluginLog().logError(e);
-		}
+
+		server.getModules();
+		
 		String launchMode = ILaunchManager.DEBUG_MODE.equals(server.getMode()) ? ILaunchManager.DEBUG_MODE : ILaunchManager.RUN_MODE; 
 		try {
 			Object launchable = new HttpLaunchable(new URL(lastRunUrl));
 			IClient[] clients = getClients(server, launchable, launchMode);
 			IClient client = clients[0];
 			client.launch(server, launchable, launchMode, server.getLaunch());
-		} catch (Exception e) {
+		} catch (MalformedURLException e) {
 			WebModelPlugin.getPluginLog().logError(e);
 			runJustUrl();
 		}
@@ -164,7 +164,7 @@ public class RunOnServerContext extends AbstractBrowserContext {
 		} catch (MalformedURLException mue) {
 			ServiceDialog d = PreferenceModelUtilities.getPreferenceModel().getService();
 			d.showDialog(WebUIMessages.ERROR, NLS.bind(WebUIMessages.INCORRECT_URL, mue.getMessage()), new String[]{WebUIMessages.OK}, null, ServiceDialog.ERROR); //$NON-NLS-3$
-		} catch (Exception e) {
+		} catch (PartInitException e) {
 			WebModelPlugin.getPluginLog().logError(e);
 		}
 	}
