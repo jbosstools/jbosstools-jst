@@ -86,7 +86,7 @@ public class AddProjectTemplateSupport extends MultistepWizardSupport {
 			setVersionList();
 			try {
 				prepareStep(RESOURCES_STEP);
-			} catch (Exception e) {
+			} catch (XModelException e) {
 				WebModelPlugin.getPluginLog().logError(e);
 			}
 		}

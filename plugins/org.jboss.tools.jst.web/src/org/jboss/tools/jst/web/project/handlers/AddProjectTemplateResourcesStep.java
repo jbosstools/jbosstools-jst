@@ -12,11 +12,13 @@ package org.jboss.tools.jst.web.project.handlers;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 import java.util.*;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.jboss.tools.common.meta.action.impl.MultistepWizardStep;
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.project.IModelNature;
@@ -54,7 +56,7 @@ public class AddProjectTemplateResourcesStep extends MultistepWizardStep {
 	        if(r != null) excludedResources.add(r.getFullPath().toString());
 	        r = root.findMember("WebContent/WEB-INF/classes");
 	        if(r != null) excludedResources.add(r.getFullPath().toString());
-		} catch (Exception e) {
+		} catch (CoreException e) {
 			WebModelPlugin.getPluginLog().logError(e);
 		}
 	}
@@ -102,7 +104,7 @@ public class AddProjectTemplateResourcesStep extends MultistepWizardStep {
 				File f = r.getLocation().toFile();
 				try {
 					set.add(f.getCanonicalPath());
-				} catch (Exception e) {
+				} catch (IOException e) {
 					WebModelPlugin.getPluginLog().logError(e);
 				}
 			}
@@ -117,7 +119,7 @@ public class AddProjectTemplateResourcesStep extends MultistepWizardStep {
 				String path = null;
 				try {
 					path = pathname.getCanonicalPath();
-				} catch (Exception e) {
+				} catch (IOException e) {
 					WebModelPlugin.getPluginLog().logError(e);
 				}
 				return path != null && !set.contains(path);
