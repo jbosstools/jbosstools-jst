@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tag-lib PUBLIC "-//Red Hat, Inc//DTD Knowledge Base 2.0//EN" "http://anonsvn.jboss.org/repos/jbosstools/trunk/jst/plugins/org.jboss.tools.jst.web.kb/resources/kbCustomTagLibSchema-1.0.dtd">
 <tag-lib defaultPrefix="ui">
-	<component name="component" extended="true">
+	<component name="component" extended="false">
 		<description>The component tag and the composition tag behave exactly
 			the same, except the component tag will insert a new UIComponent
 			instance into the tree as the root of all the child
 			components/fragments it has.</description>
-		<attribute extended="true" name="id">
+		<attribute extended="false" name="id">
 			<description>A unique id may be provided, otherwise Facelets will
 				automatically assign one under the same logic it uses for all
 				UIComponents.</description>
 		</attribute>
-		<attribute extended="true" name="binding">
+		<attribute extended="false" name="binding">
 			<description>This binding attribute is used the same as with any
 				other UIComponent such that it allows you to reference them as a
 				property of a JavaBean. If that target property did not have a
@@ -19,15 +19,15 @@
 				create an instance for you and set it on your JavaBean before
 				continuing with building the tree.</description>
 		</attribute>
-		<attribute extended="true" name="xmlns">
+		<attribute extended="false" name="xmlns">
 			<proposal type="taglib" />
 		</attribute>
-		<attribute extended="true" name="xmlns:*">
+		<attribute extended="false" name="xmlns:*">
 			<proposal type="taglib" />
 		</attribute>
 	</component>
-	<component name="composition" extended="true">
-		<attribute extended="true" name="template">
+	<component name="composition" extended="false">
+		<attribute extended="false" name="template">
 			<description>The resolvable URI of the template to use. The content
 				within the composition tag will be used in populating the template
 				specified.</description>
@@ -35,14 +35,14 @@
 				<param name="extensions" value="%page%" />
 			</proposal>
 		</attribute>
-		<attribute extended="true" name="xmlns">
+		<attribute extended="false" name="xmlns">
 			<proposal type="taglib" />
 		</attribute>
-		<attribute extended="true" name="xmlns:*">
+		<attribute extended="false" name="xmlns:*">
 			<proposal type="taglib" />
 		</attribute>
 	</component>
-	<component closeTag="true" name="debug" extended="true">
+	<component closeTag="true" name="debug" extended="false">
 		<description>The debug tag will capture the component tree and
 			variables when it is encoded, storing the data for retrieval later.
 			You may launch the debug window at any time from your browser by
@@ -52,13 +52,13 @@
 			enabled/disabled across your whole application. If your application
 			uses multiple windows, you might want to assign different hot keys to
 			each one.</description>
-		<attribute extended="true" name="hotkey">
+		<attribute extended="false" name="hotkey">
 			<description>The hot key to use in combination with 'CTRL' + 'SHIFT'
 				to launch the debug window. By default, when the debug tag is used,
 				you may launch the debug window with 'CTRL' + 'SHIFT' + 'D'. This
 				value cannot be an EL expression.</description>
 		</attribute>
-		<attribute extended="true" name="rendered">
+		<attribute extended="false" name="rendered">
 			<description>Creating debug output on every request adds some
 				overhead, so you can use the UIComponent rendered property to turn
 				debugging on or off based on some expression.</description>
@@ -68,14 +68,14 @@
 			</proposal>
 		</attribute>
 	</component>
-	<component name="decorate" extended="true">
+	<component name="decorate" extended="false">
 		<description>The decorate tag acts the same as a composition tag, but
 			it will not trim everything outside of it. This is useful in cases
 			where you have a list of items in a document, which you would like to
 			be decorated or framed. The sum of it all is that you can take any
 			element in the document and decorate it with some external logic as
 			provided by the template.</description>
-		<attribute extended="true" name="template" required="true">
+		<attribute extended="false" name="template" required="true">
 			<description>The resolvable URI of the template to use. The content
 				within the decorate tag will be used in populating the template
 				specified.</description>
@@ -83,22 +83,22 @@
 				<param name="extensions" value="%page%" />
 			</proposal>
 		</attribute>
-		<attribute extended="true" name="xmlns">
+		<attribute extended="false" name="xmlns">
 			<proposal type="taglib" />
 		</attribute>
-		<attribute extended="true" name="xmlns:*">
+		<attribute extended="false" name="xmlns:*">
 			<proposal type="taglib" />
 		</attribute>
 	</component>
-	<component name="define" extended="true">
+	<component name="define" extended="false">
 		<description>The define tag can be used within tags that allow
 			templating. This includes composition and decorate tags.</description>
-		<attribute extended="true" name="name" required="true">
+		<attribute extended="false" name="name" required="true">
 			<description>The literal name for this definition. This name will
 				match up with a &lt;ui:insert/&gt; tag in a target template.</description>
 		</attribute>
 	</component>
-	<component name="fragment" extended="true">
+	<component name="fragment" extended="false">
 		<description>Just like composition has decorate as a non-trimming
 			version of the same behavior, component has fragment. This allows you
 			to logically insert a UIComponent into the tree and possibly bind
@@ -109,12 +109,12 @@
 			children, you may want more control over the building process that
 			Facelets does and using a fragment tag will help guarantee
 			parent/child relationships for you.</description>
-		<attribute extended="true" name="id">
+		<attribute extended="false" name="id">
 			<description>A unique id may be provided, otherwise Facelets will
 				automatically assign one under the same logic it uses for all
 				UIComponents.</description>
 		</attribute>
-		<attribute extended="true" name="binding">
+		<attribute extended="false" name="binding">
 			<description>This binding attribute is used the same as with any
 				other UIComponent such that it allows you to reference them as a
 				property of a JavaBean. If that target property did not have a
@@ -122,14 +122,14 @@
 				create an instance for you and set it on your JavaBean before
 				continuing with building the tree.</description>
 		</attribute>
-		<attribute extended="true" name="xmlns">
+		<attribute extended="false" name="xmlns">
 			<proposal type="taglib" />
 		</attribute>
-		<attribute extended="true" name="xmlns:*">
+		<attribute extended="false" name="xmlns:*">
 			<proposal type="taglib" />
 		</attribute>
 	</component>
-	<component closeTag="true" name="include" extended="true">
+	<component closeTag="true" name="include" extended="false">
 		<description>The include tag can point at any Facelet which might use
 			the composition tag, component tag, or simply be straight XHTML/XML.
 			It should be noted that the src path does allow relative path names,
@@ -137,7 +137,7 @@
 			requested. The include tag can be used in conjunction with multiple
 			&lt;ui:param/&gt; tags to pass EL expressions/values to the target
 			page.</description>
-		<attribute extended="true" name="src" required="true">
+		<attribute extended="false" name="src" required="true">
 			<description>A literal or EL expression that specifies the target
 				Facelet that you would like to include into your document.</description>
 			<proposal type="file">
@@ -145,46 +145,46 @@
 			</proposal>
 		</attribute>
 	</component>
-	<component name="insert" extended="true">
+	<component name="insert" extended="false">
 		<description>The insert tag is used within your templates to declare
 			spots of replacable data.</description>
-		<attribute extended="true" name="name">
+		<attribute extended="false" name="name">
 			<description>The optional name attribute matches the associated
 				&lt;ui:define/&gt; tag in this template's client. If no name is
 				specified, it's expected that the whole template client will be
 				inserted.</description>
 		</attribute>
 	</component>
-	<component closeTag="true" name="param" extended="true">
+	<component closeTag="true" name="param" extended="false">
 		<description />
-		<attribute extended="true" name="name" required="true">
+		<attribute extended="false" name="name" required="true">
 			<description>The name of the variable to pass to the included
 				Facelet.</description>
 		</attribute>
-		<attribute extended="true" name="value" required="true">
+		<attribute extended="false" name="value" required="true">
 			<description>The literal or EL expression value to assign to the
 				named variable.</description>
 		</attribute>
 	</component>
-	<component name="remove" extended="true">
+	<component name="remove" extended="false">
 		<description>The remove tag does not have any attributes and is used
 			to remove chunks of XML content from a Facelet at compilation time.
 			The remove tag is often used in conjunction with the jsfc feature.</description>
 	</component>
-	<component name="repeat" extended="true">
-		<attribute extended="true" name="value" required="true">
+	<component name="repeat" extended="false">
+		<attribute name="value" required="true">
 			<description>Expression for the list of items</description>
 		</attribute>
-		<attribute extended="true" name="var" required="true">
+		<attribute name="var" required="true">
 			<description>The name of the variable to put the current item.</description>
 		</attribute>
-		<attribute extended="true" name="offset">
+		<attribute extended="false" name="offset">
 			<description>The offset index.</description>
 		</attribute>
-		<attribute extended="true" name="size">
+		<attribute extended="false" name="size">
 			<description>Number of items to produce.</description>
 		</attribute>
-		<attribute extended="true" name="varStatus">
+		<attribute extended="false" name="varStatus">
 			<description>Index object.</description>
 		</attribute>
 	</component>

@@ -39,14 +39,16 @@ public class EnumerationProposalType extends CustomProposalType {
 		List<TextProposal> proposals = new ArrayList<TextProposal>();
 		for (int i = 0; i < params.length; i++) {
 			String text = params[i].getValue();
-			TextProposal proposal = new TextProposal();
-			proposal.setLabel(text);
-			proposal.setReplacementString(text);
-			proposal.setPosition(text.length());
-			if(ICON==null) {
-				ICON = ImageDescriptor.createFromFile(WebKbPlugin.class, IMAGE_NAME).createImage();
+				if(text.startsWith(query.getValue())) {
+				TextProposal proposal = new TextProposal();
+				proposal.setLabel(text);
+				proposal.setReplacementString(text);
+				proposal.setPosition(text.length());
+				if(ICON==null) {
+					ICON = ImageDescriptor.createFromFile(WebKbPlugin.class, IMAGE_NAME).createImage();
+				}
+				proposals.add(proposal);
 			}
-			proposals.add(proposal);
 		}
 		return proposals.toArray(new TextProposal[0]);
 	}

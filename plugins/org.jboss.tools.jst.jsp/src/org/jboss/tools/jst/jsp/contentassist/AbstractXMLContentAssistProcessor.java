@@ -100,7 +100,7 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 		String matchString =  super.getMatchString(parent, aRegion, offset);
 		String regionType = aRegion.getType();
 		if(regionType == DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE && matchString.startsWith("\"")) {
-			matchString = matchString.substring(1); //$NON-NLS-1$
+			matchString = matchString.substring(1);
 		}
 		return matchString;
 	}

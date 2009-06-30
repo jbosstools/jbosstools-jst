@@ -30,6 +30,7 @@ import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.internal.FaceletPageContextImpl;
+import org.jboss.tools.jst.web.kb.taglib.CustomTagLibManager;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -43,8 +44,6 @@ import org.w3c.dom.Node;
  *
  */
 public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor {
-	private static final String UI_URI_JSF_FACELETS = "http://java.sun.com/jsf/facelets"; //$NON-NLS-1$
-	private static final String UI_URI_XHTML_FACELETS = "http://www.w3.org/1999/xhtml/facelets"; //$NON-NLS-1$
 	private static final String JSFC_ATTRIBUTE_NAME = "jsfc"; //$NON-NLS-1$
 
 	private boolean replaceJsfcTags;
@@ -139,10 +138,10 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 								}
 							};
 							context.addNameSpace(region, nameSpace);
-							if (UI_URI_JSF_FACELETS.equals(uri)) {
+							if (CustomTagLibManager.FACELETS_UI_TAG_LIB_URI.equals(uri)) {
 								nameSpace = new INameSpace(){
 									public String getURI() {
-										return UI_URI_XHTML_FACELETS;
+										return CustomTagLibManager.FACELETS_HTML_TAG_LIB_URI;
 									}
 									public String getPrefix() {
 										return "";

@@ -37,8 +37,8 @@ import org.xml.sax.SAXException;
  */
 public class CustomTagLibManager {
 
-	public static final String FACELETS_UI_TAG_LIB_URI = "http://java.sun.com/jsf/facelets";
-	public static final String FACELETS_HTML_TAG_LIB_URI = "http://www.w3.org/1999/xhtml/facelets";
+	public static final String FACELETS_UI_TAG_LIB_URI = "http://java.sun.com/jsf/facelets"; //$NON-NLS-1$
+	public static final String FACELETS_HTML_TAG_LIB_URI = "http://www.w3.org/1999/xhtml/facelets"; //$NON-NLS-1$
 
 	private static final CustomTagLibManager INSTANCE = new CustomTagLibManager();
 
@@ -90,7 +90,7 @@ public class CustomTagLibManager {
 				IConfigurationElement[] elements = extension.getConfigurationElements();
 				for(int j=0; j<elements.length; j++) {
 					String elementName = elements[j].getName();
-					if("tag-lib".equals(elementName)) {
+					if("tag-lib".equals(elementName)) { //$NON-NLS-1$
 						String uri = elements[j].getAttribute("uri"); //$NON-NLS-1$
 						String location = elements[j].getAttribute("location"); //$NON-NLS-1$
 						String version = elements[j].getAttribute("version"); //$NON-NLS-1$
@@ -98,7 +98,7 @@ public class CustomTagLibManager {
 						Bundle sourcePlugin = Platform.getBundle(elements[j].getNamespaceIdentifier());
 						File schemaLocation = null;
 						try {
-							String pluginPath = FileLocator.resolve(sourcePlugin.getEntry("/")).getPath();
+							String pluginPath = FileLocator.resolve(sourcePlugin.getEntry("/")).getPath(); //$NON-NLS-1$
 							if(uri==null || uri.length()==0 || location==null || location.length()==0) {
 								WebKbPlugin.getDefault().logWarning("Incorrect org.jboss.tools.jst.web.kb.KbTagLib extension in " + pluginPath + " plugin. URI or location can't be empty."); //$NON-NLS-1$ $NON-NLS-2$
 								continue;
@@ -114,7 +114,7 @@ public class CustomTagLibManager {
 						} else {
 							WebKbPlugin.getDefault().logWarning("Can't load KB schema: " + schemaLocation); //$NON-NLS-1$
 						}
-					} else if("component-extension".equals(elementName)) {
+					} else if("component-extension".equals(elementName)) { //$NON-NLS-1$
 						String location = elements[j].getAttribute("location"); //$NON-NLS-1$
 						Bundle sourcePlugin = Platform.getBundle(elements[j].getNamespaceIdentifier());
 						File schemaLocation = null;
