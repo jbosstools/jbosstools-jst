@@ -483,44 +483,34 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 	 * Calculates and adds the attribute value proposals to the Content Assist Request object
 	 */
 	protected void addAttributeValueProposals(ContentAssistRequest contentAssistRequest) {
-		
 		// Need to check if an EL Expression is opened here.
 		// If it is true we don't need to start any new tag proposals
 		TextRegion prefix = getELPrefix();
 		if (prefix != null && prefix.isELStarted()) {
 			return;
 		}
-		
-		System.out.println("JspContentAssistProcessor: addAttributeValueProposals() invoked");
 		try {
 			String matchString = contentAssistRequest.getMatchString();
 			String query = matchString;
 			if (query == null)
 				query = "";
 			String stringQuery = matchString;
-					
+
 			KbQuery kbQuery = createKbQuery(Type.ATTRIBUTE_VALUE, query, stringQuery);
 			TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext());
-			
+
 			for (int i = 0; proposals != null && i < proposals.length; i++) {
 				TextProposal textProposal = proposals[i];
-				
-				System.out.println("Tag Attribute Value proposal [" + (i + 1) + "/" + proposals.length + "]: " + textProposal.getReplacementString());
-				
-				if (isExistingAttribute(textProposal.getLabel())) 
-					continue;
-				
-				String replacementString = textProposal.getReplacementString() + "=\"\"";
-				
 				int replacementOffset = contentAssistRequest.getReplacementBeginPosition();
 				int replacementLength = contentAssistRequest.getReplacementLength();
+				String replacementString = "\"" + textProposal.getReplacementString() + "\"";
 				int cursorPosition = getCursorPositionForProposedText(replacementString);
 				Image image = textProposal.getImage();
 				String displayString = textProposal.getLabel();
 				IContextInformation contextInformation = null;
 				String additionalProposalInfo = textProposal.getContextInfo();
 				int relevance = textProposal.getRelevance() + 10000;
-				
+
 				CustomCompletionProposal proposal = new CustomCompletionProposal(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, contextInformation, additionalProposalInfo, relevance);
 				contentAssistRequest.addProposal(proposal);
 			}
@@ -534,13 +524,6 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 	 */
 	@Override
 	protected void addTextELProposals(ContentAssistRequest contentAssistRequest) {
-		// TODO Auto-generated method stub
-		System.out.println("JspContentAssistProcessor: addTextELProposals() invoked");
-		try {
-			System.out.println("JspContentAssistProcessor: No EL allowed in TEXT");
-		} finally {
-			System.out.println("JspContentAssistProcessor: addTextELProposals() exited");
-		}
 	}
 
 	/**
