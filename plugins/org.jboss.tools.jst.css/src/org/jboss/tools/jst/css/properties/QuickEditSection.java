@@ -11,7 +11,10 @@
 
 package org.jboss.tools.jst.css.properties;
 
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IWorkbenchPart;
+import org.jboss.tools.jst.jsp.outline.cssdialog.tabs.BaseTabControl;
 import org.jboss.tools.jst.jsp.outline.cssdialog.tabs.TabQuickEditControl;
 
 /**
@@ -21,9 +24,21 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.tabs.TabQuickEditControl;
 public class QuickEditSection extends AbstractCssSection {
 
 	@Override
-	public void createTabControl(Composite parent) {
-		new TabQuickEditControl(parent, getStyleAttributes(),
+	public BaseTabControl createTabControl(Composite parent) {
+		return new TabQuickEditControl(parent, getStyleAttributes(),
 				getBindingContext());
 	}
 
+	@Override
+	public void setInput(IWorkbenchPart part, ISelection selection) {
+		getTabControl().update();
+		// TODO find better way
+		getTabControl().getParent().getParent().layout(true);
+		super.setInput(part, selection);
+	}
+
+	@Override
+	public void aboutToBeShown() {
+		super.aboutToBeShown();
+	}
 }

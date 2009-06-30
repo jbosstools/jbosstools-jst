@@ -89,21 +89,19 @@ public class CSSPropertyPage extends TabbedPropertySheetPage implements
 								.getFirstElement());
 
 				if (styleRule != null) {
-					// if (styleRule != selectedObject) {
 					((IObservable) styleAttributes.getAttributeMap())
 							.removeChangeListener(this);
 					updateStyleAttributes(styleRule);
 					((IObservable) styleAttributes.getAttributeMap())
 							.addChangeListener(this);
-					// }
 					newSelectedObject = styleRule;
 				}
 
 			}
-			// if (newSelectedObject != selectedObject) {
-			super.selectionChanged(part, selection);
+
+			if (selectedObject != newSelectedObject)
+				super.selectionChanged(part, selection);
 			selectedObject = newSelectedObject;
-			// }
 
 		}
 
@@ -141,11 +139,13 @@ public class CSSPropertyPage extends TabbedPropertySheetPage implements
 			}
 		}
 
-		StructuredSelection selection = new StructuredSelection(
-				new Object[] { selectedObject });
+		notifySelectionChanged(new StructuredSelection(selectedObject));
+
+	}
+
+	protected void notifySelectionChanged(StructuredSelection selection) {
 		part.postSelectionChanged(new SelectionChangedEvent(part
 				.getSelectionProvider(), selection));
-
 	}
 
 	/**

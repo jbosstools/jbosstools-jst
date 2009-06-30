@@ -11,20 +11,12 @@
 
 package org.jboss.tools.jst.css.properties;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
-import org.eclipse.wst.css.core.internal.provisional.document.ICSSNode;
-import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.StyleAttributes;
-import org.w3c.dom.css.CSSStyleDeclaration;
+import org.jboss.tools.jst.jsp.outline.cssdialog.tabs.BaseTabControl;
 
 /**
  * @author Sergey Dzmitrovich
@@ -33,6 +25,7 @@ import org.w3c.dom.css.CSSStyleDeclaration;
 public abstract class AbstractCssSection extends AbstractPropertySection {
 	private DataBindingContext bindingContext;
 	private StyleAttributes styleAttributes;
+	protected BaseTabControl control;
 
 	@Override
 	public void createControls(Composite parent,
@@ -44,10 +37,10 @@ public abstract class AbstractCssSection extends AbstractPropertySection {
 			styleAttributes = ((CSSPropertyPage) aTabbedPropertySheetPage)
 					.getStyleAttributes();
 		}
-		createTabControl(parent);
+		control = createTabControl(parent);
 	}
 
-	abstract public void createTabControl(Composite parent);
+	abstract public BaseTabControl createTabControl(Composite parent);
 
 	public DataBindingContext getBindingContext() {
 		return bindingContext;
@@ -57,9 +50,7 @@ public abstract class AbstractCssSection extends AbstractPropertySection {
 		return styleAttributes;
 	}
 
-	@Override
-	public void setInput(IWorkbenchPart part, ISelection selection) {
-		super.setInput(part, selection);
-
+	public BaseTabControl getTabControl() {
+		return control;
 	}
 }

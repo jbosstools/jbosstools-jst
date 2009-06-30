@@ -12,6 +12,7 @@
 package org.jboss.tools.jst.css.properties;
 
 import org.eclipse.swt.widgets.Composite;
+import org.jboss.tools.jst.jsp.outline.cssdialog.tabs.BaseTabControl;
 import org.jboss.tools.jst.jsp.outline.cssdialog.tabs.TabTextControl;
 
 /**
@@ -21,8 +22,8 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.tabs.TabTextControl;
 public class TextSection extends AbstractCssSection {
 
 	@Override
-	public void createTabControl(Composite parent) {
-		new TabTextControl(parent, getStyleAttributes(),
+	public BaseTabControl createTabControl(Composite parent) {
+		return new TabTextControl(parent, getStyleAttributes(),
 				getBindingContext());
 	}
 

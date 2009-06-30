@@ -14,7 +14,6 @@ package org.jboss.tools.jst.css.view;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -48,12 +47,12 @@ public class CSSPreview extends ViewPart implements ISelectionListener {
 
 	private Text previewText;
 
-	private String previewContent = CSSUIMessages.CSSViewDefaultPreviewText;
+	private String previewContent = CSSUIMessages.CSSPreview_DefaultBrowserText;
 
 	private Map<String, String> styleAttributes = new HashMap<String, String>();
 
-//	private String location;
-//	private String selectorName;
+	// private String location;
+	// private String selectorName;
 
 	@Override
 	public void init(IViewSite site) throws PartInitException {
@@ -105,7 +104,7 @@ public class CSSPreview extends ViewPart implements ISelectionListener {
 				if (e.widget == previewText) {
 					String text = previewText.getText();
 					if (text == null || text.equals(Constants.EMPTY)) {
-						setPreviewContent(CSSUIMessages.CSSViewDefaultPreviewText);
+						setPreviewContent(CSSUIMessages.CSSPreview_DefaultBrowserText);
 					} else {
 						setPreviewContent(text);
 					}
@@ -137,23 +136,15 @@ public class CSSPreview extends ViewPart implements ISelectionListener {
 	 */
 	public String generateBrowserPage() {
 
-		 StringBuffer html = new StringBuffer(Constants.OPEN_DIV_TAG);
-		
-		 for (Map.Entry<String, String> styleItem :
-		 styleAttributes.entrySet()) {
-		
-		 html.append(styleItem.getKey() + Constants.COLON
-		 + styleItem.getValue() + Constants.SEMICOLON);
-		 }
-		
-				html.append("\">" + getPreviewContent() + Constants.CLOSE_DIV_TAG); //$NON-NLS-1$
+		StringBuffer html = new StringBuffer(Constants.OPEN_DIV_TAG);
 
-//		String html = "<html><head><link type=\"text/css\" rel=\"stylesheet\" href=\""
-//				+ location
-//				+ "\" /></head><body > <span class=\""
-//				+ selectorName
-//				+ "\" >"
-//				+ getPreviewContent() + "</span></body></html>";
+		for (Map.Entry<String, String> styleItem : styleAttributes.entrySet()) {
+
+			html.append(styleItem.getKey() + Constants.COLON
+					+ styleItem.getValue() + Constants.SEMICOLON);
+		}
+
+		html.append("\">" + getPreviewContent() + Constants.CLOSE_DIV_TAG); //$NON-NLS-1$
 
 		return html.toString();
 	}
@@ -177,23 +168,16 @@ public class CSSPreview extends ViewPart implements ISelectionListener {
 								.getFirstElement());
 
 				if (styleRule != null) {
-//					selectorName = styleRule.getSelectorText();
-//					location = ResourcesPlugin.getWorkspace().getRoot()
-//							.getLocation().toString()
-//							+ styleRule.getParentStyleSheet().getHref();
 					styleAttributes = CSSViewUtil.getStyleAttributes(styleRule);
 
 				} else {
-//					selectorName = null;
-//					location = null;
 					styleAttributes.clear();
 				}
 
-				updateBrowser();
-
 			}
-
+			updateBrowser();
 		}
+
 	}
 
 	public void updateBrowser() {

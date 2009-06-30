@@ -12,6 +12,7 @@
 package org.jboss.tools.jst.css.properties;
 
 import org.eclipse.swt.widgets.Composite;
+import org.jboss.tools.jst.jsp.outline.cssdialog.tabs.BaseTabControl;
 import org.jboss.tools.jst.jsp.outline.cssdialog.tabs.TabBackgroundControl;
 
 /**
@@ -21,8 +22,8 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.tabs.TabBackgroundControl;
 public class BackgroundSection extends AbstractCssSection {
 
 	@Override
-	public void createTabControl(Composite parent) {
-		new TabBackgroundControl(parent, getStyleAttributes(),
+	public BaseTabControl createTabControl(Composite parent) {
+		return new TabBackgroundControl(parent, getStyleAttributes(),
 				getBindingContext());
 	}
 }

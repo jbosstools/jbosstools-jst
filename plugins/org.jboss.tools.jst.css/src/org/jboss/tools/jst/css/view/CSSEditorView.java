@@ -47,13 +47,11 @@ public class CSSEditorView extends PropertySheet {
 			return new PageRec(part, page);
 		}
 
-		// Use the default page
 		return null;
 	}
 
 	@Override
 	public SelectionProvider getSelectionProvider() {
-		// TODO Auto-generated method stub
 		return super.getSelectionProvider();
 	}
 	public void postSelectionChanged(SelectionChangedEvent event){
