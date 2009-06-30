@@ -40,6 +40,12 @@
 		</attribute>
 	</customExtension>
 
+	<component closeTag="true" name="loadBundle">
+        <attribute name="basename">
+            <proposal type="bundleName"/>
+        </attribute>
+	</component>
+
 	<component name="actionparam">
 		<attribute name="noEscape">
 			<proposal type="enumeration">
