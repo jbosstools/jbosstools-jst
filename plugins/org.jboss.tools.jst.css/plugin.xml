@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+	<extension point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
+		<propertyContributor contributorId="org.eclipse.wst.css.core.csssource.source"
+			typeMapper="org.jboss.tools.jst.css.properties.TypeMapper">
+			<propertyCategory category="general">
+			</propertyCategory>
+		</propertyContributor>
+	</extension>
+	<extension point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+		<propertyTabs contributorId="org.eclipse.wst.css.core.csssource.source">
+			<propertyTab category="general"
+				id="org.jboss.tools.jst.css.textFontTab" label="%css.tabs.textFont.label">
+			</propertyTab>
+			<propertyTab category="general"
+				id="org.jboss.tools.jst.css.backgroundTab" label="%css.tabs.background.label"
+				afterTab="org.jboss.tools.jst.css.textFontTab">
+			</propertyTab>
+			<propertyTab category="general" id="org.jboss.tools.jst.css.boxesTab"
+				label="%css.tabs.boxes.label" afterTab="org.jboss.tools.jst.css.backgroundTab">
+			</propertyTab>
+			<propertyTab category="general"
+				id="org.jboss.tools.jst.css.propertyTab" label="%css.tabs.property.label"
+				afterTab="org.jboss.tools.jst.css.boxesTab">
+			</propertyTab>
+			<propertyTab category="general"
+				id="org.jboss.tools.jst.css.quickEditTab" label="%css.tabs.quickEdit.label"
+				afterTab="org.jboss.tools.jst.css.propertyTab">
+			</propertyTab>
+		</propertyTabs>
+	</extension>
+	<extension point="org.eclipse.ui.views.properties.tabbed.propertySections">
+		<propertySections contributorId="org.eclipse.wst.css.core.csssource.source">
+			<propertySection class="org.jboss.tools.jst.css.properties.TextSection"
+				id="org.jboss.tools.jst.css.textFontTab" tab="org.jboss.tools.jst.css.textFontTab">
+				<input
+					type="org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule">
+				</input>
+			</propertySection>
+
+			<propertySection
+				class="org.jboss.tools.jst.css.properties.BackgroundSection" id="org.jboss.tools.jst.css.backgroundTab"
+				tab="org.jboss.tools.jst.css.backgroundTab" >
+				<input 
+					type="org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule">
+				</input>
+			</propertySection>
+			<propertySection class="org.jboss.tools.jst.css.properties.BoxesSection"
+				id="org.jboss.tools.jst.css.boxesTab" tab="org.jboss.tools.jst.css.boxesTab">
+				<input
+					type="org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule">
+				</input>
+			</propertySection>
+			<propertySection
+				class="org.jboss.tools.jst.css.properties.PropertiesSection" id="org.jboss.tools.jst.css.propertyTab"
+				tab="org.jboss.tools.jst.css.propertyTab">
+				<input
+					type="org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule">
+				</input>
+			</propertySection>
+			<propertySection
+				class="org.jboss.tools.jst.css.properties.QuickEditSection" id="org.jboss.tools.jst.css.quickEditTab"
+				tab="org.jboss.tools.jst.css.quickEditTab">
+				<input
+					type="org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule">
+				</input>
+			</propertySection>
+		</propertySections>
+
+	</extension>
+	<extension point="org.eclipse.ui.views">
+		<view class="org.jboss.tools.jst.css.view.CSSEditorView" id="org.jboss.tools.jst.css.view.editor"
+			name="%css.editor_name" restorable="true">
+		</view>
+		<view
+	        class="org.jboss.tools.jst.css.view.CSSPreview"
+	        id="org.jboss.tools.jst.css.view.preview"
+	        name="%css.preview_name"
+	        restorable="true">
+		</view>
+	</extension>
+</plugin>
