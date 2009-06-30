@@ -470,8 +470,8 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 			}
 
 			// Store all the parents
-			while (n != null) {
-				String tagName = n.getNodeName();
+			while (n != null && n instanceof Element) {
+				String tagName = getTagName(n);
 				parentTags.add(0, tagName);
 				n = n.getParentNode();
 			}	
@@ -483,7 +483,11 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 			}
 		}
 	}
-	
+
+	protected String getTagName(Node tag) {
+		return tag.getNodeName();
+	}
+
 	/**
 	 * Returns name of the parent attribute/tag name
 	 * 
@@ -524,8 +528,8 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 			}
 			if (n == null)
 				return null;
-			
-			String parentTagName = n.getNodeName();
+
+			String parentTagName = getTagName(n);
 			return parentTagName;
 		} finally {
 			if (sModel != null) {

@@ -43,8 +43,12 @@ import org.w3c.dom.Node;
  *
  */
 public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor {
-	private static final String UI_URI_JSF_FACELETS = "http://java.sun.com/jsf/facelets";
-	private static final String UI_URI_XHTML_FACELETS = "http://www.w3.org/1999/xhtml/facelets";
+	private static final String UI_URI_JSF_FACELETS = "http://java.sun.com/jsf/facelets"; //$NON-NLS-1$
+	private static final String UI_URI_XHTML_FACELETS = "http://www.w3.org/1999/xhtml/facelets"; //$NON-NLS-1$
+	private static final String JSFC_ATTRIBUTE_NAME = "jsfc"; //$NON-NLS-1$
+
+	private boolean replaceJsfcTags;
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor#createContext()
@@ -52,8 +56,7 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 	@Override
 	protected IPageContext createContext() {
 		IPageContext superContext = super.createContext();
-		
-		
+
 		FaceletPageContextImpl context = new FaceletPageContextImpl();
 		context.setResource(superContext.getResource());
 		context.setElResolvers(superContext.getElResolvers());
@@ -63,7 +66,7 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 		context.setDocument(getDocument());
 		setNameSpaces(superContext, context);
 		context.setLibraries(getTagLibraries(context));
-		
+
 //		IFaceletPageContext getParentContext();
 //		Map<String, String> getParams();
 
@@ -81,7 +84,7 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 				context.addNameSpace(region, nameSpaces.get(prefix));
 			}
 		}
-			
+
 		try {
 			if (sModel == null)
 				return;
@@ -161,70 +164,115 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 			}
 		}
 	}
-	
-	
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor#getContext()
+	 */
 	@Override
 	protected IFaceletPageContext getContext() {
 		return (IFaceletPageContext)super.getContext();
 	}
-	
-	
 
 	/**
 	 * Calculates and adds the EL proposals to the Content Assist Request object
 	 */
 	@Override
 	protected void addTextELProposals(ContentAssistRequest contentAssistRequest) {
-		// TODO Auto-generated method stub
-		System.out.println("FaceletPageContectAssistProcessor: addTextELProposals() invoked");
-		try {
-			TextRegion prefix = getELPrefix();
-			if (prefix == null || !prefix.isELStarted()) {
-				CustomCompletionProposal proposal = new CustomCompletionProposal("#{}", contentAssistRequest.getReplacementBeginPosition(),
-						0, 2, null, "#{}", null, "New EL Expression", 10000);
-				contentAssistRequest.addProposal(proposal);
-				return;
-			}
-			String matchString = "#{" + prefix.getText();
-			String query = matchString;
-			if (query == null)
-				query = "";
-			String stringQuery = matchString;
-			
-			int beginChangeOffset = prefix.getStartOffset() + prefix.getOffset();
+		TextRegion prefix = getELPrefix();
+		if (prefix == null || !prefix.isELStarted()) {
+			CustomCompletionProposal proposal = new CustomCompletionProposal("#{}", contentAssistRequest.getReplacementBeginPosition(),
+					0, 2, null, "#{}", null, "New EL Expression", 10000);
+			contentAssistRequest.addProposal(proposal);
+			return;
+		}
+		String matchString = "#{" + prefix.getText();
+		String query = matchString;
+		if (query == null)
+			query = "";
+		String stringQuery = matchString;
 
-			
-			KbQuery kbQuery = createKbQuery(Type.TEXT, query, stringQuery);
-			TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext());
-			
-			for (int i = 0; proposals != null && i < proposals.length; i++) {
-				TextProposal textProposal = proposals[i];
-				
-				System.out.println("Tag Text EL proposal [" + (i + 1) + "/" + proposals.length + "]: " + textProposal.getReplacementString());
-				
-				int replacementOffset = beginChangeOffset;
-				int replacementLength = prefix.getLength();
-				String replacementString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString();
-				int cursorPosition = replacementString.length();
-				Image image = textProposal.getImage();
-				
-				String displayString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString(); 
-				IContextInformation contextInformation = null;
-				String additionalProposalInfo = textProposal.getContextInfo();
-				int relevance = textProposal.getRelevance() + 10000;
-				
-				CustomCompletionProposal proposal = new CustomCompletionProposal(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, contextInformation, additionalProposalInfo, relevance);
-				contentAssistRequest.addProposal(proposal);
-			}
-			
-			if (prefix.isELStarted() && !prefix.isELClosed()) {
-				CustomCompletionProposal proposal = new CustomCompletionProposal("}", getOffset(),
-						0, 1, null, "}", null, "Close EL Expression", 10001);
-				contentAssistRequest.addProposal(proposal);
-			}
-		} finally {
-			System.out.println("FaceletPageContectAssistProcessor: addTextELProposals() exited");
+		int beginChangeOffset = prefix.getStartOffset() + prefix.getOffset();
+
+		KbQuery kbQuery = createKbQuery(Type.TEXT, query, stringQuery);
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext());
+
+		for (int i = 0; proposals != null && i < proposals.length; i++) {
+			TextProposal textProposal = proposals[i];
+
+			int replacementOffset = beginChangeOffset;
+			int replacementLength = prefix.getLength();
+			String replacementString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString();
+			int cursorPosition = replacementString.length();
+			Image image = textProposal.getImage();
+
+			String displayString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString(); 
+			IContextInformation contextInformation = null;
+			String additionalProposalInfo = textProposal.getContextInfo();
+			int relevance = textProposal.getRelevance() + 10000;
+
+			CustomCompletionProposal proposal = new CustomCompletionProposal(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, contextInformation, additionalProposalInfo, relevance);
+			contentAssistRequest.addProposal(proposal);
+		}
+
+		if (prefix.isELStarted() && !prefix.isELClosed()) {
+			CustomCompletionProposal proposal = new CustomCompletionProposal("}", getOffset(),
+					0, 1, null, "}", null, "Close EL Expression", 10001);
+			contentAssistRequest.addProposal(proposal);
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor#addAttributeNameProposals(org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest)
+	 */
+	@Override
+	protected void addAttributeNameProposals(
+			ContentAssistRequest contentAssistRequest) {
+		super.addAttributeNameProposals(contentAssistRequest);
+		this.replaceJsfcTags = true;
+		super.addAttributeNameProposals(contentAssistRequest);
+		this.replaceJsfcTags = false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor#addAttributeValueProposals(org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest)
+	 */
+	@Override
+	protected void addAttributeValueProposals(ContentAssistRequest contentAssistRequest) {
+		super.addAttributeValueProposals(contentAssistRequest);
+		this.replaceJsfcTags = true;
+		super.addAttributeValueProposals(contentAssistRequest);
+		this.replaceJsfcTags = false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.jsp.contentassist.AbstractXMLContentAssistProcessor#getTagName(org.w3c.dom.Node)
+	 */
+	@Override
+	protected String getTagName(Node tag) {
+		String tagName = tag.getNodeName();
+		if(replaceJsfcTags) {
+			Element element = (Element)tag;
+
+			// Only HTML tags
+			if(tagName.indexOf(':')>0) {
+				return tagName;
+			}
+
+			NamedNodeMap attributes = element.getAttributes();
+			Node jsfC = attributes.getNamedItem(JSFC_ATTRIBUTE_NAME);
+			if(jsfC==null || (!(jsfC instanceof Attr))) {
+				return tagName;
+			}
+			Attr jsfCAttribute = (Attr)jsfC;
+			String jsfTagName = jsfCAttribute.getValue();
+			if(jsfTagName==null || jsfTagName.indexOf(':')<1) {
+				return tagName;
+			}
+			tagName = jsfTagName;
+		}
+		return tagName;
+	}
 }
