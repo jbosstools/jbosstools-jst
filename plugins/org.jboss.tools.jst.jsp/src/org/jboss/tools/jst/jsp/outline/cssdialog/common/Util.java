@@ -176,7 +176,7 @@ public class Util {
 	 * @return Array two strings, or null, if str incorrect
 	 */
 	public static String[] convertExtString(String str) {
-		if (str.equalsIgnoreCase(THIN)) {
+		if (THIN.equalsIgnoreCase(str)) {
 			return new String[] { THIN, Constants.EMPTY };
 		}
 		if (str == null) {

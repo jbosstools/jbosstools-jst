@@ -83,7 +83,7 @@ public class CSSStyleValueValidator extends CSSValidator implements IValidator {
 	 * @author yradtsevich
 	 * 
 	 */
-	private class LogHacker {
+	private static class LogHacker {
 		private Field logListeners = null;
 		private Object oldValue = null;
 
