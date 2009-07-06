@@ -113,6 +113,9 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 			INameSpace nameSpace = nameSpaces.get(getURI());
 			if(nameSpace!=null) {
 				prefix = nameSpace.getPrefix();
+				if(prefix!=null && prefix.length()==0) {
+					prefix = null;
+				}
 			}
 		}
 		return prefix;
