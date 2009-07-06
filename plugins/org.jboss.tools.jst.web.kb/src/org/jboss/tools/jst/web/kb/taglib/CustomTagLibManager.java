@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.Platform;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibAttribute;
 import org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibrary;
+import org.jboss.tools.jst.web.kb.internal.taglib.HTMLTagLibrary;
 import org.osgi.framework.Bundle;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -109,7 +110,7 @@ public class CustomTagLibManager {
 							continue;
 						}
 						if(schemaLocation.isFile()) {
-							CustomTagLibrary lib = new CustomTagLibrary(schemaLocation, uri, version, name);
+							CustomTagLibrary lib = FACELETS_HTML_TAG_LIB_URI.equals(uri)?new HTMLTagLibrary(schemaLocation, uri, version, name):new CustomTagLibrary(schemaLocation, uri, version, name);
 							libSet.add(lib);
 						} else {
 							WebKbPlugin.getDefault().logWarning("Can't load KB schema: " + schemaLocation); //$NON-NLS-1$

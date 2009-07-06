@@ -98,13 +98,13 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 		}
 	}
 
-	private CustomTagLibComponent parseComponent(Element component) {
+	protected CustomTagLibComponent parseComponent(Element component) {
 		String name = component.getAttribute(NAME);
 		boolean closeTag = TRUE.equalsIgnoreCase(component.getAttribute(CLOSE_TAG));
 		String description = getDescription(component);
 		String extendedStr = component.getAttribute(EXTENDED);
 		Boolean extended = extendedStr==null || extendedStr.length()==0 || TRUE.equals(extendedStr);
-		CustomTagLibComponent newComponent = new CustomTagLibComponent();
+		CustomTagLibComponent newComponent = createComponent();
 		newComponent.setName(name);
 		newComponent.setCanHaveBody(!closeTag);
 		newComponent.setDescription(description);
@@ -119,6 +119,10 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 		}
 
 		return newComponent;
+	}
+
+	protected CustomTagLibComponent createComponent() {
+		return new CustomTagLibComponent();		
 	}
 
 	public static CustomTagLibAttribute[] getAttributes(Element component) {
