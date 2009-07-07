@@ -403,13 +403,9 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 		return status;
 	}
 
-	public List<V> resolveVariables(IFile file, ELInvocationExpression expr, boolean isFinal, boolean onlyEqualNames) {
-		return new ArrayList<V>();
-	}
+	abstract public List<V> resolveVariables(IFile file, ELInvocationExpression expr, boolean isFinal, boolean onlyEqualNames);
 
-	protected TypeInfoCollector.MemberInfo getMemberInfoByVariable(V var, boolean onlyEqualNames) {
-		return null;
-	}
+	abstract protected TypeInfoCollector.MemberInfo getMemberInfoByVariable(V var, boolean onlyEqualNames);
 
 	protected void setUsedVariables(ELOperandResolveStatus status, List<V> resolvedVariables) {
 	}
@@ -417,7 +413,6 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 	protected boolean isSingularAttribute(V var) {
 		return false;
 	}
-
 
 	protected List<TypeInfoCollector.MemberInfo> resolveSegment(ELInvocationExpression expr, 
 			List<TypeInfoCollector.MemberInfo> members,
@@ -678,5 +673,4 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 	protected void setImage(TextProposal kbProposal, V var) {
 		kbProposal.setImage(getELProposalImage());
 	}
-
 }
