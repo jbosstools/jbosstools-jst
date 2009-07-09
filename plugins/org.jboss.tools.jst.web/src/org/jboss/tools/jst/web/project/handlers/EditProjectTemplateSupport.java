@@ -56,14 +56,14 @@ public class EditProjectTemplateSupport extends MultistepWizardSupport {
 	}
 	
 	public void action(String name) throws XModelException {
-		if("Save".equals(name)) { //$NON-NLS-1$
+		if(WebUIMessages.EditProjectTemplateSupport_Save.equals(name)) {
 			name = FINISH;
 		}
 		super.action(name);
 	}	
 
 	public String[] getActionNames(int stepId) {
-		return new String[]{"Save", CANCEL}; //$NON-NLS-1$
+		return new String[]{WebUIMessages.EditProjectTemplateSupport_Save, CANCEL};
 	}
 
 	protected void execute() throws XModelException {

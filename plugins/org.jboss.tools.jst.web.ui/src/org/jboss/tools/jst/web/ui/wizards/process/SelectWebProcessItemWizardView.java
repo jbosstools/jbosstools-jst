@@ -51,10 +51,10 @@ public abstract class SelectWebProcessItemWizardView extends AbstractQueryWizard
 	public void setObject(Object data) {
 		super.setObject(data);
 		p = (Properties)data;
-		process = (XModelObject)p.get("object");
-		items = (XModelObject[])p.get("items");
+		process = (XModelObject)p.get("object"); //$NON-NLS-1$
+		items = (XModelObject[])p.get("items"); //$NON-NLS-1$
 		sortItems();
-		this.setMessage(WizardKeys.getString("SelectItemWizardView.Message"));
+		this.setMessage(WizardKeys.getString("SelectItemWizardView.Message")); //$NON-NLS-1$
 //		this.setTitle(WizardKeys.getString("SelectItemWizardView.Title"));
 //		this.setWindowTitle(WizardKeys.getString("SelectItemWizardView.WindowTitle"));
 	}
@@ -65,8 +65,8 @@ public abstract class SelectWebProcessItemWizardView extends AbstractQueryWizard
 			public int compare(Object o1, Object o2) {
 				XModelObject oo1 = (XModelObject)o1;
 				XModelObject oo2 = (XModelObject)o2;
-				String key1 = "" + getKey(oo1);
-				String key2 = "" + getKey(oo2);
+				String key1 = "" + getKey(oo1); //$NON-NLS-1$
+				String key2 = "" + getKey(oo2); //$NON-NLS-1$
 				return key1.compareTo(key2);
 			}
 			
@@ -105,9 +105,9 @@ public abstract class SelectWebProcessItemWizardView extends AbstractQueryWizard
 			sortItems();
 		}
 		provider.setObjects(items);
-		provider.setPattern("");
+		provider.setPattern(""); //$NON-NLS-1$
 		tableViewer = new TableViewer(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		tableViewer.setColumnProperties(new String[]{"name"});
+		tableViewer.setColumnProperties(new String[]{"name"}); //$NON-NLS-1$
 		tableViewer.setContentProvider(provider);
 		tableViewer.setLabelProvider(provider);		
 		tableViewer.setInput(this);
@@ -142,7 +142,7 @@ public abstract class SelectWebProcessItemWizardView extends AbstractQueryWizard
 	public void action(String command) {
 		stopEditing();
 		if(OK.equalsIgnoreCase(command)) {
-			p.put("selected", selected);
+			p.put("selected", selected); //$NON-NLS-1$
 		}
 		super.action(command);			
 	}
@@ -195,7 +195,7 @@ public abstract class SelectWebProcessItemWizardView extends AbstractQueryWizard
 		}
 		
 		public void setPattern(String s) {
-			s = s == null ? "" : s.toLowerCase();
+			s = s == null ? "" : s.toLowerCase(); //$NON-NLS-1$
 			items.clear();
 			for (int i = 0; i < l.length; i++) {
 				String key = getKey(l[i]);
@@ -227,15 +227,15 @@ public abstract class SelectWebProcessItemWizardView extends AbstractQueryWizard
 		}
 
 		public String getColumnText(Object element, int columnIndex) {
-			if(!(element instanceof XModelObject)) return "";
-			return (columnIndex == 0) ? getKey((XModelObject)element) : "-";
+			if(!(element instanceof XModelObject)) return ""; //$NON-NLS-1$
+			return (columnIndex == 0) ? getKey((XModelObject)element) : "-"; //$NON-NLS-1$
 		}
 
 		public void addListener(ILabelProviderListener listener) {			
 		}
 
 		public boolean isLabelProperty(Object element, String property) {
-			return ("name".equals(property));
+			return ("name".equals(property)); //$NON-NLS-1$
 		}
 
 		public void removeListener(ILabelProviderListener listener) {

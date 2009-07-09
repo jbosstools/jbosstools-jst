@@ -11,22 +11,23 @@
 package org.jboss.tools.jst.web.ui.wizards.links;
 
 import org.jboss.tools.common.model.ui.wizards.query.list.AbstractListWizardView;
+import org.jboss.tools.jst.web.ui.Messages;
 
 public class HiddenLinksWizardView extends AbstractListWizardView {
 
 	public HiddenLinksWizardView() {}
 
 	protected String[] getActions() {
-		return new String[]{"Hide All", "Show All"};
+		return new String[]{Messages.HiddenLinksWizardView_HideAll, Messages.HiddenLinksWizardView_ShowAll};
 	}
 
 	protected void internalAction(String command) {
-		if("Hide All".equals(command)) {
+		if(Messages.HiddenLinksWizardView_HideAll.equals(command)) {
 			for (int i = 0; i < boxes.length; i++) {
 				boxes[i].setSelection(false);
 				apply(i);
 			}
-		} else if("Show All".equals(command)) {
+		} else if(Messages.HiddenLinksWizardView_ShowAll.equals(command)) {
 			for (int i = 0; i < boxes.length; i++) {
 				boxes[i].setSelection(true);
 				apply(i);

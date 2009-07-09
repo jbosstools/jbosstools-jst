@@ -104,6 +104,7 @@ public class WebUIMessages extends NLS {
 	public static String VALUE_NOT_RESOLVED;
 	public static String STRUTS;
 	public static String EDIT_FILTER;
+	public static String EditProjectTemplateSupport_Save;
 	public static String ENTER_NEW_FILTER;
 	public static String DELETE_REFERENCE_FROM_STRUTS_CONFIGURATION_FILE;
 	public static String YOU_WANT_TO_DELETE_LINK_TO;
