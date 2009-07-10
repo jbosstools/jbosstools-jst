@@ -20,7 +20,7 @@ public class AddProjectTemplatePropertiesView extends AbstractSpecialWizardStep 
 	PropertiesEditor propertiesEditor = new PropertiesEditor();
 
 	public Control createControl(Composite parent) {
-		XModelObject properties = (XModelObject)support.getProperties().get("properties");
+		XModelObject properties = (XModelObject)support.getProperties().get("properties"); //$NON-NLS-1$
 		propertiesEditor.setObject(properties);
 		return propertiesEditor.createControl(parent);
 	}

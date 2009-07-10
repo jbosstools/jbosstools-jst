@@ -16,16 +16,16 @@ import org.jboss.tools.common.verification.vrules.layer.VObjectImpl;
 import org.jboss.tools.jst.web.model.helpers.WebAppHelper;
 
 public class CheckServletMappingName extends WebDefaultCheck {
-	static String ATTR = "servlet-name";
+	static String ATTR = "servlet-name"; //$NON-NLS-1$
 	public VResult[] check(VObject object) {
 		XModelObject o = ((VObjectImpl)object).getModelObject();
 		String servletName = o.getAttributeValue(ATTR);
 		if(servletName == null) return null;
 		if(servletName.length() == 0) {
-			if("true".equals(rule.getProperty("acceptEmpty"))) return null;
-			return fire(object, "servlet-mapping.empty", ATTR, null);
+			if("true".equals(rule.getProperty("acceptEmpty"))) return null; //$NON-NLS-1$ //$NON-NLS-2$
+			return fire(object, "servlet-mapping.empty", ATTR, null); //$NON-NLS-1$
 		} else if(findServlet(o, servletName) == null) {
-			return fire(object, "servlet-mapping", ATTR, servletName);
+			return fire(object, "servlet-mapping", ATTR, servletName); //$NON-NLS-1$
 		}
 		return null;
 	}

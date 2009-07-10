@@ -52,7 +52,7 @@ public class TemplatePreprocessor {
 		File preprocessing = new File(sourceDir, ProjectTemplate.PREPROCESSING);
 		if(!preprocessing.isFile()) return;
 		String content = FileUtil.readFile(preprocessing);
-		StringTokenizer st = new StringTokenizer(content, "\r\n,;");
+		StringTokenizer st = new StringTokenizer(content, "\r\n,;"); //$NON-NLS-1$
 		while(st.hasMoreTokens()) {
 			String path = st.nextToken().trim();
 			if(path.length() > 0) process(path);
@@ -67,9 +67,9 @@ public class TemplatePreprocessor {
 		if(!sourceFile.exists()) return;
 
 		Properties properties = new Properties();
-		properties.put("file.resource.loader.path", sourceDir.getCanonicalPath());
-		String logFileName = Platform.getLocation().append(".metadata").append(".plugins").append(WebUiPlugin.PLUGIN_ID).append("velocity.log").toFile().getAbsolutePath();
-		properties.put("runtime.log", logFileName);
+		properties.put("file.resource.loader.path", sourceDir.getCanonicalPath()); //$NON-NLS-1$
+		String logFileName = Platform.getLocation().append(".metadata").append(".plugins").append(WebUiPlugin.PLUGIN_ID).append("velocity.log").toFile().getAbsolutePath(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		properties.put("runtime.log", logFileName); //$NON-NLS-1$
 
 		Velocity.init(properties);
 
@@ -78,18 +78,18 @@ public class TemplatePreprocessor {
 		File file = targetFile;
 		if (file.exists()) {
 			if (!file.delete()) {
-				throw new RuntimeException("Unable to delete file "+file.getAbsolutePath());
+				throw new RuntimeException("Unable to delete file "+file.getAbsolutePath()); //$NON-NLS-1$
 			}
 		}
 		File folder = file.getParentFile();
 		folder.mkdirs();
 		if (!folder.exists() || !folder.isDirectory()) {
-			throw new RuntimeException("Unable to create folder "+folder.getAbsolutePath());
+			throw new RuntimeException("Unable to create folder "+folder.getAbsolutePath()); //$NON-NLS-1$
 		}
 		Writer writer = new BufferedWriter(new FileWriter(file));
 		Reader reader = new BufferedReader(new FileReader(sourceFile));
 
-		Velocity.evaluate(context, writer, "", reader);
+		Velocity.evaluate(context, writer, "", reader); //$NON-NLS-1$
 
 		writer.flush();
 		writer.close();

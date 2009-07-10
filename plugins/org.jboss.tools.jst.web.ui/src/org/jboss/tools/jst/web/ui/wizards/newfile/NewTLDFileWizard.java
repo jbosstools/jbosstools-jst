@@ -22,7 +22,7 @@ public class NewTLDFileWizard extends NewFileWizardEx {
 	
 	class NewWebFileContext extends NewFileContextEx {
 		protected String getActionPath() {
-			return "CreateActions.CreateFiles.Web.CreateFileTLD";
+			return "CreateActions.CreateFiles.Web.CreateFileTLD"; //$NON-NLS-1$
 		}
 		protected SpecialWizardSupport createSupport() {
 			return new CreateTLDFileSupport();

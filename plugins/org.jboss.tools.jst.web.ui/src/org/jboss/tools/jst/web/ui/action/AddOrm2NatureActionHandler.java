@@ -21,20 +21,21 @@ import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
+import org.jboss.tools.jst.web.ui.Messages;
 
 public class AddOrm2NatureActionHandler extends AbstractHandler {
-	static final String PLUGIN_ID = "TODO" ;
-	static final String ORM2NATURE_ID = "TODO";
+	static final String PLUGIN_ID = "TODO" ; //$NON-NLS-1$
+	static final String ORM2NATURE_ID = "TODO"; //$NON-NLS-1$
 	
-	static final String ADD_CLASS_NAME = "TODO.view.AddOrmNatureActionDelegate";
-	static final String REMOVE_CLASS_NAME = "TODO.view.RemoveOrmNatureActionDelegate";
+	static final String ADD_CLASS_NAME = "TODO.view.AddOrmNatureActionDelegate"; //$NON-NLS-1$
+	static final String REMOVE_CLASS_NAME = "TODO.view.RemoveOrmNatureActionDelegate"; //$NON-NLS-1$
 	
 	public AddOrm2NatureActionHandler() {}
 
     public boolean isEnabled(XModelObject object) {
     	if(object == null || EclipseResourceUtil.getProject(object) == null || Platform.getBundle(PLUGIN_ID) == null) return false;
     	boolean hasNature = EclipseResourceUtil.hasNature(object.getModel(), ORM2NATURE_ID);
-    	String displayName = hasNature ? "Remove Hibernate Capabilities" : "Add Hibernate Capabilities...";
+    	String displayName = hasNature ? Messages.AddOrm2NatureActionHandler_Remove : Messages.AddOrm2NatureActionHandler_Add;
     	((XActionImpl)action).setDisplayName(displayName);
         return true;  
     }

@@ -36,12 +36,12 @@ public class CheckClass extends WebDefaultCheck {
 		if(type != null) {
 			String mustImpl = null;
 			try { mustImpl = checkImplements(object, type); } catch (Exception e) {
-	        	LogHelper.logError("org.jboss.tools.jst.web.verification", e);
+	        	LogHelper.logError("org.jboss.tools.jst.web.verification", e); //$NON-NLS-1$
 			}
 			if(mustImpl != null) return fireImplements(object, attr, attr, value, mustImpl);
 			String mustExtend = null;
 			try { mustExtend = checkExtends(object, type); } catch (Exception e) {
-	        	LogHelper.logError("org.jboss.tools.jst.web.verification", e);
+	        	LogHelper.logError("org.jboss.tools.jst.web.verification", e); //$NON-NLS-1$
 			}
 			if(mustExtend != null) return fireExtends(object, attr, attr, value, mustExtend);
 			return null;
@@ -54,8 +54,8 @@ public class CheckClass extends WebDefaultCheck {
 	}
 	
 	private String checkImplements(VObject object, IType type) throws Exception {
-		if("java.lang.Class".equals(type.getFullyQualifiedName())) return null;
-		String impl = rule.getProperty("implements");
+		if("java.lang.Class".equals(type.getFullyQualifiedName())) return null; //$NON-NLS-1$
+		String impl = rule.getProperty("implements"); //$NON-NLS-1$
 		if(impl == null || impl.length() == 0) return null;
 		String[] is = type.getSuperInterfaceNames();
 		for (int i = 0; i < is.length; i++) {
@@ -64,9 +64,9 @@ public class CheckClass extends WebDefaultCheck {
 		}
 		if(type.isInterface()) return impl;
 		String f = type.getSuperclassName();
-		if(f == null || f.length() == 0 || "java.lang.Object".equals(f)) return impl;
+		if(f == null || f.length() == 0 || "java.lang.Object".equals(f)) return impl; //$NON-NLS-1$
 		f = EclipseJavaUtil.resolveType(type, f);
-		if(f == null || f.length() == 0 || "java.lang.Object".equals(f)) return impl;
+		if(f == null || f.length() == 0 || "java.lang.Object".equals(f)) return impl; //$NON-NLS-1$
 		type = object.getModel().getValidType(f);
 		if(type == null) return impl;
 		return checkImplements(object, type);
@@ -74,14 +74,14 @@ public class CheckClass extends WebDefaultCheck {
 	
 	private String checkExtends(VObject object, IType type) throws Exception {
 		if(type.isInterface()) return null;
-		if("java.lang.Class".equals(type.getFullyQualifiedName())) return null;
-		String ext = rule.getProperty("extends");
+		if("java.lang.Class".equals(type.getFullyQualifiedName())) return null; //$NON-NLS-1$
+		String ext = rule.getProperty("extends"); //$NON-NLS-1$
 		if(ext == null || ext.length() == 0) return null;
 		String f = type.getSuperclassName();
-		if(f == null || f.length() == 0 || "java.lang.Object".equals(f)) return ext;
+		if(f == null || f.length() == 0 || "java.lang.Object".equals(f)) return ext; //$NON-NLS-1$
 		if(f.equals(ext)) return null;
 		f = EclipseJavaUtil.resolveType(type, f);
-		if(f == null || f.length() == 0 || "java.lang.Object".equals(f)) return ext;
+		if(f == null || f.length() == 0 || "java.lang.Object".equals(f)) return ext; //$NON-NLS-1$
 		if(f.equals(ext)) return null;
 		type = object.getModel().getValidType(f);
 		if(type == null) return ext;
@@ -89,21 +89,21 @@ public class CheckClass extends WebDefaultCheck {
 	}
 	
 	protected String getAttribute() {
-		return rule.getProperty("attribute");
+		return rule.getProperty("attribute"); //$NON-NLS-1$
 	}
 	
 	private boolean allowsPrimitive() {
-		return "true".equals(rule.getProperty("allow-primitive"));
+		return "true".equals(rule.getProperty("allow-primitive")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	private boolean isPrimitive(String value) {
-		return ".int.boolean.char.byte.double.float.long.short.".indexOf("." + value + ".") >= 0;
+		return ".int.boolean.char.byte.double.float.long.short.".indexOf("." + value + ".") >= 0; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	private boolean isJavaLang(String value) {
 		if(value.indexOf('.') < 0) {
-			return ".String.Integer.Boolean.Character.Byte.Double.Float.Long.Short.".indexOf("." + value + ".") >= 0;
-		} else if(value.startsWith("java.lang.")) {
+			return ".String.Integer.Boolean.Character.Byte.Double.Float.Long.Short.".indexOf("." + value + ".") >= 0; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		} else if(value.startsWith("java.lang.")) { //$NON-NLS-1$
 			return isJavaLang(value.substring(10));
 		} else {
 			return false;
@@ -118,18 +118,18 @@ public class CheckClass extends WebDefaultCheck {
 
 	protected VResult[] fireImplements(VObject object, String id, String attr, String value, String interfaceName) {
 		Object[] os = new Object[] {attr, value, interfaceName};
-		VResult result = rule.getResultFactory().getResult(id + ".implements", object, attr, object, attr, os);
+		VResult result = rule.getResultFactory().getResult(id + ".implements", object, attr, object, attr, os); //$NON-NLS-1$
 		return new VResult[] {result};
 	}
 
 	protected VResult[] fireExtends(VObject object, String id, String attr, String value, String superName) {
 		Object[] os = new Object[] {attr, value, superName};
-		VResult result = rule.getResultFactory().getResult(id + ".extends", object, attr, object, attr, os);
+		VResult result = rule.getResultFactory().getResult(id + ".extends", object, attr, object, attr, os); //$NON-NLS-1$
 		return new VResult[] {result};
 	}
 	protected VResult[] fireInvalid(VObject object, String id, String attr, String value) {
 		Object[] os = new Object[] {attr, value};
-		VResult result = rule.getResultFactory().getResult(id + ".valid", object, attr, object, attr, os);
+		VResult result = rule.getResultFactory().getResult(id + ".valid", object, attr, object, attr, os); //$NON-NLS-1$
 		return new VResult[] {result};
 	}
 }

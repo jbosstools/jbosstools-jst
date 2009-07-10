@@ -31,8 +31,8 @@ public class AddProjectTemplateNameView extends SpecialWizardStep {
 	}
 	
 	private void syncNameAndProject(PropertyChangeEvent arg0) {
-		IModelPropertyEditorAdapter n = attributes.getPropertyEditorAdapterByName("name");
-		IModelPropertyEditorAdapter p = attributes.getPropertyEditorAdapterByName("project");
+		IModelPropertyEditorAdapter n = attributes.getPropertyEditorAdapterByName("name"); //$NON-NLS-1$
+		IModelPropertyEditorAdapter p = attributes.getPropertyEditorAdapterByName("project"); //$NON-NLS-1$
 		if(n == null || p == null) return;
 		if(arg0.getSource() == p) {
 			if(nameEqualsProjectName) n.setValue(p.getStringValue(true));

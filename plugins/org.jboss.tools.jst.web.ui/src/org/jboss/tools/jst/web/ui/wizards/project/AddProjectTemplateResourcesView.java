@@ -30,7 +30,7 @@ public class AddProjectTemplateResourcesView extends AbstractSpecialWizardStep {
     AddProjectTemplateResourcesStep step;
 
 	public Control createControl(Composite parent) {
-		step = (AddProjectTemplateResourcesStep)support.getProperties().get("ResourcesStep");
+		step = (AddProjectTemplateResourcesStep)support.getProperties().get("ResourcesStep"); //$NON-NLS-1$
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout());
 

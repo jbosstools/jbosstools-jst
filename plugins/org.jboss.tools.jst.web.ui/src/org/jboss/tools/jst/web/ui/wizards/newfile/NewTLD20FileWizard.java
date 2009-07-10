@@ -21,7 +21,7 @@ public class NewTLD20FileWizard extends NewFileWizardEx {
 	}
 	
 	protected String getActionPath() {
-		return "CreateActions.CreateFiles.Web.CreateFileTLD20";
+		return "CreateActions.CreateFiles.Web.CreateFileTLD20"; //$NON-NLS-1$
 	}
 	
 	class NewWebFileContext extends NewFileContextEx {

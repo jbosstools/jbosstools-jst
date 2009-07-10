@@ -21,7 +21,7 @@ import org.eclipse.ui.IPerspectiveFactory;
  */
 public class WebDevelopmentPerspectiveFactory implements IPerspectiveFactory {
 
-	public static final String PERSPECTIVE_ID = "org.jboss.tools.jst.web.ui.WebDevelopmentPerspective";
+	public static final String PERSPECTIVE_ID = "org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"; //$NON-NLS-1$
 
 	/* (non-Javadoc)
      * @see org.eclipse.ui.IPerspectiveFactory#createInitialLayout(org.eclipse.ui.IPageLayout)
@@ -31,12 +31,12 @@ public class WebDevelopmentPerspectiveFactory implements IPerspectiveFactory {
 
 		IFolderLayout leftTop = layout.createFolder("leftTop", IPageLayout.LEFT, (float)0.2, editorArea); //$NON-NLS-1$
 		leftTop.addView(JavaUI.ID_PACKAGES);
-		leftTop.addView("org.jboss.tools.jst.web.ui.navigator.WebProjectsView");
-		leftTop.addView("org.jboss.tools.seam.ui.views.SeamComponentsNavigator");
+		leftTop.addView("org.jboss.tools.jst.web.ui.navigator.WebProjectsView"); //$NON-NLS-1$
+		leftTop.addView("org.jboss.tools.seam.ui.views.SeamComponentsNavigator"); //$NON-NLS-1$
 		leftTop.addPlaceholder(IPageLayout.ID_RES_NAV);
 		
 
-		IFolderLayout leftBottom = layout.createFolder("leftBottom", IPageLayout.BOTTOM, 0.64f, "leftTop");
+		IFolderLayout leftBottom = layout.createFolder("leftBottom", IPageLayout.BOTTOM, 0.64f, "leftTop"); //$NON-NLS-1$ //$NON-NLS-2$
 		//leftBottom.addView(IPageLayout.ID_OUTLINE);
 		leftBottom.addView(IPageLayout.ID_PROP_SHEET);			
 		
@@ -44,11 +44,11 @@ public class WebDevelopmentPerspectiveFactory implements IPerspectiveFactory {
 		IFolderLayout bottom = layout.createFolder("bottom", IPageLayout.BOTTOM, (float)0.78, editorArea); //$NON-NLS-1$
 		bottom.addView(IPageLayout.ID_PROBLEM_VIEW);
 		bottom.addView(IPageLayout.ID_TASK_LIST);
-		bottom.addView("org.jboss.ide.eclipse.as.ui.views.JBossServerView");
+		bottom.addView("org.jboss.ide.eclipse.as.ui.views.JBossServerView"); //$NON-NLS-1$
 
 		IFolderLayout rightTop = layout.createFolder("right", IPageLayout.RIGHT, (float)0.8, editorArea); //$NON-NLS-1$
-		rightTop.addView("org.jboss.tools.common.model.ui.views.palette.PaletteView");
-		IFolderLayout rightBottom = layout.createFolder("rightBottom", IPageLayout.BOTTOM, (float)0.64, "right"); //$NON-NLS-1$
+		rightTop.addView("org.jboss.tools.common.model.ui.views.palette.PaletteView"); //$NON-NLS-1$
+		IFolderLayout rightBottom = layout.createFolder("rightBottom", IPageLayout.BOTTOM, (float)0.64, "right"); //$NON-NLS-1$ //$NON-NLS-2$
 		rightBottom.addView(IPageLayout.ID_OUTLINE);
 
 		layout.addActionSet(IDebugUIConstants.LAUNCH_ACTION_SET);
@@ -57,7 +57,7 @@ public class WebDevelopmentPerspectiveFactory implements IPerspectiveFactory {
 		layout.addActionSet(IPageLayout.ID_NAVIGATE_ACTION_SET);
 
 		// views - seam
-		layout.addShowViewShortcut("org.jboss.tools.seam.ui.views.SeamComponentsNavigator");
+		layout.addShowViewShortcut("org.jboss.tools.seam.ui.views.SeamComponentsNavigator"); //$NON-NLS-1$
 		
 		// views - java
 		layout.addShowViewShortcut(JavaUI.ID_PACKAGES);

@@ -20,7 +20,7 @@ public class NewJSFileWizard extends NewFileWizardEx {
 	
 	class NewJSFileContext extends NewFileContextEx {
 		protected String getActionPath() {
-			return "CreateActions.CreateFiles.Web.CreateFileJS";
+			return "CreateActions.CreateFiles.Web.CreateFileJS"; //$NON-NLS-1$
 		}
 	}
 		

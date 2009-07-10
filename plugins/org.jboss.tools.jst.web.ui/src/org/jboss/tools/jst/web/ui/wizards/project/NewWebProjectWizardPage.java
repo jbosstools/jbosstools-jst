@@ -89,27 +89,27 @@ public class NewWebProjectWizardPage extends WizardPage {
 		nameEditor = new StringEditor(settings);
 		nameAdapter = new NameAdapter();
 		nameEditor.setInput(nameAdapter);
-		nameEditor.setLabelText(getString(getKey() + "_"+NewWebProjectContext.ATTR_NAME)+"*");
+		nameEditor.setLabelText(getString(getKey() + "_"+NewWebProjectContext.ATTR_NAME)+"*"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		locationEditor = new DirectoryChoicerEditor(settings);
 		locationAdapter = new LocationAdapter();
 		locationEditor.setInput(locationAdapter);
-		locationEditor.setLabelText(getString(getKey() + "_"+NewWebProjectContext.ATTR_LOCATION)+"*");
+		locationEditor.setLabelText(getString(getKey() + "_"+NewWebProjectContext.ATTR_LOCATION)+"*"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		useDefaultPathEditor = new CheckBoxEditor(settings);
 		useDefaultPathAdapter = new UseDefaultPathAdapter();
 		useDefaultPathEditor.setInput(useDefaultPathAdapter);
-		useDefaultPathEditor.setLabelText(getString(getKey() + "_"+NewWebProjectContext.ATTR_USE_DEFAULT_LOCATION)+"*");
+		useDefaultPathEditor.setLabelText(getString(getKey() + "_"+NewWebProjectContext.ATTR_USE_DEFAULT_LOCATION)+"*"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		versionEditor = new DropDownEditor(settings);
 		versionAdapter = new StrutsVersionAdapter();
 		versionEditor.setInput(versionAdapter);
-		versionEditor.setLabelText(getString(getKey() + "_"+NewWebProjectContext.ATTR_VERSION)+"*");
+		versionEditor.setLabelText(getString(getKey() + "_"+NewWebProjectContext.ATTR_VERSION)+"*"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		templateEditor = new DropDownEditor(settings);
 		templateAdapter = new TemplateAdapter();
 		templateEditor.setInput(templateAdapter);
-		templateEditor.setLabelText(getString(getKey() + "_"+NewWebProjectContext.ATTR_TEMPLATE)+"*");
+		templateEditor.setLabelText(getString(getKey() + "_"+NewWebProjectContext.ATTR_TEMPLATE)+"*"); //$NON-NLS-1$ //$NON-NLS-2$
 		
 		defaultPath = ModelUIPlugin.getWorkspace().getRoot().getLocation();
 		
@@ -117,7 +117,7 @@ public class NewWebProjectWizardPage extends WizardPage {
 	}
 	
 	protected String getKey() {
-		return "newStrutsProjectPage1";
+		return "newStrutsProjectPage1"; //$NON-NLS-1$
 	}
 	
 	Composite composite = null;
@@ -138,7 +138,7 @@ public class NewWebProjectWizardPage extends WizardPage {
 			composite.setLayout(layout);
 	
 			introduction = new Label(composite, SWT.NO_FOCUS);
-			String text = "" + WizardKeys.getString(getKey() + "_introduction");
+			String text = "" + WizardKeys.getString(getKey() + "_introduction"); //$NON-NLS-1$ //$NON-NLS-2$
 			text = insertBreaks(introduction, text, 380);
 			introduction.setText(text);
 			gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -172,8 +172,8 @@ public class NewWebProjectWizardPage extends WizardPage {
 			this.setControl(composite);
 ///Preference.USE_DEFAULT_PROJECT_ROOT.getValue()
 			// init default values
-			nameAdapter.setValue("");
-			useDefaultPathAdapter.setValue((getProjectRootOption() != null) ? "false" : "true");
+			nameAdapter.setValue(""); //$NON-NLS-1$
+			useDefaultPathAdapter.setValue((getProjectRootOption() != null) ? "false" : "true"); //$NON-NLS-1$ //$NON-NLS-2$
 //			locationAdapter.setValue(defaultPath.toOSString());
 			if (getProjectRootOption() == null)
 				locationAdapter.setValue(defaultPath.toOSString());
@@ -234,9 +234,9 @@ public class NewWebProjectWizardPage extends WizardPage {
 			return false;
 		}
 
-		if ("".equals(projectName)) {
+		if ("".equals(projectName)) { //$NON-NLS-1$
 			setErrorMessage(null);
-			setMessage(getString(getKey() + "_specifyProjectName"));
+			setMessage(getString(getKey() + "_specifyProjectName")); //$NON-NLS-1$
 			return false;
 		}
 		
@@ -247,19 +247,19 @@ public class NewWebProjectWizardPage extends WizardPage {
 		}
 
 		String projectLocation = getProjectLocation();	
-		if ("".equals(projectLocation)) {
+		if ("".equals(projectLocation)) { //$NON-NLS-1$
 			setErrorMessage(null);
-			setMessage(getString(getKey() + "_specifyLocation")); 
+			setMessage(getString(getKey() + "_specifyLocation"));  //$NON-NLS-1$
 			return false;
 		}
 
 		if (!(new Path(projectLocation)).isAbsolute()) {
-			setErrorMessage(getString(getKey() + "_locationError")); 
+			setErrorMessage(getString(getKey() + "_locationError"));  //$NON-NLS-1$
 			return false;
 		}
 
 		if (getProjectHandle().exists() || projectExistsIgnoreCase()) {
-			setErrorMessage(getString(getKey() + "_projectExistsMessage"));
+			setErrorMessage(getString(getKey() + "_projectExistsMessage")); //$NON-NLS-1$
 			return false;
 		}
 		
@@ -269,7 +269,7 @@ public class NewWebProjectWizardPage extends WizardPage {
 			return false;
 		}
 		
-		if ("".equals(getStringValue(versionAdapter))) {
+		if ("".equals(getStringValue(versionAdapter))) { //$NON-NLS-1$
 			setErrorMessage(versionsError);
 			return false;
 		}
@@ -303,10 +303,10 @@ public class NewWebProjectWizardPage extends WizardPage {
 	}
 	
 	private IProject overlaps(String projectLocation) {
-		projectLocation = projectLocation.replace('\\','/').toLowerCase() + "/";
+		projectLocation = projectLocation.replace('\\','/').toLowerCase() + "/"; //$NON-NLS-1$
 		IProject[] ps = ModelPlugin.getWorkspace().getRoot().getProjects();
 		for (int i = 0; i < ps.length; i++) {
-			String location = ps[i].getLocation().toString().replace('\\','/').toLowerCase() + "/";
+			String location = ps[i].getLocation().toString().replace('\\','/').toLowerCase() + "/"; //$NON-NLS-1$
 			if(location.startsWith(projectLocation)) return ps[i];
 			if(projectLocation.startsWith(location)) return ps[i];
 		}
@@ -322,7 +322,7 @@ public class NewWebProjectWizardPage extends WizardPage {
 	}
 
 	class LocalValueProvider implements IValueProvider, IValueChangeListener, IAdaptable {
-		protected Object value = "";
+		protected Object value = ""; //$NON-NLS-1$
 		protected PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
 		// listeners
@@ -343,7 +343,7 @@ public class NewWebProjectWizardPage extends WizardPage {
 
 		public String getStringValue(boolean returnNullAsEmptyString) {
 			Object o = getValue();
-			return (o != null) ? o.toString() : (returnNullAsEmptyString) ? "" : null;
+			return (o != null) ? o.toString() : (returnNullAsEmptyString) ? "" : null; //$NON-NLS-1$
 		}
 	
 		public void setValue(Object value) {
@@ -365,7 +365,7 @@ public class NewWebProjectWizardPage extends WizardPage {
 			if (adapter == IValueChangeListener.class) {
 				return this;
 			}
-			Assert.isTrue(true, "LocalValueProvider instance itself cannot provide adapter for "+adapter.getName());
+			Assert.isTrue(true, "LocalValueProvider instance itself cannot provide adapter for "+adapter.getName()); //$NON-NLS-1$
 			return null;
 		}
 	}
@@ -373,8 +373,8 @@ public class NewWebProjectWizardPage extends WizardPage {
 	class NameAdapter extends LocalValueProvider {
 		public void setValue(Object value) {
 			super.setValue(value);
-			if ("true".equals("" + useDefaultPathAdapter.getValue())) {
-				String name = (value == null) ? "" : value.toString().trim();
+			if ("true".equals("" + useDefaultPathAdapter.getValue())) { //$NON-NLS-1$ //$NON-NLS-2$
+				String name = (value == null) ? "" : value.toString().trim(); //$NON-NLS-1$
 				locationAdapter.setValue(defaultPath.append(name).toOSString());
 			}
 			setPageComplete(validatePage());
@@ -392,9 +392,9 @@ public class NewWebProjectWizardPage extends WizardPage {
 		public void setValue(Object value) {
 			super.setValue(value);
 			if (getControl()!=null) {
-				locationEditor.getFieldEditor(null).setEnabled("false".equals("" + getValue()),(Composite)getControl());
+				locationEditor.getFieldEditor(null).setEnabled("false".equals("" + getValue()),(Composite)getControl()); //$NON-NLS-1$ //$NON-NLS-2$
 				String name = nameEditor.getValue().toString();
-				if(name == null) name = ""; else name = name.trim();
+				if(name == null) name = ""; else name = name.trim(); //$NON-NLS-1$
 				locationAdapter.setValue(defaultPath.append(name).toOSString());	
 			}
 			setPageComplete(validatePage());

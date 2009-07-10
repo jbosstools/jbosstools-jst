@@ -25,7 +25,7 @@ public class SaveProjectAsTemplateActionDelegate extends AbstractModelActionDele
 	}
 
 	protected void doRun() {
-		XActionInvoker.invoke("WebWorkspace", "SaveAsTemplate", object, null);
+		XActionInvoker.invoke("WebWorkspace", "SaveAsTemplate", object, null); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	protected void safeSelectionChanged(IAction action, ISelection selection) {

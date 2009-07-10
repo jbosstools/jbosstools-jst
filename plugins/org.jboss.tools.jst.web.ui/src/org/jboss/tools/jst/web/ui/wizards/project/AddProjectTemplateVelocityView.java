@@ -25,7 +25,7 @@ import org.jboss.tools.jst.web.project.handlers.AddProjectTemplateSupport;
 public class AddProjectTemplateVelocityView extends SpecialWizardStep {
 
 	public Control createControl(Composite parent) {
-		IModelPropertyEditorAdapter adapter = attributes.getPropertyEditorAdapterByName("velocity templates");
+		IModelPropertyEditorAdapter adapter = attributes.getPropertyEditorAdapterByName("velocity templates"); //$NON-NLS-1$
 		if(adapter instanceof StructuredListAdapter) {
 			StructuredListAdapter s = (StructuredListAdapter)adapter;
 			NewResourceProvider provider = new NewResourceProvider();

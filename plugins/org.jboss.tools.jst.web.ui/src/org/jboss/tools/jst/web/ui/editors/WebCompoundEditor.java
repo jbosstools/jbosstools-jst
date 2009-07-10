@@ -15,15 +15,16 @@ import org.jboss.tools.common.meta.key.WizardKeys;
 import org.jboss.tools.common.model.ui.editor.EditorDescriptor;
 import org.jboss.tools.common.model.ui.editors.multipage.DefaultMultipageEditor;
 import org.jboss.tools.jst.web.tld.model.EditorTreeConstraint;
+import org.jboss.tools.jst.web.ui.Messages;
 
 public class WebCompoundEditor extends DefaultMultipageEditor {
 			
 	protected void doCreatePages() {
 		if(isAppropriateNature()) {
 			treeFormPage = createTreeFormPage();
-			String title = "Web XML Editor"; 
+			String title = Messages.WebCompoundEditor_WebXMLEditor; 
 			if(object != null) {
-				String key = object.getModelEntity().getName() + ".editorTitle";
+				String key = object.getModelEntity().getName() + ".editorTitle"; //$NON-NLS-1$
 				String s = WizardKeys.getString(key);
 				if(s != null) title = s;
 			}
@@ -34,13 +35,13 @@ public class WebCompoundEditor extends DefaultMultipageEditor {
 		}
 		createTextPage();
 		initEditors();
-		if(treeFormPage != null) selectionProvider.addHost("treeEditor", treeFormPage.getSelectionProvider());
-		if(textEditor != null) selectionProvider.addHost("textEditor", getTextSelectionProvider());
+		if(treeFormPage != null) selectionProvider.addHost("treeEditor", treeFormPage.getSelectionProvider()); //$NON-NLS-1$
+		if(textEditor != null) selectionProvider.addHost("textEditor", getTextSelectionProvider()); //$NON-NLS-1$
 	}
 
 	public Object getAdapter(Class adapter) {
 		if (adapter == EditorDescriptor.class)
-			return new EditorDescriptor("web.xml");
+			return new EditorDescriptor("web.xml"); //$NON-NLS-1$
 
 		return super.getAdapter(adapter);
 	}

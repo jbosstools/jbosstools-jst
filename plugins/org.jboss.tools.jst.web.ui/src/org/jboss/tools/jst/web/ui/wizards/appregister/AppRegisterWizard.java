@@ -78,7 +78,7 @@ public class AppRegisterWizard extends Wizard implements SpecialWizard {
 	}
 
 	private void register(IProgressMonitor monitor) throws Exception {
-		if(monitor != null) monitor.beginTask("", 100);
+		if(monitor != null) monitor.beginTask("", 100); //$NON-NLS-1$
 		if(monitor != null) monitor.worked(5);
 
 		IServer[] servers = registry.getTargetServers();
@@ -100,12 +100,12 @@ public class AppRegisterWizard extends Wizard implements SpecialWizard {
 			RegistrationHelper.register(p, servers[i]);
 			if(monitor != null) monitor.worked(step);
 		}
-		object.getModel().changeObjectAttribute(object, "application name", registry.getApplicationName());
+		object.getModel().changeObjectAttribute(object, "application name", registry.getApplicationName()); //$NON-NLS-1$
 		if(monitor != null) monitor.worked(20);
 	}
 
 	public String getWebRootLocation() {
-		XModelObject fs = object.getModel().getByPath("FileSystems/WEB-ROOT");
+		XModelObject fs = object.getModel().getByPath("FileSystems/WEB-ROOT"); //$NON-NLS-1$
 		///if(fs == null) fs = getRootFileSystemForModule(model, "");
 		if(!(fs instanceof FileSystemImpl)) return null;
 		return ((FileSystemImpl)fs).getAbsoluteLocation();
@@ -114,16 +114,16 @@ public class AppRegisterWizard extends Wizard implements SpecialWizard {
 	public void setObject(Object object) {
 		p = (Properties)object;
 		registry = new RegisterServerContext(RegisterServerContext.PROJECT_MODE_EXISTING);
-		this.object = (XModelObject)p.get("object");
+		this.object = (XModelObject)p.get("object"); //$NON-NLS-1$
 		registry.setProjectHandle(EclipseResourceUtil.getProject(this.object));
 		registry.init();
-		registry.setNatureIndex(p.getProperty("natureIndex"));
-		XModelObject web = this.object.getModel().getByPath("Web");
-		String servletVersion = web == null ? null : web.getAttributeValue("servlet version");
+		registry.setNatureIndex(p.getProperty("natureIndex")); //$NON-NLS-1$
+		XModelObject web = this.object.getModel().getByPath("Web"); //$NON-NLS-1$
+		String servletVersion = web == null ? null : web.getAttributeValue("servlet version"); //$NON-NLS-1$
 		registry.setServletVersion(servletVersion);
-		registry.setApplicationName(this.object.getAttributeValue("application name"));
+		registry.setApplicationName(this.object.getAttributeValue("application name")); //$NON-NLS-1$
 		page = new AppRegisterWizardPage(registry);
-		String n = p.getProperty("natureIndex");
+		String n = p.getProperty("natureIndex"); //$NON-NLS-1$
 		if(n == null) n = "project"; else n += " Project";
 		page.setTitle(WizardKeys.toDisplayName(n));
 		addPage(page);
@@ -133,7 +133,7 @@ public class AppRegisterWizard extends Wizard implements SpecialWizard {
 		Shell shell = ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell();
 		WizardDialog dialog = new WizardDialog(shell, this);
 		dialog.create();
-		dialog.getShell().setText("" + p.getProperty("title"));
+		dialog.getShell().setText("" + p.getProperty("title")); //$NON-NLS-1$ //$NON-NLS-2$
 		dialog.setTitleImage(ModelUIImages.getImageDescriptor(ModelUIImages.WIZARD_DEFAULT).createImage(null));
 		return dialog.open();		
 	}

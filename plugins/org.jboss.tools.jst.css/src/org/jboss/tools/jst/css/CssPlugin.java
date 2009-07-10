@@ -21,7 +21,7 @@ import org.osgi.framework.BundleContext;
 public class CssPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.jboss.tools.jst.css";
+	public static final String PLUGIN_ID = "org.jboss.tools.jst.css"; //$NON-NLS-1$
 
 	// The shared instance
 	private static CssPlugin plugin;

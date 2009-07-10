@@ -16,15 +16,15 @@ import org.jboss.tools.common.verification.vrules.layer.VObjectImpl;
 import org.jboss.tools.jst.web.model.helpers.WebAppHelper;
 
 public class CheckFilterMappingName extends WebDefaultCheck {
-	static String ATTR = "filter-name";
+	static String ATTR = "filter-name"; //$NON-NLS-1$
 	public VResult[] check(VObject object) {
 		XModelObject o = ((VObjectImpl)object).getModelObject();
 		String servletName = o.getAttributeValue(ATTR);
 		if(servletName == null) return null;
 		if(servletName.length() == 0) {
-			return fire(object, "filter-mapping.empty", ATTR, null);
+			return fire(object, "filter-mapping.empty", ATTR, null); //$NON-NLS-1$
 		} else if(findFilter(o, servletName) == null) {
-			return fire(object, "filter-mapping", ATTR, servletName);
+			return fire(object, "filter-mapping", ATTR, servletName); //$NON-NLS-1$
 		}
 		return null;
 	}

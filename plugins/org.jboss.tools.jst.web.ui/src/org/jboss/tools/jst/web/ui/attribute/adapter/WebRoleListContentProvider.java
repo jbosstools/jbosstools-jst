@@ -29,7 +29,7 @@ public class WebRoleListContentProvider extends DefaultXAttributeListContentProv
 		if(webxml == null) return;
 		XModelObject[] os = WebAppHelper.getRoles(webxml);
 		tags = new String[os.length];
-		for (int i = 0; i < tags.length; i++) tags[i] = os[i].getAttributeValue("role-name");
+		for (int i = 0; i < tags.length; i++) tags[i] = os[i].getAttributeValue("role-name"); //$NON-NLS-1$
 	}
 
 }

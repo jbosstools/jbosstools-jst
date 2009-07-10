@@ -44,15 +44,16 @@ import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.common.model.util.XModelObjectUtil;
 import org.jboss.tools.jst.web.context.RegisterServerContext;
 import org.jboss.tools.jst.web.server.*;
+import org.jboss.tools.jst.web.ui.Messages;
 
 public class AppRegisterComponent {
-	static String ENTITY = "WebPrjRegisterApplication";
-	static String ATTR_REGISTER = "register";
-	static String ATTR_LOCATION = "location";
-	static String ATTR_APP_NAME = "application name";
-	static String ATTR_RUNTIME = "runtime";
-	static String ATTR_TARGET_SERVER = "target server";
-	static String ATTR_SEPARATOR = "separator";
+	static String ENTITY = "WebPrjRegisterApplication"; //$NON-NLS-1$
+	static String ATTR_REGISTER = "register"; //$NON-NLS-1$
+	static String ATTR_LOCATION = "location"; //$NON-NLS-1$
+	static String ATTR_APP_NAME = "application name"; //$NON-NLS-1$
+	static String ATTR_RUNTIME = "runtime"; //$NON-NLS-1$
+	static String ATTR_TARGET_SERVER = "target server"; //$NON-NLS-1$
+	static String ATTR_SEPARATOR = "separator"; //$NON-NLS-1$
 	
 	RegisterServerContext context;
 	boolean isEnabling = true;
@@ -93,7 +94,7 @@ public class AppRegisterComponent {
 		XModelObject dummy = PreferenceModelUtilities.getPreferenceModel().getRoot();
 		String[][] attInfo = null;
 		attInfo = new String[][] {
-			{ENTITY, ""}, {ATTR_APP_NAME, "yes"}, {ATTR_RUNTIME, "yes"}, {ATTR_SEPARATOR, "no"}, {ATTR_TARGET_SERVER, "no"}
+			{ENTITY, ""}, {ATTR_APP_NAME, "yes"}, {ATTR_RUNTIME, "yes"}, {ATTR_SEPARATOR, "no"}, {ATTR_TARGET_SERVER, "no"} //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 		};
 		XEntityData entityData = XEntityDataImpl.create(attInfo);
 		support = new XAttributeSupport() {
@@ -102,7 +103,7 @@ public class AppRegisterComponent {
 			}
 		};
 		support.init(dummy, entityData);
-		entityData = XEntityDataImpl.create(new String[][] {{ENTITY, ""}, {ATTR_REGISTER, "no"}});
+		entityData = XEntityDataImpl.create(new String[][] {{ENTITY, ""}, {ATTR_REGISTER, "no"}}); //$NON-NLS-1$ //$NON-NLS-2$
 		if(isEnabling()) {
 			enableSupport = new XAttributeSupport();
 			enableSupport.init(dummy, entityData);
@@ -121,7 +122,7 @@ public class AppRegisterComponent {
 	}
 	
 	public void loadApplicationName() {
-		String n = context.getApplicationName() == null ? "" : context.getApplicationName();
+		String n = context.getApplicationName() == null ? "" : context.getApplicationName(); //$NON-NLS-1$
 		support.getPropertyEditorAdapterByName(ATTR_APP_NAME).setValue(n);
 	}
 	
@@ -140,7 +141,7 @@ public class AppRegisterComponent {
 		c.setLayout(layout);
 		enableSupport.setLayout(getEnablingLayout());
 		enableSupport.createControl(c);
-		setLableText(enableSupport, "register");
+		setLableText(enableSupport, "register"); //$NON-NLS-1$
 		Group group = new Group(c, SWT.SHADOW_ETCHED_IN);
 		group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		group.setLayout(new GridLayout());
@@ -153,14 +154,14 @@ public class AppRegisterComponent {
 		ExtendedFieldEditor f = (ExtendedFieldEditor)s.getFieldEditorByName(field);
 		if(f == null) return;
 		String t = f.getLabelText();
-		int i = (t.indexOf("%1"));
+		int i = (t.indexOf("%1")); //$NON-NLS-1$
 		if(i < 0) return;
-		String insert = "";
+		String insert = ""; //$NON-NLS-1$
 		IServer server = ServerManager.getInstance().getSelectedServer();
 		if(server != null) {
 			insert = server.getServerType().getName();
 		} else {
-			insert = "server";
+			insert = "server"; //$NON-NLS-1$
 		}
 		t = t.substring(0, i) + insert + t.substring(i + 2);
 		f.setLabelText(t);
@@ -175,7 +176,7 @@ public class AppRegisterComponent {
 	private Control createSupportControl(Composite parent) {
 		if(supportLayout != null) support.setLayout(supportLayout);
 		Control sc = support.createControl(parent);
-		setLableText(support, "location");
+		setLableText(support, "location"); //$NON-NLS-1$
 		supportControl = (Composite)sc;
 		GridData g2 = new GridData(GridData.FILL_HORIZONTAL);
 		g2.horizontalIndent = 0;
@@ -198,10 +199,10 @@ public class AppRegisterComponent {
 	
 	private void initValues() {
 		if(isEnabling()) {
-			enableSupport.getEntityData().setValue(ATTR_REGISTER, context.isEnabled() ? "yes" : "no");
+			enableSupport.getEntityData().setValue(ATTR_REGISTER, context.isEnabled() ? "yes" : "no"); //$NON-NLS-1$ //$NON-NLS-2$
 			enableSupport.load();
 		}
-		String n = context.getApplicationName() == null ? "" : context.getApplicationName();
+		String n = context.getApplicationName() == null ? "" : context.getApplicationName(); //$NON-NLS-1$
 		support.getEntityData().setValue(ATTR_APP_NAME, n);
 		
 		initRuntimeValue();
@@ -220,7 +221,7 @@ public class AppRegisterComponent {
 			if(rs[i] == selectedRuntime || selectedRuntime1 == null) selectedRuntime1 = rs[i];
 		}
 		HUtil.hackAttributeConstraintList(new XEntityData[]{support.getEntityData()}, 0, ATTR_RUNTIME,  ns);
-		String runtimeName = (selectedRuntime1 != null) ? selectedRuntime1.getName() : "";
+		String runtimeName = (selectedRuntime1 != null) ? selectedRuntime1.getName() : ""; //$NON-NLS-1$
 		context.setRuntimeName(runtimeName);
 		support.getEntityData().setValue(ATTR_RUNTIME, runtimeName);
 	}
@@ -250,7 +251,7 @@ public class AppRegisterComponent {
 			support.getEntityData().setValue(ATTR_TARGET_SERVER, selected.getName());
 		} else {
 			context.setTargetServers(new IServer[]{});
-			support.getEntityData().setValue(ATTR_TARGET_SERVER, "");
+			support.getEntityData().setValue(ATTR_TARGET_SERVER, ""); //$NON-NLS-1$
 		}
 	}
 	
@@ -268,7 +269,7 @@ public class AppRegisterComponent {
 	}
 	
 	boolean isRegisterEnabled() {
-		return !isEnabling() || ("yes".equals(enableAdapter.getValue()));
+		return !isEnabling() || ("yes".equals(enableAdapter.getValue())); //$NON-NLS-1$
 	}
 	
 	public String getErrorMessage() {
@@ -300,12 +301,12 @@ public class AppRegisterComponent {
 	}
 
 	void onRuntimeChange(String value) {
-		value = (value == null) ? "" : value.trim();
+		value = (value == null) ? "" : value.trim(); //$NON-NLS-1$
 		if(value.equals(context.getRuntimeName())) return;
 		context.setRuntimeName(value);
 		initTargetServerValue();
 		MutableMultipleChoiceFieldEditor ed = (MutableMultipleChoiceFieldEditor)support.getFieldEditorByName(ATTR_TARGET_SERVER);
-		ed.propertyChange(new PropertyChangeEvent(this, IPropertyEditor.LIST_CONTENT, "old", "new"));			
+		ed.propertyChange(new PropertyChangeEvent(this, IPropertyEditor.LIST_CONTENT, "old", "new"));			 //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	class ServerInputChangeListener implements java.beans.PropertyChangeListener {
@@ -338,7 +339,7 @@ public class AppRegisterComponent {
 		}
 
 		public int execute() {
-			Shell shell = (Shell)p.get("shell");
+			Shell shell = (Shell)p.get("shell"); //$NON-NLS-1$
 			IServer server = newServer(shell);
 			if(server == null) return -1;
 
@@ -348,10 +349,10 @@ public class AppRegisterComponent {
 				ed1.setNewValue(server.getRuntime().getName());
 			}			
 			
-			p.setProperty("value", server.getName());
+			p.setProperty("value", server.getName()); //$NON-NLS-1$
 			initTargetServerValue();
 			MutableMultipleChoiceFieldEditor ed = (MutableMultipleChoiceFieldEditor)support.getFieldEditorByName(ATTR_TARGET_SERVER);
-			ed.propertyChange(new PropertyChangeEvent(this, IPropertyEditor.LIST_CONTENT, "old", "new"));			
+			ed.propertyChange(new PropertyChangeEvent(this, IPropertyEditor.LIST_CONTENT, "old", "new"));			 //$NON-NLS-1$ //$NON-NLS-2$
 			return 0;
 		}
 		
@@ -378,12 +379,12 @@ public class AppRegisterComponent {
 		}
 
 		public int execute() {
-			Shell shell = (Shell)p.get("shell");
+			Shell shell = (Shell)p.get("shell"); //$NON-NLS-1$
 			IRuntime runtime = newRuntime(shell);
 			if(runtime == null) return -1;
-			p.setProperty("value", runtime.getName());
+			p.setProperty("value", runtime.getName()); //$NON-NLS-1$
 			initRuntimeValue();
-			context.setRuntimeName("");  //prepare for change
+			context.setRuntimeName("");  //prepare for change //$NON-NLS-1$
 			return 0;
 		}
 		
@@ -391,7 +392,7 @@ public class AppRegisterComponent {
 	
 	private IRuntime newRuntime(Shell shell) {
 		WizardFragment fragment = null;
-		String title = "New Server Runtime"; // ServerUIPlugin.getResource2("wizNewRuntimeWizardTitle");
+		String title = Messages.AppRegisterComponent_NewServerRuntime; // ServerUIPlugin.getResource2("wizNewRuntimeWizardTitle");
 		fragment = new WizardFragment() {
 			protected void createChildFragments(List list) {
 				list.add(new NewRuntimeWizardFragment());

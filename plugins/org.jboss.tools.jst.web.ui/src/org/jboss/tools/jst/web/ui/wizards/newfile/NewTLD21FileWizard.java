@@ -13,7 +13,7 @@ package org.jboss.tools.jst.web.ui.wizards.newfile;
 public class NewTLD21FileWizard extends NewTLD20FileWizard {
 
 	protected String getActionPath() {
-		return "CreateActions.CreateFiles.Web.CreateFileTLD21";
+		return "CreateActions.CreateFiles.Web.CreateFileTLD21"; //$NON-NLS-1$
 	}
 	
 }

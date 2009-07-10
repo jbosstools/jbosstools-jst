@@ -5,6 +5,7 @@ import org.jboss.tools.common.model.ui.navigator.decorator.ICustomVariable;
 
 public class TLDAttributeDecorator implements ICustomVariable {
 
+	@SuppressWarnings("nls")
 	public String getLabelPart(XModelObject object, String parameters) {
 		if(object == null) return "";
 		String required = object.getAttributeValue("required");

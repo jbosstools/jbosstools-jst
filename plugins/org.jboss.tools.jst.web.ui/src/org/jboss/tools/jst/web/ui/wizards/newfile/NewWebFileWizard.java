@@ -20,7 +20,7 @@ public class NewWebFileWizard extends NewFileWizardEx {
 	
 	class NewWebFileContext extends NewFileContextEx {
 		protected String getActionPath() {
-			return "CreateActions.CreateFiles.Web.CreateWebApp";
+			return "CreateActions.CreateFiles.Web.CreateWebApp"; //$NON-NLS-1$
 		}
 	}
 

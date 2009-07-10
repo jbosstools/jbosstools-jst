@@ -21,7 +21,7 @@ import org.jboss.tools.jst.web.ui.WebUiPlugin;
  */
 
 public class TLDEditorMessages {
-	private static final String RESOURCE_BUNDLE= "org.jboss.tools.jst.web.ui.editors.TLDEditorMessages";
+	private static final String RESOURCE_BUNDLE= "org.jboss.tools.jst.web.ui.editors.TLDEditorMessages"; //$NON-NLS-1$
 	
 	private static ResourceBundle resourceBundle= ResourceBundle.getBundle(RESOURCE_BUNDLE);
 
@@ -32,7 +32,7 @@ public class TLDEditorMessages {
 			return resourceBundle.getString(key);
 		} catch (MissingResourceException e) {
 			WebUiPlugin.getPluginLog().logError(e);
-			return "%" + key + "%";
+			return "%" + key + "%"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 	

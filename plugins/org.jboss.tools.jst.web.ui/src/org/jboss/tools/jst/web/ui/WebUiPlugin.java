@@ -17,7 +17,7 @@ import org.jboss.tools.common.log.IPluginLog;
 import org.osgi.framework.BundleContext;
 
 public class WebUiPlugin extends BaseUIPlugin {
-	public static final String PLUGIN_ID = "org.jboss.tools.jst.web.ui";
+	public static final String PLUGIN_ID = "org.jboss.tools.jst.web.ui"; //$NON-NLS-1$
 	static WebUiPlugin INSTANCE;
 	
 	public WebUiPlugin() {

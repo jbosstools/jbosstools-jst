@@ -95,7 +95,7 @@ public abstract class WebProjectAdoptOperation extends WebNatureOperation {
 	protected void copyLibraries() {}
 	
 	protected String getDefaultServletVersion() {
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 	
 	protected abstract void execute() throws XModelException;

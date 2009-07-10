@@ -20,7 +20,7 @@ public class NewCSSFileWizard extends NewFileWizardEx {
 	
 	class NewCSSFileContext extends NewFileContextEx {
 		protected String getActionPath() {
-			return "CreateActions.CreateFiles.Web.CreateFileCSS";
+			return "CreateActions.CreateFiles.Web.CreateFileCSS"; //$NON-NLS-1$
 		}
 	}
 		

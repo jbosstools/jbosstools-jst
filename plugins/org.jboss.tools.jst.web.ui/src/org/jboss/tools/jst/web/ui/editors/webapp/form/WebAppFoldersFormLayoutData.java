@@ -236,7 +236,7 @@ public class WebAppFoldersFormLayoutData {
 		"Services",
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("service-ref-name", 40), new FormAttributeData("service-interface", 60)}, //$NON-NLS-1$ //$NON-NLS-2$
-		new String[]{"WebAppServiceRef"},
+		new String[]{"WebAppServiceRef"}, //$NON-NLS-1$
 		FormLayoutDataUtil.createDefaultFormActionData("CreateActions.CreateServiceRef") //$NON-NLS-1$
 	);
 
@@ -248,7 +248,7 @@ public class WebAppFoldersFormLayoutData {
 		"Message Destination Ref List",
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("message-destination-ref-name", 100)}, //$NON-NLS-1$
-		new String[]{"WebAppMessageDestinationRef"},
+		new String[]{"WebAppMessageDestinationRef"}, //$NON-NLS-1$
 		FormLayoutDataUtil.createDefaultFormActionData("CreateActions.CreateServiceMessageDestinationRef") //$NON-NLS-1$
 	);
 
@@ -256,7 +256,7 @@ public class WebAppFoldersFormLayoutData {
 		"Message Destination List",
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("message-destination-name", 100)}, //$NON-NLS-1$
-		new String[]{"WebAppMessageDestination"},
+		new String[]{"WebAppMessageDestination"}, //$NON-NLS-1$
 		FormLayoutDataUtil.createDefaultFormActionData("CreateActions.CreateServiceMessageDestination") //$NON-NLS-1$
 	);
 

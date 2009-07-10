@@ -10,9 +10,11 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.action;
 
+import java.text.MessageFormat;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.jboss.tools.common.model.ui.action.file.ProjectRootActionDelegate;
+import org.jboss.tools.jst.web.ui.Messages;
 
 public class ServerXmlActionDelegate extends ProjectRootActionDelegate {
 	protected String textTemplate = null;
@@ -24,9 +26,11 @@ public class ServerXmlActionDelegate extends ProjectRootActionDelegate {
 		}
 		if(textTemplate == null) return;
 		String t = textTemplate;
-		int i = t.indexOf("server.xml");
+		int i = t.indexOf("server.xml"); //$NON-NLS-1$
 		if(i >= 0) {
-			t = t.substring(0, i) + "Server" + t.substring(i + "server.xml".length());
+			String prefix = t.substring(0, i);
+			String suffix = t.substring(i + "server.xml".length()); //$NON-NLS-1$
+			t = MessageFormat.format(Messages.ServerXmlActionDelegate_PrefixServerSuffix, prefix, suffix);
 			action.setText(t);
 		}
 	}

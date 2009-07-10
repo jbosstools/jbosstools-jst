@@ -22,6 +22,7 @@ public class WebProjectsLabelProvider extends NavigatorLabelProvider {
 	public WebProjectsLabelProvider() {
 	}
 	
+	@SuppressWarnings("nls")
 	public String getText(Object element) {
 		if(!(element instanceof XModelObject)) return "";
 		XModelObject o = (XModelObject)element;

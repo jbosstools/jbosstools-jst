@@ -41,7 +41,7 @@ public class EditProjectTemplateView extends AbstractSpecialWizardStep {
 	Control control;
 
 	public Control createControl(Composite parent) {
-		projectTemplate = (ProjectTemplate)support.getProperties().get("projectTemplate");
+		projectTemplate = (ProjectTemplate)support.getProperties().get("projectTemplate"); //$NON-NLS-1$
 		templateName.init(new NameChangeListener(), projectTemplate, support.getEntityData()[id]);
 		templatePreprocessing.setProjectTemplate(projectTemplate);
 		templateProperties.setObject(projectTemplate.getProperties());
@@ -106,7 +106,7 @@ class EditProjectTemplateName {
 		this.listener = listener;
 		projectTemplate = t;
 		this.data = data;
-		data.setValue("name", t.getName());
+		data.setValue("name", t.getName()); //$NON-NLS-1$
 	}
 	
 	public Control createControl(Composite parent) {
@@ -119,7 +119,7 @@ class EditProjectTemplateName {
 	
 	public void commit() {
 		support.store();
-		projectTemplate.setName(data.getValue("name"));
+		projectTemplate.setName(data.getValue("name")); //$NON-NLS-1$
 	}
 
 }
@@ -199,7 +199,7 @@ class EditPreprocessingList {
 	
 	void addSelected(Set set, File f, File root) {
 		String n = f.getAbsolutePath().replace('\\', '/');
-		String r = root.getAbsolutePath().replace('\\', '/') + "/";
+		String r = root.getAbsolutePath().replace('\\', '/') + "/"; //$NON-NLS-1$
 		if(n.startsWith(r)) {
 			n = n.substring(r.length());
 			set.add(n);

@@ -45,7 +45,7 @@ public class CustomCheckboxTreeAndListGroup extends CheckboxTreeAndListGroup {
     public CheckboxTreeViewer getTreeViewer() {
     	CheckboxTreeViewer viewer = null;
     	try {
-    		Field f = cls.getDeclaredField("treeViewer");
+    		Field f = cls.getDeclaredField("treeViewer"); //$NON-NLS-1$
     		f.setAccessible(true);
     		viewer = (CheckboxTreeViewer)f.get(this);
 		} catch (SecurityException e) {
@@ -72,7 +72,7 @@ public class CustomCheckboxTreeAndListGroup extends CheckboxTreeAndListGroup {
     private void setCurrentTreeSelection(Object element) {
 		Field f;
 		try {
-			f = cls.getDeclaredField("currentTreeSelection");
+			f = cls.getDeclaredField("currentTreeSelection"); //$NON-NLS-1$
     		f.setAccessible(true);
     		f.set(this, element);
 		} catch (SecurityException e) {

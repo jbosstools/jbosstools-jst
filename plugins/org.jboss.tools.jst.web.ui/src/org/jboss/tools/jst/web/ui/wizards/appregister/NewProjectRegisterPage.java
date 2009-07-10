@@ -25,6 +25,7 @@ import org.jboss.tools.common.meta.action.XEntityData;
 import org.jboss.tools.common.meta.action.impl.XEntityDataImpl;
 import org.jboss.tools.common.model.options.Preference;
 import org.jboss.tools.jst.web.project.helpers.NewWebProjectContext;
+import org.jboss.tools.jst.web.ui.Messages;
 
 public class NewProjectRegisterPage extends WizardPage {
 	private NewWebProjectContext context;
@@ -34,7 +35,7 @@ public class NewProjectRegisterPage extends WizardPage {
 	Preference servletPreference;
 
 	public NewProjectRegisterPage(NewWebProjectContext context, Preference servletPreference) {
-		super("Register");
+		super(Messages.NewProjectRegisterPage_Register);
 		this.context = context;
 		this.servletPreference = servletPreference;
 		initServletSupport();
@@ -64,8 +65,8 @@ public class NewProjectRegisterPage extends WizardPage {
 		String defaultServletVersion = servletPreference.getValue();
 		
 		XEntityData entityData = XEntityDataImpl.create(
-			new String[][]{{"WebPrjCreateStepDirs", ""}, {"servletVersion", ""}});
-		entityData.setValue("servletVersion", defaultServletVersion);
+			new String[][]{{"WebPrjCreateStepDirs", ""}, {"servletVersion", ""}}); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		entityData.setValue("servletVersion", defaultServletVersion); //$NON-NLS-1$
 		context.setServletVersion(defaultServletVersion);
 		support = new XAttributeSupport(ModelUtilities.getPreferenceModel().getRoot(), entityData);
 		support.setLayout(getLayoutForSupport());
@@ -105,12 +106,12 @@ public class NewProjectRegisterPage extends WizardPage {
 	}
 	
 	public void loadServletVersion() {
-		String currentServletVersion = support.getPropertyEditorAdapterByName("servletVersion").getStringValue(true);
+		String currentServletVersion = support.getPropertyEditorAdapterByName("servletVersion").getStringValue(true); //$NON-NLS-1$
 		
 		String vs = context.getServletVersion();
 		if(vs != null && vs.length() > 0 && !vs.equals(currentServletVersion)) {
 			context.setServletVersion(vs);
-			support.getPropertyEditorAdapterByName("servletVersion").setValue(vs);
+			support.getPropertyEditorAdapterByName("servletVersion").setValue(vs); //$NON-NLS-1$
 		}
 		
 		if(context != null && context.getProjectTemplate() != null) {
@@ -119,7 +120,7 @@ public class NewProjectRegisterPage extends WizardPage {
 				int i = context.compareServletVersions(prefServletVersion, currentServletVersion);
 				if(i > 0) {
 					context.setServletVersion(prefServletVersion);
-					support.getPropertyEditorAdapterByName("servletVersion").setValue(prefServletVersion);
+					support.getPropertyEditorAdapterByName("servletVersion").setValue(prefServletVersion); //$NON-NLS-1$
 				}
 			}
 		}
@@ -153,14 +154,14 @@ public class NewProjectRegisterPage extends WizardPage {
 	}
 	
 	private void initListeners() {
-		support.getPropertyEditorAdapterByName("servletVersion").addValueChangeListener(new InputChangeListener());
+		support.getPropertyEditorAdapterByName("servletVersion").addValueChangeListener(new InputChangeListener()); //$NON-NLS-1$
 		appRegister.addPropertyChangeListener(new InputChangeListener());
 	}
 
 	class InputChangeListener implements java.beans.PropertyChangeListener {
 		public void propertyChange(java.beans.PropertyChangeEvent evt) {
 			if(lock) return;
-			context.setServletVersion(support.getPropertyEditorAdapterByName("servletVersion").getStringValue(true));
+			context.setServletVersion(support.getPropertyEditorAdapterByName("servletVersion").getStringValue(true)); //$NON-NLS-1$
 			setPageComplete(validatePage());
 		}
 	}

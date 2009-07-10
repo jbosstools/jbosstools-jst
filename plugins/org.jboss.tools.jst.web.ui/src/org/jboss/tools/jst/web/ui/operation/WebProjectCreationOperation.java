@@ -125,7 +125,7 @@ public abstract class WebProjectCreationOperation extends WebNatureOperation {
 			FileUtil.copyFile(sf, new File(tf), true);
 			projectFile = new File(tf);
 		} else {
-			throw new RuntimeException("Project template must have model configuration file");
+			throw new RuntimeException("Project template must have model configuration file"); //$NON-NLS-1$
 		}
 	}
 
@@ -148,7 +148,7 @@ public abstract class WebProjectCreationOperation extends WebNatureOperation {
 		try {
 			return new File(fileName).getCanonicalPath();
 		} catch (IOException e) {
-			WebUiPlugin.getPluginLog().logError("Cannot find folder '" + fileName + "'", null);
+			WebUiPlugin.getPluginLog().logError("Cannot find folder '" + fileName + "'", null); //$NON-NLS-1$ //$NON-NLS-2$
 			return fileName;
 		}
 	}

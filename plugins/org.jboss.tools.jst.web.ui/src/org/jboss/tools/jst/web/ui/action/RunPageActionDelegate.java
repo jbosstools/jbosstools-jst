@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.action;
 
+import java.text.MessageFormat;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
@@ -51,6 +52,7 @@ import org.jboss.tools.jst.web.browser.AbstractBrowserContext;
 import org.jboss.tools.jst.web.browser.wtp.RunOnServerContext;
 import org.jboss.tools.jst.web.server.ServerManager;
 import org.jboss.tools.jst.web.server.ServerManagerListener;
+import org.jboss.tools.jst.web.ui.Messages;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 public class RunPageActionDelegate extends AbstractModelActionDelegate implements IWorkbenchWindowPulldownDelegate {
@@ -72,7 +74,7 @@ public class RunPageActionDelegate extends AbstractModelActionDelegate implement
 	
 	public void init(IWorkbenchWindow window) {
 		super.init(window);
-		new Thread(new R(), "Update Run Page Action").start();
+		new Thread(new R(), "Update Run Page Action").start(); //$NON-NLS-1$
 	}
 
 	protected void safeSelectionChanged(IAction action, ISelection selection) {
@@ -84,7 +86,7 @@ public class RunPageActionDelegate extends AbstractModelActionDelegate implement
 				adapter = EclipseResourceUtil.createObjectForResource(p);
 			} else {
 				if(context.lastRunObject != null) {
-					p = (IProject)context.lastRunObject.getModel().getProperties().get("project");
+					p = (IProject)context.lastRunObject.getModel().getProperties().get("project"); //$NON-NLS-1$
 					if(p == null || !p.isOpen() || !p.exists()) {
 						context.setLastRunObject(null);
 						update();
@@ -134,8 +136,8 @@ public class RunPageActionDelegate extends AbstractModelActionDelegate implement
 			String tip = defaultToolTip;
 			if(object != null) {
 				String lastRunURL = context.getLastRunURL();
-				if(lastRunURL != null && !lastRunURL.startsWith("%server%")) {
-					tip = "Run " + lastRunURL;
+				if(lastRunURL != null && !lastRunURL.startsWith("%server%")) { //$NON-NLS-1$
+					tip = MessageFormat.format(Messages.RunPageActionDelegate_RunURL, lastRunURL);
 				}
 			}
 			action.setToolTipText(tip);
@@ -167,7 +169,7 @@ public class RunPageActionDelegate extends AbstractModelActionDelegate implement
 		} else if(object != null && DnDUtil.getEnabledAction(object, null, getModelActionPath()) != null) {
 			if(!saveAllEditors()) return;
 			Properties p = new Properties();
-			p.put("shell", window.getShell());
+			p.put("shell", window.getShell()); //$NON-NLS-1$
 			XActionInvoker.invoke(getModelActionPath(), object, p);
 		} else {
 			getMenu(window.getShell()).setVisible(true);
@@ -214,7 +216,7 @@ public class RunPageActionDelegate extends AbstractModelActionDelegate implement
 	
 	class XModelTreeListenerImpl implements XModelTreeListener {
 		public void nodeChanged(XModelTreeEvent event) {
-			if("FileSystems".equals(event.getModelObject().getPath())) {
+			if("FileSystems".equals(event.getModelObject().getPath())) { //$NON-NLS-1$
 				context.setLastRunObject(context.lastRunObject);
 			}
 		}
@@ -227,7 +229,7 @@ public class RunPageActionDelegate extends AbstractModelActionDelegate implement
 		String lastRunURL = context.getLastRunURL();
 		if(lastRunURL == null) {
 			//do nothing
-		} else if(!lastRunURL.startsWith("%server%")) {
+		} else if(!lastRunURL.startsWith("%server%")) { //$NON-NLS-1$
 			item = new MenuItem(menu, SWT.PUSH);
 			item.addSelectionListener(new SelectionListener() {
 				public void widgetSelected(SelectionEvent e) {
@@ -238,11 +240,11 @@ public class RunPageActionDelegate extends AbstractModelActionDelegate implement
 					widgetSelected(e);
 				}
 			});
-			item.setText("" + context.getLastRunURL());
+			item.setText("" + context.getLastRunURL()); //$NON-NLS-1$
 		} else {
 			item = new MenuItem(menu, SWT.PUSH);
-			String message = lastRunURL.substring("%server%".length());
-			int i = message.indexOf("/");
+			String message = lastRunURL.substring("%server%".length()); //$NON-NLS-1$
+			int i = message.indexOf("/"); //$NON-NLS-1$
 			if(i >= 0) message = message.substring(0, i);
 			item.setText(message);
 		}
@@ -271,7 +273,7 @@ public class RunPageActionDelegate extends AbstractModelActionDelegate implement
 			item = new MenuItem(menu, SWT.SEPARATOR);
 		}
 		item = new MenuItem(menu, SWT.PUSH);
-		item.setText("Run...");
+		item.setText(Messages.RunPageActionDelegate_RunMenuItem);
 		item.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				runSelector();
@@ -285,11 +287,11 @@ public class RunPageActionDelegate extends AbstractModelActionDelegate implement
 	
 	private void runSelector() {
 		if(!saveAllEditors()) return;
-		XEntityData data = XEntityDataImpl.create(new String[][]{{"RunPageHelper"}, {"url", "yes"}});
-		XModelObject dummy = PreferenceModelUtilities.getPreferenceModel().createModelObject("RunPageHelper", null);
+		XEntityData data = XEntityDataImpl.create(new String[][]{{"RunPageHelper"}, {"url", "yes"}}); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		XModelObject dummy = PreferenceModelUtilities.getPreferenceModel().createModelObject("RunPageHelper", null); //$NON-NLS-1$
 		int i = RunSelectorSupport.run(dummy, data, null);
 		if(i != 0) return;
-		String url = data.getValue("url");
+		String url = data.getValue("url"); //$NON-NLS-1$
 		context.activateJustUrl(url);
 		update();
 		run(action);
@@ -321,27 +323,27 @@ class RunSelectorSupport extends SpecialWizardSupport {
 			IModelNature mn = EclipseResourceUtil.getModelNature(ps[i]);
 			if(mn == null) continue;
 			String url = RunPageActionDelegate.context.computeURL(mn.getModel().getRoot());
-			if(url != null && !url.startsWith("%server%")) {
+			if(url != null && !url.startsWith("%server%")) { //$NON-NLS-1$
 				set.add(url);
 			}
 		}
 		String lastRunUrl = RunPageActionDelegate.context.getLastRunURL();
-		if(lastRunUrl != null && !lastRunUrl.startsWith("%server%")) {
+		if(lastRunUrl != null && !lastRunUrl.startsWith("%server%")) { //$NON-NLS-1$
 			set.add(lastRunUrl);
 		}
 		String[] urls = RunPageActionDelegate.context.getHistory();
 		for (int i = 0; i < urls.length; i++) set.add(urls[i]);
 		urls = (String[])set.toArray(new String[0]);
-		setValueList(0, "url", urls);
-		setAttributeValue(0, "url", "");
+		setValueList(0, "url", urls); //$NON-NLS-1$
+		setAttributeValue(0, "url", ""); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public String getTitle() {
-		return "Run";
+		return Messages.RunPageActionDelegate_RunTitle;
 	}
 
 	public String getMessage(int stepId) {
-		return "Please enter URL.";
+		return Messages.RunPageActionDelegate_PleaseEnterURL;
 	}
 
 	public String[] getActionNames(int stepId) {

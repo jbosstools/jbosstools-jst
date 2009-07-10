@@ -13,14 +13,15 @@ package org.jboss.tools.jst.web.ui.editors.webapp.form;
 import org.jboss.tools.common.model.ui.forms.*;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 import org.jboss.tools.jst.web.model.helpers.WebAppHelper;
+import org.jboss.tools.jst.web.ui.Messages;
 
 public class WebAppFileFormLayoutData {
-	static String FILE_23_ENTITY = "FileWebApp";
-	static String FILE_24_ENTITY = "FileWebApp24";
-	static String FILE_25_ENTITY = "FileWebApp25";
+	static String FILE_23_ENTITY = "FileWebApp"; //$NON-NLS-1$
+	static String FILE_24_ENTITY = "FileWebApp24"; //$NON-NLS-1$
+	static String FILE_25_ENTITY = "FileWebApp25"; //$NON-NLS-1$
 	
 	static IFormData CONTEXT_PARAM_FOLDER_DEFINITION = new FormData(
-		"Context Params",
+		Messages.WebAppFileFormLayoutData_ContextParams,
 		WebAppJspConfigFormLayoutData.EMPTY_DESCRIPTION,
 		"Context Params", //$NON-NLS-1$
 		new FormAttributeData[]{new FormAttributeData("param-name", 40), new FormAttributeData("param-value", 60)}, //$NON-NLS-1$ //$NON-NLS-2$
@@ -45,15 +46,15 @@ public class WebAppFileFormLayoutData {
 	}
 	
 	public static IFormData FILE_WEB_APP_23_DEFINITION = new FormData(
-		FILE_23_ENTITY, new String[]{null}, createFileDefinitions("Web Descriptor 2.3", FILE_23_ENTITY)
+		FILE_23_ENTITY, new String[]{null}, createFileDefinitions(Messages.WebAppFileFormLayoutData_WebDesc23, FILE_23_ENTITY)
 	);
 
 	public static IFormData FILE_WEB_APP_24_DEFINITION = new FormData(
-		FILE_24_ENTITY, new String[]{null}, createFileDefinitions("Web Descriptor 2.4", FILE_24_ENTITY)
+		FILE_24_ENTITY, new String[]{null}, createFileDefinitions(Messages.WebAppFileFormLayoutData_WebDesc24, FILE_24_ENTITY)
 	);
 
 	public static IFormData FILE_WEB_APP_25_DEFINITION = new FormData(
-		FILE_25_ENTITY, new String[]{null}, createFileDefinitions("Web Descriptor 2.5", FILE_25_ENTITY)
+		FILE_25_ENTITY, new String[]{null}, createFileDefinitions(Messages.WebAppFileFormLayoutData_WebDesc25, FILE_25_ENTITY)
 	);
 
 	

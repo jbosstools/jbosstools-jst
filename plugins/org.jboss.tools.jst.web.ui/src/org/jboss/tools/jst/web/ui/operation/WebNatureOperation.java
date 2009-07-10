@@ -76,42 +76,42 @@ import org.osgi.framework.Bundle;
  */
 public abstract class WebNatureOperation implements IRunnableWithProgress {
 	
-	public static final String DEFAULT_WEB_CONTENT = "WebContent";
-	public static final String DEFAULT_WEB_INF = "WEB-INF";
-	public static final String DEFAULT_JAVA_SOURCES = "JavaSource";
-	public static final String DEFAULT_JAVA_CLASSES = "classes";
-	public static final String DEFAULT_WEB_INF_LIBRARY = "lib";
+	public static final String DEFAULT_WEB_CONTENT = "WebContent"; //$NON-NLS-1$
+	public static final String DEFAULT_WEB_INF = "WEB-INF"; //$NON-NLS-1$
+	public static final String DEFAULT_JAVA_SOURCES = "JavaSource"; //$NON-NLS-1$
+	public static final String DEFAULT_JAVA_CLASSES = "classes"; //$NON-NLS-1$
+	public static final String DEFAULT_WEB_INF_LIBRARY = "lib"; //$NON-NLS-1$
 	
-	public static final String PROJECT_NAME_ID = "WebNatureOperation.PROJECT_NAME_ID";
-	public static final String PROJECT_LOCATION_ID = "WebNatureOperation.PROJECT_LOCATION_ID";
-	public static final String WEB_CONTENT_ID = "WebNatureOperation.WEB_CONTENT_ID";
-	public static final String WEB_CONTENT_LOCATION_ID = "WebNatureOperation.WEB_CONTENT_LOCATION_ID";
-	public static final String WEB_INF_ID = "WebNatureOperation.WEB_INF_ID";
-	public static final String WEB_INF_LOCATION_ID = "WebNatureOperation.WEB_INF_LOCATION_ID";
-	public static final String WEB_XML_ID = "WebNatureOperation.WEB_XML_ID";
-	public static final String WEB_XML_LOCATION_ID = "WebNatureOperation.WEB_XML_ID";
-	public static final String WEB_INF_LIBRARY_ID = "WebNatureOperation.WEB_INF_LIBRARY_ID";
-	public static final String WEB_INF_LIBRARY_LOCATION_ID = "WebNatureOperation.WEB_INF_LIBRARY_LOCATION_ID";
-	public static final String JAVA_SOURCES_ID = "WebNatureOperation.JAVA_SOURCES_ID";
-	public static final String JAVA_SOURCES_LOCATION_ID = "WebNatureOperation.JAVA_SOURCES_LOCATION_ID";
-	public static final String JAVA_CREATE_SOURCE_FOLDERS_ID = "WebNatureOperation.JAVA_CREATE_SOURCE_FOLDERS_ID";
-	public static final String JAVA_CLASSES_ID = "WebNatureOperation.JAVA_CLASSES_ID";
-	public static final String JAVA_CLASSES_LOCATION_ID = "WebNatureOperation.JAVA_CLASSES_LOCATION_ID";
-	public static final String JAVA_CLASSPATH_ID = "WebNatureOperation.JAVA_CLASSPATH_ID";
-	public static final String SERVLET_VERSION_ID = "WebNatureOperation.SERVLET_VERSION_ID";
-	public static final String JSP_VERSION_ID = "WebNatureOperation.JSP_VERSION_ID";
-	public static final String WEB_VERSION_ID = "WebNatureOperation.WEB_VERSION_ID";
-	public static final String ANT_BUILD_XML_ID = "WebNatureOperation.ANT_BUILD_XML_ID";
-	public static final String USE_DEFAULT_LOCATION_ID = "WebNatureOperation.USE_DEFAULT_LOCATION_ID";
-	public static final String REGISTER_WEB_CONTEXT_ID = "WebNatureOperation.REGISTER_WEB_CONTEXT_ID";
-	public static final String TEMPLATE_ID = "WebNatureOperation.TEMPLATE_ID";
-	public static final String TEMPLATE_VERSION_ID = "WebNatureOperation.TEMPLATE_VERSION_ID";
-	public static final String RUNTIME_NAME = "WebNatureOperation.RUNTIME_NAME";
+	public static final String PROJECT_NAME_ID = "WebNatureOperation.PROJECT_NAME_ID"; //$NON-NLS-1$
+	public static final String PROJECT_LOCATION_ID = "WebNatureOperation.PROJECT_LOCATION_ID"; //$NON-NLS-1$
+	public static final String WEB_CONTENT_ID = "WebNatureOperation.WEB_CONTENT_ID"; //$NON-NLS-1$
+	public static final String WEB_CONTENT_LOCATION_ID = "WebNatureOperation.WEB_CONTENT_LOCATION_ID"; //$NON-NLS-1$
+	public static final String WEB_INF_ID = "WebNatureOperation.WEB_INF_ID"; //$NON-NLS-1$
+	public static final String WEB_INF_LOCATION_ID = "WebNatureOperation.WEB_INF_LOCATION_ID"; //$NON-NLS-1$
+	public static final String WEB_XML_ID = "WebNatureOperation.WEB_XML_ID"; //$NON-NLS-1$
+	public static final String WEB_XML_LOCATION_ID = "WebNatureOperation.WEB_XML_ID"; //$NON-NLS-1$
+	public static final String WEB_INF_LIBRARY_ID = "WebNatureOperation.WEB_INF_LIBRARY_ID"; //$NON-NLS-1$
+	public static final String WEB_INF_LIBRARY_LOCATION_ID = "WebNatureOperation.WEB_INF_LIBRARY_LOCATION_ID"; //$NON-NLS-1$
+	public static final String JAVA_SOURCES_ID = "WebNatureOperation.JAVA_SOURCES_ID"; //$NON-NLS-1$
+	public static final String JAVA_SOURCES_LOCATION_ID = "WebNatureOperation.JAVA_SOURCES_LOCATION_ID"; //$NON-NLS-1$
+	public static final String JAVA_CREATE_SOURCE_FOLDERS_ID = "WebNatureOperation.JAVA_CREATE_SOURCE_FOLDERS_ID"; //$NON-NLS-1$
+	public static final String JAVA_CLASSES_ID = "WebNatureOperation.JAVA_CLASSES_ID"; //$NON-NLS-1$
+	public static final String JAVA_CLASSES_LOCATION_ID = "WebNatureOperation.JAVA_CLASSES_LOCATION_ID"; //$NON-NLS-1$
+	public static final String JAVA_CLASSPATH_ID = "WebNatureOperation.JAVA_CLASSPATH_ID"; //$NON-NLS-1$
+	public static final String SERVLET_VERSION_ID = "WebNatureOperation.SERVLET_VERSION_ID"; //$NON-NLS-1$
+	public static final String JSP_VERSION_ID = "WebNatureOperation.JSP_VERSION_ID"; //$NON-NLS-1$
+	public static final String WEB_VERSION_ID = "WebNatureOperation.WEB_VERSION_ID"; //$NON-NLS-1$
+	public static final String ANT_BUILD_XML_ID = "WebNatureOperation.ANT_BUILD_XML_ID"; //$NON-NLS-1$
+	public static final String USE_DEFAULT_LOCATION_ID = "WebNatureOperation.USE_DEFAULT_LOCATION_ID"; //$NON-NLS-1$
+	public static final String REGISTER_WEB_CONTEXT_ID = "WebNatureOperation.REGISTER_WEB_CONTEXT_ID"; //$NON-NLS-1$
+	public static final String TEMPLATE_ID = "WebNatureOperation.TEMPLATE_ID"; //$NON-NLS-1$
+	public static final String TEMPLATE_VERSION_ID = "WebNatureOperation.TEMPLATE_VERSION_ID"; //$NON-NLS-1$
+	public static final String RUNTIME_NAME = "WebNatureOperation.RUNTIME_NAME"; //$NON-NLS-1$
 	
 	// for STRUTS
-	public static final String TLDS_ID = "WebNatureOperation.TLDS_ID";
+	public static final String TLDS_ID = "WebNatureOperation.TLDS_ID"; //$NON-NLS-1$
 	
-	private static final String PROJECT_ID = "WebNatureOperation.PROJECT_ID";
+	private static final String PROJECT_ID = "WebNatureOperation.PROJECT_ID"; //$NON-NLS-1$
 
 	protected XModel model;
 	private HashMap propertyValue = new HashMap();
@@ -165,8 +165,8 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 				XModelObject object = (XModelObject)o;
 				XModelObject[] cs = object.getChildren();
 				for (int i = 0; i < cs.length; i++) {
-					String n = cs[i].getAttributeValue("name");
-					String v = cs[i].getAttributeValue("value");
+					String n = cs[i].getAttributeValue("name"); //$NON-NLS-1$
+					String v = cs[i].getAttributeValue("value"); //$NON-NLS-1$
 					if(n != null && v != null) {
 						wizardPropertiesForVelocity.put(n.replace(' ', '_'), v);
 					}
@@ -202,7 +202,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 	 */
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 		if (monitor == null) monitor = new NullProgressMonitor();
-		monitor.beginTask("", 25);
+		monitor.beginTask("", 25); //$NON-NLS-1$
 		try {
 			// clear all .-files
 			clearProjectRoot(monitor);
@@ -259,7 +259,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 	}
 	
 	protected String[] dotFilesList = {
-		".classpath", ".project", IModelNature.PROJECT_FILE, ".runtime", ".wtpmodules", ".settings"
+		".classpath", ".project", IModelNature.PROJECT_FILE, ".runtime", ".wtpmodules", ".settings" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 	};
 	
 	/*
@@ -301,7 +301,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 	private void registerServer2(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 		XModelObject fs = FileSystemsHelper.getFileSystems(model);
 		try {
-			model.changeObjectAttribute(fs, "application name", registry.getApplicationName());
+			model.changeObjectAttribute(fs, "application name", registry.getApplicationName()); //$NON-NLS-1$
 		} catch (XModelException e) {
 			throw new InvocationTargetException(e);
 		}
@@ -328,7 +328,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 	 */
 	private void createLockFile() {
 		try {
-			getProject().setSessionProperty(WatcherLoader.LOCK, "true");
+			getProject().setSessionProperty(WatcherLoader.LOCK, "true"); //$NON-NLS-1$
 		} catch (CoreException e) {
 			WebUiPlugin.getPluginLog().logError(e);
 		}
@@ -339,7 +339,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 	 */
 	private void deleteLockFile() {
 		try {
-			boolean lock = "true".equals(getProject().getSessionProperty(WatcherLoader.LOCK));
+			boolean lock = "true".equals(getProject().getSessionProperty(WatcherLoader.LOCK)); //$NON-NLS-1$
 			if(lock) {
 				getProject().setSessionProperty(WatcherLoader.LOCK, null);
 				if(model != null) {	
@@ -357,10 +357,10 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 	private void updateJavaNature() throws CoreException {
 //		JavaCore.create(getProject());
 		EclipseResourceUtil.addNatureToProject(getProject(), JavaCore.NATURE_ID);
-		SpecialWizard w = SpecialWizardFactory.createSpecialWizard("org.jboss.tools.common.model.project.ClassPathUpdateWizard");
+		SpecialWizard w = SpecialWizardFactory.createSpecialWizard("org.jboss.tools.common.model.project.ClassPathUpdateWizard"); //$NON-NLS-1$
 		Properties p = new Properties();
-		p.put("model", model);
-		p.put("classes", new Path(getProperty(JAVA_CLASSES_LOCATION_ID)));
+		p.put("model", model); //$NON-NLS-1$
+		p.put("classes", new Path(getProperty(JAVA_CLASSES_LOCATION_ID))); //$NON-NLS-1$
 		//webInfLocation.append("classes"));
 		w.setObject(p);
 		w.execute();
@@ -388,30 +388,30 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 			IDataModel dataModel = DataModelFactory.createDataModel(modelProvider);
 
 			FacetDataModelMap map = (FacetDataModelMap) dataModel.getProperty(IFacetProjectCreationDataModelProperties.FACET_DM_MAP);
-			IDataModel configDM = (IDataModel) map.get("jst.web");
+			IDataModel configDM = (IDataModel) map.get("jst.web"); //$NON-NLS-1$
 			
 			if(exists) {
 				IFacetedProject fp0 = ProjectFacetsManager.create(getProject());
 				exists = fp0 != null;
 			}
 
-			if(sv != null && (sv.indexOf("2.3") >= 0 || sv.indexOf("2.5") >= 0)) {
+			if(sv != null && (sv.indexOf("2.3") >= 0 || sv.indexOf("2.5") >= 0)) { //$NON-NLS-1$ //$NON-NLS-2$
 				configDM.setProperty(IFacetDataModelProperties.FACET_VERSION_STR, sv);
 			}
 			
 			if(webroot != null) {
-				int i = webroot.lastIndexOf("/");
+				int i = webroot.lastIndexOf("/"); //$NON-NLS-1$
 				String webRootName = webroot.substring(i + 1);
-				if(webroot.startsWith(projectLocation.replace('\\', '/') + "/")) {
+				if(webroot.startsWith(projectLocation.replace('\\', '/') + "/")) { //$NON-NLS-1$
 					webRootName = webroot.substring(projectLocation.length() + 1);
 				}
 				configDM.setProperty(IJ2EEModuleFacetInstallDataModelProperties.CONFIG_FOLDER, webRootName);
 			}
 			if(javaRoot != null && javaRoot.length > 0 && javaRoot[0].length() > 0) {
 				String jr = javaRoot[0].replace('\\', '/');
-				int i = jr.lastIndexOf("/");
+				int i = jr.lastIndexOf("/"); //$NON-NLS-1$
 				String javaRootName = javaRoot[0].substring(i + 1);
-				if(jr.startsWith(projectLocation.replace('\\', '/') + "/")) {
+				if(jr.startsWith(projectLocation.replace('\\', '/') + "/")) { //$NON-NLS-1$
 					javaRootName = jr.substring(projectLocation.length() + 1);
 				}
 				configDM.setProperty(IWebFacetInstallDataModelProperties.SOURCE_FOLDER, javaRootName);
@@ -439,7 +439,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 			}
 			if(getProject().exists()) {
 				ModuleCoreNature.addModuleCoreNatureIfNecessary(getProject(), monitor);
-				String emfNature = "org.eclipse.jem.workbench.JavaEMFNature";
+				String emfNature = "org.eclipse.jem.workbench.JavaEMFNature"; //$NON-NLS-1$
 				if(!getProject().hasNature(emfNature)) {
 					ProjectUtilities.addNatureToProject(getProject(), emfNature);
 				}
@@ -473,19 +473,19 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 	
 	private boolean isDefaultLocation(String projectLocation) {
 		String root = ModelPlugin.getWorkspace().getRoot().getLocation().toString().replace('\\', '/');
-		return (projectLocation.replace('\\','/') + "/").equals(root + "/" + getProject().getName() + "/");
+		return (projectLocation.replace('\\','/') + "/").equals(root + "/" + getProject().getName() + "/"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 //		return (projectLocation.replace('\\','/') + "/").startsWith(root + "/" + getProject().getName() + "/");
 	}
 	
 	private String createLinks(String projectLocation) throws CoreException {
 		IProject project = getProject();
 		String root = ModelPlugin.getWorkspace().getRoot().getLocation().toString().replace('\\', '/');
-		if((projectLocation.replace('\\','/') + "/").startsWith(root + "/" + project.getName() + "/")) return projectLocation;
+		if((projectLocation.replace('\\','/') + "/").startsWith(root + "/" + project.getName() + "/")) return projectLocation; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		String webroot = getProperty(WEB_CONTENT_LOCATION_ID);
 		String[] javaRoot = (String[])getPropertyObject(JAVA_SOURCES_LOCATION_ID);
 
-		String wsProjectLocation = root + "/" + project.getName();
+		String wsProjectLocation = root + "/" + project.getName(); //$NON-NLS-1$
 		if(!project.exists()) {
 			IProjectDescription pd = ModelPlugin.getWorkspace().newProjectDescription(project.getName());
 			project.create(pd, null);
@@ -493,22 +493,22 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 			JavaCore.create(getProject());
 			EclipseResourceUtil.addNatureToProject(getProject(), JavaCore.NATURE_ID);
 			IJavaProject jp = EclipseResourceUtil.getJavaProject(project);
-			IClasspathEntry entry = new ClassPathUpdate().createNewClasspathEntry(project.getFullPath().append("src"), IClasspathEntry.CPE_SOURCE);
+			IClasspathEntry entry = new ClassPathUpdate().createNewClasspathEntry(project.getFullPath().append("src"), IClasspathEntry.CPE_SOURCE); //$NON-NLS-1$
 			try {
-				jp.setRawClasspath(new IClasspathEntry[]{entry}, project.getFullPath().append("classes"), null);
+				jp.setRawClasspath(new IClasspathEntry[]{entry}, project.getFullPath().append("classes"), null); //$NON-NLS-1$
 			} catch (CoreException e) {
 				WebUiPlugin.getPluginLog().logError(e);
 			}
 		}
 		if(webroot != null) {
-			IFolder f = project.getFolder("WEB-ROOT");
+			IFolder f = project.getFolder("WEB-ROOT"); //$NON-NLS-1$
 			if(!f.exists()) f.createLink(new Path(webroot), IFolder.FORCE, null);
-			setProperty(WEB_CONTENT_LOCATION_ID, "/WEB-ROOT");
+			setProperty(WEB_CONTENT_LOCATION_ID, "/WEB-ROOT"); //$NON-NLS-1$
 		}
 		if(javaRoot != null && javaRoot.length > 0 && javaRoot[0].length() > 0) {
-			IFolder f = project.getFolder("src");
+			IFolder f = project.getFolder("src"); //$NON-NLS-1$
 			if(!f.exists()) f.createLink(new Path(javaRoot[0]), IFolder.FORCE, null);
-			javaRoot[0] = "/src";
+			javaRoot[0] = "/src"; //$NON-NLS-1$
 		}
 		
 		return wsProjectLocation;

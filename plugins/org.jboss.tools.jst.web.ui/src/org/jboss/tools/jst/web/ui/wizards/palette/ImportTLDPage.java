@@ -34,8 +34,8 @@ public class ImportTLDPage extends SpecialWizardStep {
 	public void setSupport(SpecialWizardSupport support, int i) {
 		super.setSupport(support, i);
 		importSupport = (ImportTLDToPaletteSupport)support;
-		parentGroupComponent.setItems((String[])support.getProperties().get("groups"));
-		parentGroupComponent.setInitialItem(support.getProperties().getProperty("parent group"));
+		parentGroupComponent.setItems((String[])support.getProperties().get("groups")); //$NON-NLS-1$
+		parentGroupComponent.setInitialItem(support.getProperties().getProperty("parent group")); //$NON-NLS-1$
 	}
 
 	public Control createControl(Composite parent) {
@@ -75,12 +75,12 @@ public class ImportTLDPage extends SpecialWizardStep {
 		attributes.store();
 		parentGroupComponent.store(support.getProperties());
 		validate();
-		if(event != null && event.getSource() == attributes.getPropertyEditorAdapterByName("tld")) {
+		if(event != null && event.getSource() == attributes.getPropertyEditorAdapterByName("tld")) { //$NON-NLS-1$
 //			String path = (String)event.getNewValue();
-			boolean locked = ((DefaultValueAdapter)attributes.getPropertyEditorAdapterByName("tld")).isStoreLocked();
+			boolean locked = ((DefaultValueAdapter)attributes.getPropertyEditorAdapterByName("tld")).isStoreLocked(); //$NON-NLS-1$
 			if(!locked) {
 				importSupport.onPathModified();
-				String[] as = {"name", URIConstants.DEFAULT_PREFIX, URIConstants.LIBRARY_URI};
+				String[] as = {"name", URIConstants.DEFAULT_PREFIX, URIConstants.LIBRARY_URI}; //$NON-NLS-1$
 				for (int i = 0; i < as.length; i++)
 				attributes.getPropertyEditorAdapterByName(as[i]).setValue(support.getAttributeValue(0, as[i]));
 				validate();

@@ -37,11 +37,11 @@ public abstract class AbstractPagesPreferencesPage  extends PreferencePage imple
 	/**
 	 * @deprecated use bundle via Messages.getString()
 	 */
-	public static final String BUNDLE_NAME = "preferences"; 
+	public static final String BUNDLE_NAME = "preferences";  //$NON-NLS-1$
 	/**
 	 * @deprecated use bundle via Messages.getString()
 	 */
-	public static  ResourceBundle BUNDLE = ResourceBundle.getBundle(AbstractPagesPreferencesPage.class.getPackage().getName() + "." + BUNDLE_NAME); 
+	public static  ResourceBundle BUNDLE = ResourceBundle.getBundle(AbstractPagesPreferencesPage.class.getPackage().getName() + "." + BUNDLE_NAME);  //$NON-NLS-1$
 	protected AbstractWebProjectTemplate helper;
 	protected String[] pages;
 	protected String[] pageLabels;
@@ -83,7 +83,7 @@ public abstract class AbstractPagesPreferencesPage  extends PreferencePage imple
 		String[] pageLabels = new String[pages == null ? 0 : pages.length];
 		for (int i = 0; pageLabels != null && i < pageLabels.length; i++) {
 			pageLabels[i] = pages[i];
-			if (pages[i].equals(defaultPage)) pageLabels[i] += " " + Messages.AbstractPagesPreferencePage_3;
+			if (pages[i].equals(defaultPage)) pageLabels[i] += " " + Messages.AbstractPagesPreferencePage_3; //$NON-NLS-1$
 		}
 		return pageLabels;
  	}

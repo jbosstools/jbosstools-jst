@@ -49,9 +49,9 @@ public abstract class ImportWebWarWizard extends Wizard implements IImportWizard
 
 	protected void installMainPage() {
 		mainPage = new ImportWebWarWizardPage(context);
-		String mainPageTitle = WizardKeys.getString("" + getClass().getName() + ".mainPageTitle");
+		String mainPageTitle = WizardKeys.getString("" + getClass().getName() + ".mainPageTitle"); //$NON-NLS-1$ //$NON-NLS-2$
 		mainPage.setTitle(mainPageTitle);
-		String mainPageDescr = WizardKeys.getString("" + ImportWebWarWizard.class.getName() + ".mainPagePrompt");
+		String mainPageDescr = WizardKeys.getString("" + ImportWebWarWizard.class.getName() + ".mainPagePrompt"); //$NON-NLS-1$ //$NON-NLS-2$
 		mainPage.setDescription(mainPageDescr);
 		addPage(mainPage);
 	}
@@ -65,9 +65,9 @@ public abstract class ImportWebWarWizard extends Wizard implements IImportWizard
 		boolean result = true;		
 			mainPage.commit();
 			
-			context.setServletVersion("2.4");
+			context.setServletVersion("2.4"); //$NON-NLS-1$
 			if(!context.isServletVersionConsistentToWebXML()) {
-				context.setServletVersion("2.3");
+				context.setServletVersion("2.3"); //$NON-NLS-1$
 			}
 			
 			IRunnableWithProgress op =  new WorkspaceModifyDelegatingOperation(createOperation());
@@ -90,7 +90,7 @@ public abstract class ImportWebWarWizard extends Wizard implements IImportWizard
 	}
 
 	protected String getFinalPerspective() {
-		return "org.jboss.tools.jst.web.ui.WebDevelopmentPerspective";
+		return "org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"; //$NON-NLS-1$
 	}
 	
 	private class ConfigurationElementInternal implements IConfigurationElement {
@@ -98,35 +98,35 @@ public abstract class ImportWebWarWizard extends Wizard implements IImportWizard
 			return null;
 		}
 		public String getAttribute(String name) {
-			return "finalPerspective".equals(name) ? getFinalPerspective() : null;
+			return "finalPerspective".equals(name) ? getFinalPerspective() : null; //$NON-NLS-1$
 		}
 
 		public Object createExecutableExtension(String propertyName) throws CoreException {
-			throw new UnsupportedOperationException("Not implemented.");
+			throw new UnsupportedOperationException("Not implemented."); //$NON-NLS-1$
 		}
 		public String getAttributeAsIs(String name) {
-			throw new UnsupportedOperationException("Not implemented.");
+			throw new UnsupportedOperationException("Not implemented."); //$NON-NLS-1$
 		}
 		public String[] getAttributeNames() {
-			throw new UnsupportedOperationException("Not implemented.");
+			throw new UnsupportedOperationException("Not implemented."); //$NON-NLS-1$
 		}
 		public IConfigurationElement[] getChildren() {
-			throw new UnsupportedOperationException("Not implemented.");
+			throw new UnsupportedOperationException("Not implemented."); //$NON-NLS-1$
 		}
 		public IConfigurationElement[] getChildren(String name) {
-			throw new UnsupportedOperationException("Not implemented.");
+			throw new UnsupportedOperationException("Not implemented."); //$NON-NLS-1$
 		}
 		public IExtension getDeclaringExtension() {
-			throw new UnsupportedOperationException("Not implemented.");
+			throw new UnsupportedOperationException("Not implemented."); //$NON-NLS-1$
 		}
 		public String getName() {
-			throw new UnsupportedOperationException("Not implemented.");
+			throw new UnsupportedOperationException("Not implemented."); //$NON-NLS-1$
 		}
 		public String getValue() {
-			throw new UnsupportedOperationException("Not implemented.");
+			throw new UnsupportedOperationException("Not implemented."); //$NON-NLS-1$
 		}
 		public String getValueAsIs() {
-			throw new UnsupportedOperationException("Not implemented.");
+			throw new UnsupportedOperationException("Not implemented."); //$NON-NLS-1$
 		}
 		public Class loadExtensionClass(String propertyName) throws CoreException {
 			return null;

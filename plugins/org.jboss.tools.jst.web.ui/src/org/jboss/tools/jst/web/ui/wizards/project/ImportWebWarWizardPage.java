@@ -43,14 +43,14 @@ public class ImportWebWarWizardPage extends WizardPage {
 	Path defaultPath = (Path)ModelUIPlugin.getWorkspace().getRoot().getLocation();
 	
 	public ImportWebWarWizardPage(ImportWebWarContext context) {
-		super("Wizard Page");
+		super("Wizard Page"); //$NON-NLS-1$
 		this.context = context;
 		XEntityData entityData = XEntityDataImpl.create(new String[][] {
-			{"WebPrjAdoptWarStep0", ""},
-			{"*.war location", "yes"},
-			{"name", "yes"},
-			{"use default path", "no"},
-			{"location", "yes"},
+			{"WebPrjAdoptWarStep0", ""}, //$NON-NLS-1$ //$NON-NLS-2$
+			{"*.war location", "yes"}, //$NON-NLS-1$ //$NON-NLS-2$
+			{"name", "yes"}, //$NON-NLS-1$ //$NON-NLS-2$
+			{"use default path", "no"}, //$NON-NLS-1$ //$NON-NLS-2$
+			{"location", "yes"}, //$NON-NLS-1$ //$NON-NLS-2$
 //          WTP allows only classic structure
 //			{"import type", "no"}
 		});
@@ -60,10 +60,10 @@ public class ImportWebWarWizardPage extends WizardPage {
 		}
 		support = new XAttributeSupport(ModelUtilities.getPreferenceModel().getRoot(), entityData);
 		support.setLayout(getLayoutForSupport());
-		warLocationAdapter = support.getPropertyEditorAdapterByName("*.war location");
-		nameLocationAdapter = support.getPropertyEditorAdapterByName("name");
-		useDefaultPathAdapter = support.getPropertyEditorAdapterByName("use default path");
-		projectLocationAdapter = support.getPropertyEditorAdapterByName("location");
+		warLocationAdapter = support.getPropertyEditorAdapterByName("*.war location"); //$NON-NLS-1$
+		nameLocationAdapter = support.getPropertyEditorAdapterByName("name"); //$NON-NLS-1$
+		useDefaultPathAdapter = support.getPropertyEditorAdapterByName("use default path"); //$NON-NLS-1$
+		projectLocationAdapter = support.getPropertyEditorAdapterByName("location"); //$NON-NLS-1$
 		appRegister.setContext(context.getRegisterServerContext());
 		appRegister.setEnabling(false);
 		appRegister.init();
@@ -96,7 +96,7 @@ public class ImportWebWarWizardPage extends WizardPage {
 		Control control = support.createControl(c);
 		supportControl = (Composite)control;
 		control.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		projectLocationEditor = (IPropertyEditor)support.getPropertyEditorByName("location");
+		projectLocationEditor = (IPropertyEditor)support.getPropertyEditorByName("location"); //$NON-NLS-1$
 		updateLocationEditor();
 		initListeners();
 		createRegisterControl(c);
@@ -107,7 +107,7 @@ public class ImportWebWarWizardPage extends WizardPage {
 	}
 	
 	private boolean isDefaultPath() {
-		return "true".equals(useDefaultPathAdapter.getStringValue(true));
+		return "true".equals(useDefaultPathAdapter.getStringValue(true)); //$NON-NLS-1$
 	}
 	
 	private void updateLocationEditor() {
@@ -158,7 +158,7 @@ public class ImportWebWarWizardPage extends WizardPage {
 		if(p == null) {
 			return defaultPath.toOSString();
 		} else {
-			return defaultPath.toOSString() + "/" + p.getName();
+			return defaultPath.toOSString() + "/" + p.getName(); //$NON-NLS-1$
 		}
 	}
 
