@@ -726,7 +726,7 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 		}
 	}
 
-	protected static class TextRegion {
+	public static class TextRegion {
 		private int startOffset;
 		private int offset;
 		private int length;

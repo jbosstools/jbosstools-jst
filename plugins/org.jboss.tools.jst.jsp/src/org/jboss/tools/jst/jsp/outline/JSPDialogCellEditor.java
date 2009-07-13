@@ -12,20 +12,28 @@ package org.jboss.tools.jst.jsp.outline;
 
 import java.util.Properties;
 
-import org.eclipse.jdt.internal.ui.refactoring.contentassist.ControlContentAssistHelper;
+import org.eclipse.jface.fieldassist.ContentProposalAdapter;
+import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.jface.fieldassist.FieldDecoration;
+import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
+import org.eclipse.jface.fieldassist.IContentProposal;
+import org.eclipse.jface.fieldassist.IControlContentAdapter;
+import org.eclipse.jface.fieldassist.TextContentAdapter;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.contentassist.ContentAssistHandler;
 import org.jboss.tools.common.meta.key.WizardKeys;
+import org.jboss.tools.common.model.ui.attribute.AttributeContentProposalProviderFactory;
 import org.jboss.tools.common.model.ui.attribute.editor.DialogCellEditorEx;
 import org.jboss.tools.common.model.ui.objecteditor.AttributeWrapper;
 import org.jboss.tools.common.model.ui.objecteditor.ExtendedCellEditorProvider;
 import org.jboss.tools.jst.jsp.contentassist.FaceletsHtmlContentAssistProcessor;
-import org.jboss.tools.jst.jsp.contentassist.JSPDialogCellEditorContentAssistProcessor;
-import org.jboss.tools.jst.jsp.drop.treeviewer.model.RootElement;
+import org.jboss.tools.jst.jsp.contentassist.JSPDialogContentProposalProvider;
 import org.jboss.tools.jst.jsp.outline.cssdialog.CSSStyleDialog;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSConstants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
@@ -38,8 +46,7 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
     Properties context;
 
     // ValueHelper valueHelper;
-    JSPDialogCellEditorContentAssistProcessor contentAssistentProcessor;
-    ContentAssistHandler handler = null;
+//    ContentAssistHandler handler = null;
     boolean hasProposals = false;
 
     /**
@@ -51,12 +58,7 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
         super(parent);
         this.context = context;
 
-        contentAssistentProcessor = new JSPDialogCellEditorContentAssistProcessor();
-
-        contentAssistentProcessor.setContext(context);
-
-        handler = ContentAssistHandler.createHandlerForText(getTextField(),
-                ControlContentAssistHelper.createJavaContentAssistant(contentAssistentProcessor));
+        addContentAssist(getTextField());
     }
 
     public void activate() {
@@ -71,34 +73,25 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
         if (context == null) {
             return;
         }
-
-        // valueHelper = (ValueHelper)context.get("valueHelper");
-        // if(valueHelper == null) return;
-        ValueHelper valueHelper = new ValueHelper();
+        
         String attributeName = Constants.EMPTY + context.getProperty("attributeName");
-        String nodeName = Constants.EMPTY + context.getProperty("nodeName");
-        String query = Constants.SLASH;
-
-        if (valueHelper.isFacetets() && (nodeName.indexOf(':') < 0)) {
-            query += FaceletsHtmlContentAssistProcessor.faceletHtmlPrefixStart;
+        if(attributeName.equalsIgnoreCase(CSSConstants.STYLE)
+        		|| attributeName.equalsIgnoreCase(CSSConstants.CLASS)) {
+        	hasProposals = true;
+        	return;
         }
 
-        query += (nodeName + "@" + attributeName);
-
-        RootElement root = (RootElement) valueHelper.getInitalInput(query);
-        hasProposals = ((root != null) && (root.getChildren().length > 0))
-        		|| attributeName.equalsIgnoreCase(CSSConstants.STYLE)
-        		|| attributeName.equalsIgnoreCase(CSSConstants.CLASS);
+        JSPDialogContentProposalProvider cpp = new JSPDialogContentProposalProvider();
+		cpp.setContext(context);
+		IContentProposal[] ps = cpp.getProposals("#{}", 2);
+		System.out.println(ps.length);
+        hasProposals = ((ps != null) && (ps.length > 0));
     }
 
     private void checkButtonEnablement() {
         if (context == null) {
             return;
         }
-
-//        valueHelper = (ValueHelper)context.get("valueHelper");
-//        if(valueHelper == null) return;
-//        ValueHelper valueHelper = new ValueHelper();
         Button button = getButtonControl();
 
         if ((button == null) || button.isDisposed()) {
@@ -106,7 +99,6 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
         }
 
         button.setVisible(hasProposals);
-        handler.setEnabled(hasProposals);
     }
 
     protected Object openDialogBox(Control cellEditorWindow) {
@@ -179,4 +171,47 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
     protected Text getTextField() {
         return text;
     }
+
+	protected Control createContents(Composite cell) {
+		super.createContents(cell);
+		
+		return getTextControl();
+	}
+
+	protected void addContentAssist(Text text) {
+		IControlContentAdapter controlAdapter = new TextContentAdapter();
+		JSPDialogContentProposalProvider cpp = new JSPDialogContentProposalProvider();
+		cpp.setContext(context);
+
+		ContentProposalAdapter adapter = new ContentProposalAdapter(
+				text, 
+				controlAdapter, 
+				cpp,
+				AttributeContentProposalProviderFactory.getCtrlSpaceKeyStroke(), 
+				null);
+		adapter.setPropagateKeys(true);
+		adapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_INSERT);
+		if(popup != null) {
+			adapter.addContentProposalListener(popup);
+		}		
+
+		int bits = SWT.TOP | SWT.LEFT;
+		ControlDecoration controlDecoration = new ControlDecoration(getTextControl(), bits) {
+			public Image getImage() {
+				return super.getImage();
+			}
+		};
+		// Configure text widget decoration
+		// No margin
+		controlDecoration.setMarginWidth(0);
+		// Custom hover tip text
+		controlDecoration.setDescriptionText("code assist" /*PDEUIMessages.PDEJavaHelper_msgContentAssistAvailable*/);
+		// Custom hover properties
+		controlDecoration.setShowHover(true);
+		controlDecoration.setShowOnlyOnFocus(true);
+		// Hover image to use
+		FieldDecoration contentProposalImage = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_CONTENT_PROPOSAL);
+		controlDecoration.setImage(contentProposalImage.getImage());
+	}
+
 }
