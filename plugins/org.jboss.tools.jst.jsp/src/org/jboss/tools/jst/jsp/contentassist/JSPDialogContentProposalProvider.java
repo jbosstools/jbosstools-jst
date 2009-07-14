@@ -18,6 +18,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.fieldassist.IContentProposal;
 import org.eclipse.jface.fieldassist.IContentProposalProvider;
 import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.jst.jsp.ui.internal.contentassist.JSPContentAssistProcessor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
@@ -33,6 +34,7 @@ import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.jsp.contentassist.AbstractXMLContentAssistProcessor.TextRegion;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
+import org.jboss.tools.jst.jsp.outline.ValueHelper;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
@@ -50,7 +52,7 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 	String attributeName;
 	String nodeName;
 	int offset = 0;
-	JSPDialogContentAssistProcessor processor;
+	JspContentAssistProcessor processor;
 	IPageContext pageContext = null;
 
 	public JSPDialogContentProposalProvider() {}	
@@ -61,11 +63,19 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
         nodeName = Constants.EMPTY + context.getProperty("nodeName");
         Node node = (Node)context.get("node");
         if (node instanceof IDOMElement) {
-        	offset = ((IDOMElement)node).getStartEndOffset(); //approximation, attribute may be not defined
+        	offset = ((IDOMElement)node).getStartOffset() + ("" + nodeName).length(); //approximation, attribute may be not defined
+        } else if(context.get("offset") != null) {
+        	offset = ((Integer)context.get("offset")).intValue();
         }
-        processor = new JSPDialogContentAssistProcessor();
+        ValueHelper valueHelper = (ValueHelper)context.get("valueHelper");
+        if(valueHelper == null) {
+        	valueHelper = new ValueHelper();
+        }
+        processor = valueHelper.isFacetets() ? new FaceletPageContectAssistProcessor() : new JspContentAssistProcessor();
         processor.computeCompletionProposals(getTextViewer(), offset);
         pageContext = processor.getContext();
+        context.put("pageContext", pageContext);
+        context.put("kbQuery", createKbQuery(Type.ATTRIBUTE_VALUE, "", "", offset, false));
 	}
 
 	public IContentProposal[] getProposals(String contents, int position) {
@@ -84,7 +94,7 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 
 		int beginChangeOffset = prefix.getStartOffset() + prefix.getOffset();
 
-		KbQuery kbQuery = createKbQuery(Type.ATTRIBUTE_VALUE, query, stringQuery, position);
+		KbQuery kbQuery = createKbQuery(Type.ATTRIBUTE_VALUE, query, stringQuery, position, true);
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, pageContext);
 
 		if(proposals != null) for (TextProposal textProposal: proposals) {
@@ -189,48 +199,44 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 		return null;
 	}
 
-	protected KbQuery createKbQuery(Type type, String query, String stringQuery, int pos) {
+	protected KbQuery createKbQuery(Type type, String query, String stringQuery, int pos, boolean addAttr) {
 		KbQuery kbQuery = new KbQuery();
 
-		String prefix = processor.getTagPrefix();
-		String  uri = processor.getTagUri();
-		String[] parentTags = processor.getParentTags(attributeName);
-		String	parent = attributeName;
-		String queryValue = query;
-		String queryStringValue = stringQuery;
-		
-		kbQuery.setPrefix(prefix);
-		kbQuery.setUri(uri);
+		String[] parentTags = processor.getParentTags(false);
+		parentTags = add(parentTags, nodeName);
+		if(addAttr) {
+			parentTags = add(parentTags, attributeName);
+		}
+		kbQuery.setPrefix(getPrefix());
+		kbQuery.setUri(processor.getUri(getPrefix()));
 		kbQuery.setParentTags(parentTags);
-		kbQuery.setParent(parent); 
+		kbQuery.setParent(attributeName);
 		kbQuery.setMask(true); 
 		kbQuery.setType(type);
 		kbQuery.setOffset(pos);
-		kbQuery.setValue(queryValue); 
-		kbQuery.setStringQuery(queryStringValue);
+		kbQuery.setValue(query); 
+		kbQuery.setStringQuery(stringQuery);
 		
 		return kbQuery;
 	}
 
-	protected int getOffset() {
-		return offset;
+	private String getPrefix() {
+		if(nodeName == null) return null;
+		int i = nodeName.indexOf(':');
+		return i < 0 ? null : nodeName.substring(0, i);
 	}
 
-	static class JSPDialogContentAssistProcessor extends JspContentAssistProcessor {
-		public String getTagPrefix() {
-			return super.getTagPrefix();
-		}
-		public String getTagUri() {
-			return super.getTagUri();
-		}
-		protected String[] getParentTags(String attr) {
-			String[] result = super.getParentTags(true);
-			String[] result1 = new String[result.length + 1];
-			System.arraycopy(result, 0, result1, 0, result.length);
-			result1[result.length] = attr;
-			return result1;
-		}
+	protected String[] getParentTags(JspContentAssistProcessor processor) {
+		String[] result = processor.getParentTags(true);
+		String[] result1 = add(result, attributeName);
+		return result1;
+	}
 
+	private String[] add(String[] result, String v) {
+		String[] result1 = new String[result.length + 1];
+		System.arraycopy(result, 0, result1, 0, result.length);
+		result1[result.length] = v;
+		return result1;
 	}
 
 }

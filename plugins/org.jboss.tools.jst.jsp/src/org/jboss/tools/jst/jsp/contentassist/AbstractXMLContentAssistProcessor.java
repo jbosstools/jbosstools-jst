@@ -437,7 +437,7 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	 * 
 	 * @return
 	 */
-	protected String[] getParentTags(boolean includeThisTag) {
+	public String[] getParentTags(boolean includeThisTag) {
 		List<String> parentTags = new ArrayList<String>();
 		
 		IStructuredModel sModel = StructuredModelManager
@@ -542,7 +542,7 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	 * Returns URI for the current/parent tag
 	 * @return
 	 */
-	protected String getTagPrefix() {
+	public String getTagPrefix() {
 		IStructuredModel sModel = StructuredModelManager
 									.getModelManager()
 									.getExistingModelForRead(getDocument());
@@ -585,7 +585,7 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	 * Returns URI for the current/parent tag
 	 * @return
 	 */
-	protected String getTagUri() {
+	public String getTagUri() {
 		String nodePrefix = getTagPrefix();
 		return getUri(nodePrefix);
 	}
