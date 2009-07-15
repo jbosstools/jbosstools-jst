@@ -234,7 +234,7 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 	 * @return
 	 */
 	@Override
-	protected IPageContext getContext() {
+	public IPageContext getContext() {
 		return (IPageContext)super.getContext();
 	}
 
@@ -247,7 +247,7 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 	 * @return
 	 */
 	@Override
-	protected String getUri(String prefix) {
+	public String getUri(String prefix) {
 		if (prefix == null || prefix.length() == 0)
 			return null;
 		

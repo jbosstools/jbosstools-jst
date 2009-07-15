@@ -19,6 +19,8 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.Stack;
 
+import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySheetEntry;
 import org.eclipse.ui.views.properties.IPropertySource;
@@ -34,14 +36,23 @@ import org.eclipse.wst.xml.core.internal.contentmodel.CMNamedNodeMap;
 import org.eclipse.wst.xml.core.internal.contentmodel.modelquery.ModelQuery;
 import org.eclipse.wst.xml.core.internal.document.DocumentTypeAdapter;
 import org.eclipse.wst.xml.core.internal.modelquery.ModelQueryUtil;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.ui.internal.XMLUIMessages;
 import org.eclipse.wst.xml.ui.internal.properties.EnumeratedStringPropertyDescriptor;
-import org.jboss.tools.common.kb.AttributeDescriptor;
-import org.jboss.tools.common.kb.TagDescriptor;
+import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
+import org.jboss.tools.jst.jsp.contentassist.FaceletPageContectAssistProcessor;
 import org.jboss.tools.jst.jsp.contentassist.FaceletsHtmlContentAssistProcessor;
+import org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor;
 import org.jboss.tools.jst.jsp.editor.IVisualController;
+import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
+import org.jboss.tools.jst.web.kb.IPageContext;
+import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.PageProcessor;
+import org.jboss.tools.jst.web.kb.KbQuery.Type;
+import org.jboss.tools.jst.web.kb.taglib.IAttribute;
+import org.jboss.tools.jst.web.kb.taglib.IComponent;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
@@ -64,6 +75,9 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 	private boolean fCaseSensitive = true;
 	private IPropertyDescriptor[] fDescriptors = null;
 	private ValueHelper valueHelper = new ValueHelper();
+	IPageContext pageContext;
+	int offset = 0;
+	KbQuery kbQuery;
 	private Set attributeNames = new HashSet();
 
 	public JSPPropertySourceAdapter(INodeNotifier target) {
@@ -87,8 +101,24 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 			if (adapter != null)
 				fCaseSensitive = adapter.getTagNameCase() == DocumentTypeAdapter.STRICT_CASE;
 		}
+		offset = ((IDOMElement)fNode).getStartOffset() + ("" + fNode.getNodeType()).length();
+		JspContentAssistProcessor processor = valueHelper.isFacetets() ? new FaceletPageContectAssistProcessor() : new JspContentAssistProcessor();
+        processor.createContext(getTextViewer(), offset);
+        pageContext = processor.getContext();
+		kbQuery = createKbQueryForNode(processor, Type.ATTRIBUTE_NAME, "zzzzzz", "zzzzzz", offset);
 	}
 	
+	//TODO move to helper
+	protected ITextViewer getTextViewer() {
+		IEditorPart editor = ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		if(editor == null) return null;
+		if (editor instanceof JSPMultiPageEditor) {
+			JSPMultiPageEditor jsp = (JSPMultiPageEditor)editor;
+			return jsp.getSourceEditor().getTextViewer();
+		}
+		return null;
+	}
+
 	public void setSorter(AttributeSorter sorter) {
 		this.sorter = sorter;
 	}
@@ -144,7 +174,36 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 		List<String> names = new ArrayList<String>();
 		List<String> namesLow = new ArrayList<String>();
 		IPropertyDescriptor descriptor;
-		
+
+		IComponent[] components = PageProcessor.getInstance().getComponents(kbQuery, pageContext);
+
+		if(components != null && components.length != 0) {
+			for (IComponent component: components) {
+			IAttribute[] list = component.getAttributes();
+			for (IAttribute d: list) {
+				descriptor = null;
+				String attrName = d.getName();
+				if (fCaseSensitive) {
+					if (names.contains(attrName)) continue;
+				} else {
+					if (namesLow.contains(attrName.toLowerCase())) continue;
+				}
+				if(valueHelper.isAvailable(getQuery(attrName))
+						|| attrName.equals("style")
+						|| attrName.equals("class")) {
+					descriptor = createJSPPropertyDescriptor(d, attrName, false);
+				} else {
+					descriptor = createTextPropertyDescriptor(attrName, CATEGORY_ATTRIBUTES, 0);
+				}
+				if (descriptor != null) {
+					names.add(attrName);
+					namesLow.add(attrName.toLowerCase());
+					descriptorList.add(descriptor);
+				}
+			}
+			}
+		}
+/*
 		TagDescriptor td = valueHelper.getTagDescriptor("/" + fNode.getNodeName());
 		if(td != null) {
 			List list = td.getAttributesDescriptors();
@@ -171,7 +230,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 				}
 			}
 		}
-
+*/
 		// add descriptors for existing attributes
 		NamedNodeMap attributes = fNode.getAttributes();
 		if (attributes != null) {
@@ -202,8 +261,10 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 				if (attrDecl != null) {
 					descriptor = createPropertyDescriptor(attrDecl);
 					if(descriptor instanceof TextPropertyDescriptor) {
-						if(valueHelper.isAvailable(getQuery(attr))) {
-							descriptor = createJSPPropertyDescriptor(getQuery(attr), attr.getName(), false);
+						IAttribute a = findAttribute(components, attrName);
+						if(valueHelper.isAvailable(getQuery(attr)) && a != null) {
+							descriptor = createJSPPropertyDescriptor(a, attr.getName(), false);
+//							descriptor = createJSPPropertyDescriptor(getQuery(attr), attr.getName(), false);
 						}
 					}
 					if (descriptor != null) {
@@ -212,8 +273,10 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 					}
 				}
 				else {
-					if(valueHelper.isAvailable(getQuery(attr))) {
-						descriptor = createJSPPropertyDescriptor(getQuery(attr), attr.getName(), false);
+					IAttribute a = findAttribute(components, attrName);
+					if(valueHelper.isAvailable(getQuery(attr)) && a != null) {
+						descriptor = createJSPPropertyDescriptor(a, attr.getName(), false);
+//						descriptor = createJSPPropertyDescriptor(getQuery(attr), attr.getName(), false);
 					} else {
 						descriptor = createDefaultPropertyDescriptor(attr.getName(), false);
 					}
@@ -239,8 +302,10 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 				}
 				IPropertyDescriptor holdDescriptor = createPropertyDescriptor(attrDecl);
 				if(holdDescriptor instanceof TextPropertyDescriptor) {
-					if(valueHelper.isAvailable(query)) {
-						holdDescriptor = createJSPPropertyDescriptor(query, attrDecl.getAttrName(), false);
+					IAttribute a = findAttribute(components, attrDecl.getAttrName());
+					if(valueHelper.isAvailable(query) && a != null) {
+						holdDescriptor = createJSPPropertyDescriptor(a, attrDecl.getAttrName(), false);
+//						holdDescriptor = createJSPPropertyDescriptor(query, attrDecl.getAttrName(), false);
 					}
 				}
 				if (holdDescriptor != null) {
@@ -254,6 +319,30 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 			descriptors[i] = (IPropertyDescriptor) descriptorList.get(i);
 		return descriptors;
 	}
+
+	protected KbQuery createKbQueryForNode(JspContentAssistProcessor processor, Type type, String query, String stringQuery, int pos) {
+		KbQuery kbQuery = new KbQuery();
+
+		String[] parentTags = processor.getParentTags(false);
+//		parentTags = add(parentTags, nodeName);
+		kbQuery.setPrefix(getPrefix());
+		kbQuery.setUri(processor.getUri(getPrefix()));
+		kbQuery.setParentTags(parentTags);
+		kbQuery.setParent(fNode.getNodeName());
+		kbQuery.setMask(true); 
+		kbQuery.setType(type);
+		kbQuery.setOffset(pos);
+		kbQuery.setValue(query); 
+		kbQuery.setStringQuery(stringQuery);
+		
+		return kbQuery;
+	}
+
+	private String getPrefix() {
+		int i = fNode.getNodeName().indexOf(':');
+		return i < 0 ? null : fNode.getNodeName().substring(0, i);
+	}
+
 
 	private String getCategory(CMAttributeDeclaration attrDecl) {
 		if (attrDecl != null) {
@@ -274,7 +363,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 		}
 		return null;
 	}
-
+/*
 	private IPropertyDescriptor createJSPPropertyDescriptor(String query, String attributeName, boolean hideOnFilter) {
 		AttributeDescriptor d = valueHelper.getAttributeDescriptor(query);
 		return createJSPPropertyDescriptor(d, attributeName, hideOnFilter);
@@ -291,6 +380,24 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 		context.setProperty("nodeName", fNode.getNodeName());
 		context.setProperty("attributeName", attributeName);
 		context.put("valueHelper", valueHelper);
+		JSPPropertyDescriptor descriptor = new JSPPropertyDescriptor(context, attributeName, attributeName);
+		descriptor.setCategory(getCategory(null));
+		descriptor.setDescription(attributeName);
+		return descriptor;
+	}
+*/
+	private IPropertyDescriptor createJSPPropertyDescriptor(IAttribute d, String attributeName, boolean hideOnFilter) {
+		if(d != null && sorter != null) {
+			if(d.isRequired()) sorter.setWeight(attributeName, 2);
+			else if(d.isPreferable()) sorter.setWeight(attributeName, 1);
+			else sorter.setWeight(attributeName, 0);
+		}
+		Properties context = new Properties();
+		context.put("node", fNode);
+		context.setProperty("nodeName", fNode.getNodeName());
+		context.setProperty("attributeName", attributeName);
+		context.put("valueHelper", valueHelper);
+		context.put("pageContext", pageContext);
 		JSPPropertyDescriptor descriptor = new JSPPropertyDescriptor(context, attributeName, attributeName);
 		descriptor.setCategory(getCategory(null));
 		descriptor.setDescription(attributeName);
@@ -331,8 +438,19 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 		return changed;		
 	}
 
+	private IAttribute findAttribute(IComponent[] components, String attrName) {
+		for (IComponent component: components) {
+			IAttribute a = component.getAttribute(attrName);
+			if(a != null) return a;
+		}
+		return null;
+	}
+
 	protected void updatePropertyDescriptors() {
 		if (fDescriptors == null || fDescriptors.length == 0) return;
+
+		IComponent[] components = PageProcessor.getInstance().getComponents(kbQuery, pageContext);
+
 
 		// List of all names encountered in the tag and defined by the element
 		List<String> declaredNames = new ArrayList<String>();
@@ -374,8 +492,10 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 						else if (validValues != null && validValues.length > 0) {
 							fDescriptors[j] = createPropertyDescriptor(attrDecl);
 							if(fDescriptors[j] instanceof TextPropertyDescriptor) {
-								if(valueHelper.isAvailable(query)) {
-									fDescriptors[j] = createJSPPropertyDescriptor(query, attrDecl.getAttrName(), false);
+								IAttribute a = findAttribute(components, attrName);
+								if(valueHelper.isAvailable(query) && a != null) {
+									fDescriptors[j] = createJSPPropertyDescriptor(a, attrDecl.getAttrName(), false);
+//									fDescriptors[j] = createJSPPropertyDescriptor(query, attrDecl.getAttrName(), false);
 								}
 							}
 						}
@@ -422,8 +542,10 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 					if (!descriptorNames.contains(attrName)) {
 						IPropertyDescriptor descriptor = createPropertyDescriptor(attrDecl);
 						if(descriptor instanceof TextPropertyDescriptor) {
-							if(valueHelper.isAvailable(query)) {
-								descriptor = createJSPPropertyDescriptor(query, attrDecl.getAttrName(), false);
+							IAttribute a = findAttribute(components, attrName);
+							if(valueHelper.isAvailable(query) && a != null) {
+								descriptor = createJSPPropertyDescriptor(a, attrDecl.getAttrName(), false);
+//								descriptor = createJSPPropertyDescriptor(query, attrDecl.getAttrName(), false);
 							}
 						}
 						if (descriptor != null) {
@@ -440,8 +562,10 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 						descriptorNamesLow.add(attrName.toLowerCase());
 						IPropertyDescriptor descriptor = createPropertyDescriptor(attrDecl);
 						if(descriptor instanceof TextPropertyDescriptor) {
-							if(valueHelper.isAvailable(query)) {
-								descriptor = createJSPPropertyDescriptor(query, attrDecl.getAttrName(), false);
+							IAttribute a = findAttribute(components, attrName);
+							if(valueHelper.isAvailable(query) && a != null) {
+								descriptor = createJSPPropertyDescriptor(a, attrDecl.getAttrName(), false);
+//								descriptor = createJSPPropertyDescriptor(query, attrDecl.getAttrName(), false);
 							}
 						}
 						if (descriptor != null) {
@@ -454,6 +578,40 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 			}
 		}
 
+		if(components != null && components.length != 0) {
+			for (int i = 0; i < fDescriptors.length; i++) {
+				if (fDescriptors[i] != null) {
+					String descriptorName = fDescriptors[i].getId().toString();
+					if (components[0].getAttribute(descriptorName) != null && !descriptorNames.contains(descriptorName)) {
+						descriptorNames.add(descriptorName);
+						descriptorNamesLow.add(descriptorName.toLowerCase());
+						descriptors.add(fDescriptors[i]);
+					}
+				}
+			}
+			for (IComponent component: components) {
+			IAttribute[] list = component.getAttributes();
+			for (IAttribute d: list) {
+				String attrName = d.getName();
+				if (fCaseSensitive) {
+					if (descriptorNames.contains(attrName)) continue;
+				} else {
+					boolean exists = descriptorNamesLow.contains(attrName.toLowerCase());
+					if (exists) continue;
+				}
+				descriptorNames.add(attrName);
+				descriptorNamesLow.add(attrName.toLowerCase());
+				IPropertyDescriptor descriptor = null;
+				if(valueHelper.isAvailable(getQuery(attrName))) {
+					descriptor = createJSPPropertyDescriptor(d, attrName, false);
+				} else {
+					descriptor = createTextPropertyDescriptor(attrName, CATEGORY_ATTRIBUTES, 0);
+				}
+				descriptors.add(descriptor);
+			}
+			}
+		}
+/*
 		TagDescriptor td = valueHelper.getTagDescriptor("/" + fNode.getNodeName());
 		if(td != null) {
 			for (int i = 0; i < fDescriptors.length; i++) {
@@ -487,7 +645,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 				descriptors.add(descriptor);
 			}
 		}
-
+*/
 		// Add descriptors for existing attributes that don't already have one
 		if (attributes != null) {
 			for (int i = 0; i < attributes.getLength(); i++) {
@@ -580,8 +738,10 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 	}
 	
 	boolean isRequiredAttribute(String attributeName) {
-		String query = getQuery(attributeName);
-		AttributeDescriptor d = valueHelper.getAttributeDescriptor(query);
+		IComponent[] components = PageProcessor.getInstance().getComponents(kbQuery, pageContext);
+		IAttribute d = findAttribute(components, attributeName);
+//		String query = getQuery(attributeName);
+//		AttributeDescriptor d = valueHelper.getAttributeDescriptor(query);
 		if(d == null) return false; // do not remove unknown attribute? Remove it!
 		return d.isRequired();
 	}

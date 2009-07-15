@@ -71,8 +71,9 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
         if(valueHelper == null) {
         	valueHelper = new ValueHelper();
         }
+//        pageContext = (IPageContext)context.get("pageContext");
         processor = valueHelper.isFacetets() ? new FaceletPageContectAssistProcessor() : new JspContentAssistProcessor();
-        processor.computeCompletionProposals(getTextViewer(), offset);
+        processor.createContext(getTextViewer(), offset);
         pageContext = processor.getContext();
         context.put("pageContext", pageContext);
         context.put("kbQuery", createKbQuery(Type.ATTRIBUTE_VALUE, "", "", offset, false));
@@ -189,6 +190,7 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 		return elrfm.getResolvers(resource);
 	}
 
+	//TODO move to helper
 	protected ITextViewer getTextViewer() {
 		IEditorPart editor = ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		if(editor == null) return null;

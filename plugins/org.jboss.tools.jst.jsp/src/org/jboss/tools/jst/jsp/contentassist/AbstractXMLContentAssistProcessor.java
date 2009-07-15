@@ -77,6 +77,17 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 		return super.computeCompletionProposals(viewer, offset);
 	}
 
+	/**
+	 * Helper method to reuse functionality for getting context when no proposals are needed.
+	 * @param viewer
+	 * @param offset
+	 */
+	public void createContext(ITextViewer viewer, int offset) {
+		this.fDocument = (viewer == null ? null : viewer.getDocument());
+		this.fDocumentPosition = offset;
+		this.fContext = createContext();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.wst.xml.ui.internal.contentassist.AbstractContentAssistProcessor#computeContextInformation(org.eclipse.jface.text.ITextViewer, int)

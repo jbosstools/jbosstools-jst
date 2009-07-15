@@ -30,6 +30,10 @@ import org.jboss.tools.jst.jsp.drop.treeviewer.model.ModelElement;
 import org.jboss.tools.jst.jsp.drop.treeviewer.ui.AttributeValueContentProvider;
 import org.jboss.tools.jst.jsp.drop.treeviewer.ui.AttributeValueLabelProvider;
 import org.jboss.tools.jst.jsp.drop.treeviewer.ui.AttributeValueSorter;
+import org.jboss.tools.jst.web.kb.IPageContext;
+import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.PageProcessor;
+import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 
 /**
  * @author Kabanovich
@@ -76,6 +80,11 @@ class JSPTreeDialogView extends AbstractQueryWizardView {
 
 		String query = context.getProperty("query");
 		//ValueHelper valueHelper = (ValueHelper)context.get("valueHelper");
+		IPageContext pageContext = (IPageContext)context.get("pageContext");
+		KbQuery kbQuery = (KbQuery)context.get("kbQuery");
+		IAttribute[] attrs = PageProcessor.getInstance().getAttributes(kbQuery, pageContext);
+		
+		
 		ValueHelper valueHelper = new ValueHelper();
 		root = valueHelper.getInitalInput(query);
 		treeViewer.setInput(root);

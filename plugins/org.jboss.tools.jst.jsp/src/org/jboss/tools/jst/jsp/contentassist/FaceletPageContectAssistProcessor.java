@@ -169,7 +169,7 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 	 * @see org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor#getContext()
 	 */
 	@Override
-	protected IFaceletPageContext getContext() {
+	public IFaceletPageContext getContext() {
 		return (IFaceletPageContext)super.getContext();
 	}
 
