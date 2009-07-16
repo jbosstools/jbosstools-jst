@@ -118,7 +118,7 @@ public class PageProcessor implements IProposalProcessor {
 		return getComponents(query, context, false);
 	}
 
-	private IComponent[] getComponents(KbQuery query, IPageContext context, boolean includeComponentExtensions) {
+	public IComponent[] getComponents(KbQuery query, IPageContext context, boolean includeComponentExtensions) {
 		ArrayList<IComponent> components = new ArrayList<IComponent>();
 		ITagLibrary[] libs =  context.getLibraries();
 		for (int i = 0; i < libs.length; i++) {
