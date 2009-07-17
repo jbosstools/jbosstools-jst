@@ -24,8 +24,8 @@ public class WTPKbJsfValuesResource extends WTPKbdBeanPropertyResource {
 		"sessionScope", "applicationScope",
 		"facesContext", "view"};
 
-	public WTPKbJsfValuesResource(IEditorInput editorInput, WTPTextJspKbConnector connector) {
-		super(editorInput, connector);
+	public WTPKbJsfValuesResource(IEditorInput editorInput) {
+		super(editorInput);
 	}
 
 	public String getType() {

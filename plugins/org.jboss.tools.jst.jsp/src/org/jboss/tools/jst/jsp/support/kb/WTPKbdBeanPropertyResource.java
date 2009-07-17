@@ -28,7 +28,6 @@ import org.jboss.tools.common.el.core.model.ELModel;
 import org.jboss.tools.common.el.core.model.ELPropertyInvocation;
 import org.jboss.tools.common.el.core.model.ELUtil;
 import org.jboss.tools.common.el.core.parser.ELParser;
-import org.jboss.tools.common.el.core.parser.ELParserFactory;
 import org.jboss.tools.common.el.core.parser.ELParserUtil;
 import org.jboss.tools.common.kb.KbDinamicResource;
 import org.jboss.tools.common.kb.KbProposal;
@@ -46,7 +45,7 @@ public class WTPKbdBeanPropertyResource extends WTPKbAbstractModelResource {
 	public Properties type = new Properties();
 	protected String query;
 
-	public WTPKbdBeanPropertyResource(IEditorInput editorInput, WTPTextJspKbConnector connector) {
+	public WTPKbdBeanPropertyResource(IEditorInput editorInput) {
 		super(editorInput);
 	}
 

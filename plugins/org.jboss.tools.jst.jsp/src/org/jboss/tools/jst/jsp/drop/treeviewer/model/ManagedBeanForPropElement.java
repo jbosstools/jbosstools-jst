@@ -54,7 +54,7 @@ public class ManagedBeanForPropElement extends ModelElement implements IAttribut
 		if(managedBeanPropertyElements==null) {
 			ManagedBeansPropertiesResourceElement parentResource = getResource();
 			String typeValue = null;
-			String[] typeValues = parentResource.getParams().getParamsValues("type"); //$NON-NLS-1$
+			String[] typeValues = parentResource.getParamsValues("type"); //$NON-NLS-1$
 			if(typeValues.length>0) {
 				typeValue = typeValues[0];
 			}

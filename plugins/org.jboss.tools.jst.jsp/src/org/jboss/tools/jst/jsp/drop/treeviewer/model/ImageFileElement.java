@@ -29,7 +29,7 @@ public class ImageFileElement extends ModelElement implements IAttributeValue {
 		while(p != null && !p.getFullName().equals("/")) p = p.getParent(); //$NON-NLS-1$
 		if(p instanceof ImageFileResourceElement) {
 			ImageFileResourceElement r = (ImageFileResourceElement)p;
-			path = r.wtpKbResource.encodePath(path, r.getQuery(), r.getValueHelper());
+			path = r.wtpKbResource.encodePath(path, r.getQuery().getLastParentTag(), r.getValueHelper());
 		}		
 		return path;
 	}

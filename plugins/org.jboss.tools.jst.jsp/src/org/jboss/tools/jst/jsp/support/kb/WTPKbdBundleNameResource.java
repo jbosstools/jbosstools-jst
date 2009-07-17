@@ -31,7 +31,7 @@ import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
 public class WTPKbdBundleNameResource extends WTPKbAbstractModelResource {
 	public static String SUPPORTED_ID = WebPromptingProvider.JSF_BUNDLES;
 
-	public WTPKbdBundleNameResource(IEditorInput editorInput, WTPTextJspKbConnector connector) {
+	public WTPKbdBundleNameResource(IEditorInput editorInput) {
 		super(editorInput);
 	}
 	

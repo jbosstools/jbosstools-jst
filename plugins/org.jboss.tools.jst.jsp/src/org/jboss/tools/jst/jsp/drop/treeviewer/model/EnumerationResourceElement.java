@@ -10,7 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.drop.treeviewer.model;
 
-import org.jboss.tools.common.kb.ParamList;
+import org.jboss.tools.jst.web.kb.internal.taglib.CustomProposalType.Param;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 
 /**
@@ -33,10 +33,10 @@ public class EnumerationResourceElement extends AttributeValueResource {
 	 */
 	public ModelElement[] getChildren() {
 		if(enumerationElements==null) {
-			ParamList params = getParams();
-			enumerationElements = new EnumerationElement[params.getSize()];
+			Param[] params = getParams();
+			enumerationElements = new EnumerationElement[params.length];
 			for(int i=0; i<enumerationElements.length; i++) {
-				String value = params.getParam(i).getValue();
+				String value = params[i].getValue();
 				enumerationElements[i] = new EnumerationElement(value, this);
 			}
 		}

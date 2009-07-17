@@ -54,9 +54,9 @@ public class ManagedBeanForMdElement extends ModelElement implements IAttributeV
 			ManagedBeanMethodResourceElement parentResource = getResource();
 
 			Properties types = new Properties();
-			String[] typeValues = parentResource.getParams().getParamsValues("paramType"); //$NON-NLS-1$
+			String[] typeValues = parentResource.getParamsValues("paramType"); //$NON-NLS-1$
 			types.put(IWebPromptingProvider.PARAMETER_TYPES, typeValues);
-			String[] returnTypes = parentResource.getParams().getParamsValues("returnType"); //$NON-NLS-1$
+			String[] returnTypes = parentResource.getParamsValues("returnType"); //$NON-NLS-1$
 			if(returnTypes.length>0) {
 				types.put(IWebPromptingProvider.RETURN_TYPE, returnTypes[0]);
 			} else {

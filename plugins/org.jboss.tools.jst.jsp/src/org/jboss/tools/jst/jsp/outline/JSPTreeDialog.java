@@ -86,7 +86,7 @@ class JSPTreeDialogView extends AbstractQueryWizardView {
 		
 		
 		ValueHelper valueHelper = new ValueHelper();
-		root = valueHelper.getInitalInput(query);
+		root = valueHelper.getInitalInput(pageContext, kbQuery);
 		treeViewer.setInput(root);
 		treeViewer.setSorter(new AttributeValueSorter());
 		getCommandBar().setEnabled(OK, false);

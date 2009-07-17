@@ -17,7 +17,8 @@ import java.util.TreeMap;
 
 import org.eclipse.ui.IEditorInput;
 
-import org.jboss.tools.jst.jsp.support.kb.WTPTextJspKbConnector;
+import org.jboss.tools.jst.web.kb.IPageContext;
+import org.jboss.tools.jst.web.kb.IResourceBundle;
 import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
 
 /**
@@ -28,17 +29,17 @@ public class BundlesPropertiesResourceElement extends XModelAttributeValueResour
 	public static String SUPPORTED_ID = WebPromptingProvider.JSF_BUNDLES;
 
 	private BundleAliasElement[] bundleAliasElements;
-	private WTPTextJspKbConnector wtpTextJspKbConnector;
+	private IPageContext pageContext;
 	private Map bundles;
 
-	public BundlesPropertiesResourceElement(IEditorInput editorInput, WTPTextJspKbConnector wtpTextJspKbConnector, ModelElement parent) {
+	public BundlesPropertiesResourceElement(IEditorInput editorInput, IPageContext pageContext, ModelElement parent) {
 		super(editorInput, parent);
-		this.wtpTextJspKbConnector = wtpTextJspKbConnector;
+		this.pageContext = pageContext;
 	}
 
-	public BundlesPropertiesResourceElement(IEditorInput editorInput, WTPTextJspKbConnector wtpTextJspKbConnector, String name, ModelElement parent) {
+	public BundlesPropertiesResourceElement(IEditorInput editorInput, IPageContext pageContext, String name, ModelElement parent) {
 		super(editorInput, name, parent);
-		this.wtpTextJspKbConnector = wtpTextJspKbConnector;
+		this.pageContext = pageContext;
 	}
 
 	/**
@@ -56,12 +57,10 @@ public class BundlesPropertiesResourceElement extends XModelAttributeValueResour
 		if(registeredBunbles != null && registeredBunbles.size() > 1 && (registeredBunbles.get(0) instanceof Map)) {
 			bundles.putAll((Map)registeredBunbles.get(0));
 		}
-		Map bundles2 = wtpTextJspKbConnector.getDeclaredBundles();
-		Iterator it2 = bundles2.keySet().iterator();
-		while(it2.hasNext()) {
-			String alias = it2.next().toString();
-			WTPTextJspKbConnector.LoadBundleInfo info = (WTPTextJspKbConnector.LoadBundleInfo)bundles2.get(alias);
-			bundles.put(alias, info.getBaseName());
+		IResourceBundle[] bs = pageContext.getResourceBundles();
+		for (IResourceBundle b: bs) {
+			String alias = b.getVar();
+			bundles.put(alias, b.getBasename());
 		}
 		bundleAliasElements = new BundleAliasElement[bundles.size()];
 		

@@ -73,9 +73,8 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
         	valueHelper = new ValueHelper();
         }
 //        pageContext = (IPageContext)context.get("pageContext");
-        processor = valueHelper.isFacetets() ? new FaceletPageContectAssistProcessor() : new JspContentAssistProcessor();
-        processor.createContext(getTextViewer(), offset);
-        pageContext = processor.getContext();
+        processor = valueHelper.createContentAssistProcessor();
+        pageContext = valueHelper.createPageContext(processor, offset);
         context.put("pageContext", pageContext); //$NON-NLS-1$
         context.put("kbQuery", createKbQuery(Type.ATTRIBUTE_VALUE, "", "", offset, false)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
@@ -189,17 +188,6 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 	protected ELResolver[] getELResolvers(IResource resource) {
 		ELResolverFactoryManager elrfm = ELResolverFactoryManager.getInstance();
 		return elrfm.getResolvers(resource);
-	}
-
-	//TODO move to helper
-	protected ITextViewer getTextViewer() {
-		IEditorPart editor = ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		if(editor == null) return null;
-		if (editor instanceof JSPMultiPageEditor) {
-			JSPMultiPageEditor jsp = (JSPMultiPageEditor)editor;
-			return jsp.getSourceEditor().getTextViewer();
-		}
-		return null;
 	}
 
 	protected KbQuery createKbQuery(Type type, String query, String stringQuery, int pos, boolean addAttr) {

@@ -28,7 +28,7 @@ import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
 public class WTPKbdTaglibResource extends WTPKbAbstractModelResource {
 	String SUPPORTED_ID = WebPromptingProvider.JSF_GET_TAGLIBS;
 	
-	public WTPKbdTaglibResource(IEditorInput editorInput, WTPTextJspKbConnector connector) {
+	public WTPKbdTaglibResource(IEditorInput editorInput) {
 		super(editorInput);
 	}
 

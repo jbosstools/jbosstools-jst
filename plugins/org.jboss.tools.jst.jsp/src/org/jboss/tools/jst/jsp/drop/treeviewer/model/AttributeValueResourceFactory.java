@@ -14,8 +14,8 @@ import java.text.MessageFormat;
 import org.eclipse.ui.IEditorInput;
 
 import org.jboss.tools.common.kb.KbDinamicResource;
+import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
-import org.jboss.tools.jst.jsp.support.kb.WTPTextJspKbConnector;
 
 /**
  * @author Igels
@@ -31,11 +31,11 @@ public class AttributeValueResourceFactory {
 		return INSTANCE;
 	}
 
-	public AttributeValueResource createResource(IEditorInput editorInput, WTPTextJspKbConnector wtpTextJspKbConnector, ModelElement root, String type) {
-		return createResource(editorInput, wtpTextJspKbConnector, null, root, type);
+	public AttributeValueResource createResource(IEditorInput editorInput, IPageContext pageContext, ModelElement root, String type) {
+		return createResource(editorInput, pageContext, null, root, type);
 	}
 
-	public AttributeValueResource createResource(IEditorInput editorInput, WTPTextJspKbConnector wtpTextJspKbConnector, String name, ModelElement root, String type) {
+	public AttributeValueResource createResource(IEditorInput editorInput, IPageContext pageContext, String name, ModelElement root, String type) {
 		if(KbDinamicResource.BEAN_PROPERTY_TYPE.equals(type)) {
 			return new ManagedBeansPropertiesResourceElement(editorInput, name, root);
 		} else if(KbDinamicResource.BEAN_METHOD_BY_SYGNATURE_TYPE.equals(type)) {
@@ -43,7 +43,7 @@ public class AttributeValueResourceFactory {
 		} else if(KbDinamicResource.BUNDLE_NAME_TYPE.equals(type)) {
 			return new BundlesNameResourceElement(editorInput, name, root);
 		} else if(KbDinamicResource.BUNDLE_PROPERTY_TYPE.equals(type)) {
-			return new BundlesPropertiesResourceElement(editorInput, wtpTextJspKbConnector, name, root);
+			return new BundlesPropertiesResourceElement(editorInput, pageContext, name, root);
 		} else if(KbDinamicResource.VIEW_ACTIONS_TYPE.equals(type)) {
 			return new ViewActionsResorceElement(editorInput, name, root);
 		} else if(KbDinamicResource.ENUMERATION_TYPE.equals(type)) {

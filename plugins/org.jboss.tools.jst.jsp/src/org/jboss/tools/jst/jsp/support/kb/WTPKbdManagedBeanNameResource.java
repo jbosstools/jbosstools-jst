@@ -17,8 +17,8 @@ import org.jboss.tools.jst.web.project.list.IWebPromptingProvider;
 
 public class WTPKbdManagedBeanNameResource extends WTPKbdBeanPropertyResource {
 
-	public WTPKbdManagedBeanNameResource(IEditorInput editorInput, WTPTextJspKbConnector connector) {
-		super(editorInput, connector);
+	public WTPKbdManagedBeanNameResource(IEditorInput editorInput) {
+		super(editorInput);
 	}
 
 	private static String[][] MANAGED_BEAN_NAME_WRAPPERS = {{"", ""}}; //$NON-NLS-1$ //$NON-NLS-2$

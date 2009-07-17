@@ -78,7 +78,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 	private ValueHelper valueHelper = new ValueHelper();
 	IPageContext pageContext;
 	int offset = 0;
-	KbQuery kbQuery;
+	KbQuery kbQuery, kbQueryAttr;
 	private Set attributeNames = new HashSet();
 
 	public JSPPropertySourceAdapter(INodeNotifier target) {
@@ -106,7 +106,8 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 		JspContentAssistProcessor processor = valueHelper.isFacetets() ? new FaceletPageContectAssistProcessor() : new JspContentAssistProcessor();
         processor.createContext(getTextViewer(), offset);
         pageContext = processor.getContext();
-		kbQuery = createKbQueryForNode(processor, Type.ATTRIBUTE_NAME, "zzzzzz", "zzzzzz", offset); //$NON-NLS-1$ //$NON-NLS-2$
+		kbQuery = createKbQuery(processor);
+		kbQueryAttr = createKbQuery(processor);
 	}
 	
 	//TODO move to helper
@@ -146,21 +147,24 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 		return fDescriptors;
 	}
 	
-	private String getQuery(Attr attr) {
-		return getQuery(attr.getName());
-	}
+//	private String getQuery(Attr attr) {
+//		return getQuery(attr.getName());
+//	}
 
-	private String getQuery(String attributeName) {
-		String tagName = fNode.getNodeName();
-		String jsfTagName = null;
-		if(fNode instanceof Element) {
-			jsfTagName = valueHelper.getFaceletJsfTag((Element)fNode);
-		}
-		if(jsfTagName != null) tagName = jsfTagName;
-		if(jsfTagName == null && valueHelper.isFacetets() && tagName.indexOf(':') < 0 && !FaceletsHtmlContentAssistProcessor.JSFCAttributeName.equals(attributeName)) {
-			tagName = FaceletsHtmlContentAssistProcessor.faceletHtmlPrefixStart + tagName;
-		}
-		return "/" + tagName + "@" + attributeName; //$NON-NLS-1$ //$NON-NLS-2$
+	private KbQuery getQuery(String attributeName) {
+//		String tagName = fNode.getNodeName();
+//		String jsfTagName = null;
+//		if(fNode instanceof Element) {
+//			jsfTagName = valueHelper.getFaceletJsfTag((Element)fNode);
+//		}
+//		if(jsfTagName != null) tagName = jsfTagName;
+//		if(jsfTagName == null && valueHelper.isFacetets() && tagName.indexOf(':') < 0 && !FaceletsHtmlContentAssistProcessor.JSFCAttributeName.equals(attributeName)) {
+//			tagName = FaceletsHtmlContentAssistProcessor.faceletHtmlPrefixStart + tagName;
+//		}
+//		return "/" + tagName + "@" + attributeName;
+		kbQueryAttr.setValue(attributeName);
+		kbQueryAttr.setStringQuery(attributeName);
+		return kbQueryAttr;
 	}	
 
 	private IPropertyDescriptor[] createPropertyDescriptors() {
@@ -186,9 +190,9 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 				} else {
 					if (namesLow.contains(attrName.toLowerCase())) continue;
 				}
-				if(valueHelper.isAvailable(getQuery(attrName))
-						|| attrName.equals("style") //$NON-NLS-1$
-						|| attrName.equals("class")) { //$NON-NLS-1$
+				if(valueHelper.isAvailable(pageContext, getQuery(attrName))
+						|| attrName.equals("style")
+						|| attrName.equals("class")) {
 					descriptor = createJSPPropertyDescriptor(d, attrName, false);
 				} else {
 					System.out.println(attrName);
@@ -201,6 +205,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 				}
 			}
 /*
+		TagDescriptor td = valueHelper.getTagDescriptor("/" + fNode.getNodeName());
 		if(td != null) {
 			List list = td.getAttributesDescriptors();
 			for (int i = 0; i < list.size(); i++) {
@@ -213,8 +218,8 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 					if (namesLow.contains(attrName.toLowerCase())) continue;
 				}
 				if(valueHelper.isAvailable(getQuery(attrName))
-						|| attrName.equals("style") //$NON-NLS-1$
-						|| attrName.equals("class")) { //$NON-NLS-1$
+						|| attrName.equals("style")
+						|| attrName.equals("class")) {
 					descriptor = createJSPPropertyDescriptor(d, attrName, false);
 				} else {
 					descriptor = createTextPropertyDescriptor(attrName, CATEGORY_ATTRIBUTES, 0);
@@ -258,7 +263,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 					descriptor = createPropertyDescriptor(attrDecl);
 					if(descriptor instanceof TextPropertyDescriptor) {
 						IAttribute a = as.get(attrName);
-						if(valueHelper.isAvailable(getQuery(attr)) && a != null) {
+						if(valueHelper.isAvailable(pageContext, getQuery(attr.getName())) && a != null) {
 							descriptor = createJSPPropertyDescriptor(a, attr.getName(), false);
 //							descriptor = createJSPPropertyDescriptor(getQuery(attr), attr.getName(), false);
 						}
@@ -270,7 +275,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 				}
 				else {
 					IAttribute a = as.get(attrName);
-					if(valueHelper.isAvailable(getQuery(attr)) && a != null) {
+					if(valueHelper.isAvailable(pageContext, getQuery(attr.getName())) && a != null) {
 						descriptor = createJSPPropertyDescriptor(a, attr.getName(), false);
 //						descriptor = createJSPPropertyDescriptor(getQuery(attr), attr.getName(), false);
 					} else {
@@ -291,7 +296,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 			for (int i = 0; i < attrMap.getLength(); i++) {
 				CMAttributeDeclaration attrDecl = null;
 				attrDecl = (CMAttributeDeclaration) attrMap.item(i);
-				String query = getQuery(attrDecl.getAttrName());
+				KbQuery query = getQuery(attrDecl.getAttrName());
 				if (names.contains(attrDecl.getAttrName())) continue;
 				if(!fCaseSensitive && namesLow.contains(attrDecl.getAttrName().toLowerCase())) {
 					continue;
@@ -299,7 +304,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 				IPropertyDescriptor holdDescriptor = createPropertyDescriptor(attrDecl);
 				if(holdDescriptor instanceof TextPropertyDescriptor) {
 					IAttribute a = as.get(attrDecl.getAttrName());
-					if(valueHelper.isAvailable(query) && a != null) {
+					if(valueHelper.isAvailable(pageContext, query) && a != null) {
 						holdDescriptor = createJSPPropertyDescriptor(a, attrDecl.getAttrName(), false);
 //						holdDescriptor = createJSPPropertyDescriptor(query, attrDecl.getAttrName(), false);
 					}
@@ -316,7 +321,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 		return descriptors;
 	}
 
-	protected KbQuery createKbQueryForNode(JspContentAssistProcessor processor, Type type, String query, String stringQuery, int pos) {
+	protected KbQuery createKbQuery(JspContentAssistProcessor processor) {
 		KbQuery kbQuery = new KbQuery();
 
 		String[] parentTags = processor.getParentTags(false);
@@ -325,11 +330,11 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 		kbQuery.setUri(processor.getUri(getPrefix()));
 		kbQuery.setParentTags(parentTags);
 		kbQuery.setParent(fNode.getNodeName());
-		kbQuery.setMask(true); 
-		kbQuery.setType(type);
-		kbQuery.setOffset(pos);
-		kbQuery.setValue(query); 
-		kbQuery.setStringQuery(stringQuery);
+		kbQuery.setMask(false); 
+		kbQuery.setType(Type.ATTRIBUTE_NAME);
+		kbQuery.setOffset(offset);
+		kbQuery.setValue(""); 
+		kbQuery.setStringQuery("");
 		
 		return kbQuery;
 	}
@@ -348,8 +353,8 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 
 	private String getCategory(CMAttributeDeclaration attrDecl) {
 		if (attrDecl != null) {
-			if (attrDecl.supports("category")) { //$NON-NLS-1$
-				return (String) attrDecl.getProperty("category"); //$NON-NLS-1$
+			if (attrDecl.supports("category")) {
+				return (String) attrDecl.getProperty("category");
 			}
 		}
 		return CATEGORY_ATTRIBUTES;
@@ -378,10 +383,10 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 			else sorter.setWeight(attributeName, 0);
 		}
 		Properties context = new Properties();
-		context.put("node", fNode); //$NON-NLS-1$
-		context.setProperty("nodeName", fNode.getNodeName()); //$NON-NLS-1$
-		context.setProperty("attributeName", attributeName); //$NON-NLS-1$
-		context.put("valueHelper", valueHelper); //$NON-NLS-1$
+		context.put("node", fNode);
+		context.setProperty("nodeName", fNode.getNodeName());
+		context.setProperty("attributeName", attributeName);
+		context.put("valueHelper", valueHelper);
 		JSPPropertyDescriptor descriptor = new JSPPropertyDescriptor(context, attributeName, attributeName);
 		descriptor.setCategory(getCategory(null));
 		descriptor.setDescription(attributeName);
@@ -395,11 +400,11 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 			else sorter.setWeight(attributeName, 0);
 		}
 		Properties context = new Properties();
-		context.put("node", fNode); //$NON-NLS-1$
-		context.setProperty("nodeName", fNode.getNodeName()); //$NON-NLS-1$
-		context.setProperty("attributeName", attributeName); //$NON-NLS-1$
-		context.put("valueHelper", valueHelper); //$NON-NLS-1$
-		context.put("pageContext", pageContext); //$NON-NLS-1$
+		context.put("node", fNode);
+		context.setProperty("nodeName", fNode.getNodeName());
+		context.setProperty("attributeName", attributeName);
+		context.put("valueHelper", valueHelper);
+		context.put("pageContext", pageContext);
 		JSPPropertyDescriptor descriptor = new JSPPropertyDescriptor(context, attributeName, attributeName);
 		descriptor.setCategory(getCategory(null));
 		descriptor.setDescription(attributeName);
@@ -468,7 +473,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 			for (int i = 0; i < attrMap.getLength(); i++) {
 				attrDecl = (CMAttributeDeclaration) attrMap.item(i);
 				String attrName = attrDecl.getAttrName();
-				String query = getQuery(attrName);
+				KbQuery query = getQuery(attrName);
 				if (!declaredNames.contains(attrName)) {
 					declaredNames.add(attrName);
 				}
@@ -487,7 +492,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 							fDescriptors[j] = createPropertyDescriptor(attrDecl);
 							if(fDescriptors[j] instanceof TextPropertyDescriptor) {
 								IAttribute a = as.get(attrName);
-								if(valueHelper.isAvailable(query) && a != null) {
+								if(valueHelper.isAvailable(pageContext, query) && a != null) {
 									fDescriptors[j] = createJSPPropertyDescriptor(a, attrDecl.getAttrName(), false);
 //									fDescriptors[j] = createJSPPropertyDescriptor(query, attrDecl.getAttrName(), false);
 								}
@@ -531,13 +536,13 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 			for (int i = 0; i < attrMap.getLength(); i++) {
 				attrDecl = (CMAttributeDeclaration) attrMap.item(i);
 				String attrName = attrDecl.getAttrName();
-				String query = getQuery(attrName);
+				KbQuery query = getQuery(attrName);
 				if (fCaseSensitive) {
 					if (!descriptorNames.contains(attrName)) {
 						IPropertyDescriptor descriptor = createPropertyDescriptor(attrDecl);
 						if(descriptor instanceof TextPropertyDescriptor) {
 							IAttribute a = as.get(attrName);
-							if(valueHelper.isAvailable(query) && a != null) {
+							if(valueHelper.isAvailable(pageContext, query) && a != null) {
 								descriptor = createJSPPropertyDescriptor(a, attrDecl.getAttrName(), false);
 //								descriptor = createJSPPropertyDescriptor(query, attrDecl.getAttrName(), false);
 							}
@@ -557,7 +562,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 						IPropertyDescriptor descriptor = createPropertyDescriptor(attrDecl);
 						if(descriptor instanceof TextPropertyDescriptor) {
 							IAttribute a = as.get(attrName);
-							if(valueHelper.isAvailable(query) && a != null) {
+							if(valueHelper.isAvailable(pageContext, query) && a != null) {
 								descriptor = createJSPPropertyDescriptor(a, attrDecl.getAttrName(), false);
 //								descriptor = createJSPPropertyDescriptor(query, attrDecl.getAttrName(), false);
 							}
@@ -593,7 +598,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 				descriptorNames.add(attrName);
 				descriptorNamesLow.add(attrName.toLowerCase());
 				IPropertyDescriptor descriptor = null;
-				if(valueHelper.isAvailable(getQuery(attrName))) {
+				if(valueHelper.isAvailable(pageContext, getQuery(attrName))) {
 					descriptor = createJSPPropertyDescriptor(d, attrName, false);
 				} else {
 					descriptor = createTextPropertyDescriptor(attrName, CATEGORY_ATTRIBUTES, 0);
@@ -601,6 +606,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 				descriptors.add(descriptor);
 			}
 /*
+		TagDescriptor td = valueHelper.getTagDescriptor("/" + fNode.getNodeName());
 		if(td != null) {
 			for (int i = 0; i < fDescriptors.length; i++) {
 				if (fDescriptors[i] != null) {

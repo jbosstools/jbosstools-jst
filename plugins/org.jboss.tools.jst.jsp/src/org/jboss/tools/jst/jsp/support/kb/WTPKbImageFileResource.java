@@ -30,7 +30,6 @@ import org.eclipse.ui.IFileEditorInput;
 import org.jboss.tools.common.kb.KbDinamicResource;
 import org.jboss.tools.common.kb.KbProposal;
 import org.jboss.tools.common.model.XModelObject;
-import org.jboss.tools.common.model.filesystems.FilePathHelper;
 import org.jboss.tools.common.model.filesystems.FileSystemsHelper;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;

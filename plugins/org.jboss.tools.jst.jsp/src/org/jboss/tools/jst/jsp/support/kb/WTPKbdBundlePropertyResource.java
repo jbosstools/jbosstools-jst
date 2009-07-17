@@ -24,25 +24,26 @@ import org.jboss.tools.common.el.core.model.ELInstance;
 import org.jboss.tools.common.el.core.model.ELInvocationExpression;
 import org.jboss.tools.common.el.core.model.ELModel;
 import org.jboss.tools.common.el.core.parser.ELParser;
-import org.jboss.tools.common.el.core.parser.ELParserFactory;
 import org.jboss.tools.common.el.core.parser.ELParserUtil;
 import org.jboss.tools.common.kb.KbDinamicResource;
 import org.jboss.tools.common.kb.KbProposal;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
+import org.jboss.tools.jst.web.kb.IPageContext;
+import org.jboss.tools.jst.web.kb.IResourceBundle;
 import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
 
 /**
  * @author Jeremy
  */
 public class WTPKbdBundlePropertyResource extends WTPKbdBeanPropertyResource {
-	WTPTextJspKbConnector connector;
 	public static String SUPPORTED_ID = WebPromptingProvider.JSF_BUNDLE_PROPERTIES;
+	IPageContext context;
 
-	public WTPKbdBundlePropertyResource(IEditorInput editorInput, WTPTextJspKbConnector connector) {
-		super(editorInput, connector);
-		this.connector = connector;
+	public WTPKbdBundlePropertyResource(IEditorInput editorInput, IPageContext context) {
+		super(editorInput);
+		this.context = context;
 	}
 	
 	public Collection<KbProposal> queryProposal(String query) {
@@ -84,13 +85,11 @@ public class WTPKbdBundlePropertyResource extends WTPKbdBeanPropertyResource {
 			
 			Set<String> sorted = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
 
-			Map _bundles = connector.getDeclaredBundles();
+			IResourceBundle[] bs = context.getResourceBundles();
 			Map<String,String> bundles2 = new TreeMap<String,String>();
-			Iterator _it = _bundles.keySet().iterator();
-			while(_it.hasNext()) {
-				String _var = _it.next().toString();
-				WTPTextJspKbConnector.LoadBundleInfo info = (WTPTextJspKbConnector.LoadBundleInfo)_bundles.get(_var);
-				bundles2.put(_var, info.getBaseName());				
+			for (IResourceBundle b: bs) {
+				String _var = b.getVar();
+				bundles2.put(_var, b.getBasename());				
 			}
 			List l = fProvider.getList(fXModel, WebPromptingProvider.JSF_REGISTERED_BUNDLES, null, null);
 			if(l != null && l.size() > 0 && (l.get(0) instanceof Map)) {
@@ -183,7 +182,7 @@ public class WTPKbdBundlePropertyResource extends WTPKbdBeanPropertyResource {
 	public boolean equals(Object o) {
 		if(!(o instanceof WTPKbdBundlePropertyResource)) return false;
 		WTPKbdBundlePropertyResource other = (WTPKbdBundlePropertyResource)o;
-		return other.getType().equals(getType()) && other.getXModel() == getXModel() && connector.equals(other.connector);
+		return other.getType().equals(getType()) && other.getXModel() == getXModel();
 	}
 
 	/**
@@ -194,9 +193,9 @@ public class WTPKbdBundlePropertyResource extends WTPKbdBeanPropertyResource {
 		if(getXModel()!=null) {
 			hashCode += getXModel().hashCode();
 		}
-		if(connector!=null) {
-			hashCode += connector.hashCode();
-		}
+//		if(connector!=null) {
+//			hashCode += connector.hashCode();
+//		}
 
 		return hashCode;
 	}

@@ -23,8 +23,8 @@ import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
 public class WTPKbdBeanMethodResource extends WTPKbdBeanPropertyResource {
 	public static String SUPPORTED_ID = WebPromptingProvider.JSF_BEAN_METHODS;
 	
-	public WTPKbdBeanMethodResource(IEditorInput editorInput, WTPTextJspKbConnector connector) {
-		super(editorInput, connector);
+	public WTPKbdBeanMethodResource(IEditorInput editorInput) {
+		super(editorInput);
 	}
 	
 	public boolean isReadyToUse() {

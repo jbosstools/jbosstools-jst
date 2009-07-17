@@ -114,6 +114,7 @@ import org.jboss.tools.common.text.xml.ui.FreeCaretStyledText;
 import org.jboss.tools.jst.jsp.HTMLTextViewerConfiguration;
 import org.jboss.tools.jst.jsp.JSPTextViewerConfiguration;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
+import org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor;
 import org.jboss.tools.jst.jsp.editor.IJSPTextEditor;
 import org.jboss.tools.jst.jsp.editor.ITextFormatter;
 import org.jboss.tools.jst.jsp.editor.IVisualContext;
@@ -121,7 +122,6 @@ import org.jboss.tools.jst.jsp.editor.IVisualController;
 import org.jboss.tools.jst.jsp.outline.JSPContentOutlineConfiguration;
 import org.jboss.tools.jst.jsp.outline.JSPPropertySheetConfiguration;
 import org.jboss.tools.jst.jsp.preferences.VpePreference;
-import org.jboss.tools.jst.jsp.support.kb.WTPTextJspKbConnector;
 import org.jboss.tools.jst.jsp.text.xpl.IStructuredTextOccurrenceStructureProvider;
 import org.jboss.tools.jst.jsp.text.xpl.StructuredTextOccurrenceStructureProviderRegistry;
 import org.jboss.tools.jst.jsp.ui.action.ExtendedFormatAction;
@@ -328,8 +328,6 @@ public class JSPTextEditor extends StructuredTextEditor implements
 
 		if (fOccurrenceModelUpdater != null)
 			fOccurrenceModelUpdater.install(this, getTextViewer());
-
-		installActivePropmtSupport();
 
 		createDrop();
 		setModified(false);
@@ -581,29 +579,6 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		return getSourceViewer().getAnnotationModel();
 	}
 
-	private WTPTextJspKbConnector wtpTextJspKbConnector;
-
-	private void installActivePropmtSupport() {
-		IDocument document = getTextViewer().getDocument();
-		IStructuredModel model = null;
-		if (getDocumentProvider() instanceof IModelProvider) {
-			model = ((IModelProvider) getDocumentProvider())
-					.getModel(getEditorInput());
-		} else {
-			if (document instanceof IStructuredDocument) {
-				model = getModel();
-			}
-		}
-		if (wtpTextJspKbConnector == null
-				&& model != null
-				&& (getContentType().toLowerCase().indexOf("jsp") != -1 || getContentType() //$NON-NLS-1$
-						.toLowerCase().indexOf("html") != -1)) { //$NON-NLS-1$
-			wtpTextJspKbConnector = new WTPTextJspKbConnector(getEditorInput(),
-					document, model);
-			wtpTextJspKbConnector.setTaglibManagerProvider(parentEditor);
-		}
-	}
-
 	private String getContentType() {
 		String type = null;
 		try {
@@ -613,10 +588,6 @@ public class JSPTextEditor extends StructuredTextEditor implements
 				type = ""; //$NON-NLS-1$
 		}
 		return type;
-	}
-
-	public WTPTextJspKbConnector getWTPTextJspKbConnector() {
-		return wtpTextJspKbConnector;
 	}
 
 	public static class JSPStructuredTextViewer extends StructuredTextViewer
@@ -1203,11 +1174,6 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			pageContext = null;
 		}
 
-		if (wtpTextJspKbConnector != null) {
-			wtpTextJspKbConnector.setTaglibManagerProvider(null);
-			wtpTextJspKbConnector.dispose();
-			wtpTextJspKbConnector = null;
-		}
 		super.dispose();
 		if (listener != null)
 			listener.dispose();

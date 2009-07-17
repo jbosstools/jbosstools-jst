@@ -167,6 +167,7 @@ public class JSPContentOutlineConfiguration extends HTMLContentOutlineConfigurat
 						List modelQueryActionList = new ArrayList();
 						
 						String query = "/" + element.getNodeName(); //$NON-NLS-1$
+						//TODO replace TagDescriptor with Component
 						TagDescriptor d = valueHelper.getTagDescriptor(query);
 						if(d != null) {
 							List as = d.getAttributesDescriptors();

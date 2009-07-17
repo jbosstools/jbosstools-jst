@@ -34,7 +34,7 @@ public class WTPKbdActionResource extends WTPKbAbstractModelResource {
 	private String fPath;
 	public static String SUPPORTED_ID = WebPromptingProvider.JSF_VIEW_ACTIONS;
 
-	public WTPKbdActionResource(IEditorInput editorInput, WTPTextJspKbConnector connector) {
+	public WTPKbdActionResource(IEditorInput editorInput) {
 		super(editorInput);
 		if(fXModelObject != null) {
 			fPath = XModelObjectLoaderUtil.getResourcePath(fXModelObject);

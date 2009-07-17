@@ -10,13 +10,13 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.drop.treeviewer.model;
 
+
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.ui.IEditorInput;
 
-import org.jboss.tools.common.kb.ParamList;
-import org.jboss.tools.common.kb.ParamList.Param;
 import org.jboss.tools.jst.jsp.support.kb.WTPKbImageFileResource;
+import org.jboss.tools.jst.web.kb.internal.taglib.CustomProposalType.Param;
 
 /**
  * @author Igels
@@ -41,11 +41,10 @@ public class ImageFileResourceElement extends AttributeValueResource {
 		}
 	}
 
-	public void setParams(ParamList params) {
+	public void setParams(Param[] params) {
 		super.setParams(params);
-		if(params != null && params.getSize() > 0 && wtpKbResource != null) {
-			for (int i = 0; i < params.getSize(); i++) {
-				Param p = params.getParam(i);
+		if(params != null && params.length > 0 && wtpKbResource != null) {
+			for (Param p: params) {
 				wtpKbResource.setConstraint(p.getName(), p.getValue());
 			}
 		}

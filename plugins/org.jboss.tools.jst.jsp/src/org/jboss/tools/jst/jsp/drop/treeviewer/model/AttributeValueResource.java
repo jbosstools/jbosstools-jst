@@ -10,8 +10,12 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.drop.treeviewer.model;
 
+import java.util.ArrayList;
+
 import org.jboss.tools.common.kb.ParamList;
 import org.jboss.tools.jst.jsp.outline.ValueHelper;
+import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.internal.taglib.CustomProposalType.Param;
 
 /**
  * @author Igels
@@ -21,7 +25,7 @@ abstract public class AttributeValueResource extends ModelElement implements IAt
 	public static AttributeValueResource[] EMPTY_LIST = new AttributeValueResource[0];
 
 //	private List children = new ArrayList();
-	private ParamList params = new ParamList();
+	private Param[] params = new Param[0];
 
 	public AttributeValueResource(ModelElement parent) {
 		super(parent);
@@ -31,11 +35,21 @@ abstract public class AttributeValueResource extends ModelElement implements IAt
 		super(name, parent);
 	}
 
-	public ParamList getParams() {
+	public Param[] getParams() {
 		return params;
 	}
 
-	public void setParams(ParamList params) {
+	public String[] getParamsValues(String paramName) {
+		ArrayList<String> result = new ArrayList<String>();
+		for(Param param: params) {
+			if(paramName.equals(param.getName())) {
+				result.add(param.getValue());
+			}
+		}
+		return result.toArray(new String[result.size()]);		
+	}
+
+	public void setParams(Param[] params) {
 		this.params = params;
 	}
 
@@ -47,14 +61,14 @@ abstract public class AttributeValueResource extends ModelElement implements IAt
 	}
 	
 	protected ValueHelper valueHelper;
-	protected String query;
+	protected KbQuery query;
 	
-	public void setQuery(String query, ValueHelper valueHelper) {
+	public void setQuery(KbQuery query, ValueHelper valueHelper) {
 		this.query = query;
 		this.valueHelper = valueHelper;
 	}
 	
-	public String getQuery() {
+	public KbQuery getQuery() {
 		return query;
 	}
 	
