@@ -60,7 +60,12 @@ public class CustomProposalTypeFactory {
 		if(NAME_SPACE_TYPE.equals(type)) {
 			return new NameSpaceProposalType();
 		}
-		WebKbPlugin.getDefault().logError("Unknown proposal type: " + type); //$NON-NLS-1$
-		return null;
+		
+		//WebKbPlugin.getDefault().logError("Unknown proposal type: " + type); //$NON-NLS-1$
+		//ExtendedProposalType will report if necessary
+	
+		ExtendedProposalType proposalType = new ExtendedProposalType();
+
+		return proposalType;
 	}
 }
