@@ -24,7 +24,7 @@ public class TilesUIPlugin extends BaseUIPlugin {
 		super.start(context);
 	}
 	
-	public static final String PLUGIN_ID = "org.jboss.tools.jst.web.tiles.ui";
+	public static final String PLUGIN_ID = "org.jboss.tools.jst.web.tiles.ui"; //$NON-NLS-1$
 	private static TilesUIPlugin plugin;
 	//public static ShowSequence rs;
 

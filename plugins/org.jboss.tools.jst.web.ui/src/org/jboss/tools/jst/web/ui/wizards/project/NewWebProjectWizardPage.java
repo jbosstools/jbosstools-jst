@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.ui.wizards.project;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.text.MessageFormat;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -56,6 +57,7 @@ import org.jboss.tools.jst.web.project.helpers.IWebProjectTemplate;
 import org.jboss.tools.jst.web.project.helpers.NewWebProjectContext;
 import org.jboss.tools.jst.web.project.version.ProjectVersion;
 import org.jboss.tools.jst.web.project.version.ProjectVersions;
+import org.jboss.tools.jst.web.ui.Messages;
 
 public class NewWebProjectWizardPage extends WizardPage {
 
@@ -80,7 +82,7 @@ public class NewWebProjectWizardPage extends WizardPage {
 	protected IWebProjectTemplate template;
 	
 	public NewWebProjectWizardPage(NewWebProjectContext context) {
-		super("Page 1");		
+		super(Messages.NewWebProjectWizardPage_Page1);		
 		this.context = context;
 		template = context.getTemplate();
 		// init editors & adapters			
@@ -265,7 +267,9 @@ public class NewWebProjectWizardPage extends WizardPage {
 		
 		IProject overlap = overlaps(projectLocation);
 		if(overlap != null) {
-			setErrorMessage("Suggested location overlaps with location of project " + overlap.getName()); 
+			setErrorMessage(MessageFormat.format(
+					Messages.NewWebProjectWizardPage_OverlappingLocation,
+					overlap.getName())); 
 			return false;
 		}
 		
@@ -276,7 +280,7 @@ public class NewWebProjectWizardPage extends WizardPage {
 
 		String versionName = versionAdapter.getStringValue(true);
 		ProjectVersion version = versions.getVersion(versionName);
-		String error = (version == null) ? "Cannot find version " + versionName : version.getErrorMessage();
+		String error = (version == null) ? MessageFormat.format(Messages.NewWebProjectWizardPage_CannotFindVersion, versionName) : version.getErrorMessage();
 		if(error != null) {
 			setErrorMessage(error);
 			return false;
@@ -286,8 +290,8 @@ public class NewWebProjectWizardPage extends WizardPage {
 		if(templateName == null || templateName.length() == 0) {
 			String[] ts = template.getTemplateList(versionName);
 			error = (ts == null || ts.length == 0) 
-				? "There are no templates in " + versionName + "."
-				: "Template name must be set.";
+				? MessageFormat.format(Messages.NewWebProjectWizardPage_NoTemplates, versionName)
+				: Messages.NewWebProjectWizardPage_NoTemplateName;
 			setErrorMessage(error);
 			return false;
 		}

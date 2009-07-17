@@ -45,17 +45,17 @@ public class JspEditorPlugin extends BaseUIPlugin {
 	//The shared instance.
 	private static JspEditorPlugin plugin;
 	
-	public static final String PLUGIN_ID = "org.jboss.tools.jst.jsp"; 
+	public static final String PLUGIN_ID = "org.jboss.tools.jst.jsp";  //$NON-NLS-1$
 
-	public static final String RESOURCES_PATH = "/resources";
+	public static final String RESOURCES_PATH = "/resources"; //$NON-NLS-1$
 
 	// A Map to save a descriptor for each image
 	private HashMap fImageDescRegistry = null;
 
-	public static final String CA_JSF_ACTION_IMAGE_PATH = "images/ca/icons_JSF_Actions.gif";
-	public static final String CA_JSF_EL_IMAGE_PATH = "images/ca/icons_JSF_EL.gif";
-	public static final String CA_RESOURCES_IMAGE_PATH = "images/ca/icons_Resource_path.gif";
-	public static final String CA_JSF_MESSAGES_IMAGE_PATH = "images/ca/icons_Message_Bundles.gif";
+	public static final String CA_JSF_ACTION_IMAGE_PATH = "images/ca/icons_JSF_Actions.gif"; //$NON-NLS-1$
+	public static final String CA_JSF_EL_IMAGE_PATH = "images/ca/icons_JSF_EL.gif"; //$NON-NLS-1$
+	public static final String CA_RESOURCES_IMAGE_PATH = "images/ca/icons_Resource_path.gif"; //$NON-NLS-1$
+	public static final String CA_JSF_MESSAGES_IMAGE_PATH = "images/ca/icons_Message_Bundles.gif"; //$NON-NLS-1$
 
 	
 	/**
@@ -77,7 +77,7 @@ public class JspEditorPlugin extends BaseUIPlugin {
 	public void startup() throws CoreException {
 		super.startup();
         // Bug-fix for showing breakpoint icons at startup
-        Platform.getPlugin("org.jboss.tools.jst.web.debug.ui");
+        Platform.getPlugin("org.jboss.tools.jst.web.debug.ui"); //$NON-NLS-1$
 	}
 	
 	protected void initializeDefaultPluginPreferences() {
@@ -106,7 +106,7 @@ public class JspEditorPlugin extends BaseUIPlugin {
 		{
 			URL url = getDefault().getDescriptor().getInstallURL();
 			String s1 = FileLocator.resolve(url).getFile();
-			if(s1.startsWith("/"))
+			if(s1.startsWith("/")) //$NON-NLS-1$
 				s1 = s1.substring(1);
 			s1 = (new Path(s1)).toOSString();
 			String s;

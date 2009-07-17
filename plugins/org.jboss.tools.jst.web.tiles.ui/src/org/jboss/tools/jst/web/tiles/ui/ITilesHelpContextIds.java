@@ -13,7 +13,7 @@ package org.jboss.tools.jst.web.tiles.ui;
 public interface ITilesHelpContextIds {
 	public static final String PREFIX = TilesUIPlugin.PLUGIN_ID + '.';
 
-	public static final String TILES_EDITOR = PREFIX + "tiles_editor";
+	public static final String TILES_EDITOR = PREFIX + "tiles_editor"; //$NON-NLS-1$
 
 	
 }

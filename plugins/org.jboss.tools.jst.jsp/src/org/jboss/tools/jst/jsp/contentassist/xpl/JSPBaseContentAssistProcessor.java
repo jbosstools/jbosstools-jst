@@ -63,7 +63,7 @@ public class JSPBaseContentAssistProcessor extends
 		if (contentAssistRequest.getRegion().getType() == DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE) {
 			currentValue = contentAssistRequest.getText();
 		} else {
-			currentValue = "";
+			currentValue = ""; //$NON-NLS-1$
 		}
 
 		String matchString = null;

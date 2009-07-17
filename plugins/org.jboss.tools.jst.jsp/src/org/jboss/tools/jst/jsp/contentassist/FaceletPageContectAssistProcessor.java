@@ -24,6 +24,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
 import org.jboss.tools.common.text.TextProposal;
+import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.web.kb.IFaceletPageContext;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
@@ -110,8 +111,8 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 				for (int j = 0; attrs != null && j < attrs.getLength(); j++) {
 					Attr a = (Attr) attrs.item(j);
 					String name = a.getName();
-					if (name.startsWith("xmlns:")) {
-						final String prefix = name.substring("xmlns:".length());
+					if (name.startsWith("xmlns:")) { //$NON-NLS-1$
+						final String prefix = name.substring("xmlns:".length()); //$NON-NLS-1$
 						final String uri = a.getValue();
 						if (prefix != null && prefix.trim().length() > 0 &&
 								uri != null && uri.trim().length() > 0) {
@@ -144,7 +145,7 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 										return CustomTagLibManager.FACELETS_HTML_TAG_LIB_URI;
 									}
 									public String getPrefix() {
-										return "";
+										return ""; //$NON-NLS-1$
 									}
 								};
 								context.addNameSpace(region, nameSpace);
@@ -180,15 +181,15 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 	protected void addTextELProposals(ContentAssistRequest contentAssistRequest) {
 		TextRegion prefix = getELPrefix();
 		if (prefix == null || !prefix.isELStarted()) {
-			CustomCompletionProposal proposal = new CustomCompletionProposal("#{}", contentAssistRequest.getReplacementBeginPosition(),
-					0, 2, null, "#{}", null, "New EL Expression", 10000);
+			CustomCompletionProposal proposal = new CustomCompletionProposal("#{}", contentAssistRequest.getReplacementBeginPosition(), //$NON-NLS-1$
+					0, 2, null, "#{}", null, JstUIMessages.FaceletPageContectAssistProcessor_NewELExpression, 10000); //$NON-NLS-1$
 			contentAssistRequest.addProposal(proposal);
 			return;
 		}
-		String matchString = "#{" + prefix.getText();
+		String matchString = "#{" + prefix.getText(); //$NON-NLS-1$
 		String query = matchString;
 		if (query == null)
-			query = "";
+			query = ""; //$NON-NLS-1$
 		String stringQuery = matchString;
 
 		int beginChangeOffset = prefix.getStartOffset() + prefix.getOffset();
@@ -215,8 +216,8 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 		}
 
 		if (prefix.isELStarted() && !prefix.isELClosed()) {
-			CustomCompletionProposal proposal = new CustomCompletionProposal("}", getOffset(),
-					0, 1, null, "}", null, "Close EL Expression", 10001);
+			CustomCompletionProposal proposal = new CustomCompletionProposal("}", getOffset(), //$NON-NLS-1$
+					0, 1, null, "}", null, JstUIMessages.FaceletPageContectAssistProcessor_CloseELExpression, 10001); //$NON-NLS-1$
 			contentAssistRequest.addProposal(proposal);
 		}
 	}

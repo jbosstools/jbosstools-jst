@@ -118,14 +118,14 @@ public class HTMLTextViewerConfiguration extends StructuredTextViewerConfigurati
 	}
 
 	private IHyperlinkDetector getTextEditorsExtensionsHyperlinkDetector() {
-		Plugin plugin = Platform.getPlugin("org.jboss.tools.common.text.ext");
+		Plugin plugin = Platform.getPlugin("org.jboss.tools.common.text.ext"); //$NON-NLS-1$
 		return (plugin != null && plugin instanceof IAdaptable ? (IHyperlinkDetector)((IAdaptable)plugin).getAdapter(IHyperlinkDetector.class):null);
 	}
 
 	private IHyperlinkDetector getTextEditorsExtensionsHyperlinkDetector1() {
 		IHyperlinkDetector result = null;
 		final Object[] bundleActivationResult = new Object[] { Boolean.FALSE };
-		final Bundle bundle = Platform.getBundle("org.jboss.tools.common.text.ext");
+		final Bundle bundle = Platform.getBundle("org.jboss.tools.common.text.ext"); //$NON-NLS-1$
 		if (bundle != null && bundle.getState() == org.osgi.framework.Bundle.ACTIVE) {
 			bundleActivationResult[0] = Boolean.TRUE;
 		} else {
@@ -139,7 +139,7 @@ public class HTMLTextViewerConfiguration extends StructuredTextViewerConfigurati
 		if (Boolean.TRUE.equals(bundleActivationResult[0])) {
 			try {
 				Dictionary headers = bundle.getHeaders();
-				String pluginClass = (String)headers.get("Plugin-Class");
+				String pluginClass = (String)headers.get("Plugin-Class"); //$NON-NLS-1$
 				Class plugin = bundle.loadClass(pluginClass);
 				
 				Object obj = plugin.newInstance();
@@ -147,7 +147,7 @@ public class HTMLTextViewerConfiguration extends StructuredTextViewerConfigurati
 					result = (IHyperlinkDetector)((IAdaptable)obj).getAdapter(IHyperlinkDetector.class);
 				}
 			} catch (Exception x) {
-				JspEditorPlugin.getPluginLog().logError("Error in loading hyperlink detector", x);
+				JspEditorPlugin.getPluginLog().logError("Error in loading hyperlink detector", x); //$NON-NLS-1$
 			}
 		}
 		return result;

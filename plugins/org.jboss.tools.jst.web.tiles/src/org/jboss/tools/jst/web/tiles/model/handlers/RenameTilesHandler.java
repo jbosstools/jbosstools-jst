@@ -25,7 +25,7 @@ public class RenameTilesHandler extends DefaultEditHandler {
 		((FileAnyImpl)object).getAsText();
     	String oldPath = ((FileAnyImpl)object).getAbsolutePath();
 		super.executeHandler(object, prop);
-		XActionInvoker.invoke("SaveActions.Save", object, prop);
+		XActionInvoker.invoke("SaveActions.Save", object, prop); //$NON-NLS-1$
 		TilesRegistrationHelper.update(object.getModel(), object, oldPath);
 	}
 

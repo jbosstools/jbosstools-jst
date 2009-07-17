@@ -19,15 +19,15 @@ import org.jboss.tools.common.xml.XMLEntityResolver;
 public class FileTilesRecognizer implements EntityRecognizer {
     static {
         try {
-            XMLEntityResolver.registerPublicEntity(TilesConstants.DOC_PUBLICID, FileTilesRecognizer.class, "/meta/tiles_config_1_1.dtd");
+            XMLEntityResolver.registerPublicEntity(TilesConstants.DOC_PUBLICID, FileTilesRecognizer.class, "/meta/tiles_config_1_1.dtd"); //$NON-NLS-1$
         } catch (IOException e) {
         	ModelPlugin.getPluginLog().logError(e);
         }
     }
 
     public String getEntityName(String ext, String body) {
-        return (body == null || !"xml".equals(ext)) ? null :
-               (body.indexOf(TilesConstants.DOC_PUBLICID) >= 0) ? "FileTiles" :
+        return (body == null || !"xml".equals(ext)) ? null : //$NON-NLS-1$
+               (body.indexOf(TilesConstants.DOC_PUBLICID) >= 0) ? "FileTiles" : //$NON-NLS-1$
                null;
     }
 

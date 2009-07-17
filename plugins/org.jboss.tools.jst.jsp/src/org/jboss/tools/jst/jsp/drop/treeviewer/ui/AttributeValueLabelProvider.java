@@ -52,38 +52,38 @@ public class AttributeValueLabelProvider extends LabelProvider {
 
 	private static Map imagesPathes = new HashMap();
 	static {
-		imagesPathes.put(BundlesNameResourceElement.class, "images/jdo/db_fields_folder.gif");
-		imagesPathes.put(BundleNameElement.class, "images/navigationtree/properties.gif");
+		imagesPathes.put(BundlesNameResourceElement.class, "images/jdo/db_fields_folder.gif"); //$NON-NLS-1$
+		imagesPathes.put(BundleNameElement.class, "images/navigationtree/properties.gif"); //$NON-NLS-1$
 
-		imagesPathes.put(BundlesPropertiesResourceElement.class, "images/file/closed_folder.gif");
-		imagesPathes.put(BundleAliasElement.class, "images/navigationtree/properties.gif");
-		imagesPathes.put(BundlePropertyElement.class, "images/navigationtree/property.gif");
+		imagesPathes.put(BundlesPropertiesResourceElement.class, "images/file/closed_folder.gif"); //$NON-NLS-1$
+		imagesPathes.put(BundleAliasElement.class, "images/navigationtree/properties.gif"); //$NON-NLS-1$
+		imagesPathes.put(BundlePropertyElement.class, "images/navigationtree/property.gif"); //$NON-NLS-1$
 
-		imagesPathes.put(EnumerationResourceElement.class, "images/file/closed_folder.gif");
-		imagesPathes.put(EnumerationElement.class, "images/struts/pro/validator_field.gif");
+		imagesPathes.put(EnumerationResourceElement.class, "images/file/closed_folder.gif"); //$NON-NLS-1$
+		imagesPathes.put(EnumerationElement.class, "images/struts/pro/validator_field.gif"); //$NON-NLS-1$
 
-		imagesPathes.put(JsfVariablesResourceElement.class, "images/file/closed_folder.gif");
-		imagesPathes.put(JsfVariableElement.class, "images/struts/pro/validator_constant.gif");
+		imagesPathes.put(JsfVariablesResourceElement.class, "images/file/closed_folder.gif"); //$NON-NLS-1$
+		imagesPathes.put(JsfVariableElement.class, "images/struts/pro/validator_constant.gif"); //$NON-NLS-1$
 
-		imagesPathes.put(ManagedBeanMethodResourceElement.class, "images/struts/form_beans.gif");
-		imagesPathes.put(ManagedBeanForMdElement.class, "images/struts/form_bean.gif");
-		imagesPathes.put(ManagedBeanMethodElement.class, "images/java/method.gif");
+		imagesPathes.put(ManagedBeanMethodResourceElement.class, "images/struts/form_beans.gif"); //$NON-NLS-1$
+		imagesPathes.put(ManagedBeanForMdElement.class, "images/struts/form_bean.gif"); //$NON-NLS-1$
+		imagesPathes.put(ManagedBeanMethodElement.class, "images/java/method.gif"); //$NON-NLS-1$
 
-		imagesPathes.put(ManagedBeansPropertiesResourceElement.class, "images/struts/form_beans.gif");
-		imagesPathes.put(ManagedBeanForPropElement.class, "images/struts/form_bean.gif");
-		imagesPathes.put(ManagedBeanPropertyElement.class, "images/java/property.gif");
+		imagesPathes.put(ManagedBeansPropertiesResourceElement.class, "images/struts/form_beans.gif"); //$NON-NLS-1$
+		imagesPathes.put(ManagedBeanForPropElement.class, "images/struts/form_bean.gif"); //$NON-NLS-1$
+		imagesPathes.put(ManagedBeanPropertyElement.class, "images/java/property.gif"); //$NON-NLS-1$
 
-		imagesPathes.put(ViewActionsResorceElement.class, "images/struts/action_mappings.gif");
-		imagesPathes.put(ViewActionElement.class, "images/map/map_rule_source.gif");
+		imagesPathes.put(ViewActionsResorceElement.class, "images/struts/action_mappings.gif"); //$NON-NLS-1$
+		imagesPathes.put(ViewActionElement.class, "images/map/map_rule_source.gif"); //$NON-NLS-1$
 
-		imagesPathes.put(ImageFileResourceElement.class, "images/struts/web_root.gif");
-		imagesPathes.put(ImageFolderElement.class, "images/file/closed_folder.gif");
-		imagesPathes.put(ImageFileElement.class, "images/file/unknow_file.gif");
+		imagesPathes.put(ImageFileResourceElement.class, "images/struts/web_root.gif"); //$NON-NLS-1$
+		imagesPathes.put(ImageFolderElement.class, "images/file/closed_folder.gif"); //$NON-NLS-1$
+		imagesPathes.put(ImageFileElement.class, "images/file/unknow_file.gif"); //$NON-NLS-1$
 
-		imagesPathes.put(SeamVariablesResourceElement.class, "images/seam/variables_folder.gif");
-		imagesPathes.put(SeamVariableElement.class, "images/seam/variable.gif");
-		imagesPathes.put(SeamPropertyElement.class, "images/navigationtree/property.gif");
-		imagesPathes.put(SeamMethodElement.class, "images/java/method.gif");
+		imagesPathes.put(SeamVariablesResourceElement.class, "images/seam/variables_folder.gif"); //$NON-NLS-1$
+		imagesPathes.put(SeamVariableElement.class, "images/seam/variable.gif"); //$NON-NLS-1$
+		imagesPathes.put(SeamPropertyElement.class, "images/navigationtree/property.gif"); //$NON-NLS-1$
+		imagesPathes.put(SeamMethodElement.class, "images/java/method.gif"); //$NON-NLS-1$
 }
 
 	private static Map texts = new HashMap();
@@ -107,7 +107,7 @@ public class AttributeValueLabelProvider extends LabelProvider {
 		if (image == null) {
 			Object path = imagesPathes.get(element.getClass());
 			if(path==null) {
-				path = "images/java/error.gif";
+				path = "images/java/error.gif"; //$NON-NLS-1$
 			}
 			image = EclipseResourceUtil.getImage((String)path);
 			imageCache.put(element, image);
@@ -139,6 +139,6 @@ public class AttributeValueLabelProvider extends LabelProvider {
 	}
 
 	protected RuntimeException unknownElement(Object element) {
-		return new RuntimeException("Unknown type of element in tree of type " + element.getClass().getName());
+		return new RuntimeException("Unknown type of element in tree of type " + element.getClass().getName()); //$NON-NLS-1$
 	}
 }

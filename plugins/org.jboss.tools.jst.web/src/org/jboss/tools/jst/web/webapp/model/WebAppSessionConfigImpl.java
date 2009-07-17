@@ -16,7 +16,7 @@ public class WebAppSessionConfigImpl extends RegularObjectImpl {
 	private static final long serialVersionUID = 1L;
 
     public String name() {
-        return "session-config";
+        return "session-config"; //$NON-NLS-1$
     }
 
 } 

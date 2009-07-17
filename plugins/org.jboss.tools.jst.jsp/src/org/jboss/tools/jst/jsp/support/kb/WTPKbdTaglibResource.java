@@ -43,7 +43,7 @@ public class WTPKbdTaglibResource extends WTPKbAbstractModelResource {
 			String rQuery = getPassiveQueryPart(query);
 			
 			Set<String> sorted = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
-			List beanList = fProvider.getList(fXModel, SUPPORTED_ID, "", null);
+			List beanList = fProvider.getList(fXModel, SUPPORTED_ID, "", null); //$NON-NLS-1$
 			Iterator itr = beanList.iterator();
 			while (itr.hasNext()) sorted.add(itr.next().toString());				
 			if (sorted.isEmpty()) return proposals;
@@ -65,7 +65,7 @@ public class WTPKbdTaglibResource extends WTPKbAbstractModelResource {
 	}
 
 	private String getPassiveQueryPart(String query) {
-		if (query == null || query.trim().length() == 0) return "";
+		if (query == null || query.trim().length() == 0) return ""; //$NON-NLS-1$
 		int startIndex = query.length();
 		return query.substring(0, startIndex);
 	}
@@ -79,7 +79,7 @@ public class WTPKbdTaglibResource extends WTPKbAbstractModelResource {
 	}
 
 	public String toString() {
-		return "WTPKbdTaglibResource";
+		return "WTPKbdTaglibResource"; //$NON-NLS-1$
 	}
 
 	public XModel getXModel() {

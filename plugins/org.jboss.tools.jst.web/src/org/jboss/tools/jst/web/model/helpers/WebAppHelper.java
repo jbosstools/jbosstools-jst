@@ -20,21 +20,21 @@ import org.jboss.tools.common.model.util.XModelObjectUtil;
  * @author glory
  */
 public class WebAppHelper {
-    public static String CONTEXT_PARAM_ENTITY = "WebAppContextParam";
-    public static String FILTER_ENTITY = "WebAppFilter";
-    public static String FILTER_MAPPING_ENTITY = "WebAppFilterMapping";
-    public static String FILTER_MAPPING_24_ENTITY = "WebAppFilterMapping24";
-    public static String LISTENER_ENTITY = "WebAppListener";
-    public static String LISTENER_24_ENTITY = "WebAppListener24";
-    public static String SERVLET_ENTITY = "WebAppServlet";
-    public static String SERVLET_MAPPING_ENTITY = "WebAppServletMapping";
-    public static String TAGLIB_ENTITY = "WebAppTaglib";
-    public static String ROLE_ENTITY = "WebAppSecurityRole";
+    public static String CONTEXT_PARAM_ENTITY = "WebAppContextParam"; //$NON-NLS-1$
+    public static String FILTER_ENTITY = "WebAppFilter"; //$NON-NLS-1$
+    public static String FILTER_MAPPING_ENTITY = "WebAppFilterMapping"; //$NON-NLS-1$
+    public static String FILTER_MAPPING_24_ENTITY = "WebAppFilterMapping24"; //$NON-NLS-1$
+    public static String LISTENER_ENTITY = "WebAppListener"; //$NON-NLS-1$
+    public static String LISTENER_24_ENTITY = "WebAppListener24"; //$NON-NLS-1$
+    public static String SERVLET_ENTITY = "WebAppServlet"; //$NON-NLS-1$
+    public static String SERVLET_MAPPING_ENTITY = "WebAppServletMapping"; //$NON-NLS-1$
+    public static String TAGLIB_ENTITY = "WebAppTaglib"; //$NON-NLS-1$
+    public static String ROLE_ENTITY = "WebAppSecurityRole"; //$NON-NLS-1$
     
-    public static String FILTER_FOLDER = "Filters";
-    public static String SERVLET_FOLDER = "Servlets";
-    public static String JSP_CONFIG_FOLDER = "JSP Config";
-    public static String ROLE_FOLDER = "Security Roles";
+    public static String FILTER_FOLDER = "Filters"; //$NON-NLS-1$
+    public static String SERVLET_FOLDER = "Servlets"; //$NON-NLS-1$
+    public static String JSP_CONFIG_FOLDER = "JSP Config"; //$NON-NLS-1$
+    public static String ROLE_FOLDER = "Security Roles"; //$NON-NLS-1$
 	
 	/**
 	 * Returns model object representing web.xml in WEB-INF.
@@ -42,16 +42,16 @@ public class WebAppHelper {
 	 * @return
 	 */	
 	public static XModelObject getWebApp(XModel model) {
-		return model.getByPath("/web.xml");
+		return model.getByPath("/web.xml"); //$NON-NLS-1$
 	}
 	
 	public static String getServletVersion(XModelObject webxml) {
-		if(webxml == null) return "";
+		if(webxml == null) return ""; //$NON-NLS-1$
 		String entity = webxml.getModelEntity().getName();
 		if(entity.equals("FileWebApp")) return "2.3"; //$NON-NLS-1$ //$NON-NLS-2$
 		if(entity.equals("FileWebApp24")) return "2.4"; //$NON-NLS-1$ //$NON-NLS-2$
 		if(entity.equals("FileWebApp25")) return "2.5"; //$NON-NLS-1$ //$NON-NLS-2$
-		return "2.4";
+		return "2.4"; //$NON-NLS-1$
 	}
 	
 	public static XModelObject getParentFile(XModelObject o) {
@@ -85,8 +85,8 @@ public class WebAppHelper {
         if(webxml == null) return null;
         XModelObject[] s = getServlets(webxml);
         for (int i = 0; i < s.length; i++) {
-        	if(className != null && className.equals(s[i].getAttributeValue("servlet-class"))) return s[i];
-        	if(servletName != null && servletName.equals(s[i].getAttributeValue("servlet-name"))) return s[i];
+        	if(className != null && className.equals(s[i].getAttributeValue("servlet-class"))) return s[i]; //$NON-NLS-1$
+        	if(servletName != null && servletName.equals(s[i].getAttributeValue("servlet-name"))) return s[i]; //$NON-NLS-1$
         }
         return null;
 	}
@@ -107,12 +107,12 @@ public class WebAppHelper {
         	XModelObject folder = webxml.getChildByPath(SERVLET_FOLDER);
         	if(folder == null) folder = webxml;
         	s = webxml.getModel().createModelObject(SERVLET_ENTITY, null);
-        	s.setAttributeValue("servlet-name", servletName);
-        	s.setAttributeValue("servlet-class", className);
+        	s.setAttributeValue("servlet-name", servletName); //$NON-NLS-1$
+        	s.setAttributeValue("servlet-class", className); //$NON-NLS-1$
             DefaultCreateHandler.addCreatedObject(folder, s, -1);
         }
-        if(loadOnStartUp >= 0 && s.getAttributeValue("load-on-startup").length() == 0) {
-        	s.getModel().changeObjectAttribute(s, "load-on-startup", "" + loadOnStartUp);
+        if(loadOnStartUp >= 0 && s.getAttributeValue("load-on-startup").length() == 0) { //$NON-NLS-1$
+        	s.getModel().changeObjectAttribute(s, "load-on-startup", "" + loadOnStartUp); //$NON-NLS-1$ //$NON-NLS-2$
         }
         return s;
 	}
@@ -128,7 +128,7 @@ public class WebAppHelper {
         if(webxml == null) return null;
         XModelObject[] s = getServletMappings(webxml);
         for (int i = 0; i < s.length; i++) {
-        	if(servletName != null && servletName.equals(s[i].getAttributeValue("servlet-name"))) return s[i];
+        	if(servletName != null && servletName.equals(s[i].getAttributeValue("servlet-name"))) return s[i]; //$NON-NLS-1$
         }
         return null;
 	}
@@ -147,8 +147,8 @@ public class WebAppHelper {
         	XModelObject folder = webxml.getChildByPath(SERVLET_FOLDER);
         	if(folder == null) folder = webxml;
         	s = webxml.getModel().createModelObject(SERVLET_MAPPING_ENTITY, null);
-        	s.setAttributeValue("servlet-name", servletName);
-        	s.setAttributeValue("url-pattern", "*.jsf");
+        	s.setAttributeValue("servlet-name", servletName); //$NON-NLS-1$
+        	s.setAttributeValue("url-pattern", "*.jsf"); //$NON-NLS-1$ //$NON-NLS-2$
             DefaultCreateHandler.addCreatedObject(folder, s, -1);
         }
         return s;
@@ -163,9 +163,9 @@ public class WebAppHelper {
 	 */
     public static XModelObject findWebAppInitParam(XModelObject servlet, String name) {
         if(servlet == null) return null;
-        XModelObject[] init = servlet.getChildren("WebAppInitParam");
+        XModelObject[] init = servlet.getChildren("WebAppInitParam"); //$NON-NLS-1$
         for (int i = 0; i < init.length; i++) {
-            String n = init[i].getAttributeValue("param-name");
+            String n = init[i].getAttributeValue("param-name"); //$NON-NLS-1$
             if(n != null && n.equals(name)) return init[i];
         }
         return null;
@@ -186,7 +186,7 @@ public class WebAppHelper {
         if(p == null) {
 			p = createWebAppInitParam(servlet, name, value);
         } else {
-            servlet.getModel().changeObjectAttribute(p, "param-value", value);
+            servlet.getModel().changeObjectAttribute(p, "param-value", value); //$NON-NLS-1$
         }
         return p;        
     }
@@ -206,10 +206,10 @@ public class WebAppHelper {
 		if(p == null) {
 			p = createWebAppInitParam(servlet, name, valuePart);
 		} else {
-			String oldValue = p.getAttributeValue("param-value");
-			if(oldValue.length() == 0 || ("," + oldValue + ",").indexOf("," + valuePart + ",") < 0) {
-				String newValue = (oldValue.length() > 0) ? oldValue + "," + valuePart : valuePart;
-				servlet.getModel().changeObjectAttribute(p, "param-value", newValue);
+			String oldValue = p.getAttributeValue("param-value"); //$NON-NLS-1$
+			if(oldValue.length() == 0 || ("," + oldValue + ",").indexOf("," + valuePart + ",") < 0) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				String newValue = (oldValue.length() > 0) ? oldValue + "," + valuePart : valuePart; //$NON-NLS-1$
+				servlet.getModel().changeObjectAttribute(p, "param-value", newValue); //$NON-NLS-1$
 			}
 		}
 		return p;
@@ -217,9 +217,9 @@ public class WebAppHelper {
     
     private static XModelObject createWebAppInitParam(XModelObject servlet, String name, String value) throws XModelException {
     	if(servlet == null) return null;
-		XModelObject p = servlet.getModel().createModelObject("WebAppInitParam", null);
-		p.setAttributeValue("param-name", name);
-		p.setAttributeValue("param-value", value);
+		XModelObject p = servlet.getModel().createModelObject("WebAppInitParam", null); //$NON-NLS-1$
+		p.setAttributeValue("param-name", name); //$NON-NLS-1$
+		p.setAttributeValue("param-value", value); //$NON-NLS-1$
 		DefaultCreateHandler.addCreatedObject(servlet, p, -1);
 		return p;
     }
@@ -235,7 +235,7 @@ public class WebAppHelper {
     	if(servlet == null) return new String[0];
     	XModelObject p = findWebAppInitParam(servlet, name);
     	if(p == null) return new String[0];
-    	return XModelObjectUtil.asStringArray(p.getAttributeValue("param-value"));
+    	return XModelObjectUtil.asStringArray(p.getAttributeValue("param-value")); //$NON-NLS-1$
     }
 
 
@@ -248,7 +248,7 @@ public class WebAppHelper {
 	 */
     public static XModelObject findWebAppContextParam(XModelObject webxml, String name) {
         if(webxml == null) return null;
-        XModelObject folder = webxml.getChildByPath("Context Params");
+        XModelObject folder = webxml.getChildByPath("Context Params"); //$NON-NLS-1$
         if(folder == null) folder = webxml;
         return folder.getChildByPath(name);
     }
@@ -268,7 +268,7 @@ public class WebAppHelper {
         if(p == null) {
 			p = createWebAppContextParam(webxml, name, value);
         } else {
-        	webxml.getModel().changeObjectAttribute(p, "param-value", value);
+        	webxml.getModel().changeObjectAttribute(p, "param-value", value); //$NON-NLS-1$
         }
         return p;        
     }
@@ -288,10 +288,10 @@ public class WebAppHelper {
 		if(p == null) {
 			p = createWebAppContextParam(webxml, name, valuePart);
 		} else {
-			String oldValue = p.getAttributeValue("param-value");
-			if(oldValue.length() == 0 || ("," + oldValue + ",").indexOf("," + valuePart + ",") < 0) {
-				String newValue = (oldValue.length() > 0) ? oldValue + "," + valuePart : valuePart;
-				webxml.getModel().changeObjectAttribute(p, "param-value", newValue);
+			String oldValue = p.getAttributeValue("param-value"); //$NON-NLS-1$
+			if(oldValue.length() == 0 || ("," + oldValue + ",").indexOf("," + valuePart + ",") < 0) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				String newValue = (oldValue.length() > 0) ? oldValue + "," + valuePart : valuePart; //$NON-NLS-1$
+				webxml.getModel().changeObjectAttribute(p, "param-value", newValue); //$NON-NLS-1$
 			}
 		}
 		return p;
@@ -299,11 +299,11 @@ public class WebAppHelper {
     
     private static XModelObject createWebAppContextParam(XModelObject webxml, String name, String value) throws XModelException {
     	if(webxml == null) return null;
-        XModelObject folder = webxml.getChildByPath("Context Params");
+        XModelObject folder = webxml.getChildByPath("Context Params"); //$NON-NLS-1$
         if(folder == null) folder = webxml;
 		XModelObject p = folder.getModel().createModelObject(CONTEXT_PARAM_ENTITY, null);
-		p.setAttributeValue("param-name", name);
-		p.setAttributeValue("param-value", value);
+		p.setAttributeValue("param-name", name); //$NON-NLS-1$
+		p.setAttributeValue("param-value", value); //$NON-NLS-1$
 		DefaultCreateHandler.addCreatedObject(folder, p, -1);
 		return p;
     }
@@ -319,7 +319,7 @@ public class WebAppHelper {
     	if(webxml == null) return new String[0];
     	XModelObject p = findWebAppContextParam(webxml, name);
     	if(p == null) return new String[0];
-    	return XModelObjectUtil.asStringArray(p.getAttributeValue("param-value"));
+    	return XModelObjectUtil.asStringArray(p.getAttributeValue("param-value")); //$NON-NLS-1$
     }
     
     public static XModelObject[] getFilters(XModelObject webxml) {
@@ -333,7 +333,7 @@ public class WebAppHelper {
     	if(webxml == null) return null;
     	XModelObject folder = webxml.getChildByPath(FILTER_FOLDER);
     	if(folder == null) folder = webxml;
-    	String entity = (folder != webxml && folder.getModelEntity().getName().endsWith("24")) 
+    	String entity = (folder != webxml && folder.getModelEntity().getName().endsWith("24"))  //$NON-NLS-1$
     			? FILTER_MAPPING_24_ENTITY : FILTER_MAPPING_ENTITY;
     	return folder.getChildren(entity);
     }
@@ -341,7 +341,7 @@ public class WebAppHelper {
     public static XModelObject findFilterByClass(XModelObject webxml, String cls) {
 		XModelObject[] os = getFilters(webxml);
 		for (int i = 0; i < os.length; i++) {
-			String c = os[i].getAttributeValue("filter-class");
+			String c = os[i].getAttributeValue("filter-class"); //$NON-NLS-1$
 			if(cls.equals(c)) return os[i];
 		}
 		return null;
@@ -350,11 +350,11 @@ public class WebAppHelper {
     public static XModelObject findFilterMapping(XModelObject webxml, String name) {
     	XModelObject folder = webxml.getChildByPath(FILTER_FOLDER);
     	if(folder == null) folder = webxml;
-    	String entity = (folder != webxml && folder.getModelEntity().getName().endsWith("24")) 
+    	String entity = (folder != webxml && folder.getModelEntity().getName().endsWith("24"))  //$NON-NLS-1$
     			? FILTER_MAPPING_24_ENTITY : FILTER_MAPPING_ENTITY;
 		XModelObject[] os = folder.getChildren(entity);
 		for (int i = 0; i < os.length; i++) {
-			String c = os[i].getAttributeValue("filter-name");
+			String c = os[i].getAttributeValue("filter-name"); //$NON-NLS-1$
 			if(name.equals(c)) return os[i];
 		}
 		return null;
@@ -362,13 +362,13 @@ public class WebAppHelper {
 
     public static XModelObject getJSPConfig(XModelObject webxml) {
     	if(webxml == null) return null;
-    	XModelObject folder = webxml.getChildByPath("JSP Config");
+    	XModelObject folder = webxml.getChildByPath("JSP Config"); //$NON-NLS-1$
     	return folder != null ? folder : webxml;
     }
 
     public static XModelObject[] getTaglibs(XModelObject webxml) {
     	if(webxml == null) return null;
-    	XModelObject folder = webxml.getChildByPath("JSP Config");
+    	XModelObject folder = webxml.getChildByPath("JSP Config"); //$NON-NLS-1$
     	if(folder == null) folder = webxml;
     	return folder.getChildren(TAGLIB_ENTITY);
     }

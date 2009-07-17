@@ -23,9 +23,9 @@ public class ServerXmlRedirectHandler extends DefaultRedirectHandler {
 		}
 		if(textTemplate != null) {
 			String t = textTemplate;
-			int i = t.indexOf("server.xml");
+			int i = t.indexOf("server.xml"); //$NON-NLS-1$
 			if(i >= 0) {
-				t = t.substring(0, i) + "Server"/*ServerXmlHelper.getDefaultServer(2)*/ + t.substring(i + "server.xml".length());
+				t = t.substring(0, i) + "Server"/*ServerXmlHelper.getDefaultServer(2)*/ + t.substring(i + "server.xml".length()); //$NON-NLS-1$ //$NON-NLS-2$
 				((XActionImpl)action).setDisplayName(t);
 			}
 		}
@@ -33,7 +33,7 @@ public class ServerXmlRedirectHandler extends DefaultRedirectHandler {
 	}
 
 	protected XModelObject getTrueSource(XModelObject source) {
-		return source.getModel().getByPath("FileSystems");
+		return source.getModel().getByPath("FileSystems"); //$NON-NLS-1$
 	}
 
 }

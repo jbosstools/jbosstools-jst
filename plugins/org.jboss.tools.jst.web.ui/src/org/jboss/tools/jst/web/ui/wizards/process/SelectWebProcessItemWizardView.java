@@ -37,6 +37,7 @@ import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.common.meta.key.WizardKeys;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
+import org.jboss.tools.jst.web.ui.Messages;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 public abstract class SelectWebProcessItemWizardView extends AbstractQueryWizardView {
@@ -126,7 +127,7 @@ public abstract class SelectWebProcessItemWizardView extends AbstractQueryWizard
 		c.setLayout(layout);
 		
 		Label l = new Label(c, SWT.NONE);
-		l.setText("Filter: ");
+		l.setText(Messages.SelectWebProcessItemWizardView_FilterLabel);
 		filter = new Text(c, SWT.BORDER);
 		filter.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		filter.addModifyListener(new MA());

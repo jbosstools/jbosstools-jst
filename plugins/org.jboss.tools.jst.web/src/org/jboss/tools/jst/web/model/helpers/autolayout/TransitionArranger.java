@@ -104,8 +104,8 @@ public class TransitionArranger {
 		ArrayList links = item.inputLinks;
 		for (int k = 0; k < links.size(); k++) {
 			XModelObject io = (XModelObject)links.get(k);
-			String attr = (io.getModelEntity().getAttribute("link shape") != null) ? "link shape" : "shape";
-			io.setAttributeValue(attr, "-1," + (8 * (tg + 2)));
+			String attr = (io.getModelEntity().getAttribute("link shape") != null) ? "link shape" : "shape"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			io.setAttributeValue(attr, "-1," + (8 * (tg + 2))); //$NON-NLS-1$
 		}
 	}
 

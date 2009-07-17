@@ -21,18 +21,18 @@ public class TilesConfigFilteredTreeConstraint implements XFilteredTreeConstrain
 		return false;
 	}
 	
-	static String HIDING_SOME_CHILDREN_ENTITIES = "." + ENT_FILE + "."; 
+	static String HIDING_SOME_CHILDREN_ENTITIES = "." + ENT_FILE + ".";  //$NON-NLS-1$ //$NON-NLS-2$
 
 	public boolean isHidingSomeChildren(XModelObject object) {
 		String entity = object.getModelEntity().getName();
-		return (HIDING_SOME_CHILDREN_ENTITIES.indexOf("." + entity + ".") >= 0);
+		return (HIDING_SOME_CHILDREN_ENTITIES.indexOf("." + entity + ".") >= 0); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
-	static String HIDDEN_CHILDREN_ENTITIES = "." + ENT_PROCESS + ".";
+	static String HIDDEN_CHILDREN_ENTITIES = "." + ENT_PROCESS + "."; //$NON-NLS-1$ //$NON-NLS-2$
 
 	public boolean accepts(XModelObject object) {
 		String entity = object.getModelEntity().getName();
-		if(HIDDEN_CHILDREN_ENTITIES.indexOf("." + entity + ".") >= 0) return false;
+		if(HIDDEN_CHILDREN_ENTITIES.indexOf("." + entity + ".") >= 0) return false; //$NON-NLS-1$ //$NON-NLS-2$
 		return true;
 	}
 

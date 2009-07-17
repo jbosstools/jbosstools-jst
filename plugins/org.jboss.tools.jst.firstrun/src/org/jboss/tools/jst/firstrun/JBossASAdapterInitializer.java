@@ -15,6 +15,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.Properties;
 
 import org.eclipse.core.runtime.CoreException;
@@ -50,7 +51,6 @@ import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.core.ServerUtil;
 import org.eclipse.wst.server.core.internal.RuntimeWorkingCopy;
 import org.eclipse.wst.server.core.internal.ServerWorkingCopy;
-import org.jboss.tools.common.util.FileUtil;
 
 /**
  * @author eskimo
@@ -58,40 +58,42 @@ import org.jboss.tools.common.util.FileUtil;
  */
 public class JBossASAdapterInitializer implements IStartup {
 
-	public static final String JBOSS_AS_HOME = "../../../../jboss-eap/jboss-as"; // JBoss
-	public static final String SERVERS_FILE = "../../../../studio/application_platforms.properties";
+	public static final String JBOSS_AS_HOME = "../../../../jboss-eap/jboss-as"; // JBoss //$NON-NLS-1$
+	public static final String SERVERS_FILE = "../../../../studio/application_platforms.properties"; //$NON-NLS-1$
 
 	// This constants are made to avoid dependency with
 	// org.jboss.ide.eclipse.as.core plugin
+	@SuppressWarnings("nls")
 	public static final String JBOSS_AS_RUNTIME_TYPE_ID[] = {
 			"org.jboss.ide.eclipse.as.runtime.32",
 			"org.jboss.ide.eclipse.as.runtime.40",
 			"org.jboss.ide.eclipse.as.runtime.42",
 			"org.jboss.ide.eclipse.as.runtime.50" };
 
+	@SuppressWarnings("nls")
 	public static final String JBOSS_AS_TYPE_ID[] = {
 			"org.jboss.ide.eclipse.as.32", "org.jboss.ide.eclipse.as.40",
 			"org.jboss.ide.eclipse.as.42", "org.jboss.ide.eclipse.as.50" };
 
 	public static final String JBOSS_AS_NAME[] = {
-			"JBoss Application Server 3.2", "JBoss Application Server 4.0",
-			"JBoss Application Server 4.2", "JBoss Application Server 5.0" };
+			Messages.JBossASAdapterInitializer_AppServer32, Messages.JBossASAdapterInitializer_AppServer40,
+			Messages.JBossASAdapterInitializer_AppServer42, Messages.JBossASAdapterInitializer_AppServer50 };
 
 	private static final int installedASIndex = 2;
 
-	public static final String JBOSS_AS_HOST = "localhost";
+	public static final String JBOSS_AS_HOST = "localhost"; //$NON-NLS-1$
 
-	public static final String JBOSS_AS_DEFAULT_CONFIGURATION_NAME = "default";
+	public static final String JBOSS_AS_DEFAULT_CONFIGURATION_NAME = "default"; //$NON-NLS-1$
 
-	public static final String FIRST_START_PREFERENCE_NAME = "FIRST_START";
+	public static final String FIRST_START_PREFERENCE_NAME = "FIRST_START"; //$NON-NLS-1$
 
-	public static final String HSQL_DRIVER_DEFINITION_ID = "DriverDefn.Hypersonic DB";
+	public static final String HSQL_DRIVER_DEFINITION_ID = "DriverDefn.Hypersonic DB"; //$NON-NLS-1$
 
-	public static final String HSQL_DRIVER_NAME = "Hypersonic DB";
+	public static final String HSQL_DRIVER_NAME = "Hypersonic DB"; //$NON-NLS-1$
 
-	public static final String HSQL_DRIVER_TEMPLATE_ID = "org.eclipse.datatools.enablement.hsqldb.1_8.driver";
+	public static final String HSQL_DRIVER_TEMPLATE_ID = "org.eclipse.datatools.enablement.hsqldb.1_8.driver"; //$NON-NLS-1$
 
-	public static final String DTP_DB_URL_PROPERTY_ID = "org.eclipse.datatools.connectivity.db.URL";
+	public static final String DTP_DB_URL_PROPERTY_ID = "org.eclipse.datatools.connectivity.db.URL"; //$NON-NLS-1$
 
 	/**
 	 * @see org.eclipse.ui.IStartup#earlyStartup()
@@ -117,7 +119,7 @@ public class JBossASAdapterInitializer implements IStartup {
 			JstFirstRunPlugin.getDefault().getPreferenceStore().setValue(
 					FIRST_START_PREFERENCE_NAME, false);
 			String pluginLocation = FileLocator.resolve(
-					JstFirstRunPlugin.getDefault().getBundle().getEntry("/"))
+					JstFirstRunPlugin.getDefault().getBundle().getEntry("/")) //$NON-NLS-1$
 					.getPath();
 			File serversFile = new File(pluginLocation, SERVERS_FILE)
 					.getCanonicalFile();
@@ -128,7 +130,7 @@ public class JBossASAdapterInitializer implements IStartup {
 				for (Object iterable_element : servers.keySet()) {
 					String str = servers.getProperty(iterable_element.toString());
 					String jbossASLocation = null;
-					String[] params = str.split(",");
+					String[] params = str.split(","); //$NON-NLS-1$
 
 					String name = params[0];
 					String type = params[1];
@@ -136,26 +138,26 @@ public class JBossASAdapterInitializer implements IStartup {
 					jbossASLocation = params[3].trim();
 					
 					int index = 0;
-					if (type.startsWith("AS")) {
-						if (version.startsWith("3.2")) {
+					if (type.startsWith("AS")) { //$NON-NLS-1$
+						if (version.startsWith("3.2")) { //$NON-NLS-1$
 							index = 0;
-						} else if (version.startsWith("4.0")) {
+						} else if (version.startsWith("4.0")) { //$NON-NLS-1$
 							index = 1;
-						} else if (version.startsWith("4.2")
-								|| version.startsWith("4.3")) {
+						} else if (version.startsWith("4.2") //$NON-NLS-1$
+								|| version.startsWith("4.3")) { //$NON-NLS-1$
 							index = 2;
-						} else if (version.startsWith("5.0")) {
+						} else if (version.startsWith("5.0")) { //$NON-NLS-1$
 							index = 3;
 						}
 					} else {
 						index = 2;
 					}
 
-					if (!"AS".equals(type)) {
-						jbossASLocation = jbossASLocation + File.separatorChar + "jboss-as";
+					if (!"AS".equals(type)) { //$NON-NLS-1$
+						jbossASLocation = jbossASLocation + File.separatorChar + "jboss-as"; //$NON-NLS-1$
 					}
 					
-					IRuntime runtime = createRuntime(name + " Runtime",
+					IRuntime runtime = createRuntime(MessageFormat.format(Messages.JBossASAdapterInitializer_Runtime, name),
 								jbossASLocation, new NullProgressMonitor(), index);
 					
 					if (runtime != null) {
@@ -209,11 +211,11 @@ public class JBossASAdapterInitializer implements IStartup {
 		} catch (CoreException e) {
 			JstFirstRunPlugin.getPluginLog().log(
 					new Status(IStatus.ERROR, JstFirstRunPlugin.PLUGIN_ID,
-							"Can't create new JBoss Server", e));
+							Messages.JBossASAdapterInitializer_CannotCreateServer, e));
 		} catch (IOException e) {
 			JstFirstRunPlugin.getPluginLog().log(
 					new Status(IStatus.ERROR, JstFirstRunPlugin.PLUGIN_ID,
-							"Can't create new JBoss Server", e));
+							Messages.JBossASAdapterInitializer_CannotCreateServer, e));
 		} catch (ConnectionProfileException e) {
 			JstFirstRunPlugin
 					.getPluginLog()
@@ -221,8 +223,7 @@ public class JBossASAdapterInitializer implements IStartup {
 							new Status(
 									IStatus.ERROR,
 									JstFirstRunPlugin.PLUGIN_ID,
-									"Can't create new DTP "
-											+ "Connection Profile for JBoss AS Hypersonic embedded database",
+									Messages.JBossASAdapterInitializer_CannotCreateProfile,
 									e));
 		}
 	}
@@ -278,14 +279,14 @@ public class JBossASAdapterInitializer implements IStartup {
 			}
 			IVMInstall defaultVM = JavaRuntime.getDefaultVMInstall();
 			// IJBossServerRuntime.PROPERTY_VM_ID
-			((RuntimeWorkingCopy) runtime).setAttribute("PROPERTY_VM_ID",
+			((RuntimeWorkingCopy) runtime).setAttribute("PROPERTY_VM_ID", //$NON-NLS-1$
 					defaultVM.getId());
 			// IJBossServerRuntime.PROPERTY_VM_TYPE_ID
-			((RuntimeWorkingCopy) runtime).setAttribute("PROPERTY_VM_TYPE_ID",
+			((RuntimeWorkingCopy) runtime).setAttribute("PROPERTY_VM_TYPE_ID", //$NON-NLS-1$
 					defaultVM.getVMInstallType().getId());
 			// IJBossServerRuntime.PROPERTY_CONFIGURATION_NAME
 			((RuntimeWorkingCopy) runtime).setAttribute(
-					"org.jboss.ide.eclipse.as.core.runtime.configurationName",
+					"org.jboss.ide.eclipse.as.core.runtime.configurationName", //$NON-NLS-1$
 					JBOSS_AS_DEFAULT_CONFIGURATION_NAME);
 
 			return runtime.save(false, progressMonitor);
@@ -318,19 +319,19 @@ public class JBossASAdapterInitializer implements IStartup {
 		}
 
 		// JBossServer.DEPLOY_DIRECTORY
-		String deployVal = runtime.getLocation().append("server").append(
-				JBOSS_AS_DEFAULT_CONFIGURATION_NAME).append("deploy")
+		String deployVal = runtime.getLocation().append("server").append( //$NON-NLS-1$
+				JBOSS_AS_DEFAULT_CONFIGURATION_NAME).append("deploy") //$NON-NLS-1$
 				.toOSString();
 		((ServerWorkingCopy) server).setAttribute(
-				"org.jboss.ide.eclipse.as.core.server.deployDirectory",
+				"org.jboss.ide.eclipse.as.core.server.deployDirectory", //$NON-NLS-1$
 				deployVal);
 
 		// IDeployableServer.TEMP_DEPLOY_DIRECTORY
-		String deployTmpFolderVal = runtime.getLocation().append("server")
-				.append(JBOSS_AS_DEFAULT_CONFIGURATION_NAME).append("tmp")
-				.append("jbosstoolsTemp").toOSString();
+		String deployTmpFolderVal = runtime.getLocation().append("server") //$NON-NLS-1$
+				.append(JBOSS_AS_DEFAULT_CONFIGURATION_NAME).append("tmp") //$NON-NLS-1$
+				.append("jbosstoolsTemp").toOSString(); //$NON-NLS-1$
 		((ServerWorkingCopy) server).setAttribute(
-				"org.jboss.ide.eclipse.as.core.server.tempDeployDirectory",
+				"org.jboss.ide.eclipse.as.core.server.tempDeployDirectory", //$NON-NLS-1$
 				deployTmpFolderVal);
 
 		// If we'd need to set up a username / pw for JMX, do it here.
@@ -362,11 +363,11 @@ public class JBossASAdapterInitializer implements IStartup {
 		String driverPath;
 		try {
 			driverPath = new File(jbossASLocation
-					+ "/server/default/lib/hsqldb.jar").getCanonicalPath();
+					+ "/server/default/lib/hsqldb.jar").getCanonicalPath(); //$NON-NLS-1$
 		} catch (IOException e) {
 			JstFirstRunPlugin.getPluginLog().log(
 					new Status(IStatus.ERROR, JstFirstRunPlugin.PLUGIN_ID,
-							"Can't create new HSQL DB Driver.", e));
+							Messages.JBossASAdapterInitializer_CannotCreateDriver, e));
 			return;
 		}
 
@@ -387,9 +388,9 @@ public class JBossASAdapterInitializer implements IStartup {
 				String id = prop.getAttribute("id"); //$NON-NLS-1$
 
 				String value = prop.getAttribute("value"); //$NON-NLS-1$
-				props.setProperty(id, value == null ? "" : value);
+				props.setProperty(id, value == null ? "" : value); //$NON-NLS-1$
 			}
-			props.setProperty(DTP_DB_URL_PROPERTY_ID, "jdbc:hsqldb:.");
+			props.setProperty(DTP_DB_URL_PROPERTY_ID, "jdbc:hsqldb:."); //$NON-NLS-1$
 			props.setProperty(IDriverMgmtConstants.PROP_DEFN_TYPE, descr
 					.getId());
 			props.setProperty(IDriverMgmtConstants.PROP_DEFN_JARLIST,
@@ -404,7 +405,7 @@ public class JBossASAdapterInitializer implements IStartup {
 		driver = DriverManager.getInstance().getDriverInstanceByName(
 				HSQL_DRIVER_NAME);
 		if (driver != null
-				&& ProfileManager.getInstance().getProfileByName("DefaultDS") == null) {
+				&& ProfileManager.getInstance().getProfileByName("DefaultDS") == null) { //$NON-NLS-1$
 			// create profile
 			Properties props = new Properties();
 			props.setProperty(
@@ -413,7 +414,7 @@ public class JBossASAdapterInitializer implements IStartup {
 			props
 					.setProperty(
 							IJDBCConnectionProfileConstants.CONNECTION_PROPERTIES_PROP_ID,
-							"");
+							""); //$NON-NLS-1$
 			props
 					.setProperty(
 							IJDBCDriverDefinitionConstants.DRIVER_CLASS_PROP_ID,
@@ -431,12 +432,12 @@ public class JBossASAdapterInitializer implements IStartup {
 									.getProperty(IJDBCDriverDefinitionConstants.DATABASE_VERSION_PROP_ID));
 			props.setProperty(
 					IJDBCDriverDefinitionConstants.DATABASE_NAME_PROP_ID,
-					"Default");
+					"Default"); //$NON-NLS-1$
 			props.setProperty(IJDBCDriverDefinitionConstants.PASSWORD_PROP_ID,
-					"");
+					""); //$NON-NLS-1$
 			props.setProperty(
 					IJDBCConnectionProfileConstants.SAVE_PASSWORD_PROP_ID,
-					"false");
+					"false"); //$NON-NLS-1$
 			props
 					.setProperty(
 							IJDBCDriverDefinitionConstants.USERNAME_PROP_ID,
@@ -448,10 +449,10 @@ public class JBossASAdapterInitializer implements IStartup {
 							driver
 									.getProperty(IJDBCDriverDefinitionConstants.URL_PROP_ID));
 
-			ProfileManager.getInstance().createProfile("DefaultDS",
-					"The JBoss AS Hypersonic embedded database",
+			ProfileManager.getInstance().createProfile("DefaultDS", //$NON-NLS-1$
+					Messages.JBossASAdapterInitializer_JBossASHypersonicEmbeddedDB,
 					IJDBCConnectionProfileConstants.CONNECTION_PROFILE_ID,
-					props, "", false);
+					props, "", false); //$NON-NLS-1$
 		}
 		if (driver != null) {
 			driverIsCreated = true;

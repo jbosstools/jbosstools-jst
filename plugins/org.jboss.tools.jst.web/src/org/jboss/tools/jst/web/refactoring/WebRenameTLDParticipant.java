@@ -22,7 +22,7 @@ import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 
 public class WebRenameTLDParticipant extends RenameParticipant {
-	public static final String PARTICIPANT_NAME="web-RenameTLDParticipant";
+	public static final String PARTICIPANT_NAME="web-RenameTLDParticipant"; //$NON-NLS-1$
 	XModelObject object;
 
 	protected boolean initialize(Object element) {
@@ -31,7 +31,7 @@ public class WebRenameTLDParticipant extends RenameParticipant {
 		object = EclipseResourceUtil.getObjectByResource(f);
 		if(object == null) return false;
 		String entity = object.getModelEntity().getName();
-		if(entity.startsWith("FileTLD")) return true;
+		if(entity.startsWith("FileTLD")) return true; //$NON-NLS-1$
 		return false;
 	}
 

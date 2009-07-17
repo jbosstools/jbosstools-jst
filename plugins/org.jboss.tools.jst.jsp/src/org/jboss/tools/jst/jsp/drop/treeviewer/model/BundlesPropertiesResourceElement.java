@@ -78,7 +78,7 @@ public class BundlesPropertiesResourceElement extends XModelAttributeValueResour
 	 * @see ModelElement#getName()
 	 */
 	public String getName() {
-		return "Bundle Properies";
+		return "Bundle Properies"; //$NON-NLS-1$
 	}
 
 	public Map getBundles() {

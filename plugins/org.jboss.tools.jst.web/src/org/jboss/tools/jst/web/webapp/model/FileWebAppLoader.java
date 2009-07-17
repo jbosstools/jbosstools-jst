@@ -37,52 +37,52 @@ class FWLoaderUtil extends XModelObjectLoaderUtil {
 
     protected Set<String> getAllowedChildren(XModelEntity entity) {
     	Set<String> children = super.getAllowedChildren(entity);
-    	if("WebAppResourceCollection".equals(entity.getName())) {
-    		children.add("url-pattern");
-    		children.add("http-method");
-    	} else if("WebAppServiceRef".equals(entity.getName())) {
-    		children.add("port-component-ref");
-    		children.add("handler");
-    	} else if("WebAppFilterMapping24".equals(entity.getName())) {
-    		children.add("dispatcher");
-    	} else if(entity.getName().startsWith("FileWebApp")) {
-    		children.add("distributable");
+    	if("WebAppResourceCollection".equals(entity.getName())) { //$NON-NLS-1$
+    		children.add("url-pattern"); //$NON-NLS-1$
+    		children.add("http-method"); //$NON-NLS-1$
+    	} else if("WebAppServiceRef".equals(entity.getName())) { //$NON-NLS-1$
+    		children.add("port-component-ref"); //$NON-NLS-1$
+    		children.add("handler"); //$NON-NLS-1$
+    	} else if("WebAppFilterMapping24".equals(entity.getName())) { //$NON-NLS-1$
+    		children.add("dispatcher"); //$NON-NLS-1$
+    	} else if(entity.getName().startsWith("FileWebApp")) { //$NON-NLS-1$
+    		children.add("distributable"); //$NON-NLS-1$
     	}    	
     	return children;
     }
 
     protected boolean isSaveable(XModelEntity entity, String n, String v, String dv) {
-        if("load-on-startup".equals(n)) return false;
+        if("load-on-startup".equals(n)) return false; //$NON-NLS-1$
 		if(v == null) return false;
 		if(v.length() == 0 || v.equals(dv)) {
 			XAttribute attr = entity.getAttribute(n);
-			return (attr != null && "always".equals(attr.getProperty("save")));
+			return (attr != null && "always".equals(attr.getProperty("save"))); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		return super.isSaveable(entity, n, v, dv);
     }
 
     public String getAttribute(Element element, String xmlname, XAttribute attr) {
-        if("distributable".equals(xmlname))
-          return (XMLUtil.getUniqueChild(element, "distributable") != null) ? "yes" : "no";
-        if("role-names".equals(xmlname))
-          return loadArray(element, "role-name");
-        if("url-patterns".equals(xmlname))
-          return loadArray(element, "url-pattern");
-        if("http-methods".equals(xmlname))
-          return loadArray(element, "http-method");
-		if("handlers".equals(xmlname))
-		  return loadArray(element, "handler");
-		if("port-component-refs".equals(xmlname))
-		  return loadArray(element, "port-component-ref");
-		if("dispatchers".equals(xmlname))
-		  return loadArray(element, "dispatcher");
+        if("distributable".equals(xmlname)) //$NON-NLS-1$
+          return (XMLUtil.getUniqueChild(element, "distributable") != null) ? "yes" : "no"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        if("role-names".equals(xmlname)) //$NON-NLS-1$
+          return loadArray(element, "role-name"); //$NON-NLS-1$
+        if("url-patterns".equals(xmlname)) //$NON-NLS-1$
+          return loadArray(element, "url-pattern"); //$NON-NLS-1$
+        if("http-methods".equals(xmlname)) //$NON-NLS-1$
+          return loadArray(element, "http-method"); //$NON-NLS-1$
+		if("handlers".equals(xmlname)) //$NON-NLS-1$
+		  return loadArray(element, "handler"); //$NON-NLS-1$
+		if("port-component-refs".equals(xmlname)) //$NON-NLS-1$
+		  return loadArray(element, "port-component-ref"); //$NON-NLS-1$
+		if("dispatchers".equals(xmlname)) //$NON-NLS-1$
+		  return loadArray(element, "dispatcher"); //$NON-NLS-1$
         return super.getAttribute(element, xmlname, attr);
     }
 
     public void saveAttributes(Element element, XModelObject o) {
         super.saveAttributes(element, o);
 		String entity = o.getModelEntity().getName();
-		if("WebAppErrorPage".equals(entity)) {
+		if("WebAppErrorPage".equals(entity)) { //$NON-NLS-1$
 			eitherOr(element, WebAppConstants.ERROR_CODE, WebAppConstants.EXCEPTION_TYPE);
 		} else if(WebAppHelper.FILTER_ENTITY.equals(entity) || entity.startsWith(WebAppHelper.FILTER_MAPPING_ENTITY)) {
 			eitherOr(element, WebAppConstants.URL_PATTERN, WebAppConstants.SERVLET_NAME);
@@ -90,11 +90,11 @@ class FWLoaderUtil extends XModelObjectLoaderUtil {
 			eitherOr(element, WebAppConstants.SERVLET_CLASS, WebAppConstants.JSP_FILE);
 		}
 		if(schema) {
-			if(o.getModelEntity().getAttribute("description") != null) {
-				makeChildrenFirst(element, new String[]{"description", "display-name", "icon"});
+			if(o.getModelEntity().getAttribute("description") != null) { //$NON-NLS-1$
+				makeChildrenFirst(element, new String[]{"description", "display-name", "icon"}); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			}
-			if("WebAppEnvEntry".equals(o.getModelEntity().getName())) {
-				Element e = XMLUtilities.getUniqueChild(element, "env-entry-value");
+			if("WebAppEnvEntry".equals(o.getModelEntity().getName())) { //$NON-NLS-1$
+				Element e = XMLUtilities.getUniqueChild(element, "env-entry-value"); //$NON-NLS-1$
 				if(e != null) {
 					element.removeChild(e);
 					element.appendChild(e);
@@ -104,20 +104,20 @@ class FWLoaderUtil extends XModelObjectLoaderUtil {
     }
 
     public void saveAttribute(Element element, String xmlname, String value) {
-        if("distributable".equals(xmlname)) {
-            if("yes".equals(value)) XMLUtil.createElement(element, "distributable");
-        } else if("role-names".equals(xmlname)) {
-            saveArray(element, "role-name", value);
-        } else if("url-patterns".equals(xmlname)) {
-            saveArray(element, "url-pattern", value);
-        } else if("http-methods".equals(xmlname)) {
-            saveArray(element, "http-method", value);
-		} else if("handlers".equals(xmlname)) {
-			saveArray(element, "handler", value);
-		} else if("port-component-refs".equals(xmlname)) {
-			saveArray(element, "port-component-ref", value);
-		} else if("dispatchers".equals(xmlname)) {
-			saveArray(element, "dispatcher", value);
+        if("distributable".equals(xmlname)) { //$NON-NLS-1$
+            if("yes".equals(value)) XMLUtil.createElement(element, "distributable"); //$NON-NLS-1$ //$NON-NLS-2$
+        } else if("role-names".equals(xmlname)) { //$NON-NLS-1$
+            saveArray(element, "role-name", value); //$NON-NLS-1$
+        } else if("url-patterns".equals(xmlname)) { //$NON-NLS-1$
+            saveArray(element, "url-pattern", value); //$NON-NLS-1$
+        } else if("http-methods".equals(xmlname)) { //$NON-NLS-1$
+            saveArray(element, "http-method", value); //$NON-NLS-1$
+		} else if("handlers".equals(xmlname)) { //$NON-NLS-1$
+			saveArray(element, "handler", value); //$NON-NLS-1$
+		} else if("port-component-refs".equals(xmlname)) { //$NON-NLS-1$
+			saveArray(element, "port-component-ref", value); //$NON-NLS-1$
+		} else if("dispatchers".equals(xmlname)) { //$NON-NLS-1$
+			saveArray(element, "dispatcher", value); //$NON-NLS-1$
         } else {
             super.saveAttribute(element, xmlname, value);
         }
@@ -125,19 +125,19 @@ class FWLoaderUtil extends XModelObjectLoaderUtil {
 
     public boolean saveChildren(Element element, XModelObject o) {
     	String entity = o.getModelEntity().getName();
-    	if(entity.startsWith("FileWebApp")) {
+    	if(entity.startsWith("FileWebApp")) { //$NON-NLS-1$
     		return saveWebAppChildren(element, o);
     	} else if(WebAppHelper.FILTER_MAPPING_24_ENTITY.equals(entity)) {
     		
     		return true;
-    	} else if(!"WebAppServlet".equals(entity)) {
+    	} else if(!"WebAppServlet".equals(entity)) { //$NON-NLS-1$
     		return super.saveChildren(element, o);
     	}
-        saveChildren(element, o, "WebAppInitParam");
-        String l = o.getAttributeValue("load-on-startup");
-        if(l.length() > 0) saveAttribute(element, "load-on-startup.#text", l);
-        saveChildren(element, o, "WebAppRunAs");
-        saveChildren(element, o, "WebAppSecurityRoleRef");
+        saveChildren(element, o, "WebAppInitParam"); //$NON-NLS-1$
+        String l = o.getAttributeValue("load-on-startup"); //$NON-NLS-1$
+        if(l.length() > 0) saveAttribute(element, "load-on-startup.#text", l); //$NON-NLS-1$
+        saveChildren(element, o, "WebAppRunAs"); //$NON-NLS-1$
+        saveChildren(element, o, "WebAppSecurityRoleRef"); //$NON-NLS-1$
         return true;
     }
 
@@ -162,7 +162,7 @@ class FWLoaderUtil extends XModelObjectLoaderUtil {
     
     public void loadChildren(Element element, XModelObject o) {
     	String entity = o.getModelEntity().getName();
-    	if(entity.startsWith("FileWebApp")) {
+    	if(entity.startsWith("FileWebApp")) { //$NON-NLS-1$
 			addRequiredChildren(o, true);
     		XModelObject[] os = o.getChildren();
     		for (int i = 0; i < os.length; i++) {
@@ -221,11 +221,11 @@ class FWLoaderUtil extends XModelObjectLoaderUtil {
     boolean needToSave(XModelObject o) {
     	if(o == null) return false;
     	String entity = o.getModelEntity().getName();
-    	if("WebAppSessionConfig".equals(entity) || "WebAppLoginConfig".equals(entity)) {
+    	if("WebAppSessionConfig".equals(entity) || "WebAppLoginConfig".equals(entity)) { //$NON-NLS-1$ //$NON-NLS-2$
     		return hasSetAttributes(o); 
-    	} else if("WebAppWelcomFileList".equals(entity) || "WebAppLocaleEncodingMappingList".equals(entity)) {
+    	} else if("WebAppWelcomFileList".equals(entity) || "WebAppLocaleEncodingMappingList".equals(entity)) { //$NON-NLS-1$ //$NON-NLS-2$
     		return (o.getChildren().length > 0);
-    	} else if("WebAppJspConfig".equals(entity)) {
+    	} else if("WebAppJspConfig".equals(entity)) { //$NON-NLS-1$
     		return (o.getChildren().length > 0);
     	}
     	return true;
@@ -236,11 +236,11 @@ class FWLoaderUtil extends XModelObjectLoaderUtil {
     	for (int i = 0; i < as.length; i++) {
     		String xml = as[i].getXMLName();
     		// it would be more safe to check isSavable
-    		if(xml == null || xml.length() == 0 || "NAME".equals(xml)) continue;
+    		if(xml == null || xml.length() == 0 || "NAME".equals(xml)) continue; //$NON-NLS-1$
     		String v = o.getAttributeValue(as[i].getName());
     		if(v != null && v.length() > 0) return true;
     	}
-    	String finalComment = o.get("#final-comment");
+    	String finalComment = o.get("#final-comment"); //$NON-NLS-1$
     	if(finalComment != null && finalComment.length() > 0) return true;
     	return false;
     }

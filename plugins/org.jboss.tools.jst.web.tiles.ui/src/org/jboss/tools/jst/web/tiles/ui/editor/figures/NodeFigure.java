@@ -55,7 +55,7 @@ public class NodeFigure extends
 			0xe4);
 
 	public static final Image errorIcon = ModelUIImages
-			.getImage("error_co.gif");
+			.getImage("error_co.gif"); //$NON-NLS-1$
 
 	public static final int LINK_HEIGHT = 16;
 }

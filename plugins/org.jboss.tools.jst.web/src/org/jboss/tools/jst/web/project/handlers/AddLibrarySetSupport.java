@@ -70,7 +70,7 @@ public class AddLibrarySetSupport extends SpecialWizardSupport {
     		} else {
     			for (int i = 0; i < FORBIDDEN_INDICES.length(); i++) {
     				if(name.indexOf(FORBIDDEN_INDICES.charAt(i)) >= 0) {
-    	    			message = NLS.bind(WebUIMessages.MUST_NOT_CONTAIN_CHARACTER, ""+FORBIDDEN_INDICES.charAt(i));
+    	    			message = NLS.bind(WebUIMessages.MUST_NOT_CONTAIN_CHARACTER, ""+FORBIDDEN_INDICES.charAt(i)); //$NON-NLS-1$
     					return;
     				}
     			}				

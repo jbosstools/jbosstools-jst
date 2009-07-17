@@ -31,14 +31,14 @@ public class SeamVariableElement extends SeamElement {
 	 * @see IAttributeValue#getValue()
 	 */
 	public String getValue() {
-		return "#{" + getFullName() + "}";
+		return "#{" + getFullName() + "}"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
 	 * @see ModelElement#getComparedValue()
 	 */
 	protected String getComparedValue() {
-		return "#{" + getFullName();
+		return "#{" + getFullName(); //$NON-NLS-1$
 	}
 
 }

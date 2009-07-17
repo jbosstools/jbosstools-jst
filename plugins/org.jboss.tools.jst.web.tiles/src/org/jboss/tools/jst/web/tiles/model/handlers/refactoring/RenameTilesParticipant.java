@@ -20,7 +20,7 @@ import org.jboss.tools.common.model.util.*;
 import org.jboss.tools.jst.web.tiles.model.helpers.TilesRegistrationHelper;
 
 public class RenameTilesParticipant extends RenameParticipant {
-	public static final String PARTICIPANT_NAME="tiles-RenameTilesParticipant";
+	public static final String PARTICIPANT_NAME="tiles-RenameTilesParticipant"; //$NON-NLS-1$
 	XModelObject object;
 
 	protected boolean initialize(Object element) {
@@ -29,7 +29,7 @@ public class RenameTilesParticipant extends RenameParticipant {
 		object = EclipseResourceUtil.getObjectByResource(f);
 		if(object == null) return false;
 		String entity = object.getModelEntity().getName();
-		if(!entity.startsWith("FileTiles")) return false;
+		if(!entity.startsWith("FileTiles")) return false; //$NON-NLS-1$
 		return true;
 	}
 

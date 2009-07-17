@@ -35,7 +35,7 @@ public class AddProjectTemplateResourcesStep extends MultistepWizardStep {
 	}
 
 	public String getStepImplementingClass() {
-		return "org.jboss.tools.jst.web.ui.wizards.project.AddProjectTemplateResourcesView";
+		return "org.jboss.tools.jst.web.ui.wizards.project.AddProjectTemplateResourcesView"; //$NON-NLS-1$
 	}
 	
 	public void init() {
@@ -48,13 +48,13 @@ public class AddProjectTemplateResourcesStep extends MultistepWizardStep {
 			IResource[] rs = root.members();
 			for (int i = 0; i < rs.length; i++) {
 				String n = rs[i].getName();
-				if(n.startsWith(".") && !n.equals(IModelNature.PROJECT_FILE_NANE)) {
+				if(n.startsWith(".") && !n.equals(IModelNature.PROJECT_FILE_NANE)) { //$NON-NLS-1$
 					excludedResources.add(rs[i].getFullPath().toString());
 				}
 			}
-	        IResource r = root.findMember("WebContent/WEB-INF/lib");
+	        IResource r = root.findMember("WebContent/WEB-INF/lib"); //$NON-NLS-1$
 	        if(r != null) excludedResources.add(r.getFullPath().toString());
-	        r = root.findMember("WebContent/WEB-INF/classes");
+	        r = root.findMember("WebContent/WEB-INF/classes"); //$NON-NLS-1$
 	        if(r != null) excludedResources.add(r.getFullPath().toString());
 		} catch (CoreException e) {
 			WebModelPlugin.getPluginLog().logError(e);

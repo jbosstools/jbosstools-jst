@@ -36,6 +36,7 @@ import org.jboss.tools.common.model.ui.action.XModelObjectAction;
 import org.jboss.tools.common.model.ui.action.XModelObjectActionList;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.util.FindObjectHelper;
+import org.jboss.tools.jst.web.ui.Messages;
 
 public class XActionProvider extends CommonActionProvider {
 
@@ -50,10 +51,10 @@ public class XActionProvider extends CommonActionProvider {
 		Object e = ((IStructuredSelection)s).getFirstElement();
 		if(e instanceof XModelObject) {
 			XModelObject o = (XModelObject)e;
-			registerAction(actionBars, o, "DeleteActions.Delete", ActionFactory.DELETE.getId());
-			registerAction(actionBars, o, "CopyActions.Copy", ActionFactory.COPY.getId());
-			registerAction(actionBars, o, "CopyActions.Paste", ActionFactory.PASTE.getId());
-			registerAction(actionBars, o, "CopyActions.Cut", ActionFactory.CUT.getId());
+			registerAction(actionBars, o, "DeleteActions.Delete", ActionFactory.DELETE.getId()); //$NON-NLS-1$
+			registerAction(actionBars, o, "CopyActions.Copy", ActionFactory.COPY.getId()); //$NON-NLS-1$
+			registerAction(actionBars, o, "CopyActions.Paste", ActionFactory.PASTE.getId()); //$NON-NLS-1$
+			registerAction(actionBars, o, "CopyActions.Cut", ActionFactory.CUT.getId()); //$NON-NLS-1$
 			if(o.getFileType() <= XModelObject.FILE) {
 				XOpenAction x = new XOpenAction(o);
 				actionBars.setGlobalActionHandler(ICommonActionConstants.OPEN, x);
@@ -119,7 +120,7 @@ public class XActionProvider extends CommonActionProvider {
         public void fill(Menu menu, int index) {
         	if(o.getAdapter(IResource.class) != null && !removeAll) {
     			MenuItem item = new MenuItem(menu, SWT.CASCADE);
-    			item.setText("Red Hat");
+    			item.setText(Messages.XActionProvider_CompanyName);
     			menu = new Menu(item);
     			item.setMenu(menu);
         	}
@@ -142,7 +143,7 @@ public class XActionProvider extends CommonActionProvider {
 	}
 	
 	protected void fillRunningProperties(Properties p) {
-		p.setProperty("actionSourceGUIComponentID", "navigator");
+		p.setProperty("actionSourceGUIComponentID", "navigator"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 }
 

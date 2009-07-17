@@ -134,10 +134,10 @@ public class XMLScanner implements IFileScanner {
 		library.setShortName(new XMLValueInfo(o, ATTR_SHORTNAME));
 		String version = o.getAttributeValue(TLDLibrary.VERSION);
 		if(version == null) {
-			if("FileTLD_1_2".equals(o.getModelEntity().getName())) {
-				version = "1.2";
+			if("FileTLD_1_2".equals(o.getModelEntity().getName())) { //$NON-NLS-1$
+				version = "1.2"; //$NON-NLS-1$
 			} else {
-				version = "1.1";
+				version = "1.1"; //$NON-NLS-1$
 			}
 			library.setVersion(version);
 		} else {
@@ -148,7 +148,7 @@ public class XMLScanner implements IFileScanner {
 
 		XModelObject[] ts = o.getChildren();
 		for (XModelObject t: ts) {
-			if(t.getModelEntity().getName().startsWith("TLDTag")) {
+			if(t.getModelEntity().getName().startsWith("TLDTag")) { //$NON-NLS-1$
 				AbstractComponent tag = new TLDTag();
 				tag.setId(t);
 
@@ -159,7 +159,7 @@ public class XMLScanner implements IFileScanner {
 				
 				XModelObject[] as = t.getChildren();
 				for(XModelObject a: as) {
-					if(a.getModelEntity().getName().startsWith("TLDAttribute")) {
+					if(a.getModelEntity().getName().startsWith("TLDAttribute")) { //$NON-NLS-1$
 						AbstractAttribute attr = new TLDAttribute();
 						attr.setId(a);
 						attr.setName(new XMLValueInfo(a, XMLStoreConstants.ATTR_NAME));
@@ -186,12 +186,12 @@ public class XMLScanner implements IFileScanner {
 		XModelObject[] os = o.getChildren();
 		for (XModelObject t: os) {
 			String entity = t.getModelEntity().getName();
-			if(entity.startsWith("FaceletTaglibTag")) {
+			if(entity.startsWith("FaceletTaglibTag")) { //$NON-NLS-1$
 				FaceletTag tag = new FaceletTag();
 				tag.setId(t);
 				tag.setName(new XMLValueInfo(t, ATTR_TAG_NAME));
 				library.addComponent(tag);
-			} else if(entity.startsWith("FaceletTaglibFunction")) {
+			} else if(entity.startsWith("FaceletTaglibFunction")) { //$NON-NLS-1$
 				ELFunction f = new ELFunction();
 				f.setId(t);
 				f.setName(new XMLValueInfo(t, ATTR_FUNC_NAME));
@@ -204,11 +204,11 @@ public class XMLScanner implements IFileScanner {
 	private void parseFacesConfig(XModelObject o, IPath source, IKbProject sp, LoadedDeclarations ds) {
 		FacesConfigTagLibrary library = new FacesConfigTagLibrary();
 		library.setId(o);
-		library.setURI("TODO"); //TODO what is the URI?
+		library.setURI("TODO"); //TODO what is the URI? //$NON-NLS-1$
 		
 		ds.getLibraries().add(library);
 
-		XModelObject componentFolder = o.getChildByPath("Components");
+		XModelObject componentFolder = o.getChildByPath("Components"); //$NON-NLS-1$
 		if(componentFolder == null) return;
 		XModelObject[] os = componentFolder.getChildren();
 		for (XModelObject c: os) {
@@ -224,12 +224,12 @@ public class XMLScanner implements IFileScanner {
 			XModelObject[] as = c.getChildren();
 			for (XModelObject child: as) {
 				String entity = child.getModelEntity().getName();
-				if(entity.startsWith("JSFAttribute")) {
+				if(entity.startsWith("JSFAttribute")) { //$NON-NLS-1$
 					FacesConfigAttribute attr = new FacesConfigAttribute();
 					attr.setId(child);
 					attr.setName(new XMLValueInfo(child, ATTR_ATTRIBUTE_NAME));					
 					component.addAttribute(attr);
-				} else if(entity.startsWith("JSFFacet")) {
+				} else if(entity.startsWith("JSFFacet")) { //$NON-NLS-1$
 					Facet f = new Facet();
 					f.setId(child);
 					f.setName(new XMLValueInfo(child, ATTR_FACET_NAME));

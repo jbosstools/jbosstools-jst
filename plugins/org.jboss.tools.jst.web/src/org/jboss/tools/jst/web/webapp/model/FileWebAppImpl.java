@@ -22,7 +22,7 @@ public class FileWebAppImpl extends SimpleWebFileImpl {
 	
 	protected boolean hasDTD() {
 		String entity = getModelEntity().getName();
-		return !"FileWebApp24".equals(entity) && !"FileWebApp25".equals(entity);
+		return !"FileWebApp24".equals(entity) && !"FileWebApp25".equals(entity); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 }

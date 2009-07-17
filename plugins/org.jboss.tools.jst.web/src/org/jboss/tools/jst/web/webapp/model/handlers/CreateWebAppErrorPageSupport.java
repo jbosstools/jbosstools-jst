@@ -85,9 +85,9 @@ public class CreateWebAppErrorPageSupport extends SpecialWizardSupport {
     		boolean isErrorCodeSet = (errorCode != null && errorCode.length() > 0);
     		boolean isExceptionTypeSet = (exceptionType != null && exceptionType.length() > 0);
     		if(!isErrorCodeSet && !isExceptionTypeSet) {
-    			message = NLS.bind(WebUIMessages.EITHER_OR_MUST_BE_SET, getDisplayName(WebAppConstants.ERROR_CODE), getDisplayName(WebAppConstants.EXCEPTION_TYPE));  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    			message = NLS.bind(WebUIMessages.EITHER_OR_MUST_BE_SET, getDisplayName(WebAppConstants.ERROR_CODE), getDisplayName(WebAppConstants.EXCEPTION_TYPE));  
     		} else if(isErrorCodeSet && isExceptionTypeSet) {
-    			message = NLS.bind(WebUIMessages.YOU_MAY_SET_ONLY_ONE, getDisplayName(WebAppConstants.ERROR_CODE), getDisplayName(WebAppConstants.EXCEPTION_TYPE)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    			message = NLS.bind(WebUIMessages.YOU_MAY_SET_ONLY_ONE, getDisplayName(WebAppConstants.ERROR_CODE), getDisplayName(WebAppConstants.EXCEPTION_TYPE)); 
     		}
     		if(message != null) return;
     		super.validate(data);

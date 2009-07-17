@@ -22,7 +22,7 @@ public abstract class AbstractWebFileImpl extends AbstractExtendedXMLFileImpl {
 		String entity = getProcessEntity();
 		if(entity == null) return null;
 		if(getModelEntity().getChild(entity) == null) return null;
-		WebProcess process = (WebProcess)getChildByPath("process");
+		WebProcess process = (WebProcess)getChildByPath("process"); //$NON-NLS-1$
 		if(process == null) {
 			process = (WebProcess)getModel().createModelObject(entity, null);
 			addChild(process); 
@@ -47,17 +47,17 @@ public abstract class AbstractWebFileImpl extends AbstractExtendedXMLFileImpl {
 	SerializingLoader loader = null;
 
 	public String getAsText() {
-		boolean isIncorrect = ("yes".equals(getAttributeValue("isIncorrect")));
-		if(isIncorrect) return getAttributeValue("incorrectBody");
-		String abts = get("actualBodyTimeStamp");
-		if(abts != null && (abts.equals("0") || abts.equals("" + getTimeStamp()))) {
-			return get("correctBody");
+		boolean isIncorrect = ("yes".equals(getAttributeValue("isIncorrect"))); //$NON-NLS-1$ //$NON-NLS-2$
+		if(isIncorrect) return getAttributeValue("incorrectBody"); //$NON-NLS-1$
+		String abts = get("actualBodyTimeStamp"); //$NON-NLS-1$
+		if(abts != null && (abts.equals("0") || abts.equals("" + getTimeStamp()))) { //$NON-NLS-1$ //$NON-NLS-2$
+			return get("correctBody"); //$NON-NLS-1$
 		}
 		if(loader == null) loader = (SerializingLoader)XModelObjectLoaderUtil.getObjectLoader(this);
 		String body = loader.serializeObject(this);
-		if(body == null) return "";
-		set("correctBody", body);
-		set("actualBodyTimeStamp", "" + getTimeStamp());
+		if(body == null) return ""; //$NON-NLS-1$
+		set("correctBody", body); //$NON-NLS-1$
+		set("actualBodyTimeStamp", "" + getTimeStamp()); //$NON-NLS-1$ //$NON-NLS-2$
 		return body;
 	}
 	

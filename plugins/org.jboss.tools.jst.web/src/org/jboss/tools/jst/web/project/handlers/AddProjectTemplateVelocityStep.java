@@ -22,7 +22,7 @@ import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.project.helpers.ProjectTemplate;
 
 public class AddProjectTemplateVelocityStep extends MultistepWizardStep {
-	static String ATTR_NAME = "velocity templates";
+	static String ATTR_NAME = "velocity templates"; //$NON-NLS-1$
 	IProject root;
 
 	public void reset() {
@@ -30,7 +30,7 @@ public class AddProjectTemplateVelocityStep extends MultistepWizardStep {
 	}
 
 	public String getStepImplementingClass() {
-		return "org.jboss.tools.jst.web.ui.wizards.project.AddProjectTemplateVelocityView";
+		return "org.jboss.tools.jst.web.ui.wizards.project.AddProjectTemplateVelocityView"; //$NON-NLS-1$
 	}
 	
 	public void init() {
@@ -39,11 +39,11 @@ public class AddProjectTemplateVelocityStep extends MultistepWizardStep {
 		root = p;
 		if(root == null || !root.isOpen()) return;
 		StringBuffer sb = new StringBuffer();
-		IResource r = p.findMember("WebContent/WEB-INF/web.xml");
+		IResource r = p.findMember("WebContent/WEB-INF/web.xml"); //$NON-NLS-1$
 		if(r != null) {
 			sb.append(r.getFullPath().toString());
 		}
-		r = p.findMember("ant/build.xml");
+		r = p.findMember("ant/build.xml"); //$NON-NLS-1$
 		if(r != null) {
 			if(sb.length() > 0) sb.append(';');
 			sb.append(r.getFullPath().toString());
@@ -57,9 +57,9 @@ public class AddProjectTemplateVelocityStep extends MultistepWizardStep {
 		String[] s = XModelObjectUtil.asStringArray(list);
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < s.length; i++) {
-			String start = "/" + root.getName() + "/";
+			String start = "/" + root.getName() + "/"; //$NON-NLS-1$ //$NON-NLS-2$
 			if(s[i].startsWith(start)) {
-				sb.append(s[i].substring(start.length())).append("\n");
+				sb.append(s[i].substring(start.length())).append("\n"); //$NON-NLS-1$
 			}
 		}
 		File f = new File(target, ProjectTemplate.PREPROCESSING);

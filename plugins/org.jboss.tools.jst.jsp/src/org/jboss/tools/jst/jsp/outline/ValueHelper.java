@@ -71,7 +71,7 @@ public class ValueHelper {
 	public static IPromptingProvider seamPromptingProvider;
 	
 	static {
-		Object o = ModelFeatureFactory.getInstance().createFeatureInstance("org.jboss.tools.seam.internal.core.el.SeamPromptingProvider");
+		Object o = ModelFeatureFactory.getInstance().createFeatureInstance("org.jboss.tools.seam.internal.core.el.SeamPromptingProvider"); //$NON-NLS-1$
 		if(o instanceof IPromptingProvider) {
 			seamPromptingProvider = (IPromptingProvider)o;
 		}
@@ -123,10 +123,10 @@ public class ValueHelper {
 	
 	public ModelElement getInitalInput(String query) {
 		AttributeDescriptor descriptor = getAttributeDescriptor(query);
-		if(descriptor == null) return new RootElement("root", new ArrayList<AttributeValueResource>());
+		if(descriptor == null) return new RootElement("root", new ArrayList<AttributeValueResource>()); //$NON-NLS-1$
 		AttributeValueDescriptor[] valueDescriptors = descriptor.getValueDesriptors();
 		List<AttributeValueResource> elements = new ArrayList<AttributeValueResource>();
-		ModelElement root = new RootElement("root", elements);
+		ModelElement root = new RootElement("root", elements); //$NON-NLS-1$
 		for (int i = 0; i < valueDescriptors.length; i++) {
 			AttributeValueResource resource = AttributeValueResourceFactory.getInstance().createResource(getEditorInput(), wtpTextJspKbConnector, root, valueDescriptors[i].getType());
 			resource.setParams(valueDescriptors[i].getParams());
@@ -135,10 +135,10 @@ public class ValueHelper {
 		}
 		if(seamPromptingProvider != null && getFile() != null) {
 			Properties p = new Properties();
-			p.put("file", getFile());
-			List list = seamPromptingProvider.getList(null, "seam.is_seam_project", null, p);
+			p.put("file", getFile()); //$NON-NLS-1$
+			List list = seamPromptingProvider.getList(null, "seam.is_seam_project", null, p); //$NON-NLS-1$
 			if(list != null) {
-				AttributeValueResource resource = AttributeValueResourceFactory.getInstance().createResource(getEditorInput(), wtpTextJspKbConnector, root, "seamVariables");
+				AttributeValueResource resource = AttributeValueResourceFactory.getInstance().createResource(getEditorInput(), wtpTextJspKbConnector, root, "seamVariables"); //$NON-NLS-1$
 				resource.setQuery(query, this);
 				elements.add(resource);
 			}
@@ -246,8 +246,8 @@ public class ValueHelper {
 		try {
 			model = StructuredModelManager.getModelManager().getExistingModelForRead(document);
 			if(wtpTextJspKbConnector == null && model != null && 
-					(getContentType(model).toLowerCase().indexOf("jsp") != -1 || 
-					getContentType(model).toLowerCase().indexOf("html") != -1)) {
+					(getContentType(model).toLowerCase().indexOf("jsp") != -1 ||  //$NON-NLS-1$
+					getContentType(model).toLowerCase().indexOf("html") != -1)) { //$NON-NLS-1$
 				clearTextConnectors();
 				wtpTextJspKbConnector = (WTPTextJspKbConnector)wtpTextConnectors.get(getEditorInput());
 				if(wtpTextJspKbConnector == null) {
@@ -267,7 +267,7 @@ public class ValueHelper {
 		try {
 			type = model.getContentTypeIdentifier();
 		} finally {
-			if (type == null) type = "";
+			if (type == null) type = ""; //$NON-NLS-1$
 		}
 		return type;
 	}
@@ -288,7 +288,7 @@ public class ValueHelper {
 				TaglibTracker tracker = (TaglibTracker)list.get(i);
 				if(tracker == null) continue;
 				String version = TLDVersionHelper.getTldVersion(tracker);
-				KbTldResource resource = new KbTldResource(tracker.getURI(), "", tracker.getPrefix(), version);
+				KbTldResource resource = new KbTldResource(tracker.getURI(), "", tracker.getPrefix(), version); //$NON-NLS-1$
 				wtpKbConnector.registerResource(resource);
 			}
 			return true;

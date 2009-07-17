@@ -15,12 +15,12 @@ import org.jboss.tools.jst.web.WebPreference;
 
 public class TilesPreference extends WebPreference {
 
-	public static final String TILES_DIAGRAM_PATH   = "%Options%/Struts Studio/Editors/Tiles Diagram";
-	public static final Preference VERTICAL_SPACING = new TilesPreference(TILES_DIAGRAM_PATH, "verticalSpacing");
-	public static final Preference HORIZONTAL_SPACING = new TilesPreference(TILES_DIAGRAM_PATH, "horizontalSpacing");
-	public static final Preference TILES_ALIGNMENT = new TilesPreference(TILES_DIAGRAM_PATH, "alignment");
-	public static final Preference DEFINITION_NAME_FONT = new TilesPreference(TILES_DIAGRAM_PATH, "definitionNameFont");
-	public static final Preference TILES_ANIMATION = new TilesPreference(TILES_DIAGRAM_PATH, "animation");
+	public static final String TILES_DIAGRAM_PATH   = "%Options%/Struts Studio/Editors/Tiles Diagram"; //$NON-NLS-1$
+	public static final Preference VERTICAL_SPACING = new TilesPreference(TILES_DIAGRAM_PATH, "verticalSpacing"); //$NON-NLS-1$
+	public static final Preference HORIZONTAL_SPACING = new TilesPreference(TILES_DIAGRAM_PATH, "horizontalSpacing"); //$NON-NLS-1$
+	public static final Preference TILES_ALIGNMENT = new TilesPreference(TILES_DIAGRAM_PATH, "alignment"); //$NON-NLS-1$
+	public static final Preference DEFINITION_NAME_FONT = new TilesPreference(TILES_DIAGRAM_PATH, "definitionNameFont"); //$NON-NLS-1$
+	public static final Preference TILES_ANIMATION = new TilesPreference(TILES_DIAGRAM_PATH, "animation"); //$NON-NLS-1$
 
 	protected TilesPreference(String optionPath, String attributeName)	{
 		super(optionPath, attributeName);

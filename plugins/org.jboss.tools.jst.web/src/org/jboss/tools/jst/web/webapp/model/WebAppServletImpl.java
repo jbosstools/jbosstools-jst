@@ -21,20 +21,20 @@ public class WebAppServletImpl extends OrderedObjectImpl {
     }
 
     public String name() {
-        return getAttributeValue("servlet-name");
+        return getAttributeValue("servlet-name"); //$NON-NLS-1$
     }
 
     public String getPresentationString() {
         String c = getAttributeValue(WebAppConstants.SERVLET_CLASS);
         if(c.length() == 0) c = getAttributeValue(WebAppConstants.JSP_FILE);
-        return "" + getAttributeValue("servlet-name") + ":" + c;
+        return "" + getAttributeValue("servlet-name") + ":" + c; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 
 	protected void onAttributeValueEdit(String name, String oldValue, String newValue) throws XModelException {
 		if(WebAppConstants.SERVLET_CLASS.equals(name) && newValue != null && newValue.length() > 0) {
-			setAttributeValue(WebAppConstants.JSP_FILE, "");
+			setAttributeValue(WebAppConstants.JSP_FILE, ""); //$NON-NLS-1$
 		} else if(WebAppConstants.JSP_FILE.equals(name) && newValue != null && newValue.length() > 0) {
-			setAttributeValue(WebAppConstants.SERVLET_CLASS, "");
+			setAttributeValue(WebAppConstants.SERVLET_CLASS, ""); //$NON-NLS-1$
 		}
 	}
 }

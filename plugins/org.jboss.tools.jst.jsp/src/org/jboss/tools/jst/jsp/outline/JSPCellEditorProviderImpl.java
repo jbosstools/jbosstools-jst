@@ -19,7 +19,7 @@ public class JSPCellEditorProviderImpl implements ExtendedCellEditorProvider {
 
 	public CellEditor createCellEditor(Composite parent, Properties context) {
 		ValueHelper valueHelper = new ValueHelper();
-		context.put("valueHelper", valueHelper);
+		context.put("valueHelper", valueHelper); //$NON-NLS-1$
 		return new JSPDialogCellEditor(parent, context);
 	}
 

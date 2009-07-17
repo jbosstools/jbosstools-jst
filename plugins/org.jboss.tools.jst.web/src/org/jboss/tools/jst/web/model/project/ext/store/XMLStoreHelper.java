@@ -51,7 +51,7 @@ public class XMLStoreHelper implements XMLStoreConstants {
 			if(((XMLValueInfo)v).getObject() == null) {
 				v = new ValueInfo();
 				//that may be a problem
-				((ValueInfo)v).setValue("");
+				((ValueInfo)v).setValue(""); //$NON-NLS-1$
 			}
 		} else {
 			v = new ValueInfo();
@@ -68,10 +68,10 @@ public class XMLStoreHelper implements XMLStoreConstants {
 		XModelObject base = (XModelObject)context.get(XMLStoreConstants.KEY_MODEL_OBJECT);
 		if(base != null && base.getModel() == object.getModel()) {
 			String basePath = base.getPath();
-			if(path.startsWith("" + basePath + "/")) {
+			if(path.startsWith("" + basePath + "/")) { //$NON-NLS-1$ //$NON-NLS-2$
 				path = path.substring(basePath.length());
 			} else if(path.equals(basePath)) {
-				path = ".";
+				path = "."; //$NON-NLS-1$
 			}
 		}
 		
@@ -93,13 +93,13 @@ public class XMLStoreHelper implements XMLStoreConstants {
 		if(path == null || path.length() == 0) {
 			//TODO reporting
 			return null;
-		} else if(path.equals(".")) {
+		} else if(path.equals(".")) { //$NON-NLS-1$
 			if(base == null) {
 				//TODO reporting
 			}
 			return base;
 		}
-		if(path.startsWith("/")) {
+		if(path.startsWith("/")) { //$NON-NLS-1$
 			if(base != null) {
 				if(base.getChildByPath(path.substring(1)) == null) {
 					//TODO reporting
@@ -160,7 +160,7 @@ public class XMLStoreHelper implements XMLStoreConstants {
 				IType type = jp.findType(name.replace('$', '.'));
 				if(type == null && name.indexOf('$') >= 0) {
 					int ii = name.lastIndexOf('.');
-					String pack = (ii < 0) ? "" : name.substring(0, ii);
+					String pack = (ii < 0) ? "" : name.substring(0, ii); //$NON-NLS-1$
 					String cls = name.substring(ii + 1);
 					type = jp.findType(pack, cls.replace('$', '.'), new NullProgressMonitor());
 				}
@@ -218,7 +218,7 @@ public class XMLStoreHelper implements XMLStoreConstants {
 		String params = element.getAttribute(ATTR_PARAMS);
 		String[] ps = new String[0];
 		if(params != null && params.length() > 0) {
-			ps = params.split(",");
+			ps = params.split(","); //$NON-NLS-1$
 		}
 		return type.getMethod(name, ps);
 	}

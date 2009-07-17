@@ -21,7 +21,7 @@ public class WTPKbdManagedBeanNameResource extends WTPKbdBeanPropertyResource {
 		super(editorInput, connector);
 	}
 
-	private static String[][] MANAGED_BEAN_NAME_WRAPPERS = {{"", ""}};
+	private static String[][] MANAGED_BEAN_NAME_WRAPPERS = {{"", ""}}; //$NON-NLS-1$ //$NON-NLS-2$
 	
 	protected String[][] getWrappers() {
 		return MANAGED_BEAN_NAME_WRAPPERS;

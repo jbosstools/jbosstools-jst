@@ -60,7 +60,7 @@ public class LibrarySets {
 		Map<String,String> fm = new HashMap<String,String>();
 		for (int i = 0; i < fs.length; i++) {
 			if(fs[i].isDirectory() 
-				&& !"CVS".equalsIgnoreCase(fs[i].getName())
+				&& !"CVS".equalsIgnoreCase(fs[i].getName()) //$NON-NLS-1$
 				&& !".svn".equalsIgnoreCase(fs[i].getName())) { //$NON-NLS-1$
 				fm.put(fs[i].getName(), fs[i].getAbsolutePath());
 			}
@@ -111,7 +111,7 @@ public class LibrarySets {
 	public boolean removeLibrarySet(String name) {
 		LibrarySet s = getLibrarySet(name);
 		if(s == null) return false;
-		if(!AbstractWebProjectTemplate.confirm(NLS.bind(WebUIMessages.YOU_WANT_TO_DELETE_LIBRARYSET, name))) return false; //$NON-NLS-2$
+		if(!AbstractWebProjectTemplate.confirm(NLS.bind(WebUIMessages.YOU_WANT_TO_DELETE_LIBRARYSET, name))) return false; 
 		String path = s.getPath();
 		FileUtil.remove(new File(path));
 		librarySets.remove(name);

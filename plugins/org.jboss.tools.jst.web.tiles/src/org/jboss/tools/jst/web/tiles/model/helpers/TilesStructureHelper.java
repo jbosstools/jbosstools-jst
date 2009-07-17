@@ -59,7 +59,7 @@ public class TilesStructureHelper extends WebProcessStructureHelper implements T
 	public boolean isUnconfirmedItem(XModelObject item) {
 		if(!(item instanceof TilesProcessItemImpl)) return false;
 		if(getReference(item) != null) return false;
-		return !"true".equals(item.getAttributeValue("confirmed"));
+		return !"true".equals(item.getAttributeValue("confirmed")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public XModelObject getReference(XModelObject diagramObject) {

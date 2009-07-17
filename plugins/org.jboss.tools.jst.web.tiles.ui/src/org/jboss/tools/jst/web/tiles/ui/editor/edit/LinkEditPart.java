@@ -26,6 +26,7 @@ import org.eclipse.swt.accessibility.AccessibleEvent;
 import org.jboss.tools.common.meta.action.XAction;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.gef.edit.GEFRootEditPart;
+import org.jboss.tools.jst.web.tiles.ui.Messages;
 import org.jboss.tools.jst.web.tiles.ui.TilesUIPlugin;
 import org.jboss.tools.jst.web.tiles.ui.editor.figures.ConnectionFigure;
 import org.jboss.tools.jst.web.tiles.ui.editor.figures.FigureFactory;
@@ -53,7 +54,7 @@ public class LinkEditPart extends AbstractConnectionEditPart
 		try {
 			XAction action = DnDUtil.getEnabledAction(
 					(XModelObject) getLinkModel().getSource(), null,
-					"Properties.Properties");
+					"Properties.Properties"); //$NON-NLS-1$
 			if (action != null)
 				action.executeHandler(
 						(XModelObject) getLinkModel().getSource(), null);
@@ -107,7 +108,7 @@ public class LinkEditPart extends AbstractConnectionEditPart
 		if (acc == null)
 			acc = new AccessibleGraphicalEditPart() {
 				public void getName(AccessibleEvent e) {
-					e.result = "Link";
+					e.result = Messages.LinkEditPart_Link;
 				}
 			};
 		return acc;

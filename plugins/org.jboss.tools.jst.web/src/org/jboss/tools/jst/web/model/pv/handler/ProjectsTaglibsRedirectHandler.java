@@ -21,17 +21,17 @@ public class ProjectsTaglibsRedirectHandler extends DefaultRedirectHandler {
 
 	protected XModelObject getTrueSource(XModelObject source) {
 		IProject p = EclipseResourceUtil.getProject(source);
-		if(p == null) return source.getModel().getByPath("FileSystems/WEB-INF");
+		if(p == null) return source.getModel().getByPath("FileSystems/WEB-INF"); //$NON-NLS-1$
 		IResource r = null;
 		try {
-			QualifiedName n = new QualifiedName("", action.getName() + "_lastPath");
+			QualifiedName n = new QualifiedName("", action.getName() + "_lastPath"); //$NON-NLS-1$ //$NON-NLS-2$
 			String path = p.getPersistentProperty(n);
 			if(path != null) r = p.getWorkspace().getRoot().findMember(path);
 		} catch (Exception e) {
 			WebModelPlugin.getPluginLog().logError(e);
 		}
 		XModelObject o = EclipseResourceUtil.getObjectByResource(r);
-		return (o == null) ? source.getModel().getByPath("FileSystems/WEB-INF") : o;
+		return (o == null) ? source.getModel().getByPath("FileSystems/WEB-INF") : o; //$NON-NLS-1$
 	}
 
 }

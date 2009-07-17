@@ -16,7 +16,7 @@ package org.jboss.tools.jst.web.kb;
  */
 public class KbQuery {
 
-	public static final String PREFIX_SEPARATOR = ":";
+	public static final String PREFIX_SEPARATOR = ":"; //$NON-NLS-1$
 
 	private int offset;
 	private String uri;

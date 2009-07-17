@@ -16,11 +16,11 @@ public class WebAppMessageDestinationRefImpl extends RegularObjectImpl {
 	private static final long serialVersionUID = 1L;
 
 	public String name() {
-		return getAttributeValue("message-destination-ref-name"); 
+		return getAttributeValue("message-destination-ref-name");  //$NON-NLS-1$
 	}
 	
 	public String getPathPart() {
-		return "message-destination-ref-name:" + getAttributeValue("message-destination-ref-name");
+		return "message-destination-ref-name:" + getAttributeValue("message-destination-ref-name"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 }

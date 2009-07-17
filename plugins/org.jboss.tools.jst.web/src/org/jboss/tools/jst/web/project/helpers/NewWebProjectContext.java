@@ -10,23 +10,25 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.project.helpers;
 
+import java.text.MessageFormat;
 import java.util.*;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.*;
 import org.jboss.tools.jst.web.context.RegisterServerContext;
+import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 import org.jboss.tools.jst.web.project.version.ProjectVersion;
 
 public abstract class NewWebProjectContext {
-	public static final String ATTR_NAME                 = "name";
-	public static final String ATTR_LOCATION             = "location";
-	public static final String ATTR_USE_DEFAULT_LOCATION = "use default path";
-	public static final String ATTR_VERSION              = "version";
-	public static final String ATTR_TEMPLATE             = "template";
-	public static final String ATTR_SERVLET_VERSION      = "servlet version";
-	public static final String ATTR_REGISTER_WEB_CONTEXT = "register web context";
+	public static final String ATTR_NAME                 = "name"; //$NON-NLS-1$
+	public static final String ATTR_LOCATION             = "location"; //$NON-NLS-1$
+	public static final String ATTR_USE_DEFAULT_LOCATION = "use default path"; //$NON-NLS-1$
+	public static final String ATTR_VERSION              = "version"; //$NON-NLS-1$
+	public static final String ATTR_TEMPLATE             = "template"; //$NON-NLS-1$
+	public static final String ATTR_SERVLET_VERSION      = "servlet version"; //$NON-NLS-1$
+	public static final String ATTR_REGISTER_WEB_CONTEXT = "register web context"; //$NON-NLS-1$
 	
-	public static final String PROPERTY_RUNTIME_TYPE     = "runtimeType";
+	public static final String PROPERTY_RUNTIME_TYPE     = "runtimeType"; //$NON-NLS-1$
 
 	protected IWebProjectTemplate template = createTemplate();
 	protected ProjectTemplate projectTemplateEdit;
@@ -79,7 +81,7 @@ public abstract class NewWebProjectContext {
 			result.setProperty(PROPERTY_RUNTIME_TYPE, registry.getRuntime().getRuntimeType().getId());
 		}
 		if(projectTemplateEdit != null) {
-			result.put("preprocessingProperties", projectTemplateEdit.getProperties());
+			result.put("preprocessingProperties", projectTemplateEdit.getProperties()); //$NON-NLS-1$
 		}
 		return result;
 	}
@@ -148,7 +150,8 @@ public abstract class NewWebProjectContext {
 		if(pref == null) return null;
 		int c = compareServletVersions(pref, servletVersion);
 		if(c > 0) {
-			return "Servlet version must be at least " + pref;
+			return MessageFormat.format(WebUIMessages.NewWebProjectContext_ServletVersionMustBeAtLeast,
+					pref);
 		}
 		return null;
 	}

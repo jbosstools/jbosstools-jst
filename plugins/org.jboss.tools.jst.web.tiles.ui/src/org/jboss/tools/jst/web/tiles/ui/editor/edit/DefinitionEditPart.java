@@ -19,7 +19,6 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Locator;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Point;
-import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.ui.dnd.DnDUtil;
 import org.eclipse.gef.*;
 import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
@@ -48,7 +47,7 @@ public class DefinitionEditPart
 		try {
 			XAction action = DnDUtil.getEnabledAction(
 					(XModelObject) getDefinitionModel().getSource(), null,
-					"Open");
+					"Open"); //$NON-NLS-1$
 			if (action != null)
 				action.executeHandler((XModelObject) getDefinitionModel()
 						.getSource(), null);
@@ -149,7 +148,7 @@ public class DefinitionEditPart
 		return new AccessibleGraphicalEditPart() {
 
 			public void getName(AccessibleEvent e) {
-				e.result = "EditPart";
+				e.result = "EditPart"; //$NON-NLS-1$
 			}
 
 			public void getValue(AccessibleControlEvent e) {
@@ -207,7 +206,7 @@ public class DefinitionEditPart
 
 	public ConnectionAnchor getTargetConnectionAnchor(
 			ConnectionEditPart connEditPart) {
-		ConnectionAnchor anc = getNodeFigure().getConnectionAnchor("1_IN");
+		ConnectionAnchor anc = getNodeFigure().getConnectionAnchor("1_IN"); //$NON-NLS-1$
 		return anc;
 	}
 
@@ -218,7 +217,7 @@ public class DefinitionEditPart
 
 	public ConnectionAnchor getSourceConnectionAnchor(
 			ConnectionEditPart connEditPart) {
-		return getNodeFigure().getConnectionAnchor("1_OUT");
+		return getNodeFigure().getConnectionAnchor("1_OUT"); //$NON-NLS-1$
 	}
 
 	public ConnectionAnchor getSourceConnectionAnchor(Request request) {

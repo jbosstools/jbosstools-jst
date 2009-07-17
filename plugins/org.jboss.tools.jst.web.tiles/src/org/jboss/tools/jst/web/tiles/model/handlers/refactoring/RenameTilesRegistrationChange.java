@@ -19,6 +19,7 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.filesystems.impl.FileAnyImpl;
 import org.jboss.tools.common.model.filesystems.impl.FolderImpl;
+import org.jboss.tools.jst.web.tiles.Messages;
 import org.jboss.tools.jst.web.tiles.model.helpers.TilesRegistrationHelper;
 
 public class RenameTilesRegistrationChange extends Change {
@@ -35,7 +36,7 @@ public class RenameTilesRegistrationChange extends Change {
 	}
 
 	public String getName() {
-		return "Update Registration";
+		return Messages.RenameTilesRegistrationChange_UpdateRegistration;
 	}
 
 	public void initializeValidationData(IProgressMonitor pm) {}

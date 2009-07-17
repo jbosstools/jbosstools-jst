@@ -161,7 +161,7 @@ public class ExtendedJSPContentAssistProcessor extends JSPContentAssistProcessor
 		if(store.isDefault(JSPUIPreferenceNames.AUTO_PROPOSE_CODE)) {
 //			String superDefaultChars = store.getDefaultString(JSPUIPreferenceNames.AUTO_PROPOSE_CODE);
 			StringBuffer redhatDefaultChars = new StringBuffer(new String(superAutoActivChars));
-			if(redhatDefaultChars.indexOf(".")<0) {
+			if(redhatDefaultChars.indexOf(".")<0) { //$NON-NLS-1$
 				redhatDefaultChars.append('.');
 				redhatDefaultChars.append('[');
 				store.setDefault(JSPUIPreferenceNames.AUTO_PROPOSE_CODE, redhatDefaultChars.toString());
@@ -182,7 +182,7 @@ public class ExtendedJSPContentAssistProcessor extends JSPContentAssistProcessor
 					TaglibTracker tracker = (TaglibTracker)list.get(i);
 
 					String version = TLDVersionHelper.getTldVersion(tracker);
-					KbTldResource resource = new KbTldResource(tracker.getURI(), "", tracker.getPrefix(), version);
+					KbTldResource resource = new KbTldResource(tracker.getURI(), "", tracker.getPrefix(), version); //$NON-NLS-1$
 			        getWtpKbConnector().registerResource(resource);
 			        addActiveContentAssistProcessorToProcessorMap(tracker.getURI(), tracker.getPrefix(), version);
 			}
@@ -193,7 +193,7 @@ public class ExtendedJSPContentAssistProcessor extends JSPContentAssistProcessor
         try {
             List names = getWtpKbConnector().getAllTagNamesFromTldByUri(uri, version);
             for(Iterator iter = names.iterator(); iter.hasNext();) {
-                String fullName = prefix + ":" + iter.next();
+                String fullName = prefix + ":" + iter.next(); //$NON-NLS-1$
            		fNameToProcessorMap.put(fullName, jspActiveCAP);
 			}
         } catch (KbException e) {
@@ -228,7 +228,7 @@ public class ExtendedJSPContentAssistProcessor extends JSPContentAssistProcessor
 					}
 					try {
 					    String tagName = getRequiredName(parent, elementDecl);
-						TagDescriptor info = getWtpKbConnector().getTagInformation("/" + tagName + "/");
+						TagDescriptor info = getWtpKbConnector().getTagInformation("/" + tagName + "/"); //$NON-NLS-1$ //$NON-NLS-2$
 						if (info != null) {
 							KbProposal proposal = info.generateProposal();
 							String replString = proposal.getReplacementString();
@@ -236,20 +236,20 @@ public class ExtendedJSPContentAssistProcessor extends JSPContentAssistProcessor
 
 							if (replString != null && replString.length() > 0) {
 							    if(!dontOpenTag) {
-							        buffer.append("<");
+							        buffer.append("<"); //$NON-NLS-1$
 							    }
 								buffer.append(replString);
-								buffer.append(">");
+								buffer.append(">"); //$NON-NLS-1$
 								if (hasBody) {
-									buffer.append("</");
+									buffer.append("</"); //$NON-NLS-1$
 									buffer.append(tagName);
-									buffer.append(">");
+									buffer.append(">"); //$NON-NLS-1$
 								}
 								return;
 							}
 						}
 					} catch (KbException x) {
-						JspEditorPlugin.getPluginLog().logError("", x);
+						JspEditorPlugin.getPluginLog().logError("", x); //$NON-NLS-1$
 					}
 					super.generateTag(parent, elementDecl, buffer);
 					return;
@@ -299,7 +299,7 @@ public class ExtendedJSPContentAssistProcessor extends JSPContentAssistProcessor
 						String proposedInfo = getAdditionalInfo(parentDecl, childType);
 						for (int i = 0; i < childStrings.length; i++) {
 							Image image = XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_ENUM);
-							CustomCompletionProposal textProposal = new AutoContentAssistantProposal(childStrings[i].indexOf("=")>-1, childStrings[i], begin, length, childStrings[i].length(), image, childStrings[i], null, proposedInfo, XMLRelevanceConstants.R_TAG_INSERTION);
+							CustomCompletionProposal textProposal = new AutoContentAssistantProposal(childStrings[i].indexOf("=")>-1, childStrings[i], begin, length, childStrings[i].length(), image, childStrings[i], null, proposedInfo, XMLRelevanceConstants.R_TAG_INSERTION); //$NON-NLS-1$
 							contentAssistRequest.addProposal(textProposal);
 						}
 					}
@@ -473,22 +473,22 @@ public class ExtendedJSPContentAssistProcessor extends JSPContentAssistProcessor
 						KbProposal proposal;
 						TagDescriptor info;
                         try {
-                            proposal = getWtpKbConnector().getProposal("/" + proposedText);
-                            info = getWtpKbConnector().getTagInformation("/" + proposedText + "/");
+                            proposal = getWtpKbConnector().getProposal("/" + proposedText); //$NON-NLS-1$
+                            info = getWtpKbConnector().getTagInformation("/" + proposedText + "/"); //$NON-NLS-1$ //$NON-NLS-2$
     						if (proposal != null && info != null) {
     							String replString = proposal.getReplacementString();
     							boolean hasBody = info.hasBody();
 
     							if (replString != null && replString.length() > 0) {
     							    if(!dontOpenTag) {
-    							        buffer.append("<");
+    							        buffer.append("<"); //$NON-NLS-1$
     							    }
     								buffer.append(replString);
-    								buffer.append(">");
+    								buffer.append(">"); //$NON-NLS-1$
     								if (hasBody) {
-    									buffer.append("</");
+    									buffer.append("</"); //$NON-NLS-1$
     									buffer.append(proposedText);
-    									buffer.append(">");
+    									buffer.append(">"); //$NON-NLS-1$
     								}
     								proposedText = buffer.toString();
     							}
@@ -512,13 +512,13 @@ public class ExtendedJSPContentAssistProcessor extends JSPContentAssistProcessor
                         	JspEditorPlugin.getPluginLog().logError(e);
                         }
 					}
-					if (beginsWith(proposedText, matchString) || beginsWith(proposedText, "<" + matchString)) {
+					if (beginsWith(proposedText, matchString) || beginsWith(proposedText, "<" + matchString)) { //$NON-NLS-1$
 						Image image = CMImageUtil.getImage(elementDecl);
 						if (image == null) {
 							image = XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_TAG_GENERIC);
 						}
 						String proposedInfo = getAdditionalInfo(getCMElementDeclaration(parent), elementDecl);
-						CustomCompletionProposal proposal = new AutoContentAssistantProposal(proposedText.indexOf('\"')>-1 && proposedText.indexOf("=")>-1, proposedText, contentAssistRequest.getReplacementBeginPosition(), contentAssistRequest.getReplacementLength(), cursorAdjustment, image, getRequiredName(parent, elementDecl), null, proposedInfo, XMLRelevanceConstants.R_TAG_NAME);
+						CustomCompletionProposal proposal = new AutoContentAssistantProposal(proposedText.indexOf('\"')>-1 && proposedText.indexOf("=")>-1, proposedText, contentAssistRequest.getReplacementBeginPosition(), contentAssistRequest.getReplacementLength(), cursorAdjustment, image, getRequiredName(parent, elementDecl), null, proposedInfo, XMLRelevanceConstants.R_TAG_NAME); //$NON-NLS-1$
 						contentAssistRequest.addProposal(proposal);
 					}
 				}
@@ -655,10 +655,10 @@ public class ExtendedJSPContentAssistProcessor extends JSPContentAssistProcessor
 		String matchString = contentAssistRequest.getMatchString();
 
 		if (matchString.length() > StringUtils.strip(text).length() &&
-				( (matchString.startsWith("\"") && matchString.endsWith("\"") && 
-						(matchString.indexOf("\"") != matchString.lastIndexOf("\""))) 
-					|| (matchString.startsWith("'") && matchString.endsWith("\"") && 
-							(matchString.indexOf("\"") != matchString.lastIndexOf("\""))))) {
+				( (matchString.startsWith("\"") && matchString.endsWith("\"") &&  //$NON-NLS-1$ //$NON-NLS-2$
+						(matchString.indexOf("\"") != matchString.lastIndexOf("\"")))  //$NON-NLS-1$ //$NON-NLS-2$
+					|| (matchString.startsWith("'") && matchString.endsWith("\"") &&  //$NON-NLS-1$ //$NON-NLS-2$
+							(matchString.indexOf("\"") != matchString.lastIndexOf("\""))))) { //$NON-NLS-1$ //$NON-NLS-2$
 			return;
 		}
 

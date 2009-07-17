@@ -22,10 +22,10 @@ public class EditorTreeConstraint implements XFilteredTreeConstraint {
         return true;
     }
     
-    static String entities = ".TLDTag12.TLDTag.TLDValidator."; //TLDTag21 has more rich attributes
+    static String entities = ".TLDTag12.TLDTag.TLDValidator."; //TLDTag21 has more rich attributes //$NON-NLS-1$
 
     public boolean isHidingAllChildren(XModelObject object) {
-        String entity = "." + object.getModelEntity().getName() + ".";
+        String entity = "." + object.getModelEntity().getName() + "."; //$NON-NLS-1$ //$NON-NLS-2$
         if(entities.indexOf(entity) >= 0) return true;
         return false;
     }

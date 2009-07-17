@@ -43,6 +43,7 @@ import org.jboss.tools.jst.web.server.ServerManager;
 public class RunOnServerContext extends AbstractBrowserContext {
 	static RunOnServerContext instance = new RunOnServerContext();
 	
+	@SuppressWarnings("nls")
 	static String[][] pathSources = new String[][]{
 		{"org.jboss.tools.jst.web.model.handlers.RunOnServerHandler", "org.jboss.tools.jst.web"},
 		{"org.jboss.tools.struts.model.handlers.page.RunOnServerHandler", "org.jboss.tools.struts"},
@@ -75,7 +76,7 @@ public class RunOnServerContext extends AbstractBrowserContext {
 	public String getBrowserPrefix(XModel model) {
 //		String appname = model.getByPath("FileSystems").getAttributeValue("application name");
 		IServer server = ServerManager.getInstance().getSelectedServer();
-		if(server == null ) return "%server%" + WebUIMessages.CANNOT_RUN_SELECTION_WITHOUT_AVAILABLE_SERVER;
+		if(server == null ) return "%server%" + WebUIMessages.CANNOT_RUN_SELECTION_WITHOUT_AVAILABLE_SERVER; //$NON-NLS-1$
 		IProject p = EclipseResourceUtil.getProject(model.getRoot());
 		if(p != null && (!p.exists() || !p.isOpen())) p = null;
 		if(p == null) return null;
@@ -94,7 +95,7 @@ public class RunOnServerContext extends AbstractBrowserContext {
 			URL url = ((HttpLaunchable)launchable).getURL();
 			if(url != null) return url.toString();
 		}
-		return "%server%" + NLS.bind(WebUIMessages.APPLICATION_ISNOT_REGISTERED_IN_SELECTED_SERVER, (p == null ? "" : p.getName()));
+		return "%server%" + NLS.bind(WebUIMessages.APPLICATION_ISNOT_REGISTERED_IN_SELECTED_SERVER, (p == null ? "" : p.getName())); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	private HttpLaunchable getLaunchable(IServer server, WebResource resource) {
@@ -163,7 +164,7 @@ public class RunOnServerContext extends AbstractBrowserContext {
 			browser.openURL(new URL(lastRunUrl));
 		} catch (MalformedURLException mue) {
 			ServiceDialog d = PreferenceModelUtilities.getPreferenceModel().getService();
-			d.showDialog(WebUIMessages.ERROR, NLS.bind(WebUIMessages.INCORRECT_URL, mue.getMessage()), new String[]{WebUIMessages.OK}, null, ServiceDialog.ERROR); //$NON-NLS-3$
+			d.showDialog(WebUIMessages.ERROR, NLS.bind(WebUIMessages.INCORRECT_URL, mue.getMessage()), new String[]{WebUIMessages.OK}, null, ServiceDialog.ERROR);
 		} catch (PartInitException e) {
 			WebModelPlugin.getPluginLog().logError(e);
 		}
@@ -177,7 +178,7 @@ public class RunOnServerContext extends AbstractBrowserContext {
 		XModelObject fss = lastRunObject.getModel().getByPath("FileSystems"); //$NON-NLS-1$
 		if(fss == null) return false;
 		String appname = fss.getAttributeValue("application name"); //$NON-NLS-1$
-		String message = NLS.bind(WebUIMessages.APPLICATION_ISNOT_REGISTERED_IN_SELECTED_SERVER, appname); //$NON-NLS-2$
+		String message = NLS.bind(WebUIMessages.APPLICATION_ISNOT_REGISTERED_IN_SELECTED_SERVER, appname);
 		d.showDialog(WebUIMessages.WARNING, message, new String[]{WebUIMessages.CLOSE}, null, ServiceDialog.WARNING);
 		return false;
 	}

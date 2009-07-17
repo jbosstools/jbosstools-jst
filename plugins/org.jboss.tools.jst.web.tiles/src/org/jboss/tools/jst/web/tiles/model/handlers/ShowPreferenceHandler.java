@@ -17,7 +17,7 @@ import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 
 public class ShowPreferenceHandler extends AbstractHandler {
-	SpecialWizard wizard = SpecialWizardFactory.createSpecialWizard("org.jboss.tools.jst.web.tiles.ui.preferences.OpenTilesEditorPreferencePage");
+	SpecialWizard wizard = SpecialWizardFactory.createSpecialWizard("org.jboss.tools.jst.web.tiles.ui.preferences.OpenTilesEditorPreferencePage"); //$NON-NLS-1$
 
     public boolean isEnabled(XModelObject object) {
         return wizard != null;

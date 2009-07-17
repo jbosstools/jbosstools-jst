@@ -20,7 +20,7 @@ public class FileTLD12Impl extends FileTLDImpl {
     }
 
 	protected boolean hasDTD() {
-		return !getModelEntity().getName().startsWith("FileTLD_2_");
+		return !getModelEntity().getName().startsWith("FileTLD_2_"); //$NON-NLS-1$
 	}
 
 }

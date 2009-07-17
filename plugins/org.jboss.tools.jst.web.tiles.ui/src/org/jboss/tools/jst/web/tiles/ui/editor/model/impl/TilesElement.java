@@ -20,7 +20,6 @@ import org.eclipse.swt.widgets.Control;
 
 import org.jboss.tools.common.model.*;
 import org.jboss.tools.common.meta.*;
-import org.jboss.tools.jst.web.tiles.ui.TilesUIPlugin;
 import org.jboss.tools.jst.web.tiles.ui.editor.model.ITilesElement;
 import org.jboss.tools.jst.web.tiles.ui.editor.model.ITilesModel;
 
@@ -28,7 +27,7 @@ import org.jboss.tools.jst.web.tiles.ui.editor.model.ITilesModel;
 
 public class TilesElement implements ITilesElement{
 
-	protected String name = "";
+	protected String name = ""; //$NON-NLS-1$
 	protected boolean visible = false;
 	protected boolean hidden = false;
 	protected boolean deleted = false;
@@ -75,7 +74,7 @@ public class TilesElement implements ITilesElement{
 	}
 
 	public String getText() {
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 	public ITilesElement getRoot() {
@@ -99,7 +98,7 @@ public class TilesElement implements ITilesElement{
 		String path = current.getName();
 		while (current.getParentTilesElement() != null) {
 			current = current.getParentTilesElement();
-			path = current.getName() + "/" + path;
+			path = current.getName() + "/" + path; //$NON-NLS-1$
 		}
 		return path;
 	}
@@ -136,7 +135,7 @@ public class TilesElement implements ITilesElement{
 		ITilesElement oldValue = parent;
 		parent = element;
 		tilesModel = getTilesModel();
-		propertyChangeSupport.firePropertyChange("parent", oldValue, element);
+		propertyChangeSupport.firePropertyChange("parent", oldValue, element); //$NON-NLS-1$
 		updateModelModifiedProperty(oldValue, element);
 	}
 
@@ -150,7 +149,7 @@ public class TilesElement implements ITilesElement{
 
 	public void setName(String name) throws PropertyVetoException {
 		String oldValue = this.name;
-		vetoableChangeSupport.fireVetoableChange("name", oldValue, name);
+		vetoableChangeSupport.fireVetoableChange("name", oldValue, name); //$NON-NLS-1$
 		this.name = name;
 	}
 

@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.dialogs.ResourceSelectionDialog;
 import org.jboss.tools.jst.web.project.handlers.AddProjectTemplateSupport;
+import org.jboss.tools.jst.web.ui.Messages;
 
 public class AddProjectTemplateVelocityView extends SpecialWizardStep {
 
@@ -43,7 +44,7 @@ public class AddProjectTemplateVelocityView extends SpecialWizardStep {
 
 		public Object getValue() {
 			IProject root = ((AddProjectTemplateSupport)support).getSelectedProject();
-			ResourceSelectionDialog d = new ResourceSelectionDialog(stepControl.getShell(), root, "Select mappings");
+			ResourceSelectionDialog d = new ResourceSelectionDialog(stepControl.getShell(), root, Messages.AddProjectTemplateVelocityView_SelectMappings);
 			int ii = d.open();
 			if(ii != ResourceSelectionDialog.OK) return null;
 			Object[] ss = d.getResult();

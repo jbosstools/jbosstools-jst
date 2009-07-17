@@ -11,16 +11,16 @@
 package org.jboss.tools.jst.web.project;
 
 public interface WebModuleConstants {
-	public String ATTR_NAME = "name";
-    public String ATTR_URI = "URI";
-    public String ATTR_DISK_PATH = "path on disk";
-    public String ATTR_MODEL_PATH = "model path";
-    public String ATTR_ROOT = "root";
-    public String ATTR_ROOT_FS = "root file system";
-    public String ATTR_SRC_PATH = "java src";
-    public String ATTR_SRC_FS = "src file system";
+	public String ATTR_NAME = "name"; //$NON-NLS-1$
+    public String ATTR_URI = "URI"; //$NON-NLS-1$
+    public String ATTR_DISK_PATH = "path on disk"; //$NON-NLS-1$
+    public String ATTR_MODEL_PATH = "model path"; //$NON-NLS-1$
+    public String ATTR_ROOT = "root"; //$NON-NLS-1$
+    public String ATTR_ROOT_FS = "root file system"; //$NON-NLS-1$
+    public String ATTR_SRC_PATH = "java src"; //$NON-NLS-1$
+    public String ATTR_SRC_FS = "src file system"; //$NON-NLS-1$
     
-    public String ENTITY_WEB_MODULE = "JstWebModule";
-    public String ENTITY_WEB_CONFIG = "JstWebConfig";
+    public String ENTITY_WEB_MODULE = "JstWebModule"; //$NON-NLS-1$
+    public String ENTITY_WEB_CONFIG = "JstWebConfig"; //$NON-NLS-1$
 }
 

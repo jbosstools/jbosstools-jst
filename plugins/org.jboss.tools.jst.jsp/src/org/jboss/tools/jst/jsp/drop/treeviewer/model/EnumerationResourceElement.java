@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.jsp.drop.treeviewer.model;
 
 import org.jboss.tools.common.kb.ParamList;
+import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 
 /**
  * @author Igels
@@ -46,6 +47,6 @@ public class EnumerationResourceElement extends AttributeValueResource {
 	 * @see ModelElement#getName()
 	 */
 	public String getName() {
-		return "Enumeration";
+		return "Enumeration"; //$NON-NLS-1$
 	}
 }

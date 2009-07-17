@@ -80,32 +80,32 @@ public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcess
 			tagName = FaceletsHtmlContentAssistProcessor.faceletHtmlPrefixStart + tagName;
 		}
 
-    	if(!currentValue.startsWith("\"") && !currentValue.startsWith("'")) {
+    	if(!currentValue.startsWith("\"") && !currentValue.startsWith("'")) { //$NON-NLS-1$ //$NON-NLS-2$
     		// Do not show any value proposals if the attribute value is not started with a quote/double-quote character 
     		return;
     	}
 
 		int elStartPosition = getELStartPosition(matchString);
 		int delta = 0;
-		String elProposalPrefix = "";
+		String elProposalPrefix = ""; //$NON-NLS-1$
 		String elQueryString = null;
 		String queryString = null;
-		String elStartChar = "#";
+		String elStartChar = "#"; //$NON-NLS-1$
 		if (elStartPosition == -1) {
 			queryString = matchString;
-			elQueryString = "#{";
+			elQueryString = "#{"; //$NON-NLS-1$
 			delta = matchString.length();
 			if(isCharSharp(matchString, offset-1) || isCharDollar(matchString, offset-1)) {
 				elProposalPrefix = "{";  //$NON-NLS-1$
 				queryString = null; // Do not request for ordinar attr-value proposals 
 									// in case of starting EL-expression
 				if (isCharDollar(matchString, offset-1)) 
-					elStartChar = "$";
+					elStartChar = "$"; //$NON-NLS-1$
 			} else {
 				elProposalPrefix = "#{";  //$NON-NLS-1$
 			}
 	    	delta = matchString.length() - elQueryString.length();
-			if (matchString.startsWith("\"") || matchString.startsWith("'")) { 
+			if (matchString.startsWith("\"") || matchString.startsWith("'")) {  //$NON-NLS-1$ //$NON-NLS-2$
 				queryString = matchString.substring(1);
 			}
 		} else {
@@ -117,7 +117,7 @@ public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcess
 		}
 		
     	// Correct delta if matchString starts with a quote (exclude that quote)
-		if (matchString.startsWith("\"") || matchString.startsWith("'")) {
+		if (matchString.startsWith("\"") || matchString.startsWith("'")) { //$NON-NLS-1$ //$NON-NLS-2$
 			delta--;
 		}
 
@@ -134,7 +134,7 @@ public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcess
 		            for (Iterator iter = proposals.iterator(); iter.hasNext();) {
 		            	KbProposal kbProposal = cleanFaceletProposal((KbProposal)iter.next());
 		            	kbProposal.postProcess(queryString, offset - delta);
-		            	if (kbProposal.getReplacementString().startsWith("#{"))
+		            	if (kbProposal.getReplacementString().startsWith("#{")) //$NON-NLS-1$
 		            		continue; // Do not process EL-proposals here!!!
 		            	
 		                int relevance = kbProposal.getRelevance();
@@ -147,14 +147,14 @@ public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcess
 		                    int replacementBeginPosition = contentAssistRequest.getReplacementBeginPosition();
 		                	int replacementLength = contentAssistRequest.getReplacementLength();
 		                	int cursorPositionDelta = 0;
-		                	if(currentValue.startsWith("\"") || currentValue.startsWith("'")) {
+		                	if(currentValue.startsWith("\"") || currentValue.startsWith("'")) { //$NON-NLS-1$ //$NON-NLS-2$
 		                		replacementBeginPosition = replacementBeginPosition +1;
 		                		replacementLength--;
 		            		} else {
 		            			cursorPositionDelta++;
-		            			replacementStringBuffer.insert(0, "\"");
+		            			replacementStringBuffer.insert(0, "\""); //$NON-NLS-1$
 		            		}
-		                	if((currentValue.endsWith("\"") || currentValue.endsWith("'")) &&
+		                	if((currentValue.endsWith("\"") || currentValue.endsWith("'")) && //$NON-NLS-1$ //$NON-NLS-2$
 		                			strippedValue.length() < currentValue.length() ) {
 		                		replacementLength--;
 		            		}
@@ -197,8 +197,8 @@ public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcess
 	        if(elProposals != null) {
 	            for (Iterator iter = elProposals.iterator(); iter.hasNext();) {
 	            	KbProposal kbProposal = cleanFaceletProposal((KbProposal)iter.next());
-	            	kbProposal.postProcess("\"" + elQueryString, offset - delta);
-	            	if (!kbProposal.getReplacementString().startsWith("#{"))
+	            	kbProposal.postProcess("\"" + elQueryString, offset - delta); //$NON-NLS-1$
+	            	if (!kbProposal.getReplacementString().startsWith("#{")) //$NON-NLS-1$
 	            		continue; // Process the only EL-proposals here!!!
 	                int relevance = kbProposal.getRelevance();
 	                if(relevance==KbProposal.R_NONE) {
@@ -218,22 +218,22 @@ public class JSPActiveContentAssistProcessor extends JSPBaseContentAssistProcess
 	                	}
 	  
 	                	if((currentValue.length() > StringUtils.strip(currentValue).length()) && 
-	                			(currentValue.endsWith("\"") || currentValue.endsWith("'")) ) {
+	                			(currentValue.endsWith("\"") || currentValue.endsWith("'")) ) { //$NON-NLS-1$ //$NON-NLS-2$
 	                		String restOfCurrentValue = currentValue.substring(matchString.length());
 	                		
 	                		if(getELEndPosition(matchString, currentValue) == -1) {
-	                			replacementString += "}";
+	                			replacementString += "}"; //$NON-NLS-1$
 	                		}
 	            		} else {
-	                		if(elStartPosition == -1 && !currentValue.endsWith("}")) {
-	                			replacementString += "}";
+	                		if(elStartPosition == -1 && !currentValue.endsWith("}")) { //$NON-NLS-1$
+	                			replacementString += "}"; //$NON-NLS-1$
 	                		}
 	//            			replacementString += ("\"");
 	            		}
 	                	int cursorPosition = kbProposal.getPosition() + cursorPositionDelta;
 	                	String displayString = elProposalPrefix == null || elProposalPrefix.length() == 0 ? 
 	                			kbProposal.getReplacementString().substring(2,kbProposal.getReplacementString().length() - 1) :
-	                			elProposalPrefix + kbProposal.getReplacementString().substring(2,kbProposal.getReplacementString().length() - 1) + "}" ;
+	                			elProposalPrefix + kbProposal.getReplacementString().substring(2,kbProposal.getReplacementString().length() - 1) + "}" ; //$NON-NLS-1$
 
 	                	if ('#' == displayString.charAt(0) || '$' == displayString.charAt(0))
 	                		displayString = elStartChar + displayString.substring(1);

@@ -21,15 +21,15 @@ public class SeamPropertyElement extends SeamElement {
 	}
 	
 	public String getValue() {
-		return "#{" + getFullName() + "}";
+		return "#{" + getFullName() + "}"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	protected String getFullName() {
-		return parent.getFullName() + "." + name;
+		return parent.getFullName() + "." + name; //$NON-NLS-1$
 	}
 
 	protected String getComparedValue() {
-		return "#{" + getFullName();
+		return "#{" + getFullName(); //$NON-NLS-1$
 	}
 
 }

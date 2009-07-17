@@ -59,7 +59,7 @@ public class FaceletsJsfCResource implements KbDinamicResource {
 		}
 		// trim first spaces
 		while(true) {
-			if(query.startsWith(" ")) {
+			if(query.startsWith(" ")) { //$NON-NLS-1$
 				query = query.substring(1);
 			} else {
 				break;

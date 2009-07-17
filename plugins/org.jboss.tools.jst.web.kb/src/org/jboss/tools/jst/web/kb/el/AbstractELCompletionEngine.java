@@ -105,7 +105,7 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 			int position, boolean returnEqualedVariablesOnly, List<Var> vars) throws BadLocationException, StringIndexOutOfBoundsException {
 		List<TextProposal> completions = new ArrayList<TextProposal>();
 		
-		ELOperandResolveStatus status = resolveELOperand(file, parseOperand("" + prefix), returnEqualedVariablesOnly, vars, new ElVarSearcher(file, this));
+		ELOperandResolveStatus status = resolveELOperand(file, parseOperand("" + prefix), returnEqualedVariablesOnly, vars, new ElVarSearcher(file, this)); //$NON-NLS-1$
 		if (status.isOK()) {
 			completions.addAll(status.getProposals());
 		}
@@ -136,7 +136,7 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 
 	public ELExpression parseOperand(String operand) {
 		if(operand == null) return null;
-		String el = (operand.indexOf("#{") < 0 && operand.indexOf("${") < 0) ? "#{" + operand + "}" : operand; //$NON-NLS-1$ $NON-NLS-2$ $NON-NLS-3$
+		String el = (operand.indexOf("#{") < 0 && operand.indexOf("${") < 0) ? "#{" + operand + "}" : operand; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		ELParser p = getParserFactory().createParser();
 		ELModel model = p.parse(el);
 		List<ELInstance> is = model.getInstances();
@@ -172,7 +172,7 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 		}
 		String oldEl = operand.getText();
 		Var var = varSearcher.findVarForEl(oldEl, vars, true);
-		String suffix = "";
+		String suffix = ""; //$NON-NLS-1$
 		String newEl = oldEl;
 		TypeInfoCollector.MemberInfo member = null;
 		boolean isArray = false;
@@ -236,7 +236,7 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 		}
 
 		if(prefixWasChanged) {
-			var.resolveValue("#{" + var.getElToken().getText() + suffix + "}"); //$NON-NLS-1$ $NON-NLS-2$
+			var.resolveValue("#{" + var.getElToken().getText() + suffix + "}"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		if(!returnEqualedVariablesOnly && vars!=null) {
@@ -380,7 +380,7 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 			left = (ELInvocationExpression)left.getParent();
 			if (left != expr) { // inside expression
 				if(left instanceof ELArgumentInvocation) {
-					String s = "#{" + left.getLeft().toString() + collectionAdditionForCollectionDataModel + "}"; //$NON-NLS-1$ $NON-NLS-2$
+					String s = "#{" + left.getLeft().toString() + collectionAdditionForCollectionDataModel + "}"; //$NON-NLS-1$ //$NON-NLS-2$
 					ELParser p = getParserFactory().createParser();
 					ELInvocationExpression expr1 = (ELInvocationExpression)p.parse(s).getInstances().get(0).getExpression();
 					members = resolveSegment(expr1.getLeft(), members, status, returnEqualedVariablesOnly, varIsUsed);
@@ -545,7 +545,7 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 			for (TypeInfoCollector.MemberPresentation proposal : proposalsToFilter) {
 				// We do expect nothing but name for method tokens (No round brackets)
 				String filter = expr.getMemberName();
-				if(filter == null) filter = "";
+				if(filter == null) filter = ""; //$NON-NLS-1$
 				if(returnEqualedVariablesOnly) {
 					// This is used for validation.
 					if (proposal.getPresentation().equals(filter)) {
@@ -600,11 +600,11 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 			String filter = expr.getMemberName();
 			boolean bSurroundWithQuotes = false;
 			if(filter == null) {
-				filter = "";
+				filter = ""; //$NON-NLS-1$
 				bSurroundWithQuotes = true;
 			} else {
-				if((filter.startsWith("'") || filter.startsWith("\""))
-					&& (filter.endsWith("'") || filter.endsWith("\""))) {
+				if((filter.startsWith("'") || filter.startsWith("\"")) //$NON-NLS-1$ //$NON-NLS-2$
+					&& (filter.endsWith("'") || filter.endsWith("\""))) { //$NON-NLS-1$ //$NON-NLS-2$
 					filter = filter.substring(1, filter.length() - 1);
 				} else {
 					//Value is set as expression itself, we cannot compute it
@@ -640,7 +640,7 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 					
 					String replacementString = proposal.getPresentation().substring(filter.length());
 					if (bSurroundWithQuotes) {
-						replacementString = "'" + replacementString + "']";
+						replacementString = "'" + replacementString + "']"; //$NON-NLS-1$ //$NON-NLS-2$
 					}
 					
 					kbProposal.setReplacementString(replacementString);

@@ -15,7 +15,7 @@ import org.jboss.tools.common.model.impl.*;
 public class TilesItemImpl extends RegularObjectImpl {
 
     public String name() {
-        return getAttributeValue("value");
+        return getAttributeValue("value"); //$NON-NLS-1$
     }
 
 }

@@ -140,7 +140,7 @@ public abstract class ImportWebProjectContext implements IImportWebProjectContex
 	 * @return
 	 */
 	public String getDefaultLibLocation() {
-		return webInfLocation == null ? "" : webInfLocation + "/lib";
+		return webInfLocation == null ? "" : webInfLocation + "/lib"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public String getBuildXmlLocation() {
@@ -329,7 +329,7 @@ public abstract class ImportWebProjectContext implements IImportWebProjectContex
 	private void backUp() {
 		if(webXmlLocation == null) return;
 		File source = new File(webXmlLocation);
-		File target = new File(source.getParentFile(), "web.xml." + getWebXMLVersion() + ".old");
+		File target = new File(source.getParentFile(), "web.xml." + getWebXMLVersion() + ".old"); //$NON-NLS-1$ //$NON-NLS-2$
 		FileUtil.copyFile(source, target);
 	}
 

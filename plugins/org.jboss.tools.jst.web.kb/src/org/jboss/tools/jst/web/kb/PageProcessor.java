@@ -104,8 +104,8 @@ public class PageProcessor implements IProposalProcessor {
 		}
 
 		return (query.getValue() != null && 
-				(query.getValue().startsWith("#{") ||
-					query.getValue().startsWith("${")));
+				(query.getValue().startsWith("#{") || //$NON-NLS-1$
+					query.getValue().startsWith("${"))); //$NON-NLS-1$
 	}
 	
  	/**

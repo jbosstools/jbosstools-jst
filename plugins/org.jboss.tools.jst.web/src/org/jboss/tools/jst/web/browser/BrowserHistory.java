@@ -77,7 +77,7 @@ public class BrowserHistory {
 			if(isJustUrl(s)) continue;
 			XModelObject o = getRunObject(s);
 			String p = context.computeURL(o);
-			if(p == null || urls.contains(p) || p.startsWith("%server%")) {
+			if(p == null || urls.contains(p) || p.startsWith("%server%")) { //$NON-NLS-1$
 				items.remove(i);
 				map.remove(s);
 			} else if(!s.equals(p)) {

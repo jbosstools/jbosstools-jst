@@ -30,7 +30,7 @@ public class CreateWebPrjHandler extends AbstractHandler {
         if (p == null) p = new Properties();
         
         helper.createProject(object, p);
-		IProject project = (IProject)object.getModel().getProperties().get("project");
+		IProject project = (IProject)object.getModel().getProperties().get("project"); //$NON-NLS-1$
 		try {
 			project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
 		} catch (CoreException e) {

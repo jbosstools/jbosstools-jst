@@ -28,13 +28,13 @@ public class FindItemOnDiagramHandler extends AbstractHandler {
     public void executeHandler(XModelObject object, Properties p) throws XModelException {
     	p = new Properties();
     	fillProperties(object, p);
-    	String wizard = action.getProperty("wizard");
+    	String wizard = action.getProperty("wizard"); //$NON-NLS-1$
     	//"org.jboss.tools.jsf.ui.editor.wizard.SelectItemWizard"
         SpecialWizard sw = SpecialWizardFactory.createSpecialWizard(wizard);
         sw.setObject(p);
         int i = sw.execute();
         if(i != 0) return;
-        XModelObject selected = (XModelObject)p.get("selected");
+        XModelObject selected = (XModelObject)p.get("selected"); //$NON-NLS-1$
         if(selected == null) return;
         if(selected instanceof ReferenceObject) {
         	XModelObject r = ((ReferenceObject)selected).getReference();
@@ -44,10 +44,10 @@ public class FindItemOnDiagramHandler extends AbstractHandler {
     }
 
     protected void fillProperties(XModelObject object, Properties p) {
-    	p.put("object", object);
-    	String help = action.getProperty("help");
+    	p.put("object", object); //$NON-NLS-1$
+    	String help = action.getProperty("help"); //$NON-NLS-1$
     	//"JSFProcess_SelectItem"
-    	p.put("help", help);
+    	p.put("help", help); //$NON-NLS-1$
     }
     
     public static void selectInEditor(XModelObject selected) {

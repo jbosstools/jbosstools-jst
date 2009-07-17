@@ -56,7 +56,7 @@ public class ActionProposalType extends ModelProposalType {
 		}
 		Properties view = new Properties();
 		view.put(IWebPromptingProvider.VIEW_PATH, path);
-		List<Object> sourceList = provider.getList(xModel, WebPromptingProvider.JSF_VIEW_ACTIONS, "", view);
+		List<Object> sourceList = provider.getList(xModel, WebPromptingProvider.JSF_VIEW_ACTIONS, "", view); //$NON-NLS-1$
 		if (sourceList != null && !sourceList.isEmpty()) {
 			Set<String> sorted = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
 			Iterator<Object> it = sourceList.iterator();

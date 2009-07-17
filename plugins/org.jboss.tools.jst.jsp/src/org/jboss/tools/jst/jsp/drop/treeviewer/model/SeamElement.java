@@ -27,10 +27,10 @@ public abstract class SeamElement extends ModelElement implements IAttributeValu
 		SeamVariablesResourceElement resource = getResource();
 		if(resource == null) return elements = EMPTY_LIST;
 		IFile f = resource.getValueHelper().getFile();
-		String prefix = getComparedValue() + ".";
+		String prefix = getComparedValue() + "."; //$NON-NLS-1$
 		Properties p = new Properties();
-		p.put("file", f);
-		List list = ValueHelper.seamPromptingProvider.getList(null, "seam.members", prefix, p);
+		p.put("file", f); //$NON-NLS-1$
+		List list = ValueHelper.seamPromptingProvider.getList(null, "seam.members", prefix, p); //$NON-NLS-1$
 		Set<String> methods = new HashSet<String>();
 		for (int i = 0; i < list.size(); i++) {
 			String s = list.get(i).toString();

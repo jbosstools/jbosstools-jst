@@ -22,12 +22,12 @@ public class WebAppSecurityConstraintImpl extends OrderedObjectImpl {
     }
 
     public String name() {
-        return "" + getAttributeValue(XModelObjectLoaderUtil.ATTR_ID_NAME);
+        return "" + getAttributeValue(XModelObjectLoaderUtil.ATTR_ID_NAME); //$NON-NLS-1$
     }
 
     public String getPresentationString() {
-        String dn = getAttributeValue("display-name");
-        return (dn != null && dn.length() > 0) ? dn : "security-constraint";
+        String dn = getAttributeValue("display-name"); //$NON-NLS-1$
+        return (dn != null && dn.length() > 0) ? dn : "security-constraint"; //$NON-NLS-1$
     }
 
 }
@@ -39,9 +39,9 @@ class SecurityConstraintChildren extends GroupOrderedChildren {
 
     protected int getGroup(XModelObject o) {
         String entity = o.getModelEntity().getName();
-        if("WebAppResourceCollection".equals(entity)) return 0;
-        if("WebAppAuthConstraint".equals(entity)) return 1;
-        if("WebAppUserConstraint".equals(entity)) return 2;
+        if("WebAppResourceCollection".equals(entity)) return 0; //$NON-NLS-1$
+        if("WebAppAuthConstraint".equals(entity)) return 1; //$NON-NLS-1$
+        if("WebAppUserConstraint".equals(entity)) return 2; //$NON-NLS-1$
         return 0;
     }
 

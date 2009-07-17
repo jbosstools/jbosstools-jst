@@ -49,21 +49,21 @@ class ExtendedJSPDialogCellEditor extends JSPDialogCellEditor {
 			fireEditorValueChanged(false, true);
 		} else if(value instanceof AttributeWrapper) {
 			wrapper = (AttributeWrapper)value;
-			super.doSetValue(wrapper == null ? "" : wrapper.value);
+			super.doSetValue(wrapper == null ? "" : wrapper.value); //$NON-NLS-1$
 			setValueValid(true);
 		}
 	}
 	
     public void activate() {
     	if(context != null && wrapper != null) {
-    		context.setProperty("attributeName", "" + wrapper.name);
+    		context.setProperty("attributeName", "" + wrapper.name); //$NON-NLS-1$ //$NON-NLS-2$
     	}
     	super.activate();
     	
     }
 	protected Object openDialogBox(Control cellEditorWindow) {
-		context.setProperty("attributeName", "" + wrapper.name);
-		if(wrapper != null && wrapper.value != null) context.put("value", wrapper.value);
+		context.setProperty("attributeName", "" + wrapper.name); //$NON-NLS-1$ //$NON-NLS-2$
+		if(wrapper != null && wrapper.value != null) context.put("value", wrapper.value); //$NON-NLS-1$
 		Object o = super.openDialogBox(cellEditorWindow);
 		if(o == null || o.equals(wrapper.value)) return null;
 		AttributeWrapper newWrapper = new AttributeWrapper();

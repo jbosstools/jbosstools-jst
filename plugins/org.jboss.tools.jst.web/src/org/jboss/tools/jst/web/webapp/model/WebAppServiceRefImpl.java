@@ -16,7 +16,7 @@ public class WebAppServiceRefImpl extends RegularObjectImpl {
 	private static final long serialVersionUID = 1L;
 
 	public String name() {
-		return getAttributeValue("service-ref-name") + ":" + getAttributeValue("service-interface"); 
+		return getAttributeValue("service-ref-name") + ":" + getAttributeValue("service-interface");  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 }

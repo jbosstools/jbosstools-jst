@@ -30,6 +30,7 @@ import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.project.helpers.ProjectTemplate;
+import org.jboss.tools.jst.web.ui.Messages;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 public class EditProjectTemplateView extends AbstractSpecialWizardStep {
@@ -55,17 +56,17 @@ public class EditProjectTemplateView extends AbstractSpecialWizardStep {
 		g.setLayoutData(new GridData(GridData.FILL_BOTH));
 		g.setLayout(new GridLayout());
 		
-		g.setText("Preprocessing");
+		g.setText(Messages.EditProjectTemplateView_GroupName);
 		TabFolder tabFolder = new TabFolder(g, SWT.NONE);
 		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		TabItem preprocessingTab = new TabItem(tabFolder,SWT.NULL);
-		preprocessingTab.setText("Files");
+		preprocessingTab.setText(Messages.EditProjectTemplateView_PreprocessingTabName);
 		Control c2 = templatePreprocessing.createControl(tabFolder);
 		preprocessingTab.setControl(c2);
 
 		TabItem propertiesTab = new TabItem(tabFolder,SWT.NULL);
-		propertiesTab.setText("Properties");
+		propertiesTab.setText(Messages.EditProjectTemplateView_PropertiesTabName);
 		Control c3 = templateProperties.createControl(tabFolder);
 		propertiesTab.setControl(c3);
 

@@ -16,6 +16,6 @@ public class WebAppLocaleEncodingMappingImpl extends RegularObjectImpl {
 	private static final long serialVersionUID = 1L;
 
 	public String name() {
-		return "" + getAttributeValue("locale") + ":" + getAttributeValue("encoding"); 
+		return "" + getAttributeValue("locale") + ":" + getAttributeValue("encoding");  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 }

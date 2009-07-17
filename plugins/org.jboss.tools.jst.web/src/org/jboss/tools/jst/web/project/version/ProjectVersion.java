@@ -75,7 +75,7 @@ public class ProjectVersion {
 		}
 
 		if(core == null || core.location.length() == 0) {
-			return NLS.bind(WebUIMessages.CORE_LIBRARY_LOCATION_ISNOT_SET_FOR_VERSION,name); //$NON-NLS-2$
+			return NLS.bind(WebUIMessages.CORE_LIBRARY_LOCATION_ISNOT_SET_FOR_VERSION,name); 
 		} else if(!new File(core.location).isDirectory()) {
 			return NLS.bind(WebUIMessages.CORE_LIBRARY_LOCATION_FOR_VERSION_ISNOT_CORRECT,name);
 		}
@@ -100,7 +100,7 @@ public class ProjectVersion {
 	void load(Element e) {
 		element = e;
 		name = e.getAttribute("displayName"); //$NON-NLS-1$
-		String sv = e.getAttribute("servlet-version");
+		String sv = e.getAttribute("servlet-version"); //$NON-NLS-1$
 		if(sv != null && sv.trim().length() > 0) {
 			preferredServletVersion = sv.trim();
 		}

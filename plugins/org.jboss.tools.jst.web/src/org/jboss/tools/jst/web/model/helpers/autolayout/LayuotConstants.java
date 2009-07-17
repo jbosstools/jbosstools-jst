@@ -30,8 +30,8 @@ public class LayuotConstants {
 	
 	public void update() {
 		XModel model = PreferenceModelUtilities.getPreferenceModel();
-		XModelObject o = model.getByPath("%Options%/Struts Studio/Editors/Web Flow Diagram");
-		String g = o.getAttributeValue("Grid Step");
+		XModelObject o = model.getByPath("%Options%/Struts Studio/Editors/Web Flow Diagram"); //$NON-NLS-1$
+		String g = o.getAttributeValue("Grid Step"); //$NON-NLS-1$
 		int step = Integer.parseInt(g);
 		indentX = (step < 24) ? 24 : step;
 		indentY = (step < 16) ? 16 : step;

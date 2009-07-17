@@ -110,7 +110,7 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	protected String getMatchString(IStructuredDocumentRegion parent, ITextRegion aRegion, int offset) {
 		String matchString =  super.getMatchString(parent, aRegion, offset);
 		String regionType = aRegion.getType();
-		if(regionType == DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE && matchString.startsWith("\"")) {
+		if(regionType == DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE && matchString.startsWith("\"")) { //$NON-NLS-1$
 			matchString = matchString.substring(1);
 		}
 		return matchString;
@@ -162,14 +162,14 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	 * Calculates and adds the attribute name proposals to the Content Assist Request object
 	 */
 	protected void addAttributeNameProposals(ContentAssistRequest contentAssistRequest) {
-		System.out.println("AbstractXMLContentAssistProcessor: addAttributeNameProposals() invoked");
+		System.out.println("AbstractXMLContentAssistProcessor: addAttributeNameProposals() invoked"); //$NON-NLS-1$
 	}
 
 	/**
 	 * Calculates and adds the attribute value proposals to the Content Assist Request object
 	 */
 	protected void addAttributeValueProposals(ContentAssistRequest contentAssistRequest) {
-		System.out.println("AbstractXMLContentAssistProcessor: addAttributeValueProposals() invoked");
+		System.out.println("AbstractXMLContentAssistProcessor: addAttributeValueProposals() invoked"); //$NON-NLS-1$
 /*
 		IDOMNode node = (IDOMNode) contentAssistRequest.getNode();
 
@@ -225,42 +225,42 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	 * Calculates and adds the comment proposals to the Content Assist Request object
 	 */
 	protected void addCommentProposal(ContentAssistRequest contentAssistRequest) {
-		System.out.println("AbstractXMLContentAssistProcessor: addCommentProposal() invoked");
+		System.out.println("AbstractXMLContentAssistProcessor: addCommentProposal() invoked"); //$NON-NLS-1$
 	}
 	
 	/*
 	 * Calculates and adds the doc type proposals to the Content Assist Request object
 	 */
 	protected void addDocTypeProposal(ContentAssistRequest contentAssistRequest) {
-		System.out.println("AbstractXMLContentAssistProcessor: addDocTypeProposal() invoked");
+		System.out.println("AbstractXMLContentAssistProcessor: addDocTypeProposal() invoked"); //$NON-NLS-1$
 	}
 	
 	/*
 	 * Calculates and adds the empty document proposals to the Content Assist Request object
 	 */
 	protected void addEmptyDocumentProposals(ContentAssistRequest contentAssistRequest) {
-		System.out.println("AbstractXMLContentAssistProcessor: addEmptyDocumentProposals() invoked");
+		System.out.println("AbstractXMLContentAssistProcessor: addEmptyDocumentProposals() invoked"); //$NON-NLS-1$
 	}
 	
 	/*
 	 * Calculates and adds the tag name proposals to the Content Assist Request object
 	 */
 	protected void addEndTagNameProposals(ContentAssistRequest contentAssistRequest) {
-		System.out.println("AbstractXMLContentAssistProcessor: addEndTagNameProposals() invoked");
+		System.out.println("AbstractXMLContentAssistProcessor: addEndTagNameProposals() invoked"); //$NON-NLS-1$
 	}
 	
 	/*
 	 * Calculates and adds the end tag proposals to the Content Assist Request object
 	 */
 	protected void addEndTagProposals(ContentAssistRequest contentAssistRequest) {
-		System.out.println("AbstractXMLContentAssistProcessor: addEndTagProposals() invoked");
+		System.out.println("AbstractXMLContentAssistProcessor: addEndTagProposals() invoked"); //$NON-NLS-1$
 	}
 	
 	/*
 	 * Calculates and adds the enttity proposals to the Content Assist Request object
 	 */
 	protected void addEntityProposals(ContentAssistRequest contentAssistRequest, int documentPosition, ITextRegion completionRegion, IDOMNode treeNode) {
-		System.out.println("AbstractXMLContentAssistProcessor: addEntityProposals() invoked");
+		System.out.println("AbstractXMLContentAssistProcessor: addEntityProposals() invoked"); //$NON-NLS-1$
 		super.addEntityProposals(contentAssistRequest, documentPosition, completionRegion, treeNode);
 	}
 	
@@ -268,28 +268,28 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	 * Calculates and adds the PCDATA proposals to the Content Assist Request object
 	 */
 	protected void addPCDATAProposal(String nodeName, ContentAssistRequest contentAssistRequest) {
-		System.out.println("AbstractXMLContentAssistProcessor: addPCDATAProposal() invoked");
+		System.out.println("AbstractXMLContentAssistProcessor: addPCDATAProposal() invoked"); //$NON-NLS-1$
 	}
 	
 	/*
 	 * Calculates and adds the start document proposals to the Content Assist Request object
 	 */
 	protected void addStartDocumentProposals(ContentAssistRequest contentAssistRequest) {
-		System.out.println("AbstractXMLContentAssistProcessor: addStartDocumentProposals() invoked");
+		System.out.println("AbstractXMLContentAssistProcessor: addStartDocumentProposals() invoked"); //$NON-NLS-1$
 	}
 	
 	/*
 	 * Calculates and adds the tag close proposals to the Content Assist Request object
 	 */
 	protected void addTagCloseProposals(ContentAssistRequest contentAssistRequest) {
-		System.out.println("AbstractXMLContentAssistProcessor: addTagCloseProposals() invoked");
+		System.out.println("AbstractXMLContentAssistProcessor: addTagCloseProposals() invoked"); //$NON-NLS-1$
 	}
 	
 	/*
 	 * Calculates and adds the tag insertion proposals to the Content Assist Request object
 	 */
 	protected void addTagInsertionProposals(ContentAssistRequest contentAssistRequest, int childPosition) {
-		System.out.println("AbstractXMLContentAssistProcessor: addTagInsertionProposals() invoked");
+		System.out.println("AbstractXMLContentAssistProcessor: addTagInsertionProposals() invoked"); //$NON-NLS-1$
 	}
 	
 	/**
@@ -722,12 +722,12 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 			ELInstance is = ELUtil.findInstance(model, inValueOffset);// ELInstance
 			ELInvocationExpression ie = ELUtil.findExpression(model, inValueOffset);// ELExpression
 			
-			boolean isELStarted = (model != null && is != null && (model.toString().startsWith("#{") || 
-					model.toString().startsWith("${")));
-			boolean isELClosed = (model != null && is != null && model.toString().endsWith("}"));
+			boolean isELStarted = (model != null && is != null && (model.toString().startsWith("#{") ||  //$NON-NLS-1$
+					model.toString().startsWith("${"))); //$NON-NLS-1$
+			boolean isELClosed = (model != null && is != null && model.toString().endsWith("}")); //$NON-NLS-1$
 			
 //			boolean insideEL = startOffset + model.toString().length() 
-			TextRegion tr = new TextRegion(startOffset,  ie == null ? inValueOffset : ie.getStartPosition(), ie == null ? 0 : inValueOffset - ie.getStartPosition(), ie == null ? "" : ie.getText(), isELStarted, isELClosed);
+			TextRegion tr = new TextRegion(startOffset,  ie == null ? inValueOffset : ie.getStartPosition(), ie == null ? 0 : inValueOffset - ie.getStartPosition(), ie == null ? "" : ie.getText(), isELStarted, isELClosed); //$NON-NLS-1$
 			
 			return tr;
 		} finally {

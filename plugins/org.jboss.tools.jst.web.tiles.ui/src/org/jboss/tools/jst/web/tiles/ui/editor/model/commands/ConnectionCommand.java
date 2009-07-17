@@ -14,6 +14,7 @@ import org.eclipse.gef.commands.Command;
 
 import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.jst.web.tiles.ui.Messages;
 import org.jboss.tools.jst.web.tiles.ui.editor.edit.TilesEditPart;
 import org.jboss.tools.jst.web.tiles.ui.editor.model.IDefinition;
 import org.jboss.tools.jst.web.tiles.ui.editor.model.ILink;
@@ -39,7 +40,7 @@ public class ConnectionCommand extends Command {
 	protected ILink link;
 
 	public ConnectionCommand() {
-		super("connection command");
+		super(Messages.ConnectionCommand_Label);
 	}
 
 	public boolean canExecute() {
@@ -68,7 +69,7 @@ public class ConnectionCommand extends Command {
 	}
 
 	public String getLabel() {
-		return "connection command";
+		return Messages.ConnectionCommand_Label;
 	}
 
 	public TilesEditPart getSource() {

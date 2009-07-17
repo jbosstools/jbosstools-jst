@@ -60,10 +60,10 @@ public class NewWebProjectHelper {
         if(webxml == null) throw new XModelException("Cannot find web.xml");
 		String location = ((IFile)webxml.getAdapter(IFile.class)).getLocation().toString();
 
-		XModelObject webinf = model.getByPath("FileSystems/WEB-INF");
+		XModelObject webinf = model.getByPath("FileSystems/WEB-INF"); //$NON-NLS-1$
 
-		XModelObject fss = model.getByPath("FileSystems");
-        fss.setAttributeValue("application name", p.getProperty("name"));
+		XModelObject fss = model.getByPath("FileSystems"); //$NON-NLS-1$
+        fss.setAttributeValue("application name", p.getProperty("name")); //$NON-NLS-1$ //$NON-NLS-2$
 
 		File webInfDir = ((IResource)webinf.getAdapter(IResource.class)).getLocation().toFile();
         Map<String,String> modules = getModules(location);
@@ -74,33 +74,33 @@ public class NewWebProjectHelper {
             String config = (String)entry.getValue();
             String fileName = config.substring(config.indexOf('/', 1) + 1);
             File configFile = new File(location, fileName);
-            if (configFile.isFile() && fileName.toLowerCase().endsWith(".xml")) {
+            if (configFile.isFile() && fileName.toLowerCase().endsWith(".xml")) { //$NON-NLS-1$
             	//starts with a dot
-                File layoutFile = new File(location, "." + fileName.substring(0, fileName.length())+".strutsdia");
+                File layoutFile = new File(location, "." + fileName.substring(0, fileName.length())+".strutsdia"); //$NON-NLS-1$ //$NON-NLS-2$
   				if (!layoutFile.exists())
-                	FileUtil.writeFile(layoutFile, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<PROCESS ENTITY=\"StrutsProcess\" MODULE=\""+module+"\"/>");
+                	FileUtil.writeFile(layoutFile, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<PROCESS ENTITY=\"StrutsProcess\" MODULE=\""+module+"\"/>"); //$NON-NLS-1$ //$NON-NLS-2$
             }
         }
 		String libName = getLibLocation(model);
         if (libName != null && libName.length() > 0) {
             File libDir = new File(libName);
             libName = (new File(libName).getParentFile().equals(webInfDir))
-                ? XModelConstants.WORKSPACE_REF + "/lib/" : libName.replace('\\', '/')+"/";
+                ? XModelConstants.WORKSPACE_REF + "/lib/" : libName.replace('\\', '/')+"/"; //$NON-NLS-1$ //$NON-NLS-2$
             File[] jars = libDir.listFiles(new FileFilter() {
                 public boolean accept(File file) {
                     if (!file.isFile()) return false;
                     String name = file.getName().toLowerCase();
-                    return name.endsWith(".jar") || name.endsWith(".zip");
+                    return name.endsWith(".jar") || name.endsWith(".zip"); //$NON-NLS-1$ //$NON-NLS-2$
                 }
             });
             if (jars != null) {
                 for (int i = 0; i < jars.length; i++) {
                     String jarName = jars[i].getName();
                     Properties fsProp = new Properties();
-                    fsProp.setProperty("name", "lib-"+jarName);
-                    fsProp.setProperty("location", libName+jarName);
-                    fsProp.setProperty("info", "hidden=yes");
-                    XModelObject fsJar = XModelObjectLoaderUtil.createValidObject(model, "FileSystemJar", fsProp);
+                    fsProp.setProperty("name", "lib-"+jarName); //$NON-NLS-1$ //$NON-NLS-2$
+                    fsProp.setProperty("location", libName+jarName); //$NON-NLS-1$
+                    fsProp.setProperty("info", "hidden=yes"); //$NON-NLS-1$ //$NON-NLS-2$
+                    XModelObject fsJar = XModelObjectLoaderUtil.createValidObject(model, "FileSystemJar", fsProp); //$NON-NLS-1$
                     if(fss.getChildByPath(fsJar.getPathPart()) == null) {
                     	DefaultCreateHandler.addCreatedObject(fss, fsJar, false, -1);
                     }
@@ -117,18 +117,18 @@ public class NewWebProjectHelper {
     }
     
     public static String getLibLocation(XModel model) {
-        XModelObject lib = model.getByPath("FileSystems/lib");
+        XModelObject lib = model.getByPath("FileSystems/lib"); //$NON-NLS-1$
         if(lib != null) {
 			return ((IResource)lib.getAdapter(IResource.class)).getLocation().toString();
         } else {
-        	XModelObject fs = model.getByPath("FileSystems/WEB-INF");
-        	return ((IResource)fs.getAdapter(IResource.class)).getLocation().toString() + "/lib";
+        	XModelObject fs = model.getByPath("FileSystems/WEB-INF"); //$NON-NLS-1$
+        	return ((IResource)fs.getAdapter(IResource.class)).getLocation().toString() + "/lib"; //$NON-NLS-1$
         }
     }
     
     public static Map<String,String> getTemplates(String version, String templ) {
         Map<String,String> map = new HashMap<String,String>();
-        File dir = new File(templ, "struts/"+version);
+        File dir = new File(templ, "struts/"+version); //$NON-NLS-1$
         File[] files = dir.listFiles();
         if (files == null) return map;
         for (int i = 0; i < files.length; i++) {
@@ -139,7 +139,7 @@ public class NewWebProjectHelper {
                     map.put(name, file.toURL().toString());
                 } else if (file.isFile()) {
                     String ext = name.substring(name.indexOf('.') + 1).toLowerCase();
-                    if ("jar".equals(ext) || "zip".equals(ext)) {
+                    if ("jar".equals(ext) || "zip".equals(ext)) { //$NON-NLS-1$ //$NON-NLS-2$
                         map.put(name.substring(0, ext.length()-1), file.toURL().toString());
                     }
                 }
@@ -151,23 +151,23 @@ public class NewWebProjectHelper {
     }
 
     public static void updateOverlapped(XModel model) {
-        FileSystemsImpl fs = (FileSystemsImpl)model.getByPath("FileSystems");
+        FileSystemsImpl fs = (FileSystemsImpl)model.getByPath("FileSystems"); //$NON-NLS-1$
         if(fs != null) fs.updateOverlapped();
     }
 
     public static Map<String,String> getModules(String location) {
         Map<String,String> modules = new HashMap<String,String>();
-        File webXML = new File(location, "web.xml");
+        File webXML = new File(location, "web.xml"); //$NON-NLS-1$
         if(!webXML.isFile()) return modules;
         try {
 	        WebAppConfig config = new WebAppConfig(webXML);
-	        Element[] servlets = config.getServletsByClass("org.apache.struts.action.ActionServlet");
+	        Element[] servlets = config.getServletsByClass("org.apache.struts.action.ActionServlet"); //$NON-NLS-1$
 	        for (int i = 0; i < servlets.length; i++) {
 	            Map<String,String> params = config.getInitParamsAsMap(servlets[i]);
 	            Iterator<String> it = params.keySet().iterator();
 	            while (it.hasNext()) {
 	                String name = it.next();
-	                if (!name.startsWith("config/") && !name.equals("config")) continue;
+	                if (!name.startsWith("config/") && !name.equals("config")) continue; //$NON-NLS-1$ //$NON-NLS-2$
 	                String value = params.get(name);
 	                modules.put(name.substring(6), value);
 	            }
@@ -180,16 +180,16 @@ public class NewWebProjectHelper {
     }
     
     private void registerTLDs(XModel model, Properties p) {
-    	String tlds = p.getProperty("TLDs");
+    	String tlds = p.getProperty("TLDs"); //$NON-NLS-1$
     	XModelObject webxml = WebAppHelper.getWebApp(model);
     	if(webxml == null || tlds == null) return;
 		String[] ts = XModelObjectUtil.asStringArray(tlds);
 		for (int i = 0; i < ts.length; i++) {
-			XModelObject taglib = XModelObjectLoaderUtil.createValidObject(model, "WebAppTaglib");
-			String path = "/WEB-INF/" + ts[i], uri = path;
-			if(uri.endsWith(".tld")) uri = uri.substring(0, uri.length() - 4);
-			taglib.setAttributeValue("taglib-uri", uri);
-			taglib.setAttributeValue("taglib-location", path);
+			XModelObject taglib = XModelObjectLoaderUtil.createValidObject(model, "WebAppTaglib"); //$NON-NLS-1$
+			String path = "/WEB-INF/" + ts[i], uri = path; //$NON-NLS-1$
+			if(uri.endsWith(".tld")) uri = uri.substring(0, uri.length() - 4); //$NON-NLS-1$
+			taglib.setAttributeValue("taglib-uri", uri); //$NON-NLS-1$
+			taglib.setAttributeValue("taglib-location", path); //$NON-NLS-1$
 			if(webxml.getChildByPath(taglib.getPathPart()) != null) continue;
 			WebAppHelper.getJSPConfig(webxml).addChild(taglib);
 			webxml.setModified(true);
@@ -200,18 +200,18 @@ public class NewWebProjectHelper {
 
 class WebAppConfig {
 
-	public static final String TAG_SERVLET       = "servlet";
-	public static final String TAG_SERVLET_NAME  = "servlet-name";
-	public static final String TAG_SERVLET_CLASS = "servlet-class";
-	public static final String TAG_INIT_PARAM    = "init-param";
-	public static final String TAG_PARAM_NAME    = "param-name";
-	public static final String TAG_PARAM_VALUE   = "param-value";
+	public static final String TAG_SERVLET       = "servlet"; //$NON-NLS-1$
+	public static final String TAG_SERVLET_NAME  = "servlet-name"; //$NON-NLS-1$
+	public static final String TAG_SERVLET_CLASS = "servlet-class"; //$NON-NLS-1$
+	public static final String TAG_INIT_PARAM    = "init-param"; //$NON-NLS-1$
+	public static final String TAG_PARAM_NAME    = "param-name"; //$NON-NLS-1$
+	public static final String TAG_PARAM_VALUE   = "param-value"; //$NON-NLS-1$
     
 	static {
 		try {
 			Class<?> c = WebAppConfig.class;
-			XMLEntityResolver.registerPublicEntity("-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN", FileLocator.resolve(c.getResource("/meta/web-app_2_2.dtd")).toString());
-			XMLEntityResolver.registerPublicEntity("-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN", FileLocator.resolve(c.getResource("/meta/web-app_2_3.dtd")).toString());
+			XMLEntityResolver.registerPublicEntity("-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN", FileLocator.resolve(c.getResource("/meta/web-app_2_2.dtd")).toString()); //$NON-NLS-1$ //$NON-NLS-2$
+			XMLEntityResolver.registerPublicEntity("-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN", FileLocator.resolve(c.getResource("/meta/web-app_2_3.dtd")).toString()); //$NON-NLS-1$ //$NON-NLS-2$
 		} catch (IOException e) {
 			WebModelPlugin.getPluginLog().logError(e);
 		}

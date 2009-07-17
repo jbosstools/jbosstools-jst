@@ -50,7 +50,7 @@ public class ViewActionsResorceElement extends XModelAttributeValueResource {
 		Properties view = new Properties();
 		view.put(IWebPromptingProvider.VIEW_PATH, path); 
 
-		List actions = provider.getList(xModelObject.getModel(), SUPPORTED_ID, "", view);
+		List actions = provider.getList(xModelObject.getModel(), SUPPORTED_ID, "", view); //$NON-NLS-1$
 		List result = new ArrayList();
 		for(int i=0; i<actions.size(); i++) {
 			Object actionName = actions.get(i);
@@ -67,6 +67,6 @@ public class ViewActionsResorceElement extends XModelAttributeValueResource {
 	 * @see ModelElement#getName()
 	 */
 	public String getName() {
-		return "View Actions";
+		return "View Actions"; //$NON-NLS-1$
 	}
 }

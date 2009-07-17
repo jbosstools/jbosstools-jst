@@ -16,7 +16,7 @@ public class WebConfigImpl extends RegularObjectImpl {
 	private static final long serialVersionUID = 1L;
 
 	public String getPathPart() {
-		String s = "" + getAttributeValue("URI");
+		String s = "" + getAttributeValue("URI"); //$NON-NLS-1$ //$NON-NLS-2$
 		return s.replace('/', '#');
 	}
 

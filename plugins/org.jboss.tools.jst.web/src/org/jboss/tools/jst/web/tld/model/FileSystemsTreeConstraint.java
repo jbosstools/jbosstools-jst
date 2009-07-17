@@ -26,13 +26,13 @@ public class FileSystemsTreeConstraint implements XFilteredTreeConstraint {
     public boolean isHidingAllChildren(XModelObject object) {
         if(object.getFileType() != XFileObject.FILE) return false;
         String entity = object.getModelEntity().getName();
-        if(!entity.startsWith("File")) return false;
-        if(!entity.startsWith("FileTLD") &&
-           !entity.startsWith("FileValidationRules") &&
-           !entity.startsWith("FileFaceletTaglib")
+        if(!entity.startsWith("File")) return false; //$NON-NLS-1$
+        if(!entity.startsWith("FileTLD") && //$NON-NLS-1$
+           !entity.startsWith("FileValidationRules") && //$NON-NLS-1$
+           !entity.startsWith("FileFaceletTaglib") //$NON-NLS-1$
 ///        && !entity.equals("FileTiles")
         ) return false;
-        return (!"true".equals(object.getAttributeValue("expanded")));
+        return (!"true".equals(object.getAttributeValue("expanded"))); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     public boolean isHidingSomeChildren(XModelObject object) {

@@ -42,11 +42,11 @@ public class ResourcePathProposalType extends ModelProposalType {
 	private static Set<String> GRAPHIC_FILE_EXTENSIONS = new HashSet<String>();
 	private static Set<String> PAGE_FILE_EXTENSIONS = new HashSet<String>();
 	static {
-		String[] images = {"gif", "jpeg", "jpg", "png", "wbmp", "bmp"};
+		String[] images = {"gif", "jpeg", "jpg", "png", "wbmp", "bmp"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 		for (int i = 0; i < images.length; i++) {
 			GRAPHIC_FILE_EXTENSIONS.add(images[i]);
 		}
-		String[] pages = {"jsp", "htm", "html", "xhtml", "xml"};
+		String[] pages = {"jsp", "htm", "html", "xhtml", "xml"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 		for (int i = 0; i < pages.length; i++) {
 			PAGE_FILE_EXTENSIONS.add(pages[i]);
 		}
@@ -88,7 +88,7 @@ public class ResourcePathProposalType extends ModelProposalType {
 			proposal.setLabel(images[i].getQueryPath());
 			String replacementString = images[i].getQueryPath();
 			if(images[i].getResource() instanceof IFolder) {
-				replacementString = replacementString + "/";
+				replacementString = replacementString + "/"; //$NON-NLS-1$
 				proposal.setAutoActivationContentAssistantAfterApplication(true);
 			}
 			proposal.setReplacementString(replacementString);
@@ -108,13 +108,13 @@ public class ResourcePathProposalType extends ModelProposalType {
 
 	private void initExtensions() {
 		String value = getParamValue(EXTENSIONS_PARAM_NAME);
-		if(value != null && !value.equals("*")) {
+		if(value != null && !value.equals("*")) { //$NON-NLS-1$
 			if(IMAGE_PARAM_TYPE.equals(value)) {
 				this.extensions = GRAPHIC_FILE_EXTENSIONS;
-			} else if("%page%".equals(value)) {
+			} else if("%page%".equals(value)) { //$NON-NLS-1$
 				this.extensions = PAGE_FILE_EXTENSIONS;
 			} else {
-				StringTokenizer st = new StringTokenizer(value, ",;");
+				StringTokenizer st = new StringTokenizer(value, ",;"); //$NON-NLS-1$
 				if(st.countTokens() > 0) {
 					extensions = new HashSet<String>();
 					while(st.hasMoreTokens()) {
@@ -149,7 +149,7 @@ public class ResourcePathProposalType extends ModelProposalType {
 			return new ImagePathDescriptor[0];
 		}
 		if(query.length()==0) {
-			query = "/";
+			query = "/"; //$NON-NLS-1$
 		}
 		int lastSeparator = query.lastIndexOf('/');
 		String name = null;
@@ -159,37 +159,37 @@ public class ResourcePathProposalType extends ModelProposalType {
 			if(lastSeparator+1<query.length()) {
 				name = query.substring(lastSeparator+1, query.length());
 			} else {
-				name = "";
+				name = ""; //$NON-NLS-1$
 			}
 		} else {
-			pathWithoutLastSegment = "";
+			pathWithoutLastSegment = ""; //$NON-NLS-1$
 			name = query;
 		}
-		if(name.equals(".") || name.equals("..")) {
+		if(name.equals(".") || name.equals("..")) { //$NON-NLS-1$ //$NON-NLS-2$
 			if(pathWithoutLastSegment.length()>0) {
-				pathWithoutLastSegment = pathWithoutLastSegment + "/" + name;
+				pathWithoutLastSegment = pathWithoutLastSegment + "/" + name; //$NON-NLS-1$
 			} else {
-				if(query.startsWith("/")) {
-					pathWithoutLastSegment = "/" + name;
+				if(query.startsWith("/")) { //$NON-NLS-1$
+					pathWithoutLastSegment = "/" + name; //$NON-NLS-1$
 				} else {
 					pathWithoutLastSegment = name;
 				}
 			}
-			name = "";
+			name = ""; //$NON-NLS-1$
 		}
 		if(name==null) {
-			name = "";
+			name = ""; //$NON-NLS-1$
 		}
 		IResource resource;
 		String startPath = pathWithoutLastSegment;
-		if(pathWithoutLastSegment.startsWith("/")) {
+		if(pathWithoutLastSegment.startsWith("/")) { //$NON-NLS-1$
 			if(pathWithoutLastSegment.length()>1) {
 				startPath = pathWithoutLastSegment.substring(1);
 			} else {
-				startPath = "";
+				startPath = ""; //$NON-NLS-1$
 			}
 		}
-		if(query.startsWith("/")) {
+		if(query.startsWith("/")) { //$NON-NLS-1$
 			resource = webRootResource.findMember(startPath);
 		} else {
 			resource = context.getResource().getParent().findMember(startPath);
@@ -204,7 +204,7 @@ public class ResourcePathProposalType extends ModelProposalType {
 		ImagePathDescriptor[] filesPathes = new ImagePathDescriptor[resources.size()];
 		for(int i=0; i<filesPathes.length; i++) {
 			String prefix = pathWithoutLastSegment.toString();
-			if(!prefix.endsWith("/")) {
+			if(!prefix.endsWith("/")) { //$NON-NLS-1$
 				prefix = prefix + '/';
 			}
 			IResource r = (IResource)resources.get(i);
@@ -265,7 +265,7 @@ public class ResourcePathProposalType extends ModelProposalType {
 				if(count==0) {
 					count++;
 					return true;
-				} else if(resource.getName().startsWith(name) && (!resource.getName().equals("WEB-INF")) && (!resource.getName().equals("META-INF"))) {
+				} else if(resource.getName().startsWith(name) && (!resource.getName().equals("WEB-INF")) && (!resource.getName().equals("META-INF"))) { //$NON-NLS-1$ //$NON-NLS-2$
 					resources.add(resource);
 				}
 			}

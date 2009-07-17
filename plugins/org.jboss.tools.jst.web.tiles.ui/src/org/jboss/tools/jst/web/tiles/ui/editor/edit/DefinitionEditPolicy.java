@@ -55,7 +55,7 @@ public class DefinitionEditPolicy extends TilesElementEditPolicy {
 		IDefinition child = null;
 
 		public ConnectionEndCommand() {
-			super("ConnectionEndCommand");
+			super("ConnectionEndCommand"); //$NON-NLS-1$
 		}
 
 		public void setChild(IDefinition child) {

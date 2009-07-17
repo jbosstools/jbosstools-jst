@@ -40,7 +40,7 @@ public class WTPKbdBeanMethodResource extends WTPKbdBeanPropertyResource {
 	}
 	
 	public String toString () {
-		return "WTPKbdBeanMethodResource";
+		return "WTPKbdBeanMethodResource"; //$NON-NLS-1$
 	}
 
 	public String getSupportedID () {
@@ -51,7 +51,7 @@ public class WTPKbdBeanMethodResource extends WTPKbdBeanPropertyResource {
 		if (name == null) return;
 		if (value == null || value.trim().length() == 0) return;
 
-		if ("paramType".equalsIgnoreCase(name)) {
+		if ("paramType".equalsIgnoreCase(name)) { //$NON-NLS-1$
 			String[] types = (String[])type.get(IWebPromptingProvider.PARAMETER_TYPES);
 			List<String> aTypes = new ArrayList<String>();
 			for (int i = 0; types != null && i < types.length; i++) {
@@ -64,7 +64,7 @@ public class WTPKbdBeanMethodResource extends WTPKbdBeanPropertyResource {
 			}
 			
 			type.put(IWebPromptingProvider.PARAMETER_TYPES, types);
-		} else if ("returnType".equalsIgnoreCase(name)) {
+		} else if ("returnType".equalsIgnoreCase(name)) { //$NON-NLS-1$
 			type.put(IWebPromptingProvider.RETURN_TYPE, value);
 		}
 	}
@@ -72,11 +72,11 @@ public class WTPKbdBeanMethodResource extends WTPKbdBeanPropertyResource {
 	public void clearConstraints() {
 		if (type != null) type.clear();
 		type.put(IWebPromptingProvider.PARAMETER_TYPES, new String[0]);
-		type.put(IWebPromptingProvider.RETURN_TYPE, "void");
+		type.put(IWebPromptingProvider.RETURN_TYPE, "void"); //$NON-NLS-1$
 	}
 
 	public Collection queryProposal(String query, String tail) {
-		throw new RuntimeException("Not implemented");
+		throw new RuntimeException("Not implemented"); //$NON-NLS-1$
 	}
 
 }

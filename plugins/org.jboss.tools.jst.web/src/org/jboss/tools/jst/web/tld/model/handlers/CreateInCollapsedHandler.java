@@ -20,8 +20,8 @@ public class CreateInCollapsedHandler extends DefaultCreateHandler {
     public CreateInCollapsedHandler() {}
 
     public void executeHandler(XModelObject object, Properties prop) throws XModelException {
-        if("false".equals(object.get("expanded")))
-          XActionInvoker.invoke("SetExpanded", object, null);
+        if("false".equals(object.get("expanded"))) //$NON-NLS-1$ //$NON-NLS-2$
+          XActionInvoker.invoke("SetExpanded", object, null); //$NON-NLS-1$
         super.executeHandler(object, prop);
     }
 

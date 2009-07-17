@@ -16,6 +16,7 @@ import java.util.Properties;
 
 import org.jboss.tools.common.meta.action.XActionInvoker;
 import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
 
 /**
@@ -62,10 +63,10 @@ public class BundleAliasElement extends ModelElement implements IAttributeValueC
 	 * @see ModelElement#getComparedValue()
 	 */
 	protected String getComparedValue() {
-		return "#{" + getFullName();
+		return "#{" + getFullName(); //$NON-NLS-1$
 	}
 	
-	static String ADD_PROPERTY_ACTION = "Add Property";
+	static String ADD_PROPERTY_ACTION = JstUIMessages.BundleAliasElement_AddProperty;
 
 	public String[] getActions() {
 		return new String[]{ADD_PROPERTY_ACTION};
@@ -83,18 +84,18 @@ public class BundleAliasElement extends ModelElement implements IAttributeValueC
 		Map bundles = parentResource.getBundles();
 		String basename = bundles.get(bundleAlias).toString();
 		if(basename == null) return;
-		XModelObject b = parentResource.getXModel().getByPath("/" + basename.replace('.', '/') + ".properties");
+		XModelObject b = parentResource.getXModel().getByPath("/" + basename.replace('.', '/') + ".properties"); //$NON-NLS-1$ //$NON-NLS-2$
 		if(b == null) return;
-		properties.setProperty("actionSourceGUIComponentID", "dialog");
-		XActionInvoker.invoke("CreateActions.CreateProperty", b, properties);
-		XModelObject c = (XModelObject)properties.get("created");
+		properties.setProperty("actionSourceGUIComponentID", "dialog"); //$NON-NLS-1$ //$NON-NLS-2$
+		XActionInvoker.invoke("CreateActions.CreateProperty", b, properties); //$NON-NLS-1$
+		XModelObject c = (XModelObject)properties.get("created"); //$NON-NLS-1$
 		if(c == null) return;
 		bundlePropertyElements = null;
 		getChildren();
 		for (int i = 0; i < bundlePropertyElements.length; i++) {
 			BundlePropertyElement p = bundlePropertyElements[i];
-			if(p.getName().equals(c.getAttributeValue("name"))) {
-				properties.put("select", p);
+			if(p.getName().equals(c.getAttributeValue("name"))) { //$NON-NLS-1$
+				properties.put("select", p); //$NON-NLS-1$
 			}
 		}		
 	}

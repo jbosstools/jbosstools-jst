@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.eclipse.ui.IEditorInput;
+import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.ValueHelper;
 
 /**
@@ -35,8 +36,8 @@ public class SeamVariablesResourceElement extends AttributeValueResource {
 			return elements;
 		}
 		Properties p = new Properties();
-		p.put("file", valueHelper.getFile());
-		List list = ValueHelper.seamPromptingProvider.getList(null, "seam.variables", "", p);
+		p.put("file", valueHelper.getFile()); //$NON-NLS-1$
+		List list = ValueHelper.seamPromptingProvider.getList(null, "seam.variables", "", p); //$NON-NLS-1$ //$NON-NLS-2$
 		if(list == null) return EMPTY_LIST;
 		SeamVariableElement[] es = new SeamVariableElement[list.size()];
 		for (int i = 0; i < es.length; i++) {
@@ -46,7 +47,7 @@ public class SeamVariablesResourceElement extends AttributeValueResource {
 	}
 
 	public String getName() {
-		return "Seam Variables";
+		return "Seam Variables"; //$NON-NLS-1$
 	}
 
 }

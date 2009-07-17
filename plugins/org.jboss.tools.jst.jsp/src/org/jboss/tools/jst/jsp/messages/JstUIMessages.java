@@ -50,19 +50,24 @@ public class JstUIMessages extends NLS {
 	public static String CSS_APPLY_CHANGES;
 	public static String ADD_FONT_FAMILY_TIP;
 	public static String REMOVE_FONT_FAMILY_TIP;
+	public static String FaceletPageContectAssistProcessor_CloseELExpression;
+	public static String FaceletPageContectAssistProcessor_NewELExpression;
 	public static String FONT_SIZE;
 	public static String FONT_STYLE;
 	public static String FONT_WEIGHT;
 	public static String FONT_FAMILY;
 	public static String FONT_FAMILY_DIALOG_TITLE;
 	public static String IMAGE_COMBO_TABLE_TOOL_TIP;
+	public static String ImageSelectionDialog_InvalidImageFile;
 	public static String COLOR_DIALOG_TITLE;
 	public static String IMAGE_DIALOG_MESSAGE;
 	public static String IMAGE_DIALOG_TITLE;
 	public static String IMAGE_DIALOG_EMPTY_MESSAGE;
 	public static String FONT_FAMILY_TIP;
+	public static String FormatJSPActionDelegate_Format;
 	public static String ALL_FILES;
 	public static String ALL_IMAGE_FILES;
+	public static String AttributeValueResourceFactory_UnknownResourceType;
 	public static String IMAGE_PREVIEW;
 	public static String TEXT_FONT_TAB_NAME;
 	public static String BACKGROUND_TAB_NAME;
@@ -81,6 +86,9 @@ public class JstUIMessages extends NLS {
 	public static String BORDER_COLOR;
 	public static String BORDER_COLOR_TIP;
 	public static String BORDER_WIDTH;
+	public static String BundleAliasElement_AddProperty;
+	public static String BundlesNameResourceElement_AddBundle;
+	public static String ManagedBeanForPropElement_AddProperty;
 	public static String MARGIN_PADDING_TITLE;
 	public static String MARGIN;
 	public static String PADDING;
@@ -98,6 +106,12 @@ public class JstUIMessages extends NLS {
 	public static String ENTER_CSS_CLASS_NAME;
 	public static String CSS_CLASS_NAME_NOT_VALID;
 	public static String CSS_INVALID_STYLE_PROPERTY;
+	public static String JspContentAssistProcessor_CloseELExpression;
+	public static String JspContentAssistProcessor_NewELExpression;
+	public static String JSPDialogCellEditor_CodeAssist;
+	public static String JSPDialogCellEditor_EditAttribute;
+	public static String JSPDialogContentProposalProvider_CloseELExpression;
+	public static String JSPDialogContentProposalProvider_NewELExpression;
 	public static String PROPERTY_NAME_COLUMN;
 	public static String PROPERTY_VALUE_COLUMN;
 }

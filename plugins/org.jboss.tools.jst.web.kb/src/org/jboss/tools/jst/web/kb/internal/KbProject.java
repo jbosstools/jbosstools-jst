@@ -236,7 +236,7 @@ public class KbProject extends KbObject implements IKbProject {
 				root = XMLUtilities.getElement(file, null);
 				if(root != null) {
 					loadProjectDependencies(root);
-					if(XMLUtilities.getUniqueChild(root, "paths") != null) {
+					if(XMLUtilities.getUniqueChild(root, "paths") != null) { //$NON-NLS-1$
 						loadSourcePaths2(root);
 					}
 				}
@@ -321,7 +321,7 @@ public class KbProject extends KbObject implements IKbProject {
 	 */
 	private File getStorageFile() {
 		IPath path = WebKbPlugin.getDefault().getStateLocation();
-		File file = new File(path.toFile(), "projects/" + project.getName() + ".xml"); //$NON-NLS-1$
+		File file = new File(path.toFile(), "projects/" + project.getName() + ".xml"); //$NON-NLS-1$ //$NON-NLS-2$
 		return file;
 	}
 	
@@ -367,7 +367,7 @@ public class KbProject extends KbObject implements IKbProject {
 
 	private void loadSourcePaths2(Element root) {
 		Properties context = new Properties();
-		context.put("kbProject", this);
+		context.put("kbProject", this); //$NON-NLS-1$
 		Element sourcePathsElement = XMLUtilities.getUniqueChild(root, "paths"); //$NON-NLS-1$
 		if(sourcePathsElement == null) return;
 		Element[] paths = XMLUtilities.getChildren(sourcePathsElement, "path"); //$NON-NLS-1$
@@ -387,7 +387,7 @@ public class KbProject extends KbObject implements IKbProject {
 			long t1 = System.currentTimeMillis();
 			LoadedDeclarations ds = new LoadedDeclarations();
 
-			Element libraries = XMLUtilities.getUniqueChild(paths[i], "libraries");
+			Element libraries = XMLUtilities.getUniqueChild(paths[i], "libraries"); //$NON-NLS-1$
 			if(libraries != null) {
 				Element[] cs = XMLUtilities.getChildren(libraries, KbXMLStoreConstants.TAG_LIBRARY);
 				for (Element library: cs) {
@@ -414,8 +414,8 @@ public class KbProject extends KbObject implements IKbProject {
 			if(statistics != null) {
 				statistics.add(new Long(t2 - t1));
 				if(t2 - t1 > 30) {
-					System.out.println("--->" + statistics.size() + " " + (t2 - t1));
-					System.out.println("stop");
+					System.out.println("--->" + statistics.size() + " " + (t2 - t1)); //$NON-NLS-1$ //$NON-NLS-2$
+					System.out.println("stop"); //$NON-NLS-1$
 				}
 			}
 		}
@@ -510,8 +510,8 @@ public class KbProject extends KbObject implements IKbProject {
 		}
 	}
 
-	static String EXTERNAL_TOOL_BUILDER = "org.eclipse.ui.externaltools.ExternalToolBuilder";
-	static final String LAUNCH_CONFIG_HANDLE = "LaunchConfigHandle";
+	static String EXTERNAL_TOOL_BUILDER = "org.eclipse.ui.externaltools.ExternalToolBuilder"; //$NON-NLS-1$
+	static final String LAUNCH_CONFIG_HANDLE = "LaunchConfigHandle"; //$NON-NLS-1$
 	
 	/**
 	 * 

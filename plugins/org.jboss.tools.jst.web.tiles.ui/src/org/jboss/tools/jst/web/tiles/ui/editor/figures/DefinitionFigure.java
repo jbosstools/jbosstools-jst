@@ -40,10 +40,10 @@ public class DefinitionFigure extends NodeFigure implements HandleBounds,
 	protected Color bgColor = new Color(null, 0xe2, 0xef, 0xdb);
 
 	public static final Image expandIcon = ImageDescriptor.createFromFile(
-			TilesEditor.class, "icons/tiles_minus.gif").createImage();
+			TilesEditor.class, "icons/tiles_minus.gif").createImage(); //$NON-NLS-1$
 
 	public static final Image collapseIcon = ImageDescriptor.createFromFile(
-			TilesEditor.class, "icons/tiles_plus.gif").createImage();
+			TilesEditor.class, "icons/tiles_plus.gif").createImage(); //$NON-NLS-1$
 
 	private Image icon = null;
 
@@ -131,7 +131,7 @@ public class DefinitionFigure extends NodeFigure implements HandleBounds,
 			c = new FixedConnectionAnchor(this);
 			c.offsetV = 32 + LINK_HEIGHT * i;
 			c.leftToRight = false;
-			connectionAnchors.put((i + 1) + "_OUT", c);
+			connectionAnchors.put((i + 1) + "_OUT", c); //$NON-NLS-1$
 			outputConnectionAnchors.addElement(c);
 		}
 	}
@@ -155,13 +155,13 @@ public class DefinitionFigure extends NodeFigure implements HandleBounds,
 		c = new FixedConnectionAnchor(this);
 		c.offsetV = 10;
 		c.leftToRight = false;
-		connectionAnchors.put("1_IN", c);
+		connectionAnchors.put("1_IN", c); //$NON-NLS-1$
 		inputConnectionAnchors.addElement(c);
 
 		c = new FixedConnectionAnchor(this);
 		c.offsetV = 10;
 		c.offsetH = -1;
-		connectionAnchors.put("1_OUT", c);
+		connectionAnchors.put("1_OUT", c); //$NON-NLS-1$
 		outputConnectionAnchors.addElement(c);
 	}
 
@@ -384,7 +384,7 @@ public class DefinitionFigure extends NodeFigure implements HandleBounds,
 		private static List<DefinitionFigure> listeners = new Vector<DefinitionFigure>();
 
 		public Animator() {
-			super("");
+			super(""); //$NON-NLS-1$
 			start();
 		}
 

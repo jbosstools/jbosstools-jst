@@ -34,6 +34,7 @@ import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.jsp.contentassist.AbstractXMLContentAssistProcessor.TextRegion;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
+import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.ValueHelper;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.jboss.tools.jst.web.kb.IPageContext;
@@ -59,15 +60,15 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 	
 	public void setContext(Properties context) {
 		this.context = context;
-        attributeName = Constants.EMPTY + context.getProperty("attributeName");
-        nodeName = Constants.EMPTY + context.getProperty("nodeName");
-        Node node = (Node)context.get("node");
+        attributeName = Constants.EMPTY + context.getProperty("attributeName"); //$NON-NLS-1$
+        nodeName = Constants.EMPTY + context.getProperty("nodeName"); //$NON-NLS-1$
+        Node node = (Node)context.get("node"); //$NON-NLS-1$
         if (node instanceof IDOMElement) {
-        	offset = ((IDOMElement)node).getStartOffset() + ("" + nodeName).length(); //approximation, attribute may be not defined
-        } else if(context.get("offset") != null) {
-        	offset = ((Integer)context.get("offset")).intValue();
+        	offset = ((IDOMElement)node).getStartOffset() + ("" + nodeName).length(); //approximation, attribute may be not defined //$NON-NLS-1$
+        } else if(context.get("offset") != null) { //$NON-NLS-1$
+        	offset = ((Integer)context.get("offset")).intValue(); //$NON-NLS-1$
         }
-        ValueHelper valueHelper = (ValueHelper)context.get("valueHelper");
+        ValueHelper valueHelper = (ValueHelper)context.get("valueHelper"); //$NON-NLS-1$
         if(valueHelper == null) {
         	valueHelper = new ValueHelper();
         }
@@ -75,22 +76,22 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
         processor = valueHelper.isFacetets() ? new FaceletPageContectAssistProcessor() : new JspContentAssistProcessor();
         processor.createContext(getTextViewer(), offset);
         pageContext = processor.getContext();
-        context.put("pageContext", pageContext);
-        context.put("kbQuery", createKbQuery(Type.ATTRIBUTE_VALUE, "", "", offset, false));
+        context.put("pageContext", pageContext); //$NON-NLS-1$
+        context.put("kbQuery", createKbQuery(Type.ATTRIBUTE_VALUE, "", "", offset, false)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	public IContentProposal[] getProposals(String contents, int position) {
 		List<IContentProposal> result = new ArrayList<IContentProposal>();
 		TextRegion prefix = getELPrefix(contents, position);
 		if (prefix == null || !prefix.isELStarted()) {
-			IContentProposal proposal = new ContentProposal("#{}", 0, "#{}", "New EL Expression");
+			IContentProposal proposal = new ContentProposal("#{}", 0, "#{}", JstUIMessages.JSPDialogContentProposalProvider_NewELExpression); //$NON-NLS-1$ //$NON-NLS-2$
 			result.add(proposal);
 			return result.toArray(new IContentProposal[0]);
 		}
-		String matchString = "#{" + prefix.getText();
+		String matchString = "#{" + prefix.getText(); //$NON-NLS-1$
 		String query = matchString;
 		if (query == null)
-			query = "";
+			query = ""; //$NON-NLS-1$
 		String stringQuery = matchString;
 
 		int beginChangeOffset = prefix.getStartOffset() + prefix.getOffset();
@@ -105,7 +106,7 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 			int cursorPosition = /*replacementOffset + */ textProposal.getReplacementString().length();
 
 			if(!prefix.isELClosed()) {
-				textProposal.setReplacementString(textProposal.getReplacementString() + "}");
+				textProposal.setReplacementString(textProposal.getReplacementString() + "}"); //$NON-NLS-1$
 			}
 
 			Image image = textProposal.getImage();
@@ -120,7 +121,7 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 		}
 
 		if (prefix.isELStarted() && !prefix.isELClosed()) {
-			IContentProposal proposal = new ContentProposal("}", 0, "}", "Close EL Expression");
+			IContentProposal proposal = new ContentProposal("}", 0, "}", JstUIMessages.JSPDialogContentProposalProvider_CloseELExpression); //$NON-NLS-1$ //$NON-NLS-2$
 			result.add(proposal);
 		}
 		
@@ -130,7 +131,7 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 	class ContentProposal implements IContentProposal {
 		String content;
 		int pos;
-		String description = "";
+		String description = ""; //$NON-NLS-1$
 		String label;
 	
 		public ContentProposal(String content, int pos, String label, String description) {
@@ -175,12 +176,12 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 			ELInstance is = ELUtil.findInstance(model, inValueOffset);// ELInstance
 			ELInvocationExpression ie = ELUtil.findExpression(model, inValueOffset);// ELExpression
 			
-			boolean isELStarted = (model != null && is != null && (model.toString().startsWith("#{") || 
-					model.toString().startsWith("${")));
-			boolean isELClosed = (model != null && is != null && model.toString().endsWith("}"));
+			boolean isELStarted = (model != null && is != null && (model.toString().startsWith("#{") ||  //$NON-NLS-1$
+					model.toString().startsWith("${"))); //$NON-NLS-1$
+			boolean isELClosed = (model != null && is != null && model.toString().endsWith("}")); //$NON-NLS-1$
 			
 //			boolean insideEL = startOffset + model.toString().length() 
-			TextRegion tr = new TextRegion(0,  ie == null ? inValueOffset : ie.getStartPosition(), ie == null ? 0 : inValueOffset - ie.getStartPosition(), ie == null ? "" : ie.getText(), isELStarted, isELClosed);
+			TextRegion tr = new TextRegion(0,  ie == null ? inValueOffset : ie.getStartPosition(), ie == null ? 0 : inValueOffset - ie.getStartPosition(), ie == null ? "" : ie.getText(), isELStarted, isELClosed); //$NON-NLS-1$
 			
 			return tr;
 	}

@@ -40,7 +40,7 @@ public abstract class AbstractWebDiagramLoader implements WebProcessLoader, Auxi
 
 	protected void setEncoding(XModelObject object, String body) {
 		String encoding = XModelObjectLoaderUtil.getEncoding(body);
-		if(encoding == null) encoding = "";
+		if(encoding == null) encoding = ""; //$NON-NLS-1$
 		object.setAttributeValue(XModelObjectConstants.ATTR_NAME_ENCODING, encoding);
 	}
     
@@ -68,7 +68,7 @@ public abstract class AbstractWebDiagramLoader implements WebProcessLoader, Auxi
 		FileAnyImpl file = (FileAnyImpl)object;
 		String text = file.getAsText();
 		XModelObjectLoaderUtil.setTempBody(object, text);
-		if("yes".equals(object.get("isIncorrect"))) {
+		if("yes".equals(object.get("isIncorrect"))) { //$NON-NLS-1$ //$NON-NLS-2$
 			return true;
 		}
 		return saveLayout(object);
@@ -81,7 +81,7 @@ public abstract class AbstractWebDiagramLoader implements WebProcessLoader, Auxi
 	}
 
 	public String mainObjectToString(XModelObject object) {
-		return "" + serializeMainObject(object);
+		return "" + serializeMainObject(object); //$NON-NLS-1$
 	}
 
 	public String serializeObject(XModelObject object) {

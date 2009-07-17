@@ -31,19 +31,19 @@ public class RenameDefinitionHandler extends DefaultEditHandler {
     	int q = DefaultRenameSupport.run(object, data[0], p);
     	if(q != 0) return;
     	p = DefaultCreateHandler.extractProperties(data[0]);
-    	boolean updateReferences = "true".equals(p.getProperty("update references"));
-    	String name = p.getProperty("name");
-    	String oldName = object.getAttributeValue("name");
+    	boolean updateReferences = "true".equals(p.getProperty("update references")); //$NON-NLS-1$ //$NON-NLS-2$
+    	String name = p.getProperty("name"); //$NON-NLS-1$
+    	String oldName = object.getAttributeValue("name"); //$NON-NLS-1$
     	XModel model = object.getModel();
     	Map map = TilesDefinitionSet.getInstance(model).getDefinitions();
     	XModelObject[] ds = (XModelObject[])map.values().toArray(new XModelObject[0]);
-    	model.editObjectAttribute(object, "name", name);
+    	model.editObjectAttribute(object, "name", name); //$NON-NLS-1$
     	if(updateReferences) {
     		for (int i = 0; i < ds.length; i++) {
     			if(!ds[i].isObjectEditable()) continue;
-    			String ext = ds[i].getAttributeValue("extends");
+    			String ext = ds[i].getAttributeValue("extends"); //$NON-NLS-1$
     			if(!oldName.equals(ext)) continue;
-    			model.editObjectAttribute(ds[i], "extends", name);
+    			model.editObjectAttribute(ds[i], "extends", name); //$NON-NLS-1$
     		}
     	}
     }

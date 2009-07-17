@@ -14,6 +14,7 @@ import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor;
+import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
@@ -34,7 +35,7 @@ public class FormatJSPActionDelegate implements IEditorActionDelegate {
 			targetEditor = ((JSPMultiPageEditor)targetEditor).getJspEditor();
 		}
 		this.targetEditor = (ITextEditor)targetEditor;
-		action.setText("Format");
+		action.setText(JstUIMessages.FormatJSPActionDelegate_Format);
 	}
 
 	public void run(IAction action) {

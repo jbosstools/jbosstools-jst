@@ -27,7 +27,7 @@ public class ResourceLabelProvider extends LabelProvider {
 	static void init() {
 		if(model != null) return;
 		model = PreferenceModelUtilities.getPreferenceModel();
-		folder = model.createModelObject("FileFolder", null);
+		folder = model.createModelObject("FileFolder", null); //$NON-NLS-1$
 		labelProvider = new NavigatorLabelProvider();
 		images = new HashMap();
 		
@@ -64,7 +64,7 @@ public class ResourceLabelProvider extends LabelProvider {
     	Image image = (Image)images.get(entity);
     	if(image == null) {
     		XModelObject o = model.createModelObject(entity, null);
-    		if(o == null) o = model.createModelObject("FileTXT", null);
+    		if(o == null) o = model.createModelObject("FileTXT", null); //$NON-NLS-1$
     		if(o == null) o = folder;
     		image = labelProvider.getImage(o);
     		if(image != null) images.put(entity, image);
@@ -74,15 +74,15 @@ public class ResourceLabelProvider extends LabelProvider {
     
     String getEntity(String filename) {
 		int i = filename.lastIndexOf('.');
-		String ext = i < 0 ? "" : filename.substring(i + 1);
-		if(ext.equals("xml")) {
-			if(filename.equals("web.xml")) return "FileWebApp";
-			if(filename.startsWith("faces-")) return "FacesConfig11";
-			if(filename.startsWith("struts-")) return "StrutsConfig11";
-			return "FileXML";
+		String ext = i < 0 ? "" : filename.substring(i + 1); //$NON-NLS-1$
+		if(ext.equals("xml")) { //$NON-NLS-1$
+			if(filename.equals("web.xml")) return "FileWebApp"; //$NON-NLS-1$ //$NON-NLS-2$
+			if(filename.startsWith("faces-")) return "FacesConfig11"; //$NON-NLS-1$ //$NON-NLS-2$
+			if(filename.startsWith("struts-")) return "StrutsConfig11"; //$NON-NLS-1$ //$NON-NLS-2$
+			return "FileXML"; //$NON-NLS-1$
 		}
         String entity = model.getEntityRecognizer().getEntityName(ext, null);
-        if(entity == null) entity = "FileTXT";
+        if(entity == null) entity = "FileTXT"; //$NON-NLS-1$
         return entity;
     }
 

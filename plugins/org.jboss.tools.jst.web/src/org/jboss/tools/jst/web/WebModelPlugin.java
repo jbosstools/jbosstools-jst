@@ -36,7 +36,7 @@ import org.osgi.framework.BundleContext;
  */
 public class WebModelPlugin extends BaseUIPlugin {
 
-	public static final String PLUGIN_ID = "org.jboss.tools.jst.web";
+	public static final String PLUGIN_ID = "org.jboss.tools.jst.web"; //$NON-NLS-1$
 
 	static WebModelPlugin instance;
 
@@ -60,7 +60,7 @@ public class WebModelPlugin extends BaseUIPlugin {
 		super.initializeDefaultPluginPreferences();
 		Properties p = new Properties();
 		p.setProperty(XModelConstants.WORKSPACE, EclipseResourceUtil.getInstallPath(this));
-		p.setProperty("initialModel", "true");
+		p.setProperty("initialModel", "true"); //$NON-NLS-1$ //$NON-NLS-2$
 		XModel initialModel = PreferenceModelUtilities.createPreferenceModel(p);
 		if (initialModel != null) {
 			Iterator preferences = WebPreference.getPreferenceList().iterator();
@@ -90,7 +90,7 @@ public class WebModelPlugin extends BaseUIPlugin {
 
 	static public ILaunchConfiguration findLaunchConfig(String name) throws CoreException {
 		ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
-		ILaunchConfigurationType launchConfigurationType = launchManager.getLaunchConfigurationType( "org.eclipse.ant.AntLaunchConfigurationType" );
+		ILaunchConfigurationType launchConfigurationType = launchManager.getLaunchConfigurationType( "org.eclipse.ant.AntLaunchConfigurationType" ); //$NON-NLS-1$
 		ILaunchConfiguration[] launchConfigurations = launchManager.getLaunchConfigurations( launchConfigurationType );
 
 		for (int i = 0; i < launchConfigurations.length; i++) { // can't believe there is no look up by name API

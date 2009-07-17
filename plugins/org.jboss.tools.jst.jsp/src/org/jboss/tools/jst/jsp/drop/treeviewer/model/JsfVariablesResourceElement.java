@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.drop.treeviewer.model;
 
+import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.support.kb.WTPKbJsfValuesResource;
 
 /**
@@ -45,6 +46,6 @@ public class JsfVariablesResourceElement extends AttributeValueResource {
 	 * @see ModelElement#getName()
 	 */
 	public String getName() {
-		return "JSF Variables";
+		return "JSF Variables"; //$NON-NLS-1$
 	}
 }

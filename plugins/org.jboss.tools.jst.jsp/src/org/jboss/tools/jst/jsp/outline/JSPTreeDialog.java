@@ -78,10 +78,10 @@ class JSPTreeDialogView extends AbstractQueryWizardView {
 		layoutData.grabExcessVerticalSpace = true;
 		treeViewer.getControl().setLayoutData(layoutData);
 
-		String query = context.getProperty("query");
+		String query = context.getProperty("query"); //$NON-NLS-1$
 		//ValueHelper valueHelper = (ValueHelper)context.get("valueHelper");
-		IPageContext pageContext = (IPageContext)context.get("pageContext");
-		KbQuery kbQuery = (KbQuery)context.get("kbQuery");
+		IPageContext pageContext = (IPageContext)context.get("pageContext"); //$NON-NLS-1$
+		KbQuery kbQuery = (KbQuery)context.get("kbQuery"); //$NON-NLS-1$
 		IAttribute[] attrs = PageProcessor.getInstance().getAttributes(kbQuery, pageContext);
 		
 		
@@ -110,9 +110,9 @@ class JSPTreeDialogView extends AbstractQueryWizardView {
 				}
 				getCommandBar().setEnabled(OK, value != null);
 				if(value == null) {
-					context.remove("value");
+					context.remove("value"); //$NON-NLS-1$
 				} else {
-					context.setProperty("value", value);
+					context.setProperty("value", value); //$NON-NLS-1$
 				}
 			}
 		});
@@ -120,8 +120,8 @@ class JSPTreeDialogView extends AbstractQueryWizardView {
 	}
 	
 	private ModelElement getInitialSelection() {
-		String value = context.getProperty("value");
-		if(value == null || value.length() == 0 || value.equals("#{") || value.equals("#{}")) {
+		String value = context.getProperty("value"); //$NON-NLS-1$
+		if(value == null || value.length() == 0 || value.equals("#{") || value.equals("#{}")) { //$NON-NLS-1$ //$NON-NLS-2$
 			ModelElement[] cs = ((IAttributeValueContainer)root).getChildren();
 			return cs.length == 0 ? root : cs[0];
 		}
@@ -242,11 +242,11 @@ class JSPTreeMenuInvoker implements MouseListener {
 			Properties p = new Properties();
 			o.action(action, p);
 			viewer.refresh(o);
-			Object c = p.get("select");
+			Object c = p.get("select"); //$NON-NLS-1$
 			if(c != null) {
 				viewer.setSelection(new StructuredSelection(c), true);
 				if(context != null) {
-					ValueHelper valueHelper = (ValueHelper)context.get("valueHelper");
+					ValueHelper valueHelper = (ValueHelper)context.get("valueHelper"); //$NON-NLS-1$
 					if(valueHelper != null && valueHelper.getController() != null) {
 						if(valueHelper.getTaglibManager() instanceof IVisualContext) {
 							((IVisualContext)valueHelper.getTaglibManager()).refreshBundleValues();

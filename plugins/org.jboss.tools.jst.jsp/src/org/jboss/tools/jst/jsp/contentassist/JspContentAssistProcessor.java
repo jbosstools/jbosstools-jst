@@ -31,6 +31,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.text.TextProposal;
+import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.IResourceBundle;
 import org.jboss.tools.jst.web.kb.KbQuery;
@@ -203,7 +204,7 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 		if (node == null) return;
 		String name = node.getNodeName();
 		if (name == null) return;
-		if (!name.endsWith("loadBundle")) return;
+		if (!name.endsWith("loadBundle")) return; //$NON-NLS-1$
 		if (name.indexOf(':') == -1) return;
 		String prefix = name.substring(0, name.indexOf(':'));
 
@@ -212,8 +213,8 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 
 		NamedNodeMap attributes = node.getAttributes();
 		if (attributes == null) return;
-		String basename = (attributes.getNamedItem("basename") == null ? null : attributes.getNamedItem("basename").getNodeValue());
-		String var = (attributes.getNamedItem("var") == null ? null : attributes.getNamedItem("var").getNodeValue());
+		String basename = (attributes.getNamedItem("basename") == null ? null : attributes.getNamedItem("basename").getNodeValue()); //$NON-NLS-1$ //$NON-NLS-2$
+		String var = (attributes.getNamedItem("var") == null ? null : attributes.getNamedItem("var").getNodeValue()); //$NON-NLS-1$ //$NON-NLS-2$
 		if (basename == null || basename.length() == 0 ||
 			var == null || var.length() == 0) return;
 
@@ -326,13 +327,13 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 		}
 		
 		// TODO Auto-generated method stub
-		System.out.println("JspContentAssistProcessor: addTagInsertionProposals() invoked");
+		System.out.println("JspContentAssistProcessor: addTagInsertionProposals() invoked"); //$NON-NLS-1$
 		try {
 			String matchString = contentAssistRequest.getMatchString();
 			String query = matchString;
 			if (query == null)
-				query = "";
-			String stringQuery = "<" + matchString;
+				query = ""; //$NON-NLS-1$
+			String stringQuery = "<" + matchString; //$NON-NLS-1$
 					
 			KbQuery kbQuery = createKbQuery(Type.TAG_NAME, query, stringQuery);
 			TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext());
@@ -341,22 +342,22 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 				TextProposal textProposal = proposals[i];
 				
 				String replacementString = textProposal.getReplacementString();
-				if (!replacementString.endsWith("/>")) {
+				if (!replacementString.endsWith("/>")) { //$NON-NLS-1$
 					String closingTag = textProposal.getLabel();
-					if (closingTag != null && closingTag.startsWith("<")) {
+					if (closingTag != null && closingTag.startsWith("<")) { //$NON-NLS-1$
 						closingTag = closingTag.substring(1);
 					}
 					
-					replacementString += "</" + closingTag + ">";
+					replacementString += "</" + closingTag + ">"; //$NON-NLS-1$ //$NON-NLS-2$
 				}
 
-				System.out.println("Tag Name proposal [" + (i + 1) + "/" + proposals.length + "]: " + replacementString);
+				System.out.println("Tag Name proposal [" + (i + 1) + "/" + proposals.length + "]: " + replacementString); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 				int replacementOffset = contentAssistRequest.getReplacementBeginPosition();
 				int replacementLength = contentAssistRequest.getReplacementLength();
 				int cursorPosition = getCursorPositionForProposedText(replacementString);
 				Image image = textProposal.getImage();
-				String displayString = textProposal.getLabel() + ">";
+				String displayString = textProposal.getLabel() + ">"; //$NON-NLS-1$
 				IContextInformation contextInformation = null;
 				String additionalProposalInfo = textProposal.getContextInfo();
 				int relevance = textProposal.getRelevance() + 10000;
@@ -366,7 +367,7 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 				contentAssistRequest.addProposal(proposal);
 			}
 		} finally {
-			System.out.println("JspContentAssistProcessor: addTagInsertionProposals() exited");
+			System.out.println("JspContentAssistProcessor: addTagInsertionProposals() exited"); //$NON-NLS-1$
 		}
 		return;
 	}
@@ -383,13 +384,13 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 	protected void addTagNameProposals(
 			ContentAssistRequest contentAssistRequest, int childPosition) {
 		// TODO Auto-generated method stub
-		System.out.println("JspContentAssistProcessor: addTagNameProposals() invoked");
+		System.out.println("JspContentAssistProcessor: addTagNameProposals() invoked"); //$NON-NLS-1$
 		try {
 			String matchString = contentAssistRequest.getMatchString();
 			String query = matchString;
 			if (query == null)
-				query = "";
-			String stringQuery = "<" + matchString;
+				query = ""; //$NON-NLS-1$
+			String stringQuery = "<" + matchString; //$NON-NLS-1$
 					
 			KbQuery kbQuery = createKbQuery(Type.TAG_NAME, query, stringQuery);
 			TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext());
@@ -398,26 +399,26 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 				TextProposal textProposal = proposals[i];
 				
 				String replacementString = textProposal.getReplacementString();
-				if (replacementString.startsWith("<")) {
+				if (replacementString.startsWith("<")) { //$NON-NLS-1$
 					// Because the tag starting char is already in the text
 					replacementString = replacementString.substring(1);
 				}
-				if (!replacementString.endsWith("/>")) {
+				if (!replacementString.endsWith("/>")) { //$NON-NLS-1$
 					String closingTag = textProposal.getLabel();
-					if (closingTag != null && closingTag.startsWith("<")) {
+					if (closingTag != null && closingTag.startsWith("<")) { //$NON-NLS-1$
 						closingTag = closingTag.substring(1);
 					}
 					
-					replacementString += "</" + closingTag + ">";
+					replacementString += "</" + closingTag + ">"; //$NON-NLS-1$ //$NON-NLS-2$
 				}
 
-				System.out.println("Tag Name proposal [" + (i + 1) + "/" + proposals.length + "]: " + replacementString);
+				System.out.println("Tag Name proposal [" + (i + 1) + "/" + proposals.length + "]: " + replacementString); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				
 				int replacementOffset = contentAssistRequest.getReplacementBeginPosition();
 				int replacementLength = contentAssistRequest.getReplacementLength();
 				int cursorPosition = getCursorPositionForProposedText(replacementString);
 				Image image = textProposal.getImage();
-				String displayString = textProposal.getLabel() + ">";
+				String displayString = textProposal.getLabel() + ">"; //$NON-NLS-1$
 				IContextInformation contextInformation = null;
 				String additionalProposalInfo = textProposal.getContextInfo();
 				int relevance = textProposal.getRelevance() + 10000;
@@ -427,7 +428,7 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 				contentAssistRequest.addProposal(proposal);
 			}
 		} finally {
-			System.out.println("JspContentAssistProcessor: addTagNameProposals() exited");
+			System.out.println("JspContentAssistProcessor: addTagNameProposals() exited"); //$NON-NLS-1$
 		}
 		return;
 	}
@@ -440,12 +441,12 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 	 * @param childPosition the 
 	 */
 	protected void addAttributeNameProposals(ContentAssistRequest contentAssistRequest) {
-		System.out.println("JspContentAssistProcessor: addAttributeNameProposals() invoked");
+		System.out.println("JspContentAssistProcessor: addAttributeNameProposals() invoked"); //$NON-NLS-1$
 		try {
 			String matchString = contentAssistRequest.getMatchString();
 			String query = matchString;
 			if (query == null)
-				query = "";
+				query = ""; //$NON-NLS-1$
 			String stringQuery = matchString;
 					
 			KbQuery kbQuery = createKbQuery(Type.ATTRIBUTE_NAME, query, stringQuery);
@@ -454,12 +455,12 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 			for (int i = 0; proposals != null && i < proposals.length; i++) {
 				TextProposal textProposal = proposals[i];
 				
-				System.out.println("Tag Attribute proposal [" + (i + 1) + "/" + proposals.length + "]: " + textProposal.getReplacementString());
+				System.out.println("Tag Attribute proposal [" + (i + 1) + "/" + proposals.length + "]: " + textProposal.getReplacementString()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				
 				if (isExistingAttribute(textProposal.getLabel())) 
 					continue;
 				
-				String replacementString = textProposal.getReplacementString() + "=\"\"";
+				String replacementString = textProposal.getReplacementString() + "=\"\""; //$NON-NLS-1$
 				
 				int replacementOffset = contentAssistRequest.getReplacementBeginPosition();
 				int replacementLength = contentAssistRequest.getReplacementLength();
@@ -475,7 +476,7 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 				contentAssistRequest.addProposal(proposal);
 			}
 		} finally {
-			System.out.println("JspContentAssistProcessor: addAttributeNameProposals() exited");
+			System.out.println("JspContentAssistProcessor: addAttributeNameProposals() exited"); //$NON-NLS-1$
 		}
 	}
 
@@ -493,7 +494,7 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 			String matchString = contentAssistRequest.getMatchString();
 			String query = matchString;
 			if (query == null)
-				query = "";
+				query = ""; //$NON-NLS-1$
 			String stringQuery = matchString;
 
 			KbQuery kbQuery = createKbQuery(Type.ATTRIBUTE_VALUE, query, stringQuery);
@@ -503,7 +504,7 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 				TextProposal textProposal = proposals[i];
 				int replacementOffset = contentAssistRequest.getReplacementBeginPosition();
 				int replacementLength = contentAssistRequest.getReplacementLength();
-				String replacementString = "\"" + textProposal.getReplacementString() + "\"";
+				String replacementString = "\"" + textProposal.getReplacementString() + "\""; //$NON-NLS-1$ //$NON-NLS-2$
 				int cursorPosition = getCursorPositionForProposedText(replacementString);
 				Image image = textProposal.getImage();
 				String displayString = textProposal.getLabel();
@@ -515,7 +516,7 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 				contentAssistRequest.addProposal(proposal);
 			}
 		} finally {
-			System.out.println("JspContentAssistProcessor: addAttributeValueProposals() exited");
+			System.out.println("JspContentAssistProcessor: addAttributeValueProposals() exited"); //$NON-NLS-1$
 		}
 	}
 
@@ -532,7 +533,7 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 	@Override
 	protected void addAttributeValueELProposals(ContentAssistRequest contentAssistRequest) {
 		// TODO Auto-generated method stub
-		System.out.println("JspContentAssistProcessor: addAttributeValueELProposals() invoked");
+		System.out.println("JspContentAssistProcessor: addAttributeValueELProposals() invoked"); //$NON-NLS-1$
 		try {
 			TextRegion prefix = getELPrefix();
 			if (prefix == null) {
@@ -540,15 +541,15 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 			}
 
 			if(!prefix.isELStarted()) {
-				CustomCompletionProposal proposal = new CustomCompletionProposal("#{}", getOffset(),
-						0, 2, null, "#{}", null, "New EL Expression", 10000);
+				CustomCompletionProposal proposal = new CustomCompletionProposal("#{}", getOffset(), //$NON-NLS-1$
+						0, 2, null, "#{}", null, JstUIMessages.JspContentAssistProcessor_NewELExpression, 10000); //$NON-NLS-1$
 				contentAssistRequest.addProposal(proposal);
 				return;
 			}
-			String matchString = "#{" + prefix.getText();
+			String matchString = "#{" + prefix.getText(); //$NON-NLS-1$
 			String query = matchString;
 			if (query == null)
-				query = "";
+				query = ""; //$NON-NLS-1$
 			String stringQuery = matchString;
 			
 			int beginChangeOffset = prefix.getStartOffset() + prefix.getOffset();
@@ -559,7 +560,7 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 			for (int i = 0; proposals != null && i < proposals.length; i++) {
 				TextProposal textProposal = proposals[i];
 				
-				System.out.println("Tag Attribute Value EL proposal [" + (i + 1) + "/" + proposals.length + "]: " + textProposal.getReplacementString());
+				System.out.println("Tag Attribute Value EL proposal [" + (i + 1) + "/" + proposals.length + "]: " + textProposal.getReplacementString()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				
 				int replacementOffset = beginChangeOffset;
 				int replacementLength = prefix.getLength();
@@ -569,7 +570,7 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 				
 				String displayString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString(); 
 				IContextInformation contextInformation = null;
-				String additionalProposalInfo = (textProposal.getContextInfo() == null ? "" : textProposal.getContextInfo());
+				String additionalProposalInfo = (textProposal.getContextInfo() == null ? "" : textProposal.getContextInfo()); //$NON-NLS-1$
 				int relevance = textProposal.getRelevance() + 10000;
 
 				CustomCompletionProposal proposal = new CustomCompletionProposal(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, contextInformation, additionalProposalInfo, relevance);
@@ -577,12 +578,12 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 			}
 
 			if (prefix.isELStarted() && !prefix.isELClosed()) {
-				CustomCompletionProposal proposal = new CustomCompletionProposal("}", getOffset(),
-						0, 1, null, "}", null, "Close EL Expression", 10001);
+				CustomCompletionProposal proposal = new CustomCompletionProposal("}", getOffset(), //$NON-NLS-1$
+						0, 1, null, "}", null, JstUIMessages.JspContentAssistProcessor_CloseELExpression, 10001); //$NON-NLS-1$
 				contentAssistRequest.addProposal(proposal);
 			}
 		} finally {
-			System.out.println("JspContentAssistProcessor: addAttributeELProposals() exited");
+			System.out.println("JspContentAssistProcessor: addAttributeELProposals() exited"); //$NON-NLS-1$
 		}
 	}
 

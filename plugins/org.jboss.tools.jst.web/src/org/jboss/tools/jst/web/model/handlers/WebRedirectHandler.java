@@ -32,9 +32,9 @@ public class WebRedirectHandler extends DefaultRedirectHandler {
     protected XModelObject checkEntity(XModelObject object) {
         if (entities == null) {
             this.entities = new HashSet<String>();
-            String en = action.getProperty("entity");
+            String en = action.getProperty("entity"); //$NON-NLS-1$
             if (en != null) {
-                StringTokenizer tokenizer = new StringTokenizer(en, ":");
+                StringTokenizer tokenizer = new StringTokenizer(en, ":"); //$NON-NLS-1$
                 while (tokenizer.hasMoreTokens()) {
                     this.entities.add(tokenizer.nextToken());
                 }
@@ -70,7 +70,7 @@ public class WebRedirectHandler extends DefaultRedirectHandler {
     }
 
     private boolean checkConfigVersion(XModelObject object) {
-        String entity = action.getProperty("configEntity");
+        String entity = action.getProperty("configEntity"); //$NON-NLS-1$
         if(entity == null) return true;
         XModelObject f = object;
         while(f != null && f.getFileType() != XFileObject.FILE) f = f.getParent();

@@ -18,7 +18,7 @@ public class XMLEntityRecognizer implements EntityRecognizer {
 
     public String getEntityName(String ext, String body) {
         if (body == null) return null;
-        return "FileXML";
+        return "FileXML"; //$NON-NLS-1$
     }
 
 }

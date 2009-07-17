@@ -17,6 +17,10 @@ public final class Messages extends NLS {
 	public static String ADOPT_WILL_OVERWRITE_DOT_FILES_MESSAGE;
 	public static String ADOPT_WILL_CLEAR_WORKSPACE_MESSAGE;
 
+	public static String WebProjectAdoptOperation_Cancel;
+	public static String WebProjectAdoptOperation_Continue;
+	public static String WebProjectAdoptOperation_Warning;
+
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
 	}

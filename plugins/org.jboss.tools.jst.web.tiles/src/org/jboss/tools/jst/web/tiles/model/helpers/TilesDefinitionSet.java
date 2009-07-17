@@ -19,7 +19,7 @@ import org.jboss.tools.jst.web.tiles.model.TilesConstants;
 
 public class TilesDefinitionSet implements XModelTreeListener {
 	static String[] CONTRIBUTORS = new String[]{
-		"org.jboss.tools.struts.model.helpers.TilesContributor"
+		"org.jboss.tools.struts.model.helpers.TilesContributor" //$NON-NLS-1$
 	};
 	static ITilesDefinitionSetContributor[] contributors;
 	
@@ -35,18 +35,18 @@ public class TilesDefinitionSet implements XModelTreeListener {
    				list.add((ITilesDefinitionSetContributor)watcher);
    			else
 				if(ModelPlugin.isDebugEnabled()) {			
-					ModelPlugin.getPluginLog().logInfo("Class is not implemented IWatcherContributor interface!");
+					ModelPlugin.getPluginLog().logInfo("Class is not implemented IWatcherContributor interface!"); //$NON-NLS-1$
 				}
     	}
     	contributors = list.toArray(new ITilesDefinitionSetContributor[0]);
     }
 
 	public static synchronized TilesDefinitionSet getInstance(XModel model) {
-    	TilesDefinitionSet instance = (TilesDefinitionSet)model.getManager("TilesDefinitionSet");
+    	TilesDefinitionSet instance = (TilesDefinitionSet)model.getManager("TilesDefinitionSet"); //$NON-NLS-1$
         if (instance == null) {
         	instance = new TilesDefinitionSet();
         	instance.setModel(model);
-        	model.addManager("TilesDefinitionSet", instance);
+        	model.addManager("TilesDefinitionSet", instance); //$NON-NLS-1$
         	model.addModelTreeListener(instance);
         }
         return instance;
@@ -105,7 +105,7 @@ public class TilesDefinitionSet implements XModelTreeListener {
 		while(it.hasNext()) {
 			XModelObject o = (XModelObject)it.next();
 			XModelObject[] cs = o.getChildren(TilesConstants.ENT_DEFINITION);
-			for (int i = 0; i < cs.length; i++) d.put(cs[i].getAttributeValue("name"), cs[i]);
+			for (int i = 0; i < cs.length; i++) d.put(cs[i].getAttributeValue("name"), cs[i]); //$NON-NLS-1$
 		}
 		Map<String,XModelObject> old = definitions;
 		definitions = d;

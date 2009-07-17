@@ -21,8 +21,8 @@ import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 public class WebProjectsTreeListener extends TreeViewerModelListenerImpl {
 	static String[][] LISTENERS = new String[][]{
-		{WebProject.JSF_NATURE_ID, "org.jboss.tools.jsf.ui.navigator.JsfProjectsTreeListener", "org.jboss.tools.jsf.ui"},
-		{WebProject.STRUTS_NATURE_ID, "org.jboss.tools.struts.ui.navigator.StrutsProjectsTreeListener", "org.jboss.tools.struts.ui"}
+		{WebProject.JSF_NATURE_ID, "org.jboss.tools.jsf.ui.navigator.JsfProjectsTreeListener", "org.jboss.tools.jsf.ui"}, //$NON-NLS-1$ //$NON-NLS-2$
+		{WebProject.STRUTS_NATURE_ID, "org.jboss.tools.struts.ui.navigator.StrutsProjectsTreeListener", "org.jboss.tools.struts.ui"} //$NON-NLS-1$ //$NON-NLS-2$
 	};
 	Map<String,TreeViewerModelListenerImpl> listeners = new HashMap<String,TreeViewerModelListenerImpl>();
 	
@@ -51,7 +51,7 @@ public class WebProjectsTreeListener extends TreeViewerModelListenerImpl {
 	}
 	
 	private TreeViewerModelListenerImpl getListenerImpl(XModelTreeEvent event) {
-		String nature = event.getModelObject().getModel().getProperties().getProperty("nature");
+		String nature = event.getModelObject().getModel().getProperties().getProperty("nature"); //$NON-NLS-1$
 		return (nature == null) ? null : (TreeViewerModelListenerImpl)listeners.get(nature);
 	}
 

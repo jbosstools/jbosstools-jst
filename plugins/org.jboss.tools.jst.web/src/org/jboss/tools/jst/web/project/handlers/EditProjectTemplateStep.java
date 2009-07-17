@@ -15,7 +15,7 @@ import org.jboss.tools.common.meta.action.impl.MultistepWizardStep;
 public class EditProjectTemplateStep extends MultistepWizardStep {
 
 	public String getStepImplementingClass() {
-		return "org.jboss.tools.jst.web.ui.wizards.project.EditProjectTemplateView";
+		return "org.jboss.tools.jst.web.ui.wizards.project.EditProjectTemplateView"; //$NON-NLS-1$
 	}
 	
 }

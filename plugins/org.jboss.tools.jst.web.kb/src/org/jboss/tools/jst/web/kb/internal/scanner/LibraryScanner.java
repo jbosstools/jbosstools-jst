@@ -90,21 +90,21 @@ public class LibraryScanner implements IFileScanner {
 	public static boolean isTLDFile(XModelObject o) {
 		if(o == null) return false;
 		String entity = o.getModelEntity().getName();
-		if(entity.startsWith("FileTLD")) return true;
+		if(entity.startsWith("FileTLD")) return true; //$NON-NLS-1$
 		return false;
 	}
 
 	public static boolean isFaceletTaglibFile(XModelObject o) {
 		if(o == null) return false;
 		String entity = o.getModelEntity().getName();
-		if(entity.startsWith("FileFaceletTaglib")) return true;
+		if(entity.startsWith("FileFaceletTaglib")) return true; //$NON-NLS-1$
 		return false;
 	}
 	
 	public static boolean isFacesConfigFile(XModelObject o) {
 		if(o == null) return false;
 		String entity = o.getModelEntity().getName();
-		if(entity.startsWith("FacesConfig")) return true;
+		if(entity.startsWith("FacesConfig")) return true; //$NON-NLS-1$
 		return false;
 	}
 	

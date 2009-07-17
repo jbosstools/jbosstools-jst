@@ -55,7 +55,7 @@ public class AutoLayout {
             }
             x += is[i].group.xDeltas[is[i].ix] * constants.incX;
             y += yDeltas[is[i].iy] * constants.incY + is[i].yIndent;
-            o.setAttributeValue("shape", "" + x + "," + y + ",0,0");
+            o.setAttributeValue("shape", "" + x + "," + y + ",0,0"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
         }
     }
     
@@ -64,12 +64,12 @@ public class AutoLayout {
 		Item[] is = items.items;
 		for (int i = 0; i < is.length; i++) {
 			XModelObject o = is[i].object;
-			if(o.getModelEntity().getAttribute("link shape") != null)
-			  o.setAttributeValue("link shape", "");
+			if(o.getModelEntity().getAttribute("link shape") != null) //$NON-NLS-1$
+			  o.setAttributeValue("link shape", ""); //$NON-NLS-1$ //$NON-NLS-2$
 			XModelObject[] os = items.getOutput(o);
 			for (int j = 0; j < os.length; j++) {
 //				String attr = (os[j].getModelEntity().getAttribute("link shape") != null) ? "link shape" : "shape";
-				os[j].setAttributeValue("shape", "");
+				os[j].setAttributeValue("shape", ""); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
     	

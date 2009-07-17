@@ -18,12 +18,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.jst.web.project.helpers.*;
+import org.jboss.tools.jst.web.ui.Messages;
 
 public class NewWebProjectWizardPreprocessingPage extends WizardPage {
 	NewWebProjectContext context;
 
 	public NewWebProjectWizardPreprocessingPage(NewWebProjectContext context) {
-		super("Preprocessing Page");
+		super(Messages.NewWebProjectWizardPreprocessingPage_PreprocessingPage);
 		this.context = context;
 	}
 

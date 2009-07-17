@@ -16,11 +16,11 @@ public class WebAppUserConstraintImpl extends OrderedObjectImpl {
 	private static final long serialVersionUID = 1L;
 
     public String name() {
-        return "user-data-constraint";
+        return "user-data-constraint"; //$NON-NLS-1$
     }
 
     public String getPresentationString() {
-        String dn = getAttributeValue("description");
-        return (dn != null && dn.length() > 0) ? dn : "user-data-constraint";
+        String dn = getAttributeValue("description"); //$NON-NLS-1$
+        return (dn != null && dn.length() > 0) ? dn : "user-data-constraint"; //$NON-NLS-1$
     }
 }

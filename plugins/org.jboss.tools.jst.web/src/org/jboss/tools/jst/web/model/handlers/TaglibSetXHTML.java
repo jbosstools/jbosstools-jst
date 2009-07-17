@@ -18,12 +18,12 @@ import org.jboss.tools.common.xml.*;
 public class TaglibSetXHTML extends TaglibSet {
 
 	protected void doGetTaglibsFromTemplate(String body, Set<String> existing) {
-		int ib = body.toLowerCase().indexOf("<html");
+		int ib = body.toLowerCase().indexOf("<html"); //$NON-NLS-1$
 		if(ib < 0) return;
-		int ie = body.indexOf(">", ib);
+		int ie = body.indexOf(">", ib); //$NON-NLS-1$
 		if(ie < 0) return;
 		String html = body.substring(ib, ie);
-		if(html.endsWith("/")) html += ">"; else html += "/>";
+		if(html.endsWith("/")) html += ">"; else html += "/>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		
 		Element e = XMLUtilities.getElement(new StringReader(html), XMLEntityResolver.getInstance());
 		if(e == null) return;
@@ -31,7 +31,7 @@ public class TaglibSetXHTML extends TaglibSet {
 		for (int i = 0; i < as.getLength(); i++) {
 			Node n = as.item(i);
 			String name = n.getNodeName();
-			if(!name.startsWith("xmlns:")) continue;
+			if(!name.startsWith("xmlns:")) continue; //$NON-NLS-1$
 			String prefix = name.substring(6);
 			String uri = e.getAttribute(name);
 			if(prefix.length() > 0 && uri.length() > 0) {
@@ -42,19 +42,19 @@ public class TaglibSetXHTML extends TaglibSet {
 
 	protected boolean doModifyBody(String body, String[] selected, StringBuffer sb) {
 		if(body == null || body.length() == 0) {
-			body = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">" + "\n" +
-				   "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n" +	
-				   "\t<body>\n" +
-				   "\t\t<form action=\"\">\n" +
-				   "\t\t</form>\n" +
-				   "\t</body>\n" +
-				   "</html>";			
+			body = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">" + "\n" + //$NON-NLS-1$ //$NON-NLS-2$
+				   "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n" +	 //$NON-NLS-1$
+				   "\t<body>\n" + //$NON-NLS-1$
+				   "\t\t<form action=\"\">\n" + //$NON-NLS-1$
+				   "\t\t</form>\n" + //$NON-NLS-1$
+				   "\t</body>\n" + //$NON-NLS-1$
+				   "</html>";			 //$NON-NLS-1$
 		}
-		int ib = body.toLowerCase().indexOf("<html");
+		int ib = body.toLowerCase().indexOf("<html"); //$NON-NLS-1$
 		if(ib < 0) return false;
-		int ie = body.indexOf(">", ib);
+		int ie = body.indexOf(">", ib); //$NON-NLS-1$
 		if(ie < 0) return false;
-		String html = body.substring(ib, ie) + "/>";
+		String html = body.substring(ib, ie) + "/>"; //$NON-NLS-1$
 		Element e = XMLUtilities.getElement(new StringReader(html), XMLEntityResolver.getInstance());
 		if(e == null) return false;
 		sb.append(body.substring(0, ib + 5));
@@ -64,22 +64,22 @@ public class TaglibSetXHTML extends TaglibSet {
 		for (int i = 0; i < as.getLength(); i++) {
 			Node n = as.item(i);
 			String name = n.getNodeName();
-			if(name.startsWith("xmlns:")) continue;
-			if(ac > 0) sb.append("\n     ");
+			if(name.startsWith("xmlns:")) continue; //$NON-NLS-1$
+			if(ac > 0) sb.append("\n     "); //$NON-NLS-1$
 			String value = e.getAttribute(name);
-			sb.append(" " + name + "=\"" + value + "\"");
+			sb.append(" " + name + "=\"" + value + "\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			++ac;
 		}
 		for (int i = 0; i < selected.length; i++) {
-			if(ac > 0) sb.append("\n     ");
+			if(ac > 0) sb.append("\n     "); //$NON-NLS-1$
 			String uri = getURIByDescription(selected[i]);
 			String prefix = getPrefix(selected[i]);
-			String name = "xmlns:" + prefix;
+			String name = "xmlns:" + prefix; //$NON-NLS-1$
 			String value = uri;
-			sb.append(" " + name + "=\"" + value + "\"");
+			sb.append(" " + name + "=\"" + value + "\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			++ac;
 		}
-		sb.append(">");
+		sb.append(">"); //$NON-NLS-1$
 		
 		sb.append(body.substring(ie + 1));
 		return true;

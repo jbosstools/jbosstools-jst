@@ -36,7 +36,7 @@ public class NameSpaceProposalType extends ModelProposalType {
 		}
 		String rQuery = getPassiveQueryPart(query.getValue());
 		Set<String> sorted = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
-		List<Object> beanList = provider.getList(xModel, WebPromptingProvider.JSF_GET_TAGLIBS, "", null);
+		List<Object> beanList = provider.getList(xModel, WebPromptingProvider.JSF_GET_TAGLIBS, "", null); //$NON-NLS-1$
 		Iterator<Object> itr = beanList.iterator();
 		while (itr.hasNext()) {
 			sorted.add(itr.next().toString());
@@ -55,7 +55,7 @@ public class NameSpaceProposalType extends ModelProposalType {
 
 	private String getPassiveQueryPart(String query) {
 		if (query == null || query.trim().length() == 0) {
-			return "";
+			return ""; //$NON-NLS-1$
 		}
 		return query;
 	}

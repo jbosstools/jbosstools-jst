@@ -23,9 +23,9 @@ import org.w3c.dom.Element;
  * @author Viacheslav Kabanovich
  */
 public class TLDLibrary extends AbstractTagLib implements ITLDLibrary {
-	public static final String DISPLAY_NAME = "display-name";
-	public static final String SHORT_NAME = "short-name";
-	public static final String VERSION = "version";
+	public static final String DISPLAY_NAME = "display-name"; //$NON-NLS-1$
+	public static final String SHORT_NAME = "short-name"; //$NON-NLS-1$
+	public static final String VERSION = "version"; //$NON-NLS-1$
 
 	String displayName = null;
 	String shortName = null;

@@ -27,15 +27,15 @@ import org.jboss.tools.jst.web.project.helpers.LibrarySets;
 
 public class LibrarySetsPreferencePage extends PreferencePage implements
 		IWorkbenchPreferencePage {
-	public static final String ID = "org.jboss.tools.common.xstudio.libsets";
+	public static final String ID = "org.jboss.tools.common.xstudio.libsets"; //$NON-NLS-1$
 	/**
 	 * @deprecated use bundle via Messages.getString()
 	 */
-	public static final String BUNDLE_NAME = "preferences"; 
+	public static final String BUNDLE_NAME = "preferences";  //$NON-NLS-1$
 	/**
 	 * @deprecated use bundle via Messages.getString()
 	 */
-	public static final ResourceBundle BUNDLE = ResourceBundle.getBundle(LibrarySetsPreferencePage.class.getPackage().getName() + "." + BUNDLE_NAME); 
+	public static final ResourceBundle BUNDLE = ResourceBundle.getBundle(LibrarySetsPreferencePage.class.getPackage().getName() + "." + BUNDLE_NAME);  //$NON-NLS-1$
 	String[] librarySets;
 	LibrarySets helper;
 	LibrarySet library;
@@ -258,7 +258,7 @@ public class LibrarySetsPreferencePage extends PreferencePage implements
 	private String[] openJarFiles() {
 		if(addButtonLibJar == null || addButtonLibJar.isDisposed()) return new String[0];
 		FileDialog dialog = new FileDialog(addButtonLibJar.getShell(), SWT.OPEN | SWT.MULTI);
-		String[] extensions = new String[]{"*.jar"};
+		String[] extensions = new String[]{"*.jar"}; //$NON-NLS-1$
 //		dialog.setFilterPath(p.getAbsolutePath());
 //		dialog.setFileName(f.getName());
 		dialog.setFilterExtensions(extensions);
@@ -268,7 +268,7 @@ public class LibrarySetsPreferencePage extends PreferencePage implements
 		String filterPath = dialog.getFilterPath();
 		String[] rs = new String[fns.length];
 		for (int i = 0; i < rs.length; i++) {
-			rs[i] = (filterPath + "/" + fns[i]).replace('\\', '/');
+			rs[i] = (filterPath + "/" + fns[i]).replace('\\', '/'); //$NON-NLS-1$
 		}
 		return rs;
 	}

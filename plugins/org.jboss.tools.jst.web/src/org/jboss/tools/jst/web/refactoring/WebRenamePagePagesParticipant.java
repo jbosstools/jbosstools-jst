@@ -18,7 +18,7 @@ import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 
 public class WebRenamePagePagesParticipant extends RenameParticipant {
-	public static final String PARTICIPANT_NAME="web-RenamePageParticipant";
+	public static final String PARTICIPANT_NAME="web-RenamePageParticipant"; //$NON-NLS-1$
 	XModelObject object;
 
 	protected boolean initialize(Object element) {
@@ -27,7 +27,7 @@ public class WebRenamePagePagesParticipant extends RenameParticipant {
 		object = EclipseResourceUtil.getObjectByResource(f);
 		if(object == null) return false;
 		String entity = object.getModelEntity().getName();
-		if(".FileJSP.FileHTML.FileXHTML.FileGIF.FileCSS.FileAny.FileAnyLong.".indexOf("." + entity + ".") < 0) return false;
+		if(".FileJSP.FileHTML.FileXHTML.FileGIF.FileCSS.FileAny.FileAnyLong.".indexOf("." + entity + ".") < 0) return false; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return true;
 	}
 

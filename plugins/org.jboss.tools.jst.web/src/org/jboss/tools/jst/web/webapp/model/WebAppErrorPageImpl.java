@@ -28,20 +28,20 @@ public class WebAppErrorPageImpl extends RegularObjectImpl {
 		if(WebAppConstants.ERROR_CODE.equals(name) && newValue != null && newValue.length() > 0) {
 			if(getAttributeValue(WebAppConstants.EXCEPTION_TYPE).length() > 0) {
 				Properties p = new Properties();
-				p.setProperty("focusAttribute", WebAppConstants.ERROR_CODE);
-				XActionInvoker.invoke("EditActions.Edit", this, p);
-				if(!"true".equals(p.getProperty("done"))) {
-					if(oldValue == null) oldValue = "";
+				p.setProperty("focusAttribute", WebAppConstants.ERROR_CODE); //$NON-NLS-1$
+				XActionInvoker.invoke("EditActions.Edit", this, p); //$NON-NLS-1$
+				if(!"true".equals(p.getProperty("done"))) { //$NON-NLS-1$ //$NON-NLS-2$
+					if(oldValue == null) oldValue = ""; //$NON-NLS-1$
 					setAttributeValue(WebAppConstants.ERROR_CODE, oldValue);
 				}
 			}
 		} else if(WebAppConstants.EXCEPTION_TYPE.equals(name) && newValue != null && newValue.length() > 0) {
 			if(getAttributeValue(WebAppConstants.ERROR_CODE).length() > 0) {
 				Properties p = new Properties();
-				p.setProperty("focusAttribute", WebAppConstants.EXCEPTION_TYPE);
-				XActionInvoker.invoke("EditActions.Edit", this, p);
-				if(!"true".equals(p.getProperty("done"))) {
-					if(oldValue == null) oldValue = "";
+				p.setProperty("focusAttribute", WebAppConstants.EXCEPTION_TYPE); //$NON-NLS-1$
+				XActionInvoker.invoke("EditActions.Edit", this, p); //$NON-NLS-1$
+				if(!"true".equals(p.getProperty("done"))) { //$NON-NLS-1$ //$NON-NLS-2$
+					if(oldValue == null) oldValue = ""; //$NON-NLS-1$
 					setAttributeValue(WebAppConstants.EXCEPTION_TYPE, oldValue);
 				}
 			}

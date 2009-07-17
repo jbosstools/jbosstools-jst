@@ -53,6 +53,7 @@ public class AutoContentAssistantProposal extends CustomCompletionProposal {
 	/**
 	 * Return cursor position of proposal replacement string.
 	 */
+	@SuppressWarnings("nls")
 	public int getCursorPosition() {
 	    int cursorPosition = -1;
 		int firstAttributeEndPosition = getReplacementString().indexOf("=");

@@ -151,7 +151,7 @@ public abstract class WebProjectAdoptOperation extends WebNatureOperation {
 		String message = MessageFormat.format(
 	        Messages.ADOPT_WILL_OVERWRITE_DOT_FILES_MESSAGE,new Object[]{dots} 
 		);			
-		int q = d.showDialog("Warning", message, new String[]{"Continue", "Cancel"}, null, ServiceDialog.WARNING);
+		int q = d.showDialog(Messages.WebProjectAdoptOperation_Warning, message, new String[]{Messages.WebProjectAdoptOperation_Continue, Messages.WebProjectAdoptOperation_Cancel}, null, ServiceDialog.WARNING);
 		if(q != 0) return false;
 		
 		if(!checkClearWorkspace()) return false;
@@ -175,7 +175,7 @@ public abstract class WebProjectAdoptOperation extends WebNatureOperation {
 		String message = MessageFormat.format(
 		    Messages.ADOPT_WILL_CLEAR_WORKSPACE_MESSAGE,new Object[]{getProject().getName()} 
 		);			
-		int q = d.showDialog("Warning", message, new String[]{"Continue", "Cancel"}, null, ServiceDialog.WARNING);
+		int q = d.showDialog(Messages.WebProjectAdoptOperation_Warning, message, new String[]{Messages.WebProjectAdoptOperation_Continue, Messages.WebProjectAdoptOperation_Cancel}, null, ServiceDialog.WARNING);
 		if(q != 0) return false;
 		
 		for (int i = 0; i < cs.length; i++) {

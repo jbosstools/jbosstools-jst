@@ -23,8 +23,8 @@ import org.jboss.tools.jst.web.tiles.ui.editor.model.ITilesElement;
 
 public class Link extends TilesElement implements ILink {
 
-	public static final String PATH_PROPERTY = "link shape";
-	public static final String HIDDEN_PROPERTY = "hidden";
+	public static final String PATH_PROPERTY = "link shape"; //$NON-NLS-1$
+	public static final String HIDDEN_PROPERTY = "hidden"; //$NON-NLS-1$
 	List<ILinkListener> linkListeners = new Vector<ILinkListener>();
 	XModelObject target = null;
 	IDefinition toDefinition;

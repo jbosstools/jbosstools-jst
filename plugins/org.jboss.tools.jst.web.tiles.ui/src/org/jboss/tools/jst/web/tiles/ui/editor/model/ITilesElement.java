@@ -17,8 +17,8 @@ import org.eclipse.swt.widgets.Control;
 import java.beans.*;
 
 public interface ITilesElement{
-   public static String NAME_PROPERTY = "name";
-   public static String TARGET_PROPERTY = "extends";
+   public static String NAME_PROPERTY = "name"; //$NON-NLS-1$
+   public static String TARGET_PROPERTY = "extends"; //$NON-NLS-1$
 
    public static Point DEFAULT_POINT = new Point(50,50);
 

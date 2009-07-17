@@ -144,7 +144,7 @@ public class KbResourceVisitor implements IResourceVisitor {
 			srcs = ps.toArray(new IPath[0]);
 			outs = os.toArray(new IPath[0]);
 		} catch(CoreException ce) {
-			ModelPlugin.getPluginLog().logError("Error while locating java source roots for " + project, ce);
+			ModelPlugin.getPluginLog().logError("Error while locating java source roots for " + project, ce); //$NON-NLS-1$
 		}
 	}
 

@@ -37,7 +37,7 @@ public class ImageFileResourceElement extends AttributeValueResource {
 		if(wtpKbResource.isReadyToUse()) {
 			name = wtpKbResource.getWebRootResource().getName();
 		} else {
-			name = "";
+			name = ""; //$NON-NLS-1$
 		}
 	}
 
@@ -52,7 +52,7 @@ public class ImageFileResourceElement extends AttributeValueResource {
 	}
 
 	protected String getFullName() {
-		return "/";
+		return "/"; //$NON-NLS-1$
 	}
 
 	public int compareValue(String value) {

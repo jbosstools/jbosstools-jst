@@ -25,11 +25,11 @@ public class FileTLDLoader extends SimpleWebFileLoader implements TLDConstants {
 }
 
 class TLDLoaderUtil extends XModelObjectLoaderUtil {
-    static String required = "!name!tagclass!tlibversion!shortname!";
+    static String required = "!name!tagclass!tlibversion!shortname!"; //$NON-NLS-1$
 
     protected boolean isSaveable(XModelEntity entity, String n, String v, String dv) {
         if(v == null) return false;
-        if(v.length() == 0) return (required.indexOf("!" + n + "!") >= 0);
+        if(v.length() == 0) return (required.indexOf("!" + n + "!") >= 0); //$NON-NLS-1$ //$NON-NLS-2$
         return super.isSaveable(entity, n, v, dv);
     }
 

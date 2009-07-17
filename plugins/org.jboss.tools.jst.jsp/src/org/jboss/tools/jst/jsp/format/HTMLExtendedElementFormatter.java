@@ -43,7 +43,7 @@ public class HTMLExtendedElementFormatter extends HTMLElementFormatter {
 			oldStyleValue = style.getValue();
 		}
 		super.formatNode(node, contraints);
-		if(oldStyleValue!=null && oldStyleValue.indexOf("#{")>-1) {
+		if(oldStyleValue!=null && oldStyleValue.indexOf("#{")>-1) { //$NON-NLS-1$
 			style.setValue(oldStyleValue);
 		}
 	}
@@ -75,10 +75,10 @@ public class HTMLExtendedElementFormatter extends HTMLElementFormatter {
 		for(int i=0; i<children.getLength(); i++) {
 			Node child = children.item(i);
 			if(child instanceof Element) {
-				Attr style = ((Element)child).getAttributeNode("style");
+				Attr style = ((Element)child).getAttributeNode("style"); //$NON-NLS-1$
 				if(style!=null) {
 					String value = style.getValue();
-					if(value.indexOf("#{")>-1) {
+					if(value.indexOf("#{")>-1) { //$NON-NLS-1$
 						styles.add(style);
 						oldValues.add(value);
 					}

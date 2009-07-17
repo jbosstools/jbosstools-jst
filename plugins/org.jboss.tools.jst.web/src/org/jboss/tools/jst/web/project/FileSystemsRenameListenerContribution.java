@@ -40,14 +40,14 @@ public class FileSystemsRenameListenerContribution implements FileSystemsRenameL
 	}
 	
 	private String getWebRootWTP(XModel model) {
-		throw new RuntimeException("FileSystemsRenameListenerContribution.getWebRootWTP(XModel model) migration to WTP I-build is needed.");
+		throw new RuntimeException("FileSystemsRenameListenerContribution.getWebRootWTP(XModel model) migration to WTP I-build is needed."); //$NON-NLS-1$
 	}
 	
 	/*
 	 * only for comparison
 	 */
 	public static void updateWebContentNamePropertiesOnly(IProject project, String webContentName,IProgressMonitor progressMonitor) throws CoreException {
-		throw new RuntimeException("FileSystemsRenameListenerContribution.updateWebContentNamePropertiesOnly(IProject project, String webContentName,IProgressMonitor progressMonitor) migration to WTP I-build is needed.");
+		throw new RuntimeException("FileSystemsRenameListenerContribution.updateWebContentNamePropertiesOnly(IProject project, String webContentName,IProgressMonitor progressMonitor) migration to WTP I-build is needed."); //$NON-NLS-1$
 	}
 
 }

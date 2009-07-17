@@ -23,7 +23,7 @@ import org.jboss.tools.jst.web.model.project.ext.store.XMLValueInfo;
 import org.w3c.dom.Element;
 
 public class ELFunction extends KbObject implements IELFunction {
-	public static final String SIGNATURE = "signature";
+	public static final String SIGNATURE = "signature"; //$NON-NLS-1$
 	private String name;
 	private String signature;
 

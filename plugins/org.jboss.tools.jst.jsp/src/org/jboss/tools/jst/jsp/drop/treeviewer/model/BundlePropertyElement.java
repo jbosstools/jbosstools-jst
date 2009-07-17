@@ -26,6 +26,7 @@ public class BundlePropertyElement extends ModelElement implements IAttributeVal
 	/**
 	 * @see IAttributeValue#getValue()
 	 */
+	@SuppressWarnings("nls")
 	public String getValue() {
 		String propertyName;
 		if(name.indexOf('.')!=-1) {

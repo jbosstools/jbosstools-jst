@@ -33,7 +33,7 @@ public class TilesGuiEditor extends AbstractSectionEditor {
 	private TilesModel model;
 	
 	protected boolean isWrongEntity(String entity) {
-		return !entity.equals("FileTiles");
+		return !entity.equals("FileTiles"); //$NON-NLS-1$
 	}
 	
 	public void setInput(IEditorInput input) {

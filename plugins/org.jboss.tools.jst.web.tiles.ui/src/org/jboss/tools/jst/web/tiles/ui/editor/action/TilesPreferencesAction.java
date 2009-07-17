@@ -38,8 +38,8 @@ public class TilesPreferencesAction extends WorkbenchPartAction  {
 	 * @see org.eclipse.gef.ui.actions.EditorPartAction#init()
 	 */
 	protected void init() {
-		setId("Preferences");
-		setImageDescriptor(ImageDescriptor.createFromFile(TilesEditor.class, "icons/preference.gif"));
+		setId("Preferences"); //$NON-NLS-1$
+		setImageDescriptor(ImageDescriptor.createFromFile(TilesEditor.class, "icons/preference.gif")); //$NON-NLS-1$
 	}
 
 	/**

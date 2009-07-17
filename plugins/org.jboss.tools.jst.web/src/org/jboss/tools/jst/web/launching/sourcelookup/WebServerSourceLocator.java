@@ -36,7 +36,7 @@ public class WebServerSourceLocator extends JavaSourceLocator {
 
 	public Object getSourceElement(IStackFrame stackFrame) {
 		if(ModelPlugin.isDebugEnabled()) {			
-			WebModelPlugin.getPluginLog().logInfo("WebServerSourceLocator.getSourceElement()");
+			WebModelPlugin.getPluginLog().logInfo("WebServerSourceLocator.getSourceElement()"); //$NON-NLS-1$
 		}
 
 		Object result = null;

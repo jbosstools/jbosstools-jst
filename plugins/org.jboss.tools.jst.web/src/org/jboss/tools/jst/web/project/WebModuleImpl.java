@@ -27,7 +27,7 @@ public class WebModuleImpl extends RegularObjectImpl implements WebModuleConstan
     public void setURI(String uri) {
     	if(uri.equals(getURI()) && isNormalized()) return;
     	
-   		StringTokenizer st = new StringTokenizer(uri, ",");
+   		StringTokenizer st = new StringTokenizer(uri, ","); //$NON-NLS-1$
     	XModelObject[] cs = getChildren();
     	Map<String,XModelObject> map = new HashMap<String,XModelObject>();
     	for (int i = 0; i < cs.length; i++) map.put(cs[i].getPathPart(), cs[i]);
@@ -80,7 +80,7 @@ public class WebModuleImpl extends RegularObjectImpl implements WebModuleConstan
 		String uri = getAttributeValue(ATTR_URI);
 		XModelObject[] cs = getChildren();
 		for (int i = 0; i < cs.length; i++) {
-			uri += "," + cs[i].getAttributeValue(ATTR_URI);
+			uri += "," + cs[i].getAttributeValue(ATTR_URI); //$NON-NLS-1$
 		}
 		return uri;    	
     }
@@ -94,11 +94,11 @@ public class WebModuleImpl extends RegularObjectImpl implements WebModuleConstan
     }
 
 	private String guessModelPath(String uri) {
-		if(!uri.startsWith("/")) uri = "/" + uri;
-		if(!uri.startsWith("/WEB-INF/")) return "";
+		if(!uri.startsWith("/")) uri = "/" + uri; //$NON-NLS-1$ //$NON-NLS-2$
+		if(!uri.startsWith("/WEB-INF/")) return ""; //$NON-NLS-1$ //$NON-NLS-2$
 		String path = uri.substring(8);
 		XModelObject o = getModel().getByPath(path);
-		return (o != null) ? path : "";
+		return (o != null) ? path : ""; //$NON-NLS-1$
 	}
 }
 

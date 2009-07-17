@@ -333,7 +333,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 			}
 
 			public String getId() {
-				return getSite().getId(); //$NON-NLS-1$
+				return getSite().getId(); 
 			}
 
 			/**
@@ -465,7 +465,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		try {
 			if(visualEditor!=null) {
 				visualSourceIndex = addPage(visualEditor, getEditorInput());
-				setPageText(visualSourceIndex, JSPEditorMessages.JSPMultiPageEditor_TabLabel_VisualSource); //$NON-NLS-1$
+				setPageText(visualSourceIndex, JSPEditorMessages.JSPMultiPageEditor_TabLabel_VisualSource); 
 				setPartName(visualEditor.getTitle());
 			}
 		} catch (PartInitException e) {
@@ -481,7 +481,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		}*/
 
 		try {
-			String sourceTabLabel = JSPEditorMessages.JSPMultiPageEditor_TabLabel_Source; //$NON-NLS-1$
+			String sourceTabLabel = JSPEditorMessages.JSPMultiPageEditor_TabLabel_Source; 
 			if(visualEditor!=null) {
 				sourceIndex = addPage(visualEditor, getEditorInput());
 				setPageText(sourceIndex, sourceTabLabel);
@@ -499,7 +499,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		try {
 			if(visualEditor!=null) {
 				previewIndex = addPage(visualEditor, getEditorInput());
-				setPageText(previewIndex, JSPEditorMessages.JSPMultiPageEditor_TabLabel_Preview); //$NON-NLS-1$
+				setPageText(previewIndex, JSPEditorMessages.JSPMultiPageEditor_TabLabel_Preview); 
 				setPartName(visualEditor.getTitle());
 			}
 		} catch (PartInitException e) {

@@ -54,7 +54,7 @@ public class WTPKbdActionResource extends WTPKbAbstractModelResource {
 		Properties view = new Properties();
 		view.put(IWebPromptingProvider.VIEW_PATH, fPath); 
 
-		List<Object> sourceList = fProvider.getList(fXModelObject.getModel(), SUPPORTED_ID, "", view);
+		List<Object> sourceList = fProvider.getList(fXModelObject.getModel(), SUPPORTED_ID, "", view); //$NON-NLS-1$
 
 		if (sourceList != null && !sourceList.isEmpty()) {
 			Set<String> sorted = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
@@ -87,7 +87,7 @@ public class WTPKbdActionResource extends WTPKbAbstractModelResource {
 	 */
 	public InputStream getInputStream() { return null; }
 	
-	public String toString () { return "WTPKbdActionResource"; }
+	public String toString () { return "WTPKbdActionResource"; } //$NON-NLS-1$
 
 	public String getSupportedID () { return SUPPORTED_ID; }
 	

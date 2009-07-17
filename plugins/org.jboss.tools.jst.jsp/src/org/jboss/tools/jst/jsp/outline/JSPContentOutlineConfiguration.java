@@ -58,9 +58,9 @@ public class JSPContentOutlineConfiguration extends HTMLContentOutlineConfigurat
 	
 	static {
 		try {
-			Bundle b = Platform.getBundle("org.jboss.tools.vpe");
+			Bundle b = Platform.getBundle("org.jboss.tools.vpe"); //$NON-NLS-1$
 			if(b!=null) {
-				Class cls = b.loadClass("org.jboss.tools.vpe.editor.dnd.context.ViewerDropAdapterFactory");
+				Class cls = b.loadClass("org.jboss.tools.vpe.editor.dnd.context.ViewerDropAdapterFactory"); //$NON-NLS-1$
 				dropAdapterFactory = (IViewerDropAdapterFactory)cls.newInstance();
 			}
 		} catch (IllegalAccessException e) {
@@ -145,8 +145,8 @@ public class JSPContentOutlineConfiguration extends HTMLContentOutlineConfigurat
 					//
 					Element element = (Element) node;
 
-					IMenuManager addAttributeMenu = new MyMenuManager(XMLUIMessages._UI_MENU_ADD_ATTRIBUTE); //$NON-NLS-1$
-					IMenuManager addChildMenu = new MyMenuManager(XMLUIMessages._UI_MENU_ADD_CHILD); //$NON-NLS-1$
+					IMenuManager addAttributeMenu = new MyMenuManager(XMLUIMessages._UI_MENU_ADD_ATTRIBUTE); 
+					IMenuManager addChildMenu = new MyMenuManager(XMLUIMessages._UI_MENU_ADD_CHILD); 
 					menu.add(addAttributeMenu);
 					menu.add(addChildMenu);
 
@@ -166,7 +166,7 @@ public class JSPContentOutlineConfiguration extends HTMLContentOutlineConfigurat
 					} else {
 						List modelQueryActionList = new ArrayList();
 						
-						String query = "/" + element.getNodeName();
+						String query = "/" + element.getNodeName(); //$NON-NLS-1$
 						TagDescriptor d = valueHelper.getTagDescriptor(query);
 						if(d != null) {
 							List as = d.getAttributesDescriptors();

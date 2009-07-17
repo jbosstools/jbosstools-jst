@@ -25,11 +25,11 @@ public class DefinitionListContentProvider extends DefaultXAttributeListContentP
 		XModelObject file = context;
 		while(file != null && file.getFileType() != XModelObject.FILE) file = file.getParent();
 		if(file == null) return;
-		XModelObject[] os = file.getChildren("TilesDefinition");
+		XModelObject[] os = file.getChildren("TilesDefinition"); //$NON-NLS-1$
 		List list = new ArrayList();
 		for (int i = 0; i < os.length; i++) {
 			if(os[i] == context) continue;
-			list.add(os[i].getAttributeValue("name"));
+			list.add(os[i].getAttributeValue("name")); //$NON-NLS-1$
 		} 
 		tags = (String[])list.toArray(new String[0]);
 	}

@@ -17,7 +17,7 @@ public class FileTLD20Loader extends FileTLD12Loader {
 	}
 
     protected String getTagEntity() {
-    	return "TLDTag20";
+    	return "TLDTag20"; //$NON-NLS-1$
     }
 
 }

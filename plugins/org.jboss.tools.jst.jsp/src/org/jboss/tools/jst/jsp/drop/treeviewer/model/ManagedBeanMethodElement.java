@@ -20,21 +20,21 @@ public class ManagedBeanMethodElement extends ManagedBeanForMdElement implements
 	}
 
 	protected String getFullName() {
-		return parent.getFullName() + "." + name;
+		return parent.getFullName() + "." + name; //$NON-NLS-1$
 	}
 
 	/**
 	 * @see IAttributeValue#getValue()
 	 */
 	public String getValue() {
-		return "#{" + getFullName() + "}";
+		return "#{" + getFullName() + "}"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
 	 * @see ModelElement#getComparedValue()
 	 */
 	protected String getComparedValue() {
-		return "#{" + getFullName();
+		return "#{" + getFullName(); //$NON-NLS-1$
 	}
 
 	private static Class[] EQUAL_CLASSES_LIST = new Class[] {

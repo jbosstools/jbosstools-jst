@@ -35,7 +35,7 @@ public class AutoPlacement {
         y0 = shape[1];
         fillField(process);
         int[] p = findPoint();
-        if(p != null) target.setAttributeValue(WebProcessConstants.ATT_SHAPE, "" + p[0] + "," + p[1] + ",0,0");
+        if(p != null) target.setAttributeValue(WebProcessConstants.ATT_SHAPE, "" + p[0] + "," + p[1] + ",0,0"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 
     private XModelObject getItem(XModelObject process, XModelObject source) {

@@ -10,11 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.tiles.ui.editor;
 
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-
 import org.eclipse.osgi.util.NLS;
-import org.jboss.tools.jst.web.tiles.ui.TilesUIPlugin;
 
 /**
  * @author Igels
@@ -22,9 +18,9 @@ import org.jboss.tools.jst.web.tiles.ui.TilesUIPlugin;
  * To change the template for this generated type comment go to
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
-public class TilesEditorMessages {
+public class TilesEditorMessages extends NLS {
 
-	private static final String BUNDLE_NAME= "org.jboss.tools.jst.web.tiles.ui.editor.TilesEditorMessages";
+	private static final String BUNDLE_NAME= "org.jboss.tools.jst.web.tiles.ui.editor.TilesEditorMessages"; //$NON-NLS-1$
 	
 	public static String TilesDiagram_select;
 	

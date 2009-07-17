@@ -22,21 +22,21 @@ public class ManagedBeanPropertyElement extends ManagedBeanForPropElement implem
 	}
 
 	protected String getFullName() {
-		return ((ManagedBeanForPropElement)parent).getFullName() + "." + name;
+		return ((ManagedBeanForPropElement)parent).getFullName() + "." + name; //$NON-NLS-1$
 	}
 
 	/**
 	 * @see IAttributeValue#getValue()
 	 */
 	public String getValue() {
-		return "#{" + getFullName() + "}";
+		return "#{" + getFullName() + "}"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
 	 * @see ModelElement#getComparedValue()
 	 */
 	protected String getComparedValue() {
-		return "#{" + getFullName();
+		return "#{" + getFullName(); //$NON-NLS-1$
 	}
 
 	private static Class[] EQUAL_CLASSES_LIST = new Class[] {

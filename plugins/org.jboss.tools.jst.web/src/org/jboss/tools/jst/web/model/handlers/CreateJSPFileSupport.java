@@ -71,34 +71,34 @@ public class CreateJSPFileSupport extends CreateFileSupport {
 		File templateDir = new File(getPageTemplatesLocation());
 		if (!templateDir.isDirectory()) return new String[0];
 		getTemplates(templateDir);
-		String nature = getTarget().getModel().getProperties().getProperty("nature");
+		String nature = getTarget().getModel().getProperties().getProperty("nature"); //$NON-NLS-1$
 		if(nature == null) {
-		} else if(nature.indexOf("jsf") >= 0) {
-			getTemplates(templateDir, "jsf"); 
-		}  else if(nature.indexOf("struts") >= 0) {
-			getTemplates(templateDir, "struts");
+		} else if(nature.indexOf("jsf") >= 0) { //$NON-NLS-1$
+			getTemplates(templateDir, "jsf");  //$NON-NLS-1$
+		}  else if(nature.indexOf("struts") >= 0) { //$NON-NLS-1$
+			getTemplates(templateDir, "struts"); //$NON-NLS-1$
 		}
 		return (String[])templates.keySet().toArray(new String[0]); 
 	}
 	
-	private static final String NewJSFProjectPath = "%Options%/JSF Studio/Project/New Project";
-	private static final String NewStrutsProjectPath = "%Options%/Struts Studio/Project/New Project";
+	private static final String NewJSFProjectPath = "%Options%/JSF Studio/Project/New Project"; //$NON-NLS-1$
+	private static final String NewStrutsProjectPath = "%Options%/Struts Studio/Project/New Project"; //$NON-NLS-1$
 	protected String getDefaultPageTemplate() {
 		String defaultPageTemplate = null;
-		String nature = getTarget().getModel().getProperties().getProperty("nature");
+		String nature = getTarget().getModel().getProperties().getProperty("nature"); //$NON-NLS-1$
 		if(nature == null) {
 			return null;
 		}
-		String prefPath = (nature.indexOf("jsf") >= 0) ? NewJSFProjectPath :
-			(nature.indexOf("struts") >= 0) ? NewStrutsProjectPath :
+		String prefPath = (nature.indexOf("jsf") >= 0) ? NewJSFProjectPath : //$NON-NLS-1$
+			(nature.indexOf("struts") >= 0) ? NewStrutsProjectPath : //$NON-NLS-1$
 			null;
 		if(prefPath == null) return null;
 		XModelObject pref = PreferenceModelUtilities.getPreferenceModel().getByPath(prefPath);
 		if(pref == null) {
-			WebModelPlugin.getPluginLog().logError("Cannot find preference object " + prefPath, new Exception());
+			WebModelPlugin.getPluginLog().logError("Cannot find preference object " + prefPath, new Exception()); //$NON-NLS-1$
 			return null;
 		}
-		defaultPageTemplate = pref.getAttributeValue("Page Template");
+		defaultPageTemplate = pref.getAttributeValue("Page Template"); //$NON-NLS-1$
 		return defaultPageTemplate;
 	}
 
@@ -108,7 +108,7 @@ public class CreateJSPFileSupport extends CreateFileSupport {
 	
 	//// templates 
 	public String getPageTemplatesLocation() {
-		return getTemplatesBase() + "/pages";
+		return getTemplatesBase() + "/pages"; //$NON-NLS-1$
 	}
 	
 	private void getTemplates(File parent, String name) {
@@ -117,14 +117,14 @@ public class CreateJSPFileSupport extends CreateFileSupport {
 	}
 
 	private void getTemplates(File dir) {
-		String ext = action.getProperty("extension");
+		String ext = action.getProperty("extension"); //$NON-NLS-1$
 		File[] files = dir.listFiles();
 		if(files == null) return;
 		for (int i = 0; i < files.length; i++) {
 			if(!files[i].isFile()) continue;
 			String n = files[i].getName();
-			if(ext != null && !n.endsWith("." + ext)) {
-				if(!ext.equals("jsp") || n.indexOf('.') >= 0) continue;
+			if(ext != null && !n.endsWith("." + ext)) { //$NON-NLS-1$
+				if(!ext.equals("jsp") || n.indexOf('.') >= 0) continue; //$NON-NLS-1$
 			}
 			templates.put(n, files[i]);
 		}
@@ -132,7 +132,7 @@ public class CreateJSPFileSupport extends CreateFileSupport {
 
 	private String getTemplatesBase() {
 		String root = WebModelPlugin.getTemplateStateLocation();
-		return root + "templates";
+		return root + "templates"; //$NON-NLS-1$
 	}
 	
 	public WizardDataValidator getValidator(int step) {
@@ -147,17 +147,17 @@ public class CreateJSPFileSupport extends CreateFileSupport {
 	private Map<String,String> selectedTaglibs = new HashMap<String,String>();
 	
 	private void saveSelectedTaglibs() {
-		String template = getAttributeValue(0, "template");
+		String template = getAttributeValue(0, "template"); //$NON-NLS-1$
 		if(template == null) return;
-		String taglibs = getAttributeValue(1, "taglibs");
+		String taglibs = getAttributeValue(1, "taglibs"); //$NON-NLS-1$
 		if(taglibs != null) selectedTaglibs.put(template.trim(), taglibs);
 	}
 	
 	private void resetTaglibs() {
-		String extension = action.getProperty("extension");
-		if("jsp".equals(extension)) {
+		String extension = action.getProperty("extension"); //$NON-NLS-1$
+		if("jsp".equals(extension)) { //$NON-NLS-1$
 			taglibs = new TaglibSet();
-		} else if("xhtml".equals(extension)) {
+		} else if("xhtml".equals(extension)) { //$NON-NLS-1$
 			taglibs = new TaglibSetXHTML();
 		} else {
 			return;
@@ -171,14 +171,14 @@ public class CreateJSPFileSupport extends CreateFileSupport {
 		
 		taglibs.initTaglibDescriptions(model);
 		String[] s = taglibs.getDescriptions();
-		setValueList(1, "taglibs", s);
+		setValueList(1, "taglibs", s); //$NON-NLS-1$
 	}
 	
 	void initSelectedTaglibs() throws IOException {
-		String template = getAttributeValue(0, "template");
+		String template = getAttributeValue(0, "template"); //$NON-NLS-1$
 		String value = template == null ? null : (String)selectedTaglibs.get(template.trim());
 		if(value != null && template.trim().length() > 0) {
-			setAttributeValue(1, "taglibs", value);
+			setAttributeValue(1, "taglibs", value); //$NON-NLS-1$
 			return;
 		}
 		String body = getTemplateBody();
@@ -187,24 +187,24 @@ public class CreateJSPFileSupport extends CreateFileSupport {
 		Iterator<String> it = existing.iterator();
 		while(it.hasNext()) {
 			String s = it.next().toString();
-			if(sb.length() > 0) sb.append(";");
+			if(sb.length() > 0) sb.append(";"); //$NON-NLS-1$
 			sb.append(taglibs.getTaglibDescription(s));
 		}
 		value = sb.toString();
-		setAttributeValue(1, "taglibs", value);
+		setAttributeValue(1, "taglibs", value); //$NON-NLS-1$
 	}
 
 	protected String modifyBody(String body) throws IOException {
 		if(getEntityData().length < 2 || taglibs == null) return body;
 		if(getStepId() == 0) initSelectedTaglibs();
-		String ts = getAttributeValue(1, "taglibs");
+		String ts = getAttributeValue(1, "taglibs"); //$NON-NLS-1$
 		String[] selected = toArray(ts);
 		return taglibs.modifyBody(body, selected);
 	}
 	
 	String[] toArray(String s) {
 		if(s == null || s.length() == 0) return new String[0];
-		StringTokenizer st = new StringTokenizer(s, ";,");
+		StringTokenizer st = new StringTokenizer(s, ";,"); //$NON-NLS-1$
 		String[] a = new String[st.countTokens()];
 		for (int i = 0; i < a.length; i++) a[i] = st.nextToken();
 		return a;		

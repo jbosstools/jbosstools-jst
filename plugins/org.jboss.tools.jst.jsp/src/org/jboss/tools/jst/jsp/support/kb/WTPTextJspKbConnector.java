@@ -176,6 +176,7 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
 	private Map<String,Object> trackers = new HashMap<String,Object>();
 	private Map<String,LoadBundleInfo> loadedBundles = new HashMap<String,LoadBundleInfo>();
 
+	@SuppressWarnings("nls")
 	private final static String[] TRACKERS_TO_WATCH = {"http://java.sun.com/jsf/core",
 		"https://ajax4jsf.dev.java.net/ajax", "http://richfaces.org/a4j"
 	};
@@ -329,7 +330,7 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
 		if (node == null) return;
 		String name = node.getNodeName();
 		if (name == null) return;
-		if (!name.endsWith("loadBundle")) return;
+		if (!name.endsWith("loadBundle")) return; //$NON-NLS-1$
 		if (name.indexOf(':') == -1) return;
 		String prefix = name.substring(0, name.indexOf(':'));
 
@@ -337,8 +338,8 @@ public class WTPTextJspKbConnector implements KbConnector, VpeTaglibListener {
 
 		NamedNodeMap attributes = node.getAttributes();
 		if (attributes == null) return;
-		String basename = (attributes.getNamedItem("basename") == null ? null : attributes.getNamedItem("basename").getNodeValue());
-		String var = (attributes.getNamedItem("var") == null ? null : attributes.getNamedItem("var").getNodeValue());
+		String basename = (attributes.getNamedItem("basename") == null ? null : attributes.getNamedItem("basename").getNodeValue()); //$NON-NLS-1$ //$NON-NLS-2$
+		String var = (attributes.getNamedItem("var") == null ? null : attributes.getNamedItem("var").getNodeValue()); //$NON-NLS-1$ //$NON-NLS-2$
 		if (basename == null || basename.length() == 0 ||
 			var == null || var.length() == 0) return;
 

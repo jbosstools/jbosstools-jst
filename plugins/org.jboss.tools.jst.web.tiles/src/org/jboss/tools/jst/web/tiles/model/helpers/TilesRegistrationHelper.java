@@ -12,8 +12,6 @@ package org.jboss.tools.jst.web.tiles.model.helpers;
 
 import java.util.Properties;
 
-import javax.xml.transform.URIResolver;
-
 import org.jboss.tools.common.meta.action.*;
 import org.jboss.tools.common.model.*;
 import org.jboss.tools.common.model.filesystems.impl.FileAnyImpl;
@@ -22,8 +20,8 @@ import org.jboss.tools.jst.web.project.WebProject;
 
 public class TilesRegistrationHelper {
 	static Registrator[] registrators = new Registrator[]{
-		new Registrator(WebProject.STRUTS_NATURE_ID, "org.jboss.tools.struts.plugins.model.handlers.TilesFileRegistration"),
-		new Registrator(WebProject.JSF_NATURE_ID, "org.jboss.tools.jsf.model.handlers.tile.TilesFileRegistration")
+		new Registrator(WebProject.STRUTS_NATURE_ID, "org.jboss.tools.struts.plugins.model.handlers.TilesFileRegistration"), //$NON-NLS-1$
+		new Registrator(WebProject.JSF_NATURE_ID, "org.jboss.tools.jsf.model.handlers.tile.TilesFileRegistration") //$NON-NLS-1$
 	};
 	
 	public static boolean isEnabled(XModel model) {
@@ -99,20 +97,20 @@ class Registrator {
 	
 	public boolean register(XModel model, XModelObject file, String oldPath, boolean test) {
     	Properties p = new Properties();
-    	p.put("model", model);
+    	p.put("model", model); //$NON-NLS-1$
     	String webRoot = WebProject.getInstance(model).getWebRootLocation().replace('\\', '/');
-    	if(!webRoot.endsWith("/")) webRoot += "/";
+    	if(!webRoot.endsWith("/")) webRoot += "/"; //$NON-NLS-1$ //$NON-NLS-2$
     	if(file != null && file.isActive()) {
         	String path = ((FileAnyImpl)file).getAbsolutePath();
         	if(!path.toLowerCase().startsWith(webRoot.toLowerCase())) return false;
         	path = path.substring(webRoot.length() - 1);
-        	p.setProperty("path", path);
+        	p.setProperty("path", path); //$NON-NLS-1$
     	}
     	if(oldPath != null) {
     		oldPath = oldPath.substring(webRoot.length() - 1);
-    		p.setProperty("oldPath", oldPath);    		
+    		p.setProperty("oldPath", oldPath);    		 //$NON-NLS-1$
     	}
-    	if(test) p.setProperty("test", "true");
+    	if(test) p.setProperty("test", "true"); //$NON-NLS-1$ //$NON-NLS-2$
     	wizard.setObject(p);
     	return wizard.execute() == 0;
 	}

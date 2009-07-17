@@ -10,10 +10,12 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.browser;
 
+import java.text.MessageFormat;
 import org.jboss.tools.common.meta.action.impl.handlers.DefaultCreateHandler;
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 
 public abstract class AbstractBrowserContext implements IBrowserContext {
 	IPathSource[] sources = new IPathSource[0]; 
@@ -40,7 +42,7 @@ public abstract class AbstractBrowserContext implements IBrowserContext {
 
 	public void execute(XModelObject object) throws XModelException {
 		setLastRunObject(object);
-		if(url == null) throw new XModelException("Cannot open " + DefaultCreateHandler.title(object, false));
+		if(url == null) throw new XModelException(MessageFormat.format(WebUIMessages.AbstractBrowserContext_CannotOpen, DefaultCreateHandler.title(object, false)));
 		doExecute(lastRunUrl);
 		if(lastRunUrl.equals(url)) {
 			history.add(lastRunObject, url);

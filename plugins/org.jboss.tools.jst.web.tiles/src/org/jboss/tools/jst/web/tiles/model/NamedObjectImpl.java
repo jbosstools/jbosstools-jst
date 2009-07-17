@@ -15,7 +15,7 @@ import org.jboss.tools.common.model.impl.*;
 public class NamedObjectImpl extends OrderedObjectImpl {
 
     public String name() {
-        return getAttributeValue("name");
+        return getAttributeValue("name"); //$NON-NLS-1$
     }
 
 }

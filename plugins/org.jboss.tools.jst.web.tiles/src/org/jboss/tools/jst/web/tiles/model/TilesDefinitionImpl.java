@@ -19,7 +19,7 @@ public class TilesDefinitionImpl extends OrderedObjectImpl {
     }
 
     public String name() {
-        return getAttributeValue("name");
+        return getAttributeValue("name"); //$NON-NLS-1$
     }
 
 }

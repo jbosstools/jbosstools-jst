@@ -94,7 +94,7 @@ public class VpeProperties implements ExtendedProperties {
 	}
 	
 	public String getNodeName() {
-		return node == null ? "" : node.getNodeName();
+		return node == null ? "" : node.getNodeName(); //$NON-NLS-1$
 	}
 	
 	public Node getNode() {

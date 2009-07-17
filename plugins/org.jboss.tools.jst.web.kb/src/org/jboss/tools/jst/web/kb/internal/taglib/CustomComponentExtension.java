@@ -16,7 +16,7 @@ package org.jboss.tools.jst.web.kb.internal.taglib;
 public class CustomComponentExtension extends CustomTagLibComponent {
 
 	public CustomComponentExtension() {
-		setName("*");
+		setName("*"); //$NON-NLS-1$
 	}
 
 	/*

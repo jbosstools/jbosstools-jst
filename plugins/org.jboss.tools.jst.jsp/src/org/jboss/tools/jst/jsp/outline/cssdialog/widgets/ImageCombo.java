@@ -51,7 +51,7 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
  * @author dsakovich@exadel.com
  */
 public final class ImageCombo extends Composite implements CSSWidget {
-    private static final boolean gtk = "gtk".equals(SWT.getPlatform());
+    private static final boolean gtk = "gtk".equals(SWT.getPlatform()); //$NON-NLS-1$
     private static final int X = 0;
     private static final int Y = 0;
     private static final int WIDTH = 20;

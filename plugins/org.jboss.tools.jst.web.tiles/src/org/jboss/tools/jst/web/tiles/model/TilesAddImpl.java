@@ -17,14 +17,14 @@ public class TilesAddImpl extends RegularObjectImpl {
     public TilesAddImpl() {}
 
     public String name() {
-        return "" + System.identityHashCode(this);
+        return "" + System.identityHashCode(this); //$NON-NLS-1$
     }
 
     public String getPresentationString() {
-        String value = "" + getAttributeValue("value");
-        if(value.length() > 33) value = value.substring(30) + "...";
+        String value = "" + getAttributeValue("value"); //$NON-NLS-1$ //$NON-NLS-2$
+        if(value.length() > 33) value = value.substring(30) + "..."; //$NON-NLS-1$
         value = value.replace('\n', ' ');
-        return "add:" + value;
+        return "add:" + value; //$NON-NLS-1$
     }
 
 }

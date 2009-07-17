@@ -26,7 +26,7 @@ public class FileTLD12Loader extends FileTLDLoader {
     }
 
     protected String getTagEntity() {
-    	return "TLDTag12";
+    	return "TLDTag12"; //$NON-NLS-1$
     }
 
 }
@@ -41,14 +41,14 @@ class TLDLoader12Util extends XModelObjectLoaderUtil implements TLDConstants {
 	public void loadChildren(Element element, XModelObject o) {
 		if(o.getFileType() == XModelObject.FILE) {
 			addRequiredChildren(o);
-			XModelObject[] vs = o.getChildren("TLDValidator");
+			XModelObject[] vs = o.getChildren("TLDValidator"); //$NON-NLS-1$
 			if(vs.length > 0) {
-				Element ce = XMLUtil.getUniqueChild(element, applyNamespaceToTag("validator"));
+				Element ce = XMLUtil.getUniqueChild(element, applyNamespaceToTag("validator")); //$NON-NLS-1$
 				if(ce != null) super.load(ce, vs[0]);				
 			}
-			XModelObject ls = o.getChildByPath("Listeners");
+			XModelObject ls = o.getChildByPath("Listeners"); //$NON-NLS-1$
 			if(ls != null) super.loadChildren(element, ls);
-			XModelObject fs = o.getChildByPath("Functions");
+			XModelObject fs = o.getChildByPath("Functions"); //$NON-NLS-1$
 			if(fs != null) super.loadChildren(element, fs);
 			loadTags(element, o);
 		} else {
@@ -58,7 +58,7 @@ class TLDLoader12Util extends XModelObjectLoaderUtil implements TLDConstants {
 	
 	private void loadTags(Element element, XModelObject o) {
 		loadElements(element, o, tagEntity);
-		loadElements(element, o, "TLDTagFile");
+		loadElements(element, o, "TLDTagFile"); //$NON-NLS-1$
 	}
 	
 	void loadElements(Element element, XModelObject o, String childEntityName) {
@@ -91,15 +91,15 @@ class TLDLoader12Util extends XModelObjectLoaderUtil implements TLDConstants {
 
 	public boolean saveChildren(Element element, XModelObject o) {
 		if(o.getFileType() == XModelObject.FILE) {
-			XModelObject[] vs = o.getChildren("TLDValidator");
+			XModelObject[] vs = o.getChildren("TLDValidator"); //$NON-NLS-1$
 			if(vs.length > 0) {
 				TLDValidatorImpl v = (TLDValidatorImpl)vs[0];
 				if(!v.isEmpty()) super.save(element, vs[0]);
 			}
-			XModelObject ls = o.getChildByPath("Listeners");
+			XModelObject ls = o.getChildByPath("Listeners"); //$NON-NLS-1$
 			if(ls != null) super.saveChildren(element, ls);
 			saveTags(element, o);
-			XModelObject fs = o.getChildByPath("Functions");
+			XModelObject fs = o.getChildByPath("Functions"); //$NON-NLS-1$
 			if(fs != null) super.saveChildren(element, fs);
 			return true;
 		} else {
@@ -111,7 +111,7 @@ class TLDLoader12Util extends XModelObjectLoaderUtil implements TLDConstants {
 		XModelObject[] os = o.getChildren(tagEntity);
 		boolean b = true;
 		for (int i = 0; i < os.length; i++) if(!save(element, os[i])) b = false;
-		os = o.getChildren("TLDTagFile");
+		os = o.getChildren("TLDTagFile"); //$NON-NLS-1$
 		for (int i = 0; i < os.length; i++) if(!save(element, os[i])) b = false;
 		return b;
 	}
@@ -120,28 +120,28 @@ class TLDLoader12Util extends XModelObjectLoaderUtil implements TLDConstants {
         if(v == null) return false;
 		if(v.length() == 0 || v.equals(dv)) {
 			XAttribute attr = entity.getAttribute(n);
-			return (attr != null && "always".equals(attr.getProperty("save")));
+			return (attr != null && "always".equals(attr.getProperty("save"))); //$NON-NLS-1$ //$NON-NLS-2$
 		}
         return super.isSaveable(entity, n, v, dv);
     }
 
     public void saveAttributes(Element element, XModelObject o) {
         super.saveAttributes(element, o);
-        if(o.getModelEntity().getName().equals("TLDVariable")) {
+        if(o.getModelEntity().getName().equals("TLDVariable")) { //$NON-NLS-1$
         	eitherOr(element, NAME_FROM_ATTRIBUTE, NAME_GIVEN);
         }
     }
 
     protected String getChildEntity(XModelEntity entity, Element e) {
     	String ce = super.getChildEntity(entity, e);
-    	if(ce != null && ce.startsWith("TLDAttribute2")) {
-    		Element c = XMLUtilities.getUniqueChild(e, "fragment");
-    		if(c != null) return "TLDAttribute2F";
-    		if(ce.equals("TLDAttribute2F")) {
+    	if(ce != null && ce.startsWith("TLDAttribute2")) { //$NON-NLS-1$
+    		Element c = XMLUtilities.getUniqueChild(e, "fragment"); //$NON-NLS-1$
+    		if(c != null) return "TLDAttribute2F"; //$NON-NLS-1$
+    		if(ce.equals("TLDAttribute2F")) { //$NON-NLS-1$
     			XChild[] cs = entity.getChildren();
     			for (int i = 0; i < cs.length; i++) {
     				String cei = cs[i].getName();
-    				if(cei.startsWith("TLDAttribute2") && !cei.endsWith("F")) return cei;
+    				if(cei.startsWith("TLDAttribute2") && !cei.endsWith("F")) return cei; //$NON-NLS-1$ //$NON-NLS-2$
     			}
     		}
     	}

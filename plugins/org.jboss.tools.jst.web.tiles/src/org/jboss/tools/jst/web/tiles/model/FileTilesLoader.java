@@ -36,7 +36,7 @@ import org.w3c.dom.NodeList;
 public class FileTilesLoader extends AbstractWebDiagramLoader implements WebProcessLoader, TilesConstants {
 
     protected FileAuxiliary createFileAuxiliary() {
-    	return new FileAuxiliary("l4t", false);
+    	return new FileAuxiliary("l4t", false); //$NON-NLS-1$
     }
 
     protected XModelObjectLoaderUtil createUtil() {
@@ -51,14 +51,14 @@ public class FileTilesLoader extends AbstractWebDiagramLoader implements WebProc
 			XMLUtil.getXMLErrors(new StringReader(body), resolution == EntityXMLRegistration.DTD, resolution == EntityXMLRegistration.SCHEMA);
 		boolean hasErrors = (errors != null && errors.length > 0);
 		if(hasErrors) {
-			object.setAttributeValue("isIncorrect", "yes");
-			object.setAttributeValue("incorrectBody", body);
-			object.set("actualBodyTimeStamp", "-1");
+			object.setAttributeValue("isIncorrect", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
+			object.setAttributeValue("incorrectBody", body); //$NON-NLS-1$
+			object.set("actualBodyTimeStamp", "-1"); //$NON-NLS-1$ //$NON-NLS-2$
 		} else {
-			object.setAttributeValue("isIncorrect", "no");
-			object.set("correctBody", body);
-			object.set("actualBodyTimeStamp", "0");
-			object.setAttributeValue("incorrectBody", "");
+			object.setAttributeValue("isIncorrect", "no"); //$NON-NLS-1$ //$NON-NLS-2$
+			object.set("correctBody", body); //$NON-NLS-1$
+			object.set("actualBodyTimeStamp", "0"); //$NON-NLS-1$ //$NON-NLS-2$
+			object.setAttributeValue("incorrectBody", ""); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		Document doc = XMLUtil.getDocument(new StringReader(body));
 		if(doc == null) {
@@ -74,18 +74,18 @@ public class FileTilesLoader extends AbstractWebDiagramLoader implements WebProc
 			Node n = nl.item(i);
 			if(n instanceof DocumentType) {
 				DocumentType dt = (DocumentType)n;
-				object.setAttributeValue("systemId", dt.getSystemId());
+				object.setAttributeValue("systemId", dt.getSystemId()); //$NON-NLS-1$
 			}
 		}
 		String loadingError = util.getError();
 		reloadProcess(object);
 
-		object.set("actualBodyTimeStamp", "" + object.getTimeStamp());
+		object.set("actualBodyTimeStamp", "" + object.getTimeStamp()); //$NON-NLS-1$ //$NON-NLS-2$
 		((AbstractXMLFileImpl)object).setLoaderError(loadingError);
 		if(!hasErrors && loadingError != null) {
-			object.setAttributeValue("isIncorrect", "yes");
-			object.setAttributeValue("incorrectBody", body);
-			object.set("actualBodyTimeStamp", "" + object.getTimeStamp());
+			object.setAttributeValue("isIncorrect", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
+			object.setAttributeValue("incorrectBody", body); //$NON-NLS-1$
+			object.set("actualBodyTimeStamp", "" + object.getTimeStamp()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
     
@@ -115,7 +115,7 @@ public class FileTilesLoader extends AbstractWebDiagramLoader implements WebProc
 			XModelObject process = object.getChildByPath(ELM_PROCESS);
 			if(process == null) return true;
 			process.setModified(true);
-			Element element = XMLUtil.createDocumentElement("PROCESS");
+			Element element = XMLUtil.createDocumentElement("PROCESS"); //$NON-NLS-1$
 			util.saveAttributes(element, process);
 			util.saveChildren(element, process);
 			StringWriter sw = new StringWriter();
@@ -131,15 +131,15 @@ public class FileTilesLoader extends AbstractWebDiagramLoader implements WebProc
 
 	public String serializeMainObject(XModelObject object) {
 //		String entity = object.getModelEntity().getName();
-		String systemId = object.getAttributeValue("systemId");
+		String systemId = object.getAttributeValue("systemId"); //$NON-NLS-1$
 		if(systemId == null || systemId.length() == 0) systemId = DOC_EXTDTD;
 		String publicId = DOC_PUBLICID;
 		Element element = XMLUtil.createDocumentElement(object.getModelEntity().getXMLSubPath(), DOC_QUALIFIEDNAME, publicId, systemId, null);
 		String result = null;
 		try {
 			util.setup(null, false);
-			String att = object.getAttributeValue("comment");
-			if (att.length() > 0) util.saveAttribute(element, "#comment", att);
+			String att = object.getAttributeValue("comment"); //$NON-NLS-1$
+			if (att.length() > 0) util.saveAttribute(element, "#comment", att); //$NON-NLS-1$
 			util.saveChildren(element, object);
 			result = SimpleWebFileLoader.serialize(element, object);
 		} catch (IOException e) {
@@ -153,19 +153,19 @@ public class FileTilesLoader extends AbstractWebDiagramLoader implements WebProc
 }
 
 class FTLoaderUtil extends XModelObjectLoaderUtil {
-    static String tilesRequired = "!TilesDefinition.name!TilesPut.name!TilesList.name!TilesBean.classtype!TilesSetProperty.property!TilesSetProperty.value!TilesItem.value!TilesItem.link!";
-    static String SAVE_CONTENT_ATTR = "save value as 'content' attr";
+    static String tilesRequired = "!TilesDefinition.name!TilesPut.name!TilesList.name!TilesBean.classtype!TilesSetProperty.property!TilesSetProperty.value!TilesItem.value!TilesItem.link!"; //$NON-NLS-1$
+    static String SAVE_CONTENT_ATTR = "save value as 'content' attr"; //$NON-NLS-1$
 
     protected boolean isSaveable(XModelEntity entity, String n, String v, String dv) {
         if(v == null) return false;
         if(v.length() == 0)
-          return (tilesRequired.indexOf("!" + entity.getName() + "." + n + "!") >= 0);
+          return (tilesRequired.indexOf("!" + entity.getName() + "." + n + "!") >= 0); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         return super.isSaveable(entity, n, v, dv);
     }
 
     public String getAttribute(Element element, String xmlname, XAttribute attr) {
         int i = xmlname.indexOf('|');
-        if(i < 0 || xmlname.startsWith("content|")) return super.getAttribute(element, xmlname, attr);
+        if(i < 0 || xmlname.startsWith("content|")) return super.getAttribute(element, xmlname, attr); //$NON-NLS-1$
         String v = super.getAttribute(element, xmlname.substring(0, i), attr);
         return (v != null && v.length() > 0) ? v :
                super.getAttribute(element, xmlname.substring(i + 1), attr);

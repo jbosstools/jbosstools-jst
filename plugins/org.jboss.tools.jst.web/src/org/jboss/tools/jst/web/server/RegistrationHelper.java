@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.server;
 
+import java.text.MessageFormat;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.runtime.*;
@@ -74,12 +75,12 @@ public class RegistrationHelper {
 		return getRegistrationError(m, appname, server);
 	}
 	
-	static String FORBIDDEN = ";/?:@&=+,$,\\";
+	static String FORBIDDEN = ";/?:@&=+,$,\\"; //$NON-NLS-1$
 	public static String checkContextRoot(String appname) {
 		if(appname == null) return null;		
 		for (int i = 0; i < appname.length(); i++) {
 			char c = appname.charAt(i);
-			if(FORBIDDEN.indexOf(c) >= 0) return NLS.bind(WebUIMessages.CONTEXT_ROOT_CANNOT_CONTAIN_CHARACTER, "" + c);
+			if(FORBIDDEN.indexOf(c) >= 0) return NLS.bind(WebUIMessages.CONTEXT_ROOT_CANNOT_CONTAIN_CHARACTER, "" + c); //$NON-NLS-1$
 		}
 		return null;
 	}
@@ -190,7 +191,7 @@ public class RegistrationHelper {
 		IModule[] modules = ServerUtil.getModules(project);
 		if(modules != null && modules.length>0) {
 			for (int i = 0; i < modules.length; i++) {
-				if(!"jboss.singlefile".equals(modules[i].getModuleType().getId())) {
+				if(!"jboss.singlefile".equals(modules[i].getModuleType().getId())) { //$NON-NLS-1$
 					return modules[i];
 				}
 			}
@@ -215,7 +216,7 @@ public class RegistrationHelper {
 		IServer[] servers;
 		String contextRoot;
 		public RegisterServerJob(IProject p, IServer[] servers, String contextRoot) {
-			super("Register in Server");
+			super(WebUIMessages.RegistrationHelper_RegisterInServer);
 			this.p = p;
 			this.servers = servers;
 			this.contextRoot = contextRoot;
@@ -226,8 +227,11 @@ public class RegistrationHelper {
 				if(RegistrationHelper.findModule(p) == null) {
 					counter *= 2;
 					if(counter > 10000) {
-						String mesage = "Timeout expired for registering project " + p + " in server. Please check the project and try context menu action.";
-						return new Status(IStatus.ERROR, "org.jboss.tools.jst.web", 0, mesage, null);
+						String mesage = MessageFormat
+								.format(
+										WebUIMessages.RegistrationHelper_TimeoutExpired,
+										p);
+						return new Status(IStatus.ERROR, "org.jboss.tools.jst.web", 0, mesage, null); //$NON-NLS-1$
 					} else {
 						schedule(counter);
 					}
@@ -253,7 +257,7 @@ public class RegistrationHelper {
 	}
 
 	private static void register(IProject p, IServer[] servers, String contextRoot, IProgressMonitor monitor) throws XModelException {
-		if(monitor != null) monitor.beginTask("", 100);
+		if(monitor != null) monitor.beginTask("", 100); //$NON-NLS-1$
 		if(monitor != null) monitor.worked(5);
 
 		int step = 70;
@@ -278,7 +282,7 @@ public class RegistrationHelper {
 			XModel model = n == null ? null : n.getModel();
 			if(model != null) {
 				XModelObject object = FileSystemsHelper.getFileSystems(model);
-				if(object != null) model.changeObjectAttribute(object, "application name", contextRoot);
+				if(object != null) model.changeObjectAttribute(object, "application name", contextRoot); //$NON-NLS-1$
 			}
 		}
 		if(monitor != null) monitor.worked(20);

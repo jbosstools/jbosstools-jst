@@ -10,9 +10,11 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.drop.treeviewer.model;
 
+import java.text.MessageFormat;
 import org.eclipse.ui.IEditorInput;
 
 import org.jboss.tools.common.kb.KbDinamicResource;
+import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.support.kb.WTPTextJspKbConnector;
 
 /**
@@ -50,10 +52,10 @@ public class AttributeValueResourceFactory {
 			return new JsfVariablesResourceElement(name, root);
 		} else if(KbDinamicResource.IMAGE_FILE_TYPE.equals(type)) {
 			return new ImageFileResourceElement(editorInput, root);
-		} else if("seamVariables".equals(type)) {
-			return new SeamVariablesResourceElement(editorInput, "Seam Variables", root);
+		} else if("seamVariables".equals(type)) { //$NON-NLS-1$
+			return new SeamVariablesResourceElement(editorInput, "Seam Variables", root); //$NON-NLS-1$
 		}
-		return new UnknownAttributeValueResource("Unknown resource type: " + type, root);
+		return new UnknownAttributeValueResource(MessageFormat.format(JstUIMessages.AttributeValueResourceFactory_UnknownResourceType, type), root);
 //		throw new RuntimeException("Unknown resource type:" + type);
 	}
 }

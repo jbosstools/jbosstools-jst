@@ -161,11 +161,11 @@ public abstract class JSPMultiPageEditorSite implements IEditorSite {
 	}
 
 	public String getPluginId() {
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 	public String getRegisteredName() {
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 	protected ISelectionChangedListener getSelectionChangedListener() {

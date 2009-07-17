@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.wizards.appregister;
 
+import java.text.MessageFormat;
 import java.util.*;
 import org.eclipse.swt.widgets.*;
 import org.eclipse.wst.common.componentcore.internal.util.ComponentUtilities;
@@ -32,6 +33,7 @@ import org.jboss.tools.common.reporting.ProblemReportingHelper;
 import org.jboss.tools.common.model.ui.*;
 import org.jboss.tools.jst.web.context.RegisterServerContext;
 import org.jboss.tools.jst.web.server.RegistrationHelper;
+import org.jboss.tools.jst.web.ui.Messages;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 public class AppRegisterWizard extends Wizard implements SpecialWizard {
@@ -53,7 +55,7 @@ public class AppRegisterWizard extends Wizard implements SpecialWizard {
 	class RegisterServerJob extends Job {
 
 		public RegisterServerJob() {
-			super("Register in Server");
+			super(Messages.AppRegisterWizard_RegisterInServer);
 		}
 
 		protected IStatus run(IProgressMonitor monitor) {
@@ -124,7 +126,11 @@ public class AppRegisterWizard extends Wizard implements SpecialWizard {
 		registry.setApplicationName(this.object.getAttributeValue("application name")); //$NON-NLS-1$
 		page = new AppRegisterWizardPage(registry);
 		String n = p.getProperty("natureIndex"); //$NON-NLS-1$
-		if(n == null) n = "project"; else n += " Project";
+		if (n == null) {
+			n = Messages.AppRegisterWizard_GenericProject;
+		} else {
+			n = MessageFormat.format(Messages.AppRegisterWizard_Project, n);
+		}
 		page.setTitle(WizardKeys.toDisplayName(n));
 		addPage(page);
 	}

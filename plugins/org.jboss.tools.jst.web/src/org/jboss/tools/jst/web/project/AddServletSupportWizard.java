@@ -39,16 +39,16 @@ public class AddServletSupportWizard implements SpecialWizard {
 	}
 
 	private void addServletSupport() throws XModelException {
-		XModelObject web = model.getByPath("Web");
+		XModelObject web = model.getByPath("Web"); //$NON-NLS-1$
 		if(web == null) return;
-		String servletVersion = web.getAttributeValue("servlet version");
-		if (servletVersion == null || "".equals(servletVersion)) {
+		String servletVersion = web.getAttributeValue("servlet version"); //$NON-NLS-1$
+		if (servletVersion == null || "".equals(servletVersion)) { //$NON-NLS-1$
 			servletVersion = WebPreference.DEFAULT_SERVLET_VERSION.getValue();
-			model.changeObjectAttribute(web, "servlet version", servletVersion);
+			model.changeObjectAttribute(web, "servlet version", servletVersion); //$NON-NLS-1$
 		}
 		String[] jars = WebUtils.getServletLibraries(getTemplatesBase(), servletVersion);
 		if(web.getChildren(WebModuleConstants.ENTITY_WEB_MODULE).length == 0 &&
-		   web.getChildren("WebJSFModule").length == 0) {
+		   web.getChildren("WebJSFModule").length == 0) { //$NON-NLS-1$
 			return;
 		}
 		for (int i = 0; i < jars.length; i++) {
@@ -64,7 +64,7 @@ public class AddServletSupportWizard implements SpecialWizard {
 	}
 
 	public String getTemplatesBase() {
-		return WebModelPlugin.getTemplateStateLocation() + "templates";
+		return WebModelPlugin.getTemplateStateLocation() + "templates"; //$NON-NLS-1$
 	}
 
 }

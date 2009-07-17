@@ -23,16 +23,16 @@ public class JumpToTransitionTargetHandler extends AbstractHandler {
 
     public boolean isEnabled(XModelObject object) {
     	if(object == null || !object.isActive()) return false;
-    	String shortcut = object.getAttributeValue("shortcut");
+    	String shortcut = object.getAttributeValue("shortcut"); //$NON-NLS-1$
     	if(shortcut == null) return false;
         return true;
     }
 
     public void executeHandler(XModelObject object, Properties p) throws XModelException {
     	p = new Properties();
-    	p.put("object", object);
-    	p.put("help", "JSFProcess_SelectItem");
-    	String s = object.getAttributeValue("target");
+    	p.put("object", object); //$NON-NLS-1$
+    	p.put("help", "JSFProcess_SelectItem"); //$NON-NLS-1$ //$NON-NLS-2$
+    	String s = object.getAttributeValue("target"); //$NON-NLS-1$
     	XModelObject process = new WebProcessStructureHelper().getParentProcess(object);
     	if(process == null) return;
     	XModelObject selected = process.getChildByPath(s);

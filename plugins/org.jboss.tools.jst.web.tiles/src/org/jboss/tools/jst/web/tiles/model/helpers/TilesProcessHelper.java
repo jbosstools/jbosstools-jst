@@ -71,7 +71,7 @@ public class TilesProcessHelper implements TilesConstants {
 			String name = tiles[i].getAttributeValue(ATT_NAME);
 			XModelObject g = findOrCreateItem(name, name);
 			items.put(name, g);
-			String ext = tiles[i].getAttributeValue("extends");
+			String ext = tiles[i].getAttributeValue("extends"); //$NON-NLS-1$
 			if(ext.length() > 0) {
 				targets.put(ext, ext);
 			}
@@ -100,7 +100,7 @@ public class TilesProcessHelper implements TilesConstants {
 		for (int i = 0; i < ps.length; i++) {
 			String path = ps[i].getPathPart();
 			if(!items.containsKey(path) && !targets.containsKey(path)) {
-				if(q && "true".equals(ps[i].getAttributeValue("persistent"))) {
+				if(q && "true".equals(ps[i].getAttributeValue("persistent"))) { //$NON-NLS-1$ //$NON-NLS-2$
 					items.put(path, ps[i]);
 				} else {
 					ps[i].removeFromParent();
@@ -149,7 +149,7 @@ public class TilesProcessHelper implements TilesConstants {
 	
 	private void updateOutputs(TilesProcessItemImpl item) {
 		XModelObject r = item.getReference();
-		String ext = (r == null) ? "" : r.getAttributeValue("extends");
+		String ext = (r == null) ? "" : r.getAttributeValue("extends"); //$NON-NLS-1$ //$NON-NLS-2$
 		updateOutputs(item, ext, item.getChildren());
 	}
 
@@ -170,8 +170,8 @@ public class TilesProcessHelper implements TilesConstants {
 
 	private XModelObject createOutput(XModelObject item, XModelObject r) {
 		XModelObject output = item.getModel().createModelObject(ENT_PROCESS_ITEM_OUTPUT, null);
-		output.setAttributeValue(ATT_PATH, r.getAttributeValue("extends"));
-		String name = XModelObjectUtil.createNewChildName("output", item);
+		output.setAttributeValue(ATT_PATH, r.getAttributeValue("extends")); //$NON-NLS-1$
+		String name = XModelObjectUtil.createNewChildName("output", item); //$NON-NLS-1$
 		output.setAttributeValue(ATT_NAME, name);
 		item.addChild(output);
 		return output;
@@ -181,12 +181,12 @@ public class TilesProcessHelper implements TilesConstants {
 ///		if(output.isUpToDate()) return;
 		output.notifyUpdate();
 		XModelObject r = output.getReference();		
-		String path = r.getAttributeValue("extends");
+		String path = r.getAttributeValue("extends"); //$NON-NLS-1$
 		output.setAttributeValue(ATT_PATH, path);
 		String title = path;
-		output.setAttributeValue("title", title);
+		output.setAttributeValue("title", title); //$NON-NLS-1$
 		XModelObject g = findItem(path);
-		String target = (g == null) ? "" : g.getPathPart();
+		String target = (g == null) ? "" : g.getPathPart(); //$NON-NLS-1$
 		output.setAttributeValue(ATT_TARGET, target);
 	}
 	
@@ -211,7 +211,7 @@ public class TilesProcessHelper implements TilesConstants {
 		XModelObject[] ts = (XModelObject[])targets.values().toArray(new XModelObject[0]);
 		for (int i = 0; i < ts.length; i++) {
 			boolean b = ds.containsKey(ts[i].getAttributeValue(ATT_NAME));
-			ts[i].setAttributeValue("confirmed", (b) ? "true" : "false");
+			ts[i].setAttributeValue("confirmed", (b) ? "true" : "false"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
 	}
 	

@@ -42,7 +42,7 @@ public class ManagedBeansPropertiesResourceElement extends XModelAttributeValueR
 			return EMPTY_LIST;
 		}
 
-		List beanList = provider.getList(xModel, WebPromptingProvider.JSF_MANAGED_BEANS, "", null);
+		List beanList = provider.getList(xModel, WebPromptingProvider.JSF_MANAGED_BEANS, "", null); //$NON-NLS-1$
 		managedBeanElements = new ManagedBeanForPropElement[beanList.size()];
 		for(int i=0; i<beanList.size(); i++) {
 			String beanName = (String)beanList.get(i);
@@ -56,7 +56,7 @@ public class ManagedBeansPropertiesResourceElement extends XModelAttributeValueR
 	 * @see ModelElement#getName()
 	 */
 	public String getName() {
-		return "Managed Beans";
+		return "Managed Beans"; //$NON-NLS-1$
 	}
 
 	private static Class[] EQUAL_CLASSES_LIST = new Class[] {

@@ -16,6 +16,6 @@ package org.jboss.tools.jst.web.tiles.ui.editor;
  */
 public class TemplateConstants {
 
-public static final String TEMPLATE_DEFINITION       = "definition template";
+public static final String TEMPLATE_DEFINITION       = "definition template"; //$NON-NLS-1$
 
 }

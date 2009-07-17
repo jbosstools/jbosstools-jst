@@ -16,19 +16,19 @@ import org.jboss.tools.common.meta.action.*;
 import org.jboss.tools.common.meta.action.impl.*;
 
 public class ValidateTLDHandler extends AbstractHandler {
-	static SpecialWizard wizard = SpecialWizardFactory.createSpecialWizard("org.jboss.tools.common.editor.OpenEditorWizard");
+	static SpecialWizard wizard = SpecialWizardFactory.createSpecialWizard("org.jboss.tools.common.editor.OpenEditorWizard"); //$NON-NLS-1$
 	public ValidateTLDHandler() {}
 
 	public boolean isEnabled(XModelObject object) {
-		if(!"yes".equals(object.get("isIncorrect"))) return false;
-		String e = object.get("errors");
+		if(!"yes".equals(object.get("isIncorrect"))) return false; //$NON-NLS-1$ //$NON-NLS-2$
+		String e = object.get("errors"); //$NON-NLS-1$
 		return (e != null && e.length() > 0);
 	}
 
 	public void executeHandler(XModelObject object, Properties p) throws XModelException {
 		if(p == null) p = new Properties();
-		p.setProperty("toErrorTab", "true");
-		XActionInvoker.invoke("Open", object, p);
+		p.setProperty("toErrorTab", "true"); //$NON-NLS-1$ //$NON-NLS-2$
+		XActionInvoker.invoke("Open", object, p); //$NON-NLS-1$
 	}
     
 }

@@ -10,26 +10,28 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.tiles.model.handlers;
 
+import java.text.MessageFormat;
 import java.util.*;
 import org.jboss.tools.common.model.*;
 import org.jboss.tools.common.model.files.handlers.CreateFileSupport;
 import org.jboss.tools.common.model.undo.*;
+import org.jboss.tools.jst.web.tiles.Messages;
 import org.jboss.tools.jst.web.tiles.model.TilesConstants;
 import org.jboss.tools.jst.web.tiles.model.TilesProcessImpl;
 import org.jboss.tools.jst.web.tiles.model.helpers.TilesRegistrationHelper;
 
 public class CreateTilesSupport extends CreateFileSupport {
-	static String REGISTER = "register";
+	static String REGISTER = "register"; //$NON-NLS-1$
 
 	public void reset() {
 		super.reset();
-		setAttributeValue(0, "register", (canRegisterInternal()) ? "yes" : "no");
+		setAttributeValue(0, "register", (canRegisterInternal()) ? "yes" : "no"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 	
 	protected void execute() throws XModelException {
 		Properties p0 = extractStepData(0);
 		XUndoManager undo = getTarget().getModel().getUndoManager();
-		XTransactionUndo u = new XTransactionUndo("Create tiles " + getTarget().getAttributeValue("element type")+" "+getTarget().getPresentationString(), XTransactionUndo.ADD);
+		XTransactionUndo u = new XTransactionUndo(MessageFormat.format(Messages.CreateTilesSupport_CreateTiles, getTarget().getAttributeValue("element type"), getTarget().getPresentationString()), XTransactionUndo.ADD); //$NON-NLS-1$
 		undo.addUndoable(u);
 		try {
 			doExecute(p0);
@@ -43,16 +45,16 @@ public class CreateTilesSupport extends CreateFileSupport {
 	
 	private void doExecute(Properties p0) throws XModelException {
 		Properties p = extractStepData(0);
-		String path = p.getProperty("name");
+		String path = p.getProperty("name"); //$NON-NLS-1$
 		path = revalidatePath(path);
 		XModelObject file = createFile(path);
 		if(file == null) return;
 		
-		if(canRegisterInternal() && "yes".equals(getAttributeValue(0, REGISTER))) {
+		if(canRegisterInternal() && "yes".equals(getAttributeValue(0, REGISTER))) { //$NON-NLS-1$
 			registerInternal(file);
 		}
 
-		TilesProcessImpl process = (TilesProcessImpl)file.getChildByPath("process");
+		TilesProcessImpl process = (TilesProcessImpl)file.getChildByPath("process"); //$NON-NLS-1$
 		process.firePrepared();
 
 		open(file);	
@@ -60,7 +62,7 @@ public class CreateTilesSupport extends CreateFileSupport {
 
 	protected XModelObject modifyCreatedObject(XModelObject o) {
 		XModelObject d = o.getModel().createModelObject(TilesConstants.ENT_DEFINITION, null);
-		d.setAttributeValue("name", o.getAttributeValue("name"));
+		d.setAttributeValue("name", o.getAttributeValue("name")); //$NON-NLS-1$ //$NON-NLS-2$
 		o.addChild(d);
 		return o;
 	}

@@ -24,7 +24,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 
 public class LibSetPreferencePage extends TabbedPreferencesPage {
-	private static final String ATTR_LIBRARIES = "Libraries";
+	private static final String ATTR_LIBRARIES = "Libraries"; //$NON-NLS-1$
 
 	public LibSetPreferencePage(String[] paths)	{ 
 		super(paths);		
@@ -107,7 +107,7 @@ public class LibSetPreferencePage extends TabbedPreferencesPage {
 		public Object getValue() {
 			String result = null;			
 			FileDialog dialog = new FileDialog(getShell(), SWT.OPEN);
-			dialog.setFilterExtensions(new String[]{"*.jar;*.zip"});
+			dialog.setFilterExtensions(new String[]{"*.jar;*.zip"}); //$NON-NLS-1$
 			result = dialog.open();			
 			return isNewValueValid(result) ? getAdaptedPath(result) : null;
 		}

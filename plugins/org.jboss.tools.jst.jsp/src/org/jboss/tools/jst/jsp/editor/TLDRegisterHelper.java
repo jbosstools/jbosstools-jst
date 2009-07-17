@@ -41,7 +41,7 @@ public class TLDRegisterHelper {
 
 	public static void registerTld(TaglibData data, JspWtpKbConnector wtpKbConnector, IDocument document, XModel xm) {
 		String version = WebProject.getTldVersion(data.getUri(), data.getPrefix(), document, xm);
-		KbTldResource resource = new KbTldResource(data.getUri(), "", data.getPrefix(), version);
+		KbTldResource resource = new KbTldResource(data.getUri(), "", data.getPrefix(), version); //$NON-NLS-1$
 		if(data.isNs()) {
 			resource.setJsfResource(true);
 			boolean registrated = wtpKbConnector.registerResource(resource, true);

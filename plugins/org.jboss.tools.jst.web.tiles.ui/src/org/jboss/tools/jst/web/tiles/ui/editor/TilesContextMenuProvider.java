@@ -75,8 +75,8 @@ public class TilesContextMenuProvider	extends org.eclipse.gef.ContextMenuProvide
 				Point point = new Point(lastDownEvent.x, lastDownEvent.y); 
 				
 				((TilesDiagramEditPart)getViewer().getRootEditPart().getChildren().get(0)).getFigure().translateToRelative(point);
-				p.setProperty("process.mouse.x", "" + point.x);
-				p.setProperty("process.mouse.y", "" + point.y);
+				p.setProperty("process.mouse.x", "" + point.x); //$NON-NLS-1$ //$NON-NLS-2$
+				p.setProperty("process.mouse.y", "" + point.y); //$NON-NLS-1$ //$NON-NLS-2$
 				lastDownEvent = null;
 			}
 			XActionList al = getActionList(object, ss.getFirstElement());

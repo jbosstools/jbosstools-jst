@@ -13,7 +13,7 @@ package org.jboss.tools.jst.web.tld.model;
 public class FileTLD21Loader extends FileTLD20Loader {
 
     protected String getTagEntity() {
-    	return "TLDTag21";
+    	return "TLDTag21"; //$NON-NLS-1$
     }
 
 }

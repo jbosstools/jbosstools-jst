@@ -35,6 +35,9 @@ public class ModelElement {
 	 * Returns Name of Element
 	 * @return
 	 */
+	// i18n: names have been marked NON-NLS because they appear to be used in processing
+	// if they also appear in the UI (AttributeValueLabelProvider?) it may be necessary to
+	// maintain internal and visible names in parallel
 	public String getName() {
 		return name;
 	}
@@ -97,7 +100,7 @@ public class ModelElement {
 		if(value==null) {
 			return NOT_EQUAL_VALUES;
 		}
-		if(value.endsWith("}") && value.length()>1) {
+		if(value.endsWith("}") && value.length()>1) { //$NON-NLS-1$
 			value = value.substring(0, value.length()-1);
 		}
 		String thisValue = getComparedValue();

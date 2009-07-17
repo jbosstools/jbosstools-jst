@@ -88,7 +88,7 @@ public abstract class ImportWebWarContext extends ImportWebProjectContext {
 		}
 		ZipEntry entry = null;
 		try {
-			entry = zip.getEntry("WEB-INF/web.xml"); 
+			entry = zip.getEntry("WEB-INF/web.xml");  //$NON-NLS-1$
 		} catch (IllegalStateException e) {
 			WebModelPlugin.getPluginLog().logError(e);
 		}
@@ -102,11 +102,11 @@ public abstract class ImportWebWarContext extends ImportWebProjectContext {
 			body = FileUtil.readStream(s);
 		} catch (ZipException e) {
 			WebModelPlugin.getPluginLog().logError(e);
-			warError = NLS.bind(WebUIMessages.CANNOT_READ_WEBXML, location); //$NON-NLS-2$
+			warError = NLS.bind(WebUIMessages.CANNOT_READ_WEBXML, location); 
 			return;
 		} catch (IOException e) {
 			WebModelPlugin.getPluginLog().logError(e);
-			warError = NLS.bind(WebUIMessages.CANNOT_READ_WEBXML, location); //$NON-NLS-2$
+			warError = NLS.bind(WebUIMessages.CANNOT_READ_WEBXML, location); 
 			return;
 		}
 		try {
@@ -135,9 +135,9 @@ public abstract class ImportWebWarContext extends ImportWebProjectContext {
 			if (!nameStatus.isOK()) {
 				nameError = nameStatus.getMessage();
 			} else if(getProjectHandle() != null && getProjectHandle().exists()) {
-				nameError = NLS.bind(WebUIMessages.PROJECT_ALREADY_EXISTS_IN_THE_WORKSPACE, value); //$NON-NLS-2$
+				nameError = NLS.bind(WebUIMessages.PROJECT_ALREADY_EXISTS_IN_THE_WORKSPACE, value); 
 			} else if(EclipseResourceUtil.projectExistsIgnoreCase(projectName)) {
-				nameError = NLS.bind(WebUIMessages.PROJECT_ALREADY_EXISTS_IN_THE_WORKSPACE, value); //$NON-NLS-2$
+				nameError = NLS.bind(WebUIMessages.PROJECT_ALREADY_EXISTS_IN_THE_WORKSPACE, value); 
 			} else {
 				nameError = null;
 			}

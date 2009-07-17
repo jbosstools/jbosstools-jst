@@ -18,13 +18,13 @@ public class TLDValidatorImpl extends OrderedObjectImpl {
 	private static final long serialVersionUID = 1L;
 	
     public String name() {
-        return "Validator";
+        return "Validator"; //$NON-NLS-1$
     }
     
     public boolean isEmpty() {
     	if(getChildren().length > 0) return false;
-    	if(getAttributeValue("validator-class").length() > 0) return false; 
-		if(getAttributeValue("description").length() > 0) return false;
+    	if(getAttributeValue("validator-class").length() > 0) return false;  //$NON-NLS-1$
+		if(getAttributeValue("description").length() > 0) return false; //$NON-NLS-1$
 		return true; 
     }
     
@@ -33,8 +33,8 @@ public class TLDValidatorImpl extends OrderedObjectImpl {
     	for (int i = 0; i < cs.length; i++) {
     		DefaultRemoveHandler.removeFromParent(cs[i]);
     	}
-		getModel().changeObjectAttribute(this, "validator-class", "");
-		getModel().changeObjectAttribute(this, "description", "");
+		getModel().changeObjectAttribute(this, "validator-class", ""); //$NON-NLS-1$ //$NON-NLS-2$
+		getModel().changeObjectAttribute(this, "description", ""); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
 }

@@ -21,8 +21,8 @@ public class CreateForWebApp23Handler extends DefaultCreateHandler {
         XModelObject f = object;
         while(f != null && f.getFileType() != XFileObject.FILE) f = f.getParent();
         if(f == null) return false;
-        String publicId = "" + f.get("publicId");
-        return (publicId.indexOf("2.2") < 0);
+        String publicId = "" + f.get("publicId"); //$NON-NLS-1$ //$NON-NLS-2$
+        return (publicId.indexOf("2.2") < 0); //$NON-NLS-1$
     }
 
 }

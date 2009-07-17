@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.context;
 
+import java.text.MessageFormat;
 import java.util.StringTokenizer;
 
 import org.eclipse.core.resources.IProject;
@@ -159,7 +160,9 @@ public class RegisterServerContext {
 				}
 				if(this.project != null /*&& !this.project.exists()*/ && servletVersion != null && servletVersion.length() > 0) {
 					if(project.exists() && RegistrationHelper.isRegistered(project)) {
-						return "Project " + project.getName() + " is already registered.";
+						return MessageFormat
+								.format(WebUIMessages.PROJECT_IS_ALREADY_REGISTERED,
+										project.getName());
 					}
 					ModuleFactory f = ServerPlugin.findModuleFactory("org.eclipse.jst.j2ee.server"); //$NON-NLS-1$
 					IModule module = RegistrationHelper.findModule(project);

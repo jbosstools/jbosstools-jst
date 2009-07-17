@@ -66,16 +66,16 @@ public class XMLValueInfo implements IValueInfo {
 	public Element toXML(Element parent, Properties context) {
 		Element element = XMLUtilities.createElement(parent, XMLStoreConstants.TAG_VALUE_INFO);
 		element.setAttribute(XMLStoreConstants.ATTR_CLASS, XMLStoreConstants.CLS_XML);
-		if(attribute != null) element.setAttribute("attr", attribute);
+		if(attribute != null) element.setAttribute("attr", attribute); //$NON-NLS-1$
 		if(object != null) {
-			XMLStoreHelper.saveModelObject(element, object, "object", context);
+			XMLStoreHelper.saveModelObject(element, object, "object", context); //$NON-NLS-1$
 		}
 		return element;
 	}
 
 	public void loadXML(Element element, Properties context) {
-		attribute = element.getAttribute("attr");
-		object = XMLStoreHelper.loadModelObject(element, "object", context);
+		attribute = element.getAttribute("attr"); //$NON-NLS-1$
+		object = XMLStoreHelper.loadModelObject(element, "object", context); //$NON-NLS-1$
 	}
 	
 }

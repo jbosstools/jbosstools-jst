@@ -41,7 +41,7 @@ public class TaglibSet {
 		descriptionToUri.clear();
 		uriToPrefix.clear();
 		Map<String,String> uriToDescriptionPalette = new HashMap<String,String>();
-		XModelObject palette = PreferenceModelUtilities.getPreferenceModel().getByPath("%Palette%");
+		XModelObject palette = PreferenceModelUtilities.getPreferenceModel().getByPath("%Palette%"); //$NON-NLS-1$
 		if(palette == null) return;
 		XModelObject[] tabs = palette.getChildren();
 		for (int i = 0; i < tabs.length; i++) {
@@ -49,14 +49,14 @@ public class TaglibSet {
 			for (int j = 0; j < gs.length; j++) {
 				String uri = gs[j].getAttributeValue(URIConstants.LIBRARY_URI);
 				if(uri == null || uri.length() == 0) continue;
-				String description = tabs[i].getAttributeValue("name") + " " + gs[j].getAttributeValue("name");
+				String description = tabs[i].getAttributeValue("name") + " " + gs[j].getAttributeValue("name"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				uriToDescriptionPalette.put(uri, description);
 			}
 		}
 
 		if(isJSF()) {
-			registerTaglib("http://java.sun.com/jsf/html", "h");
-			registerTaglib("http://java.sun.com/jsf/core", "f");
+			registerTaglib("http://java.sun.com/jsf/html", "h"); //$NON-NLS-1$ //$NON-NLS-2$
+			registerTaglib("http://java.sun.com/jsf/core", "f"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		WebProject p = WebProject.getInstance(model);
 		Map taglibObjects = p.getTaglibMapping().getTaglibObjects();
@@ -65,14 +65,14 @@ public class TaglibSet {
 			Object o = it.next();
 			if(o == null) break;
 			String s = o.toString();
-			s = (s == null) ? "" : s.trim();
+			s = (s == null) ? "" : s.trim(); //$NON-NLS-1$
 			if(s.length() == 0) continue;
 			XModelObject t = (XModelObject)taglibObjects.get(s);
 			if(t == null) continue;
-			String sn = t.getAttributeValue("shortname");
+			String sn = t.getAttributeValue("shortname"); //$NON-NLS-1$
 			if(sn == null || sn.length() == 0) continue;
 			String declaredURI = p.getTaglibMapping().getDeclaredURI(s);
-			String description = t.getAttributeValue("description");
+			String description = t.getAttributeValue("description"); //$NON-NLS-1$
 			if(description == null || description.length() == 0) {
 				description = (String)uriToDescription.get(s);
 			}
@@ -117,20 +117,20 @@ public class TaglibSet {
 	}
 	
 	protected void doGetTaglibsFromTemplate(String body, Set<String> existing) {
-		StringTokenizer st = new StringTokenizer(body, "\n");
+		StringTokenizer st = new StringTokenizer(body, "\n"); //$NON-NLS-1$
 		while(st.hasMoreTokens()) {
 			String t = st.nextToken().trim();
-			if(t.startsWith("<%@ taglib") && t.endsWith("%>")) {
-				int b = t.indexOf("uri=\"");
+			if(t.startsWith("<%@ taglib") && t.endsWith("%>")) { //$NON-NLS-1$ //$NON-NLS-2$
+				int b = t.indexOf("uri=\""); //$NON-NLS-1$
 				if(b < 0) continue;
 				b += 5;
-				int e = t.indexOf("\"", b);
+				int e = t.indexOf("\"", b); //$NON-NLS-1$
 				if(e < 0) continue;
 				String uri = t.substring(b, e);
-				b = t.indexOf("prefix=\"");
+				b = t.indexOf("prefix=\""); //$NON-NLS-1$
 				b += 8;
 				if(b < 0) continue;
-				e = t.indexOf("\"", b);
+				e = t.indexOf("\"", b); //$NON-NLS-1$
 				if(e < 0) continue;
 				String prefix = t.substring(b, e);
 				appendURIFound(prefix, uri, existing);
@@ -160,9 +160,9 @@ public class TaglibSet {
 		for (int i = 0; i < selected.length; i++) {
 			String uri = getURIByDescription(selected[i]);
 			String prefix = getPrefix(selected[i]);
-			sb.append("<%@ taglib uri=\"" + uri + "\"" + " prefix=\"" + prefix + "\"" + " %>\n");
+			sb.append("<%@ taglib uri=\"" + uri + "\"" + " prefix=\"" + prefix + "\"" + " %>\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 		}
-		body = remove(body, "<%@ taglib", "%>");
+		body = remove(body, "<%@ taglib", "%>"); //$NON-NLS-1$ //$NON-NLS-2$
 		sb.append(body);
 		return true;
 	}

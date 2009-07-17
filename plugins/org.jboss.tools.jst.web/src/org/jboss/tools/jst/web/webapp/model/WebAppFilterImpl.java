@@ -16,16 +16,16 @@ public class WebAppFilterImpl extends OrderedObjectImpl {
 	private static final long serialVersionUID = 1L;
 
 	public String name() {
-        return getAttributeValue("filter-name");
+        return getAttributeValue("filter-name"); //$NON-NLS-1$
     }
 	
 	public String getPathPart() {
-		return "filter:" + super.getPathPart();
+		return "filter:" + super.getPathPart(); //$NON-NLS-1$
 	}
 
     public String getPresentationString() {
-        String dn = getAttributeValue("display-name");
-        return (dn != null && dn.length() > 0) ? dn : getAttributeValue("filter-name");
+        String dn = getAttributeValue("display-name"); //$NON-NLS-1$
+        return (dn != null && dn.length() > 0) ? dn : getAttributeValue("filter-name"); //$NON-NLS-1$
     }
 
 }

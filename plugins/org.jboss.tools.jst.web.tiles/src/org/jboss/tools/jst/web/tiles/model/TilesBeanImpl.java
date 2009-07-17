@@ -15,7 +15,7 @@ import org.jboss.tools.common.model.impl.*;
 public class TilesBeanImpl extends RegularObjectImpl {
 
     public String name() {
-        return getAttributeValue("classtype");
+        return getAttributeValue("classtype"); //$NON-NLS-1$
     }
 
 }

@@ -22,6 +22,7 @@ public class WebUIMessages extends NLS {
 		// load message values from bundle file
 		NLS.initializeMessages(BUNDLE_NAME, WebUIMessages.class);		
 	}
+	public static String AbstractBrowserContext_CannotOpen;
 	public static String ATTRIBUTES;
 	public static String CANNOT_RUN_SELECTION_WITHOUT_AVAILABLE_SERVER;
 	public static String PLEASE_CREATE_A_SERVER_AND_SELECT_IT_ON_TOOLBAR;
@@ -38,6 +39,7 @@ public class WebUIMessages extends NLS {
 	public static String FILE_DOESNOT_CONTAIN_WEBXML;
 	public static String CANNOT_READ_WEBXML;
 	public static String NAME_MUST_BE_SET;
+	public static String NewWebProjectContext_ServletVersionMustBeAtLeast;
 	public static String PROJECT_ALREADY_EXISTS_IN_THE_WORKSPACE;
 	public static String FILE_ISNOT_RECOGNIZED;
 	public static String WEBDESCRIPTOR_FILE_IS_CORRUPTED;
@@ -47,6 +49,7 @@ public class WebUIMessages extends NLS {
 	public static String RUNTIME_IS_REQUIRED;
 	public static String SPECIFIED_RUNTIME_DOESNOT_EXIST;
 	public static String APPLICATION_IS_ALREADY_REGISTERED;
+	public static String PROJECT_IS_ALREADY_REGISTERED;
 	public static String ITEM_ISNOT_REFERENCED;
 	public static String CANCEL;
 	public static String YOU_WANT_TO_REARRANGE_THE_DIAGRAM_ELEMENTS;
@@ -106,6 +109,8 @@ public class WebUIMessages extends NLS {
 	public static String EDIT_FILTER;
 	public static String EditProjectTemplateSupport_Save;
 	public static String ENTER_NEW_FILTER;
+	public static String ExpandTLDHandler_Collapse;
+	public static String ExpandTLDHandler_Expand;
 	public static String DELETE_REFERENCE_FROM_STRUTS_CONFIGURATION_FILE;
 	public static String YOU_WANT_TO_DELETE_LINK_TO;
 	public static String TILES_EDITOR;
@@ -132,6 +137,8 @@ public class WebUIMessages extends NLS {
 	public static String UNSELECT_ALL;
 	public static String PRINT_PREVIEW;
 	public static String REDHAT_TAG_LIBRARY_EDITOR;
+	public static String RegistrationHelper_RegisterInServer;
+	public static String RegistrationHelper_TimeoutExpired;
 	public static String SECURITY_ROLES;
 	public static String SERVLET;
 	public static String AUTH_CONSTRAINT;
@@ -142,11 +149,19 @@ public class WebUIMessages extends NLS {
 	public static String FILTER;
 	public static String RESOURCE_COLLECTIONS;
 	public static String SECURITY_CONSTRAINT;
+	public static String ShowHideCommentsHandler_HideComments;
+	public static String ShowHideCommentsHandler_ShowComments;
 	public static String LOCALE_ENCODING_MAPPINGS;
 	public static String WELCOME_FILES;
 	public static String YES;
 	public static String NO;
 	public static String ADD_TO_EXISTING_GROUP;
+	public static String AdoptWebProjectContext_FileDoesNotExist;
+	public static String AdoptWebProjectContext_PathDoesNotExist;
+	public static String AdoptWebProjectContext_PathIsNotSet;
+	public static String AdoptWebProjectContext_RootDoesNotExist;
+	public static String AdoptWebProjectContext_RootIsNotSet;
+	public static String AdoptWebProjectContext_WebDescriptorFileIsCorrupted;
 	public static String CREATE_NEW_GROUP;
 	public static String WARNING;
 	public static String PROJECT_EXISTS_IN_WORKSPACE;

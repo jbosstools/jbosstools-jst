@@ -21,10 +21,10 @@ public class ProjectsResourceRedirectHandler extends DefaultRedirectHandler {
 
 	protected XModelObject getTrueSource(XModelObject source) {
 		IProject p = EclipseResourceUtil.getProject(source);
-		if(p == null) return source.getModel().getByPath("FileSystems/src");
+		if(p == null) return source.getModel().getByPath("FileSystems/src"); //$NON-NLS-1$
 		IResource r = null;
 		try {
-			QualifiedName n = new QualifiedName("", action.getName() + "_lastPath");
+			QualifiedName n = new QualifiedName("", action.getName() + "_lastPath"); //$NON-NLS-1$ //$NON-NLS-2$
 			String path = p.getPersistentProperty(n);
 			if(path != null) r = p.getWorkspace().getRoot().findMember(path);
 		} catch (Exception e) {
@@ -32,7 +32,7 @@ public class ProjectsResourceRedirectHandler extends DefaultRedirectHandler {
 		}
 		if(r == null) r = EclipseResourceUtil.getJavaSourceRoot(p);
 		XModelObject o = EclipseResourceUtil.getObjectByResource(r);
-		return (o == null) ? source.getModel().getByPath("FileSystems/src") : o;
+		return (o == null) ? source.getModel().getByPath("FileSystems/src") : o; //$NON-NLS-1$
 	}
 
 }

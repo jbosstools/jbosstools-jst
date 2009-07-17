@@ -25,7 +25,7 @@ public abstract class WebProjectPreferencesPage extends TabbedPreferencesPage {
 	protected ProjectXMOBasedPreferencesPage newProjectPage;
 	protected XMOBasedPreferencesPage importProjectPage;
 	
-	private String oldRoot = "";
+	private String oldRoot = ""; //$NON-NLS-1$
 	private IPropertyEditor defaultRoot;	
 	private IPropertyEditor selectRoot = null;
 	private IValueProvider defaultRootValueProvider = null;
@@ -53,20 +53,20 @@ public abstract class WebProjectPreferencesPage extends TabbedPreferencesPage {
 			((DefaultComboBoxValueAdapter)versionAdapter).setListContentProvider(
 				new VersionListContentProvider()
 			);
-			IModelPropertyEditorAdapter adapter = getSupport().getPropertyEditorAdapterByName("Project Template"); /* "Project Template" */
+			IModelPropertyEditorAdapter adapter = getSupport().getPropertyEditorAdapterByName("Project Template"); /* "Project Template" */ //$NON-NLS-1$
 			((DefaultComboBoxValueAdapter)adapter).setListContentProvider(
 				new ProjectTemplatesListContentProvider()
 			);
 		}
 
 		public void initPageProperties() {
-			defaultRoot = (IPropertyEditor)getSupport().getPropertyEditorByName("Use Default Path");
-			selectRoot = (IPropertyEditor)getSupport().getPropertyEditorByName("Projects Root");
+			defaultRoot = (IPropertyEditor)getSupport().getPropertyEditorByName("Use Default Path"); //$NON-NLS-1$
+			selectRoot = (IPropertyEditor)getSupport().getPropertyEditorByName("Projects Root"); //$NON-NLS-1$
 			defaultRootValueProvider = (IValueProvider)defaultRoot.getAdapter(IValueProvider.class);
 			defaultRootValueProvider.addValueChangeListener(new DefaultRootChangeListener());
 			versionAdapter.addValueChangeListener(
 				new VersionChangeListener(
-					(PropertyChangeListener)getSupport().getPropertyEditorByName("Project Template").getFieldEditor(null)
+					(PropertyChangeListener)getSupport().getPropertyEditorByName("Project Template").getFieldEditor(null) //$NON-NLS-1$
 				)
 			);
 			updateRootInit();
@@ -75,13 +75,13 @@ public abstract class WebProjectPreferencesPage extends TabbedPreferencesPage {
 	
 	private void updateRootInit() {
 		if(defaultRoot == null) return; 
-		boolean active = "no".equals(defaultRootValueProvider.getValue()); 
+		boolean active = "no".equals(defaultRootValueProvider.getValue());  //$NON-NLS-1$
 		selectRoot.getFieldEditor(null).setEnabled(active, null);
 	}
 	
 	private void updateRoot() {
 		if(defaultRoot == null) return; 
-		boolean active = "no".equals(defaultRootValueProvider.getValue()); 
+		boolean active = "no".equals(defaultRootValueProvider.getValue());  //$NON-NLS-1$
 		selectRoot.getFieldEditor(null).setEnabled(active, null);
 		DefaultValueAdapter a = (DefaultValueAdapter)selectRoot.getInput();
 		boolean auto = a.isAutoStore();

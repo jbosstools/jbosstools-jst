@@ -23,6 +23,6 @@ public class ImageFolderElement extends ImageFileResourceElement {
 	}
 
 	protected String getFullName() {
-		return parent.getFullName() + getName() + "/";
+		return parent.getFullName() + getName() + "/"; //$NON-NLS-1$
 	}
 }

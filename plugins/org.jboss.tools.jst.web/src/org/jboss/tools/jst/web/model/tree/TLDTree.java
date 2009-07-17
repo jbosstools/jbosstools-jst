@@ -21,7 +21,7 @@ public class TLDTree implements XFilteredTree {
 
 	public void setModel(XModel model) {
 		this.model = model;
-		root = model.getByPath("FileSystems/WEB-ROOT");
+		root = model.getByPath("FileSystems/WEB-ROOT"); //$NON-NLS-1$
 	}
 
 	public XModelObject getRoot() {
@@ -56,13 +56,13 @@ public class TLDTree implements XFilteredTree {
 	}
 
 	public String getValue(XModelObject object) {
-		if(object == root) return "";
+		if(object == root) return ""; //$NON-NLS-1$
 		return getPath(object);
 	}
 
     public String getPath(XModelObject object) {
         String p = object.getPath();
-        if(p == null || !p.startsWith("FileSystems/")) return p;
+        if(p == null || !p.startsWith("FileSystems/")) return p; //$NON-NLS-1$
         return XModelObjectLoaderUtil.getResourcePath(object);
     }
 

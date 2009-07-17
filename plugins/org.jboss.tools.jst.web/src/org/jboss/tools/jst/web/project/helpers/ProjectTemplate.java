@@ -21,8 +21,8 @@ import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.web.project.version.ProjectVersion;
 
 public class ProjectTemplate {
-	public static String PREPROCESSING_PROPERTIES = ".preprocessing.properties";
-	public static String PREPROCESSING = ".preprocessing";
+	public static String PREPROCESSING_PROPERTIES = ".preprocessing.properties"; //$NON-NLS-1$
+	public static String PREPROCESSING = ".preprocessing"; //$NON-NLS-1$
 	ProjectVersion projectVersion;
 	
 	File root;
@@ -59,7 +59,7 @@ public class ProjectTemplate {
 	
 	void loadPreprocessing() {
 		String body = FileUtil.readFile(preprocessingFile);
-		StringTokenizer st = new StringTokenizer(body, "\r\n");
+		StringTokenizer st = new StringTokenizer(body, "\r\n"); //$NON-NLS-1$
 		preprocessingFiles = new ArrayList<String>();
 		while(st.hasMoreTokens()) {
 			String t = st.nextToken().trim();
@@ -69,9 +69,9 @@ public class ProjectTemplate {
 	
 	void loadProperties() {
 		XModel model = PreferenceModelUtilities.getPreferenceModel();
-		properties = model.createModelObject("FilePROPERTIES", null);
-		properties.setAttributeValue("name", ".preprocessing");
-		properties.setAttributeValue("extension", "properties");
+		properties = model.createModelObject("FilePROPERTIES", null); //$NON-NLS-1$
+		properties.setAttributeValue("name", ".preprocessing"); //$NON-NLS-1$ //$NON-NLS-2$
+		properties.setAttributeValue("extension", "properties"); //$NON-NLS-1$ //$NON-NLS-2$
 		PropertiesLoader loader = new PropertiesLoader();
 		XModelObjectLoaderUtil.setTempBody(properties, FileUtil.readFile(propertiesFile));
 		loader.load(properties);
@@ -106,7 +106,7 @@ public class ProjectTemplate {
 	void commitPreprocessingFile() {
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < preprocessingFiles.size(); i++) {
-			sb.append(preprocessingFiles.get(i)).append("\n");
+			sb.append(preprocessingFiles.get(i)).append("\n"); //$NON-NLS-1$
 		}
 		String body = sb.toString();
 		String oldBody = FileUtil.readFile(preprocessingFile);
@@ -133,8 +133,8 @@ public class ProjectTemplate {
 		}
 		updateOrder(oldName);
 		location = newLocation;
-		preprocessingFile = new File(location, ".preprocessing");
-		propertiesFile = new File(location, ".preprocessing.properties");
+		preprocessingFile = new File(location, ".preprocessing"); //$NON-NLS-1$
+		propertiesFile = new File(location, ".preprocessing.properties"); //$NON-NLS-1$
 	}
 	
 	private void updateOrder(String oldName) {

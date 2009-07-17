@@ -152,7 +152,7 @@ public abstract class AbstractAttribute extends KbObject implements IAttribute {
 			description = a.description;
 		}
 		if(required != a.required) {
-			changes = Change.addChange(changes, new Change(this, REQUIRED, "" + required, "" + a.required));
+			changes = Change.addChange(changes, new Change(this, REQUIRED, "" + required, "" + a.required)); //$NON-NLS-1$ //$NON-NLS-2$
 			required = a.required;
 		}
 		

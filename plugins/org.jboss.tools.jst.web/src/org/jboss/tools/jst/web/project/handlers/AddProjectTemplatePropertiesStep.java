@@ -21,12 +21,12 @@ public class AddProjectTemplatePropertiesStep extends MultistepWizardStep {
 	XModelObject properties;
 
 	public String getStepImplementingClass() {
-		return "org.jboss.tools.jst.web.ui.wizards.project.AddProjectTemplatePropertiesView";
+		return "org.jboss.tools.jst.web.ui.wizards.project.AddProjectTemplatePropertiesView"; //$NON-NLS-1$
 	}
 	
 	public void reset() {
-		properties = getSupport().getTarget().getModel().createModelObject("FilePROPERTIES", null);
-		getSupport().getProperties().put("properties", properties);
+		properties = getSupport().getTarget().getModel().createModelObject("FilePROPERTIES", null); //$NON-NLS-1$
+		getSupport().getProperties().put("properties", properties); //$NON-NLS-1$
 	}
 
 	void createPropertiesFile(File target) {

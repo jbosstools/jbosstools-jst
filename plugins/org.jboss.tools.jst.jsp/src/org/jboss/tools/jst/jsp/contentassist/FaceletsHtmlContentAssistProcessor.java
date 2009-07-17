@@ -90,13 +90,13 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
     private IEditorInput editorInput;
 	private VpeTaglibManager tldManager;
 	private boolean isFacelets = false;
-	public static final String faceletUri = "http://java.sun.com/jsf/facelets";
-	public static final String faceletHtmlUri = "http://www.w3.org/1999/xhtml/facelets";
-	public static final String faceletHtmlPrefix = "0fHP";
-	public static final String JSFCAttributeName = "jsfc";
-	public static final String faceletHtmlPrefixStart = faceletHtmlPrefix + ":";
+	public static final String faceletUri = "http://java.sun.com/jsf/facelets"; //$NON-NLS-1$
+	public static final String faceletHtmlUri = "http://www.w3.org/1999/xhtml/facelets"; //$NON-NLS-1$
+	public static final String faceletHtmlPrefix = "0fHP"; //$NON-NLS-1$
+	public static final String JSFCAttributeName = "jsfc"; //$NON-NLS-1$
+	public static final String faceletHtmlPrefixStart = faceletHtmlPrefix + ":"; //$NON-NLS-1$
 	//Added by Max Areshkau JBIDE-788
-	public static final KbTldResource faceletHtmlResource = new KbTldResource(faceletHtmlUri, "", faceletHtmlPrefix, null);
+	public static final KbTldResource faceletHtmlResource = new KbTldResource(faceletHtmlUri, "", faceletHtmlPrefix, null); //$NON-NLS-1$
 
 	public FaceletsHtmlContentAssistProcessor() {}
 
@@ -135,7 +135,7 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
 		ArrayList<ICompletionProposal> uniqProposalList = new ArrayList<ICompletionProposal>(proposals.length);
 		for(int i=0; i<proposals.length; i++) {
 			String str = proposals[i].getDisplayString();
-			if(str.startsWith("\"") && str.endsWith("\"") && str.length()>2) {
+			if(str.startsWith("\"") && str.endsWith("\"") && str.length()>2) { //$NON-NLS-1$ //$NON-NLS-2$
 				str = str.substring(0, str.length()-1).substring(1);
 			}
 			int eq = str.indexOf('=');
@@ -156,7 +156,7 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
 
 	protected void addTagInsertionProposals(ContentAssistRequest contentAssistRequest, int childPosition) {
 		if(!addELFaceletsProposals(contentAssistRequest, childPosition)) {
-			String request = "/" + contentAssistRequest.getMatchString();
+			String request = "/" + contentAssistRequest.getMatchString(); //$NON-NLS-1$
 			Collection kbProposals = null;
 			try {
 				kbProposals = getWtpKbConnector().getProposals(request);
@@ -170,12 +170,12 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
 				}
 				String proposedInfo = kbProposal.getContextInfo();
 				String kbReplacementString = kbProposal.getReplacementString();
-				String replacementString = "<" + kbReplacementString + ">";
+				String replacementString = "<" + kbReplacementString + ">"; //$NON-NLS-1$ //$NON-NLS-2$
 				String displayString = kbProposal.getLabel();
-				boolean autoContentAssistant = replacementString.indexOf('\"')>-1 && replacementString.indexOf("=")>-1;
+				boolean autoContentAssistant = replacementString.indexOf('\"')>-1 && replacementString.indexOf("=")>-1; //$NON-NLS-1$
 				int cursorAdjustment = replacementString.length();;
-				if(!kbReplacementString.endsWith("/")) {
-					replacementString = replacementString + "</" + displayString + ">";
+				if(!kbReplacementString.endsWith("/")) { //$NON-NLS-1$
+					replacementString = replacementString + "</" + displayString + ">"; //$NON-NLS-1$ //$NON-NLS-2$
 				}
 				Image image = XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_TAG_GENERIC);
 				AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(autoContentAssistant, replacementString, contentAssistRequest.getReplacementBeginPosition(), contentAssistRequest.getReplacementLength(), cursorAdjustment, image, displayString, null, proposedInfo, XMLRelevanceConstants.R_TAG_NAME);
@@ -228,7 +228,7 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
         				if (matchString.charAt(elStart) != label.charAt(0)) {
         					label = matchString.charAt(elStart) + label.substring(1);
         				}
-        			} else if (matchString.endsWith("#") || matchString.endsWith("$")) {
+        			} else if (matchString.endsWith("#") || matchString.endsWith("$")) { //$NON-NLS-1$ //$NON-NLS-2$
         				replacementString = replacementString.substring(1);
         				cursorPositionDelta += 1;
         				if (matchString.charAt(matchString.length() - 1) != label.charAt(0)) {
@@ -246,12 +246,12 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
                 	Image image = kbProposal.hasImage() ? kbProposal.getImage() : 
                 		JspEditorPlugin.getDefault().getImage(JspEditorPlugin.CA_JSF_EL_IMAGE_PATH);
 
-                	if (!replacementString.startsWith("#{") && !replacementString.startsWith("${")) {
-                		if (label.startsWith("#") || label.startsWith("$"))
+                	if (!replacementString.startsWith("#{") && !replacementString.startsWith("${")) { //$NON-NLS-1$ //$NON-NLS-2$
+                		if (label.startsWith("#") || label.startsWith("$")) //$NON-NLS-1$ //$NON-NLS-2$
                 			label = label.substring(1);
-                		if (label.startsWith("{"))
+                		if (label.startsWith("{")) //$NON-NLS-1$
                 			label = label.substring(1);
-                		if (label.endsWith("}"))
+                		if (label.endsWith("}")) //$NON-NLS-1$
                 			label = label.substring(0, label.length() - 1);
                 	}
 
@@ -273,7 +273,7 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
         				if (matchString.charAt(elStart) != label.charAt(0)) {
         					label = matchString.charAt(elStart) + label.substring(1);
         				}
-        			} else if (matchString.endsWith("#") || matchString.endsWith("$")) {
+        			} else if (matchString.endsWith("#") || matchString.endsWith("$")) { //$NON-NLS-1$ //$NON-NLS-2$
         				replacementString = replacementString.substring(1);
         				cursorPositionDelta += 1;
         				if (matchString.charAt(matchString.length() - 1) != label.charAt(0)) {
@@ -290,12 +290,12 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
                 	Image image = kbProposal.hasImage() ? kbProposal.getImage() : 
                 		JspEditorPlugin.getDefault().getImage(JspEditorPlugin.CA_JSF_EL_IMAGE_PATH);
                 	
-                	if (!replacementString.startsWith("#{") && !replacementString.startsWith("${")) {
-                		if (label.startsWith("#") || label.startsWith("$"))
+                	if (!replacementString.startsWith("#{") && !replacementString.startsWith("${")) { //$NON-NLS-1$ //$NON-NLS-2$
+                		if (label.startsWith("#") || label.startsWith("$")) //$NON-NLS-1$ //$NON-NLS-2$
                 			label = label.substring(1);
-                		if (label.startsWith("{"))
+                		if (label.startsWith("{")) //$NON-NLS-1$
                 			label = label.substring(1);
-                		if (label.endsWith("}"))
+                		if (label.endsWith("}")) //$NON-NLS-1$
                 			label = label.substring(0, label.length() - 1);
                 	}
                 	
@@ -434,7 +434,7 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
 		if(isFacelets && tagName.indexOf(':')<0) {
 			tagName = faceletHtmlPrefixStart + tagName;
 		}
-		String request = "/" + tagName + "@" + contentAssistRequest.getMatchString();
+		String request = "/" + tagName + "@" + contentAssistRequest.getMatchString(); //$NON-NLS-1$ //$NON-NLS-2$
 		Collection kbProposals = null;
 		try {
 			kbProposals = getWtpKbConnector().getProposals(request);
@@ -445,7 +445,7 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
 			for (Iterator iter = kbProposals.iterator(); iter.hasNext();) {
 				KbProposal kbProposal = cleanFaceletProposal((KbProposal)iter.next());
 				String proposedInfo = kbProposal.getContextInfo();
-				String replacementString = kbProposal.getReplacementString() + "=\"\"";
+				String replacementString = kbProposal.getReplacementString() + "=\"\""; //$NON-NLS-1$
 				String displayString = kbProposal.getLabel();
 				AttrImpl attr = (AttrImpl)attributes.getNamedItem(displayString);
 				if(attr!=null) {
@@ -492,7 +492,7 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
 			return;
 		}
 
-		String request = "/" + jsfTagName + "@" + contentAssistRequest.getMatchString();
+		String request = "/" + jsfTagName + "@" + contentAssistRequest.getMatchString(); //$NON-NLS-1$ //$NON-NLS-2$
 		Collection kbProposals = null;
 		try {
 			kbProposals = getWtpKbConnector().getProposals(request);
@@ -505,7 +505,7 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
 				continue;
 			}
 			String proposedInfo = kbProposal.getContextInfo();
-			String replacementString = kbProposal.getReplacementString() + "=\"\"";
+			String replacementString = kbProposal.getReplacementString() + "=\"\""; //$NON-NLS-1$
 			String displayString = kbProposal.getLabel();
 			AttrImpl attr = (AttrImpl)attributes.getNamedItem(displayString);
 			if(attr!=null) {
@@ -536,10 +536,10 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
 		String matchString = contentAssistRequest.getMatchString();
 
 		if (matchString.length() > StringUtils.strip(text).length() && 
-				( (matchString.startsWith("\"") && matchString.endsWith("\"") &&
-				(matchString.indexOf("\"") != matchString.lastIndexOf("\"")))
-				 || (matchString.startsWith("'") && matchString.endsWith("\"") &&
-				 (matchString.indexOf("\"") != matchString.lastIndexOf("\""))))) {
+				( (matchString.startsWith("\"") && matchString.endsWith("\"") && //$NON-NLS-1$ //$NON-NLS-2$
+				(matchString.indexOf("\"") != matchString.lastIndexOf("\""))) //$NON-NLS-1$ //$NON-NLS-2$
+				 || (matchString.startsWith("'") && matchString.endsWith("\"") && //$NON-NLS-1$ //$NON-NLS-2$
+				 (matchString.indexOf("\"") != matchString.lastIndexOf("\""))))) { //$NON-NLS-1$ //$NON-NLS-2$
 			return;
 		}
 
@@ -612,7 +612,7 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
 	}
 
 	protected void addTagNameProposals(ContentAssistRequest contentAssistRequest, int childPosition) {
-		String request = "/" + contentAssistRequest.getMatchString();
+		String request = "/" + contentAssistRequest.getMatchString(); //$NON-NLS-1$
 		Collection kbProposals = null;
 		try {
 			kbProposals = getWtpKbConnector().getProposals(request);
@@ -627,12 +627,12 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
 				}
 				String proposedInfo = kbProposal.getContextInfo();
 				String kbReplacementString = kbProposal.getReplacementString();
-				String replacementString = kbReplacementString + ">";
+				String replacementString = kbReplacementString + ">"; //$NON-NLS-1$
 				String displayString = kbProposal.getLabel();
-				boolean autoContentAssistant = replacementString.indexOf('\"')>-1 && replacementString.indexOf("=")>-1;
+				boolean autoContentAssistant = replacementString.indexOf('\"')>-1 && replacementString.indexOf("=")>-1; //$NON-NLS-1$
 				int cursorAdjustment = replacementString.length();
-				if(!kbReplacementString.endsWith("/")) {
-					replacementString = replacementString + "</" + displayString + ">";
+				if(!kbReplacementString.endsWith("/")) { //$NON-NLS-1$
+					replacementString = replacementString + "</" + displayString + ">"; //$NON-NLS-1$ //$NON-NLS-2$
 				}
 				Image image = XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_TAG_GENERIC);
 				AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(autoContentAssistant, replacementString, contentAssistRequest.getReplacementBeginPosition(), contentAssistRequest.getReplacementLength(), cursorAdjustment, image, displayString, null, proposedInfo, XMLRelevanceConstants.R_TAG_NAME);
@@ -714,7 +714,7 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
 				for(int i=0; i<list.size(); i++) {
 					TaglibTracker tracker = (TaglibTracker)list.get(i);
 					String version = TLDVersionHelper.getTldVersion(tracker);
-					KbTldResource resource = new KbTldResource(tracker.getURI(), "", tracker.getPrefix(), version);
+					KbTldResource resource = new KbTldResource(tracker.getURI(), "", tracker.getPrefix(), version); //$NON-NLS-1$
 			        getWtpKbConnector().registerResource(resource);
 				}
 			}
@@ -749,7 +749,7 @@ public class FaceletsHtmlContentAssistProcessor extends HTMLContentAssistProcess
 		if(store.isDefault(HTMLUIPreferenceNames.AUTO_PROPOSE_CODE)) {
 //			String superDefaultChars = store.getDefaultString(JSPUIPreferenceNames.AUTO_PROPOSE_CODE);
 			StringBuffer redhatDefaultChars = new StringBuffer(new String(superAutoActivChars));
-			if(redhatDefaultChars.indexOf(".")<0) {
+			if(redhatDefaultChars.indexOf(".")<0) { //$NON-NLS-1$
 				redhatDefaultChars.append('.');
 				redhatDefaultChars.append('[');
 				store.setDefault(HTMLUIPreferenceNames.AUTO_PROPOSE_CODE, redhatDefaultChars.toString());

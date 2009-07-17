@@ -203,7 +203,7 @@ public class TilesDiagramLayout extends AbstractLayout{
 			IDefinition tf = (IDefinition)figures.get(i);
 			String name = tf.getName();
 			String ex = tf.getExtends();
-			if(ex==null||"".equals(ex)){
+			if(ex==null||"".equals(ex)){ //$NON-NLS-1$
 				Hashtable<String,Hashtable<String,Hashtable>> line = new Hashtable<String,Hashtable<String,Hashtable>>();
 				line.put(name, getChilds(tf,figures, usedFigures));
 				lines.add(line);

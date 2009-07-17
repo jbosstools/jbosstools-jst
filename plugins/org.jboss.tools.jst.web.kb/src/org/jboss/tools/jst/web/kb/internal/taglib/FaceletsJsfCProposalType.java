@@ -37,7 +37,7 @@ public class FaceletsJsfCProposalType extends CustomProposalType {
 		// trim first spaces
 		String value = query.getValue();
 		while(true) {
-			if(value.startsWith(" ")) {
+			if(value.startsWith(" ")) { //$NON-NLS-1$
 				value = value.substring(1);
 			} else {
 				break;

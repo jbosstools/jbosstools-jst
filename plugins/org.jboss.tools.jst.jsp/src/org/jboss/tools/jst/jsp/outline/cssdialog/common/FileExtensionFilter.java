@@ -36,7 +36,7 @@ public class FileExtensionFilter extends ViewerFilter {
 	    if (element instanceof IFile) {
 		for (int i = 0; i < fTargetExtension.length; i++) {
 		    if (((IFile) element).getName().toLowerCase().endsWith(
-			    "." + fTargetExtension[i])) {
+			    "." + fTargetExtension[i])) { //$NON-NLS-1$
 			return true;
 		    }
 		}

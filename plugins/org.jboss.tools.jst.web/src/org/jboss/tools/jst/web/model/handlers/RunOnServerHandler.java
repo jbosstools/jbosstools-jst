@@ -37,7 +37,7 @@ public class RunOnServerHandler extends AbstractHandler {
 			boolean isRoot = model.getRoot() == object;
 			if(isRoot) {
 				String result = context.getBrowserPrefix(object.getModel());
-				if(result != null && !result.endsWith("/")) result += "/";
+				if(result != null && !result.endsWith("/")) result += "/"; //$NON-NLS-1$ //$NON-NLS-2$
 				return result;
 			}
 			return null;

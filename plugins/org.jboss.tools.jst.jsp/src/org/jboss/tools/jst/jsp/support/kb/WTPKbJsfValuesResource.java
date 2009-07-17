@@ -17,6 +17,7 @@ import org.jboss.tools.common.kb.KbDinamicResource;
 import org.jboss.tools.common.kb.KbProposal;
 
 public class WTPKbJsfValuesResource extends WTPKbdBeanPropertyResource {
+	@SuppressWarnings("nls")
 	private static final String[] fixedJsfValues = {
 		"header", "headerValues", "param", "paramValues",
 		"cookie", "initParam", "requestScope",

@@ -55,7 +55,7 @@ public class TilesDiagramEditPolicy extends RootComponentEditPolicy{
 	
 	
 		public CreateViewCommand(){
-			super("CreateViewCommand");
+			super("CreateViewCommand"); //$NON-NLS-1$
 		}
 	
 		public boolean canExecute(){
@@ -63,7 +63,7 @@ public class TilesDiagramEditPolicy extends RootComponentEditPolicy{
 		}
 	
 		public void execute(){
-			XActionInvoker.invoke("CreateActions.CreateDefinition", (XModelObject)((TilesModel)getDiagramEditPart().getModel()).getSource(),null);
+			XActionInvoker.invoke("CreateActions.CreateDefinition", (XModelObject)((TilesModel)getDiagramEditPart().getModel()).getSource(),null); //$NON-NLS-1$
 		}
 	
 		public boolean canUndo() {

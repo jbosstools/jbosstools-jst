@@ -28,23 +28,23 @@ public class JSPAdopt implements XAdoptManager {
 		if(isAdoptableBundle(object)) adoptBundle(target, object, p);
 	}
 	
-	static String PAGE = ".FileJSP.FileHTML.";
+	static String PAGE = ".FileJSP.FileHTML."; //$NON-NLS-1$
 
 	private boolean isAcceptableTarget(XModelObject target) {
-		String entity = "." + target.getModelEntity().getName() + ".";
+		String entity = "." + target.getModelEntity().getName() + "."; //$NON-NLS-1$ //$NON-NLS-2$
 		return PAGE.indexOf(entity) >= 0;
 	}
 
 	protected boolean isAdoptableBundle(XModelObject object) {
-		return "FilePROPERTIES".equals(object.getModelEntity().getName());
+		return "FilePROPERTIES".equals(object.getModelEntity().getName()); //$NON-NLS-1$
 	}
     
 	public void adoptBundle(XModelObject target, XModelObject object, Properties p) {
 		if(p == null) return;
 		String res = XModelObjectLoaderUtil.getResourcePath(object);
-		if(res == null || !res.endsWith(".properties")) res = object.getPresentationString();
+		if(res == null || !res.endsWith(".properties")) res = object.getPresentationString(); //$NON-NLS-1$
 		else res = res.substring(1, res.length() - 11).replace('/', '.');
-		p.setProperty("start text", res);
-		p.setProperty("end text", "");
+		p.setProperty("start text", res); //$NON-NLS-1$
+		p.setProperty("end text", ""); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 }

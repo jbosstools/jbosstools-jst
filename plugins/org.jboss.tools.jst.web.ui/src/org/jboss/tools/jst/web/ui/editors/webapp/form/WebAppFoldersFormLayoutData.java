@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.ui.editors.webapp.form;
 
 import org.jboss.tools.common.model.ui.forms.*;
 import org.jboss.tools.jst.web.model.helpers.WebAppHelper;
+import org.jboss.tools.jst.web.ui.Messages;
 
 public class WebAppFoldersFormLayoutData {
 	static String EMPTY_DESCRIPTION = ""; //$NON-NLS-1$
@@ -35,7 +36,7 @@ public class WebAppFoldersFormLayoutData {
 	
 	
 	static IFormData CONTEXT_PARAM_LIST_DEFINITION = new FormData(
-		"Context Params",
+		Messages.WebAppFoldersFormLayoutData_ContextParams,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("param-name", 40), new FormAttributeData("param-value", 60)}, //$NON-NLS-1$ //$NON-NLS-2$
 		new String[]{CONTEXT_PARAM_ENTITY},
@@ -47,7 +48,7 @@ public class WebAppFoldersFormLayoutData {
 	};
 
 	static IFormData FILTER_LIST_DEFINITION = new FormData(
-		"Filters",
+		Messages.WebAppFoldersFormLayoutData_Filters,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("filter-name", 100)}, //$NON-NLS-1$
 		new String[]{WebAppHelper.FILTER_ENTITY},
@@ -55,7 +56,7 @@ public class WebAppFoldersFormLayoutData {
 	);
 
 	static IFormData FILTER_MAPPING_LIST_DEFINITION = new FormData(
-		"Filter Mappings",
+		Messages.WebAppFoldersFormLayoutData_FilterMappings,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("filter-name", 50), new FormAttributeData("url-pattern", 50)}, //$NON-NLS-1$ //$NON-NLS-2$
 		new String[]{WebAppHelper.FILTER_MAPPING_ENTITY},
@@ -63,7 +64,7 @@ public class WebAppFoldersFormLayoutData {
 	);
 
 	static IFormData FILTER_MAPPING_24_LIST_DEFINITION = new FormData(
-		"Filter Mappings",
+		Messages.WebAppFoldersFormLayoutData_FilterMappings,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("filter-name", 50), new FormAttributeData("url-pattern", 50)}, //$NON-NLS-1$ //$NON-NLS-2$
 		new String[]{WebAppHelper.FILTER_MAPPING_24_ENTITY},
@@ -81,7 +82,7 @@ public class WebAppFoldersFormLayoutData {
 	};
 
 	static IFormData LISTENER_LIST_DEFINITION = new FormData(
-		"Listeners",
+		Messages.WebAppFoldersFormLayoutData_Listeners,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("listener-class", 100)}, //$NON-NLS-1$
 		new String[]{WebAppHelper.LISTENER_ENTITY},
@@ -93,7 +94,7 @@ public class WebAppFoldersFormLayoutData {
 	};
 
 	static IFormData LISTENER_24_LIST_DEFINITION = new FormData(
-		"Listeners",
+		Messages.WebAppFoldersFormLayoutData_Listeners,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("listener-class", 100)}, //$NON-NLS-1$
 		new String[]{WebAppHelper.LISTENER_24_ENTITY},
@@ -105,7 +106,7 @@ public class WebAppFoldersFormLayoutData {
 	};
 
 	static IFormData SERVLET_LIST_DEFINITION = new FormData(
-		"Servlets",
+		Messages.WebAppFoldersFormLayoutData_Servlets,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("servlet-name", 30), new FormAttributeData("servlet-class", 70)}, //$NON-NLS-1$ //$NON-NLS-2$
 		new String[]{WebAppHelper.SERVLET_ENTITY},
@@ -113,7 +114,7 @@ public class WebAppFoldersFormLayoutData {
 	);
 
 	static IFormData SERVLET_MAPPING_LIST_DEFINITION = new FormData(
-		"Servlet Mappings",
+		Messages.WebAppFoldersFormLayoutData_ServletMappings,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("servlet-name", 50), new FormAttributeData("url-pattern", 50)}, //$NON-NLS-1$ //$NON-NLS-2$
 		new String[]{WebAppHelper.SERVLET_MAPPING_ENTITY},
@@ -126,10 +127,10 @@ public class WebAppFoldersFormLayoutData {
 	};
 
 	static IFormData MIME_LIST_DEFINITION = new FormData(
-		"Mime Mappings",
+		Messages.WebAppFoldersFormLayoutData_MimeMappings,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("extension", 50), new FormAttributeData("mime-type", 50)}, //$NON-NLS-1$ //$NON-NLS-2$
-		new String[]{"WebAppMimeMapping"},
+		new String[]{Messages.WebAppFoldersFormLayoutData_WebAppMimeMapping},
 		FormLayoutDataUtil.createDefaultFormActionData("CreateActions.CreateMimeMapping") //$NON-NLS-1$
 	);
 
@@ -138,10 +139,10 @@ public class WebAppFoldersFormLayoutData {
 	};
 
 	static IFormData ERROR_LIST_DEFINITION = new FormData(
-		"Error Pages",
+		Messages.WebAppFoldersFormLayoutData_ErrorPages,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("location", 70), new FormAttributeData("error-code", 30)}, //$NON-NLS-1$ //$NON-NLS-2$
-		new String[]{"WebAppErrorPage"},
+		new String[]{Messages.WebAppFoldersFormLayoutData_WebAppErrorPage},
 		FormLayoutDataUtil.createDefaultFormActionData("CreateActions.CreateErrorPage") //$NON-NLS-1$
 	);
 
@@ -155,7 +156,7 @@ public class WebAppFoldersFormLayoutData {
 
 
 	static IFormData RESOURCE_ENV_REF_LIST_DEFINITION = new FormData(
-		"Resource Env Refs",
+		Messages.WebAppFoldersFormLayoutData_ResourceEnvRefs,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("resource-env-ref-name", 30), new FormAttributeData("resource-env-ref-type", 70)}, //$NON-NLS-1$ //$NON-NLS-2$
 		new String[]{"WebAppResourceEnvRef"}, //$NON-NLS-1$
@@ -163,7 +164,7 @@ public class WebAppFoldersFormLayoutData {
 	);
 
 	static IFormData RESOURCE_REF_LIST_DEFINITION = new FormData(
-		"Resource Refs",
+		Messages.WebAppFoldersFormLayoutData_ResourceRefs,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("res-ref-name", 30), new FormAttributeData("res-type", 70)}, //$NON-NLS-1$ //$NON-NLS-2$
 		new String[]{"WebAppResourceRef"}, //$NON-NLS-1$
@@ -176,7 +177,7 @@ public class WebAppFoldersFormLayoutData {
 	};
 		
 	static IFormData SECURITY_LIST_DEFINITION = new FormData(
-		"Security Constraints",
+		Messages.WebAppFoldersFormLayoutData_SecurityConstraints,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("display-name", 100)}, //$NON-NLS-1$
 		new String[]{"WebAppSecurityConstraint"}, //$NON-NLS-1$
@@ -188,7 +189,7 @@ public class WebAppFoldersFormLayoutData {
 	};
 
 	static IFormData ROLE_LIST_DEFINITION = new FormData(
-		"Security Roles",
+		Messages.WebAppFoldersFormLayoutData_SecurityRoles,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("role-name", 100)}, //$NON-NLS-1$
 		new String[]{WebAppHelper.ROLE_ENTITY},
@@ -200,7 +201,7 @@ public class WebAppFoldersFormLayoutData {
 	};
 
 	static IFormData ENV_LIST_DEFINITION = new FormData(
-		"Env Entries",
+		Messages.WebAppFoldersFormLayoutData_EnvEntries,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("env-entry-name", 50), new FormAttributeData("env-entry-type", 50)}, //$NON-NLS-1$ //$NON-NLS-2$
 		new String[]{"WebAppEnvEntry"}, //$NON-NLS-1$
@@ -212,7 +213,7 @@ public class WebAppFoldersFormLayoutData {
 	};
 
 	static IFormData EJB_REF_LIST_DEFINITION = new FormData(
-		"Ejb Ref List",
+		Messages.WebAppFoldersFormLayoutData_EjbRefList,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("ejb-ref-name", 50), new FormAttributeData("ejb-ref-type", 50)}, //$NON-NLS-1$ //$NON-NLS-2$
 		new String[]{"WebAppEjbRef"}, //$NON-NLS-1$
@@ -220,7 +221,7 @@ public class WebAppFoldersFormLayoutData {
 	);
 
 	static IFormData EJB_LOCAL_REF_LIST_DEFINITION = new FormData(
-		"Ejb Local Ref List",
+		Messages.WebAppFoldersFormLayoutData_EjbLocalRefList,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("ejb-ref-name", 50), new FormAttributeData("ejb-ref-type", 50)}, //$NON-NLS-1$ //$NON-NLS-2$
 		new String[]{"WebAppEjbLocalRef"}, //$NON-NLS-1$
@@ -233,7 +234,7 @@ public class WebAppFoldersFormLayoutData {
 	};
 
 	static IFormData SERVICE_LIST_DEFINITION = new FormData(
-		"Services",
+		Messages.WebAppFoldersFormLayoutData_Services,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("service-ref-name", 40), new FormAttributeData("service-interface", 60)}, //$NON-NLS-1$ //$NON-NLS-2$
 		new String[]{"WebAppServiceRef"}, //$NON-NLS-1$
@@ -245,7 +246,7 @@ public class WebAppFoldersFormLayoutData {
 	};
 
 	static IFormData MESSAGE_REF_LIST_DEFINITION = new FormData(
-		"Message Destination Ref List",
+		Messages.WebAppFoldersFormLayoutData_MessageDestinationRefList,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("message-destination-ref-name", 100)}, //$NON-NLS-1$
 		new String[]{"WebAppMessageDestinationRef"}, //$NON-NLS-1$
@@ -253,7 +254,7 @@ public class WebAppFoldersFormLayoutData {
 	);
 
 	static IFormData MESSAGE_LIST_DEFINITION = new FormData(
-		"Message Destination List",
+		Messages.WebAppFoldersFormLayoutData_MessageDestinationList,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("message-destination-name", 100)}, //$NON-NLS-1$
 		new String[]{"WebAppMessageDestination"}, //$NON-NLS-1$

@@ -15,14 +15,15 @@ import org.eclipse.ui.actions.RetargetAction;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 
+import org.jboss.tools.jst.web.tiles.ui.Messages;
 import org.jboss.tools.jst.web.tiles.ui.editor.TilesEditor;
 
 public class TilesPreferencesRetargetAction extends RetargetAction{
 
 	public TilesPreferencesRetargetAction() {
-		super("Preferences","Preferences"); 
-		setToolTipText("Preferences");
-		setImageDescriptor(ImageDescriptor.createFromFile(TilesEditor.class, "icons/preference.gif"));
+		super("Preferences",Messages.TilesPreferencesRetargetAction_Text);  //$NON-NLS-1$
+		setToolTipText(Messages.TilesPreferencesRetargetAction_Tooltip);
+		setImageDescriptor(ImageDescriptor.createFromFile(TilesEditor.class, "icons/preference.gif")); //$NON-NLS-1$
 	}
 
 }

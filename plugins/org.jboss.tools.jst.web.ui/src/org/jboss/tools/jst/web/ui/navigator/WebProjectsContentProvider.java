@@ -29,18 +29,18 @@ public class WebProjectsContentProvider extends NavigatorContentProvider {
 	}
 
 	protected String getFilteredTreeName(XModel model) {
-		String nature = model.getProperties().getProperty("nature");
-		IModelNature n = EclipseResourceUtil.getModelNature((IProject)model.getProperties().get("project"));
+		String nature = model.getProperties().getProperty("nature"); //$NON-NLS-1$
+		IModelNature n = EclipseResourceUtil.getModelNature((IProject)model.getProperties().get("project")); //$NON-NLS-1$
 		if(nature != null && n != null && !n.getID().equals(nature)) {
 			nature = n.getID();
-			model.getProperties().setProperty("nature", nature);
+			model.getProperties().setProperty("nature", nature); //$NON-NLS-1$
 		}
-		if(nature != null && nature.indexOf("struts") >= 0) {
-			return "StrutsProjects";
-		} else if(nature != null && nature.indexOf("jsf") >= 0) {
-			return "JSFProjects";
+		if(nature != null && nature.indexOf("struts") >= 0) { //$NON-NLS-1$
+			return "StrutsProjects"; //$NON-NLS-1$
+		} else if(nature != null && nature.indexOf("jsf") >= 0) { //$NON-NLS-1$
+			return "JSFProjects"; //$NON-NLS-1$
 		} else {
-			return "JSFProjects";
+			return "JSFProjects"; //$NON-NLS-1$
 		}
 	}
 

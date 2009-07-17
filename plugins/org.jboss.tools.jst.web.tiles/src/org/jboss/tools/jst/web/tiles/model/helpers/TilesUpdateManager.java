@@ -19,10 +19,10 @@ import org.jboss.tools.jst.web.tiles.model.TilesConstants;
 public class TilesUpdateManager implements XModelTreeListener, TilesConstants {
 
     public static synchronized TilesUpdateManager getInstance(XModel model) {
-    	TilesUpdateManager instance = (TilesUpdateManager)model.getManager("org.jboss.tools.jst.web.tiles.model.helpers.TilesUpdateManager");
+    	TilesUpdateManager instance = (TilesUpdateManager)model.getManager("org.jboss.tools.jst.web.tiles.model.helpers.TilesUpdateManager"); //$NON-NLS-1$
         if (instance == null) {
         	instance = new TilesUpdateManager();
-        	model.addManager("org.jboss.tools.jst.web.tiles.model.helpers.TilesUpdateManager", instance);
+        	model.addManager("org.jboss.tools.jst.web.tiles.model.helpers.TilesUpdateManager", instance); //$NON-NLS-1$
         	model.addModelTreeListener(instance);
         }
         return instance;
@@ -40,14 +40,14 @@ public class TilesUpdateManager implements XModelTreeListener, TilesConstants {
 	public void nodeChanged(XModelTreeEvent event) {
 		String entity = event.getModelObject().getModelEntity().getName();
 		if(entity.equals(ENT_DEFINITION)) fireChange();
-		else if(entity.startsWith("WebApp")) fireChange();
+		else if(entity.startsWith("WebApp")) fireChange(); //$NON-NLS-1$
 		
 	}
 
 	public void structureChanged(XModelTreeEvent event) {
 		String sourceEntity = event.getModelObject().getModelEntity().getName();
 		if(event.kind() == XModelTreeEvent.CHILD_REMOVED) {
-			if(sourceEntity.equals("FileTiles")) fireChange();
+			if(sourceEntity.equals("FileTiles")) fireChange(); //$NON-NLS-1$
 			if(event.getInfo() instanceof XModelObject) {
 				XModelObject o = (XModelObject)event.getInfo();
 				String entity = o.getModelEntity().getName();

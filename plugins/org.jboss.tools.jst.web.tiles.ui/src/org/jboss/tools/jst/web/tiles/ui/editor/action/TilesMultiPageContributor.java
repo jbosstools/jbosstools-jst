@@ -98,7 +98,7 @@ public class TilesMultiPageContributor extends AbstractMultiPageContributor {
 				actionBars.setGlobalActionHandler(ActionFactory.FIND.getId(), getAction(editor, ITextEditorActionConstants.FIND));
 				actionBars.setGlobalActionHandler(IDEActionFactory.BOOKMARK.getId(), getAction(editor, IDEActionFactory.BOOKMARK.getId()));
 				actionBars.setGlobalActionHandler(IDEActionFactory.ADD_TASK.getId(), getAction(editor, IDEActionFactory.ADD_TASK.getId()));
-				actionBars.setGlobalActionHandler(ActionFactory.PRINT.getId(), (registry != null) ? registry.getAction("Print_Diagram") : (editor != null) ? getAction(editor, ActionFactory.PRINT.getId()) : null);
+				actionBars.setGlobalActionHandler(ActionFactory.PRINT.getId(), (registry != null) ? registry.getAction("Print_Diagram") : (editor != null) ? getAction(editor, ActionFactory.PRINT.getId()) : null); //$NON-NLS-1$
 				actionBars.setGlobalActionHandler(ActionFactory.REVERT.getId(), getAction(editor, ITextEditorActionConstants.REVERT));
 				actionBars.setGlobalActionHandler(ActionFactory.SAVE.getId(), getAction(editor, ITextEditorActionConstants.SAVE));
 			} else {
@@ -147,8 +147,8 @@ public class TilesMultiPageContributor extends AbstractMultiPageContributor {
 			addRetargetAction(new ZoomOutRetargetAction());
 		}
 		public void contributeGEFToToolBar(IToolBarManager tbm) {
-			tbm.add(getAction("Print_Diagram"));
-			tbm.add(getAction("Preferences"));
+			tbm.add(getAction("Print_Diagram")); //$NON-NLS-1$
+			tbm.add(getAction("Preferences")); //$NON-NLS-1$
 
 			tbm.add(new Separator());
 			tbm.add(new ZoomComboContributionItem(getPage()));

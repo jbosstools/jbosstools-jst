@@ -13,6 +13,7 @@ package org.jboss.tools.jst.jsp.drop.treeviewer.model;
 import java.util.List;
 import java.util.Properties;
 import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.web.project.list.IWebPromptingProvider;
 import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
 
@@ -36,14 +37,14 @@ public class ManagedBeanForPropElement extends ModelElement implements IAttribut
 			}
 			currentParent = currentParent.getParent();
 		}
-		throw new RuntimeException("Can't get ManagedBeansPropertiesResourceElement for element.");
+		throw new RuntimeException("Can't get ManagedBeansPropertiesResourceElement for element."); //$NON-NLS-1$
 	}
 
 	/**
 	 * @see ModelElement#getComparedValue()
 	 */
 	protected String getComparedValue() {
-		return "#{" + getFullName();
+		return "#{" + getFullName(); //$NON-NLS-1$
 	}
 
 	/**
@@ -53,7 +54,7 @@ public class ManagedBeanForPropElement extends ModelElement implements IAttribut
 		if(managedBeanPropertyElements==null) {
 			ManagedBeansPropertiesResourceElement parentResource = getResource();
 			String typeValue = null;
-			String[] typeValues = parentResource.getParams().getParamsValues("type");
+			String[] typeValues = parentResource.getParams().getParamsValues("type"); //$NON-NLS-1$
 			if(typeValues.length>0) {
 				typeValue = typeValues[0];
 			}
@@ -79,7 +80,7 @@ public class ManagedBeanForPropElement extends ModelElement implements IAttribut
 		return EQUAL_CLASSES_LIST;
 	}
 
-	static String ADD_PROPERTY_ACTION = "Add Property";
+	static String ADD_PROPERTY_ACTION = JstUIMessages.ManagedBeanForPropElement_AddProperty;
 
 	public String[] getActions() {
 		return new String[]{ADD_PROPERTY_ACTION};
@@ -99,8 +100,8 @@ public class ManagedBeanForPropElement extends ModelElement implements IAttribut
 		getChildren();
 		for (int i = 0; i < managedBeanPropertyElements.length; i++) {
 			ManagedBeanPropertyElement p = managedBeanPropertyElements[i];
-			if(p.getName().equals(c.getAttributeValue("property-name"))) {
-				properties.put("select", p);
+			if(p.getName().equals(c.getAttributeValue("property-name"))) { //$NON-NLS-1$
+				properties.put("select", p); //$NON-NLS-1$
 			}
 		}		
 	}

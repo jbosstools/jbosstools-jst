@@ -18,13 +18,13 @@ import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.model.WebProcess;
 
 public class WebProcessStructureHelper {
-	static String ELM_PROCESS = "process";
-	static String ATT_PATH = "path";
+	static String ELM_PROCESS = "process"; //$NON-NLS-1$
+	static String ATT_PATH = "path"; //$NON-NLS-1$
 	
 	public boolean isProcessLoaded(XModelObject process) {
 		if(!(process instanceof WebProcess)) {
 			if(ModelPlugin.isDebugEnabled()) {			
-				WebModelPlugin.getPluginLog().logInfo("wrong argument in isProcessLoaded");
+				WebModelPlugin.getPluginLog().logInfo("wrong argument in isProcessLoaded"); //$NON-NLS-1$
 			}
 			return false;
 		}
@@ -46,7 +46,7 @@ public class WebProcessStructureHelper {
 	}
 
 	public boolean isIncorrect(XModelObject config) {
-		return (config == null || "yes".equals(config.getAttributeValue("isIncorrect")));
+		return (config == null || "yes".equals(config.getAttributeValue("isIncorrect"))); //$NON-NLS-1$ //$NON-NLS-2$
 	}    
 
 	public String getConfigAsText(XModelObject config) {
@@ -57,27 +57,27 @@ public class WebProcessStructureHelper {
 	public boolean hasPageHiddenLinks(XModelObject page) {
 		XModelObject[] child = page.getChildren();
 		for (int i = 0; i < child.length; i++)
-		  if(child[i].getAttributeValue("hidden").equals("yes")) return true;
+		  if(child[i].getAttributeValue("hidden").equals("yes")) return true; //$NON-NLS-1$ //$NON-NLS-2$
 		return false;
 	}
 
 	public boolean isShortcut(XModelObject itemOutput) {
-		return "yes".equals(itemOutput.getAttributeValue("shortcut"));
+		return "yes".equals(itemOutput.getAttributeValue("shortcut")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public boolean isPageConfirmed(XModelObject itemPage) {
-		return "true".equals(itemPage.get("confirmed"));
+		return "true".equals(itemPage.get("confirmed")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public boolean areProcessCommentsHidden(XModelObject process) {
-		return "yes".equals(process.getAttributeValue("hide comments"));
+		return "yes".equals(process.getAttributeValue("hide comments")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
     
 	public void showComments(XModelObject o) {
 		XModelObject process = getParentProcess(o);
 		if(process == null) return;
 		if(areProcessCommentsHidden(process)) 
-			process.setAttributeValue("hide comments", "no");    	
+			process.setAttributeValue("hide comments", "no");    	 //$NON-NLS-1$ //$NON-NLS-2$
 	}
     
 	public String[] asStringArray(String s) {
@@ -108,7 +108,7 @@ public class WebProcessStructureHelper {
 			if(list[i] == null) continue;
 			String v = list[i].trim();
 			if(v.length() == 0) continue;
-			if(sb.length() > 0) sb.append(",");
+			if(sb.length() > 0) sb.append(","); //$NON-NLS-1$
 			sb.append(v);
 		}
 		return sb.toString();
@@ -117,8 +117,8 @@ public class WebProcessStructureHelper {
 	public String toStringValue(int[] list) {
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < list.length; i++) {
-			if(sb.length() > 0) sb.append(",");
-			sb.append("" + list[i]);
+			if(sb.length() > 0) sb.append(","); //$NON-NLS-1$
+			sb.append("" + list[i]); //$NON-NLS-1$
 		}
 		return sb.toString();
 	}
@@ -137,16 +137,16 @@ public class WebProcessStructureHelper {
 	}
 
 	public boolean isNodeChangeListenerLocked(XModelObject process) {
-		return "true".equals(process.get("isNodeChangeListenerLocked"));  
+		return "true".equals(process.get("isNodeChangeListenerLocked"));   //$NON-NLS-1$ //$NON-NLS-2$
 	}
     
 	public void setNodeChangeListenerLock(XModelObject process, boolean b) {
-		process.set("isNodeChangeListenerLocked", (b) ? "true" : "");
+		process.set("isNodeChangeListenerLocked", (b) ? "true" : ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	public String getPageTitle(XModelObject page) {
 		String path = page.getAttributeValue(ATT_PATH);
-		return (path != null && path.startsWith("//")) ? path.substring(1) : path;
+		return (path != null && path.startsWith("//")) ? path.substring(1) : path; //$NON-NLS-1$
 	}
 
 }

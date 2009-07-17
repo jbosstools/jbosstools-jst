@@ -50,7 +50,7 @@ public class UnregisterInServerXmlHandler extends AbstractHandler {
 
     public void executeHandler(XModelObject object, Properties p) throws XModelException {
 		String name = object.getAttributeValue("application name"); //$NON-NLS-1$
-		if(p != null && "true".equals(p.getProperty("unregisterFromAllServers"))) {
+		if(p != null && "true".equals(p.getProperty("unregisterFromAllServers"))) { //$NON-NLS-1$ //$NON-NLS-2$
 			unregisterFromAllServers(object);
 			return;
 		}
@@ -58,7 +58,7 @@ public class UnregisterInServerXmlHandler extends AbstractHandler {
 		if(result) {
 			ServiceDialog d = object.getModel().getService();
 			String server = RegistrationHelper.getSelectedServer().getName();
-			String mes = NLS.bind(WebUIMessages.APPLICATION_HAS_BEEN_UNREGISTERED_FROM, name, server); //$NON-NLS-2$ //$NON-NLS-3$
+			String mes = NLS.bind(WebUIMessages.APPLICATION_HAS_BEEN_UNREGISTERED_FROM, name, server);
 			d.showDialog(WebUIMessages.MESSAGE, mes, new String[]{WebUIMessages.CLOSE}, null, ServiceDialog.MESSAGE);
 		}
 	}

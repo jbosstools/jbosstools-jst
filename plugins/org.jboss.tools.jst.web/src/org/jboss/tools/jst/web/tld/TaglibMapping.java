@@ -63,16 +63,16 @@ public class TaglibMapping implements ITaglibMapping {
         resolvedURIs.clear();
         declaredURIs.clear();
         WebProject webprj = WebProject.getInstance(model);
-        String base = webprj.getWebInfLocation() + "/web.xml";
+        String base = webprj.getWebInfLocation() + "/web.xml"; //$NON-NLS-1$
         if (webxml.getChildren().length > 0) {
             XModelObject[] sz = WebAppHelper.getTaglibs(webxml);
             for (int i = 0; i < sz.length; i++) {
-                String uri = sz[i].getAttributeValue("taglib-uri");
-                String location = sz[i].getAttributeValue("taglib-location");
+                String uri = sz[i].getAttributeValue("taglib-uri"); //$NON-NLS-1$
+                String location = sz[i].getAttributeValue("taglib-location"); //$NON-NLS-1$
                 taglibs.put(uri, webprj.getAbsoluteLocation(location, base));
                 XModelObject taglibObject = XModelImpl.getByRelativePath(model, location);
                 if(taglibObject != null) {
-                	String resolvedURI = taglibObject.getAttributeValue("uri");
+                	String resolvedURI = taglibObject.getAttributeValue("uri"); //$NON-NLS-1$
                 	if(resolvedURI != null) {
                 		resolvedURIs.setProperty(uri, resolvedURI);
                 		declaredURIs.setProperty(resolvedURI, uri);
@@ -90,20 +90,20 @@ public class TaglibMapping implements ITaglibMapping {
 	private void getFaceletTaglibs(XModelObject webxml) {
 		XModelObject webRoot = FileSystemsHelper.getWebRoot(model);
 		if(webxml == null || webRoot == null) return;
-		XModelObject cp = WebAppHelper.findWebAppContextParam(webxml, "facelets.LIBRARIES");
+		XModelObject cp = WebAppHelper.findWebAppContextParam(webxml, "facelets.LIBRARIES"); //$NON-NLS-1$
 		if(cp == null) return;
-		String paths = cp.getAttributeValue("param-value");
+		String paths = cp.getAttributeValue("param-value"); //$NON-NLS-1$
 		if(paths == null || paths.length() == 0) return;
-		StringTokenizer st = new StringTokenizer(paths, ";,");
+		StringTokenizer st = new StringTokenizer(paths, ";,"); //$NON-NLS-1$
 		while(st.hasMoreTokens()) {
 			String path = st.nextToken();
 			String modelPath = path;
-			if (modelPath.startsWith("/"))
+			if (modelPath.startsWith("/")) //$NON-NLS-1$
 				modelPath = modelPath.substring(1);
 			XModelObject facelet = webRoot.getChildByPath(modelPath);
 			if (facelet == null)
 				continue;
-			String uri = facelet.getAttributeValue("uri");
+			String uri = facelet.getAttributeValue("uri"); //$NON-NLS-1$
 			if (uri != null) {
 				resolvedURIs.put(path, uri);
 				taglibObjects.put(uri, facelet);
@@ -158,7 +158,7 @@ public class TaglibMapping implements ITaglibMapping {
                 // let's try to find webroot
                 File file = new File(base);
                 while (file != null && file.exists()) {
-                    File webInf = new File(file, "WEB-INF");
+                    File webInf = new File(file, "WEB-INF"); //$NON-NLS-1$
                     if (webInf.exists() && webInf.isDirectory()) {
                         webprj.setWebRootLocation(file.getAbsolutePath());
                         revalidate(WebAppHelper.getWebApp(model));
@@ -169,9 +169,9 @@ public class TaglibMapping implements ITaglibMapping {
             }
             if (webprj.getWebRootLocation() == null) return null;
         }
-        if (uri.startsWith("urn:jsptld:")) {
+        if (uri.startsWith("urn:jsptld:")) { //$NON-NLS-1$
             uri = uri.substring(11);
-        } else if (uri.startsWith("urn:jsptagdir:")) {
+        } else if (uri.startsWith("urn:jsptagdir:")) { //$NON-NLS-1$
             uri = uri.substring(14);
         }
         String location = (String)taglibs.get(uri);
@@ -202,10 +202,10 @@ public class TaglibMapping implements ITaglibMapping {
 	private void findTldsInJars() {
     	XModelObject fss = FileSystemsHelper.getFileSystems(model);
     	if(fss == null) return;
-		XModelObject[] fs = fss.getChildren("FileSystemJar");
+		XModelObject[] fs = fss.getChildren("FileSystemJar"); //$NON-NLS-1$
 		for (int i = 0; i < fs.length; i++) {
-			String n = fs[i].getAttributeValue("name");
-			if(n.startsWith("lib-")) findTldsInJar(fs[i]);
+			String n = fs[i].getAttributeValue("name"); //$NON-NLS-1$
+			if(n.startsWith("lib-")) findTldsInJar(fs[i]); //$NON-NLS-1$
 		}
 	}
 	
@@ -213,7 +213,7 @@ public class TaglibMapping implements ITaglibMapping {
     	XModelObject fss = FileSystemsHelper.getFileSystems(model);
     	if(fss == null) return -1;
     	long n = 0;
-		XModelObject[] fs = fss.getChildren("FileSystemJar");
+		XModelObject[] fs = fss.getChildren("FileSystemJar"); //$NON-NLS-1$
 		for (int i = 0; i < fs.length; i++) {
 			n += fs[i].getTimeStamp();
 		}
@@ -221,18 +221,18 @@ public class TaglibMapping implements ITaglibMapping {
 	}
 
 	private void findTldsInJar(XModelObject jar) {
-		XModelObject metainf = jar.getChildByPath("META-INF");
+		XModelObject metainf = jar.getChildByPath("META-INF"); //$NON-NLS-1$
 		if(metainf == null) return;
 		String location = null;
 		if(jar instanceof JarSystemImpl) {
 			location = ((JarSystemImpl)jar).getTempLocation();
 		}
-		if(location == null) location = XModelObjectUtil.getExpandedValue(jar, "location", null);
+		if(location == null) location = XModelObjectUtil.getExpandedValue(jar, "location", null); //$NON-NLS-1$
 		String url = null;
 		try {
-			url = "jar:" + new File(location).toURL().toString() + "!/META-INF/";
+			url = "jar:" + new File(location).toURL().toString() + "!/META-INF/"; //$NON-NLS-1$ //$NON-NLS-2$
 		} catch (Exception e) {
-			WebModelPlugin.getPluginLog().logError("TaglibMapping:findTldsInJar:" + e.getMessage(), e);
+			WebModelPlugin.getPluginLog().logError("TaglibMapping:findTldsInJar:" + e.getMessage(), e); //$NON-NLS-1$
 			return;
 		}		
 		if(metainf != null) findTldsInFolder(metainf, url);
@@ -243,15 +243,15 @@ public class TaglibMapping implements ITaglibMapping {
 		if(cs==null) return;
 		for (int i = 0; i < cs.length; i++) {
 			if(cs[i].getFileType() == XModelObject.FOLDER) {
-				findTldsInFolder(cs[i], base + cs[i].getAttributeValue("name") + "/");
+				findTldsInFolder(cs[i], base + cs[i].getAttributeValue("name") + "/"); //$NON-NLS-1$ //$NON-NLS-2$
 			} else if(cs[i].getFileType() == XModelObject.FILE) {
 				String entity = cs[i].getModelEntity().getName();
-				boolean ok = entity.startsWith("FileTLD");
-				if(!ok && "META-INF".equals(folder.getAttributeValue("name")) && entity.startsWith("FileFaceletTaglib")) {
+				boolean ok = entity.startsWith("FileTLD"); //$NON-NLS-1$
+				if(!ok && "META-INF".equals(folder.getAttributeValue("name")) && entity.startsWith("FileFaceletTaglib")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					ok = true;
 				}
 				if(!ok) continue;
-				String uri = cs[i].getAttributeValue("uri");
+				String uri = cs[i].getAttributeValue("uri"); //$NON-NLS-1$
 				String location = base + FileAnyImpl.toFileName(cs[i]);
 				if(folder instanceof FolderImpl) {
 					String path = WebProject.getInstance(cs[i].getModel()).getPathInWebRoot(cs[i]);
@@ -284,15 +284,15 @@ public class TaglibMapping implements ITaglibMapping {
 			if(timeStamp == -1 || isLoading) return;
 			if(event.kind() == XModelTreeEvent.CHILD_ADDED) {
 				XModelObject c = (XModelObject)event.getInfo();
-				String extension = c.getAttributeValue("extension");
-				if("tld".equals(extension) || "jar".equals(extension)) {
+				String extension = c.getAttributeValue("extension"); //$NON-NLS-1$
+				if("tld".equals(extension) || "jar".equals(extension)) { //$NON-NLS-1$ //$NON-NLS-2$
 					invalidate();
-				} else if(c.getModelEntity().getName().equals("FileSystemJar")) {
+				} else if(c.getModelEntity().getName().equals("FileSystemJar")) { //$NON-NLS-1$
 					invalidate();
 				}
 			} else if(event.kind() == XModelTreeEvent.CHILD_REMOVED) {
 				String path = event.getInfo().toString();
-				if(path.endsWith(".tld")||path.endsWith(".jar")) invalidate();
+				if(path.endsWith(".tld")||path.endsWith(".jar")) invalidate(); //$NON-NLS-1$ //$NON-NLS-2$
 			}			
 		}    	
     }

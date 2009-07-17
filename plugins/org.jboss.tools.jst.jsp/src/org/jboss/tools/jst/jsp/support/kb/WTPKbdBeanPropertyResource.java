@@ -96,7 +96,7 @@ public class WTPKbdBeanPropertyResource extends WTPKbAbstractModelResource {
 			Iterator<String> it = sorted.iterator();
 			while(it.hasNext()) {
 				String text = it.next();
-				process(proposals, "", "", -1, query.length() - "".length(), query.length(), text, restQuery,
+				process(proposals, "", "", -1, query.length() - "".length(), query.length(), text, restQuery, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 						JspEditorPlugin.getDefault().getImage(JspEditorPlugin.CA_JSF_EL_IMAGE_PATH));
 			}
 		} catch (Exception x) {
@@ -107,7 +107,7 @@ public class WTPKbdBeanPropertyResource extends WTPKbAbstractModelResource {
 
 	protected void fillSortedProposalStrings(Set<String> sorted, String beanName, boolean hasProperty) {
 		if (beanName == null || beanName.length() == 0 || !hasProperty) {
-			List beanList = fProvider.getList(fXModel, WebPromptingProvider.JSF_MANAGED_BEANS, "", null);
+			List beanList = fProvider.getList(fXModel, WebPromptingProvider.JSF_MANAGED_BEANS, "", null); //$NON-NLS-1$
 			Iterator it = beanList.iterator();
 			while(it.hasNext()) {
 				sorted.add(it.next().toString());
@@ -115,12 +115,12 @@ public class WTPKbdBeanPropertyResource extends WTPKbAbstractModelResource {
 		} else {
 			List properties = fProvider.getList(fXModel, getSupportedID(), beanName, type);
 			for (int ii = 0; properties != null && ii < properties.size(); ii++) {
-				sorted.add(beanName + "." + (String)properties.get(ii));
+				sorted.add(beanName + "." + (String)properties.get(ii)); //$NON-NLS-1$
 			}
 		}
 	}
 
-	private static String[][] BEAN_PROPERTY_WRAPPERS = {{"#{", "}"},{"${", "}"}};
+	private static String[][] BEAN_PROPERTY_WRAPPERS = {{"#{", "}"},{"${", "}"}}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
 	protected String[][] getWrappers() {
 		return BEAN_PROPERTY_WRAPPERS;
@@ -151,7 +151,7 @@ public class WTPKbdBeanPropertyResource extends WTPKbAbstractModelResource {
 	}
 
 	public String toString() {
-		return "WTPKbdBeanPropertyResource";
+		return "WTPKbdBeanPropertyResource"; //$NON-NLS-1$
 	}
 
 	public XModel getXModel() {
@@ -164,7 +164,7 @@ public class WTPKbdBeanPropertyResource extends WTPKbAbstractModelResource {
 
 	public void setConstraint(String name, String value) {
 		if (name == null) return;
-		if ("type".equalsIgnoreCase(name)) {
+		if ("type".equalsIgnoreCase(name)) { //$NON-NLS-1$
 			if (value == null || value.trim().length() == 0) {
 				if(type != null) type.remove(IWebPromptingProvider.PROPERTY_TYPE);
 			} else {
@@ -210,8 +210,8 @@ public class WTPKbdBeanPropertyResource extends WTPKbAbstractModelResource {
 			
 			// JBIDE-2437: Because of the issue add EL open/close brackets to the proposal replacement string
 			// This will allow us to separate EL-proposals from all the others.
-			proposal.setReplacementString("#{" + proposal.getReplacementString() + "}");
-			proposal.setLabel("#{" + proposal.getLabel() + "}");
+			proposal.setReplacementString("#{" + proposal.getReplacementString() + "}"); //$NON-NLS-1$ //$NON-NLS-2$
+			proposal.setLabel("#{" + proposal.getLabel() + "}"); //$NON-NLS-1$ //$NON-NLS-2$
 			
 			// JBIDE-2334: JSPAciveContentAssistProcessor (a class which calls this method)
 			// is to process opening and closing EL charachers 

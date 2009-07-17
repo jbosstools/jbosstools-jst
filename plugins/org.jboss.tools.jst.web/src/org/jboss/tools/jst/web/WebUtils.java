@@ -36,13 +36,13 @@ import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.jst.web.project.WebProject;
 
 public class WebUtils {
-	public static final String ATTR_WEB_SERVER_NAME = "org.jboss.tools.jst.web.web_server_name";
-	public static final String WEB_SERVER_TOMCAT = "Tomcat";
-	public static final String APPLICATION_SERVER_J2EE = "J2EE";
-	public static final String APPLICATION_SERVER_JBOSS = "JBoss";
+	public static final String ATTR_WEB_SERVER_NAME = "org.jboss.tools.jst.web.web_server_name"; //$NON-NLS-1$
+	public static final String WEB_SERVER_TOMCAT = "Tomcat"; //$NON-NLS-1$
+	public static final String APPLICATION_SERVER_J2EE = "J2EE"; //$NON-NLS-1$
+	public static final String APPLICATION_SERVER_JBOSS = "JBoss"; //$NON-NLS-1$
 	
 	public static String[] getServletVersions(String templateBase) {
-		String location = templateBase + "/../lib/servlet";
+		String location = templateBase + "/../lib/servlet"; //$NON-NLS-1$
 		File f = new File(location);
 		if(!f.isDirectory()) return new String[0];
 		File[] fs = f.listFiles();
@@ -54,7 +54,7 @@ public class WebUtils {
 	}
 	
 	public static String[] getServletLibraries(String templateBase, String servletVersion) {
-		String location = templateBase + "/../lib/servlet/" + servletVersion;
+		String location = templateBase + "/../lib/servlet/" + servletVersion; //$NON-NLS-1$
 		File f = new File(location);
 		if(!f.isDirectory()) return new String[0];
 
@@ -86,7 +86,7 @@ public class WebUtils {
 
 		String classPathVarValue = JavaCore.getClasspathVariable(classPathVarName).toOSString();
 		
-		String location = templateBase + "/../lib/servlet/" + servletVersion;
+		String location = templateBase + "/../lib/servlet/" + servletVersion; //$NON-NLS-1$
 		File f = new File(location);
 		if(!f.isDirectory()) return new String[0];
 
@@ -97,8 +97,8 @@ public class WebUtils {
 			String path = null;
 			try {
 				path = fs[i].getCanonicalPath();
-				if(!path.startsWith("/")) 
-					path="/"+path;
+				if(!path.startsWith("/"))  //$NON-NLS-1$
+					path="/"+path; //$NON-NLS-1$
 				if(path.startsWith(classPathVarValue)) {
 					path = classPathVarName + path.substring(classPathVarValue.length());
 				}
@@ -110,10 +110,10 @@ public class WebUtils {
 		return jars.toArray(new String[jars.size()]);
 	}
 	
-	public static String CLASS_PATH_VAR_EXTENSION_POINT_ID = "org.jboss.tools.jst.web.classPathVar";
-	public static String VAR_TAG_NAME = "variable";
-	public static String VAR_NAME_ATTR = "name";
-	public static String NATURE_ID_ATTR = "natureId";
+	public static String CLASS_PATH_VAR_EXTENSION_POINT_ID = "org.jboss.tools.jst.web.classPathVar"; //$NON-NLS-1$
+	public static String VAR_TAG_NAME = "variable"; //$NON-NLS-1$
+	public static String VAR_NAME_ATTR = "name"; //$NON-NLS-1$
+	public static String NATURE_ID_ATTR = "natureId"; //$NON-NLS-1$
 
 	public static String findClassPathVarByNatureId(String nId) {
 	    IExtensionPoint point = Platform.getExtensionRegistry().getExtensionPoint(CLASS_PATH_VAR_EXTENSION_POINT_ID);
@@ -168,7 +168,7 @@ public class WebUtils {
 		if(isEar) {
 			IVirtualComponent component = ComponentCore.createComponent(project);
 			IPath path = component.getRootFolder().getProjectRelativePath();
-			IFile f = project.getFile(path.append("META-INF").append("application.xml"));
+			IFile f = project.getFile(path.append("META-INF").append("application.xml")); //$NON-NLS-1$ //$NON-NLS-2$
 			if(f != null && f.exists()) {
 				fs.add(f);
 			}
@@ -176,7 +176,7 @@ public class WebUtils {
 		if(isWar && !isReferencedByEar) {
 			IVirtualComponent component = ComponentCore.createComponent(project);
 			IPath path = component.getRootFolder().getProjectRelativePath();
-			IFile f = project.getFile(path.append("WEB-INF").append("web.xml"));
+			IFile f = project.getFile(path.append("WEB-INF").append("web.xml")); //$NON-NLS-1$ //$NON-NLS-2$
 			if(f != null && f.exists()) {
 				fs.add(f);
 			}

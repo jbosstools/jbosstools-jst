@@ -23,6 +23,7 @@ import org.eclipse.gef.tools.DeselectAllTracker;
 import org.eclipse.gef.tools.MarqueeDragTracker;
 import org.eclipse.swt.accessibility.AccessibleEvent;
 
+import org.jboss.tools.jst.web.tiles.ui.Messages;
 import org.jboss.tools.jst.web.tiles.ui.editor.figures.DiagramFigure;
 import org.jboss.tools.jst.web.tiles.ui.editor.model.IDefinition;
 import org.jboss.tools.jst.web.tiles.ui.editor.model.ILink;
@@ -75,7 +76,7 @@ public class TilesDiagramEditPart extends TilesContainerEditPart implements
 	protected AccessibleEditPart createAccessible() {
 		return new AccessibleGraphicalEditPart() {
 			public void getName(AccessibleEvent e) {
-				e.result = "Tiles Diagram";
+				e.result = Messages.TilesDiagramEditPart_TilesDiagram;
 			}
 		};
 	}

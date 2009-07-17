@@ -27,13 +27,13 @@ public class JsfVariableElement extends ModelElement implements IAttributeValue 
 	 * @see IAttributeValue#getValue()
 	 */
 	public String getValue() {
-		return "#{" + name + "}";
+		return "#{" + name + "}"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
 	 * @see ModelElement#getComparedValue()
 	 */
 	protected String getComparedValue() {
-		return "#{" + name;
+		return "#{" + name; //$NON-NLS-1$
 	}
 }

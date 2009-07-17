@@ -82,7 +82,8 @@ import java.util.Set;
  */
 @SuppressWarnings("restriction")
 public class ImageSelectionDialog extends SelectionStatusDialog {
-    final static String[][] fileExtensions = {
+    @SuppressWarnings("nls")
+	final static String[][] fileExtensions = {
             { "jpeg", "jpg", "jpe", "jfif" },
             { "gif" },
             { "bmp" },
@@ -252,7 +253,7 @@ public class ImageSelectionDialog extends SelectionStatusDialog {
                 fCurrStatus = fValidator.validate(getResult());
                 updateStatus(fCurrStatus);
             } else {
-                fCurrStatus = new Status(IStatus.OK, PlatformUI.PLUGIN_ID, IStatus.OK, "", null);
+                fCurrStatus = new Status(IStatus.OK, PlatformUI.PLUGIN_ID, IStatus.OK, "", null); //$NON-NLS-1$
             }
         } else {
             fCurrStatus = new Status(IStatus.ERROR, PlatformUI.PLUGIN_ID, IStatus.ERROR,
@@ -353,7 +354,7 @@ public class ImageSelectionDialog extends SelectionStatusDialog {
             StringBuffer buf = new StringBuffer();
 
             for (int j = 0; j < str.length; j++) {
-                buf.append("*." + str[j].toUpperCase() + "; ");
+                buf.append("*." + str[j].toUpperCase() + "; "); //$NON-NLS-1$ //$NON-NLS-2$
             }
 
             filterCombo.add(buf.toString());
@@ -429,7 +430,7 @@ public class ImageSelectionDialog extends SelectionStatusDialog {
                         }
 
                         return new Status(IStatus.ERROR, PlatformUI.PLUGIN_ID, IStatus.ERROR,
-                            "Invalid Image File", null);
+                        		JstUIMessages.ImageSelectionDialog_InvalidImageFile, null);
                     }
                 };
 
@@ -625,7 +626,7 @@ public class ImageSelectionDialog extends SelectionStatusDialog {
                                 Point imagePoint = new Point(image.getBounds().width,
                                         image.getBounds().height);
 
-                                String imageInfo = imagePoint.x + " x " + imagePoint.y + " px";
+                                String imageInfo = imagePoint.x + " x " + imagePoint.y + " px"; //$NON-NLS-1$ //$NON-NLS-2$
 
                                 // change resolution if image anymore image label
                                 if ((imagePoint.x > labelPoint.x) || (imagePoint.y > labelPoint.y)) {

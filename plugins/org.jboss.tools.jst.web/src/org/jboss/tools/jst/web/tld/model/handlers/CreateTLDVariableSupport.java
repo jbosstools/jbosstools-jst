@@ -87,9 +87,9 @@ public class CreateTLDVariableSupport extends SpecialWizardSupport {
     		boolean isNameFromAttrSet = (nameFromAttr != null && nameFromAttr.length() > 0);
     		boolean isNameGivenSet = (nameGiven != null && nameGiven.length() > 0);
     		if(!isNameFromAttrSet && !isNameGivenSet) {
-    			message = NLS.bind(WebUIMessages.EITHER_OR_MUST_BE_SET, getDisplayName(TLDConstants.NAME_FROM_ATTRIBUTE), getDisplayName(TLDConstants.NAME_GIVEN));  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    			message = NLS.bind(WebUIMessages.EITHER_OR_MUST_BE_SET, getDisplayName(TLDConstants.NAME_FROM_ATTRIBUTE), getDisplayName(TLDConstants.NAME_GIVEN));  
     		} else if(isNameFromAttrSet && isNameGivenSet) {
-    			message = NLS.bind(WebUIMessages.YOU_MAY_SET_ONLY_ONE, getDisplayName(TLDConstants.NAME_FROM_ATTRIBUTE), getDisplayName(TLDConstants.NAME_GIVEN)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    			message = NLS.bind(WebUIMessages.YOU_MAY_SET_ONLY_ONE, getDisplayName(TLDConstants.NAME_FROM_ATTRIBUTE), getDisplayName(TLDConstants.NAME_GIVEN)); 
     		}
     		if(message != null) return;
     		super.validate(data);

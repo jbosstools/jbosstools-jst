@@ -40,13 +40,13 @@ public class TilesFormLayoutData implements IFormLayoutData {
 					// Tiles Config Description Form
 					new FormData(
 						WebUIMessages.TILES_CONFIG_DESCRIPTION,
-						"",
+						"", //$NON-NLS-1$
 						new FormAttributeData[]{new FormAttributeData("name"), new FormAttributeData("encoding")} //$NON-NLS-1$ //$NON-NLS-2$
 					),
 					// Tiles Definitions Form
 					new FormData(
 						WebUIMessages.DEFINITIONS,
-						EMPTY_DESCRIPTION, //$NON-NLS-1$
+						EMPTY_DESCRIPTION, 
 						new FormAttributeData[]{new FormAttributeData("name", 33), new FormAttributeData("extends", 33), new FormAttributeData("path", 33)}, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 						new String[]{"TilesDefinition"}, //$NON-NLS-1$
 					new IFormActionData[] {
@@ -65,7 +65,7 @@ public class TilesFormLayoutData implements IFormLayoutData {
 					// Tiles Basic Definition Form
 					new FormData(
 						WebUIMessages.BASIC,
-						"",
+						"", //$NON-NLS-1$
 						new FormAttributeData[]{
 							new FormAttributeData("name"),  //$NON-NLS-1$
 							new FormAttributeData("extends"),  //$NON-NLS-1$
@@ -76,7 +76,7 @@ public class TilesFormLayoutData implements IFormLayoutData {
 					// Tiles Advanced Definition Form
 					new FormData(
 						WebUIMessages.ADVANCED,
-						"",
+						"", //$NON-NLS-1$
 						new FormAttributeData[]{
 							new FormAttributeData("id"),  //$NON-NLS-1$
 							new FormAttributeData("display-name"),  //$NON-NLS-1$
@@ -88,7 +88,7 @@ public class TilesFormLayoutData implements IFormLayoutData {
 					// Tiles Deprecated Definition Form
 					new FormData(
 						WebUIMessages.DEPRECATED,
-						"",
+						"", //$NON-NLS-1$
 						new FormAttributeData[]{
 							new FormAttributeData("page"),  //$NON-NLS-1$
 							new FormAttributeData("template")} //$NON-NLS-1$
@@ -96,7 +96,7 @@ public class TilesFormLayoutData implements IFormLayoutData {
 					// Tiles Puts Form
 					new FormData(
 						WebUIMessages.PUT,
-						EMPTY_DESCRIPTION, //$NON-NLS-1$
+						EMPTY_DESCRIPTION, 
 						new FormAttributeData[]{
 							new FormAttributeData("name", 33),  //$NON-NLS-1$
 							new FormAttributeData("type", 33),  //$NON-NLS-1$
@@ -115,7 +115,7 @@ public class TilesFormLayoutData implements IFormLayoutData {
 					// Tiles PutLists Form
 					new FormData(
 						WebUIMessages.PUTLIST,
-						EMPTY_DESCRIPTION, //$NON-NLS-1$
+						EMPTY_DESCRIPTION, 
 						new FormAttributeData[]{new FormAttributeData("name", 100)}, //$NON-NLS-1$
 						new String[]{"TilesList"}, //$NON-NLS-1$
 //						DEFAULT_TABLE_ACTION_TYPE
@@ -135,7 +135,7 @@ public class TilesFormLayoutData implements IFormLayoutData {
 					// Tiles Basic Put Form
 					new FormData(
 						WebUIMessages.BASIC,
-						"",
+						"", //$NON-NLS-1$
 						new FormAttributeData[]{
 							new FormAttributeData("name"),  //$NON-NLS-1$
 							new FormAttributeData("type"),  //$NON-NLS-1$
@@ -145,13 +145,13 @@ public class TilesFormLayoutData implements IFormLayoutData {
 					// Tiles Advanced Put Form
 					new FormData(
 						WebUIMessages.ADVANCED,
-						"",
+						"", //$NON-NLS-1$
 						new FormAttributeData[]{new FormAttributeData("id")} //$NON-NLS-1$
 					),
 					// Tiles Deprecated Put Form
 					new FormData(
 						WebUIMessages.DEPRECATED,
-						"",
+						"", //$NON-NLS-1$
 						new FormAttributeData[]{new FormAttributeData("direct")} //$NON-NLS-1$
 					)
 				}
@@ -162,13 +162,13 @@ public class TilesFormLayoutData implements IFormLayoutData {
 					// Tiles Put List Attributes Form
 					new FormData(
 						WebUIMessages.ATTRIBUTES,
-						"",
+						"", //$NON-NLS-1$
 						new FormAttributeData[]{new FormAttributeData("name"), new FormAttributeData("id")} //$NON-NLS-1$ //$NON-NLS-2$
 					),
 					// Tiles Put List Adds Form
 					new FormData(
 						WebUIMessages.ADD,
-						EMPTY_DESCRIPTION, //$NON-NLS-1$
+						EMPTY_DESCRIPTION, 
 						new FormAttributeData[]{new FormAttributeData("type", 50), new FormAttributeData("value", 50)}, //$NON-NLS-1$ //$NON-NLS-2$
 						new String[]{"TilesAdd"}, //$NON-NLS-1$
 //						DEFAULT_TABLE_ACTION_TYPE
@@ -183,7 +183,7 @@ public class TilesFormLayoutData implements IFormLayoutData {
 					// Tiles Put List Items Form
 					new FormData(
 						WebUIMessages.ITEM,
-						EMPTY_DESCRIPTION, //$NON-NLS-1$
+						EMPTY_DESCRIPTION, 
 						new FormAttributeData[]{new FormAttributeData("value", 50), new FormAttributeData("link", 50)}, //$NON-NLS-1$ //$NON-NLS-2$
 						new String[]{"TilesItem"}, //$NON-NLS-1$
 //						DEFAULT_TABLE_ACTION_TYPE
@@ -198,7 +198,7 @@ public class TilesFormLayoutData implements IFormLayoutData {
 					// Tiles Put List Adds Form
 					new FormData(
 						WebUIMessages.BEAN,
-						EMPTY_DESCRIPTION, //$NON-NLS-1$
+						EMPTY_DESCRIPTION, 
 						new FormAttributeData[]{new FormAttributeData("classtype", 100)}, //$NON-NLS-1$
 						new String[]{"TilesBean"}, //$NON-NLS-1$
 //						DEFAULT_TABLE_ACTION_TYPE
@@ -213,7 +213,7 @@ public class TilesFormLayoutData implements IFormLayoutData {
 					// Tiles PutLists Form
 					new FormData(
 						WebUIMessages.PUTLIST,
-						EMPTY_DESCRIPTION, //$NON-NLS-1$
+						EMPTY_DESCRIPTION, 
 						new FormAttributeData[]{new FormAttributeData("name", 100)}, //$NON-NLS-1$
 						new String[]{"TilesList"}, //$NON-NLS-1$
 //						DEFAULT_TABLE_ACTION_TYPE
@@ -233,13 +233,13 @@ public class TilesFormLayoutData implements IFormLayoutData {
 					// Tiles Basic Item Form
 					new FormData(
 						WebUIMessages.BASIC,
-						"",
+						"", //$NON-NLS-1$
 						new FormAttributeData[]{new FormAttributeData("link"), new FormAttributeData("value")} //$NON-NLS-1$ //$NON-NLS-2$
 					),
 					// Tiles Advanced Item Form
 					new FormData(
 						WebUIMessages.ADVANCED,
-						"",
+						"", //$NON-NLS-1$
 						new FormAttributeData[]{
 							new FormAttributeData("classtype", null, JAVA_LINK_WRAPPER),  //$NON-NLS-1$
 							new FormAttributeData("id"),  //$NON-NLS-1$
@@ -254,7 +254,7 @@ public class TilesFormLayoutData implements IFormLayoutData {
 					// Tiles Basic Bean Form
 					new FormData(
 						WebUIMessages.BASIC,
-						"",
+						"", //$NON-NLS-1$
 						new FormAttributeData[]{
 							new FormAttributeData("classtype", null, JAVA_LINK_WRAPPER),  //$NON-NLS-1$
 							new FormAttributeData("id")} //$NON-NLS-1$
@@ -262,7 +262,7 @@ public class TilesFormLayoutData implements IFormLayoutData {
 					// Tiles Set-properties Bean Form
 					new FormData(
 						WebUIMessages.SET_PROPERTIES,
-						EMPTY_DESCRIPTION, //$NON-NLS-1$
+						EMPTY_DESCRIPTION, 
 						new FormAttributeData[]{new FormAttributeData("id", 33), new FormAttributeData("property", 33), new FormAttributeData("value", 33)}, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 						new String[]{"StrutsSetProperty"}, //$NON-NLS-1$
 //						DEFAULT_TABLE_ACTION_TYPE
@@ -280,7 +280,7 @@ public class TilesFormLayoutData implements IFormLayoutData {
 					// Tiles Basic Add Form
 					new FormData(
 						WebUIMessages.BASIC,
-						"",
+						"", //$NON-NLS-1$
 						new FormAttributeData[]{
 							new FormAttributeData("type"),  //$NON-NLS-1$
 							new FormAttributeData("value", null, STRING_BUTTON_WRAPPER),  //$NON-NLS-1$
@@ -290,13 +290,13 @@ public class TilesFormLayoutData implements IFormLayoutData {
 					// Tiles Advanced Add Form
 					new FormData(
 						WebUIMessages.ADVANCED,
-						"",
+						"", //$NON-NLS-1$
 						new FormAttributeData[]{new FormAttributeData("id")} //$NON-NLS-1$
 					),
 					// Tiles Deprecated Add Form
 					new FormData(
 						WebUIMessages.DEPRECATED,
-						"",
+						"", //$NON-NLS-1$
 						new FormAttributeData[]{new FormAttributeData("direct")} //$NON-NLS-1$
 					)
 				}
@@ -307,7 +307,7 @@ public class TilesFormLayoutData implements IFormLayoutData {
 					// Tiles StrutsSetProperty Form
 					new FormData(
 						WebUIMessages.SET_PROPERTY,
-						"",
+						"", //$NON-NLS-1$
 						new FormAttributeData[]{new FormAttributeData("id"), new FormAttributeData("property"), new FormAttributeData("value")} //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					)
 				}

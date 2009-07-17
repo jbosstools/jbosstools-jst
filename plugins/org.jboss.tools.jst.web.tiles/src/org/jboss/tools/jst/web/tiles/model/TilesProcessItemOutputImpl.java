@@ -13,9 +13,9 @@ package org.jboss.tools.jst.web.tiles.model;
 public class TilesProcessItemOutputImpl extends TilesProcessItemImpl {
 
     public String getPresentationString() {
-        String title = getAttributeValue("path");
+        String title = getAttributeValue("path"); //$NON-NLS-1$
         if(title == null) title = getAttributeValue(ATT_NAME);
-        return "" + title;
+        return "" + title; //$NON-NLS-1$
     }
 
 }

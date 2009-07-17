@@ -155,7 +155,7 @@ public abstract class ProjectVersions {
 	public void removeVersion(String name) {
 		ProjectVersion v = getVersion(name);
 		if(v == null || v.element == null) return;
-		if(!ProjectVersion.confirm(NLS.bind(WebUIMessages.YOU_WANT_TO_DELETE_IMPLEMENTATION,name))) return; //$NON-NLS-2$
+		if(!ProjectVersion.confirm(NLS.bind(WebUIMessages.YOU_WANT_TO_DELETE_IMPLEMENTATION,name))) return; 
 		v.element.getParentNode().removeChild(v.element);
 		save();
 		update();

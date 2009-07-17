@@ -45,7 +45,7 @@ public class WTPKbdBundleNameResource extends WTPKbAbstractModelResource {
 	public Collection<KbProposal> queryProposal(String query) {
 		Collection<KbProposal> proposals = new ArrayList<KbProposal>();
 		if (!isReadyToUse()) return proposals;
-		List sourceList = fProvider.getList(fXModel, SUPPORTED_ID, "", null);
+		List sourceList = fProvider.getList(fXModel, SUPPORTED_ID, "", null); //$NON-NLS-1$
 		
 		if (sourceList != null && !sourceList.isEmpty()) {
 			Set<String> sorted = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
@@ -78,7 +78,7 @@ public class WTPKbdBundleNameResource extends WTPKbAbstractModelResource {
 	 */
 	public InputStream getInputStream() { return null; }
 	
-	public String toString () { return "WTPKbdBundleNameResource"; }
+	public String toString () { return "WTPKbdBundleNameResource"; } //$NON-NLS-1$
 
 	public XModel getXModel() { return fXModel; }
 	public String getSupportedID () { return SUPPORTED_ID; }

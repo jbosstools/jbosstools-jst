@@ -72,7 +72,7 @@ public class Item {
     }
 
     public boolean isComment() {
-        return object != null && object.getModelEntity().getName().endsWith("ProcessComment");
+        return object != null && object.getModelEntity().getName().endsWith("ProcessComment"); //$NON-NLS-1$
     }
     
     int gravity;

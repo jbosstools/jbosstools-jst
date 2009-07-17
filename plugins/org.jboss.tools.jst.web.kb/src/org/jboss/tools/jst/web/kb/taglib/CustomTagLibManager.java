@@ -101,7 +101,7 @@ public class CustomTagLibManager {
 						try {
 							String pluginPath = FileLocator.resolve(sourcePlugin.getEntry("/")).getPath(); //$NON-NLS-1$
 							if(uri==null || uri.length()==0 || location==null || location.length()==0) {
-								WebKbPlugin.getDefault().logWarning("Incorrect org.jboss.tools.jst.web.kb.KbTagLib extension in " + pluginPath + " plugin. URI or location can't be empty."); //$NON-NLS-1$ $NON-NLS-2$
+								WebKbPlugin.getDefault().logWarning("Incorrect org.jboss.tools.jst.web.kb.KbTagLib extension in " + pluginPath + " plugin. URI or location can't be empty."); //$NON-NLS-1$ //$NON-NLS-2$
 								continue;
 							}
 							schemaLocation = new File(pluginPath, location);
@@ -120,9 +120,9 @@ public class CustomTagLibManager {
 						Bundle sourcePlugin = Platform.getBundle(elements[j].getNamespaceIdentifier());
 						File schemaLocation = null;
 						try {
-							String pluginPath = FileLocator.resolve(sourcePlugin.getEntry("/")).getPath();
+							String pluginPath = FileLocator.resolve(sourcePlugin.getEntry("/")).getPath(); //$NON-NLS-1$
 							if(location==null || location.length()==0) {
-								WebKbPlugin.getDefault().logWarning("Incorrect org.jboss.tools.jst.web.kb.KbTagLib extension in " + pluginPath + " plugin. Location can't be empty."); //$NON-NLS-1$ $NON-NLS-2$
+								WebKbPlugin.getDefault().logWarning("Incorrect org.jboss.tools.jst.web.kb.KbTagLib extension in " + pluginPath + " plugin. Location can't be empty."); //$NON-NLS-1$ //$NON-NLS-2$
 								continue;
 							}
 							schemaLocation = new File(pluginPath, location);

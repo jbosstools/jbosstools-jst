@@ -20,7 +20,7 @@ import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 
 public class TilesEditorTabbedPreferencesPage extends TabbedPreferencesPage implements IWorkbenchPreferencePage {
-	public static String TILES_EDITOR_PATH = "%Options%/Struts Studio/Editors/Tiles Diagram";
+	public static String TILES_EDITOR_PATH = "%Options%/Struts Studio/Editors/Tiles Diagram"; //$NON-NLS-1$
 	
 	public TilesEditorTabbedPreferencesPage() {
 		XModel model = getPreferenceModel();		
@@ -54,7 +54,7 @@ public class TilesEditorTabbedPreferencesPage extends TabbedPreferencesPage impl
 		public TilesEditorPreferenceDialog() {
 			super(ModelPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell(), 
 			ModelPlugin.getDefault().getWorkbench().getPreferenceManager());
-			setSelectedNodePreference("org.jboss.tools.common.xstudio.editors.tilesdiagram");
+			setSelectedNodePreference("org.jboss.tools.common.xstudio.editors.tilesdiagram"); //$NON-NLS-1$
 		}
 	}
 }

@@ -32,8 +32,8 @@ public class TilesProcessItemImpl extends OrderedObjectImpl implements Reference
     	}
         this.reference = reference;
         if(reference != null) {
-            String shape = get("SHAPE");
-            if(shape != null && shape.length() > 0) reference.set("_shape", shape);
+            String shape = get("SHAPE"); //$NON-NLS-1$
+            if(shape != null && shape.length() > 0) reference.set("_shape", shape); //$NON-NLS-1$
         }
     }
     
@@ -54,8 +54,8 @@ public class TilesProcessItemImpl extends OrderedObjectImpl implements Reference
     }
 
     public void set(String name, String value) {
-        if("SHAPE".equals(name) && reference != null) {
-            reference.set("_shape", value);
+        if("SHAPE".equals(name) && reference != null) { //$NON-NLS-1$
+            reference.set("_shape", value); //$NON-NLS-1$
         }
         super.set(name, value);
     }

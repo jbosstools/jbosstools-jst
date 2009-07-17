@@ -43,7 +43,7 @@ import org.w3c.dom.Element;
  * @author Alexey Kazakov
  */
 public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
-	public static String URI = "uri";
+	public static String URI = "uri"; //$NON-NLS-1$
 
 	protected INameSpace nameSpace;
 	protected String uri;
@@ -354,7 +354,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		TextProposal proposal = new TextProposal();
 		proposal.setContextInfo(component.getDescription());
 		proposal.setSource(component);
-		StringBuffer label = new StringBuffer("<");
+		StringBuffer label = new StringBuffer("<"); //$NON-NLS-1$
 		if(prefix!=null && prefix.length()>0) {
 			label.append(prefix + KbQuery.PREFIX_SEPARATOR);
 		}
@@ -364,13 +364,13 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		IAttribute[] attributes = component.getPreferableAttributes();
 		StringBuffer attributeSB = new StringBuffer();
 		for (int j = 0; j < attributes.length; j++) {
-			attributeSB.append(" ").append(attributes[j].getName()).append("=\"\"");
+			attributeSB.append(" ").append(attributes[j].getName()).append("=\"\""); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		label.append(attributeSB);
 		if(!component.canHaveBody()) {
-			label.append(" /");
+			label.append(" /"); //$NON-NLS-1$
 		}
-		label.append(">");
+		label.append(">"); //$NON-NLS-1$
 
 		proposal.setReplacementString(label.toString());
 

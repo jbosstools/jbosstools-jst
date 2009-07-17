@@ -60,7 +60,7 @@ public class InnerModelHelper {
 		
 		XModelObject webroot = model.createModelObject("FileSystemFolder", null); //$NON-NLS-1$
 		webroot.setAttributeValue("name", "WEB-ROOT"); //$NON-NLS-1$ //$NON-NLS-2$
-		webroot.setAttributeValue("location", webRootLocation); //$NON-NLS-1$ //$NON-NLS-2$
+		webroot.setAttributeValue("location", webRootLocation); //$NON-NLS-1$ 
 		fs.addChild(webroot);
 		
 		XModelObject lib = model.createModelObject("FileSystemFolder", null); //$NON-NLS-1$
@@ -75,13 +75,13 @@ public class InnerModelHelper {
 	public static IPath getWebInfPath(IProject project) {		
 		IVirtualComponent component = ComponentCore.createComponent(project);
 		if(component == null) return null;
-		IVirtualFolder webInfDir = component.getRootFolder().getFolder(new Path("/WEB-INF"));
+		IVirtualFolder webInfDir = component.getRootFolder().getFolder(new Path("/WEB-INF")); //$NON-NLS-1$
 		IPath modulePath = webInfDir.getWorkspaceRelativePath();
 		return (!webInfDir.exists()) ? null : modulePath;
 	}
 
 	static String getWebRootPath(IProject project, String webInfLocation) {
-		String webRootLocation = XModelConstants.WORKSPACE_REF + "/..";
+		String webRootLocation = XModelConstants.WORKSPACE_REF + "/.."; //$NON-NLS-1$
 		
 		IPath wrp = ProjectHome.getFirstWebContentPath(project);
 		IPath wip = ProjectHome.getWebInfPath(project);

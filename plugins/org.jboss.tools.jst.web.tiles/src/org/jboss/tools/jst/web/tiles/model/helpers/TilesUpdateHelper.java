@@ -20,7 +20,7 @@ public class TilesUpdateHelper implements ITilesDefinitionSetListener{
 	public TilesUpdateHelper(TilesProcessImpl process) {
 		this.process = process;
 		this.helper = process.getHelper();
-		TilesUpdateManager.getInstance(process.getModel()).register("", this);
+		TilesUpdateManager.getInstance(process.getModel()).register("", this); //$NON-NLS-1$
 		TilesDefinitionSet.getInstance(process.getModel()).addTilesDefinitionSetListener(this);
 	}
 	

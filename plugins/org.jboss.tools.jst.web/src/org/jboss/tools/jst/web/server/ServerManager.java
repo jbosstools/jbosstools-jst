@@ -103,7 +103,7 @@ public class ServerManager {
 	
 	public String getSelectedServerId() {
 		String result = getDefaultWebServer();
-		return result == null ? "" : result;
+		return result == null ? "" : result; //$NON-NLS-1$
 	}
 
 	public IServer getSelectedServer() {
@@ -149,7 +149,7 @@ public class ServerManager {
 		}
 	}
 	
-	static String DEFAULT_WEB_SERVER = WebModelPlugin.PLUGIN_ID + ".defaultWebServer";
+	static String DEFAULT_WEB_SERVER = WebModelPlugin.PLUGIN_ID + ".defaultWebServer"; //$NON-NLS-1$
 	
 	static String getDefaultWebServer() {
 		String result = getInstancePreference(DEFAULT_WEB_SERVER);

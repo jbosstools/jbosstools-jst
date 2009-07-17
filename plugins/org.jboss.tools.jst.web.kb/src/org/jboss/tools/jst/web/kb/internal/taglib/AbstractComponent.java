@@ -38,10 +38,10 @@ import org.w3c.dom.Element;
  * @author Alexey Kazakov
  */
 public abstract class AbstractComponent extends KbObject implements IComponent {
-	public static final String DESCRIPTION = "description";
-	public static final String COMPONENT_CLASS = "component-class";
-	public static final String COMPONENT_TYPE = "component-type";
-	public static final String BODY_CONTENT = "bodycontent";
+	public static final String DESCRIPTION = "description"; //$NON-NLS-1$
+	public static final String COMPONENT_CLASS = "component-class"; //$NON-NLS-1$
+	public static final String COMPONENT_TYPE = "component-type"; //$NON-NLS-1$
+	public static final String BODY_CONTENT = "bodycontent"; //$NON-NLS-1$
 
 	protected boolean canHaveBody;
 	protected String componentClass;
@@ -75,7 +75,7 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	 * @param s
 	 */
 	public void setCanHaveBody(IValueInfo s) {
-		canHaveBody = s == null || "empty".equals(s.getValue());
+		canHaveBody = s == null || "empty".equals(s.getValue()); //$NON-NLS-1$
 		attributesInfo.put(BODY_CONTENT, s);
 	}
 
@@ -481,7 +481,7 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 			componentType = c.componentType;
 		}
 		if(canHaveBody != c.canHaveBody) {
-			changes = Change.addChange(changes, new Change(this, BODY_CONTENT, "" + canHaveBody, "" + c.canHaveBody));
+			changes = Change.addChange(changes, new Change(this, BODY_CONTENT, "" + canHaveBody, "" + c.canHaveBody)); //$NON-NLS-1$ //$NON-NLS-2$
 			canHaveBody = c.canHaveBody;
 		}
 

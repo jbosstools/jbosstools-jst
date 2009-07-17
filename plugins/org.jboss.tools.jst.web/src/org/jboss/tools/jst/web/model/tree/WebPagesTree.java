@@ -41,13 +41,13 @@ public class WebPagesTree extends FileSystemResourceTree {
 
     private boolean accept(XModelObject c) {
         if(c.getFileType() == XFileObject.FOLDER) {
-            String overlapped = c.get("overlapped");
+            String overlapped = c.get("overlapped"); //$NON-NLS-1$
             if(overlapped != null && overlapped.length() > 0) {
-            	String overlappedSystem = c.get("overlappedSystem");
-            	if(!"FileSystems/WEB-INF".equals(overlappedSystem)) return false;
+            	String overlappedSystem = c.get("overlappedSystem"); //$NON-NLS-1$
+            	if(!"FileSystems/WEB-INF".equals(overlappedSystem)) return false; //$NON-NLS-1$
             } 
         } else if(c.getFileType() == XFileObject.FILE) {
-        	String nm = c.getAttributeValue("name");
+        	String nm = c.getAttributeValue("name"); //$NON-NLS-1$
         	if(nm.length() == 0) return false;
         	if(!accepts0(c)) return false;
         }
@@ -59,14 +59,14 @@ public class WebPagesTree extends FileSystemResourceTree {
 	}
 
     public String getPath(XModelObject o) {
-        if(o == fsr) return "";
+        if(o == fsr) return ""; //$NON-NLS-1$
         String s = XModelObjectLoaderUtil.getResourcePath(o);
         String p = o.getPath();
-        if(p == null) return "";
-        int b = "FileSystems/".length(), e = p.length() - s.length();
-        if(e < b) return "";
+        if(p == null) return ""; //$NON-NLS-1$
+        int b = "FileSystems/".length(), e = p.length() - s.length(); //$NON-NLS-1$
+        if(e < b) return ""; //$NON-NLS-1$
         p = p.substring(b, e);
-           if(o.getFileType() == XFileObject.FOLDER) s += "/";
+           if(o.getFileType() == XFileObject.FOLDER) s += "/"; //$NON-NLS-1$
         return s;
     }
 

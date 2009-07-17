@@ -26,7 +26,7 @@ public class TLDRegistrationHelper {
 		if(t != null) {
 			DefaultRemoveHandler.removeFromParent(t);
 			XModelObject webxml = WebAppHelper.getWebApp(model);
-			XActionInvoker.invoke("SaveActions.Save", webxml, null);
+			XActionInvoker.invoke("SaveActions.Save", webxml, null); //$NON-NLS-1$
 		}
 	}
 
@@ -42,7 +42,7 @@ public class TLDRegistrationHelper {
 		if(webxml == null) return null;
         XModelObject[] sz = WebAppHelper.getTaglibs(webxml);
         for (int i = 0; i < sz.length; i++) {
-            String location = sz[i].getAttributeValue("taglib-location").replace('\\', '/');
+            String location = sz[i].getAttributeValue("taglib-location").replace('\\', '/'); //$NON-NLS-1$
             if(path.equalsIgnoreCase(location)) return sz[i];
         }
         return null;

@@ -159,7 +159,7 @@ public class Definition extends TilesElement implements IDefinition{
 		if (link != null && link.getToDefinition() != null) {
 			return link.getToDefinition().getName();
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 	boolean selected = false;
@@ -172,7 +172,7 @@ public class Definition extends TilesElement implements IDefinition{
 		boolean oldValue = selected;
 		selected = set;
 		this.propertyChangeSupport
-				.firePropertyChange("selected", oldValue, set);
+				.firePropertyChange("selected", oldValue, set); //$NON-NLS-1$
 		if (set)
 			this.getTilesModel().setSelectedDefinition(this);
 	}
@@ -262,8 +262,8 @@ public class Definition extends TilesElement implements IDefinition{
 
 	public void nodeChanged(Object eventData) {
 		fireDefinitionChange();
-		this.propertyChangeSupport.firePropertyChange("name", "", this
-				.getSourceProperty("name"));
+		this.propertyChangeSupport.firePropertyChange("name", "", this //$NON-NLS-1$ //$NON-NLS-2$
+				.getSourceProperty("name")); //$NON-NLS-1$
 	}
 
 	public void addLink(ILink link) {

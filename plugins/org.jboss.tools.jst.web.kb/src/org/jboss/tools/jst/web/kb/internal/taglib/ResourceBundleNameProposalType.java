@@ -40,7 +40,7 @@ public class ResourceBundleNameProposalType extends ModelProposalType {
 		if (!isReadyToUse()) {
 			return EMPTY_PROPOSAL_LIST;
 		}
-		List<Object> sourceList = provider.getList(xModel, WebPromptingProvider.JSF_BUNDLES, "", null);
+		List<Object> sourceList = provider.getList(xModel, WebPromptingProvider.JSF_BUNDLES, "", null); //$NON-NLS-1$
 		if (sourceList != null && !sourceList.isEmpty()) {
 			Set<String> sorted = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
 			Iterator<Object> it = sourceList.iterator();

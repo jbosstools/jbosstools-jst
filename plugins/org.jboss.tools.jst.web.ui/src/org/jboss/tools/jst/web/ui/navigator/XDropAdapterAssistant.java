@@ -45,7 +45,7 @@ public class XDropAdapterAssistant extends CommonDropAdapterAssistant {
 		if(!(o1 instanceof XModelObject)) return Status.CANCEL_STATUS;
 		
 		Properties p = new Properties();
-		p.setProperty("isDrop", "true");
+		p.setProperty("isDrop", "true"); //$NON-NLS-1$ //$NON-NLS-2$
 		if(DnDUtil.isPasteEnabled(targetObject)) {
 			try {
 				DnDUtil.paste(targetObject, p);

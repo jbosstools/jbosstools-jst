@@ -15,13 +15,14 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 import org.jboss.tools.jst.web.context.RegisterServerContext;
+import org.jboss.tools.jst.web.ui.Messages;
 
 public class AppRegisterWizardPage extends WizardPage {
 	protected RegisterServerContext context;
 	AppRegisterComponent appRegister = new AppRegisterComponent();
 	
 	public AppRegisterWizardPage(RegisterServerContext context) {
-		super("Red Hat Project");
+		super(Messages.AppRegisterWizardPage_PageName);
 		this.context = context;
 		appRegister.setContext(context);
 		appRegister.setEnabling(false);

@@ -15,14 +15,14 @@ import org.jboss.tools.common.model.impl.CustomizedObjectImpl;
 
 public class TLDAttribute21Impl extends CustomizedObjectImpl {
 	private static final long serialVersionUID = 1L;
-	static String DEFERRED_VALUE = "deferred-value type";
-	static String DEFERRED_METHOD = "deferred-method signature";
+	static String DEFERRED_VALUE = "deferred-value type"; //$NON-NLS-1$
+	static String DEFERRED_METHOD = "deferred-method signature"; //$NON-NLS-1$
 
 	protected void onAttributeValueEdit(String name, String oldValue, String newValue) throws XModelException {
 		if(DEFERRED_VALUE.equals(name)) {
-			setAttributeValue(DEFERRED_METHOD, "");
+			setAttributeValue(DEFERRED_METHOD, ""); //$NON-NLS-1$
 		} else if(DEFERRED_METHOD.equals(name)) {
-			setAttributeValue(DEFERRED_VALUE, "");
+			setAttributeValue(DEFERRED_VALUE, ""); //$NON-NLS-1$
 		}
 	}
 

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.outline;
 
+import java.text.MessageFormat;
 import java.util.Properties;
 
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
@@ -34,6 +35,7 @@ import org.jboss.tools.common.model.ui.objecteditor.AttributeWrapper;
 import org.jboss.tools.common.model.ui.objecteditor.ExtendedCellEditorProvider;
 import org.jboss.tools.jst.jsp.contentassist.FaceletsHtmlContentAssistProcessor;
 import org.jboss.tools.jst.jsp.contentassist.JSPDialogContentProposalProvider;
+import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.cssdialog.CSSStyleDialog;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSConstants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
@@ -74,7 +76,7 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
             return;
         }
         
-        String attributeName = Constants.EMPTY + context.getProperty("attributeName");
+        String attributeName = Constants.EMPTY + context.getProperty("attributeName"); //$NON-NLS-1$
         if(attributeName.equalsIgnoreCase(CSSConstants.STYLE)
         		|| attributeName.equalsIgnoreCase(CSSConstants.CLASS)) {
         	hasProposals = true;
@@ -83,7 +85,7 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
 
         JSPDialogContentProposalProvider cpp = new JSPDialogContentProposalProvider();
 		cpp.setContext(context);
-		IContentProposal[] ps = cpp.getProposals("#{}", 2);
+		IContentProposal[] ps = cpp.getProposals("#{}", 2); //$NON-NLS-1$
 		System.out.println(ps.length);
         hasProposals = ((ps != null) && (ps.length > 0));
     }
@@ -104,8 +106,8 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
     protected Object openDialogBox(Control cellEditorWindow) {
         externalEditing = true;
 
-        String attributeName = Constants.EMPTY + context.getProperty("attributeName");
-        String nodeName = Constants.EMPTY + context.getProperty("nodeName");
+        String attributeName = Constants.EMPTY + context.getProperty("attributeName"); //$NON-NLS-1$
+        String nodeName = Constants.EMPTY + context.getProperty("nodeName"); //$NON-NLS-1$
         String query = Constants.SLASH;
         ValueHelper valueHelper = new ValueHelper();
 
@@ -113,17 +115,17 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
             query += FaceletsHtmlContentAssistProcessor.faceletHtmlPrefixStart;
         }
 
-        query += (nodeName + "@" + attributeName);
-        context.setProperty("query", query);
-        context.setProperty("help", query);
-        context.setProperty("title", "Edit " + WizardKeys.toDisplayName(attributeName));
-        context.setProperty("subtitle", "<" + context.getProperty("nodeName") + ">");
+        query += (nodeName + "@" + attributeName); //$NON-NLS-1$
+        context.setProperty("query", query); //$NON-NLS-1$
+        context.setProperty("help", query); //$NON-NLS-1$
+        context.setProperty("title", MessageFormat.format(JstUIMessages.JSPDialogCellEditor_EditAttribute, WizardKeys.toDisplayName(attributeName))); //$NON-NLS-1$
+        context.setProperty("subtitle", "<" + context.getProperty("nodeName") + ">"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
         String value = (getValue() instanceof String) ? getValue().toString()
                                                       : ((getValue() instanceof AttributeWrapper)
             ? ((AttributeWrapper) getValue()).value : Constants.EMPTY);
 
-        context.put("value", value);
+        context.put("value", value); //$NON-NLS-1$
 
         attributeName = attributeName.toLowerCase();
 //        if (attributeName.equalsIgnoreCase(CSSConstants.CLASS)
@@ -159,7 +161,7 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
         }
 
         externalEditing = false;
-        value = context.getProperty("value");
+        value = context.getProperty("value"); //$NON-NLS-1$
 
         return value;
     }
@@ -205,7 +207,7 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
 		// No margin
 		controlDecoration.setMarginWidth(0);
 		// Custom hover tip text
-		controlDecoration.setDescriptionText("code assist" /*PDEUIMessages.PDEJavaHelper_msgContentAssistAvailable*/);
+		controlDecoration.setDescriptionText(JstUIMessages.JSPDialogCellEditor_CodeAssist /*PDEUIMessages.PDEJavaHelper_msgContentAssistAvailable*/);
 		// Custom hover properties
 		controlDecoration.setShowHover(true);
 		controlDecoration.setShowOnlyOnFocus(true);

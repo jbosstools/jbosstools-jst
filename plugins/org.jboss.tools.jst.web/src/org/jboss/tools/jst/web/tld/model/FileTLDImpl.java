@@ -16,7 +16,7 @@ public class FileTLDImpl extends SimpleWebFileImpl {
 	private static final long serialVersionUID = 1L;
 
 	protected boolean shouldLoadAttributeSeparately(String xmlname) {
-    	if("uri.#text".equals(xmlname)) return true;
+    	if("uri.#text".equals(xmlname)) return true; //$NON-NLS-1$
     	return false;
     }
     

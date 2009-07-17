@@ -367,14 +367,14 @@ public class TilesEditor extends GEFEditor implements ITilesModelListener {
 		PaletteSeparator sep = new PaletteSeparator("separator"); //$NON-NLS-1$
 		sep
 				.setUserModificationPermission(PaletteSeparator.PERMISSION_NO_MODIFICATION);
-		entries.add(sep); //$NON-NLS-1$
+		entries.add(sep); 
 
 		connectionCreationTool = new GEFConnectionCreationToolEntry(
 				TilesEditorMessages.TilesDiagram_create_new_connection,
 				TilesEditorMessages.TilesDiagram_create_new_connection,
 				null, ImageDescriptor.createFromFile(TilesEditor.class,
 						"icons/new_transition.gif"),//$NON-NLS-1$
-				null//$NON-NLS-1$
+				null
 		) {
 			protected void dragFinished() {
 				
@@ -391,7 +391,7 @@ public class TilesEditor extends GEFEditor implements ITilesModelListener {
 				TemplateConstants.TEMPLATE_DEFINITION, new SimpleFactory(
 						String.class), ImageDescriptor.createFromFile(
 						TilesEditor.class, "icons/new_definition.gif"), //$NON-NLS-1$
-				null//$NON-NLS-1$
+				null
 		);
 		entries.add(combined);
 

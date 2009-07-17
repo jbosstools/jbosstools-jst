@@ -15,64 +15,64 @@ import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.project.IPromptingProvider;
 
 public interface IWebPromptingProvider extends IPromptingProvider {
-	static String ERROR = "error";
+	static String ERROR = "error"; //$NON-NLS-1$
 	static List<Object> EMPTY_LIST = Collections.unmodifiableList(new ArrayList<Object>());
 
-	static String JSF_BUNDLES = "jsf.bundles";
-	static String JSF_REGISTERED_BUNDLES = "jsf.registered.bundles";
-	static String JSF_BUNDLE_PROPERTIES = "jsf.bundle.properties";
-	static String JSF_MANAGED_BEANS = "jsf.beans";
-	static String JSF_BEAN_PROPERTIES = "jsf.bean.properties";
-	static String JSF_BEAN_METHODS = "jsf.bean.methods";
-	static String JSF_BEAN_ADD_PROPERTY = "jsf.bean.add.property";
-	static String JSF_VIEW_ACTIONS = "jsf.view.action";
-	static String JSF_BEAN_OPEN = "jsf.bean.open";
-	static String JSF_GET_PATH = "jsf.get.path";
-	static String JSF_OPEN_ACTION = "jsf.open.action";
-	static String JSF_OPEN_CONVERTOR = "jsf.open.convertor";
-	static String JSF_OPEN_RENDER_KIT = "jsf.open.render-kit";
-	static String JSF_OPEN_VALIDATOR = "jsf.open.validator";
-	static String JSF_OPEN_CLASS_PROPERTY = "jsf.open.property";
-	static String JSF_OPEN_TAG_LIBRARY = "jsf.open.taglibrary";
-	static String JSF_OPEN_KEY = "jsf.open.key";
-	static String JSF_OPEN_BUNDLE = "jsf.open.bundle";
-	static String JSF_GET_URL = "jsf.get.url";
-	static String JSF_GET_TAGLIBS = "jsf.get.taglibs";
+	static String JSF_BUNDLES = "jsf.bundles"; //$NON-NLS-1$
+	static String JSF_REGISTERED_BUNDLES = "jsf.registered.bundles"; //$NON-NLS-1$
+	static String JSF_BUNDLE_PROPERTIES = "jsf.bundle.properties"; //$NON-NLS-1$
+	static String JSF_MANAGED_BEANS = "jsf.beans"; //$NON-NLS-1$
+	static String JSF_BEAN_PROPERTIES = "jsf.bean.properties"; //$NON-NLS-1$
+	static String JSF_BEAN_METHODS = "jsf.bean.methods"; //$NON-NLS-1$
+	static String JSF_BEAN_ADD_PROPERTY = "jsf.bean.add.property"; //$NON-NLS-1$
+	static String JSF_VIEW_ACTIONS = "jsf.view.action"; //$NON-NLS-1$
+	static String JSF_BEAN_OPEN = "jsf.bean.open"; //$NON-NLS-1$
+	static String JSF_GET_PATH = "jsf.get.path"; //$NON-NLS-1$
+	static String JSF_OPEN_ACTION = "jsf.open.action"; //$NON-NLS-1$
+	static String JSF_OPEN_CONVERTOR = "jsf.open.convertor"; //$NON-NLS-1$
+	static String JSF_OPEN_RENDER_KIT = "jsf.open.render-kit"; //$NON-NLS-1$
+	static String JSF_OPEN_VALIDATOR = "jsf.open.validator"; //$NON-NLS-1$
+	static String JSF_OPEN_CLASS_PROPERTY = "jsf.open.property"; //$NON-NLS-1$
+	static String JSF_OPEN_TAG_LIBRARY = "jsf.open.taglibrary"; //$NON-NLS-1$
+	static String JSF_OPEN_KEY = "jsf.open.key"; //$NON-NLS-1$
+	static String JSF_OPEN_BUNDLE = "jsf.open.bundle"; //$NON-NLS-1$
+	static String JSF_GET_URL = "jsf.get.url"; //$NON-NLS-1$
+	static String JSF_GET_TAGLIBS = "jsf.get.taglibs"; //$NON-NLS-1$
 
-	static String JSF_CONVERT_URL_TO_PATH = "jsf.url.to.path";
+	static String JSF_CONVERT_URL_TO_PATH = "jsf.url.to.path"; //$NON-NLS-1$
 
-	static String STRUTS_OPEN_PARAMETER = "struts.open.parameter";
-	static String STRUTS_OPEN_BUNDLE = "struts.open.bundle";
-	static String STRUTS_OPEN_KEY = "struts.open.key";
-	static String STRUTS_OPEN_LINK_FORWARD = "struts.open.link.forward";
-	static String STRUTS_OPEN_LINK_PAGE = "struts.open.link.page";
-	static String STRUTS_OPEN_LINK_ACTION = "struts.open.link.action";
-	static String STRUTS_OPEN_PROPERTY = "struts.open.property";
-	static String STRUTS_OPEN_ACTION_MAPPING = "struts.open.action.mapping";
-	static String STRUTS_OPEN_FORM_BEAN = "struts.open.form.bean";
-	static String STRUTS_OPEN_FORWARD_PATH = "struts.open.forward.path";
-	static String STRUTS_OPEN_OBJECT_BY_PATH = "struts.open.object.by.path";
-	static String STRUTS_OPEN_FILE_IN_WEB_ROOT = "struts.open.file.in.web.root";
-	static String STRUTS_OPEN_VALIDATOR = "struts.open.validator";
-	static String STRUTS_OPEN_TAG_LIBRARY = "struts.open.taglibrary";
-	static String STRUTS_OPEN_METHOD = "struts.open.method";
+	static String STRUTS_OPEN_PARAMETER = "struts.open.parameter"; //$NON-NLS-1$
+	static String STRUTS_OPEN_BUNDLE = "struts.open.bundle"; //$NON-NLS-1$
+	static String STRUTS_OPEN_KEY = "struts.open.key"; //$NON-NLS-1$
+	static String STRUTS_OPEN_LINK_FORWARD = "struts.open.link.forward"; //$NON-NLS-1$
+	static String STRUTS_OPEN_LINK_PAGE = "struts.open.link.page"; //$NON-NLS-1$
+	static String STRUTS_OPEN_LINK_ACTION = "struts.open.link.action"; //$NON-NLS-1$
+	static String STRUTS_OPEN_PROPERTY = "struts.open.property"; //$NON-NLS-1$
+	static String STRUTS_OPEN_ACTION_MAPPING = "struts.open.action.mapping"; //$NON-NLS-1$
+	static String STRUTS_OPEN_FORM_BEAN = "struts.open.form.bean"; //$NON-NLS-1$
+	static String STRUTS_OPEN_FORWARD_PATH = "struts.open.forward.path"; //$NON-NLS-1$
+	static String STRUTS_OPEN_OBJECT_BY_PATH = "struts.open.object.by.path"; //$NON-NLS-1$
+	static String STRUTS_OPEN_FILE_IN_WEB_ROOT = "struts.open.file.in.web.root"; //$NON-NLS-1$
+	static String STRUTS_OPEN_VALIDATOR = "struts.open.validator"; //$NON-NLS-1$
+	static String STRUTS_OPEN_TAG_LIBRARY = "struts.open.taglibrary"; //$NON-NLS-1$
+	static String STRUTS_OPEN_METHOD = "struts.open.method"; //$NON-NLS-1$
 
-	static String PROPERTY_TYPE = "propertyType";
-	static String PROPERTY_BEAN_ONLY = "bean-only";
-	static String PARAMETER_TYPES = "parameterTypes";  // String[]
-	static String RETURN_TYPE = "returnType";
-	static String VIEW_PATH = "viewPath";
-	static String FILE = "file";
-	static String BUNDLE = "bundle";
-	static String KEY = "key";
-	static String MODULE = "module";
-	static String ACTION = "action";
-	static String TYPE = "type";
-	static String PROPERTY = "property";
-	static String MODEL_OBJECT_PATH = "model-path";
-	static String NAME = "name";
-	static String ATTRIBUTE = "attribute";
-	static String LOCALE = "locale";
+	static String PROPERTY_TYPE = "propertyType"; //$NON-NLS-1$
+	static String PROPERTY_BEAN_ONLY = "bean-only"; //$NON-NLS-1$
+	static String PARAMETER_TYPES = "parameterTypes";  // String[] //$NON-NLS-1$
+	static String RETURN_TYPE = "returnType"; //$NON-NLS-1$
+	static String VIEW_PATH = "viewPath"; //$NON-NLS-1$
+	static String FILE = "file"; //$NON-NLS-1$
+	static String BUNDLE = "bundle"; //$NON-NLS-1$
+	static String KEY = "key"; //$NON-NLS-1$
+	static String MODULE = "module"; //$NON-NLS-1$
+	static String ACTION = "action"; //$NON-NLS-1$
+	static String TYPE = "type"; //$NON-NLS-1$
+	static String PROPERTY = "property"; //$NON-NLS-1$
+	static String MODEL_OBJECT_PATH = "model-path"; //$NON-NLS-1$
+	static String NAME = "name"; //$NON-NLS-1$
+	static String ATTRIBUTE = "attribute"; //$NON-NLS-1$
+	static String LOCALE = "locale"; //$NON-NLS-1$
 	
 	public boolean isSupporting(String id);
 	public List<Object> getList(XModel model, String id, String prefix, Properties properties);

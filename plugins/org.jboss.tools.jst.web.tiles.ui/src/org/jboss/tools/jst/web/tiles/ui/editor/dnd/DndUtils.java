@@ -22,7 +22,7 @@ public class DndUtils {
 	
 	public static void paste(IDefinition definition){
 		if(clipBoard != null){
-			clipBoard.setAttributeValue("extends", definition.getName());
+			clipBoard.setAttributeValue("extends", definition.getName()); //$NON-NLS-1$
 			clipBoard = null;
 		}
 	}

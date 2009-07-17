@@ -11,6 +11,6 @@
 package org.jboss.tools.jst.web.model.process;
 
 public interface WebProcessConstants {
-	public static String ATT_SHAPE = "shape";
-	public static String ATT_TARGET = "target";
+	public static String ATT_SHAPE = "shape"; //$NON-NLS-1$
+	public static String ATT_TARGET = "target"; //$NON-NLS-1$
 }

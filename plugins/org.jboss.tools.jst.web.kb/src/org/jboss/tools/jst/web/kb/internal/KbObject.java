@@ -152,7 +152,7 @@ public class KbObject {
 	//Serializing to XML
 	
 	public String getXMLName() {
-		return "object";
+		return "object"; //$NON-NLS-1$
 	}
 	
 	public String getXMLClass() {
@@ -186,7 +186,7 @@ public class KbObject {
 	}
 
 	protected void saveAttributesInfo(Element element, Properties context) {
-		XMLStoreHelper.saveMap(element, attributesInfo, "attributes", context);
+		XMLStoreHelper.saveMap(element, attributesInfo, "attributes", context); //$NON-NLS-1$
 	}
 
 	public void loadXML(Element element, Properties context) {
@@ -200,7 +200,7 @@ public class KbObject {
 		if(e_id != null) {
 			String cls = e_id.getAttribute(XMLStoreConstants.ATTR_CLASS);
 			if(XMLStoreConstants.CLS_STRING.equals(cls)) {
-				id = e_id.getAttribute("string");
+				id = e_id.getAttribute("string"); //$NON-NLS-1$
 			} else if(XMLStoreConstants.CLS_MODEL_OBJECT.equals(cls)) {
 				id = XMLStoreHelper.loadModelObject(e_id, context);
 			} else {
@@ -213,7 +213,7 @@ public class KbObject {
 	}
 
 	protected void loadAttributesInfo(Element element, Properties context) {
-		XMLStoreHelper.loadMap(element, attributesInfo, "attributes", context);
+		XMLStoreHelper.loadMap(element, attributesInfo, "attributes", context); //$NON-NLS-1$
 	}
 
 	protected XModelObject pushModelObject(Properties context) {

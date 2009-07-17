@@ -18,7 +18,7 @@ import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.common.model.ui.views.navigator.*;
 
 public class WebProjectsNavigator extends NavigatorViewPart {
-	public static String VIEW_ID = "org.jboss.tools.jst.web.ui.navigator.WebProjectsView";
+	public static String VIEW_ID = "org.jboss.tools.jst.web.ui.navigator.WebProjectsView"; //$NON-NLS-1$
 	private WebProjectsContentProvider c = null;
 
 	public void dispose() {
@@ -52,7 +52,7 @@ public class WebProjectsNavigator extends NavigatorViewPart {
 						return false;				
 					}
 					public Object[] getElements(Object o) {
-						return new Object[]{""};
+						return new Object[]{""}; //$NON-NLS-1$
 					}
 					public void inputChanged(Viewer v, Object o1,Object o2) {
 					
@@ -66,10 +66,10 @@ public class WebProjectsNavigator extends NavigatorViewPart {
 
 	protected String[] getActionClasses() {
 		String[] actions = new String[]{
-			"org.jboss.tools.jsf.ui.action.CreateProjectAction",
-			"org.jboss.tools.jsf.ui.action.ImportProjectAction",
-			"org.jboss.tools.struts.ui.internal.action.CreateProjectAction",
-			"org.jboss.tools.struts.ui.internal.action.ImportProjectAction"        			
+			"org.jboss.tools.jsf.ui.action.CreateProjectAction", //$NON-NLS-1$
+			"org.jboss.tools.jsf.ui.action.ImportProjectAction", //$NON-NLS-1$
+			"org.jboss.tools.struts.ui.internal.action.CreateProjectAction", //$NON-NLS-1$
+			"org.jboss.tools.struts.ui.internal.action.ImportProjectAction"        			 //$NON-NLS-1$
 		};
 		return actions;
 	}
@@ -84,7 +84,7 @@ public class WebProjectsNavigator extends NavigatorViewPart {
 }
 
 class JSFNavigatorMenuInvoker extends NavigatorMenuInvoker {
-	private static XModelObject webWorkspace = PreferenceModelUtilities.getPreferenceModel().createModelObject("WebWorkspace", null);
+	private static XModelObject webWorkspace = PreferenceModelUtilities.getPreferenceModel().createModelObject("WebWorkspace", null); //$NON-NLS-1$
 	
 	protected XModelObject getWorkspaceObject() {
 		return webWorkspace;
@@ -92,7 +92,7 @@ class JSFNavigatorMenuInvoker extends NavigatorMenuInvoker {
 
 	protected XActionList getActionList(XModelObject o) {
 		XActionList l = o.getModelEntity().getActionList();
-		if(o.getModelEntity().getName().equals("FileSystemFolder")) {
+		if(o.getModelEntity().getName().equals("FileSystemFolder")) { //$NON-NLS-1$
 			l = getWebContextActionList(l);
 		} else {
 			l = (XActionList)l.copy(acceptor);
@@ -111,22 +111,22 @@ class JSFNavigatorMenuInvoker extends NavigatorMenuInvoker {
 	
 	class FileSystemFolder implements XActionItem.Acceptor {
 		public boolean accepts(XActionItem item) {
-			if("Help".equals(item.getName())) return false;
+			if("Help".equals(item.getName())) return false; //$NON-NLS-1$
 			String path = item.getPath();
 			if(path == null) return true;
 			int q = path.indexOf('/');
 			if(q > 0) return true;
-			String s = "." + path + ".";
-			return ".CreateActions.CopyActions.Properties.".indexOf(s) >= 0;
+			String s = "." + path + "."; //$NON-NLS-1$ //$NON-NLS-2$
+			return ".CreateActions.CopyActions.Properties.".indexOf(s) >= 0; //$NON-NLS-1$
 		}
 	}
 
 	AcceptorImpl acceptor = new AcceptorImpl();
-	static String HIDDEN_ACTIONS = ".Help.Mount.Unmount.";
+	static String HIDDEN_ACTIONS = ".Help.Mount.Unmount."; //$NON-NLS-1$
 
 	class AcceptorImpl implements XActionItem.Acceptor {
 		public boolean accepts(XActionItem item) {
-			if(HIDDEN_ACTIONS.indexOf("." + item.getName() + ".") >= 0) return false;
+			if(HIDDEN_ACTIONS.indexOf("." + item.getName() + ".") >= 0) return false; //$NON-NLS-1$ //$NON-NLS-2$
 			return true;
 		}
 	}

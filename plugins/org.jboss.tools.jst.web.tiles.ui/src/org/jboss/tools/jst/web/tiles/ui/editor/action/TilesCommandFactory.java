@@ -38,19 +38,19 @@ public class TilesCommandFactory {
 	}
 
 	public static Command createDeleteCommand(List objects) {
-		return createCommand(objects, "DeleteActions.Delete");
+		return createCommand(objects, "DeleteActions.Delete"); //$NON-NLS-1$
 	}
 
 	public static Command createCopyCommand(List objects) {
-		return createCommand(objects, "CopyActions.Copy");
+		return createCommand(objects, "CopyActions.Copy"); //$NON-NLS-1$
 	}
 	
 	public static Command createCutCommand(List objects) {
-		return createCommand(objects, "CopyActions.Cut");
+		return createCommand(objects, "CopyActions.Cut"); //$NON-NLS-1$
 	}
 
 	public static Command createPasteCommand(List objects) {
-		return createCommand(objects, "CopyActions.Paste");
+		return createCommand(objects, "CopyActions.Paste"); //$NON-NLS-1$
 	}
 
 }

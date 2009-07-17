@@ -72,13 +72,13 @@ public class WTPKbdBundlePropertyResource extends WTPKbdBeanPropertyResource {
 
 			String beanNameFromQuery = current == null ? null : current.getText();
 
-			String restQuery = expr == null ? "" : expr.getText();
-			String argName = expr == null ? "" : expr.getMemberName();
-			if(argName == null) argName = "";
-			if(argName.startsWith("\"") || argName.startsWith("'")) {
+			String restQuery = expr == null ? "" : expr.getText(); //$NON-NLS-1$
+			String argName = expr == null ? "" : expr.getMemberName(); //$NON-NLS-1$
+			if(argName == null) argName = ""; //$NON-NLS-1$
+			if(argName.startsWith("\"") || argName.startsWith("'")) { //$NON-NLS-1$ //$NON-NLS-2$
 				argName = argName.substring(1);
 			}
-			if(argName.endsWith("\"") || argName.endsWith("'")) {
+			if(argName.endsWith("\"") || argName.endsWith("'")) { //$NON-NLS-1$ //$NON-NLS-2$
 				argName = argName.substring(0, argName.length() - 1);
 			}
 			
@@ -109,9 +109,9 @@ public class WTPKbdBundlePropertyResource extends WTPKbdBeanPropertyResource {
 				bundleList.add(basename);
 				if (argName != null && argName.length() > 0){
 					if (restQuery.indexOf('-') == -1) {
-						bundleList.add(basename + "." + argName);	
+						bundleList.add(basename + "." + argName);	 //$NON-NLS-1$
 					} else {
-						bundleList.add(basename + "['" + argName + "']");	
+						bundleList.add(basename + "['" + argName + "']");	 //$NON-NLS-1$ //$NON-NLS-2$
 					}
 				}
 
@@ -122,10 +122,10 @@ public class WTPKbdBundlePropertyResource extends WTPKbdBeanPropertyResource {
 					for (int ii = 0; properties != null && ii < properties.size(); ii++) {
 						String pi = (String)properties.get(ii);
 						if (pi.indexOf('-') == -1 && pi.indexOf('.') == -1 ) {
-							sorted.add(beanNameFromQuery + "." + pi);	
-							sorted.add(beanNameFromQuery + "['" + pi + "']");	
+							sorted.add(beanNameFromQuery + "." + pi);	 //$NON-NLS-1$
+							sorted.add(beanNameFromQuery + "['" + pi + "']");	 //$NON-NLS-1$ //$NON-NLS-2$
 						} else {
-							sorted.add(beanNameFromQuery + "['" + pi + "']");	
+							sorted.add(beanNameFromQuery + "['" + pi + "']");	 //$NON-NLS-1$ //$NON-NLS-2$
 						}
 					}
 				}
@@ -136,16 +136,16 @@ public class WTPKbdBundlePropertyResource extends WTPKbdBeanPropertyResource {
 			Iterator it = sorted.iterator();
 			while(it.hasNext()) {
 				String text = (String)it.next();
-				process(proposals, "", "", -1, query.length() - "".length(), query.length(), text, restQuery,
+				process(proposals, "", "", -1, query.length() - "".length(), query.length(), text, restQuery, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 						JspEditorPlugin.getDefault().getImage(JspEditorPlugin.CA_JSF_MESSAGES_IMAGE_PATH));
 			}
 		} catch (Exception x) {
-			JspEditorPlugin.getPluginLog().logError("Error in executing query " + query, x);
+			JspEditorPlugin.getPluginLog().logError("Error in executing query " + query, x); //$NON-NLS-1$
 		}
 		return proposals;
 	}
 
-	private static String[][] MESSAGE_PROPERTY_WRAPPERS = {{"#{", "}"},{"${", "}"}};
+	private static String[][] MESSAGE_PROPERTY_WRAPPERS = {{"#{", "}"},{"${", "}"}}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	
 	protected String[][] getWrappers() {
 		return MESSAGE_PROPERTY_WRAPPERS;
@@ -156,7 +156,7 @@ public class WTPKbdBundlePropertyResource extends WTPKbdBeanPropertyResource {
 	}
 
 	public String toString () {
-		return "WTPKbdBundlePropertyResource";
+		return "WTPKbdBundlePropertyResource"; //$NON-NLS-1$
 	}
 
 	public String getSupportedID () {
@@ -165,8 +165,8 @@ public class WTPKbdBundlePropertyResource extends WTPKbdBeanPropertyResource {
 
 	String getBundle(XModelObject property) {
 		String bundle = XModelObjectLoaderUtil.getResourcePath(property.getParent());
-		if(bundle == null) bundle = "";
-		if(bundle.endsWith(".properties")) bundle = bundle.substring(0, bundle.length() - 11);
+		if(bundle == null) bundle = ""; //$NON-NLS-1$
+		if(bundle.endsWith(".properties")) bundle = bundle.substring(0, bundle.length() - 11); //$NON-NLS-1$
 		bundle = bundle.substring(1).replace('/', '.');
 		return bundle;
 	}

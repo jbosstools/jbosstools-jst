@@ -16,12 +16,12 @@ public class WebAppAuthConstraintImpl extends OrderedObjectImpl {
 	private static final long serialVersionUID = 1L;
 
 	public String name() {
-        return "auth-constraint";
+        return "auth-constraint"; //$NON-NLS-1$
     }
 
     public String getPresentationString() {
-        String dn = getAttributeValue("display-name");
-        return (dn != null && dn.length() > 0) ? dn : "auth-constraint";
+        String dn = getAttributeValue("display-name"); //$NON-NLS-1$
+        return (dn != null && dn.length() > 0) ? dn : "auth-constraint"; //$NON-NLS-1$
     }
 
 }

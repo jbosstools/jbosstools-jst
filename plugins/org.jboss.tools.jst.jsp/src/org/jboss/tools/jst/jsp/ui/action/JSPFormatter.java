@@ -35,8 +35,8 @@ public class JSPFormatter {
 		selectionStart = textSelection.getOffset();
 		selectionEnd = selectionStart + textSelection.getLength();
 		text = document.get();
-		root = new Token(ROOT, "", 0, text.length(), null);
-		root.indent = "";
+		root = new Token(ROOT, "", 0, text.length(), null); //$NON-NLS-1$
+		root.indent = ""; //$NON-NLS-1$
 		root.indentLevel = -1;
 		tokenize();
 		doFormat(root.firstChild);
@@ -50,26 +50,26 @@ public class JSPFormatter {
 		while(cursor < text.length()) {
 			int p = text.indexOf('<', cursor);
 			if(p < 0) {
-				current.addChild(last = createTag(TEXT, "", cursor, text.length() - cursor, last));
+				current.addChild(last = createTag(TEXT, "", cursor, text.length() - cursor, last)); //$NON-NLS-1$
 				cursor = text.length();
 			} else {
 				if(p > cursor) {
-					current.addChild(last = createTag(TEXT, "", cursor, p - cursor, last));
+					current.addChild(last = createTag(TEXT, "", cursor, p - cursor, last)); //$NON-NLS-1$
 					cursor = p;
 				}
-				if(isStringStart(cursor, "<%")) {
-					int q = text.indexOf("%>", cursor);
+				if(isStringStart(cursor, "<%")) { //$NON-NLS-1$
+					int q = text.indexOf("%>", cursor); //$NON-NLS-1$
 					int nc = (q < 0) ? text.length() : q + 2;
-					current.addChild(last = createTag(JSP, "", cursor, nc - cursor, last));
+					current.addChild(last = createTag(JSP, "", cursor, nc - cursor, last)); //$NON-NLS-1$
 					cursor = nc;
-				} else if(isStringStart(cursor, "<!--")) {
-					int q = text.indexOf("-->", cursor);
+				} else if(isStringStart(cursor, "<!--")) { //$NON-NLS-1$
+					int q = text.indexOf("-->", cursor); //$NON-NLS-1$
 					int nc = (q < 0) ? text.length() : q + 3;
-					current.addChild(last = createTag(COMMENT, "", cursor, nc - cursor, last));
+					current.addChild(last = createTag(COMMENT, "", cursor, nc - cursor, last)); //$NON-NLS-1$
 					cursor = nc;
-				} else if(isStringStart(cursor, "</")) {
+				} else if(isStringStart(cursor, "</")) { //$NON-NLS-1$
 					String tag = readTag(cursor + 2);
-					int q = text.indexOf(">", cursor);
+					int q = text.indexOf(">", cursor); //$NON-NLS-1$
 					int nc = (q < 0) ? text.length() : q + 1;
 					last = createTag(TAG_CLOSING, tag, cursor, nc - cursor, last);
 					current = findParent(current, last);
@@ -103,26 +103,26 @@ public class JSPFormatter {
 	}
 	
 	private boolean isOptionallyClosed(String name) {
-		return ".body.p.dt.dd.li.ol.option.thead.tfoot.tbody.colgroup.tr.td.th.head.html.".indexOf(name.toLowerCase()) >= 0;
+		return ".body.p.dt.dd.li.ol.option.thead.tfoot.tbody.colgroup.tr.td.th.head.html.".indexOf(name.toLowerCase()) >= 0; //$NON-NLS-1$
 	}
 	
 	private Token findParentForOptionallyClosedTag(Token current, String name) {
 		String n1 = name.toLowerCase();
 		String n2 = current.name.toLowerCase();
-		if("p".equals(n1)) {
-			if(n2.equals("p")) return current.parent;
-		} else if("tr".equals(n1)) {
-			if(n2.equals("tr")) return current.parent;
-			if(n2.equals("th") || n2.equals("td") || n2.equals("p")) return findParentForOptionallyClosedTag(current.parent, name);
-		} else if("td".equals(n1) || "th".equals(n1)) { 
-			if(n2.equals("th") || n2.equals("td")) return current.parent;
-			if(n2.equals("p")) return findParentForOptionallyClosedTag(current.parent, name);
+		if("p".equals(n1)) { //$NON-NLS-1$
+			if(n2.equals("p")) return current.parent; //$NON-NLS-1$
+		} else if("tr".equals(n1)) { //$NON-NLS-1$
+			if(n2.equals("tr")) return current.parent; //$NON-NLS-1$
+			if(n2.equals("th") || n2.equals("td") || n2.equals("p")) return findParentForOptionallyClosedTag(current.parent, name); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		} else if("td".equals(n1) || "th".equals(n1)) {  //$NON-NLS-1$ //$NON-NLS-2$
+			if(n2.equals("th") || n2.equals("td")) return current.parent; //$NON-NLS-1$ //$NON-NLS-2$
+			if(n2.equals("p")) return findParentForOptionallyClosedTag(current.parent, name); //$NON-NLS-1$
 		}
 		return current;
 	}
 	
 	private boolean areChildrenAllowed(String name) {
-		return ".br.area.link.img.param.hr.input.col.isindex.base.meta.".indexOf("." + name.toLowerCase() + ".") < 0;
+		return ".br.area.link.img.param.hr.input.col.isindex.base.meta.".indexOf("." + name.toLowerCase() + ".") < 0; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 	
 	private Token createTag(int kind, String name, int off, int length, Token previous) {
@@ -178,7 +178,7 @@ public class JSPFormatter {
 			end = t.off + t.length;
 			boolean hasNewLine = t.indentLength >= 0;
 			boolean needNewLine = needNewLine(t);
-			if(needNewLine) sb.append("\n");
+			if(needNewLine) sb.append("\n"); //$NON-NLS-1$
 			String line = (t.indentLength > 0) ? text.substring(t.off + t.indentLength, t.off + t.length)
 			              : text.substring(t.off, t.off + t.length);
 			String indent = null;
@@ -194,7 +194,7 @@ public class JSPFormatter {
 				if(s == root) --qq;
 			}
 			indent = s.indent;
-			for (int k = 0; k < qq; k++) indent += "  ";
+			for (int k = 0; k < qq; k++) indent += "  "; //$NON-NLS-1$
 			t.indent = indent;
 			append(line, indent, hasNewLine || needNewLine);
 		}
@@ -227,7 +227,7 @@ public class JSPFormatter {
 	}
 	
 	private boolean isInline(String name) {
-		return ".br.a.b.i.u.s.strong.img".indexOf("." + name.toLowerCase() + ".") >= 0;
+		return ".br.a.b.i.u.s.strong.img".indexOf("." + name.toLowerCase() + ".") >= 0; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 	
 	private boolean isSpace(String line) {
@@ -241,7 +241,7 @@ public class JSPFormatter {
 	}
 	
 	private void append(String line, String indent, boolean indentFirst) {
-		StringTokenizer st = new StringTokenizer(line, "\r\n", true);
+		StringTokenizer st = new StringTokenizer(line, "\r\n", true); //$NON-NLS-1$
 		boolean first = true;
 		boolean doIndent = indentFirst;
 		while(st.hasMoreTokens()) {
@@ -268,7 +268,7 @@ public class JSPFormatter {
 			if(ch == '\r' || ch == '\n') return line;
 			if(!Character.isWhitespace(ch)) return line.substring(i);
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 	
 	public int findTagClosingSymbol(int i) {
@@ -315,7 +315,7 @@ class Token {
 	}
 	
 	public String toString() {
-		return "k=" + kind + " iL=" + indentLevel + " ind=" + indentLength + " n=" + name + " off=" + off + " l=" + length;
+		return "k=" + kind + " iL=" + indentLevel + " ind=" + indentLength + " n=" + name + " off=" + off + " l=" + length; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 	}
 	
 	public void addChild(Token t) {

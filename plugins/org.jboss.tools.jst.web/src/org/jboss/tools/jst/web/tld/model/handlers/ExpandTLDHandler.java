@@ -16,14 +16,15 @@ import org.jboss.tools.common.model.impl.*;
 import org.jboss.tools.common.meta.XModelEntity;
 import org.jboss.tools.common.meta.action.XAction;
 import org.jboss.tools.common.meta.action.impl.*;
+import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 
 public class ExpandTLDHandler extends AbstractHandler {
 
     public ExpandTLDHandler() {}
 
     public boolean isEnabled(XModelObject object) {
-        if("yes".equals(object.get("isIncorrect"))) return false;
-        String d = ("true".equals(object.get("expanded"))) ? "Collapse" : "Expand";
+        if("yes".equals(object.get("isIncorrect"))) return false; //$NON-NLS-1$ //$NON-NLS-2$
+        String d = ("true".equals(object.get("expanded"))) ? WebUIMessages.ExpandTLDHandler_Collapse : WebUIMessages.ExpandTLDHandler_Expand; //$NON-NLS-1$ //$NON-NLS-2$
         ((XActionImpl)action).setDisplayName(d);
         return true;
     }
@@ -34,8 +35,8 @@ public class ExpandTLDHandler extends AbstractHandler {
 
     public void executeHandler(XModelObject object, Properties p) throws XModelException {
         if(!isEnabled(object)) return;
-        String v = ("true".equals(object.get("expanded"))) ? "false" : "true";
-        object.setAttributeValue("expanded", v);
+        String v = ("true".equals(object.get("expanded"))) ? "false" : "true"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+        object.setAttributeValue("expanded", v); //$NON-NLS-1$
         XModelImpl m = (XModelImpl)object.getModel();
         m.fireStructureChanged(object);
     }
@@ -47,12 +48,12 @@ public class ExpandTLDHandler extends AbstractHandler {
             return;
         }
         
-        boolean leadingObjectExpanded = "true".equals(object.get("expanded"));
+        boolean leadingObjectExpanded = "true".equals(object.get("expanded")); //$NON-NLS-1$ //$NON-NLS-2$
         
         String path = action.getPath();
         XModelEntity entity = object.getModelEntity();
         for (int i = 0; i < objects.length; i++) {
-            if(leadingObjectExpanded != "true".equals(objects[i].get("expanded"))) {
+            if(leadingObjectExpanded != "true".equals(objects[i].get("expanded"))) { //$NON-NLS-1$ //$NON-NLS-2$
             	continue;
             }
             XModelEntity ent = objects[i].getModelEntity();
