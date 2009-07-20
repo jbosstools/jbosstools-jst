@@ -12,7 +12,10 @@ package org.jboss.tools.jst.jsp.jspeditor;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import org.eclipse.core.runtime.CoreException;
@@ -22,6 +25,7 @@ import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.TextEvent;
 import org.eclipse.jface.text.formatter.IContentFormatter;
 import org.eclipse.jface.text.hyperlink.IHyperlinkDetector;
@@ -100,6 +104,10 @@ import org.jboss.tools.common.model.ui.editors.dnd.DropCommandFactory;
 import org.jboss.tools.common.model.ui.editors.dnd.DropData;
 import org.jboss.tools.common.model.ui.editors.dnd.IDropCommand;
 import org.jboss.tools.common.model.ui.editors.dnd.JSPTagProposalFactory;
+import org.jboss.tools.common.model.ui.editors.dnd.TagProposal;
+import org.jboss.tools.common.model.ui.editors.dnd.DropUtils.AttributeDescriptorValueProvider;
+import org.jboss.tools.common.model.ui.editors.dnd.composite.TagAttributesComposite;
+import org.jboss.tools.common.model.ui.editors.dnd.composite.TagAttributesComposite.AttributeDescriptorValue;
 import org.jboss.tools.common.model.ui.editors.dnd.context.DropContext;
 import org.jboss.tools.common.model.ui.editors.dnd.context.InnerDragBuffer;
 import org.jboss.tools.common.model.ui.texteditors.TextMerge;
@@ -121,11 +129,21 @@ import org.jboss.tools.jst.jsp.editor.IVisualContext;
 import org.jboss.tools.jst.jsp.editor.IVisualController;
 import org.jboss.tools.jst.jsp.outline.JSPContentOutlineConfiguration;
 import org.jboss.tools.jst.jsp.outline.JSPPropertySheetConfiguration;
+import org.jboss.tools.jst.jsp.outline.ValueHelper;
 import org.jboss.tools.jst.jsp.preferences.VpePreference;
 import org.jboss.tools.jst.jsp.text.xpl.IStructuredTextOccurrenceStructureProvider;
 import org.jboss.tools.jst.jsp.text.xpl.StructuredTextOccurrenceStructureProviderRegistry;
 import org.jboss.tools.jst.jsp.ui.action.ExtendedFormatAction;
 import org.jboss.tools.jst.jsp.ui.action.IExtendedAction;
+import org.jboss.tools.jst.web.kb.IPageContext;
+import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.PageProcessor;
+import org.jboss.tools.jst.web.kb.KbQuery.Type;
+import org.jboss.tools.jst.web.kb.internal.JspContextImpl;
+import org.jboss.tools.jst.web.kb.taglib.IAttribute;
+import org.jboss.tools.jst.web.kb.taglib.IComponent;
+import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibComponent;
+import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 import org.jboss.tools.jst.web.tld.VpeTaglibManager;
 import org.jboss.tools.jst.web.tld.VpeTaglibManagerProvider;
 import org.w3c.dom.DocumentType;
@@ -719,6 +737,8 @@ public class JSPTextEditor extends StructuredTextEditor implements
 					DropData dropData = new DropData(flavor, data,
 							getEditorInput(), getSourceViewer(),
 							getSelectionProvider());
+					dropData.setValueProvider(new AttributeDescriptorValueProviderImpl());
+					
 					dropData.setAttributeName(dropContext.getAttributeName());
 					IDropCommand dropCommand = DropCommandFactory.getInstance()
 							.getDropCommand(flavor,
@@ -736,6 +756,111 @@ public class JSPTextEditor extends StructuredTextEditor implements
 				}
 			}
 		});
+	}
+
+	class AttributeDescriptorValueProviderImpl implements AttributeDescriptorValueProvider {
+		TagProposal proposal;
+		KbQuery query;
+		JspContentAssistProcessor processor;
+		IPageContext pageContext;
+
+		public void setProposal(TagProposal proposal) {
+			if(this.proposal == proposal) return;
+			this.proposal = proposal;
+			query = createQuery(proposal);
+			ValueHelper valueHelper = new ValueHelper();
+			processor = valueHelper.createContentAssistProcessor();
+			pageContext = valueHelper.createPageContext(processor, query.getOffset());
+			Map<String,INameSpace> ns = pageContext.getNameSpaces(query.getOffset());
+			INameSpace n = ns.get(query.getUri());
+			if(n == null && pageContext instanceof JspContextImpl) {
+				IRegion r = new Region(query.getOffset(), 0);
+				((JspContextImpl)pageContext).addNameSpace(r, new INameSpace(){
+					public String getURI() {
+						return query.getUri();
+					}
+					public String getPrefix() {
+						return query.getPrefix();
+					}
+				});
+			}
+		}
+
+		public void initContext(Properties context) {
+			if(context != null) {
+				context.put("processor", processor);
+				context.put("pageContext", pageContext);
+			}
+		}
+		public IPageContext getPageContext() {
+			return pageContext;
+		}
+	
+		public String getTag() {
+			IComponent c = findComponent(query);
+			if(c == null) return null;
+			String prefix = getPrefix(query);
+			if(prefix == null) return c.getName();
+			return prefix + ":" + c.getName();
+		}
+	
+		public boolean canHaveBody() {
+			IComponent c = findComponent(query);
+			return c != null && c.canHaveBody();
+		}
+
+		public AttributeDescriptorValue[] getValues() {
+			return createDescriptors(query);
+		}
+	
+		KbQuery createQuery(TagProposal proposal) {
+			KbQuery kbQuery = new KbQuery();
+			String name = proposal.getPrefix() + ":" + proposal.getName();
+			kbQuery.setPrefix(proposal.getPrefix());
+			kbQuery.setUri(proposal.getUri());
+			kbQuery.setParentTags(new String[]{name});
+			kbQuery.setParent(name);
+			kbQuery.setMask(false); 
+			kbQuery.setType(Type.ATTRIBUTE_NAME);
+			kbQuery.setOffset(JSPTextEditor.this.getTextViewer().getTextWidget().getCaretOffset());
+			kbQuery.setValue(""); 
+			kbQuery.setStringQuery("");
+			return kbQuery;
+		}
+		
+		public IComponent findComponent(KbQuery query) {
+			IComponent[] cs = PageProcessor.getInstance().getComponents(query, pageContext, true);
+			if(cs == null || cs.length == 0) return null;
+			IComponent s = null;
+			for (IComponent c: cs) {
+				if(c instanceof ICustomTagLibComponent) {
+					s = c;
+					break;
+				}
+			}
+			if(s == null) s = cs[0];
+			return s;
+		}
+
+		public String getPrefix(KbQuery query) {
+			Map<String,INameSpace> ns = pageContext.getNameSpaces(query.getOffset());
+			INameSpace n = ns.get(query.getUri());
+			return n == null ? null : n.getPrefix();
+		}
+
+		public TagAttributesComposite.AttributeDescriptorValue[] createDescriptors(KbQuery query) {
+			IComponent s = findComponent(query);
+			if(s == null) return new TagAttributesComposite.AttributeDescriptorValue[0];
+			
+			List<AttributeDescriptorValue> attributesValues = new ArrayList<AttributeDescriptorValue>();
+			IAttribute[] as = s.getAttributes();
+			for (IAttribute a: as) {
+				AttributeDescriptorValue value = new AttributeDescriptorValue(a.getName(), a.isRequired(), a.isPreferable());
+				attributesValues.add(value);
+			}
+			
+			return attributesValues.toArray(new AttributeDescriptorValue[attributesValues.size()]);
+		}
 	}
 
 	private void createDrop() {

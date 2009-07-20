@@ -394,6 +394,8 @@
 			class="org.jboss.tools.jst.jsp.outline.JSPCellEditorProviderImpl"/>
 		<xclass id="org.jboss.tools.jst.jsp.outline.VpeProperties"
 			class="org.jboss.tools.jst.jsp.outline.VpeProperties"/>
+		<xclass id="org.jboss.tools.jst.jsp.outline.DefaultDropCommandRunner"
+			class="org.jboss.tools.jst.jsp.outline.DefaultDropCommandRunner"/>
    </extension>
     
    <extension 
@@ -438,7 +440,6 @@
 			</contenttype>
 		</contentAssistProcessor>
 		
-		<!--
 		<contentAssistProcessor 
 				class="org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor" 
 				id="org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor">
@@ -453,6 +454,7 @@
 			</contenttype>
 		</contentAssistProcessor>
 			
+		<!--
 		<contentAssistProcessor 
 				class="org.jboss.tools.jst.jsp.contentassist.XmlContentAssistProcessor" 
 				id="org.jboss.tools.jst.jsp.contentassist.XmlContentAssistProcessor">

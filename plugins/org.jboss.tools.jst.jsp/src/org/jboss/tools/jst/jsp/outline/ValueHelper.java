@@ -10,16 +10,18 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.outline;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jst.jsp.core.internal.contentmodel.TaglibController;
+import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.texteditor.AbstractTextEditor;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.jboss.tools.common.kb.TagDescriptor;
 import org.jboss.tools.common.model.project.IPromptingProvider;
@@ -99,17 +101,14 @@ public class ValueHelper {
 	}
 
 	public JspContentAssistProcessor createContentAssistProcessor() {
-		JSPTextEditor jspEditor = getJSPTextEditor();
-		if(jspEditor == null) return null;		
 		return isFacetets() ? new FaceletPageContectAssistProcessor() : new JspContentAssistProcessor();
 	}
 
 	public IPageContext createPageContext(JspContentAssistProcessor processor, int offset) {
-		JSPTextEditor jspEditor = getJSPTextEditor();
-		if(jspEditor == null) return null;		
-        processor.createContext(jspEditor.getTextViewer(), offset);
+		ISourceViewer sv = getSourceViewer();
+		if(sv == null) return null;		
+        processor.createContext(sv, offset);
         return processor.getContext();
-
 	}
 
 	protected JSPTextEditor getJSPTextEditor() {
@@ -162,9 +161,7 @@ public class ValueHelper {
 	}
 
 	public IEditorInput getEditorInput() {
-
 		IEditorPart editor = ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-	
 		return editor.getEditorInput();
 	}
 	
@@ -193,19 +190,6 @@ public class ValueHelper {
 		}
 	}
 	
-	public IDocument getDocument() {
-		IEditorPart editor = ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		if(editor instanceof JSPMultiPageEditor) {
-			JSPTextEditor jspEditor = ((JSPMultiPageEditor)editor).getJspEditor();
-			return jspEditor.getDocumentProvider().getDocument(editor.getEditorInput());				
-		} else if(editor instanceof StructuredTextEditor) {
-			StructuredTextEditor jspEditor = ((StructuredTextEditor)editor);
-			return jspEditor.getDocumentProvider().getDocument(editor.getEditorInput());
-		}
-		
-		return null;		
-	}
-	
 	//Support of StructuredTextEditor
 	boolean init2() {
 		if(isVisualContextInitialized) return true;
@@ -229,7 +213,6 @@ public class ValueHelper {
 		List<TaglibData> list = tldManager.getTagLibs();
 		if(list == null) return;
 		isFacelets = false;
-		IDocument document = getDocument();
 		for(int i = 0; i < list.size(); i++) {
 			TaglibData data = list.get(i);
 			isFacelets = isFacelets || data.getUri().equals(FaceletsHtmlContentAssistProcessor.faceletUri);
@@ -252,4 +235,22 @@ public class ValueHelper {
 		}
 		return null;
 	}
+
+	public ISourceViewer getSourceViewer() {
+		JSPTextEditor jspEditor = getJSPTextEditor();
+		if(jspEditor != null) return jspEditor.getTextViewer();
+		IEditorPart editor = ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		if (editor == null) return null;
+		if(editor instanceof AbstractTextEditor) {
+			try {
+				Method m = AbstractTextEditor.class.getDeclaredMethod("getSourceViewer", new Class[0]);
+				m.setAccessible(true);
+				return (ISourceViewer)m.invoke(editor, new Object[0]);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+
 }

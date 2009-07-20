@@ -77,6 +77,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 	private IPropertyDescriptor[] fDescriptors = null;
 	private ValueHelper valueHelper = new ValueHelper();
 	IPageContext pageContext;
+	JspContentAssistProcessor processor;
 	int offset = 0;
 	KbQuery kbQuery, kbQueryAttr;
 	private Set attributeNames = new HashSet();
@@ -103,7 +104,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 				fCaseSensitive = adapter.getTagNameCase() == DocumentTypeAdapter.STRICT_CASE;
 			offset = ((IDOMElement)fNode).getStartOffset() + ("" + fNode.getNodeType()).length(); //$NON-NLS-1$
 		}
-		JspContentAssistProcessor processor = valueHelper.isFacetets() ? new FaceletPageContectAssistProcessor() : new JspContentAssistProcessor();
+		processor = valueHelper.isFacetets() ? new FaceletPageContectAssistProcessor() : new JspContentAssistProcessor();
         processor.createContext(getTextViewer(), offset);
         pageContext = processor.getContext();
 		kbQuery = createKbQuery(processor);
@@ -405,6 +406,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 		context.setProperty("attributeName", attributeName);
 		context.put("valueHelper", valueHelper);
 		context.put("pageContext", pageContext);
+		context.put("processor", processor);
 		JSPPropertyDescriptor descriptor = new JSPPropertyDescriptor(context, attributeName, attributeName);
 		descriptor.setCategory(getCategory(null));
 		descriptor.setDescription(attributeName);

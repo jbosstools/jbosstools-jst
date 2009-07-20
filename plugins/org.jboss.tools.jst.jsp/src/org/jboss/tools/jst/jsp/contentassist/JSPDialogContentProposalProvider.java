@@ -72,9 +72,14 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
         if(valueHelper == null) {
         	valueHelper = new ValueHelper();
         }
-//        pageContext = (IPageContext)context.get("pageContext");
-        processor = valueHelper.createContentAssistProcessor();
-        pageContext = valueHelper.createPageContext(processor, offset);
+        pageContext = (IPageContext)context.get("pageContext");
+        processor = (JspContentAssistProcessor)context.get("processor");
+        if(processor == null) {
+        	processor = valueHelper.createContentAssistProcessor();
+        }
+        if(pageContext == null) {
+        	pageContext = valueHelper.createPageContext(processor, offset);
+        }
         context.put("pageContext", pageContext); //$NON-NLS-1$
         context.put("kbQuery", createKbQuery(Type.ATTRIBUTE_VALUE, "", "", offset, false)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}

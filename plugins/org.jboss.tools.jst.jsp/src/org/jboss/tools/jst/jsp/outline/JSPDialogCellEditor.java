@@ -86,7 +86,6 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
         JSPDialogContentProposalProvider cpp = new JSPDialogContentProposalProvider();
 		cpp.setContext(context);
 		IContentProposal[] ps = cpp.getProposals("#{}", 2); //$NON-NLS-1$
-		System.out.println(ps.length);
         hasProposals = ((ps != null) && (ps.length > 0));
     }
 
