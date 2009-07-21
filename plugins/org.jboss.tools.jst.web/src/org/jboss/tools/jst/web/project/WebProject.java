@@ -12,13 +12,13 @@ package org.jboss.tools.jst.web.project;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.text.IDocument;
-import org.jboss.tools.common.kb.wtp.TLDVersionHelper;
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.filesystems.FileSystemsHelper;
 import org.jboss.tools.common.model.filesystems.impl.FileAnyImpl;
 import org.jboss.tools.common.model.filesystems.impl.FileSystemImpl;
 import org.jboss.tools.jst.web.tld.IWebProject;
+import org.jboss.tools.jst.web.tld.TLDVersionHelper;
 import org.jboss.tools.jst.web.tld.TaglibMapping;
 
 public class WebProject implements IWebProject {
