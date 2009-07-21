@@ -82,8 +82,6 @@ class JSPTreeDialogView extends AbstractQueryWizardView {
 		//ValueHelper valueHelper = (ValueHelper)context.get("valueHelper");
 		IPageContext pageContext = (IPageContext)context.get("pageContext"); //$NON-NLS-1$
 		KbQuery kbQuery = (KbQuery)context.get("kbQuery"); //$NON-NLS-1$
-		IAttribute[] attrs = PageProcessor.getInstance().getAttributes(kbQuery, pageContext);
-		
 		
 		ValueHelper valueHelper = new ValueHelper();
 		root = valueHelper.getInitalInput(pageContext, kbQuery);

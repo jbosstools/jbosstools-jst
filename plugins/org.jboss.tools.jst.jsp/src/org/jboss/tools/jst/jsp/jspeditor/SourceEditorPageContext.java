@@ -16,11 +16,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.jface.text.IDocument;
-import org.jboss.tools.common.kb.KbConnectorFactory;
-import org.jboss.tools.common.kb.KbConnectorType;
-import org.jboss.tools.common.kb.KbException;
-import org.jboss.tools.common.kb.wtp.WtpKbConnector;
-import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.editor.IVisualContext;
 import org.jboss.tools.jst.jsp.util.XmlUtil;
 import org.jboss.tools.jst.web.tld.TaglibData;
@@ -42,10 +37,6 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 	private List<TaglibData> taglibs = null;
 	
 	private IDocument iDocument;
-	/**
-	 * Kb connector
-	 */
-	private WtpKbConnector connector = null;
 	/**
 	 * references node
 	 */
@@ -69,7 +60,6 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 	
 	public void dispose() {
 		clearAll();
-		setConnector(null);
 		setReferenceNode(null);
 		setPageContext(null);
 		iDocument = null;
@@ -107,11 +97,6 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 				setTaglibs(taglibs);
 			}
 		}
-		try {
-			connector = (WtpKbConnector)KbConnectorFactory.getIntstance().createConnector(KbConnectorType.JSP_WTP_KB_CONNECTOR, iDocument);
-		} catch (KbException e) {
-			JspEditorPlugin.getPluginLog().logError(e);
-		}
 	}
 
 	public void collectRefNodeTagLibs() {
@@ -137,11 +122,6 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 	
 	public void updateTagLibs() {
 		collectRefNodeTagLibs();
-	}
-
-	// implements IVisualContext
-	public WtpKbConnector getConnector() {
-		return connector;
 	}
 
 	// implements IVisualContext
@@ -198,13 +178,6 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 	 */
 	public Node getReferenceNode() {
 		return referenceNode;
-	}
-
-	/**
-	 * @param connector the connector to set
-	 */
-	public void setConnector(WtpKbConnector connector) {
-		this.connector = connector;
 	}
 
 	/**

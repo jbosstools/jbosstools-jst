@@ -12,12 +12,10 @@ package org.jboss.tools.jst.jsp.editor;
 
 import java.util.List;
 
-import org.jboss.tools.common.kb.wtp.WtpKbConnector;
 import org.jboss.tools.jst.web.tld.TaglibData;
 
 public interface IVisualContext  {
 	public void refreshBundleValues();
-	public WtpKbConnector getConnector();
 	public List<TaglibData> getIncludeTaglibs();
 
 }
