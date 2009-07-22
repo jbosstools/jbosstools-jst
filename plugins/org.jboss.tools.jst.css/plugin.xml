@@ -71,11 +71,13 @@
 	</extension>
 	<extension point="org.eclipse.ui.views">
 		<view class="org.jboss.tools.jst.css.view.CSSEditorView" id="org.jboss.tools.jst.css.view.editor"
-			name="%css.editor_name" restorable="true" category="web.views.category.id">
+			name="%css.editor_name" restorable="true" category="web.views.category.id"
+			icon="resources/icons/jboss_css_properties_view_icon.gif">
 		</view>
 		<view
 	        class="org.jboss.tools.jst.css.view.CSSPreview"
 	        id="org.jboss.tools.jst.css.view.preview"
+	        icon="resources/icons/jboss_css_preview_view_icon.gif"
 	        name="%css.preview_name"
 	        restorable="true" category="web.views.category.id">
 		</view>
