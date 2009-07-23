@@ -24,13 +24,16 @@ import org.eclipse.jst.jsp.core.internal.contentmodel.tld.TaglibTracker;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
-import org.eclipse.wst.sse.ui.internal.contentassist.CustomCompletionProposal;
 import org.eclipse.wst.xml.core.internal.document.NodeContainer;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
+import org.eclipse.wst.xml.ui.internal.editor.CMImageUtil;
+import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImageHelper;
+import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImages;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.text.TextProposal;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.IResourceBundle;
@@ -56,6 +59,8 @@ import org.w3c.dom.NodeList;
  */
 public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 
+	protected static final Image JSF_EL_PROPOSAL_IMAGE = JspEditorPlugin.getDefault().getImage(JspEditorPlugin.CA_JSF_EL_IMAGE_PATH);
+	
 	/**
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.jsp.contentassist.XmlContentAssistProcessor#createContext()
@@ -326,8 +331,6 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 			return;
 		}
 		
-		// TODO Auto-generated method stub
-		System.out.println("JspContentAssistProcessor: addTagInsertionProposals() invoked"); //$NON-NLS-1$
 		try {
 			String matchString = contentAssistRequest.getMatchString();
 			String query = matchString;
@@ -342,32 +345,37 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 				TextProposal textProposal = proposals[i];
 				
 				String replacementString = textProposal.getReplacementString();
+				String closingTag = textProposal.getLabel();
+				if (closingTag != null && closingTag.startsWith("<")) { //$NON-NLS-1$
+					closingTag = closingTag.substring(1);
+				}
+
 				if (!replacementString.endsWith("/>")) { //$NON-NLS-1$
-					String closingTag = textProposal.getLabel();
-					if (closingTag != null && closingTag.startsWith("<")) { //$NON-NLS-1$
-						closingTag = closingTag.substring(1);
-					}
-					
 					replacementString += "</" + closingTag + ">"; //$NON-NLS-1$ //$NON-NLS-2$
 				}
 
-				System.out.println("Tag Name proposal [" + (i + 1) + "/" + proposals.length + "]: " + replacementString); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 				int replacementOffset = contentAssistRequest.getReplacementBeginPosition();
 				int replacementLength = contentAssistRequest.getReplacementLength();
 				int cursorPosition = getCursorPositionForProposedText(replacementString);
 				Image image = textProposal.getImage();
-				String displayString = textProposal.getLabel() + ">"; //$NON-NLS-1$
+				if (image == null) {
+					image = XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_TAG_GENERIC);
+				}
+				String displayString = closingTag; //$NON-NLS-1$
 				IContextInformation contextInformation = null;
 				String additionalProposalInfo = textProposal.getContextInfo();
-				int relevance = textProposal.getRelevance() + 10000;
-				
-				
-				CustomCompletionProposal proposal = new CustomCompletionProposal(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, contextInformation, additionalProposalInfo, relevance);
+				int relevance = textProposal.getRelevance();
+				if (relevance == TextProposal.R_NONE) {
+					relevance = TextProposal.R_TAG_INSERTION;
+				}
+				AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(true, replacementString, 
+						replacementOffset, replacementLength, cursorPosition, image, displayString, 
+						contextInformation, additionalProposalInfo, relevance);
+
 				contentAssistRequest.addProposal(proposal);
 			}
 		} finally {
-			System.out.println("JspContentAssistProcessor: addTagInsertionProposals() exited"); //$NON-NLS-1$
 		}
 		return;
 	}
@@ -383,8 +391,6 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 	@Override
 	protected void addTagNameProposals(
 			ContentAssistRequest contentAssistRequest, int childPosition) {
-		// TODO Auto-generated method stub
-		System.out.println("JspContentAssistProcessor: addTagNameProposals() invoked"); //$NON-NLS-1$
 		try {
 			String matchString = contentAssistRequest.getMatchString();
 			String query = matchString;
@@ -399,36 +405,43 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 				TextProposal textProposal = proposals[i];
 				
 				String replacementString = textProposal.getReplacementString();
+				String closingTag = textProposal.getLabel();
+				if (closingTag != null && closingTag.startsWith("<")) { //$NON-NLS-1$
+					closingTag = closingTag.substring(1);
+				}
+				
 				if (replacementString.startsWith("<")) { //$NON-NLS-1$
 					// Because the tag starting char is already in the text
 					replacementString = replacementString.substring(1);
 				}
 				if (!replacementString.endsWith("/>")) { //$NON-NLS-1$
-					String closingTag = textProposal.getLabel();
-					if (closingTag != null && closingTag.startsWith("<")) { //$NON-NLS-1$
-						closingTag = closingTag.substring(1);
-					}
-					
 					replacementString += "</" + closingTag + ">"; //$NON-NLS-1$ //$NON-NLS-2$
 				}
 
-				System.out.println("Tag Name proposal [" + (i + 1) + "/" + proposals.length + "]: " + replacementString); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				
+			
 				int replacementOffset = contentAssistRequest.getReplacementBeginPosition();
 				int replacementLength = contentAssistRequest.getReplacementLength();
 				int cursorPosition = getCursorPositionForProposedText(replacementString);
 				Image image = textProposal.getImage();
-				String displayString = textProposal.getLabel() + ">"; //$NON-NLS-1$
+				if (image == null) {
+					image = XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_TAG_GENERIC);
+				}
+
+				String displayString = closingTag; //$NON-NLS-1$
 				IContextInformation contextInformation = null;
 				String additionalProposalInfo = textProposal.getContextInfo();
-				int relevance = textProposal.getRelevance() + 10000;
-				
-				
-				CustomCompletionProposal proposal = new CustomCompletionProposal(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, contextInformation, additionalProposalInfo, relevance);
+				int relevance = textProposal.getRelevance();
+				if (relevance == TextProposal.R_NONE) {
+					relevance = TextProposal.R_TAG_INSERTION;
+				}
+
+				AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(true, replacementString, 
+						replacementOffset, replacementLength, cursorPosition, image, displayString, 
+						contextInformation, additionalProposalInfo, relevance);
+
 				contentAssistRequest.addProposal(proposal);
 			}
 		} finally {
-			System.out.println("JspContentAssistProcessor: addTagNameProposals() exited"); //$NON-NLS-1$
 		}
 		return;
 	}
@@ -441,7 +454,6 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 	 * @param childPosition the 
 	 */
 	protected void addAttributeNameProposals(ContentAssistRequest contentAssistRequest) {
-		System.out.println("JspContentAssistProcessor: addAttributeNameProposals() invoked"); //$NON-NLS-1$
 		try {
 			String matchString = contentAssistRequest.getMatchString();
 			String query = matchString;
@@ -455,8 +467,6 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 			for (int i = 0; proposals != null && i < proposals.length; i++) {
 				TextProposal textProposal = proposals[i];
 				
-				System.out.println("Tag Attribute proposal [" + (i + 1) + "/" + proposals.length + "]: " + textProposal.getReplacementString()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				
 				if (isExistingAttribute(textProposal.getLabel())) 
 					continue;
 				
@@ -469,14 +479,15 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 				String displayString = textProposal.getLabel();
 				IContextInformation contextInformation = null;
 				String additionalProposalInfo = textProposal.getContextInfo();
-				int relevance = textProposal.getRelevance() + 10000;
+				int relevance = textProposal.getRelevance();
 				
-				
-				CustomCompletionProposal proposal = new CustomCompletionProposal(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, contextInformation, additionalProposalInfo, relevance);
+				AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(true, replacementString, 
+						replacementOffset, replacementLength, cursorPosition, image, displayString, 
+						contextInformation, additionalProposalInfo, relevance);
+
 				contentAssistRequest.addProposal(proposal);
 			}
 		} finally {
-			System.out.println("JspContentAssistProcessor: addAttributeNameProposals() exited"); //$NON-NLS-1$
 		}
 	}
 
@@ -510,13 +521,18 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 				String displayString = textProposal.getLabel();
 				IContextInformation contextInformation = null;
 				String additionalProposalInfo = textProposal.getContextInfo();
-				int relevance = textProposal.getRelevance() + 10000;
+				int relevance = textProposal.getRelevance();
+				if (relevance == TextProposal.R_NONE) {
+					relevance = TextProposal.R_JSP_ATTRIBUTE_VALUE;
+				}
 
-				CustomCompletionProposal proposal = new CustomCompletionProposal(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, contextInformation, additionalProposalInfo, relevance);
+				AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(replacementString, 
+						replacementOffset, replacementLength, cursorPosition, image, displayString, 
+						contextInformation, additionalProposalInfo, relevance);
+
 				contentAssistRequest.addProposal(proposal);
 			}
 		} finally {
-			System.out.println("JspContentAssistProcessor: addAttributeValueProposals() exited"); //$NON-NLS-1$
 		}
 	}
 
@@ -532,8 +548,6 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 	 */
 	@Override
 	protected void addAttributeValueELProposals(ContentAssistRequest contentAssistRequest) {
-		// TODO Auto-generated method stub
-		System.out.println("JspContentAssistProcessor: addAttributeValueELProposals() invoked"); //$NON-NLS-1$
 		try {
 			TextRegion prefix = getELPrefix();
 			if (prefix == null) {
@@ -541,8 +555,10 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 			}
 
 			if(!prefix.isELStarted()) {
-				CustomCompletionProposal proposal = new CustomCompletionProposal("#{}", getOffset(), //$NON-NLS-1$
-						0, 2, null, "#{}", null, JstUIMessages.JspContentAssistProcessor_NewELExpression, 10000); //$NON-NLS-1$
+				AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(true, "#{}",  //$NON-NLS-1$
+						getOffset(), 0, 2, JSF_EL_PROPOSAL_IMAGE, JstUIMessages.JspContentAssistProcessor_NewELExpression, 
+						null, JstUIMessages.JspContentAssistProcessor_NewELExpressionAttrInfo, TextProposal.R_XML_ATTRIBUTE_VALUE_TEMPLATE);
+
 				contentAssistRequest.addProposal(proposal);
 				return;
 			}
@@ -560,8 +576,6 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 			for (int i = 0; proposals != null && i < proposals.length; i++) {
 				TextProposal textProposal = proposals[i];
 				
-				System.out.println("Tag Attribute Value EL proposal [" + (i + 1) + "/" + proposals.length + "]: " + textProposal.getReplacementString()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				
 				int replacementOffset = beginChangeOffset;
 				int replacementLength = prefix.getLength();
 				String replacementString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString();
@@ -571,19 +585,26 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 				String displayString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString(); 
 				IContextInformation contextInformation = null;
 				String additionalProposalInfo = (textProposal.getContextInfo() == null ? "" : textProposal.getContextInfo()); //$NON-NLS-1$
-				int relevance = textProposal.getRelevance() + 10000;
+				int relevance = textProposal.getRelevance();
+				if (relevance == TextProposal.R_NONE) {
+					relevance = TextProposal.R_JSP_JSF_EL_VARIABLE_ATTRIBUTE_VALUE;
+				}
 
-				CustomCompletionProposal proposal = new CustomCompletionProposal(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, contextInformation, additionalProposalInfo, relevance);
+				AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(replacementString, 
+						replacementOffset, replacementLength, cursorPosition, image, displayString, 
+						contextInformation, additionalProposalInfo, relevance);
+
 				contentAssistRequest.addProposal(proposal);
 			}
 
 			if (prefix.isELStarted() && !prefix.isELClosed()) {
-				CustomCompletionProposal proposal = new CustomCompletionProposal("}", getOffset(), //$NON-NLS-1$
-						0, 1, null, "}", null, JstUIMessages.JspContentAssistProcessor_CloseELExpression, 10001); //$NON-NLS-1$
+				AutoContentAssistantProposal proposal = new AutoContentAssistantProposal("}", //$NON-NLS-1$
+						getOffset(), 0, 1, JSF_EL_PROPOSAL_IMAGE, JstUIMessages.JspContentAssistProcessor_CloseELExpression, 
+						null, JstUIMessages.JspContentAssistProcessor_CloseELExpressionInfo, TextProposal.R_XML_ATTRIBUTE_VALUE_TEMPLATE);
+
 				contentAssistRequest.addProposal(proposal);
 			}
 		} finally {
-			System.out.println("JspContentAssistProcessor: addAttributeELProposals() exited"); //$NON-NLS-1$
 		}
 	}
 

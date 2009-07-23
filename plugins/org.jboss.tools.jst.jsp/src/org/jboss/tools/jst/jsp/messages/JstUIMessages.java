@@ -50,8 +50,7 @@ public class JstUIMessages extends NLS {
 	public static String CSS_APPLY_CHANGES;
 	public static String ADD_FONT_FAMILY_TIP;
 	public static String REMOVE_FONT_FAMILY_TIP;
-	public static String FaceletPageContectAssistProcessor_CloseELExpression;
-	public static String FaceletPageContectAssistProcessor_NewELExpression;
+	public static String FaceletPageContectAssistProcessor_NewELExpressionTextInfo;
 	public static String FONT_SIZE;
 	public static String FONT_STYLE;
 	public static String FONT_WEIGHT;
@@ -107,7 +106,9 @@ public class JstUIMessages extends NLS {
 	public static String CSS_CLASS_NAME_NOT_VALID;
 	public static String CSS_INVALID_STYLE_PROPERTY;
 	public static String JspContentAssistProcessor_CloseELExpression;
+	public static String JspContentAssistProcessor_CloseELExpressionInfo;
 	public static String JspContentAssistProcessor_NewELExpression;
+	public static String JspContentAssistProcessor_NewELExpressionAttrInfo;
 	public static String JSPDialogCellEditor_CodeAssist;
 	public static String JSPDialogCellEditor_EditAttribute;
 	public static String JSPDialogContentProposalProvider_CloseELExpression;

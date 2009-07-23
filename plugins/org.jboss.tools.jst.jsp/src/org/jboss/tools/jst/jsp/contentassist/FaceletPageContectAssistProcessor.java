@@ -19,7 +19,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
-import org.eclipse.wst.sse.ui.internal.contentassist.CustomCompletionProposal;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
@@ -181,8 +180,11 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 	protected void addTextELProposals(ContentAssistRequest contentAssistRequest) {
 		TextRegion prefix = getELPrefix();
 		if (prefix == null || !prefix.isELStarted()) {
-			CustomCompletionProposal proposal = new CustomCompletionProposal("#{}", contentAssistRequest.getReplacementBeginPosition(), //$NON-NLS-1$
-					0, 2, null, "#{}", null, JstUIMessages.FaceletPageContectAssistProcessor_NewELExpression, 10000); //$NON-NLS-1$
+			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(true, "#{}", //$NON-NLS-1$ 
+					contentAssistRequest.getReplacementBeginPosition(), 
+					0, 2, JSF_EL_PROPOSAL_IMAGE, JstUIMessages.JspContentAssistProcessor_NewELExpression, null, 
+					JstUIMessages.FaceletPageContectAssistProcessor_NewELExpressionTextInfo, TextProposal.R_XML_ATTRIBUTE_VALUE_TEMPLATE);
+			
 			contentAssistRequest.addProposal(proposal);
 			return;
 		}
@@ -209,15 +211,23 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 			String displayString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString(); 
 			IContextInformation contextInformation = null;
 			String additionalProposalInfo = textProposal.getContextInfo();
-			int relevance = textProposal.getRelevance() + 10000;
+			int relevance = textProposal.getRelevance();
+			if (relevance == TextProposal.R_NONE) {
+				relevance = TextProposal.R_JSP_JSF_EL_VARIABLE_ATTRIBUTE_VALUE;
+			}
 
-			CustomCompletionProposal proposal = new CustomCompletionProposal(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, contextInformation, additionalProposalInfo, relevance);
+			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(replacementString, 
+					replacementOffset, replacementLength, cursorPosition, image, displayString, 
+					contextInformation, additionalProposalInfo, relevance);
+
 			contentAssistRequest.addProposal(proposal);
 		}
 
 		if (prefix.isELStarted() && !prefix.isELClosed()) {
-			CustomCompletionProposal proposal = new CustomCompletionProposal("}", getOffset(), //$NON-NLS-1$
-					0, 1, null, "}", null, JstUIMessages.FaceletPageContectAssistProcessor_CloseELExpression, 10001); //$NON-NLS-1$
+			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal("}", //$NON-NLS-1$
+					getOffset(), 0, 1, JSF_EL_PROPOSAL_IMAGE, JstUIMessages.JspContentAssistProcessor_CloseELExpression, 
+					null, JstUIMessages.JspContentAssistProcessor_CloseELExpressionInfo, TextProposal.R_XML_ATTRIBUTE_VALUE_TEMPLATE);
+
 			contentAssistRequest.addProposal(proposal);
 		}
 	}

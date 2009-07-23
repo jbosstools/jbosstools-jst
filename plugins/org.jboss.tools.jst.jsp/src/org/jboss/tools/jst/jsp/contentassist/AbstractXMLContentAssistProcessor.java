@@ -162,14 +162,13 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	 * Calculates and adds the attribute name proposals to the Content Assist Request object
 	 */
 	protected void addAttributeNameProposals(ContentAssistRequest contentAssistRequest) {
-		System.out.println("AbstractXMLContentAssistProcessor: addAttributeNameProposals() invoked"); //$NON-NLS-1$
 	}
 
 	/**
 	 * Calculates and adds the attribute value proposals to the Content Assist Request object
 	 */
 	protected void addAttributeValueProposals(ContentAssistRequest contentAssistRequest) {
-		System.out.println("AbstractXMLContentAssistProcessor: addAttributeValueProposals() invoked"); //$NON-NLS-1$
+//		System.out.println("AbstractXMLContentAssistProcessor: addAttributeValueProposals() invoked"); //$NON-NLS-1$
 /*
 		IDOMNode node = (IDOMNode) contentAssistRequest.getNode();
 
@@ -213,7 +212,6 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 			int attrValueEnd=eqRegionEnd + currentValueText.length();
 			int attrTextEnd = invokeRegion.getTextEnd();
 			// attrNode.getValueRegionText()
-			System.out.println("AbstractXMLContentAssistProcessor: addAttributeValueProposals() invoked");
 		}
 		else {
 			setErrorMessage(UNKNOWN_CONTEXT);
@@ -225,42 +223,36 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	 * Calculates and adds the comment proposals to the Content Assist Request object
 	 */
 	protected void addCommentProposal(ContentAssistRequest contentAssistRequest) {
-		System.out.println("AbstractXMLContentAssistProcessor: addCommentProposal() invoked"); //$NON-NLS-1$
 	}
 	
 	/*
 	 * Calculates and adds the doc type proposals to the Content Assist Request object
 	 */
 	protected void addDocTypeProposal(ContentAssistRequest contentAssistRequest) {
-		System.out.println("AbstractXMLContentAssistProcessor: addDocTypeProposal() invoked"); //$NON-NLS-1$
 	}
 	
 	/*
 	 * Calculates and adds the empty document proposals to the Content Assist Request object
 	 */
 	protected void addEmptyDocumentProposals(ContentAssistRequest contentAssistRequest) {
-		System.out.println("AbstractXMLContentAssistProcessor: addEmptyDocumentProposals() invoked"); //$NON-NLS-1$
 	}
 	
 	/*
 	 * Calculates and adds the tag name proposals to the Content Assist Request object
 	 */
 	protected void addEndTagNameProposals(ContentAssistRequest contentAssistRequest) {
-		System.out.println("AbstractXMLContentAssistProcessor: addEndTagNameProposals() invoked"); //$NON-NLS-1$
 	}
 	
 	/*
 	 * Calculates and adds the end tag proposals to the Content Assist Request object
 	 */
 	protected void addEndTagProposals(ContentAssistRequest contentAssistRequest) {
-		System.out.println("AbstractXMLContentAssistProcessor: addEndTagProposals() invoked"); //$NON-NLS-1$
 	}
 	
 	/*
 	 * Calculates and adds the enttity proposals to the Content Assist Request object
 	 */
 	protected void addEntityProposals(ContentAssistRequest contentAssistRequest, int documentPosition, ITextRegion completionRegion, IDOMNode treeNode) {
-		System.out.println("AbstractXMLContentAssistProcessor: addEntityProposals() invoked"); //$NON-NLS-1$
 		super.addEntityProposals(contentAssistRequest, documentPosition, completionRegion, treeNode);
 	}
 	
@@ -268,28 +260,24 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	 * Calculates and adds the PCDATA proposals to the Content Assist Request object
 	 */
 	protected void addPCDATAProposal(String nodeName, ContentAssistRequest contentAssistRequest) {
-		System.out.println("AbstractXMLContentAssistProcessor: addPCDATAProposal() invoked"); //$NON-NLS-1$
 	}
 	
 	/*
 	 * Calculates and adds the start document proposals to the Content Assist Request object
 	 */
 	protected void addStartDocumentProposals(ContentAssistRequest contentAssistRequest) {
-		System.out.println("AbstractXMLContentAssistProcessor: addStartDocumentProposals() invoked"); //$NON-NLS-1$
 	}
 	
 	/*
 	 * Calculates and adds the tag close proposals to the Content Assist Request object
 	 */
 	protected void addTagCloseProposals(ContentAssistRequest contentAssistRequest) {
-		System.out.println("AbstractXMLContentAssistProcessor: addTagCloseProposals() invoked"); //$NON-NLS-1$
 	}
 	
 	/*
 	 * Calculates and adds the tag insertion proposals to the Content Assist Request object
 	 */
 	protected void addTagInsertionProposals(ContentAssistRequest contentAssistRequest, int childPosition) {
-		System.out.println("AbstractXMLContentAssistProcessor: addTagInsertionProposals() invoked"); //$NON-NLS-1$
 	}
 	
 	/**
