@@ -36,7 +36,6 @@ import org.eclipse.wst.xml.core.internal.contentmodel.CMNamedNodeMap;
 import org.eclipse.wst.xml.core.internal.contentmodel.modelquery.ModelQuery;
 import org.eclipse.wst.xml.core.internal.document.DocumentTypeAdapter;
 import org.eclipse.wst.xml.core.internal.modelquery.ModelQueryUtil;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.ui.internal.XMLUIMessages;
 import org.eclipse.wst.xml.ui.internal.properties.EnumeratedStringPropertyDescriptor;
@@ -102,7 +101,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 			DocumentTypeAdapter adapter = ownerDocument == null ? null : (DocumentTypeAdapter) ((INodeNotifier) ownerDocument).getAdapterFor(DocumentTypeAdapter.class);
 			if (adapter != null)
 				fCaseSensitive = adapter.getTagNameCase() == DocumentTypeAdapter.STRICT_CASE;
-			offset = ((IDOMElement)fNode).getStartOffset() + ("" + fNode.getNodeType()).length(); //$NON-NLS-1$
+			offset = ((IDOMNode)fNode).getStartOffset() + ("" + fNode.getNodeName()).length(); //$NON-NLS-1$
 		}
 		processor = valueHelper.isFacetets() ? new FaceletPageContectAssistProcessor() : new JspContentAssistProcessor();
         processor.createContext(getTextViewer(), offset);
