@@ -195,7 +195,6 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 						|| attrName.equals("class")) {
 					descriptor = createJSPPropertyDescriptor(d, attrName, false);
 				} else {
-					System.out.println(attrName);
 					descriptor = createTextPropertyDescriptor(attrName, CATEGORY_ATTRIBUTES, 0);
 				}
 				if (descriptor != null) {
