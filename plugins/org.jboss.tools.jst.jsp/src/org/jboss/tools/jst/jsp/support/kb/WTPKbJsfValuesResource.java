@@ -10,37 +10,13 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.support.kb;
 
-import java.util.Set;
-import org.eclipse.ui.IEditorInput;
-
-import org.jboss.tools.common.kb.KbDinamicResource;
-import org.jboss.tools.common.kb.KbProposal;
-
-public class WTPKbJsfValuesResource extends WTPKbdBeanPropertyResource {
+public class WTPKbJsfValuesResource {
 	@SuppressWarnings("nls")
 	private static final String[] fixedJsfValues = {
 		"header", "headerValues", "param", "paramValues",
 		"cookie", "initParam", "requestScope",
 		"sessionScope", "applicationScope",
 		"facesContext", "view"};
-
-	public WTPKbJsfValuesResource(IEditorInput editorInput) {
-		super(editorInput);
-	}
-
-	public String getType() {
-		return KbDinamicResource.JSF_VARIABLES_TYPE;
-	}
-
-	protected void fillSortedProposalStrings(Set sorted, String beanName, boolean hasProperty) {
-		for (int i = 0; i < fixedJsfValues.length; i++) {
-			sorted.add(fixedJsfValues[i]);
-		}
-	}
-
-	protected int getKbProposalRelevance() {
-		return KbProposal.R_JSP_JSF_EL_VARIABLE_ATTRIBUTE_VALUE;
-	}
 
 	/**
      * 

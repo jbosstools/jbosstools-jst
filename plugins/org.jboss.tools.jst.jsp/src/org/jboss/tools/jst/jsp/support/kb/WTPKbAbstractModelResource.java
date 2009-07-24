@@ -17,13 +17,11 @@ import org.eclipse.ui.IFileEditorInput;
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
-import org.jboss.tools.common.kb.KbDinamicResource;
-import org.jboss.tools.common.kb.KbProposal;
 import org.jboss.tools.common.model.ui.editor.IModelObjectEditorInput;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
 
-public abstract class WTPKbAbstractModelResource implements KbDinamicResource {
+public abstract class WTPKbAbstractModelResource {
 	protected IEditorInput fEditorInput;
 	protected WebPromptingProvider fProvider;
 	protected XModel fXModel;
@@ -55,28 +53,4 @@ public abstract class WTPKbAbstractModelResource implements KbDinamicResource {
 		return fXModelObject;
 	}
 
-	/**
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	public boolean equals(Object o) {
-		if(!(o instanceof WTPKbAbstractModelResource)) return false;
-		WTPKbAbstractModelResource other = (WTPKbAbstractModelResource)o;
-		return other.getType().equals(getType()) && other.getXModel() == getXModel();
-	}
-
-	/**
-	 * @see java.lang.Object#hashCode()
-	 */
-	public int hashCode() {
-		int hashCode = getType().hashCode();
-		if(getXModel()!=null) {
-			hashCode += getXModel().hashCode();
-		}
-
-		return hashCode;
-	}
-
-	protected int getKbProposalRelevance() {
-		return KbProposal.R_NONE;
-	}
 }

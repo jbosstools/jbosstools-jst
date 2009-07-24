@@ -105,16 +105,16 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
 
         String attributeName = Constants.EMPTY + context.getProperty("attributeName"); //$NON-NLS-1$
         String nodeName = Constants.EMPTY + context.getProperty("nodeName"); //$NON-NLS-1$
-//        String query = Constants.SLASH;
+        String query = Constants.SLASH;
         ValueHelper valueHelper = new ValueHelper();
 
 //        if ((valueHelper != null) && valueHelper.isFacetets() && (nodeName.indexOf(Constants.COLON) < 0)) {
 //            query += FaceletsHtmlContentAssistProcessor.faceletHtmlPrefixStart;
 //        }
 
-//        query += (nodeName + "@" + attributeName); //$NON-NLS-1$
-//        context.setProperty("query", query); //$NON-NLS-1$
-//        context.setProperty("help", query); //$NON-NLS-1$
+        query += (nodeName + "@" + attributeName); //$NON-NLS-1$
+        context.setProperty("query", query); //$NON-NLS-1$
+        context.setProperty("help", query); //$NON-NLS-1$
         context.setProperty("title", MessageFormat.format(JstUIMessages.JSPDialogCellEditor_EditAttribute, WizardKeys.toDisplayName(attributeName))); //$NON-NLS-1$
         context.setProperty("subtitle", "<" + context.getProperty("nodeName") + ">"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 

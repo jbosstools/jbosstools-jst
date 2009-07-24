@@ -10,9 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.support.kb;
 
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
@@ -27,8 +25,6 @@ import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
-import org.jboss.tools.common.kb.KbDinamicResource;
-import org.jboss.tools.common.kb.KbProposal;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.filesystems.FileSystemsHelper;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
@@ -112,25 +108,6 @@ public class WTPKbImageFileResource extends WTPKbAbstractModelResource {
 		}
 	}
 
-	public Collection<KbProposal> queryProposal(String query) {
-		ArrayList<KbProposal> proposals = new ArrayList<KbProposal>();
-		ImagePathDescriptor[] images = getImagesFilesPathes(query);
-		for(int i=0; i<images.length; i++) {
-			KbProposal proposal = new KbProposal();
-			proposal.setLabel(images[i].getQueryPath());
-			String replacementString = images[i].getQueryPath();
-			if(images[i].getResource() instanceof IFolder) {
-				replacementString = replacementString + "/"; //$NON-NLS-1$
-				proposal.setAutoActivationContentAssistantAfterApplication(true);
-			}
-			proposal.setReplacementString(replacementString);
-			proposal.setPosition(replacementString.length());
-			proposal.setImage(JspEditorPlugin.getDefault().getImage(JspEditorPlugin.CA_RESOURCES_IMAGE_PATH));
-			proposals.add(proposal);
-		}
-		return proposals;
-	}
-
 	public ImagePathDescriptor[] getImagesFilesPathes(String query) {
 		query = query.trim();
 		if(query.indexOf('\\')>-1) {
@@ -199,14 +176,6 @@ public class WTPKbImageFileResource extends WTPKbAbstractModelResource {
 			filesPathes[i] = new ImagePathDescriptor(prefix + r.getName(), r);
 		}
 		return filesPathes;
-	}
-
-	public String getType() {
-		return KbDinamicResource.IMAGE_FILE_TYPE;
-	}
-
-	public InputStream getInputStream() {
-		return null;
 	}
 
 	public boolean isReadyToUse() {
