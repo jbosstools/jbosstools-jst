@@ -23,12 +23,10 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
-import org.jboss.tools.common.kb.TagDescriptor;
 import org.jboss.tools.common.model.project.IPromptingProvider;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.model.util.ModelFeatureFactory;
 import org.jboss.tools.jst.jsp.contentassist.FaceletPageContectAssistProcessor;
-import org.jboss.tools.jst.jsp.contentassist.FaceletsHtmlContentAssistProcessor;
 import org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor;
 import org.jboss.tools.jst.jsp.drop.treeviewer.model.AttributeValueResource;
 import org.jboss.tools.jst.jsp.drop.treeviewer.model.AttributeValueResourceFactory;
@@ -53,6 +51,8 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 public class ValueHelper {
+	public static final String faceletUri = "http://java.sun.com/jsf/facelets"; //$NON-NLS-1$
+	public static final String JSFCAttributeName = "jsfc"; //$NON-NLS-1$
 	
 	private boolean isFacelets = false;
 	
@@ -154,12 +154,6 @@ public class ValueHelper {
 		return (root != null && root.getChildren().length > 0);
 	}
 
-	@Deprecated
-	public TagDescriptor getTagDescriptor(String query) {
-		if(!init()) return null;
-		return null;
-	}
-
 	public IEditorInput getEditorInput() {
 		IEditorPart editor = ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		return editor.getEditorInput();
@@ -215,7 +209,7 @@ public class ValueHelper {
 		isFacelets = false;
 		for(int i = 0; i < list.size(); i++) {
 			TaglibData data = list.get(i);
-			isFacelets = isFacelets || data.getUri().equals(FaceletsHtmlContentAssistProcessor.faceletUri);
+			isFacelets = isFacelets || data.getUri().equals(faceletUri);
 		}
 	}
 	
@@ -225,7 +219,7 @@ public class ValueHelper {
 		if(name.indexOf(':') >= 0) return null;
 		
 		NamedNodeMap attributes = element.getAttributes();
-		Node jsfC = attributes.getNamedItem(FaceletsHtmlContentAssistProcessor.JSFCAttributeName);
+		Node jsfC = attributes.getNamedItem(JSFCAttributeName);
 		if(jsfC != null && (jsfC instanceof Attr)) {
 			Attr jsfCAttribute = (Attr)jsfC;
 			String jsfTagName = jsfCAttribute.getValue();

@@ -20,7 +20,6 @@ import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.fieldassist.IContentProposal;
 import org.eclipse.jface.fieldassist.IControlContentAdapter;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
@@ -33,7 +32,6 @@ import org.jboss.tools.common.model.ui.attribute.AttributeContentProposalProvide
 import org.jboss.tools.common.model.ui.attribute.editor.DialogCellEditorEx;
 import org.jboss.tools.common.model.ui.objecteditor.AttributeWrapper;
 import org.jboss.tools.common.model.ui.objecteditor.ExtendedCellEditorProvider;
-import org.jboss.tools.jst.jsp.contentassist.FaceletsHtmlContentAssistProcessor;
 import org.jboss.tools.jst.jsp.contentassist.JSPDialogContentProposalProvider;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.cssdialog.CSSStyleDialog;
@@ -107,16 +105,16 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
 
         String attributeName = Constants.EMPTY + context.getProperty("attributeName"); //$NON-NLS-1$
         String nodeName = Constants.EMPTY + context.getProperty("nodeName"); //$NON-NLS-1$
-        String query = Constants.SLASH;
+//        String query = Constants.SLASH;
         ValueHelper valueHelper = new ValueHelper();
 
-        if ((valueHelper != null) && valueHelper.isFacetets() && (nodeName.indexOf(Constants.COLON) < 0)) {
-            query += FaceletsHtmlContentAssistProcessor.faceletHtmlPrefixStart;
-        }
+//        if ((valueHelper != null) && valueHelper.isFacetets() && (nodeName.indexOf(Constants.COLON) < 0)) {
+//            query += FaceletsHtmlContentAssistProcessor.faceletHtmlPrefixStart;
+//        }
 
-        query += (nodeName + "@" + attributeName); //$NON-NLS-1$
-        context.setProperty("query", query); //$NON-NLS-1$
-        context.setProperty("help", query); //$NON-NLS-1$
+//        query += (nodeName + "@" + attributeName); //$NON-NLS-1$
+//        context.setProperty("query", query); //$NON-NLS-1$
+//        context.setProperty("help", query); //$NON-NLS-1$
         context.setProperty("title", MessageFormat.format(JstUIMessages.JSPDialogCellEditor_EditAttribute, WizardKeys.toDisplayName(attributeName))); //$NON-NLS-1$
         context.setProperty("subtitle", "<" + context.getProperty("nodeName") + ">"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 

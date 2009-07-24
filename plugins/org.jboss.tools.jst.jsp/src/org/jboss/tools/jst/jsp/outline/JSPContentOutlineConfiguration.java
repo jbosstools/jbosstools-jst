@@ -33,6 +33,7 @@ import org.eclipse.wst.html.core.internal.provisional.HTMLCMProperties;
 import org.eclipse.wst.html.ui.internal.contentoutline.HTMLNodeActionManager;
 import org.eclipse.wst.html.ui.views.contentoutline.HTMLContentOutlineConfiguration;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
+import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.wst.xml.core.internal.contentmodel.CMDataType;
 import org.eclipse.wst.xml.core.internal.contentmodel.CMElementDeclaration;
 import org.eclipse.wst.xml.core.internal.contentmodel.CMNode;
@@ -40,13 +41,20 @@ import org.eclipse.wst.xml.core.internal.contentmodel.modelquery.ModelQuery;
 import org.eclipse.wst.xml.core.internal.contentmodel.modelquery.ModelQueryAction;
 import org.eclipse.wst.xml.ui.internal.XMLUIMessages;
 import org.eclipse.wst.xml.ui.internal.contentoutline.XMLNodeActionManager;
-import org.jboss.tools.common.kb.AttributeDescriptor;
-import org.jboss.tools.common.kb.TagDescriptor;
 import org.jboss.tools.common.model.ui.dnd.ModelTransfer;
 import org.jboss.tools.common.model.ui.editors.dnd.context.DropContext;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
+import org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor;
 import org.jboss.tools.jst.jsp.editor.IJSPTextEditor;
 import org.jboss.tools.jst.jsp.editor.IViewerDropAdapterFactory;
+import org.jboss.tools.jst.web.kb.IPageContext;
+import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.PageProcessor;
+import org.jboss.tools.jst.web.kb.KbQuery.Type;
+import org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibComponent;
+import org.jboss.tools.jst.web.kb.taglib.IAttribute;
+import org.jboss.tools.jst.web.kb.taglib.IComponent;
+import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibComponent;
 import org.osgi.framework.Bundle;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -166,13 +174,29 @@ public class JSPContentOutlineConfiguration extends HTMLContentOutlineConfigurat
 					} else {
 						List modelQueryActionList = new ArrayList();
 						
+						JspContentAssistProcessor processor = valueHelper.createContentAssistProcessor();
+						int offset = 0;
+						if(element instanceof IndexedRegion) {
+							offset = ((IndexedRegion)element).getStartOffset() + 1;
+						}
+						IPageContext pageContext = valueHelper.createPageContext(processor, offset);
+						KbQuery kbQuery = createKbQuery(processor, element, offset);
+						IComponent[] components = PageProcessor.getInstance().getComponents(kbQuery, pageContext, true);
+						IComponent d = null;
+						for (IComponent c: components) {
+							if(c instanceof ICustomTagLibComponent) {
+								d = c;
+								break;
+							}
+						}
+						if(d == null && components.length > 0) d = components[0];
+						
+						
 						String query = "/" + element.getNodeName(); //$NON-NLS-1$
-						//TODO replace TagDescriptor with Component
-						TagDescriptor d = valueHelper.getTagDescriptor(query);
+
 						if(d != null) {
-							List as = d.getAttributesDescriptors();
-							for (int i = 0; i < as.size(); i++) {
-								AttributeDescriptor a = (AttributeDescriptor)as.get(i);
+							IAttribute[] as = d.getAttributes();
+							for (IAttribute a: as) {
 								String attribute = a.getName();
 								if(element.hasAttribute(attribute)) continue;
 								HTMLAttrDeclImpl ad = new HTMLAttrDeclImpl(attribute, new HTMLCMDataTypeImpl(attribute), 0);
@@ -197,6 +221,36 @@ public class JSPContentOutlineConfiguration extends HTMLContentOutlineConfigurat
 			}
 		};
 	}
+
+	protected KbQuery createKbQuery(JspContentAssistProcessor processor, Node fNode, int offset) {
+		KbQuery kbQuery = new KbQuery();
+
+		String[] parentTags = processor.getParentTags(false);
+		parentTags = add(parentTags, fNode.getNodeName());
+		String prefix = getPrefix(fNode);
+		kbQuery.setPrefix(prefix);
+		kbQuery.setUri(processor.getUri(prefix));
+		kbQuery.setParentTags(parentTags);
+		kbQuery.setParent(fNode.getNodeName());
+		kbQuery.setMask(false); 
+		kbQuery.setType(Type.ATTRIBUTE_NAME);
+		kbQuery.setOffset(offset);
+		kbQuery.setValue(""); 
+		kbQuery.setStringQuery("");
+		
+		return kbQuery;
+	}
+	private String[] add(String[] result, String v) {
+		String[] result1 = new String[result.length + 1];
+		System.arraycopy(result, 0, result1, 0, result.length);
+		result1[result.length] = v;
+		return result1;
+	}
+	private String getPrefix(Node fNode) {
+		int i = fNode.getNodeName().indexOf(':');
+		return i < 0 ? null : fNode.getNodeName().substring(0, i);
+	}
+
 
 	public static class OutlineTransferDropTargetListener implements
 			TransferDropTargetListener {
