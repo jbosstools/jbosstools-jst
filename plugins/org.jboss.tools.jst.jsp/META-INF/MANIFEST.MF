@@ -21,7 +21,6 @@ Provide-Package: org.jboss.tools.jst.jsp,
  org.jboss.tools.jst.jsp.text,
  org.jboss.tools.jst.jsp.ui.action
 Require-Bundle: org.jboss.tools.common,
- org.jboss.tools.common.kb,
  org.jboss.tools.common.model,
  org.jboss.tools.common.el.core,
  org.jboss.tools.common.text.xml,
