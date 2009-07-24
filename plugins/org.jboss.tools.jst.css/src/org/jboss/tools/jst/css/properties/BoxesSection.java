@@ -19,10 +19,10 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.tabs.TabBoxesControl;
  * @author Sergey Dzmitrovich
  * 
  */
-public class BoxesSection extends AbstractCssSection {
+public class BoxesSection extends AbstractCSSSection {
 
 	@Override
-	public BaseTabControl createTabControl(Composite parent) {
+	public BaseTabControl createSectionControl(Composite parent) {
 
 		return new TabBoxesControl(parent, getStyleAttributes(),
 				getBindingContext());

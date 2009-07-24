@@ -19,10 +19,10 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.tabs.TabTextControl;
  * @author Sergey Dzmitrovich
  * 
  */
-public class TextSection extends AbstractCssSection {
+public class TextSection extends AbstractCSSSection {
 
 	@Override
-	public BaseTabControl createTabControl(Composite parent) {
+	public BaseTabControl createSectionControl(Composite parent) {
 		return new TabTextControl(parent, getStyleAttributes(),
 				getBindingContext());
 	}

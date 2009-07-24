@@ -38,7 +38,6 @@
 					type="org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule">
 				</input>
 			</propertySection>
-
 			<propertySection
 				class="org.jboss.tools.jst.css.properties.BackgroundSection" id="org.jboss.tools.jst.css.backgroundTab"
 				tab="org.jboss.tools.jst.css.backgroundTab" >
@@ -62,6 +61,30 @@
 			<propertySection
 				class="org.jboss.tools.jst.css.properties.QuickEditSection" id="org.jboss.tools.jst.css.quickEditTab"
 				tab="org.jboss.tools.jst.css.quickEditTab">
+				<input
+					type="org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule">
+				</input>
+			</propertySection>
+			<propertySection class="org.jboss.tools.jst.css.properties.MessageCSSSection"
+				id="org.jboss.tools.jst.css.messageSection" tab="org.jboss.tools.jst.css.textFontTab">
+				<input
+					type="org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule">
+				</input>
+			</propertySection>
+			<propertySection class="org.jboss.tools.jst.css.properties.MessageCSSSection"
+				id="org.jboss.tools.jst.css.messageSection" tab="org.jboss.tools.jst.css.backgroundTab">
+				<input
+					type="org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule">
+				</input>
+			</propertySection>
+			<propertySection class="org.jboss.tools.jst.css.properties.MessageCSSSection"
+				id="org.jboss.tools.jst.css.messageSection" tab="org.jboss.tools.jst.css.boxesTab">
+				<input
+					type="org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule">
+				</input>
+			</propertySection>
+			<propertySection class="org.jboss.tools.jst.css.properties.MessageCSSSection"
+				id="org.jboss.tools.jst.css.messageSection" tab="org.jboss.tools.jst.css.quickEditTab">
 				<input
 					type="org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule">
 				</input>

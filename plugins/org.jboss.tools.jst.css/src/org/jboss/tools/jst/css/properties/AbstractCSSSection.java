@@ -12,7 +12,9 @@
 package org.jboss.tools.jst.css.properties;
 
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.StyleAttributes;
@@ -22,25 +24,29 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.tabs.BaseTabControl;
  * @author Sergey Dzmitrovich
  * 
  */
-public abstract class AbstractCssSection extends AbstractPropertySection {
+public abstract class AbstractCSSSection extends AbstractPropertySection {
 	private DataBindingContext bindingContext;
 	private StyleAttributes styleAttributes;
-	protected BaseTabControl control;
+	private BaseTabControl sectionControl;
+	private Composite tabComposite;
 
 	@Override
 	public void createControls(Composite parent,
 			TabbedPropertySheetPage aTabbedPropertySheetPage) {
 		super.createControls(parent, aTabbedPropertySheetPage);
+		parent.setBackgroundMode(SWT.INHERIT_FORCE);
 		if (aTabbedPropertySheetPage instanceof CSSPropertyPage) {
 			bindingContext = ((CSSPropertyPage) aTabbedPropertySheetPage)
 					.getBindingContext();
 			styleAttributes = ((CSSPropertyPage) aTabbedPropertySheetPage)
 					.getStyleAttributes();
 		}
-		control = createTabControl(parent);
+		tabComposite = (Composite) aTabbedPropertySheetPage.getControl();
+		sectionControl = createSectionControl(parent);
+
 	}
 
-	abstract public BaseTabControl createTabControl(Composite parent);
+	abstract public BaseTabControl createSectionControl(Composite parent);
 
 	public DataBindingContext getBindingContext() {
 		return bindingContext;
@@ -50,7 +56,11 @@ public abstract class AbstractCssSection extends AbstractPropertySection {
 		return styleAttributes;
 	}
 
-	public BaseTabControl getTabControl() {
-		return control;
+	public BaseTabControl getSectionControl() {
+		return sectionControl;
+	}
+	
+	public Composite getTabComposite() {
+		return tabComposite;
 	}
 }

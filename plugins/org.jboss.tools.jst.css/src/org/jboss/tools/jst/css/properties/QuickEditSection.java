@@ -21,19 +21,18 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.tabs.TabQuickEditControl;
  * @author Sergey Dzmitrovich
  * 
  */
-public class QuickEditSection extends AbstractCssSection {
+public class QuickEditSection extends AbstractCSSSection {
 
 	@Override
-	public BaseTabControl createTabControl(Composite parent) {
+	public BaseTabControl createSectionControl(Composite parent) {
 		return new TabQuickEditControl(parent, getStyleAttributes(),
 				getBindingContext());
 	}
 
 	@Override
 	public void setInput(IWorkbenchPart part, ISelection selection) {
-		getTabControl().update();
-		// TODO find better way
-		getTabControl().getParent().getParent().layout(true);
+		getSectionControl().update();
+		getTabComposite().layout(true, true);
 		super.setInput(part, selection);
 	}
 

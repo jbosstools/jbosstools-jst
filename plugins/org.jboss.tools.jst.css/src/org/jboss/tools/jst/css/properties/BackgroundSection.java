@@ -19,10 +19,10 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.tabs.TabBackgroundControl;
  * @author Sergey Dzmitrovich
  * 
  */
-public class BackgroundSection extends AbstractCssSection {
+public class BackgroundSection extends AbstractCSSSection {
 
 	@Override
-	public BaseTabControl createTabControl(Composite parent) {
+	public BaseTabControl createSectionControl(Composite parent) {
 		return new TabBackgroundControl(parent, getStyleAttributes(),
 				getBindingContext());
 	}

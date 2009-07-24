@@ -19,10 +19,10 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.tabs.TabPropertySheetControl;
  * @author Sergey Dzmitrovich
  * 
  */
-public class PropertiesSection extends AbstractCssSection {
+public class PropertiesSection extends AbstractCSSSection {
 
 	@Override
-	public BaseTabControl createTabControl(Composite parent) {
+	public BaseTabControl createSectionControl(Composite parent) {
 
 		return new TabPropertySheetControl(parent, getStyleAttributes(),
 				getBindingContext());
