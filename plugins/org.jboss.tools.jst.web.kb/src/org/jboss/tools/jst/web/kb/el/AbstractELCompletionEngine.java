@@ -600,12 +600,12 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 			String filter = expr.getMemberName();
 			boolean bSurroundWithQuotes = false;
 			if(filter == null) {
-				filter = ""; //$NON-NLS-1$
+				filter = "";
 				bSurroundWithQuotes = true;
 			} else {
 				if((filter.startsWith("'") || filter.startsWith("\"")) //$NON-NLS-1$ //$NON-NLS-2$
 					&& (filter.endsWith("'") || filter.endsWith("\""))) { //$NON-NLS-1$ //$NON-NLS-2$
-					filter = filter.substring(1, filter.length() - 1);
+					filter = filter.length() == 1 ? "" : filter.substring(1, filter.length() - 1); //$NON-NLS-1$
 				} else {
 					//Value is set as expression itself, we cannot compute it
 					if(isMessages) status.setMapOrCollectionOrBundleAmoungTheTokens();
