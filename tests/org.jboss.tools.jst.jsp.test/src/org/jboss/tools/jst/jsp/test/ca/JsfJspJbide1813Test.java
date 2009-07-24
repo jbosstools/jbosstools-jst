@@ -27,6 +27,7 @@ public class JsfJspJbide1813Test extends ContentAssistantTestCase{
 		String[] proposals={
 					"ltr",
 					"rtl",
+					"new jsf el expression - create a new attribute value with #{}"
 		};
 
 		checkProposals(PAGE_NAME, "dir=\"\"", 5, proposals, true);

@@ -94,7 +94,7 @@ public class ContentAssistantTestCase extends TestCase {
 
 	protected boolean compareProposal(String proposalName, ICompletionProposal[] proposals){
 		for (int i = 0; i < proposals.length; i++) {
-			if(proposals[i].getDisplayString().equals(proposalName)) return true;
+			if(proposals[i].getDisplayString().toLowerCase().equals(proposalName.toLowerCase())) return true;
 		}
 		return false;
 	}

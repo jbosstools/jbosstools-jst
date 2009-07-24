@@ -26,7 +26,8 @@ public class JsfJspJbide1807Test extends ContentAssistantTestCase{
 		//  - The "/pages" proposal is added as the main case to test 
 		String[] proposals={
 					"/pages",
-					"/templates"
+					"/templates",
+					"new jsf el expression - create a new attribute value with #{}"
 		};
 
 		checkProposals(PAGE_NAME, "<input type=\"image\" src=\"", 25, proposals, true);
