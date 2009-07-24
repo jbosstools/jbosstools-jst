@@ -33,7 +33,7 @@ public class JspContextImpl extends ELContextImpl implements IPageContext {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.jboss.tools.common.kb.text.PageContext#getLibraries()
+	 * @see org.jboss.tools.jst.web.kb.IPageContext#getLibraries()
 	 */
 	public ITagLibrary[] getLibraries() {
 		return libs;
@@ -45,7 +45,7 @@ public class JspContextImpl extends ELContextImpl implements IPageContext {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.jboss.tools.common.kb.text.PageContext#getResourceBundles()
+	 * @see org.jboss.tools.jst.web.kb.IPageContext#getResourceBundles()
 	 */
 	public IResourceBundle[] getResourceBundles() {
 		return bundles;
