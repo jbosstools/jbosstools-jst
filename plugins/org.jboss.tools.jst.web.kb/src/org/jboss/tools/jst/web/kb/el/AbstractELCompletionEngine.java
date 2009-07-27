@@ -600,7 +600,7 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 			String filter = expr.getMemberName();
 			boolean bSurroundWithQuotes = false;
 			if(filter == null) {
-				filter = "";
+				filter = ""; //$NON-NLS-1$
 				bSurroundWithQuotes = true;
 			} else {
 				if((filter.startsWith("'") || filter.startsWith("\"")) //$NON-NLS-1$ //$NON-NLS-2$
