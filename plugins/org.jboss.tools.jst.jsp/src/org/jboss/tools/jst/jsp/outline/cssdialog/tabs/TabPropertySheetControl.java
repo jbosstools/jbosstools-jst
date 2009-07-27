@@ -122,8 +122,9 @@ public class TabPropertySheetControl extends BaseTabControl {
 					editor.minimumWidth = size.x;
 					editor.minimumHeight = size.y;
 
-					tree.getColumn(VALUE_ATTRIBUTE_COLUMN).setWidth(
-							editor.minimumWidth);
+					if (tree.getColumn(VALUE_ATTRIBUTE_COLUMN).getWidth() < editor.minimumWidth)
+						tree.getColumn(VALUE_ATTRIBUTE_COLUMN).setWidth(
+								editor.minimumWidth);
 
 					editor.setEditor(newEditor, item, VALUE_ATTRIBUTE_COLUMN);
 				}
