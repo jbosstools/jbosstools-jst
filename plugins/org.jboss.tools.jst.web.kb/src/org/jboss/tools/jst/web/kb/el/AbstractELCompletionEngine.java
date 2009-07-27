@@ -30,6 +30,8 @@ import org.jboss.tools.common.el.core.model.ELModel;
 import org.jboss.tools.common.el.core.model.ELObjectType;
 import org.jboss.tools.common.el.core.model.ELPropertyInvocation;
 import org.jboss.tools.common.el.core.parser.ELParser;
+import org.jboss.tools.common.el.core.parser.ELParserFactory;
+import org.jboss.tools.common.el.core.parser.ELParserUtil;
 import org.jboss.tools.common.el.core.parser.LexicalToken;
 import org.jboss.tools.common.el.core.resolver.ELCompletionEngine;
 import org.jboss.tools.common.el.core.resolver.ELContext;
@@ -135,9 +137,13 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 	}
 
 	public ELExpression parseOperand(String operand) {
+		return parseOperand(operand, getParserFactory());
+	}
+
+	public ELExpression parseOperand(String operand, ELParserFactory factory) {
 		if(operand == null) return null;
 		String el = (operand.indexOf("#{") < 0 && operand.indexOf("${") < 0) ? "#{" + operand + "}" : operand; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		ELParser p = getParserFactory().createParser();
+		ELParser p = factory.createParser();
 		ELModel model = p.parse(el);
 		List<ELInstance> is = model.getInstances();
 		if(is.isEmpty()) return null;
@@ -204,7 +210,11 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 		if(prefixWasChanged && isArray) {
 			member.setDataModel(true);
 		}
-		ELExpression newOperand = (prefixWasChanged) ? parseOperand(newEl) : operand;
+		ELExpression newOperand = (prefixWasChanged) 
+				? ((suffix.length() > 0 && getParserFactory() == ELParserUtil.getDefaultFactory()) 
+						? parseOperand(newEl, ELParserUtil.getCollectionFactory()) 
+						: parseOperand(newEl)) 
+				: operand;
 
 		ELOperandResolveStatus status = resolveELOperand(file, newOperand, returnEqualedVariablesOnly, prefixWasChanged);
 
