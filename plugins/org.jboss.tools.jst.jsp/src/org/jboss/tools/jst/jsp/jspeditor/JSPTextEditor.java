@@ -788,8 +788,8 @@ public class JSPTextEditor extends StructuredTextEditor implements
 
 		public void initContext(Properties context) {
 			if(context != null) {
-				context.put("processor", processor);
-				context.put("pageContext", pageContext);
+				context.put("processor", processor); //$NON-NLS-1$
+				context.put("pageContext", pageContext); //$NON-NLS-1$
 			}
 		}
 		public IPageContext getPageContext() {
@@ -801,7 +801,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			if(c == null) return null;
 			String prefix = getPrefix(query);
 			if(prefix == null) return c.getName();
-			return prefix + ":" + c.getName();
+			return prefix + ":" + c.getName(); //$NON-NLS-1$
 		}
 	
 		public boolean canHaveBody() {
@@ -815,7 +815,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 	
 		KbQuery createQuery(TagProposal proposal) {
 			KbQuery kbQuery = new KbQuery();
-			String name = proposal.getPrefix() + ":" + proposal.getName();
+			String name = proposal.getPrefix() + ":" + proposal.getName(); //$NON-NLS-1$
 			kbQuery.setPrefix(proposal.getPrefix());
 			kbQuery.setUri(proposal.getUri());
 			kbQuery.setParentTags(new String[]{name});
@@ -823,8 +823,8 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			kbQuery.setMask(false); 
 			kbQuery.setType(Type.ATTRIBUTE_NAME);
 			kbQuery.setOffset(JSPTextEditor.this.getTextViewer().getTextWidget().getCaretOffset());
-			kbQuery.setValue(""); 
-			kbQuery.setStringQuery("");
+			kbQuery.setValue("");  //$NON-NLS-1$
+			kbQuery.setStringQuery(""); //$NON-NLS-1$
 			return kbQuery;
 		}
 		

@@ -235,8 +235,8 @@ public class JSPContentOutlineConfiguration extends HTMLContentOutlineConfigurat
 		kbQuery.setMask(false); 
 		kbQuery.setType(Type.ATTRIBUTE_NAME);
 		kbQuery.setOffset(offset);
-		kbQuery.setValue(""); 
-		kbQuery.setStringQuery("");
+		kbQuery.setValue("");  //$NON-NLS-1$
+		kbQuery.setStringQuery(""); //$NON-NLS-1$
 		
 		return kbQuery;
 	}

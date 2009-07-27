@@ -59,7 +59,7 @@ public class ValueHelper {
 	public static IPromptingProvider seamPromptingProvider;
 	
 	static {
-		Object o = ModelFeatureFactory.getInstance().createFeatureInstance("org.jboss.tools.seam.internal.core.el.SeamPromptingProvider");
+		Object o = ModelFeatureFactory.getInstance().createFeatureInstance("org.jboss.tools.seam.internal.core.el.SeamPromptingProvider"); //$NON-NLS-1$
 		if(o instanceof IPromptingProvider) {
 			seamPromptingProvider = (IPromptingProvider)o;
 		}
@@ -119,7 +119,7 @@ public class ValueHelper {
 	
 	public ModelElement getInitalInput(IPageContext pageContext, KbQuery kbQuery) {
 		IAttribute[] as = PageProcessor.getInstance().getAttributes(kbQuery, pageContext);
-		if(as == null || as.length == 0) return new RootElement("root", new ArrayList<AttributeValueResource>());
+		if(as == null || as.length == 0) return new RootElement("root", new ArrayList<AttributeValueResource>()); //$NON-NLS-1$
 		CustomTagLibAttribute ca = null;
 		for (IAttribute a: as) {
 			if(a instanceof CustomTagLibAttribute) {
@@ -129,7 +129,7 @@ public class ValueHelper {
 		}
 		CustomProposalType[] proposals = ca != null ? ca.getProposals() : new CustomProposalType[0];
 		List<AttributeValueResource> elements = new ArrayList<AttributeValueResource>();
-		ModelElement root = new RootElement("root", elements);
+		ModelElement root = new RootElement("root", elements); //$NON-NLS-1$
 		for (int i = 0; i < proposals.length; i++) {
 			AttributeValueResource resource = AttributeValueResourceFactory.getInstance().createResource(getEditorInput(), pageContext, root, proposals[i].getType());
 			resource.setParams(proposals[i].getParams());
@@ -138,10 +138,10 @@ public class ValueHelper {
 		}
 		if(seamPromptingProvider != null && getFile() != null) {
 			Properties p = new Properties();
-			p.put("file", getFile());
-			List list = seamPromptingProvider.getList(null, "seam.is_seam_project", null, p);
+			p.put("file", getFile()); //$NON-NLS-1$
+			List list = seamPromptingProvider.getList(null, "seam.is_seam_project", null, p); //$NON-NLS-1$
 			if(list != null) {
-				AttributeValueResource resource = AttributeValueResourceFactory.getInstance().createResource(getEditorInput(), pageContext, root, "seamVariables");
+				AttributeValueResource resource = AttributeValueResourceFactory.getInstance().createResource(getEditorInput(), pageContext, root, "seamVariables"); //$NON-NLS-1$
 				resource.setQuery(kbQuery, this);
 				elements.add(resource);
 			}
@@ -237,7 +237,7 @@ public class ValueHelper {
 		if (editor == null) return null;
 		if(editor instanceof AbstractTextEditor) {
 			try {
-				Method m = AbstractTextEditor.class.getDeclaredMethod("getSourceViewer", new Class[0]);
+				Method m = AbstractTextEditor.class.getDeclaredMethod("getSourceViewer", new Class[0]); //$NON-NLS-1$
 				m.setAccessible(true);
 				return (ISourceViewer)m.invoke(editor, new Object[0]);
 			} catch (Exception e) {

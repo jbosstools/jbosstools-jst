@@ -72,8 +72,8 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
         if(valueHelper == null) {
         	valueHelper = new ValueHelper();
         }
-        pageContext = (IPageContext)context.get("pageContext");
-        processor = (JspContentAssistProcessor)context.get("processor");
+        pageContext = (IPageContext)context.get("pageContext"); //$NON-NLS-1$
+        processor = (JspContentAssistProcessor)context.get("processor"); //$NON-NLS-1$
         if(processor == null) {
         	processor = valueHelper.createContentAssistProcessor();
         }

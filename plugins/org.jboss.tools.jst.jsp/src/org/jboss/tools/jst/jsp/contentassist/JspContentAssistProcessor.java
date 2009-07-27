@@ -362,7 +362,7 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 				if (image == null) {
 					image = XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_TAG_GENERIC);
 				}
-				String displayString = closingTag; //$NON-NLS-1$
+				String displayString = closingTag;
 				IContextInformation contextInformation = null;
 				String additionalProposalInfo = textProposal.getContextInfo();
 				int relevance = textProposal.getRelevance();
@@ -427,7 +427,7 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 					image = XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_TAG_GENERIC);
 				}
 
-				String displayString = closingTag; //$NON-NLS-1$
+				String displayString = closingTag;
 				IContextInformation contextInformation = null;
 				String additionalProposalInfo = textProposal.getContextInfo();
 				int relevance = textProposal.getRelevance();
