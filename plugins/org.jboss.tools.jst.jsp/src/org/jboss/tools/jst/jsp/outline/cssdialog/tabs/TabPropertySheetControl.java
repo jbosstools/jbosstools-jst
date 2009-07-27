@@ -58,7 +58,8 @@ public class TabPropertySheetControl extends BaseTabControl {
 		super(bindingContext, styleAttributes, parent, SWT.NONE);
 		setLayout(new FillLayout());
 
-		tree = new Tree(this, SWT.NONE);
+		tree = new Tree(this, SWT.FULL_SELECTION | SWT.SINGLE
+				| SWT.HIDE_SELECTION);
 		tree.setHeaderVisible(true);
 		tree.setLinesVisible(true);
 
