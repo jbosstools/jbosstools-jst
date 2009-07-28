@@ -83,6 +83,7 @@ public class TabPropertySheetControl extends BaseTabControl {
 				TreeItem item = createBindedTreeItem(sectionTreeItem, attribute);
 				item.setExpanded(true);
 			}
+			sectionTreeItem.setExpanded(true);
 		}
 
 		final TreeEditor editor = new TreeEditor(tree);
