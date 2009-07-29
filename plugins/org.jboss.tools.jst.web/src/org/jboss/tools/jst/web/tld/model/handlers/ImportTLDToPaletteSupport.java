@@ -47,8 +47,11 @@ public class ImportTLDToPaletteSupport extends SpecialWizardSupport {
 		tree.getChildren(tree.getRoot());
 		selectedFile = (XModelObject)getProperties().get("initialSelection"); //$NON-NLS-1$
 		if(selectedFile != null) {
+			this.path = tree.getValue(selectedFile);
 			setAttributeValue(0, TLD, "" + tree.getValue(selectedFile)); //$NON-NLS-1$
 			onPathModified();
+		} else {
+			this.path = null;
 		}
 	}
 	
