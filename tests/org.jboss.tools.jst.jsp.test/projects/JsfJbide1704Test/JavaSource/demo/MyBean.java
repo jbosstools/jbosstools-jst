@@ -10,21 +10,20 @@
  ******************************************************************************/ 
 package demo;
 
+import java.util.List;
+
 /**
  * Created by JBoss Developer Studio
-*
+ *
  */
-public class Person {
-	private String name;
+public class MyBean {
+	private List<User> users; 
 
-	public Person() {
+	public MyBean() {
 	}
 
-	public String getName() {
-		return name;
+	public List<User> getUsers() {
+		return users;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
 }

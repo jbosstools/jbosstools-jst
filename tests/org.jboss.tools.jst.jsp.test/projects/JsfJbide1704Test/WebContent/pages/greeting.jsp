@@ -7,14 +7,12 @@
 </head>
 <body>
 	<f:view>
-		<f:loadBundle basename="resources" var="msg" />
-		
-		<strong>
-		<h:outputText value="#{msg.greeting}" />
-		&nbsp;
-		<h:outputText value="#{person.name}" />
-		<h:outputText value="!" />
-		</strong>
+		<h:dataTable value="#{myBean.users}" var="user">
+           <h:column>
+             <h:outputText value="#{user.}" />
+           </h:column>
+        </h:dataTable>
+
 	</f:view>
 </body>
 </html>
