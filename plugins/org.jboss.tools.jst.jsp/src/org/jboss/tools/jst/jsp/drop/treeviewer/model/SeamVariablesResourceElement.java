@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.drop.treeviewer.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -39,11 +40,15 @@ public class SeamVariablesResourceElement extends AttributeValueResource {
 		p.put("file", valueHelper.getFile()); //$NON-NLS-1$
 		List list = ValueHelper.seamPromptingProvider.getList(null, "seam.variables", "", p); //$NON-NLS-1$ //$NON-NLS-2$
 		if(list == null) return EMPTY_LIST;
-		SeamVariableElement[] es = new SeamVariableElement[list.size()];
-		for (int i = 0; i < es.length; i++) {
-			es[i] = new SeamVariableElement(list.get(i).toString(), this);
+		List<SeamVariableElement> es = new ArrayList<SeamVariableElement>();
+		for (int i = 0; i < list.size(); i++) {
+			String s = list.get(i).toString();
+			if(s.length() == 0) {
+				continue;
+			}
+			es.add(new SeamVariableElement(s, this));
 		}
-		return elements = es;
+		return elements = es.toArray(new SeamVariableElement[es.size()]);
 	}
 
 	public String getName() {
