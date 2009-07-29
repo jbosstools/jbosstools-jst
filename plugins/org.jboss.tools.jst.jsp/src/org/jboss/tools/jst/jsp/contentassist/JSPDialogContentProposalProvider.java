@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.jsp.contentassist;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 
@@ -18,9 +19,12 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.fieldassist.IContentProposal;
 import org.eclipse.jface.fieldassist.IContentProposalProvider;
 import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jst.jsp.ui.internal.contentassist.JSPContentAssistProcessor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.wst.sse.ui.internal.contentassist.IRelevanceCompletionProposal;
+import org.eclipse.wst.sse.ui.internal.util.Sorter;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.jboss.tools.common.el.core.model.ELInstance;
 import org.jboss.tools.common.el.core.model.ELInvocationExpression;
@@ -86,11 +90,25 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 
 	public IContentProposal[] getProposals(String contents, int position) {
 		List<IContentProposal> result = new ArrayList<IContentProposal>();
+		if(contents.indexOf('{') < 0) {
+			KbQuery kbQuery = createKbQuery(Type.ATTRIBUTE_VALUE, contents, contents, position, false);
+			TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, pageContext);
+			if(proposals != null) for (TextProposal textProposal: proposals) {
+				String displayString = textProposal.getReplacementString();
+				int cursorPosition = /*replacementOffset + */ textProposal.getReplacementString().length();
+
+				Image image = textProposal.getImage();
+
+				IContentProposal proposal = //new ContentProposal(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, contextInformation, additionalProposalInfo, relevance);
+					new ContentProposal(textProposal.getReplacementString(), cursorPosition, displayString, displayString);
+				result.add(proposal);
+			}
+		}
 		TextRegion prefix = getELPrefix(contents, position);
 		if (prefix == null || !prefix.isELStarted()) {
 			IContentProposal proposal = new ContentProposal("#{}", 0, "#{}", JstUIMessages.JSPDialogContentProposalProvider_NewELExpression); //$NON-NLS-1$ //$NON-NLS-2$
 			result.add(proposal);
-			return result.toArray(new IContentProposal[0]);
+			return toSortedUniqueArray(result);
 		}
 		String matchString = "#{" + prefix.getText(); //$NON-NLS-1$
 		String query = matchString;
@@ -128,9 +146,71 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 			IContentProposal proposal = new ContentProposal("}", 0, "}", JstUIMessages.JSPDialogContentProposalProvider_CloseELExpression); //$NON-NLS-1$ //$NON-NLS-2$
 			result.add(proposal);
 		}
-		
-		return result.toArray(new IContentProposal[0]);
+		return toSortedUniqueArray(result);
 	}
+
+	public IContentProposal[] makeUnique(IContentProposal[] proposals) {
+		HashSet<String> present = new HashSet<String>();
+		HashSet<String> info = new HashSet<String>();
+		ArrayList<IContentProposal> unique= new ArrayList<IContentProposal>();
+
+		for (int i = 0; proposals != null && i < proposals.length; i++) {
+			String infoUnquoted = proposals[i].getContent();
+			if (infoUnquoted != null) {
+				if (infoUnquoted.startsWith("\""))
+					infoUnquoted = infoUnquoted.substring(1);
+				if (infoUnquoted.endsWith("\""))
+					infoUnquoted = infoUnquoted.substring(0, infoUnquoted.length() - 1);
+				infoUnquoted = infoUnquoted.trim();
+			}
+			if (!present.contains(proposals[i].getLabel())) {
+				present.add(proposals[i].getLabel());
+				if (infoUnquoted != null && infoUnquoted.length() > 0) {
+					if (!info.contains(infoUnquoted)) {
+						info.add(infoUnquoted);
+					} else {
+						// Do not add proposals with the same info
+						continue;
+					}
+				}
+				unique.add(proposals[i]);
+			}
+		}
+
+		present.clear();
+		return unique.toArray(new IContentProposal[unique.size()]);
+	}
+
+	IContentProposal[] toSortedUniqueArray(List<IContentProposal> result) {
+		IContentProposal[] resultArray = result.toArray(new IContentProposal[0]);
+		if(resultArray.length < 2) return resultArray;
+		Object[] sorted = createSorter().sort(resultArray);
+		System.arraycopy(sorted, 0, resultArray, 0, sorted.length);
+		resultArray = makeUnique(resultArray);
+		return resultArray;
+	}
+
+	protected Sorter createSorter() {
+		return new Sorter() {
+			public boolean compare(Object proposal1, Object proposal2) {
+
+				int pr1 = Integer.MIN_VALUE;
+				int pr2 = Integer.MIN_VALUE;
+				
+				IContentProposal p1 = (IContentProposal)proposal1;
+				IContentProposal p2 = (IContentProposal)proposal2;
+				
+				if (pr1 == pr2) {
+					String str1 = (p1.getLabel() == null ? "" : p1.getLabel()); //$NON-NLS-1$
+					String str2 = (p2.getLabel() == null ? "" : p2.getLabel()); //$NON-NLS-1$
+					return str2.compareTo(str1) > 0;
+				}
+
+				return (pr1 > pr2);
+			}
+		};
+	}
+	
 
 	class ContentProposal implements IContentProposal {
 		String content;
@@ -209,7 +289,8 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 		kbQuery.setParent(attributeName);
 		kbQuery.setMask(true); 
 		kbQuery.setType(type);
-		kbQuery.setOffset(pos);
+//		kbQuery.setOffset(pos);
+		kbQuery.setOffset(offset);
 		kbQuery.setValue(query); 
 		kbQuery.setStringQuery(stringQuery);
 		

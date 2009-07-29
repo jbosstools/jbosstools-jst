@@ -45,8 +45,7 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedCellEditorProvider.StoppableCellEditor {
     Properties context;
 
-    // ValueHelper valueHelper;
-//    ContentAssistHandler handler = null;
+    JSPDialogContentProposalProvider cpp;
     boolean hasProposals = false;
 
     /**
@@ -81,7 +80,9 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
         	return;
         }
 
-        JSPDialogContentProposalProvider cpp = new JSPDialogContentProposalProvider();
+        if(cpp == null) {
+        	cpp = new JSPDialogContentProposalProvider();
+        }
 		cpp.setContext(context);
 		IContentProposal[] ps = cpp.getProposals("#{}", 2); //$NON-NLS-1$
         hasProposals = ((ps != null) && (ps.length > 0));
@@ -179,7 +180,7 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
 
 	protected void addContentAssist(Text text) {
 		IControlContentAdapter controlAdapter = new TextContentAdapter();
-		JSPDialogContentProposalProvider cpp = new JSPDialogContentProposalProvider();
+		cpp = new JSPDialogContentProposalProvider();
 		cpp.setContext(context);
 
 		ContentProposalAdapter adapter = new ContentProposalAdapter(
