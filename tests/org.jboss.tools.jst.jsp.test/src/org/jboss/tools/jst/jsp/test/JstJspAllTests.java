@@ -8,6 +8,7 @@ import org.jboss.tools.jst.jsp.test.ca.JsfJspJbide1704Test;
 import org.jboss.tools.jst.jsp.test.ca.JsfJspJbide1717Test;
 import org.jboss.tools.jst.jsp.test.ca.JsfJspJbide1807Test;
 import org.jboss.tools.jst.jsp.test.ca.JsfJspJbide1813Test;
+import org.jboss.tools.jst.jsp.test.ca.JsfJspJbide2016Test;
 import org.jboss.tools.jst.jsp.test.ca.JsfJspJbide2437Test;
 import org.jboss.tools.jst.jsp.test.ca.JstJspJbide1585Test;
 import org.jboss.tools.jst.jsp.test.ca.JstJspJbide1641Test;
@@ -30,6 +31,7 @@ public class JstJspAllTests {
 		suite.addTestSuite(Jbide1791Test.class);
 		suite.addTestSuite(JsfJspJbide2437Test.class);
 		suite.addTestSuite(JspPreferencesPageTest.class);
+		suite.addTestSuite(JsfJspJbide2016Test.class);
 		
 		return suite;
 	}
