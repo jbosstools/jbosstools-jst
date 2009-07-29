@@ -114,6 +114,13 @@ class JSPTreeDialogView extends AbstractQueryWizardView {
 				}
 			}
 		});
+		treeViewer.addDoubleClickListener(new IDoubleClickListener(){
+			public void doubleClick(DoubleClickEvent event) {
+				if(getCommandBar().isEnabled(OK)) {
+					action(OK);
+				}
+			}
+		});
 		return treeViewer.getControl();
 	}
 	
