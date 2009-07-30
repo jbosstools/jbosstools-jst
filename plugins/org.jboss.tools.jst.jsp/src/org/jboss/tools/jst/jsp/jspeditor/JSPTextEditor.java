@@ -783,11 +783,12 @@ public class JSPTextEditor extends StructuredTextEditor implements
 						return query.getPrefix();
 					}
 				});
+				((JspContextImpl)pageContext).setLibraries(processor.getTagLibraries(pageContext));
 			}
 		}
 
 		public void initContext(Properties context) {
-			if(context != null) {
+			if(context != null && processor != null) {
 				context.put("processor", processor); //$NON-NLS-1$
 				context.put("pageContext", pageContext); //$NON-NLS-1$
 			}

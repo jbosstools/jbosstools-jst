@@ -80,6 +80,7 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
         processor = (JspContentAssistProcessor)context.get("processor"); //$NON-NLS-1$
         if(processor == null) {
         	processor = valueHelper.createContentAssistProcessor();
+        	context.put("processor", processor); //$NON-NLS-1$
         }
         if(pageContext == null) {
         	pageContext = valueHelper.createPageContext(processor, offset);
