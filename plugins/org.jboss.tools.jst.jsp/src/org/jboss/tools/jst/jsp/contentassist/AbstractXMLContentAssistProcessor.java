@@ -724,12 +724,18 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 			if (xmlDocument == null)
 				return null;
 			
-			// Get Fixed Structured Document Region
-			IStructuredDocumentRegion sdFixedRegion = this.getStructuredDocumentRegion(getOffset());
-			if (sdFixedRegion == null)
-				return null;
+			Node n = null;
+			if (returnAttributeName) {
+				n = findNodeForOffset(xmlDocument, getOffset());
+			} else {
+				// Get Fixed Structured Document Region
+				IStructuredDocumentRegion sdFixedRegion = this.getStructuredDocumentRegion(getOffset());
+				if (sdFixedRegion == null)
+					return null;
+				
+				n = findNodeForOffset(xmlDocument, sdFixedRegion.getStartOffset());
+			}
 			
-			Node n = findNodeForOffset(xmlDocument, sdFixedRegion.getStartOffset());
 			if (n == null)
 				return null;
 
@@ -900,12 +906,7 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 			if (xmlDocument == null)
 				return null;
 			
-			// Get Fixed Structured Document Region
-			IStructuredDocumentRegion sdFixedRegion = this.getStructuredDocumentRegion(getOffset());
-			if (sdFixedRegion == null)
-				return null;
-			
-			Node n = findNodeForOffset(xmlDocument, sdFixedRegion.getStartOffset());
+			Node n = findNodeForOffset(xmlDocument, getOffset());
 			if (n == null)
 				return null;
 
