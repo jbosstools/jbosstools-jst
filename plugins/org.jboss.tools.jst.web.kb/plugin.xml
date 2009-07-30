@@ -57,6 +57,10 @@
             location="taglibs/JBossSeam.xml"
             name="JBoss Seam"
             uri="http://jboss.com/products/seam/taglib"/>
+      <tag-lib
+            location="taglibs/Jsp.xml"
+            name="JSP"
+            uri="http://java.sun.com/JSP/Page"/>
       <component-extension
             location="taglibs/componentExtension.xml"/>
    </extension>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tag-lib PUBLIC "-//Red Hat, Inc//DTD Knowledge Base 2.0//EN" "http://anonsvn.jboss.org/repos/jbosstools/trunk/jst/plugins/org.jboss.tools.jst.web.kb/resources/kbCustomTagLibSchema-1.0.dtd">
+<tag-lib defaultPrefix="jsp">
+ <component closeTag="true" name="forward" extended="false">
+  <attribute name="page" required="true"/>
+ </component>
+ <component closeTag="true" name="getProperty" extended="false">
+  <attribute name="name" required="true"/>
+  <attribute name="property" required="true"/>
+ </component>
+ <component closeTag="true" name="include" extended="false">
+  <attribute name="page" required="true"/>
+ </component>
+ <component name="plugin" extended="false">
+  <attribute name="type" required="true"/>
+  <attribute name="code" required="true"/>
+  <attribute name="codebase" required="true"/>
+  <attribute name="name" required="false"/>
+  <attribute name="archive" required="false"/>
+  <attribute name="align" required="false"/>
+  <attribute name="height" required="false"/>
+  <attribute name="width" required="false"/>
+  <attribute name="hspace" required="false"/>
+  <attribute name="vspace" required="false"/>
+  <attribute name="jreversion" required="false"/>
+  <attribute name="nspluginurl" required="false"/>
+  <attribute name="iepluginurl" required="false"/>
+ </component>
+ <component closeTag="true" name="setProperty" extended="false">
+  <attribute name="name" required="true"/>
+  <attribute name="property" required="true"/>
+  <attribute name="param" required="false"/>
+  <attribute name="value" required="false"/>
+ </component>
+ <component closeTag="true" name="useBean" extended="false">
+  <attribute name="id" required="true"/>
+  <attribute name="scope" required="true"/>
+  <attribute name="class" required="false"/>
+  <attribute name="type" required="false"/>
+  <attribute name="beanName" required="false"/>
+ </component>
+ <component name="params" extended="false"/>
+ <component closeTag="true" name="param" extended="false">
+  <attribute name="name" required="true"/>
+  <attribute name="value" required="true"/>
+ </component>
+ <component name="fallback"/>
+</tag-lib>
