@@ -44,6 +44,8 @@ public class JsfJspJbide1704Test extends ContentAssistantTestCase {
 		doTestJsfJspJbide1704(PAGE_NAME + ".xhtml");
 	}
 	
+	private static final String THE_ONLY_ALLOWED_TEMPLATE = "New JSF EL Expression - Create a new attribute value with #{}".toLowerCase();
+	
 	private void doTestJsfJspJbide1704(String pageName) {
 
 		openEditor(pageName);
@@ -61,6 +63,13 @@ public class JsfJspJbide1704Test extends ContentAssistantTestCase {
 			}
 			for (int k = 0; result != null && k < result.length; k++) {
 				// There should not be a proposal of type Red.Proposal in the result
+				
+				if ((result[k] instanceof AutoContentAssistantProposal) && 
+						result[k].getDisplayString().toLowerCase().equals(THE_ONLY_ALLOWED_TEMPLATE)) {
+					// The only new EL template proposal is allowed to be shown here
+					continue;
+				}
+				
 				assertFalse("Content Assistant peturned proposals of type (" + result[k].getClass().getName() + ").", (result[k] instanceof AutoContentAssistantProposal));
 			}
 	
