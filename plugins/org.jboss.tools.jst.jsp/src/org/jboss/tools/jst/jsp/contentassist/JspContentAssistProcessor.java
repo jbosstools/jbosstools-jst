@@ -24,11 +24,11 @@ import org.eclipse.jst.jsp.core.internal.contentmodel.tld.TaglibTracker;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
+import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.xml.core.internal.document.NodeContainer;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
-import org.eclipse.wst.xml.ui.internal.editor.CMImageUtil;
 import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImageHelper;
 import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImages;
 import org.jboss.tools.common.el.core.resolver.ELContext;
@@ -145,7 +145,7 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 	 * @param context The context object instance
 	 * @return
 	 */
-	public ITagLibrary[] getTagLibraries(IPageContext context) {
+	protected ITagLibrary[] getTagLibraries(IPageContext context) {
 		Map<String, INameSpace> nameSpaces =  context.getNameSpaces(getOffset());
 		if (nameSpaces == null || nameSpaces.isEmpty())
 			return EMPTY_LIBRARIES;
@@ -288,10 +288,15 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 			if (xmlDocument == null)
 				return false;
 
-			Node n = findNodeForOffset(xmlDocument, getOffset());
+			// Get Fixed Structured Document Region
+			IStructuredDocumentRegion sdFixedRegion = this.getStructuredDocumentRegion(getOffset());
+			if (sdFixedRegion == null)
+				return false;
+			
+			Node n = findNodeForOffset(xmlDocument, sdFixedRegion.getStartOffset());
 			if (n == null)
 				return false;
-
+			
 			// Find the first parent tag
 			if (!(n instanceof Element)) {
 				if (n instanceof Attr) {
@@ -362,7 +367,7 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 				if (image == null) {
 					image = XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_TAG_GENERIC);
 				}
-				String displayString = closingTag;
+				String displayString = closingTag; //$NON-NLS-1$
 				IContextInformation contextInformation = null;
 				String additionalProposalInfo = textProposal.getContextInfo();
 				int relevance = textProposal.getRelevance();
@@ -427,7 +432,7 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 					image = XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_TAG_GENERIC);
 				}
 
-				String displayString = closingTag;
+				String displayString = closingTag; //$NON-NLS-1$
 				IContextInformation contextInformation = null;
 				String additionalProposalInfo = textProposal.getContextInfo();
 				int relevance = textProposal.getRelevance();

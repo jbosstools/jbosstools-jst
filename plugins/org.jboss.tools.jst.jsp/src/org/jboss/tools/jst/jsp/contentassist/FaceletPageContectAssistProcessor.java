@@ -19,6 +19,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
+import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
@@ -95,7 +96,12 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 			if (xmlDocument == null)
 				return;
 
-			Node n = findNodeForOffset(xmlDocument, getOffset());
+			// Get Fixed Structured Document Region
+			IStructuredDocumentRegion sdFixedRegion = this.getStructuredDocumentRegion(getOffset());
+			if (sdFixedRegion == null)
+				return;
+			
+			Node n = findNodeForOffset(xmlDocument, sdFixedRegion.getStartOffset());
 			while (n != null) {
 				if (!(n instanceof Element)) {
 					if (n instanceof Attr) {

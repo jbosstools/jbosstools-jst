@@ -23,18 +23,29 @@ import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.jface.text.contentassist.IContextInformationValidator;
+import org.eclipse.osgi.util.NLS;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
+import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
+import org.eclipse.wst.sse.ui.internal.contentassist.ContentAssistUtils;
+import org.eclipse.wst.sse.ui.internal.contentassist.CustomCompletionProposal;
+import org.eclipse.wst.xml.core.internal.contentmodel.CMElementDeclaration;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMText;
 import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
+import org.eclipse.wst.xml.ui.internal.XMLUIMessages;
 import org.eclipse.wst.xml.ui.internal.contentassist.AbstractContentAssistProcessor;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
+import org.eclipse.wst.xml.ui.internal.contentassist.XMLRelevanceConstants;
+import org.eclipse.wst.xml.ui.internal.editor.CMImageUtil;
+import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImageHelper;
+import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImages;
 import org.jboss.tools.common.el.core.model.ELInstance;
 import org.jboss.tools.common.el.core.model.ELInvocationExpression;
 import org.jboss.tools.common.el.core.model.ELModel;
@@ -44,6 +55,7 @@ import org.jboss.tools.common.el.core.parser.ELParserUtil;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.ELResolverFactoryManager;
+import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.w3c.dom.Attr;
@@ -77,6 +89,149 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 		return super.computeCompletionProposals(viewer, offset);
 	}
 
+	
+	/**
+	 * The reason of overriding is that the method returns wrong region in case of incomplete tag (a tag with no '>'-closing char)
+	 * In this case we have to return that previous incomplete tag instead of the current tag)
+	 */
+	public IStructuredDocumentRegion getStructuredDocumentRegion(int pos) {
+		IStructuredDocumentRegion sdRegion = null;
+		if (fDocument == null)
+			return null;
+
+		int lastOffset = pos;
+		IStructuredDocument doc = (IStructuredDocument) fDocument;
+
+		do {
+			sdRegion = doc.getRegionAtCharacterOffset(lastOffset);
+			if (sdRegion != null) {
+				ITextRegion region = sdRegion.getRegionAtCharacterOffset(lastOffset);
+				if (region != null && region.getType() == DOMRegionContext.XML_TAG_OPEN &&  
+						sdRegion.getStartOffset(region) == lastOffset) {
+					// The offset is at the beginning of the region
+					if ((sdRegion.getStartOffset(region) == sdRegion.getStartOffset()) && (sdRegion.getPrevious() != null) && (!sdRegion.getPrevious().isEnded())) {
+						// Is the region also the start of the node? If so, the
+						// previous IStructuredDocumentRegion is
+						// where to look for a useful region.
+//						sdRegion = sdRegion.getPrevious();
+						sdRegion = null;
+					}
+					else {
+						// Is there no separating whitespace from the previous region?
+						// If not,
+						// then that region is the important one
+						ITextRegion previousRegion = sdRegion.getRegionAtCharacterOffset(lastOffset - 1);
+						if ((previousRegion != null) && (previousRegion != region) && (previousRegion.getTextLength() == previousRegion.getLength())) {
+//							sdRegion = sdRegion.getPrevious();
+							sdRegion = null;
+						}
+					}
+				}
+			}
+			lastOffset--;
+		} while (sdRegion == null && lastOffset >= 0);
+		return sdRegion;
+	}
+	
+	/**
+	 * The reason of overriding is that the method returns wrong region in case of incomplete tag (a tag with no '>'-closing char)
+	 * In this case we have to return that previous incomplete tag instead of the current tag)
+	 */
+	protected ITextRegion getCompletionRegion(int documentPosition, Node domnode) {
+		if (domnode == null) {
+			return null;
+		}
+		// Get the original WTP Structured Document Region
+		IStructuredDocumentRegion sdNormalRegion = super.getStructuredDocumentRegion(documentPosition);
+		// Get Fixed Structured Document Region
+		IStructuredDocumentRegion sdFixedRegion = this.getStructuredDocumentRegion(documentPosition);
+
+		// If original and fixed regions are different we have to replace domnode with its parent node
+		if (sdFixedRegion != null && !sdFixedRegion.equals(sdNormalRegion)) {
+			Node prevnode = domnode.getParentNode();
+			if (prevnode != null) {
+				domnode = prevnode;
+			}
+		}
+		return super.getCompletionRegion(documentPosition, domnode);
+	}
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.wst.xml.ui.internal.contentassist.AbstractContentAssistProcessor#computeTagNameProposals(int, java.lang.String, org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion, org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode, org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode)
+	 */
+	protected ContentAssistRequest computeTagNameProposals(int documentPosition, String matchString, ITextRegion completionRegion, IDOMNode nodeAtOffset, IDOMNode node) {
+		ContentAssistRequest contentAssistRequest = null;
+		IStructuredDocumentRegion sdRegion = getStructuredDocumentRegion(documentPosition);
+
+		if (sdRegion != nodeAtOffset.getFirstStructuredDocumentRegion()) {
+			// completing the *first* tag in "<tagname1 |<tagname2"
+			IDOMNode actualNode = (IDOMNode) node.getModel().getIndexedRegion(sdRegion.getStartOffset(completionRegion));
+			if (actualNode != null) {
+				if (actualNode.getFirstStructuredDocumentRegion() == sdRegion) {
+					// start tag
+					if ((documentPosition >= sdRegion.getStartOffset(completionRegion) + completionRegion.getLength()) && 
+						(documentPosition > sdRegion.getStartOffset(completionRegion) + completionRegion.getTextLength())){
+						// it's attributes
+						contentAssistRequest = newContentAssistRequest(actualNode, actualNode, sdRegion, completionRegion, documentPosition - matchString.length(), matchString.length(), matchString);
+						if (node.getStructuredDocument().getRegionAtCharacterOffset(sdRegion.getStartOffset(completionRegion) - 1).getRegionAtCharacterOffset(sdRegion.getStartOffset(completionRegion) - 1).getType() == DOMRegionContext.XML_TAG_OPEN) {
+							addAttributeNameProposals(contentAssistRequest);
+						}
+						addTagCloseProposals(contentAssistRequest);
+					}
+					else {
+						// it's name
+						contentAssistRequest = newContentAssistRequest(actualNode, actualNode.getParentNode(), sdRegion, completionRegion, documentPosition - matchString.length(), matchString.length(), matchString);
+						addTagNameProposals(contentAssistRequest, getElementPositionForModelQuery(actualNode));
+					}
+				}
+				else {
+					if (documentPosition >= sdRegion.getStartOffset(completionRegion) + completionRegion.getLength()) {
+						// insert name
+						contentAssistRequest = newContentAssistRequest(actualNode, actualNode.getParentNode(), sdRegion, completionRegion, documentPosition, 0, matchString);
+					}
+					else {
+						// replace name
+						contentAssistRequest = newContentAssistRequest(actualNode, actualNode.getParentNode(), sdRegion, completionRegion, sdRegion.getStartOffset(completionRegion), completionRegion.getTextLength(), matchString);
+					}
+					addEndTagNameProposals(contentAssistRequest);
+				}
+			}
+		}
+		else {
+			if (documentPosition > sdRegion.getStartOffset(completionRegion) + completionRegion.getTextLength()) {
+				// unclosed tag with only a name; should prompt for attributes
+				// and a close instead
+				contentAssistRequest = newContentAssistRequest(nodeAtOffset, node, sdRegion, completionRegion, documentPosition - matchString.length(), matchString.length(), matchString);
+				addAttributeNameProposals(contentAssistRequest);
+				addTagCloseProposals(contentAssistRequest);
+			}
+			else {
+				if (sdRegion.getRegions().get(0).getType() != DOMRegionContext.XML_END_TAG_OPEN) {
+					int replaceLength = documentPosition - sdRegion.getStartOffset(completionRegion);
+					contentAssistRequest = newContentAssistRequest(node, node.getParentNode(), sdRegion, completionRegion, sdRegion.getStartOffset(completionRegion), replaceLength, matchString);
+					addTagNameProposals(contentAssistRequest, getElementPositionForModelQuery(nodeAtOffset));
+				}
+				else {
+					IDOMNode actualNode = (IDOMNode) node.getModel().getIndexedRegion(documentPosition);
+					if (actualNode != null) {
+						if (documentPosition >= sdRegion.getStartOffset(completionRegion) + completionRegion.getTextLength()) {
+							contentAssistRequest = newContentAssistRequest(actualNode, actualNode.getParentNode(), sdRegion, completionRegion, documentPosition, 0, matchString);
+						}
+						else {
+							contentAssistRequest = newContentAssistRequest(actualNode, actualNode.getParentNode(), sdRegion, completionRegion, sdRegion.getStartOffset(completionRegion), completionRegion.getTextLength(), matchString);
+						}
+						addEndTagNameProposals(contentAssistRequest);
+					}
+				}
+			}
+		}
+		return contentAssistRequest;
+	}
+
+	private int getElementPositionForModelQuery(Node child) {
+		return getElementPosition(child);
+		// return -1;
+	}
 	/**
 	 * Helper method to reuse functionality for getting context when no proposals are needed.
 	 * @param viewer
@@ -270,8 +425,65 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	
 	/*
 	 * Calculates and adds the tag close proposals to the Content Assist Request object
+	 * 
 	 */
 	protected void addTagCloseProposals(ContentAssistRequest contentAssistRequest) {
+		IDOMNode node = (IDOMNode) contentAssistRequest.getParent();
+		if (node.getNodeType() == Node.ELEMENT_NODE) {
+			int contentType = CMElementDeclaration.ANY;
+			// if it's XML and content doesn't HAVE to be element, add "/>"
+			// proposal.
+			boolean endWithSlashBracket = (getXML(node) && (contentType != CMElementDeclaration.ELEMENT));
+
+			Image image = XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_TAG_GENERIC);
+
+			// is the start tag ended properly?
+			if ((contentAssistRequest.getDocumentRegion() == node.getFirstStructuredDocumentRegion()) && !(node.getFirstStructuredDocumentRegion()).isEnded()) {
+				setErrorMessage(null);
+				// prompt with a close for the start tag
+				AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(true, ">", //$NON-NLS-1$
+							getOffset(),
+							0, 2, image, NLS.bind(XMLUIMessages.Close_with__, (new Object[]{" '>'"})), //$NON-NLS-1$
+							null, null, TextProposal.R_CLOSE_TAG);
+				contentAssistRequest.addProposal(proposal);
+
+				// prompt with the closer for the start tag and an end tag
+				// if one is not present
+				if (node.getEndStructuredDocumentRegion() == null) {
+					// make sure tag name is actually what it thinks it
+					// is...(eg. <%@ vs. <jsp:directive)
+					IStructuredDocumentRegion sdr = contentAssistRequest.getDocumentRegion();
+					String openingTagText = (sdr != null) ? sdr.getFullText() : ""; //$NON-NLS-1$
+					if ((openingTagText != null) && (openingTagText.indexOf(node.getNodeName()) != -1)) {
+						proposal = new AutoContentAssistantProposal(true, "></" + node.getNodeName() + ">", //$NON-NLS-2$//$NON-NLS-1$
+								getOffset(),
+								0, 1, image, NLS.bind(XMLUIMessages.Close_with____, (new Object[]{node.getNodeName()})), null, null, TextProposal.R_CLOSE_TAG);
+						contentAssistRequest.addProposal(proposal);
+					}
+				}
+				// prompt with slash bracket "/>" incase if it's a self
+				// ending tag
+				if (endWithSlashBracket) {
+					proposal = new AutoContentAssistantProposal(true, "/>", //$NON-NLS-1$
+							getOffset(),
+							0, 1, image, NLS.bind(XMLUIMessages.Close_with__, (new Object[]{" \"/>\""})), //$NON-NLS-1$
+							null, null, TextProposal.R_CLOSE_TAG + 1); // +1 to bring to top of list
+					contentAssistRequest.addProposal(proposal);
+				}
+			}
+			else if ((contentAssistRequest.getDocumentRegion() == node.getLastStructuredDocumentRegion()) && !node.getLastStructuredDocumentRegion().isEnded()) {
+				setErrorMessage(null);
+				// prompt with a closing end character for the end tag
+				AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(true, ">", //$NON-NLS-1$
+						getOffset(),
+						0, 1, image, NLS.bind(XMLUIMessages.Close_with__, (new Object[]{" '>'"})), //$NON-NLS-1$
+						null, null, TextProposal.R_CLOSE_TAG);
+				contentAssistRequest.addProposal(proposal);
+			}
+		}
+		else if (node.getNodeType() == Node.DOCUMENT_NODE) {
+			setErrorMessage(UNKNOWN_CONTEXT);
+		}
 	}
 	
 	/*
@@ -453,7 +665,12 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 			if (xmlDocument == null)
 				return EMPTY_TAGS;
 			
-			Node n = findNodeForOffset(xmlDocument, getOffset());
+			// Get Fixed Structured Document Region
+			IStructuredDocumentRegion sdFixedRegion = this.getStructuredDocumentRegion(getOffset());
+			if (sdFixedRegion == null)
+				return EMPTY_TAGS;
+			
+			Node n = findNodeForOffset(xmlDocument, sdFixedRegion.getStartOffset());
 			if (n == null)
 				return EMPTY_TAGS;
 
@@ -507,7 +724,12 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 			if (xmlDocument == null)
 				return null;
 			
-			Node n = findNodeForOffset(xmlDocument, getOffset());
+			// Get Fixed Structured Document Region
+			IStructuredDocumentRegion sdFixedRegion = this.getStructuredDocumentRegion(getOffset());
+			if (sdFixedRegion == null)
+				return null;
+			
+			Node n = findNodeForOffset(xmlDocument, sdFixedRegion.getStartOffset());
 			if (n == null)
 				return null;
 
@@ -556,7 +778,12 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 			if (xmlDocument == null)
 				return null;
 			
-			Node n = findNodeForOffset(xmlDocument, getOffset());
+			// Get Fixed Structured Document Region
+			IStructuredDocumentRegion sdFixedRegion = this.getStructuredDocumentRegion(getOffset());
+			if (sdFixedRegion == null)
+				return null;
+			
+			Node n = findNodeForOffset(xmlDocument, sdFixedRegion.getStartOffset());
 			if (n == null)
 				return null;
 
@@ -673,7 +900,12 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 			if (xmlDocument == null)
 				return null;
 			
-			Node n = findNodeForOffset(xmlDocument, getOffset());
+			// Get Fixed Structured Document Region
+			IStructuredDocumentRegion sdFixedRegion = this.getStructuredDocumentRegion(getOffset());
+			if (sdFixedRegion == null)
+				return null;
+			
+			Node n = findNodeForOffset(xmlDocument, sdFixedRegion.getStartOffset());
 			if (n == null)
 				return null;
 
