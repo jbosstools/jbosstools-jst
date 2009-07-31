@@ -145,7 +145,7 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 	 * @param context The context object instance
 	 * @return
 	 */
-	protected ITagLibrary[] getTagLibraries(IPageContext context) {
+	public ITagLibrary[] getTagLibraries(IPageContext context) {
 		Map<String, INameSpace> nameSpaces =  context.getNameSpaces(getOffset());
 		if (nameSpaces == null || nameSpaces.isEmpty())
 			return EMPTY_LIBRARIES;
