@@ -801,7 +801,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			IComponent c = findComponent(query);
 			if(c == null) return null;
 			String prefix = getPrefix(query);
-			if(prefix == null) return c.getName();
+			if(prefix == null || prefix.length() == 0) return c.getName();
 			return prefix + ":" + c.getName(); //$NON-NLS-1$
 		}
 	
@@ -816,7 +816,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 	
 		KbQuery createQuery(TagProposal proposal) {
 			KbQuery kbQuery = new KbQuery();
-			String name = proposal.getPrefix() + ":" + proposal.getName(); //$NON-NLS-1$
+			String name = proposal.getPrefix().length() == 0 ? proposal.getName() : proposal.getPrefix() + ":" + proposal.getName(); //$NON-NLS-1$
 			kbQuery.setPrefix(proposal.getPrefix());
 			kbQuery.setUri(proposal.getUri());
 			kbQuery.setParentTags(new String[]{name});
