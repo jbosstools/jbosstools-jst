@@ -61,6 +61,10 @@
             location="taglibs/Jsp.xml"
             name="JSP"
             uri="http://java.sun.com/JSP/Page"/>
+      <tag-lib
+            name="Struts HTML"
+            location="taglibs/StrutsHtml.xml"
+            uri="http://struts.apache.org/tags-html"/>
       <component-extension
             location="taglibs/componentExtension.xml"/>
    </extension>
