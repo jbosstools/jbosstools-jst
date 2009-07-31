@@ -112,7 +112,7 @@ public abstract class AdoptWebProjectContext {
         String body = FileUtil.readFile(f);
         String entity = support.getTarget().getModel().getEntityRecognizer().getEntityName("xml", body); //$NON-NLS-1$
         if(entity == null || !entity.startsWith("FileWebApp")) throw new XModelException(MessageFormat.format( //$NON-NLS-1$
-				"File {0}is not recognized as web descriptor file.", location)); //$NON-NLS-1$
+				WebUIMessages.AdoptWebProjectContext_FileNotRecognizedAsWebDescriptor, location));
         XModelObject webxml = null;
         webxml = support.getTarget().getModel().createModelObject(entity, null);
         webxml.setAttributeValue("name", "web"); //$NON-NLS-1$ //$NON-NLS-2$

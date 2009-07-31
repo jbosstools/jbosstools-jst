@@ -157,6 +157,7 @@ public class WebUIMessages extends NLS {
 	public static String NO;
 	public static String ADD_TO_EXISTING_GROUP;
 	public static String AdoptWebProjectContext_FileDoesNotExist;
+	public static String AdoptWebProjectContext_FileNotRecognizedAsWebDescriptor;
 	public static String AdoptWebProjectContext_PathDoesNotExist;
 	public static String AdoptWebProjectContext_PathIsNotSet;
 	public static String AdoptWebProjectContext_RootDoesNotExist;
