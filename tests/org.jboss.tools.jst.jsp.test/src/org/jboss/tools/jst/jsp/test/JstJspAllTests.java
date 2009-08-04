@@ -3,6 +3,7 @@ package org.jboss.tools.jst.jsp.test;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.jboss.tools.jst.jsp.test.ca.CAForELinStyleTest;
 import org.jboss.tools.jst.jsp.test.ca.Jbide1791Test;
 import org.jboss.tools.jst.jsp.test.ca.JsfJspJbide1704Test;
 import org.jboss.tools.jst.jsp.test.ca.JsfJspJbide1717Test;
@@ -32,6 +33,7 @@ public class JstJspAllTests {
 		suite.addTestSuite(JsfJspJbide2437Test.class);
 		suite.addTestSuite(JspPreferencesPageTest.class);
 		suite.addTestSuite(JsfJspJbide2016Test.class);
+		suite.addTestSuite(CAForELinStyleTest.class);
 		
 		return suite;
 	}
