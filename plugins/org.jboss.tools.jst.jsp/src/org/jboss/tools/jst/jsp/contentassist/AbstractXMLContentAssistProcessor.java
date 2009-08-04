@@ -521,6 +521,10 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	 */
 	protected ContentAssistRequest computeCompletionProposals(int documentPosition, String matchString, ITextRegion completionRegion, IDOMNode treeNode, IDOMNode xmlnode) {
 		ContentAssistRequest contentAssistRequest = super.computeCompletionProposals(documentPosition, matchString, completionRegion, treeNode, xmlnode);
+		if (contentAssistRequest == null) {
+			IStructuredDocumentRegion sdRegion = getStructuredDocumentRegion(documentPosition);
+			contentAssistRequest = newContentAssistRequest((Node) treeNode, treeNode.getParentNode(), sdRegion, completionRegion, documentPosition, 0, ""); //$NON-NLS-1$
+		}
 		
 		String regionType = completionRegion.getType();
 		IStructuredDocumentRegion sdRegion = getStructuredDocumentRegion(documentPosition);
@@ -531,7 +535,11 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 		if ((xmlnode.getNodeType() == Node.ELEMENT_NODE) || (xmlnode.getNodeType() == Node.DOCUMENT_NODE)) {
 			if (regionType == DOMRegionContext.XML_EMPTY_TAG_CLOSE) {
 				addAttributeNameProposals(contentAssistRequest);
-			} else if ((regionType == DOMRegionContext.XML_CONTENT) || (regionType == DOMRegionContext.XML_CHAR_REFERENCE) || (regionType == DOMRegionContext.XML_ENTITY_REFERENCE) || (regionType == DOMRegionContext.XML_PE_REFERENCE)) {
+			} else if ((regionType == DOMRegionContext.XML_CONTENT) 
+					|| (regionType == DOMRegionContext.XML_CHAR_REFERENCE) 
+					|| (regionType == DOMRegionContext.XML_ENTITY_REFERENCE) 
+					|| (regionType == DOMRegionContext.XML_PE_REFERENCE)
+					|| (regionType == DOMRegionContext.BLOCK_TEXT)) {
 				addTextELProposals(contentAssistRequest);
 			}
 		}
@@ -673,7 +681,7 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 				// Get Fixed Structured Document Region
 				IStructuredDocumentRegion sdFixedRegion = this.getStructuredDocumentRegion(getOffset());
 				if (sdFixedRegion == null)
-					return EMPTY_TAGS;
+					return null;
 				
 				n = findNodeForOffset(xmlDocument, sdFixedRegion.getStartOffset());
 			}

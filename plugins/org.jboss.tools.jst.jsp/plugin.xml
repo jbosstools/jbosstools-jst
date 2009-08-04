@@ -451,6 +451,7 @@
 				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.DELIMITER" />
 				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
 				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
+				<partitiontype id="org.eclipse.wst.css.STYLE" />
 			</contenttype>
 		</contentAssistProcessor>
 			
@@ -476,6 +477,7 @@
 				<partitiontype id="org.eclipse.wst.html.HTML_DEFAULT" />
 				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
 				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
+				<partitiontype id="org.eclipse.wst.css.STYLE" />
 			</contenttype>
 		</contentAssistProcessor>
 
