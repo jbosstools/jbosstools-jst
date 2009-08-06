@@ -112,6 +112,7 @@
    <proposal type="beanProperty"/>
    <proposal type="jsfVariables"/>
    <proposal type="bundleProperty"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="id" required="false">
    <description>
@@ -205,6 +206,7 @@
 			</description>
    <proposal type="beanProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="requestDelay" required="false">
    <description>
@@ -226,6 +228,7 @@
    <proposal type="beanProperty"/>
    <proposal type="jsfVariables"/>
    <proposal type="bundleProperty"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="status" required="false">
    <description>
@@ -235,6 +238,7 @@
    <proposal type="beanProperty"/>
    <proposal type="jsfVariables"/>
    <proposal type="bundleProperty"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="summary" required="false">
    <description>
@@ -1373,6 +1377,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="horizontalOffset" required="false">
    <description>
@@ -1712,6 +1717,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="reRender" required="false">
    <description>
@@ -1723,6 +1729,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="rendered" required="false">
    <description>
@@ -1867,6 +1874,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="style" required="false">
    <description>
@@ -2026,6 +2034,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
  </component>
  <component name="changeExpandListener">
@@ -3383,6 +3392,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="binding" required="false">
    <description>
@@ -3423,6 +3433,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="id" required="false">
    <description>
@@ -3503,6 +3514,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="attached" required="false">
    <description>
@@ -3518,6 +3530,7 @@
     <param value="true"/>
     <param value="false"/>
    </proposal>
+   <proposal type="id"/>
   </attribute>
   <attribute name="binding" required="false">
    <description>
@@ -4048,6 +4061,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="for" required="false">
    <description>
@@ -4056,6 +4070,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="forValRef" required="false">
    <description>
@@ -4287,6 +4302,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="rangeStyleClass" required="false">
    <description>
@@ -4307,6 +4323,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="rendered" required="false">
    <description>
@@ -4359,6 +4376,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="storeResults" required="false">
    <description>
@@ -4469,6 +4487,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
  </component>
  <component name="dataGrid">
@@ -6012,6 +6031,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
  </component>
  <component closeTag="true" name="datascroller">
@@ -6162,6 +6182,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="for" required="false">
    <description>
@@ -6170,6 +6191,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="handleValue" required="false">
    <description>Current handle value</description>
@@ -6397,6 +6419,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="reRender" required="false">
    <description>
@@ -6408,6 +6431,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="renderIfSinglePage" required="false">
    <description>
@@ -6481,6 +6505,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="stepControls" required="false">
    <description>
@@ -6551,6 +6576,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
  </component>
  <component closeTag="true" name="dndParam">
@@ -6618,6 +6644,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="binding" required="false">
    <description>
@@ -6785,6 +6812,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="dragListener" required="false">
    <description>
@@ -6834,6 +6862,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="grabCursors" required="false">
    <description>
@@ -6962,6 +6991,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="reRender" required="false">
    <description>
@@ -6973,6 +7003,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="rendered" required="false">
    <description>
@@ -7006,6 +7037,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="timeout" required="false">
    <description>
@@ -7030,6 +7062,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
  </component>
  <component name="dropDownMenu">
@@ -7498,6 +7531,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="id" required="false">
    <description>
@@ -7612,6 +7646,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="reRender" required="false">
    <description>
@@ -7623,6 +7658,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="rejectCursors" required="false">
    <description>
@@ -7665,6 +7701,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="timeout" required="false">
    <description>
@@ -7699,6 +7736,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
  </component>
  <component name="editor">
@@ -8058,6 +8096,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="id" required="false">
    <description>
@@ -8102,6 +8141,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="type" required="false">
    <description>
@@ -8660,6 +8700,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="stopControlLabel" required="false">
    <description>Defines a label for a stop button</description>
@@ -12503,6 +12544,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="icon" required="false">
    <description>
@@ -12681,6 +12723,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="reRender" required="false">
    <description>
@@ -12692,6 +12735,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="rendered" required="false">
    <description>
@@ -12741,6 +12785,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="style" required="false">
    <description>
@@ -12805,6 +12850,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
  </component>
  <component closeTag="true" name="menuSeparator">
@@ -12924,6 +12970,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="id" required="false">
    <description>
@@ -13406,6 +13453,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
  </component>
  <component name="modalPanel">
@@ -15862,6 +15910,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="hoverClass" required="false">
    <description>
@@ -16165,6 +16214,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="reRender" required="false">
    <description>
@@ -16176,6 +16226,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="rendered" required="false">
    <description>
@@ -16244,6 +16295,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="style" required="false">
    <description>
@@ -16339,6 +16391,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
  </component>
  <component name="panelMenuItem">
@@ -16466,6 +16519,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="hoverClass" required="false">
    <description>
@@ -16716,6 +16770,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="reRender" required="false">
    <description>
@@ -16727,6 +16782,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="rendered" required="false">
    <description>
@@ -16760,6 +16816,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="style" required="false">
    <description>
@@ -16809,6 +16866,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
  </component>
  <component name="pickList">
@@ -17328,6 +17386,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="id" required="false">
    <description>
@@ -17563,6 +17622,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="progressVar" required="false">
    <description>
@@ -17582,6 +17642,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="reRenderAfterComplete" required="false">
    <description>
@@ -17590,6 +17651,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="remainClass" required="false">
    <description>
@@ -17620,6 +17682,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="style" required="false">
    <description>
@@ -17670,6 +17733,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
  </component>
  <component name="recursiveTreeNodesAdaptor">
@@ -18004,6 +18068,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="reRender" required="false">
    <description>
@@ -18015,6 +18080,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="rendered" required="false">
    <description>
@@ -18144,6 +18210,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="style" required="false">
    <description>
@@ -18203,6 +18270,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
  </component>
  <component closeTag="true" name="separator">
@@ -18499,6 +18567,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="headerClass" required="false">
    <description>
@@ -18714,6 +18783,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="reRender" required="false">
    <description>
@@ -18725,6 +18795,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="rendered" required="false">
    <description>
@@ -18758,6 +18829,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="style" required="false">
    <description>
@@ -18822,6 +18894,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
  </component>
  <component closeTag="true" name="spacer">
@@ -19553,6 +19626,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="for" required="false">
    <description>
@@ -19570,6 +19644,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="frame" required="false">
    <description>
@@ -19780,6 +19855,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="reRender" required="false">
    <description>
@@ -19791,6 +19867,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="rendered" required="false">
    <description>
@@ -19911,6 +19988,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="style" required="false">
    <description>
@@ -20036,6 +20114,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
  </component>
  <component name="tab">
@@ -20144,6 +20223,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="id" required="false">
    <description>
@@ -20418,6 +20498,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="reRender" required="false">
    <description>
@@ -20429,6 +20510,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="rendered" required="false">
    <description>
@@ -20462,6 +20544,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="style" required="false">
    <description>
@@ -20519,6 +20602,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
  </component>
  <component name="tabPanel">
@@ -21041,6 +21125,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="for" required="false">
    <description>
@@ -21051,6 +21136,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="id" required="false">
    <description>
@@ -21241,6 +21327,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="process" required="false">
    <description>
@@ -21253,6 +21340,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="rendered" required="false">
    <description>
@@ -21286,6 +21374,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="style" required="false">
    <description>
@@ -21358,6 +21447,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
  </component>
  <component name="togglePanel">
@@ -22226,6 +22316,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="hideDelay" required="false">
    <description>
@@ -22645,6 +22736,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="dragListener" required="false">
    <description>
@@ -22713,6 +22805,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="grabCursors" required="false">
    <description>
@@ -23061,6 +23154,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="reRender" required="false">
    <description>
@@ -23072,6 +23166,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="rejectCursors" required="false">
    <description>
@@ -23163,6 +23258,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="style" required="false">
    <description>
@@ -23296,6 +23392,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
  </component>
  <component name="treeNode">
@@ -23406,6 +23503,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="dragListener" required="false">
    <description>
@@ -23477,6 +23575,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="grabCursors" required="false">
    <description>
@@ -23797,6 +23896,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="reRender" required="false">
    <description>
@@ -23809,6 +23909,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="rejectCursors" required="false">
    <description>
@@ -23860,6 +23961,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="timeout" required="false">
    <description>
@@ -23891,6 +23993,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
  </component>
  <component name="treeNodesAdaptor">
