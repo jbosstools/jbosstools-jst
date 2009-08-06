@@ -53,6 +53,10 @@ import org.w3c.dom.Node;
  *
  */
 public class JSPDialogContentProposalProvider implements IContentProposalProvider {
+	static int EL_MODE = 0;
+	static int ATTR_MODE = 1;
+	int mode = EL_MODE;
+	
 	Properties context;
 	String attributeName;
 	String nodeName;
@@ -60,7 +64,12 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 	JspContentAssistProcessor processor;
 	IPageContext pageContext = null;
 
-	public JSPDialogContentProposalProvider() {}	
+	public JSPDialogContentProposalProvider() {		
+	}
+
+	public void setAttrMode() {
+		mode = ATTR_MODE;
+	}
 	
 	public void setContext(Properties context) {
 		this.context = context;
@@ -90,25 +99,48 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 	}
 
 	public IContentProposal[] getProposals(String contents, int position) {
+		if(mode == ATTR_MODE) {
+			return getAttrProposals(contents, position);
+		} else {
+			return getELProposals(contents, position);
+		}
+	}
+
+	public IContentProposal[] getAttrProposals(String contents, int position) {
 		List<IContentProposal> result = new ArrayList<IContentProposal>();
-		if(contents.indexOf('{') < 0) {
-			KbQuery kbQuery = createKbQuery(Type.ATTRIBUTE_VALUE, contents, contents, position, false);
+		TextRegion p = getELPrefix(contents, position);
+		if (p == null || !p.isELStarted()) {
+			KbQuery kbQuery = createKbQuery(Type.ATTRIBUTE_VALUE, contents.substring(0, position), contents, position, false);
 			TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, pageContext);
 			if(proposals != null) for (TextProposal textProposal: proposals) {
 				String displayString = textProposal.getReplacementString();
 				int cursorPosition = /*replacementOffset + */ textProposal.getReplacementString().length();
 
 				Image image = textProposal.getImage();
-
+				String relacementString = textProposal.getReplacementString();
+				if(textProposal.getStart() >= 0 && textProposal.getEnd() >= 0) {
+					int b = textProposal.getStart();
+					int e = textProposal.getEnd();
+					String prefix = contents.substring(0, b);
+					String tail = contents.substring(e);
+					relacementString = prefix + relacementString + tail;
+				}
 				IContentProposal proposal = //new ContentProposal(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, contextInformation, additionalProposalInfo, relevance);
-					new ContentProposal(textProposal.getReplacementString(), cursorPosition, displayString, displayString);
+					new ContentProposal(relacementString, cursorPosition, displayString, displayString);
 				result.add(proposal);
 			}
+			IContentProposal proposal = new ContentProposal(contents.substring(0, position) + "#{}" + contents.substring(position), position, "#{}", JstUIMessages.JSPDialogContentProposalProvider_NewELExpression); //$NON-NLS-1$ //$NON-NLS-2$
+			result.add(proposal);
 		}
+		return toSortedUniqueArray(result);
+	}
+
+	public IContentProposal[] getELProposals(String contents, int position) {
+		List<IContentProposal> result = new ArrayList<IContentProposal>();
 		TextRegion prefix = getELPrefix(contents, position);
 		if (prefix == null || !prefix.isELStarted()) {
-			IContentProposal proposal = new ContentProposal("#{}", 0, "#{}", JstUIMessages.JSPDialogContentProposalProvider_NewELExpression); //$NON-NLS-1$ //$NON-NLS-2$
-			result.add(proposal);
+//			IContentProposal proposal = new ContentProposal("#{}", 0, "#{}", JstUIMessages.JSPDialogContentProposalProvider_NewELExpression); //$NON-NLS-1$ //$NON-NLS-2$
+//			result.add(proposal);
 			return toSortedUniqueArray(result);
 		}
 		String matchString = "#{" + prefix.getText(); //$NON-NLS-1$
@@ -276,7 +308,7 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 		return elrfm.getResolvers(resource);
 	}
 
-	protected KbQuery createKbQuery(Type type, String query, String stringQuery, int pos, boolean addAttr) {
+	protected KbQuery createKbQuery(Type type, String query, String text, int pos, boolean addAttr) {
 		KbQuery kbQuery = new KbQuery();
 
 		String[] parentTags = processor.getParentTags(false);
@@ -293,7 +325,8 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 //		kbQuery.setOffset(pos);
 		kbQuery.setOffset(offset);
 		kbQuery.setValue(query); 
-		kbQuery.setStringQuery(stringQuery);
+		kbQuery.setStringQuery(query);
+		kbQuery.setText(text);
 		
 		return kbQuery;
 	}

@@ -45,7 +45,8 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedCellEditorProvider.StoppableCellEditor {
     Properties context;
 
-    JSPDialogContentProposalProvider cpp;
+    JSPDialogContentProposalProvider cppEL;
+    JSPDialogContentProposalProvider cppAttr;
     boolean hasProposals = false;
 
     /**
@@ -80,11 +81,16 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
         	return;
         }
 
-        if(cpp == null) {
-        	cpp = new JSPDialogContentProposalProvider();
+        if(cppEL == null) {
+        	cppEL = new JSPDialogContentProposalProvider();
         }
-		cpp.setContext(context);
-		IContentProposal[] ps = cpp.getProposals("#{}", 2); //$NON-NLS-1$
+		cppEL.setContext(context);
+		if(cppAttr == null) {
+			cppAttr = new JSPDialogContentProposalProvider();
+			cppAttr.setAttrMode();
+		}
+		cppAttr.setContext(context);
+		IContentProposal[] ps = cppEL.getProposals("#{}", 2); //$NON-NLS-1$
         hasProposals = ((ps != null) && (ps.length > 0));
     }
 
@@ -180,17 +186,33 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
 
 	protected void addContentAssist(Text text) {
 		IControlContentAdapter controlAdapter = new TextContentAdapter();
-		cpp = new JSPDialogContentProposalProvider();
-		cpp.setContext(context);
+		cppEL = new JSPDialogContentProposalProvider();
+		cppEL.setContext(context);
 
 		ContentProposalAdapter adapter = new ContentProposalAdapter(
 				text, 
 				controlAdapter, 
-				cpp,
+				cppEL,
 				AttributeContentProposalProviderFactory.getCtrlSpaceKeyStroke(), 
 				null);
 		adapter.setPropagateKeys(true);
 		adapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_INSERT);
+		if(popup != null) {
+			adapter.addContentProposalListener(popup);
+		}		
+
+		cppAttr = new JSPDialogContentProposalProvider();
+		cppAttr.setAttrMode();
+		cppAttr.setContext(context);
+
+		adapter = new ContentProposalAdapter(
+				text, 
+				controlAdapter, 
+				cppAttr,
+				AttributeContentProposalProviderFactory.getCtrlSpaceKeyStroke(), 
+				null);
+		adapter.setPropagateKeys(true);
+		adapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
 		if(popup != null) {
 			adapter.addContentProposalListener(popup);
 		}		

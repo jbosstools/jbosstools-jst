@@ -514,13 +514,21 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 			String stringQuery = matchString;
 
 			KbQuery kbQuery = createKbQuery(Type.ATTRIBUTE_VALUE, query, stringQuery);
+			kbQuery.setText(contentAssistRequest.getText());
 			TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext());
 
 			for (int i = 0; proposals != null && i < proposals.length; i++) {
 				TextProposal textProposal = proposals[i];
 				int replacementOffset = contentAssistRequest.getReplacementBeginPosition();
 				int replacementLength = contentAssistRequest.getReplacementLength();
+				if(textProposal.getStart() >= 0 && textProposal.getEnd() >= 0) {
+					replacementOffset += textProposal.getStart() + 1;
+					replacementLength = textProposal.getEnd() - textProposal.getStart();
+				}
 				String replacementString = "\"" + textProposal.getReplacementString() + "\""; //$NON-NLS-1$ //$NON-NLS-2$
+				if(textProposal.getStart() >= 0 && textProposal.getEnd() >= 0) {
+					replacementString = textProposal.getReplacementString();
+				}
 				int cursorPosition = getCursorPositionForProposedText(replacementString);
 				Image image = textProposal.getImage();
 				String displayString = textProposal.getLabel();
