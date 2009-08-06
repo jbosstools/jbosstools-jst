@@ -88,7 +88,7 @@ a backing bean</description>
    <proposal type="jsfVariables"/>
   </attribute>
  </component>
- <component closeTag="true" name="commandButton">
+ <component closeTag="true" name="commandButton" extended="false">
   <description>Renders an HTML "input" element.
 			&amp;lt;br /&amp;gt;
 			During Decoding: Obtains the Map from the
@@ -216,6 +216,7 @@ a backing bean</description>
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="id"/>
   </attribute>
   <attribute name="id" required="false">
    <description>Every component may have a unique id that is automatically created if omitted</description>

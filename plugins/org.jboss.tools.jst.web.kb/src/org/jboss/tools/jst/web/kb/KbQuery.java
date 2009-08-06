@@ -28,6 +28,9 @@ public class KbQuery {
 	private Type type;
 	private String parent;
 
+	//includes text after offset
+	private String text;
+
 	/**
 	 * Type of object for which we want to get info
 	 * @author Alexey Kazakov
@@ -172,5 +175,13 @@ public class KbQuery {
 	 */
 	public void setPrefix(String prefix) {
 		this.prefix = prefix;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	public String getText() {
+		return text;
 	}
 }

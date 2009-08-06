@@ -25,6 +25,7 @@ public class CustomProposalTypeFactory {
 	public static final String ENUMERATION_TYPE = "enumeration"; //$NON-NLS-1$
 	public static final String FACELETS_JSFC_TYPE = "faceletsJsfCTags"; //$NON-NLS-1$
 	public static final String NAME_SPACE_TYPE = "taglib"; //$NON-NLS-1$
+	public static final String ID_TYPE = "id"; //$NON-NLS-1$
 
 	private CustomProposalTypeFactory() {
 	}
@@ -59,6 +60,9 @@ public class CustomProposalTypeFactory {
 		}
 		if(NAME_SPACE_TYPE.equals(type)) {
 			return new NameSpaceProposalType();
+		}
+		if(ID_TYPE.equals(type)) {
+			return new IDProposalType();
 		}
 		
 		//WebKbPlugin.getDefault().logError("Unknown proposal type: " + type); //$NON-NLS-1$
