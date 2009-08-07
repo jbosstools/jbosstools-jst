@@ -681,7 +681,7 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 				// Get Fixed Structured Document Region
 				IStructuredDocumentRegion sdFixedRegion = this.getStructuredDocumentRegion(getOffset());
 				if (sdFixedRegion == null)
-					return null;
+					return EMPTY_TAGS;
 				
 				n = findNodeForOffset(xmlDocument, sdFixedRegion.getStartOffset());
 			}
