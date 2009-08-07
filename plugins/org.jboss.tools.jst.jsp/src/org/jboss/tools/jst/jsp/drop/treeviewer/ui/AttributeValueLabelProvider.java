@@ -11,7 +11,6 @@
 package org.jboss.tools.jst.jsp.drop.treeviewer.ui;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.eclipse.jface.viewers.LabelProvider;
@@ -25,6 +24,7 @@ import org.jboss.tools.jst.jsp.drop.treeviewer.model.BundlesNameResourceElement;
 import org.jboss.tools.jst.jsp.drop.treeviewer.model.BundlesPropertiesResourceElement;
 import org.jboss.tools.jst.jsp.drop.treeviewer.model.EnumerationElement;
 import org.jboss.tools.jst.jsp.drop.treeviewer.model.EnumerationResourceElement;
+import org.jboss.tools.jst.jsp.drop.treeviewer.model.IDResourceElement;
 import org.jboss.tools.jst.jsp.drop.treeviewer.model.ImageFileElement;
 import org.jboss.tools.jst.jsp.drop.treeviewer.model.ImageFileResourceElement;
 import org.jboss.tools.jst.jsp.drop.treeviewer.model.ImageFolderElement;
@@ -50,7 +50,7 @@ import org.jboss.tools.jst.jsp.drop.treeviewer.model.ViewActionsResorceElement;
  */
 public class AttributeValueLabelProvider extends LabelProvider {	
 
-	private static Map imagesPathes = new HashMap();
+	private static Map<Class<? extends ModelElement>, String> imagesPathes = new HashMap<Class<? extends ModelElement>, String>();
 	static {
 		imagesPathes.put(BundlesNameResourceElement.class, "images/jdo/db_fields_folder.gif"); //$NON-NLS-1$
 		imagesPathes.put(BundleNameElement.class, "images/navigationtree/properties.gif"); //$NON-NLS-1$
@@ -84,9 +84,11 @@ public class AttributeValueLabelProvider extends LabelProvider {
 		imagesPathes.put(SeamVariableElement.class, "images/seam/variable.gif"); //$NON-NLS-1$
 		imagesPathes.put(SeamPropertyElement.class, "images/navigationtree/property.gif"); //$NON-NLS-1$
 		imagesPathes.put(SeamMethodElement.class, "images/java/method.gif"); //$NON-NLS-1$
+
+		imagesPathes.put(IDResourceElement.class, "images/file/closed_folder.gif"); //$NON-NLS-1$
 }
 
-	private static Map texts = new HashMap();
+	private static Map<Class<? extends ModelElement>, String> texts = new HashMap<Class<? extends ModelElement>, String>();
 	static {
 		texts.put(BundlesNameResourceElement.class, TreeViewerMessages.BundlesNameResourceElement_name);
 		texts.put(BundlesPropertiesResourceElement.class, TreeViewerMessages.BundlesPropertiesResourceElement_name);
@@ -97,7 +99,7 @@ public class AttributeValueLabelProvider extends LabelProvider {
 		texts.put(ViewActionsResorceElement.class, TreeViewerMessages.ViewActionsResorceElement_name);
 	}
 
-	private Map imageCache = new HashMap();
+	private Map<Object, Image> imageCache = new HashMap<Object, Image>();
 
 	/*
 	 * @see ILabelProvider#getImage(Object)
@@ -132,8 +134,8 @@ public class AttributeValueLabelProvider extends LabelProvider {
 	}
 
 	public void dispose() {
-		for (Iterator i = imageCache.values().iterator(); i.hasNext();) {
-			((Image) i.next()).dispose();
+		for (Image i: imageCache.values()) {
+			i.dispose();
 		}
 		imageCache.clear();
 	}

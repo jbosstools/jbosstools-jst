@@ -14,6 +14,8 @@ import java.text.MessageFormat;
 import org.eclipse.ui.IEditorInput;
 
 import org.jboss.tools.jst.web.kb.IPageContext;
+import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.internal.taglib.CustomProposalType;
 import org.jboss.tools.jst.web.kb.internal.taglib.CustomProposalTypeFactory;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 
@@ -28,6 +30,7 @@ public class AttributeValueResourceFactory {
 	static String ENUMERATION_TYPE = CustomProposalTypeFactory.ENUMERATION_TYPE;
 	static String FACELETS_JSFC_TYPE = CustomProposalTypeFactory.FACELETS_JSFC_TYPE;
 	static String TAGLIB_TYPE = CustomProposalTypeFactory.NAME_SPACE_TYPE;
+	static String ID_TYPE = CustomProposalTypeFactory.ID_TYPE;
 	static String BUNDLE_PROPERTY_TYPE = "bundleProperty"; //$NON-NLS-1$
 	static String BEAN_PROPERTY_TYPE = "beanProperty"; //$NON-NLS-1$
 	static String BEAN_METHOD_BY_SYGNATURE_TYPE = "beanMethodBySignature"; //$NON-NLS-1$
@@ -45,11 +48,14 @@ public class AttributeValueResourceFactory {
 		return INSTANCE;
 	}
 
-	public AttributeValueResource createResource(IEditorInput editorInput, IPageContext pageContext, ModelElement root, String type) {
-		return createResource(editorInput, pageContext, null, root, type);
+	public AttributeValueResource createResource(IEditorInput editorInput, IPageContext pageContext, ModelElement root, CustomProposalType proposalType, String type, KbQuery kbQuery) {
+		return createResource(editorInput, pageContext, null, root, proposalType, type, kbQuery);
 	}
 
-	public AttributeValueResource createResource(IEditorInput editorInput, IPageContext pageContext, String name, ModelElement root, String type) {
+	public AttributeValueResource createResource(IEditorInput editorInput, IPageContext pageContext, String name, ModelElement root, CustomProposalType proposalType, String type, KbQuery kbQuery) {
+		if(type == null && proposalType != null) {
+			type = proposalType.getType();
+		}
 		if(BEAN_PROPERTY_TYPE.equals(type)) {
 			return new ManagedBeansPropertiesResourceElement(editorInput, name, root);
 		} else if(BEAN_METHOD_BY_SYGNATURE_TYPE.equals(type)) {
@@ -66,6 +72,8 @@ public class AttributeValueResourceFactory {
 			return new JsfVariablesResourceElement(name, root);
 		} else if(IMAGE_FILE_TYPE.equals(type)) {
 			return new ImageFileResourceElement(editorInput, root);
+		} else if(ID_TYPE.equals(type)) {
+			return new IDResourceElement(root, pageContext, proposalType, kbQuery);
 		} else if("seamVariables".equals(type)) { //$NON-NLS-1$
 			return new SeamVariablesResourceElement(editorInput, "Seam Variables", root); //$NON-NLS-1$
 		}

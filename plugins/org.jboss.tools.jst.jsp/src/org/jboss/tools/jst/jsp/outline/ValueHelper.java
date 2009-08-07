@@ -131,7 +131,7 @@ public class ValueHelper {
 		List<AttributeValueResource> elements = new ArrayList<AttributeValueResource>();
 		ModelElement root = new RootElement("root", elements); //$NON-NLS-1$
 		for (int i = 0; i < proposals.length; i++) {
-			AttributeValueResource resource = AttributeValueResourceFactory.getInstance().createResource(getEditorInput(), pageContext, root, proposals[i].getType());
+			AttributeValueResource resource = AttributeValueResourceFactory.getInstance().createResource(getEditorInput(), pageContext, root, proposals[i], proposals[i].getType(), kbQuery);
 			resource.setParams(proposals[i].getParams());
 			resource.setQuery(kbQuery, this);
 			elements.add(resource);
@@ -141,7 +141,7 @@ public class ValueHelper {
 			p.put("file", getFile()); //$NON-NLS-1$
 			List list = seamPromptingProvider.getList(null, "seam.is_seam_project", null, p); //$NON-NLS-1$
 			if(list != null) {
-				AttributeValueResource resource = AttributeValueResourceFactory.getInstance().createResource(getEditorInput(), pageContext, root, "seamVariables"); //$NON-NLS-1$
+				AttributeValueResource resource = AttributeValueResourceFactory.getInstance().createResource(getEditorInput(), pageContext, root, null, "seamVariables", kbQuery); //$NON-NLS-1$
 				resource.setQuery(kbQuery, this);
 				elements.add(resource);
 			}
