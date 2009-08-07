@@ -105,4 +105,13 @@
 	        restorable="true" category="web.views.category.id">
 		</view>
 	</extension>
+	<extension 
+        point="org.eclipse.ui.perspectives"> 
+        <perspective
+              class="org.jboss.tools.jst.css.CSSPerspective"
+              icon="resources/icons/css_prespective_icon.gif"
+              id="org.jboss.tools.jst.cssPerspective"
+              name="%css.perspective_name"> 
+        </perspective> 
+    </extension>
 </plugin>
