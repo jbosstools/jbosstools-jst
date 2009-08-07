@@ -20,6 +20,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.WorkbenchException;
 import org.eclipse.ui.internal.views.properties.tabbed.view.TabbedPropertyRegistry;
 import org.eclipse.ui.internal.views.properties.tabbed.view.TabbedPropertyViewer;
 import org.eclipse.ui.views.properties.tabbed.ITabDescriptor;
@@ -45,7 +47,7 @@ public class CSSViewTest extends AbstractCSSViewTest {
 
 	public static final String TEST_PAGE_NAME = "test.css"; //$NON-NLS-1$
 
-	public static final int COUNT_TABS = 5; //$NON-NLS-1$
+	public static final int COUNT_TABS = 5;
 
 	@Override
 	public String getProjectName() {
@@ -223,4 +225,12 @@ public class CSSViewTest extends AbstractCSSViewTest {
 
 	}
 
+	/**
+	 * @throws WorkbenchException
+	 * 
+	 */
+	public void testPerspective() throws WorkbenchException {
+		PlatformUI.getWorkbench().showPerspective(CSS_PERSPECTIVE,
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow());
+	}
 }

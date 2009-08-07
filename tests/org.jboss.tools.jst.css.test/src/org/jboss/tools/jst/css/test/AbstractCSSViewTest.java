@@ -38,7 +38,7 @@ public abstract class AbstractCSSViewTest extends TestCase {
 	public static final String CSS_EDITOR_VIEW = "org.jboss.tools.jst.css.view.editor"; //$NON-NLS-1$
 	public static final String CSS_PREVIEW_VIEW = "org.jboss.tools.jst.css.view.preview"; //$NON-NLS-1$
 	public static final String CSS_EDITOR_ID = "org.eclipse.wst.css.core.csssource.source"; //$NON-NLS-1$
-
+	public static final String CSS_PERSPECTIVE = "org.jboss.tools.jst.cssPerspective"; //$NON-NLS-1$
 	/**
 	 * 
 	 * @param componentPage
