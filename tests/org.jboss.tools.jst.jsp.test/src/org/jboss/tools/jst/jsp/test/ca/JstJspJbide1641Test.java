@@ -56,6 +56,8 @@ public class JstJspJbide1641Test extends ContentAssistantTestCase {
 		
 		jspTextEditor.setText(documentContentModified);
 		
+		JobUtils.waitForIdle();
+		
 		ICompletionProposal[] result= null;
 		String errorMessage = null;
 
