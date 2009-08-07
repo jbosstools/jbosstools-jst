@@ -4,6 +4,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.jboss.tools.jst.jsp.test.ca.CAForELinStyleTest;
+import org.jboss.tools.jst.jsp.test.ca.CAForIDTest;
 import org.jboss.tools.jst.jsp.test.ca.Jbide1791Test;
 import org.jboss.tools.jst.jsp.test.ca.JsfJspJbide1704Test;
 import org.jboss.tools.jst.jsp.test.ca.JsfJspJbide1717Test;
@@ -21,8 +22,9 @@ public class JstJspAllTests {
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for org.jboss.tools.jst.jsp.test");
 
-		suite.addTestSuite(JsfJspJbide1813Test.class);
 		suite.addTestSuite(JsfJspJbide1807Test.class);
+		suite.addTestSuite(CAForIDTest.class);
+		suite.addTestSuite(JsfJspJbide1813Test.class);
  		suite.addTestSuite(JstJspJbide1585Test.class);
 		suite.addTestSuite(StrutsJspJbide1648Test.class);
 		suite.addTestSuite(JstJspJbide1641Test.class);
