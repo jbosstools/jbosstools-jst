@@ -646,6 +646,9 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	 * @return
 	 */
 	protected ELResolver[] getELResolvers(IResource resource) {
+		if (resource == null)
+			return null;
+		
 		ELResolverFactoryManager elrfm = ELResolverFactoryManager.getInstance();
 		return elrfm.getResolvers(resource);
 	}
