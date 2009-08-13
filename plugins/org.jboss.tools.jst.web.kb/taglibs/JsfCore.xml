@@ -260,6 +260,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="converterID"/>
   </attribute>
   <attribute name="binding" required="false">
    <description>A ValueExpression that evaluates to an object that
@@ -618,6 +619,7 @@ creation.&lt;/p&gt;</description>
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="validatorID"/>
   </attribute>
   <attribute name="binding" required="false">
    <description>A ValueExpression that evaluates to an object that implements

@@ -1236,6 +1236,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="converterID"/>
   </attribute>
   <attribute name="converterMessage" required="false">
    <description>
@@ -1945,6 +1946,7 @@
    <proposal type="beanMethodBySignature">
     <param name="returnType" value="javax.faces.el.MethodBinding"/>
    </proposal>
+   <proposal type="validatorID"/>
   </attribute>
   <attribute name="validatorMessage" required="false">
    <description>
@@ -2913,6 +2915,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="converterID"/>
   </attribute>
   <attribute name="converterMessage" required="false">
    <description>
@@ -3325,6 +3328,7 @@
    <proposal type="beanMethodBySignature">
     <param name="returnType" value="javax.faces.el.MethodBinding"/>
    </proposal>
+   <proposal type="validatorID"/>
   </attribute>
   <attribute name="validatorMessage" required="false">
    <description>
@@ -7779,6 +7783,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="converterID"/>
   </attribute>
   <attribute name="converterMessage" required="false">
    <description>
@@ -8011,6 +8016,7 @@
    <proposal type="beanMethodBySignature">
     <param name="returnType" value="javax.faces.el.MethodBinding"/>
    </proposal>
+   <proposal type="validatorID"/>
   </attribute>
   <attribute name="validatorMessage" required="false">
    <description>
@@ -8809,6 +8815,7 @@
     <param name="paramType" value="javax.faces.component.UIComponent"/>
     <param name="paramType" value="java.lang.Object"/>
    </proposal>
+   <proposal type="validatorID"/>
   </attribute>
   <attribute name="validatorMessage" required="false">
    <description>
@@ -9218,6 +9225,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="converterID"/>
   </attribute>
   <attribute name="converterMessage" required="false">
    <description>
@@ -9636,6 +9644,7 @@
     <param name="paramType" value="javax.faces.component.UIComponent"/>
     <param name="paramType" value="java.lang.Object"/>
    </proposal>
+   <proposal type="validatorID"/>
   </attribute>
   <attribute name="validatorMessage" required="false">
    <description>
@@ -9757,6 +9766,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="converterID"/>
   </attribute>
   <attribute name="converterMessage" required="false">
    <description>
@@ -10210,6 +10220,7 @@
     <param name="paramType" value="javax.faces.component.UIComponent"/>
     <param name="paramType" value="java.lang.Object"/>
    </proposal>
+   <proposal type="validatorID"/>
   </attribute>
   <attribute name="validatorMessage" required="false">
    <description>
@@ -10358,6 +10369,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="converterID"/>
   </attribute>
   <attribute name="converterMessage" required="false">
    <description>
@@ -10831,6 +10843,7 @@
     <param name="paramType" value="javax.faces.component.UIComponent"/>
     <param name="paramType" value="java.lang.Object"/>
    </proposal>
+   <proposal type="validatorID"/>
   </attribute>
   <attribute name="validatorMessage" required="false">
    <description>
@@ -10966,6 +10979,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="converterID"/>
   </attribute>
   <attribute name="converterMessage" required="false">
    <description>
@@ -11367,6 +11381,7 @@
     <param name="paramType" value="javax.faces.component.UIComponent"/>
     <param name="paramType" value="java.lang.Object"/>
    </proposal>
+   <proposal type="validatorID"/>
   </attribute>
   <attribute name="validatorMessage" required="false">
    <description>
@@ -11636,6 +11651,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="converterID"/>
   </attribute>
   <attribute name="copyAllControlClass" required="false">
    <description>
@@ -12157,6 +12173,7 @@
     <param name="paramType" value="javax.faces.component.UIComponent"/>
     <param name="paramType" value="java.lang.Object"/>
    </proposal>
+   <proposal type="validatorID"/>
   </attribute>
   <attribute name="valueChangeListener" required="false">
    <description>Listener for value changes</description>
@@ -12223,6 +12240,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="converterID"/>
   </attribute>
   <attribute name="direction" required="false">
    <description>
@@ -13788,6 +13806,7 @@
     <param name="paramType" value="javax.faces.component.UIComponent"/>
     <param name="paramType" value="java.lang.Object"/>
    </proposal>
+   <proposal type="validatorID"/>
   </attribute>
   <attribute name="validatorMessage" required="false">
    <description>
@@ -13965,6 +13984,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="converterID"/>
   </attribute>
   <attribute name="downControlLabel" required="false">
    <description>
@@ -14249,6 +14269,7 @@
     <param name="paramType" value="javax.faces.component.UIComponent"/>
     <param name="paramType" value="java.lang.Object"/>
    </proposal>
+   <proposal type="validatorID"/>
   </attribute>
   <attribute name="value" required="false">
    <description>
@@ -14703,6 +14724,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="converterID"/>
   </attribute>
   <attribute name="converterMessage" required="false">
    <description>
@@ -14893,6 +14915,7 @@
     <param name="paramType" value="javax.faces.component.UIComponent"/>
     <param name="paramType" value="java.lang.Object"/>
    </proposal>
+   <proposal type="validatorID"/>
   </attribute>
   <attribute name="validatorMessage" required="false">
    <description>
@@ -15051,6 +15074,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="converterID"/>
   </attribute>
   <attribute name="converterMessage" required="false">
    <description>
@@ -15652,6 +15676,7 @@
     <param name="paramType" value="javax.faces.component.UIComponent"/>
     <param name="paramType" value="java.lang.Object"/>
    </proposal>
+   <proposal type="validatorID"/>
   </attribute>
   <attribute name="validatorMessage" required="false">
    <description>
@@ -15812,6 +15837,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="converterID"/>
   </attribute>
   <attribute name="converterMessage" required="false">
    <description>
@@ -16358,6 +16384,7 @@
     <param name="paramType" value="javax.faces.component.UIComponent"/>
     <param name="paramType" value="java.lang.Object"/>
    </proposal>
+   <proposal type="validatorID"/>
   </attribute>
   <attribute name="validatorMessage" required="false">
    <description>
@@ -16894,6 +16921,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="converterID"/>
   </attribute>
   <attribute name="converterMessage" required="false">
    <description>
@@ -17222,6 +17250,7 @@
     <param name="paramType" value="javax.faces.component.UIComponent"/>
     <param name="paramType" value="java.lang.Object"/>
    </proposal>
+   <proposal type="validatorID"/>
   </attribute>
   <attribute name="validatorMessage" required="false">
    <description>
@@ -19563,6 +19592,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="converterID"/>
   </attribute>
   <attribute name="dir" required="false">
    <description>
@@ -20648,6 +20678,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="converterID"/>
   </attribute>
   <attribute name="converterMessage" required="false">
    <description>
@@ -20962,6 +20993,7 @@
     <param name="paramType" value="javax.faces.component.UIComponent"/>
     <param name="paramType" value="java.lang.Object"/>
    </proposal>
+   <proposal type="validatorID"/>
   </attribute>
   <attribute name="validatorMessage" required="false">
    <description>
@@ -21473,6 +21505,7 @@
    <proposal type="beanProperty"/>
    <proposal type="bundleProperty"/>
    <proposal type="jsfVariables"/>
+   <proposal type="converterID"/>
   </attribute>
   <attribute name="converterMessage" required="false">
    <description>
@@ -21695,6 +21728,7 @@
     <param name="paramType" value="javax.faces.component.UIComponent"/>
     <param name="paramType" value="java.lang.Object"/>
    </proposal>
+   <proposal type="validatorID"/>
   </attribute>
   <attribute name="validatorMessage" required="false">
    <description>

@@ -26,6 +26,8 @@ public class CustomProposalTypeFactory {
 	public static final String FACELETS_JSFC_TYPE = "faceletsJsfCTags"; //$NON-NLS-1$
 	public static final String NAME_SPACE_TYPE = "taglib"; //$NON-NLS-1$
 	public static final String ID_TYPE = "id"; //$NON-NLS-1$
+	public static final String CONVERTER_ID_TYPE = "converterID"; //$NON-NLS-1$
+	public static final String VALIDATOR_ID_TYPE = "validatorID"; //$NON-NLS-1$
 
 	private CustomProposalTypeFactory() {
 	}
@@ -63,6 +65,12 @@ public class CustomProposalTypeFactory {
 		}
 		if(ID_TYPE.equals(type)) {
 			return new IDProposalType();
+		}
+		if(CONVERTER_ID_TYPE.equals(type)) {
+			return new ConverterIDProposalType();
+		}
+		if(VALIDATOR_ID_TYPE.equals(type)) {
+			return new ValidatorIDProposalType();
 		}
 		
 		//WebKbPlugin.getDefault().logError("Unknown proposal type: " + type); //$NON-NLS-1$
