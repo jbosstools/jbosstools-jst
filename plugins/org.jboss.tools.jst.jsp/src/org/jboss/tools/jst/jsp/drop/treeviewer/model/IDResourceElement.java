@@ -10,8 +10,8 @@ public class IDResourceElement extends AttributeValueResource {
 	CustomProposalType type;
 	KbQuery kbQuery;
 
-	public IDResourceElement(ModelElement parent, IPageContext pageContext, CustomProposalType type, KbQuery kbQuery) {
-		super(parent);
+	public IDResourceElement(String name, ModelElement parent, IPageContext pageContext, CustomProposalType type, KbQuery kbQuery) {
+		super(name, parent);
 		this.pageContext = pageContext;
 		this.type = type;
 		this.kbQuery = kbQuery;
@@ -28,13 +28,6 @@ public class IDResourceElement extends AttributeValueResource {
 			result[i] = new EnumerationElement(s, this);			
 		}
 		return result;
-	}
-
-	/**
-	 * @see ModelElement#getName()
-	 */
-	public String getName() {
-		return "Component IDs"; //$NON-NLS-1$
 	}
 
 }

@@ -73,7 +73,11 @@ public class AttributeValueResourceFactory {
 		} else if(IMAGE_FILE_TYPE.equals(type)) {
 			return new ImageFileResourceElement(editorInput, root);
 		} else if(ID_TYPE.equals(type)) {
-			return new IDResourceElement(root, pageContext, proposalType, kbQuery);
+			return new IDResourceElement("Component IDs", root, pageContext, proposalType, kbQuery); //$NON-NLS-1$
+		} else if(CustomProposalTypeFactory.CONVERTER_ID_TYPE.equals(type)) {
+			return new IDResourceElement("Converter IDs", root, pageContext, proposalType, kbQuery); //$NON-NLS-1$
+		} else if(CustomProposalTypeFactory.VALIDATOR_ID_TYPE.equals(type)) {
+			return new IDResourceElement("Validator IDs", root, pageContext, proposalType, kbQuery); //$NON-NLS-1$
 		} else if("seamVariables".equals(type)) { //$NON-NLS-1$
 			return new SeamVariablesResourceElement(editorInput, "Seam Variables", root); //$NON-NLS-1$
 		}
