@@ -270,12 +270,14 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 	protected String getTagName(Node tag) {
 		String tagName = tag.getNodeName();
 		if(replaceJsfcTags) {
-			Element element = (Element)tag;
-
 			// Only HTML tags
 			if(tagName.indexOf(':')>0) {
 				return tagName;
 			}
+			if (!(tag instanceof Element))
+				return tagName;
+			
+			Element element = (Element)tag;
 
 			NamedNodeMap attributes = element.getAttributes();
 			Node jsfC = attributes.getNamedItem(JSFC_ATTRIBUTE_NAME);
