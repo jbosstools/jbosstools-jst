@@ -87,13 +87,14 @@ public class SourceEditorPageContext implements IVisualContext,VpeTaglibManager 
 			referenceNode = null; //TODO study when we really need refresh
 			setReferenceNode(refNode);			
 		} else {
+			//if we on jsp page we will set taglibs 
+			//TODO Max Areshkau Find other possibility to check if we on jsp page
 			List<TaglibData> taglibs = getIncludeTaglibs();
-		//if we on jsp page we will set taglibs 
-		//TODO Max Areshkau Find other possibility to check if we on jsp page
-		// FIX FOR https://jira.jboss.org/jira/browse/JBIDE-3888 
-		// in some cases list of taglibs is not refreshed
-//			if(taglibs != null /*&& taglibs.size()>0*/) {
-			if(taglibs != null && taglibs.size()>0) {
+			
+			// FIX FOR https://jira.jboss.org/jira/browse/JBIDE-3888 
+			// in some cases list of taglibs is not refreshed
+			// if(taglibs != null && taglibs.size()>0) {
+			if(taglibs != null) {
 				setTaglibs(taglibs);
 			}
 		}
