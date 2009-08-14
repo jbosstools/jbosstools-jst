@@ -17,8 +17,9 @@
 
     	<h:form id="greetingForm">
     		<h:outputText value="#{Message.prompt_message}"/>
-    		<h:inputText value="#{user.name}" required="true">
+    		<h:inputText value="#{user.name}" required="true" converter="">
 	    		<f:validateLength maximum="30" minimum="3"/>
+	    		<f:validator validatorId="" />
     		</h:inputText>
 
 		 	<h:commandButton action="hello" value="Say Hello!" />

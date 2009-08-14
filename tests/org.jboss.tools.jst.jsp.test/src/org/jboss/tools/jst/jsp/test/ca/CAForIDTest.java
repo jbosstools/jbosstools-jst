@@ -26,4 +26,20 @@ public class CAForIDTest extends ContentAssistantTestCase{
 
 		checkProposals(PAGE_NAME, "<a4j:commandButton focus=\"\"/>", 26, proposals, false);
 	}
+
+	public void testCAForConverterIDTest(){
+		String[] proposals = {
+			"converter1",
+		};
+
+		checkProposals(PAGE_NAME, "<h:inputText value=\"#{user.name}\" required=\"true\" converter=\"\">", 61, proposals, false);
+	}
+
+	public void testCAForValidatorIDTest(){
+		String[] proposals = {
+			"validator1",
+		};
+
+		checkProposals(PAGE_NAME, "<f:validator validatorId=\"\" />", 26, proposals, false);
+	}
 }
