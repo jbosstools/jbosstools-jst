@@ -52,4 +52,16 @@
 			<param value="false" />
 		</proposal>
 	</attribute>
+	<attribute name="validatorId">
+		<proposal type="validatorID"/>
+	</attribute>
+	<attribute name="validator">
+		<proposal type="validatorID"/>
+	</attribute>
+	<attribute name="converterId">
+		<proposal type="converterID"/>
+	</attribute>
+	<attribute name="converter">
+		<proposal type="converterID"/>
+	</attribute>
 </customExtension>
