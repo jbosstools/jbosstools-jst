@@ -201,7 +201,6 @@ public class ValueHelper {
 	}
 
 	public void updateFacelets() {
-
 		VpeTaglibManager tldManager = getTaglibManager();
 		if(tldManager == null) return;
 		List<TaglibData> list = tldManager.getTagLibs();
@@ -209,7 +208,7 @@ public class ValueHelper {
 		isFacelets = false;
 		for(int i = 0; i < list.size(); i++) {
 			TaglibData data = list.get(i);
-			isFacelets = isFacelets || data.getUri().equals(faceletUri);
+			isFacelets = isFacelets || (data != null &&  faceletUri.equals(data.getUri()));
 		}
 	}
 	
