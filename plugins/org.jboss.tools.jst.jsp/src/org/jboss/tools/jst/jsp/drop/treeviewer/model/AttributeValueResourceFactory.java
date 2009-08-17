@@ -31,13 +31,13 @@ public class AttributeValueResourceFactory {
 	static String FACELETS_JSFC_TYPE = CustomProposalTypeFactory.FACELETS_JSFC_TYPE;
 	static String TAGLIB_TYPE = CustomProposalTypeFactory.NAME_SPACE_TYPE;
 	static String ID_TYPE = CustomProposalTypeFactory.ID_TYPE;
-	static String BUNDLE_PROPERTY_TYPE = "bundleProperty"; //$NON-NLS-1$
-	static String BEAN_PROPERTY_TYPE = "beanProperty"; //$NON-NLS-1$
-	static String BEAN_METHOD_BY_SYGNATURE_TYPE = "beanMethodBySignature"; //$NON-NLS-1$
-	static String JSP_PATH_TYPE = "jspPath"; //$NON-NLS-1$
-	static String JSF_VARIABLES_TYPE = "jsfVariables"; //$NON-NLS-1$
-	static String MANAGED_BEAN_NAME_TYPE = "managedBeanName"; //$NON-NLS-1$
-	static String JSF_ID = "jsfID"; //$NON-NLS-1$
+	public static String BUNDLE_PROPERTY_TYPE = "bundleProperty"; //$NON-NLS-1$
+	public static String BEAN_PROPERTY_TYPE = "beanProperty"; //$NON-NLS-1$
+	public static String BEAN_METHOD_BY_SYGNATURE_TYPE = "beanMethodBySignature"; //$NON-NLS-1$
+	public static String JSP_PATH_TYPE = "jspPath"; //$NON-NLS-1$
+	public static String JSF_VARIABLES_TYPE = "jsfVariables"; //$NON-NLS-1$
+	public static String MANAGED_BEAN_NAME_TYPE = "managedBeanName"; //$NON-NLS-1$
+	public static String JSF_ID = "jsfID"; //$NON-NLS-1$
 
 	private static AttributeValueResourceFactory INSTANCE = new AttributeValueResourceFactory();
 

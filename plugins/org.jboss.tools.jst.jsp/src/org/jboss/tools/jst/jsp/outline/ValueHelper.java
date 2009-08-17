@@ -12,10 +12,14 @@ package org.jboss.tools.jst.jsp.outline;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.IEditorInput;
@@ -42,6 +46,7 @@ import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.internal.taglib.CustomProposalType;
 import org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibAttribute;
+import org.jboss.tools.jst.web.kb.internal.taglib.ExtendedProposalType;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 import org.jboss.tools.jst.web.tld.TaglibData;
 import org.jboss.tools.jst.web.tld.VpeTaglibManager;
@@ -120,19 +125,45 @@ public class ValueHelper {
 	public ModelElement getInitalInput(IPageContext pageContext, KbQuery kbQuery) {
 		IAttribute[] as = PageProcessor.getInstance().getAttributes(kbQuery, pageContext);
 		if(as == null || as.length == 0) return new RootElement("root", new ArrayList<AttributeValueResource>()); //$NON-NLS-1$
-		CustomTagLibAttribute ca = null;
+        List<CustomProposalType> proposals = new ArrayList<CustomProposalType>();
+        Set<String> proposalTypes = new HashSet<String>();
 		for (IAttribute a: as) {
 			if(a instanceof CustomTagLibAttribute) {
-				ca = (CustomTagLibAttribute)a;
-				break;
+				CustomTagLibAttribute ca = (CustomTagLibAttribute)a;
+				CustomProposalType[] ps = ca.getProposals();
+				for (CustomProposalType p: ps) {
+					String n = p.getType();
+					if(n == null || proposalTypes.contains(n)) continue;
+					proposalTypes.add(n);
+					proposals.add(p);
+				}
 			}
 		}
-		CustomProposalType[] proposals = ca != null ? ca.getProposals() : new CustomProposalType[0];
+		boolean hasJSFNature = false;
+		IProject project = pageContext.getResource().getProject();
+		try {
+			if(project != null && project.isAccessible()) hasJSFNature = project.hasNature("org.jboss.tools.jsf.jsfnature");
+		} catch (CoreException e) {
+			//ignore
+		}
+		String[] TYPES = {AttributeValueResourceFactory.BEAN_PROPERTY_TYPE, 
+				AttributeValueResourceFactory.BUNDLE_PROPERTY_TYPE, 
+				AttributeValueResourceFactory.JSF_VARIABLES_TYPE, 
+				AttributeValueResourceFactory.BEAN_METHOD_BY_SYGNATURE_TYPE};
+		if(hasJSFNature) {
+			for (String type : TYPES) {
+				if(proposalTypes.contains(type)) continue;
+				ExtendedProposalType pt = new ExtendedProposalType();
+				pt.setType(type);
+				proposals.add(pt);
+			}
+		}
+		
 		List<AttributeValueResource> elements = new ArrayList<AttributeValueResource>();
 		ModelElement root = new RootElement("root", elements); //$NON-NLS-1$
-		for (int i = 0; i < proposals.length; i++) {
-			AttributeValueResource resource = AttributeValueResourceFactory.getInstance().createResource(getEditorInput(), pageContext, root, proposals[i], proposals[i].getType(), kbQuery);
-			resource.setParams(proposals[i].getParams());
+		for (CustomProposalType p: proposals) {
+			AttributeValueResource resource = AttributeValueResourceFactory.getInstance().createResource(getEditorInput(), pageContext, root, p, p.getType(), kbQuery);
+			resource.setParams(p.getParams());
 			resource.setQuery(kbQuery, this);
 			elements.add(resource);
 		}
