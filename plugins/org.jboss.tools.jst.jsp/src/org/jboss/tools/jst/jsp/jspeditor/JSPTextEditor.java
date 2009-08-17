@@ -140,6 +140,7 @@ import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.internal.JspContextImpl;
+import org.jboss.tools.jst.web.kb.internal.taglib.TLDTag;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibComponent;
@@ -832,9 +833,10 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		public IComponent findComponent(KbQuery query) {
 			IComponent[] cs = PageProcessor.getInstance().getComponents(query, pageContext, true);
 			if(cs == null || cs.length == 0) return null;
+			if(cs.length == 1) return cs[0];
 			IComponent s = null;
 			for (IComponent c: cs) {
-				if(c instanceof ICustomTagLibComponent) {
+				if(c instanceof TLDTag /*ICustomTagLibComponent*/) {
 					s = c;
 					break;
 				}
