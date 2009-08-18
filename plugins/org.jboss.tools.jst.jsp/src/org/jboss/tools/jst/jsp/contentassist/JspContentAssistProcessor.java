@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.contentassist.IContextInformation;
@@ -142,9 +143,13 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 		if (nameSpaces == null || nameSpaces.isEmpty())
 			return EMPTY_LIBRARIES;
 		
+		IProject project = context.getResource() == null ? null : context.getResource().getProject();
+		if (project == null)
+			return EMPTY_LIBRARIES;
+		
 		List<ITagLibrary> tagLibraries = new ArrayList<ITagLibrary>();
 		for (INameSpace nameSpace : nameSpaces.values()) {
-			ITagLibrary[] libs = TagLibriryManager.getLibraries(context.getResource().getProject(), nameSpace.getURI());
+			ITagLibrary[] libs = TagLibriryManager.getLibraries(project, nameSpace.getURI());
 			if (libs != null && libs.length > 0) {
 				for (ITagLibrary lib : libs) {
 					tagLibraries.add(lib);
