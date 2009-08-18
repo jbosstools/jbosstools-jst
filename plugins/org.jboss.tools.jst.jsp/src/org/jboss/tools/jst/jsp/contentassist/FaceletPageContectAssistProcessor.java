@@ -31,6 +31,7 @@ import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.internal.FaceletPageContextImpl;
+import org.jboss.tools.jst.web.kb.internal.taglib.NameSpace;
 import org.jboss.tools.jst.web.kb.taglib.CustomTagLibManager;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 import org.w3c.dom.Attr;
@@ -135,24 +136,10 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 							}
 
 							Region region = new Region(start, length);
-							INameSpace nameSpace = new INameSpace(){
-								public String getURI() {
-									return uri.trim();
-								}
-								public String getPrefix() {
-									return prefix.trim();
-								}
-							};
+							INameSpace nameSpace = new NameSpace(uri.trim(), prefix.trim());
 							context.addNameSpace(region, nameSpace);
 							if (CustomTagLibManager.FACELETS_UI_TAG_LIB_URI.equals(uri)) {
-								nameSpace = new INameSpace(){
-									public String getURI() {
-										return CustomTagLibManager.FACELETS_HTML_TAG_LIB_URI;
-									}
-									public String getPrefix() {
-										return ""; //$NON-NLS-1$
-									}
-								};
+								nameSpace = new NameSpace(CustomTagLibManager.FACELETS_HTML_TAG_LIB_URI, "");
 								context.addNameSpace(region, nameSpace);
 							}
 						}

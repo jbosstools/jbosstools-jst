@@ -42,6 +42,7 @@ import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.internal.JspContextImpl;
 import org.jboss.tools.jst.web.kb.internal.ResourceBundle;
+import org.jboss.tools.jst.web.kb.internal.taglib.NameSpace;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 import org.jboss.tools.jst.web.kb.taglib.TagLibriryManager;
@@ -113,16 +114,7 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 						uri != null && uri.trim().length() > 0) {
 						
 					IRegion region = new Region(0, getDocument().getLength());
-					INameSpace nameSpace = new INameSpace(){
-					
-						public String getURI() {
-							return uri.trim();
-						}
-					
-						public String getPrefix() {
-							return prefix.trim();
-						}
-					};
+					INameSpace nameSpace = new NameSpace(uri.trim(), prefix.trim());
 					context.addNameSpace(region, nameSpace);
 				}
 			}
@@ -481,7 +473,9 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 				int replacementLength = contentAssistRequest.getReplacementLength();
 				int cursorPosition = getCursorPositionForProposedText(replacementString);
 				Image image = textProposal.getImage();
-				String displayString = textProposal.getLabel();
+				String displayString = textProposal.getLabel() == null ? 
+						replacementString : 
+							textProposal.getLabel();
 				IContextInformation contextInformation = null;
 				String additionalProposalInfo = textProposal.getContextInfo();
 				int relevance = textProposal.getRelevance();
@@ -531,7 +525,9 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 				}
 				int cursorPosition = getCursorPositionForProposedText(replacementString);
 				Image image = textProposal.getImage();
-				String displayString = textProposal.getLabel();
+				String displayString = textProposal.getLabel() == null ? 
+						replacementString : 
+							textProposal.getLabel();
 				IContextInformation contextInformation = null;
 				String additionalProposalInfo = textProposal.getContextInfo();
 				int relevance = textProposal.getRelevance();
