@@ -933,8 +933,17 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 			if (n instanceof IDOMAttr) {
 				text = ((IDOMAttr)n).getValueRegionText();
 				region = ((IDOMAttr)n).getValueRegion();
-				startOffset = ((IndexedRegion)((IDOMAttr)n).getOwnerElement()).getStartOffset(); 
-				startOffset += 	region.getStart();
+				startOffset = ((IndexedRegion)((IDOMAttr)n).getOwnerElement()).getStartOffset();
+				if(region != null) {
+					startOffset += region.getStart();
+				} else {
+					region = ((IDOMAttr)n).getEqualRegion();
+					if(region != null) {
+						startOffset += 	region.getStart() + region.getLength();
+					} else {
+						startOffset = ((IDOMAttr)n).getEndOffset();
+					}
+				}
 			} else if (n instanceof IDOMText) {
 				text = ((IDOMText)n).getNodeValue();
 				region = ((IDOMText)n).getFirstStructuredDocumentRegion();
@@ -945,7 +954,7 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 			}
 
 			int inValueOffset = getOffset() - startOffset;
-			if (text.length() < inValueOffset) { // probably, the attribute value ends before the document position
+			if (text != null && text.length() < inValueOffset) { // probably, the attribute value ends before the document position
 				return null;
 			}
 			if (inValueOffset<0) {
