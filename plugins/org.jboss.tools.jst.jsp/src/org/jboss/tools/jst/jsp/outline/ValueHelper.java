@@ -140,7 +140,7 @@ public class ValueHelper {
 			}
 		}
 		boolean hasJSFNature = false;
-		IProject project = pageContext.getResource().getProject();
+		IProject project = pageContext.getResource() == null ? null : pageContext.getResource().getProject();
 		try {
 			if(project != null && project.isAccessible()) hasJSFNature = project.hasNature("org.jboss.tools.jsf.jsfnature");
 		} catch (CoreException e) {
