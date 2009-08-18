@@ -75,11 +75,9 @@ import org.eclipse.ui.views.properties.PropertySheetSorter;
 import org.eclipse.wst.html.ui.StructuredTextViewerConfigurationHTML;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
-import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.eclipse.wst.sse.ui.StructuredTextViewerConfiguration;
-import org.eclipse.wst.sse.ui.internal.IModelProvider;
 import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
 import org.eclipse.wst.sse.ui.internal.actions.StructuredTextEditorActionConstants;
 import org.eclipse.wst.sse.ui.internal.contentassist.ContentAssistUtils;
@@ -140,10 +138,10 @@ import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.internal.JspContextImpl;
+import org.jboss.tools.jst.web.kb.internal.taglib.NameSpace;
 import org.jboss.tools.jst.web.kb.internal.taglib.TLDTag;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
-import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibComponent;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 import org.jboss.tools.jst.web.tld.VpeTaglibManager;
 import org.jboss.tools.jst.web.tld.VpeTaglibManagerProvider;
@@ -776,14 +774,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			INameSpace n = ns.get(query.getUri());
 			if(n == null && pageContext instanceof JspContextImpl) {
 				IRegion r = new Region(query.getOffset(), 0);
-				((JspContextImpl)pageContext).addNameSpace(r, new INameSpace(){
-					public String getURI() {
-						return query.getUri();
-					}
-					public String getPrefix() {
-						return query.getPrefix();
-					}
-				});
+				((JspContextImpl)pageContext).addNameSpace(r, new NameSpace(query.getUri(), query.getPrefix()));
 				((JspContextImpl)pageContext).setLibraries(processor.getTagLibraries(pageContext));
 			}
 		}
