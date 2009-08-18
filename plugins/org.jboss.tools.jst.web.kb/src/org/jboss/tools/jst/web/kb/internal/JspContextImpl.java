@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.kb.internal;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
@@ -79,12 +80,46 @@ public class JspContextImpl extends ELContextImpl implements IPageContext {
 	 */
 	public Map<String, INameSpace> getNameSpaces(int offset) {
 		Map<String, INameSpace> result = new HashMap<String, INameSpace>();
+		Map<INameSpace, IRegion> namespaceToRegions = new HashMap<INameSpace, IRegion>();
+		
 		for (IRegion region : nameSpaces.keySet()) {
 			if(offset>=region.getOffset() && offset<=region.getOffset() + region.getLength()) {
-				result.putAll(nameSpaces.get(region));
+				Map<String, INameSpace> namespaces = nameSpaces.get(region);
+				if (namespaces != null) {
+					for (INameSpace ns : namespaces.values()) {
+						INameSpace existingNameSpace = findNameSpaceByPrefix(namespaceToRegions.keySet(), ns.getPrefix());
+						IRegion existingRegion = namespaceToRegions.get(existingNameSpace); 
+						if (existingRegion != null) {
+							// Perform visibility check for region
+							if (region.getOffset() > existingRegion.getOffset()) {
+								// Replace existingNS by this ns
+								namespaceToRegions.remove(existingNameSpace);
+								namespaceToRegions.put(ns, region);
+							}
+						} else {
+							namespaceToRegions.put(ns, region);
+						}
+					}
+				}
 			}
 		}
+
+		for (INameSpace ns : namespaceToRegions.keySet()) {
+			result.put(ns.getURI(), ns);
+		}
+	
 		return result;
+	}
+	
+	private INameSpace findNameSpaceByPrefix(Set<INameSpace> namespaces, String prefix) {
+		if (namespaces != null && prefix != null) {
+			for (INameSpace ns : namespaces) {
+				if (prefix.equals(ns.getPrefix())) {
+					return ns;
+				}
+			}
+		}
+		return null;
 	}
 
 	/**
