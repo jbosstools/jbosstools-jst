@@ -164,12 +164,9 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	
 	private IMarker createOrUpdateKbProblemMarker(IMarker m, IResource r, boolean kbNatureIsAbsent, boolean kbBuilderIsAbsent) throws CoreException {
 		ArrayList<String> args = new ArrayList<String>();
-		if (kbNatureIsAbsent) {
-			args.add(JstUIMessages.KBNATURE_NOT_FOUND);
-		}
-		if (kbBuilderIsAbsent) {
-			args.add(JstUIMessages.KBBUILDER_NOT_FOUND);
-		}
+		args.add(kbNatureIsAbsent ? JstUIMessages.KBNATURE_NOT_FOUND : ""); //$NON-NLS-1$
+		args.add(kbBuilderIsAbsent ? JstUIMessages.KBBUILDER_NOT_FOUND : ""); //$NON-NLS-1$
+
 		String message = MessageFormat.format(JstUIMessages.KBPROBLEM, args.toArray());
 		if (m == null) m = r.createMarker(KB_PROBLEM_MARKER_TYPE);
 		m.setAttribute(IMarker.MESSAGE, message);

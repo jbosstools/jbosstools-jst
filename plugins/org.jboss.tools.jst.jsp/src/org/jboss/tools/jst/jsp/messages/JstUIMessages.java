@@ -118,4 +118,5 @@ public class JstUIMessages extends NLS {
 	public static String KBNATURE_NOT_FOUND;
 	public static String KBBUILDER_NOT_FOUND;
 	public static String KBPROBLEM;
+	public static String ENABLE_KB;
 }
