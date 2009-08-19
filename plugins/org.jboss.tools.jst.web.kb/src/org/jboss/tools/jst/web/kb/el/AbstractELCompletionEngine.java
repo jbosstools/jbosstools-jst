@@ -243,9 +243,10 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 					}
 				}
 			}
-		}
 
-		if(prefixWasChanged) {
+			ELOperandResolveStatus oldElStatus = resolveELOperand(file, operand, returnEqualedVariablesOnly, false);
+			status.getProposals().addAll(oldElStatus.getProposals());
+
 			var.resolveValue("#{" + var.getElToken().getText() + suffix + "}"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
@@ -262,7 +263,6 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 		}
 		return status;
 	}
-
 
 	/**
 	 * Returns MemberInfo for last segment of EL. Null if El is not resolved.
