@@ -115,4 +115,7 @@ public class JstUIMessages extends NLS {
 	public static String JSPDialogContentProposalProvider_NewELExpression;
 	public static String PROPERTY_NAME_COLUMN;
 	public static String PROPERTY_VALUE_COLUMN;
+	public static String KBNATURE_NOT_FOUND;
+	public static String KBBUILDER_NOT_FOUND;
+	public static String KBPROBLEM;
 }
