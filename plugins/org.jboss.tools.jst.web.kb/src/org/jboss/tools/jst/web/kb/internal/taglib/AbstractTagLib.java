@@ -208,6 +208,10 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 			if(libs[i]!=this && libs[i].getURI().equals(uri)) {
 				IComponent ac = libs[i].getComponent(component.getName());
 				if(ac!=null && !ac.isExtended()) {
+					String d = ac.getDescription();
+					if(d!=null && component instanceof AbstractComponent) {
+						((AbstractComponent)component).setDescription(d);
+					}
 					return true;
 				}
 			}
