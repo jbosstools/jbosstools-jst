@@ -242,12 +242,11 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 						l = l.getLeft();
 					}
 				}
+				var.resolveValue("#{" + var.getElToken().getText() + suffix + "}"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
 			ELOperandResolveStatus oldElStatus = resolveELOperand(file, operand, returnEqualedVariablesOnly, false);
 			status.getProposals().addAll(oldElStatus.getProposals());
-
-			var.resolveValue("#{" + var.getElToken().getText() + suffix + "}"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		if(!returnEqualedVariablesOnly && vars!=null) {
