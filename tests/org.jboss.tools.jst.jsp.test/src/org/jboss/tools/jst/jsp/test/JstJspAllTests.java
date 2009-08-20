@@ -15,6 +15,7 @@ import org.jboss.tools.jst.jsp.test.ca.JsfJspJbide2437Test;
 import org.jboss.tools.jst.jsp.test.ca.JstJspJbide1585Test;
 import org.jboss.tools.jst.jsp.test.ca.JstJspJbide1641Test;
 import org.jboss.tools.jst.jsp.test.ca.JstJspJbide1759Test;
+import org.jboss.tools.jst.jsp.test.ca.MissingKBBuilderTest;
 import org.jboss.tools.jst.jsp.test.ca.StrutsJspJbide1648Test;
 
 public class JstJspAllTests {
@@ -22,6 +23,7 @@ public class JstJspAllTests {
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for org.jboss.tools.jst.jsp.test");
 
+		suite.addTestSuite(MissingKBBuilderTest.class);
 		suite.addTestSuite(JsfJspJbide1807Test.class);
 		suite.addTestSuite(CAForIDTest.class);
 		suite.addTestSuite(JsfJspJbide1813Test.class);
