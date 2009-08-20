@@ -61,6 +61,7 @@ import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.web.kb.IKbProject;
+import org.jboss.tools.jst.web.kb.KbProjectFactory;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.internal.KbBuilder;
@@ -130,6 +131,7 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 				for (IMarker m : markers) {
 					try {
 						project.deleteMarkers(KB_PROBLEM_MARKER_TYPE, true, IResource.DEPTH_ONE);
+						project.setPersistentProperty(KbProjectFactory.NATURE_MOCK, null);
 					} catch (CoreException ex) {
 						JspEditorPlugin.getPluginLog().logError(ex);
 					}
@@ -168,7 +170,11 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 		args.add(kbBuilderIsAbsent ? JstUIMessages.KBBUILDER_NOT_FOUND : ""); //$NON-NLS-1$
 
 		String message = MessageFormat.format(JstUIMessages.KBPROBLEM, args.toArray());
-		if (m == null) m = r.createMarker(KB_PROBLEM_MARKER_TYPE);
+		if (m == null) {
+			m = r.createMarker(KB_PROBLEM_MARKER_TYPE);
+			r.setPersistentProperty(KbProjectFactory.NATURE_MOCK, "true");
+			KbProjectFactory.getKbProject(r.getProject(), true);
+		}
 		m.setAttribute(IMarker.MESSAGE, message);
 		m.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_WARNING);
 		m.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_NORMAL);
