@@ -28,8 +28,7 @@ public class TagLibriryManager {
 	 */
 	public static ITagLibrary[] getLibraries(IProject project, String uri) {
 		IKbProject kbProject = KbProjectFactory.getKbProject(project, true);
-		if(kbProject==null) {
-			WebKbPlugin.getDefault().logWarning("Project " + project.getName() + " doesn't have KB nature."); //$NON-NLS-1$ //$NON-NLS-2$
+		if(kbProject == null) {
 			return new ITagLibrary[0];
 		}
 		return kbProject.getTagLibraries(uri);

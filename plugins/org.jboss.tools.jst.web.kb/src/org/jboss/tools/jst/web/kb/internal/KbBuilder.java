@@ -39,7 +39,7 @@ public class KbBuilder extends IncrementalProjectBuilder {
 
 	KbResourceVisitor resourceVisitor = null;
 
-	KbProject getKbProject() {
+	protected KbProject getKbProject() {
 		IProject p = getProject();
 		if(p == null) return null;
 		return (KbProject)KbProjectFactory.getKbProject(p, false);

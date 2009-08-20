@@ -305,6 +305,11 @@ public class KbProject extends KbObject implements IKbProject {
 	 * @throws IOException 
 	 */
 	public void store() throws IOException {
+		try {
+			if(!project.hasNature(IKbProject.NATURE_ID)) return;
+		} catch (CoreException e) {
+			//ignore
+		}
 		File file = getStorageFile();
 		file.getParentFile().mkdirs();
 		
