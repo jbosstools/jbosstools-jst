@@ -63,10 +63,10 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 		context.setElResolvers(superContext.getElResolvers());
 		setVars(context, superContext.getResource());
 
-		context.setResourceBundles(superContext.getResourceBundles());
 		context.setDocument(getDocument());
 		setNameSpaces(superContext, context);
 		context.setLibraries(getTagLibraries(context));
+		context.setResourceBundles(super.getResourceBundles(context));
 
 //		IFaceletPageContext getParentContext();
 //		Map<String, String> getParams();
