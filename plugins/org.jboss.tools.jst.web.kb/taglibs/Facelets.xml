@@ -172,10 +172,10 @@
 			The remove tag is often used in conjunction with the jsfc feature.</description>
 	</component>
 	<component name="repeat" extended="false">
-		<attribute name="value" required="true">
+		<attribute extended="false" name="value" required="true">
 			<description>Expression for the list of items</description>
 		</attribute>
-		<attribute name="var" required="true">
+		<attribute extended="false" name="var" required="true">
 			<description>The name of the variable to put the current item.</description>
 		</attribute>
 		<attribute extended="false" name="offset">
