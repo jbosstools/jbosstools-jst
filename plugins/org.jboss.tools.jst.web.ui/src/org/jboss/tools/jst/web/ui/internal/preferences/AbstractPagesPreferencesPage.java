@@ -158,7 +158,8 @@ public abstract class AbstractPagesPreferencesPage  extends PreferencePage imple
 				String nameNewItem = helper.addPageTemplate();
 				boolean cancel = false;
 				pages = helper.getPageTemplateList();
-				listPages.setItems(pages);
+				pageLabels = initLabels(pages, defaultPage);
+				listPages.setItems(pageLabels);
 				if (nameNewItem != null) {
 					int ind = listPages.indexOf(nameNewItem);
 					listPages.select(ind);
@@ -187,7 +188,8 @@ public abstract class AbstractPagesPreferencesPage  extends PreferencePage imple
 					String namePage = listPages.getItem(indexDel);
 					helper.removePageTemplate(namePage);
 					pages = helper.getPageTemplateList();
-					listPages.setItems(pages);
+					pageLabels = initLabels(pages, defaultPage);
+					listPages.setItems(pageLabels);
 				}
 				removeButton.setEnabled(false);
 
