@@ -198,8 +198,11 @@ public abstract class AbstractWebProjectTemplate implements IWebProjectTemplate 
 	
 	public void removePageTemplate(String name) {
 		File dir = new File(getPageTemplatesLocation());
-		dir = new File(dir, getNatureDir());
 		File target = new File(dir, name);
+		if(!target.isFile()) {
+			dir = new File(dir, getNatureDir());
+		}
+		target = new File(dir, name);
 		if(target.isFile()) {
 			if(!confirm(NLS.bind(WebUIMessages.YOU_WANT_TO_DELETE_PAGE_TEMPLATE,name))) return;
 			target.delete();
