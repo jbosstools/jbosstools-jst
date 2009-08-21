@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb;
 
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.text.IDocument;
@@ -54,5 +55,5 @@ public interface IPageContext extends ELContext {
 	 * Key is URI of name space.
 	 * @return
 	 */
-	Map<String, INameSpace> getNameSpaces(int offset);
+	Map<String, List<INameSpace>> getNameSpaces(int offset);
 }

@@ -39,7 +39,7 @@ public class EnumerationProposalType extends CustomProposalType {
 		List<TextProposal> proposals = new ArrayList<TextProposal>();
 		for (int i = 0; i < params.length; i++) {
 			String text = params[i].getValue();
-				if(text.startsWith(query.getValue())) {
+			if(text.startsWith(query.getValue())) {
 				TextProposal proposal = new TextProposal();
 				proposal.setLabel(text);
 				proposal.setReplacementString(text);

@@ -10,7 +10,9 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -78,10 +80,10 @@ public class JspContextImpl extends ELContextImpl implements IPageContext {
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.IPageContext#getNameSpaces(int)
 	 */
-	public Map<String, INameSpace> getNameSpaces(int offset) {
-		Map<String, INameSpace> result = new HashMap<String, INameSpace>();
+	public Map<String, List<INameSpace>> getNameSpaces(int offset) {
+		Map<String, List<INameSpace>> result = new HashMap<String, List<INameSpace>>();
 		Map<INameSpace, IRegion> namespaceToRegions = new HashMap<INameSpace, IRegion>();
-		
+
 		for (IRegion region : nameSpaces.keySet()) {
 			if(offset>=region.getOffset() && offset<=region.getOffset() + region.getLength()) {
 				Map<String, INameSpace> namespaces = nameSpaces.get(region);
@@ -105,12 +107,17 @@ public class JspContextImpl extends ELContextImpl implements IPageContext {
 		}
 
 		for (INameSpace ns : namespaceToRegions.keySet()) {
-			result.put(ns.getURI(), ns);
+			List<INameSpace> list = result.get(ns.getURI());
+			if(list==null) {
+				list = new ArrayList<INameSpace>();
+			}
+			list.add(ns);
+			result.put(ns.getURI(), list);
 		}
-	
+
 		return result;
 	}
-	
+
 	private INameSpace findNameSpaceByPrefix(Set<INameSpace> namespaces, String prefix) {
 		if (namespaces != null && prefix != null) {
 			for (INameSpace ns : namespaces) {

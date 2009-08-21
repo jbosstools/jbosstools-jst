@@ -770,8 +770,8 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			ValueHelper valueHelper = new ValueHelper();
 			processor = valueHelper.createContentAssistProcessor();
 			pageContext = valueHelper.createPageContext(processor, query.getOffset());
-			Map<String,INameSpace> ns = pageContext.getNameSpaces(query.getOffset());
-			INameSpace n = ns.get(query.getUri());
+			Map<String, List<INameSpace>> ns = pageContext.getNameSpaces(query.getOffset());
+			List<INameSpace> n = ns.get(query.getUri());
 			if(n == null && pageContext instanceof JspContextImpl) {
 				IRegion r = new Region(query.getOffset(), 0);
 				((JspContextImpl)pageContext).addNameSpace(r, new NameSpace(query.getUri(), query.getPrefix()));
@@ -796,7 +796,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			if(prefix == null || prefix.length() == 0) return c.getName();
 			return prefix + ":" + c.getName(); //$NON-NLS-1$
 		}
-	
+
 		public boolean canHaveBody() {
 			IComponent c = findComponent(query);
 			return c != null && c.canHaveBody();
@@ -837,9 +837,9 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		}
 
 		public String getPrefix(KbQuery query) {
-			Map<String,INameSpace> ns = pageContext.getNameSpaces(query.getOffset());
-			INameSpace n = ns.get(query.getUri());
-			return n == null ? null : n.getPrefix();
+			Map<String,List<INameSpace>> ns = pageContext.getNameSpaces(query.getOffset());
+			List<INameSpace> n = ns.get(query.getUri());
+			return n == null || n.isEmpty() ? null : n.get(0).getPrefix();
 		}
 
 		public TagAttributesComposite.AttributeDescriptorValue[] createDescriptors(KbQuery query) {

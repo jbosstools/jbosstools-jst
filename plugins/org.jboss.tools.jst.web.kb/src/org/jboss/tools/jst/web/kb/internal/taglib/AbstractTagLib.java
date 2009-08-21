@@ -102,26 +102,81 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	 * @see org.jboss.tools.jst.web.kb.taglib.ITagLibrary#getComponents(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.PageContext)
 	 */
 	public IComponent[] getComponents(KbQuery query, IPageContext context) {
-		String prefix = getPrefix(query, context);
-		return getComponents(query, prefix, context);
+		List<String> prefixes = getPrefixes(query, context);
+		return getComponentsByPrefixes(query, prefixes, context);
 	}
 
-	protected String getPrefix(KbQuery query, IPageContext context) {
-		String prefix = null;
-		Map<String, INameSpace> nameSpaces = context.getNameSpaces(query.getOffset());
+	protected List<String> getPrefixes(KbQuery query, IPageContext context) {
+		List<String> prefixes = new ArrayList<String>();
+		Map<String, List<INameSpace>> nameSpaces = context.getNameSpaces(query.getOffset());
 		if(nameSpaces!=null) {
-			INameSpace nameSpace = nameSpaces.get(getURI());
+			List<INameSpace> nameSpace = nameSpaces.get(getURI());
 			if(nameSpace!=null) {
-				prefix = nameSpace.getPrefix();
-				if(prefix!=null && prefix.length()==0) {
-					prefix = null;
+				for (INameSpace n : nameSpace) {
+					String sPrefix = n.getPrefix();
+					if(sPrefix!=null && sPrefix.length()>0) {
+						String fullTagName = null;
+						boolean mask = false;
+						if(query.getType()==KbQuery.Type.TAG_NAME || query.getType()==KbQuery.Type.TEXT) {
+							fullTagName = query.getValue();
+							mask = query.isMask();
+						} else {
+							fullTagName = query.getLastParentTag();
+						}
+						if(fullTagName == null) {
+							prefixes.add(sPrefix);
+							continue;
+						}
+						String tagName = fullTagName;
+						int prefixIndex = fullTagName.indexOf(':');
+						String queryPrefix = null;
+						if(prefixIndex>-1) {
+							queryPrefix = fullTagName.substring(0, prefixIndex);
+							if(prefixIndex<fullTagName.length()-1) {
+								tagName = fullTagName.substring(prefixIndex+1);
+							} else {
+								tagName = null;
+							}
+						}
+						if(mask && prefixIndex<0) {
+							if(ignoreCase) {
+								if(sPrefix.toLowerCase().startsWith(tagName.toLowerCase())) {
+									prefixes.add(sPrefix);
+								}
+							} else if(sPrefix.startsWith(tagName)) {
+								prefixes.add(sPrefix);
+							}
+						} else if(sPrefix.equals(queryPrefix)) {
+							prefixes.add(sPrefix);
+						}
+					}
 				}
 			}
 		}
-		return prefix;
+		return prefixes;
 	}
 
 	private static final IComponent[] EMPTY_ARRAY = new IComponent[0];
+
+	protected IComponent[] getComponentsByPrefixes(KbQuery query, List<String> prefixes, IPageContext context) {
+		if(prefixes==null) {
+			return getComponents(query, null, context);
+		}
+		if(prefixes.size()==0) {
+			return EMPTY_ARRAY;
+		}
+		if(prefixes.size()==1) {
+			return getComponents(query, prefixes.get(0), context);
+		}
+		List<IComponent> components = new ArrayList<IComponent>();
+		for (String prefix : prefixes) {
+			IComponent[] cps = getComponents(query, prefix, context);
+			for (IComponent c : cps) {
+				components.add(c);
+			}
+		}
+		return components.toArray(new IComponent[0]);
+	}
 
 	protected IComponent[] getComponents(KbQuery query, String prefix, IPageContext context) {
 		String fullTagName = null;
@@ -334,13 +389,19 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	 * @see org.jboss.tools.jst.web.kb.ProposalProcessor#getProposals(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.PageContext)
 	 */
 	public TextProposal[] getProposals(KbQuery query, IPageContext context) {
-		String prefix = getPrefix(query, context);
+		List<String> prefixes = getPrefixes(query, context);
 		List<TextProposal> proposals = new ArrayList<TextProposal>();
-		IComponent[] components = getComponents(query, prefix, context);
+		IComponent[] components = getComponentsByPrefixes(query, prefixes, context);
 		if(query.getType() == KbQuery.Type.TAG_NAME || query.getType() == KbQuery.Type.TEXT) {
 			for (int i = 0; i < components.length; i++) {
 				if(!(components[i] instanceof CustomComponentExtension)) {
-					proposals.add(getProposal(prefix, components[i]));
+					if(prefixes==null) {
+						proposals.add(getProposal(null, components[i]));
+					} else {
+						for (String prefix : prefixes) {
+							proposals.add(getProposal(prefix, components[i]));
+						}
+					}
 				}
 			}
 		} else {

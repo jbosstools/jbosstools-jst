@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.contentassist;
 
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.text.IRegion;
@@ -80,9 +81,12 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 									.getExistingModelForRead(getDocument());
 		if (superContext != null) {
 			IRegion region = new Region (0, getDocument().getLength());
-			Map<String, INameSpace> nameSpaces = superContext.getNameSpaces(getOffset());
-			for (String prefix : nameSpaces.keySet()) {
-				context.addNameSpace(region, nameSpaces.get(prefix));
+			Map<String, List<INameSpace>> nameSpaces = superContext.getNameSpaces(getOffset());
+			for (String uri : nameSpaces.keySet()) {
+				List<INameSpace> ns = nameSpaces.get(uri);
+				for (INameSpace n : ns) {
+					context.addNameSpace(region, n);
+				}
 			}
 		}
 

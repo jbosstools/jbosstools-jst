@@ -56,19 +56,21 @@ public class FaceletsJsfCProposalType extends CustomProposalType {
 			return EMPTY_PROPOSAL_LIST;
 		}
 		proposals = new ArrayList<TextProposal>();
-		Map<String, String> prefixes = new HashMap<String, String>(); 
+		Map<String, List<String>> prefixes = new HashMap<String, List<String>>(); 
 		for (int i = 0; i < components.length; i++) {
 			ITagLibrary lib = components[i].getTagLib();
 			if(ignoreTagLib(lib)) {
 				continue;
 			}
-			String prefix = prefixes.get(lib.getURI());
-			if(prefix==null) {
-				prefix = getPrefix(context, components[i], kbQuery);
-				prefixes.put(lib.getURI(), prefix);
+			List<String> pfx = prefixes.get(lib.getURI());
+			if(pfx==null) {
+				pfx = getPrefixes(context, components[i], kbQuery);
+				prefixes.put(lib.getURI(), pfx);
 			}
-			TextProposal proposal = getProposal(prefix, components[i]);
-			proposals.add(proposal);
+			for (String prefix : pfx) {
+				TextProposal proposal = getProposal(prefix, components[i]);
+				proposals.add(proposal);
+			}
 		}
 		return proposals.toArray(new TextProposal[0]);
 	}
@@ -91,16 +93,18 @@ public class FaceletsJsfCProposalType extends CustomProposalType {
 		return proposal;
 	}
 
-	private String getPrefix(IPageContext context, IComponent component, KbQuery query) {
-		String prefix = null;
-		Map<String, INameSpace> nameSpaces = context.getNameSpaces(query.getOffset());
+	private List<String> getPrefixes(IPageContext context, IComponent component, KbQuery query) {
+		List<String> prefixes = new ArrayList<String>();
+		Map<String, List<INameSpace>> nameSpaces = context.getNameSpaces(query.getOffset());
 		if(nameSpaces!=null) {
-			INameSpace nameSpace = nameSpaces.get(component.getTagLib().getURI());
+			List<INameSpace> nameSpace = nameSpaces.get(component.getTagLib().getURI());
 			if(nameSpace!=null) {
-				prefix = nameSpace.getPrefix();
+				for (INameSpace n : nameSpace) {
+					prefixes.add(n.getPrefix());
+				}
 			}
 		}
-		return prefix;
+		return prefixes;
 	}
 
 	/* (non-Javadoc)

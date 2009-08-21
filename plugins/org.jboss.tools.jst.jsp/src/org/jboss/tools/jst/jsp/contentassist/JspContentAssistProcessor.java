@@ -139,7 +139,7 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 	 * @return
 	 */
 	public ITagLibrary[] getTagLibraries(IPageContext context) {
-		Map<String, INameSpace> nameSpaces =  context.getNameSpaces(getOffset());
+		Map<String, List<INameSpace>> nameSpaces =  context.getNameSpaces(getOffset());
 		if (nameSpaces == null || nameSpaces.isEmpty())
 			return EMPTY_LIBRARIES;
 		
@@ -148,11 +148,13 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 			return EMPTY_LIBRARIES;
 		
 		List<ITagLibrary> tagLibraries = new ArrayList<ITagLibrary>();
-		for (INameSpace nameSpace : nameSpaces.values()) {
-			ITagLibrary[] libs = TagLibriryManager.getLibraries(project, nameSpace.getURI());
-			if (libs != null && libs.length > 0) {
-				for (ITagLibrary lib : libs) {
-					tagLibraries.add(lib);
+		for (List<INameSpace> nameSpace : nameSpaces.values()) {
+			for (INameSpace n : nameSpace) {
+				ITagLibrary[] libs = TagLibriryManager.getLibraries(project, n.getURI());
+				if (libs != null && libs.length > 0) {
+					for (ITagLibrary lib : libs) {
+						tagLibraries.add(lib);
+					}
 				}
 			}
 		} 
@@ -210,7 +212,7 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 		if (name.indexOf(':') == -1) return;
 		String prefix = name.substring(0, name.indexOf(':'));
 
-		Map<String, INameSpace> ns = context.getNameSpaces(node.getStartOffset());
+		Map<String, List<INameSpace>> ns = context.getNameSpaces(node.getStartOffset());
 		if (!containsPrefix(ns, prefix)) return;
 
 		NamedNodeMap attributes = node.getAttributes();
@@ -222,14 +224,14 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 
 		list.add(new ResourceBundle(basename, var));
 	}
-	private boolean containsPrefix(Map<String, INameSpace> ns, String prefix) {
-		for (INameSpace n: ns.values()) {
-			if(prefix.equals(n.getPrefix())) return true;
+	private boolean containsPrefix(Map<String, List<INameSpace>> ns, String prefix) {
+		for (List<INameSpace> n: ns.values()) {
+			for (INameSpace nameSpace : n) {
+				if(prefix.equals(nameSpace.getPrefix())) return true;
+			}
 		}
 		return false;
 	}
-
-	
 
 	/**
 	 * Returns the <code>org.jboss.tools.common.el.core.resolver.ELContext</code> instance
@@ -254,13 +256,15 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 		if (prefix == null || prefix.length() == 0)
 			return null;
 		
-		Map<String, INameSpace> nameSpaces = getContext().getNameSpaces(getOffset());
+		Map<String, List<INameSpace>> nameSpaces = getContext().getNameSpaces(getOffset());
 		if (nameSpaces == null || nameSpaces.isEmpty())
 			return null;
 		
-		for (INameSpace nameSpace : nameSpaces.values()) {
-			if (prefix.equals(nameSpace.getPrefix())) {
-				return nameSpace.getURI();
+		for (List<INameSpace> nameSpace : nameSpaces.values()) {
+			for (INameSpace n : nameSpace) {
+				if (prefix.equals(n.getPrefix())) {
+					return n.getURI();
+				}
 			}
 		}
 		return null;

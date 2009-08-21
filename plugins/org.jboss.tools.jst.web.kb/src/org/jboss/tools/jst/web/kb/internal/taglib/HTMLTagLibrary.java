@@ -67,6 +67,15 @@ public class HTMLTagLibrary extends CustomTagLibrary {
 
 	/*
 	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.taglib.AbstractTagLib#getPrefixes(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.IPageContext)
+	 */
+	@Override
+	protected List<String> getPrefixes(KbQuery query, IPageContext context) {
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibrary#parseComponent(org.w3c.dom.Element)
 	 */
 	@Override
