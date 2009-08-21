@@ -21,6 +21,7 @@ import org.jboss.tools.jst.web.kb.taglib.CustomTagLibManager;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibrary;
+import org.jboss.tools.jst.web.kb.taglib.IFacesConfigTagLibrary;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 
 /**
@@ -54,6 +55,9 @@ public class PageProcessor implements IProposalProcessor {
 		if (!isQueryForELProposals(query, context)) {
 			ITagLibrary[] libs =  context.getLibraries();
 			for (int i = 0; libs != null && i < libs.length; i++) {
+				if(libs[i] instanceof IFacesConfigTagLibrary) {
+					continue;
+				}
 				TextProposal[] libProposals = libs[i].getProposals(query, context);
 				for (int j = 0; libProposals != null && j < libProposals.length; j++) {
 					proposals.add(libProposals[j]);
@@ -122,6 +126,9 @@ public class PageProcessor implements IProposalProcessor {
 		ArrayList<IComponent> components = new ArrayList<IComponent>();
 		ITagLibrary[] libs =  context.getLibraries();
 		for (int i = 0; i < libs.length; i++) {
+			if(libs[i] instanceof IFacesConfigTagLibrary) {
+				continue;
+			}
 			IComponent[] libComponents = libs[i].getComponents(query, context);
 			for (int j = 0; j < libComponents.length; j++) {
 				if(includeComponentExtensions || !libComponents[j].isExtended()) {
