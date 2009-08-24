@@ -91,7 +91,7 @@ public class CustomTagLibManager {
 				IConfigurationElement[] elements = extension.getConfigurationElements();
 				for(int j=0; j<elements.length; j++) {
 					String elementName = elements[j].getName();
-					if("tag-lib".equals(elementName)) { //$NON-NLS-1$
+					if(CustomTagLibrary.TAG_LIB.equals(elementName)) {
 						String uri = elements[j].getAttribute("uri"); //$NON-NLS-1$
 						String location = elements[j].getAttribute("location"); //$NON-NLS-1$
 						String version = elements[j].getAttribute("version"); //$NON-NLS-1$
@@ -115,7 +115,7 @@ public class CustomTagLibManager {
 						} else {
 							WebKbPlugin.getDefault().logWarning("Can't load KB schema: " + schemaLocation); //$NON-NLS-1$
 						}
-					} else if("component-extension".equals(elementName)) { //$NON-NLS-1$
+					} else if(CustomTagLibrary.COMPONET_EXTENSION.equals(elementName)) {
 						String location = elements[j].getAttribute("location"); //$NON-NLS-1$
 						Bundle sourcePlugin = Platform.getBundle(elements[j].getNamespaceIdentifier());
 						File schemaLocation = null;

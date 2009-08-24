@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tag-lib PUBLIC "-//Red Hat, Inc//DTD Knowledge Base 2.0//EN" "http://anonsvn.jboss.org/repos/jbosstools/trunk/jst/plugins/org.jboss.tools.jst.web.kb/resources/kbCustomTagLibSchema-1.0.dtd">
 <tag-lib defaultPrefix="s">
-	<customExtension>
+	<custom-extension>
 		<attribute name="propagation">
 			<proposal type="enumeration">
 				<param value="begin" />
@@ -11,7 +11,7 @@
 				<param value="end" />
 			</proposal>
 		</attribute>
-	</customExtension>
+	</custom-extension>
 	<component name="button">
 		<attribute name="view">
 			<proposal type="file">

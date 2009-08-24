@@ -10,7 +10,7 @@
 	dafault-prefix - Default prefix.
 	ignoreCase - "true" - Ignore case of letters in name of attributes and components
 -->
-<!ELEMENT tag-lib (component*, componentExtension?)>
+<!ELEMENT tag-lib (component*, component-extension?)>
 
 <!ATTLIST tag-lib dafaultPrefix CDATA #IMPLIED>
 <!ATTLIST tag-lib ignoreCase %Boolean; #IMPLIED>
@@ -72,4 +72,4 @@
 	for component attributes in case these attributes are present in other types of tag libs.
 	For example this element could add proposals for every "rendered" attributes for any tag lib.
 -->
-<!ELEMENT componentExtension (attribute*) >
+<!ELEMENT component-extension (attribute*) >

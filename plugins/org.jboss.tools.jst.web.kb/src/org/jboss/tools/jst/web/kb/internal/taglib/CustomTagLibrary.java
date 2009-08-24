@@ -39,7 +39,7 @@ import org.xml.sax.SAXException;
 public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrary {
 
 	protected static final String DEFAULT_PREFIX = "defaultPrefix"; //$NON-NLS-1$
-	protected static final String TAG_LIB = "tag-lib"; //$NON-NLS-1$
+	public static final String TAG_LIB = "tag-lib"; //$NON-NLS-1$
 	protected static final String COMPONENT = "component"; //$NON-NLS-1$
 	protected static final String CLOSE_TAG = "closeTag"; //$NON-NLS-1$
 	protected static final String TRUE = "true"; //$NON-NLS-1$
@@ -51,7 +51,7 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 	protected static final String ENUMERATION = "enumeration"; //$NON-NLS-1$
 	protected static final String PARAM = "param"; //$NON-NLS-1$
 	protected static final String VALUE = "value"; //$NON-NLS-1$
-	protected static final String COMPONET_EXTENSION = "componentExtension"; //$NON-NLS-1$
+	public static final String COMPONET_EXTENSION = "component-extension"; //$NON-NLS-1$
 	protected static final String DEFAULT_VALUE = "defaultValue"; //$NON-NLS-1$
 	protected static final String EXTENDED = "extended"; //$NON-NLS-1$
 	protected static final String DESCRIPTION = "description"; //$NON-NLS-1$

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE customExtension PUBLIC "-//Red Hat, Inc//DTD Knowledge Base 2.0//EN" "http://anonsvn.jboss.org/repos/jbosstools/trunk/jst/plugins/org.jboss.tools.jst.web.kb/resources/kbCustomTagLibSchema-1.0.dtd">
-<customExtension>
+<component-extension>
 	<attribute name="action">
 		<proposal type="viewActions" />
 	</attribute>
@@ -64,4 +64,4 @@
 	<attribute name="converter">
 		<proposal type="converterID"/>
 	</attribute>
-</customExtension>
+</component-extension>
