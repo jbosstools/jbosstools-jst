@@ -326,7 +326,6 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 		kbQuery.setOffset(offset);
 		kbQuery.setValue(query); 
 		kbQuery.setStringQuery(query);
-		kbQuery.setText(text);
 		
 		return kbQuery;
 	}
