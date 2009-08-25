@@ -1,7 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tag-lib PUBLIC "-//Red Hat, Inc//DTD Knowledge Base 2.0//EN" "http://anonsvn.jboss.org/repos/jbosstools/trunk/jst/plugins/org.jboss.tools.jst.web.kb/resources/kbCustomTagLibSchema-1.0.dtd">
 <tag-lib defaultPrefix="a4j">
-	<custom-extension>
+	<component-extension>
+		<attribute name="focus">
+			<proposal type="id"/>
+		</attribute>
+		<attribute name="reRender">
+			<proposal type="id"/>
+		</attribute>
+		<attribute name="status">
+			<proposal type="id"/>
+		</attribute>
+		<attribute name="for">
+			<proposal type="id"/>
+		</attribute>
+		<attribute name="targetId">
+			<proposal type="id"/>
+		</attribute>
+		<attribute name="panelId">
+			<proposal type="id"/>
+		</attribute>
+		<attribute name="dragIndicator">
+			<proposal type="id"/>
+		</attribute>
+		<attribute name="process">
+			<proposal type="id"/>
+		</attribute>
+		<attribute name="similarityGroupingId">
+			<proposal type="id"/>
+		</attribute>
+		<attribute name="reRenderAfterComplete">
+			<proposal type="id"/>
+		</attribute>
+		<attribute name="attachTo">
+			<proposal type="id"/>
+		</attribute>
 		<attribute name="ajaxSingle">
 			<proposal type="enumeration">
 				<param value="true" />
@@ -38,7 +71,7 @@
 				<param value="false" />
 			</proposal>
 		</attribute>
-	</custom-extension>
+	</component-extension>
 
 	<component closeTag="true" name="loadBundle">
         <attribute name="basename">

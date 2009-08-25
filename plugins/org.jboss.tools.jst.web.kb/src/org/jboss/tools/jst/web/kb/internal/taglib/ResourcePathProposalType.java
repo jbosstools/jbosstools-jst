@@ -51,9 +51,11 @@ public class ResourcePathProposalType extends ModelProposalType {
 			PAGE_FILE_EXTENSIONS.add(pages[i]);
 		}
 	}
+	private static String PATH_ADDITION = "pathAddition";
 
 	private IContainer webRootResource;
 	private Set<String> extensions;
+	private List<String> enumeration;
 
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.internal.taglib.ModelProposalType#init(org.jboss.tools.jst.web.kb.IPageContext)
@@ -70,6 +72,16 @@ public class ResourcePathProposalType extends ModelProposalType {
 		}
 		if(extensions==null) {
 			initExtensions();
+		}
+		if(enumeration==null) {
+			enumeration = new ArrayList<String>();
+			if(params!=null) {
+				for (int i = 0; i < params.length; i++) {
+					if(PATH_ADDITION.equals(params[i].getName())) {
+						enumeration.add(params[i].getValue());
+					}
+				}
+			}
 		}
 	}
 
@@ -91,6 +103,19 @@ public class ResourcePathProposalType extends ModelProposalType {
 				replacementString = replacementString + "/"; //$NON-NLS-1$
 				proposal.setAutoActivationContentAssistantAfterApplication(true);
 			}
+			proposal.setReplacementString(replacementString);
+			proposal.setPosition(replacementString.length());
+			if(ICON==null) {
+				ICON = ImageDescriptor.createFromFile(WebKbPlugin.class, IMAGE_NAME).createImage();
+			}
+			proposal.setImage(ICON);
+			proposals.add(proposal);
+		}
+		for (String path : enumeration) {
+			TextProposal proposal = new TextProposal();
+			proposal.setLabel(path);
+			String replacementString = path;
+			proposal.setAutoActivationContentAssistantAfterApplication(false);
 			proposal.setReplacementString(replacementString);
 			proposal.setPosition(replacementString.length());
 			if(ICON==null) {

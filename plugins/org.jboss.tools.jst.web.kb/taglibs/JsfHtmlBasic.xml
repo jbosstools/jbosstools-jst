@@ -8,8 +8,8 @@
 			<proposal type="file">
 				<param name="extensions" value="%image%" />
 				<param name="pathType" value="absolute" />
-				<param name="pathAddition"
-					value="#{facesContext.externalContext.requestContextPath}" />
+				<!-- param name="pathAddition"
+					value="#{facesContext.externalContext.requestContextPath}" / -->
 			</proposal>
 		</attribute>
 		<attribute name="type">
