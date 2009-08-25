@@ -25,5 +25,4 @@ public class ValidatorIDProposalType extends ConverterIDProposalType {
 	protected String getListID() {
 		return IWebPromptingProvider.JSF_VALIDATOR_IDS;
 	}
-
 }

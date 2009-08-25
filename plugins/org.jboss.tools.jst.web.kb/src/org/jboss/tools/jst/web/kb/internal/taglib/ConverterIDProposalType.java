@@ -16,8 +16,11 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.project.list.IWebPromptingProvider;
 
 /**
@@ -26,6 +29,9 @@ import org.jboss.tools.jst.web.project.list.IWebPromptingProvider;
  *
  */
 public class ConverterIDProposalType extends ModelProposalType {
+
+	private static final String IMAGE_NAME = "EnumerationProposal.gif"; //$NON-NLS-1$
+	private static Image ICON;
 
 	public ConverterIDProposalType() {}
 
@@ -46,7 +52,11 @@ public class ConverterIDProposalType extends ModelProposalType {
 				proposal.setLabel(text);
 				proposal.setReplacementString(text);
 				proposal.setPosition(text.length());
-				
+				if(ICON==null) {
+					ICON = ImageDescriptor.createFromFile(WebKbPlugin.class, IMAGE_NAME).createImage();
+				}
+				proposal.setImage(ICON);
+
 				proposals.add(proposal);
 			}
 		}

@@ -47,6 +47,7 @@ public class EnumerationProposalType extends CustomProposalType {
 				if(ICON==null) {
 					ICON = ImageDescriptor.createFromFile(WebKbPlugin.class, IMAGE_NAME).createImage();
 				}
+				proposal.setImage(ICON);
 				proposals.add(proposal);
 			}
 		}

@@ -18,8 +18,8 @@
 	</attribute>
 	<attribute name="dir">
 		<proposal type="enumeration">
-			<param value="LTR" />
-			<param value="RTL" />
+			<param value="ltr" />
+			<param value="rtl" />
 		</proposal>
 	</attribute>
 	<attribute name="disabled">

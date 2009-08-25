@@ -15,6 +15,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImageHelper;
+import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImages;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
@@ -28,6 +31,8 @@ import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
  * @author Alexey Kazakov
  */
 public class FaceletsJsfCProposalType extends CustomProposalType {
+
+	private static Image ICON;
 
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.internal.taglib.CustomProposalType#getProposals(org.jboss.tools.jst.web.kb.KbQuery)
@@ -90,6 +95,11 @@ public class FaceletsJsfCProposalType extends CustomProposalType {
 		proposal.setReplacementString(proposal.getLabel());
 		int position = proposal.getReplacementString().length();
 		proposal.setPosition(position);
+		if (ICON == null) {
+			ICON = XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_TAG_GENERIC);
+		}
+		proposal.setImage(ICON);
+
 		return proposal;
 	}
 
