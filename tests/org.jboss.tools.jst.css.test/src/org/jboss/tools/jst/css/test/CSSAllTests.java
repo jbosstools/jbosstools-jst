@@ -14,6 +14,7 @@ package org.jboss.tools.jst.css.test;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.jboss.tools.jst.css.test.jbide.InputFractionalValueTest_JBIDE4790;
 import org.jboss.tools.test.util.ProjectImportTestSetup;
 
 /**
@@ -29,6 +30,7 @@ public class CSSAllTests {
 		TestSuite suite = new TestSuite("Tests for CSS views"); //$NON-NLS-1$
 		// $JUnit-BEGIN$
 		suite.addTestSuite(CSSViewTest.class);
+		suite.addTestSuite(InputFractionalValueTest_JBIDE4790.class);
 		// $JUnit-END$
 
 		return new ProjectImportTestSetup(

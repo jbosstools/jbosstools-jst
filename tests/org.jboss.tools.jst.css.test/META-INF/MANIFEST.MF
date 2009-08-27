@@ -19,7 +19,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jface.text,
  org.jboss.tools.jst.css,
  org.eclipse.core.databinding,
- org.eclipse.ui.views.properties.tabbed
+ org.eclipse.ui.views.properties.tabbed,
+ org.jboss.tools.jst.jsp
 Bundle-Vendor: %Bundle-Vendor.0
 Bundle-Localization: plugin
 Bundle-ActivationPolicy: lazy
