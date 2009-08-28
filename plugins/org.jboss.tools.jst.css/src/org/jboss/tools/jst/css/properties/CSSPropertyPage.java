@@ -132,12 +132,6 @@ public class CSSPropertyPage extends TabbedPropertySheetPage implements
 							|| (me.getValue().length() == 0)) {
 						declaration.removeProperty(me.getKey());
 					} else {
-
-						// FIX FOR BIDE-4790  simple setting of new
-						// value leads to error in issue's case
-						if (declaration.getPropertyValue(me.getKey()) != null)
-							declaration.removeProperty(me.getKey());
-
 						declaration.setProperty(me.getKey(), me.getValue(),
 								Constants.EMPTY);
 					}
