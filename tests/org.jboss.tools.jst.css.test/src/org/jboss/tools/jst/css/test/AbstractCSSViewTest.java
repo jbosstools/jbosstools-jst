@@ -31,6 +31,9 @@ import org.eclipse.wst.sse.ui.StructuredTextEditor;
 /**
  * @author Sergey Dzmitrovich
  * 
+ *         abstract base class for css test's classes. Override getProjectName()
+ *         method if other imported project is used.
+ * 
  */
 public abstract class AbstractCSSViewTest extends TestCase {
 
@@ -39,6 +42,8 @@ public abstract class AbstractCSSViewTest extends TestCase {
 	public static final String CSS_PREVIEW_VIEW = "org.jboss.tools.jst.css.view.preview"; //$NON-NLS-1$
 	public static final String CSS_EDITOR_ID = "org.eclipse.wst.css.core.csssource.source"; //$NON-NLS-1$
 	public static final String CSS_PERSPECTIVE = "org.jboss.tools.jst.cssPerspective"; //$NON-NLS-1$
+	public static final String IMPORT_PROJECT_NAME = "cssTest"; //$NON-NLS-1$
+
 	/**
 	 * 
 	 * @param componentPage
@@ -170,6 +175,8 @@ public abstract class AbstractCSSViewTest extends TestCase {
 	 * 
 	 * @return
 	 */
-	public abstract String getProjectName();
+	public String getProjectName() {
+		return IMPORT_PROJECT_NAME;
+	}
 
 }

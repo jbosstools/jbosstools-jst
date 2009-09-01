@@ -13,6 +13,7 @@ package org.jboss.tools.jst.css.view;
 
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.part.IContributedContentsView;
 import org.eclipse.ui.part.IPageBookViewPage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
@@ -56,5 +57,17 @@ public class CSSEditorView extends PropertySheet {
 	}
 	public void postSelectionChanged(SelectionChangedEvent event){
 		getSelectionProvider().postSelectionChanged(event);
+	}
+
+	@Override
+	public Object getAdapter(Class key) {
+		if (key == IContributedContentsView.class) {
+			return new IContributedContentsView() {
+				public IWorkbenchPart getContributingPart() {
+					return getCurrentContributingPart();
+				}
+			};
+		}
+		return super.getAdapter(key);
 	}
 }

@@ -32,8 +32,6 @@ import org.w3c.dom.css.CSSStyleRule;
  */
 public class InputFractionalValueTest_JBIDE4790 extends AbstractCSSViewTest {
 
-	public static final String IMPORT_PROJECT_NAME = "cssTest"; //$NON-NLS-1$
-
 	public static final String TEST_PAGE_NAME = "JBIDE/4790/inputFractional.css"; //$NON-NLS-1$
 
 	public static final String TEST_CSS_ATTRIBUTE_NAME = "font-size"; //$NON-NLS-1$
@@ -126,16 +124,6 @@ public class InputFractionalValueTest_JBIDE4790 extends AbstractCSSViewTest {
 
 	private String removeWhitespaces(String text) {
 		return text.replaceAll(" ", ""); //$NON-NLS-1$ //$NON-NLS-2$
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.jboss.tools.jst.css.test.AbstractCSSViewTest#getProjectName()
-	 */
-	@Override
-	public String getProjectName() {
-		return IMPORT_PROJECT_NAME;
 	}
 
 }

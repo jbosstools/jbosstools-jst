@@ -20,6 +20,8 @@ import org.eclipse.core.databinding.observable.ChangeEvent;
 import org.eclipse.core.databinding.observable.IChangeListener;
 import org.eclipse.core.databinding.observable.IObservable;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -67,6 +69,26 @@ public class CSSPropertyPage extends TabbedPropertySheetPage implements
 		super.init(pageSite);
 		pageSite.getWorkbenchWindow().getSelectionService()
 				.addPostSelectionListener(this);
+
+		// FIXED FOR JBIDE-4791
+		pageSite.setSelectionProvider(new ISelectionProvider() {
+
+			public void setSelection(ISelection selection) {
+			}
+
+			public void removeSelectionChangedListener(
+					ISelectionChangedListener listener) {
+			}
+
+			public ISelection getSelection() {
+				return selectedObject != null ? new StructuredSelection(
+						selectedObject) : StructuredSelection.EMPTY;
+			}
+
+			public void addSelectionChangedListener(
+					ISelectionChangedListener listener) {
+			}
+		});
 	}
 
 	@Override

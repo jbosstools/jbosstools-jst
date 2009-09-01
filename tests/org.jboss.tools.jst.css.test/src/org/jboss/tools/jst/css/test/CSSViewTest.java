@@ -43,16 +43,11 @@ import org.w3c.dom.css.CSSRule;
  */
 public class CSSViewTest extends AbstractCSSViewTest {
 
-	public static final String IMPORT_PROJECT_NAME = "cssTest"; //$NON-NLS-1$
 
 	public static final String TEST_PAGE_NAME = "test.css"; //$NON-NLS-1$
 
 	public static final int COUNT_TABS = 5;
 
-	@Override
-	public String getProjectName() {
-		return IMPORT_PROJECT_NAME;
-	}
 
 	/**
 	 * 

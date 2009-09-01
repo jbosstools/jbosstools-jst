@@ -15,11 +15,14 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.jboss.tools.jst.css.test.jbide.InputFractionalValueTest_JBIDE4790;
+import org.jboss.tools.jst.css.test.jbide.SelectionLosingByPropertySheet_JBIDE4791;
 import org.jboss.tools.test.util.ProjectImportTestSetup;
 
 /**
  * @author Sergey Dzmitrovich
  * 
+ *         To import other projects add names of imported projects to array the
+ *         same way as AbstractCSSViewTest.IMPORT_PROJECT_NAME
  */
 public class CSSAllTests {
 
@@ -29,14 +32,15 @@ public class CSSAllTests {
 
 		TestSuite suite = new TestSuite("Tests for CSS views"); //$NON-NLS-1$
 		// $JUnit-BEGIN$
-		suite.addTestSuite(CSSViewTest.class);
-		suite.addTestSuite(InputFractionalValueTest_JBIDE4790.class);
+//		suite.addTestSuite(CSSViewTest.class);
+//		suite.addTestSuite(InputFractionalValueTest_JBIDE4790.class);
+		suite.addTestSuite(SelectionLosingByPropertySheet_JBIDE4791.class);
 		// $JUnit-END$
 
 		return new ProjectImportTestSetup(
 				suite,
 				CSSTestPlugin.PLUGIN_ID,
 				new String[] { RESOURCE_PATH + CSSViewTest.IMPORT_PROJECT_NAME },
-				new String[] { CSSViewTest.IMPORT_PROJECT_NAME });
+				new String[] { AbstractCSSViewTest.IMPORT_PROJECT_NAME });
 	}
 }
