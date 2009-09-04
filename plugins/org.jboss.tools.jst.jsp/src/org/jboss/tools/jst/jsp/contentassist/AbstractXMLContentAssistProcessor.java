@@ -842,7 +842,7 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	 * 
 	 * @return
 	 */
-	protected String getParent(boolean returnAttributeName) {
+	protected String getParent(boolean returnAttributeName, boolean returnThisElement) {
 		IStructuredModel sModel = StructuredModelManager
 									.getModelManager()
 									.getExistingModelForRead(getDocument());
@@ -884,7 +884,8 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 					n = n.getParentNode();
 				}
 			} else {
-				n = n.getParentNode();
+				if (!returnThisElement)
+					n = n.getParentNode();
 			}
 			if (n == null)
 				return null;
