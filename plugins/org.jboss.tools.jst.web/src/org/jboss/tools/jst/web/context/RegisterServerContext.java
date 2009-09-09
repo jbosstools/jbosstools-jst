@@ -73,6 +73,10 @@ public class RegisterServerContext {
 	public void setProjectHandle(IProject p) {
 		project = p;
 	}
+
+	public IProject getProjectHandle() {
+		return project;
+	}
 	
 	public void setPreferences(Preference registerProjectPreference) {
 		this.registerProjectPreference = registerProjectPreference;
