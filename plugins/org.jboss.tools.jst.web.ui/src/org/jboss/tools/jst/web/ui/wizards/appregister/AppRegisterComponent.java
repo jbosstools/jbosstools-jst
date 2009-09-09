@@ -31,8 +31,11 @@ import org.jboss.tools.common.model.ui.attribute.editor.IMutableFieldEditor;
 import org.jboss.tools.common.model.ui.attribute.editor.IPropertyEditor;
 import org.jboss.tools.common.model.ui.attribute.editor.MutableComboBoxFieldEditor;
 import org.jboss.tools.common.model.ui.attribute.editor.MutableMultipleChoiceFieldEditor;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
 
 
 import org.jboss.tools.common.meta.action.SpecialWizard;
@@ -42,6 +45,7 @@ import org.jboss.tools.common.meta.action.impl.handlers.HUtil;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.common.model.util.XModelObjectUtil;
+import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.context.RegisterServerContext;
 import org.jboss.tools.jst.web.server.*;
 import org.jboss.tools.jst.web.ui.Messages;
@@ -219,6 +223,15 @@ public class AppRegisterComponent {
 		for (int i = 0; i < rs.length; i++) {
 			ns[i] = rs[i].getName();
 			if(rs[i] == selectedRuntime || selectedRuntime1 == null) selectedRuntime1 = rs[i];
+		}
+		IProject p = context.getProjectHandle();
+		if(p != null && p.exists() && p.isAccessible()) {
+			try {
+				IRuntime sr = J2EEProjectUtilities.getServerRuntime(p);
+				if(sr != null) selectedRuntime1 = sr;
+			} catch (CoreException exc) {
+				WebModelPlugin.getPluginLog().logError(exc);
+			}
 		}
 		HUtil.hackAttributeConstraintList(new XEntityData[]{support.getEntityData()}, 0, ATTR_RUNTIME,  ns);
 		String runtimeName = (selectedRuntime1 != null) ? selectedRuntime1.getName() : ""; //$NON-NLS-1$
