@@ -12,8 +12,6 @@
 package org.jboss.tools.jst.css.properties;
 
 import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.ChangeEvent;
@@ -29,13 +27,10 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
-import org.eclipse.wst.css.core.internal.provisional.document.ICSSNode;
+import org.jboss.tools.jst.css.common.CSSSelectionListener;
+import org.jboss.tools.jst.css.common.StyleContainer;
 import org.jboss.tools.jst.css.view.CSSEditorView;
-import org.jboss.tools.jst.css.view.CSSViewUtil;
-import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.StyleAttributes;
-import org.w3c.dom.css.CSSStyleDeclaration;
-import org.w3c.dom.css.CSSStyleRule;
 
 /**
  * @author Sergey Dzmitrovich
@@ -67,8 +62,8 @@ public class CSSPropertyPage extends TabbedPropertySheetPage implements
 	@Override
 	public void init(IPageSite pageSite) {
 		super.init(pageSite);
-		pageSite.getWorkbenchWindow().getSelectionService()
-				.addPostSelectionListener(this);
+
+		CSSSelectionListener.getInstance().addSelectionListener(this);
 
 		// FIXED FOR JBIDE-4791
 		pageSite.setSelectionProvider(new ISelectionProvider() {
@@ -81,8 +76,7 @@ public class CSSPropertyPage extends TabbedPropertySheetPage implements
 			}
 
 			public ISelection getSelection() {
-				return selectedObject != null ? new StructuredSelection(
-						selectedObject) : StructuredSelection.EMPTY;
+				return getCurrentSelection();
 			}
 
 			public void addSelectionChangedListener(
@@ -93,8 +87,7 @@ public class CSSPropertyPage extends TabbedPropertySheetPage implements
 
 	@Override
 	public void dispose() {
-		getSite().getWorkbenchWindow().getSelectionService()
-				.removePostSelectionListener(this);
+		CSSSelectionListener.getInstance().removeSelectionListener(this);
 		super.dispose();
 	}
 
@@ -104,24 +97,15 @@ public class CSSPropertyPage extends TabbedPropertySheetPage implements
 		if ((this.part != part) && (selection instanceof IStructuredSelection)) {
 			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
 			Object newSelectedObject = structuredSelection.getFirstElement();
-			if (structuredSelection.getFirstElement() instanceof ICSSNode) {
+			if (structuredSelection.getFirstElement() instanceof StyleContainer) {
 
-				CSSStyleRule styleRule = CSSViewUtil
-						.getStyleRule((ICSSNode) structuredSelection
-								.getFirstElement());
-
-				if (styleRule != null) {
-					((IObservable) styleAttributes.getAttributeMap())
-							.removeChangeListener(this);
-					updateStyleAttributes(styleRule);
-					((IObservable) styleAttributes.getAttributeMap())
-							.addChangeListener(this);
-					newSelectedObject = styleRule;
-				}
+				updateStyleAttributes(((StyleContainer) newSelectedObject)
+						.getStyleAttributes());
 
 			}
 
-			if (selectedObject != newSelectedObject)
+			if ((selectedObject == null)
+					|| (!selectedObject.equals(newSelectedObject)))
 				super.selectionChanged(part, selection);
 			selectedObject = newSelectedObject;
 
@@ -129,43 +113,30 @@ public class CSSPropertyPage extends TabbedPropertySheetPage implements
 
 	}
 
-	private void updateStyleAttributes(CSSStyleRule styleRule) {
+	private void updateStyleAttributes(Map<String, String> attributes) {
 
-		getStyleAttributes().setStyleProperties(
-				CSSViewUtil.getStyleAttributes(styleRule));
+		((IObservable) getStyleAttributes().getAttributeMap())
+				.removeChangeListener(this);
+		getStyleAttributes().setStyleProperties(attributes);
+		((IObservable) getStyleAttributes().getAttributeMap())
+				.addChangeListener(this);
 
 	}
 
 	public void handleChange(ChangeEvent event) {
 
-		if (selectedObject instanceof CSSStyleRule) {
+		if (selectedObject instanceof StyleContainer) {
 
-			final CSSStyleDeclaration declaration = ((CSSStyleRule) selectedObject)
-					.getStyle();
-
-			// set properties
-			final Set<Entry<String, String>> set = styleAttributes.entrySet();
-
-			if ((set.size() == 0) && (declaration.getLength() > 0)) {
-				declaration.setCssText(Constants.EMPTY);
-			} else {
-				for (final Map.Entry<String, String> me : set) {
-					if ((me.getValue() == null)
-							|| (me.getValue().length() == 0)) {
-						declaration.removeProperty(me.getKey());
-					} else {
-						declaration.setProperty(me.getKey(), me.getValue(),
-								Constants.EMPTY);
-					}
-				}
-			}
+			((StyleContainer) selectedObject)
+					.applyStyleAttributes(getStyleAttributes()
+							.getAttributeMap());
 		}
 
-		notifySelectionChanged(new StructuredSelection(selectedObject));
+		notifySelectionChanged(getCurrentSelection());
 
 	}
 
-	protected void notifySelectionChanged(StructuredSelection selection) {
+	protected void notifySelectionChanged(ISelection selection) {
 		part.postSelectionChanged(new SelectionChangedEvent(part
 				.getSelectionProvider(), selection));
 	}
@@ -182,4 +153,14 @@ public class CSSPropertyPage extends TabbedPropertySheetPage implements
 		return styleAttributes;
 	}
 
+	public ISelection getCurrentSelection() {
+
+		Object currentSelectedObject = selectedObject;
+		if (selectedObject instanceof StyleContainer)
+			currentSelectedObject = ((StyleContainer) selectedObject)
+					.getStyleObject();
+		return currentSelectedObject != null ? new StructuredSelection(
+				currentSelectedObject) : StructuredSelection.EMPTY;
+
+	}
 }

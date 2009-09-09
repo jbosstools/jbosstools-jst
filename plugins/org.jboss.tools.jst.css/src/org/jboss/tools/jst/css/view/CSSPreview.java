@@ -32,10 +32,10 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
-import org.eclipse.wst.css.core.internal.provisional.document.ICSSNode;
+import org.jboss.tools.jst.css.common.CSSSelectionListener;
+import org.jboss.tools.jst.css.common.StyleContainer;
 import org.jboss.tools.jst.css.messages.CSSUIMessages;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
-import org.w3c.dom.css.CSSStyleRule;
 
 /**
  * @author Sergey Dzmitrovich
@@ -51,20 +51,17 @@ public class CSSPreview extends ViewPart implements ISelectionListener {
 
 	private Map<String, String> styleAttributes = new HashMap<String, String>();
 
-	// private String location;
-	// private String selectorName;
-
 	@Override
 	public void init(IViewSite site) throws PartInitException {
 		super.init(site);
-		site.getWorkbenchWindow().getSelectionService()
-				.addPostSelectionListener(this);
+
+		CSSSelectionListener.getInstance().addSelectionListener(this);
 	}
 
 	@Override
 	public void dispose() {
-		getSite().getWorkbenchWindow().getSelectionService()
-				.removePostSelectionListener(this);
+
+		CSSSelectionListener.getInstance().removeSelectionListener(this);
 		super.dispose();
 	}
 
@@ -161,20 +158,15 @@ public class CSSPreview extends ViewPart implements ISelectionListener {
 
 		if (selection instanceof IStructuredSelection) {
 			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-			if (structuredSelection.getFirstElement() instanceof ICSSNode) {
+			if (structuredSelection.getFirstElement() instanceof StyleContainer) {
 
-				CSSStyleRule styleRule = CSSViewUtil
-						.getStyleRule((ICSSNode) structuredSelection
-								.getFirstElement());
+				styleAttributes = ((StyleContainer) structuredSelection
+						.getFirstElement()).getStyleAttributes();
 
-				if (styleRule != null) {
-					styleAttributes = CSSViewUtil.getStyleAttributes(styleRule);
-
-				} else {
-					styleAttributes.clear();
-				}
-
+			} else {
+				styleAttributes.clear();
 			}
+
 			updateBrowser();
 		}
 

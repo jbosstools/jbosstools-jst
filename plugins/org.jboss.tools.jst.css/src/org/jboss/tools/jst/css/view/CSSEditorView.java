@@ -11,6 +11,7 @@
 
 package org.jboss.tools.jst.css.view;
 
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.IContributedContentsView;
@@ -27,6 +28,11 @@ import org.jboss.tools.jst.css.properties.CSSPropertyPage;
 public class CSSEditorView extends PropertySheet {
 
 	static public String CONTRIBUTOR_ID = "org.eclipse.wst.css.core.csssource.source"; //$NON-NLS-1$
+
+	@Override
+	public void selectionChanged(IWorkbenchPart part, ISelection sel) {
+		// do nothing
+	}
 
 	@Override
 	protected PageRec doCreatePage(final IWorkbenchPart part) {
@@ -55,7 +61,8 @@ public class CSSEditorView extends PropertySheet {
 	public SelectionProvider getSelectionProvider() {
 		return super.getSelectionProvider();
 	}
-	public void postSelectionChanged(SelectionChangedEvent event){
+
+	public void postSelectionChanged(SelectionChangedEvent event) {
 		getSelectionProvider().postSelectionChanged(event);
 	}
 

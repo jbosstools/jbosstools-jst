@@ -8,13 +8,12 @@
  * Contributor:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-
-package org.jboss.tools.jst.css.view;
+package org.jboss.tools.jst.css.common;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.wst.css.core.internal.provisional.document.ICSSNode;
+import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.w3c.dom.css.CSSStyleDeclaration;
 import org.w3c.dom.css.CSSStyleRule;
 
@@ -22,23 +21,41 @@ import org.w3c.dom.css.CSSStyleRule;
  * @author Sergey Dzmitrovich
  * 
  */
-public class CSSViewUtil {
+public class CSSStyleRuleContainer extends StyleContainer {
 
-	public static CSSStyleRule getStyleRule(ICSSNode node) {
+	private CSSStyleRule styleRule;
 
-		while (node != null) {
-
-			if (node instanceof CSSStyleRule)
-				return (CSSStyleRule) node;
-
-			node = node.getParentNode();
-		}
-
-		return null;
+	public CSSStyleRuleContainer(CSSStyleRule styleRule) {
+		this.styleRule = styleRule;
 	}
 
-	public static Map<String, String> getStyleAttributes(CSSStyleRule styleRule) {
+	public void applyStyleAttributes(Map<String, String> attributes) {
 
+		final CSSStyleDeclaration declaration = styleRule.getStyle();
+
+		// set properties
+
+		if (attributes != null) {
+
+			if ((attributes.size() == 0) && (declaration.getLength() > 0)) {
+				declaration.setCssText(Constants.EMPTY);
+			} else {
+				for (final Map.Entry<String, String> me : attributes.entrySet()) {
+					if ((me.getValue() == null)
+							|| (me.getValue().length() == 0)) {
+						declaration.removeProperty(me.getKey());
+					} else {
+						declaration.setProperty(me.getKey(), me.getValue(),
+								Constants.EMPTY);
+					}
+				}
+
+			}
+		}
+
+	}
+
+	public Map<String, String> getStyleAttributes() {
 		CSSStyleDeclaration declaration = styleRule.getStyle();
 		Map<String, String> styleMap = new HashMap<String, String>();
 		for (int i = 0; i < declaration.getLength(); i++) {
@@ -48,7 +65,10 @@ public class CSSViewUtil {
 		}
 
 		return styleMap;
+	}
 
+	public Object getStyleObject() {
+		return styleRule;
 	}
 
 }
