@@ -1,34 +1,29 @@
 Manifest-Version: 1.0
-Eclipse-LazyStart: true
+Bundle-ManifestVersion: 2
+Bundle-ActivationPolicy: lazy
 Bundle-Name: %Bundle-Name.0
 Bundle-ClassPath: webui.jar
 Bundle-Activator: org.jboss.tools.jst.web.ui.WebUiPlugin
 Bundle-Vendor: %providerName
 Bundle-SymbolicName: org.jboss.tools.jst.web.ui;singleton:=true
 Bundle-Localization: plugin
-Provide-Package: org.jboss.tools.common.model.ui.texteditors.preferences,
- org.jboss.tools.jst.jsp.jspeditor.jsppreview,
- org.jboss.tools.jst.web.ui,
+Export-Package: org.jboss.tools.jst.web.ui,
  org.jboss.tools.jst.web.ui.action,
  org.jboss.tools.jst.web.ui.action.adf,
- org.jboss.tools.jst.web.ui.action.server,
  org.jboss.tools.jst.web.ui.attribute.adapter,
  org.jboss.tools.jst.web.ui.editors,
  org.jboss.tools.jst.web.ui.editors.forms,
  org.jboss.tools.jst.web.ui.editors.webapp.form,
  org.jboss.tools.jst.web.ui.internal.preferences,
- org.jboss.tools.jst.web.ui.messages,
  org.jboss.tools.jst.web.ui.navigator,
  org.jboss.tools.jst.web.ui.navigator.decorator,
  org.jboss.tools.jst.web.ui.operation,
- org.jboss.tools.jst.web.ui.registration,
  org.jboss.tools.jst.web.ui.wizards.appregister,
  org.jboss.tools.jst.web.ui.wizards.links,
  org.jboss.tools.jst.web.ui.wizards.newfile,
  org.jboss.tools.jst.web.ui.wizards.palette,
  org.jboss.tools.jst.web.ui.wizards.process,
- org.jboss.tools.jst.web.ui.wizards.project,
- org.jboss.tools.vpe
+ org.jboss.tools.jst.web.ui.wizards.project
 Require-Bundle: org.eclipse.ui.ide,
  org.jboss.tools.common.model.ui,
  org.jboss.tools.jst.web,

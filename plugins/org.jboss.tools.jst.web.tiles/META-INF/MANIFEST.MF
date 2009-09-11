@@ -1,11 +1,12 @@
 Manifest-Version: 1.0
-Eclipse-LazyStart: true
+Bundle-ManifestVersion: 2
+Bundle-ActivationPolicy: lazy
 Bundle-Name: %Bundle-Name.0
 Bundle-ClassPath: web-tiles.jar
 Bundle-Vendor: %providerName
 Bundle-SymbolicName: org.jboss.tools.jst.web.tiles;singleton:=true
 Bundle-Localization: plugin
-Provide-Package: org.jboss.tools.jst.web.tiles,
+Export-Package: org.jboss.tools.jst.web.tiles,
  org.jboss.tools.jst.web.tiles.model,
  org.jboss.tools.jst.web.tiles.model.handlers,
  org.jboss.tools.jst.web.tiles.model.helpers

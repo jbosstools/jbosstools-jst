@@ -1,12 +1,13 @@
 Manifest-Version: 1.0
-Eclipse-LazyStart: true
+Bundle-ManifestVersion: 2
+Bundle-ActivationPolicy: lazy
 Bundle-Name: %pluginName
 Bundle-ClassPath: tilesui.jar
 Bundle-Activator: org.jboss.tools.jst.web.tiles.ui.TilesUIPlugin
 Bundle-Vendor: %providerName
 Bundle-SymbolicName: org.jboss.tools.jst.web.tiles.ui;singleton:=true
 Bundle-Localization: plugin
-Provide-Package: org.jboss.tools.jst.web.tiles.ui,
+Export-Package: org.jboss.tools.jst.web.tiles.ui,
  org.jboss.tools.jst.web.tiles.ui,
  org.jboss.tools.jst.web.tiles.ui.attribute.adapter,
  org.jboss.tools.jst.web.tiles.ui.editor,
