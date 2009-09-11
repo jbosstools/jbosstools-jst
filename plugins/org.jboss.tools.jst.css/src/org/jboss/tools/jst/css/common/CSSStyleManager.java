@@ -24,8 +24,6 @@ import org.eclipse.wst.xml.core.internal.contentmodel.CMElementDeclaration;
 import org.eclipse.wst.xml.core.internal.contentmodel.CMNamedNodeMap;
 import org.eclipse.wst.xml.core.internal.contentmodel.modelquery.ModelQuery;
 import org.eclipse.wst.xml.core.internal.modelquery.ModelQueryUtil;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -65,8 +63,8 @@ public class CSSStyleManager {
 				if (styleRule != null)
 					container = new CSSStyleRuleContainer(styleRule);
 
-			} else if ((selectedObject instanceof IDOMElement)
-					|| (selectedObject instanceof IDOMAttr)) {
+			} else if ((selectedObject instanceof Element)
+					|| (selectedObject instanceof Attr)) {
 
 				Element selectedElement = null;
 

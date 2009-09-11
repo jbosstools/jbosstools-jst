@@ -13,12 +13,15 @@ package org.jboss.tools.jst.css.view;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.IContributedContentsView;
 import org.eclipse.ui.part.IPageBookViewPage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
+import org.jboss.tools.jst.css.common.CSSSelectionListener;
 import org.jboss.tools.jst.css.properties.CSSPropertyPage;
 
 /**
@@ -30,8 +33,30 @@ public class CSSEditorView extends PropertySheet {
 	static public String CONTRIBUTOR_ID = "org.eclipse.wst.css.core.csssource.source"; //$NON-NLS-1$
 
 	@Override
+	public void init(IViewSite site) throws PartInitException {
+
+		super.init(site);
+		getSite().getPage().removeSelectionListener(this);
+		CSSSelectionListener.getInstance().addSelectionListener(this);
+	}
+
+	@Override
+	public void dispose() {
+
+		super.dispose();
+		CSSSelectionListener.getInstance().removeSelectionListener(this);
+
+	}
+
+	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection sel) {
-		// do nothing
+		super.selectionChanged(part, sel);
+
+		// TODO find better way to react upon changing of node i source editor.
+		// Description of problem: when node is been editing PropertySheet will
+		// not send selection event to page as selection is same;
+		if (getCurrentPage() instanceof CSSPropertyPage)
+			((CSSPropertyPage) getCurrentPage()).update();
 	}
 
 	@Override

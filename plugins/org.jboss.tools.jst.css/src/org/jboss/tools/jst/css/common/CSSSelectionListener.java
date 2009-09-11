@@ -59,7 +59,6 @@ public class CSSSelectionListener implements ISelectionListener {
 	private void startListening() {
 		PlatformUI.getWorkbench().getActiveWorkbenchWindow()
 				.getSelectionService().addPostSelectionListener(this);
-
 	}
 
 	private void stopListening() {

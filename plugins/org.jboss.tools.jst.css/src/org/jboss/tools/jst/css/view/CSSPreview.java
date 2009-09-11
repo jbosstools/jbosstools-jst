@@ -49,6 +49,8 @@ public class CSSPreview extends ViewPart implements ISelectionListener {
 
 	private String previewContent = CSSUIMessages.CSSPreview_DefaultBrowserText;
 
+	private String currentStyle = new String();
+
 	private Map<String, String> styleAttributes = new HashMap<String, String>();
 
 	@Override
@@ -81,7 +83,6 @@ public class CSSPreview extends ViewPart implements ISelectionListener {
 		previewComposite.setLayoutData(gridData);
 
 		browser = new Browser(previewComposite, SWT.BORDER | SWT.MOZILLA);
-		browser.setText(generateBrowserPage());
 		browser.setLayoutData(gridData);
 		browser.addMouseListener(new MouseAdapter() {
 			public void mouseDoubleClick(MouseEvent e) {
@@ -93,6 +94,8 @@ public class CSSPreview extends ViewPart implements ISelectionListener {
 			}
 		});
 
+		updateBrowser();
+
 		previewText = new Text(previewComposite, SWT.NONE | SWT.H_SCROLL);
 		previewText.setLayoutData(gridData);
 		previewText.setText(getPreviewContent());
@@ -100,14 +103,17 @@ public class CSSPreview extends ViewPart implements ISelectionListener {
 			public void focusLost(FocusEvent e) {
 				if (e.widget == previewText) {
 					String text = previewText.getText();
-					if (text == null || text.equals(Constants.EMPTY)) {
-						setPreviewContent(CSSUIMessages.CSSPreview_DefaultBrowserText);
-					} else {
-						setPreviewContent(text);
+					if (!getPreviewContent().equals(text)) {
+						if (text == null || text.equals(Constants.EMPTY)) {
+							setPreviewContent(CSSUIMessages.CSSPreview_DefaultBrowserText);
+						} else {
+							setPreviewContent(text);
+						}
+						updateBrowser();
 					}
 
 					browser.setEnabled(true);
-					browser.setText(generateBrowserPage());
+
 					previewComposite.setMaximizedControl(browser);
 				}
 			}
@@ -132,18 +138,10 @@ public class CSSPreview extends ViewPart implements ISelectionListener {
 	 * @return String html text representation
 	 */
 	public String generateBrowserPage() {
+		String html = Constants.OPEN_DIV_TAG + getCurrentStyle()
+				+ "\">" + getPreviewContent() + Constants.CLOSE_DIV_TAG; //$NON-NLS-1$
 
-		StringBuffer html = new StringBuffer(Constants.OPEN_DIV_TAG);
-
-		for (Map.Entry<String, String> styleItem : styleAttributes.entrySet()) {
-
-			html.append(styleItem.getKey() + Constants.COLON
-					+ styleItem.getValue() + Constants.SEMICOLON);
-		}
-
-		html.append("\">" + getPreviewContent() + Constants.CLOSE_DIV_TAG); //$NON-NLS-1$
-
-		return html.toString();
+		return html;
 	}
 
 	public String getPreviewContent() {
@@ -167,7 +165,13 @@ public class CSSPreview extends ViewPart implements ISelectionListener {
 				styleAttributes.clear();
 			}
 
-			updateBrowser();
+			String newStyle = getStyle(styleAttributes);
+			if (!newStyle.equals(currentStyle)) {
+
+				currentStyle = newStyle;
+				updateBrowser();
+			}
+
 		}
 
 	}
@@ -176,4 +180,20 @@ public class CSSPreview extends ViewPart implements ISelectionListener {
 		browser.setText(generateBrowserPage());
 	}
 
+	protected String getStyle(Map<String, String> styleAttributes) {
+
+		StringBuffer style = new StringBuffer();
+
+		for (Map.Entry<String, String> styleItem : styleAttributes.entrySet()) {
+
+			style.append(styleItem.getKey() + Constants.COLON
+					+ styleItem.getValue() + Constants.SEMICOLON);
+		}
+
+		return style.toString();
+	}
+
+	public String getCurrentStyle() {
+		return currentStyle;
+	}
 }

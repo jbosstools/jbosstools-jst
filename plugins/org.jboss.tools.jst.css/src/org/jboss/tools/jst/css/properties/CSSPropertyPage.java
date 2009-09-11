@@ -11,8 +11,6 @@
 
 package org.jboss.tools.jst.css.properties;
 
-import java.util.Map;
-
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.ChangeEvent;
 import org.eclipse.core.databinding.observable.IChangeListener;
@@ -27,7 +25,6 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
-import org.jboss.tools.jst.css.common.CSSSelectionListener;
 import org.jboss.tools.jst.css.common.StyleContainer;
 import org.jboss.tools.jst.css.view.CSSEditorView;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.StyleAttributes;
@@ -63,7 +60,7 @@ public class CSSPropertyPage extends TabbedPropertySheetPage implements
 	public void init(IPageSite pageSite) {
 		super.init(pageSite);
 
-		CSSSelectionListener.getInstance().addSelectionListener(this);
+		// CSSSelectionListener.getInstance().addSelectionListener(this);
 
 		// FIXED FOR JBIDE-4791
 		pageSite.setSelectionProvider(new ISelectionProvider() {
@@ -87,7 +84,7 @@ public class CSSPropertyPage extends TabbedPropertySheetPage implements
 
 	@Override
 	public void dispose() {
-		CSSSelectionListener.getInstance().removeSelectionListener(this);
+		// CSSSelectionListener.getInstance().removeSelectionListener(this);
 		super.dispose();
 	}
 
@@ -97,12 +94,6 @@ public class CSSPropertyPage extends TabbedPropertySheetPage implements
 		if ((this.part != part) && (selection instanceof IStructuredSelection)) {
 			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
 			Object newSelectedObject = structuredSelection.getFirstElement();
-			if (structuredSelection.getFirstElement() instanceof StyleContainer) {
-
-				updateStyleAttributes(((StyleContainer) newSelectedObject)
-						.getStyleAttributes());
-
-			}
 
 			if ((selectedObject == null)
 					|| (!selectedObject.equals(newSelectedObject)))
@@ -113,13 +104,16 @@ public class CSSPropertyPage extends TabbedPropertySheetPage implements
 
 	}
 
-	private void updateStyleAttributes(Map<String, String> attributes) {
+	public void update() {
 
-		((IObservable) getStyleAttributes().getAttributeMap())
-				.removeChangeListener(this);
-		getStyleAttributes().setStyleProperties(attributes);
-		((IObservable) getStyleAttributes().getAttributeMap())
-				.addChangeListener(this);
+		if (selectedObject instanceof StyleContainer) {
+			((IObservable) getStyleAttributes().getAttributeMap())
+					.removeChangeListener(this);
+			getStyleAttributes().setStyleProperties(
+					((StyleContainer) selectedObject).getStyleAttributes());
+			((IObservable) getStyleAttributes().getAttributeMap())
+					.addChangeListener(this);
+		}
 
 	}
 
