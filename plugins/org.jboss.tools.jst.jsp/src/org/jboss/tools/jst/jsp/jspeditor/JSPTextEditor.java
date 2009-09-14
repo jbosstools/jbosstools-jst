@@ -128,7 +128,7 @@ import org.jboss.tools.jst.jsp.editor.IVisualController;
 import org.jboss.tools.jst.jsp.outline.JSPContentOutlineConfiguration;
 import org.jboss.tools.jst.jsp.outline.JSPPropertySheetConfiguration;
 import org.jboss.tools.jst.jsp.outline.ValueHelper;
-import org.jboss.tools.jst.jsp.preferences.VpePreference;
+import org.jboss.tools.jst.jsp.preferences.IVpePreferencesPage;
 import org.jboss.tools.jst.jsp.text.xpl.IStructuredTextOccurrenceStructureProvider;
 import org.jboss.tools.jst.jsp.text.xpl.StructuredTextOccurrenceStructureProviderRegistry;
 import org.jboss.tools.jst.jsp.ui.action.ExtendedFormatAction;
@@ -743,9 +743,8 @@ public class JSPTextEditor extends StructuredTextEditor implements
 							.getDropCommand(flavor,
 									JSPTagProposalFactory.getInstance());
 
-					boolean promptAttributes = "yes" //$NON-NLS-1$
-							.equals(VpePreference.ALWAYS_REQUEST_FOR_ATTRIBUTE
-									.getValue());
+					boolean promptAttributes = JspEditorPlugin.getDefault().getPreferenceStore().getBoolean(
+							IVpePreferencesPage.ASK_TAG_ATTRIBUTES_ON_TAG_INSERT);
 					dropCommand
 							.getDefaultModel()
 							.setPromptForTagAttributesRequired(promptAttributes);

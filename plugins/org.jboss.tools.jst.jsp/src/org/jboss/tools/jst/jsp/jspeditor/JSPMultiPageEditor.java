@@ -7,7 +7,7 @@
  *
  * Contributors:
  *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
- ******************************************************************************/ 
+ ******************************************************************************/
 package org.jboss.tools.jst.jsp.jspeditor;
 
 import java.util.Properties;
@@ -79,7 +79,7 @@ import org.jboss.tools.common.text.ext.IMultiPageEditor;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.editor.IVisualEditor;
 import org.jboss.tools.jst.jsp.editor.IVisualEditorFactory;
-import org.jboss.tools.jst.jsp.preferences.VpePreference;
+import org.jboss.tools.jst.jsp.preferences.IVpePreferencesPage;
 import org.jboss.tools.jst.web.tld.VpeTaglibManager;
 import org.jboss.tools.jst.web.tld.VpeTaglibManagerProvider;
 
@@ -88,19 +88,12 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		XModelTreeListener, ITextEditor, IGotoMarker, VpeTaglibManagerProvider,
 		IReusableEditor, ITextEditorExtension, ITextEditorExtension2,
 		ITextEditorExtension3, INavigationLocationProvider, IMultiPageEditor {
-	
+
 	public static final String EDITOR_ID = "org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor"; //$NON-NLS-1$
-	
-	//option loads preview tab
-	private static final String PREVIEW_TAB="Preview"; //$NON-NLS-1$
-	//visual tab
-	private static final String VISUAL_SOURCE_TAB="Visual/Source"; //$NON-NLS-1$
-	
-	private static final String VPE_VISUAL_EDITOR_IMPL_ID="org.jboss.tools.vpe.org.jboss.tools.vpe.editor.VpeEditorPartFactory"; //$NON-NLS-1$
-	//source tab
-	private static final String SOURCE_TAB="Source"; //$NON-NLS-1$
-	
-	private static final String VISUAL_EDITOR_IMPL_EXTENSION_POINT_NAME="visulaEditorImplementations"; //$NON-NLS-1$
+
+	private static final String VPE_VISUAL_EDITOR_IMPL_ID = "org.jboss.tools.vpe.org.jboss.tools.vpe.editor.VpeEditorPartFactory"; //$NON-NLS-1$
+
+	private static final String VISUAL_EDITOR_IMPL_EXTENSION_POINT_NAME = "visulaEditorImplementations"; //$NON-NLS-1$
 
 	private IVisualEditor visualEditor;
 
@@ -109,19 +102,19 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	private JSPTextEditor sourceEditor;
 
 	private int sourceIndex;
-	
+
 	/** composite control for default web-browser */
-	//private IVisualEditor previewWebBrowser;
-	
+	// private IVisualEditor previewWebBrowser;
+
 	/** index of tab contain default web-browser */
 	private int previewIndex;
 
-//	private boolean osWindows = true;
+	// private boolean osWindows = true;
 
 	protected XModelTreeListenerSWTSync syncListener = new XModelTreeListenerSWTSync(
 			this);
 
-//	private int oldPage = -1;
+	// private int oldPage = -1;
 
 	private ConfigurableContentOutlinePage outlinePage = null;
 
@@ -135,7 +128,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	static IVisualEditorFactory visualEditorFactory;
 
 	static {
-		//Fix For JBIDE-2674
+		// Fix For JBIDE-2674
 		try {
 			IExtension visualEditorExtension = Platform.getExtensionRegistry()
 					.getExtension(JspEditorPlugin.PLUGIN_ID,
@@ -165,44 +158,20 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	}
 
 	private void loadSelectedTab() {
-		IFile file = getFile();
-		try {
-			String q = (file == null) ? null : file.getPersistentProperty(persistentTabQualifiedName);
-			if (q == null) {
-				if (VISUAL_SOURCE_TAB.equalsIgnoreCase(VpePreference.EDITOR_VIEW_OPTION
-						.getValue()))
-					selectedPageIndex = 0;
-				else if (SOURCE_TAB
-						.equalsIgnoreCase(VpePreference.EDITOR_VIEW_OPTION
-								.getValue()))
-					selectedPageIndex = 1;
-				else if (PREVIEW_TAB
-						.equalsIgnoreCase(VpePreference.EDITOR_VIEW_OPTION
-								.getValue()))
-					selectedPageIndex = 2;
-				else
-					selectedPageIndex = 0;
-			} else {
-				int qi = Integer.parseInt(q);
-				
-				if (qi >= 0 && qi < getTabFolder().getItemCount())
-					selectedPageIndex = qi;
-			}
-
-		} catch (CoreException e) {
-			JspEditorPlugin.getPluginLog().logError(e);
+		String defaultVpeTab = JspEditorPlugin.getDefault()
+				.getPreferenceStore().getString(
+						IVpePreferencesPage.DEFAULT_VPE_TAB);
+		if (IVpePreferencesPage.DEFAULT_VPE_TAB_VISUAL_SOURCE_VALUE
+				.equalsIgnoreCase(defaultVpeTab)) {
 			selectedPageIndex = 0;
-		}
-	}
-
-	private void saveSelectedTab() {
-		IFile file = getFile();
-		if(file == null || !file.exists()) return;
-		String q = "" + selectedPageIndex; //$NON-NLS-1$
-		try {
-			file.setPersistentProperty(persistentTabQualifiedName, q);
-		} catch (CoreException e) {
-			JspEditorPlugin.getPluginLog().logWarning(e);
+		} else if (IVpePreferencesPage.DEFAULT_VPE_TAB_SOURCE_VALUE
+				.equalsIgnoreCase(defaultVpeTab)) {
+			selectedPageIndex = 1;
+		} else if (IVpePreferencesPage.DEFAULT_VPE_TAB_PREVIEW_VALUE
+				.equalsIgnoreCase(defaultVpeTab)) {
+			selectedPageIndex = 2;
+		} else {
+			selectedPageIndex = 0;
 		}
 	}
 
@@ -232,28 +201,27 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		}
 	}
 
-	protected void pageChange(int newPageIndex) {
+	public void pageChange(int newPageIndex) {
 		selectedPageIndex = newPageIndex;
-		if(visualEditor!=null) {
+		if (visualEditor != null) {
 			if (newPageIndex == visualSourceIndex) {
-					if (visualEditor.getVisualEditor() == null) {
-						visualEditor.createVisualEditor();
-					}
-					visualEditor.setVisualMode(IVisualEditor.VISUALSOURCE_MODE);
-				
-				}else if (newPageIndex == sourceIndex)
-					visualEditor.setVisualMode(IVisualEditor.SOURCE_MODE);
-			    else if (newPageIndex == previewIndex) {
-					if (visualEditor.getPreviewWebBrowser() == null) {
-						visualEditor.createPreviewBrowser();
-					}
-					visualEditor.setVisualMode(IVisualEditor.PREVIEW_MODE); 				
+				if (visualEditor.getVisualEditor() == null) {
+					visualEditor.createVisualEditor();
 				}
-		}	
+				visualEditor.setVisualMode(IVisualEditor.VISUALSOURCE_MODE);
+			} else if (newPageIndex == sourceIndex)
+				visualEditor.setVisualMode(IVisualEditor.SOURCE_MODE);
+			else if (newPageIndex == previewIndex) {
+				if (visualEditor.getPreviewWebBrowser() == null) {
+					visualEditor.createPreviewBrowser();
+				}
+				visualEditor.setVisualMode(IVisualEditor.PREVIEW_MODE);
+			}
+		}
 		superPageChange(newPageIndex);
- 
+
 	}
-	
+
 	public void setInput(IEditorInput input) {
 		super.setInput(XModelObjectEditorInput.checkInput(input));
 		if (getEditorInput() instanceof IModelObjectEditorInput) {
@@ -264,10 +232,9 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 				&& sourceEditor.getEditorInput() != getEditorInput()
 				&& sourceEditor.getEditorInput() != null) {
 			if (sourceEditor instanceof AbstractTextEditor) {
-					((AbstractTextEditor) sourceEditor)
-							.setInput(getEditorInput());
+				((AbstractTextEditor) sourceEditor).setInput(getEditorInput());
 			}
-			if(visualEditor!=null) {
+			if (visualEditor != null) {
 				visualEditor.setInput(getEditorInput());
 			}
 			updateTitle();
@@ -277,7 +244,8 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 
 	private void updateFile() {
 		IFile file = getFile();
-		if (file == null) return;
+		if (file == null)
+			return;
 		try {
 			file.refreshLocal(0, null);
 		} catch (CoreException e) {
@@ -333,7 +301,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 			}
 
 			public String getId() {
-				return getSite().getId(); 
+				return getSite().getId();
 			}
 
 			/**
@@ -373,17 +341,17 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 				}
 			}
 
-
 			public void dispose() {
 				ISelectionProvider provider = getSelectionProvider();
 				if (provider != null) {
 					provider
 							.removeSelectionChangedListener(getSelectionChangedListener());
 				}
-				if (provider instanceof IPostSelectionProvider && postSelectionChangedListener != null) {
-						((IPostSelectionProvider) provider)
-								.removePostSelectionChangedListener(postSelectionChangedListener);
-						
+				if (provider instanceof IPostSelectionProvider
+						&& postSelectionChangedListener != null) {
+					((IPostSelectionProvider) provider)
+							.removePostSelectionChangedListener(postSelectionChangedListener);
+
 				}
 				postSelectionChangedListener = null;
 				super.dispose();
@@ -402,51 +370,51 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		createPagesForVPE();
 		loadSelectedTab();
 
-//		if (selectedPageIndex == sourceIndex) {
-//			visualEditor.setVisualMode(IVisualEditor.SOURCE_MODE);
-//			// switchOutlineToJSPEditor();
-//		}
-//		if (selectedPageIndex == 2) {
-//			setActivePage(0);
-//			pageChange(0);
-//			if (visualEditor != null)
-//				visualEditor.maximizeSource();
-//			selectedPageIndex=0;
-//		} else if (selectedPageIndex == 1) {
-//			setActivePage(0);
-//			pageChange(0);
-//			if (visualEditor != null)
-//				visualEditor.maximizeVisual();
-//			selectedPageIndex=0;
-//		} else {
-//			selectedPageIndex=0;
-//			setActivePage(selectedPageIndex);
-//			pageChange(selectedPageIndex);
-//		}
+		// if (selectedPageIndex == sourceIndex) {
+		// visualEditor.setVisualMode(IVisualEditor.SOURCE_MODE);
+		// // switchOutlineToJSPEditor();
+		// }
+		// if (selectedPageIndex == 2) {
+		// setActivePage(0);
+		// pageChange(0);
+		// if (visualEditor != null)
+		// visualEditor.maximizeSource();
+		// selectedPageIndex=0;
+		// } else if (selectedPageIndex == 1) {
+		// setActivePage(0);
+		// pageChange(0);
+		// if (visualEditor != null)
+		// visualEditor.maximizeVisual();
+		// selectedPageIndex=0;
+		// } else {
+		// selectedPageIndex=0;
+		// setActivePage(selectedPageIndex);
+		// pageChange(selectedPageIndex);
+		// }
 		switch (selectedPageIndex) {
-		
+
 		case 0: {
-		//source/visual mode
+			// source/visual mode
 			setActivePage(selectedPageIndex);
 			pageChange(selectedPageIndex);
 			break;
-			}
+		}
 		case 1: {
-		//source mode
+			// source mode
 			setActivePage(selectedPageIndex);
 			pageChange(selectedPageIndex);
 			break;
-		    }
+		}
 		case 2: {
-			//preview mode
-				setActivePage(selectedPageIndex);
-				pageChange(selectedPageIndex);
-				break;
+			// preview mode
+			setActivePage(selectedPageIndex);
+			pageChange(selectedPageIndex);
+			break;
 		}
 		default: {
-		//by default we sets source/visual mode	
+			// by default we sets source/visual mode
 			setActivePage(0);
-			pageChange(0);		
+			pageChange(0);
 			break;
 		}
 		}
@@ -458,31 +426,32 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 
 	private void createPagesForVPE() {
 		sourceEditor = new JSPTextEditor(this);
-		if(visualEditorFactory!=null) {
+		if (visualEditorFactory != null) {
 			visualEditor = visualEditorFactory.createVisualEditor(this,
 					sourceEditor, false);
 		}
 		try {
-			if(visualEditor!=null) {
+			if (visualEditor != null) {
 				visualSourceIndex = addPage(visualEditor, getEditorInput());
-				setPageText(visualSourceIndex, JSPEditorMessages.JSPMultiPageEditor_TabLabel_VisualSource); 
+				setPageText(
+						visualSourceIndex,
+						JSPEditorMessages.JSPMultiPageEditor_TabLabel_VisualSource);
 				setPartName(visualEditor.getTitle());
 			}
 		} catch (PartInitException e) {
 			JspEditorPlugin.getPluginLog().logError(e);
 		}
-		/*try {
-			visualIndex = addPage(visualEditor, getEditorInput());
-			setPageText(visualIndex, JSPEditorMessages
-					.getString(VISUAL_TAB_LABEL));
-			setPartName(visualEditor.getTitle());
-		} catch (PartInitException e) {
-			JspEditorPlugin.getPluginLog().logError(e);
-		}*/
+		/*
+		 * try { visualIndex = addPage(visualEditor, getEditorInput());
+		 * setPageText(visualIndex, JSPEditorMessages
+		 * .getString(VISUAL_TAB_LABEL)); setPartName(visualEditor.getTitle());
+		 * } catch (PartInitException e) {
+		 * JspEditorPlugin.getPluginLog().logError(e); }
+		 */
 
 		try {
-			String sourceTabLabel = JSPEditorMessages.JSPMultiPageEditor_TabLabel_Source; 
-			if(visualEditor!=null) {
+			String sourceTabLabel = JSPEditorMessages.JSPMultiPageEditor_TabLabel_Source;
+			if (visualEditor != null) {
 				sourceIndex = addPage(visualEditor, getEditorInput());
 				setPageText(sourceIndex, sourceTabLabel);
 				setPartName(visualEditor.getTitle());
@@ -497,9 +466,10 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 
 		// Add tab contain default web-browser
 		try {
-			if(visualEditor!=null) {
+			if (visualEditor != null) {
 				previewIndex = addPage(visualEditor, getEditorInput());
-				setPageText(previewIndex, JSPEditorMessages.JSPMultiPageEditor_TabLabel_Preview); 
+				setPageText(previewIndex,
+						JSPEditorMessages.JSPMultiPageEditor_TabLabel_Preview);
 				setPartName(visualEditor.getTitle());
 			}
 		} catch (PartInitException e) {
@@ -530,7 +500,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		sourceEditor.addPropertyListener(pcl);
 		sourceEditor.doSaveAs();
 		sourceEditor.removePropertyListener(pcl);
-		try {		
+		try {
 			if (old.isModified())
 				new DiscardFileHandler().executeHandler(old, new Properties());
 		} catch (XModelException e) {
@@ -539,8 +509,8 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	}
 
 	public void gotoMarker(final IMarker marker) {
-		//setActivePage(IVisualEditor.VISUALSOURCE_MODE);
-		//pageChange(IVisualEditor.VISUALSOURCE_MODE);
+		// setActivePage(IVisualEditor.VISUALSOURCE_MODE);
+		// pageChange(IVisualEditor.VISUALSOURCE_MODE);
 		setActivePage(IVisualEditor.SOURCE_MODE);
 		pageChange(IVisualEditor.SOURCE_MODE);
 		IGotoMarker adapter = (IGotoMarker) sourceEditor
@@ -575,7 +545,6 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	}
 
 	public void dispose() {
-		saveSelectedTab();
 		IEditorActionBarContributor contributor = getEditorSite()
 				.getActionBarContributor();
 		if (contributor != null
@@ -583,7 +552,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 			((MultiPageEditorActionBarContributor) contributor)
 					.setActivePage(null);
 		}
-		if(visualEditor!=null) {
+		if (visualEditor != null) {
 			visualEditor.dispose();
 		}
 		site.dispose();
@@ -594,7 +563,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		}
 		if (syncListener != null)
 			syncListener.dispose();
-		syncListener=null;
+		syncListener = null;
 		if (o != null && o.isModified() && o.isActive()) {
 			try {
 				((FolderImpl) o.getParent()).discardChildFile(o);
@@ -607,14 +576,14 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 
 	public Object getAdapter(Class adapter) {
 		if (IContentOutlinePage.class.equals(adapter)) {
-			
-		if (visualEditor != null) {
+
+			if (visualEditor != null) {
 				if (outlinePage == null)
 					outlinePage = (ConfigurableContentOutlinePage) visualEditor
 							.getAdapter(adapter);
 				return outlinePage;
 			}
-			
+
 		} else if (IPropertySheetPage.class.equals(adapter)) {
 			if (sourceEditor != null)
 				return sourceEditor.getAdapter(adapter);
@@ -703,10 +672,10 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	}
 
 	public VpeTaglibManager getTaglibManager() {
-		if(sourceEditor!=null) {
-			if(sourceEditor.getPageContext() instanceof VpeTaglibManager)
-		 
-				return	(VpeTaglibManager)sourceEditor.getPageContext();
+		if (sourceEditor != null) {
+			if (sourceEditor.getPageContext() instanceof VpeTaglibManager)
+
+				return (VpeTaglibManager) sourceEditor.getPageContext();
 		}
 		return null;
 	}
@@ -793,6 +762,19 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		}
 		return null;
 	}
+	
+	public void updatePartAccordingToPreferences() {
+		String tabIndex = JspEditorPlugin.getDefault().getPreferenceStore()
+				.getString(IVpePreferencesPage.DEFAULT_VPE_TAB);
+		try {
+			int ind = Integer.parseInt(tabIndex);
+			getTabFolder().setSelection(ind);
+			pageChange(ind);
+		} catch (NumberFormatException e) {
+			JspEditorPlugin.getPluginLog().logError(e);
+		}
+	}
+	
 }
 
 class ResourceChangeListener implements IResourceChangeListener {
@@ -850,8 +832,8 @@ class ResourceChangeListener implements IResourceChangeListener {
 						if (e.getJspEditor() != null
 								&& e.getJspEditor().getEditorInput() != e
 										.getEditorInput()) {
-								((AbstractTextEditor) e.getJspEditor())
-										.setInput(e2);
+							((AbstractTextEditor) e.getJspEditor())
+									.setInput(e2);
 						}
 						((XModelObjectEditorInput) ei).synchronize();
 					}
@@ -911,4 +893,5 @@ class ResourceChangeListener implements IResourceChangeListener {
 		}
 		return null;
 	}
+	
 }
