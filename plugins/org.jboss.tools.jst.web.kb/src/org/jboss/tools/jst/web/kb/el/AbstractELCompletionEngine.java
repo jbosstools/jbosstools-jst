@@ -16,8 +16,11 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.Signature;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.graphics.Image;
@@ -40,6 +43,8 @@ import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.ElVarSearcher;
 import org.jboss.tools.common.el.core.resolver.TypeInfoCollector;
 import org.jboss.tools.common.el.core.resolver.Var;
+import org.jboss.tools.common.el.core.resolver.TypeInfoCollector.MemberInfo;
+import org.jboss.tools.common.el.core.resolver.TypeInfoCollector.MemberPresentation;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.IPageContext;
 
@@ -248,18 +253,29 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 			ELOperandResolveStatus oldElStatus = resolveELOperand(file, operand, returnEqualedVariablesOnly, false);
 			status.getProposals().addAll(oldElStatus.getProposals());
 		}
-
+		
+		// JBIDE-512, JBIDE-2541 related changes ===>>>
+		// TODO: Add type, sourceType and JavaDoc found if possible
+		// Reason of incomplete: there are no resolved members here, 
+		// The var value is to be resolved by the ELResolver to let us know
+		// what is the var's type
 		if(!returnEqualedVariablesOnly && vars!=null) {
-			List<String> varNameProposals = getVarNameProposals(vars, operand.toString());
-			if (varNameProposals != null) {
-				for (String varNameProposal : varNameProposals) {
+			
+			for (Var v : vars) {
+				String prefix = operand.toString();
+				if(v.getName().startsWith(prefix)) {
+					String varNameProposal = v.getName().substring(prefix.length());
 					TextProposal proposal = new TextProposal();
 					proposal.setReplacementString(varNameProposal);
+					proposal.setLabel(v.getName());
 					proposal.setImage(getELProposalImage());
 					status.getProposals().add(proposal);
 				}
 			}
 		}
+		// <<<=== JBIDE-512, JBIDE-2541 related changes
+
+
 		return status;
 	}
 
@@ -330,14 +346,39 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 			// no vars are resolved 
 			// the tokens are the part of var name ended with a separator (.)
 			resolvedVariables = resolveVariables(file, expr, true, returnEqualedVariablesOnly);			
+
 			Set<TextProposal> proposals = new TreeSet<TextProposal>(TextProposal.KB_PROPOSAL_ORDER);
 			for (V var : resolvedVariables) {
 				String varName = var.getName();
 				if(varName.startsWith(operand.getText())) {
+					// JBIDE-512, JBIDE-2541 related changes ===>>>
+					MemberInfo member = getMemberInfoByVariable(var, true);
+					
+					String sourceTypeName = member == null ? null : member.getDeclaringTypeQualifiedName();
+					if (sourceTypeName != null && sourceTypeName.indexOf('.') != -1) 
+						sourceTypeName = Signature.getSimpleName(sourceTypeName);
+					String typeName = member == null ? null : member.getType().getName();
+					if (typeName != null && typeName.indexOf('.') != -1) 
+						typeName = Signature.getSimpleName(typeName);
+					
+					IJavaElement element = member == null ? null : member.getJavaElement();
+					String attachedJavaDoc = null;
+					
+					try {
+							attachedJavaDoc = element == null ? null : element.getAttachedJavadoc(null);
+					} catch (JavaModelException e) {
+						// Ignore
+					}
+
 					TextProposal proposal = new TextProposal();
 					proposal.setReplacementString(varName.substring(operand.getLength()));
 					setImage(proposal, var);
+					proposal.setType(typeName);
+					proposal.setSourceType(sourceTypeName);
+					proposal.setContextInfo(attachedJavaDoc);
+					
 					proposals.add(proposal);
+					// <<<=== JBIDE-512, JBIDE-2541 related changes
 				}
 			}
 			status.setProposals(proposals);
@@ -353,25 +394,53 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 			// For example @Factory and @DataModel. We should use @DataModel instead of @Factory
 			// method which returns null.
 			// See https://jira.jboss.org/jira/browse/JBIDE-3694
+			
+			// JBIDE-512, JBIDE-2541 related changes ===>>>
 			TypeInfoCollector.MemberInfo bijectedAttribute = null;
 			for (V var : resolvedVariables) {
 				if(isSingularAttribute(var)) {
 					bijectedAttribute = getMemberInfoByVariable(var, true);
 				}
+				MemberInfo member = getMemberInfoByVariable(var, true);
+				String sourceTypeName = member == null ? null : member.getDeclaringTypeQualifiedName();
+				if (sourceTypeName != null && sourceTypeName.indexOf('.') != -1) 
+					sourceTypeName = Signature.getSimpleName(sourceTypeName);
+				String typeName = member == null ? null : member.getType().getName();
+				if (typeName != null && typeName.indexOf('.') != -1) 
+					typeName = Signature.getSimpleName(typeName);
+				IJavaElement element = member == null ? null : member.getJavaElement();
+				String attachedJavaDoc = null;
+				
+				try {
+					attachedJavaDoc = element == null ? null : element.getAttachedJavadoc(null);
+				} catch (JavaModelException e) {
+					// Ignore
+				}
+
 				String varName = var.getName();
 				if(operand.getLength()<=varName.length()) {
 					TextProposal proposal = new TextProposal();
 					proposal.setReplacementString(varName.substring(operand.getLength()));
+					proposal.setLabel(varName);
 					setImage(proposal, var);
+					proposal.setType(typeName);
+					proposal.setSourceType(sourceTypeName);
+					proposal.setContextInfo(attachedJavaDoc);
 					proposals.add(proposal);
 				} else if(returnEqualedVariablesOnly) {
 					TextProposal proposal = new TextProposal();
 					proposal.setReplacementString(varName);
+					proposal.setLabel(varName);
 					setImage(proposal, var);
+					proposal.setType(typeName);
+					proposal.setSourceType(sourceTypeName);
+					proposal.setContextInfo(attachedJavaDoc);
 					proposals.add(proposal);
 				}
 				status.setMemberOfResolvedOperand(bijectedAttribute!=null?bijectedAttribute:getMemberInfoByVariable(var, true));
 			}
+			// <<<=== JBIDE-512, JBIDE-2541 related changes
+
 			status.setLastResolvedToken(expr);
 			status.setProposals(proposals);
 			return status;
@@ -505,6 +574,9 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 					status.setMapOrCollectionOrBundleAmoungTheTokens();
 				}
 				
+				
+				// JBIDE-512, JBIDE-2541 related changes ===>>>
+				/*
 				Set<String> methodPresentations = 
 						infos.getMethodPresentationStrings();
 				if (methodPresentations != null) {
@@ -516,6 +588,43 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 						kbProposals.add(proposal);
 					}
 				}
+				*/
+
+				Set<MemberPresentation> methodPresentations = 
+					infos.getMethodPresentations();
+				
+				if (methodPresentations != null) {
+					for (MemberPresentation presentation : methodPresentations) {
+						String presentationString = presentation.getPresentation();
+						MemberInfo member = presentation.getMember();
+						String sourceTypeName = member == null ? null : member.getDeclaringTypeQualifiedName();
+						if (sourceTypeName != null && sourceTypeName.indexOf('.') != -1) 
+							sourceTypeName = Signature.getSimpleName(sourceTypeName);
+						String typeName = member == null ? null : member.getType().getName();
+						if (typeName != null && typeName.indexOf('.') != -1) 
+							typeName = Signature.getSimpleName(typeName);
+						IJavaElement element = member == null ? null : member.getJavaElement();
+						String attachedJavaDoc = null;
+						
+						try {
+							attachedJavaDoc = element == null ? null : element.getAttachedJavadoc(null);
+						} catch (JavaModelException e) {
+							// Ignore
+						}
+
+						TextProposal proposal = new TextProposal();
+						proposal.setReplacementString(presentationString);
+						proposal.setLabel(presentationString);
+						proposal.setImage(getELProposalImage());
+						proposal.setType(typeName);
+						proposal.setSourceType(sourceTypeName);
+						proposal.setContextInfo(attachedJavaDoc);
+						
+						kbProposals.add(proposal);
+					}
+				}
+
+				/*
 				Set<String> propertyPresentations = 
 					infos.getPropertyPresentationStrings(status.getUnpairedGettersOrSetters());
 				if (propertyPresentations != null) {
@@ -527,6 +636,43 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 						kbProposals.add(proposal);
 					}
 				}
+				*/
+
+				Set<MemberPresentation> propertyPresentations = 
+					infos.getPropertyPresentations(status.getUnpairedGettersOrSetters());
+				
+				if (propertyPresentations != null) {
+					for (MemberPresentation presentation : propertyPresentations) {
+						String presentationString = presentation.getPresentation();
+						MemberInfo member = presentation.getMember();
+						String sourceTypeName = member == null ? null : member.getDeclaringTypeQualifiedName();
+						if (sourceTypeName != null && sourceTypeName.indexOf('.') != -1) 
+							sourceTypeName = Signature.getSimpleName(sourceTypeName);
+						String typeName = member == null ? null : member.getType().getName();
+						if (typeName != null && typeName.indexOf('.') != -1) 
+							typeName = Signature.getSimpleName(typeName);
+						IJavaElement element = member == null ? null : member.getJavaElement();
+						String attachedJavaDoc = null;
+						
+						try {
+							attachedJavaDoc = element == null ? null : element.getAttachedJavadoc(null);
+						} catch (JavaModelException e) {
+							// Ignore
+						}
+
+						TextProposal proposal = new TextProposal();
+						proposal.setReplacementString(presentationString);
+						proposal.setLabel(presentationString);
+						proposal.setImage(getELProposalImage());
+						proposal.setType(typeName);
+						proposal.setSourceType(sourceTypeName);
+						proposal.setContextInfo(attachedJavaDoc);
+						
+						kbProposals.add(proposal);
+					}
+				}
+				// <<<=== JBIDE-512, JBIDE-2541 related changes
+
 			}
 		} else
 			if(expr.getType() != ELObjectType.EL_ARGUMENT_INVOCATION)
@@ -576,12 +722,35 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 						break;
 					}
 				} else if (proposal.getPresentation().startsWith(filter)) {
+					// JBIDE-512, JBIDE-2541 related changes ===>>>
+
 					// This is used for CA.
+					MemberInfo member = proposal.getMember();
+					String sourceTypeName = member == null ? null : member.getDeclaringTypeQualifiedName();
+					if (sourceTypeName != null && sourceTypeName.indexOf('.') != -1) 
+						sourceTypeName = Signature.getSimpleName(sourceTypeName);
+					String typeName = member == null ? null : member.getType().getName();
+					if (typeName != null && typeName.indexOf('.') != -1) 
+						typeName = Signature.getSimpleName(typeName);
+					IJavaElement element = member == null ? null : member.getJavaElement();
+					String attachedJavaDoc = null;
+					
+					try {
+						attachedJavaDoc = element == null ? null : element.getAttachedJavadoc(null);
+					} catch (JavaModelException e) {
+						// Ignore
+					}
+
 					TextProposal kbProposal = new TextProposal();
 					kbProposal.setReplacementString(proposal.getPresentation().substring(filter.length()));
+					kbProposal.setLabel(proposal.getPresentation());
 					kbProposal.setImage(getELProposalImage());
+					kbProposal.setType(typeName);
+					kbProposal.setSourceType(sourceTypeName);
+					kbProposal.setContextInfo(attachedJavaDoc);
 					
 					kbProposals.add(kbProposal);
+					// <<<=== JBIDE-512, JBIDE-2541 related changes
 				}
 			}
 		} else if(expr.getType() == ELObjectType.EL_ARGUMENT_INVOCATION) {
@@ -645,6 +814,24 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 					}
 				} else if (proposal.getPresentation().startsWith(filter)) {
 					// This is used for CA.
+					// JBIDE-512, JBIDE-2541 related changes ===>>>
+
+					MemberInfo member = proposal.getMember();
+					String sourceTypeName = member == null ? null : member.getDeclaringTypeQualifiedName();
+					if (sourceTypeName != null && sourceTypeName.indexOf('.') != -1) 
+						sourceTypeName = Signature.getSimpleName(sourceTypeName);
+					String typeName = member == null ? null : member.getType().getName();
+					if (typeName != null && typeName.indexOf('.') != -1) 
+						typeName = Signature.getSimpleName(typeName);
+					IJavaElement element = member == null ? null : member.getJavaElement();
+					String attachedJavaDoc = null;
+					
+					try {
+						attachedJavaDoc = element == null ? null : element.getAttachedJavadoc(null);
+					} catch (JavaModelException e) {
+						// Ignore
+					}
+
 					TextProposal kbProposal = new TextProposal();
 					
 					String replacementString = proposal.getPresentation().substring(filter.length());
@@ -654,8 +841,12 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 					
 					kbProposal.setReplacementString(replacementString);
 					kbProposal.setImage(getELProposalImage());
-					
+					kbProposal.setType(typeName);
+					kbProposal.setSourceType(sourceTypeName);
+					kbProposal.setContextInfo(attachedJavaDoc);
+				
 					kbProposals.add(kbProposal);
+					// <<<=== JBIDE-512, JBIDE-2541 related changes
 				}
 			}
 		}
