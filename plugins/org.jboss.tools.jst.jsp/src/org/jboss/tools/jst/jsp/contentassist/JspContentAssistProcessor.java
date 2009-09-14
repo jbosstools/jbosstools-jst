@@ -603,7 +603,14 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 				int cursorPosition = replacementString.length();
 				Image image = textProposal.getImage();
 				
-				String displayString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString(); 
+				// JBIDE-512, JBIDE-2541 related changes ===>>>
+//				String displayString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString();
+				String displayString = textProposal.getLabel();
+				if (displayString == null)
+					displayString = textProposal.getReplacementString() == null ? replacementString : textProposal.getReplacementString();
+ 
+				// <<<=== JBIDE-512, JBIDE-2541 related changes
+
 				IContextInformation contextInformation = null;
 				String additionalProposalInfo = (textProposal.getContextInfo() == null ? "" : textProposal.getContextInfo()); //$NON-NLS-1$
 				int relevance = textProposal.getRelevance();

@@ -205,7 +205,13 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 			int cursorPosition = replacementString.length();
 			Image image = textProposal.getImage();
 
-			String displayString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString(); 
+			// JBIDE-512, JBIDE-2541 related changes ===>>>
+//			String displayString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString();
+			String displayString = textProposal.getLabel();
+			if (displayString == null)
+				displayString = textProposal.getReplacementString() == null ? replacementString : textProposal.getReplacementString();
+
+			// <<<=== JBIDE-512, JBIDE-2541 related changes
 			IContextInformation contextInformation = null;
 			String additionalProposalInfo = textProposal.getContextInfo();
 			int relevance = textProposal.getRelevance();
