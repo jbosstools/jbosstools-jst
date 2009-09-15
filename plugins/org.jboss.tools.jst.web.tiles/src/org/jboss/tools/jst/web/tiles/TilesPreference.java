@@ -15,7 +15,7 @@ import org.jboss.tools.jst.web.WebPreference;
 
 public class TilesPreference extends WebPreference {
 
-	public static final String TILES_DIAGRAM_PATH   = "%Options%/Struts Studio/Editors/Tiles Diagram"; //$NON-NLS-1$
+	public static final String TILES_DIAGRAM_PATH   = Preference.EDITOR_PATH + "/Tiles Diagram"; //$NON-NLS-1$
 	public static final Preference VERTICAL_SPACING = new TilesPreference(TILES_DIAGRAM_PATH, "verticalSpacing"); //$NON-NLS-1$
 	public static final Preference HORIZONTAL_SPACING = new TilesPreference(TILES_DIAGRAM_PATH, "horizontalSpacing"); //$NON-NLS-1$
 	public static final Preference TILES_ALIGNMENT = new TilesPreference(TILES_DIAGRAM_PATH, "alignment"); //$NON-NLS-1$
