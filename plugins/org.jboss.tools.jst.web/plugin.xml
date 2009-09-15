@@ -3,6 +3,8 @@
 <plugin>
 
    <extension point="org.jboss.tools.common.model.meta">
+      <meta path="meta/studio_eclipse_option.meta">
+      </meta>
       <meta path="meta/strutstld.meta">
       </meta>
       <meta path="meta/strutstld12.meta">
@@ -272,4 +274,10 @@
 		
     </extension>
 
+ <extension
+       point="org.jboss.tools.common.model.preferences">
+    <contribution
+          resource="meta/options_general.xml" priority="1">
+    </contribution>
+ </extension>
 </plugin>

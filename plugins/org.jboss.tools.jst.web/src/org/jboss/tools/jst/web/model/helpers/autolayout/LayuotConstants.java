@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.model.helpers.autolayout;
 
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.options.Preference;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.jst.web.WebModelPlugin;
 
@@ -30,7 +31,7 @@ public class LayuotConstants {
 	
 	public void update() {
 		XModel model = PreferenceModelUtilities.getPreferenceModel();
-		XModelObject o = model.getByPath("%Options%/Struts Studio/Editors/Web Flow Diagram"); //$NON-NLS-1$
+		XModelObject o = model.getByPath(Preference.EDITOR_PATH + "/Web Flow Diagram"); //$NON-NLS-1$
 		String g = o.getAttributeValue("Grid Step"); //$NON-NLS-1$
 		int step = Integer.parseInt(g);
 		indentX = (step < 24) ? 24 : step;
