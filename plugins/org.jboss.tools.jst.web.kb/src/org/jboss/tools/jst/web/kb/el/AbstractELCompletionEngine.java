@@ -255,20 +255,37 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 		}
 		
 		// JBIDE-512, JBIDE-2541 related changes ===>>>
-		// TODO: Add type, sourceType and JavaDoc found if possible
-		// Reason of incomplete: there are no resolved members here, 
-		// The var value is to be resolved by the ELResolver to let us know
-		// what is the var's type
 		if(!returnEqualedVariablesOnly && vars!=null) {
 			
 			for (Var v : vars) {
 				String prefix = operand.toString();
 				if(v.getName().startsWith(prefix)) {
+					MemberInfo memberInfo = resolveEL(file, v.getElToken(), true, vars, varSearcher);
+					String sourceTypeName = memberInfo == null ? null : memberInfo.getDeclaringTypeQualifiedName();
+					if (sourceTypeName != null && sourceTypeName.indexOf('.') != -1) 
+						sourceTypeName = Signature.getSimpleName(sourceTypeName);
+					String typeName = memberInfo == null ? null : memberInfo.getType().getName();
+					if (typeName != null && typeName.indexOf('.') != -1) 
+						typeName = Signature.getSimpleName(typeName);
+					
+					IJavaElement element = memberInfo == null ? null : memberInfo.getJavaElement();
+					String attachedJavaDoc = null;
+					
+					try {
+							attachedJavaDoc = element == null ? null : element.getAttachedJavadoc(null);
+					} catch (JavaModelException e) {
+						// Ignore
+					}
+					
 					String varNameProposal = v.getName().substring(prefix.length());
 					TextProposal proposal = new TextProposal();
+					proposal.setLabel(v.getName());
 					proposal.setReplacementString(varNameProposal);
 					proposal.setLabel(v.getName());
 					proposal.setImage(getELProposalImage());
+					proposal.setType(typeName);
+					proposal.setSourceType(sourceTypeName);
+					proposal.setContextInfo(attachedJavaDoc);
 					status.getProposals().add(proposal);
 				}
 			}
@@ -294,6 +311,21 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 		return status.getMemberOfResolvedOperand();
 	}
 
+	/**
+	 * Returns MemberInfo for last segment of EL. Null if El is not resolved.
+	 * @param seamProject
+	 * @param file
+	 * @param operand EL without #{}
+	 * @return MemberInfo for last segment of EL. Null if El is not resolved.
+	 * @throws BadLocationException
+	 * @throws StringIndexOutOfBoundsException
+	 */
+	public TypeInfoCollector.MemberInfo resolveEL(IFile file, ELExpression operand, boolean returnEqualedVariablesOnly, List<Var> vars, ElVarSearcher varSearcher) throws BadLocationException, StringIndexOutOfBoundsException {
+		if(!(operand instanceof ELInvocationExpression)) return null;
+		ELOperandResolveStatus status = resolveELOperand(file, operand, returnEqualedVariablesOnly, vars, varSearcher);
+		return status.getMemberOfResolvedOperand();
+	}
+	
 	public ELOperandResolveStatus resolveELOperand(IFile file, ELExpression operand,  
 			boolean returnEqualedVariablesOnly, boolean varIsUsed) throws BadLocationException, StringIndexOutOfBoundsException {
 		if(!(operand instanceof ELInvocationExpression) || file == null) {
@@ -371,6 +403,7 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 					}
 
 					TextProposal proposal = new TextProposal();
+					proposal.setLabel(varName);
 					proposal.setReplacementString(varName.substring(operand.getLength()));
 					setImage(proposal, var);
 					proposal.setType(typeName);
