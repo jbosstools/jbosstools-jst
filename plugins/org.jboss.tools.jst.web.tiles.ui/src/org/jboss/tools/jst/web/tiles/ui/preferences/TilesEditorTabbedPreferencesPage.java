@@ -17,10 +17,11 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.options.Preference;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 
 public class TilesEditorTabbedPreferencesPage extends TabbedPreferencesPage implements IWorkbenchPreferencePage {
-	public static String TILES_EDITOR_PATH = "%Options%/Struts Studio/Editors/Tiles Diagram"; //$NON-NLS-1$
+	public static String TILES_EDITOR_PATH = Preference.EDITOR_PATH + "/Tiles Diagram"; //$NON-NLS-1$
 	
 	public TilesEditorTabbedPreferencesPage() {
 		XModel model = getPreferenceModel();		
