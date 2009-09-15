@@ -21,96 +21,101 @@ import org.eclipse.core.databinding.observable.map.WritableMap;
  */
 public class StyleAttributes {
 
-    private Map<String, String> attributeMap = null;
-    /**
-     * Default constructor.
-     */
-    public StyleAttributes() {
-        this.attributeMap = new WritableMap();
-    }
+	private Map<String, String> attributeMap = null;
 
-    /**
-     * Gets attribute map.
-     *
-     * @return map of attributes
-     */
-    public Map<String, String> getAttributeMap() {
-        return attributeMap;
-    }
+	/**
+	 * Default constructor.
+	 */
+	public StyleAttributes() {
+		this.attributeMap = new WritableMap();
+	}
 
+	/**
+	 * Gets attribute map.
+	 * 
+	 * @return map of attributes
+	 */
+	public Map<String, String> getAttributeMap() {
+		return attributeMap;
+	}
 
+	/**
+	 * Add attribute with the given name and value.
+	 * 
+	 * @param name
+	 *            the name of attribute
+	 * @param value
+	 *            the value of attribute
+	 */
+	public void addAttribute(String name, String value) {
+		attributeMap.put(name, value);
+	}
 
-    /**
-     * Add attribute with the given name and value.
-     *
-     * @param name the name of attribute
-     * @param value the value of attribute
-     */
-    public void addAttribute(String name, String value) {
-        attributeMap.put(name, value);
-    }
+	/**
+	 * Remove attribute with the given name.
+	 * 
+	 * @param name
+	 *            the name of attribute to be removed
+	 */
+	public void removeAttribute(String name) {
+		attributeMap.remove(name);
+	}
 
-    /**
-     * Remove attribute with the given name.
-     *
-     * @param name the name of attribute to be removed
-     */
-    public void removeAttribute(String name) {
-        attributeMap.remove(name);
-    }
+	/**
+	 * @see java.util.HashMap#entrySet()
+	 */
+	public Set<Entry<String, String>> entrySet() {
+		return attributeMap.entrySet();
+	}
 
-    /**
-     * @see java.util.HashMap#entrySet()
-     */
-    public Set<Entry<String, String>> entrySet() {
-        return attributeMap.entrySet();
-    }
+	/**
+	 * Get attribute value with the given name.
+	 * 
+	 * @param name
+	 *            the name of attribute to be returned
+	 * @return attribute value
+	 */
+	public String getAttribute(String name) {
+		String value = attributeMap.get(name);
+		return value != null ? value : Constants.EMPTY;
+	}
 
-    /**
-     * Get attribute value with the given name.
-     *
-     * @param name the name of attribute to be returned
-     * @return attribute value
-     */
-    public String getAttribute(String name) {
-    	String value = attributeMap.get(name);
-        return value != null ? value : Constants.EMPTY;
-    }
+	/**
+	 * @see java.util.HashMap#keySet()
+	 */
+	public Set<String> keySet() {
+		return attributeMap.keySet();
+	}
 
-    /**
-     * @see java.util.HashMap#keySet()
-     */
-    public Set<String> keySet() {
-        return attributeMap.keySet();
-    }
+	/**
+	 * Clear cache of attributes.
+	 */
+	public void clear() {
+		attributeMap.clear();
+	}
 
-    /**
-     * Clear cache of attributes.
-     */
-    public void clear() {
-        attributeMap.clear();
-    }
-    
-    /**
+	/**
      * 
      */
-    public void setStyleProperties(Map<String, String> properties){
-    	attributeMap.clear();
-    	attributeMap.putAll(properties);
-    }
-	
+	public void setStyleProperties(Map<String, String> properties) {
+		attributeMap.clear();
+		attributeMap.putAll(properties);
+	}
+
 	/**
 	 * String representation of style attributes.
-	 *
+	 * 
 	 * @return style string representation
 	 */
 	public String getStyle() {
-        // update newStyle value
-        StringBuffer buf = new StringBuffer();
-        Set<Entry<String, String>> set = entrySet();
-        for (Map.Entry<String, String> me : set) {
-            buf.append(me.getKey() + Constants.COLON + me.getValue() + Constants.SEMICOLON);
-        }
-        return buf.toString();
+		// update newStyle value
+		StringBuffer buf = new StringBuffer();
+		Set<Entry<String, String>> set = entrySet();
+		for (Map.Entry<String, String> me : set) {
+			if ((me.getValue() != null) && (me.getValue().length() != 0))
+				buf.append(me.getKey() + Constants.COLON + me.getValue()
+						+ Constants.SEMICOLON);
+		}
+		return buf.toString();
 	}
 }

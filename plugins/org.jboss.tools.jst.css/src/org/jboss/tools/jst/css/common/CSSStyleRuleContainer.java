@@ -44,7 +44,8 @@ public class CSSStyleRuleContainer extends StyleContainer {
 					if ((me.getValue() == null)
 							|| (me.getValue().length() == 0)) {
 						declaration.removeProperty(me.getKey());
-					} else {
+					} else if (!me.getValue().equals(
+							declaration.getPropertyValue(me.getKey()))) {
 						declaration.setProperty(me.getKey(), me.getValue(),
 								Constants.EMPTY);
 					}
