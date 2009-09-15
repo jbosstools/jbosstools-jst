@@ -82,8 +82,8 @@ public class SelectionLosingByPropertySheet_JBIDE4791 extends
 				.getFirstElement());
 
 		CSSEditorView view = (CSSEditorView) openView(CSS_EDITOR_VIEW);
-		
-		JobUtils.delay(2000);
+
+		JobUtils.delay(1000);
 
 		selection = (ISelection) getFieldValue(propertySheet,
 				SELECTION_FIELD_NAME);

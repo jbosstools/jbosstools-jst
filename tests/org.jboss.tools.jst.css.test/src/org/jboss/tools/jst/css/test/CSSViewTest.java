@@ -30,6 +30,7 @@ import org.eclipse.wst.css.core.internal.document.CSSStructuredDocumentRegionCon
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSModel;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleSheet;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
+import org.jboss.tools.jst.css.common.StyleContainer;
 import org.jboss.tools.jst.css.properties.CSSPropertyPage;
 import org.jboss.tools.jst.css.view.CSSEditorView;
 import org.jboss.tools.jst.css.view.CSSPreview;
@@ -43,11 +44,11 @@ import org.w3c.dom.css.CSSRule;
  */
 public class CSSViewTest extends AbstractCSSViewTest {
 
-
 	public static final String TEST_PAGE_NAME = "test.css"; //$NON-NLS-1$
 
-	public static final int COUNT_TABS = 5;
+	public static final String SELECTED_OBJECT_FIELD = "selectedObject"; //$NON-NLS-1$
 
+	public static final int COUNT_TABS = 5;
 
 	/**
 	 * 
@@ -75,10 +76,6 @@ public class CSSViewTest extends AbstractCSSViewTest {
 
 		assertNotNull(view);
 
-		CSSPropertyPage page = (CSSPropertyPage) view.getCurrentPage();
-
-		assertNotNull(page);
-
 		ICSSModel model = (ICSSModel) getStructuredModel(pageFile);
 
 		assertNotNull(model);
@@ -96,17 +93,17 @@ public class CSSViewTest extends AbstractCSSViewTest {
 
 		setSelection(editor, offset, 0);
 
-		JobUtils.delay(1000);
 
-		Object selectedObject = getFieldValue(page, "selectedObject"); //$NON-NLS-1$
+		Object selectedObject = getSelectedObject(view);
+		assertTrue(selectedObject instanceof StyleContainer);
+		assertEquals(cssRule, ((StyleContainer) selectedObject)
+				.getStyleObject());
 
 		setSelection(editor, 0, 0);
 
-		JobUtils.delay(1000);
 
-		selectedObject = getFieldValue(page, "selectedObject"); //$NON-NLS-1$
-
-		assertNotSame(cssRule, selectedObject);
+		selectedObject = getSelectedObject(view);
+		assertNull(selectedObject);
 
 	}
 
@@ -149,7 +146,6 @@ public class CSSViewTest extends AbstractCSSViewTest {
 
 		setSelection(editor, offset, 0);
 
-		JobUtils.delay(1000);
 
 		TabbedPropertyRegistry registry = (TabbedPropertyRegistry) getFieldValue(
 				page, TabbedPropertySheetPage.class, "registry");//$NON-NLS-1$
@@ -214,7 +210,6 @@ public class CSSViewTest extends AbstractCSSViewTest {
 
 		setSelection(editor, offset, 0);
 
-		JobUtils.delay(1000);
 
 		assertFalse(browserPage.equals(view.generateBrowserPage()));
 

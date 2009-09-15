@@ -20,7 +20,10 @@ Require-Bundle: org.eclipse.core.runtime,
  org.jboss.tools.jst.css,
  org.eclipse.core.databinding,
  org.eclipse.ui.views.properties.tabbed,
- org.jboss.tools.jst.jsp
+ org.jboss.tools.jst.jsp,
+ org.eclipse.wst.xml.core,
+ org.jboss.tools.common.text.ext,
+ org.jboss.tools.jst.web
 Bundle-Vendor: %Bundle-Vendor.0
 Bundle-Localization: plugin
 Bundle-ActivationPolicy: lazy

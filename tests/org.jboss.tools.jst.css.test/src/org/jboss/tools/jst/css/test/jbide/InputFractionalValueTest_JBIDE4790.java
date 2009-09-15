@@ -111,7 +111,7 @@ public class InputFractionalValueTest_JBIDE4790 extends AbstractCSSViewTest {
 					newTestedValue);
 
 		} catch (DOMException e) {
-			fail("Changing of attribute's value leads to DOMException. Probably it is regression of JBIDE-4790 "); //$NON-NLS-1$
+			fail("Changing of attribute's value leads to DOMException. Probably it is problem concerned with of JBIDE-4790 "); //$NON-NLS-1$
 		}
 		testedValue = declaration.getPropertyValue(TEST_CSS_ATTRIBUTE_NAME);
 

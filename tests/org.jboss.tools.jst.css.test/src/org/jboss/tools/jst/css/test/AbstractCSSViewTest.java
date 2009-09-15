@@ -21,12 +21,17 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
+import org.jboss.tools.jst.css.properties.CSSPropertyPage;
+import org.jboss.tools.jst.css.view.CSSEditorView;
+import org.jboss.tools.test.util.JobUtils;
 
 /**
  * @author Sergey Dzmitrovich
@@ -43,6 +48,7 @@ public abstract class AbstractCSSViewTest extends TestCase {
 	public static final String CSS_EDITOR_ID = "org.eclipse.wst.css.core.csssource.source"; //$NON-NLS-1$
 	public static final String CSS_PERSPECTIVE = "org.jboss.tools.jst.cssPerspective"; //$NON-NLS-1$
 	public static final String IMPORT_PROJECT_NAME = "cssTest"; //$NON-NLS-1$
+	public static final String CSS_PREVIEW_SELECTED_OBJECT = "selectedObject"; //$NON-NLS-1$
 
 	/**
 	 * 
@@ -88,11 +94,17 @@ public abstract class AbstractCSSViewTest extends TestCase {
 	public void setSelection(StructuredTextEditor textEditor, int offset,
 			int length) {
 
-		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-				.activate(textEditor);
+		activatePart(textEditor);
 
 		textEditor.selectAndReveal(offset, length);
 
+		JobUtils.delay(1000);
+
+	}
+
+	protected void activatePart(IWorkbenchPart part) {
+		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+				.activate(part);
 	}
 
 	/**
@@ -113,6 +125,23 @@ public abstract class AbstractCSSViewTest extends TestCase {
 
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow()
 				.getActivePage().showView(viewId);
+
+	}
+
+	/**
+	 * 
+	 * @param viewId
+	 * @return
+	 * @throws PartInitException
+	 */
+	public void hideView(String viewId) throws PartInitException {
+		IWorkbenchPage activePage = PlatformUI.getWorkbench()
+				.getActiveWorkbenchWindow().getActivePage();
+
+		IViewPart viewPart = activePage.findView(viewId);
+		if (viewPart != null)
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+					.getActivePage().hideView(viewPart);
 
 	}
 
@@ -144,6 +173,18 @@ public abstract class AbstractCSSViewTest extends TestCase {
 				fieldName);
 		selectedObjectField.setAccessible(true);
 		return getFieldValue(object, object.getClass(), fieldName);
+	}
+
+	protected Object getSelectedObject(CSSEditorView view)
+			throws SecurityException, IllegalArgumentException,
+			NoSuchFieldException, IllegalAccessException {
+
+		CSSPropertyPage page = (CSSPropertyPage) view.getCurrentPage();
+
+		assertNotNull(page);
+
+		return getFieldValue(page, CSS_PREVIEW_SELECTED_OBJECT);
+
 	}
 
 	/**
