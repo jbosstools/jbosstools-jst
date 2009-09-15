@@ -27,7 +27,7 @@ public class VpePreference extends Preference {
 	public static String ATT_ALWAYS_HIDE_SELECTION_BAR_WITHOUT_PROMT="always hide selection bar without prompt"; //$NON-NLS-1$
 	public static String ATT_SHOW_INVISIBLE_TAGS="show non-visual tags"; //$NON-NLS-1$
 	public static String SHOW_COMMENTS_VALUE;
-	public static String VPE_EDITOR_PATH = "%Options%/Struts Studio/Editors/Visual Page Editor"; //$NON-NLS-1$
+	public static String VPE_EDITOR_PATH = Preference.EDITOR_PATH + "/Visual Page Editor"; //$NON-NLS-1$
 	public static final Preference SHOW_COMMENTS = new VpePreference(VPE_EDITOR_PATH, ATT_SHOW_COMMENTS);
 	public static final Preference SHOW_BORDER_FOR_UNKNOWN_TAGS = new VpePreference(VPE_EDITOR_PATH, ATT_SHOW_BORDER_FOR_UNKNOWN_TAGS);
 	public static final Preference SHOW_BORDER_FOR_ALL_TAGS = new VpePreference(VPE_EDITOR_PATH, ATT_SHOW_BORDER_FOR_ALL_TAGS);
