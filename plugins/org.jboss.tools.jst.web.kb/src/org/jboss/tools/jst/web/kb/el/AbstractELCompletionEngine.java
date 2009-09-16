@@ -66,12 +66,30 @@ public abstract class AbstractELCompletionEngine<V extends IVariable> implements
 	 * @see org.jboss.tools.common.el.core.resolver.ELResolver2#getProposals(org.jboss.tools.common.el.core.resolver.ELContext, java.lang.String)
 	 */
 	public List<TextProposal> getProposals(ELContext context, String el) {
-		return getCompletions(el, false, 0, context);
+		List<TextProposal> completions = new ArrayList<TextProposal>();
+
+		List<Var> vars = new ArrayList<Var>();
+		Var[] array = context.getVars();
+		for (int i = 0; i < array.length; i++) {
+			vars.add(array[i]);
+		}
+
+		ELResolutionImpl resolution;
+		try {
+			resolution = resolveELOperand(context.getResource(), parseOperand(el), false, vars, new ElVarSearcher(context.getResource(), this));
+			completions.addAll(resolution.getProposals());
+		} catch (StringIndexOutOfBoundsException e) {
+			log(e);
+		} catch (BadLocationException e) {
+			log(e);
+		}
+		
+		return completions;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.jboss.tools.common.el.core.resolver.ELResolver2#resolve(org.jboss.tools.common.el.core.resolver.ELContext, org.jboss.tools.common.el.core.model.ELExpression)
+	 * @see org.jboss.tools.common.el.core.resolver.ELResolver#resolve(org.jboss.tools.common.el.core.resolver.ELContext, org.jboss.tools.common.el.core.model.ELExpression)
 	 */
 	public ELResolution resolve(ELContext context, ELExpression operand) {
 		List<Var> vars = new ArrayList<Var>();
@@ -89,55 +107,6 @@ public abstract class AbstractELCompletionEngine<V extends IVariable> implements
 			log(e);
 		}
 		return resolution;
-	}
-
-	private List<TextProposal> getCompletions(String elString, boolean returnEqualedVariablesOnly, int position, ELContext context) {
-		List<Var> vars = new ArrayList<Var>();
-		Var[] array = context.getVars();
-		for (int i = 0; i < array.length; i++) {
-			vars.add(array[i]);
-		}
-		List<TextProposal> proposals = null;
-		try {
-			 proposals = getCompletions(context.getResource(), elString.subSequence(0, elString.length()), position, returnEqualedVariablesOnly, vars);
-		} catch (StringIndexOutOfBoundsException e) {
-			log(e);
-		} catch (BadLocationException e) {
-			log(e);
-		}
-		return proposals;
-	}
-
-	/**
-	 * Create the list of suggestions. 
-	 * @param seamProject Seam project 
-	 * @param file File 
-	 * @param documentContent
-	 * @param prefix the prefix to search for
-	 * @param position Offset of the prefix 
-	 * @param vars - 'var' attributes which can be used in this EL. Can be null.
-	 * @param returnEqualedVariablesOnly 'false' if we get proposals for mask  
-	 *  for example:
-	 *   we have 'variableName.variableProperty', 'variableName.variableProperty1', 'variableName.variableProperty2'  
-	 *   prefix is 'variableName.variableProperty'
-	 *   Result is {'variableProperty'}
-	 * if 'false' then returns ends of variables that starts with prefix. It's useful for CA.
-	 *  for example:
-	 *   we have 'variableName.variableProperty', 'variableName.variableProperty1', 'variableName.variableProperty2'
-	 *   prefix is 'variableName.variableProperty'
-	 *   Result is {'1','2'}
-	 * @return the list of all possible suggestions
-	 * @throws BadLocationException if accessing the current document fails
-	 * @throws StringIndexOutOfBoundsException
-	 */
-	public List<TextProposal> getCompletions(IFile file, CharSequence prefix, 
-			int position, boolean returnEqualedVariablesOnly, List<Var> vars) throws BadLocationException, StringIndexOutOfBoundsException {
-		List<TextProposal> completions = new ArrayList<TextProposal>();
-
-		ELResolutionImpl resolution = resolveELOperand(file, parseOperand("" + prefix), returnEqualedVariablesOnly, vars, new ElVarSearcher(file, this)); //$NON-NLS-1$
-		completions.addAll(resolution.getProposals());
-
-		return completions;
 	}
 
 	public ELResolution resolveELOperand(ELExpression operand, ELContext context, boolean returnEqualedVariablesOnly) {
@@ -184,6 +153,10 @@ public abstract class AbstractELCompletionEngine<V extends IVariable> implements
 		return proposals;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.common.el.core.resolver.ELCompletionEngine#resolveELOperand(org.eclipse.core.resources.IFile, org.jboss.tools.common.el.core.model.ELExpression, boolean, java.util.List, org.jboss.tools.common.el.core.resolver.ElVarSearcher)
+	 */
 	public ELResolutionImpl resolveELOperand(IFile file,
 			ELExpression operand, boolean returnEqualedVariablesOnly,
 			List<Var> vars, ElVarSearcher varSearcher)

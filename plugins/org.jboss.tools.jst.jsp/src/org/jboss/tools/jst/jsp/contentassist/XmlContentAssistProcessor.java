@@ -26,6 +26,7 @@ import org.jboss.tools.common.el.core.resolver.ELResolution;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.ElVarSearcher;
 import org.jboss.tools.common.el.core.resolver.Var;
+import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
@@ -66,6 +67,14 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 
 			public ELParserFactory getParserFactory() {
 				return ELParserUtil.getJbossFactory();
+			}
+
+			public List<TextProposal> getProposals(ELContext context, String el) {
+				return null;
+			}
+
+			public ELResolution resolve(ELContext context, ELExpression operand) {
+				return null;
 			}
 		};
 		ElVarSearcher varSearcher = new ElVarSearcher(file, fakeEngine);
