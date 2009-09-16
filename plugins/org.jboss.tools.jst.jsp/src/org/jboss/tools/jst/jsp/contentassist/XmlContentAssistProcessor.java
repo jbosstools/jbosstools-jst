@@ -22,7 +22,7 @@ import org.jboss.tools.common.el.core.parser.ELParserUtil;
 import org.jboss.tools.common.el.core.resolver.ELCompletionEngine;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.ELContextImpl;
-import org.jboss.tools.common.el.core.resolver.ELOperandResolveStatus;
+import org.jboss.tools.common.el.core.resolver.ELResolution;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.ElVarSearcher;
 import org.jboss.tools.common.el.core.resolver.Var;
@@ -55,15 +55,15 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 	}
 
 	protected void setVars(ELContextImpl context, IFile file) {
-		ELCompletionEngine fakeEngine = new ELCompletionEngine(){
-		
-			public ELOperandResolveStatus resolveELOperand(IFile file,
+		ELCompletionEngine fakeEngine = new ELCompletionEngine() {
+
+			public ELResolution resolveELOperand(IFile file,
 					ELExpression operand, boolean returnEqualedVariablesOnly,
 					List<Var> vars, ElVarSearcher varSearcher)
 					throws BadLocationException, StringIndexOutOfBoundsException {
 				return null;
 			}
-		
+
 			public ELParserFactory getParserFactory() {
 				return ELParserUtil.getJbossFactory();
 			}

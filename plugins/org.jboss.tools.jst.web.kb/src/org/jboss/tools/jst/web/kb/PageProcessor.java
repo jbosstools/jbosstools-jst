@@ -95,7 +95,7 @@ public class PageProcessor implements IProposalProcessor {
 			String elString = value;
 			ELResolver[] resolvers =  context.getElResolvers();
 			for (int i = 0; resolvers != null && i < resolvers.length; i++) {
-				proposals.addAll(resolvers[i].getCompletions(elString, !query.isMask(), query.getOffset(), context));
+				proposals.addAll(resolvers[i].getProposals(context, elString));
 			}
 		}
 		return proposals.toArray(new TextProposal[proposals.size()]);

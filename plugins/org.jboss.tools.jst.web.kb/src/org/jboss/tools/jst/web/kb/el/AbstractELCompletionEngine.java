@@ -17,12 +17,10 @@ import java.util.TreeSet;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.graphics.Image;
 import org.jboss.tools.common.el.core.model.ELArgumentInvocation;
 import org.jboss.tools.common.el.core.model.ELExpression;
@@ -38,21 +36,24 @@ import org.jboss.tools.common.el.core.parser.ELParserUtil;
 import org.jboss.tools.common.el.core.parser.LexicalToken;
 import org.jboss.tools.common.el.core.resolver.ELCompletionEngine;
 import org.jboss.tools.common.el.core.resolver.ELContext;
-import org.jboss.tools.common.el.core.resolver.ELOperandResolveStatus;
+import org.jboss.tools.common.el.core.resolver.ELResolution;
+import org.jboss.tools.common.el.core.resolver.ELResolutionImpl;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
+import org.jboss.tools.common.el.core.resolver.ELSegment;
+import org.jboss.tools.common.el.core.resolver.ELSegmentImpl;
 import org.jboss.tools.common.el.core.resolver.ElVarSearcher;
+import org.jboss.tools.common.el.core.resolver.IVariable;
+import org.jboss.tools.common.el.core.resolver.JavaMemberELSegment;
+import org.jboss.tools.common.el.core.resolver.JavaMemberELSegmentImpl;
 import org.jboss.tools.common.el.core.resolver.TypeInfoCollector;
 import org.jboss.tools.common.el.core.resolver.Var;
 import org.jboss.tools.common.el.core.resolver.TypeInfoCollector.MemberInfo;
 import org.jboss.tools.common.el.core.resolver.TypeInfoCollector.MemberPresentation;
+import org.jboss.tools.common.el.internal.core.parser.token.JavaNameTokenDescription;
 import org.jboss.tools.common.text.TextProposal;
-import org.jboss.tools.jst.web.kb.IPageContext;
+import org.jboss.tools.jst.web.kb.WebKbPlugin;
 
-public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionEngine.IVariable> implements ELResolver, ELCompletionEngine {
-
-	public static interface IVariable {
-		public String getName();
-	}
+public abstract class AbstractELCompletionEngine<V extends IVariable> implements ELResolver, ELCompletionEngine {
 
 	public AbstractELCompletionEngine() {}
 
@@ -62,14 +63,35 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.jboss.tools.common.el.core.resolver.ELResolver#getCompletions(java.lang.String, boolean, int, org.jboss.tools.common.el.core.resolver.ELContext)
+	 * @see org.jboss.tools.common.el.core.resolver.ELResolver2#getProposals(org.jboss.tools.common.el.core.resolver.ELContext, java.lang.String)
 	 */
-	public List<TextProposal> getCompletions(String elString, boolean returnEqualedVariablesOnly, int position, ELContext context) {
-		IDocument document = null;
-		if(context instanceof IPageContext) {
-			IPageContext pageContext = (IPageContext)context;
-			document = pageContext.getDocument();
+	public List<TextProposal> getProposals(ELContext context, String el) {
+		return getCompletions(el, false, 0, context);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.common.el.core.resolver.ELResolver2#resolve(org.jboss.tools.common.el.core.resolver.ELContext, org.jboss.tools.common.el.core.model.ELExpression)
+	 */
+	public ELResolution resolve(ELContext context, ELExpression operand) {
+		List<Var> vars = new ArrayList<Var>();
+		Var[] array = context.getVars();
+		for (int i = 0; i < array.length; i++) {
+			vars.add(array[i]);
 		}
+		ELResolutionImpl resolution = null;
+		try {
+			resolution = resolveELOperand(context.getResource(), operand, true, vars, new ElVarSearcher(context.getResource(), this));
+			resolution.setContext(context);
+		} catch (StringIndexOutOfBoundsException e) {
+			log(e);
+		} catch (BadLocationException e) {
+			log(e);
+		}
+		return resolution;
+	}
+
+	private List<TextProposal> getCompletions(String elString, boolean returnEqualedVariablesOnly, int position, ELContext context) {
 		List<Var> vars = new ArrayList<Var>();
 		Var[] array = context.getVars();
 		for (int i = 0; i < array.length; i++) {
@@ -77,7 +99,7 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 		}
 		List<TextProposal> proposals = null;
 		try {
-			 proposals = getCompletions(context.getResource(), document, elString.subSequence(0, elString.length()), position, returnEqualedVariablesOnly, vars);
+			 proposals = getCompletions(context.getResource(), elString.subSequence(0, elString.length()), position, returnEqualedVariablesOnly, vars);
 		} catch (StringIndexOutOfBoundsException e) {
 			log(e);
 		} catch (BadLocationException e) {
@@ -108,37 +130,30 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 	 * @throws BadLocationException if accessing the current document fails
 	 * @throws StringIndexOutOfBoundsException
 	 */
-	public List<TextProposal> getCompletions(IFile file, IDocument document, CharSequence prefix, 
+	public List<TextProposal> getCompletions(IFile file, CharSequence prefix, 
 			int position, boolean returnEqualedVariablesOnly, List<Var> vars) throws BadLocationException, StringIndexOutOfBoundsException {
 		List<TextProposal> completions = new ArrayList<TextProposal>();
-		
-		ELOperandResolveStatus status = resolveELOperand(file, parseOperand("" + prefix), returnEqualedVariablesOnly, vars, new ElVarSearcher(file, this)); //$NON-NLS-1$
-		if (status.isOK()) {
-			completions.addAll(status.getProposals());
-		}
+
+		ELResolutionImpl resolution = resolveELOperand(file, parseOperand("" + prefix), returnEqualedVariablesOnly, vars, new ElVarSearcher(file, this)); //$NON-NLS-1$
+		completions.addAll(resolution.getProposals());
 
 		return completions;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.common.el.core.resolver.ELResolver#resolveELOperand(org.jboss.tools.common.el.core.model.ELExpression, org.jboss.tools.common.el.core.resolver.ELContext, boolean)
-	 */
-	public ELOperandResolveStatus resolveELOperand(ELExpression operand, ELContext context, boolean returnEqualedVariablesOnly) {
+	public ELResolution resolveELOperand(ELExpression operand, ELContext context, boolean returnEqualedVariablesOnly) {
 		List<Var> vars = new ArrayList<Var>();
 		Var[] array = context.getVars();
 		for (int i = 0; i < array.length; i++) {
 			vars.add(array[i]);
 		}
-		ELOperandResolveStatus status = null;
 		try {
-			status = resolveELOperand(context.getResource(), operand, returnEqualedVariablesOnly, vars, new ElVarSearcher(context.getResource(), this));
+			return resolveELOperand(context.getResource(), operand, returnEqualedVariablesOnly, vars, new ElVarSearcher(context.getResource(), this));
 		} catch (StringIndexOutOfBoundsException e) {
 			log(e);
 		} catch (BadLocationException e) {
 			log(e);
 		}
-		return status;
+		return null;
 	}
 
 	public ELExpression parseOperand(String operand) {
@@ -169,17 +184,13 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 		return proposals;
 	}
 
-	protected ELOperandResolveStatus newELOperandResolveStatus(ELInvocationExpression tokens) {
-		return new ELOperandResolveStatus(tokens);
-	}
-
-	public ELOperandResolveStatus resolveELOperand(IFile file,
+	public ELResolutionImpl resolveELOperand(IFile file,
 			ELExpression operand, boolean returnEqualedVariablesOnly,
 			List<Var> vars, ElVarSearcher varSearcher)
 			throws BadLocationException, StringIndexOutOfBoundsException {
 		if(operand == null) {
 			//TODO
-			return newELOperandResolveStatus(null);
+			return null;
 		}
 		String oldEl = operand.getText();
 		Var var = varSearcher.findVarForEl(oldEl, vars, true);
@@ -187,8 +198,15 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 		String newEl = oldEl;
 		TypeInfoCollector.MemberInfo member = null;
 		boolean isArray = false;
+		ELResolution varELResolution = null;
 		if(var!=null) {
-			member = resolveEL(file, var.getElToken(), true);
+			varELResolution = resolveEL(file, var.getElToken(), true);
+			if(varELResolution!=null && varELResolution.isResolved()) {
+				ELSegment segment = varELResolution.getLastSegment();
+				if(segment instanceof JavaMemberELSegment) {
+					member = ((JavaMemberELSegment)segment).getMemberInfo();
+				}
+			}
 			if(member!=null) {
 				if(!member.getType().isArray()) {
 					IType type = member.getMemberType();
@@ -221,62 +239,84 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 						: parseOperand(newEl)) 
 				: operand;
 
-		ELOperandResolveStatus status = resolveELOperand(file, newOperand, returnEqualedVariablesOnly, prefixWasChanged);
+		ELResolutionImpl resolution = resolveELOperand(file, newOperand, returnEqualedVariablesOnly, prefixWasChanged);
 
 		if(prefixWasChanged) {
-			ELInvocationExpression newLastResolvedToken = status.getLastResolvedToken();
-			status.setTokens((ELInvocationExpression)operand);
-			if(newLastResolvedToken != null) {
-				if(status.getUnresolvedTokens() != null 
-						&& status.getUnresolvedTokens().getInvocationStartPosition() - status.getUnresolvedTokens().getStartPosition() < var.getElToken().getLength() + suffix.length()) {
-					// Last resolved token is token from "var". Set first token of original EL as last resolved one.
-					status.setLastResolvedToken(null);
+			resolution.setSourceOperand(operand);
+
+			// Replace segment which came from var resolution to original first segment.
+			LexicalToken firstOriginalToken = operand.getFirstToken();
+			LexicalToken nextOriginalToken = firstOriginalToken;
+			List<ELSegment> newSegments = resolution.getSegments();
+			List<ELSegment> resultSegments = new ArrayList<ELSegment>();
+			int startSuffix = var.getElToken().getText().length();
+			int endSuffix = startSuffix + suffix.length();
+			ELSegment firstSegment = null;
+			for (ELSegment segment : newSegments) {
+				int startPosition = segment.getToken().getStart();
+				if(startPosition>=endSuffix) {
+					resultSegments.add(segment);
+					nextOriginalToken = nextOriginalToken.findTokenForward(JavaNameTokenDescription.JAVA_NAME);
+					((ELSegmentImpl)segment).setToken(nextOriginalToken);
 				} else {
-					// Last resolved token is token outside "var" prefix. Correct last resolved token.
-					int oldLastResolvedTokenStart = newLastResolvedToken.getInvocationStartPosition() - var.getElToken().getText().length() - suffix.length() + var.getName().length();
-					if(newLastResolvedToken.getLeft() == null) {
-						//In this case we do not need to take into account difference in length of var and its expression.
-						oldLastResolvedTokenStart = newLastResolvedToken.getInvocationStartPosition();
-					}
-					ELInvocationExpression l = (ELInvocationExpression)operand;
-					while(l != null) {
-						if(l.getInvocationStartPosition() - l.getStartPosition() <= oldLastResolvedTokenStart) {
-							status.setLastResolvedToken(l);
-							break;
-						}
-						l = l.getLeft();
-					}
+					firstSegment = segment;
+					((ELSegmentImpl)firstSegment).setToken(firstOriginalToken);
+//					if(firstSegment instanceof JavaMemberELSegmentImpl) {
+//						JavaMemberELSegmentImpl javaSegment = (JavaMemberELSegmentImpl) firstSegment;
+//						MemberInfo m = javaSegment.getMemberInfo();
+//						if(m!=null) {
+//							TypeInfoCollector.Type t = m.getType();
+//							if(t!=null) {
+//								javaSegment.setElement(t.getSource());
+//							}
+//						}
+//					}
 				}
-				var.resolveValue("#{" + var.getElToken().getText() + suffix + "}"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
-			ELOperandResolveStatus oldElStatus = resolveELOperand(file, operand, returnEqualedVariablesOnly, false);
-			status.getProposals().addAll(oldElStatus.getProposals());
+			if(firstSegment!=null && firstSegment.isResolved()) {
+				resultSegments.add(0, firstSegment);
+				resolution.setSegments(resultSegments);
+				var.resolveValue("#{" + var.getElToken().getText() + suffix + "}"); //$NON-NLS-1$ //$NON-NLS-2$
+
+				ELResolutionImpl oldElResolution = resolveELOperand(file, operand, returnEqualedVariablesOnly, false);
+				resolution.getProposals().addAll(oldElResolution.getProposals());
+			} else {
+				resolution = resolveELOperand(file, operand, returnEqualedVariablesOnly, false);
+			}
 		}
-		
+
 		// JBIDE-512, JBIDE-2541 related changes ===>>>
 		if(!returnEqualedVariablesOnly && vars!=null) {
 			
 			for (Var v : vars) {
 				String prefix = operand.toString();
 				if(v.getName().startsWith(prefix)) {
-					MemberInfo memberInfo = resolveEL(file, v.getElToken(), true, vars, varSearcher);
+					ELResolution r = resolveEL(file, v.getElToken(), true, vars, varSearcher);
+					ELSegment lastSegment = r.getLastSegment();
+					MemberInfo memberInfo = null;
+					if(lastSegment instanceof JavaMemberELSegment) {
+						memberInfo = ((JavaMemberELSegment)lastSegment).getMemberInfo();
+					}
+
 					String sourceTypeName = memberInfo == null ? null : memberInfo.getDeclaringTypeQualifiedName();
-					if (sourceTypeName != null && sourceTypeName.indexOf('.') != -1) 
+					if (sourceTypeName != null && sourceTypeName.indexOf('.') != -1) {
 						sourceTypeName = Signature.getSimpleName(sourceTypeName);
+					}
 					String typeName = memberInfo == null ? null : memberInfo.getType().getName();
-					if (typeName != null && typeName.indexOf('.') != -1) 
+					if (typeName != null && typeName.indexOf('.') != -1) { 
 						typeName = Signature.getSimpleName(typeName);
-					
+					}
+
 					IJavaElement element = memberInfo == null ? null : memberInfo.getJavaElement();
 					String attachedJavaDoc = null;
-					
+
 					try {
-							attachedJavaDoc = element == null ? null : element.getAttachedJavadoc(null);
+						attachedJavaDoc = element == null ? null : element.getAttachedJavadoc(null);
 					} catch (JavaModelException e) {
-						// Ignore
+						WebKbPlugin.getDefault().logError(e);
 					}
-					
+
 					String varNameProposal = v.getName().substring(prefix.length());
 					TextProposal proposal = new TextProposal();
 					proposal.setLabel(v.getName());
@@ -286,58 +326,57 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 					proposal.setType(typeName);
 					proposal.setSourceType(sourceTypeName);
 					proposal.setContextInfo(attachedJavaDoc);
-					status.getProposals().add(proposal);
+					resolution.getProposals().add(proposal);
 				}
 			}
 		}
 		// <<<=== JBIDE-512, JBIDE-2541 related changes
 
-
-		return status;
+		return resolution;
 	}
 
 	/**
-	 * Returns MemberInfo for last segment of EL. Null if El is not resolved.
+	 * Returns ELResolution for EL.
 	 * @param seamProject
 	 * @param file
 	 * @param operand EL without #{}
-	 * @return MemberInfo for last segment of EL. Null if El is not resolved.
+	 * Returns ELResolution for EL.
 	 * @throws BadLocationException
 	 * @throws StringIndexOutOfBoundsException
 	 */
-	public TypeInfoCollector.MemberInfo resolveEL(IFile file, ELExpression operand, boolean varIsUsed) throws BadLocationException, StringIndexOutOfBoundsException {
+	public ELResolution resolveEL(IFile file, ELExpression operand, boolean varIsUsed) throws BadLocationException, StringIndexOutOfBoundsException {
 		if(!(operand instanceof ELInvocationExpression)) return null;
-		ELOperandResolveStatus status = resolveELOperand(file, operand, true, varIsUsed);
-		return status.getMemberOfResolvedOperand();
+		return resolveELOperand(file, operand, true, varIsUsed);
 	}
 
 	/**
-	 * Returns MemberInfo for last segment of EL. Null if El is not resolved.
+	 * Returns ELResolution for EL.
 	 * @param seamProject
 	 * @param file
 	 * @param operand EL without #{}
-	 * @return MemberInfo for last segment of EL. Null if El is not resolved.
+	 * @return ELResolution for EL.
 	 * @throws BadLocationException
 	 * @throws StringIndexOutOfBoundsException
 	 */
-	public TypeInfoCollector.MemberInfo resolveEL(IFile file, ELExpression operand, boolean returnEqualedVariablesOnly, List<Var> vars, ElVarSearcher varSearcher) throws BadLocationException, StringIndexOutOfBoundsException {
+	public ELResolution resolveEL(IFile file, ELExpression operand, boolean returnEqualedVariablesOnly, List<Var> vars, ElVarSearcher varSearcher) throws BadLocationException, StringIndexOutOfBoundsException {
 		if(!(operand instanceof ELInvocationExpression)) return null;
-		ELOperandResolveStatus status = resolveELOperand(file, operand, returnEqualedVariablesOnly, vars, varSearcher);
-		return status.getMemberOfResolvedOperand();
+		return resolveELOperand(file, operand, returnEqualedVariablesOnly, vars, varSearcher);
 	}
-	
-	public ELOperandResolveStatus resolveELOperand(IFile file, ELExpression operand,  
+
+	public ELResolutionImpl resolveELOperand(IFile file, ELExpression operand,  
 			boolean returnEqualedVariablesOnly, boolean varIsUsed) throws BadLocationException, StringIndexOutOfBoundsException {
 		if(!(operand instanceof ELInvocationExpression) || file == null) {
-			return newELOperandResolveStatus(null);
+			return null;
 		}
+
+		ELResolutionImpl resolution = new ELResolutionImpl();
+		resolution.setSourceOperand(operand);
 
 		ELInvocationExpression expr = (ELInvocationExpression)operand;
 		boolean isIncomplete = expr.getType() == ELObjectType.EL_PROPERTY_INVOCATION 
 			&& ((ELPropertyInvocation)expr).getName() == null;
 		boolean isArgument = expr.getType() == ELObjectType.EL_ARGUMENT_INVOCATION;
 
-		ELOperandResolveStatus status = newELOperandResolveStatus(expr);
 		ELInvocationExpression left = expr;
 
 		List<V> resolvedVariables = new ArrayList<V>();
@@ -359,19 +398,14 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 						returnEqualedVariablesOnly);
 				if (resolvedVars != null && !resolvedVars.isEmpty()) {
 					resolvedVariables = resolvedVars;
-					status.setLastResolvedToken(left);
+					resolution.setLastResolvedToken(left);
 					break;
 				}
 				left = (ELInvocationExpression)left.getLeft();
 			} 
 		}
 
-		// Save all resolved variables. It's useful for incremental validation.
-		if(resolvedVariables != null && !resolvedVariables.isEmpty()) {
-			setUsedVariables(status, resolvedVariables);
-		}
-
-		if (status.getResolvedTokens() == null && 
+		if (resolution.getLastResolvedToken() == null && 
 				!returnEqualedVariablesOnly && 
 				expr != null && 
 				isIncomplete) {
@@ -380,26 +414,31 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 			resolvedVariables = resolveVariables(file, expr, true, returnEqualedVariablesOnly);			
 
 			Set<TextProposal> proposals = new TreeSet<TextProposal>(TextProposal.KB_PROPOSAL_ORDER);
+			JavaMemberELSegmentImpl segment = new JavaMemberELSegmentImpl();
+			segment.setToken(expr.getFirstToken());
+			segment.setResolved(false);
+			resolution.addSegment(segment);
 			for (V var : resolvedVariables) {
 				String varName = var.getName();
 				if(varName.startsWith(operand.getText())) {
 					// JBIDE-512, JBIDE-2541 related changes ===>>>
+
 					MemberInfo member = getMemberInfoByVariable(var, true);
-					
+
 					String sourceTypeName = member == null ? null : member.getDeclaringTypeQualifiedName();
 					if (sourceTypeName != null && sourceTypeName.indexOf('.') != -1) 
 						sourceTypeName = Signature.getSimpleName(sourceTypeName);
 					String typeName = member == null ? null : member.getType().getName();
 					if (typeName != null && typeName.indexOf('.') != -1) 
 						typeName = Signature.getSimpleName(typeName);
-					
+
 					IJavaElement element = member == null ? null : member.getJavaElement();
 					String attachedJavaDoc = null;
-					
+
 					try {
-							attachedJavaDoc = element == null ? null : element.getAttachedJavadoc(null);
+						attachedJavaDoc = element == null ? null : element.getAttachedJavadoc(null);
 					} catch (JavaModelException e) {
-						// Ignore
+						WebKbPlugin.getDefault().logError(e);
 					}
 
 					TextProposal proposal = new TextProposal();
@@ -409,27 +448,33 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 					proposal.setType(typeName);
 					proposal.setSourceType(sourceTypeName);
 					proposal.setContextInfo(attachedJavaDoc);
-					
+
 					proposals.add(proposal);
 					// <<<=== JBIDE-512, JBIDE-2541 related changes
 				}
 			}
-			status.setProposals(proposals);
-			return status;
+			resolution.setProposals(proposals);
+			return resolution;
 		}
 
 		// Here we have a list of vars for some part of expression
 		// OK. we'll proceed with members of these vars
-		if (status.getResolvedTokens() == status.getTokens()) {
+		if (resolution.getLastResolvedToken() == operand) {
 			// First segment is the last one
 			Set<TextProposal> proposals = new TreeSet<TextProposal>(TextProposal.KB_PROPOSAL_ORDER);
 			// In some cases there may be a few references to the same variable name.
 			// For example @Factory and @DataModel. We should use @DataModel instead of @Factory
 			// method which returns null.
 			// See https://jira.jboss.org/jira/browse/JBIDE-3694
-			
+
 			// JBIDE-512, JBIDE-2541 related changes ===>>>
 			TypeInfoCollector.MemberInfo bijectedAttribute = null;
+
+			JavaMemberELSegmentImpl segment = new JavaMemberELSegmentImpl();
+			segment.setToken(operand.getFirstToken());
+			segment.setResolved(true);
+			resolution.addSegment(segment);
+
 			for (V var : resolvedVariables) {
 				if(isSingularAttribute(var)) {
 					bijectedAttribute = getMemberInfoByVariable(var, true);
@@ -443,11 +488,11 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 					typeName = Signature.getSimpleName(typeName);
 				IJavaElement element = member == null ? null : member.getJavaElement();
 				String attachedJavaDoc = null;
-				
+
 				try {
 					attachedJavaDoc = element == null ? null : element.getAttachedJavadoc(null);
 				} catch (JavaModelException e) {
-					// Ignore
+					WebKbPlugin.getDefault().logError(e);
 				}
 
 				String varName = var.getName();
@@ -470,56 +515,73 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 					proposal.setContextInfo(attachedJavaDoc);
 					proposals.add(proposal);
 				}
-				status.setMemberOfResolvedOperand(bijectedAttribute!=null?bijectedAttribute:getMemberInfoByVariable(var, true));
+				segment.setMemberInfo(bijectedAttribute!=null?bijectedAttribute:getMemberInfoByVariable(var, true));
+				segment.getVariables().add(var);
 			}
 			// <<<=== JBIDE-512, JBIDE-2541 related changes
 
-			status.setLastResolvedToken(expr);
-			status.setProposals(proposals);
-			return status;
+			resolution.setLastResolvedToken(expr);
+			resolution.setProposals(proposals);
+			return resolution;
 		}
 
 		// First segment is found - proceed with next tokens 
 		List<TypeInfoCollector.MemberInfo> members = new ArrayList<TypeInfoCollector.MemberInfo>();
+		JavaMemberELSegmentImpl segment = new JavaMemberELSegmentImpl();
+		segment.setToken(expr.getFirstToken());
 		for (V var : resolvedVariables) {
 			TypeInfoCollector.MemberInfo member = getMemberInfoByVariable(var, returnEqualedVariablesOnly);
-			if (member != null && !members.contains(member)) 
+			if (member != null && !members.contains(member)) { 
 				members.add(member);
+				segment.setMemberInfo(member);
+				segment.getVariables().add(var);
+				segment.setResolved(true);
+			}
 		}
+		resolution.addSegment(segment);
 		//process segments one by one
-		if(left != null) while(left != expr) {
-			left = (ELInvocationExpression)left.getParent();
-			if (left != expr) { // inside expression
-				if(left instanceof ELArgumentInvocation) {
-					String s = "#{" + left.getLeft().toString() + collectionAdditionForCollectionDataModel + "}"; //$NON-NLS-1$ //$NON-NLS-2$
-					ELParser p = getParserFactory().createParser();
-					ELInvocationExpression expr1 = (ELInvocationExpression)p.parse(s).getInstances().get(0).getExpression();
-					members = resolveSegment(expr1.getLeft(), members, status, returnEqualedVariablesOnly, varIsUsed);
-					members = resolveSegment(expr1, members, status, returnEqualedVariablesOnly, varIsUsed);
-					if(status.getLastResolvedToken() == expr1) {
-						status.setLastResolvedToken(left);
+		if(left != null) {
+			while(left != expr) {
+				left = (ELInvocationExpression)left.getParent();
+				if (left != expr) { // inside expression
+					segment = new JavaMemberELSegmentImpl();
+					segment.setResolved(true);
+					if(left instanceof ELArgumentInvocation) {
+						String s = "#{" + left.getLeft().toString() + collectionAdditionForCollectionDataModel + "}"; //$NON-NLS-1$ //$NON-NLS-2$
+						ELParser p = getParserFactory().createParser();
+						ELInvocationExpression expr1 = (ELInvocationExpression)p.parse(s).getInstances().get(0).getExpression();
+						members = resolveSegment(expr1.getLeft(), members, resolution, returnEqualedVariablesOnly, varIsUsed, segment);
+						members = resolveSegment(expr1, members, resolution, returnEqualedVariablesOnly, varIsUsed, segment);
+						if(resolution.getLastResolvedToken() == expr1) {
+							resolution.setLastResolvedToken(left);
+						}
+					} else {
+						members = resolveSegment(left, members, resolution, returnEqualedVariablesOnly, varIsUsed, segment);
 					}
-				} else {				
-					members = resolveSegment(left, members, status, returnEqualedVariablesOnly, varIsUsed);
+					if(!members.isEmpty()) {
+						segment.setMemberInfo(members.get(0));
+					}
+					resolution.addSegment(segment);
+				} else { // Last segment
+					resolveLastSegment((ELInvocationExpression)operand, members, resolution, returnEqualedVariablesOnly, varIsUsed);
+					break;
 				}
-			} else { // Last segment
-				resolveLastSegment((ELInvocationExpression)operand, members, status, returnEqualedVariablesOnly, varIsUsed);
-				break;
 			}
 		}
 
-		if(status.getProposals().isEmpty() && status.getUnpairedGettersOrSetters()!=null) {
-			status.clearUnpairedGettersOrSetters();
+		if(resolution.getProposals().isEmpty() && !resolution.getSegments().isEmpty()) {
+//			&& status.getUnpairedGettersOrSetters()!=null) {
+			ELSegment lastSegment = resolution.getSegments().get(resolution.getSegments().size()-1);
+			if(lastSegment instanceof JavaMemberELSegmentImpl) {
+				((JavaMemberELSegmentImpl)lastSegment).clearUnpairedGettersOrSetters();
+			}
 		}
-		return status;
+		return resolution;
 	}
 
 	abstract public List<V> resolveVariables(IFile file, ELInvocationExpression expr, boolean isFinal, boolean onlyEqualNames);
 
 	abstract protected TypeInfoCollector.MemberInfo getMemberInfoByVariable(V var, boolean onlyEqualNames);
-
-	protected void setUsedVariables(ELOperandResolveStatus status, List<V> resolvedVariables) {
-	}
 
 	protected boolean isSingularAttribute(V var) {
 		return false;
@@ -527,14 +589,15 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 
 	protected List<TypeInfoCollector.MemberInfo> resolveSegment(ELInvocationExpression expr, 
 			List<TypeInfoCollector.MemberInfo> members,
-			ELOperandResolveStatus status,
-			boolean returnEqualedVariablesOnly, boolean varIsUsed) {
+			ELResolutionImpl resolution,
+			boolean returnEqualedVariablesOnly, boolean varIsUsed, JavaMemberELSegmentImpl segment) {
 		LexicalToken lt = (expr instanceof ELPropertyInvocation) 
 			? ((ELPropertyInvocation)expr).getName()
-					: (expr instanceof ELMethodInvocation) 
+					: (expr instanceof ELMethodInvocation)
 					? ((ELMethodInvocation)expr).getName()
 							: null;
 		String name = lt != null ? lt.getText() : ""; // token.getText(); //$NON-NLS-1$
+		segment.setToken(lt);
 		if (expr.getType() == ELObjectType.EL_PROPERTY_INVOCATION) {
 			// Find properties for the token
 			List<TypeInfoCollector.MemberInfo> newMembers = new ArrayList<TypeInfoCollector.MemberInfo>();
@@ -542,7 +605,7 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 				if (mbr.getMemberType() == null) continue;
 				TypeInfoCollector infos = mbr.getTypeCollector(varIsUsed);
 				if (TypeInfoCollector.isNotParameterizedCollection(mbr) || TypeInfoCollector.isResourceBundle(mbr.getMemberType())) {
-					status.setMapOrCollectionOrBundleAmoungTheTokens();
+					resolution.setMapOrCollectionOrBundleAmoungTheTokens(true);
 				}
 				List<TypeInfoCollector.MemberInfo> properties = infos.getProperties();
 				for (TypeInfoCollector.MemberInfo property : properties) {
@@ -558,7 +621,7 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 			}
 			members = newMembers;
 			if (members != null && !members.isEmpty())
-				status.setLastResolvedToken(expr);
+				resolution.setLastResolvedToken(expr);
 		}
 		if (expr.getType() == ELObjectType.EL_METHOD_INVOCATION) {
 			// Find methods for the token
@@ -570,7 +633,7 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 				if (mbr.getMemberType() == null) continue;
 				TypeInfoCollector infos = mbr.getTypeCollector();
 				if (TypeInfoCollector.isNotParameterizedCollection(mbr) || TypeInfoCollector.isResourceBundle(mbr.getMemberType())) {
-					status.setMapOrCollectionOrBundleAmoungTheTokens();
+					resolution.setMapOrCollectionOrBundleAmoungTheTokens(true);
 				}
 				List<TypeInfoCollector.MemberInfo> methods = infos.getMethods();
 				for (TypeInfoCollector.MemberInfo method : methods) {
@@ -581,17 +644,27 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 			}
 			members = newMembers;
 			if (members != null && !members.isEmpty())
-				status.setLastResolvedToken(expr);
+				resolution.setLastResolvedToken(expr);
 		}
 		return members;
 	}
 
 	protected void resolveLastSegment(ELInvocationExpression expr, 
 			List<TypeInfoCollector.MemberInfo> members,
-			ELOperandResolveStatus status,
+			ELResolutionImpl resolution,
 			boolean returnEqualedVariablesOnly, boolean varIsUsed) {
 		Set<TextProposal> kbProposals = new TreeSet<TextProposal>(TextProposal.KB_PROPOSAL_ORDER);
-		
+
+		JavaMemberELSegmentImpl segment = new JavaMemberELSegmentImpl();
+		if(expr instanceof ELPropertyInvocation) {
+			segment.setToken(((ELPropertyInvocation)expr).getName());
+		}
+//		segment.setToken(expr.getLastToken());
+		if(segment.getToken()!=null) {
+			resolution.addSegment(segment);
+		}
+		resolution.setProposals(kbProposals);
+
 		if (expr.getType() == ELObjectType.EL_PROPERTY_INVOCATION && ((ELPropertyInvocation)expr).getName() == null) {
 			// return all the methods + properties
 			for (TypeInfoCollector.MemberInfo mbr : members) {
@@ -604,10 +677,9 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 				}
 				TypeInfoCollector infos = mbr.getTypeCollector(varIsUsed);
 				if (TypeInfoCollector.isNotParameterizedCollection(mbr) || TypeInfoCollector.isResourceBundle(mbr.getMemberType())) {
-					status.setMapOrCollectionOrBundleAmoungTheTokens();
+					resolution.setMapOrCollectionOrBundleAmoungTheTokens(true);
 				}
-				
-				
+
 				// JBIDE-512, JBIDE-2541 related changes ===>>>
 				/*
 				Set<String> methodPresentations = 
@@ -625,7 +697,7 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 
 				Set<MemberPresentation> methodPresentations = 
 					infos.getMethodPresentations();
-				
+
 				if (methodPresentations != null) {
 					for (MemberPresentation presentation : methodPresentations) {
 						String presentationString = presentation.getPresentation();
@@ -638,11 +710,11 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 							typeName = Signature.getSimpleName(typeName);
 						IJavaElement element = member == null ? null : member.getJavaElement();
 						String attachedJavaDoc = null;
-						
+
 						try {
 							attachedJavaDoc = element == null ? null : element.getAttachedJavadoc(null);
 						} catch (JavaModelException e) {
-							// Ignore
+							WebKbPlugin.getDefault().logError(e);
 						}
 
 						TextProposal proposal = new TextProposal();
@@ -652,7 +724,7 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 						proposal.setType(typeName);
 						proposal.setSourceType(sourceTypeName);
 						proposal.setContextInfo(attachedJavaDoc);
-						
+
 						kbProposals.add(proposal);
 					}
 				}
@@ -672,8 +744,8 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 				*/
 
 				Set<MemberPresentation> propertyPresentations = 
-					infos.getPropertyPresentations(status.getUnpairedGettersOrSetters());
-				
+					infos.getPropertyPresentations(segment.getUnpairedGettersOrSetters());
+
 				if (propertyPresentations != null) {
 					for (MemberPresentation presentation : propertyPresentations) {
 						String presentationString = presentation.getPresentation();
@@ -686,11 +758,11 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 							typeName = Signature.getSimpleName(typeName);
 						IJavaElement element = member == null ? null : member.getJavaElement();
 						String attachedJavaDoc = null;
-						
+
 						try {
 							attachedJavaDoc = element == null ? null : element.getAttachedJavadoc(null);
 						} catch (JavaModelException e) {
-							// Ignore
+							WebKbPlugin.getDefault().logError(e);
 						}
 
 						TextProposal proposal = new TextProposal();
@@ -700,12 +772,11 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 						proposal.setType(typeName);
 						proposal.setSourceType(sourceTypeName);
 						proposal.setContextInfo(attachedJavaDoc);
-						
+
 						kbProposals.add(proposal);
 					}
 				}
 				// <<<=== JBIDE-512, JBIDE-2541 related changes
-
 			}
 		} else
 			if(expr.getType() != ELObjectType.EL_ARGUMENT_INVOCATION)
@@ -724,11 +795,11 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 				if (mbr.getMemberType() == null) continue;
 				TypeInfoCollector infos = mbr.getTypeCollector();
 				if (TypeInfoCollector.isNotParameterizedCollection(mbr) || TypeInfoCollector.isResourceBundle(mbr.getMemberType())) {
-					status.setMapOrCollectionOrBundleAmoungTheTokens();
+					resolution.setMapOrCollectionOrBundleAmoungTheTokens(true);
 				}
 				proposalsToFilter.addAll(infos.getMethodPresentations());
-				proposalsToFilter.addAll(infos.getPropertyPresentations(status.getUnpairedGettersOrSetters()));
-				status.setMemberOfResolvedOperand(mbr);
+				proposalsToFilter.addAll(infos.getPropertyPresentations(segment.getUnpairedGettersOrSetters()));
+				segment.setMemberInfo(mbr);
 			}
 			for (TypeInfoCollector.MemberPresentation proposal : proposalsToFilter) {
 				// We do expect nothing but name for method tokens (No round brackets)
@@ -741,15 +812,15 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 						kbProposal.setReplacementString(proposal.getPresentation());
 
 						setImage(kbProposal, proposal);
-						
+
 						kbProposals.add(kbProposal);
 
-						status.setMemberOfResolvedOperand(proposal.getMember());
-						if(status.getUnpairedGettersOrSetters()!=null) {
-							TypeInfoCollector.MethodInfo unpirMethod = status.getUnpairedGettersOrSetters().get(filter);
-							status.clearUnpairedGettersOrSetters();
+						segment.setMemberInfo(proposal.getMember());
+						if(segment.getUnpairedGettersOrSetters()!=null) {
+							TypeInfoCollector.MethodInfo unpirMethod = segment.getUnpairedGettersOrSetters().get(filter);
+							segment.clearUnpairedGettersOrSetters();
 							if(unpirMethod!=null) {
-								status.getUnpairedGettersOrSetters().put(filter, unpirMethod);
+								segment.getUnpairedGettersOrSetters().put(filter, unpirMethod);
 							}
 						}
 						break;
@@ -771,7 +842,7 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 					try {
 						attachedJavaDoc = element == null ? null : element.getAttachedJavadoc(null);
 					} catch (JavaModelException e) {
-						// Ignore
+						WebKbPlugin.getDefault().logError(e);
 					}
 
 					TextProposal kbProposal = new TextProposal();
@@ -781,7 +852,7 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 					kbProposal.setType(typeName);
 					kbProposal.setSourceType(sourceTypeName);
 					kbProposal.setContextInfo(attachedJavaDoc);
-					
+
 					kbProposals.add(kbProposal);
 					// <<<=== JBIDE-512, JBIDE-2541 related changes
 				}
@@ -798,14 +869,14 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 				if (mbr.getMemberType() == null) continue;
 				try {
 					if(TypeInfoCollector.isInstanceofType(mbr.getMemberType(), "java.util.Map")) { //$NON-NLS-1$
-						status.setMapOrCollectionOrBundleAmoungTheTokens();
+						resolution.setMapOrCollectionOrBundleAmoungTheTokens(true);
 						//if map/collection is parameterized, we might return member info for value type. 
 						return;
 					}
 				} catch (JavaModelException jme) {
-					//ignore
+					WebKbPlugin.getDefault().logError(jme);
 				}
-				status.setMemberOfResolvedOperand(mbr);
+				segment.setMemberInfo(mbr);
 			}
 
 			String filter = expr.getMemberName();
@@ -819,28 +890,30 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 					filter = filter.length() == 1 ? "" : filter.substring(1, filter.length() - 1); //$NON-NLS-1$
 				} else {
 					//Value is set as expression itself, we cannot compute it
-					if(isMessages) status.setMapOrCollectionOrBundleAmoungTheTokens();
+					if(isMessages) {
+						resolution.setMapOrCollectionOrBundleAmoungTheTokens(true);
+					}
 					return;
 				}
 			}
-			
+
 			for (TypeInfoCollector.MemberPresentation proposal : proposalsToFilter) {
 				if(returnEqualedVariablesOnly) {
 					// This is used for validation.
 					if (proposal.getPresentation().equals(filter)) {
 						TextProposal kbProposal = new TextProposal();
 						kbProposal.setReplacementString(proposal.getPresentation());
-						
+
 						setImage(kbProposal, proposal);
-						
+
 						kbProposals.add(kbProposal);
 
-						status.setMemberOfResolvedOperand(proposal.getMember());
-						if(status.getUnpairedGettersOrSetters()!=null) {
-							TypeInfoCollector.MethodInfo unpirMethod = status.getUnpairedGettersOrSetters().get(filter);
-							status.clearUnpairedGettersOrSetters();
+						segment.setMemberInfo(proposal.getMember());
+						if(segment.getUnpairedGettersOrSetters()!=null) {
+							TypeInfoCollector.MethodInfo unpirMethod = segment.getUnpairedGettersOrSetters().get(filter);
+							segment.clearUnpairedGettersOrSetters();
 							if(unpirMethod!=null) {
-								status.getUnpairedGettersOrSetters().put(filter, unpirMethod);
+								segment.getUnpairedGettersOrSetters().put(filter, unpirMethod);
 							}
 						}
 						break;
@@ -858,35 +931,32 @@ public abstract class AbstractELCompletionEngine<V extends AbstractELCompletionE
 						typeName = Signature.getSimpleName(typeName);
 					IJavaElement element = member == null ? null : member.getJavaElement();
 					String attachedJavaDoc = null;
-					
+
 					try {
 						attachedJavaDoc = element == null ? null : element.getAttachedJavadoc(null);
 					} catch (JavaModelException e) {
-						// Ignore
+						WebKbPlugin.getDefault().logError(e);
 					}
 
 					TextProposal kbProposal = new TextProposal();
-					
+
 					String replacementString = proposal.getPresentation().substring(filter.length());
 					if (bSurroundWithQuotes) {
 						replacementString = "'" + replacementString + "']"; //$NON-NLS-1$ //$NON-NLS-2$
 					}
-					
+
 					kbProposal.setReplacementString(replacementString);
 					kbProposal.setImage(getELProposalImage());
 					kbProposal.setType(typeName);
 					kbProposal.setSourceType(sourceTypeName);
 					kbProposal.setContextInfo(attachedJavaDoc);
-				
+
 					kbProposals.add(kbProposal);
 					// <<<=== JBIDE-512, JBIDE-2541 related changes
 				}
 			}
 		}
-		status.setProposals(kbProposals);
-		if (status.isOK()){
-			status.setLastResolvedToken(expr);
-		}
+		segment.setResolved(!resolution.getProposals().isEmpty() || resolution.isMapOrCollectionOrBundleAmoungTheTokens());
 	}
 
 	protected boolean isSingularMember(TypeInfoCollector.MemberInfo mbr) {
