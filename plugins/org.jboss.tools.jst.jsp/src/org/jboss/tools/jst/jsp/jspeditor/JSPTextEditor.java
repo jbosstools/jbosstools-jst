@@ -27,6 +27,8 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.TextEvent;
+import org.eclipse.jface.text.contentassist.ContentAssistant;
+import org.eclipse.jface.text.contentassist.IContentAssistant;
 import org.eclipse.jface.text.formatter.IContentFormatter;
 import org.eclipse.jface.text.hyperlink.IHyperlinkDetector;
 import org.eclipse.jface.text.source.IAnnotationModel;
@@ -411,6 +413,10 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			IVerticalRuler ruler, int styles) {
 		ISourceViewer sv = super.createSourceViewer(parent, ruler, styles);
 		sv.getTextWidget().addFocusListener(new TextFocusListener());
+		IContentAssistant ca = getSourceViewerConfiguration().getContentAssistant(sv);
+		if (ca instanceof ContentAssistant) {
+			((ContentAssistant)ca).enableColoredLabels(true);
+		}
 		return sv;
 	}
 

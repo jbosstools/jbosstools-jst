@@ -12,8 +12,10 @@ package org.jboss.tools.jst.jsp.contentassist;
 
 import org.eclipse.jface.text.ITextOperationTarget;
 import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.jface.text.contentassist.ICompletionProposalExtension6;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.wst.sse.ui.internal.contentassist.CustomCompletionProposal;
@@ -22,7 +24,9 @@ import org.eclipse.wst.sse.ui.internal.contentassist.IRelevanceConstants;
 /**
  * @author Igels
  */
-public class AutoContentAssistantProposal extends CustomCompletionProposal {
+public class AutoContentAssistantProposal extends CustomCompletionProposal implements ICompletionProposalExtension6 
+
+{
 
     private boolean autoContentAssistant = false;
 
@@ -71,5 +75,56 @@ public class AutoContentAssistantProposal extends CustomCompletionProposal {
 		    cursorPosition = closeStartAndEndTagPosition;
 		}
 		return cursorPosition>-1?cursorPosition:super.getCursorPosition();
+	}
+
+	
+	StyledString fStyledDisplayString;
+	
+	public String getDisplayString() {
+		if (super.getDisplayString() != null)
+			return super.getDisplayString();
+		else {
+			if (super.getReplacementString() != null) { 
+				setDisplayString(super.getReplacementString());
+				return super.getDisplayString();
+			}
+		}
+		return ""; //$NON-NLS-1$
+	}
+	
+	public void setDisplayString(String string) {
+		super.setDisplayString(string);
+		
+		boolean isJavaWordPart = string.length() > 0  && Character.isJavaIdentifierPart(string.charAt(0));
+		boolean hasRetType = isJavaWordPart && string.indexOf(':') > 0;
+		boolean hasDeclType = isJavaWordPart && string.lastIndexOf('-') > 0;
+		
+		int p1i = string.indexOf(':');
+		int p2i = string.lastIndexOf('-');
+		
+		String p1 = hasRetType && hasDeclType ? string.substring(0, p2i) : string;
+		String p2 = string.substring(p1.length());
+		
+		StyledString styledString = new StyledString();
+
+		// name, attrs, type
+		styledString.append(p1);
+
+		// decl type
+		if (p2 != null && p2.length() > 0) 
+			styledString.append(p2, StyledString.QUALIFIER_STYLER);
+		fStyledDisplayString = styledString; 
+	}
+	
+	public StyledString getStyledDisplayString() {
+		if (fStyledDisplayString == null) {
+			setDisplayString(super.getDisplayString()); // This re-creates Styled Display String
+		}
+		return fStyledDisplayString;
+	}
+	
+	public void setStyledDisplayString(StyledString text) {
+		fStyledDisplayString = text;
+		super.setDisplayString(fStyledDisplayString == null ? "" : fStyledDisplayString.getString());
 	}
 }
