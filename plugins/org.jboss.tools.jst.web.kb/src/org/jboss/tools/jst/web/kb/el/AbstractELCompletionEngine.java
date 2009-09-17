@@ -481,7 +481,6 @@ public abstract class AbstractELCompletionEngine<V extends IVariable> implements
 					proposals.add(proposal);
 				}
 				segment.setMemberInfo(bijectedAttribute!=null?bijectedAttribute:member);
-				segment.setElement(bijectedAttribute!=null?bijectedAttribute.getJavaElement():member!=null?member.getJavaElement():null);
 				segment.getVariables().add(var);
 			}
 			// <<<=== JBIDE-512, JBIDE-2541 related changes
@@ -500,7 +499,6 @@ public abstract class AbstractELCompletionEngine<V extends IVariable> implements
 			if (member != null && !members.contains(member)) { 
 				members.add(member);
 				segment.setMemberInfo(member);
-				segment.setElement(member.getJavaElement());
 				segment.getVariables().add(var);
 				segment.setResolved(true);
 			}
@@ -527,7 +525,6 @@ public abstract class AbstractELCompletionEngine<V extends IVariable> implements
 					}
 					if(!members.isEmpty()) {
 						segment.setMemberInfo(members.get(0));	// TODO: This is a buggy way to select a member to setup in a segment
-						segment.setElement(members.get(0).getJavaElement());
 					}
 					resolution.addSegment(segment);
 				} else { // Last segment
@@ -756,7 +753,6 @@ public abstract class AbstractELCompletionEngine<V extends IVariable> implements
 				proposalsToFilter.addAll(infos.getMethodPresentations());
 				proposalsToFilter.addAll(infos.getPropertyPresentations(segment.getUnpairedGettersOrSetters()));
 				segment.setMemberInfo(mbr);
-				segment.setElement(mbr!=null?mbr.getJavaElement():null);
 			}
 			for (TypeInfoCollector.MemberPresentation proposal : proposalsToFilter) {
 				// We do expect nothing but name for method tokens (No round brackets)
@@ -773,7 +769,6 @@ public abstract class AbstractELCompletionEngine<V extends IVariable> implements
 						kbProposals.add(kbProposal);
 
 						segment.setMemberInfo(proposal.getMember());
-						segment.setElement(proposal.getMember()!=null?proposal.getMember().getJavaElement():null);
 						if(segment.getUnpairedGettersOrSetters()!=null) {
 							TypeInfoCollector.MethodInfo unpirMethod = segment.getUnpairedGettersOrSetters().get(filter);
 							segment.clearUnpairedGettersOrSetters();
@@ -829,7 +824,6 @@ public abstract class AbstractELCompletionEngine<V extends IVariable> implements
 					WebKbPlugin.getDefault().logError(jme);
 				}
 				segment.setMemberInfo(mbr);
-				segment.setElement(mbr!=null?mbr.getJavaElement():null);
 			}
 
 			String filter = expr.getMemberName();
@@ -862,7 +856,6 @@ public abstract class AbstractELCompletionEngine<V extends IVariable> implements
 						kbProposals.add(kbProposal);
 
 						segment.setMemberInfo(proposal.getMember());
-						segment.setElement(proposal.getMember()!=null?proposal.getMember().getJavaElement():null);
 						if(segment.getUnpairedGettersOrSetters()!=null) {
 							TypeInfoCollector.MethodInfo unpirMethod = segment.getUnpairedGettersOrSetters().get(filter);
 							segment.clearUnpairedGettersOrSetters();
