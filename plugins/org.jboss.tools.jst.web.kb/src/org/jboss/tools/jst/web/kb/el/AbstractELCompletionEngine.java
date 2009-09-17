@@ -17,9 +17,11 @@ import java.util.TreeSet;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
+import org.eclipse.jdt.internal.ui.text.java.ProposalInfo;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.swt.graphics.Image;
 import org.jboss.tools.common.el.core.model.ELArgumentInvocation;
@@ -109,6 +111,14 @@ public abstract class AbstractELCompletionEngine<V extends IVariable> implements
 		return resolution;
 	}
 
+	/**
+	 * Resolves EL Operand
+	 * 
+	 * @param operand
+	 * @param context
+	 * @param returnEqualedVariablesOnly
+	 * @return
+	 */
 	public ELResolution resolveELOperand(ELExpression operand, ELContext context, boolean returnEqualedVariablesOnly) {
 		List<Var> vars = new ArrayList<Var>();
 		Var[] array = context.getVars();
@@ -282,13 +292,7 @@ public abstract class AbstractELCompletionEngine<V extends IVariable> implements
 					}
 
 					IJavaElement element = memberInfo == null ? null : memberInfo.getJavaElement();
-					String attachedJavaDoc = null;
-
-					try {
-						attachedJavaDoc = element == null ? null : element.getAttachedJavadoc(null);
-					} catch (JavaModelException e) {
-						WebKbPlugin.getDefault().logError(e);
-					}
+					String attachedJavaDoc = (element instanceof IMember)?(new ProposalInfo((IMember)element)).getInfo(null):null;
 
 					String varNameProposal = v.getName().substring(prefix.length());
 					TextProposal proposal = new TextProposal();
@@ -406,13 +410,7 @@ public abstract class AbstractELCompletionEngine<V extends IVariable> implements
 						typeName = Signature.getSimpleName(typeName);
 
 					IJavaElement element = member == null ? null : member.getJavaElement();
-					String attachedJavaDoc = null;
-
-					try {
-						attachedJavaDoc = element == null ? null : element.getAttachedJavadoc(null);
-					} catch (JavaModelException e) {
-						WebKbPlugin.getDefault().logError(e);
-					}
+					String attachedJavaDoc = (element instanceof IMember)?(new ProposalInfo((IMember)element)).getInfo(null):null;
 
 					TextProposal proposal = new TextProposal();
 					proposal.setLabel(varName);
@@ -460,14 +458,8 @@ public abstract class AbstractELCompletionEngine<V extends IVariable> implements
 				if (typeName != null && typeName.indexOf('.') != -1) 
 					typeName = Signature.getSimpleName(typeName);
 				IJavaElement element = member == null ? null : member.getJavaElement();
-				String attachedJavaDoc = null;
-
-				try {
-					attachedJavaDoc = element == null ? null : element.getAttachedJavadoc(null);
-				} catch (JavaModelException e) {
-					WebKbPlugin.getDefault().logError(e);
-				}
-
+				String attachedJavaDoc = (element instanceof IMember)?(new ProposalInfo((IMember)element)).getInfo(null):null;
+				
 				String varName = var.getName();
 				if(operand.getLength()<=varName.length()) {
 					TextProposal proposal = new TextProposal();
@@ -685,13 +677,7 @@ public abstract class AbstractELCompletionEngine<V extends IVariable> implements
 						if (typeName != null && typeName.indexOf('.') != -1) 
 							typeName = Signature.getSimpleName(typeName);
 						IJavaElement element = member == null ? null : member.getJavaElement();
-						String attachedJavaDoc = null;
-
-						try {
-							attachedJavaDoc = element == null ? null : element.getAttachedJavadoc(null);
-						} catch (JavaModelException e) {
-							WebKbPlugin.getDefault().logError(e);
-						}
+						String attachedJavaDoc = (element instanceof IMember)?(new ProposalInfo((IMember)element)).getInfo(null):null;
 
 						TextProposal proposal = new TextProposal();
 						proposal.setReplacementString(presentationString);
@@ -733,13 +719,7 @@ public abstract class AbstractELCompletionEngine<V extends IVariable> implements
 						if (typeName != null && typeName.indexOf('.') != -1) 
 							typeName = Signature.getSimpleName(typeName);
 						IJavaElement element = member == null ? null : member.getJavaElement();
-						String attachedJavaDoc = null;
-
-						try {
-							attachedJavaDoc = element == null ? null : element.getAttachedJavadoc(null);
-						} catch (JavaModelException e) {
-							WebKbPlugin.getDefault().logError(e);
-						}
+						String attachedJavaDoc = (element instanceof IMember)?(new ProposalInfo((IMember)element)).getInfo(null):null;
 
 						TextProposal proposal = new TextProposal();
 						proposal.setReplacementString(presentationString);
@@ -815,13 +795,7 @@ public abstract class AbstractELCompletionEngine<V extends IVariable> implements
 					if (typeName != null && typeName.indexOf('.') != -1) 
 						typeName = Signature.getSimpleName(typeName);
 					IJavaElement element = member == null ? null : member.getJavaElement();
-					String attachedJavaDoc = null;
-					
-					try {
-						attachedJavaDoc = element == null ? null : element.getAttachedJavadoc(null);
-					} catch (JavaModelException e) {
-						WebKbPlugin.getDefault().logError(e);
-					}
+					String attachedJavaDoc = (element instanceof IMember)?(new ProposalInfo((IMember)element)).getInfo(null):null;
 
 					TextProposal kbProposal = new TextProposal();
 					kbProposal.setReplacementString(proposal.getPresentation().substring(filter.length()));
@@ -910,13 +884,7 @@ public abstract class AbstractELCompletionEngine<V extends IVariable> implements
 					if (typeName != null && typeName.indexOf('.') != -1) 
 						typeName = Signature.getSimpleName(typeName);
 					IJavaElement element = member == null ? null : member.getJavaElement();
-					String attachedJavaDoc = null;
-
-					try {
-						attachedJavaDoc = element == null ? null : element.getAttachedJavadoc(null);
-					} catch (JavaModelException e) {
-						WebKbPlugin.getDefault().logError(e);
-					}
+					String attachedJavaDoc = (element instanceof IMember)?(new ProposalInfo((IMember)element)).getInfo(null):null;
 
 					TextProposal kbProposal = new TextProposal();
 
