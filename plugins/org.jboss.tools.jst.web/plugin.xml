@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.0"?>
 <plugin>
+   <extension-point id="jspAdopt" name="JSP Adopt" schema="schema/jspAdopt.exsd"/>
 
    <extension point="org.jboss.tools.common.model.meta">
       <meta path="meta/studio_eclipse_option.meta">
@@ -33,7 +34,7 @@
       </specialwizard>
    </extension>
 
-   <extension point="org.jboss.tools.common.model.jspAdopt">
+   <extension point="org.jboss.tools.jst.web.jspAdopt">
       <jspAdopt class="org.jboss.tools.jst.web.tld.model.handlers.JSPAdopt"/>
       <jspAdopt class="org.jboss.tools.jst.web.model.handlers.JSPAdopt"/>
    </extension>
@@ -118,6 +119,8 @@
 			class="org.jboss.tools.jst.web.model.handlers.FindReferringItemHandler"/>
 		<xclass id="org.jboss.tools.jst.web.model.handlers.JSPAdopt"
 			class="org.jboss.tools.jst.web.model.handlers.JSPAdopt"/>
+		<xclass id="org.jboss.tools.jst.web.model.handlers.JSPCompoundAdopt"
+			class="org.jboss.tools.jst.web.model.handlers.JSPCompoundAdopt"/>
 		<xclass id="org.jboss.tools.jst.web.model.handlers.JumpToTransitionTargetHandler"
 			class="org.jboss.tools.jst.web.model.handlers.JumpToTransitionTargetHandler"/>
 		<xclass id="org.jboss.tools.jst.web.model.handlers.RegisterInServerXmlHandler"

@@ -52,7 +52,7 @@
  </ICONS>
  <GlobalActions kind="list"/>
  <XModelEntity
-  AdoptManagerClass="org.jboss.tools.common.model.files.handlers.JSPAdopt"
+  AdoptManagerClass="org.jboss.tools.jst.web.model.handlers.JSPCompoundAdopt"
   ImplementationLoadingClass="org.jboss.tools.common.model.loaders.impl.BodyLoader"
   ImplementingClass="org.jboss.tools.common.model.filesystems.impl.RecognizedFileImpl"
   ObjectEditorClass="%HTML%" name="FileHTML">
@@ -143,7 +143,7 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity
-  AdoptManagerClass="org.jboss.tools.common.model.files.handlers.JSPAdopt"
+  AdoptManagerClass="org.jboss.tools.jst.web.model.handlers.JSPCompoundAdopt"
   ImplementationLoadingClass="org.jboss.tools.common.model.loaders.impl.BodyLoader"
   ImplementingClass="org.jboss.tools.common.model.filesystems.impl.RecognizedFileImpl"
   ObjectEditorClass="%JSP%" name="FileJSP">
@@ -233,7 +233,7 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity
-  AdoptManagerClass="org.jboss.tools.common.model.files.handlers.JSPAdopt"
+  AdoptManagerClass="org.jboss.tools.jst.web.model.handlers.JSPCompoundAdopt"
   ImplementationLoadingClass="org.jboss.tools.common.model.loaders.impl.BodyLoader"
   ImplementingClass="org.jboss.tools.common.model.filesystems.impl.RecognizedFileImpl"
   ObjectEditorClass="%HTML%" name="FileXHTML">
