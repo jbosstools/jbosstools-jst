@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.contentassist;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
@@ -23,6 +24,7 @@ import org.jboss.tools.common.el.core.resolver.ELCompletionEngine;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.ELContextImpl;
 import org.jboss.tools.common.el.core.resolver.ELResolution;
+import org.jboss.tools.common.el.core.resolver.ELResolutionImpl;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.ElVarSearcher;
 import org.jboss.tools.common.el.core.resolver.Var;
@@ -62,7 +64,7 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 					ELExpression operand, boolean returnEqualedVariablesOnly,
 					List<Var> vars, ElVarSearcher varSearcher)
 					throws BadLocationException, StringIndexOutOfBoundsException {
-				return null;
+				return new ELResolutionImpl();
 			}
 
 			public ELParserFactory getParserFactory() {
@@ -70,11 +72,11 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 			}
 
 			public List<TextProposal> getProposals(ELContext context, String el) {
-				return null;
+				return Collections.emptyList();
 			}
 
 			public ELResolution resolve(ELContext context, ELExpression operand) {
-				return null;
+				return new ELResolutionImpl();
 			}
 		};
 		ElVarSearcher varSearcher = new ElVarSearcher(file, fakeEngine);
