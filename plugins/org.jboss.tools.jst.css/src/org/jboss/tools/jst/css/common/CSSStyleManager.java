@@ -78,7 +78,8 @@ public class CSSStyleManager {
 					container = new StyleAttribyteContainer(selectedElement);
 
 				}
-			} else if (selectedObject instanceof Text) {
+			} else if ((selectedObject instanceof Text)
+					&& (selection instanceof ITextSelection)) {
 
 				Text styleText = (Text) selectedObject;
 
@@ -191,7 +192,6 @@ public class CSSStyleManager {
 		return absoluteOffset - ((IndexedRegion) basicNode).getStartOffset();
 	}
 
-	
 	/**
 	 * @param element
 	 * @param attrName

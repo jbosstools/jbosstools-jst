@@ -13,6 +13,9 @@ package org.jboss.tools.jst.css.common;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.wst.css.core.internal.provisional.document.ICSSNodeList;
+import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleDeclaration;
+import org.eclipse.wst.sse.core.internal.provisional.INodeAdapter;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.w3c.dom.css.CSSStyleDeclaration;
 import org.w3c.dom.css.CSSStyleRule;
@@ -70,6 +73,31 @@ public class CSSStyleRuleContainer extends StyleContainer {
 
 	public Object getStyleObject() {
 		return styleRule;
+	}
+
+	@Override
+	public void addNodeListener(INodeAdapter adapter) {
+		ICSSStyleDeclaration declaration = (ICSSStyleDeclaration) styleRule
+				.getStyle();
+		addNodeAdapter(declaration, adapter);
+		ICSSNodeList nodeList = declaration.getChildNodes();
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			addNodeAdapter(nodeList.item(i), adapter);
+		}
+
+	}
+
+	@Override
+	public void removeNodelListener(INodeAdapter adapter) {
+
+		ICSSStyleDeclaration declaration = (ICSSStyleDeclaration) styleRule
+				.getStyle();
+		removeNodeAdapter(declaration, adapter);
+		ICSSNodeList nodeList = declaration.getChildNodes();
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			removeNodeAdapter(nodeList.item(i), adapter);
+		}
+
 	}
 
 }

@@ -12,6 +12,9 @@ package org.jboss.tools.jst.css.common;
 
 import java.util.Map;
 
+import org.eclipse.wst.sse.core.internal.provisional.INodeAdapter;
+import org.eclipse.wst.sse.core.internal.provisional.INodeNotifier;
+
 /**
  * @author Sergey Dzmitrovich
  * 
@@ -29,5 +32,22 @@ public abstract class StyleContainer {
 			obj = ((StyleContainer) obj).getStyleObject();
 		return getStyleObject().equals(obj);
 	}
+
+	protected void addNodeAdapter(Object node, INodeAdapter adapter) {
+
+		if (node instanceof INodeNotifier)
+			((INodeNotifier) node).addAdapter(adapter);
+
+	}
+
+	protected void removeNodeAdapter(Object node, INodeAdapter adapter) {
+		if (node instanceof INodeNotifier)
+			((INodeNotifier) node).removeAdapter(adapter);
+
+	}
+
+	public abstract void addNodeListener(INodeAdapter adapter);
+
+	public abstract void removeNodelListener(INodeAdapter adapter);
 
 }
