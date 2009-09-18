@@ -19,6 +19,8 @@
       </meta>
       <meta path="meta/web-template.meta">
       </meta>
+      <meta path="meta/page-files.meta">
+      </meta>
    </extension>
    <extension point="org.jboss.tools.common.model.keys">
       <keys path="help/keys-web.properties"/>
