@@ -379,6 +379,7 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	 */
 	@Override
 	protected String getMatchString(IStructuredDocumentRegion parent, ITextRegion aRegion, int offset) {
+		if (aRegion == null) return "";
 		String matchString =  super.getMatchString(parent, aRegion, offset);
 		String regionType = aRegion.getType();
 		if(regionType == DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE && matchString.startsWith("\"")) { //$NON-NLS-1$
