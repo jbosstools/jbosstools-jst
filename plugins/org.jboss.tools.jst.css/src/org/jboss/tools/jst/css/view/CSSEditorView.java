@@ -11,24 +11,27 @@
 
 package org.jboss.tools.jst.css.view;
 
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.IContributedContentsView;
 import org.eclipse.ui.part.IPageBookViewPage;
+import org.eclipse.ui.views.contentoutline.ContentOutline;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
-import org.jboss.tools.jst.css.common.CSSSelectionListener;
+import org.jboss.tools.jst.css.common.CSSStyleListener;
+import org.jboss.tools.jst.css.common.ICSSViewListner;
+import org.jboss.tools.jst.css.common.StyleContainer;
 import org.jboss.tools.jst.css.properties.CSSPropertyPage;
 
 /**
  * @author Sergey Dzmitrovich
  * 
  */
-public class CSSEditorView extends PropertySheet {
+public class CSSEditorView extends PropertySheet implements ICSSViewListner {
 
 	static public String CONTRIBUTOR_ID = "org.eclipse.wst.css.core.csssource.source"; //$NON-NLS-1$
 
@@ -37,33 +40,22 @@ public class CSSEditorView extends PropertySheet {
 
 		super.init(site);
 		getSite().getPage().removeSelectionListener(this);
-		CSSSelectionListener.getInstance().addSelectionListener(this);
+		CSSStyleListener.getInstance().addSelectionListener(this);
 	}
 
 	@Override
 	public void dispose() {
 
 		super.dispose();
-		CSSSelectionListener.getInstance().removeSelectionListener(this);
+		CSSStyleListener.getInstance().removeSelectionListener(this);
 
-	}
-
-	@Override
-	public void selectionChanged(IWorkbenchPart part, ISelection sel) {
-		super.selectionChanged(part, sel);
-
-		// TODO find better way to react upon changing of node i source editor.
-		// Description of problem: when node is been editing PropertySheet will
-		// not send selection event to page as selection is same;
-		if (getCurrentPage() instanceof CSSPropertyPage)
-			((CSSPropertyPage) getCurrentPage()).update();
 	}
 
 	@Override
 	protected PageRec doCreatePage(final IWorkbenchPart part) {
-		if (part instanceof PropertySheet) {
-			return null;
-		}
+		// if (part instanceof PropertySheet) {
+		// return null;
+		// }
 		IPropertySheetPage page = new CSSPropertyPage(
 				new ITabbedPropertySheetPageContributor() {
 
@@ -101,5 +93,17 @@ public class CSSEditorView extends PropertySheet {
 			};
 		}
 		return super.getAdapter(key);
+	}
+
+	public void styleChanged(StyleContainer styleContainer) {
+		if (getCurrentPage() instanceof CSSPropertyPage)
+			((CSSPropertyPage) getCurrentPage()).update();
+
+	}
+	@Override
+	protected boolean isImportant(IWorkbenchPart part) {
+		if ((part instanceof IEditorPart) || (part instanceof ContentOutline))
+			return true;
+		return false;
 	}
 }

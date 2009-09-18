@@ -99,6 +99,8 @@ public class CSSPropertyPage extends TabbedPropertySheetPage implements
 					|| (!selectedObject.equals(newSelectedObject)))
 				super.selectionChanged(part, selection);
 			selectedObject = newSelectedObject;
+			
+			update();
 
 		}
 

@@ -11,6 +11,7 @@
 
 package org.jboss.tools.jst.css.view;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,12 +28,12 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
-import org.jboss.tools.jst.css.common.CSSSelectionListener;
+import org.jboss.tools.jst.css.common.CSSStyleListener;
+import org.jboss.tools.jst.css.common.ICSSViewListner;
 import org.jboss.tools.jst.css.common.StyleContainer;
 import org.jboss.tools.jst.css.messages.CSSUIMessages;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
@@ -41,7 +42,7 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
  * @author Sergey Dzmitrovich
  * 
  */
-public class CSSPreview extends ViewPart implements ISelectionListener {
+public class CSSPreview extends ViewPart implements ICSSViewListner {
 
 	private Browser browser;
 
@@ -57,13 +58,13 @@ public class CSSPreview extends ViewPart implements ISelectionListener {
 	public void init(IViewSite site) throws PartInitException {
 		super.init(site);
 
-		CSSSelectionListener.getInstance().addSelectionListener(this);
+		CSSStyleListener.getInstance().addSelectionListener(this);
 	}
 
 	@Override
 	public void dispose() {
 
-		CSSSelectionListener.getInstance().removeSelectionListener(this);
+		CSSStyleListener.getInstance().removeSelectionListener(this);
 		super.dispose();
 	}
 
@@ -155,22 +156,18 @@ public class CSSPreview extends ViewPart implements ISelectionListener {
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 
 		if (selection instanceof IStructuredSelection) {
+			Map<String, String> newAttributes;
 			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
 			if (structuredSelection.getFirstElement() instanceof StyleContainer) {
 
-				styleAttributes = ((StyleContainer) structuredSelection
+				newAttributes = ((StyleContainer) structuredSelection
 						.getFirstElement()).getStyleAttributes();
 
 			} else {
-				styleAttributes.clear();
+				newAttributes = Collections.EMPTY_MAP;
 			}
 
-			String newStyle = getStyle(styleAttributes);
-			if (!newStyle.equals(currentStyle)) {
-
-				currentStyle = newStyle;
-				updateBrowser();
-			}
+			updateView(newAttributes);
 
 		}
 
@@ -195,5 +192,18 @@ public class CSSPreview extends ViewPart implements ISelectionListener {
 
 	public String getCurrentStyle() {
 		return currentStyle;
+	}
+
+	public void styleChanged(StyleContainer styleContainer) {
+		updateView(styleContainer.getStyleAttributes());
+
+	}
+
+	protected void updateView(Map<String, String> attributes) {
+
+		this.styleAttributes = attributes;
+		this.currentStyle = getStyle(attributes);
+		updateBrowser();
+
 	}
 }
