@@ -396,6 +396,10 @@
 			class="org.jboss.tools.jst.jsp.outline.VpeProperties"/>
 		<xclass id="org.jboss.tools.jst.jsp.outline.DefaultDropCommandRunner"
 			class="org.jboss.tools.jst.jsp.outline.DefaultDropCommandRunner"/>
+		<xclass id="org.jboss.tools.jst.jsp.jspeditor.dnd.PaletteDropCommand"
+			class="org.jboss.tools.jst.jsp.jspeditor.dnd.PaletteDropCommand"/>
+		<xclass id="org.jboss.tools.jst.jsp.jspeditor.dnd.FileDropCommand"
+			class="org.jboss.tools.jst.jsp.jspeditor.dnd.FileDropCommand"/>
    </extension>
     
    <extension 

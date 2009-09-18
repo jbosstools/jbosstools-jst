@@ -24,8 +24,8 @@ import org.eclipse.ui.texteditor.ITextEditor;
 import org.jboss.tools.common.meta.action.SpecialWizard;
 import org.jboss.tools.common.model.ui.editors.dnd.DropCommandFactory;
 import org.jboss.tools.common.model.ui.editors.dnd.DropData;
-import org.jboss.tools.common.model.ui.editors.dnd.JSPTagProposalFactory;
 import org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor;
+import org.jboss.tools.jst.jsp.jspeditor.dnd.JSPTagProposalFactory;
 
 public class DefaultDropCommandRunner implements SpecialWizard {
 	String flavor;

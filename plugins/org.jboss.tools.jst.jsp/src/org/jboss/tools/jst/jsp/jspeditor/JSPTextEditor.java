@@ -103,8 +103,7 @@ import org.jboss.tools.common.model.ui.editor.IModelObjectEditorInput;
 import org.jboss.tools.common.model.ui.editors.dnd.DropCommandFactory;
 import org.jboss.tools.common.model.ui.editors.dnd.DropData;
 import org.jboss.tools.common.model.ui.editors.dnd.IDropCommand;
-import org.jboss.tools.common.model.ui.editors.dnd.JSPTagProposalFactory;
-import org.jboss.tools.common.model.ui.editors.dnd.TagProposal;
+import org.jboss.tools.common.model.ui.editors.dnd.ITagProposal;
 import org.jboss.tools.common.model.ui.editors.dnd.DropUtils.AttributeDescriptorValueProvider;
 import org.jboss.tools.common.model.ui.editors.dnd.composite.TagAttributesComposite;
 import org.jboss.tools.common.model.ui.editors.dnd.composite.TagAttributesComposite.AttributeDescriptorValue;
@@ -127,6 +126,8 @@ import org.jboss.tools.jst.jsp.editor.IJSPTextEditor;
 import org.jboss.tools.jst.jsp.editor.ITextFormatter;
 import org.jboss.tools.jst.jsp.editor.IVisualContext;
 import org.jboss.tools.jst.jsp.editor.IVisualController;
+import org.jboss.tools.jst.jsp.jspeditor.dnd.JSPTagProposalFactory;
+import org.jboss.tools.jst.jsp.jspeditor.dnd.TagProposal;
 import org.jboss.tools.jst.jsp.outline.JSPContentOutlineConfiguration;
 import org.jboss.tools.jst.jsp.outline.JSPPropertySheetConfiguration;
 import org.jboss.tools.jst.jsp.outline.ValueHelper;
@@ -768,10 +769,10 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		JspContentAssistProcessor processor;
 		IPageContext pageContext;
 
-		public void setProposal(TagProposal proposal) {
+		public void setProposal(ITagProposal proposal) {
 			if(this.proposal == proposal) return;
-			this.proposal = proposal;
-			query = createQuery(proposal);
+			this.proposal = (TagProposal)proposal;
+			query = createQuery(this.proposal);
 			ValueHelper valueHelper = new ValueHelper();
 			processor = valueHelper.createContentAssistProcessor();
 			pageContext = valueHelper.createPageContext(processor, query.getOffset());
@@ -897,6 +898,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 				event.detail = DND.DROP_NONE;
 				return;
 			}
+			JSPTagProposalFactory.getInstance();
 			dropContext.setDropTargetEvent(event);
 			if (dropContext.getFlavor() == null) {
 				event.detail = DND.DROP_NONE;
