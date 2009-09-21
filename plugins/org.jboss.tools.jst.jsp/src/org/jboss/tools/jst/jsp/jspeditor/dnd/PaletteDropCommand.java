@@ -82,7 +82,7 @@ public class PaletteDropCommand extends FileDropCommand {
 			if(endText != null) properties.setProperty(PaletteInsertHelper.PROPOPERTY_END_TEXT, endText);
 			if(reformat != null) properties.setProperty(PaletteInsertHelper.PROPOPERTY_REFORMAT_BODY, reformat);
 			if(newLine != null) properties.setProperty(PaletteInsertHelper.PROPOPERTY_NEW_LINE, newLine);
-			PaletteInsertHelper.insertIntoEditor(
+			PaletteInsertHelper.getInstance().insertIntoEditor(
 					getDefaultModel().getDropData().getSourceViewer(),
 					properties
 			);

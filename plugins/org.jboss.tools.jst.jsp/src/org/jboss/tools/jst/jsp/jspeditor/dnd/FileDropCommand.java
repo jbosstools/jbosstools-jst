@@ -61,7 +61,7 @@ public class FileDropCommand extends DefaultDropCommand {
 		properties.put(PaletteInsertHelper.PROPOPERTY_SELECTION_PROVIDER, getDefaultModel().getDropData().getSelectionProvider());
 		properties.put(PaletteInsertHelper.PROPOPERTY_ADD_TAGLIB, "true"); //$NON-NLS-1$
 		addCustomProperties(properties);
-		PaletteInsertHelper.insertIntoEditor(
+		JSPPaletteInsertHelper.getInstance().insertIntoEditor(
 				getDefaultModel().getDropData().getSourceViewer(),
 				properties
 		);

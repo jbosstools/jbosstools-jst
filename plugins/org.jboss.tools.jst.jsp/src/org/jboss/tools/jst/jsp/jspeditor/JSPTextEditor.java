@@ -126,6 +126,7 @@ import org.jboss.tools.jst.jsp.editor.IJSPTextEditor;
 import org.jboss.tools.jst.jsp.editor.ITextFormatter;
 import org.jboss.tools.jst.jsp.editor.IVisualContext;
 import org.jboss.tools.jst.jsp.editor.IVisualController;
+import org.jboss.tools.jst.jsp.jspeditor.dnd.JSPPaletteInsertHelper;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.JSPTagProposalFactory;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.TagProposal;
 import org.jboss.tools.jst.jsp.outline.JSPContentOutlineConfiguration;
@@ -569,7 +570,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		}
 
 		public void insert(Properties p) {
-			PaletteInsertHelper.insertIntoEditor(getSourceViewer(), p);
+			JSPPaletteInsertHelper.getInstance().insertIntoEditor(getSourceViewer(), p);
 		}
 
 	}
