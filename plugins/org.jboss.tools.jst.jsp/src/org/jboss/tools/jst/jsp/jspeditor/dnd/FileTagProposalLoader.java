@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jboss.tools.common.model.ui.editors.dnd.AbsoluteFilePathAttributeValueLoader;
-import org.jboss.tools.common.model.ui.editors.dnd.CssLinkAttributeValueLoader;
 import org.jboss.tools.common.model.ui.editors.dnd.DropURI;
 import org.jboss.tools.common.model.ui.editors.dnd.IAttributeValueLoader;
 import org.jboss.tools.common.model.ui.editors.dnd.IDropWizardModel;
@@ -22,7 +21,6 @@ import org.jboss.tools.common.model.ui.editors.dnd.ITagProposal;
 import org.jboss.tools.common.model.ui.editors.dnd.ITagProposalLoader;
 import org.jboss.tools.common.model.ui.editors.dnd.LoadBundleBaseNameAttributeValueLoader;
 import org.jboss.tools.common.model.ui.editors.dnd.context.DropContext;
-import org.jboss.tools.common.model.ui.views.palette.PaletteTaglibInserter;
 
 public class FileTagProposalLoader implements ITagProposalLoader {
 
