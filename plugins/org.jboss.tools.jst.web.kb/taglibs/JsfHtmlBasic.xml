@@ -204,8 +204,7 @@
 	<component name="panelGroup">
 		<attribute name="layout">
 			<proposal type="enumeration">
-				<param value="horizontal" />
-				<param value="vertical" />
+				<param value="block" />
 			</proposal>
 		</attribute>
 	</component>
