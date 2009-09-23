@@ -52,9 +52,6 @@ import org.w3c.dom.css.CSSStyleSheet;
  */
 public class CSSModel implements ICSSDialogModel {
 
-	private static String startBraces = "{"; //$NON-NLS-1$
-	private static String endBraces = "}"; //$NON-NLS-1$
-
 	private IStructuredModel model = null;
 	private IFile styleFile = null;
 
@@ -131,7 +128,7 @@ public class CSSModel implements ICSSDialogModel {
 		if ((styleSheet != null) && (selector != null)
 				&& !selector.equals(Constants.EMPTY)) {
 			CSSStyleRule rule = (CSSStyleRule) ((ICSSDocument) styleSheet)
-					.createCSSRule(selector + startBraces + endBraces);
+					.createCSSRule(selector + Constants.LEFT_BRACE + Constants.RIGHT_BRACE);
 			((ICSSStyleSheet) styleSheet).appendRule(rule);
 
 			for (Map.Entry<String, CSSStyleRule> ruleEntry : getRulesMapping()
@@ -312,8 +309,8 @@ public class CSSModel implements ICSSDialogModel {
 		if ((rules != null) && (rules.getLength() > 0)) {
 			final CSSRule rule = rules.item(rules.getLength() - 1);
 			final String text = rule.getCssText();
-			if ((text != null) && (!text.endsWith(endBraces))) {
-				rule.setCssText(text + "\n" + endBraces); //$NON-NLS-1$
+			if ((text != null) && (!text.endsWith(Constants.RIGHT_BRACE))) {
+				rule.setCssText(text + "\n" + Constants.RIGHT_BRACE); //$NON-NLS-1$
 			}
 		}
 	}

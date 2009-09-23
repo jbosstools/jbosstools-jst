@@ -100,4 +100,11 @@ public class CSSStyleRuleContainer extends StyleContainer {
 
 	}
 
+	@Override
+	public boolean isValid() {
+		final String text = styleRule.getCssText();
+		if ((text != null) && (!text.endsWith(Constants.RIGHT_BRACE)))
+			return false;
+		return true;
+	}
 }

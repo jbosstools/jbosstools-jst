@@ -50,4 +50,8 @@ public abstract class StyleContainer {
 
 	public abstract void removeNodelListener(INodeAdapter adapter);
 
+	public boolean isValid() {
+		return true;
+	}
+
 }

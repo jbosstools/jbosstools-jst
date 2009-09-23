@@ -98,7 +98,7 @@ public class CSSStyleListener implements ISelectionListener, INodeAdapter,
 
 			ISelection selectionToLiteners = null;
 
-			if (newStyle != null) {
+			if (newStyle != null && newStyle.isValid()) {
 				selectionToLiteners = new StructuredSelection(newStyle);
 			} else {
 				selectionToLiteners = StructuredSelection.EMPTY;
