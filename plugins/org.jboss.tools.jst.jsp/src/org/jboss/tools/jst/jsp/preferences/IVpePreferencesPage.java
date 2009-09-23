@@ -31,4 +31,5 @@ public interface IVpePreferencesPage {
 	static final String SPLITTING_HORIZ_LEFT_SOURCE_VALUE = "3"; //$NON-NLS-1$
 	static final String SPLITTING_HORIZ_LEFT_VISUAL_VALUE = "4"; //$NON-NLS-1$
 	
+	static final int DEFAULT_VISUAL_SOURCE_EDITORS_WEIGHTS = 500;
 }
