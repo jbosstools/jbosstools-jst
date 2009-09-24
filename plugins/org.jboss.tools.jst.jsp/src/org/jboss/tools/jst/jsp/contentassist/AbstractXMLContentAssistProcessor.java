@@ -269,7 +269,23 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 				domnode = prevnode;
 			}
 		}
+	
 		return super.getCompletionRegion(documentPosition, domnode);
+	}
+		
+	protected ITextRegion getCompletionRegion(int offset, IStructuredDocumentRegion sdRegion) {
+		ITextRegion region = super.getCompletionRegion(offset, sdRegion);
+		if (region != null && region.getType() == DOMRegionContext.UNDEFINED) {
+			// FIX: JBIDE-2332 CA with proposal list for comonent's atributes doesn't work before double quotes. 
+			// Sometimes, especially if we have a broken XML node, the region returned has UNDEFINED type.
+			// If so, we're try to use the prevoius region, which probably will be the region of type XML_TAG_NAME.
+						
+			ITextRegion previousRegion = sdRegion.getRegionAtCharacterOffset(offset - 1);
+			if ((previousRegion != null) && (previousRegion != region) && (previousRegion.getTextLength() < previousRegion.getLength())) {
+				region = previousRegion;
+			}
+		}
+		return region;
 	}
 	/*
 	 * (non-Javadoc)
