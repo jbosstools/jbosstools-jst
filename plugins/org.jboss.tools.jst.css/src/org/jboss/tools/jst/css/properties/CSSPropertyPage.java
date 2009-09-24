@@ -14,7 +14,6 @@ package org.jboss.tools.jst.css.properties;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.ChangeEvent;
 import org.eclipse.core.databinding.observable.IChangeListener;
-import org.eclipse.core.databinding.observable.IObservable;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -50,8 +49,7 @@ public class CSSPropertyPage extends TabbedPropertySheetPage implements
 		super(tabbedPropertySheetPageContributor);
 		bindingContext = new DataBindingContext();
 		styleAttributes = new StyleAttributes();
-		((IObservable) styleAttributes.getAttributeMap())
-				.addChangeListener(this);
+		styleAttributes.addChangeListener(this);
 		this.part = part;
 
 	}
@@ -99,7 +97,7 @@ public class CSSPropertyPage extends TabbedPropertySheetPage implements
 					|| (!selectedObject.equals(newSelectedObject)))
 				super.selectionChanged(part, selection);
 			selectedObject = newSelectedObject;
-			
+
 			update();
 
 		}
@@ -109,12 +107,10 @@ public class CSSPropertyPage extends TabbedPropertySheetPage implements
 	public void update() {
 
 		if (selectedObject instanceof StyleContainer) {
-			((IObservable) getStyleAttributes().getAttributeMap())
-					.removeChangeListener(this);
+			getStyleAttributes().removeChangeListener(this);
 			getStyleAttributes().setStyleProperties(
 					((StyleContainer) selectedObject).getStyleAttributes());
-			((IObservable) getStyleAttributes().getAttributeMap())
-					.addChangeListener(this);
+			getStyleAttributes().addChangeListener(this);
 		}
 
 	}
@@ -125,7 +121,7 @@ public class CSSPropertyPage extends TabbedPropertySheetPage implements
 
 			((StyleContainer) selectedObject)
 					.applyStyleAttributes(getStyleAttributes()
-							.getAttributeMap());
+							.getStyleProperties());
 		}
 
 		notifySelectionChanged(getCurrentSelection());

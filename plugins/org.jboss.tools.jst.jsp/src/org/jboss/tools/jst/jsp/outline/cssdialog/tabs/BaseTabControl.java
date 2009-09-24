@@ -16,7 +16,6 @@ import java.util.Map;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.observable.Observables;
-import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IAdaptable;
@@ -270,10 +269,10 @@ public abstract class BaseTabControl extends Composite implements
 
 				List<String> values = CSSConstants.CSS_STYLE_VALUES_MAP
 						.get(attribute);
-				
+
 				if ((values != null) && !values.contains(value))
 					value = adjustBackgroundURL((String) value);
-				
+
 				return super.doSet(observableValue, value);
 			}
 		}, null);
@@ -464,9 +463,8 @@ public abstract class BaseTabControl extends Composite implements
 	}
 
 	private IObservableValue createAttributeObservableValue(String attributeName) {
-		return Observables.observeMapEntry(
-				(IObservableMap) getStyleAttributes().getAttributeMap(),
-				attributeName, String.class);
+		return Observables.observeMapEntry(getStyleAttributes()
+				.getObservableMap(), attributeName, String.class);
 	}
 
 	private void bind(Widget widget, String attribute) {

@@ -100,7 +100,7 @@ public class Util {
 
 		for (String str : set) {
 			ArrayList<String> list = elementMap.get(str);
-			if(list.contains(name)) {
+			if(list.contains(name.toLowerCase())) {
 				return true;
 			}
 		}

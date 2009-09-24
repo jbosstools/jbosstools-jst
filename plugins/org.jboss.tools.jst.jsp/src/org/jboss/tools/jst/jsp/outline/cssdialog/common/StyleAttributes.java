@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import org.eclipse.core.databinding.observable.IChangeListener;
+import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.observable.map.WritableMap;
 
 /**
@@ -21,7 +23,7 @@ import org.eclipse.core.databinding.observable.map.WritableMap;
  */
 public class StyleAttributes {
 
-	private Map<String, String> attributeMap = null;
+	private IObservableMap attributeMap = null;
 
 	/**
 	 * Default constructor.
@@ -31,24 +33,16 @@ public class StyleAttributes {
 	}
 
 	/**
-	 * Gets attribute map.
-	 * 
-	 * @return map of attributes
-	 */
-	public Map<String, String> getAttributeMap() {
-		return attributeMap;
-	}
-
-	/**
 	 * Add attribute with the given name and value.
 	 * 
 	 * @param name
+	 * 
 	 *            the name of attribute
 	 * @param value
 	 *            the value of attribute
 	 */
-	public void addAttribute(String name, String value) {
-		attributeMap.put(name, value);
+	public String put(String name, String value) {
+		return (String) attributeMap.put(name.toLowerCase(), value);
 	}
 
 	/**
@@ -57,8 +51,8 @@ public class StyleAttributes {
 	 * @param name
 	 *            the name of attribute to be removed
 	 */
-	public void removeAttribute(String name) {
-		attributeMap.remove(name);
+	public void remove(String name) {
+		attributeMap.remove(name.toLowerCase());
 	}
 
 	/**
@@ -75,8 +69,8 @@ public class StyleAttributes {
 	 *            the name of attribute to be returned
 	 * @return attribute value
 	 */
-	public String getAttribute(String name) {
-		String value = attributeMap.get(name);
+	public String get(Object name) {
+		String value = (String) attributeMap.get(name);
 		return value != null ? value : Constants.EMPTY;
 	}
 
@@ -99,7 +93,15 @@ public class StyleAttributes {
      */
 	public void setStyleProperties(Map<String, String> properties) {
 		attributeMap.clear();
-		attributeMap.putAll(properties);
+
+		for (Entry<String, String> entry : properties.entrySet()) {
+			attributeMap.put(entry.getKey().toLowerCase(), entry.getValue());
+		}
+
+	}
+
+	public Map<String, String> getStyleProperties() {
+		return attributeMap;
 	}
 
 	/**
@@ -118,4 +120,17 @@ public class StyleAttributes {
 		}
 		return buf.toString();
 	}
+
+	public IObservableMap getObservableMap() {
+		return attributeMap;
+	}
+
+	public void addChangeListener(IChangeListener listener) {
+		attributeMap.addChangeListener(listener);
+	}
+
+	public void removeChangeListener(IChangeListener listener) {
+		attributeMap.removeChangeListener(listener);
+	}
+
 }

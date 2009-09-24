@@ -61,7 +61,7 @@ public class TabQuickEditControl extends BaseTabControl {
 
 		for (String key : listKeys) {
 
-			String value = getStyleAttributes().getAttribute(key);
+			String value = getStyleAttributes().get(key);
 			if (value != null && value.length() > 0) {
 				addLabel(this, key);
 				createControl(this, key);

@@ -104,15 +104,14 @@ public abstract class AbstractCSSDialog extends TitleAreaDialog {
 		dialogContainer.setLayoutData(new GridData(GridData.FILL,
 				GridData.BEGINNING, true, true));
 
-		((IObservable) getStyleAttributes().getAttributeMap())
-				.addChangeListener(new IChangeListener() {
+		getStyleAttributes().addChangeListener(new IChangeListener() {
 
-					public void handleChange(ChangeEvent event) {
-						handleStyleChanged();
+			public void handleChange(ChangeEvent event) {
+				handleStyleChanged();
 
-					}
+			}
 
-				});
+		});
 
 		aggregateStatus = new AggregateValidationStatus(
 				getBindingContext().getValidationStatusProviders(),
@@ -230,7 +229,7 @@ public abstract class AbstractCSSDialog extends TitleAreaDialog {
 		StringBuffer html = new StringBuffer(Constants.OPEN_DIV_TAG);
 
 		for (Map.Entry<String, String> styleItem : getStyleAttributes()
-				.getAttributeMap().entrySet()) {
+				.entrySet()) {
 
 			html.append(styleItem.getKey() + Constants.COLON
 					+ styleItem.getValue() + Constants.SEMICOLON);
