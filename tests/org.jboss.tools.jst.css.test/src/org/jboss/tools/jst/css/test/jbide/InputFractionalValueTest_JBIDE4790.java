@@ -82,7 +82,7 @@ public class InputFractionalValueTest_JBIDE4790 extends AbstractCSSViewTest {
 		StyleAttributes styleAttributes = page.getStyleAttributes();
 
 		assertEquals(testedValue, styleAttributes
-				.getAttribute(TEST_CSS_ATTRIBUTE_NAME));
+				.get(TEST_CSS_ATTRIBUTE_NAME));
 
 		String[] parsedTestValue = Util.convertExtString(testedValue);
 
@@ -90,7 +90,7 @@ public class InputFractionalValueTest_JBIDE4790 extends AbstractCSSViewTest {
 
 		String newTestedValue = parsedTestValue[0] + "." + parsedTestValue[1]; //$NON-NLS-1$
 
-		styleAttributes.getAttributeMap().put(TEST_CSS_ATTRIBUTE_NAME,
+		styleAttributes.put(TEST_CSS_ATTRIBUTE_NAME,
 				newTestedValue);
 
 		testedValue = declaration.getPropertyValue(TEST_CSS_ATTRIBUTE_NAME);
@@ -107,7 +107,7 @@ public class InputFractionalValueTest_JBIDE4790 extends AbstractCSSViewTest {
 		newTestedValue = parsedTestValue[0] + "3" + parsedTestValue[1]; //$NON-NLS-1$
 
 		try {
-			styleAttributes.getAttributeMap().put(TEST_CSS_ATTRIBUTE_NAME,
+			styleAttributes.put(TEST_CSS_ATTRIBUTE_NAME,
 					newTestedValue);
 
 		} catch (DOMException e) {
