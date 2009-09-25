@@ -23,7 +23,7 @@ import org.jboss.tools.common.text.ext.util.StructuredModelWrapper;
 import org.jboss.tools.common.text.ext.util.Utils;
 
 /**
- *  * @deprecated see org.jboss.tools.common.text.ext.hyperlink.CSSClassHyperlinkPartitioner
+ *  * @deprecated see org.jboss.tools.jst.text.ext.hyperlink.CSSClassHyperlinkPartitioner
  * @author Jeremy
  */
 public class JSPCSSClassHyperlinkPartitioner extends AbstractHyperlinkPartitioner /*implements IHyperlinkPartitionRecognizer */{
