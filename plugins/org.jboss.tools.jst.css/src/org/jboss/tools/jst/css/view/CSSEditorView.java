@@ -17,7 +17,9 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.IContributedContentsView;
+import org.eclipse.ui.part.IPage;
 import org.eclipse.ui.part.IPageBookViewPage;
+import org.eclipse.ui.part.PageBook;
 import org.eclipse.ui.views.contentoutline.ContentOutline;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
@@ -51,11 +53,23 @@ public class CSSEditorView extends PropertySheet implements ICSSViewListner {
 
 	}
 
+	protected IPage createDefaultPage(PageBook book) {
+		return createCssPropertyPage();
+	}
+
 	@Override
 	protected PageRec doCreatePage(final IWorkbenchPart part) {
-		// if (part instanceof PropertySheet) {
-		// return null;
-		// }
+		IPage page = createCssPropertyPage();
+
+		if (page != null) {
+			return new PageRec(part, page);
+		}
+
+		return null;
+	}
+
+	private IPage createCssPropertyPage() {
+
 		IPropertySheetPage page = new CSSPropertyPage(
 				new ITabbedPropertySheetPageContributor() {
 
@@ -68,10 +82,10 @@ public class CSSEditorView extends PropertySheet implements ICSSViewListner {
 				initPage((IPageBookViewPage) page);
 			}
 			page.createControl(getPageBook());
-			return new PageRec(part, page);
 		}
 
-		return null;
+		return page;
+
 	}
 
 	@Override
@@ -100,6 +114,7 @@ public class CSSEditorView extends PropertySheet implements ICSSViewListner {
 			((CSSPropertyPage) getCurrentPage()).update();
 
 	}
+
 	@Override
 	protected boolean isImportant(IWorkbenchPart part) {
 		if ((part instanceof IEditorPart) || (part instanceof ContentOutline))
