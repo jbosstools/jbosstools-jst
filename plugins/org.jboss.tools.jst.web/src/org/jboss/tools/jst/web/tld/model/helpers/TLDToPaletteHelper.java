@@ -16,9 +16,9 @@ import org.jboss.tools.jst.web.tld.URIConstants;
 import org.jboss.tools.jst.web.tld.model.TLDUtil;
 
 public class TLDToPaletteHelper {
-    public static final String START_TEXT = "start text"; //$NON-NLS-1$
-    public static final String END_TEXT = "end text"; //$NON-NLS-1$
-    public static final String REFORMAT = "automatically reformat tag body"; //$NON-NLS-1$
+    public static final String START_TEXT = XModelObjectConstants.START_TEXT;
+    public static final String END_TEXT = XModelObjectConstants.END_TEXT;
+    public static final String REFORMAT = XModelObjectConstants.REFORMAT;
     public static final String DESCRIPTION = "description"; //$NON-NLS-1$
     public static final String URI = URIConstants.LIBRARY_URI;
     public static final String DEFAULT_PREFIX = URIConstants.DEFAULT_PREFIX;
@@ -95,7 +95,7 @@ public class TLDToPaletteHelper {
 		 }
 		 for (int i = 0; i < as.length; i++) {
 			 if(isRequired(as[i])) continue;
-			 sb.append(as[i].getAttributeValue("name")); //$NON-NLS-1$
+			 sb.append(as[i].getAttributeValue(XModelObjectConstants.ATTR_NAME));
 			 ++k;
 			 if(k < as.length) sb.append(", "); //$NON-NLS-1$
 		}
@@ -107,7 +107,7 @@ public class TLDToPaletteHelper {
 
     private boolean isRequired(XModelObject attr) {
         String required = attr.getAttributeValue("required"); //$NON-NLS-1$
-        return ("true".equals(required) || "yes".equals(required)); //$NON-NLS-1$ //$NON-NLS-2$
+        return (XModelObjectConstants.TRUE.equals(required) || XModelObjectConstants.TRUE.equals(required));
     }
 
     public XModelObject createTabByTLD(XModelObject tld, XModel model) {
@@ -120,7 +120,7 @@ public class TLDToPaletteHelper {
 
     private XModelObject createGroupByTLD(XModelObject tld, XModel model, String entity) {
         Properties p = new Properties();
-        p.setProperty("name", capitalize(getTldName(tld))); //$NON-NLS-1$
+        p.setProperty(XModelObjectConstants.ATTR_NAME, capitalize(getTldName(tld)));
         p.setProperty(DESCRIPTION, TLDUtil.getTagDescription(tld));
         p.setProperty(DEFAULT_PREFIX, getTldName(tld));
         p.setProperty(URIConstants.LIBRARY_URI, "" + tld.getAttributeValue("uri")); //$NON-NLS-1$ //$NON-NLS-2$
