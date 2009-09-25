@@ -1,7 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ActivationPolicy: lazy
 Bundle-Name: %Bundle-Name.0
-Bundle-ClassPath: jspeditor.jar
 Bundle-Activator: org.jboss.tools.jst.jsp.JspEditorPlugin
 Bundle-ManifestVersion: 2
 Bundle-Vendor: %providerName

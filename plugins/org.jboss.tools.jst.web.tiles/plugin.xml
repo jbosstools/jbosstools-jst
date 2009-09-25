@@ -88,7 +88,7 @@
       <catalogContribution id="default">
          <public 
          	publicId="-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN" 
-         	uri="dtds/tiles_config_1_1.dtd"/>
+         	uri="platform:/plugin/org.jboss.tools.jst.web.tiles/dtds/tiles_config_1_1.dtd"/>
       </catalogContribution>
    </extension>
 

@@ -271,10 +271,10 @@
 
     <extension point="org.eclipse.wst.xml.core.catalogContributions">
 		<catalogContribution id="default">
-            <uri name="http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd" uri="catalog/web-facesconfig_1_2.xsd" />
+            <uri name="http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd" uri="platform:/plugin/org.jboss.tools.jst.web/catalog/web-facesconfig_1_2.xsd" />
             <uri
                 name="http://java.sun.com/xml/ns/javaee/"
-                uri="catalog/javaee_5.xsd" />
+                uri="platform:/plugin/org.jboss.tools.jst.web/catalog/javaee_5.xsd" />
 		</catalogContribution>
 		
     </extension>

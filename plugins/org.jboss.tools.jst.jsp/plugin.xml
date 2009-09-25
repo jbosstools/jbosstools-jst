@@ -124,7 +124,7 @@
 
    <extension point="org.eclipse.ui.editors">
       <editor
-            icon="images/xstudio/editors/jsp.gif"
+            icon="$nl$/images/xstudio/editors/jsp.gif"
             class="org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor"
             default="true"
             name="%editors.jsp.name"
@@ -138,7 +138,7 @@
             class="org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor" 
             contributorClass="org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageContributor" 
             extensions="html, htm, jsf" 
-            icon="images/xstudio/editors/html_file.gif" 
+            icon="$nl$/images/xstudio/editors/html_file.gif" 
             id="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor" 
             matchingStrategy = "org.jboss.tools.common.core.resources.MatchingStrategyImpl"
             name="%editors.html.name" 
@@ -193,8 +193,8 @@
          <action
                class="org.jboss.tools.jst.jsp.outline.cssdialog.OpenCSSDialogActionDelegate"
                definitionId="org.jboss.tools.jst.jsp.commands.openCSSDialog"
-               hoverIcon="images/cssdialog/color_large.gif"
-               icon="images/cssdialog/color_large.gif"
+               hoverIcon="$nl$/images/cssdialog/color_large.gif"
+               icon="$nl$/images/cssdialog/color_large.gif"
                id="org.jboss.tools.jst.jsp.openCSSDialogEditor"
                label="Open edit dialog"
                menubarPath="org.jboss.tools.jst.jsp.cssClassDialogSubMenu/content"
@@ -496,7 +496,7 @@
         <action
               class="org.jboss.tools.jst.jsp.outline.cssdialog.OpenCSSDialogActionDelegate"
               definitionId="org.jboss.tools.jst.jsp.commands.openCSSDialog"
-              icon="images/cssdialog/color_large.gif"
+              icon="$nl$/images/cssdialog/color_large.gif"
               id="org.jboss.tools.jst.jsp.openCSSDialogPopupMenu"
               label="Open CSS Dialog"
               menubarPath="additions"

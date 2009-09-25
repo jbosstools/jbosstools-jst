@@ -30,10 +30,10 @@
          class="org.jboss.tools.jst.web.ui.editors.WebCompoundEditor" 
          contributorClass="org.jboss.tools.common.model.ui.texteditors.MultiPageContributor" 
          entities="FileWebApp,FileWebApp24,FileWebApp25" 
-         icon="images/xstudio/editors/webapp_file.gif" 
+         icon="$nl$/images/xstudio/editors/webapp_file.gif" 
          name="%editors.web.name">
       </xmlEditor>
-      <xmlEditor class="org.jboss.tools.jst.web.ui.editors.TLDCompoundEditor" contributorClass="org.jboss.tools.common.model.ui.texteditors.MultiPageContributor" entities="FileTLD_PRO,FileTLD_1_2,FileTLD_2_0,FileTLD_2_1" icon="images/xstudio/editors/taglibs_file.gif" name="%editors.tld12.name">
+      <xmlEditor class="org.jboss.tools.jst.web.ui.editors.TLDCompoundEditor" contributorClass="org.jboss.tools.common.model.ui.texteditors.MultiPageContributor" entities="FileTLD_PRO,FileTLD_1_2,FileTLD_2_0,FileTLD_2_1" icon="$nl$/images/xstudio/editors/taglibs_file.gif" name="%editors.tld12.name">
       </xmlEditor>
    </extension>
    <extension point="org.eclipse.ui.preferencePages">
@@ -44,7 +44,7 @@
    <extension point="org.eclipse.ui.editors">
       <editor 
           class="org.jboss.tools.jst.web.ui.editors.TLDCompoundEditor" 
-          contributorClass="org.jboss.tools.common.model.ui.texteditors.MultiPageContributor" default="true" extensions="tld" icon="images/xstudio/editors/taglibs_file.gif" 
+          contributorClass="org.jboss.tools.common.model.ui.texteditors.MultiPageContributor" default="true" extensions="tld" icon="$nl$/images/xstudio/editors/taglibs_file.gif" 
           matchingStrategy = "org.jboss.tools.common.core.resources.MatchingStrategyImpl"
           id="org.jboss.tools.jst.web.ui.editors.TLDCompoundEditor" 
           name="%editors.tld12.name">
@@ -52,7 +52,7 @@
    </extension>
    <extension point="org.eclipse.ui.actionSets">
       <!--actionSet description="%actionSets.modelActions.description" id="com.redhat.studio.actionSet" label="%actionSets.modelActions.label" visible="true">
-         <action class="org.jboss.tools.jst.web.ui.action.RunPageActionDelegate" icon="images/xstudio/actions/run_project.gif" id="org.jboss.tools.jst.web.ui.action.RunPageActionDelegate" label="%actionSets.serverActions.runApplicationFromSelectedElement.label" style="pulldown" toolbarPath="Normal/SSRun" tooltip="%actionSets.serverActions.runApplicationFromSelectedElement.label">
+         <action class="org.jboss.tools.jst.web.ui.action.RunPageActionDelegate" icon="$nl$/images/xstudio/actions/run_project.gif" id="org.jboss.tools.jst.web.ui.action.RunPageActionDelegate" label="%actionSets.serverActions.runApplicationFromSelectedElement.label" style="pulldown" toolbarPath="Normal/SSRun" tooltip="%actionSets.serverActions.runApplicationFromSelectedElement.label">
          </action>
       </actionSet-->
    </extension>
@@ -95,7 +95,7 @@
             category="org.jboss.tools.jst.web"
             class="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSFileWizard"
             finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
-            icon="images/xstudio/wizards/new_css_file.gif"
+            icon="$nl$/images/xstudio/wizards/new_css_file.gif"
             id="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSFileWizard"
             name="%NewWizard_CSSFile"
             preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
@@ -110,7 +110,7 @@
             category="org.jboss.tools.jst.web"
             class="org.jboss.tools.jst.web.ui.wizards.css.NewCSSClassWizard"
             finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
-            icon="images/xstudio/wizards/new_css_class.gif"
+            icon="$nl$/images/xstudio/wizards/new_css_class.gif"
             id="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSClassWizard"
             name="%NewWizard_CSSClass"
             preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
@@ -125,7 +125,7 @@
             category="org.jboss.tools.jst.web"
             class="org.jboss.tools.jst.web.ui.wizards.newfile.NewJSFileWizard"
             finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
-            icon="images/xstudio/wizards/new_js_file.gif"
+            icon="$nl$/images/xstudio/wizards/new_js_file.gif"
             id="org.jboss.tools.jst.web.ui.wizards.newfile.NewJSFileWizard"
             name="%NewWizard_JSFile"
             preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
@@ -140,7 +140,7 @@
             category="org.jboss.tools.jst.web"
             class="org.jboss.tools.jst.web.ui.wizards.newfile.NewWebFileWizard"
             finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
-            icon="images/xstudio/wizards/new_webapp_file.gif"
+            icon="$nl$/images/xstudio/wizards/new_webapp_file.gif"
             id="org.jboss.tools.jst.web.ui.wizards.newfile.NewWebFileWizard"
             name="%NewWizard_WebDescriptor"
             preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
@@ -155,7 +155,7 @@
             category="org.jboss.tools.jst.web"
             class="org.jboss.tools.common.model.ui.wizard.newfile.NewJSPFileWizard"
             finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
-            icon="images/xstudio/wizards/new_jsp_file.gif"
+            icon="$nl$/images/xstudio/wizards/new_jsp_file.gif"
             id="org.jboss.tools.common.model.ui.wizard.newfile.NewJSPFileWizard"
             name="%NewWizard_JSPFile"
             preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
@@ -170,7 +170,7 @@
             category="org.jboss.tools.jst.web"
             class="org.jboss.tools.common.model.ui.wizard.newfile.NewXHTMLFileWizard"
             finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
-            icon="images/xstudio/wizards/new_html_file.gif"
+            icon="$nl$/images/xstudio/wizards/new_html_file.gif"
             id="org.jboss.tools.common.model.ui.wizard.newfile.NewXHTMLFileWizard"
             name="%NewWizard_XHTMLFile"
             preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
@@ -185,7 +185,7 @@
             category="org.jboss.tools.jst.web"
             class="org.jboss.tools.common.model.ui.wizard.newfile.NewHTMLFileWizard"
             finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
-            icon="images/xstudio/wizards/new_html_file.gif"
+            icon="$nl$/images/xstudio/wizards/new_html_file.gif"
             id="org.jboss.tools.common.model.ui.wizard.newfile.NewHTMLFileWizard"
             name="%NewWizard_HTMLFile"
             preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
@@ -199,7 +199,7 @@
       <wizard
             category="org.jboss.tools.jst.web"
             class="org.jboss.tools.common.model.ui.wizard.newfile.NewPropertiesFileWizard"
-            icon="images/xstudio/wizards/new_properties_file.gif"
+            icon="$nl$/images/xstudio/wizards/new_properties_file.gif"
             id="org.jboss.tools.common.model.ui.wizard.newfile.NewPropertiesFileWizard"
             name="%NewWizard_PropertiesFile"
             project="false">
@@ -213,7 +213,7 @@
             category="org.jboss.tools.jst.web"
             class="org.jboss.tools.jst.web.ui.wizards.newfile.NewTLDFileWizard"
             finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
-            icon="images/xstudio/wizards/new_taglibs_file.gif"
+            icon="$nl$/images/xstudio/wizards/new_taglibs_file.gif"
             id="org.jboss.tools.jst.web.ui.wizards.newfile.NewTLDFileWizard"
             name="%NewWizard_TLDFile"
             preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
@@ -229,9 +229,9 @@
    <extension id="org.jboss.tools.jst.web.ui.views" name="JBoss Tools" point="org.eclipse.ui.views">
       <category id="web.views.category.id" name="%ViewCategory_JBossToolsWeb">
       </category>
-      <view category="web.views.category.id" class="org.jboss.tools.common.model.ui.views.palette.PaletteViewPart" icon="images/xstudio/views/palette.gif" id="org.jboss.tools.common.model.ui.views.palette.PaletteView" name="%paletteViewPart.name">
+      <view category="web.views.category.id" class="org.jboss.tools.common.model.ui.views.palette.PaletteViewPart" icon="$nl$/images/xstudio/views/palette.gif" id="org.jboss.tools.common.model.ui.views.palette.PaletteView" name="%paletteViewPart.name">
       </view>
-      <view category="web.views.category.id" class="org.jboss.tools.jst.web.ui.navigator.WebProjectsNavigator" icon="images/xstudio/views/web_project.gif" id="org.jboss.tools.jst.web.ui.navigator.WebProjectsView" name="%ViewName_WebProjects">
+      <view category="web.views.category.id" class="org.jboss.tools.jst.web.ui.navigator.WebProjectsNavigator" icon="$nl$/images/xstudio/views/web_project.gif" id="org.jboss.tools.jst.web.ui.navigator.WebProjectsView" name="%ViewName_WebProjects">
       </view>
    </extension>
 
@@ -309,7 +309,7 @@
    </extension>
 
    <extension point="org.eclipse.ui.perspectives">
-      <perspective class="org.jboss.tools.jst.web.ui.WebDevelopmentPerspectiveFactory" icon="images/xstudio/perspective.png" id="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective" name="%perspective.name">
+      <perspective class="org.jboss.tools.jst.web.ui.WebDevelopmentPerspectiveFactory" icon="$nl$/images/xstudio/perspective.png" id="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective" name="%perspective.name">
       </perspective>
    </extension>
 
@@ -436,7 +436,7 @@
   <navigatorContent
             name="%NavigatorContent_FileContentProvider"
             priority="normal"
-            icon="images/xstudio/views/web_project.gif"
+            icon="$nl$/images/xstudio/views/web_project.gif"
             activeByDefault="true"
             contentProvider="org.jboss.tools.jst.web.ui.navigator.XContentProvider"
             labelProvider="org.jboss.tools.jst.web.ui.navigator.WebProjectsLabelProvider"   
@@ -470,7 +470,7 @@
   <navigatorContent
             name="%NavigatorContent_ProjectContentProvider"
             priority="highest"
-            icon="images/xstudio/views/web_project.gif"
+            icon="$nl$/images/xstudio/views/web_project.gif"
             activeByDefault="true"
             contentProvider="org.jboss.tools.jst.web.ui.navigator.XProjectContentProvider"
             labelProvider="org.jboss.tools.jst.web.ui.navigator.XLabelProvider"   

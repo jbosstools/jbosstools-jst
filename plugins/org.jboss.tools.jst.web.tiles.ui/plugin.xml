@@ -4,7 +4,7 @@
 
 <!-- contributorClass="org.jboss.tools.jst.web.tiles.editor.action.TilesActionBarContributor" -->
    <extension id="e" name="XML Editors" point="org.jboss.tools.common.model.ui.xmlEditor">
-      <xmlEditor class="org.jboss.tools.jst.web.tiles.ui.editor.TilesCompoundEditor" contributorClass="org.jboss.tools.jst.web.tiles.ui.editor.action.TilesMultiPageContributor" entities="FileTiles" icon="images/xstudio/editors/tiles_definition.gif" name="%editors.tiles.name">
+      <xmlEditor class="org.jboss.tools.jst.web.tiles.ui.editor.TilesCompoundEditor" contributorClass="org.jboss.tools.jst.web.tiles.ui.editor.action.TilesMultiPageContributor" entities="FileTiles" icon="$nl$/images/xstudio/editors/tiles_definition.gif" name="%editors.tiles.name">
       </xmlEditor>
    </extension>
    <extension point="org.jboss.tools.common.model.ui.attributeAdapter">
@@ -44,7 +44,7 @@
    <extension point="org.eclipse.ui.newWizards">
       <category id="org.jboss.tools.struts" name="%NewWizardCat_Struts" parentCategory="org.jboss.tools.jst.web">
       </category>
-      <wizard category="org.jboss.tools.jst.web/org.jboss.tools.struts" class="org.jboss.tools.jst.web.tiles.ui.wizard.newfile.NewTilesFileWizard" icon="images/xstudio/wizards/new_tiles_file.gif" id="org.jboss.tools.jst.web.tiles.ui.wizard.newfile.NewTilesFileWizard" name="%new.tiles" project="false">
+      <wizard category="org.jboss.tools.jst.web/org.jboss.tools.struts" class="org.jboss.tools.jst.web.tiles.ui.wizard.newfile.NewTilesFileWizard" icon="$nl$/images/xstudio/wizards/new_tiles_file.gif" id="org.jboss.tools.jst.web.tiles.ui.wizard.newfile.NewTilesFileWizard" name="%new.tiles" project="false">
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
          <description>
