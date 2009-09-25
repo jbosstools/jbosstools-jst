@@ -54,12 +54,12 @@ public class PaletteTaglibInserter {
 	}
 
 	private boolean checkProperties(Properties p) {
-		return "true".equalsIgnoreCase(p.getProperty(PaletteInsertHelper.PROPOPERTY_ADD_TAGLIB)) && //$NON-NLS-1$
-				p.getProperty(PaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI) != null &&
-				p.getProperty(PaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI).length() > 0 &&
-				!p.getProperty(PaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI).equals(JSP_URI) &&
-				p.getProperty(PaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX) != null &&
-				p.getProperty(PaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX).length() > 0 &&
+		return "true".equalsIgnoreCase(p.getProperty(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB)) && //$NON-NLS-1$
+				p.getProperty(JSPPaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI) != null &&
+				p.getProperty(JSPPaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI).length() > 0 &&
+				!p.getProperty(JSPPaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI).equals(JSP_URI) &&
+				p.getProperty(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX) != null &&
+				p.getProperty(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX).length() > 0 &&
 				p.getProperty(PaletteInsertHelper.PROPOPERTY_START_TEXT) != null;
 	}
 
@@ -81,8 +81,8 @@ public class PaletteTaglibInserter {
 			if(tl == null) tl = JSPPaletteInsertHelper.getPrefixes(d.get());
 			Element root = xmlDocument.getDocumentElement();
 
-			String uri_p = p.getProperty(PaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI);
-			String defaultPrefix_p = p.getProperty(PaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX);
+			String uri_p = p.getProperty(JSPPaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI);
+			String defaultPrefix_p = p.getProperty(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX);
 			String lineDelimiter = PaletteInsertHelper.getLineDelimiter(d);
 			StringBuffer tg = new StringBuffer(TAGLIB_START).append(" uri=\"").append(uri_p).append("\"").append(" prefix=\"").append(defaultPrefix_p).append("\"%>").append(lineDelimiter); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
@@ -90,7 +90,7 @@ public class PaletteTaglibInserter {
 				//If taglib already exist check the prefix if changed
 				if (tl.containsKey(uri_p)) {
 					if (!tl.get(uri_p).equals(defaultPrefix_p)) {
-						p.setProperty(PaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX, (String)tl.get(uri_p));
+						p.setProperty(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX, (String)tl.get(uri_p));
 					}
 				} else if(!tl.containsValue(defaultPrefix_p)) {
 					if (checkplace(xmlDocument, d, "jsp:directive.taglib", tg, p, v) == false) { //$NON-NLS-1$
@@ -143,7 +143,7 @@ public class PaletteTaglibInserter {
 	}
 	
 	private static boolean checkSelectedElement(HashMap<String,String> map, ISourceViewer v, Properties p){
-		String taglibUri = p.getProperty(PaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI);
+		String taglibUri = p.getProperty(JSPPaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI);
 		if(taglibUri == null) return false;
 		
 		Node selectedNode = getSelectedNode(v, p);
@@ -246,8 +246,8 @@ public class PaletteTaglibInserter {
 	 * with text formatting
 	 */
 	private static Properties checkTL(Element root, ISourceViewer v, Properties p, IDocument d) {
-		String uri_p = p.getProperty(PaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI);
-		String defaultPrefix_p = p.getProperty(PaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX);
+		String uri_p = p.getProperty(JSPPaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI);
+		String defaultPrefix_p = p.getProperty(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX);
 
 		HashMap<String,String> map = new HashMap<String,String>();
 		NamedNodeMap attrs = root.getAttributes();
@@ -262,7 +262,7 @@ public class PaletteTaglibInserter {
 		
 		if (map.containsKey(uri_p) || checkSelectedElement(map, v, p)) {
 			if (!map.get(uri_p).equals(defaultPrefix_p)) {
-				p.setProperty(PaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX, (String) map.get(uri_p));
+				p.setProperty(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX, (String) map.get(uri_p));
 			}
 		} else if(!map.containsValue(defaultPrefix_p)) {
 			StringBuffer attribute = new StringBuffer("xmlns:").append(defaultPrefix_p).append("=\"").append(uri_p).append("\"");  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$

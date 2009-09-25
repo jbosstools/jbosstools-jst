@@ -39,9 +39,9 @@ import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
 import org.jboss.tools.common.model.ui.views.palette.PaletteInsertManager;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.jst.web.tld.IWebProject;
-import org.jboss.tools.jst.web.tld.TLDToPaletteHelper;
 import org.jboss.tools.jst.web.tld.URIConstants;
 import org.jboss.tools.jst.web.tld.WebProjectFactory;
+import org.jboss.tools.jst.web.tld.model.helpers.TLDToPaletteHelper;
 
 /**
  * 
@@ -68,9 +68,9 @@ public class PaletteDropCommand extends FileDropCommand {
 		newLine = properties.getProperty(PaletteInsertHelper.PROPOPERTY_NEW_LINE);
 		if (newLine == null) newLine="true"; //$NON-NLS-1$
 		runningProperties.setProperty(PaletteInsertHelper.PROPOPERTY_NEW_LINE, newLine);
-		String addTaglib = properties.getProperty(PaletteInsertHelper.PROPOPERTY_ADD_TAGLIB);
+		String addTaglib = properties.getProperty(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB);
 		if(addTaglib == null) addTaglib = "true"; //$NON-NLS-1$
-		runningProperties.setProperty(PaletteInsertHelper.PROPOPERTY_ADD_TAGLIB, addTaglib);
+		runningProperties.setProperty(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB, addTaglib);
 	}
 	
 	public void execute() {

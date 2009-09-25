@@ -6,8 +6,14 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
+import org.jboss.tools.jst.web.tld.URIConstants;
+import org.jboss.tools.jst.web.tld.model.helpers.TLDToPaletteHelper;
 
 public class JSPPaletteInsertHelper extends PaletteInsertHelper {
+    public static final String PROPOPERTY_ADD_TAGLIB = TLDToPaletteHelper.ADD_TAGLIB;
+	public static final String PROPOPERTY_TAGLIBRARY_URI = URIConstants.LIBRARY_URI;
+	public static final String PROPOPERTY_TAGLIBRARY_VERSION = URIConstants.LIBRARY_VERSION;
+	public static final String PROPOPERTY_DEFAULT_PREFIX = URIConstants.DEFAULT_PREFIX;
 
 	static JSPPaletteInsertHelper instance = new JSPPaletteInsertHelper();
 

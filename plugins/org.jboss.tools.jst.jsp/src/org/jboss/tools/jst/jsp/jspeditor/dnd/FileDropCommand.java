@@ -54,12 +54,12 @@ public class FileDropCommand extends DefaultDropCommand {
 		properties.put(PaletteInsertHelper.PROPOPERTY_START_TEXT, generateStartText());
 		properties.put(PaletteInsertHelper.PROPOPERTY_END_TEXT, generateEndText());
 		properties.put(PaletteInsertHelper.PROPOPERTY_REFORMAT_BODY, getReformatBodyProperty());
-		properties.put(PaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI, uri);
+		properties.put(JSPPaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI, uri);
 		String version = ((TagProposal)getDefaultModel().getTagProposal()).getLibraryVersion();
-		properties.put(PaletteInsertHelper.PROPOPERTY_TAGLIBRARY_VERSION, version);
-		properties.put(PaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX,getDefaultModel().getTagProposal().getPrefix());
+		properties.put(JSPPaletteInsertHelper.PROPOPERTY_TAGLIBRARY_VERSION, version);
+		properties.put(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX,getDefaultModel().getTagProposal().getPrefix());
 		properties.put(PaletteInsertHelper.PROPOPERTY_SELECTION_PROVIDER, getDefaultModel().getDropData().getSelectionProvider());
-		properties.put(PaletteInsertHelper.PROPOPERTY_ADD_TAGLIB, "true"); //$NON-NLS-1$
+		properties.put(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB, "true"); //$NON-NLS-1$
 		addCustomProperties(properties);
 		JSPPaletteInsertHelper.getInstance().insertIntoEditor(
 				getDefaultModel().getDropData().getSourceViewer(),
