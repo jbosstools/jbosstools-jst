@@ -20,6 +20,7 @@ import java.util.Set;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.IEditorInput;
@@ -64,9 +65,11 @@ public class ValueHelper {
 	public static IPromptingProvider seamPromptingProvider;
 	
 	static {
-		Object o = ModelFeatureFactory.getInstance().createFeatureInstance("org.jboss.tools.seam.internal.core.el.SeamPromptingProvider"); //$NON-NLS-1$
-		if(o instanceof IPromptingProvider) {
-			seamPromptingProvider = (IPromptingProvider)o;
+		if(Platform.getBundle("org.jboss.tools.seam.core") != null) { //$NON-NLS-1$
+			Object o = ModelFeatureFactory.getInstance().createFeatureInstance("org.jboss.tools.seam.internal.core.el.SeamPromptingProvider"); //$NON-NLS-1$
+			if(o instanceof IPromptingProvider) {
+				seamPromptingProvider = (IPromptingProvider)o;
+			}
 		}
 	}
 	 //JBIDE-1983, coused a memmory link
