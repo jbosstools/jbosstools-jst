@@ -16,6 +16,7 @@ import junit.framework.TestSuite;
 
 import org.jboss.tools.jst.css.test.jbide.ExtendingCSSViewTest_JBIDE4850;
 import org.jboss.tools.jst.css.test.jbide.InputFractionalValueTest_JBIDE4790;
+import org.jboss.tools.jst.css.test.jbide.NotCompletedCSS_JBIDE4677;
 import org.jboss.tools.jst.css.test.jbide.SelectionLosingByPropertySheet_JBIDE4791;
 import org.jboss.tools.test.util.ProjectImportTestSetup;
 
@@ -37,6 +38,7 @@ public class CSSAllTests {
 		suite.addTestSuite(InputFractionalValueTest_JBIDE4790.class);
 		suite.addTestSuite(SelectionLosingByPropertySheet_JBIDE4791.class);
 		suite.addTestSuite(ExtendingCSSViewTest_JBIDE4850.class);
+		suite.addTestSuite(NotCompletedCSS_JBIDE4677.class);
 		// $JUnit-END$
 
 		return new ProjectImportTestSetup(
