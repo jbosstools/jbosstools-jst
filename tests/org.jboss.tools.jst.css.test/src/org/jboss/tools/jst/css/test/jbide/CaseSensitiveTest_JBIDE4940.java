@@ -23,12 +23,13 @@ import org.jboss.tools.test.util.JobUtils;
  * @author Sergey Dzmitrovich
  * 
  */
-public class IncorrectPageAfterSelectionTest_JBIDE4849 extends
-		AbstractCSSViewTest {
+public class CaseSensitiveTest_JBIDE4940 extends AbstractCSSViewTest {
 
-	public static final String TEST_PAGE_NAME = "JBIDE/4849/incorrectPageTest.css"; //$NON-NLS-1$
+	public static final String TEST_PAGE_NAME = "/JBIDE/4940/caseSensitiveTest.css"; //$NON-NLS-1$
 
-	public void testIncorrectPageAfterSelection() throws CoreException,
+	public static final String TESTED_ATTRIBUTE = "color"; //$NON-NLS-1$
+
+	public void testCaseSensitive() throws CoreException,
 			SecurityException, IllegalArgumentException, NoSuchFieldException,
 			IllegalAccessException {
 
@@ -47,11 +48,14 @@ public class IncorrectPageAfterSelectionTest_JBIDE4849 extends
 
 		assertNotNull(view);
 
-		IPage page = view.getDefaultPage();
+		IPage page = view.getCurrentPage();
 
 		assertNotNull(page);
 
 		assertTrue(page instanceof CSSPropertyPage);
+
+		assertNotNull(((CSSPropertyPage) page).getStyleAttributes().get(
+				TESTED_ATTRIBUTE));
 
 	}
 

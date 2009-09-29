@@ -28,7 +28,7 @@ public class NotCompletedCSS_JBIDE4677 extends AbstractCSSViewTest {
 
 	public static final String TEST_PAGE_NAME = "JBIDE/4677/notCompletedCss.css"; //$NON-NLS-1$
 
-	public void testInlineStyleEditing() throws CoreException,
+	public void testNotCompletedCSS() throws CoreException,
 			SecurityException, IllegalArgumentException, NoSuchFieldException,
 			IllegalAccessException {
 
