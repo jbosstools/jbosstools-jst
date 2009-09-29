@@ -703,6 +703,15 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	 */
 	abstract protected ELContext createContext();
 
+	
+	/**
+	 * Creates an empty <code>org.jboss.tools.common.el.core.resolver.ELContext</code> instance
+	 * to be used in <code>createContext()</code> method
+	 * 
+	 * 
+	 */
+	abstract protected ELContext createContextInstance();
+	
 	/**
 	 * Creates and fulfills the <code>org.jboss.tools.jst.web.kb.KbQuery</code> 
 	 * instance

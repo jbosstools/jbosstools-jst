@@ -11,11 +11,13 @@
 package org.jboss.tools.jst.jsp.contentassist;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.contentassist.IContextInformation;
@@ -32,7 +34,16 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
 import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImageHelper;
 import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImages;
+import org.jboss.tools.common.el.core.model.ELExpression;
+import org.jboss.tools.common.el.core.parser.ELParserFactory;
+import org.jboss.tools.common.el.core.parser.ELParserUtil;
+import org.jboss.tools.common.el.core.resolver.ELCompletionEngine;
 import org.jboss.tools.common.el.core.resolver.ELContext;
+import org.jboss.tools.common.el.core.resolver.ELContextImpl;
+import org.jboss.tools.common.el.core.resolver.ELResolution;
+import org.jboss.tools.common.el.core.resolver.ELResolutionImpl;
+import org.jboss.tools.common.el.core.resolver.ElVarSearcher;
+import org.jboss.tools.common.el.core.resolver.Var;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
@@ -42,6 +53,7 @@ import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.internal.JspContextImpl;
+import org.jboss.tools.jst.web.kb.internal.XmlContextImpl;
 import org.jboss.tools.jst.web.kb.internal.ResourceBundle;
 import org.jboss.tools.jst.web.kb.internal.taglib.NameSpace;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
@@ -61,36 +73,19 @@ import org.w3c.dom.NodeList;
  */
 public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 
-	protected static final Image JSF_EL_PROPOSAL_IMAGE = JspEditorPlugin.getDefault().getImage(JspEditorPlugin.CA_JSF_EL_IMAGE_PATH);
-	
-	/**
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.jsp.contentassist.XmlContentAssistProcessor#createContext()
-	 */
 	@Override
-	protected IPageContext createContext() {
-		ELContext superContext = super.createContext();
-		
-		IFile file = getResource();
-		
-		JspContextImpl context = new JspContextImpl();
-		context.setResource(superContext.getResource());
-		context.setElResolvers(superContext.getElResolvers());
-		context.setDocument(getDocument());
-		setVars(context, file);
-		setNameSpaces(context);
-		context.setLibraries(getTagLibraries(context));
-		context.setResourceBundles(getResourceBundles(context));
-		
-		return context;
+	protected ELContext createContextInstance() {
+		return new JspContextImpl();
 	}
-
+	
 	/**
 	 * Collects the namespaces over the JSP-page and sets them up to the context specified.
 	 * 
 	 * @param context
 	 */
-	protected void setNameSpaces(JspContextImpl context) {
+	protected void setNameSpaces(XmlContextImpl context) {
+		super.setNameSpaces(context);
+		
 		IStructuredModel sModel = StructuredModelManager
 									.getModelManager()
 									.getExistingModelForRead(getDocument());
@@ -129,38 +124,7 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 		}
 	}
 
-	private static final ITagLibrary[] EMPTY_LIBRARIES = new ITagLibrary[0];
 	
-	/**
-	 * Returns the Tag Libraries for the namespaces collected in the context.
-	 * Important: The context must be created using createContext() method before using this method.
-	 * 
-	 * @param context The context object instance
-	 * @return
-	 */
-	public ITagLibrary[] getTagLibraries(IPageContext context) {
-		Map<String, List<INameSpace>> nameSpaces =  context.getNameSpaces(getOffset());
-		if (nameSpaces == null || nameSpaces.isEmpty())
-			return EMPTY_LIBRARIES;
-		
-		IProject project = context.getResource() == null ? null : context.getResource().getProject();
-		if (project == null)
-			return EMPTY_LIBRARIES;
-		
-		List<ITagLibrary> tagLibraries = new ArrayList<ITagLibrary>();
-		for (List<INameSpace> nameSpace : nameSpaces.values()) {
-			for (INameSpace n : nameSpace) {
-				ITagLibrary[] libs = TagLibriryManager.getLibraries(project, n.getURI());
-				if (libs != null && libs.length > 0) {
-					for (ITagLibrary lib : libs) {
-						tagLibraries.add(lib);
-					}
-				}
-			}
-		} 
-		return (tagLibraries.isEmpty() ? EMPTY_LIBRARIES :
-				(ITagLibrary[])tagLibraries.toArray(new ITagLibrary[tagLibraries.size()]));
-	}
 	
 	/**
 	 * Returns the resource bundles  
@@ -231,16 +195,6 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 			}
 		}
 		return false;
-	}
-
-	/**
-	 * Returns the <code>org.jboss.tools.common.el.core.resolver.ELContext</code> instance
-	 * 
-	 * @return
-	 */
-	@Override
-	public IPageContext getContext() {
-		return (IPageContext)super.getContext();
 	}
 
 	/**
@@ -320,140 +274,6 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 	}
 	
 	/**
-	 * Calculates and adds the tag proposals to the Content Assist Request object
-	 * 
-	 * @param contentAssistRequest Content Assist Request object
-	 * @param childPosition the 
-	 */
-
-	@Override
-	protected void addTagInsertionProposals(
-			ContentAssistRequest contentAssistRequest, int childPosition) {
-		
-		// Need to check if an EL Expression is opened here.
-		// If it is true we don't need to start any new tag proposals
-		TextRegion prefix = getELPrefix();
-		if (prefix != null && prefix.isELStarted()) {
-			return;
-		}
-		
-		try {
-			String matchString = contentAssistRequest.getMatchString();
-			String query = matchString;
-			if (query == null)
-				query = ""; //$NON-NLS-1$
-			String stringQuery = "<" + matchString; //$NON-NLS-1$
-					
-			KbQuery kbQuery = createKbQuery(Type.TAG_NAME, query, stringQuery);
-			TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext());
-			
-			for (int i = 0; proposals != null && i < proposals.length; i++) {
-				TextProposal textProposal = proposals[i];
-				
-				String replacementString = textProposal.getReplacementString();
-				String closingTag = textProposal.getLabel();
-				if (closingTag != null && closingTag.startsWith("<")) { //$NON-NLS-1$
-					closingTag = closingTag.substring(1);
-				}
-
-				if (!replacementString.endsWith("/>")) { //$NON-NLS-1$
-					replacementString += "</" + closingTag + ">"; //$NON-NLS-1$ //$NON-NLS-2$
-				}
-
-
-				int replacementOffset = contentAssistRequest.getReplacementBeginPosition();
-				int replacementLength = contentAssistRequest.getReplacementLength();
-				int cursorPosition = getCursorPositionForProposedText(replacementString);
-				Image image = textProposal.getImage();
-				if (image == null) {
-					image = XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_TAG_GENERIC);
-				}
-				String displayString = closingTag; //$NON-NLS-1$
-				IContextInformation contextInformation = null;
-				String additionalProposalInfo = textProposal.getContextInfo();
-				int relevance = textProposal.getRelevance();
-				if (relevance == TextProposal.R_NONE) {
-					relevance = TextProposal.R_TAG_INSERTION;
-				}
-				AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(true, replacementString, 
-						replacementOffset, replacementLength, cursorPosition, image, displayString, 
-						contextInformation, additionalProposalInfo, relevance);
-
-				contentAssistRequest.addProposal(proposal);
-			}
-		} finally {
-		}
-		return;
-	}
-
-
-	/**
-	 * Calculates and adds the tag name proposals to the Content Assist Request object
-	 * 
-	 * @param contentAssistRequest Content Assist Request object
-	 * @param childPosition the 
-	 */
-
-	@Override
-	protected void addTagNameProposals(
-			ContentAssistRequest contentAssistRequest, int childPosition) {
-		try {
-			String matchString = contentAssistRequest.getMatchString();
-			String query = matchString;
-			if (query == null)
-				query = ""; //$NON-NLS-1$
-			String stringQuery = "<" + matchString; //$NON-NLS-1$
-					
-			KbQuery kbQuery = createKbQuery(Type.TAG_NAME, query, stringQuery);
-			TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext());
-			
-			for (int i = 0; proposals != null && i < proposals.length; i++) {
-				TextProposal textProposal = proposals[i];
-				
-				String replacementString = textProposal.getReplacementString();
-				String closingTag = textProposal.getLabel();
-				if (closingTag != null && closingTag.startsWith("<")) { //$NON-NLS-1$
-					closingTag = closingTag.substring(1);
-				}
-				
-				if (replacementString.startsWith("<")) { //$NON-NLS-1$
-					// Because the tag starting char is already in the text
-					replacementString = replacementString.substring(1);
-				}
-				if (!replacementString.endsWith("/>")) { //$NON-NLS-1$
-					replacementString += "</" + closingTag + ">"; //$NON-NLS-1$ //$NON-NLS-2$
-				}
-
-			
-				int replacementOffset = contentAssistRequest.getReplacementBeginPosition();
-				int replacementLength = contentAssistRequest.getReplacementLength();
-				int cursorPosition = getCursorPositionForProposedText(replacementString);
-				Image image = textProposal.getImage();
-				if (image == null) {
-					image = XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_TAG_GENERIC);
-				}
-
-				String displayString = closingTag; //$NON-NLS-1$
-				IContextInformation contextInformation = null;
-				String additionalProposalInfo = textProposal.getContextInfo();
-				int relevance = textProposal.getRelevance();
-				if (relevance == TextProposal.R_NONE) {
-					relevance = TextProposal.R_TAG_INSERTION;
-				}
-
-				AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(true, replacementString, 
-						replacementOffset, replacementLength, cursorPosition, image, displayString, 
-						contextInformation, additionalProposalInfo, relevance);
-
-				contentAssistRequest.addProposal(proposal);
-			}
-		} finally {
-		}
-		return;
-	}
-	
-	
-	/**
 	 * Calculates and adds the attribute name proposals to the Content Assist Request object
 	 * 
 	 * @param contentAssistRequest Content Assist Request object
@@ -503,59 +323,6 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 		}
 	}
 
-	/**
-	 * Calculates and adds the attribute value proposals to the Content Assist Request object
-	 */
-	protected void addAttributeValueProposals(ContentAssistRequest contentAssistRequest) {
-		// Need to check if an EL Expression is opened here.
-		// If it is true we don't need to start any new tag proposals
-		TextRegion prefix = getELPrefix();
-		if (prefix != null && prefix.isELStarted()) {
-			return;
-		}
-		try {
-			String matchString = contentAssistRequest.getMatchString();
-			String query = matchString;
-			if (query == null)
-				query = ""; //$NON-NLS-1$
-			String stringQuery = matchString;
-
-			KbQuery kbQuery = createKbQuery(Type.ATTRIBUTE_VALUE, query, stringQuery);
-			TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext());
-
-			for (int i = 0; proposals != null && i < proposals.length; i++) {
-				TextProposal textProposal = proposals[i];
-				int replacementOffset = contentAssistRequest.getReplacementBeginPosition();
-				int replacementLength = contentAssistRequest.getReplacementLength();
-				if(textProposal.getStart() >= 0 && textProposal.getEnd() >= 0) {
-					replacementOffset += textProposal.getStart() + 1;
-					replacementLength = textProposal.getEnd() - textProposal.getStart();
-				}
-				String replacementString = "\"" + textProposal.getReplacementString() + "\""; //$NON-NLS-1$ //$NON-NLS-2$
-				if(textProposal.getStart() >= 0 && textProposal.getEnd() >= 0) {
-					replacementString = textProposal.getReplacementString();
-				}
-				int cursorPosition = getCursorPositionForProposedText(replacementString);
-				Image image = textProposal.getImage();
-				String displayString = textProposal.getLabel() == null ? 
-						replacementString : 
-							textProposal.getLabel();
-				IContextInformation contextInformation = null;
-				String additionalProposalInfo = textProposal.getContextInfo();
-				int relevance = textProposal.getRelevance();
-				if (relevance == TextProposal.R_NONE) {
-					relevance = TextProposal.R_JSP_ATTRIBUTE_VALUE;
-				}
-
-				AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(replacementString, 
-						replacementOffset, replacementLength, cursorPosition, image, displayString, 
-						contextInformation, additionalProposalInfo, relevance);
-
-				contentAssistRequest.addProposal(proposal);
-			}
-		} finally {
-		}
-	}
 
 	/**
 	 * Calculates and adds the EL proposals to the Content Assist Request object
@@ -564,76 +331,35 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 	protected void addTextELProposals(ContentAssistRequest contentAssistRequest) {
 	}
 
-	/**
-	 * Calculates and adds the EL proposals to the Content Assist Request object
-	 */
-	@Override
-	protected void addAttributeValueELProposals(ContentAssistRequest contentAssistRequest) {
-		try {
-			TextRegion prefix = getELPrefix();
-			if (prefix == null) {
-				return;
+	protected void setVars(ELContextImpl context, IFile file) {
+		ELCompletionEngine fakeEngine = new ELCompletionEngine() {
+
+			public ELResolution resolveELOperand(IFile file,
+					ELExpression operand, boolean returnEqualedVariablesOnly,
+					List<Var> vars, ElVarSearcher varSearcher)
+					throws BadLocationException, StringIndexOutOfBoundsException {
+				return new ELResolutionImpl();
 			}
 
-			if(!prefix.isELStarted()) {
-				AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(true, "#{}",  //$NON-NLS-1$
-						getOffset(), 0, 2, JSF_EL_PROPOSAL_IMAGE, JstUIMessages.JspContentAssistProcessor_NewELExpression, 
-						null, JstUIMessages.JspContentAssistProcessor_NewELExpressionAttrInfo, TextProposal.R_XML_ATTRIBUTE_VALUE_TEMPLATE);
-
-				contentAssistRequest.addProposal(proposal);
-				return;
-			}
-			String matchString = "#{" + prefix.getText(); //$NON-NLS-1$
-			String query = matchString;
-			if (query == null)
-				query = ""; //$NON-NLS-1$
-			String stringQuery = matchString;
-			
-			int beginChangeOffset = prefix.getStartOffset() + prefix.getOffset();
-					
-			KbQuery kbQuery = createKbQuery(Type.ATTRIBUTE_VALUE, query, stringQuery);
-			TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext());
-			
-			for (int i = 0; proposals != null && i < proposals.length; i++) {
-				TextProposal textProposal = proposals[i];
-				
-				int replacementOffset = beginChangeOffset;
-				int replacementLength = prefix.getLength();
-				String replacementString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString();
-				int cursorPosition = replacementString.length();
-				Image image = textProposal.getImage();
-				
-				// JBIDE-512, JBIDE-2541 related changes ===>>>
-//				String displayString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString();
-				String displayString = textProposal.getLabel();
-				if (displayString == null)
-					displayString = textProposal.getReplacementString() == null ? replacementString : textProposal.getReplacementString();
- 
-				// <<<=== JBIDE-512, JBIDE-2541 related changes
-
-				IContextInformation contextInformation = null;
-				String additionalProposalInfo = (textProposal.getContextInfo() == null ? "" : textProposal.getContextInfo()); //$NON-NLS-1$
-				int relevance = textProposal.getRelevance();
-				if (relevance == TextProposal.R_NONE) {
-					relevance = TextProposal.R_JSP_JSF_EL_VARIABLE_ATTRIBUTE_VALUE;
-				}
-
-				AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(replacementString, 
-						replacementOffset, replacementLength, cursorPosition, image, displayString, 
-						contextInformation, additionalProposalInfo, relevance);
-
-				contentAssistRequest.addProposal(proposal);
+			public ELParserFactory getParserFactory() {
+				return ELParserUtil.getJbossFactory();
 			}
 
-			if (prefix.isELStarted() && !prefix.isELClosed()) {
-				AutoContentAssistantProposal proposal = new AutoContentAssistantProposal("}", //$NON-NLS-1$
-						getOffset(), 0, 1, JSF_EL_PROPOSAL_IMAGE, JstUIMessages.JspContentAssistProcessor_CloseELExpression, 
-						null, JstUIMessages.JspContentAssistProcessor_CloseELExpressionInfo, TextProposal.R_XML_ATTRIBUTE_VALUE_TEMPLATE);
-
-				contentAssistRequest.addProposal(proposal);
+			public List<TextProposal> getProposals(ELContext context, String el) {
+				return Collections.emptyList();
 			}
-		} finally {
+
+			public ELResolution resolve(ELContext context, ELExpression operand) {
+				return new ELResolutionImpl();
+			}
+		};
+		ElVarSearcher varSearcher = new ElVarSearcher(file, fakeEngine);
+		List<Var> vars = varSearcher.findAllVars(file, getOffset());
+
+		if (vars != null) {
+			for (Var var : vars) {
+				context.addVar(new Region(getOffset(), 0), var);
+			}
 		}
 	}
-
 }

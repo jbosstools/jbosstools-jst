@@ -24,6 +24,8 @@ import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentReg
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
+import org.jboss.tools.common.el.core.resolver.ELContext;
+import org.jboss.tools.common.el.core.resolver.ELContextImpl;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.web.kb.IFaceletPageContext;
@@ -32,6 +34,7 @@ import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.internal.FaceletPageContextImpl;
+import org.jboss.tools.jst.web.kb.internal.XmlContextImpl;
 import org.jboss.tools.jst.web.kb.internal.taglib.NameSpace;
 import org.jboss.tools.jst.web.kb.taglib.CustomTagLibManager;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
@@ -51,6 +54,11 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 
 	private boolean replaceJsfcTags;
 
+	@Override
+	protected ELContext createContextInstance() {
+		return new FaceletPageContextImpl();
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor#createContext()
@@ -59,7 +67,7 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 	protected IPageContext createContext() {
 		IPageContext superContext = super.createContext();
 
-		FaceletPageContextImpl context = new FaceletPageContextImpl();
+		FaceletPageContextImpl context = (FaceletPageContextImpl)createContextInstance();
 		context.setResource(superContext.getResource());
 		context.setElResolvers(superContext.getElResolvers());
 		setVars(context, superContext.getResource());
