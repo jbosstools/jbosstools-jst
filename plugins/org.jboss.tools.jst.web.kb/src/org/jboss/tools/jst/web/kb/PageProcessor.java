@@ -16,6 +16,7 @@ import java.util.Map;
 
 import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.text.TextProposal;
+import org.jboss.tools.jst.web.kb.internal.XmlContextImpl;
 import org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibAttribute;
 import org.jboss.tools.jst.web.kb.taglib.CustomTagLibManager;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
@@ -103,7 +104,7 @@ public class PageProcessor implements IProposalProcessor {
 
 	private boolean isQueryForELProposals(KbQuery query, IPageContext context) {
 		if (query.getType() != KbQuery.Type.ATTRIBUTE_VALUE &&
-				((query.getType() != KbQuery.Type.TEXT ) || !(context instanceof IFaceletPageContext))) { 
+				((query.getType() != KbQuery.Type.TEXT ) || !(context instanceof IFaceletPageContext || context instanceof XmlContextImpl))) { 
 			return false;
 		}
 
