@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.kb.internal;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ import org.eclipse.jface.text.IRegion;
 import org.jboss.tools.common.el.core.resolver.ELContextImpl;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.IResourceBundle;
+import org.jboss.tools.jst.web.kb.internal.taglib.NameSpace;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 
@@ -28,117 +30,20 @@ import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
  * JSP page context
  * @author Alexey Kazakov
  */
-public class JspContextImpl extends ELContextImpl implements IPageContext {
-	protected IDocument document;
-	protected ITagLibrary[] libs;
-	protected Map<IRegion, Map<String, INameSpace>> nameSpaces = new HashMap<IRegion, Map<String, INameSpace>>();
-	protected IResourceBundle[] bundles;
+public class JspContextImpl extends XmlContextImpl {
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.IPageContext#getLibraries()
-	 */
-	public ITagLibrary[] getLibraries() {
-		return libs;
-	}
-
-	public void setLibraries(ITagLibrary[] libs) {
-		this.libs = libs;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.IPageContext#getResourceBundles()
-	 */
-	public IResourceBundle[] getResourceBundles() {
-		return bundles;
-	}
-
-	/**
-	 * Sets resource bundles
-	 * @param bundles
-	 */
-	public void setResourceBundles(IResourceBundle[] bundles) {
-		this.bundles = bundles;
-	}
-
-	/**
-	 * @param document the document to set
-	 */
-	public void setDocument(IDocument document) {
-		this.document = document;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.PageContext#getDocument()
-	 */
-	public IDocument getDocument() {
-		return document;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.IPageContext#getNameSpaces(int)
-	 */
+	
+	
+	@Override
 	public Map<String, List<INameSpace>> getNameSpaces(int offset) {
-		Map<String, List<INameSpace>> result = new HashMap<String, List<INameSpace>>();
-		Map<INameSpace, IRegion> namespaceToRegions = new HashMap<INameSpace, IRegion>();
-
-		for (IRegion region : nameSpaces.keySet()) {
-			if(offset>=region.getOffset() && offset<=region.getOffset() + region.getLength()) {
-				Map<String, INameSpace> namespaces = nameSpaces.get(region);
-				if (namespaces != null) {
-					for (INameSpace ns : namespaces.values()) {
-						INameSpace existingNameSpace = findNameSpaceByPrefix(namespaceToRegions.keySet(), ns.getPrefix());
-						IRegion existingRegion = namespaceToRegions.get(existingNameSpace); 
-						if (existingRegion != null) {
-							// Perform visibility check for region
-							if (region.getOffset() > existingRegion.getOffset()) {
-								// Replace existingNS by this ns
-								namespaceToRegions.remove(existingNameSpace);
-								namespaceToRegions.put(ns, region);
-							}
-						} else {
-							namespaceToRegions.put(ns, region);
-						}
-					}
-				}
-			}
-		}
-
-		for (INameSpace ns : namespaceToRegions.keySet()) {
-			List<INameSpace> list = result.get(ns.getURI());
-			if(list==null) {
-				list = new ArrayList<INameSpace>();
-			}
-			list.add(ns);
-			result.put(ns.getURI(), list);
-		}
-
-		return result;
+		Map<String, List<INameSpace>> superNameSpaces = super.getNameSpaces(offset);
+		
+		List<INameSpace> fakeForHtmlNS = new ArrayList<INameSpace>();
+		fakeForHtmlNS.add(new NameSpace("", "")); //$NON-NLS-1$ //$NON-NLS-2$
+		superNameSpaces.put("", fakeForHtmlNS); //$NON-NLS-1$
+		
+		return superNameSpaces;
 	}
-
-	private INameSpace findNameSpaceByPrefix(Set<INameSpace> namespaces, String prefix) {
-		if (namespaces != null && prefix != null) {
-			for (INameSpace ns : namespaces) {
-				if (prefix.equals(ns.getPrefix())) {
-					return ns;
-				}
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Adds new name space to the context
-	 * @param region
-	 * @param name space
-	 */
-	public void addNameSpace(IRegion region, INameSpace nameSpace) {
-		if (nameSpaces.get(region) == null) {
-			Map<String, INameSpace> nameSpaceMap = new HashMap<String, INameSpace>();
-			nameSpaces.put(region, nameSpaceMap);
-		}
-		nameSpaces.get(region).put(nameSpace.getURI(), nameSpace);
-	}
+	
+	
 }
