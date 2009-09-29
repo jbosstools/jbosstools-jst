@@ -12,7 +12,6 @@ package org.jboss.tools.jst.css.test.jbide;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.part.IPage;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.jboss.tools.jst.css.properties.CSSPropertyPage;
@@ -24,9 +23,10 @@ import org.jboss.tools.test.util.JobUtils;
  * @author Sergey Dzmitrovich
  * 
  */
-public class NotCompletedCSS_JBIDE4677 extends AbstractCSSViewTest {
+public class IncorrectPageAfterSelectionTest_JBIDE4849 extends
+		AbstractCSSViewTest {
 
-	public static final String TEST_PAGE_NAME = "JBIDE/4677/notCompletedCss.css"; //$NON-NLS-1$
+	public static final String TEST_PAGE_NAME = "JBIDE/4849/incorrectPageTest.css"; //$NON-NLS-1$
 
 	public void testInlineStyleEditing() throws CoreException,
 			SecurityException, IllegalArgumentException, NoSuchFieldException,
@@ -47,16 +47,11 @@ public class NotCompletedCSS_JBIDE4677 extends AbstractCSSViewTest {
 
 		assertNotNull(view);
 
-		IPage page = view.getCurrentPage();
+		IPage page = view.getDefaultPage();
 
 		assertNotNull(page);
 
-		StructuredSelection selection = (StructuredSelection) ((CSSPropertyPage) page)
-				.getCurrentSelection();
-
-		assertNotNull(selection);
-		
-		assertNull(selection.getFirstElement());
+		assertTrue(page instanceof CSSPropertyPage);
 
 	}
 
