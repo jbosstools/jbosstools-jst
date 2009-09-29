@@ -13,11 +13,13 @@ package org.jboss.tools.jst.web.kb.internal.taglib;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
+import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -65,13 +67,32 @@ public class HTMLTagLibrary extends CustomTagLibrary {
 		return result.toArray(new IComponent[0]);
 	}
 
+	private static final List<String> EMPTY_PREFIXES = new ArrayList<String>();
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.internal.taglib.AbstractTagLib#getPrefixes(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.IPageContext)
 	 */
 	@Override
 	protected List<String> getPrefixes(KbQuery query, IPageContext context) {
-		return null;
+
+		Map<String, List<INameSpace>> nameSpaces = context.getNameSpaces(query.getOffset());
+		if(nameSpaces!=null) {
+			List<INameSpace> nameSpace = nameSpaces.get(getURI());
+			if(nameSpace!=null) {
+				for (INameSpace n : nameSpace) {
+					String sPrefix = n.getPrefix();
+					
+					// JBIDE-4923: This fake URI is added by JSP- or FaceletPage- Content Assist Processors 
+					// due to indicate that HTML schemas are to be used is query.
+					// For the Xml Content Assist Processor we need to return an empty prefix list (but not null)
+					// due to prevent HTML schemas usage
+					// 
+					if ("".equals(sPrefix)) //$NON-NLS-1$
+						return null;
+				}
+			}
+		}
+		return EMPTY_PREFIXES;
 	}
 
 	/*
