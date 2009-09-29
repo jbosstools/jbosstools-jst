@@ -11,20 +11,11 @@
 package org.jboss.tools.jst.web.kb.internal;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.IRegion;
-import org.jboss.tools.common.el.core.resolver.ELContextImpl;
-import org.jboss.tools.jst.web.kb.IPageContext;
-import org.jboss.tools.jst.web.kb.IResourceBundle;
 import org.jboss.tools.jst.web.kb.internal.taglib.NameSpace;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
-import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 
 /**
  * JSP page context
