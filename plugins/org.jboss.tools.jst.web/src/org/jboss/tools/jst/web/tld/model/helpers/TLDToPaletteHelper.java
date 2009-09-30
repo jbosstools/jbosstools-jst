@@ -105,6 +105,43 @@ public class TLDToPaletteHelper {
         return sb.toString();
     }
 
+    public XModelObject createMacroByFaceletTag(XModelObject tag, XModel model) {
+        Properties p = new Properties();
+        String parentname = getFaceletTldName(tag.getParent());
+        String prefix = (parentname.length() == 0) ? "" : parentname + ":"; //$NON-NLS-1$ //$NON-NLS-2$
+        String shortname = tag.getAttributeValue("tag-name"); //$NON-NLS-1$
+        String name = prefix + shortname;
+        String tagname = shortname; ///name;
+		p.setProperty("name", shortname); //$NON-NLS-1$
+        boolean empty = false; //we know nothing
+        if(!empty) p.setProperty(END_TEXT, "</" + tagname + ">"); //$NON-NLS-1$ //$NON-NLS-2$
+        p.setProperty(START_TEXT, getStartText(tag, empty, tagname));
+        p.setProperty(DESCRIPTION, getTagDescription(tag, empty, name));
+        if(!empty) p.setProperty(REFORMAT, "yes"); //$NON-NLS-1$
+        return model.createModelObject("SharableMacroHTML", p); //$NON-NLS-1$
+    }
+
+    public static String getFaceletTldName(XModelObject tld) {
+    	if(tld == null) return ""; //$NON-NLS-1$
+        String n = tld.getAttributeValue(XModelObjectConstants.ATTR_NAME);
+        String suff = ".taglib"; //$NON-NLS-1$
+        if(n.endsWith(suff)) {
+        	String p = n.substring(0, n.length() - suff.length()).toLowerCase();
+        	if(!"jsp".equals(p)) { //$NON-NLS-1$
+        		return p;
+        	}
+        }
+        String u = tld.getAttributeValue("uri"); //$NON-NLS-1$
+        if(u != null) {
+            int q = u.lastIndexOf('/');
+            if(q >= 0) u = u.substring(q + 1);
+            n = u;
+        }
+        int s = n.lastIndexOf(' ');
+        if(s >= 0) n = n.substring(s + 1);
+        return n.toLowerCase();
+    }
+
     private boolean isRequired(XModelObject attr) {
         String required = attr.getAttributeValue("required"); //$NON-NLS-1$
         return (XModelObjectConstants.TRUE.equals(required) || XModelObjectConstants.TRUE.equals(required));
@@ -126,11 +163,12 @@ public class TLDToPaletteHelper {
         p.setProperty(URIConstants.LIBRARY_URI, "" + tld.getAttributeValue("uri")); //$NON-NLS-1$ //$NON-NLS-2$
         XModelObject tab = model.createModelObject(entity, p);
         XModelObject[] tags = tld.getChildren();
-        for (int i = 0; i < tags.length; i++)
-          if(TLDUtil.isTag(tags[i])) tab.addChild(createMacroByTag(tags[i], model));
+        for (int i = 0; i < tags.length; i++) {
+        	if(TLDUtil.isTag(tags[i])) tab.addChild(createMacroByTag(tags[i], model));
+        	if(TLDUtil.isFaceletTag(tags[i])) tab.addChild(createMacroByFaceletTag(tags[i], model));
+        }
         return tab;
     }
-
 
     private String capitalize(String s) {
         return (s.length() == 0) ? s : Character.toUpperCase(s.charAt(0)) + s.substring(1);

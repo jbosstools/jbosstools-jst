@@ -15,7 +15,10 @@ import org.jboss.tools.common.model.*;
 public class TLDUtil {
     static String FILE_ENTITIES = ".FileTLD_PRO.FileTLD_1_2.FileTLD_2_0.FileTLD_2_1."; //$NON-NLS-1$
     static String TAG_ENTITIES = ".TLDTag.TLDTag12.TLDTag20.TLDTag21."; //$NON-NLS-1$
-    static String ATTR_ENTITIES = ".TLDAttribute.TLDAttribute12."; //$NON-NLS-1$
+    static String ATTR_ENTITIES = ".TLDAttribute.TLDAttribute12.TLDAttribute20.TLDAttribute2F."; //$NON-NLS-1$
+
+    static String FACELET_TAGLIB_ENTITIES = ".FileFaceletTaglib."; //$NON-NLS-1$
+    static String FACELET_TAG_ENTITIES = ".FaceletTaglibTag."; //$NON-NLS-1$
 
     public static boolean isTaglib(XModelObject o) {
         return isOfEntity(o, FILE_ENTITIES);
@@ -46,6 +49,13 @@ public class TLDUtil {
         }
         return sb.toString();
     }
-    
+
+    public static boolean isFaceletTaglib(XModelObject o) {
+        return isOfEntity(o, FACELET_TAGLIB_ENTITIES);
+    }
+    public static boolean isFaceletTag(XModelObject o) {
+        return isOfEntity(o, FACELET_TAG_ENTITIES);
+    }
+
 }
 

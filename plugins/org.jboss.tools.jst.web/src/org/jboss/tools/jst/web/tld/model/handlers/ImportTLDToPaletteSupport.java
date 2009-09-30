@@ -30,6 +30,7 @@ import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 import org.jboss.tools.jst.web.model.tree.AllTldsTree;
 import org.jboss.tools.jst.web.tld.URIConstants;
+import org.jboss.tools.jst.web.tld.model.TLDUtil;
 import org.jboss.tools.jst.web.tld.model.helpers.TLDToPaletteHelper;
 
 public class ImportTLDToPaletteSupport extends SpecialWizardSupport {
@@ -133,7 +134,9 @@ public class ImportTLDToPaletteSupport extends SpecialWizardSupport {
     	String name = selectedFile.getAttributeValue("display-name"); //$NON-NLS-1$
     	if(name == null || name.length() == 0) name = selectedFile.getAttributeValue("shortname"); //$NON-NLS-1$
     	setAttributeValue(0, NAME, name);
-    	String pref = TLDToPaletteHelper.getTldName(selectedFile);
+    	String pref = TLDUtil.isTaglib(selectedFile) ? TLDToPaletteHelper.getTldName(selectedFile)
+    			: TLDUtil.isFaceletTaglib(selectedFile) ? TLDToPaletteHelper.getFaceletTldName(selectedFile)
+    			: ""; //$NON-NLS-1$
     	setAttributeValue(0, URIConstants.DEFAULT_PREFIX, pref);
     	String uri = selectedFile.getAttributeValue("uri"); //$NON-NLS-1$
     	setAttributeValue(0, URIConstants.LIBRARY_URI, uri);

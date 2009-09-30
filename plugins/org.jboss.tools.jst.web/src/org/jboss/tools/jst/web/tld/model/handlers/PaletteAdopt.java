@@ -26,33 +26,43 @@ public class PaletteAdopt implements XAdoptManager {
     public PaletteAdopt() {}
 
     public boolean isAdoptable(XModelObject target, XModelObject object) {
-        return isAdoptableTag(target, object) || isAdoptableTaglib(target, object);
+        return isAdoptableTag(target, object) 
+        	|| isAdoptableTaglib(target, object)
+        	|| isAdoptableFaceletTaglib(target, object);
     }
 
     public void adopt(XModelObject target, XModelObject object, java.util.Properties p) throws XModelException {
         if(isAdoptableTag(target, object)) adoptTag(target, object);
         else if(isAdoptableTaglib(target, object)) adoptTaglib(target, object);
+        else if(isAdoptableFaceletTaglib(target, object)) adoptFaceletTaglib(target, object);
     }
 
     protected boolean isAdoptableTag(XModelObject target, XModelObject object) {
         if(!TLDUtil.isTag(object)) return false;
-        String te = target.getModelEntity().getName();
-        if(!te.startsWith("SharablePageTab") &&  //$NON-NLS-1$
-           !te.startsWith("SharableGroup") && //$NON-NLS-1$
-		   !te.startsWith("SharableMacro")) return false; //$NON-NLS-1$
+        if(!isPaletteObject(target, true)) return false;
         return true;
     }
 
+    private boolean isPaletteObject(XModelObject target, boolean excludeRoot) {
+    	String te = target.getModelEntity().getName();
+    	if(te.startsWith("SharablePageTab")) return true; //$NON-NLS-1$
+    	if(te.startsWith("SharableGroup")) return true; //$NON-NLS-1$
+    	if(te.startsWith("SharableMacro")) return true; //$NON-NLS-1$
+    	if(!excludeRoot && te.startsWith("SharablePalette")) return true; //$NON-NLS-1$
+    	return false;
+    }
     protected boolean isAdoptableTaglib(XModelObject target, XModelObject object) {
         if(!TLDUtil.isTaglib(object)) return false;
-        String te = target.getModelEntity().getName();
-        if(!te.startsWith("SharablePageTab") && //$NON-NLS-1$
-           !te.startsWith("SharableGroup") && //$NON-NLS-1$
-           !te.equals("SharablePalette") && //$NON-NLS-1$
-           !te.startsWith("SharableMacro")) return false; //$NON-NLS-1$
+        if(!isPaletteObject(target, false)) return false;
         return true;
     }
-    
+
+    protected boolean isAdoptableFaceletTaglib(XModelObject target, XModelObject object) {
+    	if(!TLDUtil.isFaceletTaglib(object)) return false;
+        if(!isPaletteObject(target, false)) return false;
+        return true;
+    }
+
     public void adoptTag(XModelObject target, XModelObject object) throws XModelException {
     	if(target.getModelEntity().getName().startsWith("SharableMacro")) target = target.getParent(); //$NON-NLS-1$
         add(target, object, helper.createMacroByTag(object, target.getModel()));
@@ -81,6 +91,10 @@ public class PaletteAdopt implements XAdoptManager {
     		p.put("target", target); //$NON-NLS-1$
     	}
 		XActionInvoker.invoke("ImportTLDToPaletteWizard", "CreateActions.ImportTLD", paletteRoot, p); //$NON-NLS-1$ //$NON-NLS-2$
+    }
+
+    public void adoptFaceletTaglib(XModelObject target, XModelObject object) {
+    	adoptTaglib(target, object);
     }
 
     static void add(XModelObject target, XModelObject object, XModelObject created) throws XModelException {
