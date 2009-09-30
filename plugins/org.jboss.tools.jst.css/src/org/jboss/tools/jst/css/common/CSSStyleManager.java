@@ -99,7 +99,7 @@ public class CSSStyleManager {
 					CSSStyleRule styleRule = getStyleRule(node);
 
 					if (styleRule != null) {
-						container = new CSSStyleRuleContainer(styleRule);
+						container = new StyleElementRuleContainer(styleText, styleRule);
 					}
 				}
 			}

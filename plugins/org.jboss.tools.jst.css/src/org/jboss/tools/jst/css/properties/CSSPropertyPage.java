@@ -124,14 +124,8 @@ public class CSSPropertyPage extends TabbedPropertySheetPage implements
 							.getStyleProperties());
 		}
 
-		notifySelectionChanged(getCurrentSelection());
-
 	}
 
-	protected void notifySelectionChanged(ISelection selection) {
-		part.postSelectionChanged(new SelectionChangedEvent(part
-				.getSelectionProvider(), selection));
-	}
 
 	/**
 	 * 

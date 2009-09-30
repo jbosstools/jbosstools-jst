@@ -93,10 +93,6 @@ public class CSSEditorView extends PropertySheet implements ICSSViewListner {
 		return super.getSelectionProvider();
 	}
 
-	public void postSelectionChanged(SelectionChangedEvent event) {
-		getSelectionProvider().postSelectionChanged(event);
-	}
-
 	@Override
 	public Object getAdapter(Class key) {
 		if (key == IContributedContentsView.class) {
