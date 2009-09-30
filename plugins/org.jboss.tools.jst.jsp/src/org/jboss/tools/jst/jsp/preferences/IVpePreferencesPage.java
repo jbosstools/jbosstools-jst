@@ -15,6 +15,7 @@ public interface IVpePreferencesPage {
 	static final String SHOW_BORDER_FOR_UNKNOWN_TAGS = "Show Border for Unknown Tags"; //$NON-NLS-1$
 	static final String SHOW_NON_VISUAL_TAGS = "Show non-visual tags"; //$NON-NLS-1$
 	static final String SHOW_SELECTION_TAG_BAR = "Show Selection Tag Bar"; //$NON-NLS-1$
+	static final String SHOW_TEXT_FORMATTING = "Show Text Formatting bar"; //$NON-NLS-1$
 	static final String SHOW_RESOURCE_BUNDLES_USAGE_AS_EL = "Show Resource Bundles Usage as EL Expressions"; //$NON-NLS-1$
 	static final String ASK_TAG_ATTRIBUTES_ON_TAG_INSERT = "Ask for tag attributes during tag insert"; //$NON-NLS-1$
 	static final String ASK_CONFIRMATION_ON_CLOSING_SELECTION_BAR = "Ask for confirmation when closing Selection Bar"; //$NON-NLS-1$
