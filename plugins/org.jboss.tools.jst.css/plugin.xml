@@ -114,4 +114,52 @@
               name="%css.perspective_name"> 
         </perspective> 
     </extension>
+ <extension
+       point="org.eclipse.ui.perspectiveExtensions">
+    <perspectiveExtension
+          targetID="org.jboss.tools.jst.cssPerspective">
+       <viewShortcut
+             id="org.eclipse.pde.runtime.LogView">
+       </viewShortcut>
+       <viewShortcut
+             id="org.eclipse.ui.views.TaskList">
+       </viewShortcut>
+       <viewShortcut
+             id="org.jboss.tools.seam.ui.views.SeamComponentsNavigator">
+       </viewShortcut>
+       <viewShortcut
+             id="org.eclipse.ui.views.PropertySheet">
+       </viewShortcut>
+       <viewShortcut
+             id="org.jboss.tools.jst.web.ui.navigator.WebProjectsView">
+       </viewShortcut>
+       <viewShortcut
+             id="org.jboss.ide.eclipse.archives.ui.ProjectArchivesView">
+       </viewShortcut>
+       <perspectiveShortcut
+             id="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective">
+       </perspectiveShortcut>
+       <perspectiveShortcut
+             id="org.eclipse.jdt.ui.JavaPerspective">
+       </perspectiveShortcut>
+       <perspectiveShortcut
+             id="org.eclipse.jst.j2ee.J2EEPerspective">
+       </perspectiveShortcut>
+       <perspectiveShortcut
+             id="org.jboss.tools.seam.ui.SeamPerspective">
+       </perspectiveShortcut>
+       <newWizardShortcut
+             id="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSClassWizard">
+       </newWizardShortcut>
+       <newWizardShortcut
+             id="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSFileWizard">
+       </newWizardShortcut>
+       <perspectiveShortcut
+             id="org.eclipse.debug.ui.DebugPerspective">
+       </perspectiveShortcut>
+       <perspectiveShortcut
+             id="org.eclipse.jdt.ui.JavaBrowsingPerspective">
+       </perspectiveShortcut>
+    </perspectiveExtension>
+ </extension>
 </plugin>
