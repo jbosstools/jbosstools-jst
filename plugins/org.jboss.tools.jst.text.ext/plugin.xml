@@ -206,11 +206,17 @@
          		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ATTRIBUTE_VALUE">
          			<axis path="*/a/href/" ignoreCase="true"/>
          			<axis path="*/jsp:directive.include/file/" />
+         			<axis path="*/[http://java.sun.com/JSP/Page]:directive.include/file/" />
          			<axis path="*/jsp:directive.page/errorPage/" />
+         			<axis path="*/[http://java.sun.com/JSP/Page]:directive.page/errorPage/" />
          			<axis path="*/jsp:include/page/" />
+         			<axis path="*/[http://java.sun.com/JSP/Page]:include/page/" />
          			<axis path="*/jsp:forward/page/" />
+         			<axis path="*/[http://java.sun.com/JSP/Page]:forward/page/" />
          			<axis path="*/jsp:plugin/iepluginurl/" />
+         			<axis path="*/[http://java.sun.com/JSP/Page]:plugin/iepluginurl/" />
          			<axis path="*/jsp:plugin/nspluginurl/" />
+         			<axis path="*/[http://java.sun.com/JSP/Page]:plugin/nspluginurl/" />
          		</partitionType>
          	</contentType>
          	<contentType id="org.eclipse.wst.html.core.htmlsource">
