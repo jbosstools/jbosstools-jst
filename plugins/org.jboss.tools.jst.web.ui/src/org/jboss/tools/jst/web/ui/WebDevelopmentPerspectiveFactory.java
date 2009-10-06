@@ -47,7 +47,8 @@ public class WebDevelopmentPerspectiveFactory implements IPerspectiveFactory {
 		bottom.addView("org.jboss.ide.eclipse.as.ui.views.JBossServerView"); //$NON-NLS-1$
 
 		IFolderLayout rightTop = layout.createFolder("right", IPageLayout.RIGHT, (float)0.8, editorArea); //$NON-NLS-1$
-		rightTop.addView("org.jboss.tools.common.model.ui.views.palette.PaletteView"); //$NON-NLS-1$
+//		rightTop.addView("org.jboss.tools.common.model.ui.views.palette.PaletteView"); //$NON-NLS-1$
+		rightTop.addView("org.eclipse.gef.ui.palette_view"); //$NON-NLS-1$
 		IFolderLayout rightBottom = layout.createFolder("rightBottom", IPageLayout.BOTTOM, (float)0.64, "right"); //$NON-NLS-1$ //$NON-NLS-2$
 		rightBottom.addView(IPageLayout.ID_OUTLINE);
 
