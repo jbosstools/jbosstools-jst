@@ -32,7 +32,7 @@ import org.w3c.dom.Element;
 /**
  * @author Viacheslav Kabanovich
  */
-public class KbObject {
+public class KbObject implements Cloneable {
 	/**
 	 * Object that allows to identify this object.
 	 */
