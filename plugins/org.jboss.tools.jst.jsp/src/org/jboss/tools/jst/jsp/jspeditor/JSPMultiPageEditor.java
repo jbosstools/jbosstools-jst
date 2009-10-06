@@ -25,6 +25,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.gef.ui.views.palette.PalettePage;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.text.IRegion;
@@ -571,10 +572,22 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 				JspEditorPlugin.getPluginLog().logError(e);
 			}
 		}
+		if(palettePage != null) {
+			palettePage.dispose();
+			palettePage = null;
+		}
 		super.dispose();
 	}
+	
+	PalettePageImpl palettePage;
 
 	public Object getAdapter(Class adapter) {
+		if(PalettePage.class == adapter) {
+			if(palettePage == null) {
+				palettePage = new PalettePageImpl();
+			}
+			return palettePage;
+		}
 		if (IContentOutlinePage.class.equals(adapter)) {
 
 			if (visualEditor != null) {
