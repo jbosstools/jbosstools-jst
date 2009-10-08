@@ -27,6 +27,7 @@ import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.internal.KbObject;
 import org.jboss.tools.jst.web.kb.internal.KbXMLStoreConstants;
+import org.jboss.tools.jst.web.kb.internal.taglib.composite.CompositeAttribute;
 import org.jboss.tools.jst.web.kb.taglib.Facet;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
@@ -575,6 +576,8 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 				c = new TLDAttribute();
 			} else if(KbXMLStoreConstants.CLS_FACESCONFIG_LIBRARY.equals(cls)) {
 				c = new FacesConfigAttribute();
+			} else if(KbXMLStoreConstants.CLS_COMPOSITE_LIBRARY.equals(cls)) {
+				c = new CompositeAttribute();
 			} else {
 				//consider other cases;
 			}

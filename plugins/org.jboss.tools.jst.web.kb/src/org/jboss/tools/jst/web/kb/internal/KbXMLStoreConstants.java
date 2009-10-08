@@ -26,6 +26,7 @@ public interface KbXMLStoreConstants extends XMLStoreConstants {
 	public String CLS_TLD_LIBRARY = "tld"; //$NON-NLS-1$
 	public String CLS_FACELET_LIBRARY = "facelet"; //$NON-NLS-1$
 	public String CLS_FACESCONFIG_LIBRARY = "faces-config"; //$NON-NLS-1$
+	public String CLS_COMPOSITE_LIBRARY = "composite"; //$NON-NLS-1$
 
 	public String ATTR_URI = "uri"; //$NON-NLS-1$
 	public String ATTR_SHORT_NAME = "short-name"; //$NON-NLS-1$

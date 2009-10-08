@@ -8,6 +8,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IClasspathEntry;
@@ -19,6 +20,7 @@ import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.internal.scanner.IFileScanner;
+import org.jboss.tools.jst.web.kb.internal.scanner.JSF2ResourcesScanner;
 import org.jboss.tools.jst.web.kb.internal.scanner.LoadedDeclarations;
 import org.jboss.tools.jst.web.kb.internal.scanner.ScannerException;
 import org.jboss.tools.jst.web.kb.internal.scanner.XMLScanner;
@@ -34,6 +36,9 @@ public class KbResourceVisitor implements IResourceVisitor {
 	IPath[] outs = new IPath[0];
 	IPath[] srcs = new IPath[0];
 	IPath webinf = null;
+	IPath jsf2resources = null; //JSF 2
+	IResource jsf2resourcesFolder = null;
+	boolean jsf2resourcesProcessed = false;
 
 	public KbResourceVisitor(KbProject p) {
 		this.p = p;
@@ -48,6 +53,13 @@ public class KbResourceVisitor implements IResourceVisitor {
 					IResource wir = (IResource)wio.getAdapter(IResource.class);
 					if(wir != null) {
 						webinf = wir.getFullPath();
+						jsf2resources = webinf.removeLastSegments(1).append("resources"); //$NON-NLS-1$
+						IResource rf = ResourcesPlugin.getWorkspace().getRoot().getFolder(jsf2resources);
+						if(rf == null || !rf.exists()) {
+							jsf2resources = null;
+						} else {
+							jsf2resourcesFolder = rf;
+						}
 					}
 				}
 			}
@@ -56,6 +68,10 @@ public class KbResourceVisitor implements IResourceVisitor {
 
 	public IResourceVisitor getVisitor() {
 		return this;
+	}
+
+	public void init() {
+		jsf2resourcesProcessed = false;
 	}
 
 	public boolean visit(IResource resource) {
@@ -99,6 +115,25 @@ public class KbResourceVisitor implements IResourceVisitor {
 					return true;
 				}
 			}
+			if(jsf2resources != null) {
+				if (jsf2resources.isPrefixOf(path)) {
+					if (jsf2resourcesProcessed) return false;
+					jsf2resourcesProcessed = true;
+					JSF2ResourcesScanner scanner = new JSF2ResourcesScanner();
+					LoadedDeclarations c = null;
+					try {
+						c = scanner.parse((IFolder) jsf2resourcesFolder, p);
+					} catch (ScannerException e) {
+						WebKbPlugin.getDefault().logError(e);
+					}
+					if (c != null)
+						componentsLoaded(c, resource);
+					return false;
+				}
+				if(path.isPrefixOf(jsf2resources)) {
+					return true;
+				}
+			}
 			if(webinf != null) {
 				if(webinf.isPrefixOf(path) || path.isPrefixOf(webinf)
 						|| webinf.removeLastSegments(1).isPrefixOf(path) //Webroot
@@ -106,6 +141,7 @@ public class KbResourceVisitor implements IResourceVisitor {
 					return true;
 				}
 			}
+			
 			if(resource == resource.getProject()) {
 				return true;
 			}
@@ -115,7 +151,7 @@ public class KbResourceVisitor implements IResourceVisitor {
 		return true;
 	}
 	
-	void componentsLoaded(LoadedDeclarations c, IFile resource) {
+	void componentsLoaded(LoadedDeclarations c, IResource resource) {
 		if(c == null || c.getLibraries().size() == 0) return;
 		p.registerComponents(c, resource.getFullPath());
 	}

@@ -14,6 +14,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.XModelObjectConstants;
 import org.jboss.tools.common.model.filesystems.impl.FileSystemsImpl;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.jst.web.kb.IKbProject;
@@ -81,9 +82,14 @@ public class LibraryScanner implements IFileScanner {
 					LoadedDeclarations ds1 = s.parse(tld, path, sp);
 					if(ds1 != null) ds.add(ds1);
 				}
+				if(tld.getFileType() == XModelObject.FOLDER && tld.getAttributeValue(XModelObjectConstants.ATTR_NAME).equals("resources")) { //$NON-NLS-1$
+					JSF2ResourcesScanner s = new JSF2ResourcesScanner();
+					LoadedDeclarations ds1 = s.parse(tld, path, sp);
+					if(ds1 != null) ds.add(ds1);
+				}
 			}
 		}
-		
+
 		return ds;
 	}
 
