@@ -3,6 +3,7 @@ package org.jboss.tools.jst.jsp.test;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.jboss.tools.jst.jsp.test.ca.CAForCompositeComponentTest;
 import org.jboss.tools.jst.jsp.test.ca.CAForELinStyleTest;
 import org.jboss.tools.jst.jsp.test.ca.CAForIDTest;
 import org.jboss.tools.jst.jsp.test.ca.Jbide1791Test;
@@ -22,7 +23,7 @@ public class JstJspAllTests {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for org.jboss.tools.jst.jsp.test");
-
+		suite.addTestSuite(CAForCompositeComponentTest.class);
 		suite.addTestSuite(MissingKBBuilderTest.class);
 		suite.addTestSuite(JsfJspJbide1807Test.class);
 		suite.addTestSuite(CAForIDTest.class);
