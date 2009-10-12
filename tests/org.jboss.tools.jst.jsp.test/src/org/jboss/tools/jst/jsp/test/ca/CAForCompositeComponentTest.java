@@ -19,7 +19,7 @@ public class CAForCompositeComponentTest extends ContentAssistantTestCase{
 		}
 	}
 	
-	public void testCAForELinStyleTest(){
+	public void testCAForCompositeComponent(){
 		String[] proposals = {
 			"sample:tag", "sample:tag2", "sample:tag3"
 		};
