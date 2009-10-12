@@ -23,6 +23,7 @@ import java.util.Set;
 
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
@@ -385,8 +386,17 @@ public class KbProject extends KbObject implements IKbProject {
 			if(sourcePaths2.containsKey(path)) continue;
 
 			if(!getClassPath().hasPath(path)) {
-				IFile f = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
-				if(f == null || !f.exists() || !f.isSynchronized(IResource.DEPTH_ZERO)) continue;
+				boolean ok = false;
+				IFolder folder = ResourcesPlugin.getWorkspace().getRoot().getFolder(path);
+				if(folder != null && folder.exists() && folder.isSynchronized(IResource.DEPTH_INFINITE)) {
+					ok = true;
+				} else {
+					IFile f = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
+					if(f != null && f.exists() && f.isSynchronized(IResource.DEPTH_ZERO)) {
+						ok = true;
+					}
+				}
+				if(!ok) continue;
 			}
 			
 			context.put(XMLStoreConstants.ATTR_PATH, path);
