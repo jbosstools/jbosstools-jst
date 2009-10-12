@@ -113,6 +113,13 @@ public class LibraryScanner implements IFileScanner {
 		if(entity.startsWith("FacesConfig")) return true; //$NON-NLS-1$
 		return false;
 	}
+
+	public static boolean isCompositeComponentFile(XModelObject o) {
+		if(o == null) return false;
+		String entity = o.getModelEntity().getName();
+		if(entity.startsWith(JSF2ResourcesScanner.ENT_COMPOSITE_COMPONENT)) return true; //$NON-NLS-1$
+		return false;
+	}
 	
 }
 

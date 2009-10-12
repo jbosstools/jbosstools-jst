@@ -1,5 +1,6 @@
 package org.jboss.tools.jst.web.kb.internal.scanner;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.IPath;
@@ -21,10 +22,25 @@ public class JSF2ResourcesScanner implements IFileScanner {
 	public static String ATTR_SHORT_DESCRIPTION = "shortDescription"; //$NON-NLS-1$
 	public static String URI_PREFIX = "http://java.sun.com/jsf/composite"; //$NON-NLS-1$
 
+	public static String ENT_COMPOSITE_COMPONENT = "FileJSF2Component"; //$NON-NLS-1$
+
 	public JSF2ResourcesScanner() {}
 
 	public boolean isLikelyComponentSource(IFile f) {
-		//only to be invoked on IFolder named 'resources'
+		if(!f.isSynchronized(IFile.DEPTH_ZERO) || !f.exists()) return false;
+		XModel model = InnerModelHelper.createXModel(f.getProject());
+		if(model == null) return false;
+		XModelObject o = EclipseResourceUtil.getObjectByResource(model, f);
+		if(o == null) return false; 
+		if(LibraryScanner.isCompositeComponentFile(o)) {
+			IContainer c = f.getParent();
+			while(c != null && c instanceof IFolder) {
+				if("resources".equals(c.getName())) {
+					return true;
+				}
+				c = c.getParent();
+			}
+		}
 		return false;
 	}
 
@@ -62,7 +78,7 @@ public class JSF2ResourcesScanner implements IFileScanner {
 				processFolder(c, ds, source, uriPrefix + "/" + n); //$NON-NLS-1$
 			}
 			String entity = c.getModelEntity().getName();
-			if("FileJSF2Component".equals(entity)) { //$NON-NLS-1$
+			if(ENT_COMPOSITE_COMPONENT.equals(entity)) {
 				if(library == null) {
 					library = new CompositeTagLibrary();
 					library.setId(o);

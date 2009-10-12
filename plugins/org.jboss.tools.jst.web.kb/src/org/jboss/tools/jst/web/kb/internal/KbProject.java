@@ -582,6 +582,9 @@ public class KbProject extends KbObject implements IKbProject {
 		for (ITagLibrary library: libraries) {
 			AbstractTagLib loaded = (AbstractTagLib)library;
 			AbstractTagLib current = (AbstractTagLib)currentLibraries.remove(loaded.getId());
+
+			loaded.setSourcePath(source);
+
 			if(current != null && current.getClass() != loaded.getClass()) {
 				this.libraries.removeLibrary((ITagLibrary)current);
 				current = null;

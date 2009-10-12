@@ -30,6 +30,7 @@ public class KbResourceVisitor implements IResourceVisitor {
 	static IFileScanner[] FILE_SCANNERS = {
 		new XMLScanner(), 
 	};
+	JSF2ResourcesScanner jsf2scanner = new JSF2ResourcesScanner();
 	
 	KbProject p;
 
@@ -102,6 +103,9 @@ public class KbResourceVisitor implements IResourceVisitor {
 //					System.out.println("Time=" + timeUsed);
 				}
 			}
+			if(jsf2resources != null && jsf2resources.isPrefixOf(f.getFullPath()) && jsf2scanner.isLikelyComponentSource(f)) {
+				processJSF2Resources();
+			}
 		}
 		if(resource instanceof IFolder) {
 			IPath path = resource.getFullPath();
@@ -117,17 +121,7 @@ public class KbResourceVisitor implements IResourceVisitor {
 			}
 			if(jsf2resources != null) {
 				if (jsf2resources.isPrefixOf(path)) {
-					if (jsf2resourcesProcessed) return false;
-					jsf2resourcesProcessed = true;
-					JSF2ResourcesScanner scanner = new JSF2ResourcesScanner();
-					LoadedDeclarations c = null;
-					try {
-						c = scanner.parse((IFolder) jsf2resourcesFolder, p);
-					} catch (ScannerException e) {
-						WebKbPlugin.getDefault().logError(e);
-					}
-					if (c != null)
-						componentsLoaded(c, resource);
+					processJSF2Resources();
 					return false;
 				}
 				if(path.isPrefixOf(jsf2resources)) {
@@ -149,6 +143,20 @@ public class KbResourceVisitor implements IResourceVisitor {
 		}
 		//return true to continue visiting children.
 		return true;
+	}
+
+	void processJSF2Resources() {
+		if (jsf2resourcesFolder == null || jsf2resourcesProcessed) return;
+		jsf2resourcesProcessed = true;
+		JSF2ResourcesScanner scanner = new JSF2ResourcesScanner();
+		LoadedDeclarations c = null;
+		try {
+			c = scanner.parse((IFolder) jsf2resourcesFolder, p);
+		} catch (ScannerException e) {
+			WebKbPlugin.getDefault().logError(e);
+		}
+		if (c != null)
+			componentsLoaded(c, jsf2resourcesFolder);
 	}
 	
 	void componentsLoaded(LoadedDeclarations c, IResource resource) {

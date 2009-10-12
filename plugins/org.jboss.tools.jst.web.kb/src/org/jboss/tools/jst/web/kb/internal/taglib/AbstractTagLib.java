@@ -475,10 +475,47 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	@Override
 	public List<Change> merge(KbObject s) {
 		List<Change> changes = super.merge(s);
-		//TODO
+		AbstractTagLib t = (AbstractTagLib)s;
+		Change children = new Change(this, null, null, null);
+		mergeComponents(t, children);
+		changes = Change.addChange(changes, children);
+
 		return changes;
 	}
 
+	public void mergeComponents(AbstractTagLib c, Change children) {
+		Map<Object,AbstractComponent> componentMap = new HashMap<Object, AbstractComponent>();
+		for (IComponent a: getComponents()) componentMap.put(((KbObject)a).getId(), (AbstractComponent)a);
+		for (IComponent a: c.getComponents()) {
+			AbstractComponent loaded = (AbstractComponent)a;
+			AbstractComponent current = componentMap.remove(loaded.getId());
+			if(current == null) {
+				addComponent(loaded);
+				Change change = new Change(this, null, null, loaded);
+				children.addChildren(Change.addChange(null, change));
+			} else {
+				if(components.get(current.getName()) == current) {
+					components.remove(current.getName());
+				}
+				List<Change> rc = current.merge(loaded);
+				if(rc != null) children.addChildren(rc);
+				components.put(current.getName(), current);
+			}
+		}
+		for (IComponent a: componentMap.values()) {
+			AbstractComponent removed = (AbstractComponent)a;
+			if(components.get(removed.getName()) == removed) {
+				components.remove(removed.getName());
+				Change change = new Change(this, null, removed, null);
+				children.addChildren(Change.addChange(null, change));
+				clearComponentArrays();
+			}
+		}
+	}
+
+	private void clearComponentArrays() {
+		componentsArray = null;
+	}
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.internal.KbObject#getXMLName()
@@ -550,4 +587,5 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	protected void loadAttributeValues(Element element) {
 		setURI(attributesInfo.get(URI));
 	}
+
 }

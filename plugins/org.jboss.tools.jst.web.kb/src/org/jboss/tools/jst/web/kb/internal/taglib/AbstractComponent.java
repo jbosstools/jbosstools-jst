@@ -502,14 +502,16 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		for (IAttribute a: getAttributes()) attributeMap.put(((KbObject)a).getId(), (AbstractAttribute)a);
 		for (IAttribute a: c.getAttributes()) {
 			AbstractAttribute loaded = (AbstractAttribute)a;
-			AbstractAttribute current = attributeMap.get(loaded.getId());
+			AbstractAttribute current = attributeMap.remove(loaded.getId());
 			if(current == null) {
 				addAttribute(loaded);
 				Change change = new Change(this, null, null, loaded);
 				children.addChildren(Change.addChange(null, change));
 			} else {
+				removeAttribute(current);
 				List<Change> rc = current.merge(loaded);
 				if(rc != null) children.addChildren(rc);
+				addAttribute(current);
 			}
 		}
 		for (IAttribute a: attributeMap.values()) {
