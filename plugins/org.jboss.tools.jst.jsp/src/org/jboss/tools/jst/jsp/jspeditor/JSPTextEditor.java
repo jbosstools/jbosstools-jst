@@ -94,6 +94,7 @@ import org.jboss.tools.common.meta.action.XActionInvoker;
 import org.jboss.tools.common.model.XModelBuffer;
 import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.XModelObjectConstants;
 import org.jboss.tools.common.model.XModelTransferBuffer;
 import org.jboss.tools.common.model.filesystems.impl.FileAnyImpl;
 import org.jboss.tools.common.model.filesystems.impl.FolderImpl;
@@ -125,6 +126,7 @@ import org.jboss.tools.jst.jsp.editor.IJSPTextEditor;
 import org.jboss.tools.jst.jsp.editor.ITextFormatter;
 import org.jboss.tools.jst.jsp.editor.IVisualContext;
 import org.jboss.tools.jst.jsp.editor.IVisualController;
+import org.jboss.tools.jst.jsp.jspeditor.dnd.FileTagProposalLoader;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.JSPPaletteInsertHelper;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.JSPTagProposalFactory;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.TagProposal;
@@ -856,10 +858,17 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		public TagAttributesComposite.AttributeDescriptorValue[] createDescriptors(KbQuery query) {
 			IComponent s = findComponent(query);
 			if(s == null) return new TagAttributesComposite.AttributeDescriptorValue[0];
+			boolean excludeJSFC = false;
+			if(FileTagProposalLoader.FACELETS_URI.equals(query.getUri())) {
+				if(getModelObject() != null && "jsp".equalsIgnoreCase(getModelObject().getAttributeValue(XModelObjectConstants.ATTR_NAME_EXTENSION))) { //$NON-NLS-1$
+					excludeJSFC = true;
+				}
+			}
 			
 			List<AttributeDescriptorValue> attributesValues = new ArrayList<AttributeDescriptorValue>();
 			IAttribute[] as = s.getAttributes();
 			for (IAttribute a: as) {
+				if(excludeJSFC && "jsfc".equals(a.getName())) continue; //$NON-NLS-1$
 				AttributeDescriptorValue value = new AttributeDescriptorValue(a.getName(), a.isRequired(), a.isPreferable());
 				attributesValues.add(value);
 			}

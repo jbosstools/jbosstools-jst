@@ -24,6 +24,8 @@ import org.jboss.tools.common.model.ui.editors.dnd.context.DropContext;
 
 public class FileTagProposalLoader implements ITagProposalLoader {
 
+	public static String FACELETS_URI = "http://www.w3.org/1999/xhtml/facelets"; //$NON-NLS-1$
+
 	private static final Map<String,TagProposal[]> extensionMap = new HashMap<String,TagProposal[]>();
 	
 	static TagProposal[] IMG_TAG_PROPOSALS = new TagProposal[]{
@@ -34,7 +36,8 @@ public class FileTagProposalLoader implements ITagProposalLoader {
 			new AbsoluteFilePathAttributeValueLoader("value","","") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		),
 		new TagProposal(
-			DropURI.HTML_4_0_URI,
+//			DropURI.HTML_4_0_URI,
+			FACELETS_URI,
 			ITagProposal.EMPTY_PREFIX,
 			"img", //$NON-NLS-1$
 			new AbsoluteFilePathAttributeValueLoader("src","","") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -63,7 +66,8 @@ public class FileTagProposalLoader implements ITagProposalLoader {
 	
 	static TagProposal[] CSS_TAG_PROPOSALS = new TagProposal[]{
 		new TagProposal(
-			DropURI.HTML_4_0_URI,
+//			DropURI.HTML_4_0_URI,
+			FACELETS_URI,
 			ITagProposal.EMPTY_PREFIX,
 			"link", //$NON-NLS-1$
 			new CssLinkAttributeValueLoader("href") //$NON-NLS-1$

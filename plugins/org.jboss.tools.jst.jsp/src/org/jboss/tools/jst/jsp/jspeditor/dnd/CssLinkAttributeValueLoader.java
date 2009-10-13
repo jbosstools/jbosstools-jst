@@ -11,9 +11,12 @@
 package org.jboss.tools.jst.jsp.jspeditor.dnd;
 
 import org.jboss.tools.common.model.ui.editors.dnd.AbsoluteFilePathAttributeValueLoader;
+import org.jboss.tools.common.model.ui.editors.dnd.DefaultDropWizardModel;
 import org.jboss.tools.common.model.ui.editors.dnd.IDropWizardModel;
 
 public class CssLinkAttributeValueLoader extends AbsoluteFilePathAttributeValueLoader {
+	static String ATTR_REL = "rel"; //$NON-NLS-1$
+	static String ATTR_TYPE = "type"; //$NON-NLS-1$
 
 	public CssLinkAttributeValueLoader(String pathAttributeName) {
 		super(pathAttributeName, null, null);
@@ -21,8 +24,12 @@ public class CssLinkAttributeValueLoader extends AbsoluteFilePathAttributeValueL
 
 	public void fillTagAttributes(IDropWizardModel model) {
 		super.fillTagAttributes(model);
-		model.setAttributeValue("rel", "stylesheet"); //$NON-NLS-1$ //$NON-NLS-2$
-		model.setAttributeValue("type", "text/css"); //$NON-NLS-1$ //$NON-NLS-2$
+		model.setAttributeValue(ATTR_REL, "stylesheet"); //$NON-NLS-1$
+		model.setAttributeValue(ATTR_TYPE, "text/css"); //$NON-NLS-1$
+		if(model instanceof DefaultDropWizardModel) {
+			((DefaultDropWizardModel)model).setPreferable(ATTR_REL);
+			((DefaultDropWizardModel)model).setPreferable(ATTR_TYPE);
+		}
 	}
 
 }
