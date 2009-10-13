@@ -743,7 +743,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 					DropData dropData = new DropData(flavor, data,
 							getEditorInput(), getSourceViewer(),
 							getSelectionProvider());
-					dropData.setValueProvider(new AttributeDescriptorValueProviderImpl());
+					dropData.setValueProvider(createAttributeDescriptorValueProvider());
 					
 					dropData.setAttributeName(dropContext.getAttributeName());
 					IDropCommand dropCommand = DropCommandFactory.getInstance()
@@ -752,6 +752,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 
 					boolean promptAttributes = JspEditorPlugin.getDefault().getPreferenceStore().getBoolean(
 							IVpePreferencesPage.ASK_TAG_ATTRIBUTES_ON_TAG_INSERT);
+
 					dropCommand
 							.getDefaultModel()
 							.setPromptForTagAttributesRequired(promptAttributes);
@@ -763,6 +764,10 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		});
 	}
 
+	public AttributeDescriptorValueProvider createAttributeDescriptorValueProvider() {
+		return new AttributeDescriptorValueProviderImpl();
+	}
+	
 	class AttributeDescriptorValueProviderImpl implements AttributeDescriptorValueProvider {
 		TagProposal proposal;
 		KbQuery query;
