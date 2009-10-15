@@ -2,6 +2,7 @@
 <?eclipse version="3.0"?>
 <plugin>
    <extension-point id="tagLib" name="Kb Custom Tag Lib" schema="schema/tagLib.exsd"/>
+   <extension-point id="validator" name="KB Validator" schema="schema/validator.exsd"/>
 
    <extension
          id="kbbuilder"

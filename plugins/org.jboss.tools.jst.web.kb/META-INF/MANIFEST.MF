@@ -13,7 +13,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jface.text,
  org.eclipse.wst.sse.core,
  org.eclipse.wst.xml.ui;bundle-version="1.1.0",
- org.eclipse.jdt.ui;bundle-version="3.5.0"
+ org.eclipse.jdt.ui;bundle-version="3.5.0",
+ org.eclipse.wst.validation;bundle-version="1.2.102",
+ org.eclipse.ui.editors;bundle-version="3.5.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Vendor: %providerName
@@ -22,5 +24,7 @@ Export-Package: org.jboss.tools.jst.web.kb,
  org.jboss.tools.jst.web.kb.internal,
  org.jboss.tools.jst.web.kb.internal.scanner,
  org.jboss.tools.jst.web.kb.internal.taglib,
+ org.jboss.tools.jst.web.kb.internal.taglib.composite,
+ org.jboss.tools.jst.web.kb.internal.validation,
  org.jboss.tools.jst.web.kb.taglib,
- org.jboss.tools.jst.web.kb.internal.taglib.composite
+ org.jboss.tools.jst.web.kb.validation
