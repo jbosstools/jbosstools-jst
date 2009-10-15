@@ -575,25 +575,8 @@
      </key>
   </extension>
   
-  <extension id="kbproblemmarker" name="%KBProblemName" point="org.eclipse.core.resources.markers">
-      <super type="org.eclipse.core.resources.problemmarker">
-      </super>
-      <persistent value="true">
-      </persistent>
-      
-   </extension>
-   
-   <extension point="org.eclipse.ui.ide.markerResolution">
-		<markerResolutionGenerator
-			markerType="org.jboss.tools.jst.jsp.kbproblemmarker"
-			class="org.jboss.tools.jst.jsp.contentassist.actions.KBProblemMarkerResolutionGenerator">
-		</markerResolutionGenerator>
-	</extension>
-   
    <extension
          point="org.eclipse.core.runtime.preferences">
                <initializer class="org.jboss.tools.jst.jsp.preferences.VpePreferencesInitializer"/>
    </extension>
-   
-
 </plugin>

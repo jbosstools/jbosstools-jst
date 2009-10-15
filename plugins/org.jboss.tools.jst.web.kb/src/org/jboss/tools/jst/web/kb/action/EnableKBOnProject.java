@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/
-package org.jboss.tools.jst.jsp.contentassist.actions;
+package org.jboss.tools.jst.web.kb.action;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -16,10 +16,10 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.IMarkerResolution;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
-import org.jboss.tools.jst.jsp.JspEditorPlugin;
-import org.jboss.tools.jst.jsp.contentassist.AbstractXMLContentAssistProcessor;
-import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.web.kb.IKbProject;
+import org.jboss.tools.jst.web.kb.KbMessages;
+import org.jboss.tools.jst.web.kb.WebKbPlugin;
+import org.jboss.tools.jst.web.kb.internal.KbProject;
 
 /**
  * The Marker Resolution that enables the KB Nature on the project
@@ -27,10 +27,10 @@ import org.jboss.tools.jst.web.kb.IKbProject;
  * @author Victor Rubezhny
  *
  */
-public class EnableJSFCAOnProject implements IMarkerResolution{
+public class EnableKBOnProject implements IMarkerResolution{
 
 	public String getLabel() {
-		return JstUIMessages.ENABLE_KB;
+		return KbMessages.ENABLE_KB;
 	}
 
 	public void run(IMarker marker) {
@@ -44,10 +44,9 @@ public class EnableJSFCAOnProject implements IMarkerResolution{
 		try {
 			EclipseResourceUtil.addNatureToProject(project, IKbProject.NATURE_ID);
 			// Find existing KBNATURE problem marker and kill it if exists
-			project.deleteMarkers(AbstractXMLContentAssistProcessor.KB_PROBLEM_MARKER_TYPE, true, IResource.DEPTH_ONE);
+			project.deleteMarkers(KbProject.KB_PROBLEM_MARKER_TYPE, true, IResource.DEPTH_ONE);
 		} catch (CoreException e) {
-			JspEditorPlugin.getPluginLog().logError(e);
+			WebKbPlugin.getDefault().logError(e);
 		}
 	}
-
 }

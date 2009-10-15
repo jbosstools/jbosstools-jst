@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/
-package org.jboss.tools.jst.jsp.contentassist.actions;
+package org.jboss.tools.jst.web.kb.action;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.ui.IMarkerResolution;
@@ -23,7 +23,7 @@ import org.eclipse.ui.IMarkerResolutionGenerator;
 public class KBProblemMarkerResolutionGenerator implements IMarkerResolutionGenerator {
 	public IMarkerResolution[] getResolutions(IMarker marker) {
 		return new IMarkerResolution[] {
-				new EnableJSFCAOnProject()
+				new EnableKBOnProject()
 		};
 	}
 }

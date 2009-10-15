@@ -8,7 +8,6 @@ Bundle-SymbolicName: org.jboss.tools.jst.jsp;singleton:=true
 Bundle-Localization: plugin
 Export-Package: org.jboss.tools.jst.jsp,
  org.jboss.tools.jst.jsp.contentassist,
- org.jboss.tools.jst.jsp.contentassist.actions,
  org.jboss.tools.jst.jsp.contentassist.xpl,
  org.jboss.tools.jst.jsp.drop.treeviewer.model,
  org.jboss.tools.jst.jsp.drop.treeviewer.ui,

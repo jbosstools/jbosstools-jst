@@ -10,18 +10,12 @@
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.contentassist;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.filebuffers.FileBuffers;
-import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.text.IDocument;
@@ -58,13 +52,9 @@ import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.ELResolverFactoryManager;
 import org.jboss.tools.common.text.TextProposal;
-import org.jboss.tools.jst.jsp.JspEditorPlugin;
-import org.jboss.tools.jst.jsp.messages.JstUIMessages;
-import org.jboss.tools.jst.web.kb.IKbProject;
-import org.jboss.tools.jst.web.kb.KbProjectFactory;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
-import org.jboss.tools.jst.web.kb.internal.KbBuilder;
+import org.jboss.tools.jst.web.kb.internal.KbProject;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -93,119 +83,12 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 		this.fDocument = (viewer == null ? null : viewer.getDocument());
 		this.fDocumentPosition = offset;
 		this.fContext = createContext();
-		
-		checkKBBuilderInstalled();
+
+		IFile resource = fContext == null ? null : fContext.getResource();
+		KbProject.checkKBBuilderInstalled(resource);
 		return super.computeCompletionProposals(viewer, offset);
 	}
 
-	
-	private void checkKBBuilderInstalled() {
-		ELContext context = getContext();
-		IFile resource = context == null ? null : context.getResource();
-		IProject project = resource == null ? null : resource.getProject();
-		if (project == null) 
-			return; // Cannot check anything
-		
-		boolean kbNatureFound = false;
-		boolean kbBuilderFound = false;
-		try {
-			kbNatureFound = (project.getNature(IKbProject.NATURE_ID) != null);
-		
-			IProjectDescription description = project.getDescription();
-			ICommand command = null;
-			ICommand commands[] = description.getBuildSpec();
-			for (int i = 0; i < commands.length && command == null; ++i) {
-				if (commands[i].getBuilderName().equals(KbBuilder.BUILDER_ID)) {
-					kbBuilderFound = true;
-					break;
-				}
-			}
-		}  catch (CoreException ex) {
-			JspEditorPlugin.getPluginLog().logError(ex);
-		}
-		
-		if (kbNatureFound && kbBuilderFound) {
-			// Find existing KBNATURE problem marker and kill it if exists
-			IMarker[] markers = getOwnedMarkers(project);
-			if (markers != null && markers.length > 0) {
-				for (IMarker m : markers) {
-					try {
-						project.deleteMarkers(KB_PROBLEM_MARKER_TYPE, true, IResource.DEPTH_ONE);
-						project.setPersistentProperty(KbProjectFactory.NATURE_MOCK, null);
-					} catch (CoreException ex) {
-						JspEditorPlugin.getPluginLog().logError(ex);
-					}
-				}
-			}
-			return;
-		}
-		
-		// Find existing KBNATURE problem marker and install it if doesn't exist
-		IMarker[] markers = getOwnedMarkers(project);
-		
-		if (markers == null || markers.length == 0) {
-			try {
-				IMarker m = createOrUpdateKbProblemMarker(null, project, !kbNatureFound, !kbBuilderFound);
-			} catch (CoreException ex) {
-				JspEditorPlugin.getPluginLog().logError(ex);
-			}
-		} else {
-			for (IMarker m : markers) {
-				try {
-					m = createOrUpdateKbProblemMarker(m, project, !kbNatureFound, !kbBuilderFound);
-				} catch (CoreException ex) {
-					JspEditorPlugin.getPluginLog().logError(ex);
-				}
-			}
-		}
-		return;
-		
-	}
-	
-	public static final String KB_PROBLEM_MARKER_TYPE = "org.jboss.tools.jst.jsp.kbproblemmarker"; //$NON-NLS-1$
-	
-	private IMarker createOrUpdateKbProblemMarker(IMarker m, IResource r, boolean kbNatureIsAbsent, boolean kbBuilderIsAbsent) throws CoreException {
-		ArrayList<String> args = new ArrayList<String>();
-		args.add(kbNatureIsAbsent ? JstUIMessages.KBNATURE_NOT_FOUND : ""); //$NON-NLS-1$
-		args.add(kbBuilderIsAbsent ? JstUIMessages.KBBUILDER_NOT_FOUND : ""); //$NON-NLS-1$
-
-		String message = MessageFormat.format(JstUIMessages.KBPROBLEM, args.toArray());
-		if (m == null) {
-			m = r.createMarker(KB_PROBLEM_MARKER_TYPE);
-			r.setPersistentProperty(KbProjectFactory.NATURE_MOCK, "true");
-			KbProjectFactory.getKbProject(r.getProject(), true);
-		}
-		m.setAttribute(IMarker.MESSAGE, message);
-		m.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_WARNING);
-		m.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_NORMAL);
-		return m;
-	}
-	
-	private IMarker[] getOwnedMarkers(IResource r) {
-		ArrayList<IMarker> l = null;
-		try {
-			IMarker[] ms = r.findMarkers(null, false, 1);
-			if(ms != null) {
-				for (int i = 0; i < ms.length; i++) {
-					if(ms[i] == null) continue;
-
-					String _type = ms[i].getType();
-					if(_type == null) continue;
-					if(!_type.equals(KB_PROBLEM_MARKER_TYPE)) continue;
-					if(!ms[i].isSubtypeOf(IMarker.PROBLEM)) continue;
-	
-					if(l == null) 
-						l = new ArrayList<IMarker>();
-					
-					l.add(ms[i]);
-				}
-			}
-		} catch (CoreException e) {
-			//ignore
-		}
-		return (l == null) ? null : l.toArray(new IMarker[0]);
-	}
-	
 	/**
 	 * The reason of overriding is that the method returns wrong region in case of incomplete tag (a tag with no '>'-closing char)
 	 * In this case we have to return that previous incomplete tag instead of the current tag)
