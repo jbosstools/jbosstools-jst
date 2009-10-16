@@ -49,8 +49,10 @@ import org.jboss.tools.jst.web.kb.internal.taglib.FaceletTagLibrary;
 import org.jboss.tools.jst.web.kb.internal.taglib.FacesConfigTagLibrary;
 import org.jboss.tools.jst.web.kb.internal.taglib.TLDLibrary;
 import org.jboss.tools.jst.web.kb.internal.taglib.composite.CompositeTagLibrary;
+import org.jboss.tools.jst.web.kb.internal.validation.ProjectValidationContext;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibrary;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
+import org.jboss.tools.jst.web.kb.validation.IValidationContext;
 import org.w3c.dom.Element;
 
 /**
@@ -75,6 +77,9 @@ public class KbProject extends KbObject implements IKbProject {
 	
 	LibraryStorage libraries = new LibraryStorage();
 
+	ProjectValidationContext validationContext;
+
+	public KbProject() {}
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.IKbProject#getTagLibraries()
@@ -251,6 +256,10 @@ public class KbProject extends KbObject implements IKbProject {
 			if(b) {
 				getClassPath().process();
 			}
+			
+			if(root != null) {
+				getValidationContext().load(root);
+			}
 
 		} finally {
 			fireChanges();
@@ -323,6 +332,8 @@ public class KbProject extends KbObject implements IKbProject {
 		storeProjectDependencies(root);
 
 		storeSourcePaths2(root);
+
+		if(validationContext != null) validationContext.store(root);
 		
 		XMLUtilities.serialize(root, file.getAbsolutePath());
 	}
@@ -341,6 +352,12 @@ public class KbProject extends KbObject implements IKbProject {
 		if(f != null && f.isFile()) f.delete();
 	}
 
+	public IValidationContext getValidationContext() {
+		if(validationContext == null) {
+			validationContext = new ProjectValidationContext();
+		}
+		return validationContext;
+	}
 	/*
 	 * 
 	 */
