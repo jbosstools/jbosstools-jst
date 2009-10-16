@@ -352,12 +352,17 @@ public class KbProject extends KbObject implements IKbProject {
 		if(f != null && f.isFile()) f.delete();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.IKbProject#getValidationContext()
+	 */
 	public IValidationContext getValidationContext() {
 		if(validationContext == null) {
 			validationContext = new ProjectValidationContext();
 		}
 		return validationContext;
 	}
+
 	/*
 	 * 
 	 */

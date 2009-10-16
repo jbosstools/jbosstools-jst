@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.kb;
 
 import org.eclipse.core.resources.IProjectNature;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
+import org.jboss.tools.jst.web.kb.validation.IValidationContext;
 
 /**
  * 
@@ -26,14 +27,19 @@ public interface IKbProject extends IProjectNature {
 	 * Returns all available tag libraries.
 	 * @return
 	 */
-	public ITagLibrary[] getTagLibraries();
+	ITagLibrary[] getTagLibraries();
 
 	/**
 	 * Returns tag libraries by URI
 	 * @param uri
 	 * @return
 	 */
-	public ITagLibrary[] getTagLibraries(String uri);
+	ITagLibrary[] getTagLibraries(String uri);
 
-	public void resolve();
+	void resolve();
+
+	/**
+	 * @return validation context which is associated with this KB project.
+	 */
+	IValidationContext getValidationContext();
 }
