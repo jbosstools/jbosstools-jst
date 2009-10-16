@@ -2,8 +2,9 @@
 <?eclipse version="3.0"?>
 <plugin>
    <extension-point id="tagLib" name="Kb Custom Tag Lib" schema="schema/tagLib.exsd"/>
+   <extension-point id="KbIncludeContext" name="Kb Include Context Buillder" schema="schema/include.exsd" />
    <extension-point id="validator" name="KB Validator" schema="schema/validator.exsd"/>
-
+ 
    <extension
          id="kbbuilder"
          name="KB Builder"
@@ -68,6 +69,25 @@
             uri="http://struts.apache.org/tags-html"/>
       <component-extension
             location="taglibs/componentExtension.xml"/>
+   </extension>
+   
+   <extension point="org.jboss.tools.jst.web.kb.KbIncludeContext">
+	<include uri="jsp">
+		<tag name="directive.include">
+        	<attribute name="file" />
+		</tag>
+		<tag name="include">
+        	<attribute name="page" />
+		</tag>
+	</include>
+
+	<contexttype id="JSP_PAGE_CONTEXT_TYPE">
+		<contenttype id="org.eclipse.jst.jsp.core.jspsource" />
+	</contexttype>
+
+	<contexttype id="FACELETS_PAGE_CONTEXT_TYPE">
+		<contenttype id="org.eclipse.wst.html.core.htmlsource" />
+	</contexttype>
    </extension>
 
   <extension id="kbproblemmarker" name="%KBProblemName" point="org.eclipse.core.resources.markers">

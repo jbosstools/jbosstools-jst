@@ -1,0 +1,205 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="org.jboss.tools.jst.web.kb" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appInfo>
+         <meta.schema plugin="org.jboss.tools.jst.web.kb" id="KbIncludeContext" name="KbIncludeContext"/>
+      </appInfo>
+      <documentation>
+         The extension point allows the application to define URIs, tags and Attributes that allow the part of code to be included into the page content.
+         
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appInfo>
+            <meta.element />
+         </appInfo>
+         <documentation>
+            Defines an extension point for the Include definitions.
+   
+      		This extension point is used to add information on which tags/tag attributes are used to include a source into a JSP/XHTML page
+         </documentation>
+      </annotation>
+      <complexType>
+         <sequence>
+            <element ref="include" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="contexttype" minOccurs="0" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  A unique ID for this extension point.  It is recommended that the plugin ID be used to prefix any extensions.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  A unique ID for this extension.  It is recommended that the plugin ID be used to prefix any extensions.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  A brief name to show to the user.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="include">
+      <annotation>
+         <documentation>
+            Defines a include item.
+         </documentation>
+      </annotation>
+      <complexType>
+         <sequence>
+            <element ref="tag" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="attribute" minOccurs="0" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="uri" type="string" use="required">
+            <annotation>
+               <documentation>
+                  An URI for this element.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="tag">
+      <annotation>
+         <documentation>
+            Defines a tag item. Contains information on tags that have the 'include-to-page-content' possibility.
+         </documentation>
+      </annotation>
+      <complexType>
+         <sequence>
+            <element ref="attribute" minOccurs="0" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  A Tag Name.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="attribute">
+      <annotation>
+         <documentation>
+            Defines an attribute item. Contains information on attributes that have the 'include-to-page-content' possibility.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  A Tag Attribute Name.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+   
+   <element name="contexttype">
+      <annotation>
+         <documentation>
+            Defines a contexttype item.
+         </documentation>
+      </annotation>
+      <complexType>
+         <sequence>
+            <element ref="contenttype" minOccurs="0" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  An ID for this element.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="contenttype">
+      <annotation>
+         <documentation>
+            Defines a contenttype item. Contains information on contenttype that is supported by a surrounding context type.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  An ID for this element.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+   
+
+   <annotation>
+      <appInfo>
+         <meta.section type="since"/>
+      </appInfo>
+      <documentation>
+         V3.1
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="examples"/>
+      </appInfo>
+      <documentation>
+         &lt;pre&gt;
+	&lt;extension-point id=&quot;KbInclude&quot; name=&quot;Kb Include Context Buillder&quot; /&gt;
+   
+	&lt;extension point=&quot;org.jboss.tools.jst.web.kb.KbInclude&quot;&gt;
+		&lt;include uri=&quot;http://java.sun.com/jsf/core&quot;&gt;
+			&lt;tag name=&quot;jsp.include&quot;&gt;
+				&lt;attribute name=&quot;file&quot; /&gt;
+			&lt;/tag&gt;
+		&lt;/include&gt;         
+	&lt;/extension&gt;
+&lt;/pre&gt;
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="apiInfo"/>
+      </appInfo>
+      <documentation>
+         The baseline for API and extension point stability is RedHat Developer Studio
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="implementation"/>
+      </appInfo>
+      <documentation>
+         The supplied implementation of the include context functionality requires the WTP components.
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="copyright"/>
+      </appInfo>
+      <documentation>
+         RedHat
+      </documentation>
+   </annotation>
+
+</schema>

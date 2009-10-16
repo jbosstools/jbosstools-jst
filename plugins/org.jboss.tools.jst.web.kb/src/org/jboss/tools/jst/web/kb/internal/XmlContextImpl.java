@@ -8,7 +8,9 @@ import java.util.Set;
 
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
+import org.eclipse.ui.part.IPage;
 import org.jboss.tools.common.el.core.resolver.ELContextImpl;
+import org.jboss.tools.jst.web.kb.IIncludedContextSupport;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.IResourceBundle;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
@@ -37,7 +39,26 @@ public class XmlContextImpl extends ELContextImpl implements IPageContext {
 	 * @see org.jboss.tools.jst.web.kb.IPageContext#getResourceBundles()
 	 */
 	public IResourceBundle[] getResourceBundles() {
-		return bundles;
+		List<IResourceBundle> resourceBundles = new ArrayList<IResourceBundle>();
+		if (bundles != null) {
+			for (IResourceBundle bundle : bundles) {
+				resourceBundles.add(bundle);
+			}
+		}
+		
+		List<IPageContext> includedContexts = getIncludedContexts();
+		if (includedContexts != null) {
+			for (IPageContext includedContext : includedContexts) {
+				IResourceBundle[] includedBundles = includedContext.getResourceBundles();
+				if (includedBundles != null) {
+					for (IResourceBundle includedBundle : includedBundles) {
+						resourceBundles.add(includedBundle);
+					}
+				}
+			}
+		}
+		
+		return (IResourceBundle[])resourceBundles.toArray(new IResourceBundle[resourceBundles.size()]);
 	}
 
 	/**
@@ -104,7 +125,7 @@ public class XmlContextImpl extends ELContextImpl implements IPageContext {
 		return result;
 	}
 
-	private INameSpace findNameSpaceByPrefix(Set<INameSpace> namespaces, String prefix) {
+	public INameSpace findNameSpaceByPrefix(Set<INameSpace> namespaces, String prefix) {
 		if (namespaces != null && prefix != null) {
 			for (INameSpace ns : namespaces) {
 				if (prefix.equals(ns.getPrefix())) {
@@ -127,4 +148,15 @@ public class XmlContextImpl extends ELContextImpl implements IPageContext {
 		}
 		nameSpaces.get(region).put(nameSpace.getURI(), nameSpace);
 	}
+
+	public void addIncludedContext(IPageContext includedContext) {
+		throw new UnsupportedOperationException();
+		
+	}
+
+	public List<IPageContext> getIncludedContexts() {
+		return null;
+	}
+	
+	
 }

@@ -11,13 +11,16 @@
 package org.jboss.tools.jst.jsp.contentassist;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.contentassist.IContextInformation;
+import org.eclipse.jface.text.templates.GlobalTemplateVariables.User;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
@@ -25,6 +28,7 @@ import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
 import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImageHelper;
 import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImages;
@@ -37,8 +41,11 @@ import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.IResourceBundle;
 import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
+import org.jboss.tools.jst.web.kb.include.IncludeContextBuilder;
+import org.jboss.tools.jst.web.kb.include.IncludeContextDefinition;
 import org.jboss.tools.jst.web.kb.internal.XmlContextImpl;
 import org.jboss.tools.jst.web.kb.internal.taglib.NameSpace;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
@@ -49,6 +56,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * 
@@ -81,10 +89,11 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 		setNameSpaces(context);
 		context.setLibraries(getTagLibraries(context));
 		context.setResourceBundles(getResourceBundles(context));
-		
 		return context;
 	}
 	
+	
+
 	protected void setVars(ELContextImpl context, IFile file) {
 		// No vars can be set for this processor
 	}
@@ -505,7 +514,7 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 								start = domElement.getStartOffset();
 								length = (domElement.hasEndTag() ? 
 											domElement.getEndStructuredDocumentRegion().getEnd() :
-												domElement.getLength());
+												((IDOMNode) xmlDocument).getEndOffset() - 1 - start);
 								
 							}
 

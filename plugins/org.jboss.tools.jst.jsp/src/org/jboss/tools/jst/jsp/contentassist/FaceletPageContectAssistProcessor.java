@@ -23,6 +23,7 @@ import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.text.TextProposal;
@@ -30,6 +31,7 @@ import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.web.kb.IFaceletPageContext;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.internal.FaceletPageContextImpl;
@@ -75,9 +77,8 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 		context.setLibraries(getTagLibraries(context));
 		context.setResourceBundles(super.getResourceBundles(context));
 
-//		IFaceletPageContext getParentContext();
-//		Map<String, String> getParams();
-
+		PageContextFactory.createIncludedContexts(context);
+		
 		return context;
 	}
 
@@ -141,7 +142,7 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 								start = domElement.getStartOffset();
 								length = (domElement.hasEndTag() ? 
 											domElement.getEndStructuredDocumentRegion().getEnd() :
-												domElement.getLength());
+												((IDOMNode) xmlDocument).getEndOffset() - 1 - start);
 								
 							}
 

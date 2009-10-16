@@ -10,12 +10,21 @@
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.contentassist;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.eclipse.core.internal.resources.ICoreConstants;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Region;
@@ -24,10 +33,14 @@ import org.eclipse.jst.jsp.core.internal.contentmodel.TaglibController;
 import org.eclipse.jst.jsp.core.internal.contentmodel.tld.TLDCMDocumentManager;
 import org.eclipse.jst.jsp.core.internal.contentmodel.tld.TaglibTracker;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.wst.common.componentcore.internal.ComponentResource;
+import org.eclipse.wst.common.componentcore.internal.StructureEdit;
+import org.eclipse.wst.common.componentcore.internal.WorkbenchComponent;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.xml.core.internal.document.NodeContainer;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
@@ -44,11 +57,15 @@ import org.jboss.tools.common.el.core.resolver.ELResolutionImpl;
 import org.jboss.tools.common.el.core.resolver.ElVarSearcher;
 import org.jboss.tools.common.el.core.resolver.Var;
 import org.jboss.tools.common.text.TextProposal;
+import org.jboss.tools.common.text.ext.util.Utils;
+import org.jboss.tools.jst.web.kb.IIncludedContextSupport;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.IResourceBundle;
 import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
+import org.jboss.tools.jst.web.kb.include.IncludeContextBuilder;
 import org.jboss.tools.jst.web.kb.internal.JspContextImpl;
 import org.jboss.tools.jst.web.kb.internal.ResourceBundle;
 import org.jboss.tools.jst.web.kb.internal.XmlContextImpl;
@@ -72,6 +89,17 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 	protected ELContext createContextInstance() {
 		return new JspContextImpl();
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.jsp.contentassist.AbstractXMLContentAssistProcessor#createContext()
+	 */
+	@Override
+	protected IPageContext createContext() {
+		IPageContext context = super.createContext();
+		PageContextFactory.createIncludedContexts(context);
+		return context;
+	}
 	
 	/**
 	 * Collects the namespaces over the JSP-page and sets them up to the context specified.
@@ -81,45 +109,23 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 	protected void setNameSpaces(XmlContextImpl context) {
 		super.setNameSpaces(context);
 		
-		IStructuredModel sModel = StructuredModelManager
-									.getModelManager()
-									.getExistingModelForRead(getDocument());
-		try {
-			if (sModel == null) 
-				return;
-			
-			Document xmlDocument = (sModel instanceof IDOMModel) ? 
-							((IDOMModel) sModel).getDocument() : 
-								null;
-
-			if (xmlDocument == null)
-				return;
-
-			TLDCMDocumentManager manager = TaglibController.getTLDCMDocumentManager(getDocument());
-			List trackers = (manager == null? null : manager.getCMDocumentTrackers(getOffset()));
-			for (int i = 0; trackers != null && i < trackers.size(); i++) {
-				TaglibTracker tt = (TaglibTracker)trackers.get(i);
-				final String prefix = tt.getPrefix();
-				final String uri = tt.getURI();
-				if (prefix != null && prefix.trim().length() > 0 &&
-						uri != null && uri.trim().length() > 0) {
-						
-					IRegion region = new Region(0, getDocument().getLength());
-					INameSpace nameSpace = new NameSpace(uri.trim(), prefix.trim());
-					context.addNameSpace(region, nameSpace);
-				}
-			}
-
-			return;
-		}
-		finally {
-			if (sModel != null) {
-				sModel.releaseFromRead();
+		TLDCMDocumentManager manager = TaglibController.getTLDCMDocumentManager(getDocument());
+		List trackers = (manager == null? null : manager.getCMDocumentTrackers(getOffset()));
+		for (int i = 0; trackers != null && i < trackers.size(); i++) {
+			TaglibTracker tt = (TaglibTracker)trackers.get(i);
+			final String prefix = tt.getPrefix();
+			final String uri = tt.getURI();
+			if (prefix != null && prefix.trim().length() > 0 &&
+					uri != null && uri.trim().length() > 0) {
+					
+				IRegion region = new Region(0, getDocument().getLength());
+				INameSpace nameSpace = new NameSpace(uri.trim(), prefix.trim());
+				context.addNameSpace(region, nameSpace);
 			}
 		}
-	}
 
-	
+		return;
+	}	
 	
 	/**
 	 * Returns the resource bundles  

@@ -23,7 +23,7 @@ import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
  * Page context
  * @author Alexey Kazakov
  */
-public interface IPageContext extends ELContext {
+public interface IPageContext extends ELContext, IIncludedContextSupport {
 
 	/**
 	 * Returns libraries which should be used in this context  

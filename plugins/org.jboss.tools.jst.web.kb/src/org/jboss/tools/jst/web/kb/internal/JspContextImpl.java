@@ -11,9 +11,14 @@
 package org.jboss.tools.jst.web.kb.internal;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.jboss.tools.jst.web.kb.IIncludedContextSupport;
+import org.jboss.tools.jst.web.kb.IPageContext;
+import org.jboss.tools.jst.web.kb.IResourceBundle;
 import org.jboss.tools.jst.web.kb.internal.taglib.NameSpace;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 
@@ -22,9 +27,23 @@ import org.jboss.tools.jst.web.kb.taglib.INameSpace;
  * @author Alexey Kazakov
  */
 public class JspContextImpl extends XmlContextImpl {
+	protected List<IPageContext> fIncludedContexts = null;
 
 	
 	
+	@Override
+	public void addIncludedContext(IPageContext includedContext) {
+		if (fIncludedContexts == null) {
+			fIncludedContexts = new ArrayList<IPageContext>();
+		}
+		fIncludedContexts.add(includedContext);
+	}
+
+	@Override
+	public List<IPageContext> getIncludedContexts() {
+		return fIncludedContexts;
+	}
+
 	@Override
 	public Map<String, List<INameSpace>> getNameSpaces(int offset) {
 		Map<String, List<INameSpace>> superNameSpaces = super.getNameSpaces(offset);
@@ -35,6 +54,5 @@ public class JspContextImpl extends XmlContextImpl {
 		
 		return superNameSpaces;
 	}
-	
 	
 }
