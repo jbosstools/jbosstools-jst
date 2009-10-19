@@ -1,33 +1,68 @@
+/******************************************************************************* 
+ * Copyright (c) 2009 Red Hat, Inc. 
+ * Distributed under license by Red Hat, Inc. All rights reserved. 
+ * This program is made available under the terms of the 
+ * Eclipse Public License v1.0 which accompanies this distribution, 
+ * and is available at http://www.eclipse.org/legal/epl-v10.html 
+ * 
+ * Contributors: 
+ * Red Hat, Inc. - initial API and implementation 
+ ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.include;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.ui.internal.EarlyStartupRunnable;
 
+/**
+ * IncludeContextDefinition is used to store the definitions read from the Include Schema
+ * 
+ * @author Victor Rubezhny
+ *
+ */
 public class IncludeContextDefinition {
 	private String fUri;
 	private Map<String, Set<String>> fIncludeTags; // Map<TagName, Set<AttributeName>>
 	private Map<String, Set<String>> fCSSTags; // Map<TagName, Set<AttributeName>>
 	private Map<String, Set<String>> fContexts; // Map<ContextType, Set<ContentType>>
 	
+	/**
+	 * Created the IncludeContextDefinition object for the specified URI
+	 * 
+	 * @param uri
+	 */
 	public IncludeContextDefinition(String uri) {
 		this.fUri = uri;
 	}
 
+	/**
+	 * Returns the URI for this IncludeContextDefinition object
+	 * 
+	 * @return
+	 */
 	public String getUri() {
 		return fUri;
 	}
 
+	/**
+	 * Sets up the specified URI for this IncludeContextDefinition object
+	 * 
+	 * @param uri
+	 */
 	public void setUri(String uri) {
 		this.fUri = uri;
 	}
 
+	/**
+	 * Adds a tag to the definition
+	 * 
+	 * @param tagName
+	 * @param element
+	 * @return
+	 */
 	public boolean addTag(String tagName, IConfigurationElement element) {
 		if ("".equals(fUri)) //$NON-NLS-1$
 			tagName = tagName.toLowerCase();
@@ -41,7 +76,13 @@ public class IncludeContextDefinition {
 		return false;
 	}
 	
-	public void addIncludeTag(String tagName, IConfigurationElement element) {
+	/**
+	 * Adds an Include Tag to the Definition
+	 * 
+	 * @param tagName
+	 * @param element
+	 */
+	private void addIncludeTag(String tagName, IConfigurationElement element) {
 		if (fIncludeTags == null) {
 			fIncludeTags = new HashMap<String, Set<String>>();
 		}
@@ -52,7 +93,13 @@ public class IncludeContextDefinition {
 		}
 	}
 
-	public void addCSSTag(String tagName, IConfigurationElement element) {
+	/**
+	 * Adds a CSS Style Sheet holder to the Definition
+	 * 
+	 * @param tagName
+	 * @param element
+	 */
+	private void addCSSTag(String tagName, IConfigurationElement element) {
 		if (fCSSTags == null) {
 			fCSSTags = new HashMap<String, Set<String>>();
 		}
@@ -63,6 +110,12 @@ public class IncludeContextDefinition {
 		}
 	}
 	
+	/**
+	 * Adds a Tag Attribute to the Definition
+	 * 
+	 * @param attributeName
+	 * @param element
+	 */
 	public void addTagAttribute(String attributeName, IConfigurationElement element) {
 		IConfigurationElement parentTagElement = null;
 		if (element.getParent() instanceof IConfigurationElement) {
@@ -95,6 +148,14 @@ public class IncludeContextDefinition {
 		}
 	}
 	
+	/**
+	 * Checks if the configuration element with the name specified exists in parents of the 
+	 * specified configuration element
+	 * 
+	 * @param element
+	 * @param elementName
+	 * @return
+	 */
 	private boolean isInParentElements(IConfigurationElement element, String elementName) {
 		Object parent = element.getParent();
 		while (parent instanceof IConfigurationElement) {
@@ -107,6 +168,12 @@ public class IncludeContextDefinition {
 		return false;
 	}
 	
+	/**
+	 * Adds a Context Type to the Definition
+	 * 
+	 * @param id
+	 * @param element
+	 */
 	public void addContextType(String id, IConfigurationElement element) {
 		if (fContexts == null) {
 			fContexts = new HashMap<String, Set<String>>();
@@ -119,6 +186,13 @@ public class IncludeContextDefinition {
 		
 	}
 
+	/**
+	 * Adds a Content Type to the Definition
+	 * 
+	 * @param id
+	 * @param element
+	 * @return
+	 */
 	public boolean addContentType(String id, IConfigurationElement element) {
 		IConfigurationElement parentContextElement = null;
 		if (element.getParent() instanceof IConfigurationElement) {
@@ -142,17 +216,32 @@ public class IncludeContextDefinition {
 
 	private static final String[] EMPTY_CHILDREN = new String[0];
 	
-	
+	/**
+	 * Returns the Include Tags stored in the Definition
+	 * 
+	 * @return
+	 */
 	public String[] getIncludeTags() {
 		return fIncludeTags == null ? EMPTY_CHILDREN :
 			(String[])fIncludeTags.keySet().toArray(new String[fIncludeTags.size()]);
 	}	
 	
+	/**
+	 * Returns the CSS Style Sheet holder Tags stored in the Definition
+	 * 
+	 * @return
+	 */
 	public String[] getCSSTags() {
 		return fCSSTags == null ? EMPTY_CHILDREN :
 			(String[])fCSSTags.keySet().toArray(new String[fCSSTags.size()]);
 	}
 	
+	/**
+	 * Returns the Attributes for the Include Tag with the specified Name
+	 * 
+	 * @param tagName
+	 * @return
+	 */
 	public String[] getIncludeTagAttributes(String tagName) {
 		if ("".equals(fUri)) //$NON-NLS-1$
 			tagName = tagName.toLowerCase();
@@ -163,6 +252,12 @@ public class IncludeContextDefinition {
 			(String[])attrSet.toArray(new String[attrSet.size()]);
 	}
 
+	/**
+	 * Returns the Attributes for the CSS Style Sheet Holder Tag with the specified Name 
+	 * 
+	 * @param tagName
+	 * @return
+	 */
 	public String[] getCSSTagAttributes(String tagName) {
 		if ("".equals(fUri)) //$NON-NLS-1$
 			tagName = tagName.toLowerCase();
@@ -172,6 +267,13 @@ public class IncludeContextDefinition {
 		return attrSet == null ? EMPTY_CHILDREN :
 			(String[])attrSet.toArray(new String[attrSet.size()]);
 	}
+	
+	/** 
+	 * Returns the ContextType for the specified Content Type
+	 * 
+	 * @param contentType
+	 * @return
+	 */
 	public String getContextType(String contentType) {
 		if (fContexts == null)
 			return null;
@@ -182,5 +284,4 @@ public class IncludeContextDefinition {
 		}
 		return null;
 	}
-
 }

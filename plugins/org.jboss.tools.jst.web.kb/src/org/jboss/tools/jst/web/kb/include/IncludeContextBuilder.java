@@ -1,3 +1,13 @@
+/******************************************************************************* 
+ * Copyright (c) 2009 Red Hat, Inc. 
+ * Distributed under license by Red Hat, Inc. All rights reserved. 
+ * This program is made available under the terms of the 
+ * Eclipse Public License v1.0 which accompanies this distribution, 
+ * and is available at http://www.eclipse.org/legal/epl-v10.html 
+ * 
+ * Contributors: 
+ * Red Hat, Inc. - initial API and implementation 
+ ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.include;
 
 import java.util.ArrayList;
@@ -7,9 +17,15 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.ui.internal.registry.RegistryReader;
-
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 
+/**
+ * Include Context Builder is used to read and store the information from the
+ * Include schema.
+ * 
+ * @author Victor Rubezhny
+ *
+ */
 public class IncludeContextBuilder extends RegistryReader {
 	// extension point ID
 	public static final String PL_INCLUDE = "KbIncludeContext"; //$NON-NLS-1$
