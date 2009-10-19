@@ -33,9 +33,9 @@ public class IncludeContextBuilder extends RegistryReader {
 	private IncludeContextDefinition fCurrentIncludeDefinition = null;
 
 	/**
-	 * returns singleton instance of HyperlinkBuilder
+	 * returns singleton instance of IncludeContextBuilder
 	 * 
-	 * @return HyperlinkBuilder
+	 * @return {@link IncludeContextBuilder}
 	 */
 	public synchronized static IncludeContextBuilder getInstance() {
 		if (fInstance == null) {
@@ -56,11 +56,25 @@ public class IncludeContextBuilder extends RegistryReader {
 		return value;
 	}
 
+	/**
+	 * Returns the URI of the part ID attribute that is expected
+	 * in the target extension.
+	 * 
+	 * @param element
+	 * @return String
+	 */
 	public static String getUri(IConfigurationElement element) {
 		String value = element.getAttribute(ATT_URI);
 		return value;
 	}
 
+	/**
+	 * Returns the name of the part ID attribute that is expected
+	 * in the target extension.
+	 * 
+	 * @param element
+	 * @return String
+	 */
 	public static String getName(IConfigurationElement element) {
 		String value = element.getAttribute(ATT_NAME);
 		return value;
@@ -91,7 +105,13 @@ public class IncludeContextBuilder extends RegistryReader {
 		}		
 	}
 
-	IncludeContextDefinition getIncludeContextDefinition(String uri) {
+	/**
+	 * Returns the IncludeContextDefinition by specified URI
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	private IncludeContextDefinition getIncludeContextDefinition(String uri) {
 		if (fIncludeContextDefs == null || uri == null)
 			return null;
 		
@@ -104,6 +124,12 @@ public class IncludeContextBuilder extends RegistryReader {
 		return null;
 	}
 	
+	/**
+	 * Reads the Tag element and stores the specific data 
+	 * 
+	 * @param element
+	 * @return
+	 */
 	private boolean processTagElement(IConfigurationElement element) {
 		String theName = getName(element);
 
@@ -114,6 +140,12 @@ public class IncludeContextBuilder extends RegistryReader {
 		return false;
 	}
 
+	/**
+	 * Reads the Tag Attribute element and stores the specific data 
+	 * 
+	 * @param element
+	 * @return
+	 */
 	private void processAttributeElement(IConfigurationElement element) {
 		String theName = getName(element);
 
@@ -122,6 +154,12 @@ public class IncludeContextBuilder extends RegistryReader {
 		}
 	}
 	
+	/**
+	 * Reads the ContextType element and stores the specific data 
+	 * 
+	 * @param element
+	 * @return
+	 */
 	private void processContextTypeElement(IConfigurationElement element) {
 		String theId = getId(element);
 
@@ -130,6 +168,12 @@ public class IncludeContextBuilder extends RegistryReader {
 		}
 	}
 	
+	/**
+	 * Reads the ContentType element and stores the specific data 
+	 * 
+	 * @param element
+	 * @return
+	 */
 	private boolean processContentTypeElement(IConfigurationElement element) {
 		String theId = getId(element);
 
@@ -148,7 +192,7 @@ public class IncludeContextBuilder extends RegistryReader {
 		if (tag.equals(TAG_INCLUDE) || tag.equals(TAG_CSSHOLDER)) {
 			processIncludeContextElement(element);
 			
-			// make sure processing of current open on tag resulted in a current open on definition
+			// make sure processing of current open on tag resulted in a current definition
 			// before continue reading the children
 			if (fCurrentIncludeDefinition != null) {
 				readElementChildren(element);
@@ -158,7 +202,7 @@ public class IncludeContextBuilder extends RegistryReader {
 		else if (tag.equals(TAG_TAG)) {
 			processTagElement(element);
 
-			// make sure processing of current open on tag resulted in a current open on definition
+			// make sure processing of current open on tag resulted in a current definition
 			// before continue reading the children
 			if (fCurrentIncludeDefinition != null) {
 				readElementChildren(element);
@@ -172,7 +216,7 @@ public class IncludeContextBuilder extends RegistryReader {
 		else if (tag.equals(TAG_CONTEXTTYPE)) {
 			processContextTypeElement(element);
 
-			// make sure processing of current open on tag resulted in a current open on definition
+			// make sure processing of current open on tag resulted in a current definition
 			// before continue reading the children
 			if (fCurrentIncludeDefinition != null) {
 				readElementChildren(element);
@@ -192,7 +236,12 @@ public class IncludeContextBuilder extends RegistryReader {
 		}
 	}
 
-
+	/**
+	 * Reads the contributions defined in the extension point
+	 * 
+	 * @param element
+	 * @param extensionPoint
+	 */
 	protected void readContributions(String element, String extensionPoint) {
 		fTargetContributionElement = element;
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
@@ -201,6 +250,7 @@ public class IncludeContextBuilder extends RegistryReader {
 
 	/**
 	 * Returns all the open on definition objects
+	 * 
 	 * @return
 	 */
 	public List<IncludeContextDefinition> getIncludeContextDefinitions() {
@@ -208,6 +258,13 @@ public class IncludeContextBuilder extends RegistryReader {
 		return fIncludeContextDefs;
 	}
 	
+	/**
+	 * Returns the attributes for the specified include tag
+	 * 
+	 * @param uri
+	 * @param tagName
+	 * @return
+	 */
 	public static String[] getIncludeAttributes(String uri, String tagName) {
 		if (uri == null)
 			return null;
@@ -230,6 +287,12 @@ public class IncludeContextBuilder extends RegistryReader {
 		return attrs.size() == 0 ? null : attrs.toArray(new String[attrs.size()]);
 	}
 	
+	/**
+	 * Returns the Content Type for the specified Content Type
+	 * 
+	 * @param contentType
+	 * @return
+	 */
 	public static String getContextType(String contentType) {
 		if (contentType == null)
 			return null;
@@ -247,6 +310,13 @@ public class IncludeContextBuilder extends RegistryReader {
 		return null;
 	}
 
+	/**
+	 * Checks if the specified tag is a CSS Style Sheet container
+	 * 
+	 * @param uri
+	 * @param tagName
+	 * @return
+	 */
 	public static boolean isCSSStyleSheetContainer(String uri, String tagName) {
 		if (uri == null)
 			return false;
@@ -277,6 +347,13 @@ public class IncludeContextBuilder extends RegistryReader {
 		return isHolder;
 	}
 
+	/**
+	 * Returns the CSS Style Sheet attributes that represent a CSS Style Sheet container
+	 * 
+	 * @param uri
+	 * @param tagName
+	 * @return
+	 */
 	public static String[] getCSSStyleSheetAttributes(String uri, String tagName) {
 		if (uri == null)
 			return null;
