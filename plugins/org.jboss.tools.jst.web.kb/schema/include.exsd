@@ -7,7 +7,6 @@
       </appInfo>
       <documentation>
          The extension point allows the application to define URIs, tags and Attributes that allow the part of code to be included into the page content.
-         
       </documentation>
    </annotation>
 
@@ -18,8 +17,7 @@
          </appInfo>
          <documentation>
             Defines an extension point for the Include definitions.
-   
-      		This extension point is used to add information on which tags/tag attributes are used to include a source into a JSP/XHTML page
+This extension point is used to add information on which tags/tag attributes are used to include a source into a JSP/XHTML page
          </documentation>
       </annotation>
       <complexType>
@@ -76,7 +74,7 @@
    <element name="tag">
       <annotation>
          <documentation>
-            Defines a tag item. Contains information on tags that have the 'include-to-page-content' possibility.
+            Defines a tag item. Contains information on tags that have the &apos;include-to-page-content&apos; possibility or &apos;load CSS Style Sheet&apos; possibility depending on its parent schema element
          </documentation>
       </annotation>
       <complexType>
@@ -96,7 +94,7 @@
    <element name="attribute">
       <annotation>
          <documentation>
-            Defines an attribute item. Contains information on attributes that have the 'include-to-page-content' possibility.
+            Defines an attribute item. Contains information on attributes that have the &apos;include-to-page-content&apos; possibility or &apos;load CSS Style Sheet&apos; possibility depending on its parent schema element
          </documentation>
       </annotation>
       <complexType>
@@ -109,7 +107,7 @@
          </attribute>
       </complexType>
    </element>
-   
+
    <element name="contexttype">
       <annotation>
          <documentation>
@@ -146,7 +144,7 @@
          </attribute>
       </complexType>
    </element>
-   
+
    <element name="cssholder">
       <annotation>
          <documentation>
@@ -183,15 +181,27 @@
       </appInfo>
       <documentation>
          &lt;pre&gt;
-	&lt;extension-point id=&quot;KbInclude&quot; name=&quot;Kb Include Context Buillder&quot; /&gt;
+ &lt;extension-point id=&quot;KbInclude&quot; name=&quot;Kb Include Context Buillder&quot; /&gt;
    
-	&lt;extension point=&quot;org.jboss.tools.jst.web.kb.KbInclude&quot;&gt;
-		&lt;include uri=&quot;http://java.sun.com/jsf/core&quot;&gt;
-			&lt;tag name=&quot;jsp.include&quot;&gt;
-				&lt;attribute name=&quot;file&quot; /&gt;
-			&lt;/tag&gt;
-		&lt;/include&gt;         
-	&lt;/extension&gt;
+ &lt;extension point=&quot;org.jboss.tools.jst.web.kb.KbInclude&quot;&gt;
+  &lt;include uri=&quot;http://java.sun.com/jsf/core&quot;&gt;
+   &lt;tag name=&quot;jsp.include&quot;&gt;
+    &lt;attribute name=&quot;file&quot; /&gt;
+   &lt;/tag&gt;
+  &lt;/include&gt;
+  &lt;contexttype id=&quot;JSP_PAGE_CONTEXT_TYPE&quot;&gt;
+    &lt;contenttype id=&quot;org.eclipse.jst.jsp.core.jspsource&quot; /&gt;
+  &lt;/contexttype&gt;
+  &lt;contexttype id=&quot;FACELETS_PAGE_CONTEXT_TYPE&quot;&gt;
+    &lt;contenttype id=&quot;org.eclipse.wst.html.core.htmlsource&quot; /&gt;
+  &lt;/contexttype&gt;
+  &lt;cssholder uri=&quot;&quot;&gt;
+    &lt;tag name=&quot;style&quot;/&gt;
+    &lt;tag name=&quot;link&quot;&gt;
+      &lt;attribute name=&quot;href&quot;/&gt;
+    &lt;/tag&gt;
+  &lt;/cssholder&gt;         
+ &lt;/extension&gt;
 &lt;/pre&gt;
       </documentation>
    </annotation>

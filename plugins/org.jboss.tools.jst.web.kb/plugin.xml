@@ -90,11 +90,9 @@
 	</contexttype>
 	
 	<cssholder uri="">
-       <tag name="style" caseinsensitive="true" />
-       <tag name="link" caseinsensitive="true">
-       	<attribute
-              name="href">
-       	</attribute>
+       <tag name="style" />
+       <tag name="link">
+       	<attribute name="href" />
        </tag>
 	</cssholder>
    </extension>
