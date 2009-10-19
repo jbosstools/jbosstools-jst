@@ -59,6 +59,7 @@ public class CSSClassProposalType extends CustomProposalType {
 	}
 
 	/**
+	 * Returns the style name found in the specified CSS Rule 
 	 * 
 	 * @param cssRule
 	 * @param styleName
