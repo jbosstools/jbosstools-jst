@@ -10,16 +10,24 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.jspeditor.dnd;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.ui.IFileEditorInput;
 import org.jboss.tools.common.model.ui.editors.dnd.AbsoluteFilePathAttributeValueLoader;
+import org.jboss.tools.common.model.ui.editors.dnd.DropData;
 import org.jboss.tools.common.model.ui.editors.dnd.DropURI;
 import org.jboss.tools.common.model.ui.editors.dnd.IAttributeValueLoader;
 import org.jboss.tools.common.model.ui.editors.dnd.IDropWizardModel;
 import org.jboss.tools.common.model.ui.editors.dnd.ITagProposal;
 import org.jboss.tools.common.model.ui.editors.dnd.ITagProposalLoader;
 import org.jboss.tools.common.model.ui.editors.dnd.LoadBundleBaseNameAttributeValueLoader;
+import org.jboss.tools.common.model.ui.editors.dnd.composite.TagAttributesComposite;
 import org.jboss.tools.common.model.ui.editors.dnd.context.DropContext;
 
 public class FileTagProposalLoader implements ITagProposalLoader {
@@ -28,6 +36,14 @@ public class FileTagProposalLoader implements ITagProposalLoader {
 
 	private static final Map<String,TagProposal[]> extensionMap = new HashMap<String,TagProposal[]>();
 	
+	private static Map<String,String[]> requiredAttributes = new HashMap<String, String[]>();
+
+	static {
+		requiredAttributes.put("h:graphicImage", new String[]{"value"});
+		requiredAttributes.put("html:img", new String[]{"page"});
+		requiredAttributes.put("s:graphicImage", new String[]{"url"});
+		requiredAttributes.put("s:decorate", new String[]{"template"});
+	}
 	static TagProposal[] IMG_TAG_PROPOSALS = new TagProposal[]{
 		new TagProposal(
 			DropURI.JSF_HTML_URI,
@@ -49,11 +65,11 @@ public class FileTagProposalLoader implements ITagProposalLoader {
 			new AbsoluteFilePathAttributeValueLoader("page","","") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		),
 		new TagProposal(
-				DropURI.SEAM_URI,
-				"s", //$NON-NLS-1$
-				"graphicImage", //$NON-NLS-1$
-				new AbsoluteFilePathAttributeValueLoader("url","","") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			)
+			DropURI.SEAM_URI,
+			"s", //$NON-NLS-1$
+			"graphicImage", //$NON-NLS-1$
+			new AbsoluteFilePathAttributeValueLoader("url","","") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		)
 // yradtsevich: fix of JBIDE-3984: Exclude t:graphicImage option from Insert tag dialog 		
 //		,
 //		new TagProposal(
@@ -96,11 +112,11 @@ public class FileTagProposalLoader implements ITagProposalLoader {
 	);
 	
 	static TagProposal S_DECORATE = new TagProposal(
-			DropURI.SEAM_URI,
-			"s", //$NON-NLS-1$
-			"decorate", //$NON-NLS-1$
-			new AbsoluteFilePathAttributeValueLoader("template","","")						 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		);
+		DropURI.SEAM_URI,
+		"s", //$NON-NLS-1$
+		"decorate", //$NON-NLS-1$
+		new AbsoluteFilePathAttributeValueLoader("template","","")						 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	);
 		
 	static TagProposal[] PAGE_TAG_PROPOSALS = new TagProposal[]{
 		JSP_INCLUDE,
@@ -160,11 +176,35 @@ public class FileTagProposalLoader implements ITagProposalLoader {
 	}
 	
 	public TagProposal[] getTagProposals(Object data) {
-		String fileName = data.toString();
+		DropData dropData = (DropData)data;
+		String fileName = dropData.getMimeData();
 		String extension = fileName.substring(fileName.lastIndexOf(".")+1); //$NON-NLS-1$
 		TagProposal[] tagProposals = (TagProposal[])extensionMap.get(extension.toLowerCase());
 		if(tagProposals==null) {
 			tagProposals = new TagProposal[0];
+		}
+		if(dropData.getEditorInput() instanceof IFileEditorInput) {
+			IFile f = ((IFileEditorInput)dropData.getEditorInput()).getFile();
+			List<TagProposal> result = new ArrayList<TagProposal>();
+			for (int i = 0; i < tagProposals.length; i++) {
+				dropData.getValueProvider().setProposal(tagProposals[i]);
+				TagAttributesComposite.AttributeDescriptorValue[] values = dropData.getValueProvider().getValues();
+				if(values == null || values.length == 0) continue;
+				Set<String> as = new HashSet<String>();
+				for (int k = 0; k < values.length; k++) {
+					as.add(values[k].getName());
+				}
+				String tag = tagProposals[i].getPrefix() + ":" + tagProposals[i].getName();
+				String[] atrs = requiredAttributes.get(tag);
+				boolean ok = true;
+				if(atrs != null) for (int k = 0; k < atrs.length && ok; k++) {
+					if(!as.contains(atrs[k])) ok = false;
+				}
+				if(!ok) continue;
+				result.add(tagProposals[i]);
+			}
+			
+			return result.toArray(new TagProposal[0]);
 		}
 		return tagProposals;
 	}
