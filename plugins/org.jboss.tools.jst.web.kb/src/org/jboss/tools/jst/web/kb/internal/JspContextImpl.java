@@ -16,19 +16,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.jboss.tools.jst.web.kb.ICSSContainerSupport;
 import org.jboss.tools.jst.web.kb.IIncludedContextSupport;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.IResourceBundle;
 import org.jboss.tools.jst.web.kb.internal.taglib.NameSpace;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
+import org.w3c.dom.css.CSSStyleSheet;
 
 /**
  * JSP page context
  * @author Alexey Kazakov
  */
-public class JspContextImpl extends XmlContextImpl {
+public class JspContextImpl extends XmlContextImpl implements ICSSContainerSupport {
 	protected List<IPageContext> fIncludedContexts = null;
-
+	protected List<CSSStyleSheet> fCSSStyleSheets = null;
 	
 	
 	@Override
@@ -53,6 +55,38 @@ public class JspContextImpl extends XmlContextImpl {
 		superNameSpaces.put("", fakeForHtmlNS); //$NON-NLS-1$
 		
 		return superNameSpaces;
+	}
+
+	public void addCSSStyleSheet(CSSStyleSheet cssStyleSheet) {
+		if (fCSSStyleSheets == null) {
+			fCSSStyleSheets = new ArrayList<CSSStyleSheet>();
+		}
+		fCSSStyleSheets.add(cssStyleSheet);
+	}
+
+	public List<CSSStyleSheet> getCSSStyleSheets() {
+		List<CSSStyleSheet> sheets = new ArrayList<CSSStyleSheet>();
+		
+		if (fCSSStyleSheets != null) {
+			for (CSSStyleSheet sheet : fCSSStyleSheets) {
+				sheets.add(sheet);
+			}
+		}
+		
+		List<IPageContext> includedContexts = getIncludedContexts();
+		if (includedContexts != null) {
+			for (IPageContext includedContext : includedContexts) {
+				if (includedContext instanceof ICSSContainerSupport) {
+					List<CSSStyleSheet> includedSheets = ((ICSSContainerSupport)includedContext).getCSSStyleSheets();
+					if (includedSheets != null) {
+						sheets.addAll(includedSheets);
+					}
+				}
+			}
+		}
+		
+		return sheets;
+
 	}
 	
 }

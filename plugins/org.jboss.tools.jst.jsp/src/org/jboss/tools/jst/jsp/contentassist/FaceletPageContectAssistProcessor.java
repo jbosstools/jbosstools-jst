@@ -77,7 +77,7 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 		context.setLibraries(getTagLibraries(context));
 		context.setResourceBundles(super.getResourceBundles(context));
 
-		PageContextFactory.createIncludedContexts(context);
+		PageContextFactory.collectIncludedAdditionalInfo(context);
 		
 		return context;
 	}

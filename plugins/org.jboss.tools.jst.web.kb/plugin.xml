@@ -88,6 +88,15 @@
 	<contexttype id="FACELETS_PAGE_CONTEXT_TYPE">
 		<contenttype id="org.eclipse.wst.html.core.htmlsource" />
 	</contexttype>
+	
+	<cssholder uri="">
+       <tag name="style" caseinsensitive="true" />
+       <tag name="link" caseinsensitive="true">
+       	<attribute
+              name="href">
+       	</attribute>
+       </tag>
+	</cssholder>
    </extension>
 
   <extension id="kbproblemmarker" name="%KBProblemName" point="org.eclipse.core.resources.markers">

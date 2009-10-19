@@ -64,4 +64,28 @@
 	<attribute name="converter">
 		<proposal type="converterID"/>
 	</attribute>
+	<attribute name="class">
+		<proposal type="cssclass"/>
+	</attribute>
+	<attribute name="styleClass">
+		<proposal type="cssclass"/>
+	</attribute>
+	<attribute name="captionClass">
+		<proposal type="cssclass"/>
+	</attribute>
+	<attribute name="columnClasses">
+		<proposal type="cssclass"/>
+	</attribute>
+	<attribute name="rowClasses">
+		<proposal type="cssclass"/>
+	</attribute>
+	<attribute name="bodyClass">
+		<proposal type="cssclass"/>
+	</attribute>
+	<attribute name="headerClass">
+		<proposal type="cssclass"/>
+	</attribute>
+	<attribute name="footerClass">
+		<proposal type="cssclass"/>
+	</attribute>
 </component-extension>

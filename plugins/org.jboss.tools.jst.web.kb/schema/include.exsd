@@ -25,6 +25,7 @@
       <complexType>
          <sequence>
             <element ref="include" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="cssholder" minOccurs="0" maxOccurs="unbounded"/>
             <element ref="contexttype" minOccurs="0" maxOccurs="unbounded"/>
          </sequence>
          <attribute name="point" type="string" use="required">
@@ -146,6 +147,26 @@
       </complexType>
    </element>
    
+   <element name="cssholder">
+      <annotation>
+         <documentation>
+            Defines a CSS holder item.
+         </documentation>
+      </annotation>
+      <complexType>
+         <sequence>
+            <element ref="tag" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="attribute" minOccurs="0" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="uri" type="string" use="required">
+            <annotation>
+               <documentation>
+                  An URI for this element.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
 
    <annotation>
       <appInfo>

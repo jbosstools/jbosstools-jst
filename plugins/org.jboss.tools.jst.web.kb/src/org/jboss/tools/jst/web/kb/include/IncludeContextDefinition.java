@@ -11,20 +11,13 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.ui.internal.EarlyStartupRunnable;
 
 public class IncludeContextDefinition {
-	private IConfigurationElement fElement;
 	private String fUri;
-	private Map<String, Set<String>> fTags; // Map<TagName, Set<AttributeName>>
-	private Map<IConfigurationElement, String> fTagConfigurationElements; 
+	private Map<String, Set<String>> fIncludeTags; // Map<TagName, Set<AttributeName>>
+	private Map<String, Set<String>> fCSSTags; // Map<TagName, Set<AttributeName>>
 	private Map<String, Set<String>> fContexts; // Map<ContextType, Set<ContentType>>
-	private Map<IConfigurationElement, String> fContextConfigurationElements; 
 	
-	public IncludeContextDefinition(IConfigurationElement element) {
-		this.fElement = element;
-	}
-	
-	public IncludeContextDefinition(String uri, IConfigurationElement element) {
+	public IncludeContextDefinition(String uri) {
 		this.fUri = uri;
-		this.fElement = element;
 	}
 
 	public String getUri() {
@@ -35,21 +28,37 @@ public class IncludeContextDefinition {
 		this.fUri = uri;
 	}
 
-	public void addTag(String tagName, IConfigurationElement element) {
-		if (fTags == null) {
-			fTags = new HashMap<String, Set<String>>();
+	public boolean addTag(String tagName, IConfigurationElement element) {
+		if (isInParentElements(element, IncludeContextBuilder.TAG_INCLUDE)) {
+			addIncludeTag(tagName, element);
+			return true;
+		} else if (isInParentElements(element, IncludeContextBuilder.TAG_CSSHOLDER)) {
+			addCSSTag(tagName, element);
+			return true;
 		}
-		Set<String> tagSet = fTags.get(tagName);
+		return false;
+	}
+	
+	public void addIncludeTag(String tagName, IConfigurationElement element) {
+		if (fIncludeTags == null) {
+			fIncludeTags = new HashMap<String, Set<String>>();
+		}
+		Set<String> tagSet = fIncludeTags.get(tagName);
 		if (tagSet == null) {
 			tagSet = new HashSet<String>();
-			fTags.put(tagName, tagSet);
+			fIncludeTags.put(tagName, tagSet);
 		}
-		
-		if (fTagConfigurationElements == null) {
-			fTagConfigurationElements = new HashMap<IConfigurationElement, String>();
+	}
+
+	public void addCSSTag(String tagName, IConfigurationElement element) {
+		if (fCSSTags == null) {
+			fCSSTags = new HashMap<String, Set<String>>();
 		}
-		
-		fTagConfigurationElements.put(element, tagName);
+		Set<String> tagSet = fCSSTags.get(tagName);
+		if (tagSet == null) {
+			tagSet = new HashSet<String>();
+			fCSSTags.put(tagName, tagSet);
+		}
 	}
 	
 	public void addTagAttribute(String attributeName, IConfigurationElement element) {
@@ -67,11 +76,31 @@ public class IncludeContextDefinition {
 		}
 		parentTagName = parentTagName == null ? "" : parentTagName; //$NON-NLS-1$
 		
-		if (fTags.get(parentTagName) == null) {
-			addTag(parentTagName, parentTagElement);
+		if (isInParentElements(element, IncludeContextBuilder.TAG_INCLUDE)) {
+			if (fIncludeTags.get(parentTagName) == null) {
+				addIncludeTag(parentTagName, parentTagElement);
+			}
+			
+			fIncludeTags.get(parentTagName).add(attributeName);
+		} else if (isInParentElements(element, IncludeContextBuilder.TAG_CSSHOLDER)) {
+			if (fCSSTags.get(parentTagName) == null) {
+				addCSSTag(parentTagName, parentTagElement);
+			}
+			
+			fCSSTags.get(parentTagName).add(attributeName);
 		}
-		
-		fTags.get(parentTagName).add(attributeName);
+	}
+	
+	private boolean isInParentElements(IConfigurationElement element, String elementName) {
+		Object parent = element.getParent();
+		while (parent instanceof IConfigurationElement) {
+			IConfigurationElement parentElement = (IConfigurationElement)parent;
+			if (elementName.equals(parentElement.getName())) {
+				return true;
+			}
+			parent = parentElement.getParent();
+		}
+		return false;
 	}
 	
 	public void addContextType(String id, IConfigurationElement element) {
@@ -84,11 +113,6 @@ public class IncludeContextDefinition {
 			fContexts.put(id, contextSet);
 		}
 		
-		if (fContextConfigurationElements == null) {
-			fContextConfigurationElements = new HashMap<IConfigurationElement, String>();
-		}
-		
-		fContextConfigurationElements.put(element, id);
 	}
 
 	public boolean addContentType(String id, IConfigurationElement element) {
@@ -115,18 +139,29 @@ public class IncludeContextDefinition {
 	private static final String[] EMPTY_CHILDREN = new String[0];
 	
 	
-	public String[] getTags() {
-		return fTags == null ? EMPTY_CHILDREN :
-			(String[])fTags.keySet().toArray(new String[fTags.size()]);
+	public String[] getIncludeTags() {
+		return fIncludeTags == null ? EMPTY_CHILDREN :
+			(String[])fIncludeTags.keySet().toArray(new String[fIncludeTags.size()]);
+	}	
+	
+	public String[] getCSSTags() {
+		return fCSSTags == null ? EMPTY_CHILDREN :
+			(String[])fCSSTags.keySet().toArray(new String[fCSSTags.size()]);
 	}
 	
-	public String[] getTagAttributes(String tagName) {
-		Set<String> attrSet = fTags.get(tagName);
+	public String[] getIncludeTagAttributes(String tagName) {
+		Set<String> attrSet = fIncludeTags == null ? null : fIncludeTags.get(tagName);
 		
 		return attrSet == null ? EMPTY_CHILDREN :
 			(String[])attrSet.toArray(new String[attrSet.size()]);
 	}
-	
+
+	public String[] getCSSTagAttributes(String tagName) {
+		Set<String> attrSet = fCSSTags == null ? null : fCSSTags.get(tagName);
+		
+		return attrSet == null ? EMPTY_CHILDREN :
+			(String[])attrSet.toArray(new String[attrSet.size()]);
+	}
 	public String getContextType(String contentType) {
 		if (fContexts == null)
 			return null;

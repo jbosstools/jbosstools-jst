@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.kb;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -34,15 +35,21 @@ import org.eclipse.jst.jsp.core.internal.contentmodel.TaglibController;
 import org.eclipse.jst.jsp.core.internal.contentmodel.tld.TLDCMDocumentManager;
 import org.eclipse.jst.jsp.core.internal.contentmodel.tld.TaglibTracker;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.DocumentProviderRegistry;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.wst.common.componentcore.internal.ComponentResource;
 import org.eclipse.wst.common.componentcore.internal.StructureEdit;
 import org.eclipse.wst.common.componentcore.internal.WorkbenchComponent;
+import org.eclipse.wst.css.core.internal.provisional.adapters.IModelProvideAdapter;
+import org.eclipse.wst.css.core.internal.provisional.adapters.IStyleSheetAdapter;
+import org.eclipse.wst.css.core.internal.provisional.document.ICSSModel;
+import org.eclipse.wst.html.core.internal.htmlcss.LinkElementAdapter;
+import org.eclipse.wst.html.core.internal.htmlcss.URLModelProvider;
 import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.INodeNotifier;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
-import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.xml.core.internal.document.NodeContainer;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
@@ -68,7 +75,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.eclipse.ui.part.FileEditorInput;
+import org.w3c.dom.css.CSSStyleSheet;
 
 /**
  * @author Alexey Kazakov
@@ -114,7 +121,8 @@ public class PageContextFactory {
 			setJSPNameSpaces(context, offset);
 			context.setLibraries(getTagLibraries(context, offset));
 			context.setResourceBundles(getResourceBundles(context));
-			createIncludedContexts(context);
+			
+			collectIncludedAdditionalInfo(context);
 		} finally {
 			releaseConnectedDocument(input);
 			context.setDocument(null);
@@ -143,7 +151,7 @@ public class PageContextFactory {
 			context.setLibraries(getTagLibraries(context, offset));
 			context.setResourceBundles(getResourceBundles(context));
 	
-			PageContextFactory.createIncludedContexts(context);
+			collectIncludedAdditionalInfo(context);
 		} finally {
 			releaseConnectedDocument(input);
 			context.setDocument(null);
@@ -154,8 +162,9 @@ public class PageContextFactory {
 	
 	/* Utility functions */
 	
-	public static void createIncludedContexts(IPageContext context) {
-		if (!(context instanceof IIncludedContextSupport))
+	public static void collectIncludedAdditionalInfo(IPageContext context) {
+		if (!(context instanceof IIncludedContextSupport) && 
+				!(context instanceof ICSSContainerSupport))
 			return;
 		
 		IStructuredModel sModel = StructuredModelManager.getModelManager()
@@ -173,7 +182,7 @@ public class PageContextFactory {
 				return;
 
 			if (xmlDocument instanceof IDOMNode) {
-				createIncludedContextForNode((IDOMNode)xmlDocument, (IIncludedContextSupport)context);
+				createIncludedAdditionalInfoForNode((IDOMNode)xmlDocument, context);
 			}
 		} finally {
 			if (sModel != null) {
@@ -182,8 +191,8 @@ public class PageContextFactory {
 		}
 
 	}
-	
-	private static void createIncludedContextForNode(IDOMNode node, IIncludedContextSupport context) {
+
+	private static void createIncludedAdditionalInfoForNode(IDOMNode node, IPageContext context) {
 		String prefix = node.getPrefix() == null ? "" : node.getPrefix(); //$NON-NLS-1$
 		String tagName = node.getLocalName();
 		if (node instanceof IDOMElement) {
@@ -192,12 +201,26 @@ public class PageContextFactory {
 			
 			if (uris != null) {
 				for (String uri : uris) {
-					String[] includeAttributes = IncludeContextBuilder.getIncludeAttributes(uri, tagName);
-					if (includeAttributes != null) {
-						for (String attr : includeAttributes) {
-							createIncludedContextFromAttribute((IDOMElement)node, attr, context);
+					if (context instanceof IIncludedContextSupport) {
+						String[] includeAttributes = IncludeContextBuilder.getIncludeAttributes(uri, tagName);
+						if (includeAttributes != null) {
+							for (String attr : includeAttributes) {
+								createIncludedContextFromAttribute((IDOMElement)node, attr, context);
+							}
 						}
 					}
+					if (context instanceof ICSSContainerSupport) {
+						if(IncludeContextBuilder.isCSSStyleSheetContainer(uri, tagName)) {
+							createCSSStyleSheetFromElement((IDOMElement)node, (ICSSContainerSupport)context);
+						} else {
+							String[] cssAttributes = IncludeContextBuilder.getCSSStyleSheetAttributes(uri, tagName);
+							if (cssAttributes != null) {
+								for (String attr : cssAttributes) {
+									createCSSStyleSheetFromAttribute((IDOMElement)node, attr, (ICSSContainerSupport)context);
+								}
+							}
+						}
+					}					
 				}
 			}
 		}		
@@ -205,11 +228,78 @@ public class PageContextFactory {
 		NodeList children = node.getChildNodes();
 		for (int i = 0; children != null && i < children.getLength(); i++) {
 			if (children.item(i) instanceof IDOMElement) {
-				createIncludedContextForNode((IDOMElement)children.item(i), context);
+				createIncludedAdditionalInfoForNode((IDOMElement)children.item(i), context);
 			}
 		}
 	}
 	
+	private static void createCSSStyleSheetFromAttribute(IDOMElement node,
+			String attribute, ICSSContainerSupport context) {
+		CSSStyleSheet sheet = getSheetForTagAttribute(node, attribute);
+		if (sheet != null)
+			context.addCSSStyleSheet(sheet);
+	}
+
+	private static void createCSSStyleSheetFromElement(IDOMElement node,
+			ICSSContainerSupport context) {
+		CSSStyleSheet sheet = getSheetForTag(node);
+		if (sheet != null)
+			context.addCSSStyleSheet(sheet);
+	}
+
+	
+	/**
+	 * 
+	 * @param stylesContainer
+	 * @return
+	 */
+	private static CSSStyleSheet getSheetForTagAttribute(final Node stylesContainer, String attribute) {
+
+		INodeNotifier notifier = (INodeNotifier) stylesContainer;
+
+		IStyleSheetAdapter adapter = (IStyleSheetAdapter) notifier
+				.getAdapterFor(IStyleSheetAdapter.class);
+
+		if (!(adapter instanceof ExtendedLinkElementAdapter)) {
+
+			notifier.removeAdapter(adapter);
+			adapter = new ExtendedLinkElementAdapter(
+					(Element) stylesContainer, attribute);
+			notifier.addAdapter(adapter);
+
+		}
+
+		CSSStyleSheet sheet = null;
+
+		if (adapter != null) {
+			sheet = (CSSStyleSheet) adapter.getSheet();
+
+		}
+
+		return sheet;
+	}
+	
+	/**
+	 * 
+	 * @param stylesContainer
+	 * @return
+	 */
+	private static CSSStyleSheet getSheetForTag(final Node stylesContainer) {
+
+		INodeNotifier notifier = (INodeNotifier) stylesContainer;
+
+		IStyleSheetAdapter adapter = (IStyleSheetAdapter) notifier
+				.getAdapterFor(IStyleSheetAdapter.class);
+
+		CSSStyleSheet sheet = null;
+
+		if (adapter != null) {
+			sheet = (CSSStyleSheet) adapter.getSheet();
+		}
+
+		return sheet;
+	}
+
 	private static void createIncludedContextFromAttribute(IDOMElement node, String attribute, IIncludedContextSupport context) {
 		String fileName = node.getAttribute(attribute);
 		if (fileName == null || fileName.trim().length() == 0)
@@ -243,7 +333,8 @@ public class PageContextFactory {
 			if (xmlDocument instanceof IDOMNode) {
 				String contentType = sModel.getContentTypeIdentifier();
 				IPageContext includedContext = PageContextFactory.createPageContext(file, ((IDOMNode) xmlDocument).getEndOffset() - 1, contentType);
-				context.addIncludedContext(includedContext);
+				if (includedContext != null)
+					context.addIncludedContext(includedContext);
 			}
 		} finally {
 			if (sModel != null) {
@@ -251,7 +342,6 @@ public class PageContextFactory {
 			}
 		}
 	}
-
 	
 	static Node findNodeForOffset(IDOMNode node, int offset) {
 		if(node == null) return null;
@@ -566,11 +656,9 @@ public class PageContextFactory {
 		try {
 			sModel = StructuredModelManager.getModelManager().getModelForRead(context.getResource());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// Ignore. The sModel will be set to null
 		} catch (CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// Ignore. The sModel will be set to null
 		}
 		
 		if (sModel == null) 
@@ -814,5 +902,87 @@ public class PageContextFactory {
         });
 
 		return sortedReferences;
+	}
+	
+	public static class ExtendedLinkElementAdapter extends LinkElementAdapter {
+
+		private Element element;
+		private String hrefAttrName;
+
+		public ExtendedLinkElementAdapter(Element element, String hrefAttrName) {
+			this.element = element;
+			this.hrefAttrName = hrefAttrName;
+		}
+
+		@Override
+		public Element getElement() {
+			return element;
+		}
+
+		@Override
+		protected boolean isValidAttribute() {
+			String href = getElement().getAttribute(hrefAttrName);
+			if (href == null || href.length() == 0)
+				return false;
+			return true;
+		}
+
+		/**
+		 */
+		public ICSSModel getModel() {
+			ICSSModel model = super.getModel();
+			if (model == null) {
+				model = retrieveModel();
+				setModel(model);
+			}
+			return model;
+		}
+
+		/**
+		 */
+		private ICSSModel retrieveModel() {
+			if (!isValidAttribute()) {
+				return null;
+			}
+
+			// null,attr check is done in isValidAttribute()
+			Element element = getElement();
+			String href = findAndReplaceElVariable(element
+					.getAttribute(hrefAttrName));
+
+			IDOMModel baseModel = ((IDOMNode) element).getModel();
+			if (baseModel == null)
+				return null;
+			Object id = baseModel.getId();
+			if (!(id instanceof String))
+				return null;
+			// String base = (String)id;
+
+			// get ModelProvideAdapter
+			IModelProvideAdapter adapter = (IModelProvideAdapter) ((INodeNotifier) getElement())
+					.getAdapterFor(IModelProvideAdapter.class);
+
+			URLModelProvider provider = new URLModelProvider();
+			try {
+				IStructuredModel newModel = provider.getModelForRead(baseModel,
+						href);
+				if (newModel == null)
+					return null;
+				if (!(newModel instanceof ICSSModel)) {
+					newModel.releaseFromRead();
+					return null;
+				}
+
+				// notify adapter
+				if (adapter != null)
+					adapter.modelProvided(newModel);
+
+				return (ICSSModel) newModel;
+			} catch (UnsupportedEncodingException e) {
+			} catch (IOException e) {
+			}
+
+			return null;
+		}
 	}
 }

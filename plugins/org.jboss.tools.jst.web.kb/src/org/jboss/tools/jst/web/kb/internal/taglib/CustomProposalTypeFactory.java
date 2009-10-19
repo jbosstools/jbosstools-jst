@@ -28,6 +28,7 @@ public class CustomProposalTypeFactory {
 	public static final String ID_TYPE = "id"; //$NON-NLS-1$
 	public static final String CONVERTER_ID_TYPE = "converterID"; //$NON-NLS-1$
 	public static final String VALIDATOR_ID_TYPE = "validatorID"; //$NON-NLS-1$
+	public static final String CSSCLASS_TYPE = "cssclass"; //$NON-NLS-1$
 
 	private CustomProposalTypeFactory() {
 	}
@@ -71,6 +72,9 @@ public class CustomProposalTypeFactory {
 		}
 		if(VALIDATOR_ID_TYPE.equals(type)) {
 			return new ValidatorIDProposalType();
+		}
+		if(CSSCLASS_TYPE.equals(type)) {
+			return new CSSClassProposalType();
 		}
 		
 		//WebKbPlugin.getDefault().logError("Unknown proposal type: " + type); //$NON-NLS-1$

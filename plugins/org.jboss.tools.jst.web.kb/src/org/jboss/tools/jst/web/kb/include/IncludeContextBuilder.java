@@ -19,7 +19,8 @@ public class IncludeContextBuilder extends RegistryReader {
 	public static final String TAG_ATTRIBUTE = "attribute"; //$NON-NLS-1$
 	public static final String TAG_CONTEXTTYPE = "contexttype"; //$NON-NLS-1$
 	public static final String TAG_CONTENTTYPE = "contenttype"; //$NON-NLS-1$
-
+	public static final String TAG_CSSHOLDER = "cssholder"; //$NON-NLS-1$
+	
 	public static final String ATT_ID = "id"; //$NON-NLS-1$
 	public static final String ATT_URI = "uri"; //$NON-NLS-1$
 	public static final String ATT_NAME = "name"; //$NON-NLS-1$
@@ -70,30 +71,47 @@ public class IncludeContextBuilder extends RegistryReader {
 	 * open on object.  Creates a new open on definition object and adds it to the
 	 * list of open on definition objects
 	 * 
-	 * @param element hyperlink configuration element
+	 * @param element configuration element
 	 */
-	private void processIncludeElement(IConfigurationElement element) {
+	private void processIncludeContextElement(IConfigurationElement element) {
 		String theUri = getUri(element);
-//		String theResolver = getIncludeResolver(element);
 
 		theUri = theUri == null ? "" : theUri; //$NON-NLS-1$
 		
-		// start building new HyperlinkDefinition
-		fCurrentIncludeDefinition = new IncludeContextDefinition(theUri, element);
-		
-		// create a new list of open on definitions if it hasnt been created yet
+		// create a new list of open on definitions if it hasn't been created yet
 		if (fIncludeContextDefs == null) {
 			fIncludeContextDefs = new ArrayList<IncludeContextDefinition>();
 		}
-		fIncludeContextDefs.add(fCurrentIncludeDefinition);
+		
+		fCurrentIncludeDefinition = getIncludeContextDefinition(theUri);
+		if (fCurrentIncludeDefinition == null) {
+			// start building new IncludeDefinition
+			fCurrentIncludeDefinition = new IncludeContextDefinition(theUri);
+			fIncludeContextDefs.add(fCurrentIncludeDefinition);
+		}		
 	}
 
-	private void processTagElement(IConfigurationElement element) {
+	IncludeContextDefinition getIncludeContextDefinition(String uri) {
+		if (fIncludeContextDefs == null || uri == null)
+			return null;
+		
+		for (IncludeContextDefinition def : fIncludeContextDefs) {
+			if (uri.equals(def.getUri())) {
+				return def;
+			}
+		}
+		
+		return null;
+	}
+	
+	private boolean processTagElement(IConfigurationElement element) {
 		String theName = getName(element);
 
 		if (fCurrentIncludeDefinition != null && theName != null) {
-			fCurrentIncludeDefinition.addTag(theName, element);
+			return fCurrentIncludeDefinition.addTag(theName, element);
 		}
+		
+		return false;
 	}
 
 	private void processAttributeElement(IConfigurationElement element) {
@@ -127,9 +145,9 @@ public class IncludeContextBuilder extends RegistryReader {
 	protected boolean readElement(IConfigurationElement element) {
 		String tag = element.getName();
 
-		if (tag.equals(fTargetContributionElement)) {
-			processIncludeElement(element);
-
+		if (tag.equals(TAG_INCLUDE) || tag.equals(TAG_CSSHOLDER)) {
+			processIncludeContextElement(element);
+			
 			// make sure processing of current open on tag resulted in a current open on definition
 			// before continue reading the children
 			if (fCurrentIncludeDefinition != null) {
@@ -190,7 +208,7 @@ public class IncludeContextBuilder extends RegistryReader {
 		return fIncludeContextDefs;
 	}
 	
-	public static String[] getIncludeAttributes(String uri, String tag) {
+	public static String[] getIncludeAttributes(String uri, String tagName) {
 		if (uri == null)
 			return null;
 		
@@ -198,13 +216,18 @@ public class IncludeContextBuilder extends RegistryReader {
 		if (defs == null)
 			return null;
 		
+		List<String> attrs = new ArrayList<String>();
+		
 		for (IncludeContextDefinition def : defs) {
 			if (uri.equals(def.getUri())) {
-				return def.getTagAttributes(tag);
+				String[] defAttrs = def.getIncludeTagAttributes(tagName);
+				if (defAttrs != null) {
+					for (String attr : defAttrs) attrs.add(attr);
+				}
 			}
 		}
 		
-		return null;
+		return attrs.size() == 0 ? null : attrs.toArray(new String[attrs.size()]);
 	}
 	
 	public static String getContextType(String contentType) {
@@ -222,5 +245,58 @@ public class IncludeContextBuilder extends RegistryReader {
 		}
 		
 		return null;
+	}
+
+	public static boolean isCSSStyleSheetContainer(String uri, String tagName) {
+		if (uri == null)
+			return false;
+		
+		List<IncludeContextDefinition> defs = IncludeContextBuilder.getInstance().getIncludeContextDefinitions();
+		if (defs == null)
+			return false;
+		
+		boolean isHolder = false;
+		for (IncludeContextDefinition def : defs) {
+			if (uri.equals(def.getUri())) {
+				String[] defTags = def.getCSSTags();
+				if (defTags != null) {
+					for (String tag : defTags) {
+						if (tagName.equals(tag)) {
+							isHolder = true;
+							// Check that the tag have no attributes defined
+							// If so - the tag itself is used to define the CSS
+							// But if the tag has at least one attribute defined - it's not the holder 
+							String[] attrs = def.getCSSTagAttributes(tagName);
+							isHolder ^= (attrs != null && attrs.length > 0);  
+						}
+					}
+				}
+			}
+		}
+		
+		return isHolder;
+	}
+
+	public static String[] getCSSStyleSheetAttributes(String uri, String tagName) {
+		if (uri == null)
+			return null;
+		
+		List<IncludeContextDefinition> defs = IncludeContextBuilder.getInstance().getIncludeContextDefinitions();
+		if (defs == null)
+			return null;
+		
+		List<String> attrs = new ArrayList<String>();
+		
+		for (IncludeContextDefinition def : defs) {
+			if (uri.equals(def.getUri())) {
+				String[] defAttrs = def.getCSSTagAttributes(tagName);
+				if (defAttrs != null) {
+					for (String attr : defAttrs) attrs.add(attr);
+				}
+			}
+		}
+		
+		return attrs.size() == 0 ? null : attrs.toArray(new String[attrs.size()]);
+
 	}
 }

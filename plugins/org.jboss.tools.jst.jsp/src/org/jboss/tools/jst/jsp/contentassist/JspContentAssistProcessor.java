@@ -97,7 +97,7 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 	@Override
 	protected IPageContext createContext() {
 		IPageContext context = super.createContext();
-		PageContextFactory.createIncludedContexts(context);
+		PageContextFactory.collectIncludedAdditionalInfo(context);
 		return context;
 	}
 	
