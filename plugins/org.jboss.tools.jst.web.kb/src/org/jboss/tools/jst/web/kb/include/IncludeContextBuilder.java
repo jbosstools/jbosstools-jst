@@ -261,7 +261,7 @@ public class IncludeContextBuilder extends RegistryReader {
 				String[] defTags = def.getCSSTags();
 				if (defTags != null) {
 					for (String tag : defTags) {
-						if (tagName.equals(tag)) {
+						if (tagName.equals(tag) || ("".equals(uri) && tagName.equalsIgnoreCase(tag))) { //$NON-NLS-1$
 							isHolder = true;
 							// Check that the tag have no attributes defined
 							// If so - the tag itself is used to define the CSS

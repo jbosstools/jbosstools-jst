@@ -29,6 +29,8 @@ public class IncludeContextDefinition {
 	}
 
 	public boolean addTag(String tagName, IConfigurationElement element) {
+		if ("".equals(fUri)) //$NON-NLS-1$
+			tagName = tagName.toLowerCase();
 		if (isInParentElements(element, IncludeContextBuilder.TAG_INCLUDE)) {
 			addIncludeTag(tagName, element);
 			return true;
@@ -75,6 +77,8 @@ public class IncludeContextDefinition {
 			parentTagName = IncludeContextBuilder.getName(parentTagElement);
 		}
 		parentTagName = parentTagName == null ? "" : parentTagName; //$NON-NLS-1$
+		if ("".equals(fUri)) //$NON-NLS-1$
+			parentTagName = parentTagName.toLowerCase();
 		
 		if (isInParentElements(element, IncludeContextBuilder.TAG_INCLUDE)) {
 			if (fIncludeTags.get(parentTagName) == null) {
@@ -150,6 +154,9 @@ public class IncludeContextDefinition {
 	}
 	
 	public String[] getIncludeTagAttributes(String tagName) {
+		if ("".equals(fUri)) //$NON-NLS-1$
+			tagName = tagName.toLowerCase();
+
 		Set<String> attrSet = fIncludeTags == null ? null : fIncludeTags.get(tagName);
 		
 		return attrSet == null ? EMPTY_CHILDREN :
@@ -157,6 +164,9 @@ public class IncludeContextDefinition {
 	}
 
 	public String[] getCSSTagAttributes(String tagName) {
+		if ("".equals(fUri)) //$NON-NLS-1$
+			tagName = tagName.toLowerCase();
+
 		Set<String> attrSet = fCSSTags == null ? null : fCSSTags.get(tagName);
 		
 		return attrSet == null ? EMPTY_CHILDREN :
