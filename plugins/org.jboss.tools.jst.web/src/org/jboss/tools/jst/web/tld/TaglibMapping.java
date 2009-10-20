@@ -17,7 +17,6 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 
 import org.eclipse.core.resources.IResource;
-
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.event.XModelTreeEvent;
@@ -49,7 +48,7 @@ public class TaglibMapping implements ITaglibMapping {
         model.addModelTreeListener(listener = new TaglibModelTreeListener());
     }
     
-    synchronized public void revalidate(XModelObject webxml) {
+    public void revalidate(XModelObject webxml) {
         if (webxml == null || isLoading) return;
         model = webxml.getModel();
         long jts = getJarsTimeStamp();
