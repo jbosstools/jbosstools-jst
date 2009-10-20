@@ -315,9 +315,9 @@ public class PageContextFactory {
 			sModel = StructuredModelManager.getModelManager()
 				.getModelForRead(file);
 		} catch (IOException e) {
-			// Ignore. The sModel will be set to null
+			WebKbPlugin.getDefault().logError(e);
 		} catch (CoreException e) {
-			// Ignore. The sModel will be set to null
+			WebKbPlugin.getDefault().logError(e);
 		}
 
 		if (sModel == null)
@@ -382,7 +382,7 @@ public class PageContextFactory {
 		try {
 			provider.connect(input);
 		} catch (CoreException e) {
-			// Ignore. The provider probably will return null in this case
+			WebKbPlugin.getDefault().logError(e);
 		}
 		return provider.getDocument(input);
 	}
@@ -400,9 +400,9 @@ public class PageContextFactory {
 			sModel = StructuredModelManager.getModelManager()
 				.getModelForRead(file);
 		} catch (IOException e) {
-			// Ignore. The sModel will be set to null
+			WebKbPlugin.getDefault().logError(e);
 		} catch (CoreException e) {
-			// Ignore. The sModel will be set to null
+			WebKbPlugin.getDefault().logError(e);
 		}
 
 		if (sModel == null)
@@ -433,9 +433,9 @@ public class PageContextFactory {
 			sModel = StructuredModelManager.getModelManager()
 				.getModelForRead(context.getResource());
 		} catch (IOException e) {
-			// Ignore. The sModel will be set to null
+			WebKbPlugin.getDefault().logError(e);
 		} catch (CoreException e) {
-			// Ignore. The sModel will be set to null
+			WebKbPlugin.getDefault().logError(e);
 		}
 
 		if (sModel == null)
@@ -538,9 +538,9 @@ public class PageContextFactory {
 			sModel = StructuredModelManager.getModelManager()
 				.getModelForRead(context.getResource());
 		} catch (IOException e) {
-			// Ignore. The sModel will be set to null
+			WebKbPlugin.getDefault().logError(e);
 		} catch (CoreException e) {
-			// Ignore. The sModel will be set to null
+			WebKbPlugin.getDefault().logError(e);
 		}
 
 		if (sModel == null)
@@ -656,9 +656,9 @@ public class PageContextFactory {
 		try {
 			sModel = StructuredModelManager.getModelManager().getModelForRead(context.getResource());
 		} catch (IOException e) {
-			// Ignore. The sModel will be set to null
+			WebKbPlugin.getDefault().logError(e);
 		} catch (CoreException e) {
-			// Ignore. The sModel will be set to null
+			WebKbPlugin.getDefault().logError(e);
 		}
 		
 		if (sModel == null) 
