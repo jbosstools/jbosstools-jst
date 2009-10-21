@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.ui.test;
 
 import junit.framework.TestCase;
 
+import org.eclipse.gef.ui.views.palette.PaletteView;
 import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IPerspectiveRegistry;
 import org.eclipse.ui.IViewPart;
@@ -65,7 +66,7 @@ public class WebViewsTest extends TestCase {
 	}
 	
 	public void testPaletteViewIsShowed() {
-		IViewPart paletteView = findView(PaletteViewPart.VIEW_ID);
+		IViewPart paletteView = findView(PaletteView.ID/*PaletteViewPart.VIEW_ID*/);
 		assertNotNull("Palette View hasn't been loaded",paletteView);
 	}
 	
