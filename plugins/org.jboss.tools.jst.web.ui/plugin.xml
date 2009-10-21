@@ -368,7 +368,9 @@
          </viewShortcut-->
          <newWizardShortcut id="org.jboss.tools.common.model.ui.wizard.newfile.NewPropertiesFileWizard">
          </newWizardShortcut>
-         <viewShortcut id="org.jboss.tools.common.model.ui.views.palette.PaletteView">
+         <!--viewShortcut id="org.jboss.tools.common.model.ui.views.palette.PaletteView">
+         </viewShortcut-->
+         <viewShortcut id="org.eclipse.gef.ui.palette_view">
          </viewShortcut>
          <viewShortcut id="org.jboss.tools.jst.web.ui.navigator.WebProjectsView">
          </viewShortcut>
