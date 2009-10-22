@@ -979,7 +979,9 @@ public class PageContextFactory {
 
 				return (ICSSModel) newModel;
 			} catch (UnsupportedEncodingException e) {
+				WebKbPlugin.getDefault().logError(e);
 			} catch (IOException e) {
+				WebKbPlugin.getDefault().logError(e);
 			}
 
 			return null;
