@@ -40,7 +40,7 @@ public class ValidationContext implements IValidationContext {
 	private IValidationContext rootContext;
 	private IProject rootProject;
 	private static List<IValidator> ALL_VALIDATORS;
-	private List<IValidator> validators;
+	private List<IValidator> validators = new ArrayList<IValidator>();
 
 	public ValidationContext(IProject project) {
 		if(ALL_VALIDATORS == null) {
@@ -255,7 +255,9 @@ public class ValidationContext implements IValidationContext {
 	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#registerFile(org.eclipse.core.resources.IFile)
 	 */
 	public void registerFile(IFile file) {
-		rootContext.registerFile(file);
+		if(rootContext!=null) {
+			rootContext.registerFile(file);
+		}
 	}
 
 	/* (non-Javadoc)

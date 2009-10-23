@@ -35,14 +35,14 @@ public interface IValidator {
 	 * @return
 	 * @throws ValidationException
 	 */
-	IStatus validate(Set<IFile> changedFiles, IProject project, ContextValidationHelper validationHelper, ValidatorManager manager, IReporter reporter, IValidationContext validationContext) throws ValidationException;
+	IStatus validate(Set<IFile> changedFiles, IProject project, ContextValidationHelper validationHelper, ValidatorManager manager, IReporter reporter) throws ValidationException;
 
 	/**
 	 * Full Validation
 	 * @return
 	 * @throws ValidationException
 	 */
-	IStatus validateAll(IProject project, ContextValidationHelper validationHelper, ValidatorManager manager, IReporter reporter, IValidationContext validationContext) throws ValidationException;
+	IStatus validateAll(IProject project, ContextValidationHelper validationHelper, ValidatorManager manager, IReporter reporter) throws ValidationException;
 
 	/**
 	 * @return unique ID of the validator

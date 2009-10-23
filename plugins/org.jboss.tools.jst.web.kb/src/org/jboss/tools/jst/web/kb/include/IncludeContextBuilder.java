@@ -304,7 +304,7 @@ public class IncludeContextBuilder extends RegistryReader {
 	}
 	
 	/**
-	 * Returns the Content Type for the specified Content Type
+	 * Returns the context type for the specified Content Type
 	 * 
 	 * @param contentType
 	 * @return

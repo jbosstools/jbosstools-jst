@@ -23,72 +23,72 @@ public interface IValidationErrorManager {
 
 	/**
 	 * Adds a marker to the resource
-	 * @param messageId
+	 * @param message
 	 * @param preferenceKey
 	 * @param messageArguments
 	 * @param location
 	 * @param target
 	 */
-	IMarker addError(String messageId, String preferenceKey,
+	IMarker addError(String message, String preferenceKey,
 			String[] messageArguments, ITextSourceReference location,
 			IResource target);
 
 	/**
 	 * Adds a marker to the resource
-	 * @param messageId
+	 * @param message
 	 * @param preferenceKey
 	 * @param messageArguments
 	 * @param target
 	 */
-	IMarker addError(String messageId, String preferenceKey,
+	IMarker addError(String message, String preferenceKey,
 			String[] messageArguments,
 			IResource target);
 
 	/**
 	 * Adds a marker to the resource
-	 * @param messageId
+	 * @param message
 	 * @param preferenceKey
 	 * @param location
 	 * @param target
 	 */
-	IMarker addError(String messageId, String preferenceKey,
+	IMarker addError(String message, String preferenceKey,
 			ITextSourceReference location, IResource target);
 
 	/**
 	 * Adds a marker to the resource
-	 * @param messageId
+	 * @param message
 	 * @param preferenceKey
 	 * @param messageArguments
 	 * @param length
 	 * @param offset
 	 * @param target
 	 */
-	IMarker addError(String messageId, String preferenceKey,
+	IMarker addError(String message, String preferenceKey,
 			String[] messageArguments, int length, int offset, IResource target);
 
 	/**
 	 * Adds a marker to the resource
-	 * @param messageId
+	 * @param message
 	 * @param severity
 	 * @param messageArguments
 	 * @param length
 	 * @param offset
 	 * @param target
 	 */
-	IMarker addError(String messageId, int severity, String[] messageArguments, int length, int offset, IResource target);
+	IMarker addError(String message, int severity, String[] messageArguments, int length, int offset, IResource target);
 
 	/**
 	 * Displays a subtask in the progress view. 
-	 * @param messageId
+	 * @param message
 	 */
-	void displaySubtask(String messageId);
+	void displaySubtask(String message);
 
 	/**
 	 * Displays a subtask in the progress view.
-	 * @param messageId
+	 * @param message
 	 * @param messageArguments
 	 */
-	void displaySubtask(String messageId, String[] messageArguments);
+	void displaySubtask(String message, String[] messageArguments);
 
 	/**
 	 * Removes all markers for the resources

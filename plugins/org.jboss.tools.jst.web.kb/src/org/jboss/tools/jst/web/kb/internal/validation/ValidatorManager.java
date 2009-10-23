@@ -89,14 +89,14 @@ public class ValidatorManager implements IValidatorJob {
 
 	private IStatus validate(List<IValidator> validators, Set<IFile> changedFiles, IProject rootProject, ContextValidationHelper validationHelper, IReporter reporter) throws ValidationException {
 		for (IValidator validator : validators) {
-			validator.validate(changedFiles, rootProject, validationHelper, this, reporter, validationHelper.getValidationContext());
+			validator.validate(changedFiles, rootProject, validationHelper, this, reporter);
 		}
 		return OK_STATUS;
 	}
 
 	private IStatus validateAll(List<IValidator> validators, IProject rootProject, ContextValidationHelper validationHelper, IReporter reporter) throws ValidationException {
 		for (IValidator validator : validators) {
-			validator.validateAll(rootProject, validationHelper, this, reporter, validationHelper.getValidationContext());
+			validator.validateAll(rootProject, validationHelper, this, reporter);
 		}
 		return OK_STATUS;
 	}
