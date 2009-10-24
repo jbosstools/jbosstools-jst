@@ -935,7 +935,12 @@ public class PageContextFactory {
 		/**
 		 */
 		public ICSSModel getModel() {
-			ICSSModel model = super.getModel();
+			// Fix for JBIDE-5079 >>>
+			ICSSModel model = null;
+			if (super.isValidAttribute()) {
+				model = super.getModel();
+			}
+			// Fix for JBIDE-5079 <<<
 			if (model == null) {
 				model = retrieveModel();
 				setModel(model);
