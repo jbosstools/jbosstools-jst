@@ -32,6 +32,8 @@ public class CSSClassHyperlinkPartitioner extends
 	public static final String CSS_CLASS_PARTITION = "org.jboss.tools.common.text.ext.CSS_CLASS"; //$NON-NLS-1$
 
 	private static final String CSS_CLASS_TOKEN = "class/"; //$NON-NLS-1$
+	private static final String EXCLUSION_TOKEN = "jsp:usebean/class/"; //$NON-NLS-1$
+	
 
 	/**
 	 * @see com.ibm.sse.editor.hyperlink.AbstractHyperlinkPartitioner#parse(org.eclipse.jface.text.IDocument,
@@ -74,9 +76,9 @@ public class CSSClassHyperlinkPartitioner extends
 	}
 
 	public boolean recognize(IDocument document, IHyperlinkRegion region) {
-
 		if (region.getAxis() != null
-				&& region.getAxis().toLowerCase().endsWith(CSS_CLASS_TOKEN))
+				&& region.getAxis().toLowerCase().endsWith(CSS_CLASS_TOKEN) 
+				&& !region.getAxis().toLowerCase().endsWith(EXCLUSION_TOKEN)) // Fix for JBIDE-5056
 			return true;
 		return false;
 	}
