@@ -11,15 +11,11 @@
 package org.jboss.tools.jst.web.kb.internal;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.jboss.tools.jst.web.kb.ICSSContainerSupport;
-import org.jboss.tools.jst.web.kb.IIncludedContextSupport;
 import org.jboss.tools.jst.web.kb.IPageContext;
-import org.jboss.tools.jst.web.kb.IResourceBundle;
 import org.jboss.tools.jst.web.kb.internal.taglib.NameSpace;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 import org.w3c.dom.css.CSSStyleSheet;
@@ -39,6 +35,9 @@ public class JspContextImpl extends XmlContextImpl implements ICSSContainerSuppo
 			fIncludedContexts = new ArrayList<IPageContext>();
 		}
 		fIncludedContexts.add(includedContext);
+		// Fix for JBIDE-5083 >>>
+		includedContext.setParent(this);
+		// Fix for JBIDE-5083 <<<
 	}
 
 	@Override

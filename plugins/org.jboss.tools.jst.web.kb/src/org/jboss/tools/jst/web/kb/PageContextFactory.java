@@ -309,6 +309,11 @@ public class PageContextFactory {
 		if (file == null)
 			return;
 		
+		// Fix for JBIDE-5083 >>>
+		if (context.contextExistsInParents(file))
+			return;
+		// Fix for JBIDE-5083 <<<
+		
 		IStructuredModel sModel = null; 
 			
 		try {

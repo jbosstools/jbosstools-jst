@@ -51,4 +51,26 @@ public interface IIncludedContextSupport {
 	 * @return
 	 */
 	Map<String, List<INameSpace>> getNameSpaces(int offset);
+	
+	/**
+	 * Checks if the context exists in parent contexts for the specified resource
+	 * 
+	 * @param resource
+	 * @return
+	 */
+	boolean contextExistsInParents(IFile resource);
+
+	/**
+	 * Set up parent context
+	 * 
+	 * @param parent
+	 */
+	void setParent(IIncludedContextSupport parent);
+	
+	/**
+	 * Returns parent context
+	 * 
+	 * @return
+	 */
+	IIncludedContextSupport getParent();
 }
