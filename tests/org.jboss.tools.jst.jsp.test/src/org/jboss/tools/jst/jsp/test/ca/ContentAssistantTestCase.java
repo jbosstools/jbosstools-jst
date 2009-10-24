@@ -15,6 +15,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
+import org.jboss.tools.jst.jsp.contentassist.AutoContentAssistantProposal;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor;
 import org.jboss.tools.jst.jsp.test.TestUtil;
@@ -94,7 +95,12 @@ public class ContentAssistantTestCase extends TestCase {
 
 	protected boolean compareProposal(String proposalName, ICompletionProposal[] proposals){
 		for (int i = 0; i < proposals.length; i++) {
-			if(proposals[i].getDisplayString().toLowerCase().equals(proposalName.toLowerCase())) return true;
+			if (proposals[i] instanceof AutoContentAssistantProposal) {
+				AutoContentAssistantProposal ap = (AutoContentAssistantProposal)proposals[i];
+				if (ap.getReplacementString().toLowerCase().equals(proposalName.toLowerCase())) return true;
+			} else {
+				if(proposals[i].getDisplayString().toLowerCase().equals(proposalName.toLowerCase())) return true;
+			}
 		}
 		return false;
 	}
