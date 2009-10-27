@@ -12,8 +12,10 @@ package org.jboss.tools.jst.jsp.outline;
 
 import java.util.Properties;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
+import org.jboss.tools.jst.jsp.outline.JSPPropertySourceAdapter.IQueryFactory;
 
 /**
  * @author Kabanovich
@@ -30,7 +32,15 @@ public class JSPPropertyDescriptor extends PropertyDescriptor {
 	}
 
     public CellEditor createPropertyEditor(Composite parent) {
-        CellEditor editor = new JSPDialogCellEditor(parent, context);
+    	CellEditor editor = null;
+    	IQueryFactory queryFactory = (IQueryFactory)context.get("queryFactory"); //$NON-NLS-1$
+    	String attributeName = (String)context.get("attributeName"); //$NON-NLS-1$
+    	if(queryFactory != null && queryFactory.isAvailable(attributeName)) {
+    		editor = new JSPDialogCellEditor(parent, context);
+    	} else {
+    		editor = new TextCellEditor(parent);
+    	}
+        
         if (getValidator() != null)
             editor.setValidator(getValidator());
         return editor;
