@@ -19,6 +19,8 @@ import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 public class XmlContextImpl extends ELContextImpl implements IPageContext {
 	protected IDocument document;
 	protected ITagLibrary[] libs;
+	
+	// Fix for JBIDE-5097: It must be a map of <IRegion to Map of <NS-Prefix to NS>> 
 	protected Map<IRegion, Map<String, INameSpace>> nameSpaces = new HashMap<IRegion, Map<String, INameSpace>>();
 	protected IResourceBundle[] bundles;
 	private IIncludedContextSupport parentContext = null;
@@ -147,7 +149,7 @@ public class XmlContextImpl extends ELContextImpl implements IPageContext {
 			Map<String, INameSpace> nameSpaceMap = new HashMap<String, INameSpace>();
 			nameSpaces.put(region, nameSpaceMap);
 		}
-		nameSpaces.get(region).put(nameSpace.getURI(), nameSpace);
+		nameSpaces.get(region).put(nameSpace.getPrefix(), nameSpace); 	// Fix for JBIDE-5097
 	}
 
 	public void addIncludedContext(IPageContext includedContext) {
