@@ -192,6 +192,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 				} else {
 					if (namesLow.contains(attrName.toLowerCase())) continue;
 				}
+				if(attrName.indexOf('*') >=0) continue;
 				descriptor = createJSPPropertyDescriptor(d, attrName, false);
 				if (descriptor != null) {
 					names.add(attrName);
@@ -241,9 +242,13 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 					}
 				}
 				else {
-					IAttribute a = as.get(attrName);
+					String an = attrName;
+					if(an.startsWith("xmlns:")) an = "xmlns:*";
+					IAttribute a = as.get(an);
 					if(a != null) {
 						descriptor = createJSPPropertyDescriptor(a, attr.getName(), false);
+					} else {
+						descriptor = createDefaultPropertyDescriptor(attr.getName(), false);
 					}
 					if (descriptor != null)
 						names.add(attr.getName());
