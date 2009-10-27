@@ -346,8 +346,7 @@ public abstract class AbstractELCompletionEngine<V extends IVariable> implements
 			return null;
 		}
 
-		ELResolutionImpl resolution = new ELResolutionImpl();
-		resolution.setSourceOperand(operand);
+		ELResolutionImpl resolution = new ELResolutionImpl(operand);
 
 		ELInvocationExpression expr = (ELInvocationExpression)operand;
 		boolean isIncomplete = expr.getType() == ELObjectType.EL_PROPERTY_INVOCATION 
