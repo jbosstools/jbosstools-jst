@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.kb.internal.validation;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -182,7 +183,9 @@ public class ValidationContext implements IValidationContext {
 	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#clearRegisteredFiles()
 	 */
 	public void clearRegisteredFiles() {
-		rootContext.clearRegisteredFiles();
+		if(rootContext!=null) {
+			rootContext.clearRegisteredFiles();
+		}
 	}
 
 	/*
@@ -212,6 +215,9 @@ public class ValidationContext implements IValidationContext {
 	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#getRegisteredFiles()
 	 */
 	public Set<IFile> getRegisteredFiles() {
+		if(rootContext==null) {
+			return Collections.emptySet();
+		}
 		return rootContext.getRegisteredFiles();
 	}
 
@@ -219,6 +225,9 @@ public class ValidationContext implements IValidationContext {
 	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#getRemovedFiles()
 	 */
 	public Set<IFile> getRemovedFiles() {
+		if(rootContext==null) {
+			return Collections.emptySet();
+		}
 		return rootContext.getRemovedFiles();
 	}
 
