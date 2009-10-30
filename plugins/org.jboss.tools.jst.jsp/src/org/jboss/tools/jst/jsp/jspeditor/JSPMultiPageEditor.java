@@ -75,6 +75,7 @@ import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.model.ui.editor.EditorDescriptor;
 import org.jboss.tools.common.model.ui.editor.IModelObjectEditorInput;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
+import org.jboss.tools.common.model.util.XModelTreeListenerSWTASync;
 import org.jboss.tools.common.model.util.XModelTreeListenerSWTSync;
 import org.jboss.tools.common.text.ext.IMultiPageEditor;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
@@ -112,7 +113,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 
 	// private boolean osWindows = true;
 
-	protected XModelTreeListenerSWTSync syncListener = new XModelTreeListenerSWTSync(
+	protected XModelTreeListenerSWTASync syncListener = new XModelTreeListenerSWTASync(
 			this);
 
 	// private int oldPage = -1;
@@ -241,6 +242,12 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 			updateTitle();
 		}
 		updateFile();
+	}
+
+	public void setInput0(IEditorInput input) {
+		super.setInput(XModelObjectEditorInput.checkInput(input));
+		updateFile();
+		firePropertyChange(IEditorPart.PROP_INPUT);
 	}
 
 	private void updateFile() {
@@ -814,7 +821,7 @@ class ResourceChangeListener implements IResourceChangeListener {
 	}
 
 	public void resourceChanged(IResourceChangeEvent event) {
-		IEditorInput ei = editorPart.getEditorInput();
+		final IEditorInput ei = editorPart.getEditorInput();
 		if (!(ei instanceof IFileEditorInput))
 			return;
 		IFileEditorInput fi = (IFileEditorInput) ei;
@@ -833,23 +840,27 @@ class ResourceChangeListener implements IResourceChangeListener {
 		if (p instanceof FolderImpl) {
 			((FolderImpl) p).update();
 		}
-		XModelObject o = EclipseResourceUtil.getObjectByResource(f);
+		final XModelObject o = EclipseResourceUtil.getObjectByResource(f);
 		if (f != null && f.exists() && o != null) {
 			if (editorPart instanceof JSPMultiPageEditor) {
-				JSPMultiPageEditor e = (JSPMultiPageEditor) editorPart;
+				final JSPMultiPageEditor e = (JSPMultiPageEditor) editorPart;
 				if (ei instanceof XModelObjectEditorInput) {
-					IEditorInput e2 = XModelObjectEditorInput.createInstance(o);
-					e.setInput(e2);
-					e.updateTitle();
-					if (e.getJspEditor() instanceof AbstractTextEditor) {
-						if (e.getJspEditor() != null
-								&& e.getJspEditor().getEditorInput() != e
-										.getEditorInput()) {
-							((AbstractTextEditor) e.getJspEditor())
-									.setInput(e2);
+					final IEditorInput e2 = XModelObjectEditorInput.createInstance(o);
+					Display.getDefault().asyncExec(new Runnable() {
+						public void run() {
+							e.setInput0(e2);
+							e.updateTitle();
+							if (e.getJspEditor() instanceof AbstractTextEditor) {
+								if (e.getJspEditor() != null
+										&& e.getJspEditor().getEditorInput() != e
+												.getEditorInput()) {
+									((AbstractTextEditor) e.getJspEditor())
+											.setInput(e2);
+								}
+								((XModelObjectEditorInput) ei).synchronize();
+							}
 						}
-						((XModelObjectEditorInput) ei).synchronize();
-					}
+					});
 				}
 			}
 		}
@@ -879,21 +890,24 @@ class ResourceChangeListener implements IResourceChangeListener {
 			IResourceDelta[] ds = delta.getAffectedChildren();
 			if (ds == null)
 				return null;
-			if (ds.length == 2) {
-				if (ds[1].getKind() == IResourceDelta.REMOVED) {
-					IPath d = ds[1].getFullPath();
-					if (d.equals(p))
-						return ds[0].getFullPath();
-					if (d.isPrefixOf(p)) {
-						return ds[0].getFullPath().append(
-								p.removeFirstSegments(d.segmentCount()));
+			if (ds.length > 1) {
+				IPath removed = null;
+				IPath added = null;
+				for (int i = 0; i < ds.length; i++) {
+					IPath d = ds[i].getFullPath();
+					if (ds[i].getKind() == IResourceDelta.REMOVED 
+							&& (d.equals(p) || d.isPrefixOf(p))) {
+						removed = d;
+					} else if (ds[i].getKind() == IResourceDelta.ADDED) {
+						added = d;
 					}
-				} else if (ds[0].getKind() == IResourceDelta.REMOVED) {
-					IPath d = ds[0].getFullPath();
+				}
+				if (removed != null && added != null) {
+					IPath d = removed;
 					if (d.equals(p))
-						return ds[1].getFullPath();
+						return added;
 					if (d.isPrefixOf(p)) {
-						return ds[1].getFullPath().append(
+						return added.append(
 								p.removeFirstSegments(d.segmentCount()));
 					}
 				}
