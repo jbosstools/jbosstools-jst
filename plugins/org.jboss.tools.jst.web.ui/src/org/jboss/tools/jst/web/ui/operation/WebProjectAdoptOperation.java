@@ -184,5 +184,12 @@ public abstract class WebProjectAdoptOperation extends WebNatureOperation {
 		return true;
 	}
 
+	protected void removeDotFiles(IPath projectLocation) {
+		if(isLinkingToProjectOutsideWorkspace()) {
+			return;
+		} else {
+			super.removeDotFiles(projectLocation);
+		}
+	}
 	
 }

@@ -275,13 +275,17 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 			return;
 		}
 		if (!project.exists()) {
-			for (int i = 0; i < dotFilesList.length; i++) {
-				File file = projectLocation.append(dotFilesList[i]).toFile();
-				if (file.exists()) FileUtil.remove(file);
-			}
+			removeDotFiles(projectLocation);
 		} 
 	}
 	
+	protected void removeDotFiles(IPath projectLocation) {
+		for (int i = 0; i < dotFilesList.length; i++) {
+			File file = projectLocation.append(dotFilesList[i]).toFile();
+			if (file.exists()) FileUtil.remove(file);
+		}
+	}
+
 	/*
 	 * 
 	 */
