@@ -235,6 +235,7 @@ public abstract class AbstractELCompletionEngine<V extends IVariable> implements
 			int startSuffix = var.getElToken().getText().length();
 			int endSuffix = startSuffix + suffix.length();
 			ELSegment firstSegment = null;
+			boolean sufixIsNotResolved = false;
 			for (ELSegment segment : newSegments) {
 				int startPosition = segment.getToken().getStart();
 				if(startPosition>=endSuffix) {
@@ -242,8 +243,12 @@ public abstract class AbstractELCompletionEngine<V extends IVariable> implements
 					nextOriginalToken = nextOriginalToken.findTokenForward(JavaNameTokenDescription.JAVA_NAME);
 					((ELSegmentImpl)segment).setToken(nextOriginalToken);
 				} else {
+					if(!sufixIsNotResolved) {
+						sufixIsNotResolved = !segment.isResolved();
+					}
 					firstSegment = segment;
 					((ELSegmentImpl)firstSegment).setToken(firstOriginalToken);
+					((ELSegmentImpl)firstSegment).setResolved(!sufixIsNotResolved);
 //					if(firstSegment instanceof JavaMemberELSegmentImpl) {
 //						JavaMemberELSegmentImpl javaSegment = (JavaMemberELSegmentImpl) firstSegment;
 //						MemberInfo m = javaSegment.getMemberInfo();
