@@ -477,6 +477,14 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		List<Change> changes = super.merge(s);
 		AbstractTagLib t = (AbstractTagLib)s;
 		Change children = new Change(this, null, null, null);
+		if(!stringsEqual(uri, t.uri)) {
+			changes = Change.addChange(changes, new Change(this, URI, uri, t.uri));
+			uri = t.uri;
+		}
+		if(!stringsEqual(version, t.version)) {
+			changes = Change.addChange(changes, new Change(this, TLDLibrary.VERSION, version, t.version));
+			version = t.version;
+		}
 		mergeComponents(t, children);
 		changes = Change.addChange(changes, children);
 
