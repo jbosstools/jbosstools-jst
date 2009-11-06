@@ -124,7 +124,8 @@ public class KbBuilder extends IncrementalProjectBuilder {
 		} finally {
 			sp.fireChanges();
 		}
-		getResourceVisitor().init();
+		resourceVisitor = null;
+
 		return null;
 	}
 
