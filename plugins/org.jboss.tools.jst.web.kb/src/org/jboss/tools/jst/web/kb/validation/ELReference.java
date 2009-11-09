@@ -28,8 +28,8 @@ import org.jboss.tools.common.el.core.model.ELModel;
 import org.jboss.tools.common.el.core.parser.ELParser;
 import org.jboss.tools.common.el.core.parser.ELParserUtil;
 import org.jboss.tools.common.el.core.parser.SyntaxError;
+import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.text.ITextSourceReference;
-import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.w3c.dom.Element;
 
@@ -117,29 +117,25 @@ public class ELReference implements ITextSourceReference {
 	public ELExpression[] getEl() {
 		if(el==null) {
 			Set<ELExpression> exps = new HashSet<ELExpression>();
-			try {
-				String content = FileUtil.readStream(getResource().getContents());
-				String elText = content.substring(startPosition, startPosition + length);
-				int startEl = elText.indexOf("#{"); //$NON-NLS-1$
-				if(startEl>-1) {
-					ELParser parser = ELParserUtil.getJbossFactory().createParser();
-					ELModel model = parser.parse(elText);
-					List<SyntaxError> errors = model.getSyntaxErrors();
-					if(!errors.isEmpty()) {
-						WebKbPlugin.getDefault().logWarning("ELObject hold incorrect information. Maybe resource " + getResource() + " has been changed.");
-						return null;
-					}
-					List<ELInstance> is = model.getInstances();
-					for (ELInstance i : is) {
-						if(!i.getErrors().isEmpty()) {
-							WebKbPlugin.getDefault().logWarning("ELObject hold incorrect information. Maybe resource " + getResource() + " has been changed.");
-							continue;
-						}
-						exps.add(i.getExpression());
-					}
+			String content = EclipseResourceUtil.getFileContent(getResource());
+			String elText = content.substring(startPosition, startPosition + length);
+			int startEl = elText.indexOf("#{"); //$NON-NLS-1$
+			if(startEl>-1) {
+				ELParser parser = ELParserUtil.getJbossFactory().createParser();
+				ELModel model = parser.parse(elText);
+				List<SyntaxError> errors = model.getSyntaxErrors();
+				if(!errors.isEmpty()) {
+					WebKbPlugin.getDefault().logWarning("ELObject hold incorrect information. Maybe resource " + getResource() + " has been changed.");
+					return null;
 				}
-			} catch (CoreException e) {
-				WebKbPlugin.getDefault().logError(e);
+				List<ELInstance> is = model.getInstances();
+				for (ELInstance i : is) {
+					if(!i.getErrors().isEmpty()) {
+						WebKbPlugin.getDefault().logWarning("ELObject hold incorrect information. Maybe resource " + getResource() + " has been changed.");
+						continue;
+					}
+					exps.add(i.getExpression());
+				}
 			}
 			el = exps.toArray(new ELExpression[0]);
 		}
