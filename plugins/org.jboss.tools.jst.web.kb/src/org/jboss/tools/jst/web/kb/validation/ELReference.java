@@ -28,8 +28,8 @@ import org.jboss.tools.common.el.core.model.ELModel;
 import org.jboss.tools.common.el.core.parser.ELParser;
 import org.jboss.tools.common.el.core.parser.ELParserUtil;
 import org.jboss.tools.common.el.core.parser.SyntaxError;
-import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.text.ITextSourceReference;
+import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.w3c.dom.Element;
 
@@ -117,7 +117,12 @@ public class ELReference implements ITextSourceReference {
 	public ELExpression[] getEl() {
 		if(el==null) {
 			Set<ELExpression> exps = new HashSet<ELExpression>();
-			String content = EclipseResourceUtil.getFileContent(getResource());
+			String content = null;
+			try {
+				content = FileUtil.readStream(getResource());
+			} catch (CoreException e) {
+				WebKbPlugin.getDefault().logError(e);
+			}
 			String elText = content.substring(startPosition, startPosition + length);
 			int startEl = elText.indexOf("#{"); //$NON-NLS-1$
 			if(startEl>-1) {
