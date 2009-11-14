@@ -444,6 +444,18 @@
 			</contenttype>
 		</contentAssistProcessor>
 		
+		<!-- 
+			// Fix for JBIDE-5068 
+		-->
+		<contentAssistProcessor 
+				class="org.eclipse.jst.jsp.ui.internal.contentassist.JSPJavaContentAssistProcessor" 
+				id="org.eclipse.jst.jsp.ui.internal.contentassist.JSPJavaContentAssistProcessor">
+			<contenttype id="org.eclipse.jst.jsp.core.jspsource">
+				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.JAVA" />
+			</contenttype>
+		</contentAssistProcessor>
+		
+		
 		<contentAssistProcessor 
 				class="org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor" 
 				id="org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor">
