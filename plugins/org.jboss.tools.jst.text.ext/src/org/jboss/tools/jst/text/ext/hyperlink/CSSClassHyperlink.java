@@ -227,28 +227,31 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 	 * @param styleName
 	 * @return
 	 */
-	private boolean isRuleMatch(CSSRule cssRule, String styleName) {
+	protected boolean isRuleMatch(CSSRule cssRule, String styleName) {
 
 		// get selector text
 		String selectorText = ((ICSSStyleRule) cssRule).getSelectorText();
 
 		if (selectorText != null) {
-
-			// split selector text by whitespace
-			String[] styles = selectorText.trim().split(" "); //$NON-NLS-1$
-			int searchIndex = Arrays.binarySearch(styles, styleName,
-					new Comparator<String>() {
-
-						public int compare(String o1, String o2) {
-							Matcher matcher = Pattern.compile(
-									COMPARE_CLASS_REGEX_PREFIX + o2)
-									.matcher(o1);
-							return matcher.matches() ? 0 : 1;
-						}
-
-					});
-			if (searchIndex >= 0)
-				return true;
+			String styles[] = selectorText.trim().split(","); //$NON-NLS-1$
+			for (String styleText : styles) {
+				String[] styleWords = styleText.trim().split(" ");  //$NON-NLS-1$
+				if (styleWords != null) {
+						int searchIndex = Arrays.binarySearch(styleWords, styleName,
+								new Comparator<String>() {
+			
+									public int compare(String o1, String o2) {
+										Matcher matcher = Pattern.compile(
+												COMPARE_CLASS_REGEX_PREFIX + o2)
+												.matcher(o1);
+										return matcher.matches() ? 0 : 1;
+									}
+			
+								});
+						if (searchIndex >= 0)
+							return true;
+				}
+			}
 		}
 		return false;
 	}
@@ -296,7 +299,7 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 	 * 
 	 * @param styleRegion
 	 */
-	private void showRegion(RegionHolder styleRegion) {
+	protected void showRegion(RegionHolder styleRegion) {
 
 		IWorkbenchPage workbenchPage = ExtensionsPlugin.getDefault()
 				.getWorkbench().getActiveWorkbenchWindow().getActivePage();
@@ -318,10 +321,35 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 
 	/**
 	 * 
+	 * @param styleRegion
+	 */
+	protected void showRegion(IFile file, IRegion region) {
+
+		IWorkbenchPage workbenchPage = ExtensionsPlugin.getDefault()
+				.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		IEditorPart part = null;
+		if (file != null) {
+			try {
+				part = IDE.openEditor(workbenchPage, file, true);
+			} catch (PartInitException e) {
+				e.printStackTrace();
+			}
+		}
+		if (part == null) {
+			openFileFailed();
+			return;
+		}
+		StructuredSelectionHelper.setSelectionAndReveal(part,
+				region);
+	}
+	
+	
+	/**
+	 * 
 	 * @param region
 	 * @return
 	 */
-	private String getStyleName(IRegion region) {
+	protected String getStyleName(IRegion region) {
 		try {
 			return getDocument().get(region.getOffset(), region.getLength());
 		} catch (BadLocationException e) {
@@ -329,7 +357,7 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 		}
 	}
 
-	IRegion fLastRegion = null;
+	protected IRegion fLastRegion = null;
 
 	/**
 	 * @see com.ibm.sse.editor.AbstractHyperlink#doGetHyperlinkRegion(int)

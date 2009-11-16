@@ -23,9 +23,9 @@ import org.jboss.tools.jst.web.kb.ICSSContainerSupport;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
+import org.jboss.tools.jst.web.kb.PageContextFactory.CSSStyleSheetDescriptor;
 import org.w3c.dom.css.CSSRule;
 import org.w3c.dom.css.CSSRuleList;
-import org.w3c.dom.css.CSSStyleSheet;
 
 /**
  * The CSS Class proposal type. Is used to collect and return the proposals on
@@ -49,17 +49,16 @@ public class CSSClassProposalType extends CustomProposalType {
 		if (context instanceof ICSSContainerSupport) {
 			ICSSContainerSupport cssSource = (ICSSContainerSupport)context;
 			
-			List<CSSStyleSheet> sheets = cssSource.getCSSStyleSheets();
-			if (sheets != null) {
-				for (CSSStyleSheet sheet : sheets) {
-					CSSRuleList rules = sheet.getCssRules();
+			List<CSSStyleSheetDescriptor> descrs = cssSource.getCSSStyleSheetDescriptors();
+			if (descrs != null) {
+				for (CSSStyleSheetDescriptor descr : descrs) {
+					CSSRuleList rules = descr.sheet.getCssRules();
 					for (int i = 0; rules != null && i < rules.getLength(); i++) {
 						CSSRule rule = rules.item(i);
 						idList.addAll(getNamesFromCSSRule(rule));
 					}
 				}
 			}
-			
 		}
 	}
 
@@ -70,7 +69,7 @@ public class CSSClassProposalType extends CustomProposalType {
 	 * @param styleName
 	 * @return
 	 */
-	private Set<String> getNamesFromCSSRule(CSSRule cssRule) {
+	public static Set<String> getNamesFromCSSRule(CSSRule cssRule) {
 		Set<String> styleNames = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
 		
 		// get selector text

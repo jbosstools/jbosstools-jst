@@ -85,6 +85,8 @@ public class PageContextFactory {
 	public static String JSP_PAGE_CONTEXT_TYPE = "JSP_PAGE_CONTEXT_TYPE";
 	public static String FACELETS_PAGE_CONTEXT_TYPE = "FACELETS_PAGE_CONTEXT_TYPE";
 	
+	
+	
 	/**
 	 * Creates a page context for the specified context type
 	 * @
@@ -150,7 +152,7 @@ public class PageContextFactory {
 			setFaceletsNameSpaces(context, offset);
 			context.setLibraries(getTagLibraries(context, offset));
 			context.setResourceBundles(getResourceBundles(context));
-	
+			
 			collectIncludedAdditionalInfo(context);
 		} finally {
 			releaseConnectedDocument(input);
@@ -235,25 +237,33 @@ public class PageContextFactory {
 	
 	private static void createCSSStyleSheetFromAttribute(IDOMElement node,
 			String attribute, ICSSContainerSupport context) {
-		CSSStyleSheet sheet = getSheetForTagAttribute(node, attribute);
-		if (sheet != null)
-			context.addCSSStyleSheet(sheet);
+		CSSStyleSheetDescriptor descr = getSheetForTagAttribute(node, attribute);
+		if (descr != null)
+			context.addCSSStyleSheetDescriptor(descr);
 	}
 
 	private static void createCSSStyleSheetFromElement(IDOMElement node,
 			ICSSContainerSupport context) {
 		CSSStyleSheet sheet = getSheetForTag(node);
 		if (sheet != null)
-			context.addCSSStyleSheet(sheet);
+			context.addCSSStyleSheetDescriptor(new CSSStyleSheetDescriptor(context.getResource().getFullPath().toString(), sheet));
 	}
 
-	
+	public static class CSSStyleSheetDescriptor {
+		public CSSStyleSheet sheet;
+		public String source;
+		
+		CSSStyleSheetDescriptor (String source, CSSStyleSheet sheet) {
+			this.source = source;
+			this.sheet = sheet;
+		}
+	}
 	/**
 	 * 
 	 * @param stylesContainer
 	 * @return
 	 */
-	private static CSSStyleSheet getSheetForTagAttribute(final Node stylesContainer, String attribute) {
+	private static CSSStyleSheetDescriptor getSheetForTagAttribute(final Node stylesContainer, String attribute) {
 
 		INodeNotifier notifier = (INodeNotifier) stylesContainer;
 
@@ -270,13 +280,14 @@ public class PageContextFactory {
 		}
 
 		CSSStyleSheet sheet = null;
+		String source = null;
 
 		if (adapter != null) {
 			sheet = (CSSStyleSheet) adapter.getSheet();
-
+			source = ((ExtendedLinkElementAdapter)adapter).getSource();
 		}
 
-		return sheet;
+		return sheet == null || source == null ? null : new CSSStyleSheetDescriptor(source, sheet);
 	}
 	
 	/**
@@ -913,6 +924,7 @@ public class PageContextFactory {
 
 		private Element element;
 		private String hrefAttrName;
+		private String source = null;
 
 		public ExtendedLinkElementAdapter(Element element, String hrefAttrName) {
 			this.element = element;
@@ -924,8 +936,15 @@ public class PageContextFactory {
 			return element;
 		}
 
+		public String getSource() {
+			return source;
+		}
+		
 		@Override
 		protected boolean isValidAttribute() {
+			if (super.isValidAttribute())
+				return true;
+			
 			String href = getElement().getAttribute(hrefAttrName);
 			if (href == null || href.length() == 0)
 				return false;
@@ -936,30 +955,34 @@ public class PageContextFactory {
 		 */
 		public ICSSModel getModel() {
 			// Fix for JBIDE-5079 >>>
-			ICSSModel model = null;
 			if (super.isValidAttribute()) {
-				model = super.getModel();
+				source = getSourceFromAttribute("href");
+			} else if (isValidAttribute()) {
+				source = getSourceFromAttribute(hrefAttrName);
+			} else {
+				return null;
 			}
-			// Fix for JBIDE-5079 <<<
-			if (model == null) {
-				model = retrieveModel();
-				setModel(model);
-			}
+
+			ICSSModel model = retrieveModel();
+			setModel(model);
 			return model;
+		}
+
+		private String getSourceFromAttribute(String hrefAttributeName) {
+			String hrefExtracted = findAndReplaceElVariable(element
+					.getAttribute(hrefAttrName));
+			
+			return hrefExtracted;
 		}
 
 		/**
 		 */
 		private ICSSModel retrieveModel() {
-			if (!isValidAttribute()) {
+			if (!isValidAttribute() || source == null) {
 				return null;
 			}
 
 			// null,attr check is done in isValidAttribute()
-			Element element = getElement();
-			String href = findAndReplaceElVariable(element
-					.getAttribute(hrefAttrName));
-
 			IDOMModel baseModel = ((IDOMNode) element).getModel();
 			if (baseModel == null)
 				return null;
@@ -975,7 +998,7 @@ public class PageContextFactory {
 			URLModelProvider provider = new URLModelProvider();
 			try {
 				IStructuredModel newModel = provider.getModelForRead(baseModel,
-						href);
+						source);
 				if (newModel == null)
 					return null;
 				if (!(newModel instanceof ICSSModel)) {

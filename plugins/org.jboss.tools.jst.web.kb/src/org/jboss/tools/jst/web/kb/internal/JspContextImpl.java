@@ -16,6 +16,7 @@ import java.util.Map;
 
 import org.jboss.tools.jst.web.kb.ICSSContainerSupport;
 import org.jboss.tools.jst.web.kb.IPageContext;
+import org.jboss.tools.jst.web.kb.PageContextFactory.CSSStyleSheetDescriptor;
 import org.jboss.tools.jst.web.kb.internal.taglib.NameSpace;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 import org.w3c.dom.css.CSSStyleSheet;
@@ -26,8 +27,7 @@ import org.w3c.dom.css.CSSStyleSheet;
  */
 public class JspContextImpl extends XmlContextImpl implements ICSSContainerSupport {
 	protected List<IPageContext> fIncludedContexts = null;
-	protected List<CSSStyleSheet> fCSSStyleSheets = null;
-	
+	protected List<CSSStyleSheetDescriptor> fCSSStyleSheetDescriptors = null;
 	
 	@Override
 	public void addIncludedContext(IPageContext includedContext) {
@@ -56,19 +56,19 @@ public class JspContextImpl extends XmlContextImpl implements ICSSContainerSuppo
 		return superNameSpaces;
 	}
 
-	public void addCSSStyleSheet(CSSStyleSheet cssStyleSheet) {
-		if (fCSSStyleSheets == null) {
-			fCSSStyleSheets = new ArrayList<CSSStyleSheet>();
+	public void addCSSStyleSheetDescriptor(CSSStyleSheetDescriptor cssStyleSheetDescriptor) {
+		if (fCSSStyleSheetDescriptors == null) {
+			fCSSStyleSheetDescriptors = new ArrayList<CSSStyleSheetDescriptor>();
 		}
-		fCSSStyleSheets.add(cssStyleSheet);
+		fCSSStyleSheetDescriptors.add(cssStyleSheetDescriptor);
 	}
 
-	public List<CSSStyleSheet> getCSSStyleSheets() {
-		List<CSSStyleSheet> sheets = new ArrayList<CSSStyleSheet>();
+	public List<CSSStyleSheetDescriptor> getCSSStyleSheetDescriptors() {
+		List<CSSStyleSheetDescriptor> descrs = new ArrayList<CSSStyleSheetDescriptor>();
 		
-		if (fCSSStyleSheets != null) {
-			for (CSSStyleSheet sheet : fCSSStyleSheets) {
-				sheets.add(sheet);
+		if (fCSSStyleSheetDescriptors != null) {
+			for (CSSStyleSheetDescriptor descr : fCSSStyleSheetDescriptors) {
+				descrs.add(descr);
 			}
 		}
 		
@@ -76,16 +76,14 @@ public class JspContextImpl extends XmlContextImpl implements ICSSContainerSuppo
 		if (includedContexts != null) {
 			for (IPageContext includedContext : includedContexts) {
 				if (includedContext instanceof ICSSContainerSupport) {
-					List<CSSStyleSheet> includedSheets = ((ICSSContainerSupport)includedContext).getCSSStyleSheets();
-					if (includedSheets != null) {
-						sheets.addAll(includedSheets);
+					List<CSSStyleSheetDescriptor> includedSheetDescriptors = ((ICSSContainerSupport)includedContext).getCSSStyleSheetDescriptors();
+					if (includedSheetDescriptors != null) {
+						descrs.addAll(includedSheetDescriptors);
 					}
 				}
 			}
 		}
 		
-		return sheets;
-
-	}
-	
+		return descrs;
+	}	
 }

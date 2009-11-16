@@ -12,6 +12,8 @@ package org.jboss.tools.jst.web.kb;
 
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
+import org.jboss.tools.jst.web.kb.PageContextFactory.CSSStyleSheetDescriptor;
 import org.w3c.dom.css.CSSStyleSheet;
 
 /**
@@ -26,14 +28,17 @@ public interface ICSSContainerSupport {
 	/**
 	 * Adds the CSS StyleSheet object found within the page
 	 * 
-	 * @param includedContext
+	 * @param cssStyleSheet
+	 * @param source
 	 */
-	void addCSSStyleSheet(CSSStyleSheet cssStyleSheet);
+	void addCSSStyleSheetDescriptor(CSSStyleSheetDescriptor cssStyleSheet);
+	
+	IFile getResource();
 	
 	/**
 	 * Returns the list of all the collected CSS StyleSheet objects
 	 * 
 	 * @return
 	 */
-	List<CSSStyleSheet> getCSSStyleSheets();
+	List<CSSStyleSheetDescriptor> getCSSStyleSheetDescriptors();
 }

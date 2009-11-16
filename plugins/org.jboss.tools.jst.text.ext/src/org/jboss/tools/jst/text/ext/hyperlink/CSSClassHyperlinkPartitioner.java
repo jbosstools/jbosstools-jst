@@ -31,7 +31,7 @@ public class CSSClassHyperlinkPartitioner extends
 
 	public static final String CSS_CLASS_PARTITION = "org.jboss.tools.common.text.ext.CSS_CLASS"; //$NON-NLS-1$
 
-	private static final String CSS_CLASS_TOKEN = "class/"; //$NON-NLS-1$
+	private static final String CSS_CLASS_TOKEN = "/class/"; //$NON-NLS-1$
 	private static final String EXCLUSION_TOKEN = "jsp:usebean/class/"; //$NON-NLS-1$
 	
 
@@ -71,7 +71,7 @@ public class CSSClassHyperlinkPartitioner extends
 		}
 	}
 
-	private String getPartitionType(String axis) {
+	protected String getPartitionType(String axis) {
 		return CSS_CLASS_PARTITION;
 	}
 
