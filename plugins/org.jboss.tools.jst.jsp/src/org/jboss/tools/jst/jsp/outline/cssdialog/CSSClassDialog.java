@@ -270,6 +270,9 @@ public class CSSClassDialog extends AbstractCSSDialog {
 		// select new class, after it in handleSelectorSwitched() dialog will be
 		// updated
 		classCombo.select(classCombo.getItemCount() - 1);
+		
+		//this is require 
+		applyButton.setEnabled(true);
 	}
 
 	@Override
