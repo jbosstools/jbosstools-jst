@@ -10,12 +10,8 @@
  ******************************************************************************/
 package org.jboss.tools.jst.text.ext.hyperlink;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -29,196 +25,65 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IDE;
-import org.eclipse.wst.css.core.internal.provisional.adapters.IModelProvideAdapter;
-import org.eclipse.wst.css.core.internal.provisional.adapters.IStyleSheetAdapter;
-import org.eclipse.wst.css.core.internal.provisional.document.ICSSDocument;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSModel;
-import org.eclipse.wst.css.core.internal.provisional.document.ICSSNode;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleSheet;
-import org.eclipse.wst.html.core.internal.htmlcss.LinkElementAdapter;
-import org.eclipse.wst.html.core.internal.htmlcss.URLModelProvider;
-import org.eclipse.wst.sse.core.internal.provisional.INodeNotifier;
-import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
+import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.text.ext.ExtensionsPlugin;
 import org.jboss.tools.common.text.ext.hyperlink.AbstractHyperlink;
 import org.jboss.tools.common.text.ext.hyperlink.xpl.Messages;
-import org.jboss.tools.common.text.ext.util.RegionHolder;
 import org.jboss.tools.common.text.ext.util.StructuredModelWrapper;
 import org.jboss.tools.common.text.ext.util.StructuredSelectionHelper;
 import org.jboss.tools.common.text.ext.util.Utils;
+import org.jboss.tools.jst.web.kb.ICSSContainerSupport;
+import org.jboss.tools.jst.web.kb.PageContextFactory;
+import org.jboss.tools.jst.web.kb.PageContextFactory.CSSStyleSheetDescriptor;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.css.CSSRule;
 import org.w3c.dom.css.CSSRuleList;
-import org.w3c.dom.css.CSSStyleSheet;
 
 /**
  * @author Jeremy
  */
+@SuppressWarnings("restriction")
 public class CSSClassHyperlink extends AbstractHyperlink {
 
 	public static final String[] STYLE_TAGS = new String[] { "style", "link" }; //$NON-NLS-1$//$NON-NLS-2$
 	public static final String LINK_TAG = "link"; //$NON-NLS-1$
 	public static final String HREF_ATTRIBUTE = "href"; //$NON-NLS-1$
-	public static final String COMPARE_CLASS_REGEX_PREFIX = "[\\.]?"; //$NON-NLS-1$
+	public static final String COMPARE_CLASS_REGEX_PREFIX = "([A-Za-z_][A-Za-z_0-9\\-]*)*[\\.]?"; //$NON-NLS-1$
 	public static final String CONTEXT_PATH_EXPRESSION = "^\\s*(\\#|\\$)\\{facesContext.externalContext.requestContextPath\\}"; //$NON-NLS-1$
-
-	/**
-	 * 
-	 */
+	
+	@Override
 	protected void doHyperlink(IRegion region) {
-
-		IDOMModel model = (IDOMModel) getModelManager()
-				.getExistingModelForRead(getDocument());
-
-		// get name of looked for style
-		String styleName = getStyleName(region);
-
-		// get elements which copntans information about styles (style and link
-		// tags)
-		List<Node> styleElementList = getStyleContainerList(model);
-
-		// sort nodes by position in inverse order - from larger position to
-		// smaller
-		Collections.sort(styleElementList, new Comparator<Node>() {
-
-			public int compare(Node o1, Node o2) {
-				return ((IDOMNode) o2).getStartOffset()
-						- ((IDOMNode) o1).getStartOffset();
-			}
-
-		});
-
-		RegionHolder styleRegion = null;
-		// look for style in each Style element
-		for (Node styleContainer : styleElementList) {
-
-			styleRegion = findStyleRegion(styleContainer, styleName);
-
-			if (styleRegion != null) {
-				showRegion(styleRegion);
-				break;
-			}
-
+		ICSSContainerSupport cssContainerSupport = null;
+		ELContext context = PageContextFactory.createPageContext(getFile());
+		if (!(context instanceof ICSSContainerSupport)) {
+			openFileFailed();
+			return;
 		}
+		cssContainerSupport = (ICSSContainerSupport)context;
+		List<CSSStyleSheetDescriptor> descrs = cssContainerSupport.getCSSStyleSheetDescriptors();
 
-		model.releaseFromRead();
-	}
-
-	/**
-	 * 
-	 * @param model
-	 * @return
-	 */
-	private List<Node> getStyleContainerList(IDOMModel model) {
-
-		// get model of current page
-		IDOMDocument document = model.getDocument();
-
-		List<Node> getStyleContainerList = new ArrayList<Node>();
-
-		// get all tags which contains style ( link, style)
-		for (String tagName : STYLE_TAGS) {
-			getStyleContainerList.addAll(getList(document
-					.getElementsByTagName(tagName)));
-		}
-
-		return getStyleContainerList;
-	}
-
-	/**
-	 * move nodes from NodeList to List
-	 * 
-	 * @param nodeList
-	 * @return
-	 */
-	List<Node> getList(NodeList nodeList) {
-
-		List<Node> newContainerList = new ArrayList<Node>();
-		for (int i = 0; i < nodeList.getLength(); i++) {
-			newContainerList.add(nodeList.item(i));
-		}
-		return newContainerList;
-	}
-
-	/**
-	 * 
-	 * @param stylesContainer
-	 * @param styleName
-	 * @return
-	 */
-	public RegionHolder findStyleRegion(Node stylesContainer, String styleName) {
-
-		// get style sheet
-		CSSStyleSheet sheet = getSheet(stylesContainer);
-
-		if (sheet != null) {
-
-			CSSRuleList ruleList = sheet.getCssRules();
-
-			// for each cssRule
-			for (int i = 0; i < ruleList.getLength(); i++) {
-
-				CSSRule cssRule = ruleList.item(i);
-
-				// if cssRule describe looked for style
-				if (isRuleMatch(cssRule, styleName)) {
-
-					return new RegionHolder(getFile((ICSSNode) cssRule),
-							getRegion(cssRule));
-
+		for (int i = (descrs == null) ? -1 : descrs.size() - 1; descrs != null && i >= 0; i--) {
+			CSSStyleSheetDescriptor descr = descrs.get(i);
+			CSSRuleList rules = descr.sheet.getCssRules();
+			for (int r = 0; rules != null && r < rules.getLength(); r++) {
+				if (isRuleMatch(rules.item(r), getStyleName(region))) {
+					CSSRule rule = rules.item(r);
+					System.out.println();
+					showRegion(
+							PageContextFactory.getFileFromProject(descr.source, getFile()), 
+							new Region(((IndexedRegion)rule).getStartOffset(), ((IndexedRegion)rule).getLength()));
+					return;
 				}
 			}
-
 		}
-		return null;
-	}
-
-	/**
-	 * 
-	 * @param stylesContainer
-	 * @return
-	 */
-	private CSSStyleSheet getSheet(final Node stylesContainer) {
-
-		INodeNotifier notifier = (INodeNotifier) stylesContainer;
-
-		IStyleSheetAdapter adapter = (IStyleSheetAdapter) notifier
-				.getAdapterFor(IStyleSheetAdapter.class);
-
-		if (LINK_TAG.equalsIgnoreCase(stylesContainer.getNodeName())
-				&& !(adapter instanceof ExtendedLinkElementAdapter)) {
-
-			notifier.removeAdapter(adapter);
-			adapter = new ExtendedLinkElementAdapter(
-					(Element) stylesContainer);
-			notifier.addAdapter(adapter);
-
-		}
-
-		CSSStyleSheet sheet = null;
-
-		if (adapter != null) {
-			sheet = (CSSStyleSheet) adapter.getSheet();
-
-		}
-
-		return sheet;
-
-	}
-
-	protected String processURL(String href) {
-		// TODO Auto-generated method stub
-		return null;
+		openFileFailed();
 	}
 
 	/**
@@ -237,35 +102,24 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 			for (String styleText : styles) {
 				String[] styleWords = styleText.trim().split(" ");  //$NON-NLS-1$
 				if (styleWords != null) {
-						int searchIndex = Arrays.binarySearch(styleWords, styleName,
-								new Comparator<String>() {
-			
-									public int compare(String o1, String o2) {
-										Matcher matcher = Pattern.compile(
-												COMPARE_CLASS_REGEX_PREFIX + o2)
-												.matcher(o1);
-										return matcher.matches() ? 0 : 1;
-									}
-			
-								});
-						if (searchIndex >= 0)
-							return true;
+					int searchIndex = Arrays.binarySearch(styleWords, styleName,
+							new Comparator<String>() {
+		
+								public int compare(String o1, String o2) {
+									Matcher matcher = Pattern.compile(
+											COMPARE_CLASS_REGEX_PREFIX + o2)
+											.matcher(o1);
+									
+									return matcher.matches() ? 0 : 1;
+								}
+		
+							});
+					if (searchIndex >= 0)
+						return true;
 				}
 			}
 		}
 		return false;
-	}
-
-	/**
-	 * 
-	 * @param node
-	 * @return
-	 */
-	private IFile getFile(ICSSNode node) {
-
-		ICSSDocument sheet = node.getOwnerDocument();
-
-		return AbstractHyperlink.getFile(sheet.getModel());
 	}
 
 	/**
@@ -299,30 +153,6 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 	 * 
 	 * @param styleRegion
 	 */
-	protected void showRegion(RegionHolder styleRegion) {
-
-		IWorkbenchPage workbenchPage = ExtensionsPlugin.getDefault()
-				.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		IEditorPart part = null;
-		if (styleRegion.file != null) {
-			try {
-				part = IDE.openEditor(workbenchPage, styleRegion.file, true);
-			} catch (PartInitException e) {
-				e.printStackTrace();
-			}
-			if (part == null) {
-				openFileFailed();
-				return;
-			}
-		}
-		StructuredSelectionHelper.setSelectionAndReveal(part,
-				styleRegion.region);
-	}
-
-	/**
-	 * 
-	 * @param styleRegion
-	 */
 	protected void showRegion(IFile file, IRegion region) {
 
 		IWorkbenchPage workbenchPage = ExtensionsPlugin.getDefault()
@@ -342,7 +172,6 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 		StructuredSelectionHelper.setSelectionAndReveal(part,
 				region);
 	}
-	
 	
 	/**
 	 * 
@@ -447,91 +276,8 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 	@Override
 	protected String findAndReplaceElVariable(String fileName) {
 		if (fileName != null)
-			fileName = fileName
-					.replaceFirst(
-							"^\\s*(\\#|\\$)\\{facesContext.externalContext.requestContextPath\\}",
-							"");
+			fileName = fileName.replaceFirst(CONTEXT_PATH_EXPRESSION,""); //$NON-NLS-1$
+		
 		return super.findAndReplaceElVariable(fileName);
 	}
-
-	public class ExtendedLinkElementAdapter extends LinkElementAdapter {
-
-		private Element element;
-
-		public ExtendedLinkElementAdapter(Element element) {
-			this.element = element;
-		}
-
-		@Override
-		public Element getElement() {
-			return element;
-		}
-
-		@Override
-		protected boolean isValidAttribute() {
-			String href = getElement().getAttribute(HREF_ATTRIBUTE);
-			if (href == null || href.length() == 0)
-				return false;
-			return true;
-		}
-
-		/**
-		 */
-		public ICSSModel getModel() {
-			ICSSModel model = super.getModel();
-			if (model == null) {
-				model = retrieveModel();
-				setModel(model);
-			}
-			return model;
-		}
-
-		/**
-		 */
-		private ICSSModel retrieveModel() {
-			if (!isValidAttribute()) {
-				return null;
-			}
-
-			// null,attr check is done in isValidAttribute()
-			Element element = getElement();
-			String href = findAndReplaceElVariable(element
-					.getAttribute(HREF_ATTRIBUTE));
-
-			IDOMModel baseModel = ((IDOMNode) element).getModel();
-			if (baseModel == null)
-				return null;
-			Object id = baseModel.getId();
-			if (!(id instanceof String))
-				return null;
-			// String base = (String)id;
-
-			// get ModelProvideAdapter
-			IModelProvideAdapter adapter = (IModelProvideAdapter) ((INodeNotifier) getElement())
-					.getAdapterFor(IModelProvideAdapter.class);
-
-			URLModelProvider provider = new URLModelProvider();
-			try {
-				IStructuredModel newModel = provider.getModelForRead(baseModel,
-						href);
-				if (newModel == null)
-					return null;
-				if (!(newModel instanceof ICSSModel)) {
-					newModel.releaseFromRead();
-					return null;
-				}
-
-				// notify adapter
-				if (adapter != null)
-					adapter.modelProvided(newModel);
-
-				return (ICSSModel) newModel;
-			} catch (UnsupportedEncodingException e) {
-			} catch (IOException e) {
-			}
-
-			return null;
-		}
-	}
-
 }
