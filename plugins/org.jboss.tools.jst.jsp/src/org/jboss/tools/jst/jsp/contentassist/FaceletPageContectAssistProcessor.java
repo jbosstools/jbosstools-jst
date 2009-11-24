@@ -10,36 +10,16 @@
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.contentassist;
 
-import java.util.List;
-import java.util.Map;
-
-import org.eclipse.jface.text.IRegion;
-import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.wst.sse.core.StructuredModelManager;
-import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
-import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
-import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
-import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.web.kb.IFaceletPageContext;
-import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
-import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
-import org.jboss.tools.jst.web.kb.internal.FaceletPageContextImpl;
-import org.jboss.tools.jst.web.kb.internal.taglib.NameSpace;
-import org.jboss.tools.jst.web.kb.taglib.CustomTagLibManager;
-import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -49,124 +29,11 @@ import org.w3c.dom.Node;
  * @author Jeremy
  *
  */
+@SuppressWarnings("restriction")
 public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor {
 	private static final String JSFC_ATTRIBUTE_NAME = "jsfc"; //$NON-NLS-1$
 
 	private boolean replaceJsfcTags;
-
-	@Override
-	protected ELContext createContextInstance() {
-		return new FaceletPageContextImpl();
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor#createContext()
-	 */
-	@Override
-	protected IPageContext createContext() {
-		IPageContext superContext = super.createContext();
-
-		FaceletPageContextImpl context = (FaceletPageContextImpl)createContextInstance();
-		context.setResource(superContext.getResource());
-		context.setElResolvers(superContext.getElResolvers());
-		setVars(context, superContext.getResource());
-
-		context.setDocument(getDocument());
-		setNameSpaces(superContext, context);
-		context.setLibraries(getTagLibraries(context));
-		context.setResourceBundles(super.getResourceBundles(context));
-
-		PageContextFactory.collectIncludedAdditionalInfo(context);
-		
-		return context;
-	}
-
-	protected void setNameSpaces(IPageContext superContext, FaceletPageContextImpl context) {
-		IStructuredModel sModel = StructuredModelManager
-									.getModelManager()
-									.getExistingModelForRead(getDocument());
-		if (superContext != null) {
-			IRegion region = new Region (0, getDocument().getLength());
-			Map<String, List<INameSpace>> nameSpaces = superContext.getNameSpaces(getOffset());
-			for (String uri : nameSpaces.keySet()) {
-				List<INameSpace> ns = nameSpaces.get(uri);
-				for (INameSpace n : ns) {
-					context.addNameSpace(region, n);
-				}
-			}
-		}
-
-		try {
-			if (sModel == null)
-				return;
-
-			Document xmlDocument = (sModel instanceof IDOMModel) ? ((IDOMModel) sModel)
-					.getDocument()
-					: null;
-
-			if (xmlDocument == null)
-				return;
-
-			// Get Fixed Structured Document Region
-			IStructuredDocumentRegion sdFixedRegion = this.getStructuredDocumentRegion(getOffset());
-			if (sdFixedRegion == null)
-				return;
-			
-			Node n = findNodeForOffset(xmlDocument, sdFixedRegion.getStartOffset());
-			while (n != null) {
-				if (!(n instanceof Element)) {
-					if (n instanceof Attr) {
-						n = ((Attr) n).getOwnerElement();
-					} else {
-						n = n.getParentNode();
-					}
-					continue;
-				}
-
-				NamedNodeMap attrs = n.getAttributes();
-				for (int j = 0; attrs != null && j < attrs.getLength(); j++) {
-					Attr a = (Attr) attrs.item(j);
-					String name = a.getName();
-					if (name.startsWith("xmlns:")) { //$NON-NLS-1$
-						final String prefix = name.substring("xmlns:".length()); //$NON-NLS-1$
-						final String uri = a.getValue();
-						if (prefix != null && prefix.trim().length() > 0 &&
-								uri != null && uri.trim().length() > 0) {
-
-							int start = ((IndexedRegion)n).getStartOffset();
-							int length = ((IndexedRegion)n).getLength();
-							
-							IDOMElement domElement = (n instanceof IDOMElement ? (IDOMElement)n : null);
-							if (domElement != null) {
-								start = domElement.getStartOffset();
-								length = (domElement.hasEndTag() ? 
-											domElement.getEndStructuredDocumentRegion().getEnd() :
-												((IDOMNode) xmlDocument).getEndOffset() - 1 - start);
-								
-							}
-
-							Region region = new Region(start, length);
-							INameSpace nameSpace = new NameSpace(uri.trim(), prefix.trim());
-							context.addNameSpace(region, nameSpace);
-							if (CustomTagLibManager.FACELETS_UI_TAG_LIB_URI.equals(uri)) {
-								nameSpace = new NameSpace(CustomTagLibManager.FACELETS_HTML_TAG_LIB_URI, "");
-								context.addNameSpace(region, nameSpace);
-							}
-						}
-					}
-				}
-
-				n = n.getParentNode();
-			}
-
-			return;
-		} finally {
-			if (sModel != null) {
-				sModel.releaseFromRead();
-			}
-		}
-	}
 
 	/*
 	 * (non-Javadoc)

@@ -22,6 +22,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.project.ext.IValueInfo;
 import org.jboss.tools.common.model.project.ext.event.Change;
@@ -389,10 +390,13 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.ProposalProcessor#getProposals(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.PageContext)
 	 */
-	public TextProposal[] getProposals(KbQuery query, IPageContext context) {
-		List<String> prefixes = getPrefixes(query, context);
+	public TextProposal[] getProposals(KbQuery query, ELContext context) {
+		if (!(context instanceof IPageContext))
+			return EMPTY_PROPOSAL_LIST;
+		
+		List<String> prefixes = getPrefixes(query, (IPageContext)context);
 		List<TextProposal> proposals = new ArrayList<TextProposal>();
-		IComponent[] components = getComponentsByPrefixes(query, prefixes, context);
+		IComponent[] components = getComponentsByPrefixes(query, prefixes, (IPageContext)context);
 		if(query.getType() == KbQuery.Type.TAG_NAME || query.getType() == KbQuery.Type.TEXT) {
 			for (int i = 0; i < components.length; i++) {
 				if(!(components[i] instanceof CustomComponentExtension)) {

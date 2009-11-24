@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb;
 
+import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.text.TextProposal;
 
 /**
@@ -21,6 +22,6 @@ public interface IProposalProcessor {
 	/**
 	 * @return proposals
 	 */
-	public TextProposal[] getProposals(KbQuery query, IPageContext context);
+	public TextProposal[] getProposals(KbQuery query, ELContext context);
 
 }

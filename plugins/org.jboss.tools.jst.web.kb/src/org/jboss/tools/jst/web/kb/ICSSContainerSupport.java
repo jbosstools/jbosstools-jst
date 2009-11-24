@@ -14,7 +14,6 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.jboss.tools.jst.web.kb.PageContextFactory.CSSStyleSheetDescriptor;
-import org.w3c.dom.css.CSSStyleSheet;
 
 /**
  * The interface defines the methods to collect

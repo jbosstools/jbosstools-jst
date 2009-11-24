@@ -14,7 +14,9 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -24,20 +26,24 @@ import org.eclipse.core.internal.resources.ICoreConstants;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jst.jsp.core.internal.contentmodel.TaglibController;
 import org.eclipse.jst.jsp.core.internal.contentmodel.tld.TLDCMDocumentManager;
 import org.eclipse.jst.jsp.core.internal.contentmodel.tld.TaglibTracker;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.part.FileEditorInput;
-import org.eclipse.ui.texteditor.DocumentProviderRegistry;
-import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.wst.common.componentcore.internal.ComponentResource;
 import org.eclipse.wst.common.componentcore.internal.StructureEdit;
 import org.eclipse.wst.common.componentcore.internal.WorkbenchComponent;
@@ -47,16 +53,21 @@ import org.eclipse.wst.css.core.internal.provisional.document.ICSSModel;
 import org.eclipse.wst.html.core.internal.htmlcss.LinkElementAdapter;
 import org.eclipse.wst.html.core.internal.htmlcss.URLModelProvider;
 import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.INodeNotifier;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
-import org.eclipse.wst.xml.core.internal.document.NodeContainer;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.jboss.tools.common.el.core.GlobalELReferenceList;
-import org.jboss.tools.common.el.core.resolver.ELResolver;
+import org.jboss.tools.common.el.core.parser.ELParserUtil;
+import org.jboss.tools.common.el.core.resolver.ELContext;
+import org.jboss.tools.common.el.core.resolver.ELContextImpl;
 import org.jboss.tools.common.el.core.resolver.ELResolverFactoryManager;
+import org.jboss.tools.common.el.core.resolver.ElVarSearcher;
+import org.jboss.tools.common.el.core.resolver.Var;
 import org.jboss.tools.common.resref.core.ResourceReference;
 import org.jboss.tools.common.text.ext.util.Utils;
 import org.jboss.tools.jst.web.kb.include.IncludeContextBuilder;
@@ -67,10 +78,8 @@ import org.jboss.tools.jst.web.kb.internal.XmlContextImpl;
 import org.jboss.tools.jst.web.kb.internal.taglib.NameSpace;
 import org.jboss.tools.jst.web.kb.taglib.CustomTagLibManager;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
-import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
-import org.jboss.tools.jst.web.kb.taglib.TagLibriryManager;
+import org.jboss.tools.jst.web.kb.taglib.TagLibraryManager;
 import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -78,171 +87,407 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.css.CSSStyleSheet;
 
 /**
+ * 
  * @author Alexey Kazakov
  */
-public class PageContextFactory {
+@SuppressWarnings("restriction")
+public class PageContextFactory implements IResourceChangeListener, IDocumentListener {
+	private static PageContextFactory fInstance;
+	
+	public static final String XML_PAGE_CONTEXT_TYPE = "XML_PAGE_CONTEXT_TYPE"; //$NON-NLS-1$
+	public static final String JSP_PAGE_CONTEXT_TYPE = "JSP_PAGE_CONTEXT_TYPE"; //$NON-NLS-1$
+	public static final String FACELETS_PAGE_CONTEXT_TYPE = "FACELETS_PAGE_CONTEXT_TYPE"; //$NON-NLS-1$
 
-	public static String JSP_PAGE_CONTEXT_TYPE = "JSP_PAGE_CONTEXT_TYPE";
-	public static String FACELETS_PAGE_CONTEXT_TYPE = "FACELETS_PAGE_CONTEXT_TYPE";
+	private static final PageContextFactory getInstance() {
+		if (fInstance != null)
+			return fInstance;
+		return (fInstance = new PageContextFactory());
+	}
 	
+	private PageContextFactory() {
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		if (workspace != null) workspace.addResourceChangeListener(this);
+	}
 	
+	/*
+	 * The cache to store the created contexts
+	 * The key is IFile.getFullPath().toString() of the resource of the context 
+	 */
+	private Map<IFile, ELContext> cache = new HashMap<IFile, ELContext>();
+	
+	private ELContext getSavedContext(IFile resource) {
+		synchronized (cache) {
+			return cache.get(resource);
+		}
+	}
+	
+	private void saveConvext(ELContext context) {
+		if (context != null && context.getResource() != null) {
+//			int size = 0; // remove this line
+			synchronized (cache) {
+				cache.put(context.getResource(), context);
+//				size = cache.size(); // remove this line
+			}
+//			System.out.println("Saved Context : " +
+//					(System.currentTimeMillis() - ctm) + "ms, "
+//					+ context.getResource().getFullPath().toString() + ", " + context.getClass().getSimpleName() + ", Totals: " + size);
+		}
+	}
+	
+	private ELContext removeSavedContext(IFile resource) {
+		ELContext removedContext = null; // Remove this line
+		
+		synchronized (cache) {
+			removedContext = cache.remove(resource);
+			if (removedContext instanceof XmlContextImpl && 
+					((XmlContextImpl)removedContext).getDocument() != null) {
+				((XmlContextImpl)removedContext).getDocument().removeDocumentListener(this);
+			}
+		}
+		
+//		if (removedContext != null) { // TODO: Remove this statement
+//			System.out.println("Removed Context : " + removedContext.getResource().getFullPath().toString() + ", " + removedContext.getClass().getSimpleName() + ", Totals: " + cache.size());
+//		}
+
+		return removedContext;
+	}
 	
 	/**
 	 * Creates a page context for the specified context type
-	 * @
+	 *
+	 * @param file
+	 * @param contentType
+	 * @return
 	 */
-	public static IPageContext createPageContext(IFile file, int offset, String contentType) {
-		String contextType = IncludeContextBuilder.getInstance().getContextType(contentType);
-		if (JSP_PAGE_CONTEXT_TYPE.equals(contextType)) {
-			return createJSPContext(file, offset);
+	public static ELContext createPageContext(IFile file) {
+		return getInstance().createPageContext(file, null);
+	}
+//	long ctm = 0;
+	
+//	String getContextType1(IFile file) {
+//		if (file.getFileExtension().endsWith("jsp"))
+//			return JSP_PAGE_CONTEXT_TYPE;
+//		else if (file.getFileExtension().endsWith("html"))
+//			return FACELETS_PAGE_CONTEXT_TYPE;
+//		else if (file.getFileExtension().endsWith("xml"))
+//			return XML_PAGE_CONTEXT_TYPE;
+//		return null;
+//	}
+	
+	/**
+	 * Creates a page context for the specified context type
+	 *
+	 * @param file
+	 * @param contentType
+	 * @param parents List of parent contexts
+	 * @return
+	 */
+	private ELContext createPageContext(IFile file, List<String> parents) {
+		ELContext context = getSavedContext(file);
+		if (context != null)
+			return context;
+		
+//		ctm = System.currentTimeMillis();
+//		System.out.println("Create Context : " + file.getFullPath().toString() + ", Totals: " + cache.size());
+		IModelManager manager = StructuredModelManager.getModelManager();
+		if(manager == null) {
+			// this may happen if plug-in org.eclipse.wst.sse.core 
+			// is stopping or un-installed, that is Eclipse is shutting down.
+			// there is no need to report it, just stop validation.
+			return context;
 		}
-		else if (FACELETS_PAGE_CONTEXT_TYPE.equals(contextType)) {
-			return createFaceletPageContext(file, offset);
+		IStructuredModel model = null;
+		try {
+			model = manager.getModelForRead(file);
+			if (model instanceof IDOMModel) {
+				IDOMModel domModel = (IDOMModel) model;
+				IDOMDocument document = domModel.getDocument();
+				
+				context = createPageContextInstance(domModel.getContentTypeIdentifier());
+				if (context == null)
+					return null;
+				
+				context.setResource(file);
+				context.setElResolvers(ELResolverFactoryManager.getInstance().getResolvers(file));
+
+				if (context instanceof JspContextImpl && !(context instanceof FaceletPageContextImpl)) {
+					// Fill JSP namespaces defined in TLDCMDocumentManager 
+					fillJSPNameSpaces((JspContextImpl)context);
+				}
+				
+				// The subsequently called functions may use the file and document
+				// already stored in context for their needs
+				fillContextForChildNodes(document, context, parents);
+			}
+		} catch (CoreException e) {
+			WebKbPlugin.getDefault().logError(e);
+        } catch (IOException e) {
+			WebKbPlugin.getDefault().logError(e);
+		} finally {
+			if (model != null) {
+				model.releaseFromRead();
+			}
+		}
+		
+		if (context != null) {
+			if (context instanceof XmlContextImpl) {
+				IDocument contextDocument = ((XmlContextImpl) context).getDocument();
+				if (contextDocument != null) {
+					contextDocument.addDocumentListener(this);
+				}
+			}
+			saveConvext(context);
+		}
+
+		return context;
+	}
+	
+	private ELContext createPageContextInstance(String contentType) {
+		String contextType = IncludeContextBuilder.getContextType(contentType);
+		if (XML_PAGE_CONTEXT_TYPE.equals(contextType)) {
+			return new XmlContextImpl();
+		} else if (JSP_PAGE_CONTEXT_TYPE.equals(contextType)) {
+			return new JspContextImpl();
+		} else if (FACELETS_PAGE_CONTEXT_TYPE.equals(contextType)) {
+			return new FaceletPageContextImpl();
 		}
 		return null;
 	}
 
 	/**
-	 * Creates a jsp context for given resource and offset.
-	 * @param file JSP
-	 * @param offset
-	 * @return
+	 * Sets up the context with namespaces and according libraries from the TagLibraryManager
+	 * 
+	 * @param node
+	 * @param context
 	 */
-	private static IPageContext createJSPContext(IFile file, int offset) {
-		JspContextImpl context = new JspContextImpl();
-		
-		
-		IEditorInput input = new FileEditorInput(file);
-		try {
-			ELResolver[] elResolvers = ELResolverFactoryManager.getInstance().getResolvers(file);
-			context.setResource(file);
-			context.setDocument(getConnectedDocument(input));
-			context.setElResolvers(elResolvers);
-			
-			setXMLNameSpaces(context, offset);
-			setJSPNameSpaces(context, offset);
-			context.setLibraries(getTagLibraries(context, offset));
-			context.setResourceBundles(getResourceBundles(context));
-			
-			collectIncludedAdditionalInfo(context);
-		} finally {
-			releaseConnectedDocument(input);
-			context.setDocument(null);
+	@SuppressWarnings({ "unchecked" })
+	private void fillJSPNameSpaces(JspContextImpl context) {
+		TLDCMDocumentManager manager = TaglibController.getTLDCMDocumentManager(context.getDocument());
+		List trackers = (manager == null? null : manager.getCMDocumentTrackers(context.getDocument().getLength() - 1));
+		for (int i = 0; trackers != null && i < trackers.size(); i++) {
+			TaglibTracker tt = (TaglibTracker)trackers.get(i);
+			final String prefix = tt.getPrefix() == null ? null : tt.getPrefix().trim();
+			final String uri = tt.getURI() == null ? null : tt.getURI().trim();
+			if (prefix != null && prefix.length() > 0 &&
+					uri != null && uri.length() > 0) {
+					
+				IRegion region = new Region(0, context.getDocument().getLength());
+				INameSpace nameSpace = new NameSpace(
+						uri, prefix,
+						TagLibraryManager.getLibraries(
+								context.getResource().getProject(), uri));
+				context.addNameSpace(region, nameSpace);
+			}
 		}
-		return context;
-	}
-
-	/**
-	 * Creates a facelet context for given resource and offset.
-	 * @param file Facelet
-	 * @param offset
-	 * @return
-	 */
-	private static IFaceletPageContext createFaceletPageContext(IFile file, int offset) {
-		FaceletPageContextImpl context = new FaceletPageContextImpl();
-
-		IEditorInput input = new FileEditorInput(file);
-		try {
-			ELResolver[] elResolvers = ELResolverFactoryManager.getInstance().getResolvers(file);
-			context.setResource(file);
-			context.setDocument(getConnectedDocument(input));
-			context.setElResolvers(elResolvers);
-			
-			setXMLNameSpaces(context, offset);
-			setFaceletsNameSpaces(context, offset);
-			context.setLibraries(getTagLibraries(context, offset));
-			context.setResourceBundles(getResourceBundles(context));
-			
-			collectIncludedAdditionalInfo(context);
-		} finally {
-			releaseConnectedDocument(input);
-			context.setDocument(null);
-		}
-		return context;
-
 	}
 	
-	/* Utility functions */
+	private void fillContextForChildNodes(IDOMNode parent, ELContext context, List<String> parents) {
+		NodeList children = parent.getChildNodes();
+		for(int i = 0; children != null && i < children.getLength(); i++) {
+			Node child = children.item(i);
+			if (child instanceof IDOMNode) {
+				fillContextForNode((IDOMNode)child, context, parents);
+				fillContextForChildNodes((IDOMNode)child, context, parents);
+			}
+		}
+	}
 	
-	public static void collectIncludedAdditionalInfo(IPageContext context) {
-		if (!(context instanceof IIncludedContextSupport) && 
-				!(context instanceof ICSSContainerSupport))
+	private void fillContextForNode(IDOMNode node, ELContext context, List<String> parents) {
+		if (context instanceof JspContextImpl && !(node instanceof IDOMElement)) {
+			// There is no any useful info for JSP in text nodes
 			return;
-		
-		IStructuredModel sModel = StructuredModelManager.getModelManager()
-				.getExistingModelForRead(context.getDocument());
-
-		try {
-			if (sModel == null)
-				return;
-
-			Document xmlDocument = (sModel instanceof IDOMModel) ? ((IDOMModel) sModel)
-					.getDocument()
-					: null;
-
-			if (xmlDocument == null)
-				return;
-
-			if (xmlDocument instanceof IDOMNode) {
-				createIncludedAdditionalInfoForNode((IDOMNode)xmlDocument, context);
-			}
-		} finally {
-			if (sModel != null) {
-				sModel.releaseFromRead();
-			}
 		}
 
+		if (context instanceof XmlContextImpl && node instanceof IDOMElement) {
+			fillXMLNamespacesForNode((IDOMElement)node, (XmlContextImpl)context);
+		}
+		
+		if ((context instanceof JspContextImpl || 
+				context instanceof FaceletPageContextImpl) &&
+				node instanceof IDOMElement) {
+			fillVarsForNode((IDOMElement)node, (ELContextImpl)context);
+		}
+
+		if (context instanceof FaceletPageContextImpl) {
+			// Insert here the initialization code for FaceletPage context elements which may exist in Text nodes
+		}
+			
+		if (context instanceof JspContextImpl && node instanceof IDOMElement) {
+			fillResourceBundlesForNode((IDOMElement)node,  (JspContextImpl)context);
+		}
+
+		// There could be some context type to be initialized somehow that is different from JSP or FaceletPage context  
+		// Insert its on-node initialization code here
+		
+		// The only Elements may have include/CSS Stylesheet links and other additional info
+		if (context instanceof IPageContext && node instanceof IDOMElement) {
+			fillAdditionalInfoForNode((IDOMElement)node, (IPageContext)context, parents);
+		}
 	}
 
-	private static void createIncludedAdditionalInfoForNode(IDOMNode node, IPageContext context) {
+	private void fillVarsForNode (IDOMElement node, ELContextImpl context) {
+		Var var = ElVarSearcher.findVar(node, ELParserUtil.getJbossFactory());
+		if (var != null) {
+			int start = ((IndexedRegion) node).getStartOffset();
+			int length = ((IndexedRegion) node).getLength();
+
+			start = node.getStartOffset();
+			length = (node.hasEndTag() ? node
+					.getEndStructuredDocumentRegion()
+					.getEnd() : ((IDOMNode) node.getOwnerDocument()).getEndOffset() - 1 - start);
+
+			context.addVar(new Region(start, length), var);
+		}
+	}
+
+	
+	private void fillAdditionalInfoForNode(IDOMElement node, IPageContext context, List<String> parents) {
 		String prefix = node.getPrefix() == null ? "" : node.getPrefix(); //$NON-NLS-1$
 		String tagName = node.getLocalName();
-		if (node instanceof IDOMElement) {
-			Map<String, List<INameSpace>> nsMap = context.getNameSpaces(node.getStartOffset());
-			String[] uris = getUrisByPrefix(nsMap, prefix);
-			
-			if (uris != null) {
-				for (String uri : uris) {
-					if (context instanceof IIncludedContextSupport) {
-						String[] includeAttributes = IncludeContextBuilder.getIncludeAttributes(uri, tagName);
-						if (includeAttributes != null) {
-							for (String attr : includeAttributes) {
-								createIncludedContextFromAttribute((IDOMElement)node, attr, context);
+		Map<String, List<INameSpace>> nsMap = context.getNameSpaces(node.getStartOffset());
+		String[] uris = getUrisByPrefix(nsMap, prefix);
+		
+		if (uris != null) {
+			for (String uri : uris) {
+				if (context instanceof IIncludedContextSupport) {
+					String[] includeAttributes = IncludeContextBuilder.getIncludeAttributes(uri, tagName);
+					if (includeAttributes != null) {
+						List<String> newParentList = parents == null ? new ArrayList<String>() : new ArrayList<String>(parents);
+						newParentList.add(context.getResource().getFullPath().toString());
+						
+						for (String attr : includeAttributes) {
+							String fileName = node.getAttribute(attr);
+							if (fileName == null || fileName.trim().length() == 0)
+								continue;
+
+							IFile file = getFileFromProject(fileName, context.getResource());
+							if (file == null)
+								continue;
+							
+							// Fix for JBIDE-5083 >>>
+							if (!checkCycling(parents, file))
+								continue;
+							// Fix for JBIDE-5083 <<<
+
+							ELContext includedContext = createPageContext(file, newParentList);
+							if (includedContext != null)
+								((IIncludedContextSupport)context).addIncludedContext(includedContext);
+						}
+					}
+				}
+				if (context instanceof ICSSContainerSupport) {
+					if(IncludeContextBuilder.isCSSStyleSheetContainer(uri, tagName)) {
+						fillCSSStyleSheetFromElement(node, (ICSSContainerSupport)context);
+					} else {
+						String[] cssAttributes = IncludeContextBuilder.getCSSStyleSheetAttributes(uri, tagName);
+						if (cssAttributes != null) {
+							for (String attr : cssAttributes) {
+								fillCSSStyleSheetFromAttribute(node, attr, (ICSSContainerSupport)context);
 							}
 						}
 					}
-					if (context instanceof ICSSContainerSupport) {
-						if(IncludeContextBuilder.isCSSStyleSheetContainer(uri, tagName)) {
-							createCSSStyleSheetFromElement((IDOMElement)node, (ICSSContainerSupport)context);
-						} else {
-							String[] cssAttributes = IncludeContextBuilder.getCSSStyleSheetAttributes(uri, tagName);
-							if (cssAttributes != null) {
-								for (String attr : cssAttributes) {
-									createCSSStyleSheetFromAttribute((IDOMElement)node, attr, (ICSSContainerSupport)context);
-								}
-							}
-						}
-					}					
 				}
-			}
-		}		
-		
-		NodeList children = node.getChildNodes();
-		for (int i = 0; children != null && i < children.getLength(); i++) {
-			if (children.item(i) instanceof IDOMElement) {
-				createIncludedAdditionalInfoForNode((IDOMElement)children.item(i), context);
 			}
 		}
 	}
 	
-	private static void createCSSStyleSheetFromAttribute(IDOMElement node,
+	private boolean checkCycling(List<String> parents, IFile resource) {
+		String resourceId = resource.getFullPath().toString();
+		if (parents != null) {
+			for (String parentId : parents) {
+				if (resourceId.equals(parentId))
+					return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * Sets up the context with namespaces and according libraries for the node
+	 * For the Facelet Context the methods adds an additional special namespace for
+	 * CustomTagLibManager.FACELETS_UI_TAG_LIB_URI when CustomTagLibManager.FACELETS_UI_TAG_LIB_URI 
+	 * is found in xmlns attributes
+	 * 
+	 * @param node
+	 * @param context
+	 */
+	private void fillXMLNamespacesForNode(Element node, XmlContextImpl context) {
+		NamedNodeMap attrs = node.getAttributes();
+		for (int j = 0; attrs != null && j < attrs.getLength(); j++) {
+			Attr a = (Attr) attrs.item(j);
+			String name = a.getName();
+			if (name.startsWith("xmlns:")) { //$NON-NLS-1$
+				String prefix = name.substring("xmlns:".length()); //$NON-NLS-1$
+				String uri = a.getValue();
+				
+				prefix = prefix == null ? null : prefix.trim();
+				uri = uri == null ? null : uri.trim();
+				
+				if (prefix != null && prefix.length() > 0
+						&& uri != null && uri.length() > 0) {
+
+					int start = ((IndexedRegion) node).getStartOffset();
+					int length = ((IndexedRegion) node).getLength();
+
+					IDOMElement domElement = (node instanceof IDOMElement ? (IDOMElement) node
+							: null);
+					if (domElement != null) {
+						start = domElement.getStartOffset();
+						length = (domElement.hasEndTag() ? domElement
+								.getEndStructuredDocumentRegion()
+								.getEnd() : ((IDOMNode) node.getOwnerDocument()).getEndOffset() - 1 - start);
+					}
+
+					Region region = new Region(start, length);
+					INameSpace nameSpace = new NameSpace(
+							uri, prefix,
+							TagLibraryManager.getLibraries(
+									context.getResource().getProject(), uri));
+
+					context.addNameSpace(region, nameSpace);
+					if (context instanceof FaceletPageContextImpl && 
+							CustomTagLibManager.FACELETS_UI_TAG_LIB_URI.equals(uri)) {
+						nameSpace = new NameSpace(
+								CustomTagLibManager.FACELETS_HTML_TAG_LIB_URI, "", //$NON-NLS-1$
+								TagLibraryManager.getLibraries(
+										context.getResource().getProject(), 
+										CustomTagLibManager.FACELETS_HTML_TAG_LIB_URI));
+						context.addNameSpace(region, nameSpace);
+					}
+				}
+			}
+		}
+	}
+	
+	private void fillResourceBundlesForNode(IDOMElement node, JspContextImpl context) {
+		String name = node.getNodeName();
+		if (name == null) return;
+		if (!name.endsWith("loadBundle")) return; //$NON-NLS-1$
+		if (name.indexOf(':') == -1) return;
+		String prefix = name.substring(0, name.indexOf(':'));
+
+		Map<String, List<INameSpace>> ns = context.getNameSpaces(node.getStartOffset());
+		if (!containsPrefix(ns, prefix)) return;
+
+		NamedNodeMap attributes = node.getAttributes();
+		if (attributes == null) return;
+		String basename = (attributes.getNamedItem("basename") == null ? null : attributes.getNamedItem("basename").getNodeValue()); //$NON-NLS-1$ //$NON-NLS-2$
+		String var = (attributes.getNamedItem("var") == null ? null : attributes.getNamedItem("var").getNodeValue()); //$NON-NLS-1$ //$NON-NLS-2$
+		if (basename == null || basename.length() == 0 ||
+			var == null || var.length() == 0) 
+			return;
+
+		context.addResourceBundle(new ResourceBundle(basename, var));
+	}
+	
+	private void fillCSSStyleSheetFromAttribute(IDOMElement node,
 			String attribute, ICSSContainerSupport context) {
 		CSSStyleSheetDescriptor descr = getSheetForTagAttribute(node, attribute);
 		if (descr != null)
 			context.addCSSStyleSheetDescriptor(descr);
 	}
 
-	private static void createCSSStyleSheetFromElement(IDOMElement node,
+	private void fillCSSStyleSheetFromElement(IDOMElement node,
 			ICSSContainerSupport context) {
 		CSSStyleSheet sheet = getSheetForTag(node);
 		if (sheet != null)
@@ -258,12 +503,13 @@ public class PageContextFactory {
 			this.sheet = sheet;
 		}
 	}
+	
 	/**
 	 * 
 	 * @param stylesContainer
 	 * @return
 	 */
-	private static CSSStyleSheetDescriptor getSheetForTagAttribute(final Node stylesContainer, String attribute) {
+	private CSSStyleSheetDescriptor getSheetForTagAttribute(final Node stylesContainer, String attribute) {
 
 		INodeNotifier notifier = (INodeNotifier) stylesContainer;
 
@@ -295,7 +541,7 @@ public class PageContextFactory {
 	 * @param stylesContainer
 	 * @return
 	 */
-	private static CSSStyleSheet getSheetForTag(final Node stylesContainer) {
+	private CSSStyleSheet getSheetForTag(final Node stylesContainer) {
 
 		INodeNotifier notifier = (INodeNotifier) stylesContainer;
 
@@ -311,428 +557,7 @@ public class PageContextFactory {
 		return sheet;
 	}
 
-	private static void createIncludedContextFromAttribute(IDOMElement node, String attribute, IIncludedContextSupport context) {
-		String fileName = node.getAttribute(attribute);
-		if (fileName == null || fileName.trim().length() == 0)
-			return;
-
-		IFile file = getFileFromProject(fileName, context.getResource());
-		if (file == null)
-			return;
-		
-		// Fix for JBIDE-5083 >>>
-		if (context.contextExistsInParents(file))
-			return;
-		// Fix for JBIDE-5083 <<<
-		
-		IStructuredModel sModel = null; 
-			
-		try {
-			sModel = StructuredModelManager.getModelManager()
-				.getModelForRead(file);
-		} catch (IOException e) {
-			WebKbPlugin.getDefault().logError(e);
-		} catch (CoreException e) {
-			WebKbPlugin.getDefault().logError(e);
-		}
-
-		if (sModel == null)
-			return;
-		
-		try {
-			Document xmlDocument = (sModel instanceof IDOMModel) ? 
-					((IDOMModel) sModel).getDocument() : null;
-
-			if (xmlDocument == null)
-				return;
-
-			if (xmlDocument instanceof IDOMNode) {
-				String contentType = sModel.getContentTypeIdentifier();
-				IPageContext includedContext = PageContextFactory.createPageContext(file, ((IDOMNode) xmlDocument).getEndOffset() - 1, contentType);
-				if (includedContext != null)
-					context.addIncludedContext(includedContext);
-			}
-		} finally {
-			if (sModel != null) {
-				sModel.releaseFromRead();
-			}
-		}
-	}
-	
-	static Node findNodeForOffset(IDOMNode node, int offset) {
-		if(node == null) return null;
-		if (!node.contains(offset)) return null;
-			
-		if (node.hasChildNodes()) {
-			// Try to find the node in children
-			NodeList children = node.getChildNodes();
-			for (int i = 0; children != null && i < children.getLength(); i++) {
-				IDOMNode child = (IDOMNode)children.item(i);
-				if (child.contains(offset)) {
-					return findNodeForOffset(child, offset);
-				}
-			}
-		}
-			// Not found in children or nave no children
-		if (node.hasAttributes()) {
-			// Try to find in the node attributes
-			NamedNodeMap attributes = node.getAttributes();
-			
-			for (int i = 0; attributes != null && i < attributes.getLength(); i++) {
-				IDOMNode attr = (IDOMNode)attributes.item(i);
-				if (attr.contains(offset)) {
-					return attr;
-				}
-			}
-		}
-		// Return the node itself
-		return node;
-	}
-
-	static Node findNodeForOffset(Node node, int offset) {
-		return (node instanceof IDOMNode) ? findNodeForOffset((IDOMNode)node, offset) : null;
-	}
-
-	private static IDocument getConnectedDocument(IEditorInput input) {
-		IDocumentProvider provider= DocumentProviderRegistry.getDefault().getDocumentProvider(input);
-		try {
-			provider.connect(input);
-		} catch (CoreException e) {
-			WebKbPlugin.getDefault().logError(e);
-		}
-		return provider.getDocument(input);
-	}
-	
-	private static void releaseConnectedDocument(IEditorInput input) {
-		IDocumentProvider provider= DocumentProviderRegistry.getDefault().getDocumentProvider(input);
-		provider.disconnect(input);
-	}
-	
-	
-	private static Document getDocument(IFile file) {
-		IStructuredModel sModel = null; 
-		
-		try {
-			sModel = StructuredModelManager.getModelManager()
-				.getModelForRead(file);
-		} catch (IOException e) {
-			WebKbPlugin.getDefault().logError(e);
-		} catch (CoreException e) {
-			WebKbPlugin.getDefault().logError(e);
-		}
-
-		if (sModel == null)
-			return null;
-	
-		try {
-			return (sModel instanceof IDOMModel) ? ((IDOMModel) sModel)
-					.getDocument()
-					: null;
-	
-		} finally {
-			if (sModel != null) {
-				sModel.releaseFromRead();
-			}
-		}
-	}
-	
-	
-	/**
-	 * Collects the namespaces over the XML-page and sets them up to the context specified.
-	 * 
-	 * @param context
-	 */
-	private static void setXMLNameSpaces(XmlContextImpl context, int offset) {
-		IStructuredModel sModel =  null;
-		
-		try {
-			sModel = StructuredModelManager.getModelManager()
-				.getModelForRead(context.getResource());
-		} catch (IOException e) {
-			WebKbPlugin.getDefault().logError(e);
-		} catch (CoreException e) {
-			WebKbPlugin.getDefault().logError(e);
-		}
-
-		if (sModel == null)
-			return;
-
-		try {
-			Document xmlDocument = (sModel instanceof IDOMModel) ? ((IDOMModel) sModel)
-					.getDocument()
-					: null;
-
-			if (xmlDocument == null)
-				return;
-
-			Node n = findNodeForOffset(xmlDocument, offset);
-			while (n != null) {
-				if (!(n instanceof Element)) {
-					if (n instanceof Attr) {
-						n = ((Attr) n).getOwnerElement();
-					} else {
-						n = n.getParentNode();
-					}
-					continue;
-				}
-
-				NamedNodeMap attrs = n.getAttributes();
-				for (int j = 0; attrs != null && j < attrs.getLength(); j++) {
-					Attr a = (Attr) attrs.item(j);
-					String name = a.getName();
-					if (name.startsWith("xmlns:")) { //$NON-NLS-1$
-						final String prefix = name.substring("xmlns:".length()); //$NON-NLS-1$
-						final String uri = a.getValue();
-						if (prefix != null && prefix.trim().length() > 0
-								&& uri != null && uri.trim().length() > 0) {
-
-							int start = ((IndexedRegion) n).getStartOffset();
-							int length = ((IndexedRegion) n).getLength();
-
-							IDOMElement domElement = (n instanceof IDOMElement ? (IDOMElement) n
-									: null);
-							if (domElement != null) {
-								start = domElement.getStartOffset();
-								length = (domElement.hasEndTag() ? domElement
-										.getEndStructuredDocumentRegion()
-										.getEnd() : ((IDOMNode) xmlDocument).getEndOffset() - 1 - start);
-							}
-
-							Region region = new Region(start, length);
-							INameSpace nameSpace = new NameSpace(uri.trim(),
-									prefix.trim());
-							context.addNameSpace(region, nameSpace);
-						}
-					}
-				}
-
-				n = n.getParentNode();
-			}
-
-			return;
-		} finally {
-			if (sModel != null) {
-				sModel.releaseFromRead();
-			}
-		}
-
-	}	
-	
-	/**
-	 * Collects the namespaces over the JSP-page and sets them up to the context specified.
-	 * 
-	 * @param context
-	 */
-	private static void setJSPNameSpaces(JspContextImpl context, int offset) {
-		TLDCMDocumentManager manager = TaglibController.getTLDCMDocumentManager(context.getDocument());
-		List trackers = (manager == null? null : manager.getCMDocumentTrackers(offset));
-		for (int i = 0; trackers != null && i < trackers.size(); i++) {
-			TaglibTracker tt = (TaglibTracker)trackers.get(i);
-			final String prefix = tt.getPrefix();
-			final String uri = tt.getURI();
-			if (prefix != null && prefix.trim().length() > 0 &&
-					uri != null && uri.trim().length() > 0) {
-					
-				IRegion region = new Region(0, context.getDocument().getLength());
-				INameSpace nameSpace = new NameSpace(uri.trim(), prefix.trim());
-				context.addNameSpace(region, nameSpace);
-			}
-		}
-
-		return;
-	}
-	
-	/**
-	 * Collects the namespaces over the Facelets-page and sets them up to the context specified.
-	 * 
-	 * @param context
-	 */
-	private static void setFaceletsNameSpaces(FaceletPageContextImpl context, int offset) {
-		IStructuredModel sModel =  null;
-		
-		try {
-			sModel = StructuredModelManager.getModelManager()
-				.getModelForRead(context.getResource());
-		} catch (IOException e) {
-			WebKbPlugin.getDefault().logError(e);
-		} catch (CoreException e) {
-			WebKbPlugin.getDefault().logError(e);
-		}
-
-		if (sModel == null)
-			return;
-
-
-		try {
-			Document xmlDocument = (sModel instanceof IDOMModel) ? 
-					((IDOMModel) sModel).getDocument() : null;
-
-			if (xmlDocument == null)
-				return;
-
-			Node n = findNodeForOffset(xmlDocument, offset);
-			while (n != null) {
-				if (!(n instanceof Element)) {
-					if (n instanceof Attr) {
-						n = ((Attr) n).getOwnerElement();
-					} else {
-						n = n.getParentNode();
-					}
-					continue;
-				}
-
-				NamedNodeMap attrs = n.getAttributes();
-				for (int j = 0; attrs != null && j < attrs.getLength(); j++) {
-					Attr a = (Attr) attrs.item(j);
-					String name = a.getName();
-					if (name.startsWith("xmlns:")) { //$NON-NLS-1$
-						final String prefix = name.substring("xmlns:".length()); //$NON-NLS-1$
-						final String uri = a.getValue();
-						if (prefix != null && prefix.trim().length() > 0 &&
-								uri != null && uri.trim().length() > 0) {
-
-							int start = ((IndexedRegion)n).getStartOffset();
-							int length = ((IndexedRegion)n).getLength();
-							
-							IDOMElement domElement = (n instanceof IDOMElement ? (IDOMElement)n : null);
-							if (domElement != null) {
-								start = domElement.getStartOffset();
-								length = (domElement.hasEndTag() ? 
-											domElement.getEndStructuredDocumentRegion().getEnd() :
-												((IDOMNode) xmlDocument).getEndOffset() - 1 - start);
-								
-							}
-
-							Region region = new Region(start, length);
-							INameSpace nameSpace = new NameSpace(uri.trim(), prefix.trim());
-							context.addNameSpace(region, nameSpace);
-							if (CustomTagLibManager.FACELETS_UI_TAG_LIB_URI.equals(uri)) {
-								nameSpace = new NameSpace(CustomTagLibManager.FACELETS_HTML_TAG_LIB_URI, ""); //$NON-NLS-1$
-								context.addNameSpace(region, nameSpace);
-							}
-						}
-					}
-				}
-
-				n = n.getParentNode();
-			}
-
-			return;
-		} finally {
-			if (sModel != null) {
-				sModel.releaseFromRead();
-			}
-		}
-	}
-
-	
-	private static final ITagLibrary[] EMPTY_LIBRARIES = new ITagLibrary[0];	
-	private static final IResourceBundle[] EMPTY_RESOURCE_BUNDLES = new IResourceBundle[0];
-
-	/**
-	 * Returns the Tag Libraries for the namespaces collected in the context.
-	 * Important: The context must be created using createContext() method before using this method.
-	 * 
-	 * @param context The context object instance
-	 * @return
-	 */
-	public static ITagLibrary[] getTagLibraries(IPageContext context, int offset) {
-		Map<String, List<INameSpace>> nameSpaces =  context.getNameSpaces(offset);
-		if (nameSpaces == null || nameSpaces.isEmpty())
-			return EMPTY_LIBRARIES;
-		
-		IProject project = context.getResource() == null ? null : context.getResource().getProject();
-		if (project == null)
-			return EMPTY_LIBRARIES;
-		
-		List<ITagLibrary> tagLibraries = new ArrayList<ITagLibrary>();
-		for (List<INameSpace> nameSpace : nameSpaces.values()) {
-			for (INameSpace n : nameSpace) {
-				ITagLibrary[] libs = TagLibriryManager.getLibraries(project, n.getURI());
-				if (libs != null && libs.length > 0) {
-					for (ITagLibrary lib : libs) {
-						tagLibraries.add(lib);
-					}
-				}
-			}
-		} 
-		return (tagLibraries.isEmpty() ? EMPTY_LIBRARIES :
-				(ITagLibrary[])tagLibraries.toArray(new ITagLibrary[tagLibraries.size()]));
-	}
-	
-	/**
-	 * Returns the resource bundles  
-	 * 
-	 * @return
-	 */
-	private static IResourceBundle[] getResourceBundles(IPageContext context) {
-		List<IResourceBundle> list = new ArrayList<IResourceBundle>();
-		IStructuredModel sModel = null;
-		
-		try {
-			sModel = StructuredModelManager.getModelManager().getModelForRead(context.getResource());
-		} catch (IOException e) {
-			WebKbPlugin.getDefault().logError(e);
-		} catch (CoreException e) {
-			WebKbPlugin.getDefault().logError(e);
-		}
-		
-		if (sModel == null) 
-			return new IResourceBundle[0];
-		try {
-			Document dom = (sModel instanceof IDOMModel) ? ((IDOMModel) sModel).getDocument() : null;
-			if (dom != null) {
-				Element element = dom.getDocumentElement();
-				NodeList children = (NodeContainer)dom.getChildNodes();
-				if (element != null) {
-					for (int i = 0; children != null && i < children.getLength(); i++) {
-						IDOMNode xmlnode = (IDOMNode)children.item(i);
-						update((IDOMNode)xmlnode, context, list);
-					}
-				}
-			}
-		}
-		finally {
-			if (sModel != null) {
-				sModel.releaseFromRead();
-			}
-		}
-			
-		return list.toArray(new IResourceBundle[list.size()]);
-	}
-
-	private static void update(IDOMNode element, IPageContext context, List<IResourceBundle> list) {
-		if (element !=  null) {
-			registerBundleForNode(element, context, list);
-			for (Node child = element.getFirstChild(); child != null; child = child.getNextSibling()) {
-				if (child instanceof IDOMNode) {
-					update((IDOMNode)child, context, list);
-				}
-			}
-		}
-	}
-	private static void registerBundleForNode(IDOMNode node, IPageContext context, List<IResourceBundle> list) {
-		if (node == null) return;
-		String name = node.getNodeName();
-		if (name == null) return;
-		if (!name.endsWith("loadBundle")) return; //$NON-NLS-1$
-		if (name.indexOf(':') == -1) return;
-		String prefix = name.substring(0, name.indexOf(':'));
-
-		Map<String, List<INameSpace>> ns = context.getNameSpaces(node.getStartOffset());
-		if (!containsPrefix(ns, prefix)) return;
-
-		NamedNodeMap attributes = node.getAttributes();
-		if (attributes == null) return;
-		String basename = (attributes.getNamedItem("basename") == null ? null : attributes.getNamedItem("basename").getNodeValue()); //$NON-NLS-1$ //$NON-NLS-2$
-		String var = (attributes.getNamedItem("var") == null ? null : attributes.getNamedItem("var").getNodeValue()); //$NON-NLS-1$ //$NON-NLS-2$
-		if (basename == null || basename.length() == 0 ||
-			var == null || var.length() == 0) return;
-
-		list.add(new ResourceBundle(basename, var));
-	}
-	
-	private static boolean containsPrefix(Map<String, List<INameSpace>> ns, String prefix) {
+	private boolean containsPrefix(Map<String, List<INameSpace>> ns, String prefix) {
 		for (List<INameSpace> n: ns.values()) {
 			for (INameSpace nameSpace : n) {
 				if(prefix.equals(nameSpace.getPrefix())) return true;
@@ -884,8 +709,13 @@ public class PageContextFactory {
 
     private static final String SHARP_PREFIX = "#{"; //$NON-NLS-1$
     
+	public static final String CONTEXT_PATH_EXPRESSION = "^\\s*(\\#|\\$)\\{facesContext.externalContext.requestContextPath\\}"; //$NON-NLS-1$
+
 	// partly copied from org.jboss.tools.vpe.editor.util.ElService
-	public static String findAndReplaceElVariable(String fileName){
+	private static String findAndReplaceElVariable(String fileName){
+		if (fileName != null)
+			fileName = fileName.replaceFirst(CONTEXT_PATH_EXPRESSION, ""); //$NON-NLS-1$
+
 		final IPath workspacePath = Platform.getLocation();
 
         final ResourceReference[] gResources = GlobalELReferenceList.getInstance().getAllResources(workspacePath);
@@ -956,15 +786,15 @@ public class PageContextFactory {
 		public ICSSModel getModel() {
 			// Fix for JBIDE-5079 >>>
 			if (super.isValidAttribute()) {
-				source = getSourceFromAttribute("href");
+				source = getSourceFromAttribute("href"); //$NON-NLS-1$
 			} else if (isValidAttribute()) {
 				source = getSourceFromAttribute(hrefAttrName);
 			} else {
 				return null;
 			}
-
 			ICSSModel model = retrieveModel();
 			setModel(model);
+//			System.out.println("get CSS: " + source + " ==>> " + (model == null ? "FAILED" : " SUCCESSFULL"));
 			return model;
 		}
 
@@ -1018,6 +848,127 @@ public class PageContextFactory {
 			}
 
 			return null;
+		}
+	}
+
+	public void resourceChanged(IResourceChangeEvent event) {
+		if(cache == null || cache.size() == 0 || event == null || event.getDelta() == null) return;
+		if(!checkDelta(event.getDelta())) return;
+		processDelta(event.getDelta());
+	}
+
+	private boolean checkDelta(IResourceDelta delta) {
+		IResource resource = delta.getResource();
+		if(resource == null) return false;
+		if(resource instanceof IWorkspaceRoot) {
+			IResourceDelta[] d = delta.getAffectedChildren();
+			return (d.length > 0 && checkDelta(d[0]));
+		}
+		return true;
+	}
+	
+	private void processDelta(IResourceDelta delta) {
+		if(delta == null) return;
+		int kind = delta.getKind();
+		IResource resource = delta.getResource();
+		
+		if(kind == IResourceDelta.CHANGED || 
+				kind == IResourceDelta.ADDED ||
+				kind == IResourceDelta.REMOVED ||
+				kind == IResourceDelta.CONTENT) {
+			cleanUpChachedResource(resource);
+//		} else {
+//			System.out.println("Resource modified [" + kind + "]: " + resource.getFullPath());
+		}
+
+		IResourceDelta[] cs = delta.getAffectedChildren();
+		for (int i = 0; cs != null && i < cs.length; i++) {
+			processDelta(cs[i]);
+		}
+		return;
+	}
+	
+	private void cleanUpChachedResource(IResource resource) {
+		if (resource instanceof IFile) {
+			synchronized (cache) {
+				ELContext removedContext = removeSavedContext((IFile)resource);
+				if (removedContext == null || removedContext.getResource() == null)
+					return;
+				
+				// Remove all the contexts that are parent to the removed context
+				Collection<ELContext> contexts = cache.values();
+				if (contexts != null) {
+					for (ELContext context : contexts) {
+						if (isDependencyContext(context, (IFile)resource)) {
+							removeSavedContext((IFile)resource);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private boolean isDependencyContext(ELContext context, IFile resource) {
+		if (resource.equals(context.getResource())) {
+			return true;
+		}
+		
+		if(context instanceof IIncludedContextSupport) {
+			List<ELContext> includedContexts = ((IIncludedContextSupport)context).getIncludedContexts();
+			if (includedContexts != null) {
+				for (ELContext includedContext : includedContexts) {
+					if (isDependencyContext(includedContext, resource))
+						return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	@Override
+	protected void finalize() throws Throwable {
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		if (workspace != null) workspace.removeResourceChangeListener(this);
+
+		synchronized (cache) {
+			// Remove all the contexts that are parent to the removed context
+			Collection<ELContext> contexts = cache.values();
+			if (contexts != null) {
+				for (ELContext context : contexts) {
+					removeSavedContext(context.getResource());
+				}
+			}
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.jface.text.IDocumentListener#documentAboutToBeChanged(org.eclipse.jface.text.DocumentEvent)
+	 */
+	public void documentAboutToBeChanged(DocumentEvent event) {
+		// Nothing to do
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.jface.text.IDocumentListener#documentChanged(org.eclipse.jface.text.DocumentEvent)
+	 */
+	public void documentChanged(DocumentEvent event) {
+		if (event.getDocument() == null)
+			return;
+
+		synchronized (cache) {
+			// Remove all the contexts that are parent to the removed context
+			Collection<ELContext> contexts = cache.values();
+			if (contexts != null) {
+				for (ELContext context : contexts) {
+					if (context instanceof XmlContextImpl &&
+							event.getDocument().equals(((XmlContextImpl)context).getDocument())) {
+						cleanUpChachedResource(context.getResource());
+						return;
+					}
+				}
+			}
 		}
 	}
 }

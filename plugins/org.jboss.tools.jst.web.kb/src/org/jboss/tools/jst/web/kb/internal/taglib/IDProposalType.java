@@ -21,6 +21,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
+import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
@@ -30,6 +31,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+@SuppressWarnings("restriction")
 public class IDProposalType extends CustomProposalType {
 	private static final String IMAGE_NAME = "EnumerationProposal.gif"; //$NON-NLS-1$
 	private static Image ICON;
@@ -40,9 +42,12 @@ public class IDProposalType extends CustomProposalType {
 	Set<String> idList = new TreeSet<String>();
 
 	@Override
-	protected void init(IPageContext context) {
+	protected void init(ELContext context) {
 		idList.clear();
-		IDocument document = context.getDocument();
+		if (!(context instanceof IPageContext))
+			return;
+		
+		IDocument document = ((IPageContext)context).getDocument();
 		IStructuredModel sModel = StructuredModelManager.getModelManager().getExistingModelForRead(document);
 		try {
 			if (sModel != null) {

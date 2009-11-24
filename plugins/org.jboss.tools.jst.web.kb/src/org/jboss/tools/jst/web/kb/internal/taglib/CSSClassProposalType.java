@@ -18,9 +18,9 @@ import java.util.TreeSet;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
+import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.ICSSContainerSupport;
-import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.PageContextFactory.CSSStyleSheetDescriptor;
@@ -34,6 +34,7 @@ import org.w3c.dom.css.CSSRuleList;
  * @author Victor Rubezhny
  *
  */
+@SuppressWarnings("restriction")
 public class CSSClassProposalType extends CustomProposalType {
 	private static final String IMAGE_NAME = "EnumerationProposal.gif"; //$NON-NLS-1$
 	private static Image ICON;
@@ -44,7 +45,7 @@ public class CSSClassProposalType extends CustomProposalType {
 	Set<String> idList = new TreeSet<String>();
 
 	@Override
-	protected void init(IPageContext context) {
+	protected void init(ELContext context) {
 		idList.clear();
 		if (context instanceof ICSSContainerSupport) {
 			ICSSContainerSupport cssSource = (ICSSContainerSupport)context;

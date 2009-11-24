@@ -11,18 +11,14 @@
 package org.jboss.tools.jst.web.kb.taglib;
 
 /**
- * @author Alexey Kazakov
+ * 
+ * @author Victor Rubezhny
+ *
  */
-public interface INameSpace {
-
+public interface INameSpaceExtended extends INameSpace {
 	/**
-	 * @return URI
+	 * 
+	 * @return
 	 */
-	String getURI();
-
-	/**
-	 * @return prefix
-	 */
-	String getPrefix();
-
+	ITagLibrary[] getTagLibraries();
 }

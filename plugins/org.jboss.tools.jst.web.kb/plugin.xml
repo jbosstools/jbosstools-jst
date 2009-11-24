@@ -88,7 +88,23 @@
 	<contexttype id="FACELETS_PAGE_CONTEXT_TYPE">
 		<contenttype id="org.eclipse.wst.html.core.htmlsource" />
 	</contexttype>
-	
+
+	<contexttype id="XML_PAGE_CONTEXT_TYPE">
+		<contenttype id="org.eclipse.wst.xml.core.xmlsource" />
+		<contenttype id="org.eclipse.jst.jsf.facesconfig.facesConfigFile" />
+		<contenttype id="org.eclipse.core.runtime.xml" />
+    	<contenttype id="org.eclipse.jst.j2ee.webDD" />
+    	<contenttype id="org.eclipse.jst.jee.ee5webDD" />
+		<contenttype id="org.jboss.tools.common.model.ui.xml" />
+		<contenttype id="org.eclipse.jst.jsp.core.tldsource" />
+		<contenttype id="org.jboss.tools.seam.xml.ui.pages12xmlsource" />
+		<contenttype id="org.jboss.tools.seam.xml.ui.page12xmlsource" />
+		<contenttype id="org.jboss.tools.seam.xml.ui.pages20xmlsource" />
+		<contenttype id="org.jboss.tools.seam.xml.ui.page20xmlsource" />
+		<contenttype id="org.jboss.tools.seam.xml.ui.pages21xmlsource" />
+		<contenttype id="org.jboss.tools.seam.xml.ui.page21xmlsource" />
+	</contexttype>
+		
 	<cssholder uri="">
        <tag name="style" />
        <tag name="link">

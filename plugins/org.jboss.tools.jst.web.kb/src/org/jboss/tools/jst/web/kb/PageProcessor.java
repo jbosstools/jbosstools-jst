@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.internal.XmlContextImpl;
@@ -50,45 +51,48 @@ public class PageProcessor implements IProposalProcessor {
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.ProposalProcessor#getProposals(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.PageContext)
 	 */
-	public TextProposal[] getProposals(KbQuery query, IPageContext context) {
+	public TextProposal[] getProposals(KbQuery query, ELContext context) {
 		ArrayList<TextProposal> proposals = new ArrayList<TextProposal>();
 
 		if (!isQueryForELProposals(query, context)) {
-			ITagLibrary[] libs =  context.getLibraries();
-			for (int i = 0; libs != null && i < libs.length; i++) {
-				if(libs[i] instanceof IFacesConfigTagLibrary) {
-					continue;
-				}
-				TextProposal[] libProposals = libs[i].getProposals(query, context);
-				for (int j = 0; libProposals != null && j < libProposals.length; j++) {
-					proposals.add(libProposals[j]);
-				}
-			}
-			if (query.getType() == KbQuery.Type.ATTRIBUTE_VALUE) {
-				Map<String, IAttribute> attrbMap = new HashMap<String, IAttribute>();
-				for (TextProposal proposal : proposals) {
-					if(proposal.getSource()!=null && proposal.getSource() instanceof IAttribute) {
-						IAttribute att = (IAttribute)proposal.getSource();
-						attrbMap.put(att.getName(), att);
+			if(context instanceof IPageContext) {
+				IPageContext pageContext = (IPageContext)context;
+				ITagLibrary[] libs =  pageContext.getLibraries();
+				for (int i = 0; libs != null && i < libs.length; i++) {
+					if(libs[i] instanceof IFacesConfigTagLibrary) {
+						continue;
+					}
+					TextProposal[] libProposals = libs[i].getProposals(query, pageContext);
+					for (int j = 0; libProposals != null && j < libProposals.length; j++) {
+						proposals.add(libProposals[j]);
 					}
 				}
-				IAttribute[] attrs = getAttributes(query, context, false);
-				for (int i = 0; i < attrs.length; i++) {
-					attrbMap.put(attrs[i].getName(), attrs[i]);
-				}
-				for (int i = 0; i < componentExtensions.length; i++) {
-					if(attrbMap.containsKey(componentExtensions[i].getName())) {
-						TextProposal[] attProposals = componentExtensions[i].getProposals(query, context);
-						for (int j = 0; j < attProposals.length; j++) {
-							proposals.add(attProposals[j]);
+				if (query.getType() == KbQuery.Type.ATTRIBUTE_VALUE) {
+					Map<String, IAttribute> attrbMap = new HashMap<String, IAttribute>();
+					for (TextProposal proposal : proposals) {
+						if(proposal.getSource()!=null && proposal.getSource() instanceof IAttribute) {
+							IAttribute att = (IAttribute)proposal.getSource();
+							attrbMap.put(att.getName(), att);
+						}
+					}
+					IAttribute[] attrs = getAttributes(query, pageContext, false);
+					for (int i = 0; i < attrs.length; i++) {
+						attrbMap.put(attrs[i].getName(), attrs[i]);
+					}
+					for (int i = 0; i < componentExtensions.length; i++) {
+						if(attrbMap.containsKey(componentExtensions[i].getName())) {
+							TextProposal[] attProposals = componentExtensions[i].getProposals(query, pageContext);
+							for (int j = 0; j < attProposals.length; j++) {
+								proposals.add(attProposals[j]);
+							}
 						}
 					}
 				}
-			}
-			for (int i = 0; customTagLibs != null && i < customTagLibs.length; i++) {
-				TextProposal[] libProposals = customTagLibs[i].getProposals(query, context);
-				for (int j = 0; libProposals != null && j < libProposals.length; j++) {
-					proposals.add(libProposals[j]);
+				for (int i = 0; customTagLibs != null && i < customTagLibs.length; i++) {
+					TextProposal[] libProposals = customTagLibs[i].getProposals(query, pageContext);
+					for (int j = 0; libProposals != null && j < libProposals.length; j++) {
+						proposals.add(libProposals[j]);
+					}
 				}
 			}
 		} else {
@@ -102,15 +106,17 @@ public class PageProcessor implements IProposalProcessor {
 		return proposals.toArray(new TextProposal[proposals.size()]);
 	}
 
-	private boolean isQueryForELProposals(KbQuery query, IPageContext context) {
-		if (query.getType() != KbQuery.Type.ATTRIBUTE_VALUE &&
-				((query.getType() != KbQuery.Type.TEXT ) || !(context instanceof IFaceletPageContext || context instanceof XmlContextImpl))) { 
-			return false;
-		}
+	private boolean isQueryForELProposals(KbQuery query, ELContext context) {
+		if (query.getType() == KbQuery.Type.ATTRIBUTE_VALUE ||
+				(query.getType() == KbQuery.Type.TEXT &&
+						(context instanceof IFaceletPageContext ||
+								context instanceof XmlContextImpl))) {
+			return (query.getValue() != null && 
+					(query.getValue().startsWith("#{") || //$NON-NLS-1$
+						query.getValue().startsWith("${"))); //$NON-NLS-1$
 
-		return (query.getValue() != null && 
-				(query.getValue().startsWith("#{") || //$NON-NLS-1$
-					query.getValue().startsWith("${"))); //$NON-NLS-1$
+		}
+		return false;
 	}
 	
  	/**

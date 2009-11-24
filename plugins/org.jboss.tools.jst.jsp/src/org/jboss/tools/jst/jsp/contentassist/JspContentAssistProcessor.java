@@ -10,26 +10,19 @@
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.contentassist;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.contentassist.IContextInformation;
-import org.eclipse.jst.jsp.core.internal.contentmodel.TaglibController;
-import org.eclipse.jst.jsp.core.internal.contentmodel.tld.TLDCMDocumentManager;
-import org.eclipse.jst.jsp.core.internal.contentmodel.tld.TaglibTracker;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
-import org.eclipse.wst.xml.core.internal.document.NodeContainer;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
 import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImageHelper;
 import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImages;
@@ -45,141 +38,29 @@ import org.jboss.tools.common.el.core.resolver.ElVarSearcher;
 import org.jboss.tools.common.el.core.resolver.Var;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.IPageContext;
-import org.jboss.tools.jst.web.kb.IResourceBundle;
 import org.jboss.tools.jst.web.kb.KbQuery;
-import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
-import org.jboss.tools.jst.web.kb.internal.JspContextImpl;
-import org.jboss.tools.jst.web.kb.internal.ResourceBundle;
-import org.jboss.tools.jst.web.kb.internal.XmlContextImpl;
-import org.jboss.tools.jst.web.kb.internal.taglib.NameSpace;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * 
  * @author Jeremy
  *
  */
+@SuppressWarnings("restriction")
 public class JspContentAssistProcessor extends XmlContentAssistProcessor {
-
-	@Override
-	protected ELContext createContextInstance() {
-		return new JspContextImpl();
-	}
-
 	/*
 	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.jsp.contentassist.AbstractXMLContentAssistProcessor#createContext()
+	 * @see org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor#getContext()
 	 */
 	@Override
-	protected IPageContext createContext() {
-		IPageContext context = super.createContext();
-		PageContextFactory.collectIncludedAdditionalInfo(context);
-		return context;
-	}
-	
-	/**
-	 * Collects the namespaces over the JSP-page and sets them up to the context specified.
-	 * 
-	 * @param context
-	 */
-	protected void setNameSpaces(XmlContextImpl context) {
-		super.setNameSpaces(context);
-		
-		TLDCMDocumentManager manager = TaglibController.getTLDCMDocumentManager(getDocument());
-		List trackers = (manager == null? null : manager.getCMDocumentTrackers(getOffset()));
-		for (int i = 0; trackers != null && i < trackers.size(); i++) {
-			TaglibTracker tt = (TaglibTracker)trackers.get(i);
-			final String prefix = tt.getPrefix();
-			final String uri = tt.getURI();
-			if (prefix != null && prefix.trim().length() > 0 &&
-					uri != null && uri.trim().length() > 0) {
-					
-				IRegion region = new Region(0, getDocument().getLength());
-				INameSpace nameSpace = new NameSpace(uri.trim(), prefix.trim());
-				context.addNameSpace(region, nameSpace);
-			}
-		}
-
-		return;
-	}	
-	
-	/**
-	 * Returns the resource bundles  
-	 * 
-	 * @return
-	 */
-	protected IResourceBundle[] getResourceBundles(IPageContext context) {
-		List<IResourceBundle> list = new ArrayList<IResourceBundle>();
-		IStructuredModel sModel = StructuredModelManager.getModelManager().getExistingModelForRead(getDocument());
-		if (sModel == null) 
-			return new IResourceBundle[0];
-		try {
-			Document dom = (sModel instanceof IDOMModel) ? ((IDOMModel) sModel).getDocument() : null;
-			if (dom != null) {
-				Element element = dom.getDocumentElement();
-				NodeList children = (NodeContainer)dom.getChildNodes();
-				if (element != null) {
-					for (int i = 0; children != null && i < children.getLength(); i++) {
-						IDOMNode xmlnode = (IDOMNode)children.item(i);
-						update((IDOMNode)xmlnode, context, list);
-					}
-				}
-			}
-		}
-		finally {
-			if (sModel != null) {
-				sModel.releaseFromRead();
-			}
-		}
-			
-		return list.toArray(new IResourceBundle[list.size()]);
-	}
-
-	private void update(IDOMNode element, IPageContext context, List<IResourceBundle> list) {
-		if (element !=  null) {
-			registerBundleForNode(element, context, list);
-			for (Node child = element.getFirstChild(); child != null; child = child.getNextSibling()) {
-				if (child instanceof IDOMNode) {
-					update((IDOMNode)child, context, list);
-				}
-			}
-		}
-	}
-	private void registerBundleForNode(IDOMNode node, IPageContext context, List<IResourceBundle> list) {
-		if (node == null) return;
-		String name = node.getNodeName();
-		if (name == null) return;
-		if (!name.endsWith("loadBundle")) return; //$NON-NLS-1$
-		if (name.indexOf(':') == -1) return;
-		String prefix = name.substring(0, name.indexOf(':'));
-
-		Map<String, List<INameSpace>> ns = context.getNameSpaces(node.getStartOffset());
-		if (!containsPrefix(ns, prefix)) return;
-
-		NamedNodeMap attributes = node.getAttributes();
-		if (attributes == null) return;
-		String basename = (attributes.getNamedItem("basename") == null ? null : attributes.getNamedItem("basename").getNodeValue()); //$NON-NLS-1$ //$NON-NLS-2$
-		String var = (attributes.getNamedItem("var") == null ? null : attributes.getNamedItem("var").getNodeValue()); //$NON-NLS-1$ //$NON-NLS-2$
-		if (basename == null || basename.length() == 0 ||
-			var == null || var.length() == 0) return;
-
-		list.add(new ResourceBundle(basename, var));
-	}
-	private boolean containsPrefix(Map<String, List<INameSpace>> ns, String prefix) {
-		for (List<INameSpace> n: ns.values()) {
-			for (INameSpace nameSpace : n) {
-				if(prefix.equals(nameSpace.getPrefix())) return true;
-			}
-		}
-		return false;
+	public IPageContext getContext() {
+		return (IPageContext)super.getContext();
 	}
 
 	/**

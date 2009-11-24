@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
+import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 
 /**
@@ -30,14 +31,14 @@ public interface IIncludedContextSupport {
 	 * 
 	 * @param includedContext
 	 */
-	void addIncludedContext(IPageContext includedContext);
+	void addIncludedContext(ELContext includedContext);
 	
 	/**
 	 * Returns the list of all the collected contexts
 	 * 
 	 * @return
 	 */
-	List<IPageContext> getIncludedContexts();
+	List<ELContext> getIncludedContexts();
 	
 	/**
 	 * Returns Resource of the page
@@ -51,26 +52,4 @@ public interface IIncludedContextSupport {
 	 * @return
 	 */
 	Map<String, List<INameSpace>> getNameSpaces(int offset);
-	
-	/**
-	 * Checks if the context exists in parent contexts for the specified resource
-	 * 
-	 * @param resource
-	 * @return
-	 */
-	boolean contextExistsInParents(IFile resource);
-
-	/**
-	 * Set up parent context
-	 * 
-	 * @param parent
-	 */
-	void setParent(IIncludedContextSupport parent);
-	
-	/**
-	 * Returns parent context
-	 * 
-	 * @return
-	 */
-	IIncludedContextSupport getParent();
 }

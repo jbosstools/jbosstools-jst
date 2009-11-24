@@ -7,78 +7,42 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.texteditor.DocumentProviderRegistry;
+import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.jboss.tools.common.el.core.resolver.ELContextImpl;
-import org.jboss.tools.jst.web.kb.IIncludedContextSupport;
-import org.jboss.tools.jst.web.kb.IPageContext;
-import org.jboss.tools.jst.web.kb.IResourceBundle;
+import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
-import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 
-public class XmlContextImpl extends ELContextImpl implements IPageContext {
+public class XmlContextImpl extends ELContextImpl {
 	protected IDocument document;
-	protected ITagLibrary[] libs;
+	private FileEditorInput editorInput;
 	
 	// Fix for JBIDE-5097: It must be a map of <IRegion to Map of <NS-Prefix to NS>> 
 	protected Map<IRegion, Map<String, INameSpace>> nameSpaces = new HashMap<IRegion, Map<String, INameSpace>>();
-	protected IResourceBundle[] bundles;
-	private IIncludedContextSupport parentContext = null;
 	
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.IPageContext#getLibraries()
+	/**
+	 * Sets up the context resource and retrieves the document for the specified resource
 	 */
-	public ITagLibrary[] getLibraries() {
-		return libs;
-	}
-
-	public void setLibraries(ITagLibrary[] libs) {
-		this.libs = libs;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.IPageContext#getResourceBundles()
-	 */
-	public IResourceBundle[] getResourceBundles() {
-		List<IResourceBundle> resourceBundles = new ArrayList<IResourceBundle>();
-		if (bundles != null) {
-			for (IResourceBundle bundle : bundles) {
-				resourceBundles.add(bundle);
+	@Override
+	public void setResource(IFile resource) {
+		super.setResource(resource);
+		if (this.document != null) {
+			if (!resource.equals(editorInput.getFile())) {
+				releaseConnectedDocument(editorInput);
+				editorInput = null;
 			}
 		}
+		if (editorInput == null)
+			editorInput = new FileEditorInput(resource);
 		
-		List<IPageContext> includedContexts = getIncludedContexts();
-		if (includedContexts != null) {
-			for (IPageContext includedContext : includedContexts) {
-				IResourceBundle[] includedBundles = includedContext.getResourceBundles();
-				if (includedBundles != null) {
-					for (IResourceBundle includedBundle : includedBundles) {
-						resourceBundles.add(includedBundle);
-					}
-				}
-			}
-		}
-		
-		return (IResourceBundle[])resourceBundles.toArray(new IResourceBundle[resourceBundles.size()]);
+		document = getConnectedDocument(editorInput);
 	}
-
-	/**
-	 * Sets resource bundles
-	 * @param bundles
-	 */
-	public void setResourceBundles(IResourceBundle[] bundles) {
-		this.bundles = bundles;
-	}
-
-	/**
-	 * @param document the document to set
-	 */
-	public void setDocument(IDocument document) {
-		this.document = document;
-	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.PageContext#getDocument()
@@ -87,7 +51,10 @@ public class XmlContextImpl extends ELContextImpl implements IPageContext {
 		return document;
 	}
 
-	/* (non-Javadoc)
+	/* 
+	 * TODO: the visibility must differ between 'include'-like and 'template'-like inclusion
+	 * 
+	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.IPageContext#getNameSpaces(int)
 	 */
 	public Map<String, List<INameSpace>> getNameSpaces(int offset) {
@@ -152,40 +119,30 @@ public class XmlContextImpl extends ELContextImpl implements IPageContext {
 		nameSpaces.get(region).put(nameSpace.getPrefix(), nameSpace); 	// Fix for JBIDE-5097
 	}
 
-	public void addIncludedContext(IPageContext includedContext) {
-		throw new UnsupportedOperationException();
-		
+
+	/**
+	 * Disconnects the editor input from the document provider
+	 */
+	@Override
+	protected void finalize() throws Throwable {
+		if (editorInput != null) {
+			releaseConnectedDocument(editorInput);
+		}
+		super.finalize();
 	}
 
-	public List<IPageContext> getIncludedContexts() {
-		return null;
+	private IDocument getConnectedDocument(IEditorInput input) {
+		IDocumentProvider provider= DocumentProviderRegistry.getDefault().getDocumentProvider(input);
+		try {
+			provider.connect(input);
+		} catch (CoreException e) {
+			WebKbPlugin.getDefault().logError(e);
+		}
+		return provider.getDocument(input);
 	}
 	
-	/**
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.IIncludedContextSupport#contextExistsInParents(org.eclipse.core.resources.IFile)
-	 */
-	public boolean contextExistsInParents(IFile resource) {
-		// Assuming that the resource must not be null here
-		if (resource.equals(getResource()))
-			return true;
-		
-		return getParent() == null ? false : getParent().contextExistsInParents(resource);
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.IIncludedContextSupport#getParent()
-	 */
-	public IIncludedContextSupport getParent() {
-		return parentContext;
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.IIncludedContextSupport#setParent(org.jboss.tools.jst.web.kb.IIncludedContextSupport)
-	 */
-	public void setParent(IIncludedContextSupport parent) {
-		parentContext = parent;
+	private void releaseConnectedDocument(IEditorInput input) {
+		IDocumentProvider provider= DocumentProviderRegistry.getDefault().getDocumentProvider(input);
+		provider.disconnect(input);
 	}
 }

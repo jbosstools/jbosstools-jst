@@ -148,6 +148,7 @@ import org.jboss.tools.jst.web.kb.internal.taglib.TLDTag;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
+import org.jboss.tools.jst.web.kb.taglib.TagLibraryManager;
 import org.jboss.tools.jst.web.tld.VpeTaglibManager;
 import org.jboss.tools.jst.web.tld.VpeTaglibManagerProvider;
 import org.w3c.dom.DocumentType;
@@ -783,13 +784,17 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			ValueHelper valueHelper = new ValueHelper();
 			processor = valueHelper.createContentAssistProcessor();
 			pageContext = valueHelper.createPageContext(processor, query.getOffset());
+
 			Map<String, List<INameSpace>> ns = pageContext.getNameSpaces(query.getOffset());
 			List<INameSpace> n = ns.get(query.getUri());
 			if(n == null && pageContext instanceof JspContextImpl) {
 				IRegion r = new Region(query.getOffset(), 0);
-				((JspContextImpl)pageContext).addNameSpace(r, new NameSpace(query.getUri(), query.getPrefix()));
-				((JspContextImpl)pageContext).setLibraries(processor.getTagLibraries(pageContext));
+				((JspContextImpl)pageContext).addNameSpace(r, new NameSpace(query.getUri(), query.getPrefix(),
+						TagLibraryManager.getLibraries(
+								pageContext.getResource().getProject(), query.getUri())));
+//				((JspContextImpl)pageContext).setLibraries(processor.getTagLibraries(pageContext));
 			}
+
 		}
 
 		public void initContext(Properties context) {

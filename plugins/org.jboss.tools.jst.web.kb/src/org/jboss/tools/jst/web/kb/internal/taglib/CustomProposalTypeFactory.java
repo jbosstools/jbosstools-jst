@@ -10,7 +10,6 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal.taglib;
 
-import org.jboss.tools.jst.web.kb.WebKbPlugin;
 
 /**
  * @author Alexey Kazakov

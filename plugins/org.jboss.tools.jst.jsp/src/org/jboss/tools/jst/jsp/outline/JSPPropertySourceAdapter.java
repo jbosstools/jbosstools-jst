@@ -65,6 +65,7 @@ import org.w3c.dom.Node;
  * creation of property descriptors.
  */
 
+@SuppressWarnings("restriction")
 public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, IPropertySourceExtension, IPropertySource2 {//extends XMLPropertySourceAdapter {
 	protected final static String CATEGORY_ATTRIBUTES = XMLUIMessages.XMLPropertySourceAdapter_0;
 	private static final boolean SET_EXPERT_FILTER = false;
@@ -95,12 +96,14 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 	JspContentAssistProcessor processor;
 	int offset = 0;
 	KbQuery kbQuery, kbQueryAttr;
+	@SuppressWarnings("unchecked")
 	private Set attributeNames = new HashSet();
 
 	public JSPPropertySourceAdapter(INodeNotifier target) {
 		setTarget(target);
 	}
 	
+	@SuppressWarnings("unchecked")
 	Map getWeights() {
 		return sorter == null ? new HashMap() : sorter.weights;
 	}

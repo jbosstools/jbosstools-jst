@@ -12,16 +12,19 @@
 package org.jboss.tools.jst.web.kb.internal.taglib;
 
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
+import org.jboss.tools.jst.web.kb.taglib.INameSpaceExtended;
+import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 
 /**
- * The Namespace holder object
+ * The Namespace and TagLibrary holder object
  * 
  * @author Victor Rubezhny
  *
  */
-public class NameSpace implements INameSpace {
+public class NameSpace implements INameSpaceExtended {
 	private String fPrefix;
 	private String fUri;
+	private ITagLibrary[] fTagLibraries;
 	
 	/**
 	 * Constructs NameSpace object 
@@ -30,8 +33,19 @@ public class NameSpace implements INameSpace {
 	 * @param prefix
 	 */
 	public NameSpace(String uri, String prefix) {
+		this(uri, prefix, null);
+	}
+
+	/**
+	 * Constructs NameSpace object 
+	 * 
+	 * @param uri
+	 * @param prefix
+	 */
+	public NameSpace(String uri, String prefix, ITagLibrary[] libraries) {
 		this.fUri = uri;
 		this.fPrefix = prefix;
+		this.fTagLibraries = libraries;
 	}
 	
 	/**
@@ -49,7 +63,19 @@ public class NameSpace implements INameSpace {
 	}
 
 	/**
+	 * Returns TagLibrary for the Namespace object
+	 * 
+	 * @return
+	 */
+	public ITagLibrary[] getTagLibraries() {
+		return fTagLibraries;
+	}
+	
+	/**
 	 * Compares the NameSpace objects
+	 * The method doesn't take in account the library
+	 *
+	 * @return
 	 */
 	public boolean equals(Object obj) {
 		if (obj instanceof INameSpace) {

@@ -13,12 +13,11 @@ package org.jboss.tools.jst.web.kb.taglib;
 import org.eclipse.core.resources.IProject;
 import org.jboss.tools.jst.web.kb.IKbProject;
 import org.jboss.tools.jst.web.kb.KbProjectFactory;
-import org.jboss.tools.jst.web.kb.WebKbPlugin;
 
 /**
  * @author Alexey Kazakov
  */
-public class TagLibriryManager {
+public class TagLibraryManager {
 
 	/**
 	 * Returns all tag libraries which have given URI and which are available in the project.

@@ -10,10 +10,10 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal.taglib;
 
+import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.project.IModelNature;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
-import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
 
 /**
@@ -28,7 +28,7 @@ public abstract class ModelProposalType extends CustomProposalType {
 	 * @see org.jboss.tools.jst.web.kb.internal.taglib.CustomProposalType#init(org.jboss.tools.jst.web.kb.IPageContext)
 	 */
 	@Override
-	protected void init(IPageContext context) {
+	protected void init(ELContext context) {
 		provider = WebPromptingProvider.getInstance();
 		IModelNature nature = EclipseResourceUtil.getModelNature(context.getResource().getProject());
 		if(nature!=null) {

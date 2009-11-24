@@ -13,8 +13,8 @@ package org.jboss.tools.jst.web.kb.internal.taglib;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.text.TextProposal;
-import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
 
@@ -65,7 +65,7 @@ public class CustomTagLibAttribute extends AbstractAttribute {
 	 * @see org.jboss.tools.jst.web.kb.internal.taglib.AbstractAttribute#getProposals(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.IPageContext)
 	 */
 	@Override
-	public TextProposal[] getProposals(KbQuery query, IPageContext context) {
+	public TextProposal[] getProposals(KbQuery query, ELContext context) {
 		CustomProposalType[] types = getProposals();
 		if(types.length==0) {
 			return EMPTY_PROPOSAL_LIST;
