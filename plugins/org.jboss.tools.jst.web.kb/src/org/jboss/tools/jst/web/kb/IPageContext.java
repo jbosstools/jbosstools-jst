@@ -43,13 +43,6 @@ public interface IPageContext extends ELContext {
 	IDocument getDocument();
 
 	/**
-	 * Returns "var" attributes which are available in particular offset.
-	 * @param offset
-	 * @return
-	 */
-//	Var[] getVars(int offset);
-
-	/**
 	 * Returns map of name spaces which are set in particular offset.
 	 * Key is URI of name space.
 	 * @return

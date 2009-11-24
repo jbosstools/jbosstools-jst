@@ -18,7 +18,6 @@ import java.util.Map;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImageHelper;
 import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImages;
-import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
@@ -41,9 +40,6 @@ public class FaceletsJsfCProposalType extends CustomProposalType {
 	 */
 	@Override
 	public TextProposal[] getProposals(KbQuery query) {
-		if (!(context instanceof IPageContext))
-			return EMPTY_PROPOSAL_LIST;
-		
 		// trim first spaces
 		String value = query.getValue();
 		while(true) {
@@ -61,7 +57,7 @@ public class FaceletsJsfCProposalType extends CustomProposalType {
 
 		IComponent[] components = null;
 		List<TextProposal> proposals = null;
-		components = PageProcessor.getInstance().getComponents(kbQuery, (IPageContext)context);
+		components = PageProcessor.getInstance().getComponents(kbQuery, context);
 		if(components.length==0) {
 			return EMPTY_PROPOSAL_LIST;
 		}
@@ -126,6 +122,6 @@ public class FaceletsJsfCProposalType extends CustomProposalType {
 	 * @see org.jboss.tools.jst.web.kb.internal.taglib.CustomProposalType#init(org.jboss.tools.jst.web.kb.IPageContext)
 	 */
 	@Override
-	protected void init(ELContext context) {
+	protected void init(IPageContext context) {
 	}
 }

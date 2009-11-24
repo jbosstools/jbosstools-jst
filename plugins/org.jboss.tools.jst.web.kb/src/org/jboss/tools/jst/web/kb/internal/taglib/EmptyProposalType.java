@@ -10,28 +10,28 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal.taglib;
 
-import org.jboss.tools.jst.web.kb.internal.KbXMLStoreConstants;
+import org.jboss.tools.common.text.TextProposal;
+import org.jboss.tools.jst.web.kb.IPageContext;
+import org.jboss.tools.jst.web.kb.KbQuery;
 
-/**
- * @author Viacheslav Kabanovich
- */
-public class FaceletTag extends AbstractComponent {
+public class EmptyProposalType extends CustomProposalType {
+
+	public EmptyProposalType() {}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.internal.KbObject#getXMLClass()
+	 * @see org.jboss.tools.jst.web.kb.internal.taglib.CustomProposalType#getProposals(org.jboss.tools.jst.web.kb.KbQuery)
 	 */
 	@Override
-	public String getXMLClass() {
-		return KbXMLStoreConstants.CLS_FACELET_LIBRARY;
+	public TextProposal[] getProposals(KbQuery query) {
+		return EMPTY_PROPOSAL_LIST;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.internal.taglib.AbstractComponent#clone()
+	 * @see org.jboss.tools.jst.web.kb.internal.taglib.CustomProposalType#init(org.jboss.tools.jst.web.kb.IPageContext)
 	 */
 	@Override
-	public FaceletTag clone() throws CloneNotSupportedException {
-		return (FaceletTag)super.clone();
+	protected void init(IPageContext context) {
 	}
 }

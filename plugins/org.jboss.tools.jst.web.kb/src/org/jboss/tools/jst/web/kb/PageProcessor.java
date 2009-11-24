@@ -29,7 +29,7 @@ import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 /**
  * @author Alexey Kazakov
  */
-public class PageProcessor implements IProposalProcessor {
+public class PageProcessor {
 
 	private static final PageProcessor INSTANCE = new PageProcessor();
 	private ICustomTagLibrary[] customTagLibs;
@@ -47,9 +47,11 @@ public class PageProcessor implements IProposalProcessor {
 		componentExtensions = CustomTagLibManager.getInstance().getComponentExtensions();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.ProposalProcessor#getProposals(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.PageContext)
+	/**
+	 * 
+	 * @param query
+	 * @param context
+	 * @return
 	 */
 	public TextProposal[] getProposals(KbQuery query, ELContext context) {
 		ArrayList<TextProposal> proposals = new ArrayList<TextProposal>();

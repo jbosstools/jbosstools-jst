@@ -10,8 +10,8 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal.taglib;
 
-import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.text.TextProposal;
+import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.IProposalProcessor;
 import org.jboss.tools.jst.web.kb.KbQuery;
 
@@ -22,9 +22,9 @@ public abstract class CustomProposalType implements IProposalProcessor {
 
 	protected Param[] params;
 	protected String type;
-	protected ELContext context;
+	protected IPageContext context;
 
-	protected abstract void init(ELContext context);
+	protected abstract void init(IPageContext context);
 
 	/**
 	 * @return the type
@@ -60,7 +60,7 @@ public abstract class CustomProposalType implements IProposalProcessor {
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.IProposalProcessor#getProposals(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.IPageContext)
 	 */
-	public TextProposal[] getProposals(KbQuery query, ELContext context) {
+	public TextProposal[] getProposals(KbQuery query, IPageContext context) {
 		this.context = context;
 		init(context);
 		return getProposals(query);

@@ -15,7 +15,6 @@ import java.util.List;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
-import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
@@ -32,16 +31,13 @@ public class FacetNameProposalType extends CustomProposalType {
 	private static final String IMAGE_NAME = "EnumerationProposal.gif"; //$NON-NLS-1$
 	private static Image ICON;
 
-	private ELContext context;
+	private IPageContext context;
 
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.internal.taglib.CustomProposalType#getProposals(org.jboss.tools.jst.web.kb.KbQuery)
 	 */
 	@Override
 	public TextProposal[] getProposals(KbQuery query) {
-		if (!(context instanceof IPageContext))
-			return EMPTY_PROPOSAL_LIST;
-		
 		String[] parentTags = query.getParentTags();
 		if(parentTags.length>1) {
 			String parentTag = parentTags[parentTags.length-2];
@@ -50,8 +46,8 @@ public class FacetNameProposalType extends CustomProposalType {
 				newQuery.setMask(false);
 				newQuery.setType(KbQuery.Type.TAG_NAME);
 				newQuery.setValue(parentTag);
-				PageProcessor.getInstance().getComponents(query, (IPageContext)context);
-				ITagLibrary[] libs = ((IPageContext)context).getLibraries();
+				PageProcessor.getInstance().getComponents(query, context);
+				ITagLibrary[] libs = context.getLibraries();
 				for (ITagLibrary l : libs) {
 					if(l instanceof IFaceletTagLibrary) {
 						//TODO
@@ -80,7 +76,7 @@ public class FacetNameProposalType extends CustomProposalType {
 	 * @see org.jboss.tools.jst.web.kb.internal.taglib.CustomProposalType#init(org.jboss.tools.jst.web.kb.IPageContext)
 	 */
 	@Override
-	protected void init(ELContext context) {
+	protected void init(IPageContext context) {
 		this.context = context;
 	}
 }

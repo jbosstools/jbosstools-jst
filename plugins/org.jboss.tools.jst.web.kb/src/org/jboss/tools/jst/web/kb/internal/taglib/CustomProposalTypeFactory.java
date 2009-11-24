@@ -79,7 +79,7 @@ public class CustomProposalTypeFactory {
 		//WebKbPlugin.getDefault().logError("Unknown proposal type: " + type); //$NON-NLS-1$
 		//ExtendedProposalType will report if necessary
 	
-		ExtendedProposalType proposalType = new ExtendedProposalType();
+		EmptyProposalType proposalType = new EmptyProposalType();
 
 		return proposalType;
 	}

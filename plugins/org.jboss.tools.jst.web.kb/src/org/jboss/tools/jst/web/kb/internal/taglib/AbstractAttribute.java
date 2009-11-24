@@ -13,12 +13,12 @@ package org.jboss.tools.jst.web.kb.internal.taglib;
 import java.util.List;
 import java.util.Properties;
 
-import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.project.ext.IValueInfo;
 import org.jboss.tools.common.model.project.ext.event.Change;
 import org.jboss.tools.common.model.project.ext.store.XMLStoreConstants;
 import org.jboss.tools.common.text.TextProposal;
+import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.internal.KbObject;
 import org.jboss.tools.jst.web.kb.internal.KbXMLStoreConstants;
@@ -111,10 +111,11 @@ public abstract class AbstractAttribute extends KbObject implements IAttribute {
 		return (IComponent)parent;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.IProposalProcessor#getProposals(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.ELContext)
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.IProposalProcessor#getProposals(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.IPageContext)
 	 */
-	public TextProposal[] getProposals(KbQuery query, ELContext context) {
+	public TextProposal[] getProposals(KbQuery query, IPageContext context) {
 		return EMPTY_PROPOSAL_LIST;
 	}
 

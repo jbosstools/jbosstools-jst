@@ -24,11 +24,11 @@ import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
-import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.filesystems.FileSystemsHelper;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.text.TextProposal;
+import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 
@@ -61,7 +61,7 @@ public class ResourcePathProposalType extends ModelProposalType {
 	 * @see org.jboss.tools.jst.web.kb.internal.taglib.ModelProposalType#init(org.jboss.tools.jst.web.kb.IPageContext)
 	 */
 	@Override
-	protected void init(ELContext context) {
+	protected void init(IPageContext context) {
 		super.init(context);
 		if(xModel != null) {
 			XModelObject webInf = FileSystemsHelper.getWebInf(xModel);

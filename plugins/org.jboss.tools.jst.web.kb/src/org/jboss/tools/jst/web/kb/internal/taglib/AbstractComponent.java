@@ -18,7 +18,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.model.project.ext.IValueInfo;
 import org.jboss.tools.common.model.project.ext.event.Change;
 import org.jboss.tools.common.model.project.ext.store.XMLStoreConstants;
@@ -331,11 +330,8 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.IProposalProcessor#getProposals(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.IPageContext)
 	 */
-	public TextProposal[] getProposals(KbQuery query, ELContext context) {
-		if (!(context instanceof IPageContext))
-			return EMPTY_PROPOSAL_LIST;
-		
-		IAttribute[] attributes = getAttributes(query, (IPageContext)context);
+	public TextProposal[] getProposals(KbQuery query, IPageContext context) {
+		IAttribute[] attributes = getAttributes(query, context);
 		if(attributes == null || attributes.length == 0) {
 			return EMPTY_PROPOSAL_LIST;
 		}
