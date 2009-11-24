@@ -138,15 +138,7 @@ public class NewWebProjectWizardPage extends WizardPage {
 			layout.marginHeight = 4;
 			layout.marginWidth = 4;
 			composite.setLayout(layout);
-	
-			introduction = new Label(composite, SWT.NO_FOCUS);
-			String text = "" + WizardKeys.getString(getKey() + "_introduction"); //$NON-NLS-1$ //$NON-NLS-2$
-			text = insertBreaks(introduction, text, 380);
-			introduction.setText(text);
-			gd = new GridData(GridData.FILL_HORIZONTAL);
-			gd.horizontalSpan = 2;
-			introduction.setLayoutData(gd);
-			
+
 			// nameEditor
 			editor = nameEditor.getFieldEditor(composite);
 			editor.fillIntoGrid(composite, 2);

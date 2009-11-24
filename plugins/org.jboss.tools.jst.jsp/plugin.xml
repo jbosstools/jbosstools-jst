@@ -137,7 +137,7 @@
       <editor 
             class="org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor" 
             contributorClass="org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageContributor" 
-            extensions="html, htm, jsf" 
+            extensions="html, htm, jsf, xhtml" 
             icon="$nl$/images/xstudio/editors/html_file.gif" 
             id="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor" 
             matchingStrategy = "org.jboss.tools.common.core.resources.MatchingStrategyImpl"
