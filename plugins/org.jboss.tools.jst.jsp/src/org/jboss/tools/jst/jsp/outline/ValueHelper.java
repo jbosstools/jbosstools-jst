@@ -47,7 +47,7 @@ import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.internal.taglib.CustomProposalType;
 import org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibAttribute;
-import org.jboss.tools.jst.web.kb.internal.taglib.ExtendedProposalType;
+import org.jboss.tools.jst.web.kb.internal.taglib.EmptyProposalType;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 import org.jboss.tools.jst.web.tld.TaglibData;
 import org.jboss.tools.jst.web.tld.VpeTaglibManager;
@@ -156,7 +156,7 @@ public class ValueHelper {
 		if(hasJSFNature) {
 			for (String type : TYPES) {
 				if(proposalTypes.contains(type)) continue;
-				ExtendedProposalType pt = new ExtendedProposalType();
+				EmptyProposalType pt = new EmptyProposalType();
 				pt.setType(type);
 				proposals.add(pt);
 			}
