@@ -31,6 +31,7 @@ import org.eclipse.ui.INestableKeyBindingService;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.internal.KeyBindingService;
 import org.eclipse.ui.internal.PartSite;
 import org.eclipse.ui.internal.PopupMenuExtender;
 import org.eclipse.ui.internal.WorkbenchPlugin;
@@ -54,7 +55,7 @@ public abstract class JSPMultiPageEditorSite implements IEditorSite {
 
 	private ISelectionChangedListener fSelChangeListener = null;
 
-	private IKeyBindingService fParentService = null;
+	//private IKeyBindingService fParentService = null;
 
 	private IKeyBindingService fService = null;
 
@@ -104,13 +105,18 @@ public abstract class JSPMultiPageEditorSite implements IEditorSite {
 				INestableKeyBindingService nestableParent = (INestableKeyBindingService) parentService;
 				nestableParent.removeKeyBindingService(this);
 			}
+			if (fService instanceof KeyBindingService) {
+				((KeyBindingService) fService).dispose();
+			}
 			fService = null;
 		}
-		//fEditor = null;
-		//fEditorPart = null;
 		if (fSelChangeListener != null) {
 			getSelectionProvider().removeSelectionChangedListener(fSelChangeListener);
 			fSelChangeListener = null;
+		}
+		
+		if (serviceLocator != null) {
+			serviceLocator.dispose();
 		}
 	}
 
@@ -139,7 +145,7 @@ public abstract class JSPMultiPageEditorSite implements IEditorSite {
 		if (fService == null) {
 			fService = getMultiPageEditor().getEditorSite()
 					.getKeyBindingService();
-			fParentService = fService;
+			//fParentService = fService;
 			if (fService instanceof INestableKeyBindingService) {
 				INestableKeyBindingService nestableService = (INestableKeyBindingService) fService;
 				fService = nestableService.getKeyBindingService(this);
@@ -149,7 +155,7 @@ public abstract class JSPMultiPageEditorSite implements IEditorSite {
 						.log("MultiPageEditorSite.getKeyBindingService()   Parent key binding fService was not an instance of INestableKeyBindingService.  It was an instance of " + fService.getClass().getName() + " instead."); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
-		return fParentService;
+		return fService;
 	}
 
 	public JSPMultiPageEditorPart getMultiPageEditor() {
@@ -272,5 +278,23 @@ public abstract class JSPMultiPageEditorSite implements IEditorSite {
 		return this.serviceLocator.hasService(api);
 	}
 	
+	/**
+	 * Notifies the multi page editor service that the component within which it 
+	 * exists has become active.
+	 * 
+	 * @since 3.2
+	 */
+	public final void activate() {
+		serviceLocator.activate();
+	}
 
+	/**
+	 * Notifies the multi page editor service that the component within which it 
+	 * exists has been deactived.
+	 * 
+	 * @since 3.2
+	 */
+	public final void deactivate() {
+		serviceLocator.deactivate();
+	}
 }
