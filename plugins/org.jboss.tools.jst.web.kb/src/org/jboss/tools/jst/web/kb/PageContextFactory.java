@@ -162,6 +162,42 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 	public static ELContext createPageContext(IFile file) {
 		return getInstance().createPageContext(file, null);
 	}
+	
+	public void cleanUp(IFile file) {
+		if (file == null)
+			return;
+		synchronized (cache) {
+			ELContext removedContext = removeSavedContext(file);
+			if (removedContext == null || removedContext.getResource() == null)
+				return;
+			
+			// Remove all the contexts that are parent to the removed context
+			Collection<ELContext> contexts = cache.values();
+			if (contexts != null) {
+				for (ELContext context : contexts) {
+					if (isDependencyContext(context, file)) {
+						removeSavedContext(file);
+					}
+				}
+			}
+		}
+	}
+	
+	public void cleanUp(IProject project) {
+		if (project == null)
+			return;
+		synchronized (cache) {
+			// Remove all the contexts that are parent to the removed context
+			Collection<IFile> files = cache.keySet();
+			if (files != null) {
+				for (IFile file : files) {
+					if (project.equals(file.getProject())) {
+						cleanUp(file);
+					}
+				}
+			}
+		}
+	}
 //	long ctm = 0;
 	
 //	String getContextType1(IFile file) {
@@ -872,13 +908,13 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 		int kind = delta.getKind();
 		IResource resource = delta.getResource();
 		
-		if(kind == IResourceDelta.CHANGED || 
-				kind == IResourceDelta.ADDED ||
-				kind == IResourceDelta.REMOVED ||
-				kind == IResourceDelta.CONTENT) {
-			cleanUpChachedResource(resource);
-//		} else {
-//			System.out.println("Resource modified [" + kind + "]: " + resource.getFullPath());
+		if(  resource instanceof IProject && (
+//				kind == IResourceDelta.CHANGED || 
+//				kind == IResourceDelta.ADDED ||
+				kind == IResourceDelta.REMOVED // ||
+//				kind == IResourceDelta.CONTENT)
+				)) {
+			cleanUp((IProject)resource);
 		}
 
 		IResourceDelta[] cs = delta.getAffectedChildren();
@@ -888,26 +924,6 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 		return;
 	}
 	
-	private void cleanUpChachedResource(IResource resource) {
-		if (resource instanceof IFile) {
-			synchronized (cache) {
-				ELContext removedContext = removeSavedContext((IFile)resource);
-				if (removedContext == null || removedContext.getResource() == null)
-					return;
-				
-				// Remove all the contexts that are parent to the removed context
-				Collection<ELContext> contexts = cache.values();
-				if (contexts != null) {
-					for (ELContext context : contexts) {
-						if (isDependencyContext(context, (IFile)resource)) {
-							removeSavedContext((IFile)resource);
-						}
-					}
-				}
-			}
-		}
-	}
-
 	private boolean isDependencyContext(ELContext context, IFile resource) {
 		if (resource.equals(context.getResource())) {
 			return true;
@@ -964,7 +980,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 				for (ELContext context : contexts) {
 					if (context instanceof XmlContextImpl &&
 							event.getDocument().equals(((XmlContextImpl)context).getDocument())) {
-						cleanUpChachedResource(context.getResource());
+						cleanUp(context.getResource());
 						return;
 					}
 				}
