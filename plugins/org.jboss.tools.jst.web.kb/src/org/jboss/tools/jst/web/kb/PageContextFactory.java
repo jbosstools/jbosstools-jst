@@ -163,6 +163,11 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 		return getInstance().createPageContext(file, null);
 	}
 	
+	/**
+	 * Cleans up the context for the file specified
+	 * 
+	 * @param file
+	 */
 	public void cleanUp(IFile file) {
 		if (file == null)
 			return;
@@ -183,6 +188,11 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 		}
 	}
 	
+	/**
+	 * Cleans up the contexts for the project specified
+	 * 
+	 * @param file
+	 */
 	public void cleanUp(IProject project) {
 		if (project == null)
 			return;
