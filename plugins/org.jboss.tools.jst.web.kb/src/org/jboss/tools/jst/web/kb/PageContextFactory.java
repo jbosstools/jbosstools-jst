@@ -208,6 +208,18 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 			}
 		}
 	}
+	
+	/**
+	 * Cleans up the contexts for the resource change delta
+	 * 
+	 * @param file
+	 */
+	public void cleanUp(IResourceDelta delta) {
+		if(cache == null || cache.size() == 0) return;
+		if(!checkDelta(delta)) return;
+		processDelta(delta);
+	}
+	
 //	long ctm = 0;
 	
 //	String getContextType1(IFile file) {
@@ -897,10 +909,13 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.core.resources.IResourceChangeListener#resourceChanged(org.eclipse.core.resources.IResourceChangeEvent)
+	 */
 	public void resourceChanged(IResourceChangeEvent event) {
-		if(cache == null || cache.size() == 0 || event == null || event.getDelta() == null) return;
-		if(!checkDelta(event.getDelta())) return;
-		processDelta(event.getDelta());
+		if(event == null || event.getDelta() == null) return;
+		cleanUp(event.getDelta());
 	}
 
 	private boolean checkDelta(IResourceDelta delta) {
@@ -918,13 +933,15 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 		int kind = delta.getKind();
 		IResource resource = delta.getResource();
 		
-		if(  resource instanceof IProject && (
-//				kind == IResourceDelta.CHANGED || 
-//				kind == IResourceDelta.ADDED ||
-				kind == IResourceDelta.REMOVED // ||
-//				kind == IResourceDelta.CONTENT)
-				)) {
+		if(resource instanceof IProject &&
+				kind == IResourceDelta.REMOVED) {
 			cleanUp((IProject)resource);
+		} else if (resource instanceof IFile && (
+			kind == IResourceDelta.CHANGED || 
+			kind == IResourceDelta.ADDED ||
+			kind == IResourceDelta.REMOVED ||
+			kind == IResourceDelta.CONTENT)) {
+			cleanUp((IFile)resource);
 		}
 
 		IResourceDelta[] cs = delta.getAffectedChildren();
