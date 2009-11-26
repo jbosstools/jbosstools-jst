@@ -18,6 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Region;
@@ -75,17 +76,48 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 			for (int r = 0; rules != null && r < rules.getLength(); r++) {
 				if (isRuleMatch(rules.item(r), getStyleName(region))) {
 					CSSRule rule = rules.item(r);
-					System.out.println();
-					showRegion(
-							PageContextFactory.getFileFromProject(descr.source, getFile()), 
-							new Region(((IndexedRegion)rule).getStartOffset(), ((IndexedRegion)rule).getLength()));
-					return;
+					IFile file = findFileForCSSStyleSheet(descr.source);
+					if (file != null) {
+						int startOffset = 0;
+						if (descr.sheet.getOwnerNode() != null) {
+							Node node = descr.sheet.getOwnerNode().getFirstChild();
+							if (node instanceof IndexedRegion) {
+								startOffset = ((IndexedRegion)node).getStartOffset();
+							}
+						}
+						showRegion(
+								file, 
+								new Region(startOffset + ((IndexedRegion)rule).getStartOffset(), ((IndexedRegion)rule).getLength()));
+						return;
+					}
 				}
 			}
 		}
 		openFileFailed();
 	}
 
+	/*
+	 * Finds a file representing the specified stylesheet
+	 * 
+	 * Three kinds of filePath values are tested:
+	 * - workspace related full path (Comes for a stylesheet defined in STYLE tag. Actually it is a path to the page where the STYLE tag is used)
+	 * - full file path to the CSS-file within the project
+	 * - relative file path
+	 * 
+	 * @param filePath
+	 * @return
+	 */
+	private IFile findFileForCSSStyleSheet(String filePath) {
+		// First try to find a file by WS-related path (because it's the most longest path)
+		IFile file = ResourcesPlugin.getWorkspace().getRoot()
+		.getFileForLocation(
+				ResourcesPlugin.getWorkspace().getRoot().
+					getLocation().append(filePath));
+		
+		return file != null ? file : PageContextFactory.getFileFromProject(filePath, getFile());
+
+	}
+	
 	/**
 	 * 
 	 * @param cssRule
