@@ -20,6 +20,7 @@ import org.jboss.tools.jst.web.kb.ICSSContainerSupport;
 import org.jboss.tools.jst.web.kb.IIncludedContextSupport;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.IResourceBundle;
+import org.jboss.tools.jst.web.kb.IXmlContext;
 import org.jboss.tools.jst.web.kb.PageContextFactory.CSSStyleSheetDescriptor;
 import org.jboss.tools.jst.web.kb.internal.taglib.NameSpace;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
@@ -95,7 +96,10 @@ public class JspContextImpl extends XmlContextImpl implements IPageContext, IInc
 		List<ELContext> includedContexts = getIncludedContexts();
 		if (includedContexts != null) {
 			for (ELContext includedContext : includedContexts) {
-				Var[] vars = includedContext.getVars(offset);
+				if (!(includedContext instanceof IXmlContext))
+					continue;
+				
+				Var[] vars = ((IXmlContext)includedContext).getVars(offset);
 				if (vars != null) {
 					for (Var b : vars) {
 						includedVars.add(b);

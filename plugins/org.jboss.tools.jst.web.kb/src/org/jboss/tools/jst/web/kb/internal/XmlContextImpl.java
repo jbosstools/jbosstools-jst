@@ -10,15 +10,18 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
+import org.eclipse.jface.text.Region;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.DocumentProviderRegistry;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.jboss.tools.common.el.core.resolver.ELContextImpl;
+import org.jboss.tools.common.el.core.resolver.Var;
+import org.jboss.tools.jst.web.kb.IXmlContext;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 
-public class XmlContextImpl extends ELContextImpl {
+public class XmlContextImpl extends ELContextImpl implements IXmlContext {
 	protected IDocument document;
 	private FileEditorInput editorInput;
 	
@@ -50,6 +53,21 @@ public class XmlContextImpl extends ELContextImpl {
 	public IDocument getDocument() {
 		return document;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.IXmlContext#getVars(int)
+	 */
+	public Var[] getVars(int offset) {
+		List<Var> result = new ArrayList<Var>();
+		for (Region region : vars.keySet()) {
+			if(offset>=region.getOffset() && offset<=region.getOffset() + region.getLength()) {
+				result.addAll(vars.get(region));
+			}
+		}
+		return result.toArray(new Var[result.size()]);
+	}
+
 
 	/* 
 	 * TODO: the visibility must differ between 'include'-like and 'template'-like inclusion
@@ -130,7 +148,7 @@ public class XmlContextImpl extends ELContextImpl {
 		}
 		super.finalize();
 	}
-
+	
 	private IDocument getConnectedDocument(IEditorInput input) {
 		IDocumentProvider provider= DocumentProviderRegistry.getDefault().getDocumentProvider(input);
 		try {
