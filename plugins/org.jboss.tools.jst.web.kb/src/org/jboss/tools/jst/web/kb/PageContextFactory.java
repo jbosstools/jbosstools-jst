@@ -179,7 +179,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 				return;
 			
 			// Remove all the contexts that are parent to the removed context
-			Collection<ELContext> contexts = cache.values();
+			ELContext[] contexts = cache.values().toArray(new ELContext[0]);
 			if (contexts != null) {
 				for (ELContext context : contexts) {
 					if (isDependencyContext(context, file)) {
@@ -200,7 +200,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 			return;
 		synchronized (cache) {
 			// Remove all the contexts that are parent to the removed context
-			Collection<IFile> files = cache.keySet();
+			IFile[] files = cache.keySet().toArray(new IFile[0]);
 			if (files != null) {
 				for (IFile file : files) {
 					if (project.equals(file.getProject())) {
@@ -217,9 +217,11 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 	 * @param file
 	 */
 	public void cleanUp(IResourceDelta delta) {
-		if(cache == null || cache.size() == 0) return;
-		if(!checkDelta(delta)) return;
-		processDelta(delta);
+		synchronized (cache) {
+			if(cache.size() == 0) return;
+			if(!checkDelta(delta)) return;
+			processDelta(delta);
+		}
 	}
 	
 //	long ctm = 0;
@@ -979,7 +981,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 
 		synchronized (cache) {
 			// Remove all the contexts that are parent to the removed context
-			Collection<ELContext> contexts = cache.values();
+			ELContext[] contexts = cache.values().toArray(new ELContext[0]);
 			if (contexts != null) {
 				for (ELContext context : contexts) {
 					removeSavedContext(context.getResource());
@@ -1006,7 +1008,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 
 		synchronized (cache) {
 			// Remove all the contexts that are parent to the removed context
-			Collection<ELContext> contexts = cache.values();
+			ELContext[] contexts = cache.values().toArray(new ELContext[0]);
 			if (contexts != null) {
 				for (ELContext context : contexts) {
 					if (context instanceof XmlContextImpl &&
