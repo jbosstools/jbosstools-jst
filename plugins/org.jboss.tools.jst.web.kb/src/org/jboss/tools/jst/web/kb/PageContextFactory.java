@@ -98,7 +98,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 	public static final String JSP_PAGE_CONTEXT_TYPE = "JSP_PAGE_CONTEXT_TYPE"; //$NON-NLS-1$
 	public static final String FACELETS_PAGE_CONTEXT_TYPE = "FACELETS_PAGE_CONTEXT_TYPE"; //$NON-NLS-1$
 
-	private static final PageContextFactory getInstance() {
+	public static final PageContextFactory getInstance() {
 		if (fInstance != null)
 			return fInstance;
 		return (fInstance = new PageContextFactory());

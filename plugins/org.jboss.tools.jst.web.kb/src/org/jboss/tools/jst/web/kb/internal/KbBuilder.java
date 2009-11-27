@@ -24,6 +24,7 @@ import org.eclipse.osgi.util.NLS;
 import org.jboss.tools.common.el.core.resolver.TypeInfoCollector;
 import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.kb.KbProjectFactory;
+import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.internal.scanner.IFileScanner;
 import org.jboss.tools.jst.web.kb.internal.scanner.LibraryScanner;
@@ -132,6 +133,7 @@ public class KbBuilder extends IncrementalProjectBuilder {
 	protected void fullBuild(final IProgressMonitor monitor)
 			throws CoreException {
 		try {
+			PageContextFactory.getInstance().cleanUp(getProject());
 			getProject().accept(getResourceVisitor().getVisitor());
 		} catch (CoreException e) {
 			WebModelPlugin.getPluginLog().logError(e);
@@ -140,6 +142,7 @@ public class KbBuilder extends IncrementalProjectBuilder {
 
 	protected void incrementalBuild(IResourceDelta delta,
 			IProgressMonitor monitor) throws CoreException {
+		PageContextFactory.getInstance().cleanUp(delta);
 		// the visitor does the work.
 		delta.accept(new SampleDeltaVisitor());
 	}
@@ -163,6 +166,7 @@ public class KbBuilder extends IncrementalProjectBuilder {
 	protected void clean(IProgressMonitor monitor) throws CoreException {
 		KbProject sp = getKbProject();
 		if(sp != null) sp.clean();
+		PageContextFactory.getInstance().cleanUp(getProject());
 	}
 
 }
