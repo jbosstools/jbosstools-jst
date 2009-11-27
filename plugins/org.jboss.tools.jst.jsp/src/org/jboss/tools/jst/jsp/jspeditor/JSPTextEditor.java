@@ -1295,7 +1295,9 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			dnd = null;
 		}
 		textEditorDropProvider = null;
-		getSourceViewer().removeTextListener(this);
+		if (getSourceViewer() != null) {
+			getSourceViewer().removeTextListener(this);
+		}
 		if (fOutlinePage != null) {
 			if (fOutlinePage instanceof ConfigurableContentOutlinePage
 					&& fOutlinePageListener != null) {
