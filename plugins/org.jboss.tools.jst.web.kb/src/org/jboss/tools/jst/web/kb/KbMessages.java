@@ -28,4 +28,5 @@ public class KbMessages {
 	public static String KBBUILDER_NOT_FOUND;
 	public static String KBPROBLEM;
 	public static String ENABLE_KB;
+	public static String ILLEGAL_CONTENTTYPE;
 }

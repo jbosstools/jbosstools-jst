@@ -83,6 +83,8 @@
 
 	<contexttype id="JSP_PAGE_CONTEXT_TYPE">
 		<contenttype id="org.eclipse.jst.jsp.core.jspsource" />
+        <contenttype id="org.eclipse.jst.jsp.core.jspfragmentsource"/>
+        <contenttype id="org.eclipse.jst.jsp.core.tagsource"/>
 	</contexttype>
 
 	<contexttype id="FACELETS_PAGE_CONTEXT_TYPE">
