@@ -102,7 +102,7 @@ public class PageProcessor {
 			String elString = value;
 			ELResolver[] resolvers =  context.getElResolvers();
 			for (int i = 0; resolvers != null && i < resolvers.length; i++) {
-				proposals.addAll(resolvers[i].getProposals(context, elString));
+				proposals.addAll(resolvers[i].getProposals(context, elString, query.getOffset()));
 			}
 		}
 		return proposals.toArray(new TextProposal[proposals.size()]);

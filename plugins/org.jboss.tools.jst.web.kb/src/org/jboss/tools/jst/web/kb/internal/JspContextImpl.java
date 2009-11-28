@@ -59,35 +59,6 @@ public class JspContextImpl extends XmlContextImpl implements IPageContext, IInc
 		return superNameSpaces;
 	}
 
-	
-	@Override
-	public Var[] getVars() {
-		Var[] thisVars = super.getVars();
-		
-		List<Var> includedVars = new ArrayList<Var>();
-		List<ELContext> includedContexts = getIncludedContexts();
-		if (includedContexts != null) {
-			for (ELContext includedContext : includedContexts) {
-				Var[] vars = includedContext.getVars();
-				if (vars != null) {
-					for (Var b : vars) {
-						includedVars.add(b);
-					}
-				}
-			}
-		}
-		
-		Var[] result = new Var[thisVars == null ? 0 : thisVars.length + includedVars.size()];
-		if (thisVars != null && thisVars.length > 0) {
-			System.arraycopy(thisVars, 0, result, 0, thisVars.length);
-		}
-		if (!includedVars.isEmpty()) {
-			System.arraycopy(includedVars.toArray(new ITagLibrary[includedVars.size()]), 0, 
-					result, thisVars == null ? 0 : thisVars.length, includedVars.size());
-		}
-		return result;
-	}
-
 	@Override
 	public Var[] getVars(int offset) {
 		Var[] thisVars = super.getVars(offset);

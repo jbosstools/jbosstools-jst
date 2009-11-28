@@ -16,6 +16,7 @@ import java.util.Set;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.jboss.tools.common.el.core.ELReference;
 import org.w3c.dom.Element;
 
 /**

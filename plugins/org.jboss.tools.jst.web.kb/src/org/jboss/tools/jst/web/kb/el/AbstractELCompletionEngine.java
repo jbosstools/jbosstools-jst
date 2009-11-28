@@ -67,11 +67,11 @@ public abstract class AbstractELCompletionEngine<V extends IVariable> implements
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.common.el.core.resolver.ELResolver2#getProposals(org.jboss.tools.common.el.core.resolver.ELContext, java.lang.String)
 	 */
-	public List<TextProposal> getProposals(ELContext context, String el) {
+	public List<TextProposal> getProposals(ELContext context, String el, int offset) {
 		List<TextProposal> completions = new ArrayList<TextProposal>();
 
 		List<Var> vars = new ArrayList<Var>();
-		Var[] array = context.getVars();
+		Var[] array = context.getVars(offset);
 		for (int i = 0; i < array.length; i++) {
 			vars.add(array[i]);
 		}
@@ -93,9 +93,9 @@ public abstract class AbstractELCompletionEngine<V extends IVariable> implements
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.common.el.core.resolver.ELResolver#resolve(org.jboss.tools.common.el.core.resolver.ELContext, org.jboss.tools.common.el.core.model.ELExpression)
 	 */
-	public ELResolution resolve(ELContext context, ELExpression operand) {
+	public ELResolution resolve(ELContext context, ELExpression operand, int offset) {
 		List<Var> vars = new ArrayList<Var>();
-		Var[] array = context.getVars();
+		Var[] array = context.getVars(offset);
 		for (int i = 0; i < array.length; i++) {
 			vars.add(array[i]);
 		}
@@ -119,9 +119,9 @@ public abstract class AbstractELCompletionEngine<V extends IVariable> implements
 	 * @param returnEqualedVariablesOnly
 	 * @return
 	 */
-	public ELResolution resolveELOperand(ELExpression operand, ELContext context, boolean returnEqualedVariablesOnly) {
+	public ELResolution resolveELOperand(ELExpression operand, ELContext context, boolean returnEqualedVariablesOnly, int offset) {
 		List<Var> vars = new ArrayList<Var>();
-		Var[] array = context.getVars();
+		Var[] array = context.getVars(offset);
 		for (int i = 0; i < array.length; i++) {
 			vars.add(array[i]);
 		}

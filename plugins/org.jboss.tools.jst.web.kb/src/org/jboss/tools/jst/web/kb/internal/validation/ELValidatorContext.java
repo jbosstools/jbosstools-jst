@@ -17,8 +17,9 @@ import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
+import org.jboss.tools.common.el.core.ELReference;
 import org.jboss.tools.common.xml.XMLUtilities;
-import org.jboss.tools.jst.web.kb.validation.ELReference;
+import org.jboss.tools.jst.web.kb.el.KbELReference;
 import org.w3c.dom.Element;
 
 /**
@@ -182,7 +183,7 @@ public class ELValidatorContext extends LinkCollection {
 				if(name == null || name.trim().length() == 0) {
 					continue;
 				}
-				ELReference el = new ELReference();
+				ELReference el = new KbELReference();
 				el.load(linkedEls[i]);
 				el.setNeedToInitMarkers(true);
 				addLinkedEl(name, el);

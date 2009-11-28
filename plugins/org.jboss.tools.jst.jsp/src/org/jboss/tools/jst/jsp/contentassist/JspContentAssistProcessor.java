@@ -206,11 +206,11 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 				return ELParserUtil.getJbossFactory();
 			}
 
-			public List<TextProposal> getProposals(ELContext context, String el) {
+			public List<TextProposal> getProposals(ELContext context, String el, int offset) {
 				return Collections.emptyList();
 			}
 
-			public ELResolution resolve(ELContext context, ELExpression operand) {
+			public ELResolution resolve(ELContext context, ELExpression operand, int offset) {
 				return new ELResolutionImpl(operand);
 			}
 		};

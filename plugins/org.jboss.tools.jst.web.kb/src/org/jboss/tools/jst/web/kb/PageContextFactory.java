@@ -35,7 +35,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.jdt.internal.corext.util.Messages;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
@@ -57,20 +56,28 @@ import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.INodeNotifier;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
+import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
+import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
+import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegionList;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
+import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
+import org.jboss.tools.common.el.core.ELReference;
 import org.jboss.tools.common.el.core.GlobalELReferenceList;
+import org.jboss.tools.common.el.core.model.ELInstance;
+import org.jboss.tools.common.el.core.model.ELModel;
+import org.jboss.tools.common.el.core.parser.ELParser;
 import org.jboss.tools.common.el.core.parser.ELParserUtil;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.ELContextImpl;
 import org.jboss.tools.common.el.core.resolver.ELResolverFactoryManager;
 import org.jboss.tools.common.el.core.resolver.ElVarSearcher;
-import org.jboss.tools.common.el.core.resolver.SimpleELContext;
 import org.jboss.tools.common.el.core.resolver.Var;
 import org.jboss.tools.common.resref.core.ResourceReference;
 import org.jboss.tools.common.text.ext.util.Utils;
+import org.jboss.tools.jst.web.kb.el.KbELReference;
 import org.jboss.tools.jst.web.kb.include.IncludeContextBuilder;
 import org.jboss.tools.jst.web.kb.internal.FaceletPageContextImpl;
 import org.jboss.tools.jst.web.kb.internal.JspContextImpl;
@@ -305,16 +312,12 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 	
 	private ELContext createPageContextInstance(String contentType) {
 		String contextType = IncludeContextBuilder.getContextType(contentType);
-		if (XML_PAGE_CONTEXT_TYPE.equals(contextType)) {
-			return new XmlContextImpl();
-		} else if (JSP_PAGE_CONTEXT_TYPE.equals(contextType)) {
+		if (JSP_PAGE_CONTEXT_TYPE.equals(contextType)) {
 			return new JspContextImpl();
 		} else if (FACELETS_PAGE_CONTEXT_TYPE.equals(contextType)) {
 			return new FaceletPageContextImpl();
-		} else {
-			WebKbPlugin.getDefault().logError(Messages.format(KbMessages.ILLEGAL_CONTENTTYPE, contentType));
 		}
-		return new SimpleELContext();
+		return new XmlContextImpl();
 	}
 
 	/**
@@ -356,15 +359,19 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 	}
 	
 	private void fillContextForNode(IDOMNode node, ELContext context, List<String> parents) {
-		if (context instanceof JspContextImpl && !(node instanceof IDOMElement)) {
+		if (!(context instanceof FaceletPageContextImpl) && !(node instanceof IDOMElement)) {
 			// There is no any useful info for JSP in text nodes
 			return;
 		}
 
-		if (context instanceof XmlContextImpl && node instanceof IDOMElement) {
-			fillXMLNamespacesForNode((IDOMElement)node, (XmlContextImpl)context);
+		if (context instanceof XmlContextImpl) {
+			XmlContextImpl xmlContext = (XmlContextImpl)context;
+			fillElReferencesForNode(node, xmlContext);
+			if (node instanceof IDOMElement) {
+				fillXMLNamespacesForNode((IDOMElement)node, xmlContext);
+			}
 		}
-		
+
 		if ((context instanceof JspContextImpl || 
 				context instanceof FaceletPageContextImpl) &&
 				node instanceof IDOMElement) {
@@ -374,14 +381,14 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 		if (context instanceof FaceletPageContextImpl) {
 			// Insert here the initialization code for FaceletPage context elements which may exist in Text nodes
 		}
-			
+
 		if (context instanceof JspContextImpl && node instanceof IDOMElement) {
 			fillResourceBundlesForNode((IDOMElement)node,  (JspContextImpl)context);
 		}
 
 		// There could be some context type to be initialized somehow that is different from JSP or FaceletPage context  
 		// Insert its on-node initialization code here
-		
+
 		// The only Elements may have include/CSS Stylesheet links and other additional info
 		if (context instanceof IPageContext && node instanceof IDOMElement) {
 			fillAdditionalInfoForNode((IDOMElement)node, (IPageContext)context, parents);
@@ -403,7 +410,41 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 		}
 	}
 
-	
+	private void fillElReferencesForNode(IDOMNode node, XmlContextImpl context) {
+		if(Node.ELEMENT_NODE == node.getNodeType() || Node.TEXT_NODE == node.getNodeType()) {
+			IStructuredDocumentRegion regionNode = node.getFirstStructuredDocumentRegion();
+			ITextRegionList regions = regionNode.getRegions();
+			for(int i=0; i<regions.size(); i++) {
+				ITextRegion region = regions.get(i);
+				if(region.getType() == DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE || region.getType() == DOMRegionContext.XML_CONTENT) {
+					String text = regionNode.getFullText(region);
+					if(text.indexOf("{")>-1) { //$NON-NLS-1$
+						int offset = regionNode.getStartOffset() + region.getStart();
+						int startEl = text.indexOf("#{"); //$NON-NLS-1$
+						if(startEl==-1) {
+							startEl = text.indexOf("${"); //$NON-NLS-1$
+						}
+						if(startEl>-1) {
+							ELParser parser = ELParserUtil.getJbossFactory().createParser();
+							ELModel model = parser.parse(text);
+							List<ELInstance> is = model.getInstances();
+
+							ELReference elReference = new KbELReference();
+							elReference.setResource(context.getResource());
+							elReference.setEl(is);
+							elReference.setLength(text.length());
+							elReference.setStartPosition(offset);
+
+							elReference.setSyntaxErrors(model.getSyntaxErrors());
+
+							context.addELReference(elReference);
+						}
+					}
+				}
+			}
+		}
+	}
+
 	private void fillAdditionalInfoForNode(IDOMElement node, IPageContext context, List<String> parents) {
 		String prefix = node.getPrefix() == null ? "" : node.getPrefix(); //$NON-NLS-1$
 		String tagName = node.getLocalName();
