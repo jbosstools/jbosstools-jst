@@ -32,7 +32,7 @@ public class MissingKBBuilderTest extends ContentAssistantTestCase{
 		System.out.println("-1->" + (ps == null ? 0 : ps.length));
 		JobUtils.waitForIdle(2000);
 		ps = checkProposals(PAGE_NAME, "<f:loadBundle basename=\"\" var=\"msg\" />", 24, proposals, false);
-		System.out.println("-2->" + ps.length);
+		System.out.println("-2->" + (ps == null ? 0 : ps.length));
 	}
 
 	protected ICompletionProposal[] checkProposals(String fileName, String substring, int offset){

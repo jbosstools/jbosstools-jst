@@ -25,9 +25,9 @@ public class JsfJspJbide1807Test extends ContentAssistantTestCase{
 		//  - The EL-proposals are removed from the test-list.
 		//  - The "/pages" proposal is added as the main case to test 
 		String[] proposals={
-					"/pages",
-					"/templates",
-					"new jsf el expression - create a new attribute value with #{}"
+					"/pages/",
+					"/templates/",
+					"#{}"
 		};
 
 		checkProposals(PAGE_NAME, "<input type=\"image\" src=\"", 25, proposals, true);

@@ -15,6 +15,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
+import org.jboss.tools.common.text.ext.util.Utils;
 import org.jboss.tools.jst.jsp.contentassist.AutoContentAssistantProposal;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor;
@@ -97,7 +98,27 @@ public class ContentAssistantTestCase extends TestCase {
 		for (int i = 0; i < proposals.length; i++) {
 			if (proposals[i] instanceof AutoContentAssistantProposal) {
 				AutoContentAssistantProposal ap = (AutoContentAssistantProposal)proposals[i];
-				if (ap.getReplacementString().toLowerCase().equals(proposalName.toLowerCase())) return true;
+				String replacementString = ap.getReplacementString().toLowerCase();
+				if (replacementString.equalsIgnoreCase(proposalName)) return true;
+				
+				// For a tag proposal there will be not only the the tag name but all others characters like default attributes, tag ending characters and so on
+				String[] replacementStringParts = replacementString.split(" ");
+				if (replacementStringParts != null && replacementStringParts.length > 0) {
+					if (replacementStringParts[0].equalsIgnoreCase(proposalName)) return true;
+				}
+				
+				// for an attribute proposal there will be a pare of attribute-value (i.e. attrName="attrValue")
+				replacementStringParts = replacementString.split("=");
+				if (replacementStringParts != null && replacementStringParts.length > 0) {
+					if (replacementStringParts[0].equalsIgnoreCase(proposalName)) return true;
+				}
+				
+				// For an attribute value proposal there will be the quote characters
+				replacementString = Utils.trimQuotes(replacementString);
+				if (replacementString.equalsIgnoreCase(proposalName)) return true;
+				
+				
+				
 			} else {
 				if(proposals[i].getDisplayString().toLowerCase().equals(proposalName.toLowerCase())) return true;
 			}
