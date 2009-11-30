@@ -205,6 +205,7 @@
          	<contentType id="org.eclipse.jst.jsp.core.jspsource">
          		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ATTRIBUTE_VALUE">
          			<axis path="*/a/href/" ignoreCase="true"/>
+         			<axis path="*/link/href/" ignoreCase="true"/>
          			<axis path="*/jsp:directive.include/file/" />
          			<axis path="*/[http://java.sun.com/JSP/Page]:directive.include/file/" />
          			<axis path="*/jsp:directive.page/errorPage/" />
@@ -222,6 +223,7 @@
          	<contentType id="org.eclipse.wst.html.core.htmlsource">
          		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ATTRIBUTE_VALUE">
          			<axis path="*/a/href/" ignoreCase="true"/>
+         			<axis path="*/link/href/" ignoreCase="true"/>
          		</partitionType>
          	</contentType>
 		</hyperlinkPartitioner>
