@@ -127,7 +127,9 @@ public class ValidationContext implements IValidationContext {
 	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#addRemovedFile(org.eclipse.core.resources.IFile)
 	 */
 	public void addRemovedFile(IFile file) {
-		rootContext.addRemovedFile(file);
+		if(rootContext!=null) {
+			rootContext.addRemovedFile(file);
+		}
 	}
 
 	/* (non-Javadoc)
