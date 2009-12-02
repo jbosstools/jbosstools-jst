@@ -58,6 +58,9 @@ public class CSSModel implements ICSSDialogModel {
 	private CSSStyleSheet styleSheet = null;
 	private static final String COPY_SUFFIX = "_copy"; //$NON-NLS-1$
 	private boolean copy = false;
+	
+	// workaround for JBIDE-4407
+	private String oldText = null;
 
 	/**
 	 * Constructor.
@@ -105,6 +108,9 @@ public class CSSModel implements ICSSDialogModel {
 				partitioner.connect(model.getStructuredDocument());
 
 			}
+			// workaround for JBIDE-4407
+			oldText = model.getStructuredDocument().get();
+
 			if (model instanceof ICSSModel) {
 				ICSSModel cssModel = (ICSSModel) model;
 
@@ -221,6 +227,9 @@ public class CSSModel implements ICSSDialogModel {
 		}
 		model = null;
 
+		// workaround for JBIDE-4407
+		oldText = null;
+
 	}
 
 	public void save() {
@@ -242,7 +251,15 @@ public class CSSModel implements ICSSDialogModel {
 				buffer.setDirty(false);
 			}
 
-			model.save();
+			// workaround for JBIDE-4407
+			// if the model is unchanged the text CSS editor
+			// loses highlighting. When the problem will be fixed on 
+			// the WTP side, the following checking will not be needed.
+			String newText = model.getStructuredDocument().get();
+			if (!oldText.equals(newText)) {
+				model.save();
+				oldText = newText;
+			}
 		} catch (IOException e) {
 			JspEditorPlugin.getPluginLog().logError(e.getMessage());
 		} catch (CoreException e) {
@@ -253,7 +270,6 @@ public class CSSModel implements ICSSDialogModel {
 
 	public void setFile(final IFile file) {
 		this.styleFile = file;
-
 	}
 
 	public void updateCSSStyle(final String selectorLabel,
