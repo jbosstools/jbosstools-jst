@@ -84,7 +84,7 @@ public class JspContextImpl extends XmlContextImpl implements IPageContext, IInc
 			System.arraycopy(thisVars, 0, result, 0, thisVars.length);
 		}
 		if (!includedVars.isEmpty()) {
-			System.arraycopy(includedVars.toArray(new ITagLibrary[includedVars.size()]), 0, 
+			System.arraycopy(includedVars.toArray(new Var[includedVars.size()]), 0, 
 					result, thisVars == null ? 0 : thisVars.length, includedVars.size());
 		}
 		return result;
