@@ -14,6 +14,7 @@ import java.util.ResourceBundle;
 
 import org.jboss.tools.common.model.ui.texteditors.AbstractMultiPageContributor;
 import org.eclipse.jem.internal.java.adapters.nls.ResourceHandler;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorPart;
@@ -90,6 +91,14 @@ public class JSPMultiPageContributor extends AbstractMultiPageContributor {
 				slm.setErrorMessage(null);
 				slm.setMessage(null);
 			}
+			ITextEditor textEditor= null;
+			if (part instanceof ITextEditor)
+				textEditor= (ITextEditor)part;
+			/** The global actions to be connected with editor actions */
+			IAction action= getAction(textEditor, ITextEditorActionConstants.NEXT);
+			actionBars.setGlobalActionHandler(ITextEditorActionDefinitionIds.GOTO_NEXT_ANNOTATION, action);
+			action= getAction(textEditor, ITextEditorActionConstants.PREVIOUS);
+			actionBars.setGlobalActionHandler(ITextEditorActionDefinitionIds.GOTO_PREVIOUS_ANNOTATION, action);
 		}
 	}
 
