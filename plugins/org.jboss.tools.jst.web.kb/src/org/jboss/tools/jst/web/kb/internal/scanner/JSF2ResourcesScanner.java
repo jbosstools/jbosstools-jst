@@ -3,6 +3,7 @@ package org.jboss.tools.jst.web.kb.internal.scanner;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelObject;
@@ -88,6 +89,10 @@ public class JSF2ResourcesScanner implements IFileScanner {
 				
 				CompositeComponent component = new CompositeComponent();
 				component.setId(c);
+				IResource r = (IResource)c.getAdapter(IResource.class);
+				if(r instanceof IFile) {
+					component.setSourcePath(r.getFullPath());
+				}
 				component.setName(createValueInfo(c.getAttributeValue(XModelObjectConstants.ATTR_NAME)));
 				library.addComponent(component);
 				

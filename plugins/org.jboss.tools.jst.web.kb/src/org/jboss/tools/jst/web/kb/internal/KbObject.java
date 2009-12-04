@@ -18,6 +18,7 @@ import java.util.Properties;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.jboss.tools.common.model.XModelObject;
@@ -93,6 +94,13 @@ public class KbObject implements Cloneable {
 
 	public IResource getResource() {
 		if(resource != null) return resource;
+		if(resource == null && id instanceof IAdaptable) {
+			IResource r = (IResource)((IAdaptable)id).getAdapter(IResource.class);
+			resource = r;
+			if(resource != null) {
+				source = resource.getFullPath();
+			}
+		}
 		if(source != null) {
 			resource = ResourcesPlugin.getWorkspace().getRoot().getFile(source);
 		}
