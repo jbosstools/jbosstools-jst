@@ -138,7 +138,10 @@ public class AutoContentAssistantProposal extends CustomCompletionProposal imple
 		if (offset < fReplacementOffset)
 			return false;
 		boolean validated = startsWith(document, offset, getReplacementString());
-
+		if (!validated && getReplacementString() != null && getReplacementString().indexOf(":") != -1) { //$NON-NLS-1$
+			String replacementString = getReplacementString().substring(getReplacementString().indexOf(":") + 1); //$NON-NLS-1$
+			validated = startsWith(document, offset, replacementString);
+		}
 		// it would be better to use "originalCursorPosition" instead of
 		// getReplacementOffset(), but we don't have that info.
 		int newLength = offset - getReplacementOffset();
