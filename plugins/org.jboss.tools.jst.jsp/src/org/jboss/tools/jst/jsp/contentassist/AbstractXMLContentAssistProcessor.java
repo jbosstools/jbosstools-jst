@@ -599,7 +599,8 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	 */
 	
 	/**
-	 * Returns the <code>org.jboss.tools.jst.web.kb.KbQuery</code> instance
+	 * Returns the <code>org.jboss.tools.jst.web.kb.KbQuery</code> instance. The prefix and URI for the tags 
+	 * are calculated from the current node
 	 * 
 	 * @param type One of the <code>org.jboss.tools.jst.web.kb.KbQuery.Type</code> values
 	 * @param query The value for query
@@ -609,6 +610,18 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	 */
 	abstract protected KbQuery createKbQuery(Type type, String query, String stringQuery);
 	
+	/**
+	 * Returns the <code>org.jboss.tools.jst.web.kb.KbQuery</code> instance
+	 * 
+	 * @param type One of the <code>org.jboss.tools.jst.web.kb.KbQuery.Type</code> values
+	 * @param query The value for query
+	 * @param prefix the prefix for the tag
+	 * @param uri the URI for the tag
+	 * 
+	 * @return The <code>org.jboss.tools.jst.web.kb.KbQuery</code> instance
+	 */
+	abstract protected KbQuery createKbQuery(Type type, String query, String stringQuery, String prefix, String uri);
+
 	/**
 	 * Returns the <code>org.jboss.tools.common.el.core.resolver.ELContext</code> instance
 	 * 
@@ -646,8 +659,7 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 			if (sModel != null) {
 				String baseLocation = sModel.getBaseLocation();
 				IPath location = new Path(baseLocation).makeAbsolute();
-				IFile resource = FileBuffers.getWorkspaceFileAtLocation(location);
-				return resource;
+				return FileBuffers.getWorkspaceFileAtLocation(location);
 			}
 		}
 		finally {
