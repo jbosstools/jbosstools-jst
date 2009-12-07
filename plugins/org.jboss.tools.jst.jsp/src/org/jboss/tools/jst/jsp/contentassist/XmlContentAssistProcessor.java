@@ -102,7 +102,7 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 			return;
 		}
 		
-		addTagNameProposals(contentAssistRequest, childPosition);
+		addTagNameProposals(contentAssistRequest, childPosition, true);
 	}
 
 	private void addTagNameProposalsForPrefix(
@@ -111,8 +111,8 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 			String query,
 			String prefix,
 			String uri, 
-			int defaultRelevance
-			) {
+			int defaultRelevance,
+			boolean insertTagOpenningCharacter) {
 		if (query == null)
 			query = ""; //$NON-NLS-1$
 		String stringQuery = "<" + query; //$NON-NLS-1$
@@ -129,7 +129,7 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 				closingTag = closingTag.substring(1);
 			}
 			
-			if (replacementString.startsWith("<")) { //$NON-NLS-1$
+			if (!insertTagOpenningCharacter && replacementString.startsWith("<")) { //$NON-NLS-1$
 				// Because the tag starting char is already in the text
 				replacementString = replacementString.substring(1);
 			}
@@ -162,6 +162,7 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 		}
 	}
 
+	
 	/**
 	 * Calculates and adds the tag name proposals to the Content Assist Request object
 	 * 
@@ -171,12 +172,23 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 	@Override
 	protected void addTagNameProposals(
 			ContentAssistRequest contentAssistRequest, int childPosition) {
+		addTagNameProposals(contentAssistRequest, childPosition, false);
+	}
+
+	/**
+	 * Calculates and adds the tag name proposals to the Content Assist Request object
+	 * 
+	 * @param contentAssistRequest Content Assist Request object
+	 * @param childPosition the 
+	 */
+	protected void addTagNameProposals(
+			ContentAssistRequest contentAssistRequest, int childPosition, boolean insertTagOpenningCharacter) {
 
 		String mainPrefix = getTagPrefix();
 		String mainURI = getTagUri();
 		
 		String query = contentAssistRequest.getMatchString();
-		addTagNameProposalsForPrefix(contentAssistRequest, childPosition, query, mainPrefix, mainURI, TextProposal.R_TAG_INSERTION);
+		addTagNameProposalsForPrefix(contentAssistRequest, childPosition, query, mainPrefix, mainURI, TextProposal.R_TAG_INSERTION, insertTagOpenningCharacter);
 
 		if (query == null || query.length() == 0 || query.contains(":")) //$NON-NLS-1$
 			return;
@@ -200,7 +212,8 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 					String possibleQuery = namespace.getPrefix() + ":" + query; //$NON-NLS-1$
 					addTagNameProposalsForPrefix(contentAssistRequest, childPosition, 
 							possibleQuery, possiblePrefix, possibleURI, 
-							TextProposal.R_TAG_INSERTION - 1);
+							TextProposal.R_TAG_INSERTION - 1, 
+							insertTagOpenningCharacter);
 				}
 			}
 		}
