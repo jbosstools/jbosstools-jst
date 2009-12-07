@@ -46,4 +46,13 @@ public class WebKbPlugin extends BaseUIPlugin {
 	public static WebKbPlugin getDefault() {
 		return plugin;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.common.log.BaseUIPlugin#getId()
+	 */
+	@Override
+	public String getId() {
+		return PLUGIN_ID;
+	}
 }
