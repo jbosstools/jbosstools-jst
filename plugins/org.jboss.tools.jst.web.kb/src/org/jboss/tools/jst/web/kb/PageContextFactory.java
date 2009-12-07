@@ -101,7 +101,7 @@ import org.w3c.dom.css.CSSStyleSheet;
 @SuppressWarnings("restriction")
 public class PageContextFactory implements IResourceChangeListener, IDocumentListener {
 	private static PageContextFactory fInstance;
-	
+	private static final String XHTML_TAG_LIB_URI = "http://www.w3.org/1999/xhtml"; //$NON-NLS-1$
 	public static final String XML_PAGE_CONTEXT_TYPE = "XML_PAGE_CONTEXT_TYPE"; //$NON-NLS-1$
 	public static final String JSP_PAGE_CONTEXT_TYPE = "JSP_PAGE_CONTEXT_TYPE"; //$NON-NLS-1$
 	public static final String FACELETS_PAGE_CONTEXT_TYPE = "FACELETS_PAGE_CONTEXT_TYPE"; //$NON-NLS-1$
@@ -231,16 +231,6 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 	}
 	
 //	long ctm = 0;
-	
-//	String getContextType1(IFile file) {
-//		if (file.getFileExtension().endsWith("jsp"))
-//			return JSP_PAGE_CONTEXT_TYPE;
-//		else if (file.getFileExtension().endsWith("html"))
-//			return FACELETS_PAGE_CONTEXT_TYPE;
-//		else if (file.getFileExtension().endsWith("xml"))
-//			return XML_PAGE_CONTEXT_TYPE;
-//		return null;
-//	}
 	
 	/**
 	 * Creates a page context for the specified context type
@@ -517,47 +507,56 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 	 */
 	private void fillXMLNamespacesForNode(Element node, XmlContextImpl context) {
 		NamedNodeMap attrs = node.getAttributes();
+		boolean mainNnIsRedefined = false;
 		for (int j = 0; attrs != null && j < attrs.getLength(); j++) {
 			Attr a = (Attr) attrs.item(j);
 			String name = a.getName();
-			if (name.startsWith("xmlns:")) { //$NON-NLS-1$
-				String prefix = name.substring("xmlns:".length()); //$NON-NLS-1$
-				String uri = a.getValue();
+
+			if (!name.startsWith("xmlns:") && !name.equals("xmlns")) //$NON-NLS-1$ //$NON-NLS-2$
+				continue;
+
+			String prefix = name.startsWith("xmlns:") ? name.substring("xmlns:".length()) : ""; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			String uri = a.getValue();
 				
-				prefix = prefix == null ? null : prefix.trim();
-				uri = uri == null ? null : uri.trim();
+			prefix = prefix == null ? null : prefix.trim();
+			uri = uri == null ? null : uri.trim();
+			if (XHTML_TAG_LIB_URI.equalsIgnoreCase(uri))
+				continue;
+			
+			if (prefix != null // prefix may be empty
+					&& uri != null && uri.length() > 0) {
+
+				int start = ((IndexedRegion) node).getStartOffset();
+				int length = ((IndexedRegion) node).getLength();
+
+				IDOMElement domElement = (node instanceof IDOMElement ? (IDOMElement) node
+						: null);
+				if (domElement != null) {
+					start = domElement.getStartOffset();
+					length = (domElement.hasEndTag() ? domElement
+							.getEndStructuredDocumentRegion()
+							.getEnd() : ((IDOMNode) node.getOwnerDocument()).getEndOffset() - 1 - start);
+				}
+
+				Region region = new Region(start, length);
+				INameSpace nameSpace = new NameSpace(
+						uri, prefix,
+						TagLibraryManager.getLibraries(
+								context.getResource().getProject(), uri));
+
+				context.addNameSpace(region, nameSpace);
+				if (prefix.length() == 0)
+					mainNnIsRedefined = true;
 				
-				if (prefix != null && prefix.length() > 0
-						&& uri != null && uri.length() > 0) {
-
-					int start = ((IndexedRegion) node).getStartOffset();
-					int length = ((IndexedRegion) node).getLength();
-
-					IDOMElement domElement = (node instanceof IDOMElement ? (IDOMElement) node
-							: null);
-					if (domElement != null) {
-						start = domElement.getStartOffset();
-						length = (domElement.hasEndTag() ? domElement
-								.getEndStructuredDocumentRegion()
-								.getEnd() : ((IDOMNode) node.getOwnerDocument()).getEndOffset() - 1 - start);
-					}
-
-					Region region = new Region(start, length);
-					INameSpace nameSpace = new NameSpace(
-							uri, prefix,
+				if (context instanceof FaceletPageContextImpl && 
+						CustomTagLibManager.FACELETS_UI_TAG_LIB_URI.equals(uri) &&
+						!mainNnIsRedefined) {
+					nameSpace = new NameSpace(
+							CustomTagLibManager.FACELETS_HTML_TAG_LIB_URI, "", //$NON-NLS-1$
 							TagLibraryManager.getLibraries(
-									context.getResource().getProject(), uri));
-
+									context.getResource().getProject(), 
+									CustomTagLibManager.FACELETS_HTML_TAG_LIB_URI));
 					context.addNameSpace(region, nameSpace);
-					if (context instanceof FaceletPageContextImpl && 
-							CustomTagLibManager.FACELETS_UI_TAG_LIB_URI.equals(uri)) {
-						nameSpace = new NameSpace(
-								CustomTagLibManager.FACELETS_HTML_TAG_LIB_URI, "", //$NON-NLS-1$
-								TagLibraryManager.getLibraries(
-										context.getResource().getProject(), 
-										CustomTagLibManager.FACELETS_HTML_TAG_LIB_URI));
-						context.addNameSpace(region, nameSpace);
-					}
 				}
 			}
 		}

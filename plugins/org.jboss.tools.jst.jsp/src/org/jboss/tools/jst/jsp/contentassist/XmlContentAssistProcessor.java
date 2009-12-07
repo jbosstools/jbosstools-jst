@@ -193,14 +193,29 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 				
 				for (INameSpace namespace : namespaces) {
 					String possiblePrefix = namespace.getPrefix(); 
+					if (possiblePrefix == null || possiblePrefix.length() == 0)
+						continue;	// Don't query proposals for the default value here
+					
 					String possibleURI = namespace.getURI();
 					String possibleQuery = namespace.getPrefix() + ":" + query; //$NON-NLS-1$
 					addTagNameProposalsForPrefix(contentAssistRequest, childPosition, 
 							possibleQuery, possiblePrefix, possibleURI, 
-							TextProposal.R_TAG_INSERTION - 1); // TODO: Make relevance to be lower here
+							TextProposal.R_TAG_INSERTION - 1);
 				}
 			}
 		}
+	}
+	
+	
+
+	@Override
+	public String getTagPrefix() {
+		String prefix = super.getTagPrefix();
+		if (prefix != null)
+			return prefix;
+
+		String uri = getUri(""); //$NON-NLS-1$
+		return uri == null ? null : "";   //$NON-NLS-1$
 	}
 
 	/**

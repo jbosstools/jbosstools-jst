@@ -73,7 +73,7 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 	 */
 	@Override
 	public String getUri(String prefix) {
-		if (prefix == null || prefix.length() == 0)
+		if (prefix == null)
 			return null;
 		
 		Map<String, List<INameSpace>> nameSpaces = getContext().getNameSpaces(getOffset());

@@ -115,7 +115,9 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 			if(nameSpace!=null) {
 				for (INameSpace n : nameSpace) {
 					String sPrefix = n.getPrefix();
-					if(sPrefix!=null && sPrefix.length()>0) {
+					if(sPrefix!=null
+//							&& sPrefix.length()>0  // Fix for JBIDE-5381
+							) {
 						String fullTagName = null;
 						boolean mask = false;
 						if(query.getType()==KbQuery.Type.TAG_NAME || query.getType()==KbQuery.Type.TEXT) {
@@ -141,10 +143,12 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 						}
 						if(mask && prefixIndex<0) {
 							if(ignoreCase) {
-								if(sPrefix.toLowerCase().startsWith(tagName.toLowerCase())) {
+//								if(sPrefix.toLowerCase().startsWith(tagName.toLowerCase())) {
+								if(fullTagName.toLowerCase().startsWith(tagName.toLowerCase())) { // Fix for JBIDE-5381
 									prefixes.add(sPrefix);
 								}
-							} else if(sPrefix.startsWith(tagName)) {
+//							} else if(sPrefix.startsWith(tagName)) {
+							} else if(fullTagName.startsWith(tagName)) { // Fix for JBIDE-5381
 								prefixes.add(sPrefix);
 							}
 						} else if(sPrefix.equals(queryPrefix)) {
@@ -195,7 +199,8 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 			if(fullTagName.length()==0) {
 				return getExtendedComponents(context);
 			}
-			if(prefix==null) {
+			if(prefix==null 
+					|| prefix.length() == 0) {	// fix for JBIDE-5381
 				return getComponents(fullTagName, context);
 			}
 		}
