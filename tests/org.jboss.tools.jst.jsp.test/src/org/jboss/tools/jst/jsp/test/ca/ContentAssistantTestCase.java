@@ -33,7 +33,7 @@ public class ContentAssistantTestCase extends TestCase {
 
 	protected void openEditor(String fileName) {
 		IEditorPart editorPart = WorkbenchUtils.openEditor(project.getName()+"/"+ fileName);
-
+//		System.out.println("openEditor: " + project.getName()+"/"+ fileName);
 		if (editorPart instanceof JSPMultiPageEditor)
 			jspEditor = (JSPMultiPageEditor) editorPart;
 
@@ -49,7 +49,8 @@ public class ContentAssistantTestCase extends TestCase {
 				"Cannot get the Content Assistant instance for the editor for page \""
 						+ fileName + "\"", (contentAssistant != null));
 
-		assertTrue("The IDocument is not instance of IStructuredDocument",
+		assertTrue("The IDocument is not instance of IStructuredDocument for page \""
+				+ fileName + "\"",
 				(document instanceof IStructuredDocument));
 
 	}
