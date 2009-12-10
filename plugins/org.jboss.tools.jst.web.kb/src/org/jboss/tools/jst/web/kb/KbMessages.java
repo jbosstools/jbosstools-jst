@@ -16,7 +16,7 @@ import org.eclipse.osgi.util.NLS;
  * @author Alexey Kazakov
  */
 public class KbMessages {
-	private static final String BUNDLE_NAME = "org.jboss.tools.jst.web.kb.KBMessages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "org.jboss.tools.jst.web.kb.KbMessages"; //$NON-NLS-1$
 
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, KbMessages.class);
