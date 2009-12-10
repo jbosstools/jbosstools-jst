@@ -35,6 +35,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.content.IContentType;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.ui.text.FastJavaPartitionScanner;
 import org.eclipse.jdt.ui.text.IJavaPartitions;
 import org.eclipse.jface.text.BadLocationException;
@@ -49,6 +51,7 @@ import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jst.jsp.core.internal.contentmodel.TaglibController;
 import org.eclipse.jst.jsp.core.internal.contentmodel.tld.TLDCMDocumentManager;
 import org.eclipse.jst.jsp.core.internal.contentmodel.tld.TaglibTracker;
+import org.eclipse.ui.ide.IDE;
 import org.eclipse.wst.common.componentcore.internal.ComponentResource;
 import org.eclipse.wst.common.componentcore.internal.StructureEdit;
 import org.eclipse.wst.common.componentcore.internal.WorkbenchComponent;
@@ -72,10 +75,13 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 import org.jboss.tools.common.el.core.ELReference;
 import org.jboss.tools.common.el.core.GlobalELReferenceList;
+import org.jboss.tools.common.el.core.model.ELExpression;
 import org.jboss.tools.common.el.core.model.ELInstance;
+import org.jboss.tools.common.el.core.model.ELInvocationExpression;
 import org.jboss.tools.common.el.core.model.ELModel;
 import org.jboss.tools.common.el.core.parser.ELParser;
 import org.jboss.tools.common.el.core.parser.ELParserUtil;
+import org.jboss.tools.common.el.core.parser.SyntaxError;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.ELContextImpl;
 import org.jboss.tools.common.el.core.resolver.ELResolverFactoryManager;
@@ -112,31 +118,31 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 	public static final String XML_PAGE_CONTEXT_TYPE = "XML_PAGE_CONTEXT_TYPE"; //$NON-NLS-1$
 	public static final String JSP_PAGE_CONTEXT_TYPE = "JSP_PAGE_CONTEXT_TYPE"; //$NON-NLS-1$
 	public static final String FACELETS_PAGE_CONTEXT_TYPE = "FACELETS_PAGE_CONTEXT_TYPE"; //$NON-NLS-1$
-	private static final String JAVA_EXT = "java"; //$NON-NLS-1$
+	private static final String JAVA_PROPERTIES_CONTENT_TYPE = "org.eclipse.jdt.core.javaProperties"; //$NON-NLS-1$
 
 	public static final PageContextFactory getInstance() {
 		if (fInstance != null)
 			return fInstance;
 		return (fInstance = new PageContextFactory());
 	}
-	
+
 	private PageContextFactory() {
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		if (workspace != null) workspace.addResourceChangeListener(this);
 	}
-	
+
 	/*
 	 * The cache to store the created contexts
 	 * The key is IFile.getFullPath().toString() of the resource of the context 
 	 */
 	private Map<IFile, ELContext> cache = new HashMap<IFile, ELContext>();
-	
+
 	private ELContext getSavedContext(IFile resource) {
 		synchronized (cache) {
 			return cache.get(resource);
 		}
 	}
-	
+
 	private void saveConvext(ELContext context) {
 		if (context != null && context.getResource() != null) {
 //			int size = 0; // remove this line
@@ -149,10 +155,10 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 //					+ context.getResource().getFullPath().toString() + ", " + context.getClass().getSimpleName() + ", Totals: " + size);
 		}
 	}
-	
+
 	private ELContext removeSavedContext(IFile resource) {
 		ELContext removedContext = null; // Remove this line
-		
+
 		synchronized (cache) {
 			removedContext = cache.remove(resource);
 			if (removedContext instanceof XmlContextImpl && 
@@ -160,14 +166,14 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 				((XmlContextImpl)removedContext).getDocument().removeDocumentListener(this);
 			}
 		}
-		
+
 //		if (removedContext != null) { // TODO: Remove this statement
 //			System.out.println("Removed Context : " + removedContext.getResource().getFullPath().toString() + ", " + removedContext.getClass().getSimpleName() + ", Totals: " + cache.size());
 //		}
 
 		return removedContext;
 	}
-	
+
 	/**
 	 * Creates a page context for the specified context type
 	 *
@@ -178,7 +184,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 	public static ELContext createPageContext(IFile file) {
 		return getInstance().createPageContext(file, null);
 	}
-	
+
 	/**
 	 * Cleans up the context for the file specified
 	 * 
@@ -191,7 +197,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 			ELContext removedContext = removeSavedContext(file);
 			if (removedContext == null || removedContext.getResource() == null)
 				return;
-			
+
 			// Remove all the contexts that are parent to the removed context
 			ELContext[] contexts = cache.values().toArray(new ELContext[0]);
 			if (contexts != null) {
@@ -203,7 +209,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 			}
 		}
 	}
-	
+
 	/**
 	 * Cleans up the contexts for the project specified
 	 * 
@@ -224,7 +230,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 			}
 		}
 	}
-	
+
 	/**
 	 * Cleans up the contexts for the resource change delta
 	 * 
@@ -236,6 +242,45 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 			if(!checkDelta(delta)) return;
 			processDelta(delta);
 		}
+	}
+
+	private ELContext createPropertiesContext(IFile file) {
+		ELContextImpl context = new ELContextImpl();
+		context.setResource(file);
+		context.setElResolvers(ELResolverFactoryManager.getInstance().getResolvers(file));
+		String content = null;
+		try {
+			content = FileUtil.readStream(file);
+			int startEl = content.indexOf("#{"); //$NON-NLS-1$
+			if(startEl<0)
+				startEl = content.indexOf("${"); //$NON-NLS-1$
+			if(startEl>-1) {
+				ELParser parser = ELParserUtil.getJbossFactory().createParser();
+				ELModel model = parser.parse(content);
+				List<SyntaxError> errors = model.getSyntaxErrors();
+				for (ELInstance instance : model.getInstances()) {
+					for(ELInvocationExpression ie : instance.getExpression().getInvocations()){
+						ELReference elReference = new KbELReference();
+						elReference.setResource(file);
+						elReference.setEl(new ELExpression[]{ie});
+						elReference.setLength(ie.getLength());
+						elReference.setStartPosition(ie.getStartPosition());
+						List<SyntaxError> elErrors = new ArrayList<SyntaxError>();
+						for (SyntaxError error : errors) {
+							if(error.getPosition()>=ie.getStartPosition() && error.getPosition()<=ie.getEndPosition()) {
+								elErrors.add(error);
+							}
+						}
+						elReference.setSyntaxErrors(elErrors);
+						context.addELReference(elReference);
+					}
+				}
+			}
+		} catch (CoreException e) {
+			WebKbPlugin.getDefault().logError(e);
+			return null;
+		}
+		return context;
 	}
 
 	private ELContext createJavaContext(IFile file) {
@@ -305,12 +350,13 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 		if (context != null) {
 			return context;
 		}
+		IContentType type = IDE.getContentType(file);
 
-		String ext = file.getFileExtension();
-		if(ext.equalsIgnoreCase(JAVA_EXT)) {
+		if(JavaCore.JAVA_SOURCE_CONTENT_TYPE.equalsIgnoreCase(type.getId())) {
 			context = createJavaContext(file);
+		} else if(JAVA_PROPERTIES_CONTENT_TYPE.equalsIgnoreCase(type.getId())) {
+			context = createPropertiesContext(file);
 		} else {
-	
 	//		ctm = System.currentTimeMillis();
 	//		System.out.println("Create Context : " + file.getFullPath().toString() + ", Totals: " + cache.size());
 			IModelManager manager = StructuredModelManager.getModelManager();
@@ -326,19 +372,19 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 				if (model instanceof IDOMModel) {
 					IDOMModel domModel = (IDOMModel) model;
 					IDOMDocument document = domModel.getDocument();
-					
+
 					context = createPageContextInstance(domModel.getContentTypeIdentifier());
 					if (context == null)
 						return null;
-					
+
 					context.setResource(file);
 					context.setElResolvers(ELResolverFactoryManager.getInstance().getResolvers(file));
-	
+
 					if (context instanceof JspContextImpl && !(context instanceof FaceletPageContextImpl)) {
 						// Fill JSP namespaces defined in TLDCMDocumentManager 
 						fillJSPNameSpaces((JspContextImpl)context);
 					}
-					
+
 					// The subsequently called functions may use the file and document
 					// already stored in context for their needs
 					fillContextForChildNodes(document, context, parents);
