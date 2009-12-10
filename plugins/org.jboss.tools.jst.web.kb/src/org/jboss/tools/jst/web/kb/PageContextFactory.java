@@ -35,11 +35,17 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jdt.internal.ui.text.FastJavaPartitionScanner;
+import org.eclipse.jdt.ui.text.IJavaPartitions;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Region;
+import org.eclipse.jface.text.rules.IToken;
+import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jst.jsp.core.internal.contentmodel.TaglibController;
 import org.eclipse.jst.jsp.core.internal.contentmodel.tld.TLDCMDocumentManager;
 import org.eclipse.jst.jsp.core.internal.contentmodel.tld.TaglibTracker;
@@ -77,6 +83,7 @@ import org.jboss.tools.common.el.core.resolver.ElVarSearcher;
 import org.jboss.tools.common.el.core.resolver.Var;
 import org.jboss.tools.common.resref.core.ResourceReference;
 import org.jboss.tools.common.text.ext.util.Utils;
+import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.web.kb.el.KbELReference;
 import org.jboss.tools.jst.web.kb.include.IncludeContextBuilder;
 import org.jboss.tools.jst.web.kb.internal.FaceletPageContextImpl;
@@ -105,6 +112,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 	public static final String XML_PAGE_CONTEXT_TYPE = "XML_PAGE_CONTEXT_TYPE"; //$NON-NLS-1$
 	public static final String JSP_PAGE_CONTEXT_TYPE = "JSP_PAGE_CONTEXT_TYPE"; //$NON-NLS-1$
 	public static final String FACELETS_PAGE_CONTEXT_TYPE = "FACELETS_PAGE_CONTEXT_TYPE"; //$NON-NLS-1$
+	private static final String JAVA_EXT = "java"; //$NON-NLS-1$
 
 	public static final PageContextFactory getInstance() {
 		if (fInstance != null)
@@ -229,9 +237,61 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 			processDelta(delta);
 		}
 	}
-	
+
+	private ELContext createJavaContext(IFile file) {
+		ELContextImpl context = new ELContextImpl();
+		context.setResource(file);
+		context.setElResolvers(ELResolverFactoryManager.getInstance().getResolvers(file));
+		String content = null;
+		try {
+			content = FileUtil.readStream(file);
+		} catch (CoreException e) {
+			WebKbPlugin.getDefault().logError(e);
+			return null;
+		}
+		FastJavaPartitionScanner scaner = new FastJavaPartitionScanner();
+		Document document = new Document(content);
+		scaner.setRange(document, 0, document.getLength());
+		IToken token = scaner.nextToken();
+		while(token!=null && token!=Token.EOF) {
+			if(IJavaPartitions.JAVA_STRING.equals(token.getData())) {
+				int length = scaner.getTokenLength();
+				int offset = scaner.getTokenOffset();
+				String value = null;
+				try {
+					value = document.get(offset, length);
+				} catch (BadLocationException e) {
+					WebKbPlugin.getDefault().logError(e);
+					return null;
+				}
+				if(value.indexOf('{')>-1) {
+					int startEl = value.indexOf("#{"); //$NON-NLS-1$
+					if(startEl==-1) {
+						startEl = value.indexOf("${"); //$NON-NLS-1$
+					}
+					if(startEl>-1) {
+						ELParser parser = ELParserUtil.getJbossFactory().createParser();
+						ELModel model = parser.parse(value);
+						List<ELInstance> is = model.getInstances();
+
+						ELReference elReference = new KbELReference();
+						elReference.setResource(file);
+						elReference.setEl(is);
+						elReference.setLength(value.length());
+						elReference.setStartPosition(offset);
+						elReference.setSyntaxErrors(model.getSyntaxErrors());
+						context.addELReference(elReference);
+					}
+				}
+			}
+			token = scaner.nextToken();
+		}
+
+		return context;
+	}
+
 //	long ctm = 0;
-	
+
 	/**
 	 * Creates a page context for the specified context type
 	 *
@@ -242,51 +302,58 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 	 */
 	private ELContext createPageContext(IFile file, List<String> parents) {
 		ELContext context = getSavedContext(file);
-		if (context != null)
-			return context;
-		
-//		ctm = System.currentTimeMillis();
-//		System.out.println("Create Context : " + file.getFullPath().toString() + ", Totals: " + cache.size());
-		IModelManager manager = StructuredModelManager.getModelManager();
-		if(manager == null) {
-			// this may happen if plug-in org.eclipse.wst.sse.core 
-			// is stopping or un-installed, that is Eclipse is shutting down.
-			// there is no need to report it, just stop validation.
+		if (context != null) {
 			return context;
 		}
-		IStructuredModel model = null;
-		try {
-			model = manager.getModelForRead(file);
-			if (model instanceof IDOMModel) {
-				IDOMModel domModel = (IDOMModel) model;
-				IDOMDocument document = domModel.getDocument();
-				
-				context = createPageContextInstance(domModel.getContentTypeIdentifier());
-				if (context == null)
-					return null;
-				
-				context.setResource(file);
-				context.setElResolvers(ELResolverFactoryManager.getInstance().getResolvers(file));
 
-				if (context instanceof JspContextImpl && !(context instanceof FaceletPageContextImpl)) {
-					// Fill JSP namespaces defined in TLDCMDocumentManager 
-					fillJSPNameSpaces((JspContextImpl)context);
-				}
-				
-				// The subsequently called functions may use the file and document
-				// already stored in context for their needs
-				fillContextForChildNodes(document, context, parents);
+		String ext = file.getFileExtension();
+		if(ext.equalsIgnoreCase(JAVA_EXT)) {
+			context = createJavaContext(file);
+		} else {
+	
+	//		ctm = System.currentTimeMillis();
+	//		System.out.println("Create Context : " + file.getFullPath().toString() + ", Totals: " + cache.size());
+			IModelManager manager = StructuredModelManager.getModelManager();
+			if(manager == null) {
+				// this may happen if plug-in org.eclipse.wst.sse.core 
+				// is stopping or un-installed, that is Eclipse is shutting down.
+				// there is no need to report it, just stop validation.
+				return context;
 			}
-		} catch (CoreException e) {
-			WebKbPlugin.getDefault().logError(e);
-        } catch (IOException e) {
-			WebKbPlugin.getDefault().logError(e);
-		} finally {
-			if (model != null) {
-				model.releaseFromRead();
+			IStructuredModel model = null;
+			try {
+				model = manager.getModelForRead(file);
+				if (model instanceof IDOMModel) {
+					IDOMModel domModel = (IDOMModel) model;
+					IDOMDocument document = domModel.getDocument();
+					
+					context = createPageContextInstance(domModel.getContentTypeIdentifier());
+					if (context == null)
+						return null;
+					
+					context.setResource(file);
+					context.setElResolvers(ELResolverFactoryManager.getInstance().getResolvers(file));
+	
+					if (context instanceof JspContextImpl && !(context instanceof FaceletPageContextImpl)) {
+						// Fill JSP namespaces defined in TLDCMDocumentManager 
+						fillJSPNameSpaces((JspContextImpl)context);
+					}
+					
+					// The subsequently called functions may use the file and document
+					// already stored in context for their needs
+					fillContextForChildNodes(document, context, parents);
+				}
+			} catch (CoreException e) {
+				WebKbPlugin.getDefault().logError(e);
+	        } catch (IOException e) {
+				WebKbPlugin.getDefault().logError(e);
+			} finally {
+				if (model != null) {
+					model.releaseFromRead();
+				}
 			}
 		}
-		
+
 		if (context != null) {
 			if (context instanceof XmlContextImpl) {
 				IDocument contextDocument = ((XmlContextImpl) context).getDocument();
@@ -299,7 +366,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 
 		return context;
 	}
-	
+
 	private ELContext createPageContextInstance(String contentType) {
 		String contextType = IncludeContextBuilder.getContextType(contentType);
 		if (JSP_PAGE_CONTEXT_TYPE.equals(contextType)) {
@@ -336,7 +403,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 			}
 		}
 	}
-	
+
 	private void fillContextForChildNodes(IDOMNode parent, ELContext context, List<String> parents) {
 		NodeList children = parent.getChildNodes();
 		for(int i = 0; children != null && i < children.getLength(); i++) {
@@ -347,7 +414,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 			}
 		}
 	}
-	
+
 	private void fillContextForNode(IDOMNode node, ELContext context, List<String> parents) {
 		if (!(context instanceof FaceletPageContextImpl) && !(node instanceof IDOMElement)) {
 			// There is no any useful info for JSP in text nodes
@@ -440,7 +507,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 		String tagName = node.getLocalName();
 		Map<String, List<INameSpace>> nsMap = context.getNameSpaces(node.getStartOffset());
 		String[] uris = getUrisByPrefix(nsMap, prefix);
-		
+
 		if (uris != null) {
 			for (String uri : uris) {
 				if (context instanceof IIncludedContextSupport) {
@@ -448,7 +515,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 					if (includeAttributes != null) {
 						List<String> newParentList = parents == null ? new ArrayList<String>() : new ArrayList<String>(parents);
 						newParentList.add(context.getResource().getFullPath().toString());
-						
+
 						for (String attr : includeAttributes) {
 							String fileName = node.getAttribute(attr);
 							if (fileName == null || fileName.trim().length() == 0)
@@ -457,7 +524,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 							IFile file = getFileFromProject(fileName, context.getResource());
 							if (file == null)
 								continue;
-							
+
 							// Fix for JBIDE-5083 >>>
 							if (!checkCycling(parents, file))
 								continue;
@@ -484,7 +551,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 			}
 		}
 	}
-	
+
 	private boolean checkCycling(List<String> parents, IFile resource) {
 		String resourceId = resource.getFullPath().toString();
 		if (parents != null) {
@@ -495,7 +562,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Sets up the context with namespaces and according libraries for the node
 	 * For the Facelet Context the methods adds an additional special namespace for
@@ -517,12 +584,12 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 
 			String prefix = name.startsWith("xmlns:") ? name.substring("xmlns:".length()) : ""; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			String uri = a.getValue();
-				
+
 			prefix = prefix == null ? null : prefix.trim();
 			uri = uri == null ? null : uri.trim();
 			if (XHTML_TAG_LIB_URI.equalsIgnoreCase(uri))
 				continue;
-			
+
 			if (prefix != null // prefix may be empty
 					&& uri != null && uri.length() > 0) {
 
@@ -547,7 +614,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 				context.addNameSpace(region, nameSpace);
 				if (prefix.length() == 0)
 					mainNnIsRedefined = true;
-				
+
 				if (context instanceof FaceletPageContextImpl && 
 						CustomTagLibManager.FACELETS_UI_TAG_LIB_URI.equals(uri) &&
 						!mainNnIsRedefined) {
@@ -561,7 +628,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 			}
 		}
 	}
-	
+
 	private void fillResourceBundlesForNode(IDOMElement node, JspContextImpl context) {
 		String name = node.getNodeName();
 		if (name == null) return;
@@ -582,7 +649,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 
 		context.addResourceBundle(new ResourceBundle(basename, var));
 	}
-	
+
 	private void fillCSSStyleSheetFromAttribute(IDOMElement node,
 			String attribute, ICSSContainerSupport context) {
 		CSSStyleSheetDescriptor descr = getSheetForTagAttribute(node, attribute);
@@ -600,13 +667,13 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 	public static class CSSStyleSheetDescriptor {
 		public CSSStyleSheet sheet;
 		public String source;
-		
+
 		CSSStyleSheetDescriptor (String source, CSSStyleSheet sheet) {
 			this.source = source;
 			this.sheet = sheet;
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param stylesContainer
@@ -620,12 +687,10 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 				.getAdapterFor(IStyleSheetAdapter.class);
 
 		if (!(adapter instanceof ExtendedLinkElementAdapter)) {
-
 			notifier.removeAdapter(adapter);
 			adapter = new ExtendedLinkElementAdapter(
 					(Element) stylesContainer, attribute);
 			notifier.addAdapter(adapter);
-
 		}
 
 		CSSStyleSheet sheet = null;
@@ -638,7 +703,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 
 		return sheet == null || source == null ? null : new CSSStyleSheetDescriptor(source, sheet);
 	}
-	
+
 	/**
 	 * 
 	 * @param stylesContainer
@@ -669,7 +734,6 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 		return false;
 	}
 
-	
 	/**
 	 * Searches the namespace map and returns all the URIs for the specified prefix
 	 *  
@@ -688,7 +752,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 				}
 			}
 		}
-		
+
 		return uris.isEmpty() ? new String[] {prefix} : (String[])uris.toArray(new String[uris.size()]);
 	}
 
@@ -701,7 +765,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 	 */
 	public static IFile getFileFromProject(String fileName, IFile documentFile) {
 		if(documentFile == null || !documentFile.isAccessible()) return null;
-		
+
 		fileName = findAndReplaceElVariable(fileName);
 
 		IProject project = documentFile.getProject();
@@ -734,15 +798,15 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 		}
 		return null;
 	}
-	
+
 	private static IFile findFileByRelativePath(IProject project,
 			WorkbenchComponent module, IPath basePath, String path) {
-		
+
 		if (path == null || path.trim().length() == 0)
 			return null;
-		
+
 		path = findAndReplaceElVariable(path);
-		
+
 		ComponentResource[] resources = module.findResourcesBySourcePath(
 				new Path("/"), 0); //$NON-NLS-1$
 		IPath projectPath = project.getLocation();
@@ -780,7 +844,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 		WorkbenchComponent module, String path) {
 		ComponentResource[] resources = module.findResourcesBySourcePath(
 				new Path("/"), 0); //$NON-NLS-1$
-		
+
 		path = findAndReplaceElVariable(path);
 
 		IFile member = null;
@@ -805,13 +869,13 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 		}
 		return null;
 	}
-	
+
 	private static final String DOLLAR_PREFIX = "${"; //$NON-NLS-1$
 
     private static final String SUFFIX = "}"; //$NON-NLS-1$
 
     private static final String SHARP_PREFIX = "#{"; //$NON-NLS-1$
-    
+
 	public static final String CONTEXT_PATH_EXPRESSION = "^\\s*(\\#|\\$)\\{facesContext.externalContext.requestContextPath\\}"; //$NON-NLS-1$
 
 	// partly copied from org.jboss.tools.vpe.editor.util.ElService
@@ -839,7 +903,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 		}
 		return result;
 	}
-	
+
 	// copied from org.jboss.tools.vpe.editor.util.ElService
 	private static ResourceReference[] sortReferencesByScope(ResourceReference[] references) {
 		ResourceReference[] sortedReferences = references.clone();
@@ -852,7 +916,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 
 		return sortedReferences;
 	}
-	
+
 	public static class ExtendedLinkElementAdapter extends LinkElementAdapter {
 
 		private Element element;
@@ -872,12 +936,12 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 		public String getSource() {
 			return source;
 		}
-		
+
 		@Override
 		protected boolean isValidAttribute() {
 			if (super.isValidAttribute())
 				return true;
-			
+
 			String href = getElement().getAttribute(hrefAttrName);
 			if (href == null || href.length() == 0)
 				return false;
@@ -904,7 +968,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 		private String getSourceFromAttribute(String hrefAttributeName) {
 			String hrefExtracted = findAndReplaceElVariable(element
 					.getAttribute(hrefAttrName));
-			
+
 			return hrefExtracted;
 		}
 
@@ -972,12 +1036,12 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 		}
 		return true;
 	}
-	
+
 	private void processDelta(IResourceDelta delta) {
 		if(delta == null) return;
 		int kind = delta.getKind();
 		IResource resource = delta.getResource();
-		
+
 		if(resource instanceof IProject &&
 				kind == IResourceDelta.REMOVED) {
 			cleanUp((IProject)resource);
@@ -995,12 +1059,12 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 		}
 		return;
 	}
-	
+
 	private boolean isDependencyContext(ELContext context, IFile resource) {
 		if (resource.equals(context.getResource())) {
 			return true;
 		}
-		
+
 		if(context instanceof IIncludedContextSupport) {
 			List<ELContext> includedContexts = ((IIncludedContextSupport)context).getIncludedContexts();
 			if (includedContexts != null) {
@@ -1012,7 +1076,7 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 		}
 		return false;
 	}
-	
+
 	@Override
 	protected void finalize() throws Throwable {
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();

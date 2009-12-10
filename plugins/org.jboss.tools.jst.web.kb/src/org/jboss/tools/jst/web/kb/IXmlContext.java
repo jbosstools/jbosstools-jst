@@ -11,9 +11,7 @@
 
 package org.jboss.tools.jst.web.kb;
 
-import org.jboss.tools.common.el.core.ELReference;
 import org.jboss.tools.common.el.core.resolver.ELContext;
-import org.jboss.tools.common.el.core.resolver.Var;
 
 /**
  * 
@@ -22,18 +20,4 @@ import org.jboss.tools.common.el.core.resolver.Var;
  */
 public interface IXmlContext extends ELContext {
 
-	/**
-	 * Returns "var" attributes which are available in particular offset.
-	 * 
-	 * @param offset
-	 * @return
-	 */
-	Var[] getVars(int offset);
-
-	/**
-	 * Returns all EL references of the file of this context.
-	 * 
-	 * @return
-	 */
-	ELReference[] getELReferences();
 }
