@@ -97,7 +97,7 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 		
 		// Need to check if an EL Expression is opened here.
 		// If it is true we don't need to start any new tag proposals
-		TextRegion prefix = getELPrefix();
+		TextRegion prefix = getELPrefix(contentAssistRequest);
 		if (prefix != null && prefix.isELStarted()) {
 			return;
 		}
@@ -237,7 +237,7 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 	protected void addAttributeValueProposals(ContentAssistRequest contentAssistRequest) {
 		// Need to check if an EL Expression is opened here.
 		// If it is true we don't need to start any new tag proposals
-		TextRegion prefix = getELPrefix();
+		TextRegion prefix = getELPrefix(contentAssistRequest);
 		if (prefix != null && prefix.isELStarted()) {
 			return;
 		}
@@ -285,13 +285,14 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 
 	@Override
 	protected void addAttributeValueELProposals(ContentAssistRequest contentAssistRequest) {
-		TextRegion prefix = getELPrefix();
+		TextRegion prefix = getELPrefix(contentAssistRequest);
 		if (prefix == null) {
 			return;
 		}
 
 		if(!prefix.isELStarted()) {
-			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(true, "#{}",  //$NON-NLS-1$
+			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(true, 
+					"#{}" + (prefix.isAttributeValue() && prefix.hasOpenQuote() && !prefix.hasCloseQuote() ? String.valueOf(prefix.getQuoteChar()) : ""), //$NON-NLS-1$ //$NON-NLS-2$
 					getOffset(), 0, 2, JSF_EL_PROPOSAL_IMAGE, JstUIMessages.JspContentAssistProcessor_NewELExpression, 
 					null, JstUIMessages.JspContentAssistProcessor_NewELExpressionAttrInfo, TextProposal.R_XML_ATTRIBUTE_VALUE_TEMPLATE);
 
@@ -315,7 +316,21 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 			int replacementOffset = beginChangeOffset;
 			int replacementLength = prefix.getLength();
 			String replacementString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString();
+			
+			char quoteChar = prefix.isAttributeValue() && prefix.hasOpenQuote() ? prefix.getQuoteChar() : '"';
+//			if (prefix.isAttributeValue() && !prefix.hasOpenQuote()) {
+//				replacementString = String.valueOf(quoteChar) + replacementString;
+//			}
 			int cursorPosition = replacementString.length();
+			
+			if (!prefix.isELClosed()) {
+				replacementString += "}"; //$NON-NLS-1$
+			}
+			
+			if (prefix.isAttributeValue() && prefix.hasOpenQuote() && !prefix.hasCloseQuote()) {
+				replacementString += String.valueOf(quoteChar);
+			}
+									
 			Image image = textProposal.getImage();
 			
 			// JBIDE-512, JBIDE-2541 related changes ===>>>
@@ -340,9 +355,10 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 		}
 
 		if (prefix.isELStarted() && !prefix.isELClosed()) {
-			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal("}", //$NON-NLS-1$
-					getOffset(), 0, 1, JSF_EL_PROPOSAL_IMAGE, JstUIMessages.JspContentAssistProcessor_CloseELExpression, 
-					null, JstUIMessages.JspContentAssistProcessor_CloseELExpressionInfo, TextProposal.R_XML_ATTRIBUTE_VALUE_TEMPLATE);
+			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(
+					"}" + (prefix.isAttributeValue() && prefix.hasOpenQuote() && !prefix.hasCloseQuote() ? String.valueOf(prefix.getQuoteChar()) : ""), //$NON-NLS-1$ //$NON-NLS-2$
+					getOffset(), 0, 0, JSF_EL_PROPOSAL_IMAGE, JstUIMessages.JspContentAssistProcessor_CloseELExpression, 
+					null, JstUIMessages.JspContentAssistProcessor_CloseELExpressionInfo, TextProposal.R_XML_ATTRIBUTE_VALUE + 1); //
 
 			contentAssistRequest.addProposal(proposal);
 		}
@@ -350,12 +366,12 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 
 	@Override
 	protected void addTextELProposals(ContentAssistRequest contentAssistRequest) {
-		TextRegion prefix = getELPrefix();
+		TextRegion prefix = getELPrefix(contentAssistRequest);
 		if (prefix == null || !prefix.isELStarted()) {
 			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(true, "#{}", //$NON-NLS-1$ 
 					contentAssistRequest.getReplacementBeginPosition(), 
 					0, 2, JSF_EL_PROPOSAL_IMAGE, JstUIMessages.JspContentAssistProcessor_NewELExpression, null, 
-					JstUIMessages.FaceletPageContectAssistProcessor_NewELExpressionTextInfo, TextProposal.R_XML_ATTRIBUTE_VALUE_TEMPLATE);
+					JstUIMessages.FaceletPageContectAssistProcessor_NewELExpressionTextInfo, TextProposal.R_TAG_INSERTION + 1);
 			
 			contentAssistRequest.addProposal(proposal);
 			return;
@@ -378,6 +394,11 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 			int replacementLength = prefix.getLength();
 			String replacementString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString();
 			int cursorPosition = replacementString.length();
+			
+			if (!prefix.isELClosed()) {
+				replacementString += "}"; //$NON-NLS-1$
+			}
+
 			Image image = textProposal.getImage();
 
 			// JBIDE-512, JBIDE-2541 related changes ===>>>

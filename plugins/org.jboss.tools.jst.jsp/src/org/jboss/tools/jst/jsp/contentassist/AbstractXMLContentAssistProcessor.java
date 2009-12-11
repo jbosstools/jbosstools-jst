@@ -938,10 +938,68 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	}
 	
 	/**
-	 * Returns URI for the current/parent tag
+	 * Returns EL Prefix Text Region Information Object
+	 * 
 	 * @return
 	 */
-	@SuppressWarnings("deprecation")
+	protected TextRegion getELPrefix(ContentAssistRequest request) {
+		if (!DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE.equals(request.getRegion().getType()) &&
+				!DOMRegionContext.XML_CONTENT.equals(request.getRegion().getType())) 
+			return null;
+		
+		String text = request.getDocumentRegion().getFullText(request.getRegion());
+		int startOffset = request.getDocumentRegion().getStartOffset() + request.getRegion().getStart();
+
+		boolean isAttributeValue = false;
+		boolean hasOpenQuote = false;
+		boolean hasCloseQuote = false;
+		char quoteChar = (char)0;
+		if (DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE.equals(request.getRegion().getType())) {
+			isAttributeValue = true;
+			if (text.startsWith("\"") || text.startsWith("'")) {//$NON-NLS-1$ //$NON-NLS-2$
+				quoteChar = text.charAt(0);
+				hasOpenQuote = true;
+			}
+			if (hasOpenQuote && text.endsWith(String.valueOf(quoteChar))) {
+				hasCloseQuote = true;
+			}
+		}
+		
+		int inValueOffset = getOffset() - startOffset;
+		if (text != null && text.length() < inValueOffset) { // probably, the attribute value ends before the document position
+			return null;
+		}
+		if (inValueOffset<0) {
+			return null;
+		}
+		
+//			String matchString = text.substring(0, inValueOffset);
+		
+		ELParser p = ELParserUtil.getJbossFactory().createParser();
+		ELModel model = p.parse(text);
+		
+		ELInstance is = ELUtil.findInstance(model, inValueOffset);// ELInstance
+		ELInvocationExpression ie = ELUtil.findExpression(model, inValueOffset);// ELExpression
+		
+		boolean isELStarted = (model != null && is != null && (model.toString().startsWith("#{") ||  //$NON-NLS-1$
+				model.toString().startsWith("${"))); //$NON-NLS-1$
+		boolean isELClosed = (model != null && is != null && model.toString().endsWith("}")); //$NON-NLS-1$
+		
+//			boolean insideEL = startOffset + model.toString().length() 
+		TextRegion tr = new TextRegion(startOffset,  ie == null ? inValueOffset : ie.getStartPosition(), 
+				ie == null ? 0 : inValueOffset - ie.getStartPosition(), ie == null ? "" : ie.getText(),  //$NON-NLS-1$ 
+				isELStarted, isELClosed,
+				isAttributeValue, hasOpenQuote, hasCloseQuote, quoteChar);
+		
+		return tr;
+	}
+	
+	/**
+	 * Returns EL Prefix Text Region Information Object
+	 * 
+	 * @deprecated
+	 * @return
+	 */
 	protected TextRegion getELPrefix() {
 		IStructuredModel sModel = StructuredModelManager
 									.getModelManager()
@@ -1038,14 +1096,27 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 		private String text;
 		private boolean isELStarted;
 		private boolean isELClosed;
+		private boolean isAttributeValue;
+		private boolean hasOpenQuote;
+		private boolean hasCloseQuote;
+		private char quoteChar;
 		
 		TextRegion(int startOffset, int offset, int length, String text, boolean isELStarted, boolean isELClosed) {
+			this(startOffset, offset, length, text, isELStarted, isELClosed, false, false, false, (char)0);
+		}
+
+		TextRegion(int startOffset, int offset, int length, String text, boolean isELStarted, boolean isELClosed,
+				boolean isAttributeValue, boolean hasOpenQuote, boolean hasCloseQuote, char quoteChar) {
 			this.startOffset = startOffset;
 			this.offset = offset;
 			this.length = length;
 			this.text = text;
 			this.isELStarted = isELStarted;
 			this.isELClosed = isELClosed;
+			this.isAttributeValue = isAttributeValue;
+			this.hasOpenQuote = hasOpenQuote;
+			this.hasCloseQuote = hasCloseQuote;
+			this.quoteChar = quoteChar;
 		}
 		
 		public int getStartOffset() {
@@ -1073,6 +1144,22 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 
 		public boolean isELClosed() {
 			return isELClosed;
+		}
+
+		public boolean isAttributeValue() {
+			return isAttributeValue;
+		}
+
+		public char getQuoteChar() {
+			return quoteChar;
+		}
+
+		public boolean hasOpenQuote() {
+			return hasOpenQuote;
+		}
+
+		public boolean hasCloseQuote() {
+			return hasCloseQuote;
 		}
 	}
 }
