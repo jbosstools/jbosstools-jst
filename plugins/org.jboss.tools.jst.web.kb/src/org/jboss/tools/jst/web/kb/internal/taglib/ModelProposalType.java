@@ -30,6 +30,7 @@ public abstract class ModelProposalType extends CustomProposalType {
 	@Override
 	protected void init(IPageContext context) {
 		provider = WebPromptingProvider.getInstance();
+		xModel = null;
 		IModelNature nature = EclipseResourceUtil.getModelNature(context.getResource().getProject());
 		if(nature!=null) {
 			xModel = nature.getModel();

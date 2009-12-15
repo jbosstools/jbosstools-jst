@@ -63,6 +63,7 @@ public class ResourcePathProposalType extends ModelProposalType {
 	@Override
 	protected void init(IPageContext context) {
 		super.init(context);
+		webRootResource = null;
 		if(xModel != null) {
 			XModelObject webInf = FileSystemsHelper.getWebInf(xModel);
 			XModelObject webRoot = FileSystemsHelper.getWebRoot(xModel);
