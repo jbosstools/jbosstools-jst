@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.jboss.tools.jst.web.kb.internal.taglib;
+package org.jboss.tools.jst.web.kb.internal.proposal;
 
 import java.util.ArrayList;
 import java.util.HashMap;

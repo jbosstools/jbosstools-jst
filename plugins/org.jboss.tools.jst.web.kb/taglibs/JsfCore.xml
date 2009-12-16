@@ -2,6 +2,12 @@
 <!DOCTYPE tag-lib PUBLIC "-//Red Hat, Inc//DTD Knowledge Base 2.0//EN" "http://anonsvn.jboss.org/repos/jbosstools/trunk/jst/plugins/org.jboss.tools.jst.web.kb/resources/kbCustomTagLibSchema-1.0.dtd">
 <tag-lib defaultPrefix="f">
 
+	<component closeTag="true" name="facet">
+        <attribute name="name">
+            <proposal type="facetName"/>
+        </attribute>
+	</component>
+
 	<component closeTag="true" name="loadBundle">
         <attribute name="basename">
             <proposal type="bundleName"/>

@@ -10,7 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.drop.treeviewer.model;
 
-import org.jboss.tools.jst.web.kb.internal.taglib.CustomProposalType.Param;
+import org.jboss.tools.jst.web.kb.internal.proposal.CustomProposalType.Param;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 
 /**

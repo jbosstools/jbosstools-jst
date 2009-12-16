@@ -16,6 +16,7 @@ import java.util.List;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.internal.proposal.CustomProposalType;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
 
 /**

@@ -77,6 +77,20 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		return components.get(name);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.taglib.ITagLibrary#getComponentByType(java.lang.String)
+	 */
+	public IComponent getComponentByType(String type) {
+		IComponent[] comps = getComponents();
+		for (int i = 0; i < comps.length; i++) {
+			if(type.equals(comps[i].getComponentType())) {
+				return comps[i];
+			}
+		}
+		return null;
+	}
+
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.TagLibrary#getComponents(java.lang.String)
 	 */

@@ -10,26 +10,17 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal.taglib.composite;
 
-import java.util.Properties;
-
 import org.jboss.tools.jst.web.kb.internal.KbXMLStoreConstants;
 import org.jboss.tools.jst.web.kb.internal.taglib.AbstractComponent;
-import org.w3c.dom.Element;
 
 public class CompositeComponent extends AbstractComponent {
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.KbObject#getXMLClass()
+	 */
+	@Override
 	public String getXMLClass() {
 		return KbXMLStoreConstants.CLS_COMPOSITE_LIBRARY;
 	}
-	
-	@Override
-	protected void saveAttributesInfo(Element element, Properties context) {
-		super.saveAttributesInfo(element, context);
-	}
-
-	@Override
-	protected void loadAttributesInfo(Element element, Properties context) {
-		super.loadAttributesInfo(element, context);
-	}
-
 }

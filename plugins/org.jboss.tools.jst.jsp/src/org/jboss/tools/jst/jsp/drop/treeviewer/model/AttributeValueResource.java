@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 import org.jboss.tools.jst.jsp.outline.ValueHelper;
 import org.jboss.tools.jst.web.kb.KbQuery;
-import org.jboss.tools.jst.web.kb.internal.taglib.CustomProposalType.Param;
+import org.jboss.tools.jst.web.kb.internal.proposal.CustomProposalType.Param;
 
 /**
  * @author Igels

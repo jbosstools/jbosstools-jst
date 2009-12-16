@@ -15,8 +15,8 @@ import org.eclipse.ui.IEditorInput;
 
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
-import org.jboss.tools.jst.web.kb.internal.taglib.CustomProposalType;
-import org.jboss.tools.jst.web.kb.internal.taglib.CustomProposalTypeFactory;
+import org.jboss.tools.jst.web.kb.internal.proposal.CustomProposalType;
+import org.jboss.tools.jst.web.kb.internal.proposal.CustomProposalTypeFactory;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 
 /**

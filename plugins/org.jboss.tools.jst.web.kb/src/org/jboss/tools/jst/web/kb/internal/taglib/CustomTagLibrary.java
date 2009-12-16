@@ -23,6 +23,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
+import org.jboss.tools.jst.web.kb.internal.proposal.CustomProposalType;
+import org.jboss.tools.jst.web.kb.internal.proposal.CustomProposalTypeFactory;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibrary;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;

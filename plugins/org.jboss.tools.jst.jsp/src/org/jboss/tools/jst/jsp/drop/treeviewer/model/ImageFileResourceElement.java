@@ -16,7 +16,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.ui.IEditorInput;
 
 import org.jboss.tools.jst.jsp.support.kb.WTPKbImageFileResource;
-import org.jboss.tools.jst.web.kb.internal.taglib.CustomProposalType.Param;
+import org.jboss.tools.jst.web.kb.internal.proposal.CustomProposalType.Param;
 
 /**
  * @author Igels

@@ -3,7 +3,7 @@ package org.jboss.tools.jst.jsp.drop.treeviewer.model;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
-import org.jboss.tools.jst.web.kb.internal.taglib.CustomProposalType;
+import org.jboss.tools.jst.web.kb.internal.proposal.CustomProposalType;
 
 public class IDResourceElement extends AttributeValueResource {
 	IPageContext pageContext;

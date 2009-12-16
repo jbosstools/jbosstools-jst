@@ -12,9 +12,9 @@ package org.jboss.tools.jst.web.kb.taglib;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
-import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.IProposalProcessor;
+import org.jboss.tools.jst.web.kb.KbQuery;
 
 /**
  * Represents a tag library.
@@ -63,6 +63,12 @@ public interface ITagLibrary extends IProposalProcessor {
 	 * @return tag by name
 	 */
 	IComponent getComponent(String name);
+
+	/**
+	 * @param type
+	 * @return component by type
+	 */
+	IComponent getComponentByType(String type);
 
 	/**
 	 * @param query

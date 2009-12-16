@@ -30,6 +30,15 @@ public class TagLibraryManager {
 		if(kbProject == null) {
 			return new ITagLibrary[0];
 		}
-		return kbProject.getTagLibraries(uri);
+		return uri==null?kbProject.getTagLibraries():kbProject.getTagLibraries(uri);
+	}
+
+	/**
+	 * Returns all tag libraries which are available in the project.
+	 * @param project
+	 * @return
+	 */
+	public static ITagLibrary[] getLibraries(IProject project) {
+		return getLibraries(project, null);
 	}
 }
