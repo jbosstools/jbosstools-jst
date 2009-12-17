@@ -77,7 +77,7 @@ public class LibraryScanner implements IFileScanner {
 		if(metaInf != null) {
 			XModelObject[] tlds = metaInf.getChildren();
 			for (XModelObject tld: tlds) {
-				if(isFaceletTaglibFile(tld) || isTLDFile(tld)) {
+				if(isFaceletTaglibFile(tld) || isTLDFile(tld) || isFacesConfigFile(tld)) {
 					XMLScanner s = new XMLScanner();				
 					LoadedDeclarations ds1 = s.parse(tld, path, sp);
 					if(ds1 != null) ds.add(ds1);

@@ -49,6 +49,7 @@ public class XMLScanner implements IFileScanner {
 	public static final String ATTR_ATTRIBUTE_NAME = "attribute-name"; //$NON-NLS-1$
 	public static final String ATTR_FUNC_SIGN = "function-signature"; //$NON-NLS-1$
 	public static final String ATTR_FUNC_NAME = "function-name"; //$NON-NLS-1$
+	public static final String ATTR_COMPONENT_TYPE = "component-type"; //$NON-NLS-1$
 	
 	public XMLScanner() {}
 
@@ -190,6 +191,13 @@ public class XMLScanner implements IFileScanner {
 				FaceletTag tag = new FaceletTag();
 				tag.setId(t);
 				tag.setName(new XMLValueInfo(t, ATTR_TAG_NAME));
+				XModelObject d = t.getChildByPath("declaration"); //$NON-NLS-1$
+				if(d != null && d.getModelEntity().getName().startsWith("FaceletTaglibComponent")) { //$NON-NLS-1$
+					String componentType = d.getAttributeValue(ATTR_COMPONENT_TYPE); //$NON-NLS-1$
+					if(componentType != null && componentType.length() > 0) {
+						tag.setComponentType(new XMLValueInfo(d, ATTR_COMPONENT_TYPE)); //$NON-NLS-1$
+					}
+				}
 				library.addComponent(tag);
 			} else if(entity.startsWith("FaceletTaglibFunction")) { //$NON-NLS-1$
 				ELFunction f = new ELFunction();
