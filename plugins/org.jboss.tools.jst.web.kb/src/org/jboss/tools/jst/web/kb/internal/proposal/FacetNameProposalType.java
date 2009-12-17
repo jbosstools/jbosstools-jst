@@ -66,10 +66,12 @@ public class FacetNameProposalType extends CustomProposalType {
 					if(lib instanceof IFacesConfigTagLibrary) {
 						for (String type : types) {
 							IComponent comp = lib.getComponentByType(type);
-							Facet[] facets = comp.getFacets();
-							if(facets!=null) {
-								for (int i = 0; i < facets.length; i++) {
-									facetNames.add(facets[i].getName());
+							if(comp!=null) {
+								Facet[] facets = comp.getFacets();
+								if(facets!=null) {
+									for (int i = 0; i < facets.length; i++) {
+										facetNames.add(facets[i].getName());
+									}
 								}
 							}
 						}
@@ -87,6 +89,7 @@ public class FacetNameProposalType extends CustomProposalType {
 				if(ICON==null) {
 					ICON = ImageDescriptor.createFromFile(WebKbPlugin.class, IMAGE_NAME).createImage();
 				}
+				proposal.setImage(ICON);
 				proposals.add(proposal);
 			}
 		}
