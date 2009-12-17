@@ -878,7 +878,7 @@ public class KbProject extends KbObject implements IKbProject {
 	 * @param resource
 	 */
 	public static boolean checkKBBuilderInstalled(IResource resource) {
-		IProject project = resource == null ? null : resource.getProject();
+		IProject project = resource == null || !resource.isAccessible() ? null : resource.getProject();
 		if (project == null) 
 			return false; // Cannot check anything
 
@@ -942,20 +942,22 @@ public class KbProject extends KbObject implements IKbProject {
 	private static IMarker[] getOwnedMarkers(IResource r) {
 		ArrayList<IMarker> l = null;
 		try {
-			IMarker[] ms = r.findMarkers(null, false, 1);
-			if(ms != null) {
-				for (int i = 0; i < ms.length; i++) {
-					if(ms[i] == null) continue;
-
-					String _type = ms[i].getType();
-					if(_type == null) continue;
-					if(!_type.equals(KB_PROBLEM_MARKER_TYPE)) continue;
-					if(!ms[i].isSubtypeOf(IMarker.PROBLEM)) continue;
+			if(r!=null && r.isAccessible()) {
+				IMarker[] ms = r.findMarkers(null, false, 1);
+				if(ms != null) {
+					for (int i = 0; i < ms.length; i++) {
+						if(ms[i] == null) continue;
 	
-					if(l == null) 
-						l = new ArrayList<IMarker>();
-					
-					l.add(ms[i]);
+						String _type = ms[i].getType();
+						if(_type == null) continue;
+						if(!_type.equals(KB_PROBLEM_MARKER_TYPE)) continue;
+						if(!ms[i].isSubtypeOf(IMarker.PROBLEM)) continue;
+		
+						if(l == null) 
+							l = new ArrayList<IMarker>();
+						
+						l.add(ms[i]);
+					}
 				}
 			}
 		} catch (CoreException e) {
