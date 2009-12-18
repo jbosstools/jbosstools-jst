@@ -2530,7 +2530,10 @@
    <XModelAttribute default="servlet mapping" loader="ElementType" name="element type">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="id=true;save=always" name="servlet-name" xmlname="servlet-name.#text"/>
+   <XModelAttribute PROPERTIES="id=true;save=always" name="servlet-name" xmlname="servlet-name.#text">
+    <Constraint loader="ListString"/>
+    <Editor name="ServletList"/>
+   </XModelAttribute>
    <XModelAttribute PROPERTIES="save=always" name="url-pattern" xmlname="url-pattern.#text"/>
    <XModelAttribute name="id" visibility="false" xmlname="id"/>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
