@@ -10,27 +10,28 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp;
 
-import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.List;
 
-import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Plugin;
+import org.eclipse.jface.text.ITextHover;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.formatter.IContentFormatter;
 import org.eclipse.jface.text.formatter.MultiPassContentFormatter;
 import org.eclipse.jface.text.hyperlink.IHyperlinkDetector;
+import org.eclipse.jface.text.information.IInformationProvider;
 import org.eclipse.jface.text.source.ISourceViewer;
-import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
 import org.eclipse.wst.html.core.text.IHTMLPartitions;
 import org.eclipse.wst.html.ui.StructuredTextViewerConfigurationHTML;
+import org.eclipse.wst.sse.ui.internal.ExtendedConfigurationBuilder;
+import org.eclipse.wst.sse.ui.internal.SSEUIPlugin;
 import org.eclipse.wst.sse.ui.internal.format.StructuredFormattingStrategy;
-import org.jboss.tools.common.text.xml.contentassist.SortingCompoundContentAssistProcessor;
+import org.eclipse.wst.sse.ui.internal.taginfo.AnnotationHoverProcessor;
+import org.eclipse.wst.sse.ui.internal.taginfo.ProblemAnnotationHoverProcessor;
+import org.eclipse.wst.sse.ui.internal.taginfo.TextHoverManager;
 import org.jboss.tools.jst.jsp.format.HTMLFormatProcessor;
-import org.osgi.framework.Bundle;
+import org.jboss.tools.jst.jsp.jspeditor.info.ChainTextHover;
 
+@SuppressWarnings("restriction")
 public class HTMLTextViewerConfiguration extends StructuredTextViewerConfigurationHTML implements ITextViewerConfiguration{
 
 	TextViewerConfigurationDelegate configurationDelegate;	
@@ -39,7 +40,6 @@ public class HTMLTextViewerConfiguration extends StructuredTextViewerConfigurati
 		configurationDelegate = new TextViewerConfigurationDelegate(this);
 	}
 
-	@SuppressWarnings("restriction")
     protected IContentAssistProcessor[] getContentAssistProcessors(ISourceViewer sourceViewer, String partitionType) {
 		return configurationDelegate.getContentAssistProcessors(sourceViewer, partitionType);
 	}
@@ -68,4 +68,63 @@ public class HTMLTextViewerConfiguration extends StructuredTextViewerConfigurati
 			ISourceViewer sourceViewer, String partitionType) {
 		return super.getContentAssistProcessors(sourceViewer, partitionType);
 	}
+
+	/**
+	 * Create documentation hovers based on hovers contributed via
+	 * <code>org.eclipse.wst.sse.ui.editorConfiguration</code> extension
+	 * point
+	 * 
+	 * Copied from {@link org.eclipse.wst.sse.ui.StructuredTextViewerConfiguration} because of private modifier
+	 * 
+	 * @param partitionType
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private ITextHover[] createDocumentationHovers(String partitionType) {
+		List extendedTextHover = ExtendedConfigurationBuilder.getInstance().getConfigurations(ExtendedConfigurationBuilder.DOCUMENTATIONTEXTHOVER, partitionType);
+		ITextHover[] hovers = (ITextHover[]) extendedTextHover.toArray(new ITextHover[extendedTextHover.size()]);
+		return hovers;
+	}
+
+	@Override
+	protected IInformationProvider getInformationProvider(
+			ISourceViewer sourceViewer, String partitionType) {
+		
+		ITextHover chainTextHover = new ChainTextHover(createDocumentationHovers(partitionType));
+		return new TextHoverInformationProvider(chainTextHover);
+	}
+
+	@Override
+	public ITextHover getTextHover(ISourceViewer sourceViewer,
+			String contentType, int stateMask) {
+		ITextHover textHover = null;
+
+		/*
+		 * Returns a default problem, annotation, and best match hover
+		 * depending on stateMask
+		 */
+		TextHoverManager.TextHoverDescriptor[] hoverDescs = SSEUIPlugin.getDefault().getTextHoverManager().getTextHovers();
+		int i = 0;
+		while (i < hoverDescs.length && textHover == null) {
+			if (hoverDescs[i].isEnabled() && computeStateMask(hoverDescs[i].getModifierString()) == stateMask) {
+				String hoverType = hoverDescs[i].getId();
+				if (TextHoverManager.PROBLEM_HOVER.equalsIgnoreCase(hoverType))
+					textHover = new ProblemAnnotationHoverProcessor();
+				else if (TextHoverManager.ANNOTATION_HOVER.equalsIgnoreCase(hoverType))
+					textHover = new AnnotationHoverProcessor();
+				else if (TextHoverManager.COMBINATION_HOVER.equalsIgnoreCase(hoverType))
+					textHover = new ChainTextHover(createDocumentationHovers(contentType));
+				else if (TextHoverManager.DOCUMENTATION_HOVER.equalsIgnoreCase(hoverType)) {
+					ITextHover[] hovers = createDocumentationHovers(contentType);
+					if (hovers.length > 0) {
+						textHover = hovers[0];
+					}
+				}
+			}
+			i++;
+		}
+		return textHover;
+	}
+	
+	
 }
