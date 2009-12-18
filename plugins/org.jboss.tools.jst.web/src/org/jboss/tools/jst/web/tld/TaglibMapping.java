@@ -90,6 +90,7 @@ public class TaglibMapping implements ITaglibMapping {
 		XModelObject webRoot = FileSystemsHelper.getWebRoot(model);
 		if(webxml == null || webRoot == null) return;
 		XModelObject cp = WebAppHelper.findWebAppContextParam(webxml, "facelets.LIBRARIES"); //$NON-NLS-1$
+		if(cp == null) cp = WebAppHelper.findWebAppContextParam(webxml, "javax.faces.FACELETS_LIBRARIES");
 		if(cp == null) return;
 		String paths = cp.getAttributeValue("param-value"); //$NON-NLS-1$
 		if(paths == null || paths.length() == 0) return;
