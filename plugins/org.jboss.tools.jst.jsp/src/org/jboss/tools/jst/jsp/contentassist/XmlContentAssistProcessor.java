@@ -13,6 +13,8 @@ package org.jboss.tools.jst.jsp.contentassist;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
@@ -285,6 +287,9 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 
 	@Override
 	protected void addAttributeValueELProposals(ContentAssistRequest contentAssistRequest) {
+		if (!isJsfProject())
+			return;
+		
 		TextRegion prefix = getELPrefix(contentAssistRequest);
 		if (prefix == null) {
 			return;
@@ -429,5 +434,24 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 
 			contentAssistRequest.addProposal(proposal);
 		}
+	}
+
+	/**
+	 * A temporary fix to decide if JSF-tricks are to play 
+	 * 
+	 * @return
+	 */
+	protected boolean isJsfProject() {
+		if (getContext() == null || getContext().getResource() == null)
+			return false;
+		
+		IProject project = getContext().getResource().getProject();
+		try {
+			if (project.getNature("org.jboss.tools.jsf.jsfnature") != null)  //$NON-NLS-1$
+				return true;
+		} catch (CoreException e) {
+			JspEditorPlugin.getDefault().logError(e);
+		}
+		return false;
 	}
 }
