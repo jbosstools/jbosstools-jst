@@ -12,12 +12,15 @@ package org.jboss.tools.jst.web.ui.editors;
 
 import org.jboss.tools.common.editor.TreeFormPage;
 import org.jboss.tools.common.meta.key.WizardKeys;
+import org.jboss.tools.common.model.XFilteredTreeConstraint;
 import org.jboss.tools.common.model.ui.editor.EditorDescriptor;
 import org.jboss.tools.common.model.ui.editors.multipage.DefaultMultipageEditor;
+import org.jboss.tools.common.model.util.ModelFeatureFactory;
 import org.jboss.tools.jst.web.tld.model.EditorTreeConstraint;
 import org.jboss.tools.jst.web.ui.Messages;
 
 public class WebCompoundEditor extends DefaultMultipageEditor {
+	public static String EDITOR_TREE_CONSTRAINT_ID = "editorTreeConstraint"; //$NON-NLS-1$
 			
 	protected void doCreatePages() {
 		if(isAppropriateNature()) {
@@ -29,7 +32,7 @@ public class WebCompoundEditor extends DefaultMultipageEditor {
 				if(s != null) title = s;
 			}
 			treeFormPage.setTitle(title);
-			((TreeFormPage)treeFormPage).addFilter(new EditorTreeConstraint());
+			addTreeConstraint();
 			treeFormPage.initialize(object);
 			addFormPage(treeFormPage);
 		}
@@ -37,6 +40,18 @@ public class WebCompoundEditor extends DefaultMultipageEditor {
 		initEditors();
 		if(treeFormPage != null) selectionProvider.addHost("treeEditor", treeFormPage.getSelectionProvider()); //$NON-NLS-1$
 		if(textEditor != null) selectionProvider.addHost("textEditor", getTextSelectionProvider()); //$NON-NLS-1$
+	}
+
+	protected void addTreeConstraint() {
+		XFilteredTreeConstraint constraint = null;
+		String editorTreeConstraintId = object.getModelEntity().getProperty(EDITOR_TREE_CONSTRAINT_ID);
+		if(editorTreeConstraintId != null) {
+			constraint = (XFilteredTreeConstraint)ModelFeatureFactory.getInstance().createFeatureInstance(editorTreeConstraintId);
+		}
+		if(constraint == null) {
+			constraint = new EditorTreeConstraint();
+		}
+		((TreeFormPage)treeFormPage).addFilter(constraint);
 	}
 
 	public Object getAdapter(Class adapter) {
