@@ -114,6 +114,13 @@ public class ContentAssistantTestCase extends TestCase {
 					if (replacementStringParts[0].equalsIgnoreCase(proposalName)) return true;
 				}
 				
+				// for an Unclosed EL the closing character is appended to the proposal string (i.e. person} )
+				// perform case sensitive compare operation
+				replacementStringParts = replacementString.split("}");
+				if (replacementStringParts != null && replacementStringParts.length > 0) {
+					if (replacementStringParts[0].equals(proposalName)) return true;
+				}
+				
 				// For an attribute value proposal there will be the quote characters
 				replacementString = Utils.trimQuotes(replacementString);
 				if (replacementString.equalsIgnoreCase(proposalName)) return true;

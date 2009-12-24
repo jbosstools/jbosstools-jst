@@ -21,7 +21,6 @@ import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 
 public class XmlContextImpl extends ELContextImpl implements IXmlContext {
 	protected IDocument document;
-	private FileEditorInput editorInput;
 
 	// Fix for JBIDE-5097: It must be a map of <IRegion to Map of <NS-Prefix to NS>> 
 	protected Map<IRegion, Map<String, INameSpace>> nameSpaces = new HashMap<IRegion, Map<String, INameSpace>>();
@@ -32,16 +31,14 @@ public class XmlContextImpl extends ELContextImpl implements IXmlContext {
 	@Override
 	public void setResource(IFile resource) {
 		super.setResource(resource);
-		if (this.document != null) {
-			if (!resource.equals(editorInput.getFile())) {
-				releaseConnectedDocument(editorInput);
-				editorInput = null;
-			}
-		}
-		if (editorInput == null)
-			editorInput = new FileEditorInput(resource);
 		
-		document = getConnectedDocument(editorInput);
+		FileEditorInput editorInput = null;
+		try {
+			editorInput = new FileEditorInput(resource);
+			document = getConnectedDocument(editorInput);
+		} finally {
+			releaseConnectedDocument(editorInput);
+		}
 	}
 	
 	/*
@@ -118,18 +115,6 @@ public class XmlContextImpl extends ELContextImpl implements IXmlContext {
 			nameSpaces.put(region, nameSpaceMap);
 		}
 		nameSpaces.get(region).put(nameSpace.getPrefix(), nameSpace); 	// Fix for JBIDE-5097
-	}
-
-
-	/**
-	 * Disconnects the editor input from the document provider
-	 */
-	@Override
-	protected void finalize() throws Throwable {
-		if (editorInput != null) {
-			releaseConnectedDocument(editorInput);
-		}
-		super.finalize();
 	}
 	
 	private IDocument getConnectedDocument(IEditorInput input) {

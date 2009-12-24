@@ -41,9 +41,6 @@ import org.eclipse.jdt.internal.ui.text.FastJavaPartitionScanner;
 import org.eclipse.jdt.ui.text.IJavaPartitions;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
-import org.eclipse.jface.text.DocumentEvent;
-import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.rules.IToken;
@@ -112,7 +109,7 @@ import org.w3c.dom.css.CSSStyleSheet;
  * @author Alexey Kazakov
  */
 @SuppressWarnings("restriction")
-public class PageContextFactory implements IResourceChangeListener, IDocumentListener {
+public class PageContextFactory implements IResourceChangeListener {
 	private static PageContextFactory fInstance;
 	private static final String XHTML_TAG_LIB_URI = "http://www.w3.org/1999/xhtml"; //$NON-NLS-1$
 	public static final String XML_PAGE_CONTEXT_TYPE = "XML_PAGE_CONTEXT_TYPE"; //$NON-NLS-1$
@@ -145,32 +142,18 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 
 	private void saveConvext(ELContext context) {
 		if (context != null && context.getResource() != null) {
-//			int size = 0; // remove this line
 			synchronized (cache) {
 				cache.put(context.getResource(), context);
-//				size = cache.size(); // remove this line
 			}
-//			System.out.println("Saved Context : " +
-//					(System.currentTimeMillis() - ctm) + "ms, "
-//					+ context.getResource().getFullPath().toString() + ", " + context.getClass().getSimpleName() + ", Totals: " + size);
 		}
 	}
 
 	private ELContext removeSavedContext(IFile resource) {
-		ELContext removedContext = null; // Remove this line
+		ELContext removedContext = null;
 
 		synchronized (cache) {
 			removedContext = cache.remove(resource);
-			if (removedContext instanceof XmlContextImpl && 
-					((XmlContextImpl)removedContext).getDocument() != null) {
-				((XmlContextImpl)removedContext).getDocument().removeDocumentListener(this);
-			}
 		}
-
-//		if (removedContext != null) { // TODO: Remove this statement
-//			System.out.println("Removed Context : " + removedContext.getResource().getFullPath().toString() + ", " + removedContext.getClass().getSimpleName() + ", Totals: " + cache.size());
-//		}
-
 		return removedContext;
 	}
 
@@ -346,15 +329,19 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 	 * @return
 	 */
 	private ELContext createPageContext(IFile file, List<String> parents) {
-		ELContext context = getSavedContext(file);
+		ELContext context = parents == null ? null : getSavedContext(file);
 		if (context != null) {
 			return context;
 		}
+		if (file == null) 
+			return createPageContextInstance(null);
+		
 		IContentType type = IDE.getContentType(file);
-
-		if(JavaCore.JAVA_SOURCE_CONTENT_TYPE.equalsIgnoreCase(type.getId())) {
+		String typeId = (type == null ? null : type.getId());
+		
+		if(JavaCore.JAVA_SOURCE_CONTENT_TYPE.equalsIgnoreCase(typeId)) {
 			context = createJavaContext(file);
-		} else if(JAVA_PROPERTIES_CONTENT_TYPE.equalsIgnoreCase(type.getId())) {
+		} else if(JAVA_PROPERTIES_CONTENT_TYPE.equalsIgnoreCase(typeId)) {
 			context = createPropertiesContext(file);
 		} else {
 	//		ctm = System.currentTimeMillis();
@@ -366,6 +353,11 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 				// there is no need to report it, just stop validation.
 				return context;
 			}
+			
+			if (file == null) {
+				System.out.println();
+			}
+			
 			IStructuredModel model = null;
 			try {
 				model = manager.getModelForRead(file);
@@ -400,14 +392,8 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 			}
 		}
 
-		if (context != null) {
-			if (context instanceof XmlContextImpl) {
-				IDocument contextDocument = ((XmlContextImpl) context).getDocument();
-				if (contextDocument != null) {
-					contextDocument.addDocumentListener(this);
-				}
-			}
-			saveConvext(context);
+		if (context != null && parents != null) {
+				saveConvext(context);
 		}
 
 		return context;
@@ -1134,37 +1120,6 @@ public class PageContextFactory implements IResourceChangeListener, IDocumentLis
 			if (contexts != null) {
 				for (ELContext context : contexts) {
 					removeSavedContext(context.getResource());
-				}
-			}
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.jface.text.IDocumentListener#documentAboutToBeChanged(org.eclipse.jface.text.DocumentEvent)
-	 */
-	public void documentAboutToBeChanged(DocumentEvent event) {
-		// Nothing to do
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.jface.text.IDocumentListener#documentChanged(org.eclipse.jface.text.DocumentEvent)
-	 */
-	public void documentChanged(DocumentEvent event) {
-		if (event.getDocument() == null)
-			return;
-
-		synchronized (cache) {
-			// Remove all the contexts that are parent to the removed context
-			ELContext[] contexts = cache.values().toArray(new ELContext[0]);
-			if (contexts != null) {
-				for (ELContext context : contexts) {
-					if (context instanceof XmlContextImpl &&
-							event.getDocument().equals(((XmlContextImpl)context).getDocument())) {
-						cleanUp(context.getResource());
-						return;
-					}
 				}
 			}
 		}

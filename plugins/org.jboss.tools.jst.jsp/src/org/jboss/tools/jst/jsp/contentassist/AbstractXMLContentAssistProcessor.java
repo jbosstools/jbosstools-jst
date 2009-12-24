@@ -944,7 +944,8 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	 */
 	protected TextRegion getELPrefix(ContentAssistRequest request) {
 		if (!DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE.equals(request.getRegion().getType()) &&
-				!DOMRegionContext.XML_CONTENT.equals(request.getRegion().getType())) 
+				!DOMRegionContext.XML_CONTENT.equals(request.getRegion().getType()) &&
+				!DOMRegionContext.BLOCK_TEXT.equals(request.getRegion().getType())) 
 			return null;
 		
 		String text = request.getDocumentRegion().getFullText(request.getRegion());
