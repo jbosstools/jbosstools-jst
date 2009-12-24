@@ -354,10 +354,6 @@ public class PageContextFactory implements IResourceChangeListener {
 				return context;
 			}
 			
-			if (file == null) {
-				System.out.println();
-			}
-			
 			IStructuredModel model = null;
 			try {
 				model = manager.getModelForRead(file);
