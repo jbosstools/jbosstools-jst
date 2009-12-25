@@ -506,8 +506,16 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 		}
 		if(webroot != null) {
 			IFolder f = project.getFolder("WEB-ROOT"); //$NON-NLS-1$
-			if(!f.exists()) f.createLink(new Path(webroot), IFolder.FORCE, null);
-			setProperty(WEB_CONTENT_LOCATION_ID, "/WEB-ROOT"); //$NON-NLS-1$
+			if(f.exists()) {
+				setProperty(WEB_CONTENT_LOCATION_ID, "/WEB-ROOT"); //$NON-NLS-1$
+			} else if(project.exists() && webroot.startsWith(project.getLocation().toString().replace('\\', '/') + "/")) {
+				f = project.getFolder(webroot.substring(project.getLocation().toString().replace('\\', '/').length() + 1));
+			}
+			if(!f.exists()) {
+				f = project.getFolder("WEB-ROOT"); //$NON-NLS-1$
+				f.createLink(new Path(webroot), IFolder.FORCE, null);
+				setProperty(WEB_CONTENT_LOCATION_ID, "/WEB-ROOT"); //$NON-NLS-1$
+			}
 		}
 		if(javaRoot != null && javaRoot.length > 0 && javaRoot[0].length() > 0) {
 			IFolder f = project.getFolder("src"); //$NON-NLS-1$

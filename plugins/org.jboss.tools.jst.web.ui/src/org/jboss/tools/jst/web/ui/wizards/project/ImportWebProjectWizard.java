@@ -41,10 +41,10 @@ import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 public abstract class ImportWebProjectWizard extends Wizard implements IImportWizard {
-	public static final String IMPORT_WEB_PROJECT_WIZARD_PROJECT_LOCATION = "IMPORT_STRUTS_PROJECT_WIZARD_PROJECT_LOCATION"; //$NON-NLS-1$
-	public static final String IMPORT_WEB_PROJECT_SELECT_WEB_XML = "IMPORT_STRUTS_PROJECT_SELECT_WEB_XML"; //$NON-NLS-1$
-	public static final String IMPORT_WEB_PROJECT_WIZARD_PROJECT_FOLDERS = "IMPORT_STRUTS_PROJECT_WIZARD_PROJECT_FOLDERS"; //$NON-NLS-1$
-	public static final String IMPORT_WEB_PROJECT_SELECT_PROJECT_FOLDERS = "IMPORT_STRUTS_PROJECT_SELECT_PROJECT_FOLDERS"; //$NON-NLS-1$
+	public static final String IMPORT_WEB_PROJECT_WIZARD_PROJECT_LOCATION = "IMPORT_WEB_PROJECT_WIZARD_PROJECT_LOCATION"; //$NON-NLS-1$
+	public static final String IMPORT_WEB_PROJECT_SELECT_WEB_XML = "IMPORT_WEB_PROJECT_SELECT_WEB_XML"; //$NON-NLS-1$
+	public static final String IMPORT_WEB_PROJECT_WIZARD_PROJECT_FOLDERS = "IMPORT_WEB_PROJECT_WIZARD_PROJECT_FOLDERS"; //$NON-NLS-1$
+	public static final String IMPORT_WEB_PROJECT_SELECT_PROJECT_FOLDERS = "IMPORT_WEB_PROJECT_SELECT_PROJECT_FOLDERS"; //$NON-NLS-1$
 
 	protected IWorkbench workbench; 
 	protected IStructuredSelection selection;
