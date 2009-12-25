@@ -213,6 +213,10 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 			public ELResolution resolve(ELContext context, ELExpression operand, int offset) {
 				return new ELResolutionImpl(operand);
 			}
+
+			public List<TextProposal> getProposals(ELContext context, int offset) {
+				return Collections.emptyList();
+			}
 		};
 		ElVarSearcher varSearcher = new ElVarSearcher(file, fakeEngine);
 		List<Var> vars = varSearcher.findAllVars(file, getOffset());

@@ -231,37 +231,31 @@ public class PageContextFactory implements IResourceChangeListener {
 		ELContextImpl context = new ELContextImpl();
 		context.setResource(file);
 		context.setElResolvers(ELResolverFactoryManager.getInstance().getResolvers(file));
-		String content = null;
-		try {
-			content = FileUtil.readStream(file);
-			int startEl = content.indexOf("#{"); //$NON-NLS-1$
-			if(startEl<0)
-				startEl = content.indexOf("${"); //$NON-NLS-1$
-			if(startEl>-1) {
-				ELParser parser = ELParserUtil.getJbossFactory().createParser();
-				ELModel model = parser.parse(content);
-				List<SyntaxError> errors = model.getSyntaxErrors();
-				for (ELInstance instance : model.getInstances()) {
-					for(ELInvocationExpression ie : instance.getExpression().getInvocations()){
-						ELReference elReference = new KbELReference();
-						elReference.setResource(file);
-						elReference.setEl(new ELExpression[]{ie});
-						elReference.setLength(ie.getLength());
-						elReference.setStartPosition(ie.getStartPosition());
-						List<SyntaxError> elErrors = new ArrayList<SyntaxError>();
-						for (SyntaxError error : errors) {
-							if(error.getPosition()>=ie.getStartPosition() && error.getPosition()<=ie.getEndPosition()) {
-								elErrors.add(error);
-							}
+		String content = FileUtil.getContentFromEditorOrFile(file);
+		int startEl = content.indexOf("#{"); //$NON-NLS-1$
+		if(startEl<0)
+			startEl = content.indexOf("${"); //$NON-NLS-1$
+		if(startEl>-1) {
+			ELParser parser = ELParserUtil.getJbossFactory().createParser();
+			ELModel model = parser.parse(content);
+			List<SyntaxError> errors = model.getSyntaxErrors();
+			for (ELInstance instance : model.getInstances()) {
+				for(ELInvocationExpression ie : instance.getExpression().getInvocations()){
+					ELReference elReference = new KbELReference();
+					elReference.setResource(file);
+					elReference.setEl(new ELExpression[]{ie});
+					elReference.setLength(ie.getLength());
+					elReference.setStartPosition(ie.getStartPosition());
+					List<SyntaxError> elErrors = new ArrayList<SyntaxError>();
+					for (SyntaxError error : errors) {
+						if(error.getPosition()>=ie.getStartPosition() && error.getPosition()<=ie.getEndPosition()) {
+							elErrors.add(error);
 						}
-						elReference.setSyntaxErrors(elErrors);
-						context.addELReference(elReference);
 					}
+					elReference.setSyntaxErrors(elErrors);
+					context.addELReference(elReference);
 				}
 			}
-		} catch (CoreException e) {
-			WebKbPlugin.getDefault().logError(e);
-			return null;
 		}
 		return context;
 	}
@@ -270,13 +264,7 @@ public class PageContextFactory implements IResourceChangeListener {
 		ELContextImpl context = new ELContextImpl();
 		context.setResource(file);
 		context.setElResolvers(ELResolverFactoryManager.getInstance().getResolvers(file));
-		String content = null;
-		try {
-			content = FileUtil.readStream(file);
-		} catch (CoreException e) {
-			WebKbPlugin.getDefault().logError(e);
-			return null;
-		}
+		String content = FileUtil.getContentFromEditorOrFile(file);
 		FastJavaPartitionScanner scaner = new FastJavaPartitionScanner();
 		Document document = new Document(content);
 		scaner.setRange(document, 0, document.getLength());
