@@ -46,7 +46,7 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 	 */
 	@Override
 	protected ELContext createContext() {
-		return PageContextFactory.createPageContext(getResource());
+		return PageContextFactory.createPageContext(getResource(), PageContextFactory.XML_PAGE_CONTEXT_TYPE);
 	}
 	
 	@Override 

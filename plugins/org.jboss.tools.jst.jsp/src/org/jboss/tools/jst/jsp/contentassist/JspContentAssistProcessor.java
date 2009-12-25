@@ -39,6 +39,7 @@ import org.jboss.tools.common.el.core.resolver.Var;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
@@ -54,6 +55,16 @@ import org.w3c.dom.Node;
  */
 @SuppressWarnings("restriction")
 public class JspContentAssistProcessor extends XmlContentAssistProcessor {
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.jsp.contentassist.AbstractXMLContentAssistProcessor#createContext()
+	 */
+	@Override
+	protected ELContext createContext() {
+		return PageContextFactory.createPageContext(getResource(), PageContextFactory.JSP_PAGE_CONTEXT_TYPE);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor#getContext()

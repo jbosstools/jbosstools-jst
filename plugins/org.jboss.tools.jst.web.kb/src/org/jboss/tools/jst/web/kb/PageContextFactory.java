@@ -86,6 +86,7 @@ import org.jboss.tools.common.el.core.resolver.ElVarSearcher;
 import org.jboss.tools.common.el.core.resolver.Var;
 import org.jboss.tools.common.resref.core.ResourceReference;
 import org.jboss.tools.common.text.ext.util.Utils;
+import org.jboss.tools.common.util.EclipseUIUtil;
 import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.web.kb.el.KbELReference;
 import org.jboss.tools.jst.web.kb.include.IncludeContextBuilder;
@@ -158,14 +159,24 @@ public class PageContextFactory implements IResourceChangeListener {
 	}
 
 	/**
-	 * Creates a page context for the specified context type
+	 * Creates a page context for the specified context file
 	 *
 	 * @param file
 	 * @param contentType
 	 * @return
 	 */
 	public static ELContext createPageContext(IFile file) {
-		return getInstance().createPageContext(file, null);
+		return createPageContext(file, null);
+	}
+	/**
+	 * Creates a page context for the specified context type
+	 *
+	 * @param file
+	 * @param contentType
+	 * @return
+	 */
+	public static ELContext createPageContext(IFile file, String contextType) {
+		return getInstance().createPageContext(file, null, contextType);
 	}
 
 	/**
@@ -316,13 +327,14 @@ public class PageContextFactory implements IResourceChangeListener {
 	 * @param parents List of parent contexts
 	 * @return
 	 */
-	private ELContext createPageContext(IFile file, List<String> parents) {
-		ELContext context = parents == null ? null : getSavedContext(file);
+	private ELContext createPageContext(IFile file, List<String> parents, String defaultContextType) {
+		boolean isContextCachingAllowed = !EclipseUIUtil.isOpenInActiveEditor(file) && file != null;
+		ELContext context = isContextCachingAllowed ? getSavedContext(file) : null;
 		if (context != null) {
 			return context;
 		}
 		if (file == null) 
-			return createPageContextInstance(null);
+			return createContextInstanceOfType(defaultContextType);
 		
 		IContentType type = IDE.getContentType(file);
 		String typeId = (type == null ? null : type.getId());
@@ -349,7 +361,9 @@ public class PageContextFactory implements IResourceChangeListener {
 					IDOMModel domModel = (IDOMModel) model;
 					IDOMDocument document = domModel.getDocument();
 
-					context = createPageContextInstance(domModel.getContentTypeIdentifier());
+					context = defaultContextType == null ? 
+							createPageContextInstance(domModel.getContentTypeIdentifier()) :
+										createContextInstanceOfType(defaultContextType);
 					if (context == null)
 						return null;
 
@@ -376,7 +390,7 @@ public class PageContextFactory implements IResourceChangeListener {
 			}
 		}
 
-		if (context != null && parents != null) {
+		if (context != null && isContextCachingAllowed) {
 				saveConvext(context);
 		}
 
@@ -385,6 +399,10 @@ public class PageContextFactory implements IResourceChangeListener {
 
 	private ELContext createPageContextInstance(String contentType) {
 		String contextType = IncludeContextBuilder.getContextType(contentType);
+		return createContextInstanceOfType(contextType);
+	}
+
+	private ELContext createContextInstanceOfType(String contextType) {
 		if (JSP_PAGE_CONTEXT_TYPE.equals(contextType)) {
 			return new JspContextImpl();
 		} else if (FACELETS_PAGE_CONTEXT_TYPE.equals(contextType)) {
@@ -392,7 +410,6 @@ public class PageContextFactory implements IResourceChangeListener {
 		}
 		return new XmlContextImpl();
 	}
-
 	/**
 	 * Sets up the context with namespaces and according libraries from the TagLibraryManager
 	 * 
@@ -546,7 +563,7 @@ public class PageContextFactory implements IResourceChangeListener {
 								continue;
 							// Fix for JBIDE-5083 <<<
 
-							ELContext includedContext = createPageContext(file, newParentList);
+							ELContext includedContext = createPageContext(file, newParentList, null);
 							if (includedContext != null)
 								((IIncludedContextSupport)context).addIncludedContext(includedContext);
 						}
