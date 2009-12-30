@@ -4,7 +4,7 @@ import org.jboss.tools.common.test.util.TestProjectProvider;
 
 public class CAForIDTest extends ContentAssistantTestCase{
 	TestProjectProvider provider = null;
-	boolean makeCopy = false;
+	boolean makeCopy = true;
 	private static final String PROJECT_NAME = "CAForIDTest";
 	private static final String PAGE_NAME = "/WebContent/pages/inputUserName.jsp";
 	
