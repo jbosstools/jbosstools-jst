@@ -4,7 +4,7 @@ import org.jboss.tools.common.test.util.TestProjectProvider;
 
 public class CAForCompositeComponentTest extends ContentAssistantTestCase{
 	TestProjectProvider provider = null;
-	boolean makeCopy = false;
+	boolean makeCopy = true;
 	private static final String PROJECT_NAME = "CAForCompositeComponentTest";
 	private static final String PAGE_NAME = "/WebContent/pages/greeting.xhtml";
 	
