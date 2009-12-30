@@ -2,7 +2,6 @@ package org.jboss.tools.jst.jsp.test.ca;
 
 import junit.framework.TestCase;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
@@ -10,9 +9,7 @@ import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContentAssistant;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
 import org.jboss.tools.common.text.ext.util.Utils;
@@ -20,7 +17,6 @@ import org.jboss.tools.jst.jsp.contentassist.AutoContentAssistantProposal;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor;
 import org.jboss.tools.jst.jsp.test.TestUtil;
-import org.jboss.tools.test.util.JobUtils;
 import org.jboss.tools.test.util.WorkbenchUtils;
 
 public class ContentAssistantTestCase extends TestCase {
@@ -31,7 +27,7 @@ public class ContentAssistantTestCase extends TestCase {
 	protected IContentAssistant contentAssistant = null;
 	protected IDocument document = null;
 
-	protected void openEditor(String fileName) {
+	public void openEditor(String fileName) {
 		IEditorPart editorPart = WorkbenchUtils.openEditor(project.getName()+"/"+ fileName);
 //		System.out.println("openEditor: " + project.getName()+"/"+ fileName);
 		if (editorPart instanceof JSPMultiPageEditor)
@@ -55,11 +51,11 @@ public class ContentAssistantTestCase extends TestCase {
 
 	}
 
-	protected ICompletionProposal[] checkProposals(String fileName, int offset, String[] proposals, boolean exactly) {
+	public ICompletionProposal[] checkProposals(String fileName, int offset, String[] proposals, boolean exactly) {
         return checkProposals(fileName, null, offset, proposals, exactly);
     }
 
-	protected ICompletionProposal[] checkProposals(String fileName, String substring, int offset, String[] proposals, boolean exactly){
+	public ICompletionProposal[] checkProposals(String fileName, String substring, int offset, String[] proposals, boolean exactly){
 		openEditor(fileName);
 
         int position = 0;
@@ -95,7 +91,7 @@ public class ContentAssistantTestCase extends TestCase {
 		return result;
 	}
 
-	protected boolean compareProposal(String proposalName, ICompletionProposal[] proposals){
+	public boolean compareProposal(String proposalName, ICompletionProposal[] proposals){
 		for (int i = 0; i < proposals.length; i++) {
 			if (proposals[i] instanceof AutoContentAssistantProposal) {
 				AutoContentAssistantProposal ap = (AutoContentAssistantProposal)proposals[i];
@@ -134,11 +130,95 @@ public class ContentAssistantTestCase extends TestCase {
 		return false;
 	}
 
-	protected void closeEditor() {
+	public void closeEditor() {
 		if (jspEditor != null) {
 			PlatformUI.getWorkbench().getActiveWorkbenchWindow()
 					.getActivePage().closeEditor(jspEditor, false);
 			jspEditor = null;
 		}
+	}
+
+	/**
+	 * @return the project
+	 */
+	public IProject getProject() {
+		return project;
+	}
+
+	/**
+	 * @param project the project to set
+	 */
+	public void setProject(IProject project) {
+		this.project = project;
+	}
+
+	/**
+	 * @return the jspEditor
+	 */
+	public JSPMultiPageEditor getJspEditor() {
+		return jspEditor;
+	}
+
+	/**
+	 * @param jspEditor the jspEditor to set
+	 */
+	public void setJspEditor(JSPMultiPageEditor jspEditor) {
+		this.jspEditor = jspEditor;
+	}
+
+	/**
+	 * @return the jspTextEditor
+	 */
+	public JSPTextEditor getJspTextEditor() {
+		return jspTextEditor;
+	}
+
+	/**
+	 * @param jspTextEditor the jspTextEditor to set
+	 */
+	public void setJspTextEditor(JSPTextEditor jspTextEditor) {
+		this.jspTextEditor = jspTextEditor;
+	}
+
+	/**
+	 * @return the viewer
+	 */
+	public StructuredTextViewer getViewer() {
+		return viewer;
+	}
+
+	/**
+	 * @param viewer the viewer to set
+	 */
+	public void setViewer(StructuredTextViewer viewer) {
+		this.viewer = viewer;
+	}
+
+	/**
+	 * @return the contentAssistant
+	 */
+	public IContentAssistant getContentAssistant() {
+		return contentAssistant;
+	}
+
+	/**
+	 * @param contentAssistant the contentAssistant to set
+	 */
+	public void setContentAssistant(IContentAssistant contentAssistant) {
+		this.contentAssistant = contentAssistant;
+	}
+
+	/**
+	 * @return the document
+	 */
+	public IDocument getDocument() {
+		return document;
+	}
+
+	/**
+	 * @param document the document to set
+	 */
+	public void setDocument(IDocument document) {
+		this.document = document;
 	}
 }
