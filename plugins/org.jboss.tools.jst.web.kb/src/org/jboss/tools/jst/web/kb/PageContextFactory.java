@@ -713,25 +713,25 @@ public class PageContextFactory implements IResourceChangeListener {
 	 * @return
 	 */
 	private CSSStyleSheetDescriptor getSheetForTagAttribute(final Node stylesContainer, String attribute) {
-
 		INodeNotifier notifier = (INodeNotifier) stylesContainer;
-
-		IStyleSheetAdapter adapter = (IStyleSheetAdapter) notifier
-				.getAdapterFor(IStyleSheetAdapter.class);
-
-		if (!(adapter instanceof ExtendedLinkElementAdapter)) {
-			notifier.removeAdapter(adapter);
-			adapter = new ExtendedLinkElementAdapter(
-					(Element) stylesContainer, attribute);
-			notifier.addAdapter(adapter);
-		}
-
 		CSSStyleSheet sheet = null;
 		String source = null;
 
-		if (adapter != null) {
-			sheet = (CSSStyleSheet) adapter.getSheet();
-			source = ((ExtendedLinkElementAdapter)adapter).getSource();
+		synchronized (notifier) {
+			IStyleSheetAdapter adapter = (IStyleSheetAdapter) notifier.getAdapterFor(IStyleSheetAdapter.class);
+
+			if (!(adapter instanceof ExtendedLinkElementAdapter)) {
+				notifier.removeAdapter(adapter);
+				adapter = new ExtendedLinkElementAdapter(
+						(Element) stylesContainer, attribute);
+				notifier.addAdapter(adapter);
+			}
+		
+			if (adapter != null) {
+				sheet = (CSSStyleSheet) adapter.getSheet();
+				source = ((ExtendedLinkElementAdapter)adapter).getSource();
+			}
+			
 		}
 
 		return sheet == null || source == null ? null : new CSSStyleSheetDescriptor(source, sheet);
@@ -743,16 +743,15 @@ public class PageContextFactory implements IResourceChangeListener {
 	 * @return
 	 */
 	private CSSStyleSheet getSheetForTag(final Node stylesContainer) {
-
 		INodeNotifier notifier = (INodeNotifier) stylesContainer;
-
-		IStyleSheetAdapter adapter = (IStyleSheetAdapter) notifier
-				.getAdapterFor(IStyleSheetAdapter.class);
-
 		CSSStyleSheet sheet = null;
 
-		if (adapter != null) {
-			sheet = (CSSStyleSheet) adapter.getSheet();
+		synchronized (notifier) {
+			IStyleSheetAdapter adapter = (IStyleSheetAdapter) notifier.getAdapterFor(IStyleSheetAdapter.class);
+
+			if (adapter != null) {
+				sheet = (CSSStyleSheet) adapter.getSheet();
+			}
 		}
 
 		return sheet;
