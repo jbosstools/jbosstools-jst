@@ -256,7 +256,7 @@ public class PageContextFactory implements IResourceChangeListener {
 					elReference.setResource(file);
 					elReference.setEl(new ELExpression[]{ie});
 					elReference.setLength(ie.getLength());
-					elReference.setStartPosition(ie.getStartPosition());
+					elReference.setStartPosition(0);
 					List<SyntaxError> elErrors = new ArrayList<SyntaxError>();
 					for (SyntaxError error : errors) {
 						if(error.getPosition()>=ie.getStartPosition() && error.getPosition()<=ie.getEndPosition()) {
