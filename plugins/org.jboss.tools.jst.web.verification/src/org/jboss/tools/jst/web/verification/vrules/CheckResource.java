@@ -31,6 +31,12 @@ public class CheckResource extends WebDefaultCheck {
 		XModel model = getXModel(object);
 		XModelObject webRoot = model == null ? null : model.getByPath("FileSystems/WEB-ROOT"); //$NON-NLS-1$
 		if(webRoot == null) return null;
+
+		if(object.getEntity().getName().startsWith("WebAppErrorPage")) {
+			if(value != null && value.indexOf("?") > 0) {
+				value = value.substring(0, value.indexOf("?"));
+			}
+		}
 		
 		List list = WebPromptingProvider.getInstance().getList(model, IWebPromptingProvider.JSF_CONVERT_URL_TO_PATH, value, null);
 		if(list != null && list.size() > 0) {
