@@ -275,6 +275,15 @@
             <uri
                 name="http://java.sun.com/xml/ns/javaee/"
                 uri="platform:/plugin/org.jboss.tools.jst.web/catalog/javaee_5.xsd" />
+            <uri
+                name="javaee_5.xsd"
+                uri="platform:/plugin/org.jboss.tools.jst.web/catalog/javaee_5.xsd" />
+        <uri 
+            name="http://java.sun.com/xml/ns/javaee/web-facelettaglibary_2_0.xsd" 
+            uri="platform:/plugin/org.jboss.tools.jst.web/catalog/web-facelettaglibrary_2_0.xsd"/>
+        <uri 
+            name="http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd" 
+            uri="platform:/plugin/org.jboss.tools.jst.web/catalog/web-facelettaglibrary_2_0.xsd"/>
 		</catalogContribution>
 		
     </extension>
