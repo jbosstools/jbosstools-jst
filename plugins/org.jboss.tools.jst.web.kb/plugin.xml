@@ -191,4 +191,25 @@
             value="true">
       	</persistent>
    </extension>
+
+   <extension point="org.eclipse.wst.xml.core.catalogContributions">
+      <catalogContribution id="default">
+         <uri 
+            name="http://java.sun.com/jsf/html" 
+            uri="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/tld/html_basic.tld"/>
+         <uri 
+            name="http://java.sun.com/jsf/core" 
+            uri="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/tld/jsf_core.tld"/>
+         <uri 
+            name="http://richfaces.org/rich" 
+            uri="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/tld/rich.tld"/>
+         <uri 
+            name="http://richfaces.org/a4j" 
+            uri="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/tld/ajax4jsf.tld"/>
+         <uri 
+            name="http://jboss.com/products/seam/taglib" 
+            uri="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/tld/s.tld"/>
+      </catalogContribution>
+   </extension>
+
 </plugin>
