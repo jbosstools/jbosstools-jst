@@ -59,6 +59,12 @@ public class TagLibraryManager {
 		try {
 			if (uri != null) {
 	        	String id = XMLCorePlugin.getDefault().getDefaultXMLCatalog().resolveURI(uri);
+	        	if(id==null) {
+	        		id = XMLCorePlugin.getDefault().getDefaultXMLCatalog().resolveSystem(uri);
+	        	}
+	        	if(id==null) {
+	        		id = XMLCorePlugin.getDefault().getDefaultXMLCatalog().resolvePublic(uri, uri);
+	        	}
 	        	if(id!=null) {
 	        		File file = new File(new URL(id).getFile());
 	        		if(file.exists()) {
