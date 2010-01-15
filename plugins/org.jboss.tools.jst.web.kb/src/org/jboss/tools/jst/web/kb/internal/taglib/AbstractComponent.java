@@ -580,6 +580,8 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 				c = new FacesConfigAttribute();
 			} else if(KbXMLStoreConstants.CLS_COMPOSITE_LIBRARY.equals(cls)) {
 				c = new CompositeAttribute();
+			} else if(KbXMLStoreConstants.CLS_FACELET_LIBRARY.equals(cls)) {
+				c = new FaceletAttribute();
 			} else {
 				//consider other cases;
 			}

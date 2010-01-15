@@ -25,6 +25,7 @@ import org.jboss.tools.jst.web.kb.internal.taglib.AbstractAttribute;
 import org.jboss.tools.jst.web.kb.internal.taglib.AbstractComponent;
 import org.jboss.tools.jst.web.kb.internal.taglib.AbstractTagLib;
 import org.jboss.tools.jst.web.kb.internal.taglib.ELFunction;
+import org.jboss.tools.jst.web.kb.internal.taglib.FaceletAttribute;
 import org.jboss.tools.jst.web.kb.internal.taglib.FaceletTag;
 import org.jboss.tools.jst.web.kb.internal.taglib.FaceletTagLibrary;
 import org.jboss.tools.jst.web.kb.internal.taglib.FacesConfigAttribute;
@@ -196,6 +197,19 @@ public class XMLScanner implements IFileScanner {
 					String componentType = d.getAttributeValue(ATTR_COMPONENT_TYPE); //$NON-NLS-1$
 					if(componentType != null && componentType.length() > 0) {
 						tag.setComponentType(new XMLValueInfo(d, ATTR_COMPONENT_TYPE)); //$NON-NLS-1$
+					}
+				}
+				XModelObject[] as = t.getChildren();
+				for (XModelObject a: as) {
+					String entity2 = a.getModelEntity().getName();
+					if(entity2.startsWith("FaceletTaglibAttribute")) { //$NON-NLS-1$
+						FaceletAttribute attr = new FaceletAttribute();
+						attr.setId(a);
+						attr.setName(new XMLValueInfo(a, XMLStoreConstants.ATTR_NAME));
+						attr.setDescription(new XMLValueInfo(a, AbstractComponent.DESCRIPTION));
+						attr.setRequired(new XMLValueInfo(a, AbstractAttribute.REQUIRED));
+						
+						tag.addAttribute(attr);
 					}
 				}
 				library.addComponent(tag);
