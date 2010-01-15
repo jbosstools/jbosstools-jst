@@ -84,6 +84,18 @@ public class KbModelTest extends TestCase {
 		assertTrue(ls.get(0).getComponents().length > 0);
 		
 		ls = null;
+		f = project.getFile("WebContent/facelet-taglib2.xml");
+		assertNotNull(f);
+		try {
+			LoadedDeclarations ds = scanner.parse(f, kbProject);
+			ls = ds.getLibraries();
+		} catch (ScannerException e) {
+			JUnitUtils.fail("Error in xml scanner",e);
+		}
+		assertEquals(1, ls.size());
+		assertTrue(ls.get(0).getComponents().length > 0);
+
+		ls = null;
 		f = project.getFile("WebContent/WEB-INF/taglib2.tld");
 		assertNotNull(f);
 		try {
