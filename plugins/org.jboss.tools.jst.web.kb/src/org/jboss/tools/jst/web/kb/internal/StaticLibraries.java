@@ -10,12 +10,13 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal;
 
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.runtime.Path;
-import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.jst.web.kb.internal.scanner.LoadedDeclarations;
@@ -32,29 +33,38 @@ public class StaticLibraries {
 	static StaticLibraries instance = new StaticLibraries();
 
 	LibraryStorage libraries = new LibraryStorage();
-	HashMap<File, XModel> loaded = new HashMap<File, XModel>();
+	Map<File, XModelObject> loadedFolders = new HashMap<File, XModelObject>();
+	Map<File, XModelObject> loadedFiles = new HashMap<File, XModelObject>();
 	
 	private StaticLibraries() {}
 
 	public ITagLibrary[] getLibraries(String uri) {
 		File file = TagLibraryManager.getStaticTLD(uri);
 		if(file == null) return new ITagLibrary[0];
+		if(loadedFiles.containsKey(file)) {
+			return libraries.getLibrariesArray(uri);
+		}
 		File folder = file.getParentFile();
-		if(!loaded.containsKey(folder)) {
+		if(!loadedFolders.containsKey(folder)) {
 			XModelObject o = EclipseResourceUtil.createObjectForLocation(file.getAbsolutePath());
 			if(o != null) {
-				loaded.put(folder, o.getModel());
-				XModelObject[] fs = o.getParent().getChildren();
-				XMLScanner scanner = new XMLScanner();
-				for (XModelObject fo: fs) {
-					LoadedDeclarations ds = scanner.parse(fo, new Path(folder.getAbsolutePath()), null);
-					List<ITagLibrary> ls = ds.getLibraries();
-					for (ITagLibrary l: ls) {
-						libraries.addLibrary(l);
-					}
-				}
+				loadedFolders.put(folder, o.getParent());
 			}			
 		}
+		XModelObject o = loadedFolders.get(folder);
+		if(o != null) {
+			XModelObject fo = o.getChildByPath(file.getName());
+			if (fo != null) {
+				loadedFiles.put(file, fo);
+				XMLScanner scanner = new XMLScanner();
+				LoadedDeclarations ds = scanner.parse(fo, new Path(file.getAbsolutePath()), null);
+				List<ITagLibrary> ls = ds.getLibraries();
+				for (ITagLibrary l : ls) {
+					libraries.addLibrary(l);
+				}
+			}
+		}
+		
 		return libraries.getLibrariesArray(uri);
 	}
 
