@@ -47,7 +47,9 @@
                      <axis path="/facelet-taglib/tag/handler-class">
                      </axis>
                      <axis path="/facelet-taglib/library-class">
-                     </axis>  			
+                     </axis>
+                     <axis path="/facelet-taglib/attribute/type" >
+                     </axis>
           		</partitionType>
           	</contentType>
 		</hyperlinkPartitioner>

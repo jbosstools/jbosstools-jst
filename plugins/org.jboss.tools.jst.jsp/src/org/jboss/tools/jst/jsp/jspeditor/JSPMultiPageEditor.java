@@ -204,6 +204,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		}
 	}
 
+	@Override
 	public void pageChange(int newPageIndex) {
 		selectedPageIndex = newPageIndex;
 		if (visualEditor != null) {
@@ -214,7 +215,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 				visualEditor.setVisualMode(IVisualEditor.VISUALSOURCE_MODE);
 			} else if (newPageIndex == sourceIndex)
 				visualEditor.setVisualMode(IVisualEditor.SOURCE_MODE);
-			else if (newPageIndex == previewIndex) {
+			else if (newPageIndex == getPreviewIndex()) {
 				if (visualEditor.getPreviewWebBrowser() == null) {
 					visualEditor.createPreviewBrowser();
 				}
@@ -476,8 +477,8 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		// Add tab contain default web-browser
 		try {
 			if (visualEditor != null) {
-				previewIndex = addPage(visualEditor, getEditorInput());
-				setPageText(previewIndex,
+				setPreviewIndex(addPage(visualEditor, getEditorInput()));
+				setPageText(getPreviewIndex(),
 						JSPEditorMessages.JSPMultiPageEditor_TabLabel_Preview);
 				setPartName(visualEditor.getTitle());
 			}
@@ -799,6 +800,20 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		} catch (NumberFormatException e) {
 			JspEditorPlugin.getPluginLog().logError(e);
 		}
+	}
+
+	/**
+	 * @return the previewIndex
+	 */
+	public int getPreviewIndex() {
+		return previewIndex;
+	}
+
+	/**
+	 * @param previewIndex the previewIndex to set
+	 */
+	public void setPreviewIndex(int previewIndex) {
+		this.previewIndex = previewIndex;
 	}
 	
 }
