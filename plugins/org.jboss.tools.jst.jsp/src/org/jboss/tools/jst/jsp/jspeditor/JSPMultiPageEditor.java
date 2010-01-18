@@ -35,7 +35,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
@@ -791,11 +790,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 				.getString(IVpePreferencesPage.DEFAULT_VPE_TAB);
 		try {
 			int ind = Integer.parseInt(tabIndex);
-			/*
-			 * After fixing https://jira.jboss.org/jira/browse/JBIDE-5666
-			 * Getting a multipage container should return CTabFolder.
-			 */
-			((CTabFolder)getContainer()).setSelection(ind);
+			getTabFolder().setSelection(ind);
 			pageChange(ind);
 		} catch (NumberFormatException e) {
 			JspEditorPlugin.getPluginLog().logError(e);
