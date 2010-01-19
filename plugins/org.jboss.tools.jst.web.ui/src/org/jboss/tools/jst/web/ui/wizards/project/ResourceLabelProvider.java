@@ -81,7 +81,7 @@ public class ResourceLabelProvider extends LabelProvider {
 			if(filename.startsWith("struts-")) return "StrutsConfig11"; //$NON-NLS-1$ //$NON-NLS-2$
 			return "FileXML"; //$NON-NLS-1$
 		}
-        String entity = model.getEntityRecognizer().getEntityName(ext, null);
+        String entity = model.getEntityRecognizer().getEntityName(filename, ext, null);
         if(entity == null) entity = "FileTXT"; //$NON-NLS-1$
         return entity;
     }
