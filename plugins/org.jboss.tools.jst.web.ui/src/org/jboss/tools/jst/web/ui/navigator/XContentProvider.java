@@ -65,6 +65,12 @@ public class XContentProvider implements ITreeContentProvider {
 			if(filteredTree != null) {
 				return filteredTree.getChildren(o);
 			}
+			if(o == null) {
+				o = EclipseResourceUtil.createObjectForResource(f);
+				if(o != null) {
+					FilteredTreesCache.getInstance().addListener(syncListener, o.getModel());
+				}
+			}
 			return getChildren(o);
 		}
 		return new Object[0];
