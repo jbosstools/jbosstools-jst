@@ -150,6 +150,28 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 	}
 
 	/**
+	 * Calculates and adds the tag proposals to the Content Assist Request object
+	 * The method is to be overridden here because jsp disallows to use EL-s inside a text region
+	 * 
+	 * @param contentAssistRequest Content Assist Request object
+	 * @param childPosition the 
+	 */
+
+	@Override
+	protected void addTagInsertionProposals(
+			ContentAssistRequest contentAssistRequest, int childPosition) {
+		
+		// Need to check if an EL Expression is opened here.
+		// If it is true we don't need to start any new tag proposals
+		TextRegion prefix = getELPrefix(contentAssistRequest);
+		if (prefix != null && prefix.isELStarted()) {
+			return;
+		}
+		
+		addTagNameProposals(contentAssistRequest, childPosition, true);
+	}
+
+	/**
 	 * Calculates and adds the attribute name proposals to the Content Assist Request object
 	 * 
 	 * @param contentAssistRequest Content Assist Request object

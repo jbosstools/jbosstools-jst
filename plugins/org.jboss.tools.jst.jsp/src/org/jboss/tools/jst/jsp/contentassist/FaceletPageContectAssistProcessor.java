@@ -55,6 +55,29 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 	}
 
 	/**
+	 * Calculates and adds the tag proposals to the Content Assist Request object
+	 * The method is to be overridden here because xhtml allows to use EL-s inside a text region
+	 * 
+	 * @param contentAssistRequest Content Assist Request object
+	 * @param childPosition the 
+	 */
+
+	@Override
+	protected void addTagInsertionProposals(
+			ContentAssistRequest contentAssistRequest, int childPosition) {
+		
+		// Need to check if an EL Expression is opened here.
+		// If it is true we don't need to start any new tag proposals
+		TextRegion prefix = getELPrefix(contentAssistRequest);
+		if (prefix != null && prefix.isELStarted()) {
+			return;
+		}
+		
+		addTagNameProposals(contentAssistRequest, childPosition, true);
+		addAttributeValueELPredicateProposals(contentAssistRequest);
+	}
+	
+	/**
 	 * Calculates and adds the EL proposals to the Content Assist Request object
 	 */
 	@Override

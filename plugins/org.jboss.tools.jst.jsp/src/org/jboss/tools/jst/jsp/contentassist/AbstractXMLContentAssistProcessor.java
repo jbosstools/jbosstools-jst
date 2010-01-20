@@ -996,6 +996,74 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	}
 	
 	/**
+	 * Returns EL Predicate Text Region Information Object
+	 * 
+	 * 
+	 * @return
+	 */
+	protected TextRegion getELPredicatePrefix(ContentAssistRequest request) {
+		if (!DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE.equals(request.getRegion().getType()) &&
+				!DOMRegionContext.XML_CONTENT.equals(request.getRegion().getType()) &&
+				!DOMRegionContext.BLOCK_TEXT.equals(request.getRegion().getType())) 
+			return null;
+		
+		String text = request.getDocumentRegion().getFullText(request.getRegion());
+		int startOffset = request.getDocumentRegion().getStartOffset() + request.getRegion().getStart();
+
+		boolean isAttributeValue = false;
+		boolean hasOpenQuote = false;
+		boolean hasCloseQuote = false;
+		char quoteChar = (char)0;
+		if (DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE.equals(request.getRegion().getType())) {
+			isAttributeValue = true;
+			if (text.startsWith("\"") || text.startsWith("'")) {//$NON-NLS-1$ //$NON-NLS-2$
+				quoteChar = text.charAt(0);
+				hasOpenQuote = true;
+			}
+			if (hasOpenQuote && text.endsWith(String.valueOf(quoteChar))) {
+				hasCloseQuote = true;
+			}
+		}
+		
+		int inValueOffset = getOffset() - startOffset;
+		if (inValueOffset<0 || // There is no a word part before cursor 
+				(text != null && text.length() < inValueOffset)) { // probably, the attribute value ends before the document position
+			return null;
+		}
+
+		String matchString = getELPredicateMatchString(text, inValueOffset);
+		if (matchString == null)
+			return null;
+		
+		TextRegion tr = new TextRegion(startOffset, getOffset() - matchString.length() - startOffset, 
+				matchString.length(), matchString, false, false,
+				isAttributeValue, hasOpenQuote, hasCloseQuote, quoteChar);
+		
+		return tr;
+	}
+
+	/**
+	 * Returns predicate string for the EL-related query. 
+	 * The predicate string is the word/part of word right before the cursor position, including the '.' and '_' characters, 
+	 * which is to be replaced by the EL CA proposal ('#{' and '}' character sequences are to be inserted too)
+	 *  
+	 * @param text
+	 * @param offset
+	 * @return
+	 */
+	protected String getELPredicateMatchString(String text, int offset) {
+		int beginningOffset = offset - 1;
+		while(beginningOffset >=0 && 
+				(Character.isJavaIdentifierPart(text.charAt(beginningOffset)) ||
+						'.' == text.charAt(beginningOffset) ||
+						'_' == text.charAt(beginningOffset))) {
+			beginningOffset--;
+		}
+		beginningOffset++; // move it to point the first valid character
+		return text.substring(beginningOffset, offset);
+	}
+	
+	/**
 	 * Returns EL Prefix Text Region Information Object
 	 * 
 	 * @deprecated

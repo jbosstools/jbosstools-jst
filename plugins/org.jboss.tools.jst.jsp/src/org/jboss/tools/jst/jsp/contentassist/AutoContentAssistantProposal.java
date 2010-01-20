@@ -21,8 +21,12 @@ import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
+import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
+import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
 import org.eclipse.wst.sse.ui.internal.contentassist.CustomCompletionProposal;
 import org.eclipse.wst.sse.ui.internal.contentassist.IRelevanceConstants;
+import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 
 /**
  * @author Igels
@@ -129,6 +133,28 @@ public class AutoContentAssistantProposal extends CustomCompletionProposal imple
 
 	private int fOriginalReplacementLength;
 
+	/**
+	 * Returns true in case of the region at specified offset is a node name region
+	 * 
+	 * @param document
+	 * @param offset
+	 * @return
+	 */
+	private boolean isTagName(IDocument document, int offset) {
+		if (!(document instanceof IStructuredDocument)) 
+			return false;
+		
+		int lastOffset = offset;
+		IStructuredDocumentRegion sdRegion = ((IStructuredDocument)document).getRegionAtCharacterOffset(offset);
+		while (sdRegion == null && lastOffset >= 0) {
+			lastOffset--;
+			sdRegion = ((IStructuredDocument)document).getRegionAtCharacterOffset(lastOffset);
+		}
+		
+		ITextRegion region = sdRegion == null ? null : sdRegion.getRegionAtCharacterOffset(offset);
+		
+		return DOMRegionContext.XML_TAG_NAME.equals(region == null ? null : region.getType());
+	}
 
 	// Fix for JBIDE-5125 >>>
 	@Override
@@ -138,8 +164,12 @@ public class AutoContentAssistantProposal extends CustomCompletionProposal imple
 		if (offset < fReplacementOffset)
 			return false;
 		boolean validated = startsWith(document, offset, getReplacementString());
-		if (!validated && getReplacementString() != null && getReplacementString().indexOf(":") != -1) { //$NON-NLS-1$
+		if (!validated && isTagName(document, fReplacementOffset) && getReplacementString() != null && getReplacementString().indexOf(":") != -1) { //$NON-NLS-1$
 			String replacementString = getReplacementString().substring(getReplacementString().indexOf(":") + 1); //$NON-NLS-1$
+			validated = startsWith(document, offset, replacementString);
+		}
+		if (!validated && getReplacementString() != null && getReplacementString().startsWith("#{")) { //$NON-NLS-1$
+			String replacementString = getReplacementString().substring(getReplacementString().indexOf("#{") + 2); //$NON-NLS-1$
 			validated = startsWith(document, offset, replacementString);
 		}
 		// it would be better to use "originalCursorPosition" instead of

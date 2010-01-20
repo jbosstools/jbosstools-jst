@@ -105,6 +105,7 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 		}
 		
 		addTagNameProposals(contentAssistRequest, childPosition, true);
+		addAttributeValueELPredicateProposals(contentAssistRequest);
 	}
 
 	private void addTagNameProposalsForPrefix(
@@ -283,8 +284,77 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 
 			contentAssistRequest.addProposal(proposal);
 		}
+		
+		addAttributeValueELPredicateProposals(contentAssistRequest);
 	}
 
+	/**
+	 * Calculates and adds EL predicate proposals based on the last word typed
+	 * To be used only outside the EL.
+	 * 
+	 * @param contentAssistRequest
+	 */
+	protected void addAttributeValueELPredicateProposals(ContentAssistRequest contentAssistRequest) {
+		// Need to check if the cursor is placed right after a word part.
+		// If there is no word part found then just quit
+		TextRegion prefix = getELPredicatePrefix(contentAssistRequest);
+		if (prefix == null || prefix.isELStarted()) {
+			return;
+		}
+		String matchString = "#{" + prefix.getText(); //$NON-NLS-1$
+		String query = matchString;
+		if (query == null)
+			query = ""; //$NON-NLS-1$
+		String stringQuery = matchString;
+		
+		int beginChangeOffset = prefix.getStartOffset() + prefix.getOffset();
+				
+		KbQuery kbQuery = createKbQuery(Type.ATTRIBUTE_VALUE, query, stringQuery);
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext());
+		
+		for (int i = 0; proposals != null && i < proposals.length; i++) {
+			TextProposal textProposal = proposals[i];
+			
+			int replacementOffset = beginChangeOffset;
+			int replacementLength = prefix.getLength();
+			String replacementString = "#{" + prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString();  //$NON-NLS-1$
+			
+			char quoteChar = prefix.isAttributeValue() && prefix.hasOpenQuote() ? prefix.getQuoteChar() : '"';
+			int cursorPosition = replacementString.length();
+			
+			if (!prefix.isELClosed()) {
+				replacementString += "}"; //$NON-NLS-1$
+			}
+			
+			if (prefix.isAttributeValue() && prefix.hasOpenQuote() && !prefix.hasCloseQuote()) {
+				replacementString += String.valueOf(quoteChar);
+			}
+									
+			Image image = textProposal.getImage();
+			
+			// JBIDE-512, JBIDE-2541 related changes ===>>>
+//				String displayString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString();
+			String displayString = textProposal.getLabel();
+			if (displayString == null)
+				displayString = textProposal.getReplacementString() == null ? replacementString : textProposal.getReplacementString();
+			// <<<=== JBIDE-512, JBIDE-2541 related changes
+
+			IContextInformation contextInformation = null;
+			String additionalProposalInfo = (textProposal.getContextInfo() == null ? "" : textProposal.getContextInfo()); //$NON-NLS-1$
+			int relevance = textProposal.getRelevance();
+			if (relevance == TextProposal.R_NONE) {
+				relevance = TextProposal.R_JSP_JSF_EL_VARIABLE_ATTRIBUTE_VALUE;
+			}
+
+			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(replacementString, 
+					replacementOffset, replacementLength, cursorPosition, image, displayString, 
+					contextInformation, additionalProposalInfo, relevance);
+
+			contentAssistRequest.addProposal(proposal);
+		}
+	}
+	
+	
 	@Override
 	protected void addAttributeValueELProposals(ContentAssistRequest contentAssistRequest) {
 		if (!isJsfProject())
