@@ -100,7 +100,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	private IVisualEditor visualEditor;
 
 	private int visualSourceIndex;
-
+	
 	private JSPTextEditor sourceEditor;
 
 	private int sourceIndex;
@@ -222,7 +222,12 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 			}
 		}
 		superPageChange(newPageIndex);
+		JspEditorPlugin.getDefault().getPreferenceStore().
+			setValue(IVpePreferencesPage.DEFAULT_VPE_TAB, selectedPageIndex);
+	}
 
+	public int getSelectedPageIndex() {
+		return selectedPageIndex;
 	}
 
 	public void setInput(IEditorInput input) {
@@ -809,6 +814,14 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	 */
 	public void setPreviewIndex(int previewIndex) {
 		this.previewIndex = previewIndex;
+	}
+	
+	public void setVisualSourceIndex(int visualSourceIndex) {
+		this.visualSourceIndex = visualSourceIndex;
+	}
+
+	public int getVisualSourceIndex() {
+		return visualSourceIndex;
 	}
 	
 }
