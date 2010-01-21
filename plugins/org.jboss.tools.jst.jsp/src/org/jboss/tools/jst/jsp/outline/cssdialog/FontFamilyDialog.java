@@ -191,6 +191,10 @@ public class FontFamilyDialog extends Dialog implements SelectionListener {
         allFontFamilyList.addMouseListener(new MouseListener() {
                 public void mouseDoubleClick(MouseEvent e) {
                     int selectedItem = allFontFamilyList.getSelectionIndex();
+                    allFontFamilyList.deselectAll();
+                    if (selectedItem == -1) {
+						return;
+					}
                     addFont(fontFamilyList, allFontFamilyList.getItem(selectedItem));
                     allFontFamilyList.remove(selectedItem);
                     rightButton.setEnabled(false);
@@ -214,6 +218,9 @@ public class FontFamilyDialog extends Dialog implements SelectionListener {
 
                     int selectedItem = fontFamilyList.getSelectionIndex();
                     fontFamilyList.deselectAll();
+                    if (selectedItem == -1) {
+						return;
+					}
                     addFont(allFontFamilyList, fontFamilyList.getItem(selectedItem));
                     fontFamilyList.remove(selectedItem);
                 }
