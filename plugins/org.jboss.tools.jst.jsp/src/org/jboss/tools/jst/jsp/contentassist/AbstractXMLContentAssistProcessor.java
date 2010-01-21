@@ -961,7 +961,7 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 				quoteChar = text.charAt(0);
 				hasOpenQuote = true;
 			}
-			if (hasOpenQuote && text.endsWith(String.valueOf(quoteChar))) {
+			if (hasOpenQuote && text.trim().endsWith(String.valueOf(quoteChar))) {
 				hasCloseQuote = true;
 			}
 		}
@@ -1020,7 +1020,7 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 				quoteChar = text.charAt(0);
 				hasOpenQuote = true;
 			}
-			if (hasOpenQuote && text.endsWith(String.valueOf(quoteChar))) {
+			if (hasOpenQuote && text.trim().endsWith(String.valueOf(quoteChar))) {
 				hasCloseQuote = true;
 			}
 		}
