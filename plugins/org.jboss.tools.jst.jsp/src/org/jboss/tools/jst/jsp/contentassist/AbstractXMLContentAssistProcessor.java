@@ -545,7 +545,6 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 		}
 		
 		String regionType = completionRegion.getType();
-//		IStructuredDocumentRegion sdRegion = getStructuredDocumentRegion(documentPosition);
 
 		/*
 		 * Jeremy: Add attribute name proposals before  empty tag close
@@ -1002,14 +1001,25 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 	 * @return
 	 */
 	protected TextRegion getELPredicatePrefix(ContentAssistRequest request) {
-		if (!DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE.equals(request.getRegion().getType()) &&
-				!DOMRegionContext.XML_CONTENT.equals(request.getRegion().getType()) &&
-				!DOMRegionContext.BLOCK_TEXT.equals(request.getRegion().getType())) 
+		if (request == null || request.getRegion() == null)
 			return null;
-		
-		String text = request.getDocumentRegion().getFullText(request.getRegion());
-		int startOffset = request.getDocumentRegion().getStartOffset() + request.getRegion().getStart();
 
+		IStructuredDocumentRegion documentRegion = request.getDocumentRegion();
+		ITextRegion completionRegion = request.getRegion();
+		String regionType = completionRegion.getType();
+		
+		if (DOMRegionContext.XML_END_TAG_OPEN.equals(regionType) || DOMRegionContext.XML_TAG_OPEN.equals(regionType)) {
+			documentRegion = documentRegion.getPrevious();
+			completionRegion = getCompletionRegion(request.getDocumentRegion().getStartOffset() + request.getRegion().getStart() - 1, request.getParent());
+		}
+		if (!DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE.equals(completionRegion.getType()) &&
+				!DOMRegionContext.XML_CONTENT.equals(completionRegion.getType()) &&
+				!DOMRegionContext.BLOCK_TEXT.equals(completionRegion.getType())) {
+				return null;
+		}
+		String text = documentRegion.getFullText(completionRegion);
+		int startOffset = documentRegion.getStartOffset() + completionRegion.getStart();
+		
 		boolean isAttributeValue = false;
 		boolean hasOpenQuote = false;
 		boolean hasCloseQuote = false;
@@ -1174,7 +1184,7 @@ abstract public class AbstractXMLContentAssistProcessor extends AbstractContentA
 			this(startOffset, offset, length, text, isELStarted, isELClosed, false, false, false, (char)0);
 		}
 
-		TextRegion(int startOffset, int offset, int length, String text, boolean isELStarted, boolean isELClosed,
+		public TextRegion(int startOffset, int offset, int length, String text, boolean isELStarted, boolean isELClosed,
 				boolean isAttributeValue, boolean hasOpenQuote, boolean hasCloseQuote, char quoteChar) {
 			this.startOffset = startOffset;
 			this.offset = offset;
