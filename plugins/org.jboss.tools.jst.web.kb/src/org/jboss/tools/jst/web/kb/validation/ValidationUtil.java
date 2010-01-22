@@ -18,7 +18,7 @@ import org.eclipse.core.resources.IFile;
 /**
  * @author Alexey Kazakov
  */
-public class ValidatorUtil {
+public class ValidationUtil {
 
 	public final static Set<String> EXTNS;
 	static {
