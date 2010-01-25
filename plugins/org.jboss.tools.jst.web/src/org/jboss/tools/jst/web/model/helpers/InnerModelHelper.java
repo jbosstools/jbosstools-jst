@@ -36,7 +36,9 @@ public class InnerModelHelper {
 		IModelNature n = EclipseResourceUtil.getModelNature(project.getProject());
 		if(n != null) return n.getModel();
 		
-		XModel model = EclipseResourceUtil.createObjectForResource(project.getProject()).getModel();
+		XModelObject o = EclipseResourceUtil.createObjectForResource(project.getProject());
+		if(o == null) return null;
+		XModel model = o.getModel();
 		XModelObject webinf = model.getByPath("FileSystems/WEB-INF"); //$NON-NLS-1$
 		if(webinf != null) return model;
 		
