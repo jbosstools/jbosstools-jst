@@ -66,8 +66,11 @@ public class Messages extends NLS {
 	public static String WebAppFoldersFormLayoutData_ServletMappings;
 	public static String WebAppFoldersFormLayoutData_Servlets;
 	public static String WebAppFoldersFormLayoutData_WebAppMimeMapping;
+	public static String WebAppFoldersFormLayoutData_LifecycleCallbacks;
+	public static String WebAppFoldersFormLayoutData_Persistence;
 	public static String WebCompoundEditor_WebXMLEditor;
 	public static String XActionProvider_CompanyName;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

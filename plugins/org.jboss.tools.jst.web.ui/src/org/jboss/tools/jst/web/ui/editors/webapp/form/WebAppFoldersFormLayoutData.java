@@ -20,6 +20,8 @@ public class WebAppFoldersFormLayoutData {
 	static String CONTEXT_PARAM_ENTITY = WebAppHelper.CONTEXT_PARAM_ENTITY;
 	static String FILTER_FOLDER_ENTITY = "WebAppFolderFilters"; //$NON-NLS-1$
 	static String FILTER_FOLDER_24_ENTITY = "WebAppFolderFilters24"; //$NON-NLS-1$
+	static String LIFECYCLE_FOLDER_24_ENTITY = "WebAppFolderLifecycles25"; //$NON-NLS-1$
+	static String PERSISTENCE_FOLDER_24_ENTITY = "WebAppFolderPersistence25"; //$NON-NLS-1$
 	static String LISTENER_FOLDER_ENTITY = "WebAppFolderListeners"; //$NON-NLS-1$
 	static String LISTENER_FOLDER_24_ENTITY = "WebAppFolderListeners24"; //$NON-NLS-1$
 	static String SERVLET_FOLDER_ENTITY = "WebAppFolderServlets"; //$NON-NLS-1$
@@ -63,6 +65,22 @@ public class WebAppFoldersFormLayoutData {
 		FormLayoutDataUtil.createDefaultFormActionData("CreateActions.CreateFilterMapping") //$NON-NLS-1$
 	);
 
+	static IFormData LIFECYCLE_LIST_DEFINITION = new FormData(
+		Messages.WebAppFoldersFormLayoutData_LifecycleCallbacks,
+		EMPTY_DESCRIPTION,
+		new FormAttributeData[]{new FormAttributeData("lifecycle-callback-method", 100)}, //$NON-NLS-1$
+		new String[]{"WebAppPostConstruct25", "WebAppPreDestroy25"}, //$NON-NLS-1$ //$NON-NLS-2$
+		FormLayoutDataUtil.createDefaultFormActionData("CreateActions.AddAnyCallback") //$NON-NLS-1$
+	);
+
+	static IFormData PERSISTENCE_LIST_DEFINITION = new FormData(
+		Messages.WebAppFoldersFormLayoutData_Persistence,
+		EMPTY_DESCRIPTION,
+		new FormAttributeData[]{new FormAttributeData("ref-name", 50), new FormAttributeData("unit-name", 50)}, //$NON-NLS-1$ //$NON-NLS-2$
+		new String[]{"WebAppPersistenceContextRef25", "WebAppPersistenceUnitRef25"}, //$NON-NLS-1$ //$NON-NLS-2$
+		FormLayoutDataUtil.createDefaultFormActionData("CreateActions.AddAnyRef") //$NON-NLS-1$
+	);
+
 	static IFormData FILTER_MAPPING_24_LIST_DEFINITION = new FormData(
 		Messages.WebAppFoldersFormLayoutData_FilterMappings,
 		EMPTY_DESCRIPTION,
@@ -79,6 +97,14 @@ public class WebAppFoldersFormLayoutData {
 	static IFormData[] FILTER_FOLDER_24_DEFINITIONS = new IFormData[]{
 		FILTER_LIST_DEFINITION,
 		FILTER_MAPPING_24_LIST_DEFINITION
+	};
+
+	static IFormData[] LIFECYCLE_FOLDER_24_DEFINITIONS = new IFormData[]{
+		LIFECYCLE_LIST_DEFINITION,
+	};
+
+	static IFormData[] PERSISTENCE_FOLDER_24_DEFINITIONS = new IFormData[]{
+		PERSISTENCE_LIST_DEFINITION,
 	};
 
 	static IFormData LISTENER_LIST_DEFINITION = new FormData(
@@ -274,6 +300,12 @@ public class WebAppFoldersFormLayoutData {
 
 	final static IFormData FILTER_FOLDER_24_DEFINITION = new FormData(
 		FILTER_FOLDER_24_ENTITY, new String[]{null}, FILTER_FOLDER_24_DEFINITIONS);
+
+	final static IFormData LIFECYCLE_FOLDER_24_DEFINITION = new FormData(
+		LIFECYCLE_FOLDER_24_ENTITY, new String[]{null}, LIFECYCLE_FOLDER_24_DEFINITIONS);
+
+	final static IFormData PERSISTENCE_FOLDER_24_DEFINITION = new FormData(
+		PERSISTENCE_FOLDER_24_ENTITY, new String[]{null}, PERSISTENCE_FOLDER_24_DEFINITIONS);
 
 	final static IFormData LISTENER_FOLDER_DEFINITION = new FormData(
 		LISTENER_FOLDER_ENTITY, new String[]{null}, LISTENER_FOLDER_DEFINITIONS);
