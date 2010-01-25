@@ -131,13 +131,18 @@ class FWLoaderUtil extends XModelObjectLoaderUtil {
     		
     		return true;
     	} else if(!"WebAppServlet".equals(entity)) { //$NON-NLS-1$
-    		return super.saveChildren(element, o);
+    		boolean b = super.saveChildren(element, o);
+    		if(o.getModelEntity().getAttribute("mapped-name") != null) { //$NON-NLS-1$
+    			moveChild(element, "mapped-name", "injection-target"); //$NON-NLS-1$ //$NON-NLS-2$
+    		}
+    		return b;
     	}
         saveChildren(element, o, "WebAppInitParam"); //$NON-NLS-1$
         String l = o.getAttributeValue("load-on-startup"); //$NON-NLS-1$
         if(l.length() > 0) saveAttribute(element, "load-on-startup.#text", l); //$NON-NLS-1$
         saveChildren(element, o, "WebAppRunAs"); //$NON-NLS-1$
         saveChildren(element, o, "WebAppSecurityRoleRef"); //$NON-NLS-1$
+
         return true;
     }
 
@@ -213,6 +218,30 @@ class FWLoaderUtil extends XModelObjectLoaderUtil {
     	return -1;
     }
 
+   	private void moveChild(Element element, String child, String childAfter) {
+   		NodeList l = element.getChildNodes();
+   		Element childE = null;
+   		Element childAfterE = null;
+   		for (int i = 0; i < l.getLength(); i++) {
+    		Node n = l.item(i);
+    		if(n.getNodeType() != Node.ELEMENT_NODE) continue;
+    		String name = n.getNodeName();
+    		if(child.equals(name)) {
+    			childE = (Element)n;
+    		} else if(childAfter.equals(name)) {
+    			if(childAfterE == null) childAfterE = (Element)n;
+    		}
+    	}
+   		if(childE != null) {
+   			element.removeChild(childE);
+   			if(childAfterE != null) {
+   				element.insertBefore(childE, childAfterE);
+   			} else {
+   				element.appendChild(childE);
+   			}
+   		}
+    }
+    
     public boolean save(Element parent, XModelObject o) {
     	if(!needToSave(o)) return true;
     	return super.save(parent, o);
