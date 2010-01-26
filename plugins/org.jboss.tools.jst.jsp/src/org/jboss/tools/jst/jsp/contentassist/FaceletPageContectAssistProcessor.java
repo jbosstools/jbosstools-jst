@@ -74,7 +74,7 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 		}
 		
 		addTagNameProposals(contentAssistRequest, childPosition, true);
-		addAttributeValueELPredicateProposals(contentAssistRequest);
+		addELPredicateProposals(contentAssistRequest, TextProposal.R_TAG_INSERTION, true);
 	}
 	
 	/**

@@ -18,6 +18,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
+import org.eclipse.wst.xml.ui.internal.contentassist.XMLRelevanceConstants;
 import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImageHelper;
 import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImages;
 import org.jboss.tools.common.el.core.resolver.ELContext;
@@ -105,7 +106,7 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 		}
 		
 		addTagNameProposals(contentAssistRequest, childPosition, true);
-		addAttributeValueELPredicateProposals(contentAssistRequest);
+		addELPredicateProposals(contentAssistRequest, TextProposal.R_TAG_INSERTION, true);
 	}
 
 	private void addTagNameProposalsForPrefix(
@@ -285,16 +286,16 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 			contentAssistRequest.addProposal(proposal);
 		}
 		
-		addAttributeValueELPredicateProposals(contentAssistRequest);
+		addELPredicateProposals(contentAssistRequest, TextProposal.R_JSP_ATTRIBUTE_VALUE, false);
 	}
-
+	
 	/**
 	 * Calculates and adds EL predicate proposals based on the last word typed
 	 * To be used only outside the EL.
 	 * 
 	 * @param contentAssistRequest
 	 */
-	protected void addAttributeValueELPredicateProposals(ContentAssistRequest contentAssistRequest) {
+	protected void addELPredicateProposals(ContentAssistRequest contentAssistRequest, int baseRelevance, boolean shiftRelevanceAgainstTagNameProposals) {
 		// Need to check if the cursor is placed right after a word part.
 		// If there is no word part found then just quit
 		TextRegion prefix = getELPredicatePrefix(contentAssistRequest);
@@ -306,6 +307,10 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 		if (query == null)
 			query = ""; //$NON-NLS-1$
 		String stringQuery = matchString;
+		int relevanceShift = 0; 
+		if (shiftRelevanceAgainstTagNameProposals) {
+			relevanceShift += prefix.getText() != null && prefix.getText().trim().length() > 0 ? (XMLRelevanceConstants.R_STRICTLY_VALID_TAG_INSERTION - baseRelevance + 2): -2;
+		}
 		
 		int beginChangeOffset = prefix.getStartOffset() + prefix.getOffset();
 				
@@ -343,8 +348,9 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 			String additionalProposalInfo = (textProposal.getContextInfo() == null ? "" : textProposal.getContextInfo()); //$NON-NLS-1$
 			int relevance = textProposal.getRelevance();
 			if (relevance == TextProposal.R_NONE) {
-				relevance = TextProposal.R_JSP_JSF_EL_VARIABLE_ATTRIBUTE_VALUE;
+				relevance = baseRelevance;
 			}
+			relevance += relevanceShift;
 
 			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(replacementString, 
 					replacementOffset, replacementLength, cursorPosition, image, displayString, 
