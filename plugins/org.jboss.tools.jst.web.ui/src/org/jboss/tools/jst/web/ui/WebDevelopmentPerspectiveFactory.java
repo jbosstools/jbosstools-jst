@@ -22,6 +22,7 @@ import org.eclipse.ui.IPerspectiveFactory;
 public class WebDevelopmentPerspectiveFactory implements IPerspectiveFactory {
 
 	public static final String PERSPECTIVE_ID = "org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"; //$NON-NLS-1$
+	private static String WTP_SERVERS_VIEW = "org.eclipse.wst.server.ui.ServersView"; //$NON-NLS-1$
 
 	/* (non-Javadoc)
      * @see org.eclipse.ui.IPerspectiveFactory#createInitialLayout(org.eclipse.ui.IPageLayout)
@@ -34,17 +35,16 @@ public class WebDevelopmentPerspectiveFactory implements IPerspectiveFactory {
 		leftTop.addView("org.jboss.tools.jst.web.ui.navigator.WebProjectsView"); //$NON-NLS-1$
 		leftTop.addView("org.jboss.tools.seam.ui.views.SeamComponentsNavigator"); //$NON-NLS-1$
 		leftTop.addPlaceholder(IPageLayout.ID_RES_NAV);
-		
 
 		IFolderLayout leftBottom = layout.createFolder("leftBottom", IPageLayout.BOTTOM, 0.64f, "leftTop"); //$NON-NLS-1$ //$NON-NLS-2$
 		//leftBottom.addView(IPageLayout.ID_OUTLINE);
 		leftBottom.addView(IPageLayout.ID_PROP_SHEET);			
-		
 
 		IFolderLayout bottom = layout.createFolder("bottom", IPageLayout.BOTTOM, (float)0.78, editorArea); //$NON-NLS-1$
 		bottom.addView(IPageLayout.ID_PROBLEM_VIEW);
 		bottom.addView(IPageLayout.ID_TASK_LIST);
-		bottom.addView("org.jboss.ide.eclipse.as.ui.views.JBossServerView"); //$NON-NLS-1$
+//		bottom.addView("org.jboss.ide.eclipse.as.ui.views.JBossServerView"); //$NON-NLS-1$
+		bottom.addView(WTP_SERVERS_VIEW);
 
 		IFolderLayout rightTop = layout.createFolder("right", IPageLayout.RIGHT, (float)0.8, editorArea); //$NON-NLS-1$
 //		rightTop.addView("org.jboss.tools.common.model.ui.views.palette.PaletteView"); //$NON-NLS-1$
@@ -59,7 +59,7 @@ public class WebDevelopmentPerspectiveFactory implements IPerspectiveFactory {
 
 		// views - seam
 		layout.addShowViewShortcut("org.jboss.tools.seam.ui.views.SeamComponentsNavigator"); //$NON-NLS-1$
-		
+
 		// views - java
 		layout.addShowViewShortcut(JavaUI.ID_PACKAGES);
 		layout.addShowViewShortcut(JavaUI.ID_TYPE_HIERARCHY);
