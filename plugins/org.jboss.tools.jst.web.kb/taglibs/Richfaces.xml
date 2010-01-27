@@ -534,6 +534,12 @@
 				<param value="none" />
 			</proposal>
 		</attribute>
+		<attribute name="icon">
+			<proposal type="file">
+				<param name="extensions" value="%image%" />
+				<param name="pathType" value="absolute" />
+			</proposal>
+		</attribute>
 	</component>
 	<component name="message">
 		<attribute name="showSummary">
