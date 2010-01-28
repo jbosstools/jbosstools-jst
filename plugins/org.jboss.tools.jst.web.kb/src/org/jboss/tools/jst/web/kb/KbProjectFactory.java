@@ -80,6 +80,7 @@ public class KbProjectFactory {
 		}
 		underConstruction.add(project);
 		final KbProject mock = new KbProject();
+		mock.setProject(project);
 		class KbBuilderEx extends KbBuilder {
 			protected KbProject getKbProject() {
 				return mock;
@@ -96,7 +97,6 @@ public class KbProjectFactory {
 			public void run() {
 //				System.out.println("build begin");
 				long t0 = System.currentTimeMillis();
-				mock.setProject(project);
 				KbBuilderEx builder = new KbBuilderEx();
 				setProjectToBuilder(builder, project);
 				builder.build();
