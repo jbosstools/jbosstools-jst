@@ -59,6 +59,17 @@ public class JspContextImpl extends XmlContextImpl implements IPageContext, IInc
 		return superNameSpaces;
 	}
 
+	/*
+	 * The method is commented due the following reasons:
+	 * 1. https://jira.jboss.org/jira/browse/JBIDE-5753. 
+	 * 2. Wrong way of gathering Var-s from the included contexts if any. There are at least two ways 
+	 * of how the code may be included into the page, but anyway we cannot use offset within the page 
+	 * to search for Var-s in other pages.
+	 * 3. Because of ##1-2 this method should be modified in future, but for now we're excluding the included 
+	 * contexts from the account. So, super method does this job well.
+	 * 
+	 * DO NOT uncomment this until the #2 will be solved
+	 * 
 	@Override
 	public Var[] getVars(int offset) {
 		Var[] thisVars = super.getVars(offset);
@@ -89,7 +100,8 @@ public class JspContextImpl extends XmlContextImpl implements IPageContext, IInc
 		}
 		return result;
 	}
-
+	*/
+	
 	public ITagLibrary[] getLibraries() {
 		List<ITagLibrary> libraries = new ArrayList<ITagLibrary>();
 		
