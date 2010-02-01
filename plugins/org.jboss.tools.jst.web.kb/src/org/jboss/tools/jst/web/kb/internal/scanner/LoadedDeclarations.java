@@ -32,4 +32,8 @@ public class LoadedDeclarations {
 		libraries.addAll(ds.libraries);
 	}
 
+	public boolean isEmpty() {
+		return libraries.isEmpty();
+	}
+
 }

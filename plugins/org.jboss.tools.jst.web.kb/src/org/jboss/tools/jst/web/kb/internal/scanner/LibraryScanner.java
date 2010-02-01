@@ -89,8 +89,39 @@ public class LibraryScanner implements IFileScanner {
 				}
 			}
 		}
+		XModelObject[] ps = o.getChildren();
+		for (int i = 0; i < ps.length; i++) {
+			if(ps[i] == metaInf || ps[i].getFileType() != XModelObject.FOLDER) continue;
+			LoadedDeclarations ds1 = parseInPackages(ps[i], path, sp);
+			if(ds1 != null) ds.add(ds1);
+		}
 
 		return ds;
+	}
+
+	public LoadedDeclarations parseInPackages(XModelObject o, IPath path, IKbProject sp) throws ScannerException {
+		LoadedDeclarations ds = new LoadedDeclarations();
+		XModelObject[] tlds = o.getChildren();
+		for (XModelObject tld: tlds) {
+			if(isFaceletTaglibFile(tld)) {
+				XMLScanner s = new XMLScanner();				
+				LoadedDeclarations ds1 = s.parse(tld, path, sp);
+				ds = add(ds, ds1);
+				if(ds1 != null && !ds1.isEmpty()) {
+					System.out.println(tld.getPath() + ":" + ds1.getLibraries().get(0).getURI());
+				}
+			} else if(tld.getFileType() == XModelObject.FOLDER) {
+				LoadedDeclarations ds1 = parseInPackages(tld, path, sp);
+				ds = add(ds, ds1);
+			}
+		}
+		return ds;
+	}
+	private LoadedDeclarations add(LoadedDeclarations total, LoadedDeclarations addition) {
+		if(addition == null || addition.isEmpty()) return total;
+		if(total == null) total = new LoadedDeclarations();
+		total.add(addition);
+		return total;
 	}
 
 	public static boolean isTLDFile(XModelObject o) {
