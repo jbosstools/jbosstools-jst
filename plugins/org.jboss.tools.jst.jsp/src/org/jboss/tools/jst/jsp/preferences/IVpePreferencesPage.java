@@ -19,7 +19,7 @@ public interface IVpePreferencesPage {
 	static final String SHOW_RESOURCE_BUNDLES_USAGE_AS_EL = "Show Resource Bundles Usage as EL Expressions"; //$NON-NLS-1$
 	static final String ASK_TAG_ATTRIBUTES_ON_TAG_INSERT = "Ask for tag attributes during tag insert"; //$NON-NLS-1$
 	static final String ASK_CONFIRMATION_ON_CLOSING_SELECTION_BAR = "Ask for confirmation when closing Selection Bar"; //$NON-NLS-1$
-	static final String IGNORE_VPE_WARNINGS = "Ignore Visual Editor warnings"; //$NON-NLS-1$
+	static final String INFORM_WHEN_PROJECT_MIGHT_NOT_BE_CONFIGURED_PROPERLY_FOR_VPE = "Inform when a project might not be configured properly for Visual Page Editor"; //$NON-NLS-1$
 	static final String DEFAULT_VPE_TAB = "Default VPE Tab"; //$NON-NLS-1$
 	static final String VISUAL_SOURCE_EDITORS_SPLITTING = "Visual/Source Editors Splitting"; //$NON-NLS-1$
 	static final String VISUAL_SOURCE_EDITORS_WEIGHTS = "Size of Visual Editor Pane 0-100%"; //$NON-NLS-1$
