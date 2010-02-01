@@ -24,7 +24,7 @@ public class CAForIDTest extends ContentAssistantTestCase{
 			"greetingForm",
 		};
 
-		checkProposals(PAGE_NAME, "<a4j:commandButton focus=\"\"/>", 26, proposals, false);
+		checkProposals(PAGE_NAME, "<a4j:commandButton focus=\"\"/>", 26, proposals, false, false);
 	}
 
 	public void testCAForConverterIDTest(){
@@ -32,7 +32,7 @@ public class CAForIDTest extends ContentAssistantTestCase{
 			"converter1",
 		};
 
-		checkProposals(PAGE_NAME, "<h:inputText value=\"#{user.name}\" required=\"true\" converter=\"\">", 61, proposals, false);
+		checkProposals(PAGE_NAME, "<h:inputText value=\"#{user.name}\" required=\"true\" converter=\"\">", 61, proposals, false, false);
 	}
 
 	public void testCAForValidatorIDTest(){
@@ -40,6 +40,6 @@ public class CAForIDTest extends ContentAssistantTestCase{
 			"validator1",
 		};
 
-		checkProposals(PAGE_NAME, "<f:validator validatorId=\"\" />", 26, proposals, false);
+		checkProposals(PAGE_NAME, "<f:validator validatorId=\"\" />", 26, proposals, false, false);
 	}
 }

@@ -52,11 +52,17 @@ public class ContentAssistantTestCase extends TestCase {
 	}
 
 	public ICompletionProposal[] checkProposals(String fileName, int offset, String[] proposals, boolean exactly) {
-        return checkProposals(fileName, null, offset, proposals, exactly);
+        return checkProposals(fileName, null, offset, proposals, exactly, true);
     }
 
-	public ICompletionProposal[] checkProposals(String fileName, String substring, int offset, String[] proposals, boolean exactly){
+	public ICompletionProposal[] checkProposals(String fileName, String substring, int offset, String[] proposals, boolean exactly) {
+		return checkProposals(fileName, substring, offset, proposals, exactly, false);
+	}
+	public ICompletionProposal[] checkProposals(String fileName, String substring, int offset, String[] proposals, boolean exactly, boolean excludeELProposalsFromExactTest){
+//		System.out.println("checkProposals >>> Enterring");
+//		System.out.println("checkProposals >>> invoking openEditor() for " + fileName);
 		openEditor(fileName);
+//		System.out.println("checkProposals >>> openEditor() is invoked for " + fileName);
 
         int position = 0;
         if (substring != null) {
@@ -66,14 +72,19 @@ public class ContentAssistantTestCase extends TestCase {
 
         ICompletionProposal[] result = null;
 
+//		System.out.println("checkProposals >>> invoking TestUtil.getProcessor() for position " + (position + offset));
         IContentAssistProcessor p = TestUtil.getProcessor(viewer, position + offset, contentAssistant);
+//		System.out.println("checkProposals >>> TestUtil.getProcessor() is invoked for " + (position + offset));
         if (p != null) {
             try {
+//        		System.out.println("checkProposals >>> invoking p.computeCompletionProposals() for position " + (position + offset));
                 result = p.computeCompletionProposals(viewer, position + offset);
+//        		System.out.println("checkProposals >>> p.computeCompletionProposals() is invoked for " + (position + offset));
             } catch (Throwable x) {
                 x.printStackTrace();
             }
         }
+//		System.out.println("checkProposals >>> Performing the values check up");
 
         assertTrue("Content Assistant returned no proposals", (result != null && result.length > 0));
 
@@ -81,14 +92,24 @@ public class ContentAssistantTestCase extends TestCase {
         // System.out.println("proposal - "+result[i].getDisplayString());
         // }
 
+        int foundCounter = 0;
         for (int i = 0; i < proposals.length; i++) {
-            assertTrue("Proposal " + proposals[i] + " not found!", compareProposal(proposals[i], result));
+        	boolean found = compareProposal(proposals[i], result);
+        	if (found)
+        		foundCounter++;
+            assertTrue("Proposal " + proposals[i] + " not found!", found );
         }
 
         if (exactly) {
-            assertTrue("Some other proposals was found!", result.length == proposals.length);
+        	if (excludeELProposalsFromExactTest) {
+        		assertTrue("Some other proposals were found!", foundCounter == proposals.length);
+        	} else {
+                assertTrue("Some other proposals were found!", result.length == proposals.length);
+        	}
         }
-		return result;
+
+//        System.out.println("checkProposals <<< Exiting");
+        return result;
 	}
 
 	public boolean compareProposal(String proposalName, ICompletionProposal[] proposals){
@@ -120,9 +141,7 @@ public class ContentAssistantTestCase extends TestCase {
 				// For an attribute value proposal there will be the quote characters
 				replacementString = Utils.trimQuotes(replacementString);
 				if (replacementString.equalsIgnoreCase(proposalName)) return true;
-				
-				
-				
+			
 			} else {
 				if(proposals[i].getDisplayString().toLowerCase().equals(proposalName.toLowerCase())) return true;
 			}

@@ -62,11 +62,12 @@ public class JsfJspJbide1704Test extends ContentAssistantTestCase {
 				result= p.computeCompletionProposals(viewer, reg.getOffset());
 			}
 			for (int k = 0; result != null && k < result.length; k++) {
-				// There should not be a proposal of type Red.Proposal in the result
+				// There should not be a proposal of type AutoContentAssistantProposal in the result
+				// (the only exclusion is EL-proposals)
 				
 				if ((result[k] instanceof AutoContentAssistantProposal) && 
-						result[k].getDisplayString().toLowerCase().equals(THE_ONLY_ALLOWED_TEMPLATE)) {
-					// The only new EL template proposal is allowed to be shown here
+						((AutoContentAssistantProposal)result[k]).getReplacementString().startsWith("#{")) {
+					// The only EL template proposal is allowed to be shown here
 					continue;
 				}
 				
