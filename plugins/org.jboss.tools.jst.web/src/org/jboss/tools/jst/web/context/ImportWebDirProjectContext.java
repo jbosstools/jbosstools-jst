@@ -18,6 +18,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.loaders.EntityRecognizerContext;
 import org.jboss.tools.common.model.loaders.impl.SerializingLoader;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
@@ -73,7 +74,7 @@ public abstract class ImportWebDirProjectContext extends ImportWebProjectContext
 		}
 		webXMLTimeStamp = f.lastModified();
 		String body = FileUtil.readFile(f);
-		String entity = getTarget().getModel().getEntityRecognizer().getEntityName("xml", body); //$NON-NLS-1$
+		String entity = getTarget().getModel().getEntityRecognizer().getEntityName(new EntityRecognizerContext("xml", body)); //$NON-NLS-1$
 		if(entity == null || !entity.startsWith("FileWebApp")) { //$NON-NLS-1$
 			webXMLErrorMessage = WebUIMessages.FILE_ISNOT_RECOGNIZED_AS_WEBDESCRIPTOR_FILE;
 			return;

@@ -1,0 +1,639 @@
+
+1. behavior restriction
+
+        <xsd:unique name="faces-config-behavior-ID-uniqueness">
+            <xsd:annotation>
+                <xsd:documentation>
+
+                    Behavior IDs must be unique within a document.
+
+                </xsd:documentation>
+            </xsd:annotation>
+
+            <xsd:selector xpath="javaee:behavior"/>
+            <xsd:field    xpath="javaee:behavior-id"/>
+        </xsd:unique>
+
+
+2. add to faces-config after application
+
+            <xsd:element name="ordering"
+                         type="javaee:faces-config-orderingType"/>
+            <xsd:element name="absolute-ordering"
+                         type="javaee:faces-config-absoluteOrderingType"
+                         minOccurs="0"
+                         maxOccurs="1"/>
+
+3.add to faces-config after managed-bean
+
+            <xsd:element name="name"
+                         type="javaee:java-identifierType"
+                         minOccurs="0"
+                         maxOccurs="1">
+              <xsd:annotation>
+                  <xsd:documentation>
+                      
+                      The "name" element within the top level "faces-config"
+                      element declares the name of this application
+                      configuration resource.  Such names are used
+                      in the document ordering scheme specified in section
+                      JSF.11.4.6.
+                      
+                  </xsd:documentation>
+              </xsd:annotation>
+            </xsd:element>
+                             
+4. add to faces-config after validator
+            <xsd:element name="behavior"
+                         type="javaee:faces-config-behaviorType"/>
+
+    <xsd:complexType name="faces-config-behaviorType">
+        <xsd:annotation>
+            <xsd:documentation>
+
+                The "behavior" element represents a concrete Behavior 
+                implementation class that should be registered under the
+                specified behavior identifier.  Behavior identifiers must
+                be unique within the entire web application.
+
+                Nested "attribute" elements identify generic attributes that
+                may be configured on the corresponding UIComponent in order
+                to affect the operation of the Behavior.  Nested "property"
+                elements identify JavaBeans properties of the Behavior 
+                implementation class that may be configured to affect the
+                operation of the Behavior.  "attribute" and "property"
+                elements are intended to allow component developers to
+                more completely describe their components to tools and users.
+                These elements have no required runtime semantics.
+
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:group ref="javaee:descriptionGroup"/>
+            <xsd:element name="behavior-id"
+                         type="javaee:string">
+                <xsd:annotation>
+                    <xsd:documentation>
+
+                        The "behavior-id" element represents the identifier
+                        under which the corresponding Behavior class should
+                        be registered.
+
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="behavior-class"
+                         type="javaee:fully-qualified-classType">
+                <xsd:annotation>
+                    <xsd:documentation>
+
+                        The "behavior-class" element represents the fully
+                        qualified class name of a concrete Behavior 
+                        implementation class.
+
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="attribute"
+                         type="javaee:faces-config-attributeType"
+                         minOccurs="0"
+                         maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>
+
+                       Nested "attribute" elements identify generic
+                       attributes that may be configured on the
+                       corresponding UIComponent in order to affect the
+                       operation of the Behavior.  This attribute is
+                       primarily for design-time tools and is not
+                       specified to have any meaning at runtime.
+
+                    </xsd:documentation>
+                </xsd:annotation>
+
+            </xsd:element>
+            <xsd:element name="property"
+                         type="javaee:faces-config-propertyType"
+                         minOccurs="0"
+                         maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>
+
+                       Nested "property" elements identify JavaBeans
+                       properties of the Behavior implementation class
+                       that may be configured to affect the operation of
+                       the Behavior.  This attribute is primarily for
+                       design-time tools and is not specified to have
+                       any meaning at runtime.
+
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="behavior-extension"
+                         type="javaee:faces-config-behavior-extensionType"
+                         minOccurs="0"
+                         maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <!-- **************************************************** -->
+
+    <xsd:complexType name = "faces-config-behavior-extensionType">
+        <xsd:annotation>
+            <xsd:documentation>
+
+                Extension element for behavior.  It may contain
+                implementation specific content.
+
+            </xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:sequence>
+            <xsd:any namespace="##any"
+                     processContents="lax"
+                     minOccurs="0"
+                     maxOccurs="unbounded" />
+         </xsd:sequence>
+         <xsd:attribute name="id" type="xsd:ID"/>
+    </xsd:complexType>
+
+5. add attribute to faces-config
+
+        <xsd:attribute name="metadata-complete"
+                       type="xsd:boolean"
+                       use="optional">
+            <xsd:annotation>
+                <xsd:documentation>
+
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+
+6. ordering objects
+
+
+    <xsd:complexType name="faces-config-orderingType">
+        <xsd:annotation>
+            <xsd:documentation>
+
+              Please see section JSF.11.4.6 for the specification of this element.
+                
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="after" 
+                         type="javaee:faces-config-ordering-orderingType"
+                         minOccurs="0"
+                         maxOccurs="1"/>
+            <xsd:element name="before" 
+                         type="javaee:faces-config-ordering-orderingType"
+                         minOccurs="0"
+                         maxOccurs="1"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="faces-config-ordering-orderingType">
+        <xsd:annotation>
+            <xsd:documentation>
+
+                This element contains a sequence of "id" elements, each of which
+                refers to an application configuration resource by the "id"
+                declared on its faces-config element.  This element can also contain
+                a single "others" element which specifies that this document comes
+                before or after other documents within the application.
+
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="name" type="javaee:java-identifierType" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="others" type="javaee:faces-config-ordering-othersType" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="faces-config-ordering-othersType">
+        <xsd:annotation>
+            <xsd:documentation>
+                
+                This element indicates that the ordering sub-element in which
+                it was placed should take special action regarding the ordering
+                of this application resource relative to other
+                application configuration resources.  See section JSF.11.4.6
+                for the complete specification.
+
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute name="id" type="xsd:ID"/>
+    </xsd:complexType>
+
+
+    <xsd:complexType name="faces-config-absoluteOrderingType">
+        <xsd:annotation>
+            <xsd:documentation>
+
+              Only relevant if this is placed within the /WEB-INF/faces-config.xml.
+              Please see section JSF.11.4.6 for the specification for details.
+
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:choice minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="name" type="javaee:java-identifierType" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="others" type="javaee:faces-config-ordering-othersType" minOccurs="0" maxOccurs="1" />
+        </xsd:choice>
+    </xsd:complexType>
+
+
+7. add to application after navigation-handler
+
+            <xsd:element name="partial-traversal"
+                         type="javaee:fully-qualified-classType">
+                <xsd:annotation>
+                    <xsd:documentation>
+
+                            The "partial-traversal" element contains the fully
+                            qualified class name of the concrete
+                            PartialTraversal implementation class that will be
+                            called during the "execute" and "render" phases of the
+                            request processing lifecycle.
+
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+
+8. add to application after variable-resolver
+
+            <xsd:element name="resource-handler"
+                         type="javaee:fully-qualified-classType">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[
+
+                            The "resource-handler" element contains the
+                            fully qualified class name of the concrete
+                            ResourceHandler implementation class that
+                            will be used during rendering and decoding
+                            of resource requests The standard
+                            constructor based decorator pattern used for
+                            other application singletons will be
+                            honored.
+
+                        ]]>
+
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="system-event-listener"
+                         type="javaee:faces-config-system-event-listenerType"
+                         minOccurs="0"
+                         maxOccurs="unbounded">
+            </xsd:element>
+
+    <xsd:complexType name="faces-config-system-event-listenerType">
+        <xsd:annotation>
+            <xsd:documentation>
+
+                The presence of this element within the "application" element in
+                an application configuration resource file indicates the
+                developer wants to add an SystemEventListener to this
+                application instance.  Elements nested within this element allow
+                selecting the kinds of events that will be delivered to the
+                listener instance, and allow selecting the kinds of classes that
+                can be the source of events that are delivered to the listener
+                instance.
+
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="system-event-listener-class"
+                         type="javaee:fully-qualified-classType">
+                <xsd:annotation>
+                    <xsd:documentation>
+
+                        The "system-event-listener-class" element contains
+                        the fully qualified class name of the concrete
+                        SystemEventListener implementation class that will be
+                        called when events of the type specified by the
+                        "system-event-class" are sent by the runtime.
+
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="system-event-class" 
+                         type="javaee:fully-qualified-classType">
+                <xsd:annotation>
+                    <xsd:documentation>
+
+                        The "system-event-class" element contains the fully
+                        qualified class name of the SystemEvent subclass for
+                        which events will be delivered to the class whose fully
+                        qualified class name is given by the
+                        "system-event-listener-class" element.
+
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="source-class" minOccurs="0"
+                         type="javaee:fully-qualified-classType">
+                <xsd:annotation>
+                    <xsd:documentation>
+
+                        The "source-class" element, if present, contains the
+                        fully qualified class name of the class that will be the
+                        source for the event to be delivered to the class whose
+                        fully qualified class name is given by the
+                        "system-event-listener-class" element.
+
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+        <xsd:attribute name="id" type="xsd:ID"/>
+    </xsd:complexType>
+
+
+9. add to application after locale-config
+
+            <xsd:element 
+                name="default-validators"
+                type="javaee:faces-config-default-validatorsType"/>
+
+
+10. add to factory after application-factory
+
+            <xsd:element name="exception-handler-factory"
+                         type="javaee:fully-qualified-classType">
+                <xsd:annotation>
+                    <xsd:documentation>
+                            
+                        The "exception-handler-factory" element contains the
+                        fully qualified class name of the concrete
+                        ExceptionHandlerFactory implementation class that will
+                        be called when 
+                        FactoryFinder.getFactory(EXCEPTION_HANDLER_FACTORY) 
+                        is called.
+                            
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="external-context-factory"
+                         type="javaee:fully-qualified-classType">
+                <xsd:annotation>
+                    <xsd:documentation>
+
+                        The "external-context-factory" element contains the
+                        fully qualified class name of the concrete
+                        ExternalContextFactory implementation class that will
+                        be called when
+                        FactoryFinder.getFactory(EXTERNAL_CONTEXT_FACTORY)
+                        is called.
+
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            
+11. add to factory after faces-context-factory
+
+
+            <xsd:element name="partial-view-context-factory"
+                         type="javaee:fully-qualified-classType">
+                <xsd:annotation>
+                    <xsd:documentation>
+
+                        The "partial-view-context-factory" element contains the
+                        fully qualified class name of the concrete
+                        PartialViewContextFactory implementation class that will
+                        be called when FactoryFinder.getFactory
+                        (FactoryFinder.PARTIAL_VIEW_CONTEXT_FACTORY) is called.
+
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+
+12. add to factory after lifecycle-factory
+
+            <xsd:element name="view-declaration-language-factory"
+                        type="javaee:fully-qualified-classType">
+                <xsd:annotation>
+                    <xsd:documentation>
+                            
+                        The "view-declaration-language-factory" element contains 
+                        the fully qualified class name of the concrete 
+                        ViewDeclarationLanguageFactory
+                        implementation class that will be called when
+                        FactoryFinder.getFactory(VIEW_DECLARATION_FACTORY) is called.
+                            
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="tag-handler-delegate-factory"
+                        type="javaee:fully-qualified-classType">
+                <xsd:annotation>
+                    <xsd:documentation>
+                            
+                        The "tag-handler-delegate-factory" element contains 
+                        the fully qualified class name of the concrete 
+                        ViewDeclarationLanguageFactory
+                        implementation class that will be called when
+                        FactoryFinder.getFactory(TAG_HANDLER_DELEGATE_FACTORY) is called.
+                            
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+
+13. add to factory after render-kit-factory
+
+            <xsd:element name="visit-context-factory"
+                         type="javaee:fully-qualified-classType">
+                <xsd:annotation>
+                    <xsd:documentation>
+
+                        The "visit-context-factory" element contains the fully
+                        qualified class name of the concrete VisitContextFactory
+                        implementation class that will be called when
+                        FactoryFinder.getFactory(VISIT_CONTEXT_FACTORY) is 
+                        called.
+
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+
+14. Description of default-validators
+
+    <xsd:complexType name="faces-config-default-validatorsType">
+        <xsd:annotation>
+            <xsd:documentation>
+
+                The "default-validators" element allows the app developer to 
+                register a set of validators, referenced by identifier, that
+                are automatically assigned to any EditableValueHolder component
+                in the application, unless overridden or disabled locally.
+
+            </xsd:documentation>
+        </xsd:annotation>
+        
+        <xsd:sequence>
+            <xsd:element name="validator-id"
+                         type="javaee:string"
+                         minOccurs="0"
+                         maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        
+                        The "validator-id" element represents the identifier 
+                        of a registered validator.
+                        
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+        <xsd:attribute name="id" type="xsd:ID"/>
+    </xsd:complexType>
+
+15. add attribute to managed-bean
+
+        <xsd:attribute name="eager"
+                       type="xsd:boolean"
+                       use="optional">
+            <xsd:annotation>
+                <xsd:documentation>
+
+                    This attribute is only considered when associated with
+                    an application-scoped managed bean. If the value of the eager
+                    attribute is true the runtime must instantiate this class
+                    and store the instance within the application scope when the
+                    application starts.
+
+                    If eager is unspecified or is false, the default "lazy"
+                    instantiation and scoped storage of the managed bean
+                    will occur.
+
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+
+16. change restriction for managed-bean-scope
+
+            <xsd:pattern value="view|request|session|application|none|#\{.*\}"/>
+
+17. add to navigation-case after from-outcome
+
+            <xsd:element name="if"
+                         type="javaee:faces-config-ifType"
+                         minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>
+
+                       Please see section JSF.7.4.2 for the specification of this element.
+
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+
+    <xsd:complexType name="faces-config-ifType">
+        <xsd:annotation>
+            <xsd:documentation>
+
+                The "if" element defines a condition that must resolve
+                to true in order for the navigation case on which it is
+                defined to be matched, with the existing match criteria
+                (action method and outcome) as a prerequiste, if present.
+                The condition is defined declaratively using a value
+                expression in the body of this element. The expression is
+                evaluated at the time the navigation case is being matched.
+                If the "from-outcome" is omitted and this element is
+                present, the navigation handler will match a null outcome
+                and use the condition return value to determine if the
+                case should be considered a match.
+
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleContent>
+            <xsd:extension base="javaee:faces-config-el-expressionType">
+                <xsd:attribute name="id" type="xsd:ID"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+18. add to redirect
+
+        <xsd:sequence>
+            <xsd:element name="view-param"
+                         type="javaee:faces-config-redirect-viewParamType"
+                         minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+        <xsd:attribute name="include-view-params" type="xsd:boolean" use="optional"/>
+
+    <xsd:complexType name="faces-config-redirect-viewParamType">
+        <xsd:annotation>
+            <xsd:documentation>
+
+                    The "view-param" element, only valid within
+                    a "redirect" element, contains child "name"
+                    and "value" elements that must be included in the
+                    redirect url when the redirect is performed.
+
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="name"
+                         type="javaee:string"
+                         minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="value"
+                         type="javaee:string"
+                         minOccurs="1" maxOccurs="1"/>
+        </xsd:sequence>
+        <xsd:attribute name="id" type="xsd:ID"/>
+
+    </xsd:complexType>
+
+19. add to render-kit after renderer
+
+            <xsd:element name="client-behavior-renderer"
+                         type="javaee:faces-config-client-behavior-rendererType"
+                         minOccurs="0" 
+                         maxOccurs="unbounded"/>
+
+    <xsd:complexType name="faces-config-client-behavior-rendererType">
+        <xsd:annotation>
+            <xsd:documentation>
+
+                The "client-behavior-renderer" element represents a concrete 
+                ClientBehaviorRenderer implementation class that should be 
+                registered under the specified behavior renderer type identifier,
+                in the RenderKit associated with the parent "render-kit"
+                element.  Client Behavior renderer type must be unique within the RenderKit
+                associated with the parent "render-kit" element.
+
+                Nested "attribute" elements identify generic component
+                attributes that are recognized by this renderer.
+
+            </xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:sequence>
+            <xsd:element name="client-behavior-renderer-type"
+                         type="javaee:string">
+                <xsd:annotation>
+                    <xsd:documentation>
+
+                        The "client-behavior-renderer-type" element represents a renderer type
+                        identifier for the Client Behavior Renderer represented by the parent
+                        "client-behavior-renderer" element.
+
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="client-behavior-renderer-class"
+                         type="javaee:fully-qualified-classType">
+                <xsd:annotation>
+                    <xsd:documentation>
+
+                        The "client-behavior-renderer-class" element represents the fully
+                        qualified class name of a concrete Client Behavior Renderer
+                        implementation class.
+
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+

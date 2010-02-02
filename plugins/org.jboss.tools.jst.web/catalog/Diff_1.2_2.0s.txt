@@ -1,0 +1,121 @@
++1. behavior restriction
+        <xsd:unique name="faces-config-behavior-ID-uniqueness"/>
+
++2. add to faces-config after application
+            <xsd:element name="ordering"  type="javaee:faces-config-orderingType"/> *
+            <xsd:element name="absolute-ordering" type="javaee:faces-config-absoluteOrderingType"/> ?
+
+tested+3.add to faces-config after managed-bean
+    <xsd:element name="name"/> ?
+                             
+tested+4. add to faces-config after validator
+            <xsd:element name="behavior"  type="javaee:faces-config-behaviorType"/>
+
+    <xsd:complexType name="faces-config-behaviorType">
+            <xsd:group ref="javaee:descriptionGroup"/>
+            <xsd:element name="behavior-id" type="javaee:string"/> R
+            <xsd:element name="behavior-class" type="javaee:fully-qualified-classType"/> R
+            <xsd:element name="attribute" type="javaee:faces-config-attributeType"/> *
+            <xsd:element name="property"  type="javaee:faces-config-propertyType"/> *
+            <xsd:element name="behavior-extension" type="javaee:faces-config-behavior-extensionType"/> *
+    </xsd:complexType>
+    <xsd:complexType name = "faces-config-behavior-extensionType">
+      <xsd:any/> *
+      <xsd:attribute name="id" type="xsd:ID"/>
+    </xsd:complexType>
+
+tested+5. add attribute to faces-config
+    <xsd:attribute name="metadata-complete" type="xsd:boolean" use="optional"/>
+
++6. ordering objects
+    <xsd:complexType name="faces-config-orderingType">
+            <xsd:element name="after" type="javaee:faces-config-ordering-orderingType"/> ?
+            <xsd:element name="before" type="javaee:faces-config-ordering-orderingType"/> ?
+    </xsd:complexType>
+
+    <xsd:complexType name="faces-config-ordering-orderingType">
+            <xsd:element name="name" type="javaee:java-identifierType" /> *
+            <xsd:element name="others" type="javaee:faces-config-ordering-othersType" /> ?
+    </xsd:complexType>
+    
+    <xsd:complexType name="faces-config-ordering-othersType">
+        <xsd:attribute name="id" type="xsd:ID"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="faces-config-absoluteOrderingType"> (any order)
+            <xsd:element name="name" type="javaee:java-identifierType" /> *
+            <xsd:element name="others" type="javaee:faces-config-ordering-othersType" /> ?
+    </xsd:complexType>
+
+
+obsolete 7. add to application after navigation-handler
+            <xsd:element name="partial-traversal" type="javaee:fully-qualified-classType"/> ?
+
+tested+8. add to application after variable-resolver
++            <xsd:element name="resource-handler" type="javaee:fully-qualified-classType"/> ?
++            <xsd:element name="system-event-listener" type="javaee:faces-config-system-event-listenerType"/> *
+
++    <xsd:complexType name="faces-config-system-event-listenerType">
+        <xsd:sequence>
+            <xsd:element name="system-event-listener-class" type="javaee:fully-qualified-classType"/> R
+            <xsd:element name="system-event-class" type="javaee:fully-qualified-classType"/> R
+            <xsd:element name="source-class" type="javaee:fully-qualified-classType"/> ?
+        </xsd:sequence>
+        <xsd:attribute name="id" type="xsd:ID"/>
+    </xsd:complexType>
+
+tested+9. add to application after locale-config
+    <xsd:element name="default-validators" type="javaee:faces-config-default-validatorsType"/>
+    <xsd:complexType name="faces-config-default-validatorsType">
+            <xsd:element name="validator-id" type="javaee:string"/> *
+        <xsd:attribute name="id" type="xsd:ID"/>
+    </xsd:complexType>
+
+tested+10. add to factory after application-factory
+            <xsd:element name="exception-handler-factory" type="javaee:fully-qualified-classType"/>
+            <xsd:element name="external-context-factory" type="javaee:fully-qualified-classType"/>
+            
+tested+11. add to factory after faces-context-factory
+            <xsd:element name="partial-view-context-factory" type="javaee:fully-qualified-classType"/>
+
+tested+12. add to factory after lifecycle-factory
+            <xsd:element name="view-declaration-language-factory" type="javaee:fully-qualified-classType"/>
+            <xsd:element name="tag-handler-delegate-factory" type="javaee:fully-qualified-classType"/>
+
+tested+13. add to factory after render-kit-factory
+            <xsd:element name="visit-context-factory" type="javaee:fully-qualified-classType"/>
+
+tested+14. add attribute to managed-bean
+        <xsd:attribute name="eager" type="xsd:boolean" use="optional"/>
+
++-15. change restriction for managed-bean-scope
+    <xsd:pattern value="view|request|session|application|none|#\{.*\}"/>
+
+tested+-16. add to navigation-case after from-outcome
+    <xsd:element name="if" type="javaee:faces-config-ifType"/>  ?
+
+    <xsd:complexType name="faces-config-ifType">
+        <xsd:simpleContent>
+            <xsd:extension base="javaee:faces-config-el-expressionType">
+                <xsd:attribute name="id" type="xsd:ID"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+tested+17. add to redirect
+    <xsd:element name="view-param" type="javaee:faces-config-redirect-viewParamType"/> *
+    <xsd:attribute name="include-view-params" type="xsd:boolean" use="optional"/>
+
+    <xsd:complexType name="faces-config-redirect-viewParamType">
+            <xsd:element name="name" type="javaee:string"/> R
+            <xsd:element name="value" type="javaee:string"/> R
+        <xsd:attribute name="id" type="xsd:ID"/>
+    </xsd:complexType>
+
+tested+18. add to render-kit after renderer
+    <xsd:element name="client-behavior-renderer" type="javaee:faces-config-client-behavior-rendererType"/> *
+    <xsd:complexType name="faces-config-client-behavior-rendererType">
+            <xsd:element name="client-behavior-renderer-type" type="javaee:string"/>
+            <xsd:element name="client-behavior-renderer-class" type="javaee:fully-qualified-classType"/>
+    </xsd:complexType>
+

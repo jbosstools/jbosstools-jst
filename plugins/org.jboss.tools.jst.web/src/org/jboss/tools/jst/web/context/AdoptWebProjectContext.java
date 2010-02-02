@@ -20,6 +20,7 @@ import org.jboss.tools.common.meta.action.impl.SpecialWizardSupport;
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.loaders.EntityRecognizerContext;
 import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
 import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.web.WebModelPlugin;
@@ -110,7 +111,7 @@ public abstract class AdoptWebProjectContext {
         File f = new File(location);
         if(!f.isFile()) throw new XModelException(MessageFormat.format(WebUIMessages.AdoptWebProjectContext_FileDoesNotExist, location));
         String body = FileUtil.readFile(f);
-        String entity = support.getTarget().getModel().getEntityRecognizer().getEntityName("xml", body); //$NON-NLS-1$
+        String entity = support.getTarget().getModel().getEntityRecognizer().getEntityName(new EntityRecognizerContext("xml", body)); //$NON-NLS-1$
         if(entity == null || !entity.startsWith("FileWebApp")) throw new XModelException(MessageFormat.format( //$NON-NLS-1$
 				WebUIMessages.AdoptWebProjectContext_FileNotRecognizedAsWebDescriptor, location));
         XModelObject webxml = null;

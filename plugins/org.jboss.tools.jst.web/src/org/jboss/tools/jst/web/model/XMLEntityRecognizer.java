@@ -16,7 +16,8 @@ public class XMLEntityRecognizer implements EntityRecognizer {
 
     public XMLEntityRecognizer() {}
 
-    public String getEntityName(String ext, String body) {
+    public String getEntityName(EntityRecognizerContext context) {
+    	String body = context.getBody();
         if (body == null) return null;
         return "FileXML"; //$NON-NLS-1$
     }

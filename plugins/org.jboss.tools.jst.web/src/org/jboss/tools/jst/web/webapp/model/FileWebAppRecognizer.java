@@ -26,17 +26,17 @@ public class FileWebAppRecognizer implements EntityRecognizer {
         }
     }
 
-    public String getEntityName(String ext, String body) {
-    	if((body == null || !"xml".equals(ext))) return null; //$NON-NLS-1$
-        int i = body.indexOf("<!DOCTYPE"); //$NON-NLS-1$
-        if(i >= 0) {
-        	int j = body.indexOf(">", i); //$NON-NLS-1$
-        	if(j < 0) return null;
-        	String dt = body.substring(i, j);
-        	if(dt.indexOf("web-app") < 0) return null; //$NON-NLS-1$
-        	if(dt.indexOf(WebAppConstants.DOC_PUBLICID) > 0) return "FileWebApp"; //$NON-NLS-1$
-        	if(dt.indexOf(WebAppConstants.DOC_PUBLICID_2_3) > 0) return "FileWebApp"; //$NON-NLS-1$
-        	if(dt.indexOf("SYSTEM") > 0 && dt.indexOf("web-app_2_3.dtd") > 0) return "FileWebApp"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    public String getEntityName(EntityRecognizerContext context) {
+    	String body = context.getBody();
+    	if((body == null || !"xml".equals(context.getExtension()))) return null; //$NON-NLS-1$
+		XMLRecognizerContext xml = context.getXMLContext();
+		if(xml.isDTD()) {
+			String publicId = xml.getPublicId();
+        	if(!"web-app".equals(xml.getRootName())) return null; //$NON-NLS-1$
+        	if(WebAppConstants.DOC_PUBLICID.equals(publicId)) return "FileWebApp"; //$NON-NLS-1$
+        	if(WebAppConstants.DOC_PUBLICID_2_3.equals(publicId)) return "FileWebApp"; //$NON-NLS-1$
+        	if(xml.getSystemId() != null && xml.getSystemId().indexOf("web-app_2_3.dtd") >= 0) return "FileWebApp"; //$NON-NLS-1$ //$NON-NLS-2$
+        	return null;
         }
 
     	return (body.indexOf("<web-app") >= 0  //$NON-NLS-1$

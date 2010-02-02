@@ -31,18 +31,20 @@ public class FileTLDRecognizer implements EntityRecognizer, TLDConstants {
     	
     public FileTLDRecognizer() {}
 
-    public String getEntityName(String ext, String body) {
-    	if((body == null || !"tld".equals(ext))) return null; //$NON-NLS-1$
-        int i = body.indexOf("<!DOCTYPE"); //$NON-NLS-1$
-        if(i >= 0) {
-        	int j = body.indexOf(">", i); //$NON-NLS-1$
-        	if(j < 0) return null;
-        	String dt = body.substring(i, j);
-        	if(dt.indexOf("taglib") < 0) return null; //$NON-NLS-1$
-        	if(dt.indexOf(TLD_DOC_PUBLICID_1_1) > 0) return "FileTLD_PRO"; //$NON-NLS-1$
-        	if(dt.indexOf(TLD_DOC_PUBLICID_1_2) > 0) return "FileTLD_1_2"; //$NON-NLS-1$
-        	if(dt.indexOf("SYSTEM") > 0 && dt.indexOf("web-jsptaglibrary_1_1.dtd") > 0) return "FileTLD_PRO"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        	if(dt.indexOf("SYSTEM") > 0 && dt.indexOf("web-jsptaglibrary_1_2.dtd") > 0) return "FileTLD_1_2"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    public String getEntityName(EntityRecognizerContext context) {
+    	String body = context.getBody();
+    	if((body == null || !"tld".equals(context.getExtension()))) return null; //$NON-NLS-1$
+		XMLRecognizerContext xml = context.getXMLContext();
+		if(xml.isDTD()) {
+			String publicId = xml.getPublicId();
+			String systemId = xml.getSystemId();
+			String root = xml.getRootName();
+        	if(!"taglib".equals(root)) return null; //$NON-NLS-1$
+        	if(TLD_DOC_PUBLICID_1_1.equals(publicId)) return "FileTLD_PRO"; //$NON-NLS-1$
+        	if(TLD_DOC_PUBLICID_1_2.equals(publicId)) return "FileTLD_1_2"; //$NON-NLS-1$
+        	if(systemId != null && systemId.indexOf("web-jsptaglibrary_1_1.dtd") >= 0) return "FileTLD_PRO"; //$NON-NLS-1$ //$NON-NLS-2$
+        	if(systemId != null && systemId.indexOf("web-jsptaglibrary_1_2.dtd") >= 0) return "FileTLD_1_2"; //$NON-NLS-1$ //$NON-NLS-2$
+        	return null;
         }
         return (body.indexOf("<taglib") >= 0  //$NON-NLS-1$
 		        && body.indexOf(VERSION_2_0) > 0

@@ -25,6 +25,7 @@ import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.engines.impl.EnginesLoader;
 import org.jboss.tools.common.model.filesystems.impl.AbstractXMLFileImpl;
 import org.jboss.tools.common.model.filesystems.impl.FileAnyImpl;
+import org.jboss.tools.common.model.loaders.EntityRecognizerContext;
 import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
 import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.web.WebModelPlugin;
@@ -233,7 +234,7 @@ public abstract class ImportWebProjectContext implements IImportWebProjectContex
 	}
 
 	protected void loadWebXML(String body, String location) throws XModelException {
-		String entity = getTarget().getModel().getEntityRecognizer().getEntityName("xml", body); //$NON-NLS-1$
+		String entity = getTarget().getModel().getEntityRecognizer().getEntityName(new EntityRecognizerContext("xml", body)); //$NON-NLS-1$
 		if(entity == null || !entity.startsWith("FileWebApp")) { //$NON-NLS-1$
 			throw new XModelException(NLS.bind(WebUIMessages.FILE_ISNOT_RECOGNIZED, location));
 		}
