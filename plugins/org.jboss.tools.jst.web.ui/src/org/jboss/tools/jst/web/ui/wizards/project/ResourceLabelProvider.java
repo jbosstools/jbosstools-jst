@@ -16,6 +16,7 @@ import org.jboss.tools.common.model.ui.navigator.NavigatorLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.jboss.tools.common.model.*;
+import org.jboss.tools.common.model.loaders.EntityRecognizerContext;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 
 public class ResourceLabelProvider extends LabelProvider {
@@ -81,7 +82,7 @@ public class ResourceLabelProvider extends LabelProvider {
 			if(filename.startsWith("struts-")) return "StrutsConfig11"; //$NON-NLS-1$ //$NON-NLS-2$
 			return "FileXML"; //$NON-NLS-1$
 		}
-        String entity = model.getEntityRecognizer().getEntityName(filename, ext, null);
+        String entity = model.getEntityRecognizer().getEntityName(new EntityRecognizerContext(filename, ext, null));
         if(entity == null) entity = "FileTXT"; //$NON-NLS-1$
         return entity;
     }
