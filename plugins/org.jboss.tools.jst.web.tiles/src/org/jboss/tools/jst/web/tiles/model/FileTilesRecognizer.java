@@ -13,6 +13,8 @@ package org.jboss.tools.jst.web.tiles.model;
 import java.io.IOException;
 
 import org.jboss.tools.common.model.loaders.EntityRecognizer;
+import org.jboss.tools.common.model.loaders.EntityRecognizerContext;
+import org.jboss.tools.common.model.loaders.XMLRecognizerContext;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.xml.XMLEntityResolver;
 
@@ -25,10 +27,15 @@ public class FileTilesRecognizer implements EntityRecognizer {
         }
     }
 
-    public String getEntityName(String ext, String body) {
-        return (body == null || !"xml".equals(ext)) ? null : //$NON-NLS-1$
-               (body.indexOf(TilesConstants.DOC_PUBLICID) >= 0) ? "FileTiles" : //$NON-NLS-1$
-               null;
+    public String getEntityName(EntityRecognizerContext context) {
+    	String body = context.getBody();
+        if(body == null || !"xml".equals(context.getExtension())) return null; //$NON-NLS-1$
+		XMLRecognizerContext xml = context.getXMLContext();
+		if(xml.isDTD()) {
+			String publicId = xml.getPublicId();
+			if(TilesConstants.DOC_PUBLICID.equals(publicId)) return "FileTiles"; //$NON-NLS-1$
+		}
+        return null;
     }
 
 }
