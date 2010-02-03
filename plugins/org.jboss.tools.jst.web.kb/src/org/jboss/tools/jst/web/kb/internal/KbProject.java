@@ -62,6 +62,8 @@ import org.w3c.dom.Element;
  */
 public class KbProject extends KbObject implements IKbProject {
 	IProject project;
+	
+	boolean isMock = false;
 
 	ClassPathMonitor classPath = new ClassPathMonitor(this);
 
@@ -80,6 +82,10 @@ public class KbProject extends KbObject implements IKbProject {
 	ProjectValidationContext validationContext;
 
 	public KbProject() {}
+
+	public void setMock() {
+		isMock = true;
+	}
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.IKbProject#getTagLibraries()
@@ -192,7 +198,10 @@ public class KbProject extends KbObject implements IKbProject {
 		if(!dependsOn.contains(p)) return;
 		p.usedBy.remove(this);
 		dependsOn.remove(p);
-		IPath[] ps = sourcePaths2.keySet().toArray(new IPath[0]);
+		IPath[] ps = null;
+		synchronized(sourcePaths2) {
+			ps = sourcePaths2.keySet().toArray(new IPath[0]);
+		}
 		for (int i = 0; i < ps.length; i++) {
 			IPath pth = ps[i];
 			if(p.getSourcePath().isPrefixOf(pth) || (p.isPathLoaded(pth) && !EclipseResourceUtil.isJar(pth.toString()))) {
@@ -278,7 +287,10 @@ public class KbProject extends KbObject implements IKbProject {
 		}
 		classPath.clean();
 		postponeFiring();
-		IPath[] ps = sourcePaths2.keySet().toArray(new IPath[0]);
+		IPath[] ps = null;
+		synchronized(sourcePaths2) {
+			ps = sourcePaths2.keySet().toArray(new IPath[0]);
+		}
 		for (int i = 0; i < ps.length; i++) {
 			pathRemoved(ps[i]);
 		}
@@ -303,7 +315,9 @@ public class KbProject extends KbObject implements IKbProject {
 		statistics = new ArrayList<Long>();
 		classPath = new ClassPathMonitor(this);
 //		sourcePaths.clear();
-		sourcePaths2.clear();
+		synchronized(sourcePaths2) {
+			sourcePaths2.clear();
+		}
 		isStorageResolved = false;
 		dependsOn.clear();
 		usedBy.clear();
@@ -379,10 +393,15 @@ public class KbProject extends KbObject implements IKbProject {
 				if(p == null || p.trim().length() == 0) continue;
 				IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(p);
 				if(project == null || !project.isAccessible()) continue;
+				checkKBBuilderInstalled(project);
 				KbProject sp = (KbProject)KbProjectFactory.getKbProject(project, false);
 				if(sp != null) {
-					dependsOn.add(sp);
-					sp.addDependentKbProject(this);
+					if(sp.isMock) {
+						addKbProject(sp);
+					} else {
+						dependsOn.add(sp);
+						sp.addDependentKbProject(this);
+					}
 				}
 			}
 		}
@@ -474,6 +493,7 @@ public class KbProject extends KbObject implements IKbProject {
 	private void storeSourcePaths2(Element root) {
 		Properties context = new Properties();
 		Element sourcePathsElement = XMLUtilities.createElement(root, "paths"); //$NON-NLS-1$
+		synchronized(sourcePaths2) {
 		for (IPath path : sourcePaths2.keySet()) {
 			IFile f = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 			if(f != null && f.exists() && f.getProject() != project) {
@@ -494,6 +514,7 @@ public class KbProject extends KbObject implements IKbProject {
 					t.toXML(cse, context);
 				}
 			}
+		}
 		}
 	}
 
@@ -599,11 +620,15 @@ public class KbProject extends KbObject implements IKbProject {
 			pathRemoved(source);
 			if(EclipseResourceUtil.isJar(source.toString())) {
 //				if(!sourcePaths.contains(source)) sourcePaths.add(source);
-				sourcePaths2.put(source, ds);
+				synchronized(sourcePaths2) {
+					sourcePaths2.put(source, ds);
+				}
 			}
 			return;
 		}
-		sourcePaths2.put(source, ds);
+		synchronized(sourcePaths2) {
+			sourcePaths2.put(source, ds);
+		}
 
 		Map<Object,ITagLibrary> currentLibraries = findLibraryDeclarations(source);
 		List<Change> addedLibraries = null;
@@ -671,7 +696,9 @@ public class KbProject extends KbObject implements IKbProject {
 	 */
 	public void pathRemoved(IPath source) {
 		if(!sourcePaths2.containsKey(source)) return;
-		sourcePaths2.remove(source);
+		synchronized (sourcePaths2) {
+			sourcePaths2.remove(source);
+		}
 
 		List<Change> changes = null;
 		

@@ -163,6 +163,7 @@ public class ClassPathMonitor extends AbstractClassPathMonitor<KbProject> {
 			if(es[i].getEntryKind() == IClasspathEntry.CPE_PROJECT) {
 				IProject p = ResourcesPlugin.getWorkspace().getRoot().getProject(es[i].getPath().lastSegment());
 				if(p == null || !p.isAccessible()) continue;
+				KbProject.checkKBBuilderInstalled(p);
 				IKbProject sp = KbProjectFactory.getKbProject(p, false);
 				if(sp != null) list.add((KbProject)sp);
 			}

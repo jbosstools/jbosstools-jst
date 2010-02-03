@@ -80,7 +80,9 @@ public class KbProjectFactory {
 		}
 		underConstruction.add(project);
 		final KbProject mock = new KbProject();
+		mock.setMock();
 		mock.setProject(project);
+		mockProjectStore.put(project, mock);
 		class KbBuilderEx extends KbBuilder {
 			protected KbProject getKbProject() {
 				return mock;
@@ -100,7 +102,6 @@ public class KbProjectFactory {
 				KbBuilderEx builder = new KbBuilderEx();
 				setProjectToBuilder(builder, project);
 				builder.build();
-				mockProjectStore.put(project, mock);
 				underConstruction.remove(project);
 //				long dt = System.currentTimeMillis() - t0;
 //				System.out.println("build end " + dt);
