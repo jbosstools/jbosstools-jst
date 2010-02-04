@@ -483,7 +483,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 			}
 			t.addComponent(((AbstractComponent)c).clone());
 		}
-		t.components.putAll(components);
+//		t.components.putAll(components);
 		return t;
 	}
 

@@ -644,7 +644,14 @@ public class KbProject extends KbObject implements IKbProject {
 				current = null;
 			}
 			if(current != null) {
+				boolean uriChanged = !stringsEqual(current.getURI(), loaded.getURI());
+				if(uriChanged) {
+					this.libraries.removeLibrary(current);
+				}
 				List<Change> changes = current.merge(loaded);
+				if(uriChanged) {
+					this.libraries.addLibrary(current);
+				}
 				fireChanges(changes);
 				continue;
 			}
