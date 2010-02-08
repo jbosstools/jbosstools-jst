@@ -25,6 +25,7 @@ import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.common.xml.XMLUtilities;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.internal.KbObject;
 import org.jboss.tools.jst.web.kb.internal.KbXMLStoreConstants;
 import org.jboss.tools.jst.web.kb.internal.taglib.composite.CompositeAttribute;
@@ -103,30 +104,30 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getAttributes(java.lang.String)
 	 */
 	public IAttribute[] getAttributes(String nameTemplate) {
-		return getAttributes(nameTemplate, null);
+		return getAttributes(nameTemplate, null, null);
 	}
 
-	public IAttribute[] getAttributes(String nameTemplate, IPageContext context) {
+	public IAttribute[] getAttributes(String nameTemplate, IPageContext context, KbQuery query) {
 		List<IAttribute> list = new ArrayList<IAttribute>();
 		IAttribute[] atts = getAttributes();
 		for (int i = 0; i < atts.length; i++) {
 			if(ignoreCase) {
-				if(atts[i].getName().toLowerCase().startsWith(nameTemplate.toLowerCase()) && (context==null || checkExtended(atts[i], context))) {
+				if(atts[i].getName().toLowerCase().startsWith(nameTemplate.toLowerCase()) && (context==null || checkExtended(atts[i], context, query))) {
 					list.add(atts[i]);
 				}
-			} else if(atts[i].getName().startsWith(nameTemplate) && (context==null || checkExtended(atts[i], context))) {
+			} else if(atts[i].getName().startsWith(nameTemplate) && (context==null || checkExtended(atts[i], context, query))) {
 				list.add(atts[i]);
 			}
 		}
 		return list.toArray(new IAttribute[list.size()]);
 	}
 
-	protected IAttribute[] getExtendedAttributes(IPageContext context) {
+	protected IAttribute[] getExtendedAttributes(IPageContext context, KbQuery query) {
 		if(hasExtendedAttributes) {
 			Set<IAttribute> attrs = new HashSet<IAttribute>();
 			synchronized(attributes) {
 				for (IAttribute attribute : attributes.values()) {
-					if(checkExtended(attribute, context)) {
+					if(checkExtended(attribute, context, query)) {
 						attrs.add(attribute);
 					}
 				}
@@ -136,28 +137,21 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		return getAttributes();
 	}
 
-	protected boolean checkExtended(IAttribute attribute, IPageContext context) {
+	protected boolean checkExtended(IAttribute attribute, IPageContext context, KbQuery query) {
 		if(!attribute.isExtended()) {
 			return true;
 		}
 		IComponent parentComponent = attribute.getComponent();
+		IComponent[] parentComponents = null;
 		if(parentComponent==null) {
-			return true;
+			parentComponents = PageProcessor.getInstance().getComponents(query, context, false);
+		} else {
+			parentComponents = new IComponent[]{parentComponent};
 		}
-		ITagLibrary[] libs = context.getLibraries();
-		for (int i = 0; i < libs.length; i++) {
-			ITagLibrary thisLib = this.getTagLib();
-			if(thisLib==null) {
+		for (IComponent component : parentComponents) {
+			IAttribute at = component.getAttribute(attribute.getName());
+			if(at!=null && !at.isExtended()) {
 				return true;
-			}
-			if(libs[i].getURI().equals(thisLib.getURI())) {
-				IComponent ac = libs[i].getComponent(parentComponent.getName());
-				if(ac!=null && ac!=this) {
-					IAttribute at = ac.getAttribute(attribute.getName());
-					if(at!=null && !at.isExtended()) {
-						return true;
-					}
-				}
 			}
 		}
 		return false;
@@ -181,10 +175,10 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 			return null;
 		}
 		if(mask) {
-			return getAttributes(attrName, context);
+			return getAttributes(attrName, context, query);
 		}
 		IAttribute attr = getAttribute(attrName);
-		if(attr!=null && checkExtended(attr, context)) {
+		if(attr!=null && checkExtended(attr, context, query)) {
 			return new IAttribute[]{getAttribute(attrName)};
 		}
 		return EMPTY_ARRAY;
