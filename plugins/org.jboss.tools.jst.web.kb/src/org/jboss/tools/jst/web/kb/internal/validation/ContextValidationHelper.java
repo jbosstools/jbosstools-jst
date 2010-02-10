@@ -36,7 +36,17 @@ public class ContextValidationHelper extends WorkbenchContext {
 
 	protected IValidationContext validationContext;
 	protected TextFileDocumentProvider documentProvider = new TextFileDocumentProvider();
-	protected Map<IProject, IValidationContext> contexts = new HashMap<IProject, IValidationContext>();
+	protected Map<IProject, IValidationContext> contexts;
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.wst.validation.internal.operations.WorkbenchContext#initialize()
+	 */
+	@Override
+	public void initialize() {
+		validationContext = null;
+		contexts = new HashMap<IProject, IValidationContext>();
+	}
 
 	/*
 	 * (non-Javadoc)
