@@ -138,23 +138,7 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	}
 
 	protected boolean checkExtended(IAttribute attribute, IPageContext context, KbQuery query) {
-		if(!attribute.isExtended()) {
-			return true;
-		}
-		IComponent parentComponent = attribute.getComponent();
-		IComponent[] parentComponents = null;
-		if(parentComponent==null) {
-			parentComponents = PageProcessor.getInstance().getComponents(query, context, false);
-		} else {
-			parentComponents = new IComponent[]{parentComponent};
-		}
-		for (IComponent component : parentComponents) {
-			IAttribute at = component.getAttribute(attribute.getName());
-			if(at!=null && !at.isExtended()) {
-				return true;
-			}
-		}
-		return false;
+		return true;
 	}
 
 	private static final IAttribute[] EMPTY_ARRAY = new IAttribute[0];

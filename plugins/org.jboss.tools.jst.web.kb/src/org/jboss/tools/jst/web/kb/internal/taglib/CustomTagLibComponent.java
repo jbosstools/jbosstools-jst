@@ -10,6 +10,11 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal.taglib;
 
+import org.jboss.tools.jst.web.kb.IPageContext;
+import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.PageProcessor;
+import org.jboss.tools.jst.web.kb.taglib.IAttribute;
+import org.jboss.tools.jst.web.kb.taglib.IComponent;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibComponent;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 
@@ -51,5 +56,24 @@ public class CustomTagLibComponent extends AbstractComponent implements ICustomT
 	 */
 	public void setParentTagLib(CustomTagLibrary parentTagLib) {
 		this.parentTagLib = parentTagLib;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.taglib.AbstractComponent#checkExtended(org.jboss.tools.jst.web.kb.taglib.IAttribute, org.jboss.tools.jst.web.kb.IPageContext, org.jboss.tools.jst.web.kb.KbQuery)
+	 */
+	@Override
+	protected boolean checkExtended(IAttribute attribute, IPageContext context, KbQuery query) {
+		if(!attribute.isExtended()) {
+			return true;
+		}
+		IComponent[] parentComponents = PageProcessor.getInstance().getComponents(query, context, false);
+		for (IComponent component : parentComponents) {
+			IAttribute at = component.getAttribute(attribute.getName());
+			if(at!=null && !at.isExtended()) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
