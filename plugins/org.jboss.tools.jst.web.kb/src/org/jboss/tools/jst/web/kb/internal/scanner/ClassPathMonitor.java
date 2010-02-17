@@ -157,18 +157,20 @@ public class ClassPathMonitor extends AbstractClassPathMonitor<KbProject> {
 
 	List<KbProject> getKbProjects(IProject project) throws CoreException {
 		List<KbProject> list = new ArrayList<KbProject>();
-		IJavaProject javaProject = JavaCore.create(project);
-		IClasspathEntry[] es = javaProject.getResolvedClasspath(true);
-		for (int i = 0; i < es.length; i++) {
-			if(es[i].getEntryKind() == IClasspathEntry.CPE_PROJECT) {
-				IProject p = ResourcesPlugin.getWorkspace().getRoot().getProject(es[i].getPath().lastSegment());
-				if(p == null || !p.isAccessible()) continue;
-				KbProject.checkKBBuilderInstalled(p);
-				IKbProject sp = KbProjectFactory.getKbProject(p, false);
-				if(sp != null) list.add((KbProject)sp);
+		if(project.hasNature(JavaCore.NATURE_ID)) {
+			IJavaProject javaProject = JavaCore.create(project);
+			IClasspathEntry[] es = javaProject.getResolvedClasspath(true);
+			for (int i = 0; i < es.length; i++) {
+				if(es[i].getEntryKind() == IClasspathEntry.CPE_PROJECT) {
+					IProject p = ResourcesPlugin.getWorkspace().getRoot().getProject(es[i].getPath().lastSegment());
+					if(p == null || !p.isAccessible()) continue;
+					KbProject.checkKBBuilderInstalled(p);
+					IKbProject sp = KbProjectFactory.getKbProject(p, false);
+					if(sp != null) list.add((KbProject)sp);
+				}
 			}
+			
 		}
 		return list;
 	}
-	
 }
