@@ -20,10 +20,12 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.contentoutline.ContentOutline;
+import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleDeclItem;
 import org.eclipse.wst.sse.core.internal.provisional.INodeAdapter;
 import org.eclipse.wst.sse.core.internal.provisional.INodeNotifier;
 import org.jboss.tools.jst.css.CssPlugin;
 
+@SuppressWarnings("restriction")
 public class CSSStyleListener implements ISelectionListener, INodeAdapter,
 		IPartListener {
 
@@ -148,6 +150,8 @@ public class CSSStyleListener implements ISelectionListener, INodeAdapter,
 
 	public void notifyChanged(INodeNotifier notifier, int eventType,
 			Object changedFeature, Object oldValue, Object newValue, int pos) {
+		clearListeners(newValue);
+		clearListeners(oldValue);
 		Object[] array = listeners.getListeners();
 		for (int i = 0; i < array.length; i++) {
 			final ICSSViewListner l = (ICSSViewListner) array[i];
@@ -161,9 +165,22 @@ public class CSSStyleListener implements ISelectionListener, INodeAdapter,
 			}
 
 		}
-
 	}
-
+	
+	/*
+	 * Fixed by yzhishko. See https://jira.jboss.org/jira/browse/JBIDE-5954.
+	 */
+	private void clearListeners(Object node){
+		if (!(node instanceof ICSSStyleDeclItem)) {
+			return;
+		}
+		if (!(node instanceof INodeNotifier)) {
+			return;
+		}
+		((INodeNotifier)node).removeAdapter(this);
+		((INodeNotifier)node).addAdapter(this);
+	}
+	
 	public void partActivated(IWorkbenchPart part) {
 		currentPart = part;
 		Object[] array = listeners.getListeners();

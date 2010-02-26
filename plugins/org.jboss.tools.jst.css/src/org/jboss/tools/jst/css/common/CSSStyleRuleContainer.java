@@ -13,6 +13,7 @@ package org.jboss.tools.jst.css.common;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.wst.css.core.internal.provisional.document.ICSSNode;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSNodeList;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleDeclaration;
 import org.eclipse.wst.sse.core.internal.provisional.INodeAdapter;
@@ -24,6 +25,7 @@ import org.w3c.dom.css.CSSStyleRule;
  * @author Sergey Dzmitrovich
  * 
  */
+@SuppressWarnings("restriction")
 public class CSSStyleRuleContainer extends StyleContainer {
 
 	private CSSStyleRule styleRule;
@@ -80,11 +82,45 @@ public class CSSStyleRuleContainer extends StyleContainer {
 		ICSSStyleDeclaration declaration = (ICSSStyleDeclaration) styleRule
 				.getStyle();
 		addNodeAdapter(declaration, adapter);
-		ICSSNodeList nodeList = declaration.getChildNodes();
-		for (int i = 0; i < nodeList.getLength(); i++) {
-			addNodeAdapter(nodeList.item(i), adapter);
+		addNodeListenersForChildren(declaration, adapter);
+	}
+	
+	/*
+	 * Fixed by yzhishko. See https://jira.jboss.org/jira/browse/JBIDE-5954.
+	 */
+	private void addNodeListenersForChildren(Object node, INodeAdapter adapter){
+		if (!(node instanceof ICSSNode)) {
+			return;
 		}
-
+		ICSSNode cssNode = (ICSSNode) node;
+		ICSSNodeList nodeList = cssNode.getChildNodes();
+		if (nodeList == null) {
+			return;
+		}
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			ICSSNode cssChildNode = nodeList.item(i);
+			addNodeAdapter(cssChildNode, adapter);
+			addNodeListenersForChildren(cssChildNode, adapter);
+		}
+	}
+	
+	/*
+	 * Fixed by yzhishko. See https://jira.jboss.org/jira/browse/JBIDE-5954.
+	 */
+	private void removeNodeListenersForChildren(Object node, INodeAdapter adapter){
+		if (!(node instanceof ICSSNode)) {
+			return;
+		}
+		ICSSNode cssNode = (ICSSNode) node;
+		ICSSNodeList nodeList = cssNode.getChildNodes();
+		if (nodeList == null) {
+			return;
+		}
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			ICSSNode cssChildNode = nodeList.item(i);
+			removeNodeAdapter(cssChildNode, adapter);
+			removeNodeListenersForChildren(cssChildNode, adapter);
+		}
 	}
 
 	@Override
@@ -93,11 +129,7 @@ public class CSSStyleRuleContainer extends StyleContainer {
 		ICSSStyleDeclaration declaration = (ICSSStyleDeclaration) styleRule
 				.getStyle();
 		removeNodeAdapter(declaration, adapter);
-		ICSSNodeList nodeList = declaration.getChildNodes();
-		for (int i = 0; i < nodeList.getLength(); i++) {
-			removeNodeAdapter(nodeList.item(i), adapter);
-		}
-
+		removeNodeListenersForChildren(declaration, adapter);
 	}
 
 	@Override
