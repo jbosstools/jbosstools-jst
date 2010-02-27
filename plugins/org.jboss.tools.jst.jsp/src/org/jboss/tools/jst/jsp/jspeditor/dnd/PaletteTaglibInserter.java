@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.jspeditor.dnd;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
@@ -17,8 +18,10 @@ import java.util.Properties;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextSelection;
+import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.wst.sse.core.internal.provisional.StructuredModelManager;
@@ -30,6 +33,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
+import org.jboss.tools.jst.jsp.util.XmlUtil;
 import org.jboss.tools.jst.web.tld.TaglibData;
 import org.jboss.tools.jst.web.tld.VpeTaglibManager;
 import org.jboss.tools.jst.web.tld.VpeTaglibManagerProvider;
@@ -46,9 +50,9 @@ public class PaletteTaglibInserter {
 
 	private static final String TAGLIB_START = "<%@ taglib";  //$NON-NLS-1$
 
-	public Properties inserTaglib(ISourceViewer v, Properties p) {
-		if(!inserTaglibInXml(v, p)) {
-			inserTaglibInOldJsp(v, p);
+	public Properties inserTaglib(IDocument d, Properties p) {
+		if(!inserTaglibInXml(d, p)) {
+			inserTaglibInOldJsp(d, p);
 		}
 		return p;
 	}
@@ -63,12 +67,11 @@ public class PaletteTaglibInserter {
 				p.getProperty(PaletteInsertHelper.PROPOPERTY_START_TEXT) != null;
 	}
 
-	public boolean inserTaglibInOldJsp(ISourceViewer v, Properties p) {
+	public boolean inserTaglibInOldJsp(IDocument d, Properties p) {
 		if(!checkProperties(p)) {
 			return false;
 		}
 
-		IDocument d = v.getDocument();
 		IStructuredModel model = null;
 
 		try {
@@ -77,7 +80,7 @@ public class PaletteTaglibInserter {
 			if (xmlDocument == null) {
 				return false;
 			}
-			Properties tl = getPrefixes(v);
+			Properties tl = getPrefixes(d, p);
 			if(tl == null) tl = JSPPaletteInsertHelper.getPrefixes(d.get());
 			Element root = xmlDocument.getDocumentElement();
 
@@ -93,9 +96,9 @@ public class PaletteTaglibInserter {
 						p.setProperty(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX, (String)tl.get(uri_p));
 					}
 				} else if(!tl.containsValue(defaultPrefix_p)) {
-					if (checkplace(xmlDocument, d, "jsp:directive.taglib", tg, p, v) == false) { //$NON-NLS-1$
+					if (checkplace(xmlDocument, d, "jsp:directive.taglib", tg, p) == false) { //$NON-NLS-1$
 						d.replace(0, 0, tg.toString());
-						mouveFocusOnPage(p,v, tg.toString().length(), 0);
+						mouveFocusOnPage(p, tg.toString().length(), 0);
 						return true;
 					}
 				}
@@ -103,9 +106,9 @@ public class PaletteTaglibInserter {
 				DocumentImpl docImpl = (DocumentImpl)xmlDocument;
 				// Only for JSP
 				if(docImpl.isJSPType()) {
-					if (checkplace(xmlDocument, d, "jsp:directive.page", tg, p, v) == false) { //$NON-NLS-1$
+					if (checkplace(xmlDocument, d, "jsp:directive.page", tg, p) == false) { //$NON-NLS-1$
 						d.replace(0, 0, tg.toString());
-						mouveFocusOnPage(p,v, tg.toString().length(), 0);
+						mouveFocusOnPage(p, tg.toString().length(), 0);
 						return true;
 					}
 				}
@@ -118,7 +121,39 @@ public class PaletteTaglibInserter {
 		return false;
 	}
 	
-	private static Node getSelectedNode(ISourceViewer v, Properties p){
+	/**
+	 * copied from ContentAssistUtils
+	 * @param viewer
+	 * @param documentOffset
+	 * @return
+	 */
+	public static IndexedRegion getNodeAt(IDocument d, int documentOffset) {
+
+		if (d == null)
+			return null;
+
+		IndexedRegion node = null;
+		IModelManager mm = StructuredModelManager.getModelManager();
+		IStructuredModel model = null;
+		if (mm != null)
+			model = mm.getExistingModelForRead(d);
+		try {
+			if (model != null) {
+				int lastOffset = documentOffset;
+				node = model.getIndexedRegion(documentOffset);
+				while (node == null && lastOffset >= 0) {
+					lastOffset--;
+					node = model.getIndexedRegion(lastOffset);
+				}
+			}
+		} finally {
+			if (model != null)
+				model.releaseFromRead();
+		}
+		return node;
+	}
+	
+	private static Node getSelectedNode(IDocument d, Properties p){
 		ISelectionProvider selProvider = (ISelectionProvider)p.get(PaletteInsertHelper.PROPOPERTY_SELECTION_PROVIDER);
 		if(selProvider == null) return null;
 		
@@ -128,7 +163,7 @@ public class PaletteTaglibInserter {
 			selection = (ITextSelection)selProvider.getSelection();
 		else return null;
 		
-		IndexedRegion region = ContentAssistUtils.getNodeAt(v, selection.getOffset());
+		IndexedRegion region = getNodeAt(d, selection.getOffset());
 		if(region == null) return null;
 		
 		if(!(region instanceof Node)) return null;
@@ -142,11 +177,11 @@ public class PaletteTaglibInserter {
 			return text;
 	}
 	
-	private static boolean checkSelectedElement(HashMap<String,String> map, ISourceViewer v, Properties p){
+	private static boolean checkSelectedElement(HashMap<String,String> map, IDocument d, Properties p){
 		String taglibUri = p.getProperty(JSPPaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI);
 		if(taglibUri == null) return false;
 		
-		Node selectedNode = getSelectedNode(v, p);
+		Node selectedNode = getSelectedNode(d, p);
 		if(selectedNode == null) return false;
 		
 		return checkElement(map, selectedNode, taglibUri);
@@ -171,12 +206,11 @@ public class PaletteTaglibInserter {
 		}
 	}
 
-	public boolean inserTaglibInXml(ISourceViewer v, Properties p) {
+	public boolean inserTaglibInXml(IDocument d, Properties p) {
 		if(!checkProperties(p)) {
 			return false;
 		}
 		
-		IDocument d = v.getDocument();
 		IStructuredModel model = null;
 		
 		try {
@@ -187,7 +221,7 @@ public class PaletteTaglibInserter {
 				return false;
 			}
 			
-			Properties tl = getPrefixes(v);
+			Properties tl = getPrefixes(d, p);
 			if(tl == null) tl = JSPPaletteInsertHelper.getPrefixes(d.get());
 			Element root = xmlDocument.getDocumentElement();
 			if(root != null) {
@@ -195,11 +229,11 @@ public class PaletteTaglibInserter {
 				if (xmlDocument.getDoctype() != null /* && tagLibListConainsFacelet(tl)*/ ) {
 					String publicId = xmlDocument.getDoctype().getPublicId();
 					if (publicId!=null && publicId.toUpperCase().startsWith("-//W3C//DTD XHTML")) { // && root.getNodeName().equalsIgnoreCase(HTML_SOURCE_ROOT_ELEMENT)) { //$NON-NLS-1$
-						checkTL(root, v, p, d);
+						checkTL(root, p, d);
 						return true;
 					}
 				} else if(xmlDocument.isXMLType() || root.getNodeName().equals(JSP_SOURCE_ROOT_ELEMENT)) {
-					checkTL(root, v, p, d);
+					checkTL(root, p, d);
 					return true;
 				}
 			}
@@ -224,19 +258,36 @@ public class PaletteTaglibInserter {
 	/*
 	 * analyse source for taglib, return the list of taglib
 	 */
-	private static Properties getPrefixes(ISourceViewer viewer) {
-		VpeTaglibManager tldManager = null;
-		if((tldManager == null) && (viewer instanceof VpeTaglibManagerProvider)) {
-			tldManager = ((VpeTaglibManagerProvider)viewer).getTaglibManager();
-			if(tldManager != null) {
-				List list = tldManager.getTagLibs();
-				Properties p = new Properties();
-				for (int i = 0; i < list.size(); i++) {
-					TaglibData data = (TaglibData)list.get(i);
-					p.setProperty(data.getUri(), data.getPrefix());
+	public static Properties getPrefixes(IDocument d, Properties properties) {
+		List list = getTaglibData(d, properties);
+		Properties p = new Properties();
+		for (int i = 0; i < list.size(); i++) {
+			TaglibData data = (TaglibData)list.get(i);
+			p.setProperty(data.getUri(), data.getPrefix());
+		}
+		return p;
+	}
+	
+	private static List<TaglibData> getTaglibData(IDocument d, Properties p){
+		ISourceViewer viewer= getViewer(p);
+		if(viewer != null){
+			VpeTaglibManager tldManager = null;
+			if(viewer instanceof VpeTaglibManagerProvider) {
+				tldManager = ((VpeTaglibManagerProvider)viewer).getTaglibManager();
+				if(tldManager != null) {
+					return tldManager.getTagLibs();
+				}			
+			}
+		}else{
+			List<TaglibData> result = XmlUtil.getTaglibsForJSPDocument(d, new ArrayList<TaglibData>());
+			
+			if(result == null || result.isEmpty()){
+				Node node = getSelectedNode(d, p);
+				if(node != null){
+					result = XmlUtil.processNode(node, new ArrayList<TaglibData>());
 				}
-				return p;
-			}			
+			}
+			return result;
 		}
 		return null;
 	}
@@ -245,7 +296,7 @@ public class PaletteTaglibInserter {
 	 * for jsp:root and html check the taglib if exist check the prefix else add the taglib
 	 * with text formatting
 	 */
-	private static Properties checkTL(Element root, ISourceViewer v, Properties p, IDocument d) {
+	private static Properties checkTL(Element root, Properties p, IDocument d) {
 		String uri_p = p.getProperty(JSPPaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI);
 		String defaultPrefix_p = p.getProperty(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX);
 
@@ -260,7 +311,7 @@ public class PaletteTaglibInserter {
 			}
 		}
 		
-		if (map.containsKey(uri_p) || checkSelectedElement(map, v, p)) {
+		if (map.containsKey(uri_p) || checkSelectedElement(map, d, p)) {
 			if (!map.get(uri_p).equals(defaultPrefix_p)) {
 				p.setProperty(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX, (String) map.get(uri_p));
 			}
@@ -299,8 +350,13 @@ public class PaletteTaglibInserter {
 			ca[i]=' ';
 		return ca;
 	}
+	
+	private static ISourceViewer getViewer(Properties p){
+		return (ISourceViewer)p.get("viewer"); //$NON-NLS-1$
+	}
 
-	private static void mouveFocusOnPage(Properties p, ISourceViewer v, int length, int pos){
+	private static void mouveFocusOnPage(Properties p, int length, int pos){
+		ISourceViewer v = getViewer(p);
 		ISelectionProvider selProvider = (ISelectionProvider)p.get(PaletteInsertHelper.PROPOPERTY_SELECTION_PROVIDER);
 		IDocument doc = v.getDocument();
 
@@ -331,7 +387,7 @@ public class PaletteTaglibInserter {
 		return st;		
 	}
 
-	private static boolean checkplace(IDOMDocument xmlDocument, IDocument d, String st, StringBuffer tg, Properties p, ISourceViewer v) throws BadLocationException {
+	private static boolean checkplace(IDOMDocument xmlDocument, IDocument d, String st, StringBuffer tg, Properties p) throws BadLocationException {
 		NodeList nl = xmlDocument.getChildNodes();
 		boolean docType = false;
 		IndexedRegion irdt = null;
@@ -371,12 +427,12 @@ public class PaletteTaglibInserter {
 					if (d.getLineOffset(d.getLineOfOffset(so)) == so) {
 						tgleft.append(tg);
 						d.replace(eo, 0, tgleft.toString());
-						mouveFocusOnPage(p,v, eo + tgleft.length(), eo);
+						mouveFocusOnPage(p, eo + tgleft.length(), eo);
 					} else {
 						tgleft.append(analyseSubstring(d.get(d.getLineOffset(d.getLineOfOffset(so)), so-d.getLineOffset(d.getLineOfOffset(so)))));
 						tgleft.append(tg);
 						d.replace(eo, 0, tgleft.toString());
-						mouveFocusOnPage(p,v, eo + tgleft.length(), eo);
+						mouveFocusOnPage(p, eo + tgleft.length(), eo);
 					}
 					return true;
 				}
@@ -388,12 +444,12 @@ public class PaletteTaglibInserter {
 					if (d.getLineOffset(d.getLineOfOffset(so)) == so) {
 						tgleft.append(tg);
 						d.replace(eo, 0, tgleft.toString());
-						mouveFocusOnPage(p,v, eo + tgleft.length(), eo);
+						mouveFocusOnPage(p, eo + tgleft.length(), eo);
 					} else {
 						tgleft.append(analyseSubstring(d.get(d.getLineOffset(d.getLineOfOffset(so)), so-d.getLineOffset(d.getLineOfOffset(so)))));
 						tgleft.append(tg);
 						d.replace(eo, 0, tgleft.toString());
-						mouveFocusOnPage(p,v, eo + tgleft.length(), eo);
+						mouveFocusOnPage(p, eo + tgleft.length(), eo);
 					}
 					return true;
 				}

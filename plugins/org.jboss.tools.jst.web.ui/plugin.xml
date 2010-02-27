@@ -676,5 +676,19 @@
       </labelDecorator>
 
    </extension>
+   
+	<extension point="org.eclipse.ui.ide.markerResolution">
+		<markerResolutionGenerator
+			markerType="org.eclipse.jst.jsp.core.validationMarker"
+			class="org.jboss.tools.jst.web.ui.action.JSPProblemMarkerResolutionGenerator">
+		</markerResolutionGenerator>
+	</extension>
 
+	<extension point="org.eclipse.ui.ide.markerResolution">
+		<markerResolutionGenerator
+			markerType="org.eclipse.wst.html.core.validationMarker"
+			class="org.jboss.tools.jst.web.ui.action.JSPProblemMarkerResolutionGenerator">
+		</markerResolutionGenerator>
+	</extension>
+	
 </plugin>
