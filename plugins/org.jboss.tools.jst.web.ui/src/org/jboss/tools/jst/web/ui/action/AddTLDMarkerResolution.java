@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.ui.action;
 
 import java.util.HashMap;
+import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -20,6 +21,8 @@ import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.DocumentProviderRegistry;
 import org.eclipse.ui.texteditor.IDocumentProvider;
+import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
+import org.jboss.tools.jst.jsp.jspeditor.dnd.PaletteTaglibInserter;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 /**
@@ -29,6 +32,9 @@ import org.jboss.tools.jst.web.ui.WebUiPlugin;
  *
  */
 public class AddTLDMarkerResolution implements IMarkerResolution{
+	private IFile file;
+	private IDocument document;
+	private Properties properties;
 	
 	public static HashMap<String, String> libs = new HashMap<String, String>();
 	static{
@@ -41,6 +47,12 @@ public class AddTLDMarkerResolution implements IMarkerResolution{
 		libs.put("a", "http://richfaces.org/a4j"); //$NON-NLS-1$ //$NON-NLS-2$
 		libs.put("c", "http://java.sun.com/jstl/core"); //$NON-NLS-1$ //$NON-NLS-2$
 		libs.put("jsp", "http://java.sun.com/JSP/Page"); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+	
+	public AddTLDMarkerResolution(IFile file, IDocument document, Properties properties){
+		this.file = file;
+		this.document = document;
+		this.properties = properties;
 	}
 
 	public String getLabel() {
@@ -75,6 +87,7 @@ public class AddTLDMarkerResolution implements IMarkerResolution{
 	}
 
 	public void run(IMarker marker) {
-		
+		PaletteTaglibInserter inserter = new PaletteTaglibInserter();
+		inserter.inserTaglib(document, properties);
 	}
 }

@@ -34,11 +34,15 @@ import org.jboss.tools.jst.web.ui.WebUiPlugin;
  *
  */
 public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGenerator {
+	private IFile file;
+	private IDocument document;
+	private Properties properties;
+	
 	public IMarkerResolution[] getResolutions(IMarker marker) {
 		try{
 			if(isOurCase(marker)){
 				return new IMarkerResolution[] {
-					new AddTLDMarkerResolution()
+					new AddTLDMarkerResolution(file, document, properties)
 				};
 			}
 			
@@ -59,18 +63,14 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		if(prefix == null)
 			return false;
 		
-		//System.out.println("Prefix - "+prefix);
-		
 		if(!AddTLDMarkerResolution.libs.containsKey(prefix))
 			return false;
 		
-		IFile file = (IFile)marker.getResource();
+		file = (IFile)marker.getResource();
 		
-		//System.out.println("File - "+file.getFullPath());
+		document = AddTLDMarkerResolution.getDocument(file);
 		
-		IDocument document = AddTLDMarkerResolution.getDocument(file);
-		
-		Properties properties = new Properties();
+		properties = new Properties();
 		properties.put(JSPPaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI, AddTLDMarkerResolution.libs.get(prefix));
 		properties.put(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX, prefix);
 		properties.put(PaletteInsertHelper.PROPOPERTY_SELECTION_PROVIDER, new ISelectionProvider() {
@@ -96,18 +96,6 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		if(p.containsValue(prefix))
 			return false;
 
-		
-//		ArrayList<TaglibData> includeTaglibs = new ArrayList<TaglibData>();
-		
-//		List<TaglibData> taglibs = XmlUtil.getTaglibsForJSPDocument(document, includeTaglibs);
-//		
-//		for(TaglibData data : taglibs){
-//			System.out.println("Taglib prefix - "+data.getPrefix()+" URI - "+data.getUri());
-//		}
-		
-//		if(XmlUtil.getTaglibForPrefix(prefix, taglibs) != null)
-//			return false;
-			
 		return true;
 	}
 }
