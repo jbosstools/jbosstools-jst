@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.jboss.tools.jst.web.ui.action;
 
+import java.util.HashMap;
 import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
@@ -22,6 +23,9 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.IMarkerResolutionGenerator;
+import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.texteditor.DocumentProviderRegistry;
+import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.JSPPaletteInsertHelper;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.PaletteTaglibInserter;
@@ -34,15 +38,30 @@ import org.jboss.tools.jst.web.ui.WebUiPlugin;
  *
  */
 public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGenerator {
+	
+	public static HashMap<String, String> libs = new HashMap<String, String>();
+	static{
+		libs.put("s", "http://jboss.com/products/seam/taglib");  //$NON-NLS-1$//$NON-NLS-2$
+		libs.put("ui", "http://java.sun.com/jsf/facelets"); //$NON-NLS-1$ //$NON-NLS-2$
+		libs.put("f", "http://java.sun.com/jsf/core"); //$NON-NLS-1$ //$NON-NLS-2$
+		libs.put("h", "http://java.sun.com/jsf/html"); //$NON-NLS-1$ //$NON-NLS-2$
+		libs.put("rich", "http://richfaces.org/rich"); //$NON-NLS-1$ //$NON-NLS-2$
+		libs.put("a4j", "http://richfaces.org/a4j"); //$NON-NLS-1$ //$NON-NLS-2$
+		libs.put("a", "http://richfaces.org/a4j"); //$NON-NLS-1$ //$NON-NLS-2$
+		libs.put("c", "http://java.sun.com/jstl/core"); //$NON-NLS-1$ //$NON-NLS-2$
+		libs.put("jsp", "http://java.sun.com/JSP/Page"); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+
 	private IFile file;
-	private IDocument document;
+	private IDocumentProvider provider;
+	private FileEditorInput input;
 	private Properties properties;
 	
 	public IMarkerResolution[] getResolutions(IMarker marker) {
 		try{
 			if(isOurCase(marker)){
 				return new IMarkerResolution[] {
-					new AddTLDMarkerResolution(file, document, properties)
+					new AddTLDMarkerResolution(provider, input, properties)
 				};
 			}
 			
@@ -56,22 +75,22 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		String message = (String)marker.getAttribute(IMarker.MESSAGE);
 		final int start = ((Integer)marker.getAttribute(IMarker.CHAR_START)).intValue();
 		final int end = ((Integer)marker.getAttribute(IMarker.CHAR_END)).intValue();
-		if(!message.startsWith("Unknown tag"))
+		if(!message.startsWith("Unknown tag")) //$NON-NLS-1$
 			return false;
 		
-		String prefix = AddTLDMarkerResolution.getPrifix(message);
+		String prefix = getPrifix(message);
 		if(prefix == null)
 			return false;
 		
-		if(!AddTLDMarkerResolution.libs.containsKey(prefix))
+		if(!libs.containsKey(prefix))
 			return false;
 		
 		file = (IFile)marker.getResource();
 		
-		document = AddTLDMarkerResolution.getDocument(file);
+		IDocument document = getDocument(file);
 		
 		properties = new Properties();
-		properties.put(JSPPaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI, AddTLDMarkerResolution.libs.get(prefix));
+		properties.put(JSPPaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI, libs.get(prefix));
 		properties.put(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX, prefix);
 		properties.put(PaletteInsertHelper.PROPOPERTY_SELECTION_PROVIDER, new ISelectionProvider() {
 			
@@ -98,4 +117,34 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 
 		return true;
 	}
+	
+	public static String getPrifix(String message){
+		String prefix=""; //$NON-NLS-1$
+		
+		int start = message.indexOf("("); //$NON-NLS-1$
+		if(start < 0)
+			return null;
+		
+		int end = message.indexOf(":", start); //$NON-NLS-1$
+		if(end < 0)
+			return null;
+		
+		prefix = message.substring(start+1, end);
+		
+		return prefix;
+	}
+
+	
+	public IDocument getDocument(IFile file) {
+		input = new FileEditorInput(file);
+		provider = DocumentProviderRegistry.getDefault().getDocumentProvider(input);
+		try {
+			provider.connect(input);
+		} catch (CoreException e) {
+			WebUiPlugin.getPluginLog().logError(e);
+		}
+		
+		return provider.getDocument(input);
+	}
+
 }

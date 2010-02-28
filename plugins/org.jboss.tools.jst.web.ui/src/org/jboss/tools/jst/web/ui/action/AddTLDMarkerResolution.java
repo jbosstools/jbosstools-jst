@@ -10,19 +10,17 @@
  ******************************************************************************/
 package org.jboss.tools.jst.web.ui.action;
 
-import java.util.HashMap;
 import java.util.Properties;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.part.FileEditorInput;
-import org.eclipse.ui.texteditor.DocumentProviderRegistry;
 import org.eclipse.ui.texteditor.IDocumentProvider;
-import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.PaletteTaglibInserter;
+import org.jboss.tools.jst.web.ui.Messages;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 /**
@@ -32,62 +30,31 @@ import org.jboss.tools.jst.web.ui.WebUiPlugin;
  *
  */
 public class AddTLDMarkerResolution implements IMarkerResolution{
-	private IFile file;
-	private IDocument document;
+	private IDocumentProvider provider;
+	private FileEditorInput input;
 	private Properties properties;
 	
-	public static HashMap<String, String> libs = new HashMap<String, String>();
-	static{
-		libs.put("s", "http://jboss.com/products/seam/taglib");  //$NON-NLS-1$//$NON-NLS-2$
-		libs.put("ui", "http://java.sun.com/jsf/facelets"); //$NON-NLS-1$ //$NON-NLS-2$
-		libs.put("f", "http://java.sun.com/jsf/core"); //$NON-NLS-1$ //$NON-NLS-2$
-		libs.put("h", "http://java.sun.com/jsf/html"); //$NON-NLS-1$ //$NON-NLS-2$
-		libs.put("rich", "http://richfaces.org/rich"); //$NON-NLS-1$ //$NON-NLS-2$
-		libs.put("a4j", "http://richfaces.org/a4j"); //$NON-NLS-1$ //$NON-NLS-2$
-		libs.put("a", "http://richfaces.org/a4j"); //$NON-NLS-1$ //$NON-NLS-2$
-		libs.put("c", "http://java.sun.com/jstl/core"); //$NON-NLS-1$ //$NON-NLS-2$
-		libs.put("jsp", "http://java.sun.com/JSP/Page"); //$NON-NLS-1$ //$NON-NLS-2$
-	}
 	
-	public AddTLDMarkerResolution(IFile file, IDocument document, Properties properties){
-		this.file = file;
-		this.document = document;
+	public AddTLDMarkerResolution(IDocumentProvider provider, FileEditorInput input, Properties properties){
+		this.provider = provider;
+		this.input = input;
 		this.properties = properties;
 	}
 
 	public String getLabel() {
-		return "Insert tag library defenition";
+		return Messages.AddTLDMarkerResolution_Name;
 	}
 	
-	public static String getPrifix(String message){
-		String prefix="";
-		
-		int start = message.indexOf("(");
-		if(start < 0)
-			return null;
-		
-		int end = message.indexOf(":", start);
-		if(end < 0)
-			return null;
-		
-		prefix = message.substring(start+1, end);
-		
-		return prefix;
-	}
 	
-	public static IDocument getDocument(IFile file) {
-		FileEditorInput input = new FileEditorInput(file);
-		IDocumentProvider provider= DocumentProviderRegistry.getDefault().getDocumentProvider(input);
-		try {
-			provider.connect(input);
-		} catch (CoreException e) {
-			WebUiPlugin.getPluginLog().logError(e);
-		}
-		return provider.getDocument(input);
-	}
 
 	public void run(IMarker marker) {
+		IDocument document = provider.getDocument(input);
 		PaletteTaglibInserter inserter = new PaletteTaglibInserter();
 		inserter.inserTaglib(document, properties);
+		try{
+			provider.saveDocument(new NullProgressMonitor(), input, document, true);
+		}catch(CoreException ex){
+			WebUiPlugin.getPluginLog().logError(ex);
+		}
 	}
 }

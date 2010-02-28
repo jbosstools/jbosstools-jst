@@ -70,6 +70,7 @@ public class Messages extends NLS {
 	public static String WebAppFoldersFormLayoutData_Persistence;
 	public static String WebCompoundEditor_WebXMLEditor;
 	public static String XActionProvider_CompanyName;
+	public static String AddTLDMarkerResolution_Name;
 
 	static {
 		// initialize resource bundle
