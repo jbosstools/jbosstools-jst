@@ -25,6 +25,7 @@ import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.wst.sse.core.internal.provisional.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.sse.ui.internal.contentassist.ContentAssistUtils;
 import org.eclipse.wst.xml.core.internal.document.DocumentImpl;
 import org.eclipse.wst.xml.core.internal.document.ElementImpl;
@@ -128,7 +129,6 @@ public class PaletteTaglibInserter {
 	 * @return
 	 */
 	public static IndexedRegion getNodeAt(IDocument d, int documentOffset) {
-
 		if (d == null)
 			return null;
 
@@ -136,7 +136,7 @@ public class PaletteTaglibInserter {
 		IModelManager mm = StructuredModelManager.getModelManager();
 		IStructuredModel model = null;
 		if (mm != null)
-			model = mm.getExistingModelForRead(d);
+			model = mm.getModelForRead((IStructuredDocument)d);
 		try {
 			if (model != null) {
 				int lastOffset = documentOffset;
@@ -214,7 +214,7 @@ public class PaletteTaglibInserter {
 		IStructuredModel model = null;
 		
 		try {
-			model = StructuredModelManager.getModelManager().getExistingModelForRead(d);
+			model = StructuredModelManager.getModelManager().getModelForRead((IStructuredDocument)d);
 			IDOMDocument xmlDocument = (model instanceof IDOMModel) ? ((IDOMModel) model).getDocument() : null;
 			
 			if (xmlDocument == null) {

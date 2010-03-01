@@ -49,7 +49,6 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		libs.put("a4j", "http://richfaces.org/a4j"); //$NON-NLS-1$ //$NON-NLS-2$
 		libs.put("a", "http://richfaces.org/a4j"); //$NON-NLS-1$ //$NON-NLS-2$
 		libs.put("c", "http://java.sun.com/jstl/core"); //$NON-NLS-1$ //$NON-NLS-2$
-		libs.put("jsp", "http://java.sun.com/JSP/Page"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	private IFile file;
@@ -90,6 +89,8 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		IDocument document = getDocument(file);
 		
 		properties = new Properties();
+		properties.put(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB, "true"); //$NON-NLS-1$
+		properties.put(PaletteInsertHelper.PROPOPERTY_START_TEXT, ""); //$NON-NLS-1$
 		properties.put(JSPPaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI, libs.get(prefix));
 		properties.put(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX, prefix);
 		properties.put(PaletteInsertHelper.PROPOPERTY_SELECTION_PROVIDER, new ISelectionProvider() {
@@ -108,7 +109,7 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 			public void addSelectionChangedListener(ISelectionChangedListener listener) {
 			}
 		});
-		properties.put(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB, "true"); //$NON-NLS-1$
+		
 		
 		Properties p = PaletteTaglibInserter.getPrefixes(document, properties);
 		
