@@ -12,12 +12,14 @@ package org.jboss.tools.jst.web.ui.action;
 
 import java.util.Properties;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.texteditor.DocumentProviderRegistry;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.PaletteTaglibInserter;
 import org.jboss.tools.jst.web.ui.Messages;
@@ -30,29 +32,33 @@ import org.jboss.tools.jst.web.ui.WebUiPlugin;
  *
  */
 public class AddTLDMarkerResolution implements IMarkerResolution{
-	private IDocumentProvider provider;
-	private FileEditorInput input;
+	private IFile file;
 	private Properties properties;
 	
 	
-	public AddTLDMarkerResolution(IDocumentProvider provider, FileEditorInput input, Properties properties){
-		this.provider = provider;
-		this.input = input;
+	public AddTLDMarkerResolution(IFile file, Properties properties){
+		this.file = file;
 		this.properties = properties;
 	}
 
 	public String getLabel() {
 		return Messages.AddTLDMarkerResolution_Name;
 	}
-	
-	
 
 	public void run(IMarker marker) {
-		IDocument document = provider.getDocument(input);
-		PaletteTaglibInserter inserter = new PaletteTaglibInserter();
-		inserter.inserTaglib(document, properties);
-		try{
+		FileEditorInput input = new FileEditorInput(file);
+		IDocumentProvider provider = DocumentProviderRegistry.getDefault().getDocumentProvider(input);
+		try {
+			provider.connect(input);
+		
+			IDocument document = provider.getDocument(input);
+			
+			PaletteTaglibInserter inserter = new PaletteTaglibInserter();
+			inserter.inserTaglib(document, properties);
+			
+			provider.aboutToChange(input);
 			provider.saveDocument(new NullProgressMonitor(), input, document, true);
+			provider.disconnect(input);
 		}catch(CoreException ex){
 			WebUiPlugin.getPluginLog().logError(ex);
 		}

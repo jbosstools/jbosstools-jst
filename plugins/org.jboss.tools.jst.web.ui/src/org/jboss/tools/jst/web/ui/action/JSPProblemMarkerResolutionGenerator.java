@@ -52,15 +52,13 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 	}
 
 	private IFile file;
-	private IDocumentProvider provider;
-	private FileEditorInput input;
 	private Properties properties;
 	
 	public IMarkerResolution[] getResolutions(IMarker marker) {
 		try{
 			if(isOurCase(marker)){
 				return new IMarkerResolution[] {
-					new AddTLDMarkerResolution(provider, input, properties)
+					new AddTLDMarkerResolution(file, properties)
 				};
 			}
 			
@@ -86,8 +84,16 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		
 		file = (IFile)marker.getResource();
 		
-		IDocument document = getDocument(file);
+		FileEditorInput input = new FileEditorInput(file);
+		IDocumentProvider provider = DocumentProviderRegistry.getDefault().getDocumentProvider(input);
+		try {
+			provider.connect(input);
+		} catch (CoreException e) {
+			WebUiPlugin.getPluginLog().logError(e);
+		}
 		
+		IDocument document = provider.getDocument(input);
+
 		properties = new Properties();
 		properties.put(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB, "true"); //$NON-NLS-1$
 		properties.put(PaletteInsertHelper.PROPOPERTY_START_TEXT, ""); //$NON-NLS-1$
@@ -113,9 +119,11 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		
 		Properties p = PaletteTaglibInserter.getPrefixes(document, properties);
 		
+		provider.disconnect(input);
+		
 		if(p.containsValue(prefix))
 			return false;
-
+		
 		return true;
 	}
 	
@@ -134,18 +142,4 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		
 		return prefix;
 	}
-
-	
-	public IDocument getDocument(IFile file) {
-		input = new FileEditorInput(file);
-		provider = DocumentProviderRegistry.getDefault().getDocumentProvider(input);
-		try {
-			provider.connect(input);
-		} catch (CoreException e) {
-			WebUiPlugin.getPluginLog().logError(e);
-		}
-		
-		return provider.getDocument(input);
-	}
-
 }

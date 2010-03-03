@@ -76,7 +76,7 @@ public class PaletteTaglibInserter {
 		IStructuredModel model = null;
 
 		try {
-			model = StructuredModelManager.getModelManager().getExistingModelForRead(d);
+			model = StructuredModelManager.getModelManager().getModelForRead((IStructuredDocument)d);
 			IDOMDocument xmlDocument = (model instanceof IDOMModel) ? ((IDOMModel) model).getDocument() : null;
 			if (xmlDocument == null) {
 				return false;
