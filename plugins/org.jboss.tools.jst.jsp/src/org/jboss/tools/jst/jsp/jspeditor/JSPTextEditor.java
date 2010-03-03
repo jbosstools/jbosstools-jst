@@ -66,6 +66,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.editors.text.ILocationProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -735,7 +736,13 @@ public class JSPTextEditor extends StructuredTextEditor implements
 	public void runDropCommand(final String flavor, final String data) {
 		XModelBuffer b = XModelTransferBuffer.getInstance().getBuffer();
 		final XModelObject o = b == null ? null : b.source();
-		Display.getDefault().asyncExec(new Runnable() {
+		/*
+		 * Fixes https://jira.jboss.org/jira/browse/JBIDE-5874
+		 * Display.getDefault() should always be replaced by
+		 * PlatformUI.getWorkbench().getDisplay().
+		 *  syncExec() will reduce the number if simultaneously launched threads. 
+		 */
+		PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
 			public void run() {
 				if (o != null
 						&& !XModelTransferBuffer.getInstance().isEnabled()) {
