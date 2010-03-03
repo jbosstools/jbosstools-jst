@@ -102,6 +102,9 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		List<IComponent> list = new ArrayList<IComponent>();
 		IComponent[] comps = getComponents();
 		for (int i = 0; i < comps.length; i++) {
+			if(comps[i].getName()==null) {
+				continue;
+			}
 			if(ignoreCase) {
 				if(!(comps[i] instanceof CustomComponentExtension) && comps[i].getName().toLowerCase().startsWith(nameTemplate.toLowerCase()) && (context==null || checkExtended(comps[i], context))) {
 					list.add(comps[i]);
