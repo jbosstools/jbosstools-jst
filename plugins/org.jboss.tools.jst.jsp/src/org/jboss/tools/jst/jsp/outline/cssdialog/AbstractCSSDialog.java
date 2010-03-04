@@ -17,7 +17,6 @@ import org.eclipse.core.databinding.AggregateValidationStatus;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.ChangeEvent;
 import org.eclipse.core.databinding.observable.IChangeListener;
-import org.eclipse.core.databinding.observable.IObservable;
 import org.eclipse.core.databinding.observable.value.IValueChangeListener;
 import org.eclipse.core.databinding.observable.value.ValueChangeEvent;
 import org.eclipse.core.runtime.IStatus;
@@ -92,18 +91,7 @@ public abstract class AbstractCSSDialog extends TitleAreaDialog {
 	}
 
 	public Composite createControlPane(Composite parent) {
-
-		// Create split component that separates dialog on 2 parts
-		Split dialogContainer = new Split(parent, SWT.VERTICAL);
-
-		createBrowserComposite(dialogContainer);
-		createControlComposite(dialogContainer);
-
-		dialogContainer.setWeights(new int[] { DEFAULT_BROWTHER_WEIGHT,
-				DEFAULT_CONTROLS_WEIGHT });
-		dialogContainer.setLayoutData(new GridData(GridData.FILL,
-				GridData.BEGINNING, true, true));
-
+		
 		getStyleAttributes().addChangeListener(new IChangeListener() {
 
 			public void handleChange(ChangeEvent event) {
@@ -122,6 +110,17 @@ public abstract class AbstractCSSDialog extends TitleAreaDialog {
 				handleStatusChanged((IStatus) event.diff.getNewValue());
 			}
 		});
+		
+		// Create split component that separates dialog on 2 parts
+		Split dialogContainer = new Split(parent, SWT.VERTICAL);
+
+		createBrowserComposite(dialogContainer);
+		createControlComposite(dialogContainer);
+
+		dialogContainer.setWeights(new int[] { DEFAULT_BROWTHER_WEIGHT,
+				DEFAULT_CONTROLS_WEIGHT });
+		dialogContainer.setLayoutData(new GridData(GridData.FILL,
+				GridData.BEGINNING, true, true));
 
 		return dialogContainer;
 	}
@@ -226,7 +225,7 @@ public abstract class AbstractCSSDialog extends TitleAreaDialog {
 	 * @return String html text representation
 	 */
 	public String generateBrowserPage() {
-		StringBuffer html = new StringBuffer(Constants.OPEN_DIV_TAG);
+		StringBuffer html = new StringBuffer("<style>span{"); //$NON-NLS-1$
 
 		for (Map.Entry<String, String> styleItem : getStyleAttributes()
 				.entrySet()) {
@@ -235,7 +234,7 @@ public abstract class AbstractCSSDialog extends TitleAreaDialog {
 					+ styleItem.getValue() + Constants.SEMICOLON);
 		}
 
-		html.append("\">" + getPreviewContent() + Constants.CLOSE_DIV_TAG); //$NON-NLS-1$
+		html.append("}</style><span>" + getPreviewContent() + "</span>"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		return html.toString();
 	}

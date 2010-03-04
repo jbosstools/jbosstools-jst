@@ -44,6 +44,10 @@ public class StyleAttributes {
 	public String put(String name, String value) {
 		return (String) attributeMap.put(name.toLowerCase(), value);
 	}
+	
+	public void putAll(Map<String, String> t) {
+		attributeMap.putAll(t);
+	}
 
 	/**
 	 * Remove attribute with the given name.

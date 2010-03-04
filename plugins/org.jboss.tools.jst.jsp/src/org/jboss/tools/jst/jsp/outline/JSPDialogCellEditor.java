@@ -37,6 +37,7 @@ import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.cssdialog.CSSStyleDialog;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSConstants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
+import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.CSSStyleClassSelector;
 
 /**
  * @author Kabanovich Cell Editor for JSP attributes, of which values can be
@@ -132,17 +133,17 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
         context.put("value", value); //$NON-NLS-1$
 
         attributeName = attributeName.toLowerCase();
-//        if (attributeName.equalsIgnoreCase(CSSConstants.CLASS)
-//        		|| attributeName.endsWith(CSSConstants.CLASS.toLowerCase())) {
-//            CSSClassDialog dialog = new CSSClassDialog(cellEditorWindow.getShell(), null, false);
-//            dialog.setCurrentStyleClass(value);
-//
-//            if (dialog.open() == Window.OK) {
-//                externalEditing = false;
-//
-//                return dialog.getSelectorName();
-//            }
-//        } else
+        if (attributeName.equalsIgnoreCase(CSSConstants.CLASS)
+        		|| attributeName.endsWith(CSSConstants.CLASS.toLowerCase())) {
+            CSSStyleClassSelector dialog = new CSSStyleClassSelector(cellEditorWindow.getShell());
+            dialog.setCurrentStyleClass(value);
+
+            if (dialog.open() == Window.OK) {
+                externalEditing = false;
+
+                return dialog.getCSSStyleClasses();
+            }
+        } else
         	if (attributeName.equalsIgnoreCase(CSSConstants.STYLE)
         		|| attributeName.endsWith(CSSConstants.STYLE.toLowerCase())) {
             CSSStyleDialog dialog = new CSSStyleDialog(cellEditorWindow.getShell(),

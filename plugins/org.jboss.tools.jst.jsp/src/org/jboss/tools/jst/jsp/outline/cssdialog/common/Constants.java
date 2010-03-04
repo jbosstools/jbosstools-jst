@@ -61,7 +61,9 @@ public class Constants {
 	public static final String IMAGE_LEFT_FILE_LOCATION = "images/cssdialog/left.gif"; //$NON-NLS-1$
 	public static final String IMAGE_RIGHT_FILE_LOCATION = "images/cssdialog/right.gif"; //$NON-NLS-1$
 	public static final String IMAGE_SAMPLE_FILE_LOCATION = "images/cssdialog/sample.gif"; //$NON-NLS-1$
-
+	public static final String IMAGE_STYLE_SHEET_LOCATION = "images/cssdialog/style_sheet.gif"; //$NON-NLS-1$
+	public static final String IMAGE_STYLE_CLASS_LOCATION = "images/cssdialog/style_class.gif"; //$NON-NLS-1$
+	
 	public static final int FIRST_COLUMN = 0;
 	public static final int SECOND_COLUMN = 1;
 
