@@ -23,6 +23,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.IMarkerResolutionGenerator;
+import org.eclipse.ui.IMarkerResolutionGenerator2;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.DocumentProviderRegistry;
 import org.eclipse.ui.texteditor.IDocumentProvider;
@@ -37,7 +38,7 @@ import org.jboss.tools.jst.web.ui.WebUiPlugin;
  * @author Daniel Azarov
  *
  */
-public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGenerator {
+public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGenerator2 {
 	
 	public static HashMap<String, String> libs = new HashMap<String, String>();
 	static{
@@ -61,7 +62,6 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 					new AddTLDMarkerResolution(file, properties)
 				};
 			}
-			
 		}catch(CoreException ex){
 			WebUiPlugin.getPluginLog().logError(ex);
 		}
@@ -141,5 +141,15 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		prefix = message.substring(start+1, end);
 		
 		return prefix;
+	}
+
+	public boolean hasResolutions(IMarker marker) {
+		try{
+			if(isOurCase(marker))
+				return true;
+		}catch(CoreException ex){
+			WebUiPlugin.getPluginLog().logError(ex);
+		}
+		return false;
 	}
 }

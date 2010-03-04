@@ -16,8 +16,10 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.ui.IMarkerResolution;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.IMarkerResolution2;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.DocumentProviderRegistry;
 import org.eclipse.ui.texteditor.IDocumentProvider;
@@ -31,7 +33,7 @@ import org.jboss.tools.jst.web.ui.WebUiPlugin;
  * @author Daniel Azarov
  *
  */
-public class AddTLDMarkerResolution implements IMarkerResolution{
+public class AddTLDMarkerResolution implements IMarkerResolution2{
 	private IFile file;
 	private Properties properties;
 	
@@ -62,5 +64,13 @@ public class AddTLDMarkerResolution implements IMarkerResolution{
 		}catch(CoreException ex){
 			WebUiPlugin.getPluginLog().logError(ex);
 		}
+	}
+
+	public String getDescription() {
+		return Messages.AddTLDMarkerResolution_Name;
+	}
+
+	public Image getImage() {
+		return ImageDescriptor.createFromFile(AddTLDMarkerResolution.class,	"images/xstudio/editors/taglibs_file.gif").createImage(); //$NON-NLS-1$
 	}
 }
