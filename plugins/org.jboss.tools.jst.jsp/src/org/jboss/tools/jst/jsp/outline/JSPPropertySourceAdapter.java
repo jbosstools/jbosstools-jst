@@ -50,8 +50,6 @@ import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
-import org.jboss.tools.jst.web.kb.taglib.IComponent;
-import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibComponent;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
@@ -126,6 +124,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 		processor.createContext(getTextViewer(), offset);
         pageContext = processor.getContext();
 		kbQuery = createKbQuery(processor);
+		kbQuery.setMask(true); 
 		kbQueryAttr = createKbQuery(processor);
 	}
 	
@@ -647,19 +646,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 	}
 	
 	private Map<String, IAttribute> getAttributes() {
-		IComponent[] components = PageProcessor.getInstance().getComponents(kbQuery, pageContext, true);
-		Map<String, IAttribute> map = new HashMap<String, IAttribute>();
-		for (IComponent component: components) {
-			IAttribute[] as = component.getAttributes();
-			for (IAttribute a: as) {
-				String n = a.getName();
-				if(map.containsKey(n) && !(component instanceof ICustomTagLibComponent)) {
-					continue;
-				}
-				map.put(n, a);
-			}
-		}
-		return map;
+		return PageProcessor.getInstance().getAttributesAsMap(kbQuery, pageContext);
 	}
 	
 	//////// XMLPropertyDescriptor
