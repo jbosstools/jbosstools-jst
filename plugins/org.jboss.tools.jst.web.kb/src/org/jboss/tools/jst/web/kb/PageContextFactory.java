@@ -503,6 +503,8 @@ public class PageContextFactory implements IResourceChangeListener {
 	private void fillElReferencesForNode(IDOMNode node, XmlContextImpl context) {
 		if(Node.ELEMENT_NODE == node.getNodeType() || Node.TEXT_NODE == node.getNodeType()) {
 			IStructuredDocumentRegion regionNode = node.getFirstStructuredDocumentRegion();
+			if (regionNode == null)
+				return;
 			ITextRegionList regions = regionNode.getRegions();
 			for(int i=0; i<regions.size(); i++) {
 				ITextRegion region = regions.get(i);
