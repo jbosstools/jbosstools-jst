@@ -191,4 +191,18 @@ public class PageProcessor {
 		}
 		return EMPTY_ATTRIBUTE_ARRAY;
 	}
+
+	public Map<String, IAttribute> getAttributesAsMap(KbQuery query, IPageContext context) {
+		IAttribute[] as = getAttributes(query, context);
+		Map<String, IAttribute> map = new HashMap<String, IAttribute>();
+		for (IAttribute a: as) {
+			String n = a.getName();
+			if(map.containsKey(n) && !(a instanceof CustomTagLibAttribute)) {
+				continue;
+			}
+			map.put(n, a);
+		}
+		return map;
+	}
+
 }
