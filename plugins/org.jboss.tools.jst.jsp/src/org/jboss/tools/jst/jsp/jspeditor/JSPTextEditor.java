@@ -741,9 +741,9 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		 * Fixes https://jira.jboss.org/jira/browse/JBIDE-5874
 		 * Display.getDefault() should always be replaced by
 		 * PlatformUI.getWorkbench().getDisplay().
-		 *  syncExec() will reduce the number if simultaneously launched threads. 
+		 *  syncExec() can hang the JBDS thus asyncExec is used. 
 		 */
-		PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
+		PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
 			public void run() {
 				if (o != null
 						&& !XModelTransferBuffer.getInstance().isEnabled()) {
