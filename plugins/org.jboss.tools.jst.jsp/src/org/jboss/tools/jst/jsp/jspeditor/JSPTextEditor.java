@@ -149,6 +149,7 @@ import org.jboss.tools.jst.web.kb.internal.taglib.TLDTag;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
+import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 import org.jboss.tools.jst.web.kb.taglib.TagLibraryManager;
 import org.jboss.tools.jst.web.tld.VpeTaglibManager;
 import org.jboss.tools.jst.web.tld.VpeTaglibManagerProvider;
@@ -797,6 +798,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			if(n == null && pageContext instanceof JspContextImpl) {
 				IRegion r = new Region(query.getOffset(), 0);
 				((JspContextImpl)pageContext).addNameSpace(r, new NameSpace(query.getUri(), query.getPrefix(),
+						pageContext.getResource() == null ? new ITagLibrary[0] :
 						TagLibraryManager.getLibraries(
 								pageContext.getResource().getProject(), query.getUri())));
 //				((JspContextImpl)pageContext).setLibraries(processor.getTagLibraries(pageContext));
