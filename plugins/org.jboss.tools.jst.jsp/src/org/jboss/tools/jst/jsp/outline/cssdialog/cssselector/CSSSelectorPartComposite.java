@@ -233,7 +233,7 @@ public class CSSSelectorPartComposite extends Composite implements
 		leftButton = new Button(buttonsContainer, SWT.PUSH);
 		selectedClassesTableViewer = new CSSSelectorTableViewer(this, SWT.MULTI
 				| SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
-		rightButton.setToolTipText(JstUIMessages.ADD_FONT_FAMILY_TIP);
+		rightButton.setToolTipText(JstUIMessages.CSS_ADD_CSS_CLASS_TIP);
 		ImageDescriptor rightDesc = JspEditorPlugin
 				.getImageDescriptor(Constants.IMAGE_RIGHT_FILE_LOCATION);
 		Image rightImage = rightDesc.createImage();
@@ -246,7 +246,7 @@ public class CSSSelectorPartComposite extends Composite implements
 			}
 		});
 
-		leftButton.setToolTipText(JstUIMessages.REMOVE_FONT_FAMILY_TIP);
+		leftButton.setToolTipText(JstUIMessages.CSS_REMOVE_CSS_CLASS_TIP);
 
 		ImageDescriptor leftDesc = JspEditorPlugin
 				.getImageDescriptor(Constants.IMAGE_LEFT_FILE_LOCATION);

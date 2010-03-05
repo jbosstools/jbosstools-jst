@@ -116,4 +116,6 @@ public class JstUIMessages extends NLS {
 	public static String JSPDialogContentProposalProvider_NewELExpression;
 	public static String PROPERTY_NAME_COLUMN;
 	public static String PROPERTY_VALUE_COLUMN;
+	public static String CSS_ADD_CSS_CLASS_TIP;
+	public static String CSS_REMOVE_CSS_CLASS_TIP;
 }
