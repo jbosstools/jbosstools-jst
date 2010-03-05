@@ -11,7 +11,6 @@ import org.jboss.tools.jst.web.ui.action.JSPProblemMarkerResolutionGenerator;
 import org.jboss.tools.test.util.JobUtils;
 import org.jboss.tools.test.util.ProjectImportTestSetup;
 import org.jboss.tools.tests.AbstractResourceMarkerTest;
-import org.jboss.tools.tests.IMarkerFilter;
 
 public class JSPProblemMarkerResolutionTest extends AbstractResourceMarkerTest{
 	IProject project = null;
