@@ -19,6 +19,7 @@ public class WebAppFileFormLayoutData {
 	static String FILE_23_ENTITY = "FileWebApp"; //$NON-NLS-1$
 	static String FILE_24_ENTITY = "FileWebApp24"; //$NON-NLS-1$
 	static String FILE_25_ENTITY = "FileWebApp25"; //$NON-NLS-1$
+	static String FILE_30_ENTITY = "FileWebApp30"; //$NON-NLS-1$
 	
 	static IFormData CONTEXT_PARAM_FOLDER_DEFINITION = new FormData(
 		Messages.WebAppFileFormLayoutData_ContextParams,
@@ -55,6 +56,10 @@ public class WebAppFileFormLayoutData {
 
 	public static IFormData FILE_WEB_APP_25_DEFINITION = new FormData(
 		FILE_25_ENTITY, new String[]{null}, createFileDefinitions(Messages.WebAppFileFormLayoutData_WebDesc25, FILE_25_ENTITY)
+	);
+
+	public static IFormData FILE_WEB_APP_30_DEFINITION = new FormData(
+		FILE_30_ENTITY, new String[]{null}, createFileDefinitions(Messages.WebAppFileFormLayoutData_WebDesc30, FILE_30_ENTITY)
 	);
 
 	

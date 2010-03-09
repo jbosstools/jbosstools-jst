@@ -20,21 +20,28 @@ public class WebAppFoldersFormLayoutData {
 	static String CONTEXT_PARAM_ENTITY = WebAppHelper.CONTEXT_PARAM_ENTITY;
 	static String FILTER_FOLDER_ENTITY = "WebAppFolderFilters"; //$NON-NLS-1$
 	static String FILTER_FOLDER_24_ENTITY = "WebAppFolderFilters24"; //$NON-NLS-1$
+	static String FILTER_FOLDER_30_ENTITY = "WebAppFolderFilters30"; //$NON-NLS-1$
 	static String LIFECYCLE_FOLDER_24_ENTITY = "WebAppFolderLifecycles25"; //$NON-NLS-1$
 	static String PERSISTENCE_FOLDER_24_ENTITY = "WebAppFolderPersistence25"; //$NON-NLS-1$
 	static String LISTENER_FOLDER_ENTITY = "WebAppFolderListeners"; //$NON-NLS-1$
 	static String LISTENER_FOLDER_24_ENTITY = "WebAppFolderListeners24"; //$NON-NLS-1$
 	static String SERVLET_FOLDER_ENTITY = "WebAppFolderServlets"; //$NON-NLS-1$
+	static String SERVLET_FOLDER_30_ENTITY = "WebAppFolderServlets30"; //$NON-NLS-1$
 	static String MIME_FOLDER_ENTITY = "WebAppFolderMimeMappings"; //$NON-NLS-1$
 	static String ERROR_FOLDER_ENTITY = "WebAppFolderErrorPages"; //$NON-NLS-1$
 	static String TAGLIB_FOLDER_ENTITY = "WebAppFolderTaglibs"; //$NON-NLS-1$
 	static String RESOURCE_FOLDER_ENTITY = "WebAppFolderResources"; //$NON-NLS-1$
+	static String RESOURCE_FOLDER_30_ENTITY = "WebAppFolderResources30"; //$NON-NLS-1$
 	static String SECURITY_FOLDER_ENTITY = "WebAppFolderSecurityConstraints"; //$NON-NLS-1$
+	static String SECURITY_FOLDER_30_ENTITY = "WebAppFolderSecurityConstraints30"; //$NON-NLS-1$
 	static String ROLE_FOLDER_ENTITY = "WebAppFolderSecurityRoles"; //$NON-NLS-1$
 	static String ENV_FOLDER_ENTITY = "WebAppFolderEnvEntries"; //$NON-NLS-1$
+	static String ENV_FOLDER_30_ENTITY = "WebAppFolderEnvEntries30"; //$NON-NLS-1$
 	static String EJB_FOLDER_ENTITY = "WebAppFolderEJB"; //$NON-NLS-1$
+	static String EJB_FOLDER_30_ENTITY = "WebAppFolderEJB30"; //$NON-NLS-1$
 	static String SERVICE_FOLDER_ENTITY = "WebAppFolderServices"; //$NON-NLS-1$	
 	static String MESSAGE_FOLDER_ENTITY = "WebAppFolderMessageDestinations"; //$NON-NLS-1$
+	static String MESSAGE_FOLDER_30_ENTITY = "WebAppFolderMessageDestinations30"; //$NON-NLS-1$
 	
 	
 	static IFormData CONTEXT_PARAM_LIST_DEFINITION = new FormData(
@@ -53,7 +60,7 @@ public class WebAppFoldersFormLayoutData {
 		Messages.WebAppFoldersFormLayoutData_Filters,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("filter-name", 100)}, //$NON-NLS-1$
-		new String[]{WebAppHelper.FILTER_ENTITY},
+		new String[]{WebAppHelper.FILTER_ENTITY, WebAppHelper.FILTER_30_ENTITY},
 		FormLayoutDataUtil.createDefaultFormActionData("CreateActions.CreateFilter") //$NON-NLS-1$
 	);
 
@@ -99,6 +106,11 @@ public class WebAppFoldersFormLayoutData {
 		FILTER_MAPPING_24_LIST_DEFINITION
 	};
 
+	static IFormData[] FILTER_FOLDER_30_DEFINITIONS = new IFormData[]{
+		FILTER_LIST_DEFINITION,
+		FILTER_MAPPING_24_LIST_DEFINITION
+	};
+
 	static IFormData[] LIFECYCLE_FOLDER_24_DEFINITIONS = new IFormData[]{
 		LIFECYCLE_LIST_DEFINITION,
 	};
@@ -135,7 +147,7 @@ public class WebAppFoldersFormLayoutData {
 		Messages.WebAppFoldersFormLayoutData_Servlets,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("servlet-name", 30), new FormAttributeData("servlet-class", 70)}, //$NON-NLS-1$ //$NON-NLS-2$
-		new String[]{WebAppHelper.SERVLET_ENTITY},
+		new String[]{WebAppHelper.SERVLET_ENTITY, WebAppHelper.SERVLET_30_ENTITY},
 		FormLayoutDataUtil.createDefaultFormActionData("CreateActions.CreateServlet") //$NON-NLS-1$
 	);
 
@@ -185,7 +197,7 @@ public class WebAppFoldersFormLayoutData {
 		Messages.WebAppFoldersFormLayoutData_ResourceEnvRefs,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("resource-env-ref-name", 30), new FormAttributeData("resource-env-ref-type", 70)}, //$NON-NLS-1$ //$NON-NLS-2$
-		new String[]{"WebAppResourceEnvRef"}, //$NON-NLS-1$
+		new String[]{"WebAppResourceEnvRef", "WebAppResourceEnvRef30"}, //$NON-NLS-1$ //$NON-NLS-2$
 		FormLayoutDataUtil.createDefaultFormActionData("CreateActions.CreateResourceEnvRef") //$NON-NLS-1$
 	);
 
@@ -193,7 +205,7 @@ public class WebAppFoldersFormLayoutData {
 		Messages.WebAppFoldersFormLayoutData_ResourceRefs,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("res-ref-name", 30), new FormAttributeData("res-type", 70)}, //$NON-NLS-1$ //$NON-NLS-2$
-		new String[]{"WebAppResourceRef"}, //$NON-NLS-1$
+		new String[]{"WebAppResourceRef", "WebAppResourceRef30"}, //$NON-NLS-1$ //$NON-NLS-2$
 		FormLayoutDataUtil.createDefaultFormActionData("CreateActions.CreateResourceRef") //$NON-NLS-1$
 	);
 
@@ -206,7 +218,7 @@ public class WebAppFoldersFormLayoutData {
 		Messages.WebAppFoldersFormLayoutData_SecurityConstraints,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("display-name", 100)}, //$NON-NLS-1$
-		new String[]{"WebAppSecurityConstraint"}, //$NON-NLS-1$
+		new String[]{"WebAppSecurityConstraint", "WebAppSecurityConstraint30"}, //$NON-NLS-1$ //$NON-NLS-2$
 		FormLayoutDataUtil.createDefaultFormActionData("CreateActions.CreateSecurityConstraint") //$NON-NLS-1$
 	);
 
@@ -230,7 +242,7 @@ public class WebAppFoldersFormLayoutData {
 		Messages.WebAppFoldersFormLayoutData_EnvEntries,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("env-entry-name", 50), new FormAttributeData("env-entry-type", 50)}, //$NON-NLS-1$ //$NON-NLS-2$
-		new String[]{"WebAppEnvEntry"}, //$NON-NLS-1$
+		new String[]{"WebAppEnvEntry", "WebAppEnvEntry30"}, //$NON-NLS-1$ //$NON-NLS-2$
 		FormLayoutDataUtil.createDefaultFormActionData("CreateActions.CreateEnvEntry") //$NON-NLS-1$
 	);
 
@@ -242,7 +254,7 @@ public class WebAppFoldersFormLayoutData {
 		Messages.WebAppFoldersFormLayoutData_EjbRefList,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("ejb-ref-name", 50), new FormAttributeData("ejb-ref-type", 50)}, //$NON-NLS-1$ //$NON-NLS-2$
-		new String[]{"WebAppEjbRef"}, //$NON-NLS-1$
+		new String[]{"WebAppEjbRef", "WebAppEjbRef30"}, //$NON-NLS-1$ //$NON-NLS-2$
 			FormLayoutDataUtil.createDefaultFormActionData("CreateActions.CreateEjbRef") //$NON-NLS-1$
 	);
 
@@ -250,7 +262,7 @@ public class WebAppFoldersFormLayoutData {
 		Messages.WebAppFoldersFormLayoutData_EjbLocalRefList,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("ejb-ref-name", 50), new FormAttributeData("ejb-ref-type", 50)}, //$NON-NLS-1$ //$NON-NLS-2$
-		new String[]{"WebAppEjbLocalRef"}, //$NON-NLS-1$
+		new String[]{"WebAppEjbLocalRef", "WebAppEjbLocalRef30"}, //$NON-NLS-1$ //$NON-NLS-2$
 		FormLayoutDataUtil.createDefaultFormActionData("CreateActions.CreateEjbLocalRef") //$NON-NLS-1$
 	);
 
@@ -275,7 +287,7 @@ public class WebAppFoldersFormLayoutData {
 		Messages.WebAppFoldersFormLayoutData_MessageDestinationRefList,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("message-destination-ref-name", 100)}, //$NON-NLS-1$
-		new String[]{"WebAppMessageDestinationRef"}, //$NON-NLS-1$
+		new String[]{"WebAppMessageDestinationRef", "WebAppMessageDestinationRef30"}, //$NON-NLS-1$ //$NON-NLS-2$
 		FormLayoutDataUtil.createDefaultFormActionData("CreateActions.CreateServiceMessageDestinationRef") //$NON-NLS-1$
 	);
 
@@ -283,7 +295,7 @@ public class WebAppFoldersFormLayoutData {
 		Messages.WebAppFoldersFormLayoutData_MessageDestinationList,
 		EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("message-destination-name", 100)}, //$NON-NLS-1$
-		new String[]{"WebAppMessageDestination"}, //$NON-NLS-1$
+		new String[]{"WebAppMessageDestination", "WebAppMessageDestination30"}, //$NON-NLS-1$ //$NON-NLS-2$
 		FormLayoutDataUtil.createDefaultFormActionData("CreateActions.CreateServiceMessageDestination") //$NON-NLS-1$
 	);
 
@@ -301,6 +313,9 @@ public class WebAppFoldersFormLayoutData {
 	final static IFormData FILTER_FOLDER_24_DEFINITION = new FormData(
 		FILTER_FOLDER_24_ENTITY, new String[]{null}, FILTER_FOLDER_24_DEFINITIONS);
 
+	final static IFormData FILTER_FOLDER_30_DEFINITION = new FormData(
+		FILTER_FOLDER_30_ENTITY, new String[]{null}, FILTER_FOLDER_30_DEFINITIONS);
+
 	final static IFormData LIFECYCLE_FOLDER_24_DEFINITION = new FormData(
 		LIFECYCLE_FOLDER_24_ENTITY, new String[]{null}, LIFECYCLE_FOLDER_24_DEFINITIONS);
 
@@ -316,6 +331,9 @@ public class WebAppFoldersFormLayoutData {
 	final static IFormData SERVLET_FOLDER_DEFINITION = new FormData(
 		SERVLET_FOLDER_ENTITY, new String[]{null}, SERVLET_FOLDER_DEFINITIONS);
 
+	final static IFormData SERVLET_FOLDER_30_DEFINITION = new FormData(
+		SERVLET_FOLDER_30_ENTITY, new String[]{null}, SERVLET_FOLDER_DEFINITIONS);
+
 	final static IFormData MIME_FOLDER_DEFINITION = new FormData(
 		MIME_FOLDER_ENTITY, new String[]{null}, MIME_FOLDER_DEFINITIONS);
 
@@ -328,8 +346,14 @@ public class WebAppFoldersFormLayoutData {
 	final static IFormData RESOURCE_FOLDER_DEFINITION = new FormData(
 		RESOURCE_FOLDER_ENTITY, new String[]{null}, RESOURCE_FOLDER_DEFINITIONS);
 
+	final static IFormData RESOURCE_FOLDER_30_DEFINITION = new FormData(
+		RESOURCE_FOLDER_30_ENTITY, new String[]{null}, RESOURCE_FOLDER_DEFINITIONS);
+
 	final static IFormData SECURITY_FOLDER_DEFINITION = new FormData(
 		SECURITY_FOLDER_ENTITY, new String[]{null}, SECURITY_FOLDER_DEFINITIONS);
+
+	final static IFormData SECURITY_FOLDER_30_DEFINITION = new FormData(
+		SECURITY_FOLDER_30_ENTITY, new String[]{null}, SECURITY_FOLDER_DEFINITIONS);
 
 	final static IFormData ROLE_FOLDER_DEFINITION = new FormData(
 		ROLE_FOLDER_ENTITY, new String[]{null}, ROLE_FOLDER_DEFINITIONS);
@@ -337,13 +361,22 @@ public class WebAppFoldersFormLayoutData {
 	final static IFormData ENV_FOLDER_DEFINITION = new FormData(
 		ENV_FOLDER_ENTITY, new String[]{null}, ENV_FOLDER_DEFINITIONS);
 
+	final static IFormData ENV_FOLDER_30_DEFINITION = new FormData(
+		ENV_FOLDER_30_ENTITY, new String[]{null}, ENV_FOLDER_DEFINITIONS);
+
 	final static IFormData EJB_FOLDER_DEFINITION = new FormData(
 		EJB_FOLDER_ENTITY, new String[]{null}, EJB_FOLDER_DEFINITIONS);
+
+	final static IFormData EJB_FOLDER_30_DEFINITION = new FormData(
+		EJB_FOLDER_30_ENTITY, new String[]{null}, EJB_FOLDER_DEFINITIONS);
 
 	final static IFormData SERVICE_FOLDER_DEFINITION = new FormData(
 		SERVICE_FOLDER_ENTITY, new String[]{null}, SERVICE_FOLDER_DEFINITIONS);
 
 	final static IFormData MESSAGE_FOLDER_DEFINITION = new FormData(
 		MESSAGE_FOLDER_ENTITY, new String[]{null}, MESSAGE_FOLDER_DEFINITIONS);
+
+	final static IFormData MESSAGE_FOLDER_30_DEFINITION = new FormData(
+		MESSAGE_FOLDER_30_ENTITY, new String[]{null}, MESSAGE_FOLDER_DEFINITIONS);
 
 }

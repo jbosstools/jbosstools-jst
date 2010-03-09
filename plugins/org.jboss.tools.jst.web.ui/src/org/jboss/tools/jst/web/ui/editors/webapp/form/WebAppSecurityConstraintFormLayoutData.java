@@ -15,13 +15,15 @@ import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
 
 public class WebAppSecurityConstraintFormLayoutData {
 	static String SECURITY_CONSTRAINT_ENTITY = "WebAppSecurityConstraint"; //$NON-NLS-1$
+	static String SECURITY_CONSTRAINT_30_ENTITY = "WebAppSecurityConstraint30"; //$NON-NLS-1$
 	static String RESOURCE_COLLECTION_ENTITY = "WebAppResourceCollection"; //$NON-NLS-1$
+	static String RESOURCE_COLLECTION_30_ENTITY = "WebAppResourceCollection30"; //$NON-NLS-1$
 
 	static IFormData RESOURCE_COLLECTION_LIST_DEFINITION = new FormData(
 		WebUIMessages.RESOURCE_COLLECTIONS,
 		WebAppJspConfigFormLayoutData.EMPTY_DESCRIPTION,
 		new FormAttributeData[]{new FormAttributeData("web-resource-name", 100)}, //$NON-NLS-1$
-		new String[]{RESOURCE_COLLECTION_ENTITY},
+		new String[]{RESOURCE_COLLECTION_ENTITY, RESOURCE_COLLECTION_30_ENTITY},
 		FormLayoutDataUtil.createDefaultFormActionData("CreateActions.CreateResourceCollection") //$NON-NLS-1$
 	);
 
@@ -36,4 +38,7 @@ public class WebAppSecurityConstraintFormLayoutData {
 
 	final static IFormData SECURITY_CONSTRAINT_FORM_DEFINITION = new FormData(
 		SECURITY_CONSTRAINT_ENTITY, new String[]{null}, SECURITY_CONSTRAINT_DEFINITIONS);
+
+	final static IFormData SECURITY_CONSTRAINT_30_FORM_DEFINITION = new FormData(
+		SECURITY_CONSTRAINT_30_ENTITY, new String[]{null}, SECURITY_CONSTRAINT_DEFINITIONS);
 }

@@ -12,9 +12,9 @@ package org.jboss.tools.jst.web.ui.editors.webapp.form;
 
 import org.jboss.tools.common.model.ui.forms.*;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
+import org.jboss.tools.jst.web.model.helpers.WebAppHelper;
 
 public class WebAppFilterFormLayoutData {
-	static String FILTER_ENTITY = "WebAppFilter"; //$NON-NLS-1$
 	static String INIT_PARAM_ENTITY = "WebAppInitParam"; //$NON-NLS-1$
 
 	static IFormData INIT_PARAM_LIST_DEFINITION = new FormData(
@@ -29,17 +29,34 @@ public class WebAppFilterFormLayoutData {
 		new FormData(
 			WebUIMessages.FILTER,
 			WebAppJspConfigFormLayoutData.EMPTY_DESCRIPTION,
-			FormLayoutDataUtil.createGeneralFormAttributeData(FILTER_ENTITY)
+			FormLayoutDataUtil.createGeneralFormAttributeData(WebAppHelper.FILTER_ENTITY)
 		),
 		INIT_PARAM_LIST_DEFINITION,
 		new FormData(
 			WebUIMessages.ADVANCED,
 			WebAppJspConfigFormLayoutData.EMPTY_DESCRIPTION,
-			FormLayoutDataUtil.createAdvancedFormAttributeData(FILTER_ENTITY)
+			FormLayoutDataUtil.createAdvancedFormAttributeData(WebAppHelper.FILTER_ENTITY)
+		),
+	};
+
+	private final static IFormData[] FILTER_30_DEFINITIONS = new IFormData[] {
+		new FormData(
+			WebUIMessages.FILTER,
+			WebAppJspConfigFormLayoutData.EMPTY_DESCRIPTION,
+			FormLayoutDataUtil.createGeneralFormAttributeData(WebAppHelper.FILTER_30_ENTITY)
+		),
+		INIT_PARAM_LIST_DEFINITION,
+		new FormData(
+			WebUIMessages.ADVANCED,
+			WebAppJspConfigFormLayoutData.EMPTY_DESCRIPTION,
+			FormLayoutDataUtil.createAdvancedFormAttributeData(WebAppHelper.FILTER_30_ENTITY)
 		),
 	};
 
 	final static IFormData FILTER_FORM_DEFINITION = new FormData(
-		FILTER_ENTITY, new String[]{null}, FILTER_DEFINITIONS);
+		WebAppHelper.FILTER_ENTITY, new String[]{null}, FILTER_DEFINITIONS);
+
+	final static IFormData FILTER_30_FORM_DEFINITION = new FormData(
+		WebAppHelper.FILTER_30_ENTITY, new String[]{null}, FILTER_30_DEFINITIONS);
 
 }

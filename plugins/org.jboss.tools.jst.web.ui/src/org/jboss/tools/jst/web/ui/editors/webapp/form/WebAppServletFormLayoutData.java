@@ -26,21 +26,26 @@ public class WebAppServletFormLayoutData {
 		FormLayoutDataUtil.createDefaultFormActionData("CreateActions.CreateSecurityRoleRef") //$NON-NLS-1$
 	);
 
-	private final static IFormData[] SERVLET_DEFINITIONS = new IFormData[] {
+	private final static IFormData[] creareServletDefinitions(String entity) {
+		return new IFormData[] {
 		new FormData(
 			WebUIMessages.SERVLET,
 			WebAppJspConfigFormLayoutData.EMPTY_DESCRIPTION,
-			FormLayoutDataUtil.createGeneralFormAttributeData(SERVLET_ENTITY)
+			FormLayoutDataUtil.createGeneralFormAttributeData(entity)
 		),
 		WebAppFilterFormLayoutData.INIT_PARAM_LIST_DEFINITION,
 		SECURITY_ROLE_REF_LIST_DEFINITION,
 		new FormData(
 			WebUIMessages.ADVANCED,
 			WebAppJspConfigFormLayoutData.EMPTY_DESCRIPTION,
-			FormLayoutDataUtil.createAdvancedFormAttributeData(SERVLET_ENTITY)
+			FormLayoutDataUtil.createAdvancedFormAttributeData(entity)
 		),
-	};
+		};
+	}
 
 	final static IFormData SERVLET_FORM_DEFINITION = new FormData(
-		SERVLET_ENTITY, new String[]{null}, SERVLET_DEFINITIONS);
+		SERVLET_ENTITY, new String[]{null}, creareServletDefinitions(SERVLET_ENTITY));
+
+	final static IFormData SERVLET_30_FORM_DEFINITION = new FormData(
+		WebAppHelper.SERVLET_30_ENTITY, new String[]{null}, creareServletDefinitions(WebAppHelper.SERVLET_30_ENTITY));
 }

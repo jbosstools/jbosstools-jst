@@ -46,6 +46,7 @@ public class Messages extends NLS {
 	public static String WebAppFileFormLayoutData_WebDesc23;
 	public static String WebAppFileFormLayoutData_WebDesc24;
 	public static String WebAppFileFormLayoutData_WebDesc25;
+	public static String WebAppFileFormLayoutData_WebDesc30;
 	public static String WebAppFoldersFormLayoutData_ErrorPages;
 	public static String WebAppFoldersFormLayoutData_WebAppErrorPage;
 	public static String WebAppFoldersFormLayoutData_ResourceEnvRefs;
