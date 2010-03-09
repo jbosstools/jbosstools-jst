@@ -18,6 +18,8 @@
       </meta>
       <meta path="meta/webapp24.meta">
       </meta>
+      <meta path="meta/webapp30.meta">
+      </meta>
       <meta path="meta/web-template.meta">
       </meta>
       <meta path="meta/page-files.meta">
@@ -203,12 +205,16 @@
 
 		<xclass id="org.jboss.tools.jst.web.webapp.model.FileWebApp24Loader"
 			class="org.jboss.tools.jst.web.webapp.model.FileWebApp24Loader"/>
+		<xclass id="org.jboss.tools.jst.web.webapp.model.WebAppAuxFolderImpl"
+			class="org.jboss.tools.jst.web.webapp.model.WebAppAuxFolderImpl"/>
 		<xclass id="org.jboss.tools.jst.web.webapp.model.FileWebAppImpl"
 			class="org.jboss.tools.jst.web.webapp.model.FileWebAppImpl"/>
 		<xclass id="org.jboss.tools.jst.web.webapp.model.FileWebAppLoader"
 			class="org.jboss.tools.jst.web.webapp.model.FileWebAppLoader"/>
 		<xclass id="org.jboss.tools.jst.web.webapp.model.FileWebAppRecognizer"
 			class="org.jboss.tools.jst.web.webapp.model.FileWebAppRecognizer"/>
+		<xclass id="org.jboss.tools.jst.web.webapp.model.FileWebAppFilteredTreeConstraint"
+			class="org.jboss.tools.jst.web.webapp.model.FileWebAppFilteredTreeConstraint"/>
 		<xclass id="org.jboss.tools.jst.web.webapp.model.WebAppAuthConstraintImpl"
 			class="org.jboss.tools.jst.web.webapp.model.WebAppAuthConstraintImpl"/>
 		<xclass id="org.jboss.tools.jst.web.webapp.model.WebAppErrorPageImpl"

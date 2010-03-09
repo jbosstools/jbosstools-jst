@@ -38,14 +38,23 @@ public class FileWebAppRecognizer implements EntityRecognizer {
         	if(xml.getSystemId() != null && xml.getSystemId().indexOf("web-app_2_3.dtd") >= 0) return "FileWebApp"; //$NON-NLS-1$ //$NON-NLS-2$
         	return null;
         }
-
-    	return (body.indexOf("<web-app") >= 0  //$NON-NLS-1$
-		        && body.indexOf("version=\"2.4\"") > 0 //$NON-NLS-1$
-		        && body.indexOf("xmlns=\"http://java.sun.com/xml/ns/j2ee\"") > 0) ? "FileWebApp24" : //$NON-NLS-1$ //$NON-NLS-2$
-		       (body.indexOf("<web-app") >= 0  //$NON-NLS-1$
-				        && body.indexOf("version=\"2.5\"") > 0 //$NON-NLS-1$
-				        && body.indexOf("xmlns=\"http://java.sun.com/xml/ns/javaee\"") > 0) ? "FileWebApp25" : //$NON-NLS-1$ //$NON-NLS-2$
-               null;
+		
+		if(body.indexOf("<web-app") >= 0) { //$NON-NLS-1$
+			if(body.indexOf("xmlns=\"http://java.sun.com/xml/ns/j2ee\"") > 0) { //$NON-NLS-1$
+				if(body.indexOf("version=\"2.4\"") > 0) { //$NON-NLS-1$
+					return "FileWebApp24"; //$NON-NLS-1$
+				}
+			} else if(body.indexOf("xmlns=\"http://java.sun.com/xml/ns/javaee\"") > 0) { //$NON-NLS-1$
+				if(body.indexOf("version=\"2.5\"") > 0) { //$NON-NLS-1$
+					return "FileWebApp25"; //$NON-NLS-1$
+				} else if(body.indexOf("version=\"3.0\"") > 0) { //$NON-NLS-1$
+					return "FileWebApp30"; //$NON-NLS-1$
+				}
+				
+			}
+		}
+		
+		return null;
     }
 
 }

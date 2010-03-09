@@ -10,6 +10,8 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.webapp.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.w3c.dom.*;
@@ -37,9 +39,12 @@ class FWLoaderUtil extends XModelObjectLoaderUtil {
 
     protected Set<String> getAllowedChildren(XModelEntity entity) {
     	Set<String> children = super.getAllowedChildren(entity);
-    	if("WebAppResourceCollection".equals(entity.getName())) { //$NON-NLS-1$
+    	if(entity.getName().startsWith("WebAppResourceCollection")) { //$NON-NLS-1$
     		children.add("url-pattern"); //$NON-NLS-1$
     		children.add("http-method"); //$NON-NLS-1$
+    		if("WebAppResourceCollection30".equals(entity.getName())) { //$NON-NLS-1$
+    			children.add("http-method-omission"); //$NON-NLS-1$
+    		}
     	} else if("WebAppServiceRef".equals(entity.getName())) { //$NON-NLS-1$
     		children.add("port-component-ref"); //$NON-NLS-1$
     		children.add("handler"); //$NON-NLS-1$
@@ -47,12 +52,15 @@ class FWLoaderUtil extends XModelObjectLoaderUtil {
     		children.add("dispatcher"); //$NON-NLS-1$
     	} else if(entity.getName().startsWith("FileWebApp")) { //$NON-NLS-1$
     		children.add("distributable"); //$NON-NLS-1$
+    	} else if(entity.getName().startsWith("WebAppAbsoluteOrdering")) { //$NON-NLS-1$
+    		children.add("others"); //$NON-NLS-1$
+    	} else if(entity.getName().equals("WebAppSessionConfig30")) { //$NON-NLS-1$
+    		children.add("tracking-mode"); //$NON-NLS-1$
     	}    	
     	return children;
     }
 
     protected boolean isSaveable(XModelEntity entity, String n, String v, String dv) {
-        if("load-on-startup".equals(n)) return false; //$NON-NLS-1$
 		if(v == null) return false;
 		if(v.length() == 0 || v.equals(dv)) {
 			XAttribute attr = entity.getAttribute(n);
@@ -64,18 +72,24 @@ class FWLoaderUtil extends XModelObjectLoaderUtil {
     public String getAttribute(Element element, String xmlname, XAttribute attr) {
         if("distributable".equals(xmlname)) //$NON-NLS-1$
           return (XMLUtil.getUniqueChild(element, "distributable") != null) ? "yes" : "no"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        if("others".equals(xmlname)) //$NON-NLS-1$
+            return (XMLUtil.getUniqueChild(element, "others") != null) ? "true" : "false"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         if("role-names".equals(xmlname)) //$NON-NLS-1$
           return loadArray(element, "role-name"); //$NON-NLS-1$
         if("url-patterns".equals(xmlname)) //$NON-NLS-1$
           return loadArray(element, "url-pattern"); //$NON-NLS-1$
         if("http-methods".equals(xmlname)) //$NON-NLS-1$
           return loadArray(element, "http-method"); //$NON-NLS-1$
+        if("http-method-omissions".equals(xmlname)) //$NON-NLS-1$
+            return loadArray(element, "http-method-omission"); //$NON-NLS-1$
 		if("handlers".equals(xmlname)) //$NON-NLS-1$
 		  return loadArray(element, "handler"); //$NON-NLS-1$
 		if("port-component-refs".equals(xmlname)) //$NON-NLS-1$
 		  return loadArray(element, "port-component-ref"); //$NON-NLS-1$
 		if("dispatchers".equals(xmlname)) //$NON-NLS-1$
 		  return loadArray(element, "dispatcher"); //$NON-NLS-1$
+	    if("tracking-modes".equals(xmlname)) //$NON-NLS-1$
+	      return loadArray(element, "tracking-mode"); //$NON-NLS-1$
         return super.getAttribute(element, xmlname, attr);
     }
 
@@ -84,13 +98,13 @@ class FWLoaderUtil extends XModelObjectLoaderUtil {
 		String entity = o.getModelEntity().getName();
 		if("WebAppErrorPage".equals(entity)) { //$NON-NLS-1$
 			eitherOr(element, WebAppConstants.ERROR_CODE, WebAppConstants.EXCEPTION_TYPE);
-		} else if(WebAppHelper.FILTER_ENTITY.equals(entity) || entity.startsWith(WebAppHelper.FILTER_MAPPING_ENTITY)) {
+		} else if(entity.startsWith(WebAppHelper.FILTER_ENTITY)) { // both filter and filter mapping
 			eitherOr(element, WebAppConstants.URL_PATTERN, WebAppConstants.SERVLET_NAME);
-		} else if(WebAppHelper.SERVLET_ENTITY.equals(entity)) {
+		} else if(WebAppHelper.SERVLET_ENTITY.equals(entity) || WebAppHelper.SERVLET_30_ENTITY.equals(entity)) {
 			eitherOr(element, WebAppConstants.SERVLET_CLASS, WebAppConstants.JSP_FILE);
 		}
 		if(schema) {
-			if(o.getModelEntity().getAttribute("description") != null) { //$NON-NLS-1$
+			if(o.getModelEntity().getAttribute("description") != null && !o.getModelEntity().getName().startsWith("WebAppResourceCollection")) { //$NON-NLS-1$ //$NON-NLS-2$
 				makeChildrenFirst(element, new String[]{"description", "display-name", "icon"}); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			}
 			if("WebAppEnvEntry".equals(o.getModelEntity().getName())) { //$NON-NLS-1$
@@ -106,18 +120,24 @@ class FWLoaderUtil extends XModelObjectLoaderUtil {
     public void saveAttribute(Element element, String xmlname, String value) {
         if("distributable".equals(xmlname)) { //$NON-NLS-1$
             if("yes".equals(value)) XMLUtil.createElement(element, "distributable"); //$NON-NLS-1$ //$NON-NLS-2$
+        } else if("others".equals(xmlname)) { //$NON-NLS-1$
+            if("true".equals(value)) XMLUtil.createElement(element, "others"); //$NON-NLS-1$ //$NON-NLS-2$
         } else if("role-names".equals(xmlname)) { //$NON-NLS-1$
             saveArray(element, "role-name", value); //$NON-NLS-1$
         } else if("url-patterns".equals(xmlname)) { //$NON-NLS-1$
             saveArray(element, "url-pattern", value); //$NON-NLS-1$
         } else if("http-methods".equals(xmlname)) { //$NON-NLS-1$
             saveArray(element, "http-method", value); //$NON-NLS-1$
+        } else if("http-method-omissions".equals(xmlname)) { //$NON-NLS-1$
+            saveArray(element, "http-method-omission", value); //$NON-NLS-1$
 		} else if("handlers".equals(xmlname)) { //$NON-NLS-1$
 			saveArray(element, "handler", value); //$NON-NLS-1$
 		} else if("port-component-refs".equals(xmlname)) { //$NON-NLS-1$
 			saveArray(element, "port-component-ref", value); //$NON-NLS-1$
 		} else if("dispatchers".equals(xmlname)) { //$NON-NLS-1$
 			saveArray(element, "dispatcher", value); //$NON-NLS-1$
+        } else if("tracking-modes".equals(xmlname)) { //$NON-NLS-1$
+            saveArray(element, "tracking-mode", value); //$NON-NLS-1$
         } else {
             super.saveAttribute(element, xmlname, value);
         }
@@ -130,19 +150,30 @@ class FWLoaderUtil extends XModelObjectLoaderUtil {
     	} else if(WebAppHelper.FILTER_MAPPING_24_ENTITY.equals(entity)) {
     		
     		return true;
-    	} else if(!"WebAppServlet".equals(entity)) { //$NON-NLS-1$
+    	} else if(entity.equals(WebAppHelper.SERVLET_ENTITY) || entity.equals(WebAppHelper.SERVLET_30_ENTITY)) {
+    		boolean b = super.saveChildren(element, o);
+    		String afterName = null;
+    		String[] cs = {"run-as", "security-role-ref", "multipart-config"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    		for (int i = 0; i < cs.length && afterName == null; i++) if(XMLUtilities.getChildren(element, cs[i]).length > 0) {
+    			afterName = cs[i];
+    		}
+    		String[] attrs = {"load-on-startup", "enabled", "async-supported"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    		for (String a: attrs) if(o.getModelEntity().getAttribute(a) != null) {
+    			moveChild(element, a, afterName);
+    		}
+    	} else {
     		boolean b = super.saveChildren(element, o);
     		if(o.getModelEntity().getAttribute("mapped-name") != null) { //$NON-NLS-1$
     			moveChild(element, "mapped-name", "injection-target"); //$NON-NLS-1$ //$NON-NLS-2$
     		}
+    		if(o.getModelEntity().getAttribute("lookup-name") != null) { //$NON-NLS-1$
+				moveChild(element, "lookup-name", null); //$NON-NLS-1$
+    		}
+    		if(o.getModelEntity().getAttribute("tracking-modes") != null) { //$NON-NLS-1$
+    			moveChild(element, "tracking-mode", null); //$NON-NLS-1$ //$NON-NLS-2$
+    		}
     		return b;
     	}
-        saveChildren(element, o, "WebAppInitParam"); //$NON-NLS-1$
-        String l = o.getAttributeValue("load-on-startup"); //$NON-NLS-1$
-        if(l.length() > 0) saveAttribute(element, "load-on-startup.#text", l); //$NON-NLS-1$
-        saveChildren(element, o, "WebAppRunAs"); //$NON-NLS-1$
-        saveChildren(element, o, "WebAppSecurityRoleRef"); //$NON-NLS-1$
-
         return true;
     }
 
@@ -220,24 +251,25 @@ class FWLoaderUtil extends XModelObjectLoaderUtil {
 
    	private void moveChild(Element element, String child, String childAfter) {
    		NodeList l = element.getChildNodes();
-   		Element childE = null;
+   		List<Element> childE = null;
    		Element childAfterE = null;
    		for (int i = 0; i < l.getLength(); i++) {
     		Node n = l.item(i);
     		if(n.getNodeType() != Node.ELEMENT_NODE) continue;
     		String name = n.getNodeName();
     		if(child.equals(name)) {
-    			childE = (Element)n;
-    		} else if(childAfter.equals(name)) {
+    			if(childE == null) childE = new ArrayList<Element>();
+    			childE.add((Element)n);
+    		} else if(name.equals(childAfter)) {
     			if(childAfterE == null) childAfterE = (Element)n;
     		}
     	}
-   		if(childE != null) {
-   			element.removeChild(childE);
+   		if(childE != null) for (Element c: childE) {
+   			element.removeChild(c);
    			if(childAfterE != null) {
-   				element.insertBefore(childE, childAfterE);
+   				element.insertBefore(c, childAfterE);
    			} else {
-   				element.appendChild(childE);
+   				element.appendChild(c);
    			}
    		}
     }

@@ -1075,7 +1075,7 @@
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
- <XModelEntity ImplementingClass="%Custom%"
+ <XModelEntity ImplementingClass="%WebAppAuxFolder%"
   PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%EntityOrdered%" name="WebAppFolderFilters24">
   <XChildrenEntities>
    <XChildEntity name="WebAppFilter"/>
@@ -1140,7 +1140,7 @@
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
- <XModelEntity ImplementingClass="%Custom%"
+ <XModelEntity ImplementingClass="%WebAppAuxFolder%"
   PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%EntityOrdered%" name="WebAppFolderLifecycles25">
   <XChildrenEntities>
    <XChildEntity name="WebAppPostConstruct25"/>
@@ -1206,7 +1206,7 @@
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
- <XModelEntity ImplementingClass="%Custom%"
+ <XModelEntity ImplementingClass="%WebAppAuxFolder%"
   PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%" name="WebAppFolderListeners24">
   <XChildrenEntities>
    <XChildEntity name="WebAppListener24"/>
@@ -1257,7 +1257,7 @@
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
- <XModelEntity ImplementingClass="%Custom%"
+ <XModelEntity ImplementingClass="%WebAppAuxFolder%"
   PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%" name="WebAppFolderPersistence25">
   <XChildrenEntities>
    <XChildEntity name="WebAppPersistenceContextRef25"/>

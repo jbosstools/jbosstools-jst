@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.model.helpers;
 
+import org.jboss.tools.common.meta.XModelEntity;
 import org.jboss.tools.common.meta.action.impl.handlers.DefaultCreateHandler;
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelException;
@@ -22,11 +23,13 @@ import org.jboss.tools.common.model.util.XModelObjectUtil;
 public class WebAppHelper {
     public static String CONTEXT_PARAM_ENTITY = "WebAppContextParam"; //$NON-NLS-1$
     public static String FILTER_ENTITY = "WebAppFilter"; //$NON-NLS-1$
+    public static String FILTER_30_ENTITY = "WebAppFilter30"; //$NON-NLS-1$
     public static String FILTER_MAPPING_ENTITY = "WebAppFilterMapping"; //$NON-NLS-1$
     public static String FILTER_MAPPING_24_ENTITY = "WebAppFilterMapping24"; //$NON-NLS-1$
     public static String LISTENER_ENTITY = "WebAppListener"; //$NON-NLS-1$
     public static String LISTENER_24_ENTITY = "WebAppListener24"; //$NON-NLS-1$
     public static String SERVLET_ENTITY = "WebAppServlet"; //$NON-NLS-1$
+    public static String SERVLET_30_ENTITY = "WebAppServlet30"; //$NON-NLS-1$
     public static String SERVLET_MAPPING_ENTITY = "WebAppServletMapping"; //$NON-NLS-1$
     public static String TAGLIB_ENTITY = "WebAppTaglib"; //$NON-NLS-1$
     public static String ROLE_ENTITY = "WebAppSecurityRole"; //$NON-NLS-1$
@@ -63,7 +66,7 @@ public class WebAppHelper {
     	if(webxml == null) return null;
     	XModelObject folder = webxml.getChildByPath(SERVLET_FOLDER);
     	if(folder == null) folder = webxml;
-    	return folder.getChildren(SERVLET_ENTITY);
+    	return folder.getChildren(getServletEntity(folder.getModelEntity()));
     }
 
     public static XModelObject[] getServletMappings(XModelObject webxml) {
@@ -106,7 +109,7 @@ public class WebAppHelper {
         if(s == null) {
         	XModelObject folder = webxml.getChildByPath(SERVLET_FOLDER);
         	if(folder == null) folder = webxml;
-        	s = webxml.getModel().createModelObject(SERVLET_ENTITY, null);
+        	s = webxml.getModel().createModelObject(getServletEntity(folder.getModelEntity()), null);
         	s.setAttributeValue("servlet-name", servletName); //$NON-NLS-1$
         	s.setAttributeValue("servlet-class", className); //$NON-NLS-1$
             DefaultCreateHandler.addCreatedObject(folder, s, -1);
@@ -115,6 +118,11 @@ public class WebAppHelper {
         	s.getModel().changeObjectAttribute(s, "load-on-startup", "" + loadOnStartUp); //$NON-NLS-1$ //$NON-NLS-2$
         }
         return s;
+	}
+
+	public static String getServletEntity(XModelEntity folder) {
+		if(folder != null && folder.getChild(SERVLET_30_ENTITY) != null) return SERVLET_30_ENTITY;
+		return SERVLET_ENTITY;
 	}
 	
 	/**
@@ -326,6 +334,9 @@ public class WebAppHelper {
     	if(webxml == null) return null;
     	XModelObject folder = webxml.getChildByPath(FILTER_FOLDER);
     	if(folder == null) folder = webxml;
+    	if(folder.getModelEntity().getChild(FILTER_30_ENTITY) != null) {
+    		folder.getChildren(FILTER_30_ENTITY);
+    	}
     	return folder.getChildren(FILTER_ENTITY);
     }
 
