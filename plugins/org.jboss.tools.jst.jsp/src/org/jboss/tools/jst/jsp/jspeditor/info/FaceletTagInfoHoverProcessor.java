@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2009 Red Hat, Inc. 
+ * Copyright (c) 2010 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -18,22 +18,36 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.jface.text.Region;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
+import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
+import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
+import org.eclipse.wst.sse.ui.internal.contentassist.ContentAssistUtils;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
+import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 import org.eclipse.wst.xml.ui.internal.taginfo.XMLTagInfoHoverProcessor;
+import org.jboss.tools.common.el.core.model.ELInstance;
+import org.jboss.tools.common.el.core.model.ELInvocationExpression;
+import org.jboss.tools.common.el.core.model.ELModel;
+import org.jboss.tools.common.el.core.model.ELUtil;
+import org.jboss.tools.common.el.core.parser.ELParser;
+import org.jboss.tools.common.el.core.parser.ELParserUtil;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.jsp.contentassist.Utils;
+import org.jboss.tools.jst.jsp.contentassist.AbstractXMLContentAssistProcessor.TextRegion;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
+import org.w3c.dom.Node;
 
 /**
  * 
@@ -63,7 +77,30 @@ public class FaceletTagInfoHoverProcessor extends XMLTagInfoHoverProcessor {
 		if (fContext == null)
 			return null;
 		
-		return super.computeHoverHelp(textViewer, documentPosition);
+		IStructuredDocumentRegion flatNode = ((IStructuredDocument) textViewer.getDocument()).getRegionAtCharacterOffset(fDocumentPosition);
+		ITextRegion region = null;
+
+		if (flatNode != null) {
+			region = flatNode.getRegionAtCharacterOffset(fDocumentPosition);
+		}
+		
+		String hoverHelp = null;
+		if (region != null) {
+			TextRegion elPrefix = getELPrefix(flatNode, region, fDocumentPosition);
+			if (elPrefix != null && elPrefix.isELStarted()) {
+				IndexedRegion treeNode = ContentAssistUtils.getNodeAt(textViewer, fDocumentPosition);
+				if (treeNode == null) {
+					return null;
+				}
+				Node node = (Node) treeNode;
+
+				while ((node != null) && (node.getNodeType() == Node.TEXT_NODE) && (node.getParentNode() != null)) {
+					node = node.getParentNode();
+				}
+				return  computeELHelp((IDOMNode) treeNode, (IDOMNode) node, flatNode, region, elPrefix);
+			}
+		}
+		return hoverHelp != null ? hoverHelp : super.computeHoverHelp(textViewer, documentPosition);
 	}
 
 	@Override
@@ -80,7 +117,7 @@ public class FaceletTagInfoHoverProcessor extends XMLTagInfoHoverProcessor {
 		String[] parentTags = Utils.getParentTags(xmlnode, true, true);
 		String parent = Utils.getParent(xmlnode, true, true, true);
 		
-		KbQuery kbQuery = Utils.createKbQuery(Type.ATTRIBUTE_NAME, fDocumentPosition, query, query,  //$NON-NLS-1$
+		KbQuery kbQuery = Utils.createKbQuery(Type.ATTRIBUTE_NAME, fDocumentPosition, query, query,
 				prefix, uri, parentTags, parent, false);
 
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, fContext);
@@ -133,6 +170,78 @@ public class FaceletTagInfoHoverProcessor extends XMLTagInfoHoverProcessor {
 		return null;
 	}
 	
+	
+	protected String computeELHelp(IDOMNode xmlnode, IDOMNode parentNode,
+			IStructuredDocumentRegion flatNode, ITextRegion region, TextRegion elPrefix) {
+		if (fContext == null)
+			return null;
+
+		String query = "#{" + elPrefix.getText(); //$NON-NLS-1$
+		String prefix = getPrefix(query);
+		String uri = getUri(prefix);
+		String[] parentTags = Utils.getParentTags(xmlnode, false, true);
+		String parent = Utils.getParent(xmlnode, false, false, true);
+		
+		KbQuery kbQuery = Utils.createKbQuery(Type.TEXT, fDocumentPosition, query, query,
+				prefix, uri, parentTags, parent, false);
+
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, fContext);
+		if (proposals == null)
+			return null;
+		
+		for(TextProposal proposal : proposals) {
+			String label = proposal == null ? null : proposal.getLabel();
+			label = (label == null || label.indexOf(':') == -1) ? label : label.substring(0, label.indexOf(':')).trim(); 
+			if (label != null && query.endsWith(label) && 
+					proposal != null && proposal.getContextInfo() != null &&
+					proposal.getContextInfo().trim().length() > 0) {
+				return proposal.getContextInfo();
+			}
+		}
+
+		return null;
+	}
+ 
+	/**
+	 * Returns the region to hover the text over based on the offset.
+	 * Overrides the base method enabling the TEXT regions to the supported
+	 * 
+	 * @param textViewer
+	 * @param offset
+	 * 
+	 * @return IRegion region to hover over if offset is within tag name,
+	 *         attribute name, or attribute value and if offset is not over
+	 *         invalid whitespace. otherwise, returns <code>null</code>
+	 * 
+	 * @see org.eclipse.jface.text.ITextHover#getHoverRegion(ITextViewer, int)
+	 */
+	@Override
+	public IRegion getHoverRegion(ITextViewer textViewer, int offset) {
+		if ((textViewer == null) || (textViewer.getDocument() == null)) {
+			return null;
+		}
+		
+		IStructuredDocumentRegion flatNode = ((IStructuredDocument) textViewer.getDocument()).getRegionAtCharacterOffset(offset);
+		ITextRegion region = null;
+
+		if (flatNode != null) {
+			region = flatNode.getRegionAtCharacterOffset(offset);
+		}
+		
+		if (region != null) {
+			// Supply hoverhelp for text 
+			String regionType = region.getType();
+			if (DOMRegionContext.XML_CONTENT.equals(regionType) ||
+					DOMRegionContext.BLOCK_TEXT.equals(regionType) ||
+					DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE.equals(regionType)) {
+				TextRegion elPrefix = getELPrefix(flatNode, region, offset);
+				if (elPrefix != null && elPrefix.isELStarted()) {
+					return new Region(elPrefix.getStartOffset() + elPrefix.getOffset() + elPrefix.getLength(), 0);
+				}
+			}
+		}
+		return super.getHoverRegion(textViewer, offset);
+	}
 	/**
 	 * Returns IFile resource of the document
 	 * 
@@ -190,4 +299,61 @@ public class FaceletTagInfoHoverProcessor extends XMLTagInfoHoverProcessor {
 		}
 		return null;
 	}
+	
+	/**
+	 * Returns EL Prefix Text Region Information Object
+	 * 
+	 * @return
+	 */
+	private TextRegion getELPrefix(IStructuredDocumentRegion sdRegion, ITextRegion region, int offset) {
+		if (sdRegion == null || region == null)
+			return null;
+
+		String text = sdRegion.getFullText(region);
+		int startOffset = sdRegion.getStartOffset() + region.getStart();
+		
+		boolean isAttributeValue = false;
+		boolean hasOpenQuote = false;
+		boolean hasCloseQuote = false;
+		char quoteChar = (char)0;
+		if (DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE.equals(region.getType())) {
+			isAttributeValue = true;
+			if (text.startsWith("\"") || text.startsWith("'")) {//$NON-NLS-1$ //$NON-NLS-2$
+				quoteChar = text.charAt(0);
+				hasOpenQuote = true;
+			}
+			if (hasOpenQuote && text.endsWith(String.valueOf(quoteChar))) {
+				hasCloseQuote = true;
+			}
+		}
+		
+		int inValueOffset = offset - startOffset;
+		if (text != null && text.length() < inValueOffset) { // probably, the attribute value ends before the document position
+			return null;
+		}
+		if (inValueOffset<0) {
+			return null;
+		}
+		
+//			String matchString = text.substring(0, inValueOffset);
+		
+		ELParser p = ELParserUtil.getJbossFactory().createParser();
+		ELModel model = p.parse(text);
+		
+		ELInstance is = ELUtil.findInstance(model, inValueOffset);// ELInstance
+		ELInvocationExpression ie = ELUtil.findExpression(model, inValueOffset);// ELExpression
+		
+		boolean isELStarted = (model != null && is != null && (model.toString().startsWith("#{") ||  //$NON-NLS-1$
+				model.toString().startsWith("${"))); //$NON-NLS-1$
+		boolean isELClosed = (model != null && is != null && model.toString().endsWith("}")); //$NON-NLS-1$
+		
+//			boolean insideEL = startOffset + model.toString().length() 
+		TextRegion tr = new TextRegion(startOffset,  ie == null ? inValueOffset : ie.getStartPosition(), 
+				ie == null ? 0 : ie.getLength(), ie == null ? "" : ie.getText(),  //$NON-NLS-1$ 
+				isELStarted, isELClosed,
+				isAttributeValue, hasOpenQuote, hasCloseQuote, quoteChar);
+		
+		return tr;
+	}
+
 }

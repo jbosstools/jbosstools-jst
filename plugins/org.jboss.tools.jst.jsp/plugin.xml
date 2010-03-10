@@ -112,7 +112,22 @@
 	
 	
 	  <documentationTextHover class="org.jboss.tools.jst.jsp.jspeditor.info.FaceletTagInfoHoverProcessor" target="org.eclipse.wst.html.HTML_DEFAULT" /> 
-	
+	  <documentationTextHover class="org.jboss.tools.jst.jsp.jspeditor.info.FaceletTagInfoHoverProcessor" target="org.eclipse.wst.xml.XML_DEFAULT" />
+	  <documentationTextHover class="org.jboss.tools.jst.jsp.jspeditor.info.FaceletTagInfoHoverProcessor" target="org.eclipse.wst.sse.ST_DEFAULT" />
+	  <documentationTextHover class="org.jboss.tools.jst.jsp.jspeditor.info.FaceletTagInfoHoverProcessor" target="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
+	  <documentationTextHover class="org.jboss.tools.jst.jsp.jspeditor.info.FaceletTagInfoHoverProcessor" target="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
+	  
+	</extension>
+
+   <extension
+         point="org.eclipse.jdt.ui.javaEditorTextHovers">
+      <hover
+            label="%javaStringELHover"
+            description="%javaStringELHoverDescription"
+            class="org.jboss.tools.jst.jsp.jspeditor.info.JavaStringELInfoHover"
+            id="org.jboss.tools.jst.jsp.jspeditor.info.JavaStringELInfoHover"
+            activate="true">
+      </hover>
 	</extension>
 
 	<extension point="org.eclipse.ui.preferencePages">
