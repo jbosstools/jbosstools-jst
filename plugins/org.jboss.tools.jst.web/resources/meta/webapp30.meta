@@ -19,6 +19,7 @@
   <XChildrenEntities>
    <XChildEntity maxCount="1" name="WebAppFolderAbsoluteOrderings" required="yes"/>
    <XChildEntity maxCount="1" name="WebAppFolderContextParams" required="yes"/>
+   <XChildEntity maxCount="1" name="WebAppFolderDataSources30" required="yes"/>
    <XChildEntity maxCount="1" name="WebAppFolderFilters30" required="yes"/>
    <XChildEntity maxCount="1" name="WebAppFolderListeners24" required="yes"/>
    <XChildEntity maxCount="1" name="WebAppFolderServlets30" required="yes"/>
@@ -32,7 +33,7 @@
    <XChildEntity maxCount="1" name="WebAppFolderSecurityRoles" required="yes"/>
    <XChildEntity maxCount="1" name="WebAppFolderEnvEntries30" required="yes"/>
    <XChildEntity maxCount="1" name="WebAppFolderEJB30" required="yes"/>
-   <XChildEntity maxCount="1" name="WebAppFolderServices" required="yes"/>
+   <XChildEntity maxCount="1" name="WebAppFolderServices30" required="yes"/>
    <XChildEntity maxCount="1" name="WebAppFolderResources30" required="yes"/>
    <XChildEntity maxCount="1" name="WebAppFolderMessageDestinations30" required="yes"/>
    <XChildEntity maxCount="1" name="WebAppLocaleEncodingMappingList" required="yes"/>
@@ -141,6 +142,11 @@
      WizardClassName="%Default%" displayName="Context Param..."
      kind="action" name="CreateContextParam"/>
     <XActionItem HandlerClassName="%Redirect%"
+     ICON="action.new.struts.webapp.param"
+     PROPERTIES="validator.add=true;sourcepath=Data Sources;actionpath=CreateActions/CreateDataSource"
+     WizardClassName="%Default%" displayName="Data Source..."
+     kind="action" name="CreateDataSource"/>
+    <XActionItem HandlerClassName="%Redirect%"
      ICON="action.new.struts.webapp.filter"
      PROPERTIES="validator.add=true;sourcepath=Filters;actionpath=CreateActions/CreateFilter"
      WizardClassName="%Default%" displayName="Filter..." kind="action" name="CreateFilter"/>
@@ -226,11 +232,6 @@
      WizardClassName="%Default%" displayName="Ejb Local Ref..."
      kind="action" name="CreateEjbLocalRef"/>
     <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.service"
-     PROPERTIES="validator.add=true;sourcepath=Services;actionpath=CreateActions/CreateServiceRef"
-     WizardClassName="%Default%" displayName="Service Ref..."
-     kind="action" name="CreateServiceRef"/>
-    <XActionItem HandlerClassName="%Redirect%"
      ICON="action.new.struts.webapp.res_env_ref"
      PROPERTIES="validator.add=true;sourcepath=Resources;actionpath=CreateActions/CreateResourceEnvRef"
      WizardClassName="%Default%" displayName="Resource Env Ref..."
@@ -250,6 +251,11 @@
      PROPERTIES="validator.add=true;sourcepath=Message Destinations;actionpath=CreateActions/CreateServiceMessageDestination"
      WizardClassName="%Default%" displayName="Message Destination..."
      kind="action" name="CreateServiceMessageDestination"/>
+    <XActionItem HandlerClassName="%Redirect%"
+     ICON="action.new.struts.webapp.service"
+     PROPERTIES="validator.add=true;sourcepath=Services;actionpath=CreateActions/CreateServiceRef"
+     WizardClassName="%Default%" displayName="Service Ref..."
+     kind="action" name="CreateServiceRef"/>
     <XActionItem HIDE="always" HandlerClassName="%Create%"
      ICON="action.new.struts.webapp.taglib"
      PROPERTIES="validator.add=true"
@@ -342,6 +348,11 @@
      PROPERTIES="validator.add=true;sourcepath=Context Params;actionpath=CreateActions/CreateContextParam"
      WizardClassName="%Default%" displayName="Context Param..."
      kind="action" name="CreateContextParam"/>
+    <XActionItem HandlerClassName="%Redirect%"
+     ICON="action.new.struts.webapp.param"
+     PROPERTIES="validator.add=true;sourcepath=Data Sources;actionpath=CreateActions/CreateDataSource"
+     WizardClassName="%Default%" displayName="Data Source..."
+     kind="action" name="CreateDataSource"/>
     <XActionItem HandlerClassName="%Redirect%"
      ICON="action.new.struts.webapp.filter"
      PROPERTIES="validator.add=true;sourcepath=Filters;actionpath=CreateActions/CreateFilter"
@@ -551,7 +562,9 @@
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
- <XModelEntity ImplementingClass="%Custom%" XMLSUBPATH="cookie-config" name="WebAppCookieConfig">
+ <XModelEntity ImplementingClass="%Custom%"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
+  XMLSUBPATH="cookie-config" name="WebAppCookieConfig">
   <XChildrenEntities/>
   <XEntityRenderer>
    <ICONS>
@@ -562,11 +575,12 @@
    <XModelAttribute default="cookie config" loader="ElementType" name="element type">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="save=always;id=true" name="name" xmlname="name.#text"/>
-   <XModelAttribute name="domain" xmlname="domain.#text"/>
-   <XModelAttribute name="path" xmlname="path.#text"/>
-   <XModelAttribute name="comment" xmlname="comment.#text"/>
-   <XModelAttribute name="http-only" xmlname="http-only.#text">
+   <XModelAttribute PROPERTIES="save=always;id=true;category=general"
+    name="name" xmlname="name.#text"/>
+   <XModelAttribute PROPERTIES="category=general" name="domain" xmlname="domain.#text"/>
+   <XModelAttribute PROPERTIES="category=general" name="path" xmlname="path.#text"/>
+   <XModelAttribute PROPERTIES="category=general" name="comment" xmlname="comment.#text"/>
+   <XModelAttribute PROPERTIES="category=general" name="http-only" xmlname="http-only.#text">
     <Constraint loader="ListString">
      <value/>
      <value name="true"/>
@@ -574,7 +588,7 @@
     </Constraint>
     <Editor name="ListString"/>
    </XModelAttribute>
-   <XModelAttribute name="secure" xmlname="secure.#text">
+   <XModelAttribute PROPERTIES="category=general" name="secure" xmlname="secure.#text">
     <Constraint loader="ListString">
      <value/>
      <value name="true"/>
@@ -582,13 +596,113 @@
     </Constraint>
     <Editor name="ListString"/>
    </XModelAttribute>
-   <XModelAttribute name="id" visibility="false" xmlname="id"/>
+   <XModelAttribute PROPERTIES="category=general" name="max-age" xmlname="max-age.#text"/>
+   <XModelAttribute PROPERTIES="category=advanced" name="id" xmlname="id"/>
    <XModelAttribute TRIM="no" name="_comment" visibility="false" xmlname="#comment">
     <Editor name="Note"/>
    </XModelAttribute>
-   <XModelAttribute name="max-age" xmlname="max-age.#text"/>
   </XModelAttributes>
   <XActionItem kind="list">
+   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
+    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
+     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
+    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
+     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
+   </XActionItem>
+   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
+    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
+     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
+   </XActionItem>
+   <XActionItem ICON="action.empty" kind="list" name="Properties">
+    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
+     displayName="Properties..." kind="action" name="Properties"/>
+   </XActionItem>
+   <XActionItem displayName="move" kind="list" name="MoveActions">
+    <XActionItem HIDE="always" HandlerClassName="%Move%"
+     ICON="action.move" displayName="Move" kind="action" name="Move"/>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%Custom%"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%"
+  XMLSUBPATH="data-source" name="WebAppDataSource30">
+  <XChildrenEntities>
+   <XChildEntity name="WebAppProperty30"/>
+  </XChildrenEntities>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.struts.webapp.env_entry" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="data source" loader="ElementType" name="element type">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general" name="description" xmlname="description.#text">
+    <Editor name="Note"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="id=true;save=always;category=general"
+    name="name" xmlname="name.#text"/>
+   <XModelAttribute PROPERTIES="category=general" name="class-name" xmlname="class-name.#text">
+    <Constraint>
+     <value name="java.lang.Boolean"/>
+     <value name="java.lang.String"/>
+     <value name="java.lang.Integer"/>
+     <value name="java.lang.Double"/>
+     <value name="java.lang.Float"/>
+    </Constraint>
+    <Editor name="AccessibleJava"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general" name="server-name" xmlname="server-name.#text"/>
+   <XModelAttribute PROPERTIES="category=general" name="port-number" xmlname="port-number.#text"/>
+   <XModelAttribute PROPERTIES="category=general" name="database-name" xmlname="database-name.#text"/>
+   <XModelAttribute PROPERTIES="category=general" name="url" xmlname="url.#text"/>
+   <XModelAttribute PROPERTIES="category=general" name="user" xmlname="user.#text"/>
+   <XModelAttribute PROPERTIES="category=general" name="password" xmlname="password.#text"/>
+   <XModelAttribute PROPERTIES="category=advanced" name="login-timeout" xmlname="login-timeout.#text"/>
+   <XModelAttribute PROPERTIES="category=advanced" name="transactional" xmlname="transactional.#text">
+    <Constraint loader="ListString">
+     <value/>
+     <value name="true"/>
+     <value name="false"/>
+    </Constraint>
+    <Editor name="ListString"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=advanced"
+    name="isolation-level" xmlname="isolation-level.#text">
+    <Constraint loader="ListString">
+     <value/>
+     <value name="TRANSACTION_READ_UNCOMMITTED"/>
+     <value name="TRANSACTION_REPEATABLE_READ"/>
+     <value name="TRANSACTION_READ_COMMITTED"/>
+     <value name="TRANSACTION_SERIALIZABLE"/>
+    </Constraint>
+    <Editor name="ListString"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=advanced"
+    name="initial-pool-size" xmlname="initial-pool-size.#text"/>
+   <XModelAttribute PROPERTIES="category=advanced" name="max-pool-size" xmlname="max-pool-size.#text"/>
+   <XModelAttribute PROPERTIES="category=advanced" name="min-pool-size" xmlname="min-pool-size.#text"/>
+   <XModelAttribute PROPERTIES="category=advanced" name="max-idle-time" xmlname="max-idle-time.#text"/>
+   <XModelAttribute PROPERTIES="category=advanced" name="max-statements" xmlname="max-statements.#text"/>
+   <XModelAttribute PROPERTIES="category=advanced" name="id"
+    visibility="false" xmlname="id"/>
+   <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
+    <Editor name="Note"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem kind="list" name="CreateActions">
+    <XActionItem HandlerClassName="%Create%" ICON="action.empty"
+     PROPERTIES="validator.add=true" WizardClassName="%Default%"
+     displayName="Property..." kind="action" name="CreateProperty">
+     <EntityData EntityName="WebAppProperty30">
+      <AttributeData AttributeName="name"/>
+      <AttributeData AttributeName="value"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
    <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
     <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
      ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
@@ -943,6 +1057,57 @@
      <EntityData EntityName="WebAppAbsoluteOrdering">
       <AttributeData AttributeName="name"/>
       <AttributeData AttributeName="others" Mandatory="no"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
+    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
+     ICON="action.cut" displayName="Cut" kind="action" name="Cut"/>
+    <XActionItem BaseActionName="Copy" HandlerClassName="%CopyChildren%"
+     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
+    <XActionItem BaseActionName="Paste" HandlerClassName="%Paste%"
+     ICON="action.paste" displayName="Paste" kind="action" name="Paste"/>
+   </XActionItem>
+   <XActionItem kind="list" name="DeleteActions">
+    <XActionItem BaseActionName="Delete"
+     HandlerClassName="%DeleteChildren%" ICON="action.delete"
+     displayName="Delete" kind="action" name="Delete"/>
+   </XActionItem>
+   <XActionItem ICON="action.empty" kind="list" name="Properties">
+    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
+     displayName="Properties..." kind="action" name="Properties"/>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%WebAppAuxFolder%"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%" name="WebAppFolderDataSources30">
+  <XChildrenEntities>
+   <XChildEntity name="WebAppDataSource30"/>
+  </XChildrenEntities>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.jsf.components" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="data sources" loader="ElementType" name="element type">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="id=true;" default="Data Sources"
+    name="name" xmlname="NAME">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem ICON="action.empty" displayName="New" group="1"
+    kind="list" name="CreateActions">
+    <XActionItem HandlerClassName="%Create%"
+     ICON="action.new.struts.webapp.env_entry"
+     PROPERTIES="validator.add=true" WizardClassName="%Default%"
+     displayName="Data Source..." kind="action" name="CreateDataSource">
+     <EntityData EntityName="WebAppDataSource30">
+      <AttributeData AttributeName="name"/>
      </EntityData>
     </XActionItem>
    </XActionItem>
@@ -1328,6 +1493,57 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity ImplementingClass="%WebAppAuxFolder%"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%" name="WebAppFolderServices30">
+  <XChildrenEntities>
+   <XChildEntity name="WebAppServiceRef30"/>
+  </XChildrenEntities>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.jsf.components" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="services" loader="ElementType" name="element type">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="id=true;" default="Services" name="name" xmlname="NAME">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem ICON="action.empty" displayName="New" group="1"
+    kind="list" name="CreateActions">
+    <XActionItem HandlerClassName="%Create%"
+     ICON="action.new.struts.webapp.service"
+     PROPERTIES="validator.add=true" WizardClassName="%Default%"
+     displayName="Service Ref..." kind="action" name="CreateServiceRef">
+     <EntityData EntityName="WebAppServiceRef30">
+      <AttributeData AttributeName="service-ref-name"/>
+      <AttributeData AttributeName="service-interface"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
+    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
+     ICON="action.cut" displayName="Cut" kind="action" name="Cut"/>
+    <XActionItem BaseActionName="Copy" HandlerClassName="%CopyChildren%"
+     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
+    <XActionItem BaseActionName="Paste" HandlerClassName="%Paste%"
+     ICON="action.paste" displayName="Paste" kind="action" name="Paste"/>
+   </XActionItem>
+   <XActionItem kind="list" name="DeleteActions">
+    <XActionItem BaseActionName="Delete"
+     HandlerClassName="%DeleteChildren%" ICON="action.delete"
+     displayName="Delete" kind="action" name="Delete"/>
+   </XActionItem>
+   <XActionItem ICON="action.empty" kind="list" name="Properties">
+    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
+     displayName="Properties..." kind="action" name="Properties"/>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%WebAppAuxFolder%"
   PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%EntityOrdered%" name="WebAppFolderServlets30">
   <XChildrenEntities>
    <XChildEntity name="WebAppServlet30"/>
@@ -1386,6 +1602,113 @@
    <XActionItem ICON="action.empty" kind="list" name="Properties">
     <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
      displayName="Properties..." kind="action" name="Properties"/>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%Custom%"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%EntityOrdered%"
+  XMLSUBPATH="handler" name="WebAppHandler30">
+  <XChildrenEntities>
+   <XChildEntity name="WebAppInitParam"/>
+   <XChildEntity name="WebAppSoapHeader30"/>
+   <XChildEntity name="WebAppSoapRole30"/>
+   <XChildEntity name="WebAppPortName30"/>
+  </XChildrenEntities>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.struts.webapp.service" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="handler" loader="ElementType" name="element type">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general" name="description" xmlname="description.#text">
+    <Editor name="Note"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general" name="display-name" xmlname="display-name.#text"/>
+   <XModelAttribute PROPERTIES="category=advanced" name="small-icon" xmlname="icon.small-icon.#text">
+    <Constraint loader="Tree">
+     <value name="WebPageTree"/>
+     <value name="extensions=gif,jpg"/>
+    </Constraint>
+    <Editor name="TreeChooser"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=advanced" name="large-icon" xmlname="icon.large-icon.#text">
+    <Constraint loader="Tree">
+     <value name="WebPageTree"/>
+     <value name="extensions=gif,jpg"/>
+    </Constraint>
+    <Editor name="TreeChooser"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="save=always;category=general"
+    name="handler-name" xmlname="handler-name.#text"/>
+   <XModelAttribute PROPERTIES="save=always;category=general"
+    name="handler-class" xmlname="handler-class.#text">
+    <Editor name="AccessibleJava"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=advanced" name="id"
+    visibility="false" xmlname="id"/>
+   <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
+    <Editor name="Note"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem ICON="action.empty" displayName="Create" kind="list" name="CreateActions">
+    <XActionItem HandlerClassName="%Create%"
+     ICON="action.new.struts.webapp.param"
+     PROPERTIES="validator.add=true" WizardClassName="%Default%"
+     displayName="Add Init Param..." kind="action" name="CreateInitParam">
+     <EntityData EntityName="WebAppInitParam">
+      <AttributeData AttributeName="param-name"/>
+      <AttributeData AttributeName="param-value"/>
+     </EntityData>
+    </XActionItem>
+    <XActionItem HandlerClassName="%Create%"
+     ICON="action.new.struts.webapp.param"
+     PROPERTIES="validator.add=true" WizardClassName="%Default%"
+     displayName="Add Soap Header..." kind="action" name="CreateSoapHeader">
+     <EntityData EntityName="WebAppSoapHeader30">
+      <AttributeData AttributeName="header"/>
+     </EntityData>
+    </XActionItem>
+    <XActionItem HandlerClassName="%Create%"
+     ICON="action.new.struts.webapp.param"
+     PROPERTIES="validator.add=true" WizardClassName="%Default%"
+     displayName="Add Soap Role..." kind="action" name="CreateSoapRole">
+     <EntityData EntityName="WebAppSoapRole30">
+      <AttributeData AttributeName="role"/>
+     </EntityData>
+    </XActionItem>
+    <XActionItem HandlerClassName="%Create%"
+     ICON="action.new.struts.webapp.param"
+     PROPERTIES="validator.add=true" WizardClassName="%Default%"
+     displayName="Add Port Name..." kind="action" name="CreatePortName">
+     <EntityData EntityName="WebAppPortName30">
+      <AttributeData AttributeName="name"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
+    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
+     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
+    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
+     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
+    <XActionItem BaseActionName="Paste" HandlerClassName="%Paste%"
+     ICON="action.paste" displayName="Paste" kind="action" name="Paste"/>
+   </XActionItem>
+   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
+    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
+     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
+   </XActionItem>
+   <XActionItem ICON="action.empty" kind="list" name="Properties">
+    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
+     displayName="Properties..." kind="action" name="Properties"/>
+   </XActionItem>
+   <XActionItem displayName="move" kind="list" name="MoveActions">
+    <XActionItem HIDE="always" HandlerClassName="%Move%"
+     ICON="action.move" displayName="Move" kind="action" name="Move"/>
    </XActionItem>
   </XActionItem>
   <XDependencies/>
@@ -1733,7 +2056,185 @@
     <Constraint loader="ListString"/>
     <Editor name="WebRoleList"/>
    </XModelAttribute>
-   <XModelAttribute name="id" visibility="false" xmlname="id"/>
+   <XModelAttribute name="id" xmlname="id"/>
+   <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
+    <Editor name="Note"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
+    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
+     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
+    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
+     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
+   </XActionItem>
+   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
+    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
+     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
+   </XActionItem>
+   <XActionItem ICON="action.empty" kind="list" name="Properties">
+    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
+     displayName="Properties..." kind="action" name="Properties"/>
+   </XActionItem>
+   <XActionItem displayName="move" kind="list" name="MoveActions">
+    <XActionItem HIDE="always" HandlerClassName="%Move%"
+     ICON="action.move" displayName="Move" kind="action" name="Move"/>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%Custom%"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
+  XMLSUBPATH="port-component-ref" name="WebAppPortComponentRef30">
+  <XChildrenEntities/>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.struts.webapp.param" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="port component ref" loader="ElementType" name="element type">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="id=true;save=always;category=general"
+    name="service-endpoint-interface" xmlname="service-endpoint-interface.#text"/>
+   <XModelAttribute PROPERTIES="category=general" name="enable-mtom" xmlname="enable-mtom.#text">
+    <Constraint loader="ListString">
+     <value/>
+     <value name="true"/>
+     <value name="false"/>
+    </Constraint>
+    <Editor name="ListString"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general" name="mtom-threshold" xmlname="mtom-threshold.#text"/>
+   <XModelAttribute PROPERTIES="category=general"
+    name="addressing enabled" xmlname="addressing.enabled.#text">
+    <Constraint loader="ListString">
+     <value/>
+     <value name="true"/>
+     <value name="false"/>
+    </Constraint>
+    <Editor name="ListString"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general"
+    name="addressing required" xmlname="addressing.required.#text">
+    <Constraint loader="ListString">
+     <value/>
+     <value name="true"/>
+     <value name="false"/>
+    </Constraint>
+    <Editor name="ListString"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general"
+    name="addressing responses" xmlname="addressing.responses.#text">
+    <Constraint loader="ListString">
+     <value/>
+     <value name="ALL"/>
+     <value name="ANONYMOUS"/>
+     <value name="NON_ANONYMOUS"/>
+    </Constraint>
+    <Editor name="ListString"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general"
+    name="respect-binding enabled" xmlname="respect-binding.enabled.#text">
+    <Constraint loader="ListString">
+     <value/>
+     <value name="true"/>
+     <value name="false"/>
+    </Constraint>
+    <Editor name="ListString"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general"
+    name="port-component-link" xmlname="port-component-link.#text"/>
+   <XModelAttribute PROPERTIES="category=advanced" name="id" xmlname="id"/>
+   <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
+    <Editor name="Note"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
+    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
+     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
+    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
+     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
+   </XActionItem>
+   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
+    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
+     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
+   </XActionItem>
+   <XActionItem ICON="action.empty" kind="list" name="Properties">
+    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
+     displayName="Properties..." kind="action" name="Properties"/>
+   </XActionItem>
+   <XActionItem displayName="move" kind="list" name="MoveActions">
+    <XActionItem HIDE="always" HandlerClassName="%Move%"
+     ICON="action.move" displayName="Move" kind="action" name="Move"/>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%Custom%"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
+  XMLSUBPATH="port-name" name="WebAppPortName30">
+  <XChildrenEntities/>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.struts.webapp.param" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="port name" loader="ElementType" name="element type">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="id=true;save=always;category=general"
+    name="name" xmlname="#text"/>
+   <XModelAttribute name="id" xmlname="id"/>
+   <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
+    <Editor name="Note"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
+    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
+     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
+    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
+     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
+   </XActionItem>
+   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
+    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
+     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
+   </XActionItem>
+   <XActionItem ICON="action.empty" kind="list" name="Properties">
+    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
+     displayName="Properties..." kind="action" name="Properties"/>
+   </XActionItem>
+   <XActionItem displayName="move" kind="list" name="MoveActions">
+    <XActionItem HIDE="always" HandlerClassName="%Move%"
+     ICON="action.move" displayName="Move" kind="action" name="Move"/>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%Custom%"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
+  XMLSUBPATH="property" name="WebAppProperty30">
+  <XChildrenEntities/>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.struts.webapp.param" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="property" loader="ElementType" name="element type">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="id=true;save=always;category=general"
+    name="name" xmlname="name.#text"/>
+   <XModelAttribute PROPERTIES="save=always;category=general"
+    name="value" xmlname="value.#text">
+    <Editor name="Note"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=advanced" name="id" xmlname="id"/>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Editor name="Note"/>
    </XModelAttribute>
@@ -1990,7 +2491,7 @@
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute PROPERTIES="category=general" name="display-name" xmlname="display-name.#text"/>
-   <XModelAttribute name="id" visibility="false" xmlname="id"/>
+   <XModelAttribute name="id" xmlname="id"/>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Editor name="Note"/>
    </XModelAttribute>
@@ -2030,6 +2531,106 @@
      ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
     <XActionItem BaseActionName="Paste" HandlerClassName="%Paste%"
      ICON="action.paste" displayName="Paste" kind="action" name="Paste"/>
+   </XActionItem>
+   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
+    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
+     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
+   </XActionItem>
+   <XActionItem ICON="action.empty" kind="list" name="Properties">
+    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
+     displayName="Properties..." kind="action" name="Properties"/>
+   </XActionItem>
+   <XActionItem displayName="move" kind="list" name="MoveActions">
+    <XActionItem HIDE="always" HandlerClassName="%Move%"
+     ICON="action.move" displayName="Move" kind="action" name="Move"/>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%Custom%"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%EntityOrdered%"
+  XMLSUBPATH="service-ref" name="WebAppServiceRef30">
+  <XChildrenEntities>
+   <XChildEntity name="WebAppPortComponentRef30"/>
+   <XChildEntity name="WebAppHandler30"/>
+   <XChildEntity name="WebAppInjectionTarget25"/>
+  </XChildrenEntities>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.struts.webapp.service" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="service reference" loader="ElementType" name="element type">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general" name="description" xmlname="description.#text">
+    <Editor name="Note"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general" name="display-name" xmlname="display-name.#text"/>
+   <XModelAttribute PROPERTIES="category=advanced" name="small-icon" xmlname="icon.small-icon.#text">
+    <Constraint loader="Tree">
+     <value name="WebPageTree"/>
+     <value name="extensions=gif,jpg"/>
+    </Constraint>
+    <Editor name="TreeChooser"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=advanced" name="large-icon" xmlname="icon.large-icon.#text">
+    <Constraint loader="Tree">
+     <value name="WebPageTree"/>
+     <value name="extensions=gif,jpg"/>
+    </Constraint>
+    <Editor name="TreeChooser"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="save=always;category=general;id=true"
+    name="service-ref-name" xmlname="service-ref-name.#text"/>
+   <XModelAttribute PROPERTIES="save=always;category=general"
+    name="service-interface" xmlname="service-interface.#text">
+    <Editor name="AccessibleJava"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general" name="wsdl-file" xmlname="wsdl-file.#text"/>
+   <XModelAttribute PROPERTIES="category=general"
+    name="jaxrpc-mapping-file" xmlname="jaxrpc-mapping-file.#text"/>
+   <XModelAttribute name="service-qname" xmlname="service-qname.#text"/>
+   <XModelAttribute PROPERTIES="category=general" name="mapped-name" xmlname="mapped-name.#text"/>
+   <XModelAttribute PROPERTIES="category=general" name="lookup-name" xmlname="lookup-name.#text"/>
+   <XModelAttribute PROPERTIES="category=advanced" name="id" xmlname="id"/>
+   <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
+    <Editor name="Note"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem ICON="action.empty" displayName="New" group="1"
+    kind="list" name="CreateActions">
+    <XActionItem HandlerClassName="%Create%" ICON="action.empty"
+     PROPERTIES="validator.add=true" WizardClassName="%Default%"
+     displayName="Port Component Ref..." kind="action" name="CreatePortComponentRef">
+     <EntityData EntityName="WebAppPortComponentRef30">
+      <AttributeData AttributeName="service-endpoint-interface"/>
+     </EntityData>
+    </XActionItem>
+    <XActionItem HandlerClassName="%Create%" ICON="action.empty"
+     PROPERTIES="validator.add=true" WizardClassName="%Default%"
+     displayName="Handler..." kind="action" name="CreateHandler">
+     <EntityData EntityName="WebAppHandler30">
+      <AttributeData AttributeName="handler-name"/>
+      <AttributeData AttributeName="handler-class"/>
+     </EntityData>
+    </XActionItem>
+    <XActionItem HandlerClassName="%Create%" ICON="action.empty"
+     PROPERTIES="validator.add=true" WizardClassName="%Default%"
+     displayName="Injection Target..." kind="action" name="CreateInjectionTarget">
+     <EntityData EntityName="WebAppInjectionTarget25">
+      <AttributeData AttributeName="name"/>
+      <AttributeData AttributeName="class"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
+    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
+     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
+    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
+     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
    </XActionItem>
    <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
     <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
@@ -2182,8 +2783,8 @@
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
- <XModelEntity
-  ImplementingClass="org.jboss.tools.jst.web.webapp.model.WebAppSessionConfigImpl"
+ <XModelEntity ImplementingClass="%Custom%"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%"
   XMLSUBPATH="session-config" name="WebAppSessionConfig30">
   <XChildrenEntities>
    <XChildEntity name="WebAppCookieConfig"/>
@@ -2194,13 +2795,14 @@
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
-   <XModelAttribute name="session-timeout" xmlname="session-timeout.#text">
+   <XModelAttribute default="session-config" name="name" visibility="false"/>
+   <XModelAttribute PROPERTIES="category=general" name="session-timeout" xmlname="session-timeout.#text">
     <Constraint loader="Int">
      <value name="mandatory=false"/>
     </Constraint>
     <Editor name="Int"/>
    </XModelAttribute>
-   <XModelAttribute name="tracking-modes" xmlname="tracking-modes">
+   <XModelAttribute PROPERTIES="category=general" name="tracking-modes" xmlname="tracking-modes">
     <Constraint loader="ListAdd">
      <value name="COOKIE"/>
      <value name="SSL"/>
@@ -2208,7 +2810,56 @@
     </Constraint>
     <Editor name="ListAdd"/>
    </XModelAttribute>
-   <XModelAttribute name="id" visibility="false" xmlname="id"/>
+   <XModelAttribute PROPERTIES="category=advanced" name="id" xmlname="id"/>
+   <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
+    <Editor name="Note"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem ICON="action.empty" displayName="Create" kind="list" name="CreateActions">
+    <XActionItem HandlerClassName="%Create%"
+     ICON="action.new.struts.webapp.param"
+     PROPERTIES="validator.add=true" WizardClassName="%Default%"
+     displayName="Add Cookie Config..." kind="action" name="CreateCookieConfig">
+     <EntityData EntityName="WebAppCookieConfig">
+      <AttributeData AttributeName="name"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
+    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
+     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
+    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
+     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
+   </XActionItem>
+   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions"/>
+   <XActionItem ICON="action.empty" kind="list" name="Properties">
+    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
+     displayName="Properties..." kind="action" name="Properties"/>
+   </XActionItem>
+   <XActionItem displayName="move" kind="list" name="MoveActions">
+    <XActionItem HIDE="always" HandlerClassName="%Move%"
+     ICON="action.move" displayName="Move" kind="action" name="Move"/>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%Custom%"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
+  XMLSUBPATH="soap-header" name="WebAppSoapHeader30">
+  <XChildrenEntities/>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.struts.webapp.param" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="soap header" loader="ElementType" name="element type">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="id=true;save=always;category=general"
+    name="header" xmlname="#text"/>
+   <XModelAttribute name="id" xmlname="id"/>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Editor name="Note"/>
    </XModelAttribute>
@@ -2220,7 +2871,52 @@
     <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
      ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
    </XActionItem>
-   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions"/>
+   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
+    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
+     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
+   </XActionItem>
+   <XActionItem ICON="action.empty" kind="list" name="Properties">
+    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
+     displayName="Properties..." kind="action" name="Properties"/>
+   </XActionItem>
+   <XActionItem displayName="move" kind="list" name="MoveActions">
+    <XActionItem HIDE="always" HandlerClassName="%Move%"
+     ICON="action.move" displayName="Move" kind="action" name="Move"/>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%Custom%"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"
+  XMLSUBPATH="soap-role" name="WebAppSoapRole30">
+  <XChildrenEntities/>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.struts.webapp.param" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="soap role" loader="ElementType" name="element type">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="id=true;save=always;category=general"
+    name="role" xmlname="#text"/>
+   <XModelAttribute name="id" xmlname="id"/>
+   <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
+    <Editor name="Note"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
+    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
+     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
+    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
+     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
+   </XActionItem>
+   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
+    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
+     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
+   </XActionItem>
    <XActionItem ICON="action.empty" kind="list" name="Properties">
     <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
      displayName="Properties..." kind="action" name="Properties"/>

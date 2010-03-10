@@ -161,6 +161,24 @@ class FWLoaderUtil extends XModelObjectLoaderUtil {
     		for (String a: attrs) if(o.getModelEntity().getAttribute(a) != null) {
     			moveChild(element, a, afterName);
     		}
+    	} else if(entity.startsWith("WebAppDataSource")) { //$NON-NLS-1$
+    		boolean b = super.saveChildren(element, o);
+    		String afterName = null;
+    		XAttribute[] as = o.getModelEntity().getAttributes();
+    		boolean f = false;
+    		for (int i = 0; i < as.length; i++) {
+    			String n = as[i].getName();
+    			if(!f && "login-timeout".equals(n)) f = true; //$NON-NLS-1$
+    			if(f && XMLUtilities.getUniqueChild(element, n) != null) {
+   					afterName = n;
+   					break;
+    			}
+    			if("max-statements".equals(n)) { //$NON-NLS-1$
+    				break;
+    			}
+    		}
+    		if(afterName != null) moveChild(element, "property", afterName); //$NON-NLS-1$
+    		return b;
     	} else {
     		boolean b = super.saveChildren(element, o);
     		if(o.getModelEntity().getAttribute("mapped-name") != null) { //$NON-NLS-1$
