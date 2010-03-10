@@ -80,24 +80,9 @@
     name="xsi:schemaLocation" xmlname="xsi:schemaLocation"/>
    <XModelAttribute PROPERTIES="save=always" default="3.0"
     name="version" visibility="false" xmlname="version"/>
-   <XModelAttribute PROPERTIES="category=advanced" name="small-icon" xmlname="icon.small-icon.#text">
-    <Constraint loader="Tree">
-     <value name="WebPageTree"/>
-     <value name="extensions=gif,jpg"/>
-    </Constraint>
-    <Editor name="TreeChooser"/>
-   </XModelAttribute>
-   <XModelAttribute PROPERTIES="category=advanced" name="large-icon" xmlname="icon.large-icon.#text">
-    <Constraint loader="Tree">
-     <value name="WebPageTree"/>
-     <value name="extensions=gif,jpg"/>
-    </Constraint>
-    <Editor name="TreeChooser"/>
-   </XModelAttribute>
-   <XModelAttribute PROPERTIES="category=general" name="display-name" xmlname="display-name.#text"/>
-   <XModelAttribute PROPERTIES="category=general" name="description" xmlname="description.#text">
-    <Editor name="Note"/>
-   </XModelAttribute>
+   <XModelAttributeReference
+    attributes="description,display-name,small-icon,large-icon"
+    entity="WebAppFilter" name="description"/>
    <XModelAttribute PROPERTIES="category=advanced" default="no"
     name="distributable" xmlname="distributable">
     <Constraint loader="List">
@@ -283,51 +268,13 @@
      </EntityData>
     </XActionItem>
    </XActionItem>
-   <XActionItem kind="list" name="EditActions">
-    <XActionItem HIDE="always" HandlerClassName="%RenameFile%"
-     ICON="action.empty" PROPERTIES="validator.edit=true"
-     WizardClassName="%Default%" displayName="Rename..." kind="action" name="Rename">
-     <EntityData EntityName="FileWebApp">
-      <AttributeData AttributeName="name"/>
-     </EntityData>
-    </XActionItem>
-    <XActionItem
-     HandlerClassName="org.jboss.tools.common.model.filesystems.impl.handlers.RenameEclipseFileHandler"
-     ICON="action.empty" displayName="Rename..." kind="action" name="RenameEclipse"/>
-   </XActionItem>
-   <XActionItem kind="list" name="SaveActions">
-    <XActionItem HIDE="always" HandlerClassName="%SaveFile%"
-     ICON="action.save" displayName="Save" kind="action" name="Save"/>
-    <XActionItem
-     HandlerClassName="org.jboss.tools.jst.web.model.handlers.ResetFileDateHandler"
-     ICON="action.save" displayName="Change Timestamp" kind="action" name="ChangeTimeStamp"/>
-   </XActionItem>
-   <XActionItem HIDE="always"
-    HandlerClassName="org.jboss.tools.jst.web.tld.model.handlers.ExpandTLDHandler"
-    ICON="action.empty" displayName="Set Expanded" kind="action" name="SetExpanded"/>
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.cut" displayName="Cut" kind="action" name="Cut"/>
-    <XActionItem BaseActionName="Paste" HandlerClassName="%Paste%"
-     ICON="action.paste" displayName="Paste" kind="action" name="Paste"/>
-   </XActionItem>
-   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete" HandlerClassName="%DeleteFile%"
-     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
-   <XActionItem kind="list" name="DiscardActions">
-    <XActionItem HIDE="always"
-     HandlerClassName="org.jboss.tools.common.model.filesystems.impl.DiscardFileHandler"
-     ICON="action.delete"
-     PROPERTIES="significanceMessageClass=org.jboss.tools.common.model.filesystems.impl.DiscardFileSignificanceMessage"
-     displayName="Discard Changes" kind="action" name="Discard"/>
-   </XActionItem>
+   <XActionItemReference entity="FileWebApp" name="EditActions"/>
+   <XActionItemReference entity="FileWebApp" name="SaveActions"/>
+   <XActionItemReference entity="FileWebApp" name="SetExpanded"/>
+   <XActionItemReference entity="FileWebApp" name="CopyActions"/>
+   <XActionItemReference entity="FileWebApp" name="DeleteActions"/>
+   <XActionItemReference entity="FileWebApp" name="Properties"/>
+   <XActionItemReference entity="FileWebApp" name="DiscardActions"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -336,175 +283,12 @@
   <XEntityRenderer/>
   <XModelAttributes/>
   <XActionItem kind="list">
-   <XActionItem ICON="action.empty" displayName="New" group="1"
-    kind="list" name="CreateActions">
-    <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.mime_mapping"
-     PROPERTIES="validator.add=true;sourcepath=Absolute Orderings;actionpath=CreateActions/CreateAbsoluteOrdering"
-     WizardClassName="%Default%" displayName="Absolute Ordering..."
-     kind="action" name="CreateAbsoluteOrdering"/>
-    <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.param"
-     PROPERTIES="validator.add=true;sourcepath=Context Params;actionpath=CreateActions/CreateContextParam"
-     WizardClassName="%Default%" displayName="Context Param..."
-     kind="action" name="CreateContextParam"/>
-    <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.param"
-     PROPERTIES="validator.add=true;sourcepath=Data Sources;actionpath=CreateActions/CreateDataSource"
-     WizardClassName="%Default%" displayName="Data Source..."
-     kind="action" name="CreateDataSource"/>
-    <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.filter"
-     PROPERTIES="validator.add=true;sourcepath=Filters;actionpath=CreateActions/CreateFilter"
-     WizardClassName="%Default%" displayName="Filter..." kind="action" name="CreateFilter"/>
-    <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.filter_mapping"
-     PROPERTIES="validator.add=true;sourcepath=Filters;actionpath=CreateActions/CreateFilterMapping"
-     WizardClassName="%Default%" displayName="Filter Mapping..."
-     kind="action" name="CreateFilterMapping"/>
-    <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.listener"
-     PROPERTIES="validator.add=true;sourcepath=Listeners;actionpath=CreateActions/CreateListener"
-     WizardClassName="%Default%" displayName="Listener..." kind="action" name="CreateListener"/>
-    <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.servlet"
-     PROPERTIES="validator.add=true;sourcepath=Servlets;actionpath=CreateActions/CreateServlet"
-     WizardClassName="%Default%" displayName="Servlet..." kind="action" name="CreateServlet"/>
-    <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.servlet_mapping"
-     PROPERTIES="validator.add=true;sourcepath=Servlets;actionpath=CreateActions/CreateServletMapping"
-     WizardClassName="%Default%" displayName="Servlet Mapping..."
-     kind="action" name="CreateServletMapping"/>
-    <XActionItem HIDE="always" HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.session"
-     PROPERTIES="validator.add=true" WizardClassName="%Default%"
-     displayName="Session Config..." kind="action" name="CreateSessionConfig">
-     <EntityData EntityName="WebAppSessionConfig">
-      <AttributeData AttributeName="session-timeout" Mandatory="no"/>
-     </EntityData>
-    </XActionItem>
-    <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.mime_mapping"
-     PROPERTIES="validator.add=true;sourcepath=Mime Mappings;actionpath=CreateActions/CreateMimeMapping"
-     WizardClassName="%Default%" displayName="Mime Mapping..."
-     kind="action" name="CreateMimeMapping"/>
-    <XActionItem HIDE="always" HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.welcom_list"
-     displayName="Welcome File List" kind="action" name="CreateWelcomeFileList">
-     <EntityData EntityName="WebAppWelcomFileList"/>
-    </XActionItem>
-    <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.error"
-     PROPERTIES="validator.add=true;sourcepath=Error Pages;actionpath=CreateActions/CreateErrorPage"
-     displayName="Error Page..." kind="action" name="CreateErrorPage"/>
-    <XActionItem HIDE="always" HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.taglib"
-     PROPERTIES="validator.add=true" displayName="JSP Config..."
-     kind="action" name="CreateJspConfig">
-     <EntityData EntityName="WebAppJspConfig"/>
-    </XActionItem>
-    <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.security_constraint"
-     PROPERTIES="validator.add=true;sourcepath=Security Constraints;actionpath=CreateActions/CreateSecurityConstraint"
-     WizardClassName="%Default%" displayName="Security Constraint..."
-     kind="action" name="CreateSecurityConstraint"/>
-    <XActionItem HIDE="always" HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.login_config"
-     PROPERTIES="validator.add=true" WizardClassName="%Default%"
-     displayName="Login Config..." kind="action" name="CreateLoginConfig">
-     <EntityData EntityName="WebAppLoginConfig">
-      <AttributeData AttributeName="auth-method" Mandatory="no"/>
-      <AttributeData AttributeName="realm-name" Mandatory="no"/>
-      <AttributeData AttributeName="form-login-page" Mandatory="no"/>
-      <AttributeData AttributeName="form-error-page" Mandatory="no"/>
-     </EntityData>
-    </XActionItem>
-    <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.security_role"
-     PROPERTIES="validator.add=true;sourcepath=Security Roles;actionpath=CreateActions/CreateSecurityRole"
-     WizardClassName="%Default%" displayName="Security Role..."
-     kind="action" name="CreateSecurityRole"/>
-    <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.env_entry"
-     PROPERTIES="validator.add=true;sourcepath=Env Entries;actionpath=CreateActions/CreateEnvEntry"
-     WizardClassName="%Default%" displayName="Env Entry..."
-     kind="action" name="CreateEnvEntry"/>
-    <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.ejb_reference"
-     PROPERTIES="validator.add=true;sourcepath=EJB;actionpath=CreateActions/CreateEjbRef"
-     WizardClassName="%Default%" displayName="Ejb Ref..." kind="action" name="CreateEjbRef"/>
-    <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.ejb_local_reference"
-     PROPERTIES="validator.add=true;sourcepath=EJB;actionpath=CreateActions/CreateEjbLocalRef"
-     WizardClassName="%Default%" displayName="Ejb Local Ref..."
-     kind="action" name="CreateEjbLocalRef"/>
-    <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.service"
-     PROPERTIES="validator.add=true;sourcepath=Services;actionpath=CreateActions/CreateServiceRef"
-     WizardClassName="%Default%" displayName="Service Ref..."
-     kind="action" name="CreateServiceRef"/>
-    <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.res_env_ref"
-     PROPERTIES="validator.add=true;sourcepath=Resources;actionpath=CreateActions/CreateResourceEnvRef"
-     WizardClassName="%Default%" displayName="Resource Env Ref..."
-     kind="action" name="CreateResourceEnvRef"/>
-    <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.res_ref"
-     PROPERTIES="validator.add=true;sourcepath=Resources;actionpath=CreateActions/CreateResourceRef"
-     WizardClassName="%Default%" displayName="Resource Ref..."
-     kind="action" name="CreateResourceRef"/>
-    <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.message"
-     PROPERTIES="validator.add=true;sourcepath=Message Destinations;actionpath=CreateActions/CreateServiceMessageDestinationRef"
-     WizardClassName="%Default%"
-     displayName="Message Destination Ref..." kind="action" name="CreateServiceMessageDestinationRef"/>
-    <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.message"
-     PROPERTIES="validator.add=true;sourcepath=Message Destinations;actionpath=CreateActions/CreateServiceMessageDestination"
-     WizardClassName="%Default%" displayName="Message Destination..."
-     kind="action" name="CreateServiceMessageDestination"/>
-    <XActionItem HIDE="always" HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.taglib"
-     PROPERTIES="validator.add=true"
-     displayName="Locale Encoding Mapping List..." kind="action" name="CreateLocaleEncodingMappingList">
-     <EntityData EntityName="WebAppLocaleEncodingMappingList"/>
-    </XActionItem>
-   </XActionItem>
-   <XActionItem kind="list" name="EditActions">
-    <XActionItem HandlerClassName="%RenameFile%" ICON="action.empty"
-     PROPERTIES="validator.edit=true" WizardClassName="%Default%"
-     displayName="Rename..." kind="action" name="Rename">
-     <EntityData EntityName="FileWebApp">
-      <AttributeData AttributeName="name"/>
-     </EntityData>
-    </XActionItem>
-   </XActionItem>
-   <XActionItem kind="list" name="SaveActions">
-    <XActionItem HIDE="always" HandlerClassName="%SaveFile%"
-     ICON="action.save" displayName="Save" kind="action" name="Save"/>
-    <XActionItem
-     HandlerClassName="org.jboss.tools.jst.web.model.handlers.ResetFileDateHandler"
-     ICON="action.save" displayName="Change Timestamp" kind="action" name="ChangeTimeStamp"/>
-   </XActionItem>
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.cut" displayName="Cut" kind="action" name="Cut"/>
-    <XActionItem BaseActionName="Paste" HandlerClassName="%Paste%"
-     ICON="action.paste" displayName="Paste" kind="action" name="Paste"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
-   <XActionItem kind="list" name="DiscardActions">
-    <XActionItem HIDE="always"
-     HandlerClassName="org.jboss.tools.common.model.filesystems.impl.DiscardFileHandler"
-     ICON="action.delete"
-     PROPERTIES="significanceMessageClass=org.jboss.tools.common.model.filesystems.impl.DiscardFileSignificanceMessage"
-     displayName="Discard Changes" kind="action" name="Discard"/>
-   </XActionItem>
+   <XActionItemReference entity="FileWebApp30" name="CreateActions"/>
+   <XActionItemReference entity="FileWebApp" name="EditActions"/>
+   <XActionItemReference entity="FileWebApp" name="SaveActions"/>
+   <XActionItemReference entity="FileWebApp_EditorActionList" name="CopyActions"/>
+   <XActionItemReference entity="FileWebApp" name="Properties"/>
+   <XActionItemReference entity="FileWebApp" name="DiscardActions"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -541,24 +325,10 @@
    </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
-   </XActionItem>
-   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
-     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
-   <XActionItem displayName="move" kind="list" name="MoveActions">
-    <XActionItem HIDE="always" HandlerClassName="%Move%"
-     ICON="action.move" displayName="Move" kind="action" name="Move"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppFilter" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFilter" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFilter" name="Properties"/>
+   <XActionItemReference entity="WebAppFilter" name="MoveActions"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -603,24 +373,10 @@
    </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
-   </XActionItem>
-   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
-     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
-   <XActionItem displayName="move" kind="list" name="MoveActions">
-    <XActionItem HIDE="always" HandlerClassName="%Move%"
-     ICON="action.move" displayName="Move" kind="action" name="Move"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppContextParam" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFilter" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFilter" name="Properties"/>
+   <XActionItemReference entity="WebAppFilter" name="MoveActions"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -703,24 +459,10 @@
      </EntityData>
     </XActionItem>
    </XActionItem>
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
-   </XActionItem>
-   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
-     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
-   <XActionItem displayName="move" kind="list" name="MoveActions">
-    <XActionItem HIDE="always" HandlerClassName="%Move%"
-     ICON="action.move" displayName="Move" kind="action" name="Move"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppFilter" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFilter" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFilter" name="Properties"/>
+   <XActionItemReference entity="WebAppFilter" name="MoveActions"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -775,26 +517,10 @@
      </EntityData>
     </XActionItem>
    </XActionItem>
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
-    <XActionItem BaseActionName="Paste" HandlerClassName="%Paste%"
-     ICON="action.paste" displayName="Paste" kind="action" name="Paste"/>
-   </XActionItem>
-   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
-     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
-   <XActionItem displayName="move" kind="list" name="MoveActions">
-    <XActionItem HIDE="always" HandlerClassName="%Move%"
-     ICON="action.move" displayName="Move" kind="action" name="Move"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppFilter" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFilter" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFilter" name="Properties"/>
+   <XActionItemReference entity="WebAppFilter" name="MoveActions"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -849,26 +575,10 @@
      </EntityData>
     </XActionItem>
    </XActionItem>
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
-    <XActionItem BaseActionName="Paste" HandlerClassName="%Paste%"
-     ICON="action.paste" displayName="Paste" kind="action" name="Paste"/>
-   </XActionItem>
-   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
-     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
-   <XActionItem displayName="move" kind="list" name="MoveActions">
-    <XActionItem HIDE="always" HandlerClassName="%Move%"
-     ICON="action.move" displayName="Move" kind="action" name="Move"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppFilter" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFilter" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFilter" name="Properties"/>
+   <XActionItemReference entity="WebAppFilter" name="MoveActions"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -920,24 +630,10 @@
      </EntityData>
     </XActionItem>
    </XActionItem>
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
-   </XActionItem>
-   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
-     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
-   <XActionItem displayName="move" kind="list" name="MoveActions">
-    <XActionItem HIDE="always" HandlerClassName="%Move%"
-     ICON="action.move" displayName="Move" kind="action" name="Move"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppFilter" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFilter" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFilter" name="Properties"/>
+   <XActionItemReference entity="WebAppFilter" name="MoveActions"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -957,24 +653,9 @@
    <XModelAttribute default="filter" loader="ElementType" name="element type">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="category=advanced" name="description" xmlname="description.#text">
-    <Editor name="Note"/>
-   </XModelAttribute>
-   <XModelAttribute PROPERTIES="category=advanced" name="display-name" xmlname="display-name.#text"/>
-   <XModelAttribute PROPERTIES="category=advanced" name="small-icon" xmlname="icon.small-icon.#text">
-    <Constraint loader="Tree">
-     <value name="WebPageTree"/>
-     <value name="extensions=gif,jpg"/>
-    </Constraint>
-    <Editor name="TreeChooser"/>
-   </XModelAttribute>
-   <XModelAttribute PROPERTIES="category=advanced" name="large-icon" xmlname="icon.large-icon.#text">
-    <Constraint loader="Tree">
-     <value name="WebPageTree"/>
-     <value name="extensions=gif,jpg"/>
-    </Constraint>
-    <Editor name="TreeChooser"/>
-   </XModelAttribute>
+   <XModelAttributeReference
+    attributes="description,display-name,small-icon,large-icon"
+    entity="WebAppFilter" name="description"/>
    <XModelAttribute PROPERTIES="id=true;save=always;category=general"
     name="filter-name" xmlname="filter-name.#text"/>
    <XModelAttribute PROPERTIES="save=always;category=general"
@@ -1007,24 +688,10 @@
      </EntityData>
     </XActionItem>
    </XActionItem>
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
-   </XActionItem>
-   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
-     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
-   <XActionItem displayName="move" kind="list" name="MoveActions">
-    <XActionItem HIDE="always" HandlerClassName="%Move%"
-     ICON="action.move" displayName="Move" kind="action" name="Move"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppFilter" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFilter" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFilter" name="Properties"/>
+   <XActionItemReference entity="WebAppFilter" name="MoveActions"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -1060,23 +727,9 @@
      </EntityData>
     </XActionItem>
    </XActionItem>
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.cut" displayName="Cut" kind="action" name="Cut"/>
-    <XActionItem BaseActionName="Copy" HandlerClassName="%CopyChildren%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Paste" HandlerClassName="%Paste%"
-     ICON="action.paste" displayName="Paste" kind="action" name="Paste"/>
-   </XActionItem>
-   <XActionItem kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete"
-     HandlerClassName="%DeleteChildren%" ICON="action.delete"
-     displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppFolderContextParams" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="Properties"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -1111,23 +764,9 @@
      </EntityData>
     </XActionItem>
    </XActionItem>
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.cut" displayName="Cut" kind="action" name="Cut"/>
-    <XActionItem BaseActionName="Copy" HandlerClassName="%CopyChildren%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Paste" HandlerClassName="%Paste%"
-     ICON="action.paste" displayName="Paste" kind="action" name="Paste"/>
-   </XActionItem>
-   <XActionItem kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete"
-     HandlerClassName="%DeleteChildren%" ICON="action.delete"
-     displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppFolderContextParams" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="Properties"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -1178,23 +817,9 @@
      </EntityData>
     </XActionItem>
    </XActionItem>
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.cut" displayName="Cut" kind="action" name="Cut"/>
-    <XActionItem BaseActionName="Copy" HandlerClassName="%CopyChildren%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Paste" HandlerClassName="%Paste%"
-     ICON="action.paste" displayName="Paste" kind="action" name="Paste"/>
-   </XActionItem>
-   <XActionItem kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete"
-     HandlerClassName="%DeleteChildren%" ICON="action.delete"
-     displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppFolderContextParams" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="Properties"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -1231,23 +856,9 @@
      </EntityData>
     </XActionItem>
    </XActionItem>
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.cut" displayName="Cut" kind="action" name="Cut"/>
-    <XActionItem BaseActionName="Copy" HandlerClassName="%CopyChildren%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Paste" HandlerClassName="%Paste%"
-     ICON="action.paste" displayName="Paste" kind="action" name="Paste"/>
-   </XActionItem>
-   <XActionItem kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete"
-     HandlerClassName="%DeleteChildren%" ICON="action.delete"
-     displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppFolderContextParams" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="Properties"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -1296,23 +907,9 @@
      </EntityData>
     </XActionItem>
    </XActionItem>
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.cut" displayName="Cut" kind="action" name="Cut"/>
-    <XActionItem BaseActionName="Copy" HandlerClassName="%CopyChildren%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Paste" HandlerClassName="%Paste%"
-     ICON="action.paste" displayName="Paste" kind="action" name="Paste"/>
-   </XActionItem>
-   <XActionItem kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete"
-     HandlerClassName="%DeleteChildren%" ICON="action.delete"
-     displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppFolderContextParams" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="Properties"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -1358,23 +955,9 @@
      </EntityData>
     </XActionItem>
    </XActionItem>
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.cut" displayName="Cut" kind="action" name="Cut"/>
-    <XActionItem BaseActionName="Copy" HandlerClassName="%CopyChildren%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Paste" HandlerClassName="%Paste%"
-     ICON="action.paste" displayName="Paste" kind="action" name="Paste"/>
-   </XActionItem>
-   <XActionItem kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete"
-     HandlerClassName="%DeleteChildren%" ICON="action.delete"
-     displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppFolderContextParams" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="Properties"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -1421,23 +1004,9 @@
      </EntityData>
     </XActionItem>
    </XActionItem>
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.cut" displayName="Cut" kind="action" name="Cut"/>
-    <XActionItem BaseActionName="Copy" HandlerClassName="%CopyChildren%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Paste" HandlerClassName="%Paste%"
-     ICON="action.paste" displayName="Paste" kind="action" name="Paste"/>
-   </XActionItem>
-   <XActionItem kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete"
-     HandlerClassName="%DeleteChildren%" ICON="action.delete"
-     displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppFolderContextParams" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="Properties"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -1472,23 +1041,9 @@
      </EntityData>
     </XActionItem>
    </XActionItem>
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.cut" displayName="Cut" kind="action" name="Cut"/>
-    <XActionItem BaseActionName="Copy" HandlerClassName="%CopyChildren%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Paste" HandlerClassName="%Paste%"
-     ICON="action.paste" displayName="Paste" kind="action" name="Paste"/>
-   </XActionItem>
-   <XActionItem kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete"
-     HandlerClassName="%DeleteChildren%" ICON="action.delete"
-     displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppFolderContextParams" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="Properties"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -1523,23 +1078,9 @@
      </EntityData>
     </XActionItem>
    </XActionItem>
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.cut" displayName="Cut" kind="action" name="Cut"/>
-    <XActionItem BaseActionName="Copy" HandlerClassName="%CopyChildren%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Paste" HandlerClassName="%Paste%"
-     ICON="action.paste" displayName="Paste" kind="action" name="Paste"/>
-   </XActionItem>
-   <XActionItem kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete"
-     HandlerClassName="%DeleteChildren%" ICON="action.delete"
-     displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppFolderContextParams" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="Properties"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -1586,23 +1127,9 @@
      </EntityData>
     </XActionItem>
    </XActionItem>
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.cut" displayName="Cut" kind="action" name="Cut"/>
-    <XActionItem BaseActionName="Copy" HandlerClassName="%CopyChildren%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Paste" HandlerClassName="%Paste%"
-     ICON="action.paste" displayName="Paste" kind="action" name="Paste"/>
-   </XActionItem>
-   <XActionItem kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete"
-     HandlerClassName="%DeleteChildren%" ICON="action.delete"
-     displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppFolderContextParams" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="Properties"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -1624,24 +1151,9 @@
    <XModelAttribute default="handler" loader="ElementType" name="element type">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="category=general" name="description" xmlname="description.#text">
-    <Editor name="Note"/>
-   </XModelAttribute>
-   <XModelAttribute PROPERTIES="category=general" name="display-name" xmlname="display-name.#text"/>
-   <XModelAttribute PROPERTIES="category=advanced" name="small-icon" xmlname="icon.small-icon.#text">
-    <Constraint loader="Tree">
-     <value name="WebPageTree"/>
-     <value name="extensions=gif,jpg"/>
-    </Constraint>
-    <Editor name="TreeChooser"/>
-   </XModelAttribute>
-   <XModelAttribute PROPERTIES="category=advanced" name="large-icon" xmlname="icon.large-icon.#text">
-    <Constraint loader="Tree">
-     <value name="WebPageTree"/>
-     <value name="extensions=gif,jpg"/>
-    </Constraint>
-    <Editor name="TreeChooser"/>
-   </XModelAttribute>
+   <XModelAttributeReference
+    attributes="description,display-name,small-icon,large-icon"
+    entity="WebAppFilter" name="description"/>
    <XModelAttribute PROPERTIES="save=always;category=general"
     name="handler-name" xmlname="handler-name.#text"/>
    <XModelAttribute PROPERTIES="save=always;category=general"
@@ -1690,26 +1202,10 @@
      </EntityData>
     </XActionItem>
    </XActionItem>
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
-    <XActionItem BaseActionName="Paste" HandlerClassName="%Paste%"
-     ICON="action.paste" displayName="Paste" kind="action" name="Paste"/>
-   </XActionItem>
-   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
-     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
-   <XActionItem displayName="move" kind="list" name="MoveActions">
-    <XActionItem HIDE="always" HandlerClassName="%Move%"
-     ICON="action.move" displayName="Move" kind="action" name="Move"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppFilter" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFilter" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFilter" name="Properties"/>
+   <XActionItemReference entity="WebAppFilter" name="MoveActions"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -1729,24 +1225,9 @@
    <XModelAttribute name="name" visibility="false" xmlname="#text">
     <Editor name="Note"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="category=advanced" name="description" xmlname="description.#text">
-    <Editor name="Note"/>
-   </XModelAttribute>
-   <XModelAttribute PROPERTIES="category=advanced" name="display-name" xmlname="display-name.#text"/>
-   <XModelAttribute PROPERTIES="category=advanced" name="small-icon" xmlname="icon.small-icon.#text">
-    <Constraint loader="Tree">
-     <value name="WebPageTree"/>
-     <value name="extensions=gif,jpg"/>
-    </Constraint>
-    <Editor name="TreeChooser"/>
-   </XModelAttribute>
-   <XModelAttribute PROPERTIES="category=advanced" name="large-icon" xmlname="icon.large-icon.#text">
-    <Constraint loader="Tree">
-     <value name="WebPageTree"/>
-     <value name="extensions=gif,jpg"/>
-    </Constraint>
-    <Editor name="TreeChooser"/>
-   </XModelAttribute>
+   <XModelAttributeReference
+    attributes="description,display-name,small-icon,large-icon"
+    entity="WebAppFilter" name="description"/>
    <XModelAttribute PROPERTIES="id=true;save=always;category=general"
     name="url-pattern" xmlname="url-pattern.#text"/>
    <XModelAttribute PROPERTIES="category=general" name="el-ignored" xmlname="el-ignored.#text">
@@ -1806,24 +1287,10 @@
    </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
-   </XActionItem>
-   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
-     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
-   <XActionItem displayName="move" kind="list" name="MoveActions">
-    <XActionItem HIDE="always" HandlerClassName="%Move%"
-     ICON="action.move" displayName="Move" kind="action" name="Move"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppContextParam" name="CopyActions"/>
+   <XActionItemReference entity="WebAppContextParam" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppContextParam" name="Properties"/>
+   <XActionItemReference entity="WebAppContextParam" name="MoveActions"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -1870,25 +1337,10 @@
      </EntityData>
     </XActionItem>
    </XActionItem>
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
-   </XActionItem>
-   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete"
-     HandlerClassName="%DeleteChildren%" ICON="action.delete"
-     displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
-   <XActionItem displayName="move" kind="list" name="MoveActions">
-    <XActionItem HIDE="always" HandlerClassName="%Move%"
-     ICON="action.move" displayName="Move" kind="action" name="Move"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppFolderContextParams" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFilter" name="Properties"/>
+   <XActionItemReference entity="WebAppFilter" name="MoveActions"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -1905,24 +1357,9 @@
    <XModelAttribute default="message destination" loader="ElementType" name="element type">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute name="description" xmlname="description.#text">
-    <Editor name="Note"/>
-   </XModelAttribute>
-   <XModelAttribute name="display-name" xmlname="display-name.#text"/>
-   <XModelAttribute name="small-icon" xmlname="icon.small-icon.#text">
-    <Constraint loader="Tree">
-     <value name="WebPageTree"/>
-     <value name="extensions=gif,jpg"/>
-    </Constraint>
-    <Editor name="TreeChooser"/>
-   </XModelAttribute>
-   <XModelAttribute name="large-icon" xmlname="icon.large-icon.#text">
-    <Constraint loader="Tree">
-     <value name="WebPageTree"/>
-     <value name="extensions=gif,jpg"/>
-    </Constraint>
-    <Editor name="TreeChooser"/>
-   </XModelAttribute>
+   <XModelAttributeReference
+    attributes="description,display-name,small-icon,large-icon"
+    entity="WebAppFilter" name="description"/>
    <XModelAttribute PROPERTIES="save=always;id=true"
     name="message-destination-name" xmlname="message-destination-name.#text"/>
    <XModelAttribute PROPERTIES="category=general" name="mapped-name" xmlname="mapped-name.#text"/>
@@ -1933,24 +1370,10 @@
    </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
-   </XActionItem>
-   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
-     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
-   <XActionItem displayName="move" kind="list" name="MoveActions">
-    <XActionItem HIDE="always" HandlerClassName="%Move%"
-     ICON="action.move" displayName="Move" kind="action" name="Move"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppContextParam" name="CopyActions"/>
+   <XActionItemReference entity="WebAppContextParam" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppContextParam" name="Properties"/>
+   <XActionItemReference entity="WebAppContextParam" name="MoveActions"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -2008,24 +1431,10 @@
      </EntityData>
     </XActionItem>
    </XActionItem>
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
-   </XActionItem>
-   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
-     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
-   <XActionItem displayName="move" kind="list" name="MoveActions">
-    <XActionItem HIDE="always" HandlerClassName="%Move%"
-     ICON="action.move" displayName="Move" kind="action" name="Move"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppFilter" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFilter" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFilter" name="Properties"/>
+   <XActionItemReference entity="WebAppFilter" name="MoveActions"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -2041,45 +1450,20 @@
    <XModelAttribute default="multipart config" loader="ElementType" name="element type">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="id=true;save=always" name="location" xmlname="location.#text">
-    <Constraint loader="JavaName"/>
-    <Editor name="Name"/>
-   </XModelAttribute>
-   <XModelAttribute name="max-file-size" xmlname="max-file-size.#text">
-    <Editor name="Note"/>
-   </XModelAttribute>
-   <XModelAttribute name="max-request-size" xmlname="max-request-size.#text">
-    <Constraint loader="ListString"/>
-    <Editor name="WebRoleList"/>
-   </XModelAttribute>
-   <XModelAttribute name="file-size-threshold" xmlname="file-size-threshold.#text">
-    <Constraint loader="ListString"/>
-    <Editor name="WebRoleList"/>
-   </XModelAttribute>
+   <XModelAttribute PROPERTIES="id=true;save=always" name="location" xmlname="location.#text"/>
+   <XModelAttribute name="max-file-size" xmlname="max-file-size.#text"/>
+   <XModelAttribute name="max-request-size" xmlname="max-request-size.#text"/>
+   <XModelAttribute name="file-size-threshold" xmlname="file-size-threshold.#text"/>
    <XModelAttribute name="id" xmlname="id"/>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Editor name="Note"/>
    </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
-   </XActionItem>
-   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
-     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
-   <XActionItem displayName="move" kind="list" name="MoveActions">
-    <XActionItem HIDE="always" HandlerClassName="%Move%"
-     ICON="action.move" displayName="Move" kind="action" name="Move"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppContextParam" name="CopyActions"/>
+   <XActionItemReference entity="WebAppContextParam" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppContextParam" name="Properties"/>
+   <XActionItemReference entity="WebAppContextParam" name="MoveActions"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -2152,24 +1536,10 @@
    </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
-   </XActionItem>
-   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
-     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
-   <XActionItem displayName="move" kind="list" name="MoveActions">
-    <XActionItem HIDE="always" HandlerClassName="%Move%"
-     ICON="action.move" displayName="Move" kind="action" name="Move"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppContextParam" name="CopyActions"/>
+   <XActionItemReference entity="WebAppContextParam" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppContextParam" name="Properties"/>
+   <XActionItemReference entity="WebAppContextParam" name="MoveActions"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -2194,24 +1564,10 @@
    </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
-   </XActionItem>
-   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
-     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
-   <XActionItem displayName="move" kind="list" name="MoveActions">
-    <XActionItem HIDE="always" HandlerClassName="%Move%"
-     ICON="action.move" displayName="Move" kind="action" name="Move"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppContextParam" name="CopyActions"/>
+   <XActionItemReference entity="WebAppContextParam" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppContextParam" name="Properties"/>
+   <XActionItemReference entity="WebAppContextParam" name="MoveActions"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -2240,24 +1596,10 @@
    </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
-   </XActionItem>
-   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
-     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
-   <XActionItem displayName="move" kind="list" name="MoveActions">
-    <XActionItem HIDE="always" HandlerClassName="%Move%"
-     ICON="action.move" displayName="Move" kind="action" name="Move"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppContextParam" name="CopyActions"/>
+   <XActionItemReference entity="WebAppContextParam" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppContextParam" name="Properties"/>
+   <XActionItemReference entity="WebAppContextParam" name="MoveActions"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -2309,24 +1651,10 @@
    </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
-   </XActionItem>
-   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
-     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
-   <XActionItem displayName="move" kind="list" name="MoveActions">
-    <XActionItem HIDE="always" HandlerClassName="%Move%"
-     ICON="action.move" displayName="Move" kind="action" name="Move"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppContextParam" name="CopyActions"/>
+   <XActionItemReference entity="WebAppContextParam" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppContextParam" name="Properties"/>
+   <XActionItemReference entity="WebAppContextParam" name="MoveActions"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -2374,24 +1702,10 @@
      </EntityData>
     </XActionItem>
    </XActionItem>
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
-   </XActionItem>
-   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
-     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
-   <XActionItem displayName="move" kind="list" name="MoveActions">
-    <XActionItem HIDE="always" HandlerClassName="%Move%"
-     ICON="action.move" displayName="Move" kind="action" name="Move"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppFilter" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFilter" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFilter" name="Properties"/>
+   <XActionItemReference entity="WebAppFilter" name="MoveActions"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -2451,24 +1765,10 @@
      </EntityData>
     </XActionItem>
    </XActionItem>
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
-   </XActionItem>
-   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
-     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
-   <XActionItem displayName="move" kind="list" name="MoveActions">
-    <XActionItem HIDE="always" HandlerClassName="%Move%"
-     ICON="action.move" displayName="Move" kind="action" name="Move"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppFilter" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFilter" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFilter" name="Properties"/>
+   <XActionItemReference entity="WebAppFilter" name="MoveActions"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -2524,26 +1824,10 @@
      </EntityData>
     </XActionItem>
    </XActionItem>
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
-    <XActionItem BaseActionName="Paste" HandlerClassName="%Paste%"
-     ICON="action.paste" displayName="Paste" kind="action" name="Paste"/>
-   </XActionItem>
-   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
-     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
-   <XActionItem displayName="move" kind="list" name="MoveActions">
-    <XActionItem HIDE="always" HandlerClassName="%Move%"
-     ICON="action.move" displayName="Move" kind="action" name="Move"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppFilter" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFilter" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFilter" name="Properties"/>
+   <XActionItemReference entity="WebAppFilter" name="MoveActions"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -2564,24 +1848,9 @@
    <XModelAttribute default="service reference" loader="ElementType" name="element type">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="category=general" name="description" xmlname="description.#text">
-    <Editor name="Note"/>
-   </XModelAttribute>
-   <XModelAttribute PROPERTIES="category=general" name="display-name" xmlname="display-name.#text"/>
-   <XModelAttribute PROPERTIES="category=advanced" name="small-icon" xmlname="icon.small-icon.#text">
-    <Constraint loader="Tree">
-     <value name="WebPageTree"/>
-     <value name="extensions=gif,jpg"/>
-    </Constraint>
-    <Editor name="TreeChooser"/>
-   </XModelAttribute>
-   <XModelAttribute PROPERTIES="category=advanced" name="large-icon" xmlname="icon.large-icon.#text">
-    <Constraint loader="Tree">
-     <value name="WebPageTree"/>
-     <value name="extensions=gif,jpg"/>
-    </Constraint>
-    <Editor name="TreeChooser"/>
-   </XModelAttribute>
+   <XModelAttributeReference
+    attributes="description,display-name,small-icon,large-icon"
+    entity="WebAppFilter" name="description"/>
    <XModelAttribute PROPERTIES="save=always;category=general;id=true"
     name="service-ref-name" xmlname="service-ref-name.#text"/>
    <XModelAttribute PROPERTIES="save=always;category=general"
@@ -2626,24 +1895,10 @@
      </EntityData>
     </XActionItem>
    </XActionItem>
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
-   </XActionItem>
-   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
-     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
-   <XActionItem displayName="move" kind="list" name="MoveActions">
-    <XActionItem HIDE="always" HandlerClassName="%Move%"
-     ICON="action.move" displayName="Move" kind="action" name="Move"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppFilter" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFilter" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFilter" name="Properties"/>
+   <XActionItemReference entity="WebAppFilter" name="MoveActions"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -2666,26 +1921,11 @@
    <XModelAttribute default="servlet" loader="ElementType" name="element type">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="category=advanced" name="small-icon" xmlname="icon.small-icon.#text">
-    <Constraint loader="Tree">
-     <value name="WebPageTree"/>
-     <value name="extensions=gif,jpg"/>
-    </Constraint>
-    <Editor name="TreeChooser"/>
-   </XModelAttribute>
-   <XModelAttribute PROPERTIES="category=advanced" name="large-icon" xmlname="icon.large-icon.#text">
-    <Constraint loader="Tree">
-     <value name="WebPageTree"/>
-     <value name="extensions=gif,jpg"/>
-    </Constraint>
-    <Editor name="TreeChooser"/>
-   </XModelAttribute>
+   <XModelAttributeReference
+    attributes="description,display-name,small-icon,large-icon"
+    entity="WebAppFilter" name="description"/>
    <XModelAttribute PROPERTIES="id=true;save=always;category=general"
     name="servlet-name" xmlname="servlet-name.#text"/>
-   <XModelAttribute PROPERTIES="category=advanced" name="display-name" xmlname="display-name.#text"/>
-   <XModelAttribute PROPERTIES="category=advanced" name="description" xmlname="description.#text">
-    <Editor name="Note"/>
-   </XModelAttribute>
    <XModelAttribute PROPERTIES="category=general" name="servlet-class" xmlname="servlet-class.#text">
     <Editor name="AccessibleJava"/>
    </XModelAttribute>
@@ -2760,26 +2000,10 @@
      </EntityData>
     </XActionItem>
    </XActionItem>
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
-    <XActionItem BaseActionName="Paste" HandlerClassName="%Paste%"
-     ICON="action.paste" displayName="Paste" kind="action" name="Paste"/>
-   </XActionItem>
-   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
-     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
-   <XActionItem displayName="move" kind="list" name="MoveActions">
-    <XActionItem HIDE="always" HandlerClassName="%Move%"
-     ICON="action.move" displayName="Move" kind="action" name="Move"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppFilter" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFilter" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFilter" name="Properties"/>
+   <XActionItemReference entity="WebAppFilter" name="MoveActions"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -2826,21 +2050,10 @@
      </EntityData>
     </XActionItem>
    </XActionItem>
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
-   </XActionItem>
-   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions"/>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
-   <XActionItem displayName="move" kind="list" name="MoveActions">
-    <XActionItem HIDE="always" HandlerClassName="%Move%"
-     ICON="action.move" displayName="Move" kind="action" name="Move"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppFolderContextParams" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFilter" name="Properties"/>
+   <XActionItemReference entity="WebAppFilter" name="MoveActions"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -2865,24 +2078,10 @@
    </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
-   </XActionItem>
-   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
-     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
-   <XActionItem displayName="move" kind="list" name="MoveActions">
-    <XActionItem HIDE="always" HandlerClassName="%Move%"
-     ICON="action.move" displayName="Move" kind="action" name="Move"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppContextParam" name="CopyActions"/>
+   <XActionItemReference entity="WebAppContextParam" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppContextParam" name="Properties"/>
+   <XActionItemReference entity="WebAppContextParam" name="MoveActions"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -2907,24 +2106,10 @@
    </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
-   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
-    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
-     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
-    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
-     ICON="action.copy" displayName="Cut" kind="action" name="Cut"/>
-   </XActionItem>
-   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
-    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
-     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
-   </XActionItem>
-   <XActionItem ICON="action.empty" kind="list" name="Properties">
-    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
-     displayName="Properties..." kind="action" name="Properties"/>
-   </XActionItem>
-   <XActionItem displayName="move" kind="list" name="MoveActions">
-    <XActionItem HIDE="always" HandlerClassName="%Move%"
-     ICON="action.move" displayName="Move" kind="action" name="Move"/>
-   </XActionItem>
+   <XActionItemReference entity="WebAppContextParam" name="CopyActions"/>
+   <XActionItemReference entity="WebAppContextParam" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppContextParam" name="Properties"/>
+   <XActionItemReference entity="WebAppContextParam" name="MoveActions"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
