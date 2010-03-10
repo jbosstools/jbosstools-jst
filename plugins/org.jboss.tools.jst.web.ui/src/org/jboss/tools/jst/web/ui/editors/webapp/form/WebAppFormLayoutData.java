@@ -11,6 +11,9 @@
 package org.jboss.tools.jst.web.ui.editors.webapp.form;
 
 import java.util.*;
+
+import org.jboss.tools.common.meta.XModelEntity;
+import org.jboss.tools.common.meta.impl.XModelMetaDataImpl;
 import org.jboss.tools.common.model.util.ClassLoaderUtil;
 import org.jboss.tools.common.model.ui.forms.*;
 
@@ -65,7 +68,7 @@ public class WebAppFormLayoutData implements IFormLayoutData {
 		WebAppFileFormLayoutData.FILE_WEB_APP_30_DEFINITION,
 	};
 
-	private static Map FORM_LAYOUT_DEFINITION_MAP = Collections.unmodifiableMap(new ArrayToMap(FORM_LAYOUT_DEFINITIONS));
+	private static Map FORM_LAYOUT_DEFINITION_MAP = Collections.synchronizedMap(new ArrayToMap(FORM_LAYOUT_DEFINITIONS));
 	
 	private static WebAppFormLayoutData INSTANCE = new WebAppFormLayoutData();
 	
@@ -76,7 +79,42 @@ public class WebAppFormLayoutData implements IFormLayoutData {
 	private WebAppFormLayoutData() {}
 
 	public IFormData getFormData(String entityName) {
-		return (IFormData)FORM_LAYOUT_DEFINITION_MAP.get(entityName);
+		IFormData data = (IFormData)FORM_LAYOUT_DEFINITION_MAP.get(entityName);
+		if(data == null) {
+			data = generateDefaultFormData(entityName);
+		}
+		return data;
+	}
+	
+	private IFormData generateDefaultFormData(String entityName) {
+		IFormData data = null;
+		XModelEntity entity = XModelMetaDataImpl.getInstance().getEntity(entityName);
+		if(entity != null) {
+			data = generateDefaultFormData(entity);
+		}
+		if(data != null) {
+			FORM_LAYOUT_DEFINITION_MAP.put(entityName, data);
+		}
+		return data;		
+	}
+	
+	public IFormData generateDefaultFormData(XModelEntity entity) {
+		String entityName = entity.getName();
+		List<IFormData> list = new ArrayList<IFormData>();
+		IFormData g = ModelFormLayoutData.createGeneralFormData(entity);
+		if(g != null) list.add(g);
+
+		for (int i = 0; i < entity.getChildren().length; i++) {
+			String ce = entity.getChildren()[i].getName();
+			if(WebAppListsFormLayoutData.singleChildLists.containsKey(ce)) {
+				list.add(WebAppListsFormLayoutData.singleChildLists.get(ce));
+			}
+		}
+		IFormData a = ModelFormLayoutData.createAdvancedFormData(entityName);
+		if(a != null) list.add(a);
+		IFormData[] ds = list.toArray(new IFormData[0]);
+		IFormData data = new FormData(entityName, new String[0], ds);
+		return data;
 	}
 
 }
