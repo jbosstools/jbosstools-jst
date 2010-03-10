@@ -36,15 +36,16 @@ import org.jboss.tools.jst.web.ui.WebUiPlugin;
 public class AddTLDMarkerResolution implements IMarkerResolution2{
 	private IFile file;
 	private Properties properties;
+	private String resolutionName;
 	
-	
-	public AddTLDMarkerResolution(IFile file, Properties properties){
+	public AddTLDMarkerResolution(IFile file, String name, Properties properties){
 		this.file = file;
 		this.properties = properties;
+		this.resolutionName = name;
 	}
 
 	public String getLabel() {
-		return Messages.AddTLDMarkerResolution_Name;
+		return Messages.bind(Messages.AddTLDMarkerResolution_Name, resolutionName);
 	}
 
 	public void run(IMarker marker) {

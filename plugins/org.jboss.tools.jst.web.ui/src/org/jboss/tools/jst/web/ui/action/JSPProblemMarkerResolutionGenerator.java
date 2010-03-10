@@ -39,6 +39,9 @@ import org.jboss.tools.jst.web.ui.WebUiPlugin;
  */
 public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGenerator2 {
 	
+	private static final String HTML_VALIDATOR_MARKER="org.eclipse.wst.html.core.validationMarker"; //$NON-NLS-1$
+	private static final String JSP_VALIDATOR_MARKER="org.eclipse.jst.jsp.core.validationMarker"; //$NON-NLS-1$
+	
 	public static HashMap<String, String> libs = new HashMap<String, String>();
 	static{
 		libs.put("s", "http://jboss.com/products/seam/taglib");  //$NON-NLS-1$//$NON-NLS-2$
@@ -53,12 +56,13 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 
 	private IFile file;
 	private Properties properties;
+	private String resolutionName;
 	
 	public IMarkerResolution[] getResolutions(IMarker marker) {
 		try{
 			if(isOurCase(marker)){
 				return new IMarkerResolution[] {
-					new AddTLDMarkerResolution(file, properties)
+					new AddTLDMarkerResolution(file, resolutionName, properties)
 				};
 			}
 		}catch(CoreException ex){
@@ -122,6 +126,12 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		
 		if(p.containsValue(prefix))
 			return false;
+		
+		if(marker.getType().equals(HTML_VALIDATOR_MARKER) || marker.isSubtypeOf(HTML_VALIDATOR_MARKER)){
+			resolutionName = "xmlns: "+prefix+" = \""+libs.get(prefix)+"\""; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		}else if(marker.getType().equals(JSP_VALIDATOR_MARKER) || marker.isSubtypeOf(JSP_VALIDATOR_MARKER)){
+			resolutionName = "<%@ taglib uri = \""+libs.get(prefix)+"\" prefix=\""+prefix+"\" %>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		}
 		
 		return true;
 	}
