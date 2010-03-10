@@ -16,9 +16,9 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
+import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.model.CSSRuleContainer;
+import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.model.CSSStyleSheetContainer;
 import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.model.CSSTreeNode;
-import org.w3c.dom.css.CSSRule;
-import org.w3c.dom.css.CSSStyleSheet;
 
 /**
  * 
@@ -33,10 +33,10 @@ public class CSSSelectorTreeLabelProvider extends LabelProvider {
 	
 	@Override
 	public Image getImage(Object element) {
-		if (((CSSTreeNode) element).getCssResource() instanceof CSSStyleSheet) {
+		if (((CSSTreeNode) element).getCSSContainer() instanceof CSSStyleSheetContainer) {
 			return CSS_STYLE_SHEET_DESCR.createImage();
 		}
-		if (((CSSTreeNode) element).getCssResource() instanceof CSSRule) {
+		if (((CSSTreeNode) element).getCSSContainer() instanceof CSSRuleContainer) {
 			return CSS_STYLE_CLASS_DESCR.createImage();
 		}
 		return super.getImage(element);

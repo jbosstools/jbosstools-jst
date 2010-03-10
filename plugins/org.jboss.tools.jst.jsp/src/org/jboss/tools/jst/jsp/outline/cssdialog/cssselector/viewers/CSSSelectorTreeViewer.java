@@ -24,6 +24,7 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.model.CSSSelectorTr
 public class CSSSelectorTreeViewer extends TreeViewer {
 
 	public final static String CSS_SELECTOR_TREE_VIWER_ID = "css_selector_tree_viwer"; //$NON-NLS-1$
+	private CSSSelectorTreeModel model;
 	
 	public CSSSelectorTreeViewer(Composite parent, int style) {
 		super(parent, style);
@@ -34,7 +35,12 @@ public class CSSSelectorTreeViewer extends TreeViewer {
 	public void setModel(CSSSelectorTreeModel model){
 		if (model != null) {
 			setInput(model.getInvisibleRoot());
+			this.model = model;
 		}
+	}
+	
+	public CSSSelectorTreeModel getModel(){
+		return model;
 	}
 
 }

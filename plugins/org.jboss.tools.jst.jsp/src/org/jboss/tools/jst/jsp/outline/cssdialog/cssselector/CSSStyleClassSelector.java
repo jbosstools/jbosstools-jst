@@ -16,21 +16,23 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
+import org.jboss.tools.common.model.ui.widgets.Split;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.cssdialog.AbstractCSSDialog;
 
 /**
  * 
  * @author yzhishko
- *
+ * 
  */
 
-public class CSSStyleClassSelector extends AbstractCSSDialog{
+public class CSSStyleClassSelector extends AbstractCSSDialog {
 
 	private String currentCSSStyleClass;
 	private CSSSelectorPartComposite cssClassComposite;
 	private String selectesCSSStylesClasses;
-	
+	private CSSSelectorPreview preview;
+
 	public CSSStyleClassSelector(Shell shell) {
 		super(shell);
 		setShellStyle(getShellStyle() | SWT.RESIZE | SWT.MAX
@@ -40,29 +42,32 @@ public class CSSStyleClassSelector extends AbstractCSSDialog{
 	@Override
 	protected Composite createControlComposite(Composite parent) {
 		// Create down splitter container
-		Composite controlsContainer = new Composite(parent, SWT.NONE);
+		Split controlsContainer = new Split(parent, SWT.VERTICAL);
 		controlsContainer.setLayout(new GridLayout());
 		controlsContainer.setLayoutData(new GridData(GridData.FILL,
 				GridData.FILL, true, true));
 		cssClassComposite = createCSSClassComposite(controlsContainer);
+		preview = createPreviewComposite(controlsContainer);
+		cssClassComposite.addCSSClassSelectionChangedListener(preview);
 		return controlsContainer;
 	}
-	
+
 	@Override
 	protected Control createContents(Composite parent) {
-		Composite composite = (Composite)super.createContents(parent);
+		Composite composite = (Composite) super.createContents(parent);
 		return composite;
 	}
-	
+
 	private CSSSelectorPartComposite createCSSClassComposite(Composite parent) {
-		return new CSSSelectorPartComposite(getStyleAttributes(), parent, currentCSSStyleClass);
+		return new CSSSelectorPartComposite(getStyleAttributes(), parent,
+				currentCSSStyleClass);
 	}
 
 	public void setCurrentStyleClass(String value) {
 		currentCSSStyleClass = value;
 	}
-	
-	public String getCSSStyleClasses (){
+
+	public String getCSSStyleClasses() {
 		return selectesCSSStylesClasses;
 	}
 
@@ -73,17 +78,21 @@ public class CSSStyleClassSelector extends AbstractCSSDialog{
 		}
 		super.buttonPressed(buttonId);
 	}
-	
+
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText(JstUIMessages.CSS_SELECTOR_TITLE);
 	}
-	
+
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		setTitle(JstUIMessages.CSS_SELECTOR_TITLE);
 		return super.createDialogArea(parent);
+	}
+
+	private CSSSelectorPreview createPreviewComposite(Composite parent) {
+		return new CSSSelectorPreview(parent);
 	}
 	
 }

@@ -25,7 +25,7 @@ public class CSSTreeNode {
 	private String name;
 	private List<CSSTreeNode> children = new ArrayList<CSSTreeNode>(0);
 	private CSSTreeNode parent;
-	private Object cssResource;
+	private CSSContainer cssResource;
 	private String styleSheetSource;
 
 	public CSSTreeNode(String n) {
@@ -54,11 +54,11 @@ public class CSSTreeNode {
 		return name;
 	}
 
-	public void setCssResource(Object cssResource) {
+	public void setCSSContainer(CSSContainer cssResource) {
 		this.cssResource = cssResource;
 	}
 
-	public Object getCssResource() {
+	public CSSContainer getCSSContainer() {
 		return cssResource;
 	}
 	

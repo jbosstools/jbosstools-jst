@@ -13,12 +13,15 @@ package org.jboss.tools.jst.jsp.outline.cssdialog.cssselector;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetAdapter;
@@ -27,8 +30,6 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
@@ -47,14 +48,19 @@ import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.StyleAttributes;
+import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.dnd.CSSTableDragListener;
+import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.dnd.CSSTreeDragListener;
 import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.model.CSSJSPRecognizer;
+import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.model.CSSRuleContainer;
 import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.model.CSSSelectorTableModel;
 import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.model.CSSSelectorTreeModel;
 import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.model.CSSTreeNode;
+import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.selection.CSSClassSelectionChangedEvent;
+import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.selection.CSSSelectorEventManager;
+import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.selection.ICSSClassSelectionChangedListener;
 import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.viewers.CSSSelectorFilter;
 import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.viewers.CSSSelectorTableViewer;
 import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.viewers.CSSSelectorTreeViewer;
-import org.w3c.dom.css.CSSRule;
 
 /**
  * 
@@ -65,9 +71,9 @@ import org.w3c.dom.css.CSSRule;
 public class CSSSelectorPartComposite extends Composite implements
 		SelectionListener {
 
-	private static final int LIST_HEIGHT = 500;
+	private static final int VIEWER_HEIGHT = 500;
 	private static final int BUTTOND_WIDTH = 50;
-	private static final int LIST_WIDTH = 175;
+	private static final int VIEWER_WIDTH = 175;
 
 	/** Existing font family */
 	Composite buttonsContainer;
@@ -80,13 +86,24 @@ public class CSSSelectorPartComposite extends Composite implements
 	private StyleAttributes styleAttributes;
 	private CSSSelectorTreeModel styleClassTreeModel;
 	private CSSSelectorFilter filter;
+	private List<ICSSClassSelectionChangedListener> changedListeners = new ArrayList<ICSSClassSelectionChangedListener>(
+			0);
 
 	public CSSSelectorPartComposite(StyleAttributes styleAttributes,
 			Composite parentComposite, String setClasses) {
-		super(parentComposite, SWT.NONE);
+		super(parentComposite, SWT.BORDER);
 		this.setClasses = setClasses;
 		this.styleAttributes = styleAttributes;
 		creatSelectorPart();
+		addDisposeListener(new DisposeListener() {
+
+			public void widgetDisposed(DisposeEvent e) {
+				for (int i = 0; i < changedListeners.size(); i++) {
+					removeCSSClassSelectionChangedListener(changedListeners
+							.get(i));
+				}
+			}
+		});
 	}
 
 	private void creatSelectorPart() {
@@ -103,6 +120,9 @@ public class CSSSelectorPartComposite extends Composite implements
 		if (!(editorPart instanceof JSPMultiPageEditor)) {
 			return;
 		}
+		String[] selectedClasses = parseSetClasses();
+		selectedClassesTableViewer.setModel(new CSSSelectorTableModel(
+				selectedClasses));
 		CSSJSPRecognizer recognizer = new CSSJSPRecognizer(
 				(JSPMultiPageEditor) editorPart);
 		if (recognizer.parseCSS() == CSSJSPRecognizer.VOID_RESULT) {
@@ -111,15 +131,12 @@ public class CSSSelectorPartComposite extends Composite implements
 		styleClassTreeModel = recognizer.getCssStyleClassTreeModel();
 		allCSSClassStyles = recognizer.getCSSStyleMap();
 		allCSSStyleClassViewer.setModel(styleClassTreeModel);
-		String[] selectedClasses = parseSetClasses();
-		selectedClassesTableViewer.setModel(new CSSSelectorTableModel(
-				selectedClasses));
 		updateStyles();
 	}
 
 	private void initDND() {
 		Transfer[] types = new Transfer[] { TextTransfer.getInstance() };
-	
+
 		allCSSStyleClassViewer.addDragSupport(DND.DROP_MOVE, types,
 				new CSSTreeDragListener(this, allCSSStyleClassViewer,
 						selectedClassesTableViewer));
@@ -127,26 +144,32 @@ public class CSSSelectorPartComposite extends Composite implements
 		selectedClassesTableViewer.addDragSupport(DND.DROP_MOVE, types,
 				new CSSTableDragListener(this, allCSSStyleClassViewer,
 						selectedClassesTableViewer));
-		
-		allCSSStyleClassViewer.addDropSupport(DND.DROP_MOVE, types, new DropTargetAdapter(){
-			@Override
-			public void drop(DropTargetEvent event) {
-				if (event.data == null || event.data.equals(CSSSelectorTreeViewer.CSS_SELECTOR_TREE_VIWER_ID)) {
-					event.detail = DND.DROP_NONE;
-					return;
-				}
-			}
-		});
-		
-		selectedClassesTableViewer.addDropSupport(DND.DROP_MOVE, types, new DropTargetAdapter(){
-			@Override
-			public void drop(DropTargetEvent event) {
-				if (event.data == null || event.data.equals(CSSSelectorTableViewer.CSS_SELECTOR_TABLE_VIWER_ID)) {
-					event.detail = DND.DROP_NONE;
-					return;
-				}
-			}
-		});
+
+		allCSSStyleClassViewer.addDropSupport(DND.DROP_MOVE, types,
+				new DropTargetAdapter() {
+					@Override
+					public void drop(DropTargetEvent event) {
+						if (event.data == null
+								|| event.data
+										.equals(CSSSelectorTreeViewer.CSS_SELECTOR_TREE_VIWER_ID)) {
+							event.detail = DND.DROP_NONE;
+							return;
+						}
+					}
+				});
+
+		selectedClassesTableViewer.addDropSupport(DND.DROP_MOVE, types,
+				new DropTargetAdapter() {
+					@Override
+					public void drop(DropTargetEvent event) {
+						if (event.data == null
+								|| event.data
+										.equals(CSSSelectorTableViewer.CSS_SELECTOR_TABLE_VIWER_ID)) {
+							event.detail = DND.DROP_NONE;
+							return;
+						}
+					}
+				});
 
 	}
 
@@ -163,7 +186,7 @@ public class CSSSelectorPartComposite extends Composite implements
 							TreeItem selectedItem = selectedItems[selectedItems.length - 1];
 							CSSTreeNode treeNode = (CSSTreeNode) selectedItem
 									.getData();
-							if (!(treeNode.getCssResource() instanceof CSSRule)) {
+							if (!(treeNode.getCSSContainer() instanceof CSSRuleContainer)) {
 								if (allCSSStyleClassViewer
 										.getExpandedState(treeNode)) {
 									allCSSStyleClassViewer.collapseToLevel(
@@ -179,18 +202,7 @@ public class CSSSelectorPartComposite extends Composite implements
 						}
 					}
 				});
-
-		tree.addMouseListener(new MouseAdapter() {
-
-			public void mouseDown(MouseEvent e) {
-				if (tree.getSelectionCount() > 0) {
-					selectedClassesTableViewer.getTable().deselectAll();
-					leftButton.setEnabled(false);
-					rightButton.setEnabled(true);
-				}
-			}
-		});
-
+	
 		selectedClassesTableViewer
 				.addDoubleClickListener(new IDoubleClickListener() {
 
@@ -206,18 +218,52 @@ public class CSSSelectorPartComposite extends Composite implements
 
 				});
 
-		table.addMouseListener(new MouseAdapter() {
+		allCSSStyleClassViewer
+				.addSelectionChangedListener(new ISelectionChangedListener() {
 
-			@Override
-			public void mouseDown(MouseEvent e) {
-				if (table.getSelectionCount() > 0) {
-					tree.deselectAll();
-					rightButton.setEnabled(false);
-					leftButton.setEnabled(true);
-				}
-			}
+					public void selectionChanged(
+							final SelectionChangedEvent event) {
+						if (!event.getSelection().isEmpty()) {
+							rightButton.setEnabled(true);
+							leftButton.setEnabled(false);
+						} else {
+							rightButton.setEnabled(false);
+							leftButton.setEnabled(false);
+						}
+						Thread thread = new Thread("TreeSelectorWorker") { //$NON-NLS-1$
+							@Override
+							public void run() {
+								fireClassSelectionChanged(CSSSelectorEventManager
+										.getInstance().createTreeSelectionChangedEvent(
+												event, allCSSStyleClassViewer.getModel()));
+							}
+						};
+						thread.start();
+					}
+				});
 
-		});
+		selectedClassesTableViewer
+				.addSelectionChangedListener(new ISelectionChangedListener() {
+
+					public void selectionChanged(final SelectionChangedEvent event) {
+						if (!event.getSelection().isEmpty()) {
+							rightButton.setEnabled(false);
+							leftButton.setEnabled(true);
+						} else {
+							rightButton.setEnabled(false);
+							leftButton.setEnabled(false);
+						}
+						Thread thread = new Thread("TableSelectorWorker") { //$NON-NLS-1$
+							@Override
+							public void run() {
+								fireClassSelectionChanged(CSSSelectorEventManager
+										.getInstance().createTableSelectionChangedEvent(
+												event, allCSSStyleClassViewer.getModel()));
+							}
+						};
+						thread.start();
+					}
+				});
 
 		rightButton.addSelectionListener(this);
 		leftButton.addSelectionListener(this);
@@ -317,7 +363,7 @@ public class CSSSelectorPartComposite extends Composite implements
 		if (selectedItems != null && selectedItems.length > 0) {
 			for (int i = 0; i < selectedItems.length; i++) {
 				TreeItem item = selectedItems[i];
-				if (!(((CSSTreeNode) item.getData()).getCssResource() instanceof CSSRule)) {
+				if (!(((CSSTreeNode) item.getData()).getCSSContainer() instanceof CSSRuleContainer)) {
 					continue;
 				}
 				selectedClassesTableViewer.add(((CSSTreeNode) item.getData())
@@ -335,13 +381,13 @@ public class CSSSelectorPartComposite extends Composite implements
 		setLayoutData(gridData);
 
 		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-		gridData.heightHint = LIST_HEIGHT;
-		gridData.widthHint = LIST_WIDTH;
+		gridData.heightHint = VIEWER_HEIGHT;
+		gridData.widthHint = VIEWER_WIDTH;
 		allCSSStyleClassViewer.getTree().setLayoutData(gridData);
 
 		gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-		gridData.heightHint = LIST_HEIGHT;
-		gridData.widthHint = LIST_WIDTH;
+		gridData.heightHint = VIEWER_HEIGHT;
+		gridData.widthHint = VIEWER_WIDTH;
 		selectedClassesTableViewer.getTable().setLayoutData(gridData);
 
 		final GridLayout btmContGridLayout = new GridLayout();
@@ -358,7 +404,7 @@ public class CSSSelectorPartComposite extends Composite implements
 
 	}
 
-	void updateStyles() {
+	public void updateStyles() {
 		String[] selectedItems = getItemsFromSelectedTable();
 		styleAttributes.clear();
 		if (filter == null) {
@@ -425,6 +471,22 @@ public class CSSSelectorPartComposite extends Composite implements
 			}
 		}
 		return selectedItemsList.toArray(new String[0]);
+	}
+
+	private void fireClassSelectionChanged(CSSClassSelectionChangedEvent event) {
+		for (int i = 0; i < changedListeners.size(); i++) {
+			changedListeners.get(i).classSelectionChanged(event);
+		}
+	}
+
+	public synchronized void addCSSClassSelectionChangedListener(
+			ICSSClassSelectionChangedListener listener) {
+		changedListeners.add(listener);
+	}
+
+	public synchronized void removeCSSClassSelectionChangedListener(
+			ICSSClassSelectionChangedListener listener) {
+		changedListeners.remove(listener);
 	}
 
 }

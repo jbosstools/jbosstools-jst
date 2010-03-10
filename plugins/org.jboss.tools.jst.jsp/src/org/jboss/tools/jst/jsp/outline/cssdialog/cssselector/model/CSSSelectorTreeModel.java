@@ -11,6 +11,8 @@
 
 package org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
 import org.jboss.tools.jst.web.kb.PageContextFactory.CSSStyleSheetDescriptor;
 import org.w3c.dom.css.CSSRule;
@@ -20,7 +22,7 @@ import org.w3c.dom.css.CSSStyleSheet;
 /**
  * 
  * @author yzhishko
- *
+ * 
  */
 
 @SuppressWarnings("restriction")
@@ -29,29 +31,30 @@ public class CSSSelectorTreeModel {
 	private CSSStyleSheetDescriptor[] cssSheets;
 	private CSSTreeNode invisibleRoot;
 
-	public CSSSelectorTreeModel(CSSStyleSheet[] cssSheets) {
-	}
-
 	public CSSSelectorTreeModel(CSSStyleSheetDescriptor[] cssSheets) {
 		this.cssSheets = cssSheets;
 		setInvisibleRoot(new CSSTreeNode("")); //$NON-NLS-1$
 		initModel(this.cssSheets);
 	}
 
-	private void initModel(CSSStyleSheetDescriptor[] cssStyleSheets){
+	private void initModel(CSSStyleSheetDescriptor[] cssStyleSheets) {
 		for (int i = 0; i < cssStyleSheets.length; i++) {
 			CSSStyleSheet styleSheet = cssStyleSheets[i].sheet;
 			CSSTreeNode parentSheet = new CSSTreeNode(cssStyleSheets[i].source);
 			parentSheet.setStyleSheetSource(parentSheet.toString());
 			invisibleRoot.addChild(parentSheet);
-			parentSheet.setCssResource(styleSheet);
+			parentSheet.setCSSContainer(new CSSStyleSheetContainer(styleSheet,
+					cssStyleSheets[i].source));
 			CSSRuleList cssRuleList = styleSheet.getCssRules();
 			for (int j = 0; j < cssRuleList.getLength(); j++) {
 				CSSRule cssRule = cssRuleList.item(j);
-				String[] selectors = CSSSelectorUtils.parseSelectorName(((ICSSStyleRule)cssRule).getSelectorText());
+				String[] selectors = CSSSelectorUtils
+						.parseSelectorName(((ICSSStyleRule) cssRule)
+								.getSelectorText());
 				for (int k = 0; k < selectors.length; k++) {
 					CSSTreeNode ruleNode = new CSSTreeNode(selectors[k]);
-					ruleNode.setCssResource(cssRule);
+					ruleNode.setCSSContainer(new CSSRuleContainer(selectors[k], cssRule,
+							cssStyleSheets[i].source));
 					ruleNode.setStyleSheetSource(cssStyleSheets[i].source);
 					parentSheet.addChild(ruleNode);
 				}
@@ -66,6 +69,29 @@ public class CSSSelectorTreeModel {
 	public CSSTreeNode getInvisibleRoot() {
 		return invisibleRoot;
 	}
-	
-	
+
+	public CSSTreeNode[] findCSSNodesByName(String name) {
+		List<CSSTreeNode> treeNodes = new ArrayList<CSSTreeNode>(0);
+		findCSSNodesRecursivly(invisibleRoot, name, treeNodes);
+		return treeNodes.toArray(new CSSTreeNode[0]);
+	}
+
+	private void findCSSNodesRecursivly(CSSTreeNode parentNode, String name,
+			List<CSSTreeNode> nodeCollection) {
+		if (parentNode == null) {
+			return;
+		}
+		List<CSSTreeNode> treeNodes = parentNode.getChildren();
+		if (treeNodes == null) {
+			return;
+		}
+		for (int i = 0; i < treeNodes.size(); i++) {
+			CSSTreeNode node = treeNodes.get(i);
+			if (name.equals(node.toString())) {
+				nodeCollection.add(node);
+			}
+			findCSSNodesRecursivly(node, name, nodeCollection);
+		}
+	}
+
 }
