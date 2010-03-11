@@ -30,6 +30,8 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
@@ -37,7 +39,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
@@ -176,7 +177,6 @@ public class CSSSelectorPartComposite extends Composite implements
 	private void initListeners() {
 
 		final Tree tree = allCSSStyleClassViewer.getTree();
-		final Table table = selectedClassesTableViewer.getTable();
 		allCSSStyleClassViewer
 				.addDoubleClickListener(new IDoubleClickListener() {
 
@@ -207,13 +207,7 @@ public class CSSSelectorPartComposite extends Composite implements
 				.addDoubleClickListener(new IDoubleClickListener() {
 
 					public void doubleClick(DoubleClickEvent event) {
-						TableItem[] selectedItems = table.getSelection();
-						if (selectedItems != null && selectedItems.length > 0) {
-							TableItem selectedItem = selectedItems[selectedItems.length - 1];
-							selectedClassesTableViewer.remove(selectedItem
-									.getData());
-							updateStyles();
-						}
+						handleRemoveClass();
 					}
 
 				});
@@ -265,6 +259,30 @@ public class CSSSelectorPartComposite extends Composite implements
 					}
 				});
 
+		allCSSStyleClassViewer.getTree().addKeyListener(new KeyListener() {
+			
+			public void keyReleased(KeyEvent e) {
+				if (SWT.ARROW_RIGHT == e.keyCode && SWT.ALT == e.stateMask) {
+					handleAddClass();
+				}
+			}
+			
+			public void keyPressed(KeyEvent e) {
+			}
+		});
+		
+		selectedClassesTableViewer.getTable().addKeyListener(new KeyListener() {
+			
+			public void keyReleased(KeyEvent e) {
+				if (SWT.ARROW_LEFT== e.keyCode && SWT.ALT == e.stateMask) {
+					handleRemoveClass();
+				}
+			}
+			
+			public void keyPressed(KeyEvent e) {
+			}
+		});
+		
 		rightButton.addSelectionListener(this);
 		leftButton.addSelectionListener(this);
 	}
@@ -324,9 +342,9 @@ public class CSSSelectorPartComposite extends Composite implements
 	public void widgetDefaultSelected(SelectionEvent e) {
 		Object ob = e.getSource();
 		if (ob.equals(leftButton)) {
-			handleLeftButtonSelection();
+			handleRemoveClass();
 		} else if (ob.equals(rightButton)) {
-			handleRightButtonSelection();
+			handleAddClass();
 		} else if (ob.equals(allCSSStyleClassViewer.getTree())) {
 			selectedClassesTableViewer.getTable().deselectAll();
 			leftButton.setEnabled(false);
@@ -341,23 +359,24 @@ public class CSSSelectorPartComposite extends Composite implements
 	public void widgetSelected(SelectionEvent e) {
 		Object ob = e.getSource();
 		if (ob.equals(leftButton)) {
-			handleLeftButtonSelection();
+			handleRemoveClass();
 		} else if (ob.equals(rightButton)) {
-			handleRightButtonSelection();
+			handleAddClass();
 		}
 	}
 
-	private void handleLeftButtonSelection() {
+	private void handleRemoveClass() {
 		TableItem[] selectedItems = selectedClassesTableViewer.getTable()
 				.getSelection();
-
-		for (int i = 0; i < selectedItems.length; i++) {
-			selectedClassesTableViewer.remove(selectedItems[i].getData());
+		if (selectedItems != null && selectedItems.length > 0) {
+			for (int i = 0; i < selectedItems.length; i++) {
+				selectedClassesTableViewer.remove(selectedItems[i].getData());
+			}
+			updateStyles();
 		}
-		updateStyles();
 	}
 
-	private void handleRightButtonSelection() {
+	private void handleAddClass() {
 		TreeItem[] selectedItems = allCSSStyleClassViewer.getTree()
 				.getSelection();
 		if (selectedItems != null && selectedItems.length > 0) {
@@ -369,8 +388,8 @@ public class CSSSelectorPartComposite extends Composite implements
 				selectedClassesTableViewer.add(((CSSTreeNode) item.getData())
 						.toString());
 			}
+			updateStyles();
 		}
-		updateStyles();
 	}
 
 	private void createLayout() {
