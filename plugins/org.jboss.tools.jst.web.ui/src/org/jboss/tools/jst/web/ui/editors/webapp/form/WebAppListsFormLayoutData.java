@@ -18,6 +18,8 @@ import org.jboss.tools.common.model.ui.forms.FormData;
 import org.jboss.tools.common.model.ui.forms.FormLayoutDataUtil;
 import org.jboss.tools.common.model.ui.forms.IFormData;
 import org.jboss.tools.common.model.ui.forms.ModelFormLayoutData;
+import org.jboss.tools.jst.web.model.helpers.WebAppHelper;
+import org.jboss.tools.jst.web.ui.Messages;
 
 /**
  * @author Viacheslav Kabanovich
@@ -83,6 +85,11 @@ public class WebAppListsFormLayoutData {
 		createOneAttributeSingleChildList(
 			"Cookie Configs", "name", "WebAppCookieConfig", "CreateActions.CreateCookieConfig" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		);
+
+		createTwoAttributeSingleChildList(
+			Messages.WebAppFileFormLayoutData_ContextParams, "param-name", 40, "param-value", WebAppHelper.CONTEXT_PARAM_ENTITY, "CreateActions.CreateContextParam" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		);
+
 	}
 
 

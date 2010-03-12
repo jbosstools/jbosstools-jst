@@ -65,7 +65,6 @@ public class WebAppFormLayoutData implements IFormLayoutData {
 		WebAppFileFormLayoutData.FILE_WEB_APP_23_DEFINITION,
 		WebAppFileFormLayoutData.FILE_WEB_APP_24_DEFINITION,
 		WebAppFileFormLayoutData.FILE_WEB_APP_25_DEFINITION,
-		WebAppFileFormLayoutData.FILE_WEB_APP_30_DEFINITION,
 	};
 
 	private static Map FORM_LAYOUT_DEFINITION_MAP = Collections.synchronizedMap(new ArrayToMap(FORM_LAYOUT_DEFINITIONS));
@@ -103,6 +102,10 @@ public class WebAppFormLayoutData implements IFormLayoutData {
 		List<IFormData> list = new ArrayList<IFormData>();
 		IFormData g = ModelFormLayoutData.createGeneralFormData(entity);
 		if(g != null) list.add(g);
+
+		if(entity.getName().startsWith("FileWebApp")) {
+			list.add(WebAppFileFormLayoutData.CONTEXT_PARAM_FOLDER_DEFINITION);
+		}
 
 		for (int i = 0; i < entity.getChildren().length; i++) {
 			String ce = entity.getChildren()[i].getName();

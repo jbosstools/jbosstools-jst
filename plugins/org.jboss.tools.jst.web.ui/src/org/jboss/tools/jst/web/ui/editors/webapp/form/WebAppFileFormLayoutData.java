@@ -58,10 +58,4 @@ public class WebAppFileFormLayoutData {
 		FILE_25_ENTITY, new String[]{null}, createFileDefinitions(Messages.WebAppFileFormLayoutData_WebDesc25, FILE_25_ENTITY)
 	);
 
-	public static IFormData FILE_WEB_APP_30_DEFINITION = new FormData(
-		FILE_30_ENTITY, new String[]{null}, createFileDefinitions(Messages.WebAppFileFormLayoutData_WebDesc30, FILE_30_ENTITY)
-	);
-
-	
-
 }
