@@ -10,13 +10,15 @@
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.outline.cssdialog.common;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
-
 import org.eclipse.jface.dialogs.IInputValidator;
+import org.eclipse.wst.css.core.internal.parser.CSSTokenizer;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.w3c.dom.css.CSSRuleList;
-import org.w3c.dom.css.CSSStyleRule;
 
 /**
  * CSS Validator
@@ -24,6 +26,7 @@ import org.w3c.dom.css.CSSStyleRule;
  * @author yradtsevich
  * 
  */
+@SuppressWarnings("restriction")
 public class CSSSelectorValidator extends CSSValidator implements
 		IInputValidator {
 	private static Reference<CSSSelectorValidator> instanceCache;
@@ -52,6 +55,8 @@ public class CSSSelectorValidator extends CSSValidator implements
 	 * @return {@code true} if the selector is valid, {@code false} otherwise
 	 */
 	public boolean isValidSelector(String selector) {
+		cleanValidatingDocument();
+
 		getValidatingDocument().set(selector + "{}"); //$NON-NLS-1$
 
 		CSSRuleList cssRules = getValidatingCSS().getCssRules();
@@ -61,14 +66,22 @@ public class CSSSelectorValidator extends CSSValidator implements
 			return false;
 		}
 
-		CSSStyleRule cssRule = (CSSStyleRule) cssRules.item(0);
-		if (!selector.equals(cssRule.getSelectorText())) {
-			// if the selector is like 'a{{{'
-			return false;
+		//https://jira.jboss.org/jira/browse/JBIDE-5994 fix
+		
+		CSSTokenizer cssTokenizer = new CSSTokenizer(new StringReader(selector+"{}")); //$NON-NLS-1$
+		try {
+			while (!cssTokenizer.isEOF()) {
+				String token = cssTokenizer.primGetNextToken();
+				if ("undefined".equalsIgnoreCase(token)) { //$NON-NLS-1$
+					return false;
+				}
+			}
+		} catch (IOException e) {
+			JspEditorPlugin.getPluginLog().logError(e);
 		}
-
+		
 		cleanValidatingDocument();
-
+		
 		return true;
 	}
 
