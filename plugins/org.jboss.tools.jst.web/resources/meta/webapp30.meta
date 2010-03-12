@@ -80,9 +80,12 @@
     name="xsi:schemaLocation" xmlname="xsi:schemaLocation"/>
    <XModelAttribute PROPERTIES="save=always" default="3.0"
     name="version" visibility="false" xmlname="version"/>
+   <XModelAttribute PROPERTIES="category=general" name="description" xmlname="description.#text">
+    <Editor name="Note"/>
+   </XModelAttribute>
    <XModelAttributeReference
-    attributes="description,display-name,small-icon,large-icon"
-    entity="WebAppFilter" name="description"/>
+    attributes="display-name,small-icon,large-icon"
+    entity="WebAppFilter" name="display"/>
    <XModelAttribute PROPERTIES="category=advanced" default="no"
     name="distributable" xmlname="distributable">
     <Constraint loader="List">
