@@ -80,6 +80,8 @@ public class AttributeValueResourceFactory {
 			return new IDResourceElement("Validator IDs", root, pageContext, proposalType, kbQuery); //$NON-NLS-1$
 		} else if("seamVariables".equals(type)) { //$NON-NLS-1$
 			return new SeamVariablesResourceElement(editorInput, "Seam Variables", root); //$NON-NLS-1$
+		} else if(CustomProposalTypeFactory.CSSCLASS_TYPE.equals(type)) {
+			return new IDResourceElement("CSS Classes", root, pageContext, proposalType, kbQuery); //$NON-NLS-1$
 		}
 		return new UnknownAttributeValueResource(MessageFormat.format(JstUIMessages.AttributeValueResourceFactory_UnknownResourceType, type), root);
 //		throw new RuntimeException("Unknown resource type:" + type);
