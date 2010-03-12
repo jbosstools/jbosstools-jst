@@ -1157,7 +1157,7 @@
    <XModelAttributeReference
     attributes="description,display-name,small-icon,large-icon"
     entity="WebAppFilter" name="description"/>
-   <XModelAttribute PROPERTIES="save=always;category=general"
+   <XModelAttribute PROPERTIES="save=always;category=general;id=true"
     name="handler-name" xmlname="handler-name.#text"/>
    <XModelAttribute PROPERTIES="save=always;category=general"
     name="handler-class" xmlname="handler-class.#text">
@@ -2022,7 +2022,8 @@
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
-   <XModelAttribute default="session-config" name="name" visibility="false"/>
+   <XModelAttribute PROPERTIES="id=true" default="session-config"
+    name="name" visibility="false"/>
    <XModelAttribute PROPERTIES="category=general" name="session-timeout" xmlname="session-timeout.#text">
     <Constraint loader="Int">
      <value name="mandatory=false"/>
