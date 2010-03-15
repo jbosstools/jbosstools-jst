@@ -82,7 +82,7 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 	 */
 	@Override
 	protected void addTextELProposals(ContentAssistRequest contentAssistRequest) {
-		if (!isJsfProject())
+		if (!isELCAToBeShown())
 			return;
 		
 		TextRegion prefix = getELPrefix(contentAssistRequest);

@@ -13,8 +13,6 @@ package org.jboss.tools.jst.jsp.contentassist;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
@@ -22,6 +20,7 @@ import org.eclipse.wst.xml.ui.internal.contentassist.XMLRelevanceConstants;
 import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImageHelper;
 import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImages;
 import org.jboss.tools.common.el.core.resolver.ELContext;
+import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
@@ -296,6 +295,9 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 	 * @param contentAssistRequest
 	 */
 	protected void addELPredicateProposals(ContentAssistRequest contentAssistRequest, int baseRelevance, boolean shiftRelevanceAgainstTagNameProposals) {
+		if (!isELCAToBeShown())
+			return;
+		
 		// Need to check if the cursor is placed right after a word part.
 		// If there is no word part found then just quit
 		TextRegion prefix = getELPredicatePrefix(contentAssistRequest);
@@ -363,7 +365,7 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 	
 	@Override
 	protected void addAttributeValueELProposals(ContentAssistRequest contentAssistRequest) {
-		if (!isJsfProject())
+		if (!isELCAToBeShown())
 			return;
 		
 		TextRegion prefix = getELPrefix(contentAssistRequest);
@@ -447,6 +449,9 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 
 	@Override
 	protected void addTextELProposals(ContentAssistRequest contentAssistRequest) {
+		if (!isELCAToBeShown())
+			return;
+		
 		TextRegion prefix = getELPrefix(contentAssistRequest);
 		if (prefix == null || !prefix.isELStarted()) {
 			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(true, "#{}", //$NON-NLS-1$ 
@@ -513,21 +518,12 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 	}
 
 	/**
-	 * A temporary fix to decide if JSF-tricks are to play 
+	 * Checks is we need to show EL proposals
 	 * 
 	 * @return
 	 */
-	protected boolean isJsfProject() {
-		if (getContext() == null || getContext().getResource() == null)
-			return false;
-		
-		IProject project = getContext().getResource().getProject();
-		try {
-			if (project.getNature("org.jboss.tools.jsf.jsfnature") != null)  //$NON-NLS-1$
-				return true;
-		} catch (CoreException e) {
-			JspEditorPlugin.getDefault().logError(e);
-		}
-		return false;
+	protected boolean isELCAToBeShown() {
+		ELResolver[] resolvers =  getContext().getElResolvers();
+		return (resolvers != null && resolvers.length > 0);
 	}
 }
