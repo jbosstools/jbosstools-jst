@@ -307,15 +307,7 @@
    <XModelAttribute default="absolute ordering" loader="ElementType" name="element type">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="save=always;id=true" name="name" xmlname="name.#text">
-    <Constraint loader="ListString">
-     <value name="doc"/>
-     <value name="gif"/>
-     <value name="html"/>
-     <value name="txt"/>
-    </Constraint>
-    <Editor name="ListString"/>
-   </XModelAttribute>
+   <XModelAttribute PROPERTIES="save=always;id=true" name="names" xmlname="names"/>
    <XModelAttribute name="others" xmlname="others">
     <Constraint loader="List">
      <value name="true"/>
@@ -725,7 +717,7 @@
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Absolute Ordering..." kind="action" name="CreateAbsoluteOrdering">
      <EntityData EntityName="WebAppAbsoluteOrdering">
-      <AttributeData AttributeName="name"/>
+      <AttributeData AttributeName="names"/>
       <AttributeData AttributeName="others" Mandatory="no"/>
      </EntityData>
     </XActionItem>

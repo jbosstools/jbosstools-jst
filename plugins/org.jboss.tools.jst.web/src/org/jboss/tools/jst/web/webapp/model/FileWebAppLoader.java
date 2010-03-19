@@ -18,7 +18,6 @@ import org.w3c.dom.*;
 
 import org.jboss.tools.common.meta.*;
 import org.jboss.tools.common.model.*;
-import org.jboss.tools.common.model.impl.XModelObjectImpl;
 import org.jboss.tools.common.model.loaders.impl.SimpleWebFileLoader;
 import org.jboss.tools.common.model.util.*;
 import org.jboss.tools.common.xml.XMLUtilities;
@@ -53,6 +52,7 @@ class FWLoaderUtil extends XModelObjectLoaderUtil {
     	} else if(entity.getName().startsWith("FileWebApp")) { //$NON-NLS-1$
     		children.add("distributable"); //$NON-NLS-1$
     	} else if(entity.getName().startsWith("WebAppAbsoluteOrdering")) { //$NON-NLS-1$
+    		children.add("name"); //$NON-NLS-1$
     		children.add("others"); //$NON-NLS-1$
     	} else if(entity.getName().equals("WebAppSessionConfig30")) { //$NON-NLS-1$
     		children.add("tracking-mode"); //$NON-NLS-1$
@@ -76,6 +76,8 @@ class FWLoaderUtil extends XModelObjectLoaderUtil {
             return (XMLUtil.getUniqueChild(element, "others") != null) ? "true" : "false"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         if("role-names".equals(xmlname)) //$NON-NLS-1$
           return loadArray(element, "role-name"); //$NON-NLS-1$
+        if("names".equals(xmlname)) //$NON-NLS-1$
+            return loadArray(element, "name"); //$NON-NLS-1$
         if("url-patterns".equals(xmlname)) //$NON-NLS-1$
           return loadArray(element, "url-pattern"); //$NON-NLS-1$
         if("http-methods".equals(xmlname)) //$NON-NLS-1$
@@ -124,6 +126,8 @@ class FWLoaderUtil extends XModelObjectLoaderUtil {
             if("true".equals(value)) XMLUtil.createElement(element, "others"); //$NON-NLS-1$ //$NON-NLS-2$
         } else if("role-names".equals(xmlname)) { //$NON-NLS-1$
             saveArray(element, "role-name", value); //$NON-NLS-1$
+        } else if("names".equals(xmlname)) { //$NON-NLS-1$
+            saveArray(element, "name", value); //$NON-NLS-1$
         } else if("url-patterns".equals(xmlname)) { //$NON-NLS-1$
             saveArray(element, "url-pattern", value); //$NON-NLS-1$
         } else if("http-methods".equals(xmlname)) { //$NON-NLS-1$
@@ -300,11 +304,11 @@ class FWLoaderUtil extends XModelObjectLoaderUtil {
     boolean needToSave(XModelObject o) {
     	if(o == null) return false;
     	String entity = o.getModelEntity().getName();
-    	if("WebAppSessionConfig".equals(entity) || "WebAppLoginConfig".equals(entity)) { //$NON-NLS-1$ //$NON-NLS-2$
+    	if(entity.startsWith("WebAppSessionConfig") || "WebAppLoginConfig".equals(entity)) { //$NON-NLS-1$ //$NON-NLS-2$
     		return hasSetAttributes(o); 
     	} else if("WebAppWelcomFileList".equals(entity) || "WebAppLocaleEncodingMappingList".equals(entity)) { //$NON-NLS-1$ //$NON-NLS-2$
     		return (o.getChildren().length > 0);
-    	} else if("WebAppJspConfig".equals(entity)) { //$NON-NLS-1$
+    	} else if(entity.startsWith("WebAppJspConfig")) { //$NON-NLS-1$
     		return (o.getChildren().length > 0);
     	}
     	return true;
@@ -317,7 +321,7 @@ class FWLoaderUtil extends XModelObjectLoaderUtil {
     		// it would be more safe to check isSavable
     		if(xml == null || xml.length() == 0 || "NAME".equals(xml)) continue; //$NON-NLS-1$
     		String v = o.getAttributeValue(as[i].getName());
-    		if(v != null && v.length() > 0) return true;
+    		if(v != null && v.length() > 0 && !v.equals(as[i].getDefaultValue())) return true;
     	}
     	String finalComment = o.get("#final-comment"); //$NON-NLS-1$
     	if(finalComment != null && finalComment.length() > 0) return true;
