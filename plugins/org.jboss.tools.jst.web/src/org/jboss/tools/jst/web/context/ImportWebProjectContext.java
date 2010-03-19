@@ -260,6 +260,7 @@ public abstract class ImportWebProjectContext implements IImportWebProjectContex
 		if("2.3".equals(servletVersion) && !entity.equals("FileWebApp")) return false; //$NON-NLS-1$ //$NON-NLS-2$
 		if("2.4".equals(servletVersion) && !entity.equals("FileWebApp24")) return false; //$NON-NLS-1$ //$NON-NLS-2$
 		if("2.5".equals(servletVersion) && !entity.equals("FileWebApp25")) return false; //$NON-NLS-1$ //$NON-NLS-2$
+		if("3.0".equals(servletVersion) && !entity.equals("FileWebApp30")) return false; //$NON-NLS-1$ //$NON-NLS-2$
 		return true;		
 	}
 
@@ -272,6 +273,8 @@ public abstract class ImportWebProjectContext implements IImportWebProjectContex
 			convertWebXML("FileWebApp24", backup); //$NON-NLS-1$
 		} else if("2.5".equals(servletVersion) && !entity.equals("FileWebApp25")) { //$NON-NLS-1$ //$NON-NLS-2$
 			convertWebXML("FileWebApp25", backup); //$NON-NLS-1$
+		} else if("3.0".equals(servletVersion) && !entity.equals("FileWebApp30")) { //$NON-NLS-1$ //$NON-NLS-2$
+			convertWebXML("FileWebApp30", backup); //$NON-NLS-1$
 		}
 	}	
 	
@@ -291,10 +294,11 @@ public abstract class ImportWebProjectContext implements IImportWebProjectContex
 			String n = as[i].getName();
 			String xmlname = as[i].getXMLName();
 			if(xmlname == null || xmlname.length() == 0) continue;
+			if("version".equals(xmlname) || xmlname.startsWith("xmlns")) continue; //$NON-NLS-1$ //$NON-NLS-2$
 			XAttribute a = webxml.getModelEntity().getAttribute(n);
 			if(a == null) continue;
 			String v = webxml.getAttributeValue(n);
-			if(v != null && !v.equals(a.getDefaultValue())) {
+			if(v != null && !v.equals(a.getDefaultValue()) && !v.equals(as[i].getDefaultValue())) {
 				newweb.setAttributeValue(n, v);
 			}
 		}
