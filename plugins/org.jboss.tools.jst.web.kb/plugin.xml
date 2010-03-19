@@ -32,43 +32,43 @@
    <extension
          point="org.jboss.tools.jst.web.kb.tagLib">
       <tag-lib
-            location="taglibs/Ajax4jsf.xml"
+            location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/Ajax4jsf.xml"
             name="JBoss Ajax4jsf"
             uri="http://richfaces.org/a4j"/>
       <tag-lib
-            location="taglibs/Richfaces.xml"
+            location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/Richfaces.xml"
             name="JBoss RichFaces"
             uri="http://richfaces.org/rich"/>
       <tag-lib
-            location="taglibs/JsfCore.xml"
+            location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/JsfCore.xml"
             name="JSF Core"
             uri="http://java.sun.com/jsf/core"/>
       <tag-lib
-            location="taglibs/JsfHtmlBasic.xml"
+            location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/JsfHtmlBasic.xml"
             name="JSF HTML Basic"
             uri="http://java.sun.com/jsf/html"/>
       <tag-lib
-            location="taglibs/Facelets.xml"
+            location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/Facelets.xml"
             name="Facelets UI"
             uri="http://java.sun.com/jsf/facelets"/>
       <tag-lib
-            location="taglibs/FaceletsHtml.xml"
+            location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/FaceletsHtml.xml"
             name="Facelets Html"
             uri="http://www.w3.org/1999/xhtml/facelets"/>
       <tag-lib
-            location="taglibs/JBossSeam.xml"
+            location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/JBossSeam.xml"
             name="JBoss Seam"
             uri="http://jboss.com/products/seam/taglib"/>
       <tag-lib
-            location="taglibs/Jsp.xml"
+            location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/Jsp.xml"
             name="JSP"
             uri="http://java.sun.com/JSP/Page"/>
       <tag-lib
             name="Struts HTML"
-            location="taglibs/StrutsHtml.xml"
+            location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/StrutsHtml.xml"
             uri="http://struts.apache.org/tags-html"/>
       <component-extension
-            location="taglibs/componentExtension.xml"/>
+            location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/componentExtension.xml"/>
    </extension>
    
    <extension point="org.jboss.tools.jst.web.kb.KbIncludeContext">

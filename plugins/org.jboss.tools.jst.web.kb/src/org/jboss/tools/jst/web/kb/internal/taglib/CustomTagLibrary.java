@@ -11,8 +11,8 @@
 package org.jboss.tools.jst.web.kb.internal.taglib;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -62,14 +62,14 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 	protected String name;
 	protected String defaultPrefix;
 
-	public CustomTagLibrary(File file, String uri, String version, String name) {
+	public CustomTagLibrary(InputStream inputStream, String uri, String version, String name) {
 		setURI(uri);
 		setVersion(version);
 		this.name = name;
 		Document document = null;
 		try {
 			DocumentBuilder builder = createDocumentBuilder(false);
-			document = builder.parse(file);
+			document = builder.parse(inputStream);
 		} catch (SAXException e) {
 			WebKbPlugin.getDefault().logError(e);
 		} catch (IOException e) {

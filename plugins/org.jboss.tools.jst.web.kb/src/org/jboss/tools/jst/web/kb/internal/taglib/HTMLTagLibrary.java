@@ -10,7 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal.taglib;
 
-import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,8 +28,8 @@ import org.w3c.dom.NodeList;
  */
 public class HTMLTagLibrary extends CustomTagLibrary {
 
-	public HTMLTagLibrary(File file, String uri, String version, String name) {
-		super(file, uri, version, name);
+	public HTMLTagLibrary(InputStream inputStream, String uri, String version, String name) {
+		super(inputStream, uri, version, name);
 	}
 
 	/*

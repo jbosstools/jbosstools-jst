@@ -10,8 +10,9 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.taglib;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,7 +29,6 @@ import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibAttribute;
 import org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibrary;
 import org.jboss.tools.jst.web.kb.internal.taglib.HTMLTagLibrary;
-import org.osgi.framework.Bundle;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -78,6 +78,17 @@ public class CustomTagLibManager {
 		}
 		return extensions;
 	}
+	
+	private InputStream getInputStream(IConfigurationElement element){
+		String location = element.getAttribute("location"); //$NON-NLS-1$
+		try{
+			URL url = FileLocator.resolve(new URL(location));
+			return url.openConnection().getInputStream();
+		}catch(IOException ex){
+			WebKbPlugin.getDefault().logError(ex);
+			return null;
+		}
+	}
 
 	private void init() {
 		Set<ICustomTagLibrary> libSet = new HashSet<ICustomTagLibrary>();
@@ -93,62 +104,28 @@ public class CustomTagLibManager {
 					String elementName = elements[j].getName();
 					if(CustomTagLibrary.TAG_LIB.equals(elementName)) {
 						String uri = elements[j].getAttribute("uri"); //$NON-NLS-1$
-						String location = elements[j].getAttribute("location"); //$NON-NLS-1$
 						String version = elements[j].getAttribute("version"); //$NON-NLS-1$
 						String name = elements[j].getAttribute("name"); //$NON-NLS-1$
-						Bundle sourcePlugin = Platform.getBundle(elements[j].getNamespaceIdentifier());
-						File schemaLocation = null;
-						try {
-							String pluginPath = FileLocator.resolve(sourcePlugin.getEntry("/")).getPath(); //$NON-NLS-1$
-							if(uri==null || uri.length()==0 || location==null || location.length()==0) {
-								WebKbPlugin.getDefault().logWarning("Incorrect org.jboss.tools.jst.web.kb.KbTagLib extension in " + pluginPath + " plugin. URI or location can't be empty."); //$NON-NLS-1$ //$NON-NLS-2$
-								continue;
-							}
-							schemaLocation = new File(pluginPath, location);
-						} catch (IOException e) {
-							WebKbPlugin.getDefault().logError(e);
-							continue;
-						}
-						if(schemaLocation.isFile()) {
-							CustomTagLibrary lib = FACELETS_HTML_TAG_LIB_URI.equals(uri)?new HTMLTagLibrary(schemaLocation, uri, version, name):new CustomTagLibrary(schemaLocation, uri, version, name);
-							libSet.add(lib);
-						} else {
-							WebKbPlugin.getDefault().logWarning("Can't load KB schema: " + schemaLocation); //$NON-NLS-1$
-						}
+						InputStream schemaStream = getInputStream(elements[j]);
+						CustomTagLibrary lib = FACELETS_HTML_TAG_LIB_URI.equals(uri)?new HTMLTagLibrary(schemaStream, uri, version, name):new CustomTagLibrary(schemaStream, uri, version, name);
+						libSet.add(lib);
 					} else if(CustomTagLibrary.COMPONET_EXTENSION.equals(elementName)) {
-						String location = elements[j].getAttribute("location"); //$NON-NLS-1$
-						Bundle sourcePlugin = Platform.getBundle(elements[j].getNamespaceIdentifier());
-						File schemaLocation = null;
+						InputStream schemaStream = getInputStream(elements[j]);
+						Document document = null;
 						try {
-							String pluginPath = FileLocator.resolve(sourcePlugin.getEntry("/")).getPath(); //$NON-NLS-1$
-							if(location==null || location.length()==0) {
-								WebKbPlugin.getDefault().logWarning("Incorrect org.jboss.tools.jst.web.kb.KbTagLib extension in " + pluginPath + " plugin. Location can't be empty."); //$NON-NLS-1$ //$NON-NLS-2$
-								continue;
-							}
-							schemaLocation = new File(pluginPath, location);
+							DocumentBuilder builder = CustomTagLibrary.createDocumentBuilder(false);
+							document = builder.parse(schemaStream);
+						} catch (SAXException e) {
+							WebKbPlugin.getDefault().logError(e);
 						} catch (IOException e) {
 							WebKbPlugin.getDefault().logError(e);
-							continue;
+						} catch (ParserConfigurationException e) {
+							WebKbPlugin.getDefault().logError(e);
 						}
-						if(schemaLocation.isFile()) {
-							Document document = null;
-							try {
-								DocumentBuilder builder = CustomTagLibrary.createDocumentBuilder(false);
-								document = builder.parse(schemaLocation);
-							} catch (SAXException e) {
-								WebKbPlugin.getDefault().logError(e);
-							} catch (IOException e) {
-								WebKbPlugin.getDefault().logError(e);
-							} catch (ParserConfigurationException e) {
-								WebKbPlugin.getDefault().logError(e);
-							}
-							Element root = document.getDocumentElement();
-							CustomTagLibAttribute[] attributes = CustomTagLibrary.getAttributes(root);
-							for (int k = 0; k < attributes.length; k++) {
-								extensionSet.add(attributes[k]);
-							}
-						} else {
-							WebKbPlugin.getDefault().logWarning("Can't load KB schema: " + schemaLocation); //$NON-NLS-1$
+						Element root = document.getDocumentElement();
+						CustomTagLibAttribute[] attributes = CustomTagLibrary.getAttributes(root);
+						for (int k = 0; k < attributes.length; k++) {
+							extensionSet.add(attributes[k]);
 						}
 					}
 				}
