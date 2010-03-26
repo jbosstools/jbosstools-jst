@@ -118,4 +118,6 @@ public class JstUIMessages extends NLS {
 	public static String PROPERTY_VALUE_COLUMN;
 	public static String CSS_ADD_CSS_CLASS_TIP;
 	public static String CSS_REMOVE_CSS_CLASS_TIP;
+	public static String CSS_MOVE_UP_CSS_CLASS_TIP;
+	public static String CSS_MOVE_DOWN_CSS_CLASS_TIP;
 }

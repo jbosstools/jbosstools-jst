@@ -16,7 +16,7 @@ import org.w3c.dom.css.CSSRule;
 /**
  * 
  * @author yzhishko
- *
+ * 
  */
 
 public class CSSRuleContainer extends CSSContainer {

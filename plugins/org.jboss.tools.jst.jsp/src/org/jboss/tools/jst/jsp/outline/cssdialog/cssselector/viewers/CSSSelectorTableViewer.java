@@ -13,10 +13,10 @@ package org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.viewers;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
@@ -27,36 +27,44 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.model.CSSSelectorTa
 /**
  * 
  * @author yzhishko
- *
+ * 
  */
 
-public class CSSSelectorTableViewer extends TableViewer{
+public class CSSSelectorTableViewer extends TableViewer {
 
 	public final static String CSS_SELECTOR_TABLE_VIWER_ID = "css_selector_table_viwer"; //$NON-NLS-1$
-	private final static ImageDescriptor CSS_STYLE_CLASS_DESCR = JspEditorPlugin.getImageDescriptor(Constants.IMAGE_STYLE_CLASS_LOCATION);
+	private Image CSS_STYLE_CLASS_IMAGE = JspEditorPlugin.getImageDescriptor(
+			Constants.IMAGE_STYLE_CLASS_LOCATION).createImage();
 
 	private CSSSelectorTableModel model;
-	
+
 	public CSSSelectorTableViewer(Composite parent, int style) {
 		super(parent, style);
 		setContentProvider(new CSSSelectorTableContentProvider());
-		setLabelProvider(new LabelProvider(){
+		setLabelProvider(new LabelProvider() {
 			@Override
 			public Image getImage(Object element) {
-				return CSS_STYLE_CLASS_DESCR.createImage();
+				return CSS_STYLE_CLASS_IMAGE;
+			}
+		});
+		getTable().addDisposeListener(new DisposeListener() {
+
+			public void widgetDisposed(DisposeEvent e) {
+				CSS_STYLE_CLASS_IMAGE.dispose();
+				CSS_STYLE_CLASS_IMAGE = null;
 			}
 		});
 	}
-	
-	public void setModel(CSSSelectorTableModel model){
+
+	public void setModel(CSSSelectorTableModel model) {
 		setInput(model.getContainerList());
 		this.model = model;
 	}
-	
-	public CSSSelectorTableModel getModel(){
+
+	public CSSSelectorTableModel getModel() {
 		return model;
 	}
-	
+
 	@Override
 	public void add(Object element) {
 		if (element != null) {
@@ -66,7 +74,7 @@ public class CSSSelectorTableViewer extends TableViewer{
 		}
 		super.add(element);
 	}
-	
+
 	@Override
 	public void add(Object[] elements) {
 		List<Object> objects = new ArrayList<Object>(0);
@@ -79,8 +87,8 @@ public class CSSSelectorTableViewer extends TableViewer{
 		}
 		super.add(objects.toArray());
 	}
-	
-	private boolean isContain(Object element){
+
+	private boolean isContain(Object element) {
 		TableItem[] items = getTable().getItems();
 		if (items != null) {
 			for (int i = 0; i < items.length; i++) {
@@ -91,5 +99,20 @@ public class CSSSelectorTableViewer extends TableViewer{
 		}
 		return false;
 	}
-	
+
+	@Override
+	public void refresh() {
+		if (model != null) {
+			model.getContainerList().clear();
+			TableItem[] tableItems = getTable().getItems();
+			if (tableItems != null) {
+				for (int i = 0; i < tableItems.length; i++) {
+					model.getContainerList().add(
+							tableItems[i].getData().toString());
+				}
+			}
+		}
+		super.refresh();
+	}
+
 }

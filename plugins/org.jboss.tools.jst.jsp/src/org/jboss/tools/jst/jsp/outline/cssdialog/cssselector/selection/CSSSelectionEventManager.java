@@ -17,18 +17,19 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.model.CSSSelectorTr
 /**
  * 
  * @author yzhishko
- *
+ * 
  */
 
-public class CSSSelectorEventManager {
+public class CSSSelectionEventManager {
 
-	private static CSSSelectorEventManager instance = new CSSSelectorEventManager();
+	private static CSSSelectionEventManager instance = new CSSSelectionEventManager();
+	private boolean handleSelection = true;
 
-	private CSSSelectorEventManager() {
+	private CSSSelectionEventManager() {
 
 	}
 
-	public static CSSSelectorEventManager getInstance() {
+	public static CSSSelectionEventManager getInstance() {
 		return instance;
 	}
 
@@ -42,6 +43,14 @@ public class CSSSelectorEventManager {
 			SelectionChangedEvent event, CSSSelectorTreeModel model) {
 		return new CSSTableSelectionChangedEvent(event.getSelectionProvider(),
 				event.getSelection(), model);
+	}
+
+	public void setHandleSelection(boolean handleSelection) {
+		this.handleSelection = handleSelection;
+	}
+
+	public boolean isHandleSelection() {
+		return handleSelection;
 	}
 
 }

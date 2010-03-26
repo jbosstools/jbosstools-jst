@@ -53,8 +53,8 @@ public class CSSSelectorTreeModel {
 								.getSelectorText());
 				for (int k = 0; k < selectors.length; k++) {
 					CSSTreeNode ruleNode = new CSSTreeNode(selectors[k]);
-					ruleNode.setCSSContainer(new CSSRuleContainer(selectors[k], cssRule,
-							cssStyleSheets[i].source));
+					ruleNode.setCSSContainer(new CSSRuleContainer(selectors[k],
+							cssRule, cssStyleSheets[i].source));
 					ruleNode.setStyleSheetSource(cssStyleSheets[i].source);
 					parentSheet.addChild(ruleNode);
 				}

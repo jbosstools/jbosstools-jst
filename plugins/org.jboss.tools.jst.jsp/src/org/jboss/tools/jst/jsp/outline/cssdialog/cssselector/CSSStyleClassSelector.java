@@ -94,5 +94,5 @@ public class CSSStyleClassSelector extends AbstractCSSDialog {
 	private CSSSelectorPreview createPreviewComposite(Composite parent) {
 		return new CSSSelectorPreview(parent);
 	}
-	
+
 }

@@ -18,25 +18,25 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.model.CSSTreeNode;
 /**
  * 
  * @author yzhishko
- *
+ * 
  */
 
 public class CSSSelectorTreeContentProvider implements ITreeContentProvider {
 
 	public Object[] getChildren(Object parentElement) {
-		return ((CSSTreeNode)parentElement).getChildren().toArray();
+		return ((CSSTreeNode) parentElement).getChildren().toArray();
 	}
 
 	public Object getParent(Object element) {
-		return ((CSSTreeNode)element).getParent();
+		return ((CSSTreeNode) element).getParent();
 	}
 
 	public boolean hasChildren(Object element) {
-		return ((CSSTreeNode)element).hasChildren();
+		return ((CSSTreeNode) element).hasChildren();
 	}
 
 	public Object[] getElements(Object inputElement) {
-		return ((CSSTreeNode)inputElement).getChildren().toArray();
+		return ((CSSTreeNode) inputElement).getChildren().toArray();
 	}
 
 	public void dispose() {

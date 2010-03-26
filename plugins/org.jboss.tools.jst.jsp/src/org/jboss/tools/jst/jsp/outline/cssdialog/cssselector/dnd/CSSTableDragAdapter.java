@@ -28,26 +28,27 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.viewers.CSSSelector
 /**
  * 
  * @author yzhishko
- *
+ * 
  */
 
 @SuppressWarnings("unused")
-public class CSSTableDragListener implements DragSourceListener {
+public class CSSTableDragAdapter implements DragSourceListener {
 
 	private Table table;
 	private Tree tree;
 	private CSSSelectorPartComposite parent;
 	private TreeViewer treeViewer;
 	private TableViewer tableViewer;
-	
-	public CSSTableDragListener (CSSSelectorPartComposite parent, TreeViewer treeViewer, TableViewer tableViewer){
+
+	public CSSTableDragAdapter(CSSSelectorPartComposite parent,
+			TreeViewer treeViewer, TableViewer tableViewer) {
 		this.table = tableViewer.getTable();
 		this.tree = treeViewer.getTree();
 		this.treeViewer = treeViewer;
 		this.tableViewer = tableViewer;
 		this.parent = parent;
 	}
-	
+
 	public void dragStart(DragSourceEvent event) {
 		event.doit = table.getSelectionCount() > 0;
 	}
@@ -57,8 +58,7 @@ public class CSSTableDragListener implements DragSourceListener {
 		TableItem[] selectedTableItems = table.getSelection();
 		if (selectedTableItems != null) {
 			for (int i = 0; i < selectedTableItems.length; i++) {
-				selectedItems.add(selectedTableItems[i].getData()
-						.toString());
+				selectedItems.add(selectedTableItems[i].getData().toString());
 			}
 		}
 		event.data = CSSSelectorTableViewer.CSS_SELECTOR_TABLE_VIWER_ID;

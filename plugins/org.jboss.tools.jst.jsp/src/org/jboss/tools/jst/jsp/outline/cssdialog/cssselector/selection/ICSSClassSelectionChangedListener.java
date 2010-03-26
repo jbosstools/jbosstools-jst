@@ -14,11 +14,11 @@ package org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.selection;
 /**
  * 
  * @author yzhishko
- *
+ * 
  */
 
 public interface ICSSClassSelectionChangedListener {
 
 	void classSelectionChanged(CSSClassSelectionChangedEvent event);
-	
+
 }

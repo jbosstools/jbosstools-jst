@@ -18,28 +18,28 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.model.CSSSelectorTr
 /**
  * 
  * @author yzhishko
- *
+ * 
  */
 
 public class CSSSelectorTreeViewer extends TreeViewer {
 
 	public final static String CSS_SELECTOR_TREE_VIWER_ID = "css_selector_tree_viwer"; //$NON-NLS-1$
 	private CSSSelectorTreeModel model;
-	
+
 	public CSSSelectorTreeViewer(Composite parent, int style) {
 		super(parent, style);
 		setContentProvider(new CSSSelectorTreeContentProvider());
 		setLabelProvider(new CSSSelectorTreeLabelProvider());
 	}
-	
-	public void setModel(CSSSelectorTreeModel model){
+
+	public void setModel(CSSSelectorTreeModel model) {
 		if (model != null) {
 			setInput(model.getInvisibleRoot());
 			this.model = model;
 		}
 	}
-	
-	public CSSSelectorTreeModel getModel(){
+
+	public CSSSelectorTreeModel getModel() {
 		return model;
 	}
 

@@ -16,13 +16,13 @@ import java.util.List;
 /**
  * 
  * @author yzhishko
- *
+ * 
  */
 
 public class CSSSelectorTableModel {
 
 	private List<String> containerList = new ArrayList<String>(0);
-	
+
 	public List<String> getContainerList() {
 		return containerList;
 	}
@@ -30,15 +30,13 @@ public class CSSSelectorTableModel {
 	public CSSSelectorTableModel(String... classNames) {
 		initModel(classNames);
 	}
-	
-	private void initModel(String... classNames){
+
+	private void initModel(String... classNames) {
 		if (classNames != null) {
 			for (int i = 0; i < classNames.length; i++) {
 				containerList.add(classNames[i]);
 			}
 		}
 	}
-	
-	
-	
+
 }

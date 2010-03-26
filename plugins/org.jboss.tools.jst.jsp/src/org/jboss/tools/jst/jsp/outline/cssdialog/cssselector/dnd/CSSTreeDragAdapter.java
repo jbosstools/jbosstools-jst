@@ -12,7 +12,11 @@
 package org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.dnd;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.dnd.DND;
@@ -24,6 +28,7 @@ import org.eclipse.swt.widgets.TreeItem;
 import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.CSSSelectorPartComposite;
 import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.model.CSSContainer;
 import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.model.CSSRuleContainer;
+import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.model.CSSStyleSheetContainer;
 import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.model.CSSTreeNode;
 import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.viewers.CSSSelectorTreeViewer;
 import org.w3c.dom.css.CSSRule;
@@ -35,7 +40,7 @@ import org.w3c.dom.css.CSSRule;
  */
 
 @SuppressWarnings("unused")
-public class CSSTreeDragListener implements DragSourceListener {
+public class CSSTreeDragAdapter implements DragSourceListener {
 
 	private Table table;
 	private Tree tree;
@@ -43,7 +48,7 @@ public class CSSTreeDragListener implements DragSourceListener {
 	private TreeViewer treeViewer;
 	private TableViewer tableViewer;
 
-	public CSSTreeDragListener(CSSSelectorPartComposite parent,
+	public CSSTreeDragAdapter(CSSSelectorPartComposite parent,
 			TreeViewer treeViewer, TableViewer tableViewer) {
 		this.table = tableViewer.getTable();
 		this.tree = treeViewer.getTree();
@@ -70,21 +75,30 @@ public class CSSTreeDragListener implements DragSourceListener {
 
 	public void dragFinished(DragSourceEvent event) {
 		if (event.detail == DND.DROP_MOVE) {
-			List<String> selectedItems = new ArrayList<String>(0);
-			TreeItem[] selectedTreeItems = tree.getSelection();
-			if (selectedTreeItems != null) {
-				for (int i = 0; i < selectedTreeItems.length; i++) {
-					if (((CSSTreeNode) selectedTreeItems[i].getData())
-							.getCSSContainer() instanceof CSSRuleContainer) {
-						selectedItems.add(selectedTreeItems[i].getData()
-								.toString());
+			Set<CSSTreeNode> itemsToMove = new LinkedHashSet<CSSTreeNode>(0);
+			TreeItem[] selectedItems = treeViewer.getTree().getSelection();
+			if (selectedItems != null && selectedItems.length > 0) {
+				for (int i = 0; i < selectedItems.length; i++) {
+					TreeItem item = selectedItems[i];
+					CSSContainer container = ((CSSTreeNode) item.getData())
+							.getCSSContainer();
+					CSSTreeNode treeNode = (CSSTreeNode) item.getData();
+					if ((container instanceof CSSStyleSheetContainer)) {
+						List<CSSTreeNode> children = treeNode.getChildren();
+						for (int j = 0; j < children.size(); j++) {
+							itemsToMove.add(children.get(j));
+						}
+					} else if (container instanceof CSSRuleContainer) {
+						itemsToMove.add(treeNode);
 					}
 				}
+				for (Iterator<CSSTreeNode> iterator = itemsToMove.iterator(); iterator
+						.hasNext();) {
+					CSSTreeNode cssTreeNode = (CSSTreeNode) iterator.next();
+					tableViewer.add(cssTreeNode.toString());
+				}
+				parent.updateStyles();
 			}
-			for (int i = 0; i < selectedItems.size(); i++) {
-				tableViewer.add(selectedItems.get(i));
-			}
-			parent.updateStyles();
 		}
 	}
 

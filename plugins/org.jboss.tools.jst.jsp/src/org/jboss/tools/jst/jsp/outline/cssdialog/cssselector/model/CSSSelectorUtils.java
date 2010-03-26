@@ -11,34 +11,52 @@
 
 package org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.model;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+import org.eclipse.wst.css.core.internal.parser.CSSTokenizer;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
 
 /**
  * 
  * @author yzhishko
- *
+ * 
  */
 
+@SuppressWarnings("restriction")
 public class CSSSelectorUtils {
 
-	private static String filterName(String className){
+	private static String filterName(String className) {
 		className = className.trim();
 		if (className.indexOf(' ') > -1) {
 			return null;
 		}
-		if (className.indexOf('.')==className.lastIndexOf('.')) {
+		if (className.indexOf('.') == className.lastIndexOf('.')) {
 			if (className.indexOf('.') == 0) {
-				return className.substring(className.indexOf('.')+1);
+				CSSTokenizer cssTokenizer = new CSSTokenizer(new StringReader(
+						className + "{}")); //$NON-NLS-1$
+				try {
+					while (!cssTokenizer.isEOF()) {
+						String token = cssTokenizer.primGetNextToken();
+						if ("undefined".equalsIgnoreCase(token)) { //$NON-NLS-1$
+							return null;
+						}
+					}
+				} catch (IOException e) {
+					JspEditorPlugin.getPluginLog().logError(e);
+				}
+				return className.substring(className.indexOf('.') + 1);
 			}
 		}
 		return null;
 	}
-	
-	public static String[] parseSelectorName(String selectorText){
+
+	public static String[] parseSelectorName(String selectorText) {
 		List<String> selectors = new ArrayList<String>(0);
-		StringTokenizer tokenizer = new StringTokenizer(selectorText, ",", false); //$NON-NLS-1$
+		StringTokenizer tokenizer = new StringTokenizer(selectorText,
+				",", false); //$NON-NLS-1$
 		while (tokenizer.hasMoreTokens()) {
 			String selectorName = tokenizer.nextToken();
 			selectorName = filterName(selectorName);

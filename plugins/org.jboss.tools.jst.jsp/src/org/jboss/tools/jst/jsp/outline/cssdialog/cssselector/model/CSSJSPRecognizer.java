@@ -33,14 +33,14 @@ import org.w3c.dom.css.CSSStyleSheet;
 /**
  * 
  * @author yzhishko
- *
+ * 
  */
 
 @SuppressWarnings("restriction")
 public class CSSJSPRecognizer {
 
 	private JSPMultiPageEditor jspMultiPageEditor;
-	
+
 	public static final int OK = 0;
 	public static final int VOID_RESULT = 1;
 	private List<CSSStyleSheet> styleSheets;
@@ -51,7 +51,7 @@ public class CSSJSPRecognizer {
 	public CSSJSPRecognizer(JSPMultiPageEditor jspMultiPageEditor) {
 		this.jspMultiPageEditor = jspMultiPageEditor;
 	}
-	
+
 	private List<CSSRuleList> extractCSSRulesLists() {
 		ICSSContainerSupport cssContainerSupport = null;
 		ELContext context = PageContextFactory.createPageContext(getFile());
@@ -109,9 +109,8 @@ public class CSSJSPRecognizer {
 		}
 		return cssRules.toArray(new CSSRule[0]);
 	}
-	
-	public Map<String, Map<String, String>> getCSSStyleMap(
-			CSSRule[] cssRules) {
+
+	public Map<String, Map<String, String>> getCSSStyleMap(CSSRule[] cssRules) {
 		if (cssRules == null) {
 			return null;
 		}
@@ -120,26 +119,32 @@ public class CSSJSPRecognizer {
 		for (int i = 0; i < cssRules.length; i++) {
 			ICSSStyleRule styleRule = (ICSSStyleRule) cssRules[i];
 			String styleClassSelector = styleRule.getSelectorText();
-			String[] selectors = CSSSelectorUtils.parseSelectorName(styleClassSelector);
+			String[] selectors = CSSSelectorUtils
+					.parseSelectorName(styleClassSelector);
 			for (int j = 0; j < selectors.length; j++) {
 				String styleClassName = selectors[j];
 				ICSSNodeList cssNodeList = styleRule.getChildNodes();
 				if (cssNodeList == null) {
 					continue;
 				}
-				Map<String, String> attrsMap = new LinkedHashMap<String, String>(0);
+				Map<String, String> attrsMap = new LinkedHashMap<String, String>(
+						0);
 				for (int k = 0; k < cssNodeList.getLength(); k++) {
-					ICSSStyleDeclaration styleDeclaration = (ICSSStyleDeclaration) cssNodeList.item(k);
+					ICSSStyleDeclaration styleDeclaration = (ICSSStyleDeclaration) cssNodeList
+							.item(k);
 					ICSSNodeList attrsList = styleDeclaration.getChildNodes();
 					if (attrsList == null) {
 						continue;
 					}
 					for (int l = 0; l < attrsList.getLength(); l++) {
-						ICSSStyleDeclItem styleItem = (ICSSStyleDeclItem) attrsList.item(l);
-						attrsMap.put(styleItem.getPropertyName(), styleItem.getCSSValueText());
+						ICSSStyleDeclItem styleItem = (ICSSStyleDeclItem) attrsList
+								.item(l);
+						attrsMap.put(styleItem.getPropertyName(), styleItem
+								.getCSSValueText());
 					}
 				}
-				Map<String, String> attrsForCSSStyle = styleMap.get(styleClassName);
+				Map<String, String> attrsForCSSStyle = styleMap
+						.get(styleClassName);
 				if (attrsForCSSStyle == null) {
 					styleMap.put(styleClassName, attrsMap);
 				} else {
@@ -151,23 +156,25 @@ public class CSSJSPRecognizer {
 		}
 		return styleMap;
 	}
-	
-	public CSSSelectorTreeModel getCssStyleClassTreeModel(CSSStyleSheetDescriptor[] cssSheets){
+
+	public CSSSelectorTreeModel getCssStyleClassTreeModel(
+			CSSStyleSheetDescriptor[] cssSheets) {
 		if (cssSheets != null) {
 			return new CSSSelectorTreeModel(cssSheets);
 		}
 		return null;
 	}
-	
-	public CSSSelectorTreeModel getCssStyleClassTreeModel(){
-		return getCssStyleClassTreeModel(styleSheetDescriptors.toArray(new CSSStyleSheetDescriptor[0]));
+
+	public CSSSelectorTreeModel getCssStyleClassTreeModel() {
+		return getCssStyleClassTreeModel(styleSheetDescriptors
+				.toArray(new CSSStyleSheetDescriptor[0]));
 	}
-	
+
 	public Map<String, Map<String, String>> getCSSStyleMap() {
 		return getCSSStyleMap(this.cssRules);
 	}
-	
-	public int parseCSS(){
+
+	public int parseCSS() {
 		this.cssRuleLists = extractCSSRulesLists();
 		this.cssRules = extractCSSRules(this.cssRuleLists);
 		if (cssRules != null && cssRules.length != 0) {
@@ -175,13 +182,13 @@ public class CSSJSPRecognizer {
 		}
 		return VOID_RESULT;
 	}
-	
+
 	public CSSStyleSheet[] getStyleSheets() {
 		return styleSheets.toArray(new CSSStyleSheet[0]);
 	}
-	
+
 	public CSSRule[] getCssRules() {
 		return cssRules;
 	}
-	
+
 }

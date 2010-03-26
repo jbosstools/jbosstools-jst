@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * 
  * @author yzhishko
- *
+ * 
  */
 
 public class CSSTreeNode {
@@ -61,12 +61,13 @@ public class CSSTreeNode {
 	public CSSContainer getCSSContainer() {
 		return cssResource;
 	}
-	
-	public void setStyleSheetSource(String source){
+
+	public void setStyleSheetSource(String source) {
 		styleSheetSource = source;
 	}
-	
-	public String getStyleSheetSource(){
+
+	public String getStyleSheetSource() {
 		return styleSheetSource;
 	}
+
 }

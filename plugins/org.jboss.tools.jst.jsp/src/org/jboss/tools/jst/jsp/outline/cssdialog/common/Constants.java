@@ -60,6 +60,8 @@ public class Constants {
 	public static final String IMAGE_FONTLARGE_FILE_LOCATION = "images/cssdialog/font_large.gif"; //$NON-NLS-1$
 	public static final String IMAGE_LEFT_FILE_LOCATION = "images/cssdialog/left.gif"; //$NON-NLS-1$
 	public static final String IMAGE_RIGHT_FILE_LOCATION = "images/cssdialog/right.gif"; //$NON-NLS-1$
+	public static final String IMAGE_UP_FILE_LOCATION = "images/cssdialog/up.gif"; //$NON-NLS-1$
+	public static final String IMAGE_DOWN_FILE_LOCATION = "images/cssdialog/down.gif"; //$NON-NLS-1$
 	public static final String IMAGE_SAMPLE_FILE_LOCATION = "images/cssdialog/sample.gif"; //$NON-NLS-1$
 	public static final String IMAGE_STYLE_SHEET_LOCATION = "images/cssdialog/style_sheet.gif"; //$NON-NLS-1$
 	public static final String IMAGE_STYLE_CLASS_LOCATION = "images/cssdialog/style_class.gif"; //$NON-NLS-1$

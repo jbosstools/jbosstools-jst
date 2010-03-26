@@ -20,31 +20,31 @@ import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.model.CSSTreeNode;
 /**
  * 
  * @author yzhishko
- *
+ * 
  */
 
-public class CSSSelectorFilter extends ViewerFilter{
+public class CSSSelectorFilter extends ViewerFilter {
 
 	private Set<String> filterNames = new HashSet<String>(0);
-	
+
 	@Override
 	public boolean select(Viewer viewer, Object parentElement, Object element) {
-		if (filterNames.contains(((CSSTreeNode)element).toString())) {
+		if (filterNames.contains(((CSSTreeNode) element).toString())) {
 			return false;
 		}
 		return true;
 	}
-	
-	public void removeFilterName(String name){
+
+	public void removeFilterName(String name) {
 		filterNames.remove(name);
 	}
-	
-	public void addFilterName(String name){
+
+	public void addFilterName(String name) {
 		filterNames.add(name);
 	}
-	
-	public void removeAllFilters(){
+
+	public void removeAllFilters() {
 		filterNames.clear();
 	}
-	
+
 }

@@ -14,13 +14,13 @@ package org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.model;
 /**
  * 
  * @author yzhishko
- *
+ * 
  */
 
 public abstract class CSSContainer {
 
 	private String styleSheetPath;
-	
+
 	public CSSContainer(String styleSheetPath) {
 		this.setStyleSheetPath(styleSheetPath);
 	}
@@ -32,7 +32,7 @@ public abstract class CSSContainer {
 	public String getStyleSheetPath() {
 		return styleSheetPath;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -41,7 +41,7 @@ public abstract class CSSContainer {
 		if (!(obj instanceof CSSContainer)) {
 			return false;
 		}
-		return styleSheetPath.equals(((CSSContainer)obj).getStyleSheetPath());
+		return styleSheetPath.equals(((CSSContainer) obj).getStyleSheetPath());
 	}
-	
+
 }

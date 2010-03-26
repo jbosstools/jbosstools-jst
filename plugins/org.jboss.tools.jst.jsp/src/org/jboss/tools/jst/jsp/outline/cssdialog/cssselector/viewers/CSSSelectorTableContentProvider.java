@@ -19,22 +19,22 @@ import org.jboss.tools.common.model.ui.attribute.IListContentProvider;
 /**
  * 
  * @author yzhishko
- *
+ * 
  */
 
-public class CSSSelectorTableContentProvider implements IListContentProvider{
+public class CSSSelectorTableContentProvider implements IListContentProvider {
 
 	@SuppressWarnings("unchecked")
 	public Object[] getElements(Object inputElement) {
-		return ((List<String>)inputElement).toArray();
+		return ((List<String>) inputElement).toArray();
 	}
 
 	public void dispose() {
-		
+
 	}
 
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		
+
 	}
 
 }
