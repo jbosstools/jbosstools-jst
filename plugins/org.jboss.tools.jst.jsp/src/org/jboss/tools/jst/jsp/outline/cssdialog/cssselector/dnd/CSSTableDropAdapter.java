@@ -97,6 +97,7 @@ public class CSSTableDropAdapter extends DropTargetAdapter {
 				}
 				parent.updateStyles();
 			}
+			treeViewer.setSelection(new StructuredSelection());
 		}
 	}
 
@@ -188,6 +189,7 @@ public class CSSTableDropAdapter extends DropTargetAdapter {
 		} else {
 			handleTableMiddleInsert(event);
 		}
+		parent.updateStyles();
 	}
 
 	private int getItemIndex(TableItem item) {
@@ -221,7 +223,8 @@ public class CSSTableDropAdapter extends DropTargetAdapter {
 		}
 		if (pt.y < bounds.y + bounds.height / 3) {
 			for (int i = 0; i < selectedItems.size(); i++) {
-				CSSSelectionEventManager.getInstance().setHandleSelection(false);
+				CSSSelectionEventManager.getInstance()
+						.setHandleSelection(false);
 				tableViewer.remove(selectedItems.get(i));
 				itemIndex = getItemIndex(item);
 				TableItem tableItem = new TableItem(tableViewer.getTable(),
@@ -233,7 +236,8 @@ public class CSSTableDropAdapter extends DropTargetAdapter {
 					true);
 		} else if (pt.y > bounds.y + 2 * bounds.height / 3) {
 			for (int i = 0; i < selectedItems.size(); i++) {
-				CSSSelectionEventManager.getInstance().setHandleSelection(false);
+				CSSSelectionEventManager.getInstance()
+						.setHandleSelection(false);
 				tableViewer.remove(selectedItems.get(i));
 				itemIndex = getItemIndex(item);
 				itemIndex = itemIndex + i + 1;

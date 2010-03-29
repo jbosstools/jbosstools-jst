@@ -443,7 +443,8 @@ public class CSSSelectorPartComposite extends Composite implements
 		int selectionLength = selectedIndices.length;
 		for (int i = 0; i < selectionLength; i++) {
 			CSSSelectionEventManager.getInstance().setHandleSelection(false);
-			selectedClassesTableViewer.remove(selectedItems[selectionLength - 1 - i]);
+			selectedClassesTableViewer.remove(selectedItems[selectionLength - 1
+					- i]);
 			if (selectedIndices[selectionLength - 1 - i] == itemsCount - 1) {
 				TableItem item = new TableItem(selectedClassesTableViewer
 						.getTable(), selectedClassesTableViewer.getTable()
@@ -461,6 +462,7 @@ public class CSSSelectorPartComposite extends Composite implements
 		selectedClassesTableViewer.refresh();
 		selectedClassesTableViewer.setSelection(new StructuredSelection(
 				selectedItems));
+		updateStyles();
 	}
 
 	private void handleMoveUp() {
@@ -487,6 +489,7 @@ public class CSSSelectorPartComposite extends Composite implements
 		selectedClassesTableViewer.refresh();
 		selectedClassesTableViewer.setSelection(new StructuredSelection(
 				selectedItems));
+		updateStyles();
 	}
 
 	public void widgetSelected(SelectionEvent e) {
@@ -536,6 +539,7 @@ public class CSSSelectorPartComposite extends Composite implements
 			}
 			selectedClassesTableViewer.add(itemsToMove.toArray());
 			updateStyles();
+			allCSSStyleClassViewer.setSelection(new StructuredSelection());
 		}
 	}
 
@@ -592,8 +596,6 @@ public class CSSSelectorPartComposite extends Composite implements
 			}
 		}
 		allCSSStyleClassViewer.refresh();
-		allCSSStyleClassViewer.setSelection(new StructuredSelection());
-		selectedClassesTableViewer.setSelection(new StructuredSelection());
 	}
 
 	public String getCSSStyleClasses() {
@@ -642,14 +644,17 @@ public class CSSSelectorPartComposite extends Composite implements
 
 	private void fireClassSelectionChanged(
 			final CSSClassSelectionChangedEvent event) {
-		SafeRunner.run(new SafeRunnable() {
-			public void run() throws Exception {
-				for (int i = 0; i < changedListeners.size(); i++) {
-					changedListeners.get(i).classSelectionChanged(event);
+		for (int i = 0; i < changedListeners.size(); i++) {
+			final ICSSClassSelectionChangedListener listener = changedListeners
+					.get(i);
+			SafeRunner.run(new SafeRunnable() {
+				public void run() throws Exception {
+					for (int i = 0; i < changedListeners.size(); i++) {
+						listener.classSelectionChanged(event);
+					}
 				}
-			}
-		});
-
+			});
+		}
 	}
 
 	public synchronized void addCSSClassSelectionChangedListener(
