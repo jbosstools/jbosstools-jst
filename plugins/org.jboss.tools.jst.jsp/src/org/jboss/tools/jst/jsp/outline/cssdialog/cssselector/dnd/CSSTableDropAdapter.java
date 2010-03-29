@@ -97,7 +97,7 @@ public class CSSTableDropAdapter extends DropTargetAdapter {
 				}
 				parent.updateStyles();
 			}
-			treeViewer.setSelection(new StructuredSelection());
+			treeViewer.getTree().deselectAll();
 		}
 	}
 
