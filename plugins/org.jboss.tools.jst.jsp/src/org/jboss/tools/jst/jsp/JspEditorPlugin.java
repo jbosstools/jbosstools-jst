@@ -35,8 +35,10 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.jboss.tools.common.log.BaseUIPlugin;
 import org.jboss.tools.common.log.IPluginLog;
 import org.jboss.tools.common.text.xml.XmlEditorPlugin;
+import org.jboss.tools.jst.jsp.check.ProjectNaturesChecker;
 import org.jboss.tools.jst.jsp.preferences.JSPOccurrencePreferenceConstants;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 
 /**
  * The main plugin class to be used in the desktop.
@@ -278,5 +280,13 @@ public class JspEditorPlugin extends BaseUIPlugin {
 				fImageDescRegistry = new HashMap();
 			}
 			return fImageDescRegistry;
+		}
+		
+		@Override
+		public void stop(BundleContext context) throws Exception {
+			ProjectNaturesChecker naturesChecker = ProjectNaturesChecker.getInstance();
+			naturesChecker.dispose();
+			naturesChecker = null;
+			super.stop(context);
 		}
 }

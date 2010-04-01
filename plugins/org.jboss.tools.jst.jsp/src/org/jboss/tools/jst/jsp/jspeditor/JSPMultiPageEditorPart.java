@@ -7,12 +7,13 @@
  *
  * Contributors:
  *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
- ******************************************************************************/ 
+ ******************************************************************************/
 package org.jboss.tools.jst.jsp.jspeditor;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.jface.util.Assert;
 import org.eclipse.jface.util.SafeRunnable;
@@ -32,16 +33,23 @@ import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IKeyBindingService;
 import org.eclipse.ui.INestableKeyBindingService;
+import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.ui.part.MultiPageSelectionProvider;
 import org.jboss.tools.common.core.resources.XModelObjectEditorInput;
+import org.jboss.tools.common.reporting.ProblemReportingHelper;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
+import org.jboss.tools.jst.jsp.check.ProjectNaturesChecker;
+import org.jboss.tools.jst.jsp.preferences.IVpePreferencesPage;
 
 /**
  * 
@@ -51,6 +59,8 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 	private CTabFolder container;
 
 	private ArrayList nestedEditors = new ArrayList(3);
+
+	private ActivationListener activationListener = new ActivationListener();
 
 	protected JSPMultiPageEditorPart() {
 		super();
@@ -123,6 +133,8 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 	public final void createPartControl(Composite parent) {
 		this.container = createContainer(parent);
 		createPages();
+		IWorkbenchWindow window = getSite().getWorkbenchWindow();
+		window.getPartService().addPartListener(activationListener);
 		// set the active page (page 0 by default), unless it has already been
 		// done
 		if (getActivePage() == -1)
@@ -132,6 +144,11 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 	protected abstract IEditorSite createSite(IEditorPart editor);
 
 	public void dispose() {
+		if (activationListener != null) {
+			IWorkbenchWindow window = getSite().getWorkbenchWindow();
+			window.getPartService().removePartListener(activationListener);
+			activationListener = null;
+		}
 		getSite().setSelectionProvider(null);
 		for (int i = 0; i < nestedEditors.size(); ++i) {
 			IEditorPart editor = (IEditorPart) nestedEditors.get(i);
@@ -291,7 +308,7 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 			if (service instanceof INestableKeyBindingService) {
 				final INestableKeyBindingService nestableService = (INestableKeyBindingService) service;
 				nestableService.activateKeyBindingService(null);
-			} 
+			}
 			return;
 		}
 
@@ -326,5 +343,59 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 
 	protected void setPageText(int pageIndex, String text) {
 		getItem(pageIndex).setText(text);
+	}
+
+	private void checkNaturesFromPart(IWorkbenchPart part) throws CoreException {
+		if (part == this) {
+			IEditorInput editorInput = getEditorInput();
+			if (editorInput instanceof IFileEditorInput) {
+				ProjectNaturesChecker.getInstance()
+						.checkNatures(
+								((IFileEditorInput) editorInput).getFile()
+										.getProject());
+			}
+		}
+	}
+
+	private class ActivationListener implements IPartListener {
+
+		public void partActivated(IWorkbenchPart part) {
+
+		}
+
+		public void partBroughtToTop(IWorkbenchPart part) {
+
+		}
+
+		public void partClosed(IWorkbenchPart part) {
+
+		}
+
+		public void partDeactivated(IWorkbenchPart part) {
+
+		}
+
+		public void partOpened(IWorkbenchPart part) {
+			boolean isCheck = true;
+			String isCheckString = System
+					.getProperty("org.jboss.tools.vpe.ENABLE_PROJECT_NATURES_CHECKER"); //$NON-NLS-1$
+			if (isCheckString != null) {
+				isCheck = Boolean.parseBoolean(isCheckString);
+			}
+			if (isCheck) {
+				if (JspEditorPlugin
+						.getDefault()
+						.getPreferenceStore()
+						.getBoolean(
+								IVpePreferencesPage.INFORM_WHEN_PROJECT_MIGHT_NOT_BE_CONFIGURED_PROPERLY_FOR_VPE)) {
+					try {
+						checkNaturesFromPart(part);
+					} catch (CoreException e) {
+						ProblemReportingHelper.reportProblem(
+								JspEditorPlugin.PLUGIN_ID, e);
+					}
+				}
+			}
+		}
 	}
 }
