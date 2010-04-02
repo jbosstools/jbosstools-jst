@@ -39,5 +39,6 @@ Export-Package: org.jboss.tools.jst.web.kb,
  org.jboss.tools.jst.web.kb.internal.taglib,
  org.jboss.tools.jst.web.kb.internal.taglib.composite,
  org.jboss.tools.jst.web.kb.internal.validation,
+ org.jboss.tools.jst.web.kb.refactoring,
  org.jboss.tools.jst.web.kb.taglib,
  org.jboss.tools.jst.web.kb.validation
