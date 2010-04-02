@@ -17,6 +17,7 @@ import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextViewer;
@@ -38,6 +39,10 @@ import org.jboss.tools.common.el.core.model.ELUtil;
 import org.jboss.tools.common.el.core.parser.ELParser;
 import org.jboss.tools.common.el.core.parser.ELParserUtil;
 import org.jboss.tools.common.el.core.resolver.ELContext;
+import org.jboss.tools.common.el.core.resolver.ELResolution;
+import org.jboss.tools.common.el.core.resolver.ELResolver;
+import org.jboss.tools.common.el.core.resolver.ELSegment;
+import org.jboss.tools.common.el.core.resolver.JavaMemberELSegmentImpl;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.jsp.contentassist.Utils;
 import org.jboss.tools.jst.jsp.contentassist.AbstractXMLContentAssistProcessor.TextRegion;
@@ -87,6 +92,7 @@ public class FaceletTagInfoHoverProcessor extends XMLTagInfoHoverProcessor {
 		String hoverHelp = null;
 		if (region != null) {
 			TextRegion elPrefix = getELPrefix(flatNode, region, fDocumentPosition);
+			ELInvocationExpression elOperand = getELExpression(flatNode, region, fDocumentPosition);
 			if (elPrefix != null && elPrefix.isELStarted()) {
 				IndexedRegion treeNode = ContentAssistUtils.getNodeAt(textViewer, fDocumentPosition);
 				if (treeNode == null) {
@@ -97,7 +103,7 @@ public class FaceletTagInfoHoverProcessor extends XMLTagInfoHoverProcessor {
 				while ((node != null) && (node.getNodeType() == Node.TEXT_NODE) && (node.getParentNode() != null)) {
 					node = node.getParentNode();
 				}
-				return  computeELHelp((IDOMNode) treeNode, (IDOMNode) node, flatNode, region, elPrefix);
+				return  computeELHelp((IDOMNode) treeNode, (IDOMNode) node, flatNode, region, elOperand);
 			}
 		}
 		return hoverHelp != null ? hoverHelp : super.computeHoverHelp(textViewer, documentPosition);
@@ -172,33 +178,34 @@ public class FaceletTagInfoHoverProcessor extends XMLTagInfoHoverProcessor {
 	
 	
 	protected String computeELHelp(IDOMNode xmlnode, IDOMNode parentNode,
-			IStructuredDocumentRegion flatNode, ITextRegion region, TextRegion elPrefix) {
+			IStructuredDocumentRegion flatNode, ITextRegion region, ELInvocationExpression elOperand) {
 		if (fContext == null)
 			return null;
 
-		String query = "#{" + elPrefix.getText(); //$NON-NLS-1$
-		String prefix = getPrefix(query);
-		String uri = getUri(prefix);
-		String[] parentTags = Utils.getParentTags(xmlnode, false, true);
-		String parent = Utils.getParent(xmlnode, false, false, true);
+		ELResolver[] resolvers =  fContext.getElResolvers();
 		
-		KbQuery kbQuery = Utils.createKbQuery(Type.TEXT, fDocumentPosition, query, query,
-				prefix, uri, parentTags, parent, false);
-
-		TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, fContext);
-		if (proposals == null)
-			return null;
-		
-		for(TextProposal proposal : proposals) {
-			String label = proposal == null ? null : proposal.getLabel();
-			label = (label == null || label.indexOf(':') == -1) ? label : label.substring(0, label.indexOf(':')).trim(); 
-			if (label != null && query.endsWith(label) && 
-					proposal != null && proposal.getContextInfo() != null &&
-					proposal.getContextInfo().trim().length() > 0) {
-				return proposal.getContextInfo();
+		for (int i = 0; resolvers != null && i < resolvers.length; i++) {
+			ELResolution resolution = resolvers[i].resolve(fContext, elOperand, fDocumentPosition);
+			
+			ELSegment segment = resolution.getLastSegment();
+			if(segment instanceof JavaMemberELSegmentImpl) {
+				JavaMemberELSegmentImpl jmSegment = (JavaMemberELSegmentImpl)segment;
+				
+				IJavaElement[] javaElements = jmSegment.getAllJavaElements();
+				if (javaElements == null || javaElements.length == 0) {
+					if (jmSegment.getJavaElement() == null)
+						continue;
+					
+					javaElements = new IJavaElement[] {jmSegment.getJavaElement()};
+				}
+				if (javaElements == null || javaElements.length == 0)
+					continue;
+				
+				ELInfoHoverBrowserInformationControlInput hover = JavaStringELInfoHover.getHoverInfo2Internal(javaElements, false);
+				return (hover == null ? null : hover.getHtml());
 			}
 		}
-
+		
 		return null;
 	}
  
@@ -335,8 +342,6 @@ public class FaceletTagInfoHoverProcessor extends XMLTagInfoHoverProcessor {
 			return null;
 		}
 		
-//			String matchString = text.substring(0, inValueOffset);
-		
 		ELParser p = ELParserUtil.getJbossFactory().createParser();
 		ELModel model = p.parse(text);
 		
@@ -347,7 +352,6 @@ public class FaceletTagInfoHoverProcessor extends XMLTagInfoHoverProcessor {
 				model.toString().startsWith("${"))); //$NON-NLS-1$
 		boolean isELClosed = (model != null && is != null && model.toString().endsWith("}")); //$NON-NLS-1$
 		
-//			boolean insideEL = startOffset + model.toString().length() 
 		TextRegion tr = new TextRegion(startOffset,  ie == null ? inValueOffset : ie.getStartPosition(), 
 				ie == null ? 0 : ie.getLength(), ie == null ? "" : ie.getText(),  //$NON-NLS-1$ 
 				isELStarted, isELClosed,
@@ -356,4 +360,31 @@ public class FaceletTagInfoHoverProcessor extends XMLTagInfoHoverProcessor {
 		return tr;
 	}
 
+	/**
+	 * Returns EL Prefix Text Region Information Object
+	 * 
+	 * @return
+	 */
+	private ELInvocationExpression getELExpression(IStructuredDocumentRegion sdRegion, ITextRegion region, int offset) {
+		if (sdRegion == null || region == null)
+			return null;
+
+		String text = sdRegion.getFullText(region);
+		int startOffset = sdRegion.getStartOffset() + region.getStart();
+		
+		int inValueOffset = offset - startOffset;
+		if (text != null && text.length() < inValueOffset) { // probably, the attribute value ends before the document position
+			return null;
+		}
+		if (inValueOffset<0) {
+			return null;
+		}
+		
+		ELParser p = ELParserUtil.getJbossFactory().createParser();
+		ELModel model = p.parse(text);
+		
+		ELInvocationExpression ie = ELUtil.findExpression(model, inValueOffset);// ELExpression
+		
+		return ie;
+	}
 }
