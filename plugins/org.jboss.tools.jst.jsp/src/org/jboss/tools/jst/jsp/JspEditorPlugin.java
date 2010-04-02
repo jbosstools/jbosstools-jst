@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
-
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -24,8 +23,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.ui.text.JavaTextTools;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.resource.ImageRegistry;
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jst.jsp.ui.internal.JSPUIPlugin;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
@@ -35,10 +32,8 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.jboss.tools.common.log.BaseUIPlugin;
 import org.jboss.tools.common.log.IPluginLog;
 import org.jboss.tools.common.text.xml.XmlEditorPlugin;
-import org.jboss.tools.jst.jsp.check.ProjectNaturesChecker;
 import org.jboss.tools.jst.jsp.preferences.JSPOccurrencePreferenceConstants;
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 
 /**
  * The main plugin class to be used in the desktop.
@@ -281,12 +276,5 @@ public class JspEditorPlugin extends BaseUIPlugin {
 			}
 			return fImageDescRegistry;
 		}
-		
-		@Override
-		public void stop(BundleContext context) throws Exception {
-			ProjectNaturesChecker naturesChecker = ProjectNaturesChecker.getInstance();
-			naturesChecker.dispose();
-			naturesChecker = null;
-			super.stop(context);
-		}
+	
 }
