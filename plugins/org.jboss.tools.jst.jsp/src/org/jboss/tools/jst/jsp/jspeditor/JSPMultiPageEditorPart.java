@@ -13,7 +13,6 @@ package org.jboss.tools.jst.jsp.jspeditor;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.jface.util.Assert;
 import org.eclipse.jface.util.SafeRunnable;
@@ -33,22 +32,16 @@ import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IKeyBindingService;
 import org.eclipse.ui.INestableKeyBindingService;
-import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.ui.part.MultiPageSelectionProvider;
 import org.jboss.tools.common.core.resources.XModelObjectEditorInput;
-import org.jboss.tools.common.reporting.ProblemReportingHelper;
-import org.jboss.tools.jst.jsp.JspEditorPlugin;
-import org.jboss.tools.jst.jsp.preferences.IVpePreferencesPage;
 
 /**
  * 
@@ -334,28 +327,5 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 	protected void setPageText(int pageIndex, String text) {
 		getItem(pageIndex).setText(text);
 	}
-
-
-	private class ActivationListener implements IPartListener {
-
-		public void partActivated(IWorkbenchPart part) {
-
-		}
-
-		public void partBroughtToTop(IWorkbenchPart part) {
-
-		}
-
-		public void partClosed(IWorkbenchPart part) {
-
-		}
-
-		public void partDeactivated(IWorkbenchPart part) {
-
-		}
-
-		public void partOpened(IWorkbenchPart part) {
-			
-		}
-	}
+	
 }
