@@ -158,8 +158,8 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 			ContentAssistRequest contentAssistRequest) {
 		super.addAttributeNameProposals(contentAssistRequest);
 		this.replaceJsfcTags = true;
-		super.addAttributeNameProposals(contentAssistRequest);
-		this.replaceJsfcTags = false;
+//		super.addAttributeNameProposals(contentAssistRequest);
+//		this.replaceJsfcTags = false;
 	}
 
 	/*
@@ -170,8 +170,8 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 	protected void addAttributeValueProposals(ContentAssistRequest contentAssistRequest) {
 		super.addAttributeValueProposals(contentAssistRequest);
 		this.replaceJsfcTags = true;
-		super.addAttributeValueProposals(contentAssistRequest);
-		this.replaceJsfcTags = false;
+//		super.addAttributeValueProposals(contentAssistRequest);
+//		this.replaceJsfcTags = false;
 	}
 
 	/*
