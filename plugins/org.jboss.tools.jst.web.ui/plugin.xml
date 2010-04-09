@@ -170,7 +170,7 @@
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
       </wizard>
-      <wizard
+<!--      <wizard
             category="org.jboss.tools.jst.web"
             class="org.jboss.tools.common.model.ui.wizard.newfile.NewXHTMLFileWizard"
             finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
@@ -185,6 +185,7 @@
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
       </wizard>
+-->      
       <wizard
             category="org.jboss.tools.jst.web"
             class="org.jboss.tools.common.model.ui.wizard.newfile.NewHTMLFileWizard"
