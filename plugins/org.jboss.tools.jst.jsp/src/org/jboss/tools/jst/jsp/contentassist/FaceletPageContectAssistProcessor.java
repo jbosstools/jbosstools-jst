@@ -10,9 +10,10 @@
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.contentassist;
 
-import org.eclipse.jface.text.contentassist.IContextInformation;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
+import org.jboss.tools.common.el.core.ca.ELTextProposal;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
@@ -105,10 +106,10 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 
 		KbQuery kbQuery = createKbQuery(Type.TEXT, query, stringQuery);
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext());
-
-		for (int i = 0; proposals != null && i < proposals.length; i++) {
-			TextProposal textProposal = proposals[i];
-
+		if (proposals == null || proposals.length == 0)
+			return;
+		
+		for (TextProposal textProposal : proposals) {
 			int replacementOffset = beginChangeOffset;
 			int replacementLength = prefix.getLength();
 			String replacementString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString();
@@ -127,17 +128,26 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 				displayString = textProposal.getReplacementString() == null ? replacementString : textProposal.getReplacementString();
 
 			// <<<=== JBIDE-512, JBIDE-2541 related changes
-			IContextInformation contextInformation = null;
-			String additionalProposalInfo = textProposal.getContextInfo();
 			int relevance = textProposal.getRelevance();
 			if (relevance == TextProposal.R_NONE) {
 				relevance = TextProposal.R_JSP_JSF_EL_VARIABLE_ATTRIBUTE_VALUE;
 			}
 
-			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(replacementString, 
-					replacementOffset, replacementLength, cursorPosition, image, displayString, 
-					contextInformation, additionalProposalInfo, relevance);
+			AutoContentAssistantProposal proposal = null;
+			if (textProposal instanceof ELTextProposal) {
+				IJavaElement[] javaElements = ((ELTextProposal)textProposal).getAllJavaElements();
+	
+				proposal = new AutoELContentAssistantProposal(replacementString, 
+						replacementOffset, replacementLength, cursorPosition, image, displayString, 
+						null, javaElements, relevance);
+			} else {
+				String additionalProposalInfo = (textProposal.getContextInfo() == null ? "" : textProposal.getContextInfo()); //$NON-NLS-1$
 
+				proposal = new AutoContentAssistantProposal(replacementString, 
+						replacementOffset, replacementLength, cursorPosition, image, displayString, 
+						null, additionalProposalInfo, relevance);
+			}
+			
 			contentAssistRequest.addProposal(proposal);
 		}
 
@@ -157,9 +167,11 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 	protected void addAttributeNameProposals(
 			ContentAssistRequest contentAssistRequest) {
 		super.addAttributeNameProposals(contentAssistRequest);
-		this.replaceJsfcTags = true;
-		super.addAttributeNameProposals(contentAssistRequest);
-		this.replaceJsfcTags = false;
+		if (isExistingAttribute(JSFC_ATTRIBUTE_NAME)) {
+			this.replaceJsfcTags = true;
+			super.addAttributeNameProposals(contentAssistRequest);
+			this.replaceJsfcTags = false;
+		}
 	}
 
 	/*
@@ -169,9 +181,11 @@ public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor
 	@Override
 	protected void addAttributeValueProposals(ContentAssistRequest contentAssistRequest) {
 		super.addAttributeValueProposals(contentAssistRequest);
-		this.replaceJsfcTags = true;
-		super.addAttributeValueProposals(contentAssistRequest);
-		this.replaceJsfcTags = false;
+		if (isExistingAttribute(JSFC_ATTRIBUTE_NAME)) {
+			this.replaceJsfcTags = true;
+			super.addAttributeValueProposals(contentAssistRequest);
+			this.replaceJsfcTags = false;
+		}
 	}
 
 	/*
