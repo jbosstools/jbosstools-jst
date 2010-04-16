@@ -248,7 +248,9 @@ public class JavaStringELInfoHover extends JavadocHover {
 		ELResolver[] resolvers =  context.getElResolvers();
 		
 		for (int i = 0; resolvers != null && i < resolvers.length; i++) {
-			ELResolution resolution = resolvers[i].resolve(context, ie, region.getOffset() + region.getLength());
+			ELResolution resolution = resolvers[i] == null ? null : resolvers[i].resolve(context, ie, region.getOffset() + region.getLength());
+			if (resolution == null)
+				continue;
 			
 			ELSegment segment = resolution.getLastSegment();
 			if(segment instanceof JavaMemberELSegmentImpl) {
