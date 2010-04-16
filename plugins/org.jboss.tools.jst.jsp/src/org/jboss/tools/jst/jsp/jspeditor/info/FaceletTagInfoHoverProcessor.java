@@ -185,7 +185,9 @@ public class FaceletTagInfoHoverProcessor extends XMLTagInfoHoverProcessor {
 		ELResolver[] resolvers =  fContext.getElResolvers();
 		
 		for (int i = 0; resolvers != null && i < resolvers.length; i++) {
-			ELResolution resolution = resolvers[i].resolve(fContext, elOperand, fDocumentPosition);
+			ELResolution resolution = resolvers[i] == null ? null : resolvers[i].resolve(fContext, elOperand, fDocumentPosition);
+			if (resolution == null)
+				continue;
 			
 			ELSegment segment = resolution.getLastSegment();
 			if(segment instanceof JavaMemberELSegmentImpl) {
