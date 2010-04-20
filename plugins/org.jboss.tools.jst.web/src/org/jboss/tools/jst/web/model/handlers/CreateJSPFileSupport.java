@@ -201,6 +201,13 @@ public class CreateJSPFileSupport extends CreateFileSupport {
 		String[] selected = toArray(ts);
 		return taglibs.modifyBody(body, selected);
 	}
+	/**
+	 * Added by Maksim Areshkau, method accessor for tmodifyBody()
+	 * @param content
+	 */
+	public String addTaglibs(String content) throws IOException{
+		return modifyBody(content);
+	}
 	
 	String[] toArray(String s) {
 		if(s == null || s.length() == 0) return new String[0];
