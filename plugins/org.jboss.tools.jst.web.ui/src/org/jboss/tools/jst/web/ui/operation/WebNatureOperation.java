@@ -44,6 +44,7 @@ import org.eclipse.wst.common.frameworks.datamodel.DataModelFactory;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.internal.operations.IProjectCreationPropertiesNew;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
+import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.eclipse.wst.common.project.facet.core.runtime.RuntimeManager;
 import org.eclipse.wst.server.core.IRuntime;
@@ -394,9 +395,19 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 			FacetDataModelMap map = (FacetDataModelMap) dataModel.getProperty(IFacetProjectCreationDataModelProperties.FACET_DM_MAP);
 			IDataModel configDM = (IDataModel) map.get("jst.web"); //$NON-NLS-1$
 			
+			boolean hasJSTWebFacet = false;
 			if(exists) {
 				IFacetedProject fp0 = ProjectFacetsManager.create(getProject());
 				exists = fp0 != null;
+				if(exists) {
+					Set<IProjectFacetVersion> vs = fp0.getProjectFacets();
+					if(vs != null) for (IProjectFacetVersion v: vs) {
+						String id = v.getProjectFacet().getId();
+						if("jst.web".equals(id)) { //$NON-NLS-1$
+							hasJSTWebFacet = true;
+						}
+					}
+				}
 			}
 
 			if(sv != null && (sv.indexOf("2.3") >= 0 || sv.indexOf("2.5") >= 0)) { //$NON-NLS-1$ //$NON-NLS-2$
@@ -448,7 +459,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 					ProjectUtilities.addNatureToProject(getProject(), emfNature);
 				}
 			}
-			if(!exists) {
+			if(!exists || !hasJSTWebFacet) {
 				return wcco;
 			} else {
 				return null;

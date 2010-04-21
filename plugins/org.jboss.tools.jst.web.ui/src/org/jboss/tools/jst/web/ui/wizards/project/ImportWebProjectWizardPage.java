@@ -13,6 +13,8 @@ package org.jboss.tools.jst.web.ui.wizards.project;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -22,6 +24,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
 import org.jboss.tools.common.model.ui.attribute.XAttributeSupport;
 import org.jboss.tools.common.model.ui.attribute.adapter.IModelPropertyEditorAdapter;
 import org.jboss.tools.common.model.ui.attribute.editor.IPropertyEditor;
@@ -36,6 +39,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.wst.common.project.facet.core.IFacetedProject;
+import org.eclipse.wst.common.project.facet.core.IProjectFacet;
+import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
+import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
+import org.eclipse.wst.common.project.facet.core.IFacetedProject.Action;
 
 import org.jboss.tools.common.meta.action.XEntityData;
 import org.jboss.tools.common.meta.action.impl.XEntityDataImpl;
@@ -361,6 +369,50 @@ public class ImportWebProjectWizardPage extends WizardPage {
 				String message = NLS.bind(WebUIMessages.PROJECT_ALREADY_EXISTS_IN_THE_WORKSPACE, p1.getName());
 				setErrorMessage(message);
 				return false;
+			}
+		}
+
+		if(project != null && project.exists()) {
+			//Check existing faceted project
+			IProjectFacet f = ProjectFacetsManager.getProjectFacet("jst.web"); //$NON-NLS-1$
+			if(f != null) {
+				IFacetedProject fp = null;
+				try {
+					fp = ProjectFacetsManager.create(project);
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+				if(fp != null) {
+					//Check that 'jst.web' facet is compatible with facets of existing faceted projects
+					boolean hasJSTWebFacet = false;
+					Set<IProjectFacetVersion> vs = fp.getProjectFacets();
+					if(vs != null) for (IProjectFacetVersion v: vs) {
+						String id = v.getProjectFacet().getId();
+						if("jst.web".equals(id)) { //$NON-NLS-1$
+							hasJSTWebFacet = true;
+						}
+					}
+					if(!hasJSTWebFacet) {
+						Set<IProjectFacetVersion> fvs = f.getVersions();
+						boolean ok = false;
+						for (IProjectFacetVersion v: fvs) {
+							IFacetedProject.Action action = new Action(IFacetedProject.Action.Type.INSTALL, v, null);
+							Set<IFacetedProject.Action> actions = new HashSet<Action>();
+							actions.add(action);
+							IStatus status = ProjectFacetsManager.check(vs, actions);
+							if(status != null && status.isOK()) {
+								ok = true;
+								break;
+							}
+						}
+						if (!ok) {
+							String message = "This project cannot be converted to Web Dynamic project required for JSF capabilities."; //$NON-NLS-1$
+							setErrorMessage(message);
+							return false;
+						}
+					}
+				}
+				
 			}
 		}
 
