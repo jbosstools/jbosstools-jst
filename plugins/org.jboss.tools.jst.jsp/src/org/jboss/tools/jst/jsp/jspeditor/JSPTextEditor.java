@@ -66,6 +66,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.editors.text.ILocationProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -148,6 +149,7 @@ import org.jboss.tools.jst.web.kb.internal.taglib.TLDTag;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
+import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 import org.jboss.tools.jst.web.kb.taglib.TagLibraryManager;
 import org.jboss.tools.jst.web.tld.VpeTaglibManager;
 import org.jboss.tools.jst.web.tld.VpeTaglibManagerProvider;
@@ -735,7 +737,13 @@ public class JSPTextEditor extends StructuredTextEditor implements
 	public void runDropCommand(final String flavor, final String data) {
 		XModelBuffer b = XModelTransferBuffer.getInstance().getBuffer();
 		final XModelObject o = b == null ? null : b.source();
-		Display.getDefault().asyncExec(new Runnable() {
+		/*
+		 * Fixes https://jira.jboss.org/jira/browse/JBIDE-5874
+		 * Display.getDefault() should always be replaced by
+		 * PlatformUI.getWorkbench().getDisplay().
+		 *  syncExec() can hang the JBDS thus asyncExec is used. 
+		 */
+		PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
 			public void run() {
 				if (o != null
 						&& !XModelTransferBuffer.getInstance().isEnabled()) {
@@ -790,6 +798,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			if(n == null && pageContext instanceof JspContextImpl) {
 				IRegion r = new Region(query.getOffset(), 0);
 				((JspContextImpl)pageContext).addNameSpace(r, new NameSpace(query.getUri(), query.getPrefix(),
+						pageContext.getResource() == null ? new ITagLibrary[0] :
 						TagLibraryManager.getLibraries(
 								pageContext.getResource().getProject(), query.getUri())));
 //				((JspContextImpl)pageContext).setLibraries(processor.getTagLibraries(pageContext));
