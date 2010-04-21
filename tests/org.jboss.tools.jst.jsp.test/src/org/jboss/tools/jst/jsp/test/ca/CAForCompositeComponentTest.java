@@ -7,6 +7,7 @@ public class CAForCompositeComponentTest extends ContentAssistantTestCase{
 	boolean makeCopy = true;
 	private static final String PROJECT_NAME = "CAForCompositeComponentTest";
 	private static final String PAGE_NAME = "/WebContent/pages/greeting.xhtml";
+	private static final String TAG_NAME = "/WebContent/resources/sample/tag2.xhtml";
 	
 	public void setUp() throws Exception {
 		provider = new TestProjectProvider("org.jboss.tools.jst.jsp.test", null, PROJECT_NAME, makeCopy); 
@@ -30,5 +31,17 @@ public class CAForCompositeComponentTest extends ContentAssistantTestCase{
 			"aaa"
 		};
 		checkProposals(PAGE_NAME, "<sample:tag />", 12, proposals, false);
+	}
+
+	/**
+	 * JBIDE-5941
+	 */
+	public void testCAForCCAttrs(){
+		String[] proposals = {
+			"cc.attrs.a2", "cc.attrs.b3", "cc.attrs.onclick"
+		};
+
+		checkProposals(TAG_NAME, "#{cc.attrs.}", 11, proposals, false);
+
 	}
 }
