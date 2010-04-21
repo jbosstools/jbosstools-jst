@@ -17,8 +17,8 @@ public class TLDUtil {
     static String TAG_ENTITIES = ".TLDTag.TLDTag12.TLDTag20.TLDTag21."; //$NON-NLS-1$
     static String ATTR_ENTITIES = ".TLDAttribute.TLDAttribute12.TLDAttribute20.TLDAttribute2F."; //$NON-NLS-1$
 
-    static String FACELET_TAGLIB_ENTITIES = ".FileFaceletTaglib."; //$NON-NLS-1$
-    static String FACELET_TAG_ENTITIES = ".FaceletTaglibTag."; //$NON-NLS-1$
+    static String FACELET_TAGLIB_ENTITIES = ".FileFaceletTaglib.FileFaceletTaglib20."; //$NON-NLS-1$
+    static String FACELET_TAG_ENTITIES = ".FaceletTaglibTag.FaceletTaglibTag20."; //$NON-NLS-1$
 
     public static boolean isTaglib(XModelObject o) {
         return isOfEntity(o, FILE_ENTITIES);
