@@ -13,14 +13,14 @@ package org.jboss.tools.jst.jsp.contentassist;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
 import org.eclipse.wst.xml.ui.internal.contentassist.XMLRelevanceConstants;
 import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImageHelper;
 import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImages;
+import org.jboss.tools.common.el.core.ca.ELTextProposal;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.text.TextProposal;
@@ -286,7 +286,7 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 
 			contentAssistRequest.addProposal(proposal);
 		}
-		
+
 		addELPredicateProposals(contentAssistRequest, TextProposal.R_JSP_ATTRIBUTE_VALUE, false);
 	}
 	
@@ -317,13 +317,14 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 		}
 		
 		int beginChangeOffset = prefix.getStartOffset() + prefix.getOffset();
-				
+
 		KbQuery kbQuery = createKbQuery(Type.ATTRIBUTE_VALUE, query, stringQuery);
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext());
 		
-		for (int i = 0; proposals != null && i < proposals.length; i++) {
-			TextProposal textProposal = proposals[i];
-			
+		if (proposals == null || proposals.length == 0)
+			return;
+
+		for (TextProposal textProposal : proposals) {
 			int replacementOffset = beginChangeOffset;
 			int replacementLength = prefix.getLength();
 			String replacementString = "#{" + prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString();  //$NON-NLS-1$
@@ -348,22 +349,29 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 				displayString = textProposal.getReplacementString() == null ? replacementString : textProposal.getReplacementString();
 			// <<<=== JBIDE-512, JBIDE-2541 related changes
 
-			IContextInformation contextInformation = null;
-			String additionalProposalInfo = (textProposal.getContextInfo() == null ? "" : textProposal.getContextInfo()); //$NON-NLS-1$
 			int relevance = textProposal.getRelevance();
 			if (relevance == TextProposal.R_NONE) {
 				relevance = baseRelevance; 
 			}
 			relevance += relevanceShift;
 
-			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(replacementString, 
-					replacementOffset, replacementLength, cursorPosition, image, displayString, 
-					contextInformation, additionalProposalInfo, relevance);
+			AutoContentAssistantProposal proposal = null;
+			if (textProposal instanceof ELTextProposal) {
+				IJavaElement[] javaElements = ((ELTextProposal)textProposal).getAllJavaElements();
+	
+				proposal = new AutoELContentAssistantProposal(replacementString, 
+						replacementOffset, replacementLength, cursorPosition, image, displayString, 
+						null, javaElements, relevance);
+			} else {
+				String additionalProposalInfo = (textProposal.getContextInfo() == null ? "" : textProposal.getContextInfo()); //$NON-NLS-1$
 
+				proposal = new AutoContentAssistantProposal(replacementString, 
+						replacementOffset, replacementLength, cursorPosition, image, displayString, 
+						null, additionalProposalInfo, relevance);
+			}
 			contentAssistRequest.addProposal(proposal);
 		}
 	}
-	
 	
 	@Override
 	protected void addAttributeValueELProposals(ContentAssistRequest contentAssistRequest) {
@@ -394,10 +402,11 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 				
 		KbQuery kbQuery = createKbQuery(Type.ATTRIBUTE_VALUE, query, stringQuery);
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext());
-		
-		for (int i = 0; proposals != null && i < proposals.length; i++) {
-			TextProposal textProposal = proposals[i];
-			
+
+		if (proposals == null || proposals.length == 0)
+			return;
+
+		for (TextProposal textProposal : proposals) {
 			int replacementOffset = beginChangeOffset;
 			int replacementLength = prefix.getLength();
 			String replacementString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString();
@@ -425,17 +434,25 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 				displayString = textProposal.getReplacementString() == null ? replacementString : textProposal.getReplacementString();
 			// <<<=== JBIDE-512, JBIDE-2541 related changes
 
-			IContextInformation contextInformation = null;
-			String additionalProposalInfo = (textProposal.getContextInfo() == null ? "" : textProposal.getContextInfo()); //$NON-NLS-1$
 			int relevance = textProposal.getRelevance();
 			if (relevance == TextProposal.R_NONE) {
 				relevance = TextProposal.R_JSP_JSF_EL_VARIABLE_ATTRIBUTE_VALUE;
 			}
 
-			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(replacementString, 
-					replacementOffset, replacementLength, cursorPosition, image, displayString, 
-					contextInformation, additionalProposalInfo, relevance);
+			AutoContentAssistantProposal proposal = null;
+			if (textProposal instanceof ELTextProposal) {
+				IJavaElement[] javaElements = ((ELTextProposal)textProposal).getAllJavaElements();
+	
+				proposal = new AutoELContentAssistantProposal(replacementString, 
+						replacementOffset, replacementLength, cursorPosition, image, displayString, 
+						null, javaElements, relevance);
+			} else {
+				String additionalProposalInfo = (textProposal.getContextInfo() == null ? "" : textProposal.getContextInfo()); //$NON-NLS-1$
 
+				proposal = new AutoContentAssistantProposal(replacementString, 
+						replacementOffset, replacementLength, cursorPosition, image, displayString, 
+						null, additionalProposalInfo, relevance);
+			}
 			contentAssistRequest.addProposal(proposal);
 		}
 
@@ -475,9 +492,10 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 		KbQuery kbQuery = createKbQuery(Type.TEXT, query, stringQuery);
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext());
 
-		for (int i = 0; proposals != null && i < proposals.length; i++) {
-			TextProposal textProposal = proposals[i];
-
+		if (proposals == null || proposals.length == 0)
+			return;
+		
+		for (TextProposal textProposal : proposals) {
 			int replacementOffset = beginChangeOffset;
 			int replacementLength = prefix.getLength();
 			String replacementString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString();
@@ -496,17 +514,25 @@ public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor
 				displayString = textProposal.getReplacementString() == null ? replacementString : textProposal.getReplacementString();
 
 			// <<<=== JBIDE-512, JBIDE-2541 related changes
-			IContextInformation contextInformation = null;
-			String additionalProposalInfo = textProposal.getContextInfo();
 			int relevance = textProposal.getRelevance();
 			if (relevance == TextProposal.R_NONE) {
 				relevance = TextProposal.R_JSP_JSF_EL_VARIABLE_ATTRIBUTE_VALUE;
 			}
 
-			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(replacementString, 
-					replacementOffset, replacementLength, cursorPosition, image, displayString, 
-					contextInformation, additionalProposalInfo, relevance);
+			AutoContentAssistantProposal proposal = null;
+			if (textProposal instanceof ELTextProposal) {
+				IJavaElement[] javaElements = ((ELTextProposal)textProposal).getAllJavaElements();
+	
+				proposal = new AutoELContentAssistantProposal(replacementString, 
+						replacementOffset, replacementLength, cursorPosition, image, displayString, 
+						null, javaElements, relevance);
+			} else {
+				String additionalProposalInfo = (textProposal.getContextInfo() == null ? "" : textProposal.getContextInfo()); //$NON-NLS-1$
 
+				proposal = new AutoContentAssistantProposal(replacementString, 
+						replacementOffset, replacementLength, cursorPosition, image, displayString, 
+						null, additionalProposalInfo, relevance);
+			}
 			contentAssistRequest.addProposal(proposal);
 		}
 
