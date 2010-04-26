@@ -9,9 +9,9 @@ import junit.framework.TestSuite;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.wst.sse.ui.internal.contentassist.CustomCompletionProposal;
-import org.jboss.tools.common.test.util.TestProjectProvider;
 import org.jboss.tools.jst.jsp.test.TestUtil;
 import org.jboss.tools.test.util.JobUtils;
+import org.jboss.tools.test.util.TestProjectProvider;
 /**
  * JBIDE-4341 JstJspAllTests/testJsfJspJbide1813Test failing with missing applicationScope in completions
  * 

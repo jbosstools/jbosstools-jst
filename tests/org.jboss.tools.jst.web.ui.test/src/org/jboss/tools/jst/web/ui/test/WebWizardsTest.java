@@ -10,7 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.test;
 
-import org.jboss.tools.common.model.ui.test.ModelNewWizardTest;
+import org.jboss.tools.common.model.ui.test.AbstractModelNewWizardTest;
 import org.jboss.tools.common.model.ui.wizard.newfile.NewHTMLFileWizard;
 import org.jboss.tools.common.model.ui.wizard.newfile.NewJSPFileWizard;
 import org.jboss.tools.common.model.ui.wizard.newfile.NewPropertiesFileWizard;
@@ -24,7 +24,7 @@ import org.jboss.tools.jst.web.ui.wizards.newfile.NewWebFileWizard;
  * @author eskimo
  *
  */
-public class WebWizardsTest extends ModelNewWizardTest {
+public class WebWizardsTest extends AbstractModelNewWizardTest {
 	
 	public void testNewCssWizardInstanceIsCreated() {
 		testNewWizardInstanceIsCreated(NewCSSFileWizard.class.getName());

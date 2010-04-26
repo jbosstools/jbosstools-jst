@@ -1,6 +1,6 @@
 package org.jboss.tools.jst.jsp.test.ca;
 
-import org.jboss.tools.common.test.util.TestProjectProvider;
+import org.jboss.tools.test.util.TestProjectProvider;
 
 public class JsfJspJbide1813Test extends ContentAssistantTestCase{
 	TestProjectProvider provider = null;

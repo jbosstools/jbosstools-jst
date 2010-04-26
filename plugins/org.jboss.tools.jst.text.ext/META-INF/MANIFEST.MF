@@ -5,7 +5,7 @@ Export-Package: org.jboss.tools.jst.text.ext,
  org.jboss.tools.jst.text.ext.hyperlink,
  org.jboss.tools.jst.text.ext.hyperlink.jsp,
  org.jboss.tools.jst.text.ext.util
-Bundle-Version: 2.0.0
+Bundle-Version: 3.1.0.qualifier
 Bundle-Name: %Bundle-Name.0
 Bundle-ManifestVersion: 2
 Bundle-Vendor: %providerName

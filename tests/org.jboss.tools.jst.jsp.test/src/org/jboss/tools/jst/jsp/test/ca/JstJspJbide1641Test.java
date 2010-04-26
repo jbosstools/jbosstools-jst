@@ -5,10 +5,10 @@ import junit.framework.TestSuite;
 
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
-import org.jboss.tools.common.test.util.TestProjectProvider;
 import org.jboss.tools.jst.jsp.contentassist.AutoContentAssistantProposal;
 import org.jboss.tools.jst.jsp.test.TestUtil;
 import org.jboss.tools.test.util.JobUtils;
+import org.jboss.tools.test.util.TestProjectProvider;
 
 public class JstJspJbide1641Test extends ContentAssistantTestCase {
 	TestProjectProvider provider = null;

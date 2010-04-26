@@ -15,13 +15,14 @@ Require-Bundle: org.jboss.tools.common.model;visibility:=reexport,
  org.eclipse.debug.ui,
  org.eclipse.jdt.debug,
  org.eclipse.wst.server.core,
+ org.eclipse.jem.util,
  org.eclipse.wst.sse.core,
  org.eclipse.jst.j2ee,
  org.eclipse.ltk.core.refactoring,
  org.eclipse.jst.jsp.core,
  org.eclipse.jst.j2ee.core;bundle-version="1.1.300",
  org.eclipse.wst.common.project.facet.core;bundle-version="1.4.0"
-Bundle-Version: 2.0.0
+Bundle-Version: 3.1.0.qualifier
 Export-Package: 
  org.jboss.tools.jst.web,
  org.jboss.tools.jst.web.browser,
@@ -53,3 +54,4 @@ Export-Package:
  org.jboss.tools.jst.web.webapp.model,
  org.jboss.tools.jst.web.webapp.model.handlers
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
+

@@ -17,7 +17,7 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.FindReplaceDocumentAdapter;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
-import org.jboss.tools.common.test.util.TestProjectProvider;
+import org.jboss.tools.test.util.TestProjectProvider;
 
 /**
  * Test cast testing http://jira.jboss.com/jira/browse/JBIDE-1791 issue.

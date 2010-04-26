@@ -24,9 +24,9 @@ import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.project.Watcher;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
-import org.jboss.tools.common.test.util.TestProjectProvider;
 import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
 import org.jboss.tools.test.util.JobUtils;
+import org.jboss.tools.test.util.TestProjectProvider;
 
 public class WebContentAssistProviderTest extends TestCase {
 

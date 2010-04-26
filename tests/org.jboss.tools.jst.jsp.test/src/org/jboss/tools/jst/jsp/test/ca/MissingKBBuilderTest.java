@@ -2,9 +2,9 @@ package org.jboss.tools.jst.jsp.test.ca;
 
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
-import org.jboss.tools.common.test.util.TestProjectProvider;
 import org.jboss.tools.jst.jsp.test.TestUtil;
 import org.jboss.tools.test.util.JobUtils;
+import org.jboss.tools.test.util.TestProjectProvider;
 
 public class MissingKBBuilderTest extends ContentAssistantTestCase{
 	TestProjectProvider provider = null;
