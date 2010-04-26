@@ -360,8 +360,8 @@
          </newWizardShortcut>
          <newWizardShortcut id="org.jboss.tools.common.model.ui.wizard.newfile.NewJSPFileWizard">
          </newWizardShortcut>
-         <newWizardShortcut id="org.jboss.tools.common.model.ui.wizard.newfile.NewXHTMLFileWizard">
-         </newWizardShortcut>
+         <!--newWizardShortcut id="org.jboss.tools.common.model.ui.wizard.newfile.NewXHTMLFileWizard">
+         </newWizardShortcut-->
          <newWizardShortcut id="org.jboss.tools.common.model.ui.wizard.newfile.NewHTMLFileWizard">
          </newWizardShortcut>
          <newWizardShortcut id="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSFileWizard">
