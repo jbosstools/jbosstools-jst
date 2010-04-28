@@ -31,6 +31,7 @@ public class JSPPaletteInsertHelper extends PaletteInsertHelper {
 		String startText = texts[0];
 		if(startText != null && startText.startsWith("<%@ taglib")) { //$NON-NLS-1$
 			if(PaletteTaglibInserter.inserTaglibInXml(v, p)) {
+				texts[0] = "";
 				return;
 			}
 		} else {
