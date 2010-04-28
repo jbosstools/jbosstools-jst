@@ -7,11 +7,20 @@
  *
  * Contributors:
  *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
- ******************************************************************************/ 
+ ******************************************************************************/
 package org.jboss.tools.jst.jsp;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionPoint;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.text.ITextHover;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.formatter.IContentFormatter;
@@ -30,67 +39,100 @@ import org.eclipse.wst.sse.ui.internal.taginfo.ProblemAnnotationHoverProcessor;
 import org.eclipse.wst.sse.ui.internal.taginfo.TextHoverManager;
 import org.jboss.tools.jst.jsp.format.HTMLFormatProcessor;
 import org.jboss.tools.jst.jsp.jspeditor.info.ChainTextHover;
+import org.osgi.framework.Bundle;
 
 @SuppressWarnings("restriction")
-public class HTMLTextViewerConfiguration extends StructuredTextViewerConfigurationHTML implements ITextViewerConfiguration{
+public class HTMLTextViewerConfiguration extends
+		StructuredTextViewerConfigurationHTML implements
+		ITextViewerConfiguration {
 
-	TextViewerConfigurationDelegate configurationDelegate;	
+	TextViewerConfigurationDelegate configurationDelegate;
+
+	private static final String TEMPLATES_CONTENT_ASSISTANT = "org.jboss.tools.jst.jsp.editorContentAssistent"; //$NON-NLS-1$
+	private static final String CLASS_ATTRIBUTE = "class"; //$NON-NLS-1$
+
 	public HTMLTextViewerConfiguration() {
 		super();
 		configurationDelegate = new TextViewerConfigurationDelegate(this);
 	}
 
-    protected IContentAssistProcessor[] getContentAssistProcessors(ISourceViewer sourceViewer, String partitionType) {
-		return configurationDelegate.getContentAssistProcessors(sourceViewer, partitionType);
+	protected IContentAssistProcessor[] getContentAssistProcessors(
+			ISourceViewer sourceViewer, String partitionType) {
+		return configurationDelegate.getContentAssistProcessors(sourceViewer,
+				partitionType);
 	}
 
 	/*
-	 * @see org.eclipse.jface.text.source.SourceViewerConfiguration#getHyperlinkDetectors(org.eclipse.jface.text.source.ISourceViewer)
+	 * @see
+	 * org.eclipse.jface.text.source.SourceViewerConfiguration#getHyperlinkDetectors
+	 * (org.eclipse.jface.text.source.ISourceViewer)
+	 * 
 	 * @since 3.1
 	 */
 	public IHyperlinkDetector[] getHyperlinkDetectors(ISourceViewer sourceViewer) {
-			return configurationDelegate.getHyperlinkDetectors(
-					sourceViewer,
-					fPreferenceStore.getBoolean(AbstractDecoratedTextEditorPreferenceConstants.EDITOR_HYPERLINKS_ENABLED));
+		return configurationDelegate
+				.getHyperlinkDetectors(
+						sourceViewer,
+						fPreferenceStore
+								.getBoolean(AbstractDecoratedTextEditorPreferenceConstants.EDITOR_HYPERLINKS_ENABLED));
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.wst.html.ui.StructuredTextViewerConfigurationHTML#getContentFormatter(org.eclipse.jface.text.source.ISourceViewer)
+	 * 
+	 * @seeorg.eclipse.wst.html.ui.StructuredTextViewerConfigurationHTML#
+	 * getContentFormatter(org.eclipse.jface.text.source.ISourceViewer)
 	 */
 	public IContentFormatter getContentFormatter(ISourceViewer sourceViewer) {
-		MultiPassContentFormatter formatter = new MultiPassContentFormatter(getConfiguredDocumentPartitioning(sourceViewer), IHTMLPartitions.HTML_DEFAULT);
-		formatter.setMasterStrategy(new StructuredFormattingStrategy(new HTMLFormatProcessor()));
+		MultiPassContentFormatter formatter = new MultiPassContentFormatter(
+				getConfiguredDocumentPartitioning(sourceViewer),
+				IHTMLPartitions.HTML_DEFAULT);
+		formatter.setMasterStrategy(new StructuredFormattingStrategy(
+				new HTMLFormatProcessor()));
 		return formatter;
 	}
 
 	public IContentAssistProcessor[] getContentAssistProcessorsForPartitionType(
 			ISourceViewer sourceViewer, String partitionType) {
-		return super.getContentAssistProcessors(sourceViewer, partitionType);
+		IContentAssistProcessor[] results = super.getContentAssistProcessors(
+				sourceViewer, partitionType);
+		// added by Maksim Areshkau
+		if ("org.eclipse.wst.html.HTML_DEFAULT".equalsIgnoreCase(partitionType)) { //$NON-NLS-1$
+			List<IContentAssistProcessor> contAssists = getVpeTestExtensions();
+			contAssists.addAll(Arrays.asList(results));
+			results = contAssists.toArray(new IContentAssistProcessor[0]);
+		}
+		return results;
 	}
 
 	/**
 	 * Create documentation hovers based on hovers contributed via
-	 * <code>org.eclipse.wst.sse.ui.editorConfiguration</code> extension
-	 * point
+	 * <code>org.eclipse.wst.sse.ui.editorConfiguration</code> extension point
 	 * 
-	 * Copied from {@link org.eclipse.wst.sse.ui.StructuredTextViewerConfiguration} because of private modifier
+	 * Copied from
+	 * {@link org.eclipse.wst.sse.ui.StructuredTextViewerConfiguration} because
+	 * of private modifier
 	 * 
 	 * @param partitionType
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
 	private ITextHover[] createDocumentationHovers(String partitionType) {
-		List extendedTextHover = ExtendedConfigurationBuilder.getInstance().getConfigurations(ExtendedConfigurationBuilder.DOCUMENTATIONTEXTHOVER, partitionType);
-		ITextHover[] hovers = (ITextHover[]) extendedTextHover.toArray(new ITextHover[extendedTextHover.size()]);
+		List extendedTextHover = ExtendedConfigurationBuilder.getInstance()
+				.getConfigurations(
+						ExtendedConfigurationBuilder.DOCUMENTATIONTEXTHOVER,
+						partitionType);
+		ITextHover[] hovers = (ITextHover[]) extendedTextHover
+				.toArray(new ITextHover[extendedTextHover.size()]);
 		return hovers;
 	}
 
 	@Override
 	protected IInformationProvider getInformationProvider(
 			ISourceViewer sourceViewer, String partitionType) {
-		
-		ITextHover chainTextHover = new ChainTextHover(createDocumentationHovers(partitionType));
+
+		ITextHover chainTextHover = new ChainTextHover(
+				createDocumentationHovers(partitionType));
 		return new TextHoverInformationProvider(chainTextHover);
 	}
 
@@ -100,21 +142,27 @@ public class HTMLTextViewerConfiguration extends StructuredTextViewerConfigurati
 		ITextHover textHover = null;
 
 		/*
-		 * Returns a default problem, annotation, and best match hover
-		 * depending on stateMask
+		 * Returns a default problem, annotation, and best match hover depending
+		 * on stateMask
 		 */
-		TextHoverManager.TextHoverDescriptor[] hoverDescs = SSEUIPlugin.getDefault().getTextHoverManager().getTextHovers();
+		TextHoverManager.TextHoverDescriptor[] hoverDescs = SSEUIPlugin
+				.getDefault().getTextHoverManager().getTextHovers();
 		int i = 0;
 		while (i < hoverDescs.length && textHover == null) {
-			if (hoverDescs[i].isEnabled() && computeStateMask(hoverDescs[i].getModifierString()) == stateMask) {
+			if (hoverDescs[i].isEnabled()
+					&& computeStateMask(hoverDescs[i].getModifierString()) == stateMask) {
 				String hoverType = hoverDescs[i].getId();
 				if (TextHoverManager.PROBLEM_HOVER.equalsIgnoreCase(hoverType))
 					textHover = new ProblemAnnotationHoverProcessor();
-				else if (TextHoverManager.ANNOTATION_HOVER.equalsIgnoreCase(hoverType))
+				else if (TextHoverManager.ANNOTATION_HOVER
+						.equalsIgnoreCase(hoverType))
 					textHover = new AnnotationHoverProcessor();
-				else if (TextHoverManager.COMBINATION_HOVER.equalsIgnoreCase(hoverType))
-					textHover = new ChainTextHover(createDocumentationHovers(contentType));
-				else if (TextHoverManager.DOCUMENTATION_HOVER.equalsIgnoreCase(hoverType)) {
+				else if (TextHoverManager.COMBINATION_HOVER
+						.equalsIgnoreCase(hoverType))
+					textHover = new ChainTextHover(
+							createDocumentationHovers(contentType));
+				else if (TextHoverManager.DOCUMENTATION_HOVER
+						.equalsIgnoreCase(hoverType)) {
 					ITextHover[] hovers = createDocumentationHovers(contentType);
 					if (hovers.length > 0) {
 						textHover = hovers[0];
@@ -125,6 +173,30 @@ public class HTMLTextViewerConfiguration extends StructuredTextViewerConfigurati
 		}
 		return textHover;
 	}
-	
-	
+
+	/**
+	 * Returns all extensions of {@value #VPE_TEST_EXTENTION_POINT_ID}
+	 */
+	public List<IContentAssistProcessor> getVpeTestExtensions() {
+		IExtensionRegistry extensionRegistry = Platform.getExtensionRegistry();
+		IExtensionPoint extensionPoint = extensionRegistry
+				.getExtensionPoint(TEMPLATES_CONTENT_ASSISTANT);
+		IExtension[] extensions = extensionPoint.getExtensions();
+		List<IContentAssistProcessor> contentAssisteProcessors = new ArrayList<IContentAssistProcessor>();
+		for (IExtension extension : extensions) {
+			IConfigurationElement[] confElements = extension
+					.getConfigurationElements();
+			for (IConfigurationElement configurationElement : confElements) {
+				IContentAssistProcessor contentAssistProcessor;
+				try {
+					contentAssistProcessor = (IContentAssistProcessor) configurationElement
+							.createExecutableExtension(CLASS_ATTRIBUTE);
+					contentAssisteProcessors.add(contentAssistProcessor);
+				} catch (CoreException e) {
+					JspEditorPlugin.getPluginLog().logError(e);
+				}
+			}
+		}
+		return contentAssisteProcessors;
+	}
 }
