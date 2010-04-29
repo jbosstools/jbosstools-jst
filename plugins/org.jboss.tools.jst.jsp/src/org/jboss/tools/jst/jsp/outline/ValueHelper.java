@@ -82,7 +82,7 @@ public class ValueHelper {
 	}
 	
 	public IVisualController getController() {
-		IEditorPart editor = ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		IEditorPart editor = getEditor();
 		if(!(editor instanceof JSPMultiPageEditor)) return null;
 		IVisualEditor v = ((JSPMultiPageEditor)editor).getVisualEditor();
 		if(v == null) return null;
@@ -91,7 +91,7 @@ public class ValueHelper {
 
 	boolean init() {
 		if(isVisualContextInitialized) return true;
-		IEditorPart editor = ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		IEditorPart editor = getEditor();
 		if(!(editor instanceof JSPMultiPageEditor)) return false;
 		JSPTextEditor jspEditor = ((JSPMultiPageEditor)editor).getJspEditor();
 		
@@ -101,6 +101,11 @@ public class ValueHelper {
 			updateFacelets();
 		}
 		return getIVisualContext() != null;
+	}
+
+	protected IEditorPart getEditor() {
+		return ModelUIPlugin.getDefault().getWorkbench()
+				.getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 	}
 
 	private IVisualContext getIVisualContext(){
@@ -120,7 +125,7 @@ public class ValueHelper {
 	}
 
 	protected JSPTextEditor getJSPTextEditor() {
-		IEditorPart editor = ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		IEditorPart editor = getEditor();
 		if(!(editor instanceof JSPMultiPageEditor)) return null;
 		return ((JSPMultiPageEditor)editor).getJspEditor();		
 	}
@@ -189,7 +194,7 @@ public class ValueHelper {
 	}
 
 	public IEditorInput getEditorInput() {
-		IEditorPart editor = ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		IEditorPart editor = getEditor();
 		return editor.getEditorInput();
 	}
 	
@@ -221,7 +226,7 @@ public class ValueHelper {
 	//Support of StructuredTextEditor
 	boolean init2() {
 		if(isVisualContextInitialized) return true;
-		IEditorPart editor = ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		IEditorPart editor = getEditor();
 		if(!(editor instanceof StructuredTextEditor)) return false;
 		StructuredTextEditor jspEditor = ((StructuredTextEditor)editor);
 		IDocument document = jspEditor.getDocumentProvider().getDocument(getEditorInput());
@@ -266,7 +271,7 @@ public class ValueHelper {
 	public ISourceViewer getSourceViewer() {
 		JSPTextEditor jspEditor = getJSPTextEditor();
 		if(jspEditor != null) return jspEditor.getTextViewer();
-		IEditorPart editor = ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		IEditorPart editor = getEditor();
 		if (editor == null) return null;
 		if(editor instanceof AbstractTextEditor) {
 			try {
