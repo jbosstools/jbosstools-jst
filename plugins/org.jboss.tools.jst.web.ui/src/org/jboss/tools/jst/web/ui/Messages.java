@@ -72,6 +72,18 @@ public class Messages extends NLS {
 	public static String WebCompoundEditor_WebXMLEditor;
 	public static String XActionProvider_CompanyName;
 	public static String AddTLDMarkerResolution_Name;
+	public static String UI_WIZARD_XHTML_NEW_TITLE;
+	public static String UI_WIZARD_XHTML_NEW_Description;
+
+	
+	public static String NewXHTMLTemplatesWizardPage_0;
+	public static String NewXHTMLTemplatesWizardPage_1;
+	public static String NewXHTMLTemplatesWizardPage_2;
+	public static String NewXHTMLTemplatesWizardPage_3;
+	public static String NewXHTMLTemplatesWizardPage_4;
+	public static String NewXHTMLTemplatesWizardPage_5;
+	public static String NewXHTMLTemplatesWizardPage_6;
+	public static String NewXHTMLTemplatesWizardPage_7;
 
 	static {
 		// initialize resource bundle

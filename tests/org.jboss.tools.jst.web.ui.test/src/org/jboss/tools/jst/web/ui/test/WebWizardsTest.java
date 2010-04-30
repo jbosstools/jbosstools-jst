@@ -14,11 +14,11 @@ import org.jboss.tools.common.model.ui.test.AbstractModelNewWizardTest;
 import org.jboss.tools.common.model.ui.wizard.newfile.NewHTMLFileWizard;
 import org.jboss.tools.common.model.ui.wizard.newfile.NewJSPFileWizard;
 import org.jboss.tools.common.model.ui.wizard.newfile.NewPropertiesFileWizard;
-import org.jboss.tools.common.model.ui.wizard.newfile.NewXHTMLFileWizard;
 import org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSFileWizard;
 import org.jboss.tools.jst.web.ui.wizards.newfile.NewJSFileWizard;
 import org.jboss.tools.jst.web.ui.wizards.newfile.NewTLDFileWizard;
 import org.jboss.tools.jst.web.ui.wizards.newfile.NewWebFileWizard;
+import org.jboss.tools.jst.web.ui.wizards.newfile.NewXHTMLWizard;
 
 /**
  * @author eskimo
@@ -43,7 +43,7 @@ public class WebWizardsTest extends AbstractModelNewWizardTest {
 	}
 	
 	public void testNewXhtmlWizardInstanceIsCreated() {
-		testNewWizardInstanceIsCreated(NewXHTMLFileWizard.class.getName());
+		testNewWizardInstanceIsCreated(NewXHTMLWizard.class.getName());
 	}
 	
 	public void testNewHtmlWizardInstanceIsCreated() {

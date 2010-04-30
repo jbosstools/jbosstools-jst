@@ -40,7 +40,9 @@ Require-Bundle: org.eclipse.ui.ide,
  org.jboss.tools.jst.jsp;bundle-version="2.0.0",
  org.eclipse.jface.text;bundle-version="3.5.0",
  org.eclipse.wst.common.emfworkbench.integration;bundle-version="1.1.300",
- org.apache.velocity;bundle-version="1.5.0"
+ org.apache.velocity;bundle-version="1.5.0",
+ org.eclipse.ui.workbench.texteditor;bundle-version="3.5.1",
+ org.eclipse.wst.html.ui;bundle-version="1.0.401"
 Bundle-Version: 3.1.0.qualifier
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ClassPath: .
