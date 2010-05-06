@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
@@ -21,6 +22,8 @@ import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.jface.text.contentassist.IContextInformationValidator;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
@@ -134,18 +137,44 @@ public class XHTMLContentAssistProcessor implements IContentAssistProcessor,
 	public ICompletionProposal[] computeCompletionProposals(
 			ITextViewer textViewer, int documentPosition) {
 		List<ICompletionProposal> result = new ArrayList<ICompletionProposal>();
+		List<String> fContextTypes = getContentTypes(textViewer, documentPosition);
+  		addTemplates(textViewer, result, fContextTypes,
+				documentPosition);
+		return result.toArray(new ICompletionProposal[0]);
+	}
+	/**
+	 * Function for culculation content type depending on position
+	 * @param textViewer
+	 * @param documentPosition
+	 * @return List of content types
+	 * 
+	 * @author mareshkau
+	 */
+	private List<String> getContentTypes(ITextViewer textViewer, int documentPosition){
 		List<String> fContextTypes = new ArrayList<String>();
+		IDocument document = textViewer.getDocument();
+		IStructuredModel model = null;
+		try {
+			// gets source model for read, model should be released see
+			// JBIDE-2219
+			model = StructuredModelManager.getModelManager()
+					.getExistingModelForRead(document);
+			IndexedRegion node = model.getIndexedRegion(documentPosition);
+		}
+		finally{
+			if (model != null) {
+				model.releaseFromRead();
+			}
+		}
 		//TODO Maksim Areshkau, analize and position here
 		fContextTypes.add(TemplateContextTypeIdsXHTML.ALL);
 		fContextTypes.add(TemplateContextTypeIdsXHTML.TAG);
 		fContextTypes.add(TemplateContextTypeIdsXHTML.NEW);
 		fContextTypes.add(TemplateContextTypeIdsXHTML.ATTRIBUTE);
 		fContextTypes.add(TemplateContextTypeIdsXHTML.ATTRIBUTE_VALUE);
-  		addTemplates(textViewer, result, fContextTypes,
-				documentPosition);
-		return result.toArray(new ICompletionProposal[0]);
+		return fContextTypes;
 	}
-
+	
 	protected String getEmptyTagCloseString() {
 		if (isXHTML)
 			return " />"; //$NON-NLS-1$

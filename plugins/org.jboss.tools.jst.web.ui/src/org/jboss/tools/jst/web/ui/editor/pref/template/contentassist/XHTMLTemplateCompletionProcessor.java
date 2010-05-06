@@ -122,10 +122,12 @@ public class XHTMLTemplateCompletionProcessor  extends TemplateCompletionProcess
 		return null;
 	}
 
+	@Override
 	protected ICompletionProposal createProposal(Template template, TemplateContext context, IRegion region, int relevance) {
 		return new TemplateProposal(template, context, region, getImage(template), relevance);
 	}
 
+	@Override
 	protected TemplateContextType getContextType(ITextViewer viewer, IRegion region) {
 		TemplateContextType type = null;
 
@@ -145,6 +147,7 @@ public class XHTMLTemplateCompletionProcessor  extends TemplateCompletionProcess
 		return WebUiPlugin.getDefault().getTemplateContextRegistry();
 	}
 
+	@Override
 	protected Template[] getTemplates(String contextTypeId) {
 		Template templates[] = null;
 
@@ -160,7 +163,7 @@ public class XHTMLTemplateCompletionProcessor  extends TemplateCompletionProcess
 	}
 
 	void setContextType(String contextTypeId) {
-		fContextTypeId = contextTypeId;
+		this.fContextTypeId = contextTypeId;
 	}
 
 	@Override
