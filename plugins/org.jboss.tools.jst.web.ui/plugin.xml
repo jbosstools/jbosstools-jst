@@ -47,7 +47,7 @@
         <page
 		    name="%VPE_Templates"
 			category="org.jboss.tools.vpe.editor"
-			class="org.jboss.tools.jst.web.ui.editor.pref.template.VPE1TemplatePreferencePage"
+			class="org.jboss.tools.jst.web.ui.editor.pref.template.VPETemplatePreferencePage"
 			id="org.jboss.tools.jsf.ui.editor.pref.template">
 			<keywordReference id="org.eclipse.wst.html.ui.templates"/>
 		</page>
