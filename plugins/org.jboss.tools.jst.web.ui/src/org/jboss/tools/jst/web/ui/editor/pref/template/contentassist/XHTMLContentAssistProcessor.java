@@ -26,7 +26,6 @@ import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.editor.pref.template.TemplateContextTypeIdsXHTML;
 import org.w3c.dom.Node;
@@ -152,26 +151,39 @@ public class XHTMLContentAssistProcessor implements IContentAssistProcessor,
 	 */
 	private List<String> getContentTypes(ITextViewer textViewer, int documentPosition){
 		List<String> fContextTypes = new ArrayList<String>();
+		//this should be added in any case
+		fContextTypes.add(TemplateContextTypeIdsXHTML.ALL);
 		IDocument document = textViewer.getDocument();
 		IStructuredModel model = null;
 		try {
-			// gets source model for read, model should be released see
-			// JBIDE-2219
 			model = StructuredModelManager.getModelManager()
 					.getExistingModelForRead(document);
-			IndexedRegion node = model.getIndexedRegion(documentPosition);
+			Node node = (Node) model.getIndexedRegion(documentPosition);
+			
+			if(node==null||node.getNodeType()==Node.DOCUMENT_NODE){
+				fContextTypes.add(TemplateContextTypeIdsXHTML.NEW);
+			}
+			//commented by Maksim Areshkau, because even on attribute we get type ELEMENT_NODE
+//			else if(node.getNodeType()==Node.ATTRIBUTE_NODE){
+//				fContextTypes.add(TemplateContextTypeIdsXHTML.ATTRIBUTE);
+//				fContextTypes.add(TemplateContextTypeIdsXHTML.ATTRIBUTE_VALUE);
+//			}
+		else if(node.getNodeType()==Node.ELEMENT_NODE ||node.getNodeType()==Node.TEXT_NODE) {
+				fContextTypes.add(TemplateContextTypeIdsXHTML.ATTRIBUTE);
+				fContextTypes.add(TemplateContextTypeIdsXHTML.ATTRIBUTE_VALUE);
+				fContextTypes.add(TemplateContextTypeIdsXHTML.TAG);
+			}
+			
 		}
 		finally{
 			if (model != null) {
 				model.releaseFromRead();
 			}
 		}
-		//TODO Maksim Areshkau, analize and position here
-		fContextTypes.add(TemplateContextTypeIdsXHTML.ALL);
-		fContextTypes.add(TemplateContextTypeIdsXHTML.TAG);
-		fContextTypes.add(TemplateContextTypeIdsXHTML.NEW);
-		fContextTypes.add(TemplateContextTypeIdsXHTML.ATTRIBUTE);
-		fContextTypes.add(TemplateContextTypeIdsXHTML.ATTRIBUTE_VALUE);
+//		fContextTypes.add(TemplateContextTypeIdsXHTML.TAG);
+//		fContextTypes.add(TemplateContextTypeIdsXHTML.NEW);
+//		fContextTypes.add(TemplateContextTypeIdsXHTML.ATTRIBUTE);
+//		fContextTypes.add(TemplateContextTypeIdsXHTML.ATTRIBUTE_VALUE);
 		return fContextTypes;
 	}
 	
