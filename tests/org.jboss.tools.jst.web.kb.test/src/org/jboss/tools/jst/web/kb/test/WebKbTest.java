@@ -12,7 +12,14 @@ package org.jboss.tools.jst.web.kb.test;
 
 import junit.framework.TestCase;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.jboss.tools.common.el.core.resolver.ELContext;
+import org.jboss.tools.common.text.TextProposal;
+import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.PageContextFactory;
+import org.jboss.tools.jst.web.kb.PageProcessor;
+import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibAttribute;
 import org.jboss.tools.jst.web.kb.taglib.CustomTagLibManager;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibrary;
@@ -49,8 +56,32 @@ public class WebKbTest extends TestCase {
 		}
 	}
 
+	/**
+	 * https://jira.jboss.org/jira/browse/JBIDE-6284
+	 */
+	public void testFFacet() {
+		IFile file = testProject.getFile("WebContent/pages/inputUserName.jsp");
+		ELContext context = PageContextFactory.createPageContext(file);
+		KbQuery query = new KbQuery();
+		query.setMask(true);
+		query.setOffset(130);
+		query.setType(Type.TAG_NAME);
+		query.setPrefix("f");
+		query.setUri("http://java.sun.com/jsf/core");
+		query.setValue("f:facet");
+
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
+		for (TextProposal proposal : proposals) {
+			if("<f:facet name=\"\">".equals(proposal.getReplacementString())) {
+				return;
+			}
+		}
+		fail("Can't find <f:facet name=\"\"> proposal.");
+	}
+
 	public void testCustomExtensions() {
 		CustomTagLibAttribute[] attributes = CustomTagLibManager.getInstance().getComponentExtensions();
 		assertNotNull("Can't load component extensions.", attributes);
 		assertFalse("Can't load component extensions.", attributes.length==0);
-	}}
+	}
+}
