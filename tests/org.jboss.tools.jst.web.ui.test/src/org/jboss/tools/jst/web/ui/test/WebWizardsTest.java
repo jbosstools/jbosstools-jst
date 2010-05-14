@@ -36,11 +36,11 @@ import org.jboss.tools.test.util.WorkbenchUtils;
  */
 public class WebWizardsTest extends AbstractModelNewWizardTest {
 	
-	public void testNewCssWizardInstanceIsCreated() {
+	public void _testNewCssWizardInstanceIsCreated() {
 		testNewWizardInstanceIsCreated(NewCSSFileWizard.class.getName());
 	}
 	
-	public void testNewJsWizardInstanceIsCreated() {
+	public void _testNewJsWizardInstanceIsCreated() {
 		testNewWizardInstanceIsCreated(NewJSFileWizard.class.getName());
 	}
 	
@@ -48,14 +48,19 @@ public class WebWizardsTest extends AbstractModelNewWizardTest {
 		testNewWizardInstanceIsCreated(NewWebFileWizard.class.getName());
 	}
 	
-	public void testNewJspWizardInstanceIsCreated() {
+	public void _testNewJspWizardInstanceIsCreated() {
 		testNewWizardInstanceIsCreated(NewJSPFileWizard.class.getName());
 	}
-	//rewritten by Maksim Areshkau, as fix for https://jira.jboss.org/jira/browse/JBIDE-6216,
-	//https://jira.jboss.org/jira/browse/JBIDE-6190
+	/*
+	 *	rewritten by Maksim Areshkau, as fix for
+	 * https://jira.jboss.org/jira/browse/JBIDE-6216,
+	 * https://jira.jboss.org/jira/browse/JBIDE-6190 
+	 */
 	public void testNewXhtmlWizardInstanceIsCreated() {
-		//commented by Maksim Areshkau, because in this methid not called
-		//init for wizard
+		/*
+		 * commented by Maksim Areshkau, 
+		 * because in this method not called init for wizard
+		 */
 		//testNewWizardInstanceIsCreated(NewXHTMLWizard.class.getName());
 		IWorkbenchWizard 
 		aWizard = (IWorkbenchWizard) WorkbenchUtils.findWizardByDefId(
@@ -64,7 +69,9 @@ public class WebWizardsTest extends AbstractModelNewWizardTest {
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
 				aWizard);
 		try {
-			//here we show view to get initialized selection
+			/*
+			 * here we show view to get initialized selection
+			 */
 			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("org.eclipse.jdt.ui.PackageExplorer"); //$NON-NLS-1$
 		} catch (PartInitException e) {
 			fail(e.toString());
@@ -85,7 +92,7 @@ public class WebWizardsTest extends AbstractModelNewWizardTest {
 		}
 	}
 	
-	public void testNewHtmlWizardInstanceIsCreated() {
+	public void _testNewHtmlWizardInstanceIsCreated() {
 		testNewWizardInstanceIsCreated(NewHTMLFileWizard.class.getName());
 	}
 	
