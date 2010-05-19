@@ -745,8 +745,8 @@
 			id="xhtml_attribute_value">
 		</contextType>
 		<include
-			file="/src/templates/xhtmldefault-templates.xml"
-			translations="/src/templates/xhtmldefault-templates.properties">
+			file="templates/xhtmldefault-templates.xml"
+			translations="$nl$/templates/xhtmldefault-templates.properties">
 		</include>
 	</extension>
 
