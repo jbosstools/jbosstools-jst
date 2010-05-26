@@ -52,6 +52,8 @@ public class RegisterServerContext {
 	
 	long xmlTimeStamp = -1;
 	String xmlError = null;
+
+	String serverErrorCache = null;
     
 	private static final String YES_STRING = "yes"; //$NON-NLS-1$
 	private static final String EMPTY_LOCATION = ""; //$NON-NLS-1$
@@ -63,6 +65,9 @@ public class RegisterServerContext {
 	}
 	
 	public void setServletVersion(String v) {
+		if(v != null && !v.equals(servletVersion)) {
+			serverErrorCache = null;
+		}
 		servletVersion = v;
 	}
 	
@@ -97,6 +102,7 @@ public class RegisterServerContext {
 			}
 		}
 		runtime = null;
+		serverErrorCache = null;
 	}
 	
 	public String getRuntimeName() {
@@ -104,7 +110,16 @@ public class RegisterServerContext {
 	}
 	
 	public void setTargetServers(IServer[] info) {
+		if(!targetServersEqual(targetServers, info)) {
+			serverErrorCache = null;
+		}
 		targetServers = info;
+	}
+
+	boolean targetServersEqual(IServer[] s1, IServer[] s2) {
+		if(s1.length != s2.length) return false;
+		for (int i = 0; i < s1.length; i++) if(s1[i] != s2[i]) return false;
+		return true;
 	}
 	
 	public IServer[] getTargetServers() {
@@ -158,23 +173,37 @@ public class RegisterServerContext {
 		if(true) {
 			String contextRootError = RegistrationHelper.checkContextRoot(applicationName);
 			if(contextRootError != null) return contextRootError;
-			for (int i = 0; i < targetServers.length; i++) {
-				if(RegistrationHelper.isRegistered(applicationName, targetServers[i])) {
-					return NLS.bind(WebUIMessages.APPLICATION_IS_ALREADY_REGISTERED, applicationName, targetServers[i].getName());
-				}
-				if(this.project != null /*&& !this.project.exists()*/ && servletVersion != null && servletVersion.length() > 0) {
-					if(project.exists() && RegistrationHelper.isRegistered(project)) {
-						return MessageFormat
-								.format(WebUIMessages.PROJECT_IS_ALREADY_REGISTERED,
-										project.getName());
+			if(targetServers.length > 0) {
+				IModule module = RegistrationHelper.findModule(project);
+				boolean isFakeModule = false;
+				if(module == null) {
+					if(serverErrorCache != null) {
+						return serverErrorCache;
 					}
 					ModuleFactory f = ServerPlugin.findModuleFactory("org.eclipse.jst.j2ee.server"); //$NON-NLS-1$
-					IModule module = RegistrationHelper.findModule(project);
-					if(module == null) {
-						module = (f == null) ? null : new Module(f, project.getName(), project.getName(), "jst.web", servletVersion, null); //$NON-NLS-1$
+					module = (f == null) ? null : new Module(f, project.getName(), project.getName(), "jst.web", servletVersion, null); //$NON-NLS-1$
+					isFakeModule = true;
+				} else {
+					serverErrorCache = null;
+				}
+				for (int i = 0; i < targetServers.length; i++) {
+					if(RegistrationHelper.isRegistered(applicationName, targetServers[i])) {
+						return NLS.bind(WebUIMessages.APPLICATION_IS_ALREADY_REGISTERED, applicationName, targetServers[i].getName());
 					}
-					String m = (module == null) ? null : RegistrationHelper.getRegistrationError(module, applicationName, targetServers[i]);
-					if(m != null) return m;
+					if(this.project != null /*&& !this.project.exists()*/ && servletVersion != null && servletVersion.length() > 0) {
+						if(project.exists() && RegistrationHelper.isRegistered(project)) {
+							return MessageFormat
+									.format(WebUIMessages.PROJECT_IS_ALREADY_REGISTERED,
+											project.getName());
+						}
+						String m = (module == null) ? null : RegistrationHelper.getRegistrationError(module, applicationName, targetServers[i]);
+						if(m != null) {
+							if(isFakeModule) {
+								serverErrorCache = m;
+							}
+							return m;
+						}
+					}
 				}
 			}
 			if(servletVersion != null && servletVersion.length() == 0) {
