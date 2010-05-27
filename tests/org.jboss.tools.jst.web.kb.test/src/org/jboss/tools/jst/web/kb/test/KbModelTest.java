@@ -55,46 +55,13 @@ public class KbModelTest extends TestCase {
 		return kbProject;
 	}
 
-	public void testXMLScanner() {
+	public void testTldXMLScanner() {
 		IKbProject kbProject = getKbProject();
 		
 		IFile f = project.getFile("WebContent/WEB-INF/faces-config.xml");
 		assertNotNull(f);
 		XMLScanner scanner = new XMLScanner();
 		List<ITagLibrary> ls = null;		
-		try {
-			LoadedDeclarations ds = scanner.parse(f, kbProject);
-			ls = ds.getLibraries();
-		} catch (ScannerException e) {
-			JUnitUtils.fail("Error in xml scanner",e);
-		}
-		assertEquals(1, ls.size());
-		assertTrue(ls.get(0).getComponents().length > 0);
-
-		ls = null;
-		f = project.getFile("WebContent/facelet-taglib.xml");
-		assertNotNull(f);
-		try {
-			LoadedDeclarations ds = scanner.parse(f, kbProject);
-			ls = ds.getLibraries();
-		} catch (ScannerException e) {
-			JUnitUtils.fail("Error in xml scanner",e);
-		}
-		assertEquals(1, ls.size());
-		assertTrue(ls.get(0).getComponents().length > 0);
-		
-		ls = null;
-		f = project.getFile("WebContent/facelet-taglib2.xml");
-		assertNotNull(f);
-		try {
-			LoadedDeclarations ds = scanner.parse(f, kbProject);
-			ls = ds.getLibraries();
-		} catch (ScannerException e) {
-			JUnitUtils.fail("Error in xml scanner",e);
-		}
-		assertEquals(1, ls.size());
-		assertTrue(ls.get(0).getComponents().length > 0);
-
 		ls = null;
 		f = project.getFile("WebContent/WEB-INF/taglib2.tld");
 		assertNotNull(f);
@@ -113,15 +80,15 @@ public class KbModelTest extends TestCase {
 //		}
 	}
 
-	public void testKbProjectObjects() {
+	public void toDoTestKbProjectObjects() {
 		
 	}
 
-	public void testXMLSerialization() {
+	public void toDoXMLSerialization() {
 		
 	}
 
-	public void testCleanBuild() {
+	public void toDoCleanBuild() {
 
 	}
 

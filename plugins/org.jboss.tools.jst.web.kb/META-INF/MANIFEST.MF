@@ -4,7 +4,6 @@ Bundle-Name: %Bundle-Name.0
 Bundle-SymbolicName: org.jboss.tools.jst.web.kb;singleton:=true
 Bundle-Localization: plugin
 Bundle-Version: 3.1.0.qualifier
-Bundle-ClassPath: webKb.jar
 Bundle-Activator: org.jboss.tools.jst.web.kb.WebKbPlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,

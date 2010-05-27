@@ -9,6 +9,5 @@ Require-Bundle: org.jboss.tools.jst.web,
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: %Bundle-Vendor.0
 Export-Package: org.jboss.tools.jst.web.test
-Bundle-ClassPath: jst-web-tests.jar
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: J2SE-1.5

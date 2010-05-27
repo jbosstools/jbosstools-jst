@@ -15,4 +15,3 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Vendor: %Bundle-Vendor.0
 Export-Package: org.jboss.tools.jst.web.kb.test
-Bundle-ClassPath: jst-web-kb-tests.jar
