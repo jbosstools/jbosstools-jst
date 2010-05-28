@@ -74,8 +74,10 @@ public class Constants {
 	public static String COLON = ":"; //$NON-NLS-1$
 	public static String SEMICOLON = ";"; //$NON-NLS-1$
 	public static String COMMA = ","; //$NON-NLS-1$
+	public static String DOT = "."; //$NON-NLS-1$
 	public static String DASH = "-"; //$NON-NLS-1$
 	public static String SLASH = "/"; //$NON-NLS-1$
+	public static String EQUAL = "="; //$NON-NLS-1$
 	public static final String START_BRACKET = "("; //$NON-NLS-1$
 	public static final String END_BRACKET = ")"; //$NON-NLS-1$
 
