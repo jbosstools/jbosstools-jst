@@ -52,6 +52,9 @@ public class XMLScanner implements IFileScanner {
 	public static final String ATTR_FUNC_NAME = "function-name"; //$NON-NLS-1$
 	public static final String ATTR_COMPONENT_TYPE = "component-type"; //$NON-NLS-1$
 	
+	public static final String XML_SUFFIX = ".xml";
+	public static final String TLD_SUFFIX = ".tld";	
+	
 	public XMLScanner() {}
 
 	/**
@@ -61,9 +64,8 @@ public class XMLScanner implements IFileScanner {
 	 * @return
 	 */	
 	public boolean isRelevant(IFile resource) {
-		if(resource.getName().endsWith(".xml")) return true; //$NON-NLS-1$
-		if(resource.getName().endsWith(".tld")) return true; //$NON-NLS-1$
-		return false;
+		String name = resource.getName().toLowerCase();
+		return name.endsWith(XML_SUFFIX) || name.endsWith(TLD_SUFFIX); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	/**

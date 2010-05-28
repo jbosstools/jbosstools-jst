@@ -24,52 +24,63 @@ import org.jboss.tools.jst.web.model.helpers.InnerModelHelper;
  * @author Viacheslav Kabanovich
  */
 public class LibraryScanner implements IFileScanner {
+	
+	public static final String FILE_SYSTEMS_PATH = "FileSystems"; //$NON-NLS-1$
+	public static final String FILE_SYSTEM_JAR_PATH = "FileSystemJar"; //$NON-NLS-1$
+	public static final String META_INF_PATH = "META-INF"; //$NON-NLS-1$
+	
+	public static final String JAR_SUFFIX = ".jar";  //$NON-NLS-1$
+	public static final String ZIP_SUFFIX = ".zip"; //$NON-NLS-1$
+	
 	//Now it is absolute file on disk
 	IPath sourcePath = null;
 	
 	public LibraryScanner() {}
 	
 	public boolean isRelevant(IFile f) {
-		if(EclipseResourceUtil.isJar(f.getName())) return true;
-		return false;
+		String name = f.getName().toLowerCase();
+		return name.endsWith(JAR_SUFFIX) || name.endsWith(ZIP_SUFFIX);
 	}
 
 	public boolean isLikelyComponentSource(IFile f) {
 		XModel model = InnerModelHelper.createXModel(f.getProject());
-		if(model == null) return false;
-		XModelObject o = EclipseResourceUtil.getObjectByResource(model, f);
-		if(o == null) return false;
-		if(!o.getModelEntity().getName().equals("FileSystemJar")) { //$NON-NLS-1$
-			((FileSystemsImpl)o.getModel().getByPath("FileSystems")).updateOverlapped(); //$NON-NLS-1$
-			o = EclipseResourceUtil.getObjectByResource(f);
-			if(o == null || !o.getModelEntity().getName().equals("FileSystemJar")) return false; //$NON-NLS-1$
+		boolean result = false;
+		if(model != null) {
+			XModelObject o = EclipseResourceUtil.getObjectByResource(model, f);
+			if(o != null) {
+				if(o.getModelEntity().getName().equals(FILE_SYSTEM_JAR_PATH)) {
+					result = isLikelyComponentSource(o);
+				} else {
+					((FileSystemsImpl)o.getModel().getByPath(FILE_SYSTEMS_PATH)).updateOverlapped();
+					o = EclipseResourceUtil.getObjectByResource(f);
+					result = o != null && o.getModelEntity().getName().equals(FILE_SYSTEM_JAR_PATH);
+				}
+			}
 		}
-		return isLikelyComponentSource(o);
+		return result;
 	}
 
 	public LoadedDeclarations parse(IFile f, IKbProject sp) throws ScannerException {
 		XModel model = InnerModelHelper.createXModel(f.getProject());
-		if(model == null) return null;
 		XModelObject o = EclipseResourceUtil.getObjectByResource(model, f);
-		if(o == null) return null;
-		if(!o.getModelEntity().getName().equals("FileSystemJar")) { //$NON-NLS-1$
-			((FileSystemsImpl)o.getModel().getByPath("FileSystems")).updateOverlapped(); //$NON-NLS-1$
+		if(!o.getModelEntity().getName().equals(FILE_SYSTEM_JAR_PATH)) {
+			((FileSystemsImpl)o.getModel().getByPath(FILE_SYSTEMS_PATH)).updateOverlapped();
 			o = EclipseResourceUtil.getObjectByResource(f);
-			if(o == null || !o.getModelEntity().getName().equals("FileSystemJar")) return null; //$NON-NLS-1$
+			if(o == null || !o.getModelEntity().getName().equals(FILE_SYSTEM_JAR_PATH)) return null;
 		}
 		return parse(o, f.getFullPath(), sp);
 	}
 
 	public boolean isLikelyComponentSource(XModelObject o) {
 		if(o == null) return false;
-		if(o.getChildByPath("META-INF") != null) return true; //$NON-NLS-1$
+		if(o.getChildByPath(META_INF_PATH) != null) return true;
 		return false;
 	}
 
 	public LoadedDeclarations parse(XModelObject o, IPath path, IKbProject sp) throws ScannerException {
 		if(o == null) return null;
 		sourcePath = path;
-		XModelObject metaInf = o.getChildByPath("META-INF"); //$NON-NLS-1$
+		XModelObject metaInf = o.getChildByPath(META_INF_PATH);
 		if(metaInf == null) return null;
 		
 		LoadedDeclarations ds = new LoadedDeclarations();
@@ -107,9 +118,6 @@ public class LibraryScanner implements IFileScanner {
 				XMLScanner s = new XMLScanner();				
 				LoadedDeclarations ds1 = s.parse(tld, path, sp);
 				ds = add(ds, ds1);
-				if(ds1 != null && !ds1.isEmpty()) {
-					System.out.println(tld.getPath() + ":" + ds1.getLibraries().get(0).getURI());
-				}
 			} else if(tld.getFileType() == XModelObject.FOLDER) {
 				LoadedDeclarations ds1 = parseInPackages(tld, path, sp);
 				ds = add(ds, ds1);
@@ -148,7 +156,7 @@ public class LibraryScanner implements IFileScanner {
 	public static boolean isCompositeComponentFile(XModelObject o) {
 		if(o == null) return false;
 		String entity = o.getModelEntity().getName();
-		if(entity.startsWith(JSF2ResourcesScanner.ENT_COMPOSITE_COMPONENT)) return true; //$NON-NLS-1$
+		if(entity.startsWith(JSF2ResourcesScanner.ENT_COMPOSITE_COMPONENT)) return true;
 		return false;
 	}
 	

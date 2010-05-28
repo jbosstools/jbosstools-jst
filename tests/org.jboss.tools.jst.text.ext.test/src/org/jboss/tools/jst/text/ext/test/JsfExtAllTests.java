@@ -7,16 +7,21 @@ import org.jboss.tools.test.util.ProjectImportTestSetup;
 
 
 public class JsfExtAllTests {
-	public static Test suite() {
-		TestSuite suite = new TestSuite("Test for default package");
-		//$JUnit-BEGIN$
-
-		suite.addTest(new ProjectImportTestSetup(new TestSuite(OpenOnsTest.class),
-				"org.jboss.tools.jst.text.ext.test",
-				new String[]{"projects/HiperlinksTestProject"},
-				new String[]{"HiperlinksTestProject"}));
+	
+	// all tests were moved to jst.ui.test plugin
+	public void testJsfTextExt () {
 		
-		//$JUnit-END$
-		return suite;
 	}
+//	public static Test suite() {
+//		TestSuite suite = new TestSuite("Test for default package");
+//		//$JUnit-BEGIN$
+//
+//		suite.addTest(new ProjectImportTestSetup(new TestSuite(OpenOnsTest.class),
+//				"org.jboss.tools.jst.text.ext.test",
+//				new String[]{"projects/HiperlinksTestProject"},
+//				new String[]{"HiperlinksTestProject"}));
+//		
+//		//$JUnit-END$
+//		return suite;
+//	}
 }
