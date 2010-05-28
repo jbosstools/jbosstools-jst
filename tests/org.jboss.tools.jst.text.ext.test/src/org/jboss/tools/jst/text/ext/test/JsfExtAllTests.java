@@ -6,13 +6,13 @@ import junit.framework.TestSuite;
 import org.jboss.tools.test.util.ProjectImportTestSetup;
 
 
-public class CommonExtAllTests {
+public class JsfExtAllTests {
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for default package");
 		//$JUnit-BEGIN$
 
 		suite.addTest(new ProjectImportTestSetup(new TestSuite(OpenOnsTest.class),
-				"org.jboss.tools.common.text.ext.test",
+				"org.jboss.tools.jst.text.ext.test",
 				new String[]{"projects/HiperlinksTestProject"},
 				new String[]{"HiperlinksTestProject"}));
 		

@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name.0
-Bundle-SymbolicName: org.jboss.tools.jsp.text.ext.test
+Bundle-SymbolicName: org.jboss.tools.jst.text.ext.test
 Bundle-Version: 3.1.0.qualifier
 Require-Bundle: org.jboss.tools.common.text.ext,
  org.junit,
@@ -15,7 +15,6 @@ Require-Bundle: org.jboss.tools.common.text.ext,
  org.eclipse.jface.text,
  org.jboss.tools.common.model.ui
 Export-Package: org.jboss.tools.jst.text.ext.test
-Bundle-ClassPath: common-text-ext-test.jar
 Bundle-Vendor: %Bundle-Vendor.0
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
