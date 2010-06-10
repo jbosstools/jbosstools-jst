@@ -9,14 +9,23 @@
  *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.tiles.ui.editor.figures;
-import org.eclipse.draw2d.*;
-import org.eclipse.draw2d.geometry.*;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.Vector;
 
+import org.eclipse.draw2d.AbstractLayout;
+import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.jboss.tools.jst.web.tiles.ui.editor.edit.DefinitionEditPart;
 import org.jboss.tools.jst.web.tiles.ui.editor.model.IDefinition;
 import org.jboss.tools.jst.web.tiles.ui.editor.model.ITilesOptions;
-
-import java.util.*;
 
 public class TilesDiagramLayout extends AbstractLayout{
 	Dimension dim = new Dimension(0,0);

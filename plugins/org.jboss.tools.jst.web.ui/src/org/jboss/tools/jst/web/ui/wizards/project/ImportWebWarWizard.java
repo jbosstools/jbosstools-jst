@@ -143,6 +143,14 @@ public abstract class ImportWebWarWizard extends Wizard implements IImportWizard
 		public String getNamespaceIdentifier() throws InvalidRegistryObjectException {
 			throw new UnsupportedOperationException("Not implemented."); //$NON-NLS-1$
 		}
+		public String getAttribute(String attrName, String locale)
+				throws InvalidRegistryObjectException {
+			throw new UnsupportedOperationException("Not implemented."); //$NON-NLS-1$
+		}
+		public String getValue(String locale)
+				throws InvalidRegistryObjectException {
+			throw new UnsupportedOperationException("Not implemented."); //$NON-NLS-1$
+		}
 	}
 
 }
