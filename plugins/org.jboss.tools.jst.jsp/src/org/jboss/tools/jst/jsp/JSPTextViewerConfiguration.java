@@ -10,6 +10,10 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.hyperlink.IHyperlinkDetector;
 import org.eclipse.jface.text.source.ISourceViewer;
@@ -74,7 +78,16 @@ public class JSPTextViewerConfiguration extends StructuredTextViewerConfiguratio
 	}
 
 	protected IContentAssistProcessor[] getContentAssistProcessors(ISourceViewer sourceViewer, String partitionType) {
-		return configurationDelegate.getContentAssistProcessors(sourceViewer, partitionType);
+		IContentAssistProcessor[] superProcessors = super.getContentAssistProcessors(
+				sourceViewer, partitionType);
+		List<IContentAssistProcessor> processors = new ArrayList<IContentAssistProcessor>();
+		processors.addAll(
+				Arrays.asList(
+						configurationDelegate.getContentAssistProcessors(
+								sourceViewer,
+								partitionType)));
+		processors.addAll(Arrays.asList(superProcessors));
+		return processors.toArray(new IContentAssistProcessor[0]);
 	}
 	
 	/*
@@ -90,6 +103,7 @@ public class JSPTextViewerConfiguration extends StructuredTextViewerConfiguratio
 	public IContentAssistProcessor[] getContentAssistProcessorsForPartitionType(
 			ISourceViewer sourceViewer, String partitionType) {
 		// TODO Auto-generated method stub
-		return super.getContentAssistProcessors(sourceViewer, partitionType);
+//		return super.getContentAssistProcessors(sourceViewer, partitionType);
+		return new IContentAssistProcessor[0];
 	}
 }

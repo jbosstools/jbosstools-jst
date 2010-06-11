@@ -58,8 +58,17 @@ public class HTMLTextViewerConfiguration extends
 
 	protected IContentAssistProcessor[] getContentAssistProcessors(
 			ISourceViewer sourceViewer, String partitionType) {
-		return configurationDelegate.getContentAssistProcessors(sourceViewer,
-				partitionType);
+		
+		IContentAssistProcessor[] superProcessors = super.getContentAssistProcessors(
+								sourceViewer, partitionType);
+		List<IContentAssistProcessor> processors = new ArrayList<IContentAssistProcessor>();
+		processors.addAll(
+				Arrays.asList(
+						configurationDelegate.getContentAssistProcessors(
+								sourceViewer,
+								partitionType)));
+		processors.addAll(Arrays.asList(superProcessors));
+		return processors.toArray(new IContentAssistProcessor[0]);
 	}
 
 	/*
@@ -94,15 +103,14 @@ public class HTMLTextViewerConfiguration extends
 
 	public IContentAssistProcessor[] getContentAssistProcessorsForPartitionType(
 			ISourceViewer sourceViewer, String partitionType) {
-		IContentAssistProcessor[] results = super.getContentAssistProcessors(
-				sourceViewer, partitionType);
+//		IContentAssistProcessor[] results = super.getContentAssistProcessors(
+//				sourceViewer, partitionType);
 		// added by Maksim Areshkau
 		if ("org.eclipse.wst.html.HTML_DEFAULT".equalsIgnoreCase(partitionType)) { //$NON-NLS-1$
 			List<IContentAssistProcessor> contAssists = getVpeTestExtensions();
-			contAssists.addAll(Arrays.asList(results));
-			results = contAssists.toArray(new IContentAssistProcessor[0]);
+			return contAssists.toArray(new IContentAssistProcessor[0]);
 		}
-		return results;
+		return new IContentAssistProcessor[0];
 	}
 
 	/**

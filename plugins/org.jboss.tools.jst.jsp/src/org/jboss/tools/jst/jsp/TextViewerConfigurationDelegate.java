@@ -24,7 +24,8 @@ public class TextViewerConfigurationDelegate {
 		SortingCompoundContentAssistProcessor sortingCompoundProcessor = new SortingCompoundContentAssistProcessor(sourceViewer, partitionType);
 		
 		if (sortingCompoundProcessor.supportsPartitionType(partitionType)) {
-			// Add the default WTP CA processors to our SortingCompoundContentAssistProcessor
+			// No more default WTP CA processors are to be added to our SortingCompoundContentAssistProcessor
+
 			IContentAssistProcessor[] superProcessors = target.getContentAssistProcessorsForPartitionType(sourceViewer, partitionType);
 
 			if (superProcessors != null && superProcessors.length > 0) {
