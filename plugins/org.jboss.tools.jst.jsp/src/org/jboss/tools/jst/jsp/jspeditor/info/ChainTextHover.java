@@ -18,6 +18,7 @@ import org.eclipse.jface.text.IInformationControlCreator;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextHover;
 import org.eclipse.jface.text.ITextHoverExtension;
+import org.eclipse.jface.text.ITextHoverExtension2;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.wst.sse.ui.internal.Logger;
 import org.eclipse.wst.sse.ui.internal.taginfo.AnnotationHoverProcessor;
@@ -111,7 +112,14 @@ public class ChainTextHover implements ITextHover, ITextHoverExtension {
 			Iterator<ITextHover> i = getTextHovers().iterator();
 			while ((i.hasNext()) && (displayInfo == null)) {
 				ITextHover hover = (ITextHover) i.next();
-				displayInfo = hover.getHoverInfo(viewer, hoverRegion);
+				if(hover instanceof ITextHoverExtension2) {
+					Object displayInfoObject = ((ITextHoverExtension2)hover).getHoverInfo2(viewer, hoverRegion);
+					if(displayInfoObject!=null) {
+						displayInfo = displayInfoObject.toString();
+					}
+				} else {
+					displayInfo = hover.getHoverInfo(viewer, hoverRegion);
+				}
 			}
 		}
 		return displayInfo;

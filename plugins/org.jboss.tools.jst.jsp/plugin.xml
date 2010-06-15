@@ -100,6 +100,49 @@
       		type="preferencepages"
             value="org.eclipse.wst.sse.ui.preferences.jsp.occurrences"
             target="org.eclipse.wst.html.core.htmlsource"/>
+
+	      <sourceViewerConfiguration
+				class="org.jboss.tools.jst.jsp.HTMLTextViewerConfiguration"
+	            target="jsf.facelet"/>
+	      <contentOutlineConfiguration
+	            class="org.eclipse.wst.html.ui.views.contentoutline.HTMLContentOutlineConfiguration"
+	            target="jsf.facelet"/>
+	      <propertySheetConfiguration
+	            class="org.eclipse.wst.xml.ui.views.properties.XMLPropertySheetConfiguration"
+	            target="jsf.facelet"/>
+	      <provisionalConfiguration
+	      		type="sourceeditingtexttools"
+	            class="org.eclipse.wst.xml.ui.internal.provisional.XMLSourceEditingTextTools"
+	            target="jsf.facelet"/>
+	      <provisionalConfiguration
+	      		type="characterpairmatcher"
+	            class="org.eclipse.wst.html.ui.internal.text.HTMLDocumentRegionEdgeMatcher"
+	            target="jsf.facelet"/>
+	      <provisionalConfiguration
+	      		type="structuredtextfoldingprovider"
+	            class="org.eclipse.wst.html.ui.internal.projection.StructuredTextFoldingProviderHTML"
+	            target="jsf.facelet"/>
+	      <provisionalDefinition 
+	      		type="preferencepages"
+	            value="org.eclipse.wst.html.ui.preferences"
+	            target="jsf.facelet"/>
+	      <provisionalDefinition 
+	      		type="preferencepages"
+	            value="org.eclipse.wst.html.ui.preferences.source"
+	            target="jsf.facelet"/>
+	      <provisionalDefinition 
+	      		type="preferencepages"
+	            value="org.eclipse.wst.html.ui.preferences.templates"
+	            target="jsf.facelet"/>
+	      <provisionalDefinition 
+	      		type="preferencepages"
+	            value="org.eclipse.wst.html.ui.preferences.styles"
+	            target="jsf.facelet"/>
+      <provisionalDefinition
+      		type="preferencepages"
+            value="org.eclipse.wst.sse.ui.preferences.jsp.occurrences"
+            target="jsf.facelet"/>
+
       <provisionalConfiguration
             class="org.eclipse.wst.xml.ui.internal.projection.StructuredTextFoldingProviderXML"
             target="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor"
@@ -163,6 +206,7 @@
             name="%editors.html.name" 
             default="true">
          <contentTypeBinding contentTypeId="org.eclipse.wst.html.core.htmlsource"/>
+         <contentTypeBinding contentTypeId="jsf.facelet"/>
       </editor>
    </extension>
 
@@ -549,6 +593,12 @@
 				class="org.jboss.tools.jst.jsp.contentassist.FaceletPageContectAssistProcessor" 
 				id="org.jboss.tools.jst.jsp.contentassist.FaceletPageContectAssistProcessor">
 			<contenttype id="org.eclipse.wst.html.core.htmlsource">
+				<partitiontype id="org.eclipse.wst.html.HTML_DEFAULT" />
+				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
+				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
+				<partitiontype id="org.eclipse.wst.css.STYLE" />
+			</contenttype>
+			<contenttype id="jsf.facelet">
 				<partitiontype id="org.eclipse.wst.html.HTML_DEFAULT" />
 				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
 				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
