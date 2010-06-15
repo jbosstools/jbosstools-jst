@@ -89,6 +89,7 @@
 
 	<contexttype id="FACELETS_PAGE_CONTEXT_TYPE">
 		<contenttype id="org.eclipse.wst.html.core.htmlsource" />
+		<contenttype id="jsf.facelet" />
 	</contexttype>
 
 	<contexttype id="XML_PAGE_CONTEXT_TYPE">
@@ -131,7 +132,7 @@
 
    <extension
         point="org.eclipse.wst.validation.validator"
-		id="KbValidator"
+		id="cd"
 		name="JBoss KB Project Validator">
 		<validator>
 			<projectNature id="org.eclipse.jdt.core.javanature" />
