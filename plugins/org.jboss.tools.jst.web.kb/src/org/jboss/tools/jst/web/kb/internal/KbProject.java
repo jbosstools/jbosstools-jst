@@ -156,7 +156,7 @@ public class KbProject extends KbObject implements IKbProject {
 	 */
 	public void addKbProject(KbProject p) {
 		if(dependsOn.contains(p)) return;
-		dependsOn.add(p);
+		addUsedKbProject(p);
 		p.addDependentKbProject(this);
 		if(!p.isStorageResolved) {
 			p.resolve();
@@ -187,7 +187,39 @@ public class KbProject extends KbObject implements IKbProject {
 	 * @param p
 	 */
 	public void addDependentKbProject(KbProject p) {
-		usedBy.add(p);
+		synchronized (usedBy) {
+			usedBy.add(p);
+		}
+	}
+
+	void removeDependentKbProject(KbProject p) {
+		synchronized (usedBy) {
+			usedBy.remove(p);
+		}
+	}
+	
+	KbProject[] getDependentKbProjects() {
+		synchronized (usedBy) {
+			return usedBy.toArray(new KbProject[0]);
+		}
+	}
+
+	void addUsedKbProject(KbProject p) {
+		synchronized (dependsOn) {
+			dependsOn.add(p);
+		}
+	}
+
+	void removeUsedKbProject(KbProject p) {
+		synchronized (dependsOn) {
+			dependsOn.remove(p);
+		}
+	}
+	
+	KbProject[] getUsedKbProjects() {
+		synchronized (dependsOn) {
+			return dependsOn.toArray(new KbProject[0]);
+		}
 	}
 
 	/**
@@ -196,8 +228,8 @@ public class KbProject extends KbObject implements IKbProject {
 	 */
 	public void removeKbProject(KbProject p) {
 		if(!dependsOn.contains(p)) return;
-		p.usedBy.remove(this);
-		dependsOn.remove(p);
+		p.removeDependentKbProject(this);
+		removeUsedKbProject(p);
 		IPath[] ps = null;
 		synchronized(sourcePaths2) {
 			ps = sourcePaths2.keySet().toArray(new IPath[0]);
@@ -319,8 +351,12 @@ public class KbProject extends KbObject implements IKbProject {
 			sourcePaths2.clear();
 		}
 		isStorageResolved = false;
-		dependsOn.clear();
-		usedBy.clear();
+		synchronized (dependsOn) {
+			dependsOn.clear();
+		}
+		synchronized (usedBy) {
+			usedBy.clear();
+		}
 		libraries.clear();
 		
 		long begin = System.currentTimeMillis();
@@ -399,7 +435,7 @@ public class KbProject extends KbObject implements IKbProject {
 					if(sp.isMock) {
 						addKbProject(sp);
 					} else {
-						dependsOn.add(sp);
+						addUsedKbProject(sp);
 						sp.addDependentKbProject(this);
 					}
 				}
@@ -415,7 +451,9 @@ public class KbProject extends KbObject implements IKbProject {
 				IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(p);
 				if(project == null || !project.isAccessible()) continue;
 				KbProject sp = (KbProject)KbProjectFactory.getKbProject(project, false);
-				if(sp != null) usedBy.add(sp);
+				if(sp != null) {
+					addDependentKbProject(sp);
+				}
 			}
 		}
 	
@@ -523,13 +561,15 @@ public class KbProject extends KbObject implements IKbProject {
 	 */
 	private void storeProjectDependencies(Element root) {
 		Element dependsOnElement = XMLUtilities.createElement(root, "depends-on-projects"); //$NON-NLS-1$
-		for (IKbProject p : dependsOn) {
+		KbProject[] ds = getUsedKbProjects();
+		for (IKbProject p : ds) {
 			if(!p.getProject().isAccessible()) continue;
 			Element pathElement = XMLUtilities.createElement(dependsOnElement, "project"); //$NON-NLS-1$
 			pathElement.setAttribute("name", p.getProject().getName()); //$NON-NLS-1$
 		}
 		Element usedElement = XMLUtilities.createElement(root, "used-by-projects"); //$NON-NLS-1$
-		for (IKbProject p : usedBy) {
+		KbProject[] ps = getDependentKbProjects();
+		for (IKbProject p : ps) {
 			if(!p.getProject().isAccessible()) continue;
 			Element pathElement = XMLUtilities.createElement(usedElement, "project"); //$NON-NLS-1$
 			pathElement.setAttribute("name", p.getProject().getName()); //$NON-NLS-1$
@@ -682,7 +722,8 @@ public class KbProject extends KbObject implements IKbProject {
 		if(usedBy.isEmpty()) return;
 		if(EclipseResourceUtil.isJar(source.toString())) return;
 		
-		for (KbProject p : usedBy) {
+		KbProject[] ps = getDependentKbProjects();
+		for (KbProject p : ps) {
 			p.resolve();
 			LoadedDeclarations ds1 = new LoadedDeclarations();
 			for (ITagLibrary f : ds.getLibraries()) {
@@ -722,7 +763,8 @@ public class KbProject extends KbObject implements IKbProject {
 		if(usedBy.isEmpty()) return;
 		if(EclipseResourceUtil.isJar(source.toString())) return;
 		
-		for (KbProject p : usedBy) {
+		KbProject[] ps = getDependentKbProjects();
+		for (KbProject p : ps) {
 			p.resolve();
 			p.pathRemoved(source);
 		}
@@ -818,13 +860,11 @@ public class KbProject extends KbObject implements IKbProject {
 			// Find existing KBNATURE problem marker and kill it if exists
 			IMarker[] markers = getOwnedMarkers(project);
 			if (markers != null && markers.length > 0) {
-				for (IMarker m : markers) {
-					try {
-						project.deleteMarkers(KB_PROBLEM_MARKER_TYPE, true, IResource.DEPTH_ONE);
-						project.setPersistentProperty(KbProjectFactory.NATURE_MOCK, null);
-					} catch (CoreException ex) {
-						WebKbPlugin.getDefault().logError(ex);
-					}
+				try {
+					project.deleteMarkers(KB_PROBLEM_MARKER_TYPE, true, IResource.DEPTH_ONE);
+					project.setPersistentProperty(KbProjectFactory.NATURE_MOCK, null);
+				} catch (CoreException ex) {
+					WebKbPlugin.getDefault().logError(ex);
 				}
 			}
 			return true;
