@@ -141,7 +141,7 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 			if (n == null)
 				return false;
 
-			return (((Element)n).getAttribute(attrName) != null);
+			return (((Element)n).getAttributeNode(attrName) != null);
 		} finally {
 			if (sModel != null) {
 				sModel.releaseFromRead();
