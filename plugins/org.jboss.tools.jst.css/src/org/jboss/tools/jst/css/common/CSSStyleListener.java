@@ -155,7 +155,7 @@ public class CSSStyleListener implements ISelectionListener, INodeAdapter,
 	public void notifyChanged(INodeNotifier notifier, int eventType,
 			Object changedFeature, Object oldValue, Object newValue, int pos) {
 		/*
-		 * Fixed by yzhishko. See https://jira.jboss.org/jira/browse/JBIDE-.
+		 * Fixed by yzhishko. See https://jira.jboss.org/jira/browse/JBIDE-5979.
 		 */
 		IEditorPart editorPart = PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow().getActivePage().getActiveEditor();
