@@ -159,12 +159,13 @@ public class CSSStyleListener implements ISelectionListener, INodeAdapter,
 		 */
 		IEditorPart editorPart = PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		StructuredTextEditor structuredTextEditor = (StructuredTextEditor) editorPart;
-		Object page = structuredTextEditor.getAdapter(IPropertySheetPage.class);
-		if (page instanceof ConfigurablePropertySheetPage) {
-			((ConfigurablePropertySheetPage) page).refresh();
+		if (editorPart instanceof StructuredTextEditor) {
+			StructuredTextEditor structuredTextEditor = (StructuredTextEditor) editorPart;
+			Object page = structuredTextEditor.getAdapter(IPropertySheetPage.class);
+			if (page instanceof ConfigurablePropertySheetPage) {
+				((ConfigurablePropertySheetPage) page).refresh();
+			}
 		}
-		
 		clearListeners(newValue);
 		clearListeners(oldValue);
 		Object[] array = listeners.getListeners();
