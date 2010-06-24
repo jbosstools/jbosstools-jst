@@ -712,6 +712,7 @@ public class KbProject extends KbObject implements IKbProject {
 		}
 	}
 
+	private Set<IPath> sourcesInRegistering = new HashSet<IPath>();
 	/**
 	 * 
 	 * @param ds
@@ -721,15 +722,29 @@ public class KbProject extends KbObject implements IKbProject {
 	public void registerComponentsInDependentProjects(LoadedDeclarations ds, IPath source) throws CloneNotSupportedException {
 		if(usedBy.isEmpty()) return;
 		if(EclipseResourceUtil.isJar(source.toString())) return;
+
+		if(sourcesInRegistering.contains(source)) {
+			return;
+		}
+		synchronized (sourcesInRegistering) {
+			sourcesInRegistering.add(source);
+		}
 		
-		KbProject[] ps = getDependentKbProjects();
-		for (KbProject p : ps) {
-			p.resolve();
-			LoadedDeclarations ds1 = new LoadedDeclarations();
-			for (ITagLibrary f : ds.getLibraries()) {
-				ds1.getLibraries().add(f.clone());
+		try {
+			KbProject[] ps = getDependentKbProjects();
+			for (KbProject p : ps) {
+				if(p.sourcesInRegistering.contains(source)) continue;
+				p.resolve();
+				LoadedDeclarations ds1 = new LoadedDeclarations();
+				for (ITagLibrary f : ds.getLibraries()) {
+					ds1.getLibraries().add(f.clone());
+				}
+				p.registerComponents(ds1, source);
 			}
-			p.registerComponents(ds1, source);
+		} finally {
+			synchronized (sourcesInRegistering) {
+				sourcesInRegistering.remove(source);
+			}
 		}
 	}
 	
