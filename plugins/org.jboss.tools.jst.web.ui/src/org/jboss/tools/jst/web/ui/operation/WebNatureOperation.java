@@ -437,6 +437,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 	
 			wcco.setDataModel(dataModel);
 			dataModel.setProperty(IProjectCreationPropertiesNew.PROJECT_NAME, projectName);
+			dataModel.setProperty(IFacetProjectCreationDataModelProperties.FACET_PROJECT_NAME, projectName);
 			if(!isDefaultLocation(projectLocation)) {
 				dataModel.setProperty(IProjectCreationPropertiesNew.USE_DEFAULT_LOCATION, Boolean.FALSE);
 				dataModel.setProperty(IProjectCreationPropertiesNew.USER_DEFINED_LOCATION, projectLocation);
