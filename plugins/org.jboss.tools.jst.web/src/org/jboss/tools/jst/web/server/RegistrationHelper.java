@@ -93,12 +93,12 @@ public class RegistrationHelper {
 		}
 		IModule[] add = new IModule[]{m};
 		IModule[] remove = new IModule[0];
-		try {
-			server.getRootModules(m, null);
-		} catch (CoreException ce) {
-			WebModelPlugin.getPluginLog().logError(ce);
-			return ce.getStatus().getMessage();
-		}
+//		try {
+//			server.getRootModules(m, null);
+//		} catch (CoreException ce) {
+//			WebModelPlugin.getPluginLog().logError(ce);
+//			return ce.getStatus().getMessage();
+//		}
 
 		IProgressMonitor monitor = new NullProgressMonitor();
 		IServerWorkingCopy copy = server.createWorkingCopy();
