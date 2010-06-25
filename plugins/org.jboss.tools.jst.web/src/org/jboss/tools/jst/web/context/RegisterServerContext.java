@@ -11,10 +11,16 @@
 package org.jboss.tools.jst.web.context;
 
 import java.text.MessageFormat;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.wst.common.project.facet.core.IProjectFacet;
+import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
+import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
+import org.eclipse.wst.common.project.facet.core.runtime.RuntimeManager;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
@@ -177,7 +183,7 @@ public class RegisterServerContext {
 				IModule module = RegistrationHelper.findModule(project);
 				boolean isFakeModule = false;
 				if(module == null) {
-					if(serverErrorCache != null) {
+					if(serverErrorCache != null && serverErrorCache.length() > 0) {
 						return serverErrorCache;
 					}
 					ModuleFactory f = ServerPlugin.findModuleFactory("org.eclipse.jst.j2ee.server"); //$NON-NLS-1$
@@ -186,7 +192,7 @@ public class RegisterServerContext {
 				} else {
 					serverErrorCache = null;
 				}
-				for (int i = 0; i < targetServers.length; i++) {
+				if(serverErrorCache == null) for (int i = 0; i < targetServers.length; i++) {
 					if(RegistrationHelper.isRegistered(applicationName, targetServers[i])) {
 						return NLS.bind(WebUIMessages.APPLICATION_IS_ALREADY_REGISTERED, applicationName, targetServers[i].getName());
 					}
@@ -205,11 +211,29 @@ public class RegisterServerContext {
 						}
 					}
 				}
+				serverErrorCache = ""; //$NON-NLS-1$
 			}
 			if(servletVersion != null && servletVersion.length() == 0) {
 				return Messages.ERR_SERVLET_VERSION_IS_NOT_SET; 
 			} else if(!checkServletVersionFormat()) {
 				return Messages.ERR_SERVLET_VERSION_IS_NOT_VALID;				 
+			}
+			if(runtime != null) {
+				IProjectFacet f = ProjectFacetsManager.getProjectFacet("jst.web"); //$NON-NLS-1$
+				if(f != null) {
+					IProjectFacetVersion v = f.getVersion(servletVersion);
+					if (v == null) return NLS.bind(Messages.ERR_SERVLET_VERSION_IS_NOT_SUPPORTED, servletVersion);
+					org.eclipse.wst.common.project.facet.core.runtime.IRuntime facetRuntime = null;
+					Set<?> set = RuntimeManager.getRuntimes();
+					Iterator<?> it = set.iterator();
+					while(it.hasNext()) {
+						org.eclipse.wst.common.project.facet.core.runtime.IRuntime r = (org.eclipse.wst.common.project.facet.core.runtime.IRuntime)it.next();
+						if(runtimeName.equals(r.getName())) facetRuntime = r;
+					}
+					if(facetRuntime != null && !facetRuntime.supports(v)) {
+						return NLS.bind(Messages.ERR_SERVLET_VERSION_IS_NOT_SUPPORTED_BY_RUNTIME, runtimeName, servletVersion);
+					}
+				}
 			}
 			return null;
 		}
@@ -226,7 +250,7 @@ public class RegisterServerContext {
 			try {
 				Integer.parseInt(t);
 			} catch (NumberFormatException e) {
-				WebModelPlugin.getPluginLog().logError(e);
+				//Do not log! This is the validation of user input!
 				return false;
 			}
 		}			
