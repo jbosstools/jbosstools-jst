@@ -31,6 +31,10 @@ public class JstWebUiAllTests {
 				"org.jboss.tools.jst.web.ui.test",
 				new String[]{"projects/test_jsf_project"},
 				new String[]{"test_jsf_project"}));
+		suite.addTest(new ProjectImportTestSetup(new TestSuite(AddJSFCapabilitiesTest.class),
+				"org.jboss.tools.jst.web.ui.test",
+				new String[]{"projects/test_add_jsf_capabilities"},
+				new String[]{"test_add_jsf_capabilities"}));
 
 		return suite;
 	}
