@@ -10,6 +10,9 @@
  ******************************************************************************/
 package org.jboss.tools.jst.css.common;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -24,6 +27,9 @@ import org.eclipse.wst.xml.core.internal.contentmodel.CMElementDeclaration;
 import org.eclipse.wst.xml.core.internal.contentmodel.CMNamedNodeMap;
 import org.eclipse.wst.xml.core.internal.contentmodel.modelquery.ModelQuery;
 import org.eclipse.wst.xml.core.internal.modelquery.ModelQueryUtil;
+import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSConstants;
+import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
+import org.jboss.tools.jst.jsp.outline.cssdialog.common.Util;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -32,74 +38,79 @@ import org.w3c.dom.css.CSSStyleRule;
 import org.w3c.dom.css.CSSStyleSheet;
 import org.w3c.dom.css.ElementCSSInlineStyle;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class CSSStyleManager.
+ *
  * @author Sergey Dzmitrovich
- * 
  */
 public class CSSStyleManager {
 
+	/** The Constant STYLE_TAG_NAME. */
 	public static final String STYLE_TAG_NAME = "style"; //$NON-NLS-1$
 
+	/** The Constant STYLE_ATTRIBUTE_NAME. */
 	public static final String STYLE_ATTRIBUTE_NAME = "style"; //$NON-NLS-1$
 
 	/**
-	 * 
-	 * @param selection
-	 * @return
+	 * Recognize css style.
+	 *
+	 * @param node the selected node
+	 * @return the style container
 	 */
-	public StyleContainer recognizeCSSStyle(ISelection selection) {
-
+	public static StyleContainer recognizeCSSStyle(Object node) {
+		StyleContainer container = null;
+		// if selected object is node in css file
+		if (node instanceof ICSSNode) {
+			CSSStyleRule styleRule = getStyleRule((ICSSNode) node);
+			if (styleRule != null)
+				container = new CSSStyleRuleContainer(styleRule);
+		} else if ((node instanceof Element)
+				|| (node instanceof Attr)) {
+			Element selectedElement = null;
+			if (node instanceof Attr) {
+				selectedElement = ((Attr) node).getOwnerElement();
+			} else {
+				selectedElement = (Element) node;
+			}
+			if (isSuitableElement(selectedElement)) {
+				container = new StyleAttribyteContainer(selectedElement);
+			}
+		}
+		return container;
+	}
+	
+	/**
+	 * Recognize css style.
+	 *
+	 * @param selection the selection
+	 * @return the style container
+	 */
+	public static StyleContainer recognizeCSSStyle(ISelection selection) {
 		StyleContainer container = null;
 		if (selection instanceof IStructuredSelection) {
-
 			Object selectedObject = ((IStructuredSelection) selection)
 					.getFirstElement();
-
-			// if selected object is node in css file
-			if (selectedObject instanceof ICSSNode) {
-
-				CSSStyleRule styleRule = getStyleRule((ICSSNode) selectedObject);
-
-				if (styleRule != null)
-					container = new CSSStyleRuleContainer(styleRule);
-
-			} else if ((selectedObject instanceof Element)
-					|| (selectedObject instanceof Attr)) {
-
-				Element selectedElement = null;
-
-				if (selectedObject instanceof Attr)
-					selectedElement = ((Attr) selectedObject).getOwnerElement();
-				else
-					selectedElement = (Element) selectedObject;
-
-				if (isSuitableElement(selectedElement)) {
-
-					container = new StyleAttribyteContainer(selectedElement);
-
-				}
-			} else if ((selectedObject instanceof Text)
+			container = recognizeCSSStyle(selectedObject);
+			/*
+			 * When container was not found and
+			 * the selection is text selection then:
+			 */
+			if ((null == container) && (selectedObject instanceof Text)
 					&& (selection instanceof ITextSelection)) {
-
 				Text styleText = (Text) selectedObject;
-
 				Node parentNode = styleText.getParentNode();
-
 				if ((parentNode != null)
 						&& STYLE_TAG_NAME.equalsIgnoreCase(parentNode
 								.getNodeName())) {
-
 					int offset = getRelationalOffset(styleText,
 							((ITextSelection) selection).getOffset());
-
 					CSSStyleSheet sheet = getSheet(parentNode);
-
 					ICSSNode node = getNode(sheet, offset);
-
 					CSSStyleRule styleRule = getStyleRule(node);
-
 					if (styleRule != null) {
-						container = new StyleElementRuleContainer(styleText, styleRule);
+						container = new StyleElementRuleContainer(
+								styleText, styleRule);
 					}
 				}
 			}
@@ -108,11 +119,12 @@ public class CSSStyleManager {
 	}
 
 	/**
-	 * 
-	 * @param styleContainer
-	 * @return
+	 * Gets the sheet.
+	 *
+	 * @param styleContainer the style container
+	 * @return the sheet
 	 */
-	private CSSStyleSheet getSheet(Node styleContainer) {
+	private static CSSStyleSheet getSheet(Node styleContainer) {
 
 		if (styleContainer instanceof INodeNotifier) {
 
@@ -131,12 +143,13 @@ public class CSSStyleManager {
 	}
 
 	/**
-	 * 
-	 * @param sheet
-	 * @param offset
-	 * @return
+	 * Gets the node.
+	 *
+	 * @param sheet the sheet
+	 * @param offset the offset
+	 * @return the node
 	 */
-	private ICSSNode getNode(CSSStyleSheet sheet, int offset) {
+	private static ICSSNode getNode(CSSStyleSheet sheet, int offset) {
 
 		ICSSModel model = ((ICSSDocument) sheet).getModel();
 
@@ -149,11 +162,12 @@ public class CSSStyleManager {
 	}
 
 	/**
-	 * 
-	 * @param element
-	 * @return
+	 * Checks if element has "style" property.
+	 *
+	 * @param element the element
+	 * @return true, if is suitable element
 	 */
-	private boolean isSuitableElement(Element element) {
+	private static boolean isSuitableElement(Element element) {
 
 		if (element instanceof ElementCSSInlineStyle
 				&& isAttributeAvailable(element, STYLE_TAG_NAME)) {
@@ -164,11 +178,12 @@ public class CSSStyleManager {
 	}
 
 	/**
-	 * 
-	 * @param node
-	 * @return
+	 * Gets the style rule.
+	 *
+	 * @param node the node
+	 * @return the style rule
 	 */
-	private CSSStyleRule getStyleRule(ICSSNode node) {
+	private static CSSStyleRule getStyleRule(ICSSNode node) {
 
 		while (node != null) {
 
@@ -182,20 +197,23 @@ public class CSSStyleManager {
 	}
 
 	/**
-	 * 
-	 * @param selection
-	 * @param styleText
-	 * @return
+	 * Gets the relational offset.
+	 *
+	 * @param basicNode the basic node
+	 * @param absoluteOffset the absolute offset
+	 * @return the relational offset
 	 */
-	private int getRelationalOffset(Node basicNode, int absoluteOffset) {
+	private static int getRelationalOffset(Node basicNode, int absoluteOffset) {
 
 		return absoluteOffset - ((IndexedRegion) basicNode).getStartOffset();
 	}
 
 	/**
-	 * @param element
-	 * @param attrName
-	 * @return
+	 * Checks if attribute is available.
+	 *
+	 * @param element the element
+	 * @param attrName the attr name
+	 * @return true, if is attribute available
 	 */
 	private static boolean isAttributeAvailable(Element element, String attrName) {
 		ModelQuery modelQuery = ModelQueryUtil.getModelQuery(element
@@ -213,4 +231,30 @@ public class CSSStyleManager {
 
 		return false;
 	}
+	
+	
+	/**
+	 * Gets the style attributes.
+	 *
+	 * @param styleString the style string
+	 * @return the style attributes
+	 */
+	public static Map<String, String> getStyleAttributes(String styleString) { 
+		Map<String, String> styleMap = new HashMap<String, String>();
+		if ((styleString != null) && (styleString.length() > 0)) {
+			String[] styles = styleString.split(Constants.SEMICOLON);
+			for (String styleElement : styles) {
+				String[] styleElementParts = styleElement.trim().split(
+						Constants.COLON);
+				if ((styleElementParts != null)
+						&& (styleElementParts.length == 2)
+						&& Util.searchInElement(styleElementParts[0],
+								CSSConstants.CSS_STYLES_MAP)) {
+					styleMap.put(styleElementParts[0], styleElementParts[1]);
+				}
+			}
+		}
+		return styleMap;
+	}
+	
 }

@@ -37,8 +37,6 @@ public class CSSStyleListener implements ISelectionListener, INodeAdapter,
 
 	private ListenerList listeners = new ListenerList();
 
-	private CSSStyleManager styleManager = new CSSStyleManager();
-
 	private StyleContainer currentStyle;
 
 	private IWorkbenchPart currentPart;
@@ -93,7 +91,7 @@ public class CSSStyleListener implements ISelectionListener, INodeAdapter,
 
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 
-		StyleContainer newStyle = styleManager.recognizeCSSStyle(selection);
+		StyleContainer newStyle = CSSStyleManager.recognizeCSSStyle(selection);
 
 		if (isImportant(part)
 				&& ((currentStyle == null) || !(currentStyle.equals(newStyle)))) {

@@ -48,29 +48,8 @@ public class StyleAttribyteContainer extends StyleContainer {
 	}
 
 	public Map<String, String> getStyleAttributes() {
-
-		String styleString = element.getAttribute(STYLE_ATTRIBUTE_NAME);
-
-		Map<String, String> styleMap = new HashMap<String, String>();
-
-		if ((styleString != null) && (styleString.length() > 0)) {
-
-			String[] styles = styleString.split(Constants.SEMICOLON);
-			for (String styleElement : styles) {
-				String[] styleElementParts = styleElement.trim().split(
-						Constants.COLON);
-				if ((styleElementParts != null)
-						&& (styleElementParts.length == 2)
-						&& Util.searchInElement(styleElementParts[0],
-								CSSConstants.CSS_STYLES_MAP)) {
-
-					styleMap.put(styleElementParts[0], styleElementParts[1]);
-				}
-			}
-
-		}
-
-		return styleMap;
+		return CSSStyleManager.getStyleAttributes(element
+				.getAttribute(STYLE_ATTRIBUTE_NAME));
 	}
 
 	public Object getStyleObject() {
