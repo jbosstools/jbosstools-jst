@@ -1,0 +1,124 @@
+Index: src/org/jboss/tools/jst/web/kb/internal/validation/ValidationErrorManager.java
+===================================================================
+--- src/org/jboss/tools/jst/web/kb/internal/validation/ValidationErrorManager.java	(revision 22821)
++++ src/org/jboss/tools/jst/web/kb/internal/validation/ValidationErrorManager.java	(working copy)
+@@ -20,6 +20,7 @@
+ import org.eclipse.core.runtime.Status;
+ import org.eclipse.jface.text.BadLocationException;
+ import org.eclipse.jface.text.IDocument;
++import org.eclipse.osgi.util.NLS;
+ import org.eclipse.ui.editors.text.TextFileDocumentProvider;
+ import org.eclipse.wst.validation.internal.TaskListUtility;
+ import org.eclipse.wst.validation.internal.operations.WorkbenchReporter;
+@@ -28,6 +29,7 @@
+ import org.eclipse.wst.validation.internal.provisional.core.IValidator;
+ import org.jboss.tools.common.preferences.SeverityPreferences;
+ import org.jboss.tools.common.text.ITextSourceReference;
++import org.jboss.tools.jst.web.kb.KbMessages;
+ import org.jboss.tools.jst.web.kb.WebKbPlugin;
+ import org.jboss.tools.jst.web.kb.validation.IValidationContext;
+ import org.jboss.tools.jst.web.kb.validation.IValidationErrorManager;
+@@ -159,53 +161,15 @@
+ 	public IMarker addError(String message, String preferenceKey,
+ 			String[] messageArguments, int length, int offset, IResource target) {
+ 		String preferenceValue = getPreference(target.getProject(), preferenceKey);
+-		boolean ignore = false;
+-		int messageSeverity = IMessage.HIGH_SEVERITY;
+-		if (SeverityPreferences.WARNING.equals(preferenceValue)) {
+-			messageSeverity = IMessage.NORMAL_SEVERITY;
+-		} else if (SeverityPreferences.IGNORE.equals(preferenceValue)) {
+-			ignore = true;
+-		}
+-
+-		if (ignore) {
+-			return null;
+-		}
+-
+-		IMessage problemMessage = new ProblemMessage(message, messageSeverity, messageArguments, target, getMarkerId());
+-		problemMessage.setLength(length);
+-		problemMessage.setOffset(offset);
+-		try {
+-			if(getDocumentProvider()!=null) {
+-				getDocumentProvider().connect(target);
+-				IDocument document = getDocumentProvider().getDocument(target);
+-				if(document!=null) {
+-					problemMessage.setLineNo(document.getLineOfOffset(offset) + 1);
+-				}
+-			}
+-		} catch (BadLocationException e) {
+-			WebKbPlugin.getDefault().logError(
+-					"Exception occurred during error line number calculation",
+-					e);
+-			return null;
+-		} catch (CoreException e) {
+-			WebKbPlugin.getDefault().logError(
+-					"Exception occurred during error line number calculation",
+-					e);
+-			return null;
+-		} finally {
+-			if(getDocumentProvider()!=null) {
+-				getDocumentProvider().disconnect(target);
+-			}
+-		}
+-
+-		int severity = problemMessage.getSeverity();
+-		try {
+-			return TaskListUtility.addTask(getMarkerOwner().getName().intern(), target, "" + problemMessage.getLineNumber(), problemMessage.getText(), 
+-					problemMessage.getText(), severity, null, problemMessage.getGroupName(), problemMessage.getOffset(), problemMessage.getLength());
+-		} catch (CoreException e) {
+-			WebKbPlugin.getDefault().logError(e);
++		IMarker marker = null;
++		if (!SeverityPreferences.IGNORE.equals(preferenceValue)) {
++			int severity = IMessage.HIGH_SEVERITY;
++			if (SeverityPreferences.WARNING.equals(preferenceValue)) {
++				severity = IMessage.NORMAL_SEVERITY;
++			} 
++			marker = addError(message, severity, messageArguments, length, offset, target, getDocumentProvider(), getMarkerId(), getMarkerOwner());
+ 		}
+-		return null;
++		return marker;
+ 	}
+ 
+ 	protected TextFileDocumentProvider getDocumentProvider() {
+@@ -245,6 +209,7 @@
+ 	 * @return
+ 	 */
+ 	public static IMarker addError(String message, int severity, String[] messageArguments, int length, int offset, IResource target, TextFileDocumentProvider documentProvider, String markerId, Class markerOwner) {
++		IMarker marker = null;
+ 		IMessage problemMessage = new ProblemMessage(message, severity, messageArguments, target, markerId);
+ 		problemMessage.setLength(length);
+ 		problemMessage.setOffset(offset);
+@@ -254,27 +219,19 @@
+ 				problemMessage.setLineNo(documentProvider.getDocument(
+ 						target).getLineOfOffset(offset) + 1);
+ 			}
++			marker = TaskListUtility.addTask(markerOwner.getName().intern(), target, "" + problemMessage.getLineNumber(), problemMessage.getText(), 
++					problemMessage.getText(), severity, null, problemMessage.getGroupName(), problemMessage.getOffset(), problemMessage.getLength());
+ 		} catch (BadLocationException e) {
+ 			WebKbPlugin.getDefault().logError(
+-					"Exception occurred during error line number calculation",
+-					e);
+-			return null;
++					NLS.bind(KbMessages.EXCEPTION_DURING_CREATING_MARKER, target.getFullPath()), e);
+ 		} catch (CoreException e) {
+ 			WebKbPlugin.getDefault().logError(
+-					"Exception occurred during error line number calculation",
+-					e);
+-			return null;
++					NLS.bind(KbMessages.EXCEPTION_DURING_CREATING_MARKER, target.getFullPath()), e);
+ 		} finally {
+ 			documentProvider.disconnect(target);
+ 		}
+ 
+-		try {
+-			return TaskListUtility.addTask(markerOwner.getName().intern(), target, "" + problemMessage.getLineNumber(), problemMessage.getText(), 
+-					problemMessage.getText(), severity, null, problemMessage.getGroupName(), problemMessage.getOffset(), problemMessage.getLength());
+-		} catch (CoreException e) {
+-			WebKbPlugin.getDefault().logError(e);
+-		}
+-		return null;
++		return marker;
+ 	}
+ 
+ 	/*
+
