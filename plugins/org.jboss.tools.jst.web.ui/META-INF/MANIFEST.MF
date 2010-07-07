@@ -43,6 +43,6 @@ Require-Bundle: org.eclipse.ui.ide,
  org.apache.velocity;bundle-version="1.5.0",
  org.eclipse.ui.workbench.texteditor;bundle-version="3.5.1",
  org.eclipse.wst.html.ui;bundle-version="1.0.401"
-Bundle-Version: 3.1.0.qualifier
+Bundle-Version: 3.2.0.qualifier
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ClassPath: .
