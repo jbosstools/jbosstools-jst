@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.jboss.tools.common.model.ui.ModelUIImages;
 import org.jboss.tools.common.model.ui.widgets.Split;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
@@ -79,6 +80,11 @@ public abstract class AbstractCSSDialog extends TitleAreaDialog {
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
+		/*
+		 * Set the dialog image
+		 */
+		setTitleImage(ModelUIImages.getImageDescriptor(
+				ModelUIImages.WIZARD_DEFAULT).createImage());
 
 		Composite parentComposite = (Composite) super.createDialogArea(parent);
 		GridData gridData = (GridData) parentComposite.getLayoutData();
