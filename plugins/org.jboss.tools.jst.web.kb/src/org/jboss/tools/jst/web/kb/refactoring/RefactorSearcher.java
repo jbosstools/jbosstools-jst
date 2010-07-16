@@ -190,7 +190,7 @@ public abstract class RefactorSearcher {
 		}
 	}
 	
-	private void searchInCach(IFile file){
+	protected void searchInCach(IFile file){
 		ELContext context = PageContextFactory.createPageContext(file);
 		
 		if(context == null)
