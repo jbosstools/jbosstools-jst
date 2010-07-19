@@ -6,9 +6,15 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.wst.server.core.IRuntime;
+import org.eclipse.wst.server.core.IRuntimeType;
+import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
+import org.eclipse.wst.server.core.ServerCore;
 import org.jboss.tools.common.meta.key.WizardKeys;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.model.ui.action.AddNatureActionDelegate;
@@ -20,6 +26,7 @@ import org.jboss.tools.test.util.ProjectImportTestSetup;
 
 public class AddJSFCapabilitiesTest extends TestCase {
 	IProject project = null;
+	IProject fake_as = null;
 
 	public AddJSFCapabilitiesTest() {
 		super("Add JSF Capabilities Test");
@@ -41,6 +48,17 @@ public class AddJSFCapabilitiesTest extends TestCase {
 			project = setup.importProject();
 		}
 		this.project = project.getProject();
+
+		IResource fake_as = ResourcesPlugin.getWorkspace().getRoot().findMember("fake_as");
+		if(fake_as == null) {
+			ProjectImportTestSetup setup = new ProjectImportTestSetup(
+					this,
+					"org.jboss.tools.jst.web.ui.test",
+					"projects/fake_as",
+					"fake_as");
+			fake_as = setup.importProject();
+		}
+		this.fake_as = fake_as.getProject();
 		JobUtils.waitForIdle();
 	}
 
@@ -52,11 +70,40 @@ public class AddJSFCapabilitiesTest extends TestCase {
 		dialog.setBlockOnOpen(false);
 		dialog.open();
 
-		//TODO implement finish of wizard and check of results.
-		//TODO it is necessary to provide server runtime; without it, wizard cannot finish
-		System.out.println(wizard.canFinish());
+		IRuntime r0 = createRuntime();
+		((ImportWebProjectWizard)wizard).setRuntimeName(r0.getName());
+
+		assertTrue(wizard.canFinish());
+		
+		boolean b = wizard.performFinish();
+
+		assertTrue(b);
+		
+		try {
+			assertTrue(project.hasNature("org.jboss.tools.jsf.jsfnature"));
+		} catch (CoreException e) {
+			fail(e.getMessage());
+		}
 	}
 
+	static String RUNTIME = "org.jboss.ide.eclipse.as.runtime.42";
+	
+	IRuntime createRuntime() {
+		IRuntimeType t = ServerCore.findRuntimeType(RUNTIME);
+		
+		IPath location = fake_as.getLocation();
+		try {
+			IRuntimeWorkingCopy r = t.createRuntime(RUNTIME, new NullProgressMonitor());
+			r.setName("myRuntime");
+			r.setLocation(location);
+			return r.save(true, new NullProgressMonitor());
+		
+		} catch (CoreException e) {
+			fail(e.getMessage());
+			return null;
+		}
+	}
+	
 	private void refreshProject(IProject project){
 		try {
 			project.refreshLocal(IResource.DEPTH_INFINITE, null);
