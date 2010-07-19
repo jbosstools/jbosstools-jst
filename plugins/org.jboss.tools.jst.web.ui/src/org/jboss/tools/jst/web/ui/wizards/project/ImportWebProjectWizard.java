@@ -124,6 +124,11 @@ public abstract class ImportWebProjectWizard extends Wizard implements IImportWi
 		initialLocation = s;
 	}
 
+	//test method
+	public void setRuntimeName(String runtimeName) {
+		context.getRegisterServerContext().setRuntimeName(runtimeName);
+	}
+
 	protected void updatePerspective() throws CoreException {
 		BasicNewProjectResourceWizard.updatePerspective(new ConfigurationElementInternal());
 	}
