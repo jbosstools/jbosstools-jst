@@ -48,15 +48,17 @@ public class CSSSelectorTreeModel {
 			CSSRuleList cssRuleList = styleSheet.getCssRules();
 			for (int j = 0; j < cssRuleList.getLength(); j++) {
 				CSSRule cssRule = cssRuleList.item(j);
-				String[] selectors = CSSSelectorUtils
+				if (cssRule.getType() == CSSRule.STYLE_RULE) {
+					String[] selectors = CSSSelectorUtils
 						.parseSelectorName(((ICSSStyleRule) cssRule)
 								.getSelectorText());
-				for (int k = 0; k < selectors.length; k++) {
-					CSSTreeNode ruleNode = new CSSTreeNode(selectors[k]);
-					ruleNode.setCSSContainer(new CSSRuleContainer(selectors[k],
+					for (int k = 0; k < selectors.length; k++) {
+						CSSTreeNode ruleNode = new CSSTreeNode(selectors[k]);
+						ruleNode.setCSSContainer(new CSSRuleContainer(selectors[k],
 							cssRule, cssStyleSheets[i].source));
-					ruleNode.setStyleSheetSource(cssStyleSheets[i].source);
-					parentSheet.addChild(ruleNode);
+						ruleNode.setStyleSheetSource(cssStyleSheets[i].source);
+						parentSheet.addChild(ruleNode);
+					}
 				}
 			}
 		}

@@ -117,7 +117,11 @@ public class CSSJSPRecognizer {
 		Map<String, Map<String, String>> styleMap = new LinkedHashMap<String, Map<String, String>>(
 				0);
 		for (int i = 0; i < cssRules.length; i++) {
-			ICSSStyleRule styleRule = (ICSSStyleRule) cssRules[i];
+			CSSRule cssRule = cssRules[i];
+			if (cssRule.getType() != CSSRule.STYLE_RULE) {
+				continue;
+			}
+			ICSSStyleRule styleRule = (ICSSStyleRule) cssRule;
 			String styleClassSelector = styleRule.getSelectorText();
 			String[] selectors = CSSSelectorUtils
 					.parseSelectorName(styleClassSelector);

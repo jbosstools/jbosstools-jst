@@ -57,7 +57,6 @@ public class CSSModel implements ICSSDialogModel {
 
 	private CSSStyleSheet styleSheet = null;
 	private static final String COPY_SUFFIX = "_copy"; //$NON-NLS-1$
-	private static final String CHARSET = "@CHARSET"; //$NON-NLS-1$
 	private boolean copy = false;
 	
 	// workaround for JBIDE-4407
@@ -325,10 +324,11 @@ public class CSSModel implements ICSSDialogModel {
 		final CSSRuleList rules = styleSheet.getCssRules();
 		if ((rules != null) && (rules.getLength() > 0)) {
 			final CSSRule rule = rules.item(rules.getLength() - 1);
-			final String text = rule.getCssText();
-			if (text != null && !text.toUpperCase().startsWith(CHARSET) && 
-					!text.endsWith(Constants.RIGHT_BRACE)) {
-				rule.setCssText(text + "\n" + Constants.RIGHT_BRACE); //$NON-NLS-1$
+			if (rule.getType() == CSSRule.STYLE_RULE) {
+				final String text = rule.getCssText();
+				if (text != null && !text.endsWith(Constants.RIGHT_BRACE)) {
+					rule.setCssText(text + "\n" + Constants.RIGHT_BRACE); //$NON-NLS-1$
+				}
 			}
 		}
 	}
