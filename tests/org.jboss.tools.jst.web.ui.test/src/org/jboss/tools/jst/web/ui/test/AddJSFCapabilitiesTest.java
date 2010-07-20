@@ -2,12 +2,14 @@ package org.jboss.tools.jst.web.ui.test;
 
 import junit.framework.TestCase;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.PlatformUI;
@@ -84,6 +86,10 @@ public class AddJSFCapabilitiesTest extends TestCase {
 		} catch (CoreException e) {
 			fail(e.getMessage());
 		}
+		
+		IFile f = project.getFile(new Path(".settings/org.eclipse.wst.common.project.facet.core.xml"));
+		assertNotNull(f);
+		assertTrue(f.exists());
 	}
 
 	static String RUNTIME = "org.jboss.ide.eclipse.as.runtime.42";
