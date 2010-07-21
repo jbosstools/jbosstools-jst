@@ -22,7 +22,13 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.internal.ui.text.FastJavaPartitionScanner;
+import org.eclipse.jdt.ui.text.IJavaPartitions;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.TextSelection;
+import org.eclipse.jface.text.rules.IToken;
+import org.eclipse.jface.text.rules.Token;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
@@ -100,10 +106,10 @@ public class SearchUtil {
 			// searching java, xml and property files in source folders
 			if(javaProject != null){
 				for(IResource resource : EclipseResourceUtil.getJavaSourceRoots(project)){
-					//if(resource instanceof IFolder)
-						//scanForJava((IFolder) resource);
-					//else if(resource instanceof IFile)
-						//scanForJava((IFile) resource);
+					if(resource instanceof IFolder)
+						scanForJava((IFolder) resource);
+					else if(resource instanceof IFile)
+						scanForJava((IFile) resource);
 				}
 			}
 		}
@@ -154,6 +160,19 @@ public class SearchUtil {
 		}
 	}
 	
+	private void scanForJava(IContainer container){
+		try{
+			for(IResource resource : container.members()){
+				if(resource instanceof IFolder)
+					scanForJava((IFolder) resource);
+				else if(resource instanceof IFile)
+					scanForJava((IFile) resource);
+			}
+		}catch(CoreException ex){
+			ELCorePlugin.getDefault().logError(ex);
+		}
+	}
+	
 	private void scan(IFile file){
 		if(isFileCorrect(file)) {
 			String fileContent=null;
@@ -166,6 +185,21 @@ public class SearchUtil {
 			if(XHTML_EXT.equalsIgnoreCase(ext) 
 				|| JSP_EXT.equalsIgnoreCase(ext)) {
 				scanInDOM(file, fileContent);
+			}
+		}
+	}
+	
+	private void scanForJava(IFile file){
+		if(isFileCorrect(file)) {
+			String fileContent=null;
+			try {
+				fileContent = FileUtil.readStream(file);
+			} catch (CoreException e) {
+				ELCorePlugin.getDefault().logError(e);
+			}
+			String ext = file.getFileExtension();			
+			if(JAVA_EXT.equalsIgnoreCase(ext)) {
+				scanInJava(file, fileContent);
 			}
 		}
 	}
@@ -222,6 +256,34 @@ public class SearchUtil {
 		return false;
 	}
 	
+	private boolean scanInJava(IFile file, String content){
+		try {
+			FastJavaPartitionScanner scaner = new FastJavaPartitionScanner();
+			Document document = new Document(content);
+			scaner.setRange(document, 0, document.getLength());
+			IToken token = scaner.nextToken();
+			while(token!=null && token!=Token.EOF) {
+				if(IJavaPartitions.JAVA_STRING.equals(token.getData())) {
+					int length = scaner.getTokenLength();
+					int offset = scaner.getTokenOffset();
+					String value = document.get(offset, length);
+					if(searchString.equals(value)){
+						if(lastResult == null || !lastResult.getFile().equals(file)){
+							lastResult = new FileResult(file);
+							result.getEntries().add(lastResult);
+						}
+						
+						lastResult.addPosition(length);
+					}
+				}
+				token = scaner.nextToken();
+			}
+		} catch (BadLocationException e) {
+			WebKbPlugin.getDefault().logError(e);
+		}
+		return false;
+	}
+	
 	private boolean scanNodeContent(IFile file, IStructuredDocumentRegion node, String regionType) {
 		boolean status = false;
 		
@@ -230,16 +292,22 @@ public class SearchUtil {
 		
 		ITextRegionList regions = node.getRegions();
 		for(int i=0; i<regions.size(); i++) {
+			String tempSearchString = searchString;
+			int delta = 0;
 			ITextRegion region = regions.get(i);
 			if(region.getType() == regionType) {
-				String text = node.getFullText(region).trim();
-				if(searchString.equals(text)){
+				String text = node.getFullText(region);
+				if(text.startsWith("\"")){
+					tempSearchString = "\""+tempSearchString;
+					delta = 1;
+				}
+				if(text.startsWith(tempSearchString)){
 					if(lastResult == null || !lastResult.getFile().equals(file)){
 						lastResult = new FileResult(file);
 						result.getEntries().add(lastResult);
 					}
 					
-					lastResult.addPosition(node.getStartOffset()+region.getStart());
+					lastResult.addPosition(node.getStartOffset()+region.getStart()+delta);
 				}
 			}
 		}
