@@ -10,10 +10,10 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.test;
 
-import org.jboss.tools.test.util.ProjectImportTestSetup;
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
+
+import org.jboss.tools.test.util.ProjectImportTestSetup;
 
 
 /**
@@ -27,15 +27,7 @@ public class JstWebUiAllTests {
 		suite.addTestSuite(WebViewsTest.class);
 		suite.addTestSuite(WebWizardsTest.class);
 		suite.addTestSuite(JstWebUiPreferencesPagesTest.class);
-		suite.addTest(new ProjectImportTestSetup(new TestSuite(JSPProblemMarkerResolutionTest.class),
-				"org.jboss.tools.jst.web.ui.test",
-				new String[]{"projects/test_jsf_project"},
-				new String[]{"test_jsf_project"}));
-		suite.addTest(new ProjectImportTestSetup(new TestSuite(AddJSFCapabilitiesTest.class),
-				"org.jboss.tools.jst.web.ui.test",
-				new String[]{"projects/test_add_jsf_capabilities"},
-				new String[]{"test_add_jsf_capabilities"}));
-
+		
 		return suite;
 	}
 }
