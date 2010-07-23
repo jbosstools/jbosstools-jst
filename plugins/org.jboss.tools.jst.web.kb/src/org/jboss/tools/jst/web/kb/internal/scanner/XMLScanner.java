@@ -194,6 +194,7 @@ public class XMLScanner implements IFileScanner {
 				FaceletTag tag = new FaceletTag();
 				tag.setId(t);
 				tag.setName(new XMLValueInfo(t, ATTR_TAG_NAME));
+				tag.setDescription(new XMLValueInfo(t, AbstractComponent.DESCRIPTION));
 				XModelObject d = t.getChildByPath("declaration"); //$NON-NLS-1$
 				if(d != null && d.getModelEntity().getName().startsWith("FaceletTaglibComponent")) { //$NON-NLS-1$
 					String componentType = d.getAttributeValue(ATTR_COMPONENT_TYPE); //$NON-NLS-1$
