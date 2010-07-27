@@ -73,8 +73,17 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 	
 	private boolean isOurCase(IMarker marker) throws CoreException{
 		String message = (String)marker.getAttribute(IMarker.MESSAGE);
-		final int start = ((Integer)marker.getAttribute(IMarker.CHAR_START)).intValue();
-		final int end = ((Integer)marker.getAttribute(IMarker.CHAR_END)).intValue();
+		
+		Integer attribute =  ((Integer)marker.getAttribute(IMarker.CHAR_START));
+		if(attribute == null)
+			return false;
+		final int start = attribute.intValue();
+		
+		attribute = ((Integer)marker.getAttribute(IMarker.CHAR_END));
+		if(attribute == null)
+			return false;
+		final int end = attribute.intValue();
+		
 		if(!message.startsWith("Unknown tag")) //$NON-NLS-1$
 			return false;
 		
