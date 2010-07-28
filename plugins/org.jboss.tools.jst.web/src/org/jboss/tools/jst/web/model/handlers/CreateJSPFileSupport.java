@@ -182,7 +182,11 @@ public class CreateJSPFileSupport extends CreateFileSupport {
 			return;
 		}
 		String body = getTemplateBody();
-		Set<String> existing = taglibs.getTaglibsFromTemplate(body);
+		setTaglibsFromTemplateBody(body);
+	}
+	
+	public void setTaglibsFromTemplateBody(String templateBody) {
+		Set<String> existing = taglibs.getTaglibsFromTemplate(templateBody);
 		StringBuffer sb = new StringBuffer();
 		Iterator<String> it = existing.iterator();
 		while(it.hasNext()) {
@@ -190,9 +194,10 @@ public class CreateJSPFileSupport extends CreateFileSupport {
 			if(sb.length() > 0) sb.append(";"); //$NON-NLS-1$
 			sb.append(taglibs.getTaglibDescription(s));
 		}
-		value = sb.toString();
-		setAttributeValue(1, "taglibs", value); //$NON-NLS-1$
+		setAttributeValue(1, "taglibs", sb.toString()); //$NON-NLS-1$
 	}
+	
+	public void asd(String ast) {}
 
 	protected String modifyBody(String body) throws IOException {
 		if(getEntityData().length < 2 || taglibs == null) return body;

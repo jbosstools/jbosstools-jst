@@ -35,6 +35,7 @@ import org.eclipse.wst.sse.core.utils.StringUtils;
 import org.jboss.tools.common.meta.action.impl.SpecialWizardSupport;
 import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
+import org.jboss.tools.common.model.ui.wizard.newfile.NewFileContextEx;
 import org.jboss.tools.common.model.ui.wizard.newfile.NewXHTMLFileWizard;
 import org.jboss.tools.jst.web.model.handlers.CreateJSPFileSupport;
 import org.jboss.tools.jst.web.ui.Messages;
@@ -64,7 +65,10 @@ public class NewXHTMLWizard extends NewHTMLWizard{
 		this.fNewFilePage.setTitle(Messages.UI_WIZARD_XHTML_NEW_TITLE);
 		this.fNewFilePage.setDescription(Messages.UI_WIZARD_XHTML_NEW_Description);
 		
-		this.fNewFileTemplatesPage = new NewXHTMLTemplatesWizardPage();
+		NewFileContextEx newFileContext = newXHTMLFileWizard.getFileContext();
+		CreateJSPFileSupport jspFileSupport = (CreateJSPFileSupport)newFileContext.getSupport();		
+		this.fNewFileTemplatesPage = new NewXHTMLTemplatesWizardPage(jspFileSupport);
+		
 		addPage(this.fNewFileTemplatesPage);
 		this.newXHTMLWizardSelectTagLibrariesPage = getURISelectionPage();
 		addPage(this.newXHTMLWizardSelectTagLibrariesPage);
@@ -118,7 +122,9 @@ public class NewXHTMLWizard extends NewHTMLWizard{
 			// put template contents into file
 			String templateString = fNewFileTemplatesPage.getTemplateString();
 			try {
-				templateString=((CreateJSPFileSupport)getNewXHTMLFileWizard().getFileContext().getSupport()).addTaglibs(templateString);
+				NewFileContextEx newFileContext = newXHTMLFileWizard.getFileContext();
+				CreateJSPFileSupport jspFileSupport = (CreateJSPFileSupport)newFileContext.getSupport();
+				templateString = jspFileSupport.addTaglibs(templateString);
 			} catch (IOException ex) {
 				WebUiPlugin.getDefault().logWarning("Problems with adding taglibs",ex); //$NON-NLS-1$
 			}

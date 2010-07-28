@@ -63,6 +63,7 @@ import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.ui.StructuredTextViewerConfiguration;
 import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
 import org.eclipse.wst.sse.ui.internal.provisional.style.LineStyleProvider;
+import org.jboss.tools.jst.web.model.handlers.CreateJSPFileSupport;
 import org.jboss.tools.jst.web.ui.Messages;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.editor.pref.template.TemplateContextTypeIdsXHTML;
@@ -146,9 +147,12 @@ public class NewXHTMLTemplatesWizardPage extends WizardPage {
 	private TemplateStore fTemplateStore;
 	/** Checkbox for using templates. */
 	private Button fUseTemplateButton;
+	
+	private CreateJSPFileSupport fJspFileSupport;
 
-	public NewXHTMLTemplatesWizardPage() {
+	public NewXHTMLTemplatesWizardPage(CreateJSPFileSupport jspFileSupport) {
 		super("NewXHTMLTemplatesWizardPage", Messages.NewXHTMLTemplatesWizardPage_0, null); //$NON-NLS-1$
+		this.fJspFileSupport = jspFileSupport;
 		setDescription(Messages.NewXHTMLTemplatesWizardPage_0);
 	}
 
@@ -501,12 +505,12 @@ public class NewXHTMLTemplatesWizardPage extends WizardPage {
 	 * Updates the pattern viewer.
 	 */
 	void updateViewerInput() {
+		String pattern = ""; //$NON-NLS-1$
 		Template template = getSelectedTemplate();
 		if (template != null) {
-			fPatternViewer.getDocument().set(template.getPattern());
+			pattern = template.getPattern();
+			fJspFileSupport.setTaglibsFromTemplateBody(pattern);
 		}
-		else {
-			fPatternViewer.getDocument().set(""); //$NON-NLS-1$
-		}
+		fPatternViewer.getDocument().set(pattern);
 	}
 }
