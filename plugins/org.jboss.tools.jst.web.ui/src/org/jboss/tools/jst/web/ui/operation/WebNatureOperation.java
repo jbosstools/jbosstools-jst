@@ -394,6 +394,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 
 			FacetDataModelMap map = (FacetDataModelMap) dataModel.getProperty(IFacetProjectCreationDataModelProperties.FACET_DM_MAP);
 			IDataModel configDM = (IDataModel) map.get("jst.web"); //$NON-NLS-1$
+			IDataModel configJavaDM = (IDataModel) map.get("java"); //$NON-NLS-1$
 			
 			boolean hasJSTWebFacet = false;
 			if(exists) {
@@ -410,8 +411,11 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 				}
 			}
 
-			if(sv != null && (sv.indexOf("2.3") >= 0 || sv.indexOf("2.5") >= 0)) { //$NON-NLS-1$ //$NON-NLS-2$
+			if(sv != null && (sv.indexOf("2.3") >= 0 || sv.indexOf("2.5") >= 0 || sv.indexOf("3.0") >= 0)) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				configDM.setProperty(IFacetDataModelProperties.FACET_VERSION_STR, sv);
+			}
+			if(configJavaDM != null && sv != null && sv.indexOf("3.0") >= 0) { //$NON-NLS-1$
+				configJavaDM.setProperty(IFacetDataModelProperties.FACET_VERSION_STR, "1.6"); //$NON-NLS-1$
 			}
 			
 			if(webroot != null) {
