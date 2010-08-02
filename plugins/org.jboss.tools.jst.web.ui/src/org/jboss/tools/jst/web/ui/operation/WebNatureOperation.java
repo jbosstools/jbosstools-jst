@@ -411,7 +411,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 				}
 			}
 
-			if(sv != null && (sv.indexOf("2.3") >= 0 || sv.indexOf("2.5") >= 0 || sv.indexOf("3.0") >= 0)) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			if(sv != null && (sv.indexOf("2.3") >= 0 || sv.indexOf("2.4") >= 0 || sv.indexOf("2.5") >= 0 || sv.indexOf("3.0") >= 0)) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				configDM.setProperty(IFacetDataModelProperties.FACET_VERSION_STR, sv);
 			}
 			if(configJavaDM != null && sv != null && sv.indexOf("3.0") >= 0) { //$NON-NLS-1$
