@@ -60,4 +60,11 @@ public interface IValidator {
 	 * @return true if this validator should validate given project.
 	 */
 	boolean shouldValidate(IProject project);
+
+	/**
+	 * Returns "true" if this validator is enabled in the preferences store. 
+	 * @param project
+	 * @return
+	 */
+	boolean isEnabled(IProject project);
 }

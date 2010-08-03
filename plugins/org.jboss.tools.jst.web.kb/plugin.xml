@@ -140,6 +140,7 @@
 		id="cd"
 		name="JBoss KB Project Validator">
 		<validator>
+			<runStrategy project="true"/>
 			<projectNature id="org.eclipse.jdt.core.javanature" />
 			<filter
 				objectClass="org.eclipse.core.resources.IFile"
