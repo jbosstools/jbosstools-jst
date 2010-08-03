@@ -67,6 +67,11 @@
             name="Struts HTML"
             location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/StrutsHtml.xml"
             uri="http://struts.apache.org/tags-html"/>
+      <tag-lib
+            location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/SeamPdf.xml"
+            name="Seam PDF"
+            uri="http://jboss.com/products/seam/pdf"/>
+            
       <component-extension
             location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/componentExtension.xml"/>
    </extension>
