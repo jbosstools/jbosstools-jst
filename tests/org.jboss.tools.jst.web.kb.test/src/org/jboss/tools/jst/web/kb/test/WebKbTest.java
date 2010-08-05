@@ -79,6 +79,30 @@ public class WebKbTest extends TestCase {
 		fail("Can't find <f:facet name=\"\"> proposal.");
 	}
 
+	/**
+	 * https://jira.jboss.org/jira/browse/JBIDE-5231
+	 */
+	public void testSeamPdf() {
+		IFile file = testProject.getFile("WebContent/pages/testSeamPdfAndMail.jsp");
+		ELContext context = PageContextFactory.createPageContext(file);
+		KbQuery query = new KbQuery();
+		query.setMask(true);
+		query.setOffset(315);
+		query.setType(Type.ATTRIBUTE_NAME);
+		query.setParentTags(new String[]{"p:document"});
+		query.setPrefix("p");
+		query.setUri("http://jboss.com/products/seam/pdf");
+		query.setValue("ori");
+		
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
+		for (TextProposal proposal : proposals) {
+			if("orientation".equals(proposal.getReplacementString())) {
+				return;
+			}
+		}
+		fail("Can't find <p:document orientation=\"\"> proposal.");
+	}
+
 	public void testCustomExtensions() {
 		CustomTagLibAttribute[] attributes = CustomTagLibManager.getInstance().getComponentExtensions();
 		assertNotNull("Can't load component extensions.", attributes);
