@@ -20,8 +20,8 @@
 	component can contain attributes.
 	Attributes:
 	name - name of component
-	closeTag - "true" - Component can have a body.
-	           "false" - Component cannot have a body. Used by default.
+	closeTag - "true" - Component cannot have a body.
+	           "false" - Component can have a body. Used by default.
 	extended - "true" - Component is relevant only if this component exists in other tag-libs (tld, faclets, ...). Set to "true" by default.
 -->
 <!ELEMENT component (description?, component*, attribute*)>
