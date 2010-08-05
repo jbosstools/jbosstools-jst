@@ -103,6 +103,30 @@ public class WebKbTest extends TestCase {
 		fail("Can't find <p:document orientation=\"\"> proposal.");
 	}
 
+	/**
+	 * https://jira.jboss.org/jira/browse/JBIDE-5198
+	 */
+	public void testSeamMail() {
+		IFile file = testProject.getFile("WebContent/pages/testSeamPdfAndMail.jsp");
+		ELContext context = PageContextFactory.createPageContext(file);
+		KbQuery query = new KbQuery();
+		query.setMask(true);
+		query.setOffset(315);
+		query.setType(Type.ATTRIBUTE_NAME);
+		query.setParentTags(new String[]{"m:message"});
+		query.setPrefix("m");
+		query.setUri("http://jboss.com/products/seam/mail");
+		query.setValue("pre");
+		
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
+		for (TextProposal proposal : proposals) {
+			if("precedence".equals(proposal.getReplacementString())) {
+				return;
+			}
+		}
+		fail("Can't find <m:message precedence=\"\"> proposal.");
+	}
+
 	public void testCustomExtensions() {
 		CustomTagLibAttribute[] attributes = CustomTagLibManager.getInstance().getComponentExtensions();
 		assertNotNull("Can't load component extensions.", attributes);
