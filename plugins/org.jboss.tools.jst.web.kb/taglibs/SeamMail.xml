@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tag-lib PUBLIC "-//Red Hat, Inc//DTD Knowledge Base 2.0//EN" "http://anonsvn.jboss.org/repos/jbosstools/trunk/jst/plugins/org.jboss.tools.jst.web.kb/resources/kbCustomTagLibSchema-1.0.dtd">
+<tag-lib defaultPrefix="m">
+
+	<component name="message">
+		<description>Root tag of a mail message.</description>
+		<attribute extended="false" name="importance">
+			<description>low, normal or high. By default normal, this sets the
+				importance of the mail message.</description>
+			<proposal type="enumeration">
+				<param value="low" />
+				<param value="normal" />
+				<param value="high" />
+			</proposal>
+		</attribute>
+		<attribute extended="false" name="precedence">
+			<description>Sets the precedence of the message.</description>
+		</attribute>
+		<attribute extended="false" name="requestReadReceipt">
+			<description>By default false, if set, a read receipt request will be
+				will be added, with the read receipt being sent to the From:
+				address.</description>
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute extended="false" name="urlBase">
+			<description>If set, the value is prepended to the requestContextPath
+				allowing you to use components such as h:graphicImage in your
+				emails.</description>
+		</attribute>
+	</component>
+
+	<component closeTag="true" name="from">
+		<description>Set's the From: address for the email. You can only have
+			one of these per email.</description>
+		<attribute extended="false" name="name">
+			<description>The name the email should come from.</description>
+		</attribute>
+		<attribute extended="false" name="address">
+			<description>The email address the email should come from.
+			</description>
+		</attribute>
+	</component>
+
+	<component closeTag="true" name="replyTo">
+		<description>Set's the Reply-to: address for the email. You can only
+			have one of these per email.</description>
+		<attribute extended="false" name="address">
+			<description>The email address the email should come from.
+			</description>
+		</attribute>
+	</component>
+
+	<component closeTag="true" name="to">
+		<description>Add a recipient to the email. Use multiple m:to tags for
+			multiple recipients. This tag can be safely placed inside a repeat
+			tag such as ui:repeat.</description>
+		<attribute extended="false" name="name">
+			<description>The name of the recipient.</description>
+		</attribute>
+		<attribute extended="false" name="address">
+			<description>The email address of the recipient.</description>
+		</attribute>
+	</component>
+
+	<component closeTag="true" name="cc">
+		<description>Add a cc recipient to the email. Use multiple m:cc tags
+			for multiple ccs. This tag can be safely placed inside a iterator tag
+			such as ui:repeat.</description>
+		<attribute extended="false" name="name">
+			<description>The name of the recipient.</description>
+		</attribute>
+		<attribute extended="false" name="address">
+			<description>The email address of the recipient.</description>
+		</attribute>
+	</component>
+
+	<component closeTag="true" name="bcc">
+		<description>Add a bcc recipient to the email. Use multiple m:bcc tags
+			for multiple bccs. This tag can be safely placed inside a repeat tag
+			such as ui:repeat.</description>
+		<attribute extended="false" name="name">
+			<description>The name of the recipient.</description>
+		</attribute>
+		<attribute extended="false" name="address">
+			<description>The email address of the recipient.</description>
+		</attribute>
+	</component>
+
+	<component closeTag="true" name="header">
+		<description>Add a header to the email.</description>
+		<attribute extended="false" name="name">
+			<description>The name of the header to add.</description>
+		</attribute>
+		<attribute extended="false" name="value">
+			<description>The value of the header to add.</description>
+		</attribute>
+	</component>
+
+	<component closeTag="true" name="attachment">
+		<description>Add an attachment to the email.</description>
+		<attribute extended="false" name="value">
+			<description>The file to attach:
+				- String — A String is interpreted as a path to file within the
+				classpath
+				- java.io.File — An EL expression can reference a File object
+				- java.net.URL — An EL expression can reference a URL object
+				- java.io.InputStream — An EL expression can reference an
+				InputStream. In this case both a fileName and a contentType must be
+				specified.
+				- byte[] — An EL expression can reference an byte[]. In this case
+				both a fileName and a contentType must be specified.</description>
+		</attribute>
+		<attribute extended="false" name="fileName">
+			<description>Specify the file name to use for the attached file.
+			</description>
+		</attribute>
+		<attribute extended="false" name="contentType">
+			<description>Specify the MIME type of the attached file.
+			</description>
+		</attribute>
+	</component>
+
+	<component name="subject">
+		<description>Set's the subject for the email.</description>
+	</component>
+
+	<component name="body">
+		<description>Set's the body for the email. Supports an alternative
+			facet which, if an HTML email is generated can contain alternative
+			text for a mail reader which doesn't support html.</description>
+		<attribute extended="false" name="type">
+			<description>If set to plain then a plain text email will be
+				generated otherwise an HTML email is generated.</description>
+			<proposal type="enumeration">
+				<param value="plain" />
+				<param value="HTML" />
+			</proposal>
+		</attribute>
+	</component>
+
+</tag-lib>

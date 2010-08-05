@@ -71,6 +71,10 @@
             location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/SeamPdf.xml"
             name="Seam PDF"
             uri="http://jboss.com/products/seam/pdf"/>
+      <tag-lib
+            location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/SeamMail.xml"
+            name="Seam Mail"
+            uri="http://jboss.com/products/seam/mail"/>
             
       <component-extension
             location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/componentExtension.xml"/>
