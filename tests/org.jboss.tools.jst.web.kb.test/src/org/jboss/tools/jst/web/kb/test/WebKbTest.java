@@ -32,7 +32,7 @@ import org.jboss.tools.test.util.ProjectImportTestSetup;
 public class WebKbTest extends TestCase {
 
 	private IProject testProject;
-	private static final String[] CUSTOM_TAG_LIB_URIS = {"http://richfaces.org/a4j", "http://richfaces.org/rich", "http://java.sun.com/jsf/core", "http://java.sun.com/jsf/html", "http://java.sun.com/jsf/facelets", "http://www.w3.org/1999/xhtml/facelets", "http://jboss.com/products/seam/taglib", "http://java.sun.com/JSP/Page", "http://struts.apache.org/tags-html", "taglibs/componentExtension.xml"};
+	private static final String[] CUSTOM_TAG_LIB_URIS = {"http://richfaces.org/a4j", "http://richfaces.org/rich", "http://java.sun.com/jsf/core", "http://java.sun.com/jsf/html", "http://java.sun.com/jsf/facelets", "http://www.w3.org/1999/xhtml/facelets", "http://jboss.com/products/seam/taglib", "http://java.sun.com/JSP/Page", "http://struts.apache.org/tags-html", "taglibs/componentExtension.xml", "http://jboss.com/products/seam/pdf", "http://jboss.com/products/seam/mail"};
 
 	protected void setUp() throws Exception {
 		if(testProject==null) {
