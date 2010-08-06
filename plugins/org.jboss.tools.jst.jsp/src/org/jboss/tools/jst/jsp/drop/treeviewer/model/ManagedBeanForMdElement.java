@@ -60,7 +60,7 @@ public class ManagedBeanForMdElement extends ModelElement implements IAttributeV
 			if(returnTypes.length>0) {
 				types.put(IWebPromptingProvider.RETURN_TYPE, returnTypes[0]);
 			} else {
-				types.put(IWebPromptingProvider.RETURN_TYPE, "void"); //$NON-NLS-1$
+				types.put(IWebPromptingProvider.RETURN_TYPE, "any"); //$NON-NLS-1$
 			}
 
 			List properties = parentResource.getProvider().getList(parentResource.getXModel(), SUPPORTED_ID, getFullName(), types);
