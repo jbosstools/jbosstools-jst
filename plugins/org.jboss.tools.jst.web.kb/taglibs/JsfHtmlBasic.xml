@@ -2,11 +2,7 @@
 <!DOCTYPE tag-lib PUBLIC "-//Red Hat, Inc//DTD Knowledge Base 2.0//EN" "http://anonsvn.jboss.org/repos/jbosstools/trunk/jst/plugins/org.jboss.tools.jst.web.kb/resources/kbCustomTagLibSchema-1.0.dtd">
 <tag-lib defaultPrefix="h">
 	<component closeTag="true" name="commandButton">
-		<attribute name="action" required="true">
-			<proposal type="beanMethodBySignature">
-				<param name="returnType" value="java.lang.String" />
-			</proposal>
-		</attribute>
+		<attribute name="action" required="true"/>
 		<attribute name="value" required="true" />
 		<attribute name="image">
 			<proposal type="file">
