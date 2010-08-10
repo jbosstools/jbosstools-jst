@@ -508,26 +508,27 @@
 			//added by estherbin
 			//fix http://jira.jboss.com/jira/browse/JBIDE-1791
 		-->
-		<contentAssistProcessor 
+		<!-- contentAssistProcessor 
 				class="org.eclipse.wst.css.ui.internal.contentassist.CSSContentAssistProcessor" 
 				id="org.eclipse.wst.css.ui.internal.contentassist.CSSContentAssistProcessor">
 			<contenttype id="org.eclipse.wst.html.core.htmlsource">
 				<partitiontype id="org.eclipse.wst.css.STYLE" />
 			</contenttype>
-		</contentAssistProcessor>
+		</contentAssistProcessor -->
 		
 		<!-- 
 			// Fix for JBIDE-5068 
 		-->
-		<contentAssistProcessor 
+		<!-- contentAssistProcessor 
 				class="org.eclipse.jst.jsp.ui.internal.contentassist.JSPJavaContentAssistProcessor" 
 				id="org.eclipse.jst.jsp.ui.internal.contentassist.JSPJavaContentAssistProcessor">
 			<contenttype id="org.eclipse.jst.jsp.core.jspsource">
 				<partitiontype id="org.eclipse.jst.jsp.SCRIPT.JAVA" />
 			</contenttype>
-		</contentAssistProcessor>
+		</contentAssistProcessor -->
 		
-		
+		<!-- This is to be replaced by org.eclipse.wst.sse.ui.completionProposal ext. point -->
+		<!--
 		<contentAssistProcessor 
 				class="org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor" 
 				id="org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor">
@@ -614,7 +615,7 @@
 				<partitiontype id="org.eclipse.wst.css.STYLE" />
 			</contenttype>
 		</contentAssistProcessor>
-
+	-->
   </extension>
   <extension
         point="org.eclipse.ui.popupMenus">
@@ -669,4 +670,200 @@
          point="org.eclipse.core.runtime.preferences">
                <initializer class="org.jboss.tools.jst.jsp.preferences.VpePreferencesInitializer"/>
    </extension>
+   
+    <extension
+       point="org.eclipse.wst.sse.ui.completionProposal">
+    <proposalCategory
+          icon="images/ca/icons_JSF_EL.gif"
+          id="org.jboss.tools.jst.jsp.proposalCategory.xmlEL"
+          name="%proposalCategory.xmlEL">
+    </proposalCategory>
+    <proposalComputer
+          activate="false"
+          categoryId="org.jboss.tools.jst.jsp.proposalCategory.xmlEL"
+          class="org.jboss.tools.jst.jsp.contentassist.computers.XmlELCompletionProposalComputer"
+          id="org.jboss.tools.jst.jsp.proposalComputer.xmlEL">
+			<contentType id="org.eclipse.wst.xml.core.xmlsource">
+				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
+				<partitionType id="org.eclipse.wst.xml.XML_CDATA" />
+				<partitionType id="org.eclipse.wst.xml.XML_PI" />
+				<partitionType id="org.eclipse.wst.xml.XML_DECL" />
+				<partitionType id="org.eclipse.wst.xml.XML_COMMENT" />
+				<partitionType id="org.eclipse.wst.xml.dtd.internal_subset" />
+				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT" />
+				<partitionType id="org.eclipse.wst.sse.UNKNOWN_PARTITION_TYPE" />
+			</contentType>
+			<contentType id="org.jboss.tools.seam.xml.ui.pages20xmlsource">
+				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
+				<partitionType id="org.eclipse.wst.xml.XML_CDATA" />
+				<partitionType id="org.eclipse.wst.xml.XML_PI" />
+				<partitionType id="org.eclipse.wst.xml.XML_DECL" />
+				<partitionType id="org.eclipse.wst.xml.XML_COMMENT" />
+				<partitionType id="org.eclipse.wst.xml.dtd.internal_subset" />
+				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT" />
+				<partitionType id="org.eclipse.wst.sse.UNKNOWN_PARTITION_TYPE" />
+			</contentType>
+			<contentType id="org.eclipse.jst.jsf.facesconfig.facesConfigFile">
+				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
+				<partitionType id="org.eclipse.wst.xml.XML_CDATA" />
+				<partitionType id="org.eclipse.wst.xml.XML_PI" />
+				<partitionType id="org.eclipse.wst.xml.XML_DECL" />
+				<partitionType id="org.eclipse.wst.xml.XML_COMMENT" />
+				<partitionType id="org.eclipse.wst.xml.dtd.internal_subset" />
+				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT" />
+				<partitionType id="org.eclipse.wst.sse.UNKNOWN_PARTITION_TYPE" />
+			</contentType>
+			<contentType id="org.jboss.tools.common.model.ui.xml">
+				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
+				<partitionType id="org.eclipse.wst.xml.XML_CDATA" />
+				<partitionType id="org.eclipse.wst.xml.XML_PI" />
+				<partitionType id="org.eclipse.wst.xml.XML_DECL" />
+				<partitionType id="org.eclipse.wst.xml.XML_COMMENT" />
+				<partitionType id="org.eclipse.wst.xml.dtd.internal_subset" />
+				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT" />
+				<partitionType id="org.eclipse.wst.sse.UNKNOWN_PARTITION_TYPE" />
+			</contentType>
+			<contentType id="org.eclipse.jst.jee.ee5webDD">
+				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
+				<partitionType id="org.eclipse.wst.xml.XML_CDATA" />
+				<partitionType id="org.eclipse.wst.xml.XML_PI" />
+				<partitionType id="org.eclipse.wst.xml.XML_DECL" />
+				<partitionType id="org.eclipse.wst.xml.XML_COMMENT" />
+				<partitionType id="org.eclipse.wst.xml.dtd.internal_subset" />
+				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT" />
+				<partitionType id="org.eclipse.wst.sse.UNKNOWN_PARTITION_TYPE" />
+			</contentType>
+    </proposalComputer>
+    <proposalComputer
+          activate="false"
+          categoryId="org.jboss.tools.jst.jsp.proposalCategory.xmlEL"
+          class="org.jboss.tools.jst.jsp.contentassist.computers.JspELCompletionProposalComputer"
+          id="org.jboss.tools.jst.jsp.proposalComputer.jspEL">
+			<contentType id="org.eclipse.jst.jsp.core.jspsource">
+          		<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
+          		<partitionType id="org.eclipse.wst.html.HTML_DEFAULT" />
+          		<partitionType id="org.eclipse.jst.jsp.DEFAULT_JSP" />
+          		<partitionType id="org.eclipse.jst.jsp.JSP_DIRECTIVE" />
+          		<partitionType id="org.eclipse.jst.jsp.SCRIPT.DELIMITER" />
+          		<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
+          		<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
+          		<partitionType id="org.eclipse.wst.css.STYLE" />
+       		</contentType>
+    </proposalComputer>
+    <proposalComputer
+          activate="false"
+          categoryId="org.jboss.tools.jst.jsp.proposalCategory.xmlEL"
+          class="org.jboss.tools.jst.jsp.contentassist.computers.FaceletsELCompletionProposalComputer"
+          id="org.jboss.tools.jst.jsp.proposalComputer.xhtmlEL">
+			<contentType id="org.eclipse.wst.html.core.htmlsource">
+				<partitionType id="org.eclipse.wst.html.HTML_DEFAULT" />
+				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
+				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
+				<partitionType id="org.eclipse.wst.css.STYLE" />
+       		</contentType>
+       		<contentType id="jsf.facelet">
+				<partitionType id="org.eclipse.wst.html.HTML_DEFAULT" />
+				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
+				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
+				<partitionType id="org.eclipse.wst.css.STYLE" />
+			</contentType>
+    </proposalComputer>
+
+    <proposalCategory
+          icon="images/ca/icons_JSF_EL.gif"
+          id="org.jboss.tools.jst.jsp.proposalCategory.xmlTag"
+          name="%proposalCategory.xmlTag">
+    </proposalCategory>
+    <proposalComputer
+          activate="false"
+          categoryId="org.jboss.tools.jst.jsp.proposalCategory.xmlTag"
+          class="org.jboss.tools.jst.jsp.contentassist.computers.XmlTagCompletionProposalComputer"
+          id="org.jboss.tools.jst.jsp.proposalComputer.xmlTag">
+			<contentType id="org.eclipse.wst.xml.core.xmlsource">
+				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
+				<partitionType id="org.eclipse.wst.xml.XML_CDATA" />
+				<partitionType id="org.eclipse.wst.xml.XML_PI" />
+				<partitionType id="org.eclipse.wst.xml.XML_DECL" />
+				<partitionType id="org.eclipse.wst.xml.XML_COMMENT" />
+				<partitionType id="org.eclipse.wst.xml.dtd.internal_subset" />
+				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT" />
+				<partitionType id="org.eclipse.wst.sse.UNKNOWN_PARTITION_TYPE" />
+			</contentType>
+			<contentType id="org.jboss.tools.seam.xml.ui.pages20xmlsource">
+				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
+				<partitionType id="org.eclipse.wst.xml.XML_CDATA" />
+				<partitionType id="org.eclipse.wst.xml.XML_PI" />
+				<partitionType id="org.eclipse.wst.xml.XML_DECL" />
+				<partitionType id="org.eclipse.wst.xml.XML_COMMENT" />
+				<partitionType id="org.eclipse.wst.xml.dtd.internal_subset" />
+				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT" />
+				<partitionType id="org.eclipse.wst.sse.UNKNOWN_PARTITION_TYPE" />
+			</contentType>
+			<contentType id="org.eclipse.jst.jsf.facesconfig.facesConfigFile">
+				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
+				<partitionType id="org.eclipse.wst.xml.XML_CDATA" />
+				<partitionType id="org.eclipse.wst.xml.XML_PI" />
+				<partitionType id="org.eclipse.wst.xml.XML_DECL" />
+				<partitionType id="org.eclipse.wst.xml.XML_COMMENT" />
+				<partitionType id="org.eclipse.wst.xml.dtd.internal_subset" />
+				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT" />
+				<partitionType id="org.eclipse.wst.sse.UNKNOWN_PARTITION_TYPE" />
+			</contentType>
+			<contentType id="org.jboss.tools.common.model.ui.xml">
+				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
+				<partitionType id="org.eclipse.wst.xml.XML_CDATA" />
+				<partitionType id="org.eclipse.wst.xml.XML_PI" />
+				<partitionType id="org.eclipse.wst.xml.XML_DECL" />
+				<partitionType id="org.eclipse.wst.xml.XML_COMMENT" />
+				<partitionType id="org.eclipse.wst.xml.dtd.internal_subset" />
+				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT" />
+				<partitionType id="org.eclipse.wst.sse.UNKNOWN_PARTITION_TYPE" />
+			</contentType>
+			<contentType id="org.eclipse.jst.jee.ee5webDD">
+				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
+				<partitionType id="org.eclipse.wst.xml.XML_CDATA" />
+				<partitionType id="org.eclipse.wst.xml.XML_PI" />
+				<partitionType id="org.eclipse.wst.xml.XML_DECL" />
+				<partitionType id="org.eclipse.wst.xml.XML_COMMENT" />
+				<partitionType id="org.eclipse.wst.xml.dtd.internal_subset" />
+				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT" />
+				<partitionType id="org.eclipse.wst.sse.UNKNOWN_PARTITION_TYPE" />
+			</contentType>
+    </proposalComputer>
+    <proposalComputer
+          activate="false"
+          categoryId="org.jboss.tools.jst.jsp.proposalCategory.xmlTag"
+          class="org.jboss.tools.jst.jsp.contentassist.computers.JspTagCompletionProposalComputer"
+          id="org.jboss.tools.jst.jsp.proposalComputer.jspTag">
+			<contentType id="org.eclipse.jst.jsp.core.jspsource">
+          		<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
+          		<partitionType id="org.eclipse.wst.html.HTML_DEFAULT" />
+          		<partitionType id="org.eclipse.jst.jsp.DEFAULT_JSP" />
+          		<partitionType id="org.eclipse.jst.jsp.JSP_DIRECTIVE" />
+          		<partitionType id="org.eclipse.jst.jsp.SCRIPT.DELIMITER" />
+          		<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
+          		<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
+          		<partitionType id="org.eclipse.wst.css.STYLE" />
+       		</contentType>
+    </proposalComputer>
+    <proposalComputer
+          activate="false"
+          categoryId="org.jboss.tools.jst.jsp.proposalCategory.xmlTag"
+          class="org.jboss.tools.jst.jsp.contentassist.computers.FaceletsTagCompletionProposalComputer"
+          id="org.jboss.tools.jst.jsp.proposalComputer.xhtmltag">
+			<contentType id="org.eclipse.wst.html.core.htmlsource">
+				<partitionType id="org.eclipse.wst.html.HTML_DEFAULT" />
+				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
+				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
+				<partitionType id="org.eclipse.wst.css.STYLE" />
+       		</contentType>
+       		<contentType id="jsf.facelet">
+				<partitionType id="org.eclipse.wst.html.HTML_DEFAULT" />
+				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
+				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
+				<partitionType id="org.eclipse.wst.css.STYLE" />
+			</contentType>
+    </proposalComputer>
+   </extension>
+   
 </plugin>

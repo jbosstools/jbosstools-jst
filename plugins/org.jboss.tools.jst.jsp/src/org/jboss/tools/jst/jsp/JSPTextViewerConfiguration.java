@@ -14,18 +14,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.hyperlink.IHyperlinkDetector;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jst.jsp.core.text.IJSPPartitions;
 import org.eclipse.jst.jsp.ui.StructuredTextViewerConfigurationJSP;
+import org.eclipse.jst.jsp.ui.internal.contentassist.JSPStructuredContentAssistProcessor;
 import org.eclipse.jst.jsp.ui.internal.style.jspel.LineStyleProviderForJSPEL;
 import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
+import org.eclipse.wst.sse.ui.contentassist.CompletionProposalInvocationContext;
 import org.eclipse.wst.sse.ui.internal.provisional.style.LineStyleProvider;
+import org.jboss.tools.common.text.xml.contentassist.ProposalSorter;
 
 /**
  * @author Igels
  */
+@SuppressWarnings("restriction")
 public class JSPTextViewerConfiguration extends StructuredTextViewerConfigurationJSP implements ITextViewerConfiguration {
 	
 	private TextViewerConfigurationDelegate configurationDelegate;
@@ -78,15 +83,29 @@ public class JSPTextViewerConfiguration extends StructuredTextViewerConfiguratio
 	}
 
 	protected IContentAssistProcessor[] getContentAssistProcessors(ISourceViewer sourceViewer, String partitionType) {
-		IContentAssistProcessor[] superProcessors = super.getContentAssistProcessors(
-				sourceViewer, partitionType);
+//		IContentAssistProcessor[] superProcessors = super.getContentAssistProcessors(
+//				sourceViewer, partitionType);
+		IContentAssistProcessor superProcessor = new JSPStructuredContentAssistProcessor(
+				this.getContentAssistant(), partitionType, sourceViewer) {
+
+					@SuppressWarnings({ "rawtypes", "unchecked" })
+					@Override
+					protected List filterAndSortProposals(List proposals,
+							IProgressMonitor monitor,
+							CompletionProposalInvocationContext context) {
+						return ProposalSorter.filterAndSortProposals(proposals, monitor, context);
+					}
+			
+		};
+		
 		List<IContentAssistProcessor> processors = new ArrayList<IContentAssistProcessor>();
 		processors.addAll(
 				Arrays.asList(
 						configurationDelegate.getContentAssistProcessors(
 								sourceViewer,
 								partitionType)));
-		processors.addAll(Arrays.asList(superProcessors));
+//		processors.addAll(Arrays.asList(superProcessors));
+		processors.add(superProcessor);
 		return processors.toArray(new IContentAssistProcessor[0]);
 	}
 	
@@ -100,6 +119,9 @@ public class JSPTextViewerConfiguration extends StructuredTextViewerConfiguratio
 				fPreferenceStore.getBoolean(AbstractDecoratedTextEditorPreferenceConstants.EDITOR_HYPERLINKS_ENABLED));		
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public IContentAssistProcessor[] getContentAssistProcessorsForPartitionType(
 			ISourceViewer sourceViewer, String partitionType) {
 		// TODO Auto-generated method stub

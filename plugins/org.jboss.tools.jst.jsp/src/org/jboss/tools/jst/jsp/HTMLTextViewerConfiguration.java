@@ -12,7 +12,6 @@ package org.jboss.tools.jst.jsp;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
@@ -20,6 +19,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.text.ITextHover;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
@@ -31,15 +31,17 @@ import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
 import org.eclipse.wst.html.core.text.IHTMLPartitions;
 import org.eclipse.wst.html.ui.StructuredTextViewerConfigurationHTML;
+import org.eclipse.wst.html.ui.internal.contentassist.HTMLStructuredContentAssistProcessor;
+import org.eclipse.wst.sse.ui.contentassist.CompletionProposalInvocationContext;
 import org.eclipse.wst.sse.ui.internal.ExtendedConfigurationBuilder;
 import org.eclipse.wst.sse.ui.internal.SSEUIPlugin;
 import org.eclipse.wst.sse.ui.internal.format.StructuredFormattingStrategy;
 import org.eclipse.wst.sse.ui.internal.taginfo.AnnotationHoverProcessor;
 import org.eclipse.wst.sse.ui.internal.taginfo.ProblemAnnotationHoverProcessor;
 import org.eclipse.wst.sse.ui.internal.taginfo.TextHoverManager;
+import org.jboss.tools.common.text.xml.contentassist.ProposalSorter;
 import org.jboss.tools.jst.jsp.format.HTMLFormatProcessor;
 import org.jboss.tools.jst.jsp.jspeditor.info.ChainTextHover;
-import org.osgi.framework.Bundle;
 
 @SuppressWarnings("restriction")
 public class HTMLTextViewerConfiguration extends
@@ -58,16 +60,28 @@ public class HTMLTextViewerConfiguration extends
 
 	protected IContentAssistProcessor[] getContentAssistProcessors(
 			ISourceViewer sourceViewer, String partitionType) {
-		
-		IContentAssistProcessor[] superProcessors = super.getContentAssistProcessors(
-								sourceViewer, partitionType);
+//		IContentAssistProcessor[] superProcessors = super.getContentAssistProcessors(
+//		sourceViewer, partitionType);
+		IContentAssistProcessor superProcessor = new HTMLStructuredContentAssistProcessor(
+				this.getContentAssistant(), partitionType, sourceViewer) {
+
+					@SuppressWarnings({ "rawtypes", "unchecked" })
+					@Override
+					protected List filterAndSortProposals(List proposals,
+							IProgressMonitor monitor,
+							CompletionProposalInvocationContext context) {
+						return ProposalSorter.filterAndSortProposals(proposals, monitor, context);
+					}
+			
+		};
 		List<IContentAssistProcessor> processors = new ArrayList<IContentAssistProcessor>();
 		processors.addAll(
 				Arrays.asList(
 						configurationDelegate.getContentAssistProcessors(
 								sourceViewer,
 								partitionType)));
-		processors.addAll(Arrays.asList(superProcessors));
+//		processors.addAll(Arrays.asList(superProcessors));
+		processors.add(superProcessor);
 		return processors.toArray(new IContentAssistProcessor[0]);
 	}
 
@@ -101,11 +115,16 @@ public class HTMLTextViewerConfiguration extends
 		return formatter;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public IContentAssistProcessor[] getContentAssistProcessorsForPartitionType(
 			ISourceViewer sourceViewer, String partitionType) {
 //		IContentAssistProcessor[] results = super.getContentAssistProcessors(
 //				sourceViewer, partitionType);
 		// added by Maksim Areshkau
+		// TODO: create a CA computer and move it to 
+		//	org.eclipse.wst.sse.ui.completionProposal extension point
 		if ("org.eclipse.wst.html.HTML_DEFAULT".equalsIgnoreCase(partitionType)) { //$NON-NLS-1$
 			List<IContentAssistProcessor> contAssists = getVpeTestExtensions();
 			return contAssists.toArray(new IContentAssistProcessor[0]);
@@ -124,7 +143,7 @@ public class HTMLTextViewerConfiguration extends
 	 * @param partitionType
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private ITextHover[] createDocumentationHovers(String partitionType) {
 		List extendedTextHover = ExtendedConfigurationBuilder.getInstance()
 				.getConfigurations(
@@ -183,6 +202,8 @@ public class HTMLTextViewerConfiguration extends
 	}
 
 	/**
+	 * @deprecated
+	 * 
 	 * Returns all extensions of {@value #VPE_TEST_EXTENTION_POINT_ID}
 	 */
 	public List<IContentAssistProcessor> getVpeTestExtensions() {
