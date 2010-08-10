@@ -195,8 +195,7 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 			if (n == null)
 				return false;
 
-			String existingAttributeName = ((Element)n).getAttribute(attrName); 
-			return (existingAttributeName != null && existingAttributeName.length() > 0);
+			return (((Element)n).getAttributeNode(attrName) != null);
 		} finally {
 			if (sModel != null) {
 				sModel.releaseFromRead();
