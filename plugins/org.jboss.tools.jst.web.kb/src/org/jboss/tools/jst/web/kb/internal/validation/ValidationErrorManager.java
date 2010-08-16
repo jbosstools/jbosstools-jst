@@ -216,8 +216,11 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 		try {
 			if (documentProvider != null) {
 				documentProvider.connect(target);
-				problemMessage.setLineNo(documentProvider.getDocument(
-						target).getLineOfOffset(offset) + 1);
+				IDocument doc = documentProvider.getDocument(target);
+				if(doc != null)
+					problemMessage.setLineNo(doc.getLineOfOffset(offset) + 1);
+				else
+					problemMessage.setLineNo(1);
 			}
 			marker = TaskListUtility.addTask(markerOwner.getName().intern(), target, "" + problemMessage.getLineNumber(), problemMessage.getText(), 
 					problemMessage.getText(), severity, null, problemMessage.getGroupName(), problemMessage.getOffset(), problemMessage.getLength());

@@ -13,13 +13,26 @@ package org.jboss.tools.jst.web.kb.validation;
 import java.util.Set;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.wst.validation.internal.provisional.core.IReporter;
+import org.eclipse.wst.validation.internal.provisional.core.IValidator;
 import org.jboss.tools.common.text.ITextSourceReference;
+import org.jboss.tools.jst.web.kb.internal.validation.ContextValidationHelper;
 
 /**
  * @author Alexey Kazakov
  */
 public interface IValidationErrorManager {
+	
+	/**
+	 * inits validator error manager
+	 * @param project
+	 * @param validationHelper
+	 * @param manager
+	 * @param reporter
+	 */
+	void init(IProject project, ContextValidationHelper validationHelper, IValidator manager, IReporter reporter);
 
 	/**
 	 * Adds a marker to the resource
