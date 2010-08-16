@@ -136,6 +136,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		// If it is true we don't need to start any new tag proposals
 		TextRegion prefix = getELPrefix(contentAssistRequest);
 		if (prefix != null && prefix.isELStarted()) {
+			addAttributeValueELProposals(contentAssistRequest, context);
 			return;
 		}
 
