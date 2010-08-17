@@ -9,4 +9,8 @@
 
 <template name="%Templates.xhtml.jsf2.composite.component" description="%Templates.xhtml.jsf2.composite.component.desc" id="org.jboss.tools.jsf.ui.xhtml.jsf2.composite.component" context="xhtml_new" enabled="true">%Templates.xhtml.jsf2.composite.component.content</template>
 
+<template name="%Templates.xhtml.jsf" description="%Templates.xhtml.jsf.desc" id="org.jboss.tools.jsf.ui.xhtml.component" context="xhtml_new" enabled="true">%Templates.xhtml.jsf.content</template>
+
+<template name="%Templates.xhtml.jsf.richfaces" description="%Templates.xhtml.jsf.richfaces.desc" id="org.jboss.tools.jsf.ui.richfaces" context="xhtml_new" enabled="true">%Templates.xhtml.jsf.richfaces.content</template>
+
 </templates>
