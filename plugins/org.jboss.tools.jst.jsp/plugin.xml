@@ -215,7 +215,6 @@
       		icon="$nl$/images/xstudio/editors/xmldoc.gif"
       		id="org.jboss.tools.jst.jsp.jspeditor.DocBookEditor"
       		name="%editors.docbook.name">
-      		<contentTypeBinding contentTypeId="org.eclipse.wst.html.core.htmlsource"/>
       </editor>
    </extension>
 
