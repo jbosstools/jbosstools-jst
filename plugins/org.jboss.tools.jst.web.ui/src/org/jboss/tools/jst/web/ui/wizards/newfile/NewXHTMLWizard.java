@@ -34,6 +34,7 @@ import org.eclipse.wst.sse.core.internal.encoding.CommonEncodingPreferenceNames;
 import org.eclipse.wst.sse.core.utils.StringUtils;
 import org.jboss.tools.common.meta.action.impl.SpecialWizardSupport;
 import org.jboss.tools.common.model.XModelException;
+import org.jboss.tools.common.model.files.handlers.CreateFileSupport;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.model.ui.wizard.newfile.NewFileContextEx;
 import org.jboss.tools.common.model.ui.wizard.newfile.NewXHTMLFileWizard;
@@ -93,6 +94,7 @@ public class NewXHTMLWizard extends NewHTMLWizard{
 		SpecialWizardSupport support = getNewXHTMLFileWizard().getFileContext().getSupport();
 		NewXHTMLWizardSelectTagLibrariesPage step = new NewXHTMLWizardSelectTagLibrariesPage(support, 1);
 		try {
+			support.setAttributeValue(0, "template", "");
 			support.action(SpecialWizardSupport.NEXT);
 		} catch (XModelException e) {
 			ModelUIPlugin.getPluginLog().logError(e);
@@ -198,6 +200,5 @@ public class NewXHTMLWizard extends NewHTMLWizard{
 	private void setNewXHTMLFileWizard(NewXHTMLFileWizard newXHTMLFileWizard) {
 		this.newXHTMLFileWizard = newXHTMLFileWizard;
 	}
-
 
 }
