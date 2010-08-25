@@ -934,7 +934,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			}
 			// Drop from VPE to Source is forbidden
 			if (dropContext.getFlavor().equals("text/html")) { //$NON-NLS-1$
-				if (InnerDragBuffer.object != null) {
+				if (InnerDragBuffer.getInnerDragObject() != null) {
 					event.detail = DND.DROP_NONE;
 				}
 				return;
