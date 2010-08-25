@@ -126,7 +126,9 @@ public class NewXHTMLWizard extends NewHTMLWizard{
 			try {
 				NewFileContextEx newFileContext = newXHTMLFileWizard.getFileContext();
 				CreateJSPFileSupport jspFileSupport = (CreateJSPFileSupport)newFileContext.getSupport();
-				templateString = jspFileSupport.addTaglibs(templateString);
+				if(jspFileSupport.getAttributeValue(1, "taglibs").length()>0){
+					templateString = jspFileSupport.addTaglibs(templateString);
+				}
 			} catch (IOException ex) {
 				WebUiPlugin.getDefault().logWarning("Problems with adding taglibs",ex); //$NON-NLS-1$
 			}
