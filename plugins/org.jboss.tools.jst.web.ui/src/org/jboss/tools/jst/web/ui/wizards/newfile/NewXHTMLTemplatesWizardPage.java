@@ -378,6 +378,7 @@ public class NewXHTMLTemplatesWizardPage extends WizardPage {
 				fLastSelectedTemplateName = ""; //$NON-NLS-1$
 
 			fTableViewer.setSelection(null);
+			updateViewerInput();
 		}
 		else {
 			setSelectedTemplate(fLastSelectedTemplateName);
@@ -509,8 +510,8 @@ public class NewXHTMLTemplatesWizardPage extends WizardPage {
 		Template template = getSelectedTemplate();
 		if (template != null) {
 			pattern = template.getPattern();
-			fJspFileSupport.setTaglibsFromTemplateBody(pattern);
 		}
+		fJspFileSupport.setTaglibsFromTemplateBody(pattern);
 		fPatternViewer.getDocument().set(pattern);
 	}
 }
