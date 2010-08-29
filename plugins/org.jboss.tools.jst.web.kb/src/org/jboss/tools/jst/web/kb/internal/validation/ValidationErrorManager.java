@@ -187,6 +187,10 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 		return this.getClass();
 	}
 
+	public IValidationContext getValidationContext() {
+		return validationContext;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.seam.internal.core.validation.IValidationErrorManager#addError(java.lang.String, int, java.lang.String[], int, int, org.eclipse.core.resources.IResource)
