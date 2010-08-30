@@ -72,6 +72,7 @@ public class NewXHTMLWizard extends NewHTMLWizard{
 		
 		addPage(this.fNewFileTemplatesPage);
 		this.newXHTMLWizardSelectTagLibrariesPage = getURISelectionPage();
+		if(jspFileSupport.getTaglibs()!=null&&jspFileSupport.getTaglibs().getDescriptions().length>0)
 		addPage(this.newXHTMLWizardSelectTagLibrariesPage);
 	}
 	@Override

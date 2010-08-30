@@ -33,6 +33,10 @@ public class CreateJSPFileSupport extends CreateFileSupport {
 	protected Map<String,File> templates = new TreeMap<String,File>();
 	TaglibSet taglibs;
 	
+	public TaglibSet getTaglibs() {
+		return taglibs;
+	}
+
 	public void reset() {
 		taglibs = null;
 		selectedTaglibs.clear();
