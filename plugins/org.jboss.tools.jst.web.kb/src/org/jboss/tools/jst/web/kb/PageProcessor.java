@@ -175,9 +175,11 @@ public class PageProcessor {
 			IComponent[] components  = getComponents(query, context, includeComponentExtensions);
 			for (int i = 0; i < components.length; i++) {
 				IAttribute[] libAttributess = components[i].getAttributes(query, context);
-				for (int j = 0; j < libAttributess.length; j++) {
-					attributes.add(libAttributess[j]);
-					attrbMap.put(libAttributess[j].getName(), libAttributess[j]);
+				if(libAttributess!=null) {
+					for (int j = 0; j < libAttributess.length; j++) {
+						attributes.add(libAttributess[j]);
+						attrbMap.put(libAttributess[j].getName(), libAttributess[j]);
+					}
 				}
 			}
 			if(includeComponentExtensions) {

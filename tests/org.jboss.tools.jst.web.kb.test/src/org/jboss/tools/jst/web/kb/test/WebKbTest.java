@@ -14,17 +14,16 @@ import junit.framework.TestCase;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.PageProcessor;
-import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibAttribute;
 import org.jboss.tools.jst.web.kb.taglib.CustomTagLibManager;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibrary;
-import org.jboss.tools.test.util.JobUtils;
-import org.jboss.tools.test.util.ProjectImportTestSetup;
 
 /**
  * @author Alexey Kazakov
@@ -36,9 +35,8 @@ public class WebKbTest extends TestCase {
 
 	protected void setUp() throws Exception {
 		if(testProject==null) {
-			testProject = ProjectImportTestSetup.loadProject("TestKbModel");
-			JobUtils.waitForIdle();
-			JobUtils.delay(2000);
+			testProject = ResourcesPlugin.getWorkspace().getRoot().getProject("TestKbModel");
+			assertNotNull("Can't load TestKbModel", testProject); //$NON-NLS-1$
 		}
 	}
 
@@ -131,5 +129,31 @@ public class WebKbTest extends TestCase {
 		CustomTagLibAttribute[] attributes = CustomTagLibManager.getInstance().getComponentExtensions();
 		assertNotNull("Can't load component extensions.", attributes);
 		assertFalse("Can't load component extensions.", attributes.length==0);
+	}
+
+	/**
+	 * https://jira.jboss.org/jira/browse/JBIDE-3875
+	 */
+	public void testFacetNames() {
+		IFile file = testProject.getFile("WebContent/pages/facetname.jsp");
+		ELContext context = PageContextFactory.createPageContext(file);
+		KbQuery query = new KbQuery();
+		query.setMask(true);
+		query.setOffset(302);
+		query.setType(Type.ATTRIBUTE_VALUE);
+		query.setPrefix("f");
+		query.setUri("http://java.sun.com/jsf/core");
+		query.setValue("h");
+		query.setParentTags(new String[]{"rich:page", "f:facet"});
+		query.setParent("name");
+		query.setStringQuery("h");
+
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
+		for (TextProposal proposal : proposals) {
+			if("header".equals(proposal.getReplacementString())) {
+				return;
+			}
+		}
+		fail("Can't find \"header\" proposal.");
 	}
 }

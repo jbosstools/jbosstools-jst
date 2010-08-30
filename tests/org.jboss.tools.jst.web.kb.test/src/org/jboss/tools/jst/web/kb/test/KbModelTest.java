@@ -12,24 +12,20 @@ package org.jboss.tools.jst.web.kb.test;
 
 import java.util.List;
 
+import junit.framework.TestCase;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IncrementalProjectBuilder;
-import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.jboss.tools.jst.web.kb.IKbProject;
 import org.jboss.tools.jst.web.kb.internal.scanner.LoadedDeclarations;
 import org.jboss.tools.jst.web.kb.internal.scanner.ScannerException;
 import org.jboss.tools.jst.web.kb.internal.scanner.XMLScanner;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 import org.jboss.tools.test.util.JUnitUtils;
-import org.jboss.tools.test.util.TestProjectProvider;
-
-import junit.framework.TestCase;
 
 public class KbModelTest extends TestCase {
 
-	TestProjectProvider provider = null;
 	IProject project = null;
 	boolean makeCopy = true;
 
@@ -38,11 +34,8 @@ public class KbModelTest extends TestCase {
 	}
 
 	public void setUp() throws Exception {
-		provider = new TestProjectProvider("org.jboss.tools.jst.web.kb.test",
-				null,"TestKbModel" ,true);
-		project = provider.getProject();
-		project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
-		this.project.build(IncrementalProjectBuilder.FULL_BUILD, null);
+		project = ResourcesPlugin.getWorkspace().getRoot().getProject("TestKbModel");
+		assertNotNull("Can't load TestKbModel", project); //$NON-NLS-1$
 	}
 
 	private IKbProject getKbProject() {
@@ -90,11 +83,5 @@ public class KbModelTest extends TestCase {
 
 	public void toDoCleanBuild() {
 
-	}
-
-	protected void tearDown() throws Exception {
-		if(provider != null) {
-			provider.dispose();
-		}
 	}
 }

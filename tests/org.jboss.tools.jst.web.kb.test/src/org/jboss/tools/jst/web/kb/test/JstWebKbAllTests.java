@@ -22,11 +22,12 @@ public class JstWebKbAllTests {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite(JstWebKbAllTests.class.getName());
-		suite.addTest(new ProjectImportTestSetup(new TestSuite(WebKbTest.class),
+		suite.addTestSuite(KbModelTest.class);
+		suite.addTestSuite(WebKbTest.class);
+		ProjectImportTestSetup testSetup = new ProjectImportTestSetup(suite,
 				"org.jboss.tools.jst.web.kb.test",
 				new String[]{"projects/TestKbModel"},
-				new String[]{"TestKbModel"}));
-		suite.addTestSuite(KbModelTest.class);
-		return suite;
+				new String[]{"TestKbModel"});
+		return testSetup;
 	}
 }

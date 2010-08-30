@@ -156,7 +156,7 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 			attrName = query.getParent();
 		}
 		if(attrName == null) {
-			return null;
+			return EMPTY_ARRAY;
 		}
 		if(mask) {
 			return getAttributes(attrName, context, query);
