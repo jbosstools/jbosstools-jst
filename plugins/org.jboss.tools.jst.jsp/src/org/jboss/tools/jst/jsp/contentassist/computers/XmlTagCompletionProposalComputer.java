@@ -43,6 +43,7 @@ import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.ELResolverFactoryManager;
 import org.jboss.tools.common.text.TextProposal;
+import org.jboss.tools.common.text.ext.util.Utils;
 import org.jboss.tools.jst.jsp.contentassist.AutoContentAssistantProposal;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
@@ -218,7 +219,7 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 		}
 		
 		String matchString = contentAssistRequest.getMatchString();
-		String query = matchString;
+		String query = Utils.trimQuotes(matchString);
 		if (query == null)
 			query = ""; //$NON-NLS-1$
 		String stringQuery = matchString;
