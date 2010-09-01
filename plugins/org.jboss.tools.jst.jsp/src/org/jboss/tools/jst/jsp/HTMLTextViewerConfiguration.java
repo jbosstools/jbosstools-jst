@@ -28,6 +28,7 @@ import org.eclipse.jface.text.formatter.MultiPassContentFormatter;
 import org.eclipse.jface.text.hyperlink.IHyperlinkDetector;
 import org.eclipse.jface.text.information.IInformationProvider;
 import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
 import org.eclipse.wst.html.core.text.IHTMLPartitions;
 import org.eclipse.wst.html.ui.StructuredTextViewerConfigurationHTML;
@@ -48,6 +49,10 @@ public class HTMLTextViewerConfiguration extends
 		StructuredTextViewerConfigurationHTML implements
 		ITextViewerConfiguration {
 
+	private static final char[] PROPOSAL_AUTO_ACTIVATION_CHARS = new char[] {
+		'<', '=', '"', '\'', '.', '{'
+	};
+
 	TextViewerConfigurationDelegate configurationDelegate;
 
 	private static final String TEMPLATES_CONTENT_ASSISTANT = "org.jboss.tools.jst.jsp.editorContentAssistent"; //$NON-NLS-1$
@@ -64,7 +69,6 @@ public class HTMLTextViewerConfiguration extends
 //		sourceViewer, partitionType);
 		IContentAssistProcessor superProcessor = new HTMLStructuredContentAssistProcessor(
 				this.getContentAssistant(), partitionType, sourceViewer) {
-
 					@SuppressWarnings({ "rawtypes", "unchecked" })
 					@Override
 					protected List filterAndSortProposals(List proposals,
@@ -72,7 +76,21 @@ public class HTMLTextViewerConfiguration extends
 							CompletionProposalInvocationContext context) {
 						return ProposalSorter.filterAndSortProposals(proposals, monitor, context);
 					}
-			
+
+					@Override
+					public char[] getCompletionProposalAutoActivationCharacters() {
+						char[] superAutoActivationCharacters = super.getCompletionProposalAutoActivationCharacters();
+						if (superAutoActivationCharacters == null)
+							return PROPOSAL_AUTO_ACTIVATION_CHARS;
+						
+						String chars = new String(superAutoActivationCharacters);
+						for (char ch : PROPOSAL_AUTO_ACTIVATION_CHARS) {
+							if (chars.indexOf(ch) == -1) {
+								chars += ch;
+							}
+						}
+						return chars.toCharArray();
+					}
 		};
 		List<IContentAssistProcessor> processors = new ArrayList<IContentAssistProcessor>();
 		processors.addAll(

@@ -32,7 +32,10 @@ import org.jboss.tools.common.text.xml.contentassist.ProposalSorter;
  */
 @SuppressWarnings("restriction")
 public class JSPTextViewerConfiguration extends StructuredTextViewerConfigurationJSP implements ITextViewerConfiguration {
-	
+	private static final char[] PROPOSAL_AUTO_ACTIVATION_CHARS = new char[] {
+		'<', '=', '"', '\'', '.', '{'
+	};
+
 	private TextViewerConfigurationDelegate configurationDelegate;
 
 	public JSPTextViewerConfiguration() {
@@ -95,7 +98,21 @@ public class JSPTextViewerConfiguration extends StructuredTextViewerConfiguratio
 							CompletionProposalInvocationContext context) {
 						return ProposalSorter.filterAndSortProposals(proposals, monitor, context);
 					}
-			
+
+					@Override
+					public char[] getCompletionProposalAutoActivationCharacters() {
+						char[] superAutoActivationCharacters = super.getCompletionProposalAutoActivationCharacters();
+						if (superAutoActivationCharacters == null)
+							return PROPOSAL_AUTO_ACTIVATION_CHARS;
+						
+						String chars = new String(superAutoActivationCharacters);
+						for (char ch : PROPOSAL_AUTO_ACTIVATION_CHARS) {
+							if (chars.indexOf(ch) == -1) {
+								chars += ch;
+							}
+						}
+						return chars.toCharArray();
+					}
 		};
 		
 		List<IContentAssistProcessor> processors = new ArrayList<IContentAssistProcessor>();
