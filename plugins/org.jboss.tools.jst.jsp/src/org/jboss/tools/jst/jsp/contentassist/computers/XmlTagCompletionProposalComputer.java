@@ -326,7 +326,8 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 		
 		for (int i = 0; proposals != null && i < proposals.length; i++) {
 			TextProposal textProposal = proposals[i];
-			
+			boolean useAutoActivation = true;
+	
 			String replacementString = textProposal.getReplacementString();
 			String closingTag = textProposal.getLabel();
 			if (closingTag != null && closingTag.startsWith("<")) { //$NON-NLS-1$
@@ -339,6 +340,7 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 			}
 			if (!replacementString.endsWith("/>")) { //$NON-NLS-1$
 				replacementString += "</" + closingTag + ">"; //$NON-NLS-1$ //$NON-NLS-2$
+				useAutoActivation = false;	// JBIDE-6285: Don't invoke code assist automaticly if user inserts <tag></tag>.
 			}
 
 		
@@ -358,7 +360,7 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 				relevance = defaultRelevance == TextProposal.R_NONE? TextProposal.R_TAG_INSERTION : defaultRelevance;
 			}
 
-			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(true, replacementString, 
+			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(useAutoActivation, replacementString, 
 					replacementOffset, replacementLength, cursorPosition, image, displayString, 
 					contextInformation, additionalProposalInfo, relevance);
 
