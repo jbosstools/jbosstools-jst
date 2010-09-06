@@ -25,6 +25,9 @@ public class ValidatingProjectSet implements IValidatingProjectSet {
 	protected List<IProject> allProjects;
 	protected IValidationContext rootContext;
 
+	protected ValidatingProjectSet() {
+	}
+
 	/**
 	 * @param rootProject
 	 * @param allProjects

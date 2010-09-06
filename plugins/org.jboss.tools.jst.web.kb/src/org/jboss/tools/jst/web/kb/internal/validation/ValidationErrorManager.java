@@ -45,7 +45,7 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 	protected IValidator validationManager;
 	protected ContextValidationHelper coreHelper;
 	protected IReporter reporter;
-	protected IProject rootProject;
+	protected IProject validatingProject;
 	protected String markerId;
 	protected IValidationContext validationContext;
 	protected TextFileDocumentProvider documentProvider;
@@ -57,7 +57,7 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 	}
 
 	public void init(IProject project, ContextValidationHelper validationHelper, IValidator manager, IReporter reporter) {
-		setRootProject(project);
+		setProject(project);
 		setCoreHelper(validationHelper);
 		setValidationManager(manager);
 		setReporter(reporter);
@@ -89,8 +89,8 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 	/**
 	 * @param rootProject the rootProject to set
 	 */
-	public void setRootProject(IProject rootProject) {
-		this.rootProject = rootProject;
+	public void setProject(IProject rootProject) {
+		this.validatingProject = rootProject;
 	}
 
 	/**
