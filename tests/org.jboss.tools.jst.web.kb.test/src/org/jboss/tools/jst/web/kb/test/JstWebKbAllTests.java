@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.kb.test;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.jboss.tools.common.model.util.test.XProjectImportTestSetUp;
 import org.jboss.tools.test.util.ProjectImportTestSetup;
 
 /**
@@ -24,7 +25,7 @@ public class JstWebKbAllTests {
 		TestSuite suite = new TestSuite(JstWebKbAllTests.class.getName());
 		suite.addTestSuite(KbModelTest.class);
 		suite.addTestSuite(WebKbTest.class);
-		ProjectImportTestSetup testSetup = new ProjectImportTestSetup(suite,
+		ProjectImportTestSetup testSetup = new XProjectImportTestSetUp(suite,
 				"org.jboss.tools.jst.web.kb.test",
 				new String[]{"projects/TestKbModel"},
 				new String[]{"TestKbModel"});
