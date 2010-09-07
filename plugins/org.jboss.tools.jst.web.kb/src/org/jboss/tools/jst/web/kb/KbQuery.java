@@ -36,7 +36,8 @@ public class KbQuery {
 		TEXT,
 		TAG_NAME,
 		ATTRIBUTE_NAME,
-		ATTRIBUTE_VALUE
+		ATTRIBUTE_VALUE,
+		TAG_BODY
 	}
 
 	public KbQuery() {
