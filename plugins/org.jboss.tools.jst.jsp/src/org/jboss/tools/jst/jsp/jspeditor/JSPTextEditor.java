@@ -104,13 +104,12 @@ import org.jboss.tools.common.model.ui.dnd.ModelTransfer;
 import org.jboss.tools.common.model.ui.editor.IModelObjectEditorInput;
 import org.jboss.tools.common.model.ui.editors.dnd.DropCommandFactory;
 import org.jboss.tools.common.model.ui.editors.dnd.DropData;
+import org.jboss.tools.common.model.ui.editors.dnd.DropUtils.AttributeDescriptorValueProvider;
 import org.jboss.tools.common.model.ui.editors.dnd.IDropCommand;
 import org.jboss.tools.common.model.ui.editors.dnd.ITagProposal;
-import org.jboss.tools.common.model.ui.editors.dnd.DropUtils.AttributeDescriptorValueProvider;
 import org.jboss.tools.common.model.ui.editors.dnd.composite.TagAttributesComposite;
 import org.jboss.tools.common.model.ui.editors.dnd.composite.TagAttributesComposite.AttributeDescriptorValue;
 import org.jboss.tools.common.model.ui.editors.dnd.context.DropContext;
-import org.jboss.tools.common.model.ui.editors.dnd.context.InnerDragBuffer;
 import org.jboss.tools.common.model.ui.texteditors.TextMerge;
 import org.jboss.tools.common.model.ui.texteditors.dnd.TextEditorDrop;
 import org.jboss.tools.common.model.ui.texteditors.dnd.TextEditorDropProvider;
@@ -141,8 +140,8 @@ import org.jboss.tools.jst.jsp.ui.action.ExtendedFormatAction;
 import org.jboss.tools.jst.jsp.ui.action.IExtendedAction;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
-import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
+import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.internal.JspContextImpl;
 import org.jboss.tools.jst.web.kb.internal.taglib.NameSpace;
 import org.jboss.tools.jst.web.kb.internal.taglib.TLDTag;
@@ -932,13 +931,18 @@ public class JSPTextEditor extends StructuredTextEditor implements
 				event.detail = DND.DROP_NONE;
 				return;
 			}
-			// Drop from VPE to Source is forbidden
-			if (dropContext.getFlavor().equals("text/html")) { //$NON-NLS-1$
-				if (InnerDragBuffer.getInnerDragObject() != null) {
-					event.detail = DND.DROP_NONE;
-				}
-				return;
-			}
+			
+// commented by yradtsevich, see JBIDE-6439 (InnerDragBuffer is removed,
+// nodes are transfered through vpe/xpath flavor now)			
+//			// Drop from VPE to Source is forbidden
+//			if (dropContext.getFlavor().equals("text/html")) { //$NON-NLS-1$
+//				if (InnerDragBuffer.getInnerDragObject() != null) {
+//					event.detail = DND.DROP_NONE;
+//				}
+//				return;
+//			}
+			
+			
 			int pos = getPosition(event.x, event.y);
 			if (lastpos == pos && pos >= 0) {
 				pos = lastpos;
