@@ -385,17 +385,9 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 				projectLocation = createLinks(projectLocation);
 			}
 			
-			String webroot = getProperty(WEB_CONTENT_LOCATION_ID);
-			String[] javaRoot = (String[])getPropertyObject(JAVA_SOURCES_LOCATION_ID);
-			String sv = getProperty(SERVLET_VERSION_ID);
-			
 			WebFacetProjectCreationDataModelProvider modelProvider = new WebFacetProjectCreationDataModelProvider();
 			IDataModel dataModel = DataModelFactory.createDataModel(modelProvider);
 
-			FacetDataModelMap map = (FacetDataModelMap) dataModel.getProperty(IFacetProjectCreationDataModelProperties.FACET_DM_MAP);
-			IDataModel configDM = (IDataModel) map.get("jst.web"); //$NON-NLS-1$
-			IDataModel configJavaDM = (IDataModel) map.get("java"); //$NON-NLS-1$
-			
 			boolean hasJSTWebFacet = false;
 			if(exists) {
 				IFacetedProject fp0 = ProjectFacetsManager.create(getProject());
@@ -411,31 +403,8 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 				}
 			}
 
-			if(sv != null && (sv.indexOf("2.3") >= 0 || sv.indexOf("2.4") >= 0 || sv.indexOf("2.5") >= 0 || sv.indexOf("3.0") >= 0)) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				configDM.setProperty(IFacetDataModelProperties.FACET_VERSION_STR, sv);
-			}
-			if(configJavaDM != null && sv != null && sv.indexOf("3.0") >= 0) { //$NON-NLS-1$
-				configJavaDM.setProperty(IFacetDataModelProperties.FACET_VERSION_STR, "1.6"); //$NON-NLS-1$
-			}
-			
-			if(webroot != null) {
-				int i = webroot.lastIndexOf("/"); //$NON-NLS-1$
-				String webRootName = webroot.substring(i + 1);
-				if(webroot.startsWith(projectLocation.replace('\\', '/') + "/")) { //$NON-NLS-1$
-					webRootName = webroot.substring(projectLocation.length() + 1);
-				}
-				configDM.setProperty(IJ2EEModuleFacetInstallDataModelProperties.CONFIG_FOLDER, webRootName);
-			}
-			if(javaRoot != null && javaRoot.length > 0 && javaRoot[0].length() > 0) {
-				String jr = javaRoot[0].replace('\\', '/');
-				int i = jr.lastIndexOf("/"); //$NON-NLS-1$
-				String javaRootName = javaRoot[0].substring(i + 1);
-				if(jr.startsWith(projectLocation.replace('\\', '/') + "/")) { //$NON-NLS-1$
-					javaRootName = jr.substring(projectLocation.length() + 1);
-				}
-				configDM.setProperty(IWebFacetInstallDataModelProperties.SOURCE_FOLDER, javaRootName);
-			}
-			
+			configFacets(dataModel, projectLocation);
+
 			modelProvider.setDataModel(dataModel);
 			FacetProjectCreationOperation wcco = (FacetProjectCreationOperation)modelProvider.getDefaultOperation();
 	
@@ -469,6 +438,42 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 			} else {
 				return null;
 			}
+	}
+
+	protected void configFacets(IDataModel dataModel, String projectLocation) {
+		String webroot = getProperty(WEB_CONTENT_LOCATION_ID);
+		String[] javaRoot = (String[])getPropertyObject(JAVA_SOURCES_LOCATION_ID);
+		String sv = getProperty(SERVLET_VERSION_ID);
+
+		FacetDataModelMap map = (FacetDataModelMap) dataModel.getProperty(IFacetProjectCreationDataModelProperties.FACET_DM_MAP);
+		IDataModel configDM = (IDataModel) map.get("jst.web"); //$NON-NLS-1$
+		IDataModel configJavaDM = (IDataModel) map.get("java"); //$NON-NLS-1$
+		
+		if(sv != null && (sv.indexOf("2.3") >= 0 || sv.indexOf("2.4") >= 0 || sv.indexOf("2.5") >= 0 || sv.indexOf("3.0") >= 0)) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			configDM.setProperty(IFacetDataModelProperties.FACET_VERSION_STR, sv);
+		}
+		if(configJavaDM != null && sv != null && sv.indexOf("3.0") >= 0) { //$NON-NLS-1$
+			configJavaDM.setProperty(IFacetDataModelProperties.FACET_VERSION_STR, "1.6"); //$NON-NLS-1$
+		}
+		
+		if(webroot != null) {
+			int i = webroot.lastIndexOf("/"); //$NON-NLS-1$
+			String webRootName = webroot.substring(i + 1);
+			if(webroot.startsWith(projectLocation.replace('\\', '/') + "/")) { //$NON-NLS-1$
+				webRootName = webroot.substring(projectLocation.length() + 1);
+			}
+			configDM.setProperty(IJ2EEModuleFacetInstallDataModelProperties.CONFIG_FOLDER, webRootName);
+		}
+		if(javaRoot != null && javaRoot.length > 0 && javaRoot[0].length() > 0) {
+			String jr = javaRoot[0].replace('\\', '/');
+			int i = jr.lastIndexOf("/"); //$NON-NLS-1$
+			String javaRootName = javaRoot[0].substring(i + 1);
+			if(jr.startsWith(projectLocation.replace('\\', '/') + "/")) { //$NON-NLS-1$
+				javaRootName = jr.substring(projectLocation.length() + 1);
+			}
+			configDM.setProperty(IWebFacetInstallDataModelProperties.SOURCE_FOLDER, javaRootName);
+		}
+		
 	}
 	
 	//https://bugs.eclipse.org/bugs/show_bug.cgi?id=119066
