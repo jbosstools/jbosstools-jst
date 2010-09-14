@@ -3,6 +3,7 @@ package org.jboss.tools.jst.jsp.test.ca;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.jboss.tools.jst.jsp.contentassist.AutoContentAssistantProposal;
@@ -51,17 +52,26 @@ public class JstJspJbide1585Test extends ContentAssistantTestCase {
 		
 		jspTextEditor.setText(documentContentModified);
 		
+		// sets cursor position
+		viewer.getTextWidget().setCaretOffset(offsetToTest);
+		
+		TestUtil.waitForIdle(TestUtil.MAX_IDLE);
+		TestUtil.delay(1000);
+
 		ICompletionProposal[] result= null;
 		String errorMessage = null;
 
-		IContentAssistProcessor p= TestUtil.getProcessor(viewer, offsetToTest, contentAssistant);
-		if (p != null) {
-			try {
-				result= p.computeCompletionProposals(viewer, offsetToTest);
-			} catch (Throwable x) {
-				x.printStackTrace();
+		if (contentAssistant instanceof ContentAssistant) {
+			TestUtil.prepareCAInvokation(contentAssistant, viewer, offsetToTest);
+			IContentAssistProcessor p= TestUtil.getProcessor(viewer, offsetToTest, contentAssistant);
+			if (p != null) {
+				try {
+					result= p.computeCompletionProposals(viewer, offsetToTest);
+				} catch (Throwable x) {
+					x.printStackTrace();
+				}
+				errorMessage= p.getErrorMessage();
 			}
-			errorMessage= p.getErrorMessage();
 		}
 
 		assertTrue("Content Assistant returned no proposals", (result != null && result.length > 0));

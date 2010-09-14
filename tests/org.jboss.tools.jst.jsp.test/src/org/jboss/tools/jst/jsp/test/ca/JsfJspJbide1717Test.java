@@ -60,6 +60,7 @@ public class JsfJspJbide1717Test extends ContentAssistantTestCase {
 		ICompletionProposal[] result= null;
 		String errorMessage = null;
 
+		TestUtil.prepareCAInvokation(contentAssistant, viewer, offsetToTest);
 		IContentAssistProcessor p= TestUtil.getProcessor(viewer, offsetToTest, contentAssistant);
 		if (p != null) {
 			try {

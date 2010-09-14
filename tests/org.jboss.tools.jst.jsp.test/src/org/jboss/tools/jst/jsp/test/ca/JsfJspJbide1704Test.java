@@ -6,6 +6,7 @@ import junit.framework.TestSuite;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.FindReplaceDocumentAdapter;
 import org.eclipse.jface.text.IRegion;
+import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.jboss.tools.jst.jsp.contentassist.AutoContentAssistantProposal;
@@ -56,6 +57,8 @@ public class JsfJspJbide1704Test extends ContentAssistantTestCase {
 			final IRegion reg = new FindReplaceDocumentAdapter(document).find(0,
 					" var=\"msg\"", true, true, false, false);
 			String errorMessage = null;
+
+			TestUtil.prepareCAInvokation(contentAssistant, viewer, reg.getOffset());
 
 			final IContentAssistProcessor p= TestUtil.getProcessor(viewer, reg.getOffset(), contentAssistant);
 			if (p != null) {

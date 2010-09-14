@@ -3,6 +3,7 @@ package org.jboss.tools.jst.jsp.test.ca;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.jboss.tools.jst.jsp.contentassist.AutoContentAssistantProposal;
@@ -60,6 +61,8 @@ public class JstJspJbide1641Test extends ContentAssistantTestCase {
 		
 		ICompletionProposal[] result= null;
 		String errorMessage = null;
+
+		TestUtil.prepareCAInvokation(contentAssistant, viewer, offsetToTest);
 
 		IContentAssistProcessor p= TestUtil.getProcessor(viewer, offsetToTest, contentAssistant);
 		if (p != null) {

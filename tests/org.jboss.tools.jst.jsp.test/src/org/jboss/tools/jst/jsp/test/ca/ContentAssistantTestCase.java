@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContentAssistant;
@@ -12,6 +13,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
+import org.eclipse.wst.sse.ui.internal.contentassist.StructuredContentAssistant;
 import org.jboss.tools.common.text.ext.util.Utils;
 import org.jboss.tools.jst.jsp.contentassist.AutoContentAssistantProposal;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
@@ -73,18 +75,20 @@ public class ContentAssistantTestCase extends TestCase {
         ICompletionProposal[] result = null;
 
 //		System.out.println("checkProposals >>> invoking TestUtil.getProcessor() for position " + (position + offset));
+
         IContentAssistProcessor p = TestUtil.getProcessor(viewer, position + offset, contentAssistant);
-//		System.out.println("checkProposals >>> TestUtil.getProcessor() is invoked for " + (position + offset));
+		TestUtil.prepareCAInvokation(contentAssistant, viewer, position+offset);
+	//		System.out.println("checkProposals >>> TestUtil.getProcessor() is invoked for " + (position + offset));
         if (p != null) {
             try {
-//        		System.out.println("checkProposals >>> invoking p.computeCompletionProposals() for position " + (position + offset));
+	//        		System.out.println("checkProposals >>> invoking p.computeCompletionProposals() for position " + (position + offset));
                 result = p.computeCompletionProposals(viewer, position + offset);
-//        		System.out.println("checkProposals >>> p.computeCompletionProposals() is invoked for " + (position + offset));
+	//        		System.out.println("checkProposals >>> p.computeCompletionProposals() is invoked for " + (position + offset));
             } catch (Throwable x) {
                 x.printStackTrace();
             }
         }
-//		System.out.println("checkProposals >>> Performing the values check up");
+	//		System.out.println("checkProposals >>> Performing the values check up");
 
         assertTrue("Content Assistant returned no proposals", (result != null && result.length > 0));
 
