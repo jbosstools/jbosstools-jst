@@ -1,5 +1,8 @@
 package org.jboss.tools.jst.jsp.test.ca;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -9,6 +12,7 @@ import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
+import org.eclipse.wst.sse.ui.internal.contentassist.CustomCompletionProposal;
 import org.jboss.tools.jst.jsp.contentassist.AutoContentAssistantProposal;
 import org.jboss.tools.jst.jsp.test.TestUtil;
 import org.jboss.tools.test.util.TestProjectProvider;
@@ -45,7 +49,7 @@ public class JsfJspJbide1704Test extends ContentAssistantTestCase {
 		doTestJsfJspJbide1704(PAGE_NAME + ".xhtml");
 	}
 	
-	private static final String THE_ONLY_ALLOWED_TEMPLATE = "New JSF EL Expression - Create a new attribute value with #{}".toLowerCase();
+	private static final String TEST_RESOURCES_VALUE = "\"resources\"";
 	
 	private void doTestJsfJspJbide1704(String pageName) {
 
@@ -53,28 +57,51 @@ public class JsfJspJbide1704Test extends ContentAssistantTestCase {
 		
 		try {
 			
-			ICompletionProposal[] result= null;
 			final IRegion reg = new FindReplaceDocumentAdapter(document).find(0,
 					" var=\"msg\"", true, true, false, false);
+			String text = document.get();
 			String errorMessage = null;
 
-			TestUtil.prepareCAInvokation(contentAssistant, viewer, reg.getOffset());
-
-			final IContentAssistProcessor p= TestUtil.getProcessor(viewer, reg.getOffset(), contentAssistant);
-			if (p != null) {
-				result= p.computeCompletionProposals(viewer, reg.getOffset());
-			}
-			for (int k = 0; result != null && k < result.length; k++) {
+			List<ICompletionProposal> res = TestUtil.collectProposals(contentAssistant, viewer, reg.getOffset());
+			
+			assertTrue("Content Assist returned no proposals: ", (res != null && res.size() > 0));
+			
+			for (ICompletionProposal proposal : res) {
 				// There should not be a proposal of type AutoContentAssistantProposal in the result
 				// (the only exclusion is EL-proposals)
 				
-				if ((result[k] instanceof AutoContentAssistantProposal) && 
-						((AutoContentAssistantProposal)result[k]).getReplacementString().startsWith("#{")) {
-					// The only EL template proposal is allowed to be shown here
-					continue;
+				if (proposal instanceof AutoContentAssistantProposal) {
+					if(((AutoContentAssistantProposal)proposal).getReplacementString().startsWith("#{")) {
+						// The only EL template proposal is allowed to be shown here
+						continue;
+					}
 				}
 				
-				assertFalse("Content Assistant peturned proposals of type (" + result[k].getClass().getName() + ").", (result[k] instanceof AutoContentAssistantProposal));
+				
+				if (proposal instanceof CustomCompletionProposal) {
+					// There are two cases are allowed to be shown
+					// AutoContentAssistantProposal which returns the "resources" string as replacement 
+					// CustomCompletionProposal which returns the current value string as replacement
+					
+					if (!(proposal instanceof AutoContentAssistantProposal)) {
+						int equalSignIndex = text.lastIndexOf('=', reg.getOffset());
+						if (equalSignIndex != -1) {
+							String prevAttrValue = text.substring(equalSignIndex+1, reg.getOffset()).trim();					
+							if (((CustomCompletionProposal)proposal).getReplacementString().equals(prevAttrValue)){
+								// The old value for the attribute is allowed to be shown here
+								continue;
+							}
+						}
+					} else {
+						if (((CustomCompletionProposal)proposal).getReplacementString().equals(TEST_RESOURCES_VALUE)){
+							// The old value for the attribute is allowed to be shown here
+							continue;
+						}
+						
+					}
+				}
+				
+				assertFalse("Content Assistant peturned proposals of type (" + proposal.getClass().getName() + ").", (proposal instanceof AutoContentAssistantProposal));
 			}
 	
 		} catch (BadLocationException e) {

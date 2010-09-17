@@ -1,5 +1,7 @@
 package org.jboss.tools.jst.jsp.test.ca;
 
+import java.util.List;
+
 import junit.framework.TestCase;
 
 import org.eclipse.core.resources.IProject;
@@ -72,30 +74,15 @@ public class ContentAssistantTestCase extends TestCase {
             position = documentContent.indexOf(substring);
         }
 
-        ICompletionProposal[] result = null;
+		List<ICompletionProposal> res = TestUtil.collectProposals(contentAssistant, viewer, position+offset);
 
-//		System.out.println("checkProposals >>> invoking TestUtil.getProcessor() for position " + (position + offset));
-
-        IContentAssistProcessor p = TestUtil.getProcessor(viewer, position + offset, contentAssistant);
-		TestUtil.prepareCAInvokation(contentAssistant, viewer, position+offset);
-	//		System.out.println("checkProposals >>> TestUtil.getProcessor() is invoked for " + (position + offset));
-        if (p != null) {
-            try {
-	//        		System.out.println("checkProposals >>> invoking p.computeCompletionProposals() for position " + (position + offset));
-                result = p.computeCompletionProposals(viewer, position + offset);
-	//        		System.out.println("checkProposals >>> p.computeCompletionProposals() is invoked for " + (position + offset));
-            } catch (Throwable x) {
-                x.printStackTrace();
-            }
-        }
-	//		System.out.println("checkProposals >>> Performing the values check up");
-
-        assertTrue("Content Assistant returned no proposals", (result != null && result.length > 0));
+        assertTrue("Content Assistant returned no proposals", (res != null && res.size() > 0));
 
         // for (int i = 0; i < result.length; i++) {
         // System.out.println("proposal - "+result[i].getDisplayString());
         // }
 
+        ICompletionProposal[] result = res.toArray(new ICompletionProposal[res.size()]);
         int foundCounter = 0;
         for (int i = 0; i < proposals.length; i++) {
         	boolean found = compareProposal(proposals[i], result);

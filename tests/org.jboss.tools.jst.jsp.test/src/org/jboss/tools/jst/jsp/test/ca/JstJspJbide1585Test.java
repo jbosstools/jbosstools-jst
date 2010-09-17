@@ -1,5 +1,7 @@
 package org.jboss.tools.jst.jsp.test.ca;
 
+import java.util.List;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -52,43 +54,26 @@ public class JstJspJbide1585Test extends ContentAssistantTestCase {
 		
 		jspTextEditor.setText(documentContentModified);
 		
-		// sets cursor position
-		viewer.getTextWidget().setCaretOffset(offsetToTest);
-		
-		TestUtil.waitForIdle(TestUtil.MAX_IDLE);
-		TestUtil.delay(1000);
-
-		ICompletionProposal[] result= null;
-		String errorMessage = null;
-
-		if (contentAssistant instanceof ContentAssistant) {
-			TestUtil.prepareCAInvokation(contentAssistant, viewer, offsetToTest);
-			IContentAssistProcessor p= TestUtil.getProcessor(viewer, offsetToTest, contentAssistant);
-			if (p != null) {
-				try {
-					result= p.computeCompletionProposals(viewer, offsetToTest);
-				} catch (Throwable x) {
-					x.printStackTrace();
-				}
-				errorMessage= p.getErrorMessage();
+		try {
+			List<ICompletionProposal> res = TestUtil.collectProposals(contentAssistant, viewer, offsetToTest);
+	
+			assertTrue("Content Assistant returned no proposals", (res != null && res.size() > 0));
+			
+			for (ICompletionProposal p : res) {
+				assertTrue("Content Assistant returned proposals which type (" + p.getClass().getName() + ") differs from AutoContentAssistantProposal", (p instanceof AutoContentAssistantProposal));
+				
+				AutoContentAssistantProposal proposal = (AutoContentAssistantProposal)p;
+				String proposalString = proposal.getReplacementString();
+				int proposalReplacementOffset = proposal.getReplacementOffset();
+				int proposalReplacementLength = proposal.getReplacementLength();
+	
+				assertTrue("The proposal replacement Offset is not correct.", proposalReplacementOffset == start + TAG_OPEN_STRING.length());
+				assertTrue("The proposal replacement Length is not correct.", proposalReplacementLength == PREFIX_STRING.length());
+				assertTrue("The proposal isn\'t filtered properly in the Content Assistant.", proposalString.startsWith(PREFIX_STRING));
 			}
+		} finally {
+			closeEditor();
 		}
-
-		assertTrue("Content Assistant returned no proposals", (result != null && result.length > 0));
-		
-		for (int i = 0; i < result.length; i++) {
-			assertTrue("Content Assistant returned proposals which type (" + result[i].getClass().getName() + ") differs from AutoContentAssistantProposal", (result[i] instanceof AutoContentAssistantProposal));
-			AutoContentAssistantProposal proposal = (AutoContentAssistantProposal)result[i];
-			String proposalString = proposal.getReplacementString();
-			int proposalReplacementOffset = proposal.getReplacementOffset();
-			int proposalReplacementLength = proposal.getReplacementLength();
-
-			assertTrue("The proposal replacement Offset is not correct.", proposalReplacementOffset == start + TAG_OPEN_STRING.length());
-			assertTrue("The proposal replacement Length is not correct.", proposalReplacementLength == PREFIX_STRING.length());
-			assertTrue("The proposal isn\'t filtered properly in the Content Assistant.", proposalString.startsWith(PREFIX_STRING));
-		}
-		
-		closeEditor();
 	}
 
 }

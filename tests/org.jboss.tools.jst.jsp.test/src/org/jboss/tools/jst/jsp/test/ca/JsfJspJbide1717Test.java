@@ -57,25 +57,18 @@ public class JsfJspJbide1717Test extends ContentAssistantTestCase {
 		
 		jspTextEditor.setText(documentContentModified);
 		
-		ICompletionProposal[] result= null;
 		String errorMessage = null;
 
-		TestUtil.prepareCAInvokation(contentAssistant, viewer, offsetToTest);
-		IContentAssistProcessor p= TestUtil.getProcessor(viewer, offsetToTest, contentAssistant);
-		if (p != null) {
-			try {
-				result= p.computeCompletionProposals(viewer, offsetToTest);
-			} catch (Throwable x) {
-				x.printStackTrace();
-			}
-			errorMessage= p.getErrorMessage();
-		}
+		List<ICompletionProposal> res = TestUtil.collectProposals(contentAssistant, viewer, offsetToTest);
 
 		List<String> customCompletionProposals = new ArrayList<String>();
-		for (int i = 0; i < result.length; i++) {
-			// There should be at least one proposal of type CustomCompletionProposal in the result
-			if (result[i] instanceof CustomCompletionProposal) {
-				customCompletionProposals.add(((CustomCompletionProposal)result[i]).getReplacementString());
+		
+		if (res != null) {
+			for (ICompletionProposal proposal : res) {
+				// There should be at least one proposal of type CustomCompletionProposal in the result
+				if (proposal instanceof CustomCompletionProposal) {
+					customCompletionProposals.add(((CustomCompletionProposal)proposal).getReplacementString());
+				}
 			}
 		}
 		assertFalse("Content Assistant returned no proposals of type CustomCompletionProposal.",customCompletionProposals.isEmpty());
@@ -100,24 +93,17 @@ public class JsfJspJbide1717Test extends ContentAssistantTestCase {
 			"|" + documentContentModified.substring(offsetToTest);
 
 		jspTextEditor.setText(documentContentModified);
-		
-		p= TestUtil.getProcessor(viewer, offsetToTest, contentAssistant);
-		if (p != null) {
-			try {
-				result= p.computeCompletionProposals(viewer, offsetToTest);
-			} catch (Throwable x) {
-				x.printStackTrace();
-			}
-			errorMessage= p.getErrorMessage();
-		}
-		
 
-		for (int i = 0; i < result.length; i++) {
-			// There should be the same proposals as in the saved result
-			if (result[i] instanceof CustomCompletionProposal) {
-				assertTrue("Content Assistant returned additional proposal (proposal returned doesn't exist in the saved list).",
-						customCompletionProposals.contains(((CustomCompletionProposal)result[i]).getReplacementString()));
-				customCompletionProposals.remove(((CustomCompletionProposal)result[i]).getReplacementString());
+		res = TestUtil.collectProposals(contentAssistant, viewer, offsetToTest);
+
+		if (res != null) {
+			for (ICompletionProposal proposal : res) {
+				// There should be the same proposals as in the saved result
+				if (proposal instanceof CustomCompletionProposal) {
+					assertTrue("Content Assistant returned additional proposal (proposal returned doesn't exist in the saved list).",
+							customCompletionProposals.contains(((CustomCompletionProposal)proposal).getReplacementString()));
+					customCompletionProposals.remove(((CustomCompletionProposal)proposal).getReplacementString());
+				}
 			}
 		}
 		assertTrue("Content Assistant didn't returned some proposals.",customCompletionProposals.isEmpty());

@@ -1,6 +1,9 @@
 package org.jboss.tools.jst.jsp.test;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.text.BadLocationException;
@@ -8,6 +11,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.TextUtilities;
 import org.eclipse.jface.text.contentassist.ContentAssistant;
+import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContentAssistant;
 import org.eclipse.jface.text.contentassist.IContentAssistantExtension;
@@ -114,4 +118,21 @@ public class TestUtil {
 
 		ca.showPossibleCompletions();
 	}	
+	
+	public static int MAX_CATEGORIES_COUNT = 10;
+	public static List<ICompletionProposal> collectProposals(IContentAssistant ca, ITextViewer viewer, int offset) {
+		prepareCAInvokation(ca, viewer, offset);
+
+		final IContentAssistProcessor p= TestUtil.getProcessor(viewer, offset, ca);
+		List<ICompletionProposal> res= new ArrayList<ICompletionProposal>();
+		// Try to acquire all the proposal categories assuming that there are less than 10 or equal
+		for (int i = 0; i < MAX_CATEGORIES_COUNT && p != null; i++) { 
+			ICompletionProposal[] result= p.computeCompletionProposals(viewer, offset);
+			for (int j = 0; result != null && j < result.length; j++) {
+				res.add(result[j]);
+			}
+		}
+		return res;
+	}
+	
 }
