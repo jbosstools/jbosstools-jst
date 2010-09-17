@@ -347,18 +347,15 @@ public abstract class JSPMultiPageEditorPart extends EditorPart implements ISele
 	protected void setPageText(int pageIndex, String text) {
 		getItem(pageIndex).setText(text);
 	}
-	
-	@Override
+
 	public void showSelectionBar() {
 		selectionBar.setVisible(true);
 	}
 
-	@Override
 	public void hideSelectionBar() {
 		selectionBar.setVisible(false);
 	}
 
-	@Override
 	public boolean isSelectionBarAvailable() {
 		return	selectionBar.isVisible();
 	}
