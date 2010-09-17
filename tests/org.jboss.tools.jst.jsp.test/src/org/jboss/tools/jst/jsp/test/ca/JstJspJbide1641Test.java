@@ -1,5 +1,7 @@
 package org.jboss.tools.jst.jsp.test.ca;
 
+import java.util.List;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -59,29 +61,19 @@ public class JstJspJbide1641Test extends ContentAssistantTestCase {
 		
 		JobUtils.waitForIdle();
 		
-		ICompletionProposal[] result= null;
+//		ICompletionProposal[] result= null;
 		String errorMessage = null;
 
-		TestUtil.prepareCAInvokation(contentAssistant, viewer, offsetToTest);
-
-		IContentAssistProcessor p= TestUtil.getProcessor(viewer, offsetToTest, contentAssistant);
-		if (p != null) {
-			try {
-				result= p.computeCompletionProposals(viewer, offsetToTest);
-			} catch (Throwable x) {
-				x.printStackTrace();
-			}
-			errorMessage= p.getErrorMessage();
-		}
 		
+		List<ICompletionProposal> res = TestUtil.collectProposals(contentAssistant, viewer, offsetToTest);
 
-		assertTrue("Content Assistant returned no proposals", (result != null && result.length > 0));
+		assertTrue("Content Assistant returned no proposals", (res != null && res.size() > 0));
 
 		boolean bPropoosalToApplyFound = false;
-		for (int i = 0; i < result.length; i++) {
-			if (!(result[i] instanceof AutoContentAssistantProposal)) 
+		for (ICompletionProposal p : res) {
+			if (!(p instanceof AutoContentAssistantProposal)) 
 				continue;
-			AutoContentAssistantProposal proposal = (AutoContentAssistantProposal)result[i];
+			AutoContentAssistantProposal proposal = (AutoContentAssistantProposal)p;
 			String proposalString = proposal.getReplacementString();
 
 			if (PROPOSAL_TO_APPLY_STRING.equals(proposalString)) {
