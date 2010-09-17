@@ -16,6 +16,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.jboss.tools.jst.web.kb.IKbProject;
 import org.jboss.tools.jst.web.kb.internal.taglib.myfaces.MyFacesTagLibrary;
+import org.jboss.tools.jst.web.kb.taglib.IComponent;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 import org.jboss.tools.test.util.JUnitUtils;
 
@@ -59,12 +60,22 @@ public class MyFacesKbModelTest extends TestCase {
 		MyFacesTagLibrary coreTagLib = null;
 		ls = kbProject.getTagLibraries("http://java.sun.com/jsf/core");
 		for (int i = 0; i < ls.length; i++) {
-			if(ls[i] instanceof MyFacesTagLibrary) coreTagLib = (MyFacesTagLibrary)ls[i];
+			if(ls[i] instanceof MyFacesTagLibrary) {
+				coreTagLib = (MyFacesTagLibrary)ls[i];
+			}
 		}
 		assertNotNull(coreTagLib);
 		String[] coreTags = {"event", "metadata"};
 		for (String tag: coreTags) {
-			assertNotNull(coreTagLib.getComponent(tag));
+			IComponent component = null;
+			for (int i = 0; i < ls.length; i++) {
+				if(ls[i] instanceof MyFacesTagLibrary) {
+					coreTagLib = (MyFacesTagLibrary)ls[i];
+					component = coreTagLib.getComponent(tag);
+				}
+				if(component != null) break;
+			}
+			assertNotNull("Cannot find tag '" + tag + "'", component);
 		}
 		assertEquals(2, coreTagLib.getComponent("event").getAttributes().length);
 		
