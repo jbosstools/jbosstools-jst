@@ -681,7 +681,6 @@ public class SelectionBar implements ISelectionChangedListener{
 		}
 	}
     
-	@Override
 	public void selectionChanged(SelectionChangedEvent event) {
 		updateNodes(true);
 	}
