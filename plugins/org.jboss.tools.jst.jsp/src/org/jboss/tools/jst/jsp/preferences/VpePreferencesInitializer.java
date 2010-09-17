@@ -24,7 +24,6 @@ public class VpePreferencesInitializer extends AbstractPreferenceInitializer {
 		
 		defaultPreferences.putBoolean(IVpePreferencesPage.SHOW_BORDER_FOR_UNKNOWN_TAGS, true);
 		defaultPreferences.putBoolean(IVpePreferencesPage.SHOW_NON_VISUAL_TAGS, false);
-		defaultPreferences.putBoolean(IVpePreferencesPage.SHOW_SELECTION_TAG_BAR, true);
 		defaultPreferences.putBoolean(IVpePreferencesPage.SHOW_TEXT_FORMATTING, true);
 		defaultPreferences.putBoolean(IVpePreferencesPage.SHOW_RESOURCE_BUNDLES_USAGE_AS_EL, false);
 		defaultPreferences.putBoolean(IVpePreferencesPage.ASK_TAG_ATTRIBUTES_ON_TAG_INSERT, true);

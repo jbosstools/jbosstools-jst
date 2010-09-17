@@ -25,6 +25,9 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Item;
@@ -41,7 +44,9 @@ import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.ui.part.MultiPageSelectionProvider;
+import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.jboss.tools.common.core.resources.XModelObjectEditorInput;
+import org.jboss.tools.jst.jsp.selection.bar.SelectionBar;
 
 /**
  * 
@@ -66,8 +71,15 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 	 */
 
 	Composite ppp = null;
+	/**
+	 * 
+	 * @param editor
+	 * @param input
+	 * @return
+	 * @throws PartInitException
+	 */
 
-	public int addPage(IEditorPart editor, IEditorInput input)
+	public int addPage(IEditorPart editor, IEditorInput input, StructuredTextEditor sourcePart)
 			throws PartInitException {
 		Composite parent2;
 		if (ppp == null) {
@@ -75,8 +87,15 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 			editor.init(site, input);
 			parent2 = new Composite(getContainer(), SWT.NONE);
 			ppp = parent2;
-			parent2.setLayout(new FillLayout());
 			editor.createPartControl(parent2);
+			parent2.setLayout(new GridLayout(2, false));
+			
+			SelectionBar selBar = new SelectionBar(sourcePart);
+			selBar.createToolBarComposite(parent2, true);
+//				GridData gridData = new GridData();
+//				gridData.horizontalAlignment = GridData.FILL;
+//				gridData.horizontalSpan = 2;
+//				but.setLayoutData(gridData);
 			editor.addPropertyListener(new IPropertyListener() {
 				public void propertyChanged(Object source, int propertyId) {
 					JSPMultiPageEditorPart.this
@@ -106,6 +125,7 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 				pageChange(newPageIndex);
 			}
 		});
+		
 		return newContainer;
 	}
 

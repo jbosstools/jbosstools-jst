@@ -446,7 +446,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		}
 		try {
 			if (visualEditor != null) {
-				visualSourceIndex = addPage(visualEditor, getEditorInput());
+				visualSourceIndex = addPage(visualEditor, getEditorInput(),sourceEditor);
 				setPageText(
 						visualSourceIndex,
 						JSPEditorMessages.JSPMultiPageEditor_TabLabel_VisualSource);
@@ -466,11 +466,11 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		try {
 			String sourceTabLabel = JSPEditorMessages.JSPMultiPageEditor_TabLabel_Source;
 			if (visualEditor != null) {
-				sourceIndex = addPage(visualEditor, getEditorInput());
+				sourceIndex = addPage(visualEditor, getEditorInput(),sourceEditor);
 				setPageText(sourceIndex, sourceTabLabel);
 				setPartName(visualEditor.getTitle());
 			} else {
-				sourceIndex = addPage(sourceEditor, getEditorInput());
+				sourceIndex = addPage(sourceEditor, getEditorInput(),sourceEditor);
 				setPageText(sourceIndex, sourceTabLabel);
 				setPartName(sourceEditor.getTitle());
 			}
@@ -481,7 +481,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		// Add tab contain default web-browser
 		try {
 			if (visualEditor != null) {
-				setPreviewIndex(addPage(visualEditor, getEditorInput()));
+				setPreviewIndex(addPage(visualEditor, getEditorInput(),sourceEditor));
 				setPageText(getPreviewIndex(),
 						JSPEditorMessages.JSPMultiPageEditor_TabLabel_Preview);
 				setPartName(visualEditor.getTitle());

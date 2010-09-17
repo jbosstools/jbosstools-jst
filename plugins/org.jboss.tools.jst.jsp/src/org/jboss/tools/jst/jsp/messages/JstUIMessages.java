@@ -123,4 +123,11 @@ public class JstUIMessages extends NLS {
 	public static String INFORM_WHEN_PROJECT_MIGHT_NOT_BE_CONFIGURED_PROPERLY_FOR_VPE;
 	public static String DOCS_INFO_LINK;
 	public static String DOCS_INFO_LINK_TEXT;
+	public static String CONFIRM_SELECTION_BAR_DIALOG_TITLE;
+	public static String CONFIRM_SELECTION_BAR_DIALOG_MESSAGE;
+	public static String CONFIRM_SELECTION_BAR_DIALOG_TOGGLE_MESSAGE;
+	public static String ASK_CONFIRMATION_ON_CLOSING_SELECTION_BAR;
+	public static String SelectionBar_MoreNodes;
+	public static String HIDE_SELECTION_BAR;
+
 }

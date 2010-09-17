@@ -307,6 +307,24 @@
 				</visibleWhen>
 			</command>
 			</menuContribution>
+         <menuContribution 
+               locationURI="menu:navigate?endof=show.ext">
+               <command label="%Show.Selection.Bar"
+                     commandId="org.jboss.tools.jst.jsp.commands.showSelectionBar"
+                     id="org.jboss.tools.jst.jsp.menus.sampleCommand"
+                     mnemonic="S">
+               </command>
+         </menuContribution>
+         <menuContribution
+               locationURI="toolbar:org.eclipse.ui.workbench.navigate?after=forwardHistory">
+               <command
+               	
+                     commandId="org.jboss.tools.jst.jsp.commands.showSelectionBar"
+                     icon="icons/selbar.gif"
+                     id="org.jboss.tools.jst.jsp.toolbars.sampleCommand"
+                     tooltip="%Show.Selection.Bar">
+               </command>
+         </menuContribution>
    </extension>
    
        <extension
@@ -395,6 +413,16 @@
              class="org.eclipse.wst.sse.ui.internal.handlers.StructuredSelectHistoryHandler"
              commandId="org.eclipse.wst.sse.ui.structure.select.last">
           <activeWhen>
+              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
+          </activeWhen>
+          <enabledWhen>
+              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
+          </enabledWhen>
+       </handler>
+       <handler
+             class="org.jboss.tools.jst.jsp.selection.bar.handlers.SelectionBarHandler"
+             commandId="org.jboss.tools.jst.jsp.commands.showSelectionBar">
+           <activeWhen>
               <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
           </activeWhen>
           <enabledWhen>
@@ -654,6 +682,15 @@
            id="org.jboss.tools.jst.jsp.commands.openCSSDialog"
            name="Open CSS Dialog">
      </command>
+     <category
+           id="org.jboss.tools.jst.jsp.commands.category"
+           name="Sample Category">
+     </category>
+     <command
+           categoryId="org.jboss.tools.jst.jsp.commands.category"
+           id="org.jboss.tools.jst.jsp.commands.showSelectionBar"
+           name="Sample Command">
+     </command>
   </extension>
   <extension
         point="org.eclipse.ui.bindings">
@@ -662,6 +699,12 @@
            contextId="org.eclipse.wst.css.core.csssource"
            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
            sequence="Ctrl+Shift+C">
+     </key>
+     <key
+           commandId="org.jboss.tools.jst.jsp.commands.showSelectionBar"
+           contextId="org.eclipse.ui.contexts.window"
+           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+           sequence="M1+6">
      </key>
   </extension>
   

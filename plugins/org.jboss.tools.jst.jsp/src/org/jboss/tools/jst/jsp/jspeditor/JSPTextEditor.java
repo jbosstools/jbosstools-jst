@@ -1072,13 +1072,15 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			storedSelection = p;
 			if (selection instanceof ITextSelection) {
 				ITextSelection ts = (ITextSelection) selection;
+//				getSelectionProvider().setSelection(ts);
 				if (ts.getLength() == 0) {
-					if (vpeController != null) {
-						vpeController
-								.selectionChanged(new SelectionChangedEvent(
-										getSelectionProvider(),
-										getSelectionProvider().getSelection()));
-					}
+					getSelectionProvider().setSelection(ts);
+//					if (vpeController != null) {
+//						vpeController
+//								.selectionChanged(new SelectionChangedEvent(
+//										getSelectionProvider(),
+//										getSelectionProvider().getSelection()));
+//					}
 				}
 			}
 		}
