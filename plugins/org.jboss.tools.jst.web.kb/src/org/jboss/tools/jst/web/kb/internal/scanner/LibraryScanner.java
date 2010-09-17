@@ -15,6 +15,7 @@ import org.eclipse.core.runtime.IPath;
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.XModelObjectConstants;
+import org.jboss.tools.common.model.filesystems.impl.FileAnyImpl;
 import org.jboss.tools.common.model.filesystems.impl.FileSystemsImpl;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.jst.web.kb.IKbProject;
@@ -97,6 +98,10 @@ public class LibraryScanner implements IFileScanner {
 					JSF2ResourcesScanner s = new JSF2ResourcesScanner();
 					LoadedDeclarations ds1 = s.parse(tld, path, sp);
 					if(ds1 != null) ds.add(ds1);
+				} else if(isMyFacesMetadata(tld)) {
+					MyFacesScanner s = new MyFacesScanner();
+					LoadedDeclarations ds1 = s.parse(tld, path, sp);
+					if(ds1 != null) ds.add(ds1);		
 				}
 			}
 		}
@@ -121,6 +126,10 @@ public class LibraryScanner implements IFileScanner {
 			} else if(tld.getFileType() == XModelObject.FOLDER) {
 				LoadedDeclarations ds1 = parseInPackages(tld, path, sp);
 				ds = add(ds, ds1);
+			} else if(isMyFacesMetadata(tld)) {
+				MyFacesScanner s = new MyFacesScanner();
+				LoadedDeclarations ds1 = s.parse(tld, path, sp);
+				ds = add(ds, ds1);				
 			}
 		}
 		return ds;
@@ -157,6 +166,13 @@ public class LibraryScanner implements IFileScanner {
 		if(o == null) return false;
 		String entity = o.getModelEntity().getName();
 		if(entity.startsWith(JSF2ResourcesScanner.ENT_COMPOSITE_COMPONENT)) return true;
+		return false;
+	}
+
+	public static boolean isMyFacesMetadata(XModelObject o) {
+		if("myfaces-metadata.xml".equals(o.getPathPart())) { //$NON-NLS-1$
+			return true;
+		}
 		return false;
 	}
 	

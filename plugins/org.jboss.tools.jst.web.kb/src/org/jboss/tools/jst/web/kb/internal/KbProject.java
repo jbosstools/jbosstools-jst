@@ -49,6 +49,7 @@ import org.jboss.tools.jst.web.kb.internal.taglib.FaceletTagLibrary;
 import org.jboss.tools.jst.web.kb.internal.taglib.FacesConfigTagLibrary;
 import org.jboss.tools.jst.web.kb.internal.taglib.TLDLibrary;
 import org.jboss.tools.jst.web.kb.internal.taglib.composite.CompositeTagLibrary;
+import org.jboss.tools.jst.web.kb.internal.taglib.myfaces.MyFacesTagLibrary;
 import org.jboss.tools.jst.web.kb.internal.validation.ProjectValidationContext;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibrary;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
@@ -504,6 +505,8 @@ public class KbProject extends KbObject implements IKbProject {
 						tagLib = new FacesConfigTagLibrary();
 					} else if(KbXMLStoreConstants.CLS_COMPOSITE_LIBRARY.equals(cls)) {
 						tagLib = new CompositeTagLibrary();
+					} else if(KbXMLStoreConstants.CLS_MYFACES_LIBRARY.equals(cls)) {
+						tagLib = new MyFacesTagLibrary();
 					} else {
 						//consider other cases;
 					}

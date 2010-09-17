@@ -29,6 +29,7 @@ import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.internal.KbObject;
 import org.jboss.tools.jst.web.kb.internal.KbXMLStoreConstants;
 import org.jboss.tools.jst.web.kb.internal.taglib.composite.CompositeAttribute;
+import org.jboss.tools.jst.web.kb.internal.taglib.myfaces.MyFacesAttribute;
 import org.jboss.tools.jst.web.kb.taglib.Facet;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
@@ -560,6 +561,8 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 				c = new CompositeAttribute();
 			} else if(KbXMLStoreConstants.CLS_FACELET_LIBRARY.equals(cls)) {
 				c = new FaceletAttribute();
+			} else if(KbXMLStoreConstants.CLS_MYFACES_LIBRARY.equals(cls)) {
+				c = new MyFacesAttribute();
 			} else {
 				//consider other cases;
 			}

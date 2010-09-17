@@ -33,6 +33,7 @@ import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.internal.KbObject;
 import org.jboss.tools.jst.web.kb.internal.KbXMLStoreConstants;
 import org.jboss.tools.jst.web.kb.internal.taglib.composite.CompositeComponent;
+import org.jboss.tools.jst.web.kb.internal.taglib.myfaces.MyFacesComponent;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
@@ -602,6 +603,8 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 				c = new FacesConfigComponent();
 			} else if(KbXMLStoreConstants.CLS_COMPOSITE_LIBRARY.equals(cls)) {
 				c = new CompositeComponent();
+			} else if(KbXMLStoreConstants.CLS_MYFACES_LIBRARY.equals(cls)) {
+				c = new MyFacesComponent();
 			} else {
 				//consider other cases;
 			}
