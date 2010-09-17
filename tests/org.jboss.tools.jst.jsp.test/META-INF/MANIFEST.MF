@@ -15,14 +15,8 @@ Require-Bundle: org.junit,
  org.jboss.tools.jst.jsp,
  org.jboss.tools.common.text.ext,
  org.jboss.tools.jst.web,
- org.jboss.tools.common.text.xml;bundle-version="2.0.0",
- org.jboss.tools.jst.web.kb;bundle-version="3.1.0",
- org.jboss.tools.jmx.core;bundle-version="1.2.0",
- org.jboss.tools.jsf;bundle-version="3.2.0",
- org.jboss.tools.seam.core;bundle-version="3.2.0",
- org.jboss.tools.seam.pages.xml;bundle-version="3.1.0",
- org.jboss.tools.seam.xml;bundle-version="3.2.0",
- org.jboss.tools.struts;bundle-version="3.2.0"
+ org.jboss.tools.common.text.xml,
+ org.jboss.tools.jst.web.kb
 Export-Package: 
  org.jboss.tools.jst.jsp.test,
  org.jboss.tools.jst.jsp.test.ca
