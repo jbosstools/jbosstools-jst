@@ -21,6 +21,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.MenuEvent;
+import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -372,16 +374,18 @@ public class SelectionBar implements ISelectionChangedListener{
 					 * Create DropDownMenu button
 					 */
 					item = new ToolItem(selBar, SWT.DROP_DOWN, 1);
-					final DropdownSelectionListener listenerOne = new DropdownSelectionListener(item);
-					for (Node node2 : list) {
-						listenerOne.add(node2);
-					}
-					item.addSelectionListener(listenerOne);
-					item.addDisposeListener(new DisposeListener(){
+					final DropdownSelectionListener dropdownListener = new DropdownSelectionListener(
+							item, list);
+					item.addSelectionListener(dropdownListener);
+					/*
+					 * Dispose the menu manually when the item is disposed.
+					 * Thus unnecessary memory will be released. 
+					 */
+					item.addDisposeListener(new DisposeListener() {
 						public void widgetDisposed(DisposeEvent e) {
-							listenerOne.disposeMenu();
+							dropdownListener.disposeMenu();
 						}
-				});
+					});
 				}
 				item.setData(node);
 				item.setText(node.getNodeName());
@@ -602,26 +606,27 @@ public class SelectionBar implements ISelectionChangedListener{
      ********************************************************************************************* 
      * This class provides the "drop down" functionality for the selection bar.
      *********************************************************************************************/ 
-	class DropdownSelectionListener extends SelectionAdapter {
+    class DropdownSelectionListener extends SelectionAdapter {
 		private ToolItem dropdown;
 		private Menu menu;
+		private List<Node> children;
 		private boolean shown = false;
+		/**
+		 * Constructs a DropdownSelectionListener
+		 * 
+		 * @param dropdown
+		 *            the tool item this listener belongs to
+		 */
+		public DropdownSelectionListener(ToolItem dropdown, List<Node> children) {
+			this.dropdown = dropdown;
+			this.children = children;
+		}
 		
 		public void disposeMenu() {
 			if (menu != null) {
 				menu.dispose();
 				menu = null;
 			}
-		}
-		/**
-		 * Constructs a DropdownSelectionListener
-		 * 
-		 * @param dropdown
-		 *            the dropdown this listener belongs to
-		 */
-		public DropdownSelectionListener(ToolItem dropdown) {
-			this.dropdown = dropdown;
-			menu = new Menu(dropdown.getParent().getShell());
 		}
 
 		/**
@@ -653,9 +658,35 @@ public class SelectionBar implements ISelectionChangedListener{
 			 */
 			if (event.detail == SWT.ARROW) {
 				if (shown) {
-					menu.setVisible(false);
+					if (menu != null) {
+						menu.setVisible(false);
+					}
 					shown = false;
 				} else {
+					/*
+					 * Create menu when it is accessed for the first time.
+					 */
+					if (menu == null) {
+						menu = new Menu(dropdown.getParent());
+						if ((children != null) && (children.size() > 0)) {
+							for (Node node : children) {
+								add(node);
+							}
+						}
+					}
+					menu.addMenuListener(new MenuListener() {
+						public void menuShown(MenuEvent e) {
+							/*
+							 * Do nothing
+							 */
+						}
+						public void menuHidden(MenuEvent e) {
+							/*
+							 * Change the 'shown' state
+							 */
+							shown = false;
+						}
+					});
 					/*
 					 * Determine where to put the dropdown list and show it
 					 */
@@ -675,7 +706,7 @@ public class SelectionBar implements ISelectionChangedListener{
 			}
 		}
 	}
-
+    
 	@Override
 	public void selectionChanged(SelectionChangedEvent event) {
 		updateNodes(true);
