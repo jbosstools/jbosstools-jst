@@ -49,7 +49,8 @@ public class MyFacesScanner implements IFileScanner {
 	static String UI_URI = "http://java.sun.com/jsf/facelets"; //$NON-NLS-1$
 	
 	static String C_PREFIX = "c"; //$NON-NLS-1$
-	static String C_URI = "http://java.sun.com/jsp/jstl/core"; //$NON-NLS-1$
+	static String C_URI = "http://java.sun.com/jstl/core"; //$NON-NLS-1$
+//	static String C_URI = "http://java.sun.com/jsp/jstl/core"; //$NON-NLS-1$
 
 	static String COMPOSITE_PREFIX = "composite"; //$NON-NLS-1$
 	static String COMPOSITE_URI = "http://java.sun.com/jsf/composite"; //$NON-NLS-1$
