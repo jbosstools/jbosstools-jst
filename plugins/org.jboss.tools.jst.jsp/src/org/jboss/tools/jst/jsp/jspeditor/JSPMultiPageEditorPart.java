@@ -46,16 +46,19 @@ import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.ui.part.MultiPageSelectionProvider;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.jboss.tools.common.core.resources.XModelObjectEditorInput;
+import org.jboss.tools.jst.jsp.selection.bar.ISelectionBarController;
 import org.jboss.tools.jst.jsp.selection.bar.SelectionBar;
 
 /**
  * 
  */
-public abstract class JSPMultiPageEditorPart extends EditorPart {
+public abstract class JSPMultiPageEditorPart extends EditorPart implements ISelectionBarController {
 
 	private CTabFolder container;
 
 	private ArrayList nestedEditors = new ArrayList(3);
+	
+	private SelectionBar selectionBar;
 
 	protected JSPMultiPageEditorPart() {
 		super();
@@ -90,12 +93,8 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 			editor.createPartControl(parent2);
 			parent2.setLayout(new GridLayout(2, false));
 			
-			SelectionBar selBar = new SelectionBar(sourcePart);
-			selBar.createToolBarComposite(parent2, true);
-//				GridData gridData = new GridData();
-//				gridData.horizontalAlignment = GridData.FILL;
-//				gridData.horizontalSpan = 2;
-//				but.setLayoutData(gridData);
+			selectionBar = new SelectionBar(sourcePart);
+			selectionBar.createToolBarComposite(parent2, true);
 			editor.addPropertyListener(new IPropertyListener() {
 				public void propertyChanged(Object source, int propertyId) {
 					JSPMultiPageEditorPart.this
@@ -157,6 +156,7 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 			IEditorPart editor = (IEditorPart) nestedEditors.get(i);
 			disposePart(editor);
 		}
+		selectionBar.dispose();
 		nestedEditors.clear();
 	}
 
@@ -348,4 +348,18 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 		getItem(pageIndex).setText(text);
 	}
 	
+	@Override
+	public void showSelectionBar() {
+		selectionBar.setVisible(true);
+	}
+
+	@Override
+	public void hideSelectionBar() {
+		selectionBar.setVisible(false);
+	}
+
+	@Override
+	public boolean isSelectionBarAvailable() {
+		return	selectionBar.isVisible();
+	}
 }

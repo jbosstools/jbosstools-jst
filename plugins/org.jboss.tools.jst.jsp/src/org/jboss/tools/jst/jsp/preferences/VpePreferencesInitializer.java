@@ -27,7 +27,6 @@ public class VpePreferencesInitializer extends AbstractPreferenceInitializer {
 		defaultPreferences.putBoolean(IVpePreferencesPage.SHOW_TEXT_FORMATTING, true);
 		defaultPreferences.putBoolean(IVpePreferencesPage.SHOW_RESOURCE_BUNDLES_USAGE_AS_EL, false);
 		defaultPreferences.putBoolean(IVpePreferencesPage.ASK_TAG_ATTRIBUTES_ON_TAG_INSERT, true);
-		defaultPreferences.putBoolean(IVpePreferencesPage.ASK_CONFIRMATION_ON_CLOSING_SELECTION_BAR, true);
 		defaultPreferences.putBoolean(IVpePreferencesPage.INFORM_WHEN_PROJECT_MIGHT_NOT_BE_CONFIGURED_PROPERLY_FOR_VPE, true);
 		defaultPreferences.put(IVpePreferencesPage.DEFAULT_VPE_TAB, IVpePreferencesPage.DEFAULT_VPE_TAB_VISUAL_SOURCE_VALUE);
 		defaultPreferences.put(IVpePreferencesPage.VISUAL_SOURCE_EDITORS_SPLITTING, IVpePreferencesPage.SPLITTING_VERT_TOP_SOURCE_VALUE);

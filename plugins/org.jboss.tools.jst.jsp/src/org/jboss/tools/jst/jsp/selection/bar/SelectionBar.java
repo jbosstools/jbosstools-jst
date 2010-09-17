@@ -130,21 +130,6 @@ public class SelectionBar implements ISelectionChangedListener{
 
 		final Listener closeListener = new Listener() {
 			public void handleEvent(Event event) {
-				if (askConfirmationOnClosingSelectionBar()) {
-					MessageDialogWithToggle dialog = MessageDialogWithToggle
-					.openOkCancelConfirm(
-							PlatformUI.getWorkbench()
-							.getActiveWorkbenchWindow()
-							.getShell(),
-							JstUIMessages.CONFIRM_SELECTION_BAR_DIALOG_TITLE,
-							JstUIMessages.CONFIRM_SELECTION_BAR_DIALOG_MESSAGE,
-							JstUIMessages.ASK_CONFIRMATION_ON_CLOSING_SELECTION_BAR,
-							askConfirmationOnClosingSelectionBar(), null, null);
-					if (dialog.getReturnCode() != IDialogConstants.OK_ID) {
-						return;
-					}
-					setAskConfirmationOnClosingSelectionBar(dialog.getToggleState());
-				}
 				/*
 				 * Hide the selection bar
 				 */
@@ -172,17 +157,6 @@ public class SelectionBar implements ISelectionChangedListener{
 		cmpToolBar.layout();
 		setVisible(visible);
 		return splitter;
-	}
-
-	public void setAskConfirmationOnClosingSelectionBar(boolean askConfirmation) {
-		JspEditorPlugin.getDefault().getPreferenceStore().setValue(
-				IVpePreferencesPage.ASK_CONFIRMATION_ON_CLOSING_SELECTION_BAR,
-				askConfirmation);
-	}
-
-	public boolean askConfirmationOnClosingSelectionBar() {
-		return JspEditorPlugin.getDefault().getPreferenceStore().getBoolean(
-				IVpePreferencesPage.ASK_CONFIRMATION_ON_CLOSING_SELECTION_BAR);
 	}
 
 	/**

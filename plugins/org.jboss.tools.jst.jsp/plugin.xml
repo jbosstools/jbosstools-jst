@@ -311,18 +311,19 @@
                locationURI="menu:navigate?endof=show.ext">
                <command label="%Show.Selection.Bar"
                      commandId="org.jboss.tools.jst.jsp.commands.showSelectionBar"
-                     id="org.jboss.tools.jst.jsp.menus.sampleCommand"
+                     id="org.jboss.tools.jst.jsp.menus.showSelectionBar"
+                     style="toggle"
                      mnemonic="S">
                </command>
          </menuContribution>
          <menuContribution
                locationURI="toolbar:org.eclipse.ui.workbench.navigate?after=forwardHistory">
                <command
-               	
                      commandId="org.jboss.tools.jst.jsp.commands.showSelectionBar"
                      icon="icons/selbar.gif"
-                     id="org.jboss.tools.jst.jsp.toolbars.sampleCommand"
-                     tooltip="%Show.Selection.Bar">
+                     id="org.jboss.tools.jst.jsp.toolbars.showSelectionBar"
+                     style="toggle"
+                     tooltip="%Toggle.Selection.Bar">
                </command>
          </menuContribution>
    </extension>
@@ -684,12 +685,16 @@
      </command>
      <category
            id="org.jboss.tools.jst.jsp.commands.category"
-           name="Sample Category">
+           name="Visual Page Editor Category">
      </category>
      <command
            categoryId="org.jboss.tools.jst.jsp.commands.category"
            id="org.jboss.tools.jst.jsp.commands.showSelectionBar"
-           name="Sample Command">
+           name="Show Selection Bar">
+           <state
+                 class="org.eclipse.ui.handlers.RegistryToggleState:true"
+                 id="org.eclipse.ui.commands.toggleState">
+           </state>
      </command>
   </extension>
   <extension

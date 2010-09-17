@@ -1,16 +1,27 @@
+/******************************************************************************* 
+ * Copyright (c) 2010 Red Hat, Inc.
+ * Distributed under license by Red Hat, Inc. All rights reserved.
+ * This program is made available under the terms of the
+ * Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Red Hat, Inc. - initial API and implementation
+ ******************************************************************************/
+
 package org.jboss.tools.jst.jsp.selection.bar.handlers;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.jboss.tools.jst.jsp.selection.bar.ISelectionBarController;
 
 /**
- * Our sample handler extends AbstractHandler, an IHandler base class.
- * @see org.eclipse.core.commands.IHandler
- * @see org.eclipse.core.commands.AbstractHandler
+ * Selection bar handler
  */
 public class SelectionBarHandler extends AbstractHandler {
 	/**
@@ -24,11 +35,14 @@ public class SelectionBarHandler extends AbstractHandler {
 	 * from the application context.
 	 */
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
-		MessageDialog.openInformation(
-				window.getShell(),
-				"Jsp Editor Plug-in",
-				"Hello, Selection Bar Handler");
+		IEditorPart activeEditor = HandlerUtil.getActiveEditorChecked(event);
+		boolean togleState = HandlerUtil.toggleCommandState(event.getCommand());
+		if(!togleState){
+			((ISelectionBarController)activeEditor).showSelectionBar();
+		}else{
+			((ISelectionBarController)activeEditor).hideSelectionBar();
+		}
 		return null;
 	}
+	
 }
