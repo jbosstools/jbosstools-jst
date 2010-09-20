@@ -281,11 +281,11 @@
    </extension>
    <extension
          point="org.eclipse.ui.menus">
+         
          <menuContribution locationURI="menu:sourceMenuId?after=sourceBegin">
 			<command commandId="org.eclipse.wst.sse.ui.toggle.comment"
 			         id="ToggleComment"
-			         mnemonic="%command.toggle.comment.mnemonic"
-			         style="push">
+			         mnemonic="%command.toggle.comment.mnemonic">
 				<visibleWhen checkEnabled="false">
 					<reference definitionId="org.jboss.tools.ui.structuredEditor"/>
 				</visibleWhen>
@@ -314,6 +314,9 @@
                      id="org.jboss.tools.jst.jsp.menus.showSelectionBar"
                      style="toggle"
                      mnemonic="S">
+	               	<visibleWhen checkEnabled="false">
+						<reference definitionId="org.jboss.tools.ui.structuredEditor"/>
+					</visibleWhen>
                </command>
          </menuContribution>
          <menuContribution
@@ -324,6 +327,9 @@
                      id="org.jboss.tools.jst.jsp.toolbars.showSelectionBar"
                      style="toggle"
                      tooltip="%Toggle.Selection.Bar">
+                <visibleWhen checkEnabled="false">
+					<reference definitionId="org.jboss.tools.ui.structuredEditor"/>
+				</visibleWhen>
                </command>
          </menuContribution>
    </extension>
