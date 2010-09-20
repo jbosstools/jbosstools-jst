@@ -15,6 +15,8 @@ import java.util.Set;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -30,6 +32,7 @@ import org.eclipse.wst.validation.internal.provisional.core.IValidator;
 import org.jboss.tools.common.preferences.SeverityPreferences;
 import org.jboss.tools.common.text.ITextSourceReference;
 import org.jboss.tools.jst.web.kb.KbMessages;
+import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.validation.IValidationContext;
 import org.jboss.tools.jst.web.kb.validation.IValidationErrorManager;
@@ -217,7 +220,9 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 		IMessage problemMessage = new ProblemMessage(message, severity, messageArguments, target, markerId);
 		problemMessage.setLength(length);
 		problemMessage.setOffset(offset);
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		try {
+			if (workspace != null) workspace.removeResourceChangeListener(PageContextFactory.getInstance());
 			if (documentProvider != null) {
 				documentProvider.connect(target);
 				IDocument doc = documentProvider.getDocument(target);
@@ -236,6 +241,7 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 					NLS.bind(KbMessages.EXCEPTION_DURING_CREATING_MARKER, target.getFullPath()), e);
 		} finally {
 			documentProvider.disconnect(target);
+			if (workspace != null) workspace.addResourceChangeListener(PageContextFactory.getInstance());
 		}
 
 		return marker;

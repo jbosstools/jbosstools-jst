@@ -168,6 +168,7 @@ public class PageContextFactory implements IResourceChangeListener {
 	public static ELContext createPageContext(IFile file) {
 		return createPageContext(file, null);
 	}
+
 	/**
 	 * Creates a page context for the specified context type
 	 *
@@ -343,6 +344,46 @@ public class PageContextFactory implements IResourceChangeListener {
 			context = createJavaContext(file);
 		} else if(JAVA_PROPERTIES_CONTENT_TYPE.equalsIgnoreCase(typeId)) {
 			context = createPropertiesContext(file);
+		} else if (typeId != null) {
+			context = defaultContextType == null ? 
+					createPageContextInstance(typeId) :
+								createContextInstanceOfType(defaultContextType);
+			if (context == null)
+				return null;
+
+			context.setResource(file);
+			context.setElResolvers(ELResolverFactoryManager.getInstance().getResolvers(file));
+
+			if (context instanceof JspContextImpl && !(context instanceof FaceletPageContextImpl)) {
+				// Fill JSP namespaces defined in TLDCMDocumentManager 
+				fillJSPNameSpaces((JspContextImpl)context);
+			}
+
+			// The subsequently called functions may use the file and document
+			// already stored in context for their needs
+			if (context instanceof FaceletPageContextImpl) {
+				IModelManager manager = StructuredModelManager.getModelManager();
+				if(manager == null) {
+					return context;
+				}
+				IStructuredModel model = null;
+				try {
+					model = manager.getModelForRead(file);
+					if (model instanceof IDOMModel) {
+						IDOMModel domModel = (IDOMModel) model;
+						IDOMDocument document = domModel.getDocument();
+						fillContextForChildNodes(document, context, parents);
+					}
+				} catch (CoreException e) {
+					WebKbPlugin.getDefault().logError(e);
+		        } catch (IOException e) {
+					WebKbPlugin.getDefault().logError(e);
+		        } finally {
+						if (model != null) {
+							model.releaseFromRead();
+						}
+					}
+			}
 		} else {
 	//		ctm = System.currentTimeMillis();
 	//		System.out.println("Create Context : " + file.getFullPath().toString() + ", Totals: " + cache.size());
@@ -726,7 +767,11 @@ public class PageContextFactory implements IResourceChangeListener {
 				notifier.removeAdapter(adapter);
 				adapter = new ExtendedLinkElementAdapter(
 						(Element) stylesContainer, attribute);
-				notifier.addAdapter(adapter);
+				sheet = (CSSStyleSheet) adapter.getSheet();
+				source = ((ExtendedLinkElementAdapter)adapter).getSource();
+				if (sheet != null && source != null) {
+					notifier.addAdapter(adapter);
+				}
 			}
 		
 			if (adapter != null) {
