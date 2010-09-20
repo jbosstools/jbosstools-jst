@@ -645,11 +645,9 @@ public class SelectionBar implements ISelectionChangedListener, IStateListener{
 		updateNodes(true);
 	}
 
-	@Override
 	public void handleStateChange(State state, Object oldValue) {
 		setVisible((Boolean)state.getValue());
 	}
-
 }
 
 /**
