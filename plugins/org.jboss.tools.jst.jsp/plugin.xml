@@ -429,9 +429,14 @@
        <handler
              class="org.jboss.tools.jst.jsp.selection.bar.handlers.SelectionBarHandler"
              commandId="org.jboss.tools.jst.jsp.commands.showSelectionBar">
-           <activeWhen>
-              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
-          </activeWhen>
+       <activeWhen>
+          <with variable="activeContexts">
+             <iterate operator="or">
+                <equals value="org.jboss.tools.jst.jsp.selectionBar.context"/>
+             </iterate>
+          </with>
+       </activeWhen>
+
           <enabledWhen>
               <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
           </enabledWhen>
@@ -918,5 +923,14 @@
 			</contentType>
     </proposalComputer>
    </extension>
+    <extension
+          point="org.eclipse.ui.contexts">
+       <context
+             description="Context to allow activate and deactivate selection bar"
+             id="org.jboss.tools.jst.jsp.selectionBar.context"
+             name="Selection Bar"
+             parentId="org.eclipse.ui.contexts.window">
+       </context>
+    </extension>
    
 </plugin>

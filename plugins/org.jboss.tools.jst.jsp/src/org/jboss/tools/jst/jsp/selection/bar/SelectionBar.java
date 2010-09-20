@@ -20,6 +20,8 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.ICommandListener;
 import org.eclipse.core.commands.IStateListener;
 import org.eclipse.core.commands.State;
+import org.eclipse.core.commands.contexts.ContextManagerEvent;
+import org.eclipse.core.commands.contexts.IContextManagerListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
@@ -52,6 +54,7 @@ import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
+import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.internal.IWorkbenchGraphicConstants;
 import org.eclipse.ui.internal.WorkbenchImages;
@@ -75,11 +78,13 @@ import org.w3c.dom.NodeList;
  * @author yradtsevich
  * @author mareshkau
  */
-public class SelectionBar implements ISelectionChangedListener, IStateListener{
+public class SelectionBar implements ISelectionChangedListener, IStateListener,ICommandListener{
     /**
 	 *
 	 */
 	private static final int SEL_ITEM_RIGHT_MARGIN = 5;
+	
+	public static final String SELECTION_BAR_CONTEXT_ID="org.jboss.tools.jst.jsp.selectionBar.context";
 
 	private Splitter splitter;
 
@@ -108,6 +113,9 @@ public class SelectionBar implements ISelectionChangedListener, IStateListener{
 		"org.jboss.tools.jst.jsp.commands.showSelectionBar") //$NON-NLS-1$
 		.getState("org.eclipse.ui.commands.toggleState"); //$NON-NLS-1$
 		toggleSelBarState.addListener(this); 
+		commandService.getCommand(
+		"org.jboss.tools.jst.jsp.commands.showSelectionBar"). //$NON-NLS-1$
+		addCommandListener(this);
 	}
 
 	/**
@@ -647,6 +655,11 @@ public class SelectionBar implements ISelectionChangedListener, IStateListener{
 
 	public void handleStateChange(State state, Object oldValue) {
 		setVisible((Boolean)state.getValue());
+	}
+
+	@Override
+	public void commandChanged(CommandEvent commandEvent) {
+		setVisible(commandEvent.getCommand().isEnabled()&&(Boolean)commandEvent.getCommand().getState("org.eclipse.ui.commands.toggleState").getValue()); //$NON-NLS-1$
 	}
 }
 

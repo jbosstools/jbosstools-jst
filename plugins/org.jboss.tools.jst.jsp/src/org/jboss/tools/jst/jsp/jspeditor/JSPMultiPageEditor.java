@@ -50,6 +50,8 @@ import org.eclipse.ui.INavigationLocationProvider;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.contexts.IContextActivation;
+import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
@@ -82,6 +84,7 @@ import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.editor.IVisualEditor;
 import org.jboss.tools.jst.jsp.editor.IVisualEditorFactory;
 import org.jboss.tools.jst.jsp.preferences.IVpePreferencesPage;
+import org.jboss.tools.jst.jsp.selection.bar.SelectionBar;
 import org.jboss.tools.jst.web.tld.VpeTaglibManager;
 import org.jboss.tools.jst.web.tld.VpeTaglibManagerProvider;
 
@@ -128,6 +131,8 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	int selectedPageIndex = 0;
 
 	static IVisualEditorFactory visualEditorFactory;
+	
+	private IContextActivation selBarContextActivation;
 
 	static {
 		// Fix For JBIDE-2674
@@ -221,6 +226,17 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 				visualEditor.setVisualMode(IVisualEditor.PREVIEW_MODE);
 			}
 		}
+		//fix for JBIDE-7059, author Maksim Areshkau
+		IContextService contextService = (IContextService) getSite()
+		  .getService(IContextService.class);
+		if(newPageIndex!=getPreviewIndex()){
+			if(selBarContextActivation==null)
+			selBarContextActivation = contextService.activateContext(SelectionBar.SELECTION_BAR_CONTEXT_ID);
+			} else if(selBarContextActivation!=null){
+				contextService.deactivateContext(selBarContextActivation);
+				selBarContextActivation=null;
+		}
+		
 		superPageChange(newPageIndex);
 		JspEditorPlugin.getDefault().getPreferenceStore().
 			setValue(IVpePreferencesPage.DEFAULT_VPE_TAB, selectedPageIndex);
@@ -823,8 +839,6 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	public int getVisualSourceIndex() {
 		return visualSourceIndex;
 	}
-	
-}
 
 class ResourceChangeListener implements IResourceChangeListener {
 	IEditorPart editorPart;
@@ -949,5 +963,4 @@ class ResourceChangeListener implements IResourceChangeListener {
 		}
 		return null;
 	}
-	
-}
+}}
