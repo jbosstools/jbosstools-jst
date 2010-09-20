@@ -45,6 +45,7 @@ public class Jbide1791Test extends ContentAssistantTestCase {
             provider.dispose();
         }
     }
+    
     public void testJbide1791(){
         final String[] proposals = new String[]{
                 "h1",
