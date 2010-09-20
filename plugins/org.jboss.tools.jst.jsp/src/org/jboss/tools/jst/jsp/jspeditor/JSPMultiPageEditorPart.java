@@ -46,13 +46,12 @@ import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.ui.part.MultiPageSelectionProvider;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.jboss.tools.common.core.resources.XModelObjectEditorInput;
-import org.jboss.tools.jst.jsp.selection.bar.ISelectionBarController;
 import org.jboss.tools.jst.jsp.selection.bar.SelectionBar;
 
 /**
  * 
  */
-public abstract class JSPMultiPageEditorPart extends EditorPart implements ISelectionBarController {
+public abstract class JSPMultiPageEditorPart extends EditorPart {
 
 	private CTabFolder container;
 
@@ -94,7 +93,7 @@ public abstract class JSPMultiPageEditorPart extends EditorPart implements ISele
 			parent2.setLayout(new GridLayout(2, false));
 			
 			selectionBar = new SelectionBar(sourcePart);
-			selectionBar.createToolBarComposite(parent2, true);
+			selectionBar.createToolBarComposite(parent2);
 			editor.addPropertyListener(new IPropertyListener() {
 				public void propertyChanged(Object source, int propertyId) {
 					JSPMultiPageEditorPart.this
@@ -151,12 +150,12 @@ public abstract class JSPMultiPageEditorPart extends EditorPart implements ISele
 	protected abstract IEditorSite createSite(IEditorPart editor);
 
 	public void dispose() {
+		selectionBar.dispose();
 		getSite().setSelectionProvider(null);
 		for (int i = 0; i < nestedEditors.size(); ++i) {
 			IEditorPart editor = (IEditorPart) nestedEditors.get(i);
 			disposePart(editor);
 		}
-		selectionBar.dispose();
 		nestedEditors.clear();
 	}
 
@@ -347,16 +346,5 @@ public abstract class JSPMultiPageEditorPart extends EditorPart implements ISele
 	protected void setPageText(int pageIndex, String text) {
 		getItem(pageIndex).setText(text);
 	}
-
-	public void showSelectionBar() {
-		selectionBar.setVisible(true);
-	}
-
-	public void hideSelectionBar() {
-		selectionBar.setVisible(false);
-	}
-
-	public boolean isSelectionBarAvailable() {
-		return	selectionBar.isVisible();
-	}
+	
 }

@@ -14,8 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.compare.Splitter;
-import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.MessageDialogWithToggle;
+import org.eclipse.core.commands.Command;
+import org.eclipse.core.commands.CommandEvent;
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.ICommandListener;
+import org.eclipse.core.commands.IStateListener;
+import org.eclipse.core.commands.State;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
@@ -47,6 +51,8 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.commands.ICommandService;
+import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.internal.IWorkbenchGraphicConstants;
 import org.eclipse.ui.internal.WorkbenchImages;
 import org.eclipse.wst.sse.core.internal.provisional.INodeAdapter;
@@ -54,7 +60,6 @@ import org.eclipse.wst.sse.core.internal.provisional.INodeNotifier;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
-import org.jboss.tools.jst.jsp.preferences.IVpePreferencesPage;
 import org.jboss.tools.jst.jsp.selection.SelectionHelper;
 import org.jboss.tools.jst.jsp.selection.SourceSelection;
 import org.jboss.tools.jst.jsp.selection.SourceSelectionBuilder;
@@ -70,7 +75,7 @@ import org.w3c.dom.NodeList;
  * @author yradtsevich
  * @author mareshkau
  */
-public class SelectionBar implements ISelectionChangedListener{
+public class SelectionBar implements ISelectionChangedListener, IStateListener{
     /**
 	 *
 	 */
@@ -88,23 +93,33 @@ public class SelectionBar implements ISelectionChangedListener{
     private Composite cmpToolBar = null;
     private Composite cmpTlEmpty = null;
     private StructuredTextEditor textEditor;
-
+    //Selection Bar State
+    private State toggleSelBarState;
+    
 	public SelectionBar(StructuredTextEditor textEditor) {
 		super();
 		this.textEditor = textEditor;
 		this.textEditor.getTextViewer().addSelectionChangedListener(this);
+		
+		ICommandService commandService =
+			(ICommandService) PlatformUI.getWorkbench()
+				.getService(ICommandService.class);
+		toggleSelBarState= commandService.getCommand(
+		"org.jboss.tools.jst.jsp.commands.showSelectionBar") //$NON-NLS-1$
+		.getState("org.eclipse.ui.commands.toggleState"); //$NON-NLS-1$
+		toggleSelBarState.addListener(this); 
 	}
 
 	/**
 	 * Visibility state of the {@code SelectionBar}.
 	 */
-	private static boolean visible;
+	//private boolean visible;
 
 	private ImageButton arrowButton;
 	private Node currentSelectedNode = null;
 	private Node currentLastNode = null;
 
-	public Composite createToolBarComposite(Composite parent, boolean visible) {
+	public Composite createToolBarComposite(Composite parent) {
 		splitter = new Splitter(parent, SWT.NONE);
 		splitter.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		/*
@@ -134,6 +149,7 @@ public class SelectionBar implements ISelectionChangedListener{
 				 * Hide the selection bar
 				 */
 				setVisible(false);
+				toggleSelBarState.setValue(false);
 			}
 		};
 
@@ -155,7 +171,8 @@ public class SelectionBar implements ISelectionChangedListener{
 		selBar.setLayoutData(selBarData);
 		createArrowButton();
 		cmpToolBar.layout();
-		setVisible(visible);
+		splitter.getParent().layout(true, true);
+		setVisible((Boolean)toggleSelBarState.getValue());
 		return splitter;
 	}
 
@@ -172,67 +189,8 @@ public class SelectionBar implements ISelectionChangedListener{
 			splitter.setVisible(cmpTlEmpty, true);
 		}
 		splitter.getParent().layout(true, true);
-
-		this.visible = visible;
-//		/*
-//		 * https://jira.jboss.org/jira/browse/JBIDE-4968
-//		 * Updating VPE toolbar icon on selection bar changes.
-//		 */
-//		if (vpeController != null) {
-//			vpeController.updateVpeToolbar();
-//		}
-//		fireVisibilityListeners();
 	}
 
-	/**
-	 * Returns {@code visible} state of this {@code SelectionBar}.
-	 */
-	public boolean isVisible() {
-		return visible;
-	}
-
-//    /**
-//     * Adds the listener to the collection of listeners who will
-//     * be notified when the {@code #visible} state is changed.
-//     *
-//     * @param listener the listener which should be notified
-//     *
-//     * @see VisibilityListener
-//     * @see VisibilityEvent
-//     */
-//    public void addVisibilityListener(VisibilityListener listener) {
-//    	visibilityListeners.add(listener);
-//    }
-//
-//    /**
-//     * Removes the listener from the collection of listeners who will
-//     * be notified when the {@link #visible} state is changed.
-//     *
-//     * @param listener the listener which should be removed
-//     *
-//     * @see VisibilityListener
-//     */
-//    public void removeVisibilityListener(VisibilityListener listener) {
-//    	visibilityListeners.remove(listener);
-//    }
-//
-//    /**
-//     * Fires all registered instances of {@code VisibilityListener} by
-//     * sending them {@link VisibilityEvent}.
-//     *
-//     * @see #addVisibilityListener(VisibilityListener)
-//     * @see #removeVisibilityListener(VisibilityListener)
-//     */
-//    private void fireVisibilityListeners() {
-//		VisibilityEvent event = new VisibilityEvent(this);
-//		for (VisibilityListener listener : visibilityListeners) {
-//			listener.visibilityChanged(event);
-//		}
-//	}
-//
-//	public void setVpeController(VpeController vpeController) {
-//		this.vpeController = vpeController;
-//	}
 
 	/**
 	 * Updates buttons in the selection bar and the drop-down menu
@@ -530,7 +488,9 @@ public class SelectionBar implements ISelectionChangedListener{
 
     public void dispose() {
     	removeNodeListenerFromAllNodes();
-
+    	if(textEditor.getTextViewer()!=null)
+    	textEditor.getTextViewer().removeSelectionChangedListener(this);
+    	toggleSelBarState.removeListener(this);
 		if (splitter != null) {
 			splitter.dispose();
 			splitter = null;
@@ -684,6 +644,12 @@ public class SelectionBar implements ISelectionChangedListener{
 	public void selectionChanged(SelectionChangedEvent event) {
 		updateNodes(true);
 	}
+
+	@Override
+	public void handleStateChange(State state, Object oldValue) {
+		setVisible((Boolean)state.getValue());
+	}
+
 }
 
 /**
