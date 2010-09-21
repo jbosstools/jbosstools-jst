@@ -25,6 +25,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.draw2d.GridData;
 import org.eclipse.gef.ui.views.palette.PalettePage;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
@@ -112,7 +113,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	// private IVisualEditor previewWebBrowser;
 
 	/** index of tab contain default web-browser */
-	private int previewIndex;
+	private int previewIndex=-1;//by default 1, so if there no visual editor impl, this tab will be not available
 
 	// private boolean osWindows = true;
 
@@ -179,6 +180,10 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 			selectedPageIndex = 2;
 		} else {
 			selectedPageIndex = 0;
+		}
+		//when implementation of visual editor not available we have only one tab
+		if(visualEditor==null){
+			selectedPageIndex=0;
 		}
 	}
 
