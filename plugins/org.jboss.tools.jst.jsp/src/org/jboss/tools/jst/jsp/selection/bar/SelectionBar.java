@@ -652,7 +652,6 @@ public class SelectionBar implements ISelectionChangedListener, IStateListener,I
 		setVisible((Boolean)state.getValue());
 	}
 
-	@Override
 	public void commandChanged(CommandEvent commandEvent) {
 		setVisible(commandEvent.getCommand().isEnabled()&&(Boolean)commandEvent.getCommand().getState("org.eclipse.ui.commands.toggleState").getValue()); //$NON-NLS-1$
 	}
