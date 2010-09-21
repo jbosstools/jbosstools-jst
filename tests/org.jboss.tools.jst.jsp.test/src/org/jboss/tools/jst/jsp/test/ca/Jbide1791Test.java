@@ -26,8 +26,8 @@ import org.jboss.tools.test.util.TestProjectProvider;
  *
  */
 public class Jbide1791Test extends ContentAssistantTestCase {
-    private static final String PROJECT_NAME = "JsfJbide1791Test";
-    private static final String PAGE_NAME = "/WebContent/pages/jbide1791.xhtml";
+    private static final String PROJECT_NAME = "JsfJbide1791Test"; //$NON-NLS-1$
+    private static final String PAGE_NAME = "/WebContent/pages/jbide1791.xhtml"; //$NON-NLS-1$
     private TestProjectProvider provider = null;
     
     public static Test suite() {
@@ -35,9 +35,8 @@ public class Jbide1791Test extends ContentAssistantTestCase {
     }
     
     public void setUp() throws Exception {
-        provider = new TestProjectProvider("org.jboss.tools.jst.jsp.test", null, PROJECT_NAME,false); 
+        provider = new TestProjectProvider("org.jboss.tools.jst.jsp.test", null, PROJECT_NAME,false);  //$NON-NLS-1$
         project = provider.getProject();
-        Throwable exception = null;
     }
 
     protected void tearDown() throws Exception {
@@ -48,18 +47,18 @@ public class Jbide1791Test extends ContentAssistantTestCase {
     
     public void testJbide1791(){
         final String[] proposals = new String[]{
-                "h1",
-                "h2",
-                "h3",
-                "h4",
-                "h5",
-                "h6",
-                "hr"
+                "h1", //$NON-NLS-1$
+                "h2", //$NON-NLS-1$
+                "h3", //$NON-NLS-1$
+                "h4", //$NON-NLS-1$
+                "h5", //$NON-NLS-1$
+                "h6", //$NON-NLS-1$
+                "hr" //$NON-NLS-1$
         };
         openEditor(PAGE_NAME);
         IRegion reg=null;
 		try {
-			reg = new FindReplaceDocumentAdapter(this.document).find(0, "</style>", true, false, false, false);
+			reg = new FindReplaceDocumentAdapter(this.document).find(0, "</style>", true, false, false, false); //$NON-NLS-1$
 		} catch (BadLocationException e) {
 			fail(e.getMessage());
 		}
@@ -74,7 +73,7 @@ public class Jbide1791Test extends ContentAssistantTestCase {
      */
     private void checkResult(ICompletionProposal[] rst, String[] proposals) {
         for ( int i = 0 ; i < proposals.length ; i ++ ){
-           assertTrue("Should be in proposals list",isInResultList(rst,proposals[i]));
+           assertTrue("Should be in proposals list",isInResultList(rst,proposals[i])); //$NON-NLS-1$
         }
         
     }

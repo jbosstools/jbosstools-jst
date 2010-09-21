@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright (c) 2007-2010 Red Hat, Inc.
+ * Distributed under license by Red Hat, Inc. All rights reserved.
+ * This program is made available under the terms of the
+ * Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributor:
+ *     Red Hat, Inc. - initial API and implementation
+ ******************************************************************************/
+
 package org.jboss.tools.jst.jsp.test.ca;
 
 import java.util.List;
@@ -6,16 +17,13 @@ import junit.framework.TestCase;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
-import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContentAssistant;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
-import org.eclipse.wst.sse.ui.internal.contentassist.StructuredContentAssistant;
 import org.jboss.tools.common.text.ext.util.Utils;
 import org.jboss.tools.jst.jsp.contentassist.AutoContentAssistantProposal;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
@@ -32,7 +40,7 @@ public class ContentAssistantTestCase extends TestCase {
 	protected IDocument document = null;
 
 	public void openEditor(String fileName) {
-		IEditorPart editorPart = WorkbenchUtils.openEditor(project.getName()+"/"+ fileName);
+		IEditorPart editorPart = WorkbenchUtils.openEditor(project.getName()+"/"+ fileName); //$NON-NLS-1$
 //		System.out.println("openEditor: " + project.getName()+"/"+ fileName);
 		if (editorPart instanceof JSPMultiPageEditor)
 			jspEditor = (JSPMultiPageEditor) editorPart;
@@ -46,11 +54,11 @@ public class ContentAssistantTestCase extends TestCase {
 				.getContentAssistant(viewer));
 
 		assertTrue(
-				"Cannot get the Content Assistant instance for the editor for page \""
-						+ fileName + "\"", (contentAssistant != null));
+				"Cannot get the Content Assistant instance for the editor for page \"" //$NON-NLS-1$
+						+ fileName + "\"", (contentAssistant != null)); //$NON-NLS-1$
 
-		assertTrue("The IDocument is not instance of IStructuredDocument for page \""
-				+ fileName + "\"",
+		assertTrue("The IDocument is not instance of IStructuredDocument for page \"" //$NON-NLS-1$
+				+ fileName + "\"", //$NON-NLS-1$
 				(document instanceof IStructuredDocument));
 
 	}
@@ -76,7 +84,7 @@ public class ContentAssistantTestCase extends TestCase {
 
 		List<ICompletionProposal> res = TestUtil.collectProposals(contentAssistant, viewer, position+offset);
 
-        assertTrue("Content Assistant returned no proposals", (res != null && res.size() > 0));
+        assertTrue("Content Assistant returned no proposals", (res != null && res.size() > 0)); //$NON-NLS-1$
 
         // for (int i = 0; i < result.length; i++) {
         // System.out.println("proposal - "+result[i].getDisplayString());
@@ -88,14 +96,14 @@ public class ContentAssistantTestCase extends TestCase {
         	boolean found = compareProposal(proposals[i], result);
         	if (found)
         		foundCounter++;
-            assertTrue("Proposal " + proposals[i] + " not found!", found );
+            assertTrue("Proposal " + proposals[i] + " not found!", found ); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         if (exactly) {
         	if (excludeELProposalsFromExactTest) {
-        		assertTrue("Some other proposals were found!", foundCounter == proposals.length);
+        		assertTrue("Some other proposals were found!", foundCounter == proposals.length); //$NON-NLS-1$
         	} else {
-                assertTrue("Some other proposals were found!", result.length == proposals.length);
+                assertTrue("Some other proposals were found!", result.length == proposals.length); //$NON-NLS-1$
         	}
         }
 
@@ -111,20 +119,20 @@ public class ContentAssistantTestCase extends TestCase {
 				if (replacementString.equalsIgnoreCase(proposalName)) return true;
 				
 				// For a tag proposal there will be not only the the tag name but all others characters like default attributes, tag ending characters and so on
-				String[] replacementStringParts = replacementString.split(" ");
+				String[] replacementStringParts = replacementString.split(" "); //$NON-NLS-1$
 				if (replacementStringParts != null && replacementStringParts.length > 0) {
 					if (replacementStringParts[0].equalsIgnoreCase(proposalName)) return true;
 				}
 				
 				// for an attribute proposal there will be a pare of attribute-value (i.e. attrName="attrValue")
-				replacementStringParts = replacementString.split("=");
+				replacementStringParts = replacementString.split("="); //$NON-NLS-1$
 				if (replacementStringParts != null && replacementStringParts.length > 0) {
 					if (replacementStringParts[0].equalsIgnoreCase(proposalName)) return true;
 				}
 				
 				// for an Unclosed EL the closing character is appended to the proposal string (i.e. person} )
 				// perform case sensitive compare operation
-				replacementStringParts = replacementString.split("}");
+				replacementStringParts = replacementString.split("}"); //$NON-NLS-1$
 				if (replacementStringParts != null && replacementStringParts.length > 0) {
 					if (replacementStringParts[0].equals(proposalName)) return true;
 				}

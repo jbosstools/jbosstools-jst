@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2008 Red Hat, Inc.
+ * Copyright (c) 2007-2010 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -33,7 +33,7 @@ public abstract class CommonContentAssistantTestCase extends ContentAssistantTes
 
     @Override
     public void setUp() throws Exception {
-        provider = new TestProjectProvider("org.jboss.tools.seam.ui.test", null, getSetUpProjectName(), makeCopy);
+        provider = new TestProjectProvider("org.jboss.tools.seam.ui.test", null, getSetUpProjectName(), makeCopy); //$NON-NLS-1$
         project = provider.getProject();
     }
 
