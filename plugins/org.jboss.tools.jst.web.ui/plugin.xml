@@ -102,23 +102,6 @@
       <category name="%NewWizardCat_JBossToolsWeb" 
                 id="org.jboss.tools.jst.web">
       </category>
-      <!--
-      <wizard
-            category="org.jboss.tools.jst.web"
-            class="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSFileWizard"
-            finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
-            icon="$nl$/images/xstudio/wizards/new_css_file.gif"
-            id="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSFileWizard"
-            name="%NewWizard_CSSFile"
-            preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
-            project="false">
-         <description>
-            	%NewWizardDescription_CSSFile
-         </description>
-         <selection class="org.eclipse.core.resources.IResource">
-         </selection>
-      </wizard>
-      -->
       <wizard
             category="org.jboss.tools.jst.web"
             class="org.jboss.tools.jst.web.ui.wizards.newfile.NewXHTMLWizard"
@@ -148,23 +131,6 @@
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
       </wizard>
-      <!--
-      <wizard
-            category="org.jboss.tools.jst.web"
-            class="org.jboss.tools.jst.web.ui.wizards.newfile.NewJSFileWizard"
-            finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
-            icon="$nl$/images/xstudio/wizards/new_js_file.gif"
-            id="org.jboss.tools.jst.web.ui.wizards.newfile.NewJSFileWizard"
-            name="%NewWizard_JSFile"
-            preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
-            project="false">
-         <description>
-            	%NewWizardDescription_JSFile
-         </description>
-         <selection class="org.eclipse.core.resources.IResource">
-         </selection>
-      </wizard>
-      -->
       <wizard
             category="org.jboss.tools.jst.web"
             class="org.jboss.tools.jst.web.ui.wizards.newfile.NewWebFileWizard"
@@ -180,53 +146,6 @@
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
       </wizard>
- <!--
-      <wizard
-            category="org.jboss.tools.jst.web"
-            class="org.jboss.tools.common.model.ui.wizard.newfile.NewJSPFileWizard"
-            finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
-            icon="$nl$/images/xstudio/wizards/new_jsp_file.gif"
-            id="org.jboss.tools.common.model.ui.wizard.newfile.NewJSPFileWizard"
-            name="%NewWizard_JSPFile"
-            preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
-            project="false">
-         <description>
-            	%NewWizardDescription_JSPFile
-         </description>
-         <selection class="org.eclipse.core.resources.IResource">
-         </selection>
-      </wizard>
-     <wizard
-            category="org.jboss.tools.jst.web"
-            class="org.jboss.tools.common.model.ui.wizard.newfile.NewXHTMLFileWizard"
-            finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
-            icon="$nl$/images/xstudio/wizards/new_html_file.gif"
-            id="org.jboss.tools.common.model.ui.wizard.newfile.NewXHTMLFileWizard"
-            name="%NewWizard_XHTMLFile"
-            preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
-            project="false">
-         <description>
-            	%NewWizardDescription_XHTMLFile
-         </description>
-         <selection class="org.eclipse.core.resources.IResource">
-         </selection>
-      </wizard>
-      <wizard
-            category="org.jboss.tools.jst.web"
-            class="org.jboss.tools.common.model.ui.wizard.newfile.NewHTMLFileWizard"
-            finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
-            icon="$nl$/images/xstudio/wizards/new_html_file.gif"
-            id="org.jboss.tools.common.model.ui.wizard.newfile.NewHTMLFileWizard"
-            name="%NewWizard_HTMLFile"
-            preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
-            project="false">
-         <description>
-            	%NewWizardDescription_HTMLFile
-         </description>
-         <selection class="org.eclipse.core.resources.IResource">
-         </selection>
-      </wizard>
-      -->
       <wizard
             category="org.jboss.tools.jst.web"
             class="org.jboss.tools.common.model.ui.wizard.newfile.NewPropertiesFileWizard"
@@ -384,15 +303,15 @@
          </newWizardShortcut>
          <newWizardShortcut id="org.jboss.tools.jst.web.ui.wizard.newfile.NewTLDFileWizard">
          </newWizardShortcut>
-         <newWizardShortcut id="org.jboss.tools.common.model.ui.wizard.newfile.NewJSPFileWizard">
+         <newWizardShortcut id="org.eclipse.jst.jsp.ui.internal.wizard.NewJSPWizard">
          </newWizardShortcut>
-         <!--newWizardShortcut id="org.jboss.tools.common.model.ui.wizard.newfile.NewXHTMLFileWizard">
-         </newWizardShortcut-->
-         <newWizardShortcut id="org.jboss.tools.common.model.ui.wizard.newfile.NewHTMLFileWizard">
+         <newWizardShortcut id="org.jboss.tools.jst.web.ui.wizards.newfile.NewXHTMLWizard">
          </newWizardShortcut>
-         <newWizardShortcut id="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSFileWizard">
+         <newWizardShortcut id="org.eclipse.wst.html.ui.internal.wizard.NewHTMLWizard">
          </newWizardShortcut>
-         <newWizardShortcut id="org.jboss.tools.jst.web.ui.wizards.newfile.NewJSFileWizard">
+         <newWizardShortcut id="org.eclipse.wst.css.ui.internal.wizard.NewCSSWizard">
+         </newWizardShortcut>
+         <newWizardShortcut id="org.eclipse.wst.jsdt.ui.NewJSWizard">
          </newWizardShortcut>
          <!--viewShortcut 
              id="org.jboss.tools.common.model.ui.navigator.NavigatorViewPart">
