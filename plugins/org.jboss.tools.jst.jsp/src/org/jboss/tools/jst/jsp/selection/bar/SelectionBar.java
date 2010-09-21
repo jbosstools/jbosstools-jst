@@ -16,12 +16,9 @@ import java.util.List;
 import org.eclipse.compare.Splitter;
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.CommandEvent;
-import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.ICommandListener;
 import org.eclipse.core.commands.IStateListener;
 import org.eclipse.core.commands.State;
-import org.eclipse.core.commands.contexts.ContextManagerEvent;
-import org.eclipse.core.commands.contexts.IContextManagerListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
@@ -54,14 +51,11 @@ import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
-import org.eclipse.ui.contexts.IContextService;
-import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.internal.IWorkbenchGraphicConstants;
 import org.eclipse.ui.internal.WorkbenchImages;
 import org.eclipse.wst.sse.core.internal.provisional.INodeAdapter;
 import org.eclipse.wst.sse.core.internal.provisional.INodeNotifier;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
-import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.selection.SelectionHelper;
 import org.jboss.tools.jst.jsp.selection.SourceSelection;
@@ -100,6 +94,7 @@ public class SelectionBar implements ISelectionChangedListener, IStateListener,I
     private StructuredTextEditor textEditor;
     //Selection Bar State
     private State toggleSelBarState;
+    private Command toggleSelBarCommand;
     
 	public SelectionBar(StructuredTextEditor textEditor) {
 		super();
@@ -109,13 +104,12 @@ public class SelectionBar implements ISelectionChangedListener, IStateListener,I
 		ICommandService commandService =
 			(ICommandService) PlatformUI.getWorkbench()
 				.getService(ICommandService.class);
-		toggleSelBarState= commandService.getCommand(
-		"org.jboss.tools.jst.jsp.commands.showSelectionBar") //$NON-NLS-1$
+		this.toggleSelBarCommand = commandService.getCommand(
+		"org.jboss.tools.jst.jsp.commands.showSelectionBar");  //$NON-NLS-1$
+		toggleSelBarState= toggleSelBarCommand
 		.getState("org.eclipse.ui.commands.toggleState"); //$NON-NLS-1$
 		toggleSelBarState.addListener(this); 
-		commandService.getCommand(
-		"org.jboss.tools.jst.jsp.commands.showSelectionBar"). //$NON-NLS-1$
-		addCommandListener(this);
+		toggleSelBarCommand.addCommandListener(this);
 	}
 
 	/**
@@ -496,6 +490,7 @@ public class SelectionBar implements ISelectionChangedListener, IStateListener,I
 
     public void dispose() {
     	removeNodeListenerFromAllNodes();
+    	toggleSelBarCommand.removeCommandListener(this);
     	if(textEditor.getTextViewer()!=null)
     	textEditor.getTextViewer().removeSelectionChangedListener(this);
     	toggleSelBarState.removeListener(this);
