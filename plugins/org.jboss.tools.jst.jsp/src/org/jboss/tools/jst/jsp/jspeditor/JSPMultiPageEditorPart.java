@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.jspeditor;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -89,9 +90,18 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 			editor.init(site, input);
 			parent2 = new Composite(getContainer(), SWT.NONE);
 			ppp = parent2;
-			editor.createPartControl(parent2);
+			if(editor==sourcePart){
+				//case when only source part available
+				Composite editorComp = new Composite(parent2, SWT.NONE);
+				editorComp.setLayout(new FillLayout());
+				GridData editorGD=new GridData(GridData.FILL_BOTH);
+				editorGD.horizontalSpan=2;
+				editorComp.setLayoutData(editorGD);
+				editor.createPartControl(editorComp);
+			}else {
+				editor.createPartControl(parent2);
+			}
 			parent2.setLayout(new GridLayout(2, false));
-			
 			selectionBar = new SelectionBar(sourcePart);
 			selectionBar.createToolBarComposite(parent2);
 			editor.addPropertyListener(new IPropertyListener() {
