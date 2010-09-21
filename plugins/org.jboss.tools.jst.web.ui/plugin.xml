@@ -51,6 +51,12 @@
 			id="org.jboss.tools.jsf.ui.editor.pref.template">
 			<keywordReference id="org.eclipse.wst.html.ui.templates"/>
 		</page>
+        <page
+		    name="%ContentAssist"
+			category="org.jboss.tools.vpe.editor"
+			class="org.jboss.tools.jst.web.ui.internal.preferences.ContentAssistPreferencePage"
+			id="org.jboss.tools.jsf.ui.editor.pref.contentassist">
+		</page>
    </extension>
    <extension point="org.eclipse.ui.editors">
       <editor 

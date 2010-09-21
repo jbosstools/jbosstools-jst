@@ -19,7 +19,9 @@ public class Messages extends NLS {
 	public static String ImplementationsPreferencesPage_Down;
 	public static String ImplementationsPreferencesPage_Library_Sets;
 	public static String ImplementationsPreferencesPage_Project_Templates;
-
+	public static String ContentAssistPreferencePage_showGettersAndSetters;
+	public static String ContentAssistPreferencePage_showMethodsWithParenthesesOnly;
+	
 	private Messages() {
 	}
 
