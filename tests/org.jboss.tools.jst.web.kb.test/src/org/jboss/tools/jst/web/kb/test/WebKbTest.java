@@ -58,11 +58,11 @@ public class WebKbTest extends TestCase {
 	 * https://jira.jboss.org/jira/browse/JBIDE-6284
 	 */
 	public void testFFacet() {
-		IFile file = testProject.getFile("WebContent/pages/inputUserName.jsp");
+		IFile file = testProject.getFile("WebContent/pages/inputUserName.xhtml");
 		ELContext context = PageContextFactory.createPageContext(file);
 		KbQuery query = new KbQuery();
 		query.setMask(true);
-		query.setOffset(130);
+		query.setOffset(356);
 		query.setType(Type.TAG_NAME);
 		query.setPrefix("f");
 		query.setUri("http://java.sun.com/jsf/core");
@@ -81,17 +81,17 @@ public class WebKbTest extends TestCase {
 	 * https://jira.jboss.org/jira/browse/JBIDE-5231
 	 */
 	public void testSeamPdf() {
-		IFile file = testProject.getFile("WebContent/pages/testSeamPdfAndMail.jsp");
+		IFile file = testProject.getFile("WebContent/pages/testSeamPdfAndMail.xhtml");
 		ELContext context = PageContextFactory.createPageContext(file);
 		KbQuery query = new KbQuery();
 		query.setMask(true);
-		query.setOffset(315);
+		query.setOffset(356);
 		query.setType(Type.ATTRIBUTE_NAME);
 		query.setParentTags(new String[]{"p:document"});
 		query.setPrefix("p");
 		query.setUri("http://jboss.com/products/seam/pdf");
 		query.setValue("ori");
-		
+
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
 		for (TextProposal proposal : proposals) {
 			if("orientation".equals(proposal.getReplacementString())) {
@@ -105,17 +105,17 @@ public class WebKbTest extends TestCase {
 	 * https://jira.jboss.org/jira/browse/JBIDE-5198
 	 */
 	public void testSeamMail() {
-		IFile file = testProject.getFile("WebContent/pages/testSeamPdfAndMail.jsp");
+		IFile file = testProject.getFile("WebContent/pages/testSeamPdfAndMail.xhtml");
 		ELContext context = PageContextFactory.createPageContext(file);
 		KbQuery query = new KbQuery();
 		query.setMask(true);
-		query.setOffset(315);
+		query.setOffset(356);
 		query.setType(Type.ATTRIBUTE_NAME);
 		query.setParentTags(new String[]{"m:message"});
 		query.setPrefix("m");
 		query.setUri("http://jboss.com/products/seam/mail");
 		query.setValue("pre");
-		
+
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
 		for (TextProposal proposal : proposals) {
 			if("precedence".equals(proposal.getReplacementString())) {
@@ -135,7 +135,7 @@ public class WebKbTest extends TestCase {
 	 * https://jira.jboss.org/jira/browse/JBIDE-3875
 	 */
 	public void testFacetNames() {
-		IFile file = testProject.getFile("WebContent/pages/facetname.jsp");
+		IFile file = testProject.getFile("WebContent/pages/facetname.xhtml");
 		ELContext context = PageContextFactory.createPageContext(file);
 		KbQuery query = new KbQuery();
 		query.setMask(true);
