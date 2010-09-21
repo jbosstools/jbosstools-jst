@@ -174,7 +174,7 @@ public class SelectionBar implements ISelectionChangedListener, IStateListener,I
 		createArrowButton();
 		cmpToolBar.layout();
 		splitter.getParent().layout(true, true);
-		setVisible((Boolean)toggleSelBarState.getValue());
+		setVisible(toggleSelBarCommand.isEnabled()&&(Boolean)toggleSelBarState.getValue());
 		return splitter;
 	}
 
@@ -649,11 +649,11 @@ public class SelectionBar implements ISelectionChangedListener, IStateListener,I
 	}
 
 	public void handleStateChange(State state, Object oldValue) {
-		setVisible((Boolean)state.getValue());
+		setVisible(toggleSelBarCommand.isEnabled()&&(Boolean)state.getValue());
 	}
 
 	public void commandChanged(CommandEvent commandEvent) {
-		setVisible(commandEvent.getCommand().isEnabled()&&(Boolean)commandEvent.getCommand().getState("org.eclipse.ui.commands.toggleState").getValue()); //$NON-NLS-1$
+		setVisible(toggleSelBarCommand.isEnabled()&&(Boolean)commandEvent.getCommand().getState("org.eclipse.ui.commands.toggleState").getValue()); //$NON-NLS-1$
 	}
 }
 

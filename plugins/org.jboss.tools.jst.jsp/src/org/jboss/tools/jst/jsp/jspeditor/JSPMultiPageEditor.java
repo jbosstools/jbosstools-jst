@@ -611,6 +611,12 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 			palettePage.dispose();
 			palettePage = null;
 		}
+		IContextService contextService = (IContextService) getSite()
+		  .getService(IContextService.class);
+		 if(selBarContextActivation!=null){
+				contextService.deactivateContext(selBarContextActivation);
+				selBarContextActivation=null;
+		}
 		super.dispose();
 	}
 	
