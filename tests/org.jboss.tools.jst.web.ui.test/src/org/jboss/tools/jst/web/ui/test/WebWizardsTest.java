@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.test;
 
+
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -19,8 +20,8 @@ import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.jboss.tools.common.model.ui.test.AbstractModelNewWizardTest;
-import org.jboss.tools.common.model.ui.wizard.newfile.NewHTMLFileWizard;
-import org.jboss.tools.common.model.ui.wizard.newfile.NewJSPFileWizard;
+//import org.jboss.tools.common.model.ui.wizard.newfile.NewHTMLFileWizard;
+//import org.jboss.tools.common.model.ui.wizard.newfile.NewJSPFileWizard;
 import org.jboss.tools.common.model.ui.wizard.newfile.NewPropertiesFileWizard;
 import org.jboss.tools.common.model.ui.wizards.standard.DefaultStandardStep;
 import org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSFileWizard;
@@ -48,9 +49,9 @@ public class WebWizardsTest extends AbstractModelNewWizardTest {
 		testNewWizardInstanceIsCreated(NewWebFileWizard.class.getName());
 	}
 	
-	public void _testNewJspWizardInstanceIsCreated() {
-		testNewWizardInstanceIsCreated(NewJSPFileWizard.class.getName());
-	}
+//	public void _testNewJspWizardInstanceIsCreated() {
+//		testNewWizardInstanceIsCreated(NewJSPFileWizard.class.getName());
+//	}
 	/*
 	 *	rewritten by Maksim Areshkau, as fix for
 	 * https://jira.jboss.org/jira/browse/JBIDE-6216,
@@ -92,9 +93,9 @@ public class WebWizardsTest extends AbstractModelNewWizardTest {
 		}
 	}
 	
-	public void _testNewHtmlWizardInstanceIsCreated() {
-		testNewWizardInstanceIsCreated(NewHTMLFileWizard.class.getName());
-	}
+//	public void _testNewHtmlWizardInstanceIsCreated() {
+//		testNewWizardInstanceIsCreated(NewHTMLFileWizard.class.getName());
+//	}
 	
 	public void testNewPropertiesWizardInstanceIsCreated() {
 		testNewWizardInstanceIsCreated(NewPropertiesFileWizard.class.getName());
