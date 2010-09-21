@@ -1377,23 +1377,23 @@
       </XActionItem>
       <XActionItem HandlerClassName="%WizardInvoker%"
        ICON="action.new.file.jsp_file"
-       PROPERTIES="plugin=org.jboss.tools.jst.web.ui;wizard=org.jboss.tools.common.model.ui.wizard.newfile.NewJSPFileWizard"
+       PROPERTIES="plugin=org.eclipse.jst.jsp.ui;wizard=org.eclipse.jst.jsp.ui.internal.wizard.NewJSPWizard"
        displayName="JSP..." kind="action" name="CreateFileJSPV"/>
       <XActionItem HandlerClassName="%WizardInvoker%"
        ICON="action.new.file.html_file"
-       PROPERTIES="plugin=org.jboss.tools.jst.web.ui;wizard=org.jboss.tools.common.model.ui.wizard.newfile.NewHTMLFileWizard"
+       PROPERTIES="plugin=org.eclipse.wst.html.ui;wizard=org.eclipse.wst.html.ui.internal.wizard.NewHTMLWizard"
        displayName="HTML..." kind="action" name="CreateFileHTMLV"/>
       <XActionItem HandlerClassName="%WizardInvoker%"
        ICON="action.new.file.css_file"
-       PROPERTIES="plugin=org.jboss.tools.jst.web.ui;wizard=org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSFileWizard"
+       PROPERTIES="plugin=org.eclipse.wst.css.ui;wizard=org.eclipse.wst.css.ui.internal.wizard.NewCSSWizard"
        displayName="CSS..." kind="action" name="CreateFileCSSV"/>
       <XActionItem HandlerClassName="%WizardInvoker%"
        ICON="action.new.file.js_file"
-       PROPERTIES="plugin=org.jboss.tools.jst.web.ui;wizard=org.jboss.tools.jst.web.ui.wizards.newfile.NewJSFileWizard"
+       PROPERTIES="plugin=org.eclipse.wst.jsdt.ui;wizard=org.eclipse.wst.jsdt.ui.NewJSWizard"
        displayName="JS..." kind="action" name="CreateFileJSV"/>
       <XActionItem HandlerClassName="%WizardInvoker%"
        ICON="action.new.file.xhtml_file"
-       PROPERTIES="plugin=org.jboss.tools.jst.web.ui;wizard=org.jboss.tools.common.model.ui.wizard.newfile.NewXHTMLFileWizard"
+       PROPERTIES="plugin=org.jboss.tools.jst.web.ui;wizard=org.jboss.tools.jst.web.ui.wizards.newfile.NewXHTMLWizard"
        displayName="XHTML..." kind="action" name="CreateFileXHTMLV"/>
      </XActionItem>
     </XActionItem>
@@ -1501,23 +1501,23 @@
       </XActionItem>
       <XActionItem HandlerClassName="%WizardInvoker%"
        ICON="action.new.file.jsp_file"
-       PROPERTIES="plugin=org.jboss.tools.jst.web.ui;wizard=org.jboss.tools.common.model.ui.wizard.newfile.NewJSPFileWizard"
+       PROPERTIES="plugin=org.eclipse.jst.jsp.ui;wizard=org.eclipse.jst.jsp.ui.internal.wizard.NewJSPWizard"
        displayName="JSP..." kind="action" name="CreateFileJSPV"/>
       <XActionItem HandlerClassName="%WizardInvoker%"
        ICON="action.new.file.html_file"
-       PROPERTIES="plugin=org.jboss.tools.jst.web.ui;wizard=org.jboss.tools.common.model.ui.wizard.newfile.NewHTMLFileWizard"
+       PROPERTIES="plugin=org.eclipse.wst.html.ui;wizard=org.eclipse.wst.html.ui.internal.wizard.NewHTMLWizard"
        displayName="HTML..." kind="action" name="CreateFileHTMLV"/>
       <XActionItem HandlerClassName="%WizardInvoker%"
        ICON="action.new.file.css_file"
-       PROPERTIES="plugin=org.jboss.tools.jst.web.ui;wizard=org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSFileWizard"
+       PROPERTIES="plugin=org.eclipse.wst.css.ui;wizard=org.eclipse.wst.css.ui.internal.wizard.NewCSSWizard"
        displayName="CSS..." kind="action" name="CreateFileCSSV"/>
       <XActionItem HandlerClassName="%WizardInvoker%"
        ICON="action.new.file.js_file"
-       PROPERTIES="plugin=org.jboss.tools.jst.web.ui;wizard=org.jboss.tools.jst.web.ui.wizards.newfile.NewJSFileWizard"
+       PROPERTIES="plugin=org.eclipse.wst.jsdt.ui;wizard=org.eclipse.wst.jsdt.ui.NewJSWizard"
        displayName="JS..." kind="action" name="CreateFileJSV"/>
       <XActionItem HandlerClassName="%WizardInvoker%"
        ICON="action.new.file.xhtml_file"
-       PROPERTIES="plugin=org.jboss.tools.jst.web.ui;wizard=org.jboss.tools.common.model.ui.wizard.newfile.NewXHTMLFileWizard"
+       PROPERTIES="plugin=org.jboss.tools.jst.web.ui;wizard=org.jboss.tools.jst.web.ui.wizards.newfile.NewXHTMLWizard"
        displayName="XHTML..." kind="action" name="CreateFileXHTMLV"/>
      </XActionItem>
     </XActionItem>
