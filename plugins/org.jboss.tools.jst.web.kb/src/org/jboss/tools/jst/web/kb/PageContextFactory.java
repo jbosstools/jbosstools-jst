@@ -125,8 +125,8 @@ public class PageContextFactory implements IResourceChangeListener {
 	}
 
 	private PageContextFactory() {
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		if (workspace != null) workspace.addResourceChangeListener(this);
+//		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+//		if (workspace != null) workspace.addResourceChangeListener(this);
 	}
 
 	/*

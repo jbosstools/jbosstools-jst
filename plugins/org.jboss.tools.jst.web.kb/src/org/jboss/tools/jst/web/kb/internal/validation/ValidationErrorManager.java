@@ -10,13 +10,12 @@
  ******************************************************************************/
 package org.jboss.tools.jst.web.kb.internal.validation;
 
+import java.text.MessageFormat;
 import java.util.Set;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -24,15 +23,14 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.editors.text.TextFileDocumentProvider;
-import org.eclipse.wst.validation.internal.TaskListUtility;
 import org.eclipse.wst.validation.internal.operations.WorkbenchReporter;
+import org.eclipse.wst.validation.internal.plugin.ValidationPlugin;
 import org.eclipse.wst.validation.internal.provisional.core.IMessage;
 import org.eclipse.wst.validation.internal.provisional.core.IReporter;
 import org.eclipse.wst.validation.internal.provisional.core.IValidator;
 import org.jboss.tools.common.preferences.SeverityPreferences;
 import org.jboss.tools.common.text.ITextSourceReference;
 import org.jboss.tools.jst.web.kb.KbMessages;
-import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.validation.IValidationContext;
 import org.jboss.tools.jst.web.kb.validation.IValidationErrorManager;
@@ -41,6 +39,10 @@ import org.jboss.tools.jst.web.kb.validation.IValidationErrorManager;
  * @author Alexey Kazakov
  */
 public abstract class ValidationErrorManager implements IValidationErrorManager {
+
+	static String VALIDATION_MARKER = ValidationPlugin.PLUGIN_ID + ".problemmarker"; //$NON-NLS-1$
+	static String VALIDATION_MARKER_OWNER = "owner"; //$NON-NLS-1$
+	static String VALIDATION_MARKER_GROUP = "groupName"; //$NON-NLS-1$
 
 	protected IStatus OK_STATUS = new Status(IStatus.OK,
 			"org.eclipse.wst.validation", 0, "OK", null); //$NON-NLS-1$ //$NON-NLS-2$
@@ -217,22 +219,17 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 	 */
 	public static IMarker addError(String message, int severity, String[] messageArguments, int length, int offset, IResource target, TextFileDocumentProvider documentProvider, String markerId, Class markerOwner) {
 		IMarker marker = null;
-		IMessage problemMessage = new ProblemMessage(message, severity, messageArguments, target, markerId);
-		problemMessage.setLength(length);
-		problemMessage.setOffset(offset);
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		int lineNumber = 1;
 		try {
-			if (workspace != null) workspace.removeResourceChangeListener(PageContextFactory.getInstance());
 			if (documentProvider != null) {
 				documentProvider.connect(target);
 				IDocument doc = documentProvider.getDocument(target);
-				if(doc != null)
-					problemMessage.setLineNo(doc.getLineOfOffset(offset) + 1);
-				else
-					problemMessage.setLineNo(1);
+				if(doc != null){
+					lineNumber = doc.getLineOfOffset(offset) + 1;
+				}
 			}
-			marker = TaskListUtility.addTask(markerOwner.getName().intern(), target, "" + problemMessage.getLineNumber(), problemMessage.getText(), 
-					problemMessage.getText(), severity, null, problemMessage.getGroupName(), problemMessage.getOffset(), problemMessage.getLength());
+//			marker = addTask(markerOwner.getName().intern(), target, lineNumber, MessageFormat.format(message, messageArguments),
+//					severity, null, markerId, offset, length);
 		} catch (BadLocationException e) {
 			WebKbPlugin.getDefault().logError(
 					NLS.bind(KbMessages.EXCEPTION_DURING_CREATING_MARKER, target.getFullPath()), e);
@@ -240,11 +237,73 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 			WebKbPlugin.getDefault().logError(
 					NLS.bind(KbMessages.EXCEPTION_DURING_CREATING_MARKER, target.getFullPath()), e);
 		} finally {
-			documentProvider.disconnect(target);
-			if (workspace != null) workspace.addResourceChangeListener(PageContextFactory.getInstance());
+			if (documentProvider != null) {
+				documentProvider.disconnect(target);
+			}
 		}
 
 		return marker;
+	}
+
+	private static IMarker addTask(String pluginId, IResource resource, int location, 
+		String message, int markerType, String targetObjectName, 
+		String groupName, int offset, int length) throws CoreException {
+
+		if ((message == null) || (resource == null) || (!resource.exists())) {
+			return null;
+		}
+		int severity = getSeverity(markerType);
+
+		IMarker item = resource.createMarker(VALIDATION_MARKER); // add a validation marker
+
+		boolean offsetSet = ((offset != IMessage.OFFSET_UNSET) && (length != IMessage.OFFSET_UNSET));
+		int size = (offsetSet) ? 7 : 5;
+		String[] attribNames = new String[size];
+		Object[] attribValues = new Object[size];
+
+		attribNames[0] = VALIDATION_MARKER_OWNER;
+		attribValues[0] = pluginId;
+		attribNames[1] = VALIDATION_MARKER_GROUP;
+		attribValues[1] = ((groupName == null) ? "" : groupName); //$NON-NLS-1$
+		attribNames[2] = IMarker.MESSAGE;
+		attribValues[2] = message;
+		attribNames[3] = IMarker.SEVERITY;
+		attribValues[3] = new Integer(severity);
+
+		Integer lineNumber = Integer.valueOf(location);
+		attribNames[4] = IMarker.LINE_NUMBER;
+		attribValues[4] = lineNumber;
+
+		if (offsetSet) {
+			attribNames[5] = IMarker.CHAR_START;
+			attribValues[5] = new Integer(offset);
+			attribNames[6] = IMarker.CHAR_END;
+			attribValues[6] = new Integer(offset + length);
+		}
+
+		item.setAttributes(attribNames, attribValues);
+
+		return item;
+	}
+
+	private static int getSeverity(int severityEnumValue) {
+		switch (severityEnumValue) {
+			case (IMessage.HIGH_SEVERITY) : {
+				return IMarker.SEVERITY_ERROR;
+			}
+			case (IMessage.LOW_SEVERITY) : {
+				return IMarker.SEVERITY_INFO;
+			}
+			case (IMessage.NORMAL_SEVERITY) : {
+				return IMarker.SEVERITY_WARNING;
+			}
+			case (IMessage.ALL_MESSAGES) :
+			case (IMessage.ERROR_AND_WARNING) :
+			default : {
+				// assume it's a warning.
+				return IMarker.SEVERITY_WARNING;
+			}
+		}
 	}
 
 	/*
