@@ -736,13 +736,24 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 	 * @return
 	 */
 	protected TextRegion getELPrefix(ContentAssistRequest request) {
-		if (!DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE.equals(request.getRegion().getType()) &&
-				!DOMRegionContext.XML_CONTENT.equals(request.getRegion().getType()) &&
-				!DOMRegionContext.BLOCK_TEXT.equals(request.getRegion().getType())) 
+		if (request == null || request.getRegion() == null)
 			return null;
+
+		IStructuredDocumentRegion documentRegion = request.getDocumentRegion();
+		ITextRegion completionRegion = request.getRegion();
+		String regionType = completionRegion.getType();
 		
-		String text = request.getDocumentRegion().getFullText(request.getRegion());
-		int startOffset = request.getDocumentRegion().getStartOffset() + request.getRegion().getStart();
+		if (DOMRegionContext.XML_END_TAG_OPEN.equals(regionType) || DOMRegionContext.XML_TAG_OPEN.equals(regionType)) {
+			documentRegion = documentRegion.getPrevious();
+			completionRegion = getCompletionRegion(request.getDocumentRegion().getStartOffset() + request.getRegion().getStart() - 1, request.getParent());
+		}
+		if (!DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE.equals(completionRegion.getType()) &&
+				!DOMRegionContext.XML_CONTENT.equals(completionRegion.getType()) &&
+				!DOMRegionContext.BLOCK_TEXT.equals(completionRegion.getType())) {
+				return null;
+		}
+		String text = documentRegion.getFullText(completionRegion);
+		int startOffset = documentRegion.getStartOffset() + completionRegion.getStart();
 
 		boolean isAttributeValue = false;
 		boolean hasOpenQuote = false;
