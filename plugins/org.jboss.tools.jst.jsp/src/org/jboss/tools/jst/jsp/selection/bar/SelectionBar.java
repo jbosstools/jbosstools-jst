@@ -65,69 +65,78 @@ import org.w3c.dom.NodeList;
 
 /**
  * This class create and manage the Selection Bar under the VPE.
- * Entry point from the class MozilaEditor This bar can be hiden and
- * shown it uses splitter for this.
+ * Entry point from the class MozilaEditor 
+ * This bar can be hidden or  shown.
  *
  * @author erick
  * @author yradtsevich
  * @author mareshkau
  */
-public class SelectionBar implements ISelectionChangedListener, IStateListener,ICommandListener{
-    /**
-	 *
-	 */
+public class SelectionBar extends Composite implements ISelectionChangedListener, IStateListener,ICommandListener{
 	private static final int SEL_ITEM_RIGHT_MARGIN = 5;
-	
 	public static final String SELECTION_BAR_CONTEXT_ID="org.jboss.tools.jst.jsp.selectionBar.context";
-
+	/*
+	 * The main composite that holds all other controls
+	 */
 	private Splitter splitter;
+	/*
+	 * The SWT ToolBar that contains items with tag names
+	 */
+	private ToolBar toolbar = null;
+	/*
+	 * Composite that contains visible toolbar
+	 */
+	private Composite realBar = null;
+	/*
+	 * Composite to represent invisible toolbar
+	 */
+	private Composite emptyBar = null;
 
 	private boolean resizeListenerAdded = false;
-    private ToolBar selBar = null;
-    private FormData selBarData;
-//    private Composite closeBar = null;
+    private FormData toolbarData;
     private Menu dropDownMenu = null;
     private int itemCount = 0;
-//    private Composite arrowBar;
-    private Composite cmpToolBar = null;
-    private Composite cmpTlEmpty = null;
     private StructuredTextEditor textEditor;
-    //Selection Bar State
+    private Node currentSelectedNode = null;
+    private Node currentLastNode = null;
+    /*
+     * Selection Bar State
+     */
     private State toggleSelBarState;
     private Command toggleSelBarCommand;
+    private ImageButton arrowButton;
     
-	public SelectionBar(StructuredTextEditor textEditor) {
-		super();
+	public SelectionBar(StructuredTextEditor textEditor, Composite parent,
+			int style) {
+		super(parent, style);
 		this.textEditor = textEditor;
 		this.textEditor.getTextViewer().addSelectionChangedListener(this);
-		
-		ICommandService commandService =
-			(ICommandService) PlatformUI.getWorkbench()
-				.getService(ICommandService.class);
-		this.toggleSelBarCommand = commandService.getCommand(
-		"org.jboss.tools.jst.jsp.commands.showSelectionBar");  //$NON-NLS-1$
-		toggleSelBarState= toggleSelBarCommand
-		.getState("org.eclipse.ui.commands.toggleState"); //$NON-NLS-1$
-		toggleSelBarState.addListener(this); 
+
+		ICommandService commandService = (ICommandService) PlatformUI
+				.getWorkbench().getService(ICommandService.class);
+		this.toggleSelBarCommand = commandService
+				.getCommand("org.jboss.tools.jst.jsp.commands.showSelectionBar"); //$NON-NLS-1$
+		toggleSelBarState = toggleSelBarCommand
+				.getState("org.eclipse.ui.commands.toggleState"); //$NON-NLS-1$
+		toggleSelBarState.addListener(this);
 		toggleSelBarCommand.addCommandListener(this);
-	}
-
-	/**
-	 * Visibility state of the {@code SelectionBar}.
-	 */
-	//private boolean visible;
-
-	private ImageButton arrowButton;
-	private Node currentSelectedNode = null;
-	private Node currentLastNode = null;
-
-	public Composite createToolBarComposite(Composite parent) {
-		splitter = new Splitter(parent, SWT.NONE);
-		splitter.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		/*
-		 * The empty composite
+		 * Create the Selection Bar Composite in its constructor
 		 */
-		cmpTlEmpty = new Composite(splitter, SWT.NONE) {
+		createToolBarComposite();
+	}
+	
+	public Composite createToolBarComposite() {
+		/*
+		 * The parent of all children should be 'this' composite
+		 */
+		splitter = new Splitter(this, SWT.NONE);
+		splitter.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
+		/*
+		 * The invisible Selection Bar that is used to handle
+		 * show/hide Selection Bar actions.
+		 */
+		emptyBar = new Composite(splitter, SWT.NONE) {
 			@Override
 			public Point computeSize(int wHint, int hHint, boolean changed) {
 				Point point = super.computeSize(wHint, hHint, changed);
@@ -135,12 +144,13 @@ public class SelectionBar implements ISelectionChangedListener, IStateListener,I
 				return point;
 			}
 		};
+		emptyBar.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		cmpTlEmpty.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		// Main composite of the visible splitter
-		cmpToolBar = new Composite(splitter, SWT.NONE);
-		cmpToolBar.setLayout(new FormLayout());
+		/*
+		 * Visible Composite that contains all other Selection Bar controls 
+		 */
+		realBar = new Composite(splitter, SWT.NONE);
+		realBar.setLayout(new FormLayout());
 
 		final Image closeImage = PlatformUI.getWorkbench().getSharedImages()
 				.getImage(ISharedImages.IMG_TOOL_DELETE);
@@ -155,7 +165,7 @@ public class SelectionBar implements ISelectionChangedListener, IStateListener,I
 			}
 		};
 
-		ImageButton closeButton = new ImageButton(cmpToolBar, closeImage,
+		ImageButton closeButton = new ImageButton(realBar, closeImage,
 				JstUIMessages.HIDE_SELECTION_BAR);
 		closeButton.addSelectionListener(closeListener);
 		FormData closeBarData = new FormData();
@@ -164,16 +174,18 @@ public class SelectionBar implements ISelectionChangedListener, IStateListener,I
 		Composite closeItemComposite = closeButton.getComposite();
 		closeItemComposite.setLayoutData(closeBarData);
 
-		// Create selection bar
-		selBar = new ToolBar(cmpToolBar, SWT.HORIZONTAL | SWT.FLAT | SWT.NO_BACKGROUND);
-		selBarData = new FormData();
-		selBarData.left = new FormAttachment(0);
-		selBarData.right = new FormAttachment(closeItemComposite, 0, SWT.LEFT);
-		selBarData.top = new FormAttachment(0);
-		selBar.setLayoutData(selBarData);
+		/*
+		 *  Create tool bar that will contain nodes from the source editor 
+		 */
+		toolbar = new ToolBar(realBar, SWT.HORIZONTAL | SWT.FLAT | SWT.NO_BACKGROUND);
+		toolbarData = new FormData();
+		toolbarData.left = new FormAttachment(0);
+		toolbarData.right = new FormAttachment(closeItemComposite, 0, SWT.LEFT);
+		toolbarData.top = new FormAttachment(0);
+		toolbar.setLayoutData(toolbarData);
 		createArrowButton();
-		cmpToolBar.layout();
-		splitter.getParent().layout(true, true);
+		realBar.layout();
+		this.getParent().layout(true, true);
 		setVisible(toggleSelBarCommand.isEnabled()&&(Boolean)toggleSelBarState.getValue());
 		return splitter;
 	}
@@ -184,13 +196,13 @@ public class SelectionBar implements ISelectionChangedListener, IStateListener,I
 	 */
 	public void setVisible(boolean visible) {
 		if (visible) {
-			splitter.setVisible(cmpToolBar, true);
-			splitter.setVisible(cmpTlEmpty, false);
+			splitter.setVisible(realBar, true);
+			splitter.setVisible(emptyBar, false);
 		} else {
-			splitter.setVisible(cmpToolBar, false);
-			splitter.setVisible(cmpTlEmpty, true);
+			splitter.setVisible(realBar, false);
+			splitter.setVisible(emptyBar, true);
 		}
-		splitter.getParent().layout(true, true);
+		this.getParent().layout(true, true);
 	}
 
 
@@ -229,7 +241,7 @@ public class SelectionBar implements ISelectionChangedListener, IStateListener,I
 	    	setSelBarItems(node);
 	    	currentLastNode = node;
 	    }
-
+	    
 		setNodeSelected(node, true);
 		currentSelectedNode = node;
 	}
@@ -238,7 +250,7 @@ public class SelectionBar implements ISelectionChangedListener, IStateListener,I
 	 * Sets the selection state of the given node in the selection bar.
 	 */
 	private void setNodeSelected(Node node, boolean selected) {
-		for (ToolItem item : selBar.getItems()) {
+		for (ToolItem item : toolbar.getItems()) {
 			if (item.getData() == node) {
 				item.setSelection(selected);
 				return;
@@ -258,16 +270,16 @@ public class SelectionBar implements ISelectionChangedListener, IStateListener,I
 	}
 	
 	/**
-     * Cleans {@link #selBar} and adds to it buttons which
+     * Cleans {@link #toolbar} and adds to it buttons which
      * appropriate the {@code node} and all its ancestors.
 	 */
 	private void setSelBarItems(Node node) {
 		// bug was fixed when toolbar are not shown for resizeble components
-		cmpToolBar.layout();
-		splitter.getParent().layout(true, true);
+		realBar.layout();
+		this.getParent().layout(true, true);
 
 		removeNodeListenerFromAllNodes();
-		cleanToolBar(selBar);
+		cleanToolBar(toolbar);
 
 		disposeDropDownMenu();
 		// for now dropDownMenu = null
@@ -294,7 +306,7 @@ public class SelectionBar implements ISelectionChangedListener, IStateListener,I
 				 * for the last tag -- show check button
 				 */
 				if ((elementCounter == 0) && (list.size() == 0)){
-					 item = new ToolItem(selBar, SWT.FLAT | SWT.CHECK, 1);
+					 item = new ToolItem(toolbar, SWT.FLAT | SWT.CHECK, 1);
 					item.addSelectionListener(new SelectionListener() {
 						public void widgetSelected(SelectionEvent e) {
 							handleSelectionEvent(e);
@@ -307,7 +319,7 @@ public class SelectionBar implements ISelectionChangedListener, IStateListener,I
 					/*
 					 * Create DropDownMenu button
 					 */
-					item = new ToolItem(selBar, SWT.DROP_DOWN, 1);
+					item = new ToolItem(toolbar, SWT.DROP_DOWN, 1);
 					final DropdownSelectionListener dropdownListener = new DropdownSelectionListener(
 							item, list);
 					item.addSelectionListener(dropdownListener);
@@ -327,9 +339,9 @@ public class SelectionBar implements ISelectionChangedListener, IStateListener,I
 				 * When the item does not fit to the bar --
 				 * put it to the DDM
 				 */
-				if (!isItemShown(selBar.getItem(elementCounter + 1))) {
+				if (!isItemShown(toolbar.getItem(elementCounter + 1))) {
 					item.dispose();
-					dropDownMenu = new Menu(selBar);
+					dropDownMenu = new Menu(toolbar);
 				}
 			}
 
@@ -369,7 +381,7 @@ public class SelectionBar implements ISelectionChangedListener, IStateListener,I
 		}
 
 		if (!resizeListenerAdded ) {
-			cmpToolBar.addListener(SWT.Resize, new Listener() {
+			realBar.addListener(SWT.Resize, new Listener() {
 				public void handleEvent(Event event) {
 					updateNodes(true);
 				}
@@ -415,21 +427,21 @@ public class SelectionBar implements ISelectionChangedListener, IStateListener,I
 		final Image hoverImage = WorkbenchImages.getImage(
 				IWorkbenchGraphicConstants.IMG_LCL_RENDERED_VIEW_MENU);
 
-		arrowButton = new ImageButton(selBar, hoverImage,
+		arrowButton = new ImageButton(toolbar, hoverImage,
 				JstUIMessages.SelectionBar_MoreNodes);
 		arrowButton.setEnabled(false);
 		arrowButton.addSelectionListener(
 				new Listener() {
 					public void handleEvent(Event event) {
 						Rectangle bounds = arrowButton.getButtonBounds();
-						Point point = selBar.toDisplay(bounds.x, bounds.y
+						Point point = toolbar.toDisplay(bounds.x, bounds.y
 								+ bounds.height);
 						dropDownMenu.setLocation(point);
 						dropDownMenu.setVisible(true);
 					}
 				});
 
-		ToolItem arrowItem = new ToolItem(selBar, SWT.SEPARATOR, 0);
+		ToolItem arrowItem = new ToolItem(toolbar, SWT.SEPARATOR, 0);
 		Composite arrowButtonComposite = arrowButton.getComposite();
 		arrowItem.setControl(arrowButtonComposite);
 		arrowButtonComposite.pack();
@@ -498,8 +510,8 @@ public class SelectionBar implements ISelectionChangedListener, IStateListener,I
 			splitter.dispose();
 			splitter = null;
 		}
-
     	disposeDropDownMenu();
+    	super.dispose();
 	}
 
     /**
@@ -534,8 +546,8 @@ public class SelectionBar implements ISelectionChangedListener, IStateListener,I
 	public String toString() {
 		StringBuffer st = new StringBuffer("CountItem: "); //$NON-NLS-1$
 		st.append(itemCount);
-		st.append(" Parent Composite: " + cmpToolBar.getBounds().width); //$NON-NLS-1$
-		st.append(" Bar : " + selBar.getBounds().width); //$NON-NLS-1$
+		st.append(" Parent Composite: " + realBar.getBounds().width); //$NON-NLS-1$
+		st.append(" Bar : " + toolbar.getBounds().width); //$NON-NLS-1$
 		return st.toString();
 	}
     
