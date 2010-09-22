@@ -26,6 +26,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.core.internal.ssemodelquery.ModelQueryAdapter;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
+import org.eclipse.wst.xml.ui.internal.contentassist.XMLRelevanceConstants;
 import org.jboss.tools.common.el.core.ca.ELTextProposal;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.text.TextProposal;
@@ -151,11 +152,11 @@ public class FaceletsELCompletionProposalComputer extends JspELCompletionProposa
 		// Need to check if an EL Expression is opened here.
 		// If it is true we don't need to start any new tag proposals
 		TextRegion prefix = getELPrefix(contentAssistRequest);
-		if (prefix != null && !prefix.isELStarted()) {
-			return;
+		if (prefix != null && prefix.isELStarted()) {
+			addTextELProposals(contentAssistRequest, context);
+		} else {
+			addELPredicateProposals(contentAssistRequest, /*TextProposal.R_TAG_INSERTION*/ XMLRelevanceConstants.R_STRICTLY_VALID_TAG_INSERTION, true);
 		}
-		
-		addELPredicateProposals(contentAssistRequest, TextProposal.R_TAG_INSERTION, true);
 	}
 	
 	@Override

@@ -119,10 +119,10 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		// If it is true we don't need to start any new tag proposals
 		TextRegion prefix = getELPrefix(contentAssistRequest);
 		if (prefix != null && prefix.isELStarted()) {
-			return;
+			addTextELProposals(contentAssistRequest, context);
+		} else {
+			addELPredicateProposals(contentAssistRequest, TextProposal.R_TAG_INSERTION, true);
 		}
-		
-		addELPredicateProposals(contentAssistRequest, TextProposal.R_TAG_INSERTION, true);
 	}
 	
 	@Override
@@ -839,8 +839,18 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		if (matchString == null)
 			return null;
 		
+		ELParser p = ELParserUtil.getJbossFactory().createParser();
+		ELModel model = p.parse(text);
+		
+		ELInstance is = ELUtil.findInstance(model, inValueOffset);// ELInstance
+		ELInvocationExpression ie = ELUtil.findExpression(model, inValueOffset);// ELExpression
+		
+		boolean isELStarted = (model != null && is != null && (model.toString().startsWith("#{") ||  //$NON-NLS-1$
+				model.toString().startsWith("${"))); //$NON-NLS-1$
+		boolean isELClosed = (model != null && is != null && model.toString().endsWith("}")); //$NON-NLS-1$
+
 		TextRegion tr = new TextRegion(startOffset, getOffset() - matchString.length() - startOffset, 
-				matchString.length(), matchString, false, false,
+				matchString.length(), matchString, isELStarted, isELClosed,
 				isAttributeValue, hasOpenQuote, hasCloseQuote, quoteChar);
 		
 		return tr;
