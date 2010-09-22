@@ -74,7 +74,7 @@ import org.w3c.dom.NodeList;
  */
 public class SelectionBar extends Composite implements ISelectionChangedListener, IStateListener,ICommandListener{
 	private static final int SEL_ITEM_RIGHT_MARGIN = 5;
-	public static final String SELECTION_BAR_CONTEXT_ID="org.jboss.tools.jst.jsp.selectionBar.context";
+	public static final String SELECTION_BAR_CONTEXT_ID="org.jboss.tools.jst.jsp.selectionBar.context"; //$NON-NLS-1$
 	/*
 	 * The main composite that holds all other controls
 	 */
