@@ -741,6 +741,16 @@
           categoryId="org.jboss.tools.jst.jsp.proposalCategory.xmlEL"
           class="org.jboss.tools.jst.jsp.contentassist.computers.XmlELCompletionProposalComputer"
           id="org.jboss.tools.jst.jsp.proposalComputer.xmlEL">
+          	<contentType id="org.eclipse.core.runtime.xml">
+				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
+				<partitionType id="org.eclipse.wst.xml.XML_CDATA" />
+				<partitionType id="org.eclipse.wst.xml.XML_PI" />
+				<partitionType id="org.eclipse.wst.xml.XML_DECL" />
+				<partitionType id="org.eclipse.wst.xml.XML_COMMENT" />
+				<partitionType id="org.eclipse.wst.xml.dtd.internal_subset" />
+				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT" />
+				<partitionType id="org.eclipse.wst.sse.UNKNOWN_PARTITION_TYPE" />
+			</contentType>
 			<contentType id="org.eclipse.wst.xml.core.xmlsource">
 				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
 				<partitionType id="org.eclipse.wst.xml.XML_CDATA" />
