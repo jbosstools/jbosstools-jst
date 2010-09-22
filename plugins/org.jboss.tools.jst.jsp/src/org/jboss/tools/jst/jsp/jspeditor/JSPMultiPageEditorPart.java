@@ -54,7 +54,7 @@ import org.jboss.tools.jst.jsp.selection.bar.SelectionBar;
  */
 public abstract class JSPMultiPageEditorPart extends EditorPart {
 
-	private CTabFolder container;
+	private CTabFolder tabFolderContainer;
 
 	private ArrayList nestedEditors = new ArrayList(3);
 	
@@ -90,20 +90,33 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 			editor.init(site, input);
 			parent2 = new Composite(getContainer(), SWT.NONE);
 			ppp = parent2;
+			GridLayout gridLayout = new GridLayout(2, false);
+			gridLayout.marginHeight = 0;
+			gridLayout.marginWidth = 0;
+			gridLayout.horizontalSpacing = 0;
+			gridLayout.verticalSpacing = 0;
+			parent2.setLayout(gridLayout);
+			
 			if(editor==sourcePart){
-				//case when only source part available
+				/*
+				 * In the case when only the source part is available
+				 */
 				Composite editorComp = new Composite(parent2, SWT.NONE);
-				editorComp.setLayout(new FillLayout());
-				GridData editorGD=new GridData(GridData.FILL_BOTH);
-				editorGD.horizontalSpan=2;
-				editorComp.setLayoutData(editorGD);
+				GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
+				gd.horizontalSpan = 2;
+				editorComp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+				editorComp.setLayout(new FillLayout(SWT.VERTICAL));
 				editor.createPartControl(editorComp);
 			}else {
 				editor.createPartControl(parent2);
 			}
-			parent2.setLayout(new GridLayout(2, false));
-			selectionBar = new SelectionBar(sourcePart);
-			selectionBar.createToolBarComposite(parent2);
+			/*
+			 * Create Selection Bar Composite and set its layout
+			 */
+			selectionBar = new SelectionBar(sourcePart, parent2, SWT.NONE);
+			selectionBar.setLayout(new GridLayout(1, false));
+			selectionBar.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false, 2, 1));
+			
 			editor.addPropertyListener(new IPropertyListener() {
 				public void propertyChanged(Object source, int propertyId) {
 					JSPMultiPageEditorPart.this
@@ -149,7 +162,7 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 	protected abstract void createPages();
 
 	public final void createPartControl(Composite parent) {
-		this.container = createContainer(parent);
+		this.tabFolderContainer = createContainer(parent);
 		createPages();
 		// set the active page (page 0 by default), unless it has already been
 		// done
@@ -184,7 +197,7 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 	}
 
 	protected Composite getContainer() {
-		return container;
+		return tabFolderContainer;
 	}
 
 	protected Control getControl(int pageIndex) {
@@ -223,7 +236,7 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 	}
 
 	protected CTabFolder getTabFolder() {
-		return container;
+		return tabFolderContainer;
 	}
 
 	protected void handlePropertyChange(int propertyId) {
