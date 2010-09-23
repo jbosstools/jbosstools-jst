@@ -217,7 +217,7 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 	 * @param markerOwner
 	 * @return
 	 */
-	public static IMarker addError(String message, int severity, String[] messageArguments, int length, int offset, IResource target, TextFileDocumentProvider documentProvider, String markerId, Class markerOwner) {
+	public static IMarker addError(String message, int severity, Object[] messageArguments, int length, int offset, IResource target, TextFileDocumentProvider documentProvider, String markerId, Class markerOwner) {
 		IMarker marker = null;
 		int lineNumber = 1;
 		try {
