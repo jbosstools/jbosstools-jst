@@ -10,7 +10,9 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.project.list;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 import org.eclipse.core.runtime.Platform;
 import org.jboss.tools.common.model.XModel;
@@ -18,9 +20,9 @@ import org.jboss.tools.common.model.util.ModelFeatureFactory;
 import org.jboss.tools.jst.web.WebModelPlugin;
 
 public class WebPromptingProvider implements IWebPromptingProvider {
-	
+
 	static IWebPromptingProvider[] providers;
-	
+
 	static {
 		String[][] pns = new String[][]{
 			{"org.jboss.tools.jsf.model.pv.JSFPromptingProvider", "org.jboss.tools.jsf"}, //$NON-NLS-1$ //$NON-NLS-2$
@@ -40,11 +42,11 @@ public class WebPromptingProvider implements IWebPromptingProvider {
 		}
 		providers = l.toArray(new IWebPromptingProvider[0]);
 	}
-	
+
 	public static WebPromptingProvider getInstance() {
 		return WebPromptingProviderHolder.provider;
 	}
-	
+
 	public boolean isSupporting(String id) {
 		for (int i = 0; i < providers.length; i++) {
 			if(providers[i].isSupporting(id)) return true;
@@ -70,9 +72,8 @@ public class WebPromptingProvider implements IWebPromptingProvider {
 		}
 		return EMPTY_LIST;
 	}
-	
+
 	static class WebPromptingProviderHolder {
 		static WebPromptingProvider provider = new WebPromptingProvider();
 	}
-
 }
