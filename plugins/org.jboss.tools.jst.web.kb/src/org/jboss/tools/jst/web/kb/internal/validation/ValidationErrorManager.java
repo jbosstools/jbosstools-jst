@@ -228,8 +228,8 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 					lineNumber = doc.getLineOfOffset(offset) + 1;
 				}
 			}
-//			marker = addTask(markerOwner.getName().intern(), target, lineNumber, MessageFormat.format(message, messageArguments),
-//					severity, null, markerId, offset, length);
+			marker = addTask(markerOwner.getName().intern(), target, lineNumber, MessageFormat.format(message, messageArguments),
+					severity, null, markerId, offset, length);
 		} catch (BadLocationException e) {
 			WebKbPlugin.getDefault().logError(
 					NLS.bind(KbMessages.EXCEPTION_DURING_CREATING_MARKER, target.getFullPath()), e);
