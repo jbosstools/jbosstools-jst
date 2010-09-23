@@ -87,7 +87,10 @@ public class WebWizardsTest extends AbstractModelNewWizardTest {
 			assertEquals("The Page should be","HTMLWizardNewFileCreationPage", htmlWizardNewFileCreationPage.getName());  //$NON-NLS-1$//$NON-NLS-2$
 			IWizardPage newXHTMLTemplatesWizardPage=htmlWizardNewFileCreationPage.getNextPage();
 			assertEquals("The Page should be","NewXHTMLTemplatesWizardPage", newXHTMLTemplatesWizardPage.getName());  //$NON-NLS-1$//$NON-NLS-2$
-			assertTrue("Start page is not loaded",newXHTMLTemplatesWizardPage.getNextPage() instanceof DefaultStandardStep); //$NON-NLS-1$
+			if (newXHTMLTemplatesWizardPage.canFlipToNextPage()) {
+				IWizardPage newXHTMLTagLibrariesWizardPage = newXHTMLTemplatesWizardPage.getNextPage();
+				assertTrue("Start page is not loaded", newXHTMLTagLibrariesWizardPage instanceof DefaultStandardStep); //$NON-NLS-1$
+			}
 		} finally {
 			dialog.close();
 		}
