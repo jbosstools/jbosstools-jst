@@ -54,6 +54,7 @@ public class ClassPathMonitor extends AbstractClassPathMonitor<KbProject> {
 	 */
 	public void init() {
 		model = InnerModelHelper.createXModel(project.getProject());
+		super.init();
 	}
 	
 	public IProject getProjectResource() {
