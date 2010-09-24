@@ -26,10 +26,12 @@ import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.project.ext.AbstractClassPathMonitor;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.kb.IKbProject;
+import org.jboss.tools.jst.web.kb.KbMessages;
 import org.jboss.tools.jst.web.kb.KbProjectFactory;
 import org.jboss.tools.jst.web.kb.internal.KbProject;
 import org.jboss.tools.jst.web.model.helpers.InnerModelHelper;
@@ -66,6 +68,11 @@ public class ClassPathMonitor extends AbstractClassPathMonitor<KbProject> {
 	 */
 	public void process() {
 		Iterator<String> it = processedPaths.iterator();
+		
+		if(paths == null) {
+			ModelPlugin.getDefault().logError("Failed to process class path in kb builder for project " + project);
+			return;
+		}
 		while(it.hasNext()) {
 			String p = it.next();
 			if(paths.contains(p)) continue;
