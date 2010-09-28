@@ -13,26 +13,21 @@ package org.jboss.tools.jst.web.project.helpers;
 import java.io.*;
 import java.util.*;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.osgi.util.NLS;
 
 import org.jboss.tools.common.model.ServiceDialog;
-import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.messages.xpl.WebUIMessages;
-import org.jboss.tools.jst.web.project.handlers.AddPageTemplateSupport;
 import org.jboss.tools.jst.web.project.handlers.AddProjectTemplateSupport;
 import org.jboss.tools.jst.web.project.handlers.EditProjectTemplateSupport;
 import org.jboss.tools.jst.web.project.version.*;
 
 public abstract class AbstractWebProjectTemplate implements IWebProjectTemplate {
-	Map<String,File> pages = new TreeMap<String,File>();
 	
 	public AbstractWebProjectTemplate() {
-		updatePageTemplates();
 	}
 
 	protected abstract String getNatureDir();
@@ -89,34 +84,6 @@ public abstract class AbstractWebProjectTemplate implements IWebProjectTemplate 
 		return getTemplatesBase() + "/pages"; //$NON-NLS-1$
 	}
 
-	public void updatePageTemplates() {
-		pages.clear();
-		File templateDir = new File(getPageTemplatesLocation());
-		if (!templateDir.isDirectory()) return;
-		getTemplates(templateDir, pages);
-		getTemplates(templateDir, getNatureDir(), pages); 
-	}
-
-	public Map<String,File> getPageTemplates() {
-		return pages; 
-	}
-	
-	public String[] getPageTemplateList() {
-		return pages.keySet().toArray(new String[0]);
-	}
-
-	private void getTemplates(File parent, String name, Map<String,File> templates) {
-		File dir = new File(parent, name);
-		if(dir.isDirectory()) getTemplates(dir, templates);
-	}
-
-	private void getTemplates(File dir, Map<String,File> templates) {
-		File[] files = dir.listFiles();
-		if(files == null) return;
-		for (int i = 0; i < files.length; i++)
-			if(files[i].isFile()) templates.put(files[i].getName(), files[i]);
-	}
-	
 	public String[] getVersionList() {
 		return getProjectVersions().getVersionList();
 	}
@@ -164,37 +131,6 @@ public abstract class AbstractWebProjectTemplate implements IWebProjectTemplate 
 
 	protected abstract String getWizardEntitySuffix();
 
-	public String addPageTemplate(XModelObject selection) {
-		return AddPageTemplateSupport.run(this, "PageTemplate" + getWizardEntitySuffix(), selection); //$NON-NLS-1$
-	}
-
-	public String addPageTemplate() {
-		return addPageTemplate(null);
-	}
-
-	public void addPageTemplate(String name, IFile resource) {
-		File dir = new File(getPageTemplatesLocation());
-		dir = new File(dir, getNatureDir());
-		File target = new File(dir, name);
-		File source = resource.getLocation().toFile();
-		FileUtil.copyFile(source, target, true, true);
-		updatePageTemplates();
-	}
-	
-	public void removePageTemplate(String name) {
-		File dir = new File(getPageTemplatesLocation());
-		File target = new File(dir, name);
-		if(!target.isFile()) {
-			dir = new File(dir, getNatureDir());
-		}
-		target = new File(dir, name);
-		if(target.isFile()) {
-			if(!confirm(NLS.bind(WebUIMessages.YOU_WANT_TO_DELETE_PAGE_TEMPLATE,name))) return;
-			target.delete();
-			updatePageTemplates();
-		}
-	}
-	
 	public String addProjectTemplate(String version) {
 		return AddProjectTemplateSupport.run(this, "ProjectTemplate" + getWizardEntitySuffix(), version); //$NON-NLS-1$
 	}

@@ -139,14 +139,6 @@
   </XModelAttributes>
   <XActionItem kind="list">
    <XActionItem kind="list" name="CreateActions">
-    <XActionItem HandlerClassName="%SpecialWizard%" ICON="action.empty"
-     PROPERTIES="support=org.jboss.tools.jst.web.project.handlers.AddPageTemplateSupport"
-     displayName="Add Page Template" kind="action" name="CreatePageTemplate">
-     <EntityData EntityName="PageTemplateJSF">
-      <AttributeData AttributeName="name"/>
-      <AttributeData AttributeName="page path"/>
-     </EntityData>
-    </XActionItem>
    </XActionItem>
   </XActionItem>
   <XDependencies/>
@@ -179,17 +171,6 @@
   </XModelAttributes>
   <XActionItem kind="list">
    <XActionItem kind="list" name="CreateActions">
-    <XActionItem HandlerClassName="%SpecialWizard%" ICON="action.empty"
-     PROPERTIES="support=org.jboss.tools.jst.web.project.handlers.AddPageTemplateSupport"
-     displayName="Add Page Template" kind="action" name="CreatePageTemplate">
-     <EntityData EntityName="PageTemplateStruts">
-      <AttributeData AttributeName="name"/>
-      <AttributeData AttributeName="page path"/>
-     </EntityData>
-     <EntityData EntityName="ProjectTemplateVelocity">
-      <AttributeData AttributeName="velocity templates" Mandatory="no"/>
-     </EntityData>
-    </XActionItem>
    </XActionItem>
   </XActionItem>
   <XDependencies/>

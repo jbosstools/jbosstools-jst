@@ -155,8 +155,6 @@
 			class="org.jboss.tools.jst.web.project.WebConfigImpl"/>
 		<xclass id="org.jboss.tools.jst.web.project.WebModuleImpl"
 			class="org.jboss.tools.jst.web.project.WebModuleImpl"/>
-		<xclass id="org.jboss.tools.jst.web.project.handlers.CreateTemplateFromPageHandler"
-			class="org.jboss.tools.jst.web.project.handlers.CreateTemplateFromPageHandler"/>
 		<xclass id="org.jboss.tools.jst.web.project.handlers.CreateTemplateFromProjectHandler"
 			class="org.jboss.tools.jst.web.project.handlers.CreateTemplateFromProjectHandler"/>
 		<xclass id="org.jboss.tools.jst.web.project.handlers.CreateWebPrjHandler"
@@ -265,8 +263,6 @@
 			class="org.jboss.tools.jst.web.project.handlers.AddJarToLibrarySetSupport"/>
 		<xclass id="org.jboss.tools.jst.web.project.handlers.AddLibraryToVersionSupport"
 			class="org.jboss.tools.jst.web.project.handlers.AddLibraryToVersionSupport"/>
-		<xclass id="org.jboss.tools.jst.web.project.handlers.AddPageTemplateSupport"
-			class="org.jboss.tools.jst.web.project.handlers.AddPageTemplateSupport"/>
 		<xclass id="org.jboss.tools.jst.web.project.handlers.AddVersionSupport"
 			class="org.jboss.tools.jst.web.project.handlers.AddVersionSupport"/>
 		<xclass id="org.jboss.tools.jst.web.project.handlers.AddLibrarySetSupport"

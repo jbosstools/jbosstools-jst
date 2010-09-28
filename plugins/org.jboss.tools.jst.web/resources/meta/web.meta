@@ -1404,9 +1404,6 @@
   <XChildrenEntities/>
   <XActionItem kind="list">
    <XActionItem kind="list" name="CreateActions">
-    <XActionItem
-     HandlerClassName="org.jboss.tools.jst.web.project.handlers.CreateTemplateFromPageHandler"
-     ICON="action.empty" displayName="Save as Template..." kind="action" name="CreateTemplate"/>
    </XActionItem>
   </XActionItem>
  </XEntityExtension>
@@ -1414,9 +1411,6 @@
   <XChildrenEntities/>
   <XActionItem kind="list">
    <XActionItem kind="list" name="CreateActions">
-    <XActionItem
-     HandlerClassName="org.jboss.tools.jst.web.project.handlers.CreateTemplateFromPageHandler"
-     ICON="action.empty" displayName="Save as Template..." kind="action" name="CreateTemplate"/>
    </XActionItem>
   </XActionItem>
  </XEntityExtension>
@@ -1560,9 +1554,6 @@
   <XChildrenEntities/>
   <XActionItem kind="list">
    <XActionItem kind="list" name="CreateActions">
-    <XActionItem
-     HandlerClassName="org.jboss.tools.jst.web.project.handlers.CreateTemplateFromPageHandler"
-     ICON="action.empty" displayName="Save as Template..." kind="action" name="CreateTemplate"/>
    </XActionItem>
   </XActionItem>
  </XEntityExtension>
