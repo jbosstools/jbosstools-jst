@@ -24,6 +24,7 @@ import org.eclipse.wst.sse.ui.internal.Logger;
 import org.eclipse.wst.sse.ui.internal.taginfo.AnnotationHoverProcessor;
 import org.eclipse.wst.sse.ui.internal.taginfo.DebugInfoHoverProcessor;
 import org.eclipse.wst.sse.ui.internal.taginfo.ProblemAnnotationHoverProcessor;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
 
 
 /**
@@ -104,28 +105,36 @@ public class ChainTextHover implements ITextHover, ITextHoverExtension {
 
 		// already have a best match hover picked out from getHoverRegion call
 		if (fBestMatchHover != null) {
-			displayInfo = fBestMatchHover.getHoverInfo(viewer, hoverRegion);
+			try {
+				displayInfo = fBestMatchHover.getHoverInfo(viewer, hoverRegion);
+			} catch (Exception e) {
+				JspEditorPlugin.getPluginLog().logError(ELInfoHooverMessages.ELInfoHoover_error_gettingInfo, e);
+			}
 		}
 		// either had no best match hover or best match hover returned null
 		if (displayInfo == null) {
-			// go through list of text hovers and return first display string
+			// go through the list of text hovers and return first display string
 			Iterator<ITextHover> i = getTextHovers().iterator();
 			while ((i.hasNext()) && (displayInfo == null)) {
 				ITextHover hover = (ITextHover) i.next();
-				if(hover instanceof ITextHoverExtension2) {
-					Object displayInfoObject = ((ITextHoverExtension2)hover).getHoverInfo2(viewer, hoverRegion);
-					if(displayInfoObject!=null) {
-						displayInfo = displayInfoObject.toString();
+				try {
+					if(hover instanceof ITextHoverExtension2) {
+						Object displayInfoObject = ((ITextHoverExtension2)hover).getHoverInfo2(viewer, hoverRegion);
+						if(displayInfoObject!=null) {
+							displayInfo = displayInfoObject.toString();
+						}
+					} else {
+						displayInfo = hover.getHoverInfo(viewer, hoverRegion);
 					}
-				} else {
-					displayInfo = hover.getHoverInfo(viewer, hoverRegion);
+				} catch (Exception e) {
+					JspEditorPlugin.getPluginLog().logError(ELInfoHooverMessages.ELInfoHoover_error_gettingInfo, e);
 				}
 			}
 		}
 		return displayInfo;
 	}
 
-	/*
+	/* 
 	 * (non-Javadoc)
 	 * 
 	 * @see org.eclipse.jface.text.ITextHover#getHoverRegion(org.eclipse.jface.text.ITextViewer,
