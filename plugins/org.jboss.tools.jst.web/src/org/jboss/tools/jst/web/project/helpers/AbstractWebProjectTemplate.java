@@ -162,21 +162,6 @@ public abstract class AbstractWebProjectTemplate implements IWebProjectTemplate 
 		
 	}
 
-	public abstract String getDefaultPageTemplate();
-
-	public String getDefaultPageTemplate(String preference) {
-		String[] vs = getPageTemplateList();
-		if(vs == null || vs.length == 0) return ""; //$NON-NLS-1$
-		for (int i = 0; i < vs.length; i++) {
-			if(vs[i].equals(preference)) return preference;
-		}
-		return vs[0];
-	}
-	
-	public void setDefaultPageTemplate(String template) {
-		
-	}
-
 	protected abstract String getWizardEntitySuffix();
 
 	public String addPageTemplate(XModelObject selection) {
