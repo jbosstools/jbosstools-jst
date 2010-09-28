@@ -355,7 +355,7 @@
    <XModelAttribute default="Add View" name="name" visibility="false" xmlname="NAME">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute default="JSFBasePage" name="Page Template" xmlname="page-template">
+   <XModelAttribute default="New JavaServer Faces (JSF) Page (html)" name="Page Template" xmlname="page-template">
     <Constraint loader="ListString"/>
     <Editor name="ListString"/>
    </XModelAttribute>
