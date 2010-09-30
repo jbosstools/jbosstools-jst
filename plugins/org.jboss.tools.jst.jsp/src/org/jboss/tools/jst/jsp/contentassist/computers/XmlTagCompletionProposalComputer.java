@@ -322,7 +322,7 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 		String stringQuery = "<" + query; //$NON-NLS-1$
 				
 		KbQuery kbQuery = createKbQuery(Type.TAG_NAME, query, stringQuery, prefix, uri);
-		TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext());
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext(), true);
 		
 		for (int i = 0; proposals != null && i < proposals.length; i++) {
 			TextProposal textProposal = proposals[i];

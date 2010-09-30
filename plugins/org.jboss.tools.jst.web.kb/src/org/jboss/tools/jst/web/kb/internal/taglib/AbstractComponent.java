@@ -46,7 +46,7 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	public static final String COMPONENT_TYPE = "component-type"; //$NON-NLS-1$
 	public static final String BODY_CONTENT = "bodycontent"; //$NON-NLS-1$
 
-	protected boolean canHaveBody;
+	protected boolean canHaveBody = true;
 	protected String componentClass;
 	protected String componentType;
 	protected String description;
@@ -78,7 +78,7 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	 * @param s
 	 */
 	public void setCanHaveBody(IValueInfo s) {
-		canHaveBody = s == null || "empty".equals(s.getValue()); //$NON-NLS-1$
+		canHaveBody = s == null || !"empty".equals(s.getValue()); //$NON-NLS-1$
 		attributesInfo.put(BODY_CONTENT, s);
 	}
 

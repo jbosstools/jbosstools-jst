@@ -12,7 +12,10 @@ package org.jboss.tools.jst.web.kb;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
@@ -22,6 +25,7 @@ import org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibAttribute;
 import org.jboss.tools.jst.web.kb.taglib.CustomTagLibManager;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
+import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibComponent;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibrary;
 import org.jboss.tools.jst.web.kb.taglib.IFacesConfigTagLibrary;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
@@ -54,7 +58,51 @@ public class PageProcessor {
 	 * @return
 	 */
 	public TextProposal[] getProposals(KbQuery query, ELContext context) {
-		ArrayList<TextProposal> proposals = new ArrayList<TextProposal>();
+		return getProposals(query, context, false);
+	}
+
+	private List<TextProposal> excludeExtendedComponents(List<TextProposal> proposals) {
+		Map<String, Set<TextProposal>> runtimeComponentMap = new HashMap<String, Set<TextProposal>>();
+		Map<String, TextProposal> customComponentMap = new HashMap<String, TextProposal>();
+		for (TextProposal proposal : proposals) {
+			Object source = proposal.getSource();
+			if(source instanceof IComponent) {
+				IComponent component = (IComponent)source;
+				String name = component.getTagLib().getURI() + ":" + component.getName(); //$NON-NLS-1$
+				if(source instanceof ICustomTagLibComponent) {
+					customComponentMap.put(name, proposal);
+				} else {
+					Set<TextProposal> textProposals = runtimeComponentMap.get(name);
+					if(textProposals==null) {
+						textProposals = new HashSet<TextProposal>();
+					}
+					textProposals.add(proposal);
+					runtimeComponentMap.put(name, textProposals);
+				}
+			}
+		}
+		if(!customComponentMap.isEmpty()) {
+			proposals.clear();
+			for (String name : runtimeComponentMap.keySet()) {
+				TextProposal customProposal = customComponentMap.get(name);
+				if(customProposal!=null) {
+					proposals.add(customProposal);
+				} else {
+					proposals.addAll(runtimeComponentMap.get(name));
+				}
+			}
+		}
+		return proposals;
+	}
+
+	/**
+	 * 
+	 * @param query
+	 * @param context
+	 * @return
+	 */
+	public TextProposal[] getProposals(KbQuery query, ELContext context, boolean preferCustomComponentExtensions) {
+		List<TextProposal> proposals = new ArrayList<TextProposal>();
 
 		if (!isQueryForELProposals(query, context)) {
 			if(context instanceof IPageContext) {
@@ -95,6 +143,9 @@ public class PageProcessor {
 					for (int j = 0; libProposals != null && j < libProposals.length; j++) {
 						proposals.add(libProposals[j]);
 					}
+				}
+				if(preferCustomComponentExtensions && query.getType() == KbQuery.Type.TAG_NAME) {
+					proposals = excludeExtendedComponents(proposals);
 				}
 			}
 		} else {

@@ -79,13 +79,15 @@
         </attribute>
 	</component>
 
-	<component name="actionparam">
+	<component closeTag="true" name="actionparam">
 		<attribute name="noEscape">
 			<proposal type="enumeration">
 				<param value="true" />
 				<param value="false" />
 			</proposal>
 		</attribute>
+		<attribute name="name" required="true"/>
+		<attribute name="value" required="true"/>
 	</component>
 	<component name="commandButton">
 		<attribute name="image">
