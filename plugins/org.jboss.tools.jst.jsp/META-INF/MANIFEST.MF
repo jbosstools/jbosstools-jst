@@ -28,7 +28,9 @@ Export-Package: org.jboss.tools.jst.jsp,
  org.jboss.tools.jst.jsp.text,
  org.jboss.tools.jst.jsp.ui.action,
  org.jboss.tools.jst.jsp.util,
- org.jboss.tools.jst.jsp.selection
+ org.jboss.tools.jst.jsp.selection,
+ org.jboss.tools.jst.jsp.i18n, 
+ org.jboss.tools.jst.jsp.bundle
 Require-Bundle: org.jboss.tools.common.el.core,
  org.jboss.tools.common.model.ui,
  org.jboss.tools.jst.web,

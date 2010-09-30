@@ -39,6 +39,9 @@ import org.osgi.framework.Bundle;
  * The main plugin class to be used in the desktop.
  */
 public class JspEditorPlugin extends BaseUIPlugin {
+	
+	public static final String EXTESION_POINT_LOCALE_PROVIDER = "org.jboss.tools.jst.jsp.localeProvider"; //$NON-NLS-1$
+	
 	//The shared instance.
 	private static JspEditorPlugin plugin;
 	

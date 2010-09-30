@@ -71,15 +71,18 @@ public class Constants {
 
 	public static final String EMPTY = ""; //$NON-NLS-1$
 	public static final String WHITE_SPACE = " "; //$NON-NLS-1$
-	public static String COLON = ":"; //$NON-NLS-1$
-	public static String SEMICOLON = ";"; //$NON-NLS-1$
-	public static String COMMA = ","; //$NON-NLS-1$
-	public static String DOT = "."; //$NON-NLS-1$
-	public static String DASH = "-"; //$NON-NLS-1$
-	public static String SLASH = "/"; //$NON-NLS-1$
-	public static String EQUAL = "="; //$NON-NLS-1$
+	public static final String COLON = ":"; //$NON-NLS-1$
+	public static final String SEMICOLON = ";"; //$NON-NLS-1$
+	public static final String COMMA = ","; //$NON-NLS-1$
+	public static final String DOT = "."; //$NON-NLS-1$
+	public static final String DASH = "-"; //$NON-NLS-1$
+	public static final String SLASH = "/"; //$NON-NLS-1$
+	public static final String EQUAL = "="; //$NON-NLS-1$
+	public static final String UNDERSCORE = "_"; //$NON-NLS-1$
 	public static final String START_BRACKET = "("; //$NON-NLS-1$
 	public static final String END_BRACKET = ")"; //$NON-NLS-1$
+	public static final String GT = ">"; //$NON-NLS-1$
+	public static final String LT = "<"; //$NON-NLS-1$
 
 	public static final String LEFT_BRACE = "{"; //$NON-NLS-1$
 	public static final String RIGHT_BRACE = "}"; //$NON-NLS-1$

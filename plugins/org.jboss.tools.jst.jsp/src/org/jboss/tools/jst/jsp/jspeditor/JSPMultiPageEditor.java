@@ -82,6 +82,7 @@ import org.jboss.tools.common.model.util.XModelTreeListenerSWTASync;
 import org.jboss.tools.common.model.util.XModelTreeListenerSWTSync;
 import org.jboss.tools.common.text.ext.IMultiPageEditor;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
+import org.jboss.tools.jst.jsp.bundle.BundleMap;
 import org.jboss.tools.jst.jsp.editor.IVisualEditor;
 import org.jboss.tools.jst.jsp.editor.IVisualEditorFactory;
 import org.jboss.tools.jst.jsp.preferences.IVpePreferencesPage;
@@ -116,6 +117,8 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	private int previewIndex=-1;//by default 1, so if there no visual editor impl, this tab will be not available
 
 	// private boolean osWindows = true;
+	
+	private BundleMap bundleMap;
 
 	protected XModelTreeListenerSWTASync syncListener = new XModelTreeListenerSWTASync(
 			this);
@@ -460,10 +463,19 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	}
 
 	private void createPagesForVPE() {
+		/*
+		 * Create Source Editor and BundleMap
+		 */
 		sourceEditor = new JSPTextEditor(this);
+		/*
+		 * Create Bundle Map here but Initialize it  in the VpeController
+		 * or here if there is only the source part. 
+		 */
+		bundleMap = new BundleMap();
+		
 		if (visualEditorFactory != null) {
 			visualEditor = visualEditorFactory.createVisualEditor(this,
-					sourceEditor, false);
+					sourceEditor, false, bundleMap);
 		}
 		try {
 			if (visualEditor != null) {
@@ -510,7 +522,16 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		} catch (PartInitException e) {
 			JspEditorPlugin.getPluginLog().logError(e);
 		}
-
+		
+		/*
+		 * When there is only the source part --
+		 * then VpeController very likely hasn't been created.
+		 * Thus Bundle Map should be initialized here instead of
+		 * VpeController.
+		 */
+		if (visualEditor == null) {
+			bundleMap.init(sourceEditor);
+		}
 	}
 
 	public void doSave(IProgressMonitor monitor) {

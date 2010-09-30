@@ -183,14 +183,11 @@ public class XmlUtil {
 	 * @return
 	 */
 	public static TaglibData getTaglibForPrefix(String prefix, List<TaglibData> taglibData){
-				
 			for (TaglibData data : taglibData) {
-				
 				if(data.getPrefix()!=null && data.getPrefix().equalsIgnoreCase(prefix)) {
 					 return data;
 				}
 			}
-			
 			return null;
 	}
 }

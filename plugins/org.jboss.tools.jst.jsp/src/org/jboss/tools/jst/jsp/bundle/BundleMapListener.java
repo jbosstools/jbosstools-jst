@@ -8,16 +8,8 @@
  * Contributors:
  *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
  ******************************************************************************/ 
-package org.jboss.tools.jst.jsp.editor;
+package org.jboss.tools.jst.jsp.bundle;
 
-import org.eclipse.ui.part.EditorPart;
-import org.eclipse.wst.sse.ui.StructuredTextEditor;
-import org.jboss.tools.jst.jsp.bundle.BundleMap;
-
-public interface IVisualEditorFactory {
-	
-	public IVisualEditor createVisualEditor(EditorPart multiPageEditor,
-			StructuredTextEditor textEditor, boolean visualMode,
-			BundleMap bundleMap);
-
+public interface BundleMapListener {
+	public void bundleKeyChanged(String bundlePrefix, String key, String value);
 }
