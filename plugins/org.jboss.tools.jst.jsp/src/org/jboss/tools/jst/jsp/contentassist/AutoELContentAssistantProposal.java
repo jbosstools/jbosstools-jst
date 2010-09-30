@@ -180,4 +180,27 @@ public class AutoELContentAssistantProposal extends AutoContentAssistantProposal
 			HTMLPrinter.addSmallHeader(buffer, getInfoText(element));
 		}
 	}
+	
+	/**
+	 * Return cursor position of proposal replacement string.
+	 * 
+	 * Method is added because of JBIDE-7168
+	 */
+	public int getCursorPosition() {
+	    int cursorPosition = -1;
+	    
+	    int openingQuoteInReplacement = getReplacementString().indexOf('(');
+	    int closingQuoteInReplacement = getReplacementString().indexOf(')');
+	    int openingQuoteInDisplay = getDisplayString().indexOf('(');
+	    int closingQuoteInDisplay = getDisplayString().indexOf(')');
+	    
+	    if (openingQuoteInReplacement != -1 && closingQuoteInReplacement != -1 &&
+	    		openingQuoteInDisplay != -1 && closingQuoteInDisplay != -1 &&
+	    		(closingQuoteInReplacement - openingQuoteInReplacement) != 
+	    			(closingQuoteInDisplay - openingQuoteInDisplay)) {
+	    	cursorPosition = openingQuoteInReplacement + 1;
+	    }
+	    
+		return cursorPosition>-1?cursorPosition:super.getCursorPosition();
+	}
 }
