@@ -131,5 +131,10 @@ public class JspELCompletionProposalComputer extends XmlELCompletionProposalComp
 		}
 	}
 
+	@Override
+	protected int getTagInsertionBaseRelevance() {
+		return TextProposal.R_TAG_INSERTION;
+	}
+
 	
 }

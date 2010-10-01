@@ -155,7 +155,7 @@ public class FaceletsELCompletionProposalComputer extends JspELCompletionProposa
 		if (prefix != null && prefix.isELStarted()) {
 			addTextELProposals(contentAssistRequest, context);
 		} else {
-			addELPredicateProposals(contentAssistRequest, /*TextProposal.R_TAG_INSERTION*/ XMLRelevanceConstants.R_STRICTLY_VALID_TAG_INSERTION, true);
+			addELPredicateProposals(contentAssistRequest, getTagInsertionBaseRelevance(), true);
 		}
 	}
 	
@@ -262,6 +262,11 @@ public class FaceletsELCompletionProposalComputer extends JspELCompletionProposa
 			tagName = jsfTagName;
 		}
 		return tagName;
+	}
+
+	@Override
+	protected int getTagInsertionBaseRelevance() {
+		return XMLRelevanceConstants.R_STRICTLY_VALID_TAG_INSERTION;
 	}
 
 }

@@ -121,7 +121,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		if (prefix != null && prefix.isELStarted()) {
 			addTextELProposals(contentAssistRequest, context);
 		} else {
-			addELPredicateProposals(contentAssistRequest, TextProposal.R_TAG_INSERTION, true);
+			addELPredicateProposals(contentAssistRequest, getTagInsertionBaseRelevance(), true);
 		}
 	}
 	
@@ -1109,4 +1109,8 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		return region;
 	}
 
+	protected int getTagInsertionBaseRelevance() {
+		return TextProposal.R_XML_TAG_INSERTION;
+	}
+	
 }
