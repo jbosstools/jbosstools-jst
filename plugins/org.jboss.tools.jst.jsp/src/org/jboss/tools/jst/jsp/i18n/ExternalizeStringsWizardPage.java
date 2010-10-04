@@ -711,6 +711,8 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 		 * and "key=value" exists.
 		 */
 		if ((getErrorMessage() == null)
+				&& !Constants.EMPTY.equalsIgnoreCase(propsKey.getText().trim())
+				&& !Constants.EMPTY.equalsIgnoreCase(propsValue.getText().trim())
 				&& ((rbCombo.getSelectionIndex() != -1) || isNewFile())) {
 			isPageComplete = true;
 		}
