@@ -308,7 +308,7 @@
 			</menuContribution>
          <menuContribution 
                locationURI="menu:navigate?endof=show.ext">
-               <command label="%Show.Selection.Bar"
+               <command label="%Toggle.Selection.Bar"
                      commandId="org.jboss.tools.jst.jsp.commands.showSelectionBar"
                      id="org.jboss.tools.jst.jsp.menus.showSelectionBar"
                      style="toggle"
@@ -345,6 +345,32 @@
                class="org.jboss.tools.jst.jsp.i18n.ExternalizeStringsContributionItem"
                id="org.jboss.tools.jst.jsp.i18n.ExternalizeStringsContributionItem">
         	</dynamic>
+        </menuContribution>
+        <menuContribution
+              locationURI="menu:sourceMenuId?after=OccurencesFile">
+              <command label="%Externalize.Selected.Property"
+                    commandId="org.jboss.tools.jst.jsp.commands.i18"
+                    id="org.jboss.tools.jst.jsp.menus.i18"
+                    mnemonic="S">
+                <visibleWhen checkEnabled="false">
+					<reference definitionId="org.jboss.tools.ui.structuredEditor"/>
+				</visibleWhen>
+              </command>
+        </menuContribution>
+        <menuContribution
+              locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+           <toolbar
+                 id="org.jboss.tools.jst.jsp.toolbars.sampleToolbar">
+              <command
+                    commandId="org.jboss.tools.jst.jsp.commands.i18"
+                    icon="icons/externalize.png"
+                    id="org.jboss.tools.jst.jsp.toolbars.i18"
+                    tooltip="%Externalize.Selected.Property">
+                <visibleWhen checkEnabled="false">
+					<reference definitionId="org.jboss.tools.ui.structuredEditor"/>
+				</visibleWhen>
+              </command>
+           </toolbar>
         </menuContribution>
          
    </extension>
@@ -455,6 +481,10 @@
           <enabledWhen>
               <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
           </enabledWhen>
+       </handler>
+       <handler
+             class="org.jboss.tools.jst.jsp.i18n.handlers.I18Handler"
+             commandId="org.jboss.tools.jst.jsp.commands.i18">
        </handler>
        </extension>
 
@@ -722,6 +752,11 @@
                  id="org.eclipse.ui.commands.toggleState">
            </state>
      </command>
+     <command
+           categoryId="org.jboss.tools.jst.jsp.commands.category"
+           id="org.jboss.tools.jst.jsp.commands.i18"
+           name="%Externalize.Selected.Property">
+     </command>
   </extension>
   <extension
         point="org.eclipse.ui.bindings">
@@ -736,6 +771,12 @@
            contextId="org.eclipse.ui.contexts.window"
            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
            sequence="M1+6">
+     </key>
+     <key
+           commandId="org.jboss.tools.jst.jsp.commands.i18"
+           contextId="org.eclipse.ui.contexts.window"
+           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+           sequence="M1+7">
      </key>
   </extension>
   

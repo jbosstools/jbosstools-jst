@@ -19,7 +19,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
-import org.eclipse.wst.sse.ui.StructuredTextEditor;
+import org.eclipse.ui.texteditor.ITextEditor;
 import org.jboss.tools.common.model.ui.ModelUIImages;
 import org.jboss.tools.jst.jsp.bundle.BundleMap;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
@@ -29,12 +29,12 @@ public class ExternalizeStringsWizard extends Wizard {
 	public String ExternalizeStringsWizardPageName = "ExternalizeStringsWizardPage"; //$NON-NLS-1$
 	public String NewFileCreationPageName = "NewFileCreationPage"; //$NON-NLS-1$
 	
-	StructuredTextEditor editor = null;
+	ITextEditor editor = null;
 	BundleMap bm = null;
 	ExternalizeStringsWizardPage page1 = null;
 	WizardNewFileCreationPage page2 = null;
 	
-	public ExternalizeStringsWizard(StructuredTextEditor editor, BundleMap bm) {
+	public ExternalizeStringsWizard(ITextEditor editor, BundleMap bm) {
 		super();
 		setHelpAvailable(false);
 		setWindowTitle(JstUIMessages.EXTERNALIZE_STRINGS_DIALOG_TITLE);

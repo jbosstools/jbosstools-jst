@@ -17,19 +17,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.InvalidRegistryObjectException;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.RegistryFactory;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.wst.sse.ui.StructuredTextEditor;
+import org.eclipse.ui.texteditor.ITextEditor;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 
 /**
@@ -77,7 +74,7 @@ public class MainLocaleProvider implements ILocaleProvider {
 	 * {@code localeProvider} extensions. Returns the default
 	 * system locale if nothing found (never returns {@code null}).
 	 */
-	public Locale getLocale(StructuredTextEditor editor) {
+	public Locale getLocale(ITextEditor editor) {
 		IEditorInput editorInput = editor.getEditorInput();
 		if (editorInput instanceof IFileEditorInput) {
 			IProject project = ((IFileEditorInput)editorInput)

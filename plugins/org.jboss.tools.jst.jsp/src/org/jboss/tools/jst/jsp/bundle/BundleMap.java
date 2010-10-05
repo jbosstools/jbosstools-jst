@@ -34,6 +34,7 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.jboss.tools.common.el.core.model.ELArgumentInvocation;
 import org.jboss.tools.common.el.core.model.ELExpression;
@@ -64,7 +65,7 @@ public class BundleMap {
 	};
 		
 	private BundleMapListener[] bundleMapListeners = new BundleMapListener[0];
-	private StructuredTextEditor editor;
+	private ITextEditor editor;
 	
 	private String[] javaSources;
     /*
@@ -79,7 +80,7 @@ public class BundleMap {
 
 	XModelTreeListener modelListener = new ML();
 	
-	public void init(StructuredTextEditor editor){
+	public void init(ITextEditor editor){
 		this.editor = editor;
 		IEditorInput input = editor.getEditorInput();
 		

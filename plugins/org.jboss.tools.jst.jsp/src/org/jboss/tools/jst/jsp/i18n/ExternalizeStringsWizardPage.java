@@ -59,8 +59,8 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.IDocumentProvider;
+import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.wst.sse.core.internal.provisional.StructuredModelManager;
-import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.eclipse.wst.sse.ui.internal.provisional.extensions.ISourceEditingTextTools;
 import org.eclipse.wst.xml.core.internal.document.AttrImpl;
 import org.eclipse.wst.xml.core.internal.document.NodeImpl;
@@ -97,7 +97,7 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 	private final char[] LINE_DELEMITERS = new char[] {'\r', '\n', '\t'};
 	private final int DIALOG_WIDTH = 450;
 	private final int DIALOG_HEIGHT = 650;
-	private StructuredTextEditor editor;
+	private ITextEditor editor;
 	private Text propsKey;
 	private Text propsValue;
 	private Button newFile;
@@ -113,7 +113,7 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 	private Table tagsTable;
 	
 	
-	public ExternalizeStringsWizardPage(String pageName, StructuredTextEditor editor, BundleMap bm) {
+	public ExternalizeStringsWizardPage(String pageName, ITextEditor editor, BundleMap bm) {
 		/*
 		 * Setting dialog Title, Description, Image.
 		 */
@@ -732,7 +732,7 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 	 * @param editor the source editor 
 	 * @return the new bundle map
 	 */
-	private BundleMap createBundleMap(StructuredTextEditor editor) {
+	private BundleMap createBundleMap(ITextEditor editor) {
 		String uri = null;
 		String prefix = null;
 		int hash;

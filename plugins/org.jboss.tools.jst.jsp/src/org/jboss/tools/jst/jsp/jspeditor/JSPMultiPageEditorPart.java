@@ -10,10 +10,8 @@
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.jspeditor;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
-
 import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.jface.util.Assert;
 import org.eclipse.jface.util.SafeRunnable;
@@ -28,7 +26,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Item;
@@ -39,6 +36,7 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IKeyBindingService;
 import org.eclipse.ui.INestableKeyBindingService;
 import org.eclipse.ui.IPropertyListener;
+import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
@@ -59,6 +57,7 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 	private ArrayList nestedEditors = new ArrayList(3);
 	
 	private SelectionBar selectionBar;
+	
 
 	protected JSPMultiPageEditorPart() {
 		super();

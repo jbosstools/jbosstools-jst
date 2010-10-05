@@ -12,7 +12,7 @@ package org.jboss.tools.jst.jsp.i18n;
 
 import java.util.Locale;
 
-import org.eclipse.wst.sse.ui.StructuredTextEditor;
+import org.eclipse.ui.texteditor.ITextEditor;
 
 /**
  * This interface is intended for creation extensions of {@code localeProvider}
@@ -25,7 +25,7 @@ public interface ILocaleProvider {
 	 * Returns the locale for given {@code editor}. Implementations
 	 * may return {@code null} if they can not determine the locale. 
 	 */
-	Locale getLocale(StructuredTextEditor editor);
+	Locale getLocale(ITextEditor editor);
 
 	/**
 	 * Shows the string representation of the locale 
