@@ -111,8 +111,18 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 	private Status propsValueStatus;
 	private Status duplicateKeyStatus;
 	private Table tagsTable;
-	
-	
+
+	/**
+	 * Creates the wizard page
+	 * 
+	 * @param pageName
+	 *            the name of the page
+	 * @param editor
+	 *            the source text editor
+	 * @param bm
+	 *            bundle map, or <code>null</code> - then the bundle map will be
+	 *            created and initialized manually
+	 */
 	public ExternalizeStringsWizardPage(String pageName, ITextEditor editor, BundleMap bm) {
 		/*
 		 * Setting dialog Title, Description, Image.
@@ -261,7 +271,7 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 	 */
 	private void initializeFieldsAndAddLIsteners() {
 		ISelection sel = editor.getSelectionProvider().getSelection();
-		if (isSelectionCorrect(sel)) {
+		if (ExternalizeStringsUtils.isSelectionCorrect(sel)) {
 			String text = Constants.EMPTY;
 			String stringToUpdate = Constants.EMPTY;
 			TextSelection textSelection = null;
@@ -419,21 +429,6 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 	}
 	
 	/**
-	 * Checks user has selected a correct string.
-	 *  
-	 * @param selection the current selection
-	 * @return <code>true</code> if correct
-	 */
-	private boolean isSelectionCorrect(ISelection selection) {
-		if ((selection instanceof TextSelection)
-				&& (selection instanceof IStructuredSelection)
-				&& (((IStructuredSelection) selection).size() == 1)) {
-			return true;
-		} 
-		return false;
-	}
-	
-	/**
 	 * Checks keys in the selected resource bundle.
 	 * 
 	 * @param key the key name
@@ -549,7 +544,7 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 		IDocumentProvider prov = editor.getDocumentProvider();
 		IDocument doc = prov.getDocument(editor.getEditorInput());
 		ISelection sel = editor.getSelectionProvider().getSelection();
-		if (isSelectionCorrect(sel)) {
+		if (ExternalizeStringsUtils.isSelectionCorrect(sel)) {
 			try {
 				/*
 				 * Get source text and new text
