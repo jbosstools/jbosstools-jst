@@ -44,15 +44,17 @@ public class ELValidatorContext extends LinkCollection {
 			elsByVariableName.put(variableName, linkedEls);
 		}
 		// save linked ELs.
-		linkedEls.add(el);
-
-		// Save link between EL and variable names.
-		Set<String> variableNames = variableNamesByEl.get(el);
-		if(variableNames==null) {
-			variableNames = new HashSet<String>();
-			variableNamesByEl.put(el, variableNames);
+		// don't save links if there are more than 500 ELs for the var name.
+		if(linkedEls.size()<500) {
+			linkedEls.add(el);
+			// Save link between EL and variable names.
+			Set<String> variableNames = variableNamesByEl.get(el);
+			if(variableNames==null) {
+				variableNames = new HashSet<String>();
+				variableNamesByEl.put(el, variableNames);
+			}
+			variableNames.add(variableName);
 		}
-		variableNames.add(variableName);
 
 		// Save link between EL and resource.
 		Set<ELReference> els = elsByResource.get(el.getPath());

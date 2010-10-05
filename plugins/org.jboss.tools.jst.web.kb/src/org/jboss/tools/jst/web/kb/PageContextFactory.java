@@ -41,6 +41,7 @@ import org.eclipse.jdt.internal.ui.text.FastJavaPartitionScanner;
 import org.eclipse.jdt.ui.text.IJavaPartitions;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.rules.IToken;
@@ -303,6 +304,11 @@ public class PageContextFactory implements IResourceChangeListener {
 						List<ELInstance> is = model.getInstances();
 
 						ELReference elReference = new KbELReference();
+						try {
+							elReference.setLineNumber(document.getLineOfOffset(startEl));
+						} catch (BadLocationException e) {
+							WebKbPlugin.getDefault().logError(e);
+						}
 						elReference.setResource(file);
 						elReference.setEl(is);
 						elReference.setLength(value.length());
@@ -418,7 +424,7 @@ public class PageContextFactory implements IResourceChangeListener {
 
 					// The subsequently called functions may use the file and document
 					// already stored in context for their needs
-					fillContextForChildNodes(document, context, parents);
+					fillContextForChildNodes(model.getStructuredDocument(), document, context, parents);
 				}
 			} catch (CoreException e) {
 				WebKbPlugin.getDefault().logError(e);
@@ -478,18 +484,18 @@ public class PageContextFactory implements IResourceChangeListener {
 		}
 	}
 
-	private void fillContextForChildNodes(IDOMNode parent, ELContext context, List<String> parents) {
+	private void fillContextForChildNodes(IDocument document, IDOMNode parent, ELContext context, List<String> parents) {
 		NodeList children = parent.getChildNodes();
 		for(int i = 0; children != null && i < children.getLength(); i++) {
 			Node child = children.item(i);
 			if (child instanceof IDOMNode) {
-				fillContextForNode((IDOMNode)child, context, parents);
-				fillContextForChildNodes((IDOMNode)child, context, parents);
+				fillContextForNode(document, (IDOMNode)child, context, parents);
+				fillContextForChildNodes(document, (IDOMNode)child, context, parents);
 			}
 		}
 	}
 
-	private void fillContextForNode(IDOMNode node, ELContext context, List<String> parents) {
+	private void fillContextForNode(IDocument document, IDOMNode node, ELContext context, List<String> parents) {
 		if (!(context instanceof FaceletPageContextImpl) && !(node instanceof IDOMElement)) {
 			// There is no any useful info for JSP in text nodes
 			return;
@@ -497,7 +503,7 @@ public class PageContextFactory implements IResourceChangeListener {
 
 		if (context instanceof XmlContextImpl) {
 			XmlContextImpl xmlContext = (XmlContextImpl)context;
-			fillElReferencesForNode(node, xmlContext);
+			fillElReferencesForNode(document, node, xmlContext);
 			if (node instanceof IDOMElement) {
 				fillXMLNamespacesForNode((IDOMElement)node, xmlContext);
 			}
@@ -541,7 +547,7 @@ public class PageContextFactory implements IResourceChangeListener {
 		}
 	}
 
-	private void fillElReferencesForNode(IDOMNode node, XmlContextImpl context) {
+	private void fillElReferencesForNode(IDocument document, IDOMNode node, XmlContextImpl context) {
 		if(Node.ELEMENT_NODE == node.getNodeType() || Node.TEXT_NODE == node.getNodeType()) {
 			IStructuredDocumentRegion regionNode = node.getFirstStructuredDocumentRegion();
 			if (regionNode == null)
@@ -567,6 +573,11 @@ public class PageContextFactory implements IResourceChangeListener {
 							elReference.setEl(is);
 							elReference.setLength(text.length());
 							elReference.setStartPosition(offset);
+							try {
+								elReference.setLineNumber(document.getLineOfOffset(offset) + 1);
+							} catch (BadLocationException e) {
+								WebKbPlugin.getDefault().logError(e);
+							}
 
 							elReference.setSyntaxErrors(model.getSyntaxErrors());
 

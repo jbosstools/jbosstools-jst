@@ -123,7 +123,7 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 	public IMarker addError(String message, String preferenceKey,
 			String[] messageArguments, ITextSourceReference location,
 			IResource target) {
-		return addError(message, preferenceKey, messageArguments, location
+		return addError(message, preferenceKey, messageArguments, 0, location
 				.getLength(), location.getStartPosition(), target);
 	}
 
@@ -145,7 +145,7 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 	 */
 	public IMarker addError(String message, String preferenceKey,
 			String[] messageArguments, IResource target) {
-		return addError(message, preferenceKey, messageArguments, 0, 0, target);
+		return addError(message, preferenceKey, messageArguments, 0, 0, 0, target);
 	}
 
 	private String getMarkerId() {
@@ -164,7 +164,7 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 	 * @see org.jboss.tools.seam.internal.core.validation.IValidationErrorManager#addError(java.lang.String, java.lang.String, java.lang.String[], int, int, org.eclipse.core.resources.IResource)
 	 */
 	public IMarker addError(String message, String preferenceKey,
-			String[] messageArguments, int length, int offset, IResource target) {
+			String[] messageArguments, int lineNumber, int length, int offset, IResource target) {
 		String preferenceValue = getPreference(target.getProject(), preferenceKey);
 		IMarker marker = null;
 		if (!SeverityPreferences.IGNORE.equals(preferenceValue)) {
@@ -172,9 +172,14 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 			if (SeverityPreferences.WARNING.equals(preferenceValue)) {
 				severity = IMessage.NORMAL_SEVERITY;
 			} 
-			marker = addError(message, severity, messageArguments, length, offset, target, getDocumentProvider(), getMarkerId(), getMarkerOwner());
+			marker = addError(message, severity, messageArguments, lineNumber, length, offset, target, getDocumentProvider(), getMarkerId(), getMarkerOwner());
 		}
 		return marker;
+	}
+
+	public IMarker addError(String message, String preferenceKey,
+			String[] messageArguments, int length, int offset, IResource target) {
+		return addError(message, preferenceKey, messageArguments, 0, length, offset, target);
 	}
 
 	protected TextFileDocumentProvider getDocumentProvider() {
@@ -200,8 +205,8 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.seam.internal.core.validation.IValidationErrorManager#addError(java.lang.String, int, java.lang.String[], int, int, org.eclipse.core.resources.IResource)
 	 */
-	public IMarker addError(String message, int severity, String[] messageArguments, int length, int offset, IResource target) {
-		return addError(message, severity, messageArguments, length, offset, target, getDocumentProvider(), getMarkerId(), getMarkerOwner());
+	public IMarker addError(String message, int severity, String[] messageArguments, int lineNumber, int length, int offset, IResource target) {
+		return addError(message, severity, messageArguments, lineNumber, length, offset, target, getDocumentProvider(), getMarkerId(), getMarkerOwner());
 	}
 
 	/**
@@ -217,22 +222,25 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 	 * @param markerOwner
 	 * @return
 	 */
-	public static IMarker addError(String message, int severity, Object[] messageArguments, int length, int offset, IResource target, TextFileDocumentProvider documentProvider, String markerId, Class markerOwner) {
+	public static IMarker addError(String message, int severity, Object[] messageArguments, int lineNumber, int length, int offset, IResource target, TextFileDocumentProvider documentProvider, String markerId, Class markerOwner) {
 		IMarker marker = null;
-		int lineNumber = 1;
 		try {
-			if (documentProvider != null) {
-				documentProvider.connect(target);
-				IDocument doc = documentProvider.getDocument(target);
-				if(doc != null){
-					lineNumber = doc.getLineOfOffset(offset) + 1;
+			if(lineNumber<1) {
+				if (documentProvider != null) {
+					documentProvider.connect(target);
+					IDocument doc = documentProvider.getDocument(target);
+					if(doc != null){
+						try {
+							lineNumber = doc.getLineOfOffset(offset) + 1;
+						} catch (BadLocationException e) {
+							WebKbPlugin.getDefault().logError(e);
+						}
+					}
 				}
 			}
-			marker = addTask(markerOwner.getName().intern(), target, lineNumber, MessageFormat.format(message, messageArguments),
+			marker = addTask(markerOwner.getName().intern(), target, lineNumber,
+					MessageFormat.format(message, messageArguments),
 					severity, null, markerId, offset, length);
-		} catch (BadLocationException e) {
-			WebKbPlugin.getDefault().logError(
-					NLS.bind(KbMessages.EXCEPTION_DURING_CREATING_MARKER, target.getFullPath()), e);
 		} catch (CoreException e) {
 			WebKbPlugin.getDefault().logError(
 					NLS.bind(KbMessages.EXCEPTION_DURING_CREATING_MARKER, target.getFullPath()), e);
@@ -253,6 +261,11 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 			return null;
 		}
 		int severity = getSeverity(markerType);
+
+		int existingMarkers = resource.findMarkers(VALIDATION_MARKER, true, IResource.DEPTH_ZERO).length;
+		if(existingMarkers>1) {
+			return null;
+		}
 
 		IMarker item = resource.createMarker(VALIDATION_MARKER); // add a validation marker
 

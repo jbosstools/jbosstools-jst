@@ -77,6 +77,18 @@ public interface IValidationErrorManager {
 	 * @param target
 	 */
 	IMarker addError(String message, String preferenceKey,
+			String[] messageArguments, int lineNumber, int length, int offset, IResource target);
+
+	/**
+	 * Adds a marker to the resource
+	 * @param message
+	 * @param preferenceKey
+	 * @param messageArguments
+	 * @param length
+	 * @param offset
+	 * @param target
+	 */
+	IMarker addError(String message, String preferenceKey,
 			String[] messageArguments, int length, int offset, IResource target);
 
 	/**
@@ -88,7 +100,7 @@ public interface IValidationErrorManager {
 	 * @param offset
 	 * @param target
 	 */
-	IMarker addError(String message, int severity, String[] messageArguments, int length, int offset, IResource target);
+	IMarker addError(String message, int severity, String[] messageArguments, int lineNumber, int length, int offset, IResource target);
 
 	/**
 	 * Displays a subtask in the progress view. 
