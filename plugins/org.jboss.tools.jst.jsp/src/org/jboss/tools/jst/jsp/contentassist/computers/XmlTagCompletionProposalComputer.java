@@ -156,6 +156,48 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 		}
 	}
 	
+	protected String getMatchString(IStructuredDocumentRegion parent, ITextRegion aRegion, int offset) {
+		if ((aRegion == null) || isCloseRegion(aRegion)) {
+			return ""; //$NON-NLS-1$
+		}
+		String matchString = null;
+		String regionType = aRegion.getType();
+		if ((regionType == DOMRegionContext.XML_TAG_ATTRIBUTE_EQUALS) || (regionType == DOMRegionContext.XML_TAG_OPEN) || (offset > parent.getStartOffset(aRegion) + aRegion.getTextLength())) {
+			matchString = ""; //$NON-NLS-1$
+		}
+		else if (regionType == DOMRegionContext.XML_CONTENT) {
+			matchString = ""; //$NON-NLS-1$
+		}
+		else {
+			if ((parent.getText(aRegion).length() > 0) && (parent.getStartOffset(aRegion) < offset)) {
+				matchString = parent.getText(aRegion).substring(0, offset - parent.getStartOffset(aRegion));
+			}
+			else {
+				matchString = ""; //$NON-NLS-1$
+			}
+		}
+		if(regionType == DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE && matchString.startsWith("\"")) { //$NON-NLS-1$
+			matchString = matchString.substring(1);
+		}
+		return matchString;
+	}
+
+	protected boolean isCloseRegion(ITextRegion region) {
+		String type = region.getType();
+		return ((type == DOMRegionContext.XML_PI_CLOSE) || 
+				(type == DOMRegionContext.XML_TAG_CLOSE) || 
+				(type == DOMRegionContext.XML_EMPTY_TAG_CLOSE) || 
+				(type == DOMRegionContext.XML_CDATA_CLOSE) || 
+				(type == DOMRegionContext.XML_COMMENT_CLOSE) || 
+				(type == DOMRegionContext.XML_ATTLIST_DECL_CLOSE) || 
+				(type == DOMRegionContext.XML_ELEMENT_DECL_CLOSE) || 
+				(type == DOMRegionContext.XML_DOCTYPE_DECLARATION_CLOSE) || 
+				(type == "JSP_CLOSE") ||  //$NON-NLS-1$
+				(type == "JSP_COMMENT_CLOSE") ||  //$NON-NLS-1$
+				(type.equals("JSP_DIRECTIVE_CLOSE")) ||  //$NON-NLS-1$
+				(type == DOMRegionContext.XML_DECLARATION_CLOSE));
+	}
+
 	/*
 	 * Checks if the specified attribute exists 
 	 * 
@@ -276,8 +318,25 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 
 		String mainPrefix = getTagPrefix();
 		String mainURI = getTagUri();
+		// TODO: Insert here: processing for the tag ending start region due to
+		// - calculate correct replacenemt begin position
+		// - calculate correct replacenment length
+		// - calculate correct match string
 		
-		String query = contentAssistRequest.getMatchString();
+		String matchString = contentAssistRequest.getMatchString();
+
+		/*
+		 * Jeremy: Add attribute name proposals before  empty tag close
+		 */
+		// TODO: calculate those values hereafter
+		IStructuredDocumentRegion sdRegion = getStructuredDocumentRegion(getOffset());
+		ITextRegion completionRegion = getCompletionRegion(getOffset(), 
+				contentAssistRequest.getNode());
+
+		matchString = getMatchString(sdRegion, completionRegion, 
+								getOffset());
+				
+		String query = matchString;
 		addTagNameProposalsForPrefix(contentAssistRequest, childPosition, query, mainPrefix, mainURI, TextProposal.R_TAG_INSERTION, insertTagOpenningCharacter);
 
 		if (query == null || query.length() == 0 || query.contains(":")) //$NON-NLS-1$
@@ -344,8 +403,8 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 			}
 
 		
-			int replacementOffset = contentAssistRequest.getReplacementBeginPosition();
-			int replacementLength = contentAssistRequest.getReplacementLength();
+			int replacementOffset = getOffset() - query.length();
+			int replacementLength = query.length();
 			int cursorPosition = getCursorPositionForProposedText(replacementString);
 			Image image = textProposal.getImage();
 			if (image == null) {
