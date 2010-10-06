@@ -64,13 +64,18 @@ public class PageProcessor {
 	private List<TextProposal> excludeExtendedComponents(List<TextProposal> proposals) {
 		Map<String, Set<TextProposal>> runtimeComponentMap = new HashMap<String, Set<TextProposal>>();
 		Map<String, TextProposal> customComponentMap = new HashMap<String, TextProposal>();
+		Set<TextProposal> customNotExtendedComponents = new HashSet<TextProposal>();
 		for (TextProposal proposal : proposals) {
 			Object source = proposal.getSource();
 			if(source instanceof IComponent) {
 				IComponent component = (IComponent)source;
 				String name = component.getTagLib().getURI() + ":" + component.getName(); //$NON-NLS-1$
-				if(source instanceof ICustomTagLibComponent) {
-					customComponentMap.put(name, proposal);
+				if(component instanceof ICustomTagLibComponent) {
+					if(component.isExtended()) {
+						customComponentMap.put(name, proposal);
+					} else {
+						customNotExtendedComponents.add(proposal);
+					}
 				} else {
 					Set<TextProposal> textProposals = runtimeComponentMap.get(name);
 					if(textProposals==null) {
@@ -90,6 +95,9 @@ public class PageProcessor {
 				} else {
 					proposals.addAll(runtimeComponentMap.get(name));
 				}
+			}
+			if(!customNotExtendedComponents.isEmpty()) {
+				proposals.addAll(customNotExtendedComponents);
 			}
 		}
 		return proposals;
