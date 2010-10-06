@@ -574,8 +574,13 @@ public class PageContextFactory implements IResourceChangeListener {
 							elReference.setLength(text.length());
 							elReference.setStartPosition(offset);
 							try {
-								if(is.size()==1) {
-									elReference.setLineNumber(document.getLineOfOffset(elReference.getStartPossitionOfFirstEL()) + 1);
+								if(Node.TEXT_NODE == node.getNodeType()) {
+									if(is.size()==1) {
+										elReference.setLineNumber(document.getLineOfOffset(elReference.getStartPossitionOfFirstEL()) + 1);
+									}
+								}
+								else {
+									elReference.setLineNumber(document.getLineOfOffset(offset) + 1);
 								}
 							} catch (BadLocationException e) {
 								WebKbPlugin.getDefault().logError(e);
