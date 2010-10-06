@@ -578,8 +578,7 @@ public class PageContextFactory implements IResourceChangeListener {
 									if(is.size()==1) {
 										elReference.setLineNumber(document.getLineOfOffset(elReference.getStartPossitionOfFirstEL()) + 1);
 									}
-								}
-								else {
+								} else {
 									elReference.setLineNumber(document.getLineOfOffset(offset) + 1);
 								}
 							} catch (BadLocationException e) {
