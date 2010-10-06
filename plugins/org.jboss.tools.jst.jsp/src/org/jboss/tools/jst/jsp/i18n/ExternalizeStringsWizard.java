@@ -16,13 +16,17 @@ import java.io.InputStream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.jboss.tools.common.model.ui.ModelUIImages;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.bundle.BundleMap;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
+import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 
 public class ExternalizeStringsWizard extends Wizard {
 	
@@ -56,6 +60,28 @@ public class ExternalizeStringsWizard extends Wizard {
 		page2.setTitle(JstUIMessages.EXTERNALIZE_STRINGS_DIALOG_TITLE);
 		page2.setDescription(JstUIMessages.EXTERNALIZE_STRINGS_DIALOG_DESCRIPTION);
 		page2.setImageDescriptor(ModelUIImages.getImageDescriptor(ModelUIImages.WIZARD_DEFAULT));
+		/*
+		 * https://jira.jboss.org/browse/JBIDE-7247
+		 * Set initial values for the new properties file
+		 */
+		if (editor.getEditorInput() instanceof IStorageEditorInput) {
+			try {
+				IPath fullPath = ((IStorageEditorInput) editor.getEditorInput()).getStorage().getFullPath();
+				page2.setContainerFullPath(fullPath);
+			} catch (CoreException e) {
+				JspEditorPlugin.getDefault().logError(e);
+			}
+			
+		}
+		String fileName = editor.getEditorInput().getName();
+		int pos = fileName.lastIndexOf(Constants.DOT);
+		if (pos != -1) {
+			fileName = fileName.substring(0, pos) + Constants.PROPERTIES_EXTENTION;
+		}
+		page2.setFileName(fileName);
+		/*
+		 * Add all the pages to the wizard
+		 */
 		addPage(page1);
 		addPage(page2);
 	}

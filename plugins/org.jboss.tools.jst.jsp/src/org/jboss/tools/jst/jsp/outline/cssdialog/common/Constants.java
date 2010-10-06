@@ -83,6 +83,7 @@ public class Constants {
 	public static final String END_BRACKET = ")"; //$NON-NLS-1$
 	public static final String GT = ">"; //$NON-NLS-1$
 	public static final String LT = "<"; //$NON-NLS-1$
+	public static final String PROPERTIES_EXTENTION = ".properties"; //$NON-NLS-1$
 
 	public static final String LEFT_BRACE = "{"; //$NON-NLS-1$
 	public static final String RIGHT_BRACE = "}"; //$NON-NLS-1$
