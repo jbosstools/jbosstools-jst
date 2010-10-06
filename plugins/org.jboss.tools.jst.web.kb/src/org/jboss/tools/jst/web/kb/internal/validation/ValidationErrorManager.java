@@ -262,10 +262,10 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 		}
 		int severity = getSeverity(markerType);
 
-		int existingMarkers = resource.findMarkers(VALIDATION_MARKER, true, IResource.DEPTH_ZERO).length;
-		if(existingMarkers>1) {
-			return null;
-		}
+//		int existingMarkers = resource.findMarkers(VALIDATION_MARKER, true, IResource.DEPTH_ZERO).length;
+//		if(existingMarkers>1) {
+//			return null;
+//		}
 
 		IMarker item = resource.createMarker(VALIDATION_MARKER); // add a validation marker
 
