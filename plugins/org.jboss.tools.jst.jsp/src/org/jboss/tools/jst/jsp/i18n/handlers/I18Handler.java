@@ -122,7 +122,6 @@ public class I18Handler extends AbstractHandler implements IElementUpdater{
 		return null;
 	}
 
-	@Override
 	public void updateElement(UIElement element, Map parameters) {
 		fireHandlerChanged(new HandlerEvent(this, true, false));
 		

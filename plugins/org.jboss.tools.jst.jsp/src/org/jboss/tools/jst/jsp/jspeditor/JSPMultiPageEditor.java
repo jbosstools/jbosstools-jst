@@ -142,7 +142,6 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	//added by Maksim Areshkau, notified externalize command that selection changed
 	private ISelectionChangedListener externalizeSelectionChangeListener = new ISelectionChangedListener() {
 		
-		@Override
 		public void selectionChanged(SelectionChangedEvent event) {
 			ICommandService commandService = (ICommandService) PlatformUI
 			.getWorkbench().getService(ICommandService.class);
