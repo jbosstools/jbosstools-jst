@@ -338,6 +338,14 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 				if (rbCombo.getItemCount() > 0) {
 					rbCombo.select(0);
 					setResourceBundlePath(rbCombo.getText());
+				} else {
+					/*
+					 * https://jira.jboss.org/browse/JBIDE-7247
+					 * Select 'Create new file' checkbox and
+					 * disable bundle group if no bundles are found.
+					 */
+					newFile.setSelection(true);
+					enableBundleGroup(false);
 				}
 			}
 			/*
@@ -717,7 +725,7 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 	@Override
 	public boolean canFlipToNextPage() {
 		return isPageComplete() && (getNextPage() != null)
-				&& (newFile.getSelection() == true);
+				&& isNewFile();
 	}
 
 	/**

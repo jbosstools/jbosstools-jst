@@ -80,6 +80,10 @@ public class ExternalizeStringsWizard extends Wizard {
 		}
 		page2.setFileName(fileName);
 		/*
+		 * The new file should not exist
+		 */
+		page2.setAllowExistingResources(false);
+		/*
 		 * Add all the pages to the wizard
 		 */
 		addPage(page1);
@@ -107,8 +111,9 @@ public class ExternalizeStringsWizard extends Wizard {
 			return false;
 		}
 		/*
-		 * Add "key=value" to the bundle if file is not new,
-		 * If it is new, it got input by getInitialContent()
+		 * Add "key=value" to the bundle file that is already exists. 
+		 * When the file is new key and value will be written to the file content
+		 * via getInitialContent() method of the page2 during the file creation. 
 		 */
 		if (bundleFile.exists() && !page1.isNewFile()) {
 			InputStream is = new ByteArrayInputStream(page1.getKeyValuePair().getBytes());
