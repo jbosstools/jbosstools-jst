@@ -27,6 +27,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.menus.UIElement;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.jboss.tools.jst.jsp.i18n.ExternalizeStringsDialog;
+import org.jboss.tools.jst.jsp.i18n.ExternalizeStringsUtils;
 import org.jboss.tools.jst.jsp.i18n.ExternalizeStringsWizard;
 import org.w3c.dom.Attr;
 
@@ -65,9 +66,7 @@ public class I18Handler extends AbstractHandler implements IElementUpdater{
 	private static boolean getExternalizeStringsCommandEnabled(ISelection selection) {
 		boolean enabled=false;
 		String stringToUpdate = ""; //$NON-NLS-1$
-		if ((selection instanceof TextSelection)
-				&& (selection instanceof IStructuredSelection)
-				&& (((IStructuredSelection) selection).size() == 1)) {
+		if (ExternalizeStringsUtils.isSelectionCorrect(selection)) {
 			String text = ""; //$NON-NLS-1$
 			TextSelection textSelection = null;
 			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
