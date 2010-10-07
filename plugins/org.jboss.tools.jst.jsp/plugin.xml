@@ -998,5 +998,4 @@
              parentId="org.eclipse.ui.contexts.window">
        </context>
     </extension>
-   
 </plugin>

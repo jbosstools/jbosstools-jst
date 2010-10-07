@@ -11,13 +11,11 @@
 package org.jboss.tools.jst.jsp.jspeditor;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
+import org.eclipse.core.commands.IHandler;
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -36,13 +34,12 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
-import org.eclipse.ui.contexts.IContextActivation;
-import org.eclipse.ui.contexts.IContextService;
-import org.eclipse.ui.handlers.IHandlerService;
+import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.internal.KeyBindingService;
 import org.eclipse.ui.internal.PartSite;
 import org.eclipse.ui.internal.PopupMenuExtender;
 import org.eclipse.ui.internal.WorkbenchPlugin;
+import org.eclipse.ui.internal.handlers.HandlerProxy;
 import org.eclipse.ui.internal.services.IServiceLocatorCreator;
 import org.eclipse.ui.internal.services.IWorkbenchLocationService;
 import org.eclipse.ui.internal.services.ServiceLocator;
@@ -211,7 +208,7 @@ public abstract class JSPMultiPageEditorSite implements IEditorSite {
 					parentProvider, event.getSelection());
 			((JSPMultiPageSelectionProvider) parentProvider)
 					.fireSelectionChanged(newEvent);
-		}
+		}	
 	}
 
 	public void registerContextMenu(String menuID, MenuManager menuMgr,

@@ -51,6 +51,8 @@ import org.eclipse.ui.INavigationLocationProvider;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.contexts.IContextActivation;
 import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.ide.IGotoMarker;
@@ -137,6 +139,16 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	static IVisualEditorFactory visualEditorFactory;
 	
 	private IContextActivation selBarContextActivation;
+	//added by Maksim Areshkau, notified externalize command that selection changed
+	private ISelectionChangedListener externalizeSelectionChangeListener = new ISelectionChangedListener() {
+		
+		@Override
+		public void selectionChanged(SelectionChangedEvent event) {
+			ICommandService commandService = (ICommandService) PlatformUI
+			.getWorkbench().getService(ICommandService.class);
+			commandService.refreshElements("org.jboss.tools.jst.jsp.commands.i18", null); //$NON-NLS-1$
+		}
+	};
 
 	static {
 		// Fix For JBIDE-2674
@@ -369,6 +381,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 				if (selectionProvider != null) {
 					selectionProvider
 							.addSelectionChangedListener(getSelectionChangedListener());
+					selectionProvider.addSelectionChangedListener(externalizeSelectionChangeListener);
 				}
 
 				if (provider != null) {
@@ -384,6 +397,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 				if (provider != null) {
 					provider
 							.removeSelectionChangedListener(getSelectionChangedListener());
+					provider.removeSelectionChangedListener(externalizeSelectionChangeListener);
 				}
 				if (provider instanceof IPostSelectionProvider
 						&& postSelectionChangedListener != null) {

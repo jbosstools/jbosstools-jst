@@ -11,15 +11,20 @@
 
 package org.jboss.tools.jst.jsp.i18n.handlers;
 
+import java.util.Map;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.HandlerEvent;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.commands.IElementUpdater;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.eclipse.ui.menus.UIElement;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.jboss.tools.jst.jsp.i18n.ExternalizeStringsDialog;
 import org.jboss.tools.jst.jsp.i18n.ExternalizeStringsWizard;
@@ -30,7 +35,7 @@ import org.w3c.dom.Attr;
  * @author mareshkau
  *
  */
-public class I18Handler extends AbstractHandler {
+public class I18Handler extends AbstractHandler implements IElementUpdater{
 	
 	/* (non-Javadoc)
 	 * @see org.eclipse.core.commands.AbstractHandler#isEnabled()
@@ -45,6 +50,12 @@ public class I18Handler extends AbstractHandler {
 			return getExternalizeStringsCommandEnabled(selection);
 		}
 		return false;
+	}
+	/**
+	 * 
+	 */
+	public I18Handler() {
+		setBaseEnabled(true);
 	}
 	/**
 	 * Calculates the state of ext command
@@ -110,5 +121,11 @@ public class I18Handler extends AbstractHandler {
 			dlg.open();
 		}
 		return null;
+	}
+
+	@Override
+	public void updateElement(UIElement element, Map parameters) {
+		fireHandlerChanged(new HandlerEvent(this, true, false));
+		
 	}
 }
