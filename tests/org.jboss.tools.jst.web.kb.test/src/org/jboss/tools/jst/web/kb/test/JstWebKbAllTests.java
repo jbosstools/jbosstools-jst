@@ -25,11 +25,12 @@ public class JstWebKbAllTests {
 		TestSuite suite = new TestSuite(JstWebKbAllTests.class.getName());
 		suite.addTestSuite(KbModelTest.class);
 		suite.addTestSuite(MyFacesKbModelTest.class);
+		suite.addTestSuite(MyFacesKbModelWithMetadataInSourcesTest.class);
 		suite.addTestSuite(WebKbTest.class);
 		ProjectImportTestSetup testSetup = new XProjectImportTestSetUp(suite,
 				"org.jboss.tools.jst.web.kb.test",
-				new String[]{"projects/TestKbModel", "projects/MyFaces"},
-				new String[]{"TestKbModel", "MyFaces"});
+				new String[]{"projects/TestKbModel", "projects/MyFaces", "projects/MyFaces2"},
+				new String[]{"TestKbModel", "MyFaces", "MyFaces2"});
 		return testSetup;
 	}
 }

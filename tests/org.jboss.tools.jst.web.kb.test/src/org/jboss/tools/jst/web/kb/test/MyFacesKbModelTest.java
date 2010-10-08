@@ -22,8 +22,8 @@ import org.jboss.tools.test.util.JUnitUtils;
 
 public class MyFacesKbModelTest extends TestCase {
 
-	IProject project = null;
-	boolean makeCopy = true;
+	protected IProject project = null;
+	protected boolean makeCopy = true;
 
 	public MyFacesKbModelTest() {
 		super("MyFaces Kb Model Test");
