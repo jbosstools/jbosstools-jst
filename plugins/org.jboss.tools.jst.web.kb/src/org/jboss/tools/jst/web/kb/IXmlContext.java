@@ -11,6 +11,8 @@
 
 package org.jboss.tools.jst.web.kb;
 
+import java.util.Set;
+
 import org.jboss.tools.common.el.core.resolver.ELContext;
 
 /**
@@ -20,4 +22,9 @@ import org.jboss.tools.common.el.core.resolver.ELContext;
  */
 public interface IXmlContext extends ELContext {
 
+	/**
+	 * Returns all the URIs which are used in the page.
+	 * @return
+	 */
+	Set<String> getURIs();
 }

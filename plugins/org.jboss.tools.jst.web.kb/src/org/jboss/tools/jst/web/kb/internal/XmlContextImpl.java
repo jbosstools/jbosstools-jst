@@ -2,6 +2,7 @@ package org.jboss.tools.jst.web.kb.internal;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,7 +25,8 @@ public class XmlContextImpl extends ELContextImpl implements IXmlContext {
 
 	// Fix for JBIDE-5097: It must be a map of <IRegion to Map of <NS-Prefix to NS>> 
 	protected Map<IRegion, Map<String, INameSpace>> nameSpaces = new HashMap<IRegion, Map<String, INameSpace>>();
-	
+	protected Set<String> uris = new HashSet<String>();
+
 	/**
 	 * Sets up the context resource and retrieves the document for the specified resource
 	 */
@@ -115,8 +117,16 @@ public class XmlContextImpl extends ELContextImpl implements IXmlContext {
 			nameSpaces.put(region, nameSpaceMap);
 		}
 		nameSpaces.get(region).put(nameSpace.getPrefix(), nameSpace); 	// Fix for JBIDE-5097
+		String uri = nameSpace.getURI();
+		if(uri!=null && uri.length()>0) {
+			uris.add(uri);
+		}
 	}
-	
+
+	public Set<String> getURIs() {
+		return uris;
+	}
+
 	private IDocument getConnectedDocument(IEditorInput input) {
 		IDocumentProvider provider= DocumentProviderRegistry.getDefault().getDocumentProvider(input);
 		try {

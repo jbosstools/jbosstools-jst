@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.kb;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.jface.text.IDocument;
 import org.jboss.tools.common.el.core.resolver.ELContext;
