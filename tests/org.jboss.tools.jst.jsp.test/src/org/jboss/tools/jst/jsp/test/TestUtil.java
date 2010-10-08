@@ -17,6 +17,9 @@ import org.eclipse.jface.text.contentassist.IContentAssistant;
 import org.eclipse.jface.text.contentassist.IContentAssistantExtension;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 import org.eclipse.wst.sse.ui.internal.contentassist.StructuredContentAssistant;
 
@@ -134,5 +137,16 @@ public class TestUtil {
 		}
 		return res;
 	}
-	
+	/**
+	 * Close all opened editors
+	 * @author mareshkau
+	 */
+	public static final void closeAllEditors(){
+		IWorkbenchPage page = PlatformUI.getWorkbench()
+		.getActiveWorkbenchWindow().getActivePage();
+		IWorkbenchPart part = page.getViewReferences()[0].getPart(false);
+		page.activate(part);
+		// close
+		page.closeAllEditors(false);
+	}
 }

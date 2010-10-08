@@ -55,9 +55,9 @@ public class I18Handler extends AbstractHandler implements IElementUpdater{
 	/**
 	 * 
 	 */
-	public I18Handler() {
-		setBaseEnabled(true);
-	}
+//	public I18Handler() {
+//		setBaseEnabled(true);
+//	}
 	/**
 	 * Calculates the state of ext command
 	 * @param selection
@@ -124,6 +124,5 @@ public class I18Handler extends AbstractHandler implements IElementUpdater{
 
 	public void updateElement(UIElement element, Map parameters) {
 		fireHandlerChanged(new HandlerEvent(this, true, false));
-		
 	}
 }

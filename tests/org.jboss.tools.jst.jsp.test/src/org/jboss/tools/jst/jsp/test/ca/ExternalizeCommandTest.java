@@ -8,14 +8,13 @@
  * Contributor:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-
 package org.jboss.tools.jst.jsp.test.ca;
 
 import junit.framework.TestCase;
 
 import org.eclipse.core.commands.Command;
-import org.eclipse.core.commands.State;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
@@ -25,26 +24,24 @@ import org.jboss.tools.test.util.TestProjectProvider;
 import org.jboss.tools.test.util.WorkbenchUtils;
 
 /**
- * Junit which tests selection bar command behaviour and logic
+ * Junit for JBIDE-7060
+ * 
  * @author mareshkau
  *
  */
-public class SelectionBarTest extends TestCase{
+public class ExternalizeCommandTest extends TestCase {
 	protected IProject project = null;
     private TestProjectProvider provider = null;
-    private Command toggleSelBarCommand;
-    private State toggleSelBarState;
-	
+    private Command externalizeCommand;
+    
     public void setUp() throws Exception {
         provider = new TestProjectProvider("org.jboss.tools.jst.jsp.test", null, "JsfJbide1791Test",false);  //$NON-NLS-1$ //$NON-NLS-2$
         project = provider.getProject();
 		ICommandService commandService =
 			(ICommandService) PlatformUI.getWorkbench()
 				.getService(ICommandService.class);
-		toggleSelBarCommand = commandService.getCommand(
-		"org.jboss.tools.jst.jsp.commands.showSelectionBar"); //$NON-NLS-1$
-		toggleSelBarState= toggleSelBarCommand
-		.getState("org.eclipse.ui.commands.toggleState"); //$NON-NLS-1$
+		externalizeCommand = commandService.getCommand(
+		"org.jboss.tools.jst.jsp.commands.i18"); //$NON-NLS-1$
     }
 
     protected void tearDown() throws Exception {
@@ -52,22 +49,27 @@ public class SelectionBarTest extends TestCase{
             provider.dispose();
         }
     }
-    
-	public void testSelectionBarCommandState() throws Throwable{
-		assertEquals("check command enabled command status",false,toggleSelBarCommand.isEnabled()); //$NON-NLS-1$
-		IEditorPart editorPart = WorkbenchUtils.openEditor(project.getName()+"/WebContent/pages/selectionBar.xhtml");  //$NON-NLS-1$
+    /**
+     * Test behaviour of externalize string command
+     */
+    public void testExternalizeCommand(){
+		IEditorPart editorPart = WorkbenchUtils.openEditor(project.getName()+"/WebContent/pages/extCommandTest.xhtml");  //$NON-NLS-1$
 		if(editorPart instanceof JSPMultiPageEditor){
-			JSPMultiPageEditor multiPageEditor = (JSPMultiPageEditor) editorPart;
-			multiPageEditor.pageChange(0);
-			assertEquals("check command enabled command status",true,toggleSelBarCommand.isEnabled()&&(Boolean)toggleSelBarState.getValue()); //$NON-NLS-1$
-			multiPageEditor.pageChange(multiPageEditor.getPreviewIndex());
-			assertEquals("check command enabled command status",false,toggleSelBarCommand.isEnabled()&&(Boolean)toggleSelBarState.getValue()); //$NON-NLS-1$
-			multiPageEditor.pageChange(0);
-			assertEquals("check command enabled command status",true,toggleSelBarCommand.isEnabled()&&(Boolean)toggleSelBarState.getValue()); //$NON-NLS-1$
+			JSPMultiPageEditor jspMultiPageEditor= (JSPMultiPageEditor) editorPart;
+			StyledText textWidget = 	jspMultiPageEditor.getSourceEditor().getTextViewer().getTextWidget();
+			textWidget.setCaretOffset(0);
+			assertEquals("Ext command should be disabled with current selection",false,externalizeCommand.isEnabled()); //$NON-NLS-1$
+			textWidget.setCaretOffset(2);
+			assertEquals("Ext command should be disabled with current selection",false,externalizeCommand.isEnabled()); //$NON-NLS-1$
+			textWidget.setCaretOffset(15);
+			assertEquals("Ext command should be enabled with current selection",true,externalizeCommand.isEnabled()); //$NON-NLS-1$
+			textWidget.setCaretOffset(2);
+			assertEquals("Ext command should be disabled with current selection",false,externalizeCommand.isEnabled()); //$NON-NLS-1$
 			TestUtil.closeAllEditors();
-			assertEquals("check command enabled command status",false,toggleSelBarCommand.isEnabled()&&(Boolean)toggleSelBarState.getValue()); //$NON-NLS-1$
-		} else{
+			assertEquals("Ext command should be disabled without opened editor",false,externalizeCommand.isEnabled()); //$NON-NLS-1$
+		}else{
 			fail("Should be opened JSPMultiPage Editor"); //$NON-NLS-1$
 		}
-	}
+		
+    }
 }
