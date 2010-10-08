@@ -348,7 +348,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		String stringQuery = matchString;
 		int relevanceShift = -2; // Fix for JBIDE-5987: Relevance for predicate proposals is shifted down by default to show EL proposals lower than attr-value proposals 
 		if (shiftRelevanceAgainstTagNameProposals) {
-			relevanceShift += prefix.getText() != null && prefix.getText().trim().length() > 0 ? (XMLRelevanceConstants.R_STRICTLY_VALID_TAG_INSERTION - baseRelevance + 2): -2;
+			relevanceShift += prefix.getText() != null && prefix.getText().trim().length() > 0 ? 0 : -2;
 		}
 		
 		int beginChangeOffset = prefix.getStartOffset() + prefix.getOffset();
