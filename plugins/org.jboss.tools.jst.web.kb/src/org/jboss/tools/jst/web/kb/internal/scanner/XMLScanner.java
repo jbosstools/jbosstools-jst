@@ -79,11 +79,11 @@ public class XMLScanner implements IFileScanner {
 		XModel model = InnerModelHelper.createXModel(f.getProject());
 		if(model == null) return false;
 		XModelObject o = EclipseResourceUtil.getObjectByResource(model, f);
-		if(o == null) return false;
-		if(LibraryScanner.isTLDFile(o) 
-				|| LibraryScanner.isFaceletTaglibFile(o)
-				|| LibraryScanner.isFacesConfigFile(o)) return true;
-		return false;
+		return (o != null) &&
+			  (LibraryScanner.isTLDFile(o) 
+			|| LibraryScanner.isFaceletTaglibFile(o)
+			|| LibraryScanner.isFacesConfigFile(o)
+			);
 	}
 
 	/**

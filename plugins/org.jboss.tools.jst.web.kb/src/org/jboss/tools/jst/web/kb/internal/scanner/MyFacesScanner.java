@@ -19,10 +19,12 @@ import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
+import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.filesystems.impl.FileAnyImpl;
 import org.jboss.tools.common.model.project.ext.IValueInfo;
 import org.jboss.tools.common.model.project.ext.impl.ValueInfo;
+import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
 import org.jboss.tools.common.xml.XMLEntityResolver;
 import org.jboss.tools.common.xml.XMLUtilities;
@@ -31,6 +33,7 @@ import org.jboss.tools.jst.web.kb.internal.taglib.myfaces.MyFacesAttribute;
 import org.jboss.tools.jst.web.kb.internal.taglib.myfaces.MyFacesComponent;
 import org.jboss.tools.jst.web.kb.internal.taglib.myfaces.MyFacesTagLibrary;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
+import org.jboss.tools.jst.web.model.helpers.InnerModelHelper;
 import org.w3c.dom.Element;
 
 /**
@@ -39,6 +42,7 @@ import org.w3c.dom.Element;
  *
  */
 public class MyFacesScanner implements IFileScanner {
+	public static String METADATA_FILE_NAME = "myfaces-metadata.xml"; //$NON-NLS-1$
 	static String F_PREFIX = "f"; //$NON-NLS-1$
 	static String F_URI = "http://java.sun.com/jsf/core"; //$NON-NLS-1$
 
@@ -74,16 +78,19 @@ public class MyFacesScanner implements IFileScanner {
 	
 
 	public boolean isRelevant(IFile resource) {
-		return false;
+		return resource != null && resource.getName().equals(METADATA_FILE_NAME);
 	}
 
 	public boolean isLikelyComponentSource(IFile f) {
-		return false;
+		return f != null && f.getName().equals(METADATA_FILE_NAME);
 	}
 
 	public LoadedDeclarations parse(IFile f, IKbProject sp)
 			throws ScannerException {
-		return null;
+		XModel model = InnerModelHelper.createXModel(f.getProject());
+		if(model == null) return null;
+		XModelObject o = EclipseResourceUtil.getObjectByResource(model, f);
+		return parse(o, f.getFullPath(), sp);
 	}
 
 	public LoadedDeclarations parse(XModelObject o, IPath source, IKbProject sp) {
@@ -132,7 +139,7 @@ public class MyFacesScanner implements IFileScanner {
 
 	void processComponent(Element c, Map<String, MyFacesTagLibrary> libraries, Map<String, MyFacesComponent> componentsByClass) {
 		String name = util.getAttribute(c, ATTR_NAME);
-		String className = util.getAttribute(c, "className.#text");
+		String className = util.getAttribute(c, "className.#text"); //$NON-NLS-1$
 		MyFacesComponent component = null;
 		MyFacesTagLibrary library = null;
 		boolean isNew = false;
@@ -166,11 +173,11 @@ public class MyFacesScanner implements IFileScanner {
 			component.setComponentClass(createValueInfo(className.trim()));
 			componentsByClass.put(className, component);
 		}
-		String type = util.getAttribute(c, "type.#text");
+		String type = util.getAttribute(c, "type.#text"); //$NON-NLS-1$
 		if(!isEmpty(type)) {
 			component.setComponentType(createValueInfo(type.trim()));
 		}
-		String bodyContent = util.getAttribute(c, "bodyContent.#text");
+		String bodyContent = util.getAttribute(c, "bodyContent.#text"); //$NON-NLS-1$
 		if(!isEmpty(bodyContent)) {
 			component.setCanHaveBody(createValueInfo(bodyContent.trim()));
 		}
@@ -197,7 +204,7 @@ public class MyFacesScanner implements IFileScanner {
 	}
 
 	void processAttribute(Element a, MyFacesComponent component) {
-		String name = util.getAttribute(a, "jspName.#text");
+		String name = util.getAttribute(a, "jspName.#text"); //$NON-NLS-1$
 		if(isEmpty(name)) name = util.getAttribute(a, ATTR_NAME);
 		if(isEmpty(name)) return;
 		name = name.trim();
@@ -210,7 +217,7 @@ public class MyFacesScanner implements IFileScanner {
 			isNew = true;
 		}
 		String description = util.getAttribute(a, ATTR_DESCRIPTION);
-		if(!isEmpty(description) && !description.trim().equals("no description")) {
+		if(!isEmpty(description) && !description.trim().equals("no description")) { //$NON-NLS-1$
 			attribute.setDescription(createValueInfo(description.trim()));
 		}
 		String required = util.getAttribute(a, ATTR_REQUIRED);

@@ -22,13 +22,15 @@ import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.internal.scanner.IFileScanner;
 import org.jboss.tools.jst.web.kb.internal.scanner.JSF2ResourcesScanner;
 import org.jboss.tools.jst.web.kb.internal.scanner.LoadedDeclarations;
+import org.jboss.tools.jst.web.kb.internal.scanner.MyFacesScanner;
 import org.jboss.tools.jst.web.kb.internal.scanner.ScannerException;
 import org.jboss.tools.jst.web.kb.internal.scanner.XMLScanner;
 import org.jboss.tools.jst.web.model.helpers.InnerModelHelper;
 
 public class KbResourceVisitor implements IResourceVisitor {
 	static IFileScanner[] FILE_SCANNERS = {
-		new XMLScanner(), 
+		new MyFacesScanner(),
+		new XMLScanner(),
 	};
 	JSF2ResourcesScanner jsf2scanner = new JSF2ResourcesScanner();
 	
@@ -101,6 +103,7 @@ public class KbResourceVisitor implements IResourceVisitor {
 					long dt = System.currentTimeMillis() - t;
 //					timeUsed += dt;
 //					System.out.println("Time=" + timeUsed);
+					break;
 				}
 			}
 			if(jsf2resources != null && jsf2resources.isPrefixOf(f.getFullPath()) && jsf2scanner.isLikelyComponentSource(f)) {

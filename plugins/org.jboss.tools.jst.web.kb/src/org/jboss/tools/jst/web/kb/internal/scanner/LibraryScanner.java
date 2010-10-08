@@ -170,7 +170,7 @@ public class LibraryScanner implements IFileScanner {
 	}
 
 	public static boolean isMyFacesMetadata(XModelObject o) {
-		if("myfaces-metadata.xml".equals(o.getPathPart())) { //$NON-NLS-1$
+		if(MyFacesScanner.METADATA_FILE_NAME.equals(o.getPathPart())) {
 			return true;
 		}
 		return false;
