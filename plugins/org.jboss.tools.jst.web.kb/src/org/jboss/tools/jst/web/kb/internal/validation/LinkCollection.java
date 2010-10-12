@@ -31,6 +31,8 @@ public class LinkCollection {
 	protected Map<IPath, Set<String>> declaringVariableNamesByResource = new HashMap<IPath, Set<String>>();
 	protected Set<IPath> unnamedResources = new HashSet<IPath>();
 
+	protected int modifications = 0;
+
 	/**
 	 * Save link between resource and variable name.
 	 * It's needed for incremental validation because we must save all linked resources of changed java file.
@@ -51,7 +53,9 @@ public class LinkCollection {
 				resourcesByVariableName.put(variableName, linkedResources);
 			}
 			// save linked resources.
-			linkedResources.add(linkedResourcePath);
+			if(linkedResources.add(linkedResourcePath)) {
+				modifications++;
+			}
 		}
 
 		// Save link between resource and variable names. It's needed if variable name changes in resource file.
@@ -60,7 +64,9 @@ public class LinkCollection {
 			variableNames = new HashSet<String>();
 			variableNamesByResource.put(linkedResourcePath, variableNames);
 		}
-		variableNames.add(variableName);
+		if(variableNames.add(variableName)) {
+			modifications++;
+		}
 
 		if(declaration) {
 			synchronized(this) {
@@ -71,7 +77,9 @@ public class LinkCollection {
 					resourcesByDeclaringVariableName.put(variableName, linkedResources);
 				}
 				// save linked resources.
-				linkedResources.add(linkedResourcePath);
+				if(linkedResources.add(linkedResourcePath)) {
+					modifications++;
+				}
 			}
 
 			// Save link between resource and declaring  variable names. It's needed if variable name changes in resource file.
@@ -80,7 +88,9 @@ public class LinkCollection {
 				variableNames = new HashSet<String>();
 				declaringVariableNamesByResource.put(linkedResourcePath, variableNames);
 			}
-			variableNames.add(variableName);
+			if(variableNames.add(variableName)) {
+				modifications++;
+			}
 		}
 	}
 
@@ -94,7 +104,9 @@ public class LinkCollection {
 			Set<IPath> linkedResources = resourcesByVariableName.get(name);
 			if(linkedResources!=null) {
 				// remove linked resource.
-				linkedResources.remove(linkedResourcePath);
+				if(linkedResources.remove(linkedResourcePath)) {
+					modifications++;
+				}
 			}
 			if(linkedResources.isEmpty()) {
 				resourcesByVariableName.remove(name);
@@ -103,7 +115,9 @@ public class LinkCollection {
 		// Remove link between resource and declaring variable names.
 		Set<String> variableNames = variableNamesByResource.get(linkedResourcePath);
 		if(variableNames!=null) {
-			variableNames.remove(name);
+			if(variableNames.remove(name)) {
+				modifications++;
+			}
 		}
 		if(variableNames.isEmpty()) {
 			variableNamesByResource.remove(linkedResourcePath);
@@ -112,7 +126,9 @@ public class LinkCollection {
 			Set<IPath> linkedResources = resourcesByDeclaringVariableName.get(name);
 			if(linkedResources!=null) {
 				// remove linked resource.
-				linkedResources.remove(linkedResourcePath);
+				if(linkedResources.remove(linkedResourcePath)) {
+					modifications++;
+				}
 			}
 			if(linkedResources.isEmpty()) {
 				resourcesByDeclaringVariableName.remove(name);
@@ -121,7 +137,9 @@ public class LinkCollection {
 		// Remove link between resource and declaring variable names.
 		variableNames = declaringVariableNamesByResource.get(linkedResourcePath);
 		if(variableNames!=null) {
-			variableNames.remove(name);
+			if(variableNames.remove(name)) {
+				modifications++;
+			}
 		}
 		if(variableNames.isEmpty()) {
 			declaringVariableNamesByResource.remove(linkedResourcePath);
@@ -148,28 +166,36 @@ public class LinkCollection {
 			for (String name : resourceNames) {
 				Set<IPath> linkedResources = resourcesByVariableName.get(name);
 				if(linkedResources!=null) {
-					linkedResources.remove(resource);
+					if(linkedResources.remove(resource)) {
+						modifications++;
+					}
 					if(linkedResources.isEmpty()) {
 						resourcesByVariableName.remove(name);
 					}
 				}
 			}
 		}
-		variableNamesByResource.remove(resource);
+		if(variableNamesByResource.remove(resource) != null) {
+			modifications++;
+		}
 
 		resourceNames = declaringVariableNamesByResource.get(resource);
 		if(resourceNames!=null) {
 			for (String name : resourceNames) {
 				Set<IPath> linkedResources = resourcesByDeclaringVariableName.get(name);
 				if(linkedResources!=null) {
-					linkedResources.remove(resource);
+					if(linkedResources.remove(resource)) {
+						modifications++;
+					}
 					if(linkedResources.isEmpty()) {
 						resourcesByDeclaringVariableName.remove(name);
 					}
 				}
 			}
 		}
-		declaringVariableNamesByResource.remove(resource);
+		if(declaringVariableNamesByResource.remove(resource) != null) {
+			modifications++;
+		}
 	}
 
 	public Set<IPath> getResourcesByVariableName(String variableName, boolean declaration) {
@@ -185,7 +211,9 @@ public class LinkCollection {
 	 * @param fullPath
 	 */
 	public void addUnnamedResource(IPath fullPath) {
-		unnamedResources.add(fullPath);
+		if(unnamedResources.add(fullPath)) {
+			modifications++;
+		}
 	}
 
 	/**
@@ -201,7 +229,9 @@ public class LinkCollection {
 	 * @param fullPath
 	 */
 	public void removeUnnamedResource(IPath fullPath) {
-		unnamedResources.remove(fullPath);
+		if(unnamedResources.remove(fullPath)) {
+			modifications++;
+		}
 	}
 
 	/**
@@ -213,6 +243,7 @@ public class LinkCollection {
 		declaringVariableNamesByResource.clear();
 		resourcesByDeclaringVariableName.clear();
 		unnamedResources.clear();
+		modifications = 0;
 	}
 
 	/**
@@ -237,6 +268,7 @@ public class LinkCollection {
 			Element unnamedPathElement = XMLUtilities.createElement(root, "unnamed-path"); //$NON-NLS-1$
 			unnamedPathElement.setAttribute("path", unnamedPath.toString()); //$NON-NLS-1$
 		}
+		modifications = 0;
 	}
 
 	private boolean checkDeclaration(IPath resource, String variableName) {
@@ -273,5 +305,10 @@ public class LinkCollection {
 			IPath pathObject = new Path(path);
 			addUnnamedResource(pathObject);
 		}
+		modifications = 0;
+	}
+
+	public int getModificationsSinceLastStore() {
+		return modifications;
 	}
 }

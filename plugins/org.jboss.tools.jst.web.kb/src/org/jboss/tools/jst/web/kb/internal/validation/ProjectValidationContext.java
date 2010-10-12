@@ -39,6 +39,8 @@ public class ProjectValidationContext implements IValidationContext {
 	private Set<IFile> registeredResources = new HashSet<IFile>();
 	private Set<String> oldVariableNamesForELValidation = new HashSet<String>();
 
+	int modifications = 0;
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#addLinkedCoreResource(java.lang.String, org.eclipse.core.runtime.IPath, boolean)
@@ -268,6 +270,7 @@ public class ProjectValidationContext implements IValidationContext {
 		coreLinks.store(core);
 		Element el = XMLUtilities.createElement(validation, "el"); //$NON-NLS-1$
 		elLinks.store(el);
+		modifications = 0;
 	}
 
 	/*
@@ -285,6 +288,7 @@ public class ProjectValidationContext implements IValidationContext {
 		if(el != null) {
 			elLinks.load(el);
 		}
+		modifications = 0;
 	}
 
 	/*
@@ -321,7 +325,10 @@ public class ProjectValidationContext implements IValidationContext {
 	 */
 	public void registerFile(IFile file) {
 		synchronized (registeredResources) {
-			registeredResources.add(file);
+			if(!registeredResources.contains(file)) {
+				registeredResources.add(file);
+				modifications++;
+			}
 		}
 	}
 
@@ -339,5 +346,9 @@ public class ProjectValidationContext implements IValidationContext {
 	 */
 	public List<IValidator> getValidators() {
 		return null;
+	}
+
+	public int getModificationsSinceLastStore() {
+		return modifications + coreLinks.getModificationsSinceLastStore() + elLinks.getModificationsSinceLastStore();
 	}
 }

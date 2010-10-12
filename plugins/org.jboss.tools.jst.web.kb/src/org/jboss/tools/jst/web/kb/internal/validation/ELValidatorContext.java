@@ -46,14 +46,18 @@ public class ELValidatorContext extends LinkCollection {
 		// save linked ELs.
 		// don't save links if there are more than 500 ELs for the var name.
 		if(linkedEls.size()<500) {
-			linkedEls.add(el);
+			if(linkedEls.add(el)) {
+				modifications++;
+			}
 			// Save link between EL and variable names.
 			Set<String> variableNames = variableNamesByEl.get(el);
 			if(variableNames==null) {
 				variableNames = new HashSet<String>();
 				variableNamesByEl.put(el, variableNames);
 			}
-			variableNames.add(variableName);
+			if(variableNames.add(variableName)) {
+				modifications++;
+			}
 		}
 
 		// Save link between EL and resource.
@@ -62,7 +66,9 @@ public class ELValidatorContext extends LinkCollection {
 			els = new HashSet<ELReference>();
 			elsByResource.put(el.getPath(), els);
 		}
-		els.add(el);
+		if(els.add(el)) {
+			modifications++;
+		}
 	}
 
 	public synchronized void removeLinkedEls(Set<IFile> resorces) {
@@ -74,7 +80,9 @@ public class ELValidatorContext extends LinkCollection {
 	public synchronized void removeLinkedEls(IFile resource) {
 		Set<ELReference> els = elsByResource.get(resource.getFullPath());
 		if(els!=null) {
-			elsByResource.remove(resource.getFullPath());
+			if(elsByResource.remove(resource.getFullPath()) != null) {
+				modifications++;
+			}
 			for (ELReference el : els) {
 				Set<String> names = variableNamesByEl.get(el);
 				if(names!=null) {
@@ -95,7 +103,9 @@ public class ELValidatorContext extends LinkCollection {
 	public synchronized void removeLinkedEl(String name, ELReference el) {
 		Set<ELReference> linkedEls = elsByVariableName.get(name);
 		if(linkedEls!=null) {
-			linkedEls.remove(el);
+			if(linkedEls.remove(el)) {
+				modifications++;
+			}
 		}
 		if(linkedEls.isEmpty()) {
 			elsByVariableName.remove(name);
@@ -104,7 +114,9 @@ public class ELValidatorContext extends LinkCollection {
 		// Remove link between EL and variable names.
 		Set<String> variableNames = variableNamesByEl.get(el);
 		if(variableNames!=null) {
-			variableNames.remove(name);
+			if(variableNames.remove(name)) {
+				modifications++;
+			}
 		}
 		if(variableNames.isEmpty()) {
 			variableNamesByEl.remove(el);
