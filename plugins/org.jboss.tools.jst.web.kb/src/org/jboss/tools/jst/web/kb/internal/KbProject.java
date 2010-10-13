@@ -539,8 +539,6 @@ public class KbProject extends KbObject implements IKbProject {
 					System.out.println("--->" + statistics.size() + " " + (t2 - t1)); //$NON-NLS-1$ //$NON-NLS-2$
 					System.out.println("stop"); //$NON-NLS-1$
 				}
-			} else {
-				System.out.println((t2 - t1));
 			}
 		}
 	}
