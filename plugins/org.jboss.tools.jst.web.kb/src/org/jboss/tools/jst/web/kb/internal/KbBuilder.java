@@ -114,11 +114,11 @@ public class KbBuilder extends IncrementalProjectBuilder {
 			}
 			long end = System.currentTimeMillis();
 			sp.fullBuildTime += end - begin;
-			try {
-				sp.store();
-			} catch (IOException e) {
-				WebModelPlugin.getPluginLog().logError(e);
-			}
+//			try {
+//				sp.store();
+//			} catch (IOException e) {
+//				WebModelPlugin.getPluginLog().logError(e);
+//			}
 			
 //			sp.postBuild();
 		

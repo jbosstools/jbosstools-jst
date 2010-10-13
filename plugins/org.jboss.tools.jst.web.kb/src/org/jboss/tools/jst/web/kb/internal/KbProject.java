@@ -81,6 +81,8 @@ public class KbProject extends KbObject implements IKbProject {
 	LibraryStorage libraries = new LibraryStorage();
 
 	ProjectValidationContext validationContext;
+	
+	int modifications = 0;
 
 	public KbProject() {}
 
@@ -229,6 +231,7 @@ public class KbProject extends KbObject implements IKbProject {
 	 */
 	public void removeKbProject(KbProject p) {
 		if(!dependsOn.contains(p)) return;
+		modifications++;
 		p.removeDependentKbProject(this);
 		removeUsedKbProject(p);
 		IPath[] ps = null;
@@ -309,6 +312,8 @@ public class KbProject extends KbObject implements IKbProject {
 
 		} finally {
 			fireChanges();
+			
+			modifications = 0;
 		}
 
 	}
@@ -369,6 +374,11 @@ public class KbProject extends KbObject implements IKbProject {
 		return end - begin;
 	}
 
+	public int getModificationsSinceLastStore() {
+		return modifications + 
+			(validationContext == null ? 0 : validationContext.getModificationsSinceLastStore());
+	}
+
 	/**
 	 * Stores results of last build, so that on exit/enter Eclipse
 	 * load them without rebuilding project
@@ -391,6 +401,8 @@ public class KbProject extends KbObject implements IKbProject {
 		if(validationContext != null) validationContext.store(root);
 		
 		XMLUtilities.serialize(root, file.getAbsolutePath());
+		
+		modifications = 0;
 	}
 
 	/*
@@ -527,6 +539,8 @@ public class KbProject extends KbObject implements IKbProject {
 					System.out.println("--->" + statistics.size() + " " + (t2 - t1)); //$NON-NLS-1$ //$NON-NLS-2$
 					System.out.println("stop"); //$NON-NLS-1$
 				}
+			} else {
+				System.out.println((t2 - t1));
 			}
 		}
 	}
@@ -657,6 +671,7 @@ public class KbProject extends KbObject implements IKbProject {
 	 * @param source
 	 */	
 	public void registerComponents(LoadedDeclarations ds, IPath source) {
+		boolean isThisProject = pathCheck.isThisProject(source);
 		ITagLibrary[] libraries = ds.getLibraries().toArray(new ITagLibrary[0]);
 
 		if(libraries.length == 0) {
@@ -695,7 +710,7 @@ public class KbProject extends KbObject implements IKbProject {
 				if(uriChanged) {
 					this.libraries.addLibrary(current);
 				}
-				fireChanges(changes);
+				fireChanges(changes, isThisProject);
 				continue;
 			}
 			if(((KbObject)library).getParent() == null) {
@@ -704,7 +719,7 @@ public class KbProject extends KbObject implements IKbProject {
 			this.libraries.addLibrary(library);
 			addedLibraries = Change.addChange(addedLibraries, new Change(this, null, null, loaded));
 		}
-		fireChanges(addedLibraries); 
+		fireChanges(addedLibraries, isThisProject); 
 		
 		libraryDeclarationsRemoved(currentLibraries);
 
@@ -771,8 +786,9 @@ public class KbProject extends KbObject implements IKbProject {
 		Set<ITagLibrary> ls = libraries.removePath(source);
 		if(ls != null) for (ITagLibrary l: ls) {
 			changes = Change.addChange(changes, new Change(this, null, l, null));
+			if(l.getResource() != null && l.getResource().getProject() == project) modifications++;
 		}
-		fireChanges(changes);
+		fireChanges(changes, false);
 		
 		firePathRemovedToDependentProjects(source);
 	}
@@ -816,7 +832,7 @@ public class KbProject extends KbObject implements IKbProject {
 			libraries.removeLibrary(c);
 			changes = Change.addChange(changes, new Change(this, null, c, null));
 		}
-		fireChanges(changes);
+		fireChanges(changes, false);
 	}
 
 	List<Change> postponedChanges = null;
@@ -831,15 +847,16 @@ public class KbProject extends KbObject implements IKbProject {
 		if(postponedChanges == null) return;
 		List<Change> changes = postponedChanges;
 		postponedChanges = null;
-		fireChanges(changes);
+		fireChanges(changes, false);
 	}
 
 	/**
 	 * 
 	 * @param changes
 	 */
-	void fireChanges(List<Change> changes) {
+	void fireChanges(List<Change> changes, boolean increaseModification) {
 		if(changes == null || changes.isEmpty()) return;
+		if(increaseModification) modifications++;
 		if(postponedChanges != null) {
 			postponedChanges.addAll(changes);
 			return;
@@ -954,4 +971,33 @@ public class KbProject extends KbObject implements IKbProject {
 		m.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_NORMAL);
 		return m;
 	}
+
+	PathCheck pathCheck = new PathCheck();
+
+	class PathCheck {
+		Map<IPath, Boolean> paths = new HashMap<IPath, Boolean>();
+		
+		public boolean isThisProject(IPath path) {
+			Boolean b = paths.get(path);
+			if(b == null) {
+				if(path != null && path.toString().endsWith(".jar")) { //$NON-NLS-1$
+					b = true;
+				} else {
+					IFile f = path.segmentCount() < 2 ? null : ResourcesPlugin.getWorkspace().getRoot().getFile(path);
+					b = !(f != null && f.exists() && f.getProject() != project);
+				}
+				paths.put(path, b);
+			}
+			return b.booleanValue();
+		}
+		
+	}
+
+	public void printModifications() {
+		System.out.println(project.getName());
+		System.out.println("" + modifications);
+		if(validationContext != null)
+			System.out.println("validationContext " + validationContext.getModificationsSinceLastStore());		
+	}
+	
 }
