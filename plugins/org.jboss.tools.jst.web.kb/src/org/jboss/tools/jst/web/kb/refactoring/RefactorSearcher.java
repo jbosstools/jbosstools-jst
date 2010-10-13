@@ -213,6 +213,9 @@ public abstract class RefactorSearcher {
 							continue;
 	
 						List<ELSegment> segments = resolution.findSegmentsByJavaElement(javaElement);
+
+						if(segments == null)
+							continue;
 						
 						for(ELSegment segment : segments){
 							match(file, offset+segment.getSourceReference().getStartPosition(), segment.getSourceReference().getLength());
