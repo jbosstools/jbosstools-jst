@@ -10,6 +10,7 @@
   ******************************************************************************/
 package org.jboss.tools.jst.web.kb.refactoring;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -192,18 +193,35 @@ public abstract class RefactorSearcher {
 	}
 	
 	protected void searchInCach(IFile file){
+		if(file == null) return;
+		ELResolver[] resolvers = ELResolverFactoryManager.getInstance().getResolvers(file);
+		IRelevanceCheck[] checks = getRelevanceChecks(resolvers);
+		String text = null;
+		try {
+			InputStream is = file.getContents();
+			if(is != null) text = FileUtil.readStream(is);
+		} catch (CoreException e) {
+			//ignore
+		}
+		if(text != null) {
+			boolean found = false;
+			for (IRelevanceCheck check: checks) {
+				if(check.isRelevant(text)) {
+					found = true;
+					break;
+				}
+			}
+			if(!found) return;
+		}		
+		
 		ELContext context = PageContextFactory.createPageContext(file);
 		
 		if(context == null)
 			return;
 		
 		ELReference[] references = context.getELReferences();
-		ELResolver[] resolvers = context.getElResolvers();
-	
-		IRelevanceCheck[] checks = new IRelevanceCheck[resolvers.length];
-		for (int i = 0; i < checks.length; i++) {
-			checks[i] = resolvers[i].createRelevanceCheck(javaElement);
-		}
+		resolvers = context.getElResolvers();
+		checks = getRelevanceChecks(resolvers);
 		
 		if(javaElement != null){
 			for(ELReference reference : references){
@@ -247,6 +265,15 @@ public abstract class RefactorSearcher {
 			}
 		}
 		
+	}
+
+	private IRelevanceCheck[] getRelevanceChecks(ELResolver[] resolvers) {
+		if(resolvers == null) return new IRelevanceCheck[0];
+		IRelevanceCheck[] checks = new IRelevanceCheck[resolvers.length];
+		for (int i = 0; i < checks.length; i++) {
+			checks[i] = resolvers[i].createRelevanceCheck(javaElement);
+		}
+		return checks;
 	}
 	
 
