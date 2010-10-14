@@ -26,6 +26,7 @@ import org.jboss.tools.jst.web.kb.internal.validation.ValidatorManager;
  */
 public interface IValidator {
 
+	public static final String KB_PROBLEM_MARKER_TYPE = "org.jboss.tools.jst.web.kb.kbproblemmarker"; //$NON-NLS-1$
 	public static final String MARKED_RESOURCE_MESSAGE_GROUP = "markedKbResource"; //$NON-NLS-1$
 	public static final String RESOURCE_MESSAGE_ID = "org.jboss.tools.kb.problem"; //$NON-NLS-1$
 	public static final String EXTENSION_POINT_ID = "org.jboss.tools.jst.web.kb.validator"; //$NON-NLS-1$

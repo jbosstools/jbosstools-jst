@@ -40,7 +40,7 @@ import org.jboss.tools.jst.web.kb.validation.IValidationErrorManager;
  */
 public abstract class ValidationErrorManager implements IValidationErrorManager {
 
-	static String VALIDATION_MARKER = ValidationPlugin.PLUGIN_ID + ".problemmarker"; //$NON-NLS-1$
+	public static String DEFAULT_VALIDATION_MARKER = ValidationPlugin.PLUGIN_ID + ".problemmarker"; //$NON-NLS-1$
 	static String VALIDATION_MARKER_OWNER = "owner"; //$NON-NLS-1$
 	static String VALIDATION_MARKER_GROUP = "groupName"; //$NON-NLS-1$
 
@@ -209,7 +209,7 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 		return addError(message, severity, messageArguments, lineNumber, length, offset, target, getDocumentProvider(), getMarkerId(), getMarkerOwner());
 	}
 
-	public static IMarker addError(String message, int severity, Object[] messageArguments, int lineNumber, int length, int offset, IResource target, TextFileDocumentProvider documentProvider, String markerId, Class markerOwner, int maxNumberOfMarkersPerFile) {
+	public static IMarker addError(String message, int severity, Object[] messageArguments, int lineNumber, int length, int offset, IResource target, TextFileDocumentProvider documentProvider, String markerId, Class markerOwner, int maxNumberOfMarkersPerFile, String markerType) {
 		IMarker marker = null;
 		try {
 			if(lineNumber<1) {
@@ -227,7 +227,7 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 			}
 			marker = addTask(markerOwner.getName().intern(), target, lineNumber,
 					MessageFormat.format(message, messageArguments),
-					severity, null, markerId, offset, length, maxNumberOfMarkersPerFile);
+					severity, null, markerId, offset, length, maxNumberOfMarkersPerFile, markerType);
 		} catch (CoreException e) {
 			WebKbPlugin.getDefault().logError(
 					NLS.bind(KbMessages.EXCEPTION_DURING_CREATING_MARKER, target.getFullPath()), e);
@@ -254,28 +254,33 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 	 * @return
 	 */
 	public IMarker addError(String message, int severity, Object[] messageArguments, int lineNumber, int length, int offset, IResource target, TextFileDocumentProvider documentProvider, String markerId, Class markerOwner) {
-		return addError(message, severity, messageArguments, lineNumber, length, offset, target, documentProvider, markerId, markerOwner, getMaxNumberOfMarkersPerFile(target.getProject()));
+		return addError(message, severity, messageArguments, lineNumber, length, offset, target, documentProvider, markerId, markerOwner, getMaxNumberOfMarkersPerFile(target.getProject()), getMarkerType());
 	}
 
 	abstract public int getMaxNumberOfMarkersPerFile(IProject project);
 
+	public abstract String getMarkerType();
+
 	private static IMarker addTask(String pluginId, IResource resource, int location, 
-			String message, int markerType, String targetObjectName, 
-			String groupName, int offset, int length, int maxNumberOfMarkersPerFile) throws CoreException {
+			String message, int severityEnumValue, String targetObjectName, 
+			String groupName, int offset, int length, int maxNumberOfMarkersPerFile, String markerType) throws CoreException {
 
 		if ((message == null) || (resource == null) || (!resource.exists())) {
 			return null;
 		}
-		int severity = getSeverity(markerType);
+		int severity = getSeverity(severityEnumValue);
 
+		if(markerType==null) {
+			markerType = DEFAULT_VALIDATION_MARKER;
+		}
 		if(maxNumberOfMarkersPerFile>0) {
-			int existingMarkers = resource.findMarkers(VALIDATION_MARKER, true, IResource.DEPTH_ZERO).length;
+			int existingMarkers = resource.findMarkers(markerType, true, IResource.DEPTH_ZERO).length;
 			if(existingMarkers>maxNumberOfMarkersPerFile) {
 				return null;
 			}
 		}
 
-		IMarker item = resource.createMarker(VALIDATION_MARKER); // add a validation marker
+		IMarker item = resource.createMarker(markerType); // add a validation marker
 
 		boolean offsetSet = ((offset != IMessage.OFFSET_UNSET) && (length != IMessage.OFFSET_UNSET));
 		int size = (offsetSet) ? 7 : 5;
@@ -305,12 +310,6 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 		item.setAttributes(attribNames, attribValues);
 
 		return item;
-	}
-
-	private IMarker addTask(String pluginId, IResource resource, int location, 
-		String message, int markerType, String targetObjectName, 
-		String groupName, int offset, int length) throws CoreException {
-		return addTask(pluginId, resource, location, message, markerType, targetObjectName, groupName, offset, length, getMaxNumberOfMarkersPerFile(resource.getProject()));
 	}
 
 	private static int getSeverity(int severityEnumValue) {

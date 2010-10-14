@@ -16,12 +16,15 @@ import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.wst.validation.internal.core.ValidationException;
 import org.eclipse.wst.validation.internal.provisional.core.IReporter;
 import org.eclipse.wst.validation.internal.provisional.core.IValidationContext;
 import org.eclipse.wst.validation.internal.provisional.core.IValidatorJob;
+import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.validation.IValidator;
 
 /**
@@ -88,13 +91,25 @@ public class ValidatorManager implements IValidatorJob {
 	}
 
 	private IStatus validate(List<IValidator> validators, Set<IFile> changedFiles, IProject rootProject, ContextValidationHelper validationHelper, IReporter reporter) throws ValidationException {
+		removeMarkers(changedFiles);
 		for (IValidator validator : validators) {
 			validator.validate(changedFiles, rootProject, validationHelper, this, reporter);
 		}
 		return OK_STATUS;
 	}
 
+	private void removeMarkers(Set<IFile> files) {
+		try {
+			for (IFile file : files) {
+				file.deleteMarkers(IValidator.KB_PROBLEM_MARKER_TYPE, true, IResource.DEPTH_ZERO);
+			}
+		} catch (CoreException e) {
+			WebKbPlugin.getDefault().logError(e);
+		}
+	}
+
 	private IStatus validateAll(List<IValidator> validators, IProject rootProject, ContextValidationHelper validationHelper, IReporter reporter) throws ValidationException {
+		removeMarkers(validationHelper.getProjectSetRegisteredFiles());
 		for (IValidator validator : validators) {
 			validator.validateAll(rootProject, validationHelper, this, reporter);
 		}

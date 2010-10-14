@@ -894,7 +894,7 @@ public class KbProject extends KbObject implements IKbProject {
 			IMarker[] markers = getOwnedMarkers(project);
 			if (markers != null && markers.length > 0) {
 				try {
-					project.deleteMarkers(KB_PROBLEM_MARKER_TYPE, true, IResource.DEPTH_ONE);
+					project.deleteMarkers(KB_BUILDER_PROBLEM_MARKER_TYPE, true, IResource.DEPTH_ONE);
 					project.setPersistentProperty(KbProjectFactory.NATURE_MOCK, null);
 				} catch (CoreException ex) {
 					WebKbPlugin.getDefault().logError(ex);
@@ -924,7 +924,7 @@ public class KbProject extends KbObject implements IKbProject {
 		return false;
 	}
 
-	public static final String KB_PROBLEM_MARKER_TYPE = "org.jboss.tools.jst.web.kb.kbproblemmarker"; //$NON-NLS-1$
+	public static final String KB_BUILDER_PROBLEM_MARKER_TYPE = "org.jboss.tools.jst.web.kb.kbBuilderProblemMarker"; //$NON-NLS-1$
 
 	private static IMarker[] getOwnedMarkers(IResource r) {
 		ArrayList<IMarker> l = null;
@@ -937,7 +937,7 @@ public class KbProject extends KbObject implements IKbProject {
 	
 						String _type = ms[i].getType();
 						if(_type == null) continue;
-						if(!_type.equals(KB_PROBLEM_MARKER_TYPE)) continue;
+						if(!_type.equals(KB_BUILDER_PROBLEM_MARKER_TYPE)) continue;
 						if(!ms[i].isSubtypeOf(IMarker.PROBLEM)) continue;
 		
 						if(l == null) 
@@ -960,7 +960,7 @@ public class KbProject extends KbObject implements IKbProject {
 
 		String message = MessageFormat.format(KbMessages.KBPROBLEM, args.toArray());
 		if (m == null) {
-			m = r.createMarker(KB_PROBLEM_MARKER_TYPE);
+			m = r.createMarker(KB_BUILDER_PROBLEM_MARKER_TYPE);
 			r.setPersistentProperty(KbProjectFactory.NATURE_MOCK, "true"); //$NON-NLS-1$
 			KbProjectFactory.getKbProject(r.getProject(), true);
 		}
@@ -997,5 +997,4 @@ public class KbProject extends KbObject implements IKbProject {
 		if(validationContext != null)
 			System.out.println("validationContext " + validationContext.getModificationsSinceLastStore());		
 	}
-	
 }

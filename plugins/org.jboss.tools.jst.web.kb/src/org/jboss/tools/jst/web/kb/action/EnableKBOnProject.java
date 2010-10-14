@@ -44,7 +44,7 @@ public class EnableKBOnProject implements IMarkerResolution{
 		try {
 			EclipseResourceUtil.addNatureToProject(project, IKbProject.NATURE_ID);
 			// Find existing KBNATURE problem marker and kill it if exists
-			project.deleteMarkers(KbProject.KB_PROBLEM_MARKER_TYPE, true, IResource.DEPTH_ONE);
+			project.deleteMarkers(KbProject.KB_BUILDER_PROBLEM_MARKER_TYPE, true, IResource.DEPTH_ONE);
 		} catch (CoreException e) {
 			WebKbPlugin.getDefault().logError(e);
 		}
