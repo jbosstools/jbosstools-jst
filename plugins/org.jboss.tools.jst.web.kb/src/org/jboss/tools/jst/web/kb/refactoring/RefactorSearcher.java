@@ -42,6 +42,7 @@ import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.ELResolverFactoryManager;
 import org.jboss.tools.common.el.core.resolver.ELSegment;
 import org.jboss.tools.common.el.core.resolver.ElVarSearcher;
+import org.jboss.tools.common.el.core.resolver.IRelevanceCheck;
 import org.jboss.tools.common.el.core.resolver.SimpleELContext;
 import org.jboss.tools.common.el.core.resolver.Var;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
@@ -198,13 +199,21 @@ public abstract class RefactorSearcher {
 		
 		ELReference[] references = context.getELReferences();
 		ELResolver[] resolvers = context.getElResolvers();
+	
+		IRelevanceCheck[] checks = new IRelevanceCheck[resolvers.length];
+		for (int i = 0; i < checks.length; i++) {
+			checks[i] = resolvers[i].createRelevanceCheck(javaElement);
+		}
 		
 		if(javaElement != null){
 			for(ELReference reference : references){
 				int offset = reference.getStartPosition();
 				for(ELExpression operand : reference.getEl()){
-					for (ELResolver resolver : resolvers) {
+					for (int i = 0; i < resolvers.length; i++) {
+						ELResolver resolver = resolvers[i];
 						if (!(resolver instanceof ELCompletionEngine))
+							continue;
+						if(!checks[i].isRelevant(operand.getText())) 
 							continue;
 						
 						ELResolution resolution = resolver.resolve(context, operand, offset);
