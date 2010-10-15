@@ -16,6 +16,8 @@ import java.util.StringTokenizer;
 import org.jboss.tools.common.model.*;
 import org.jboss.tools.common.model.impl.XModelImpl;
 import org.jboss.tools.common.verification.vrules.*;
+import org.jboss.tools.common.verification.vrules.layer.VObjectImpl;
+import org.jboss.tools.jst.web.model.helpers.WebAppHelper;
 import org.jboss.tools.jst.web.project.list.IWebPromptingProvider;
 import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
 
@@ -32,13 +34,16 @@ public class CheckResource extends WebDefaultCheck {
 		XModelObject webRoot = model == null ? null : model.getByPath("FileSystems/WEB-ROOT"); //$NON-NLS-1$
 		if(webRoot == null) return null;
 
-		if(object.getEntity().getName().startsWith("WebAppErrorPage")) {
-			if(value != null && value.indexOf("?") > 0) {
-				value = value.substring(0, value.indexOf("?"));
+		if(object.getEntity().getName().startsWith("WebAppErrorPage")) { //$NON-NLS-1$
+			if(value != null && value.indexOf("?") > 0) { //$NON-NLS-1$
+				value = value.substring(0, value.indexOf("?")); //$NON-NLS-1$
+			}
+			if(isMappedToServlet(object, value)) {
+				return null;
 			}
 		}
 		
-		List list = WebPromptingProvider.getInstance().getList(model, IWebPromptingProvider.JSF_CONVERT_URL_TO_PATH, value, null);
+		List<Object> list = WebPromptingProvider.getInstance().getList(model, IWebPromptingProvider.JSF_CONVERT_URL_TO_PATH, value, null);
 		if(list != null && list.size() > 0) {
 			value = list.get(0).toString();
 		}
@@ -79,5 +84,21 @@ public class CheckResource extends WebDefaultCheck {
 		}
 		return false;
 	}
-	
+
+	boolean isMappedToServlet(VObject object, String value) {
+		XModelObject o = ((VObjectImpl)object).getModelObject();
+		while(o != null && o.getFileType() != XModelObject.FILE) o = o.getParent();
+		return isMappedToServlet(o, value);
+	}
+
+	boolean isMappedToServlet(XModelObject webxml, String value) {
+		if(webxml == null) return false;
+		XModelObject[] ms = WebAppHelper.getServletMappings(webxml);
+		if(ms != null) for (XModelObject m: ms) {
+			String url = m.getAttributeValue("url-pattern"); //$NON-NLS-1$
+			if(value != null && value.equals(url)) return true;
+		}
+		return false;
+	}
+
 }
