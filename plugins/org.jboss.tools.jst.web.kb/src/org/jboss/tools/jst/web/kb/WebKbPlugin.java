@@ -49,7 +49,7 @@ public class WebKbPlugin extends BaseUIPlugin {
 					case ISaveContext.FULL_SAVE:
 						IProject[] ps = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 						for (IProject p: ps) {
-							KbProject sp = (KbProject)KbProjectFactory.getKbProject(p, false);
+							KbProject sp = (KbProject)KbProjectFactory.getKbProject(p, false, true);
 							if(sp != null && sp.getModificationsSinceLastStore() > 0) {
 //								sp.printModifications();
 								try {

@@ -27,6 +27,10 @@ import org.jboss.tools.jst.web.kb.internal.KbProject;
 
 public class KbProjectFactory {
 
+	public static IKbProject getKbProject(IProject project, boolean resolve) {
+		return getKbProject(project, resolve, false);
+	}
+
 	/**
 	 * Factory method creating kb project instance by project resource.
 	 * Returns null if 
@@ -38,10 +42,11 @@ public class KbProjectFactory {
 	 * @param resolve if true and results of last build have not been resolved they are loaded.
 	 * @return
 	 */
-	public static IKbProject getKbProject(IProject project, boolean resolve) {
+	public static IKbProject getKbProject(IProject project, boolean resolve, boolean isNatureRequired) {
 		if(project == null || !project.exists() || !project.isOpen()) return null;
 		try {
 			if(!project.hasNature(IKbProject.NATURE_ID)) {
+				if(isNatureRequired) return null;
 				String s = project.getPersistentProperty(NATURE_MOCK);
 				if(s != null && "true".equals(s)) {
 					return getMockKbProject(project);
@@ -101,6 +106,9 @@ public class KbProjectFactory {
 				long t0 = System.currentTimeMillis();
 				KbBuilderEx builder = new KbBuilderEx();
 				setProjectToBuilder(builder, project);
+				if(WebKbPlugin.getDefault() == null) {
+					return;
+				}
 				builder.build();
 				underConstruction.remove(project);
 //				long dt = System.currentTimeMillis() - t0;
