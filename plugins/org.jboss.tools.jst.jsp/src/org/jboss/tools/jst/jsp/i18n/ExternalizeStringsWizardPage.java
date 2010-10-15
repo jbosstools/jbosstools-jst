@@ -525,7 +525,7 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 	 * @return a pair <code>\nkey=value\n</code>
 	 */
 	public String getKeyValuePair() {
-		return "\n" + propsKey.getText() + Constants.EQUAL + propsValue.getText() + "\n"; //$NON-NLS-1$ //$NON-NLS-2$
+		return propsKey.getText() + Constants.EQUAL + propsValue.getText();
 	}
 	
 	/**

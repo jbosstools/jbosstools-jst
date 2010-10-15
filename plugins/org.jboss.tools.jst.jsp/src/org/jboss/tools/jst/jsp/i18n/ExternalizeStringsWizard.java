@@ -116,7 +116,12 @@ public class ExternalizeStringsWizard extends Wizard {
 		 * via getInitialContent() method of the page2 during the file creation. 
 		 */
 		if (bundleFile.exists() && !page1.isNewFile()) {
-			InputStream is = new ByteArrayInputStream(page1.getKeyValuePair().getBytes());
+			/*
+			 * https://jira.jboss.org/browse/JBIDE-7218
+			 * Add only one line before adding the value. 
+			 */
+			String writeToFile = "\n" + page1.getKeyValuePair(); //$NON-NLS-1$
+			InputStream is = new ByteArrayInputStream(writeToFile.getBytes());
 			try {
 				bundleFile.appendContents(is, false, true, null);
 				is.close();
