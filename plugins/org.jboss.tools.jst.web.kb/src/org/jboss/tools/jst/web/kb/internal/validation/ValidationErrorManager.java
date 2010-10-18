@@ -182,7 +182,7 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 		return addError(message, preferenceKey, messageArguments, 0, length, offset, target);
 	}
 
-	protected TextFileDocumentProvider getDocumentProvider() {
+	public TextFileDocumentProvider getDocumentProvider() {
 		if(documentProvider==null) {
 			if(coreHelper!=null) {
 				documentProvider = coreHelper.getDocumentProvider();
@@ -211,9 +211,11 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 
 	public static IMarker addError(String message, int severity, Object[] messageArguments, int lineNumber, int length, int offset, IResource target, TextFileDocumentProvider documentProvider, String markerId, Class markerOwner, int maxNumberOfMarkersPerFile, String markerType) {
 		IMarker marker = null;
+		boolean connected = false;
 		try {
 			if(lineNumber<1) {
 				if (documentProvider != null) {
+					connected = true;
 					documentProvider.connect(target);
 					IDocument doc = documentProvider.getDocument(target);
 					if(doc != null){
@@ -232,7 +234,7 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 			WebKbPlugin.getDefault().logError(
 					NLS.bind(KbMessages.EXCEPTION_DURING_CREATING_MARKER, target.getFullPath()), e);
 		} finally {
-			if (documentProvider != null) {
+			if (documentProvider != null && connected) {
 				documentProvider.disconnect(target);
 			}
 		}
