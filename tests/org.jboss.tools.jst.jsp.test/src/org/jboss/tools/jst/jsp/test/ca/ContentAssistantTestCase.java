@@ -118,7 +118,16 @@ public class ContentAssistantTestCase extends TestCase {
 				String replacementString = ap.getReplacementString().toLowerCase();
 				if (replacementString.equalsIgnoreCase(proposalName)) return true;
 				
+				
 				// For a tag proposal there will be not only the the tag name but all others characters like default attributes, tag ending characters and so on
+				if (replacementString.indexOf("/>") != -1) {
+					replacementString = replacementString.substring(0, replacementString.indexOf("/>"));
+				}
+				if (replacementString.indexOf('>') != -1) {
+					replacementString = replacementString.substring(0, replacementString.indexOf('>'));
+				}
+				if (replacementString.equalsIgnoreCase(proposalName)) return true;
+				
 				String[] replacementStringParts = replacementString.split(" "); //$NON-NLS-1$
 				if (replacementStringParts != null && replacementStringParts.length > 0) {
 					if (replacementStringParts[0].equalsIgnoreCase(proposalName)) return true;
