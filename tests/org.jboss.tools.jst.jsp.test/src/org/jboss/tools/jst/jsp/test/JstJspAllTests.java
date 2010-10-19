@@ -15,6 +15,7 @@ import junit.framework.TestSuite;
 
 import org.jboss.tools.jst.jsp.test.ca.ExternalizeCommandTest;
 import org.jboss.tools.jst.jsp.test.ca.JstJspJbide1641Test;
+import org.jboss.tools.jst.jsp.test.ca.NewEditorSideBySideCommandTest;
 import org.jboss.tools.jst.jsp.test.ca.SelectionBarTest;
 
 public class JstJspAllTests {
@@ -44,6 +45,7 @@ public class JstJspAllTests {
 		suite.addTestSuite(SelectionBarTest.class);
 		suite.addTestSuite(ExternalizeCommandTest.class);
 	
+		suite.addTestSuite(NewEditorSideBySideCommandTest.class);
 		return suite;
 	}
 
