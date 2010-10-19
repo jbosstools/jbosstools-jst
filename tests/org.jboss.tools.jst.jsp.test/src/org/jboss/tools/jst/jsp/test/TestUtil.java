@@ -22,6 +22,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 import org.eclipse.wst.sse.ui.internal.contentassist.StructuredContentAssistant;
+import org.jboss.tools.common.text.xml.contentassist.ProposalSorter;
 
 public class TestUtil {
 
@@ -135,7 +136,7 @@ public class TestUtil {
 				res.add(result[j]);
 			}
 		}
-		return res;
+		return ProposalSorter.filterAndSortProposals(res, null, null);
 	}
 	/**
 	 * Close all opened editors
