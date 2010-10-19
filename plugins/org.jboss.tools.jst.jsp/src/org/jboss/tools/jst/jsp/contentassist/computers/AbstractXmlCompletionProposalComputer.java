@@ -651,8 +651,37 @@ abstract public class AbstractXmlCompletionProposalComputer extends AbstractXMLM
 		return region;
 	}
 
+	protected ContentAssistRequest computeCompletionProposals(String matchString, ITextRegion completionRegion, IDOMNode treeNode, IDOMNode xmlnode, CompletionProposalInvocationContext context) {
+		ContentAssistRequest contentAssistRequest = super.computeCompletionProposals(matchString, completionRegion, treeNode, xmlnode, context);
+		if (contentAssistRequest == null) {
+			IStructuredDocumentRegion sdRegion = getStructuredDocumentRegion(context.getInvocationOffset());
+			contentAssistRequest = newContentAssistRequest((Node) treeNode, treeNode.getParentNode(), sdRegion, completionRegion, context.getInvocationOffset(), 0, ""); //$NON-NLS-1$
+		}
+		
+		String regionType = completionRegion.getType();
+
+		/*
+		 * Jeremy: Add attribute name proposals before  empty tag close
+		 */
+		if ((xmlnode.getNodeType() == Node.ELEMENT_NODE) || (xmlnode.getNodeType() == Node.DOCUMENT_NODE)) {
+			if (regionType == DOMRegionContext.XML_EMPTY_TAG_CLOSE) {
+				addAttributeNameProposals(contentAssistRequest, context);
+			} else if ((regionType == DOMRegionContext.XML_CONTENT) 
+					|| (regionType == DOMRegionContext.XML_CHAR_REFERENCE) 
+					|| (regionType == DOMRegionContext.XML_ENTITY_REFERENCE) 
+					|| (regionType == DOMRegionContext.XML_PE_REFERENCE)
+					|| (regionType == DOMRegionContext.BLOCK_TEXT)
+					|| (regionType == DOMRegionContext.XML_END_TAG_OPEN)) {
+				addTextELProposals(contentAssistRequest, context);
+			}
+		}
+
+		return contentAssistRequest;
+	}
 	
-	
+	protected ContentAssistRequest newContentAssistRequest(Node node, Node possibleParent, IStructuredDocumentRegion documentRegion, ITextRegion completionRegion, int begin, int length, String filter) {
+		return new ContentAssistRequest(node, possibleParent, documentRegion, completionRegion, begin, length, filter);
+	}
 	/**
 	 * Calculates and adds the tag name proposals to the Content Assist Request object
 	 * 
