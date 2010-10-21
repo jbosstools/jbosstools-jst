@@ -129,7 +129,7 @@ public abstract class RefactorSearcher {
 	protected abstract IContainer getViewFolder(IProject project);
 	
 	private void scanForJava(IContainer container){
-		if(container.getName().startsWith("."))
+		if(container.getName().startsWith(".")) //$NON-NLS-1$
 			return;
 		
 		try{
@@ -145,7 +145,7 @@ public abstract class RefactorSearcher {
 	}
 
 	private void scan(IContainer container){
-		if(container.getName().startsWith("."))
+		if(container.getName().startsWith(".")) //$NON-NLS-1$
 			return;
 
 		try{
