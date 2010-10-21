@@ -267,7 +267,7 @@ public abstract class RefactorSearcher {
 		
 	}
 
-	private IRelevanceCheck[] getRelevanceChecks(ELResolver[] resolvers) {
+	protected IRelevanceCheck[] getRelevanceChecks(ELResolver[] resolvers) {
 		if(resolvers == null) return new IRelevanceCheck[0];
 		IRelevanceCheck[] checks = new IRelevanceCheck[resolvers.length];
 		for (int i = 0; i < checks.length; i++) {
