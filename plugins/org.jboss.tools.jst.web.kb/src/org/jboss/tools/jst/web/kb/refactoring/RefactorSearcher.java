@@ -129,6 +129,9 @@ public abstract class RefactorSearcher {
 	protected abstract IContainer getViewFolder(IProject project);
 	
 	private void scanForJava(IContainer container){
+		if(container.getName().startsWith("."))
+			return;
+		
 		try{
 			for(IResource resource : container.members()){
 				if(resource instanceof IFolder)
@@ -142,6 +145,9 @@ public abstract class RefactorSearcher {
 	}
 
 	private void scan(IContainer container){
+		if(container.getName().startsWith("."))
+			return;
+
 		try{
 			for(IResource resource : container.members()){
 				if(resource instanceof IFolder)
