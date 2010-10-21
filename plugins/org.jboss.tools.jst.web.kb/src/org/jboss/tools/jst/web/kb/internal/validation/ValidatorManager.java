@@ -101,7 +101,9 @@ public class ValidatorManager implements IValidatorJob {
 	private void removeMarkers(Set<IFile> files) {
 		try {
 			for (IFile file : files) {
-				file.deleteMarkers(IValidator.KB_PROBLEM_MARKER_TYPE, true, IResource.DEPTH_ZERO);
+				if(file.isAccessible()) {
+					file.deleteMarkers(IValidator.KB_PROBLEM_MARKER_TYPE, true, IResource.DEPTH_ZERO);
+				}
 			}
 		} catch (CoreException e) {
 			WebKbPlugin.getDefault().logError(e);
