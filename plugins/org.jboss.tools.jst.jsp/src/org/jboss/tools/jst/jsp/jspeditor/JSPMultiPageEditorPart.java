@@ -113,7 +113,6 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 			 * Create Selection Bar Composite and set its layout
 			 */
 			selectionBar = new SelectionBar(sourcePart, parent2, SWT.NONE);
-			selectionBar.setLayout(new GridLayout(1, false));
 			selectionBar.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false, 2, 1));
 			
 			editor.addPropertyListener(new IPropertyListener() {

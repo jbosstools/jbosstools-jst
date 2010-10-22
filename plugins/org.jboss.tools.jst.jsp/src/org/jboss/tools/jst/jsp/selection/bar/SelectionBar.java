@@ -34,6 +34,7 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -120,6 +121,7 @@ public class SelectionBar extends Composite implements ISelectionChangedListener
 				.getState("org.eclipse.ui.commands.toggleState"); //$NON-NLS-1$
 		toggleSelBarState.addListener(this);
 		toggleSelBarCommand.addCommandListener(this);
+		this.setLayout(new FillLayout());
 		/*
 		 * Create the Selection Bar Composite in its constructor
 		 */
@@ -131,7 +133,6 @@ public class SelectionBar extends Composite implements ISelectionChangedListener
 		 * The parent of all children should be 'this' composite
 		 */
 		splitter = new Splitter(this, SWT.NONE);
-		splitter.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
 		/*
 		 * The invisible Selection Bar that is used to handle
 		 * show/hide Selection Bar actions.
