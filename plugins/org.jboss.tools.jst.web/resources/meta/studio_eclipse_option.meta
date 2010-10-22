@@ -246,7 +246,7 @@
     visibility="false" xmlname="NAME">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute default="2.3" name="Servlet Version" xmlname="servlet_version">
+   <XModelAttribute default="2.4" name="Servlet Version" xmlname="servlet_version">
     <Constraint loader="List">
      <value name="2.3"/>
      <value name="2.4"/>
@@ -621,7 +621,7 @@
     </Constraint>
     <Editor name="FolderChooser"/>
    </XModelAttribute>
-   <XModelAttribute default="2.3" name="Servlet Version" xmlname="servlet_version">
+   <XModelAttribute default="2.4" name="Servlet Version" xmlname="servlet_version">
     <Constraint loader="List">
      <value name="2.3"/>
      <value name="2.4"/>
