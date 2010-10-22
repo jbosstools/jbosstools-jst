@@ -588,7 +588,7 @@
   <XChildrenEntities/>
   <XEntityRenderer/>
   <XModelAttributes>
-   <XModelAttribute default="1.1" name="version" xmlname="version">
+   <XModelAttribute default="1.2" name="version" xmlname="version">
     <Constraint loader="List">
      <value name="1.0"/>
      <value name="1.1"/>
