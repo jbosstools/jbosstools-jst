@@ -98,38 +98,40 @@ public class ExternalizeStringsWizard extends Wizard {
 
 	@Override
 	public boolean performFinish() {
-		IFile bundleFile = null;
-		if (page1.isNewFile()) {
-			bundleFile = page2.createNewFile();
-		} else {
-			bundleFile = page1.getBundleFile();
-		}
-		/*
-		 * Exit when the file is null
-		 */
-		if (bundleFile == null) {
-			return false;
-		}
-		/*
-		 * Add "key=value" to the bundle file that is already exists. 
-		 * When the file is new key and value will be written to the file content
-		 * via getInitialContent() method of the page2 during the file creation. 
-		 */
-		if (bundleFile.exists() && !page1.isNewFile()) {
+		if (!page1.isDuplicatedKeyValue()) {
+			IFile bundleFile = null;
+			if (page1.isNewFile()) {
+				bundleFile = page2.createNewFile();
+			} else {
+				bundleFile = page1.getBundleFile();
+			}
 			/*
-			 * https://jira.jboss.org/browse/JBIDE-7218
-			 * Add only one line before adding the value. 
+			 * Exit when the file is null
 			 */
-			String writeToFile = "\n" + page1.getKeyValuePair(); //$NON-NLS-1$
-			InputStream is = new ByteArrayInputStream(writeToFile.getBytes());
-			try {
-				bundleFile.appendContents(is, false, true, null);
-				is.close();
-				is = null;
-			} catch (CoreException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+			if (bundleFile == null) {
+				return false;
+			}
+			/*
+			 * Add "key=value" to the bundle file that is already exists. 
+			 * When the file is new key and value will be written to the file content
+			 * via getInitialContent() method of the page2 during the file creation. 
+			 */
+			if (bundleFile.exists() && !page1.isNewFile()) {
+				/*
+				 * https://jira.jboss.org/browse/JBIDE-7218
+				 * Add only one line before adding the value. 
+				 */
+				String writeToFile = "\n" + page1.getKeyValuePair(); //$NON-NLS-1$
+				InputStream is = new ByteArrayInputStream(writeToFile.getBytes());
+				try {
+					bundleFile.appendContents(is, false, true, null);
+					is.close();
+					is = null;
+				} catch (CoreException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		/*

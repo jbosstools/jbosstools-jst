@@ -110,6 +110,7 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 	private Status propsKeyStatus;
 	private Status propsValueStatus;
 	private Status duplicateKeyStatus;
+	private Status duplicateValueStatus;
 	private Table tagsTable;
 
 	/**
@@ -145,6 +146,7 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 		propsKeyStatus = new Status(IStatus.OK, JspEditorPlugin.PLUGIN_ID, Constants.EMPTY);
 		propsValueStatus = new Status(IStatus.OK, JspEditorPlugin.PLUGIN_ID, Constants.EMPTY);
 		duplicateKeyStatus = new Status(IStatus.OK, JspEditorPlugin.PLUGIN_ID, Constants.EMPTY);
+		duplicateValueStatus = new Status(IStatus.OK, JspEditorPlugin.PLUGIN_ID, Constants.EMPTY);
 	}
 
 	public void createControl(Composite parent) {
@@ -349,52 +351,69 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 				}
 			}
 			/*
-			 * Check the initial key value
-			 * If there is the error - add sequence number to the key
+			 * Check the initial value status
+			 * When the same value is already externalized --
+			 * suggest to use already created key as well.
 			 */
-			updateDuplicateKeyStatus();
-			while (!duplicateKeyStatus.isOK()) {
-				int index = propsKey.getText().lastIndexOf('_');
-				String newKey = Constants.EMPTY;
-				if (index != -1) {
-					/*
-					 * String sequence at the end should be checked.
-					 * If it is a sequence number - it should be increased by 1.
-					 * If not - new number should be added.
-					 */
-					String numberString =  propsKey.getText().substring(index + 1);
-					int number;
-					try {
-						number = Integer.parseInt(numberString);
-						number++;
-						newKey = propsKey.getText().substring(0, index + 1) + number;
-					} catch (NumberFormatException e) {
-						newKey = propsKey.getText() + "_1"; //$NON-NLS-1$
-					}
+			updatePropertiesValueStatus();
+			updateDuplicateValueStatus();
+			if (propsValueStatus.isOK()) {
+				if (!duplicateValueStatus.isOK()
+						&& JstUIMessages.EXTERNALIZE_STRINGS_DIALOG_VALUE_EXISTS
+						.equalsIgnoreCase(duplicateValueStatus.getMessage())) {
+					applyStatus(this, new IStatus[] {duplicateValueStatus});
 				} else {
 					/*
-					 * If the string has no sequence number - add it.
+					 * Check the initial key status
+					 * If there is the error - add sequence number to the key
 					 */
-					newKey = propsKey.getText() + "_1"; //$NON-NLS-1$
+					updateDuplicateKeyStatus();
+					while (!duplicateKeyStatus.isOK()) {
+						int index = propsKey.getText().lastIndexOf('_');
+						String newKey = Constants.EMPTY;
+						if (index != -1) {
+							/*
+							 * String sequence at the end should be checked.
+							 * If it is a sequence number - it should be increased by 1.
+							 * If not - new number should be added.
+							 */
+							String numberString =  propsKey.getText().substring(index + 1);
+							int number;
+							try {
+								number = Integer.parseInt(numberString);
+								number++;
+								newKey = propsKey.getText().substring(0, index + 1) + number;
+							} catch (NumberFormatException e) {
+								newKey = propsKey.getText() + "_1"; //$NON-NLS-1$
+							}
+						} else {
+							/*
+							 * If the string has no sequence number - add it.
+							 */
+							newKey = propsKey.getText() + "_1"; //$NON-NLS-1$
+						}
+						/*
+						 * Set the new key text
+						 */
+						propsKey.setText(newKey);
+						updateDuplicateKeyStatus();
+					}
+					/*
+					 * https://jira.jboss.org/browse/JBIDE-6945
+					 * Set the greeting message only.
+					 * All the validation will take place in the fields' listeners
+					 * after user enters some new values. 
+					 */
+					setMessage(JstUIMessages.EXTERNALIZE_STRINGS_DIALOG_ENTER_KEY_NAME,
+							IMessageProvider.INFORMATION);
 				}
-				/*
-				 * Set the new key text
-				 */
-				propsKey.setText(newKey);
-				updateDuplicateKeyStatus();
+			} else {
+				applyStatus(this, new IStatus[] {propsValueStatus});
 			}
-			/*
-			 * https://jira.jboss.org/browse/JBIDE-6945
-			 * Set the greeting message only.
-			 * All the validation will take place in the fields' listeners
-			 * after user enters some new values. 
-			 */
-			setMessage(JstUIMessages.EXTERNALIZE_STRINGS_DIALOG_ENTER_KEY_NAME,
-					IMessageProvider.INFORMATION);
 			/*
 			 * Update the Buttons state.
 			 * When all the fields are correct -- 
-			 * then user should be abke to  press OK
+			 * then user should be able to  press OK
 			 */
 			setPageComplete(isPageComplete());
 			/*
@@ -442,18 +461,38 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 	 * @param key the key name
 	 * @return <code>true</code> if there is a key with the specified name
 	 */
-	private boolean isDuplicatedKey(String key) {
-		boolean isDupliacted = false;
+	private boolean isKeyDuplicated(String key) {
+		boolean isDuplicated = false;
 		if ((tagsTable.getItemCount() > 0) && (null != key) && !isNewFile()) {
 			TableItem[] items = tagsTable.getItems();
 			for (TableItem tableItem : items) {
 				if (key.equalsIgnoreCase(tableItem.getText(0))) {
-					isDupliacted = true;
+					isDuplicated = true;
 					break;
 				}
 			}
 		} 
-		return isDupliacted; 
+		return isDuplicated; 
+	}
+	
+	/**
+	 * Checks values in the selected resource bundle.
+	 * 
+	 * @param value the text string to externalize
+	 * @return <code>true</code> if there is a key with the specified name
+	 */
+	private boolean isValueDuplicated(String value) {
+		boolean isDuplicated = false;
+		if ((tagsTable.getItemCount() > 0) && (null != value) && !isNewFile()) {
+			TableItem[] items = tagsTable.getItems();
+			for (TableItem tableItem : items) {
+				if (value.equalsIgnoreCase(tableItem.getText(1))) {
+					isDuplicated = true;
+					break;
+				}
+			}
+		} 
+		return isDuplicated; 
 	}
 	
 	/**
@@ -605,13 +644,27 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 	 * Update duplicate key status.
 	 */
 	private void updateDuplicateKeyStatus() {
-		if (isDuplicatedKey(propsKey.getText())) {
+		if (isKeyDuplicated(propsKey.getText())) {
 			duplicateKeyStatus = new Status(
 					IStatus.ERROR,
 					JspEditorPlugin.PLUGIN_ID,
 					JstUIMessages.EXTERNALIZE_STRINGS_DIALOG_KEY_ALREADY_EXISTS); 
 		} else {
 			duplicateKeyStatus = new Status(IStatus.OK, JspEditorPlugin.PLUGIN_ID, Constants.EMPTY);
+		}
+	}
+	
+	/**
+	 * Update duplicate key status.
+	 */
+	private void updateDuplicateValueStatus() {
+		if (isValueDuplicated(propsValue.getText())) {
+			duplicateValueStatus = new Status(
+					IStatus.WARNING,
+					JspEditorPlugin.PLUGIN_ID,
+					JstUIMessages.EXTERNALIZE_STRINGS_DIALOG_VALUE_EXISTS); 
+		} else {
+			duplicateValueStatus = new Status(IStatus.OK, JspEditorPlugin.PLUGIN_ID, Constants.EMPTY);
 		}
 	}
 
@@ -655,10 +708,17 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 		updatePropertiesKeyStatus();
 		updatePropertiesValueStatus();
 		updateDuplicateKeyStatus();
+		updateDuplicateValueStatus();
 		/*
 		 * Apply status to the dialog
 		 */
-		applyStatus(this, new IStatus[] {propsKeyStatus, propsValueStatus, duplicateKeyStatus});
+		if (!duplicateValueStatus.isOK()) {
+			applyStatus(this, new IStatus[] { propsKeyStatus, propsValueStatus,
+					duplicateValueStatus});
+		} else {
+			applyStatus(this, new IStatus[] { propsKeyStatus, propsValueStatus,
+					duplicateKeyStatus});
+		}
 		/*
 		 * Set page complete
 		 */
@@ -677,7 +737,6 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 			severeStatus = severeStatus.getSeverity() >= status.getSeverity() 
 				? severeStatus : status;
 		}
-
 		String message = severeStatus.getMessage();
 		switch (severeStatus.getSeverity()) {
 		case IStatus.OK:
@@ -847,6 +906,21 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 			bm.addBundle(hash, prefix, uri, false);
 		}
 		return bm;
+	}
+	
+	/**
+	 * Use existed key-value pair from the properties file
+	 * without writing any data to the file.
+	 * 
+	 * @return 
+	 */
+	public boolean isDuplicatedKeyValue() {
+		boolean exists = false; 
+		if (isValueDuplicated(propsValue.getText()) 
+				&& isKeyDuplicated(propsKey.getText())) {
+			exists = true;
+		}
+		return exists;
 	}
 	
 	/**
