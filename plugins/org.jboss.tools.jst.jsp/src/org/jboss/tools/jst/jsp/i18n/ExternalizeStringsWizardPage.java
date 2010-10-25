@@ -357,10 +357,22 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 			 */
 			updatePropertiesValueStatus();
 			updateDuplicateValueStatus();
+			/*
+			 * When selected text is fine perform further validation
+			 */
 			if (propsValueStatus.isOK()) {
-				if (!duplicateValueStatus.isOK()
-						&& JstUIMessages.EXTERNALIZE_STRINGS_DIALOG_VALUE_EXISTS
-						.equalsIgnoreCase(duplicateValueStatus.getMessage())) {
+				/*
+				 * Check the bundle for the value in it.
+				 * if so -- show the warning and set correct key.
+				 */
+				if (!duplicateValueStatus.isOK()) {
+					/*
+					 * Set the same key value
+					 */
+					propsKey.setText(getValueForKey(propsValue.getText()));
+					/*
+					 * Set the new warning message
+					 */
 					applyStatus(this, new IStatus[] {duplicateValueStatus});
 				} else {
 					/*
@@ -408,6 +420,9 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 							IMessageProvider.INFORMATION);
 				}
 			} else {
+				/*
+				 * Set the message about wrong selected text.
+				 */
 				applyStatus(this, new IStatus[] {propsValueStatus});
 			}
 			/*
@@ -493,6 +508,28 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 			}
 		} 
 		return isDuplicated; 
+	}
+	
+	
+	/**
+	 * Returns the key for the specified value
+	 * from the visual table.
+	 * 
+	 * @param value - the value
+	 * @return the key or empty string
+	 */
+	private String getValueForKey(String value) {
+		String key = Constants.EMPTY;
+		if ((tagsTable.getItemCount() > 0) && (null != value) && !isNewFile()) {
+			TableItem[] items = tagsTable.getItems();
+			for (TableItem tableItem : items) {
+				if (value.equalsIgnoreCase(tableItem.getText(1))) {
+					key = tableItem.getText(0);
+					break;
+				}
+			}
+		} 
+		return key; 
 	}
 	
 	/**
@@ -712,7 +749,9 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 		/*
 		 * Apply status to the dialog
 		 */
-		if (!duplicateValueStatus.isOK()) {
+		if (!duplicateValueStatus.isOK()
+				&& getValueForKey(propsValue.getText())
+						.equalsIgnoreCase(propsKey.getText())) {
 			applyStatus(this, new IStatus[] { propsKeyStatus, propsValueStatus,
 					duplicateValueStatus});
 		} else {
