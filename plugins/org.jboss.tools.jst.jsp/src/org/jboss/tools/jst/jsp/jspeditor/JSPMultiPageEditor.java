@@ -25,7 +25,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.QualifiedName;
-import org.eclipse.draw2d.GridData;
 import org.eclipse.gef.ui.views.palette.PalettePage;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
@@ -53,7 +52,6 @@ import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
-import org.eclipse.ui.contexts.IContextActivation;
 import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
@@ -81,14 +79,12 @@ import org.jboss.tools.common.model.ui.editor.EditorDescriptor;
 import org.jboss.tools.common.model.ui.editor.IModelObjectEditorInput;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.util.XModelTreeListenerSWTASync;
-import org.jboss.tools.common.model.util.XModelTreeListenerSWTSync;
 import org.jboss.tools.common.text.ext.IMultiPageEditor;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.bundle.BundleMap;
 import org.jboss.tools.jst.jsp.editor.IVisualEditor;
 import org.jboss.tools.jst.jsp.editor.IVisualEditorFactory;
 import org.jboss.tools.jst.jsp.preferences.IVpePreferencesPage;
-import org.jboss.tools.jst.jsp.selection.bar.SelectionBar;
 import org.jboss.tools.jst.web.tld.VpeTaglibManager;
 import org.jboss.tools.jst.web.tld.VpeTaglibManagerProvider;
 
@@ -138,7 +134,6 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 
 	static IVisualEditorFactory visualEditorFactory;
 	
-	private IContextActivation selBarContextActivation;
 	//added by Maksim Areshkau, notified externalize command that selection changed
 	private ISelectionChangedListener externalizeSelectionChangeListener = new ISelectionChangedListener() {
 		
@@ -245,16 +240,11 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 				visualEditor.setVisualMode(IVisualEditor.PREVIEW_MODE);
 			}
 		}
-		//fix for JBIDE-7059, author Maksim Areshkau
-		IContextService contextService = (IContextService) getSite()
-		  .getService(IContextService.class);
-		if(newPageIndex!=getPreviewIndex()){
-			if(selBarContextActivation==null)
-			selBarContextActivation = contextService.activateContext(SelectionBar.SELECTION_BAR_CONTEXT_ID);
-			} else if(selBarContextActivation!=null){
-				contextService.deactivateContext(selBarContextActivation);
-				selBarContextActivation=null;
-		}
+		
+		ICommandService commandService = (ICommandService) PlatformUI
+		.getWorkbench().getService(ICommandService.class);
+		commandService.refreshElements("org.jboss.tools.jst.jsp.commands.showSelectionBar", null); //$NON-NLS-1$
+
 		
 		superPageChange(newPageIndex);
 		JspEditorPlugin.getDefault().getPreferenceStore().
@@ -647,10 +637,6 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		}
 		IContextService contextService = (IContextService) getSite()
 		  .getService(IContextService.class);
-		 if(selBarContextActivation!=null){
-				contextService.deactivateContext(selBarContextActivation);
-				selBarContextActivation=null;
-		}
 		super.dispose();
 	}
 	

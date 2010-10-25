@@ -19,6 +19,7 @@ import org.eclipse.core.commands.CommandEvent;
 import org.eclipse.core.commands.ICommandListener;
 import org.eclipse.core.commands.IStateListener;
 import org.eclipse.core.commands.State;
+import org.eclipse.gef.Handle;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
@@ -52,6 +53,7 @@ import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
+import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.internal.IWorkbenchGraphicConstants;
 import org.eclipse.ui.internal.WorkbenchImages;
 import org.eclipse.wst.sse.core.internal.provisional.INodeAdapter;
@@ -75,7 +77,6 @@ import org.w3c.dom.NodeList;
  */
 public class SelectionBar extends Composite implements ISelectionChangedListener, IStateListener,ICommandListener{
 	private static final int SEL_ITEM_RIGHT_MARGIN = 5;
-	public static final String SELECTION_BAR_CONTEXT_ID="org.jboss.tools.jst.jsp.selectionBar.context"; //$NON-NLS-1$
 	/*
 	 * The main composite that holds all other controls
 	 */

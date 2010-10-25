@@ -313,9 +313,23 @@
                      id="org.jboss.tools.jst.jsp.menus.showSelectionBar"
                      style="toggle"
                      mnemonic="S">
-	               	<visibleWhen checkEnabled="false">
-						<reference definitionId="org.jboss.tools.ui.structuredEditor"/>
-					</visibleWhen>
+                     <visibleWhen
+                           checkEnabled="false">
+                           <with
+                                 variable="activeEditorId">
+                                 <or>
+	                                 <equals
+	                                       value="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
+	                                 </equals>
+	                                 <equals
+	                                       value="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor">
+	                                 </equals>
+	                                 <equals
+	                                       value="org.jboss.tools.jst.jsp.jspeditor.DocBookEditor">
+	                                 </equals>
+                                 </or>
+                           </with>
+                     </visibleWhen>
                </command>
          </menuContribution>
          <menuContribution
@@ -326,9 +340,23 @@
                      id="org.jboss.tools.jst.jsp.toolbars.showSelectionBar"
                      style="toggle"
                      tooltip="%Toggle.Selection.Bar">
-                <visibleWhen checkEnabled="false">
-					<reference definitionId="org.jboss.tools.ui.structuredEditor"/>
-				</visibleWhen>
+                     <visibleWhen
+                           checkEnabled="false">
+                           <with
+                                 variable="activeEditorId">
+                                 <or>
+	                                 <equals
+	                                       value="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
+	                                 </equals>
+	                                 <equals
+	                                       value="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor">
+	                                 </equals>
+	                                 <equals
+	                                       value="org.jboss.tools.jst.jsp.jspeditor.DocBookEditor">
+	                                 </equals>
+                                 </or>
+                           </with>
+                     </visibleWhen>
                </command>
          </menuContribution>
          
@@ -352,9 +380,23 @@
                     commandId="org.jboss.tools.jst.jsp.commands.i18"
                     id="org.jboss.tools.jst.jsp.menus.i18"
                     mnemonic="S">
-                <visibleWhen checkEnabled="false">
-					<reference definitionId="org.jboss.tools.ui.structuredEditor"/>
-				</visibleWhen>
+                     <visibleWhen
+                           checkEnabled="false">
+                           <with
+                                 variable="activeEditorId">
+                                 <or>
+	                                 <equals
+	                                       value="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
+	                                 </equals>
+	                                 <equals
+	                                       value="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor">
+	                                 </equals>
+	                                 <equals
+	                                       value="org.jboss.tools.jst.jsp.jspeditor.DocBookEditor">
+	                                 </equals>
+                                 </or>
+                           </with>
+                     </visibleWhen>
               </command>
         </menuContribution>
         <menuContribution
@@ -366,9 +408,23 @@
                     icon="icons/externalize.png"
                     id="org.jboss.tools.jst.jsp.toolbars.i18"
                     tooltip="%Externalize.Selected.Property">
-                <visibleWhen checkEnabled="false">
-					<reference definitionId="org.jboss.tools.ui.structuredEditor"/>
-				</visibleWhen>
+              <visibleWhen
+                           checkEnabled="false">
+                           <with
+                                 variable="activeEditorId">
+                                 <or>
+	                                 <equals
+	                                       value="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
+	                                 </equals>
+	                                 <equals
+	                                       value="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor">
+	                                 </equals>
+	                                 <equals
+	                                       value="org.jboss.tools.jst.jsp.jspeditor.DocBookEditor">
+	                                 </equals>
+                                 </or>
+                           </with>
+                    </visibleWhen>
               </command>
            </toolbar>
         </menuContribution>
@@ -470,17 +526,6 @@
        <handler
              class="org.jboss.tools.jst.jsp.selection.bar.handlers.SelectionBarHandler"
              commandId="org.jboss.tools.jst.jsp.commands.showSelectionBar">
-       <activeWhen>
-          <with variable="activeContexts">
-             <iterate operator="or">
-                <equals value="org.jboss.tools.jst.jsp.selectionBar.context"/>
-             </iterate>
-          </with>
-       </activeWhen>
-
-          <enabledWhen>
-              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
-          </enabledWhen>
        </handler>
        <handler
              class="org.jboss.tools.jst.jsp.i18n.handlers.I18Handler"
