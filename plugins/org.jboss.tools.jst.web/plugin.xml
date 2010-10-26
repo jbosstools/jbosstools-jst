@@ -301,4 +301,18 @@
           resource="meta/options_general.xml" priority="1">
     </contribution>
  </extension>
+
+   <extension id="strutsmarker" name="%strutsProblemName" point="org.eclipse.core.resources.markers">
+      <super type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <persistent value="true">
+      </persistent>
+   </extension>
+   <extension id="constraintsmarker" name="%constraintProblemName" point="org.eclipse.core.resources.markers">
+      <super type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <persistent value="true">
+      </persistent>
+   </extension>
+
 </plugin>
