@@ -19,7 +19,6 @@ import org.eclipse.core.commands.CommandEvent;
 import org.eclipse.core.commands.ICommandListener;
 import org.eclipse.core.commands.IStateListener;
 import org.eclipse.core.commands.State;
-import org.eclipse.gef.Handle;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
@@ -53,7 +52,6 @@ import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
-import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.internal.IWorkbenchGraphicConstants;
 import org.eclipse.ui.internal.WorkbenchImages;
 import org.eclipse.wst.sse.core.internal.provisional.INodeAdapter;
@@ -186,8 +184,7 @@ public class SelectionBar extends Composite implements ISelectionChangedListener
 		toolbarData.top = new FormAttachment(0);
 		toolbar.setLayoutData(toolbarData);
 		createArrowButton();
-		realBar.layout();
-		this.getParent().layout(true, true);
+
 		setVisible(toggleSelBarCommand.isEnabled()&&(Boolean)toggleSelBarState.getValue());
 		return splitter;
 	}
@@ -204,7 +201,16 @@ public class SelectionBar extends Composite implements ISelectionChangedListener
 			splitter.setVisible(realBar, false);
 			splitter.setVisible(emptyBar, true);
 		}
+		
+		/* JBIDE-7387:
+		 * By default toolbar size is set to fit regular button ToolItems.
+		 * But drop-down items are a little bigger and do not
+		 * fit in the default-size toolbars (at least under Windows XP).
+		 * This temporary ToolItem is needed to set enough size to the toolbar.*/
+		ToolItem tempItem = new ToolItem(toolbar, SWT.DROP_DOWN);
+		tempItem.setText("foo"); //$NON-NLS-1$
 		this.getParent().layout(true, true);
+		tempItem.dispose();
 	}
 
 
@@ -276,10 +282,6 @@ public class SelectionBar extends Composite implements ISelectionChangedListener
      * appropriate the {@code node} and all its ancestors.
 	 */
 	private void setSelBarItems(Node node) {
-		// bug was fixed when toolbar are not shown for resizeble components
-		realBar.layout();
-		this.getParent().layout(true, true);
-
 		removeNodeListenerFromAllNodes();
 		cleanToolBar(toolbar);
 
@@ -308,7 +310,7 @@ public class SelectionBar extends Composite implements ISelectionChangedListener
 				 * for the last tag -- show check button
 				 */
 				if ((elementCounter == 0) && (list.size() == 0)){
-					 item = new ToolItem(toolbar, SWT.FLAT | SWT.CHECK, 1);
+					item = new ToolItem(toolbar, SWT.FLAT | SWT.CHECK, 1);
 					item.addSelectionListener(new SelectionListener() {
 						public void widgetSelected(SelectionEvent e) {
 							handleSelectionEvent(e);
