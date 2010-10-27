@@ -130,6 +130,7 @@ public class JstUIMessages extends NLS {
 	public static String HIDE_SELECTION_BAR;
 	
 	public static String EXTERNALIZE_STRINGS;
+	public static String EXTERNALIZE_STRINGS_POPUP_MENU_TITLE;
 	public static String EXTERNALIZE_STRINGS_DIALOG_TITLE;
 	public static String EXTERNALIZE_STRINGS_DIALOG_DESCRIPTION;
 	public static String EXTERNALIZE_STRINGS_DIALOG_TEXT_STRING;

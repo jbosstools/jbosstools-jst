@@ -30,7 +30,7 @@ public class ExternalizeStringsContributionItem extends ActionContributionItem {
 		/*
 		 * Simply sets the title
 		 */
-		getAction().setText(JstUIMessages.EXTERNALIZE_STRINGS);
+		getAction().setText(JstUIMessages.EXTERNALIZE_STRINGS_POPUP_MENU_TITLE);
 		super.fill(parent, index);
 	}
 	
