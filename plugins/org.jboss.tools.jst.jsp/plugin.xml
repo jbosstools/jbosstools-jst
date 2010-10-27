@@ -401,7 +401,7 @@
         </menuContribution>
         <menuContribution
               locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
-           <toolbar
+           <toolbar label="%vpe.toolbar.name"
                  id="org.jboss.tools.jst.jsp.toolbars.sampleToolbar">
               <command
                     commandId="org.jboss.tools.jst.jsp.commands.i18"
@@ -547,6 +547,9 @@
 					</with>
 					<with variable="activeEditorId">
 							<equals value="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor"/>
+					</with>
+					<with variable="activeEditorId">
+							<equals value="org.jboss.tools.jst.jsp.jspeditor.DocBookEditor"/>
 					</with>
 					</or>
 				</and>			
