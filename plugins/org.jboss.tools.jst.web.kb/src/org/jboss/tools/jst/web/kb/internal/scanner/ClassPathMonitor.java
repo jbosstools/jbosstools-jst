@@ -25,6 +25,8 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.jboss.tools.common.model.XJob;
+import org.jboss.tools.common.model.XJob.XRunnable;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.project.ext.AbstractClassPathMonitor;
@@ -180,5 +182,24 @@ public class ClassPathMonitor extends AbstractClassPathMonitor<KbProject> {
 			
 		}
 		return list;
+	}
+
+	public void pathsChanged(List<String> paths) {
+		super.pathsChanged(paths);
+		if(project.isStorageResolved()) {
+			XJob.addRunnableWithPriority(new XRunnable() {
+				
+				public void run() {
+					if(update()) {
+						System.out.println("Running " + getId());
+						process();
+					}					
+				}
+				
+				public String getId() {
+					return "Update class path of kb project " + project.getProject().getName(); //$NON-NLS-1$
+				}
+			});
+		}
 	}
 }

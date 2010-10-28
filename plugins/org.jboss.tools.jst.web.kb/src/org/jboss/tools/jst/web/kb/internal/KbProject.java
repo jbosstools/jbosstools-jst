@@ -267,6 +267,10 @@ public class KbProject extends KbObject implements IKbProject {
 		}
 	}
 
+	public boolean isStorageResolved() {
+		return isStorageResolved;
+	}
+
 	/**
 	 * 
 	 */
