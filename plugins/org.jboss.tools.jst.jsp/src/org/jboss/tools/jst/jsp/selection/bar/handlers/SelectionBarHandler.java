@@ -57,13 +57,11 @@ public class SelectionBarHandler extends AbstractHandler implements IElementUpda
 	 * the command has been executed, so extract extract the needed information
 	 * from the application context.
 	 */
-	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		HandlerUtil.toggleCommandState(event.getCommand());
 		return null;
 	}
 	
-	@Override
 	public void updateElement(UIElement element, Map parameters) {
 		fireHandlerChanged(new HandlerEvent(this, true, false));
 	}
