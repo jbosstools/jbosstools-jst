@@ -17,8 +17,8 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.HandlerEvent;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.core.expressions.IEvaluationContext;
+import org.eclipse.ui.ISources;
 import org.eclipse.ui.commands.IElementUpdater;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.menus.UIElement;
@@ -29,34 +29,41 @@ import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
  */
 public class SelectionBarHandler extends AbstractHandler implements IElementUpdater{
 	
-	@Override
-	public boolean isEnabled() {
-		boolean result=false;
-		IEditorPart activeEditor= PlatformUI
-		.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		if(activeEditor instanceof JSPMultiPageEditor){
-			JSPMultiPageEditor jspEditor = (JSPMultiPageEditor) activeEditor;
-			if(jspEditor.getSelectedPageIndex()!=jspEditor.getPreviewIndex()){
-				result=true;
-			}
-		}
-		return result;
-	}
 	/**
 	 * The constructor.
 	 */
 	public SelectionBarHandler() {
 	}
-
+	
+	@Override
+	public void setEnabled(Object evaluationContext) {
+		boolean enabled = false;
+		
+		if (evaluationContext instanceof IEvaluationContext) {
+			IEvaluationContext context = (IEvaluationContext) evaluationContext;
+			Object activeEditor = context.getVariable(ISources.ACTIVE_EDITOR_NAME);
+			if(activeEditor instanceof JSPMultiPageEditor){
+				JSPMultiPageEditor jspEditor = (JSPMultiPageEditor) activeEditor;
+				if(jspEditor.getSelectedPageIndex() != jspEditor.getPreviewIndex()){
+					enabled = true;
+				}
+			}
+		}
+		
+		setBaseEnabled(enabled);
+	}
+	
 	/**
 	 * the command has been executed, so extract extract the needed information
 	 * from the application context.
 	 */
+	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		HandlerUtil.toggleCommandState(event.getCommand());
 		return null;
 	}
 	
+	@Override
 	public void updateElement(UIElement element, Map parameters) {
 		fireHandlerChanged(new HandlerEvent(this, true, false));
 	}

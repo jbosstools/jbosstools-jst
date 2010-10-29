@@ -185,7 +185,6 @@ public class SelectionBar extends Composite implements ISelectionChangedListener
 		toolbar.setLayoutData(toolbarData);
 		createArrowButton();
 
-		setVisible(toggleSelBarCommand.isEnabled()&&(Boolean)toggleSelBarState.getValue());
 		return splitter;
 	}
 
@@ -208,7 +207,8 @@ public class SelectionBar extends Composite implements ISelectionChangedListener
 		 * fit in the default-size toolbars (at least under Windows XP).
 		 * This temporary ToolItem is needed to set enough size to the toolbar.*/
 		ToolItem tempItem = new ToolItem(toolbar, SWT.DROP_DOWN);
-		tempItem.setText("foo"); //$NON-NLS-1$
+		tempItem.setText(" "); //$NON-NLS-1$
+		tempItem.setEnabled(false);
 		this.getParent().layout(true, true);
 		tempItem.dispose();
 	}
