@@ -32,30 +32,31 @@ import org.jboss.tools.jst.jsp.i18n.ExternalizeStringsWizard;
 import org.w3c.dom.Attr;
 
 /**
- * Externalization command handler
+ * Internationalization command handler
  * @author mareshkau
  *
  */
-public class I18Handler extends AbstractHandler implements IElementUpdater{
+public class I18nHandler extends AbstractHandler implements IElementUpdater {
 	
-	/* (non-Javadoc)
-	 * @see org.eclipse.core.commands.AbstractHandler#isEnabled()
-	 */
 	@Override
-	public boolean isEnabled() {
+	public void setEnabled(Object evaluationContext) {
 		IEditorPart activeEditor= PlatformUI
-		.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+			.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		boolean enabled;
 		if(activeEditor instanceof ITextEditor){
 			ITextEditor txtEditor = (ITextEditor) activeEditor;
 			ISelection selection = txtEditor.getSelectionProvider().getSelection();
-			return getExternalizeStringsCommandEnabled(selection);
+			enabled = getExternalizeStringsCommandEnabled(selection);
+		} else {
+			enabled = false;
 		}
-		return false;
+
+		if (isEnabled() != enabled) {
+			setBaseEnabled(enabled);
+		}
 	}
-	/**
-	 * 
-	 */
-//	public I18Handler() {
+	
+//	public I18nHandler() {
 //		setBaseEnabled(true);
 //	}
 	/**

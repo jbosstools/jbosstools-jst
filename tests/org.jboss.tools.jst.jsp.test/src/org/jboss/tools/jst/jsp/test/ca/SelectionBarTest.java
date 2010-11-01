@@ -56,18 +56,15 @@ public class SelectionBarTest extends TestCase{
 	public void testSelectionBarCommandState() throws Throwable{
 		assertEquals("check command enabled command status",false,toggleSelBarCommand.isEnabled()); //$NON-NLS-1$
 		IEditorPart editorPart = WorkbenchUtils.openEditor(project.getName()+"/WebContent/pages/selectionBar.xhtml");  //$NON-NLS-1$
-		if(editorPart instanceof JSPMultiPageEditor){
-			JSPMultiPageEditor multiPageEditor = (JSPMultiPageEditor) editorPart;
-			multiPageEditor.pageChange(0);
-			assertEquals("check command enabled command status",true,toggleSelBarCommand.isEnabled()&&(Boolean)toggleSelBarState.getValue()); //$NON-NLS-1$
-			multiPageEditor.pageChange(multiPageEditor.getPreviewIndex());
-			assertEquals("check command enabled command status",false,toggleSelBarCommand.isEnabled()&&(Boolean)toggleSelBarState.getValue()); //$NON-NLS-1$
-			multiPageEditor.pageChange(0);
-			assertEquals("check command enabled command status",true,toggleSelBarCommand.isEnabled()&&(Boolean)toggleSelBarState.getValue()); //$NON-NLS-1$
-			TestUtil.closeAllEditors();
-			assertEquals("check command enabled command status",false,toggleSelBarCommand.isEnabled()&&(Boolean)toggleSelBarState.getValue()); //$NON-NLS-1$
-		} else{
-			fail("Should be opened JSPMultiPage Editor"); //$NON-NLS-1$
-		}
+		
+		assertTrue("Should be opened JSPMultiPage Editor", //$NON-NLS-1$
+				editorPart instanceof JSPMultiPageEditor);
+		JSPMultiPageEditor multiPageEditor = (JSPMultiPageEditor) editorPart;
+		multiPageEditor.pageChange(0);
+		assertEquals("check command enabled command status",true,toggleSelBarCommand.isEnabled()&&(Boolean)toggleSelBarState.getValue()); //$NON-NLS-1$
+		multiPageEditor.pageChange(multiPageEditor.getPreviewIndex());
+		assertEquals("check command enabled command status",false,toggleSelBarCommand.isEnabled()&&(Boolean)toggleSelBarState.getValue()); //$NON-NLS-1$
+		multiPageEditor.pageChange(0);
+		assertEquals("check command enabled command status",true,toggleSelBarCommand.isEnabled()&&(Boolean)toggleSelBarState.getValue()); //$NON-NLS-1$
 	}
 }

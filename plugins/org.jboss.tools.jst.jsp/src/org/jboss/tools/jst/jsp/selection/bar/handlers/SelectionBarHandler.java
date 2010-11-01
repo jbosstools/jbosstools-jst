@@ -50,7 +50,9 @@ public class SelectionBarHandler extends AbstractHandler implements IElementUpda
 			}
 		}
 		
-		setBaseEnabled(enabled);
+		if (enabled != isEnabled()) {
+			setBaseEnabled(enabled);
+		}
 	}
 	
 	/**

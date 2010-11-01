@@ -528,7 +528,7 @@
              commandId="org.jboss.tools.jst.jsp.commands.showSelectionBar">
        </handler>
        <handler
-             class="org.jboss.tools.jst.jsp.i18n.handlers.I18Handler"
+             class="org.jboss.tools.jst.jsp.i18n.handlers.I18nHandler"
              commandId="org.jboss.tools.jst.jsp.commands.i18">
        </handler>
        </extension>
