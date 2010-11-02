@@ -21,7 +21,7 @@ public class VpePreferencesInitializer extends AbstractPreferenceInitializer {
 	@Override
 	public void initializeDefaultPreferences() {
 		IEclipsePreferences defaultPreferences = ((IScopeContext) new DefaultScope()).getNode(JspEditorPlugin.PLUGIN_ID);
-		
+		defaultPreferences.putBoolean(IVpePreferencesPage.SHOW_VISUAL_TOOLBAR, false);
 		defaultPreferences.putBoolean(IVpePreferencesPage.SHOW_BORDER_FOR_UNKNOWN_TAGS, true);
 		defaultPreferences.putBoolean(IVpePreferencesPage.SHOW_NON_VISUAL_TAGS, false);
 		defaultPreferences.putBoolean(IVpePreferencesPage.SHOW_TEXT_FORMATTING, true);
