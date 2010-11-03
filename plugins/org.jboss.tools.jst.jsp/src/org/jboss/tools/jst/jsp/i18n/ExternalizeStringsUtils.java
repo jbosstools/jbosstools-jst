@@ -13,6 +13,12 @@ package org.jboss.tools.jst.jsp.i18n;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.jboss.tools.common.model.XModel;
+import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.jsf.model.pv.JSFProjectTreeConstants;
+import org.jboss.tools.jsf.model.pv.JSFProjectsRoot;
+import org.jboss.tools.jsf.model.pv.JSFProjectsTree;
+import org.jboss.tools.jst.web.model.pv.WebProjectNode;
 import org.w3c.dom.Element;
 
 /**
@@ -50,5 +56,34 @@ public class ExternalizeStringsUtils {
 		} 
 		return isSelectionCorrect;
 	}
-	
+
+	public static XModelObject findFacesConfig(XModel model) {
+		XModelObject facesConfig = null;
+		JSFProjectsRoot root = JSFProjectsTree.getProjectsRoot(model);
+		if (root != null) {
+			WebProjectNode n = (WebProjectNode) root
+					.getChildByPath(JSFProjectTreeConstants.CONFIGURATION);
+			if (n != null) {
+				/*
+				 * The array contains the all configuration files in the project
+				 * including files from jar archives.
+				 * Only editable object is be the necessary faces-config file.
+				 */
+				XModelObject[] os = n.getTreeChildren();
+				for (XModelObject o : os) {
+					if (o.isObjectEditable()) {
+						facesConfig = o;
+						break;
+					}
+				}
+			}
+		}
+		/*
+		 * When nothing has been found try the last straight-forward way.
+		 */
+		if (facesConfig == null) {
+			facesConfig = model.getByPath("/faces-config.xml"); //$NON-NLS-1$
+		}
+		return facesConfig;
+	}
 }

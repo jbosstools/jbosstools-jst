@@ -196,13 +196,15 @@ public class BundleMap {
 		
 		if(entry == null){
 			if (hasJsfProjectNatureType()) {
-				IProject project = ((IFileEditorInput)editor.getEditorInput()).getFile().getProject();
-				XModel model = EclipseResourceUtil.getModelNature(project).getModel();
-				String prefix2 = prefix;
-				if(propertyName != null && prefix != null) {
-					prefix2 = prefix + "." + propertyName; //$NON-NLS-1$
+				if (editor.getEditorInput() instanceof IFileEditorInput) {
+					IProject project = ((IFileEditorInput)editor.getEditorInput()).getFile().getProject();
+					XModel model = EclipseResourceUtil.getModelNature(project).getModel();
+					String prefix2 = prefix;
+					if(propertyName != null && prefix != null) {
+						prefix2 = prefix + "." + propertyName; //$NON-NLS-1$
+					}
+					WebPromptingProvider.getInstance().getList(model, WebPromptingProvider.JSF_BEAN_OPEN, prefix2, null);
 				}
-				WebPromptingProvider.getInstance().getList(model, WebPromptingProvider.JSF_BEAN_OPEN, prefix2, null);
 			}
 			return false;
 		}
@@ -213,12 +215,13 @@ public class BundleMap {
 			p.put(WebPromptingProvider.KEY, propertyName);
 			if (locale != null) p.put(WebPromptingProvider.LOCALE, locale);
 			p.put(WebPromptingProvider.FILE, ((IFileEditorInput)editor.getEditorInput()).getFile().getProject());
-	
-			IProject project = ((IFileEditorInput)editor.getEditorInput()).getFile().getProject();
-			XModel model = EclipseResourceUtil.getModelNature(project).getModel();
-	
-			WebPromptingProvider.getInstance().getList(model, WebPromptingProvider.JSF_OPEN_KEY, entry.uri, p);
-			String error = p.getProperty(WebPromptingProvider.ERROR); 
+			String error = null;
+			if (editor.getEditorInput() instanceof IFileEditorInput) {
+				IProject project = ((IFileEditorInput)editor.getEditorInput()).getFile().getProject();
+				XModel model = EclipseResourceUtil.getModelNature(project).getModel();
+				WebPromptingProvider.getInstance().getList(model, WebPromptingProvider.JSF_OPEN_KEY, entry.uri, p);
+				error = p.getProperty(WebPromptingProvider.ERROR); 
+			}
 			return (error == null || error.length() == 0);
 		}
 		return false;

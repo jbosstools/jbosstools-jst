@@ -92,6 +92,8 @@ import org.w3c.dom.NodeList;
 
 public class ExternalizeStringsWizardPage extends WizardPage {
 
+	public static final String PAGE_NAME = "ExternalizeStringsWizardBasicPage"; //$NON-NLS-1$
+	
 	private final char[] REPLACED_CHARACTERS = new char[] {'~', '!', '@', '#',
 			'$', '%', '^', '&', '*', '(', ')', '-', '+', '=', '{', '}', '[', ']', ':', ';', ',', '.', '?', '\\', '/'};
 	private final char[] LINE_DELEMITERS = new char[] {'\r', '\n', '\t'};
@@ -266,7 +268,191 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 		 */
 		setControl(composite);
 	}
+	
+	/**
+	 * Generate properties key.
+	 * Replaces all non-word characters with 
+	 * underline character.
+	 *
+	 * @param text the text
+	 * @return the result string
+	 */
+	public String generatePropertyKey(String text) {
+		String result = text.trim();
+		/*
+		 * Replace all other symbols with '_'
+		 */
+		for (char ch : REPLACED_CHARACTERS) {
+			result = result.replace(ch, '_');
+		}
+		/*
+		 * Replace line delimiters white space
+		 */
+		for (char ch : LINE_DELEMITERS) {
+			result = result.replace(ch, ' ');
+		}
+		/*
+		 * Replace all white spaces with '_'
+		 */
+		result = result.replaceAll(Constants.WHITE_SPACE,
+				Constants.UNDERSCORE);
+		/*
+		 * Correct underline symbols:
+		 * show only one of them
+		 */
+		result = result.replaceAll("_+", Constants.UNDERSCORE); //$NON-NLS-1$
+		/*
+		 * Remove leading and trailing '_'
+		 */
+		if (result.startsWith(Constants.UNDERSCORE)) {
+			result = result.substring(1);
+		}
+		if (result.endsWith(Constants.UNDERSCORE)) {
+			result = result.substring(0, result.length() - 1);
+		}
+		/*
+		 * Return the result
+		 */
+		return result;
+	}
 
+	/**
+	 * Gets the bundle prefix.
+	 *
+	 * @return the bundle prefix
+	 */
+	public String getBundlePrefix() {
+		String bundlePrefix = Constants.EMPTY;
+		if (!isNewFile()) {
+			for (BundleEntry be : bm.getBundles()) {
+				if (be.uri.equalsIgnoreCase(rbCombo.getText())) {
+					bundlePrefix = be.prefix;
+				}
+			}
+		}
+		return bundlePrefix;
+	}
+	
+	/**
+	 * Gets resource bundle's file
+	 * @return the file
+	 */
+	public IFile getBundleFile() {
+		return bm.getBundleFile(rbCombo.getText());
+	}
+	
+	/**
+	 * Use existed key-value pair from the properties file
+	 * without writing any data to the file.
+	 * 
+	 * @return 
+	 */
+	public boolean isDuplicatedKeyAndValue() {
+		boolean exists = false; 
+		if (isValueDuplicated(propsValue.getText()) 
+				&& isKeyDuplicated(propsKey.getText())) {
+			exists = true;
+		}
+		return exists;
+	}
+	
+	/**
+	 * Gets <code>key=value</code> pair
+	 * 
+	 * @return a pair <code>key=value</code>
+	 */
+	public String getKeyValuePair() {
+		return propsKey.getText() + Constants.EQUAL + propsValue.getText();
+	}
+	
+	/**
+	 * Gets the key.
+	 *
+	 * @return the key
+	 */
+	public String getKey() {
+		return propsKey.getText();
+	}
+	
+	/**
+	 * Check if "Create new file.." option is enabled
+	 * 
+	 * @return the status
+	 */
+	public boolean isNewFile() {
+		return newFile.getSelection();
+	}
+	
+	/**
+	 * Replaces the text in the current file
+	 */
+	public void replaceText(String replacement) {
+		IDocumentProvider prov = editor.getDocumentProvider();
+		IDocument doc = prov.getDocument(editor.getEditorInput());
+		ISelection sel = editor.getSelectionProvider().getSelection();
+		if (ExternalizeStringsUtils.isSelectionCorrect(sel)) {
+			try {
+				/*
+				 * Get source text and new text
+				 */
+				TextSelection textSel = (TextSelection) sel;
+				IStructuredSelection structuredSelection = (IStructuredSelection) sel;
+				Object firstElement = structuredSelection.getFirstElement();
+				int offset = 0;
+				int length = 0;
+				/*
+				 * When user selection is empty 
+				 * underlying node will e automatically selected.
+				 * Thus we need to correct replacement offsets. 
+				 */
+				if ((textSel.getLength() != 0)) {
+					offset = textSel.getOffset();
+					length = textSel.getLength();
+				} else if (firstElement instanceof TextImpl) {
+					TextImpl ti = (TextImpl) firstElement;
+					offset = ti.getStartOffset();
+					length = ti.getLength();
+				} else if (firstElement instanceof AttrImpl) {
+					AttrImpl ai = (AttrImpl) firstElement;
+					/*
+					 * Get offset and length without quotes ".."
+					 */
+					offset = ai.getValueRegionStartOffset() + 1;
+					length = ai.getValueRegionText().length() - 2;
+				}
+				/*
+				 * Replace text in the editor with "key.value"
+				 */
+				doc.replace(offset, length, replacement);
+			} catch (BadLocationException ex) {
+				ex.printStackTrace();
+			}
+		}
+	}
+
+	@Override
+	public boolean isPageComplete() {
+		boolean isPageComplete = false;
+		/*
+		 * The page is ready when there are no error messages 
+		 * and the bundle is selected
+		 * and "key=value" exists.
+		 */
+		if ((getErrorMessage() == null)
+				&& !Constants.EMPTY.equalsIgnoreCase(propsKey.getText().trim())
+				&& !Constants.EMPTY.equalsIgnoreCase(propsValue.getText().trim())
+				&& ((rbCombo.getSelectionIndex() != -1) || isNewFile())) {
+			isPageComplete = true;
+		}
+		return isPageComplete;
+	}
+	
+	@Override
+	public boolean canFlipToNextPage() {
+		return isPageComplete() && (getNextPage() != null)
+				&& isNewFile();
+	}
+	
 	/**
 	 * Initialize dialog's controls.
 	 * Fill in appropriate text and make validation.
@@ -596,88 +782,6 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 	}
 	
 	/**
-	 * Gets <code>key=value</code> pair
-	 * 
-	 * @return a pair <code>\nkey=value\n</code>
-	 */
-	public String getKeyValuePair() {
-		return propsKey.getText() + Constants.EQUAL + propsValue.getText();
-	}
-	
-	/**
-	 * Gets resource bundle's file
-	 * @return the file
-	 */
-	public IFile getBundleFile() {
-		return bm.getBundleFile(rbCombo.getText());
-	}
-	
-	/**
-	 * Check if "Create new file.." option is enabled
-	 * 
-	 * @return the status
-	 */
-	public boolean isNewFile() {
-		return newFile.getSelection();
-	}
-	
-	/**
-	 * Replaces the text in the current file
-	 */
-	public void replaceText() {
-		IDocumentProvider prov = editor.getDocumentProvider();
-		IDocument doc = prov.getDocument(editor.getEditorInput());
-		ISelection sel = editor.getSelectionProvider().getSelection();
-		if (ExternalizeStringsUtils.isSelectionCorrect(sel)) {
-			try {
-				/*
-				 * Get source text and new text
-				 */
-				TextSelection textSel = (TextSelection) sel;
-				IStructuredSelection structuredSelection = (IStructuredSelection) sel;
-				Object firstElement = structuredSelection.getFirstElement();
-				int offset = 0;
-				int length = 0;
-				/*
-				 * When user selection is empty 
-				 * underlying node will e automatically selected.
-				 * Thus we need to correct replacement offsets. 
-				 */
-				if ((textSel.getLength() != 0)) {
-					offset = textSel.getOffset();
-					length = textSel.getLength();
-				} else if (firstElement instanceof TextImpl) {
-					TextImpl ti = (TextImpl) firstElement;
-					offset = ti.getStartOffset();
-					length = ti.getLength();
-				} else if (firstElement instanceof AttrImpl) {
-					AttrImpl ai = (AttrImpl) firstElement;
-					/*
-					 * Get offset and length without quotes ".."
-					 */
-					offset = ai.getValueRegionStartOffset() + 1;
-					length = ai.getValueRegionText().length() - 2;
-				}
-				/*
-				 * Replace text in the editor with "key.value"
-				 */
-				String bundlePrefix = Constants.EMPTY;
-				if (!isNewFile()) {
-					for (BundleEntry be : bm.getBundles()) {
-						if (be.uri.equalsIgnoreCase(rbCombo.getText())) {
-							bundlePrefix = be.prefix;
-						}
-					}
-				}
-				String newText = "#{" + bundlePrefix + Constants.DOT + propsKey.getText() + "}"; //$NON-NLS-1$ //$NON-NLS-2$
-				doc.replace(offset, length, newText);
-			} catch (BadLocationException ex) {
-				ex.printStackTrace();
-			}
-		}
-	}
-	
-	/**
 	 * Update duplicate key status.
 	 */
 	private void updateDuplicateKeyStatus() {
@@ -803,29 +907,6 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 		}
 	}
 
-	@Override
-	public boolean isPageComplete() {
-		boolean isPageComplete = false;
-		/*
-		 * The page is ready when there are no error messages 
-		 * and the bundle is selected
-		 * and "key=value" exists.
-		 */
-		if ((getErrorMessage() == null)
-				&& !Constants.EMPTY.equalsIgnoreCase(propsKey.getText().trim())
-				&& !Constants.EMPTY.equalsIgnoreCase(propsValue.getText().trim())
-				&& ((rbCombo.getSelectionIndex() != -1) || isNewFile())) {
-			isPageComplete = true;
-		}
-		return isPageComplete;
-	}
-	
-	@Override
-	public boolean canFlipToNextPage() {
-		return isPageComplete() && (getNextPage() != null)
-				&& isNewFile();
-	}
-
 	/**
 	 * Creates new bundle map if no one was specified 
 	 * during initialization of the page.
@@ -945,68 +1026,6 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 			bm.addBundle(hash, prefix, uri, false);
 		}
 		return bm;
-	}
-	
-	/**
-	 * Use existed key-value pair from the properties file
-	 * without writing any data to the file.
-	 * 
-	 * @return 
-	 */
-	public boolean isDuplicatedKeyValue() {
-		boolean exists = false; 
-		if (isValueDuplicated(propsValue.getText()) 
-				&& isKeyDuplicated(propsKey.getText())) {
-			exists = true;
-		}
-		return exists;
-	}
-	
-	/**
-	 * Generate properties key.
-	 * Replaces all non-word characters with 
-	 * underline character.
-	 *
-	 * @param text the text
-	 * @return the result string
-	 */
-	public String generatePropertyKey(String text) {
-		String result = text.trim();
-		/*
-		 * Replace all other symbols with '_'
-		 */
-		for (char ch : REPLACED_CHARACTERS) {
-			result = result.replace(ch, '_');
-		}
-		/*
-		 * Replace line delimiters white space
-		 */
-		for (char ch : LINE_DELEMITERS) {
-			result = result.replace(ch, ' ');
-		}
-		/*
-		 * Replace all white spaces with '_'
-		 */
-		result = result.replaceAll(Constants.WHITE_SPACE,
-				Constants.UNDERSCORE);
-		/*
-		 * Correct underline symbols:
-		 * show only one of them
-		 */
-		result = result.replaceAll("_+", Constants.UNDERSCORE); //$NON-NLS-1$
-		/*
-		 * Remove leading and trailing '_'
-		 */
-		if (result.startsWith(Constants.UNDERSCORE)) {
-			result = result.substring(1);
-		}
-		if (result.endsWith(Constants.UNDERSCORE)) {
-			result = result.substring(0, result.length() - 1);
-		}
-		/*
-		 * Return the result
-		 */
-		return result;
 	}
 
 	/**
