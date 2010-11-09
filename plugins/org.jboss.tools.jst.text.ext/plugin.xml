@@ -20,6 +20,9 @@
          	<contentType id="jsf.facelet">
          		<partitionType id="org.eclipse.wst.html.HTML_DEFAULT" />
          	</contentType>
+         	<contentType id="jsf.facelet.composite">
+         		<partitionType id="org.eclipse.wst.html.HTML_DEFAULT" />
+         	</contentType>
 		</hyperlinkPartitioner>
 
 		<hyperlinkPartitioner 
@@ -34,6 +37,10 @@
          		</partitionType>
          	</contentType>
          	<contentType id="jsf.facelet">
+         		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ATTRIBUTE_VALUE">
+         		</partitionType>
+         	</contentType>
+         	<contentType id="jsf.facelet.composite">
          		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ATTRIBUTE_VALUE">
          		</partitionType>
          	</contentType>
@@ -108,6 +115,9 @@
          	<contentType id="jsf.facelet">
          		<partitionType id="org.jboss.tools.common.text.ext.jsp.JSP_ROOT" />
          	</contentType>
+         	<contentType id="jsf.facelet.composite">
+         		<partitionType id="org.jboss.tools.common.text.ext.jsp.JSP_ROOT" />
+         	</contentType>
 		</hyperlinkPartitioner>
 
 		<hyperlinkPartitioner
@@ -120,6 +130,9 @@
          		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ELEMENT"/>
          	</contentType>
          	<contentType id="jsf.facelet">
+         		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ELEMENT"/>
+         	</contentType>
+         	<contentType id="jsf.facelet.composite">
          		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ELEMENT"/>
          	</contentType>
 		</hyperlinkPartitioner>
@@ -136,6 +149,9 @@
          	<contentType id="jsf.facelet">
          		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ELEMENT" />
          	</contentType>
+         	<contentType id="jsf.facelet.composite">
+         		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ELEMENT" />
+         	</contentType>
 		</hyperlinkPartitioner> 
 
 		<hyperlinkPartitioner
@@ -148,6 +164,9 @@
          		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ATTRIBUTE_VALUE"/>
          	</contentType>
          	<contentType id="jsf.facelet">
+         		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ATTRIBUTE_VALUE"/>
+         	</contentType>
+         	<contentType id="jsf.facelet.composite">
          		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ATTRIBUTE_VALUE"/>
          	</contentType>
 		</hyperlinkPartitioner> 
@@ -231,6 +250,17 @@
          			<!--axis path="*/style/" /-->
          		</partitionType>
          	</contentType>
+         	<contentType id="jsf.facelet.composite">
+         		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ATTRIBUTE_VALUE">
+         			<axis path="*/link/*" ignoreCase="true"/>
+         		</partitionType>
+         		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ELEMENT">
+         			<axis path="*/link/*" ignoreCase="true"/>
+         		</partitionType>
+         		<partitionType id="com.ibm.sse.STYLE">
+         			<!--axis path="*/style/" /-->
+         		</partitionType>
+         	</contentType>
 		</hyperlinkPartitioner>
 
 		<hyperlinkPartitioner
@@ -266,6 +296,12 @@
          			<axis path="*/link/href/" ignoreCase="true"/>
          		</partitionType>
          	</contentType>
+         	<contentType id="jsf.facelet.composite">
+         		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ATTRIBUTE_VALUE">
+         			<axis path="*/a/href/" ignoreCase="true"/>
+         			<axis path="*/link/href/" ignoreCase="true"/>
+         		</partitionType>
+         	</contentType>
 		</hyperlinkPartitioner>
 		<!-- End of Common HTML and/or JSP hyperlink partitioners -->
 
@@ -286,6 +322,9 @@
 				<partitiontype id="org.jboss.tools.common.text.ext.CSS_CLASS" />
 			</contenttypeidentifier>
    			<contenttypeidentifier id="jsf.facelet">
+				<partitiontype id="org.jboss.tools.common.text.ext.CSS_CLASS" />
+			</contenttypeidentifier>
+   			<contenttypeidentifier id="jsf.facelet.composite">
 				<partitiontype id="org.jboss.tools.common.text.ext.CSS_CLASS" />
 			</contenttypeidentifier>
 		</hyperlink>
@@ -320,6 +359,9 @@
 				<partitiontype id="org.jboss.tools.common.text.ext.jsp.JSP_STYLESHEET_REL_LINK" />
 			</contenttypeidentifier>
 			<contenttypeidentifier id="jsf.facelet">
+				<partitiontype id="org.jboss.tools.common.text.ext.jsp.JSP_STYLESHEET_REL_LINK" />
+			</contenttypeidentifier>
+			<contenttypeidentifier id="jsf.facelet.composite">
 				<partitiontype id="org.jboss.tools.common.text.ext.jsp.JSP_STYLESHEET_REL_LINK" />
 			</contenttypeidentifier>
 		</hyperlink>
@@ -414,6 +456,9 @@
 				<partitiontype id="org.jboss.tools.common.text.ext.jsp.JSP_XMLNS" />
 			</contenttypeidentifier>
 			<contenttypeidentifier id="jsf.facelet">
+				<partitiontype id="org.jboss.tools.common.text.ext.jsp.JSP_XMLNS" />
+			</contenttypeidentifier>
+			<contenttypeidentifier id="jsf.facelet.composite">
 				<partitiontype id="org.jboss.tools.common.text.ext.jsp.JSP_XMLNS" />
 			</contenttypeidentifier>
 		</hyperlink>
