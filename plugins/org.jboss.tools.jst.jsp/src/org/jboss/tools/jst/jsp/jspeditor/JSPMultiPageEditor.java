@@ -459,7 +459,11 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 			break;
 		}
 		}
-		new ResourceChangeListener(this, getContainer());
+		
+		IFile f = getFile();
+		if (f != null && f.exists()) {
+			new ResourceChangeListener(this, getContainer());
+		}
 		if (getModelObject() != null) {
 			getModelObject().getModel().addModelTreeListener(syncListener);
 		}
@@ -904,10 +908,8 @@ class ResourceChangeListener implements IResourceChangeListener {
 			return;
 		IPath path = getPathChange(event, f);
 		if (path == null) {
-//			if (f != null && !f.exists())
-//				closeEditor();   // Fix for JBIDE-7289: we don't close the editor here
-								// due to let eclipse to show error dialog and 
-								// default view for the corrupted editor
+			if (f != null && !f.exists())
+				closeEditor();
 			return;
 		}
 		f = ModelPlugin.getWorkspace().getRoot().getFile(path);
