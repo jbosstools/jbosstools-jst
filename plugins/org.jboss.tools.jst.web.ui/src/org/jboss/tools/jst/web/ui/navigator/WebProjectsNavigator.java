@@ -10,7 +10,11 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.navigator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jboss.tools.common.model.ui.navigator.*;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.*;
 import org.jboss.tools.common.meta.action.*;
 import org.jboss.tools.common.model.XModelObject;
@@ -64,14 +68,17 @@ public class WebProjectsNavigator extends NavigatorViewPart {
 		}
 	}
 
+	static String STRUTS_UI = "org.jboss.tools.struts.ui"; //$NON-NLS-1$
+
 	protected String[] getActionClasses() {
-		String[] actions = new String[]{
-			"org.jboss.tools.jsf.ui.action.CreateProjectAction", //$NON-NLS-1$
-			"org.jboss.tools.jsf.ui.action.ImportProjectAction", //$NON-NLS-1$
-			"org.jboss.tools.struts.ui.internal.action.CreateProjectAction", //$NON-NLS-1$
-			"org.jboss.tools.struts.ui.internal.action.ImportProjectAction"        			 //$NON-NLS-1$
-		};
-		return actions;
+		List<String> actions = new ArrayList<String>();
+		actions.add("org.jboss.tools.jsf.ui.action.CreateProjectAction"); //$NON-NLS-1$
+		actions.add("org.jboss.tools.jsf.ui.action.ImportProjectAction"); //$NON-NLS-1$
+		if(Platform.getBundle(STRUTS_UI) != null) {
+			actions.add("org.jboss.tools.struts.ui.internal.action.CreateProjectAction"); //$NON-NLS-1$
+			actions.add("org.jboss.tools.struts.ui.internal.action.ImportProjectAction"); //$NON-NLS-1$
+		}
+		return actions.toArray(new String[0]);
 	}
 	
 	protected TreeViewerMenuInvoker createMenuInvoker() {
