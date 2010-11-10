@@ -75,7 +75,7 @@ public class ExternalizeCommandTest extends TestCase {
     }
     
     private void checkExternalizeCommand(boolean requiredState) {
-    	TestUtil.waitForIdle(TestUtil.MAX_IDLE * 100);
+    	TestUtil.waitForIdle(TestUtil.MAX_IDLE);
 		assertEquals("Externalize Command has incorrect enabled state", //$NON-NLS-1$
 				requiredState,externalizeCommand.isEnabled());
     }
