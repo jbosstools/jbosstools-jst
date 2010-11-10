@@ -18,6 +18,7 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
+import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.jsp.test.TestUtil;
 import org.jboss.tools.test.util.TestProjectProvider;
@@ -54,22 +55,28 @@ public class ExternalizeCommandTest extends TestCase {
      */
     public void testExternalizeCommand(){
 		IEditorPart editorPart = WorkbenchUtils.openEditor(project.getName()+"/WebContent/pages/extCommandTest.xhtml");  //$NON-NLS-1$
-		if(editorPart instanceof JSPMultiPageEditor){
-			JSPMultiPageEditor jspMultiPageEditor= (JSPMultiPageEditor) editorPart;
-			StyledText textWidget = 	jspMultiPageEditor.getSourceEditor().getTextViewer().getTextWidget();
-			textWidget.setCaretOffset(0);
-			assertEquals("Ext command should be disabled with current selection",false,externalizeCommand.isEnabled()); //$NON-NLS-1$
-			textWidget.setCaretOffset(2);
-			assertEquals("Ext command should be disabled with current selection",false,externalizeCommand.isEnabled()); //$NON-NLS-1$
-			textWidget.setCaretOffset(15);
-			assertEquals("Ext command should be enabled with current selection",true,externalizeCommand.isEnabled()); //$NON-NLS-1$
-			textWidget.setCaretOffset(2);
-			assertEquals("Ext command should be disabled with current selection",false,externalizeCommand.isEnabled()); //$NON-NLS-1$
-			TestUtil.closeAllEditors();
-			assertEquals("Ext command should be disabled without opened editor",false,externalizeCommand.isEnabled()); //$NON-NLS-1$
-		}else{
-			fail("Should be opened JSPMultiPage Editor"); //$NON-NLS-1$
-		}
 		
+		assertTrue("Should be opened JSPMultiPage Editor", editorPart instanceof JSPMultiPageEditor); //$NON-NLS-1$
+
+		JSPMultiPageEditor jspMultiPageEditor= (JSPMultiPageEditor) editorPart;
+		StructuredTextViewer textViewer = jspMultiPageEditor.getSourceEditor().getTextViewer();
+		
+		textViewer.setSelectedRange(0, 0);
+		checkExternalizeCommand(false);
+		textViewer.setSelectedRange(2, 0);
+		checkExternalizeCommand(false);
+		textViewer.setSelectedRange(15, 0);
+		checkExternalizeCommand(true);
+		textViewer.setSelectedRange(2, 0);
+		checkExternalizeCommand(false);
+		
+		TestUtil.closeAllEditors();
+		checkExternalizeCommand(false);
+    }
+    
+    private void checkExternalizeCommand(boolean requiredState) {
+    	TestUtil.waitForIdle(TestUtil.MAX_IDLE * 100);
+		assertEquals("Externalize Command has incorrect enabled state", //$NON-NLS-1$
+				requiredState,externalizeCommand.isEnabled());
     }
 }
