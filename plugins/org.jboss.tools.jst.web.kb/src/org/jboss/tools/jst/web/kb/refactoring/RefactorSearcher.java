@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.kb.refactoring;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -270,38 +271,39 @@ public abstract class RefactorSearcher {
 				}
 			}
 		}
-		
 	}
 
 	protected IRelevanceCheck[] getRelevanceChecks(ELResolver[] resolvers) {
 		if(resolvers == null) return new IRelevanceCheck[0];
-		IRelevanceCheck[] checks = new IRelevanceCheck[resolvers.length];
-		for (int i = 0; i < checks.length; i++) {
-			checks[i] = resolvers[i].createRelevanceCheck(javaElement);
-		}
-		return checks;
-	}
-	
-
-	// looking for component references in EL
-	private void scanString(IFile file, String string, int offset) {
-		int startEl = string.indexOf("#{"); //$NON-NLS-1$
-		if(startEl<0)
-			startEl = string.indexOf("${"); //$NON-NLS-1$
-		if(startEl>-1) {
-			ELParser parser = ELParserUtil.getJbossFactory().createParser();
-			ELModel model = parser.parse(string);
-			for (ELInstance instance : model.getInstances()) {
-				for(ELInvocationExpression ie : instance.getExpression().getInvocations()){
-					ELInvocationExpression expression = findComponentReference(ie);
-					if(expression != null){
-						checkMatch(file, expression, offset+getOffset(expression), getLength(expression));
-					}
-				}
+		List<IRelevanceCheck> checks = new ArrayList<IRelevanceCheck>();
+		for (ELResolver resolver : resolvers) {
+			IRelevanceCheck check = resolver.createRelevanceCheck(javaElement);
+			if(check!=null) {
+				checks.add(check);
 			}
 		}
+		return checks.toArray(new IRelevanceCheck[0]);
 	}
-	
+
+	// looking for component references in EL
+//	private void scanString(IFile file, String string, int offset) {
+//		int startEl = string.indexOf("#{"); //$NON-NLS-1$
+//		if(startEl<0)
+//			startEl = string.indexOf("${"); //$NON-NLS-1$
+//		if(startEl>-1) {
+//			ELParser parser = ELParserUtil.getJbossFactory().createParser();
+//			ELModel model = parser.parse(string);
+//			for (ELInstance instance : model.getInstances()) {
+//				for(ELInvocationExpression ie : instance.getExpression().getInvocations()){
+//					ELInvocationExpression expression = findComponentReference(ie);
+//					if(expression != null){
+//						checkMatch(file, expression, offset+getOffset(expression), getLength(expression));
+//					}
+//				}
+//			}
+//		}
+//	}
+
 	protected int getOffset(ELInvocationExpression expression){
 		if(expression instanceof ELPropertyInvocation){
 			ELPropertyInvocation pi = (ELPropertyInvocation)expression;

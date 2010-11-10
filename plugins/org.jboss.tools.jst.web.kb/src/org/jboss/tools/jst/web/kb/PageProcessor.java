@@ -161,7 +161,10 @@ public class PageProcessor {
 			String elString = value;
 			ELResolver[] resolvers =  context.getElResolvers();
 			for (int i = 0; resolvers != null && i < resolvers.length; i++) {
-				proposals.addAll(resolvers[i].getProposals(context, elString, query.getOffset()));
+				List<TextProposal> pls = resolvers[i].getProposals(context, elString, query.getOffset());
+				if(pls!=null) {
+					proposals.addAll(pls);
+				}
 			}
 		}
 		return proposals.toArray(new TextProposal[proposals.size()]);
