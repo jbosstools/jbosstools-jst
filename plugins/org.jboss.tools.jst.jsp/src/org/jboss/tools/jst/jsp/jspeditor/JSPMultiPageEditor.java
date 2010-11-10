@@ -904,8 +904,10 @@ class ResourceChangeListener implements IResourceChangeListener {
 			return;
 		IPath path = getPathChange(event, f);
 		if (path == null) {
-			if (f != null && !f.exists())
-				closeEditor();
+//			if (f != null && !f.exists())
+//				closeEditor();   // Fix for JBIDE-7289: we don't close the editor here
+								// due to let eclipse to show error dialog and 
+								// default view for the corrupted editor
 			return;
 		}
 		f = ModelPlugin.getWorkspace().getRoot().getFile(path);
