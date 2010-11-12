@@ -27,7 +27,7 @@ import org.jboss.tools.common.text.xml.contentassist.ProposalSorter;
 public class TestUtil {
 
 	/** The Constant MAX_IDLE. */
-	public static final long MAX_IDLE = 15*1000L;
+	public static final long MAX_IDLE = 5*60*1000L;
 
 	/**
      * Returns the CA Processor from content assistant for the given offset in the document.
