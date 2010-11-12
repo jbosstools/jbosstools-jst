@@ -54,7 +54,6 @@ public class SelectionBarTest extends TestCase{
     }
     
 	public void testSelectionBarCommandState() throws Throwable{
-		assertEquals("check command enabled command status",false,toggleSelBarCommand.isEnabled()); //$NON-NLS-1$
 		IEditorPart editorPart = WorkbenchUtils.openEditor(project.getName()+"/WebContent/pages/selectionBar.xhtml");  //$NON-NLS-1$
 		
 		assertTrue("Should be opened JSPMultiPage Editor", //$NON-NLS-1$
