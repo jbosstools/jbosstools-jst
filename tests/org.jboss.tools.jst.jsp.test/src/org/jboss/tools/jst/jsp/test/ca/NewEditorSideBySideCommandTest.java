@@ -56,7 +56,7 @@ public class NewEditorSideBySideCommandTest extends TestCase {
      * @throws NotEnabledException 
      * @throws ExecutionException 
      */
-    public void testExternalizeCommand() throws NotDefinedException, ExecutionException, NotEnabledException, NotHandledException{
+    public void testNewEditorSideBySideCommand() throws Exception {
     	assertEquals(newEditorSideBySideCmd.getName()+ " should be disabled without opened editor",false,newEditorSideBySideCmd.isEnabled());  //$NON-NLS-1$
     	WorkbenchUtils.openEditor(project.getName()+"/WebContent/pages/newSideBySideEditorTest.txt");  //$NON-NLS-1$
 		assertEquals(newEditorSideBySideCmd.getName()+ " should be enabled when editor opened",true,newEditorSideBySideCmd.isEnabled());  //$NON-NLS-1$
