@@ -38,7 +38,6 @@ public class JstJspAllTests {
 		suite.addTestSuite(SelectionBarTest.class);
 		suite.addTestSuite(ExternalizeCommandTest.class);
 	
-		suite.addTestSuite(NewEditorSideBySideCommandTest.class);
 		return suite;
 	}
 
