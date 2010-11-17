@@ -114,8 +114,12 @@ public class WebKbPlugin extends BaseUIPlugin {
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
-		plugin = null;
 		super.stop(context);
+		
+		// Fix for JBIDE-7621: The following line is moved to the very end of the method 
+		// due to prevent NullPointerException to be thrown in cleanObsoleteFiles() method --->>>
+		plugin = null;
+		// <<<---
 	}
 
 	/**
