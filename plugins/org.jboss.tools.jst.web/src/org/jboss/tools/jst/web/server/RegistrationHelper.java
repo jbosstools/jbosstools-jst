@@ -204,8 +204,11 @@ public class RegistrationHelper {
 	}
 
 	public static void runRegisterInServerJob(IProject p, IServer[] servers, String contextRoot) {
-		RegisterServerJob job = new RegisterServerJob(p, servers, contextRoot);
-		job.schedule(100);
+		getRegisterInServerJob(p, servers, contextRoot).schedule(100);
+	}
+	
+	public static RegisterServerJob getRegisterInServerJob(IProject p, IServer[] servers, String contextRoot) {
+		return new RegisterServerJob(p, servers, contextRoot);
 	}
 	
 	// registerInJob

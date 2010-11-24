@@ -161,7 +161,7 @@ public class RegisterServerContext {
 	}
 
 	@SuppressWarnings("restriction")
-	public String getErrorMessage() {
+	public String getErrorMessage() { 
 		if(runtimeName == null || runtimeName.length() == 0) return WebUIMessages.RUNTIME_IS_REQUIRED;
 		if(runtime == null) return WebUIMessages.SPECIFIED_RUNTIME_DOESNOT_EXIST;
 
