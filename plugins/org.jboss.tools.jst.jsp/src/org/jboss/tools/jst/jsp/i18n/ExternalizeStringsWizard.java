@@ -30,6 +30,8 @@ import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
+import org.eclipse.wst.xml.core.internal.document.AttrImpl;
+import org.eclipse.wst.xml.core.internal.document.ElementImpl;
 import org.jboss.tools.common.EclipseUtil;
 import org.jboss.tools.common.meta.action.XActionInvoker;
 import org.jboss.tools.common.meta.action.impl.handlers.DefaultCreateHandler;
@@ -337,7 +339,24 @@ public class ExternalizeStringsWizard extends Wizard {
 										jsfCoreTaglibPrefix + Constants.COLON + "loadBundle"); //$NON-NLS-1$
 								loadBundle.setAttribute("var", var); //$NON-NLS-1$
 								loadBundle.setAttribute("basename", bundlePath); //$NON-NLS-1$
-								node.getParentNode().insertBefore(loadBundle, node);
+								Node elementToInsertBefore = null;
+								Node refChild = null;
+								if (node.getParentNode() != null) {
+									refChild = node;
+									elementToInsertBefore = node.getParentNode();
+								} else if (node instanceof AttrImpl) {
+									AttrImpl attr = (AttrImpl) node;
+									if ((attr.getOwnerElement().getParentNode() != null)){
+										refChild = attr.getOwnerElement();
+										elementToInsertBefore = attr.getOwnerElement().getParentNode();
+									}
+								}
+								if ((elementToInsertBefore != null) && (refChild != null)){
+									elementToInsertBefore.insertBefore(loadBundle, refChild);
+								} else {
+									JspEditorPlugin.getDefault().logWarning(
+											JstUIMessages.EXTERNALIZE_STRINGS_DIALOG_CANNOT_ADD_LOAD_BUNDLE_TAG);
+								}
 							}
 						}
 					}
