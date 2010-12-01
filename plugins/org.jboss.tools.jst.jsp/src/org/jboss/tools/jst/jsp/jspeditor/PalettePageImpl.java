@@ -18,6 +18,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.Page;
 import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.ui.views.palette.IPaletteAdapter;
 import org.jboss.tools.common.model.ui.views.palette.IPalettePageAdapter;
 import org.jboss.tools.common.model.ui.views.palette.PaletteCreator;
 
@@ -71,6 +72,10 @@ public class PalettePageImpl extends Page implements PalettePage, IPalettePageAd
 
 	public IWorkbenchPage getPage() {
 		return getSite().getPage();
+	}
+
+	public IPaletteAdapter getAdapter() {
+		return paletteCreator.getAdapter();
 	}
 
 }
