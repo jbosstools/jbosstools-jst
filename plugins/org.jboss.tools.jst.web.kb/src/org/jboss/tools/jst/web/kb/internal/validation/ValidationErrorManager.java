@@ -55,10 +55,20 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 	protected IValidationContext validationContext;
 	protected TextFileDocumentProvider documentProvider;
 
+	private String messageIdQuickFixAttributeName;
+
 	/**
 	 * Constructor
 	 */
 	public ValidationErrorManager() {
+	}
+
+	/**
+	 * @param messageIdQuickFixAttributeName the messageIdQuickFixAttributeName to set
+	 */
+	public void setMessageIdQuickFixAttributeName(
+			String messageIdQuickFixAttributeName) {
+		this.messageIdQuickFixAttributeName = messageIdQuickFixAttributeName;
 	}
 
 	public void init(IProject project, ContextValidationHelper validationHelper, IValidator manager, IReporter reporter) {
@@ -68,6 +78,11 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 		setReporter(reporter);
 		setValidationContext(validationHelper.getValidationContext());
 		setMarkerId(org.jboss.tools.jst.web.kb.validation.IValidator.MARKED_RESOURCE_MESSAGE_GROUP);
+	}
+
+	public void init(IProject project, ContextValidationHelper validationHelper, IValidator manager, IReporter reporter, String messageIdQuickFixAttributeName) {
+		init(project, validationHelper, manager, reporter);
+		setMessageIdQuickFixAttributeName(messageIdQuickFixAttributeName);
 	}
 
 	/**
@@ -239,6 +254,29 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 			}
 		}
 
+		return marker;
+	}
+
+	/**
+	 * Create a problem marker and add to the marker an attribute with the message ID for QuickFix.
+	 * 
+	 * @param message
+	 * @param preferenceKey
+	 * @param location
+	 * @param target
+	 * @param messageId
+	 * @return
+	 */
+	public IMarker addError(String message, String preferenceKey,
+			ITextSourceReference location, IResource target, int messageId) {
+		IMarker marker = addError(message, preferenceKey, location, target);
+		try {
+			if(marker!=null) {
+				marker.setAttribute(messageIdQuickFixAttributeName, new Integer(messageId));
+			}
+		} catch(CoreException e) {
+			WebKbPlugin.getDefault().logError(e);
+		}
 		return marker;
 	}
 
