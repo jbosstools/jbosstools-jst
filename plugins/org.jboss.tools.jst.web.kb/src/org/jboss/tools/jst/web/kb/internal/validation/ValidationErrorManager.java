@@ -81,7 +81,7 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 	}
 
 	public void init(IProject project, ContextValidationHelper validationHelper, IValidator manager, IReporter reporter, String messageIdQuickFixAttributeName) {
-		init(project, validationHelper, manager, reporter);
+		this.init(project, validationHelper, manager, reporter);
 		setMessageIdQuickFixAttributeName(messageIdQuickFixAttributeName);
 	}
 
