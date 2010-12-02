@@ -213,7 +213,7 @@ public abstract class RefactorSearcher {
 		if(text != null) {
 			boolean found = false;
 			for (IRelevanceCheck check: checks) {
-				if(check.isRelevant(text)) {
+				if(check != null && check.isRelevant(text)) {
 					found = true;
 					break;
 				}
@@ -238,7 +238,7 @@ public abstract class RefactorSearcher {
 						ELResolver resolver = resolvers[i];
 						if (!(resolver instanceof ELCompletionEngine))
 							continue;
-						if(!checks[i].isRelevant(operand.getText())) 
+						if(checks[i] != null && !checks[i].isRelevant(operand.getText())) 
 							continue;
 						
 						ELResolution resolution = resolver.resolve(context, operand, offset);
@@ -275,14 +275,11 @@ public abstract class RefactorSearcher {
 
 	protected IRelevanceCheck[] getRelevanceChecks(ELResolver[] resolvers) {
 		if(resolvers == null) return new IRelevanceCheck[0];
-		List<IRelevanceCheck> checks = new ArrayList<IRelevanceCheck>();
-		for (ELResolver resolver : resolvers) {
-			IRelevanceCheck check = resolver.createRelevanceCheck(javaElement);
-			if(check!=null) {
-				checks.add(check);
-			}
+		IRelevanceCheck[] checks = new IRelevanceCheck[resolvers.length];
+		for (int i = 0; i < checks.length; i++) {
+			checks[i] = resolvers[i].createRelevanceCheck(javaElement);
 		}
-		return checks.toArray(new IRelevanceCheck[0]);
+		return checks;
 	}
 
 	// looking for component references in EL
