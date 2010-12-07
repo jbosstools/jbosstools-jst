@@ -736,13 +736,8 @@ public class JSPTextEditor extends StructuredTextEditor implements
 	public void runDropCommand(final String flavor, final String data) {
 		XModelBuffer b = XModelTransferBuffer.getInstance().getBuffer();
 		final XModelObject o = b == null ? null : b.source();
-		/*
-		 * Fixes https://jira.jboss.org/jira/browse/JBIDE-5874
-		 * Display.getDefault() should always be replaced by
-		 * PlatformUI.getWorkbench().getDisplay().
-		 *  syncExec() can hang the JBDS thus asyncExec is used. 
-		 */
-		PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
+		
+		Runnable runnable = new Runnable() {
 			public void run() {
 				if (o != null
 						&& !XModelTransferBuffer.getInstance().isEnabled()) {
@@ -771,7 +766,18 @@ public class JSPTextEditor extends StructuredTextEditor implements
 					XModelTransferBuffer.getInstance().disable();
 				}
 			}
-		});
+		};
+//		if(Display.getCurrent() != null) {
+//			runnable.run();
+//		} else {
+		/*
+		 * Fixes https://jira.jboss.org/jira/browse/JBIDE-5874
+		 * Display.getDefault() should always be replaced by
+		 * PlatformUI.getWorkbench().getDisplay().
+		 *  syncExec() can hang the JBDS thus asyncExec is used. 
+		 */
+			PlatformUI.getWorkbench().getDisplay().asyncExec(runnable);
+//		}
 	}
 
 	public AttributeDescriptorValueProvider createAttributeDescriptorValueProvider() {
@@ -787,13 +793,22 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		public void setProposal(ITagProposal proposal) {
 			if(this.proposal == proposal) return;
 			this.proposal = (TagProposal)proposal;
-			query = createQuery(this.proposal);
+			
+			String prefix = proposal.getPrefix();
+			int offset = JSPTextEditor.this.getTextViewer().getTextWidget().getCaretOffset();
+			
 			ValueHelper valueHelper = new ValueHelper();
 			processor = valueHelper.createContentAssistProcessor();
-			pageContext = valueHelper.createPageContext(processor, query.getOffset());
+			pageContext = valueHelper.createPageContext(processor, offset);
 
-			Map<String, List<INameSpace>> ns = pageContext.getNameSpaces(query.getOffset());
-			List<INameSpace> n = ns.get(query.getUri());
+			Map<String, List<INameSpace>> ns = pageContext.getNameSpaces(offset);
+			List<INameSpace> n = ns.get(this.proposal.getUri());
+			if(n != null && !n.isEmpty()) {
+				prefix = n.get(0).getPrefix();
+			}
+
+			query = createQuery(this.proposal, prefix);
+
 			if(n == null && pageContext instanceof JspContextImpl) {
 				IRegion r = new Region(query.getOffset(), 0);
 				((JspContextImpl)pageContext).addNameSpace(r, new NameSpace(query.getUri(), query.getPrefix(),
@@ -832,10 +847,10 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			return createDescriptors(query);
 		}
 	
-		KbQuery createQuery(TagProposal proposal) {
+		KbQuery createQuery(TagProposal proposal, String prefix) {
 			KbQuery kbQuery = new KbQuery();
-			String name = proposal.getPrefix().length() == 0 ? proposal.getName() : proposal.getPrefix() + ":" + proposal.getName(); //$NON-NLS-1$
-			kbQuery.setPrefix(proposal.getPrefix());
+			String name = (prefix == null | prefix.length() == 0) ? proposal.getName() : prefix + ":" + proposal.getName(); //$NON-NLS-1$
+			kbQuery.setPrefix(prefix);
 			kbQuery.setUri(proposal.getUri());
 			kbQuery.setParentTags(new String[]{name});
 			kbQuery.setParent(name);
