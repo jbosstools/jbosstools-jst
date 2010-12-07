@@ -22,8 +22,9 @@ Require-Bundle: org.eclipse.core.runtime,
  org.jboss.tools.jst.jsp,
  org.eclipse.wst.xml.core,
  org.jboss.tools.common.text.ext,
- org.jboss.tools.jst.web
+ org.jboss.tools.jst.web,
+ org.jboss.tools.jsf.ui.test;bundle-version="3.2.0"
 Bundle-Vendor: %Bundle-Vendor.0
 Bundle-Localization: plugin
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

@@ -14,11 +14,10 @@ package org.jboss.tools.jst.css.properties;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
-import org.jboss.tools.jst.jsp.outline.cssdialog.common.StyleAttributes;
-import org.jboss.tools.jst.jsp.outline.cssdialog.tabs.BaseTabControl;
+import org.jboss.tools.jst.css.dialog.common.StyleAttributes;
+import org.jboss.tools.jst.css.dialog.tabs.BaseTabControl;
 
 /**
  * @author Sergey Dzmitrovich

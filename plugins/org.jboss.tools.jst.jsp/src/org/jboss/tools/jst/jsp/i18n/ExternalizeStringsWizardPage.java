@@ -79,7 +79,7 @@ import org.jboss.tools.jst.jsp.editor.IVisualContext;
 import org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor;
 import org.jboss.tools.jst.jsp.jspeditor.SourceEditorPageContext;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
-import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
+import org.jboss.tools.jst.jsp.util.Constants;
 import org.jboss.tools.jst.jsp.util.FaceletsUtil;
 import org.jboss.tools.jst.web.project.WebProject;
 import org.jboss.tools.jst.web.project.list.WebPromptingProvider;

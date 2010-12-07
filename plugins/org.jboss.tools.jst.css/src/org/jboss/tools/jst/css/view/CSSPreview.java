@@ -36,7 +36,7 @@ import org.jboss.tools.jst.css.common.CSSStyleListener;
 import org.jboss.tools.jst.css.common.ICSSViewListner;
 import org.jboss.tools.jst.css.common.StyleContainer;
 import org.jboss.tools.jst.css.messages.CSSUIMessages;
-import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
+import org.jboss.tools.jst.jsp.util.Constants;
 
 /**
  * @author Sergey Dzmitrovich

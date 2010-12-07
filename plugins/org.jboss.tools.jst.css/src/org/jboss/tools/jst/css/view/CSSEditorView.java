@@ -11,7 +11,6 @@
 
 package org.jboss.tools.jst.css.view;
 
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPart;

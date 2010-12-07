@@ -52,8 +52,8 @@ import org.jboss.tools.common.model.project.IModelNature;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.i18n.MainLocaleProvider;
-import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
 import org.jboss.tools.jst.jsp.preferences.IVpePreferencesPage;
+import org.jboss.tools.jst.jsp.util.Constants;
 import org.jboss.tools.jst.web.project.WebProject;
 import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
 

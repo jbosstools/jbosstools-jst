@@ -29,7 +29,7 @@ import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.jboss.tools.common.EclipseUtil;
 import org.jboss.tools.common.model.ui.ModelUIImages;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
-import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
+import org.jboss.tools.jst.jsp.util.Constants;
 
 /**
  * The Class ExternalizeStringsWizardRegisterBundlePage.

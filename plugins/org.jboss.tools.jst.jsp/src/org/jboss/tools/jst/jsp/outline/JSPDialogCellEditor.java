@@ -34,10 +34,9 @@ import org.jboss.tools.common.model.ui.objecteditor.AttributeWrapper;
 import org.jboss.tools.common.model.ui.objecteditor.ExtendedCellEditorProvider;
 import org.jboss.tools.jst.jsp.contentassist.JSPDialogContentProposalProvider;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
-import org.jboss.tools.jst.jsp.outline.cssdialog.CSSStyleDialog;
-import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSConstants;
-import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
-import org.jboss.tools.jst.jsp.outline.cssdialog.cssselector.CSSStyleClassSelector;
+import org.jboss.tools.jst.jsp.outline.css.CSSStyleClassSelectorDecorator;
+import org.jboss.tools.jst.jsp.outline.css.CSSStyleDialogDecorator;
+import org.jboss.tools.jst.jsp.util.Constants;
 
 /**
  * @author Kabanovich Cell Editor for JSP attributes, of which values can be
@@ -76,8 +75,8 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
         }
         
         String attributeName = Constants.EMPTY + context.getProperty("attributeName"); //$NON-NLS-1$
-        if(attributeName.equalsIgnoreCase(CSSConstants.STYLE)
-        		|| attributeName.equalsIgnoreCase(CSSConstants.CLASS)) {
+        if(attributeName.equalsIgnoreCase(Constants.STYLE)
+        		|| attributeName.equalsIgnoreCase(Constants.CLASS)) {
         	hasProposals = true;
         	return;
         }
@@ -133,9 +132,9 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
         context.put("value", value); //$NON-NLS-1$
 
         attributeName = attributeName.toLowerCase();
-        if (attributeName.equalsIgnoreCase(CSSConstants.CLASS)
-        		|| attributeName.endsWith(CSSConstants.CLASS.toLowerCase())) {
-            CSSStyleClassSelector dialog = new CSSStyleClassSelector(cellEditorWindow.getShell());
+        if (attributeName.equalsIgnoreCase(Constants.CLASS)
+        		|| attributeName.endsWith(Constants.CLASS.toLowerCase())) {
+            CSSStyleClassSelectorDecorator dialog = new CSSStyleClassSelectorDecorator(cellEditorWindow.getShell());
             dialog.setCurrentStyleClass(value);
 
             if (dialog.open() == Window.OK) {
@@ -144,9 +143,9 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
                 return dialog.getCSSStyleClasses();
             }
         } else
-        	if (attributeName.equalsIgnoreCase(CSSConstants.STYLE)
-        		|| attributeName.endsWith(CSSConstants.STYLE.toLowerCase())) {
-            CSSStyleDialog dialog = new CSSStyleDialog(cellEditorWindow.getShell(),
+        	if (attributeName.equalsIgnoreCase(Constants.STYLE)
+        		|| attributeName.endsWith(Constants.STYLE.toLowerCase())) {
+            CSSStyleDialogDecorator dialog = new CSSStyleDialogDecorator(cellEditorWindow.getShell(),
                     ((value == null) ? Constants.EMPTY : value));
 
             if (dialog.open() == Window.OK) {

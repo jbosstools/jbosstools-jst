@@ -25,8 +25,8 @@ import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.jboss.tools.jst.css.common.StyleContainer;
+import org.jboss.tools.jst.css.dialog.common.StyleAttributes;
 import org.jboss.tools.jst.css.view.CSSEditorView;
-import org.jboss.tools.jst.jsp.outline.cssdialog.common.StyleAttributes;
 
 /**
  * @author Sergey Dzmitrovich

@@ -17,7 +17,7 @@ import org.eclipse.wst.css.core.internal.provisional.document.ICSSNode;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSNodeList;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleDeclaration;
 import org.eclipse.wst.sse.core.internal.provisional.INodeAdapter;
-import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
+import org.jboss.tools.jst.jsp.util.Constants;
 import org.w3c.dom.css.CSSStyleDeclaration;
 import org.w3c.dom.css.CSSStyleRule;
 

@@ -14,9 +14,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.wst.sse.core.internal.provisional.INodeAdapter;
-import org.jboss.tools.jst.jsp.outline.cssdialog.common.CSSConstants;
-import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
-import org.jboss.tools.jst.jsp.outline.cssdialog.common.Util;
+import org.jboss.tools.jst.css.dialog.common.CSSConstants;
+import org.jboss.tools.jst.css.dialog.common.Util;
+import org.jboss.tools.jst.jsp.util.Constants;
 import org.w3c.dom.Element;
 
 /**

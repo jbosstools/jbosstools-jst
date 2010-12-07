@@ -24,7 +24,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
-import org.jboss.tools.jst.jsp.outline.cssdialog.tabs.BaseTabControl;
+import org.jboss.tools.jst.css.dialog.tabs.BaseTabControl;
 
 /**
  * @author Sergey Dzmitrovich

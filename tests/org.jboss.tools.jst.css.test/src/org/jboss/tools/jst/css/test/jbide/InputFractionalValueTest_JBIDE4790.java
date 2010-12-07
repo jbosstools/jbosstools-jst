@@ -16,11 +16,11 @@ import org.eclipse.wst.css.core.internal.document.CSSStructuredDocumentRegionCon
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSModel;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleSheet;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
+import org.jboss.tools.jst.css.dialog.common.StyleAttributes;
+import org.jboss.tools.jst.css.dialog.common.Util;
 import org.jboss.tools.jst.css.properties.CSSPropertyPage;
 import org.jboss.tools.jst.css.test.AbstractCSSViewTest;
 import org.jboss.tools.jst.css.view.CSSEditorView;
-import org.jboss.tools.jst.jsp.outline.cssdialog.common.StyleAttributes;
-import org.jboss.tools.jst.jsp.outline.cssdialog.common.Util;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.css.CSSRule;
 import org.w3c.dom.css.CSSStyleDeclaration;

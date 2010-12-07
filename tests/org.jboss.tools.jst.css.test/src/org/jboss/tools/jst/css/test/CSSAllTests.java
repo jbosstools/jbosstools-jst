@@ -13,7 +13,7 @@ package org.jboss.tools.jst.css.test;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-
+import org.jboss.tools.jst.css.test.jbide.CSSStyleDialogTest;
 import org.jboss.tools.jst.css.test.jbide.CaseSensitiveTest_JBIDE4940;
 import org.jboss.tools.jst.css.test.jbide.ExtendingCSSViewTest_JBIDE4850;
 import org.jboss.tools.jst.css.test.jbide.IncorrectPageAfterSelectionTest_JBIDE4849;
@@ -43,6 +43,7 @@ public class CSSAllTests {
 		suite.addTestSuite(NotCompletedCSS_JBIDE4677.class);
 		suite.addTestSuite(IncorrectPageAfterSelectionTest_JBIDE4849.class);
 		suite.addTestSuite(CaseSensitiveTest_JBIDE4940.class);
+		suite.addTestSuite(CSSStyleDialogTest.class);
 		// $JUnit-END$
 
 		return new ProjectImportTestSetup(

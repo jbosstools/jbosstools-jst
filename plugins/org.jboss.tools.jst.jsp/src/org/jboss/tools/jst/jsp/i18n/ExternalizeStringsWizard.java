@@ -51,7 +51,7 @@ import org.jboss.tools.jst.jsp.jspeditor.SourceEditorPageContext;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.JSPPaletteInsertHelper;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.PaletteTaglibInserter;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
-import org.jboss.tools.jst.jsp.outline.cssdialog.common.Constants;
+import org.jboss.tools.jst.jsp.util.Constants;
 import org.jboss.tools.jst.web.tld.TaglibData;
 import org.jboss.tools.jst.web.tld.URIConstants;
 import org.w3c.dom.Element;

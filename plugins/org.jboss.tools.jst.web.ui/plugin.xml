@@ -124,21 +124,6 @@
       </wizard>
       <wizard
             category="org.jboss.tools.jst.web"
-            class="org.jboss.tools.jst.web.ui.wizards.css.NewCSSClassWizard"
-            finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
-            icon="$nl$/images/xstudio/wizards/new_css_class.gif"
-            id="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSClassWizard"
-            name="%NewWizard_CSSClass"
-            preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
-            project="false">
-         <description>
-            	%NewWizardDescription_CSSClass
-         </description>
-         <selection class="org.eclipse.core.resources.IResource">
-         </selection>
-      </wizard>
-      <wizard
-            category="org.jboss.tools.jst.web"
             class="org.jboss.tools.jst.web.ui.wizards.newfile.NewWebFileWizard"
             finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
             icon="$nl$/images/xstudio/wizards/new_webapp_file.gif"

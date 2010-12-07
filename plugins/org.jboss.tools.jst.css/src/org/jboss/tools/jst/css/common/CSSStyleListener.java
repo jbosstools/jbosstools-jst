@@ -27,7 +27,7 @@ import org.eclipse.wst.sse.core.internal.provisional.INodeAdapter;
 import org.eclipse.wst.sse.core.internal.provisional.INodeNotifier;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.eclipse.wst.sse.ui.internal.properties.ConfigurablePropertySheetPage;
-import org.jboss.tools.jst.css.CssPlugin;
+import org.jboss.tools.jst.css.CSSPlugin;
 
 @SuppressWarnings("restriction")
 public class CSSStyleListener implements ISelectionListener, INodeAdapter,
@@ -116,7 +116,7 @@ public class CSSStyleListener implements ISelectionListener, INodeAdapter,
 					try {
 						l.selectionChanged(part, selectionToLiteners);
 					} catch (Exception e) {
-						CssPlugin.log(e.getLocalizedMessage());
+						CSSPlugin.log(e.getLocalizedMessage());
 					}
 				}
 
@@ -174,7 +174,7 @@ public class CSSStyleListener implements ISelectionListener, INodeAdapter,
 				try {
 					l.styleChanged(currentStyle);
 				} catch (Exception e) {
-					CssPlugin.log(e.getLocalizedMessage());
+					CSSPlugin.log(e.getLocalizedMessage());
 				}
 			}
 
@@ -205,7 +205,7 @@ public class CSSStyleListener implements ISelectionListener, INodeAdapter,
 				try {
 					((IPartListener) l).partActivated(part);
 				} catch (Exception e) {
-					CssPlugin.log(e.getLocalizedMessage());
+					CSSPlugin.log(e.getLocalizedMessage());
 				}
 			}
 		}
