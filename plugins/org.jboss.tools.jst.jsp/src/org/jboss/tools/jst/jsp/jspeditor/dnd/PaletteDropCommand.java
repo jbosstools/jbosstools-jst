@@ -223,7 +223,10 @@ public class PaletteDropCommand extends FileDropCommand {
 		AttributeDescriptorValue[] vs = getDefaultModel().getAttributeValueDescriptors();
 		for (int i = 0; i < vs.length; i++) {
 			String v = initialValues.getProperty(vs[i].getName());
-			if(v != null) vs[i].setValue(v);
+			if(v != null) {
+				vs[i].setPreferable(true);
+				vs[i].setValue(v);
+			}
 		}
 	}
 	
@@ -239,6 +242,7 @@ public class PaletteDropCommand extends FileDropCommand {
 		int ATT_VALUE = 2;
 		char quote = '\0';
 		int state = NOTHING;
+		boolean whitespace = false;
 		String name = null;
 		String value = null;
 		for (int i = 0; i < header.length(); i++) {
@@ -247,16 +251,26 @@ public class PaletteDropCommand extends FileDropCommand {
 				if(Character.isJavaIdentifierStart(c)) {
 					name = "" + c; //$NON-NLS-1$
 					state = ATT_NAME;
+					whitespace = false;
 				}
 			} else if(state == ATT_NAME) {
 				if(Character.isJavaIdentifierPart(c) || c == ':') {
+					if(whitespace) {
+						whitespace = false;
+						name = "";
+					}
 					name += c;
 				} else if(c == '=') {
 					state = ATT_VALUE;
 					quote = '\0';
+					whitespace = false;
+				} else if(Character.isWhitespace(c)) {
+					whitespace = true;
 				}
 			} else if(state == ATT_VALUE) {
 				if(c == quote) {
+					int q = value.indexOf("|");
+					if(q >= 0) value = value.substring(0, q) + value.substring(q + 1);
 					initialValues.setProperty(name, value);
 					name = null;
 					value = null;
