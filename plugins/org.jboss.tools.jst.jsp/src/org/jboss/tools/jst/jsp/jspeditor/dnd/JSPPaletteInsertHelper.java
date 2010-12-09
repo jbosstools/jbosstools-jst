@@ -113,6 +113,10 @@ public class JSPPaletteInsertHelper extends PaletteInsertHelper {
 		if(k >= 0) {
 			return text.substring(0, k + 2) + prefix + ":" + text.substring(k + 2); //$NON-NLS-1$
 		}
+		k = text.toLowerCase().indexOf("${" + tagname.toLowerCase()); //$NON-NLS-1$
+		if(k >= 0) {
+			return text.substring(0, k + 2) + prefix + ":" + text.substring(k + 2); //$NON-NLS-1$
+		}
 		return text;
 	}
 
