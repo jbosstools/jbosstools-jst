@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.tld.model.helpers;
 
 import java.util.*;
+
 import org.jboss.tools.common.model.*;
 import org.jboss.tools.jst.web.tld.URIConstants;
 import org.jboss.tools.jst.web.tld.model.TLDUtil;
@@ -167,11 +168,56 @@ public class TLDToPaletteHelper {
         	if(TLDUtil.isTag(tags[i])) tab.addChild(createMacroByTag(tags[i], model));
         	if(TLDUtil.isFaceletTag(tags[i])) tab.addChild(createMacroByFaceletTag(tags[i], model));
         }
+        XModelObject f = tld.getChildByPath("Functions"); //$NON-NLS-1$
+        if(f != null) {
+        	XModelObject[] fs = f.getChildren();
+        	for (int i = 0; i < fs.length; i++) {
+        		tab.addChild(createMacroByFunction(fs[i], model));
+        	}
+        }
         return tab;
     }
 
     private String capitalize(String s) {
         return (s.length() == 0) ? s : Character.toUpperCase(s.charAt(0)) + s.substring(1);
+    }
+
+    public XModelObject createMacroByFunction(XModelObject tag, XModel model) {
+        Properties p = new Properties();
+//        String parentname = getTldName(tag.getParent());
+//        String prefix = (parentname.length() == 0) ? "" : parentname + ":"; //$NON-NLS-1$ //$NON-NLS-2$
+        String shortname = tag.getAttributeValue("name"); //$NON-NLS-1$
+		p.setProperty("name", shortname); //$NON-NLS-1$
+		String signature = tag.getAttributeValue("function-signature"); //$NON-NLS-1$
+		int i = signature.indexOf("("); //$NON-NLS-1$
+		int j = signature.indexOf(")"); //$NON-NLS-1$
+		List<String> paramTypes = new ArrayList<String>();
+		if(i >= 0 && j > i) {
+			String params = signature.substring(i + 1, j);
+			StringTokenizer st = new StringTokenizer(params, ","); //$NON-NLS-1$
+			while(st.hasMoreTokens()) {
+				String param = st.nextToken().trim();
+				paramTypes.add(param);
+			}
+		}
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append("${"); //$NON-NLS-1$
+		sb.append(shortname);
+		sb.append("("); //$NON-NLS-1$
+		for (int k = 0; k < paramTypes.size(); k++) {
+			if(k > 0) sb.append(", "); //$NON-NLS-1$
+			sb.append("''"); //$NON-NLS-1$
+		}
+		sb.append(")"); //$NON-NLS-1$
+		sb.append("}"); //$NON-NLS-1$
+        p.setProperty(START_TEXT, sb.toString());
+        
+        sb = new StringBuffer();
+        sb.append("<b>").append(shortname).append("</b><br>"); //$NON-NLS-1$ //$NON-NLS-2$
+        sb.append(signature);
+        p.setProperty(DESCRIPTION, sb.toString());
+        return model.createModelObject("SharableMacroHTML", p); //$NON-NLS-1$
     }
 
 }

@@ -126,6 +126,7 @@ public class JSPAdopt implements XAdoptManager {
 			if(!Character.isJavaIdentifierPart(c) && c != '.' && c != ':') return false;
 		}
 		int q = s.indexOf('<');
+		if(q < 0) q = s.indexOf("${");
 		if(q < 0) return false;
 		if(s.indexOf(n, q) < 0) return false;
 		return true;
