@@ -22,8 +22,10 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -63,7 +65,6 @@ import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.wst.sse.core.internal.provisional.StructuredModelManager;
 import org.eclipse.wst.sse.ui.internal.provisional.extensions.ISourceEditingTextTools;
 import org.eclipse.wst.xml.core.internal.document.AttrImpl;
-import org.eclipse.wst.xml.core.internal.document.NodeImpl;
 import org.eclipse.wst.xml.core.internal.document.TextImpl;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.ui.internal.provisional.IDOMSourceEditingTextTools;
@@ -87,7 +88,6 @@ import org.jboss.tools.jst.web.tld.TaglibData;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class ExternalizeStringsWizardPage extends WizardPage {
@@ -992,23 +992,26 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 					String filePath= root.getAttributeNode("template").getNodeValue(); //$NON-NLS-1$
 					if (((JSPTextEditor) editor).getEditorInput() instanceof FileEditorInput) {
 						FileEditorInput fei = (FileEditorInput) ((JSPTextEditor) editor).getEditorInput();
-						IFile templateFile = (IFile) fei.getFile().getProject().getFolder("WebContent").findMember(filePath); //$NON-NLS-1$
-						Document document = null;
-						try {
-							IDOMModel wtpModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForRead(templateFile);
-							if (wtpModel != null) {
-								document = wtpModel.getDocument();
+						IResource webContentResource = EclipseResourceUtil.getFirstWebContentResource(fei.getFile().getProject());
+						if (webContentResource instanceof IContainer) {
+							IFile templateFile = (IFile) ((IContainer) webContentResource).findMember(filePath); //$NON-NLS-1$
+							Document document = null;
+							try {
+								IDOMModel wtpModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForRead(templateFile);
+								if (wtpModel != null) {
+									document = wtpModel.getDocument();
+								}
+							} catch(IOException e) {
+								JspEditorPlugin.getPluginLog().logError(e);
+							} catch(CoreException e) {
+								JspEditorPlugin.getPluginLog().logError(e);
 							}
-						} catch(IOException e) {
-							JspEditorPlugin.getPluginLog().logError(e);
-						} catch(CoreException e) {
-							JspEditorPlugin.getPluginLog().logError(e);
-						}
-						if (null != document) {
-							/*
-							 * Change the document where to look bundles
-							 */
-							documentWithBundles = document;
+							if (null != document) {
+								/*
+								 * Change the document where to look bundles
+								 */
+								documentWithBundles = document;
+							}
 						}
 					}
 				}
