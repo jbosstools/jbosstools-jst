@@ -15,6 +15,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.jboss.tools.jst.css.test.jbide.CSSStyleDialogTest;
 import org.jboss.tools.jst.css.test.jbide.CaseSensitiveTest_JBIDE4940;
+import org.jboss.tools.jst.css.test.jbide.CssClassNewWizardTest;
 import org.jboss.tools.jst.css.test.jbide.ExtendingCSSViewTest_JBIDE4850;
 import org.jboss.tools.jst.css.test.jbide.IncorrectPageAfterSelectionTest_JBIDE4849;
 import org.jboss.tools.jst.css.test.jbide.InputFractionalValueTest_JBIDE4790;
@@ -44,6 +45,7 @@ public class CSSAllTests {
 		suite.addTestSuite(IncorrectPageAfterSelectionTest_JBIDE4849.class);
 		suite.addTestSuite(CaseSensitiveTest_JBIDE4940.class);
 		suite.addTestSuite(CSSStyleDialogTest.class);
+		suite.addTestSuite(CssClassNewWizardTest.class);
 		// $JUnit-END$
 
 		return new ProjectImportTestSetup(
