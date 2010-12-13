@@ -87,7 +87,7 @@ public class CSSPreview extends ViewPart implements ICSSViewListner {
 		browser.setLayoutData(gridData);
 		browser.addMouseListener(new MouseAdapter() {
 			public void mouseDoubleClick(MouseEvent e) {
-				if (e.widget == browser.getBrowser()) {
+				if (browser.isBrowserEvent(e)) {
 					browser.setEnabled(false);
 					previewComposite.setMaximizedControl(previewText);
 					previewText.setFocus();

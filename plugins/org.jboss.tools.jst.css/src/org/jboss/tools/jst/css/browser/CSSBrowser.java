@@ -15,22 +15,22 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.TypedEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.jst.css.CSSPlugin;
 
 /**
  * @author mareshkau
  *
  */
-public class CSSBrowser extends Composite {
+public class CSSBrowser extends Composite implements CSSBrowserInterface {
 	
-	private Browser browser;
+	private CSSBrowserInterface browser;
 
-	public Browser getBrowser() {
-		return browser;
-	}
 	/**
 	 * If in system not installed xulrunner, than 
 	 * browser will be null
@@ -57,15 +57,20 @@ public class CSSBrowser extends Composite {
 			browser.setLayoutData(gridData);
 			browser.pack();
 		} catch(SWTError er){
-			CSSPlugin.getDefault().logError(er);
+			CSSPlugin.getDefault().logWarning("Xulrunner implementation hasn't been founded, so browser based preview " +
+					"will be not available");
 		}
-		cssBrowser.setBrowser(browser);
+		if(browser!=null) {
+			cssBrowser.setBrowser(new CSSBrowserMozillaImplementation(browser));
+		} else {
+			Label label = new Label(cssBrowser,SWT.CENTER);
+			label.setText("Browser based preview not availabe,"+System.getProperty("line.separator")+" see log for more details");
+			label.setBounds(cssBrowser.getClientArea());
+			cssBrowser.setBrowser(new CSSBrowserEmptyImplementation());
+		}
 		return cssBrowser;
 	}
 	
-	public void setBrowser(Browser browser) {
-		this.browser = browser;
-	}
 	public void setLayoutData(GridData layoutData) {
 		super.setLayoutData(layoutData);
 	}
@@ -80,5 +85,14 @@ public class CSSBrowser extends Composite {
 	}
 	public void addMouseListener(MouseAdapter mouseAdapter) {
 		getBrowser().addMouseListener(mouseAdapter);
+	}
+	public boolean isBrowserEvent(TypedEvent e){
+		return getBrowser().isBrowserEvent(e);
+	}
+	private CSSBrowserInterface getBrowser() {
+		return this.browser;
+	}
+	private void setBrowser(CSSBrowserInterface browser) {
+		this.browser = browser;
 	}
 }
