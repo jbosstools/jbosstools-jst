@@ -23,7 +23,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
@@ -37,6 +36,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.common.model.ui.ModelUIImages;
 import org.jboss.tools.common.model.ui.widgets.Split;
+import org.jboss.tools.jst.css.browser.CSSBrowser;
 import org.jboss.tools.jst.css.dialog.common.StyleAttributes;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.util.Constants;
@@ -47,7 +47,7 @@ import org.jboss.tools.jst.jsp.util.Constants;
  */
 public abstract class AbstractCSSDialog extends TitleAreaDialog {
 
-	private Browser browser;
+	private CSSBrowser browser;
 
 	private Text previewText;
 
@@ -162,7 +162,7 @@ public abstract class AbstractCSSDialog extends TitleAreaDialog {
 				true);
 		previewComposite.setLayoutData(gridData);
 
-		browser = new Browser(previewComposite, SWT.BORDER | SWT.MOZILLA);
+		browser = CSSBrowser.createCSSBrowser(previewComposite, SWT.BORDER | SWT.MOZILLA);
 		browser.setText(generateBrowserPage());
 		browser.setLayoutData(gridData);
 		browser.addMouseListener(new MouseAdapter() {
@@ -253,10 +253,6 @@ public abstract class AbstractCSSDialog extends TitleAreaDialog {
 	public boolean close() {
 		releaseResources();
 		return super.close();
-	}
-
-	public Browser getBrowser() {
-		return browser;
 	}
 
 	public StyleAttributes getStyleAttributes() {
