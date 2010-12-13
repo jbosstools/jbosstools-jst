@@ -18,7 +18,6 @@ import java.util.Map;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
@@ -32,6 +31,7 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
+import org.jboss.tools.jst.css.browser.CSSBrowser;
 import org.jboss.tools.jst.css.common.CSSStyleListener;
 import org.jboss.tools.jst.css.common.ICSSViewListner;
 import org.jboss.tools.jst.css.common.StyleContainer;
@@ -44,7 +44,7 @@ import org.jboss.tools.jst.jsp.util.Constants;
  */
 public class CSSPreview extends ViewPart implements ICSSViewListner {
 
-	private Browser browser;
+	private CSSBrowser browser;
 
 	private Text previewText;
 
@@ -83,11 +83,11 @@ public class CSSPreview extends ViewPart implements ICSSViewListner {
 				true);
 		previewComposite.setLayoutData(gridData);
 
-		browser = new Browser(previewComposite, SWT.BORDER | SWT.MOZILLA);
+		browser = CSSBrowser.createCSSBrowser(previewComposite, SWT.BORDER | SWT.MOZILLA);
 		browser.setLayoutData(gridData);
 		browser.addMouseListener(new MouseAdapter() {
 			public void mouseDoubleClick(MouseEvent e) {
-				if (e.widget == browser) {
+				if (e.widget == browser.getBrowser()) {
 					browser.setEnabled(false);
 					previewComposite.setMaximizedControl(previewText);
 					previewText.setFocus();
