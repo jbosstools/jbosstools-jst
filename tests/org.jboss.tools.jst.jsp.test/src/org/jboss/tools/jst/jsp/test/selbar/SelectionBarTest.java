@@ -9,7 +9,7 @@
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 
-package org.jboss.tools.jst.jsp.test.ca;
+package org.jboss.tools.jst.jsp.test.selbar;
 
 import junit.framework.TestCase;
 
@@ -20,7 +20,6 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
-import org.jboss.tools.jst.jsp.test.TestUtil;
 import org.jboss.tools.test.util.TestProjectProvider;
 import org.jboss.tools.test.util.WorkbenchUtils;
 
@@ -54,13 +53,14 @@ public class SelectionBarTest extends TestCase{
     }
     
 	public void testSelectionBarCommandState() throws Throwable{
+		assertTrue("Command should be defined", toggleSelBarCommand.isDefined());//$NON-NLS-1$
 		IEditorPart editorPart = WorkbenchUtils.openEditor(project.getName()+"/WebContent/pages/selectionBar.xhtml");  //$NON-NLS-1$
-		
 		assertTrue("Should be opened JSPMultiPage Editor", //$NON-NLS-1$
 				editorPart instanceof JSPMultiPageEditor);
 		JSPMultiPageEditor multiPageEditor = (JSPMultiPageEditor) editorPart;
 		multiPageEditor.pageChange(0);
 		assertEquals("check command enabled command status",true,toggleSelBarCommand.isEnabled()&&(Boolean)toggleSelBarState.getValue()); //$NON-NLS-1$
+		if(multiPageEditor.getPreviewIndex()==-1) return;
 		multiPageEditor.pageChange(multiPageEditor.getPreviewIndex());
 		assertEquals("check command enabled command status",false,toggleSelBarCommand.isEnabled()&&(Boolean)toggleSelBarState.getValue()); //$NON-NLS-1$
 		multiPageEditor.pageChange(0);

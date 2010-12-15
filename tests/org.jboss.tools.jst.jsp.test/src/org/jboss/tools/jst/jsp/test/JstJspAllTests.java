@@ -16,8 +16,7 @@ import junit.framework.TestSuite;
 import org.jboss.tools.jst.jsp.test.ca.ExternalizeCommandTest;
 import org.jboss.tools.jst.jsp.test.ca.JstJspJbide1585Test;
 import org.jboss.tools.jst.jsp.test.ca.JstJspJbide1641Test;
-import org.jboss.tools.jst.jsp.test.ca.NewEditorSideBySideCommandTest;
-import org.jboss.tools.jst.jsp.test.ca.SelectionBarTest;
+import org.jboss.tools.jst.jsp.test.selbar.SelectionBarTest;
 
 public class JstJspAllTests {
 
