@@ -35,7 +35,10 @@ import org.jboss.tools.jst.web.kb.validation.IValidator;
  */
 public class ValidatorManager implements IValidatorJob {
 
-	private static Set<IProject> validatingProjects = new HashSet<IProject>(); 
+	private static Set<IProject> validatingProjects = new HashSet<IProject>();
+	private static final String SLEEPING = "Sleeping"; //$NON-NLS-1$
+	private static final String RUNNING = "Running"; //$NON-NLS-1$
+	private static String STATUS = SLEEPING;
 
 	public ValidatorManager() {
 		super();
@@ -53,41 +56,46 @@ public class ValidatorManager implements IValidatorJob {
 	 * @see org.eclipse.wst.validation.internal.provisional.core.IValidatorJob#validateInJob(org.eclipse.wst.validation.internal.provisional.core.IValidationContext, org.eclipse.wst.validation.internal.provisional.core.IReporter)
 	 */
 	public IStatus validateInJob(IValidationContext helper, IReporter reporter)	throws ValidationException {
-		ContextValidationHelper validationHelper = (ContextValidationHelper)helper;
-		IProject project = validationHelper.getProject();
-		if(project==null) {
-			return OK_STATUS;
-		}
-		IProject rootProject = validationHelper.getValidationContext().getRootProject();
-		IStatus status = OK_STATUS;
-		synchronized (validatingProjects) {
-			if(validatingProjects.contains(rootProject)) {
+		STATUS = RUNNING;
+		try {
+			ContextValidationHelper validationHelper = (ContextValidationHelper)helper;
+			IProject project = validationHelper.getProject();
+			if(project==null) {
 				return OK_STATUS;
 			}
-			validatingProjects.add(rootProject);
-		}
-		synchronized (validatingProjects) {
-			org.jboss.tools.jst.web.kb.validation.IValidationContext validationContext = null;
-			try {
-				validationContext = new ValidationContext(project);
-				validationHelper.setValidationContext(validationContext);
-
-				List<IValidator> validators = validationHelper.getValidationContext().getValidators();
-				Set<IFile> changedFiles = validationHelper.getChangedFiles();
-				if(!changedFiles.isEmpty()) {
-					status = validate(validators, changedFiles, rootProject, validationHelper, reporter);
-				} else if(!validationContext.getRegisteredFiles().isEmpty()) {
-					validationContext.clearAllResourceLinks();
-					status = validateAll(validators, rootProject, validationHelper, reporter);
+			IProject rootProject = validationHelper.getValidationContext().getRootProject();
+			IStatus status = OK_STATUS;
+			synchronized (validatingProjects) {
+				if(validatingProjects.contains(rootProject)) {
+					return OK_STATUS;
 				}
-			} finally {
-				if(validationContext!=null) {
-					validationContext.clearRegisteredFiles();
-				}
-				validatingProjects.remove(rootProject);
+				validatingProjects.add(rootProject);
 			}
+			synchronized (validatingProjects) {
+				org.jboss.tools.jst.web.kb.validation.IValidationContext validationContext = null;
+				try {
+					validationContext = new ValidationContext(project);
+					validationHelper.setValidationContext(validationContext);
+	
+					List<IValidator> validators = validationHelper.getValidationContext().getValidators();
+					Set<IFile> changedFiles = validationHelper.getChangedFiles();
+					if(!changedFiles.isEmpty()) {
+						status = validate(validators, changedFiles, rootProject, validationHelper, reporter);
+					} else if(!validationContext.getRegisteredFiles().isEmpty()) {
+						validationContext.clearAllResourceLinks();
+						status = validateAll(validators, rootProject, validationHelper, reporter);
+					}
+				} finally {
+					if(validationContext!=null) {
+						validationContext.clearRegisteredFiles();
+					}
+					validatingProjects.remove(rootProject);
+				}
+			}
+			return status;
+		} finally {
+			STATUS = SLEEPING;
 		}
-		return status;
 	}
 
 	private IStatus validate(List<IValidator> validators, Set<IFile> changedFiles, IProject rootProject, ContextValidationHelper validationHelper, IReporter reporter) throws ValidationException {
@@ -132,5 +140,21 @@ public class ValidatorManager implements IValidatorJob {
 	 */
 	public void validate(IValidationContext helper, IReporter reporter)	throws ValidationException {
 		validateInJob(helper, reporter);
+	}
+
+	/**
+	 * This method returns a string with status message of the validator. This method is supposed to be used in unit tests.
+	 * @return
+	 */
+	public static String getStatus() {
+		return STATUS;
+	}
+
+	/**
+	 * This method is supposed to be used in unit tests.
+	 * @param status
+	 */
+	public static void setStatus(String status) {
+		STATUS = status;
 	}
 }
