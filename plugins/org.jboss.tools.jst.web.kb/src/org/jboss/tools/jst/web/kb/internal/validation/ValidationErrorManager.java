@@ -237,7 +237,7 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 						try {
 							lineNumber = doc.getLineOfOffset(offset) + 1;
 						} catch (BadLocationException e) {
-							WebKbPlugin.getDefault().logError(e);
+							WebKbPlugin.getDefault().logError("Wrong offset [" + offset + "] of the problem marker [" + MessageFormat.format(message, messageArguments)  + "] for resource: " + target.getFullPath().toOSString(), e);  //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
 						}
 					}
 				}
