@@ -26,7 +26,10 @@ public class KbMessages {
 	public static String VALIDATION_CONTEXT_VARIABLE_NAME_MUST_NOT_BE_NULL;
 	public static String KBNATURE_NOT_FOUND;
 	public static String KBBUILDER_NOT_FOUND;
+	public static String KBNATURE_SEPARATOR;
+	public static String KBNATURE_LAST_SEPARATOR;
 	public static String KBPROBLEM;
+	public static String KBPROBLEM_LOCATION;
 	public static String ENABLE_KB;
 	public static String ILLEGAL_CONTENTTYPE;
 	
