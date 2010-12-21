@@ -28,6 +28,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -866,6 +867,29 @@ public class KbProject extends KbObject implements IKbProject {
 		//TODO Implement if it will be needed events and listeners. and fire events to them.
 	}
 
+	private static String[] getKBBuilderRequiredNatureDescriptions(IProject project) {
+		ArrayList<String> natureDescriptions = new ArrayList<String>();
+		try {
+			IProjectDescription projectDescription = project.getDescription();
+			String[] ids = projectDescription.getNatureIds();
+			if (ids == null) return (String[])natureDescriptions.toArray(new String[0]);
+			for (String id : ids) {
+				IProjectNature nature = project.getNature(id);
+				if (nature instanceof IKBBuilderRequiredNature) {
+					if (((IKBBuilderRequiredNature)nature).isKBBuilderRequired()) {
+						String description = ((IKBBuilderRequiredNature)nature).getNatureDescription();
+						if (description != null && description.length() > 0) {
+							natureDescriptions.add(description);
+						}
+					}
+				}
+			}
+		} catch (CoreException ex) {
+			WebKbPlugin.getDefault().logError(ex);
+		}
+		return (String[])natureDescriptions.toArray(new String[0]);
+	}
+	
 	/**
 	 * Check if KB builder is installed and add a warning with quick fix to the project if it is not.
 	 * @param resource
@@ -875,8 +899,25 @@ public class KbProject extends KbObject implements IKbProject {
 		if (project == null) 
 			return false; // Cannot check anything
 
+		String[] descriptions = getKBBuilderRequiredNatureDescriptions(project);
+		if (descriptions == null || descriptions.length == 0)
+			return true; // KBBuilder is not needed
+		
+		StringBuffer natures = new StringBuffer();
+		for (int i = 0; i < descriptions.length; i++) {
+			if (i > 0) {
+				if (i != descriptions.length - 1) {
+					natures.append(KbMessages.KBNATURE_SEPARATOR).append(' ');
+				} else {
+					natures.append(' ').append(KbMessages.KBNATURE_LAST_SEPARATOR).append(' ');
+				}
+			}
+			natures.append(descriptions[i]);
+		}
+		
 		boolean kbNatureFound = false;
 		boolean kbBuilderFound = false;
+		
 		try {
 			kbNatureFound = (project.getNature(IKbProject.NATURE_ID) != null);
 		
@@ -912,14 +953,14 @@ public class KbProject extends KbObject implements IKbProject {
 		
 		if (markers == null || markers.length == 0) {
 			try {
-				IMarker m = createOrUpdateKbProblemMarker(null, project, !kbNatureFound, !kbBuilderFound);
+				IMarker m = createOrUpdateKbProblemMarker(null, project, !kbNatureFound, !kbBuilderFound, natures.toString());
 			} catch (CoreException ex) {
 				WebKbPlugin.getDefault().logError(ex);
 			}
 		} else {
 			for (IMarker m : markers) {
 				try {
-					m = createOrUpdateKbProblemMarker(m, project, !kbNatureFound, !kbBuilderFound);
+					m = createOrUpdateKbProblemMarker(m, project, !kbNatureFound, !kbBuilderFound, natures.toString());
 				} catch (CoreException ex) {
 					WebKbPlugin.getDefault().logError(ex);
 				}
@@ -957,17 +998,31 @@ public class KbProject extends KbObject implements IKbProject {
 		return (l == null) ? null : l.toArray(new IMarker[0]);
 	}
 
-	private static IMarker createOrUpdateKbProblemMarker(IMarker m, IResource r, boolean kbNatureIsAbsent, boolean kbBuilderIsAbsent) throws CoreException {
+	private static IMarker createOrUpdateKbProblemMarker(IMarker m, IResource r, boolean kbNatureIsAbsent, boolean kbBuilderIsAbsent, String natures) throws CoreException {
 		ArrayList<String> args = new ArrayList<String>();
-		args.add(kbNatureIsAbsent ? KbMessages.KBNATURE_NOT_FOUND : ""); //$NON-NLS-1$
-		args.add(kbBuilderIsAbsent ? KbMessages.KBBUILDER_NOT_FOUND : ""); //$NON-NLS-1$
+		
+		StringBuffer arg = new StringBuffer();
+		if (kbNatureIsAbsent) {
+			arg.append(KbMessages.KBNATURE_NOT_FOUND);
+		}
+		if (kbBuilderIsAbsent) {
+			if (kbNatureIsAbsent) arg.append('/');
+			arg.append(KbMessages.KBBUILDER_NOT_FOUND);
+		}
+
+		args.add(arg.toString());
+		args.add(natures);
 
 		String message = MessageFormat.format(KbMessages.KBPROBLEM, args.toArray());
+		String location = MessageFormat.format(KbMessages.KBPROBLEM_LOCATION, new Object[] {r.getProject().getName()});
+		
 		if (m == null) {
 			m = r.createMarker(KB_BUILDER_PROBLEM_MARKER_TYPE);
 			r.setPersistentProperty(KbProjectFactory.NATURE_MOCK, "true"); //$NON-NLS-1$
 			KbProjectFactory.getKbProject(r.getProject(), true);
 		}
+		
+		m.setAttribute(IMarker.LOCATION, location);
 		m.setAttribute(IMarker.MESSAGE, message);
 		m.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_WARNING);
 		m.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_NORMAL);
