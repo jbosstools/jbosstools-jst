@@ -996,8 +996,9 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 						if (webContentResource instanceof IContainer) {
 							IFile templateFile = (IFile) ((IContainer) webContentResource).findMember(filePath); //$NON-NLS-1$
 							Document document = null;
+							IDOMModel wtpModel = null;
 							try {
-								IDOMModel wtpModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForRead(templateFile);
+								wtpModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForRead(templateFile);
 								if (wtpModel != null) {
 									document = wtpModel.getDocument();
 								}
@@ -1005,6 +1006,10 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 								JspEditorPlugin.getPluginLog().logError(e);
 							} catch(CoreException e) {
 								JspEditorPlugin.getPluginLog().logError(e);
+							} finally {
+								if(wtpModel!=null) {
+									wtpModel.releaseFromRead();
+								}
 							}
 							if (null != document) {
 								/*
