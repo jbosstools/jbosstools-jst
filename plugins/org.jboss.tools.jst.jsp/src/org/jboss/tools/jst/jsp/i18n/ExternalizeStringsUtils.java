@@ -10,15 +10,16 @@
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.i18n;
 
+import java.util.List;
+import java.util.Properties;
+
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelObject;
-import org.jboss.tools.jsf.model.pv.JSFProjectTreeConstants;
-import org.jboss.tools.jsf.model.pv.JSFProjectsRoot;
-import org.jboss.tools.jsf.model.pv.JSFProjectsTree;
-import org.jboss.tools.jst.web.model.pv.WebProjectNode;
+import org.jboss.tools.common.model.util.ModelFeatureFactory;
+import org.jboss.tools.jst.web.project.list.IWebPromptingProvider;
 import org.w3c.dom.Element;
 
 /**
@@ -58,32 +59,15 @@ public class ExternalizeStringsUtils {
 	}
 
 	public static XModelObject findFacesConfig(XModel model) {
-		XModelObject facesConfig = null;
-		JSFProjectsRoot root = JSFProjectsTree.getProjectsRoot(model);
-		if (root != null) {
-			WebProjectNode n = (WebProjectNode) root
-					.getChildByPath(JSFProjectTreeConstants.CONFIGURATION);
-			if (n != null) {
-				/*
-				 * The array contains the all configuration files in the project
-				 * including files from jar archives.
-				 * Only editable object is be the necessary faces-config file.
-				 */
-				XModelObject[] os = n.getTreeChildren();
-				for (XModelObject o : os) {
-					if (o.isObjectEditable()) {
-						facesConfig = o;
-						break;
-					}
-				}
-			}
+		IWebPromptingProvider provider = (IWebPromptingProvider)ModelFeatureFactory.getInstance().createFeatureInstance("org.jboss.tools.jsf.model.pv.JSFPromptingProvider"); //$NON-NLS-1$
+		if(provider == null) {
+			return null;
 		}
-		/*
-		 * When nothing has been found try the last straight-forward way.
-		 */
-		if (facesConfig == null) {
-			facesConfig = model.getByPath("/faces-config.xml"); //$NON-NLS-1$
+		List<Object> result = provider.getList(model, IWebPromptingProvider.JSF_FACES_CONFIG, "", new Properties()); //$NON-NLS-1$
+		if(result != null && !result.isEmpty()) {
+			return (XModelObject)result.get(0);
 		}
-		return facesConfig;
+		return null;
 	}
+
 }
