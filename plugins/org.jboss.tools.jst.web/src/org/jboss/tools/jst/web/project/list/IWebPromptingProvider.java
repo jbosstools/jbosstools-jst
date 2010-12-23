@@ -40,6 +40,7 @@ public interface IWebPromptingProvider extends IPromptingProvider {
 	static String JSF_GET_TAGLIBS = "jsf.get.taglibs"; //$NON-NLS-1$
 	static String JSF_CONVERTER_IDS = "jsf.converter.ids"; //$NON-NLS-1$
 	static String JSF_VALIDATOR_IDS = "jsf.validator.ids"; //$NON-NLS-1$
+	static String JSF_FACES_CONFIG = "jsf.faces.config"; //$NON-NLS-1$
 
 	static String JSF_CONVERT_URL_TO_PATH = "jsf.url.to.path"; //$NON-NLS-1$
 
