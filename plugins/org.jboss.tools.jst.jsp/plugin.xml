@@ -209,14 +209,14 @@
          <contentTypeBinding contentTypeId="org.eclipse.wst.html.core.htmlsource"/>
          <contentTypeBinding contentTypeId="jsf.facelet"/>
       </editor>
-      <editor
+      <!--editor
       		class="org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor"
       		contributorClass="org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageContributor"
       		extensions="xml"
       		icon="$nl$/images/xstudio/editors/xmldoc.gif"
       		id="org.jboss.tools.jst.jsp.jspeditor.DocBookEditor"
       		name="%editors.docbook.name">
-      </editor>
+      </editor -->
    </extension>
 
    <extension point="org.eclipse.ui.editorActions">
