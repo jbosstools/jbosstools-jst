@@ -321,4 +321,8 @@ public class LinkCollection {
 	public String getId() {
 		return id;
 	}
+
+	public boolean isEmpty() {
+		return resourcesByVariableName.isEmpty() && variableNamesByResource.isEmpty() && resourcesByDeclaringVariableName.isEmpty() && declaringVariableNamesByResource.isEmpty() && unnamedResources.isEmpty();
+	}
 }
