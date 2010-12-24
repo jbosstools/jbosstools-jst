@@ -10,79 +10,66 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.validation;
 
-import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.jboss.tools.common.el.core.ELReference;
+import org.jboss.tools.jst.web.kb.internal.validation.ValidationResourceRegister;
 import org.w3c.dom.Element;
 
 /**
  * Contains information for validators that must be saved between validation invoking.
  * @author Alexey Kazakov
  */
-public interface IValidationContext {
-
-	/**
-	 * @return IProject which holds this context. One context could store information for a few dependent projects.
-	 * But the only one project should store a context for all dependent projects. Such root project will be returned by this method.
-	 */
-	IProject getRootProject();
+public interface IProjectValidationContext {
 
 	/**
 	 * Save link between core resource and variable name.
 	 * It's needed for incremental validation because we must save all linked resources of changed java file.
 	 */
-	void addLinkedCoreResource(String variableName, IPath linkedResourcePath, boolean declaration);
+	void addLinkedCoreResource(String validatorId, String variableName, IPath linkedResourcePath, boolean declaration);
 
 	/**
 	 * Removes link between core resource and variable name.
 	 * @param oldVariableName
 	 * @param linkedResourcePath
 	 */
-	void removeLinkedCoreResource(String name, IPath linkedResourcePath);
+	void removeLinkedCoreResource(String validatorId, String name, IPath linkedResourcePath);
 
 	/**
 	 * Removes link between core resources and variable names.
 	 * @param linkedResources
 	 */
-	void removeLinkedCoreResources(Set<IPath> resources);
+	void removeLinkedCoreResources(String validatorId, Set<IPath> resources);
 
 	/**
 	 * Removes link between core resource and variable names.
 	 * @param linkedResource
 	 */
-	void removeLinkedCoreResource(IPath resource);
+	void removeLinkedCoreResource(String validatorId, IPath resource);
 
-	Set<IPath> getCoreResourcesByVariableName(String variableName, boolean declaration);
+	Set<IPath> getCoreResourcesByVariableName(String validatorId, String variableName, boolean declaration);
 
-	Set<String> getVariableNamesByCoreResource(IPath fullPath, boolean declaration);
+	Set<String> getVariableNamesByCoreResource(String validatorId, IPath fullPath, boolean declaration);
 
 	/**
 	 * Adds core resource without any link to any context variable name.
 	 * @param fullPath
 	 */
-	void addUnnamedCoreResource(IPath fullPath);
+	void addUnnamedCoreResource(String validatorId, IPath fullPath);
 
 	/**
 	 * @return Set of coreresources without any link to any context variable name.
 	 * @param fullPath
 	 */
-	Set<IPath> getUnnamedCoreResources();
+	Set<IPath> getUnnamedCoreResources(String validatorId);
 
 	/**
 	 * Removes unnamed EL resource.
 	 * @param fullPath
 	 */
-	void removeUnnamedCoreResource(IPath fullPath);
-
-	/**
-	 * Adds EL resource without any link to any context variable name.
-	 * @param fullPath
-	 */
-	void addUnnamedElResource(IPath fullPath);
+	void removeUnnamedCoreResource(String validatorId, IPath fullPath);
 
 	/**
 	 * @return Set of EL resources without any link to any context variable name.
@@ -100,7 +87,7 @@ public interface IValidationContext {
 	 * We should validate all EL resources which use these names.
 	 * @param name
 	 */
-	void addVariableNameForELValidation(String name);
+	void addVariableNameForELValidation(String validatorId, String name);
 
 	void removeLinkedEls(Set<IFile> resorces);
 
@@ -113,12 +100,6 @@ public interface IValidationContext {
 	Set<ELReference> getElsForValidation(Set<IFile> changedFiles, boolean onlyChangedVariables);
 
 	void clearAll();
-
-	void clearAllResourceLinks();
-
-	void clearRegisteredFiles();
-
-	void clearElResourceLinks();
 
 	void clearOldVariableNameForElValidation();
 
@@ -155,16 +136,7 @@ public interface IValidationContext {
 	 */
 	void load(Element root);
 
-	Set<IFile> getRemovedFiles();
+	void setValidationResourceRegister(ValidationResourceRegister validationResourceRegister);
 
-	void addRemovedFile(IFile file);
-
-	Set<IFile> getRegisteredFiles();
-
-	void registerFile(IFile file);
-
-	/**
-	 * @return a list of validators which are associated with this context.
-	 */
-	List<IValidator> getValidators();
+	ValidationResourceRegister getValidationResourceRegister();
 }

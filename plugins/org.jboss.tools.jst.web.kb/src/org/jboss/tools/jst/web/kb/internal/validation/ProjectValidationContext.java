@@ -10,18 +10,17 @@
   ******************************************************************************/
 package org.jboss.tools.jst.web.kb.internal.validation;
 
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.jboss.tools.common.el.core.ELReference;
 import org.jboss.tools.common.xml.XMLUtilities;
-import org.jboss.tools.jst.web.kb.validation.IValidationContext;
-import org.jboss.tools.jst.web.kb.validation.IValidator;
+import org.jboss.tools.jst.web.kb.validation.IProjectValidationContext;
 import org.w3c.dom.Element;
 
 /**
@@ -29,96 +28,121 @@ import org.w3c.dom.Element;
  * validation invoking.
  * @author Alexey Kazakov
  */
-public class ProjectValidationContext implements IValidationContext {
+public class ProjectValidationContext implements IProjectValidationContext {
 
 	// We should load/save these collections between eclipse sessions.
-	private LinkCollection coreLinks = new LinkCollection();
-	private ELValidatorContext elLinks = new ELValidatorContext();
+	private Map<String, LinkCollection> coreLinks = new HashMap<String, LinkCollection>();
+	private Map<String, ELValidatorContext> elLinks = new HashMap<String, ELValidatorContext>();
 
-	private Set<IFile> removedFiles = new HashSet<IFile>();
-	private Set<IFile> registeredResources = new HashSet<IFile>();
-	private Set<String> oldVariableNamesForELValidation = new HashSet<String>();
+	private Map<String, Set<String>> oldVariableNamesForELValidation = new HashMap<String, Set<String>>();
 
-	int modifications = 0;
+	private ValidationResourceRegister validationResourceRegister;
+
+	private LinkCollection getCoreLinks(String validatorId) {
+		LinkCollection linkCollection = coreLinks.get(validatorId);
+		if(linkCollection==null) {
+			linkCollection = new LinkCollection(validatorId);
+			coreLinks.put(validatorId, linkCollection);
+		}
+		return linkCollection;
+	}
+
+	private ELValidatorContext getElLinks(String validatorId) {
+		ELValidatorContext linkCollection = elLinks.get(validatorId);
+		if(linkCollection==null) {
+			linkCollection = new ELValidatorContext(validatorId);
+			elLinks.put(validatorId, linkCollection);
+		}
+		return linkCollection;
+	}
+
+	private Set<String> getOldVariableNamesForELValidation(String validatorId) {
+		Set<String> linkCollection = oldVariableNamesForELValidation.get(validatorId);
+		if(linkCollection==null) {
+			linkCollection = new HashSet<String>();
+			oldVariableNamesForELValidation.put(validatorId, linkCollection);
+		}
+		return linkCollection;
+	}
 
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#addLinkedCoreResource(java.lang.String, org.eclipse.core.runtime.IPath, boolean)
 	 */
-	public void addLinkedCoreResource(String variableName, IPath linkedResourcePath, boolean declaration) {
-		coreLinks.addLinkedResource(variableName, linkedResourcePath, declaration);
+	public void addLinkedCoreResource(String validatorId, String variableName, IPath linkedResourcePath, boolean declaration) {
+		getCoreLinks(validatorId).addLinkedResource(variableName, linkedResourcePath, declaration);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#removeLinkedCoreResource(java.lang.String, org.eclipse.core.runtime.IPath)
 	 */
-	public void removeLinkedCoreResource(String name, IPath linkedResourcePath) {
-		coreLinks.removeLinkedResource(name, linkedResourcePath);
+	public void removeLinkedCoreResource(String validatorId, String name, IPath linkedResourcePath) {
+		getCoreLinks(validatorId).removeLinkedResource(name, linkedResourcePath);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#removeLinkedCoreResources(java.util.Set)
 	 */
-	public void removeLinkedCoreResources(Set<IPath> resources) {
-		coreLinks.removeLinkedResources(resources);
+	public void removeLinkedCoreResources(String validatorId, Set<IPath> resources) {
+		getCoreLinks(validatorId).removeLinkedResources(resources);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#removeLinkedCoreResource(org.eclipse.core.runtime.IPath)
 	 */
-	public void removeLinkedCoreResource(IPath resource) {
-		coreLinks.removeLinkedResource(resource);
+	public void removeLinkedCoreResource(String validatorId, IPath resource) {
+		getCoreLinks(validatorId).removeLinkedResource(resource);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#getCoreResourcesByVariableName(java.lang.String, boolean)
 	 */
-	public Set<IPath> getCoreResourcesByVariableName(String variableName, boolean declaration) {
-		return coreLinks.getResourcesByVariableName(variableName, declaration);
+	public Set<IPath> getCoreResourcesByVariableName(String validatorId, String variableName, boolean declaration) {
+		return getCoreLinks(validatorId).getResourcesByVariableName(variableName, declaration);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#getVariableNamesByCoreResource(org.eclipse.core.runtime.IPath, boolean)
 	 */
-	public Set<String> getVariableNamesByCoreResource(IPath fullPath, boolean declaration) {
-		return coreLinks.getVariableNamesByResource(fullPath, declaration);
+	public Set<String> getVariableNamesByCoreResource(String validatorId, IPath fullPath, boolean declaration) {
+		return getCoreLinks(validatorId).getVariableNamesByResource(fullPath, declaration);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#addUnnamedCoreResource(org.eclipse.core.runtime.IPath)
 	 */
-	public void addUnnamedCoreResource(IPath fullPath) {
-		coreLinks.addUnnamedResource(fullPath);
+	public void addUnnamedCoreResource(String validatorId, IPath fullPath) {
+		getCoreLinks(validatorId).addUnnamedResource(fullPath);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#getUnnamedCoreResources()
 	 */
-	public Set<IPath> getUnnamedCoreResources() {
-		return coreLinks.getUnnamedResources();
+	public Set<IPath> getUnnamedCoreResources(String validatorId) {
+		return getCoreLinks(validatorId).getUnnamedResources();
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#removeUnnamedCoreResource(org.eclipse.core.runtime.IPath)
 	 */
-	public void removeUnnamedCoreResource(IPath fullPath) {
-		coreLinks.removeUnnamedResource(fullPath);
+	public void removeUnnamedCoreResource(String validatorId, IPath fullPath) {
+		getCoreLinks(validatorId).removeUnnamedResource(fullPath);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#addUnnamedElResource(org.eclipse.core.runtime.IPath)
 	 */
-	public void addUnnamedElResource(IPath fullPath) {
-		elLinks.addUnnamedResource(fullPath);
+	public void addUnnamedElResource(String validatorId, IPath fullPath) {
+		getElLinks(validatorId).addUnnamedResource(fullPath);
 	}
 
 	/*
@@ -126,7 +150,11 @@ public class ProjectValidationContext implements IValidationContext {
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#getUnnamedElResources()
 	 */
 	public Set<IPath> getUnnamedElResources() {
-		return elLinks.getUnnamedResources();
+		Set<IPath> result = new HashSet<IPath>();
+		for (ELValidatorContext elLinksCollection : elLinks.values()) {
+			result.addAll(elLinksCollection.getUnnamedResources());
+		}
+		return result;
 	}
 
 	/*
@@ -134,15 +162,17 @@ public class ProjectValidationContext implements IValidationContext {
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#removeUnnamedElResource(org.eclipse.core.runtime.IPath)
 	 */
 	public void removeUnnamedElResource(IPath fullPath) {
-		elLinks.removeUnnamedResource(fullPath);
+		for (ELValidatorContext links : elLinks.values()) {
+			links.removeUnnamedResource(fullPath);
+		}
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#addVariableNameForELValidation(java.lang.String)
 	 */
-	public void addVariableNameForELValidation(String name) {
-		oldVariableNamesForELValidation.add(name);
+	public void addVariableNameForELValidation(String validatorId, String name) {
+		getOldVariableNamesForELValidation(validatorId).add(name);
 	}
 
 	/*
@@ -150,7 +180,9 @@ public class ProjectValidationContext implements IValidationContext {
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#removeLinkedEls(java.util.Set)
 	 */
 	public void removeLinkedEls(Set<IFile> resorces) {
-		elLinks.removeLinkedEls(resorces);
+		for (ELValidatorContext links : elLinks.values()) {
+			links.removeLinkedEls(resorces);
+		}
 	}
 
 	/*
@@ -159,24 +191,28 @@ public class ProjectValidationContext implements IValidationContext {
 	 */
 	public Set<ELReference> getElsForValidation(Set<IFile> changedFiles, boolean onlyChangedVariables) {
 		Set<ELReference> result = new HashSet<ELReference>();
-		// Collect all ELs which use new variables names
-		for(IResource resource : changedFiles) {
-			Set<String> newNames = getVariableNamesByCoreResource(resource.getFullPath(), true);
-			if(newNames!=null) {
-				for (String newName : newNames) {
-					if(!onlyChangedVariables || !oldVariableNamesForELValidation.contains(newName)) {
-						Set<ELReference> els = elLinks.getElsByVariableName(newName);
-						if(els!=null) {
-							result.addAll(els);
+		for (String id : elLinks.keySet()) {
+			ELValidatorContext elLinksCollection = getElLinks(id);
+			Set<String> oldVariableNamesForELValidation = getOldVariableNamesForELValidation(id);
+			// Collect all ELs which use new variables names
+			for(IResource resource : changedFiles) {
+				Set<String> newNames = getVariableNamesByCoreResource(id, resource.getFullPath(), true);
+				if(newNames!=null) {
+					for (String newName : newNames) {
+						if(!onlyChangedVariables || ! oldVariableNamesForELValidation.contains(newName)) {
+							Set<ELReference> els = elLinksCollection.getElsByVariableName(newName);
+							if(els!=null) {
+								result.addAll(els);
+							}
 						}
 					}
 				}
-			}
-			for (String oldName : oldVariableNamesForELValidation) {
-				if(!onlyChangedVariables || newNames==null || !newNames.contains(oldName)) {
-					Set<ELReference> els = elLinks.getElsByVariableName(oldName);
-					if(els!=null) {
-						result.addAll(els);
+				for (String oldName :oldVariableNamesForELValidation) {
+					if(!onlyChangedVariables || newNames==null || !newNames.contains(oldName)) {
+						Set<ELReference> els = elLinksCollection.getElsByVariableName(oldName);
+						if(els!=null) {
+							result.addAll(els);
+						}
 					}
 				}
 			}
@@ -189,43 +225,15 @@ public class ProjectValidationContext implements IValidationContext {
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#clearAll()
 	 */
 	public void clearAll() {
-		removedFiles.clear();
-		synchronized (registeredResources) {
-			registeredResources.clear();
+		for (LinkCollection links : coreLinks.values()) {
+			links.clearAll();
 		}
-		oldVariableNamesForELValidation.clear();
-		coreLinks.clearAll();
-		elLinks.clearAll();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#clearAllResourceLinks()
-	 */
-	public void clearAllResourceLinks() {
-		oldVariableNamesForELValidation.clear();
-		coreLinks.clearAll();
-		elLinks.clearAll();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#clearRegisteredFiles()
-	 */
-	public void clearRegisteredFiles() {
-		removedFiles.clear();
-		synchronized (registeredResources) {
-			registeredResources.clear();
+		coreLinks.clear();
+		for (ELValidatorContext links : elLinks.values()) {
+			links.clearAll();
 		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#clearElResourceLinks()
-	 */
-	public void clearElResourceLinks() {
+		elLinks.clear();
 		oldVariableNamesForELValidation.clear();
-		elLinks.clearAll();
 	}
 
 	/*
@@ -241,7 +249,9 @@ public class ProjectValidationContext implements IValidationContext {
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#addLinkedEl(java.lang.String, org.jboss.tools.jst.web.kb.validation.ELReference)
 	 */
 	public void addLinkedEl(String variableName, ELReference el) {
-		elLinks.addLinkedEl(variableName, el);
+		for (ELValidatorContext elLinksCollection : elLinks.values()) {
+			elLinksCollection.addLinkedEl(variableName, el);
+		}
 	}
 
 	/*
@@ -249,7 +259,9 @@ public class ProjectValidationContext implements IValidationContext {
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#removeLinkedEl(java.lang.String, org.jboss.tools.jst.web.kb.validation.ELReference)
 	 */
 	public void removeLinkedEl(String name, ELReference el) {
-		elLinks.removeLinkedEl(name, el);
+		for (ELValidatorContext elLinksCollection : elLinks.values()) {
+			elLinksCollection.removeLinkedEl(name, el);
+		}
 	}
 
 	/*
@@ -257,7 +269,11 @@ public class ProjectValidationContext implements IValidationContext {
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#getElsByVariableName(java.lang.String)
 	 */
 	public Set<ELReference> getElsByVariableName(String variableName) {
-		return elLinks.getElsByVariableName(variableName);
+		Set<ELReference> result = new HashSet<ELReference>();
+		for (ELValidatorContext elLinksCollection : elLinks.values()) {
+			result.addAll(elLinksCollection.getElsByVariableName(variableName));
+		}
+		return result;
 	}
 
 	/*
@@ -266,11 +282,16 @@ public class ProjectValidationContext implements IValidationContext {
 	 */
 	public void store(Element root) {
 		Element validation = XMLUtilities.createElement(root, "validation"); //$NON-NLS-1$
-		Element core = XMLUtilities.createElement(validation, "core"); //$NON-NLS-1$
-		coreLinks.store(core);
-		Element el = XMLUtilities.createElement(validation, "el"); //$NON-NLS-1$
-		elLinks.store(el);
-		modifications = 0;
+		for (LinkCollection links : coreLinks.values()) {
+			Element core = XMLUtilities.createElement(validation, "core"); //$NON-NLS-1$
+			core.setAttribute("validator-id", links.getId()); //$NON-NLS-1$
+			links.store(core);
+		}
+		for (ELValidatorContext links : elLinks.values()) {
+			Element el = XMLUtilities.createElement(validation, "el"); //$NON-NLS-1$
+			el.setAttribute("validator-id", links.getId()); //$NON-NLS-1$
+			links.store(el);
+		}
 	}
 
 	/*
@@ -280,75 +301,46 @@ public class ProjectValidationContext implements IValidationContext {
 	public void load(Element root) {
 		Element validation = XMLUtilities.getUniqueChild(root, "validation"); //$NON-NLS-1$
 		if(validation == null) return;
-		Element core = XMLUtilities.getUniqueChild(validation, "core"); //$NON-NLS-1$
-		if(core != null) {
-			coreLinks.load(core);
+		Element[] cores = XMLUtilities.getChildren(validation, "core"); //$NON-NLS-1$
+		for (Element core : cores) {
+			String id = core.getAttribute("validator-id"); //$NON-NLS-1$
+			if(id!=null && id.trim().length()>0) {
+				getCoreLinks(id).load(core);
+			}
 		}
-		Element el = XMLUtilities.getUniqueChild(validation, "el"); //$NON-NLS-1$
-		if(el != null) {
-			elLinks.load(el);
-		}
-		modifications = 0;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#getRemovedFiles()
-	 */
-	public Set<IFile> getRemovedFiles() {
-		return removedFiles;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#addRemovedFile(org.eclipse.core.resources.IFile)
-	 */
-	public void addRemovedFile(IFile file) {
-		removedFiles.add(file);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#getRegisteredFiles()
-	 */
-	public Set<IFile> getRegisteredFiles() {
-		Set<IFile> copy = new HashSet<IFile>();
-		synchronized (registeredResources) {
-			copy.addAll(registeredResources);
-		}
-		return copy;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#registerFile(org.eclipse.core.resources.IFile)
-	 */
-	public void registerFile(IFile file) {
-		synchronized (registeredResources) {
-			if(!registeredResources.contains(file)) {
-				registeredResources.add(file);
-				modifications++;
+		Element[] els = XMLUtilities.getChildren(validation, "el"); //$NON-NLS-1$
+		for (Element el : els) {
+			String id = el.getAttribute("validator-id"); //$NON-NLS-1$
+			if(id!=null && id.trim().length()>0) {
+				getElLinks(id).load(el);
 			}
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#getRootProject()
-	 */
-	public IProject getRootProject() {
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#getValidators()
-	 */
-	public List<IValidator> getValidators() {
-		return null;
-	}
-
 	public int getModificationsSinceLastStore() {
-		return modifications + coreLinks.getModificationsSinceLastStore() + elLinks.getModificationsSinceLastStore();
+		int result = 0;
+		for (LinkCollection links : coreLinks.values()) {
+			result = result + links.getModificationsSinceLastStore();
+		}
+		for (ELValidatorContext links : elLinks.values()) {
+			result = result + links.getModificationsSinceLastStore();
+		}
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.validation.IProjectValidationContext#setValidationResourceRegister(org.jboss.tools.jst.web.kb.internal.validation.ValidationResourceRegister)
+	 */
+	public void setValidationResourceRegister(ValidationResourceRegister validationResourceRegister) {
+		this.validationResourceRegister = validationResourceRegister;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.validation.IProjectValidationContext#getValidationResourceRegister()
+	 */
+	public ValidationResourceRegister getValidationResourceRegister() {
+		return validationResourceRegister;
 	}
 }

@@ -10,11 +10,11 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal.validation;
 
-import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
+import org.jboss.tools.jst.web.kb.validation.IProjectValidationContext;
 import org.jboss.tools.jst.web.kb.validation.IValidatingProjectSet;
-import org.jboss.tools.jst.web.kb.validation.IValidationContext;
 
 /**
  * @author Alexey Kazakov
@@ -22,8 +22,8 @@ import org.jboss.tools.jst.web.kb.validation.IValidationContext;
 public class ValidatingProjectSet implements IValidatingProjectSet {
 
 	protected IProject rootProject;
-	protected List<IProject> allProjects;
-	protected IValidationContext rootContext;
+	protected Set<IProject> allProjects;
+	protected IProjectValidationContext rootContext;
 
 	protected ValidatingProjectSet() {
 	}
@@ -33,7 +33,7 @@ public class ValidatingProjectSet implements IValidatingProjectSet {
 	 * @param allProjects
 	 * @param rootContext
 	 */
-	public ValidatingProjectSet(IProject rootProject, List<IProject> allProjects, IValidationContext rootContext) {
+	public ValidatingProjectSet(IProject rootProject, Set<IProject> allProjects, IProjectValidationContext rootContext) {
 		this.rootProject = rootProject;
 		this.allProjects = allProjects;
 		this.rootContext = rootContext;
@@ -42,14 +42,14 @@ public class ValidatingProjectSet implements IValidatingProjectSet {
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidatingProjectSet#getAllProjests()
 	 */
-	public List<IProject> getAllProjests() {
+	public Set<IProject> getAllProjects() {
 		return allProjects;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidatingProjectSet#getRootContext()
 	 */
-	public IValidationContext getRootContext() {
+	public IProjectValidationContext getRootContext() {
 		return rootContext;
 	}
 

@@ -54,7 +54,7 @@ import org.jboss.tools.jst.web.kb.internal.taglib.myfaces.MyFacesTagLibrary;
 import org.jboss.tools.jst.web.kb.internal.validation.ProjectValidationContext;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibrary;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
-import org.jboss.tools.jst.web.kb.validation.IValidationContext;
+import org.jboss.tools.jst.web.kb.validation.IProjectValidationContext;
 import org.w3c.dom.Element;
 
 /**
@@ -428,7 +428,7 @@ public class KbProject extends KbObject implements IKbProject {
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.IKbProject#getValidationContext()
 	 */
-	public IValidationContext getValidationContext() {
+	public IProjectValidationContext getValidationContext() {
 		if(validationContext == null) {
 			validationContext = new ProjectValidationContext();
 		}

@@ -30,6 +30,11 @@ public class LinkCollection {
 	protected Map<String, Set<IPath>> resourcesByDeclaringVariableName = new HashMap<String, Set<IPath>>();
 	protected Map<IPath, Set<String>> declaringVariableNamesByResource = new HashMap<IPath, Set<String>>();
 	protected Set<IPath> unnamedResources = new HashSet<IPath>();
+	private String id;
+
+	public LinkCollection(String id) {
+		this.id = id;
+	}
 
 	protected int modifications = 0;
 
@@ -271,17 +276,6 @@ public class LinkCollection {
 		modifications = 0;
 	}
 
-	private boolean checkDeclaration(IPath resource, String variableName) {
-		Set<IPath> paths = resourcesByDeclaringVariableName.get(variableName);
-		if(paths!=null) {
-			for (IPath path : paths) {
-				if(path.equals(resource)) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
 	/**
 	 * Load the collection from XML
 	 * @param root
@@ -308,7 +302,23 @@ public class LinkCollection {
 		modifications = 0;
 	}
 
+	private boolean checkDeclaration(IPath resource, String variableName) {
+		Set<IPath> paths = resourcesByDeclaringVariableName.get(variableName);
+		if(paths!=null) {
+			for (IPath path : paths) {
+				if(path.equals(resource)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	public int getModificationsSinceLastStore() {
 		return modifications;
+	}
+
+	public String getId() {
+		return id;
 	}
 }

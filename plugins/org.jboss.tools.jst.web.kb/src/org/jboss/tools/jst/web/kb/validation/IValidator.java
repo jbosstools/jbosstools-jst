@@ -36,14 +36,14 @@ public interface IValidator {
 	 * @return
 	 * @throws ValidationException
 	 */
-	IStatus validate(Set<IFile> changedFiles, IProject project, ContextValidationHelper validationHelper, ValidatorManager manager, IReporter reporter) throws ValidationException;
+	IStatus validate(Set<IFile> changedFiles, IProject project, ContextValidationHelper validationHelper, IProjectValidationContext validationContext, ValidatorManager manager, IReporter reporter) throws ValidationException;
 
 	/**
 	 * Full Validation
 	 * @return
 	 * @throws ValidationException
 	 */
-	IStatus validateAll(IProject project, ContextValidationHelper validationHelper, ValidatorManager manager, IReporter reporter) throws ValidationException;
+	IStatus validateAll(IProject project, ContextValidationHelper validationHelper, IProjectValidationContext validationContext, ValidatorManager manager, IReporter reporter) throws ValidationException;
 
 	/**
 	 * @return unique ID of the validator
@@ -54,7 +54,7 @@ public interface IValidator {
 	 * @param project
 	 * @return a set of projects which should be validated with given project.
 	 */
-	IValidatingProjectSet getValidatingProjects(IProject project);
+	IValidatingProjectTree getValidatingProjects(IProject project);
 
 	/**
 	 * @param project

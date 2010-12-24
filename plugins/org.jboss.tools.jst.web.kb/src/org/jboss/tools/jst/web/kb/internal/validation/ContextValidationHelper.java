@@ -10,10 +10,8 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal.validation;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
@@ -24,8 +22,8 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.ui.editors.text.TextFileDocumentProvider;
 import org.eclipse.wst.validation.internal.operations.WorkbenchContext;
-import org.jboss.tools.jst.web.kb.validation.IValidatingProjectSet;
-import org.jboss.tools.jst.web.kb.validation.IValidationContext;
+import org.jboss.tools.jst.web.kb.validation.IValidatingProjectTree;
+import org.jboss.tools.jst.web.kb.validation.IValidationContextManager;
 import org.jboss.tools.jst.web.kb.validation.IValidator;
 
 /**
@@ -34,9 +32,8 @@ import org.jboss.tools.jst.web.kb.validation.IValidator;
  */
 public class ContextValidationHelper extends WorkbenchContext {
 
-	protected IValidationContext validationContext;
+	protected IValidationContextManager validationContextManager;
 	protected TextFileDocumentProvider documentProvider = new TextFileDocumentProvider();
-	protected Map<IProject, IValidationContext> contexts;
 
 	/*
 	 * (non-Javadoc)
@@ -44,8 +41,7 @@ public class ContextValidationHelper extends WorkbenchContext {
 	 */
 	@Override
 	public void initialize() {
-		validationContext = null;
-		contexts = new HashMap<IProject, IValidationContext>();
+		validationContextManager = null;
 	}
 
 	/*
@@ -56,15 +52,14 @@ public class ContextValidationHelper extends WorkbenchContext {
 	public void registerResource(IResource resource) {
 		if(resource instanceof IFile) {
 			IFile file = (IFile)resource;
-			IValidationContext context = contexts.get(file.getProject());
-			if(context==null) {
-				context = new ValidationContext(file.getProject());
-				contexts.put(file.getProject(), context);
+			if(validationContextManager == null) {
+				validationContextManager = new ValidationContext(file.getProject());
 			}
+			validationContextManager.addProject(file.getProject());
 			if(!file.exists()) {
-				context.addRemovedFile(file);
+				validationContextManager.addRemovedFile(file);
 			} else {
-				context.registerFile(file);
+				validationContextManager.registerFile(file);
 			}
 		}
 	}
@@ -73,22 +68,17 @@ public class ContextValidationHelper extends WorkbenchContext {
 	 * @return Set of changed resources
 	 */
 	public Set<IFile> getChangedFiles() {
-		List<IValidator> validators = getValidationContext().getValidators();
-		Set<IProject> projects = new HashSet<IProject>();
-		for (IValidator validator : validators) {
-			IValidatingProjectSet set = validator.getValidatingProjects(getProject());
-			projects.addAll(set.getAllProjests());
-		}
 		Set<IFile> result = new HashSet<IFile>();
 		String[] uris = getURIs();
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		Set<IProject> projects = getAllProjects();
 		for (int i = 0; i < uris.length; i++) {
 			IFile currentFile = root.getFile(new Path(uris[i]));
 			if(projects.contains(currentFile.getProject())) {
 				result.add(currentFile);
 			}
 		}
-		Set<IFile> removedFiles = getValidationContext().getRemovedFiles();
+		Set<IFile> removedFiles = getValidationContextManager().getRemovedFiles();
 		for (IFile file : removedFiles) {
 			if(projects.contains(file.getProject())) {
 				result.add(file);
@@ -99,13 +89,8 @@ public class ContextValidationHelper extends WorkbenchContext {
 
 	public Set<IFile> getProjectSetRegisteredFiles() {
 		Set<IFile> result = new HashSet<IFile>();
-		List<IValidator> validators = getValidationContext().getValidators();
-		Set<IProject> projects = new HashSet<IProject>();
-		for (IValidator validator : validators) {
-			IValidatingProjectSet set = validator.getValidatingProjects(getProject());
-			projects.addAll(set.getAllProjests());
-		}
-		Set<IFile> files = validationContext.getRegisteredFiles();
+		Set<IFile> files = validationContextManager.getRegisteredFiles();
+		Set<IProject> projects = getAllProjects();
 		for (IFile file : files) {
 			if(projects.contains(file.getProject())) {
 				result.add(file);
@@ -114,15 +99,25 @@ public class ContextValidationHelper extends WorkbenchContext {
 		return result;
 	}
 
-	public IValidationContext getValidationContext() {
-		if(validationContext==null) {
-			validationContext = new ValidationContext(getProject());
+	private Set<IProject> getAllProjects() {
+		List<IValidator> validators = getValidationContextManager().getValidators();
+		Set<IProject> projects = new HashSet<IProject>();
+		for (IValidator validator : validators) {
+			IValidatingProjectTree tree = validator.getValidatingProjects(getProject());
+			projects.addAll(tree.getAllProjects());
 		}
-		return validationContext;
+		return projects;
 	}
 
-	public void setValidationContext(IValidationContext context) {
-		validationContext = context;
+	public IValidationContextManager getValidationContextManager() {
+		if(validationContextManager==null) {
+			validationContextManager = new ValidationContext(getProject());
+		}
+		return validationContextManager;
+	}
+
+	public void setValidationContextManager(IValidationContextManager context) {
+		validationContextManager = context;
 	}
 
 	public TextFileDocumentProvider getDocumentProvider() {

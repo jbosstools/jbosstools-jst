@@ -31,6 +31,10 @@ public class ELValidatorContext extends LinkCollection {
 	private Map<ELReference, Set<String>> variableNamesByEl = new HashMap<ELReference, Set<String>>();
 	private Map<IPath, Set<ELReference>> elsByResource = new HashMap<IPath, Set<ELReference>>();
 
+	public ELValidatorContext(String id) {
+		super(id);
+	}
+
 	/**
 	 * Save link between EL and variable name.
 	 * @param variableName

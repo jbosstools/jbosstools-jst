@@ -10,7 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.validation;
 
-import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 
@@ -26,12 +26,12 @@ public interface IValidatingProjectSet {
 	IProject getRootProject();
 
 	/**
-	 * @return all projects of the set.
+	 * @return all the projects of the set.
 	 */
-	List<IProject> getAllProjests();
+	Set<IProject> getAllProjects();
 
 	/**
 	 * @return Root validating context which is associated with the root project.
 	 */
-	IValidationContext getRootContext();
+	IProjectValidationContext getRootContext();
 }

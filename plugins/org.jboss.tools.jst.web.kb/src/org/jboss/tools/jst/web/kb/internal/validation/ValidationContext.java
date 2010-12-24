@@ -11,8 +11,8 @@
 package org.jboss.tools.jst.web.kb.internal.validation;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,24 +24,24 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
-import org.jboss.tools.common.el.core.ELReference;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
+import org.jboss.tools.jst.web.kb.validation.IProjectValidationContext;
 import org.jboss.tools.jst.web.kb.validation.IValidatingProjectSet;
-import org.jboss.tools.jst.web.kb.validation.IValidationContext;
+import org.jboss.tools.jst.web.kb.validation.IValidatingProjectTree;
+import org.jboss.tools.jst.web.kb.validation.IValidationContextManager;
 import org.jboss.tools.jst.web.kb.validation.IValidator;
-import org.w3c.dom.Element;
 
 /**
  * @author Alexey Kazakov
  */
-public class ValidationContext implements IValidationContext {
+public class ValidationContext implements IValidationContextManager {
 
-	private IValidationContext rootContext;
-	private IProject rootProject;
+	private ValidationResourceRegister validationResourceRegister;
+	private Map<IValidator, IValidatingProjectTree> projectTree = new HashMap<IValidator, IValidatingProjectTree>();
 	private static List<IValidator> ALL_VALIDATORS;
 	private List<IValidator> validators = new ArrayList<IValidator>();
+	private Map<IValidator, Set<IProject>> validatedProjects = new HashMap<IValidator, Set<IProject>>();
 
 	public ValidationContext(IProject project) {
 		if(ALL_VALIDATORS == null) {
@@ -83,21 +83,42 @@ public class ValidationContext implements IValidationContext {
 		for (IValidator validator : ALL_VALIDATORS) {
 			if(validator.shouldValidate(project)) {
 				validators.add(validator);
+				IValidatingProjectTree prTree = validator.getValidatingProjects(project);
+				projectTree.put(validator, prTree);
 			}
 		}
-		for (IValidator validator : validators) {
-			IValidatingProjectSet prSet = validator.getValidatingProjects(project);
-			IProject vProject = prSet.getRootProject();
-			if(vProject!=project) {
-				rootProject = vProject;
-				rootContext = prSet.getRootContext();
-			} else if(rootContext==null) {
-				rootContext = prSet.getRootContext();
+	}
+
+	private ValidationResourceRegister getValidationResourceRegister() {
+		if(validationResourceRegister==null && !projectTree.isEmpty()) {
+			// Initialize the register
+			for (IValidatingProjectTree tree : projectTree.values()) {
+				boolean inited = false;
+				if(!tree.getBrunches().isEmpty()) {
+					for (IValidatingProjectSet brunch : tree.getBrunches().values()) {
+						IProjectValidationContext context = brunch.getRootContext();
+						ValidationResourceRegister register = context.getValidationResourceRegister();
+						if(register==null) {
+							if(validationResourceRegister==null) {
+								validationResourceRegister = new ValidationResourceRegister();
+							}
+							context.setValidationResourceRegister(validationResourceRegister);
+						} else {
+							validationResourceRegister = register;
+							inited = true;
+							break;
+						}
+					}
+				}
+				if(inited) {
+					break;
+				}
 			}
 		}
-		if(rootProject==null) {
-			rootProject = project;
+		if(validationResourceRegister==null) {
+			validationResourceRegister = new ValidationResourceRegister();
 		}
+		return validationResourceRegister;
 	}
 
 	/*
@@ -108,230 +129,124 @@ public class ValidationContext implements IValidationContext {
 		return validators;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#addLinkedCoreResource(java.lang.String, org.eclipse.core.runtime.IPath, boolean)
-	 */
-	public void addLinkedCoreResource(String variableName, IPath linkedResourcePath, boolean declaration) {
-		rootContext.addLinkedCoreResource(variableName, linkedResourcePath, declaration);	
-	}
-
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#addLinkedEl(java.lang.String, org.jboss.tools.seam.internal.core.validation.ELReference)
-	 */
-	public void addLinkedEl(String variableName, ELReference el) {
-		rootContext.addLinkedEl(variableName, el);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#addRemovedFile(org.eclipse.core.resources.IFile)
-	 */
-	public void addRemovedFile(IFile file) {
-		if(rootContext!=null) {
-			rootContext.addRemovedFile(file);
-		}
-	}
-
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#addUnnamedCoreResource(org.eclipse.core.runtime.IPath)
-	 */
-	public void addUnnamedCoreResource(IPath fullPath) {
-		rootContext.addUnnamedCoreResource(fullPath);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#addUnnamedElResource(org.eclipse.core.runtime.IPath)
-	 */
-	public void addUnnamedElResource(IPath fullPath) {
-		rootContext.addUnnamedElResource(fullPath);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#addVariableNameForELValidation(java.lang.String)
-	 */
-	public void addVariableNameForELValidation(String name) {
-		rootContext.addVariableNameForELValidation(name);
-	}
-
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#clearAll()
 	 */
 	public void clearAll() {
-		rootContext.clearAll();
+		clearRegisteredFiles();
+		for (IValidatingProjectTree tree : projectTree.values()) {
+			for (IValidatingProjectSet brunch : tree.getBrunches().values()) {
+				brunch.getRootContext().clearAll();
+			}
+		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#clearAllResourceLinks()
-	 */
-	public void clearAllResourceLinks() {
-		rootContext.clearAllResourceLinks();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#clearElResourceLinks()
-	 */
-	public void clearElResourceLinks() {
-		rootContext.clearElResourceLinks();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#clearOldVariableNameForElValidation()
-	 */
-	public void clearOldVariableNameForElValidation() {
-		rootContext.clearOldVariableNameForElValidation();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#clearRegisteredFiles()
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#clearRegisteredFiles()
 	 */
 	public void clearRegisteredFiles() {
-		if(rootContext!=null) {
-			rootContext.clearRegisteredFiles();
-		}
+		getValidationResourceRegister().clear();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#getCoreResourcesByVariableName(java.lang.String, boolean)
-	 */
-	public Set<IPath> getCoreResourcesByVariableName(String variableName, boolean declaration) {
-		return rootContext.getCoreResourcesByVariableName(variableName, declaration);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#getElsByVariableName(java.lang.String)
-	 */
-	public Set<ELReference> getElsByVariableName(String variableName) {
-		return rootContext.getElsByVariableName(variableName);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#getElsForValidation(java.util.Set, boolean)
-	 */
-	public Set<ELReference> getElsForValidation(Set<IFile> changedFiles, boolean onlyChangedVariables) {
-		return rootContext.getElsForValidation(changedFiles, onlyChangedVariables);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#getRegisteredFiles()
-	 */
-	public Set<IFile> getRegisteredFiles() {
-		if(rootContext==null) {
-			return Collections.emptySet();
-		}
-		return rootContext.getRegisteredFiles();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#getRemovedFiles()
+	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#getRemovedFiles()
 	 */
 	public Set<IFile> getRemovedFiles() {
-		if(rootContext==null) {
-			return Collections.emptySet();
-		}
-		return rootContext.getRemovedFiles();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#getUnnamedCoreResources()
-	 */
-	public Set<IPath> getUnnamedCoreResources() {
-		return rootContext.getUnnamedCoreResources();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#getUnnamedElResources()
-	 */
-	public Set<IPath> getUnnamedElResources() {
-		return rootContext.getUnnamedElResources();
+		return getValidationResourceRegister().getRemovedFiles();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#getVariableNamesByCoreResource(org.eclipse.core.runtime.IPath, boolean)
+	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#addRemovedFile(org.eclipse.core.resources.IFile)
 	 */
-	public Set<String> getVariableNamesByCoreResource(IPath fullPath, boolean declaration) {
-		return rootContext.getVariableNamesByCoreResource(fullPath, declaration);
+	public void addRemovedFile(IFile file) {
+		getValidationResourceRegister().addRemovedFile(file);
+		for (IValidatingProjectTree tree : projectTree.values()) {
+			tree.addProject(file.getProject());
+		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#load(org.w3c.dom.Element)
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#getRegisteredFiles()
 	 */
-	public void load(Element root) {
-		rootContext.load(root);
+	public Set<IFile> getRegisteredFiles() {
+		return getValidationResourceRegister().getRegisteredFiles();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#registerFile(org.eclipse.core.resources.IFile)
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#registerFile(org.eclipse.core.resources.IFile)
 	 */
 	public void registerFile(IFile file) {
-		if(rootContext!=null) {
-			rootContext.registerFile(file);
-		}
-	}
-
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#removeLinkedCoreResource(org.eclipse.core.runtime.IPath)
-	 */
-	public void removeLinkedCoreResource(IPath resource) {
-		rootContext.removeLinkedCoreResource(resource);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#removeLinkedCoreResource(java.lang.String, org.eclipse.core.runtime.IPath)
-	 */
-	public void removeLinkedCoreResource(String name, IPath linkedResourcePath) {
-		rootContext.removeLinkedCoreResource(name, linkedResourcePath);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#removeLinkedCoreResources(java.util.Set)
-	 */
-	public void removeLinkedCoreResources(Set<IPath> resources) {
-		rootContext.removeLinkedCoreResources(resources);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#removeLinkedEl(java.lang.String, org.jboss.tools.seam.internal.core.validation.ELReference)
-	 */
-	public void removeLinkedEl(String name, ELReference el) {
-		rootContext.removeLinkedEl(name, el);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#removeLinkedEls(java.util.Set)
-	 */
-	public void removeLinkedEls(Set<IFile> resorces) {
-		rootContext.removeLinkedEls(resorces);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#removeUnnamedCoreResource(org.eclipse.core.runtime.IPath)
-	 */
-	public void removeUnnamedCoreResource(IPath fullPath) {
-		rootContext.removeUnnamedCoreResource(fullPath);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#removeUnnamedElResource(org.eclipse.core.runtime.IPath)
-	 */
-	public void removeUnnamedElResource(IPath fullPath) {
-		rootContext.removeUnnamedElResource(fullPath);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.seam.internal.core.validation.ISeamValidationContext#store(org.w3c.dom.Element)
-	 */
-	public void store(Element root) {
-		rootContext.store(root);
+		getValidationResourceRegister().registerFile(file);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#getRootProject()
+	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContextManager#getValidatingProjectTree(org.jboss.tools.jst.web.kb.validation.IValidator)
 	 */
-	public IProject getRootProject() {
-		return rootProject;
+	public IValidatingProjectTree getValidatingProjectTree(IValidator validator) {
+		return projectTree.get(validator);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContextManager#addProject(org.eclipse.core.resources.IProject)
+	 */
+	public void addProject(IProject project) {
+		for (IValidator validator : validators) {
+			projectTree.get(validator).addProject(project);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContextManager#getRootProjects()
+	 */
+	public Set<IProject> getRootProjects() {
+		Set<IProject> roots = new HashSet<IProject>();
+		for (IValidatingProjectTree tree : projectTree.values()) {
+			for (IValidatingProjectSet brunch : tree.getBrunches().values()) {
+				roots.add(brunch.getRootProject());
+			}
+		}
+		return roots;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContextManager#clearAllResourceLinks()
+	 */
+	public void clearAllResourceLinks() {
+		for (IValidatingProjectTree tree : projectTree.values()) {
+			for (IValidatingProjectSet brunch : tree.getBrunches().values()) {
+				brunch.getRootContext().clearAll();
+			}
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContextManager#addValidatedProject(org.jboss.tools.jst.web.kb.validation.IValidator, org.eclipse.core.resources.IProject)
+	 */
+	public void addValidatedProject(IValidator validator, IProject project) {
+		Set<IProject> projects = validatedProjects.get(validator);
+		if(projects==null) {
+			projects = new HashSet<IProject>();
+			validatedProjects.put(validator, projects);
+		}
+		projects.add(project);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContextManager#projectHasBeenValidated(org.jboss.tools.jst.web.kb.validation.IValidator, org.eclipse.core.resources.IProject)
+	 */
+	public boolean projectHasBeenValidated(IValidator validator, IProject project) {
+		Set<IProject> projects = validatedProjects.get(validator);
+		return projects==null?false:projects.contains(project);
 	}
 }

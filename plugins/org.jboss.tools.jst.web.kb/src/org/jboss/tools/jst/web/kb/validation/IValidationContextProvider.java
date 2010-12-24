@@ -19,6 +19,6 @@ public interface IValidationContextProvider {
 	/**
 	 * @return validation context
 	 */
-	public IValidationContext getValidationContext();
+	public IProjectValidationContext getValidationContext();
 
 }

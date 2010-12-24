@@ -25,6 +25,8 @@ import org.eclipse.wst.validation.internal.provisional.core.IReporter;
 import org.eclipse.wst.validation.internal.provisional.core.IValidationContext;
 import org.eclipse.wst.validation.internal.provisional.core.IValidatorJob;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
+import org.jboss.tools.jst.web.kb.validation.IValidatingProjectSet;
+import org.jboss.tools.jst.web.kb.validation.IValidationContextManager;
 import org.jboss.tools.jst.web.kb.validation.IValidator;
 
 /**
@@ -63,33 +65,33 @@ public class ValidatorManager implements IValidatorJob {
 			if(project==null) {
 				return OK_STATUS;
 			}
-			IProject rootProject = validationHelper.getValidationContext().getRootProject();
+			IValidationContextManager validationContextManager = validationHelper.getValidationContextManager();
+			Set<IProject> rootProjects = validationContextManager.getRootProjects();
 			IStatus status = OK_STATUS;
 			synchronized (validatingProjects) {
-				if(validatingProjects.contains(rootProject)) {
-					return OK_STATUS;
+				for (IProject rootProject : rootProjects) {
+					if(validatingProjects.contains(rootProject)) {
+						return OK_STATUS;
+					}
+					validatingProjects.add(rootProject);
 				}
-				validatingProjects.add(rootProject);
 			}
 			synchronized (validatingProjects) {
-				org.jboss.tools.jst.web.kb.validation.IValidationContext validationContext = null;
 				try {
-					validationContext = new ValidationContext(project);
-					validationHelper.setValidationContext(validationContext);
-	
-					List<IValidator> validators = validationHelper.getValidationContext().getValidators();
 					Set<IFile> changedFiles = validationHelper.getChangedFiles();
 					if(!changedFiles.isEmpty()) {
-						status = validate(validators, changedFiles, rootProject, validationHelper, reporter);
-					} else if(!validationContext.getRegisteredFiles().isEmpty()) {
-						validationContext.clearAllResourceLinks();
-						status = validateAll(validators, rootProject, validationHelper, reporter);
+						status = validate(changedFiles, validationHelper, reporter);
+					} else if(!validationContextManager.getRegisteredFiles().isEmpty()) {
+						validationContextManager.clearAllResourceLinks();
+						status = validateAll(validationHelper, reporter);
 					}
 				} finally {
-					if(validationContext!=null) {
-						validationContext.clearRegisteredFiles();
+					if(validationContextManager!=null) {
+						validationContextManager.clearRegisteredFiles();
 					}
-					validatingProjects.remove(rootProject);
+					for (IProject rootProject : rootProjects) {
+						validatingProjects.remove(rootProject);
+					}
 				}
 			}
 			return status;
@@ -98,10 +100,34 @@ public class ValidatorManager implements IValidatorJob {
 		}
 	}
 
-	private IStatus validate(List<IValidator> validators, Set<IFile> changedFiles, IProject rootProject, ContextValidationHelper validationHelper, IReporter reporter) throws ValidationException {
+	private IStatus validate(Set<IFile> changedFiles, ContextValidationHelper validationHelper, IReporter reporter) throws ValidationException {
+		IValidationContextManager validationContextManager = validationHelper.getValidationContextManager();
+		List<IValidator> validators = validationContextManager.getValidators();
+		Set<IProject> rootProjects = validationContextManager.getRootProjects();
 		removeMarkers(changedFiles);
 		for (IValidator validator : validators) {
-			validator.validate(changedFiles, rootProject, validationHelper, this, reporter);
+			for (IProject rootProject : rootProjects) {
+				IValidatingProjectSet projectBrunch = validationHelper.getValidationContextManager().getValidatingProjectTree(validator).getBrunches().get(rootProject);
+				if(projectBrunch!=null) {
+					validator.validate(changedFiles, rootProject, validationHelper, projectBrunch.getRootContext(), this, reporter);
+				}
+			}
+		}
+		return OK_STATUS;
+	}
+
+	private IStatus validateAll(ContextValidationHelper validationHelper, IReporter reporter) throws ValidationException {
+		IValidationContextManager validationContextManager = validationHelper.getValidationContextManager();
+		List<IValidator> validators = validationContextManager.getValidators();
+		Set<IProject> rootProjects = validationContextManager.getRootProjects();
+		removeMarkers(validationHelper.getProjectSetRegisteredFiles());
+		for (IValidator validator : validators) {
+			for (IProject rootProject : rootProjects) {
+				IValidatingProjectSet projectBrunch = validationHelper.getValidationContextManager().getValidatingProjectTree(validator).getBrunches().get(rootProject);
+				if(projectBrunch!=null) {
+					validator.validateAll(rootProject, validationHelper, projectBrunch.getRootContext(), this, reporter);
+				}
+			}
 		}
 		return OK_STATUS;
 	}
@@ -116,14 +142,6 @@ public class ValidatorManager implements IValidatorJob {
 		} catch (CoreException e) {
 			WebKbPlugin.getDefault().logError(e);
 		}
-	}
-
-	private IStatus validateAll(List<IValidator> validators, IProject rootProject, ContextValidationHelper validationHelper, IReporter reporter) throws ValidationException {
-		removeMarkers(validationHelper.getProjectSetRegisteredFiles());
-		for (IValidator validator : validators) {
-			validator.validateAll(rootProject, validationHelper, this, reporter);
-		}
-		return OK_STATUS;
 	}
 
 	/*

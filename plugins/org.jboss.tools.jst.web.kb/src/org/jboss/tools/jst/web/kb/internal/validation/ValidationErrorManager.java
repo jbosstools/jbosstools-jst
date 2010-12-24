@@ -32,7 +32,7 @@ import org.jboss.tools.common.preferences.SeverityPreferences;
 import org.jboss.tools.common.text.ITextSourceReference;
 import org.jboss.tools.jst.web.kb.KbMessages;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
-import org.jboss.tools.jst.web.kb.validation.IValidationContext;
+import org.jboss.tools.jst.web.kb.validation.IProjectValidationContext;
 import org.jboss.tools.jst.web.kb.validation.IValidationErrorManager;
 
 /**
@@ -52,7 +52,7 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 	protected IReporter reporter;
 	protected IProject validatingProject;
 	protected String markerId;
-	protected IValidationContext validationContext;
+	protected IProjectValidationContext validationContext;
 	protected TextFileDocumentProvider documentProvider;
 
 	private String messageIdQuickFixAttributeName;
@@ -71,17 +71,21 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 		this.messageIdQuickFixAttributeName = messageIdQuickFixAttributeName;
 	}
 
-	public void init(IProject project, ContextValidationHelper validationHelper, IValidator manager, IReporter reporter) {
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.validation.IValidationErrorManager#init(org.eclipse.core.resources.IProject, org.jboss.tools.jst.web.kb.internal.validation.ContextValidationHelper, org.jboss.tools.jst.web.kb.validation.IProjectValidationContext, org.eclipse.wst.validation.internal.provisional.core.IValidator, org.eclipse.wst.validation.internal.provisional.core.IReporter)
+	 */
+	public void init(IProject project, ContextValidationHelper validationHelper, IProjectValidationContext validationContext, IValidator manager, IReporter reporter) {
 		setProject(project);
 		setCoreHelper(validationHelper);
 		setValidationManager(manager);
 		setReporter(reporter);
-		setValidationContext(validationHelper.getValidationContext());
+		setValidationContext(validationContext);
 		setMarkerId(org.jboss.tools.jst.web.kb.validation.IValidator.MARKED_RESOURCE_MESSAGE_GROUP);
 	}
 
-	public void init(IProject project, ContextValidationHelper validationHelper, IValidator manager, IReporter reporter, String messageIdQuickFixAttributeName) {
-		this.init(project, validationHelper, manager, reporter);
+	public void init(IProject project, ContextValidationHelper validationHelper, IProjectValidationContext validationContext, IValidator manager, IReporter reporter, String messageIdQuickFixAttributeName) {
+		this.init(project, validationHelper, validationContext, manager, reporter);
 		setMessageIdQuickFixAttributeName(messageIdQuickFixAttributeName);
 	}
 
@@ -123,7 +127,7 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 	/**
 	 * @param validationContext the validationContext to set
 	 */
-	public void setValidationContext(IValidationContext validationContext) {
+	public void setValidationContext(IProjectValidationContext validationContext) {
 		this.validationContext = validationContext;
 	}
 
@@ -212,7 +216,7 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 		return this.getClass();
 	}
 
-	public IValidationContext getValidationContext() {
+	public IProjectValidationContext getValidationContext() {
 		return validationContext;
 	}
 

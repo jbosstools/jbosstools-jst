@@ -12,7 +12,7 @@ package org.jboss.tools.jst.web.kb;
 
 import org.eclipse.core.resources.IProjectNature;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
-import org.jboss.tools.jst.web.kb.validation.IValidationContext;
+import org.jboss.tools.jst.web.kb.validation.IProjectValidationContext;
 
 /**
  * 
@@ -41,5 +41,5 @@ public interface IKbProject extends IProjectNature {
 	/**
 	 * @return validation context which is associated with this KB project.
 	 */
-	IValidationContext getValidationContext();
+	IProjectValidationContext getValidationContext();
 }

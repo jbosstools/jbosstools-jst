@@ -32,7 +32,7 @@ public interface IValidationErrorManager {
 	 * @param manager
 	 * @param reporter
 	 */
-	void init(IProject project, ContextValidationHelper validationHelper, IValidator manager, IReporter reporter);
+	void init(IProject project, ContextValidationHelper validationHelper, IProjectValidationContext validationContext, IValidator manager, IReporter reporter);
 
 	/**
 	 * Adds a marker to the resource
