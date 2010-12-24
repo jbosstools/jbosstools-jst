@@ -49,9 +49,7 @@ public class ValidationResourceRegister {
 
 	public void registerFile(IFile file) {
 		synchronized (registeredResources) {
-//			if (!registeredResources.contains(file)) {
-				registeredResources.add(file);
-//			}
+			registeredResources.add(file);
 		}
 	}
 }
