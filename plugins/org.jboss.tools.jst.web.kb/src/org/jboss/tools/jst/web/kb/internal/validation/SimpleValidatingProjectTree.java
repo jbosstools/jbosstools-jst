@@ -37,6 +37,7 @@ public class SimpleValidatingProjectTree implements IValidatingProjectTree, IVal
 	public SimpleValidatingProjectTree(IValidatingProjectSet brunch) {
 		this.brunch = brunch;
 		brunches.put(brunch.getRootProject(), brunch);
+		validatingProjects.add(brunch.getRootProject());
 	}
 
 	/* (non-Javadoc)
