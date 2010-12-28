@@ -896,7 +896,7 @@ public class KbProject extends KbObject implements IKbProject {
 	 */
 	public static boolean checkKBBuilderInstalled(IResource resource) {
 		IProject project = resource == null || !resource.isAccessible() ? null : resource.getProject();
-		if (project == null) 
+		if (project == null || !project.isAccessible()) 
 			return false; // Cannot check anything
 
 		String[] descriptions = getKBBuilderRequiredNatureDescriptions(project);
