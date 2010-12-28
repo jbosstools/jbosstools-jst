@@ -49,4 +49,6 @@ public interface IValidationContextManager {
 	void addValidatedProject(IValidator validator, IProject project);
 
 	boolean projectHasBeenValidated(IValidator validator, IProject project);
+
+	void clearValidatedProjectsList();
 }

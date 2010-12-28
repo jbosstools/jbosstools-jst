@@ -4,6 +4,7 @@
    <extension-point id="tagLib" name="Kb Custom Tag Lib" schema="schema/tagLib.exsd"/>
    <extension-point id="KbIncludeContext" name="Kb Include Context Buillder" schema="schema/include.exsd" />
    <extension-point id="validator" name="KB Validator" schema="schema/validator.exsd"/>
+   <extension-point id="elValidationDelegate" name="EL Validation Delegate" schema="schema/elValidationDelegate.exsd"/>
  
    <extension
          id="kbbuilder"
@@ -208,6 +209,26 @@
       	<persistent
             value="true">
       	</persistent>
+   </extension>
+
+   <extension point="org.eclipse.core.runtime.preferences">
+      <initializer class="org.jboss.tools.jst.web.kb.preferences.ELPreferenceInitializer"/>
+   </extension>
+
+   <extension id="elproblem" name="%KBProblemName" point="org.eclipse.core.resources.markers">
+      <super type="org.jboss.tools.jst.web.kb.kbproblemmarker">
+      </super>
+      <persistent value="true">
+      </persistent>
+   </extension>
+
+   <extension
+         point="org.jboss.tools.jst.web.kb.validator">
+         <validator
+               class="org.jboss.tools.jst.web.kb.internal.validation.ELValidator"
+               id="org.jboss.tools.jst.web.kb.ELValidator"
+               dependent="true">
+         </validator>
    </extension>
 
    <extension point="org.eclipse.wst.xml.core.catalogContributions">

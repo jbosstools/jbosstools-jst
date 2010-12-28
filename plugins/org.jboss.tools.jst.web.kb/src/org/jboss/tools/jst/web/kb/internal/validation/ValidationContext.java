@@ -45,12 +45,12 @@ public class ValidationContext implements IValidationContextManager {
 
 	public ValidationContext(IProject project) {
 		if(ALL_VALIDATORS == null) {
-			// Load all validators
+			// Load all the validators
 			ALL_VALIDATORS = new ArrayList<IValidator>();
+			List<IValidator> dependentValidators = new ArrayList<IValidator>();
 	        IExtensionRegistry registry = Platform.getExtensionRegistry();
 			IExtensionPoint extensionPoint = registry.getExtensionPoint(IValidator.EXTENSION_POINT_ID);
 			if (extensionPoint != null) { 
-				Map<String, IValidator> extendsIds = new HashMap<String, IValidator>();
 				IExtension[] extensions = extensionPoint.getExtensions();
 				for (int i=0; i<extensions.length; i++) {
 					IExtension extension = extensions[i];
@@ -58,17 +58,10 @@ public class ValidationContext implements IValidationContextManager {
 					for(int j=0; j<elements.length; j++) {
 						try {
 							IValidator validator = (IValidator)elements[j].createExecutableExtension("class"); //$NON-NLS-1$
-							String extendsId = elements[j].getAttribute("extends"); //$NON-NLS-1$
-							if(extendsId!=null) {
-								IValidator[] tempArray = ALL_VALIDATORS.toArray(new IValidator[0]);
-								for (IValidator vld : tempArray) {
-									if(extendsId.equals(vld.getId())) {
-										ALL_VALIDATORS.remove(vld);
-									}
-								}
-								extendsIds.put(extendsId, validator);
-							}
-							if(!extendsIds.containsKey(validator.getId())) {
+							String dependent = elements[j].getAttribute("dependent"); //$NON-NLS-1$
+							if(Boolean.parseBoolean(dependent)) {
+								dependentValidators.add(validator);
+							} else {
 								ALL_VALIDATORS.add(validator);
 							}
 						} catch (CoreException e) {
@@ -77,6 +70,8 @@ public class ValidationContext implements IValidationContextManager {
 					}
 				}
 			}
+			// We should add all the dependent validators (e.g. EL validator) to the very end of the list.
+			ALL_VALIDATORS.addAll(dependentValidators);
 		}
 
 		// Init context for given project.
@@ -239,6 +234,14 @@ public class ValidationContext implements IValidationContextManager {
 			validatedProjects.put(validator, projects);
 		}
 		projects.add(project);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContextManager#clearValidatedProjectsList()
+	 */
+	public void clearValidatedProjectsList() {
+		validatedProjects.clear();
 	}
 
 	/*

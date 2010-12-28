@@ -57,6 +57,28 @@
 			class="org.jboss.tools.jst.web.ui.internal.preferences.ContentAssistPreferencePage"
 			id="org.jboss.tools.jsf.ui.editor.pref.contentassist">
 		</page>
+      <page 
+         category="org.jboss.tools.el.ui" 
+         class="org.jboss.tools.jst.web.ui.internal.preferences.ELValidatorPreferencePage" 
+         id="org.jboss.tools.jst.web.ui.preferences.ELValidatorPreferencePage" 
+         name="%PreferencePage_Validator"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            name="%PropertiesPage_Validator"
+            class="org.jboss.tools.jst.web.ui.internal.preferences.ELValidatorPreferencePage"
+            id="org.jboss.tools.jst.web.ui.properties.ELValidatorPreferencePage">
+         <enabledWhen>
+		     <adapt type="org.eclipse.core.resources.IProject">
+			     <or>
+			          <test property="org.eclipse.core.resources.projectNature" value="org.jboss.tools.jsf.jsfnature"/>
+			          <test property="org.eclipse.core.resources.projectNature" value="org.jboss.tools.cdi.core.cdinature"/>
+			          <test property="org.eclipse.core.resources.projectNature" value="org.jboss.tools.seam.core.seamnature"/>
+			     </or>
+		     </adapt>         
+         </enabledWhen>
+      </page>
    </extension>
    <extension point="org.eclipse.ui.editors">
       <editor 

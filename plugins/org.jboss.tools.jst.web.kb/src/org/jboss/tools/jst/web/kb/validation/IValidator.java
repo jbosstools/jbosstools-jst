@@ -52,13 +52,13 @@ public interface IValidator {
 
 	/**
 	 * @param project
-	 * @return a set of projects which should be validated with given project.
+	 * @return @return a set of projects which should be validated together with the given project.
 	 */
 	IValidatingProjectTree getValidatingProjects(IProject project);
 
 	/**
 	 * @param project
-	 * @return true if this validator should validate given project.
+	 * @return true if this validator should validate the given project.
 	 */
 	boolean shouldValidate(IProject project);
 

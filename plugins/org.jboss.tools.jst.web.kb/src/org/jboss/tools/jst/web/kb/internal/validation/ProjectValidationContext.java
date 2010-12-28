@@ -32,7 +32,7 @@ public class ProjectValidationContext implements IProjectValidationContext {
 
 	// We should load/save these collections between eclipse sessions.
 	private Map<String, LinkCollection> coreLinks = new HashMap<String, LinkCollection>();
-	private Map<String, ELValidatorContext> elLinks = new HashMap<String, ELValidatorContext>();
+	private ELValidatorContext elLinks = new ELValidatorContext("jboss.el"); //$NON-NLS-1$
 
 	private Map<String, Set<String>> oldVariableNamesForELValidation = new HashMap<String, Set<String>>();
 
@@ -47,15 +47,6 @@ public class ProjectValidationContext implements IProjectValidationContext {
 		return linkCollection;
 	}
 
-	private ELValidatorContext getElLinks(String validatorId) {
-		ELValidatorContext linkCollection = elLinks.get(validatorId);
-		if(linkCollection==null) {
-			linkCollection = new ELValidatorContext(validatorId);
-			elLinks.put(validatorId, linkCollection);
-		}
-		return linkCollection;
-	}
-
 	private Set<String> getOldVariableNamesForELValidation(String validatorId) {
 		Set<String> linkCollection = oldVariableNamesForELValidation.get(validatorId);
 		if(linkCollection==null) {
@@ -63,6 +54,13 @@ public class ProjectValidationContext implements IProjectValidationContext {
 			oldVariableNamesForELValidation.put(validatorId, linkCollection);
 		}
 		return linkCollection;
+	}
+
+	private Set<String> getIds() {
+		Set<String> ids = new HashSet<String>();
+		ids.addAll(coreLinks.keySet());
+		ids.addAll(oldVariableNamesForELValidation.keySet());
+		return ids;
 	}
 
 	/*
@@ -139,22 +137,10 @@ public class ProjectValidationContext implements IProjectValidationContext {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#addUnnamedElResource(org.eclipse.core.runtime.IPath)
-	 */
-	public void addUnnamedElResource(String validatorId, IPath fullPath) {
-		getElLinks(validatorId).addUnnamedResource(fullPath);
-	}
-
-	/*
-	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#getUnnamedElResources()
 	 */
 	public Set<IPath> getUnnamedElResources() {
-		Set<IPath> result = new HashSet<IPath>();
-		for (ELValidatorContext elLinksCollection : elLinks.values()) {
-			result.addAll(elLinksCollection.getUnnamedResources());
-		}
-		return result;
+		return elLinks.getUnnamedResources();
 	}
 
 	/*
@@ -162,9 +148,7 @@ public class ProjectValidationContext implements IProjectValidationContext {
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#removeUnnamedElResource(org.eclipse.core.runtime.IPath)
 	 */
 	public void removeUnnamedElResource(IPath fullPath) {
-		for (ELValidatorContext links : elLinks.values()) {
-			links.removeUnnamedResource(fullPath);
-		}
+		elLinks.removeUnnamedResource(fullPath);
 	}
 
 	/*
@@ -180,9 +164,7 @@ public class ProjectValidationContext implements IProjectValidationContext {
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#removeLinkedEls(java.util.Set)
 	 */
 	public void removeLinkedEls(Set<IFile> resorces) {
-		for (ELValidatorContext links : elLinks.values()) {
-			links.removeLinkedEls(resorces);
-		}
+		elLinks.removeLinkedEls(resorces);
 	}
 
 	/*
@@ -191,27 +173,28 @@ public class ProjectValidationContext implements IProjectValidationContext {
 	 */
 	public Set<ELReference> getElsForValidation(Set<IFile> changedFiles, boolean onlyChangedVariables) {
 		Set<ELReference> result = new HashSet<ELReference>();
-		for (String id : elLinks.keySet()) {
-			ELValidatorContext elLinksCollection = getElLinks(id);
+		for (String id : getIds()) {
 			Set<String> oldVariableNamesForELValidation = getOldVariableNamesForELValidation(id);
 			// Collect all ELs which use new variables names
 			for(IResource resource : changedFiles) {
 				Set<String> newNames = getVariableNamesByCoreResource(id, resource.getFullPath(), true);
 				if(newNames!=null) {
 					for (String newName : newNames) {
-						if(!onlyChangedVariables || ! oldVariableNamesForELValidation.contains(newName)) {
-							Set<ELReference> els = elLinksCollection.getElsByVariableName(newName);
+						if(!onlyChangedVariables || (oldVariableNamesForELValidation!=null && !oldVariableNamesForELValidation.contains(newName))) {
+							Set<ELReference> els = elLinks.getElsByVariableName(newName);
 							if(els!=null) {
 								result.addAll(els);
 							}
 						}
 					}
 				}
-				for (String oldName :oldVariableNamesForELValidation) {
-					if(!onlyChangedVariables || newNames==null || !newNames.contains(oldName)) {
-						Set<ELReference> els = elLinksCollection.getElsByVariableName(oldName);
-						if(els!=null) {
-							result.addAll(els);
+				if(oldVariableNamesForELValidation!=null) {
+					for (String oldName :oldVariableNamesForELValidation) {
+						if(!onlyChangedVariables || newNames==null || !newNames.contains(oldName)) {
+							Set<ELReference> els = elLinks.getElsByVariableName(oldName);
+							if(els!=null) {
+								result.addAll(els);
+							}
 						}
 					}
 				}
@@ -229,10 +212,7 @@ public class ProjectValidationContext implements IProjectValidationContext {
 			links.clearAll();
 		}
 		coreLinks.clear();
-		for (ELValidatorContext links : elLinks.values()) {
-			links.clearAll();
-		}
-		elLinks.clear();
+		elLinks.clearAll();
 		oldVariableNamesForELValidation.clear();
 	}
 
@@ -249,9 +229,7 @@ public class ProjectValidationContext implements IProjectValidationContext {
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#addLinkedEl(java.lang.String, org.jboss.tools.jst.web.kb.validation.ELReference)
 	 */
 	public void addLinkedEl(String variableName, ELReference el) {
-		for (ELValidatorContext elLinksCollection : elLinks.values()) {
-			elLinksCollection.addLinkedEl(variableName, el);
-		}
+		elLinks.addLinkedEl(variableName, el);
 	}
 
 	/*
@@ -259,9 +237,7 @@ public class ProjectValidationContext implements IProjectValidationContext {
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#removeLinkedEl(java.lang.String, org.jboss.tools.jst.web.kb.validation.ELReference)
 	 */
 	public void removeLinkedEl(String name, ELReference el) {
-		for (ELValidatorContext elLinksCollection : elLinks.values()) {
-			elLinksCollection.removeLinkedEl(name, el);
-		}
+		elLinks.removeLinkedEl(name, el);
 	}
 
 	/*
@@ -269,11 +245,7 @@ public class ProjectValidationContext implements IProjectValidationContext {
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#getElsByVariableName(java.lang.String)
 	 */
 	public Set<ELReference> getElsByVariableName(String variableName) {
-		Set<ELReference> result = new HashSet<ELReference>();
-		for (ELValidatorContext elLinksCollection : elLinks.values()) {
-			result.addAll(elLinksCollection.getElsByVariableName(variableName));
-		}
-		return result;
+		return elLinks.getElsByVariableName(variableName);
 	}
 
 	/*
@@ -287,11 +259,8 @@ public class ProjectValidationContext implements IProjectValidationContext {
 			core.setAttribute("validator-id", links.getId()); //$NON-NLS-1$
 			links.store(core);
 		}
-		for (ELValidatorContext links : elLinks.values()) {
-			Element el = XMLUtilities.createElement(validation, "el"); //$NON-NLS-1$
-			el.setAttribute("validator-id", links.getId()); //$NON-NLS-1$
-			links.store(el);
-		}
+		Element el = XMLUtilities.createElement(validation, "el"); //$NON-NLS-1$
+		elLinks.store(el);
 	}
 
 	/*
@@ -310,10 +279,7 @@ public class ProjectValidationContext implements IProjectValidationContext {
 		}
 		Element[] els = XMLUtilities.getChildren(validation, "el"); //$NON-NLS-1$
 		for (Element el : els) {
-			String id = el.getAttribute("validator-id"); //$NON-NLS-1$
-			if(id!=null && id.trim().length()>0) {
-				getElLinks(id).load(el);
-			}
+			elLinks.load(el);
 		}
 	}
 
@@ -322,9 +288,7 @@ public class ProjectValidationContext implements IProjectValidationContext {
 		for (LinkCollection links : coreLinks.values()) {
 			result = result + links.getModificationsSinceLastStore();
 		}
-		for (ELValidatorContext links : elLinks.values()) {
-			result = result + links.getModificationsSinceLastStore();
-		}
+		result = result + elLinks.getModificationsSinceLastStore();
 		return result;
 	}
 

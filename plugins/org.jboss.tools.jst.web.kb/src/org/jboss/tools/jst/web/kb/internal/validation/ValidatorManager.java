@@ -78,6 +78,7 @@ public class ValidatorManager implements IValidatorJob {
 			}
 			synchronized (validatingProjects) {
 				try {
+					validationContextManager.clearValidatedProjectsList();
 					Set<IFile> changedFiles = validationHelper.getChangedFiles();
 					if(!changedFiles.isEmpty()) {
 						status = validate(changedFiles, validationHelper, reporter);

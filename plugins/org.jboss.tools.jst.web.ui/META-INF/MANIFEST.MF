@@ -40,11 +40,15 @@ Require-Bundle: org.eclipse.ui.ide,
  org.eclipse.debug.ui,
  org.jboss.tools.jst.jsp;bundle-version="2.0.0",
  org.eclipse.jface.text;bundle-version="3.5.0",
- org.eclipse.wst.common.emfworkbench.integration;bundle-version="1.1.300",
+ org.eclipse.wst.common.emfworkbench.integration,
  org.apache.velocity;bundle-version="1.5.0",
- org.eclipse.ui.workbench.texteditor;bundle-version="3.5.1",
- org.eclipse.wst.html.ui;bundle-version="1.0.401",
- org.jboss.tools.common.el.core;bundle-version="3.2.0"
+ org.eclipse.ui.workbench.texteditor,
+ org.eclipse.wst.html.ui,
+ org.jboss.tools.common.el.core;bundle-version="3.2.0",
+ org.jboss.tools.common.ui,
+ org.jboss.tools.jst.web.kb,
+ org.eclipse.ui.forms,
+ org.jboss.tools.common.el.ui
 Bundle-Version: 3.2.0.qualifier
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ClassPath: .

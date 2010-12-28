@@ -3,7 +3,7 @@
 <schema targetNamespace="org.jboss.tools.jst.web.kb" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.jboss.tools.jst.web.kb" id="validator" name="KB Validator"/>
+         <meta.schema plugin="org.jboss.tools.jst.web.kb" id="elValidationDelegate" name="EL Validation Delegate"/>
       </appInfo>
       <documentation>
          [Enter description of this extension point.]
@@ -18,7 +18,7 @@
       </annotation>
       <complexType>
          <sequence>
-            <element ref="validator" minOccurs="1" maxOccurs="unbounded"/>
+            <element ref="delegate" minOccurs="1" maxOccurs="unbounded"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -47,30 +47,23 @@
       </complexType>
    </element>
 
-   <element name="validator">
+   <element name="delegate">
       <complexType>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
                   
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn=":org.jboss.tools.jst.web.kb.validation.IValidator"/>
+                  <meta.attribute kind="java" basedOn=":org.jboss.tools.jst.web.kb.validation.IELValidationDelegate"/>
                </appInfo>
-            </annotation>
-         </attribute>
-         <attribute name="id" type="string" use="required">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="dependent" type="boolean">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
             </annotation>
          </attribute>
       </complexType>
