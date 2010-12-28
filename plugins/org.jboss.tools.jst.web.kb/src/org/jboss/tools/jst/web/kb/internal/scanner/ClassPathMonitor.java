@@ -161,7 +161,7 @@ public class ClassPathMonitor extends AbstractClassPathMonitor<KbProject> {
 
 	List<KbProject> getKbProjects(IProject project) throws CoreException {
 		List<KbProject> list = new ArrayList<KbProject>();
-		if(project.hasNature(JavaCore.NATURE_ID)) {
+		if(project.isAccessible() && project.hasNature(JavaCore.NATURE_ID)) {
 			IJavaProject javaProject = JavaCore.create(project);
 			IClasspathEntry[] es = javaProject.getResolvedClasspath(true);
 			for (int i = 0; i < es.length; i++) {
