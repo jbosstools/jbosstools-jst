@@ -48,6 +48,7 @@ import org.jboss.tools.common.el.core.resolver.IRelevanceCheck;
 import org.jboss.tools.common.el.core.resolver.SimpleELContext;
 import org.jboss.tools.common.el.core.resolver.Var;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
+import org.jboss.tools.common.util.BeanUtil;
 import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
 
@@ -385,36 +386,12 @@ public abstract class RefactorSearcher {
 			match(file, offset, length);
 	}
 	
-	// TODO: move to util class
-	public static boolean isGetter(IMethod method) {
-		String name = method.getElementName();
-		int numberOfParameters = method.getNumberOfParameters();
-		
-		return (((name.startsWith(GET) && !name.equals(GET)) || name.startsWith(IS)) && numberOfParameters == 0);
-	}
-
-	// TODO: move to util class
-	public static boolean isSetter(IMethod method) {
-		String name = method.getElementName();
-		int numberOfParameters = method.getNumberOfParameters();
-
-		return ((name.startsWith(SET) && !name.equals(SET)) && numberOfParameters == 1);
-	}
-	
-	// TODO: move to util class
 	public static String getPropertyName(IMethod method, String methodName){
-		if (isGetter(method) || isSetter(method)) {
-			StringBuffer name = new StringBuffer(methodName);
-			if(methodName.startsWith("i")) { //$NON-NLS-1$
-				name.delete(0, 2);
-			} else {
-				name.delete(0, 3);
+		if (BeanUtil.isGetter(method) || BeanUtil.isSetter(method)) {
+			String propertyName = BeanUtil.getPropertyName(methodName);
+			if(propertyName != null) {
+				return propertyName;
 			}
-			if(name.length()<2 || Character.isLowerCase(name.charAt(1))) {
-				name.setCharAt(0, Character.toLowerCase(name.charAt(0)));
-			}
-			String propertyName = name.toString();
-			return propertyName;
 		}
 		return methodName;
 	}
