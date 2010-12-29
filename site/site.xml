@@ -8,6 +8,9 @@
 	<feature url="features/org.jboss.tools.jst.feature_0.0.0.jar" id="org.jboss.tools.jst.feature" version="0.0.0">
 		<category name="JBoss Tools jst Nightly Build Update Site"/>
 	</feature>
+	<feature url="features/org.jboss.tools.jst.test.feature_0.0.0.jar" id="org.jboss.tools.jst.test.feature" version="0.0.0">
+		<category name="JBoss Tools JST Tests Nightly Build Update Site"/>
+	</feature>
 	<feature url="features/org.jboss.tools.jst.web.tiles.feature_0.0.0.jar" id="org.jboss.tools.jst.web.tiles.feature" version="0.0.0">
 		<category name="JBoss Tools jst Nightly Build Update Site"/>
 	</feature>

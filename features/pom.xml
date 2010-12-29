@@ -8,6 +8,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	<packaging>pom</packaging>
 	<modules>
 		<module>org.jboss.tools.jst.feature</module>
+		<module>org.jboss.tools.jst.test.feature</module>
 		<module>org.jboss.tools.jst.web.tiles.feature</module>
 	</modules>
 </project>
