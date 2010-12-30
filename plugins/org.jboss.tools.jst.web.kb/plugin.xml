@@ -5,6 +5,7 @@
    <extension-point id="KbIncludeContext" name="Kb Include Context Buillder" schema="schema/include.exsd" />
    <extension-point id="validator" name="KB Validator" schema="schema/validator.exsd"/>
    <extension-point id="elValidationDelegate" name="EL Validation Delegate" schema="schema/elValidationDelegate.exsd"/>
+   <extension-point id="KbRequire" name="KB Builder Requirement" schema="schema/KbRequire.exsd"/>
  
    <extension
          id="kbbuilder"

@@ -52,6 +52,8 @@ import org.jboss.tools.jst.web.kb.internal.taglib.TLDLibrary;
 import org.jboss.tools.jst.web.kb.internal.taglib.composite.CompositeTagLibrary;
 import org.jboss.tools.jst.web.kb.internal.taglib.myfaces.MyFacesTagLibrary;
 import org.jboss.tools.jst.web.kb.internal.validation.ProjectValidationContext;
+import org.jboss.tools.jst.web.kb.require.KbRequireBuilder;
+import org.jboss.tools.jst.web.kb.require.KbRequireDefinition;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibrary;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 import org.jboss.tools.jst.web.kb.validation.IProjectValidationContext;
@@ -870,18 +872,19 @@ public class KbProject extends KbObject implements IKbProject {
 	private static String[] getKBBuilderRequiredNatureDescriptions(IProject project) {
 		ArrayList<String> natureDescriptions = new ArrayList<String>();
 		try {
-			IProjectDescription projectDescription = project.getDescription();
-			String[] ids = projectDescription.getNatureIds();
-			if (ids == null) return (String[])natureDescriptions.toArray(new String[0]);
-			for (String id : ids) {
-				IProjectNature nature = project.getNature(id);
-				if (nature instanceof IKBBuilderRequiredNature) {
-					if (((IKBBuilderRequiredNature)nature).isKBBuilderRequired()) {
-						String description = ((IKBBuilderRequiredNature)nature).getNatureDescription();
-						if (description != null && description.length() > 0) {
-							natureDescriptions.add(description);
-						}
-					}
+			List<KbRequireDefinition> definitions = KbRequireBuilder.getInstance().getKbRequireDefinitions();
+
+			if (definitions == null) return (String[])natureDescriptions.toArray(new String[0]);
+
+			for (KbRequireDefinition def : definitions) {
+				String forNature = def.getNatureId();
+				
+				if (project.getNature(forNature) != null) {
+					String description = def.getDescription();
+					if (description == null)
+						description = forNature;
+					
+					natureDescriptions.add(description);
 				}
 			}
 		} catch (CoreException ex) {
