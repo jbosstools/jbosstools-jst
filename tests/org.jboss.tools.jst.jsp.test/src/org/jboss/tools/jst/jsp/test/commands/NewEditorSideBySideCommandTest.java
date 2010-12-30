@@ -8,7 +8,7 @@
  * Contributor:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.jboss.tools.jst.jsp.test.ca;
+package org.jboss.tools.jst.jsp.test.commands;
 
 import junit.framework.TestCase;
 import org.eclipse.core.commands.Command;
