@@ -17,10 +17,12 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.HandlerEvent;
+import org.eclipse.core.expressions.IEvaluationContext;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.ISources;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.IElementUpdater;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -40,17 +42,16 @@ public class I18nHandler extends AbstractHandler implements IElementUpdater {
 	
 	@Override
 	public void setEnabled(Object evaluationContext) {
-		IEditorPart activeEditor= PlatformUI
-			.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		boolean enabled;
-		if(activeEditor instanceof ITextEditor){
-			ITextEditor txtEditor = (ITextEditor) activeEditor;
-			ISelection selection = txtEditor.getSelectionProvider().getSelection();
-			enabled = getExternalizeStringsCommandEnabled(selection);
-		} else {
-			enabled = false;
+		boolean enabled=false;
+		if (evaluationContext instanceof IEvaluationContext) {
+			IEvaluationContext context = (IEvaluationContext) evaluationContext;
+			Object activeEditor = context.getVariable(ISources.ACTIVE_EDITOR_NAME);
+			if(activeEditor instanceof ITextEditor){
+				ITextEditor txtEditor = (ITextEditor) activeEditor;
+				ISelection selection = txtEditor.getSelectionProvider().getSelection();
+				enabled = getExternalizeStringsCommandEnabled(selection);
+			} 
 		}
-
 		if (isEnabled() != enabled) {
 			setBaseEnabled(enabled);
 		}
