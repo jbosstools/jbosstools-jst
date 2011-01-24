@@ -140,11 +140,6 @@ public class XHTMLTemplateCompletionProcessor  extends TemplateCompletionProcess
 		return type;
 	}
 
-//	protected Image getImage(Template template) {
-//		// just return the same image for now
-//		return HTMLEditorPluginImageHelper.getInstance().getImage(HTMLEditorPluginImages.IMG_OBJ_TAG_TEMPLATE);
-//	}
-
 	private ContextTypeRegistry getTemplateContextRegistry() {
 		return WebUiPlugin.getDefault().getTemplateContextRegistry();
 	}
