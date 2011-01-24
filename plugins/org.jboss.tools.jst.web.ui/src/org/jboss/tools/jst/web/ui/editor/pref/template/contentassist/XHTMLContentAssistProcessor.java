@@ -90,8 +90,10 @@ public class XHTMLContentAssistProcessor implements IContentAssistProcessor,
 	private void addTemplates(ITextViewer fTextViewer,
 			List<ICompletionProposal> contentAssistRequest,
 			List<String> fTemplateContexts, int startOffset) {
-		if (contentAssistRequest == null)
+		
+		if (contentAssistRequest == null) {
 			return;
+		}
 
 		// if already adding template proposals for a certain context type, do
 		// not add again

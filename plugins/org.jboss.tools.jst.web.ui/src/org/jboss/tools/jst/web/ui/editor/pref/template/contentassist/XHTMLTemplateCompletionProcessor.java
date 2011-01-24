@@ -31,6 +31,8 @@ import org.eclipse.jface.text.templates.TemplateProposal;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.html.ui.internal.contentassist.ReplaceNameTemplateContext;
+import org.eclipse.wst.html.ui.internal.editor.HTMLEditorPluginImageHelper;
+import org.eclipse.wst.html.ui.internal.editor.HTMLEditorPluginImages;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 
@@ -89,7 +91,7 @@ public class XHTMLTemplateCompletionProcessor  extends TemplateCompletionProcess
 		}
 
 		Collections.sort(matches, fgProposalComparator);
-
+		
 		return (ICompletionProposal[]) matches.toArray(new ICompletionProposal[matches.size()]);
 	}
 
@@ -124,7 +126,7 @@ public class XHTMLTemplateCompletionProcessor  extends TemplateCompletionProcess
 
 	@Override
 	protected ICompletionProposal createProposal(Template template, TemplateContext context, IRegion region, int relevance) {
-		return new TemplateProposal(template, context, region, getImage(template), relevance);
+		return new XHTMLCustomTemplateProposal(template, context, region, getImage(template), relevance);
 	}
 
 	@Override
@@ -168,7 +170,6 @@ public class XHTMLTemplateCompletionProcessor  extends TemplateCompletionProcess
 
 	@Override
 	protected Image getImage(Template template) {
-		// TODO Auto-generated method stub
-		return null;
+		return HTMLEditorPluginImageHelper.getInstance().getImage(HTMLEditorPluginImages.IMG_OBJ_TAG_TEMPLATE);
 	}
 }
