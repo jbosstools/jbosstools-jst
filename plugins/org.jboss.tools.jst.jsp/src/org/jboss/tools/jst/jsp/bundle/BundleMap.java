@@ -33,7 +33,6 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.part.FileEditorInput;
 import org.jboss.tools.common.el.core.model.ELArgumentInvocation;
 import org.jboss.tools.common.el.core.model.ELExpression;
 import org.jboss.tools.common.el.core.model.ELInstance;
@@ -76,12 +75,14 @@ public class BundleMap {
 
 	XModelTreeListener modelListener = new ML();
 	private IEditorInput editorInput =null;
+	private IProject project;
 	
 	public void init(IEditorInput input){
 		this.editorInput = input;
 		
 		if (getEditorInput() instanceof IFileEditorInput) {
-			javaSources = getJavaProjectSrcLocations(((IFileEditorInput)getEditorInput()).getFile().getProject());
+			this.project = ((IFileEditorInput)getEditorInput()).getFile().getProject();
+			javaSources = getJavaProjectSrcLocations(project);
 		}
 		/*
 		 * Initialize the locale with default value.
@@ -93,9 +94,7 @@ public class BundleMap {
 	
 	public void refreshRegisteredBundles() {
 		if (hasJsfProjectNatureType()
-				&& (getEditorInput() instanceof IFileEditorInput)) {
-			IProject project = ((IFileEditorInput)getEditorInput())
-					.getFile().getProject();
+				&& project!=null) {
 			IModelNature modelNature = EclipseResourceUtil
 					.getModelNature(project);
 			if (modelNature != null) {
@@ -151,9 +150,7 @@ public class BundleMap {
 	private boolean hasJsfProjectNatureType() {
 		boolean hasJsfProjectNatureType = false;
 		try {
-			IEditorInput ei = getEditorInput();
-			if(ei instanceof IFileEditorInput) {
-				IProject project = ((IFileEditorInput)ei).getFile().getProject();
+			if(project!=null) {
 				if (project.exists() && project.isOpen()) {
 					for (int i = 0; i < JSF_PROJECT_NATURES.length; i++) {
 						if (project.hasNature(JSF_PROJECT_NATURES[i])) 
@@ -192,8 +189,7 @@ public class BundleMap {
 		
 		if(entry == null){
 			if (hasJsfProjectNatureType()) {
-				if (getEditorInput() instanceof IFileEditorInput) {
-					IProject project = ((IFileEditorInput)getEditorInput()).getFile().getProject();
+				if (project!=null) {
 					XModel model = EclipseResourceUtil.getModelNature(project).getModel();
 					String prefix2 = prefix;
 					if(propertyName != null && prefix != null) {
@@ -210,10 +206,9 @@ public class BundleMap {
 			p.put(WebPromptingProvider.BUNDLE, entry.uri);
 			p.put(WebPromptingProvider.KEY, propertyName);
 			if (locale != null) p.put(WebPromptingProvider.LOCALE, locale);
-			p.put(WebPromptingProvider.FILE, ((IFileEditorInput)getEditorInput()).getFile().getProject());
+			p.put(WebPromptingProvider.FILE, project);
 			String error = null;
-			if (getEditorInput() instanceof IFileEditorInput) {
-				IProject project = ((IFileEditorInput)getEditorInput()).getFile().getProject();
+			if (project!=null) {
 				XModel model = EclipseResourceUtil.getModelNature(project).getModel();
 				WebPromptingProvider.getInstance().getList(model, WebPromptingProvider.JSF_OPEN_KEY, entry.uri, p);
 				error = p.getProperty(WebPromptingProvider.ERROR); 
@@ -231,8 +226,6 @@ public class BundleMap {
 	 * @return the bundle file
 	 */
 	public IFile getBundleFile(String uri){
-		IEditorInput input = getEditorInput();
-		IProject project = ((FileEditorInput)input).getFile().getProject();
 		if(project == null || !project.isOpen()) {
 			return null;
 		}
@@ -389,9 +382,8 @@ public class BundleMap {
 	
 	public void refresh(){
 		refreshRegisteredBundles();
-		IEditorInput input = getEditorInput();
-		if (input instanceof IFileEditorInput) {
-			javaSources = getJavaProjectSrcLocations(((IFileEditorInput)input).getFile().getProject());
+		if (project!=null) {
+			javaSources = getJavaProjectSrcLocations(project);
 			UsedKey key;
 			UsedKey[] array = new UsedKey[0];
 			array = usedKeys.values().toArray(array);			
@@ -671,5 +663,4 @@ public class BundleMap {
 	private IEditorInput getEditorInput() {
 		return editorInput;
 	}
-	
 }
