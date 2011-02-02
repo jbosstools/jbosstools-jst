@@ -17,10 +17,14 @@ import org.jboss.tools.common.model.XFilteredTree;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.project.IModelNature;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
+import org.jboss.tools.jst.web.ui.navigator.XLabelProvider.RootWrapper;
 
 public class XProjectContentProvider extends XContentProvider {
 
 	public Object[] getChildren(Object parentElement) {
+		if(parentElement instanceof RootWrapper) {
+			parentElement = ((RootWrapper)parentElement).element;
+		}
 		if(parentElement instanceof XModelObject) {
 			XModelObject o = (XModelObject)parentElement;
 			XFilteredTree filteredTree = getFilteredTree(o);
@@ -42,7 +46,9 @@ public class XProjectContentProvider extends XContentProvider {
 				filteredTree = getFilteredTree(o);
 			}
 			if(filteredTree != null) {
-				return new Object[]{filteredTree.getRoot()};
+				RootWrapper w = new RootWrapper();
+				w.element = filteredTree.getRoot();
+				return new Object[]{w};
 			}
 			return new Object[0];
 		}
@@ -50,6 +56,9 @@ public class XProjectContentProvider extends XContentProvider {
 	}
 
 	public Object getParent(Object element) {
+		if(element instanceof RootWrapper) {
+			element = ((RootWrapper)element).element;
+		}
 		if(element instanceof XModelObject) {
 			XModelObject o = (XModelObject)element;
 			XFilteredTree filteredTree = getFilteredTree(o);
