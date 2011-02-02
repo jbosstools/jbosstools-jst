@@ -74,25 +74,14 @@ public class MainLocaleProvider implements ILocaleProvider {
 	 * {@code localeProvider} extensions. Returns the default
 	 * system locale if nothing found (never returns {@code null}).
 	 */
-	public Locale getLocale(ITextEditor editor) {
-		return this.getLocale(editor.getEditorInput());
-	}
-	/**
-	 * Tries to determine the locale of the {@code editor} using
-	 * {@code localeProvider} extensions. Returns the default
-	 * system locale if nothing found (never returns {@code null}).
-	 */
-	public Locale getLocale(IEditorInput editorInput) {
-		if (editorInput instanceof IFileEditorInput) {
-			IProject project = ((IFileEditorInput)editorInput)
-					.getFile().getProject();
-	
+	public Locale getLocale(IProject project) {
+		if (project!=null) {
 			try {
 				if(project.isAccessible()) {
 					String[] natures = project.getDescription().getNatureIds();
 					for (String natureId : natures) {
 						for (ILocaleProvider provider : getProviders(natureId)) {
-							Locale locale = provider.getLocale(editorInput);
+							Locale locale = provider.getLocale(project);
 							if (locale != null) {
 								localeString = provider.getLocaleString();
 								return locale;
@@ -102,8 +91,7 @@ public class MainLocaleProvider implements ILocaleProvider {
 				}
 			} catch (CoreException e) {
 				JspEditorPlugin.getPluginLog().logError(
-						MessageFormat.format("Error in getting locale for {0}.",((IFileEditorInput)editorInput)
-								.getFile().getLocation().toOSString()), e);
+						MessageFormat.format("Error in getting locale for {0}.",project==null?"Couldn't find project":project.getName(), e));
 			}
 		}
 	

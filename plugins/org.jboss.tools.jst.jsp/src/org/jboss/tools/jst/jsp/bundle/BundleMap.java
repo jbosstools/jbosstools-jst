@@ -74,20 +74,24 @@ public class BundleMap {
 			IVpePreferencesPage.SHOW_RESOURCE_BUNDLES_USAGE_AS_EL); 
 
 	XModelTreeListener modelListener = new ML();
-	private IEditorInput editorInput =null;
 	private IProject project;
 	
 	public void init(IEditorInput input){
-		this.editorInput = input;
-		
-		if (getEditorInput() instanceof IFileEditorInput) {
-			this.project = ((IFileEditorInput)getEditorInput()).getFile().getProject();
+		IProject fileProject=null;
+		if (input instanceof IFileEditorInput) {
+			fileProject=((IFileEditorInput)input).getFile().getProject();
+		}
+		init(fileProject);
+	}
+	
+	public void init(IProject project){
+		if (project!=null) {
 			javaSources = getJavaProjectSrcLocations(project);
 		}
 		/*
 		 * Initialize the locale with default value.
 		 */
-		locale = MainLocaleProvider.getInstance().getLocale(getEditorInput());
+		locale = MainLocaleProvider.getInstance().getLocale(project);
 		refreshRegisteredBundles();
 		PreferenceModelUtilities.getPreferenceModel().addModelTreeListener(modelListener);
 	}
@@ -660,7 +664,7 @@ public class BundleMap {
 		return bundles;
 	}
 
-	private IEditorInput getEditorInput() {
-		return editorInput;
-	}
+//	private IEditorInput getEditorInput() {
+//		return editorInput;
+//	}
 }
