@@ -12,6 +12,7 @@ package org.jboss.tools.jst.jsp.i18n;
 
 import java.util.Locale;
 
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 /**
@@ -26,6 +27,8 @@ public interface ILocaleProvider {
 	 * may return {@code null} if they can not determine the locale. 
 	 */
 	Locale getLocale(ITextEditor editor);
+	
+	Locale getLocale(IEditorInput editorInput);
 
 	/**
 	 * Shows the string representation of the locale 

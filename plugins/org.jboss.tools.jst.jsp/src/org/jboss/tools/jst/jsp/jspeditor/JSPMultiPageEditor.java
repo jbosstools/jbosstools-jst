@@ -537,7 +537,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		 * VpeController.
 		 */
 		if (visualEditor == null) {
-			bundleMap.init(sourceEditor);
+			bundleMap.init(sourceEditor.getEditorInput());
 		}
 	}
 

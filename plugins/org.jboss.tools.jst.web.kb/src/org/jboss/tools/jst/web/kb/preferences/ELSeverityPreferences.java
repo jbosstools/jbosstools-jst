@@ -40,6 +40,8 @@ public class ELSeverityPreferences extends SeverityPreferences {
 	public static final String UNPAIRED_GETTER_OR_SETTER = INSTANCE.createSeverityOption("unpairedGetterOrSetter"); //$NON-NLS-1$
 
 	public static final String EL_SYNTAX_ERROR = INSTANCE.createSeverityOption("elSyntaxError"); //$NON-NLS-1$
+	
+	public static final String NON_EXTERNALIZED_STRINGS = INSTANCE.createSeverityOption("nonExternalizedString"); //$NON-NLS-1$
 
 	/**
 	 * @return the only instance of JSFSeverityPreferences

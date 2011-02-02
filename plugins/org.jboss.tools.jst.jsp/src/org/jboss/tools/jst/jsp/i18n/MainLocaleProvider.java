@@ -75,7 +75,14 @@ public class MainLocaleProvider implements ILocaleProvider {
 	 * system locale if nothing found (never returns {@code null}).
 	 */
 	public Locale getLocale(ITextEditor editor) {
-		IEditorInput editorInput = editor.getEditorInput();
+		return this.getLocale(editor.getEditorInput());
+	}
+	/**
+	 * Tries to determine the locale of the {@code editor} using
+	 * {@code localeProvider} extensions. Returns the default
+	 * system locale if nothing found (never returns {@code null}).
+	 */
+	public Locale getLocale(IEditorInput editorInput) {
 		if (editorInput instanceof IFileEditorInput) {
 			IProject project = ((IFileEditorInput)editorInput)
 					.getFile().getProject();
@@ -85,7 +92,7 @@ public class MainLocaleProvider implements ILocaleProvider {
 					String[] natures = project.getDescription().getNatureIds();
 					for (String natureId : natures) {
 						for (ILocaleProvider provider : getProviders(natureId)) {
-							Locale locale = provider.getLocale(editor);
+							Locale locale = provider.getLocale(editorInput);
 							if (locale != null) {
 								localeString = provider.getLocaleString();
 								return locale;
@@ -101,7 +108,7 @@ public class MainLocaleProvider implements ILocaleProvider {
 		}
 	
 		return Locale.getDefault();
-	}
+	}	
 
 	private void initNatureExtensionsMap() {
 		Map<String, ArrayList<IExtension>> natureExtensionsMap

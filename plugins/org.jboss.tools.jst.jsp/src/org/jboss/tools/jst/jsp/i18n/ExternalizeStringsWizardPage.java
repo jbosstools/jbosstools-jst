@@ -920,7 +920,7 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 		int hash;
 		Map<?, ?> map = null;
 		BundleMap bm = new BundleMap();
-		bm.init(editor);
+		bm.init(editor.getEditorInput());
 
 		/*
 		 * Check JSF Nature
