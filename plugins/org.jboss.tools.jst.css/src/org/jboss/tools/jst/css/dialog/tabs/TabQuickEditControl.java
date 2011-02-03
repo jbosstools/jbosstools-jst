@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.jboss.tools.jst.css.dialog.common.StyleAttributes;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
+import org.jboss.tools.jst.jsp.util.Constants;
 
 /**
  * Class for creating control in Quick edit tab
@@ -63,7 +64,7 @@ public class TabQuickEditControl extends BaseTabControl {
 
 			String value = getStyleAttributes().get(key);
 			if (value != null && value.length() > 0) {
-				addLabel(this, key);
+				addLabel(this, key + Constants.COLON);
 				createControl(this, key);
 			}
 		}
