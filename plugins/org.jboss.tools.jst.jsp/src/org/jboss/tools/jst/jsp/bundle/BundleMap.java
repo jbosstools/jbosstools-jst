@@ -77,11 +77,10 @@ public class BundleMap {
 	private IProject project;
 	
 	public void init(IEditorInput input){
-		IProject fileProject=null;
 		if (input instanceof IFileEditorInput) {
-			fileProject=((IFileEditorInput)input).getFile().getProject();
+			project=((IFileEditorInput)input).getFile().getProject();
 		}
-		init(fileProject);
+		init(project);
 	}
 	
 	public void init(IProject project){
