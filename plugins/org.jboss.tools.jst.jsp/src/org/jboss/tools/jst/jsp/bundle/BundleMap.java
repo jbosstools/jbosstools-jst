@@ -157,9 +157,10 @@ public class BundleMap {
 			if(project!=null) {
 				if (project.exists() && project.isOpen()) {
 					for (int i = 0; i < JSF_PROJECT_NATURES.length; i++) {
-						if (project.hasNature(JSF_PROJECT_NATURES[i])) 
+						if (project.hasNature(JSF_PROJECT_NATURES[i])){ 
 							hasJsfProjectNatureType = true;
 						break;
+						}
 					}
 				}
 			}
@@ -664,7 +665,4 @@ public class BundleMap {
 		return bundles;
 	}
 
-//	private IEditorInput getEditorInput() {
-//		return editorInput;
-//	}
 }
