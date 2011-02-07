@@ -21,6 +21,8 @@ import org.w3c.dom.Node;
  *
  */
 public class BundleMapUtil {
+	
+	private static final String elPattern = "(?s:(.*)[#\\$]\\{(.+)\\}(.*))"; //$NON-NLS-1$
     /**
     * Checks if node contains text information from resource bundle
     * @param pageContext
@@ -31,7 +33,6 @@ public class BundleMapUtil {
        boolean rst = findInResourcesBundle(bundleMap, sourceNode);
        return rst;
    }
-
 
    /**
     * @param pageContext
@@ -84,6 +85,6 @@ public class BundleMapUtil {
 	 * @return
 	 */
 	public static boolean isContainsEl(final String value) {
-		return (value.contains("#{") || value.contains("${")); //$NON-NLS-1$//$NON-NLS-2$
+		return value.matches(elPattern);
 	}
 }
