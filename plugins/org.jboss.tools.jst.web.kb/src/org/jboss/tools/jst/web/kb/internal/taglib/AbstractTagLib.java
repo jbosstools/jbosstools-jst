@@ -185,9 +185,9 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		if(prefixes == null || prefixes.isEmpty()) {
 			return getComponents(query, null, context);
 		}
-		if(prefixes.size()==0) {
-			return EMPTY_ARRAY;
-		}
+//		if(prefixes.size()==0) {
+//			return EMPTY_ARRAY;
+//		}
 		if(prefixes.size()==1) {
 			return getComponents(query, prefixes.get(0), context);
 		}
