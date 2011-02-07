@@ -182,7 +182,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	private static final IComponent[] EMPTY_ARRAY = new IComponent[0];
 
 	protected IComponent[] getComponentsByPrefixes(KbQuery query, List<String> prefixes, IPageContext context) {
-		if(prefixes==null) {
+		if(prefixes == null || prefixes.isEmpty()) {
 			return getComponents(query, null, context);
 		}
 		if(prefixes.size()==0) {
