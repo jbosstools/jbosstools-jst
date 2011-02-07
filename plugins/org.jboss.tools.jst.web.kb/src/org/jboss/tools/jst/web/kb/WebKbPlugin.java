@@ -93,20 +93,22 @@ public class WebKbPlugin extends BaseUIPlugin {
 		IProject[] ps = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 		Set<String> projectNames = new HashSet<String>();
 		for (IProject p: ps) projectNames.add(p.getName());
-		IPath path = WebKbPlugin.getDefault().getStateLocation();
-		File file = new File(path.toFile(), "projects"); //$NON-NLS-1$
-		if(!file.isDirectory()) return;
-		File[] fs = file.listFiles();
-		if(fs != null) for (File f: fs) {
-			String name = f.getName();
-			if(name.endsWith(".xml")) { //$NON-NLS-1$
-				name = name.substring(0, name.length() - 4);
-				if(!projectNames.contains(name)) {
-					f.delete();
+		WebKbPlugin plugin = WebKbPlugin.getDefault();
+		if(plugin!=null) {
+			IPath path = plugin.getStateLocation();
+			File file = new File(path.toFile(), "projects"); //$NON-NLS-1$
+			if(!file.isDirectory()) return;
+			File[] fs = file.listFiles();
+			if(fs != null) for (File f: fs) {
+				String name = f.getName();
+				if(name.endsWith(".xml")) { //$NON-NLS-1$
+					name = name.substring(0, name.length() - 4);
+					if(!projectNames.contains(name)) {
+						f.delete();
+					}
 				}
 			}
 		}
-		
 	}
 
 	/*
