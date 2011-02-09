@@ -61,7 +61,7 @@ public class WebKbPlugin extends BaseUIPlugin {
 						}
 						break;
 					case ISaveContext.PROJECT_SAVE:
-						KbProject sp = (KbProject)KbProjectFactory.getKbProject(context.getProject(), false);
+						KbProject sp = (KbProject)KbProjectFactory.getKbProject(context.getProject(), false, true);
 						try {
 							if(sp != null && sp.getModificationsSinceLastStore() > 0) {
 //								sp.printModifications();
