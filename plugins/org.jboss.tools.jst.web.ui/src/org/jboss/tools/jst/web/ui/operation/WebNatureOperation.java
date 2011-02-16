@@ -455,6 +455,10 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 		if(configJavaDM != null && sv != null && sv.indexOf("3.0") >= 0) { //$NON-NLS-1$
 			configJavaDM.setProperty(IFacetDataModelProperties.FACET_VERSION_STR, "1.6"); //$NON-NLS-1$
 		}
+		String contextRoot = getProperty("WebNatureOperation.CONTEXT_ROOT");
+		if(contextRoot != null && contextRoot.length() > 0 && !contextRoot.equals(getProject().getName())) {
+			configDM.setProperty(IWebFacetInstallDataModelProperties.CONTEXT_ROOT, contextRoot);
+		}
 		
 		if(webroot != null) {
 			int i = webroot.lastIndexOf("/"); //$NON-NLS-1$
