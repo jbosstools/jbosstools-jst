@@ -59,6 +59,10 @@ public abstract class WebProjectCreationOperation extends WebNatureOperation {
 		setProperty(WebNatureOperation.REGISTER_WEB_CONTEXT_ID, context.getActionProperties().getProperty(NewWebProjectContext.ATTR_REGISTER_WEB_CONTEXT));
 		setProperty(WebNatureOperation.RUNTIME_NAME, context.getRegisterServerContext().getRuntimeName());
 		setProperty(WebNatureOperation.JAVA_SOURCES_LOCATION_ID, getJavaSources());
+		String contextRoot = context.getRegisterServerContext().getApplicationName();
+		if(contextRoot != null && contextRoot.length() > 0) {
+			setProperty("WebNatureOperation.CONTEXT_ROOT", contextRoot);
+		}
 	}
 	
 	protected abstract IWebProjectTemplate createTemplate();
