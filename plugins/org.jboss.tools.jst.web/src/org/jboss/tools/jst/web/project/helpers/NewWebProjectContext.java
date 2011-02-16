@@ -146,12 +146,13 @@ public abstract class NewWebProjectContext {
 		if(projectTemplateEdit == null) return null;
 		ProjectVersion v = projectTemplateEdit.getProjectVersion();
 		if(v == null) return null;
-		String pref = v.getPreferredServletVersion();
-		if(pref == null) return null;
-		int c = compareServletVersions(pref, servletVersion);
+		String min = v.getMinimalServletVersion();
+		if(min == null) min = v.getPreferredServletVersion();
+		if(min == null) return null;
+		int c = compareServletVersions(min, servletVersion);
 		if(c > 0) {
 			return MessageFormat.format(WebUIMessages.NewWebProjectContext_ServletVersionMustBeAtLeast,
-					pref);
+					min);
 		}
 		return null;
 	}
