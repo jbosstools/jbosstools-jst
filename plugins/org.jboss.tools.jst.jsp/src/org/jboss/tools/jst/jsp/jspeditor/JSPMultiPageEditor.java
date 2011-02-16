@@ -482,7 +482,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		
 		if (visualEditorFactory != null) {
 			visualEditor = visualEditorFactory.createVisualEditor(this,
-					sourceEditor, false, bundleMap);
+					sourceEditor, IVisualEditor.VISUALSOURCE_MODE, bundleMap);
 		}
 		try {
 			if (visualEditor != null) {

@@ -17,7 +17,7 @@ import org.jboss.tools.jst.jsp.bundle.BundleMap;
 public interface IVisualEditorFactory {
 	
 	public IVisualEditor createVisualEditor(EditorPart multiPageEditor,
-			StructuredTextEditor textEditor, boolean visualMode,
+			StructuredTextEditor textEditor, int visualMode,
 			BundleMap bundleMap);
 
 }
