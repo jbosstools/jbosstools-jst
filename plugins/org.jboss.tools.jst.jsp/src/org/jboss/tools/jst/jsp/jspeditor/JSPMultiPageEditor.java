@@ -14,6 +14,7 @@ import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
@@ -873,6 +874,15 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 
 	public int getVisualSourceIndex() {
 		return visualSourceIndex;
+	}
+	
+	public IProject getProject() {
+		IProject pr = null;
+		IFile file = getFile();
+		if (null != file) {
+			pr = file.getProject();
+		}
+		return pr;
 	}
 
 class ResourceChangeListener implements IResourceChangeListener {
