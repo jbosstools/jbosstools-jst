@@ -38,10 +38,14 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
 
 
+import org.jboss.tools.common.meta.XAttribute;
+import org.jboss.tools.common.meta.XModelEntity;
 import org.jboss.tools.common.meta.action.SpecialWizard;
 import org.jboss.tools.common.meta.action.XEntityData;
 import org.jboss.tools.common.meta.action.impl.XEntityDataImpl;
 import org.jboss.tools.common.meta.action.impl.handlers.HUtil;
+import org.jboss.tools.common.meta.constraint.XAttributeEditor;
+import org.jboss.tools.common.meta.constraint.impl.XAttributeEditorImpl;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.common.model.util.XModelObjectUtil;
@@ -68,8 +72,14 @@ public class AppRegisterComponent {
 	Composite supportControl;
 	AddServer addServer = new AddServer();
 	AddRuntime addRuntime = new AddRuntime();
+
+	boolean disableContextRoot = false;
 	
 	public void setLight(boolean b) {
+	}
+
+	public void setDisableContextRoot(boolean disableContextRoot) {
+		this.disableContextRoot = disableContextRoot;
 	}
 	
 	public void setLayoutForSupport(Layout layout) {
@@ -100,6 +110,9 @@ public class AppRegisterComponent {
 		attInfo = new String[][] {
 			{ENTITY, ""}, {ATTR_APP_NAME, "yes"}, {ATTR_RUNTIME, "yes"}, {ATTR_SEPARATOR, "no"}, {ATTR_TARGET_SERVER, "no"} //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 		};
+
+		initDisablingContextRoot();
+		
 		XEntityData entityData = XEntityDataImpl.create(attInfo);
 		support = new XAttributeSupport() {
 			protected boolean keepGreedy(String name, int index, int greedyCount) {
@@ -119,6 +132,17 @@ public class AppRegisterComponent {
 		a.addValueChangeListener(new ServerInputChangeListener());
 		a = support.getPropertyEditorAdapterByName(ATTR_RUNTIME);
 		a.addValueChangeListener(new RuntimeInputChangeListener());
+	}
+
+	void initDisablingContextRoot() {
+		XModelEntity entity = PreferenceModelUtilities.getPreferenceModel().getMetaData().getEntity(ENTITY);
+		XAttribute attr = entity.getAttribute(ATTR_APP_NAME);
+		XAttributeEditorImpl ed = (XAttributeEditorImpl)attr.getEditor();
+		if(disableContextRoot) {
+			ed.setName("Uneditable"); //$NON-NLS-1$
+		} else {
+			ed.setName("Text"); //$NON-NLS-1$
+		}
 	}
 	
 	public boolean isEnabling() {
