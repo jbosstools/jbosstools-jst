@@ -16,16 +16,11 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -37,6 +32,7 @@ import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ColumnLayoutData;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
@@ -57,38 +53,16 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.part.FileEditorInput;
-import org.eclipse.ui.texteditor.IDocumentProvider;
-import org.eclipse.ui.texteditor.ITextEditor;
-import org.eclipse.wst.sse.core.internal.provisional.StructuredModelManager;
-import org.eclipse.wst.sse.ui.internal.provisional.extensions.ISourceEditingTextTools;
 import org.eclipse.wst.xml.core.internal.document.AttrImpl;
 import org.eclipse.wst.xml.core.internal.document.TextImpl;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
-import org.eclipse.wst.xml.ui.internal.provisional.IDOMSourceEditingTextTools;
-import org.jboss.tools.common.model.XModel;
-import org.jboss.tools.common.model.project.IModelNature;
 import org.jboss.tools.common.model.ui.ModelUIImages;
-import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.bundle.BundleMap;
 import org.jboss.tools.jst.jsp.bundle.BundleMap.BundleEntry;
-import org.jboss.tools.jst.jsp.editor.IVisualContext;
-import org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor;
-import org.jboss.tools.jst.jsp.jspeditor.SourceEditorPageContext;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.util.Constants;
-import org.jboss.tools.jst.jsp.util.FaceletsUtil;
-import org.jboss.tools.jst.web.project.WebProject;
-import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
-import org.jboss.tools.jst.web.tld.TaglibData;
 import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 public class ExternalizeStringsWizardPage extends WizardPage {
 
@@ -99,7 +73,6 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 	private final char[] LINE_DELEMITERS = new char[] {'\r', '\n', '\t'};
 	private final int DIALOG_WIDTH = 450;
 	private final int DIALOG_HEIGHT = 650;
-	private ITextEditor editor;
 	private Text propsKey;
 	private Text propsValue;
 	private Button newFile;
@@ -114,6 +87,8 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 	private Status duplicateKeyStatus;
 	private Status duplicateValueStatus;
 	private Table tagsTable;
+	private IDocument document;
+	private ISelectionProvider selectionProvider;
 
 	/**
 	 * Creates the wizard page
@@ -123,10 +98,9 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 	 * @param editor
 	 *            the source text editor
 	 * @param bm
-	 *            bundle map, or <code>null</code> - then the bundle map will be
-	 *            created and initialized manually
+	 *            bundle map, or not null
 	 */
-	public ExternalizeStringsWizardPage(String pageName, ITextEditor editor, BundleMap bm) {
+	public ExternalizeStringsWizardPage(String pageName, BundleMap bm, IDocument document, ISelectionProvider selectionProvider) {
 		/*
 		 * Setting dialog Title, Description, Image.
 		 */
@@ -135,16 +109,17 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 				ModelUIImages.getImageDescriptor(ModelUIImages.WIZARD_DEFAULT));
 		setDescription(JstUIMessages.EXTERNALIZE_STRINGS_DIALOG_DESCRIPTION);
 		setPageComplete(false);
-		this.editor = editor;
-		if (bm != null) {
-			this.bm = bm;
-		} else {
-			/*
-			 * When BundleMap is null create it manually
-			 * with all necessary initialization
-			 */
-			this.bm = createBundleMap(editor);
-		}
+//		if (bm != null) {
+//			this.bm = bm;
+//		} else {
+//			/*
+//			 * When BundleMap is null create it manually
+//			 * with all necessary initialization
+//			 */
+//			this.bm = createBundleMap(editor);
+//		}
+		this.document = document;
+		this.selectionProvider = selectionProvider;
 		propsKeyStatus = new Status(IStatus.OK, JspEditorPlugin.PLUGIN_ID, Constants.EMPTY);
 		propsValueStatus = new Status(IStatus.OK, JspEditorPlugin.PLUGIN_ID, Constants.EMPTY);
 		duplicateKeyStatus = new Status(IStatus.OK, JspEditorPlugin.PLUGIN_ID, Constants.EMPTY);
@@ -387,9 +362,8 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 	 * Replaces the text in the current file
 	 */
 	public void replaceText(String replacement) {
-		IDocumentProvider prov = editor.getDocumentProvider();
-		IDocument doc = prov.getDocument(editor.getEditorInput());
-		ISelection sel = editor.getSelectionProvider().getSelection();
+		IDocument doc = getDocument();
+		ISelection sel = getSelectionProvider().getSelection();
 		if (ExternalizeStringsUtils.isSelectionCorrect(sel)) {
 			try {
 				/*
@@ -458,7 +432,7 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 	 * Fill in appropriate text and make validation.
 	 */
 	private void initializeFieldsAndAddLIsteners() {
-		ISelection sel = editor.getSelectionProvider().getSelection();
+		ISelection sel = getSelectionProvider().getSelection();
 		if (ExternalizeStringsUtils.isSelectionCorrect(sel)) {
 			String text = Constants.EMPTY;
 			String stringToUpdate = Constants.EMPTY;
@@ -479,7 +453,7 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 					org.w3c.dom.Text textNode = (org.w3c.dom.Text) selectedElement;
 					if (textNode.getNodeValue().trim().length() > 0) {
 						stringToUpdate = textNode.getNodeValue();
-						editor.getSelectionProvider().setSelection(new StructuredSelection(stringToUpdate));
+						getSelectionProvider().setSelection(new StructuredSelection(stringToUpdate));
 					}
 				} else if (selectedElement instanceof Attr) {
 					/*
@@ -488,7 +462,7 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 					Attr attrNode = (Attr) selectedElement;
 					if (attrNode.getNodeValue().trim().length() > 0) {
 						stringToUpdate = attrNode.getNodeValue();
-						editor.getSelectionProvider().setSelection(new StructuredSelection(stringToUpdate));
+						getSelectionProvider().setSelection(new StructuredSelection(stringToUpdate));
 					}
 				}
 				if ((stringToUpdate.trim().length() > 0)) {
@@ -908,135 +882,6 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 	}
 
 	/**
-	 * Creates new bundle map if no one was specified 
-	 * during initialization of the page.
-	 *
-	 * @param editor the source editor 
-	 * @return the new bundle map
-	 */
-	private BundleMap createBundleMap(ITextEditor editor) {
-		String uri = null;
-		String prefix = null;
-		int hash;
-		Map<?, ?> map = null;
-		BundleMap bm = new BundleMap();
-		bm.init(editor.getEditorInput());
-
-		/*
-		 * Check JSF Nature
-		 */
-		boolean hasJsfProjectNatureType = false;
-		try {
-			IEditorInput ei = editor.getEditorInput();
-			if(ei instanceof IFileEditorInput) {
-				IProject project = ((IFileEditorInput)ei).getFile().getProject();
-				if (project.exists() && project.isOpen()) {
-					if (project.hasNature(WebProject.JSF_NATURE_ID)) {
-						hasJsfProjectNatureType = true;
-					}
-				}
-			}
-		} catch (CoreException e) {
-			JspEditorPlugin.getPluginLog().logError(e);
-		}
-		/*
-		 * Get Bundles from faces-config.xml
-		 */
-		if (hasJsfProjectNatureType
-				&& (editor.getEditorInput() instanceof IFileEditorInput)) {
-			IProject project = ((IFileEditorInput) editor.getEditorInput())
-			.getFile().getProject();
-			IModelNature modelNature = EclipseResourceUtil.getModelNature(project);
-			if (modelNature != null) {
-				XModel model = modelNature.getModel();
-				List<Object> l = WebPromptingProvider.getInstance().getList(model,
-						WebPromptingProvider.JSF_REGISTERED_BUNDLES, null, null);
-				if (l != null && l.size() > 1 && (l.get(1) instanceof Map)) {
-					map = (Map<?, ?>) l.get(1);
-					if ((null != map) && (map.keySet().size() > 0)) {
-						Iterator<?> it = map.keySet().iterator();
-						while (it.hasNext()) {
-							uri = it.next().toString();
-							prefix = map.get(uri).toString();
-							hash = (prefix + ":" + uri).hashCode(); //$NON-NLS-1$
-							bm.addBundle(hash, prefix, uri, false);
-						}
-					}
-				} 
-			}
-		}
-		ISourceEditingTextTools sourceEditingTextTools = 
-			(ISourceEditingTextTools) editor
-			.getAdapter(ISourceEditingTextTools.class);
-		IDOMSourceEditingTextTools domSourceEditingTextTools = 
-			(IDOMSourceEditingTextTools) sourceEditingTextTools;
-		Document documentWithBundles = domSourceEditingTextTools.getDOMDocument();
-		
-		/*
-		 * When facelets are used -- get bundles from the template file
-		 */
-		if (editor instanceof JSPTextEditor) {
-			IVisualContext context =  ((JSPTextEditor) editor).getPageContext();
-			List<TaglibData> taglibs = null;
-			if (context instanceof SourceEditorPageContext) {
-				SourceEditorPageContext sourcePageContext = (SourceEditorPageContext) context;
-				taglibs = sourcePageContext.getTagLibs();
-			}
-			if (null == taglibs) {
-				JspEditorPlugin.getDefault().logError(
-						JstUIMessages.CANNOT_LOAD_TAGLIBS_FROM_PAGE_CONTEXT);
-			} else {
-				Element root = FaceletsUtil.findComponentElement(documentWithBundles.getDocumentElement());
-				if ((root != null) && FaceletsUtil.isFacelet(root, taglibs)
-						&& root.hasAttribute("template")) { //$NON-NLS-1$
-					String filePath= root.getAttributeNode("template").getNodeValue(); //$NON-NLS-1$
-					if (((JSPTextEditor) editor).getEditorInput() instanceof FileEditorInput) {
-						FileEditorInput fei = (FileEditorInput) ((JSPTextEditor) editor).getEditorInput();
-						IResource webContentResource = EclipseResourceUtil.getFirstWebContentResource(fei.getFile().getProject());
-						if (webContentResource instanceof IContainer) {
-							IFile templateFile = (IFile) ((IContainer) webContentResource).findMember(filePath); //$NON-NLS-1$
-							Document document = null;
-							IDOMModel wtpModel = null;
-							try {
-								wtpModel = (IDOMModel)StructuredModelManager.getModelManager().getModelForRead(templateFile);
-								if (wtpModel != null) {
-									document = wtpModel.getDocument();
-								}
-							} catch(IOException e) {
-								JspEditorPlugin.getPluginLog().logError(e);
-							} catch(CoreException e) {
-								JspEditorPlugin.getPluginLog().logError(e);
-							} finally {
-								if(wtpModel!=null) {
-									wtpModel.releaseFromRead();
-								}
-							}
-							if (null != document) {
-								/*
-								 * Change the document where to look bundles
-								 */
-								documentWithBundles = document;
-							}
-						}
-					}
-				}
-			}
-		}
-		/*
-		 * Add bundles from <f:loadBundle> tags on the current page
-		 */
-		NodeList list = documentWithBundles.getElementsByTagName("f:loadBundle"); //$NON-NLS-1$
-		for (int i = 0; i < list.getLength(); i++) {
-			Element node = (Element) list.item(i);
-			uri = node.getAttribute("basename"); //$NON-NLS-1$
-			prefix = node.getAttribute("var"); //$NON-NLS-1$
-			hash = node.hashCode();
-			bm.addBundle(hash, prefix, uri, false);
-		}
-		return bm;
-	}
-
-	/**
 	 * Sets the resource bundle path according to the selection
 	 * from the bundles list.
 	 *
@@ -1056,4 +901,11 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 		propsFile.setText(bundlePath);
 	}
 	
+	private ISelectionProvider getSelectionProvider(){
+		return selectionProvider;
+	}
+	
+	private IDocument getDocument(){
+		return document;
+	}
 }
