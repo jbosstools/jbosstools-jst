@@ -22,6 +22,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
@@ -31,7 +32,6 @@ import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.eclipse.wst.xml.core.internal.document.AttrImpl;
-import org.eclipse.wst.xml.core.internal.document.ElementImpl;
 import org.jboss.tools.common.EclipseUtil;
 import org.jboss.tools.common.meta.action.XActionInvoker;
 import org.jboss.tools.common.meta.action.impl.handlers.DefaultCreateHandler;
@@ -82,7 +82,7 @@ public class ExternalizeStringsWizard extends Wizard {
 		page1 = new ExternalizeStringsWizardPage(
 				ExternalizeStringsWizardPage.PAGE_NAME, editor, bm);
 		page2 = new WizardNewFileCreationPage(EXTERNALIZE_STRINGS_DIALOG_NEW_FILE_PAGE,
-				(IStructuredSelection) editor.getSelectionProvider().getSelection()) {
+				(IStructuredSelection) getSelectionProvider().getSelection()) {
 			protected InputStream getInitialContents() {
 				return new ByteArrayInputStream(page1.getKeyValuePair().getBytes());
 			}
@@ -110,20 +110,7 @@ public class ExternalizeStringsWizard extends Wizard {
 		 * https://jira.jboss.org/browse/JBIDE-7247
 		 * Set initial values for the new properties file
 		 */
-		IPath containerFullPath = null;
-		if (editor.getEditorInput() instanceof IFileEditorInput) {
-			IProject project = ((IFileEditorInput)editor.getEditorInput()).getFile().getProject();
-			IResource[] src = EclipseUtil.getJavaSourceRoots(project);
-			if (src.length > 0) {
-				containerFullPath = src[0].getFullPath();
-			}
-		} else if (editor.getEditorInput() instanceof IStorageEditorInput) {
-			try {
-				containerFullPath = ((IStorageEditorInput) editor.getEditorInput()).getStorage().getFullPath();
-			} catch (CoreException e) {
-				JspEditorPlugin.getDefault().logError(e);
-			}
-		}
+		IPath containerFullPath = getContainerFullPath();
 		if (null != containerFullPath) {
 			page2.setContainerFullPath(containerFullPath);
 		}
@@ -288,7 +275,7 @@ public class ExternalizeStringsWizard extends Wizard {
 						 * Add <f:loadBundle> tag to the current page.
 						 * Insert the tag before currently selected tag.
 						 */
-						ISelection sel = editor.getSelectionProvider().getSelection();
+						ISelection sel = getSelectionProvider().getSelection();
 						if (ExternalizeStringsUtils.isSelectionCorrect(sel)) {
 							IStructuredSelection structuredSelection = (IStructuredSelection) sel;
 							Object selectedElement = structuredSelection.getFirstElement();
@@ -321,7 +308,7 @@ public class ExternalizeStringsWizard extends Wizard {
 													 */
 													PaletteTaglibInserter PaletteTaglibInserter = new PaletteTaglibInserter();
 													Properties p = new Properties();
-													p.put("selectionProvider", editor.getSelectionProvider()); //$NON-NLS-1$
+													p.put("selectionProvider", getSelectionProvider()); //$NON-NLS-1$
 													p.setProperty(URIConstants.LIBRARY_URI, DropURI.JSF_CORE_URI);
 													p.setProperty(URIConstants.LIBRARY_VERSION, ""); //$NON-NLS-1$
 													p.setProperty(URIConstants.DEFAULT_PREFIX, jsfCoreTaglibPrefix);
@@ -369,5 +356,30 @@ public class ExternalizeStringsWizard extends Wizard {
 		String replacement = "#{" + var + Constants.DOT + key + "}"; //$NON-NLS-1$ //$NON-NLS-2$
 		page1.replaceText(replacement);
 		return true;
+	}
+	
+	private ISelectionProvider getSelectionProvider(){
+		return editor.getSelectionProvider();
+	}
+	/**
+	 * https://jira.jboss.org/browse/JBIDE-7247
+	 * returns initial path for new properties file
+	 */
+	private IPath getContainerFullPath(){
+		IPath containerFullPath = null;
+		if (editor.getEditorInput() instanceof IFileEditorInput) {
+			IProject project = ((IFileEditorInput)editor.getEditorInput()).getFile().getProject();
+			IResource[] src = EclipseUtil.getJavaSourceRoots(project);
+			if (src.length > 0) {
+				containerFullPath = src[0].getFullPath();
+			}
+		} else if (editor.getEditorInput() instanceof IStorageEditorInput) {
+			try {
+				containerFullPath = ((IStorageEditorInput) editor.getEditorInput()).getStorage().getFullPath();
+			} catch (CoreException e) {
+				JspEditorPlugin.getDefault().logError(e);
+			}
+		}
+		return containerFullPath;
 	}
 }
