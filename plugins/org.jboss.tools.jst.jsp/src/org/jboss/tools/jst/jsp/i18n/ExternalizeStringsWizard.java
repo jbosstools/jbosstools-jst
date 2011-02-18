@@ -200,9 +200,9 @@ public class ExternalizeStringsWizard extends Wizard {
 					is.close();
 					is = null;
 				} catch (CoreException e) {
-					e.printStackTrace();
+					JspEditorPlugin.getDefault().logError(e);
 				} catch (IOException e) {
-					e.printStackTrace();
+					JspEditorPlugin.getDefault().logError(e);
 				}
 			}
 			/*
