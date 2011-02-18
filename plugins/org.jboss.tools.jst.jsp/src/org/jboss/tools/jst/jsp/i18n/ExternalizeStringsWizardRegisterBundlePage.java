@@ -24,7 +24,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.jboss.tools.common.EclipseUtil;
 import org.jboss.tools.common.model.ui.ModelUIImages;
@@ -89,8 +88,7 @@ public class ExternalizeStringsWizardRegisterBundlePage extends WizardPage
 		bundleName.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false, 1, 1));
 		String fileName = Constants.EMPTY;
 		if (getWizard() instanceof ExternalizeStringsWizard) {
-			fileName = ((ExternalizeStringsWizard) getWizard()).editor
-					.getEditorInput().getName();
+			fileName = ((ExternalizeStringsWizard) getWizard()).getFileName();
 			int pos = fileName.lastIndexOf(Constants.DOT);
 			if (pos != -1) {
 				fileName = fileName.substring(0, pos);
@@ -184,22 +182,22 @@ public class ExternalizeStringsWizardRegisterBundlePage extends WizardPage
 		}
 	}
 	
-	/**
-	 * Gets the selected place.
-	 *
-	 * @return the selected place
-	 */
-	private int getSelectedPlace() {
-		int place = FACES_CONFIG;
-		if (isInFacesConfig()) {
-			place = FACES_CONFIG;
-		} else if (isViaLoadBundle()) {
-			place = LOAD_BUNDLE;
-		} else if (isUserDefined()) {
-			place = USER_DEFINED;
-		}
-		return place;
-	}
+//	/**
+//	 * Gets the selected place.
+//	 *
+//	 * @return the selected place
+//	 */
+//	private int getSelectedPlace() {
+//		int place = FACES_CONFIG;
+//		if (isInFacesConfig()) {
+//			place = FACES_CONFIG;
+//		} else if (isViaLoadBundle()) {
+//			place = LOAD_BUNDLE;
+//		} else if (isUserDefined()) {
+//			place = USER_DEFINED;
+//		}
+//		return place;
+//	}
 
 	/**
 	 * Update bundle name field.
@@ -223,8 +221,8 @@ public class ExternalizeStringsWizardRegisterBundlePage extends WizardPage
 		boolean sourceFolderSelected = false;
 		if (getWizard() instanceof ExternalizeStringsWizard) {
 			ExternalizeStringsWizard wiz = (ExternalizeStringsWizard) getWizard(); 
-			if (wiz.editor.getEditorInput() instanceof IFileEditorInput) {
-				IProject project = ((IFileEditorInput)(wiz.editor.getEditorInput())).getFile().getProject();
+			if (wiz.getProject()!=null) {
+				IProject project = wiz.getProject();
 				WizardNewFileCreationPage page2 = (WizardNewFileCreationPage)wiz.getPage(
 						ExternalizeStringsWizard.EXTERNALIZE_STRINGS_DIALOG_NEW_FILE_PAGE);
 				String userDefinedPath = page2.getContainerFullPath().toString();

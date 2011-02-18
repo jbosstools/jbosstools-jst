@@ -79,7 +79,7 @@ public class ExternalizeStringsWizard extends Wizard {
 	public static final String EXTERNALIZE_STRINGS_DIALOG_NEW_FILE_PAGE = 
 		"EXTERNALIZE_STRINGS_DIALOG_NEW_FILE_PAGE"; //$NON-NLS-1$
 	
-	ITextEditor editor = null;
+	private ITextEditor editor = null;
 	BundleMap bm = null;
 	ExternalizeStringsWizardPage page1 = null;
 	WizardNewFileCreationPage page2 = null;
@@ -134,7 +134,7 @@ public class ExternalizeStringsWizard extends Wizard {
 		if (null != containerFullPath) {
 			page2.setContainerFullPath(containerFullPath);
 		}
-		String fileName = editor.getEditorInput().getName();
+		String fileName = getFileName();
 		int pos = fileName.lastIndexOf(Constants.DOT);
 		if (pos != -1) {
 			fileName = fileName.substring(0, pos) + Constants.PROPERTIES_EXTENTION;
@@ -210,8 +210,8 @@ public class ExternalizeStringsWizard extends Wizard {
 			 */
 			if (page1.isNewFile() && !page3.isUserDefined()) {
 				var = page3.getBundleName();
-				if (editor.getEditorInput() instanceof IFileEditorInput) {
-					IProject project = ((IFileEditorInput)editor.getEditorInput()).getFile().getProject();
+				if (getProject()!=null) {
+					IProject project = getProject();
 					String userDefinedPath = page2.getContainerFullPath().toString();
 					/*
 					 * Get the source folders for the project
@@ -535,5 +535,17 @@ public class ExternalizeStringsWizard extends Wizard {
 			}
 		}
 		return containerFullPath;
+	}
+	
+	protected String getFileName(){
+		return editor.getEditorInput().getName();
+	}
+	
+	protected IProject getProject(){
+		IProject project = null;
+		if (editor.getEditorInput() instanceof IFileEditorInput) {
+			project = ((IFileEditorInput)editor.getEditorInput()).getFile().getProject();
+		}
+		return project;
 	}
 }
