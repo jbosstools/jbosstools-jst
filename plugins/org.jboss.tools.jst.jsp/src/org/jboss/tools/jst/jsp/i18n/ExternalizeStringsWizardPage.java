@@ -109,15 +109,7 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 				ModelUIImages.getImageDescriptor(ModelUIImages.WIZARD_DEFAULT));
 		setDescription(JstUIMessages.EXTERNALIZE_STRINGS_DIALOG_DESCRIPTION);
 		setPageComplete(false);
-//		if (bm != null) {
-//			this.bm = bm;
-//		} else {
-//			/*
-//			 * When BundleMap is null create it manually
-//			 * with all necessary initialization
-//			 */
-//			this.bm = createBundleMap(editor);
-//		}
+		this.bm=bm;
 		this.document = document;
 		this.selectionProvider = selectionProvider;
 		propsKeyStatus = new Status(IStatus.OK, JspEditorPlugin.PLUGIN_ID, Constants.EMPTY);
