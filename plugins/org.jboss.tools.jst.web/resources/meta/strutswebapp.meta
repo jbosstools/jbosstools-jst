@@ -2328,8 +2328,8 @@
    <XModelAttribute name="description" xmlname="description.#text">
     <Editor name="Note"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="id=true" name="role-name" xmlname="role-name.#text">
-    <Constraint loader="JavaName">
+   <XModelAttribute PROPERTIES="id=true;save=always" name="role-name" xmlname="role-name.#text">
+    <Constraint loader="Nmtoken">
      <value name="acceptIncorrect=true"/>
     </Constraint>
     <Editor name="Name"/>
@@ -2378,7 +2378,7 @@
     <Editor name="Note"/>
    </XModelAttribute>
    <XModelAttribute PROPERTIES="id=true;save=always" name="role-name" xmlname="role-name.#text">
-    <Constraint loader="JavaName"/>
+    <Constraint loader="Nmtoken"/>
     <Editor name="Name"/>
    </XModelAttribute>
    <XModelAttribute PROPERTIES="save=always" name="role-link" xmlname="role-link.#text">
