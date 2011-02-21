@@ -13,7 +13,7 @@ package org.jboss.tools.jst.jsp.editor;
 import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.texteditor.ITextEditor;
 
-public interface IVisualEditor extends ITextEditor, IReusableEditor {
+public interface IVisualEditor extends IReusableEditor {
 	public static final int VISUALSOURCE_MODE = 0;
 	//public static final int VISUAL_MODE = 1;
 	public static final int SOURCE_MODE = 1;
