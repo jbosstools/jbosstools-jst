@@ -80,10 +80,10 @@ public class ExternalizeStringsWizard extends Wizard {
 		"EXTERNALIZE_STRINGS_DIALOG_NEW_FILE_PAGE"; //$NON-NLS-1$
 	
 	private ITextEditor editor = null;
-	BundleMap bm = null;
-	ExternalizeStringsWizardPage page1 = null;
-	WizardNewFileCreationPage page2 = null;
-	ExternalizeStringsWizardRegisterBundlePage page3 = null;
+	private BundleMap bm = null;
+	private ExternalizeStringsWizardPage page1 = null;
+	private WizardNewFileCreationPage page2 = null;
+	private ExternalizeStringsWizardRegisterBundlePage page3 = null;
 	
 	public ExternalizeStringsWizard(ITextEditor editor, BundleMap bm) {
 		super();
@@ -301,47 +301,8 @@ public class ExternalizeStringsWizard extends Wizard {
 							Object selectedElement = structuredSelection.getFirstElement();
 							if (selectedElement instanceof Node) {
 								Node node = (Node) selectedElement;
-								List<TaglibData> taglibs = null;
+								registerMessageTaglib();
 								String jsfCoreTaglibPrefix = "f"; //$NON-NLS-1$
-								boolean isJsfCoreTaglibRegistered = false;
-								if (editor instanceof JSPMultiPageEditor) {
-									StructuredTextEditor ed = ((JSPMultiPageEditor) editor).getSourceEditor();
-									if (ed instanceof JSPTextEditor) {
-										IVisualContext context =  ((JSPTextEditor) ed).getPageContext();
-										if (context instanceof SourceEditorPageContext) {
-											SourceEditorPageContext sourcePageContext = (SourceEditorPageContext) context;
-											taglibs = sourcePageContext.getTagLibs();
-											if (null == taglibs) {
-												JspEditorPlugin.getDefault().logError(
-														JstUIMessages.CANNOT_LOAD_TAGLIBS_FROM_PAGE_CONTEXT);
-											} else {
-												for (TaglibData tl : taglibs) {
-													if (DropURI.JSF_CORE_URI.equalsIgnoreCase(tl.getUri())) {
-														isJsfCoreTaglibRegistered = true;
-														jsfCoreTaglibPrefix = tl.getPrefix();
-														break;
-													}
-												}
-												if (!isJsfCoreTaglibRegistered) {
-													/*
-													 * Register the required taglib
-													 */
-													PaletteTaglibInserter PaletteTaglibInserter = new PaletteTaglibInserter();
-													Properties p = new Properties();
-													p.put("selectionProvider", getSelectionProvider()); //$NON-NLS-1$
-													p.setProperty(URIConstants.LIBRARY_URI, DropURI.JSF_CORE_URI);
-													p.setProperty(URIConstants.LIBRARY_VERSION, ""); //$NON-NLS-1$
-													p.setProperty(URIConstants.DEFAULT_PREFIX, jsfCoreTaglibPrefix);
-													p.setProperty(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB, "true"); //$NON-NLS-1$
-													p.setProperty(JSPPaletteInsertHelper.PROPOPERTY_REFORMAT_BODY, "yes"); //$NON-NLS-1$
-													p.setProperty(PaletteInsertHelper.PROPOPERTY_START_TEXT, 
-															"<%@ taglib uri=\"http://java.sun.com/jsf/core\" prefix=\"f\" %>\\n"); //$NON-NLS-1$
-													PaletteTaglibInserter.inserTaglib(ed.getTextViewer().getDocument(), p);
-												}
-											}
-										}
-									}
-								}
 								Element loadBundle = node.getOwnerDocument().createElement(
 										jsfCoreTaglibPrefix + Constants.COLON + "loadBundle"); //$NON-NLS-1$
 								loadBundle.setAttribute("var", var); //$NON-NLS-1$
@@ -376,6 +337,53 @@ public class ExternalizeStringsWizard extends Wizard {
 		String replacement = "#{" + var + Constants.DOT + key + "}"; //$NON-NLS-1$ //$NON-NLS-2$
 		page1.replaceText(replacement);
 		return true;
+	}
+	/**
+	 * Register Message Taglibs on page
+	 */
+	protected void registerMessageTaglib(){
+		List<TaglibData> taglibs = null;
+		String jsfCoreTaglibPrefix = "f"; //$NON-NLS-1$
+		if (editor instanceof JSPMultiPageEditor) {
+			StructuredTextEditor ed = ((JSPMultiPageEditor) editor).getSourceEditor();
+			if (ed instanceof JSPTextEditor) {
+				IVisualContext context =  ((JSPTextEditor) ed).getPageContext();
+				if (context instanceof SourceEditorPageContext) {
+					SourceEditorPageContext sourcePageContext = (SourceEditorPageContext) context;
+					taglibs = sourcePageContext.getTagLibs();
+					if (null == taglibs) {
+						JspEditorPlugin.getDefault().logError(
+								JstUIMessages.CANNOT_LOAD_TAGLIBS_FROM_PAGE_CONTEXT);
+					} else {
+						boolean isJsfCoreTaglibRegistered = false;
+						for (TaglibData tl : taglibs) {
+							if (DropURI.JSF_CORE_URI.equalsIgnoreCase(tl.getUri())) {
+								isJsfCoreTaglibRegistered = true;
+								jsfCoreTaglibPrefix = tl.getPrefix();
+								break;
+							}
+						}
+						if (!isJsfCoreTaglibRegistered) {
+							/*
+							 * Register the required taglib
+							 */
+							PaletteTaglibInserter PaletteTaglibInserter = new PaletteTaglibInserter();
+							Properties p = new Properties();
+							p.put("selectionProvider", getSelectionProvider()); //$NON-NLS-1$
+							p.setProperty(URIConstants.LIBRARY_URI, DropURI.JSF_CORE_URI);
+							p.setProperty(URIConstants.LIBRARY_VERSION, ""); //$NON-NLS-1$
+							p.setProperty(URIConstants.DEFAULT_PREFIX, jsfCoreTaglibPrefix);
+							p.setProperty(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB, "true"); //$NON-NLS-1$
+							p.setProperty(JSPPaletteInsertHelper.PROPOPERTY_REFORMAT_BODY, "yes"); //$NON-NLS-1$
+							p.setProperty(PaletteInsertHelper.PROPOPERTY_START_TEXT, 
+									"<%@ taglib uri=\"http://java.sun.com/jsf/core\" prefix=\"f\" %>\\n"); //$NON-NLS-1$
+							PaletteTaglibInserter.inserTaglib(ed.getTextViewer().getDocument(), p);
+						}
+					}
+				}
+			}
+		}
+
 	}
 	
 	/**
