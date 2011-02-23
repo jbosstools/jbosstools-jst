@@ -1863,13 +1863,13 @@
     visibility="false" xmlname="NAME"/>
    <XModelAttribute PROPERTIES="save=always" default="BASIC"
     name="auth-method" xmlname="auth-method.#text">
-    <Constraint loader="List">
+    <Constraint loader="ListString">
      <value name="BASIC"/>
      <value name="DIGEST"/>
      <value name="FORM"/>
      <value name="CLIENT-CERT"/>
     </Constraint>
-    <Editor name="List"/>
+    <Editor name="ListString"/>
    </XModelAttribute>
    <XModelAttribute name="realm-name" xmlname="realm-name.#text"/>
    <XModelAttribute name="form-login-page" xmlname="form-login-config.form-login-page.#text">
