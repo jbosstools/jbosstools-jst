@@ -1863,13 +1863,13 @@
     visibility="false" xmlname="NAME"/>
    <XModelAttribute PROPERTIES="save=always" default="BASIC"
     name="auth-method" xmlname="auth-method.#text">
-    <Constraint loader="List">
+    <Constraint loader="ListString">
      <value name="BASIC"/>
      <value name="DIGEST"/>
      <value name="FORM"/>
      <value name="CLIENT-CERT"/>
     </Constraint>
-    <Editor name="List"/>
+    <Editor name="ListString"/>
    </XModelAttribute>
    <XModelAttribute name="realm-name" xmlname="realm-name.#text"/>
    <XModelAttribute name="form-login-page" xmlname="form-login-config.form-login-page.#text">
@@ -2328,8 +2328,8 @@
    <XModelAttribute name="description" xmlname="description.#text">
     <Editor name="Note"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="id=true" name="role-name" xmlname="role-name.#text">
-    <Constraint loader="JavaName">
+   <XModelAttribute PROPERTIES="id=true;save=always" name="role-name" xmlname="role-name.#text">
+    <Constraint loader="Nmtoken">
      <value name="acceptIncorrect=true"/>
     </Constraint>
     <Editor name="Name"/>
@@ -2378,7 +2378,7 @@
     <Editor name="Note"/>
    </XModelAttribute>
    <XModelAttribute PROPERTIES="id=true;save=always" name="role-name" xmlname="role-name.#text">
-    <Constraint loader="JavaName"/>
+    <Constraint loader="Nmtoken"/>
     <Editor name="Name"/>
    </XModelAttribute>
    <XModelAttribute PROPERTIES="save=always" name="role-link" xmlname="role-link.#text">
