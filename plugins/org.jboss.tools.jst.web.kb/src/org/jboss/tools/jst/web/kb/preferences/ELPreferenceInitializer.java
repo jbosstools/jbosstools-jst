@@ -39,5 +39,6 @@ public class ELPreferenceInitializer extends AbstractPreferenceInitializer {
 		defaultPreferences.put(ELSeverityPreferences.CHECK_VARS, ELSeverityPreferences.ENABLE);
 		defaultPreferences.put(ELSeverityPreferences.RE_VALIDATE_UNRESOLVED_EL, ELSeverityPreferences.ENABLE);
 		defaultPreferences.putInt(SeverityPreferences.MAX_NUMBER_OF_MARKERS_PREFERENCE_NAME, SeverityPreferences.DEFAULT_MAX_NUMBER_OF_MARKERS_PER_FILE);
+		defaultPreferences.put(ELSeverityPreferences.NON_EXTERNALIZED_STRINGS, ELSeverityPreferences.IGNORE);
 	}
 }

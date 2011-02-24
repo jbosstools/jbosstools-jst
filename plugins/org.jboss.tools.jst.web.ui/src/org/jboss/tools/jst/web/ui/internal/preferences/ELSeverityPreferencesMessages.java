@@ -34,6 +34,7 @@ public class ELSeverityPreferencesMessages extends NLS {
 	public static String JSFValidatorConfigurationBlock_pb_revalidateUnresolvedEl_label;
 	public static String JSFValidatorConfigurationBlock_pb_unknownElVariablePropertyName_label;
 	public static String JSFValidatorConfigurationBlock_pb_unpairedGetterOrSetter_label;
+	public static String JSFValidatorConfigurationBlock_pb_non_externalizedStrings_label;
 
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, ELSeverityPreferencesMessages.class);

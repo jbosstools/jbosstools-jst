@@ -53,6 +53,7 @@ public class ELValidatorConfigurationBlock extends SeverityConfigurationBlock {
 			{ELSeverityPreferences.UNKNOWN_EL_VARIABLE_NAME, ELSeverityPreferencesMessages.JSFValidatorConfigurationBlock_pb_unknownElVariableName_label},
 			{ELSeverityPreferences.UNKNOWN_EL_VARIABLE_PROPERTY_NAME, ELSeverityPreferencesMessages.JSFValidatorConfigurationBlock_pb_unknownElVariablePropertyName_label},
 			{ELSeverityPreferences.UNPAIRED_GETTER_OR_SETTER, ELSeverityPreferencesMessages.JSFValidatorConfigurationBlock_pb_unpairedGetterOrSetter_label},
+			{ELSeverityPreferences.NON_EXTERNALIZED_STRINGS, ELSeverityPreferencesMessages.JSFValidatorConfigurationBlock_pb_non_externalizedStrings_label}
 		},
 		WebKbPlugin.PLUGIN_ID
 	);
