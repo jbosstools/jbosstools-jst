@@ -37,6 +37,7 @@ public class ProjectVersion {
 	String[] order = new String[0];
 	
 	String preferredServletVersion = null;
+	String minimalServletVersion = null;
 	
 	ProjectVersion(ProjectVersions versions) {
 		this.versions = versions;
@@ -64,6 +65,10 @@ public class ProjectVersion {
 	
 	public String getPreferredServletVersion() {
 		return preferredServletVersion;
+	}
+	
+	public String getMinimalServletVersion() {
+		return minimalServletVersion;
 	}
 	
 	public String getErrorMessage() {
@@ -103,6 +108,10 @@ public class ProjectVersion {
 		String sv = e.getAttribute("servlet-version"); //$NON-NLS-1$
 		if(sv != null && sv.trim().length() > 0) {
 			preferredServletVersion = sv.trim();
+		}
+		sv = e.getAttribute("min-servlet-version"); //$NON-NLS-1$
+		if(sv != null && sv.trim().length() > 0) {
+			minimalServletVersion = sv.trim();
 		}
 		ArrayList<LibraryReference> ls = new ArrayList<LibraryReference>();
 		NodeList nl = e.getChildNodes();
