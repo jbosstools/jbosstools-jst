@@ -488,7 +488,13 @@ public class SelectionBar extends Composite implements ISelectionChangedListener
 	private void addNodeListenerTo(Node node) {
 		if (node instanceof INodeNotifier) {
 			INodeNotifier notifier = (INodeNotifier) node;
-			if (notifier.getExistingAdapter(this) == null) {
+			
+			/* yradtsevich:
+			 * checking for notifier.getExistingAdapter(this) == null
+	 		 * is not used because of JBIDE-8049 (JBIDE-8051)
+	 		 * (PDT implementation of getExistingAdapter(Object type) works
+	 		 * incorrectly with non Class parameters) */
+			if (!nodeNotifiers.contains(notifier)) {
 				notifier.addAdapter(nodeListener);
 				nodeNotifiers.add(notifier);
 			}
