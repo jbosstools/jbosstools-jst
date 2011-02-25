@@ -11,7 +11,6 @@
 package org.jboss.tools.jst.web.kb.refactoring;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -30,13 +29,9 @@ import org.eclipse.jdt.core.search.IJavaSearchScope;
 import org.jboss.tools.common.el.core.ELCorePlugin;
 import org.jboss.tools.common.el.core.ELReference;
 import org.jboss.tools.common.el.core.model.ELExpression;
-import org.jboss.tools.common.el.core.model.ELInstance;
 import org.jboss.tools.common.el.core.model.ELInvocationExpression;
 import org.jboss.tools.common.el.core.model.ELMethodInvocation;
-import org.jboss.tools.common.el.core.model.ELModel;
 import org.jboss.tools.common.el.core.model.ELPropertyInvocation;
-import org.jboss.tools.common.el.core.parser.ELParser;
-import org.jboss.tools.common.el.core.parser.ELParserUtil;
 import org.jboss.tools.common.el.core.resolver.ELCompletionEngine;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.ELResolution;
@@ -59,9 +54,9 @@ public abstract class RefactorSearcher {
 	protected static final String JSP_EXT = "jsp"; //$NON-NLS-1$
 	protected static final String PROPERTIES_EXT = "properties"; //$NON-NLS-1$
 	
-	private static final String GET = "get"; //$NON-NLS-1$
-	private static final String SET = "set"; //$NON-NLS-1$
-	private static final String IS = "is"; //$NON-NLS-1$
+//	private static final String GET = "get"; //$NON-NLS-1$
+//	private static final String SET = "set"; //$NON-NLS-1$
+//	private static final String IS = "is"; //$NON-NLS-1$
 	
 	protected static final String SEAM_PROPERTIES_FILE = "seam.properties"; //$NON-NLS-1$
 	
@@ -69,7 +64,6 @@ public abstract class RefactorSearcher {
 	protected String propertyName;
 	protected IJavaElement javaElement;
 	protected IJavaSearchScope searchScope;
-	
 	
 	public RefactorSearcher(IFile baseFile, String propertyName){
 		this.baseFile = baseFile;
@@ -106,18 +100,31 @@ public abstract class RefactorSearcher {
 			if(javaProject != null){
 				for(IResource resource : EclipseResourceUtil.getJavaSourceRoots(project)){
 					if(resource instanceof IFolder)
-						scanForJava((IFolder) resource);
+						if(!scanForJava((IFolder) resource)){
+							outOfSynch(((IFolder) resource).getProject());
+							return;
+						}
 					else if(resource instanceof IFile)
-						scanForJava((IFile) resource);
+						if(!scanForJava((IFile) resource)){
+							outOfSynch(((IFile) resource).getProject());
+							return;
+						}
 				}
 			}
 			
 			// searching jsp, xhtml and xml files in WebContent folders
 			
-			if(getViewFolder(project) != null)
-				scan(getViewFolder(project));
-			else
-				scan(project);
+			if(getViewFolder(project) != null){
+				if(!scan(getViewFolder(project))){
+					outOfSynch(project);
+					return;
+				}
+			}else{
+				if(!scan(project)){
+					outOfSynch(project);
+					return;
+				}
+			}
 		}
 		//stopStatistic();
 	}
@@ -130,36 +137,44 @@ public abstract class RefactorSearcher {
 	
 	protected abstract IContainer getViewFolder(IProject project);
 	
-	private void scanForJava(IContainer container){
+	private boolean scanForJava(IContainer container){
 		if(container.getName().startsWith(".")) //$NON-NLS-1$
-			return;
+			return true;
 		
 		try{
 			for(IResource resource : container.members()){
-				if(resource instanceof IFolder)
-					scanForJava((IFolder) resource);
-				else if(resource instanceof IFile)
-					scanForJava((IFile) resource);
+				if(resource instanceof IFolder){
+					if(!scanForJava((IFolder) resource))
+						return false;
+				}else if(resource instanceof IFile){
+					if(!scanForJava((IFile) resource))
+						return false;
+				}
 			}
 		}catch(CoreException ex){
 			ELCorePlugin.getDefault().logError(ex);
 		}
+		return true;
 	}
 
-	private void scan(IContainer container){
+	private boolean scan(IContainer container){
 		if(container.getName().startsWith(".")) //$NON-NLS-1$
-			return;
+			return true;
 
 		try{
 			for(IResource resource : container.members()){
-				if(resource instanceof IFolder)
-					scan((IFolder) resource);
-				else if(resource instanceof IFile)
-					scan((IFile) resource);
+				if(resource instanceof IFolder){
+					if(!scan((IFolder) resource))
+						return false;
+				}else if(resource instanceof IFile){
+					if(!scan((IFile) resource))
+						return false;
+				}
 			}
 		}catch(CoreException ex){
 			ELCorePlugin.getDefault().logError(ex);
 		}
+		return true;
 	}
 	
 	private String getFileContent(IFile file){
@@ -172,32 +187,56 @@ public abstract class RefactorSearcher {
 		return null;
 	}
 	
-	private void scanForJava(IFile file){
-		if(isFileCorrect(file)) {
-			if(PROPERTIES_EXT.equalsIgnoreCase(file.getFileExtension())){
-				if(file.getName().equals(SEAM_PROPERTIES_FILE)){
-					String content = getFileContent(file);
-					scanProperties(file, content);
-				}else
-					searchInCach(file);
-			} else if (JAVA_EXT.equalsIgnoreCase(file.getFileExtension())
-					|| JSP_EXT.equalsIgnoreCase(file.getFileExtension())
-					|| XHTML_EXT.equalsIgnoreCase(file.getFileExtension())
-					|| XML_EXT.equalsIgnoreCase(file.getFileExtension())) {
+	/**
+	 * 
+	 * @param file
+	 * @return
+	 * true - in order to continue searching
+	 * false - in order to stop searching
+	 */
+	private boolean scanForJava(IFile file){
+		if(isFilePhantom(file))
+			return true;
+		
+		if(isFileOutOfSynch(file))
+			return false;
+		
+		if(PROPERTIES_EXT.equalsIgnoreCase(file.getFileExtension())){
+			if(file.getName().equals(SEAM_PROPERTIES_FILE)){
+				String content = getFileContent(file);
+				scanProperties(file, content);
+			}else
 				searchInCach(file);
-			}
+		} else if (JAVA_EXT.equalsIgnoreCase(file.getFileExtension())
+				|| JSP_EXT.equalsIgnoreCase(file.getFileExtension())
+				|| XHTML_EXT.equalsIgnoreCase(file.getFileExtension())
+				|| XML_EXT.equalsIgnoreCase(file.getFileExtension())) {
+			searchInCach(file);
 		}
+		return true;
 	}
 
-	private void scan(IFile file){
-		if(isFileCorrect(file)) {
-			String ext = file.getFileExtension();			
-			if(XML_EXT.equalsIgnoreCase(ext) 
-				|| XHTML_EXT.equalsIgnoreCase(ext) 
-				|| JSP_EXT.equalsIgnoreCase(ext)) {
-				searchInCach(file);
-			}
+	/**
+	 * 
+	 * @param file
+	 * @return
+	 * true - in order to continue searching
+	 * false - in order to stop searching
+	 */
+	private boolean scan(IFile file){
+		if(isFilePhantom(file))
+			return true;
+		
+		if(isFileOutOfSynch(file))
+			return false;
+
+		String ext = file.getFileExtension();			
+		if(XML_EXT.equalsIgnoreCase(ext) 
+			|| XHTML_EXT.equalsIgnoreCase(ext) 
+			|| JSP_EXT.equalsIgnoreCase(ext)) {
+			searchInCach(file);
 		}
+		return true;
 	}
 	
 	protected void searchInCach(IFile file){
@@ -375,7 +414,19 @@ public abstract class RefactorSearcher {
 		return invocationExpression;
 	}
 	
-	protected abstract boolean isFileCorrect(IFile file);
+	protected boolean isFileOutOfSynch(IFile file){
+		return !file.isSynchronized(IResource.DEPTH_ZERO);
+	}
+	
+	protected boolean isFilePhantom(IFile file){
+		return file.isPhantom();
+	}
+	
+	protected boolean isFileReadOnly(IFile file){
+		return file.isReadOnly();
+	}
+	
+	protected abstract void outOfSynch(IProject file);
 	
 	protected abstract void match(IFile file, int offset, int length);
 	
