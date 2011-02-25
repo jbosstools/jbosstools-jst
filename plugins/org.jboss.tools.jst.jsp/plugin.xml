@@ -194,7 +194,7 @@
             contributorClass="org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageContributor"
             id="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor"
             matchingStrategy = "org.jboss.tools.common.core.resources.MatchingStrategyImpl"
-            extensions="jsp, jspf, jspx, tag, tagf, inc">
+            extensions="jsp, jspf, jspx, tag, tagf">
          <contentTypeBinding contentTypeId="org.eclipse.jst.jsp.core.jspsource"/>
       </editor>
       <editor 
@@ -538,9 +538,9 @@
 	</extension>
 	
     <extension point="org.eclipse.core.runtime.contentTypes">
-       <file-association
+       <!--file-association
              content-type="org.eclipse.jst.jsp.core.jspsource"
-             file-extensions="inc"/>
+             file-extensions="inc"/ -->
        <file-association
              content-type="org.eclipse.wst.html.core.htmlsource"
              file-extensions="jsf"/>
@@ -971,6 +971,17 @@
       </content-type> 
       
     </extension>
+   
+   <extension point="org.eclipse.core.contenttype.contentTypes"> 
+      <content-type id="org.eclipse.jst.jsp.core.jspsource" 
+       name="%ContentType_JBossToolsINC"
+       base-type="org.eclipse.core.runtime.text"
+       describer="org.jboss.tools.jst.jsp.jspeditor.JSPIncludeContentDescriber"
+       file-extensions="inc"
+       priority="normal" 
+       />
+   </extension>
+   
    
    <extension
          point="org.jboss.tools.common.model.resourceMapping">
