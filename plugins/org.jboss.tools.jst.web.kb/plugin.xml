@@ -94,6 +94,7 @@
 
 	<contexttype id="JSP_PAGE_CONTEXT_TYPE">
 		<contenttype id="org.eclipse.jst.jsp.core.jspsource" />
+		<contenttype id="org.jboss.tools.jst.jsp.jspincludesource" />
         <contenttype id="org.eclipse.jst.jsp.core.jspfragmentsource"/>
         <contenttype id="org.eclipse.jst.jsp.core.tagsource"/>
 	</contexttype>
@@ -185,6 +186,7 @@
 				nameFilter="*.jtpl">
 			</filter>
          	<contentTypeBinding contentTypeId="org.eclipse.jst.jsp.core.jspsource"/>
+         	<contentTypeBinding contentTypeId="org.jboss.tools.jst.jsp.jspincludesource"/>
          	<contentTypeBinding contentTypeId="org.eclipse.jst.jsp.core.jspfragmentsource"/>
          	<contentTypeBinding contentTypeId="org.eclipse.jst.jsp.core.tagsource"/>
 			<markerId
