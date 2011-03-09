@@ -92,14 +92,13 @@ public class CSSPropertyPage extends TabbedPropertySheetPage implements
 		if ((this.part != part) && (selection instanceof IStructuredSelection)) {
 			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
 			Object newSelectedObject = structuredSelection.getFirstElement();
-
-			if ((selectedObject == null)
-					|| (!selectedObject.equals(newSelectedObject)))
+			//added by Maksim Areshkay as fix for https://issues.jboss.org/browse/JBIDE-8523
+			//here we should process only elements of StyleContainer or set selection to null(clean)
+			if(newSelectedObject==null||(newSelectedObject instanceof StyleContainer)){
 				super.selectionChanged(part, selection);
-			selectedObject = newSelectedObject;
-
-			update();
-
+				selectedObject = newSelectedObject;
+				update();
+			}
 		}
 
 	}
