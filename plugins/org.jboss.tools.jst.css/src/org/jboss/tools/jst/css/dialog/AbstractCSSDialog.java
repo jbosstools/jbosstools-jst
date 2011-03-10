@@ -165,9 +165,14 @@ public abstract class AbstractCSSDialog extends TitleAreaDialog {
 		browser = CSSBrowser.createCSSBrowser(previewComposite, SWT.BORDER | SWT.MOZILLA);
 		browser.setText(generateBrowserPage());
 		browser.setLayoutData(gridData);
+		
 		browser.addMouseListener(new MouseAdapter() {
+			/* TODO: yradtsevich: Deduplicate code. Method
+			 * org.jboss.tools.jst.css.view.CSSPreview.createPartControl(Composite)
+			 * has the same MouseListener in it.
+			 * This duplicate code may cause issues like JBIDE-8414  */
 			public void mouseDoubleClick(MouseEvent e) {
-				if (e.widget == browser) {
+				if (browser.isBrowserEvent(e)) {
 					browser.setEnabled(false);
 					previewComposite.setMaximizedControl(previewText);
 					previewText.setFocus();
