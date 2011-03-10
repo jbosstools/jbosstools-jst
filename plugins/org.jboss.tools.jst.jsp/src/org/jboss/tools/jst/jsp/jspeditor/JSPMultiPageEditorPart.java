@@ -13,7 +13,11 @@ package org.jboss.tools.jst.jsp.jspeditor;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.eclipse.core.commands.AbstractHandler;
+import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.SafeRunner;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.util.Assert;
 import org.eclipse.jface.util.SafeRunnable;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -23,12 +27,15 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Item;
 import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorInput;
@@ -39,10 +46,12 @@ import org.eclipse.ui.INestableKeyBindingService;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.ui.part.MultiPageSelectionProvider;
+import org.eclipse.ui.part.PageSwitcher;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.jboss.tools.common.core.resources.XModelObjectEditorInput;
 import org.jboss.tools.jst.jsp.selection.bar.SelectionBar;
@@ -51,6 +60,8 @@ import org.jboss.tools.jst.jsp.selection.bar.SelectionBar;
  * 
  */
 public abstract class JSPMultiPageEditorPart extends EditorPart {
+	private static final String COMMAND_NEXT_SUB_TAB = "org.eclipse.ui.navigate.nextSubTab"; //$NON-NLS-1$
+	private static final String COMMAND_PREVIOUS_SUB_TAB = "org.eclipse.ui.navigate.previousSubTab"; //$NON-NLS-1$
 
 	private CTabFolder tabFolderContainer;
 
@@ -144,6 +155,20 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 				pageChange(newPageIndex);
 			}
 		});
+		newContainer.addTraverseListener(new TraverseListener() { 
+			// Switching tabs by Ctrl+PageUp/PageDown must not be caught on the inner tab set
+			public void keyTraversed(TraverseEvent e) {
+				switch (e.detail) {
+					case SWT.TRAVERSE_PAGE_NEXT:
+					case SWT.TRAVERSE_PAGE_PREVIOUS:
+						int detail = e.detail;
+						e.doit = true;
+						e.detail = SWT.TRAVERSE_NONE;
+						Control control = newContainer.getParent();
+						control.traverse(detail, new Event());
+				}
+			}
+		});
 		
 		return newContainer;
 	}
@@ -166,6 +191,91 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 		// done
 		if (getActivePage() == -1)
 			setActivePage(0);
+		
+		initializePageSwitching();
+		initializeSubTabSwitching();
+	}
+
+	/*
+	 * Initialize the MultiPageEditorPart to use the page switching command.
+	 */
+	protected void initializePageSwitching() {
+		new PageSwitcher(this) {
+			public Object[] getPages() {
+				int pageCount = getPageCount();
+				Object[] result = new Object[pageCount];
+				for (int i = 0; i < pageCount; i++) {
+					result[i] = new Integer(i);
+				}
+				return result;
+			}
+
+			public String getName(Object page) {
+				return getPageText(((Integer) page).intValue());
+			}
+
+			public ImageDescriptor getImageDescriptor(Object page) {
+				Image image = getPageImage(((Integer) page).intValue());
+				if (image == null)
+					return null;
+
+				return ImageDescriptor.createFromImage(image);
+			}
+
+			public void activatePage(Object page) {
+				setActivePage(((Integer) page).intValue());
+			}
+
+			public int getCurrentPageIndex() {
+				return getActivePage();
+			}
+		};
+	}
+
+	/*
+	 * Initialize the MultiPageEditorPart to use the sub-tab switching commands.
+	 */
+	private void initializeSubTabSwitching() {
+		IHandlerService service = (IHandlerService) getSite().getService(IHandlerService.class);
+		service.activateHandler(COMMAND_NEXT_SUB_TAB, new AbstractHandler() {
+			/**
+			 * {@inheritDoc}
+			 * @throws ExecutionException
+			 *             if an exception occurred during execution
+			 */
+			public Object execute(ExecutionEvent event) throws ExecutionException {
+				int n= getPageCount();
+				if (n == 0)
+					return null;
+				
+				int i= getActivePage() + 1;
+				if (i >= n)
+					i= 0;
+				setActivePage(i);
+				pageChange(i);
+				return null;
+			}
+		});
+		
+		service.activateHandler(COMMAND_PREVIOUS_SUB_TAB, new AbstractHandler() {
+			/**
+			 * {@inheritDoc}
+			 * @throws ExecutionException
+			 *             if an exception occurred during execution
+			 */
+			public Object execute(ExecutionEvent event) throws ExecutionException {
+				int n= getPageCount();
+				if (n == 0)
+					return null;
+				
+				int i= getActivePage() - 1;
+				if (i < 0)
+					i= n - 1;
+				setActivePage(i);
+				pageChange(i);
+				return null;
+			}
+		});
 	}
 
 	protected abstract IEditorSite createSite(IEditorPart editor);
