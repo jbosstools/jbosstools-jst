@@ -40,8 +40,8 @@ import org.eclipse.wst.sse.ui.internal.format.StructuredFormattingStrategy;
 import org.eclipse.wst.sse.ui.internal.taginfo.AnnotationHoverProcessor;
 import org.eclipse.wst.sse.ui.internal.taginfo.ProblemAnnotationHoverProcessor;
 import org.eclipse.wst.sse.ui.internal.taginfo.TextHoverManager;
-import org.jboss.tools.common.text.xml.MarkerProblemAnnotationHoverProcessor;
 import org.jboss.tools.common.text.xml.contentassist.ProposalSorter;
+import org.jboss.tools.common.text.xml.xpl.MarkerProblemAnnotationHoverProcessor;
 import org.jboss.tools.jst.jsp.format.HTMLFormatProcessor;
 import org.jboss.tools.jst.jsp.jspeditor.info.ChainTextHover;
 
