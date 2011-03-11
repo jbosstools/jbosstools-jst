@@ -82,7 +82,7 @@ public class AutoELContentAssistantProposal extends AutoContentAssistantProposal
 				if (elements[i] instanceof IMember || 
 						elements[i].getElementType() == IJavaElement.LOCAL_VARIABLE || 
 						elements[i].getElementType() == IJavaElement.TYPE_PARAMETER) {
-					buffer.append('•').append(' ').append(getInfoText(elements[i]));
+					buffer.append('ï¿½').append(' ').append(getInfoText(elements[i]));
 					hasContents= true;
 				}
 				buffer.append("<br/>"); //$NON-NLS-1$
@@ -170,6 +170,10 @@ public class AutoELContentAssistantProposal extends AutoContentAssistantProposal
 				reader= content == null ? null : new StringReader(content);
 			} catch (JavaModelException ex) {
 				JavaPlugin.log(ex);
+			}
+			
+			if (reader == null) {
+				reader = new StringReader(Messages.NO_JAVADOC);
 			}
 
 			if (reader != null) {
