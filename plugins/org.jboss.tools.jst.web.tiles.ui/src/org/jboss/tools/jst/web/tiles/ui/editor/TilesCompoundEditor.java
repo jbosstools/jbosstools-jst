@@ -63,7 +63,7 @@ public class TilesCompoundEditor extends ObjectMultiPageEditor {
 	protected void createGuiPage() {
 		guiEditor = new TilesGuiEditor();
 		try {
-			int index = addPage(guiEditor, guiEditor.getEditorInput());
+			int index = addPage(guiEditor, getEditorInput());
 			setPageText(index, WebUIMessages.DIAGRAM);
 			guiEditor.setInput(input);
 			selectionProvider.setHost(guiEditor.getSelectionProvider());
