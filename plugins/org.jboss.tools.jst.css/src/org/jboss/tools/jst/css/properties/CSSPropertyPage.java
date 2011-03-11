@@ -24,6 +24,8 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
+import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleDeclItem;
+import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleSheet;
 import org.jboss.tools.jst.css.common.StyleContainer;
 import org.jboss.tools.jst.css.dialog.common.StyleAttributes;
 import org.jboss.tools.jst.css.view.CSSEditorView;
@@ -88,18 +90,16 @@ public class CSSPropertyPage extends TabbedPropertySheetPage implements
 
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-
 		if ((this.part != part) && (selection instanceof IStructuredSelection)) {
 			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
 			Object newSelectedObject = structuredSelection.getFirstElement();
-
-			if ((selectedObject == null)
-					|| (!selectedObject.equals(newSelectedObject)))
+			//added by Maksim Areshkay as fix for https://issues.jboss.org/browse/JBIDE-8523
+			//here we should process only elements of StyleContainer or set selection to null(clean)
+			if(newSelectedObject==null||(newSelectedObject instanceof StyleContainer)){
 				super.selectionChanged(part, selection);
-			selectedObject = newSelectedObject;
-
-			update();
-
+				selectedObject = newSelectedObject;
+				update();
+			}
 		}
 
 	}
