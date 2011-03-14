@@ -77,7 +77,7 @@ public class AutoELContentAssistantProposal extends AutoContentAssistantProposal
 		IJavaElement element= null;
 
 		if (nResults > 1) {
-			for (int i= 0; i < elements.length; i++) {
+/*			for (int i= 0; i < elements.length; i++) {
 				if (elements[i] == null) continue;
 				if (elements[i] instanceof IMember || 
 						elements[i].getElementType() == IJavaElement.LOCAL_VARIABLE || 
@@ -87,14 +87,15 @@ public class AutoELContentAssistantProposal extends AutoContentAssistantProposal
 				}
 				buffer.append("<br/>"); //$NON-NLS-1$
 			}
-
+*/
 			for (int i=0; i < elements.length; i++) {
 				if (elements[i] == null) continue;
 				if (elements[i] instanceof IMember || 
 						elements[i].getElementType() == IJavaElement.LOCAL_VARIABLE || 
 						elements[i].getElementType() == IJavaElement.TYPE_PARAMETER) {
-					buffer.append("<br/>"); //$NON-NLS-1$
+					buffer.append('\uE467').append(' ');
 					addFullInfo(buffer, elements[i]);
+					buffer.append("<br/>"); //$NON-NLS-1$
 					hasContents = true;
 				}
 			}
