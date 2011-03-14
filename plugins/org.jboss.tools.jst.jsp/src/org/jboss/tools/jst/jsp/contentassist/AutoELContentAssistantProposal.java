@@ -82,7 +82,7 @@ public class AutoELContentAssistantProposal extends AutoContentAssistantProposal
 				if (elements[i] instanceof IMember || 
 						elements[i].getElementType() == IJavaElement.LOCAL_VARIABLE || 
 						elements[i].getElementType() == IJavaElement.TYPE_PARAMETER) {
-					buffer.append('�').append(' ').append(getInfoText(elements[i]));
+					buffer.append('\uE467').append(' ').append(getInfoText(elements[i]));
 					hasContents= true;
 				}
 				buffer.append("<br/>"); //$NON-NLS-1$
