@@ -10,18 +10,10 @@
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.i18n;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Properties;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.DialogPage;
@@ -29,13 +21,10 @@ import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
-import org.eclipse.jface.viewers.ColumnLayoutData;
-import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -50,13 +39,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wst.xml.core.internal.document.AttrImpl;
 import org.eclipse.wst.xml.core.internal.document.TextImpl;
 import org.jboss.tools.common.model.ui.ModelUIImages;
-import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.bundle.BundleMap;
 import org.jboss.tools.jst.jsp.bundle.BundleMap.BundleEntry;
@@ -68,9 +55,6 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 
 	public static final String PAGE_NAME = "ExternalizeStringsWizardBasicPage"; //$NON-NLS-1$
 	
-	private final char[] REPLACED_CHARACTERS = new char[] {'~', '!', '@', '#',
-			'$', '%', '^', '&', '*', '(', ')', '-', '+', '=', '{', '}', '[', ']', ':', ';', ',', '.', '?', '\\', '/'};
-	private final char[] LINE_DELEMITERS = new char[] {'\r', '\n', '\t'};
 	private final int DIALOG_WIDTH = 450;
 	private final int DIALOG_HEIGHT = 650;
 	private Text propsKey;
@@ -208,23 +192,7 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 		/*
 		 * Create properties file table of content
 		 */
-		tagsTable = new Table(propsFilesGroup, SWT.BORDER);
-        TableLayout layout = new TableLayout();
-        tagsTable.setLayout(layout);
-        tagsTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
-        tagsTable.setHeaderVisible(true);
-        tagsTable.setLinesVisible(true);
-		
-        ColumnLayoutData columnLayoutData;
-        TableColumn propNameColumn = new TableColumn(tagsTable, SWT.NONE);
-        propNameColumn.setText(JstUIMessages.EXTERNALIZE_STRINGS_DIALOG_PROPERTY_NAME);
-        columnLayoutData = new ColumnWeightData(200, true);
-        layout.addColumnData(columnLayoutData);
-        TableColumn propValueColumn = new TableColumn(tagsTable, SWT.NONE);
-        propValueColumn.setText(JstUIMessages.EXTERNALIZE_STRINGS_DIALOG_PROPERTY_VALUE);
-        columnLayoutData = new ColumnWeightData(200, true);
-        layout.addColumnData(columnLayoutData);
-        
+		tagsTable = ExternalizeStringsUtils.createPropertiesTable(propsFilesGroup, SWT.BORDER); 
 		/*
 		 * Initialize all fields with real values.
 		 */
@@ -234,53 +202,6 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 		 * Wizard Page control should be initialized.
 		 */
 		setControl(composite);
-	}
-	
-	/**
-	 * Generate properties key.
-	 * Replaces all non-word characters with 
-	 * underline character.
-	 *
-	 * @param text the text
-	 * @return the result string
-	 */
-	public String generatePropertyKey(String text) {
-		String result = text.trim();
-		/*
-		 * Replace all other symbols with '_'
-		 */
-		for (char ch : REPLACED_CHARACTERS) {
-			result = result.replace(ch, '_');
-		}
-		/*
-		 * Replace line delimiters white space
-		 */
-		for (char ch : LINE_DELEMITERS) {
-			result = result.replace(ch, ' ');
-		}
-		/*
-		 * Replace all white spaces with '_'
-		 */
-		result = result.replaceAll(Constants.WHITE_SPACE,
-				Constants.UNDERSCORE);
-		/*
-		 * Correct underline symbols:
-		 * show only one of them
-		 */
-		result = result.replaceAll("_+", Constants.UNDERSCORE); //$NON-NLS-1$
-		/*
-		 * Remove leading and trailing '_'
-		 */
-		if (result.startsWith(Constants.UNDERSCORE)) {
-			result = result.substring(1);
-		}
-		if (result.endsWith(Constants.UNDERSCORE)) {
-			result = result.substring(0, result.length() - 1);
-		}
-		/*
-		 * Return the result
-		 */
-		return result;
 	}
 
 	/**
@@ -391,7 +312,7 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 				 */
 				doc.replace(offset, length, replacement);
 			} catch (BadLocationException ex) {
-				ex.printStackTrace();
+				JspEditorPlugin.getPluginLog().logError(ex);
 			}
 		}
 	}
@@ -461,16 +382,8 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 					text = stringToUpdate;
 				}
 			}
-			/*
-			 * Update text string field.
-			 * Trim the text to remove line breaks and caret returns.
-			 * Replace line delimiters white space
-			 */
-			for (char ch : LINE_DELEMITERS) {
-				text = text.trim().replace(ch, ' ');
-			}
 			propsValue.setText(text);
-			propsKey.setText(generatePropertyKey(text));
+			propsKey.setText(ExternalizeStringsUtils.generatePropertyKey(text));
 			/*
 			 * Initialize bundle messages field
 			 */
@@ -685,55 +598,6 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 	}
 	
 	/**
-	 * Update resource bundle table according to the selected file:
-	 * it fills key and value columns.
-	 * 
-	 * @param file the resource bundle file
-	 */
-	private void updateTable(IFile file) {
-		if ((file != null) && file.exists()) {
-		try {
-			/*
-			 * Read the file content
-			 */
-			String encoding = FileUtil.getEncoding(file);
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					file.getContents(), encoding));
-			Properties properties =  new Properties();
-			properties.load(in);
-			in.close();
-			in = null;
-			/*
-			 * Clear the table
-			 */
-			tagsTable.removeAll();
-			/*
-			 * Fill in new values
-			 */
-			int k = 0;
-			Set<String> keys = properties.stringPropertyNames();
-			List<String> keysList = new ArrayList<String>(keys);  
-			Collections.sort(keysList);
-			for (String key : keysList) {
-				TableItem tableItem = null;
-				tableItem = new TableItem(tagsTable, SWT.BORDER, k);
-				k++;
-				tableItem.setText(new String[] {key, properties.getProperty(key)});
-			}
-		} catch (CoreException e) {
-			JspEditorPlugin.getDefault().logError(
-					"Could not load file content for '" + file + "'", e); //$NON-NLS-1$ //$NON-NLS-2$
-		} catch (IOException e) {
-			JspEditorPlugin.getDefault().logError(
-					"Could not read file: '" + file + "'", e); //$NON-NLS-1$ //$NON-NLS-2$
-		}		
-		} else {
-			JspEditorPlugin.getDefault().logError(
-					"Bundle File'" + file + "' does not exist!"); //$NON-NLS-1$ //$NON-NLS-2$
-		}
-	}
-	
-	/**
 	 * Enables or disables resource bundle information
 	 * 
 	 * @param enabled shows the status
@@ -884,7 +748,7 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 		String bundlePath = Constants.EMPTY;
 		if (bundleFile != null) {
 			bundlePath = bundleFile.getFullPath().toString();
-			updateTable(bundleFile);
+			ExternalizeStringsUtils.populatePropertiesTable(tagsTable, bundleFile);
 		} else {
 			JspEditorPlugin.getDefault().logError(
 					"Could not get Bundle File for resource '" //$NON-NLS-1$

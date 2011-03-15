@@ -21,7 +21,7 @@ import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 
 public class ExternalizeStringsAction extends Action {
 
-	private JSPMultiPageEditor editor;
+	protected JSPMultiPageEditor editor;
 	
 	public ExternalizeStringsAction() {
 		super();

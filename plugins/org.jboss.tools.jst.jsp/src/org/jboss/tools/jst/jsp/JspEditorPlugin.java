@@ -44,9 +44,8 @@ public class JspEditorPlugin extends BaseUIPlugin {
 	
 	//The shared instance.
 	private static JspEditorPlugin plugin;
-	
 	public static final String PLUGIN_ID = "org.jboss.tools.jst.jsp";  //$NON-NLS-1$
-
+	public static final String I18N_VALIDATION_PROBLEM_ID = PLUGIN_ID + ".i18nproblemmarker"; //$NON-NLS-1$
 	public static final String RESOURCES_PATH = "/resources"; //$NON-NLS-1$
 
 	// A Map to save a descriptor for each image
