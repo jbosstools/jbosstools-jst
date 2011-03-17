@@ -10,6 +10,9 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.navigator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.core.IJavaProject;
@@ -17,15 +20,31 @@ import org.jboss.tools.common.model.XFilteredTree;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.project.IModelNature;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
+import org.jboss.tools.jst.web.ui.navigator.XLabelProvider.RootWrapper;
 
 public class XProjectContentProvider extends XContentProvider {
 
 	public Object[] getChildren(Object parentElement) {
+		boolean root = false;
+		if(parentElement instanceof RootWrapper) {
+			root = true;
+			parentElement = ((RootWrapper)parentElement).element;
+		}
 		if(parentElement instanceof XModelObject) {
 			XModelObject o = (XModelObject)parentElement;
 			XFilteredTree filteredTree = getFilteredTree(o);
 			if(filteredTree != null) {
-				return filteredTree.getChildren(o);
+				XModelObject[] result = filteredTree.getChildren(o);
+				if(root) {
+					List<XModelObject> list = new ArrayList<XModelObject>();
+					for (XModelObject c: result) {
+						if(c.getFileType() != XModelObject.SYSTEM) {
+							list.add(c);
+						}
+					}
+					return list.toArray(new XModelObject[0]);
+				}
+				return result;
 			}
 			return o.getChildrenForSave();
 		} else if(parentElement instanceof IProject || parentElement instanceof IJavaProject) {
@@ -42,7 +61,9 @@ public class XProjectContentProvider extends XContentProvider {
 				filteredTree = getFilteredTree(o);
 			}
 			if(filteredTree != null) {
-				return new Object[]{filteredTree.getRoot()};
+				RootWrapper w = new RootWrapper();
+				w.element = filteredTree.getRoot();
+				return new Object[]{w};
 			}
 			return new Object[0];
 		}
@@ -50,6 +71,9 @@ public class XProjectContentProvider extends XContentProvider {
 	}
 
 	public Object getParent(Object element) {
+		if(element instanceof RootWrapper) {
+			element = ((RootWrapper)element).element;
+		}
 		if(element instanceof XModelObject) {
 			XModelObject o = (XModelObject)element;
 			XFilteredTree filteredTree = getFilteredTree(o);
