@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2007 Exadel, Inc. and Red Hat, Inc.
+ * Copyright (c) 2011 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
+ *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 package org.jboss.tools.jst.text.ext.hyperlink;
 
@@ -76,7 +76,7 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 			for (int r = 0; rules != null && r < rules.getLength(); r++) {
 				if (isRuleMatch(rules.item(r), getStyleName(region))) {
 					CSSRule rule = rules.item(r);
-					IFile file = findFileForCSSStyleSheet(descr.source);
+					IFile file = findFileForCSSStyleSheet(descr.getFilePath());
 					if (file != null) {
 						int startOffset = 0;
 						if (descr.sheet.getOwnerNode() != null) {

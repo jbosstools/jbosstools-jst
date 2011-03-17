@@ -166,6 +166,27 @@ This extension point is used to add information on which tags/tag attributes are
       </complexType>
    </element>
 
+   <element name="jsf2cssholder">
+      <annotation>
+         <documentation>
+            Defines a CSS holder item.
+         </documentation>
+      </annotation>
+      <complexType>
+         <sequence>
+            <element ref="tag" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="attribute" minOccurs="0" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="uri" type="string" use="required">
+            <annotation>
+               <documentation>
+                  An URI for this element.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
    <annotation>
       <appInfo>
          <meta.section type="since"/>

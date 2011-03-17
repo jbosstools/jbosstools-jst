@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2009 Red Hat, Inc. 
+ * Copyright (c) 2011 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -27,6 +27,7 @@ public class IncludeContextDefinition {
 	private String fUri;
 	private Map<String, Set<String>> fIncludeTags; // Map<TagName, Set<AttributeName>>
 	private Map<String, Set<String>> fCSSTags; // Map<TagName, Set<AttributeName>>
+	private Map<String, Set<String>> fJSF2CSSTags; // Map<TagName, Set<AttributeName>>
 	private Map<String, Set<String>> fContexts; // Map<ContextType, Set<ContentType>>
 	
 	/**
@@ -72,6 +73,9 @@ public class IncludeContextDefinition {
 		} else if (isInParentElements(element, IncludeContextBuilder.TAG_CSSHOLDER)) {
 			addCSSTag(tagName, element);
 			return true;
+		} else if (isInParentElements(element, IncludeContextBuilder.TAG_JSF2CSSHOLDER)) {
+			addJSF2CSSTag(tagName, element);
+			return true;
 		}
 		return false;
 	}
@@ -107,6 +111,23 @@ public class IncludeContextDefinition {
 		if (tagSet == null) {
 			tagSet = new HashSet<String>();
 			fCSSTags.put(tagName, tagSet);
+		}
+	}
+
+	/**
+	 * Adds a CSS Style Sheet holder to the Definition
+	 * 
+	 * @param tagName
+	 * @param element
+	 */
+	private void addJSF2CSSTag(String tagName, IConfigurationElement element) {
+		if (fJSF2CSSTags == null) {
+			fJSF2CSSTags = new HashMap<String, Set<String>>();
+		}
+		Set<String> tagSet = fJSF2CSSTags.get(tagName);
+		if (tagSet == null) {
+			tagSet = new HashSet<String>();
+			fJSF2CSSTags.put(tagName, tagSet);
 		}
 	}
 	
@@ -145,6 +166,12 @@ public class IncludeContextDefinition {
 			}
 			
 			fCSSTags.get(parentTagName).add(attributeName);
+		} else if (isInParentElements(element, IncludeContextBuilder.TAG_JSF2CSSHOLDER)) {
+			if (fJSF2CSSTags.get(parentTagName) == null) {
+				addJSF2CSSTag(parentTagName, parentTagElement);
+			}
+			
+			fJSF2CSSTags.get(parentTagName).add(attributeName);
 		}
 	}
 	
@@ -235,6 +262,15 @@ public class IncludeContextDefinition {
 		return fCSSTags == null ? EMPTY_CHILDREN :
 			(String[])fCSSTags.keySet().toArray(new String[fCSSTags.size()]);
 	}
+	/**
+	 * Returns the JSF2 CSS Style Sheet holder Tags stored in the Definition
+	 * 
+	 * @return
+	 */
+	public String[] getJSF2CSSTags() {
+		return fJSF2CSSTags == null ? EMPTY_CHILDREN :
+			(String[])fJSF2CSSTags.keySet().toArray(new String[fJSF2CSSTags.size()]);
+	}
 	
 	/**
 	 * Returns the Attributes for the Include Tag with the specified Name
@@ -243,13 +279,7 @@ public class IncludeContextDefinition {
 	 * @return
 	 */
 	public String[] getIncludeTagAttributes(String tagName) {
-		if ("".equals(fUri)) //$NON-NLS-1$
-			tagName = tagName.toLowerCase();
-
-		Set<String> attrSet = fIncludeTags == null ? null : fIncludeTags.get(tagName);
-		
-		return attrSet == null ? EMPTY_CHILDREN :
-			(String[])attrSet.toArray(new String[attrSet.size()]);
+		return getTagAttributes(fIncludeTags, tagName);
 	}
 
 	/**
@@ -259,10 +289,24 @@ public class IncludeContextDefinition {
 	 * @return
 	 */
 	public String[] getCSSTagAttributes(String tagName) {
+		return getTagAttributes(fCSSTags, tagName);
+	}
+
+	/**
+	 * Returns the Attributes for the CSS Style Sheet Holder Tag with the specified Name 
+	 * 
+	 * @param tagName
+	 * @return
+	 */
+	public String[] getJSF2CSSTagAttributes(String tagName) {
+		return getTagAttributes(fJSF2CSSTags, tagName);
+	}
+
+	private String[] getTagAttributes (Map<String, Set<String>> tags, String tagName) {
 		if ("".equals(fUri)) //$NON-NLS-1$
 			tagName = tagName.toLowerCase();
 
-		Set<String> attrSet = fCSSTags == null ? null : fCSSTags.get(tagName);
+		Set<String> attrSet = tags == null ? null : tags.get(tagName);
 		
 		return attrSet == null ? EMPTY_CHILDREN :
 			(String[])attrSet.toArray(new String[attrSet.size()]);

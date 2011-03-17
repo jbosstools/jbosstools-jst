@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2009 Red Hat, Inc. 
+ * Copyright (c) 2011 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -36,6 +36,7 @@ public class IncludeContextBuilder extends RegistryReader {
 	public static final String TAG_CONTEXTTYPE = "contexttype"; //$NON-NLS-1$
 	public static final String TAG_CONTENTTYPE = "contenttype"; //$NON-NLS-1$
 	public static final String TAG_CSSHOLDER = "cssholder"; //$NON-NLS-1$
+	public static final String TAG_JSF2CSSHOLDER = "jsf2cssholder"; //$NON-NLS-1$
 	
 	public static final String ATT_ID = "id"; //$NON-NLS-1$
 	public static final String ATT_URI = "uri"; //$NON-NLS-1$
@@ -205,7 +206,7 @@ public class IncludeContextBuilder extends RegistryReader {
 	protected boolean readElement(IConfigurationElement element) {
 		String tag = element.getName();
 
-		if (tag.equals(TAG_INCLUDE) || tag.equals(TAG_CSSHOLDER)) {
+		if (tag.equals(TAG_INCLUDE) || tag.equals(TAG_CSSHOLDER) || tag.equals(TAG_JSF2CSSHOLDER)) {
 			processIncludeContextElement(element);
 			
 			// make sure processing of current open on tag resulted in a current definition
@@ -364,6 +365,43 @@ public class IncludeContextBuilder extends RegistryReader {
 	}
 
 	/**
+	 * Checks if the specified tag is a JSF2 CSS Style Sheet container
+	 * 
+	 * @param uri
+	 * @param tagName
+	 * @return
+	 */
+	public static boolean isJSF2CSSStyleSheetContainer(String uri, String tagName) {
+		if (uri == null)
+			return false;
+		
+		List<IncludeContextDefinition> defs = IncludeContextBuilder.getInstance().getIncludeContextDefinitions();
+		if (defs == null)
+			return false;
+		
+		boolean isHolder = false;
+		for (IncludeContextDefinition def : defs) {
+			if (uri.equals(def.getUri())) {
+				String[] defTags = def.getJSF2CSSTags();
+				if (defTags != null) {
+					for (String tag : defTags) {
+						if (tagName.equals(tag) || ("".equals(uri) && tagName.equalsIgnoreCase(tag))) { //$NON-NLS-1$
+							isHolder = true;
+							// Check that the tag have no attributes defined
+							// If so - the tag itself is used to define the CSS
+							// But if the tag has at least one attribute defined - it's not the holder 
+							String[] attrs = def.getJSF2CSSTagAttributes(tagName);
+							isHolder ^= (attrs != null && attrs.length > 0);  
+						}
+					}
+				}
+			}
+		}
+		
+		return isHolder;
+	}
+
+	/**
 	 * Returns the CSS Style Sheet attributes that represent a CSS Style Sheet container
 	 * 
 	 * @param uri
@@ -383,6 +421,36 @@ public class IncludeContextBuilder extends RegistryReader {
 		for (IncludeContextDefinition def : defs) {
 			if (uri.equals(def.getUri())) {
 				String[] defAttrs = def.getCSSTagAttributes(tagName);
+				if (defAttrs != null) {
+					for (String attr : defAttrs) attrs.add(attr);
+				}
+			}
+		}
+		
+		return attrs.size() == 0 ? null : attrs.toArray(new String[attrs.size()]);
+
+	}
+
+	/**
+	 * Returns the JSF2 CSS Style Sheet attributes that represent a CSS Style Sheet container
+	 * 
+	 * @param uri
+	 * @param tagName
+	 * @return
+	 */
+	public static String[] getJSF2CSSStyleSheetAttributes(String uri, String tagName) {
+		if (uri == null)
+			return null;
+		
+		List<IncludeContextDefinition> defs = IncludeContextBuilder.getInstance().getIncludeContextDefinitions();
+		if (defs == null)
+			return null;
+		
+		List<String> attrs = new ArrayList<String>();
+		
+		for (IncludeContextDefinition def : defs) {
+			if (uri.equals(def.getUri())) {
+				String[] defAttrs = def.getJSF2CSSTagAttributes(tagName);
 				if (defAttrs != null) {
 					for (String attr : defAttrs) attrs.add(attr);
 				}

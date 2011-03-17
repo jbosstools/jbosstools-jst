@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2009 Red Hat, Inc. 
+ * Copyright (c) 2011 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -631,14 +631,23 @@ public class PageContextFactory implements IResourceChangeListener {
 				}
 				if (context instanceof ICSSContainerSupport) {
 					if(IncludeContextBuilder.isCSSStyleSheetContainer(uri, tagName)) {
-						fillCSSStyleSheetFromElement(node, (ICSSContainerSupport)context);
+						fillCSSStyleSheetFromElement(node, (ICSSContainerSupport)context, false);
+					} else if(IncludeContextBuilder.isJSF2CSSStyleSheetContainer(uri, tagName)) {
+							fillCSSStyleSheetFromElement(node, (ICSSContainerSupport)context, true);
 					} else {
 						String[] cssAttributes = IncludeContextBuilder.getCSSStyleSheetAttributes(uri, tagName);
 						if (cssAttributes != null) {
 							for (String attr : cssAttributes) {
-								fillCSSStyleSheetFromAttribute(node, attr, (ICSSContainerSupport)context);
+								fillCSSStyleSheetFromAttribute(node, attr, (ICSSContainerSupport)context, false);
 							}
 						}
+						cssAttributes = IncludeContextBuilder.getJSF2CSSStyleSheetAttributes(uri, tagName);
+						if (cssAttributes != null) {
+							for (String attr : cssAttributes) {
+								fillCSSStyleSheetFromAttribute(node, attr, (ICSSContainerSupport)context, true);
+							}
+						}
+						
 					}
 				}
 			}
@@ -744,26 +753,61 @@ public class PageContextFactory implements IResourceChangeListener {
 	}
 
 	private void fillCSSStyleSheetFromAttribute(IDOMElement node,
-			String attribute, ICSSContainerSupport context) {
-		CSSStyleSheetDescriptor descr = getSheetForTagAttribute(node, attribute);
+			String attribute, ICSSContainerSupport context, boolean jsf2Source) {
+		CSSStyleSheetDescriptor descr = getSheetForTagAttribute(node, attribute, jsf2Source);
 		if (descr != null)
 			context.addCSSStyleSheetDescriptor(descr);
 	}
 
 	private void fillCSSStyleSheetFromElement(IDOMElement node,
-			ICSSContainerSupport context) {
+			ICSSContainerSupport context, boolean jsf2Source) {
 		CSSStyleSheet sheet = getSheetForTag(node);
-		if (sheet != null)
-			context.addCSSStyleSheetDescriptor(new CSSStyleSheetDescriptor(context.getResource().getFullPath().toString(), sheet));
+		if (sheet != null) {
+			String library = null;
+			if (jsf2Source) {
+				Attr libraryAttr = node.getAttributeNode("library"); //$NON-NLS-1$
+				if (libraryAttr != null && libraryAttr.getNodeValue() != null) {
+					library = libraryAttr.getNodeValue().trim();
+					library = library.length() == 0 ? null : library;
+				}
+			}
+
+			context.addCSSStyleSheetDescriptor(new CSSStyleSheetDescriptor(context.getResource().getFullPath().toString(), sheet, jsf2Source, library));
+		}
 	}
+
+	private static final String JSF2_RESOURCES_FOLDER = "/resources"; //$NON-NLS-1$
 
 	public static class CSSStyleSheetDescriptor {
 		public CSSStyleSheet sheet;
 		public String source;
+		public boolean jsf2Source;
+		public String jsf2Library;
 
+		/*
 		CSSStyleSheetDescriptor (String source, CSSStyleSheet sheet) {
+			this(source, sheet, false);
+		}
+		*/
+		
+		CSSStyleSheetDescriptor (String source, CSSStyleSheet sheet, boolean jsf2Source, String jsf2Library) {
 			this.source = source;
 			this.sheet = sheet;
+			this.jsf2Source = jsf2Source;
+			this.jsf2Library  = jsf2Library;
+		}
+		
+		public String getFilePath() {
+			if (!jsf2Source)
+				return source;
+			
+			if (jsf2Library != null) {
+				String library = jsf2Library.trim();
+				if (library.length() != 0) {
+					return JSF2_RESOURCES_FOLDER + '/' + library + '/' + source;
+				}
+			}
+			return JSF2_RESOURCES_FOLDER + '/' + source;
 		}
 	}
 
@@ -772,7 +816,7 @@ public class PageContextFactory implements IResourceChangeListener {
 	 * @param stylesContainer
 	 * @return
 	 */
-	private CSSStyleSheetDescriptor getSheetForTagAttribute(final Node stylesContainer, String attribute) {
+	private CSSStyleSheetDescriptor getSheetForTagAttribute(final Node stylesContainer, String attribute, boolean jsf2Source) {
 		INodeNotifier notifier = (INodeNotifier) stylesContainer;
 		CSSStyleSheet sheet = null;
 		String source = null;
@@ -783,7 +827,7 @@ public class PageContextFactory implements IResourceChangeListener {
 			if (!(adapter instanceof ExtendedLinkElementAdapter)) {
 				notifier.removeAdapter(adapter);
 				adapter = new ExtendedLinkElementAdapter(
-						(Element) stylesContainer, attribute);
+						(Element) stylesContainer, attribute, jsf2Source);
 				sheet = (CSSStyleSheet) adapter.getSheet();
 				source = ((ExtendedLinkElementAdapter)adapter).getSource();
 				if (sheet != null && source != null) {
@@ -798,7 +842,16 @@ public class PageContextFactory implements IResourceChangeListener {
 			
 		}
 
-		return sheet == null || source == null ? null : new CSSStyleSheetDescriptor(source, sheet);
+		String library = null;
+		if (jsf2Source && stylesContainer instanceof Element) {
+			Attr libraryAttr = ((Element)stylesContainer).getAttributeNode("library"); //$NON-NLS-1$
+			if (libraryAttr != null && libraryAttr.getNodeValue() != null) {
+				library = libraryAttr.getNodeValue().trim();
+				library = library.length() == 0 ? null : library;
+			}
+		}
+
+		return sheet == null || source == null ? null : new CSSStyleSheetDescriptor(source, sheet, jsf2Source, library);
 	}
 
 	/**
@@ -1018,10 +1071,13 @@ public class PageContextFactory implements IResourceChangeListener {
 		private Element element;
 		private String hrefAttrName;
 		private String source = null;
+		private boolean jsf2Source;
+		private String prefix = null;
 
-		public ExtendedLinkElementAdapter(Element element, String hrefAttrName) {
+		public ExtendedLinkElementAdapter(Element element, String hrefAttrName, boolean jsf2Source) {
 			this.element = element;
 			this.hrefAttrName = hrefAttrName;
+			this.jsf2Source = jsf2Source;
 		}
 
 		@Override
@@ -1051,6 +1107,19 @@ public class PageContextFactory implements IResourceChangeListener {
 			if (super.isValidAttribute()) {
 				source = getSourceFromAttribute("href"); //$NON-NLS-1$
 			} else if (isValidAttribute()) {
+				if (jsf2Source) {
+					String library = null;
+					Attr libraryAttr = element.getAttributeNode("library"); //$NON-NLS-1$
+					if (libraryAttr != null && libraryAttr.getNodeValue() != null) {
+						library = libraryAttr.getNodeValue().trim();
+						library = library.length() == 0 ? null : library;
+					}
+					if (library != null) {
+						prefix = JSF2_RESOURCES_FOLDER + '/' + library + '/';
+					} else {
+						prefix = JSF2_RESOURCES_FOLDER + '/';
+					}
+				}
 				source = getSourceFromAttribute(hrefAttrName);
 			} else {
 				return null;
@@ -1091,7 +1160,7 @@ public class PageContextFactory implements IResourceChangeListener {
 			URLModelProvider provider = new URLModelProvider();
 			try {
 				IStructuredModel newModel = provider.getModelForRead(baseModel,
-						source);
+						prefix == null ? source : prefix + source);
 				if (newModel == null)
 					return null;
 				if (!(newModel instanceof ICSSModel)) {
