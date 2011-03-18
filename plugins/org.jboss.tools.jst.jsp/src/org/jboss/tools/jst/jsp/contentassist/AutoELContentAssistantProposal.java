@@ -178,7 +178,8 @@ public class AutoELContentAssistantProposal extends AutoContentAssistantProposal
 			}
 
 			if (reader != null) {
-				HTMLPrinter.addParagraph(buffer, reader);
+				buffer.append(HTMLPrinter.read(reader));
+//				HTMLPrinter.addParagraph(buffer, reader);
 			}
 
 		} else if (element.getElementType() == IJavaElement.LOCAL_VARIABLE || element.getElementType() == IJavaElement.TYPE_PARAMETER) {
