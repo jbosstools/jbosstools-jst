@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.jsp.i18n;
 
 import java.io.File;
+import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.preference.FileFieldEditor;
@@ -32,6 +33,7 @@ public class ExternalizeAllStringsSelectBundlePage extends WizardPage {
 	IFile editorFile;
 	File bundleFile;
 	private FileFieldEditor fileFieldEditor;
+	Properties properties;
 	
 	protected ExternalizeAllStringsSelectBundlePage(String pageName) {
 		super(pageName,
@@ -53,7 +55,7 @@ public class ExternalizeAllStringsSelectBundlePage extends WizardPage {
 		fileFieldEditor.setEmptyStringAllowed(false);
 		
 		if (getWizard() instanceof ExternalizeAllStringsWizard) {
-			ExternalizeAllStringsWizard wiz = (ExternalizeAllStringsWizard) getWizard();
+			final ExternalizeAllStringsWizard wiz = (ExternalizeAllStringsWizard) getWizard();
 			IEditorInput in = wiz.getEditor().getEditorInput();
 			if (in instanceof IFileEditorInput) {
 				IFileEditorInput fin = (IFileEditorInput) in;
@@ -62,22 +64,23 @@ public class ExternalizeAllStringsSelectBundlePage extends WizardPage {
 			if (null != editorFile) {
 				fileFieldEditor.setFilterPath(editorFile.getProject().getLocation().toFile());
 			}
-		}
-		final Table table = ExternalizeStringsUtils.createPropertiesTable(composite, SWT.BORDER);
-		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true, 3, 1));
-		fileFieldEditor.setPropertyChangeListener(new IPropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent event) {
-				if (FileFieldEditor.VALUE.equalsIgnoreCase(event.getProperty())) {
-					bundleFile = new File((String)event.getNewValue());
-					ExternalizeStringsUtils.populatePropertiesTable(table, bundleFile);
-					/*
-					 * Set page complete
-					 */
-					setPageComplete(isPageComplete());
+			final Table table = ExternalizeStringsUtils.createPropertiesTable(composite, SWT.BORDER);
+			table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true, 3, 1));
+			fileFieldEditor.setPropertyChangeListener(new IPropertyChangeListener() {
+				@Override
+				public void propertyChange(PropertyChangeEvent event) {
+					if (FileFieldEditor.VALUE.equalsIgnoreCase(event.getProperty())) {
+						bundleFile = new File((String)event.getNewValue());
+						properties = ExternalizeStringsUtils.populatePropertiesTable(table, bundleFile);
+						wiz.setUpdatedProperties(properties);
+						/*
+						 * Set page complete
+						 */
+						setPageComplete(isPageComplete());
+					}
 				}
-			}
-		});
+			});
+		}
 		/*
 		 * Wizard Page control should be initialized.
 		 */
@@ -91,5 +94,9 @@ public class ExternalizeAllStringsSelectBundlePage extends WizardPage {
 	
 	public File getBundleFile() {
 		return bundleFile;
+	}
+
+	public Properties getOriginalProperties() {
+		return properties;
 	}
 }

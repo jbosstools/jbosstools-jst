@@ -12,13 +12,16 @@ package org.jboss.tools.jst.jsp.i18n;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.viewers.CellEditor;
@@ -33,11 +36,17 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.wst.validation.ValidationFramework;
@@ -50,8 +59,12 @@ public class ExternalizeAllStringsKeysListPage extends WizardPage {
 
 	private static final String KEY_PROPERTY = "key"; //$NON-NLS-1$
 	private static final String VALUE_PROPERTY = "value"; //$NON-NLS-1$
-	private List<KeyValueElement> keys = new ArrayList<KeyValueElement>();
-	private IDocument doc = null;
+	Color red; 
+	Color white;
+	private List<KeyValueElement> initKeys;
+	private IDocument doc;
+	Properties properties;
+	TableViewer tv;
 
 	protected ExternalizeAllStringsKeysListPage(String pageName) {
 		super(pageName,
@@ -63,12 +76,16 @@ public class ExternalizeAllStringsKeysListPage extends WizardPage {
 
 	@Override
 	public void createControl(Composite parent) {
-		keys = getAllStrings();
-		Table table = createTable(parent);
-		setControl(table);
+		red = parent.getDisplay().getSystemColor(SWT.COLOR_RED); 
+		white = parent.getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND);
+		initKeys = getAllNonExternalizedStrings();
+		Collections.sort(initKeys, Collections.reverseOrder());
+		tv = createTable(parent);
+		highlightAllDuplicateKeys(tv);
+		setControl(tv.getTable());
 	}
 
-	private List<KeyValueElement> getAllStrings() {
+	private List<KeyValueElement> getAllNonExternalizedStrings() {
 		List<KeyValueElement> keys = new ArrayList<KeyValueElement>(); 
 		if (getWizard() instanceof ExternalizeAllStringsWizard) {
 			ExternalizeAllStringsWizard wiz = (ExternalizeAllStringsWizard) getWizard();
@@ -93,7 +110,7 @@ public class ExternalizeAllStringsKeysListPage extends WizardPage {
 							text = doc.get(offset.intValue(), length.intValue());
 							keys.add(new KeyValueElement(
 									ExternalizeStringsUtils.generatePropertyKey(text), 
-									text, offset.intValue(), length.intValue()));
+									text, offset.intValue(), length.intValue(), false));
 						} catch (BadLocationException e) {
 							e.printStackTrace();
 						}
@@ -103,17 +120,79 @@ public class ExternalizeAllStringsKeysListPage extends WizardPage {
 				}
 			}
 		}
+		markAllDuplicatedKeys(keys);
 		return keys;
 	}
 
-	private Table createTable(Composite parent) {
+	private void markAllDuplicatedKeys(List<KeyValueElement> keys) {
+		/*
+		 * Check for duplicated keys and mark corresponding elements
+		 */
+			if (properties != null) {
+				for (KeyValueElement k : keys) {
+					if(isDuplicatedBundleKey(k.key)) {
+						k.duplicated = true;
+					}
+				}
+			}
+	}
+	
+	private void markAllDuplicatedKeys(TableViewer tv) {
+		for (int i = 0; i < tv.getTable().getItemCount(); i++) {
+			KeyValueElement k = (KeyValueElement) tv.getElementAt(i);
+			if(isDuplicatedBundleKey(k.key)) {
+				k.duplicated = true;
+			}
+		}
+	}
+	
+	private boolean isDuplicatedBundleKey(String key) {
+		boolean duplicated = false;
+		if (properties != null) {
+			for (Iterator it = properties.keySet().iterator(); it.hasNext();) {
+				String original = (String) it.next();
+				if (original.equalsIgnoreCase(key)) {
+					duplicated = true;
+					break;
+				}
+			}
+		}
+		return duplicated;
+	}
+	
+	private boolean isDuplicatedStringKey(KeyValueElement element, String newKey) {
+		boolean duplicated = false;
+		for (KeyValueElement k : initKeys) {
+			if (!k.equals(element) && k.key.equalsIgnoreCase(newKey)) {
+				duplicated = true;
+			}
+		}
+		return duplicated;
+	}
+	
+	private void highlightAllDuplicateKeys(TableViewer tv) {
+		for (int i = 0; i < tv.getTable().getItemCount(); i++) {
+			highlightDuplicateKey(tv.getTable().getItem(i),
+					((KeyValueElement) tv.getElementAt(i)).duplicated);
+		}
+	}
+	
+	private void highlightDuplicateKey(TableItem ti, boolean duplicated) {
+		if (duplicated) {
+			ti.setBackground(0, red);
+		} else {
+			ti.setBackground(0, white);
+		}
+	}
+	
+	private TableViewer createTable(Composite parent) {
 		Table table = new Table(parent, SWT.FULL_SELECTION | SWT.BORDER);
 		TableViewer tv = layoutTableInViewer(table);
 		attachContentProvider(tv);
 		attachLabelProvider(tv);
 		attachCellEditors(tv, table);
-		addProperties(tv);
-		return table;
+		addInitialKeysValues(tv);
+		return tv;
 	}
 
 	private TableViewer layoutTableInViewer(Table table) {
@@ -193,14 +272,65 @@ public class ExternalizeAllStringsKeysListPage extends WizardPage {
 				viewer.refresh(kve);
 			}
 		});
+		TextCellEditor keyEditor = new TextCellEditor(parent); 
+		/*
+		 * TODO: cell validator should be added after bug
+		 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=130854
+		 * is fixed.
+		 */
+//		keyEditor.setValidator(new ICellEditorValidator() {
+//			@Override
+//			public String isValid(Object value) {
+//				return null;
+//			}
+//		});
+		((Text)keyEditor.getControl()).addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				Text t = (Text) e.getSource();
+				Table table = (Table) t.getParent();
+				int ind = table.getSelectionIndex();
+				KeyValueElement element = (KeyValueElement) viewer.getElementAt(ind);
+				TableItem ti = table.getItem(ind);
+				String key = t.getText();
+				/*
+				 * Check duplicate key, set bkg color to red
+				 * Setting new key value is called after this modyfy listener,
+				 * thus pass new key value manually.
+				 */
+				if (isDuplicatedBundleKey(key) || isDuplicatedStringKey(element, key)) {
+					element.duplicated = true;
+					highlightDuplicateKey(ti, true);
+					t.setBackground(red);
+				} else {
+					element.duplicated = false;
+					highlightDuplicateKey(ti, false);
+					t.setBackground(white);
+				}
+				updateStatus();
+			}
+		});
+		((Text)keyEditor.getControl()).addVerifyListener(new VerifyListener() {
+			  public void verifyText(VerifyEvent e) {
+					for (int i = 0; i < ExternalizeStringsUtils.REPLACED_CHARACTERS.length; i++) {
+						/*
+						 * Entering of the forbidden characters will be prevented.
+						 */
+						if (e.character == ExternalizeStringsUtils.REPLACED_CHARACTERS[i]) {
+							e.doit = false;
+							break;
+						}
+					}
+			    }
+			});
 		viewer.setCellEditors(new CellEditor[] { 
-				new TextCellEditor(parent), null });
+				keyEditor, null });
 		viewer.setColumnProperties(new String[] { 
 				KEY_PROPERTY, VALUE_PROPERTY });
 	}
 
-	private void addProperties(TableViewer viewer) {
-		for (KeyValueElement k : keys) {
+	private void addInitialKeysValues(TableViewer viewer) {
+		for (KeyValueElement k : initKeys) {
 			viewer.add(k);
 		}
 	}
@@ -212,9 +342,14 @@ public class ExternalizeAllStringsKeysListPage extends WizardPage {
 	 */
 	public String getKeyValuePairsList() {
 		StringBuffer sb = new StringBuffer();
-		for (KeyValueElement k : keys) {
-			sb.append(k.key + Constants.EQUAL + k.value);
-			sb.append('\n');
+		for (KeyValueElement k : initKeys) {
+			/*
+			 * Element with duplicated key will be excluded.
+			 */
+			if (!k.duplicated) {
+				sb.append(k.key + Constants.EQUAL + k.value);
+				sb.append('\n');
+			}
 		}
 		return sb.toString();
 	}
@@ -230,11 +365,16 @@ public class ExternalizeAllStringsKeysListPage extends WizardPage {
 			/*
 			 * Go from the end to the top of the file.
 			 */
-			Collections.sort(keys);
-			for (int i = keys.size()-1; i >= 0; i--) {
-				KeyValueElement k = keys.get(i);
+			Collections.sort(initKeys);
+			for (int i = initKeys.size()-1; i >= 0; i--) {
+				KeyValueElement k = initKeys.get(i);
 				try {
-					doc.replace(k.offset, k.length, "#{" +bundlePrefix + Constants.DOT + k.key + "}"); //$NON-NLS-1$ //$NON-NLS-2$
+					/*
+					 * Element with duplicated key won't be replaced
+					 */
+					if (!k.duplicated) {
+						doc.replace(k.offset, k.length, "#{" +bundlePrefix + Constants.DOT + k.key + "}"); //$NON-NLS-1$ //$NON-NLS-2$
+					}
 				} catch (BadLocationException e) {
 					JspEditorPlugin.getPluginLog().logError(e);
 				}
@@ -242,8 +382,52 @@ public class ExternalizeAllStringsKeysListPage extends WizardPage {
 		}
 	}
 	
+	public void updateTable(Properties p) {
+		this.properties = p;
+		boolean anyDuplicated = false;
+		for (int i = 0; i < tv.getTable().getItemCount(); i++) {
+			KeyValueElement k = (KeyValueElement) tv.getElementAt(i);
+			TableItem ti = tv.getTable().getItem(i);
+			if(isDuplicatedBundleKey(k.key) || isDuplicatedStringKey(k, k.key)) {
+				k.duplicated = true;
+				ti.setBackground(0, red);
+				anyDuplicated = true;
+			} else {
+				k.duplicated = false;
+				ti.setBackground(0, white);
+			}
+		}
+		setDuplicateWarning(anyDuplicated);
+	}
+	
+	private void setDuplicateWarning(boolean anyDuplicated) {
+		if (anyDuplicated) {
+			this.setMessage("Duplicated entries won't be externalized",
+					IMessageProvider.WARNING);
+			this.setErrorMessage(null);
+		} else {
+			this.setMessage(null);
+			this.setErrorMessage(null);
+		}
+	}
+	
+	private void updateStatus() {
+		boolean anyDuplicated = false;
+		for (KeyValueElement k : initKeys) {
+			if (k.duplicated) {
+				anyDuplicated = true;
+				break;
+			}
+		}
+		setDuplicateWarning(anyDuplicated);
+	}
+	
 	@Override
 	public boolean isPageComplete() {
+		/*
+		 * User always can complete the page
+		 *  Duplicate entries simply will be ignored.
+		 */
 		return true;
 	}
 	
@@ -252,11 +436,13 @@ public class ExternalizeAllStringsKeysListPage extends WizardPage {
 		public String value;
 		public int offset;
 		public int length;
-		public KeyValueElement(String k, String v, int o, int l) {
+		public boolean duplicated;
+		public KeyValueElement(String k, String v, int o, int l, boolean d) {
 			key = k;
 			value = v;
 			offset = o;
 			length = l;
+			duplicated = d;
 		}
 		@Override
 		public int compareTo(KeyValueElement aThat) {
@@ -271,7 +457,7 @@ public class ExternalizeAllStringsKeysListPage extends WizardPage {
 		}
 		@Override
 		public int hashCode() {
-			int result = 47;
+			int result = 47 + super.hashCode();
 			if (key != null) {
 				result+= key.hashCode();
 			}
@@ -300,8 +486,9 @@ public class ExternalizeAllStringsKeysListPage extends WizardPage {
 		@Override
 		public String toString() {
 			return this.getClass() + "@" + this.hashCode()  //$NON-NLS-1$
-			+ " (key=" + this.key + ", value=" + this.value  //$NON-NLS-1$ //$NON-NLS-2$
-			+ ", offset=" + this.offset + ", length=" + this.length + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			+ " (key=" + this.key + ", value=" + this.value //$NON-NLS-1$ //$NON-NLS-2$
+			+ ", offset=" + this.offset + ", length=" + this.length //$NON-NLS-1$ //$NON-NLS-2$
+			+ ", duplicated=" + this.duplicated + ")"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 }

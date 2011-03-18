@@ -281,7 +281,8 @@ public class ExternalizeStringsUtils {
 	 * @param table the UI table
 	 * @param propertiesFile  resource bundle file
 	 */
-	public static void populatePropertiesTable(Table table, IFile propertiesFile) {
+	public static Properties populatePropertiesTable(Table table, IFile propertiesFile) {
+		Properties properties = null;
 		if ((propertiesFile != null) && propertiesFile.exists()) {
 			BufferedReader in = null;
 			try {
@@ -291,7 +292,7 @@ public class ExternalizeStringsUtils {
 				String encoding = FileUtil.getEncoding(propertiesFile);
 				in = new BufferedReader(new InputStreamReader(
 						propertiesFile.getContents(), encoding));
-				readFileToProperies(table, in);
+				properties = readFileToProperies(table, in);
 				in.close();
 			} catch (CoreException e) {
 				JspEditorPlugin.getDefault().logError(
@@ -307,9 +308,11 @@ public class ExternalizeStringsUtils {
 				JspEditorPlugin.getDefault().logError(
 						"Bundle File '" + propertiesFile + "' does not exist!"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
+		return properties;
 	}
 	
-	public static void populatePropertiesTable(Table table, File propertiesFile) {
+	public static Properties populatePropertiesTable(Table table, File propertiesFile) {
+		Properties properties = null;
 		if ((propertiesFile != null) && (propertiesFile.exists())) {
 			/*
 			 * Read the file content
@@ -317,7 +320,7 @@ public class ExternalizeStringsUtils {
 			FileReader fr = null;
 			try {
 				fr = new FileReader(propertiesFile);
-				readFileToProperies(table, fr);
+				properties = readFileToProperies(table, fr);
 				fr.close();
 			} catch (FileNotFoundException e) {
 				JspEditorPlugin.getDefault().logError(e);
@@ -331,10 +334,11 @@ public class ExternalizeStringsUtils {
 			JspEditorPlugin.getDefault().logError(
 					"Bundle File '" + propertiesFile + "' does not exist!"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
+		return properties;
 	}
 	
-	private static void readFileToProperies(Table table, Reader r) {
-		Properties properties =  new Properties();
+	private static Properties readFileToProperies(Table table, Reader r) {
+		Properties properties = new Properties();
 		try {
 			properties.load(r);
 			r.close();
@@ -359,6 +363,7 @@ public class ExternalizeStringsUtils {
 			k++;
 			tableItem.setText(new String[] {key, properties.getProperty(key)});
 		}
+		return properties;
 	}
 	
 	/**

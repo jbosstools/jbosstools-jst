@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.IDocument;
@@ -108,4 +109,13 @@ public class ExternalizeAllStringsWizard extends Wizard {
 		return true;
 	}
 
+	public Properties getOriginalProperties() {
+		if (null != page1) {
+			return page1.getOriginalProperties();
+		}
+		return null;
+	}
+	public void setUpdatedProperties(Properties p) {
+		page2.updateTable(p);
+	}
 }
