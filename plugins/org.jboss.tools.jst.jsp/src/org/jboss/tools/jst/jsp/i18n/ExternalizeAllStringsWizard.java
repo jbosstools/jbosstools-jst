@@ -33,7 +33,7 @@ public class ExternalizeAllStringsWizard extends Wizard {
 	private BundleMap bm = null;
 	ExternalizeAllStringsSelectBundlePage page1;
 	ExternalizeAllStringsKeysListPage page2;
-	ExternalizeStringsWizardRegisterBundlePage page3 = null;
+	ExternalizeStringsWizardRegisterBundlePage page3;
 	
 	public ExternalizeAllStringsWizard(ITextEditor editor, BundleMap bm) {
 		super();
@@ -49,9 +49,9 @@ public class ExternalizeAllStringsWizard extends Wizard {
 	@Override
 	public void addPages() {
 		super.addPages();
-		page1 = new ExternalizeAllStringsSelectBundlePage("page1");
-		page2 = new ExternalizeAllStringsKeysListPage("page2");
-		page3 = new ExternalizeStringsWizardRegisterBundlePage("page3");
+		page1 = new ExternalizeAllStringsSelectBundlePage("ExternalizeAllStringsSelectBundlePage");
+		page2 = new ExternalizeAllStringsKeysListPage("ExternalizeAllStringsKeysListPage");
+		page3 = new ExternalizeStringsWizardRegisterBundlePage("ExternalizeStringsWizardRegisterBundlePage");
 		/*
 		 * Add all the pages to the wizard
 		 */
@@ -92,23 +92,26 @@ public class ExternalizeAllStringsWizard extends Wizard {
 			}
 			out.close();
 			out = null;
-			}
-		/*
-		 * Find bundle prefix
-		 */
-		String bundlePrefix = Constants.EMPTY;
-		String ap = bundleFile.getAbsolutePath();
-		for (BundleEntry be : bm.getBundles()) {
-			IFile bf = bm.getBundleFile(be.uri);
-			if (ap.equalsIgnoreCase(bf.getLocation().toOSString())) {
-				bundlePrefix = be.prefix;
-				break;
-			}
 		}
-		page2.replaceAllStrings(bundlePrefix);
+		page2.replaceAllStrings(findBundlePrefix());
 		return true;
 	}
 
+	public String findBundlePrefix() {
+		String bundlePrefix = Constants.EMPTY;
+		if (page1.getBundleFile() != null) {
+			String ap = page1.getBundleFile().getAbsolutePath();
+			for (BundleEntry be : bm.getBundles()) {
+				IFile bf = bm.getBundleFile(be.uri);
+				if (ap.equalsIgnoreCase(bf.getLocation().toOSString())) {
+					bundlePrefix = be.prefix;
+					break;
+				}
+			}
+		}
+		return bundlePrefix;
+	}
+	
 	public Properties getOriginalProperties() {
 		if (null != page1) {
 			return page1.getOriginalProperties();
@@ -117,5 +120,8 @@ public class ExternalizeAllStringsWizard extends Wizard {
 	}
 	public void setUpdatedProperties(Properties p) {
 		page2.updateTable(p);
+	}
+	public void setPage3BundleName() {
+		page3.setBundleName(findBundlePrefix());
 	}
 }

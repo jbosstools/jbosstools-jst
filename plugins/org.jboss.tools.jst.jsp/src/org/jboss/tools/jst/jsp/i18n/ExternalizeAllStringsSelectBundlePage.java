@@ -73,6 +73,7 @@ public class ExternalizeAllStringsSelectBundlePage extends WizardPage {
 						bundleFile = new File((String)event.getNewValue());
 						properties = ExternalizeStringsUtils.populatePropertiesTable(table, bundleFile);
 						wiz.setUpdatedProperties(properties);
+						wiz.setPage3BundleName();
 						/*
 						 * Set page complete
 						 */

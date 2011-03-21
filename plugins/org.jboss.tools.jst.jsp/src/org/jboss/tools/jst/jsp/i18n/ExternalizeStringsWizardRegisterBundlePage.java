@@ -93,6 +93,8 @@ public class ExternalizeStringsWizardRegisterBundlePage extends WizardPage
 			if (pos != -1) {
 				fileName = fileName.substring(0, pos);
 			}
+		} else if (getWizard() instanceof ExternalizeAllStringsWizard) {
+			fileName = ((ExternalizeAllStringsWizard) getWizard()).findBundlePrefix();
 		}
 		bundleName.setText(fileName);
 		
@@ -267,4 +269,11 @@ public class ExternalizeStringsWizardRegisterBundlePage extends WizardPage
 	public void widgetDefaultSelected(SelectionEvent e) {
 		updateBundleNameField();
 	}
+	
+	public void setBundleName(String bn) {
+		if (bundleName != null) {
+			bundleName.setText(bn);
+		}
+	}
+	
 }

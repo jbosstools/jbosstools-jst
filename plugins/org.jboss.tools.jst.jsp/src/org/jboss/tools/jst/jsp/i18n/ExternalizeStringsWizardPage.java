@@ -31,6 +31,8 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -504,6 +506,19 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 					updateStatus();
 				}
 			});
+			propsKey.addVerifyListener(new VerifyListener() {
+				  public void verifyText(VerifyEvent e) {
+						for (int i = 0; i < ExternalizeStringsUtils.REPLACED_CHARACTERS.length; i++) {
+							/*
+							 * Entering of the forbidden characters will be prevented.
+							 */
+							if (e.character == ExternalizeStringsUtils.REPLACED_CHARACTERS[i]) {
+								e.doit = false;
+								break;
+							}
+						}
+				    }
+				});
 			propsValue.addModifyListener(new ModifyListener() {
 				public void modifyText(ModifyEvent e) {
 					updateStatus();

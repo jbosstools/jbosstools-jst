@@ -79,7 +79,7 @@ public class ExternalizeAllStringsKeysListPage extends WizardPage {
 		red = parent.getDisplay().getSystemColor(SWT.COLOR_RED); 
 		white = parent.getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND);
 		initKeys = getAllNonExternalizedStrings();
-		Collections.sort(initKeys, Collections.reverseOrder());
+		Collections.sort(initKeys);
 		tv = createTable(parent);
 		highlightAllDuplicateKeys(tv);
 		setControl(tv.getTable());
@@ -270,6 +270,19 @@ public class ExternalizeAllStringsKeysListPage extends WizardPage {
 					kve.value = value.toString();
 				}
 				viewer.refresh(kve);
+				/*
+				 * Mark/unmark all duplicated keys with red/white.
+				 * Change the dialog status.
+				 */
+				for (KeyValueElement k : initKeys) {
+					if (isDuplicatedBundleKey(k.key) || isDuplicatedStringKey(k, k.key)) {
+						k.duplicated = true;
+					} else {
+						k.duplicated = false;
+					}
+				}
+				highlightAllDuplicateKeys(viewer);
+				updateStatus();
 			}
 		});
 		TextCellEditor keyEditor = new TextCellEditor(parent); 
@@ -288,11 +301,10 @@ public class ExternalizeAllStringsKeysListPage extends WizardPage {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				Text t = (Text) e.getSource();
+				String key = t.getText();
 				Table table = (Table) t.getParent();
 				int ind = table.getSelectionIndex();
 				KeyValueElement element = (KeyValueElement) viewer.getElementAt(ind);
-				TableItem ti = table.getItem(ind);
-				String key = t.getText();
 				/*
 				 * Check duplicate key, set bkg color to red
 				 * Setting new key value is called after this modyfy listener,
@@ -300,14 +312,11 @@ public class ExternalizeAllStringsKeysListPage extends WizardPage {
 				 */
 				if (isDuplicatedBundleKey(key) || isDuplicatedStringKey(element, key)) {
 					element.duplicated = true;
-					highlightDuplicateKey(ti, true);
 					t.setBackground(red);
 				} else {
 					element.duplicated = false;
-					highlightDuplicateKey(ti, false);
 					t.setBackground(white);
 				}
-				updateStatus();
 			}
 		});
 		((Text)keyEditor.getControl()).addVerifyListener(new VerifyListener() {
