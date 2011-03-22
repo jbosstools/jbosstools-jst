@@ -283,6 +283,9 @@
          		<partitionType id="com.ibm.sse.STYLE">
          			<!--axis path="*/style/" /-->
          		</partitionType>
+         		<partitionType id="org.jboss.tools.common.text.ext.jsp.JSP_LINK">
+         			<axis path="*/link/*" ignoreCase="true"/>
+         		</partitionType>
          	</contentType>
          	<contentType id="org.eclipse.wst.html.core.htmlsource">
          		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ATTRIBUTE_VALUE">
@@ -293,6 +296,9 @@
          		</partitionType>
          		<partitionType id="com.ibm.sse.STYLE">
          			<!--axis path="*/style/" /-->
+         		</partitionType>
+         		<partitionType id="org.jboss.tools.common.text.ext.jsp.JSP_LINK">
+         			<axis path="*/link/*" ignoreCase="true"/>
          		</partitionType>
          	</contentType>
          	<contentType id="jsf.facelet">
@@ -305,6 +311,9 @@
          		<partitionType id="com.ibm.sse.STYLE">
          			<!--axis path="*/style/" /-->
          		</partitionType>
+         		<partitionType id="org.jboss.tools.common.text.ext.jsp.JSP_LINK">
+         			<axis path="*/link/*" ignoreCase="true"/>
+         		</partitionType>
          	</contentType>
          	<contentType id="jsf.facelet.composite">
          		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ATTRIBUTE_VALUE">
@@ -316,6 +325,9 @@
          		<partitionType id="com.ibm.sse.STYLE">
          			<!--axis path="*/style/" /-->
          		</partitionType>
+         		<partitionType id="org.jboss.tools.common.text.ext.jsp.JSP_LINK">
+         			<axis path="*/link/*" ignoreCase="true"/>
+         		</partitionType>
          	</contentType>
          	<contentType id="org.jboss.tools.jst.jsp.jspincludesource">
          		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ATTRIBUTE_VALUE">
@@ -326,6 +338,9 @@
          		</partitionType>
          		<partitionType id="com.ibm.sse.STYLE">
          			<!--axis path="*/style/" /-->
+         		</partitionType>
+         		<partitionType id="org.jboss.tools.common.text.ext.jsp.JSP_LINK">
+         			<axis path="*/link/*" ignoreCase="true"/>
          		</partitionType>
          	</contentType>
 		</hyperlinkPartitioner>
