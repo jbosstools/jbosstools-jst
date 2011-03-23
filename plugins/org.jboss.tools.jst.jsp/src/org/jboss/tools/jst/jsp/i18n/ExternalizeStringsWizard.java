@@ -195,9 +195,9 @@ public class ExternalizeStringsWizard extends Wizard {
 			 */
 			if (page1.isNewFile() && !page3.isUserDefined()) {
 				var = page3.getBundleName();
-				if (getProject()!=null) {
-					IProject project = getProject();
-					String userDefinedPath = page2.getContainerFullPath().toString();
+				IProject project = ExternalizeStringsUtils.getProject(editor);
+				if (project != null) {
+					String userDefinedPath = getUserDefinedPath().toString();
 					/*
 					 * Get the source folders for the project
 					 */
@@ -286,8 +286,10 @@ public class ExternalizeStringsWizard extends Wizard {
 							Object selectedElement = structuredSelection.getFirstElement();
 							if (selectedElement instanceof Node) {
 								Node node = (Node) selectedElement;
-								registerMessageTaglib();
-								String jsfCoreTaglibPrefix = "f"; //$NON-NLS-1$
+								String jsfCoreTaglibPrefix = ExternalizeStringsUtils.registerMessageTaglib(editor);
+								/*
+								 * Create f:loadBundle element
+								 */
 								Element loadBundle = node.getOwnerDocument().createElement(
 										jsfCoreTaglibPrefix + Constants.COLON + "loadBundle"); //$NON-NLS-1$
 								loadBundle.setAttribute("var", var); //$NON-NLS-1$
@@ -323,53 +325,6 @@ public class ExternalizeStringsWizard extends Wizard {
 		page1.replaceText(replacement);
 		return true;
 	}
-	/**
-	 * Register Message Taglibs on page
-	 */
-	protected void registerMessageTaglib(){
-		List<TaglibData> taglibs = null;
-		String jsfCoreTaglibPrefix = "f"; //$NON-NLS-1$
-		if (editor instanceof JSPMultiPageEditor) {
-			StructuredTextEditor ed = ((JSPMultiPageEditor) editor).getSourceEditor();
-			if (ed instanceof JSPTextEditor) {
-				IVisualContext context =  ((JSPTextEditor) ed).getPageContext();
-				if (context instanceof SourceEditorPageContext) {
-					SourceEditorPageContext sourcePageContext = (SourceEditorPageContext) context;
-					taglibs = sourcePageContext.getTagLibs();
-					if (null == taglibs) {
-						JspEditorPlugin.getDefault().logError(
-								JstUIMessages.CANNOT_LOAD_TAGLIBS_FROM_PAGE_CONTEXT);
-					} else {
-						boolean isJsfCoreTaglibRegistered = false;
-						for (TaglibData tl : taglibs) {
-							if (DropURI.JSF_CORE_URI.equalsIgnoreCase(tl.getUri())) {
-								isJsfCoreTaglibRegistered = true;
-								jsfCoreTaglibPrefix = tl.getPrefix();
-								break;
-							}
-						}
-						if (!isJsfCoreTaglibRegistered) {
-							/*
-							 * Register the required taglib
-							 */
-							PaletteTaglibInserter PaletteTaglibInserter = new PaletteTaglibInserter();
-							Properties p = new Properties();
-							p.put("selectionProvider", getSelectionProvider()); //$NON-NLS-1$
-							p.setProperty(URIConstants.LIBRARY_URI, DropURI.JSF_CORE_URI);
-							p.setProperty(URIConstants.LIBRARY_VERSION, ""); //$NON-NLS-1$
-							p.setProperty(URIConstants.DEFAULT_PREFIX, jsfCoreTaglibPrefix);
-							p.setProperty(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB, "true"); //$NON-NLS-1$
-							p.setProperty(JSPPaletteInsertHelper.PROPOPERTY_REFORMAT_BODY, "yes"); //$NON-NLS-1$
-							p.setProperty(PaletteInsertHelper.PROPOPERTY_START_TEXT, 
-									"<%@ taglib uri=\"http://java.sun.com/jsf/core\" prefix=\"f\" %>\\n"); //$NON-NLS-1$
-							PaletteTaglibInserter.inserTaglib(ed.getTextViewer().getDocument(), p);
-						}
-					}
-				}
-			}
-		}
-
-	}
 	
 	private IDocument getDocument(){
 		IDocumentProvider prov = editor.getDocumentProvider();
@@ -385,8 +340,8 @@ public class ExternalizeStringsWizard extends Wizard {
 	 */
 	private IPath getContainerFullPath(){
 		IPath containerFullPath = null;
-		if (editor.getEditorInput() instanceof IFileEditorInput) {
-			IProject project = ((IFileEditorInput)editor.getEditorInput()).getFile().getProject();
+		IProject project = ExternalizeStringsUtils.getProject(editor);
+		if (project != null) {
 			IResource[] src = EclipseUtil.getJavaSourceRoots(project);
 			if (src.length > 0) {
 				containerFullPath = src[0].getFullPath();
@@ -401,15 +356,14 @@ public class ExternalizeStringsWizard extends Wizard {
 		return containerFullPath;
 	}
 	
-	protected String getFileName(){
-		return editor.getEditorInput().getName();
+	protected IPath getUserDefinedPath() {
+		return page2.getContainerFullPath();
 	}
 	
-	protected IProject getProject(){
-		IProject project = null;
-		if (editor.getEditorInput() instanceof IFileEditorInput) {
-			project = ((IFileEditorInput)editor.getEditorInput()).getFile().getProject();
-		}
-		return project;
+	protected String getFileName() {
+		return editor.getEditorInput().getName();
+	}
+	protected IProject getProject() {
+		return ExternalizeStringsUtils.getProject(editor);
 	}
 }

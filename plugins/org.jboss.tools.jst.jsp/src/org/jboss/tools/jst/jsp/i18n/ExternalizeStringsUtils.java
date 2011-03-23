@@ -30,6 +30,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ColumnLayoutData;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -47,20 +48,33 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
+import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.eclipse.wst.sse.ui.internal.provisional.extensions.ISourceEditingTextTools;
+import org.eclipse.wst.xml.core.internal.document.AttrImpl;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.ui.internal.provisional.IDOMSourceEditingTextTools;
+import org.jboss.tools.common.meta.action.XActionInvoker;
+import org.jboss.tools.common.meta.action.impl.handlers.DefaultCreateHandler;
 import org.jboss.tools.common.model.XModel;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.project.IModelNature;
+import org.jboss.tools.common.model.ui.editors.dnd.DropURI;
+import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.util.ModelFeatureFactory;
 import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.bundle.BundleMap;
 import org.jboss.tools.jst.jsp.editor.IVisualContext;
+import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor;
 import org.jboss.tools.jst.jsp.jspeditor.SourceEditorPageContext;
+import org.jboss.tools.jst.jsp.jspeditor.dnd.JSPPaletteInsertHelper;
+import org.jboss.tools.jst.jsp.jspeditor.dnd.PaletteTaglibInserter;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.util.Constants;
 import org.jboss.tools.jst.jsp.util.FaceletsUtil;
@@ -68,8 +82,10 @@ import org.jboss.tools.jst.web.project.WebProject;
 import org.jboss.tools.jst.web.project.list.IWebPromptingProvider;
 import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
 import org.jboss.tools.jst.web.tld.TaglibData;
+import org.jboss.tools.jst.web.tld.URIConstants;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
@@ -414,4 +430,159 @@ public class ExternalizeStringsUtils {
 		 */
 		return result;
 	}
+	
+	public static void registerInFacesConfig(ITextEditor editor, String bundlePath, String var) {
+		/*
+		 * Register new bundle in the faces-config.xml 
+		 * We should write only correct base-name.
+		 * If it is not -- then just skip it. But such a situation
+		 * should never happen. 
+		 */
+		IProject project = getProject(editor);
+		if (project != null) {
+			XModel model = EclipseResourceUtil.getModelNature(project).getModel();
+			XModelObject facesConfig = ExternalizeStringsUtils.findFacesConfig(model);
+			XModelObject application = facesConfig.getChildByPath("application"); //$NON-NLS-1$
+			XModelObject resourceBundle = facesConfig.getModel().createModelObject("JSFResourceBundle", null); //$NON-NLS-1$
+			resourceBundle.setAttributeValue("base-name", bundlePath); //$NON-NLS-1$
+			resourceBundle.setAttributeValue("var", var); //$NON-NLS-1$
+			try {
+				DefaultCreateHandler.addCreatedObject(application, resourceBundle, 0);
+			} catch (XModelException e) {
+				JspEditorPlugin.getDefault().logError(
+						"Could not add <resource-bundle> to the faces-config.xml", e); //$NON-NLS-1$
+			}
+			/*
+			 * When the faces-config.xml is opened in the editor the following
+			 * action should be called to ensure that changes have been applied. 
+			 */
+			XActionInvoker.invoke("SaveActions.Save", facesConfig, new Properties()); //$NON-NLS-1$
+		}
+	}
+	
+	
+	public static void registerViaLoadBundle(ITextEditor editor, String bundlePath, String var) {
+		/*
+		 * Add <f:loadBundle> tag to the current page.
+		 * Insert the tag inside <f:view> or <html>.
+		 */
+		String jsfCoreTaglibPrefix = registerMessageTaglib(editor);
+		IStructuredModel model = null;
+		IModelManager manager = StructuredModelManager.getModelManager();
+		if (manager != null) {
+			try {
+				model = manager.getModelForEdit(getFile(editor));
+			} catch (IOException e) {
+				JspEditorPlugin.getDefault().logError(e);
+			} catch (CoreException e) {
+				JspEditorPlugin.getDefault().logError(e);
+			}
+			if (model instanceof IDOMModel) {
+				IDOMModel domModel = (IDOMModel) model;
+				IDOMDocument document = domModel.getDocument();
+				NodeList viewList = document.getElementsByTagName(jsfCoreTaglibPrefix + ":view"); //$NON-NLS-1$
+				NodeList subviewList = document.getElementsByTagName(jsfCoreTaglibPrefix + ":subview"); //$NON-NLS-1$
+				NodeList htmlList = document.getElementsByTagName("html"); //$NON-NLS-1$
+				IDocument doc = editor.getDocumentProvider().getDocument(editor.getEditorInput());
+				Node node = null;
+				if (viewList.getLength() > 0) {
+					/*
+					 * Add loadBundle right after f:view declaration
+					 */
+					node = viewList.item(0);
+				} else if (subviewList.getLength() > 0) {
+					/*
+					 * There is no f:view, may be f:subwiew
+					 */
+					node = subviewList.item(0);
+				} else {
+					/*
+					 * Register at least somewhere
+					 */
+					node = htmlList.item(0);
+				}
+				if (node != null) {
+					/*
+					 * Create f:loadBundle element
+					 */
+					Document srcDoc =  node.getOwnerDocument();
+					Element loadBundle = srcDoc.createElement(
+							jsfCoreTaglibPrefix + Constants.COLON + "loadBundle"); //$NON-NLS-1$
+					loadBundle.setAttribute("var", var); //$NON-NLS-1$
+					loadBundle.setAttribute("basename", bundlePath); //$NON-NLS-1$
+					Node firstChild = node.getFirstChild();
+					if (firstChild != null) {
+						firstChild.insertBefore(loadBundle, node);
+					}
+				}
+			}
+		} else {
+			JspEditorPlugin.getDefault().logWarning(
+					JstUIMessages.EXTERNALIZE_STRINGS_DIALOG_CANNOT_ADD_LOAD_BUNDLE_TAG);
+		}
+	}
+	
+	/**
+	 * Register Message Taglibs on page
+	 */
+	public static String registerMessageTaglib(ITextEditor editor) {
+		List<TaglibData> taglibs = null;
+		String jsfCoreTaglibPrefix = "f"; //$NON-NLS-1$
+		if (editor instanceof JSPMultiPageEditor) {
+			StructuredTextEditor ed = ((JSPMultiPageEditor) editor).getSourceEditor();
+			if (ed instanceof JSPTextEditor) {
+				IVisualContext context =  ((JSPTextEditor) ed).getPageContext();
+				if (context instanceof SourceEditorPageContext) {
+					SourceEditorPageContext sourcePageContext = (SourceEditorPageContext) context;
+					taglibs = sourcePageContext.getTagLibs();
+					if (null == taglibs) {
+						JspEditorPlugin.getDefault().logError(
+								JstUIMessages.CANNOT_LOAD_TAGLIBS_FROM_PAGE_CONTEXT);
+					} else {
+						boolean isJsfCoreTaglibRegistered = false;
+						for (TaglibData tl : taglibs) {
+							if (DropURI.JSF_CORE_URI.equalsIgnoreCase(tl.getUri())) {
+								isJsfCoreTaglibRegistered = true;
+								jsfCoreTaglibPrefix = tl.getPrefix();
+								break;
+							}
+						}
+						if (!isJsfCoreTaglibRegistered) {
+							/*
+							 * Register the required taglib
+							 */
+							PaletteTaglibInserter PaletteTaglibInserter = new PaletteTaglibInserter();
+							Properties p = new Properties();
+							p.put("selectionProvider", editor.getSelectionProvider()); //$NON-NLS-1$
+							p.setProperty(URIConstants.LIBRARY_URI, DropURI.JSF_CORE_URI);
+							p.setProperty(URIConstants.LIBRARY_VERSION, ""); //$NON-NLS-1$
+							p.setProperty(URIConstants.DEFAULT_PREFIX, jsfCoreTaglibPrefix);
+							p.setProperty(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB, "true"); //$NON-NLS-1$
+							p.setProperty(JSPPaletteInsertHelper.PROPOPERTY_REFORMAT_BODY, "yes"); //$NON-NLS-1$
+							p.setProperty(PaletteInsertHelper.PROPOPERTY_START_TEXT, 
+									"<%@ taglib uri=\"http://java.sun.com/jsf/core\" prefix=\"f\" %>\\n"); //$NON-NLS-1$
+							PaletteTaglibInserter.inserTaglib(ed.getTextViewer().getDocument(), p);
+						}
+					}
+				}
+			}
+		}
+		return jsfCoreTaglibPrefix;
+	}
+	
+	public static IFile getFile(ITextEditor editor) {
+		if (editor.getEditorInput() instanceof IFileEditorInput) {
+			return ((IFileEditorInput)editor.getEditorInput()).getFile();
+		}
+		return null;
+	}
+	
+	public static IProject getProject(ITextEditor editor) {
+		IFile file = getFile(editor);
+		if (file != null) {
+			return file.getProject();
+		}
+		return null;
+	}
+	
 }

@@ -52,6 +52,7 @@ public class ExternalizeStringsWizardRegisterBundlePage extends WizardPage
 	private Button userDefined;
 	private Label bundleLabel;
 	private Text bundleName;
+	private Group group;
 
 	/**
 	 * Instantiates a new externalize strings wizard register bundle page.
@@ -101,7 +102,7 @@ public class ExternalizeStringsWizardRegisterBundlePage extends WizardPage
 		/*
 		 * Group with a place for bundle
 		 */
-		Group group = new Group(composite, SWT.SHADOW_ETCHED_IN);
+		group = new Group(composite, SWT.SHADOW_ETCHED_IN);
 		group.setLayout(new GridLayout(1, true));
 		group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
 		group.setText(JstUIMessages.EXTERNALIZE_STRINGS_DIALOG_SAVE_RESOURCE_BUNDLE);
@@ -205,12 +206,18 @@ public class ExternalizeStringsWizardRegisterBundlePage extends WizardPage
 	 * Update bundle name field.
 	 */
 	private void updateBundleNameField() {
-		if (isUserDefined()) {
-			bundleLabel.setEnabled(false);
-			bundleName.setEnabled(false);
-		} else {
-			bundleLabel.setEnabled(true);
-			bundleName.setEnabled(true);
+		/*
+		 * While externalizing all strings - this update is unnecessary.
+		 *  It will be done in setBundleName() method.
+		 */
+		if (getWizard() instanceof ExternalizeStringsWizard) {
+			if (isUserDefined()) {
+				bundleLabel.setEnabled(false);
+				bundleName.setEnabled(false);
+			} else {
+				bundleLabel.setEnabled(true);
+				bundleName.setEnabled(true);
+			}
 		}
 	}
 	
@@ -221,29 +228,38 @@ public class ExternalizeStringsWizardRegisterBundlePage extends WizardPage
 	 */
 	private boolean isSourceFolderSelected() {
 		boolean sourceFolderSelected = false;
+		IProject project = null;
+		String userDefinedPath = Constants.EMPTY;
 		if (getWizard() instanceof ExternalizeStringsWizard) {
-			ExternalizeStringsWizard wiz = (ExternalizeStringsWizard) getWizard(); 
-			if (wiz.getProject()!=null) {
-				IProject project = wiz.getProject();
-				WizardNewFileCreationPage page2 = (WizardNewFileCreationPage)wiz.getPage(
-						ExternalizeStringsWizard.EXTERNALIZE_STRINGS_DIALOG_NEW_FILE_PAGE);
-				String userDefinedPath = page2.getContainerFullPath().toString();
-				/*
-				 * Get the source folders for the project
-				 */
-				IResource[] src = EclipseUtil.getJavaSourceRoots(project);
-				/*
-				 * When there are multiple source folders --
-				 * match user defined folder to them.
-				 */
-				String srcPath = Constants.EMPTY;
-					for (IResource res : src) {
-						srcPath =  res.getFullPath().toString();
-						if (userDefinedPath.indexOf(srcPath) > -1) {
-							sourceFolderSelected = true;
-							break;
-						}
-					}
+			ExternalizeStringsWizard wiz = (ExternalizeStringsWizard) getWizard();
+			project = wiz.getProject();
+			if (project != null) {
+				userDefinedPath = wiz.getUserDefinedPath().toString();
+			}
+		} else if (getWizard() instanceof ExternalizeAllStringsWizard) {
+			ExternalizeAllStringsWizard wiz = (ExternalizeAllStringsWizard) getWizard();
+			project = wiz.getProject();
+			if (project != null) {
+				userDefinedPath = wiz.getUserDefinedFile().getAbsolutePath().toString();
+			}
+		}
+		if ((project != null)
+				&& !Constants.EMPTY.equalsIgnoreCase(userDefinedPath)) {
+			/*
+			 * Get the source folders for the project
+			 */
+			IResource[] src = EclipseUtil.getJavaSourceRoots(project);
+			/*
+			 * When there are multiple source folders --
+			 * match user defined folder to them.
+			 */
+			String srcPath = Constants.EMPTY;
+			for (IResource res : src) {
+				srcPath =  res.getFullPath().toString();
+				if (userDefinedPath.indexOf(srcPath) > -1) {
+					sourceFolderSelected = true;
+					break;
+				}
 			}
 		}
 		return sourceFolderSelected;
@@ -272,8 +288,17 @@ public class ExternalizeStringsWizardRegisterBundlePage extends WizardPage
 	
 	public void setBundleName(String bn) {
 		if (bundleName != null) {
-			bundleName.setText(bn);
+			if (!Constants.EMPTY.equalsIgnoreCase(bn)) {
+				bundleName.setText(bn);
+				bundleName.setEditable(false);
+				bundleLabel.setEnabled(false);
+				group.setEnabled(false);
+			} else {
+				bundleName.setText(Constants.EMPTY);
+				bundleName.setEditable(true);
+				bundleLabel.setEnabled(true);
+				group.setEnabled(true);
+			}
 		}
 	}
-	
 }
