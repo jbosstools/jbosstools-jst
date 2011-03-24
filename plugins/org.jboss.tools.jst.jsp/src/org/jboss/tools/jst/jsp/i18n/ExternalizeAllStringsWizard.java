@@ -30,6 +30,9 @@ import org.jboss.tools.jst.jsp.bundle.BundleMap.BundleEntry;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.util.Constants;
 
+/**
+ * The Wizard to Externalize All Strings on the page.
+ */
 public class ExternalizeAllStringsWizard extends Wizard {
 	
 	private ITextEditor editor = null;
@@ -38,6 +41,12 @@ public class ExternalizeAllStringsWizard extends Wizard {
 	ExternalizeAllStringsKeysListPage page2;
 	ExternalizeStringsWizardRegisterBundlePage page3;
 	
+	/**
+	 * Instantiates a new externalize all strings wizard.
+	 *
+	 * @param editor the editor with the opened file
+	 * @param bm the BundleMap 
+	 */
 	public ExternalizeAllStringsWizard(ITextEditor editor, BundleMap bm) {
 		super();
 		setHelpAvailable(false);
@@ -49,6 +58,9 @@ public class ExternalizeAllStringsWizard extends Wizard {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.wizard.Wizard#addPages()
+	 */
 	@Override
 	public void addPages() {
 		super.addPages();
@@ -63,14 +75,27 @@ public class ExternalizeAllStringsWizard extends Wizard {
 		addPage(page3);
 	}
 	
+	/**
+	 * Gets the editor.
+	 *
+	 * @return the editor
+	 */
 	protected ITextEditor getEditor() {
 		return editor;
 	}
 	
+	/**
+	 * Gets the document.
+	 *
+	 * @return the document
+	 */
 	protected IDocument getDocument() {
 		return editor.getDocumentProvider().getDocument(editor.getEditorInput());
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
+	 */
 	@Override
 	public boolean performFinish() {
 		File bundleFile = page1.getBundleFile();
@@ -167,16 +192,33 @@ public class ExternalizeAllStringsWizard extends Wizard {
 				var = bundlePath.substring(bundlePath.lastIndexOf("/") + 1); //$NON-NLS-1$
 				bundleName = var;
 			}
+			/*
+			 * Replace strings with new bundle name 
+			 */
+			page2.replaceAllStrings(bundleName);
+			/*
+			 * Register the bundle if required.
+			 */
 			if (page3.isInFacesConfig()) {
 				ExternalizeStringsUtils.registerInFacesConfig(editor, bundlePath, var);
 			} else if (page3.isViaLoadBundle()) {
 				ExternalizeStringsUtils.registerViaLoadBundle(editor, bundlePath, var);
 			}
+		} else {
+			/*
+			 * Simply replace the string with exited bundle and existed name.
+			 */
+			page2.replaceAllStrings(bundleName);
 		}
-		page2.replaceAllStrings(bundleName);
 		return true;
 	}
 
+	/**
+	 * Find bundle prefix for the file 
+	 * user selected on the page1.
+	 *
+	 * @return the string
+	 */
 	public String findBundlePrefix() {
 		String bundlePrefix = Constants.EMPTY;
 		if (page1.getBundleFile() != null) {
@@ -192,21 +234,48 @@ public class ExternalizeAllStringsWizard extends Wizard {
 		return bundlePrefix;
 	}
 	
+	/**
+	 * Gets the original properties.
+	 *
+	 * @return the original properties
+	 */
 	public Properties getOriginalProperties() {
 		if (null != page1) {
 			return page1.getOriginalProperties();
 		}
 		return null;
 	}
+	
+	/**
+	 * Sets the updated properties.
+	 *
+	 * @param p the new updated properties
+	 */
 	public void setUpdatedProperties(Properties p) {
 		page2.updateTable(p);
 	}
+	
+	/**
+	 * Sets the page3 bundle name.
+	 */
 	public void setPage3BundleName() {
 		page3.setBundleName(findBundlePrefix());
 	}
+	
+	/**
+	 * Gets the project.
+	 *
+	 * @return the project
+	 */
 	protected IProject getProject() {
 		return ExternalizeStringsUtils.getProject(editor);
 	}
+	
+	/**
+	 * Gets the user defined file.
+	 *
+	 * @return the user defined file
+	 */
 	protected File getUserDefinedFile() {
 		return page1.getBundleFile();
 	}

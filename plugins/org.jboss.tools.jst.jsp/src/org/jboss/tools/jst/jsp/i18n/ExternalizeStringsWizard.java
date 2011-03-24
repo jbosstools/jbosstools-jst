@@ -306,12 +306,7 @@ public class ExternalizeStringsWizard extends Wizard {
 										elementToInsertBefore = attr.getOwnerElement().getParentNode();
 									}
 								}
-								if ((elementToInsertBefore != null) && (refChild != null)){
-									elementToInsertBefore.insertBefore(loadBundle, refChild);
-								} else {
-									JspEditorPlugin.getDefault().logWarning(
-											JstUIMessages.EXTERNALIZE_STRINGS_DIALOG_CANNOT_ADD_LOAD_BUNDLE_TAG);
-								}
+								ExternalizeStringsUtils.insertLoadBundleTag(elementToInsertBefore, refChild, loadBundle);
 							}
 						}
 					}
@@ -326,6 +321,11 @@ public class ExternalizeStringsWizard extends Wizard {
 		return true;
 	}
 	
+	/**
+	 * Gets the document for the given editor.
+	 * 
+	 * @return the document
+	 */
 	private IDocument getDocument(){
 		IDocumentProvider prov = editor.getDocumentProvider();
 		return prov.getDocument(editor.getEditorInput());
@@ -356,13 +356,29 @@ public class ExternalizeStringsWizard extends Wizard {
 		return containerFullPath;
 	}
 	
+	/**
+	 * Gets the user defined path.
+	 * 
+	 * @return the user defined path
+	 */
 	protected IPath getUserDefinedPath() {
 		return page2.getContainerFullPath();
 	}
 	
+	/**
+	 * Gets the file name.
+	 * 
+	 * @return the file name
+	 */
 	protected String getFileName() {
 		return editor.getEditorInput().getName();
 	}
+	
+	/**
+	 * Gets the project.
+	 * 
+	 * @return the project
+	 */
 	protected IProject getProject() {
 		return ExternalizeStringsUtils.getProject(editor);
 	}

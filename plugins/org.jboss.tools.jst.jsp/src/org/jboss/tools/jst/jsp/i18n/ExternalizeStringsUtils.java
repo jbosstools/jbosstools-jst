@@ -53,6 +53,7 @@ import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.eclipse.wst.sse.ui.internal.provisional.extensions.ISourceEditingTextTools;
 import org.eclipse.wst.xml.core.internal.document.AttrImpl;
+import org.eclipse.wst.xml.core.internal.document.ElementImpl;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.ui.internal.provisional.IDOMSourceEditingTextTools;
@@ -83,6 +84,7 @@ import org.jboss.tools.jst.web.project.list.IWebPromptingProvider;
 import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
 import org.jboss.tools.jst.web.tld.TaglibData;
 import org.jboss.tools.jst.web.tld.URIConstants;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -128,6 +130,13 @@ public class ExternalizeStringsUtils {
 		return isSelectionCorrect;
 	}
 
+	/**
+	 * Find faces config xml file using XModel.
+	 * 
+	 * @param model
+	 *            the XModel
+	 * @return the x-model-object for faces-config.xml  
+	 */
 	public static XModelObject findFacesConfig(XModel model) {
 		IWebPromptingProvider provider = (IWebPromptingProvider)ModelFeatureFactory.getInstance().createFeatureInstance("org.jboss.tools.jsf.model.pv.JSFPromptingProvider"); //$NON-NLS-1$
 		if(provider == null) {
@@ -269,6 +278,15 @@ public class ExternalizeStringsUtils {
 		return bm;
 	}
 
+	/**
+	 * Creates the properties table.
+	 * 
+	 * @param parent
+	 *            the visual parent
+	 * @param style
+	 *            the table style constraint
+	 * @return the created table 
+	 */
 	public static Table createPropertiesTable(Composite parent, int style) {
 		Table table = new Table(parent, style);
         TableLayout layout = new TableLayout();
@@ -291,11 +309,14 @@ public class ExternalizeStringsUtils {
 	}
 	
 	/**
-	 *  Update resource bundle table according to the selected file:
-	 *  put key and value pairs to the table
-	 *  
-	 * @param table the UI table
-	 * @param propertiesFile  resource bundle file
+	 * Update resource bundle table according to the selected file:
+	 * put key and value pairs to the table.
+	 * 
+	 * @param table
+	 *            the UI table
+	 * @param propertiesFile
+	 *            resource bundle file
+	 * @return the java properties list generated from the propertiesFile
 	 */
 	public static Properties populatePropertiesTable(Table table, IFile propertiesFile) {
 		Properties properties = null;
@@ -308,7 +329,7 @@ public class ExternalizeStringsUtils {
 				String encoding = FileUtil.getEncoding(propertiesFile);
 				in = new BufferedReader(new InputStreamReader(
 						propertiesFile.getContents(), encoding));
-				properties = readFileToProperies(table, in);
+				properties = readFileToProperties(table, in);
 				in.close();
 			} catch (CoreException e) {
 				JspEditorPlugin.getDefault().logError(
@@ -327,6 +348,16 @@ public class ExternalizeStringsUtils {
 		return properties;
 	}
 	
+	/**
+	 * Update resource bundle table according to the selected file:
+	 * put key and value pairs to the table.
+	 * 
+	 * @param table
+	 *            the table
+	 * @param propertiesFile
+	 *            the properties file
+	 * @return the java properties list generated from the propertiesFile
+	 */
 	public static Properties populatePropertiesTable(Table table, File propertiesFile) {
 		Properties properties = null;
 		if ((propertiesFile != null) && (propertiesFile.exists())) {
@@ -336,7 +367,7 @@ public class ExternalizeStringsUtils {
 			FileReader fr = null;
 			try {
 				fr = new FileReader(propertiesFile);
-				properties = readFileToProperies(table, fr);
+				properties = readFileToProperties(table, fr);
 				fr.close();
 			} catch (FileNotFoundException e) {
 				JspEditorPlugin.getDefault().logError(e);
@@ -353,7 +384,19 @@ public class ExternalizeStringsUtils {
 		return properties;
 	}
 	
-	private static Properties readFileToProperies(Table table, Reader r) {
+
+	/**
+	 * Read properties file from the reader.
+	 * Create java properties file.
+	 * Populate the table with this properties values.
+	 * 
+	 * @param table
+	 *            the table to populate
+	 * @param r
+	 *            the reader
+	 * @return the java properties list generated from the reader file
+	 */
+	private static Properties readFileToProperties(Table table, Reader r) {
 		Properties properties = new Properties();
 		try {
 			properties.load(r);
@@ -431,6 +474,16 @@ public class ExternalizeStringsUtils {
 		return result;
 	}
 	
+	/**
+	 * Register the resource bundle in faces-config.xml file.
+	 * 
+	 * @param editor
+	 *            the editor
+	 * @param bundlePath
+	 *            the base-name for resource-bundle element
+	 * @param var
+	 *            the var for resource-bundle element
+	 */
 	public static void registerInFacesConfig(ITextEditor editor, String bundlePath, String var) {
 		/*
 		 * Register new bundle in the faces-config.xml 
@@ -461,6 +514,16 @@ public class ExternalizeStringsUtils {
 	}
 	
 	
+	/**
+	 * Register the resource bundle via load bundle tag on the current page.
+	 * 
+	 * @param editor
+	 *            the editor
+	 * @param bundlePath
+	 *            the basename for f:loadBundle tag
+	 * @param var
+	 *            the var for f:loadBundle tag
+	 */
 	public static void registerViaLoadBundle(ITextEditor editor, String bundlePath, String var) {
 		/*
 		 * Add <f:loadBundle> tag to the current page.
@@ -510,10 +573,8 @@ public class ExternalizeStringsUtils {
 							jsfCoreTaglibPrefix + Constants.COLON + "loadBundle"); //$NON-NLS-1$
 					loadBundle.setAttribute("var", var); //$NON-NLS-1$
 					loadBundle.setAttribute("basename", bundlePath); //$NON-NLS-1$
-					Node firstChild = node.getFirstChild();
-					if (firstChild != null) {
-						firstChild.insertBefore(loadBundle, node);
-					}
+					Node n = node.getFirstChild();
+					ExternalizeStringsUtils.insertLoadBundleTag(node, n, loadBundle);
 				}
 			}
 		} else {
@@ -523,7 +584,11 @@ public class ExternalizeStringsUtils {
 	}
 	
 	/**
-	 * Register Message Taglibs on page
+	 * Register jsf core taglib on current page.
+	 * 
+	 * @param editor
+	 *            the editor
+	 * @return the jsf core taglib prefix
 	 */
 	public static String registerMessageTaglib(ITextEditor editor) {
 		List<TaglibData> taglibs = null;
@@ -570,6 +635,13 @@ public class ExternalizeStringsUtils {
 		return jsfCoreTaglibPrefix;
 	}
 	
+	/**
+	 * Gets the file in the editor.
+	 * 
+	 * @param editor
+	 *            the editor
+	 * @return the file or null
+	 */
 	public static IFile getFile(ITextEditor editor) {
 		if (editor.getEditorInput() instanceof IFileEditorInput) {
 			return ((IFileEditorInput)editor.getEditorInput()).getFile();
@@ -577,6 +649,13 @@ public class ExternalizeStringsUtils {
 		return null;
 	}
 	
+	/**
+	 * Gets the project for the file in the editor.
+	 * 
+	 * @param editor
+	 *            the editor
+	 * @return the project or null
+	 */
 	public static IProject getProject(ITextEditor editor) {
 		IFile file = getFile(editor);
 		if (file != null) {
@@ -585,4 +664,38 @@ public class ExternalizeStringsUtils {
 		return null;
 	}
 	
+	/**
+	 * Insert load bundle tag.
+	 * 
+	 * @param elementToInsertBefore
+	 *            the element to insert before
+	 * @param refChild
+	 *            the referenced child
+	 * @param loadBundle
+	 *            the load bundle element
+	 * @return true, if the insertion was successful
+	 */
+	public static boolean insertLoadBundleTag(Node elementToInsertBefore, Node refChild, Element loadBundle) {
+		boolean success = false;
+		/*
+		 * elementToInsertBefore should be a container tag.
+		 * Its isContainer() method should return true.
+		 * refChild should be the element next to inserting loadBundle.
+		 * Otherwise exception will be thrown.
+		 */
+		if ((elementToInsertBefore != null) && (refChild != null) && (loadBundle != null)) {
+			try {
+				elementToInsertBefore.insertBefore(loadBundle, refChild);
+				success = true;
+			} catch (DOMException e) {
+				JspEditorPlugin.getDefault().logError(
+						JstUIMessages.EXTERNALIZE_STRINGS_DIALOG_CANNOT_ADD_LOAD_BUNDLE_TAG,
+						e);
+			}
+		} else {
+			JspEditorPlugin.getDefault().logWarning(
+					JstUIMessages.EXTERNALIZE_STRINGS_DIALOG_CANNOT_ADD_LOAD_BUNDLE_TAG);
+		}
+		return success;
+	}
 }
