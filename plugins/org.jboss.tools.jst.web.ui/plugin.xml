@@ -508,8 +508,6 @@
 			class="org.jboss.tools.jst.web.ui.wizards.appregister.AppRegisterWizard"/>
 		<xclass id="org.jboss.tools.jst.web.ui.wizards.links.HiddenLinksWizard"
 			class="org.jboss.tools.jst.web.ui.wizards.links.HiddenLinksWizard"/>
-		<xclass id="org.jboss.tools.jst.web.ui.wizards.palette.ImportTLDPage"
-			class="org.jboss.tools.jst.web.ui.wizards.palette.ImportTLDPage"/>
 		<xclass id="org.jboss.tools.jst.web.ui.wizards.project.AddProjectTemplateNameView"
 			class="org.jboss.tools.jst.web.ui.wizards.project.AddProjectTemplateNameView"/>
 		<xclass id="org.jboss.tools.jst.web.ui.wizards.project.AddProjectTemplatePropertiesView"

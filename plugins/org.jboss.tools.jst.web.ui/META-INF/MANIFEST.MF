@@ -21,7 +21,6 @@ Export-Package: org.jboss.tools.jst.web.ui,
  org.jboss.tools.jst.web.ui.wizards.appregister,
  org.jboss.tools.jst.web.ui.wizards.links,
  org.jboss.tools.jst.web.ui.wizards.newfile,
- org.jboss.tools.jst.web.ui.wizards.palette,
  org.jboss.tools.jst.web.ui.wizards.process,
  org.jboss.tools.jst.web.ui.wizards.project
 Require-Bundle: org.eclipse.ui.ide,
