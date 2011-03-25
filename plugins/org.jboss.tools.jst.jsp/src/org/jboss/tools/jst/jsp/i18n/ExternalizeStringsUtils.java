@@ -96,7 +96,7 @@ import org.w3c.dom.NodeList;
 public class ExternalizeStringsUtils {
 	
 	public static final char[] REPLACED_CHARACTERS = new char[] {'~', '!', '@', '#',
-			'$', '%', '^', '&', '*', '(', ')', '-', '+', '=', '{', '}', '[', ']', ':', ';', ',', '.', '?', '\\', '/'};
+			'$', '%', '^', '&', '*', '(', ')', '-', '+', '=', '{', '}', '[', ']', ':', ';', ',', '.', '?', '\\', '/', '"', '\''};
 	public static final char[] LINE_DELEMITERS = new char[] {'\r', '\n', '\t'};
 
 	/**
