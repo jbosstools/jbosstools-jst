@@ -184,7 +184,7 @@ public class ImportTLDToPaletteSupport extends SpecialWizardSupport {
     }
     
     public String getStepImplementingClass(int stepId) {
-        return "org.jboss.tools.jst.web.ui.wizards.palette.ImportTLDPage"; //$NON-NLS-1$
+        return "org.jboss.tools.vpe.ui.palette.wizard.ImportTLDPage"; //$NON-NLS-1$
     }
 
 }
