@@ -28,6 +28,7 @@ import org.eclipse.wst.sse.ui.contentassist.CompletionProposalInvocationContext;
 import org.eclipse.wst.sse.ui.internal.SSEUIPlugin;
 import org.eclipse.wst.sse.ui.internal.provisional.style.LineStyleProvider;
 import org.eclipse.wst.sse.ui.internal.taginfo.TextHoverManager;
+import org.jboss.tools.common.text.ext.hyperlink.HyperlinkDetector;
 import org.jboss.tools.common.text.xml.contentassist.ProposalSorter;
 import org.jboss.tools.common.text.xml.xpl.MarkerProblemAnnotationHoverProcessor;
 
@@ -135,9 +136,20 @@ public class JSPTextViewerConfiguration extends StructuredTextViewerConfiguratio
 	 * @since 3.1
 	 */
 	public IHyperlinkDetector[] getHyperlinkDetectors(ISourceViewer sourceViewer) {
-		return configurationDelegate.getHyperlinkDetectors(
-				sourceViewer,
-				fPreferenceStore.getBoolean(AbstractDecoratedTextEditorPreferenceConstants.EDITOR_HYPERLINKS_ENABLED));		
+		List<IHyperlinkDetector> allDetectors = new ArrayList<IHyperlinkDetector>();
+		
+		IHyperlinkDetector extHyperlinkDetector = HyperlinkDetector.getInstance(); 
+
+		if (extHyperlinkDetector != null) allDetectors.add(extHyperlinkDetector);
+		
+		IHyperlinkDetector[] superDetectors = super.getHyperlinkDetectors(sourceViewer);
+		for (IHyperlinkDetector detector : superDetectors) {
+			if (!allDetectors.contains(detector)) {
+				allDetectors.add(detector);
+			}
+		}
+		
+		return allDetectors.toArray(new IHyperlinkDetector[0]); 
 	}
 
 	/**

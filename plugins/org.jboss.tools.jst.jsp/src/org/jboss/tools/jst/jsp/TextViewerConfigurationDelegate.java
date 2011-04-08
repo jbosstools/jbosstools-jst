@@ -44,26 +44,26 @@ public class TextViewerConfigurationDelegate {
 	 * @see org.eclipse.jface.text.source.SourceViewerConfiguration#getHyperlinkDetectors(org.eclipse.jface.text.source.ISourceViewer)
 	 * @since 3.1
 	 */
-	public IHyperlinkDetector[] getHyperlinkDetectors(ISourceViewer sourceViewer, boolean enabled) {
-		IHyperlinkDetector[] result = ITextViewerConfiguration.NO_CA_DETECTORS;
-		if (enabled) {
-			List<IHyperlinkDetector> allDetectors = new ArrayList<IHyperlinkDetector>(0);
-	
-			IHyperlinkDetector extHyperlinkDetector = HyperlinkDetector.getInstance(); 
-	
-			if (extHyperlinkDetector != null) allDetectors.add(extHyperlinkDetector);
-	
-	/*		IHyperlinkDetector[] superDetectors = super.getHyperlinkDetectors(sourceViewer);
-			for (int m = 0; m < superDetectors.length; m++) {
-				IHyperlinkDetector detector = superDetectors[m];
-				if (!allDetectors.contains(detector)) {
-					allDetectors.add(detector);
-				}
-			}
-	*/
-			result = allDetectors.toArray(new IHyperlinkDetector[0]);
-		}
-		return result;
-	}
+//	public IHyperlinkDetector[] getHyperlinkDetectors(ISourceViewer sourceViewer, boolean enabled) {
+//		IHyperlinkDetector[] result = ITextViewerConfiguration.NO_CA_DETECTORS;
+//		if (enabled) {
+//			List<IHyperlinkDetector> allDetectors = new ArrayList<IHyperlinkDetector>(0);
+//	
+//			IHyperlinkDetector extHyperlinkDetector = HyperlinkDetector.getInstance(); 
+//	
+//			if (extHyperlinkDetector != null) allDetectors.add(extHyperlinkDetector);
+//	
+////			IHyperlinkDetector[] superDetectors = target.getHyperlinkDetectors(sourceViewer);
+////			for (int m = 0; m < superDetectors.length; m++) {
+////				IHyperlinkDetector detector = superDetectors[m];
+////				if (!allDetectors.contains(detector)) {
+////					allDetectors.add(detector);
+////				}
+////			}
+//	
+//			result = allDetectors.toArray(new IHyperlinkDetector[0]);
+//		}
+//		return result;
+//	}
     
 }
