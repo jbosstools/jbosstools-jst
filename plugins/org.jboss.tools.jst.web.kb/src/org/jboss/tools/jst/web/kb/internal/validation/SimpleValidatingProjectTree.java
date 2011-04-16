@@ -79,7 +79,7 @@ public class SimpleValidatingProjectTree implements IValidatingProjectTree, IVal
 		if(project!=null && !validatingProjects.contains(project)) {
 			Set<IProject> allProjects = new HashSet<IProject>();
 			allProjects.add(project);
-			IValidatingProjectSet brunch = new ValidatingProjectSet(project, allProjects, new ProjectValidationContext());
+			brunch = new ValidatingProjectSet(project, allProjects, new ProjectValidationContext());
 			brunches.put(brunch.getRootProject(), brunch);
 			validatingProjects.add(project);
 		}

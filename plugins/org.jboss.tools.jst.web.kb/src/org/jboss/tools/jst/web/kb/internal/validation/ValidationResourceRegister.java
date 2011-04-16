@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IFile;
 public class ValidationResourceRegister {
 	private Set<IFile> removedFiles = new HashSet<IFile>();
 	private Set<IFile> registeredResources = new HashSet<IFile>();
+	private boolean obsolete = false;
 
 	public void clear() {
 		synchronized (removedFiles) {
@@ -29,6 +30,7 @@ public class ValidationResourceRegister {
 		synchronized (registeredResources) {
 			registeredResources.clear();
 		}
+		obsolete = true;
 	}
 
 	public Set<IFile> getRemovedFiles() {
@@ -48,8 +50,16 @@ public class ValidationResourceRegister {
 	}
 
 	public void registerFile(IFile file) {
+		obsolete = false;
 		synchronized (registeredResources) {
 			registeredResources.add(file);
 		}
+	}
+
+	/**
+	 * @return the obsolete
+	 */
+	public boolean isObsolete() {
+		return obsolete;
 	}
 }
