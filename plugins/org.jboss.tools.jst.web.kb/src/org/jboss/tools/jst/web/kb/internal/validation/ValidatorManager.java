@@ -90,6 +90,7 @@ public class ValidatorManager implements IValidatorJob {
 					if(validationContextManager!=null) {
 						validationContextManager.clearRegisteredFiles();
 					}
+					validationHelper.cleanup(); // See https://issues.jboss.org/browse/JBIDE-8726
 					for (IProject rootProject : rootProjects) {
 						validatingProjects.remove(rootProject);
 					}

@@ -44,6 +44,13 @@ public class ValidationContext implements IValidationContextManager {
 	private Map<IValidator, Set<IProject>> validatedProjects = new HashMap<IValidator, Set<IProject>>();
 
 	public ValidationContext(IProject project) {
+		init(project);
+	}
+
+	public void init(IProject project) {
+		projectTree.clear();
+		validators.clear();
+		validationResourceRegister = null;
 		if(ALL_VALIDATORS == null) {
 			// Load all the validators
 			ALL_VALIDATORS = new ArrayList<IValidator>();
@@ -84,6 +91,14 @@ public class ValidationContext implements IValidationContextManager {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContextManager#isObsolete()
+	 */
+	public boolean isObsolete() {
+		return validationResourceRegister!=null && validationResourceRegister.isObsolete();
+	}
+
 	private ValidationResourceRegister getValidationResourceRegister() {
 		if(validationResourceRegister==null && !projectTree.isEmpty()) {
 			// Initialize the register
@@ -114,6 +129,15 @@ public class ValidationContext implements IValidationContextManager {
 			validationResourceRegister = new ValidationResourceRegister();
 		}
 		return validationResourceRegister;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContextManager#setValidationResourceRegister(org.jboss.tools.jst.web.kb.internal.validation.ValidationResourceRegister)
+	 */
+	public void setValidationResourceRegister(
+			ValidationResourceRegister validationResourceRegister) {
+		this.validationResourceRegister = validationResourceRegister;
 	}
 
 	/*

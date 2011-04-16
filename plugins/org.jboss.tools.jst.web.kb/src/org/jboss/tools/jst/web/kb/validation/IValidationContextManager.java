@@ -15,6 +15,7 @@ import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.jboss.tools.jst.web.kb.internal.validation.ValidationResourceRegister;
 
 /**
  * @author Alexey Kazakov
@@ -39,6 +40,15 @@ public interface IValidationContextManager {
 
 	void registerFile(IFile file);
 
+	void init(IProject project);
+
+	/**
+	 * If the context is obsolete then it should be re-initialized.
+	 * See https://issues.jboss.org/browse/JBIDE-8726
+	 * @return
+	 */
+	boolean isObsolete();
+
 	/**
 	 * @return a list of validators which are associated with this context.
 	 */
@@ -51,4 +61,6 @@ public interface IValidationContextManager {
 	boolean projectHasBeenValidated(IValidator validator, IProject project);
 
 	void clearValidatedProjectsList();
+
+	void setValidationResourceRegister(ValidationResourceRegister validationResourceRegister);
 }

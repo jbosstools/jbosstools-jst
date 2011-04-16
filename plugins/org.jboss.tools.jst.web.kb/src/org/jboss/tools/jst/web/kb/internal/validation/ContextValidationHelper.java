@@ -22,6 +22,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.ui.editors.text.TextFileDocumentProvider;
 import org.eclipse.wst.validation.internal.operations.WorkbenchContext;
+import org.eclipse.wst.validation.internal.operations.WorkbenchReporter;
 import org.jboss.tools.jst.web.kb.validation.IValidatingProjectTree;
 import org.jboss.tools.jst.web.kb.validation.IValidationContextManager;
 import org.jboss.tools.jst.web.kb.validation.IValidator;
@@ -41,6 +42,34 @@ public class ContextValidationHelper extends WorkbenchContext {
 	 */
 	@Override
 	public void initialize() {
+		super.initialize();
+		cleanup();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.wst.validation.internal.operations.WorkbenchContext#deleting()
+	 */
+	@Override
+	public void deleting() {
+		super.deleting();
+		cleanup();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.wst.validation.internal.operations.WorkbenchContext#cleanup(org.eclipse.wst.validation.internal.operations.WorkbenchReporter)
+	 */
+	@Override
+	public void cleanup(WorkbenchReporter reporter) {
+		super.cleanup(reporter);
+		cleanup();
+	}
+
+	public void cleanup() {
+		if(validationContextManager!=null) {
+			validationContextManager.setValidationResourceRegister(null);
+		}
 		validationContextManager = null;
 	}
 
@@ -54,6 +83,8 @@ public class ContextValidationHelper extends WorkbenchContext {
 			IFile file = (IFile)resource;
 			if(validationContextManager == null) {
 				validationContextManager = new ValidationContext(file.getProject());
+			} else if(validationContextManager.isObsolete()) {
+				validationContextManager.init(file.getProject()); // https://issues.jboss.org/browse/JBIDE-8726
 			}
 			validationContextManager.addProject(file.getProject());
 			if(!file.exists()) {
@@ -89,7 +120,7 @@ public class ContextValidationHelper extends WorkbenchContext {
 
 	public Set<IFile> getProjectSetRegisteredFiles() {
 		Set<IFile> result = new HashSet<IFile>();
-		Set<IFile> files = validationContextManager.getRegisteredFiles();
+		Set<IFile> files = getValidationContextManager().getRegisteredFiles();
 		Set<IProject> projects = getAllProjects();
 		for (IFile file : files) {
 			if(projects.contains(file.getProject())) {
@@ -110,6 +141,13 @@ public class ContextValidationHelper extends WorkbenchContext {
 	}
 
 	public IValidationContextManager getValidationContextManager() {
+		return getValidationContextManager(true);
+	}
+
+	public IValidationContextManager getValidationContextManager(boolean initialize) {
+		if(!initialize) {
+			return validationContextManager;
+		}
 		if(validationContextManager==null) {
 			validationContextManager = new ValidationContext(getProject());
 		}

@@ -396,6 +396,9 @@ public class ELValidator extends KBValidator {
 				c.setAllVars(vars);
 			}
 
+			if(resolution==null) {
+				return;
+			}
 			if(!resolution.isResolved()) {
 				Set<String> names = findVariableNames(operandToken);
 				for (String name : names) {
