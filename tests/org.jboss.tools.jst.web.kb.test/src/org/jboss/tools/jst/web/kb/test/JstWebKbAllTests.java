@@ -14,6 +14,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.jboss.tools.common.model.util.test.XProjectImportTestSetUp;
+import org.jboss.tools.jst.web.kb.test.validation.KBValidationTest;
 import org.jboss.tools.test.util.ProjectImportTestSetup;
 
 /**
@@ -32,6 +33,9 @@ public class JstWebKbAllTests {
 				"org.jboss.tools.jst.web.kb.test",
 				new String[]{"projects/TestKbModel", "projects/MyFaces", "projects/MyFaces2", "projects/TestKbModel2"},
 				new String[]{"TestKbModel", "MyFaces", "MyFaces2", "TestKbModel2"});
-		return testSetup;
+		TestSuite suiteAll = new TestSuite("KB Tests");
+		suiteAll.addTest(testSetup);
+		suiteAll.addTestSuite(KBValidationTest.class);
+		return suiteAll;
 	}
 }
