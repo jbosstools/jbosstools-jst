@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+   <extension
+         point="org.jboss.tools.jst.web.kb.validator">
+         <validator
+               class="org.jboss.tools.jst.web.kb.test.validation.TestValidator"
+               id="org.jboss.tools.jst.web.kb.test.TestValidator"
+               dependent="true">
+         </validator>
+   </extension>
+
+</plugin>
