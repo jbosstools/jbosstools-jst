@@ -86,6 +86,7 @@ public class KbModelTest extends TestCase {
 		assertEquals(1, fs.length);
 		assertEquals("f1", fs[0].getName());
 		assertEquals("s1", fs[0].getFunctionSignature());
+		assertEquals("String", fs[0].getFunctionClass());
 		
 		//TODO continue
 		
