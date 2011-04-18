@@ -24,4 +24,9 @@ public interface IELFunction {
 	 * @return the signature
 	 */
 	String getFunctionSignature();
+
+	/**
+	 * @return function class
+	 */
+	String getFunctionClass();
 }

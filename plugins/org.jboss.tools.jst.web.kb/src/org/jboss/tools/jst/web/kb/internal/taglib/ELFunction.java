@@ -27,8 +27,10 @@ import org.w3c.dom.Element;
 
 public class ELFunction extends KbObject implements IELFunction {
 	public static final String SIGNATURE = "signature"; //$NON-NLS-1$
+	public static final String FUNCTION_CLASS = "function-class"; //$NON-NLS-1$
 	private String name;
 	private String signature;
+	private String functionClass;
 
 	public ELFunction() {}
 
@@ -40,6 +42,10 @@ public class ELFunction extends KbObject implements IELFunction {
 		return signature;
 	}
 
+	public String getFunctionClass() {
+		return functionClass;
+	}
+
 	public void setName(IValueInfo s) {
 		name = s == null ? null : s.getValue();
 		attributesInfo.put(XMLStoreConstants.ATTR_NAME, s);
@@ -48,6 +54,11 @@ public class ELFunction extends KbObject implements IELFunction {
 	public void setSignature(IValueInfo s) {
 		signature = s == null ? null : s.getValue();
 		attributesInfo.put(SIGNATURE, s);
+	}
+
+	public void setFunctionClass(IValueInfo s) {
+		functionClass = s == null ? null : s.getValue();
+		attributesInfo.put(FUNCTION_CLASS, s);
 	}
 
 	public ELFunction clone() throws CloneNotSupportedException {
@@ -73,6 +84,7 @@ public class ELFunction extends KbObject implements IELFunction {
 
 		setName(attributesInfo.get(XMLStoreConstants.ATTR_NAME));
 		setSignature(attributesInfo.get(SIGNATURE));
+		setFunctionClass(attributesInfo.get(FUNCTION_CLASS));
 
 		if(name == null && element.hasAttribute(XMLStoreConstants.ATTR_NAME)) {
 			name = element.getAttribute(XMLStoreConstants.ATTR_NAME);
@@ -95,6 +107,7 @@ public class ELFunction extends KbObject implements IELFunction {
 			String attrname = a.getModelEntity().getAttribute(XMLScanner.ATTR_FUNC_NAME) != null ? XMLScanner.ATTR_FUNC_NAME : XModelObjectConstants.ATTR_NAME;
 			attributesInfo.put(XMLStoreConstants.ATTR_NAME, new XMLValueInfo(a, attrname));
 			attributesInfo.put(SIGNATURE, new XMLValueInfo(a, XMLScanner.ATTR_FUNC_SIGN));
+			attributesInfo.put(FUNCTION_CLASS, new XMLValueInfo(a, FUNCTION_CLASS));
 		} else {
 			super.loadAttributesInfo(element, context);
 		}
@@ -112,6 +125,10 @@ public class ELFunction extends KbObject implements IELFunction {
 		if(!stringsEqual(signature, a.signature)) {
 			changes = Change.addChange(changes, new Change(this, SIGNATURE, signature, a.signature));
 			signature = a.signature;
+		}
+		if(!stringsEqual(functionClass, a.functionClass)) {
+			changes = Change.addChange(changes, new Change(this, FUNCTION_CLASS, functionClass, a.functionClass));
+			functionClass = a.functionClass;
 		}
 		return changes;
 	}

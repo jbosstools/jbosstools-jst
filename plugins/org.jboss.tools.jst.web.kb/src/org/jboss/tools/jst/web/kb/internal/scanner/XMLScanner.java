@@ -186,6 +186,7 @@ public class XMLScanner implements IFileScanner {
 				f.setId(t);
 				f.setName(new XMLValueInfo(t, XModelObjectConstants.ATTR_NAME));
 				f.setSignature(new XMLValueInfo(t, ATTR_FUNC_SIGN));
+				f.setFunctionClass(new XMLValueInfo(t, ELFunction.FUNCTION_CLASS));
 				library.addFunction(f);
 			}
 		}
@@ -233,6 +234,7 @@ public class XMLScanner implements IFileScanner {
 				f.setId(t);
 				f.setName(new XMLValueInfo(t, ATTR_FUNC_NAME));
 				f.setSignature(new XMLValueInfo(t, ATTR_FUNC_SIGN));
+				f.setFunctionClass(new XMLValueInfo(t, ELFunction.FUNCTION_CLASS));
 				library.addFunction(f);
 			}
 		}
