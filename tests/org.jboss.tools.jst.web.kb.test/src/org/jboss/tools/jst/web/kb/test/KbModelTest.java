@@ -21,6 +21,9 @@ import org.jboss.tools.jst.web.kb.IKbProject;
 import org.jboss.tools.jst.web.kb.internal.scanner.LoadedDeclarations;
 import org.jboss.tools.jst.web.kb.internal.scanner.ScannerException;
 import org.jboss.tools.jst.web.kb.internal.scanner.XMLScanner;
+import org.jboss.tools.jst.web.kb.internal.taglib.ELFunction;
+import org.jboss.tools.jst.web.kb.taglib.IELFunction;
+import org.jboss.tools.jst.web.kb.taglib.IFunctionLibrary;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 import org.jboss.tools.test.util.JUnitUtils;
 
@@ -73,7 +76,18 @@ public class KbModelTest extends TestCase {
 //		}
 	}
 
-	public void toDoTestKbProjectObjects() {
+	public void testKbProjectObjects() {
+		IKbProject kbProject = getKbProject();
+		ITagLibrary[] ls = kbProject.getTagLibraries("taglib2");
+		assertEquals(1, ls.length);
+		ITagLibrary l = ls[0];
+		assertTrue(l instanceof IFunctionLibrary);
+		IELFunction[] fs = ((IFunctionLibrary)l).getFunctions();
+		assertEquals(1, fs.length);
+		assertEquals("f1", fs[0].getName());
+		assertEquals("s1", fs[0].getFunctionSignature());
+		
+		//TODO continue
 		
 	}
 
