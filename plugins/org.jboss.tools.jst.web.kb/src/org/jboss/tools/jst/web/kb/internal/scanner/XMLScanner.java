@@ -16,6 +16,7 @@ import org.eclipse.core.runtime.IPath;
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.XModelObjectConstants;
 import org.jboss.tools.common.model.filesystems.impl.FolderImpl;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.project.ext.store.XMLStoreConstants;
@@ -175,6 +176,17 @@ public class XMLScanner implements IFileScanner {
 				}
 				
 				library.addComponent(tag);
+			}
+		}
+		XModelObject functions = o.getChildByPath("Functions"); //$NON-NLS-1$
+		if(functions != null) {
+			ts = functions.getChildren();
+			for (XModelObject t: ts) {
+				ELFunction f = new ELFunction();
+				f.setId(t);
+				f.setName(new XMLValueInfo(t, XModelObjectConstants.ATTR_NAME));
+				f.setSignature(new XMLValueInfo(t, ATTR_FUNC_SIGN));
+				library.addFunction(f);
 			}
 		}
 		

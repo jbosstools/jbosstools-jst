@@ -22,7 +22,7 @@ import org.w3c.dom.Element;
 /**
  * @author Viacheslav Kabanovich
  */
-public class TLDLibrary extends AbstractTagLib implements ITLDLibrary {
+public class TLDLibrary extends FunctionTagLib implements ITLDLibrary {
 	public static final String DISPLAY_NAME = "display-name"; //$NON-NLS-1$
 	public static final String SHORT_NAME = "short-name"; //$NON-NLS-1$
 	public static final String VERSION = "version"; //$NON-NLS-1$

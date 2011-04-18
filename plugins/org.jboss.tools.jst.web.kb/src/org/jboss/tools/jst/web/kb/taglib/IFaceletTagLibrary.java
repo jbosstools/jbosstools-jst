@@ -13,10 +13,6 @@ package org.jboss.tools.jst.web.kb.taglib;
 /**
  * @author Alexey Kazakov
  */
-public interface IFaceletTagLibrary extends ITagLibrary {
+public interface IFaceletTagLibrary extends IFunctionLibrary {
 
-	/**
-	 * @return EL functions
-	 */
-	IELFunction[] getFunctions();
 }
