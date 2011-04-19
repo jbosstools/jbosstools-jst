@@ -9,7 +9,7 @@
  
    <extension
          id="kbbuilder"
-         name="KB Builder"
+         name="JBoss Knowledge Base Builder"
          point="org.eclipse.core.resources.builders">
       <builder
             hasNature="false">
