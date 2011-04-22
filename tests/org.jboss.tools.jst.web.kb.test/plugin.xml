@@ -11,4 +11,13 @@
          </validator>
    </extension>
 
+  <extension
+       id="org.jboss.tools.jsf.KbRequire"
+       point="org.jboss.tools.jst.web.kb.KbRequire">
+       <require
+             description="%KB_REQUIRED_FOR_FACET"
+             forNature="org.eclipse.wst.common.project.facet.core.nature">
+       </require>
+ </extension>
+
 </plugin>

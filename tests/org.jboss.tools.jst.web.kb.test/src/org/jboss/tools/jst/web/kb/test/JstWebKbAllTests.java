@@ -27,6 +27,7 @@ public class JstWebKbAllTests {
 		suite.addTestSuite(KbModelStorageTest.class);
 		suite.addTestSuite(KbModelTest.class);
 		suite.addTestSuite(MyFacesKbModelTest.class);
+		suite.addTestSuite(KbMockModelTest.class);
 		suite.addTestSuite(MyFacesKbModelWithMetadataInSourcesTest.class);
 		suite.addTestSuite(WebKbTest.class);
 		ProjectImportTestSetup testSetup = new XProjectImportTestSetUp(suite,
