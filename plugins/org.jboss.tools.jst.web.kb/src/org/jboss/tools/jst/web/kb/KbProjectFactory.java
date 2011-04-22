@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import org.eclipse.core.internal.events.InternalBuilder;
+import org.eclipse.core.internal.resources.BuildConfiguration;
+import org.eclipse.core.resources.IBuildConfiguration;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -124,9 +126,9 @@ public class KbProjectFactory {
 
 	static void setProjectToBuilder(KbBuilder builder, IProject project) {
 		try {
-			Method m = InternalBuilder.class.getDeclaredMethod("setProject", new Class[]{IProject.class});
+			Method m = InternalBuilder.class.getDeclaredMethod("setBuildConfig", new Class[]{IBuildConfiguration.class});
 			m.setAccessible(true);
-			m.invoke(builder, project);
+			m.invoke(builder, new BuildConfiguration(project));
 		} catch (Exception e) {
 			WebModelPlugin.getPluginLog().logError(e);
 		}
