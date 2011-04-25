@@ -32,7 +32,8 @@ public class FileSystemsTreeConstraint implements XFilteredTreeConstraint {
            !entity.startsWith("FileFaceletTaglib") //$NON-NLS-1$
 ///        && !entity.equals("FileTiles")
         ) return false;
-        return (!"true".equals(object.getAttributeValue("expanded"))); //$NON-NLS-1$ //$NON-NLS-2$
+//        return (!"true".equals(object.getAttributeValue("expanded"))); //$NON-NLS-1$ //$NON-NLS-2$
+        return false;
     }
 
     public boolean isHidingSomeChildren(XModelObject object) {
