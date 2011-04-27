@@ -365,17 +365,13 @@
         </menuContribution>
          <menuContribution 
 			locationURI="popup:org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor.source.EditorContext?after=org.jboss.tools.jst.jsp.i18n.ExternalizeAllStringsContributionItem">
-        	<dynamic
-               class="org.jboss.tools.jst.jsp.i18n.ExternalizeStringsContributionItem"
-               id="org.jboss.tools.jst.jsp.i18n.ExternalizeStringsContributionItem">
-        	</dynamic>
+			<command
+         		commandId="org.jboss.tools.jst.jsp.commands.i18" />
         </menuContribution>
         <menuContribution
               locationURI="popup:org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor.source.EditorContext?after=org.jboss.tools.jst.jsp.i18n.ExternalizeAllStringsContributionItem">
-        	<dynamic
-               class="org.jboss.tools.jst.jsp.i18n.ExternalizeStringsContributionItem"
-               id="org.jboss.tools.jst.jsp.i18n.ExternalizeStringsContributionItem">
-        	</dynamic>
+              <command
+         		commandId="org.jboss.tools.jst.jsp.commands.i18" />
         </menuContribution>
         <menuContribution
               locationURI="menu:sourceMenuId?after=OccurencesFile">
