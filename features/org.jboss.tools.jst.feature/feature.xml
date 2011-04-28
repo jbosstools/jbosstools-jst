@@ -2,7 +2,7 @@
 <feature
       id="org.jboss.tools.jst.feature"
       label="%featureName"
-      version="3.1.0.qualifier">
+      version="3.3.0.qualifier">
 
    <description url="http://www.jboss.org/tools">
       %description
@@ -12,15 +12,15 @@
       %copyright
    </copyright>
 
-   <license>Red Hat, Inc. licenses these features and plugins to you under
+   <license>
+      Red Hat, Inc. licenses these features and plugins to you under
 certain open source licenses (or aggregations of such licenses), which
 in a particular case may include the Eclipse Public License, the GNU
 Lesser General Public License, and/or certain other open source
 licenses. For precise licensing details, consult the corresponding
 source code, or contact Red Hat Legal Affairs, 1801 Varsity Drive,
 Raleigh NC 27606 USA.
-</license>
-
+   </license>
 
    <plugin
          id="org.jboss.tools.jst.web"
@@ -57,20 +57,20 @@ Raleigh NC 27606 USA.
          download-size="0"
          install-size="0"
          version="0.0.0"
-         unpack="false" />
+         unpack="false"/>
 
    <plugin
          id="org.jboss.tools.jst.text.ext"
          download-size="0"
          install-size="0"
          version="0.0.0"
-         unpack="false" />
+         unpack="false"/>
 
- <plugin
+   <plugin
          id="org.jboss.tools.jst.css"
          download-size="0"
          install-size="0"
          version="0.0.0"
-         unpack="false" />
+         unpack="false"/>
 
 </feature>
