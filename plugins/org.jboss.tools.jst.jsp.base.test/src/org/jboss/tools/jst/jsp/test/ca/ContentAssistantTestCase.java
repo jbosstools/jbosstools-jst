@@ -20,6 +20,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistant;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
@@ -44,6 +45,12 @@ public class ContentAssistantTestCase extends TestCase {
 //		System.out.println("openEditor: " + project.getName()+"/"+ fileName);
 		if (editorPart instanceof JSPMultiPageEditor)
 			jspEditor = (JSPMultiPageEditor) editorPart;
+
+		assertNotNull("Cannot get the JSP Text Editor instance for page \"" //$NON-NLS-1$
+						+ fileName + "\"", jspEditor);
+		
+		// clean deffered events 
+		while (Display.getCurrent().readAndDispatch());
 
 		jspTextEditor = jspEditor.getJspEditor();
 		viewer = jspTextEditor.getTextViewer();
