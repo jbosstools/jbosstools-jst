@@ -49,6 +49,6 @@ Require-Bundle: org.eclipse.ui.ide,
  org.jboss.tools.jst.web.kb,
  org.eclipse.ui.forms,
  org.jboss.tools.common.el.ui
-Bundle-Version: 3.2.0.qualifier
+Bundle-Version: 3.2.1.qualifier
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ClassPath: .
