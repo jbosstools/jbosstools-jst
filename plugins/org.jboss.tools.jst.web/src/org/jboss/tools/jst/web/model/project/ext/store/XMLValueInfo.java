@@ -10,8 +10,11 @@
   ******************************************************************************/
 package org.jboss.tools.jst.web.model.project.ext.store;
 
+import java.io.File;
 import java.util.Properties;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.project.ext.IValueInfo;
 import org.jboss.tools.common.model.project.ext.store.XMLStoreConstants;
@@ -76,6 +79,10 @@ public class XMLValueInfo implements IValueInfo {
 	public void loadXML(Element element, Properties context) {
 		attribute = element.getAttribute("attr"); //$NON-NLS-1$
 		object = XMLStoreHelper.loadModelObject(element, "object", context); //$NON-NLS-1$
+	}
+
+	public IFile getResource() {
+		return object == null ? null : (IFile)object.getAdapter(File.class);
 	}
 	
 }
