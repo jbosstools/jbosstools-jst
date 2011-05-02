@@ -142,6 +142,15 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 	public IMarker addError(String message, String preferenceKey,
 			String[] messageArguments, ITextSourceReference location,
 			IResource target) {
+		if(location == null) {
+			//
+		} else if(location.getResource() != null && location.getResource().exists()) {
+			if(!location.getResource().equals(target)) {
+				target = location.getResource();
+			}
+		} else {
+			//
+		}
 		return addError(message, preferenceKey, messageArguments, 0, location
 				.getLength(), location.getStartPosition(), target);
 	}
