@@ -38,8 +38,8 @@ import org.jboss.tools.jst.web.kb.validation.IValidator;
 public class ValidatorManager implements IValidatorJob {
 
 	private static Set<IProject> validatingProjects = new HashSet<IProject>();
-	private static final String SLEEPING = "Sleeping"; //$NON-NLS-1$
-	private static final String RUNNING = "Running"; //$NON-NLS-1$
+	public static final String SLEEPING = "Sleeping"; //$NON-NLS-1$
+	public static final String RUNNING = "Running"; //$NON-NLS-1$
 	private static String STATUS = SLEEPING;
 
 	public ValidatorManager() {
