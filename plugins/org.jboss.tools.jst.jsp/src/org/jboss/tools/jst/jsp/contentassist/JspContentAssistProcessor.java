@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2009 Red Hat, Inc. 
+ * Copyright (c) 2009-2011 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -232,7 +232,7 @@ public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 
 			public ELResolution resolveELOperand(IFile file,
 					ELExpression operand, boolean returnEqualedVariablesOnly,
-					List<Var> vars, ElVarSearcher varSearcher)
+					List<Var> vars, ElVarSearcher varSearcher, int offset)
 					throws BadLocationException, StringIndexOutOfBoundsException {
 				return new ELResolutionImpl(operand);
 			}
