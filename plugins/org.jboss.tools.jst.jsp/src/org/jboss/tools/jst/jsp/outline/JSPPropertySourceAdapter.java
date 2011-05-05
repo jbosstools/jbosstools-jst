@@ -107,8 +107,8 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 	}
 	
 	public void setTarget(INodeNotifier target) {
-		if(fNode == target) return;
 		fNode = (target instanceof Node) ? (Node) target : null;
+
 		if (fNode instanceof IDOMNode) {
 			Document ownerDocument = fNode.getOwnerDocument();
 			if (ownerDocument == null && fNode instanceof Document) {
@@ -120,12 +120,15 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 				fCaseSensitive = adapter.getTagNameCase() == DocumentTypeAdapter.STRICT_CASE;
 			offset = ((IDOMNode)fNode).getStartOffset() + ("" + fNode.getNodeName()).length(); //$NON-NLS-1$
 		}
-		processor = valueHelper.isFacetets() ? new FaceletPageContectAssistProcessor() : new JspContentAssistProcessor();
-		processor.createContext(getTextViewer(), offset);
-        pageContext = processor.getContext();
-		kbQuery = createKbQuery(processor);
-		kbQuery.setMask(true); 
-		kbQueryAttr = createKbQuery(processor);
+
+		if(fNode instanceof Node) {
+			processor = valueHelper.isFacetets() ? new FaceletPageContectAssistProcessor() : new JspContentAssistProcessor();
+			processor.createContext(getTextViewer(), offset);
+			pageContext = processor.getContext();
+			kbQuery = createKbQuery(processor);
+			kbQuery.setMask(true); 
+			kbQueryAttr = createKbQuery(processor);
+		}
 	}
 	
 	//TODO move to helper
