@@ -11,6 +11,8 @@
 package org.jboss.tools.jst.jsp.jspeditor;
 
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -95,6 +97,8 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		IReusableEditor, ITextEditorExtension, ITextEditorExtension2,
 		ITextEditorExtension3, INavigationLocationProvider, IMultiPageEditor {
 
+	private static final int MINIMUM_JRE_VERSION_FOR_VPE = 6;
+
 	public static final String EDITOR_ID = "org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor"; //$NON-NLS-1$
 
 	private static final String VPE_VISUAL_EDITOR_IMPL_ID = "org.jboss.tools.vpe.org.jboss.tools.vpe.editor.VpeEditorPartFactory"; //$NON-NLS-1$
@@ -166,12 +170,18 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 									"Visual Editor Extension Point not configured correctly"); //$NON-NLS-1$
 				}
 			} else {
-				JspEditorPlugin.getPluginLog().logError(
-						"Visual Editor Implementation not available"); //$NON-NLS-1$
+				if (isRequiredJreVersionForVpe()) {
+					JspEditorPlugin.getPluginLog().logError(
+							"Visual Editor Implementation not available."); //$NON-NLS-1$
+				} else {
+					JspEditorPlugin.getPluginLog().logError(
+							"Visual Editor Implementation not available." + //$NON-NLS-1$
+							" It requires JRE 1." + MINIMUM_JRE_VERSION_FOR_VPE + " or later."); //$NON-NLS-1$ //$NON-NLS-2$					
+				}
 			}
 		} catch (CoreException e) {
 			JspEditorPlugin.getPluginLog().logError(
-					"Visual Editor Implementation not available" + e); //$NON-NLS-1$
+					"Visual Editor Implementation not available." + e); //$NON-NLS-1$
 		}
 	}
 
@@ -195,6 +205,21 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		if(visualEditor==null){
 			selectedPageIndex=0;
 		}
+	}
+
+	private static boolean isRequiredJreVersionForVpe() {
+		String javaVersion = System.getProperty("java.version"); //$NON-NLS-1$
+		Pattern pattern = Pattern.compile("1\\.(\\d{1,6})\\..*"); //$NON-NLS-1$
+		if (javaVersion != null) {
+			Matcher matcher = pattern.matcher(javaVersion);
+			if (matcher.matches()) {
+				int majorVersion = Integer.valueOf(matcher.group(1));
+				if (majorVersion < MINIMUM_JRE_VERSION_FOR_VPE) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	public void superPageChange(int newPageIndex) {
