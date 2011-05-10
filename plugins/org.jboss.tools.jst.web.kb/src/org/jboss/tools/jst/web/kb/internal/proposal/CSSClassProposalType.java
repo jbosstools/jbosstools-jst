@@ -56,7 +56,7 @@ public class CSSClassProposalType extends CustomProposalType {
 					CSSRuleList rules = descr.sheet.getCssRules();
 					for (int i = 0; rules != null && i < rules.getLength(); i++) {
 						CSSRule rule = rules.item(i);
-						idList.addAll(getNamesFromCSSRule(rule));
+						idList.addAll(getClassNamesFromCSSRule(rule));
 					}
 				}
 			}
@@ -64,13 +64,13 @@ public class CSSClassProposalType extends CustomProposalType {
 	}
 
 	/**
-	 * Returns the style name found in the specified CSS Rule 
+	 * Returns the style class name found in the specified CSS Rule 
 	 * 
 	 * @param cssRule
 	 * @param styleName
 	 * @return
 	 */
-	public static Set<String> getNamesFromCSSRule(CSSRule cssRule) {
+	public static Set<String> getClassNamesFromCSSRule(CSSRule cssRule) {
 		Set<String> styleNames = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
 		
 		// get selector text
@@ -81,22 +81,30 @@ public class CSSClassProposalType extends CustomProposalType {
 			for (String styleText : styles) {
 				String[] styleWords = styleText.trim().split(" ");  //$NON-NLS-1$
 				if (styleWords != null) {
-					for (String name : styleWords) {
-						if (name.startsWith(".")) //$NON-NLS-1$
-							continue;
-						
-						if (name.indexOf("[") >= 0) { //$NON-NLS-1$
-							name = name.substring(0, name.indexOf("[")); //$NON-NLS-1$
+					for (String styleWord : styleWords) {
+						String[] anotherStyleWords = styleWord.split(":");
+						for (String name : anotherStyleWords) {
+							String nameWithoutArgs = name;
+							// Add (if exists) class name defined before args
+							if (name.indexOf('[') >= 0) { //$NON-NLS-1$
+								nameWithoutArgs = name.substring(0, name.indexOf("[")); //$NON-NLS-1$
+							}
+							
+							if (nameWithoutArgs != null && nameWithoutArgs.indexOf(".") >= 0) { //$NON-NLS-1$
+								nameWithoutArgs = nameWithoutArgs.substring(nameWithoutArgs.indexOf(".") + 1); //$NON-NLS-1$
+
+								styleNames.add(nameWithoutArgs);
+							}
+
+							if (name.lastIndexOf(']') >= 0) {
+								nameWithoutArgs = name.substring(name.indexOf(']') + 1);
+								if (nameWithoutArgs != null && nameWithoutArgs.indexOf(".") >= 0) { //$NON-NLS-1$
+									nameWithoutArgs = nameWithoutArgs.substring(nameWithoutArgs.indexOf(".") + 1); //$NON-NLS-1$
+
+									styleNames.add(nameWithoutArgs);
+								}
+							}
 						}
-						if (name.indexOf(".") >= 0) { //$NON-NLS-1$
-							name = name.substring(0, name.indexOf(".")); //$NON-NLS-1$
-						}
-						if (name.indexOf(":") >= 0) { //$NON-NLS-1$
-							name = name.substring(0, name.indexOf(":")); //$NON-NLS-1$
-						}
-						
-						// Use the first word as a style name
-						styleNames.add(name);
 					}
 				}
 			}
