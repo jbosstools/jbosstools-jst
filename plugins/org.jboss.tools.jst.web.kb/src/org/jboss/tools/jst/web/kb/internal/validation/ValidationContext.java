@@ -84,9 +84,11 @@ public class ValidationContext implements IValidationContextManager {
 		// Init context for given project.
 		for (IValidator validator : ALL_VALIDATORS) {
 			if(validator.shouldValidate(project)) {
-				validators.add(validator);
 				IValidatingProjectTree prTree = validator.getValidatingProjects(project);
-				projectTree.put(validator, prTree);
+				if(prTree!=null) {
+					validators.add(validator);
+					projectTree.put(validator, prTree);
+				}
 			}
 		}
 	}
