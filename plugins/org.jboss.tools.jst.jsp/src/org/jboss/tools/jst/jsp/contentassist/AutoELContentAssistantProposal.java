@@ -145,13 +145,16 @@ public class AutoELContentAssistantProposal extends AutoContentAssistantProposal
 				break;
 		}
 		StringBuffer label= new StringBuffer(JavaElementLinks.getElementLabel(element, flags));
-		
-		StringBuffer buf= new StringBuffer();
-		buf.append("<span style='word-wrap:break-word;'>"); //$NON-NLS-1$
-		buf.append(label);
-		buf.append("</span>"); //$NON-NLS-1$
+	
+		// The following lines were commented out because of JBIDE-8923 faced in Eclipse 3.7
+		//
+//		StringBuffer buf= new StringBuffer();
+//		buf.append("<span style='word-wrap:break-word;'>"); //$NON-NLS-1$
+//		buf.append(label);
+//		buf.append("</span>"); //$NON-NLS-1$
 
-		return buf.toString();
+//		return buf.toString();
+		return label.toString();
 	}
 
 	/*
@@ -178,6 +181,7 @@ public class AutoELContentAssistantProposal extends AutoContentAssistantProposal
 			}
 
 			if (reader != null) {
+				buffer.append("<br/>"); //$NON-NLS-1$
 				buffer.append(HTMLPrinter.read(reader));
 //				HTMLPrinter.addParagraph(buffer, reader);
 			}
