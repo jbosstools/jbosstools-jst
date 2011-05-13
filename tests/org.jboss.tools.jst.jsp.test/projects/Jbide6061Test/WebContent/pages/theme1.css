@@ -1,0 +1,49 @@
+.errors {
+	color: red;
+	vertical-align: middle; 
+}
+
+h1 {
+	font-family: Arial, sans-serif;
+	color: #578888;
+	font-size: 1.6em;
+	margin-top: 0;
+}
+
+input.cls1[type=submit] {
+color: #FF0000;
+}
+input[type=submit].cls2 {
+color: #0000FF;
+}
+input[type=submit].cls3 {
+color: #00FF00;
+}
+
+a.cls4:link{ text-decoration: none;
+	color: gray;
+}
+	
+a.cls4:visited{ text-decoration: none;
+	color: gray;
+}
+
+a.cls4:hover{ text-decoration: none;
+	color: green;
+	font-weight: bolder;
+	letter-spacing: 2px;
+}
+
+a:link.cls5{ text-decoration: none;
+	color: gray;
+}
+	
+a:visited.cls5{ text-decoration: none;
+	color: gray;
+}
+
+a:hover.cls5{ text-decoration: none;
+	color: green;
+	font-weight: bolder;
+	letter-spacing: 2px;
+}
