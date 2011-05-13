@@ -12,11 +12,16 @@ package org.jboss.tools.jst.web.kb.test;
 
 import junit.framework.TestCase;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.jboss.tools.common.el.core.resolver.ELContext;
+import org.jboss.tools.jst.web.kb.IPageContext;
+import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibAttribute;
 import org.jboss.tools.jst.web.kb.taglib.CustomTagLibManager;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibrary;
+import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 
 /**
  * @author Alexey Kazakov
@@ -51,5 +56,28 @@ public class WebKbTest extends TestCase {
 		CustomTagLibAttribute[] attributes = CustomTagLibManager.getInstance().getComponentExtensions();
 		assertNotNull("Can't load component extensions.", attributes);
 		assertFalse("Can't load component extensions.", attributes.length==0);
+	}
+
+	/**
+	 * JBIDE-8926
+	 */
+	public void testDuplicateLibs() {
+		IFile f = testProject.getFile("WebContent/pages/template.xhtml");
+		assertNotNull(f);
+
+		ELContext context = PageContextFactory.createPageContext(f);
+
+		assertTrue(context instanceof IPageContext);
+
+		ITagLibrary[] templateLibs = ((IPageContext)context).getLibraries();
+
+		f = testProject.getFile("WebContent/pages/duplicateLibs.xhtml");
+		context = PageContextFactory.createPageContext(f);
+
+		assertTrue(context instanceof IPageContext);
+
+		ITagLibrary[] pageLibs = ((IPageContext)context).getLibraries();
+
+		assertEquals(templateLibs.length, pageLibs.length);
 	}
 }

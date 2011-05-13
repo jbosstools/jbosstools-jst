@@ -11,16 +11,16 @@
 package org.jboss.tools.jst.web.kb.internal;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.jboss.tools.common.el.core.resolver.ELContext;
-import org.jboss.tools.common.el.core.resolver.Var;
 import org.jboss.tools.jst.web.kb.ICSSContainerSupport;
 import org.jboss.tools.jst.web.kb.IIncludedContextSupport;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.IResourceBundle;
-import org.jboss.tools.jst.web.kb.IXmlContext;
 import org.jboss.tools.jst.web.kb.PageContextFactory.CSSStyleSheetDescriptor;
 import org.jboss.tools.jst.web.kb.internal.taglib.NameSpace;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
@@ -103,8 +103,8 @@ public class JspContextImpl extends XmlContextImpl implements IPageContext, IInc
 	*/
 	
 	public ITagLibrary[] getLibraries() {
-		List<ITagLibrary> libraries = new ArrayList<ITagLibrary>();
-		
+		Set<ITagLibrary> libraries = new HashSet<ITagLibrary>();
+
 		for (Map<String, INameSpace> nsMap : nameSpaces.values()) {
 			for (INameSpace ns : nsMap.values()) {
 				if (ns instanceof INameSpaceExtended) {
@@ -146,7 +146,7 @@ public class JspContextImpl extends XmlContextImpl implements IPageContext, IInc
 	}
 
 	public IResourceBundle[] getResourceBundles() {
-		List<IResourceBundle> resourceBundles = new ArrayList<IResourceBundle>();
+		Set<IResourceBundle> resourceBundles = new HashSet<IResourceBundle>();
 		if (bundles != null) {
 			resourceBundles.addAll(bundles);
 		}

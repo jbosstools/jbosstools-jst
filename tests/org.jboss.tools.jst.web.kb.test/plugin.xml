@@ -20,4 +20,12 @@
        </require>
  </extension>
 
+	<extension point="org.jboss.tools.jst.web.kb.KbIncludeContext">
+		<include uri="http://java.sun.com/jsf/facelets">
+			<tag name="composition">
+	        	<attribute name="template" />
+			</tag>
+		</include>
+   </extension>
+
 </plugin>
