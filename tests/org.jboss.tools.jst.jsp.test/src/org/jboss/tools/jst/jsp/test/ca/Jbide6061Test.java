@@ -29,6 +29,7 @@ public class Jbide6061Test extends ContentAssistantTestCase {
    private static final String PROJECT_NAME = "Jbide6061Test"; //$NON-NLS-1$
    private static final String JSP_PAGE_NAME = "/WebContent/pages/jsp_page.jsp"; //$NON-NLS-1$
    private static final String XHTML_PAGE_NAME = "/WebContent/pages/xhtml_page.xhtml"; //$NON-NLS-1$
+   private static final String HTML_PAGE_NAME = "/WebContent/pages/html_page.html"; //$NON-NLS-1$
    private TestProjectProvider provider = null;
    private final String[] CSSCLASS_PROPOSALS = new String[]{
            "errors", //$NON-NLS-1$
@@ -38,8 +39,9 @@ public class Jbide6061Test extends ContentAssistantTestCase {
            "cls4", //$NON-NLS-1$
            "cls5", //$NON-NLS-1$
    };
-   private static final String STRING_TO_FIND_IN_JSP = "styleClass=\"";
-   private static final String STRING_TO_FIND_IN_XHTML = "class=\"";
+   private static final String[] STRINGS_TO_FIND_IN_JSP = new String[] {"class=\"", "styleClass=\""};
+   private static final String[] STRINGS_TO_FIND_IN_XHTML = new String[] {"class=\"", "styleClass=\""};
+   private static final String[] STRINGS_TO_FIND_IN_HTML = new String [] {"class=\""};
 
    public static Test suite() {
        return new TestSuite(Jbide6061Test.class);
@@ -57,36 +59,37 @@ public class Jbide6061Test extends ContentAssistantTestCase {
    }
    
    public void testJbide6061OnJspPage(){
-       openEditor(JSP_PAGE_NAME);
-       IRegion reg=null;
-		try {
-			reg = new FindReplaceDocumentAdapter(this.document).find(0, STRING_TO_FIND_IN_JSP, true, false, false, false); //$NON-NLS-1$
-		} catch (BadLocationException e) {
-			fail(e.getMessage());
-		}
-		
-		assertNotNull("Cannot find a text region to test", reg);
-		
-       final ICompletionProposal[] rst = checkProposals(JSP_PAGE_NAME,reg.getOffset() + STRING_TO_FIND_IN_JSP.length(), CSSCLASS_PROPOSALS, false);
-       
-       checkResult(rst,CSSCLASS_PROPOSALS);
-       closeEditor();
+	   for (String textToFind : STRINGS_TO_FIND_IN_JSP) {
+		   doTheCSSClassValuesTest(JSP_PAGE_NAME, textToFind, CSSCLASS_PROPOSALS);
+	   }
+   }
+
+   public void testJbide6061OnHtmlPage(){
+	   for (String textToFind : STRINGS_TO_FIND_IN_HTML) {
+		   doTheCSSClassValuesTest(HTML_PAGE_NAME, textToFind, CSSCLASS_PROPOSALS);
+	   }
    }
 
    public void testJbide6061OnXhtmlPage(){
-       openEditor(XHTML_PAGE_NAME);
+	   for (String textToFind : STRINGS_TO_FIND_IN_XHTML) {
+		   doTheCSSClassValuesTest(XHTML_PAGE_NAME, textToFind, CSSCLASS_PROPOSALS);
+	   }
+   }
+   
+   protected void doTheCSSClassValuesTest(String pageName, String textToFind, String[] proposals) {
+       openEditor(pageName);
        IRegion reg=null;
 		try {
-			reg = new FindReplaceDocumentAdapter(this.document).find(0, STRING_TO_FIND_IN_XHTML, true, false, false, false); //$NON-NLS-1$
+			reg = new FindReplaceDocumentAdapter(this.document).find(0, textToFind, true, false, false, false); //$NON-NLS-1$
 		} catch (BadLocationException e) {
 			fail(e.getMessage());
 		}
 		
 		assertNotNull("Cannot find a text region to test", reg);
 		
-       final ICompletionProposal[] rst = checkProposals(XHTML_PAGE_NAME,reg.getOffset() + STRING_TO_FIND_IN_XHTML.length(), CSSCLASS_PROPOSALS, false);
+       final ICompletionProposal[] rst = checkProposals(pageName,reg.getOffset() + textToFind.length(), proposals, false);
        
-       checkResult(rst,CSSCLASS_PROPOSALS);
+       checkResult(rst,proposals);
        closeEditor();
    }
    
