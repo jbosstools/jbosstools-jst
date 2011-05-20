@@ -16,7 +16,7 @@
 <title>Insert title here</title>
 <link rel="stylesheet" href="theme1.css" type="text/css" />
 </head>
-<body>
+<body class="">
 <f:view>
 	<h:inputText value="" styleClass="" />
 </f:view>
