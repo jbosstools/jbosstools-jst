@@ -17,8 +17,8 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
+import org.jboss.tools.common.text.xml.contentassist.test.CATestUtil;
 import org.jboss.tools.jst.jsp.contentassist.AutoContentAssistantProposal;
-import org.jboss.tools.jst.jsp.test.TestUtil;
 import org.jboss.tools.test.util.TestProjectProvider;
 
 public class JstJspJbide1585Test extends ContentAssistantTestCase {
@@ -64,7 +64,7 @@ public class JstJspJbide1585Test extends ContentAssistantTestCase {
 		jspTextEditor.setText(documentContentModified);
 		
 		try {
-			List<ICompletionProposal> res = TestUtil.collectProposals(contentAssistant, viewer, offsetToTest);
+			List<ICompletionProposal> res = CATestUtil.collectProposals(contentAssistant, viewer, offsetToTest);
 	
 			assertTrue("Content Assistant returned no proposals", (res != null && res.size() > 0)); //$NON-NLS-1$
 			

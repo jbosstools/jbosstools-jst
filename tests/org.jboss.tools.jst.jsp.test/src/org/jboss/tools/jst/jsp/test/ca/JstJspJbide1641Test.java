@@ -16,11 +16,9 @@ import java.util.List;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
-import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
+import org.jboss.tools.common.text.xml.contentassist.test.CATestUtil;
 import org.jboss.tools.jst.jsp.contentassist.AutoContentAssistantProposal;
-import org.jboss.tools.jst.jsp.test.TestUtil;
 import org.jboss.tools.test.util.JobUtils;
 import org.jboss.tools.test.util.TestProjectProvider;
 
@@ -73,10 +71,10 @@ public class JstJspJbide1641Test extends ContentAssistantTestCase {
 		JobUtils.waitForIdle();
 		
 //		ICompletionProposal[] result= null;
-		String errorMessage = null;
+//		String errorMessage = null;
 
 		
-		List<ICompletionProposal> res = TestUtil.collectProposals(contentAssistant, viewer, offsetToTest);
+		List<ICompletionProposal> res = CATestUtil.collectProposals(contentAssistant, viewer, offsetToTest);
 
 		assertTrue("Content Assistant returned no proposals", (res != null && res.size() > 0));
 
