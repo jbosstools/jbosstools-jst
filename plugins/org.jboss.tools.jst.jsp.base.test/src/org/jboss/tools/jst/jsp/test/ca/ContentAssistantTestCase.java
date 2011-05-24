@@ -14,7 +14,7 @@ package org.jboss.tools.jst.jsp.test.ca;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
-import org.jboss.tools.common.text.xml.contentassist.test.AbstractContentAssistantTestCase;
+import org.jboss.tools.common.base.test.contentassist.AbstractContentAssistantTestCase;
 import org.jboss.tools.jst.jsp.contentassist.AutoContentAssistantProposal;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor;
