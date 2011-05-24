@@ -17,7 +17,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
-import org.jboss.tools.common.text.xml.contentassist.test.CATestUtil;
+import org.jboss.tools.common.base.test.contentassist.CATestUtil;
 import org.jboss.tools.jst.jsp.contentassist.AutoContentAssistantProposal;
 import org.jboss.tools.test.util.TestProjectProvider;
 
