@@ -20,6 +20,12 @@
 		</attribute>
 	</component>
 
+	<component closeTag="true" name="link">
+		<attribute name="value" >
+			<proposal type="file"/>
+		</attribute>
+	</component>
+
 	<component closeTag="true" name="commandLink">
 		<attribute name="action" required="true" />
 		<attribute name="value" required="true" />

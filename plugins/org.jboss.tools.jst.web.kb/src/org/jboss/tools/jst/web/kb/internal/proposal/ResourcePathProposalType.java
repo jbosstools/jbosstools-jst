@@ -41,6 +41,7 @@ public class ResourcePathProposalType extends ModelProposalType {
 	private static Image ICON;
 	private static Set<String> GRAPHIC_FILE_EXTENSIONS = new HashSet<String>();
 	private static Set<String> PAGE_FILE_EXTENSIONS = new HashSet<String>();
+	private static Set<String> CSS_FILE_EXTENSIONS = new HashSet<String>();
 	static {
 		String[] images = {"gif", "jpeg", "jpg", "png", "wbmp", "bmp"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 		for (int i = 0; i < images.length; i++) {
@@ -50,11 +51,16 @@ public class ResourcePathProposalType extends ModelProposalType {
 		for (int i = 0; i < pages.length; i++) {
 			PAGE_FILE_EXTENSIONS.add(pages[i]);
 		}
+		String[] css = {"css", "xcss"}; //$NON-NLS-1$ //$NON-NLS-2$
+		for (int i = 0; i < css.length; i++) {
+			CSS_FILE_EXTENSIONS.add(css[i]);
+		}
 	}
 	private static String PATH_ADDITION = "pathAddition"; //$NON-NLS-1$
 
 	private IContainer webRootResource;
-	private Set<String> extensions;
+	private Set<String> extensions = new HashSet<String>();
+	private String optionalPrefix;
 	private List<String> enumeration;
 
 	/* (non-Javadoc)
@@ -71,9 +77,9 @@ public class ResourcePathProposalType extends ModelProposalType {
 				webRootResource = (IContainer)EclipseResourceUtil.getResource(webRoot);
 			}
 		}
-		if(extensions==null) {
+//		if(extensions==null) {
 			initExtensions();
-		}
+//		}
 		if(enumeration==null) {
 			enumeration = new ArrayList<String>();
 			if(params!=null) {
@@ -95,12 +101,27 @@ public class ResourcePathProposalType extends ModelProposalType {
 			return EMPTY_PROPOSAL_LIST;
 		}
 		List<TextProposal> proposals = new ArrayList<TextProposal>();
-		ImagePathDescriptor[] images = getImagesFilesPathes(query.getValue());
-		for(int i=0; i<images.length; i++) {
+		String newValue = null;
+		String value = query.getValue();
+		if(optionalPrefix!=null) {
+			char[] optionalPrefixArray = optionalPrefix.toCharArray();
+			StringBuffer prefix = new StringBuffer();
+			for (char c : optionalPrefixArray) {
+				prefix.append(c);
+				if(value.startsWith(prefix.toString())) {
+					newValue = value.substring(prefix.length());
+				}
+			}
+		}
+		if(newValue==null) {
+			newValue = value;
+		}
+		ResourcePathDescriptor[] resources = getResourcePathes(newValue);
+		for(int i=0; i<resources.length; i++) {
 			TextProposal proposal = new TextProposal();
-			proposal.setLabel(images[i].getQueryPath());
-			String replacementString = images[i].getQueryPath();
-			if(images[i].getResource() instanceof IFolder) {
+			proposal.setLabel(resources[i].getQueryPath());
+			String replacementString = resources[i].getQueryPath();
+			if(resources[i].getResource() instanceof IFolder) {
 				replacementString = replacementString + "/"; //$NON-NLS-1$
 				proposal.setAutoActivationContentAssistantAfterApplication(true);
 			}
@@ -110,7 +131,20 @@ public class ResourcePathProposalType extends ModelProposalType {
 				ICON = ImageDescriptor.createFromFile(WebKbPlugin.class, IMAGE_NAME).createImage();
 			}
 			proposal.setImage(ICON);
-			proposals.add(proposal);
+			if(newValue == value) {
+				proposals.add(proposal);
+			}
+			if(optionalPrefix!=null) {
+				try {
+					TextProposal clone = proposal.clone();
+					clone.setLabel(optionalPrefix + proposal.getLabel());
+					clone.setReplacementString(optionalPrefix + proposal.getReplacementString());
+					clone.setPosition(clone.getReplacementString().length());
+					proposals.add(clone);
+				} catch (CloneNotSupportedException e) {
+					WebKbPlugin.getDefault().logError(e);
+				}
+			}
 		}
 		for (String path : enumeration) {
 			TextProposal proposal = new TextProposal();
@@ -131,18 +165,22 @@ public class ResourcePathProposalType extends ModelProposalType {
 	private static final String EXTENSIONS_PARAM_NAME = "extensions"; //$NON-NLS-1$
 	private static final String IMAGE_PARAM_TYPE = "%image%"; //$NON-NLS-1$
 	private static final String PAGE_PARAM_TYPE = "%page%"; //$NON-NLS-1$
+	private static final String CSS_PARAM_TYPE = "%css%"; //$NON-NLS-1$
+	private static final String OPTIONAL_PREFIX = "optionalPrefix"; //$NON-NLS-1$
 
 	private void initExtensions() {
+		extensions.clear();
 		String value = getParamValue(EXTENSIONS_PARAM_NAME);
 		if(value != null && !value.equals("*")) { //$NON-NLS-1$
 			if(IMAGE_PARAM_TYPE.equals(value)) {
-				this.extensions = GRAPHIC_FILE_EXTENSIONS;
-			} else if("%page%".equals(value)) { //$NON-NLS-1$
-				this.extensions = PAGE_FILE_EXTENSIONS;
+				this.extensions.addAll(GRAPHIC_FILE_EXTENSIONS);
+			} else if(PAGE_PARAM_TYPE.equals(value)) {
+				this.extensions.addAll(PAGE_FILE_EXTENSIONS);
+			} else if(CSS_PARAM_TYPE.equals(value)) {
+				this.extensions.addAll(CSS_FILE_EXTENSIONS);
 			} else {
 				StringTokenizer st = new StringTokenizer(value, ",;"); //$NON-NLS-1$
 				if(st.countTokens() > 0) {
-					extensions = new HashSet<String>();
 					while(st.hasMoreTokens()) {
 						String t = st.nextToken().trim();
 						if(t.length() == 0) {
@@ -152,12 +190,18 @@ public class ResourcePathProposalType extends ModelProposalType {
 							extensions.addAll(GRAPHIC_FILE_EXTENSIONS);
 						} else if(PAGE_PARAM_TYPE.equals(t)) {
 							extensions.addAll(PAGE_FILE_EXTENSIONS);
+						} else if(CSS_PARAM_TYPE.equals(t)) {
+							extensions.addAll(CSS_FILE_EXTENSIONS);
 						} else {
 							extensions.add(t);
 						}
 					}
 				}
 			}
+		}
+		optionalPrefix = getParamValue(OPTIONAL_PREFIX);
+		if(optionalPrefix!=null && optionalPrefix.trim().length()==0) {
+			optionalPrefix = null;
 		}
 	}
 
@@ -169,10 +213,10 @@ public class ResourcePathProposalType extends ModelProposalType {
 		return webRootResource!=null;
 	}
 
-	private ImagePathDescriptor[] getImagesFilesPathes(String query) {
+	private ResourcePathDescriptor[] getResourcePathes(String query) {
 		query = query.trim();
 		if(query.indexOf('\\')>-1) {
-			return new ImagePathDescriptor[0];
+			return new ResourcePathDescriptor[0];
 		}
 		if(query.length()==0) {
 			query = "/"; //$NON-NLS-1$
@@ -203,9 +247,6 @@ public class ResourcePathProposalType extends ModelProposalType {
 			}
 			name = ""; //$NON-NLS-1$
 		}
-		if(name==null) {
-			name = ""; //$NON-NLS-1$
-		}
 		IResource resource;
 		String startPath = pathWithoutLastSegment;
 		if(pathWithoutLastSegment.startsWith("/")) { //$NON-NLS-1$
@@ -223,27 +264,27 @@ public class ResourcePathProposalType extends ModelProposalType {
 
 		List<IResource> resources = new ArrayList<IResource>();
 		try {
-			if(resource != null) resource.accept(new ImagesFinder(resources, name, extensions));
+			if(resource != null) resource.accept(new ResourceFinder(resources, name, extensions));
 		} catch (CoreException e) {
 			WebKbPlugin.getDefault().logError(e);
 		}
-		ImagePathDescriptor[] filesPathes = new ImagePathDescriptor[resources.size()];
+		ResourcePathDescriptor[] filesPathes = new ResourcePathDescriptor[resources.size()];
 		for(int i=0; i<filesPathes.length; i++) {
 			String prefix = pathWithoutLastSegment.toString();
 			if(!prefix.endsWith("/")) { //$NON-NLS-1$
 				prefix = prefix + '/';
 			}
 			IResource r = (IResource)resources.get(i);
-			filesPathes[i] = new ImagePathDescriptor(prefix + r.getName(), r);
+			filesPathes[i] = new ResourcePathDescriptor(prefix + r.getName(), r);
 		}
 		return filesPathes;
 	}
 
-	private static class ImagePathDescriptor {
+	private static class ResourcePathDescriptor {
 		private String queryPath;
 		private IResource resource;
 
-		public ImagePathDescriptor(String queryPath, IResource resource) {
+		public ResourcePathDescriptor(String queryPath, IResource resource) {
 			this.queryPath = queryPath;
 			this.resource = resource;
 		}
@@ -257,18 +298,18 @@ public class ResourcePathProposalType extends ModelProposalType {
 		}
 	}
 
-	private static class ImagesFinder implements IResourceVisitor {
+	private static class ResourceFinder implements IResourceVisitor {
 		private List<IResource> resources;
 		private int count = 0;
 		private String name;
-		Set<String> extensions = null;
+		Set<String> extensions;
 
 		/**
 		 * @param resources
 		 * @param name
 		 * @param extensions
 		 */
-		public ImagesFinder(List<IResource> resources, String name, Set<String> extensions) {
+		public ResourceFinder(List<IResource> resources, String name, Set<String> extensions) {
 			this.resources = resources;
 			this.name = name;
 			this.extensions = extensions;
@@ -278,7 +319,7 @@ public class ResourcePathProposalType extends ModelProposalType {
 			if(ext != null) {
 		        ext = ext.toLowerCase();
 			}
-			return (extensions == null || extensions.contains(ext));
+			return extensions == null || extensions.isEmpty() || extensions.contains(ext);
 		}
 
 		public boolean visit(IResource resource) throws CoreException {

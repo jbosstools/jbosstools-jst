@@ -2038,7 +2038,9 @@
 				<param value="rtl" />
 			</proposal>
 		</attribute>
-		<attribute extended="false" name="href" />
+		<attribute extended="false" name="href" >
+			<proposal type="file"/>
+		</attribute>
 		<attribute extended="false" name="onkeyup" />
 		<attribute extended="false" name="style" />
 		<attribute extended="false" name="rev" />

@@ -18,8 +18,11 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
+import org.jboss.tools.jst.web.kb.internal.proposal.CustomProposalType;
 import org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibAttribute;
 import org.jboss.tools.jst.web.kb.taglib.CustomTagLibManager;
+import org.jboss.tools.jst.web.kb.taglib.IAttribute;
+import org.jboss.tools.jst.web.kb.taglib.IComponent;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibrary;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 
@@ -56,6 +59,67 @@ public class WebKbTest extends TestCase {
 		CustomTagLibAttribute[] attributes = CustomTagLibManager.getInstance().getComponentExtensions();
 		assertNotNull("Can't load component extensions.", attributes);
 		assertFalse("Can't load component extensions.", attributes.length==0);
+	}
+
+	/**
+	 * https://issues.jboss.org/browse/JBIDE-8953
+	 */
+	public void testLinksComponents() {
+		ICustomTagLibrary[] libs = CustomTagLibManager.getInstance().getLibraries();
+		ICustomTagLibrary facelets = null;
+		ICustomTagLibrary h = null;
+		ICustomTagLibrary a4j = null;
+		for (ICustomTagLibrary lib : libs) {
+			if("http://www.w3.org/1999/xhtml/facelets".equals(lib.getURI())) {
+				facelets = lib;
+			} else if("http://java.sun.com/jsf/html".equals(lib.getURI())) {
+				h = lib;
+			} else if("http://richfaces.org/a4j".equals(lib.getURI())) {
+				a4j = lib;
+			}
+		}
+		assertNotNull(facelets);
+		assertNotNull(h);
+		assertNotNull(a4j);
+
+		IComponent link = facelets.getComponent("link");
+		assertNotNull(link);
+
+		IAttribute href = link.getAttribute("href");
+		assertNotNull(href);
+
+		CustomProposalType[] proposals = ((CustomTagLibAttribute)href).getProposals();
+		boolean found = false;
+		for (CustomProposalType proposalType : proposals) {
+			found = found || "file".equals(proposalType.getType());
+		}
+		assertTrue(found);
+
+		IComponent hLink = h.getComponent("link");
+		assertNotNull(hLink);
+
+		IAttribute value = hLink.getAttribute("value");
+		assertNotNull(value);
+
+		proposals = ((CustomTagLibAttribute)value).getProposals();
+		found = false;
+		for (CustomProposalType proposalType : proposals) {
+			found = found || "file".equals(proposalType.getType());
+		}
+		assertTrue(found);
+
+		IComponent aLoadStyle = a4j.getComponent("loadStyle");
+		assertNotNull(aLoadStyle);
+
+		IAttribute src = aLoadStyle.getAttribute("src");
+		assertNotNull(src);
+
+		proposals = ((CustomTagLibAttribute)src).getProposals();
+		found = false;
+		for (CustomProposalType proposalType : proposals) {
+			found = found || "file".equals(proposalType.getType());
+		}
+		assertTrue(found);
 	}
 
 	/**

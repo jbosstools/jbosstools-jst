@@ -162,7 +162,12 @@
 				<param value="speech" />
 			</proposal>
 		</attribute>
-		<attribute name="src" required="true" />
+		<attribute name="src" required="true" >
+			<proposal type="file">
+				<param name="extensions" value="%css%"/>
+				<param name="optionalPrefix" value="resource://"/>
+   			</proposal>
+		</attribute>
 	</component>
 	<component name="log">
 		<attribute name="level">
