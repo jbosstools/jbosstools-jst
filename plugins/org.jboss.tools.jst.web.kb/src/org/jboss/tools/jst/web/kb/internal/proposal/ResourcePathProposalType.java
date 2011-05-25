@@ -136,7 +136,7 @@ public class ResourcePathProposalType extends ModelProposalType {
 			}
 			if(optionalPrefix!=null) {
 				try {
-					TextProposal clone = proposal.clone();
+					TextProposal clone = (TextProposal)proposal.clone();
 					clone.setLabel(optionalPrefix + proposal.getLabel());
 					clone.setReplacementString(optionalPrefix + proposal.getReplacementString());
 					clone.setPosition(clone.getReplacementString().length());
