@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.jboss.tools.jst.css.dialog.tabs;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +20,7 @@ import org.eclipse.core.databinding.observable.Observables;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.resource.JFaceResources;
@@ -41,6 +43,9 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swt.widgets.Widget;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.jboss.tools.jst.css.CSSPlugin;
@@ -58,6 +63,7 @@ import org.jboss.tools.jst.css.dialog.widgets.SizeCombo;
 import org.jboss.tools.jst.css.dialog.widgets.SizeText;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.util.Constants;
+
 
 /**
  * This is base tab control component that should be re-implemented by
@@ -253,10 +259,18 @@ public abstract class BaseTabControl extends Composite implements
 				dialog.setInput(project);
 
 				if (dialog.open() == ImageSelectionDialog.OK) {
-					IFile file = (IFile) dialog.getFirstResult();
-					String value = file.getFullPath().toString();
-					combo.add(value);
-					combo.setText(value);
+					IFile imageFile = (IFile) dialog.getFirstResult();
+					IWorkbenchPage page = CSSPlugin.getDefault().getWorkbench()
+							.getActiveWorkbenchWindow().getActivePage();
+					if (page != null
+							&& page.getActiveEditor() != null
+							&& page.getActiveEditor().getEditorInput() instanceof IFileEditorInput ) {
+						IEditorInput input = page.getActiveEditor().getEditorInput();
+						IFile pageFile = ((IFileEditorInput) input).getFile();		
+						String relativePath = BaseTabControl.computeRelativePath(pageFile, imageFile);
+						combo.add(relativePath);
+						combo.setText(relativePath);
+					}
 				}
 			}
 		});
@@ -279,6 +293,31 @@ public abstract class BaseTabControl extends Composite implements
 
 		return wrapper;
 	}
+
+	/**
+	 * Build a relative path to the given base path.
+	 * 
+	 * @param base
+	 *            - the path used as the base
+	 * @param path
+	 *            - the path to compute relative to the base path
+	 * @return A relative path from base to path
+	 */
+
+	private static String computeRelativePath(IFile baseFile, IFile otherFile) {
+
+		IPath basePath = baseFile.getLocation();
+		IPath otherPath = otherFile.getLocation();
+
+		String relativePath = otherPath.makeRelativeTo(basePath).toPortableString();
+
+		if (relativePath.startsWith("..")) {
+			relativePath = relativePath.replaceFirst("..", ".");
+		}
+
+		return relativePath;
+	}
+
 
 	protected Composite createWrapperComposite(Composite parent) {
 		Composite wrapper = new Composite(parent, SWT.None);
