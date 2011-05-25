@@ -38,6 +38,7 @@ import org.jboss.tools.common.text.ext.hyperlink.xpl.Messages;
 import org.jboss.tools.common.text.ext.util.StructuredModelWrapper;
 import org.jboss.tools.common.text.ext.util.StructuredSelectionHelper;
 import org.jboss.tools.common.text.ext.util.Utils;
+import org.jboss.tools.jst.text.ext.JSTExtensionsPlugin;
 import org.jboss.tools.jst.web.kb.ICSSContainerSupport;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.PageContextFactory.CSSStyleSheetDescriptor;
@@ -211,11 +212,14 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 	 * @return
 	 */
 	protected String getStyleName(IRegion region) {
-		try {
-			return getDocument().get(region.getOffset(), region.getLength());
-		} catch (BadLocationException e) {
-			return null;
+		if(region != null) {
+			try {
+				return getDocument().get(region.getOffset(), region.getLength());
+			} catch (BadLocationException e) {
+				JSTExtensionsPlugin.getPluginLog().logError(e);
+			}
 		}
+		return null;
 	}
 
 	protected IRegion fLastRegion = null;
