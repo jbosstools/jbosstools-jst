@@ -22,6 +22,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.jboss.tools.common.meta.action.impl.handlers.DefaultCreateHandler;
 import org.jboss.tools.common.model.*;
 import org.jboss.tools.common.model.filesystems.FileSystemsHelper;
+import org.jboss.tools.common.model.filesystems.impl.Libs;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
@@ -53,16 +54,19 @@ public class AddADFSupportHelper {
 	public boolean isEnabled() {
 		if(object == null) return false;
 		XModel model = object.getModel();
-		XModelObject fss = FileSystemsHelper.getFileSystems(model);
-		if(fss == null) return false;
 		File adfLibFile = new File(adfLibPath);
-		if(!adfLibFile.isDirectory()) return false;
-		File[] fs = adfLibFile.listFiles();
-		if(fs == null || fs.length == 0) return false;
-		for (int i = 0; i < fs.length; i++) {
-			String n = fs[i].getName();
-			if(!n.endsWith(".jar")) continue; //$NON-NLS-1$
-			if(fss.getChildByPath("lib-" + n) == null) return true; //$NON-NLS-1$
+		if(adfLibFile.isDirectory()) {
+			File[] fs = adfLibFile.listFiles();
+			if(fs != null && fs.length > 0) {
+				Libs libs = FileSystemsHelper.getLibs(model);
+				if(libs != null) {
+					for (int i = 0; i < fs.length; i++) {
+						if(libs.getLibrary(fs[i]) != null) {
+							return true;
+						}
+					}
+				}
+			}
 		}
 		return false;
 	}

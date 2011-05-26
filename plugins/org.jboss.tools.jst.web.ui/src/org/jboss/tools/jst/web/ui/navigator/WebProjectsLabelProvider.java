@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.navigator;
 
+import org.jboss.tools.common.model.filesystems.impl.Libs;
 import org.jboss.tools.common.model.ui.navigator.NavigatorLabelProvider;
 import org.jboss.tools.common.model.ui.navigator.decorator.DecoratorManager;
 import org.jboss.tools.common.model.ui.navigator.decorator.XModelObjectDecorator;
@@ -54,7 +55,7 @@ public class WebProjectsLabelProvider extends NavigatorLabelProvider {
 		while(p != null && p.getFileType() != XModelObject.SYSTEM) p = p.getParent();
 		if(p != null && p.getModelEntity().getName().equals("FileSystemJar")) {
 			String n = p.getAttributeValue("name");
-			if(n != null && n.startsWith("lib-")) n = n.substring(4);
+			if(n != null && n.startsWith(Libs.LIB_PREFIX)) n = n.substring(4);
 			String addition = (n != null) ? " - " + n : "";
 			return super.getText(element) + addition;
 		}
