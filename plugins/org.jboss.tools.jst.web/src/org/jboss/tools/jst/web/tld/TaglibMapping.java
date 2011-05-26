@@ -25,6 +25,7 @@ import org.jboss.tools.common.model.filesystems.FileSystemsHelper;
 import org.jboss.tools.common.model.filesystems.impl.FileAnyImpl;
 import org.jboss.tools.common.model.filesystems.impl.FolderImpl;
 import org.jboss.tools.common.model.filesystems.impl.JarSystemImpl;
+import org.jboss.tools.common.model.filesystems.impl.Libs;
 import org.jboss.tools.common.model.impl.XModelImpl;
 import org.jboss.tools.common.model.util.XModelObjectUtil;
 import org.jboss.tools.jst.web.WebModelPlugin;
@@ -205,7 +206,7 @@ public class TaglibMapping implements ITaglibMapping {
 		XModelObject[] fs = fss.getChildren("FileSystemJar"); //$NON-NLS-1$
 		for (int i = 0; i < fs.length; i++) {
 			String n = fs[i].getAttributeValue("name"); //$NON-NLS-1$
-			if(n.startsWith("lib-")) findTldsInJar(fs[i]); //$NON-NLS-1$
+			if(n.startsWith(Libs.LIB_PREFIX)) findTldsInJar(fs[i]);
 		}
 	}
 	

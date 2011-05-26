@@ -35,6 +35,7 @@ import org.jboss.tools.common.model.XModelConstants;
 import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.filesystems.impl.FileSystemsImpl;
+import org.jboss.tools.common.model.filesystems.impl.Libs;
 import org.jboss.tools.common.model.impl.XModelImpl;
 import org.jboss.tools.common.model.util.XMLUtil;
 import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
@@ -97,7 +98,7 @@ public class NewWebProjectHelper {
                 for (int i = 0; i < jars.length; i++) {
                     String jarName = jars[i].getName();
                     Properties fsProp = new Properties();
-                    fsProp.setProperty("name", "lib-"+jarName); //$NON-NLS-1$ //$NON-NLS-2$
+                    fsProp.setProperty("name", Libs.LIB_PREFIX + jarName); //$NON-NLS-1$
                     fsProp.setProperty("location", libName+jarName); //$NON-NLS-1$
                     fsProp.setProperty("info", "hidden=yes"); //$NON-NLS-1$ //$NON-NLS-2$
                     XModelObject fsJar = XModelObjectLoaderUtil.createValidObject(model, "FileSystemJar", fsProp); //$NON-NLS-1$
