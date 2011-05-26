@@ -28,6 +28,7 @@ import org.eclipse.jdt.core.JavaCore;
 import org.jboss.tools.common.model.XJob;
 import org.jboss.tools.common.model.XJob.XRunnable;
 import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.filesystems.FileSystemsHelper;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.project.ext.AbstractClassPathMonitor;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
@@ -84,8 +85,8 @@ public class ClassPathMonitor extends AbstractClassPathMonitor<KbProject> {
 
 			String fileName = new File(p).getName();
 			if(EclipseResourceUtil.SYSTEM_JAR_SET.contains(fileName)) continue;
-			String jsname = "lib-" + fileName; //$NON-NLS-1$
-			XModelObject o = model.getByPath("FileSystems").getChildByPath(jsname); //$NON-NLS-1$
+
+			XModelObject o = FileSystemsHelper.getLibs(model).getLibrary(p);
 			if(o == null) continue;
 			
 			LoadedDeclarations c = null;
@@ -99,9 +100,7 @@ public class ClassPathMonitor extends AbstractClassPathMonitor<KbProject> {
 			if(c == null) {
 				c = new LoadedDeclarations();
 			}
-			if(c != null) {
-				componentsLoaded(c, new Path(p));
-			}
+			componentsLoaded(c, new Path(p));
 		}
 		
 		validateProjectDependencies();
