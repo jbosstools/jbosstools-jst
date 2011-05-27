@@ -61,6 +61,7 @@ import org.jboss.tools.common.el.core.resolver.Var;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
+import org.jboss.tools.jst.web.kb.internal.KbBuilder;
 import org.jboss.tools.jst.web.kb.preferences.ELSeverityPreferences;
 import org.jboss.tools.jst.web.kb.validation.IELValidationDelegate;
 import org.jboss.tools.jst.web.kb.validation.IProjectValidationContext;
@@ -505,6 +506,10 @@ public class ELValidator extends KBValidator {
 	 */
 	public String getId() {
 		return ID;
+	}
+
+	public String getBuilderId() {
+		return KbBuilder.BUILDER_ID;
 	}
 
 	/*

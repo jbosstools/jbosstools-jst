@@ -51,6 +51,11 @@ public interface IValidator {
 	String getId();
 
 	/**
+	 * @return ID of required builder that creates and updates model to be validated.
+	 */
+	String getBuilderId();
+
+	/**
 	 * @param project
 	 * @return @return a set of projects which should be validated together with the given project.
 	 */
