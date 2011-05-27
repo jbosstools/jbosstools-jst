@@ -22,6 +22,8 @@ public class KbMessages {
 		NLS.initializeMessages(BUNDLE_NAME, KbMessages.class);
 	}
 
+	public static String WRONG_BUILDER_ORDER;
+
 	public static String VALIDATION_CONTEXT_LINKED_RESOURCE_PATH_MUST_NOT_BE_NULL;
 	public static String VALIDATION_CONTEXT_VARIABLE_NAME_MUST_NOT_BE_NULL;
 	public static String KBNATURE_NOT_FOUND;

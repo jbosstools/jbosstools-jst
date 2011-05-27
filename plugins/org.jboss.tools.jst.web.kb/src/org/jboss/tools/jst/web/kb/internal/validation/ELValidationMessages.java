@@ -4,7 +4,7 @@ import org.eclipse.osgi.util.NLS;
 
 public class ELValidationMessages {
 	private static final String BUNDLE_NAME = "org.jboss.tools.jst.web.kb.internal.validation.messages"; //$NON-NLS-1$
-
+	
 	public static String UNKNOWN_EL_VARIABLE_NAME;
 	public static String UNKNOWN_EL_VARIABLE_PROPERTY_NAME;
 	public static String UNPAIRED_GETTER_OR_SETTER;

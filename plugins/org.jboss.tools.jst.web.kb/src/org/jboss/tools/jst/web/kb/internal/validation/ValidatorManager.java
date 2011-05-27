@@ -14,16 +14,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.validation.internal.core.ValidationException;
 import org.eclipse.wst.validation.internal.provisional.core.IReporter;
 import org.eclipse.wst.validation.internal.provisional.core.IValidationContext;
 import org.eclipse.wst.validation.internal.provisional.core.IValidatorJob;
+import org.jboss.tools.jst.web.kb.KbMessages;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.validation.IValidatingProjectSet;
 import org.jboss.tools.jst.web.kb.validation.IValidationContextManager;
@@ -73,6 +76,12 @@ public class ValidatorManager implements IValidatorJob {
 					if(validatingProjects.contains(rootProject)) {
 						return OK_STATUS;
 					}
+					if(!checkBuilderOrder(validationHelper, rootProject)) {
+				//TODO activate this return after duly testing
+				//     it would be too dangerous to abort validation now
+				//     while some test project have wrong builder order.
+//						return OK_STATUS;
+					}
 					validatingProjects.add(rootProject);
 				}
 			}
@@ -100,6 +109,40 @@ public class ValidatorManager implements IValidatorJob {
 		} finally {
 			STATUS = SLEEPING;
 		}
+	}
+
+	private static String WTP_VALIDATOR_ID = "org.eclipse.wst.validation.validationbuilder"; //$NON-NLS-1$
+
+	private boolean checkBuilderOrder(ContextValidationHelper validationHelper, IProject project) {
+		IValidationContextManager validationContextManager = validationHelper.getValidationContextManager();
+		List<IValidator> validators = validationContextManager.getValidators();
+		Set<String> requiredBuilders = new HashSet<String>();
+		for (IValidator v: validators) {
+			String builderId = v.getBuilderId();
+			if(builderId != null) {
+				requiredBuilders.add(builderId);
+			}
+		}
+		try {
+			boolean validationFound = false;
+			ICommand[] cs = project.getDescription().getBuildSpec();
+			for (ICommand c: cs) {
+				String name = c.getBuilderName();
+				if(WTP_VALIDATOR_ID.equals(name)) {
+					validationFound = true;
+				}
+				if(requiredBuilders.contains(name) && validationFound) {
+					String message = NLS.bind(KbMessages.WRONG_BUILDER_ORDER, project.getName(), name);
+					WebKbPlugin.getDefault().logError(message);
+					return false;
+				}
+			}
+		
+		} catch (CoreException e) {
+			WebKbPlugin.getDefault().logError(e);
+		}
+		
+		return true;
 	}
 
 	private IStatus validate(Set<IFile> changedFiles, ContextValidationHelper validationHelper, IReporter reporter) throws ValidationException {
