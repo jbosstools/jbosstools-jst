@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2010 Exadel, Inc. and Red Hat, Inc.
+ * Copyright (c) 2010-2011 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
+ *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.contentassist.computers;
 
@@ -19,6 +19,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.swt.graphics.Image;
@@ -194,8 +195,55 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 //			}
 			int cursorPosition = replacementString.length();
 			
-			if (!prefix.isELClosed()) {
-				replacementString += "}"; //$NON-NLS-1$
+			// Check if it is a long named property to be inserted
+			if (replacementString.indexOf('[') != -1) {
+				// That's it - The long message property
+				
+				// Need to get the rest of line from context.getInvocationOffset() 
+				IDocument doc = context.getDocument();
+				
+				String restOfLine = "";
+				String restOfValue = "";
+				int endPosition = -1;
+				try {
+					int line = doc.getLineOfOffset(context.getInvocationOffset());
+					int lineStart = doc.getLineOffset(line);
+					int lineLength = doc.getLineLength(line);
+					String sDoc = doc.get();
+					restOfValue = restOfLine = sDoc.substring(context.getInvocationOffset(), lineStart + lineLength);
+					endPosition = restOfValue.indexOf(quoteChar);
+					if (endPosition != -1) {
+						// Use end of line
+						restOfValue = restOfValue.substring(0, endPosition);
+					}
+				} catch (BadLocationException e) {
+					// Ignore it
+				}
+				
+				// Is closing ']' is in it?
+				int paraIndex = restOfValue.indexOf(']');
+				// Is the quotation is in it?
+				int quoteIndex = restOfValue.indexOf('\'');
+				if (quoteIndex == -1 || (paraIndex != -1 && quoteIndex > paraIndex)) {
+					// Need to insert closing single-quote
+					replacementString += '\'';
+				}
+				if (paraIndex == -1) {
+					// Closing ']' is to be added
+					replacementString += ']';
+				}
+				if (prefix.isAttributeValue() && prefix.hasOpenQuote() && endPosition == -1) {
+					// Add closing attr-quote
+					replacementString += quoteChar;
+				}
+				if (restOfLine.indexOf('}') == -1) {
+					// Add closing }-char
+					replacementString += '}';
+				}
+			} else {
+				if (!prefix.isELClosed()) {
+					replacementString += '}';
+				}
 			}
 			
 			if (prefix.isAttributeValue() && prefix.hasOpenQuote() && !prefix.hasCloseQuote()) {
