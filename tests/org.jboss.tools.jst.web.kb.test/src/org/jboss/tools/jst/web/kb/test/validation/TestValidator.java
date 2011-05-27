@@ -21,6 +21,7 @@ import org.eclipse.wst.validation.internal.core.ValidationException;
 import org.eclipse.wst.validation.internal.provisional.core.IReporter;
 import org.jboss.tools.jst.web.kb.IKbProject;
 import org.jboss.tools.jst.web.kb.KbProjectFactory;
+import org.jboss.tools.jst.web.kb.internal.KbBuilder;
 import org.jboss.tools.jst.web.kb.internal.validation.ContextValidationHelper;
 import org.jboss.tools.jst.web.kb.internal.validation.SimpleValidatingProjectTree;
 import org.jboss.tools.jst.web.kb.internal.validation.ValidatingProjectSet;
@@ -45,6 +46,11 @@ public class TestValidator implements IValidator {
 	 */
 	public String getId() {
 		return "org.jboss.tools.jst.web.kb.test.TestValidator";
+	}
+
+	public String getBuilderId() {
+		//for the sake of test
+		return KbBuilder.BUILDER_ID;
 	}
 
 	/* (non-Javadoc)
