@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         id="testbuilder"
+         name="JBoss Tools JST Test Builder"
+         point="org.eclipse.core.resources.builders">
+      <builder
+            hasNature="false">
+         <run
+               class="org.jboss.tools.jst.web.test.TestBuilder">
+         </run>
+      </builder>
+   </extension>
+   <extension
+         id="testnature"
+         name="JBoss Tools JST Test Nature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="org.jboss.tools.jst.web.test.TestNature">
+         </run>
+      </runtime>
+      <builder
+            id="org.jboss.tools.jst.web.test.testbuilder">
+      </builder>
+   </extension>
+</plugin>

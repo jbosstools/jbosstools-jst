@@ -1,12 +1,14 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name.0
-Bundle-SymbolicName: org.jboss.tools.jst.web.test
+Bundle-SymbolicName: org.jboss.tools.jst.web.test;singleton:=true
 Bundle-Version: 3.2.0.qualifier
 Require-Bundle: org.jboss.tools.jst.web,
  org.junit,
  org.jboss.tools.tests,
- org.eclipse.jst.standard.schemas
+ org.eclipse.jst.standard.schemas,
+ org.eclipse.ui,
+ org.eclipse.wst.validation
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: %Bundle-Vendor.0
 Export-Package: org.jboss.tools.jst.web.test
