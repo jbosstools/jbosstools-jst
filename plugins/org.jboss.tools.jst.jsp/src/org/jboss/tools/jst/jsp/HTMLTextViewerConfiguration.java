@@ -52,7 +52,7 @@ public class HTMLTextViewerConfiguration extends
 		ITextViewerConfiguration {
 
 	private static final char[] PROPOSAL_AUTO_ACTIVATION_CHARS = new char[] {
-		'<', '=', '"', '\'', '.', '{'
+		'<', '=', '"', '\'', '.', '{', '['
 	};
 
 	TextViewerConfigurationDelegate configurationDelegate;

@@ -220,18 +220,22 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 					// Ignore it
 				}
 				
-				// Is closing ']' is in it?
-				int paraIndex = restOfValue.indexOf(']');
-				// Is the quotation is in it?
-				int quoteIndex = restOfValue.indexOf('\'');
-				if (quoteIndex == -1 || (paraIndex != -1 && quoteIndex > paraIndex)) {
-					// Need to insert closing single-quote
-					replacementString += '\'';
+				// Check if the replacementString is already configured
+				if (replacementString.indexOf(']') == -1) {
+					// Is closing ']' is in it?
+					int paraIndex = restOfValue.indexOf(']');
+					// Is the quotation is in it?
+					int quoteIndex = restOfValue.indexOf('\'');
+					if (quoteIndex == -1 || (paraIndex != -1 && quoteIndex > paraIndex)) {
+						// Need to insert closing single-quote
+						replacementString += '\'';
+					}
+					if (paraIndex == -1) {
+						// Closing ']' is to be added
+						replacementString += ']';
+					}
 				}
-				if (paraIndex == -1) {
-					// Closing ']' is to be added
-					replacementString += ']';
-				}
+				
 				if (prefix.isAttributeValue() && prefix.hasOpenQuote() && endPosition == -1) {
 					// Add closing attr-quote
 					replacementString += quoteChar;
@@ -328,10 +332,55 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 			String replacementString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString();
 			int cursorPosition = replacementString.length();
 			
-			if (!prefix.isELClosed()) {
-				replacementString += "}"; //$NON-NLS-1$
+			// Check if it is a long named property to be inserted
+			if (replacementString.indexOf('[') != -1) {
+				// That's it - The long message property
+				
+				// Need to get the rest of line from context.getInvocationOffset() 
+				IDocument doc = context.getDocument();
+				
+				String restOfLine = "";
+				String restOfValue = "";
+				int endPosition = -1;
+				try {
+					int line = doc.getLineOfOffset(context.getInvocationOffset());
+					int lineStart = doc.getLineOffset(line);
+					int lineLength = doc.getLineLength(line);
+					String sDoc = doc.get();
+					restOfValue = restOfLine = sDoc.substring(context.getInvocationOffset(), lineStart + lineLength);
+					if (endPosition != -1) {
+						// Use end of line
+						restOfValue = restOfValue.substring(0, endPosition);
+					}
+				} catch (BadLocationException e) {
+					// Ignore it
+				}
+				
+				// Check if the replacementString is already configured
+				if (replacementString.indexOf(']') == -1) {
+					// Is closing ']' is in it?
+					int paraIndex = restOfValue.indexOf(']');
+					// Is the quotation is in it?
+					int quoteIndex = restOfValue.indexOf('\'');
+					if (quoteIndex == -1 || (paraIndex != -1 && quoteIndex > paraIndex)) {
+						// Need to insert closing single-quote
+						replacementString += '\'';
+					}
+					if (paraIndex == -1) {
+						// Closing ']' is to be added
+						replacementString += ']';
+					}
+				}
+				
+				if (restOfLine.indexOf('}') == -1) {
+					// Add closing }-char
+					replacementString += '}';
+				}
+			} else {
+				if (!prefix.isELClosed()) {
+					replacementString += "}"; //$NON-NLS-1$
+				}
 			}
-
 			Image image = textProposal.getImage();
 
 			// JBIDE-512, JBIDE-2541 related changes ===>>>

@@ -38,7 +38,7 @@ import org.jboss.tools.common.text.xml.xpl.MarkerProblemAnnotationHoverProcessor
 @SuppressWarnings("restriction")
 public class JSPTextViewerConfiguration extends StructuredTextViewerConfigurationJSP implements ITextViewerConfiguration {
 	private static final char[] PROPOSAL_AUTO_ACTIVATION_CHARS = new char[] {
-		'<', '=', '"', '\'', '.', '{'
+		'<', '=', '"', '\'', '.', '{', '['
 	};
 
 	private TextViewerConfigurationDelegate configurationDelegate;
