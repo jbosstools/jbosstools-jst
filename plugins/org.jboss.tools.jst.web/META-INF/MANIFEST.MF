@@ -21,7 +21,8 @@ Require-Bundle: org.jboss.tools.common.model;visibility:=reexport,
  org.eclipse.ltk.core.refactoring;bundle-version="3.5.200",
  org.eclipse.jst.jsp.core;bundle-version="1.2.400",
  org.eclipse.jst.j2ee.core;bundle-version="1.2.100",
- org.eclipse.wst.common.project.facet.core;bundle-version="1.4.200"
+ org.eclipse.wst.common.project.facet.core;bundle-version="1.4.200",
+ org.eclipse.wst.validation;bundle-version="1.2.300"
 Bundle-Version: 3.3.0.qualifier
 Export-Package: 
  org.jboss.tools.jst.web,

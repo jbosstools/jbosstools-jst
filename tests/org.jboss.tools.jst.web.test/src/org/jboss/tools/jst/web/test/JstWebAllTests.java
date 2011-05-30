@@ -18,6 +18,7 @@ public class JstWebAllTests {
 	public static Test suite() {
 		TestSuite suite = new TestSuite(JstWebAllTests.class.getName());
 		suite.addTestSuite(WebContentAssistProviderTest.class);
+		suite.addTestSuite(BuilderTest.class);
 		return suite;
 	}
 }
