@@ -11,6 +11,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.IMarkerResolution2;
 import org.eclipse.ui.IMarkerResolutionGenerator2;
+import org.eclipse.wst.validation.internal.plugin.ValidationPlugin;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 
 public class BuilderOrderResolutionGenerator implements IMarkerResolutionGenerator2 {
@@ -51,7 +52,7 @@ class BuilderOrderResolution implements IMarkerResolution2 {
 			ICommand[] bs = d.getBuildSpec();
 			ICommand v = null;
 			for (int i = 0; i < bs.length; i++) {
-				if(ValidatorManager.WTP_VALIDATOR_ID.equals(bs[i].getBuilderName())) {
+				if(ValidationPlugin.VALIDATION_BUILDER_ID.equals(bs[i].getBuilderName())) {
 					v = bs[i];
 				}
 				if(v != null) {
