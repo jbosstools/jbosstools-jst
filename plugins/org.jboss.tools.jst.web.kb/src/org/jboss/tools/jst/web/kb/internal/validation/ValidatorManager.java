@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.validation.internal.core.ValidationException;
+import org.eclipse.wst.validation.internal.plugin.ValidationPlugin;
 import org.eclipse.wst.validation.internal.provisional.core.IReporter;
 import org.eclipse.wst.validation.internal.provisional.core.IValidationContext;
 import org.eclipse.wst.validation.internal.provisional.core.IValidatorJob;
@@ -110,7 +111,6 @@ public class ValidatorManager implements IValidatorJob {
 		}
 	}
 
-	static String WTP_VALIDATOR_ID = "org.eclipse.wst.validation.validationbuilder"; //$NON-NLS-1$
 	static String ORDER_PROBLEM_MARKER_TYPE = "org.jboss.tools.jst.web.kb.builderOrderProblem"; //$NON-NLS-1$
 	private static String ATTR_VALIDATOR = "validator"; //$NON-NLS-1$
 
@@ -160,7 +160,7 @@ public class ValidatorManager implements IValidatorJob {
 		boolean validationFound = false;
 		for (ICommand c: cs) {
 			String name = c.getBuilderName();
-			if(WTP_VALIDATOR_ID.equals(name)) {
+			if(ValidationPlugin.VALIDATION_BUILDER_ID.equals(name)) {
 				validationFound = true;
 			} else if(builderId.equals(name)) {
 				return !validationFound;
