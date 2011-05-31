@@ -535,13 +535,22 @@ public class ELValidator extends KBValidator {
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidator#shouldValidate(org.eclipse.core.resources.IProject)
 	 */
 	public boolean shouldValidate(IProject project) {
-		if(isEnabled(project)) {
-			for (IELValidationDelegate delegate : DELEGATES) {
-				if(delegate.shouldValidate(project)) {
-					return true;
+		try {
+			if(validateBuilderOrder(project) && isEnabled(project)) {
+				for (IELValidationDelegate delegate : DELEGATES) {
+					if(delegate.shouldValidate(project)) {
+						return true;
+					}
 				}
 			}
+		} catch (CoreException e) {
+			WebKbPlugin.getDefault().logError(e);
 		}
 		return false;
 	}
+
+	private boolean validateBuilderOrder(IProject project) throws CoreException {
+		return ValidatorManager.validateBuilderOrder(project, getBuilderId(), getId(), ELSeverityPreferences.getInstance());
+	}
+
 }

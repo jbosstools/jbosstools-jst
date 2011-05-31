@@ -29,6 +29,7 @@ public class ELPreferenceInitializer extends AbstractPreferenceInitializer {
 
 		IEclipsePreferences defaultPreferences = ((IScopeContext) new DefaultScope()).getNode(WebKbPlugin.PLUGIN_ID);
 		defaultPreferences.putBoolean(SeverityPreferences.ENABLE_BLOCK_PREFERENCE_NAME, true);
+		defaultPreferences.put(SeverityPreferences.WRONG_BUILDER_ORDER_PREFERENCE_NAME, ELSeverityPreferences.ERROR);
 		for (String name : ELSeverityPreferences.SEVERITY_OPTION_NAMES) {
 			defaultPreferences.put(name, ELSeverityPreferences.ERROR);
 		}

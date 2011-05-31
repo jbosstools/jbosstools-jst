@@ -135,6 +135,15 @@
       </persistent>
    </extension>
 
+   <extension id="builderOrderProblem" name="%BuilderOrderProblemName" point="org.eclipse.core.resources.markers">
+      <super type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <persistent value="true">
+      </persistent>
+      <attribute name="validator">
+      </attribute>
+   </extension>
+
    <extension id="kbproblemmarker" name="%KBProblemName" point="org.eclipse.core.resources.markers">
       <super type="org.eclipse.wst.validation.problemmarker">
       </super>
@@ -148,6 +157,12 @@
 			class="org.jboss.tools.jst.web.kb.action.KBProblemMarkerResolutionGenerator">
 		</markerResolutionGenerator>
    </extension>
+
+  	<extension point="org.eclipse.ui.ide.markerResolution">
+		<markerResolutionGenerator
+			markerType="org.jboss.tools.jst.web.kb.builderOrderProblem"
+			class="org.jboss.tools.jst.web.kb.internal.validation.BuilderOrderResolutionGenerator"/>
+	</extension>
 
    <extension
         point="org.eclipse.wst.validation.validator"
