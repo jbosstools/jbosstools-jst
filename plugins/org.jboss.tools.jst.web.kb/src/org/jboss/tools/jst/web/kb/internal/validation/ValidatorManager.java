@@ -21,7 +21,9 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.validation.internal.core.ValidationException;
@@ -112,45 +114,25 @@ public class ValidatorManager implements IValidatorJob {
 	static String ORDER_PROBLEM_MARKER_TYPE = "org.jboss.tools.jst.web.kb.builderOrderProblem"; //$NON-NLS-1$
 	private static String ATTR_VALIDATOR = "validator"; //$NON-NLS-1$
 
-	public static boolean isCorrectOrder(IProject project, String builderId) {
-		try {
-		ICommand[] cs = project.getDescription().getBuildSpec();
-		boolean validationFound = false;
-			for (ICommand c: cs) {
-				String name = c.getBuilderName();
-				if(WTP_VALIDATOR_ID.equals(name)) {
-					validationFound = true;
-				}
-				if(builderId.equals(name)) {
-					return !validationFound;
-				}
-			}		
-		} catch (CoreException e) {
-			WebKbPlugin.getDefault().logError(e);
-		}
-		return true;
-	}
-
-	public static IMarker findBuilderOrderMarker(IProject project, String validator) {
-		IMarker result = null;
-		try {
-			IMarker[] ms = project.findMarkers(ORDER_PROBLEM_MARKER_TYPE, false, IResource.DEPTH_ZERO);
-			for (IMarker m: ms) {
-				if(validator.equals(m.getAttribute(ATTR_VALIDATOR, null))) {
-					result = m;
-				}
-			}
-		} catch (CoreException e) {
-			WebKbPlugin.getDefault().logError(e);
-		}
-		return result;
-	}
-
-	public static boolean validateBuilderOrder(IProject project, String builderId, String validator, SeverityPreferences preferences) throws CoreException {
-		String severityPreferenceValue = preferences.getBuilderOrderPreference(project);
-		int severity = getSeverity(severityPreferenceValue);
+	/**
+	 * Helper method to be called by IValidator implementations. 
+	 * It implements common logic:
+	 * 1. Checks if builderId follows Validation Builder.
+	 * 2. Checks severity preference associated with this builder.
+	 * 3. Creates, updates or deletes error/warning marker on project 
+	 *    taking into account builders order and severity preference.
+	 * 
+	 * @param project
+	 * @param builderId
+	 * @param validatorId
+	 * @param preferences
+	 * @return
+	 * @throws CoreException
+	 */
+	public static boolean validateBuilderOrder(IProject project, String builderId, String validatorId, SeverityPreferences preferences) throws CoreException {
+		int severity = getSeverity(preferences.getBuilderOrderPreference(project));
 		boolean isCorrect = isCorrectOrder(project, builderId);
-		IMarker marker = findBuilderOrderMarker(project, validator);
+		IMarker marker = findBuilderOrderMarker(project, validatorId);
 		if(isCorrect || severity <= IMarker.SEVERITY_INFO) {
 			if(marker != null) {
 				ResourcesPlugin.getWorkspace().deleteMarkers(new IMarker[]{marker});
@@ -162,9 +144,9 @@ public class ValidatorManager implements IValidatorJob {
 				}
 			} else {
 				marker = project.createMarker(ORDER_PROBLEM_MARKER_TYPE);
-				marker.setAttribute(ATTR_VALIDATOR, validator);
+				marker.setAttribute(ATTR_VALIDATOR, validatorId);
 				marker.setAttribute(IMarker.SEVERITY, severity);
-				String message = NLS.bind(KbMessages.WRONG_BUILDER_ORDER, project.getName(), builderId);
+				String message = NLS.bind(KbMessages.WRONG_BUILDER_ORDER, project.getName(), findBuilderName(builderId));
 				marker.setAttribute(IMarker.MESSAGE, message);
 				//Temporary to debug
 				WebKbPlugin.getDefault().logError(message);
@@ -173,10 +155,40 @@ public class ValidatorManager implements IValidatorJob {
 		return isCorrect || severity <= IMarker.SEVERITY_INFO;
 	}
 
-	public static int getSeverity(String severityPreferenceValue) {
+	private static boolean isCorrectOrder(IProject project, String builderId) throws CoreException {
+		ICommand[] cs = project.getDescription().getBuildSpec();
+		boolean validationFound = false;
+		for (ICommand c: cs) {
+			String name = c.getBuilderName();
+			if(WTP_VALIDATOR_ID.equals(name)) {
+				validationFound = true;
+			} else if(builderId.equals(name)) {
+				return !validationFound;
+			}
+		}		
+		return true;
+	}
+
+	private static IMarker findBuilderOrderMarker(IProject project, String validator) throws CoreException {
+		IMarker result = null;
+		IMarker[] ms = project.findMarkers(ORDER_PROBLEM_MARKER_TYPE, false, IResource.DEPTH_ZERO);
+		for (IMarker m: ms) {
+			if(validator.equals(m.getAttribute(ATTR_VALIDATOR, null))) {
+				result = m;
+			}
+		}
+		return result;
+	}
+
+	private static String findBuilderName(String builderId) {
+		IExtension ext = Platform.getExtensionRegistry().getExtension(builderId);
+		return (ext != null && ext.getLabel() != null) ? ext.getLabel() : builderId;
+	}
+
+	private static int getSeverity(String severityPreferenceValue) {
 		return (SeverityPreferences.IGNORE.equals(severityPreferenceValue))
 				? IMarker.SEVERITY_INFO
-				: SeverityPreferences.WARNING.equals(severityPreferenceValue)
+				: (SeverityPreferences.WARNING.equals(severityPreferenceValue))
 				? IMarker.SEVERITY_WARNING
 				: IMarker.SEVERITY_ERROR;
 	}
