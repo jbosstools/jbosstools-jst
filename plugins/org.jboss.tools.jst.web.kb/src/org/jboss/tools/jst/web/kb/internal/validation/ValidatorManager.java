@@ -148,8 +148,6 @@ public class ValidatorManager implements IValidatorJob {
 				marker.setAttribute(IMarker.SEVERITY, severity);
 				String message = NLS.bind(KbMessages.WRONG_BUILDER_ORDER, project.getName(), findBuilderName(builderId));
 				marker.setAttribute(IMarker.MESSAGE, message);
-				//Temporary to debug
-				WebKbPlugin.getDefault().logError(message);
 			}
 		}		
 		return isCorrect || severity <= IMarker.SEVERITY_INFO;
