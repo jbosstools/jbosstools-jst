@@ -124,12 +124,11 @@ public class ValidatorManager implements IValidatorJob {
 	 * 
 	 * @param project
 	 * @param builderId
-	 * @param validatorId
 	 * @param preferences
 	 * @return
 	 * @throws CoreException
 	 */
-	public static boolean validateBuilderOrder(IProject project, String builderId, String validatorId, SeverityPreferences preferences) throws CoreException {
+	public static boolean validateBuilderOrder(IProject project, String builderId, SeverityPreferences preferences) throws CoreException {
 		int severity = getSeverity(preferences.getBuilderOrderPreference(project));
 		boolean isCorrect = isCorrectOrder(project, builderId);
 		IMarker marker = findBuilderOrderMarker(project, builderId);

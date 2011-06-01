@@ -550,7 +550,6 @@ public class ELValidator extends KBValidator {
 	}
 
 	private boolean validateBuilderOrder(IProject project) throws CoreException {
-		return ValidatorManager.validateBuilderOrder(project, getBuilderId(), getId(), ELSeverityPreferences.getInstance());
+		return ValidatorManager.validateBuilderOrder(project, getBuilderId(), ELSeverityPreferences.getInstance());
 	}
-
 }
