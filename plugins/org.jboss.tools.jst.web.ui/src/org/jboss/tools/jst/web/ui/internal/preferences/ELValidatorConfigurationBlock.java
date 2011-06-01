@@ -72,6 +72,7 @@ public class ELValidatorConfigurationBlock extends SeverityConfigurationBlock {
 		keys.add(getKey(WebKbPlugin.PLUGIN_ID, ELSeverityPreferences.CHECK_VARS));
 		keys.add(getKey(WebKbPlugin.PLUGIN_ID, ELSeverityPreferences.RE_VALIDATE_UNRESOLVED_EL));
 		keys.add(MAX_NUMBER_OF_PROBLEMS_KEY);
+		keys.add(WRONG_BUILDER_ORDER_KEY);
 		return keys.toArray(new Key[0]);
 	}
 
@@ -80,6 +81,12 @@ public class ELValidatorConfigurationBlock extends SeverityConfigurationBlock {
 	@Override
 	protected Key getMaxNumberOfProblemsKey() {
 		return MAX_NUMBER_OF_PROBLEMS_KEY;
+	}
+
+	private static final Key WRONG_BUILDER_ORDER_KEY = getKey(WebKbPlugin.PLUGIN_ID, SeverityPreferences.WRONG_BUILDER_ORDER_PREFERENCE_NAME);
+
+	protected Key getWrongBuilderOrderKey() {
+		return WRONG_BUILDER_ORDER_KEY;
 	}
 
 	public ELValidatorConfigurationBlock(IStatusChangeListener context,
@@ -97,6 +104,8 @@ public class ELValidatorConfigurationBlock extends SeverityConfigurationBlock {
 		Composite composite = sc1.getBody();
 
 		addMaxNumberOfMarkersField(composite);
+
+		addWrongBuilderOrderField(composite);
 
 		GridLayout layout= new GridLayout(nColumns, false);
 		layout.marginHeight= 0;
