@@ -140,7 +140,7 @@
       </super>
       <persistent value="true">
       </persistent>
-      <attribute name="validator">
+      <attribute name="builder">
       </attribute>
    </extension>
 

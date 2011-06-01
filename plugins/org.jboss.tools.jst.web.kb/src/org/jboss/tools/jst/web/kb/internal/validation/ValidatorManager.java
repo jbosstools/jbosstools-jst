@@ -112,7 +112,7 @@ public class ValidatorManager implements IValidatorJob {
 	}
 
 	public static final String ORDER_PROBLEM_MARKER_TYPE = "org.jboss.tools.jst.web.kb.builderOrderProblem"; //$NON-NLS-1$
-	private static String ATTR_VALIDATOR = "validator"; //$NON-NLS-1$
+	private static String ATTR_BUILDER = "builder"; //$NON-NLS-1$
 
 	/**
 	 * Helper method to be called by IValidator implementations. 
@@ -132,7 +132,7 @@ public class ValidatorManager implements IValidatorJob {
 	public static boolean validateBuilderOrder(IProject project, String builderId, String validatorId, SeverityPreferences preferences) throws CoreException {
 		int severity = getSeverity(preferences.getBuilderOrderPreference(project));
 		boolean isCorrect = isCorrectOrder(project, builderId);
-		IMarker marker = findBuilderOrderMarker(project, validatorId);
+		IMarker marker = findBuilderOrderMarker(project, builderId);
 		if(isCorrect || severity <= IMarker.SEVERITY_INFO) {
 			if(marker != null) {
 				ResourcesPlugin.getWorkspace().deleteMarkers(new IMarker[]{marker});
@@ -144,7 +144,7 @@ public class ValidatorManager implements IValidatorJob {
 				}
 			} else {
 				marker = project.createMarker(ORDER_PROBLEM_MARKER_TYPE);
-				marker.setAttribute(ATTR_VALIDATOR, validatorId);
+				marker.setAttribute(ATTR_BUILDER, builderId);
 				marker.setAttribute(IMarker.SEVERITY, severity);
 				String message = NLS.bind(KbMessages.WRONG_BUILDER_ORDER, project.getName(), findBuilderName(builderId));
 				marker.setAttribute(IMarker.MESSAGE, message);
@@ -167,11 +167,11 @@ public class ValidatorManager implements IValidatorJob {
 		return true;
 	}
 
-	private static IMarker findBuilderOrderMarker(IProject project, String validator) throws CoreException {
+	private static IMarker findBuilderOrderMarker(IProject project, String builderId) throws CoreException {
 		IMarker result = null;
 		IMarker[] ms = project.findMarkers(ORDER_PROBLEM_MARKER_TYPE, false, IResource.DEPTH_ZERO);
 		for (IMarker m: ms) {
-			if(validator.equals(m.getAttribute(ATTR_VALIDATOR, null))) {
+			if(builderId.equals(m.getAttribute(ATTR_BUILDER, null))) {
 				result = m;
 			}
 		}
