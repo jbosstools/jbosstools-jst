@@ -23,6 +23,7 @@ public class KbMessages {
 	}
 
 	public static String WRONG_BUILDER_ORDER;
+	public static String CHANGE_BUILDER_ORDER;
 
 	public static String VALIDATION_CONTEXT_LINKED_RESOURCE_PATH_MUST_NOT_BE_NULL;
 	public static String VALIDATION_CONTEXT_VARIABLE_NAME_MUST_NOT_BE_NULL;
