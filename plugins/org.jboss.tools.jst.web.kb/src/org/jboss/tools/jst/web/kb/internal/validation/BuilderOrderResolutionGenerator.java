@@ -12,6 +12,7 @@ import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.IMarkerResolution2;
 import org.eclipse.ui.IMarkerResolutionGenerator2;
 import org.eclipse.wst.validation.internal.plugin.ValidationPlugin;
+import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 
 public class BuilderOrderResolutionGenerator implements IMarkerResolutionGenerator2 {
@@ -46,22 +47,10 @@ class BuilderOrderResolution implements IMarkerResolution2 {
 
 	public void run(IMarker marker) {
 		IProject project = marker.getResource().getProject();
-		
 		try {
-			IProjectDescription d = project.getDescription();
-			ICommand[] bs = d.getBuildSpec();
-			ICommand v = null;
-			for (int i = 0; i < bs.length; i++) {
-				if(ValidationPlugin.VALIDATION_BUILDER_ID.equals(bs[i].getBuilderName())) {
-					v = bs[i];
-				}
-				if(v != null) {
-					bs[i] = (i + 1 < bs.length) ? bs[i + 1] : v;
-				}
+			if(WebModelPlugin.makeBuilderLast(project, ValidationPlugin.VALIDATION_BUILDER_ID)) {
+				project.build(IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor());
 			}
-			d.setBuildSpec(bs);
-			project.setDescription(d, IProject.FORCE, new NullProgressMonitor());
-			project.build(IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor());
 		} catch (CoreException e) {
 			WebKbPlugin.getDefault().logError(e);
 		}
