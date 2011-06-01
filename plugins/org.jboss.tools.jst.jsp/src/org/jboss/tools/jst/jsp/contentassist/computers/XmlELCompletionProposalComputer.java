@@ -226,7 +226,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 					int paraIndex = restOfValue.indexOf(']');
 					// Is the quotation is in it?
 					int quoteIndex = restOfValue.indexOf('\'');
-					if (quoteIndex == -1 || (paraIndex != -1 && quoteIndex > paraIndex)) {
+					if (quoteIndex == -1 || paraIndex == -1 || (paraIndex != -1 && quoteIndex > paraIndex)) {
 						// Need to insert closing single-quote
 						replacementString += '\'';
 					}
@@ -895,7 +895,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		
 		return tr;
 	}
-	
+
 	/**
 	 * Returns EL Predicate Text Region Information Object
 	 * 
