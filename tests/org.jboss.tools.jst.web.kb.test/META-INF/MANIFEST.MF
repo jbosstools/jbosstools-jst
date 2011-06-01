@@ -15,7 +15,8 @@ Require-Bundle: org.eclipse.ui,
  org.jboss.tools.common.model.test,
  org.jboss.tools.common,
  org.eclipse.jst.standard.schemas,
- org.eclipse.wst.validation
+ org.eclipse.wst.validation,
+ org.eclipse.ui.ide
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Vendor: %Bundle-Vendor.0

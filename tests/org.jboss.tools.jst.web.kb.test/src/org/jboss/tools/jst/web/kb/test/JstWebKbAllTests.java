@@ -14,6 +14,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.jboss.tools.common.model.util.test.XProjectImportTestSetUp;
+import org.jboss.tools.jst.web.kb.test.validation.BuilderOrderMarkerResolutionTest;
 import org.jboss.tools.jst.web.kb.test.validation.KBValidationTest;
 import org.jboss.tools.test.util.ProjectImportTestSetup;
 
@@ -44,6 +45,13 @@ public class JstWebKbAllTests {
 				new String[]{"TestKbModel", "MyFaces", "MyFaces2", "TestKbModel3", "TestKbModel4"});
 		suiteAll.addTest(testSetup);
 		suiteAll.addTestSuite(KBValidationTest.class);
+		suite = new TestSuite(BuilderOrderMarkerResolutionTest.class.getName());
+		suite.addTestSuite(BuilderOrderMarkerResolutionTest.class);
+		testSetup = new XProjectImportTestSetUp(suite,
+				"org.jboss.tools.jst.web.kb.test",
+				new String[]{"projects/TestBrokenBuilderOrder"},
+				new String[]{"TestBrokenBuilderOrder"});
+		suiteAll.addTest(testSetup);
 		return suiteAll;
 	}
 }
