@@ -111,7 +111,7 @@ public class ValidatorManager implements IValidatorJob {
 		}
 	}
 
-	static String ORDER_PROBLEM_MARKER_TYPE = "org.jboss.tools.jst.web.kb.builderOrderProblem"; //$NON-NLS-1$
+	public static String ORDER_PROBLEM_MARKER_TYPE = "org.jboss.tools.jst.web.kb.builderOrderProblem"; //$NON-NLS-1$
 	private static String ATTR_VALIDATOR = "validator"; //$NON-NLS-1$
 
 	/**
