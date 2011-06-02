@@ -7,6 +7,7 @@
          <validator
                class="org.jboss.tools.jst.web.kb.test.validation.TestValidator"
                id="org.jboss.tools.jst.web.kb.test.TestValidator"
+               name="Test Validator"
                dependent="true">
          </validator>
    </extension>
