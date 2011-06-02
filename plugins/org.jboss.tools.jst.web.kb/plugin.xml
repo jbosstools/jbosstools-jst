@@ -142,6 +142,8 @@
       </persistent>
       <attribute name="builder">
       </attribute>
+      <attribute name="validator">
+      </attribute>
    </extension>
 
    <extension id="kbproblemmarker" name="%KBProblemName" point="org.eclipse.core.resources.markers">
@@ -241,10 +243,12 @@
    </extension>
 
    <extension
+         id="ELValidator"
          point="org.jboss.tools.jst.web.kb.validator">
          <validator
                class="org.jboss.tools.jst.web.kb.internal.validation.ELValidator"
                id="org.jboss.tools.jst.web.kb.ELValidator"
+               name="%ELValidator"
                dependent="true">
          </validator>
    </extension>

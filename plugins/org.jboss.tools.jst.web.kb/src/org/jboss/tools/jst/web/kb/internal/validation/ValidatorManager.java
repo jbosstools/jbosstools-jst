@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
@@ -113,6 +114,7 @@ public class ValidatorManager implements IValidatorJob {
 
 	public static final String ORDER_PROBLEM_MARKER_TYPE = "org.jboss.tools.jst.web.kb.builderOrderProblem"; //$NON-NLS-1$
 	private static String ATTR_BUILDER = "builder"; //$NON-NLS-1$
+	private static String ATTR_VALIDATOR = "validator"; //$NON-NLS-1$
 
 	/**
 	 * Helper method to be called by IValidator implementations. 
@@ -124,14 +126,15 @@ public class ValidatorManager implements IValidatorJob {
 	 * 
 	 * @param project
 	 * @param builderId
+	 * @param validatorId
 	 * @param preferences
 	 * @return
 	 * @throws CoreException
 	 */
-	public static boolean validateBuilderOrder(IProject project, String builderId, SeverityPreferences preferences) throws CoreException {
+	public static boolean validateBuilderOrder(IProject project, String builderId, String validatorId, SeverityPreferences preferences) throws CoreException {
 		int severity = getSeverity(preferences.getBuilderOrderPreference(project));
 		boolean isCorrect = isCorrectOrder(project, builderId);
-		IMarker marker = findBuilderOrderMarker(project, builderId);
+		IMarker marker = findBuilderOrderMarker(project, builderId, validatorId);
 		if(isCorrect || severity <= IMarker.SEVERITY_INFO) {
 			if(marker != null) {
 				ResourcesPlugin.getWorkspace().deleteMarkers(new IMarker[]{marker});
@@ -145,8 +148,9 @@ public class ValidatorManager implements IValidatorJob {
 				marker = project.createMarker(ORDER_PROBLEM_MARKER_TYPE);
 				marker.setAttribute(ATTR_BUILDER, builderId);
 				marker.setAttribute(IMarker.SEVERITY, severity);
-				String message = NLS.bind(KbMessages.WRONG_BUILDER_ORDER, project.getName(), findBuilderName(builderId));
+				String message = NLS.bind(KbMessages.WRONG_BUILDER_ORDER, new String[]{project.getName(), findValidatorName(validatorId), findBuilderName(builderId)});
 				marker.setAttribute(IMarker.MESSAGE, message);
+				marker.setAttribute(ATTR_VALIDATOR, validatorId);
 			}
 		}		
 		return isCorrect || severity <= IMarker.SEVERITY_INFO;
@@ -166,11 +170,12 @@ public class ValidatorManager implements IValidatorJob {
 		return true;
 	}
 
-	private static IMarker findBuilderOrderMarker(IProject project, String builderId) throws CoreException {
+	private static IMarker findBuilderOrderMarker(IProject project, String builderId, String validatorId) throws CoreException {
 		IMarker result = null;
 		IMarker[] ms = project.findMarkers(ORDER_PROBLEM_MARKER_TYPE, false, IResource.DEPTH_ZERO);
 		for (IMarker m: ms) {
-			if(builderId.equals(m.getAttribute(ATTR_BUILDER, null))) {
+			if(builderId.equals(m.getAttribute(ATTR_BUILDER, null))
+				&& validatorId.equals(m.getAttribute(ATTR_VALIDATOR))) {
 				result = m;
 			}
 		}
@@ -180,6 +185,20 @@ public class ValidatorManager implements IValidatorJob {
 	private static String findBuilderName(String builderId) {
 		IExtension ext = Platform.getExtensionRegistry().getExtension(builderId);
 		return (ext != null && ext.getLabel() != null) ? ext.getLabel() : builderId;
+	}
+
+	private static String findValidatorName(String validatorId) {
+		IExtension ext = Platform.getExtensionRegistry().getExtension(validatorId);
+		if(ext != null) {
+			IConfigurationElement[] es = ext.getConfigurationElements();
+			if(es.length > 0) {
+				String name = es[0].getAttribute("name"); //$NON-NLS-1$
+				if(name != null) {
+					return name;
+				}
+			}
+		}
+		return validatorId;
 	}
 
 	private static int getSeverity(String severityPreferenceValue) {
