@@ -14,9 +14,13 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.SafeRunner;
+import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.util.Assert;
 import org.eclipse.jface.util.SafeRunnable;
 import org.eclipse.jface.viewers.*;
+import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.filesystems.impl.FileAnyImpl;
+import org.jboss.tools.common.model.util.PositionSearcher;
 
 /**
  * 
@@ -78,6 +82,7 @@ public class JSPMultiPageSelectionProvider implements IPostSelectionProvider,
 	}
 
 	public void setSelection(ISelection selection) {
+		selection = convertObjectSelection(selection);
 		if (!isAppropriateSelected(selection))
 			return;
 		if (isFiringSelection)
@@ -94,6 +99,27 @@ public class JSPMultiPageSelectionProvider implements IPostSelectionProvider,
 		} finally {
 			isFiringSelection = false;
 		}
+	}
+
+	private ISelection convertObjectSelection(ISelection selection) {
+		if(selection instanceof IStructuredSelection && !selection.isEmpty()
+				&& ((IStructuredSelection)selection).getFirstElement() instanceof XModelObject) {
+			XModelObject o = (XModelObject)((IStructuredSelection)selection).getFirstElement();
+			XModelObject f = o;
+			while(f != null && f.getFileType() != XModelObject.FILE) f = f.getParent();
+			if(((JSPMultiPageEditor)multiPageEditor).getModelObject() == f) {
+				String text = ((FileAnyImpl)f).getAsText();
+				PositionSearcher searcher = new PositionSearcher();
+				searcher.init(text, o, null);
+				searcher.execute();
+				int bp = searcher.getStartPosition();
+				int ep = searcher.getEndPosition();
+				if(bp >= 0 && ep >= bp) {
+					selection = new TextSelection(bp,  ep - bp);
+				}
+			}
+		}
+		return selection;
 	}
 
 	private boolean isAppropriateSelected(ISelection selection) {
