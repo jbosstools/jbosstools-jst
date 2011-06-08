@@ -1,5 +1,5 @@
 /*******************************************************************************
-  * Copyright (c) 2007-2008 Red Hat, Inc.
+  * Copyright (c) 2007-2011 Red Hat, Inc.
   * Distributed under license by Red Hat, Inc. All rights reserved.
   * This program is made available under the terms of the
   * Eclipse Public License v1.0 which accompanies this distribution,
@@ -20,7 +20,8 @@ import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.jboss.tools.test.util.TestProjectProvider;
 
 /**
- * Test cast testing http://jira.jboss.com/jira/browse/JBIDE-1791 issue.
+ * Test case testing http://jira.jboss.com/jira/browse/JBIDE-1791 issue.
+ * The same test case is suitable for http://jira.jboss.com/jira/browse/JBIDE-7100 issue
  * 
  * @author Eugene Stherbin
  *
@@ -62,6 +63,8 @@ public class Jbide1791Test extends ContentAssistantTestCase {
 		} catch (BadLocationException e) {
 			fail(e.getMessage());
 		}
+		assertNotNull("Cannot find a text region to test", reg);
+		
         final ICompletionProposal[] rst = checkProposals(PAGE_NAME,reg.getOffset(), proposals, false);
         
         checkResult(rst,proposals);
