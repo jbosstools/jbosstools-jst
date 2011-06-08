@@ -125,6 +125,18 @@ public class PageContextFactory implements IResourceChangeListener {
 		return (fInstance = new PageContextFactory());
 	}
 
+	/**
+	 * Returns true if the file is XHTML or JSP page.
+	 * 
+	 * @param file
+	 * @return
+	 */
+	public static boolean isPage(IFile file) {
+		IContentType type = IDE.getContentType(file);
+		String typeId = (type == null ? null : type.getId());
+		return JSP_PAGE_CONTEXT_TYPE.equals(typeId) || FACELETS_PAGE_CONTEXT_TYPE.equals(typeId);
+	}
+
 	private PageContextFactory() {
 //		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 //		if (workspace != null) workspace.addResourceChangeListener(this);
