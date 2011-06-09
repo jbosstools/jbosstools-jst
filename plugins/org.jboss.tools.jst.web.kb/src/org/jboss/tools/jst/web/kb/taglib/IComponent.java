@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.taglib;
 
+import org.eclipse.core.resources.IResource;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.IProposalProcessor;
 import org.jboss.tools.jst.web.kb.KbQuery;
@@ -110,4 +111,10 @@ public interface IComponent extends IProposalProcessor {
 	 * @return parent tag lib.
 	 */
 	ITagLibrary getTagLib();
+
+	/**
+	 * Returns the resource where this component is defined. May be a jar file. 
+	 * @return
+	 */
+	IResource getResource();
 }

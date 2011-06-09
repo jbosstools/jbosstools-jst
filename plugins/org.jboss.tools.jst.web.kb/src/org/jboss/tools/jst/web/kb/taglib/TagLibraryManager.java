@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.wst.xml.core.internal.XMLCorePlugin;
 import org.jboss.tools.jst.web.kb.IKbProject;
@@ -37,6 +38,19 @@ public class TagLibraryManager {
 			return new ITagLibrary[0];
 		}
 		return uri==null?kbProject.getTagLibraries():kbProject.getTagLibraries(uri);
+	}
+
+	/**
+	 * Returns all the tag libraries which defined in the file (TLD, facelet tag lib, composite component, etc.)
+	 * @param file
+	 * @return
+	 */
+	public static ITagLibrary[] getLibraries(IFile file) {
+		IKbProject kbProject = KbProjectFactory.getKbProject(file.getProject(), true);
+		if(kbProject == null) {
+			return new ITagLibrary[0];
+		}
+		return kbProject.getTagLibraries(file.getFullPath());
 	}
 
 	/**
@@ -74,7 +88,6 @@ public class TagLibraryManager {
 			}
 		} catch (IOException e) {
 			WebKbPlugin.getDefault().logError(e);
-			return null;
 		}
 
 		return null;

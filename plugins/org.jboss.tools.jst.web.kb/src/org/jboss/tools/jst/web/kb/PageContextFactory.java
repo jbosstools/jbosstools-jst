@@ -134,6 +134,7 @@ public class PageContextFactory implements IResourceChangeListener {
 	public static boolean isPage(IFile file) {
 		IContentType type = IDE.getContentType(file);
 		String typeId = (type == null ? null : type.getId());
+		typeId = IncludeContextBuilder.getContextType(typeId);
 		return JSP_PAGE_CONTEXT_TYPE.equals(typeId) || FACELETS_PAGE_CONTEXT_TYPE.equals(typeId);
 	}
 

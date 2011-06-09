@@ -12,10 +12,8 @@ package org.jboss.tools.jst.web.kb;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.jface.text.IDocument;
-import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 
@@ -23,7 +21,7 @@ import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
  * Page context
  * @author Alexey Kazakov
  */
-public interface IPageContext extends ELContext {
+public interface IPageContext extends IXmlContext {
 
 	/**
 	 * Returns libraries which should be used in this context  

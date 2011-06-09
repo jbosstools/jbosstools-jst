@@ -10,6 +10,8 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -51,6 +53,8 @@ public class LibraryStorage {
 		return allLibrariesArray;
 	}
 
+	private static final ITagLibrary[] EMPTY_LIB_ARRAY = new ITagLibrary[0];
+
 	public ITagLibrary[] getLibrariesArray(String uri) {
 		ITagLibrary[] result = librariesByUriArray.get(uri);
 		if(result == null) {
@@ -59,7 +63,7 @@ public class LibraryStorage {
 				if(libs!=null) {
 					result = libs.toArray(new ITagLibrary[0]);
 				} else {
-					result = new ITagLibrary[0]; 
+					result = EMPTY_LIB_ARRAY; 
 				}
 				librariesByUriArray.put(uri, result);
 			}
@@ -69,6 +73,17 @@ public class LibraryStorage {
 
 	public Set<ITagLibrary> getLibrariesBySource(IPath path) {
 		return librariesBySource.get(path);
+	}
+
+	public ITagLibrary[] getLibrariesArray(IPath path) {
+		ITagLibrary[] result = EMPTY_LIB_ARRAY;
+		synchronized(librariesBySource) {
+			Set<ITagLibrary> libs = librariesBySource.get(path);
+			if(libs!=null) {
+				result = libs.toArray(new ITagLibrary[0]);
+			}
+		}
+		return result;
 	}
 
 	public void addLibrary(ITagLibrary f) {

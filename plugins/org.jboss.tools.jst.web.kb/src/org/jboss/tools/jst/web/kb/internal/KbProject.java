@@ -28,7 +28,6 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
-import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -110,6 +109,14 @@ public class KbProject extends KbObject implements IKbProject {
 			result = StaticLibraries.instance.getLibraries(uri);
 		}
 		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.IKbProject#getTagLibraries(org.eclipse.core.runtime.IPath)
+	 */
+	public ITagLibrary[] getTagLibraries(IPath path) {
+		return libraries.getLibrariesArray(path);
 	}
 
 	/*
@@ -1055,8 +1062,8 @@ public class KbProject extends KbObject implements IKbProject {
 
 	public void printModifications() {
 		System.out.println(project.getName());
-		System.out.println("" + modifications);
+		System.out.println("" + modifications); //$NON-NLS-1$
 		if(validationContext != null)
-			System.out.println("validationContext " + validationContext.getModificationsSinceLastStore());		
+			System.out.println("validationContext " + validationContext.getModificationsSinceLastStore()); //$NON-NLS-1$
 	}
 }
