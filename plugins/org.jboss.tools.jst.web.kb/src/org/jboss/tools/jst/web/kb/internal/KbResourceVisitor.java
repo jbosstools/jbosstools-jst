@@ -2,6 +2,7 @@ package org.jboss.tools.jst.web.kb.internal;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -152,14 +153,18 @@ public class KbResourceVisitor implements IResourceVisitor {
 		if (jsf2resourcesFolder == null || jsf2resourcesProcessed) return;
 		jsf2resourcesProcessed = true;
 		JSF2ResourcesScanner scanner = new JSF2ResourcesScanner();
-		LoadedDeclarations c = null;
+		Map<IPath,LoadedDeclarations> result = null;
 		try {
-			c = scanner.parse((IFolder) jsf2resourcesFolder, p);
+			result = scanner.parse((IFolder) jsf2resourcesFolder, p);
 		} catch (ScannerException e) {
 			WebKbPlugin.getDefault().logError(e);
 		}
-		if (c != null)
-			componentsLoaded(c, jsf2resourcesFolder);
+		if (result != null) {
+			for (IPath path: result.keySet()) {
+				LoadedDeclarations c = result.get(path);
+				p.registerComponents(c, path);
+			}
+		}
 	}
 	
 	void componentsLoaded(LoadedDeclarations c, IResource resource) {

@@ -1,5 +1,8 @@
 package org.jboss.tools.jst.web.kb.internal.scanner;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -54,29 +57,34 @@ public class JSF2ResourcesScanner implements IFileScanner {
 		return null;
 	}
 
-	public LoadedDeclarations parse(IFolder f, IKbProject sp) throws ScannerException {
+	public Map<IPath, LoadedDeclarations>  parse(IFolder f, IKbProject sp) throws ScannerException {
 		XModel model = InnerModelHelper.createXModel(f.getProject());
 		if(model == null) return null;
 		XModelObject o = EclipseResourceUtil.getObjectByResource(model, f);
-		return parse(o, f.getFullPath(), sp);
+		return parse(o, f.getFullPath(), sp, false);
 	}
 
 	//XModelObject must represent folder named 'resources' under web root.
-	public LoadedDeclarations parse(XModelObject o, IPath source, IKbProject sp) {
+	public Map<IPath, LoadedDeclarations> parse(XModelObject o, IPath source, IKbProject sp, boolean lib) {
 		if(o == null) return null;
-
-		LoadedDeclarations ds = new LoadedDeclarations();
-		processFolder(o, ds, source, URI_PREFIX);
-		return ds;
+		Map<IPath, LoadedDeclarations> result = new HashMap<IPath, LoadedDeclarations>();
+		processFolder(o, result, source, URI_PREFIX, lib);
+		return result;
 	}
 
-	void processFolder(XModelObject o, LoadedDeclarations ds, IPath source, String uriPrefix) {
+	void processFolder(XModelObject o, Map<IPath, LoadedDeclarations> result, IPath source, String uriPrefix, boolean lib) {
+		LoadedDeclarations ds = result.get(source);
+		if(ds == null) {
+			ds = new LoadedDeclarations();
+			result.put(source, ds);
+		}
 		CompositeTagLibrary library = null;
 		XModelObject[] cs = o.getChildren();
 		for (XModelObject c: cs) {
 			if(c.getFileType() == XModelObject.FOLDER) {
 				String n = c.getAttributeValue(XModelObjectConstants.ATTR_NAME);
-				processFolder(c, ds, source, uriPrefix + "/" + n); //$NON-NLS-1$
+				IPath source1 = lib ? source : source.append(n);
+				processFolder(c, result, source1, uriPrefix + "/" + n, lib); //$NON-NLS-1$
 			}
 			String entity = c.getModelEntity().getName();
 			if(ENT_COMPOSITE_COMPONENT.equals(entity)) {

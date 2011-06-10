@@ -10,6 +10,8 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal.scanner;
 
+import java.util.Map;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.jboss.tools.common.model.XModel;
@@ -96,8 +98,8 @@ public class LibraryScanner implements IFileScanner {
 				}
 				if(tld.getFileType() == XModelObject.FOLDER && tld.getAttributeValue(XModelObjectConstants.ATTR_NAME).equals("resources")) { //$NON-NLS-1$
 					JSF2ResourcesScanner s = new JSF2ResourcesScanner();
-					LoadedDeclarations ds1 = s.parse(tld, path, sp);
-					if(ds1 != null) ds.add(ds1);
+					Map<IPath,LoadedDeclarations> ds1 = s.parse(tld, path, sp, true);
+					if(ds1 != null && ds1.size() > 0) ds.add(ds1.values().iterator().next());
 				} else if(isMyFacesMetadata(tld)) {
 					MyFacesScanner s = new MyFacesScanner();
 					LoadedDeclarations ds1 = s.parse(tld, path, sp);
