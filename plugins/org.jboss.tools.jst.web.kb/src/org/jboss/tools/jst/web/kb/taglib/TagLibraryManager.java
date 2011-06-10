@@ -16,6 +16,7 @@ import java.net.URL;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.wst.xml.core.internal.XMLCorePlugin;
 import org.jboss.tools.jst.web.kb.IKbProject;
 import org.jboss.tools.jst.web.kb.KbProjectFactory;
@@ -41,16 +42,16 @@ public class TagLibraryManager {
 	}
 
 	/**
-	 * Returns all the tag libraries which defined in the file (TLD, facelet tag lib, composite component, etc.)
+	 * Returns all the tag libraries which defined in the resource (TLD, facelet tag lib, etc.)
 	 * @param file
 	 * @return
 	 */
-	public static ITagLibrary[] getLibraries(IFile file) {
-		IKbProject kbProject = KbProjectFactory.getKbProject(file.getProject(), true);
+	public static ITagLibrary[] getLibraries(IResource resource) {
+		IKbProject kbProject = KbProjectFactory.getKbProject(resource.getProject(), true);
 		if(kbProject == null) {
 			return new ITagLibrary[0];
 		}
-		return kbProject.getTagLibraries(file.getFullPath());
+		return kbProject.getTagLibraries(resource.getFullPath());
 	}
 
 	/**
