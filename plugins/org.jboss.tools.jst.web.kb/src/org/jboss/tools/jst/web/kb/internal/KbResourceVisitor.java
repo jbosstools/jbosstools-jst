@@ -164,6 +164,7 @@ public class KbResourceVisitor implements IResourceVisitor {
 				LoadedDeclarations c = result.get(path);
 				p.registerComponents(c, path);
 			}
+			p.updateChildPaths(jsf2resourcesFolder.getFullPath(), result.keySet());
 		}
 	}
 	

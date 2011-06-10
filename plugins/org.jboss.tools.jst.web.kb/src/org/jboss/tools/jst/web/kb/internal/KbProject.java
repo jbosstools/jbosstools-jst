@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -803,6 +804,22 @@ public class KbProject extends KbObject implements IKbProject {
 		fireChanges(changes, false);
 		
 		firePathRemovedToDependentProjects(source);
+	}
+
+	/**
+	 * Used for cleaning jsf2 resources - because they now are loaded all at once,
+	 * starting at root.
+	 * 
+	 * @param path
+	 * @param cs
+	 */
+	public void updateChildPaths(IPath path, Collection<IPath> cs) {
+		IPath[] ps = sourcePaths2.keySet().toArray(new IPath[0]);
+		for (IPath p: ps) {
+			if(!cs.contains(p) && !p.equals(path) && path.isPrefixOf(p)) {
+				pathRemoved(p);
+			}
+		}
 	}
 
 	public void firePathRemovedToDependentProjects(IPath source) {
