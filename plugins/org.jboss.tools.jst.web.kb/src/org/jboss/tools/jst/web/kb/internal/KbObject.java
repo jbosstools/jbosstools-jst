@@ -124,7 +124,7 @@ public class KbObject implements Cloneable {
 	
 	protected void adopt(KbObject child) {
 		if(child.getKbProject() != null && child.getKbProject() != getKbProject()) return;
-		((KbObject)child).setParent(this);
+		child.setParent(this);
 	}
 
 	
@@ -137,7 +137,7 @@ public class KbObject implements Cloneable {
 	 * @return list of changes
 	 */
 	public List<Change> merge(KbObject s) {
-		KbObject o = (KbObject)s;
+		KbObject o = s;
 		source = o.source;
 		id = o.id;
 		resource = o.resource;

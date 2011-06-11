@@ -12,8 +12,19 @@ package org.jboss.tools.jst.web.kb.internal.taglib.composite;
 
 import org.jboss.tools.jst.web.kb.internal.KbXMLStoreConstants;
 import org.jboss.tools.jst.web.kb.internal.taglib.AbstractComponent;
+import org.jboss.tools.jst.web.kb.internal.taglib.StaticAttribute;
+import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 
 public class CompositeComponent extends AbstractComponent {
+
+	public static final String[] STATIC_ATTRIBUTES = new String[] {"id", "rendered"}; //$NON-NLS-1$ //$NON-NLS-2$
+
+	public CompositeComponent() {
+		for (String attribute : STATIC_ATTRIBUTES) {
+			IAttribute staticAttribute = new StaticAttribute(this, attribute);
+			attributes.put(attribute, staticAttribute);
+		}
+	}
 
 	/*
 	 * (non-Javadoc)

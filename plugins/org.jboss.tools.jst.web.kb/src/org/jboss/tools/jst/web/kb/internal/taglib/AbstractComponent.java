@@ -25,7 +25,6 @@ import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.common.xml.XMLUtilities;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
-import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.internal.KbObject;
 import org.jboss.tools.jst.web.kb.internal.KbXMLStoreConstants;
 import org.jboss.tools.jst.web.kb.internal.taglib.composite.CompositeAttribute;
@@ -52,7 +51,7 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	protected String description;
 	protected String name;
 	protected boolean hasExtendedAttributes = false;
-	private Map<String, IAttribute> attributes = new HashMap<String, IAttribute>();
+	protected Map<String, IAttribute> attributes = new HashMap<String, IAttribute>();
 	private IAttribute[] attributesArray;
 	private Map<String, IAttribute> preferableAttributes = new HashMap<String, IAttribute>();
 	private IAttribute[] preferableAttributesArray;
@@ -347,7 +346,9 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	 * @param attribute
 	 */
 	public void addAttribute(IAttribute attribute) {
-		adopt((KbObject)attribute);
+		if(attribute instanceof KbObject) {
+			adopt((KbObject)attribute);
+		}
 		attributes.put(attribute.getName(), attribute);
 		if(attribute.isExtended()) {
 			hasExtendedAttributes = true;
@@ -417,7 +418,9 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		copy.requiredAttributes = new HashMap<String, IAttribute>();
 		IAttribute[] as = getAttributes();
 		for (IAttribute a: as) {
-			copy.addAttribute(((AbstractAttribute)a).clone());
+			if(a instanceof AbstractAttribute) {
+				copy.addAttribute(((AbstractAttribute)a).clone());
+			}
 			if(a.isExtended()) {
 				copy.hasExtendedAttributes = true;
 			}
@@ -478,28 +481,36 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	 */
 	public void mergeAttributes(AbstractComponent c, Change children) {
 		Map<Object,AbstractAttribute> attributeMap = new HashMap<Object, AbstractAttribute>();
-		for (IAttribute a: getAttributes()) attributeMap.put(((KbObject)a).getId(), (AbstractAttribute)a);
+		for (IAttribute a: getAttributes()) {
+			if(a instanceof AbstractAttribute) {
+				attributeMap.put(((KbObject)a).getId(), (AbstractAttribute)a);
+			}
+		}
 		for (IAttribute a: c.getAttributes()) {
-			AbstractAttribute loaded = (AbstractAttribute)a;
-			AbstractAttribute current = attributeMap.remove(loaded.getId());
-			if(current == null) {
-				addAttribute(loaded);
-				Change change = new Change(this, null, null, loaded);
-				children.addChildren(Change.addChange(null, change));
-			} else {
-				removeAttribute(current);
-				List<Change> rc = current.merge(loaded);
-				if(rc != null) children.addChildren(rc);
-				addAttribute(current);
+			if(a instanceof AbstractAttribute) {
+				AbstractAttribute loaded = (AbstractAttribute)a;
+				AbstractAttribute current = attributeMap.remove(loaded.getId());
+				if(current == null) {
+					addAttribute(loaded);
+					Change change = new Change(this, null, null, loaded);
+					children.addChildren(Change.addChange(null, change));
+				} else {
+					removeAttribute(current);
+					List<Change> rc = current.merge(loaded);
+					if(rc != null) children.addChildren(rc);
+					addAttribute(current);
+				}
 			}
 		}
 		for (IAttribute a: attributeMap.values()) {
-			AbstractAttribute removed = (AbstractAttribute)a;
-			if(attributes.get(removed.getName()) == removed) {
-				attributes.remove(removed.getName());
-				Change change = new Change(this, null, removed, null);
-				children.addChildren(Change.addChange(null, change));
-				clearAttributeArrays();
+			if(a instanceof AbstractAttribute) {
+				AbstractAttribute removed = (AbstractAttribute)a;
+				if(attributes.get(removed.getName()) == removed) {
+					attributes.remove(removed.getName());
+					Change change = new Change(this, null, removed, null);
+					children.addChildren(Change.addChange(null, change));
+					clearAttributeArrays();
+				}
 			}
 		}
 	}
@@ -526,7 +537,9 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		}
 
 		for (IAttribute c: getAttributes()) {
-			((KbObject)c).toXML(element, context);
+			if(c instanceof KbObject) {
+				((KbObject)c).toXML(element, context);
+			}
 		}
 
 		return element;
