@@ -102,6 +102,7 @@
 	<contexttype id="FACELETS_PAGE_CONTEXT_TYPE">
 		<contenttype id="org.eclipse.wst.html.core.htmlsource" />
 		<contenttype id="jsf.facelet" />
+		<contenttype id="jsf.facelet.composite" />
 	</contexttype>
 
 	<contexttype id="XML_PAGE_CONTEXT_TYPE">
