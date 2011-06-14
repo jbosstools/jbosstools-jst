@@ -25,6 +25,7 @@ import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.jface.text.ITextViewerExtension5;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.TextEvent;
 import org.eclipse.jface.text.contentassist.ContentAssistant;
@@ -1026,7 +1027,18 @@ public class JSPTextEditor extends StructuredTextEditor implements
 
 	private int getPosition(int x, int y) {
 		ISourceViewer v = getSourceViewer();
-		return v == null ? 0 : getPosition(v.getTextWidget(), x, y);
+		int result = 0;
+		if(v != null) {
+			result = getPosition(v.getTextWidget(), x, y);
+			if (v instanceof ITextViewerExtension5) {
+			    ITextViewerExtension5 ext = (ITextViewerExtension5) v;
+			    int off = ext.widgetOffset2ModelOffset(result);
+			    if (off >= 0) {
+			    	result = off;
+			    }
+			}
+		}
+		return result;
 	}
 
 	private int getPosition(StyledText t, int x, int y) {
