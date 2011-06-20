@@ -14,7 +14,9 @@ package org.jboss.tools.jst.web.ui.internal.preferences;
 import java.util.ArrayList;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jdt.internal.ui.preferences.OptionsConfigurationBlock;
 import org.eclipse.jdt.internal.ui.preferences.ScrolledPageContent;
+import org.eclipse.jdt.internal.ui.preferences.OptionsConfigurationBlock.Key;
 import org.eclipse.jdt.internal.ui.wizards.IStatusChangeListener;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;
@@ -30,6 +32,8 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
 import org.jboss.tools.common.preferences.SeverityPreferences;
 import org.jboss.tools.common.ui.preferences.SeverityConfigurationBlock;
+import org.jboss.tools.common.ui.preferences.SeverityConfigurationBlock.OptionDescription;
+import org.jboss.tools.common.ui.preferences.SeverityConfigurationBlock.SectionDescription;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.preferences.ELSeverityPreferences;
 
@@ -64,10 +68,8 @@ public class ELValidatorConfigurationBlock extends SeverityConfigurationBlock {
 
 	private static Key[] getKeys() {
 		ArrayList<Key> keys = new ArrayList<Key>();
-		for (int i = 0; i < ALL_SECTIONS.length; i++) {
-			for (int j = 0; j < ALL_SECTIONS[i].options.length; j++) {
-				keys.add(ALL_SECTIONS[i].options[j].key);
-			}
+		for (SectionDescription s: ALL_SECTIONS) {
+			s.collectKeys(keys);
 		}
 		keys.add(getKey(WebKbPlugin.PLUGIN_ID, ELSeverityPreferences.CHECK_VARS));
 		keys.add(getKey(WebKbPlugin.PLUGIN_ID, ELSeverityPreferences.RE_VALIDATE_UNRESOLVED_EL));
@@ -97,79 +99,62 @@ public class ELValidatorConfigurationBlock extends SeverityConfigurationBlock {
 
 	@Override
 	protected Composite createStyleTabContent(Composite folder) {
-		int nColumns = 3;
+		Composite result = super.createStyleTabContent(folder);
+		updateELCombox();
+		return result;
+	}
 
-		final ScrolledPageContent sc1 = new ScrolledPageContent(folder);
+	@Override
+	protected void createSection(PreferenceTreeNode parent, SectionDescription section, Composite composite, int nColumns, int defaultIndent) {
+		String label = section.getLabel(); 
 
-		Composite composite = sc1.getBody();
+		Key twistieKey = OptionsConfigurationBlock.getLocalKey(label.replace(' ', '_'));
+		PreferenceTreeNode treeSection = fFilteredPrefTree.addExpandableComposite(composite, label, nColumns, twistieKey, parent, false);
+		ExpandableComposite excomposite = getExpandableComposite(twistieKey);
+		Composite inner = createInnerComposite(excomposite, nColumns, composite.getFont());
+		
+		for (SectionDescription s: section.getSections()) {
+			createSection(treeSection, s, inner, nColumns, defaultIndent);
+		}
 
-		addMaxNumberOfMarkersField(composite);
-
-		addWrongBuilderOrderField(composite);
-
-		GridLayout layout= new GridLayout(nColumns, false);
-		layout.marginHeight= 0;
-		layout.marginWidth= 0;
-		composite.setLayout(layout);
-
-		Label description= new Label(composite, SWT.LEFT | SWT.WRAP);
-		description.setFont(description.getFont());
-		description.setText(getCommonDescription()); 
-		description.setLayoutData(new GridData(GridData.BEGINNING, GridData.CENTER, true, false, nColumns - 1, 1));
-
-		int defaultIndent = 0;
-
-		for (int i = 0; i < ALL_SECTIONS.length; i++) {
-			SectionDescription section = ALL_SECTIONS[i];
-			String label = section.label; 
-			ExpandableComposite excomposite = createStyleSection(composite, label, nColumns);
-
-			Composite inner = new Composite(excomposite, SWT.NONE);
-			inner.setFont(composite.getFont());
-			inner.setLayout(new GridLayout(nColumns, false));
-			excomposite.setClient(inner);
-
-			for (int j = 0; j < section.options.length; j++) {
-				OptionDescription option = section.options[j];
-				label = option.label;
-				Combo combo = addComboBox(inner, label, option.key, errorWarningIgnore, errorWarningIgnoreLabels, defaultIndent);
-				if(option.label == ELSeverityPreferencesMessages.JSFValidatorConfigurationBlock_pb_unknownElVariableName_label) {
-					elVariablesCombo = combo;
-					combo.addSelectionListener(new SelectionListener(){
-						public void widgetDefaultSelected(SelectionEvent e) {
-							updateELCombox();
-						}
-						public void widgetSelected(SelectionEvent e) {
-							updateELCombox();
-						}
-					});
-				} else if(option.label == ELSeverityPreferencesMessages.JSFValidatorConfigurationBlock_pb_unknownElVariablePropertyName_label) {
-					elPropertiesCombo = combo;
-					combo.addSelectionListener(new SelectionListener(){
-						public void widgetDefaultSelected(SelectionEvent e) {
-							updateELCombox();
-						}
-						public void widgetSelected(SelectionEvent e) {
-							updateELCombox();
-						}
-					});
-				}
-			}
-
-			if(section==SECTION_EL) {
-				label = ELSeverityPreferencesMessages.JSFValidatorConfigurationBlock_pb_checkVars_label; 
-				recognizeVarsCheckBox = addCheckBox(inner, label, getKey(WebKbPlugin.PLUGIN_ID, ELSeverityPreferences.CHECK_VARS), enableDisableValues, defaultIndent);
-
-				label = ELSeverityPreferencesMessages.JSFValidatorConfigurationBlock_pb_revalidateUnresolvedEl_label; 
-				revalidateUnresolvedElCheckBox = addCheckBox(inner, label, getKey(WebKbPlugin.PLUGIN_ID, ELSeverityPreferences.RE_VALIDATE_UNRESOLVED_EL), enableDisableValues, defaultIndent);
+		for (OptionDescription option: section.getOptions()) {
+			label = option.label;
+			fFilteredPrefTree.addComboBox(inner, label, option.key, errorWarningIgnore, errorWarningIgnoreLabels, defaultIndent, treeSection);
+			Combo combo = getComboBox(option.key);
+			if(option.label == ELSeverityPreferencesMessages.JSFValidatorConfigurationBlock_pb_unknownElVariableName_label) {
+				elVariablesCombo = combo;
+				combo.addSelectionListener(new SelectionListener(){
+					public void widgetDefaultSelected(SelectionEvent e) {
+						updateELCombox();
+					}
+					public void widgetSelected(SelectionEvent e) {
+						updateELCombox();
+					}
+				});
+			} else if(option.label == ELSeverityPreferencesMessages.JSFValidatorConfigurationBlock_pb_unknownElVariablePropertyName_label) {
+				elPropertiesCombo = combo;
+				combo.addSelectionListener(new SelectionListener(){
+					public void widgetDefaultSelected(SelectionEvent e) {
+						updateELCombox();
+					}
+					public void widgetSelected(SelectionEvent e) {
+						updateELCombox();
+					}
+				});
 			}
 		}
 
-		restoreSectionExpansionStates(getDialogSettings());
+		if(section == SECTION_EL) {
+			label = ELSeverityPreferencesMessages.JSFValidatorConfigurationBlock_pb_checkVars_label; 
+			Key key = getKey(WebKbPlugin.PLUGIN_ID, ELSeverityPreferences.CHECK_VARS); 
+			PreferenceTreeNode node = fFilteredPrefTree.addCheckBox(inner, label, key, enableDisableValues, defaultIndent, treeSection);
+			recognizeVarsCheckBox = getCheckBox(key);
 
-		updateELCombox();
-
-		return sc1;
+			label = ELSeverityPreferencesMessages.JSFValidatorConfigurationBlock_pb_revalidateUnresolvedEl_label;
+			key = getKey(WebKbPlugin.PLUGIN_ID, ELSeverityPreferences.RE_VALIDATE_UNRESOLVED_EL);
+			node = fFilteredPrefTree.addCheckBox(inner, label, key, enableDisableValues, defaultIndent, treeSection);
+			revalidateUnresolvedElCheckBox = getCheckBox(key);
+		}
 	}
 
 	@Override
