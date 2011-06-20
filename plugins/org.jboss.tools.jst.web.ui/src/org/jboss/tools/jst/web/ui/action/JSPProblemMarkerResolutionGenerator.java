@@ -42,6 +42,8 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 	private static final String HTML_VALIDATOR_MARKER="org.eclipse.wst.html.core.validationMarker"; //$NON-NLS-1$
 	private static final String JSP_VALIDATOR_MARKER="org.eclipse.jst.jsp.core.validationMarker"; //$NON-NLS-1$
 	
+	private static final String UNKNOWN_TAG = "Unknown tag"; //$NON-NLS-1$
+	
 	public static HashMap<String, String> libs = new HashMap<String, String>();
 	static{
 		libs.put("s", "http://jboss.com/products/seam/taglib");  //$NON-NLS-1$//$NON-NLS-2$
@@ -84,7 +86,7 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 			return false;
 		final int end = attribute.intValue();
 		
-		if(!message.startsWith("Unknown tag")) //$NON-NLS-1$
+		if(!message.startsWith(UNKNOWN_TAG)) //$NON-NLS-1$
 			return false;
 		
 		String prefix = getPrifix(message);
@@ -163,8 +165,8 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 
 	public boolean hasResolutions(IMarker marker) {
 		try{
-			if(isOurCase(marker))
-				return true;
+			String message = (String)marker.getAttribute(IMarker.MESSAGE);
+			return message.startsWith(UNKNOWN_TAG);
 		}catch(CoreException ex){
 			WebUiPlugin.getPluginLog().logError(ex);
 		}

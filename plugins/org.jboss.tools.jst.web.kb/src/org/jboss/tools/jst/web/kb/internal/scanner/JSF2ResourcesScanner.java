@@ -9,8 +9,11 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.jboss.tools.common.model.XModel;
+import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.XModelObjectConstants;
+import org.jboss.tools.common.model.filesystems.impl.FolderImpl;
+import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.project.ext.IValueInfo;
 import org.jboss.tools.common.model.project.ext.impl.ValueInfo;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
@@ -100,6 +103,13 @@ public class JSF2ResourcesScanner implements IFileScanner {
 				IResource r = (IResource)c.getAdapter(IResource.class);
 				if(r instanceof IFile) {
 					component.setSourcePath(r.getFullPath());
+					// 
+					try {
+						((FolderImpl)c.getParent()).updateChildFile(c, r.getLocation().toFile());
+					} catch (XModelException e) {
+						ModelPlugin.getPluginLog().logError(e);
+					}
+					//
 				}
 				component.setName(createValueInfo(c.getAttributeValue(XModelObjectConstants.ATTR_NAME)));
 				library.addComponent(component);
