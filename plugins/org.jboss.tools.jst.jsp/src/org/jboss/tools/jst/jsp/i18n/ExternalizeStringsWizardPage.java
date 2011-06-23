@@ -45,6 +45,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wst.xml.core.internal.document.AttrImpl;
 import org.eclipse.wst.xml.core.internal.document.TextImpl;
+import org.jboss.tools.common.model.loaders.impl.EncodedProperties;
 import org.jboss.tools.common.model.ui.ModelUIImages;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.bundle.BundleMap;
@@ -384,8 +385,13 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 					text = stringToUpdate;
 				}
 			}
-			propsValue.setText(text);
+			/*
+			 * https://issues.jboss.org/browse/JBIDE-9203
+			 * Replace special characters with their string representation.
+			 * Key should be generated first.
+			 */
 			propsKey.setText(ExternalizeStringsUtils.generatePropertyKey(text));
+			propsValue.setText(EncodedProperties.saveConvert(text, true));
 			/*
 			 * Initialize bundle messages field
 			 */

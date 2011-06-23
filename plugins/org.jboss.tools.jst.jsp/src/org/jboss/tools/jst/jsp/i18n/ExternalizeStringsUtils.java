@@ -17,6 +17,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -95,10 +97,12 @@ import org.w3c.dom.NodeList;
  */
 public class ExternalizeStringsUtils {
 	
+	public static final String NONAME = "noname";  //$NON-NLS-1$
 	public static final char[] REPLACED_CHARACTERS = new char[] {'~', '!', '@', '#',
 			'$', '%', '^', '&', '*', '(', ')', '-', '+', '=', '{', '}', '[', ']', ':', ';', ',', '.', '?', '\\', '/', '"', '\''};
 	public static final char[] LINE_DELEMITERS = new char[] {'\r', '\n', '\t'};
-
+	private static CharsetEncoder asciiEncoder;
+	
 	/**
 	 * Checks that the user has selected a correct string.
 	 *  
@@ -340,11 +344,7 @@ public class ExternalizeStringsUtils {
 			} finally {
 				in = null;
 			}
-			
-			} else {
-				JspEditorPlugin.getDefault().logError(
-						"Bundle File '" + propertiesFile + "' does not exist!"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
+		}
 		return properties;
 	}
 	
@@ -377,9 +377,6 @@ public class ExternalizeStringsUtils {
 			} finally {
 				fr = null;
 			}
-		} else {
-			JspEditorPlugin.getDefault().logError(
-					"Bundle File '" + propertiesFile + "' does not exist!"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		return properties;
 	}
@@ -434,6 +431,17 @@ public class ExternalizeStringsUtils {
 	 * @return the result string
 	 */
 	public static String generatePropertyKey(String text) {
+		/*
+		 * If text cannot be represented in standard eclipse encoding
+		 * change the key name to "noname"
+		 */
+		if (null == asciiEncoder) {
+			asciiEncoder = Charset.forName("ISO-8859-1").newEncoder(); //$NON-NLS-1$
+		}
+		if (!asciiEncoder.canEncode(text)) {
+			text = NONAME;
+		}
+		
 		String result = text.trim();
 		/*
 		 * Update text string field.
