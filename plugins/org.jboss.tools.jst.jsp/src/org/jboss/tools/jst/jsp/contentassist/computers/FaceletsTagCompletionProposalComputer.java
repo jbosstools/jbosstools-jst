@@ -13,15 +13,18 @@ package org.jboss.tools.jst.jsp.contentassist.computers;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.wst.html.core.internal.contentmodel.HTMLCMDocument;
 import org.eclipse.wst.html.core.internal.provisional.HTMLCMProperties;
 import org.eclipse.wst.sse.core.internal.provisional.INodeNotifier;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
+import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
 import org.eclipse.wst.sse.ui.contentassist.CompletionProposalInvocationContext;
 import org.eclipse.wst.sse.ui.internal.contentassist.ContentAssistUtils;
 import org.eclipse.wst.xml.core.internal.contentmodel.CMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
+import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 import org.eclipse.wst.xml.core.internal.ssemodelquery.ModelQueryAdapter;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
 import org.jboss.tools.common.el.core.resolver.ELContext;
@@ -152,6 +155,26 @@ public class FaceletsTagCompletionProposalComputer extends JspTagCompletionPropo
 		if (prefix != null && prefix.isELStarted()) {
 			return;
 		}
+		
+		// This is a workaround for issues JBIDE-7100 and JBIDE-9092 ===>>>  
+		ITextViewer textViewer = context.getViewer();
+		IndexedRegion treeNode = ContentAssistUtils.getNodeAt(textViewer, context.getInvocationOffset());
+
+		Node node = (Node) treeNode;
+		while ((node != null) && (node.getNodeType() == Node.TEXT_NODE) && (node.getParentNode() != null)) {
+			node = node.getParentNode();
+		}
+		IDOMNode xmlnode = (IDOMNode) node;
+
+		ITextRegion completionRegion = getCompletionRegion(context.getInvocationOffset(), node);
+
+		String regionType = completionRegion.getType();
+		if (regionType == DOMRegionContext.XML_END_TAG_OPEN) {
+			// Disable tag insertion proposals if it's end tag open region of <style /> tag
+			if (xmlnode != null && xmlnode.getNodeName() != null && xmlnode.getNodeName().equalsIgnoreCase("style")) //$NON-NLS-1$
+				return;
+		}
+		// This is a workaround for issues JBIDE-7100 and JBIDE-9092 <<<===  
 		
 		addTagNameProposals(contentAssistRequest, childPosition, true, context);
 	}
