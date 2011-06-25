@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.kb.internal.validation;
 
 import java.text.MessageFormat;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.core.resources.IMarker;
@@ -76,6 +77,7 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationErrorManager#init(org.eclipse.core.resources.IProject, org.jboss.tools.jst.web.kb.internal.validation.ContextValidationHelper, org.jboss.tools.jst.web.kb.validation.IProjectValidationContext, org.eclipse.wst.validation.internal.provisional.core.IValidator, org.eclipse.wst.validation.internal.provisional.core.IReporter)
 	 */
 	public void init(IProject project, ContextValidationHelper validationHelper, IProjectValidationContext validationContext, IValidator manager, IReporter reporter) {
+		cleanSavedMarkers();
 		setProject(project);
 		setCoreHelper(validationHelper);
 		setValidationManager(manager);
@@ -187,6 +189,51 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 	 */
 	protected abstract String getPreference(IProject project, String preferenceKey);
 
+	private Set<MarkerID> markers = new HashSet<MarkerID>();
+
+	private static class MarkerID {
+
+		String preferenceKey;
+		int length;
+		int offset;
+		String path;
+
+		public MarkerID(String preferenceKey, int length, int offset, String path) {
+			super();
+			this.preferenceKey = preferenceKey;
+			this.length = length;
+			this.offset = offset;
+			this.path = path;
+		}
+
+		@Override
+		public int hashCode() {
+			return toString().hashCode();
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			return obj instanceof MarkerID && toString().equals(obj.toString());
+		}
+
+		@Override
+		public String toString() {
+			return path + ":" + preferenceKey + ":" + length + ":" + offset; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		}
+	}
+
+	/**
+	 * Returns true if the manager should not add a problem markers with the same location and preference key twice.
+	 * @return
+	 */
+	protected boolean shouldCheckDuplicateMarkers() {
+		return false;
+	}
+
+	protected void cleanSavedMarkers() {
+		markers.clear();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.seam.internal.core.validation.IValidationErrorManager#addError(java.lang.String, java.lang.String, java.lang.String[], int, int, org.eclipse.core.resources.IResource)
@@ -199,8 +246,18 @@ public abstract class ValidationErrorManager implements IValidationErrorManager 
 			int severity = IMessage.HIGH_SEVERITY;
 			if (SeverityPreferences.WARNING.equals(preferenceValue)) {
 				severity = IMessage.NORMAL_SEVERITY;
-			} 
-			marker = addError(message, severity, messageArguments, lineNumber, length, offset, target, getDocumentProvider(), getMarkerId(), getMarkerOwner());
+			}
+			if(shouldCheckDuplicateMarkers()) {
+				MarkerID id = new MarkerID(preferenceKey, length, offset, target.getFullPath().toOSString());
+				if(!markers.contains(id)) {
+					marker = addError(message, severity, messageArguments, lineNumber, length, offset, target, getDocumentProvider(), getMarkerId(), getMarkerOwner());
+					if(marker!=null) {
+						markers.add(id);
+					}
+				}
+			} else {
+				marker = addError(message, severity, messageArguments, lineNumber, length, offset, target, getDocumentProvider(), getMarkerId(), getMarkerOwner());
+			}
 		}
 		return marker;
 	}
