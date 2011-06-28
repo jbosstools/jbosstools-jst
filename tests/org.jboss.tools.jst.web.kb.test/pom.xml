@@ -15,4 +15,19 @@
 		<emma.filter>org.jboss.tools.jst.web.kb*</emma.filter>
 		<emma.instrument.bundles>org.jboss.tools.jst.web.kb</emma.instrument.bundles>
 	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.sonatype.tycho</groupId>
+				<artifactId>maven-osgi-test-plugin</artifactId>
+				<configuration>
+					<explodedBundles>
+						<bundle>org.jboss.tools.jst.web.kb</bundle>
+					</explodedBundles>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>
