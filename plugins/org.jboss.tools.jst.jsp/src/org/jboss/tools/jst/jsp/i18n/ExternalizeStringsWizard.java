@@ -114,7 +114,7 @@ public class ExternalizeStringsWizard extends Wizard {
 		if (editor.getEditorInput() instanceof IFileEditorInput) {
 			IProject project = ((IFileEditorInput)editor.getEditorInput()).getFile().getProject();
 			IResource[] src = EclipseUtil.getJavaSourceRoots(project);
-			if (src.length > 0) {
+			if ((src != null) && (src.length > 0)) {
 				containerFullPath = src[0].getFullPath();
 			}
 		} else if (editor.getEditorInput() instanceof IStorageEditorInput) {
