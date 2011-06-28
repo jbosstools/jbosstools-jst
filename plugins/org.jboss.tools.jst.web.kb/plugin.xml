@@ -258,16 +258,16 @@
       <catalogContribution id="default">
          <uri 
             name="http://java.sun.com/jsf/html" 
-            uri="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/tld/html_basic.tld"/>
+            uri="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/tld/html_basic.taglib.xml"/>
          <uri 
             name="http://java.sun.com/jsf/core" 
-            uri="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/tld/jsf_core.tld"/>
+            uri="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/tld/facelets_jsf_core.taglib.xml"/>
          <uri 
             name="http://richfaces.org/rich" 
-            uri="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/tld/rich.tld"/>
+            uri="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/tld/rich.taglib.xml"/>
          <uri 
             name="http://richfaces.org/a4j" 
-            uri="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/tld/ajax4jsf.tld"/>
+            uri="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/tld/a4j.taglib.xml"/>
          <uri 
             name="http://jboss.com/products/seam/taglib" 
             uri="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/tld/s.tld"/>
