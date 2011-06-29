@@ -64,6 +64,7 @@ import org.jboss.tools.common.meta.action.impl.handlers.DefaultCreateHandler;
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.loaders.impl.EncodedProperties;
 import org.jboss.tools.common.model.project.IModelNature;
 import org.jboss.tools.common.model.ui.editors.dnd.DropURI;
 import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
@@ -394,7 +395,7 @@ public class ExternalizeStringsUtils {
 	 * @return the java properties list generated from the reader file
 	 */
 	private static Properties readFileToProperties(Table table, Reader r) {
-		Properties properties = new Properties();
+		EncodedProperties properties = new EncodedProperties();
 		try {
 			properties.load(r);
 			r.close();
@@ -410,6 +411,7 @@ public class ExternalizeStringsUtils {
 		 * Fill in new values
 		 */
 		int k = 0;
+		String value = null;
 		Set<String> keys = properties.stringPropertyNames();
 		List<String> keysList = new ArrayList<String>(keys);  
 		Collections.sort(keysList);
@@ -417,7 +419,13 @@ public class ExternalizeStringsUtils {
 			TableItem tableItem = null;
 			tableItem = new TableItem(table, SWT.BORDER, k);
 			k++;
-			tableItem.setText(new String[] {key, properties.getProperty(key)});
+			value = properties.getProperty(key);
+			if (value != null) {
+				value = value.replaceAll("\t", "\\\\t") //$NON-NLS-1$ //$NON-NLS-2$
+										.replaceAll("\r", "\\\\r") //$NON-NLS-1$ //$NON-NLS-2$
+											.replaceAll("\n", "\\\\n"); //$NON-NLS-1$ //$NON-NLS-2$
+			}
+			tableItem.setText(new String[] {key, value});
 		}
 		return properties;
 	}
