@@ -90,11 +90,12 @@ public class TLDToPaletteHelper {
 		 for (int i = 0; i < as.length; i++) {
 			 if(!TLDUtil.isAttribute(as[i])) continue;
 			 if(!isRequired(as[i])) continue;
-			 sb.append("<b>").append(as[i].getAttributeValue("name")).append("</b>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			 sb.append("<b>").append(as[i].getAttributeValue(XModelObjectConstants.ATTR_NAME)).append("</b>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			 ++k;
 			 if(k < as.length) sb.append(", "); //$NON-NLS-1$
 		 }
 		 for (int i = 0; i < as.length; i++) {
+			 if(!TLDUtil.isAttribute(as[i])) continue;
 			 if(isRequired(as[i])) continue;
 			 sb.append(as[i].getAttributeValue(XModelObjectConstants.ATTR_NAME));
 			 ++k;
