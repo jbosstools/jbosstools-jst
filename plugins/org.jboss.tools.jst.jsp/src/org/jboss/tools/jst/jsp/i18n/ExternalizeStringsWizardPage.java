@@ -148,7 +148,6 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 		propsValue = new Text(propsStringGroup, SWT.BORDER);
 		propsValue.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false, 2, 1));
 		propsValue.setText(Constants.EMPTY);
-		propsValue.setEditable(false);
 
 		/*
 		 * Create New File Checkbox
@@ -253,7 +252,19 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 	 * @return a pair <code>key=value</code>
 	 */
 	public String getKeyValuePair() {
-		return propsKey.getText() + Constants.EQUAL + propsValue.getText();
+		/*
+		 * While initializing 'propsValue' field \t\r\n were replaced by \\\\t, etc.
+		 * Now we should return escaped characters, and during saving tha properties
+		 * they will treated as escape symbols as well.
+		 * Otherwise \\\\t string will be put into the properties file.
+		 */
+		String value = propsValue.getText();
+		if (value != null) {
+			value = value.replaceAll("\\\\t", "\t"); //$NON-NLS-1$ //$NON-NLS-2$
+			value = value.replaceAll("\\\\r", "\r"); //$NON-NLS-1$ //$NON-NLS-2$
+			value = value.replaceAll("\\\\n", "\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+		return propsKey.getText() + Constants.EQUAL + EncodedProperties.saveConvert(value, true);
 	}
 	
 	/**
@@ -391,7 +402,16 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 			 * Key should be generated first.
 			 */
 			propsKey.setText(ExternalizeStringsUtils.generatePropertyKey(text));
-			propsValue.setText(EncodedProperties.saveConvert(text, true));
+			/*
+			 * Replaced escaped symbols by strings.
+			 */
+			String value = text;
+			if (value != null) {
+				value = value.replaceAll("\t", "\\\\t"); //$NON-NLS-1$ //$NON-NLS-2$
+				value = value.replaceAll("\r", "\\\\r"); //$NON-NLS-1$ //$NON-NLS-2$
+				value = value.replaceAll("\n", "\\\\n"); //$NON-NLS-1$ //$NON-NLS-2$
+			}
+			propsValue.setText(value);
 			/*
 			 * Initialize bundle messages field
 			 */

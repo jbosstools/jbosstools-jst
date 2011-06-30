@@ -421,9 +421,9 @@ public class ExternalizeStringsUtils {
 			k++;
 			value = properties.getProperty(key);
 			if (value != null) {
-				value = value.replaceAll("\t", "\\\\t") //$NON-NLS-1$ //$NON-NLS-2$
-										.replaceAll("\r", "\\\\r") //$NON-NLS-1$ //$NON-NLS-2$
-											.replaceAll("\n", "\\\\n"); //$NON-NLS-1$ //$NON-NLS-2$
+				value = value.replaceAll("\t", "\\\\t"); //$NON-NLS-1$ //$NON-NLS-2$
+				value = value.replaceAll("\r", "\\\\r"); //$NON-NLS-1$ //$NON-NLS-2$
+				value = value.replaceAll("\n", "\\\\n"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			tableItem.setText(new String[] {key, value});
 		}
