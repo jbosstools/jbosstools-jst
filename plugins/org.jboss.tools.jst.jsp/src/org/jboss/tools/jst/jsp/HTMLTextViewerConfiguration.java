@@ -21,14 +21,24 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jdt.internal.ui.text.correction.JavaCorrectionAssistant;
+import org.eclipse.jface.preference.PreferenceConverter;
+import org.eclipse.jface.text.DefaultInformationControl;
+import org.eclipse.jface.text.IInformationControl;
+import org.eclipse.jface.text.IInformationControlCreator;
 import org.eclipse.jface.text.ITextHover;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.formatter.IContentFormatter;
 import org.eclipse.jface.text.formatter.MultiPassContentFormatter;
 import org.eclipse.jface.text.hyperlink.IHyperlinkDetector;
 import org.eclipse.jface.text.information.IInformationProvider;
+import org.eclipse.jface.text.quickassist.IQuickAssistAssistant;
+import org.eclipse.jface.text.quickassist.QuickAssistAssistant;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
 import org.eclipse.wst.html.core.text.IHTMLPartitions;
 import org.eclipse.wst.html.ui.StructuredTextViewerConfigurationHTML;
@@ -36,11 +46,16 @@ import org.eclipse.wst.html.ui.internal.contentassist.HTMLStructuredContentAssis
 import org.eclipse.wst.sse.ui.contentassist.CompletionProposalInvocationContext;
 import org.eclipse.wst.sse.ui.internal.ExtendedConfigurationBuilder;
 import org.eclipse.wst.sse.ui.internal.SSEUIPlugin;
+import org.eclipse.wst.sse.ui.internal.correction.CompoundQuickAssistProcessor;
+import org.eclipse.wst.sse.ui.internal.derived.HTMLTextPresenter;
 import org.eclipse.wst.sse.ui.internal.format.StructuredFormattingStrategy;
+import org.eclipse.wst.sse.ui.internal.preferences.EditorPreferenceNames;
 import org.eclipse.wst.sse.ui.internal.taginfo.AnnotationHoverProcessor;
 import org.eclipse.wst.sse.ui.internal.taginfo.ProblemAnnotationHoverProcessor;
 import org.eclipse.wst.sse.ui.internal.taginfo.TextHoverManager;
+import org.eclipse.wst.sse.ui.internal.util.EditorUtility;
 import org.jboss.tools.common.text.ext.hyperlink.HyperlinkDetector;
+import org.jboss.tools.common.text.xml.JBDSQuickAssistProcessor;
 import org.jboss.tools.common.text.xml.contentassist.ProposalSorter;
 import org.jboss.tools.common.text.xml.xpl.MarkerProblemAnnotationHoverProcessor;
 import org.jboss.tools.jst.jsp.format.HTMLFormatProcessor;
@@ -255,5 +270,44 @@ public class HTMLTextViewerConfiguration extends
 			}
 		}
 		return contentAssisteProcessors;
+	}
+	
+	private IQuickAssistAssistant fQuickAssistant = null;
+	
+	private Color getColor(String key) {
+		RGB rgb = PreferenceConverter.getColor(fPreferenceStore, key);
+		return EditorUtility.getColor(rgb);
+	}
+	
+	@Override
+	public IQuickAssistAssistant getQuickAssistAssistant(ISourceViewer sourceViewer) {
+		if (fQuickAssistant == null) {
+			IQuickAssistAssistant assistant = new QuickAssistAssistant();
+			assistant.setQuickAssistProcessor(new JBDSQuickAssistProcessor());
+			assistant.setInformationControlCreator(getQuickAssistAssistantInformationControlCreator());
+
+			if (fPreferenceStore != null) {
+				Color color = getColor(EditorPreferenceNames.CODEASSIST_PROPOSALS_BACKGROUND);
+				assistant.setProposalSelectorBackground(color);
+
+				color = getColor(EditorPreferenceNames.CODEASSIST_PROPOSALS_FOREGROUND);
+				assistant.setProposalSelectorForeground(color);
+			}
+			fQuickAssistant = assistant;
+		}
+		return fQuickAssistant;
+	}
+	
+	/**
+	 * Returns the information control creator for the quick assist assistant.
+	 * 
+	 * @return the information control creator
+	 */
+	private IInformationControlCreator getQuickAssistAssistantInformationControlCreator() {
+		return new IInformationControlCreator() {
+			public IInformationControl createInformationControl(Shell parent) {
+				return new DefaultInformationControl(parent, new HTMLTextPresenter(true));
+			}
+		};
 	}
 }
