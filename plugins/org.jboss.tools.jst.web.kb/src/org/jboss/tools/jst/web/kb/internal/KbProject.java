@@ -87,6 +87,8 @@ public class KbProject extends KbObject implements IKbProject {
 	
 	int modifications = 0;
 
+	Map<String, Object> extensionModels = new HashMap<String, Object>();
+
 	public KbProject() {}
 
 	public void setMock() {
@@ -1082,5 +1084,13 @@ public class KbProject extends KbObject implements IKbProject {
 		System.out.println("" + modifications); //$NON-NLS-1$
 		if(validationContext != null)
 			System.out.println("validationContext " + validationContext.getModificationsSinceLastStore()); //$NON-NLS-1$
+	}
+
+	public Object getExtensionModel(String id) {
+		return extensionModels.get(id);
+	}
+
+	public void setExtensionModel(String id, Object model) {
+		extensionModels.put(id, model);
 	}
 }
