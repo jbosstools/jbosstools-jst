@@ -15,7 +15,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -29,14 +28,7 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.jst.j2ee.project.facet.IJ2EEFacetConstants;
-import org.eclipse.wst.common.componentcore.ComponentCore;
-import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
-import org.eclipse.wst.common.project.facet.core.IFacetedProject;
-import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.eclipse.wst.validation.internal.core.ValidationException;
 import org.eclipse.wst.validation.internal.provisional.core.IReporter;
 import org.jboss.tools.common.el.core.ELReference;
@@ -58,7 +50,6 @@ import org.jboss.tools.common.el.core.resolver.JavaMemberELSegmentImpl;
 import org.jboss.tools.common.el.core.resolver.SimpleELContext;
 import org.jboss.tools.common.el.core.resolver.TypeInfoCollector;
 import org.jboss.tools.common.el.core.resolver.Var;
-import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.internal.KbBuilder;
@@ -71,7 +62,7 @@ import org.jboss.tools.jst.web.kb.validation.IValidatingProjectTree;
  * EL Validator
  * @author Alexey Kazakov
  */
-public class ELValidator extends KBValidator {
+public class ELValidator extends WebValidator {
 
 	public static final String ID = "org.jboss.tools.jst.web.kb.ELValidator"; //$NON-NLS-1$
 	public static final String PROBLEM_TYPE = "org.jboss.tools.jst.web.kb.elproblem"; //$NON-NLS-1$
@@ -83,9 +74,6 @@ public class ELValidator extends KBValidator {
 	private ELResolver[] resolvers;
 	protected ELParserFactory mainFactory;
 
-	private IProject currentProject;
-	private IResource[] currentSources;
-	private IContainer webRootFolder;
 	private boolean revalidateUnresolvedELs = false;
 	private boolean validateVars = true;
 
@@ -148,7 +136,6 @@ public class ELValidator extends KBValidator {
 		resolvers = ELResolverFactoryManager.getInstance().getResolvers(project);
 		mainFactory = ELParserUtil.getJbossFactory();
 		validateVars = ELSeverityPreferences.ENABLE.equals(ELSeverityPreferences.getInstance().getProjectPreference(validatingProject, ELSeverityPreferences.CHECK_VARS));
-		currentProject = null;
 	}
 
 	/*
@@ -157,7 +144,6 @@ public class ELValidator extends KBValidator {
 	 */
 	public IStatus validate(Set<IFile> changedFiles, IProject project, ContextValidationHelper validationHelper, IProjectValidationContext context, ValidatorManager manager, IReporter reporter) throws ValidationException {
 		init(project, validationHelper, context, manager, reporter);
-		webRootFolder = null;
 		initRevalidationFlag();
 		IWorkspaceRoot wsRoot = ResourcesPlugin.getWorkspace().getRoot();
 
@@ -224,7 +210,6 @@ public class ELValidator extends KBValidator {
 	 */
 	public IStatus validateAll(IProject project, ContextValidationHelper validationHelper, IProjectValidationContext context, ValidatorManager manager, IReporter reporter) throws ValidationException {
 		init(project, validationHelper, context, manager, reporter);
-		webRootFolder = null;
 		initRevalidationFlag();
 		Set<IFile> files = validationHelper.getProjectSetRegisteredFiles();
 		Set<IFile> filesToValidate = new HashSet<IFile>();
@@ -241,67 +226,6 @@ public class ELValidator extends KBValidator {
 			validateFile(file);
 		}
 		return OK_STATUS;
-	}
-
-	private static final String JAVA_EXT = "java"; //$NON-NLS-1$
-
-	private boolean enabled = true;
-
-	private boolean shouldFileBeValidated(IFile file) {
-		if(!file.isAccessible()) {
-			return false;
-		}
-		IProject project = file.getProject();
-		if(!file.isSynchronized(IResource.DEPTH_ZERO)) {
-			// The resource is out of sync with the file system
-			// Just ignore this resource.
-			return false;
-		}
-		if(!project.equals(currentProject)) {
-			currentProject = project;
-			enabled = isEnabled(project);	
-			if(!enabled) {
-				return false;
-			}
-			if(webRootFolder!=null && !project.equals(webRootFolder.getProject())) {
-				webRootFolder = null;
-			}
-			if(webRootFolder==null) {
-				IFacetedProject facetedProject = null;
-				try {
-					facetedProject = ProjectFacetsManager.create(project);
-				} catch (CoreException e) {
-					WebKbPlugin.getDefault().logError(ELValidationMessages.EL_VALIDATOR_ERROR_VALIDATING, e);
-				}
-				if(facetedProject!=null && facetedProject.getProjectFacetVersion(IJ2EEFacetConstants.DYNAMIC_WEB_FACET)!=null) {
-					IVirtualComponent component = ComponentCore.createComponent(project);
-					if(component!=null) {
-						IVirtualFolder webRootVirtFolder = component.getRootFolder().getFolder(new Path("/")); //$NON-NLS-1$
-						webRootFolder = webRootVirtFolder.getUnderlyingFolder();
-					}
-				}
-			}
-			currentProject = project;
-			currentSources = EclipseResourceUtil.getJavaSourceRoots(project);
-		}
-		if(!enabled) {
-			return false;
-		}
-		// Validate all files from java source folders.
-		for (int i = 0; currentSources!=null && i < currentSources.length; i++) {
-			if(currentSources[i].getLocation().isPrefixOf(file.getLocation())) {
-				return true;
-			}
-		}
-		// If *.java is out of Java Source path then ignore it.
-		if(JAVA_EXT.equalsIgnoreCase(file.getFileExtension())) {
-			return false;
-		}
-		// Otherwise validate only files from Web-Content (in case of WTP project)
-		if(webRootFolder!=null) {
-			return webRootFolder.getLocation().isPrefixOf(file.getLocation());
-		}
-		return true;
 	}
 
 	private int markers;
@@ -553,4 +477,12 @@ public class ELValidator extends KBValidator {
 		return ValidatorManager.validateBuilderOrder(project, getBuilderId(), getId(), ELSeverityPreferences.getInstance());
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.validation.WebValidator#shouldValidateJavaSources()
+	 */
+	@Override
+	protected boolean shouldValidateJavaSources() {
+		return true;
+	}
 }
