@@ -18,6 +18,7 @@ import org.eclipse.core.internal.events.InternalBuilder;
 import org.eclipse.core.internal.resources.BuildConfiguration;
 import org.eclipse.core.resources.IBuildConfiguration;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.QualifiedName;
@@ -124,7 +125,7 @@ public class KbProjectFactory {
 		return mock;
 	}
 
-	static void setProjectToBuilder(KbBuilder builder, IProject project) {
+	public static void setProjectToBuilder(IncrementalProjectBuilder builder, IProject project) {
 		try {
 			Method m = InternalBuilder.class.getDeclaredMethod("setBuildConfig", new Class[]{IBuildConfiguration.class});
 			m.setAccessible(true);

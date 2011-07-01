@@ -20,6 +20,7 @@ import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.osgi.util.NLS;
 import org.jboss.tools.common.el.core.resolver.TypeInfoCollector;
 import org.jboss.tools.jst.web.WebModelPlugin;
@@ -29,6 +30,7 @@ import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.internal.scanner.IFileScanner;
 import org.jboss.tools.jst.web.kb.internal.scanner.LibraryScanner;
 import org.jboss.tools.jst.web.kb.internal.scanner.XMLScanner;
+import org.osgi.framework.Bundle;
 
 /**
  * 
@@ -79,7 +81,7 @@ public class KbBuilder extends IncrementalProjectBuilder {
 	 * @see org.eclipse.core.resource.InternalProjectBuilder#build(int,
 	 *      java.util.Map, org.eclipse.core.runtime.IProgressMonitor)
 	 */
-	protected IProject[] build(int kind, Map args, IProgressMonitor monitor)
+	protected IProject[] build(int kind, Map<String,String> args, IProgressMonitor monitor)
 			throws CoreException {
 		KbProject sp = getKbProject();
 		if(sp == null) {
@@ -126,6 +128,8 @@ public class KbBuilder extends IncrementalProjectBuilder {
 			sp.fireChanges();
 		}
 		resourceVisitor = null;
+	
+		buildExtensionModels(kind, args, monitor);
 
 		return null;
 	}
@@ -169,4 +173,26 @@ public class KbBuilder extends IncrementalProjectBuilder {
 		PageContextFactory.getInstance().cleanUp(getProject());
 	}
 
+	static String[][] builders = {
+		{"org.jboss.tools.jsf", "org.jboss.tools.jsf.jsf2.bean.build.JSF2ProjectBuilder"}
+	};
+
+	void buildExtensionModels(int kind, Map args, IProgressMonitor monitor) throws CoreException {
+		for (int i = 0; i < builders.length; i++) {
+			Bundle b = Platform.getBundle(builders[i][0]);
+			if(b != null) {
+				try {
+					IncrementalProjectBuilder builder = (IncrementalProjectBuilder)b.loadClass(builders[i][1]).newInstance();
+					KbProjectFactory.setProjectToBuilder(builder, getProject());
+					((IIncrementalProjectBuilderExtension)builder).build(kind, args, monitor);
+				} catch (InstantiationException e) {
+					WebKbPlugin.getDefault().logError(e);
+				} catch (IllegalAccessException e) {
+					WebKbPlugin.getDefault().logError(e);
+				} catch (ClassNotFoundException e) {
+					WebKbPlugin.getDefault().logError(e);
+				}
+			}
+		}
+	}
 }
