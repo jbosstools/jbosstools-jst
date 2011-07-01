@@ -16,8 +16,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IMarkerResolution2;
 import org.eclipse.ui.part.FileEditorInput;
@@ -45,7 +45,7 @@ public class AddTLDMarkerResolution implements IMarkerResolution2{
 	}
 
 	public String getLabel() {
-		return Messages.bind(Messages.AddTLDMarkerResolution_Name, resolutionName);
+		return NLS.bind(Messages.AddTLDMarkerResolution_Name, resolutionName);
 	}
 
 	public void run(IMarker marker) {
@@ -68,10 +68,10 @@ public class AddTLDMarkerResolution implements IMarkerResolution2{
 	}
 
 	public String getDescription() {
-		return Messages.AddTLDMarkerResolution_Name;
+		return getLabel();
 	}
 
 	public Image getImage() {
-		return ImageDescriptor.createFromFile(AddTLDMarkerResolution.class,	"images/xstudio/editors/taglibs_file.gif").createImage(); //$NON-NLS-1$
+		return null;//ImageDescriptor.createFromFile(AddTLDMarkerResolution.class,	"images/xstudio/editors/taglibs_file.gif").createImage(); //$NON-NLS-1$
 	}
 }
