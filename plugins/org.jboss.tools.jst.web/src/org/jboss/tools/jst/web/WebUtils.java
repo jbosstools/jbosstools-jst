@@ -84,7 +84,7 @@ public class WebUtils {
 		return (modelNature != null) ? WebProject.getInstance(modelNature.getModel()).getWebRootLocation() : null;
 	}
 
-	public static IContainer[] getWebRootFolders(IProject project) {
+	public static IContainer[] getWebRootFolders(IProject project, boolean ignoreTarget) {
 		IFacetedProject facetedProject = null;
 		try {
 			facetedProject = ProjectFacetsManager.create(project);
@@ -95,10 +95,23 @@ public class WebUtils {
 			IVirtualComponent component = ComponentCore.createComponent(project);
 			if(component!=null) {
 				IVirtualFolder webRootVirtFolder = component.getRootFolder().getFolder(new Path("/")); //$NON-NLS-1$
-				return webRootVirtFolder.getUnderlyingFolders();
+				IContainer[] folders = webRootVirtFolder.getUnderlyingFolders();
+				if(folders.length > 1){
+					ArrayList<IContainer> containers = new ArrayList<IContainer>();
+					for(IContainer container : folders){
+						if(container.getFullPath().segmentCount() < 2 || !"target".equals(container.getFullPath().segment(1))) //$NON-NLS-1$
+							containers.add(container);
+					}
+					return containers.toArray(new IContainer[]{});
+				}else
+					return folders;
 			}
 		}
 		return null;
+	}
+
+	public static IContainer[] getWebRootFolders(IProject project) {
+		return getWebRootFolders(project, false);
 	}
 
 	public static String[] getServletLibraries(String natureId, String templateBase, String servletVersion) {
