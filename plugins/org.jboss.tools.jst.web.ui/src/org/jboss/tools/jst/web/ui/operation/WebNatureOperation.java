@@ -22,11 +22,14 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
@@ -312,11 +315,9 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 		}
 		fs.setModified(true);
 		model.save();
-		if(registry.isEnabled()) ModelPlugin.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
-			public void run() {
-				RegistrationHelper.runRegisterInServerJob(getProject(), registry.getTargetServers(), null);
-			}
-		});
+		if(registry.isEnabled()) {
+			RegistrationHelper.runRegisterInServerJob(getProject(), registry.getTargetServers(), null);
+		}
 	}
 	
 	protected boolean checkOverwrite() {
@@ -484,10 +485,25 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 	private void createWTPNature2(AbstractOperation wcco, IProgressMonitor monitor) {
 		try {
 			if(wcco != null) wcco.execute(monitor, null);
-			IFacetedProject fp = ProjectFacetsManager.create(getProject());
-			fp.setRuntime(findFacetRuntime(null/*runtime*/), monitor);
+			new RuntimeJob().schedule();
 		} catch (Exception e) {
 			WebUiPlugin.getPluginLog().logError(e);
+		}
+		
+	}
+
+	class RuntimeJob extends WorkspaceJob {
+		
+		public RuntimeJob() {
+			super("Set runtime"); //$NON-NLS-1$
+		}
+
+		@Override
+		public IStatus runInWorkspace(IProgressMonitor monitor)
+				throws CoreException {
+			IFacetedProject fp = ProjectFacetsManager.create(getProject());
+			fp.setRuntime(findFacetRuntime(null/*runtime*/), monitor);
+			return Status.OK_STATUS;
 		}
 		
 	}
