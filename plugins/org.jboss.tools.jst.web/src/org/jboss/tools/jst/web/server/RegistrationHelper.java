@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.server;
 import java.text.MessageFormat;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRunnable;
+import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.*;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.osgi.util.NLS;
@@ -213,7 +214,7 @@ public class RegistrationHelper {
 	
 	// registerInJob
 	
-	private static class RegisterServerJob extends Job {
+	private static class RegisterServerJob extends WorkspaceJob {
 		long counter = 100;
 		IProject p;
 		IServer[] servers;
@@ -225,7 +226,7 @@ public class RegistrationHelper {
 			this.contextRoot = contextRoot;
 		}
 
-		protected IStatus run(IProgressMonitor monitor) {
+		public IStatus runInWorkspace(IProgressMonitor monitor) {
 			try {
 				if(RegistrationHelper.findModule(p) == null) {
 					counter *= 2;
