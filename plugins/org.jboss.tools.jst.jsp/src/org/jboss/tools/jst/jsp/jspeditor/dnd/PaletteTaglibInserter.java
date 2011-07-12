@@ -21,6 +21,8 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
@@ -225,6 +227,8 @@ public class PaletteTaglibInserter {
 			if(tl == null) tl = JSPPaletteInsertHelper.getPrefixes(d.get());
 			Element root = xmlDocument.getDocumentElement();
 			if(root != null) {
+				IEditorPart editorPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+				
 				// for xhtml and jsp:root 
 				if (xmlDocument.getDoctype() != null /* && tagLibListConainsFacelet(tl)*/ ) {
 					String publicId = xmlDocument.getDoctype().getPublicId();
@@ -232,7 +236,7 @@ public class PaletteTaglibInserter {
 						checkTL(root, p, d);
 						return true;
 					}
-				} else if(xmlDocument.isXMLType() || root.getNodeName().equals(JSP_SOURCE_ROOT_ELEMENT)) {
+				} else if(xmlDocument.isXMLType() || root.getNodeName().equals(JSP_SOURCE_ROOT_ELEMENT) || (editorPart != null && editorPart.getTitle().toLowerCase().endsWith(".jspx"))) { //$NON-NLS-1$
 					checkTL(root, p, d);
 					return true;
 				}
