@@ -614,5 +614,15 @@
 <!-- JSP -->
 
 	</extension>
+	 <extension
+	       point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectors">
+	    <hyperlinkDetector
+	          activate="true"
+	          class="org.jboss.tools.jst.text.ext.hyperlink.ELHyperlinkDetector"
+	          id="org.jboss.tools.jst.text.ext.hyperlink.ELHyperlinkDetector"
+	          name="EL Hyperlink Detector"
+	          targetId="org.eclipse.ui.DefaultTextEditor">
+	    </hyperlinkDetector>
+	 </extension>
 
 </plugin>
