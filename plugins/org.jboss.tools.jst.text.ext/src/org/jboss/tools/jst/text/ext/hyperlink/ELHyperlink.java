@@ -83,7 +83,7 @@ public class ELHyperlink extends AbstractHyperlink{
 				JSTExtensionsPlugin.getDefault().logError(e);
 			}
 		}else if(segment instanceof MessagePropertyELSegment){
-			IFile file = (IFile)((MessagePropertyELSegment)segment).getMessageBundleResource();
+			IFile file = ((MessagePropertyELSegment)segment).getMessageBundleResource();
 			if(file == null)
 				file = (IFile)segment.getResource();
 			
@@ -122,8 +122,9 @@ public class ELHyperlink extends AbstractHyperlink{
 			if ( error != null && error.length() > 0) {
 				openFileFailed();
 			}
-			}else
+		} else {
 				openFileFailed();
+		}
 	}
 	
 	private String getPageLocale(IRegion region) {
