@@ -23,6 +23,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
+import org.eclipse.jface.text.Region;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 import org.jboss.tools.common.el.core.ELReference;
@@ -30,11 +31,14 @@ import org.jboss.tools.common.el.core.resolver.ELSegment;
 import org.jboss.tools.common.el.core.resolver.JavaMemberELSegment;
 import org.jboss.tools.common.el.core.resolver.MessagePropertyELSegment;
 import org.jboss.tools.common.model.XModel;
+import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.project.IPromptingProvider;
 import org.jboss.tools.common.model.project.PromptingProviderFactory;
+import org.jboss.tools.common.model.util.PositionHolder;
 import org.jboss.tools.common.text.ext.hyperlink.AbstractHyperlink;
 import org.jboss.tools.common.text.ext.hyperlink.xpl.Messages;
 import org.jboss.tools.common.text.ext.util.StructuredModelWrapper;
+import org.jboss.tools.common.text.ext.util.StructuredSelectionHelper;
 import org.jboss.tools.common.text.ext.util.Utils;
 import org.jboss.tools.jst.text.ext.JSTExtensionsPlugin;
 import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
@@ -50,10 +54,12 @@ public class ELHyperlink extends AbstractHyperlink{
 	
 	private ELReference reference;
 	private ELSegment segment;
+	private XModelObject xObject;
 	
-	public ELHyperlink(IDocument document, ELReference reference, ELSegment segment){
+	public ELHyperlink(IDocument document, ELReference reference, ELSegment segment, XModelObject xObject){
 		this.reference = reference;
 		this.segment = segment;
+		this.xObject = xObject;
 		setDocument(document);
 	}
 
@@ -74,14 +80,15 @@ public class ELHyperlink extends AbstractHyperlink{
 	protected void doHyperlink(IRegion region) {
 		if(segment instanceof JavaMemberELSegment){
 			try {
-				IEditorPart part = JavaUI.openInEditor(((JavaMemberELSegment) segment).getJavaElement());
-				if(part == null)
+				if(JavaUI.openInEditor(((JavaMemberELSegment) segment).getJavaElement()) == null){
 					openFileFailed();
+				}
 			} catch (PartInitException e) {
 				JSTExtensionsPlugin.getDefault().logError(e);
 			} catch (JavaModelException e) {
 				JSTExtensionsPlugin.getDefault().logError(e);
 			}
+			return;
 		}else if(segment instanceof MessagePropertyELSegment){
 			IFile file = ((MessagePropertyELSegment)segment).getMessageBundleResource();
 			if(file == null)
@@ -97,6 +104,7 @@ public class ELHyperlink extends AbstractHyperlink{
 			String locale = getPageLocale(region);
 			
 			Properties p = new Properties();
+			
 			if (bundleBasename != null) {
 				p.put(WebPromptingProvider.BUNDLE, bundleBasename);
 			}
@@ -122,9 +130,26 @@ public class ELHyperlink extends AbstractHyperlink{
 			if ( error != null && error.length() > 0) {
 				openFileFailed();
 			}
-		} else {
+			return;
+		}else if(xObject != null){
+			IRegion attrRegion = null;
+			PositionHolder h = PositionHolder.getPosition(xObject, null);
+			h.update();
+			if (h.getStart() == -1 || h.getEnd() == -1) {
 				openFileFailed();
+				return;
+			}
+			attrRegion = new Region(h.getStart(), h.getEnd() - h.getStart());
+			IFile file = (IFile)xObject.getAdapter(IFile.class);
+			if (file != null) {
+				if (openFileInEditor(file) != null) {
+					StructuredSelectionHelper.setSelectionAndRevealInActiveEditor(attrRegion);
+					return;
+				}
+			}
 		}
+		
+		openFileFailed();
 	}
 	
 	private String getPageLocale(IRegion region) {
@@ -209,7 +234,10 @@ public class ELHyperlink extends AbstractHyperlink{
 				return  MessageFormat.format(Messages.Open, baseName);
 			
 			return MessageFormat.format(Messages.OpenBundleProperty, propertyName, baseName);
+		}else if(xObject != null){
+			return Messages.OpenJsf2CCAttribute;
 		}
+		
 		return ""; //$NON-NLS-1$
 	}
 
