@@ -447,6 +447,7 @@ public class ELValidator extends WebValidator {
 			if(delegate.shouldValidate(project)) {
 				IValidatingProjectTree tree = delegate.getValidatingProjects(project);
 				if(tree.getAllProjects().size()>max) {
+					max = tree.getAllProjects().size();
 					result = tree;
 				}
 			}
