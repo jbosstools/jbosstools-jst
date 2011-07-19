@@ -429,61 +429,31 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 
 	protected void createPages() {
 
-		// Sergey Vasilyev
-		/*
-		 * TODO to author of this class VPE work on linux! this check not need
-		 * in future
-		 */
 		createPagesForVPE();
 		loadSelectedTab();
 
-		// if (selectedPageIndex == sourceIndex) {
-		// visualEditor.setVisualMode(IVisualEditor.SOURCE_MODE);
-		// // switchOutlineToJSPEditor();
-		// }
-		// if (selectedPageIndex == 2) {
-		// setActivePage(0);
-		// pageChange(0);
-		// if (visualEditor != null)
-		// visualEditor.maximizeSource();
-		// selectedPageIndex=0;
-		// } else if (selectedPageIndex == 1) {
-		// setActivePage(0);
-		// pageChange(0);
-		// if (visualEditor != null)
-		// visualEditor.maximizeVisual();
-		// selectedPageIndex=0;
-		// } else {
-		// selectedPageIndex=0;
-		// setActivePage(selectedPageIndex);
-		// pageChange(selectedPageIndex);
-		// }
 		switch (selectedPageIndex) {
-
-		case 0: {
-			// source/visual mode
-			setActivePage(selectedPageIndex);
-			pageChange(selectedPageIndex);
-			break;
-		}
-		case 1: {
-			// source mode
-			setActivePage(selectedPageIndex);
-			pageChange(selectedPageIndex);
-			break;
-		}
-		case 2: {
-			// preview mode
-			setActivePage(selectedPageIndex);
-			pageChange(selectedPageIndex);
-			break;
-		}
-		default: {
-			// by default we sets source/visual mode
-			setActivePage(0);
-			pageChange(0);
-			break;
-		}
+			case 0: {
+				// source/visual mode
+				setActivePage(selectedPageIndex);
+				pageChange(selectedPageIndex);
+				break;
+			} case 1: {
+				// source mode
+				setActivePage(selectedPageIndex);
+				pageChange(selectedPageIndex);
+				break;
+			} case 2: {
+				// preview mode
+				setActivePage(selectedPageIndex);
+				pageChange(selectedPageIndex);
+				break;
+			} default: {
+				// by default we sets source/visual mode
+				setActivePage(0);
+				pageChange(0);
+				break;
+			}
 		}
 		
 		IFile f = getFile();
@@ -500,6 +470,8 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		 * Create Source Editor and BundleMap
 		 */
 		sourceEditor = new JSPTextEditor(this);
+		sourceEditor.setEditorPart(this);
+		
 		/*
 		 * Create Bundle Map here but Initialize it  in the VpeController
 		 * or here if there is only the source part. 
