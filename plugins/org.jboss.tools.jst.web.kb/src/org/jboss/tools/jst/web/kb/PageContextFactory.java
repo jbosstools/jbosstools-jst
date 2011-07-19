@@ -563,49 +563,47 @@ public class PageContextFactory implements IResourceChangeListener {
 	private void fillElReferencesForNode(IDocument document, IDOMNode node, XmlContextImpl context) {
 		if(Node.ELEMENT_NODE == node.getNodeType() || Node.TEXT_NODE == node.getNodeType()) {
 			IStructuredDocumentRegion regionNode = node.getFirstStructuredDocumentRegion();
-			while (regionNode != null){
-				//return;
-				ITextRegionList regions = regionNode.getRegions();
-				for(int i=0; i<regions.size(); i++) {
-					ITextRegion region = regions.get(i);
-					if(region.getType() == DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE || region.getType() == DOMRegionContext.XML_CONTENT) {
-						String text = regionNode.getFullText(region);
-						if(text.indexOf("{")>-1) { //$NON-NLS-1$
-							int offset = regionNode.getStartOffset() + region.getStart();
-							int startEl = text.indexOf("#{"); //$NON-NLS-1$
-							if(startEl==-1) {
-								startEl = text.indexOf("${"); //$NON-NLS-1$
-							}
-							if(startEl>-1) {
-								ELParser parser = ELParserUtil.getJbossFactory().createParser();
-								ELModel model = parser.parse(text);
-								List<ELInstance> is = model.getInstances();
-	
-								ELReference elReference = new KbELReference();
-								elReference.setResource(context.getResource());
-								elReference.setEl(is);
-								elReference.setLength(text.length());
-								elReference.setStartPosition(offset);
-								try {
-									if(Node.TEXT_NODE == node.getNodeType()) {
-										if(is.size()==1) {
-											elReference.setLineNumber(document.getLineOfOffset(elReference.getStartPossitionOfFirstEL()) + 1);
-										}
-									} else {
-										elReference.setLineNumber(document.getLineOfOffset(offset) + 1);
+			if (regionNode == null)
+				return;
+			ITextRegionList regions = regionNode.getRegions();
+			for(int i=0; i<regions.size(); i++) {
+				ITextRegion region = regions.get(i);
+				if(region.getType() == DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE || region.getType() == DOMRegionContext.XML_CONTENT) {
+					String text = regionNode.getFullText(region);
+					if(text.indexOf("{")>-1) { //$NON-NLS-1$
+						int offset = regionNode.getStartOffset() + region.getStart();
+						int startEl = text.indexOf("#{"); //$NON-NLS-1$
+						if(startEl==-1) {
+							startEl = text.indexOf("${"); //$NON-NLS-1$
+						}
+						if(startEl>-1) {
+							ELParser parser = ELParserUtil.getJbossFactory().createParser();
+							ELModel model = parser.parse(text);
+							List<ELInstance> is = model.getInstances();
+
+							ELReference elReference = new KbELReference();
+							elReference.setResource(context.getResource());
+							elReference.setEl(is);
+							elReference.setLength(text.length());
+							elReference.setStartPosition(offset);
+							try {
+								if(Node.TEXT_NODE == node.getNodeType()) {
+									if(is.size()==1) {
+										elReference.setLineNumber(document.getLineOfOffset(elReference.getStartPossitionOfFirstEL()) + 1);
 									}
-								} catch (BadLocationException e) {
-									WebKbPlugin.getDefault().logError(e);
+								} else {
+									elReference.setLineNumber(document.getLineOfOffset(offset) + 1);
 								}
-	
-								elReference.setSyntaxErrors(model.getSyntaxErrors());
-	
-								context.addELReference(elReference);
+							} catch (BadLocationException e) {
+								WebKbPlugin.getDefault().logError(e);
 							}
+
+							elReference.setSyntaxErrors(model.getSyntaxErrors());
+
+							context.addELReference(elReference);
 						}
 					}
 				}
-				regionNode = regionNode.getNext();
 			}
 		}
 	}
