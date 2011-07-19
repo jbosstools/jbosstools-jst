@@ -16,6 +16,9 @@ import java.util.Iterator;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.util.Assert;
@@ -41,6 +44,7 @@ import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IKeyBindingService;
 import org.eclipse.ui.INestableKeyBindingService;
 import org.eclipse.ui.IPropertyListener;
@@ -60,6 +64,7 @@ import org.jboss.tools.jst.jsp.selection.bar.SelectionBar;
  * 
  */
 public abstract class JSPMultiPageEditorPart extends EditorPart {
+
 	private static final String COMMAND_NEXT_SUB_TAB = "org.eclipse.ui.navigate.nextSubTab"; //$NON-NLS-1$
 	private static final String COMMAND_PREVIOUS_SUB_TAB = "org.eclipse.ui.navigate.previousSubTab"; //$NON-NLS-1$
 
@@ -117,6 +122,7 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 				editorComp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 				editorComp.setLayout(new FillLayout(SWT.VERTICAL));
 				editor.createPartControl(editorComp);
+				sourcePart.init(site, input);
 			}else {
 				editor.createPartControl(parent2);
 			}
@@ -281,7 +287,9 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 	protected abstract IEditorSite createSite(IEditorPart editor);
 
 	public void dispose() {
-		selectionBar.dispose();
+		if(selectionBar!=null) {
+			selectionBar.dispose();
+		}
 		getSite().setSelectionProvider(null);
 		for (int i = 0; i < nestedEditors.size(); ++i) {
 			IEditorPart editor = (IEditorPart) nestedEditors.get(i);

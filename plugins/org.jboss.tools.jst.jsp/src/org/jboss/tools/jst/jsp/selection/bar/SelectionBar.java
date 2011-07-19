@@ -110,7 +110,9 @@ public class SelectionBar extends Composite implements ISelectionChangedListener
 			int style) {
 		super(parent, style);
 		this.textEditor = textEditor;
-		this.textEditor.getTextViewer().addSelectionChangedListener(this);
+		if(this.textEditor.getTextViewer()!= null) {
+			this.textEditor.getTextViewer().addSelectionChangedListener(this);
+		}
 
 		ICommandService commandService = (ICommandService) PlatformUI
 				.getWorkbench().getService(ICommandService.class);
