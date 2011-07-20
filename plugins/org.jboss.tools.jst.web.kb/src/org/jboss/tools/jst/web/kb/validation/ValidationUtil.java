@@ -33,6 +33,10 @@ public class ValidationUtil {
 	 * @return
 	 */
 	public static boolean checkFileExtensionForJavaAndXml(IFile file) {
-		return EXTNS.contains(file.getFileExtension());
+		String ext = file.getFileExtension();
+		if(ext!=null) {
+			ext = ext.toLowerCase();
+		}
+		return EXTNS.contains(ext);
 	}
 }
