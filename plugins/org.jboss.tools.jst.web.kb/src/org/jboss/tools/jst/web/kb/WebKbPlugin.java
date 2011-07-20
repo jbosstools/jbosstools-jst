@@ -23,6 +23,8 @@ public class WebKbPlugin extends BaseUIPlugin {
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.jboss.tools.jst.web.kb"; //$NON-NLS-1$
 
+	public static final String CA_KB_IMAGE_PATH = "icons/ca/el.gif"; //$NON-NLS-1$
+
 	// The shared instance
 	private static WebKbPlugin plugin;
 

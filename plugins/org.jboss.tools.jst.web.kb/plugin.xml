@@ -274,4 +274,21 @@
       </catalogContribution>
    </extension>
 
+   <extension point="org.eclipse.jdt.ui.javaCompletionProposalComputer"
+   		id="kb_el_proposals"
+			name="KB EL Proposals">
+	   	<proposalCategory icon="$nl$/icons/ca/el.png"/>
+ 	</extension>
+
+	<extension point="org.eclipse.jdt.ui.javaCompletionProposalComputer"
+   		id="CDIJavaELCompletionProposalComputer" 
+   		name="CDI EL Java Completion Proposal Computer">
+	   	<javaCompletionProposalComputer
+	      		class="org.jboss.tools.jst.web.kb.el.KbELProposalComputer"
+	      		categoryId="org.jboss.tools.jst.web.kb.kb_el_proposals"
+	      		activate="true">
+				<partition type="__java_string"/>
+	   	</javaCompletionProposalComputer>
+	</extension>
+
 </plugin>
