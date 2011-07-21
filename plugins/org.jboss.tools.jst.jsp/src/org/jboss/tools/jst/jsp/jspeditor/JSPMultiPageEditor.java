@@ -88,6 +88,7 @@ import org.jboss.tools.jst.jsp.bundle.BundleMap;
 import org.jboss.tools.jst.jsp.editor.IVisualEditor;
 import org.jboss.tools.jst.jsp.editor.IVisualEditorFactory;
 import org.jboss.tools.jst.jsp.preferences.IVpePreferencesPage;
+import org.jboss.tools.jst.jsp.selection.bar.SelectionBarHandler;
 import org.jboss.tools.jst.web.tld.VpeTaglibManager;
 import org.jboss.tools.jst.web.tld.VpeTaglibManagerProvider;
 
@@ -268,9 +269,9 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		}
 		
 		ICommandService commandService = (ICommandService) PlatformUI
-		.getWorkbench().getService(ICommandService.class);
-		commandService.refreshElements("org.jboss.tools.jst.jsp.commands.showSelectionBar", null); //$NON-NLS-1$
-
+				.getWorkbench().getService(ICommandService.class);
+		commandService.refreshElements(SelectionBarHandler.COMMAND_ID, null);
+		getSelectionBar().refreshVisibility();
 		
 		superPageChange(newPageIndex);
 		JspEditorPlugin.getDefault().getPreferenceStore().

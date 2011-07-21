@@ -49,14 +49,19 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Widget;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.internal.IWorkbenchGraphicConstants;
 import org.eclipse.ui.internal.WorkbenchImages;
+import org.eclipse.ui.part.EditorPart;
 import org.eclipse.wst.sse.core.internal.provisional.INodeAdapter;
 import org.eclipse.wst.sse.core.internal.provisional.INodeNotifier;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
+import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
+import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditorPart;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.selection.SelectionHelper;
 import org.jboss.tools.jst.jsp.selection.SourceSelection;
@@ -73,7 +78,7 @@ import org.w3c.dom.NodeList;
  * @author yradtsevich
  * @author mareshkau
  */
-public class SelectionBar extends Composite implements ISelectionChangedListener, IStateListener,ICommandListener{
+public class SelectionBar extends Composite {
 	private static final int SEL_ITEM_RIGHT_MARGIN = 5;
 	/*
 	 * The main composite that holds all other controls
@@ -104,24 +109,39 @@ public class SelectionBar extends Composite implements ISelectionChangedListener
      */
     private State toggleSelBarState;
     private Command toggleSelBarCommand;
+    private ICommandListener toggleSelBarCommandListener;
+    private ISelectionChangedListener selectionChangedListener;
     private ImageButton arrowButton;
     
 	public SelectionBar(StructuredTextEditor textEditor, Composite parent,
 			int style) {
 		super(parent, style);
 		this.textEditor = textEditor;
-		if(this.textEditor.getTextViewer()!= null) {
-			this.textEditor.getTextViewer().addSelectionChangedListener(this);
+		
+		if (this.textEditor.getTextViewer() != null) {
+			selectionChangedListener = new ISelectionChangedListener() {
+				@Override
+				public void selectionChanged(SelectionChangedEvent event) {
+					updateNodes(true);
+				}
+			};
+			this.textEditor.getTextViewer().addSelectionChangedListener(selectionChangedListener);
 		}
-
+		
 		ICommandService commandService = (ICommandService) PlatformUI
 				.getWorkbench().getService(ICommandService.class);
-		this.toggleSelBarCommand = commandService
-				.getCommand("org.jboss.tools.jst.jsp.commands.showSelectionBar"); //$NON-NLS-1$
+		this.toggleSelBarCommand = commandService.getCommand(SelectionBarHandler.COMMAND_ID);
 		toggleSelBarState = toggleSelBarCommand
 				.getState("org.eclipse.ui.commands.toggleState"); //$NON-NLS-1$
-		toggleSelBarState.addListener(this);
-		toggleSelBarCommand.addCommandListener(this);
+		
+		toggleSelBarCommandListener = new ICommandListener() {
+			@Override
+			public void commandChanged(CommandEvent commandEvent) {
+				refreshVisibility();
+			}
+		};
+		toggleSelBarCommand.addCommandListener(toggleSelBarCommandListener);
+		
 		this.setLayout(new FillLayout());
 		/*
 		 * Create the Selection Bar Composite in its constructor
@@ -158,6 +178,7 @@ public class SelectionBar extends Composite implements ISelectionChangedListener
 				.getImage(ISharedImages.IMG_TOOL_DELETE);
 
 		final Listener closeListener = new Listener() {
+			@Override
 			public void handleEvent(Event event) {
 				/*
 				 * Hide the selection bar
@@ -194,6 +215,7 @@ public class SelectionBar extends Composite implements ISelectionChangedListener
 	 * Sets {@code visible} state to this {@code SelectionBar} and fires
 	 * all registered {@code VisibilityListener}s.
 	 */
+	@Override
 	public void setVisible(boolean visible) {
 		if (visible) {
 			splitter.setVisible(realBar, true);
@@ -213,6 +235,20 @@ public class SelectionBar extends Composite implements ISelectionChangedListener
 		tempItem.setEnabled(false);
 		this.getParent().layout(true, true);
 		tempItem.dispose();
+	}
+	
+	public void refreshVisibility() {
+		boolean visible = (Boolean) toggleSelBarState.getValue();
+
+		IEditorPart editorPart = textEditor.getEditorPart();
+		if(editorPart instanceof JSPMultiPageEditor){
+			JSPMultiPageEditor jspEditor = (JSPMultiPageEditor) editorPart;
+			if(jspEditor.getSelectedPageIndex() == jspEditor.getPreviewIndex()){
+				visible = false;
+			}
+		}
+		
+		setVisible(visible);
 	}
 
 
@@ -291,9 +327,9 @@ public class SelectionBar extends Composite implements ISelectionChangedListener
 		// for now dropDownMenu = null
 
 		int elementCounter = 0;
-		while ((node != null)
-				&& ((node.getNodeType() == Node.ELEMENT_NODE)
-						|| (node.getNodeType() == Node.COMMENT_NODE))) {
+		while (node != null
+				&& (node.getNodeType() == Node.ELEMENT_NODE
+						|| node.getNodeType() == Node.COMMENT_NODE)) {
 			addNodeListenerTo(node);
 			
 			/*
@@ -311,12 +347,14 @@ public class SelectionBar extends Composite implements ISelectionChangedListener
 				/*
 				 * for the last tag -- show check button
 				 */
-				if ((elementCounter == 0) && (list.size() == 0)){
+				if (elementCounter == 0 && list.size() == 0){
 					item = new ToolItem(toolbar, SWT.FLAT | SWT.CHECK, 1);
 					item.addSelectionListener(new SelectionListener() {
+						@Override
 						public void widgetSelected(SelectionEvent e) {
 							handleSelectionEvent(e);
 						}
+						@Override
 						public void widgetDefaultSelected(SelectionEvent e) {
 							handleSelectionEvent(e);
 						}
@@ -334,6 +372,7 @@ public class SelectionBar extends Composite implements ISelectionChangedListener
 					 * Thus unnecessary memory will be released. 
 					 */
 					item.addDisposeListener(new DisposeListener() {
+						@Override
 						public void widgetDisposed(DisposeEvent e) {
 							dropdownListener.disposeMenu();
 						}
@@ -359,9 +398,11 @@ public class SelectionBar extends Composite implements ISelectionChangedListener
 			if (dropDownMenu != null) {
 				MenuItem menuItem = new MenuItem(dropDownMenu, SWT.CHECK, 0);
 				menuItem.addSelectionListener(new SelectionListener() {
+					@Override
 					public void widgetSelected(SelectionEvent e) {
 						handleSelectionEvent(e);
 					}
+					@Override
 					public void widgetDefaultSelected(SelectionEvent e) {
 						handleSelectionEvent(e);
 					}
@@ -388,6 +429,7 @@ public class SelectionBar extends Composite implements ISelectionChangedListener
 
 		if (!resizeListenerAdded ) {
 			realBar.addListener(SWT.Resize, new Listener() {
+				@Override
 				public void handleEvent(Event event) {
 					updateNodes(true);
 				}
@@ -438,6 +480,7 @@ public class SelectionBar extends Composite implements ISelectionChangedListener
 		arrowButton.setEnabled(false);
 		arrowButton.addSelectionListener(
 				new Listener() {
+					@Override
 					public void handleEvent(Event event) {
 						Rectangle bounds = arrowButton.getButtonBounds();
 						Point point = toolbar.toDisplay(bounds.x, bounds.y
@@ -512,12 +555,14 @@ public class SelectionBar extends Composite implements ISelectionChangedListener
 		nodeNotifiers.clear();
 	}
 
-    public void dispose() {
+    @Override
+	public void dispose() {
     	removeNodeListenerFromAllNodes();
-    	toggleSelBarCommand.removeCommandListener(this);
-    	if(textEditor.getTextViewer()!=null)
-    	textEditor.getTextViewer().removeSelectionChangedListener(this);
-    	toggleSelBarState.removeListener(this);
+    	toggleSelBarCommand.removeCommandListener(toggleSelBarCommandListener);
+    	if (textEditor.getTextViewer() != null) {
+			textEditor.getTextViewer().removeSelectionChangedListener(selectionChangedListener);
+		}
+
 		if (splitter != null) {
 			splitter.dispose();
 			splitter = null;
@@ -601,6 +646,7 @@ public class SelectionBar extends Composite implements ISelectionChangedListener
 			menuItem.setText(node.getNodeName());
 			menuItem.setData(node);
 			menuItem.addSelectionListener(new SelectionAdapter() {
+				@Override
 				public void widgetSelected(SelectionEvent event) {
 					handleSelectionEvent(event);
 				}
@@ -613,6 +659,7 @@ public class SelectionBar extends Composite implements ISelectionChangedListener
 		 * @param event
 		 *            the event that trigged this call
 		 */
+		@Override
 		public void widgetSelected(SelectionEvent event) {
 			/*
 			 * If they clicked the arrow, we show the list or close it
@@ -629,18 +676,20 @@ public class SelectionBar extends Composite implements ISelectionChangedListener
 					 */
 					if (menu == null) {
 						menu = new Menu(dropdown.getParent());
-						if ((children != null) && (children.size() > 0)) {
+						if (children != null && children.size() > 0) {
 							for (Node node : children) {
 								add(node);
 							}
 						}
 					}
 					menu.addMenuListener(new MenuListener() {
+						@Override
 						public void menuShown(MenuEvent e) {
 							/*
 							 * Do nothing
 							 */
 						}
+						@Override
 						public void menuHidden(MenuEvent e) {
 							/*
 							 * Change the 'shown' state
@@ -667,18 +716,6 @@ public class SelectionBar extends Composite implements ISelectionChangedListener
 			}
 		}
 	}
-    
-	public void selectionChanged(SelectionChangedEvent event) {
-		updateNodes(true);
-	}
-
-	public void handleStateChange(State state, Object oldValue) {
-		setVisible(toggleSelBarCommand.isEnabled()&&(Boolean)state.getValue());
-	}
-
-	public void commandChanged(CommandEvent commandEvent) {
-		setVisible(toggleSelBarCommand.isEnabled()&&(Boolean)commandEvent.getCommand().getState("org.eclipse.ui.commands.toggleState").getValue()); //$NON-NLS-1$
-	}
 }
 
 /**
@@ -695,6 +732,7 @@ class ImageButton {
 	public ImageButton(Composite parent, Image image, String toolTip) {
 		composite = new Composite(parent, SWT.NONE);
 		composite.addDisposeListener(new DisposeListener() {
+			@Override
 			public void widgetDisposed(DisposeEvent e) {
 				release();
 			}
@@ -787,7 +825,8 @@ class NodeListener implements INodeAdapter {
      * identity comparison to 'type', but this is not required, that is, the
      * decision can be based on complex logic.
      */
-    public boolean isAdapterForType(Object type) {
+    @Override
+	public boolean isAdapterForType(Object type) {
     	return selectionBar == type;
     }
 
@@ -798,8 +837,8 @@ class NodeListener implements INodeAdapter {
      * ISSUE: may be more evolvable if the argument was one big 'notifier
      * event' instance.
      */
-    public void notifyChanged(INodeNotifier notifier, int eventType, Object changedFeature, Object oldValue, Object newValue, int pos) {
+    @Override
+	public void notifyChanged(INodeNotifier notifier, int eventType, Object changedFeature, Object oldValue, Object newValue, int pos) {
    		selectionBar.updateNodes(false);
     }
-    }
-
+}

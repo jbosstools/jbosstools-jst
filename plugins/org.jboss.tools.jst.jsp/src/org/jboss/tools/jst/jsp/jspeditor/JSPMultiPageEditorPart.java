@@ -354,6 +354,10 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 	protected CTabFolder getTabFolder() {
 		return tabFolderContainer;
 	}
+	
+	public SelectionBar getSelectionBar() {
+		return selectionBar;
+	}
 
 	protected void handlePropertyChange(int propertyId) {
 		firePropertyChange(propertyId);
@@ -377,32 +381,7 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 		return false;
 	}
 
-	protected void pageChange(int newPageIndex) {
-		Control control = getControl(newPageIndex);
-		if (control != null) {
-			control.setVisible(true);
-		}
-
-		setFocus();
-		IEditorPart activeEditor = getEditor(newPageIndex);
-		IEditorActionBarContributor contributor = getEditorSite()
-				.getActionBarContributor();
-		if (contributor != null
-				&& contributor instanceof MultiPageEditorActionBarContributor) {
-			((MultiPageEditorActionBarContributor) contributor)
-					.setActivePage(activeEditor);
-		}
-		if (activeEditor != null) {
-			ISelectionProvider selectionProvider = activeEditor.getSite()
-					.getSelectionProvider();
-			if (selectionProvider != null) {
-				SelectionChangedEvent event = new SelectionChangedEvent(
-						selectionProvider, selectionProvider.getSelection());
-				((MultiPageSelectionProvider) getSite().getSelectionProvider())
-						.fireSelectionChanged(event);
-			}
-		}
-	}
+	protected abstract void pageChange(int newPageIndex);
 
 	private void disposePart(final IWorkbenchPart part) {
 		SafeRunner.run(new SafeRunnable() {

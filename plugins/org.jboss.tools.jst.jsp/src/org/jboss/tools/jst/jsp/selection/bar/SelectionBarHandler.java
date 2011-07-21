@@ -9,7 +9,7 @@
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 
-package org.jboss.tools.jst.jsp.selection.bar.handlers;
+package org.jboss.tools.jst.jsp.selection.bar;
 
 import java.util.Map;
 
@@ -27,8 +27,10 @@ import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
 /**
  * Selection bar handler
  */
-public class SelectionBarHandler extends AbstractHandler implements IElementUpdater{
+public class SelectionBarHandler extends AbstractHandler implements IElementUpdater {
 	
+	public static final String COMMAND_ID = "org.jboss.tools.jst.jsp.commands.showSelectionBar"; //$NON-NLS-1$
+
 	/**
 	 * The constructor.
 	 */

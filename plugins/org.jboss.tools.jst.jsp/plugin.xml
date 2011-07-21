@@ -493,7 +493,7 @@
           </enabledWhen>
        </handler>
        <handler
-             class="org.jboss.tools.jst.jsp.selection.bar.handlers.SelectionBarHandler"
+             class="org.jboss.tools.jst.jsp.selection.bar.SelectionBarHandler"
              commandId="org.jboss.tools.jst.jsp.commands.showSelectionBar">
        </handler>
        <handler
