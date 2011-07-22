@@ -509,7 +509,7 @@ public class PageContextFactory implements IResourceChangeListener {
 	}
 
 	private void fillContextForNode(IDocument document, IDOMNode node, ELContext context, List<String> parents) {
-		if (!(context instanceof FaceletPageContextImpl) && !(node instanceof IDOMElement)) {
+		if (context instanceof JspContextImpl && !(context instanceof FaceletPageContextImpl) && !(node instanceof IDOMElement)) {
 			// There is no any useful info for JSP in text nodes
 			return;
 		}
