@@ -12,8 +12,10 @@
 package org.jboss.tools.jst.jsp.test.ca;
 
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
+import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.jboss.tools.common.base.test.contentassist.AbstractContentAssistantTestCase;
 import org.jboss.tools.jst.jsp.contentassist.AutoContentAssistantProposal;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
@@ -34,6 +36,10 @@ public class ContentAssistantTestCase extends AbstractContentAssistantTestCase {
 		while (Display.getCurrent().readAndDispatch());
 
 		textEditor = jspTextEditor = jspEditor.getJspEditor();
+	}
+
+	protected ISourceViewer getTextViewer() {
+		return ((StructuredTextEditor)textEditor).getTextViewer();
 	}
 
 	protected boolean isRelevantProposal(ICompletionProposal proposal) {
