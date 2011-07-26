@@ -82,7 +82,9 @@ public class ELHyperlink extends AbstractHyperlink{
 		IOpenableReference[] openables = segment.getOpenable();
 		
 		if(openables.length > 0) {
-			openables[0].open();
+			if(!openables[0].open()) {
+				openFileFailed();
+			}
 			//If openables.length > 1 - show menu.
 			return;
 		}
