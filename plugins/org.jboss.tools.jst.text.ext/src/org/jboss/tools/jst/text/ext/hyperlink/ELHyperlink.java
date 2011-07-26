@@ -15,31 +15,20 @@ import java.util.List;
 import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.jdt.core.IField;
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.IMethod;
-import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
-import org.eclipse.jface.text.Region;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.PartInitException;
 import org.jboss.tools.common.el.core.ELReference;
 import org.jboss.tools.common.el.core.resolver.ELSegment;
 import org.jboss.tools.common.el.core.resolver.IOpenableReference;
 import org.jboss.tools.common.el.core.resolver.JavaMemberELSegment;
 import org.jboss.tools.common.el.core.resolver.MessagePropertyELSegment;
 import org.jboss.tools.common.model.XModel;
-import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.project.IPromptingProvider;
 import org.jboss.tools.common.model.project.PromptingProviderFactory;
-import org.jboss.tools.common.model.util.PositionHolder;
 import org.jboss.tools.common.text.ext.hyperlink.AbstractHyperlink;
 import org.jboss.tools.common.text.ext.hyperlink.xpl.Messages;
 import org.jboss.tools.common.text.ext.util.StructuredModelWrapper;
-import org.jboss.tools.common.text.ext.util.StructuredSelectionHelper;
 import org.jboss.tools.common.text.ext.util.Utils;
 import org.jboss.tools.jst.text.ext.JSTExtensionsPlugin;
 import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
@@ -55,12 +44,10 @@ public class ELHyperlink extends AbstractHyperlink{
 	
 	private ELReference reference;
 	private ELSegment segment;
-	private XModelObject xObject;
 	
-	public ELHyperlink(IDocument document, ELReference reference, ELSegment segment, XModelObject xObject){
+	public ELHyperlink(IDocument document, ELReference reference, ELSegment segment) {
 		this.reference = reference;
 		this.segment = segment;
-		this.xObject = xObject;
 		setDocument(document);
 	}
 
@@ -123,7 +110,7 @@ public class ELHyperlink extends AbstractHyperlink{
 
 			p.put(IPromptingProvider.FILE, file);
 
-			List list = provider.getList(xModel, getRequestMethod(p), p.getProperty("prefix"), p); //$NON-NLS-1$
+			List<?> list = provider.getList(xModel, getRequestMethod(p), p.getProperty("prefix"), p); //$NON-NLS-1$
 			if (list != null && list.size() >= 1) {
 				openFileInEditor((String)list.get(0));
 				return;
@@ -133,22 +120,6 @@ public class ELHyperlink extends AbstractHyperlink{
 				openFileFailed();
 			}
 			return;
-		}else if(xObject != null){
-			IRegion attrRegion = null;
-			PositionHolder h = PositionHolder.getPosition(xObject, null);
-			h.update();
-			if (h.getStart() == -1 || h.getEnd() == -1) {
-				openFileFailed();
-				return;
-			}
-			attrRegion = new Region(h.getStart(), h.getEnd() - h.getStart());
-			IFile file = (IFile)xObject.getAdapter(IFile.class);
-			if (file != null) {
-				if (openFileInEditor(file) != null) {
-					StructuredSelectionHelper.setSelectionAndRevealInActiveEditor(attrRegion);
-					return;
-				}
-			}
 		}
 		
 		openFileFailed();
@@ -211,24 +182,12 @@ public class ELHyperlink extends AbstractHyperlink{
 
 	@Override
 	public String getHyperlinkText() {
+		IOpenableReference[] openables = segment.getOpenable();
+		if(openables.length > 0) {
+			return openables[0].getLabel();
+		}
 		if(segment instanceof JavaMemberELSegment){
-			IJavaElement javaElement = ((JavaMemberELSegment) segment).getJavaElement();
-			String name = ""; //$NON-NLS-1$
-			IType type = null;
-			if(javaElement instanceof IType){
-				name = javaElement.getElementName();
-				type = (IType)javaElement;
-				
-			}else if(javaElement instanceof IMethod){
-				type = ((IMethod) javaElement).getDeclaringType();
-				name = type.getElementName()+"."+javaElement.getElementName()+"()"; //$NON-NLS-1$ //$NON-NLS-2$
-			}else if(javaElement instanceof IField){
-				type = ((IField) javaElement).getDeclaringType();
-				name = type.getElementName()+"."+javaElement.getElementName(); //$NON-NLS-1$
-			}
-			if(type != null)
-				name += " - "+type.getPackageFragment().getElementName(); //$NON-NLS-1$
-			return MessageFormat.format(Messages.Open, name);
+			return "Should not get here."; //$NON-NLS-1$
 		}else if(segment instanceof MessagePropertyELSegment){
 			String baseName = ((MessagePropertyELSegment)segment).getBaseName();
 			String propertyName = ((MessagePropertyELSegment)segment).isBundle() ? null : trimQuotes(((MessagePropertyELSegment)segment).getToken().getText());
@@ -236,8 +195,6 @@ public class ELHyperlink extends AbstractHyperlink{
 				return  MessageFormat.format(Messages.Open, baseName);
 			
 			return MessageFormat.format(Messages.OpenBundleProperty, propertyName, baseName);
-		}else if(xObject != null){
-			return Messages.OpenJsf2CCAttribute;
 		}
 		
 		return ""; //$NON-NLS-1$
