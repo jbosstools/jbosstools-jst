@@ -90,16 +90,7 @@ public class ELHyperlink extends AbstractHyperlink{
 		}
 		
 		if(segment instanceof JavaMemberELSegment){
-			try {
-				if(JavaUI.openInEditor(((JavaMemberELSegment) segment).getJavaElement()) == null){
-					openFileFailed();
-				}
-			} catch (PartInitException e) {
-				JSTExtensionsPlugin.getDefault().logError(e);
-			} catch (JavaModelException e) {
-				JSTExtensionsPlugin.getDefault().logError(e);
-			}
-			return;
+			//should not be here, Java case implements getOpenable().
 		}else if(segment instanceof MessagePropertyELSegment){
 			IFile file = ((MessagePropertyELSegment)segment).getMessageBundleResource();
 			if(file == null)
