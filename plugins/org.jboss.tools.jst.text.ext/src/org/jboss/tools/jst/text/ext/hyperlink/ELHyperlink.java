@@ -28,6 +28,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 import org.jboss.tools.common.el.core.ELReference;
 import org.jboss.tools.common.el.core.resolver.ELSegment;
+import org.jboss.tools.common.el.core.resolver.IOpenableReference;
 import org.jboss.tools.common.el.core.resolver.JavaMemberELSegment;
 import org.jboss.tools.common.el.core.resolver.MessagePropertyELSegment;
 import org.jboss.tools.common.model.XModel;
@@ -78,6 +79,14 @@ public class ELHyperlink extends AbstractHyperlink{
 
 	@Override
 	protected void doHyperlink(IRegion region) {
+		IOpenableReference[] openables = segment.getOpenable();
+		
+		if(openables.length > 0) {
+			openables[0].open();
+			//If openables.length > 1 - show menu.
+			return;
+		}
+		
 		if(segment instanceof JavaMemberELSegment){
 			try {
 				if(JavaUI.openInEditor(((JavaMemberELSegment) segment).getJavaElement()) == null){
