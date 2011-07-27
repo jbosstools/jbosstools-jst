@@ -11,8 +11,6 @@
 package org.jboss.tools.jst.text.ext.hyperlink;
 
 import java.text.MessageFormat;
-import java.util.List;
-import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jdt.core.JavaModelException;
@@ -23,25 +21,11 @@ import org.jboss.tools.common.el.core.resolver.ELSegment;
 import org.jboss.tools.common.el.core.resolver.IOpenableReference;
 import org.jboss.tools.common.el.core.resolver.JavaMemberELSegment;
 import org.jboss.tools.common.el.core.resolver.MessagePropertyELSegment;
-import org.jboss.tools.common.model.XModel;
-import org.jboss.tools.common.model.project.IPromptingProvider;
-import org.jboss.tools.common.model.project.PromptingProviderFactory;
 import org.jboss.tools.common.text.ext.hyperlink.AbstractHyperlink;
 import org.jboss.tools.common.text.ext.hyperlink.xpl.Messages;
-import org.jboss.tools.common.text.ext.util.StructuredModelWrapper;
-import org.jboss.tools.common.text.ext.util.Utils;
 import org.jboss.tools.jst.text.ext.JSTExtensionsPlugin;
-import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 public class ELHyperlink extends AbstractHyperlink{
-	private static final String VIEW_TAGNAME = "view"; //$NON-NLS-1$
-	private static final String LOCALE_ATTRNAME = "locale"; //$NON-NLS-1$
-	private static final String PREFIX_SEPARATOR = ":"; //$NON-NLS-1$
-	
 	private ELReference reference;
 	private ELSegment segment;
 	
@@ -76,89 +60,6 @@ public class ELHyperlink extends AbstractHyperlink{
 			return;
 		}
 		
-		if(segment instanceof JavaMemberELSegment){
-			//should not be here, Java case implements getOpenable().
-		}else if(segment instanceof MessagePropertyELSegment){
-			IFile file = ((MessagePropertyELSegment)segment).getMessageBundleResource();
-			if(file == null)
-				file = (IFile)segment.getResource();
-			
-			XModel xModel = getXModel(file);
-			if (xModel == null) {
-				openFileFailed();
-				return;
-			}
-			String bundleBasename = ((MessagePropertyELSegment)segment).getBaseName();
-			String property = ((MessagePropertyELSegment)segment).isBundle() ? null : trimQuotes(((MessagePropertyELSegment)segment).getToken().getText());
-			String locale = getPageLocale(region);
-			
-			Properties p = new Properties();
-			
-			if (bundleBasename != null) {
-				p.put(WebPromptingProvider.BUNDLE, bundleBasename);
-			}
-			
-			if (property != null) {
-				p.put(WebPromptingProvider.KEY, property);
-			}
-			
-			if (locale != null) {
-				p.setProperty(WebPromptingProvider.LOCALE, locale);
-			}
-			
-			IPromptingProvider provider = PromptingProviderFactory.WEB;
-
-			p.put(IPromptingProvider.FILE, file);
-
-			List<?> list = provider.getList(xModel, getRequestMethod(p), p.getProperty("prefix"), p); //$NON-NLS-1$
-			if (list != null && list.size() >= 1) {
-				openFileInEditor((String)list.get(0));
-				return;
-			}
-			String error = p.getProperty(IPromptingProvider.ERROR); 
-			if ( error != null && error.length() > 0) {
-				openFileFailed();
-			}
-			return;
-		}
-		
-		openFileFailed();
-	}
-	
-	private String getPageLocale(IRegion region) {
-		if(getDocument() == null || region == null) return null;
-
-		StructuredModelWrapper smw = new StructuredModelWrapper();
-		try {
-			smw.init(getDocument());
-			Document xmlDocument = smw.getDocument();
-			if (xmlDocument == null) return null;
-			
-			Node n = Utils.findNodeForOffset(xmlDocument, region.getOffset());
-			if (!(n instanceof Attr) ) return null; 
-
-			Element el = ((Attr)n).getOwnerElement();
-			
-			Element jsfCoreViewTag = null;
-			String nodeToFind = PREFIX_SEPARATOR + VIEW_TAGNAME; 
-	
-			while (el != null) {
-				if (el.getNodeName() != null && el.getNodeName().endsWith(nodeToFind)) {
-					jsfCoreViewTag = el;
-					break;
-				}
-				Node parent = el.getParentNode();
-				el = (parent instanceof Element ? (Element)parent : null); 
-			}
-			
-			if (jsfCoreViewTag == null || !jsfCoreViewTag.hasAttribute(LOCALE_ATTRNAME)) return null;
-			
-			String locale = Utils.trimQuotes((jsfCoreViewTag.getAttributeNode(LOCALE_ATTRNAME)).getValue());
-			if (locale == null || locale.length() == 0) return null;
-			return locale;
-		} finally {
-			smw.dispose();
-		}
 	}
 	
 	private String trimQuotes(String value) {
@@ -175,10 +76,10 @@ public class ELHyperlink extends AbstractHyperlink{
 		return value;
 	}
 	
-	private String getRequestMethod(Properties prop) {
-		return prop != null && prop.getProperty(WebPromptingProvider.KEY) == null ? 
-				WebPromptingProvider.JSF_OPEN_BUNDLE : WebPromptingProvider.JSF_OPEN_KEY;
-	}
+//	private String getRequestMethod(Properties prop) {
+//		return prop != null && prop.getProperty(WebPromptingProvider.KEY) == null ? 
+//				WebPromptingProvider.JSF_OPEN_BUNDLE : WebPromptingProvider.JSF_OPEN_KEY;
+//	}
 
 	@Override
 	public String getHyperlinkText() {
@@ -189,6 +90,7 @@ public class ELHyperlink extends AbstractHyperlink{
 		if(segment instanceof JavaMemberELSegment){
 			return "Should not get here."; //$NON-NLS-1$
 		}else if(segment instanceof MessagePropertyELSegment){
+			//TODO move to getLabel() in openable in MessagePropertyELSegmentImpl
 			String baseName = ((MessagePropertyELSegment)segment).getBaseName();
 			String propertyName = ((MessagePropertyELSegment)segment).isBundle() ? null : trimQuotes(((MessagePropertyELSegment)segment).getToken().getText());
 			if (propertyName == null)
