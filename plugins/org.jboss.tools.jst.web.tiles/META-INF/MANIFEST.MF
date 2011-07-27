@@ -24,5 +24,5 @@ Require-Bundle: org.jboss.tools.common,
  org.eclipse.ltk.ui.refactoring;bundle-version="3.5.100",
  org.eclipse.core.resources;bundle-version="3.7.100",
  org.eclipse.core.runtime;bundle-version="3.7.0"
-Bundle-Version: 3.1.0.qualifier
+Bundle-Version: 3.3.0.qualifier
 Bundle-RequiredExecutionEnvironment: J2SE-1.5

@@ -13,6 +13,6 @@ Require-Bundle: org.eclipse.core.runtime.compatibility;bundle-version="3.2.100",
  org.jboss.tools.common.model,
  org.jboss.tools.common.verification,
  org.jboss.tools.jst.web
-Bundle-Version: 3.1.0.qualifier
+Bundle-Version: 3.3.0.qualifier
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
