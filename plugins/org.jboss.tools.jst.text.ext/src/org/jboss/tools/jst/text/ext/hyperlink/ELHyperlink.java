@@ -13,16 +13,20 @@ package org.jboss.tools.jst.text.ext.hyperlink;
 import java.text.MessageFormat;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
+import org.eclipse.jface.text.Region;
 import org.jboss.tools.common.el.core.ELReference;
 import org.jboss.tools.common.el.core.resolver.ELSegment;
 import org.jboss.tools.common.el.core.resolver.IOpenableReference;
 import org.jboss.tools.common.el.core.resolver.JavaMemberELSegment;
 import org.jboss.tools.common.el.core.resolver.MessagePropertyELSegment;
+import org.jboss.tools.common.text.ITextSourceReference;
 import org.jboss.tools.common.text.ext.hyperlink.AbstractHyperlink;
 import org.jboss.tools.common.text.ext.hyperlink.xpl.Messages;
+import org.jboss.tools.common.text.ext.util.StructuredSelectionHelper;
 import org.jboss.tools.jst.text.ext.JSTExtensionsPlugin;
 
 public class ELHyperlink extends AbstractHyperlink{
@@ -60,6 +64,20 @@ public class ELHyperlink extends AbstractHyperlink{
 			return;
 		}
 		
+		// Open by ITextSourceReference
+		ITextSourceReference ref = segment.getSourceReference();
+		if (ref != null) {
+			IResource r = ref.getResource();
+			IFile file = r instanceof IFile ? (IFile)r : null;
+			if (file == null || !file.exists() || !file.isAccessible()) {
+				openFileFailed();
+				return;
+			}
+			if (openFileInEditor(file) != null && ref.getStartPosition() >=0 && ref.getLength() > 0) {
+				StructuredSelectionHelper.setSelectionAndRevealInActiveEditor(new Region(ref.getStartPosition(), ref.getLength()));
+				return;
+			}
+		}
 	}
 	
 	private String trimQuotes(String value) {
