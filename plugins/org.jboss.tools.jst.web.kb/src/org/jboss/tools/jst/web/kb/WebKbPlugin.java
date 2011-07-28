@@ -6,12 +6,17 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ISaveContext;
 import org.eclipse.core.resources.ISaveParticipant;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.jboss.tools.common.EclipseUtil;
 import org.jboss.tools.common.log.BaseUIPlugin;
+import org.jboss.tools.jst.web.WebModelPlugin;
+import org.jboss.tools.jst.web.kb.internal.KbBuilder;
 import org.jboss.tools.jst.web.kb.internal.KbProject;
 import org.osgi.framework.BundleContext;
 
@@ -134,4 +139,21 @@ public class WebKbPlugin extends BaseUIPlugin {
 	public static WebKbPlugin getDefault() {
 		return plugin;
 	}
+
+	public static void enableKB(IProject project, IProgressMonitor monitor) {
+		try {
+			WebModelPlugin.addNatureToProjectWithValidationSupport(project, KbBuilder.BUILDER_ID, IKbProject.NATURE_ID);
+		} catch (CoreException e) {
+			getDefault().logError(e);
+		}
+	}
+
+	public static void disableKB(IProject project) {
+		try {
+			EclipseUtil.removeNatureFromProject(project, IKbProject.NATURE_ID);
+		} catch (CoreException e) {
+			getDefault().logError(e);
+		}
+	}
+
 }

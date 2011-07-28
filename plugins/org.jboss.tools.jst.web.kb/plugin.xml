@@ -291,4 +291,18 @@
 	   	</javaCompletionProposalComputer>
 	</extension>
 
+   <extension
+         point="org.eclipse.ui.propertyPages">
+       <page
+            name="%PreferencePage_KBSettings"
+            class="org.jboss.tools.jst.web.kb.preferences.KBSettingsPreferencePage"
+            id="org.jboss.tools.jst.web.kb.propertyPages.KBSettingsPreferencePage">
+         <enabledWhen>
+		     	<adapt type="org.eclipse.core.resources.IProject">
+		     		<test property="org.eclipse.core.resources.projectNature" value="org.eclipse.jdt.core.javanature"/>
+				</adapt>
+         </enabledWhen>
+      </page>
+   </extension>
+
 </plugin>
