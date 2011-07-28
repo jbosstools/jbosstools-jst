@@ -305,4 +305,54 @@
       </page>
    </extension>
 
+	<extension
+		point="org.eclipse.ui.popupMenus">
+
+		<objectContribution
+			id="org.jboss.tools.web.kb.project.configure.enable"
+			objectClass="org.eclipse.core.resources.IProject"
+			adaptable="true">
+			<visibility>
+				<and>
+					<objectState 
+						name="projectNature"
+						value="org.eclipse.jdt.core.javanature"/>
+					<not>
+						<objectState 
+							name="projectNature"
+							value="org.jboss.tools.jst.web.kb.kbnature"/>
+					</not>
+				</and>
+			</visibility>
+
+			<action
+				id="org.jboss.tools.web.kb.AddKBSupport"
+				label="%ConfigureMenu_AddKBSupport"
+				class="org.jboss.tools.jst.web.kb.preferences.AddKBSupportAction"
+				enablesFor="1"
+				menubarPath="org.eclipse.ui.projectConfigure/additions"/>
+
+		</objectContribution>
+
+		<objectContribution
+			id="org.jboss.tools.web.kb.project.configure.disable"
+			objectClass="org.eclipse.core.resources.IProject"
+			adaptable="true">
+			<visibility>
+				<objectState 
+					name="projectNature"
+					value="org.jboss.tools.jst.web.kb.kbnature"/>
+			</visibility>
+
+			<action
+				id="org.jboss.tools.web.kb.RemoveKBSupport"
+				label="%ConfigureMenu_RemoveKBSupport"
+				class="org.jboss.tools.jst.web.kb.preferences.RemoveKBSupportAction"
+				enablesFor="1"
+				menubarPath="org.eclipse.ui.projectConfigure/additions"/>
+
+		</objectContribution>
+
+	</extension>
+
 </plugin>
