@@ -38,7 +38,6 @@ public class CSSStylesheetOpenOnTest extends TestCase {
 		project = ResourcesPlugin.getWorkspace().getRoot().getProject(
 				PROJECT_NAME);
 		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeAllEditors(false);
-		JobUtils.waitForIdle();
 	}
 	
 	protected void tearDown() {
@@ -55,7 +54,6 @@ public class CSSStylesheetOpenOnTest extends TestCase {
 		final String valueToFind = "style.css";  
 		IEditorPart editor = WorkbenchUtils.openEditor(PAGE_NAME);
 		assertTrue(editor instanceof JSPMultiPageEditor);
-		JobUtils.waitForIdle();
 		JSPMultiPageEditor jspMultyPageEditor = (JSPMultiPageEditor) editor;
 		ISourceViewer viewer = jspMultyPageEditor.getSourceEditor().getTextViewer(); 
 			
@@ -79,7 +77,6 @@ public class CSSStylesheetOpenOnTest extends TestCase {
 			assertNotNull(link.toString());
 			
 			link.open();
-			JobUtils.waitForIdle(2000);
 			
 			IEditorPart resultEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 			if(editorName.equals(resultEditor.getTitle())){
@@ -96,7 +93,6 @@ public class CSSStylesheetOpenOnTest extends TestCase {
 		final String valueToFind = "red";  
 		IEditorPart editor = WorkbenchUtils.openEditor(PAGE_NAME);
 		assertTrue(editor instanceof JSPMultiPageEditor);
-		JobUtils.waitForIdle();
 		JSPMultiPageEditor jspMultyPageEditor = (JSPMultiPageEditor) editor;
 		ISourceViewer viewer = jspMultyPageEditor.getSourceEditor().getTextViewer(); 
 			
@@ -120,7 +116,6 @@ public class CSSStylesheetOpenOnTest extends TestCase {
 			assertNotNull(link.toString());
 			
 			link.open();
-			JobUtils.waitForIdle(2000);
 			
 			IEditorPart resultEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 			if(editorName.equals(resultEditor.getTitle())){
