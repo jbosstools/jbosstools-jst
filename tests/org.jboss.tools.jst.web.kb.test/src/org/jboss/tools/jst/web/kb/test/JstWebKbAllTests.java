@@ -53,6 +53,13 @@ public class JstWebKbAllTests {
 				new String[]{"projects/TestBrokenBuilderOrder"},
 				new String[]{"TestBrokenBuilderOrder"});
 		suiteAll.addTest(testSetup);
+		suite = new TestSuite(WebWithModuleTest.class.getName());
+		suite.addTestSuite(WebWithModuleTest.class);
+		testSetup = new XProjectImportTestSetUp(suite,
+				"org.jboss.tools.jst.web.kb.test",
+				new String[]{"projects/utility", "projects/webapp"},
+				new String[]{"utility", "webapp"});
+		suiteAll.addTest(testSetup);
 		return suiteAll;
 	}
 }
