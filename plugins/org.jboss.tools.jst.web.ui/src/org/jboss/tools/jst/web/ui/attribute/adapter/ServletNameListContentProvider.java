@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.ui.attribute.adapter;
 import org.jboss.tools.common.model.*;
 import org.jboss.tools.jst.web.model.helpers.WebAppHelper;
 
+import org.jboss.tools.common.model.filesystems.FileSystemsHelper;
 import org.jboss.tools.common.model.ui.attribute.adapter.DefaultXAttributeListContentProvider;
 
 /**
@@ -30,17 +31,15 @@ public class ServletNameListContentProvider extends DefaultXAttributeListContent
 	}
 
 	protected void loadTags() {
-		XModelObject webxml = null;
-		if(object != null) {
-			XModelObject f = object;
-			while(f != null && f.getFileType() != XModelObject.FILE) f = f.getParent();
-			if(f != null) webxml = f;
+		XModelObject webxml = FileSystemsHelper.getFile(object);
+		if(webxml == null) {
+			webxml = WebAppHelper.getWebApp(model);
 		}
-		if(webxml == null) webxml = WebAppHelper.getWebApp(model);
-		if(webxml == null) return;
-		XModelObject[] os = WebAppHelper.getServlets(webxml);
-		tags = new String[os.length];
-		for (int i = 0; i < tags.length; i++) tags[i] = os[i].getAttributeValue("servlet-name"); //$NON-NLS-1$
+		if(webxml != null) {
+			XModelObject[] os = WebAppHelper.getServlets(webxml);
+			tags = new String[os.length];
+			for (int i = 0; i < tags.length; i++) tags[i] = os[i].getAttributeValue("servlet-name"); //$NON-NLS-1$
+		}
 	}
 
 }
