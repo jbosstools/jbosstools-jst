@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.tiles.ui.attribute.adapter;
 
 import java.util.*;
 import org.jboss.tools.common.model.*;
+import org.jboss.tools.common.model.filesystems.FileSystemsHelper;
 import org.jboss.tools.common.model.ui.attribute.adapter.DefaultXAttributeListContentProvider;
 
 public class DefinitionListContentProvider extends DefaultXAttributeListContentProvider {
@@ -22,16 +23,15 @@ public class DefinitionListContentProvider extends DefaultXAttributeListContentP
 	}
 
 	protected void loadTags() {
-		XModelObject file = context;
-		while(file != null && file.getFileType() != XModelObject.FILE) file = file.getParent();
+		XModelObject file = FileSystemsHelper.getFile(context);
 		if(file == null) return;
 		XModelObject[] os = file.getChildren("TilesDefinition"); //$NON-NLS-1$
-		List list = new ArrayList();
+		List<String> list = new ArrayList<String>();
 		for (int i = 0; i < os.length; i++) {
 			if(os[i] == context) continue;
 			list.add(os[i].getAttributeValue("name")); //$NON-NLS-1$
 		} 
-		tags = (String[])list.toArray(new String[0]);
+		tags = list.toArray(new String[0]);
 	}
 
 }
