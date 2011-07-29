@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.jboss.tools.common.model.*;
+import org.jboss.tools.common.model.filesystems.FileSystemsHelper;
 import org.jboss.tools.common.model.impl.XModelImpl;
 import org.jboss.tools.common.verification.vrules.*;
 import org.jboss.tools.common.verification.vrules.layer.VObjectImpl;
@@ -87,12 +88,11 @@ public class CheckResource extends WebDefaultCheck {
 
 	boolean isMappedToServlet(VObject object, String value) {
 		XModelObject o = ((VObjectImpl)object).getModelObject();
-		while(o != null && o.getFileType() != XModelObject.FILE) o = o.getParent();
-		return isMappedToServlet(o, value);
+		XModelObject webxml = FileSystemsHelper.getFile(o);
+		return webxml != null && isMappedToServlet(webxml, value);
 	}
 
 	boolean isMappedToServlet(XModelObject webxml, String value) {
-		if(webxml == null) return false;
 		XModelObject[] ms = WebAppHelper.getServletMappings(webxml);
 		if(ms != null) for (XModelObject m: ms) {
 			String url = m.getAttributeValue("url-pattern"); //$NON-NLS-1$
