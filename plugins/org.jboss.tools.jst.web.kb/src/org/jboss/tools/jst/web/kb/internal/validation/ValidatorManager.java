@@ -25,7 +25,6 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.validation.internal.core.ValidationException;
@@ -53,8 +52,6 @@ public class ValidatorManager implements IValidatorJob {
 	public static final String SLEEPING = "Sleeping"; //$NON-NLS-1$
 	public static final String RUNNING = "Running"; //$NON-NLS-1$
 	private static String STATUS = SLEEPING;
-
-	private final IStatus EXCEPTION_STATUS = new Status(IStatus.ERROR, WebKbPlugin.PLUGIN_ID, 0, "EXCEPTION", null); //$NON-NLS-1$ //$NON-NLS-2$
 
 	public ValidatorManager() {
 		super();
@@ -114,7 +111,7 @@ public class ValidatorManager implements IValidatorJob {
 		} catch(Exception e) {
 			// We need to catch exceptions and wrap them in KBValidationException to let JUnit tests catch validation exceptions reported to eclipse log. 
 			WebKbPlugin.getDefault().logError(new KBValidationException(e.getMessage(), e));
-			return EXCEPTION_STATUS;
+			return OK_STATUS;
 		} finally {
 			STATUS = SLEEPING;
 		}
