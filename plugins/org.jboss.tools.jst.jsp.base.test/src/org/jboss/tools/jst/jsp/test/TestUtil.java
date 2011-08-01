@@ -15,7 +15,6 @@ public class TestUtil {
 	 * @throws CoreException
 	 */
 	public static void waitForValidation() throws CoreException{
-		JobUtils.waitForIdle();
 		for (int i = 0; i < 50; i++) {
 			if(ValidatorManager.getStatus().equals(ValidatorManager.SLEEPING)) {
 				break;
