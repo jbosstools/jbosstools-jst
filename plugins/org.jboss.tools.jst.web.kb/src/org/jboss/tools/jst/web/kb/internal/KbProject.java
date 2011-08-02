@@ -34,6 +34,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.jboss.tools.common.model.project.ext.event.Change;
 import org.jboss.tools.common.model.project.ext.store.XMLStoreConstants;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
@@ -408,27 +409,34 @@ public class KbProject extends KbObject implements IKbProject {
 			//ignore
 		}
 		File file = getStorageFile();
-		file.getParentFile().mkdirs();
+		if(file != null) {
+			file.getParentFile().mkdirs();
 		
-		Element root = XMLUtilities.createDocumentElement("kb-project"); //$NON-NLS-1$
-		storeProjectDependencies(root);
+			Element root = XMLUtilities.createDocumentElement("kb-project"); //$NON-NLS-1$
+			storeProjectDependencies(root);
 
-		storeSourcePaths2(root);
+			storeSourcePaths2(root);
 
-		if(validationContext != null) validationContext.store(root);
+			if(validationContext != null) validationContext.store(root);
 		
-		XMLUtilities.serialize(root, file.getAbsolutePath());
+			XMLUtilities.serialize(root, file.getAbsolutePath());
 		
-		modifications = 0;
+			modifications = 0;
+		}
 	}
 
 	/*
 	 * 
 	 */
 	private File getStorageFile() {
-		IPath path = WebKbPlugin.getDefault().getStateLocation();
-		File file = new File(path.toFile(), "projects/" + project.getName() + ".xml"); //$NON-NLS-1$ //$NON-NLS-2$
-		return file;
+		WebKbPlugin plugin = WebKbPlugin.getDefault();
+		if( plugin != null) {
+			IPath path = plugin.getStateLocation();
+			File file = new File(path.toFile(), "projects/" + project.getName() + ".xml"); //$NON-NLS-1$ //$NON-NLS-2$
+			return file;
+		} else {
+			return null;
+		}
 	}
 	
 	public void clearStorage() {
