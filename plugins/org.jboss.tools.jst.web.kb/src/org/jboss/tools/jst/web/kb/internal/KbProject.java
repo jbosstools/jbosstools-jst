@@ -34,7 +34,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
 import org.jboss.tools.common.model.project.ext.event.Change;
 import org.jboss.tools.common.model.project.ext.store.XMLStoreConstants;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
@@ -431,6 +430,7 @@ public class KbProject extends KbObject implements IKbProject {
 	private File getStorageFile() {
 		WebKbPlugin plugin = WebKbPlugin.getDefault();
 		if( plugin != null) {
+			//The plug-in instance can be null at shutdown, when the plug-in is stopped. 
 			IPath path = plugin.getStateLocation();
 			File file = new File(path.toFile(), "projects/" + project.getName() + ".xml"); //$NON-NLS-1$ //$NON-NLS-2$
 			return file;
