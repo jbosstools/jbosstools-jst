@@ -190,7 +190,13 @@ public class FaceletsELCompletionProposalComputer extends JspELCompletionProposa
 		for (TextProposal textProposal : proposals) {
 			int replacementOffset = beginChangeOffset;
 			int replacementLength = prefix.getLength();
-			String replacementString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString();
+			String replacementString = prefix.getText().substring(0, replacementLength);
+			if (textProposal.getReplacementString().trim().startsWith("[") && replacementString.endsWith(".")) { //$NON-NLS-1$ //$NON-NLS-2$ 
+				// Need to include last '.' (dot) char into the string to replace 
+				replacementString = replacementString.substring(0, replacementString.length() - 1);
+			}
+			replacementString += textProposal.getReplacementString();
+
 			int cursorPosition = replacementString.length();
 			
 			// Check if it is a long named property to be inserted
@@ -230,6 +236,11 @@ public class FaceletsELCompletionProposalComputer extends JspELCompletionProposa
 					if (paraIndex == -1) {
 						// Closing ']' is to be added
 						replacementString += ']';
+					}
+				} else {
+					if (replacementString.endsWith("]") && restOfValue.indexOf(']') != -1) {
+						replacementString = replacementString.substring(0, replacementString.length() -1);
+						cursorPosition = replacementString.length(); // Cursor will be put right after the replacement (not after the closing square bracket in this case)
 					}
 				}
 				
