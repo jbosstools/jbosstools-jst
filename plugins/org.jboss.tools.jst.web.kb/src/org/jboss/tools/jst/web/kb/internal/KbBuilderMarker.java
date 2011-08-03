@@ -4,11 +4,14 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.jboss.tools.common.preferences.SeverityPreferences;
 import org.jboss.tools.jst.web.kb.KbMessages;
 import org.jboss.tools.jst.web.kb.KbProjectFactory;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
+import org.jboss.tools.jst.web.kb.preferences.KBSeverityPreferences;
 
 public class KbBuilderMarker {
 
@@ -44,7 +47,14 @@ public class KbBuilderMarker {
 	}
 
 	public static IMarker createOrUpdateKbProblemMarker(IMarker m, IResource r, String message, int kind) throws CoreException {
-		String location = MessageFormat.format(KbMessages.KBPROBLEM_LOCATION, new Object[] {r.getProject().getName()});
+		String preferenceValue = getPreference(r.getProject(), kind);
+		
+		if(SeverityPreferences.IGNORE.equals(preferenceValue)) {
+			if(m != null) {
+				m.delete();
+			}
+			return null;
+		}
 		
 		if (m == null) {
 			m = r.createMarker(KB_BUILDER_PROBLEM_MARKER_TYPE);
@@ -54,13 +64,32 @@ public class KbBuilderMarker {
 				KbProjectFactory.getKbProject(r.getProject(), true);
 			}
 		}
+		
+		int severity = IMarker.SEVERITY_WARNING;
+
+		if(SeverityPreferences.ERROR.equals(preferenceValue)) {
+			severity = IMarker.SEVERITY_ERROR;
+		}
+		String location = MessageFormat.format(KbMessages.KBPROBLEM_LOCATION, new Object[] {r.getProject().getName()});
 
 		m.setAttribute(ATTR_KIND, kind);
 		m.setAttribute(IMarker.LOCATION, location);
 		m.setAttribute(IMarker.MESSAGE, message);
-		m.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_WARNING);
+		m.setAttribute(IMarker.SEVERITY, severity);
 		m.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_NORMAL);
 		return m;
 	}
 
+	protected static String getPreference(IProject project, int kind) {
+		if(kind == KIND_KB_NATURE_OR_BUILDER_MISSING) {
+			return getPreference(project, KBSeverityPreferences.REQUIRED_KB_CAPABILITIES_ARE_MISSING);
+		} else if(kind == KIND_DEPENDS_ON_NON_KB_POJECTS) {
+			return getPreference(project, KBSeverityPreferences.KB_CAPABILITIES_ARE_NOT_ENABLED_IN_JAVA_MODULE);
+		}
+		return getPreference(project, KBSeverityPreferences.REQUIRED_KB_CAPABILITIES_ARE_MISSING);
+	}
+
+	protected static String getPreference(IProject project, String preferenceKey) {
+		return KBSeverityPreferences.getInstance().getProjectPreference(project, preferenceKey);
+	}
 }

@@ -28,6 +28,8 @@ public class ELPreferenceInitializer extends AbstractPreferenceInitializer {
 	public void initializeDefaultPreferences() {
 
 		IEclipsePreferences defaultPreferences = ((IScopeContext) new DefaultScope()).getNode(WebKbPlugin.PLUGIN_ID);
+		
+		//EL Preferences
 		defaultPreferences.putBoolean(SeverityPreferences.ENABLE_BLOCK_PREFERENCE_NAME, true);
 		defaultPreferences.put(SeverityPreferences.WRONG_BUILDER_ORDER_PREFERENCE_NAME, ELSeverityPreferences.ERROR);
 		for (String name : ELSeverityPreferences.SEVERITY_OPTION_NAMES) {
@@ -41,5 +43,9 @@ public class ELPreferenceInitializer extends AbstractPreferenceInitializer {
 		defaultPreferences.put(ELSeverityPreferences.RE_VALIDATE_UNRESOLVED_EL, ELSeverityPreferences.ENABLE);
 		defaultPreferences.putInt(SeverityPreferences.MAX_NUMBER_OF_MARKERS_PREFERENCE_NAME, SeverityPreferences.DEFAULT_MAX_NUMBER_OF_MARKERS_PER_FILE);
 		defaultPreferences.put(ELSeverityPreferences.NON_EXTERNALIZED_STRINGS, ELSeverityPreferences.IGNORE);
+
+		//KB preferences
+		defaultPreferences.put(KBSeverityPreferences.REQUIRED_KB_CAPABILITIES_ARE_MISSING, SeverityPreferences.WARNING);
+		defaultPreferences.put(KBSeverityPreferences.KB_CAPABILITIES_ARE_NOT_ENABLED_IN_JAVA_MODULE, SeverityPreferences.WARNING);
 	}
 }

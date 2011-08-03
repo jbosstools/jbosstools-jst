@@ -22,6 +22,12 @@ public class KBPreferencesMessages extends NLS {
 	public static String KB_DESCRIPTION;
 
 	public static String KB_SETTINGS_PREFERENCE_PAGE_KB_SUPPORT;
+	public static String KB_VALIDATOR_PREFERENCE_PAGE_KB_VALIDATOR;
+	
+	public static String KBValidationConfigurationBlock_common_description;
+	public static String KBValidationConfigurationBlock_section_config;
+	public static String KBValidationConfigurationBlock_pb_requiredKbCapabilitiesAreMissing_label;
+	public static String KBValidationConfigurationBlock_pb_kbCapabilitiesAreNotEnabledInJavaModule_label;
 
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, KBPreferencesMessages.class);

@@ -10,33 +10,43 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.preferences;
 
-import org.eclipse.jface.preference.PreferencePage;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
+import org.jboss.tools.common.ui.preferences.SeverityPreferencePage;
+import org.jboss.tools.jst.web.kb.WebKbPlugin;
 
 /**
  * @author Viacheslav Kabanovich
  */
-public class KBValidationPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
-	
-	/**
-	 * @see plugin.xml descriptor for ID
-	 */
-	public static final String ID = "org.jboss.tools.common.model.ui.kb"; //$NON-NLS-1$
+public class KBValidationPreferencePage extends SeverityPreferencePage {
+	public static final String PREF_ID = "org.jboss.tools.jst.web.kb.preferences.KBValidationPreferencePage"; //$NON-NLS-1$
+	public static final String PROP_ID = "org.jboss.tools.jst.web.kb.propertyPages.KBValidationPreferencePage"; //$NON-NLS-1$\
+
+	public KBValidationPreferencePage() {
+		setPreferenceStore(WebKbPlugin.getDefault().getPreferenceStore());
+		setTitle(KBPreferencesMessages.KB_VALIDATOR_PREFERENCE_PAGE_KB_VALIDATOR);
+	}
 
 	@Override
-	protected Control createContents(Composite parent) {
-		Composite root = new Composite(parent, SWT.NONE);
-		GridLayout gl = new GridLayout(1, false);
-		root.setLayout(gl);
+	public void createControl(Composite parent) {
+		IWorkbenchPreferenceContainer container = (IWorkbenchPreferenceContainer) getContainer();
+		fConfigurationBlock = new KBValidationConfigurationBlock(getNewStatusChangedListener(), getProject(), container);
 
-		return root;
+		super.createControl(parent);
 	}
 
 	public void init(IWorkbench workbench) {
+	}
+
+	@Override
+	protected String getPreferencePageID() {
+		// TODO Auto-generated method stub
+		return PREF_ID;
+	}
+
+	@Override
+	protected String getPropertyPageID() {
+		return PROP_ID;
 	}
 }

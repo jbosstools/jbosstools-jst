@@ -306,6 +306,17 @@
 				</adapt>
          </enabledWhen>
       </page>
+       <page
+            name="%PreferencePage_KBValidator"
+            class="org.jboss.tools.jst.web.kb.preferences.KBValidationPreferencePage"
+            id="org.jboss.tools.jst.web.kb.propertyPages.KBValidationPreferencePage"
+            category="org.jboss.tools.jst.web.kb.propertyPages.KBSettingsPreferencePage">
+         <enabledWhen>
+		     	<adapt type="org.eclipse.core.resources.IProject">
+		     		<test property="org.eclipse.core.resources.projectNature" value="org.eclipse.jdt.core.javanature"/>
+				</adapt>
+         </enabledWhen>
+      </page>
    </extension>
 
    <extension point="org.eclipse.ui.preferencePages">

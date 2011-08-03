@@ -22,12 +22,11 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.jboss.tools.common.ui.preferences.SettingsPage;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditorFactory;
 import org.jboss.tools.jst.web.kb.IKbProject;
-import org.jboss.tools.jst.web.kb.KbMessages;
-import org.jboss.tools.jst.web.kb.KbProjectFactory;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 
 /**
@@ -68,6 +67,9 @@ public class KBSettingsPreferencePage extends SettingsPage {
 		GridLayout gridLayout = new GridLayout(1, false);
 		root.setLayout(gridLayout);
 
+		Label lable = new Label(root, 0);
+		lable.setText(KBPreferencesMessages.KB_DESCRIPTION);
+
 		Composite generalGroup = new Composite(root, SWT.NONE);
 		generalGroup.setLayoutData(gd);
 		gridLayout = new GridLayout(4, false);
@@ -76,7 +78,7 @@ public class KBSettingsPreferencePage extends SettingsPage {
 
 		initialState = isKBEnabled(project);
 		IFieldEditor kbSupportCheckBox = IFieldEditorFactory.INSTANCE.createCheckboxEditor(
-				KbMessages.KB_SETTINGS_PREFERENCE_PAGE_KB_SUPPORT, KbMessages.KB_SETTINGS_PREFERENCE_PAGE_KB_SUPPORT, initialState);
+				KBPreferencesMessages.KB_SETTINGS_PREFERENCE_PAGE_KB_SUPPORT, KBPreferencesMessages.KB_SETTINGS_PREFERENCE_PAGE_KB_SUPPORT, initialState);
 		kbSupportCheckBox.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
 				Object value = evt.getNewValue();
@@ -99,7 +101,7 @@ public class KBSettingsPreferencePage extends SettingsPage {
 	 */
 	@Override
 	protected void performDefaults() {
-		getEditor(KbMessages.KB_SETTINGS_PREFERENCE_PAGE_KB_SUPPORT).setValue(isKBEnabled(project));
+		getEditor(KBPreferencesMessages.KB_SETTINGS_PREFERENCE_PAGE_KB_SUPPORT).setValue(isKBEnabled(project));
 		validate();
 	}
 
@@ -145,7 +147,7 @@ public class KBSettingsPreferencePage extends SettingsPage {
 
 	public void setEnabledKBSuport(boolean enabled) {
 		kbEnabled = enabled;
-		editorRegistry.get(KbMessages.KB_SETTINGS_PREFERENCE_PAGE_KB_SUPPORT).setValue(enabled);
+		editorRegistry.get(KBPreferencesMessages.KB_SETTINGS_PREFERENCE_PAGE_KB_SUPPORT).setValue(enabled);
 	}
 
 	/*

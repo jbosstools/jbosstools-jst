@@ -42,6 +42,4 @@ public class KbMessages {
 	public static String ILLEGAL_CONTENTTYPE;
 	
 	public static String EXCEPTION_DURING_CREATING_MARKER; 
-	
-	public static String KB_SETTINGS_PREFERENCE_PAGE_KB_SUPPORT;
-}
+	}
