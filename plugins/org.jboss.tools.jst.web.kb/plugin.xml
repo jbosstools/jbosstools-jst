@@ -308,6 +308,21 @@
       </page>
    </extension>
 
+   <extension point="org.eclipse.ui.preferencePages">
+      <page 
+         category="org.jboss.tools.common.model.ui.kb" 
+         class="org.jboss.tools.jst.web.kb.preferences.KBValidationPreferencePage" 
+         id="org.jboss.tools.jst.web.kb.preferences.KBValidationPreferencePage" 
+         name="%PreferencePage_KBValidator">
+      </page>
+      <page
+            category="org.jboss.tools.common.model.ui"
+            class="org.jboss.tools.jst.web.kb.preferences.KBPreferencePage"
+            id="org.jboss.tools.common.model.ui.kb"
+            name="%PreferencePage_KB">
+      </page>
+   </extension>
+
 	<extension
 		point="org.eclipse.ui.popupMenus">
 
