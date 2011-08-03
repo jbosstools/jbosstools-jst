@@ -132,6 +132,7 @@ public class WebModelPlugin extends BaseUIPlugin {
      * @throws CoreException
      */
     public static void addNatureToProjectWithValidationSupport(IProject project, String builderId, String natureId) throws CoreException {
+    	EclipseResourceUtil.addNatureToProject(project, natureId);
 	    IProjectDescription desc = project.getDescription();
 	    ICommand[] existing = desc.getBuildSpec();
 	    boolean updated = false;
@@ -174,7 +175,6 @@ public class WebModelPlugin extends BaseUIPlugin {
 	    	    project.setDescription(desc, null);
 	    	    updated = false;
 	    	}
-	    	EclipseResourceUtil.addNatureToProject(project, natureId);
 		    desc = project.getDescription();
 		    existing = desc.getBuildSpec();
 	    	builderIndex = existing.length-1;
