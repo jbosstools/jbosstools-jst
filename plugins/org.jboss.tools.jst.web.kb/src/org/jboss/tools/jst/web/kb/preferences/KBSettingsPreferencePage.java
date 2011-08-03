@@ -14,6 +14,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.SWT;
@@ -24,6 +25,7 @@ import org.eclipse.swt.widgets.Control;
 import org.jboss.tools.common.ui.preferences.SettingsPage;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditorFactory;
+import org.jboss.tools.jst.web.kb.IKbProject;
 import org.jboss.tools.jst.web.kb.KbMessages;
 import org.jboss.tools.jst.web.kb.KbProjectFactory;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
@@ -129,7 +131,12 @@ public class KBSettingsPreferencePage extends SettingsPage {
 	}
 
 	private boolean isKBEnabled(IProject project) {
-		return KbProjectFactory.getKbProject(project, false) != null;
+		try {
+			return(project.isAccessible() && project.hasNature(IKbProject.NATURE_ID));
+		} catch (CoreException e) {
+			//ignore - all checks are done above
+			return false;
+		}
 	}
 
 	private boolean isKBEnabled() {

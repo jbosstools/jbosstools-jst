@@ -29,6 +29,7 @@ import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.internal.scanner.IFileScanner;
 import org.jboss.tools.jst.web.kb.internal.scanner.LibraryScanner;
+import org.jboss.tools.jst.web.kb.internal.scanner.UsedJavaProjectCheck;
 import org.jboss.tools.jst.web.kb.internal.scanner.XMLScanner;
 import org.osgi.framework.Bundle;
 
@@ -101,6 +102,7 @@ public class KbBuilder extends IncrementalProjectBuilder {
 			} else if(sp.getClassPath().hasToUpdateProjectDependencies()) {
 				sp.getClassPath().validateProjectDependencies();
 			}
+			new UsedJavaProjectCheck().check(sp);
 
 			TypeInfoCollector.cleanCache();
 

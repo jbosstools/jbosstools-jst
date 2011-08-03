@@ -34,6 +34,11 @@ public class KbMessages {
 	public static String KBPROBLEM;
 	public static String KBPROBLEM_LOCATION;
 	public static String ENABLE_KB;
+	public static String KBPROBLEM_DEPENDS_ON_JAVA_SINGLE;
+	public static String KBPROBLEM_DEPENDS_ON_JAVA_MANY;
+	public static String ENABLE_KB_ON_SINGLE;
+	public static String ENABLE_KB_ON_MANY;
+	
 	public static String ILLEGAL_CONTENTTYPE;
 	
 	public static String EXCEPTION_DURING_CREATING_MARKER; 

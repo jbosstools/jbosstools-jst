@@ -460,18 +460,19 @@ public class ELValidator extends WebValidator {
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidator#shouldValidate(org.eclipse.core.resources.IProject)
 	 */
 	public boolean shouldValidate(IProject project) {
+		boolean result = false;
 		try {
 			if(validateBuilderOrder(project) && isEnabled(project)) {
 				for (IELValidationDelegate delegate : DELEGATES) {
 					if(delegate.shouldValidate(project)) {
-						return true;
+						result = true;
 					}
 				}
 			}
 		} catch (CoreException e) {
 			WebKbPlugin.getDefault().logError(e);
 		}
-		return false;
+		return result;
 	}
 
 	private boolean validateBuilderOrder(IProject project) throws CoreException {

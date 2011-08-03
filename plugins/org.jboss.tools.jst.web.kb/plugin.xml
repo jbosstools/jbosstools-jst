@@ -241,6 +241,9 @@
       </super>
       <persistent value="true">
       </persistent>
+      <attribute
+            name="kind">
+      </attribute>
    </extension>
 
    <extension
