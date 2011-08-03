@@ -9,6 +9,7 @@ import org.jboss.tools.common.meta.action.XAction;
 import org.jboss.tools.common.meta.action.impl.XActionImpl;
 import org.jboss.tools.common.meta.action.impl.handlers.DefaultRedirectHandler;
 import org.jboss.tools.common.model.*;
+import org.jboss.tools.common.model.filesystems.FileSystemsHelper;
 import org.jboss.tools.common.model.filesystems.XFileObject;
 import org.jboss.tools.jst.web.model.ReferenceObject;
 
@@ -72,8 +73,7 @@ public class WebRedirectHandler extends DefaultRedirectHandler {
     private boolean checkConfigVersion(XModelObject object) {
         String entity = action.getProperty("configEntity"); //$NON-NLS-1$
         if(entity == null) return true;
-        XModelObject f = object;
-        while(f != null && f.getFileType() != XFileObject.FILE) f = f.getParent();
+        XModelObject f = FileSystemsHelper.getFile(object);
         if(f == null) return true;
         boolean b = f.getModelEntity().getName().equals(entity);
         if(b) return true;
