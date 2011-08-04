@@ -46,6 +46,7 @@ import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.util.BeanUtil;
 import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
+import org.jboss.tools.jst.web.kb.WebKbPlugin;
 
 public abstract class RefactorSearcher {
 	protected static final String JAVA_EXT = "java"; //$NON-NLS-1$
@@ -248,7 +249,7 @@ public abstract class RefactorSearcher {
 			InputStream is = file.getContents();
 			if(is != null) text = FileUtil.readStream(is);
 		} catch (CoreException e) {
-			//ignore
+			WebKbPlugin.getDefault().logError(e);
 		}
 		if(text != null) {
 			boolean found = false;
