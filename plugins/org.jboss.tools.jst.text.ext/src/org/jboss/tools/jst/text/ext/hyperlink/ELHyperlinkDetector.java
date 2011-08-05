@@ -10,7 +10,9 @@
  ******************************************************************************/
 package org.jboss.tools.jst.text.ext.hyperlink;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.IRegion;
@@ -42,7 +44,7 @@ public class ELHyperlinkDetector extends AbstractHyperlinkDetector{
 		ELContext context = PageContextFactory.createPageContext(file);
 		if(context == null)
 			return null;
-		
+		Set<IHyperlink> links = new HashSet<IHyperlink>();
 		ELReference reference = context.getELReference(region.getOffset());
 		if(reference != null){
 			ELInvocationExpression expression = findInvocationExpressionByOffset(reference, region.getOffset());
@@ -54,7 +56,8 @@ public class ELHyperlinkDetector extends AbstractHyperlinkDetector{
 						ELSegment segment = resolution.findSegmentByOffset(region.getOffset()-reference.getStartPosition());
 	
 						if(segment != null && segment.isResolved()){
-							return new IHyperlink[]{new ELHyperlink(textViewer.getDocument(), reference, segment)};
+//							return new IHyperlink[]{new ELHyperlink(textViewer.getDocument(), reference, segment)};
+							links.add(new ELHyperlink(textViewer.getDocument(), reference, segment));
 						}
 						
 					}
@@ -62,7 +65,9 @@ public class ELHyperlinkDetector extends AbstractHyperlinkDetector{
 			}
 			
 		}
-		return null;
+		if (links.size() == 0)
+			return null;
+		return (IHyperlink[])links.toArray(new IHyperlink[links.size()]);
 	}
 	
 	private ELInvocationExpression findInvocationExpressionByOffset(ELReference reference, int offset){
