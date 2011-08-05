@@ -368,8 +368,8 @@ public class ELValidator extends WebValidator {
 				validationContext.addLinkedEl(variable.getName(), elReference);
 			}
 
-			if (resolution.isResolved()) {
-				// It's valid EL.
+			if (resolution.isResolved() || !resolution.isValidatable()) {
+				// It's valid EL or we should ignore it.
 				return;
 			}
 
