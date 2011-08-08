@@ -52,9 +52,10 @@ import org.eclipse.wst.sse.ui.internal.util.EditorUtility;
 import org.jboss.tools.common.text.ext.hyperlink.HyperlinkDetector;
 import org.jboss.tools.common.text.xml.JBDSQuickAssistProcessor;
 import org.jboss.tools.common.text.xml.contentassist.ProposalSorter;
+import org.jboss.tools.common.text.xml.info.ChainTextHover;
+import org.jboss.tools.common.text.xml.info.TextHoverInformationProvider;
 import org.jboss.tools.common.text.xml.xpl.MarkerProblemAnnotationHoverProcessor;
 import org.jboss.tools.jst.jsp.format.HTMLFormatProcessor;
-import org.jboss.tools.jst.jsp.jspeditor.info.ChainTextHover;
 
 @SuppressWarnings("restriction")
 public class HTMLTextViewerConfiguration extends
@@ -199,21 +200,14 @@ public class HTMLTextViewerConfiguration extends
 	@Override
 	protected IInformationProvider getInformationProvider(
 			ISourceViewer sourceViewer, String partitionType) {
-		ITextHover chainTextHover = null;
 		ITextHover[] hovers = createDocumentationHovers(partitionType);
 		if (hovers == null) {
 			hovers = new ITextHover[] {new ChainTextHover(
 					new ITextHover[0])};
 		}
 		
-		if (hovers.length == 1) {
-			chainTextHover = hovers[0];
-		} else {
-			chainTextHover = new ChainTextHover(
-					hovers);
-		}
-		
-		return new TextHoverInformationProvider(chainTextHover);
+		return new TextHoverInformationProvider(new ChainTextHover(
+				hovers));
 	}
 
 	@Override
