@@ -122,7 +122,6 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 				editorComp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 				editorComp.setLayout(new FillLayout(SWT.VERTICAL));
 				editor.createPartControl(editorComp);
-				sourcePart.init(site, input);
 			}else {
 				editor.createPartControl(parent2);
 			}
