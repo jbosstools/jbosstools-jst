@@ -12,11 +12,11 @@ package org.jboss.tools.jst.jsp.jspeditor.info;
 
 import org.eclipse.osgi.util.NLS;
 
-public class ELInfoHooverMessages extends NLS {
+public class ELInfoHoverMessages extends NLS {
 
-	private static final String BUNDLE_NAME= ELInfoHooverMessages.class.getName();
+	private static final String BUNDLE_NAME= ELInfoHoverMessages.class.getName();
 
-	private ELInfoHooverMessages() {
+	private ELInfoHoverMessages() {
 		// Do not instantiate
 	}
 
@@ -28,6 +28,6 @@ public class ELInfoHooverMessages extends NLS {
 	public static String ELInfoHoover_error_gettingInfo; 	//
 	
 	static {
-		NLS.initializeMessages(BUNDLE_NAME, ELInfoHooverMessages.class);
+		NLS.initializeMessages(BUNDLE_NAME, ELInfoHoverMessages.class);
 	}
 }

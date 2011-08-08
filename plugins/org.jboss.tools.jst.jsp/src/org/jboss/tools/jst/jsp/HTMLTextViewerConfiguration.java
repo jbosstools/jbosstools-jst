@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2007 Exadel, Inc. and Red Hat, Inc.
+ * Copyright (c) 2007-2011 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
+ *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 package org.jboss.tools.jst.jsp;
 
@@ -21,7 +21,6 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.jdt.internal.ui.text.correction.JavaCorrectionAssistant;
 import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.jface.text.DefaultInformationControl;
 import org.eclipse.jface.text.IInformationControl;
@@ -35,23 +34,19 @@ import org.eclipse.jface.text.information.IInformationProvider;
 import org.eclipse.jface.text.quickassist.IQuickAssistAssistant;
 import org.eclipse.jface.text.quickassist.QuickAssistAssistant;
 import org.eclipse.jface.text.source.ISourceViewer;
-import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
 import org.eclipse.wst.html.core.text.IHTMLPartitions;
 import org.eclipse.wst.html.ui.StructuredTextViewerConfigurationHTML;
 import org.eclipse.wst.html.ui.internal.contentassist.HTMLStructuredContentAssistProcessor;
 import org.eclipse.wst.sse.ui.contentassist.CompletionProposalInvocationContext;
 import org.eclipse.wst.sse.ui.internal.ExtendedConfigurationBuilder;
 import org.eclipse.wst.sse.ui.internal.SSEUIPlugin;
-import org.eclipse.wst.sse.ui.internal.correction.CompoundQuickAssistProcessor;
 import org.eclipse.wst.sse.ui.internal.derived.HTMLTextPresenter;
 import org.eclipse.wst.sse.ui.internal.format.StructuredFormattingStrategy;
 import org.eclipse.wst.sse.ui.internal.preferences.EditorPreferenceNames;
 import org.eclipse.wst.sse.ui.internal.taginfo.AnnotationHoverProcessor;
-import org.eclipse.wst.sse.ui.internal.taginfo.ProblemAnnotationHoverProcessor;
 import org.eclipse.wst.sse.ui.internal.taginfo.TextHoverManager;
 import org.eclipse.wst.sse.ui.internal.util.EditorUtility;
 import org.jboss.tools.common.text.ext.hyperlink.HyperlinkDetector;
@@ -195,15 +190,29 @@ public class HTMLTextViewerConfiguration extends
 						partitionType);
 		ITextHover[] hovers = (ITextHover[]) extendedTextHover
 				.toArray(new ITextHover[extendedTextHover.size()]);
-		return hovers;
+
+		ITextHover chainTextHover = new ChainTextHover(hovers);
+
+		return new ITextHover[] {chainTextHover};
 	}
 
 	@Override
 	protected IInformationProvider getInformationProvider(
 			ISourceViewer sourceViewer, String partitionType) {
-
-		ITextHover chainTextHover = new ChainTextHover(
-				createDocumentationHovers(partitionType));
+		ITextHover chainTextHover = null;
+		ITextHover[] hovers = createDocumentationHovers(partitionType);
+		if (hovers == null) {
+			hovers = new ITextHover[] {new ChainTextHover(
+					new ITextHover[0])};
+		}
+		
+		if (hovers.length == 1) {
+			chainTextHover = hovers[0];
+		} else {
+			chainTextHover = new ChainTextHover(
+					hovers);
+		}
+		
 		return new TextHoverInformationProvider(chainTextHover);
 	}
 
@@ -224,14 +233,15 @@ public class HTMLTextViewerConfiguration extends
 					&& computeStateMask(hoverDescs[i].getModifierString()) == stateMask) {
 				String hoverType = hoverDescs[i].getId();
 				if (TextHoverManager.PROBLEM_HOVER.equalsIgnoreCase(hoverType))
-					textHover = new ProblemAnnotationHoverProcessor();
+//					textHover = new ProblemAnnotationHoverProcessor();
+					textHover = new MarkerProblemAnnotationHoverProcessor();
 				else if (TextHoverManager.ANNOTATION_HOVER
 						.equalsIgnoreCase(hoverType))
 					textHover = new AnnotationHoverProcessor();
 				else if (TextHoverManager.COMBINATION_HOVER
-						.equalsIgnoreCase(hoverType))
-					return new MarkerProblemAnnotationHoverProcessor();
-				else if (TextHoverManager.DOCUMENTATION_HOVER
+						.equalsIgnoreCase(hoverType)) {
+					textHover = new ChainTextHover(createDocumentationHovers(contentType));
+				} else if (TextHoverManager.DOCUMENTATION_HOVER
 						.equalsIgnoreCase(hoverType)) {
 					ITextHover[] hovers = createDocumentationHovers(contentType);
 					if (hovers.length > 0) {

@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2009 Red Hat, Inc. 
+ * Copyright (c) 2009-2011 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -23,7 +23,7 @@ import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.wst.sse.ui.internal.Logger;
 import org.eclipse.wst.sse.ui.internal.taginfo.AnnotationHoverProcessor;
 import org.eclipse.wst.sse.ui.internal.taginfo.DebugInfoHoverProcessor;
-import org.eclipse.wst.sse.ui.internal.taginfo.ProblemAnnotationHoverProcessor;
+import org.jboss.tools.common.text.xml.xpl.MarkerProblemAnnotationHoverProcessor;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 
 
@@ -39,7 +39,7 @@ import org.jboss.tools.jst.jsp.JspEditorPlugin;
  *
  */
 @SuppressWarnings("restriction")
-public class ChainTextHover implements ITextHover, ITextHoverExtension {
+public class ChainTextHover implements ITextHover, ITextHoverExtension, ITextHoverExtension2 {
 	private ITextHover fBestMatchHover; // current best match text hover
 	private ITextHover[] fTagInfoHovers; // documentation/information hover
 	private List<ITextHover> fTextHovers; // list of text hovers to consider in best
@@ -67,7 +67,8 @@ public class ChainTextHover implements ITextHover, ITextHoverExtension {
 			hoverList.add(new DebugInfoHoverProcessor());
 		}
 
-		hoverList.add(new ProblemAnnotationHoverProcessor());
+//		hoverList.add(new ProblemAnnotationHoverProcessor());
+		hoverList.add(new MarkerProblemAnnotationHoverProcessor());
 
 		if (fTagInfoHovers != null) {
 			for (int i = 0; i < fTagInfoHovers.length; i++) {
@@ -108,7 +109,7 @@ public class ChainTextHover implements ITextHover, ITextHoverExtension {
 			try {
 				displayInfo = fBestMatchHover.getHoverInfo(viewer, hoverRegion);
 			} catch (Exception e) {
-				JspEditorPlugin.getPluginLog().logError(ELInfoHooverMessages.ELInfoHoover_error_gettingInfo, e);
+				JspEditorPlugin.getPluginLog().logError(ELInfoHoverMessages.ELInfoHoover_error_gettingInfo, e);
 			}
 		}
 		// either had no best match hover or best match hover returned null
@@ -127,11 +128,49 @@ public class ChainTextHover implements ITextHover, ITextHoverExtension {
 						displayInfo = hover.getHoverInfo(viewer, hoverRegion);
 					}
 				} catch (Exception e) {
-					JspEditorPlugin.getPluginLog().logError(ELInfoHooverMessages.ELInfoHoover_error_gettingInfo, e);
+					JspEditorPlugin.getPluginLog().logError(ELInfoHoverMessages.ELInfoHoover_error_gettingInfo, e);
 				}
 			}
 		}
 		return displayInfo;
+	}
+
+	
+	
+	@Override
+	public Object getHoverInfo2(ITextViewer viewer, IRegion hoverRegion) {
+		Object objectInfo = null;
+
+		// already have a best match hover picked out from getHoverRegion call
+		if (fBestMatchHover != null) {
+			try {
+				if (fBestMatchHover instanceof ITextHoverExtension2) {
+					objectInfo = ((ITextHoverExtension2) fBestMatchHover).getHoverInfo2(viewer, hoverRegion);
+				} else {
+					objectInfo = fBestMatchHover.getHoverInfo(viewer, hoverRegion);
+				}
+			} catch (Exception e) {
+				JspEditorPlugin.getPluginLog().logError(ELInfoHoverMessages.ELInfoHoover_error_gettingInfo, e);
+			}
+		}
+		// either had no best match hover or best match hover returned null
+		if (objectInfo == null) {
+			// go through the list of text hovers and return first display string
+			Iterator<ITextHover> i = getTextHovers().iterator();
+			while ((i.hasNext()) && (objectInfo == null)) {
+				ITextHover hover = (ITextHover) i.next();
+				try {
+					if(hover instanceof ITextHoverExtension2) {
+						objectInfo = ((ITextHoverExtension2)hover).getHoverInfo2(viewer, hoverRegion);
+					} else {
+						objectInfo = hover.getHoverInfo(viewer, hoverRegion);
+					}
+				} catch (Exception e) {
+					JspEditorPlugin.getPluginLog().logError(ELInfoHoverMessages.ELInfoHoover_error_gettingInfo, e);
+				}
+			}
+		}
+		return objectInfo;
 	}
 
 	/* 

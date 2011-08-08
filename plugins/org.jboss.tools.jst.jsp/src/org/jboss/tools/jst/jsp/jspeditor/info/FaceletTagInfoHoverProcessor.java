@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2010 Red Hat, Inc. 
+ * Copyright (c) 2010-2011 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -10,6 +10,9 @@
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.jspeditor.info;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.List;
 import java.util.Map;
 
@@ -18,10 +21,15 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jface.text.DefaultInformationControl;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IInformationControl;
+import org.eclipse.jface.text.IInformationControlCreator;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.Region;
+import org.eclipse.jface.text.TextPresentation;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
@@ -29,6 +37,8 @@ import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
 import org.eclipse.wst.sse.ui.internal.contentassist.ContentAssistUtils;
+import org.eclipse.wst.sse.ui.internal.derived.HTML2TextReader;
+import org.eclipse.wst.sse.ui.internal.derived.HTMLTextPresenter;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 import org.eclipse.wst.xml.ui.internal.taginfo.XMLTagInfoHoverProcessor;
@@ -44,13 +54,13 @@ import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.ELSegment;
 import org.jboss.tools.common.el.core.resolver.JavaMemberELSegmentImpl;
 import org.jboss.tools.common.text.TextProposal;
-import org.jboss.tools.jst.jsp.contentassist.Utils;
 import org.jboss.tools.jst.jsp.contentassist.AbstractXMLContentAssistProcessor.TextRegion;
+import org.jboss.tools.jst.jsp.contentassist.Utils;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.PageProcessor;
-import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 import org.w3c.dom.Node;
 
@@ -389,4 +399,41 @@ public class FaceletTagInfoHoverProcessor extends XMLTagInfoHoverProcessor {
 		
 		return ie;
 	}
+	
+	private static final String EMPTY_STRING= ""; //$NON-NLS-1$
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.jface.text.ITextHoverExtension#getHoverControlCreator()
+	 */
+	public IInformationControlCreator getHoverControlCreator() {
+		return new IInformationControlCreator() {
+			public IInformationControl createInformationControl(Shell parent) {
+				return new DefaultInformationControl(parent, new HTMLTextPresenter(true) {
+
+					@Override
+					protected Reader createReader(String hoverInfo,
+							TextPresentation presentation) {
+						return new HTML2TextReader(new StringReader(hoverInfo), presentation) {
+							/*
+							 * @see org.eclipse.jdt.internal.ui.text.SubstitutionTextReader#computeSubstitution(int)
+							 */
+							protected String computeSubstitution(int c) throws IOException {
+								String substitution = super.computeSubstitution(c);
+								if (substitution != null && substitution.length() > 0) {
+									// This cuts off all The tags from the text
+									if (substitution.startsWith("<") && substitution.endsWith(">")) { //$NON-NLS-1$ //$NON-NLS-2$
+										return EMPTY_STRING;
+									}
+								}
+								return substitution;
+							}
+						};
+					}
+				});
+			}
+		};
+	}
+
 }

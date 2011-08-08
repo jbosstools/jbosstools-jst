@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2010 Red Hat, Inc. 
+ * Copyright (c) 2010-2011 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -327,7 +327,7 @@ public class JavaStringELInfoHover extends JavadocHover {
 					if (useFullHTML) {
 						HTMLPrinter.addBullet(buffer, getInfoText(elements[i], false, useFullHTML));
 					} else {
-						buffer.append('•').append(' ').append(getInfoText(elements[i], false, useFullHTML));
+						buffer.append('\u002d').append(' ').append(getInfoText(elements[i], false, useFullHTML));
 					}
 					hasContents= true;
 				}
@@ -408,20 +408,20 @@ public class JavaStringELInfoHover extends JavadocHover {
 					boolean hasSource= openable.getBuffer() != null;
 
 					if (!hasAttachedSource && !hasAttachedJavadoc)
-						reader= new StringReader(ELInfoHooverMessages.ELInfoHover_noAttachments);
+						reader= new StringReader(ELInfoHoverMessages.ELInfoHover_noAttachments);
 					else if (!hasAttachedJavadoc && !hasSource)
-						reader= new StringReader(ELInfoHooverMessages.ELInfoHover_noAttachedJavadoc);
+						reader= new StringReader(ELInfoHoverMessages.ELInfoHover_noAttachedJavadoc);
 					else if (!hasAttachedSource)
-						reader= new StringReader(ELInfoHooverMessages.ELInfoHover_noAttachedJavaSource);
+						reader= new StringReader(ELInfoHoverMessages.ELInfoHover_noAttachedJavaSource);
 					else if (!hasSource)
-						reader= new StringReader(ELInfoHooverMessages.ELInfoHover_noInformation);
+						reader= new StringReader(ELInfoHoverMessages.ELInfoHover_noInformation);
 
 				} else {
 					base= JavaDocLocations.getBaseURL(member);
 				}
 
 			} catch (JavaModelException ex) {
-				reader= new StringReader(ELInfoHooverMessages.ELInfoHover_error_gettingJavadoc);
+				reader= new StringReader(ELInfoHoverMessages.ELInfoHover_error_gettingJavadoc);
 				JavaPlugin.log(ex);
 			}
 
