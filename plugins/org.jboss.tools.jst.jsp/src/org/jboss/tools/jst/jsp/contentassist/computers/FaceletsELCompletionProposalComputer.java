@@ -86,7 +86,9 @@ public class FaceletsELCompletionProposalComputer extends JspELCompletionProposa
 			//compute the completion proposals
 			return super.computeCompletionProposals(context, monitor);
 		} finally {
-			fCurrentContext = null;
+			if(!keepState) {
+				fCurrentContext = null;
+			}
 		}
 	}
 

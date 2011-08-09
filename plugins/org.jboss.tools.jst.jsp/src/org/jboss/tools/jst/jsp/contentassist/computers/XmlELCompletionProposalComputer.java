@@ -79,6 +79,19 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 	private static final String[] EMPTY_TAGS = new String[0];
 	protected static final Image JSF_EL_PROPOSAL_IMAGE = JspEditorPlugin.getDefault().getImage(JspEditorPlugin.CA_JSF_EL_IMAGE_PATH);
 
+	/**
+	 * Implementation may only set fCurrentContext to null if keepState is not set to true.
+	 */
+	boolean keepState = false;
+
+	/**
+	 * 
+	 * @param b
+	 */
+	public void setKeepState(boolean b) {
+		keepState = b;
+	}
+
 	@Override
 	protected XMLContentModelGenerator getContentGenerator() {
 		return 	new XMLContentModelGenerator();

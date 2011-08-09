@@ -20,7 +20,6 @@ import org.eclipse.jface.fieldassist.IContentProposal;
 import org.eclipse.jface.fieldassist.IContentProposalProvider;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
-import org.eclipse.jst.jsp.ui.internal.contentassist.JSPContentAssistProcessor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.wst.sse.ui.internal.contentassist.IRelevanceCompletionProposal;
@@ -37,6 +36,7 @@ import org.jboss.tools.common.el.core.resolver.ELResolverFactoryManager;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.jsp.contentassist.AbstractXMLContentAssistProcessor.TextRegion;
+import org.jboss.tools.jst.jsp.contentassist.computers.JspELCompletionProposalComputer;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.ValueHelper;
@@ -61,7 +61,7 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 	String attributeName;
 	String nodeName;
 	int offset = 0;
-	JspContentAssistProcessor processor;
+	JspELCompletionProposalComputer processor;
 	IPageContext pageContext = null;
 
 	public JSPDialogContentProposalProvider() {		
@@ -86,7 +86,7 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
         	valueHelper = new ValueHelper();
         }
         pageContext = (IPageContext)context.get("pageContext"); //$NON-NLS-1$
-        processor = (JspContentAssistProcessor)context.get("processor"); //$NON-NLS-1$
+        processor = (JspELCompletionProposalComputer)context.get("processor"); //$NON-NLS-1$
         if(processor == null) {
         	processor = valueHelper.createContentAssistProcessor();
         	context.put("processor", processor); //$NON-NLS-1$
@@ -336,7 +336,7 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 		return i < 0 ? null : nodeName.substring(0, i);
 	}
 
-	protected String[] getParentTags(JspContentAssistProcessor processor) {
+	protected String[] getParentTags(JspELCompletionProposalComputer processor) {
 		String[] result = processor.getParentTags(true);
 		String[] result1 = add(result, attributeName);
 		return result1;

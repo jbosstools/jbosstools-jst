@@ -20,6 +20,7 @@ import java.util.Set;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.source.ISourceViewer;
@@ -28,11 +29,13 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
+import org.eclipse.wst.sse.ui.contentassist.CompletionProposalInvocationContext;
 import org.jboss.tools.common.model.project.IPromptingProvider;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.model.util.ModelFeatureFactory;
-import org.jboss.tools.jst.jsp.contentassist.FaceletPageContectAssistProcessor;
 import org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor;
+import org.jboss.tools.jst.jsp.contentassist.computers.FaceletsELCompletionProposalComputer;
+import org.jboss.tools.jst.jsp.contentassist.computers.JspELCompletionProposalComputer;
 import org.jboss.tools.jst.jsp.drop.treeviewer.model.AttributeValueResource;
 import org.jboss.tools.jst.jsp.drop.treeviewer.model.AttributeValueResourceFactory;
 import org.jboss.tools.jst.jsp.drop.treeviewer.model.ModelElement;
@@ -113,14 +116,16 @@ public class ValueHelper {
 		return (jspEditor == null) ? null : jspEditor.getPageContext();
 	}
 
-	public JspContentAssistProcessor createContentAssistProcessor() {
-		return isFacetets() ? new FaceletPageContectAssistProcessor() : new JspContentAssistProcessor();
+	public JspELCompletionProposalComputer createContentAssistProcessor() {
+		return isFacetets() ? new FaceletsELCompletionProposalComputer() : new JspELCompletionProposalComputer();
 	}
 
-	public IPageContext createPageContext(JspContentAssistProcessor processor, int offset) {
+	public IPageContext createPageContext(JspELCompletionProposalComputer processor, int offset) {
 		ISourceViewer sv = getSourceViewer();
 		if(sv == null) return null;		
-        processor.createContext(sv, offset);
+//        processor.createContext(sv, offset);
+		processor.setKeepState(true);
+        processor.computeCompletionProposals(new CompletionProposalInvocationContext(sv, offset), new NullProgressMonitor());
         return processor.getContext();
 	}
 

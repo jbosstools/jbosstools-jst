@@ -122,7 +122,7 @@ import org.jboss.tools.common.text.xml.ui.FreeCaretStyledText;
 import org.jboss.tools.jst.jsp.HTMLTextViewerConfiguration;
 import org.jboss.tools.jst.jsp.JSPTextViewerConfiguration;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
-import org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor;
+import org.jboss.tools.jst.jsp.contentassist.computers.JspELCompletionProposalComputer;
 import org.jboss.tools.jst.jsp.editor.IJSPTextEditor;
 import org.jboss.tools.jst.jsp.editor.ITextFormatter;
 import org.jboss.tools.jst.jsp.editor.IVisualContext;
@@ -788,7 +788,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 	class AttributeDescriptorValueProviderImpl implements AttributeDescriptorValueProvider {
 		TagProposal proposal;
 		KbQuery query;
-		JspContentAssistProcessor processor;
+		JspELCompletionProposalComputer processor;
 		IPageContext pageContext;
 
 		public void setProposal(ITagProposal proposal) {

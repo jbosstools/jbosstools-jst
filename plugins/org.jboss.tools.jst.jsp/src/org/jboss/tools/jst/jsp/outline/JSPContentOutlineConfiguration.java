@@ -45,6 +45,7 @@ import org.jboss.tools.common.model.ui.dnd.ModelTransfer;
 import org.jboss.tools.common.model.ui.editors.dnd.context.DropContext;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor;
+import org.jboss.tools.jst.jsp.contentassist.computers.JspELCompletionProposalComputer;
 import org.jboss.tools.jst.jsp.editor.IJSPTextEditor;
 import org.jboss.tools.jst.jsp.editor.IViewerDropAdapterFactory;
 import org.jboss.tools.jst.web.kb.IPageContext;
@@ -174,7 +175,7 @@ public class JSPContentOutlineConfiguration extends HTMLContentOutlineConfigurat
 					} else {
 						List modelQueryActionList = new ArrayList();
 						
-						JspContentAssistProcessor processor = valueHelper.createContentAssistProcessor();
+						JspELCompletionProposalComputer processor = valueHelper.createContentAssistProcessor();
 						int offset = 0;
 						if(element instanceof IndexedRegion) {
 							offset = ((IndexedRegion)element).getStartOffset() + 1;
@@ -222,7 +223,7 @@ public class JSPContentOutlineConfiguration extends HTMLContentOutlineConfigurat
 		};
 	}
 
-	protected KbQuery createKbQuery(JspContentAssistProcessor processor, Node fNode, int offset) {
+	protected KbQuery createKbQuery(JspELCompletionProposalComputer processor, Node fNode, int offset) {
 		KbQuery kbQuery = new KbQuery();
 
 		String[] parentTags = processor.getParentTags(false);

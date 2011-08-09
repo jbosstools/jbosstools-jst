@@ -19,6 +19,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.Stack;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -28,6 +29,7 @@ import org.eclipse.ui.views.properties.IPropertySource2;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 import org.eclipse.wst.sse.core.internal.provisional.INodeAdapter;
 import org.eclipse.wst.sse.core.internal.provisional.INodeNotifier;
+import org.eclipse.wst.sse.ui.contentassist.CompletionProposalInvocationContext;
 import org.eclipse.wst.sse.ui.views.properties.IPropertySourceExtension;
 import org.eclipse.wst.xml.core.internal.contentmodel.CMAttributeDeclaration;
 import org.eclipse.wst.xml.core.internal.contentmodel.CMDataType;
@@ -43,6 +45,8 @@ import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.contentassist.FaceletPageContectAssistProcessor;
 import org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor;
+import org.jboss.tools.jst.jsp.contentassist.computers.FaceletsELCompletionProposalComputer;
+import org.jboss.tools.jst.jsp.contentassist.computers.JspELCompletionProposalComputer;
 import org.jboss.tools.jst.jsp.editor.IVisualController;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.web.kb.IPageContext;
@@ -91,7 +95,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 	private IPropertyDescriptor[] fDescriptors = null;
 	private ValueHelper valueHelper = new ValueHelper();
 	IPageContext pageContext;
-	JspContentAssistProcessor processor;
+	JspELCompletionProposalComputer processor;
 	int offset = 0;
 	KbQuery kbQuery, kbQueryAttr;
 	@SuppressWarnings("unchecked")
@@ -122,8 +126,10 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 		}
 
 		if(fNode instanceof Node) {
-			processor = valueHelper.isFacetets() ? new FaceletPageContectAssistProcessor() : new JspContentAssistProcessor();
-			processor.createContext(getTextViewer(), offset);
+			processor = valueHelper.isFacetets() ? new FaceletsELCompletionProposalComputer() : new JspELCompletionProposalComputer();
+//			processor.createContext(getTextViewer(), offset);
+			processor.setKeepState(true);
+	        processor.computeCompletionProposals(new CompletionProposalInvocationContext(getTextViewer(), offset), new NullProgressMonitor());
 			pageContext = processor.getContext();
 			kbQuery = createKbQuery(processor);
 			kbQuery.setMask(true); 
@@ -293,7 +299,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 		return descriptors;
 	}
 
-	protected KbQuery createKbQuery(JspContentAssistProcessor processor) {
+	protected KbQuery createKbQuery(JspELCompletionProposalComputer processor) {
 		KbQuery kbQuery = new KbQuery();
 
 		String[] parentTags = processor.getParentTags(false);
