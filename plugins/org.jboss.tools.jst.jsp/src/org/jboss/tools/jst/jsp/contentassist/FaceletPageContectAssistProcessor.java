@@ -32,6 +32,7 @@ import org.w3c.dom.Node;
  * @author Jeremy
  *
  */
+@Deprecated
 @SuppressWarnings("restriction")
 public class FaceletPageContectAssistProcessor extends JspContentAssistProcessor {
 	private static final String JSFC_ATTRIBUTE_NAME = "jsfc"; //$NON-NLS-1$

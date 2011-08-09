@@ -55,6 +55,7 @@ import org.w3c.dom.Node;
  * @author Jeremy
  *
  */
+@Deprecated
 @SuppressWarnings("restriction")
 public class JspContentAssistProcessor extends XmlContentAssistProcessor {
 	

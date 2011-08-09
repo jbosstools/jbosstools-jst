@@ -38,6 +38,7 @@ import org.jboss.tools.jst.web.kb.taglib.INameSpace;
  * @author Jeremy
  *
  */
+@Deprecated
 @SuppressWarnings("restriction")
 public class XmlContentAssistProcessor extends AbstractXMLContentAssistProcessor {
 	protected static final Image JSF_EL_PROPOSAL_IMAGE = JspEditorPlugin.getDefault().getImage(JspEditorPlugin.CA_JSF_EL_IMAGE_PATH);

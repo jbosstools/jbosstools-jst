@@ -55,7 +55,10 @@ import org.w3c.dom.NodeList;
 abstract public class AbstractXmlCompletionProposalComputer extends AbstractXMLModelQueryCompletionProposalComputer {
 	protected static final ICompletionProposal[] EMPTY_PROPOSAL_LIST = new ICompletionProposal[0];
 	private static final String[] EMPTY_TAGS = new String[0];
-
+	public static final String EL_DOLLAR_PREFIX = "${"; //$NON-NLS-1$
+	public static final String EL_NUMBER_PREFIX = "#{"; //$NON-NLS-1$
+	public static final String[] EL_PREFIXES = {EL_DOLLAR_PREFIX, EL_NUMBER_PREFIX};
+	
 	protected CompletionProposalInvocationContext fCurrentContext;
 	
 	protected ELContext fContext;
@@ -707,5 +710,23 @@ abstract public class AbstractXmlCompletionProposalComputer extends AbstractXMLM
 	 */
 	abstract protected void addTextELProposals(ContentAssistRequest contentAssistRequest,
 			CompletionProposalInvocationContext context);
+
+	/**
+	 * Returns default prefix for ELs
+	 * 
+	 * @return default EL prefix
+	 */
+	public String getDefaultELPrefix() {
+		return EL_DOLLAR_PREFIX;
+	}
 	
+	/**
+	 * Checks if the specified text begins with a one of possible EL prefixes
+	 *  
+	 * @param text
+	 * @return true if one of EL prefixes found 
+	 */
+	protected boolean startsWithELBeginning(String text) {
+		return (text != null && (text.startsWith(EL_DOLLAR_PREFIX) || text.startsWith(EL_NUMBER_PREFIX)));
+	}
 }

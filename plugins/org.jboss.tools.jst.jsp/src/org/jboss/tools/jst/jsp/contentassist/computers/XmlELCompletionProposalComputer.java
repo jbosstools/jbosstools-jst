@@ -163,14 +163,14 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 
 		if(!prefix.isELStarted()) {
 			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(true, 
-					"#{}" + (prefix.isAttributeValue() && prefix.hasOpenQuote() && !prefix.hasCloseQuote() ? String.valueOf(prefix.getQuoteChar()) : ""), //$NON-NLS-1$ //$NON-NLS-2$
+					getDefaultELPrefix() + "}" + (prefix.isAttributeValue() && prefix.hasOpenQuote() && !prefix.hasCloseQuote() ? String.valueOf(prefix.getQuoteChar()) : ""), //$NON-NLS-1$ //$NON-NLS-2$
 					getOffset(), 0, 2, JSF_EL_PROPOSAL_IMAGE, JstUIMessages.JspContentAssistProcessor_NewELExpression, 
 					null, JstUIMessages.JspContentAssistProcessor_NewELExpressionAttrInfo, TextProposal.R_XML_ATTRIBUTE_VALUE_TEMPLATE);
 
 			contentAssistRequest.addProposal(proposal);
 			return;
 		}
-		String matchString = "#{" + prefix.getText(); //$NON-NLS-1$
+		String matchString = EL_NUMBER_PREFIX + prefix.getText(); //$NON-NLS-1$
 		String query = matchString;
 		if (query == null)
 			query = ""; //$NON-NLS-1$
@@ -305,16 +305,14 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		}
 	}
 
-	@SuppressWarnings("unused")
 	@Override
-	protected void addTextELProposals(ContentAssistRequest contentAssistRequest,
-			CompletionProposalInvocationContext context) {
+	protected void addTextELProposals(ContentAssistRequest contentAssistRequest, CompletionProposalInvocationContext context) {
 		if (!isELCAToBeShown())
 			return;
 		
 		TextRegion prefix = getELPrefix(contentAssistRequest);
 		if (prefix == null || !prefix.isELStarted()) {
-			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(true, "#{}", //$NON-NLS-1$ 
+			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(true, getDefaultELPrefix()+ "}", //$NON-NLS-1$ 
 					contentAssistRequest.getReplacementBeginPosition(), 
 					0, 2, JSF_EL_PROPOSAL_IMAGE, JstUIMessages.JspContentAssistProcessor_NewELExpression, null, 
 					JstUIMessages.FaceletPageContectAssistProcessor_NewELExpressionTextInfo, TextProposal.R_TAG_INSERTION + 1);
@@ -322,24 +320,27 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 			contentAssistRequest.addProposal(proposal);
 			return;
 		}
-		String matchString = "#{" + prefix.getText(); //$NON-NLS-1$
+		String matchString = EL_NUMBER_PREFIX + prefix.getText();
 		String query = matchString;
-		if (query == null)
-			query = ""; //$NON-NLS-1$
 		String stringQuery = matchString;
 
 		int beginChangeOffset = prefix.getStartOffset() + prefix.getOffset();
 
 		KbQuery kbQuery = createKbQuery(Type.TEXT, query, stringQuery);
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext());
-
 		if (proposals == null || proposals.length == 0)
 			return;
 		
 		for (TextProposal textProposal : proposals) {
 			int replacementOffset = beginChangeOffset;
 			int replacementLength = prefix.getLength();
-			String replacementString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString();
+			String replacementString = prefix.getText().substring(0, replacementLength);
+			if (textProposal.getReplacementString().trim().startsWith("[") && replacementString.endsWith(".")) { //$NON-NLS-1$ //$NON-NLS-2$ 
+				// Need to include last '.' (dot) char into the string to replace 
+				replacementString = replacementString.substring(0, replacementString.length() - 1);
+			}
+			replacementString += textProposal.getReplacementString();
+
 			int cursorPosition = replacementString.length();
 			
 			// Check if it is a long named property to be inserted
@@ -372,13 +373,18 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 					int paraIndex = restOfValue.indexOf(']');
 					// Is the quotation is in it?
 					int quoteIndex = restOfValue.indexOf('\'');
-					if (quoteIndex == -1 || (paraIndex != -1 && quoteIndex > paraIndex)) {
+					if (quoteIndex == -1 || paraIndex == -1 || (paraIndex != -1 && quoteIndex > paraIndex)) {
 						// Need to insert closing single-quote
 						replacementString += '\'';
 					}
 					if (paraIndex == -1) {
 						// Closing ']' is to be added
 						replacementString += ']';
+					}
+				} else {
+					if (replacementString.endsWith("]") && restOfValue.indexOf(']') != -1) {
+						replacementString = replacementString.substring(0, replacementString.length() -1);
+						cursorPosition = replacementString.length(); // Cursor will be put right after the replacement (not after the closing square bracket in this case)
 					}
 				}
 				
@@ -391,6 +397,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 					replacementString += "}"; //$NON-NLS-1$
 				}
 			}
+
 			Image image = textProposal.getImage();
 
 			// JBIDE-512, JBIDE-2541 related changes ===>>>
@@ -419,6 +426,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 						replacementOffset, replacementLength, cursorPosition, image, displayString, 
 						null, additionalProposalInfo, relevance);
 			}
+			
 			contentAssistRequest.addProposal(proposal);
 		}
 
@@ -448,7 +456,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		if (prefix == null || prefix.isELStarted()) {
 			return;
 		}
-		String matchString = "#{" + prefix.getText(); //$NON-NLS-1$
+		String matchString = EL_NUMBER_PREFIX + prefix.getText();
 		String query = matchString;
 		if (query == null)
 			query = ""; //$NON-NLS-1$
@@ -469,7 +477,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		for (TextProposal textProposal : proposals) {
 			int replacementOffset = beginChangeOffset;
 			int replacementLength = prefix.getLength();
-			String replacementString = "#{" + prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString();  //$NON-NLS-1$
+			String replacementString = getDefaultELPrefix() + prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString();
 			
 			char quoteChar = prefix.isAttributeValue() && prefix.hasOpenQuote() ? prefix.getQuoteChar() : '"';
 			int cursorPosition = replacementString.length();
@@ -893,8 +901,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		ELInstance is = ELUtil.findInstance(model, inValueOffset);// ELInstance
 		ELInvocationExpression ie = ELUtil.findExpression(model, inValueOffset);// ELExpression
 		
-		boolean isELStarted = (model != null && is != null && (model.toString().startsWith("#{") ||  //$NON-NLS-1$
-				model.toString().startsWith("${"))); //$NON-NLS-1$
+		boolean isELStarted = (model != null && is != null && (startsWithELBeginning(model.toString()))); //$NON-NLS-1$
 		boolean isELClosed = (model != null && is != null && model.toString().endsWith("}")); //$NON-NLS-1$
 		
 //			boolean insideEL = startOffset + model.toString().length() 
@@ -961,10 +968,9 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		ELModel model = p.parse(text);
 		
 		ELInstance is = ELUtil.findInstance(model, inValueOffset);// ELInstance
-		ELInvocationExpression ie = ELUtil.findExpression(model, inValueOffset);// ELExpression
+//		ELInvocationExpression ie = ELUtil.findExpression(model, inValueOffset);// ELExpression
 		
-		boolean isELStarted = (model != null && is != null && (model.toString().startsWith("#{") ||  //$NON-NLS-1$
-				model.toString().startsWith("${"))); //$NON-NLS-1$
+		boolean isELStarted = (model != null && is != null && startsWithELBeginning(model.toString()));
 		boolean isELClosed = (model != null && is != null && model.toString().endsWith("}")); //$NON-NLS-1$
 
 		TextRegion tr = new TextRegion(startOffset, getOffset() - matchString.length() - startOffset, 

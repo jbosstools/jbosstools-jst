@@ -63,6 +63,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+@Deprecated
 @SuppressWarnings("restriction")
 abstract public class AbstractXMLContentAssistProcessor extends AbstractContentAssistProcessor {
 	private static final char[] PROPOSAL_AUTO_ACTIVATION_CHARS = new char[] {

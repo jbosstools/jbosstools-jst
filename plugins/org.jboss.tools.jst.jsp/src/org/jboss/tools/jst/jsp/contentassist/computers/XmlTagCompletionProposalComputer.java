@@ -573,8 +573,7 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 		ELInstance is = ELUtil.findInstance(model, inValueOffset);// ELInstance
 		ELInvocationExpression ie = ELUtil.findExpression(model, inValueOffset);// ELExpression
 		
-		boolean isELStarted = (model != null && is != null && (model.toString().startsWith("#{") ||  //$NON-NLS-1$
-				model.toString().startsWith("${"))); //$NON-NLS-1$
+		boolean isELStarted = (model != null && is != null && startsWithELBeginning(text));
 		boolean isELClosed = (model != null && is != null && model.toString().endsWith("}")); //$NON-NLS-1$
 		
 //			boolean insideEL = startOffset + model.toString().length() 
