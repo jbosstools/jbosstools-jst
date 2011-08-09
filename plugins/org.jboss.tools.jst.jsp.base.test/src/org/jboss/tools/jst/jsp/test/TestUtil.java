@@ -83,13 +83,14 @@ public class TestUtil {
 		}
 	}
 	
-	public static void waitForValidation() throws CoreException{
+	public static boolean waitForValidation() throws CoreException{
 		for (int i = 0; i < 50; i++) {
 			if(ValidatorManager.getStatus().equals(ValidatorManager.SLEEPING)) {
-				break;
+				return true;
 			}
 			JobUtils.delay(100);
 			JobUtils.waitForIdle();
 		}
+		return false;
 	}
 }

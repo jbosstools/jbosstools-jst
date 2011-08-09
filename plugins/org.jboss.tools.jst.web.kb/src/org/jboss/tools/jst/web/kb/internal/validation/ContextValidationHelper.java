@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal.validation;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -131,10 +132,15 @@ public class ContextValidationHelper extends WorkbenchContext {
 	}
 
 	private Set<IProject> getAllProjects() {
+		IProject project = getProject();
+		if(!project.isAccessible()) {
+			return Collections.emptySet();
+		}
+
 		List<IValidator> validators = getValidationContextManager().getValidators();
 		Set<IProject> projects = new HashSet<IProject>();
 		for (IValidator validator : validators) {
-			IValidatingProjectTree tree = validator.getValidatingProjects(getProject());
+			IValidatingProjectTree tree = validator.getValidatingProjects(project);
 			projects.addAll(tree.getAllProjects());
 		}
 		return projects;
