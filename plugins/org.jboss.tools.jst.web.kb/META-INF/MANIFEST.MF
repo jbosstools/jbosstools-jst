@@ -47,3 +47,4 @@ Export-Package: org.jboss.tools.jst.web.kb,
  org.jboss.tools.jst.web.kb.taglib,
  org.jboss.tools.jst.web.kb.validation
 Bundle-ClassPath: .
+Import-Package: org.eclipse.search.ui.text

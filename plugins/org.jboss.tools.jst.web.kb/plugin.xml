@@ -6,6 +6,7 @@
    <extension-point id="validator" name="KB Validator" schema="schema/validator.exsd"/>
    <extension-point id="elValidationDelegate" name="EL Validation Delegate" schema="schema/elValidationDelegate.exsd"/>
    <extension-point id="KbRequire" name="KB Builder Requirement" schema="schema/KbRequire.exsd"/>
+   <extension-point id="elProjectSet" name="EL Project Set" schema="schema/elProjectSet.exsd"/>
  
    <extension
          id="kbbuilder"
@@ -383,5 +384,14 @@
 		</objectContribution>
 
 	</extension>
-
+	
+	<extension
+        point="org.eclipse.jdt.ui.queryParticipants">
+     <queryParticipant
+           class="org.jboss.tools.jst.web.kb.refactoring.ELReferencesQueryParticipant"
+           id="org.jboss.tools.jst.web.kb.refactoring.ELReferencesQueryParticipant"
+           name="SearchELReferencesParticipant"
+           nature="org.eclipse.jdt.core.javanature">
+     </queryParticipant>
+  </extension>
 </plugin>

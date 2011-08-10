@@ -10,7 +10,6 @@
   ******************************************************************************/
 package org.jboss.tools.jst.web.kb.refactoring;
 
-import java.io.InputStream;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -46,7 +45,6 @@ import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.util.BeanUtil;
 import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
-import org.jboss.tools.jst.web.kb.WebKbPlugin;
 
 public abstract class RefactorSearcher {
 	protected static final String JAVA_EXT = "java"; //$NON-NLS-1$
@@ -243,24 +241,6 @@ public abstract class RefactorSearcher {
 	protected void searchInCach(IFile file){
 		if(file == null) return;
 		ELResolver[] resolvers = ELResolverFactoryManager.getInstance().getResolvers(file);
-		IRelevanceCheck[] checks = getRelevanceChecks(resolvers);
-		String text = null;
-		try {
-			InputStream is = file.getContents();
-			if(is != null) text = FileUtil.readStream(is);
-		} catch (CoreException e) {
-			WebKbPlugin.getDefault().logError(e);
-		}
-		if(text != null) {
-			boolean found = false;
-			for (IRelevanceCheck check: checks) {
-				if(check != null && check.isRelevant(text)) {
-					found = true;
-					break;
-				}
-			}
-			if(!found) return;
-		}		
 		
 		ELContext context = PageContextFactory.createPageContext(file);
 		
@@ -269,7 +249,7 @@ public abstract class RefactorSearcher {
 		
 		ELReference[] references = context.getELReferences();
 		resolvers = context.getElResolvers();
-		checks = getRelevanceChecks(resolvers);
+		IRelevanceCheck[] checks = getRelevanceChecks(resolvers);
 		
 		if(javaElement != null){
 			for(ELReference reference : references){
@@ -323,25 +303,6 @@ public abstract class RefactorSearcher {
 		return checks;
 	}
 
-	// looking for component references in EL
-//	private void scanString(IFile file, String string, int offset) {
-//		int startEl = string.indexOf("#{"); //$NON-NLS-1$
-//		if(startEl<0)
-//			startEl = string.indexOf("${"); //$NON-NLS-1$
-//		if(startEl>-1) {
-//			ELParser parser = ELParserUtil.getJbossFactory().createParser();
-//			ELModel model = parser.parse(string);
-//			for (ELInstance instance : model.getInstances()) {
-//				for(ELInvocationExpression ie : instance.getExpression().getInvocations()){
-//					ELInvocationExpression expression = findComponentReference(ie);
-//					if(expression != null){
-//						checkMatch(file, expression, offset+getOffset(expression), getLength(expression));
-//					}
-//				}
-//			}
-//		}
-//	}
-
 	protected int getOffset(ELInvocationExpression expression){
 		if(expression instanceof ELPropertyInvocation){
 			ELPropertyInvocation pi = (ELPropertyInvocation)expression;
@@ -373,8 +334,6 @@ public abstract class RefactorSearcher {
 	}
 	
 	private void scanProperties(IFile file, String content){
-		//scanString(file, content, 0);
-		
 		if(!file.getName().equals(SEAM_PROPERTIES_FILE))
 			return;
 		
