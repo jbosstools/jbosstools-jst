@@ -201,11 +201,6 @@ public class HTMLTextViewerConfiguration extends
 	protected IInformationProvider getInformationProvider(
 			ISourceViewer sourceViewer, String partitionType) {
 		ITextHover[] hovers = createDocumentationHovers(partitionType);
-		if (hovers == null) {
-			hovers = new ITextHover[] {new ChainTextHover(
-					new ITextHover[0])};
-		}
-		
 		return new TextHoverInformationProvider(new ChainTextHover(
 				hovers));
 	}
