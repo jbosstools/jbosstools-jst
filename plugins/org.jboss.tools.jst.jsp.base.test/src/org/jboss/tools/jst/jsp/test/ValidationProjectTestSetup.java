@@ -8,24 +8,23 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/
-package org.jboss.tools.jst.web.kb.test;
+package org.jboss.tools.jst.jsp.test;
 
 import junit.framework.Test;
 
 import org.eclipse.core.resources.IProject;
-import org.jboss.tools.common.model.util.test.XProjectImportTestSetUp;
-import org.jboss.tools.jst.jsp.test.TestUtil;
+import org.jboss.tools.test.util.ProjectImportTestSetup;
 
 /**
  * @author Alexey Kazakov
  */
-public class KBProjectTestSetup extends XProjectImportTestSetUp {
+public class ValidationProjectTestSetup extends ProjectImportTestSetup {
 
-	public KBProjectTestSetup(Test test, String bundleName, String projectPath, String projectName) {
+	public ValidationProjectTestSetup(Test test, String bundleName, String projectPath, String projectName) {
 		super(test,bundleName, projectPath, projectName);
 	}
 
-	public KBProjectTestSetup(Test test, String bundleName, String[] projectPaths, String[] projectNames) {
+	public ValidationProjectTestSetup(Test test, String bundleName, String[] projectPaths, String[] projectNames) {
 		super(test, bundleName, projectPaths, projectNames);
 	}
 

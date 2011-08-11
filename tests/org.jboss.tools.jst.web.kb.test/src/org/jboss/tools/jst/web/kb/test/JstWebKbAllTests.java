@@ -14,6 +14,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.jboss.tools.common.model.util.test.XProjectImportTestSetUp;
+import org.jboss.tools.jst.jsp.test.ValidationProjectTestSetup;
 import org.jboss.tools.jst.web.kb.test.validation.BuilderOrderMarkerResolutionTest;
 import org.jboss.tools.jst.web.kb.test.validation.KBValidationTest;
 import org.jboss.tools.test.util.ProjectImportTestSetup;
@@ -48,7 +49,7 @@ public class JstWebKbAllTests {
 		suiteAll.addTestSuite(KBValidationTest.class);
 		suite = new TestSuite(BuilderOrderMarkerResolutionTest.class.getName());
 		suite.addTestSuite(BuilderOrderMarkerResolutionTest.class);
-		testSetup = new KBProjectTestSetup(suite,
+		testSetup = new ValidationProjectTestSetup(suite,
 				"org.jboss.tools.jst.web.kb.test",
 				new String[]{"projects/TestBrokenBuilderOrder"},
 				new String[]{"TestBrokenBuilderOrder"});
