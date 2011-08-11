@@ -9,11 +9,11 @@ import junit.framework.TestCase;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.jboss.tools.jst.jsp.test.TestUtil;
 import org.jboss.tools.jst.web.kb.internal.validation.ContextValidationHelper;
 import org.jboss.tools.jst.web.kb.internal.validation.ValidationResourceRegister;
 import org.jboss.tools.jst.web.kb.validation.IValidatingProjectTree;
@@ -38,8 +38,7 @@ public class KBValidationTest extends TestCase {
 		if(project==null || !project.exists()) {
 			project = ResourcesUtils.importProject(b, PROJECT_PATH);
 		}
-		project.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
-		JobUtils.waitForIdle();
+		TestUtil._waitForValidation(project);
 		return project;
 	}
 

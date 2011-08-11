@@ -48,7 +48,7 @@ public class JstWebKbAllTests {
 		suiteAll.addTestSuite(KBValidationTest.class);
 		suite = new TestSuite(BuilderOrderMarkerResolutionTest.class.getName());
 		suite.addTestSuite(BuilderOrderMarkerResolutionTest.class);
-		testSetup = new XProjectImportTestSetUp(suite,
+		testSetup = new KBProjectTestSetup(suite,
 				"org.jboss.tools.jst.web.kb.test",
 				new String[]{"projects/TestBrokenBuilderOrder"},
 				new String[]{"TestBrokenBuilderOrder"});

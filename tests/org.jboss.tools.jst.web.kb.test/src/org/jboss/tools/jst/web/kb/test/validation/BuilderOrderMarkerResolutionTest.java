@@ -16,13 +16,12 @@ import org.eclipse.core.internal.preferences.EclipsePreferences;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.ide.IDE;
 import org.jboss.tools.common.preferences.SeverityPreferences;
+import org.jboss.tools.jst.jsp.test.TestUtil;
 import org.jboss.tools.jst.web.kb.internal.validation.ValidatorManager;
 import org.jboss.tools.jst.web.kb.preferences.ELSeverityPreferences;
 import org.jboss.tools.test.util.JobUtils;
@@ -47,7 +46,7 @@ public class BuilderOrderMarkerResolutionTest extends TestCase {
 					IMarkerResolution resolution = resolutions[j];
 					if (resolution.getClass().getName().equals(resolutionClassName)) {
 						resolution.run(marker);
-						JobUtils.waitForIdle();
+						TestUtil._waitForValidation(project);
 						IMarker[] newMarkers = project.findMarkers(markerType, true,	IResource.DEPTH_INFINITE);
 						assertTrue("Marker resolution did not decrease number of problems. was: "+markers.length+" now: "+newMarkers.length, newMarkers.length < markers.length);
 						return;
@@ -88,9 +87,7 @@ public class BuilderOrderMarkerResolutionTest extends TestCase {
 	void modifyPreference(String value) throws CoreException {
 		EclipsePreferences ps = (EclipsePreferences)ELSeverityPreferences.getInstance().getProjectPreferences(project);
 		ps.put(ELSeverityPreferences.WRONG_BUILDER_ORDER_PREFERENCE_NAME, value);
-		JobUtils.waitForIdle();
-		project.build(IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor());
-		JobUtils.waitForIdle();
+		TestUtil._waitForValidation(project);
 	}
 
 	public void testBuilderOrderResolution() throws CoreException {
@@ -98,5 +95,4 @@ public class BuilderOrderMarkerResolutionTest extends TestCase {
 				ValidatorManager.ORDER_PROBLEM_MARKER_TYPE,
 				"org.jboss.tools.jst.web.kb.internal.validation.BuilderOrderResolution");
 	}
-
 }
