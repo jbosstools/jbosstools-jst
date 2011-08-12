@@ -90,6 +90,15 @@ public class FileTagProposalLoader implements ITagProposalLoader {
 		),
 	};
 	
+	static TagProposal[] JS_TAG_PROPOSALS = new TagProposal[]{
+		new TagProposal(
+			FACELETS_URI,
+			ITagProposal.EMPTY_PREFIX,
+			"script", //$NON-NLS-1$
+			new JsLinkAttributeValueLoader("src") //$NON-NLS-1$
+		),
+	};
+	
 	static TagProposal JSP_INCLUDE = new TagProposal(
 		DropURI.JSP_URI,
 		"jsp", //$NON-NLS-1$
@@ -157,6 +166,7 @@ public class FileTagProposalLoader implements ITagProposalLoader {
 					}
 				);
 		extensionMap.put("css",CSS_TAG_PROPOSALS); //$NON-NLS-1$
+		extensionMap.put("js",JS_TAG_PROPOSALS); //$NON-NLS-1$
 		extensionMap.put(
 			"inc", new TagProposal[]{ //$NON-NLS-1$
 				new TagProposal(
