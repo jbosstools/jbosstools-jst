@@ -57,6 +57,7 @@ abstract public class AbstractXmlCompletionProposalComputer extends AbstractXMLM
 	private static final String[] EMPTY_TAGS = new String[0];
 	public static final String EL_DOLLAR_PREFIX = "${"; //$NON-NLS-1$
 	public static final String EL_NUMBER_PREFIX = "#{"; //$NON-NLS-1$
+	public static final String EL_SUFFIX = "}"; //$NON-NLS-1$
 	public static final String[] EL_PREFIXES = {EL_DOLLAR_PREFIX, EL_NUMBER_PREFIX};
 	
 	protected CompletionProposalInvocationContext fCurrentContext;
@@ -728,5 +729,8 @@ abstract public class AbstractXmlCompletionProposalComputer extends AbstractXMLM
 	 */
 	protected boolean startsWithELBeginning(String text) {
 		return (text != null && (text.startsWith(EL_DOLLAR_PREFIX) || text.startsWith(EL_NUMBER_PREFIX)));
+	}
+	protected boolean endsWithELBeginning(String text) {
+		return (text != null && text.endsWith(EL_SUFFIX));
 	}
 }

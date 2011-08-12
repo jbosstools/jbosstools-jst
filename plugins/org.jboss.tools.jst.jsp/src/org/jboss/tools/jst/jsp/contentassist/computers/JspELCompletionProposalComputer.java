@@ -90,10 +90,6 @@ public class JspELCompletionProposalComputer extends XmlELCompletionProposalComp
 		return null;
 	}
 
-	protected boolean startsWithELBeginning(String text) {
-		return (text != null && text.startsWith("${")); //$NON-NLS-1$ //$NON-NLS-2$
-	}
-
 	protected void setVars(ELContextImpl context, IFile file) {
 		ELCompletionEngine fakeEngine = new ELCompletionEngine() {
 
