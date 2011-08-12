@@ -51,6 +51,7 @@ public abstract class RefactorSearcher {
 	protected static final String XML_EXT = "xml"; //$NON-NLS-1$
 	protected static final String XHTML_EXT = "xhtml"; //$NON-NLS-1$
 	protected static final String JSP_EXT = "jsp"; //$NON-NLS-1$
+	protected static final String JSPX_EXT = "jspx"; //$NON-NLS-1$
 	protected static final String PROPERTIES_EXT = "properties"; //$NON-NLS-1$
 	
 //	private static final String GET = "get"; //$NON-NLS-1$
@@ -208,6 +209,7 @@ public abstract class RefactorSearcher {
 				searchInCach(file);
 		} else if (JAVA_EXT.equalsIgnoreCase(file.getFileExtension())
 				|| JSP_EXT.equalsIgnoreCase(file.getFileExtension())
+				|| JSPX_EXT.equalsIgnoreCase(file.getFileExtension())
 				|| XHTML_EXT.equalsIgnoreCase(file.getFileExtension())
 				|| XML_EXT.equalsIgnoreCase(file.getFileExtension())) {
 			searchInCach(file);
@@ -232,7 +234,8 @@ public abstract class RefactorSearcher {
 		String ext = file.getFileExtension();			
 		if(XML_EXT.equalsIgnoreCase(ext) 
 			|| XHTML_EXT.equalsIgnoreCase(ext) 
-			|| JSP_EXT.equalsIgnoreCase(ext)) {
+			|| JSP_EXT.equalsIgnoreCase(ext)
+			|| JSPX_EXT.equalsIgnoreCase(ext)) {
 			searchInCach(file);
 		}
 		return true;
