@@ -14,9 +14,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -144,6 +146,7 @@ import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.internal.JspContextImpl;
+import org.jboss.tools.jst.web.kb.internal.taglib.HTMLTag;
 import org.jboss.tools.jst.web.kb.internal.taglib.NameSpace;
 import org.jboss.tools.jst.web.kb.internal.taglib.TLDTag;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
@@ -832,11 +835,16 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		}
 	
 		public String getTag() {
+			String result = null;
 			IComponent c = findComponent(query);
-			if(c == null) return null;
-			String prefix = getPrefix(query);
-			if(prefix == null || prefix.length() == 0) return c.getName();
-			return prefix + ":" + c.getName(); //$NON-NLS-1$
+			if(c != null) {
+				result = c.getName();
+				String prefix = getPrefix(query);
+				if(prefix != null && prefix.length() > 0) {
+					result = prefix + ":" + c.getName(); //$NON-NLS-1$
+				}
+			}
+			return result;
 		}
 
 		public boolean canHaveBody() {
@@ -872,6 +880,8 @@ public class JSPTextEditor extends StructuredTextEditor implements
 				if(c instanceof TLDTag /*ICustomTagLibComponent*/) {
 					s = c;
 					break;
+				} else if(c instanceof HTMLTag) {
+					s = c;
 				}
 			}
 			if(s == null) s = cs[0];
@@ -885,20 +895,20 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		}
 
 		public TagAttributesComposite.AttributeDescriptorValue[] createDescriptors(KbQuery query) {
-			IComponent s = findComponent(query);
-			if(s == null) return new TagAttributesComposite.AttributeDescriptorValue[0];
-			boolean excludeJSFC = false;
-			if(FileTagProposalLoader.FACELETS_URI.equals(query.getUri())) {
-				if(getModelObject() != null && "jsp".equalsIgnoreCase(getModelObject().getAttributeValue(XModelObjectConstants.ATTR_NAME_EXTENSION))) { //$NON-NLS-1$
-					excludeJSFC = true;
-				}
-			}
+			query.setMask(true);
+			IAttribute[] as = PageProcessor.getInstance().getAttributes(query, pageContext);
+			query.setMask(false);
+			boolean excludeJSFC = (FileTagProposalLoader.FACELETS_URI.equals(query.getUri())
+				&& getModelObject() != null 
+				&& "jsp".equalsIgnoreCase(getModelObject().getAttributeValue(XModelObjectConstants.ATTR_NAME_EXTENSION))); //$NON-NLS-1$
 			
 			List<AttributeDescriptorValue> attributesValues = new ArrayList<AttributeDescriptorValue>();
-			IAttribute[] as = s.getAttributes();
+			Set<String> names = new HashSet<String>();
 			for (IAttribute a: as) {
-				if(excludeJSFC && "jsfc".equals(a.getName())) continue; //$NON-NLS-1$
-				AttributeDescriptorValue value = new AttributeDescriptorValue(a.getName(), a.isRequired(), a.isPreferable());
+				String name = a.getName();
+				if((excludeJSFC && "jsfc".equals(name)) || names.contains(name)) continue; //$NON-NLS-1$
+				names.add(name);
+				AttributeDescriptorValue value = new AttributeDescriptorValue(name, a.isRequired(), a.isPreferable());
 				attributesValues.add(value);
 			}
 			
