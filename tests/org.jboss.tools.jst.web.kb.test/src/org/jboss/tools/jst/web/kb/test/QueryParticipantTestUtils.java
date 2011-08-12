@@ -90,24 +90,28 @@ public class QueryParticipantTestUtils extends TestCase{
 	private static void checkMatches(List<Match> matchesForCheck, List<MatchStructure> matchList) throws CoreException {
 		for(Match match : matchesForCheck){
 			assertTrue("Match must return IFile", match.getElement() instanceof IFile);
-			MatchStructure ms = findMatch(matchList, match);
-			assertNotNull("Unexpected match found (file - "+((IFile)match.getElement()).getFullPath()+")", ms);
+			
+			IFile file = (IFile)match.getElement();
+			String filePath = file.getFullPath().toString();
+			String text = FileUtil.getContentFromEditorOrFile(file);
+			String name = text.substring(match.getOffset(), match.getOffset()+match.getLength());
+			
+			MatchStructure ms = findMatch(matchList, match, filePath, name);
+			
+			assertNotNull("Unexpected match found (file - "+filePath+" name - "+name+")", ms);
 			ms.checked = true;
 		}
 		
 		for(MatchStructure ms : matchList){
-			assertTrue("Match not found (file - "+ms.path+")", ms.checked);
+			assertTrue("Match not found (file - "+ms.path+" name - "+ms.name+")", ms.checked);
 		}
 	}
 	
-	protected static MatchStructure findMatch(List<MatchStructure> matchList, Match match){
-		IFile file = (IFile)match.getElement();
-		String filePath = file.getFullPath().toString();
-		String text = FileUtil.getContentFromEditorOrFile(file);
-		String name = text.substring(match.getOffset(), match.getOffset()+match.getLength());
+	protected static MatchStructure findMatch(List<MatchStructure> matchList, Match match, String filePath, String name){
+		
 		for(MatchStructure ms : matchList){
 			if(!ms.checked && ms.path.equals(filePath) && ms.name.equals(name)){
-				System.out.println("found!");
+				//System.out.println("Match found (file - "+ms.path+" name - "+ms.name+")");
 				return ms;
 			}
 		}
