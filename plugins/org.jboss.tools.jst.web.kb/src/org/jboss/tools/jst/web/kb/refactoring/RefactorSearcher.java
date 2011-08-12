@@ -10,6 +10,7 @@
   ******************************************************************************/
 package org.jboss.tools.jst.web.kb.refactoring;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -255,6 +256,7 @@ public abstract class RefactorSearcher {
 		IRelevanceCheck[] checks = getRelevanceChecks(resolvers);
 		
 		if(javaElement != null){
+			List<MatchArea> areas = new ArrayList<MatchArea>();
 			for(ELReference reference : references){
 				int offset = reference.getStartPosition();
 				for(ELExpression operand : reference.getEl()){
@@ -276,7 +278,13 @@ public abstract class RefactorSearcher {
 							continue;
 						
 						for(ELSegment segment : segments){
-							match(file, offset+segment.getSourceReference().getStartPosition(), segment.getSourceReference().getLength());
+							int o = offset+segment.getSourceReference().getStartPosition();
+							int l = segment.getSourceReference().getLength();
+							
+							if(!contains(areas, o, l)){
+								match(file, o, l);
+								areas.add(new MatchArea(o, l));
+							}
 						}
 					}
 				}
@@ -295,6 +303,24 @@ public abstract class RefactorSearcher {
 				}
 			}
 		}
+	}
+	
+	class MatchArea{
+		int offset;
+		int length;
+		
+		public MatchArea(int offset, int length){
+			this.offset = offset;
+			this.length = length;
+		}
+	}
+	
+	private boolean contains(List<MatchArea> list, int offset, int length){
+		for(MatchArea area : list){
+			if(area.offset == offset && area.length == length)
+				return true;
+		}
+		return false;
 	}
 
 	protected IRelevanceCheck[] getRelevanceChecks(ELResolver[] resolvers) {
