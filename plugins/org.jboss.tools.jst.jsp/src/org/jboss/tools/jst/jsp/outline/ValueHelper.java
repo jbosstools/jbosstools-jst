@@ -33,7 +33,6 @@ import org.eclipse.wst.sse.ui.contentassist.CompletionProposalInvocationContext;
 import org.jboss.tools.common.model.project.IPromptingProvider;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.model.util.ModelFeatureFactory;
-import org.jboss.tools.jst.jsp.contentassist.JspContentAssistProcessor;
 import org.jboss.tools.jst.jsp.contentassist.computers.FaceletsELCompletionProposalComputer;
 import org.jboss.tools.jst.jsp.contentassist.computers.JspELCompletionProposalComputer;
 import org.jboss.tools.jst.jsp.drop.treeviewer.model.AttributeValueResource;

@@ -35,7 +35,7 @@ import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.ELResolverFactoryManager;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.text.TextProposal;
-import org.jboss.tools.jst.jsp.contentassist.AbstractXMLContentAssistProcessor.TextRegion;
+import org.jboss.tools.jst.jsp.contentassist.computers.AbstractXmlCompletionProposalComputer.TextRegion;
 import org.jboss.tools.jst.jsp.contentassist.computers.JspELCompletionProposalComputer;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
