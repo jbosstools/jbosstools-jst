@@ -32,45 +32,41 @@ public class QueryParticipantTestUtils extends TestCase{
 	public static final int TYPE_SEARCH = 3;
 	public static final int PARAMETER_SEARCH = 4;
 	
-	public static void testSearchParticipant(IProject project, String fileName, int searchType, String elementName, String parameterName, IQueryParticipant participant, List<MatchStructure> matches){
+	public static void testSearchParticipant(IProject project, String fileName, int searchType, String elementName, String parameterName, IQueryParticipant participant, List<MatchStructure> matches) throws CoreException{
 		IFile file = project.getFile(fileName);
 		assertNotNull("File - "+fileName+" not found", file);
 		
-		try{
-			ICompilationUnit compilationUnit = EclipseUtil.getCompilationUnit(file);
-			IJavaElement element = null;
-			
-			IType type = compilationUnit.findPrimaryType();
-			
-			if(searchType == FIELD_SEARCH){
-				element = type.getField(elementName);
-			}else if(searchType == METHOD_SEARCH){
-				element = getMethod(type, elementName);
-			}else if(searchType == TYPE_SEARCH){
-				element = type;
-			}else if(searchType == PARAMETER_SEARCH){
-				IMethod method = getMethod(type, elementName);
-				element = getParameter(method, parameterName);
-			}
-			
-			if(element != null){
-				SearchRequestor requestor = new SearchRequestor();
-				
-				JavaSearchScopeFactory factory= JavaSearchScopeFactory.getInstance();
-				IJavaSearchScope scope= factory.createWorkspaceScope(true);
-				String description= factory.getWorkspaceScopeDescription(true);
-				QuerySpecification specification = new ElementQuerySpecification(element, IJavaSearchConstants.REFERENCES, scope, description);
-				
-				participant.search(requestor, specification, new NullProgressMonitor());
-				
-				List<Match> matchesForCheck = requestor.getMatches();
-				
-				checkMatches(matchesForCheck, matches);
-			}else
-				fail("Java Element not found");
-		}catch(CoreException ex){
-			fail("Core exception");
+		ICompilationUnit compilationUnit = EclipseUtil.getCompilationUnit(file);
+		IJavaElement element = null;
+		
+		IType type = compilationUnit.findPrimaryType();
+		
+		if(searchType == FIELD_SEARCH){
+			element = type.getField(elementName);
+		}else if(searchType == METHOD_SEARCH){
+			element = getMethod(type, elementName);
+		}else if(searchType == TYPE_SEARCH){
+			element = type;
+		}else if(searchType == PARAMETER_SEARCH){
+			IMethod method = getMethod(type, elementName);
+			element = getParameter(method, parameterName);
 		}
+		
+		if(element != null){
+			SearchRequestor requestor = new SearchRequestor();
+			
+			JavaSearchScopeFactory factory= JavaSearchScopeFactory.getInstance();
+			IJavaSearchScope scope= factory.createWorkspaceScope(true);
+			String description= factory.getWorkspaceScopeDescription(true);
+			QuerySpecification specification = new ElementQuerySpecification(element, IJavaSearchConstants.REFERENCES, scope, description);
+			
+			participant.search(requestor, specification, new NullProgressMonitor());
+			
+			List<Match> matchesForCheck = requestor.getMatches();
+			
+			checkMatches(matchesForCheck, matches);
+		}else
+			fail("Java Element not found");
 	}
 	
 	private static IMethod getMethod(IType type, String name) throws JavaModelException{
@@ -106,7 +102,7 @@ public class QueryParticipantTestUtils extends TestCase{
 	
 	protected static MatchStructure findMatch(List<MatchStructure> matchList, Match match){
 		IFile file = (IFile)match.getElement();
-		String filePath = ((IFile)match.getElement()).getFullPath().toString();
+		String filePath = file.getFullPath().toString();
 		String text = FileUtil.getContentFromEditorOrFile(file);
 		String name = text.substring(match.getOffset(), match.getOffset()+match.getLength());
 		for(MatchStructure ms : matchList){
