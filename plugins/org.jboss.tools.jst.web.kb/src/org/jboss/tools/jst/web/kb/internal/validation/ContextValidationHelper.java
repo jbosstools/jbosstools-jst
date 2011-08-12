@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.ui.editors.text.TextFileDocumentProvider;
 import org.eclipse.wst.validation.internal.operations.WorkbenchContext;
 import org.eclipse.wst.validation.internal.operations.WorkbenchReporter;
+import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.validation.IValidatingProjectTree;
 import org.jboss.tools.jst.web.kb.validation.IValidationContextManager;
 import org.jboss.tools.jst.web.kb.validation.IValidator;
@@ -141,7 +142,11 @@ public class ContextValidationHelper extends WorkbenchContext {
 		Set<IProject> projects = new HashSet<IProject>();
 		for (IValidator validator : validators) {
 			IValidatingProjectTree tree = validator.getValidatingProjects(project);
-			projects.addAll(tree.getAllProjects());
+			if(tree == null) {
+				WebKbPlugin.getDefault().logError(new NullPointerException("Validator has no tree " + validator + " for project " + getProject() + ". Project exists=" + getProject().exists()));
+			} else {
+				projects.addAll(tree.getAllProjects());
+			}
 		}
 		return projects;
 	}
