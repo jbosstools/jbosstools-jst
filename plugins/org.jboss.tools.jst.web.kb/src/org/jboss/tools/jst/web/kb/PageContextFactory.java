@@ -112,7 +112,7 @@ import org.w3c.dom.css.CSSStyleSheet;
  */
 @SuppressWarnings("restriction")
 public class PageContextFactory implements IResourceChangeListener {
-	private static PageContextFactory fInstance;
+	private static PageContextFactory fInstance = new PageContextFactory();
 	private static final String XHTML_TAG_LIB_URI = "http://www.w3.org/1999/xhtml"; //$NON-NLS-1$
 	public static final String XML_PAGE_CONTEXT_TYPE = "XML_PAGE_CONTEXT_TYPE"; //$NON-NLS-1$
 	public static final String JSP_PAGE_CONTEXT_TYPE = "JSP_PAGE_CONTEXT_TYPE"; //$NON-NLS-1$
@@ -120,9 +120,7 @@ public class PageContextFactory implements IResourceChangeListener {
 	private static final String JAVA_PROPERTIES_CONTENT_TYPE = "org.eclipse.jdt.core.javaProperties"; //$NON-NLS-1$
 
 	public static final PageContextFactory getInstance() {
-		if (fInstance != null)
-			return fInstance;
-		return (fInstance = new PageContextFactory());
+		return fInstance;
 	}
 
 	/**
@@ -139,8 +137,6 @@ public class PageContextFactory implements IResourceChangeListener {
 	}
 
 	private PageContextFactory() {
-//		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-//		if (workspace != null) workspace.addResourceChangeListener(this);
 	}
 
 	/*
@@ -470,6 +466,7 @@ public class PageContextFactory implements IResourceChangeListener {
 		}
 		return new XmlContextImpl();
 	}
+
 	/**
 	 * Sets up the context with namespaces and according libraries from the TagLibraryManager
 	 * 
