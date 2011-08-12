@@ -13,11 +13,11 @@ package org.jboss.tools.jst.jsp.test.ca;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.FindReplaceDocumentAdapter;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
-import org.jboss.tools.test.util.TestProjectProvider;
 
 /**
  * Test cast testing http://jira.jboss.com/jira/browse/JBIDE-6061 issue.
@@ -30,7 +30,6 @@ public class Jbide6061Test extends ContentAssistantTestCase {
    private static final String JSP_PAGE_NAME = "/WebContent/pages/jsp_page.jsp"; //$NON-NLS-1$
    private static final String XHTML_PAGE_NAME = "/WebContent/pages/xhtml_page.xhtml"; //$NON-NLS-1$
    private static final String HTML_PAGE_NAME = "/WebContent/pages/html_page.html"; //$NON-NLS-1$
-   private TestProjectProvider provider = null;
    private final String[] CSSCLASS_PROPOSALS = new String[]{
            "errors", //$NON-NLS-1$
            "cls1", //$NON-NLS-1$
@@ -48,16 +47,9 @@ public class Jbide6061Test extends ContentAssistantTestCase {
    }
    
    public void setUp() throws Exception {
-       provider = new TestProjectProvider("org.jboss.tools.jst.jsp.test", null, PROJECT_NAME,false);  //$NON-NLS-1$
-       project = provider.getProject();
+       project = ResourcesPlugin.getWorkspace().getRoot().getProject(PROJECT_NAME);
    }
 
-   protected void tearDown() throws Exception {
-       if(provider != null) {
-           provider.dispose();
-       }
-   }
-   
    public void testJbide6061OnJspPage(){
 	   for (String textToFind : STRINGS_TO_FIND_IN_JSP) {
 		   doTheCSSClassValuesTest(JSP_PAGE_NAME, textToFind, CSSCLASS_PROPOSALS);

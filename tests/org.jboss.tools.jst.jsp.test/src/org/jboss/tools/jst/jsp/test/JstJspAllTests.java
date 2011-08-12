@@ -19,24 +19,27 @@ import org.jboss.tools.jst.jsp.test.ca.Jbide9092Test;
 import org.jboss.tools.jst.jsp.test.ca.JstJspJbide1585Test;
 import org.jboss.tools.jst.jsp.test.ca.JstJspJbide1641Test;
 import org.jboss.tools.jst.jsp.test.selbar.SelectionBarTest;
+import org.jboss.tools.test.util.ProjectImportTestSetup;
 
 public class JstJspAllTests {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for org.jboss.tools.jst.jsp.test"); //$NON-NLS-1$
 
-		
+		suite.addTest(new ProjectImportTestSetup(new TestSuite(
+				Jbide6061Test.class),
+				"org.jboss.tools.jst.jsp.test", "projects/Jbide6061Test", //$NON-NLS-1$ //$NON-NLS-2$
+				"Jbide6061Test")); //$NON-NLS-1$
+
  		suite.addTestSuite(JstJspJbide1585Test.class);
 		suite.addTestSuite(JstJspJbide1641Test.class);
-		
+
 		suite.addTestSuite(Jbide1791Test.class);
 		suite.addTestSuite(Jbide9092Test.class);
-		suite.addTestSuite(Jbide6061Test.class);
-		
+
 		suite.addTestSuite(JspPreferencesPageTest.class);
 		suite.addTestSuite(SelectionBarTest.class);
-	
+
 		return suite;
 	}
-
 }
