@@ -37,9 +37,14 @@ public class QueryParticipantTestUtils extends TestCase{
 		assertNotNull("File - "+fileName+" not found", file);
 		
 		ICompilationUnit compilationUnit = EclipseUtil.getCompilationUnit(file);
+		
+		assertNotNull("CompilationUnit not found", compilationUnit);
+		
 		IJavaElement element = null;
 		
 		IType type = compilationUnit.findPrimaryType();
+		
+		assertNotNull("Primary type not found", type);
 		
 		if(searchType == FIELD_SEARCH){
 			element = type.getField(elementName);
