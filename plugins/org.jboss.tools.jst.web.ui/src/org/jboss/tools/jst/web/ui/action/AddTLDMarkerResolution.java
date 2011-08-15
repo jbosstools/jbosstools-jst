@@ -61,6 +61,7 @@ public class AddTLDMarkerResolution implements IMarkerResolution2{
 			
 			provider.aboutToChange(input);
 			provider.saveDocument(new NullProgressMonitor(), input, document, true);
+			provider.changed(input);
 			provider.disconnect(input);
 		}catch(CoreException ex){
 			WebUiPlugin.getPluginLog().logError(ex);
