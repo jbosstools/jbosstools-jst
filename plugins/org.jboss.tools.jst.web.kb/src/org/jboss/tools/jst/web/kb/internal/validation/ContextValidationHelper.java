@@ -143,7 +143,7 @@ public class ContextValidationHelper extends WorkbenchContext {
 		for (IValidator validator : validators) {
 			IValidatingProjectTree tree = validator.getValidatingProjects(project);
 			if(tree == null) {
-				WebKbPlugin.getDefault().logError(new NullPointerException("Validator has no tree " + validator + " for project " + getProject() + ". Project exists=" + getProject().exists()));
+				WebKbPlugin.getDefault().logError(new IllegalStateException("Validator has no tree " + validator + " for project " + getProject() + ". Project exists=" + getProject().exists()));
 			} else {
 				projects.addAll(tree.getAllProjects());
 			}
