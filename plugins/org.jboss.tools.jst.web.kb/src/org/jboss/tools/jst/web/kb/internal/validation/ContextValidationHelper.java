@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal.validation;
 
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -143,7 +144,7 @@ public class ContextValidationHelper extends WorkbenchContext {
 		for (IValidator validator : validators) {
 			IValidatingProjectTree tree = validator.getValidatingProjects(project);
 			if(tree == null) {
-				WebKbPlugin.getDefault().logError(new IllegalStateException("Validator has no tree " + validator + " for project " + getProject() + ". Project exists=" + getProject().exists()));
+				WebKbPlugin.getDefault().logError(new IllegalStateException(MessageFormat.format(ELValidationMessages.ERR_ILLIGAL_VALIDATION_STATE,validator,getProject(),getProject().exists()))); //$NON-NLS-1$
 			} else {
 				projects.addAll(tree.getAllProjects());
 			}
