@@ -23,6 +23,7 @@ import org.jboss.tools.common.model.filesystems.impl.Libs;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.jst.web.kb.IKbProject;
 import org.jboss.tools.jst.web.kb.KbProjectFactory;
+import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 import org.jboss.tools.test.util.JUnitUtils;
 
 /**
@@ -31,57 +32,35 @@ import org.jboss.tools.test.util.JUnitUtils;
  *
  */
 public class WebWithModuleTest extends TestCase {
-
-	protected IProject project = null;
-	protected boolean makeCopy = true;
+	protected IProject utility = null;
+	protected IProject webapp = null;
 
 	public WebWithModuleTest() {
 		super("MyFaces Kb Model Test");
 	}
 
 	public void setUp() throws Exception {
-		project = ResourcesPlugin.getWorkspace().getRoot().getProject("webapp");
-		assertNotNull("Can't load webapp", project); //$NON-NLS-1$
+		utility = ResourcesPlugin.getWorkspace().getRoot().getProject("utility");
+		assertNotNull("Can't load utility", utility); //$NON-NLS-1$
+		webapp = ResourcesPlugin.getWorkspace().getRoot().getProject("webapp");
+		assertNotNull("Can't load webapp", webapp); //$NON-NLS-1$
 	}
 
 	/**
 	 * webapp project has kb nature, and depends on utility project without kb nature.
-	 * In this case we add sources of 'utility' to file systems of 'webapp'.
+	 * In this case builder adds kb problem marker to 'webapp'
+	 * and sets on 'utility' property '...mock' to 'true'..
 	 * 
-	 * Check that file systems created but no links added to 'webapp'.
-	 * 
-	 * Warning: If we decide to stop adding sources of one project to other project, 
-	 * this test should be removed.
+	 * Check that file 'utility' has correct property '...mock'.
+	 * Check that kb model of 'webapp' has tag library declared in sources of 'utility'.
 	 * 
 	 * @throws CoreException
 	 */
 	public void testWebProject() throws CoreException {
-		KbProjectFactory.getKbProject(project, true);
-		XModelObject o = EclipseResourceUtil.createObjectForResource(project);
-		XModelObject libsrc = null;
-		XModelObject f = FileSystemsHelper.getFileSystems(o.getModel());
-		Libs libs = ((FileSystemsImpl)f).getLibs();
-		libs.requestForUpdate();
-		libs.update();
-		
-		//Check that sources of 'utility' are loaded by model of 'webapp'.
-		XModelObject[] fs = f.getChildren();
-		for (XModelObject s: fs) {
-			String name = s.getAttributeValue("name");
-			if(name.equals("lib-src")) {
-				libsrc = s;
-			}
-		}
-		assertNotNull(libsrc);
-		XModelObject q = libsrc.getChildByPath("foo/bar/Dummy.java");
-		assertNotNull(q);		
+		assertTrue("true".equals(utility.getPersistentProperty(KbProjectFactory.NATURE_MOCK)));
 
-		//Check that no links is added to 'webapp'
-		IResource[] ms = project.members();
-		for (IResource m: ms) {
-			assertFalse(m.isLinked());
-		}
-		
+		IKbProject kb = KbProjectFactory.getKbProject(webapp, true);
+		ITagLibrary[] ls = kb.getTagLibraries("utility-lib");
+		assertTrue(ls.length > 0);
 	}
-
 }
