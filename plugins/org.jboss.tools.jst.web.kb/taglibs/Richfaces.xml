@@ -823,6 +823,12 @@
 				<param value="ajax" />
 			</proposal>
 		</attribute>
+		<attribute name="cycledSwitching">
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
 	</component>
 	<component name="togglePanel">
 		<attribute name="switchType">
