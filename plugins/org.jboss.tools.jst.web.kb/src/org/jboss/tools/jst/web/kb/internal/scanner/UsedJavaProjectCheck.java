@@ -38,6 +38,11 @@ public class UsedJavaProjectCheck {
 			String messageId = list.size() == 1 ? KbMessages.KBPROBLEM_DEPENDS_ON_JAVA_SINGLE : KbMessages.KBPROBLEM_DEPENDS_ON_JAVA_MANY;
 			String message = MessageFormat.format(messageId, projectList);
 			m = KbBuilderMarker.createOrUpdateKbProblemMarker(m, project.getProject(), message, KbBuilderMarker.KIND_DEPENDS_ON_NON_KB_POJECTS);
+			for (IProject p: list) {
+				if(p.isAccessible()) {
+					p.setPersistentProperty(KbProjectFactory.NATURE_MOCK, "true"); //$NON-NLS-1$
+				}
+			}
 		}		
 	}
 
