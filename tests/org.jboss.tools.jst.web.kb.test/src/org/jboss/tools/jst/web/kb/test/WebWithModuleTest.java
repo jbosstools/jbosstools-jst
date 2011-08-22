@@ -13,18 +13,11 @@ package org.jboss.tools.jst.web.kb.test;
 import junit.framework.TestCase;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.jboss.tools.common.model.XModelObject;
-import org.jboss.tools.common.model.filesystems.FileSystemsHelper;
-import org.jboss.tools.common.model.filesystems.impl.FileSystemsImpl;
-import org.jboss.tools.common.model.filesystems.impl.Libs;
-import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.jst.web.kb.IKbProject;
 import org.jboss.tools.jst.web.kb.KbProjectFactory;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
-import org.jboss.tools.test.util.JUnitUtils;
 
 /**
  * 
