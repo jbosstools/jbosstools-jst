@@ -25,8 +25,6 @@ public class KbMessages {
 	public static String WRONG_BUILDER_ORDER;
 	public static String CHANGE_BUILDER_ORDER;
 
-	public static String VALIDATION_CONTEXT_LINKED_RESOURCE_PATH_MUST_NOT_BE_NULL;
-	public static String VALIDATION_CONTEXT_VARIABLE_NAME_MUST_NOT_BE_NULL;
 	public static String KBNATURE_NOT_FOUND;
 	public static String KBBUILDER_NOT_FOUND;
 	public static String KBNATURE_SEPARATOR;
@@ -38,8 +36,4 @@ public class KbMessages {
 	public static String KBPROBLEM_DEPENDS_ON_JAVA_MANY;
 	public static String ENABLE_KB_ON_SINGLE;
 	public static String ENABLE_KB_ON_MANY;
-	
-	public static String ILLEGAL_CONTENTTYPE;
-	
-	public static String EXCEPTION_DURING_CREATING_MARKER; 
-	}
+}

@@ -37,6 +37,8 @@ import org.eclipse.core.runtime.Path;
 import org.jboss.tools.common.model.project.ext.event.Change;
 import org.jboss.tools.common.model.project.ext.store.XMLStoreConstants;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
+import org.jboss.tools.common.validation.IProjectValidationContext;
+import org.jboss.tools.common.validation.internal.ProjectValidationContext;
 import org.jboss.tools.common.xml.XMLUtilities;
 import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.kb.IKbProject;
@@ -51,12 +53,10 @@ import org.jboss.tools.jst.web.kb.internal.taglib.FacesConfigTagLibrary;
 import org.jboss.tools.jst.web.kb.internal.taglib.TLDLibrary;
 import org.jboss.tools.jst.web.kb.internal.taglib.composite.CompositeTagLibrary;
 import org.jboss.tools.jst.web.kb.internal.taglib.myfaces.MyFacesTagLibrary;
-import org.jboss.tools.jst.web.kb.internal.validation.ProjectValidationContext;
 import org.jboss.tools.jst.web.kb.require.KbRequireBuilder;
 import org.jboss.tools.jst.web.kb.require.KbRequireDefinition;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibrary;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
-import org.jboss.tools.jst.web.kb.validation.IProjectValidationContext;
 import org.w3c.dom.Element;
 
 /**

@@ -50,13 +50,15 @@ import org.jboss.tools.common.el.core.resolver.JavaMemberELSegmentImpl;
 import org.jboss.tools.common.el.core.resolver.SimpleELContext;
 import org.jboss.tools.common.el.core.resolver.TypeInfoCollector;
 import org.jboss.tools.common.el.core.resolver.Var;
+import org.jboss.tools.common.validation.ContextValidationHelper;
+import org.jboss.tools.common.validation.IELValidationDelegate;
+import org.jboss.tools.common.validation.IProjectValidationContext;
+import org.jboss.tools.common.validation.IValidatingProjectTree;
+import org.jboss.tools.common.validation.ValidatorManager;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.internal.KbBuilder;
 import org.jboss.tools.jst.web.kb.preferences.ELSeverityPreferences;
-import org.jboss.tools.jst.web.kb.validation.IELValidationDelegate;
-import org.jboss.tools.jst.web.kb.validation.IProjectValidationContext;
-import org.jboss.tools.jst.web.kb.validation.IValidatingProjectTree;
 
 /**
  * EL Validator
@@ -476,7 +478,7 @@ public class ELValidator extends WebValidator {
 	}
 
 	private boolean validateBuilderOrder(IProject project) throws CoreException {
-		return ValidatorManager.validateBuilderOrder(project, getBuilderId(), getId(), ELSeverityPreferences.getInstance());
+		return KBValidator.validateBuilderOrder(project, getBuilderId(), getId(), ELSeverityPreferences.getInstance());
 	}
 
 	/*

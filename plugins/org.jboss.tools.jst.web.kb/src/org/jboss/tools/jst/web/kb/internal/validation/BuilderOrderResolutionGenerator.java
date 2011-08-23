@@ -20,28 +20,28 @@ import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.IMarkerResolution2;
 import org.eclipse.ui.IMarkerResolutionGenerator2;
 import org.eclipse.wst.validation.internal.plugin.ValidationPlugin;
-import org.jboss.tools.jst.web.WebModelPlugin;
+import org.jboss.tools.common.CommonPlugin;
+import org.jboss.tools.common.validation.CommonValidationPlugin;
 import org.jboss.tools.jst.web.kb.KbMessages;
-import org.jboss.tools.jst.web.kb.WebKbPlugin;
 
 public class BuilderOrderResolutionGenerator implements IMarkerResolutionGenerator2 {
 
 	public IMarkerResolution[] getResolutions(IMarker marker) {
 		try {
-			if(ValidatorManager.ORDER_PROBLEM_MARKER_TYPE.equals(marker.getType())) {
+			if(KBValidator.ORDER_PROBLEM_MARKER_TYPE.equals(marker.getType())) {
 				return new IMarkerResolution[]{new BuilderOrderResolution()};
 			}
 		} catch (CoreException e) {
-			WebKbPlugin.getDefault().logError(e);
+			CommonPlugin.getDefault().logError(e);
 		}
 		return new IMarkerResolution[0];
 	}
 
 	public boolean hasResolutions(IMarker marker) {
 		try {
-			return ValidatorManager.ORDER_PROBLEM_MARKER_TYPE.equals(marker.getType());
+			return KBValidator.ORDER_PROBLEM_MARKER_TYPE.equals(marker.getType());
 		} catch (CoreException e) {
-			WebKbPlugin.getDefault().logError(e);
+			CommonPlugin.getDefault().logError(e);
 		}
 		return false;
 	}
@@ -57,13 +57,12 @@ class BuilderOrderResolution implements IMarkerResolution2 {
 	public void run(IMarker marker) {
 		IProject project = marker.getResource().getProject();
 		try {
-			if(WebModelPlugin.makeBuilderLast(project, ValidationPlugin.VALIDATION_BUILDER_ID)) {
+			if(CommonValidationPlugin.makeBuilderLast(project, ValidationPlugin.VALIDATION_BUILDER_ID)) {
 				project.build(IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor());
 			}
 		} catch (CoreException e) {
-			WebKbPlugin.getDefault().logError(e);
+			CommonPlugin.getDefault().logError(e);
 		}
-		
 	}
 
 	public String getDescription() {
@@ -73,5 +72,4 @@ class BuilderOrderResolution implements IMarkerResolution2 {
 	public Image getImage() {
 		return null;
 	}
-	
 }

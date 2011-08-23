@@ -12,8 +12,8 @@ package org.jboss.tools.jst.web.kb;
 
 import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.runtime.IPath;
+import org.jboss.tools.common.validation.IProjectValidationContext;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
-import org.jboss.tools.jst.web.kb.validation.IProjectValidationContext;
 
 /**
  * 

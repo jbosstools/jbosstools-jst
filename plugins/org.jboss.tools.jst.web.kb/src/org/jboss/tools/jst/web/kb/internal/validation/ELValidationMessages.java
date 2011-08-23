@@ -15,8 +15,6 @@ public class ELValidationMessages {
 	public static String EL_VALIDATOR_ERROR_VALIDATING;
 	public static String EL_VALIDATOR_SETTER;
 	public static String EL_VALIDATOR_GETTER;
-	
-	public static String ERR_ILLIGAL_VALIDATION_STATE;
 
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, ELValidationMessages.class);

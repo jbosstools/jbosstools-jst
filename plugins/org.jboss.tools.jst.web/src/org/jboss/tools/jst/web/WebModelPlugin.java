@@ -18,7 +18,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -36,9 +35,6 @@ import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.projecttemplates.ProjectTemplatesPlugin;
 import org.osgi.framework.BundleContext;
 
-/**
- * 
- */
 public class WebModelPlugin extends BaseUIPlugin {
 
 	public static final String PLUGIN_ID = "org.jboss.tools.jst.web"; //$NON-NLS-1$
@@ -230,30 +226,5 @@ public class WebModelPlugin extends BaseUIPlugin {
 	    cmds[commands.length] = newcmd;
 	    System.arraycopy(commands, 0, cmds, 0, commands.length);
 	    return cmds;
-    }
-
-    public static boolean makeBuilderLast(IProject project, String builderId) throws CoreException {
-		IProjectDescription d = project.getDescription();
-		ICommand[] bs = d.getBuildSpec();
-		ICommand v = null;
-		boolean updated = false;
-		for (int i = 0; i < bs.length; i++) {
-			if(builderId.equals(bs[i].getBuilderName())) {
-				v = bs[i];
-			}
-			if(v != null) {
-				if(i + 1 < bs.length) {
-					bs[i] = bs[i + 1];
-					updated = true;
-				} else if(updated) {
-					bs[i] = v;
-				}
-			}
-		}
-		if(updated) {
-			d.setBuildSpec(bs);
-			project.setDescription(d, IProject.FORCE, new NullProgressMonitor());
-		}
-		return updated;
     }
 }

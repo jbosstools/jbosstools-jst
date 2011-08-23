@@ -89,7 +89,7 @@ import org.jboss.tools.common.resref.core.ResourceReference;
 import org.jboss.tools.common.text.ext.util.Utils;
 import org.jboss.tools.common.util.EclipseUIUtil;
 import org.jboss.tools.common.util.FileUtil;
-import org.jboss.tools.jst.web.kb.el.KbELReference;
+import org.jboss.tools.common.validation.ValidationELReference;
 import org.jboss.tools.jst.web.kb.include.IncludeContextBuilder;
 import org.jboss.tools.jst.web.kb.internal.FaceletPageContextImpl;
 import org.jboss.tools.jst.web.kb.internal.JspContextImpl;
@@ -263,7 +263,7 @@ public class PageContextFactory implements IResourceChangeListener {
 			List<SyntaxError> errors = model.getSyntaxErrors();
 			for (ELInstance instance : model.getInstances()) {
 				for(ELInvocationExpression ie : instance.getExpression().getInvocations()){
-					ELReference elReference = new KbELReference();
+					ELReference elReference = new ValidationELReference();
 					elReference.setResource(file);
 					elReference.setEl(new ELExpression[]{ie});
 					elReference.setLength(ie.getLength());
@@ -312,7 +312,7 @@ public class PageContextFactory implements IResourceChangeListener {
 						ELModel model = parser.parse(value);
 						List<ELInstance> is = model.getInstances();
 
-						ELReference elReference = new KbELReference();
+						ELReference elReference = new ValidationELReference();
 						try {
 							elReference.setLineNumber(document.getLineOfOffset(startEl));
 						} catch (BadLocationException e) {
@@ -578,7 +578,7 @@ public class PageContextFactory implements IResourceChangeListener {
 							ELModel model = parser.parse(text);
 							List<ELInstance> is = model.getInstances();
 
-							ELReference elReference = new KbELReference();
+							ELReference elReference = new ValidationELReference();
 							elReference.setResource(context.getResource());
 							elReference.setEl(is);
 							elReference.setLength(text.length());

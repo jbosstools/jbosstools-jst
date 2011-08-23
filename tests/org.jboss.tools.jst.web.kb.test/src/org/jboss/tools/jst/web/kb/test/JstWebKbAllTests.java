@@ -13,8 +13,8 @@ package org.jboss.tools.jst.web.kb.test;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.jboss.tools.common.base.test.validation.ValidationProjectTestSetup;
 import org.jboss.tools.common.model.util.test.XProjectImportTestSetUp;
-import org.jboss.tools.jst.jsp.test.ValidationProjectTestSetup;
 import org.jboss.tools.jst.web.kb.test.validation.BuilderOrderMarkerResolutionTest;
 import org.jboss.tools.jst.web.kb.test.validation.KBValidationTest;
 import org.jboss.tools.test.util.ProjectImportTestSetup;

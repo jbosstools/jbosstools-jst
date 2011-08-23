@@ -3,7 +3,7 @@
 <plugin>
 
    <extension
-         point="org.jboss.tools.jst.web.kb.validator">
+         point="org.jboss.tools.common.validation.validator">
          <validator
                class="org.jboss.tools.jst.web.kb.test.validation.TestValidator"
                id="org.jboss.tools.jst.web.kb.test.TestValidator"

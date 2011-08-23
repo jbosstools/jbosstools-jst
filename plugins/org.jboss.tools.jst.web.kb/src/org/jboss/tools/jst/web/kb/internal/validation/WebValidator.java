@@ -16,8 +16,9 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.wst.validation.internal.provisional.core.IReporter;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
+import org.jboss.tools.common.validation.ContextValidationHelper;
+import org.jboss.tools.common.validation.IProjectValidationContext;
 import org.jboss.tools.jst.web.WebUtils;
-import org.jboss.tools.jst.web.kb.validation.IProjectValidationContext;
 
 /**
  * @author Alexey Kazakov
