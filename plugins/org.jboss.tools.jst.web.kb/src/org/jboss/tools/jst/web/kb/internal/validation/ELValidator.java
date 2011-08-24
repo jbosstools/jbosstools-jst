@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.validation.internal.core.ValidationException;
 import org.eclipse.wst.validation.internal.provisional.core.IReporter;
 import org.jboss.tools.common.el.core.ELReference;
@@ -72,6 +73,27 @@ public class ELValidator extends WebValidator {
 	private static final String EXTENSION_POINT_ID = "org.jboss.tools.jst.web.kb.elValidationDelegate"; //$NON-NLS-1$
 
 	private static Set<IELValidationDelegate> DELEGATES;
+	static {
+		DELEGATES = new HashSet<IELValidationDelegate>();
+		IExtensionRegistry registry = Platform.getExtensionRegistry();
+		IExtensionPoint extensionPoint = registry.getExtensionPoint(EXTENSION_POINT_ID);
+		if (extensionPoint != null) {
+			IExtension[] extensions = extensionPoint.getExtensions();
+			for (int i = 0; i < extensions.length; i++) {
+				IExtension extension = extensions[i];
+				IConfigurationElement[] elements = extension.getConfigurationElements();
+				for (int j = 0; j < elements.length; j++) {
+					try {
+						IELValidationDelegate delegate = (IELValidationDelegate) elements[j]
+								.createExecutableExtension("class"); //$NON-NLS-1$
+						DELEGATES.add(delegate);
+					} catch (CoreException e) {
+						WebKbPlugin.getDefault().logError(e);
+					}
+				}
+			}
+		}
+	}
 
 	private ELResolver[] resolvers;
 	protected ELParserFactory mainFactory;
@@ -80,26 +102,6 @@ public class ELValidator extends WebValidator {
 	private boolean validateVars = true;
 
 	public ELValidator() {
-		if(DELEGATES==null) {
-			DELEGATES = new HashSet<IELValidationDelegate>();
-	        IExtensionRegistry registry = Platform.getExtensionRegistry();
-			IExtensionPoint extensionPoint = registry.getExtensionPoint(EXTENSION_POINT_ID);
-			if (extensionPoint != null) { 
-				IExtension[] extensions = extensionPoint.getExtensions();
-				for (int i=0; i<extensions.length; i++) {
-					IExtension extension = extensions[i];
-					IConfigurationElement[] elements = extension.getConfigurationElements();
-					for(int j=0; j<elements.length; j++) {
-						try {
-							IELValidationDelegate delegate = (IELValidationDelegate)elements[j].createExecutableExtension("class"); //$NON-NLS-1$
-							DELEGATES.add(delegate);
-						} catch (CoreException e) {
-							WebKbPlugin.getDefault().logError(e);
-						}
-					}
-				}
-			}
-		}
 	}
 
 	/*
@@ -166,7 +168,7 @@ public class ELValidator extends WebValidator {
 				Set<IPath> unnamedResources = validationContext.getUnnamedElResources();
 				for (IPath path : unnamedResources) {
 					IFile file = wsRoot.getFile(path);
-					if(file!=null && file.isAccessible() && notValidatedYet(file)) {
+					if(file.isAccessible() && notValidatedYet(file)) {
 						filesToValidate.add(file);
 					}
 				}
@@ -180,7 +182,7 @@ public class ELValidator extends WebValidator {
 			int i=0;
 			for (ELReference el : els) {
 				IResource resource = el.getResource();
-				if(resource!=null && resource.isAccessible() && !filesToValidate.contains(resource) && notValidatedYet(resource)) {
+				if(resource.isAccessible() && !filesToValidate.contains(resource) && notValidatedYet(resource)) {
 					// Don't re-validate more than 1000 ELs.
 					if(i++>1000) {
 						break;
@@ -247,7 +249,7 @@ public class ELValidator extends WebValidator {
 				if(!references[i].getSyntaxErrors().isEmpty()) {
 					for (SyntaxError error: references[i].getSyntaxErrors()) {
 						markers++;
-						addError(ELValidationMessages.EL_SYNTAX_ERROR, ELSeverityPreferences.EL_SYNTAX_ERROR, new String[]{"" + error.getProblem()}, references[i].getLineNumber(), 1, references[i].getStartPosition() + error.getPosition(), context.getResource());
+						addError(ELValidationMessages.EL_SYNTAX_ERROR, ELSeverityPreferences.EL_SYNTAX_ERROR, new String[]{error.getProblem()}, references[i].getLineNumber(), 1, references[i].getStartPosition() + error.getPosition(), context.getResource());
 					}
 				}
 				if(markers<getMaxNumberOfMarkersPerFile(file.getProject())) {
@@ -268,7 +270,6 @@ public class ELValidator extends WebValidator {
 	}
 
 	private void validateELExpression(ELReference elReference, ELExpression el) {
-		if(el == null) return;
 		List<ELInvocationExpression> es = el.getInvocations();
 		for (ELInvocationExpression token: es) {
 			validateElOperand(elReference, token);
