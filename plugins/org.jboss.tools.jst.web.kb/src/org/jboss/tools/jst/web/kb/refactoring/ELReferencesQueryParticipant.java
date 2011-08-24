@@ -16,6 +16,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
@@ -51,7 +52,7 @@ public class ELReferencesQueryParticipant implements IQueryParticipant{
 				return;
 			
 			ElementQuerySpecification qs = (ElementQuerySpecification)querySpecification;
-			if(qs.getElement() instanceof IMethod || qs.getElement() instanceof IType){
+			if(qs.getElement() instanceof IField || qs.getElement() instanceof IMethod || qs.getElement() instanceof IType){
 				IFile file = (IFile)qs.getElement().getResource();
 				if(file == null)
 					return;
