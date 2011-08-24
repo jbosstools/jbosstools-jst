@@ -122,7 +122,7 @@ public class LibraryStorage {
 				fs.remove(f);
 			}
 			if(fs.isEmpty()) {
-				librariesBySource.remove(fs);
+				librariesBySource.remove(path);
 			}
 		}
 		String uri = f.getURI();
