@@ -25,11 +25,11 @@ import org.eclipse.core.runtime.IConfigurationElement;
  */
 public class IncludeContextDefinition {
 	private String fUri;
-	private Map<String, Set<String>> fIncludeTags; // Map<TagName, Set<AttributeName>>
-	private Map<String, Set<String>> fCSSTags; // Map<TagName, Set<AttributeName>>
-	private Map<String, Set<String>> fJSF2CSSTags; // Map<TagName, Set<AttributeName>>
-	private Map<String, Set<String>> fContexts; // Map<ContextType, Set<ContentType>>
-	
+	private Map<String, Set<String>> fIncludeTags = new HashMap<String, Set<String>>(); // Map<TagName, Set<AttributeName>>
+	private Map<String, Set<String>> fCSSTags = new HashMap<String, Set<String>>(); // Map<TagName, Set<AttributeName>>
+	private Map<String, Set<String>> fJSF2CSSTags = new HashMap<String, Set<String>>(); // Map<TagName, Set<AttributeName>>
+	private Map<String, Set<String>> fContexts = new HashMap<String, Set<String>>(); // Map<ContextType, Set<ContentType>>
+
 	/**
 	 * Created the IncludeContextDefinition object for the specified URI
 	 * 
@@ -87,9 +87,6 @@ public class IncludeContextDefinition {
 	 * @param element
 	 */
 	private void addIncludeTag(String tagName, IConfigurationElement element) {
-		if (fIncludeTags == null) {
-			fIncludeTags = new HashMap<String, Set<String>>();
-		}
 		Set<String> tagSet = fIncludeTags.get(tagName);
 		if (tagSet == null) {
 			tagSet = new HashSet<String>();
@@ -104,9 +101,6 @@ public class IncludeContextDefinition {
 	 * @param element
 	 */
 	private void addCSSTag(String tagName, IConfigurationElement element) {
-		if (fCSSTags == null) {
-			fCSSTags = new HashMap<String, Set<String>>();
-		}
 		Set<String> tagSet = fCSSTags.get(tagName);
 		if (tagSet == null) {
 			tagSet = new HashSet<String>();
@@ -121,9 +115,6 @@ public class IncludeContextDefinition {
 	 * @param element
 	 */
 	private void addJSF2CSSTag(String tagName, IConfigurationElement element) {
-		if (fJSF2CSSTags == null) {
-			fJSF2CSSTags = new HashMap<String, Set<String>>();
-		}
 		Set<String> tagSet = fJSF2CSSTags.get(tagName);
 		if (tagSet == null) {
 			tagSet = new HashSet<String>();
@@ -202,9 +193,6 @@ public class IncludeContextDefinition {
 	 * @param element
 	 */
 	public void addContextType(String id, IConfigurationElement element) {
-		if (fContexts == null) {
-			fContexts = new HashMap<String, Set<String>>();
-		}
 		Set<String> contextSet = fContexts.get(id);
 		if (contextSet == null) {
 			contextSet = new HashSet<String>();
@@ -249,7 +237,7 @@ public class IncludeContextDefinition {
 	 * @return
 	 */
 	public String[] getIncludeTags() {
-		return fIncludeTags == null ? EMPTY_CHILDREN :
+		return fIncludeTags.isEmpty() ? EMPTY_CHILDREN :
 			(String[])fIncludeTags.keySet().toArray(new String[fIncludeTags.size()]);
 	}	
 	
@@ -259,7 +247,7 @@ public class IncludeContextDefinition {
 	 * @return
 	 */
 	public String[] getCSSTags() {
-		return fCSSTags == null ? EMPTY_CHILDREN :
+		return fCSSTags.isEmpty() ? EMPTY_CHILDREN :
 			(String[])fCSSTags.keySet().toArray(new String[fCSSTags.size()]);
 	}
 	/**
@@ -268,7 +256,7 @@ public class IncludeContextDefinition {
 	 * @return
 	 */
 	public String[] getJSF2CSSTags() {
-		return fJSF2CSSTags == null ? EMPTY_CHILDREN :
+		return fJSF2CSSTags.isEmpty() ? EMPTY_CHILDREN :
 			(String[])fJSF2CSSTags.keySet().toArray(new String[fJSF2CSSTags.size()]);
 	}
 	
@@ -319,9 +307,6 @@ public class IncludeContextDefinition {
 	 * @return
 	 */
 	public String getContextType(String contentType) {
-		if (fContexts == null)
-			return null;
-		
 		for (String contextType : fContexts.keySet()) {
 			if (fContexts.get(contextType).contains(contentType))
 				return contextType;
