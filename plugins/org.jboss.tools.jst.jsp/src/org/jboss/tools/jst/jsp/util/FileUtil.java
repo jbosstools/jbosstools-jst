@@ -27,6 +27,7 @@ import org.eclipse.jdt.core.search.SearchMatch;
 import org.eclipse.jdt.core.search.SearchParticipant;
 import org.eclipse.jdt.core.search.SearchPattern;
 import org.eclipse.jdt.core.search.SearchRequestor;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
 
 /**
  * 
@@ -35,43 +36,38 @@ import org.eclipse.jdt.core.search.SearchRequestor;
  */
 
 public class FileUtil {
-
+	
+	public final static int INITIAL_CAPACITY = 20;
+	
 	public static IJavaElement searchForClass(IJavaProject javaProject, String className) throws JavaModelException {
-//		 Get the search pattern
-	    SearchPattern pattern = SearchPattern.createPattern(className, IJavaSearchConstants.TYPE, IJavaSearchConstants.DECLARATIONS, SearchPattern.R_EXACT_MATCH | SearchPattern.R_CASE_SENSITIVE);
-	    // Get the search scope
-	    IJavaSearchScope scope = SearchEngine.createJavaSearchScope(new IJavaElement[] { javaProject });
+		// Get the search pattern
+		SearchPattern pattern = SearchPattern.createPattern(className, IJavaSearchConstants.TYPE,
+				IJavaSearchConstants.DECLARATIONS, SearchPattern.R_EXACT_MATCH | SearchPattern.R_CASE_SENSITIVE);
+		// Get the search scope
+		IJavaSearchScope scope = SearchEngine.createJavaSearchScope(new IJavaElement[] { javaProject });
 
-	    final List<SearchMatch> matches = new ArrayList<SearchMatch>();
-	    // Get the search requestor
-	    SearchRequestor requestor = new SearchRequestor() {
+		final List<SearchMatch> matches = new ArrayList<SearchMatch>(INITIAL_CAPACITY);
+		// Get the search requestor
+		SearchRequestor requestor = new SearchRequestor() {
 			public void acceptSearchMatch(SearchMatch match) throws CoreException {
 				matches.add(match);
 			}
-	    };
+		};
 
-	    // Search
-	    SearchEngine searchEngine = new SearchEngine();
-	    try {
-	    	searchEngine.search(pattern, new SearchParticipant[] {SearchEngine.getDefaultSearchParticipant()}, scope, requestor, null);
-	    } catch (CoreException ex) {
-	    	// Ignore
-//	    	ExtensionsPlugin.log(ex);
-	    }
-	    for (Iterator i = matches.iterator(); i != null && i.hasNext();) {
-	    	IJavaElement element = (IJavaElement)((SearchMatch)i.next()).getElement();
-	    	String classQualifiedName = getQualifiedClassName(element);
-	    	if (className.equals(classQualifiedName)) 
-	    		return element;
-	    }
-	    return javaProject.findType(className, new NullProgressMonitor());
-	}
-
-	private static String getQualifiedClassName(IJavaElement element) {
-		if(element instanceof IType) {
-			return ((IType)element).getFullyQualifiedName('.');
+		// Search
+		SearchEngine searchEngine = new SearchEngine();
+		try {
+			searchEngine.search(pattern, new SearchParticipant[] { SearchEngine.getDefaultSearchParticipant() }, scope,
+					requestor, null);
+		} catch (CoreException ex) {
+			JspEditorPlugin.getPluginLog().logError(ex);
 		}
-		return null;
-	}
-	
+		for (SearchMatch match : matches) {
+			IJavaElement element = (IJavaElement) match.getElement();
+			if(element instanceof IType && className.equals(((IType)element).getFullyQualifiedName('.'))) {
+				return element;
+			}
+		}
+		return javaProject.findType(className, new NullProgressMonitor());
+	}	
 }
