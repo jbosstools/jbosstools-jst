@@ -432,10 +432,14 @@ public class KbProject extends KbObject implements IKbProject {
 	 */
 	private File getStorageFile() {
 		WebKbPlugin plugin = WebKbPlugin.getDefault();
-		//The plug-in instance can be null at shutdown, when the plug-in is stopped. 
-		IPath path = plugin.getStateLocation();
-		File file = new File(path.toFile(), "projects/" + project.getName() + ".xml"); //$NON-NLS-1$ //$NON-NLS-2$
-		return file;
+		if( plugin != null) {
+			//The plug-in instance can be null at shutdown, when the plug-in is stopped. 
+			IPath path = plugin.getStateLocation();
+			File file = new File(path.toFile(), "projects/" + project.getName() + ".xml"); //$NON-NLS-1$ //$NON-NLS-2$
+			return file;
+		} else {
+			return null;
+		}
 	}
 	
 	public void clearStorage() {
