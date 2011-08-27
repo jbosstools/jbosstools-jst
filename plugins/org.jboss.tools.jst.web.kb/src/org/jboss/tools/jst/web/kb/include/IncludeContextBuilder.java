@@ -27,6 +27,9 @@ import org.jboss.tools.jst.web.kb.WebKbPlugin;
  *
  */
 public class IncludeContextBuilder extends RegistryReader {
+	
+	public static final String[] EMPTY = new String[0];
+	
 	// extension point ID
 	public static final String PL_INCLUDE = "KbIncludeContext"; //$NON-NLS-1$
 
@@ -129,9 +132,6 @@ public class IncludeContextBuilder extends RegistryReader {
 	 * @return
 	 */
 	private IncludeContextDefinition getIncludeContextDefinition(String uri) {
-		if (fIncludeContextDefs == null || uri == null)
-			return null;
-		
 		for (IncludeContextDefinition def : fIncludeContextDefs) {
 			if (uri.equals(def.getUri())) {
 				return def;
@@ -214,9 +214,7 @@ public class IncludeContextBuilder extends RegistryReader {
 			if (fCurrentIncludeDefinition != null) {
 				readElementChildren(element);
 			}
-			return true;
-		}
-		else if (tag.equals(TAG_TAG)) {
+		} else if (tag.equals(TAG_TAG)) {
 			processTagElement(element);
 
 			// make sure processing of current open on tag resulted in a current definition
@@ -224,13 +222,9 @@ public class IncludeContextBuilder extends RegistryReader {
 			if (fCurrentIncludeDefinition != null) {
 				readElementChildren(element);
 			}
-			return true;
-		}
-		else if (tag.equals(TAG_ATTRIBUTE)) {
+		} else if (tag.equals(TAG_ATTRIBUTE)) {
 			processAttributeElement(element);
-			return true;
-		}
-		else if (tag.equals(TAG_CONTEXTTYPE)) {
+		} else if (tag.equals(TAG_CONTEXTTYPE)) {
 			processContextTypeElement(element);
 
 			// make sure processing of current open on tag resulted in a current definition
@@ -238,13 +232,13 @@ public class IncludeContextBuilder extends RegistryReader {
 			if (fCurrentIncludeDefinition != null) {
 				readElementChildren(element);
 			}
-			return true;
-		}
-		else if (tag.equals(TAG_CONTENTTYPE)) {
+		} else if (tag.equals(TAG_CONTENTTYPE)) {
 			return processContentTypeElement(element);
+		} else {
+			return false;
 		}
 
-		return false;
+		return true;
 	}
 
 	private void initCache() {
@@ -283,25 +277,27 @@ public class IncludeContextBuilder extends RegistryReader {
 	 * @return
 	 */
 	public static String[] getIncludeAttributes(String uri, String tagName) {
-		if (uri == null)
-			return null;
-		
 		List<IncludeContextDefinition> defs = IncludeContextBuilder.getInstance().getIncludeContextDefinitions();
-		if (defs == null)
-			return null;
-		
-		List<String> attrs = new ArrayList<String>();
-		
-		for (IncludeContextDefinition def : defs) {
-			if (uri.equals(def.getUri())) {
-				String[] defAttrs = def.getIncludeTagAttributes(tagName);
-				if (defAttrs != null) {
-					for (String attr : defAttrs) attrs.add(attr);
+		String[] result = EMPTY;
+		if(!defs.isEmpty()) {
+			List<String> attrs = new ArrayList<String>();
+			
+			for (IncludeContextDefinition def : defs) {
+				if (uri.equals(def.getUri())) {
+					String[] defAttrs = def.getIncludeTagAttributes(tagName);
+					if (defAttrs != null) {
+						for (String attr : defAttrs) {
+							attrs.add(attr);
+						}
+					}
 				}
 			}
-		}
 		
-		return attrs.size() == 0 ? null : attrs.toArray(new String[attrs.size()]);
+			if(!attrs.isEmpty()) {
+				result = attrs.toArray(new String[attrs.size()]);
+			}
+		}
+		return result;
 	}
 	
 	/**
@@ -311,19 +307,15 @@ public class IncludeContextBuilder extends RegistryReader {
 	 * @return
 	 */
 	public static String getContextType(String contentType) {
-		if (contentType == null)
-			return null;
-		
-		List<IncludeContextDefinition> defs = IncludeContextBuilder.getInstance().getIncludeContextDefinitions();
-		if (defs == null)
-			return null;
-		
-		for (IncludeContextDefinition def : defs) {
-			String contextType = def.getContextType(contentType);
-			if (contextType != null)
-				return contextType;
+		if (contentType != null) {
+			List<IncludeContextDefinition> defs = IncludeContextBuilder.getInstance().getIncludeContextDefinitions();
+			for (IncludeContextDefinition def : defs) {
+				String contextType = def.getContextType(contentType);
+				if (contextType != null)
+					return contextType;
+			}
 		}
-		
+
 		return null;
 	}
 
@@ -335,18 +327,13 @@ public class IncludeContextBuilder extends RegistryReader {
 	 * @return
 	 */
 	public static boolean isCSSStyleSheetContainer(String uri, String tagName) {
-		if (uri == null)
-			return false;
-		
-		List<IncludeContextDefinition> defs = IncludeContextBuilder.getInstance().getIncludeContextDefinitions();
-		if (defs == null)
-			return false;
-		
 		boolean isHolder = false;
-		for (IncludeContextDefinition def : defs) {
-			if (uri.equals(def.getUri())) {
-				String[] defTags = def.getCSSTags();
-				if (defTags != null) {
+		if (uri != null) {
+			List<IncludeContextDefinition> defs = IncludeContextBuilder.getInstance().getIncludeContextDefinitions();
+	
+			for (IncludeContextDefinition def : defs) {
+				if (uri.equals(def.getUri())) {
+					String[] defTags = def.getCSSTags();
 					for (String tag : defTags) {
 						if (tagName.equals(tag) || ("".equals(uri) && tagName.equalsIgnoreCase(tag))) { //$NON-NLS-1$
 							isHolder = true;
@@ -360,7 +347,6 @@ public class IncludeContextBuilder extends RegistryReader {
 				}
 			}
 		}
-		
 		return isHolder;
 	}
 
@@ -372,18 +358,13 @@ public class IncludeContextBuilder extends RegistryReader {
 	 * @return
 	 */
 	public static boolean isJSF2CSSStyleSheetContainer(String uri, String tagName) {
-		if (uri == null)
-			return false;
-		
-		List<IncludeContextDefinition> defs = IncludeContextBuilder.getInstance().getIncludeContextDefinitions();
-		if (defs == null)
-			return false;
-		
 		boolean isHolder = false;
-		for (IncludeContextDefinition def : defs) {
-			if (uri.equals(def.getUri())) {
-				String[] defTags = def.getJSF2CSSTags();
-				if (defTags != null) {
+		if (uri != null) {
+			List<IncludeContextDefinition> defs = IncludeContextBuilder.getInstance().getIncludeContextDefinitions();
+			
+			for (IncludeContextDefinition def : defs) {
+				if (uri.equals(def.getUri())) {
+					String[] defTags = def.getJSF2CSSTags();
 					for (String tag : defTags) {
 						if (tagName.equals(tag) || ("".equals(uri) && tagName.equalsIgnoreCase(tag))) { //$NON-NLS-1$
 							isHolder = true;
@@ -397,7 +378,6 @@ public class IncludeContextBuilder extends RegistryReader {
 				}
 			}
 		}
-		
 		return isHolder;
 	}
 
@@ -409,26 +389,23 @@ public class IncludeContextBuilder extends RegistryReader {
 	 * @return
 	 */
 	public static String[] getCSSStyleSheetAttributes(String uri, String tagName) {
-		if (uri == null)
-			return null;
-		
+		String[] result = EMPTY;
 		List<IncludeContextDefinition> defs = IncludeContextBuilder.getInstance().getIncludeContextDefinitions();
-		if (defs == null)
-			return null;
-		
-		List<String> attrs = new ArrayList<String>();
-		
-		for (IncludeContextDefinition def : defs) {
-			if (uri.equals(def.getUri())) {
-				String[] defAttrs = def.getCSSTagAttributes(tagName);
-				if (defAttrs != null) {
-					for (String attr : defAttrs) attrs.add(attr);
+		if(!defs.isEmpty()) {
+			List<String> attrs = new ArrayList<String>();
+			for (IncludeContextDefinition def : defs) {
+				if (uri.equals(def.getUri())) {
+					String[] defAttrs = def.getCSSTagAttributes(tagName);
+					for (String attr : defAttrs) {
+						attrs.add(attr);
+					}
 				}
 			}
+			if(!attrs.isEmpty()) {
+				result =  attrs.toArray(new String[attrs.size()]);
+			}
 		}
-		
-		return attrs.size() == 0 ? null : attrs.toArray(new String[attrs.size()]);
-
+		return result;
 	}
 
 	/**
@@ -439,25 +416,20 @@ public class IncludeContextBuilder extends RegistryReader {
 	 * @return
 	 */
 	public static String[] getJSF2CSSStyleSheetAttributes(String uri, String tagName) {
-		if (uri == null)
-			return null;
-		
-		List<IncludeContextDefinition> defs = IncludeContextBuilder.getInstance().getIncludeContextDefinitions();
-		if (defs == null)
-			return null;
-		
-		List<String> attrs = new ArrayList<String>();
-		
-		for (IncludeContextDefinition def : defs) {
-			if (uri.equals(def.getUri())) {
-				String[] defAttrs = def.getJSF2CSSTagAttributes(tagName);
-				if (defAttrs != null) {
-					for (String attr : defAttrs) attrs.add(attr);
+		String[] result = EMPTY;
+		if (uri != null) {
+			List<IncludeContextDefinition> defs = IncludeContextBuilder.getInstance().getIncludeContextDefinitions();
+			List<String> attrs = new ArrayList<String>();
+			for (IncludeContextDefinition def : defs) {
+				if (uri.equals(def.getUri())) {
+					String[] defAttrs = def.getJSF2CSSTagAttributes(tagName);
+					if (defAttrs != null) {
+						for (String attr : defAttrs) attrs.add(attr);
+					}
 				}
 			}
+			result = attrs.toArray(new String[attrs.size()]);
 		}
-		
-		return attrs.size() == 0 ? null : attrs.toArray(new String[attrs.size()]);
-
+		return result;
 	}
 }

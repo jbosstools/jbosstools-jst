@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -24,71 +25,62 @@ import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
  *
  */
 public class LibraryStorage {
+
+	private static final Set<ITagLibrary> EMPTY_SET = Collections.emptySet();
+	private static final ITagLibrary[] EMPTY_LIB_ARRAY = new ITagLibrary[0];
+	
 	private Set<ITagLibrary> allLibraries = new HashSet<ITagLibrary>();
-	private ITagLibrary[] allLibrariesArray = null;
-	Map<IPath, Set<ITagLibrary>> librariesBySource = new HashMap<IPath, Set<ITagLibrary>>();
-	Map<String, Set<ITagLibrary>> librariesByUri = new HashMap<String, Set<ITagLibrary>>();
+	private ITagLibrary[] allLibrariesArray = EMPTY_LIB_ARRAY;
+	private Map<IPath, Set<ITagLibrary>> librariesBySource = new HashMap<IPath, Set<ITagLibrary>>();
+	private Map<String, Set<ITagLibrary>> librariesByUri = new HashMap<String, Set<ITagLibrary>>();
 	private Map<String,ITagLibrary[]> librariesByUriArray = new HashMap<String, ITagLibrary[]>();
 
-	public void clear() {
-		synchronized(allLibraries) {
-			allLibraries.clear();
-			allLibrariesArray = null;
-		}
+	public synchronized void clear() {
+		allLibraries.clear();
+		allLibrariesArray = EMPTY_LIB_ARRAY;
 		librariesBySource.clear();
-		synchronized (librariesByUri) {
-			librariesByUri.clear();
-			librariesByUriArray.clear();
-		}
+		librariesByUri.clear();
+		librariesByUriArray.clear();
 	}
 
-	public ITagLibrary[] getAllLibrariesArray() {
-		if(allLibrariesArray == null) {
-			synchronized(allLibraries) {
-				allLibrariesArray = allLibraries.toArray(new ITagLibrary[0]);
-			}
+	public synchronized ITagLibrary[] getAllLibrariesArray() {
+		if(allLibrariesArray.length == 0) {
+			allLibrariesArray = allLibraries.toArray(new ITagLibrary[allLibraries.size()]);
 		}
 		return allLibrariesArray;
 	}
 
-	private static final ITagLibrary[] EMPTY_LIB_ARRAY = new ITagLibrary[0];
-
-	public ITagLibrary[] getLibrariesArray(String uri) {
+	public synchronized ITagLibrary[] getLibrariesArray(String uri) {
 		ITagLibrary[] result = librariesByUriArray.get(uri);
 		if(result == null) {
-			synchronized(librariesByUri) {
-				Set<ITagLibrary> libs = librariesByUri.get(uri);
-				if(libs!=null) {
-					result = libs.toArray(new ITagLibrary[0]);
-				} else {
-					result = EMPTY_LIB_ARRAY; 
-				}
-				librariesByUriArray.put(uri, result);
-			}
-		}
-		return result;
-	}
-
-	public Set<ITagLibrary> getLibrariesBySource(IPath path) {
-		return librariesBySource.get(path);
-	}
-
-	public ITagLibrary[] getLibrariesArray(IPath path) {
-		ITagLibrary[] result = EMPTY_LIB_ARRAY;
-		synchronized(librariesBySource) {
-			Set<ITagLibrary> libs = librariesBySource.get(path);
+			Set<ITagLibrary> libs = librariesByUri.get(uri);
 			if(libs!=null) {
-				result = libs.toArray(new ITagLibrary[0]);
+				result = libs.toArray(new ITagLibrary[libs.size()]);
+			} else {
+				result = EMPTY_LIB_ARRAY; 
 			}
+			librariesByUriArray.put(uri, result);
 		}
 		return result;
 	}
 
-	public void addLibrary(ITagLibrary f) {
-		synchronized(allLibraries) {
-			allLibraries.add(f);
-			allLibrariesArray = null;
+	public synchronized Set<ITagLibrary> getLibrariesBySource(IPath path) {
+		Set<ITagLibrary> set = librariesBySource.get(path);
+		return set != null ? set : EMPTY_SET;
+	}
+
+	public synchronized ITagLibrary[] getLibrariesArray(IPath path) {
+		ITagLibrary[] result = EMPTY_LIB_ARRAY;
+		Set<ITagLibrary> libs = librariesBySource.get(path);
+		if(libs!=null) {
+			result = libs.toArray(new ITagLibrary[0]);
 		}
+		return result;
+	}
+
+	public synchronized void addLibrary(ITagLibrary f) {
+		allLibraries.add(f);
+		allLibrariesArray = EMPTY_LIB_ARRAY;
 		IPath path = f.getSourcePath();
 		if(path != null) {
 			Set<ITagLibrary> fs = librariesBySource.get(path);
@@ -99,22 +91,18 @@ public class LibraryStorage {
 			fs.add(f);
 		}
 		String uri = f.getURI();
-		synchronized (librariesByUri) {
-			librariesByUriArray.remove(uri);
-			Set<ITagLibrary> ul = librariesByUri.get(uri);
-			if (ul == null) {
-				ul = new HashSet<ITagLibrary>();
-				librariesByUri.put(uri, ul);
-			}
-			ul.add(f);
+		librariesByUriArray.remove(uri);
+		Set<ITagLibrary> ul = librariesByUri.get(uri);
+		if (ul == null) {
+			ul = new HashSet<ITagLibrary>();
+			librariesByUri.put(uri, ul);
 		}
+		ul.add(f);
 	}
 
-	public void removeLibrary(ITagLibrary f) {
-		synchronized(allLibraries) {
-			allLibraries.remove(f);
-			allLibrariesArray = null;
-		}
+	public synchronized void removeLibrary(ITagLibrary f) {
+		allLibraries.remove(f);
+		allLibrariesArray = EMPTY_LIB_ARRAY;
 		IPath path = f.getSourcePath();
 		if(path != null) {
 			Set<ITagLibrary> fs = librariesBySource.get(path);
@@ -126,36 +114,35 @@ public class LibraryStorage {
 			}
 		}
 		String uri = f.getURI();
-		synchronized (librariesByUri) {
-			Set<ITagLibrary> ul = librariesByUri.get(uri);
-			librariesByUriArray.remove(uri);
-			if (ul != null) {
-				ul.remove(f);
-				if (ul.isEmpty()) {
-					librariesByUri.remove(uri);
-				}
+		Set<ITagLibrary> ul = librariesByUri.get(uri);
+		librariesByUriArray.remove(uri);
+		if (ul != null) {
+			ul.remove(f);
+			if (ul.isEmpty()) {
+				librariesByUri.remove(uri);
 			}
 		}
 	}
 
-	public Set<ITagLibrary> removePath(IPath path) {
+	public synchronized Set<ITagLibrary> removePath(IPath path) {
 		Set<ITagLibrary> fs = librariesBySource.get(path);
-		if(fs == null) return null;
-		for (ITagLibrary f: fs) {
-			synchronized(allLibraries) {
+		if(fs == null) {
+			fs = EMPTY_SET;
+		} else {
+			for (ITagLibrary f: fs) {
 				allLibraries.remove(f);
-				allLibrariesArray = null;
-			}
-			synchronized (librariesByUri) {
+				allLibrariesArray = EMPTY_LIB_ARRAY;
 				Set<ITagLibrary> s = librariesByUri.get(f.getURI());
-				if(s != null) s.remove(f);
-				if(s != null && s.isEmpty()) {
-					librariesByUri.remove(f.getURI());
+				if(s != null) {
+					s.remove(f);
+					if(s.isEmpty()) {
+						librariesByUri.remove(f.getURI());
+					}
 				}
 				librariesByUriArray.remove(f.getURI());
 			}
+			librariesBySource.remove(path);
 		}
-		librariesBySource.remove(path);
 		return fs;
 	}
 

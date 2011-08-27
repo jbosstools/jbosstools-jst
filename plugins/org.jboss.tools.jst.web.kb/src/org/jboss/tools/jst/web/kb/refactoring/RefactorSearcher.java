@@ -243,7 +243,6 @@ public abstract class RefactorSearcher {
 	}
 	
 	protected void searchInCach(IFile file){
-		if(file == null) return;
 		ELResolver[] resolvers = ELResolverFactoryManager.getInstance().getResolvers(file);
 		
 		ELContext context = PageContextFactory.createPageContext(file);
@@ -252,44 +251,37 @@ public abstract class RefactorSearcher {
 			return;
 		
 		ELReference[] references = context.getELReferences();
-		resolvers = context.getElResolvers();
-		IRelevanceCheck[] checks = getRelevanceChecks(resolvers);
-		
+
 		if(javaElement != null){
+			resolvers = context.getElResolvers();
+			IRelevanceCheck[] checks = getRelevanceChecks(resolvers);
 			List<MatchArea> areas = new ArrayList<MatchArea>();
 			for(ELReference reference : references){
 				int offset = reference.getStartPosition();
 				for(ELExpression operand : reference.getEl()){
 					for (int i = 0; i < resolvers.length; i++) {
 						ELResolver resolver = resolvers[i];
-						if (!(resolver instanceof ELCompletionEngine))
-							continue;
-						if(checks[i] != null && !checks[i].isRelevant(operand.getText())) 
+						if (!(resolver instanceof ELCompletionEngine) || !checks[i].isRelevant(operand.getText())) 
 							continue;
 						
 						ELResolution resolution = resolver.resolve(context, operand, offset);
 						
-						if(resolution == null)
-							continue;
-	
-						List<ELSegment> segments = resolution.findSegmentsByJavaElement(javaElement);
-
-						if(segments == null)
-							continue;
-						
-						for(ELSegment segment : segments){
-							int o = offset+segment.getSourceReference().getStartPosition();
-							int l = segment.getSourceReference().getLength();
-							
-							if(!contains(areas, o, l)){
-								match(file, o, l);
-								areas.add(new MatchArea(o, l));
+						if(resolution != null) {
+							List<ELSegment> segments = resolution.findSegmentsByJavaElement(javaElement);
+							for(ELSegment segment : segments){
+								int o = offset+segment.getSourceReference().getStartPosition();
+								int l = segment.getSourceReference().getLength();
+								
+								if(!contains(areas, o, l)){
+									match(file, o, l);
+									areas.add(new MatchArea(o, l));
+								}
 							}
 						}
 					}
 				}
 			}
-		}else{
+		} else {
 			for(ELReference reference : references){
 				int offset = reference.getStartPosition();
 				ELExpression[] expressions = reference.getEl();
@@ -324,7 +316,6 @@ public abstract class RefactorSearcher {
 	}
 
 	protected IRelevanceCheck[] getRelevanceChecks(ELResolver[] resolvers) {
-		if(resolvers == null) return new IRelevanceCheck[0];
 		IRelevanceCheck[] checks = new IRelevanceCheck[resolvers.length];
 		for (int i = 0; i < checks.length; i++) {
 			checks[i] = resolvers[i].createRelevanceCheck(javaElement);

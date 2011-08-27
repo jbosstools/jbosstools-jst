@@ -41,8 +41,7 @@ public class EnableKBOnProject implements IMarkerResolution {
 
 	public void run(IMarker marker) {
 		IResource resource = marker.getResource();
-		IProject project = resource instanceof IProject ? (IProject)resource : 
-			resource != null ? resource.getProject() : null;
+		IProject project = resource instanceof IProject ? (IProject)resource : resource != null ? resource.getProject() : null;
 		
 		if (project == null)
 			return;

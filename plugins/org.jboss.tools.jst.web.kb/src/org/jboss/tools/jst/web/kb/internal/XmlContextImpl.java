@@ -112,13 +112,17 @@ public class XmlContextImpl extends ELContextImpl implements IXmlContext {
 	 * @param name space
 	 */
 	public void addNameSpace(IRegion region, INameSpace nameSpace) {
-		if (nameSpaces.get(region) == null) {
-			Map<String, INameSpace> nameSpaceMap = new HashMap<String, INameSpace>();
+		Map<String, INameSpace> nameSpaceMap = nameSpaces.get(region);
+
+		if (nameSpaceMap == null) {
+			nameSpaceMap = new HashMap<String, INameSpace>();
 			nameSpaces.put(region, nameSpaceMap);
 		}
-		nameSpaces.get(region).put(nameSpace.getPrefix(), nameSpace); 	// Fix for JBIDE-5097
+
+		nameSpaceMap.put(nameSpace.getPrefix(), nameSpace); 	// Fix for JBIDE-5097
+		
 		String uri = nameSpace.getURI();
-		if(uri!=null && uri.length()>0) {
+		if(!uri.isEmpty()) {
 			uris.add(uri);
 		}
 	}

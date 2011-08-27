@@ -33,7 +33,7 @@ public class NameSpace implements INameSpaceExtended {
 	 * @param prefix
 	 */
 	public NameSpace(String uri, String prefix) {
-		this(uri, prefix, null);
+		this(uri, prefix, new ITagLibrary[0]);
 	}
 
 	/**

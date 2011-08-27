@@ -32,15 +32,12 @@ import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
  * @author Alexey Kazakov
  */
 public class JspContextImpl extends XmlContextImpl implements IPageContext, IIncludedContextSupport, ICSSContainerSupport {
-	protected List<IResourceBundle> bundles;
+	protected List<IResourceBundle> bundles = new ArrayList<IResourceBundle>();
 
-	protected List<ELContext> fIncludedContexts = null;
-	protected List<CSSStyleSheetDescriptor> fCSSStyleSheetDescriptors = null;
+	protected List<ELContext> fIncludedContexts = new ArrayList<ELContext>();
+	protected List<CSSStyleSheetDescriptor> fCSSStyleSheetDescriptors = new ArrayList<CSSStyleSheetDescriptor>();;
 
 	public void addIncludedContext(ELContext includedContext) {
-		if (fIncludedContexts == null) {
-			fIncludedContexts = new ArrayList<ELContext>();
-		}
 		fIncludedContexts.add(includedContext);
 	}
 
@@ -109,23 +106,18 @@ public class JspContextImpl extends XmlContextImpl implements IPageContext, IInc
 			for (INameSpace ns : nsMap.values()) {
 				if (ns instanceof INameSpaceExtended) {
 					ITagLibrary[] libs = ((INameSpaceExtended)ns).getTagLibraries();
-					if (libs != null) {
-						for(ITagLibrary lib : libs) {
-							libraries.add(lib);
-						}
+					for(ITagLibrary lib : libs) {
+						libraries.add(lib);
 					}
 				}
 			}
 		}
 
-		List<ELContext> includedContexts = getIncludedContexts();
-		if (includedContexts != null) {
-			for (ELContext includedContext : includedContexts) {
-				ITagLibrary[] includedLibraries = includedContext instanceof IPageContext ? ((IPageContext)includedContext).getLibraries() : null;
-				if (includedLibraries != null) {
-					for (ITagLibrary lib : includedLibraries) {
-						libraries.add(lib);
-					}
+		for (ELContext includedContext : this.fIncludedContexts) {
+			if (includedContext instanceof IPageContext) { 
+				ITagLibrary[] includedLibraries = ((IPageContext)includedContext).getLibraries();
+				for (ITagLibrary lib : includedLibraries) {
+					libraries.add(lib);
 				}
 			}
 		}
@@ -139,26 +131,17 @@ public class JspContextImpl extends XmlContextImpl implements IPageContext, IInc
 	 * @param bundle
 	 */
 	public void addResourceBundle(IResourceBundle bundle) {
-		if (bundles == null) {
-			bundles = new ArrayList<IResourceBundle>();
-		}
 		bundles.add(bundle);
 	}
 
 	public IResourceBundle[] getResourceBundles() {
 		Set<IResourceBundle> resourceBundles = new HashSet<IResourceBundle>();
-		if (bundles != null) {
-			resourceBundles.addAll(bundles);
-		}
-		
-		List<ELContext> includedContexts = getIncludedContexts();
-		if (includedContexts != null) {
-			for (ELContext includedContext : includedContexts) {
-				IResourceBundle[] includedBundles = includedContext instanceof IPageContext ? ((IPageContext)includedContext).getResourceBundles() : null;
-				if (includedBundles != null) {
-					for (IResourceBundle b : includedBundles) {
-						resourceBundles.add(b);
-					}
+		resourceBundles.addAll(bundles);
+
+		for (ELContext includedContext : this.fIncludedContexts) {
+			if (includedContext instanceof IPageContext) {
+				for (IResourceBundle b : ((IPageContext)includedContext).getResourceBundles()) {
+					resourceBundles.add(b);
 				}
 			}
 		}
@@ -167,30 +150,17 @@ public class JspContextImpl extends XmlContextImpl implements IPageContext, IInc
 	}
 
 	public void addCSSStyleSheetDescriptor(CSSStyleSheetDescriptor cssStyleSheetDescriptor) {
-		if (fCSSStyleSheetDescriptors == null) {
-			fCSSStyleSheetDescriptors = new ArrayList<CSSStyleSheetDescriptor>();
-		}
 		fCSSStyleSheetDescriptors.add(cssStyleSheetDescriptor);
 	}
 
 	public List<CSSStyleSheetDescriptor> getCSSStyleSheetDescriptors() {
 		List<CSSStyleSheetDescriptor> descrs = new ArrayList<CSSStyleSheetDescriptor>();
 		
-		if (fCSSStyleSheetDescriptors != null) {
-			for (CSSStyleSheetDescriptor descr : fCSSStyleSheetDescriptors) {
-				descrs.add(descr);
-			}
-		}
+		descrs.addAll(fCSSStyleSheetDescriptors);
 		
-		List<ELContext> includedContexts = getIncludedContexts();
-		if (includedContexts != null) {
-			for (ELContext includedContext : includedContexts) {
-				if (includedContext instanceof ICSSContainerSupport) {
-					List<CSSStyleSheetDescriptor> includedSheetDescriptors = ((ICSSContainerSupport)includedContext).getCSSStyleSheetDescriptors();
-					if (includedSheetDescriptors != null) {
-						descrs.addAll(includedSheetDescriptors);
-					}
-				}
+		for (ELContext includedContext : this.fIncludedContexts) {
+			if (includedContext instanceof ICSSContainerSupport) {
+				descrs.addAll(((ICSSContainerSupport)includedContext).getCSSStyleSheetDescriptors());
 			}
 		}
 		

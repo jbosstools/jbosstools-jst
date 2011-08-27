@@ -108,7 +108,7 @@ public class KbProject extends KbObject implements IKbProject {
 	 */
 	public ITagLibrary[] getTagLibraries(String uri) {
 		ITagLibrary[] result = libraries.getLibrariesArray(uri);
-		if(result == null || result.length == 0) {
+		if(result.length == 0) {
 			result = StaticLibraries.instance.getLibraries(uri);
 		}
 		return result;
@@ -408,7 +408,7 @@ public class KbProject extends KbObject implements IKbProject {
 		try {
 			if(!project.hasNature(IKbProject.NATURE_ID)) return;
 		} catch (CoreException e) {
-			//ignore
+			WebKbPlugin.getDefault().logError(e);
 		}
 		File file = getStorageFile();
 		if(file != null) {
@@ -432,19 +432,14 @@ public class KbProject extends KbObject implements IKbProject {
 	 */
 	private File getStorageFile() {
 		WebKbPlugin plugin = WebKbPlugin.getDefault();
-		if( plugin != null) {
-			//The plug-in instance can be null at shutdown, when the plug-in is stopped. 
-			IPath path = plugin.getStateLocation();
-			File file = new File(path.toFile(), "projects/" + project.getName() + ".xml"); //$NON-NLS-1$ //$NON-NLS-2$
-			return file;
-		} else {
-			return null;
-		}
+		//The plug-in instance can be null at shutdown, when the plug-in is stopped. 
+		IPath path = plugin.getStateLocation();
+		File file = new File(path.toFile(), "projects/" + project.getName() + ".xml"); //$NON-NLS-1$ //$NON-NLS-2$
+		return file;
 	}
 	
 	public void clearStorage() {
-		File f = getStorageFile();
-		if(f != null && f.isFile()) f.delete();
+		getStorageFile().delete();
 	}
 
 	/*
@@ -810,7 +805,7 @@ public class KbProject extends KbObject implements IKbProject {
 		List<Change> changes = null;
 		
 		Set<ITagLibrary> ls = libraries.removePath(source);
-		if(ls != null) for (ITagLibrary l: ls) {
+		for (ITagLibrary l: ls) {
 			changes = Change.addChange(changes, new Change(this, null, l, null));
 			if(l.getResource() != null && l.getResource().getProject() == project) modifications++;
 		}
@@ -827,7 +822,7 @@ public class KbProject extends KbObject implements IKbProject {
 	 * @param cs
 	 */
 	public void updateChildPaths(IPath path, Collection<IPath> cs) {
-		IPath[] ps = sourcePaths2.keySet().toArray(new IPath[0]);
+		IPath[] ps = sourcePaths2.keySet().toArray(new IPath[sourcePaths2.keySet().size()]);
 		for (IPath p: ps) {
 			if(!cs.contains(p) && !p.equals(path) && path.isPrefixOf(p)) {
 				pathRemoved(p);
@@ -854,7 +849,7 @@ public class KbProject extends KbObject implements IKbProject {
 	public Map<Object,ITagLibrary> findLibraryDeclarations(IPath source) {
 		Map<Object,ITagLibrary> map = new HashMap<Object, ITagLibrary>();
 		Set<ITagLibrary> fs = libraries.getLibrariesBySource(source);
-		if(fs != null) for (ITagLibrary c: fs) {
+		for (ITagLibrary c: fs) {
 			KbObject ci = (KbObject)c;
 			map.put(ci.getId(), c);
 		}		

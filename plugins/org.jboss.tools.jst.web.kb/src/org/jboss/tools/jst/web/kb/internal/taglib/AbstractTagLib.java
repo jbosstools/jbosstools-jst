@@ -44,6 +44,7 @@ import org.w3c.dom.Element;
  * Abstract implementation of ITagLibrary
  * @author Alexey Kazakov
  */
+
 public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	public static String URI = "uri"; //$NON-NLS-1$
 

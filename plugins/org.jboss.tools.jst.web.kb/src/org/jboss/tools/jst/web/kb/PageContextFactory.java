@@ -152,20 +152,11 @@ public class PageContextFactory implements IResourceChangeListener {
 	}
 
 	private void saveConvext(ELContext context) {
-		if (context != null && context.getResource() != null) {
+		if (context.getResource() != null) {
 			synchronized (cache) {
 				cache.put(context.getResource(), context);
 			}
 		}
-	}
-
-	private ELContext removeSavedContext(IFile resource) {
-		ELContext removedContext = null;
-
-		synchronized (cache) {
-			removedContext = cache.remove(resource);
-		}
-		return removedContext;
 	}
 
 	/**
@@ -187,7 +178,7 @@ public class PageContextFactory implements IResourceChangeListener {
 	 * @return
 	 */
 	public static ELContext createPageContext(IFile file, String contextType) {
-		return getInstance().createPageContext(file, null, contextType);
+		return getInstance().createPageContext(file, new ArrayList<String>(), contextType);
 	}
 
 	/**
@@ -196,19 +187,17 @@ public class PageContextFactory implements IResourceChangeListener {
 	 * @param file
 	 */
 	public void cleanUp(IFile file) {
-		if (file == null)
-			return;
 		synchronized (cache) {
-			ELContext removedContext = removeSavedContext(file);
+			ELContext removedContext = cache.remove(file);
 			if (removedContext == null || removedContext.getResource() == null)
 				return;
-
+			ELContext[] contexts = null;
 			// Remove all the contexts that are parent to the removed context
-			ELContext[] contexts = cache.values().toArray(new ELContext[0]);
+			contexts = cache.values().toArray(new ELContext[cache.values().size()]);
 			if (contexts != null) {
 				for (ELContext context : contexts) {
 					if (isDependencyContext(context, file)) {
-						removeSavedContext(file);
+						cache.remove(file);
 					}
 				}
 			}
@@ -221,16 +210,12 @@ public class PageContextFactory implements IResourceChangeListener {
 	 * @param file
 	 */
 	public void cleanUp(IProject project) {
-		if (project == null)
-			return;
 		synchronized (cache) {
 			// Remove all the contexts that are parent to the removed context
-			IFile[] files = cache.keySet().toArray(new IFile[0]);
-			if (files != null) {
-				for (IFile file : files) {
-					if (project.equals(file.getProject())) {
-						cleanUp(file);
-					}
+			IFile[] files = cache.keySet().toArray(new IFile[cache.size()]);
+			for (IFile file : files) {
+				if (project.equals(file.getProject())) {
+					cleanUp(file);
 				}
 			}
 		}
@@ -243,9 +228,9 @@ public class PageContextFactory implements IResourceChangeListener {
 	 */
 	public void cleanUp(IResourceDelta delta) {
 		synchronized (cache) {
-			if(cache.size() == 0) return;
-			if(!checkDelta(delta)) return;
-			processDelta(delta);
+			if(!cache.isEmpty() && checkDelta(delta)) {
+				processDelta(delta);
+			}
 		}
 	}
 
@@ -254,10 +239,7 @@ public class PageContextFactory implements IResourceChangeListener {
 		context.setResource(file);
 		context.setElResolvers(ELResolverFactoryManager.getInstance().getResolvers(file));
 		String content = FileUtil.getContentFromEditorOrFile(file);
-		int startEl = content.indexOf("#{"); //$NON-NLS-1$
-		if(startEl<0)
-			startEl = content.indexOf("${"); //$NON-NLS-1$
-		if(startEl>-1) {
+		if(content.indexOf('{')>-1 && content.indexOf("#{") >-1 || content.indexOf("${")>-1 ) { //$NON-NLS-1$
 			ELParser parser = ELParserUtil.getJbossFactory().createParser();
 			ELModel model = parser.parse(content);
 			List<SyntaxError> errors = model.getSyntaxErrors();
@@ -282,7 +264,7 @@ public class PageContextFactory implements IResourceChangeListener {
 		return context;
 	}
 
-	private ELContext createJavaContext(IFile file) {
+	private static ELContext createJavaContext(IFile file) {
 		ELContextImpl context = new ELContextImpl();
 		context.setResource(file);
 		context.setElResolvers(ELResolverFactoryManager.getInstance().getResolvers(file));
@@ -344,121 +326,68 @@ public class PageContextFactory implements IResourceChangeListener {
 	 * @return
 	 */
 	private ELContext createPageContext(IFile file, List<String> parents, String defaultContextType) {
-		boolean isContextCachingAllowed = !EclipseUIUtil.isOpenInActiveEditor(file) && file != null;
+		boolean isContextCachingAllowed = !EclipseUIUtil.isOpenInActiveEditor(file);
 		ELContext context = isContextCachingAllowed ? getSavedContext(file) : null;
-		if (context != null) {
-			return context;
-		}
-		if (file == null) 
-			return createContextInstanceOfType(defaultContextType);
-		
-		IContentType type = IDE.getContentType(file);
-		String typeId = (type == null ? null : type.getId());
-		
-		if(JavaCore.JAVA_SOURCE_CONTENT_TYPE.equalsIgnoreCase(typeId)) {
-			context = createJavaContext(file);
-		} else if(JAVA_PROPERTIES_CONTENT_TYPE.equalsIgnoreCase(typeId)) {
-			context = createPropertiesContext(file);
-//		} else if (typeId != null) {
-//			context = defaultContextType == null ? 
-//					createPageContextInstance(typeId) :
-//								createContextInstanceOfType(defaultContextType);
-//			if (context == null)
-//				return null;
-//
-//			context.setResource(file);
-//			context.setElResolvers(ELResolverFactoryManager.getInstance().getResolvers(file));
-//
-//			if (context instanceof JspContextImpl && !(context instanceof FaceletPageContextImpl)) {
-//				// Fill JSP namespaces defined in TLDCMDocumentManager 
-//				fillJSPNameSpaces((JspContextImpl)context);
-//			}
-//
-//			// The subsequently called functions may use the file and document
-//			// already stored in context for their needs
-//			if (context instanceof FaceletPageContextImpl) {
-//				IModelManager manager = StructuredModelManager.getModelManager();
-//				if(manager == null) {
-//					return context;
-//				}
-//				IStructuredModel model = null;
-//				try {
-//					model = manager.getModelForRead(file);
-//					if (model instanceof IDOMModel) {
-//						IDOMModel domModel = (IDOMModel) model;
-//						IDOMDocument document = domModel.getDocument();
-//						fillContextForChildNodes(document, context, parents);
-//					}
-//				} catch (CoreException e) {
-//					WebKbPlugin.getDefault().logError(e);
-//		        } catch (IOException e) {
-//					WebKbPlugin.getDefault().logError(e);
-//		        } finally {
-//						if (model != null) {
-//							model.releaseFromRead();
-//						}
-//					}
-//			}
-		} else {
-	//		ctm = System.currentTimeMillis();
-	//		System.out.println("Create Context : " + file.getFullPath().toString() + ", Totals: " + cache.size());
-			IModelManager manager = StructuredModelManager.getModelManager();
-			if(manager == null) {
-				// this may happen if plug-in org.eclipse.wst.sse.core 
+		if (context == null) {
+			IContentType type = IDE.getContentType(file);
+			String typeId = (type == null ? null : type.getId());
+			
+			if(JavaCore.JAVA_SOURCE_CONTENT_TYPE.equalsIgnoreCase(typeId)) {
+				context = createJavaContext(file);
+			} else if(JAVA_PROPERTIES_CONTENT_TYPE.equalsIgnoreCase(typeId)) {
+				context = createPropertiesContext(file);
+			} else {
+				IModelManager manager = StructuredModelManager.getModelManager();
+				// manager==null if plug-in org.eclipse.wst.sse.core 
 				// is stopping or un-installed, that is Eclipse is shutting down.
 				// there is no need to report it, just stop validation.
-				return context;
-			}
-			
-			IStructuredModel model = null;
-			try {
-				model = manager.getModelForRead(file);
-				if (model instanceof IDOMModel) {
-					IDOMModel domModel = (IDOMModel) model;
-					IDOMDocument document = domModel.getDocument();
-
-					context = defaultContextType == null ? 
-							createPageContextInstance(domModel.getContentTypeIdentifier()) :
-										createContextInstanceOfType(defaultContextType);
-					if (context == null)
-						return null;
-
-					context.setResource(file);
-					context.setElResolvers(ELResolverFactoryManager.getInstance().getResolvers(file));
-
-					if (context instanceof JspContextImpl && !(context instanceof FaceletPageContextImpl)) {
-						// Fill JSP namespaces defined in TLDCMDocumentManager 
-						fillJSPNameSpaces((JspContextImpl)context);
+				if(manager != null) {
+					IStructuredModel model = null;
+					try {
+						model = manager.getModelForRead(file);
+						if (model instanceof IDOMModel) {
+							IDOMModel domModel = (IDOMModel) model;
+							context = defaultContextType == null ? 
+									createPageContextInstance(domModel.getContentTypeIdentifier()) :
+												createContextInstanceOfType(defaultContextType);
+							if (context != null) {
+								IDOMDocument document = domModel.getDocument();
+								context.setResource(file);
+								context.setElResolvers(ELResolverFactoryManager.getInstance().getResolvers(file));
+								if (context instanceof JspContextImpl && !(context instanceof FaceletPageContextImpl)) {
+									// Fill JSP namespaces defined in TLDCMDocumentManager 
+									fillJSPNameSpaces((JspContextImpl)context);
+								}
+								// The subsequently called functions may use the file and document
+								// already stored in context for their needs
+								fillContextForChildNodes(model.getStructuredDocument(), document, context, parents);
+							}
+						}
+					} catch (CoreException e) {
+						WebKbPlugin.getDefault().logError(e);
+					} catch (IOException e) {
+						WebKbPlugin.getDefault().logError(e);
+					} finally {
+						if (model != null) {
+							model.releaseFromRead();
+						}
 					}
-
-					// The subsequently called functions may use the file and document
-					// already stored in context for their needs
-					fillContextForChildNodes(model.getStructuredDocument(), document, context, parents);
-				}
-			} catch (CoreException e) {
-				WebKbPlugin.getDefault().logError(e);
-	        } catch (IOException e) {
-				WebKbPlugin.getDefault().logError(e);
-			} finally {
-				if (model != null) {
-					model.releaseFromRead();
 				}
 			}
+	
+			if (context != null && isContextCachingAllowed) {
+					saveConvext(context);
+			}
 		}
-
-		if (context != null && isContextCachingAllowed) {
-				saveConvext(context);
-		}
-
 		return context;
 	}
 
-	private ELContext createPageContextInstance(String contentType) {
+	private static ELContext createPageContextInstance(String contentType) {
 		String contextType = IncludeContextBuilder.getContextType(contentType);
 		return createContextInstanceOfType(contextType);
 	}
 
-	private ELContext createContextInstanceOfType(String contextType) {
+	private static ELContext createContextInstanceOfType(String contextType) {
 		if (JSP_PAGE_CONTEXT_TYPE.equals(contextType)) {
 			return new JspContextImpl();
 		} else if (FACELETS_PAGE_CONTEXT_TYPE.equals(contextType)) {
@@ -474,7 +403,7 @@ public class PageContextFactory implements IResourceChangeListener {
 	 * @param context
 	 */
 	@SuppressWarnings({ "unchecked" })
-	private void fillJSPNameSpaces(JspContextImpl context) {
+	private static void fillJSPNameSpaces(JspContextImpl context) {
 		TLDCMDocumentManager manager = TaglibController.getTLDCMDocumentManager(context.getDocument());
 		List trackers = (manager == null? null : manager.getCMDocumentTrackers(context.getDocument().getLength() - 1));
 		for (int i = 0; trackers != null && i < trackers.size(); i++) {
@@ -542,7 +471,7 @@ public class PageContextFactory implements IResourceChangeListener {
 		}
 	}
 
-	private void fillVarsForNode (IDOMElement node, ELContextImpl context) {
+	private static void fillVarsForNode (IDOMElement node, ELContextImpl context) {
 		Var var = ElVarSearcher.findVar(node, ELParserUtil.getJbossFactory());
 		if (var != null) {
 			int start = ((IndexedRegion) node).getStartOffset();
@@ -557,7 +486,7 @@ public class PageContextFactory implements IResourceChangeListener {
 		}
 	}
 
-	private void fillElReferencesForNode(IDocument document, IDOMNode node, XmlContextImpl context) {
+	private static void fillElReferencesForNode(IDocument document, IDOMNode node, XmlContextImpl context) {
 		if(Node.ELEMENT_NODE == node.getNodeType() || Node.TEXT_NODE == node.getNodeType()) {
 			IStructuredDocumentRegion regionNode = node.getFirstStructuredDocumentRegion();
 			if (regionNode == null)
@@ -567,38 +496,29 @@ public class PageContextFactory implements IResourceChangeListener {
 				ITextRegion region = regions.get(i);
 				if(region.getType() == DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE || region.getType() == DOMRegionContext.XML_CONTENT) {
 					String text = regionNode.getFullText(region);
-					if(text.indexOf("{")>-1) { //$NON-NLS-1$
+					if(text.indexOf('{')>-1 && (text.indexOf("#{") > -1 || text.indexOf("${") > -1)) { //$NON-NLS-1$
 						int offset = regionNode.getStartOffset() + region.getStart();
-						int startEl = text.indexOf("#{"); //$NON-NLS-1$
-						if(startEl==-1) {
-							startEl = text.indexOf("${"); //$NON-NLS-1$
-						}
-						if(startEl>-1) {
-							ELParser parser = ELParserUtil.getJbossFactory().createParser();
-							ELModel model = parser.parse(text);
-							List<ELInstance> is = model.getInstances();
-
-							ELReference elReference = new ValidationELReference();
-							elReference.setResource(context.getResource());
-							elReference.setEl(is);
-							elReference.setLength(text.length());
-							elReference.setStartPosition(offset);
-							try {
-								if(Node.TEXT_NODE == node.getNodeType()) {
-									if(is.size()==1) {
-										elReference.setLineNumber(document.getLineOfOffset(elReference.getStartPossitionOfFirstEL()) + 1);
-									}
-								} else {
-									elReference.setLineNumber(document.getLineOfOffset(offset) + 1);
+						ELParser parser = ELParserUtil.getJbossFactory().createParser();
+						ELModel model = parser.parse(text);
+						List<ELInstance> is = model.getInstances();
+						ELReference elReference = new ValidationELReference();
+						elReference.setResource(context.getResource());
+						elReference.setEl(is);
+						elReference.setLength(text.length());
+						elReference.setStartPosition(offset);
+						try {
+							if(Node.TEXT_NODE == node.getNodeType()) {
+								if(is.size()==1) {
+									elReference.setLineNumber(document.getLineOfOffset(elReference.getStartPossitionOfFirstEL()) + 1);
 								}
-							} catch (BadLocationException e) {
-								WebKbPlugin.getDefault().logError(e);
+							} else {
+								elReference.setLineNumber(document.getLineOfOffset(offset) + 1);
 							}
-
-							elReference.setSyntaxErrors(model.getSyntaxErrors());
-
-							context.addELReference(elReference);
+						} catch (BadLocationException e) {
+							WebKbPlugin.getDefault().logError(e);
 						}
+						elReference.setSyntaxErrors(model.getSyntaxErrors());
+						context.addELReference(elReference);
 					}
 				}
 			}
@@ -611,66 +531,50 @@ public class PageContextFactory implements IResourceChangeListener {
 		Map<String, List<INameSpace>> nsMap = context.getNameSpaces(node.getStartOffset());
 		String[] uris = getUrisByPrefix(nsMap, prefix);
 
-		if (uris != null) {
-			for (String uri : uris) {
-				if (context instanceof IIncludedContextSupport) {
-					String[] includeAttributes = IncludeContextBuilder.getIncludeAttributes(uri, tagName);
-					if (includeAttributes != null) {
-						List<String> newParentList = parents == null ? new ArrayList<String>() : new ArrayList<String>(parents);
-						newParentList.add(context.getResource().getFullPath().toString());
-
-						for (String attr : includeAttributes) {
-							String fileName = node.getAttribute(attr);
-							if (fileName == null || fileName.trim().length() == 0)
-								continue;
-
+		for (String uri : uris) {
+			if (context instanceof IIncludedContextSupport) {
+				String[] includeAttributes = IncludeContextBuilder.getIncludeAttributes(uri, tagName);
+				if (includeAttributes.length > 0) {
+					List<String> newParentList = parents == null ? new ArrayList<String>() : new ArrayList<String>(parents);
+					newParentList.add(context.getResource().getFullPath().toString());
+					for (String attr : includeAttributes) {
+						String fileName = node.getAttribute(attr);
+						if (fileName != null && !fileName.trim().isEmpty()) {
 							IFile file = getFileFromProject(fileName, context.getResource());
-							if (file == null)
-								continue;
-
-							// Fix for JBIDE-5083 >>>
-							if (!checkCycling(parents, file))
-								continue;
-							// Fix for JBIDE-5083 <<<
-
-							ELContext includedContext = createPageContext(file, newParentList, null);
-							if (includedContext != null)
-								((IIncludedContextSupport)context).addIncludedContext(includedContext);
+							if (file != null && checkCycling(parents, file)) { // checkCycling is to fix for JBIDE-5083
+								ELContext includedContext = createPageContext(file, newParentList, null);
+								if (includedContext != null)
+									((IIncludedContextSupport)context).addIncludedContext(includedContext);
+							}
 						}
 					}
 				}
-				if (context instanceof ICSSContainerSupport) {
-					if(IncludeContextBuilder.isCSSStyleSheetContainer(uri, tagName)) {
-						fillCSSStyleSheetFromElement(node, (ICSSContainerSupport)context, false);
-					} else if(IncludeContextBuilder.isJSF2CSSStyleSheetContainer(uri, tagName)) {
-							fillCSSStyleSheetFromElement(node, (ICSSContainerSupport)context, true);
-					} else {
-						String[] cssAttributes = IncludeContextBuilder.getCSSStyleSheetAttributes(uri, tagName);
-						if (cssAttributes != null) {
-							for (String attr : cssAttributes) {
-								fillCSSStyleSheetFromAttribute(node, attr, (ICSSContainerSupport)context, false);
-							}
-						}
-						cssAttributes = IncludeContextBuilder.getJSF2CSSStyleSheetAttributes(uri, tagName);
-						if (cssAttributes != null) {
-							for (String attr : cssAttributes) {
-								fillCSSStyleSheetFromAttribute(node, attr, (ICSSContainerSupport)context, true);
-							}
-						}
-						
+			}
+			if (context instanceof ICSSContainerSupport) {
+				if(IncludeContextBuilder.isCSSStyleSheetContainer(uri, tagName)) {
+					fillCSSStyleSheetFromElement(node, (ICSSContainerSupport)context, false);
+				} else if(IncludeContextBuilder.isJSF2CSSStyleSheetContainer(uri, tagName)) {
+						fillCSSStyleSheetFromElement(node, (ICSSContainerSupport)context, true);
+				} else {
+					String[] cssAttributes = IncludeContextBuilder.getCSSStyleSheetAttributes(uri, tagName);
+					for (String attr : cssAttributes) {
+						fillCSSStyleSheetFromAttribute(node, attr, (ICSSContainerSupport)context, false);
 					}
+					cssAttributes = IncludeContextBuilder.getJSF2CSSStyleSheetAttributes(uri, tagName);
+					for (String attr : cssAttributes) {
+						fillCSSStyleSheetFromAttribute(node, attr, (ICSSContainerSupport)context, true);
+					}
+					
 				}
 			}
 		}
 	}
 
-	private boolean checkCycling(List<String> parents, IFile resource) {
+	private static boolean checkCycling(List<String> parents, IFile resource) {
 		String resourceId = resource.getFullPath().toString();
-		if (parents != null) {
-			for (String parentId : parents) {
-				if (resourceId.equals(parentId))
-					return false;
-			}
+		for (String parentId : parents) {
+			if (resourceId.equals(parentId))
+				return false;
 		}
 		return true;
 	}
@@ -684,7 +588,7 @@ public class PageContextFactory implements IResourceChangeListener {
 	 * @param node
 	 * @param context
 	 */
-	private void fillXMLNamespacesForNode(Element node, XmlContextImpl context) {
+	private static void fillXMLNamespacesForNode(Element node, XmlContextImpl context) {
 		NamedNodeMap attrs = node.getAttributes();
 		boolean mainNnIsRedefined = false;
 		for (int j = 0; attrs != null && j < attrs.getLength(); j++) {
@@ -741,35 +645,33 @@ public class PageContextFactory implements IResourceChangeListener {
 		}
 	}
 
-	private void fillResourceBundlesForNode(IDOMElement node, JspContextImpl context) {
+	private static void fillResourceBundlesForNode(IDOMElement node, JspContextImpl context) {
 		String name = node.getNodeName();
-		if (name == null) return;
-		if (!name.endsWith("loadBundle")) return; //$NON-NLS-1$
-		if (name.indexOf(':') == -1) return;
+		if (name == null || !name.endsWith("loadBundle") || name.indexOf(':') == -1)  //$NON-NLS-1$
+				return;
 		String prefix = name.substring(0, name.indexOf(':'));
 
 		Map<String, List<INameSpace>> ns = context.getNameSpaces(node.getStartOffset());
 		if (!containsPrefix(ns, prefix)) return;
 
 		NamedNodeMap attributes = node.getAttributes();
-		if (attributes == null) return;
 		String basename = (attributes.getNamedItem("basename") == null ? null : attributes.getNamedItem("basename").getNodeValue()); //$NON-NLS-1$ //$NON-NLS-2$
 		String var = (attributes.getNamedItem("var") == null ? null : attributes.getNamedItem("var").getNodeValue()); //$NON-NLS-1$ //$NON-NLS-2$
-		if (basename == null || basename.length() == 0 ||
-			var == null || var.length() == 0) 
+		if (basename == null || basename.length() == 0 || var == null || var.length() == 0) 
 			return;
 
 		context.addResourceBundle(new ResourceBundle(basename, var));
 	}
 
-	private void fillCSSStyleSheetFromAttribute(IDOMElement node,
+	private static void fillCSSStyleSheetFromAttribute(IDOMElement node,
 			String attribute, ICSSContainerSupport context, boolean jsf2Source) {
 		CSSStyleSheetDescriptor descr = getSheetForTagAttribute(node, attribute, jsf2Source);
-		if (descr != null)
+		if (descr != null) {
 			context.addCSSStyleSheetDescriptor(descr);
+		}
 	}
 
-	private void fillCSSStyleSheetFromElement(IDOMElement node,
+	private static void fillCSSStyleSheetFromElement(IDOMElement node,
 			ICSSContainerSupport context, boolean jsf2Source) {
 		CSSStyleSheet sheet = getSheetForTag(node);
 		if (sheet != null) {
@@ -826,7 +728,7 @@ public class PageContextFactory implements IResourceChangeListener {
 	 * @param stylesContainer
 	 * @return
 	 */
-	private CSSStyleSheetDescriptor getSheetForTagAttribute(final Node stylesContainer, String attribute, boolean jsf2Source) {
+	private static CSSStyleSheetDescriptor getSheetForTagAttribute(final Node stylesContainer, String attribute, boolean jsf2Source) {
 		INodeNotifier notifier = (INodeNotifier) stylesContainer;
 		CSSStyleSheet sheet = null;
 		String source = null;
@@ -869,7 +771,7 @@ public class PageContextFactory implements IResourceChangeListener {
 	 * @param stylesContainer
 	 * @return
 	 */
-	private CSSStyleSheet getSheetForTag(final Node stylesContainer) {
+	private static CSSStyleSheet getSheetForTag(final Node stylesContainer) {
 		INodeNotifier notifier = (INodeNotifier) stylesContainer;
 		CSSStyleSheet sheet = null;
 
@@ -884,7 +786,7 @@ public class PageContextFactory implements IResourceChangeListener {
 		return sheet;
 	}
 
-	private boolean containsPrefix(Map<String, List<INameSpace>> ns, String prefix) {
+	private static boolean containsPrefix(Map<String, List<INameSpace>> ns, String prefix) {
 		for (List<INameSpace> n: ns.values()) {
 			for (INameSpace nameSpace : n) {
 				if(prefix.equals(nameSpace.getPrefix())) return true;
@@ -901,8 +803,9 @@ public class PageContextFactory implements IResourceChangeListener {
 	 * @return
 	 */
 	public static String[] getUrisByPrefix(Map<String, List<INameSpace>> nsMap, String prefix) {
-		if(nsMap == null || nsMap.isEmpty())
-			return null;
+		if(nsMap.isEmpty()) {
+			return new String[0];
+		}
 		Set<String> uris = new HashSet<String>();
 		for (List<INameSpace> nsList : nsMap.values()) {
 			for (INameSpace ns : nsList) {
@@ -971,7 +874,7 @@ public class PageContextFactory implements IResourceChangeListener {
 		IPath projectPath = project.getLocation();
 		IFile member = null;
 
-		for (int i = 0; resources != null && i < resources.length; i++) {
+		for (int i = 0; i < resources.length; i++) {
 			IPath runtimePath = resources[i].getRuntimePath();
 			IPath sourcePath = resources[i].getSourcePath();
 
@@ -1067,11 +970,11 @@ public class PageContextFactory implements IResourceChangeListener {
 	private static ResourceReference[] sortReferencesByScope(ResourceReference[] references) {
 		ResourceReference[] sortedReferences = references.clone();
 
-        Arrays.sort(sortedReferences, new Comparator<ResourceReference>() {
+		Arrays.sort(sortedReferences, new Comparator<ResourceReference>() {
 			public int compare(ResourceReference r1, ResourceReference r2) {
 				return r1.getScope() - r2.getScope();
 			}
-        });
+		});
 
 		return sortedReferences;
 	}
@@ -1101,13 +1004,12 @@ public class PageContextFactory implements IResourceChangeListener {
 
 		@Override
 		protected boolean isValidAttribute() {
-			if (super.isValidAttribute())
-				return true;
-
-			String href = getElement().getAttribute(hrefAttrName);
-			if (href == null || href.length() == 0)
-				return false;
-			return true;
+			boolean result = true;
+			if (!super.isValidAttribute()) {
+				String href = getElement().getAttribute(hrefAttrName);
+				result = href != null && !href.isEmpty();
+			}
+			return result;
 		}
 
 		/**
@@ -1202,9 +1104,8 @@ public class PageContextFactory implements IResourceChangeListener {
 		cleanUp(event.getDelta());
 	}
 
-	private boolean checkDelta(IResourceDelta delta) {
+	private static boolean checkDelta(IResourceDelta delta) {
 		IResource resource = delta.getResource();
-		if(resource == null) return false;
 		if(resource instanceof IWorkspaceRoot) {
 			IResourceDelta[] d = delta.getAffectedChildren();
 			return (d.length > 0 && checkDelta(d[0]));
@@ -1213,58 +1114,40 @@ public class PageContextFactory implements IResourceChangeListener {
 	}
 
 	private void processDelta(IResourceDelta delta) {
-		if(delta == null) return;
-		int kind = delta.getKind();
-		IResource resource = delta.getResource();
-
-		if(resource instanceof IProject &&
-				kind == IResourceDelta.REMOVED) {
-			cleanUp((IProject)resource);
-		} else if (resource instanceof IFile && (
-			kind == IResourceDelta.CHANGED || 
-			kind == IResourceDelta.ADDED ||
-			kind == IResourceDelta.REMOVED ||
-			kind == IResourceDelta.CONTENT)) {
-			cleanUp((IFile)resource);
+		if(delta!= null) {
+			int kind = delta.getKind();
+			IResource resource = delta.getResource();
+	
+			if(resource instanceof IProject &&
+					kind == IResourceDelta.REMOVED) {
+				cleanUp((IProject)resource);
+			} else if (resource instanceof IFile && (
+				kind == IResourceDelta.CHANGED || 
+				kind == IResourceDelta.ADDED ||
+				kind == IResourceDelta.REMOVED ||
+				kind == IResourceDelta.CONTENT)) {
+				cleanUp((IFile)resource);
+			}
+			
+			IResourceDelta[] cs = delta.getAffectedChildren();
+			for (int i = 0; i < cs.length; i++) {
+				processDelta(cs[i]);
+			}
 		}
-
-		IResourceDelta[] cs = delta.getAffectedChildren();
-		for (int i = 0; cs != null && i < cs.length; i++) {
-			processDelta(cs[i]);
-		}
-		return;
 	}
 
-	private boolean isDependencyContext(ELContext context, IFile resource) {
+	private static boolean isDependencyContext(ELContext context, IFile resource) {
 		if (resource.equals(context.getResource())) {
 			return true;
 		}
 
 		if(context instanceof IIncludedContextSupport) {
 			List<ELContext> includedContexts = ((IIncludedContextSupport)context).getIncludedContexts();
-			if (includedContexts != null) {
-				for (ELContext includedContext : includedContexts) {
-					if (isDependencyContext(includedContext, resource))
-						return true;
-				}
+			for (ELContext includedContext : includedContexts) {
+				if (isDependencyContext(includedContext, resource))
+					return true;
 			}
 		}
 		return false;
-	}
-
-	@Override
-	protected void finalize() throws Throwable {
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		if (workspace != null) workspace.removeResourceChangeListener(this);
-
-		synchronized (cache) {
-			// Remove all the contexts that are parent to the removed context
-			ELContext[] contexts = cache.values().toArray(new ELContext[0]);
-			if (contexts != null) {
-				for (ELContext context : contexts) {
-					removeSavedContext(context.getResource());
-				}
-			}
-		}
 	}
 }
