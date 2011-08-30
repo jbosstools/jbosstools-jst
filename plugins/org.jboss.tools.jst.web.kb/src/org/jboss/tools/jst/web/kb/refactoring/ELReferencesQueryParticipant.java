@@ -47,35 +47,27 @@ public class ELReferencesQueryParticipant implements IQueryParticipant{
 			QuerySpecification querySpecification, IProgressMonitor monitor)
 			throws CoreException {
 		
-		if(querySpecification instanceof ElementQuerySpecification){
-			if (!isSearchForReferences(querySpecification.getLimitTo()))
-				return;
-			
-			ElementQuerySpecification qs = (ElementQuerySpecification)querySpecification;
-			if(qs.getElement() instanceof IField || qs.getElement() instanceof IMethod || qs.getElement() instanceof IType){
-				IFile file = (IFile)qs.getElement().getResource();
-				if(file == null)
-					return;
-				
-				String name = qs.getElement().getElementName();
-				
-				searcher = new ELSearcher(requestor, qs.getElement(), file, name);
-				searcher.setSearchScope(qs.getScope());
-				
-				searcher.findELReferences();
+		if(querySpecification instanceof ElementQuerySpecification && isSearchForReferences(querySpecification.getLimitTo())){
+
+			IJavaElement element = ((ElementQuerySpecification)querySpecification).getElement();
+			if(element instanceof IField || element instanceof IMethod || element instanceof IType){
+				IFile file = (IFile)element.getResource();
+				if(file != null) {
+					String name = element.getElementName();
+					searcher = new ELSearcher(requestor, element, file, name);
+					searcher.setSearchScope(querySpecification.getScope());
+					searcher.findELReferences();
+				}
 			}
 		}
 	}
 	
 	public boolean isSearchForReferences(int limitTo) {
-    	int maskedLimitTo = limitTo & ~(IJavaSearchConstants.IGNORE_DECLARING_TYPE+IJavaSearchConstants.IGNORE_RETURN_TYPE);
-    	if (maskedLimitTo == IJavaSearchConstants.REFERENCES || maskedLimitTo == IJavaSearchConstants.ALL_OCCURRENCES) {
-    		return true;
-    	}
-    
-    	return false;
-    }
-	
+		int maskedLimitTo = limitTo
+				& ~(IJavaSearchConstants.IGNORE_DECLARING_TYPE + IJavaSearchConstants.IGNORE_RETURN_TYPE);
+		return maskedLimitTo == IJavaSearchConstants.REFERENCES || maskedLimitTo == IJavaSearchConstants.ALL_OCCURRENCES;	
+	}
+
 	class ELSearcher extends RefactorSearcher{
 		ISearchRequestor requestor;
 		IProjectsSet projectSet=null;
@@ -89,7 +81,6 @@ public class ELReferencesQueryParticipant implements IQueryParticipant{
 				if(projectSet != null)
 					projectSet.init(file.getProject());
 			}
-			
 		}
 		
 		protected void outOfSynch(IProject file){
