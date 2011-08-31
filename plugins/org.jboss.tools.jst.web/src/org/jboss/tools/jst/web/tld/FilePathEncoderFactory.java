@@ -15,6 +15,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.project.ModelNatureExtension;
 import org.jboss.tools.common.model.util.ModelFeatureFactory;
+import org.jboss.tools.jst.web.WebModelPlugin;
 
 public class FilePathEncoderFactory {
 	static IFilePathEncoder pathEncoderInstance;
@@ -51,7 +52,7 @@ public class FilePathEncoderFactory {
 					if(encoder != null) return encoder;
 				}
 			} catch (CoreException e) {
-				//ignore - all checks are done above
+				WebModelPlugin.getPluginLog().logError(e);
 			}
 		}
 		return null;
