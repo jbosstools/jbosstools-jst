@@ -45,7 +45,7 @@ public class IncludeContextBuilder extends RegistryReader {
 	public static final String ATT_URI = "uri"; //$NON-NLS-1$
 	public static final String ATT_NAME = "name"; //$NON-NLS-1$
 
-	private final List<IncludeContextDefinition> fIncludeContextDefs = new ArrayList<IncludeContextDefinition>();;
+	private final List<IncludeContextDefinition> fIncludeContextDefs = new ArrayList<IncludeContextDefinition>();
 	private IncludeContextDefinition fCurrentIncludeDefinition;
 
 	private static final IncludeContextBuilder fInstance = new IncludeContextBuilder();
@@ -140,14 +140,11 @@ public class IncludeContextBuilder extends RegistryReader {
 	 * @param element
 	 * @return
 	 */
-	private boolean processTagElement(IConfigurationElement element) {
+	private void processTagElement(IConfigurationElement element) {
 		String theName = getName(element);
-
-		if (fCurrentIncludeDefinition != null && theName != null) {
-			return fCurrentIncludeDefinition.addTag(theName, element);
+		if(fCurrentIncludeDefinition != null && theName != null) {
+			fCurrentIncludeDefinition.addTag(theName, element);
 		}
-		
-		return false;
 	}
 
 	/**
@@ -186,11 +183,7 @@ public class IncludeContextBuilder extends RegistryReader {
 	 */
 	private boolean processContentTypeElement(IConfigurationElement element) {
 		String theId = getId(element);
-
-		if (fCurrentIncludeDefinition != null && theId != null) {
-			return fCurrentIncludeDefinition.addContentType(theId, element);
-		}
-		return false;
+		return fCurrentIncludeDefinition != null && theId != null && fCurrentIncludeDefinition.addContentType(theId, element);
 	}
 	
 	/* (non-Javadoc)
@@ -235,15 +228,6 @@ public class IncludeContextBuilder extends RegistryReader {
 	}
 
 	/**
-	 * Returns all the definitions
-	 * 
-	 * @return
-	 */
-	private List<IncludeContextDefinition> getIncludeContextDefinitions() {
-		return fIncludeContextDefs;
-	}
-	
-	/**
 	 * Returns the attributes for the specified include tag
 	 * 
 	 * @param uri
@@ -251,7 +235,7 @@ public class IncludeContextBuilder extends RegistryReader {
 	 * @return
 	 */
 	public static String[] getIncludeAttributes(String uri, String tagName) {
-		List<IncludeContextDefinition> defs = getInstance().getIncludeContextDefinitions();
+		List<IncludeContextDefinition> defs = fInstance.fIncludeContextDefs;
 		String[] result = EMPTY;
 		if(!defs.isEmpty()) {
 			List<String> attrs = new ArrayList<String>();
@@ -280,7 +264,7 @@ public class IncludeContextBuilder extends RegistryReader {
 	 */
 	public static String getContextType(String contentType) {
 		if (contentType != null) {
-			List<IncludeContextDefinition> defs = getInstance().getIncludeContextDefinitions();
+			List<IncludeContextDefinition> defs = fInstance.fIncludeContextDefs;
 			for (IncludeContextDefinition def : defs) {
 				String contextType = def.getContextType(contentType);
 				if (contextType != null) {
@@ -301,7 +285,7 @@ public class IncludeContextBuilder extends RegistryReader {
 	 */
 	public static boolean isCSSStyleSheetContainer(String uri, String tagName) {
 		boolean isHolder = false;
-		List<IncludeContextDefinition> defs = getInstance().getIncludeContextDefinitions();
+		List<IncludeContextDefinition> defs = fInstance.fIncludeContextDefs;
 
 		for (IncludeContextDefinition def : defs) {
 			if (uri.equals(def.getUri())) {
@@ -330,7 +314,7 @@ public class IncludeContextBuilder extends RegistryReader {
 	 */
 	public static boolean isJSF2CSSStyleSheetContainer(String uri, String tagName) {
 		boolean isHolder = false;
-		List<IncludeContextDefinition> defs = getInstance().getIncludeContextDefinitions();
+		List<IncludeContextDefinition> defs = fInstance.fIncludeContextDefs;
 
 		for (IncludeContextDefinition def : defs) {
 			if (uri.equals(def.getUri())) {
@@ -359,7 +343,7 @@ public class IncludeContextBuilder extends RegistryReader {
 	 */
 	public static String[] getCSSStyleSheetAttributes(String uri, String tagName) {
 		String[] result = EMPTY;
-		List<IncludeContextDefinition> defs = getInstance().getIncludeContextDefinitions();
+		List<IncludeContextDefinition> defs = fInstance.fIncludeContextDefs;
 		if(!defs.isEmpty()) {
 			List<String> attrs = new ArrayList<String>();
 			for (IncludeContextDefinition def : defs) {
@@ -387,7 +371,7 @@ public class IncludeContextBuilder extends RegistryReader {
 	public static String[] getJSF2CSSStyleSheetAttributes(String uri, String tagName) {
 		String[] result = EMPTY;
 		if (uri != null) {
-			List<IncludeContextDefinition> defs = getInstance().getIncludeContextDefinitions();
+			List<IncludeContextDefinition> defs = fInstance.fIncludeContextDefs;
 			List<String> attrs = new ArrayList<String>();
 			for (IncludeContextDefinition def : defs) {
 				if (uri.equals(def.getUri())) {
