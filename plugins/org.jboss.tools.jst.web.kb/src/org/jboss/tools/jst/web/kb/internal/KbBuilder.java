@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.osgi.util.NLS;
 import org.jboss.tools.common.el.core.resolver.TypeInfoCollector;
+import org.jboss.tools.common.util.TypeResolutionCache;
 import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.kb.KbProjectFactory;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
@@ -84,6 +85,7 @@ public class KbBuilder extends IncrementalProjectBuilder {
 	 */
 	protected IProject[] build(int kind, Map<String,String> args, IProgressMonitor monitor)
 			throws CoreException {
+		TypeResolutionCache.getInstance().clean();
 		KbProject sp = getKbProject();
 		if(sp == null) {
 			return null; 
