@@ -718,7 +718,7 @@ abstract public class AbstractXmlCompletionProposalComputer extends AbstractXMLM
 	 * @return default EL prefix
 	 */
 	public String getDefaultELPrefix() {
-		return EL_DOLLAR_PREFIX;
+		return EL_NUMBER_PREFIX;
 	}
 	
 	/**

@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.contentassist.computers;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -175,8 +176,8 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		if(!prefix.isELStarted()) {
 			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(true, 
 					getDefaultELPrefix() + "}" + (prefix.isAttributeValue() && prefix.hasOpenQuote() && !prefix.hasCloseQuote() ? String.valueOf(prefix.getQuoteChar()) : ""), //$NON-NLS-1$ //$NON-NLS-2$
-					getOffset(), 0, 2, JSF_EL_PROPOSAL_IMAGE, JstUIMessages.JspContentAssistProcessor_NewELExpression, 
-					null, JstUIMessages.JspContentAssistProcessor_NewELExpressionAttrInfo, TextProposal.R_XML_ATTRIBUTE_VALUE_TEMPLATE);
+					getOffset(), 0, 2, JSF_EL_PROPOSAL_IMAGE, MessageFormat.format(JstUIMessages.JspContentAssistProcessor_NewELExpression, getDefaultELPrefix()), 
+					null, MessageFormat.format(JstUIMessages.JspContentAssistProcessor_NewELExpressionAttrInfo, getDefaultELPrefix()), TextProposal.R_XML_ATTRIBUTE_VALUE_TEMPLATE);
 
 			contentAssistRequest.addProposal(proposal);
 			return;
@@ -325,8 +326,8 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		if (prefix == null || !prefix.isELStarted()) {
 			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(true, getDefaultELPrefix()+ "}", //$NON-NLS-1$ 
 					contentAssistRequest.getReplacementBeginPosition(), 
-					0, 2, JSF_EL_PROPOSAL_IMAGE, JstUIMessages.JspContentAssistProcessor_NewELExpression, null, 
-					JstUIMessages.FaceletPageContectAssistProcessor_NewELExpressionTextInfo, TextProposal.R_TAG_INSERTION + 1);
+					0, 2, JSF_EL_PROPOSAL_IMAGE, MessageFormat.format(JstUIMessages.JspContentAssistProcessor_NewELExpression, getDefaultELPrefix()), null, 
+					MessageFormat.format(JstUIMessages.FaceletPageContectAssistProcessor_NewELExpressionTextInfo, getDefaultELPrefix()), TextProposal.R_TAG_INSERTION + 1);
 			
 			contentAssistRequest.addProposal(proposal);
 			return;
@@ -1236,5 +1237,4 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 	protected int getTagInsertionBaseRelevance() {
 		return TextProposal.R_XML_TAG_INSERTION;
 	}
-	
 }
