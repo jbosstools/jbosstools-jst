@@ -219,8 +219,8 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 				// Need to get the rest of line from context.getInvocationOffset() 
 				IDocument doc = context.getDocument();
 				
-				String restOfLine = "";
-				String restOfValue = "";
+				String restOfLine = ""; //$NON-NLS-1$
+				String restOfValue = ""; //$NON-NLS-1$
 				int endPosition = -1;
 				try {
 					int line = doc.getLineOfOffset(context.getInvocationOffset());
@@ -252,16 +252,12 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 						replacementString += ']';
 					}
 				} else {
-					if (replacementString.endsWith("]") && restOfValue.indexOf(']') != -1) {
+					if (replacementString.endsWith("]") && restOfValue.indexOf(']') != -1) { //$NON-NLS-1$
 						replacementString = replacementString.substring(0, replacementString.length() -1);
 						cursorPosition = replacementString.length(); // Cursor will be put right after the replacement (not after the closing square bracket in this case)
 					}
 				}
 				
-				if (prefix.isAttributeValue() && prefix.hasOpenQuote() && endPosition == -1) {
-					// Add closing attr-quote
-					replacementString += quoteChar;
-				}
 				if (restOfLine.indexOf('}') == -1) {
 					// Add closing }-char
 					replacementString += '}';
