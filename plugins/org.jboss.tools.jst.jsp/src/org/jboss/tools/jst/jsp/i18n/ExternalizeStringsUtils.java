@@ -100,7 +100,7 @@ public class ExternalizeStringsUtils {
 	
 	public static final String NONAME = "noname";  //$NON-NLS-1$
 	public static final char[] REPLACED_CHARACTERS = new char[] {'~', '!', '@', '#',
-			'$', '%', '^', '&', '*', '(', ')', '-', '+', '=', '{', '}', '[', ']', ':', ';', ',', '.', '?', '\\', '/', '"', '\''};
+			'$', '%', '^', '&', '*', '(', ')', '-', '+', '=', '{', '}', '[', ']', ':', ';', ',', '.', '?', '\\', '/', '"', '\'', ' '};
 	public static final char[] LINE_DELEMITERS = new char[] {'\r', '\n', '\t'};
 	private static CharsetEncoder asciiEncoder;
 	
@@ -439,6 +439,7 @@ public class ExternalizeStringsUtils {
 	 * @return the result string
 	 */
 	public static String generatePropertyKey(String text) {
+		String result = text.trim();
 		/*
 		 * If text cannot be represented in standard eclipse encoding
 		 * change the key name to "noname"
@@ -446,18 +447,16 @@ public class ExternalizeStringsUtils {
 		if (null == asciiEncoder) {
 			asciiEncoder = Charset.forName("ISO-8859-1").newEncoder(); //$NON-NLS-1$
 		}
-		if (!asciiEncoder.canEncode(text)) {
-			text = NONAME;
+		if (!asciiEncoder.canEncode(result)) {
+			result = NONAME;
 		}
-		
-		String result = text.trim();
 		/*
 		 * Update text string field.
 		 * Trim the text to remove line breaks and caret returns.
 		 * Replace line delimiters white space
 		 */
 		for (char ch : LINE_DELEMITERS) {
-			text = text.trim().replace(ch, ' ');
+			result = result.trim().replace(ch, ' ');
 		}
 		/*
 		 * Replace all other symbols with '_'
@@ -465,11 +464,6 @@ public class ExternalizeStringsUtils {
 		for (char ch : REPLACED_CHARACTERS) {
 			result = result.replace(ch, '_');
 		}
-		/*
-		 * Replace all white spaces with '_'
-		 */
-		result = result.replaceAll(Constants.WHITE_SPACE,
-				Constants.UNDERSCORE);
 		/*
 		 * Correct underline symbols:
 		 * show only one of them
