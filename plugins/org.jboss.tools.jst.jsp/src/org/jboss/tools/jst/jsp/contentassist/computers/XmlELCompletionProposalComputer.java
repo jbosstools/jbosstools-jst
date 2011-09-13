@@ -870,6 +870,9 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 			documentRegion = documentRegion.getPrevious();
 			completionRegion = getCompletionRegion(request.getDocumentRegion().getStartOffset() + request.getRegion().getStart() - 1, request.getParent());
 		}
+		if(documentRegion==null || completionRegion==null) {
+			return null;
+		}
 		if (!DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE.equals(completionRegion.getType()) &&
 				!DOMRegionContext.XML_CONTENT.equals(completionRegion.getType()) &&
 				!DOMRegionContext.BLOCK_TEXT.equals(completionRegion.getType())) {
@@ -938,6 +941,9 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		if (DOMRegionContext.XML_END_TAG_OPEN.equals(regionType) || DOMRegionContext.XML_TAG_OPEN.equals(regionType)) {
 			documentRegion = documentRegion.getPrevious();
 			completionRegion = getCompletionRegion(request.getDocumentRegion().getStartOffset() + request.getRegion().getStart() - 1, request.getParent());
+		}
+		if(documentRegion==null || completionRegion==null) {
+			return null;
 		}
 		if (!DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE.equals(completionRegion.getType()) &&
 				!DOMRegionContext.XML_CONTENT.equals(completionRegion.getType()) &&
@@ -1097,7 +1103,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 				return null;
 			}
 			ITextRegion result = node.getStructuredDocument().getRegionAtCharacterOffset(offset).getRegionAtCharacterOffset(offset);
-			while (result == null) {
+			while (result == null && offset>0) {
 				offset--;
 				result = node.getStructuredDocument().getRegionAtCharacterOffset(offset).getRegionAtCharacterOffset(offset);
 			}
