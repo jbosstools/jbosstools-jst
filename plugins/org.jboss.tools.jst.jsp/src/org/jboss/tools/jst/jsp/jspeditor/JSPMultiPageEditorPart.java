@@ -12,19 +12,15 @@ package org.jboss.tools.jst.jsp.jspeditor;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.util.Assert;
 import org.eclipse.jface.util.SafeRunnable;
-import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -40,11 +36,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Item;
-import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IKeyBindingService;
 import org.eclipse.ui.INestableKeyBindingService;
 import org.eclipse.ui.IPropertyListener;
@@ -52,9 +46,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.EditorPart;
-import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 import org.eclipse.ui.part.MultiPageEditorSite;
-import org.eclipse.ui.part.MultiPageSelectionProvider;
 import org.eclipse.ui.part.PageSwitcher;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.jboss.tools.common.core.resources.XModelObjectEditorInput;
@@ -329,6 +321,30 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 		}
 		return null;
 	}
+	
+	/**
+	 * Find the editors contained in this multi-page editor
+	 * whose editor input match the provided input.
+	 * @param input the editor input
+	 * @return the editors contained in this multi-page editor
+	 * whose editor input match the provided input
+	 * @since 3.3
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public final IEditorPart[] findEditors(IEditorInput input) {
+		List result = new ArrayList();
+		int count = getPageCount();
+		for (int i = 0; i < count; i++) {
+			IEditorPart editor = getEditor(i);
+			if (editor != null 
+					&& editor.getEditorInput() != null
+					&& editor.getEditorInput().equals(input)) {
+				result.add(editor);
+			}
+		}
+		return (IEditorPart[]) result.toArray(new IEditorPart[result.size()]);
+	}
+
 
 	private CTabItem getItem(int pageIndex) {
 		return getTabFolder().getItem(pageIndex);
