@@ -12,23 +12,25 @@ package org.jboss.tools.jst.web.model.handlers;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.TreeMap;
+
 import org.jboss.tools.common.meta.action.impl.WizardDataValidator;
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
-import org.jboss.tools.common.model.files.handlers.*;
+import org.jboss.tools.common.model.files.handlers.CreateFileSupport;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
-import org.jboss.tools.common.model.util.ClassLoaderUtil;
 import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.model.helpers.WebAppHelper;
 import org.jboss.tools.jst.web.project.WebProject;
 import org.jboss.tools.jst.web.tld.TaglibMapping;
 
 public class CreateJSPFileSupport extends CreateFileSupport {
-	static {
-		ClassLoaderUtil.init();
-	}
 	
 	protected Map<String,File> templates = new TreeMap<String,File>();
 	TaglibSet taglibs;
