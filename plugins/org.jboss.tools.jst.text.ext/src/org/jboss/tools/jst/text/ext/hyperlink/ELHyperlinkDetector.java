@@ -70,7 +70,14 @@ public class ELHyperlinkDetector extends AbstractHyperlinkDetector{
 		return (IHyperlink[])links.toArray(new IHyperlink[links.size()]);
 	}
 	
-	private ELInvocationExpression findInvocationExpressionByOffset(ELReference reference, int offset){
+	/**
+	 * Returns EL Invocation Expression of EL reference by offset
+	 * 
+	 * @param reference
+	 * @param offset
+	 * @return
+	 */
+	public static ELInvocationExpression findInvocationExpressionByOffset(ELReference reference, int offset){
 		ELExpression[] expressions = reference.getEl();
 		for(ELExpression expression : expressions){
 			if(reference.getStartPosition()+expression.getStartPosition() <= offset && reference.getStartPosition()+expression.getEndPosition() > offset){
@@ -82,7 +89,7 @@ public class ELHyperlinkDetector extends AbstractHyperlinkDetector{
 		return null;
 	}
 	
-	private ELInvocationExpression findInvocationExpressionByOffset(ELReference reference, ELExpression expression, int offset){
+	private static ELInvocationExpression findInvocationExpressionByOffset(ELReference reference, ELExpression expression, int offset){
 		List<ELInvocationExpression> invocations = expression.getInvocations();
 		for(ELInvocationExpression invocation : invocations){
 			if(reference.getStartPosition()+invocation.getStartPosition() <= offset && reference.getStartPosition()+invocation.getEndPosition() > offset)
