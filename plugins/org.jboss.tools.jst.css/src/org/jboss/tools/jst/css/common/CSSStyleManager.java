@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.jboss.tools.jst.css.common;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -240,21 +241,17 @@ public class CSSStyleManager {
 	 * @return the style attributes
 	 */
 	public static Map<String, String> getStyleAttributes(String styleString) { 
-		Map<String, String> styleMap = new HashMap<String, String>();
+		Map<String, String> styleMap = Collections.emptyMap();
 		if ((styleString != null) && (styleString.length() > 0)) {
+			styleMap = new HashMap<String, String>();
 			String[] styles = styleString.split(Constants.SEMICOLON);
 			for (String styleElement : styles) {
-				String[] styleElementParts = styleElement.trim().split(
-						Constants.COLON);
-				if ((styleElementParts != null)
-						&& (styleElementParts.length == 2)
-						&& Util.searchInElement(styleElementParts[0],
-								CSSConstants.CSS_STYLES_MAP)) {
+				String[] styleElementParts = styleElement.trim().split(Constants.COLON);
+				if (styleElementParts.length == 2 && Util.searchInElement(styleElementParts[0], CSSConstants.CSS_STYLES_MAP)) {
 					styleMap.put(styleElementParts[0], styleElementParts[1]);
 				}
 			}
 		}
 		return styleMap;
 	}
-	
 }
