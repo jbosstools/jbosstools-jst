@@ -109,16 +109,18 @@ public abstract class KBValidator extends ValidationErrorManager implements IVal
 	}
 
 	private static boolean isCorrectOrder(IProject project, String builderId) throws CoreException {
-		ICommand[] cs = project.getDescription().getBuildSpec();
-		boolean validationFound = false;
-		for (ICommand c: cs) {
-			String name = c.getBuilderName();
-			if(ValidationPlugin.VALIDATION_BUILDER_ID.equals(name)) {
-				validationFound = true;
-			} else if(builderId.equals(name)) {
-				return !validationFound;
+		if(project.isAccessible()) {
+			ICommand[] cs = project.getDescription().getBuildSpec();
+			boolean validationFound = false;
+			for (ICommand c: cs) {
+				String name = c.getBuilderName();
+				if(ValidationPlugin.VALIDATION_BUILDER_ID.equals(name)) {
+					validationFound = true;
+				} else if(builderId.equals(name)) {
+					return !validationFound;
+				}
 			}
-		}		
+		}
 		return true;
 	}
 
