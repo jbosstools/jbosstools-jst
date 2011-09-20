@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2009 Exadel, Inc. and Red Hat, Inc.
+ * Copyright (c) 2009-2011 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
+ *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.test;
 
@@ -41,6 +41,7 @@ public class JstWebKbAllTests {
 		suite.addTestSuite(WebKbTest.class);
 		suite.addTestSuite(KbModelWithSeveralJarCopiesTest.class);
 		suite.addTestSuite(XMLCatalogTest.class);
+		suite.addTestSuite(CSSMediaRuleTest.class);
 		testSetup = new XProjectImportTestSetUp(suite,
 				"org.jboss.tools.jst.web.kb.test",
 				new String[]{"projects/TestKbModel", "projects/MyFaces", "projects/MyFaces2", "projects/TestKbModel3", "projects/TestKbModel4"},

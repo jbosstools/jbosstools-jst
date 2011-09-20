@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2009 Red Hat, Inc. 
+ * Copyright (c) 2009-2011 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -17,15 +17,16 @@ import java.util.TreeSet;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.ICSSContainerSupport;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
-import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.PageContextFactory.CSSStyleSheetDescriptor;
+import org.jboss.tools.jst.web.kb.WebKbPlugin;
+import org.w3c.dom.css.CSSMediaRule;
 import org.w3c.dom.css.CSSRule;
 import org.w3c.dom.css.CSSRuleList;
+import org.w3c.dom.css.CSSStyleRule;
 
 /**
  * The CSS Class proposal type. Is used to collect and return the proposals on
@@ -72,9 +73,21 @@ public class CSSClassProposalType extends CustomProposalType {
 	 */
 	public static Set<String> getClassNamesFromCSSRule(CSSRule cssRule) {
 		Set<String> styleNames = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
+
+		if (cssRule instanceof CSSMediaRule) {
+			CSSMediaRule cssMediaRule = (CSSMediaRule)cssRule;
+			CSSRuleList rules = cssMediaRule.getCssRules();
+			for (int i = 0; rules != null && i < rules.getLength(); i++) {
+				CSSRule rule = rules.item(i);
+				styleNames.addAll(getClassNamesFromCSSRule(rule));
+			}
+			return styleNames;
+		}
+		if (!(cssRule instanceof CSSStyleRule))
+			return styleNames;
 		
 		// get selector text
-		String selectorText = ((ICSSStyleRule) cssRule).getSelectorText();
+		String selectorText = ((CSSStyleRule) cssRule).getSelectorText();
 
 		if (selectorText != null) {
 			String styles[] = selectorText.trim().split(","); //$NON-NLS-1$
