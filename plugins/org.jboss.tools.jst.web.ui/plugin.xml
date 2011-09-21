@@ -423,7 +423,6 @@
       <enablement>
         <or>
           <instanceof value="org.jboss.tools.common.model.XModelObject"/>
-          <instanceof value="org.eclipse.core.resources.IFile"/>
         </or>
       </enablement>
     </actionProvider>
