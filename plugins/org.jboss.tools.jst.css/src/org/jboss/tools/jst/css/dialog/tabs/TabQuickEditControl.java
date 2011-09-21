@@ -46,22 +46,20 @@ public class TabQuickEditControl extends BaseTabControl {
 	}
 
 	/**
-	 * Initialize method.s
+	 * Adds content to the tab.
 	 */
 	private void addContent() {
-
-		ArrayList<String> listKeys = new ArrayList<String>(getStyleAttributes()
-				.keySet());
-
+		/*
+		 * Called from QuickEditSection.setInput(..)
+		 * StyleAttributes() should be already updated 
+		 */
+		ArrayList<String> listKeys = new ArrayList<String>(getStyleAttributes().keySet());
 		if (listKeys.size() == 0) {
 			Label label = new Label(this, SWT.CENTER);
 			label.setText(JstUIMessages.CSS_NO_EDITED_PROPERTIES);
 		}
-
 		Collections.sort(listKeys);
-
 		for (String key : listKeys) {
-
 			String value = getStyleAttributes().get(key);
 			if (value != null && value.length() > 0) {
 				addLabel(this, key + Constants.COLON);

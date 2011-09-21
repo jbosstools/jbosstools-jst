@@ -31,6 +31,10 @@ public class QuickEditSection extends AbstractCSSSection {
 
 	@Override
 	public void setInput(IWorkbenchPart part, ISelection selection) {
+		/*
+		 * Called after super.selectionChanged(..) from 
+		 * CSSPropertyPage.selectionChanged(..)
+		 */
 		getSectionControl().update();
 		getTabComposite().layout(true, true);
 		super.setInput(part, selection);

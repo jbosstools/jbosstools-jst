@@ -95,9 +95,15 @@ public class CSSPropertyPage extends TabbedPropertySheetPage implements
 			//added by Maksim Areshkay as fix for https://issues.jboss.org/browse/JBIDE-8523
 			//here we should process only elements of StyleContainer or set selection to null(clean)
 			if(newSelectedObject==null||(newSelectedObject instanceof StyleContainer)){
-				super.selectionChanged(part, selection);
 				selectedObject = newSelectedObject;
 				update();
+				/*
+				 * https://issues.jboss.org/browse/JBIDE-9739
+				 * {super} should be called after the selection has been updated.
+				 * Because TabQuickEditControl's addContent() method uses
+				 * getStyleAttributes() to fill in the tab content.
+				 */
+				super.selectionChanged(part, selection);
 			}
 		}
 
