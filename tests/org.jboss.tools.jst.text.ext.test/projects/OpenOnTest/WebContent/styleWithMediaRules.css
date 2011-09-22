@@ -1,0 +1,13 @@
+p.common {font-family:verdana,sans-serif;font-size:14px;}
+@media screen
+  {
+  p.display {font-family:verdana,sans-serif;font-size:14px;}
+  }
+@media print
+  {
+  p.printer {font-family:times,serif;font-size:10px;}
+  }
+@media screen,print
+  {
+  p.displayAndPrinter {font-weight:bold;}
+  }

@@ -1,0 +1,24 @@
+<html>
+<head>
+<style>
+p.inpageCommon {font-family:verdana,sans-serif;font-size:14px;}
+@media screen
+  {
+  p.inpageDisplay {font-family:verdana,sans-serif;font-size:14px;}
+  }
+@media print
+  {
+  p.inpagePrinter {font-family:times,serif;font-size:10px;}
+  }
+@media screen,print
+  {
+  p.inpageDisplayAndPrinter {font-weight:bold;}
+  }
+</style>
+<link rel="stylesheet" href="styleWithMediaRules.css" />
+</head>
+
+<body>
+<p class="common display printer displayAndPrinter inpageCommon inpageDisplay inpagePrinter inpageDisplayAndPrinter">p</p>
+</body>
+</html>
