@@ -88,6 +88,17 @@ public class WebUtils {
 		return (modelNature != null) ? WebProject.getInstance(modelNature.getModel()).getWebRootLocation() : null;
 	}
 
+	private static final IContainer[] EMPTY_ARRAY = new IContainer[0];
+
+	/**
+	 * Returns all the web root folders of the project.
+	 * If the project is not a web project then the method will return an empty array.
+	 * If ignoreDerived==true then all the derived resources or resources belonged to derived containers will be eliminated.
+	 * If some folder is set as default web root source folder (available since WTP 3.3.1) then this folder will be places in the very beginning of the result array.
+	 * @param project
+	 * @param ignoreDerived
+	 * @return
+	 */
 	public static IContainer[] getWebRootFolders(IProject project, boolean ignoreDerived) {
 		IFacetedProject facetedProject = null;
 		try {
@@ -120,15 +131,23 @@ public class WebUtils {
 				}
 			}
 		}
-		return null;
+		return EMPTY_ARRAY;
 	}
 
 	private static boolean WTP_3_3_0 = false;
 
+	/**
+	 * Returns all the web root folders of the project.
+	 * If the project is not a web project then the method will return an empty array.
+	 * All the derived resources or resources belonged to derived containers will be eliminated.
+	 * If some folder is set as default web root source folder (available since WTP 3.3.1) then this folder will be places in the very beginning of the result array.
+	 * @param project
+	 * @return
+	 */
 	public static IPath getDefaultDeploymentDescriptorFolder(IVirtualFolder folder) {
 		if(!WTP_3_3_0) {
 			try {
-				Method getDefaultDeploymentDescriptorFolder = J2EEModuleVirtualComponent.class.getMethod("getDefaultDeploymentDescriptorFolder", IVirtualFolder.class);
+				Method getDefaultDeploymentDescriptorFolder = J2EEModuleVirtualComponent.class.getMethod("getDefaultDeploymentDescriptorFolder", IVirtualFolder.class); //$NON-NLS-1$
 				return (IPath) getDefaultDeploymentDescriptorFolder.invoke(null, folder);
 			} catch (NoSuchMethodException nsme) {
 				// Not available in this WTP version, let's ignore it
