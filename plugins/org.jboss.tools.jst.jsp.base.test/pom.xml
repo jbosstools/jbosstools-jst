@@ -7,7 +7,7 @@
 		<version>3.3.0-SNAPSHOT</version>
 	</parent>
 	<groupId>org.jboss.tools.jst.plugins</groupId>
-	<artifactId>org.jboss.tools.jst.base.test</artifactId>
+	<artifactId>org.jboss.tools.jst.jsp.base.test</artifactId>
 	
 	<packaging>eclipse-plugin</packaging>
 </project>
