@@ -12,6 +12,8 @@ package org.jboss.tools.jst.web;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -20,6 +22,7 @@ import java.util.TreeSet;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -30,6 +33,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jst.j2ee.componentcore.J2EEModuleVirtualComponent;
 import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
 import org.eclipse.jst.j2ee.project.facet.IJ2EEFacetConstants;
 import org.eclipse.wst.common.componentcore.ComponentCore;
@@ -84,7 +88,7 @@ public class WebUtils {
 		return (modelNature != null) ? WebProject.getInstance(modelNature.getModel()).getWebRootLocation() : null;
 	}
 
-	public static IContainer[] getWebRootFolders(IProject project, boolean ignoreTarget) {
+	public static IContainer[] getWebRootFolders(IProject project, boolean ignoreDerived) {
 		IFacetedProject facetedProject = null;
 		try {
 			facetedProject = ProjectFacetsManager.create(project);
@@ -95,23 +99,54 @@ public class WebUtils {
 			IVirtualComponent component = ComponentCore.createComponent(project);
 			if(component!=null) {
 				IVirtualFolder webRootVirtFolder = component.getRootFolder().getFolder(new Path("/")); //$NON-NLS-1$
+
+				IPath defaultPath = getDefaultDeploymentDescriptorFolder(webRootVirtFolder);
+
 				IContainer[] folders = webRootVirtFolder.getUnderlyingFolders();
 				if(folders.length > 1){
 					ArrayList<IContainer> containers = new ArrayList<IContainer>();
 					for(IContainer container : folders){
-						if(container.getFullPath().segmentCount() < 2 || !"target".equals(container.getFullPath().segment(1))) //$NON-NLS-1$
-							containers.add(container);
+						if(!ignoreDerived || !container.isDerived(IResource.CHECK_ANCESTORS)) {
+							if(defaultPath!=null && defaultPath.equals(container.getFullPath())) {
+								containers.add(0, container); // Put default root folder to the first position of the list
+							} else {
+								containers.add(container);
+							}
+						}
 					}
-					return containers.toArray(new IContainer[]{});
-				}else
+					return containers.toArray(new IContainer[containers.size()]);
+				} else {
 					return folders;
+				}
+			}
+		}
+		return null;
+	}
+
+	private static boolean WTP_3_3_0 = false;
+
+	public static IPath getDefaultDeploymentDescriptorFolder(IVirtualFolder folder) {
+		if(!WTP_3_3_0) {
+			try {
+				Method getDefaultDeploymentDescriptorFolder = J2EEModuleVirtualComponent.class.getMethod("getDefaultDeploymentDescriptorFolder", IVirtualFolder.class);
+				return (IPath) getDefaultDeploymentDescriptorFolder.invoke(null, folder);
+			} catch (NoSuchMethodException nsme) {
+				// Not available in this WTP version, let's ignore it
+				WTP_3_3_0 = true;
+			} catch (IllegalArgumentException e) {
+				WebModelPlugin.getDefault().logError(e);
+			} catch (IllegalAccessException e) {
+				WebModelPlugin.getDefault().logError(e);
+			} catch (InvocationTargetException e) {
+				// Not available in this WTP version, let's ignore it
+				WTP_3_3_0 = true;
 			}
 		}
 		return null;
 	}
 
 	public static IContainer[] getWebRootFolders(IProject project) {
-		return getWebRootFolders(project, false);
+		return getWebRootFolders(project, true);
 	}
 
 	public static String[] getServletLibraries(String natureId, String templateBase, String servletVersion) {
