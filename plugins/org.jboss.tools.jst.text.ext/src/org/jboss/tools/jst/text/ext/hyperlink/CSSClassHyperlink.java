@@ -17,8 +17,12 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Region;
@@ -26,11 +30,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IDE;
-import org.eclipse.wst.css.core.internal.provisional.document.ICSSModel;
-import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleRule;
-import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleSheet;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.text.ext.ExtensionsPlugin;
 import org.jboss.tools.common.text.ext.hyperlink.AbstractHyperlink;
@@ -45,8 +45,10 @@ import org.jboss.tools.jst.web.kb.PageContextFactory.CSSStyleSheetDescriptor;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.w3c.dom.css.CSSMediaRule;
 import org.w3c.dom.css.CSSRule;
 import org.w3c.dom.css.CSSRuleList;
+import org.w3c.dom.css.CSSStyleRule;
 
 /**
  * @author Jeremy
@@ -75,8 +77,8 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 			CSSStyleSheetDescriptor descr = descrs.get(i);
 			CSSRuleList rules = descr.sheet.getCssRules();
 			for (int r = 0; rules != null && r < rules.getLength(); r++) {
-				if (isRuleMatch(rules.item(r), getStyleName(region))) {
-					CSSRule rule = rules.item(r);
+				CSSRule rule = getMatchedRule(rules.item(r), getStyleName(region));
+				if (rule != null) {
 					IFile file = findFileForCSSStyleSheet(descr.getFilePath());
 					if (file != null) {
 						int startOffset = 0;
@@ -114,8 +116,28 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 		.getFileForLocation(
 				ResourcesPlugin.getWorkspace().getRoot().
 					getLocation().append(filePath));
+		if (file != null)
+			return file;
 		
-		return file != null ? file : PageContextFactory.getFileFromProject(filePath, getFile());
+		// Thought if project is imported as a link from some out-of-workspace location and the first segment of path is a project 
+		IPath path = new Path(filePath);
+		
+		if (path.isAbsolute()) {
+			IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects(IContainer.INCLUDE_HIDDEN);
+			for (int i = 0; i < projects.length; i++) {
+				IProject project = projects[i];
+				IPath projectLocation = project.getLocation();
+				if (projectLocation != null && projectLocation.lastSegment().equals(path.segment(0))) {
+					IPath projectRelatedPath = projectLocation.append(path.removeFirstSegments(1));
+					file = ResourcesPlugin.getWorkspace().getRoot()
+							.getFileForLocation(projectRelatedPath);
+					if (file != null)
+						return file;
+				}
+			}
+		}
+
+		return PageContextFactory.getFileFromProject(filePath, getFile());
 
 	}
 	
@@ -125,10 +147,25 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 	 * @param styleName
 	 * @return
 	 */
-	protected boolean isRuleMatch(CSSRule cssRule, String styleName) {
+	protected CSSRule getMatchedRule(CSSRule cssRule, String styleName) {
 
+		if (cssRule instanceof CSSMediaRule) {
+			CSSMediaRule cssMediaRule = (CSSMediaRule)cssRule;
+			CSSRuleList rules = cssMediaRule.getCssRules();
+			for (int i = 0; rules != null && i < rules.getLength(); i++) {
+				CSSRule rule = rules.item(i);
+				CSSRule match = getMatchedRule(rule, styleName);
+				if (match != null)
+					return match;
+			}
+			return null;
+		}
+
+		if (!(cssRule instanceof CSSStyleRule))
+			return null;
+		
 		// get selector text
-		String selectorText = ((ICSSStyleRule) cssRule).getSelectorText();
+		String selectorText = ((CSSStyleRule) cssRule).getSelectorText();
 
 		if (selectorText != null) {
 			String styles[] = selectorText.trim().split(","); //$NON-NLS-1$
@@ -148,38 +185,11 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 		
 							});
 					if (searchIndex >= 0)
-						return true;
+						return cssRule;
 				}
 			}
 		}
-		return false;
-	}
-
-	/**
-	 * 
-	 * @param cssRule
-	 * @return
-	 */
-	protected Region getRegion(CSSRule cssRule) {
-
-		int offset = ((IndexedRegion) cssRule).getStartOffset();
-
-		// if css rule is contained in style tag so it is require to take into
-		// account offset of this tag
-		ICSSStyleSheet document = (ICSSStyleSheet) ((ICSSStyleRule) cssRule)
-				.getOwnerDocument();
-
-		ICSSModel model = document.getModel();
-
-		// get style tag
-		Node node = model.getOwnerDOMNode();
-
-		// increase offset
-		if (node instanceof IDOMElement)
-			offset += ((IDOMElement) node).getStartEndOffset();
-
-		return new Region(offset, 0);
-
+		return null;
 	}
 
 	/**
@@ -258,7 +268,7 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 			String attrText = getDocument().get(start, end - start);
 
 			StringBuffer sb = new StringBuffer(attrText);
-			// find start of bean property
+			// find start of css class
 			int bStart = offset - start;
 			while (bStart >= 0) {
 				if (!Character.isJavaIdentifierPart(sb.charAt(bStart))
@@ -272,7 +282,7 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 					break;
 				bStart--;
 			}
-			// find end of bean property
+			// find end of css class
 			int bEnd = offset - start;
 			while (bEnd < sb.length()) {
 				if (!Character.isJavaIdentifierPart(sb.charAt(bEnd))
