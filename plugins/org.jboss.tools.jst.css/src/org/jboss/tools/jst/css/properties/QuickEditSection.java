@@ -39,9 +39,4 @@ public class QuickEditSection extends AbstractCSSSection {
 		getTabComposite().layout(true, true);
 		super.setInput(part, selection);
 	}
-
-	@Override
-	public void aboutToBeShown() {
-		super.aboutToBeShown();
-	}
 }

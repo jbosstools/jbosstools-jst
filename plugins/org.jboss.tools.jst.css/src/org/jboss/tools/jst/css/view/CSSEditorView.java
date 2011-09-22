@@ -38,7 +38,6 @@ public class CSSEditorView extends PropertySheet implements ICSSViewListner {
 
 	@Override
 	public void init(IViewSite site) throws PartInitException {
-
 		super.init(site);
 		getSite().getPage().removeSelectionListener(this);
 		CSSStyleListener.getInstance().addSelectionListener(this);
@@ -46,7 +45,6 @@ public class CSSEditorView extends PropertySheet implements ICSSViewListner {
 
 	@Override
 	public void dispose() {
-
 		super.dispose();
 		CSSStyleListener.getInstance().removeSelectionListener(this);
 
@@ -58,38 +56,20 @@ public class CSSEditorView extends PropertySheet implements ICSSViewListner {
 
 	@Override
 	protected PageRec doCreatePage(final IWorkbenchPart part) {
-		IPage page = createCssPropertyPage();
-
-		if (page != null) {
-			return new PageRec(part, page);
-		}
-
-		return null;
+		return new PageRec(part, createCssPropertyPage());
 	}
 
 	private IPage createCssPropertyPage() {
-
 		IPropertySheetPage page = new CSSPropertyPage(
 				new ITabbedPropertySheetPageContributor() {
-
 					public String getContributorId() {
 						return CONTRIBUTOR_ID;
 					}
 				}, this);
-		if (page != null) {
-			if (page instanceof IPageBookViewPage) {
-				initPage((IPageBookViewPage) page);
-			}
-			page.createControl(getPageBook());
-		}
+		initPage((IPageBookViewPage) page);
+		page.createControl(getPageBook());
 
 		return page;
-
-	}
-
-	@Override
-	public SelectionProvider getSelectionProvider() {
-		return super.getSelectionProvider();
 	}
 
 	@Override
@@ -112,8 +92,6 @@ public class CSSEditorView extends PropertySheet implements ICSSViewListner {
 
 	@Override
 	protected boolean isImportant(IWorkbenchPart part) {
-		if ((part instanceof IEditorPart) || (part instanceof ContentOutline))
-			return true;
-		return false;
+		return part instanceof IEditorPart || part instanceof ContentOutline;
 	}
 }

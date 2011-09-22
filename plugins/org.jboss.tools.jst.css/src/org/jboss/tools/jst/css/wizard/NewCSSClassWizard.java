@@ -41,7 +41,6 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 	protected IStructuredSelection selection;
 	// the workbench instance
 	protected IWorkbench workbench;
-
 	// wizard contains only one page
 	private NewCSSClassWizardPage editFilePage;
 
@@ -51,7 +50,6 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 	 * Constructor for SampleNewWizard.
 	 */
 	public NewCSSClassWizard() {
-		super();
 		setWindowTitle(CSSUIMessages.WIZARD_WINDOW_TITLE);
 	}
 
@@ -65,8 +63,7 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 		IResource selectedResource = (IResource) selection.getFirstElement();
 		if (selectedResource != null) {
 			if (selectedResource.getType() == IFile.FILE
-					&& !WizardNewCssClassPage.CSS_FILE_EXTENSION
-							.equals(selectedResource.getFileExtension())) {
+					&& !WizardNewCssClassPage.CSS_FILE_EXTENSION.equals(selectedResource.getFileExtension())) {
 				selectedResource = selectedResource.getParent();
 			}
 			classDescription.setCssFile(selectedResource);
@@ -79,7 +76,6 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 	 */
 	@Override
 	public void addPages() {
-
 		selectFilePage = new WizardNewCssClassPage(classDescription);
 		editFilePage = new NewCSSClassWizardPage();
 		addPage(selectFilePage);
@@ -104,8 +100,7 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 	 */
 	@Override
 	public boolean canFinish() {
-		return selectFilePage.canFlipToNextPage()
-				&& getContainer().getCurrentPage() == editFilePage
+		return selectFilePage.canFlipToNextPage() && getContainer().getCurrentPage() == editFilePage
 				&& editFilePage.canFinish;
 	}
 
@@ -159,24 +154,20 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 			super("newCSSClassWizard"); //$NON-NLS-1$
 			setTitle(CSSUIMessages.WIZARD_TITLE);
 			setDescription(CSSUIMessages.WIZARD_DESCRIPTION);
-
 		}
 
 		/**
 		 * @see IDialogPage#createControl(Composite)
 		 */
 		public void createControl(final Composite parent) {
-
 			final Composite container = new Composite(parent, SWT.NONE);
 
 			container.setLayout(new GridLayout(1, true));
-			GridData gridData = new GridData(GridData.FILL, GridData.FILL,
-					true, true);
+			GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
 			container.setLayoutData(gridData);
 
 			if (getWizard().getContainer() instanceof WizardDialog) {
-				final WizardDialog wd = (WizardDialog) getWizard()
-						.getContainer();
+				final WizardDialog wd = (WizardDialog) getWizard().getContainer();
 				wd.addPageChangedListener(new IPageChangedListener() {
 
 					// set console configuration as treeViewer input
@@ -184,39 +175,27 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 						if (event.getSelectedPage() == editFilePage) {
 
 							if (dialog == null) {
-								dialog = new CSSClassDialog(getShell(),
-										(IFile) classDescription.getCssFile(),
+								dialog = new CSSClassDialog(getShell(), (IFile) classDescription.getCssFile(),
 										selection) {
-									protected void handleStatusChanged(
-											IStatus newStatus) {
+									protected void handleStatusChanged(IStatus newStatus) {
 
-										if (newStatus.isOK()
-												&& !getStatus().isOK()) {
-											NewCSSClassWizardPage.this
-													.setErrorMessage(null);
+										if (newStatus.isOK() && !getStatus().isOK()) {
+											NewCSSClassWizardPage.this.setErrorMessage(null);
 											canFinish = true;
 										} else if (newStatus.getSeverity() == IStatus.ERROR) {
-											NewCSSClassWizardPage.this
-													.setErrorMessage(newStatus
-															.getMessage());
+											NewCSSClassWizardPage.this.setErrorMessage(newStatus.getMessage());
 											canFinish = false;
 										}
 
-										if (newStatus.getSeverity() != getStatus()
-												.getSeverity()) {
+										if (newStatus.getSeverity() != getStatus().getSeverity()) {
 											if (!getApplyButton().isDisposed()) {
-												getApplyButton().setEnabled(
-														newStatus.isOK());
+												getApplyButton().setEnabled(newStatus.isOK());
 											}
 											if (!getClassCombo().isDisposed()) {
-												getClassCombo().setEnabled(
-														newStatus.isOK());
+												getClassCombo().setEnabled(newStatus.isOK());
 											}
-											if (!getAddNewClassButton()
-													.isDisposed()) {
-												getAddNewClassButton()
-														.setEnabled(newStatus
-																		.isOK());
+											if (!getAddNewClassButton().isDisposed()) {
+												getAddNewClassButton().setEnabled(newStatus.isOK());
 											}
 										}
 										if (getContainer() != null) {
@@ -228,8 +207,7 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 								dialog.createControlPane(container);
 								container.layout();
 							} else {
-								dialog.setFile((IFile) classDescription
-										.getCssFile());
+								dialog.setFile((IFile) classDescription.getCssFile());
 							}
 							dialog.reinit();
 							dialog.addNewClass(classDescription.cssClassName);
@@ -239,7 +217,6 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 			}
 
 			setControl(container);
-
 		}
 	}
 

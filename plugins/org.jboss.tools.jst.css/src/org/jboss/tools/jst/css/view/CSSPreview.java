@@ -57,13 +57,11 @@ public class CSSPreview extends ViewPart implements ICSSViewListner {
 	@Override
 	public void init(IViewSite site) throws PartInitException {
 		super.init(site);
-
 		CSSStyleListener.getInstance().addSelectionListener(this);
 	}
 
 	@Override
 	public void dispose() {
-
 		CSSStyleListener.getInstance().removeSelectionListener(this);
 		super.dispose();
 	}
@@ -79,8 +77,7 @@ public class CSSPreview extends ViewPart implements ICSSViewListner {
 	public void createPartControl(Composite parent) {
 		final SashForm previewComposite = new SashForm(parent, SWT.None);
 		previewComposite.setLayout(new GridLayout());
-		GridData gridData = new GridData(GridData.FILL, GridData.FILL, true,
-				true);
+		GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		previewComposite.setLayoutData(gridData);
 
 		browser = CSSBrowser.createCSSBrowser(previewComposite, SWT.BORDER | SWT.MOZILLA);
@@ -105,21 +102,18 @@ public class CSSPreview extends ViewPart implements ICSSViewListner {
 				if (e.widget == previewText) {
 					String text = previewText.getText();
 					if (!getPreviewContent().equals(text)) {
-						if (text == null || text.equals(Constants.EMPTY)) {
+						if (text.equals(Constants.EMPTY)) {
 							setPreviewContent(CSSUIMessages.CSSPreview_DefaultBrowserText);
 						} else {
 							setPreviewContent(text);
 						}
 						updateBrowser();
 					}
-
 					browser.setEnabled(true);
-
 					previewComposite.setMaximizedControl(browser);
 				}
 			}
 		});
-
 		previewComposite.setMaximizedControl(browser);
 	}
 
@@ -139,10 +133,8 @@ public class CSSPreview extends ViewPart implements ICSSViewListner {
 	 * @return String html text representation
 	 */
 	public String generateBrowserPage() {
-		String html = Constants.OPEN_DIV_TAG + getCurrentStyle()
+		return Constants.OPEN_DIV_TAG + getCurrentStyle()
 				+ "\">" + getPreviewContent() + Constants.CLOSE_DIV_TAG; //$NON-NLS-1$
-
-		return html;
 	}
 
 	public String getPreviewContent() {
@@ -154,23 +146,18 @@ public class CSSPreview extends ViewPart implements ICSSViewListner {
 	}
 
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-
 		if (selection instanceof IStructuredSelection) {
 			Map<String, String> newAttributes;
 			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
 			if (structuredSelection.getFirstElement() instanceof StyleContainer) {
-
 				newAttributes = ((StyleContainer) structuredSelection
 						.getFirstElement()).getStyleAttributes();
-
 			} else {
-				newAttributes = Collections.EMPTY_MAP;
+				newAttributes = Collections.emptyMap();
 			}
 
 			updateView(newAttributes);
-
 		}
-
 	}
 
 	public void updateBrowser() {
@@ -178,15 +165,11 @@ public class CSSPreview extends ViewPart implements ICSSViewListner {
 	}
 
 	protected String getStyle(Map<String, String> styleAttributes) {
-
-		StringBuffer style = new StringBuffer();
-
+		StringBuilder style = new StringBuilder();
 		for (Map.Entry<String, String> styleItem : styleAttributes.entrySet()) {
-
 			style.append(styleItem.getKey() + Constants.COLON
 					+ styleItem.getValue() + Constants.SEMICOLON);
 		}
-
 		return style.toString();
 	}
 
@@ -196,14 +179,11 @@ public class CSSPreview extends ViewPart implements ICSSViewListner {
 
 	public void styleChanged(StyleContainer styleContainer) {
 		updateView(styleContainer.getStyleAttributes());
-
 	}
 
 	protected void updateView(Map<String, String> attributes) {
-
 		this.styleAttributes = attributes;
 		this.currentStyle = getStyle(attributes);
 		updateBrowser();
-
 	}
 }

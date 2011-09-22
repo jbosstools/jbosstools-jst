@@ -106,31 +106,24 @@ public class CSSPropertyPage extends TabbedPropertySheetPage implements
 				super.selectionChanged(part, selection);
 			}
 		}
-
 	}
 
 	public void update() {
-
 		if (selectedObject instanceof StyleContainer) {
 			getStyleAttributes().removeChangeListener(this);
 			getStyleAttributes().setStyleProperties(
 					((StyleContainer) selectedObject).getStyleAttributes());
 			getStyleAttributes().addChangeListener(this);
 		}
-
 	}
 
 	public void handleChange(ChangeEvent event) {
-
 		if (selectedObject instanceof StyleContainer) {
-
 			((StyleContainer) selectedObject)
 					.applyStyleAttributes(getStyleAttributes()
 							.getStyleProperties());
 		}
-
 	}
-
 
 	/**
 	 * 
@@ -145,7 +138,6 @@ public class CSSPropertyPage extends TabbedPropertySheetPage implements
 	}
 
 	public ISelection getCurrentSelection() {
-
 		Object currentSelectedObject = selectedObject;
 		if (selectedObject instanceof StyleContainer)
 			currentSelectedObject = ((StyleContainer) selectedObject)

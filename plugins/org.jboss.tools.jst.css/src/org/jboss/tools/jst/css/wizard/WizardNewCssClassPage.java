@@ -151,11 +151,8 @@ public class WizardNewCssClassPage extends WizardPage implements ModifyListener 
 
 	@Override
 	public boolean canFlipToNextPage() {
-		if ((classNameText.getText().length() != 0)
-				&& (getCssFile(selectFileText.getText()) != null)) {
-			return true;
-		}
-		return false;
+		return classNameText.getText().length() != 0
+				&& getCssFile(selectFileText.getText()) != null;
 	}
 
 	public void modifyText(ModifyEvent e) {
@@ -166,8 +163,7 @@ public class WizardNewCssClassPage extends WizardPage implements ModifyListener 
 
 		if (getCssFile(selectFileText.getText()) == null) {
 			setErrorMessage(CSSUIMessages.WIZARD_ERROR_FILE_SELECTION);
-		} else if ((classNameText.getText() == null)
-				|| (classNameText.getText().length() == 0)) {
+		} else if (classNameText.getText().isEmpty()) {
 			setErrorMessage(CSSUIMessages.WIZARD_ERROR_EMPTY_CLASSNAME);
 		} else if (!CSSSelectorValidator.getInstance().isValidSelector(
 				classNameText.getText())) {
