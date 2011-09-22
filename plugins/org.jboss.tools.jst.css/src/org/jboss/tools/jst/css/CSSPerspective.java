@@ -40,8 +40,6 @@ public class CSSPerspective implements IPerspectiveFactory {
 				"leftTop", IPageLayout.LEFT, (float) 0.2, editorArea); //$NON-NLS-1$
 		leftTop.addView(JavaUI.ID_PACKAGES);
 		leftTop.addView("org.jboss.tools.jst.web.ui.navigator.WebProjectsView"); //$NON-NLS-1$
-		leftTop
-				.addView("org.jboss.tools.seam.ui.views.SeamComponentsNavigator"); //$NON-NLS-1$
 		leftTop.addPlaceholder(IPageLayout.ID_RES_NAV);
 
 		IFolderLayout leftBottom = layout.createFolder(
