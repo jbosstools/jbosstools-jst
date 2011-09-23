@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.test;
 import junit.framework.TestCase;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.jboss.tools.jst.web.WebUtils;
 
@@ -29,6 +30,8 @@ public class WebUtilTest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 		project = ResourcesPlugin.getWorkspace().getRoot().getProject(JstWebAllTests.PROJECT_NAME);
+		IResource target = project.getFolder("target");
+		target.setDerived(true, null);
 	}
 
 	/**
@@ -36,7 +39,7 @@ public class WebUtilTest extends TestCase {
 	 * @throws Exception
 	 */
 	public void testGetWebRootFolders() throws Exception {
-		assertEquals(1, WebUtils.getWebRootFolders(project));
-		assertEquals(2, WebUtils.getWebRootFolders(project, false));
+		assertEquals(1, WebUtils.getWebRootFolders(project).length);
+		assertEquals(2, WebUtils.getWebRootFolders(project, false).length);
 	}
 }
