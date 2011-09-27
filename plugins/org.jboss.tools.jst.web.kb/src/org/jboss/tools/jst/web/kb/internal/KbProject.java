@@ -46,6 +46,7 @@ import org.jboss.tools.jst.web.kb.KbMessages;
 import org.jboss.tools.jst.web.kb.KbProjectFactory;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.internal.scanner.ClassPathMonitor;
+import org.jboss.tools.jst.web.kb.internal.scanner.LibraryProxy;
 import org.jboss.tools.jst.web.kb.internal.scanner.LoadedDeclarations;
 import org.jboss.tools.jst.web.kb.internal.taglib.AbstractTagLib;
 import org.jboss.tools.jst.web.kb.internal.taglib.FaceletTagLibrary;
@@ -55,6 +56,7 @@ import org.jboss.tools.jst.web.kb.internal.taglib.composite.CompositeTagLibrary;
 import org.jboss.tools.jst.web.kb.internal.taglib.myfaces.MyFacesTagLibrary;
 import org.jboss.tools.jst.web.kb.require.KbRequireBuilder;
 import org.jboss.tools.jst.web.kb.require.KbRequireDefinition;
+import org.jboss.tools.jst.web.kb.taglib.ICompositeTagLibrary;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibrary;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 import org.w3c.dom.Element;
@@ -549,8 +551,14 @@ public class KbProject extends KbObject implements IKbProject {
 					} else {
 						//consider other cases;
 					}
-					if(tagLib != null) {
+					if(tagLib != null && !(tagLib instanceof ICompositeTagLibrary)) {
+						LibraryProxy proxy = new LibraryProxy(tagLib);
+						proxy.loadXML(library, context);
+						tagLib = proxy.getLibrary();
+					} else if(tagLib != null) {
 						tagLib.loadXML(library, context);
+					}
+					if(tagLib != null) {
 						ds.getLibraries().add(tagLib);
 					}
 				}
@@ -591,7 +599,12 @@ public class KbProject extends KbObject implements IKbProject {
 				for (ITagLibrary d: fs) {
 					if(d instanceof ICustomTagLibrary) continue;
 					AbstractTagLib t = (AbstractTagLib)d;
-					t.toXML(cse, context);
+					if(!(t instanceof ICompositeTagLibrary)) {
+						LibraryProxy proxy = new LibraryProxy(t);
+						proxy.toXML(cse, context);
+					} else {
+						t.toXML(cse, context);
+					}
 				}
 			}
 		}

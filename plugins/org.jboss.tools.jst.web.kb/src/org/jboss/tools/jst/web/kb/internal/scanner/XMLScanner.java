@@ -122,16 +122,16 @@ public class XMLScanner implements IFileScanner {
 		
 		LoadedDeclarations ds = new LoadedDeclarations();
 		if(LibraryScanner.isTLDFile(o)) {
-			parseTLD(o, source, sp, ds);
+			parseTLD(o, source, ds);
 		} else if(LibraryScanner.isFaceletTaglibFile(o)) {
-			parseFaceletTaglib(o, source, sp, ds);
+			parseFaceletTaglib(o, source, ds);
 		} else if(LibraryScanner.isFacesConfigFile(o)) {
-			parseFacesConfig(o, source, sp, ds);
+			parseFacesConfig(o, source, ds);
 		}
 		return ds;
 	}
 
-	private void parseTLD(XModelObject o, IPath source, IKbProject sp, LoadedDeclarations ds) {
+	private void parseTLD(XModelObject o, IPath source, LoadedDeclarations ds) {
 		TLDLibrary library = new TLDLibrary();
 		library.setId(o);
 		library.setURI(new XMLValueInfo(o, AbstractTagLib.URI));
@@ -193,7 +193,7 @@ public class XMLScanner implements IFileScanner {
 		
 	}
 
-	private void parseFaceletTaglib(XModelObject o, IPath source, IKbProject sp, LoadedDeclarations ds) {
+	private void parseFaceletTaglib(XModelObject o, IPath source, LoadedDeclarations ds) {
 		FaceletTagLibrary library = new FaceletTagLibrary();
 		library.setId(o);
 		library.setURI(new XMLValueInfo(o, AbstractTagLib.URI));
@@ -240,7 +240,7 @@ public class XMLScanner implements IFileScanner {
 		}
 	}
 
-	private void parseFacesConfig(XModelObject o, IPath source, IKbProject sp, LoadedDeclarations ds) {
+	private void parseFacesConfig(XModelObject o, IPath source, LoadedDeclarations ds) {
 		FacesConfigTagLibrary library = new FacesConfigTagLibrary();
 		library.setId(o);
 		library.setURI("TODO"); //TODO what is the URI? //$NON-NLS-1$
