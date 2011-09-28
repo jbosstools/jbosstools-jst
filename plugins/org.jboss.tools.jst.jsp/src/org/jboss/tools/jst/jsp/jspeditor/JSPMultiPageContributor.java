@@ -115,49 +115,48 @@ public class JSPMultiPageContributor extends AbstractMultiPageContributor {
 		cleanStatusLine();
 		fActiveEditorPart = part;
 		IActionBars actionBars = getActionBars();
+		/*
+		 * https://issues.jboss.org/browse/JBIDE-9681
+		 * 'part' is VpeEditorPart class.
+		 * It should be cast to ITextEditor.
+		 */
+		ITextEditor textEditor = getTextEditor(part);
 		if (actionBars != null) {
-
-			ITextEditor editor = (part instanceof ITextEditor) ? (ITextEditor) part
-					: null;
-			if (editor != null) {
-
+			if (textEditor != null) {
 				actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(),
-						getAction(editor, ITextEditorActionConstants.DELETE));
+						getAction(textEditor, ITextEditorActionConstants.DELETE));
 				actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(),
-						getAction(editor, ITextEditorActionConstants.UNDO));
+						getAction(textEditor, ITextEditorActionConstants.UNDO));
 				actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(),
-						getAction(editor, ITextEditorActionConstants.REDO));
+						getAction(textEditor, ITextEditorActionConstants.REDO));
 				actionBars.setGlobalActionHandler(ActionFactory.CUT.getId(),
-						getAction(editor, ITextEditorActionConstants.CUT));
+						getAction(textEditor, ITextEditorActionConstants.CUT));
 				actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(),
-						getAction(editor, ITextEditorActionConstants.COPY));
+						getAction(textEditor, ITextEditorActionConstants.COPY));
 				actionBars.setGlobalActionHandler(ActionFactory.PASTE.getId(),
-						getAction(editor, ITextEditorActionConstants.PASTE));
+						getAction(textEditor, ITextEditorActionConstants.PASTE));
 				actionBars.setGlobalActionHandler(ActionFactory.SELECT_ALL
-						.getId(), getAction(editor,
+						.getId(), getAction(textEditor,
 						ITextEditorActionConstants.SELECT_ALL));
 				actionBars.setGlobalActionHandler(ActionFactory.FIND.getId(),
-						getAction(editor, ITextEditorActionConstants.FIND));
+						getAction(textEditor, ITextEditorActionConstants.FIND));
 				actionBars.setGlobalActionHandler(IDEActionFactory.BOOKMARK
-						.getId(), getAction(editor, IDEActionFactory.BOOKMARK
+						.getId(), getAction(textEditor, IDEActionFactory.BOOKMARK
 						.getId()));
 				actionBars.setGlobalActionHandler(IDEActionFactory.ADD_TASK
-						.getId(), getAction(editor, IDEActionFactory.ADD_TASK
+						.getId(), getAction(textEditor, IDEActionFactory.ADD_TASK
 						.getId()));
 				actionBars.setGlobalActionHandler(ActionFactory.PRINT.getId(),
-						getAction(editor, ITextEditorActionConstants.PRINT));
+						getAction(textEditor, ITextEditorActionConstants.PRINT));
 				actionBars.setGlobalActionHandler(ActionFactory.REVERT.getId(),
-						getAction(editor, ITextEditorActionConstants.REVERT));
+						getAction(textEditor, ITextEditorActionConstants.REVERT));
 				actionBars.setGlobalActionHandler(ActionFactory.SAVE.getId(),
-						getAction(editor, ITextEditorActionConstants.SAVE));
-
+						getAction(textEditor, ITextEditorActionConstants.SAVE));
 				//TODO-3.3: keep checking if 'quick fix' action appears in WTP
                                 //				fQuickFix
 				//		.setAction(getAction(
-				//				editor,
+				//				textEditor,
 				//				StructuredTextEditorActionConstants.ACTION_NAME_QUICK_FIX));
-
-
 			}
 
 			// re-register action on key binding service
@@ -169,7 +168,7 @@ public class JSPMultiPageContributor extends AbstractMultiPageContributor {
 					handler = (IHandlerService) mainPart.getEditorSite()
 							.getService(IHandlerService.class);
 				}
-				if (editor != null && handler != null) {
+				if (textEditor != null && handler != null) {
 					// editor
 //					registerKeyBindings(handler, ACTIONS_2, editor);
 					String[] ACTIONS_3 = {
@@ -183,12 +182,11 @@ public class JSPMultiPageContributor extends AbstractMultiPageContributor {
 			cleanActionBarStatus();
 			actionBars.updateActionBars();
 		}
-		
-		ITextEditor textEditor = getTextEditor(part);
-		
+		/*
+		 * textEditor is defined on the top.
+		 */
 		fToggleOccurencesMarkUp.setEditor(textEditor);
 		fToggleOccurencesMarkUp.update();
-
 		fGoToMatchingTagAction.setEditor(textEditor);
 		if (textEditor != null) {
 			textEditor.setAction(GO_TO_MATCHING_TAG_ID, fGoToMatchingTagAction);
