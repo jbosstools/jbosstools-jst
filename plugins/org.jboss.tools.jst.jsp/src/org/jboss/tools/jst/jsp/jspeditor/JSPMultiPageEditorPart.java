@@ -28,7 +28,9 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -46,6 +48,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.EditorPart;
+import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.ui.part.PageSwitcher;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
@@ -55,7 +58,7 @@ import org.jboss.tools.jst.jsp.selection.bar.SelectionBar;
 /**
  * 
  */
-public abstract class JSPMultiPageEditorPart extends EditorPart {
+public abstract class JSPMultiPageEditorPart extends MultiPageEditorPart {
 
 	private static final String COMMAND_NEXT_SUB_TAB = "org.eclipse.ui.navigate.nextSubTab"; //$NON-NLS-1$
 	private static final String COMMAND_PREVIOUS_SUB_TAB = "org.eclipse.ui.navigate.previousSubTab"; //$NON-NLS-1$
@@ -71,15 +74,9 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 		super();
 	}
 
-	public int addPage(Control control) {
-		createItem(control);
-		return getPageCount() - 1;
-	}
-
 	/**
 	 * 
 	 */
-
 	Composite ppp = null;
 	/**
 	 * 
@@ -138,142 +135,16 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 		return getPageCount() - 1;
 	}
 
-	/**
-	 * 
-	 * @param parent
-	 * @return
-	 */
-	private CTabFolder createContainer(Composite parent) {
-		final CTabFolder newContainer = new CTabFolder(parent, SWT.BOTTOM
-				| SWT.FLAT);
-		newContainer.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				int newPageIndex = newContainer.indexOf((CTabItem) e.item);
-				pageChange(newPageIndex);
-			}
-		});
-		newContainer.addTraverseListener(new TraverseListener() { 
-			// Switching tabs by Ctrl+PageUp/PageDown must not be caught on the inner tab set
-			public void keyTraversed(TraverseEvent e) {
-				switch (e.detail) {
-					case SWT.TRAVERSE_PAGE_NEXT:
-					case SWT.TRAVERSE_PAGE_PREVIOUS:
-						int detail = e.detail;
-						e.doit = true;
-						e.detail = SWT.TRAVERSE_NONE;
-						Control control = newContainer.getParent();
-						control.traverse(detail, new Event());
-				}
-			}
-		});
-		
-		return newContainer;
-	}
-
 	/*
 	 * 
 	 */
 	private CTabItem createItem(Control control) {
-		CTabItem item = new CTabItem(getTabFolder(), SWT.NONE);
+		CTabItem item = new CTabItem((CTabFolder)getContainer(), SWT.NONE);
 		item.setControl(control);
 		return item;
 	}
 
 	protected abstract void createPages();
-
-	public final void createPartControl(Composite parent) {
-		this.tabFolderContainer = createContainer(parent);
-		createPages();
-		// set the active page (page 0 by default), unless it has already been
-		// done
-		if (getActivePage() == -1)
-			setActivePage(0);
-		
-		initializePageSwitching();
-		initializeSubTabSwitching();
-	}
-
-	/*
-	 * Initialize the MultiPageEditorPart to use the page switching command.
-	 */
-	protected void initializePageSwitching() {
-		new PageSwitcher(this) {
-			public Object[] getPages() {
-				int pageCount = getPageCount();
-				Object[] result = new Object[pageCount];
-				for (int i = 0; i < pageCount; i++) {
-					result[i] = new Integer(i);
-				}
-				return result;
-			}
-
-			public String getName(Object page) {
-				return getPageText(((Integer) page).intValue());
-			}
-
-			public ImageDescriptor getImageDescriptor(Object page) {
-				Image image = getPageImage(((Integer) page).intValue());
-				if (image == null)
-					return null;
-
-				return ImageDescriptor.createFromImage(image);
-			}
-
-			public void activatePage(Object page) {
-				setActivePage(((Integer) page).intValue());
-			}
-
-			public int getCurrentPageIndex() {
-				return getActivePage();
-			}
-		};
-	}
-
-	/*
-	 * Initialize the MultiPageEditorPart to use the sub-tab switching commands.
-	 */
-	private void initializeSubTabSwitching() {
-		IHandlerService service = (IHandlerService) getSite().getService(IHandlerService.class);
-		service.activateHandler(COMMAND_NEXT_SUB_TAB, new AbstractHandler() {
-			/**
-			 * {@inheritDoc}
-			 * @throws ExecutionException
-			 *             if an exception occurred during execution
-			 */
-			public Object execute(ExecutionEvent event) throws ExecutionException {
-				int n= getPageCount();
-				if (n == 0)
-					return null;
-				
-				int i= getActivePage() + 1;
-				if (i >= n)
-					i= 0;
-				setActivePage(i);
-				pageChange(i);
-				return null;
-			}
-		});
-		
-		service.activateHandler(COMMAND_PREVIOUS_SUB_TAB, new AbstractHandler() {
-			/**
-			 * {@inheritDoc}
-			 * @throws ExecutionException
-			 *             if an exception occurred during execution
-			 */
-			public Object execute(ExecutionEvent event) throws ExecutionException {
-				int n= getPageCount();
-				if (n == 0)
-					return null;
-				
-				int i= getActivePage() - 1;
-				if (i < 0)
-					i= n - 1;
-				setActivePage(i);
-				pageChange(i);
-				return null;
-			}
-		});
-	}
 
 	protected abstract IEditorSite createSite(IEditorPart editor);
 
@@ -288,7 +159,7 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 		}
 		nestedEditors.clear();
 	}
-
+	
 	protected IEditorPart getActiveEditor() {
 		int index = getActivePage();
 		if (index != -1)
@@ -296,86 +167,8 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 		return null;
 	}
 
-	protected int getActivePage() {
-		CTabFolder tabFolder = getTabFolder();
-		if (tabFolder != null && !tabFolder.isDisposed())
-			return tabFolder.getSelectionIndex();
-		return -1;
-	}
-
-	protected Composite getContainer() {
-		return tabFolderContainer;
-	}
-
-	protected Control getControl(int pageIndex) {
-		return getItem(0).getControl();
-	}
-
-	protected IEditorPart getEditor(int pageIndex) {
-		Item item = getItem(pageIndex);
-		if (item != null) {
-			Object data = item.getData();
-			if (data instanceof IEditorPart) {
-				return (IEditorPart) data;
-			}
-		}
-		return null;
-	}
-	
-	/**
-	 * Find the editors contained in this multi-page editor
-	 * whose editor input match the provided input.
-	 * @param input the editor input
-	 * @return the editors contained in this multi-page editor
-	 * whose editor input match the provided input
-	 * @since 3.3
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public final IEditorPart[] findEditors(IEditorInput input) {
-		List result = new ArrayList();
-		int count = getPageCount();
-		for (int i = 0; i < count; i++) {
-			IEditorPart editor = getEditor(i);
-			if (editor != null 
-					&& editor.getEditorInput() != null
-					&& editor.getEditorInput().equals(input)) {
-				result.add(editor);
-			}
-		}
-		return (IEditorPart[]) result.toArray(new IEditorPart[result.size()]);
-	}
-
-
-	private CTabItem getItem(int pageIndex) {
-		return getTabFolder().getItem(pageIndex);
-	}
-
-	protected int getPageCount() {
-		CTabFolder folder = getTabFolder();
-		// May not have been created yet, or may have been disposed.
-		if (folder != null && !folder.isDisposed())
-			return folder.getItemCount();
-		return 0;
-	}
-
-	protected Image getPageImage(int pageIndex) {
-		return getItem(pageIndex).getImage();
-	}
-
-	protected String getPageText(int pageIndex) {
-		return getItem(pageIndex).getText();
-	}
-
-	protected CTabFolder getTabFolder() {
-		return tabFolderContainer;
-	}
-	
 	public SelectionBar getSelectionBar() {
 		return selectionBar;
-	}
-
-	protected void handlePropertyChange(int propertyId) {
-		firePropertyChange(propertyId);
 	}
 
 	public void init(IEditorSite site, IEditorInput input)
@@ -383,17 +176,6 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 		setSite(site);
 		setInput(XModelObjectEditorInput.checkInput(input));
 		site.setSelectionProvider(new JSPMultiPageSelectionProvider(this));
-	}
-
-	public boolean isDirty() {
-		// use nestedEditors to avoid SWT requests; see bug 12996
-		for (Iterator i = nestedEditors.iterator(); i.hasNext();) {
-			IEditorPart editor = (IEditorPart) i.next();
-			if (editor.isDirty()) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	protected abstract void pageChange(int newPageIndex);
@@ -412,25 +194,6 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 			public void handleException(Throwable e) {
 			}
 		});
-	}
-
-	public void removePage(int pageIndex) {
-		Assert.isTrue(pageIndex >= 0 && pageIndex < getPageCount());
-		IEditorPart editor = getEditor(pageIndex);
-		getItem(pageIndex).dispose();
-		if (editor != null) {
-			nestedEditors.remove(editor);
-			disposePart(editor);
-		}
-	}
-
-	protected void setActivePage(int pageIndex) {
-		Assert.isTrue(pageIndex >= 0 && pageIndex < getPageCount());
-		getTabFolder().setSelection(pageIndex);
-	}
-
-	protected void setControl(int pageIndex, Control control) {
-		getItem(pageIndex).setControl(control);
 	}
 
 	public void setFocus() {
@@ -471,13 +234,4 @@ public abstract class JSPMultiPageEditorPart extends EditorPart {
 			}
 		}
 	}
-
-	protected void setPageImage(int pageIndex, Image image) {
-		getItem(pageIndex).setImage(image);
-	}
-
-	protected void setPageText(int pageIndex, String text) {
-		getItem(pageIndex).setText(text);
-	}
-	
 }

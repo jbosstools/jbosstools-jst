@@ -109,19 +109,12 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	private IVisualEditor visualEditor;
 
 	private int visualSourceIndex;
-	
-	private JSPTextEditor sourceEditor;
-
 	private int sourceIndex;
-
-	/** composite control for default web-browser */
-	// private IVisualEditor previewWebBrowser;
-
 	/** index of tab contain default web-browser */
 	private int previewIndex=-1;//by default 1, so if there no visual editor impl, this tab will be not available
 
-	// private boolean osWindows = true;
-	
+	private JSPTextEditor sourceEditor;
+
 	private BundleMap bundleMap;
 
 	protected XModelTreeListenerSWTASync syncListener = new XModelTreeListenerSWTASync(
@@ -430,43 +423,48 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 
 	protected void createPages() {
 
-		createPagesForVPE();
-		loadSelectedTab();
+		try {
+			createPagesForVPE();
+			loadSelectedTab();
 
-		switch (selectedPageIndex) {
-			case 0: {
-				// source/visual mode
-				setActivePage(selectedPageIndex);
-				pageChange(selectedPageIndex);
-				break;
-			} case 1: {
-				// source mode
-				setActivePage(selectedPageIndex);
-				pageChange(selectedPageIndex);
-				break;
-			} case 2: {
-				// preview mode
-				setActivePage(selectedPageIndex);
-				pageChange(selectedPageIndex);
-				break;
-			} default: {
-				// by default we sets source/visual mode
-				setActivePage(0);
-				pageChange(0);
-				break;
+			switch (selectedPageIndex) {
+				case 0: {
+					// source/visual mode
+					setActivePage(selectedPageIndex);
+					pageChange(selectedPageIndex);
+					break;
+				} case 1: {
+					// source mode
+					setActivePage(selectedPageIndex);
+					pageChange(selectedPageIndex);
+					break;
+				} case 2: {
+					// preview mode
+					setActivePage(selectedPageIndex);
+					pageChange(selectedPageIndex);
+					break;
+				} default: {
+					// by default we sets source/visual mode
+					setActivePage(0);
+					pageChange(0);
+					break;
+				}
 			}
+			
+			IFile f = getFile();
+			if (f != null && f.exists()) {
+				new ResourceChangeListener(this, getContainer());
+			}
+			if (getModelObject() != null) {
+				getModelObject().getModel().addModelTreeListener(syncListener);
+			}
+		} catch (PartInitException e) {
+			JspEditorPlugin.getPluginLog().logError(e);
 		}
-		
-		IFile f = getFile();
-		if (f != null && f.exists()) {
-			new ResourceChangeListener(this, getContainer());
-		}
-		if (getModelObject() != null) {
-			getModelObject().getModel().addModelTreeListener(syncListener);
-		}
+
 	}
 
-	private void createPagesForVPE() {
+	private void createPagesForVPE() throws PartInitException {
 		/*
 		 * Create Source Editor and BundleMap
 		 */
@@ -478,64 +476,32 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		 * or here if there is only the source part. 
 		 */
 		bundleMap = new BundleMap();
-		
+		String sourceTabLabel = JSPEditorMessages.JSPMultiPageEditor_TabLabel_Source;
 		if (visualEditorFactory != null) {
-			visualEditor = visualEditorFactory.createVisualEditor(this,
-					sourceEditor, IVisualEditor.VISUALSOURCE_MODE, bundleMap);
-		}
-		try {
-			if (visualEditor != null) {
-				visualSourceIndex = addPage(visualEditor, getEditorInput(),sourceEditor);
-				setPageText(
-						visualSourceIndex,
-						JSPEditorMessages.JSPMultiPageEditor_TabLabel_VisualSource);
-				setPartName(visualEditor.getTitle());
-			}
-		} catch (PartInitException e) {
-			JspEditorPlugin.getPluginLog().logError(e);
-		}
-		/*
-		 * try { visualIndex = addPage(visualEditor, getEditorInput());
-		 * setPageText(visualIndex, JSPEditorMessages
-		 * .getString(VISUAL_TAB_LABEL)); setPartName(visualEditor.getTitle());
-		 * } catch (PartInitException e) {
-		 * JspEditorPlugin.getPluginLog().logError(e); }
-		 */
+			visualEditor = visualEditorFactory.createVisualEditor(this,sourceEditor, IVisualEditor.VISUALSOURCE_MODE, bundleMap);
 
-		try {
-			String sourceTabLabel = JSPEditorMessages.JSPMultiPageEditor_TabLabel_Source;
-			if (visualEditor != null) {
-				sourceIndex = addPage(visualEditor, getEditorInput(),sourceEditor);
-				setPageText(sourceIndex, sourceTabLabel);
-				setPartName(visualEditor.getTitle());
-			} else {
-				sourceIndex = addPage(sourceEditor, getEditorInput(),sourceEditor);
-				setPageText(sourceIndex, sourceTabLabel);
-				setPartName(sourceEditor.getTitle());
-			}
-		} catch (PartInitException e) {
-			JspEditorPlugin.getPluginLog().logError(e);
-		}
+			visualSourceIndex = addPage(visualEditor, getEditorInput(),sourceEditor);
+			setPageText(visualSourceIndex,JSPEditorMessages.JSPMultiPageEditor_TabLabel_VisualSource);
+			setPartName(visualEditor.getTitle());
 
-		// Add tab contain default web-browser
-		try {
-			if (visualEditor != null) {
-				setPreviewIndex(addPage(visualEditor, getEditorInput(),sourceEditor));
-				setPageText(getPreviewIndex(),
-						JSPEditorMessages.JSPMultiPageEditor_TabLabel_Preview);
-				setPartName(visualEditor.getTitle());
-			}
-		} catch (PartInitException e) {
-			JspEditorPlugin.getPluginLog().logError(e);
-		}
-		
-		/*
-		 * When there is only the source part --
-		 * then VpeController very likely hasn't been created.
-		 * Thus Bundle Map should be initialized here instead of
-		 * VpeController.
-		 */
-		if (visualEditor == null) {
+			sourceIndex = addPage(visualEditor, getEditorInput(),sourceEditor);
+			setPageText(sourceIndex, sourceTabLabel);
+			setPartName(visualEditor.getTitle());
+
+			setPreviewIndex(addPage(visualEditor, getEditorInput(),sourceEditor));
+			setPageText(getPreviewIndex(),
+					JSPEditorMessages.JSPMultiPageEditor_TabLabel_Preview);
+			setPartName(visualEditor.getTitle());
+		} else {
+			sourceIndex = addPage(sourceEditor, getEditorInput(),sourceEditor);
+			setPageText(sourceIndex, sourceTabLabel);
+			setPartName(sourceEditor.getTitle());
+			/*
+			 * When there is only the source part --
+			 * then VpeController very likely hasn't been created.
+			 * Thus Bundle Map should be initialized here instead of
+			 * VpeController.
+			 */
 			bundleMap.init(sourceEditor.getEditorInput());
 		}
 	}
@@ -845,7 +811,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 				.getString(IVpePreferencesPage.DEFAULT_VPE_TAB);
 		try {
 			int ind = Integer.parseInt(tabIndex);
-			getTabFolder().setSelection(ind);
+			setActivePage(ind);
 			pageChange(ind);
 		} catch (NumberFormatException e) {
 			JspEditorPlugin.getPluginLog().logError(e);
