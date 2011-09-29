@@ -394,23 +394,22 @@
                     commandId="org.jboss.tools.jst.jsp.commands.i18"
                     id="org.jboss.tools.jst.jsp.menus.i18"
                     mnemonic="S">
-                     <visibleWhen
-                           checkEnabled="false">
-                           <with
-                                 variable="activeEditorId">
-                                 <or>
-	                                 <equals
-	                                       value="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
-	                                 </equals>
-	                                 <equals
-	                                       value="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor">
-	                                 </equals>
-	                                 <equals
-	                                       value="org.jboss.tools.jst.jsp.jspeditor.DocBookEditor">
-	                                 </equals>
-                                 </or>
-                           </with>
-                     </visibleWhen>
+                     <visibleWhen checkEnabled="false">
+							<and>
+								<with variable="activeContexts">
+									<iterate operator="or">
+										<equals value="org.eclipse.wst.sse.ui.structuredTextEditorScope"/>
+									</iterate>
+								</with>
+								<with variable="activeEditorId">
+                            	     <or>
+	                            	     <equals value="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor" />
+	                                	 <equals value="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor" />
+		                                 <equals value="org.jboss.tools.jst.jsp.jspeditor.DocBookEditor" />
+    	                             </or>
+        	                   </with>
+							</and>
+						</visibleWhen>
               </command>
         </menuContribution>
         <menuContribution
