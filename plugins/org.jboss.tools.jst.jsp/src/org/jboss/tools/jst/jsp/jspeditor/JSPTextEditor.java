@@ -439,16 +439,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 	class TextFocusListener extends FocusAdapter {
 		public void focusLost(FocusEvent e) {
 			if (JSPTextEditor.super.isDirty()) {
-				Display.getDefault().syncExec(new Runnable() {
-					public void run() {
-						try {
-							Thread.sleep(200);
-						} catch (InterruptedException exc) {
-							JspEditorPlugin.getPluginLog().logError(exc);
-						}
 						save();
-					}
-				});
 			}
 		}
 	}
