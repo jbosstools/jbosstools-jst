@@ -12,31 +12,17 @@ package org.jboss.tools.jst.jsp.jspeditor;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
-import org.eclipse.core.commands.AbstractHandler;
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.SafeRunner;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.util.Assert;
 import org.eclipse.jface.util.SafeRunnable;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.TraverseEvent;
-import org.eclipse.swt.events.TraverseListener;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Item;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -46,11 +32,8 @@ import org.eclipse.ui.INestableKeyBindingService;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.handlers.IHandlerService;
-import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.MultiPageEditorSite;
-import org.eclipse.ui.part.PageSwitcher;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.jboss.tools.common.core.resources.XModelObjectEditorInput;
 import org.jboss.tools.jst.jsp.selection.bar.SelectionBar;
@@ -60,12 +43,7 @@ import org.jboss.tools.jst.jsp.selection.bar.SelectionBar;
  */
 public abstract class JSPMultiPageEditorPart extends MultiPageEditorPart {
 
-	private static final String COMMAND_NEXT_SUB_TAB = "org.eclipse.ui.navigate.nextSubTab"; //$NON-NLS-1$
-	private static final String COMMAND_PREVIOUS_SUB_TAB = "org.eclipse.ui.navigate.previousSubTab"; //$NON-NLS-1$
-
-	private CTabFolder tabFolderContainer;
-
-	private ArrayList nestedEditors = new ArrayList(3);
+	private ArrayList<IEditorPart> nestedEditors = new ArrayList<IEditorPart>(3);
 	
 	private SelectionBar selectionBar;
 	
@@ -144,8 +122,6 @@ public abstract class JSPMultiPageEditorPart extends MultiPageEditorPart {
 		return item;
 	}
 
-	protected abstract void createPages();
-
 	protected abstract IEditorSite createSite(IEditorPart editor);
 
 	public void dispose() {
@@ -154,17 +130,14 @@ public abstract class JSPMultiPageEditorPart extends MultiPageEditorPart {
 		}
 		getSite().setSelectionProvider(null);
 		for (int i = 0; i < nestedEditors.size(); ++i) {
-			IEditorPart editor = (IEditorPart) nestedEditors.get(i);
+			IEditorPart editor = nestedEditors.get(i);
 			disposePart(editor);
 		}
 		nestedEditors.clear();
 	}
 	
 	protected IEditorPart getActiveEditor() {
-		int index = getActivePage();
-		if (index != -1)
-			return getEditor(0);
-		return null;
+		return super.getActiveEditor();
 	}
 
 	public SelectionBar getSelectionBar() {
@@ -234,4 +207,16 @@ public abstract class JSPMultiPageEditorPart extends MultiPageEditorPart {
 			}
 		}
 	}
+
+	public boolean isDirty() {
+		// use nestedEditors to avoid SWT requests; see bug 12996
+		for (Iterator<IEditorPart> i = nestedEditors.iterator(); i.hasNext();) {
+			IEditorPart editor = i.next();
+			if (editor.isDirty()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 }
