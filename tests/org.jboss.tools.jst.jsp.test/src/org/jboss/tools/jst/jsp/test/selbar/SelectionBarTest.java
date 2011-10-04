@@ -20,6 +20,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
+import org.jboss.tools.test.util.JobUtils;
 import org.jboss.tools.test.util.TestProjectProvider;
 import org.jboss.tools.test.util.WorkbenchUtils;
 
@@ -58,12 +59,31 @@ public class SelectionBarTest extends TestCase{
 		assertTrue("Should be opened JSPMultiPage Editor", //$NON-NLS-1$
 				editorPart instanceof JSPMultiPageEditor);
 		JSPMultiPageEditor multiPageEditor = (JSPMultiPageEditor) editorPart;
+		/*
+		 * Set the Source tab active.
+		 */
 		multiPageEditor.pageChange(0);
-		assertEquals("check command enabled command status",true,toggleSelBarCommand.isEnabled()&&(Boolean)toggleSelBarState.getValue()); //$NON-NLS-1$
-		if(multiPageEditor.getPreviewIndex()==-1) return;
-		multiPageEditor.pageChange(multiPageEditor.getPreviewIndex());
-		assertEquals("check command enabled command status",false,toggleSelBarCommand.isEnabled()&&(Boolean)toggleSelBarState.getValue()); //$NON-NLS-1$
-		multiPageEditor.pageChange(0);
-		assertEquals("check command enabled command status",true,toggleSelBarCommand.isEnabled()&&(Boolean)toggleSelBarState.getValue()); //$NON-NLS-1$
+		assertEquals("On Source tab selection bar item should be enabled.", //$NON-NLS-1$
+				true, toggleSelBarCommand.isEnabled()&&(Boolean)toggleSelBarState.getValue());
+		int previewIndex = multiPageEditor.getPreviewIndex();
+		if (previewIndex != -1) {
+			/*
+			 * Switch to the Preview Tab
+			 */
+			multiPageEditor.pageChange(previewIndex);
+			/*
+			 * Wait for some time in order to allow the tab to be rendered 
+			 * and the command state to be refreshed.
+			 */
+			JobUtils.waitForIdle();
+			assertEquals("On Preview tab selection bar item should be disabled.", //$NON-NLS-1$
+					false, toggleSelBarCommand.isEnabled()&&(Boolean)toggleSelBarState.getValue());
+			/*
+			 * Come back to the Source
+			 */
+			multiPageEditor.pageChange(0);
+			assertEquals("When returned to the Source tab after Preview -- selection bar item should be enabled.", //$NON-NLS-1$
+					true, toggleSelBarCommand.isEnabled()&&(Boolean)toggleSelBarState.getValue());
+		}
 	}
 }
