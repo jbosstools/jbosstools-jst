@@ -100,6 +100,10 @@ public class MessagePropertyELSegmentImpl extends ELSegmentImpl implements
 		objects.add(object);
 	}
 
+	public List<XModelObject> getObjects() {
+		return objects;
+	}
+	
 	public IOpenableReference[] getOpenable() {
 		if(objects != null) {
 			IOpenableReference[] result = new IOpenableReference[objects.size()];
@@ -114,8 +118,8 @@ public class MessagePropertyELSegmentImpl extends ELSegmentImpl implements
 					
 					@Override
 					public String getLabel() {
-						XModelObject p = o;
-						while(p != null && p.getFileType() < XModelObject.FILE) p = p.getParent();
+//						XModelObject p = o;
+//						while(p != null && p.getFileType() < XModelObject.FILE) p = p.getParent();
 						
 						// Improve label - add a locale for a resource bundle
 						String baseName = getBaseName();

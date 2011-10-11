@@ -25,7 +25,15 @@ public class ELInfoHoverMessages extends NLS {
 	public static String ELInfoHover_noAttachedJavaSource; 	//
 	public static String ELInfoHover_noInformation;			//
 	public static String ELInfoHover_error_gettingJavadoc; 	//	
-	
+	public static String ELInfoHover_baseName; 
+	public static String ELInfoHover_propertyName;
+	public static String ELInfoHover_resourceBundle; 
+	public static String ELInfoHover_resourceBundlePropertyValue;
+	public static String ELInfoHover_resourceBundlePropertyValueNotDefined; 
+	public static String ELInfoHover_resourceBundleNotDefined;
+	public static String ELInfoHover_newLine;
+	public static String ELInfoHover_treeDots;
+		
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, ELInfoHoverMessages.class);
 	}

@@ -13,11 +13,14 @@ package org.jboss.tools.jst.jsp.jspeditor.info;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IJavaElement;
@@ -53,6 +56,9 @@ import org.jboss.tools.common.el.core.resolver.ELResolution;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.ELSegment;
 import org.jboss.tools.common.el.core.resolver.JavaMemberELSegmentImpl;
+import org.jboss.tools.common.el.core.resolver.MessagePropertyELSegment;
+import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.filesystems.impl.JarSystemImpl;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.jsp.contentassist.Utils;
 import org.jboss.tools.jst.jsp.contentassist.computers.AbstractXmlCompletionProposalComputer.TextRegion;
@@ -61,6 +67,7 @@ import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.PageProcessor;
+import org.jboss.tools.jst.web.kb.el.MessagePropertyELSegmentImpl;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 import org.w3c.dom.Node;
 
@@ -196,7 +203,7 @@ public class FaceletTagInfoHoverProcessor extends XMLTagInfoHoverProcessor {
 		
 		for (int i = 0; resolvers != null && i < resolvers.length; i++) {
 			ELResolution resolution = resolvers[i] == null ? null : resolvers[i].resolve(fContext, elOperand, fDocumentPosition);
-			if (resolution == null)
+			if (resolution == null || !resolution.isResolved())
 				continue;
 			
 			ELSegment segment = resolution.getLastSegment();
@@ -215,6 +222,75 @@ public class FaceletTagInfoHoverProcessor extends XMLTagInfoHoverProcessor {
 				
 				ELInfoHoverBrowserInformationControlInput hover = JavaStringELInfoHover.getHoverInfo2Internal(javaElements, false);
 				return (hover == null ? null : hover.getHtml());
+			} else if (segment instanceof MessagePropertyELSegmentImpl) {
+				MessagePropertyELSegmentImpl mpSegment = (MessagePropertyELSegmentImpl)segment;
+				
+				String baseName = mpSegment.getBaseName();
+				String propertyName = ((MessagePropertyELSegment)segment).isBundle() ? null : trimQuotes(segment.getToken().getText());
+				
+				StringBuilder sb = new StringBuilder();
+				if (propertyName != null && propertyName.length() > 0) 
+					sb.append(MessageFormat.format(ELInfoHoverMessages.ELInfoHover_propertyName, 
+						propertyName));
+					
+				if (baseName != null && baseName.length() > 0)
+					sb.append(MessageFormat.format(ELInfoHoverMessages.ELInfoHover_baseName, 
+							baseName));
+				sb.append(ELInfoHoverMessages.ELInfoHover_newLine);
+				
+				List<XModelObject> objects = (List<XModelObject>)mpSegment.getObjects();
+				for (XModelObject o : objects) {
+					IFile propFile = (IFile)o.getAdapter(IFile.class);
+					String propFilePath = null;
+					if (propFile != null) {
+						propFilePath = propFile.getFullPath().toString();
+					} else {
+						XModelObject parent = o.getFileType() == XModelObject.FILE ? o : o.getParent();
+						String path = parent.getPath();
+						while (parent != null && parent.getFileType() != XModelObject.SYSTEM) {
+							parent = parent.getParent();
+						}
+						if (parent instanceof JarSystemImpl) {
+							String sysPath = parent.getPath();
+							path = path.substring(sysPath.length());
+
+							String jarPath = ((JarSystemImpl) parent).getLocation();
+							
+							IResource jar = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(new Path(jarPath));
+							
+							if (jar != null) {
+								jarPath = jar.getFullPath().toString();
+							}
+							
+							propFilePath = jarPath + "!" + path; //$NON-NLS-1$
+						}
+					}
+					sb.append(MessageFormat.format(ELInfoHoverMessages.ELInfoHover_resourceBundle, 
+							propFilePath != null ? propFilePath : ELInfoHoverMessages.ELInfoHover_resourceBundleNotDefined));
+					
+					if (propertyName != null) {
+						String value = o.get("VALUE");  //$NON-NLS-1$
+						boolean addCut = false;
+						if (value != null) {
+							if (value.length() > 100) {
+								// Get first words of value
+								int lastSpace = value.lastIndexOf(' ', 99);
+								if (lastSpace != -1) {
+									value = value.substring(0, lastSpace);
+								} else { // cut as is
+									value = value.substring(0, 100);
+								}
+								addCut = true;
+							}
+						}
+						sb.append(MessageFormat.format(ELInfoHoverMessages.ELInfoHover_resourceBundlePropertyValue, 
+								value != null ? value : ELInfoHoverMessages.ELInfoHover_resourceBundlePropertyValueNotDefined,
+										addCut ? ELInfoHoverMessages.ELInfoHover_treeDots : "")); //$NON-NLS-1$
+						sb.append(ELInfoHoverMessages.ELInfoHover_newLine);
+					}
+				}
+
+				return sb.toString();
 			}
 		}
 		
@@ -434,6 +510,20 @@ public class FaceletTagInfoHoverProcessor extends XMLTagInfoHoverProcessor {
 				});
 			}
 		};
+	}
+
+	private String trimQuotes(String value) {
+		if(value == null)
+			return null;
+
+		if(value.startsWith("'") || value.startsWith("\"")) {  //$NON-NLS-1$ //$NON-NLS-2$
+			value = value.substring(1);
+		} 
+		
+		if(value.endsWith("'") || value.endsWith("\"")) { //$NON-NLS-1$ //$NON-NLS-2$
+			value = value.substring(0, value.length() - 1);
+		}
+		return value;
 	}
 
 }
