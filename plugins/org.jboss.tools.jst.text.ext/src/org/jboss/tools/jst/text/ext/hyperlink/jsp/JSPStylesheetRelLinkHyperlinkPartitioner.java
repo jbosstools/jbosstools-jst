@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2007 Exadel, Inc. and Red Hat, Inc.
+ * Copyright (c) 2007-2011 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
+ *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/ 
 package org.jboss.tools.jst.text.ext.hyperlink.jsp;
 
@@ -14,23 +14,23 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Region;
+import org.jboss.tools.common.text.ext.hyperlink.AbstractHyperlinkPartitioner;
+import org.jboss.tools.common.text.ext.hyperlink.HyperlinkRegion;
+import org.jboss.tools.common.text.ext.hyperlink.IExclusiblePartitionerRecognition;
+import org.jboss.tools.common.text.ext.hyperlink.IHyperlinkPartitionRecognizer;
+import org.jboss.tools.common.text.ext.hyperlink.IHyperlinkRegion;
+import org.jboss.tools.common.text.ext.util.StructuredModelWrapper;
+import org.jboss.tools.common.text.ext.util.Utils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
-import org.jboss.tools.common.text.ext.hyperlink.AbstractHyperlinkPartitioner;
-import org.jboss.tools.common.text.ext.hyperlink.HyperlinkRegion;
-import org.jboss.tools.common.text.ext.hyperlink.IHyperlinkPartitionRecognizer;
-import org.jboss.tools.common.text.ext.hyperlink.IHyperlinkRegion;
-import org.jboss.tools.common.text.ext.util.StructuredModelWrapper;
-import org.jboss.tools.common.text.ext.util.Utils;
-
 /**
  * @author Jeremy
  */
-public class JSPStylesheetRelLinkHyperlinkPartitioner extends AbstractHyperlinkPartitioner implements IHyperlinkPartitionRecognizer {
+public class JSPStylesheetRelLinkHyperlinkPartitioner extends AbstractHyperlinkPartitioner implements IHyperlinkPartitionRecognizer, IExclusiblePartitionerRecognition {
 	public static final String JSP_STYLESHEET_REL_LINK_PARTITION = "org.jboss.tools.common.text.ext.jsp.JSP_STYLESHEET_REL_LINK"; //$NON-NLS-1$
 	
 	private static final String LINK_TAGNAME = "link"; //$NON-NLS-1$
@@ -232,6 +232,15 @@ public class JSPStylesheetRelLinkHyperlinkPartitioner extends AbstractHyperlinkP
 		} finally {
 			smw.dispose();
 		}
+	}
+
+	public String getExclusionPartitionType() {
+		return null;
+	}
+
+	public boolean excludes(String partitionType, IDocument document,
+			IHyperlinkRegion superRegion) {
+		return (JSP_STYLESHEET_REL_LINK_PARTITION.equals(partitionType) && recognize(document, superRegion));
 	}
 
 }
