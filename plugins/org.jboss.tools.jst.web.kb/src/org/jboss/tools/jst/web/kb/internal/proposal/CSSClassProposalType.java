@@ -35,7 +35,6 @@ import org.w3c.dom.css.CSSStyleRule;
  * @author Victor Rubezhny
  *
  */
-@SuppressWarnings("restriction")
 public class CSSClassProposalType extends CustomProposalType {
 	private static final String IMAGE_NAME = "EnumerationProposal.gif"; //$NON-NLS-1$
 	private static Image ICON;
@@ -127,14 +126,19 @@ public class CSSClassProposalType extends CustomProposalType {
 	
 	@Override
 	public TextProposal[] getProposals(KbQuery query) {
-		String v = query.getValue();
-		int offset = v.length();
-		int b = v.lastIndexOf(',');
-		if(b < 0) b = 0; else b += 1;
-		String tail = v.substring(offset);
-		int e = tail.indexOf(',');
-		if(e < 0) e = v.length(); else e += offset;
-		String prefix = v.substring(b).trim();
+		// Do not use getValue() because it trims the string and removes opening quote char, but all the characters 
+		// (including whitespaces and quotes) are valuable here
+		String v = query.getStringQuery(); //query.getValue(); 
+		int predicateLength = 0;
+		while(predicateLength < v.length() && (v.charAt(predicateLength) == '"' || v.charAt(predicateLength) == '\''))
+			predicateLength++;
+		
+		int b = v.lastIndexOf(' ');
+		b = (b == -1 ? v.lastIndexOf('\t') : b);
+		b = (b == -1 ? predicateLength : b + 1);
+		int e = v.length(); 
+		
+		String prefix = v.substring(b);
 
 		List<TextProposal> proposals = new ArrayList<TextProposal>();
 		for (String text: idList) {
@@ -142,9 +146,9 @@ public class CSSClassProposalType extends CustomProposalType {
 				TextProposal proposal = new TextProposal();
 				proposal.setLabel(text);
 				proposal.setReplacementString(text);
-				proposal.setPosition(b + text.length());
-				proposal.setStart(b);
-				proposal.setEnd(e);
+				proposal.setPosition(b + text.length() - predicateLength);
+				proposal.setStart(b - predicateLength);
+				proposal.setEnd(e - predicateLength);
 				if(ICON==null) {
 					ICON = ImageDescriptor.createFromFile(WebKbPlugin.class, IMAGE_NAME).createImage();
 				}

@@ -13,6 +13,7 @@ package org.jboss.tools.jst.jsp.test;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.jboss.tools.jst.jsp.test.ca.CAMultipleCSSClassesInsertionTest;
 import org.jboss.tools.jst.jsp.test.ca.Jbide1791Test;
 import org.jboss.tools.jst.jsp.test.ca.Jbide6061Test;
 import org.jboss.tools.jst.jsp.test.ca.Jbide9092Test;
@@ -30,8 +31,12 @@ public class JstJspAllTests {
 				Jbide6061Test.class),
 				"org.jboss.tools.jst.jsp.test", "projects/Jbide6061Test", //$NON-NLS-1$ //$NON-NLS-2$
 				"Jbide6061Test")); //$NON-NLS-1$
+		suite.addTest(new ProjectImportTestSetup(new TestSuite(
+				CAMultipleCSSClassesInsertionTest.class),
+				"org.jboss.tools.jst.jsp.test", "projects/Jbide6061Test", //$NON-NLS-1$ //$NON-NLS-2$
+				"Jbide6061Test")); //$NON-NLS-1$
 
- 		suite.addTestSuite(JstJspJbide1585Test.class);
+		suite.addTestSuite(JstJspJbide1585Test.class);
 		suite.addTestSuite(JstJspJbide1641Test.class);
 
 		suite.addTestSuite(Jbide1791Test.class);
