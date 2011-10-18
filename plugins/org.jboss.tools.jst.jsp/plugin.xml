@@ -544,7 +544,7 @@
 	       	name="%ContentType_JBossToolsINC"
 	       	base-type="org.eclipse.jst.jsp.core.jspsource"
 	       	describer="org.jboss.tools.jst.jsp.jspeditor.JSPIncludeContentDescriber"
-	       	file-extensions="inc"
+	       	file-extensions="inc, php"
 	       	priority="high"/>
 	       	
        <file-association
