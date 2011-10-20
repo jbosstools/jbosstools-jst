@@ -435,11 +435,6 @@ public class PageContextFactory implements IResourceChangeListener {
 	}
 
 	private void fillContextForNode(IDocument document, IDOMNode node, ELContext context, List<String> parents) {
-		if (context instanceof JspContextImpl && !(context instanceof FaceletPageContextImpl) && !(node instanceof IDOMElement)) {
-			// There is no any useful info for JSP in text nodes
-			return;
-		}
-
 		if (context instanceof XmlContextImpl) {
 			XmlContextImpl xmlContext = (XmlContextImpl)context;
 			fillElReferencesForNode(document, node, xmlContext);
@@ -487,39 +482,51 @@ public class PageContextFactory implements IResourceChangeListener {
 	}
 
 	private static void fillElReferencesForNode(IDocument document, IDOMNode node, XmlContextImpl context) {
-		if(Node.ELEMENT_NODE == node.getNodeType() || Node.TEXT_NODE == node.getNodeType()) {
-			IStructuredDocumentRegion regionNode = node.getFirstStructuredDocumentRegion();
-			if (regionNode == null)
-				return;
-			ITextRegionList regions = regionNode.getRegions();
-			for(int i=0; i<regions.size(); i++) {
-				ITextRegion region = regions.get(i);
-				if(region.getType() == DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE || region.getType() == DOMRegionContext.XML_CONTENT) {
-					String text = regionNode.getFullText(region);
-					if(text.indexOf('{')>-1 && (text.indexOf("#{") > -1 || text.indexOf("${") > -1)) { //$NON-NLS-1$
-						int offset = regionNode.getStartOffset() + region.getStart();
-						ELParser parser = ELParserUtil.getJbossFactory().createParser();
-						ELModel model = parser.parse(text);
-						List<ELInstance> is = model.getInstances();
-						ELReference elReference = new ValidationELReference();
-						elReference.setResource(context.getResource());
-						elReference.setEl(is);
-						elReference.setLength(text.length());
-						elReference.setStartPosition(offset);
-						try {
-							if(Node.TEXT_NODE == node.getNodeType()) {
-								if(is.size()==1) {
-									elReference.setLineNumber(document.getLineOfOffset(elReference.getStartPossitionOfFirstEL()) + 1);
-								}
-							} else {
-								elReference.setLineNumber(document.getLineOfOffset(offset) + 1);
+		if(Node.ELEMENT_NODE != node.getNodeType() && Node.TEXT_NODE != node.getNodeType()) 
+			return;
+		
+		IStructuredDocumentRegion regionNode = node.getFirstStructuredDocumentRegion(); 
+		if (regionNode == null)
+			return;
+
+		IStructuredDocumentRegion lastRegionNode = node.getLastStructuredDocumentRegion();
+		for (; regionNode != null && regionNode != lastRegionNode; regionNode = regionNode.getNext()) {
+			fillElReferencesForRegionNode(document, node, regionNode, context);
+		}
+		if (lastRegionNode != null) {
+			fillElReferencesForRegionNode(document, node, lastRegionNode, context);
+		}
+	}
+	
+	private static void fillElReferencesForRegionNode(IDocument document, IDOMNode node, IStructuredDocumentRegion regionNode, XmlContextImpl context) {
+		ITextRegionList regions = regionNode.getRegions();
+		for(int i=0; i<regions.size(); i++) {
+			ITextRegion region = regions.get(i);
+			if(region.getType() == DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE || region.getType() == DOMRegionContext.XML_CONTENT) {
+				String text = regionNode.getFullText(region);
+				if(text.indexOf('{')>-1 && (text.indexOf("#{") > -1 || text.indexOf("${") > -1)) { //$NON-NLS-1$
+					int offset = regionNode.getStartOffset() + region.getStart();
+					ELParser parser = ELParserUtil.getJbossFactory().createParser();
+					ELModel model = parser.parse(text);
+					List<ELInstance> is = model.getInstances();
+					ELReference elReference = new ValidationELReference();
+					elReference.setResource(context.getResource());
+					elReference.setEl(is);
+					elReference.setLength(text.length());
+					elReference.setStartPosition(offset);
+					try {
+						if(Node.TEXT_NODE == node.getNodeType()) {
+							if(is.size()==1) {
+								elReference.setLineNumber(document.getLineOfOffset(elReference.getStartPossitionOfFirstEL()) + 1);
 							}
-						} catch (BadLocationException e) {
-							WebKbPlugin.getDefault().logError(e);
+						} else {
+							elReference.setLineNumber(document.getLineOfOffset(offset) + 1);
 						}
-						elReference.setSyntaxErrors(model.getSyntaxErrors());
-						context.addELReference(elReference);
+					} catch (BadLocationException e) {
+						WebKbPlugin.getDefault().logError(e);
 					}
+					elReference.setSyntaxErrors(model.getSyntaxErrors());
+					context.addELReference(elReference);
 				}
 			}
 		}
