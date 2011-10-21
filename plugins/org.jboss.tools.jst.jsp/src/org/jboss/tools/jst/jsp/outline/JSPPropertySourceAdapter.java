@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2007 Exadel, Inc. and Red Hat, Inc.
+ * Copyright (c) 2007-2011 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
+ *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.outline;
 
@@ -96,14 +96,12 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 	JspELCompletionProposalComputer processor;
 	int offset = 0;
 	KbQuery kbQuery, kbQueryAttr;
-	@SuppressWarnings("unchecked")
 	private Set attributeNames = new HashSet();
 
 	public JSPPropertySourceAdapter(INodeNotifier target) {
 		setTarget(target);
 	}
 	
-	@SuppressWarnings("unchecked")
 	Map getWeights() {
 		return sorter == null ? new HashMap() : sorter.weights;
 	}
@@ -124,14 +122,21 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 		}
 
 		if(fNode instanceof Node) {
-			processor = valueHelper.isFacetets() ? new FaceletsELCompletionProposalComputer() : new JspELCompletionProposalComputer();
-//			processor.createContext(getTextViewer(), offset);
-			processor.setKeepState(true);
-	        processor.computeCompletionProposals(new CompletionProposalInvocationContext(getTextViewer(), offset), new NullProgressMonitor());
-			pageContext = processor.getContext();
-			kbQuery = createKbQuery(processor);
-			kbQuery.setMask(true); 
-			kbQueryAttr = createKbQuery(processor);
+			ITextViewer viewer = getTextViewer();
+			// Jeremy: JBIDE-9949: This prevents invocation of CA Proposals Computation in case 
+			// of Text Viewer is not accessible anymore (f.i. in case of closing editor, 
+			// since ITexViewer is acquired from Active Page of Active Workbench Window)
+			//
+			if (viewer != null) {  
+				processor = valueHelper.isFacetets() ? new FaceletsELCompletionProposalComputer() : new JspELCompletionProposalComputer();
+	//			processor.createContext(getTextViewer(), offset);
+				processor.setKeepState(true);
+		        processor.computeCompletionProposals(new CompletionProposalInvocationContext(viewer, offset), new NullProgressMonitor());
+				pageContext = processor.getContext();
+				kbQuery = createKbQuery(processor);
+				kbQuery.setMask(true); 
+				kbQueryAttr = createKbQuery(processor);
+			}
 		}
 	}
 	
@@ -252,7 +257,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 				}
 				else {
 					String an = attrName;
-					if(an.startsWith("xmlns:")) an = "xmlns:*";
+					if(an.startsWith("xmlns:")) an = "xmlns:*"; //$NON-NLS-1$ //$NON-NLS-2$
 					IAttribute a = as.get(an);
 					if(a != null) {
 						descriptor = createJSPPropertyDescriptor(a, attr.getName(), false);
