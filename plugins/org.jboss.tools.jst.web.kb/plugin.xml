@@ -101,6 +101,8 @@
 
 	<contexttype id="FACELETS_PAGE_CONTEXT_TYPE">
 		<contenttype id="org.eclipse.wst.html.core.htmlsource" />
+		<contenttype id="org.jboss.tools.jst.jsp.phpsource" />
+		<contenttype id="org.eclipse.php.core.phpsource" />
 		<contenttype id="jsf.facelet" />
 		<contenttype id="jsf.facelet.composite" />
 	</contexttype>

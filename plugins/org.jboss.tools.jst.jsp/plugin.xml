@@ -250,6 +250,8 @@
             name="%editors.html.name" 
             default="true">
          <contentTypeBinding contentTypeId="org.eclipse.wst.html.core.htmlsource"/>
+         <contentTypeBinding contentTypeId="org.jboss.tools.jst.jsp.phpsource"/>
+         <contentTypeBinding contentTypeId="org.eclipse.php.core.phpsource"/>
          <contentTypeBinding contentTypeId="jsf.facelet"/>
       </editor>
       <editor
@@ -544,7 +546,14 @@
 	       	name="%ContentType_JBossToolsINC"
 	       	base-type="org.eclipse.jst.jsp.core.jspsource"
 	       	describer="org.jboss.tools.jst.jsp.jspeditor.JSPIncludeContentDescriber"
-	       	file-extensions="inc, php"
+	       	file-extensions="inc"
+	       	priority="high"/>
+      	<content-type 
+	      	id="org.jboss.tools.jst.jsp.phpsource"
+	       	name="%ContentType_JBossPHPSource"
+	       	base-type="org.eclipse.wst.html.core.htmlsource"
+	       	describer="org.jboss.tools.jst.jsp.jspeditor.JSPIncludeContentDescriber"
+	       	file-extensions="php"
 	       	priority="high"/>
 	       	
        <file-association
@@ -910,6 +919,18 @@
 				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
 				<partitionType id="org.eclipse.wst.css.STYLE" />
        		</contentType>
+       		<contentType id="org.jboss.tools.jst.jsp.phpsource">
+				<partitionType id="org.eclipse.wst.html.HTML_DEFAULT" />
+				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
+				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
+				<partitionType id="org.eclipse.wst.css.STYLE" />
+       		</contentType>
+			<contentType id="org.eclipse.php.core.phpsource">
+				<partitionType id="org.eclipse.wst.html.HTML_DEFAULT" />
+				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
+				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
+				<partitionType id="org.eclipse.wst.css.STYLE" />
+			</contentType>
        		<contentType id="jsf.facelet">
 				<partitionType id="org.eclipse.wst.html.HTML_DEFAULT" />
 				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
