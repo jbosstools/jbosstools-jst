@@ -28,9 +28,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
-import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -402,7 +400,7 @@ public class PageContextFactory implements IResourceChangeListener {
 	 * @param node
 	 * @param context
 	 */
-	@SuppressWarnings({ "unchecked" })
+	@SuppressWarnings("rawtypes")
 	private static void fillJSPNameSpaces(JspContextImpl context) {
 		TLDCMDocumentManager manager = TaglibController.getTLDCMDocumentManager(context.getDocument());
 		List trackers = (manager == null? null : manager.getCMDocumentTrackers(context.getDocument().getLength() - 1));
@@ -482,53 +480,48 @@ public class PageContextFactory implements IResourceChangeListener {
 	}
 
 	private static void fillElReferencesForNode(IDocument document, IDOMNode node, XmlContextImpl context) {
-		if(Node.ELEMENT_NODE != node.getNodeType() && Node.TEXT_NODE != node.getNodeType()) 
-			return;
-		
-		IStructuredDocumentRegion regionNode = node.getFirstStructuredDocumentRegion(); 
-		if (regionNode == null)
-			return;
-
-		IStructuredDocumentRegion lastRegionNode = node.getLastStructuredDocumentRegion();
-		for (; regionNode != null && regionNode != lastRegionNode; regionNode = regionNode.getNext()) {
-			fillElReferencesForRegionNode(document, node, regionNode, context);
-		}
-		if (lastRegionNode != null) {
-			fillElReferencesForRegionNode(document, node, lastRegionNode, context);
-		}
-	}
-	
-	private static void fillElReferencesForRegionNode(IDocument document, IDOMNode node, IStructuredDocumentRegion regionNode, XmlContextImpl context) {
-		ITextRegionList regions = regionNode.getRegions();
-		for(int i=0; i<regions.size(); i++) {
-			ITextRegion region = regions.get(i);
-			if(region.getType() == DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE || region.getType() == DOMRegionContext.XML_CONTENT) {
-				String text = regionNode.getFullText(region);
-				if(text.indexOf('{')>-1 && (text.indexOf("#{") > -1 || text.indexOf("${") > -1)) { //$NON-NLS-1$
-					int offset = regionNode.getStartOffset() + region.getStart();
-					ELParser parser = ELParserUtil.getJbossFactory().createParser();
-					ELModel model = parser.parse(text);
-					List<ELInstance> is = model.getInstances();
-					ELReference elReference = new ValidationELReference();
-					elReference.setResource(context.getResource());
-					elReference.setEl(is);
-					elReference.setLength(text.length());
-					elReference.setStartPosition(offset);
-					try {
-						if(Node.TEXT_NODE == node.getNodeType()) {
-							if(is.size()==1) {
-								elReference.setLineNumber(document.getLineOfOffset(elReference.getStartPossitionOfFirstEL()) + 1);
-							}
-						} else {
-							elReference.setLineNumber(document.getLineOfOffset(offset) + 1);
-						}
-					} catch (BadLocationException e) {
-						WebKbPlugin.getDefault().logError(e);
-					}
-					elReference.setSyntaxErrors(model.getSyntaxErrors());
-					context.addELReference(elReference);
+		if(Node.ELEMENT_NODE == node.getNodeType() || Node.TEXT_NODE == node.getNodeType()) {
+			IStructuredDocumentRegion regionNode = node.getFirstStructuredDocumentRegion(); 
+			if (regionNode == null) return;
+			
+			ITextRegionList regions = regionNode.getRegions();
+			if (regions == null) return;
+			
+			for (ITextRegion region : regions.toArray()) {
+				if (DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE  == region.getType() || DOMRegionContext.XML_CONTENT == region.getType()) {
+					fillElReferencesForRegionNode(document, node, regionNode, region, context);
 				}
 			}
+		}
+	}
+
+	private static void fillElReferencesForRegionNode(IDocument document, IDOMNode node, IStructuredDocumentRegion regionNode, ITextRegion region, XmlContextImpl context) {
+		String text = regionNode.getFullText(region);
+		if(text.indexOf('{')>-1 && (text.indexOf("#{") > -1 || text.indexOf("${") > -1)) { //$NON-NLS-1$
+			int offset = regionNode.getStartOffset() + region.getStart();
+			if (context.getELReference(offset) != null) return; // prevent the duplication of EL references while iterating thru the regions 
+
+			ELParser parser = ELParserUtil.getJbossFactory().createParser();
+			ELModel model = parser.parse(text);
+			List<ELInstance> is = model.getInstances();
+			ELReference elReference = new ValidationELReference();
+			elReference.setResource(context.getResource());
+			elReference.setEl(is);
+			elReference.setLength(text.length());
+			elReference.setStartPosition(offset);
+			try {
+				if(Node.TEXT_NODE == node.getNodeType()) {
+					if(is.size()==1) {
+						elReference.setLineNumber(document.getLineOfOffset(elReference.getStartPossitionOfFirstEL()) + 1);
+					}
+				} else {
+					elReference.setLineNumber(document.getLineOfOffset(offset) + 1);
+				}
+			} catch (BadLocationException e) {
+				WebKbPlugin.getDefault().logError(e);
+			}
+			elReference.setSyntaxErrors(model.getSyntaxErrors());
+			context.addELReference(elReference);
 		}
 	}
 
