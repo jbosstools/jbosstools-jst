@@ -480,10 +480,10 @@ public class PageContextFactory implements IResourceChangeListener {
 	}
 
 	private static void fillElReferencesForNode(IDocument document, IDOMNode node, XmlContextImpl context) {
-		if(Node.ELEMENT_NODE == node.getNodeType() || Node.TEXT_NODE == node.getNodeType()) {
-			IStructuredDocumentRegion regionNode = node.getFirstStructuredDocumentRegion(); 
-			if (regionNode == null) return;
-			
+		IStructuredDocumentRegion regionNode = node.getFirstStructuredDocumentRegion(); 
+		if (regionNode == null) return;
+		
+		if(Node.ELEMENT_NODE == node.getNodeType()) {
 			ITextRegionList regions = regionNode.getRegions();
 			if (regions == null) return;
 			
@@ -491,6 +491,20 @@ public class PageContextFactory implements IResourceChangeListener {
 				if (DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE  == region.getType() || DOMRegionContext.XML_CONTENT == region.getType()) {
 					fillElReferencesForRegionNode(document, node, regionNode, region, context);
 				}
+			}
+		} else if (Node.TEXT_NODE == node.getNodeType()) {
+			IStructuredDocumentRegion lastRegionNode = node.getLastStructuredDocumentRegion();
+			while (regionNode != null) {
+				ITextRegionList regions = regionNode.getRegions();
+				if (regions == null) return;
+				
+				for (ITextRegion region : regions.toArray()) {
+					if (DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE  == region.getType() || DOMRegionContext.XML_CONTENT == region.getType()) {
+						fillElReferencesForRegionNode(document, node, regionNode, region, context);
+					}
+				}
+				if (regionNode == lastRegionNode) break;
+				regionNode = regionNode.getNext();
 			}
 		}
 	}
