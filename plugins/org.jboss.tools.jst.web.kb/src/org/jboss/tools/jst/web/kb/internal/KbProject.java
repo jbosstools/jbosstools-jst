@@ -281,6 +281,7 @@ public class KbProject extends KbObject implements IKbProject {
 		if(load) {
 			load();
 		} else {
+			loadValidationContext();
 			isStorageResolved = true;
 		}
 	}
@@ -338,6 +339,17 @@ public class KbProject extends KbObject implements IKbProject {
 			modifications = 0;
 		}
 
+	}
+
+	void loadValidationContext() {
+		File file = getStorageFile();
+		Element root = null;
+		if(file != null && file.isFile()) {
+			root = XMLUtilities.getElement(file, null);
+			if(root != null) {
+				getValidationContext().load(root);
+			}
+		}
 	}
 
 	public void clean() {
