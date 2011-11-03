@@ -58,7 +58,6 @@ public class WebWithModuleTest extends TestCase {
 		while(kbUtility.getTagLibraries().length == 0 && w++ < 50) {
 			try {
 				Thread.sleep(1000);
-				System.out.println("waiting for utility");
 			} catch (InterruptedException e) {
 				break;
 			}
