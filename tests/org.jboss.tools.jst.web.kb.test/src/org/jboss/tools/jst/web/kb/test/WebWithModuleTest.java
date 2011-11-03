@@ -51,9 +51,22 @@ public class WebWithModuleTest extends TestCase {
 	 */
 	public void testWebProject() throws CoreException {
 		assertTrue("true".equals(utility.getPersistentProperty(KbProjectFactory.NATURE_MOCK)));
+		
+		IKbProject kbUtility = KbProjectFactory.getKbProject(utility, true);
+		assertNotNull(kbUtility);
+		int w = 0;
+		while(kbUtility.getTagLibraries().length == 0 && w++ < 50) {
+			try {
+				Thread.sleep(1000);
+				System.out.println("waiting for utility");
+			} catch (InterruptedException e) {
+				break;
+			}
+		}
 
 		IKbProject kb = KbProjectFactory.getKbProject(webapp, true);
 		ITagLibrary[] ls = kb.getTagLibraries("utility-lib");
 		assertTrue(ls.length > 0);
 	}
+	
 }

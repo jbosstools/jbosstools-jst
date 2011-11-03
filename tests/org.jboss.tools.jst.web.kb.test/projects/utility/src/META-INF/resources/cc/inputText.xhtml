@@ -1,0 +1,24 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:c="http://java.sun.com/jsp/jstl/core"
+   xmlns:cc="http://java.sun.com/jsf/composite"
+   xmlns:t="http://br.com.test/ui/components">
+
+   <cc:interface componentType="br.com.test.ui.inputtext">
+		<cc:attribute name="label" required="true"/>
+		<cc:attribute name="value" />
+		<cc:attribute name="action" />
+   </cc:interface>
+   
+   <cc:implementation>
+   		<div class="testinputtext" id="#{cc.clientId}">
+			<h:outputLabel id="label" value="#{cc.attrs.label}: " for="#{cc.clientId}:input" />
+			<h:inputText onkeypress="showUndoButton('#{cc.clientId}:testsoftbutton');" id="input" binding="#{cc.input}" value="#{cc.attrs.value}" />
+			<t:button id="testsoftbutton" alt="lero" styleClass="testbutton" value="undo" action="#{cc.actionUndoValue}"  />
+		</div>
+   </cc:implementation>
+</ui:composition>
