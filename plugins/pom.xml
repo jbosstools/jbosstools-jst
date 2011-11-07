@@ -15,7 +15,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<module>org.jboss.tools.jst.css</module>
 		<module>org.jboss.tools.jst.firstrun</module>
 		<module>org.jboss.tools.jst.jsp</module>
-		<module>org.jboss.tools.jst.jsp.base.test</module>
 		<module>org.jboss.tools.jst.text.ext</module>
 		<module>org.jboss.tools.jst.web</module>
 		<module>org.jboss.tools.jst.web.kb</module>

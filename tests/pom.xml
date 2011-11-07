@@ -12,6 +12,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	</parent>
 	<packaging>pom</packaging>
 	<modules>
+		<module>org.jboss.tools.jst.jsp.base.test</module>
 		<module>org.jboss.tools.jst.css.test</module>
 		<module>org.jboss.tools.jst.jsp.test</module>
 		<module>org.jboss.tools.jst.text.ext.test</module>
