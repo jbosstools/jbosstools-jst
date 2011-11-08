@@ -465,7 +465,7 @@ public class ELValidator extends WebValidator {
 	public boolean shouldValidate(IProject project) {
 		boolean result = false;
 		try {
-			if(validateBuilderOrder(project) && isEnabled(project)) {
+			if(project.isAccessible() && validateBuilderOrder(project) && isEnabled(project)) {
 				for (IELValidationDelegate delegate : DELEGATES) {
 					if(delegate.shouldValidate(project)) {
 						result = true;
