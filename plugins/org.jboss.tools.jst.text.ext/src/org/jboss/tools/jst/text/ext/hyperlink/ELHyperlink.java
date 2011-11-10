@@ -27,6 +27,7 @@ import org.jboss.tools.common.text.ITextSourceReference;
 import org.jboss.tools.common.text.ext.hyperlink.AbstractHyperlink;
 import org.jboss.tools.common.text.ext.hyperlink.xpl.Messages;
 import org.jboss.tools.common.text.ext.util.StructuredSelectionHelper;
+import org.jboss.tools.common.util.StringUtil;
 import org.jboss.tools.jst.text.ext.JSTExtensionsPlugin;
 
 public class ELHyperlink extends AbstractHyperlink{
@@ -80,20 +81,6 @@ public class ELHyperlink extends AbstractHyperlink{
 		}
 	}
 	
-	private String trimQuotes(String value) {
-		if(value == null)
-			return null;
-
-		if(value.startsWith("'") || value.startsWith("\"")) {  //$NON-NLS-1$ //$NON-NLS-2$
-			value = value.substring(1);
-		} 
-		
-		if(value.endsWith("'") || value.endsWith("\"")) { //$NON-NLS-1$ //$NON-NLS-2$
-			value = value.substring(0, value.length() - 1);
-		}
-		return value;
-	}
-	
 //	private String getRequestMethod(Properties prop) {
 //		return prop != null && prop.getProperty(WebPromptingProvider.KEY) == null ? 
 //				WebPromptingProvider.JSF_OPEN_BUNDLE : WebPromptingProvider.JSF_OPEN_KEY;
@@ -110,7 +97,7 @@ public class ELHyperlink extends AbstractHyperlink{
 		}else if(segment instanceof MessagePropertyELSegment){
 			//TODO move to getLabel() in openable in MessagePropertyELSegmentImpl
 			String baseName = ((MessagePropertyELSegment)segment).getBaseName();
-			String propertyName = ((MessagePropertyELSegment)segment).isBundle() ? null : trimQuotes(((MessagePropertyELSegment)segment).getToken().getText());
+			String propertyName = ((MessagePropertyELSegment)segment).isBundle() ? null : StringUtil.trimQuotes(((MessagePropertyELSegment)segment).getToken().getText());
 			if (propertyName == null)
 				return  MessageFormat.format(Messages.Open, baseName);
 			

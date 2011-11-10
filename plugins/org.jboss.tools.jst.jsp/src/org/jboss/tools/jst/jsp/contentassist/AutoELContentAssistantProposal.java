@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2010 Red Hat, Inc. 
+ * Copyright (c) 2010-2011 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -12,6 +12,7 @@ package org.jboss.tools.jst.jsp.contentassist;
 
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.List;
 
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMember;
@@ -23,6 +24,9 @@ import org.eclipse.jdt.ui.JavaElementLabels;
 import org.eclipse.jface.internal.text.html.HTMLPrinter;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.swt.graphics.Image;
+import org.jboss.tools.common.el.core.ca.MessagesELTextProposal;
+import org.jboss.tools.common.el.ui.ca.ELProposalProcessor;
+import org.jboss.tools.common.model.XModelObject;
 
 /**
  * Class to provide EL proposals to Content Assistant.
@@ -34,6 +38,7 @@ import org.eclipse.swt.graphics.Image;
 @SuppressWarnings("restriction")
 public class AutoELContentAssistantProposal extends AutoContentAssistantProposal {
 	private IJavaElement[] fJavaElements;
+	private MessagesELTextProposal fProperySource;
 	private String fAdditionalProposalInfo;
 
 	/**
@@ -49,9 +54,29 @@ public class AutoELContentAssistantProposal extends AutoContentAssistantProposal
 	 * @param elements
 	 * @param relevance
 	 */
-	public AutoELContentAssistantProposal(String replacementString, int replacementOffset, int replacementLength, int cursorPosition, Image image, String displayString, IContextInformation contextInformation, IJavaElement[] elements, int relevance) {
-	    super(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, contextInformation, null, relevance);
+	public AutoELContentAssistantProposal(String replacementString, int replacementOffset, int replacementLength, int cursorPosition, Image image, String displayString, String alternateMatch, IContextInformation contextInformation, IJavaElement[] elements, int relevance) {
+	    super(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, alternateMatch, contextInformation, null, relevance);
 	    this.fJavaElements = elements;
+	    this.fProperySource = null;
+	}
+	
+	/**
+	 * Constructs the proposal object
+	 * 
+	 * @param replacementString
+	 * @param replacementOffset
+	 * @param replacementLength
+	 * @param cursorPosition
+	 * @param image
+	 * @param displayString
+	 * @param contextInformation
+	 * @param properySource
+	 * @param relevance
+	 */
+	public AutoELContentAssistantProposal(String replacementString, int replacementOffset, int replacementLength, int cursorPosition, Image image, String displayString, String alternateMatch, IContextInformation contextInformation, MessagesELTextProposal propertySource, int relevance) {
+	    super(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, alternateMatch, contextInformation, null, relevance);
+	    this.fJavaElements = null;
+	    this.fProperySource = propertySource;
 	}
 	
 	/*
@@ -62,6 +87,8 @@ public class AutoELContentAssistantProposal extends AutoContentAssistantProposal
 		if (fAdditionalProposalInfo == null) {
 			if (this.fJavaElements != null && this.fJavaElements.length > 0) {
 				this.fAdditionalProposalInfo = extractProposalContextInfo(fJavaElements);
+			} else if (fProperySource != null) {
+				this.fAdditionalProposalInfo = extractProposalContextInfo(fProperySource);
 			}
 		}
 		return fAdditionalProposalInfo;
@@ -109,18 +136,31 @@ public class AutoELContentAssistantProposal extends AutoContentAssistantProposal
 			}
 		}
 
-		if (!hasContents)
+		if (!hasContents || buffer.length() == 0) 
 			return null;
-
-		if (buffer.length() > 0) {
-			HTMLPrinter.insertPageProlog(buffer, 0, (String)null);
-			HTMLPrinter.addPageEpilog(buffer);
-			return buffer.toString();
-		}
-
-		return null;
+			
+		HTMLPrinter.insertPageProlog(buffer, 0, (String)null);
+		HTMLPrinter.addPageEpilog(buffer);
+		return buffer.toString();
 	}
 
+	/*
+	 * Extracts the additional proposal information based on Javadoc for the stored IJavaElement objects
+	 */
+	private String extractProposalContextInfo(MessagesELTextProposal propertySource) {
+		StringBuffer buffer= new StringBuffer();
+		buffer.append(ELProposalProcessor.getELMessagesHoverInternal(propertySource.getBaseName(), 
+				propertySource.getPropertyName(), (List<XModelObject>)propertySource.getAllObjects()));
+
+		if (buffer.length() == 0) 
+			return null;
+			
+		HTMLPrinter.insertPageProlog(buffer, 0, (String)null);
+		HTMLPrinter.addPageEpilog(buffer);
+		return buffer.toString();
+	}
+
+	
 	private static final long LABEL_FLAGS=  JavaElementLabels.ALL_FULLY_QUALIFIED
 			| JavaElementLabels.M_PRE_RETURNTYPE | JavaElementLabels.M_PARAMETER_TYPES | JavaElementLabels.M_PARAMETER_NAMES | JavaElementLabels.M_EXCEPTIONS
 			| JavaElementLabels.F_PRE_TYPE_SIGNATURE | JavaElementLabels.M_PRE_TYPE_PARAMETERS | JavaElementLabels.T_TYPE_PARAMETERS

@@ -16,6 +16,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -57,13 +58,17 @@ import org.jboss.tools.common.el.core.resolver.ELResolution;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.ELSegment;
 import org.jboss.tools.common.el.core.resolver.JavaMemberELSegmentImpl;
+import org.jboss.tools.common.el.ui.ca.ELProposalProcessor;
+import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.text.TextProposal;
+import org.jboss.tools.common.util.StringUtil;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.contentassist.Utils;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
+import org.jboss.tools.jst.web.kb.el.MessagePropertyELSegmentImpl;
 import org.osgi.framework.Bundle;
 
 /**
@@ -253,6 +258,8 @@ public class JavaStringELInfoHover extends JavadocHover {
 				continue;
 			
 			ELSegment segment = resolution.getLastSegment();
+			if (!segment.isResolved()) continue;
+			
 			if(segment instanceof JavaMemberELSegmentImpl) {
 				JavaMemberELSegmentImpl jmSegment = (JavaMemberELSegmentImpl)segment;
 				
@@ -267,6 +274,17 @@ public class JavaStringELInfoHover extends JavadocHover {
 					continue;
 				
 				return JavaStringELInfoHover.getHoverInfo2Internal(javaElements, true);
+			} else if (segment instanceof MessagePropertyELSegmentImpl) {
+				MessagePropertyELSegmentImpl mpSegment = (MessagePropertyELSegmentImpl)segment;
+				String baseName = mpSegment.getBaseName();
+				String propertyName = mpSegment.isBundle() ? null : StringUtil.trimQuotes(segment.getToken().getText());
+				String hoverText = ELProposalProcessor.getELMessagesHoverInternal(baseName, propertyName, (List<XModelObject>)mpSegment.getObjects());
+				StringBuffer buffer = new StringBuffer(hoverText);
+
+				HTMLPrinter.insertPageProlog(buffer, 0, getStyleSheet());
+				HTMLPrinter.addPageEpilog(buffer);
+				
+				return new ELInfoHoverBrowserInformationControlInput(null, new IJavaElement[0], buffer.toString(), 0);
 			}
 		}
 

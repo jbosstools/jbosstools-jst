@@ -18,7 +18,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.swt.graphics.Image;
 import org.jboss.tools.common.el.core.ElCoreMessages;
-import org.jboss.tools.common.el.core.ca.AbstractELCompletionEngine;
 import org.jboss.tools.common.el.core.parser.LexicalToken;
 import org.jboss.tools.common.el.core.resolver.ELSegmentImpl;
 import org.jboss.tools.common.el.core.resolver.IOpenableReference;
@@ -26,6 +25,7 @@ import org.jboss.tools.common.el.core.resolver.MessagePropertyELSegment;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.util.FindObjectHelper;
 import org.jboss.tools.common.text.ITextSourceReference;
+import org.jboss.tools.common.util.StringUtil;
 
 /**
  * @author Daniel Azarov
@@ -123,7 +123,7 @@ public class MessagePropertyELSegmentImpl extends ELSegmentImpl implements
 						
 						// Improve label - add a locale for a resource bundle
 						String baseName = getBaseName();
-						String propertyName = isBundle() ? null : AbstractELCompletionEngine.trimQuotes(getToken().getText());
+						String propertyName = isBundle() ? null : StringUtil.trimQuotes(getToken().getText());
 						if (propertyName == null)
 							return  MessageFormat.format(ElCoreMessages.OpenBundle, baseName);
 						
