@@ -11,11 +11,7 @@
 package org.jboss.tools.jst.text.ext.hyperlink;
 
 import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -59,7 +55,6 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 	public static final String[] STYLE_TAGS = new String[] { "style", "link" }; //$NON-NLS-1$//$NON-NLS-2$
 	public static final String LINK_TAG = "link"; //$NON-NLS-1$
 	public static final String HREF_ATTRIBUTE = "href"; //$NON-NLS-1$
-	public static final String COMPARE_CLASS_REGEX_PREFIX = "([A-Za-z_][A-Za-z_0-9\\-]*)*[\\.]?"; //$NON-NLS-1$
 	public static final String CONTEXT_PATH_EXPRESSION = "^\\s*(\\#|\\$)\\{facesContext.externalContext.requestContextPath\\}"; //$NON-NLS-1$
 	
 	@Override
@@ -168,24 +163,15 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 		String selectorText = ((CSSStyleRule) cssRule).getSelectorText();
 
 		if (selectorText != null) {
-			String styles[] = selectorText.trim().split(","); //$NON-NLS-1$
+			String styleNameToSearch = '.' + styleName.toLowerCase();
+			String styles[] = selectorText.trim().toLowerCase().split(","); //$NON-NLS-1$
 			for (String styleText : styles) {
 				String[] styleWords = styleText.trim().split(" ");  //$NON-NLS-1$
 				if (styleWords != null) {
-					int searchIndex = Arrays.binarySearch(styleWords, styleName,
-							new Comparator<String>() {
-		
-								public int compare(String o1, String o2) {
-									Matcher matcher = Pattern.compile(
-											COMPARE_CLASS_REGEX_PREFIX + o2)
-											.matcher(o1);
-									
-									return matcher.matches() ? 0 : 1;
-								}
-		
-							});
-					if (searchIndex >= 0)
-						return cssRule;
+					for (String word : styleWords) {
+						if (word.trim().toLowerCase().endsWith(styleNameToSearch)) 
+							return cssRule;
+					}
 				}
 			}
 		}
@@ -243,7 +229,6 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 	}
 
 	/**
-	 * TODO research method
 	 * 
 	 * @param offset
 	 * @return
