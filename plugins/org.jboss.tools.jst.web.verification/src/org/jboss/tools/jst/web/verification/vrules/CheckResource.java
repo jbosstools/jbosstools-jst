@@ -53,14 +53,15 @@ public class CheckResource extends WebDefaultCheck {
 			if("true".equals(rule.getProperty("acceptEmpty"))) return null; //$NON-NLS-1$ //$NON-NLS-2$
 			return fire(object, attribute + ".empty", attribute, null); //$NON-NLS-1$
 		}
-		String value1 = !value.startsWith("/") ? "/" + value : value; //$NON-NLS-1$ //$NON-NLS-2$
-		XModelObject tld = XModelImpl.getByRelativePath(model, value1);
-		if(tld == null) {
-			return fire(object, attribute + ".exists", attribute, value); //$NON-NLS-1$
+
+		XModelObject o = null;
+		for (Object v: list) {
+			String valuei = v.toString();
+			String value2 = valuei.startsWith("/") ? valuei.substring(1) : valuei; //$NON-NLS-1$
+			o = webRoot.getChildByPath(value2);
+			if(o != null) break;
 		}
-		String value2 = value.startsWith("/") ? value.substring(1) : value; //$NON-NLS-1$
-		XModelObject tld2 = webRoot.getChildByPath(value2);
-		if(tld2 == null) {
+		if(o == null) {
 			return fire(object, attribute + ".exists", attribute, value); //$NON-NLS-1$
 		}
 		if(!checkExtensions(value)) {
