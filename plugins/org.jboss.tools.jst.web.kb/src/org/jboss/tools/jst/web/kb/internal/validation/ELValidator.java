@@ -69,6 +69,7 @@ public class ELValidator extends WebValidator {
 
 	public static final String ID = "org.jboss.tools.jst.web.kb.ELValidator"; //$NON-NLS-1$
 	public static final String PROBLEM_TYPE = "org.jboss.tools.jst.web.kb.elproblem"; //$NON-NLS-1$
+	public static final String PREFERENCE_PAGE_ID = "org.jboss.tools.jst.web.ui.preferences.ELValidatorPreferencePage"; //$NON-NLS-1$
 
 	private static final String EXTENSION_POINT_ID = "org.jboss.tools.jst.web.kb.elValidationDelegate"; //$NON-NLS-1$
 
@@ -493,6 +494,6 @@ public class ELValidator extends WebValidator {
 
 	@Override
 	protected String getPreferencePageId() {
-		return "org.jboss.tools.jst.web.kb.preferences.KBValidationPreferencePage";
+		return PREFERENCE_PAGE_ID;
 	}
 }

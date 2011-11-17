@@ -14,12 +14,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
 import org.jboss.tools.common.ui.preferences.SeverityPreferencePage;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
+import org.jboss.tools.jst.web.kb.internal.validation.ELValidator;
 
 /**
  * @author Viacheslav Kabanovich
  */
 public class ELValidatorPreferencePage extends SeverityPreferencePage {
-	public static final String PREF_ID = "org.jboss.tools.jst.web.ui.preferences.ELValidatorPreferencePage"; //$NON-NLS-1$
+	public static final String PREF_ID = ELValidator.PREFERENCE_PAGE_ID;
 	public static final String PROP_ID = "org.jboss.tools.jst.web.ui.properties.ELValidatorPreferencePage"; //$NON-NLS-1$
 
 	public ELValidatorPreferencePage() {
