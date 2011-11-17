@@ -20,6 +20,7 @@ import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.project.ProjectHome;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
+import org.jboss.tools.common.web.WebUtils;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.internal.scanner.IFileScanner;
 import org.jboss.tools.jst.web.kb.internal.scanner.JSF2ResourcesScanner;
@@ -53,8 +54,8 @@ public class KbResourceVisitor implements IResourceVisitor {
 			List<IPath> jsf2rs = new ArrayList<IPath>();
 			XModel model = InnerModelHelper.createXModel(p.getProject());
 			if(model != null) {
-				webinfs = ProjectHome.getWebInfPaths(p.getProject());
-				IPath[] webContents = ProjectHome.getWebContentPaths(p.getProject());
+				webinfs = WebUtils.getWebInfPaths(p.getProject());
+				IPath[] webContents = WebUtils.getWebContentPaths(p.getProject());
 				for (IPath webcontent: webContents) {
 					IPath jsf2r = webcontent.append("resources"); //$NON-NLS-1$
 					IResource rf = ResourcesPlugin.getWorkspace().getRoot().getFolder(jsf2r);
