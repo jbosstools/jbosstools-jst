@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.model.helpers;
 
 import java.io.IOException;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -26,9 +27,9 @@ import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelConstants;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.project.IModelNature;
-import org.jboss.tools.common.model.project.ProjectHome;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.util.XModelObjectUtil;
+import org.jboss.tools.common.web.WebUtils;
 
 public class InnerModelHelper {
 	
@@ -74,7 +75,16 @@ public class InnerModelHelper {
 	}
 
 	//Taken from J2EEUtils and modified
-	public static IPath getWebInfPath(IProject project) {		
+	public static IPath getWebInfPath(IProject project) {
+		IContainer[] cs = WebUtils.getWebRootFolders(project, true);
+		for (IContainer c: cs) {
+			if(c.exists()) {
+				IFolder f = c.getFolder(new Path("WEB-INF")); //$NON-NLS-1$
+				if(f.exists()) {
+					return f.getFullPath();
+				}
+			}
+		}
 		IVirtualComponent component = ComponentCore.createComponent(project);
 		if(component == null) return null;
 		IVirtualFolder webInfDir = component.getRootFolder().getFolder(new Path("/WEB-INF")); //$NON-NLS-1$
@@ -82,11 +92,22 @@ public class InnerModelHelper {
 		return (!webInfDir.exists()) ? null : modulePath;
 	}
 
+	public static IPath getFirstWebContentPath(IProject project) {
+		IContainer[] cs = WebUtils.getWebRootFolders(project, true);
+		for (IContainer c: cs) {
+			if(c.exists()) {
+				return c.getFullPath();
+			}
+		}
+		return null;
+	}
+
+
 	static String getWebRootPath(IProject project, String webInfLocation) {
 		String webRootLocation = XModelConstants.WORKSPACE_REF + "/.."; //$NON-NLS-1$
 		
-		IPath wrp = ProjectHome.getFirstWebContentPath(project);
-		IPath wip = ProjectHome.getWebInfPath(project);
+		IPath wrp = getFirstWebContentPath(project);
+		IPath wip = getWebInfPath(project);
 
 		if(wrp == null || wip == null) {
 			return webRootLocation;
