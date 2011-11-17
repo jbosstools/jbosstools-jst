@@ -490,4 +490,9 @@ public class ELValidator extends WebValidator {
 	protected boolean shouldValidateJavaSources() {
 		return true;
 	}
+
+	@Override
+	protected String getPreferencePageId() {
+		return "org.jboss.tools.jst.web.kb.preferences.KBValidationPreferencePage";
+	}
 }

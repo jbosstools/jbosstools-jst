@@ -71,4 +71,9 @@ public class KBValidationConfigurationBlock extends SeverityConfigurationBlock {
 	protected IDialogSettings getDialogSettings() {
 		return WebKbPlugin.getDefault().getDialogSettings().getSection(SETTINGS_SECTION_NAME);
 	}
+
+	@Override
+	protected String getQualifier() {
+		return WebKbPlugin.PLUGIN_ID;
+	}
 }
