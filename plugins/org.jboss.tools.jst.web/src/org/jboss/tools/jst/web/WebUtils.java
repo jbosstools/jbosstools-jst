@@ -12,8 +12,6 @@ package org.jboss.tools.jst.web;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -22,25 +20,18 @@ import java.util.TreeSet;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jst.j2ee.componentcore.J2EEModuleVirtualComponent;
 import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
-import org.eclipse.jst.j2ee.project.facet.IJ2EEFacetConstants;
 import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
-import org.eclipse.wst.common.project.facet.core.IFacetedProject;
-import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.jboss.tools.common.model.project.IModelNature;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.jst.web.project.WebProject;
@@ -88,80 +79,8 @@ public class WebUtils {
 		return (modelNature != null) ? WebProject.getInstance(modelNature.getModel()).getWebRootLocation() : null;
 	}
 
-	private static final IContainer[] EMPTY_ARRAY = new IContainer[0];
-
-	/**
-	 * Returns all the web root folders of the project.
-	 * If the project is not a web project then the method will return an empty array.
-	 * If ignoreDerived==true then all the derived resources or resources belonged to derived containers will be eliminated.
-	 * If some folder is set as default web root source folder (available since WTP 3.3.1) then this folder will be places in the very beginning of the result array.
-	 * @param project
-	 * @param ignoreDerived
-	 * @return
-	 */
 	public static IContainer[] getWebRootFolders(IProject project, boolean ignoreDerived) {
-		IFacetedProject facetedProject = null;
-		try {
-			facetedProject = ProjectFacetsManager.create(project);
-		} catch (CoreException e) {
-			WebModelPlugin.getDefault().logError(e);
-		}
-		if(facetedProject!=null && facetedProject.getProjectFacetVersion(IJ2EEFacetConstants.DYNAMIC_WEB_FACET)!=null) {
-			IVirtualComponent component = ComponentCore.createComponent(project);
-			if(component!=null) {
-				IVirtualFolder webRootVirtFolder = component.getRootFolder().getFolder(new Path("/")); //$NON-NLS-1$
-
-				IPath defaultPath = getDefaultDeploymentDescriptorFolder(webRootVirtFolder);
-
-				IContainer[] folders = webRootVirtFolder.getUnderlyingFolders();
-				if(folders.length > 1){
-					ArrayList<IContainer> containers = new ArrayList<IContainer>();
-					for(IContainer container : folders){
-						if(!ignoreDerived || !container.isDerived(IResource.CHECK_ANCESTORS)) {
-							if(defaultPath!=null && defaultPath.equals(container.getFullPath())) {
-								containers.add(0, container); // Put default root folder to the first position of the list
-							} else {
-								containers.add(container);
-							}
-						}
-					}
-					return containers.toArray(new IContainer[containers.size()]);
-				} else {
-					return folders;
-				}
-			}
-		}
-		return EMPTY_ARRAY;
-	}
-
-	private static boolean WTP_3_3_0 = false;
-
-	/**
-	 * Returns all the web root folders of the project.
-	 * If the project is not a web project then the method will return an empty array.
-	 * All the derived resources or resources belonged to derived containers will be eliminated.
-	 * If some folder is set as default web root source folder (available since WTP 3.3.1) then this folder will be places in the very beginning of the result array.
-	 * @param project
-	 * @return
-	 */
-	public static IPath getDefaultDeploymentDescriptorFolder(IVirtualFolder folder) {
-		if(!WTP_3_3_0) {
-			try {
-				Method getDefaultDeploymentDescriptorFolder = J2EEModuleVirtualComponent.class.getMethod("getDefaultDeploymentDescriptorFolder", IVirtualFolder.class); //$NON-NLS-1$
-				return (IPath) getDefaultDeploymentDescriptorFolder.invoke(null, folder);
-			} catch (NoSuchMethodException nsme) {
-				// Not available in this WTP version, let's ignore it
-				WTP_3_3_0 = true;
-			} catch (IllegalArgumentException e) {
-				WebModelPlugin.getDefault().logError(e);
-			} catch (IllegalAccessException e) {
-				WebModelPlugin.getDefault().logError(e);
-			} catch (InvocationTargetException e) {
-				// Not available in this WTP version, let's ignore it
-				WTP_3_3_0 = true;
-			}
-		}
-		return null;
+		return org.jboss.tools.common.web.WebUtils.getWebRootFolders(project, ignoreDerived);
 	}
 
 	public static IContainer[] getWebRootFolders(IProject project) {
