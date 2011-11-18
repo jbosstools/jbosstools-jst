@@ -326,7 +326,7 @@ public class PageContextFactory implements IResourceChangeListener {
 	private ELContext createPageContext(IFile file, List<String> parents, String defaultContextType) {
 		boolean isContextCachingAllowed = !EclipseUIUtil.isOpenInActiveEditor(file);
 		ELContext context = isContextCachingAllowed ? getSavedContext(file) : null;
-		if (context == null) {
+		if (context == null && file != null) {
 			IContentType type = IDE.getContentType(file);
 			String typeId = (type == null ? null : type.getId());
 			
