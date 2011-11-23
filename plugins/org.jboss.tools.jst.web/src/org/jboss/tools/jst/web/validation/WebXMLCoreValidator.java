@@ -249,7 +249,7 @@ public class WebXMLCoreValidator extends ValidationErrorManager implements IVali
 		try {
 			
 			// This code line never return null
-			webInf = project.getFolder(webContentPath.append("WEB-INF")); //$NON-NLS-1$
+			webInf = project.getFolder(webContentPath.removeFirstSegments(1).append("WEB-INF")); //$NON-NLS-1$
 			// so never check it for null
 			if(webInf.isAccessible()) {
 				IResource[] rs = webInf.members();

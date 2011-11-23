@@ -48,6 +48,11 @@ public class CheckClass extends Check {
 	public void check(XModelObject object) {
 		if(attr == null) return;
 		String value = object.getAttributeValue(attr);
+		if(value == null) {
+			System.out.println("Entity=" + object.getModelEntity().getName());
+			System.out.println("Attr=" + attr);
+			return;
+		}
 		if(value.length() == 0 || isJavaLang(value)) return;
 		if(isPrimitive(value)) {
 			if(!allowsPrimitive) {
