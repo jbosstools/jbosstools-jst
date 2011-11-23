@@ -82,7 +82,7 @@ public class XMLValueInfo implements IValueInfo {
 	}
 
 	public IFile getResource() {
-		return object == null ? null : (IFile)object.getAdapter(File.class);
+		return object == null ? null : (IFile)object.getAdapter(IFile.class);
 	}
 	
 }

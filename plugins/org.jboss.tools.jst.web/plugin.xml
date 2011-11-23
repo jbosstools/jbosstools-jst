@@ -315,4 +315,24 @@
       </persistent>
    </extension>
 
+   <extension id="webxmlproblem" name="%WebXMLProblemName" point="org.eclipse.core.resources.markers">
+      <super type="org.jboss.tools.common.validation.JBTValidationProblem">
+      </super>
+      <persistent value="true">
+      </persistent>
+   </extension>
+
+   <extension point="org.eclipse.core.runtime.preferences">
+      <initializer class="org.jboss.tools.jst.web.validation.WebXMLPreferenceInitializer"/>
+   </extension>
+
+   <extension
+         point="org.jboss.tools.common.validation.validator">
+         <validator
+               class="org.jboss.tools.jst.web.validation.WebXMLCoreValidator"
+               name="%WebXMLCoreValidator"
+               id="org.jboss.tools.jst.web.validation.WebXMLCoreValidator">
+         </validator>
+   </extension>
+
 </plugin>
