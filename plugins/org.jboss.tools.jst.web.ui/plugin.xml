@@ -707,4 +707,31 @@
 			</contentType>
     </proposalComputer>
    </extension>
+
+   <extension point="org.eclipse.ui.preferencePages">
+      <page 
+         category="org.jboss.tools.common.model.ui" 
+         class="org.jboss.tools.jst.web.ui.internal.preferences.WebXMLValidatorPreferencePage" 
+         id="org.jboss.tools.jst.web.ui.WebXMLValidatorPreferencePage" 
+         name="%PreferencePage_WebXML_Validator">
+      </page>
+   </extension>
+
+	<extension point="org.eclipse.ui.propertyPages">
+		<page
+			name="%PreferencePage_WebXML_Validator"
+			class="org.jboss.tools.jst.web.ui.internal.preferences.WebXMLValidatorPreferencePage"
+			id="org.jboss.tools.jst.web.ui.propertyPages.WebXMLValidatorPreferencePage">
+         	<enabledWhen>
+               	<and>
+					<adapt type="org.eclipse.core.resources.IProject">
+						<or> 
+				          <test property="org.eclipse.core.resources.projectNature" value="org.jboss.tools.jsf.jsfnature"/>
+						</or>
+					</adapt>
+				</and> 
+			</enabledWhen>
+         	<keywordReference id="org.eclipse.wst.html.ui.webcontent"/>
+		</page>
+	</extension>
 </plugin>
