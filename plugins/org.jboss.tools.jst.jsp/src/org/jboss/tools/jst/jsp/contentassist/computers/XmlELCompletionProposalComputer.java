@@ -161,7 +161,6 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 			CompletionProposalInvocationContext context) {
 	}
 
-	@SuppressWarnings("unused")
 	@Override
 	protected void addAttributeValueELProposals(ContentAssistRequest contentAssistRequest,
 			CompletionProposalInvocationContext context) {
@@ -357,10 +356,10 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 					int quoteIndex = restOfValue.indexOf('\'');
 					if (quoteIndex == -1 || paraIndex == -1 || (paraIndex != -1 && quoteIndex > paraIndex)) {
 						// Need to insert closing single-quote if there is no quote inserted
-						if (!replacementString.endsWith("\'")) 
+						if (!replacementString.endsWith("\'"))  //$NON-NLS-1$
 							replacementString += '\'';
 					} else {
-						if (quoteIndex != -1 && replacementString.endsWith("\'"))
+						if (quoteIndex != -1 && replacementString.endsWith("\'")) //$NON-NLS-1$
 							replacementString = replacementString.substring(0, replacementString.length() - 1);
 					}
 					if (paraIndex == -1) {
@@ -368,7 +367,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 						replacementString += ']';
 					}
 				} else {
-					if (replacementString.endsWith("]") && restOfValue.indexOf(']') != -1) {
+					if (replacementString.endsWith("]") && restOfValue.indexOf(']') != -1) { //$NON-NLS-1$
 						replacementString = replacementString.substring(0, replacementString.length() -1);
 					}
 				}
@@ -440,7 +439,6 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 	 * 
 	 * @param contentAssistRequest
 	 */
-	@SuppressWarnings("unused")
 	protected void addELPredicateProposals(ContentAssistRequest contentAssistRequest, int baseRelevance, boolean shiftRelevanceAgainstTagNameProposals) {
 		if (!isELCAToBeShown())
 			return;
@@ -528,7 +526,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 	}
 
 	protected ELContext createContext() {
-		return PageContextFactory.createPageContext(getResource(), PageContextFactory.XML_PAGE_CONTEXT_TYPE);
+		return PageContextFactory.createPageContext(getDocument(), PageContextFactory.XML_PAGE_CONTEXT_TYPE);
 	}
 	
 	protected KbQuery createKbQuery(Type type, String query, String stringQuery) {
@@ -926,7 +924,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		ELInstance is = ELUtil.findInstance(model, inValueOffset);// ELInstance
 		ELInvocationExpression ie = ELUtil.findExpression(model, inValueOffset);// ELExpression
 		
-		boolean isELStarted = (model != null && is != null && (startsWithELBeginning(model.toString()))); //$NON-NLS-1$
+		boolean isELStarted = (model != null && is != null && (startsWithELBeginning(model.toString())));
 		boolean isELClosed = (model != null && is != null && model.toString().endsWith("}")); //$NON-NLS-1$
 		
 //			boolean insideEL = startOffset + model.toString().length() 

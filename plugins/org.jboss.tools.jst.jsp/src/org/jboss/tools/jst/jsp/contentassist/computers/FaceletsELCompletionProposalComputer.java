@@ -124,7 +124,7 @@ public class FaceletsELCompletionProposalComputer extends JspELCompletionProposa
 	 */
 	@Override
 	protected ELContext createContext() {
-		return PageContextFactory.createPageContext(getResource(), PageContextFactory.FACELETS_PAGE_CONTEXT_TYPE);
+		return PageContextFactory.createPageContext(getDocument(), PageContextFactory.FACELETS_PAGE_CONTEXT_TYPE);
 	}
 
 	/*

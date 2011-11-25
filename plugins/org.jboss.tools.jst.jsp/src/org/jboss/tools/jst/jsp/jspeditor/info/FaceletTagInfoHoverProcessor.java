@@ -88,11 +88,7 @@ public class FaceletTagInfoHoverProcessor extends XMLTagInfoHoverProcessor {
 		this.fDocumentPosition = documentPosition;
 		this.fContext = null;
 		
-		IFile file = getResource(textViewer.getDocument());
-		if (file == null)
-			return null;
-		
-		fContext = PageContextFactory.createPageContext(file);
+		fContext = PageContextFactory.createPageContext(textViewer.getDocument());
 		if (fContext == null)
 			return null;
 		

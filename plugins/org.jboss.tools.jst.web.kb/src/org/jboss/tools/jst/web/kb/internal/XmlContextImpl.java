@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2010-2011 Red Hat, Inc.
+ * Distributed under license by Red Hat, Inc. All rights reserved.
+ * This program is made available under the terms of the
+ * Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Red Hat, Inc. - initial API and implementation
+ ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal;
 
 import java.util.ArrayList;
@@ -20,6 +30,11 @@ import org.jboss.tools.jst.web.kb.IXmlContext;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 
+/**
+ * 
+ * @author Victor V. Rubezhny
+ *
+ */
 public class XmlContextImpl extends ELContextImpl implements IXmlContext {
 	protected IDocument document;
 
@@ -33,13 +48,16 @@ public class XmlContextImpl extends ELContextImpl implements IXmlContext {
 	@Override
 	public void setResource(IFile resource) {
 		super.setResource(resource);
-		
-		FileEditorInput editorInput = null;
-		try {
-			editorInput = new FileEditorInput(resource);
-			document = getConnectedDocument(editorInput);
-		} finally {
-			releaseConnectedDocument(editorInput);
+
+		document = null;
+		if (resource != null) {
+			FileEditorInput editorInput = null;
+			try {
+				editorInput = new FileEditorInput(resource);
+				document = getConnectedDocument(editorInput);
+			} finally {
+				releaseConnectedDocument(editorInput);
+			}
 		}
 	}
 	
@@ -49,6 +67,14 @@ public class XmlContextImpl extends ELContextImpl implements IXmlContext {
 	 */
 	public IDocument getDocument() {
 		return document;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.PageContext#getDocument()
+	 */
+	public void setDocument(IDocument document) {
+		this.document = document;
 	}
 
 	/* 

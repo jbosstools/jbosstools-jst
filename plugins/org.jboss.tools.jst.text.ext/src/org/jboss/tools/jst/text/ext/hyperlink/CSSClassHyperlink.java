@@ -60,7 +60,7 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 	@Override
 	protected void doHyperlink(IRegion region) {
 		ICSSContainerSupport cssContainerSupport = null;
-		ELContext context = PageContextFactory.createPageContext(getFile());
+		ELContext context = PageContextFactory.createPageContext(getDocument());
 		if (!(context instanceof ICSSContainerSupport)) {
 			openFileFailed();
 			return;

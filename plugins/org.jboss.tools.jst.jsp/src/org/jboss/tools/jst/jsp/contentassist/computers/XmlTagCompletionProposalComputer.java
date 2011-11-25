@@ -321,7 +321,6 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 
 		String mainPrefix = getTagPrefix();
 		String mainURI = getTagUri();
-		// TODO: Insert here: processing for the tag ending start region due to
 		// - calculate correct replacenemt begin position
 		// - calculate correct replacenment length
 		// - calculate correct match string
@@ -331,7 +330,6 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 		/*
 		 * Jeremy: Add attribute name proposals before  empty tag close
 		 */
-		// TODO: calculate those values hereafter
 		IStructuredDocumentRegion sdRegion = getStructuredDocumentRegion(getOffset());
 		ITextRegion completionRegion = getCompletionRegion(getOffset(), 
 				contentAssistRequest.getNode());
@@ -443,7 +441,7 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 	}
 
 	protected ELContext createContext() {
-		return PageContextFactory.createPageContext(getResource(), PageContextFactory.XML_PAGE_CONTEXT_TYPE);
+		return PageContextFactory.createPageContext(getDocument(), PageContextFactory.XML_PAGE_CONTEXT_TYPE);
 	}
 	
 	protected KbQuery createKbQuery(Type type, String query, String stringQuery) {

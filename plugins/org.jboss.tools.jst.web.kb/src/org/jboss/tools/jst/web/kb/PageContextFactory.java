@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.internal.resources.ICoreConstants;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -28,13 +29,16 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IStorage;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
+import org.eclipse.jdt.core.IJarEntryResource;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.internal.core.JarPackageFragmentRoot;
 import org.eclipse.jdt.internal.ui.text.FastJavaPartitionScanner;
 import org.eclipse.jdt.ui.text.IJavaPartitions;
 import org.eclipse.jface.text.BadLocationException;
@@ -47,7 +51,11 @@ import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jst.jsp.core.internal.contentmodel.TaglibController;
 import org.eclipse.jst.jsp.core.internal.contentmodel.tld.TLDCMDocumentManager;
 import org.eclipse.jst.jsp.core.internal.contentmodel.tld.TaglibTracker;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.wst.common.componentcore.internal.ComponentResource;
 import org.eclipse.wst.common.componentcore.internal.StructureEdit;
 import org.eclipse.wst.common.componentcore.internal.WorkbenchComponent;
@@ -158,6 +166,28 @@ public class PageContextFactory implements IResourceChangeListener {
 	}
 
 	/**
+	 * Creates a page context for the specified context document
+	 *
+	 * @param file
+	 * @param contentType
+	 * @return
+	 */
+	public static ELContext createPageContext(IDocument document) {
+		return createPageContext(document, null);
+	}
+
+	/**
+	 * Creates a page context for the specified context document
+	 *
+	 * @param file
+	 * @param contentType
+	 * @return
+	 */
+	public static ELContext createPageContext(IDocument document, String contextType) {
+		return createPageContext(document, null, contextType);
+	}
+
+	/**
 	 * Creates a page context for the specified context file
 	 *
 	 * @param file
@@ -169,14 +199,25 @@ public class PageContextFactory implements IResourceChangeListener {
 	}
 
 	/**
-	 * Creates a page context for the specified context type
+	 * Creates a page context for the specified context file
 	 *
 	 * @param file
 	 * @param contentType
 	 * @return
 	 */
 	public static ELContext createPageContext(IFile file, String contextType) {
-		return getInstance().createPageContext(file, new ArrayList<String>(), contextType);
+		return createPageContext(null, file, null);
+	}
+
+	/**
+	 * Creates a page context for the specified context type
+	 *
+	 * @param file
+	 * @param contentType
+	 * @return
+	 */
+	public static ELContext createPageContext(IDocument document, IFile file, String contextType) {
+		return getInstance().createPageContext(document, file, new ArrayList<String>(), contextType);
 	}
 
 	/**
@@ -323,12 +364,14 @@ public class PageContextFactory implements IResourceChangeListener {
 	 * @param parents List of parent contexts
 	 * @return
 	 */
-	private ELContext createPageContext(IFile file, List<String> parents, String defaultContextType) {
+	private ELContext createPageContext(IDocument document, IFile file, List<String> parents, String defaultContextType) {
+		if (file == null)
+			file = getResource(document);
+		
 		boolean isContextCachingAllowed = !EclipseUIUtil.isOpenInActiveEditor(file);
 		ELContext context = isContextCachingAllowed ? getSavedContext(file) : null;
-		if (context == null && file != null) {
-			IContentType type = IDE.getContentType(file);
-			String typeId = (type == null ? null : type.getId());
+		if (context == null) {
+			String typeId = getContentTypeIdentifier(file == null ? document : file);
 			
 			if(JavaCore.JAVA_SOURCE_CONTENT_TYPE.equalsIgnoreCase(typeId)) {
 				context = createJavaContext(file);
@@ -342,23 +385,32 @@ public class PageContextFactory implements IResourceChangeListener {
 				if(manager != null) {
 					IStructuredModel model = null;
 					try {
-						model = manager.getModelForRead(file);
+						model = file != null ? 
+								manager.getModelForRead(file) : 
+									manager.getExistingModelForRead(document);
 						if (model instanceof IDOMModel) {
 							IDOMModel domModel = (IDOMModel) model;
 							context = defaultContextType == null ? 
 									createPageContextInstance(domModel.getContentTypeIdentifier()) :
 												createContextInstanceOfType(defaultContextType);
 							if (context != null) {
-								IDOMDocument document = domModel.getDocument();
+								IDOMDocument domDocument = domModel.getDocument();
 								context.setResource(file);
-								context.setElResolvers(ELResolverFactoryManager.getInstance().getResolvers(file));
+								if (document != null && context instanceof XmlContextImpl) {
+									// Renew the document in context, since it might be cleared by context.setResource() call
+									((XmlContextImpl)context).setDocument(document);
+								}
+								
+								IProject project = file != null ? file.getProject() : getActiveProject();
+								
+								context.setElResolvers(ELResolverFactoryManager.getInstance().getResolvers(project));
 								if (context instanceof JspContextImpl && !(context instanceof FaceletPageContextImpl)) {
 									// Fill JSP namespaces defined in TLDCMDocumentManager 
 									fillJSPNameSpaces((JspContextImpl)context);
 								}
 								// The subsequently called functions may use the file and document
 								// already stored in context for their needs
-								fillContextForChildNodes(model.getStructuredDocument(), document, context, parents);
+								fillContextForChildNodes(model.getStructuredDocument(), domDocument, context, parents);
 							}
 						}
 					} catch (CoreException e) {
@@ -379,9 +431,86 @@ public class PageContextFactory implements IResourceChangeListener {
 		}
 		return context;
 	}
-
+	
+	private IProject getActiveProject() {
+		ITextEditor editor = EclipseUIUtil.getActiveEditor();
+		if (editor == null) return null;
+			
+		IEditorInput editorInput = editor.getEditorInput();
+		if (editorInput instanceof IFileEditorInput) {
+			IFile file = ((IFileEditorInput)editorInput).getFile();
+			return file == null ? null : file.getProject();
+		} else if (editorInput instanceof IStorageEditorInput) {
+			IStorage storage;
+			try {
+				storage = ((IStorageEditorInput)editorInput).getStorage();
+			} catch (CoreException e) {
+				return null;
+			}
+			if (storage instanceof IJarEntryResource) {
+				Object parent = ((IJarEntryResource)storage).getParent();
+				while (parent instanceof IJarEntryResource && !(parent instanceof IProject)) {
+					parent = ((IJarEntryResource)parent).getParent();
+				}
+				if (parent instanceof JarPackageFragmentRoot) {
+					return ((JarPackageFragmentRoot)parent).getJavaProject().getProject();
+				}
+				return null;
+			}
+		}
+		return null;
+	}
+	
+	protected String getContentTypeIdentifier(Object source) {
+		if (source instanceof IFile) {
+			IContentType type = IDE.getContentType((IFile)source);
+			if (type != null) return type.getId();
+		} else if (source instanceof IDocument) {
+			IStructuredModel sModel = StructuredModelManager.getModelManager().getExistingModelForRead((IDocument)source);
+			try {
+				if (sModel != null) return sModel.getContentTypeIdentifier();
+			} finally {
+				if (sModel != null) sModel.releaseFromRead();
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Returns IFile resource of the document
+	 * 
+	 * @return
+	 */
+	public static IFile getResource(IDocument document) {
+		if (document == null) return null;
+		IStructuredModel sModel = StructuredModelManager.getModelManager().getExistingModelForRead(document);
+		try {
+			if (sModel != null) {
+				String baseLocation = sModel.getBaseLocation();
+				IPath location = new Path(baseLocation).makeAbsolute();
+				return FileBuffers.getWorkspaceFileAtLocation(location);
+			}
+		}
+		finally {
+			if (sModel != null) {
+				sModel.releaseFromRead();
+			}
+		}
+		return null;
+	}
+	
 	private static ELContext createPageContextInstance(String contentType) {
 		String contextType = IncludeContextBuilder.getContextType(contentType);
+		if (contextType == null && contentType != null) {
+			IContentType baseContentType = Platform.getContentTypeManager().getContentType(contentType);
+			baseContentType = baseContentType == null ? null : baseContentType.getBaseType();
+			
+			while (contextType == null && baseContentType != null) {
+				contextType = IncludeContextBuilder.getContextType(baseContentType.getId());
+				baseContentType = baseContentType.getBaseType();
+			}
+		}
+
 		return createContextInstanceOfType(contextType);
 	}
 
@@ -556,7 +685,7 @@ public class PageContextFactory implements IResourceChangeListener {
 						if (fileName != null && !fileName.trim().isEmpty()) {
 							IFile file = getFileFromProject(fileName, context.getResource());
 							if (file != null && checkCycling(parents, file)) { // checkCycling is to fix for JBIDE-5083
-								ELContext includedContext = createPageContext(file, newParentList, null);
+								ELContext includedContext = createPageContext(null, file, newParentList, null);
 								if (includedContext != null)
 									((IIncludedContextSupport)context).addIncludedContext(includedContext);
 							}

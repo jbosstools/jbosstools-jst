@@ -18,8 +18,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Region;
-import org.eclipse.wst.sse.ui.contentassist.CompletionProposalInvocationContext;
-import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
 import org.jboss.tools.common.el.core.model.ELExpression;
 import org.jboss.tools.common.el.core.parser.ELParserFactory;
 import org.jboss.tools.common.el.core.parser.ELParserUtil;
@@ -42,7 +40,6 @@ import org.jboss.tools.jst.web.kb.taglib.INameSpace;
  * @author Jeremy
  *
  */
-@SuppressWarnings("restriction")
 public class JspELCompletionProposalComputer extends XmlELCompletionProposalComputer {
 
 	/*
@@ -51,7 +48,7 @@ public class JspELCompletionProposalComputer extends XmlELCompletionProposalComp
 	 */
 	@Override
 	protected ELContext createContext() {
-		return PageContextFactory.createPageContext(getResource(), PageContextFactory.JSP_PAGE_CONTEXT_TYPE);
+		return PageContextFactory.createPageContext(getDocument(), PageContextFactory.JSP_PAGE_CONTEXT_TYPE);
 	}
 
 	/*
