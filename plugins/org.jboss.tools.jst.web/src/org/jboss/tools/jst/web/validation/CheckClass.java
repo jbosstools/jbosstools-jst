@@ -162,7 +162,7 @@ public class CheckClass extends Check {
 		fireMessage(object, NLS.bind(WebXMLValidatorMessages.CLASS_NOT_EXISTS, attr, value));
 	}
 
-	public IType getValidType(String className, XModelObject o) {
+	public static IType getValidType(String className, XModelObject o) {
 		IProject project = EclipseResourceUtil.getProject(o);
 		if(project == null) return null;
 		IType type = EclipseResourceUtil.getValidType(project, className);
