@@ -140,7 +140,7 @@ public class AppRegisterWizard extends Wizard implements SpecialWizard {
 		WizardDialog dialog = new WizardDialog(shell, this);
 		dialog.create();
 		dialog.getShell().setText("" + p.getProperty("title")); //$NON-NLS-1$ //$NON-NLS-2$
-		dialog.setTitleImage(ModelUIImages.getImageDescriptor(ModelUIImages.WIZARD_DEFAULT).createImage(null));
+		dialog.setTitleImage(ModelUIImages.getImage(ModelUIImages.WIZARD_DEFAULT));
 		return dialog.open();		
 	}
 
