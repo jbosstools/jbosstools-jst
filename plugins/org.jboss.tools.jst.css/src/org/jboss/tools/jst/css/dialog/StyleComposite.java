@@ -13,8 +13,11 @@ package org.jboss.tools.jst.css.dialog;
 import java.util.Map;
 
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -22,6 +25,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
+import org.jboss.tools.jst.css.CSSPlugin;
+import org.jboss.tools.jst.css.dialog.common.CSSConstants;
 import org.jboss.tools.jst.css.dialog.common.StyleAttributes;
 import org.jboss.tools.jst.css.dialog.tabs.BaseTabControl;
 import org.jboss.tools.jst.css.dialog.tabs.ICSSTabControl;
@@ -145,6 +150,15 @@ public class StyleComposite extends Composite {
 		
 		tabFolder.setSelection(DEFAULT_START_TAB);
 
+		addDisposeListener(new DisposeListener() {			
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+		    	ImageRegistry registry = CSSPlugin.getDefault().getImageRegistry();
+				for (String color : CSSConstants.COLORS_BY_RGB.values()) {
+					registry.remove(color);
+				}
+			}
+		});
 	}
 
 	/**

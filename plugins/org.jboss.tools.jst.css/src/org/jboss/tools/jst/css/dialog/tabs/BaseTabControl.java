@@ -197,9 +197,13 @@ public abstract class BaseTabControl extends Composite implements
 		colorCombo.setLayoutData(new GridData(GridData.FILL, GridData.CENTER,
 				true, false));
 
-		for (Map.Entry<String, String> me : CSSConstants.COLORS.entrySet()) {
-			RGB rgb = Util.getColor(me.getKey());
-			colorCombo.add(me.getValue(), rgb);
+		for (Map.Entry<String, String> me : CSSConstants.COLORS_BY_NAME.entrySet()) {
+			RGB rgb = Util.getColor(me.getValue());
+			String name = CSSConstants.COLORS_BY_RGB.get(me.getValue());
+			if(name == null) {
+				name = me.getKey();
+			}
+			colorCombo.add(name, rgb);
 		}
 
 		Button button = createButton(wrapper,

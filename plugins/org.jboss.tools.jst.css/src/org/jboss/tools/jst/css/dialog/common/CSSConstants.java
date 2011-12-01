@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.TreeMap;
 
 import org.jboss.tools.jst.css.CSSPlugin;
 import org.jboss.tools.jst.css.dialog.parsers.BaseListener;
@@ -49,7 +50,8 @@ public class CSSConstants {
 
 	public static final Map<String, ArrayList<String>> CSS_STYLES_MAP = new HashMap<String, ArrayList<String>>();
 
-	public static Map<String, String> COLORS;
+	public static Map<String, String> COLORS_BY_RGB;
+	public static Map<String, String> COLORS_BY_NAME;
 
 	private static final String CSS_VALUES_FILE = "resources/cssdialog/cssElementsWithCombo.xml"; //$NON-NLS-1$
 	private static final String CSS_STYLES_FILE = "resources/cssdialog/cssElements.xml"; //$NON-NLS-1$
@@ -72,7 +74,13 @@ public class CSSConstants {
 			properties.loadFromXML(is);
 
 			is.close();
-			COLORS = (Map) properties;
+			COLORS_BY_RGB = (Map) properties;
+			COLORS_BY_NAME = new TreeMap<String, String>();
+			for (String rgb: COLORS_BY_RGB.keySet()) {
+				String name = COLORS_BY_RGB.get(rgb);
+				COLORS_BY_NAME.put(name.toLowerCase(), rgb);
+			}
+			
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

@@ -149,35 +149,11 @@ public class Util {
 			}
 			return convertColorHEX(color);
 		} else if (color.toLowerCase().indexOf(RGB) != Constants.DONT_CONTAIN) {
-
-			int start = color.indexOf(OPEN_BRACKET);
-			int end = color.indexOf(CLOSE_BRACKET);
-			String str = color.substring(start + 1, end);
-
-			StringTokenizer st = new StringTokenizer(str, Constants.COMMA);
-
-			int j = 0;
-			while (st.hasMoreTokens()) {
-				try {
-					int i = Integer.parseInt(st.nextToken().trim());
-					if (i < MIN_VALUE_RGB || i > MAX_VALUE_RGB) {
-						return null;
-					}
-				} catch (NumberFormatException e) {
-					return null;
-				}
-				j++;
-			}
-			if (j == COUNT_COLORS) {
-				return convertColorRGB(color);
-			}
+			return convertColorRGB(color);
 		} else {
-			Map<String, String> colorMap = CSSConstants.COLORS;
-
-			for (String key : colorMap.keySet()) {
-				if (colorMap.get(key).equalsIgnoreCase(color)) {
-					return convertColorHEX(key);
-				}
+			String rgb = CSSConstants.COLORS_BY_NAME.get(color.toLowerCase());
+			if(rgb != null) {
+				return convertColorHEX(rgb);
 			}
 		}
 
@@ -242,14 +218,33 @@ public class Util {
 
 		int rgb[] = new int[COUNT_COLORS];
 
-		int start = newStr.indexOf(OPEN_BRACKET);
-		int end = newStr.indexOf(CLOSE_BRACKET);
+		int start = -1;
+		int end = -1;
+		if((start = newStr.indexOf('(')) >= 0) {
+			end = newStr.indexOf(')');
+		} else if((start = newStr.indexOf('{')) >= 0) {
+			end = newStr.indexOf('}');
+		}
+		if(start < 0 || end < start) {
+			return null;
+		}
 		String str = newStr.substring(start + 1, end);
 
 		StringTokenizer st = new StringTokenizer(str, Constants.COMMA);
 		int i = 0;
 		while (st.hasMoreTokens()) {
-			rgb[i++] = Integer.parseInt(st.nextToken().trim());
+			if(i == 3) {
+				return null;
+			}
+			try {
+				rgb[i++] = Integer.parseInt(st.nextToken().trim());
+			} catch (NumberFormatException e) {
+				//It is user input error, should not be reported to log.
+				return null;
+			}
+		}
+		if(i != 3) {
+			return null;
 		}
 		return new RGB(rgb[0], rgb[1], rgb[2]);
 	}
@@ -294,8 +289,8 @@ public class Util {
 						: Constants.EMPTY)
 				+ Integer.toHexString(rgb.blue);
 		colorStr = colorStr.toUpperCase();
-		if (CSSConstants.COLORS.get(colorStr) != null) {
-			return CSSConstants.COLORS.get(colorStr);
+		if (CSSConstants.COLORS_BY_RGB.containsKey(colorStr)) {
+			return CSSConstants.COLORS_BY_RGB.get(colorStr);
 		}
 		return colorStr;
 	}

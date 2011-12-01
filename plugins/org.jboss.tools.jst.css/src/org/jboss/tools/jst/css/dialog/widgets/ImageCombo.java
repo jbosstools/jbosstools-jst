@@ -322,7 +322,6 @@ public final class ImageCombo extends Composite implements CSSWidget {
     }
 
     private Image newImageByColor(String string, RGB rgb) {
-    	System.out.println("-->" + string);
         Color white = new Color(getDisplay(), Constants.RGB_WHITE);
         Color black = new Color(getDisplay(), Constants.RGB_BLACK);
         Color color = new Color(getDisplay(), rgb);
