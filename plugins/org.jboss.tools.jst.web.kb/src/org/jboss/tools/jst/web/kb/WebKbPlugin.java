@@ -12,6 +12,9 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.swt.graphics.Image;
 import org.jboss.tools.common.EclipseUtil;
 import org.jboss.tools.common.log.BaseUIPlugin;
 import org.jboss.tools.jst.web.WebModelPlugin;
@@ -153,6 +156,18 @@ public class WebKbPlugin extends BaseUIPlugin {
 		} catch (CoreException e) {
 			getDefault().logError(e);
 		}
+	}
+
+	public static Image getImage(Class<?> baseClass, String imageName) {
+		ImageRegistry registry = getDefault().getImageRegistry();
+		Image result = registry.get(imageName);
+		if(result == null || result.isDisposed()) {
+			result = ImageDescriptor.createFromFile(baseClass, imageName).createImage();
+			if(result != null) {
+				registry.put(imageName, result);
+			}
+		}
+		return result;
 	}
 
 }

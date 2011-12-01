@@ -29,7 +29,6 @@ import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
 public class ResourceBundleNameProposalType extends ModelProposalType {
 
 	private static final String IMAGE_NAME = "MessageBundleProposal.gif"; //$NON-NLS-1$
-	private static Image ICON;
 
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.internal.taglib.CustomProposalType#getProposals(org.jboss.tools.jst.web.kb.KbQuery)
@@ -53,10 +52,7 @@ public class ResourceBundleNameProposalType extends ModelProposalType {
 					proposal.setLabel(text);
 					proposal.setReplacementString(text);
 					proposal.setPosition(text.length());
-					if(ICON==null) {
-						ICON = ImageDescriptor.createFromFile(WebKbPlugin.class, IMAGE_NAME).createImage();
-					}
-					proposal.setImage(ICON);
+					proposal.setImage(WebKbPlugin.getImage(WebKbPlugin.class, IMAGE_NAME));
 					proposals.add(proposal);
 				}
 			}

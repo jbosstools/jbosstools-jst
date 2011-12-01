@@ -38,7 +38,6 @@ import org.jboss.tools.jst.web.kb.WebKbPlugin;
 public class ResourcePathProposalType extends ModelProposalType {
 
 	private static final String IMAGE_NAME = "ResourcePathProposal.gif"; //$NON-NLS-1$
-	private static Image ICON;
 	private static Set<String> GRAPHIC_FILE_EXTENSIONS = new HashSet<String>();
 	private static Set<String> PAGE_FILE_EXTENSIONS = new HashSet<String>();
 	private static Set<String> CSS_FILE_EXTENSIONS = new HashSet<String>();
@@ -127,10 +126,7 @@ public class ResourcePathProposalType extends ModelProposalType {
 			}
 			proposal.setReplacementString(replacementString);
 			proposal.setPosition(replacementString.length());
-			if(ICON==null) {
-				ICON = ImageDescriptor.createFromFile(WebKbPlugin.class, IMAGE_NAME).createImage();
-			}
-			proposal.setImage(ICON);
+			proposal.setImage(WebKbPlugin.getImage(WebKbPlugin.class, IMAGE_NAME));
 			if(newValue == value) {
 				proposals.add(proposal);
 			}
@@ -153,10 +149,7 @@ public class ResourcePathProposalType extends ModelProposalType {
 			proposal.setAutoActivationContentAssistantAfterApplication(false);
 			proposal.setReplacementString(replacementString);
 			proposal.setPosition(replacementString.length());
-			if(ICON==null) {
-				ICON = ImageDescriptor.createFromFile(WebKbPlugin.class, IMAGE_NAME).createImage();
-			}
-			proposal.setImage(ICON);
+			proposal.setImage(WebKbPlugin.getImage(WebKbPlugin.class, IMAGE_NAME));
 			proposals.add(proposal);
 		}
 		return proposals.toArray(new TextProposal[0]);

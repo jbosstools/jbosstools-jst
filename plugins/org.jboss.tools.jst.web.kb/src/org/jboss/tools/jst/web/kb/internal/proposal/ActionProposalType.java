@@ -34,7 +34,6 @@ import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
 public class ActionProposalType extends ModelProposalType {
 
 	private static final String IMAGE_NAME = "JSFActionProposal.gif"; //$NON-NLS-1$
-	private static Image ICON;
 
 	/*
 	 * (non-Javadoc)
@@ -69,10 +68,7 @@ public class ActionProposalType extends ModelProposalType {
 					proposal.setLabel(text);
 					proposal.setReplacementString(text);
 					proposal.setPosition(text.length());
-					if(ICON==null) {
-						ICON = ImageDescriptor.createFromFile(WebKbPlugin.class, IMAGE_NAME).createImage();
-					}
-					proposal.setImage(ICON);
+					proposal.setImage(WebKbPlugin.getImage(WebKbPlugin.class, IMAGE_NAME));
 					proposals.add(proposal);
 				}
 			}

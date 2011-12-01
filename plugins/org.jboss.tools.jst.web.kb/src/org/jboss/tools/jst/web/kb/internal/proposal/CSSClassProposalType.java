@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.Image;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.ICSSContainerSupport;
 import org.jboss.tools.jst.web.kb.IPageContext;
@@ -37,7 +35,6 @@ import org.w3c.dom.css.CSSStyleRule;
  */
 public class CSSClassProposalType extends CustomProposalType {
 	private static final String IMAGE_NAME = "EnumerationProposal.gif"; //$NON-NLS-1$
-	private static Image ICON;
 
 	static String ID = "cssclass"; //$NON-NLS-1$
 	static String QUOTE_1 = "'"; //$NON-NLS-1$
@@ -149,10 +146,7 @@ public class CSSClassProposalType extends CustomProposalType {
 				proposal.setPosition(b + text.length() - predicateLength);
 				proposal.setStart(b - predicateLength);
 				proposal.setEnd(e - predicateLength);
-				if(ICON==null) {
-					ICON = ImageDescriptor.createFromFile(WebKbPlugin.class, IMAGE_NAME).createImage();
-				}
-				proposal.setImage(ICON);
+				proposal.setImage(WebKbPlugin.getImage(WebKbPlugin.class, IMAGE_NAME));
 				
 				proposals.add(proposal);
 			}

@@ -31,7 +31,6 @@ import org.jboss.tools.jst.web.project.list.IWebPromptingProvider;
 public class ConverterIDProposalType extends ModelProposalType {
 
 	private static final String IMAGE_NAME = "EnumerationProposal.gif"; //$NON-NLS-1$
-	private static Image ICON;
 
 	public ConverterIDProposalType() {}
 
@@ -52,10 +51,7 @@ public class ConverterIDProposalType extends ModelProposalType {
 				proposal.setLabel(text);
 				proposal.setReplacementString(text);
 				proposal.setPosition(text.length());
-				if(ICON==null) {
-					ICON = ImageDescriptor.createFromFile(WebKbPlugin.class, IMAGE_NAME).createImage();
-				}
-				proposal.setImage(ICON);
+				proposal.setImage(WebKbPlugin.getImage(WebKbPlugin.class, IMAGE_NAME));
 
 				proposals.add(proposal);
 			}

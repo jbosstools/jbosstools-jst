@@ -13,8 +13,6 @@ package org.jboss.tools.jst.web.kb.internal.proposal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.Image;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
@@ -26,7 +24,6 @@ import org.jboss.tools.jst.web.kb.WebKbPlugin;
 public class EnumerationProposalType extends CustomProposalType {
 
 	private static final String IMAGE_NAME = "EnumerationProposal.gif"; //$NON-NLS-1$
-	private static Image ICON;
 
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.internal.taglib.CustomProposalType#getProposals(org.jboss.tools.jst.web.kb.KbQuery)
@@ -44,10 +41,7 @@ public class EnumerationProposalType extends CustomProposalType {
 				proposal.setLabel(text);
 				proposal.setReplacementString(text);
 				proposal.setPosition(text.length());
-				if(ICON==null) {
-					ICON = ImageDescriptor.createFromFile(WebKbPlugin.class, IMAGE_NAME).createImage();
-				}
-				proposal.setImage(ICON);
+				proposal.setImage(WebKbPlugin.getImage(WebKbPlugin.class, IMAGE_NAME));
 				proposals.add(proposal);
 			}
 		}

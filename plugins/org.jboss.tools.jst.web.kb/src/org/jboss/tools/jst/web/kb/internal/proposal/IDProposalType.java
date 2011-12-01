@@ -33,7 +33,6 @@ import org.w3c.dom.NodeList;
 @SuppressWarnings("restriction")
 public class IDProposalType extends CustomProposalType {
 	private static final String IMAGE_NAME = "EnumerationProposal.gif"; //$NON-NLS-1$
-	private static Image ICON;
 
 	static String ID = "id"; //$NON-NLS-1$
 	static String QUOTE_1 = "'"; //$NON-NLS-1$
@@ -93,10 +92,7 @@ public class IDProposalType extends CustomProposalType {
 				proposal.setPosition(b + text.length());
 				proposal.setStart(b);
 				proposal.setEnd(e);
-				if(ICON==null) {
-					ICON = ImageDescriptor.createFromFile(WebKbPlugin.class, IMAGE_NAME).createImage();
-				}
-				proposal.setImage(ICON);
+				proposal.setImage(WebKbPlugin.getImage(WebKbPlugin.class, IMAGE_NAME));
 				
 				proposals.add(proposal);
 			}
