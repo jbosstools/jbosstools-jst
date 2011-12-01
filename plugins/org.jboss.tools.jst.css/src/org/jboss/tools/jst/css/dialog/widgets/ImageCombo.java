@@ -12,10 +12,9 @@ package org.jboss.tools.jst.css.dialog.widgets;
 
 import java.util.Arrays;
 
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -39,6 +38,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.TypedListener;
 import org.eclipse.swt.widgets.Widget;
+import org.jboss.tools.jst.css.CSSPlugin;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.util.Constants;
 
@@ -232,17 +232,10 @@ public final class ImageCombo extends Composite implements CSSWidget {
 
         TableItem newItem = new TableItem(this.table, SWT.NONE);
         newItem.setText(string);
-
-        if (image != null) {
-            newItem.setImage(image);
+        
+        if(image != null) {
+        	newItem.setImage(image);
         }
-
-        newItem.addDisposeListener(new DisposeListener() {
-                public void widgetDisposed(DisposeEvent e) {
-                    TableItem item = (TableItem) e.getSource();
-                    item.getImage().dispose();
-                }
-            });
     }
 
     /**
@@ -289,12 +282,6 @@ public final class ImageCombo extends Composite implements CSSWidget {
 
         if (image != null) {
             newItem.setImage(image);
-            newItem.addDisposeListener(new DisposeListener() {
-                    public void widgetDisposed(DisposeEvent e) {
-                        TableItem item = (TableItem) e.getSource();
-                        item.getImage().dispose();
-                    }
-                });
         }
     }
 
@@ -321,6 +308,21 @@ public final class ImageCombo extends Composite implements CSSWidget {
      * @see #add(String,int)
      */
     public void add(String string, RGB rgb) {
+        add(string, getImageByColor(string, rgb));
+    }
+
+    Image getImageByColor(String string, RGB rgb) {
+    	ImageRegistry registry = CSSPlugin.getDefault().getImageRegistry();
+    	Image result = registry.get(string);
+    	if(result == null) {
+    		result = newImageByColor(string, rgb);
+    		registry.put(string, result);
+    	}
+    	return result;
+    }
+
+    private Image newImageByColor(String string, RGB rgb) {
+    	System.out.println("-->" + string);
         Color white = new Color(getDisplay(), Constants.RGB_WHITE);
         Color black = new Color(getDisplay(), Constants.RGB_BLACK);
         Color color = new Color(getDisplay(), rgb);
@@ -353,7 +355,7 @@ public final class ImageCombo extends Composite implements CSSWidget {
         color.dispose();
         black.dispose();
         white.dispose();
-        add(string, icon);
+        return icon;
     }
 
     /**

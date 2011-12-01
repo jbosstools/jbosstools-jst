@@ -83,8 +83,7 @@ public abstract class AbstractCSSDialog extends TitleAreaDialog {
 		/*
 		 * Set the dialog image
 		 */
-		setTitleImage(ModelUIImages.getImageDescriptor(
-				ModelUIImages.WIZARD_DEFAULT).createImage());
+		setTitleImage(ModelUIImages.getImage(ModelUIImages.WIZARD_DEFAULT));
 
 		Composite parentComposite = (Composite) super.createDialogArea(parent);
 		GridData gridData = (GridData) parentComposite.getLayoutData();
