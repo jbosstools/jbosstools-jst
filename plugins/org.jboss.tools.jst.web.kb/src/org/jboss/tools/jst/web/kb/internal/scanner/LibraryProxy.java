@@ -46,12 +46,16 @@ public class LibraryProxy extends KbObject {
 
 	public void loadXML(Element element, Properties context) {
 		super.loadXML(element, context);
-		XModelObject o = (XModelObject)getId();
-		LoadedDeclarations ds = new XMLScanner().parse(o, getSourcePath(), library.getKbProject());
-		if(ds != null && !ds.getLibraries().isEmpty()) {
-			library = (AbstractTagLib)ds.getLibraries().get(0);
+		if(getId() instanceof XModelObject) {
+			XModelObject o = (XModelObject)getId();
+			LoadedDeclarations ds = new XMLScanner().parse(o, getSourcePath(), library.getKbProject());
+			if(ds != null && !ds.getLibraries().isEmpty()) {
+				library = (AbstractTagLib)ds.getLibraries().get(0);
+			} else {
+				library = null;
+			}
 		} else {
-			library = null;
+			library.loadXML(element, context);
 		}
 	}
 }

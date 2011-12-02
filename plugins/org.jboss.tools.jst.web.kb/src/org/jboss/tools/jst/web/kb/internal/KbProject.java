@@ -563,7 +563,7 @@ public class KbProject extends KbObject implements IKbProject {
 					} else {
 						//consider other cases;
 					}
-					if(tagLib != null && !(tagLib instanceof ICompositeTagLibrary)) {
+					if(tagLib != null && !(tagLib instanceof ICompositeTagLibrary) && !(tagLib instanceof MyFacesTagLibrary)) {
 						LibraryProxy proxy = new LibraryProxy(tagLib);
 						proxy.loadXML(library, context);
 						tagLib = proxy.getLibrary();
@@ -611,7 +611,7 @@ public class KbProject extends KbObject implements IKbProject {
 				for (ITagLibrary d: fs) {
 					if(d instanceof ICustomTagLibrary) continue;
 					AbstractTagLib t = (AbstractTagLib)d;
-					if(!(t instanceof ICompositeTagLibrary)) {
+					if(!(t instanceof ICompositeTagLibrary) && !(t instanceof MyFacesTagLibrary)) {
 						LibraryProxy proxy = new LibraryProxy(t);
 						proxy.toXML(cse, context);
 					} else {

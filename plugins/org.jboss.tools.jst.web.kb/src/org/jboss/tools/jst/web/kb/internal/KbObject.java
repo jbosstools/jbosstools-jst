@@ -208,7 +208,7 @@ public class KbObject implements Cloneable {
 		if(e_id != null) {
 			String cls = e_id.getAttribute(XMLStoreConstants.ATTR_CLASS);
 			if(XMLStoreConstants.CLS_STRING.equals(cls)) {
-				id = e_id.getAttribute("string"); //$NON-NLS-1$
+				id = e_id.getAttribute(XMLStoreConstants.ATTR_VALUE);
 			} else if(XMLStoreConstants.CLS_MODEL_OBJECT.equals(cls)) {
 				id = XMLStoreHelper.loadModelObject(e_id, context);
 			} else {
