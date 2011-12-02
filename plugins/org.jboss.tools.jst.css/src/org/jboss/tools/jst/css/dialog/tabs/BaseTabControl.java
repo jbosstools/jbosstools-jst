@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.jboss.tools.jst.css.dialog.tabs;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +18,7 @@ import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.observable.Observables;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
@@ -43,11 +43,11 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swt.widgets.Widget;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
+import org.jboss.tools.common.web.WebUtils;
 import org.jboss.tools.jst.css.CSSPlugin;
 import org.jboss.tools.jst.css.dialog.FontFamilyDialog;
 import org.jboss.tools.jst.css.dialog.ImageSelectionDialog;
@@ -262,15 +262,51 @@ public abstract class BaseTabControl extends Composite implements
 				dialog.setAllowMultiple(false);
 				dialog.setInput(project);
 
+				IFile pageFile = getPageFile();
+				String text = combo.getText();
+				if(pageFile != null && text != null && text.length() > 0) {
+					if(text.startsWith("url(") && text.endsWith(")")) {
+						text = text.substring(4, text.length() - 1);
+					}
+					text = text.replace('\\', '/');
+					IPath path = pageFile.getFullPath().removeLastSegments(1);
+					IFile selectedFile = null;
+					if(text.startsWith("/")) {
+						IPath[] paths = WebUtils.getWebContentPaths(pageFile.getProject());
+						for (IPath p: paths) {
+							selectedFile = ResourcesPlugin.getWorkspace().getRoot().getFile(p.append(text.substring(1)));
+							if(!selectedFile.exists()) {
+								selectedFile = null;
+							} else {
+								break;
+							}
+						}
+					}
+					if(selectedFile == null) {
+						while(true) {
+							if(path.segmentCount() < 2) break;
+							if(text.startsWith("/")) {
+								text = text.substring(1);
+							} else if(text.startsWith("./")) {
+								text = text.substring(2);
+							} else if(text.startsWith("../")) {
+								text = text.substring(3);
+								path = path.removeLastSegments(1);
+							} else {
+								break;
+							}
+						}
+						path = path.append(text);
+						selectedFile = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
+					}
+					if(selectedFile.exists()) {
+						dialog.setInitialSelection(selectedFile);
+					}					
+				}				
+
 				if (dialog.open() == ImageSelectionDialog.OK) {
-					IFile imageFile = (IFile) dialog.getFirstResult();
-					IWorkbenchPage page = CSSPlugin.getDefault().getWorkbench()
-							.getActiveWorkbenchWindow().getActivePage();
-					if (page != null
-							&& page.getActiveEditor() != null
-							&& page.getActiveEditor().getEditorInput() instanceof IFileEditorInput ) {
-						IEditorInput input = page.getActiveEditor().getEditorInput();
-						IFile pageFile = ((IFileEditorInput) input).getFile();		
+					if(pageFile != null) {
+						IFile imageFile = (IFile) dialog.getFirstResult();
 						String relativePath = BaseTabControl.computeRelativePath(pageFile, imageFile);
 						combo.add(relativePath);
 						combo.setText(relativePath);
@@ -296,6 +332,17 @@ public abstract class BaseTabControl extends Composite implements
 		}, null);
 
 		return wrapper;
+	}
+
+	private IFile getPageFile() {
+		IWorkbenchPage page = CSSPlugin.getDefault().getWorkbench()
+				.getActiveWorkbenchWindow().getActivePage();
+		if (page != null
+				&& page.getActiveEditor() != null
+				&& page.getActiveEditor().getEditorInput() instanceof IFileEditorInput ) {
+			return ((IFileEditorInput) page.getActiveEditor().getEditorInput()).getFile();		
+		}
+		return null;
 	}
 
 	/**

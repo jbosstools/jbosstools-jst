@@ -596,83 +596,84 @@ public class ImageSelectionDialog extends SelectionStatusDialog {
         resolution.setVisible(false);
 
         emptyColor = canvas.getForeground();
-
+        List<?> list = getInitialElementSelections();
+        if(!list.isEmpty()) {
+        	Object o = list.iterator().next();
+        	if(o instanceof IFile) {
+        		file = (IFile)o;
+        	}
+        }
         canvas.addPaintListener(new PaintListener() {
                 public void paintControl(PaintEvent e) {
                     GC gc = new GC(canvas);
-                    gc.setForeground(emptyColor);
-                    gc.fillRectangle(1, 1, canvas.getSize().x - 2, canvas.getSize().y - 2);
-                    // resolution.setText("");
-                    resolution.setVisible(false);
+                    try {
+                    	gc.setForeground(emptyColor);
+                    	gc.fillRectangle(1, 1, canvas.getSize().x - 2, canvas.getSize().y - 2);
+                    	//resolution.setText("");
+                    	resolution.setVisible(false);
 
-                    if (file != null) {
-                        Cursor parentCursor = getShell().getCursor();
-                        final Cursor waitCursor = new Cursor(getShell().getDisplay(), SWT.CURSOR_WAIT);
-                        Point previewPoint = new Point(0, 0);
-                        Point labelPoint = canvas.getSize();
-                        InputStream stream = null;
+                    	if (file != null) {
+                    		Cursor parentCursor = getShell().getCursor();
+                    		final Cursor waitCursor = new Cursor(getShell().getDisplay(), SWT.CURSOR_WAIT);
+                    		Point previewPoint = new Point(0, 0);
+                    		Point labelPoint = canvas.getSize();
+                    		InputStream stream = null;
 
-                        try {
-                            getShell().setCursor(waitCursor);
-                            stream = new FileInputStream(file.getLocation().toOSString());
+                    		try {
+                    			getShell().setCursor(waitCursor);
+                    			stream = new FileInputStream(file.getLocation().toOSString());
 
-                            ImageData imageData = new ImageData(stream);
-                            stream.close();
+                    			ImageData imageData = new ImageData(stream);
+                    			stream.close();
 
-                            if (imageData != null) {
-                                Image image = new Image(getShell().getDisplay(), imageData);
+                    			if (imageData != null) {
+                    				Image image = new Image(getShell().getDisplay(), imageData);
 
-                                // set image in center
-                                Point imagePoint = new Point(image.getBounds().width,
+                    				// set image in center
+                    				Point imagePoint = new Point(image.getBounds().width,
                                         image.getBounds().height);
 
-                                String imageInfo = imagePoint.x + " x " + imagePoint.y + " px"; //$NON-NLS-1$ //$NON-NLS-2$
+                    				String imageInfo = imagePoint.x + " x " + imagePoint.y + " px"; //$NON-NLS-1$ //$NON-NLS-2$
 
-                                // change resolution if image anymore image label
-                                if ((imagePoint.x > labelPoint.x) || (imagePoint.y > labelPoint.y)) {
-                                    float ratioImage = (float) imagePoint.x / (float) imagePoint.y;
+                    				// change resolution if image anymore image label
+                    				if ((imagePoint.x > labelPoint.x) || (imagePoint.y > labelPoint.y)) {
+                    					float ratioImage = (float) imagePoint.x / (float) imagePoint.y;
 
-                                    if (((imagePoint.y > labelPoint.y) &&
+                    					if (((imagePoint.y > labelPoint.y) &&
                                             ((labelPoint.y * ratioImage) > labelPoint.x)) ||
                                             ((imagePoint.x > labelPoint.x) &&
                                             ((labelPoint.x / ratioImage) < labelPoint.y))) {
-                                        imageData = imageData.scaledTo(labelPoint.x - 10,
+                    						imageData = imageData.scaledTo(labelPoint.x - 10,
                                                 (int) (labelPoint.x / ratioImage));
-                                    } else {
-                                        imageData = imageData.scaledTo((int) (labelPoint.y * ratioImage) -
+                    					} else {
+                    						imageData = imageData.scaledTo((int) (labelPoint.y * ratioImage) -
                                                 10, labelPoint.y);
-                                    }
+                    					}
 
-                                    image.dispose();
-                                    image = new Image(getShell().getDisplay(), imageData);
-                                    imagePoint.x = image.getBounds().width;
-                                    imagePoint.y = image.getBounds().height;
-                                }
+                    					image.dispose();
+                    					image = new Image(getShell().getDisplay(), imageData);
+                    					imagePoint.x = image.getBounds().width;
+                    					imagePoint.y = image.getBounds().height;
+                    				}
 
-                                previewPoint.x = (labelPoint.x / 2) - (imagePoint.x / 2);
-                                previewPoint.y = (labelPoint.y / 2) - (imagePoint.y / 2);
-                                gc.drawImage(image, previewPoint.x, previewPoint.y);
-                                resolution.setVisible(true);
-                                resolution.setText(imageInfo);
-                                image.dispose();
-                                gc.dispose();
-                            }
-                        } catch (IOException ev) {
-                            //ignore
-                        } catch (SWTException ex) {
-                            //ignore (if select not image file) 
-                        } finally {
-                            getShell().setCursor(parentCursor);
-
-                            if (stream != null) {
-                                try {
-                                    stream.close();
-                                } catch (IOException e1) {
-                                    // ignore
-                                }
-                            }
-                        }
-                    }
+                    				previewPoint.x = (labelPoint.x / 2) - (imagePoint.x / 2);
+                    				previewPoint.y = (labelPoint.y / 2) - (imagePoint.y / 2);
+                    				gc.drawImage(image, previewPoint.x, previewPoint.y);
+                    				resolution.setVisible(true);
+                    				resolution.setText(imageInfo);
+                    				image.dispose();
+                    			}
+                    		} catch (IOException ev) {
+                    			//ignore
+                    		} catch (SWTException ex) {
+                    			//ignore (if select not image file) 
+                    		} finally {
+                    			getShell().setCursor(parentCursor);
+                    		}
+                    	}
+                	} finally {
+                        gc.dispose();
+                	}
                 }
             });
 
