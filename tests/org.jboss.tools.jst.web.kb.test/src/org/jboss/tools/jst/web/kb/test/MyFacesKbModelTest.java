@@ -15,6 +15,7 @@ import junit.framework.TestCase;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.jboss.tools.jst.web.kb.IKbProject;
+import org.jboss.tools.jst.web.kb.internal.KbProject;
 import org.jboss.tools.jst.web.kb.internal.taglib.myfaces.MyFacesTagLibrary;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
@@ -79,6 +80,12 @@ public class MyFacesKbModelTest extends TestCase {
 		}
 		assertEquals(2, coreTagLib.getComponent("event").getAttributes().length);
 		
+	}
+
+	public void testReload() {
+		IKbProject kbProject = getKbProject();
+		((KbProject)kbProject).reload();
+		testKbProjectObjects();
 	}
 
 }
