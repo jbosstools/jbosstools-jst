@@ -16,19 +16,17 @@ import junit.framework.TestSuite;
 import org.jboss.tools.test.util.ProjectImportTestSetup;
 
 public class JstWebAllTests {
-
+	public static final String PLUGIN_ID = "org.jboss.tools.jst.web.test";
 	public static final String PROJECT_NAME = "testWebProject";
-	private static final String PROJECT_PATH = "/projects/" + PROJECT_NAME;
+	public static final String PROJECT_PATH = "/projects/" + PROJECT_NAME;
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite(JstWebAllTests.class.getName());
 		suite.addTestSuite(WebContentAssistProviderTest.class);
-		suite.addTestSuite(BuilderTest.class);
-		suite.addTest(new ProjectImportTestSetup(new TestSuite(
-				WebUtilTest.class),
-				"org.jboss.tools.jst.web.test", //$NON-NLS-1$
-				PROJECT_PATH, //$NON-NLS-1$
-				PROJECT_NAME));
+//		suite.addTestSuite(BuilderTest.class);
+		suite.addTest(new WebValidationTestSetup(new TestSuite(
+				WebUtilTest.class, 
+				WebXMLValidationTest.class)));
 		return suite;
 	}
 }
