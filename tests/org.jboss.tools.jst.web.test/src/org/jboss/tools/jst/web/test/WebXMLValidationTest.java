@@ -46,6 +46,10 @@ public class WebXMLValidationTest extends TestCase {
 		target.setDerived(true, null);
 	}
 
+	/**
+	 * See JBIDE-10161
+	 * @throws Exception
+	 */
 	public void testValidationInDerived() throws Exception {
 		//Check first that original web.xml contains errors. 
 		String path0 = "WebContent/WEB-INF/web.xml";
