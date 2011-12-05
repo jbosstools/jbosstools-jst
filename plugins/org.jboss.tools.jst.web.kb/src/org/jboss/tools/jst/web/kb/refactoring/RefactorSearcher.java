@@ -79,6 +79,52 @@ public abstract class RefactorSearcher {
 	public void setSearchScope(IJavaSearchScope searchScope){
 		this.searchScope = searchScope;
 	}
+	
+	private void scanProject(IProject project){
+		if(project == null || !project.exists()) return;
+		
+		IProject[] referencingProject = project.getReferencingProjects();
+		for(IProject rProject: referencingProject){
+			scanProject(rProject);
+		}
+		
+		if(!containsInSearchScope(project))
+			return;
+		
+		updateEnvironment(project);
+		
+		IJavaProject javaProject = EclipseResourceUtil.getJavaProject(project);
+		
+		// searching java, xml and property files in source folders
+		if(javaProject != null){
+			for(IResource resource : EclipseResourceUtil.getJavaSourceRoots(project)){
+				if(resource instanceof IFolder)
+					if(!scanForJava((IFolder) resource)){
+						outOfSynch(((IFolder) resource).getProject());
+						return;
+					}
+				else if(resource instanceof IFile)
+					if(!scanForJava((IFile) resource)){
+						outOfSynch(((IFile) resource).getProject());
+						return;
+					}
+			}
+		}
+		
+		// searching jsp, xhtml and xml files in WebContent folders
+		
+		if(getViewFolder(project) != null){
+			if(!scan(getViewFolder(project))){
+				outOfSynch(project);
+				return;
+			}
+		}else{
+			if(!scan(project)){
+				outOfSynch(project);
+				return;
+			}
+		}
+	}
 
 	public void findELReferences(){
 		if(baseFile == null)
@@ -88,44 +134,7 @@ public abstract class RefactorSearcher {
 		
 		IProject[] projects = getProjects();
 		for (IProject project : projects) {
-			if(project == null) continue;
-			
-			if(!containsInSearchScope(project))
-				continue;
-			
-			updateEnvironment(project);
-			
-			IJavaProject javaProject = EclipseResourceUtil.getJavaProject(project);
-			
-			// searching java, xml and property files in source folders
-			if(javaProject != null){
-				for(IResource resource : EclipseResourceUtil.getJavaSourceRoots(project)){
-					if(resource instanceof IFolder)
-						if(!scanForJava((IFolder) resource)){
-							outOfSynch(((IFolder) resource).getProject());
-							return;
-						}
-					else if(resource instanceof IFile)
-						if(!scanForJava((IFile) resource)){
-							outOfSynch(((IFile) resource).getProject());
-							return;
-						}
-				}
-			}
-			
-			// searching jsp, xhtml and xml files in WebContent folders
-			
-			if(getViewFolder(project) != null){
-				if(!scan(getViewFolder(project))){
-					outOfSynch(project);
-					return;
-				}
-			}else{
-				if(!scan(project)){
-					outOfSynch(project);
-					return;
-				}
-			}
+			scanProject(project);
 		}
 		//stopStatistic();
 	}
