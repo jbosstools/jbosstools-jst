@@ -113,11 +113,11 @@ public class WebXMLCoreValidator extends ValidationErrorManager implements IVali
 				WebAppHelper.TAGLIB_ENTITY);
 		addCheck(new CheckResource(this, WebXMLPreferences.INVALID_WELCOME_FILE_REF, "file name", false, ".jsp .html .htm .jspx", WebXMLValidatorMessages.PATH_NOT_PAGE), 
 				"WebAppWelcomFile");
-		addCheck(new CheckResource(this, WebXMLPreferences.INVALID_ERROR_PAGE_REF, "location", false, null, null), 
+		addCheck(new CheckResource(this, WebXMLPreferences.INVALID_ERROR_PAGE_REF, "location", false, null, null).acceptServlet(), 
 				"WebAppErrorPage");
-		addCheck(new CheckResource(this, WebXMLPreferences.INVALID_FORM_ERROR_PAGE_REF, "form-error-page"), 
+		addCheck(new CheckResource(this, WebXMLPreferences.INVALID_FORM_ERROR_PAGE_REF, "form-error-page").acceptServlet(), 
 				"WebAppLoginConfig");
-		addCheck(new CheckResource(this, WebXMLPreferences.INVALID_FORM_LOGIN_PAGE_REF, "form-login-page"), 
+		addCheck(new CheckResource(this, WebXMLPreferences.INVALID_FORM_LOGIN_PAGE_REF, "form-login-page").acceptServlet(), 
 				"WebAppLoginConfig");
 		addCheck(new CheckResource(this, WebXMLPreferences.INVALID_JSP_FILE_REF, "jsp-file"), 
 				WebAppHelper.SERVLET_ENTITY, WebAppHelper.SERVLET_30_ENTITY);

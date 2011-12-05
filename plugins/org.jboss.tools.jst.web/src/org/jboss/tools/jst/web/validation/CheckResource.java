@@ -30,6 +30,8 @@ public class CheckResource extends Check {
 	String extensions = null;
 	String extensionMessage = null;
 
+	boolean canBeServlet = false;
+
 	public CheckResource(ValidationErrorManager manager, String preference, String attr) {
 		super(manager, preference, attr);
 	}
@@ -41,13 +43,18 @@ public class CheckResource extends Check {
 		this.extensionMessage = extensionMessage;
 	}		
 
+	public CheckResource acceptServlet() {
+		canBeServlet = true;
+		return this;
+	}
+
 	public void check(XModelObject object) {
 		String value = object.getAttributeValue(attr);
 		XModel model = object.getModel();
-		XModelObject webRoot = model == null ? null : model.getByPath("FileSystems/WEB-ROOT"); //$NON-NLS-1$
+		XModelObject webRoot = model == null ? null : FileSystemsHelper.getWebRoot(model);
 		if(webRoot == null) return;
 
-		if(object.getModelEntity().getName().startsWith("WebAppErrorPage")) { //$NON-NLS-1$
+		if(canBeServlet) {
 			if(value != null && value.indexOf("?") > 0) { //$NON-NLS-1$
 				value = value.substring(0, value.indexOf("?")); //$NON-NLS-1$
 			}
