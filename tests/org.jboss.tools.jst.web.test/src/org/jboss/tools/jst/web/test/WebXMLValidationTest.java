@@ -78,6 +78,36 @@ public class WebXMLValidationTest extends TestCase {
 		assertTrue(markers.length == 0);
 	}
 
+	public void testPathsInLoginConfig() throws Exception {
+		String path0 = "WebContent/WEB-INF/web.xml";
+		IFile webxml = project.getFile(path0);
+		assertTrue(webxml.exists());
+		
+		String path1 = "WebContent/WEB-INF/web.xml.loginconfigtest1";
+		replaceFile(project, path1, path0);
+		IMarker[] markers = webxml.findMarkers(WebXMLCoreValidator.PROBLEM_TYPE, false, IResource.DEPTH_ZERO);
+		assertFalse(hasMarkerOnLine(markers, 18));
+		assertTrue(hasMarkerOnLine(markers, 19));
+
+		String path2 = "WebContent/WEB-INF/web.xml.loginconfigtest2";
+		replaceFile(project, path2, path0);
+		markers = webxml.findMarkers(WebXMLCoreValidator.PROBLEM_TYPE, false, IResource.DEPTH_ZERO);
+		assertTrue(hasMarkerOnLine(markers, 18));
+		assertFalse(hasMarkerOnLine(markers, 19));
+	}
+
+	static boolean hasMarkerOnLine(IMarker[] ms, int line) {
+		System.out.println("-markers->" + ms.length);
+		for (IMarker m: ms) {
+			int l = m.getAttribute(IMarker.LINE_NUMBER, -1);
+			System.out.println("---->" + l);
+			if(line == l) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static void replaceFile(IProject project, String sourcePath, String targetPath) throws CoreException {
 		boolean saveAutoBuild = ResourcesUtils.setBuildAutomatically(false);
 		try {
@@ -90,6 +120,7 @@ public class WebXMLValidationTest extends TestCase {
 			} else {
 				target.setContents(source.getContents(), true, false, new NullProgressMonitor());
 			}
+			JobUtils.waitForIdle();
 			TestUtil.validate(target);
 		} finally {
 			ResourcesUtils.setBuildAutomatically(saveAutoBuild);

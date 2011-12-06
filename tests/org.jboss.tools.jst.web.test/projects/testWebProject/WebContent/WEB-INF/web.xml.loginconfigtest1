@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+ <display-name>jsf</display-name>
+<servlet>
+    <description></description>
+    <display-name>LoginServlet</display-name>
+    <servlet-name>LoginServlet</servlet-name>
+    <servlet-class>dk.jyskebank.core.jsf.login.FacesLoginServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LoginServlet</servlet-name>
+    <url-pattern>/loginServlet</url-pattern>
+  </servlet-mapping>
+  <login-config>
+    <auth-method>FORM</auth-method>
+    <form-login-config>
+      <form-login-page>/loginServlet</form-login-page>
+      <form-error-page>/loginServlet2</form-error-page>
+    </form-login-config>
+  </login-config>
+</web-app>
