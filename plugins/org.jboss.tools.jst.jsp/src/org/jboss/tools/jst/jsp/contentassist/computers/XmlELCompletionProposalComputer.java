@@ -246,6 +246,14 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 
 				if (restOfValue.indexOf('}') == -1) {
 					// Add closing }-char
+
+					if (replacementString.indexOf(']') == -1 && restOfValue.indexOf(']') != -1) {
+						// Need to move chars before ']' (including this char) from restOfValue to replacementString before adding closing '}'-char
+						int shift = restOfValue.indexOf(']') + 1;
+						replacementString += restOfValue.substring(0, shift);
+						replacementLength += shift;
+						restOfValue = restOfValue.substring(shift);
+					}
 					replacementString += '}';
 				}
 			} else {
@@ -899,11 +907,13 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		char quoteChar = (char)0;
 		if (DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE.equals(request.getRegion().getType())) {
 			isAttributeValue = true;
+			if (text.indexOf('\n') != -1) text = text.substring(0, text.indexOf('\n'));
+			if (text.indexOf('\r') != -1) text = text.substring(0, text.indexOf('\r'));
 			if (text.startsWith("\"") || text.startsWith("'")) {//$NON-NLS-1$ //$NON-NLS-2$
 				quoteChar = text.charAt(0);
 				hasOpenQuote = true;
 			}
-			if (hasOpenQuote && text.trim().endsWith(String.valueOf(quoteChar))) {
+			if (hasOpenQuote && text.substring(1).trim().endsWith(String.valueOf(quoteChar))) {
 				hasCloseQuote = true;
 			}
 		}
