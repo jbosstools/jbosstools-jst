@@ -432,7 +432,7 @@ public class PageContextFactory implements IResourceChangeListener {
 		return context;
 	}
 	
-	private IProject getActiveProject() {
+	private static IProject getActiveProject() {
 		ITextEditor editor = EclipseUIUtil.getActiveEditor();
 		if (editor == null) return null;
 			
@@ -765,10 +765,12 @@ public class PageContextFactory implements IResourceChangeListener {
 				}
 
 				Region region = new Region(start, length);
+				IProject project = context.getResource() != null ? context.getResource().getProject() : getActiveProject();
+
 				INameSpace nameSpace = new NameSpace(
 						uri, prefix,
 						TagLibraryManager.getLibraries(
-								context.getResource().getProject(), uri));
+								project, uri));
 
 				context.addNameSpace(region, nameSpace);
 				if (prefix.length() == 0)
