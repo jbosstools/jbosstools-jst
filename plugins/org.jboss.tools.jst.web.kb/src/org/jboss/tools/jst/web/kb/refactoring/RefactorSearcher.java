@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.kb.refactoring;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -82,6 +83,9 @@ public abstract class RefactorSearcher {
 	
 	private void scanProject(IProject project){
 		if(project == null || !project.exists()) return;
+		if(doneProjects.contains(project)) return;
+		
+		doneProjects.add(project);
 		
 		IProject[] referencingProject = project.getReferencingProjects();
 		for(IProject rProject: referencingProject){
@@ -125,10 +129,14 @@ public abstract class RefactorSearcher {
 			}
 		}
 	}
+	
+	private HashSet<IProject> doneProjects = new HashSet<IProject>();
 
-	public void findELReferences(){
+	public final void findELReferences(){
 		if(baseFile == null)
 			return;
+		
+		doneProjects.clear();
 		
 		//startStatistics();
 		
