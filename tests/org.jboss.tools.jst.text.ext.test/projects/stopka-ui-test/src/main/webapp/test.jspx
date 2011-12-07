@@ -1,0 +1,29 @@
+<stopka:page xmlns="http://www.w3.org/1999/xhtml"
+         xmlns:stopka="http://stopka.us"
+         xmlns:jsp="http://java.sun.com/JSP/Page"
+         xmlns:c="http://java.sun.com/jsp/jstl/core"
+         xmlns:utils="http://stopka.us/ui/utils">
+    <jsp:output xmlns:jsp="http://java.sun.com/JSP/Page" omit-xml-declaration="yes"/>
+    <c:set var="bannerType" scope="page" value="simple"/>
+    <html xmlns="http://www.w3.org/1999/xhtml" lang="en-us">
+    <head>
+        <title>StopKa filemanager</title>
+        <stopka:css file="system/styles/stopka.css" />
+        <utils:common-head-data/>
+        <stopka:css file="system/styles/filemanager.css" />
+    </head>
+    <body>
+    12345678
+    qwertyui
+	    <div class="component">
+	        <div class="subitem">
+	        </div>
+	    </div>
+	<div class="article"/>
+        <div class="in_stopka">
+        </div>
+        <div class="in_filemanager">
+        </div>
+    </body>
+    </html>
+</stopka:page>

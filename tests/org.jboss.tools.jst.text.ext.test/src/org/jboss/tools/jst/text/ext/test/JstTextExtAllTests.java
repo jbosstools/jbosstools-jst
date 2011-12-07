@@ -25,6 +25,11 @@ public class JstTextExtAllTests {
 				new String[]{"projects/OpenOnTest"},
 				new String[]{"OpenOnTest"}));
 
+		suite.addTest(new ProjectImportTestSetup(new TestSuite(TaglibOpenOnTest.class),
+				"org.jboss.tools.jst.text.ext.test",
+				new String[]{"projects/stopka-ui-test"},
+				new String[]{"stopka-ui-test"}));
+
 		//$JUnit-END$
 		return suite;
 	}
