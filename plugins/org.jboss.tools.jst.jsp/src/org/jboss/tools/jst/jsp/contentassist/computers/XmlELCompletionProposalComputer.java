@@ -191,8 +191,8 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		if (proposals == null || proposals.length == 0)
 			return;
 
-		String restOfValue = getRestOfEL(context.getDocument(), context.getInvocationOffset());
 		for (TextProposal textProposal : proposals) {
+			String restOfValue = getRestOfEL(context.getDocument(), context.getInvocationOffset());
 			int replacementOffset = beginChangeOffset;
 			int replacementLength = prefix.getLength();
 			String replacementString = prefix.getText().substring(0, replacementLength);
@@ -237,16 +237,9 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 						replacementString = replacementString.substring(0, replacementString.length() -1);
 					}
 				}
-				cursorPosition = replacementString.length(); // Cursor will be put right after the replacement
-				if (replacementString.indexOf(']') == -1) { // Find closing square bracket in restOfValue
-					if (restOfValue.indexOf(']') != -1) {
-						cursorPosition += restOfValue.indexOf(']') + 1;
-					}
-				}
 
 				if (restOfValue.indexOf('}') == -1) {
 					// Add closing }-char
-
 					if (replacementString.indexOf(']') == -1 && restOfValue.indexOf(']') != -1) {
 						// Need to move chars before ']' (including this char) from restOfValue to replacementString before adding closing '}'-char
 						int shift = restOfValue.indexOf(']') + 1;
@@ -261,7 +254,15 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 					replacementString += "}"; //$NON-NLS-1$
 				}
 			}
-			
+
+			cursorPosition = replacementString.length(); // Cursor will be put right after the replacement
+			if (replacementString.indexOf(']') == -1) { // Find closing square bracket in restOfValue
+				if (restOfValue.indexOf(']') != -1) {
+					cursorPosition += restOfValue.indexOf(']') + 1;
+				}
+			} else {
+				cursorPosition = replacementString.indexOf(']') + 1;
+			}
 			if (prefix.isAttributeValue() && prefix.hasOpenQuote() && !prefix.hasCloseQuote()) {
 				replacementString += String.valueOf(quoteChar);
 			}
@@ -337,8 +338,8 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		if (proposals == null || proposals.length == 0)
 			return;
 
-		String restOfValue = getRestOfEL(context.getDocument(), context.getInvocationOffset());
 		for (TextProposal textProposal : proposals) {
+			String restOfValue = getRestOfEL(context.getDocument(), context.getInvocationOffset());
 			int replacementOffset = beginChangeOffset;
 			int replacementLength = prefix.getLength();
 			String replacementString = prefix.getText().substring(0, replacementLength);
@@ -388,6 +389,13 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 				
 				if (restOfValue.indexOf('}') == -1) {
 					// Add closing }-char
+					if (replacementString.indexOf(']') == -1 && restOfValue.indexOf(']') != -1) {
+						// Need to move chars before ']' (including this char) from restOfValue to replacementString before adding closing '}'-char
+						int shift = restOfValue.indexOf(']') + 1;
+						replacementString += restOfValue.substring(0, shift);
+						replacementLength += shift;
+						restOfValue = restOfValue.substring(shift);
+					}
 					replacementString += '}';
 				}
 			} else {
