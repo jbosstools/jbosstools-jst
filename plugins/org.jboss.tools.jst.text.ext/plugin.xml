@@ -48,6 +48,14 @@
                      </axis>
                      <axis path="/facelet-taglib/attribute/type" >
                      </axis>
+                     <axis path="/taglib/tag-file/path" >
+                     </axis>
+          		</partitionType>
+          	</contentType>
+           	<contentType id="org.eclipse.jst.jsp.core.tldsource">
+          		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_TEXT">
+                     <axis path="/taglib/tag-file/path" >
+                     </axis>
           		</partitionType>
           	</contentType>
 		</hyperlinkPartitioner>
