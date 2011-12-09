@@ -16,14 +16,11 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IncrementalProjectBuilder;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.jboss.tools.common.base.test.validation.TestUtil;
 import org.jboss.tools.common.validation.ValidatorManager;
-import org.jboss.tools.jst.web.WebUtils;
 import org.jboss.tools.jst.web.validation.WebXMLCoreValidator;
 import org.jboss.tools.test.util.JobUtils;
 import org.jboss.tools.test.util.ProjectImportTestSetup;
@@ -97,10 +94,8 @@ public class WebXMLValidationTest extends TestCase {
 	}
 
 	static boolean hasMarkerOnLine(IMarker[] ms, int line) {
-		System.out.println("-markers->" + ms.length);
 		for (IMarker m: ms) {
 			int l = m.getAttribute(IMarker.LINE_NUMBER, -1);
-			System.out.println("---->" + l);
 			if(line == l) {
 				return true;
 			}
