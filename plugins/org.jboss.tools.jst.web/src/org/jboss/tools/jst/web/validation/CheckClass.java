@@ -33,16 +33,23 @@ public class CheckClass extends Check {
 	boolean allowsPrimitive = false;
 	String implementsType = null;
 	String extendsType = null;
+	String visualAttr;
 
 	public CheckClass(ValidationErrorManager manager, String preference, String attr) {
 		super(manager, preference, attr);
+		visualAttr = attr;
 	}
 
 	public CheckClass(ValidationErrorManager manager, String preference, String attr, boolean allowsPrimitive, String implementsType, String extendsType) {
-		super(manager, preference, attr);
+		this(manager, preference, attr);
 		this.allowsPrimitive = allowsPrimitive;
 		this.implementsType = implementsType;
 		this.extendsType = extendsType;
+	}
+
+	public CheckClass setVisualAttribute(String v) {
+		visualAttr = v;
+		return this;
 	}
 
 	public void check(XModelObject object) {
@@ -54,12 +61,12 @@ public class CheckClass extends Check {
 		if(value.length() == 0 || isJavaLang(value)) return;
 		if(isPrimitive(value)) {
 			if(!allowsPrimitive) {
-				fireNotExist(object, preference, attr, value);
+				fireNotExist(object, preference, value);
 			}
 			return;
 		}
 		if(!checkQualifiedName(value)) {
-			fireInvalid(object, attr, attr, value);
+			fireInvalid(object, attr, value);
 			return;
 		}
 		IType type = getValidType(value, object);
@@ -81,18 +88,18 @@ public class CheckClass extends Check {
 	        	LogHelper.logError("org.jboss.tools.jst.web.verification", e); //$NON-NLS-1$
 			}
 			if(mustImpl != null) {
-				fireImplements(object, preference, attr, value, mustImpl);
+				fireImplements(object, preference, value, mustImpl);
 			}
 			String mustExtend = null;
 			try { mustExtend = checkExtends(object, type); } catch (Exception e) {
 	        	LogHelper.logError("org.jboss.tools.jst.web.verification", e); //$NON-NLS-1$
 			}
 			if(mustExtend != null) {
-				fireExtends(object, preference, attr, value, mustExtend);
+				fireExtends(object, preference, value, mustExtend);
 			}
 			return;
 		}
-		fireNotExist(object, preference, attr, value);
+		fireNotExist(object, preference, value);
 	}
 	
 	private boolean checkQualifiedName(String value) {
@@ -148,18 +155,18 @@ public class CheckClass extends Check {
 		}
 	}
 
-	protected void fireImplements(XModelObject object, String id, String attr, String value, String interfaceName) {
-		fireMessage(object, NLS.bind(WebXMLValidatorMessages.CLASS_NOT_IMPLEMENTS, new Object[] {attr, value, interfaceName}));
+	protected void fireImplements(XModelObject object, String id, String value, String interfaceName) {
+		fireMessage(object, NLS.bind(WebXMLValidatorMessages.CLASS_NOT_IMPLEMENTS, new Object[] {visualAttr, value, interfaceName}));
 	}
 
-	protected void fireExtends(XModelObject object, String id, String attr, String value, String superName) {
-		fireMessage(object, NLS.bind(WebXMLValidatorMessages.CLASS_NOT_EXTENDS, new Object[] {attr, value, superName}));
+	protected void fireExtends(XModelObject object, String id, String value, String superName) {
+		fireMessage(object, NLS.bind(WebXMLValidatorMessages.CLASS_NOT_EXTENDS, new Object[] {visualAttr, value, superName}));
 	}
-	protected void fireInvalid(XModelObject object, String id, String attr, String value) {
-		fireMessage(object, NLS.bind(WebXMLValidatorMessages.CLASS_NOT_VALID, attr, value));
+	protected void fireInvalid(XModelObject object, String id, String value) {
+		fireMessage(object, NLS.bind(WebXMLValidatorMessages.CLASS_NOT_VALID, visualAttr, value));
 	}
-	protected void fireNotExist(XModelObject object, String id, String attr, String value) {
-		fireMessage(object, NLS.bind(WebXMLValidatorMessages.CLASS_NOT_EXISTS, attr, value));
+	protected void fireNotExist(XModelObject object, String id, String value) {
+		fireMessage(object, NLS.bind(WebXMLValidatorMessages.CLASS_NOT_EXISTS, visualAttr, value));
 	}
 
 	public static IType getValidType(String className, XModelObject o) {
