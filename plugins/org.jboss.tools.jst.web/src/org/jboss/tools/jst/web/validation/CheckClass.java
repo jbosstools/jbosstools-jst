@@ -40,6 +40,10 @@ public class CheckClass extends Check {
 		visualAttr = attr;
 	}
 
+	protected String getShortId() {
+		return WebXMLCoreValidator.SHORT_ID;
+	}
+
 	public CheckClass(ValidationErrorManager manager, String preference, String attr, boolean allowsPrimitive, String implementsType, String extendsType) {
 		this(manager, preference, attr);
 		this.allowsPrimitive = allowsPrimitive;
@@ -75,9 +79,9 @@ public class CheckClass extends Check {
 		if(f != null) {
 			IProjectValidationContext context = manager.getValidationContext();
 			if(context != null) {
-				context.addLinkedCoreResource(WebXMLCoreValidator.SHORT_ID, value, f.getFullPath(), true);
+				context.addLinkedCoreResource(getShortId(), value, f.getFullPath(), true);
 				if(type != null && type.getResource() != null && type.exists()) {
-					context.addLinkedCoreResource(WebXMLCoreValidator.SHORT_ID, type.getResource().getFullPath().toOSString(), f.getFullPath(), true);
+					context.addLinkedCoreResource(getShortId(), type.getResource().getFullPath().toOSString(), f.getFullPath(), true);
 				}
 			}
 		}

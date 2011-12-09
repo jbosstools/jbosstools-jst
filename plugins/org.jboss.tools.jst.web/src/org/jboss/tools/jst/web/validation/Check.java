@@ -26,7 +26,7 @@ public class Check {
 	static String ATTR_ATTRIBUTE = "attribute"; //$NON-NLS-1$
 	protected String preference;
 	protected String attr;
-	ValidationErrorManager manager;
+	protected ValidationErrorManager manager;
 
 	public Check(ValidationErrorManager manager, String preference, String attr) {
 		this.manager = manager;
