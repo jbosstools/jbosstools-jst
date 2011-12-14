@@ -50,6 +50,7 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -614,13 +615,12 @@ public class ImageSelectionDialog extends SelectionStatusDialog {
 
                     	if (file != null) {
                     		Cursor parentCursor = getShell().getCursor();
-                    		final Cursor waitCursor = new Cursor(getShell().getDisplay(), SWT.CURSOR_WAIT);
                     		Point previewPoint = new Point(0, 0);
                     		Point labelPoint = canvas.getSize();
                     		InputStream stream = null;
 
                     		try {
-                    			getShell().setCursor(waitCursor);
+                    			getShell().setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_WAIT));
                     			stream = new FileInputStream(file.getLocation().toOSString());
 
                     			ImageData imageData = new ImageData(stream);
