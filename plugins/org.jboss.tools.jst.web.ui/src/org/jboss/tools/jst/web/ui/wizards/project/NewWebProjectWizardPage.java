@@ -34,17 +34,15 @@ import org.jboss.tools.common.model.ui.attribute.editor.IPropertyEditor;
 import org.jboss.tools.common.model.ui.attribute.editor.PropertyEditor;
 import org.jboss.tools.common.model.ui.attribute.editor.StringEditor;
 import org.eclipse.jface.preference.FieldEditor;
-import org.eclipse.jface.util.Assert;
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
 import org.jboss.tools.common.meta.key.WizardKeys;
@@ -176,24 +174,6 @@ public class NewWebProjectWizardPage extends WizardPage {
 			versionAdapter.setValue(template.getDefaultVersion());
 			templateAdapter.setValue(template.getDefaultTemplate(template.getDefaultVersion()));
 //			setPageComplete(false);
-	}
-	
-	private String insertBreaks(Control control, String text, int maxWidth) {
-		StringBuffer sb = new StringBuffer();
-		int size = 0;
-		for (int i = 0; i < text.length(); i++) {
-			char c = text.charAt(i);
-			if(c == '\n' || c == '\r' || c == '\t') c = ' ';
-			GC g = new GC(control);
-			g.setFont(control.getFont());
-			size += g.getCharWidth(c) + 1;
-			if(size > maxWidth && c == ' ') {
-				size = 0;
-				c = '\n';
-			}
-			sb.append(c);
-		}				
-		return sb.toString();
 	}
 	
 	protected String getProjectRootOption() {
