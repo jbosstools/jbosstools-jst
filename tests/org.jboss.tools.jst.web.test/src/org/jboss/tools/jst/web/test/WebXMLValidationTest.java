@@ -19,12 +19,15 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.osgi.util.NLS;
 import org.jboss.tools.common.base.test.validation.TestUtil;
 import org.jboss.tools.common.validation.ValidatorManager;
 import org.jboss.tools.jst.web.validation.WebXMLCoreValidator;
+import org.jboss.tools.jst.web.validation.WebXMLValidatorMessages;
 import org.jboss.tools.test.util.JobUtils;
 import org.jboss.tools.test.util.ProjectImportTestSetup;
 import org.jboss.tools.test.util.ResourcesUtils;
+import org.jboss.tools.tests.AbstractResourceMarkerTest;
 
 /**
  * @author Alexey Kazakov
@@ -41,6 +44,15 @@ public class WebXMLValidationTest extends TestCase {
 		project = ProjectImportTestSetup.loadProject(JstWebAllTests.PROJECT_NAME);
 		IResource target = project.getFolder("target");
 		target.setDerived(true, null);
+	}
+
+	/**
+	 * Test position of marker when comments contain textually matching fragments.
+	 */
+	public void testServletClassWithIdenticalComments() throws Exception {
+		String path0 = "WebContent/WEB-INF/web.xml";
+		IFile webxml = project.getFile(path0);
+		AbstractResourceMarkerTest.assertMarkerIsCreated(webxml, NLS.bind(WebXMLValidatorMessages.CLASS_NOT_EXISTS, "servlet-class", "javax.faces.webapp.FacesServlet111"), 11);
 	}
 
 	/**
@@ -75,6 +87,10 @@ public class WebXMLValidationTest extends TestCase {
 		assertTrue(markers.length == 0);
 	}
 
+	/**
+	 * Tests incremental validation
+	 * @throws Exception
+	 */
 	public void testPathsInLoginConfig() throws Exception {
 		String path0 = "WebContent/WEB-INF/web.xml";
 		IFile webxml = project.getFile(path0);
