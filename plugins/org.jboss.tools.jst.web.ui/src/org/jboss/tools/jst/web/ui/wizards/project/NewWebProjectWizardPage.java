@@ -84,7 +84,7 @@ public class NewWebProjectWizardPage extends WizardPage {
 		this.context = context;
 		template = context.getTemplate();
 		// init editors & adapters			
-		IWidgetSettings settings = new DefaultSettings();
+		IWidgetSettings settings = DefaultSettings.getDefault();
 			
 		nameEditor = new StringEditor(settings);
 		nameAdapter = new NameAdapter();
