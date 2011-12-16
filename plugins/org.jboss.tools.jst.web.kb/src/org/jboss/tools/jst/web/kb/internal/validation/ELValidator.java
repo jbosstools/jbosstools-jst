@@ -29,9 +29,13 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IMember;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.wst.validation.internal.core.ValidationException;
 import org.eclipse.wst.validation.internal.provisional.core.IReporter;
+import org.jboss.tools.common.CommonPlugin;
 import org.jboss.tools.common.el.core.ELReference;
 import org.jboss.tools.common.el.core.model.ELExpression;
 import org.jboss.tools.common.el.core.model.ELInvocationExpression;
@@ -51,6 +55,7 @@ import org.jboss.tools.common.el.core.resolver.JavaMemberELSegmentImpl;
 import org.jboss.tools.common.el.core.resolver.SimpleELContext;
 import org.jboss.tools.common.el.core.resolver.TypeInfoCollector;
 import org.jboss.tools.common.el.core.resolver.Var;
+import org.jboss.tools.common.java.IJavaSourceReference;
 import org.jboss.tools.common.validation.ContextValidationHelper;
 import org.jboss.tools.common.validation.IELValidationDelegate;
 import org.jboss.tools.common.validation.IProjectValidationContext;
@@ -250,7 +255,12 @@ public class ELValidator extends WebValidator {
 				if(!references[i].getSyntaxErrors().isEmpty()) {
 					for (SyntaxError error: references[i].getSyntaxErrors()) {
 						markers++;
-						addError(ELValidationMessages.EL_SYNTAX_ERROR, ELSeverityPreferences.EL_SYNTAX_ERROR, new String[]{error.getProblem()}, references[i].getLineNumber(), 1, references[i].getStartPosition() + error.getPosition(), context.getResource());
+						IJavaSourceReference reference = getJavaReference(file, references[i].getStartPosition() + error.getPosition(), 1);
+						if(reference == null) {
+							addError(ELValidationMessages.EL_SYNTAX_ERROR, ELSeverityPreferences.EL_SYNTAX_ERROR, new String[]{error.getProblem()}, references[i].getLineNumber(), 1, references[i].getStartPosition() + error.getPosition(), context.getResource());
+						} else {
+							addError(ELValidationMessages.EL_SYNTAX_ERROR, ELSeverityPreferences.EL_SYNTAX_ERROR, new String[]{error.getProblem()}, reference, context.getResource());
+						}
 					}
 				}
 				if(markers<getMaxNumberOfMarkersPerFile(file.getProject())) {
@@ -362,8 +372,17 @@ public class ELValidator extends WebValidator {
 							length = propertyName.length();
 						}
 						markers++;
-						IMarker marker = addError(ELValidationMessages.UNPAIRED_GETTER_OR_SETTER, ELSeverityPreferences.UNPAIRED_GETTER_OR_SETTER, new String[]{propertyName, existedMethodName, missingMethodName}, elReference.getLineNumber(), length, startPosition, file);
-						elReference.addMarker(marker);
+						
+						IJavaSourceReference reference = getJavaReference(file, startPosition, length);
+						
+						if(reference != null) {
+							IMarker marker = addError(ELValidationMessages.UNPAIRED_GETTER_OR_SETTER, ELSeverityPreferences.UNPAIRED_GETTER_OR_SETTER, new String[]{propertyName, existedMethodName, missingMethodName}, reference, file);
+							elReference.addMarker(marker);
+						} else {
+							IMarker marker = addError(ELValidationMessages.UNPAIRED_GETTER_OR_SETTER, ELSeverityPreferences.UNPAIRED_GETTER_OR_SETTER, new String[]{propertyName, existedMethodName, missingMethodName}, elReference.getLineNumber(), length, startPosition, file);
+							elReference.addMarker(marker);
+						}
+						
 					}
 				}
 			}
@@ -395,14 +414,68 @@ public class ELValidator extends WebValidator {
 			}
 		}
 		markers++;
+		IJavaSourceReference reference = getJavaReference(file, offsetOfVarName, lengthOfVarName);
+		
+		IMarker marker = null;
 		// Mark invalid EL
 		if(unresolvedTokenIsVariable) {
-			IMarker marker = addError(ELValidationMessages.UNKNOWN_EL_VARIABLE_NAME, ELSeverityPreferences.UNKNOWN_EL_VARIABLE_NAME, new String[]{varName}, elReference.getLineNumber(), lengthOfVarName, offsetOfVarName, file);
-			elReference.addMarker(marker);
+			if(reference == null) {
+				marker = addError(ELValidationMessages.UNKNOWN_EL_VARIABLE_NAME, ELSeverityPreferences.UNKNOWN_EL_VARIABLE_NAME, new String[]{varName}, elReference.getLineNumber(), lengthOfVarName, offsetOfVarName, file);
+			} else {
+				marker = addError(ELValidationMessages.UNKNOWN_EL_VARIABLE_NAME, ELSeverityPreferences.UNKNOWN_EL_VARIABLE_NAME, new String[]{varName}, reference, file);
+			}
+			
 		} else {
-			IMarker marker = addError(ELValidationMessages.UNKNOWN_EL_VARIABLE_PROPERTY_NAME, ELSeverityPreferences.UNKNOWN_EL_VARIABLE_PROPERTY_NAME, new String[]{varName}, elReference.getLineNumber(), lengthOfVarName, offsetOfVarName, file);
+			if(reference == null) {
+				marker = addError(ELValidationMessages.UNKNOWN_EL_VARIABLE_PROPERTY_NAME, ELSeverityPreferences.UNKNOWN_EL_VARIABLE_PROPERTY_NAME, new String[]{varName}, elReference.getLineNumber(), lengthOfVarName, offsetOfVarName, file);
+			} else {
+				marker = addError(ELValidationMessages.UNKNOWN_EL_VARIABLE_PROPERTY_NAME, ELSeverityPreferences.UNKNOWN_EL_VARIABLE_PROPERTY_NAME, new String[]{varName}, reference, file);
+			}
+		}
+		
+		if(marker != null) {
 			elReference.addMarker(marker);
 		}
+	}
+
+	IJavaSourceReference getJavaReference(final IFile file, final int startPosition, final int length) {
+		IMember m = null;
+		
+		if(file.getName().endsWith(".java")) {
+			IJavaElement el = JavaCore.create(file);
+			if(el instanceof ICompilationUnit) {
+				try {
+					el = ((ICompilationUnit)el).getElementAt(startPosition);
+				} catch (CoreException exc) {
+					CommonPlugin.getDefault().logError(exc);
+				}
+				if(el instanceof IMember) {
+					m = (IMember)el;
+				}
+			}
+		}
+
+		if(m != null) {
+			final IMember mm = m;
+			return new IJavaSourceReference() {
+				public int getStartPosition() {
+					return startPosition;
+				}
+				public int getLength() {
+					return length;
+				}
+				public IResource getResource() {
+					return file;
+				}
+				public IMember getSourceMember() {
+					return mm;
+				}
+				public IJavaElement getSourceElement() {
+					return mm;
+				}				
+			};
+		}
+		return null;
 	}
 
 	private Set<String> findVariableNames(ELInvocationExpression invocationExpression){
