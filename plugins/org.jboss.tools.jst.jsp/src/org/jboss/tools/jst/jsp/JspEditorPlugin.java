@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
+
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -114,7 +115,7 @@ public class JspEditorPlugin extends BaseUIPlugin {
 			else
 				s = s1 + File.separator;
 			return new Path(s);
-		}	catch(Exception exception)	{
+		}	catch(IOException exception)	{
 			getDefault().logError(exception);
 		}
 		return null;
