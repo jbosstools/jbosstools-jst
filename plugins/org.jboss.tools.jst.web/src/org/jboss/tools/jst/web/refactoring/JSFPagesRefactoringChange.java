@@ -57,18 +57,14 @@ public class JSFPagesRefactoringChange extends CompositeChange {
 		if(list != null && list.size() > 0) {
 			newJsfResourcePath = list.get(0).toString();
 		}
-		try {
-			addChanges();
-		} catch (Exception e) {
-			WebModelPlugin.getPluginLog().logError(e);
-		}
+		addChanges();
 	}
 	
 	public XModel getModel() {
 		return model;
 	}
 	
-	private void addChanges() throws Exception {
+	private void addChanges() {
 		if(model == null) return;
 		XModelObject webRoot = FileSystemsHelper.getWebRoot(model);
 		if(webRoot == null) return;
