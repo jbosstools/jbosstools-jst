@@ -187,6 +187,16 @@
          </validator>
    </extension>
 
+   <extension
+   		 id="ELWarnings"
+         point="org.jboss.tools.common.validation.warnings">
+         <map
+               class="org.jboss.tools.jst.web.kb.internal.validation.ELSuppressWarningsMap"
+               warningGroupID="el"
+               preferenceGroupID="org.jboss.tools.jst.web.kb.validator.problem">
+         </map>
+   </extension>
+
    <extension point="org.eclipse.wst.xml.core.catalogContributions">
       <catalogContribution id="default">
          <uri 

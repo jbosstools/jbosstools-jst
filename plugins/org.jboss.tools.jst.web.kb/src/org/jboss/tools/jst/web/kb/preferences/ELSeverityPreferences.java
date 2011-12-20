@@ -15,32 +15,35 @@ import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.jboss.tools.common.preferences.SeverityPreferences;
+import org.jboss.tools.common.validation.ValidationSeverityPreferences;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 
 /**
  * @author Alexey Kazakov
  */
-public class ELSeverityPreferences extends SeverityPreferences {
+public class ELSeverityPreferences extends ValidationSeverityPreferences {
 
 	public static final Set<String> SEVERITY_OPTION_NAMES = new HashSet<String>();
 
 	private static ELSeverityPreferences INSTANCE = new ELSeverityPreferences();
 
+	public static final String WARNING_GROUP_ID = "el";
+
 	// Expression Language
 
 	// Mark EL Variable name which we can't resolve.
-	public static final String UNKNOWN_EL_VARIABLE_NAME = INSTANCE.createSeverityOption("unknownElVariableName"); //$NON-NLS-1$
+	public static final String UNKNOWN_EL_VARIABLE_NAME = INSTANCE.createSeverityOption("unknownElVariableName", "unresolved"); //$NON-NLS-1$
 	// Check "var" attributes.
 	public static final String CHECK_VARS = INSTANCE.createSeverityOption("checkVars"); //$NON-NLS-1$
 	// Re-validate unresolved ELs.
 	public static final String RE_VALIDATE_UNRESOLVED_EL = INSTANCE.createSeverityOption("revalidateUnresolvedEl"); //$NON-NLS-1$
 	// Mark EL Variable property name which we can't resolve.
-	public static final String UNKNOWN_EL_VARIABLE_PROPERTY_NAME = INSTANCE.createSeverityOption("unknownElVariablePropertyName"); //$NON-NLS-1$
+	public static final String UNKNOWN_EL_VARIABLE_PROPERTY_NAME = INSTANCE.createSeverityOption("unknownElVariablePropertyName", "unresolved"); //$NON-NLS-1$
 	// If Expression use property of bean and this property has only setter(getter) without getter(setter) then mark it.
-	public static final String UNPAIRED_GETTER_OR_SETTER = INSTANCE.createSeverityOption("unpairedGetterOrSetter"); //$NON-NLS-1$
+	public static final String UNPAIRED_GETTER_OR_SETTER = INSTANCE.createSeverityOption("unpairedGetterOrSetter", "unresolved"); //$NON-NLS-1$
 
-	public static final String EL_SYNTAX_ERROR = INSTANCE.createSeverityOption("elSyntaxError"); //$NON-NLS-1$
-	
+	public static final String EL_SYNTAX_ERROR = INSTANCE.createSeverityOption("elSyntaxError", "syntax"); //$NON-NLS-1$
+
 	public static final String NON_EXTERNALIZED_STRINGS = INSTANCE.createSeverityOption("nonExternalizedString"); //$NON-NLS-1$
 
 	/**
@@ -51,6 +54,15 @@ public class ELSeverityPreferences extends SeverityPreferences {
 	}
 
 	private ELSeverityPreferences() {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.common.validation.ValidationSeverityPreferences#getWarningGroupID()
+	 */
+	@Override
+	public String getWarningGroupID() {
+		return WARNING_GROUP_ID;
 	}
 
 	/* (non-Javadoc)

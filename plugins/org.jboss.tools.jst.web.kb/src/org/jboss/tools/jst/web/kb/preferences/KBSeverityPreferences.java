@@ -26,11 +26,7 @@ public class KBSeverityPreferences extends SeverityPreferences {
 
 	private static KBSeverityPreferences INSTANCE = new KBSeverityPreferences();
 
-	// Expression Language
-
-	// Mark EL Variable name which we can't resolve.
 	public static final String REQUIRED_KB_CAPABILITIES_ARE_MISSING = INSTANCE.createSeverityOption("requiredKbCapabilitiesAreMissing"); //$NON-NLS-1$
-	// Check "var" attributes.
 	public static final String KB_CAPABILITIES_ARE_NOT_ENABLED_IN_JAVA_MODULE = INSTANCE.createSeverityOption("kbCapabilitiesAreNotEnabledInJavaModule"); //$NON-NLS-1$
 
 	/**
