@@ -279,26 +279,13 @@ public class PageContextFactory implements IResourceChangeListener {
 		context.setElResolvers(ELResolverFactoryManager.getInstance().getResolvers(file));
 		String content = FileUtil.getContentFromEditorOrFile(file);
 		if(content.indexOf('{')>-1 && content.indexOf("#{") >-1 || content.indexOf("${")>-1 ) { //$NON-NLS-1$
-			ELParser parser = ELParserUtil.getJbossFactory().createParser();
-			ELModel model = parser.parse(content);
-			List<SyntaxError> errors = model.getSyntaxErrors();
-			for (ELInstance instance : model.getInstances()) {
-				for(ELInvocationExpression ie : instance.getExpression().getInvocations()){
-					ELReference elReference = new ValidationELReference();
-					elReference.setResource(file);
-					elReference.setEl(new ELExpression[]{ie});
-					elReference.setLength(ie.getLength());
-					elReference.setStartPosition(0);
-					List<SyntaxError> elErrors = new ArrayList<SyntaxError>();
-					for (SyntaxError error : errors) {
-						if(error.getPosition()>=ie.getStartPosition() && error.getPosition()<=ie.getEndPosition()) {
-							elErrors.add(error);
-						}
-					}
-					elReference.setSyntaxErrors(elErrors);
-					context.addELReference(elReference);
-				}
-			}
+			ELReference elReference = new ValidationELReference();
+			elReference.setResource(file);
+			elReference.setLength(content.length());
+			elReference.setStartPosition(0);
+			elReference.init(content);
+			context.addELReference(elReference);
+			
 		}
 		return context;
 	}
@@ -329,21 +316,17 @@ public class PageContextFactory implements IResourceChangeListener {
 						startEl = value.indexOf("${"); //$NON-NLS-1$
 					}
 					if(startEl>-1) {
-						ELParser parser = ELParserUtil.getJbossFactory().createParser();
-						ELModel model = parser.parse(value);
-						List<ELInstance> is = model.getInstances();
-
 						ELReference elReference = new ValidationELReference();
+						elReference.setResource(file);
+						elReference.setLength(value.length());
+						elReference.setStartPosition(offset);
+						elReference.init(value);
+
 						try {
 							elReference.setLineNumber(document.getLineOfOffset(startEl));
 						} catch (BadLocationException e) {
 							WebKbPlugin.getDefault().logError(e);
 						}
-						elReference.setResource(file);
-						elReference.setEl(is);
-						elReference.setLength(value.length());
-						elReference.setStartPosition(offset);
-						elReference.setSyntaxErrors(model.getSyntaxErrors());
 						context.addELReference(elReference);
 					}
 				}
@@ -644,17 +627,14 @@ public class PageContextFactory implements IResourceChangeListener {
 			int offset = regionNode.getStartOffset() + region.getStart();
 			if (context.getELReference(offset) != null) return; // prevent the duplication of EL references while iterating thru the regions 
 
-			ELParser parser = ELParserUtil.getJbossFactory().createParser();
-			ELModel model = parser.parse(text);
-			List<ELInstance> is = model.getInstances();
 			ELReference elReference = new ValidationELReference();
 			elReference.setResource(context.getResource());
-			elReference.setEl(is);
 			elReference.setLength(text.length());
 			elReference.setStartPosition(offset);
+			elReference.init(text);
 			try {
 				if(Node.TEXT_NODE == node.getNodeType()) {
-					if(is.size()==1) {
+					if(elReference.getEl().length == 1) {
 						elReference.setLineNumber(document.getLineOfOffset(elReference.getStartPossitionOfFirstEL()) + 1);
 					}
 				} else {
@@ -663,7 +643,6 @@ public class PageContextFactory implements IResourceChangeListener {
 			} catch (BadLocationException e) {
 				WebKbPlugin.getDefault().logError(e);
 			}
-			elReference.setSyntaxErrors(model.getSyntaxErrors());
 			context.addELReference(elReference);
 		}
 	}
