@@ -740,6 +740,7 @@ abstract public class AbstractXmlCompletionProposalComputer extends AbstractXMLM
 		private int length;
 		private String text;
 		private boolean isELStarted;
+		private boolean isInsideELStartToken;
 		private boolean isELClosed;
 		private boolean isAttributeValue;
 		private boolean hasOpenQuote;
@@ -785,6 +786,14 @@ abstract public class AbstractXmlCompletionProposalComputer extends AbstractXMLM
 		
 		public boolean isELStarted() {
 			return isELStarted;
+		}
+	
+		public boolean isInsideELStartToken() {
+			return isInsideELStartToken;
+		}
+
+		void setInsideELStartToken(boolean b) {
+			isInsideELStartToken = b;
 		}
 
 		public boolean isELClosed() {

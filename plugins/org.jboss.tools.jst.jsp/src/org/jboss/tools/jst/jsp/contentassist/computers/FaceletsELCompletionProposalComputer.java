@@ -144,6 +144,10 @@ public class FaceletsELCompletionProposalComputer extends JspELCompletionProposa
 		// If it is true we don't need to start any new tag proposals
 		TextRegion prefix = getELPrefix(contentAssistRequest);
 		if (prefix != null && prefix.isELStarted()) {
+			if(prefix.isInsideELStartToken()) {
+				// "#|{" - wrong place to suggest anything
+				return;
+			}
 			addTextELProposals(contentAssistRequest, context);
 		} else {
 			addELPredicateProposals(contentAssistRequest, getTagInsertionBaseRelevance(), true);

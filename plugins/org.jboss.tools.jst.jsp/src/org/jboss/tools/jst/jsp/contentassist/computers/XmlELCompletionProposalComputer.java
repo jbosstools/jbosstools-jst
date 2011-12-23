@@ -133,6 +133,10 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		// If it is true we don't need to start any new tag proposals
 		TextRegion prefix = getELPrefix(contentAssistRequest);
 		if (prefix != null && prefix.isELStarted()) {
+			if(prefix.isInsideELStartToken()) {
+				// "#|{" - wrong place to suggest anything
+				return;
+			}
 			addTextELProposals(contentAssistRequest, context);
 		} else {
 			addELPredicateProposals(contentAssistRequest, getTagInsertionBaseRelevance(), true);
@@ -150,6 +154,10 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		// If it is true we don't need to start any new tag proposals
 		TextRegion prefix = getELPrefix(contentAssistRequest);
 		if (prefix != null && prefix.isELStarted()) {
+			if(prefix.isInsideELStartToken()) {
+				// "#|{" - wrong place to suggest anything
+				return;
+			}
 			addAttributeValueELProposals(contentAssistRequest, context);
 			return;
 		}
@@ -168,7 +176,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 			return;
 		
 		TextRegion prefix = getELPrefix(contentAssistRequest);
-		if (prefix == null) 
+		if (prefix == null || prefix.isInsideELStartToken()) 
 			return; // Do not return any proposals here (predicate proposals may be created instead)
 
 		if(!prefix.isELStarted()) {
@@ -325,6 +333,10 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 					MessageFormat.format(JstUIMessages.FaceletPageContectAssistProcessor_NewELExpressionTextInfo, getDefaultELPrefix()), TextProposal.R_TAG_INSERTION + 1);
 			
 			contentAssistRequest.addProposal(proposal);
+			return;
+		}
+		if(prefix.isInsideELStartToken()) {
+			// "#|{" - wrong place to suggest anything
 			return;
 		}
 		String matchString = EL_NUMBER_PREFIX + prefix.getText();
@@ -941,7 +953,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		
 		ELInstance is = ELUtil.findInstance(model, inValueOffset);// ELInstance
 		ELInvocationExpression ie = ELUtil.findExpression(model, inValueOffset);// ELExpression
-		
+
 		boolean isELStarted = (model != null && is != null && (startsWithELBeginning(model.toString())));
 		boolean isELClosed = (model != null && is != null && model.toString().endsWith("}")); //$NON-NLS-1$
 		
@@ -950,6 +962,10 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 				ie == null ? 0 : inValueOffset - ie.getStartPosition(), ie == null ? "" : ie.getText(),  //$NON-NLS-1$ 
 				isELStarted, isELClosed,
 				isAttributeValue, hasOpenQuote, hasCloseQuote, quoteChar);
+		
+		if(is != null && ie == null && is.getFirstToken() != null && is.getFirstToken().getStart() + is.getFirstToken().getLength() > inValueOffset) {
+			tr.setInsideELStartToken(true);
+		}
 		
 		return tr;
 	}

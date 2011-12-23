@@ -600,6 +600,9 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 			documentRegion = documentRegion.getPrevious();
 			completionRegion = getCompletionRegion(request.getDocumentRegion().getStartOffset() + request.getRegion().getStart() - 1, request.getParent());
 		}
+		if(documentRegion==null || completionRegion==null) {
+			return null;
+		}
 		if (!DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE.equals(completionRegion.getType()) &&
 				!DOMRegionContext.XML_CONTENT.equals(completionRegion.getType()) &&
 				!DOMRegionContext.BLOCK_TEXT.equals(completionRegion.getType())) {
