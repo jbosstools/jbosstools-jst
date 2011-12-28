@@ -663,22 +663,18 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		}
 
 		public void doOperation(int operation) {
-			if (operation == UNDO || operation == REDO
+			boolean isLongOperation = operation == UNDO 
+					|| operation == REDO
 					|| operation == FORMAT_DOCUMENT
-					|| operation == FORMAT_ACTIVE_ELEMENTS) {
-				if (editor.getVPEController() != null) {
+					|| operation == FORMAT_ACTIVE_ELEMENTS;
+			if (isLongOperation && editor.getVPEController() != null) {
 					editor.getVPEController().preLongOperation();
-				}
 			}
 			try {
 				super.doOperation(operation);
 			} finally {
-				if (operation == UNDO || operation == REDO
-						|| operation == FORMAT_DOCUMENT
-						|| operation == FORMAT_ACTIVE_ELEMENTS) {
-					if (editor.getVPEController() != null) {
+				if (isLongOperation && editor.getVPEController() != null) {
 						editor.getVPEController().postLongOperation();
-					}
 				}
 			}
 		}
