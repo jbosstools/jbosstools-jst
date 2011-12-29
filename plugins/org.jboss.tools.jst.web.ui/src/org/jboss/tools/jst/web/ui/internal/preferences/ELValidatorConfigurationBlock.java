@@ -62,7 +62,7 @@ public class ELValidatorConfigurationBlock extends SeverityConfigurationBlock {
 		WebKbPlugin.PLUGIN_ID
 	);
 
-	private static SectionDescription[] ALL_SECTIONS = new SectionDescription[]{
+	public static SectionDescription[] ALL_SECTIONS = new SectionDescription[]{
 		SECTION_EL,
 	};
 

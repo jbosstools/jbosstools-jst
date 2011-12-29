@@ -35,7 +35,7 @@ public class KBValidationConfigurationBlock extends SeverityConfigurationBlock {
 		WebKbPlugin.PLUGIN_ID
 	);
 
-	private static SectionDescription[] ALL_SECTIONS = new SectionDescription[]{
+	public static SectionDescription[] ALL_SECTIONS = new SectionDescription[]{
 		SECTION_KB_CONFIG,
 	};
 

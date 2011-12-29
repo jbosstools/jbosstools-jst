@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
 import org.jboss.tools.common.ui.preferences.SeverityPreferencePage;
+import org.jboss.tools.common.ui.preferences.SeverityConfigurationBlock.SectionDescription;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 
 /**
@@ -48,5 +49,10 @@ public class KBValidationPreferencePage extends SeverityPreferencePage {
 	@Override
 	protected String getPropertyPageID() {
 		return PROP_ID;
+	}
+	
+	@Override
+	protected SectionDescription[] getAllSections() {
+		return KBValidationConfigurationBlock.ALL_SECTIONS;
 	}
 }

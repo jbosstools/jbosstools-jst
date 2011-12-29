@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.ui.internal.preferences;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
 import org.jboss.tools.common.ui.preferences.SeverityPreferencePage;
+import org.jboss.tools.common.ui.preferences.SeverityConfigurationBlock.SectionDescription;
 import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.validation.WebXMLCoreValidator;
 
@@ -51,5 +52,10 @@ public class WebXMLValidatorPreferencePage extends SeverityPreferencePage {
 		fConfigurationBlock = new WebXMLConfigurationBlock(getNewStatusChangedListener(), getProject(), container);
 
 		super.createControl(parent);
+	}
+	
+	@Override
+	protected SectionDescription[] getAllSections() {
+		return WebXMLConfigurationBlock.ALL_SECTIONS;
 	}
 }

@@ -66,7 +66,7 @@ public class WebXMLConfigurationBlock extends SeverityConfigurationBlock {
 		WebModelPlugin.PLUGIN_ID
 	);
 
-	private static SectionDescription[] ALL_SECTIONS = new SectionDescription[]{
+	public static SectionDescription[] ALL_SECTIONS = new SectionDescription[]{
 		SECTION_CLASS_REFERENCES,
 		SECTION_RESOURCE_REFERENCES,
 		SECTION_OBJECT_REFERENCES,

@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.ui.internal.preferences;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
 import org.jboss.tools.common.ui.preferences.SeverityPreferencePage;
+import org.jboss.tools.common.ui.preferences.SeverityConfigurationBlock.SectionDescription;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.internal.validation.ELValidator;
 
@@ -44,5 +45,10 @@ public class ELValidatorPreferencePage extends SeverityPreferencePage {
 		fConfigurationBlock = new ELValidatorConfigurationBlock(getNewStatusChangedListener(), getProject(), container);
 
 		super.createControl(parent);
+	}
+	
+	@Override
+	protected SectionDescription[] getAllSections() {
+		return ELValidatorConfigurationBlock.ALL_SECTIONS;
 	}
 }
