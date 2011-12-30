@@ -257,11 +257,10 @@ public class TaglibMapping implements ITaglibMapping {
 				if(folder instanceof FolderImpl) {
 					String path = WebProject.getInstance(cs[i].getModel()).getPathInWebRoot(cs[i]);
 					if(uri == null) {
-						System.out.println("-->Null uri");
-						System.out.println(cs[i]);
-						System.out.println(cs[i].getModelEntity().getName());
-					} else
-					if(path != null) resolvedURIs.put(path, uri);
+						WebModelPlugin.getDefault().logWarning("TaglibMapping: null 'uri' from object " + cs[i].getModelEntity().getName()); //$NON-NLS-1$
+					} else {
+						if(path != null) resolvedURIs.put(path, uri);
+					}
 				}
 				addLocation(uri, location);
 				taglibObjects.put(uri, cs[i]);
