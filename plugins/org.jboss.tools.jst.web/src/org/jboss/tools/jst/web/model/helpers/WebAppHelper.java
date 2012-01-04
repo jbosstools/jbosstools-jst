@@ -54,6 +54,7 @@ public class WebAppHelper {
 		if(entity.equals("FileWebApp")) return "2.3"; //$NON-NLS-1$ //$NON-NLS-2$
 		if(entity.equals("FileWebApp24")) return "2.4"; //$NON-NLS-1$ //$NON-NLS-2$
 		if(entity.equals("FileWebApp25")) return "2.5"; //$NON-NLS-1$ //$NON-NLS-2$
+		if(entity.equals("FileWebApp30")) return "3.0"; //$NON-NLS-1$ //$NON-NLS-2$
 		return "2.4"; //$NON-NLS-1$
 	}
 	
@@ -335,7 +336,7 @@ public class WebAppHelper {
     	XModelObject folder = webxml.getChildByPath(FILTER_FOLDER);
     	if(folder == null) folder = webxml;
     	if(folder.getModelEntity().getChild(FILTER_30_ENTITY) != null) {
-    		folder.getChildren(FILTER_30_ENTITY);
+    		return folder.getChildren(FILTER_30_ENTITY);
     	}
     	return folder.getChildren(FILTER_ENTITY);
     }
@@ -344,7 +345,7 @@ public class WebAppHelper {
     	if(webxml == null) return null;
     	XModelObject folder = webxml.getChildByPath(FILTER_FOLDER);
     	if(folder == null) folder = webxml;
-    	String entity = (folder != webxml && folder.getModelEntity().getName().endsWith("24"))  //$NON-NLS-1$
+    	String entity = (folder.getModelEntity().getChild(FILTER_MAPPING_24_ENTITY) != null)
     			? FILTER_MAPPING_24_ENTITY : FILTER_MAPPING_ENTITY;
     	return folder.getChildren(entity);
     }
