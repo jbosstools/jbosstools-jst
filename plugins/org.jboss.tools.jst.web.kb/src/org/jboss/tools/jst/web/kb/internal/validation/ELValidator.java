@@ -160,7 +160,7 @@ public class ELValidator extends WebValidator {
 		Set<IFile> filesToValidate = new HashSet<IFile>();
 		boolean containsJavaOrComponentsXml = false;
 		for (IFile file : changedFiles) {
-			if(file.isAccessible() && notValidatedYet(file)) {
+			if(shouldBeValidated(file) && notValidatedYet(file)) {
 				filesToValidate.add(file);
 				if(!containsJavaOrComponentsXml) {
 					String fileName = file.getName().toLowerCase();
@@ -174,7 +174,7 @@ public class ELValidator extends WebValidator {
 				Set<IPath> unnamedResources = validationContext.getUnnamedElResources();
 				for (IPath path : unnamedResources) {
 					IFile file = wsRoot.getFile(path);
-					if(file.isAccessible() && notValidatedYet(file)) {
+					if(shouldBeValidated(file) && notValidatedYet(file)) {
 						filesToValidate.add(file);
 					}
 				}
@@ -224,7 +224,7 @@ public class ELValidator extends WebValidator {
 		Set<IFile> files = validationHelper.getProjectSetRegisteredFiles();
 		Set<IFile> filesToValidate = new HashSet<IFile>();
 		for (IFile file : files) {
-			if(file.isAccessible()) {
+			if(shouldBeValidated(file)) {
 				if(notValidatedYet(file)) {
 					filesToValidate.add(file);
 				}
@@ -271,7 +271,7 @@ public class ELValidator extends WebValidator {
 	}
 
 	private void validateEL(ELReference el) {
-		if(!reporter.isCancelled()) {
+		if(!reporter.isCancelled() && shouldBeValidated(el.getResource())) {
 			displaySubtask(ELValidationMessages.VALIDATING_EL_FILE, new String[]{el.getResource().getProject().getName(), el.getResource().getName()});
 			el.deleteMarkers();
 			for (ELExpression expresion : el.getEl()) {
