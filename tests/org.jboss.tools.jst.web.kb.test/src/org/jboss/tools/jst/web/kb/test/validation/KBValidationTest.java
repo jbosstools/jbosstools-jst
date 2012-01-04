@@ -73,11 +73,9 @@ public class KBValidationTest extends TestCase {
 			}
 			public void addProject(IProject project) {
 			}
-			public void clearAll() {
-			}
 			public void clearRegisteredFiles() {
 			}
-			public void clearAllResourceLinks() {
+			public void clearAllResourceLinks(Set<IProject> projects) {
 			}
 			public Set<IFile> getRemovedFiles() {
 				return null;
