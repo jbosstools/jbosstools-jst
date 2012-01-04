@@ -25,7 +25,8 @@ public class JstWebAllTests {
 		suite.addTestSuite(WebContentAssistProviderTest.class);
 //		suite.addTestSuite(BuilderTest.class);
 		suite.addTest(new WebValidationTestSetup(new TestSuite(
-				WebUtilTest.class, 
+				WebUtilTest.class,
+				WebAppHelperTest.class,
 				WebXMLValidationTest.class)));
 		return suite;
 	}
