@@ -43,6 +43,7 @@ import org.jboss.tools.common.el.core.resolver.ElVarSearcher;
 import org.jboss.tools.common.el.core.resolver.IRelevanceCheck;
 import org.jboss.tools.common.el.core.resolver.SimpleELContext;
 import org.jboss.tools.common.el.core.resolver.Var;
+import org.jboss.tools.common.model.project.ProjectHome;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.util.BeanUtil;
 import org.jboss.tools.common.util.FileUtil;
@@ -153,7 +154,14 @@ public abstract class RefactorSearcher {
 	
 	protected abstract IProject[] getProjects();
 	
-	protected abstract IContainer getViewFolder(IProject project);
+	protected IContainer getViewFolder(IProject project) {
+		IPath path = ProjectHome.getFirstWebContentPath(project);
+		
+		if(path != null)
+			return project.getFolder(path.removeFirstSegments(1));
+		
+		return null;
+	}
 	
 	private boolean scanForJava(IContainer container){
 		if(container.getName().startsWith(".")) //$NON-NLS-1$
