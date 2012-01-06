@@ -36,6 +36,7 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.wst.validation.internal.core.ValidationException;
 import org.eclipse.wst.validation.internal.provisional.core.IReporter;
 import org.jboss.tools.common.CommonPlugin;
+import org.jboss.tools.common.EclipseUtil;
 import org.jboss.tools.common.el.core.ELReference;
 import org.jboss.tools.common.el.core.model.ELExpression;
 import org.jboss.tools.common.el.core.model.ELInvocationExpression;
@@ -439,24 +440,21 @@ public class ELValidator extends WebValidator {
 	}
 
 	IJavaSourceReference getJavaReference(final IFile file, final int startPosition, final int length) {
-		IMember m = null;
+		IJavaElement el = null;
 		
 		if(file.getName().endsWith(".java")) {
-			IJavaElement el = JavaCore.create(file);
-			if(el instanceof ICompilationUnit) {
+			ICompilationUnit u = EclipseUtil.getCompilationUnit(file);
+			if(u != null) {
 				try {
-					el = ((ICompilationUnit)el).getElementAt(startPosition);
+					el = u.getElementAt(startPosition);
 				} catch (CoreException exc) {
 					CommonPlugin.getDefault().logError(exc);
-				}
-				if(el instanceof IMember) {
-					m = (IMember)el;
 				}
 			}
 		}
 
-		if(m != null) {
-			final IMember mm = m;
+		if(el instanceof IMember) {
+			final IMember member = (IMember)el;
 			return new IJavaSourceReference() {
 				public int getStartPosition() {
 					return startPosition;
@@ -468,10 +466,10 @@ public class ELValidator extends WebValidator {
 					return file;
 				}
 				public IMember getSourceMember() {
-					return mm;
+					return member;
 				}
 				public IJavaElement getSourceElement() {
-					return mm;
+					return member;
 				}				
 			};
 		}
