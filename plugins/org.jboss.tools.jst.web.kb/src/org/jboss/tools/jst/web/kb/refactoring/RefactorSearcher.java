@@ -271,7 +271,7 @@ public abstract class RefactorSearcher {
 	private void resolveByResolvers(ELExpression operand, ELResolver[] resolvers, ELContext context, IRelevanceCheck[] checks, int offset, List<MatchArea> areas, IFile file){
 		for (int i = 0; i < resolvers.length; i++) {
 			ELResolver resolver = resolvers[i];
-			if (!(resolver instanceof ELCompletionEngine) || !checks[i].isRelevant(operand.getText())) 
+			if (!checks[i].isRelevant(operand.getText())) 
 				continue;
 			
 			ELResolution resolution = resolver.resolve(context, operand, offset);
@@ -496,9 +496,6 @@ public abstract class RefactorSearcher {
 				.getResolvers(file);
 
 		for (ELResolver resolver : resolvers) {
-			if (!(resolver instanceof ELCompletionEngine))
-				continue;
-
 			SimpleELContext context = new SimpleELContext();
 
 			context.setResource(file);
