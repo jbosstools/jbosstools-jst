@@ -141,6 +141,8 @@ public class KbProject extends KbObject implements IKbProject {
 	 */
 	public void deconfigure() throws CoreException {
 		removeFromBuildSpec(KbBuilder.BUILDER_ID);
+		dispose();
+		clearStorage();
 	}
 
 	/*
@@ -219,7 +221,7 @@ public class KbProject extends KbObject implements IKbProject {
 		}
 	}
 	
-	KbProject[] getDependentKbProjects() {
+	public KbProject[] getDependentKbProjects() {
 		synchronized (usedBy) {
 			return usedBy.toArray(new KbProject[0]);
 		}
@@ -336,7 +338,9 @@ public class KbProject extends KbObject implements IKbProject {
 		} finally {
 			fireChanges();
 			
-			modifications = 0;
+			if(getStorageFile() != null && getStorageFile().exists()) {
+				modifications = 0;
+			}
 		}
 
 	}
@@ -1088,4 +1092,17 @@ public class KbProject extends KbObject implements IKbProject {
 	public void setExtensionModel(String id, Object model) {
 		extensionModels.put(id, model);
 	}
+
+	public void dispose() {
+		KbProject[] ds = dependsOn.toArray(new KbProject[0]);
+		for (KbProject p: ds) {
+			removeKbProject(p);
+		}
+		KbProject[] us = usedBy.toArray(new KbProject[0]);
+		for (KbProject p: us) {
+			p.removeKbProject(this);
+		}
+		modifications++;
+	}
+
 }

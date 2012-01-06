@@ -6,6 +6,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.ISaveContext;
 import org.eclipse.core.resources.ISaveParticipant;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -39,6 +43,7 @@ public class WebKbPlugin extends BaseUIPlugin {
 	 * The constructor
 	 */
 	public WebKbPlugin() {
+		plugin = this;
 	}
 
 	/*
@@ -47,7 +52,7 @@ public class WebKbPlugin extends BaseUIPlugin {
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		plugin = this;
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceChangeListener);
 
 		ResourcesPlugin.getWorkspace().addSaveParticipant(PLUGIN_ID, new ISaveParticipant() {
 			
@@ -73,8 +78,6 @@ public class WebKbPlugin extends BaseUIPlugin {
 						KbProject sp = (KbProject)KbProjectFactory.getKbProject(context.getProject(), false, true);
 						try {
 							if(sp != null && sp.getModificationsSinceLastStore() > 0) {
-//								sp.printModifications();
-								//Not any project is a seam project
 								sp.store();
 							}
 						} catch (IOException e) {
@@ -101,7 +104,9 @@ public class WebKbPlugin extends BaseUIPlugin {
 	private void cleanObsoleteFiles() {
 		IProject[] ps = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 		Set<String> projectNames = new HashSet<String>();
-		for (IProject p: ps) projectNames.add(p.getName());
+		for (IProject p: ps) {
+			projectNames.add(p.getName());
+		}
 		WebKbPlugin plugin = WebKbPlugin.getDefault();
 		if(plugin!=null) {
 			IPath path = plugin.getStateLocation();
@@ -125,14 +130,34 @@ public class WebKbPlugin extends BaseUIPlugin {
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
+		ResourcesPlugin.getWorkspace().removeResourceChangeListener(resourceChangeListener);
 		super.stop(context);
-		
-		// Fix for JBIDE-7621: The following line is moved to the very end of the method 
-		// due to prevent NullPointerException to be thrown in cleanObsoleteFiles() method --->>>
-		plugin = null;
-		// <<<---
 	}
 
+	IResourceChangeListener resourceChangeListener = new RCL();
+
+	class RCL implements IResourceChangeListener {
+
+		public void resourceChanged(IResourceChangeEvent event) {
+			if(event.getType() == IResourceChangeEvent.PRE_DELETE || event.getType() == IResourceChangeEvent.PRE_CLOSE) {
+				IResource r = event.getResource();
+				if(r instanceof IProject) {
+					KbProject n = (KbProject)KbProjectFactory.getKbProject((IProject)r, false, true);
+					if(n != null) {
+						n.dispose();
+					}
+				}
+			} else if(event.getType() == IResourceChangeEvent.POST_CHANGE) {
+				IResourceDelta[] cs = event.getDelta().getAffectedChildren(IResourceDelta.CHANGED);
+				for (IResourceDelta c: cs) {
+					if((c.getFlags() & IResourceDelta.OPEN) != 0 && c.getResource() instanceof IProject) {
+						IProject p = (IProject)c.getResource();
+						KbProjectFactory.getKbProject(p, true, true);
+					}
+				}
+			}
+		}
+	}
 	/**
 	 * Returns the shared instance
 	 *
