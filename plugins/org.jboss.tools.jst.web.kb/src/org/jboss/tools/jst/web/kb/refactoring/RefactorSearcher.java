@@ -32,6 +32,7 @@ import org.jboss.tools.common.el.core.ELReference;
 import org.jboss.tools.common.el.core.model.ELExpression;
 import org.jboss.tools.common.el.core.model.ELInvocationExpression;
 import org.jboss.tools.common.el.core.model.ELMethodInvocation;
+import org.jboss.tools.common.el.core.model.ELObject;
 import org.jboss.tools.common.el.core.model.ELPropertyInvocation;
 import org.jboss.tools.common.el.core.resolver.ELCompletionEngine;
 import org.jboss.tools.common.el.core.resolver.ELContext;
@@ -267,6 +268,29 @@ public abstract class RefactorSearcher {
 		return true;
 	}
 	
+	private void resolveByResolvers(ELExpression operand, ELResolver[] resolvers, ELContext context, IRelevanceCheck[] checks, int offset, List<MatchArea> areas, IFile file){
+		for (int i = 0; i < resolvers.length; i++) {
+			ELResolver resolver = resolvers[i];
+			if (!(resolver instanceof ELCompletionEngine) || !checks[i].isRelevant(operand.getText())) 
+				continue;
+			
+			ELResolution resolution = resolver.resolve(context, operand, offset);
+			
+			if(resolution != null) {
+				List<ELSegment> segments = resolution.findSegmentsByJavaElement(javaElement);
+				for(ELSegment segment : segments){
+					int o = offset+segment.getSourceReference().getStartPosition();
+					int l = segment.getSourceReference().getLength();
+					
+					if(!contains(areas, o, l)){
+						match(file, o, l);
+						areas.add(new MatchArea(o, l));
+					}
+				}
+			}
+		}
+	}
+	
 	protected void searchInCach(IFile file){
 		ELResolver[] resolvers = ELResolverFactoryManager.getInstance().getResolvers(file);
 		
@@ -284,24 +308,11 @@ public abstract class RefactorSearcher {
 			for(ELReference reference : references){
 				int offset = reference.getStartPosition();
 				for(ELExpression operand : reference.getEl()){
-					for (int i = 0; i < resolvers.length; i++) {
-						ELResolver resolver = resolvers[i];
-						if (!(resolver instanceof ELCompletionEngine) || !checks[i].isRelevant(operand.getText())) 
-							continue;
-						
-						ELResolution resolution = resolver.resolve(context, operand, offset);
-						
-						if(resolution != null) {
-							List<ELSegment> segments = resolution.findSegmentsByJavaElement(javaElement);
-							for(ELSegment segment : segments){
-								int o = offset+segment.getSourceReference().getStartPosition();
-								int l = segment.getSourceReference().getLength();
-								
-								if(!contains(areas, o, l)){
-									match(file, o, l);
-									areas.add(new MatchArea(o, l));
-								}
-							}
+					resolveByResolvers(operand, resolvers, context, checks, offset, areas, file);
+					
+					for(ELObject child : operand.getChildren()){
+						if(child instanceof ELExpression){
+							resolveByResolvers((ELExpression)child, resolvers, context, checks, offset, areas, file);
 						}
 					}
 				}
@@ -315,6 +326,14 @@ public abstract class RefactorSearcher {
 						ELInvocationExpression expression = findComponentReference((ELInvocationExpression)operand);
 						if(expression != null){
 							checkMatch(file, expression, offset+getOffset(expression), getLength(expression));
+						}
+					}
+					for(ELObject child : operand.getChildren()){
+						if(child instanceof ELInvocationExpression){
+							ELInvocationExpression expression = findComponentReference((ELInvocationExpression)child);
+							if(expression != null){
+								checkMatch(file, expression, offset+getOffset(expression), getLength(expression));
+							}
 						}
 					}
 				}
