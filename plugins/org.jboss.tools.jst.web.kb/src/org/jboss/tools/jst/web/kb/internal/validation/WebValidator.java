@@ -15,6 +15,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.wst.validation.internal.provisional.core.IReporter;
+import org.jboss.tools.common.EclipseUtil;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.validation.ContextValidationHelper;
 import org.jboss.tools.common.validation.IProjectValidationContext;
@@ -79,6 +80,10 @@ abstract public class WebValidator extends KBValidator {
 		if(shouldValidateJavaSources()) {
 			for (int i = 0; currentSources!=null && i < currentSources.length; i++) {
 				if(currentSources[i].getLocation().isPrefixOf(file.getLocation())) {
+					if(JAVA_EXT.equalsIgnoreCase(file.getFileExtension())) {
+						//check that Java is not excluded from class path.
+						return EclipseUtil.getCompilationUnit(file) != null;
+					}
 					return true;
 				}
 			}
