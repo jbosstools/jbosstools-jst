@@ -160,6 +160,10 @@ public class JavaStringELInfoHover extends JavadocHover {
 			// Ignore. It is probably because of Java element's resource is not found 
 		}
 
+		if(file == null) {
+			return null;
+		}
+
 		ELContext context = PageContextFactory.createPageContext(file, JavaCore.JAVA_SOURCE_CONTENT_TYPE);
 		
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, context);
@@ -238,15 +242,11 @@ public class JavaStringELInfoHover extends JavadocHover {
 		if (input == null)
 			return null;
 		
-		IFile file = null;
-		
-		try {
-			IResource resource = input.getCorrespondingResource();
-			if (resource instanceof IFile)
-				file = (IFile) resource;
-		} catch (JavaModelException e) {
-			// Ignore. It is probably because of Java element's resource is not found 
+		IResource r = input.getResource();
+		if(!(r instanceof IFile) || !r.exists() || r.getName().endsWith(".jar")) { //$NON-NLS-1$
+			return null;
 		}
+		IFile file = (IFile)r;
 
 		ELContext context = PageContextFactory.createPageContext(file, JavaCore.JAVA_SOURCE_CONTENT_TYPE);
 		
