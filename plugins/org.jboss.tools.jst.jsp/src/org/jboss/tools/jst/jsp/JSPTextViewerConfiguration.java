@@ -43,7 +43,7 @@ import org.eclipse.wst.sse.ui.internal.taginfo.AnnotationHoverProcessor;
 import org.eclipse.wst.sse.ui.internal.taginfo.TextHoverManager;
 import org.eclipse.wst.sse.ui.internal.util.EditorUtility;
 import org.jboss.tools.common.text.ext.hyperlink.HyperlinkDetector;
-import org.jboss.tools.common.text.xml.JBDSQuickAssistProcessor;
+import org.jboss.tools.common.text.xml.BaseQuickAssistProcessor;
 import org.jboss.tools.common.text.xml.contentassist.ProposalSorter;
 import org.jboss.tools.common.text.xml.info.ChainTextHover;
 import org.jboss.tools.common.text.xml.info.TextHoverInformationProvider;
@@ -262,7 +262,7 @@ public class JSPTextViewerConfiguration extends StructuredTextViewerConfiguratio
 	public IQuickAssistAssistant getQuickAssistAssistant(ISourceViewer sourceViewer) {
 		if (fQuickAssistant == null) {
 			IQuickAssistAssistant assistant = new QuickAssistAssistant();
-			assistant.setQuickAssistProcessor(new JBDSQuickAssistProcessor());
+			assistant.setQuickAssistProcessor(new BaseQuickAssistProcessor());
 			assistant.setInformationControlCreator(getQuickAssistAssistantInformationControlCreator());
 
 			if (fPreferenceStore != null) {
