@@ -17,6 +17,8 @@
       </attributeAdapter>
       <attributeAdapter class="org.jboss.tools.jst.web.ui.attribute.adapter.ServletNameListAdapter" id="ServletList">
       </attributeAdapter>
+      <attributeAdapter class="org.jboss.tools.jst.web.ui.attribute.adapter.FilterNameListAdapter" id="FilterList">
+      </attributeAdapter>
    </extension>
    <extension point="org.jboss.tools.common.model.ui.attributeEditor">
       <attributeEditor class="org.jboss.tools.common.model.ui.attribute.editor.ComboBoxEditor" id="WebRoleList">
@@ -26,6 +28,8 @@
       <attributeEditor class="org.jboss.tools.common.model.ui.attribute.editor.ComboBoxEditor" id="LibrarySetList">
       </attributeEditor>
       <attributeEditor class="org.jboss.tools.common.model.ui.attribute.editor.ComboBoxEditor" id="ServletList">
+      </attributeEditor>
+      <attributeEditor class="org.jboss.tools.common.model.ui.attribute.editor.ComboBoxEditor" id="FilterList">
       </attributeEditor>
    </extension>
    
