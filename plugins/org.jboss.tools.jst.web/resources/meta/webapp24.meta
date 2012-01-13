@@ -1036,9 +1036,19 @@
    <XModelAttribute default="filter mapping" loader="ElementType" name="element type">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="id=true;save=always" name="filter-name" xmlname="filter-name.#text"/>
+   <XModelAttribute
+    PROPERTIES="id=true;save=always;linkAction=OpenFilter"
+    name="filter-name" xmlname="filter-name.#text">
+    <Constraint loader="ListString"/>
+    <Editor name="FilterList"/>
+   </XModelAttribute>
    <XModelAttribute PROPERTIES="id=true" name="url-pattern" xmlname="url-pattern.#text"/>
-   <XModelAttribute PROPERTIES="id=true;save=always" name="servlet-name" xmlname="servlet-name.#text"/>
+   <XModelAttribute
+    PROPERTIES="id=true;save=always;linkAction=OpenServlet"
+    name="servlet-name" xmlname="servlet-name.#text">
+    <Constraint loader="ListString"/>
+    <Editor name="ServletList"/>
+   </XModelAttribute>
    <XModelAttribute name="dispatchers" xmlname="dispatchers">
     <Constraint loader="ListAdd">
      <value name="FORWARD"/>
@@ -1054,6 +1064,12 @@
    </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
+   <XActionItem HIDE="always"
+    HandlerClassName="org.jboss.tools.jst.web.webapp.model.handlers.OpenFilterHandler"
+    ICON="action.empty" displayName="Open Filter" kind="action" name="OpenFilter"/>
+   <XActionItem HIDE="always"
+    HandlerClassName="org.jboss.tools.jst.web.webapp.model.handlers.OpenServletHandler"
+    ICON="action.empty" displayName="Open Servlet" kind="action" name="OpenServlet"/>
    <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
     <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
      ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>

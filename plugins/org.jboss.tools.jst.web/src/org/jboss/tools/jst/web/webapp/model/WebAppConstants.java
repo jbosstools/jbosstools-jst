@@ -22,5 +22,7 @@ public interface WebAppConstants {
 	public String JSP_FILE = "jsp-file"; //$NON-NLS-1$
 	public String SERVLET_NAME = "servlet-name"; //$NON-NLS-1$
 	public String URL_PATTERN = "url-pattern"; //$NON-NLS-1$
+	public String FILTER_NAME = "filter-name"; //$NON-NLS-1$
+	public String ROLE_NAME = "role-name"; //$NON-NLS-1$
 }
 

@@ -247,6 +247,14 @@
 			class="org.jboss.tools.jst.web.tld.model.handlers.CreateTLDFileSupport"/>
 		<xclass id="org.jboss.tools.jst.web.webapp.model.handlers.CreateWebAppErrorPageSupport"
 			class="org.jboss.tools.jst.web.webapp.model.handlers.CreateWebAppErrorPageSupport"/>
+		<xclass id="org.jboss.tools.jst.web.webapp.model.handlers.OpenFilterHandler"
+			class="org.jboss.tools.jst.web.webapp.model.handlers.OpenFilterHandler"/>
+		<xclass id="org.jboss.tools.jst.web.webapp.model.handlers.OpenServletHandler"
+			class="org.jboss.tools.jst.web.webapp.model.handlers.OpenServletHandler"/>
+		<xclass id="org.jboss.tools.jst.web.webapp.model.handlers.OpenFilterHandler"
+			class="org.jboss.tools.jst.web.webapp.model.handlers.OpenFilterHandler"/>
+		<xclass id="org.jboss.tools.jst.web.webapp.model.handlers.OpenRoleHandler"
+			class="org.jboss.tools.jst.web.webapp.model.handlers.OpenRoleHandler"/>
 
 		<xclass id="org.jboss.tools.jst.web.tld.model.handlers.DeleteValidatorSignificanceMessage"
 			class="org.jboss.tools.jst.web.tld.model.handlers.DeleteValidatorSignificanceMessage"/>

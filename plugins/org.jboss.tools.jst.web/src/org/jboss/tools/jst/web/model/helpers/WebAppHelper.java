@@ -16,6 +16,7 @@ import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.util.XModelObjectUtil;
+import org.jboss.tools.jst.web.webapp.model.WebAppConstants;
 
 /**
  * @author glory
@@ -359,6 +360,15 @@ public class WebAppHelper {
 		return null;
 	}
 
+    public static XModelObject findFilter(XModelObject webxml, String filterName) {
+		XModelObject[] os = getFilters(webxml);
+		for (int i = 0; i < os.length; i++) {
+			String c = os[i].getAttributeValue(WebAppConstants.FILTER_NAME);
+			if(filterName.equals(c)) return os[i];
+		}
+		return null;
+	}
+
     public static XModelObject findFilterMapping(XModelObject webxml, String name) {
     	XModelObject folder = webxml.getChildByPath(FILTER_FOLDER);
     	if(folder == null) folder = webxml;
@@ -386,10 +396,17 @@ public class WebAppHelper {
     }
 
     public static XModelObject[] getRoles(XModelObject webxml) {
-    	if(webxml == null) return null;
     	XModelObject folder = webxml.getChildByPath(ROLE_FOLDER);
     	if(folder == null) folder = webxml;
     	return folder.getChildren(ROLE_ENTITY);
     }
+
+    public static XModelObject findRole(XModelObject webxml, String name) {
+		XModelObject[] cs = WebAppHelper.getRoles(webxml);
+		for (int i = 0; i < cs.length; i++) {
+			if(name.equals(cs[i].getAttributeValue("role-name"))) return cs[i]; //$NON-NLS-1$
+		}
+		return null;
+	}
 
 }

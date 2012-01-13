@@ -44,12 +44,7 @@ public class CheckRoleReferenceName extends Check {
 	
 	XModelObject findRole(XModelObject mapping, String name) {
 		XModelObject webxml = WebAppHelper.getParentFile(mapping);
-		if(webxml == null) return null;
-		XModelObject[] cs = WebAppHelper.getRoles(webxml);
-		for (int i = 0; i < cs.length; i++) {
-			if(name.equals(cs[i].getAttributeValue(attr))) return cs[i];
-		}
-		return null;
+		return (webxml == null) ? null : WebAppHelper.findRole(webxml, name);
 	}
 
 }

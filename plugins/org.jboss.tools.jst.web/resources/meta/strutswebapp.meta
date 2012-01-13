@@ -948,15 +948,31 @@
    <XModelAttribute default="filter mapping" loader="ElementType" name="element type">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="id=true;save=always" name="filter-name" xmlname="filter-name.#text"/>
+   <XModelAttribute
+    PROPERTIES="id=true;save=always;linkAction=OpenFilter"
+    name="filter-name" xmlname="filter-name.#text">
+    <Constraint loader="ListString"/>
+    <Editor name="FilterList"/>
+   </XModelAttribute>
    <XModelAttribute PROPERTIES="id=true" name="url-pattern" xmlname="url-pattern.#text"/>
-   <XModelAttribute PROPERTIES="id=true;save=always" name="servlet-name" xmlname="servlet-name.#text"/>
+   <XModelAttribute
+    PROPERTIES="id=true;save=always;linkAction=OpenServlet"
+    name="servlet-name" xmlname="servlet-name.#text">
+    <Constraint loader="ListString"/>
+    <Editor name="ServletList"/>
+   </XModelAttribute>
    <XModelAttribute name="id" visibility="false" xmlname="id"/>
    <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
     <Editor name="Note"/>
    </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
+   <XActionItem HIDE="always"
+    HandlerClassName="org.jboss.tools.jst.web.webapp.model.handlers.OpenFilterHandler"
+    ICON="action.empty" displayName="Open Filter" kind="action" name="OpenFilter"/>
+   <XActionItem HIDE="always"
+    HandlerClassName="org.jboss.tools.jst.web.webapp.model.handlers.OpenServletHandler"
+    ICON="action.empty" displayName="Open Servlet" kind="action" name="OpenServlet"/>
    <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
     <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
      ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
@@ -2167,7 +2183,8 @@
    <XModelAttribute default="role" loader="ElementType" name="element type">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="id=true" name="role-name" xmlname="#text">
+   <XModelAttribute PROPERTIES="id=true;linkAction=OpenRole"
+    name="role-name" xmlname="#text">
     <Constraint loader="ListString"/>
     <Editor name="WebRoleList"/>
    </XModelAttribute>
@@ -2177,6 +2194,9 @@
    </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
+   <XActionItem HIDE="always"
+    HandlerClassName="org.jboss.tools.jst.web.webapp.model.handlers.OpenRoleHandler"
+    ICON="action.empty" displayName="Open Role" kind="action" name="OpenRole"/>
    <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
     <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
      ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
@@ -2212,7 +2232,8 @@
    <XModelAttribute name="description" xmlname="description.#text">
     <Editor name="Note"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="id=true;save=always" name="role-name" xmlname="role-name.#text">
+   <XModelAttribute PROPERTIES="id=true;save=always;linkAction=OpenRole"
+    name="role-name" xmlname="role-name.#text">
     <Constraint loader="ListString"/>
     <Editor name="WebRoleList"/>
    </XModelAttribute>
@@ -2222,6 +2243,9 @@
    </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
+   <XActionItem HIDE="always"
+    HandlerClassName="org.jboss.tools.jst.web.webapp.model.handlers.OpenRoleHandler"
+    ICON="action.empty" displayName="Open Role" kind="action" name="OpenRole"/>
    <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
     <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
      ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
@@ -2381,7 +2405,8 @@
     <Constraint loader="Nmtoken"/>
     <Editor name="Name"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="save=always" name="role-link" xmlname="role-link.#text">
+   <XModelAttribute PROPERTIES="save=always;linkAction=OpenRole"
+    name="role-link" xmlname="role-link.#text">
     <Constraint loader="ListString"/>
     <Editor name="WebRoleList"/>
    </XModelAttribute>
@@ -2391,6 +2416,10 @@
    </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
+   <XActionItem HIDE="always"
+    HandlerClassName="org.jboss.tools.jst.web.webapp.model.handlers.OpenRoleHandler"
+    ICON="action.empty" PROPERTIES="attribute=role-link"
+    displayName="Open Role" kind="action" name="OpenRole"/>
    <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
     <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
      ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
@@ -2536,7 +2565,9 @@
    <XModelAttribute default="servlet mapping" loader="ElementType" name="element type">
     <Editor name="Uneditable"/>
    </XModelAttribute>
-   <XModelAttribute PROPERTIES="id=true;save=always" name="servlet-name" xmlname="servlet-name.#text">
+   <XModelAttribute
+    PROPERTIES="id=true;save=always;linkAction=OpenServlet"
+    name="servlet-name" xmlname="servlet-name.#text">
     <Constraint loader="ListString"/>
     <Editor name="ServletList"/>
    </XModelAttribute>
@@ -2547,6 +2578,9 @@
    </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
+   <XActionItem HIDE="always"
+    HandlerClassName="org.jboss.tools.jst.web.webapp.model.handlers.OpenServletHandler"
+    ICON="action.empty" displayName="Open Servlet" kind="action" name="OpenServlet"/>
    <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
     <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
      ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
