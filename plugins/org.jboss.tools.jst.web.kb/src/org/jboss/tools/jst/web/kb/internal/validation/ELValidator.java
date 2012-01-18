@@ -32,7 +32,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMember;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.wst.validation.internal.core.ValidationException;
 import org.eclipse.wst.validation.internal.provisional.core.IReporter;
 import org.jboss.tools.common.CommonPlugin;
@@ -299,120 +298,118 @@ public class ELValidator extends WebValidator {
 		int offsetOfVarName = documnetOffset + operandToken.getFirstToken().getStart();
 		int lengthOfVarName = varName.length();
 		boolean unresolvedTokenIsVariable = false;
-		if (!operand.endsWith(".")) { //$NON-NLS-1$
-			ELResolution resolution = null;
-			ELContext context = PageContextFactory.createPageContext(file);
-			if(context==null) {
-				context = new SimpleELContext();
-				context.setResource(file);
-				context.setElResolvers(resolvers);
-			}
-			int maxNumberOfResolvedSegments = -1;
-			List<Var> vars = null;
-			ELContextImpl c = null;
-			if(!validateVars && context instanceof ELContextImpl) {
-				c = (ELContextImpl)context;
-				vars = c.getAllVars();
-				c.setAllVars(new ArrayList<Var>());
-			}
+		ELResolution resolution = null;
+		ELContext context = PageContextFactory.createPageContext(file);
+		if(context==null) {
+			context = new SimpleELContext();
+			context.setResource(file);
+			context.setElResolvers(resolvers);
+		}
+		int maxNumberOfResolvedSegments = -1;
+		List<Var> vars = null;
+		ELContextImpl c = null;
+		if(!validateVars && context instanceof ELContextImpl) {
+			c = (ELContextImpl)context;
+			vars = c.getAllVars();
+			c.setAllVars(new ArrayList<Var>());
+		}
 
-			for (int i = 0; i < resolvers.length; i++) {
-				ELResolution elResolution = resolvers[i].resolve(context, operandToken, documnetOffset);
-				if(elResolution==null) {
-					continue;
-				}
-				if(elResolution.isResolved()) {
-					resolution = elResolution;
-					break;
-				}
-				int number = elResolution.getNumberOfResolvedSegments();
-				if(number>maxNumberOfResolvedSegments) {
-					maxNumberOfResolvedSegments = number;
-					resolution = elResolution;
-				}
+		for (int i = 0; i < resolvers.length; i++) {
+			ELResolution elResolution = resolvers[i].resolve(context, operandToken, documnetOffset);
+			if(elResolution==null) {
+				continue;
 			}
+			if(elResolution.isResolved()) {
+				resolution = elResolution;
+				break;
+			}
+			int number = elResolution.getNumberOfResolvedSegments();
+			if(number>maxNumberOfResolvedSegments) {
+				maxNumberOfResolvedSegments = number;
+				resolution = elResolution;
+			}
+		}
 
-			if(c!=null) {
-				c.setAllVars(vars);
-			}
+		if(c!=null) {
+			c.setAllVars(vars);
+		}
 
-			if(resolution==null) {
-				return;
+		if(resolution==null) {
+			return;
+		}
+		if(!resolution.isResolved()) {
+			Set<String> names = findVariableNames(operandToken);
+			for (String name : names) {
+				validationContext.addLinkedEl(name, elReference);
 			}
-			if(!resolution.isResolved()) {
-				Set<String> names = findVariableNames(operandToken);
-				for (String name : names) {
-					validationContext.addLinkedEl(name, elReference);
-				}
-			}
+		}
 
-			List<ELSegment> segments = resolution.getSegments();
-			List<IVariable> usedVariables = new ArrayList<IVariable>();
-			for (ELSegment segment : segments) {
-				if(!segment.getVariables().isEmpty()) {
-					usedVariables.addAll(segment.getVariables());
-				}
-				// Check pair for getter/setter
-				if(segment instanceof JavaMemberELSegmentImpl) {
-					JavaMemberELSegmentImpl javaSegment = (JavaMemberELSegmentImpl)segment;
-					if(!javaSegment.getUnpairedGettersOrSetters().isEmpty()) {
-						TypeInfoCollector.MethodInfo unpairedMethod = javaSegment.getUnpairedGettersOrSetters().values().iterator().next();
-						String methodName = unpairedMethod.getName();
-						String propertyName = javaSegment.getUnpairedGettersOrSetters().keySet().iterator().next();
-						String missingMethodName = ELValidationMessages.EL_VALIDATOR_SETTER;
-						String existedMethodName = ELValidationMessages.EL_VALIDATOR_GETTER;
-						if(methodName.startsWith("s")) { //$NON-NLS-1$
-							missingMethodName = existedMethodName;
-							existedMethodName = ELValidationMessages.EL_VALIDATOR_SETTER;
-						}
-						int startPosition = documnetOffset + operandToken.getStartPosition();
-						int length = operandToken.getLength();
-						int startPr = operand.indexOf(propertyName);
-						if(startPr>-1) {
-							startPosition = startPosition + startPr;
-							length = propertyName.length();
-						}
-						markers++;
-						
-						IJavaSourceReference reference = getJavaReference(file, startPosition, length);
-						
-						if(reference != null) {
-							IMarker marker = addError(ELValidationMessages.UNPAIRED_GETTER_OR_SETTER, ELSeverityPreferences.UNPAIRED_GETTER_OR_SETTER, new String[]{propertyName, existedMethodName, missingMethodName}, reference, file);
-							elReference.addMarker(marker);
-						} else {
-							IMarker marker = addError(ELValidationMessages.UNPAIRED_GETTER_OR_SETTER, ELSeverityPreferences.UNPAIRED_GETTER_OR_SETTER, new String[]{propertyName, existedMethodName, missingMethodName}, elReference.getLineNumber(), length, startPosition, file);
-							elReference.addMarker(marker);
-						}
-						
+		List<ELSegment> segments = resolution.getSegments();
+		List<IVariable> usedVariables = new ArrayList<IVariable>();
+		for (ELSegment segment : segments) {
+			if(!segment.getVariables().isEmpty()) {
+				usedVariables.addAll(segment.getVariables());
+			}
+			// Check pair for getter/setter
+			if(segment instanceof JavaMemberELSegmentImpl) {
+				JavaMemberELSegmentImpl javaSegment = (JavaMemberELSegmentImpl)segment;
+				if(!javaSegment.getUnpairedGettersOrSetters().isEmpty()) {
+					TypeInfoCollector.MethodInfo unpairedMethod = javaSegment.getUnpairedGettersOrSetters().values().iterator().next();
+					String methodName = unpairedMethod.getName();
+					String propertyName = javaSegment.getUnpairedGettersOrSetters().keySet().iterator().next();
+					String missingMethodName = ELValidationMessages.EL_VALIDATOR_SETTER;
+					String existedMethodName = ELValidationMessages.EL_VALIDATOR_GETTER;
+					if(methodName.startsWith("s")) { //$NON-NLS-1$
+						missingMethodName = existedMethodName;
+						existedMethodName = ELValidationMessages.EL_VALIDATOR_SETTER;
 					}
+					int startPosition = documnetOffset + operandToken.getStartPosition();
+					int length = operandToken.getLength();
+					int startPr = operand.indexOf(propertyName);
+					if(startPr>-1) {
+						startPosition = startPosition + startPr;
+						length = propertyName.length();
+					}
+					markers++;
+					
+					IJavaSourceReference reference = getJavaReference(file, startPosition, length);
+					
+					if(reference != null) {
+						IMarker marker = addError(ELValidationMessages.UNPAIRED_GETTER_OR_SETTER, ELSeverityPreferences.UNPAIRED_GETTER_OR_SETTER, new String[]{propertyName, existedMethodName, missingMethodName}, reference, file);
+						elReference.addMarker(marker);
+					} else {
+						IMarker marker = addError(ELValidationMessages.UNPAIRED_GETTER_OR_SETTER, ELSeverityPreferences.UNPAIRED_GETTER_OR_SETTER, new String[]{propertyName, existedMethodName, missingMethodName}, elReference.getLineNumber(), length, startPosition, file);
+						elReference.addMarker(marker);
+					}
+					
 				}
 			}
-			// Save links between resource and used variables names
-			for(IVariable variable: usedVariables) {
-				validationContext.addLinkedEl(variable.getName(), elReference);
-			}
+		}
+		// Save links between resource and used variables names
+		for(IVariable variable: usedVariables) {
+			validationContext.addLinkedEl(variable.getName(), elReference);
+		}
 
-			if (resolution.isResolved() || !resolution.isValidatable()) {
-				// It's valid EL or we should ignore it.
-				return;
-			}
+		if (resolution.isResolved() || !resolution.isValidatable()) {
+			// It's valid EL or we should ignore it.
+			return;
+		}
 
-			ELSegment segment = resolution.getUnresolvedSegment();
-			if(segment==null) {
-				return;
-			}
-			LexicalToken token = segment.getToken();
+		ELSegment segment = resolution.getUnresolvedSegment();
+		if(segment==null) {
+			return;
+		}
+		LexicalToken token = segment.getToken();
 
-			varName = token.getText();
-			if(varName == null) {
-				//This is syntax error case. Reported by parser.
-				return;						
-			}
-			offsetOfVarName = documnetOffset + token.getStart();
-			lengthOfVarName = varName == null ? 0 : varName.length();
-			if(usedVariables.isEmpty()) {
-				unresolvedTokenIsVariable = true;
-			}
+		varName = token.getText();
+		if(varName == null) {
+			//This is syntax error case. Reported by parser.
+			return;						
+		}
+		offsetOfVarName = documnetOffset + token.getStart();
+		lengthOfVarName = varName == null ? 0 : varName.length();
+		if(usedVariables.isEmpty()) {
+			unresolvedTokenIsVariable = true;
 		}
 		markers++;
 		IJavaSourceReference reference = getJavaReference(file, offsetOfVarName, lengthOfVarName);
@@ -425,7 +422,6 @@ public class ELValidator extends WebValidator {
 			} else {
 				marker = addError(ELValidationMessages.UNKNOWN_EL_VARIABLE_NAME, ELSeverityPreferences.UNKNOWN_EL_VARIABLE_NAME, new String[]{varName}, reference, file);
 			}
-			
 		} else {
 			if(reference == null) {
 				marker = addError(ELValidationMessages.UNKNOWN_EL_VARIABLE_PROPERTY_NAME, ELSeverityPreferences.UNKNOWN_EL_VARIABLE_PROPERTY_NAME, new String[]{varName}, elReference.getLineNumber(), lengthOfVarName, offsetOfVarName, file);
@@ -433,7 +429,7 @@ public class ELValidator extends WebValidator {
 				marker = addError(ELValidationMessages.UNKNOWN_EL_VARIABLE_PROPERTY_NAME, ELSeverityPreferences.UNKNOWN_EL_VARIABLE_PROPERTY_NAME, new String[]{varName}, reference, file);
 			}
 		}
-		
+
 		if(marker != null) {
 			elReference.addMarker(marker);
 		}
