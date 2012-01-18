@@ -583,9 +583,7 @@ public class PageContextFactory implements IResourceChangeListener {
 			int length = ((IndexedRegion) node).getLength();
 
 			start = node.getStartOffset();
-			length = (node.hasEndTag() ? node
-					.getEndStructuredDocumentRegion()
-					.getEnd() : ((IDOMNode) node.getOwnerDocument()).getEndOffset() - 1 - start);
+			length = node.getEndOffset() - start;
 
 			context.addVar(new Region(start, length), var);
 		}
