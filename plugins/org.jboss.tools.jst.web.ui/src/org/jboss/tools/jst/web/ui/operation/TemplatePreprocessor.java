@@ -65,6 +65,11 @@ public class TemplatePreprocessor {
 		File sourceFile = new File(sourceDir, path);
 		File targetFile = new File(targetDir, path);
 		if(!sourceFile.exists()) return;
+		
+		ClassLoader c = Thread.currentThread().getContextClassLoader();
+		Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
+
+		try {
 
 		Properties properties = new Properties();
 		properties.put("file.resource.loader.path", sourceDir.getCanonicalPath()); //$NON-NLS-1$
@@ -93,5 +98,9 @@ public class TemplatePreprocessor {
 
 		writer.flush();
 		writer.close();
+
+		} finally {
+			Thread.currentThread().setContextClassLoader(c);
+		}
 	}
 }
