@@ -10,15 +10,19 @@
  ******************************************************************************/
 package org.jboss.tools.jst.web.validation;
 
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.osgi.util.NLS;
 import org.jboss.tools.common.model.*;
 import org.jboss.tools.common.validation.ValidationErrorManager;
+import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.model.helpers.WebAppHelper;
 
 /**
  * @author Viacheslav Kabanovich
  */
 public class CheckServletMappingName extends Check {
+	public static String JAX_RS_APPLICATION = "javax.ws.rs.core.Application"; //$NON-NLS-1$
 	static String ATTR = "servlet-name"; //$NON-NLS-1$
 	boolean acceptEmpty = false;
 
@@ -34,7 +38,20 @@ public class CheckServletMappingName extends Check {
 			if(acceptEmpty) return;
 			fireMessage(object, NLS.bind(WebXMLValidatorMessages.EMPTY, attr));
 		} else if(findServlet(object, servletName) == null) {
-			fireMessage(object, NLS.bind(WebXMLValidatorMessages.SERVLET_NOT_EXISTS, attr, servletName));
+			//JAX-RS
+			if(servletName.equals(JAX_RS_APPLICATION)) {
+				return;
+			}
+			IType type = CheckClass.getValidType(servletName, object);
+			if(type != null) {
+				try {
+					new CheckServletClass(manager).check(object, servletName, type);
+				} catch (JavaModelException e) {
+					WebModelPlugin.getDefault().logError(e);
+				}
+			} else {
+				fireMessage(object, NLS.bind(WebXMLValidatorMessages.SERVLET_NOT_EXISTS, attr, servletName));
+			}
 		}
 	}
 	
@@ -47,4 +64,19 @@ public class CheckServletMappingName extends Check {
 		return null;
 	}
 
+}
+
+class CheckServletClass extends CheckClass {
+
+	public CheckServletClass(ValidationErrorManager manager) {
+		super(manager, WebXMLPreferences.INVALID_SERVLET_REF, CheckServletMappingName.ATTR, false, null, CheckServletMappingName.JAX_RS_APPLICATION);
+	}
+
+	protected void check(XModelObject object, String value, IType type) throws JavaModelException {
+		String mustExtend = checkExtends(object, type);
+		if(mustExtend == null) {
+			return;
+		}
+		fireExtends(object, preference, value, mustExtend);
+	}
 }

@@ -87,30 +87,41 @@ public class CheckClass extends Check {
 		}
 		
 		if(type != null) {
-			String mustImpl = null;
-			try { mustImpl = checkImplements(object, type); } catch (Exception e) {
+			try {
+				check(object, value, type);
+			} catch (Exception e) {
 	        	LogHelper.logError("org.jboss.tools.jst.web.verification", e); //$NON-NLS-1$
-			}
-			if(mustImpl != null) {
-				fireImplements(object, preference, value, mustImpl);
-			}
-			String mustExtend = null;
-			try { mustExtend = checkExtends(object, type); } catch (Exception e) {
-	        	LogHelper.logError("org.jboss.tools.jst.web.verification", e); //$NON-NLS-1$
-			}
-			if(mustExtend != null) {
-				fireExtends(object, preference, value, mustExtend);
 			}
 			return;
 		}
 		fireNotExist(object, preference, value);
 	}
+
+	protected void check(XModelObject object, String value, IType type) throws JavaModelException {
+		String mustImpl = checkImplements(object, type);
+		if(mustImpl != null) {
+			fireImplements(object, preference, value, mustImpl);
+		}
+		String mustExtend = checkExtends(object, type);
+		if(mustExtend != null) {
+			fireExtends(object, preference, value, mustExtend);
+		}
+	}
 	
 	private boolean checkQualifiedName(String value) {
 		return constraint.accepts(value);
 	}
-	
-	private String checkImplements(XModelObject object, IType type) throws Exception {
+
+	/**
+	 * Returns name of interface that should be implemented by type but is not.
+	 * Returns null if no restriction on type is set.
+	 * 
+	 * @param object
+	 * @param type
+	 * @return
+	 * @throws JavaModelException
+	 */
+	protected String checkImplements(XModelObject object, IType type) throws JavaModelException {
 		if("java.lang.Class".equals(type.getFullyQualifiedName())) return null; //$NON-NLS-1$
 		String impl = implementsType;
 		if(impl == null || impl.length() == 0) return null;
@@ -129,7 +140,16 @@ public class CheckClass extends Check {
 		return checkImplements(object, type);
 	}
 	
-	private String checkExtends(XModelObject object, IType type) throws Exception {
+	/**
+	 * Returns name of class that should be extended by type but is not.
+	 * Returns null if no restriction on type is set or if type is interface.
+	 * 
+	 * @param object
+	 * @param type
+	 * @return
+	 * @throws JavaModelException
+	 */
+	protected String checkExtends(XModelObject object, IType type) throws JavaModelException {
 		if(type.isInterface()) return null;
 		if("java.lang.Class".equals(type.getFullyQualifiedName())) return null; //$NON-NLS-1$
 		String ext = extendsType;
