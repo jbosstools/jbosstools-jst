@@ -24,6 +24,7 @@ import org.jboss.tools.common.base.test.validation.TestUtil;
 import org.jboss.tools.common.validation.ValidatorManager;
 import org.jboss.tools.jst.web.validation.WebXMLCoreValidator;
 import org.jboss.tools.jst.web.validation.WebXMLValidatorMessages;
+import org.jboss.tools.jst.web.webapp.model.WebAppConstants;
 import org.jboss.tools.test.util.JobUtils;
 import org.jboss.tools.test.util.ProjectImportTestSetup;
 import org.jboss.tools.test.util.ResourcesUtils;
@@ -110,13 +111,39 @@ public class WebXMLValidationTest extends TestCase {
 	}
 
 	static boolean hasMarkerOnLine(IMarker[] ms, int line) {
+		return getMarkerOnLine(ms, line) != null;
+	}
+
+	static IMarker getMarkerOnLine(IMarker[] ms, int line) {
 		for (IMarker m: ms) {
 			int l = m.getAttribute(IMarker.LINE_NUMBER, -1);
 			if(line == l) {
-				return true;
+				return m;
 			}
 		}
-		return false;
+		return null;
+	}
+
+	public void testServletMapping() throws CoreException {
+		IFile webxml = project.getFile("WebContent/WEB-INF/webJAXFX.xml");
+		IMarker[] markers = webxml.findMarkers(WebXMLCoreValidator.PROBLEM_TYPE, false, IResource.DEPTH_ZERO);
+
+		//1. If servlet-mapping/servlet-name=javax.ws.rs.core.Application, it is ok.
+		assertFalse(hasMarkerOnLine(markers, 6));
+
+		//2. If servlet-mapping/servlet-name is a class it should extend javax.ws.rs.core.Application.
+		assertTrue(hasMarkerOnLine(markers, 11));
+		IMarker m = getMarkerOnLine(markers, 11);
+		String expected = NLS.bind(WebXMLValidatorMessages.CLASS_NOT_EXTENDS, new Object[]{WebAppConstants.SERVLET_NAME, "test.MyApplication", "javax.ws.rs.core.Application"});
+		assertEquals(expected, m.getAttribute(IMarker.MESSAGE, ""));
+
+		//3. If servlet-mapping/servlet-name is not a class, it should reference servlet/servlet-name
+		assertTrue(hasMarkerOnLine(markers, 16));
+		m = getMarkerOnLine(markers, 16);
+		expected = NLS.bind(WebXMLValidatorMessages.SERVLET_NOT_EXISTS, new Object[]{WebAppConstants.SERVLET_NAME, "notaservlet"});
+		assertEquals(expected, m.getAttribute(IMarker.MESSAGE, ""));
+
+		assertFalse(hasMarkerOnLine(markers, 24));
 	}
 
 	public static void replaceFile(IProject project, String sourcePath, String targetPath) throws CoreException {
