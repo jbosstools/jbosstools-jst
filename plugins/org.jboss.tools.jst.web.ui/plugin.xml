@@ -414,6 +414,8 @@
       <or>         
         <instanceof 
               value="org.eclipse.core.resources.IFile" /> 
+        <instanceof 
+              value="org.eclipse.core.resources.IProject" /> <!-- for activation -->
       </or>
     </triggerPoints>
     <possibleChildren>

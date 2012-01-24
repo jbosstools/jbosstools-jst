@@ -13,9 +13,7 @@ package org.jboss.tools.jst.web.ui.navigator;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -24,13 +22,11 @@ import org.jboss.tools.common.model.XFilteredTree;
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.project.IModelNature;
-import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.model.ui.navigator.TreeViewerModelListenerImpl;
 import org.jboss.tools.common.model.ui.preferences.DecoratorPreferencesListener;
 import org.jboss.tools.common.model.ui.views.navigator.FilteredTreesCache;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.util.XModelTreeListenerSWTASync;
-import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 public class XContentProvider implements ITreeContentProvider {
 	protected Viewer viewer = null;
@@ -38,6 +34,9 @@ public class XContentProvider implements ITreeContentProvider {
 	protected XModelTreeListenerSWTASync syncListener = new XModelTreeListenerSWTASync(listener);
 
 	DecoratorPreferencesListener decoratorListener = null;
+
+	public XContentProvider() {
+	}
 
 	protected TreeViewerModelListenerImpl createListener() {
 		return new TreeViewerModelListenerImpl();
@@ -92,6 +91,13 @@ public class XContentProvider implements ITreeContentProvider {
 	}
 
 	public boolean hasChildren(Object element) {
+		if(element instanceof IFile) {
+			IFile f = (IFile)element;
+			element = EclipseResourceUtil.createObjectForResource(f);
+			if(element == null) {
+				return false;
+			}
+		}
 		if(element instanceof XModelObject) {
 			XModelObject o = (XModelObject)element;
 			XFilteredTree filteredTree = getFilteredTree(o);
