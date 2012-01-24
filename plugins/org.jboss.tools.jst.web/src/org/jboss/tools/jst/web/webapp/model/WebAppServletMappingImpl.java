@@ -16,7 +16,7 @@ public class WebAppServletMappingImpl extends RegularObjectImpl {
 	private static final long serialVersionUID = 1L;
 
     public String name() {
-        return getAttributeValue("servlet-name") + ":" + getAttributeValue("url-pattern"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        return getAttributeValue(WebAppConstants.SERVLET_NAME) + ":" + getAttributeValue("url-pattern"); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
 }

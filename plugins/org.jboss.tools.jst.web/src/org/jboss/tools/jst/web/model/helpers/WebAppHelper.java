@@ -91,7 +91,7 @@ public class WebAppHelper {
         XModelObject[] s = getServlets(webxml);
         for (int i = 0; i < s.length; i++) {
         	if(className != null && className.equals(s[i].getAttributeValue("servlet-class"))) return s[i]; //$NON-NLS-1$
-        	if(servletName != null && servletName.equals(s[i].getAttributeValue("servlet-name"))) return s[i]; //$NON-NLS-1$
+        	if(servletName != null && servletName.equals(s[i].getAttributeValue(WebAppConstants.SERVLET_NAME))) return s[i];
         }
         return null;
 	}
@@ -112,7 +112,7 @@ public class WebAppHelper {
         	XModelObject folder = webxml.getChildByPath(SERVLET_FOLDER);
         	if(folder == null) folder = webxml;
         	s = webxml.getModel().createModelObject(getServletEntity(folder.getModelEntity()), null);
-        	s.setAttributeValue("servlet-name", servletName); //$NON-NLS-1$
+        	s.setAttributeValue(WebAppConstants.SERVLET_NAME, servletName);
         	s.setAttributeValue("servlet-class", className); //$NON-NLS-1$
             DefaultCreateHandler.addCreatedObject(folder, s, -1);
         }
@@ -138,7 +138,7 @@ public class WebAppHelper {
         if(webxml == null) return null;
         XModelObject[] s = getServletMappings(webxml);
         for (int i = 0; i < s.length; i++) {
-        	if(servletName != null && servletName.equals(s[i].getAttributeValue("servlet-name"))) return s[i]; //$NON-NLS-1$
+        	if(servletName != null && servletName.equals(s[i].getAttributeValue(WebAppConstants.SERVLET_NAME))) return s[i];
         }
         return null;
 	}
@@ -157,7 +157,7 @@ public class WebAppHelper {
         	XModelObject folder = webxml.getChildByPath(SERVLET_FOLDER);
         	if(folder == null) folder = webxml;
         	s = webxml.getModel().createModelObject(SERVLET_MAPPING_ENTITY, null);
-        	s.setAttributeValue("servlet-name", servletName); //$NON-NLS-1$
+        	s.setAttributeValue(WebAppConstants.SERVLET_NAME, servletName);
         	s.setAttributeValue("url-pattern", "*.jsf"); //$NON-NLS-1$ //$NON-NLS-2$
             DefaultCreateHandler.addCreatedObject(folder, s, -1);
         }

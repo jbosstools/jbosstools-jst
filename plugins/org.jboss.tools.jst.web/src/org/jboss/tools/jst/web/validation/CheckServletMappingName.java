@@ -17,13 +17,14 @@ import org.jboss.tools.common.model.*;
 import org.jboss.tools.common.validation.ValidationErrorManager;
 import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.model.helpers.WebAppHelper;
+import org.jboss.tools.jst.web.webapp.model.WebAppConstants;
 
 /**
  * @author Viacheslav Kabanovich
  */
 public class CheckServletMappingName extends Check {
 	public static String JAX_RS_APPLICATION = "javax.ws.rs.core.Application"; //$NON-NLS-1$
-	static String ATTR = "servlet-name"; //$NON-NLS-1$
+	static String ATTR = WebAppConstants.SERVLET_NAME;
 	boolean acceptEmpty = false;
 
 	public CheckServletMappingName(ValidationErrorManager manager, String preference, boolean acceptEmpty) {

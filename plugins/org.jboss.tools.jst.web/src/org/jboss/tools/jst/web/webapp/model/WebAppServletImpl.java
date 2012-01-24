@@ -21,13 +21,13 @@ public class WebAppServletImpl extends OrderedObjectImpl {
     }
 
     public String name() {
-        return getAttributeValue("servlet-name"); //$NON-NLS-1$
+        return getAttributeValue(WebAppConstants.SERVLET_NAME);
     }
 
     public String getPresentationString() {
         String c = getAttributeValue(WebAppConstants.SERVLET_CLASS);
         if(c.length() == 0) c = getAttributeValue(WebAppConstants.JSP_FILE);
-        return "" + getAttributeValue("servlet-name") + ":" + c; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        return "" + getAttributeValue(WebAppConstants.SERVLET_NAME) + ":" + c; //$NON-NLS-1$ //$NON-NLS-2$
     }
 
 	protected void onAttributeValueEdit(String name, String oldValue, String newValue) throws XModelException {
