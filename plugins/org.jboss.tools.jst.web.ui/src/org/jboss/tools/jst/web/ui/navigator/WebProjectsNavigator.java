@@ -17,8 +17,8 @@ import org.jboss.tools.common.model.ui.navigator.*;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.*;
 import org.jboss.tools.common.meta.action.*;
+import org.jboss.tools.common.model.XModelFactory;
 import org.jboss.tools.common.model.XModelObject;
-import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.common.model.ui.views.navigator.*;
 
 public class WebProjectsNavigator extends NavigatorViewPart {
@@ -36,36 +36,12 @@ public class WebProjectsNavigator extends NavigatorViewPart {
 	}
 	
 	protected void initContentProvider(TreeViewer viewer) {
-		if(true) {
-			c = new WebProjectsContentProvider();
-			TreeViewerModelListenerImpl listener = new WebProjectsTreeListener();
-			listener.setViewer(viewer);
-			c.setListener(listener);
-			contentProvider = c;
-			viewer.setContentProvider(contentProvider);
-		} else {
-			viewer.setContentProvider(
-				new ITreeContentProvider() {
-					public Object[] getChildren(Object parentElement) {
-						return new Object[]{};
-					}
-					public Object getParent(Object element) {
-						return null;	
-					}
-					public boolean hasChildren(Object element) {
-						return false;				
-					}
-					public Object[] getElements(Object o) {
-						return new Object[]{""}; //$NON-NLS-1$
-					}
-					public void inputChanged(Viewer v, Object o1,Object o2) {
-					
-					}
-					public void dispose() {
-					}
-				}
-			);
-		}
+		c = new WebProjectsContentProvider();
+		TreeViewerModelListenerImpl listener = new WebProjectsTreeListener();
+		listener.setViewer(viewer);
+		c.setListener(listener);
+		contentProvider = c;
+		viewer.setContentProvider(contentProvider);
 	}
 
 	static String STRUTS_UI = "org.jboss.tools.struts.ui"; //$NON-NLS-1$
@@ -91,9 +67,12 @@ public class WebProjectsNavigator extends NavigatorViewPart {
 }
 
 class JSFNavigatorMenuInvoker extends NavigatorMenuInvoker {
-	private static XModelObject webWorkspace = PreferenceModelUtilities.getPreferenceModel().createModelObject("WebWorkspace", null); //$NON-NLS-1$
-	
+	private static XModelObject webWorkspace;
+
 	protected XModelObject getWorkspaceObject() {
+		if(webWorkspace == null) {
+			webWorkspace = XModelFactory.getDefaultInstance().createModelObject("WebWorkspace", null); //$NON-NLS-1$
+		}
 		return webWorkspace;
 	}
 
