@@ -44,8 +44,8 @@ import org.jboss.tools.common.meta.action.SpecialWizard;
 import org.jboss.tools.common.meta.action.XEntityData;
 import org.jboss.tools.common.meta.action.impl.XEntityDataImpl;
 import org.jboss.tools.common.meta.action.impl.handlers.HUtil;
-import org.jboss.tools.common.meta.constraint.XAttributeEditor;
 import org.jboss.tools.common.meta.constraint.impl.XAttributeEditorImpl;
+import org.jboss.tools.common.meta.impl.XModelMetaDataImpl;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.common.model.util.XModelObjectUtil;
@@ -135,7 +135,7 @@ public class AppRegisterComponent {
 	}
 
 	void initDisablingContextRoot() {
-		XModelEntity entity = PreferenceModelUtilities.getPreferenceModel().getMetaData().getEntity(ENTITY);
+		XModelEntity entity = XModelMetaDataImpl.getInstance().getEntity(ENTITY);
 		XAttribute attr = entity.getAttribute(ATTR_APP_NAME);
 		XAttributeEditorImpl ed = (XAttributeEditorImpl)attr.getEditor();
 		if(disableContextRoot) {
