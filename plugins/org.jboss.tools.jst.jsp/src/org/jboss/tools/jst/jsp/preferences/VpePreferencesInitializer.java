@@ -30,8 +30,7 @@ public class VpePreferencesInitializer extends AbstractPreferenceInitializer {
 		defaultPreferences.putBoolean(IVpePreferencesPage.INFORM_WHEN_PROJECT_MIGHT_NOT_BE_CONFIGURED_PROPERLY_FOR_VPE, true);
 		defaultPreferences.put(IVpePreferencesPage.DEFAULT_VPE_TAB, IVpePreferencesPage.DEFAULT_VPE_TAB_VISUAL_SOURCE_VALUE);
 		defaultPreferences.put(IVpePreferencesPage.VISUAL_SOURCE_EDITORS_SPLITTING, IVpePreferencesPage.SPLITTING_VERT_TOP_SOURCE_VALUE);
+		defaultPreferences.putBoolean(IVpePreferencesPage.SYNCHRONIZE_SCROLLING_BETWEEN_SOURCE_VISUAL_PANES, false);
 		defaultPreferences.putInt(IVpePreferencesPage.VISUAL_SOURCE_EDITORS_WEIGHTS, IVpePreferencesPage.DEFAULT_VISUAL_SOURCE_EDITORS_WEIGHTS);
-		
 	}
-
 }

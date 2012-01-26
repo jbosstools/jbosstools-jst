@@ -21,6 +21,7 @@ public interface IVpePreferencesPage {
 	static final String DEFAULT_VPE_TAB = "Default VPE Tab"; //$NON-NLS-1$
 	static final String VISUAL_SOURCE_EDITORS_SPLITTING = "Visual/Source Editors Splitting"; //$NON-NLS-1$
 	static final String VISUAL_SOURCE_EDITORS_WEIGHTS = "Size of Visual Editor Pane 0-100%"; //$NON-NLS-1$
+	static final String SYNCHRONIZE_SCROLLING_BETWEEN_SOURCE_VISUAL_PANES = "Synchronize scrolling between source and visual panes"; //$NON-NLS-1$
 	static final String SHOW_VISUAL_TOOLBAR = "Show VPE Toolbar"; //$NON-NLS-1$
 	
 	static final String DEFAULT_VPE_TAB_VISUAL_SOURCE_VALUE = "0"; //$NON-NLS-1$
