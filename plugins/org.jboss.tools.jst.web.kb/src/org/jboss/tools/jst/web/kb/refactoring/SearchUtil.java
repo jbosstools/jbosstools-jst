@@ -129,7 +129,7 @@ public class SearchUtil {
 		IPath path = ProjectHome.getFirstWebContentPath(project);
 		
 		if(path != null)
-			return project.getFolder(path.removeFirstSegments(1));
+			return path.segmentCount() > 1 ? project.getFolder(path.removeFirstSegments(1)) : project;
 		
 		return null;
 	}
