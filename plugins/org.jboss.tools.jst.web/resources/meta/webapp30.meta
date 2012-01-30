@@ -697,7 +697,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.jsf.components" type="main"/>
+    <ICON info="main.struts.webapp.folder" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -735,7 +735,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.jsf.components" type="main"/>
+    <ICON info="main.struts.webapp.folder" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -773,7 +773,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.jsf.components" type="main"/>
+    <ICON info="main.struts.webapp.folder" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -825,7 +825,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.jsf.components" type="main"/>
+    <ICON info="main.struts.webapp.folder" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -865,7 +865,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.jsf.components" type="main"/>
+    <ICON info="main.struts.webapp.folder" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -916,7 +916,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.jsf.components" type="main"/>
+    <ICON info="main.struts.webapp.folder" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -964,7 +964,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.jsf.components" type="main"/>
+    <ICON info="main.struts.webapp.folder" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -1012,7 +1012,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.jsf.components" type="main"/>
+    <ICON info="main.struts.webapp.folder" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -1049,7 +1049,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.jsf.components" type="main"/>
+    <ICON info="main.struts.webapp.folder" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -1087,7 +1087,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.jsf.components" type="main"/>
+    <ICON info="main.struts.webapp.folder" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
