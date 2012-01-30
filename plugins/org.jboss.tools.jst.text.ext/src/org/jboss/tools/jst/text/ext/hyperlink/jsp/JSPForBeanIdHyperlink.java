@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2007 Exadel, Inc. and Red Hat, Inc.
+ * Copyright (c) 2007-2012 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
+ *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/ 
 package org.jboss.tools.jst.text.ext.hyperlink.jsp;
 
@@ -26,7 +26,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
 
 /**
  * @author Jeremy
@@ -112,7 +111,6 @@ public class JSPForBeanIdHyperlink extends AbstractHyperlink {
 		return null;
 	}
 
-
 	String getForId(IRegion region) {
 		try {
 			return Utils.trimQuotes(getDocument().get(region.getOffset(), region.getLength()));
@@ -122,75 +120,16 @@ public class JSPForBeanIdHyperlink extends AbstractHyperlink {
 		}
 	}
 
-	IRegion fLastRegion = null;
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.ibm.sse.editor.AbstractHyperlink#doGetHyperlinkRegion(int)
-	 */
-	protected IRegion doGetHyperlinkRegion(int offset) {
-		fLastRegion = getRegion(offset);
-		return fLastRegion;
-	}
-
-	private IRegion getRegion(int offset) {
-		StructuredModelWrapper smw = new StructuredModelWrapper();
-		try {
-			smw.init(getDocument());
-			Document xmlDocument = smw.getDocument();
-			if (xmlDocument == null) return null;
-			
-			Node n = Utils.findNodeForOffset(xmlDocument, offset);
-
-			if (n == null || !(n instanceof Attr || n instanceof Text)) return null;
-			
-			int start = Utils.getValueStart(n);
-			int end = Utils.getValueEnd(n);
-
-			if (start > offset || end < offset) return null;
-
-			String text = getDocument().get(start, end - start);
-			StringBuffer sb = new StringBuffer(text);
-
-			//find start and end of path property
-			int bStart = 0;
-			int bEnd = text.length() - 1;
-
-			while (bStart < bEnd && (Character.isWhitespace(sb.charAt(bStart)) 
-					|| sb.charAt(bStart) == '\"' || sb.charAt(bStart) == '\"')) { 
-				bStart++;
-			}
-			while (bEnd > bStart && (Character.isWhitespace(sb.charAt(bEnd)) 
-					|| sb.charAt(bEnd) == '\"' || sb.charAt(bEnd) == '\"')) { 
-				bEnd--;
-			}
-			bEnd++;
-
-			final int propStart = bStart + start;
-			final int propLength = bEnd - bStart;
-			
-			if (propStart > offset || propStart + propLength < offset) return null;
-	
-			return new Region (propStart,propLength);
-		} catch (BadLocationException x) {
-			//ignore
-			return null;
-		} finally {
-			smw.dispose();
-		}
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see IHyperlink#getHyperlinkText()
 	 */
 	public String getHyperlinkText() {
-		String forId = getForId(fLastRegion);
+		String forId = getForId(getHyperlinkRegion());
 		if (forId == null)
 			return  MessageFormat.format(Messages.BrowseFor, Messages.BeanId);
 		
 		return MessageFormat.format(Messages.BrowseForBeanId, forId);
 	}
-
 }

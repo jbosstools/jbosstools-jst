@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 Red Hat, Inc.
+ * Copyright (c) 2011-2012 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -31,15 +31,11 @@ import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.text.ext.ExtensionsPlugin;
 import org.jboss.tools.common.text.ext.hyperlink.AbstractHyperlink;
 import org.jboss.tools.common.text.ext.hyperlink.xpl.Messages;
-import org.jboss.tools.common.text.ext.util.StructuredModelWrapper;
 import org.jboss.tools.common.text.ext.util.StructuredSelectionHelper;
-import org.jboss.tools.common.text.ext.util.Utils;
 import org.jboss.tools.jst.text.ext.JSTExtensionsPlugin;
 import org.jboss.tools.jst.web.kb.ICSSContainerSupport;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.PageContextFactory.CSSStyleSheetDescriptor;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.css.CSSMediaRule;
 import org.w3c.dom.css.CSSRule;
@@ -133,7 +129,6 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 		}
 
 		return PageContextFactory.getFileFromProject(filePath, getFile());
-
 	}
 	
 	/**
@@ -217,87 +212,14 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 		}
 		return null;
 	}
-
-	protected IRegion fLastRegion = null;
-
-	/**
-	 * @see com.ibm.sse.editor.AbstractHyperlink#doGetHyperlinkRegion(int)
-	 */
-	protected IRegion doGetHyperlinkRegion(int offset) {
-		fLastRegion = getRegion(offset);
-		return fLastRegion;
-	}
-
-	/**
-	 * 
-	 * @param offset
-	 * @return
-	 */
-	protected IRegion getRegion(int offset) {
-		StructuredModelWrapper smw = new StructuredModelWrapper();
-		try {
-			smw.init(getDocument());
-			Document xmlDocument = smw.getDocument();
-			if (xmlDocument == null)
-				return null;
-
-			Node n = Utils.findNodeForOffset(xmlDocument, offset);
-
-			if (n == null || !(n instanceof Attr))
-				return null;
-			int start = Utils.getValueStart(n);
-			int end = Utils.getValueEnd(n);
-			if (start > offset)
-				return null;
-
-			String attrText = getDocument().get(start, end - start);
-
-			StringBuffer sb = new StringBuffer(attrText);
-			// find start of css class
-			int bStart = offset - start;
-			while (bStart >= 0) {
-				if (!Character.isJavaIdentifierPart(sb.charAt(bStart))
-						&& sb.charAt(bStart) != '_' && sb.charAt(bStart) != '-'
-						&& sb.charAt(bStart) != '.') {
-					bStart++;
-					break;
-				}
-
-				if (bStart == 0)
-					break;
-				bStart--;
-			}
-			// find end of css class
-			int bEnd = offset - start;
-			while (bEnd < sb.length()) {
-				if (!Character.isJavaIdentifierPart(sb.charAt(bEnd))
-						&& sb.charAt(bEnd) != '_' && sb.charAt(bEnd) != '-'
-						&& sb.charAt(bEnd) != '.')
-					break;
-				bEnd++;
-			}
-
-			final int propStart = bStart + start;
-			final int propLength = bEnd - bStart;
-
-			if (propStart > offset || propStart + propLength < offset)
-				return null;
-			return new Region(propStart, propLength);
-		} catch (BadLocationException x) {
-			// ignore
-			return null;
-		} finally {
-			smw.dispose();
-		}
-	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see IHyperlink#getHyperlinkText()
 	 */
 	public String getHyperlinkText() {
-		String styleName = getStyleName(fLastRegion);
+		String styleName = getStyleName(getHyperlinkRegion());
 		if (styleName == null)
 			return MessageFormat.format(Messages.OpenA, Messages.CSSStyle);
 

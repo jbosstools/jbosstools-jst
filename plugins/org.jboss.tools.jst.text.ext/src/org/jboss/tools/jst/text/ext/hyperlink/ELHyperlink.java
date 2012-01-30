@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 Red Hat, Inc.
+ * Copyright (c) 2011-2012 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -25,6 +25,7 @@ import org.jboss.tools.common.el.core.resolver.JavaMemberELSegment;
 import org.jboss.tools.common.el.core.resolver.MessagePropertyELSegment;
 import org.jboss.tools.common.text.ITextSourceReference;
 import org.jboss.tools.common.text.ext.hyperlink.AbstractHyperlink;
+import org.jboss.tools.common.text.ext.hyperlink.HyperlinkRegion;
 import org.jboss.tools.common.text.ext.hyperlink.xpl.Messages;
 import org.jboss.tools.common.text.ext.util.StructuredSelectionHelper;
 import org.jboss.tools.common.util.StringUtil;
@@ -40,17 +41,16 @@ public class ELHyperlink extends AbstractHyperlink{
 		setDocument(document);
 	}
 
+	/**
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.common.text.ext.hyperlink.AbstractHyperlink#doGetHyperlinkRegion(int)
+	 */ 
 	@Override
 	protected IRegion doGetHyperlinkRegion(int offset) {
-		
-		return new IRegion(){
-			public int getLength() {
-				return segment.getSourceReference().getLength();
-			}
-
-			public int getOffset() {
-				return reference.getStartPosition()+segment.getSourceReference().getStartPosition();
-			}};
+		IRegion region = super.doGetHyperlinkRegion(offset);
+		return (region != null ? region : new HyperlinkRegion(
+					reference.getStartPosition()+segment.getSourceReference().getStartPosition(),
+					segment.getSourceReference().getLength()));
 	}
 
 	@Override
@@ -81,11 +81,6 @@ public class ELHyperlink extends AbstractHyperlink{
 		}
 	}
 	
-//	private String getRequestMethod(Properties prop) {
-//		return prop != null && prop.getProperty(WebPromptingProvider.KEY) == null ? 
-//				WebPromptingProvider.JSF_OPEN_BUNDLE : WebPromptingProvider.JSF_OPEN_KEY;
-//	}
-
 	@Override
 	public String getHyperlinkText() {
 		IOpenableReference[] openables = segment.getOpenable();
@@ -122,5 +117,4 @@ public class ELHyperlink extends AbstractHyperlink{
 		}
 		return file;
 	}
-
 }

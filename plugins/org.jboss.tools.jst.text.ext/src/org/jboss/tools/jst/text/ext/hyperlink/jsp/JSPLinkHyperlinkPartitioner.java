@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2011 Red Hat, Inc.
+ * Copyright (c) 2007-2012 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -31,7 +31,7 @@ public class JSPLinkHyperlinkPartitioner extends XMLLinkHyperlinkPartitioner imp
 	/* (non-Javadoc)
 	 * @see com.ibm.sse.editor.extensions.hyperlink.IHyperlinkPartitionRecognizer#recognize(org.eclipse.jface.text.IDocument, com.ibm.sse.editor.extensions.hyperlink.IHyperlinkRegion)
 	 */
-	public boolean recognize(IDocument document, IHyperlinkRegion region) {
+	public boolean recognize(IDocument document, int offset, IHyperlinkRegion region) {
 		return true;
 	}
 
@@ -46,7 +46,7 @@ public class JSPLinkHyperlinkPartitioner extends XMLLinkHyperlinkPartitioner imp
 		return JSPStylesheetRelLinkHyperlinkPartitioner.JSP_STYLESHEET_REL_LINK_PARTITION;
 	}
 
-	public boolean excludes(String partitionType, IDocument document,
+	public boolean excludes(String partitionType, IDocument document, int offset,
 			IHyperlinkRegion superRegion) {
 		return false;
 	}

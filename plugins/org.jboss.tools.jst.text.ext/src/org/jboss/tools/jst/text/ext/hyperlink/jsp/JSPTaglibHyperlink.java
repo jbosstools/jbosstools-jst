@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2007 Exadel, Inc. and Red Hat, Inc.
+ * Copyright (c) 2007-2012 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
+ *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/ 
 package org.jboss.tools.jst.text.ext.hyperlink.jsp;
 
@@ -14,7 +14,6 @@ import java.text.MessageFormat;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.IRegion;
-import org.eclipse.jface.text.Region;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
@@ -27,13 +26,10 @@ import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.util.FindObjectHelper;
 import org.jboss.tools.common.text.ext.hyperlink.AbstractHyperlink;
 import org.jboss.tools.common.text.ext.hyperlink.xpl.Messages;
-import org.jboss.tools.common.text.ext.util.StructuredModelWrapper;
 import org.jboss.tools.common.text.ext.util.Utils;
 import org.jboss.tools.jst.web.tld.ITaglibMapping;
 import org.jboss.tools.jst.web.tld.IWebProject;
 import org.jboss.tools.jst.web.tld.WebProjectFactory;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 /**
@@ -51,7 +47,6 @@ public class JSPTaglibHyperlink extends AbstractHyperlink {
 		else {
 			openFileFailed();
 		}
-
 	}
 	
 	protected final String JAR_FILE_PROTOCOL = "jar:file:/";//$NON-NLS-1$
@@ -109,40 +104,6 @@ public class JSPTaglibHyperlink extends AbstractHyperlink {
 			if (model != null)	model.releaseFromRead();
 		}
 	}
-
-	IRegion fLastRegion = null;
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @seecom.ibm.sse.editor.AbstractHyperlink#doGetHyperlinkRegion(int)
-	 */
-	protected IRegion doGetHyperlinkRegion(int offset) {
-		fLastRegion = getRegion(offset);
-		return fLastRegion;
-	}
-	
-	private IRegion getRegion(int offset) {
-		StructuredModelWrapper smw = new StructuredModelWrapper();
-		smw.init(getDocument());
-		try {	
-			Document xmlDocument = smw.getDocument();
-			if (xmlDocument == null) return null;
-			
-			Node n = Utils.findNodeForOffset(xmlDocument, offset);
-			if (n instanceof Attr) n = ((Attr)n).getOwnerElement();
-			if (!(n instanceof IDOMElement)) return null;
-			if (!"jsp:directive.taglib".equals(n.getNodeName())) return null; //$NON-NLS-1$
-
-			IDOMElement taglib = (IDOMElement)n;
-			
-			final int taglibLength = taglib.getEndOffset() - taglib.getStartOffset();
-			final int taglibOffset = taglib.getStartOffset();
-			
-			return new Region(taglibOffset,taglibLength);
-		} finally {
-			smw.dispose();
-		}
-	}
 	
 	/*
 	 * (non-Javadoc)
@@ -150,11 +111,10 @@ public class JSPTaglibHyperlink extends AbstractHyperlink {
 	 * @see IHyperlink#getHyperlinkText()
 	 */
 	public String getHyperlinkText() {
-		String uri = getTaglibUri(fLastRegion);
+		String uri = getTaglibUri(getHyperlinkRegion());
 		if (uri == null)
 			return  MessageFormat.format(Messages.OpenA, Messages.TagLibrary);
 		
 		return MessageFormat.format(Messages.OpenTagLibraryForUri, uri);
 	}
-
 }

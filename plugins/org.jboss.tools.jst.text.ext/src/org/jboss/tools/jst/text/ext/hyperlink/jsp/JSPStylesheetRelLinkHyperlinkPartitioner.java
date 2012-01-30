@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2011 Red Hat, Inc.
+ * Copyright (c) 2007-2012 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -46,7 +46,7 @@ public class JSPStylesheetRelLinkHyperlinkPartitioner extends AbstractHyperlinkP
 	/**
 	 * @see com.ibm.sse.editor.hyperlink.AbstractHyperlinkPartitioner#parse(org.eclipse.jface.text.IDocument, com.ibm.sse.editor.extensions.hyperlink.IHyperlinkRegion)
 	 */
-	protected IHyperlinkRegion parse(IDocument document, IHyperlinkRegion superRegion) {
+	protected IHyperlinkRegion parse(IDocument document, int offset, IHyperlinkRegion superRegion) {
 		if(superRegion == null) return null;
 		StructuredModelWrapper smw = new StructuredModelWrapper();
 		smw.init(document);
@@ -54,19 +54,14 @@ public class JSPStylesheetRelLinkHyperlinkPartitioner extends AbstractHyperlinkP
 			Document xmlDocument = smw.getDocument();
 			if (xmlDocument == null) return null;
 			
-			Utils.findNodeForOffset(xmlDocument, superRegion.getOffset());
-//			if (!recognize(document, superRegion)) return null;
-			IRegion r = getRegion(document, superRegion.getOffset());
+			IRegion r = getRegion(document, offset);
 			if (r == null) return null;
 			
 			String axis = getAxis(document, superRegion);
 			String contentType = superRegion.getContentType();
 			String type = JSP_STYLESHEET_REL_LINK_PARTITION;
-			int length = r.getLength() - (superRegion.getOffset() - r.getOffset());
-			int offset = superRegion.getOffset();
 
-			IHyperlinkRegion region = new HyperlinkRegion(offset, length, axis, contentType, type);
-			return region;
+			return new HyperlinkRegion(r.getOffset(), r.getLength(), axis, contentType, type);
 		} finally {
 			smw.dispose();
 		}
@@ -75,7 +70,7 @@ public class JSPStylesheetRelLinkHyperlinkPartitioner extends AbstractHyperlinkP
 	/**
 	 * @see com.ibm.sse.editor.extensions.hyperlink.IHyperlinkPartitionRecognizer#recognize(org.eclipse.jface.text.IDocument, com.ibm.sse.editor.extensions.hyperlink.IHyperlinkRegion)
 	 */
-	public boolean recognize(IDocument document, IHyperlinkRegion region) {
+	public boolean recognize(IDocument document, int offset, IHyperlinkRegion region) {
 		if(region == null) return false;
 		StructuredModelWrapper smw = new StructuredModelWrapper();
 		smw.init(document);
@@ -83,7 +78,7 @@ public class JSPStylesheetRelLinkHyperlinkPartitioner extends AbstractHyperlinkP
 			Document xmlDocument = smw.getDocument();
 			if (xmlDocument == null) return false;
 			
-			Node n = Utils.findNodeForOffset(xmlDocument, region.getOffset());
+			Node n = Utils.findNodeForOffset(xmlDocument, offset);
 
 			Attr attr = null;
 			Node tag = null;
@@ -116,7 +111,7 @@ public class JSPStylesheetRelLinkHyperlinkPartitioner extends AbstractHyperlinkP
 
 			// do recognize style text
 			int start = Utils.getValueStart(styleText);
-			int current = region.getOffset();
+			int current = offset;
 			
 			String text = styleText.getData();
 			if (text == null || text.length() == 0) return false;
@@ -238,9 +233,8 @@ public class JSPStylesheetRelLinkHyperlinkPartitioner extends AbstractHyperlinkP
 		return null;
 	}
 
-	public boolean excludes(String partitionType, IDocument document,
+	public boolean excludes(String partitionType, IDocument document, int offset,
 			IHyperlinkRegion superRegion) {
-		return (JSP_STYLESHEET_REL_LINK_PARTITION.equals(partitionType) && recognize(document, superRegion));
+		return (JSP_STYLESHEET_REL_LINK_PARTITION.equals(partitionType) && recognize(document, offset, superRegion));
 	}
-
 }

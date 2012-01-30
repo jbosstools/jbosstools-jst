@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2007 Exadel, Inc. and Red Hat, Inc.
+ * Copyright (c) 2007-2012 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
+ *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/ 
 package org.jboss.tools.jst.text.ext.hyperlink.jsp;
 
@@ -127,27 +127,27 @@ public class JSPBeanGetPropertyHyperlink extends ClassMethodHyperlink {
 
 			for (int i = list.getLength() - 1; list != null && i >= 0; i--) {
 				if(!(list.item(i) instanceof Element)) continue;
-					Element element = (Element)list.item(i);
-					int start = Utils.getValueStart(element);
-					if (start < 0 || start >= endOffset) continue;
+
+				Element element = (Element)list.item(i);
+				int start = Utils.getValueStart(element);
+				if (start < 0 || start >= endOffset) continue;
+				
+				String elementName = element.getNodeName();
+				if (tagName.equals(elementName)) {
 					
-					String elementName = element.getNodeName();
-					if (tagName.equals(elementName)) {
-						
-						Attr idAttr = element.getAttributeNode(ID_ATTRNAME);
-						if (idAttr != null) {
-							String val = Utils.trimQuotes(idAttr.getNodeValue());
-							if (id.equals(val)) {
-								return element;
-							}
+					Attr idAttr = element.getAttributeNode(ID_ATTRNAME);
+					if (idAttr != null) {
+						String val = Utils.trimQuotes(idAttr.getNodeValue());
+						if (id.equals(val)) {
+							return element;
 						}
 					}
-					
-					if (element.hasChildNodes()) {
-						Element child = findElementByIDBackward(element.getChildNodes(), id, endOffset, tagName);
-						if (child != null) return child;
-					}
-
+				}
+				
+				if (element.hasChildNodes()) {
+					Element child = findElementByIDBackward(element.getChildNodes(), id, endOffset, tagName);
+					if (child != null) return child;
+				}
 			}
 		} finally {
 			smw.dispose();
@@ -189,11 +189,10 @@ public class JSPBeanGetPropertyHyperlink extends ClassMethodHyperlink {
 	 * @see IHyperlink#getHyperlinkText()
 	 */
 	public String getHyperlinkText() {
-		String propertyName = getPropertyName(fLastRegion);
+		String propertyName = getPropertyName(getHyperlinkRegion());
 		if (propertyName == null)
 			return  MessageFormat.format(Messages.OpenA, Messages.Getter);
 		
 		return MessageFormat.format(Messages.OpenGetterOrSetterForProperty, Messages.Getter, propertyName);
 	}
-
 }

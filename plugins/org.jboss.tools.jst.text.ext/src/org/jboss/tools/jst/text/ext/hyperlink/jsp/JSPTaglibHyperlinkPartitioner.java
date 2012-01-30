@@ -1,26 +1,25 @@
 /*******************************************************************************
- * Copyright (c) 2007 Exadel, Inc. and Red Hat, Inc.
+ * Copyright (c) 2007-2012 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
+ *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/ 
 package org.jboss.tools.jst.text.ext.hyperlink.jsp;
 
 import org.eclipse.jface.text.IDocument;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-
 import org.jboss.tools.common.text.ext.hyperlink.HyperlinkRegion;
 import org.jboss.tools.common.text.ext.hyperlink.IHyperlinkPartitionRecognizer;
 import org.jboss.tools.common.text.ext.hyperlink.IHyperlinkRegion;
 import org.jboss.tools.common.text.ext.util.StructuredModelWrapper;
 import org.jboss.tools.common.text.ext.util.Utils;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 /**
  * @author Jeremy
@@ -31,7 +30,7 @@ public class JSPTaglibHyperlinkPartitioner extends JSPElementAttributeValueHyper
 	/**
 	 * @see com.ibm.sse.editor.hyperlink.AbstractHyperlinkPartitioner#parse(org.eclipse.jface.text.IDocument, com.ibm.sse.editor.extensions.hyperlink.IHyperlinkRegion)
 	 */
-	protected IHyperlinkRegion parse(IDocument document, IHyperlinkRegion superRegion) {
+	protected IHyperlinkRegion parse(IDocument document, int offset, IHyperlinkRegion superRegion) {
 		if(document == null || superRegion == null) return null;
 		StructuredModelWrapper smw = new StructuredModelWrapper();
 		smw.init(document);
@@ -39,7 +38,7 @@ public class JSPTaglibHyperlinkPartitioner extends JSPElementAttributeValueHyper
 			Document xmlDocument = smw.getDocument();
 			if (xmlDocument == null) return null;
 			
-			Node n = Utils.findNodeForOffset(xmlDocument, superRegion.getOffset());
+			Node n = Utils.findNodeForOffset(xmlDocument, offset);
 			if (n instanceof Attr) n = ((Attr)n).getOwnerElement();
 			if (!(n instanceof Element)) return null;
 			if (!"jsp:directive.taglib".equals(n.getNodeName())) return null; //$NON-NLS-1$
@@ -51,21 +50,17 @@ public class JSPTaglibHyperlinkPartitioner extends JSPElementAttributeValueHyper
 			String axis = getAxis(document, superRegion);
 			String contentType = superRegion.getContentType();
 			String type = JSP_TAGLIB_PARTITION;
-			int length = end - start - (superRegion.getOffset() - start);
-			int offset = superRegion.getOffset();
 			
-			IHyperlinkRegion region = new HyperlinkRegion(offset, length, axis, contentType, type);
-			return region;
+			return new HyperlinkRegion(start, end - start, axis, contentType, type);
 		} finally {
 			smw.dispose();
 		}
 	}
-	
 
 	/**
 	 * @see com.ibm.sse.editor.extensions.hyperlink.IHyperlinkPartitionRecognizer#recognize(org.eclipse.jface.text.IDocument, com.ibm.sse.editor.extensions.hyperlink.IHyperlinkRegion)
 	 */
-	public boolean recognize(IDocument document, IHyperlinkRegion region) {
+	public boolean recognize(IDocument document, int offset, IHyperlinkRegion region) {
 		if(document == null || region == null) return false;
 		StructuredModelWrapper smw = new StructuredModelWrapper();
 		smw.init(document);
@@ -73,7 +68,7 @@ public class JSPTaglibHyperlinkPartitioner extends JSPElementAttributeValueHyper
 			Document xmlDocument = smw.getDocument();
 			if (xmlDocument == null) return false;
 			
-			Node n = Utils.findNodeForOffset(xmlDocument, region.getOffset());
+			Node n = Utils.findNodeForOffset(xmlDocument, offset);
 			if (n instanceof Attr) n = ((Attr)n).getOwnerElement();
 			if (!(n instanceof Element)) return false;
 			return ("jsp:directive.taglib".equals(n.getNodeName())); //$NON-NLS-1$

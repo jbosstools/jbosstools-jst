@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2007 Exadel, Inc. and Red Hat, Inc.
+ * Copyright (c) 2007-2012 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
+ *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/ 
 package org.jboss.tools.jst.text.ext.hyperlink.jsp;
 
@@ -32,11 +32,10 @@ public class JSPBeanSetPropertyHyperlink extends JSPBeanGetPropertyHyperlink {
 	 * @see IHyperlink#getHyperlinkText()
 	 */
 	public String getHyperlinkText() {
-		String propertyName = getPropertyName(fLastRegion);
+		String propertyName = getPropertyName(getHyperlinkRegion());
 		if (propertyName == null)
 			return  MessageFormat.format(Messages.OpenA, Messages.Setter);
 		
 		return MessageFormat.format(Messages.OpenGetterOrSetterForProperty, Messages.Setter, propertyName);
 	}
-
 }
