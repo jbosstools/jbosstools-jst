@@ -18,6 +18,7 @@
   <GROUP name="main">
    <GROUP name="tld">
     <ICON name="validator" path="images/struts/pro/validator.gif"/>
+    <ICON name="variable" path="images/struts/pro/validator_constant.gif"/>
    </GROUP>
   </GROUP>
  </ICONS>
@@ -668,7 +669,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.validator.constant" type="main"/>
+    <ICON info="main.tld.variable" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
