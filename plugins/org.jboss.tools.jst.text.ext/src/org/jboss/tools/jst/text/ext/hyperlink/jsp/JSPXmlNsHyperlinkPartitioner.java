@@ -47,7 +47,7 @@ public class JSPXmlNsHyperlinkPartitioner extends AbstractHyperlinkPartitioner i
 			Element rootElem = xmlnsAttr.getOwnerElement();
 			if (!(rootElem.getNodeName().equals("jsp:root") || rootElem.getNodeName().equalsIgnoreCase("html"))) return null; //$NON-NLS-1$ //$NON-NLS-2$
 			String xmlns = xmlnsAttr.getValueRegionText();
-			String axis = getAxis(document, superRegion);
+			String axis = getAxis(document, offset);
 			String contentType = superRegion.getContentType();
 			String type = JSP_XMLNS_PARTITION;
 			int start = Utils.getValueStart(xmlnsAttr);
@@ -105,10 +105,7 @@ public class JSPXmlNsHyperlinkPartitioner extends AbstractHyperlinkPartitioner i
 		}
 	}
 		
-	protected String getAxis(IDocument document, IHyperlinkRegion superRegion) {
-		if (superRegion.getAxis() == null || superRegion.getAxis().length() == 0) {
-			return JSPRootHyperlinkPartitioner.computeAxis(document, superRegion.getOffset()) + "/"; //$NON-NLS-1$
-		}
-		return superRegion.getAxis();
+	protected String getAxis(IDocument document, int offset) {
+		return JSPRootHyperlinkPartitioner.computeAxis(document, offset) + "/"; //$NON-NLS-1$
 	}
 }

@@ -42,7 +42,7 @@ public class JSPBeanSetPropertyHyperlinkPartitioner extends AbstractHyperlinkPar
 			int start = Utils.getValueStart(n);
 			int end = Utils.getValueEnd(n);
 
-			String axis = getAxis(document, superRegion);
+			String axis = getAxis(document, offset);
 			String contentType = superRegion.getContentType();
 			String type = JSP_BEAN_SET_PROPERTY_PARTITION;
 
@@ -52,11 +52,8 @@ public class JSPBeanSetPropertyHyperlinkPartitioner extends AbstractHyperlinkPar
 		}
 	}
 	
-	protected String getAxis(IDocument document, IHyperlinkRegion superRegion) {
-		if (superRegion.getAxis() == null || superRegion.getAxis().length() == 0) {
-			return JSPRootHyperlinkPartitioner.computeAxis(document, superRegion.getOffset()) + "/"; //$NON-NLS-1$
-		}
-		return superRegion.getAxis();
+	protected String getAxis(IDocument document, int offset) {
+		return JSPRootHyperlinkPartitioner.computeAxis(document, offset) + "/"; //$NON-NLS-1$
 	}
 
 	/**

@@ -25,11 +25,8 @@ import org.w3c.dom.Node;
  * @author Jeremy
  */
 public class JSPElementNameHyperlinkPartitioner extends XMLElementNameHyperlinkPartitioner {
-	protected String getAxis(IDocument document, IHyperlinkRegion superRegion) {
-		if (superRegion.getAxis() == null || superRegion.getAxis().length() == 0) {
-			return JSPRootHyperlinkPartitioner.computeAxis(document, superRegion.getOffset()) + "/"; //$NON-NLS-1$
-		}
-		return superRegion.getAxis();
+	protected String getAxis(IDocument document, int offset) {
+		return JSPRootHyperlinkPartitioner.computeAxis(document, offset) + "/"; //$NON-NLS-1$
 	}
 
 	/**

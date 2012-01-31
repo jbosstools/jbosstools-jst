@@ -53,7 +53,7 @@ public class CSSClassHyperlinkPartitioner extends
 			if (n == null || !(n instanceof Attr))
 				return null;
 
-			String axis = getAxis(document, superRegion);
+			String axis = getAxis(document, offset);
 			String contentType = superRegion.getContentType();
 			String type = getPartitionType(axis);
 
