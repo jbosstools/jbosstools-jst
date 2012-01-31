@@ -22,6 +22,7 @@ public class JstWebAllTests {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite(JstWebAllTests.class.getName());
+		suite.addTestSuite(WebMetaModelTest.class);
 		suite.addTestSuite(WebContentAssistProviderTest.class);
 //		suite.addTestSuite(BuilderTest.class);
 		suite.addTest(new WebValidationTestSetup(new TestSuite(
