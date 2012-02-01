@@ -188,7 +188,7 @@ public class ELValidator extends WebValidator {
 			int i=0;
 			for (ELReference el : els) {
 				IResource resource = el.getResource();
-				if(resource.isAccessible() && !filesToValidate.contains(resource) && notValidatedYet(resource)) {
+				if(resource instanceof IFile && shouldBeValidated((IFile)resource) && !filesToValidate.contains(resource) && notValidatedYet(resource)) {
 					// Don't re-validate more than 1000 ELs.
 					if(i++>1000) {
 						break;
@@ -371,9 +371,9 @@ public class ELValidator extends WebValidator {
 						length = propertyName.length();
 					}
 					markers++;
-					
+
 					IJavaSourceReference reference = getJavaReference(file, startPosition, length);
-					
+
 					if(reference != null) {
 						IMarker marker = addError(ELValidationMessages.UNPAIRED_GETTER_OR_SETTER, ELSeverityPreferences.UNPAIRED_GETTER_OR_SETTER, new String[]{propertyName, existedMethodName, missingMethodName}, reference, file);
 						elReference.addMarker(marker);
@@ -381,7 +381,6 @@ public class ELValidator extends WebValidator {
 						IMarker marker = addError(ELValidationMessages.UNPAIRED_GETTER_OR_SETTER, ELSeverityPreferences.UNPAIRED_GETTER_OR_SETTER, new String[]{propertyName, existedMethodName, missingMethodName}, elReference.getLineNumber(), length, startPosition, file);
 						elReference.addMarker(marker);
 					}
-					
 				}
 			}
 		}
@@ -413,7 +412,7 @@ public class ELValidator extends WebValidator {
 		}
 		markers++;
 		IJavaSourceReference reference = getJavaReference(file, offsetOfVarName, lengthOfVarName);
-		
+
 		IMarker marker = null;
 		// Mark invalid EL
 		if(unresolvedTokenIsVariable) {
