@@ -94,7 +94,7 @@ public class WebProcessStructureHelper {
 		for (int i = 0; i < s.length; i++) {
 			try {
 				result[i] = Integer.parseInt(s[i]);
-			} catch (Exception e) {
+			} catch (NumberFormatException e) {
 				WebModelPlugin.getPluginLog().logError(e);
 				result[i] = 0;
 			}

@@ -30,19 +30,13 @@ public abstract class WTPKbAbstractModelResource {
 	public WTPKbAbstractModelResource(IEditorInput fEditorInput) {
 		this.fEditorInput = fEditorInput;
 		fProvider = WebPromptingProvider.getInstance();
-		try {
-			if(fEditorInput instanceof IModelObjectEditorInput) {
-				fXModelObject = ((IModelObjectEditorInput)fEditorInput).getXModelObject();
-			} else if(fEditorInput instanceof IFileEditorInput) {
-				IFile file = ((IFileEditorInput)fEditorInput).getFile();
-				fXModelObject = EclipseResourceUtil.getObjectByResource(file);
-			}
-			fXModel = (fXModelObject == null) ? null : fXModelObject.getModel();
-		} catch (Exception x) {
-			JspEditorPlugin.getPluginLog().logError(x);
-			this.fProvider = null;
-			this.fXModel = null;
+		if(fEditorInput instanceof IModelObjectEditorInput) {
+			fXModelObject = ((IModelObjectEditorInput)fEditorInput).getXModelObject();
+		} else if(fEditorInput instanceof IFileEditorInput) {
+			IFile file = ((IFileEditorInput)fEditorInput).getFile();
+			fXModelObject = EclipseResourceUtil.getObjectByResource(file);
 		}
+		fXModel = (fXModelObject == null) ? null : fXModelObject.getModel();
 	}
 
 	public XModel getXModel() { 

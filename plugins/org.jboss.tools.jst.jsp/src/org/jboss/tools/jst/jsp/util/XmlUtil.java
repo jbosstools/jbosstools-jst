@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.jsp.util;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
@@ -45,7 +46,7 @@ public class XmlUtil {
 		} finally {
 			try {
 				if (inStream != null) inStream.close();
-			} catch (Exception e) {
+			} catch (IOException e) {
 				JspEditorPlugin.getPluginLog().logError(e);
 			}
 		}

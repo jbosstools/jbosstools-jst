@@ -35,14 +35,10 @@ public class WebRenameTLDWebAppChange extends CompositeChange {
 		int i = oldText.lastIndexOf("/"); //$NON-NLS-1$
 		String newText = oldText.substring(0, i + 1) + newName;
 		replacements.setProperty(oldText, newText);
-		try {
-			addChanges();
-		} catch (Exception e) {
-			WebModelPlugin.getPluginLog().logError(e);
-		}
+		addChanges();
 	}
 
-	private void addChanges() throws Exception {
+	private void addChanges() {
 		if(object == null) return;
 		XModelObject webxml = object.getModel().getByPath("/web.xml"); //$NON-NLS-1$
 		XModelObject[] fs = (webxml == null) ? new XModelObject[0] : new XModelObject[]{webxml};

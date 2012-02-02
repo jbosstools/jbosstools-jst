@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.model.pv.handler;
 
 import org.eclipse.core.resources.*;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
 import org.jboss.tools.common.meta.action.impl.handlers.DefaultRedirectHandler;
 import org.jboss.tools.common.model.XModelObject;
@@ -27,7 +28,7 @@ public class ProjectsResourceRedirectHandler extends DefaultRedirectHandler {
 			QualifiedName n = new QualifiedName("", action.getName() + "_lastPath"); //$NON-NLS-1$ //$NON-NLS-2$
 			String path = p.getPersistentProperty(n);
 			if(path != null) r = p.getWorkspace().getRoot().findMember(path);
-		} catch (Exception e) {
+		} catch (CoreException e) {
 			WebModelPlugin.getPluginLog().logError(e);
 		}
 		if(r == null) r = EclipseResourceUtil.getJavaSourceRoot(p);

@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.tld;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -194,7 +195,7 @@ public class TaglibMapping implements ITaglibMapping {
 			if(r != null && r.getLocation() != null) {
 				url = r.getLocation().toFile().toURL().toString();
 			}
-		} catch (Exception e) {
+		} catch (MalformedURLException e) {
 			WebModelPlugin.getPluginLog().logError(e);
 		}
 		if(url != null) findTldsInFolder(webinf, url);
@@ -232,7 +233,7 @@ public class TaglibMapping implements ITaglibMapping {
 		String url = null;
 		try {
 			url = "jar:" + new File(location).toURL().toString() + "!/META-INF/"; //$NON-NLS-1$ //$NON-NLS-2$
-		} catch (Exception e) {
+		} catch (MalformedURLException e) {
 			WebModelPlugin.getPluginLog().logError("TaglibMapping:findTldsInJar:" + e.getMessage(), e); //$NON-NLS-1$
 			return;
 		}		
