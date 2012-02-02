@@ -79,13 +79,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 import org.jboss.tools.common.el.core.ELReference;
 import org.jboss.tools.common.el.core.GlobalELReferenceList;
-import org.jboss.tools.common.el.core.model.ELExpression;
-import org.jboss.tools.common.el.core.model.ELInstance;
-import org.jboss.tools.common.el.core.model.ELInvocationExpression;
-import org.jboss.tools.common.el.core.model.ELModel;
-import org.jboss.tools.common.el.core.parser.ELParser;
 import org.jboss.tools.common.el.core.parser.ELParserUtil;
-import org.jboss.tools.common.el.core.parser.SyntaxError;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.ELContextImpl;
 import org.jboss.tools.common.el.core.resolver.ELResolverFactoryManager;
@@ -1005,7 +999,7 @@ public class PageContextFactory implements IResourceChangeListener {
 			IPath relativePath = Utils.getRelativePath(webRootPath,
 					basePath);
 			IPath filePath = relativePath.append(path);
-			member = project.getFolder(sourcePath).getFile(filePath);
+			member = project.getFile(sourcePath.append(filePath));
 			if (member.exists()) {
 				return member;
 			}
@@ -1015,7 +1009,7 @@ public class PageContextFactory implements IResourceChangeListener {
 				webRootPath = projectPath.append(runtimePath);
 				relativePath = Utils.getRelativePath(webRootPath, basePath);
 				filePath = relativePath.append(path);
-				member = project.getFolder(runtimePath).getFile(filePath);
+				member = project.getFile(runtimePath.append(filePath));
 				if (member.exists()) {
 					return member;
 				}
@@ -1038,14 +1032,14 @@ public class PageContextFactory implements IResourceChangeListener {
 			IPath sourcePath = resources[i].getSourcePath();
 
 			// Look in source environment
-			member = project.getFolder(sourcePath).getFile(path);
+			member = project.getFile(sourcePath.append(path));
 			if(member.exists()) {
 					return member;
 			} 
 
 			// Look in runtime environment
 			if (runtimePath.segmentCount() >= ICoreConstants.MINIMUM_FOLDER_SEGMENT_LENGTH - 1) {
-				member = project.getFolder(runtimePath).getFile(path);
+				member = project.getFile(runtimePath.append(path));
 					if (member.exists()) {
 						return member;
 				}

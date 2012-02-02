@@ -333,4 +333,10 @@
            nature="org.eclipse.jdt.core.javanature">
      </queryParticipant>
   </extension>
+ 
+   <extension point="org.jboss.tools.common.model.classes">
+		<xclass id="org.jboss.tools.jst.web.kb.internal.ProjectValidationContextFactory"
+			class="org.jboss.tools.jst.web.kb.internal.ProjectValidationContextFactory"/>
+  </extension>
+
 </plugin>

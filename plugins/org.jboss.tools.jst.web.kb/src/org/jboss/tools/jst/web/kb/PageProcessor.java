@@ -261,8 +261,15 @@ public class PageProcessor {
 		Map<String, IAttribute> map = new HashMap<String, IAttribute>();
 		for (IAttribute a: as) {
 			String n = a.getName();
-			if(map.containsKey(n) && !(a instanceof CustomTagLibAttribute)) {
-				continue;
+			if(map.containsKey(n)) {
+				IAttribute o = map.get(n);
+				int pa = (a.isPreferable() || a.isRequired()) ? 2 : 0;
+				int po = (o.isPreferable() || o.isRequired()) ? 2 : 0;
+				pa += (a instanceof CustomTagLibAttribute) ? 1 : 0;
+				po += (o instanceof CustomTagLibAttribute) ? 1 : 0;
+				if(pa <= po) {				
+					continue;
+				}
 			}
 			map.put(n, a);
 		}
