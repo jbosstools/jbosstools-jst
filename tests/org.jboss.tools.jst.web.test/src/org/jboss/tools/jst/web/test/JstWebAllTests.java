@@ -29,6 +29,8 @@ public class JstWebAllTests {
 				WebUtilTest.class,
 				WebAppHelperTest.class,
 				WebXMLValidationTest.class)));
+		suite.addTest(new WebUtil2TestSetup(new TestSuite(
+				WebUtil2Test.class)));
 		return suite;
 	}
 }
