@@ -16,6 +16,7 @@ import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.IMarkerResolution2;
 import org.eclipse.ui.IMarkerResolutionGenerator2;
@@ -55,10 +56,19 @@ class BuilderOrderResolution implements IMarkerResolution2 {
 	}
 
 	public void run(IMarker marker) {
-		IProject project = marker.getResource().getProject();
+		final IProject project = marker.getResource().getProject();
 		try {
 			if(CommonValidationPlugin.makeBuilderLast(project, ValidationPlugin.VALIDATION_BUILDER_ID)) {
-				project.build(IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor());
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							project.build(IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor());
+						} catch (CoreException e) {
+							CommonPlugin.getDefault().logError(e);
+						}
+					}
+				});
 			}
 		} catch (CoreException e) {
 			CommonPlugin.getDefault().logError(e);
