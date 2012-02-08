@@ -370,16 +370,18 @@ public class ELValidator extends WebValidator {
 						startPosition = startPosition + startPr;
 						length = propertyName.length();
 					}
-					markers++;
 
 					IJavaSourceReference reference = getJavaReference(file, startPosition, length);
-
+					IMarker marker = null;
 					if(reference != null) {
-						IMarker marker = addError(ELValidationMessages.UNPAIRED_GETTER_OR_SETTER, ELSeverityPreferences.UNPAIRED_GETTER_OR_SETTER, new String[]{propertyName, existedMethodName, missingMethodName}, reference, file);
+						marker = addError(ELValidationMessages.UNPAIRED_GETTER_OR_SETTER, ELSeverityPreferences.UNPAIRED_GETTER_OR_SETTER, new String[]{propertyName, existedMethodName, missingMethodName}, reference, file);
 						elReference.addMarker(marker);
 					} else {
-						IMarker marker = addError(ELValidationMessages.UNPAIRED_GETTER_OR_SETTER, ELSeverityPreferences.UNPAIRED_GETTER_OR_SETTER, new String[]{propertyName, existedMethodName, missingMethodName}, elReference.getLineNumber(), length, startPosition, file);
+						marker = addError(ELValidationMessages.UNPAIRED_GETTER_OR_SETTER, ELSeverityPreferences.UNPAIRED_GETTER_OR_SETTER, new String[]{propertyName, existedMethodName, missingMethodName}, elReference.getLineNumber(), length, startPosition, file);
 						elReference.addMarker(marker);
+					}
+					if(marker!=null) {
+						markers++;
 					}
 				}
 			}
@@ -410,7 +412,6 @@ public class ELValidator extends WebValidator {
 		if(usedVariables.isEmpty()) {
 			unresolvedTokenIsVariable = true;
 		}
-		markers++;
 		IJavaSourceReference reference = getJavaReference(file, offsetOfVarName, lengthOfVarName);
 
 		IMarker marker = null;
@@ -431,6 +432,7 @@ public class ELValidator extends WebValidator {
 
 		if(marker != null) {
 			elReference.addMarker(marker);
+			markers++;
 		}
 	}
 
