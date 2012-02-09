@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2007 Exadel, Inc. and Red Hat, Inc.
+ * Copyright (c) 2007-2012 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
+ *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.jspeditor;
 
@@ -539,8 +539,15 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	public void gotoMarker(final IMarker marker) {
 		// setActivePage(IVisualEditor.VISUALSOURCE_MODE);
 		// pageChange(IVisualEditor.VISUALSOURCE_MODE);
-		setActivePage(IVisualEditor.SOURCE_MODE);
-		pageChange(IVisualEditor.SOURCE_MODE);
+		
+		// Fix for JBIDE-10835: In some environments we have no working XulRunner,
+		// so, as result, there is only Source Tab is in editor 
+		// (and its index is not IVisualEditor.SOURCE_MODE == 1, but 0) 
+		// 
+		int pageToActivate = (IVisualEditor.SOURCE_MODE < getPageCount() ? IVisualEditor.SOURCE_MODE : 0);
+		
+		setActivePage(pageToActivate);
+		pageChange(pageToActivate);
 		IGotoMarker adapter = (IGotoMarker) sourceEditor
 				.getAdapter(IGotoMarker.class);
 		if (adapter != null) {
