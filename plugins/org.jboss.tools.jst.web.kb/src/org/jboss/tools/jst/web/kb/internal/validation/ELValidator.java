@@ -193,6 +193,7 @@ public class ELValidator extends WebValidator {
 					if(i++>1000) {
 						break;
 					}
+					validationContext.removeLinkedEl(el);
 					elsToValidate.add(el);
 				}
 			}
@@ -318,6 +319,18 @@ public class ELValidator extends WebValidator {
 			ELResolution elResolution = resolvers[i].resolve(context, operandToken, documnetOffset);
 			if(elResolution==null) {
 				continue;
+			}
+//			ELSegment previousSegment = null;
+			for (ELSegment segment : elResolution.getSegments()) {
+				IResource resource = segment.getResource();
+				if(resource instanceof IFile) {
+					validationContext.addLinkedEl(resource.getFullPath().toString(), elReference);
+//					if(!segment.isResolved() && previousSegment!=null && previousSegment.isResolved() && previousSegment instanceof JavaMemberELSegment) {
+//						IJavaElement element = ((JavaMemberELSegment)previousSegment).getJavaElement();
+//						element
+//					}
+				}
+//				previousSegment = segment;
 			}
 			if(elResolution.isResolved()) {
 				resolution = elResolution;
