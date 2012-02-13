@@ -19,6 +19,9 @@ import org.eclipse.core.commands.CommandEvent;
 import org.eclipse.core.commands.ICommandListener;
 import org.eclipse.core.commands.IStateListener;
 import org.eclipse.core.commands.State;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
@@ -57,6 +60,7 @@ import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.internal.IWorkbenchGraphicConstants;
 import org.eclipse.ui.internal.WorkbenchImages;
 import org.eclipse.ui.part.EditorPart;
+import org.eclipse.ui.progress.UIJob;
 import org.eclipse.wst.sse.core.internal.provisional.INodeAdapter;
 import org.eclipse.wst.sse.core.internal.provisional.INodeNotifier;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
@@ -838,7 +842,31 @@ class NodeListener implements INodeAdapter {
      * event' instance.
      */
     @Override
-	public void notifyChanged(INodeNotifier notifier, int eventType, Object changedFeature, Object oldValue, Object newValue, int pos) {
-   		selectionBar.updateNodes(false);
+	public void notifyChanged(INodeNotifier notifier, int eventType, 
+			Object changedFeature, Object oldValue, Object newValue, int pos) {
+    	/*
+    	 * https://issues.jboss.org/browse/JBIDE-10881
+    	 * Fixing selection bar listeners calls.
+    	 */
+    	if(updateJob == null) {
+    		updateJob = new SelectionBarUpdateJob();
+    		updateJob.schedule(100);
+    	}
+    }
+    
+    SelectionBarUpdateJob updateJob = null;
+    class SelectionBarUpdateJob extends UIJob {
+		public SelectionBarUpdateJob() {
+			super("Selection Bar update job"); //$NON-NLS-1$
+		}
+		@Override
+		public IStatus runInUIThread(IProgressMonitor monitor) {
+			try {
+				selectionBar.updateNodes(false);
+			} finally {
+				updateJob = null;
+			}
+			return Status.OK_STATUS;
+		}
     }
 }
