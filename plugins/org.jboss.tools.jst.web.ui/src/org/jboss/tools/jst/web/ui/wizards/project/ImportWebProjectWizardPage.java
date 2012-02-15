@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.ui.wizards.project;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -103,7 +104,7 @@ public class ImportWebProjectWizardPage extends WizardPage {
 				webXmlLocationAdapter.setValue("" + context.getInitialLocation()); //$NON-NLS-1$
 		} else {
 			linkAdapter = support.getPropertyEditorAdapterByName(ImportWebDirProjectContext.ATTR_LINK);
-			linkAdapter.setValue("true"); //$NON-NLS-1$
+			linkAdapter.setValue("false"); //$NON-NLS-1$
 		}
 	}
 	
@@ -185,9 +186,12 @@ public class ImportWebProjectWizardPage extends WizardPage {
 				setPageComplete(validatePage());
 				getContainer().updateButtons();
 				if(linkAdapter != null) {
-					support.getFieldEditorByName(ImportWebDirProjectContext.ATTR_LINK).setEnabled(mayNeedLink(), (Composite)getControl());
+					boolean requiresLink = !isProjectFolderPresentInWorkspace() && isLocationInsideWorkspace();
+					support.getFieldEditorByName(ImportWebDirProjectContext.ATTR_LINK).setEnabled(mayNeedLink() && !requiresLink, (Composite)getControl());
 					if(!mayNeedLink() && linkAdapter != null) {
 						linkAdapter.setValue("false"); //$NON-NLS-1$
+					} else if(requiresLink) {
+						linkAdapter.setValue("true"); //$NON-NLS-1$
 					}
 				}
 			}
@@ -199,11 +203,14 @@ public class ImportWebProjectWizardPage extends WizardPage {
 					updateContext(false, true);
 					setPageComplete(validatePage());
 					getContainer().updateButtons();
+					boolean requiresLink = !isProjectFolderPresentInWorkspace() && isLocationInsideWorkspace();
 					if(linkAdapter != null) {
-						support.getFieldEditorByName(ImportWebDirProjectContext.ATTR_LINK).setEnabled(mayNeedLink(), (Composite)getControl());
-					}
-					if(!mayNeedLink() && linkAdapter != null) {
-						linkAdapter.setValue("false"); //$NON-NLS-1$
+						support.getFieldEditorByName(ImportWebDirProjectContext.ATTR_LINK).setEnabled(mayNeedLink() && !requiresLink, (Composite)getControl());
+						if(!mayNeedLink()) {
+							linkAdapter.setValue("false"); //$NON-NLS-1$
+						} else if(requiresLink) {
+							linkAdapter.setValue("true"); //$NON-NLS-1$
+						}
 					}
 				}
 			}
@@ -235,11 +242,29 @@ public class ImportWebProjectWizardPage extends WizardPage {
 	private boolean mayNeedLink() {
 		String location = getWebXmlLocationValue();
 		if(location == null || location.trim().length() == 0) return false;
+		return !isProjectFolderPresentInWorkspace() || !isLocationInsideWorkspace();
+	}
+
+	private boolean isProjectFolderPresentInWorkspace() {
+		File workspaceFile = ResourcesPlugin.getWorkspace().getRoot().getLocation().toFile();
+		return new File(workspaceFile, getProjectNameValue()).exists();
+	}
+
+	private boolean isLocationInsideWorkspace() {
+		String location = getWebXmlLocationValue();
+		if(location == null || location.trim().length() == 0) return false;
 		String workspace = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString().replace('\\', '/') + '/';
 		location = location.replace('\\', '/');
-		if(!location.startsWith(workspace)) return true;
-		
-		return false;
+		File webxmlFile = new File(location);
+		File workspaceFile = new File(workspace);
+		if(webxmlFile.exists() && workspaceFile.exists()) {
+			try {
+				return webxmlFile.getCanonicalPath().startsWith(workspaceFile.getCanonicalPath());
+			} catch (IOException e) {
+				WebUiPlugin.getDefault().logError(e);
+			}
+		}
+		return location.startsWith(workspace);
 	}
 
 	private void updateProjectNameValue(boolean onProjectNameEdit, boolean onProjectLocationEdit) {
@@ -439,7 +464,7 @@ public class ImportWebProjectWizardPage extends WizardPage {
 			setErrorMessage(WizardKeys.getString(ImportWebDirProjectContext.PAGE_NAME+"_existsInWorkspace")); //$NON-NLS-1$
 			return false;
 		}
-		
+	
 		return true;
 	}
 	

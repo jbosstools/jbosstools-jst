@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.ui.operation;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -412,14 +413,14 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 			wcco.setDataModel(dataModel);
 			dataModel.setProperty(IProjectCreationPropertiesNew.PROJECT_NAME, projectName);
 			dataModel.setProperty(IFacetProjectCreationDataModelProperties.FACET_PROJECT_NAME, projectName);
-			if(!isDefaultLocation(projectLocation)) {
+			if(!isDefaultLocation(projectLocation, true)) {
 				dataModel.setProperty(IProjectCreationPropertiesNew.USE_DEFAULT_LOCATION, Boolean.FALSE);
 				dataModel.setProperty(IProjectCreationPropertiesNew.USER_DEFINED_LOCATION, projectLocation);
 			}
 
 			if(!getProject().exists()) {
 				IProjectDescription pd = ModelPlugin.getWorkspace().newProjectDescription(getProject().getName());
-				if(!isDefaultLocation(projectLocation)) {
+				if(!isDefaultLocation(projectLocation, true)) {
 					pd.setLocation(new Path(projectLocation));
 				}
 				getProject().create(pd, null);
@@ -516,16 +517,29 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 		return true;
 	}
 	
-	private boolean isDefaultLocation(String projectLocation) {
+	protected boolean isDefaultLocation(String projectLocation, boolean exact) {
 		String root = ModelPlugin.getWorkspace().getRoot().getLocation().toString().replace('\\', '/');
-		return (projectLocation.replace('\\','/') + "/").equals(root + "/" + getProject().getName() + "/"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-//		return (projectLocation.replace('\\','/') + "/").startsWith(root + "/" + getProject().getName() + "/");
+		try {
+			File f1 = new File(projectLocation);
+			if(f1.exists()) {
+				String pLocation = f1.getCanonicalPath().replace('\\','/') + '/';
+				String rLocation = ModelPlugin.getWorkspace().getRoot().getLocation().toFile().getCanonicalPath().replace('\\','/') + '/' + getProject().getName() + '/';
+				return exact ? pLocation.equals(rLocation) : pLocation.startsWith(rLocation);
+				
+			}
+		} catch (IOException e) {
+			WebUiPlugin.getDefault().logError(e);
+		}
+		return exact ? (projectLocation.replace('\\','/') + '/').equals(root + '/' + getProject().getName() + '/')
+					 : (projectLocation.replace('\\','/') + '/').startsWith(root + '/' + getProject().getName() + '/');
 	}
 	
 	private String createLinks(String projectLocation) throws CoreException {
+		if(isDefaultLocation(projectLocation, false)) {
+			return projectLocation;
+		}
 		IProject project = getProject();
 		String root = ModelPlugin.getWorkspace().getRoot().getLocation().toString().replace('\\', '/');
-		if((projectLocation.replace('\\','/') + "/").startsWith(root + "/" + project.getName() + "/")) return projectLocation; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		String webroot = getProperty(WEB_CONTENT_LOCATION_ID);
 		String[] javaRoot = (String[])getPropertyObject(JAVA_SOURCES_LOCATION_ID);
@@ -566,6 +580,11 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 		
 		return wsProjectLocation;
 	}
+
+//	private boolean isProjectLocationInsideWorkspaceProject(String projectLocation) {
+//		File project
+//		return false;
+//	}
 	
 	private org.eclipse.wst.common.project.facet.core.runtime.IRuntime findFacetRuntime(IRuntime runtime) {
 		String runtimeName = getProperty(WebNatureOperation.RUNTIME_NAME);
