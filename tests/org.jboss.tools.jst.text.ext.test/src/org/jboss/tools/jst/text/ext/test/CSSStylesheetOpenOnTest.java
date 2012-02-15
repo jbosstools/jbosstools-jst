@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2011 Red Hat, Inc. 
+ * Copyright (c) 2011-2012 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -20,6 +20,7 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.FindReplaceDocumentAdapter;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
+import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.hyperlink.IHyperlink;
 import org.eclipse.jface.text.source.ISourceViewer;
@@ -37,7 +38,7 @@ public class CSSStylesheetOpenOnTest extends TestCase {
 	private static final String PAGE_NAME =  PROJECT_NAME+"/WebContent/index.html";
 	private static final String MEDIA_PAGE_NAME =  PROJECT_NAME+"/WebContent/indexWithMediaRules.html";
 	private static final String SECOND_IN_A_ROW_PAGE_NAME =  PROJECT_NAME+"/WebContent/indexWithSecondClassInRule.html";
-	
+	private static final String RESOLVE_SELECTOR_PAGE_NAME =  PROJECT_NAME+"/WebContent/indexResolveSelector.html";
 	
 	public IProject project = null;
 
@@ -219,11 +220,9 @@ public class CSSStylesheetOpenOnTest extends TestCase {
 	 */
 	public void testCSSClassOpenOnWithASecondRuleNameInARow() throws PartInitException, BadLocationException {
 		HashSet<IEditorPart> openedEditors = new HashSet<IEditorPart>();
-		final String tagName = "<div";  
-		final String[] valuesToFind = {
-					"event", "evt_sub", "style2"};
-		final String[] editorNames = {
-				"secondClassName.css", "secondClassName.css", "secondClassName.css"};
+		final String textToFind = "class=\"style2\"";
+		final String valueToFind = "style2";
+		final String editorName = "secondClassName.css";
 		final int[] editorSelectionOffsets = {
 				0, 0, 0};
 		final int[] editorSelectionLengths = {
@@ -237,18 +236,21 @@ public class CSSStylesheetOpenOnTest extends TestCase {
 			ISourceViewer viewer = jspMultyPageEditor.getSourceEditor().getTextViewer(); 
 				
 			IDocument document = viewer.getDocument();
-			for (int i = 0; i < valuesToFind.length; i++) {
-				IRegion reg = new FindReplaceDocumentAdapter(document).find(0,
-						tagName, true, true, false, false);
-				assertNotNull("Tag:"+tagName+" not found",reg);
-				
+			int startFrom = 0;
+			for (int i = 0; i < editorSelectionOffsets.length; i++) {
+				IRegion reg = new FindReplaceDocumentAdapter(document).find(startFrom,
+						textToFind, true, true, false, false);
+				assertNotNull("Tag: <div "+textToFind+"/> not found",reg);
+
+				startFrom = reg.getOffset() + reg.getLength();
+
 				reg = new FindReplaceDocumentAdapter(document).find(reg.getOffset(),
-						valuesToFind[i], true, true, false, false);
-				assertNotNull("Value to find '"+valuesToFind[i]+"' not found",reg);
-				
+						valueToFind, true, true, false, false);
+				assertNotNull("Tag: <div "+textToFind+"/> not found",reg);
+
 				IHyperlink[] links = HyperlinkDetector.getInstance().detectHyperlinks(viewer, reg, true); // new Region(reg.getOffset() + reg.getLength(), 0)
 				
-				assertTrue("Hyperlinks for value '"+valuesToFind[i]+"' are not found",(links != null && links.length > 0));
+				assertTrue("Hyperlinks for value '"+valueToFind+"' are not found",(links != null && links.length > 0));
 				
 				boolean found = false;
 				for(IHyperlink link : links){
@@ -258,7 +260,7 @@ public class CSSStylesheetOpenOnTest extends TestCase {
 					
 					IEditorPart resultEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 					if (resultEditor != null) openedEditors.add(resultEditor);
-					if(editorNames[i].equals(resultEditor.getTitle())){
+					if(editorName.equals(resultEditor.getTitle())){
 						StructuredTextEditor stEditor = null;
 						if (resultEditor instanceof StructuredTextEditor) {
 							stEditor = (StructuredTextEditor)resultEditor;
@@ -277,14 +279,95 @@ public class CSSStylesheetOpenOnTest extends TestCase {
 						}
 					}
 				}
-				assertTrue("OpenOn have not opened "+editorNames[i]+" editor",found);
+				assertTrue("OpenOn have not opened "+editorName+" editor",found);
 			}
 		} finally {
 			closeEditors(openedEditors);
 		}
 	}
 	
-	
+	public void testCSSClassResolveSelectorOpenOn() throws PartInitException, BadLocationException {
+		HashSet<IEditorPart> openedEditors = new HashSet<IEditorPart>();
+
+		// CSS class names to be tested are placed one by one, 
+		// so, for each next test we'll continue to search in document 
+		// (We'll not search from beginning each time)
+		//
+		// Position to continue the search from
+		int startFrom = 0;  
+
+		// 'class="' - is the string to search
+		final String TEXT_TO_SEARCH = "class=\"";
+		
+		// Valid CSS Stylesheet to be opened
+		final String VALID_CSS_EDITOR_NAME = "styleResolveSelector.css";
+		
+		// Valid values for Text Selection after the open on is performed
+		final String[] VALID_TEXT_SELECTIONS = new String[] {
+				".styleA {color: #FF0000}",
+				".styleA {color: #FF0000}",
+				".styleA .styleB {color: #FF8000}",
+				"div.styleA {color: #FF0080}",
+				"div[title=\"x\"].styleA {color: #0000FF}",
+				"p input.styleA {color: #CCAA00}",
+				"div p input.styleA {color: #CC00FF}",
+				"[title=\"y\"] p input.styleA {color: #00CCFF}"
+		};
+		
+		for (int i = 0; i < VALID_TEXT_SELECTIONS.length; i++) {
+			IEditorPart editor = WorkbenchUtils.openEditor(RESOLVE_SELECTOR_PAGE_NAME);
+			if (editor != null) openedEditors.add(editor);
+			try {
+				assertTrue(editor instanceof JSPMultiPageEditor);
+				JSPMultiPageEditor jspMultyPageEditor = (JSPMultiPageEditor) editor;
+				ISourceViewer viewer = jspMultyPageEditor.getSourceEditor().getTextViewer(); 
+					
+				IDocument document = viewer.getDocument();
+				IRegion reg = new FindReplaceDocumentAdapter(document).find(startFrom,
+						TEXT_TO_SEARCH, true, true, false, false);
+				assertNotNull("Attribute :" + TEXT_TO_SEARCH + " not found whyle search starting from " + startFrom, reg);
+
+				startFrom = reg.getOffset() + reg.getLength();
+				
+				IHyperlink[] links = HyperlinkDetector.getInstance().detectHyperlinks(viewer, new Region(startFrom, 0), true); // new Region(reg.getOffset() + reg.getLength(), 0)
+				
+				assertTrue("Hyperlinks not found for position " + startFrom,(links != null && links.length > 0));
+				
+				boolean found = false;
+				for(IHyperlink link : links){
+					assertNotNull(link.toString());
+					
+					link.open();
+					
+					IEditorPart resultEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+					if (resultEditor != null) openedEditors.add(resultEditor);
+					if(VALID_CSS_EDITOR_NAME.equals(resultEditor.getTitle())){
+						StructuredTextEditor stEditor = null;
+						if (resultEditor instanceof StructuredTextEditor) {
+							stEditor = (StructuredTextEditor)resultEditor;
+						} else if (resultEditor instanceof JSPMultiPageEditor) {
+							stEditor = ((JSPMultiPageEditor)resultEditor).getSourceEditor();
+						}
+						assertNotNull("Unexpected Editor is openned: " + resultEditor.getTitle() + " [" + resultEditor.getClass().getName() + "]", stEditor);
+						ISelection selection = stEditor.getSelectionProvider().getSelection();
+						assertFalse("Required CSS Rule is not selected", selection.isEmpty());
+						if (selection instanceof TextSelection) {
+							TextSelection textSelection = (TextSelection)selection;
+							String selectionText = stEditor.getTextViewer().getDocument().get(textSelection.getOffset(), textSelection.getLength());
+							assertTrue("Required CSS Rule is not selected", 
+									(VALID_TEXT_SELECTIONS[i].equalsIgnoreCase(selectionText)));
+							found = true;
+							break;
+						}
+					}
+				}
+				assertTrue("OpenOn have not opened a valid selection in " + VALID_CSS_EDITOR_NAME + " editor",found);
+			} finally {
+				closeEditors(openedEditors);
+			}
+		}
+	}
+
 	protected void closeEditors (HashSet<IEditorPart> editors) {
 		if (editors == null || editors.isEmpty()) 
 			return;
