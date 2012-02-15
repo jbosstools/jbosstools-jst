@@ -167,7 +167,11 @@ public class PageContextFactory implements IResourceChangeListener {
 	 * @return
 	 */
 	public static ELContext createPageContext(IDocument document) {
-		return createPageContext(document, null);
+		return createPageContext(document, null, false);
+	}
+
+	public static ELContext createPageContext(IDocument document, boolean dontUseCache) {
+		return createPageContext(document, null, dontUseCache);
 	}
 
 	/**
@@ -178,7 +182,11 @@ public class PageContextFactory implements IResourceChangeListener {
 	 * @return
 	 */
 	public static ELContext createPageContext(IDocument document, String contextType) {
-		return createPageContext(document, null, contextType);
+		return createPageContext(document, null, contextType, false);
+	}
+
+	public static ELContext createPageContext(IDocument document, String contextType, boolean dontUseCache) {
+		return createPageContext(document, null, contextType, dontUseCache);
 	}
 
 	/**
@@ -211,7 +219,11 @@ public class PageContextFactory implements IResourceChangeListener {
 	 * @return
 	 */
 	public static ELContext createPageContext(IDocument document, IFile file, String contextType) {
-		return getInstance().createPageContext(document, file, new ArrayList<String>(), contextType);
+		return getInstance().createPageContext(document, file, new ArrayList<String>(), contextType, false);
+	}
+
+	public static ELContext createPageContext(IDocument document, IFile file, String contextType, boolean dontUseCache) {
+		return getInstance().createPageContext(document, file, new ArrayList<String>(), contextType, dontUseCache);
 	}
 
 	/**
@@ -341,15 +353,16 @@ public class PageContextFactory implements IResourceChangeListener {
 	 * @param parents List of parent contexts
 	 * @return
 	 */
-	private ELContext createPageContext(IDocument document, IFile file, List<String> parents, String defaultContextType) {
-		if (file == null)
+	private ELContext createPageContext(IDocument document, IFile file, List<String> parents, String defaultContextType, boolean dontUseCache) {
+		if (file == null) {
 			file = getResource(document);
-		
-		boolean isContextCachingAllowed = !EclipseUIUtil.isOpenInActiveEditor(file);
+		}
+
+		boolean isContextCachingAllowed = !dontUseCache && !EclipseUIUtil.isOpenInActiveEditor(file);
 		ELContext context = isContextCachingAllowed ? getSavedContext(file) : null;
 		if (context == null) {
 			String typeId = getContentTypeIdentifier(file == null ? document : file);
-			
+
 			if(JavaCore.JAVA_SOURCE_CONTENT_TYPE.equalsIgnoreCase(typeId)) {
 				context = createJavaContext(file);
 			} else if(JAVA_PROPERTIES_CONTENT_TYPE.equalsIgnoreCase(typeId)) {
@@ -401,14 +414,14 @@ public class PageContextFactory implements IResourceChangeListener {
 					}
 				}
 			}
-	
-			if (context != null && isContextCachingAllowed) {
-					saveConvext(context);
+
+			if (context != null) { // && isContextCachingAllowed) {  <- Save context even for modified files to prevent multiple initialization when invoked from NON-UI thread.
+				saveConvext(context);
 			}
 		}
 		return context;
 	}
-	
+
 	private static IProject getActiveProject() {
 		ITextEditor editor = EclipseUIUtil.getActiveEditor();
 		if (editor == null) return null;
@@ -656,7 +669,7 @@ public class PageContextFactory implements IResourceChangeListener {
 						if (fileName != null && !fileName.trim().isEmpty()) {
 							IFile file = getFileFromProject(fileName, context.getResource());
 							if (file != null && checkCycling(parents, file)) { // checkCycling is to fix for JBIDE-5083
-								ELContext includedContext = createPageContext(null, file, newParentList, null);
+								ELContext includedContext = createPageContext(null, file, newParentList, null, false);
 								if (includedContext != null)
 									((IIncludedContextSupport)context).addIncludedContext(includedContext);
 							}

@@ -29,7 +29,7 @@ import org.jboss.tools.common.validation.IProjectValidationContext;
 import org.jboss.tools.common.validation.IValidatingProjectSet;
 import org.jboss.tools.common.validation.IValidatingProjectTree;
 import org.jboss.tools.common.validation.IValidator;
-import org.jboss.tools.common.validation.ValidationErrorManager;
+import org.jboss.tools.common.validation.TempMarkerManager;
 import org.jboss.tools.common.validation.internal.SimpleValidatingProjectTree;
 import org.jboss.tools.common.validation.internal.ValidatingProjectSet;
 import org.jboss.tools.jst.web.kb.IKbProject;
@@ -39,7 +39,7 @@ import org.jboss.tools.jst.web.kb.KbProjectFactory;
 /**
  * @author Alexey Kazakov
  */
-public abstract class KBValidator extends ValidationErrorManager implements IValidator {
+public abstract class KBValidator extends TempMarkerManager implements IValidator {
 
 	protected boolean notValidatedYet(IResource resource) {
 		IProject pr = resource.getProject();

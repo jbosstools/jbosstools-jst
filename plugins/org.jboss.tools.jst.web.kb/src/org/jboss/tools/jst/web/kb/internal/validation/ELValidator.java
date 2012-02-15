@@ -32,8 +32,11 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMember;
+import org.eclipse.jface.text.IRegion;
 import org.eclipse.wst.validation.internal.core.ValidationException;
 import org.eclipse.wst.validation.internal.provisional.core.IReporter;
+import org.eclipse.wst.validation.internal.provisional.core.IValidationContext;
+import org.eclipse.wst.validation.internal.provisional.core.IValidator;
 import org.jboss.tools.common.CommonPlugin;
 import org.jboss.tools.common.EclipseUtil;
 import org.jboss.tools.common.el.core.ELReference;
@@ -57,6 +60,8 @@ import org.jboss.tools.common.el.core.resolver.TypeInfoCollector;
 import org.jboss.tools.common.el.core.resolver.Var;
 import org.jboss.tools.common.java.IJavaSourceReference;
 import org.jboss.tools.common.validation.ContextValidationHelper;
+import org.jboss.tools.common.validation.EditorValidationContext;
+import org.jboss.tools.common.validation.IAsYouTypeValidator;
 import org.jboss.tools.common.validation.IELValidationDelegate;
 import org.jboss.tools.common.validation.IProjectValidationContext;
 import org.jboss.tools.common.validation.IValidatingProjectTree;
@@ -70,7 +75,7 @@ import org.jboss.tools.jst.web.kb.preferences.ELSeverityPreferences;
  * EL Validator
  * @author Alexey Kazakov
  */
-public class ELValidator extends WebValidator {
+public class ELValidator extends WebValidator implements IAsYouTypeValidator {
 
 	public static final String ID = "org.jboss.tools.jst.web.kb.ELValidator"; //$NON-NLS-1$
 	public static final String PROBLEM_TYPE = "org.jboss.tools.jst.web.kb.elproblem"; //$NON-NLS-1$
@@ -202,7 +207,7 @@ public class ELValidator extends WebValidator {
 			validateFile(file);
 		}
 		for (ELReference el : elsToValidate) {
-			validateEL(el);
+			validateEL(el, false, null);
 			coreHelper.getValidationContextManager().addValidatedProject(this, el.getResource().getProject());
 		}
 
@@ -239,6 +244,21 @@ public class ELValidator extends WebValidator {
 		return OK_STATUS;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.common.validation.IAsYouTypeValidator#validate(org.eclipse.core.resources.IProject, org.eclipse.jface.text.IRegion, org.eclipse.wst.validation.internal.provisional.core.IValidationContext, org.eclipse.wst.validation.internal.provisional.core.IReporter, org.jboss.tools.common.validation.EditorValidationContext, org.eclipse.core.resources.IFile)
+	 */
+	@Override
+	public void validate(IValidator validatorManager, IProject rootProject, IRegion dirtyRegion, IValidationContext helper, IReporter reporter, EditorValidationContext validationContext, IProjectValidationContext projectContext, IFile file) {
+		init(rootProject, null, projectContext, validatorManager, reporter);
+		this.document = validationContext.getDocument();
+		ELContext elContext = PageContextFactory.createPageContext(validationContext.getDocument(), true);
+		Set<ELReference> references = elContext.getELReferences(dirtyRegion);
+		for (ELReference elReference : references) {
+			validateEL(elReference, true, elContext);
+		}
+	}
+
 	private int markers;
 
 	private void validateFile(IFile file) {
@@ -253,42 +273,52 @@ public class ELValidator extends WebValidator {
 		if(context!=null) {
 			ELReference[] references = context.getELReferences();
 			for (int i = 0; i < references.length; i++) {
-				if(!references[i].getSyntaxErrors().isEmpty()) {
-					for (SyntaxError error: references[i].getSyntaxErrors()) {
-						markers++;
-						IJavaSourceReference reference = getJavaReference(file, references[i].getStartPosition() + error.getPosition(), 1);
-						if(reference == null) {
-							addError(ELValidationMessages.EL_SYNTAX_ERROR, ELSeverityPreferences.EL_SYNTAX_ERROR, new String[]{error.getProblem()}, references[i].getLineNumber(), 1, references[i].getStartPosition() + error.getPosition(), context.getResource());
+				if(markers<getMaxNumberOfMarkersPerFile(file.getProject())) {
+					validateEL(references[i], false, context);
+				}
+			}
+		}
+	}
+
+	private void validateEL(ELReference el, boolean asYouType, ELContext context) {
+		if(asYouType || (!reporter.isCancelled() && shouldBeValidated(el.getResource()))) {
+			displaySubtask(ELValidationMessages.VALIDATING_EL_FILE, new String[]{el.getResource().getProject().getName(), el.getResource().getName()});
+			if(!asYouType) {
+				el.deleteMarkers();
+			}
+			if(context!=null && !el.getSyntaxErrors().isEmpty()) {
+				for (SyntaxError error: el.getSyntaxErrors()) {
+					markers++;
+					IJavaSourceReference reference = getJavaReference(el.getResource(), el.getStartPosition() + error.getPosition(), 1);
+					if(reference == null) {
+						if(asYouType) {
+							addMesssage(el.getResource(), el.getStartPosition() + error.getPosition(), 1, ELSeverityPreferences.EL_SYNTAX_ERROR, ELValidationMessages.EL_SYNTAX_ERROR, new String[]{error.getProblem()});
+						} else {
+							addError(ELValidationMessages.EL_SYNTAX_ERROR, ELSeverityPreferences.EL_SYNTAX_ERROR, new String[]{error.getProblem()}, el.getLineNumber(), 1, el.getStartPosition() + error.getPosition(), context.getResource());
+						}
+					} else {
+						if(asYouType) {
+							addMesssage(el.getResource(), reference, ELSeverityPreferences.EL_SYNTAX_ERROR, ELValidationMessages.EL_SYNTAX_ERROR, new String[]{error.getProblem()});
 						} else {
 							addError(ELValidationMessages.EL_SYNTAX_ERROR, ELSeverityPreferences.EL_SYNTAX_ERROR, new String[]{error.getProblem()}, reference, context.getResource());
 						}
 					}
 				}
-				if(markers<getMaxNumberOfMarkersPerFile(file.getProject())) {
-					validateEL(references[i]);
-				}
 			}
-		}
-	}
-
-	private void validateEL(ELReference el) {
-		if(!reporter.isCancelled() && shouldBeValidated(el.getResource())) {
-			displaySubtask(ELValidationMessages.VALIDATING_EL_FILE, new String[]{el.getResource().getProject().getName(), el.getResource().getName()});
-			el.deleteMarkers();
 			for (ELExpression expresion : el.getEl()) {
-				validateELExpression(el, expresion);
+				validateELExpression(el, expresion, asYouType, context);
 			}
 		}
 	}
 
-	private void validateELExpression(ELReference elReference, ELExpression el) {
+	private void validateELExpression(ELReference elReference, ELExpression el, boolean asYouType, ELContext context) {
 		List<ELInvocationExpression> es = el.getInvocations();
 		for (ELInvocationExpression token: es) {
-			validateElOperand(elReference, token);
+			validateElOperand(elReference, token, asYouType, context);
 		}
 	}
 
-	private void validateElOperand(ELReference elReference, ELInvocationExpression operandToken) {
+	private void validateElOperand(ELReference elReference, ELInvocationExpression operandToken, boolean asYouType, ELContext context) {
 		IFile file = elReference.getResource();
 		int documnetOffset = elReference.getStartPosition();
 		String operand = operandToken.getText();
@@ -300,7 +330,9 @@ public class ELValidator extends WebValidator {
 		int lengthOfVarName = varName.length();
 		boolean unresolvedTokenIsVariable = false;
 		ELResolution resolution = null;
-		ELContext context = PageContextFactory.createPageContext(file);
+		if(context==null) {
+			context = PageContextFactory.createPageContext(file);
+		}
 		if(context==null) {
 			context = new SimpleELContext();
 			context.setResource(file);
@@ -320,17 +352,13 @@ public class ELValidator extends WebValidator {
 			if(elResolution==null) {
 				continue;
 			}
-//			ELSegment previousSegment = null;
-			for (ELSegment segment : elResolution.getSegments()) {
-				IResource resource = segment.getResource();
-				if(resource instanceof IFile) {
-					validationContext.addLinkedEl(resource.getFullPath().toString(), elReference);
-//					if(!segment.isResolved() && previousSegment!=null && previousSegment.isResolved() && previousSegment instanceof JavaMemberELSegment) {
-//						IJavaElement element = ((JavaMemberELSegment)previousSegment).getJavaElement();
-//						element
-//					}
+			if(!asYouType) {
+				for (ELSegment segment : elResolution.getSegments()) {
+					IResource resource = segment.getResource();
+					if(resource instanceof IFile) {
+						validationContext.addLinkedEl(resource.getFullPath().toString(), elReference);
+					}
 				}
-//				previousSegment = segment;
 			}
 			if(elResolution.isResolved()) {
 				resolution = elResolution;
@@ -350,10 +378,12 @@ public class ELValidator extends WebValidator {
 		if(resolution==null) {
 			return;
 		}
-		if(!resolution.isResolved()) {
-			Set<String> names = findVariableNames(operandToken);
-			for (String name : names) {
-				validationContext.addLinkedEl(name, elReference);
+		if(!asYouType) {
+			if(!resolution.isResolved()) {
+				Set<String> names = findVariableNames(operandToken);
+				for (String name : names) {
+					validationContext.addLinkedEl(name, elReference);
+				}
 			}
 		}
 
@@ -387,11 +417,19 @@ public class ELValidator extends WebValidator {
 					IJavaSourceReference reference = getJavaReference(file, startPosition, length);
 					IMarker marker = null;
 					if(reference != null) {
-						marker = addError(ELValidationMessages.UNPAIRED_GETTER_OR_SETTER, ELSeverityPreferences.UNPAIRED_GETTER_OR_SETTER, new String[]{propertyName, existedMethodName, missingMethodName}, reference, file);
-						elReference.addMarker(marker);
+						if(asYouType) {
+							addMesssage(file, reference, ELSeverityPreferences.UNPAIRED_GETTER_OR_SETTER, ELValidationMessages.UNPAIRED_GETTER_OR_SETTER, new String[]{propertyName, existedMethodName, missingMethodName});
+						} else {
+							marker = addError(ELValidationMessages.UNPAIRED_GETTER_OR_SETTER, ELSeverityPreferences.UNPAIRED_GETTER_OR_SETTER, new String[]{propertyName, existedMethodName, missingMethodName}, reference, file);
+							elReference.addMarker(marker);
+						}
 					} else {
-						marker = addError(ELValidationMessages.UNPAIRED_GETTER_OR_SETTER, ELSeverityPreferences.UNPAIRED_GETTER_OR_SETTER, new String[]{propertyName, existedMethodName, missingMethodName}, elReference.getLineNumber(), length, startPosition, file);
-						elReference.addMarker(marker);
+						if(asYouType) {
+							addMesssage(file, startPosition, length, ELSeverityPreferences.UNPAIRED_GETTER_OR_SETTER, ELValidationMessages.UNPAIRED_GETTER_OR_SETTER, new String[]{propertyName, existedMethodName, missingMethodName});
+						} else {
+							marker = addError(ELValidationMessages.UNPAIRED_GETTER_OR_SETTER, ELSeverityPreferences.UNPAIRED_GETTER_OR_SETTER, new String[]{propertyName, existedMethodName, missingMethodName}, elReference.getLineNumber(), length, startPosition, file);
+							elReference.addMarker(marker);
+						}
 					}
 					if(marker!=null) {
 						markers++;
@@ -399,9 +437,11 @@ public class ELValidator extends WebValidator {
 				}
 			}
 		}
-		// Save links between resource and used variables names
-		for(IVariable variable: usedVariables) {
-			validationContext.addLinkedEl(variable.getName(), elReference);
+		if(!asYouType) {
+			// Save links between resource and used variables names
+			for(IVariable variable: usedVariables) {
+				validationContext.addLinkedEl(variable.getName(), elReference);
+			}
 		}
 
 		if (resolution.isResolved() || !resolution.isValidatable()) {
@@ -425,26 +465,35 @@ public class ELValidator extends WebValidator {
 		if(usedVariables.isEmpty()) {
 			unresolvedTokenIsVariable = true;
 		}
-		IJavaSourceReference reference = getJavaReference(file, offsetOfVarName, lengthOfVarName);
+		IJavaSourceReference javaReference = getJavaReference(file, offsetOfVarName, lengthOfVarName);
 
 		IMarker marker = null;
 		// Mark invalid EL
+
+		String message = ELValidationMessages.UNKNOWN_EL_VARIABLE_PROPERTY_NAME;
+		String preference = ELSeverityPreferences.UNKNOWN_EL_VARIABLE_PROPERTY_NAME;
 		if(unresolvedTokenIsVariable) {
-			if(reference == null) {
-				marker = addError(ELValidationMessages.UNKNOWN_EL_VARIABLE_NAME, ELSeverityPreferences.UNKNOWN_EL_VARIABLE_NAME, new String[]{varName}, elReference.getLineNumber(), lengthOfVarName, offsetOfVarName, file);
+			message = ELValidationMessages.UNKNOWN_EL_VARIABLE_NAME;
+			preference = ELSeverityPreferences.UNKNOWN_EL_VARIABLE_NAME;
+		}
+		if(javaReference == null) {
+			if(asYouType) {
+				addMesssage(file, offsetOfVarName, lengthOfVarName, preference, message, new String[]{varName});
 			} else {
-				marker = addError(ELValidationMessages.UNKNOWN_EL_VARIABLE_NAME, ELSeverityPreferences.UNKNOWN_EL_VARIABLE_NAME, new String[]{varName}, reference, file);
+				marker = addError(message, preference, new String[]{varName}, elReference.getLineNumber(), lengthOfVarName, offsetOfVarName, file);
 			}
 		} else {
-			if(reference == null) {
-				marker = addError(ELValidationMessages.UNKNOWN_EL_VARIABLE_PROPERTY_NAME, ELSeverityPreferences.UNKNOWN_EL_VARIABLE_PROPERTY_NAME, new String[]{varName}, elReference.getLineNumber(), lengthOfVarName, offsetOfVarName, file);
+			if(asYouType) {
+				addMesssage(file, javaReference, preference, message, new String[]{varName});
 			} else {
-				marker = addError(ELValidationMessages.UNKNOWN_EL_VARIABLE_PROPERTY_NAME, ELSeverityPreferences.UNKNOWN_EL_VARIABLE_PROPERTY_NAME, new String[]{varName}, reference, file);
+				marker = addError(message, preference, new String[]{varName}, javaReference, file);
 			}
 		}
 
 		if(marker != null) {
-			elReference.addMarker(marker);
+			if(!asYouType) {
+				elReference.addMarker(marker);
+			}
 			markers++;
 		}
 	}
@@ -573,8 +622,23 @@ public class ELValidator extends WebValidator {
 		return true;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.common.validation.ValidationErrorManager#getPreferencePageId()
+	 */
 	@Override
 	protected String getPreferencePageId() {
 		return PREFERENCE_PAGE_ID;
+	}
+
+	private static final String BUNDLE_NAME = "org.jboss.tools.jst.web.kb.internal.validation.messages";
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.common.validation.TempMarkerManager#getMessageBundleName()
+	 */
+	@Override
+	protected String getMessageBundleName() {
+		return BUNDLE_NAME;
 	}
 }
