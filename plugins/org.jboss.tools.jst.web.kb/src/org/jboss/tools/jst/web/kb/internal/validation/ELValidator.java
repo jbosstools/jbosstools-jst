@@ -254,6 +254,7 @@ public class ELValidator extends WebValidator implements IAsYouTypeValidator {
 		this.document = validationContext.getDocument();
 		ELContext elContext = PageContextFactory.createPageContext(validationContext.getDocument(), true);
 		Set<ELReference> references = elContext.getELReferences(dirtyRegion);
+
 		for (ELReference elReference : references) {
 			validateEL(elReference, true, elContext);
 		}
@@ -285,7 +286,10 @@ public class ELValidator extends WebValidator implements IAsYouTypeValidator {
 			displaySubtask(ELValidationMessages.VALIDATING_EL_FILE, new String[]{el.getResource().getProject().getName(), el.getResource().getName()});
 			if(!asYouType) {
 				el.deleteMarkers();
+			} else {
+				disableProblemAnnotations(el);
 			}
+
 			if(context!=null && !el.getSyntaxErrors().isEmpty()) {
 				for (SyntaxError error: el.getSyntaxErrors()) {
 					markers++;
