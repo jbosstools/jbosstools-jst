@@ -363,7 +363,8 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 		if (restOfRule.length() > 0) {
 			StringBuilder sb = new StringBuilder();
 			for (char ch : restOfRule.toCharArray()) {
-				if (!Character.isJavaIdentifierPart(ch))
+				if (!Character.isJavaIdentifierPart(ch) 
+						&& ch != '-' && ch != '_')
 					break;
 				sb.append(ch);
 			}
@@ -382,7 +383,8 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 			// Get attr name
 			StringBuilder sb = new StringBuilder();
 			for (char ch : restOfRule.toCharArray()) {
-				if (!Character.isJavaIdentifierPart(ch))
+				if (!Character.isJavaIdentifierPart(ch) 
+						&& ch != '-' && ch != '_')
 					break;
 				sb.append(ch);
 			}
@@ -405,7 +407,8 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 
 	boolean checkWord(String word) {
 		for (char ch : word.toCharArray()) {
-			if (!Character.isJavaIdentifierPart(ch)) {
+			if (!Character.isJavaIdentifierPart(ch)  
+					&& ch != '-' && ch != '_') {
 				return false;
 			}
 		}
