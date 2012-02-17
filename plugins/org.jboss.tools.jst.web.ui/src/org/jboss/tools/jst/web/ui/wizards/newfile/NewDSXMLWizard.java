@@ -48,6 +48,7 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
@@ -201,10 +202,26 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 			q.setLayout(l);
 			connProfileSelEditor.doFillIntoGrid(q);
 			templateSelEditor.doFillIntoGrid(q);
-//			sync.register(connProfileSelEditor);			
+			connProfileSelEditor.addPropertyChangeListener(new PropertyChangeListener() {
+				public void propertyChange(PropertyChangeEvent evt) {
+					validatePage();
+				}
+			});
 			validatePage();
 		}
     	
+		protected boolean validatePage() {
+			boolean valid = super.validatePage();
+			if(valid && connProfileSelEditor != null) {
+				String p = connProfileSelEditor.getValueAsString();
+				if(p == null || p.length() == 0) {
+					valid = false;
+					setErrorMessage("Connenction profile must be set.");
+				}
+			}
+			return valid;
+		}
+
 	}
 
 	/**
@@ -212,9 +229,9 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 	 */
 	private Object getConnectionProfileDefaultValue() {
 		List<String> values = getConnectionProfileNameList();
-		String defaultDs = ""; // Use preference, or dialog settings?
+		String defaultDs = NewDSXMLWizardFactory.EMPTY_PROFILE; // Use preference, or dialog settings?
 		return values.contains(defaultDs) ? defaultDs
-				: !values.isEmpty() ? values.get(0) : ""; //$NON-NLS-1$
+				: !values.isEmpty() ? values.get(0) : NewDSXMLWizardFactory.EMPTY_PROFILE; //$NON-NLS-1$
 	}
 
 	private static List<String> getConnectionProfileNameList() {
@@ -409,9 +426,10 @@ class DSDataModelProvider extends AbstractDataModelProvider implements IDSDataMo
 }
 
 class NewDSXMLWizardFactory {
+	static String EMPTY_PROFILE = "                            "; //$NON-NLS-1$
 	
 	public static String[] TEMPLATE_LIST = {
-		"Default", "AS7"
+		"Format: JBoss AS 5", "Format: JBoss AS 7" //$NON-NLS-1$ //$NON-NLS-2$
 	};
 
 	public static IFieldEditor createTemplateFieldEditor(Object defaultValue) {
@@ -432,8 +450,8 @@ class NewDSXMLWizardFactory {
 		EditConnectionProfileAction editAction = new EditConnectionProfileAction(validator);
 		NewConnectionProfileAction newAction = new NewConnectionProfileAction(validator);
 		List<String> profiles = getConnectionProfileNameList();
-		if(canBeEmpty) {
-			profiles.add(0, ""); //$NON-NLS-1$
+		if(canBeEmpty || profiles.isEmpty()) {
+			profiles.add(0, EMPTY_PROFILE);
 		}
 		IFieldEditor connProfileSelEditor = IFieldEditorFactory.INSTANCE.createComboWithTwoButtons(
 				IDSDataModelProperties.CONNECTION_PROFILE,
@@ -446,11 +464,11 @@ class NewDSXMLWizardFactory {
 		editAction.setEditor(connProfileSelEditor);
 		newAction.setEditor(connProfileSelEditor);
 		final ButtonFieldEditor editButton = (ButtonFieldEditor)((CompositeEditor)connProfileSelEditor).getEditors().get(2);
-		editButton.setEnabled(!"".equals(defaultValue)); //$NON-NLS-1$
-		if(canBeEmpty) {
+		editButton.setEnabled(!"".equals(defaultValue) && !EMPTY_PROFILE.equals(defaultValue)); //$NON-NLS-1$
+		if(canBeEmpty || profiles.isEmpty()) {
 			connProfileSelEditor.addPropertyChangeListener(new PropertyChangeListener(){
 				public void propertyChange(PropertyChangeEvent evt) {
-					boolean ediatble = !"".equals(evt.getNewValue()); //$NON-NLS-1$
+					boolean ediatble = !"".equals(evt.getNewValue()) && !EMPTY_PROFILE.equals(evt.getNewValue()); //$NON-NLS-1$
 					editButton.setEnabled(ediatble);
 				}
 			});
@@ -459,8 +477,8 @@ class NewDSXMLWizardFactory {
 		final IProfileListener profileListener = new IProfileListener() {
 			private void update() {
 				final List<String> profiles = getConnectionProfileNameList();
-				if(canBeEmpty) {
-					profiles.add(0, ""); //$NON-NLS-1$
+				if(canBeEmpty || profiles.isEmpty()) {
+					profiles.add(0, EMPTY_PROFILE);
 				}
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
@@ -616,9 +634,12 @@ class NewDSXMLWizardFactory {
 					((ITaggedFieldEditor) ((CompositeEditor) connProfileSelEditor)
 							.getEditors().get(1)).setTags(getConnectionProfileNameList()
 							.toArray(new String[0]));
+					Control c = (Control)connProfileSelEditor.getEditorControls()[0];
+					c.getParent().layout();
+					c.getParent().getParent().layout();					
+					validator.validate(profile.getName(), null);
 				}
 			});
-			validator.validate(profile.getName(), null);
 		}
 
 		/* (non-Javadoc)

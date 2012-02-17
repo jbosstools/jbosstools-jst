@@ -192,7 +192,7 @@
          </selection>
       </wizard>
       <wizard
-            name="New DS XML"
+            name="New JBoss Datasource"
             icon="$nl$/images/xstudio/wizards/new_properties_file.gif"
             category="org.jboss.tools.jst.web"
             class="org.jboss.tools.jst.web.ui.wizards.newfile.NewDSXMLWizard"
