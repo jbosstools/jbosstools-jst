@@ -85,6 +85,13 @@ public class Messages extends NLS {
 	public static String NewXHTMLTemplatesWizardPage_6;
 	public static String NewXHTMLTemplatesWizardPage_7;
 
+	public static String NewDSXMLWizard_TITLE;
+	public static String NewDSXMLWizard_DESCRIPTION;
+	public static String NewDSXMLWizard_CONNECTION_PROFILE_FIELD;
+	public static String NewDSXMLWizard_TEMPLATE_FIELD;
+	public static String NewDSXMLWizard_EDIT_BUTTON;
+	public static String NewDSXMLWizard_NEW_BUTTON;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

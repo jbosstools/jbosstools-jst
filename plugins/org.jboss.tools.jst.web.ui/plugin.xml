@@ -191,6 +191,19 @@
          <selection class="org.eclipse.core.resources.IResource">
          </selection>
       </wizard>
+      <wizard
+            name="New DS XML"
+            icon="$nl$/images/xstudio/wizards/new_properties_file.gif"
+            category="org.jboss.tools.jst.web"
+            class="org.jboss.tools.jst.web.ui.wizards.newfile.NewDSXMLWizard"
+            id="org.jboss.tools.jst.web.ui.wizards.newfile.NewDSXMLWizard">
+         <description>
+            Creates New DS XML file
+         </description>
+         <selection
+               class="org.eclipse.core.resources.IResource">
+         </selection>
+      </wizard>
    </extension>
 
    <extension id="org.jboss.tools.jst.web.ui.views" name="JBoss Tools" point="org.eclipse.ui.views">
