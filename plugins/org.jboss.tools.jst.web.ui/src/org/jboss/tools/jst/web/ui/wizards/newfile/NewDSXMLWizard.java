@@ -280,7 +280,7 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 			String jarname = (String)model.getProperty(IDSDataModelProperties.JDBC_DRIVER_JAR_NAME);
 			if(jarname != null) {
 				IPath container = getContainerFullPath();
-				IPath target = container.append(jarname + ".jar"); //$NON-NLS-1$
+				IPath target = container.append(jarname);
 				IFile targetFile = ResourcesPlugin.getWorkspace().getRoot().getFile(target);
 				if(!targetFile.exists()) {
 					return targetFile;
@@ -296,7 +296,7 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 				File jarSource = new File(jars[0]);
 				if(jarSource.isFile()) {
 					IPath container = getContainerFullPath();
-					IPath target = container.append(jarname + ".jar"); //$NON-NLS-1$
+					IPath target = container.append(jarname);
 					IFile targetFile = ResourcesPlugin.getWorkspace().getRoot().getFile(target);
 					if(!targetFile.exists()) {
 						try {
@@ -550,7 +550,7 @@ interface IDSDataModelProperties {
 	String DATATOOLS_JDBC_DRIVER_JAR_PATH = "org.eclipse.datatools.connectivity.driverDefinitionID"; //$NON-NLS-1$
 
 	String JDBC_CONNECTION_NAME = "datasource.name"; //$NON-NLS-1$
-	String JDBC_DRIVER_JAR_NAME = "driver.jar.name.without.dot.jar"; //$NON-NLS-1$
+	String JDBC_DRIVER_JAR_NAME = "driver.jar.name"; //$NON-NLS-1$
 }
 
 class DSDataModelProvider extends AbstractDataModelProvider implements IDSDataModelProperties {
@@ -676,7 +676,7 @@ class DSDataModelProvider extends AbstractDataModelProvider implements IDSDataMo
 				String jarList = props.getProperty("jarList"); //$NON-NLS-1$
 				int q = jarList.indexOf(".jar"); //$NON-NLS-1$
 				if(q >= 0) {
-					String jar = jarList.substring(0, q);
+					String jar = jarList.substring(0, q + 4);
 					int b = jar.replace('\\', '/').lastIndexOf('/');
 					String jarName = jar.substring(b + 1);
 					model.setProperty(JDBC_DRIVER_JAR_NAME, jarName);
@@ -963,7 +963,7 @@ class FilterSetFactory {
 		JDBC_TEMPLATE.addFilter("catalogProperty","${catalog.property}"); //$NON-NLS-1$ //$NON-NLS-2$
 		JDBC_TEMPLATE.addFilter("schemaProperty","${schema.property}"); //$NON-NLS-1$ //$NON-NLS-2$
 		JDBC_TEMPLATE.addFilter("datasourcename","${datasource.name}"); //$NON-NLS-1$ //$NON-NLS-2$
-		JDBC_TEMPLATE.addFilter("driverjarnamewithoutdotjar","${driver.jar.name.without.dot.jar}"); //$NON-NLS-1$ //$NON-NLS-2$
+		JDBC_TEMPLATE.addFilter("driverjarnamewithoutdotjar","${driver.jar.name}"); //$NON-NLS-1$ //$NON-NLS-2$
 		
 		PROJECT_TEMPLATE = new FilterSet();
 		PROJECT_TEMPLATE.addFilter("projectName","${project.name}"); //$NON-NLS-1$ //$NON-NLS-2$
