@@ -12,7 +12,11 @@ package org.jboss.tools.jst.text.ext.hyperlink;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -56,6 +60,7 @@ import org.w3c.dom.css.CSSStyleRule;
 @SuppressWarnings("restriction")
 public class CSSClassHyperlink extends AbstractHyperlink {
 	CSSRuleDescriptorSorter SORTER = new CSSRuleDescriptorSorter();
+	private static final char[] SPACE_CHARS = {' ', '\t', '\r', '\n', '\f'};
 
 	public static final String[] STYLE_TAGS = new String[] { "style", "link" }; //$NON-NLS-1$//$NON-NLS-2$
 	public static final String LINK_TAG = "link"; //$NON-NLS-1$
@@ -79,8 +84,8 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 			CSSStyleSheetDescriptor descr = descrs.get(i);
 			CSSRuleList rules = descr.sheet.getCssRules();
 			for (int r = 0; rules != null && r < rules.getLength(); r++) {
-				CSSRuleDescriptor match = getMatchedRuleDescriptor(rules.item(r), getStyleName(region));
-				if (match != null) {
+				Set<CSSRuleDescriptor> matches = getMatchedRuleDescriptors(rules.item(r), getStyleName(region));
+				for (CSSRuleDescriptor match : matches) {
 					match.stylesheetDescriptor = descr;
 					bestMatchDescriptors.add(match);
 				}
@@ -124,25 +129,21 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 			CSSAxis[] a1 = ((CSSRuleDescriptor)descr1).axis;
 			CSSAxis[] a2 = ((CSSRuleDescriptor)descr2).axis;
 
+			return (calcImportance(a1) > calcImportance(a2));
+		}
+		
+		long calcImportance(CSSAxis[] axis) {
+			short b = 0;	// count the number of ID attributes in the selector
+			short c = 0;	// count the number of other attributes and pseudo-classes in the selector
+			short d = 0;	// count the number of element names and pseudo-elements in the selector
 
-			if (a1.length == a2.length) {
-				for (int i = a1.length - 1; i >= 0; i--) {
-					if (a1[i].className != CSSAxis.CSS_ANY && 
-							!a1[i].className.equalsIgnoreCase(a2[i].className))
-						return true;
-	
-					if (a1[i].attrName != CSSAxis.CSS_ANY && 
-							!a1[i].attrName.equalsIgnoreCase(a2[i].attrName))
-						return true;
-	
-					if (a1[i].nodeName != CSSAxis.CSS_ANY && 
-							!a1[i].nodeName.equalsIgnoreCase(a2[i].nodeName))
-						return true;
-				}
-	
-				return false;
+			for (CSSAxis a : axis) {
+				b += a.idAttributeValues.size();
+				c += a.attributes.size() + a.classNames.size() + a.pseudoClasses.size();
+				d += (CSSAxis.CSS_ANY.equals(a.elementName) ? 0 : 1) + a.pseudoElements.size();
 			}
-			return (a1.length > a2.length);
+			
+			return (b<<32) + (c<<16) + d;
 		}
 	}
 	
@@ -193,48 +194,145 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 	 * @param styleName
 	 * @return
 	 */
-	protected CSSRuleDescriptor getMatchedRuleDescriptor(CSSRule cssRule, String styleName) {
+	protected Set<CSSRuleDescriptor> getMatchedRuleDescriptors(CSSRule cssRule, String styleName) {
+		Set<CSSRuleDescriptor> matches = new HashSet<CSSRuleDescriptor>();
 		if (cssRule instanceof CSSMediaRule) {
 			CSSMediaRule cssMediaRule = (CSSMediaRule)cssRule;
 			CSSRuleList rules = cssMediaRule.getCssRules();
 			for (int i = 0; rules != null && i < rules.getLength(); i++) {
 				CSSRule rule = rules.item(i);
-				CSSRuleDescriptor descr = getMatchedRuleDescriptor(rule, styleName);
-				if (descr != null) {
-					return descr;
+				Set<CSSRuleDescriptor> descrs = getMatchedRuleDescriptors(rule, styleName);
+				if (descrs != null) {
+					matches.addAll(descrs);
 				}
 			}
-			return null;
+			return matches;
 		}
 
 		if (!(cssRule instanceof CSSStyleRule))
-			return null;
+			return matches;
 		
 		// get selector text
 		String selectorText = ((CSSStyleRule) cssRule).getSelectorText();
 
-		if (selectorText != null) {
-			String styles[] = selectorText.trim().toLowerCase().split(","); //$NON-NLS-1$
-			for (String styleText : styles) {
-				String[] styleWords = styleText.trim().split(" ");  //$NON-NLS-1$
-				CSSAxis[] styleAxis = new CSSAxis[styleWords == null ? 0 : styleWords.length];
-				
-				if (styleWords != null) {
-					for (int i = styleWords.length - 1; i >= 0; i--) {
-						String word = styleWords[i];
-						styleAxis[i] = getCSSAxis(word);
-					}
-				}
-				
-				if (matchesRule(getHyperlinkRegion(), styleAxis)) {
-					return new CSSRuleDescriptor(cssRule, styleAxis);
+		if (selectorText == null) 
+			return null;
+		
+		String[] selectors = getSelectors(selectorText);
+		if (selectors.length == 0)
+			return null;
+		
+		for (String selector : selectors) {
+			String[] simpleSelectors = getSimpleSelectors(selector);
+			if (simpleSelectors.length == 0)
+				continue;
+			
+			List<CSSAxis> axisList = new ArrayList<CSSAxis>();
+			for (String simpleSelector : simpleSelectors) {
+				if (simpleSelector.length() > 0) {
+					axisList.add(new CSSAxis(simpleSelector));
 				}
 			}
+			if (axisList.size() > 0) {
+				CSSAxis[] axis = axisList.toArray(new CSSAxis[0]);
+				if (matchesRule(getHyperlinkRegion(), axis)) {
+					matches.add(new CSSRuleDescriptor(selector, cssRule, axis));
+				}
+			}				
 		}
-		return null;
+		return matches;
+	}
+	
+	private String[] getSelectors(String selectorText) {
+		List<String> selectors = new ArrayList<String>();
+		String rest = selectorText.trim().toLowerCase();
+		int index = -1;
+		while ((index = getIndexOfCharNotQuotted(rest, ',')) != -1) {
+			String selector = rest.substring(0, index).trim();
+			rest = rest.substring(index + 1).trim();
+			if (selector.length() > 0) {
+				selectors.add(selector);
+			}
+		}
+		if (rest.length() > 0) {
+			selectors.add(rest);
+		}
+		return selectors.toArray(new String[0]);
+	}
+	
+	private String[] getSimpleSelectors(String selector) {
+		List<String> simpleSelectors = new ArrayList<String>();
+		String rest = dropWSCharsInBrackets(selector);
+		int index = -1;
+		while ((index = getIndexOfCharNotQuotted(rest, SPACE_CHARS)) != -1) {
+			String simpleSelector = rest.substring(0, index).trim();
+			rest = rest.substring(index + 1).trim();
+			if (simpleSelector.length() > 0) {
+				simpleSelectors.add(simpleSelector);
+			}
+		}
+		if (rest.length() > 0) {
+			simpleSelectors.add(rest);
+		}
+		return simpleSelectors.toArray(new String[0]);
 	}
 
-	boolean matchesRule(IRegion styleNameRegion, CSSAxis[] cssAxis) {
+	private String dropWSCharsInBrackets(String selector) {
+		char pair = 0;
+		char pairBracket = 0;
+		
+		boolean inQuotes = false;
+		boolean inBrackets = false;
+		StringBuilder sb = new StringBuilder();
+		if (selector != null) {
+			for (char character : selector.toCharArray()) {
+	            if (inQuotes) {
+	            	// Append any char
+	            	sb.append(character);
+	            	if (character == pair) {
+	            		inQuotes = false;
+	            	} 
+	            } else {
+	            	if (character == '"' || character == '\'') {
+	            		pair = character;
+	            		inQuotes = true;
+	            		sb.append(character);
+	            	} else {
+	            		if (inBrackets) {
+	            			// Append any char excluding WS chars
+	            			boolean wsChar = false; 
+	                		for (char ch : SPACE_CHARS) {
+	                    		if (character == ch) {
+	                        		wsChar = true;
+	                        		break;
+	                    		}
+	                		}
+	                		if (!wsChar) {
+	                			sb.append(character);
+	                		}
+	            			if (character == pairBracket) {
+	            				pairBracket = 0;
+	            				inBrackets = false;
+	            			}
+	            		} else {
+	            			// Append any char
+	            			sb.append(character);
+	            			if (character == '[') {
+	            				pairBracket = ']';
+	            				inBrackets = true;
+	            			} else if (character == '(') {
+	            				pairBracket = ')';
+	            				inBrackets = true;
+	            			}
+	            		}
+	            	}
+	            }
+			}
+		}
+		return sb.toString();
+	}
+	
+	private boolean matchesRule(IRegion styleNameRegion, CSSAxis[] cssAxis) {
 		if (cssAxis == null || cssAxis.length == 0)
 			return false;
 		
@@ -251,22 +349,24 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 				Attr attr = (Attr)node;
 				node = attr.getOwnerElement();
 			}
-			
+
 			for (int i = cssAxis.length - 1; i >= 0; i--) {
 				CSSAxis currentAxis = cssAxis[i];
 				
 				do {
-					boolean classFound = currentAxis.className == CSSAxis.CSS_ANY;
-					boolean nodeFound = currentAxis.nodeName == CSSAxis.CSS_ANY;
-					boolean attrFound = currentAxis.attrName == CSSAxis.CSS_ANY;
+					boolean classFound = currentAxis.classNames.isEmpty() && currentAxis.pseudoClasses.isEmpty();
+					boolean nodeFound = currentAxis.elementName == CSSAxis.CSS_ANY && currentAxis.pseudoElements.isEmpty();
+					boolean attrFound = currentAxis.attributes.isEmpty() && currentAxis.idAttributeValues.isEmpty();
 
 					if (!classFound) {
 						// For the top node's class name we have to use word from the styleNameRegion 
 						String nodeClasses = (i == cssAxis.length - 1) ? classNameFromTheRegion : getNodeAttributeValue(node, "class"); //$NON-NLS-1$
-						String[] classes = nodeClasses == null ? null : nodeClasses.split(" "); //$NON-NLS-1$
+						
+						// Use getSimpleSelectors() method here since it takes in account all the possible WhiteSpace characters
+						String[] classes = getSimpleSelectors(nodeClasses == null ? "" : nodeClasses.toLowerCase()); //$NON-NLS-1$ 
 						if (classes != null) {
 							for (String cssClass : classes) {
-								if (currentAxis.className.equalsIgnoreCase(cssClass)) {
+								if (currentAxis.classNames.contains(cssClass) || currentAxis.pseudoClasses.contains(cssClass)) {
 									classFound = true;
 									break;
 								}
@@ -275,11 +375,23 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 					}
 					
 					if (!nodeFound) {
-						nodeFound = currentAxis.nodeName.equalsIgnoreCase(node.getNodeName());
+						nodeFound = currentAxis.elementName.equalsIgnoreCase(node.getNodeName()) || currentAxis.pseudoElements.contains(node.getNodeName().toLowerCase());
 					}
 					
 					if (!attrFound) {
-						attrFound = currentAxis.attrValue.equalsIgnoreCase(getNodeAttributeValue(node, currentAxis.attrName));
+						boolean allValuesAreOK = true;
+						for (String attrName : currentAxis.attributes.keySet()) {
+							String attrValue = Utils.trimQuotes(currentAxis.attributes.get(attrName));
+							if (!attrValue.equalsIgnoreCase(Utils.trimQuotes(getNodeAttributeValue(node, attrName)))) {
+								allValuesAreOK = false;
+								break;
+							}
+						}
+						if (currentAxis.idAttributeValues.size() > 0) {
+							allValuesAreOK &= currentAxis.idAttributeValues.contains(Utils.trimQuotes(getNodeAttributeValue(node, "id"))); //$NON-NLS-1$
+						}
+
+						attrFound = allValuesAreOK;
 					}
 
 					if (classFound && nodeFound && attrFound) {
@@ -305,115 +417,308 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 		}		
 	}
 	
-	String getNodeAttributeValue(Node node, String attrName) {
+	private String getNodeAttributeValue(Node node, String attrName) {
 		NamedNodeMap attrs = node.getAttributes();
-		if (attrs == null)
-			return null;
-		Node attr = attrs.getNamedItem(attrName);
-		if (attr == null)
-			return null;
-		return ((Attr)attr).getValue();
+
+		for (int i = 0; attrs != null && i < attrs.getLength(); i++) {
+			Attr attr = (Attr)attrs.item(i);
+			if (attr.getName().toLowerCase().equalsIgnoreCase(attrName)) {
+				return ((Attr)attr).getValue();
+			}
+		}
+		return null;
 	}
 
 	class CSSRuleDescriptor {
+		String selector;
 		CSSRule rule;
 		CSSAxis[] axis;
 		CSSStyleSheetDescriptor stylesheetDescriptor;
 		
-		CSSRuleDescriptor (CSSRule rule, CSSAxis[] axis) {
+		CSSRuleDescriptor (String selector, CSSRule rule, CSSAxis[] axis) {
+			this.selector = selector;
 			this.rule = rule;
 			this.axis = axis;
+		}
+
+		@Override
+		public String toString() {
+			return selector;
 		}
 	}
 	
 	class CSSAxis {
 		static final String CSS_ANY = "*"; //$NON-NLS-1$
-		String className;
-		String nodeName;
-		String attrName;
-		String attrValue;
+		static final int AXIS_TYPE_ANY = 0;
+		static final int AXIS_TYPE_IMMEDIATELY_FOLLOWS = 1;
+		static final int AXIS_TYPE_CHILD_OF_PARENT = 2;
+		final String[] VALID_PSEUDO_CLASSES = {
+				"first-element", "link", "visited",  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				"hover", "active", "focus", "lang" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			};
+		final String[] VALID_PSEUDO_ELEMENTS = {
+				"first-line", "first-letter",  //$NON-NLS-1$ //$NON-NLS-2$
+				"before", "after"   //$NON-NLS-1$//$NON-NLS-2$
+			};
 		
-		public CSSAxis(String className, String nodeName, String attrName, String attrValue) {
-			this.className = (className == null ? CSS_ANY : className);
-			this.nodeName = (nodeName == null ? CSS_ANY : nodeName);
-			this.attrName = (attrName == null ? CSS_ANY : attrName);
-			this.attrValue = (attrValue == null ? CSS_ANY : attrValue);
-			if (attrName == null || attrValue == null) {
-				this.attrName = this.attrValue = CSS_ANY;
+		int type;
+		Set<String> classNames;
+		String elementName;
+		Set<String> pseudoClasses;
+		Set<String> pseudoElements;
+		Set<String> idAttributeValues;
+		Map<String, String> attributes;
+
+		CSSAxis(String simpleSelector) {
+			type = AXIS_TYPE_ANY;
+			classNames = new HashSet<String>();
+			elementName = CSS_ANY;
+			pseudoClasses = new HashSet<String>();
+			pseudoElements = new HashSet<String>();
+			idAttributeValues = new HashSet<String>();
+			attributes = new HashMap<String, String>();
+
+			/*
+			 combinator
+				: ’+’ S* 
+				| ’>’ S*
+				;
+			 selector
+				: simple_selector [ combinator selector | S+ [ combinator? selector ]? ]?
+				;
+				simple_selector
+				: element_name [ HASH | class | attrib | pseudo ]*
+				| [ HASH | class | attrib | pseudo ]+
+				;
+			 */
+			
+			String rest = simpleSelector.trim().toLowerCase();
+
+			if (rest.length() == 1) {
+				if (rest.charAt(0) == '>') {
+					this.type = AXIS_TYPE_CHILD_OF_PARENT;
+					return;
+				} else if (rest.charAt(0) == '+') {
+					this.type = AXIS_TYPE_IMMEDIATELY_FOLLOWS;
+					return;
+				}
 			}
+			
+			// Extract Element Name (which, if exists, must be the first Identifier or '*'-char)
+			if (rest.length() > 0) {
+				if (rest.charAt(0) == '*') {
+					// Cut it
+					rest = rest.substring(1).trim();
+				} else {
+					StringBuilder sb = new StringBuilder();
+					for (char ch : rest.toCharArray()) {
+						if (!Character.isJavaIdentifierPart(ch) 
+								&& ch != '-' && ch != '_')
+							break;
+						sb.append(ch);
+					}
+					if (sb.length() > 0) {
+						elementName = sb.toString();
+						rest = rest.substring(sb.length()).trim();
+					}
+				}
+			}
+			
+			// All the other selector parts could be picked up one by one
+			
+			// attributes (must be retrieved right after type or element name because of their complexity)
+			/*
+			 	 INCLUDES 
+			 	 	: '~=' 
+			 	 	;
+					DASHMATCH
+					: '|='
+					'
+				 attrib
+					: ’[’ S* IDENT S* [ [ ’=’ | INCLUDES | DASHMATCH ] S*
+					[ IDENT | STRING ] S* ]? ’]’
+					;
+			 */
+			int index = -1;
+			while ((index = getIndexOfCharNotQuotted(rest, '[')) != -1) {
+				int start = index;
+				int end = getIndexOfCharNotQuotted(rest, ']');
+				
+				String attrName = null;
+				String attrValue = null;
+				
+				String attribute = (end == -1 ? 
+						rest.substring(start + 1) :
+						rest.substring(start + 1, end)).trim();
+				rest = (end == -1 ? 
+						"" :  //$NON-NLS-1$
+						rest.substring(end + 1)).trim();
+				
+				// Eat open/close brackets
+				if (attribute.startsWith("["))  //$NON-NLS-1$
+					attribute = attribute.substring(1).trim();
+				if (attribute.endsWith("]")) //$NON-NLS-1$
+					attribute = attribute.substring(0, attribute.length() - 1).trim();
+				
+				// Get attr name
+				StringBuilder sb = new StringBuilder();
+				for (char ch : attribute.toCharArray()) {
+					if (!Character.isJavaIdentifierPart(ch) 
+							&& ch != '-' && ch != '_')
+						break;
+					sb.append(ch);
+				}
+				if (sb.length() > 0) {
+					attrName = sb.toString();
+					attribute = attribute.substring(sb.length()).trim();
+				} else {
+					// There is some syntax error in this case - skip
+					continue; 
+				}
+				
+				// There may be one of '=', '~=' '|=' signs between attr name and value
+				if (attribute.startsWith("=")  //$NON-NLS-1$
+						|| attribute.startsWith("~=")  //$NON-NLS-1$
+						|| attribute.startsWith("|=")) { //$NON-NLS-1$
+					
+					// Eat the EQUAL/INCLUDES/DASHMATCH sign
+					attribute = (attribute.charAt(0) == '=' 
+							? attribute.substring(1).trim() 
+									: attribute.substring(2).trim());
+
+					// the rest of attribute is the value string (may be quotted)
+					attrValue = attribute.trim();
+					if (attrValue.length() == 0) {
+						attrValue = CSS_ANY;
+					}
+				}
+				
+				attributes.put(attrName, attrValue);
+			}
+			
+			// After the attributes are picked up we can read all the other things with no any trick
+			
+			// HASH ('#'-char followed by an identifier)
+			/*
+			 	HASH #{name}
+				name {nmchar}+
+				nonascii [^\0-\237]
+				unicode \\[0-9a-f]{1,6}(\r\n|[ \n\r\t\f])?
+				escape {unicode}|\\[^\n\r\f0-9a-f]
+				nmchar [_a-z0-9-]|{nonascii}|{escape}
+			 */
+			while ((index = rest.indexOf('#')) != -1) {
+				// Get ID attribute value
+				StringBuilder sb = new StringBuilder();
+				for (char ch : rest.substring(index + 1).toCharArray()) {
+					if (ch == '#' || ch == '.' || ch == ':')
+						break;
+					sb.append(ch);
+				}
+				if (sb.length() > 0) {
+					rest = rest.substring(0, index) + rest.substring(index + sb.length() + 1);
+					String idAttributeValue = sb.toString().trim();
+					if (idAttributeValue.length() > 0) {
+						idAttributeValues.add(idAttributeValue);
+					}
+				}
+			}
+			
+			// class ('.'-char followed by an identifier)
+			while ((index = rest.indexOf('.')) != -1) {
+				// Get class name
+				StringBuilder sb = new StringBuilder();
+				for (char ch : rest.substring(index + 1).toCharArray()) {
+					if (ch == '#' || ch == '.' || ch == ':')
+						break;
+					sb.append(ch);
+				}
+				if (sb.length() > 0) {
+					rest = rest.substring(0, index) + rest.substring(index + sb.length() + 1);
+					String className = sb.toString().trim();
+					if (className.length() > 0) {
+						classNames.add(className);
+					}
+				}
+			}
+			
+			// pseudo (':'-char followed by an identifier or function)
+			/*
+			 	pseudo
+					: ’:’ [ IDENT | FUNCTION S* [IDENT S*]? ’)’ ]
+					;
+			 */
+			while ((index = rest.indexOf(':')) != -1) {
+				// Get class name
+				StringBuilder sb = new StringBuilder();
+				for (char ch : rest.substring(index + 1).toCharArray()) {
+					if (ch == '#' || ch == '.' || ch == ':')
+						break;
+					sb.append(ch);
+				}
+				if (sb.length() > 0) {
+					rest = rest.substring(0, index) + rest.substring(index + sb.length() + 1);
+					String pseudo = sb.toString().trim();
+					if (isValidPseudo(pseudo, VALID_PSEUDO_CLASSES)) {
+						pseudoClasses.add(pseudo);
+					} else if (isValidPseudo(pseudo, VALID_PSEUDO_ELEMENTS)) {
+						pseudoElements.add(pseudo);
+					}
+				}
+			}
+			
+			// Done
+		}
+
+		boolean isValidPseudo(String pseudo, String[] template) {
+			if (template == null) return false;
+			pseudo = pseudo == null ? "" : pseudo.toLowerCase(); //$NON-NLS-1$
+			if (pseudo.indexOf('(') != -1) 
+				pseudo = pseudo.substring(0, pseudo.indexOf('(')).trim();
+			for (String valid : template) {
+				if (pseudo.startsWith(valid.toLowerCase()))
+					return true;
+			}
+			return false;
 		}
 	}
 	
-	CSSAxis getCSSAxis(String rule) {
-		String restOfRule = rule;
-		
-		// There may be CSS class name at the end
-		String className = null;
-		int lastDot = rule.lastIndexOf('.');
-		if (lastDot != -1) {
-			className = rule.substring(lastDot + 1).trim();
-			if (!checkWord(className)) {
-				className = null;
-			}
-			restOfRule = restOfRule.substring(0, lastDot);
-		}
-		
-		// there may be a node name at the beginning
-		String nodeName = null;
-		if (restOfRule.length() > 0) {
-			StringBuilder sb = new StringBuilder();
-			for (char ch : restOfRule.toCharArray()) {
-				if (!Character.isJavaIdentifierPart(ch) 
-						&& ch != '-' && ch != '_')
-					break;
-				sb.append(ch);
-			}
-			if (sb.length() > 0) {
-				nodeName = sb.toString();
-				restOfRule = restOfRule.substring(sb.length());
-			}
-		}
-		
-		// there may be node attribute/value inside square brackets
-		String attrName = null;
-		String attrValue = null;
-		if (restOfRule.startsWith("[") &&  restOfRule.endsWith("]")) {//$NON-NLS-1$ //$NON-NLS-2$
-			restOfRule = restOfRule.substring(1, restOfRule.length() - 1).trim();
-			
-			// Get attr name
-			StringBuilder sb = new StringBuilder();
-			for (char ch : restOfRule.toCharArray()) {
-				if (!Character.isJavaIdentifierPart(ch) 
-						&& ch != '-' && ch != '_')
-					break;
-				sb.append(ch);
-			}
-			if (sb.length() > 0) {
-				attrName = sb.toString();
-				restOfRule = restOfRule.substring(sb.length()).trim();
-			}
-			// There should be an equal sign between attr name and value
-			if (restOfRule.startsWith("=")) { //$NON-NLS-1$
-				restOfRule = restOfRule.substring(1).trim();
-				attrValue = Utils.trimQuotes(restOfRule).trim();
-				if (attrValue.trim().length() == 0) {
-					attrValue = null;
-				}
-			}
-		}
-		
-		return new CSSAxis(className, nodeName, attrName, attrValue);
+	private int getIndexOfCharNotQuotted(String text, char ch) {
+		return getIndexOfCharNotQuotted(text, new char[] {ch});
 	}
 
-	boolean checkWord(String word) {
-		for (char ch : word.toCharArray()) {
-			if (!Character.isJavaIdentifierPart(ch)  
-					&& ch != '-' && ch != '_') {
-				return false;
-			}
-		}
-		return true;
+	private int getIndexOfCharNotQuotted(String text, char[] chars) {
+		return getIndexOfCharNotQuotted(text, chars, 0);
 	}
+	
+	/* Returns index of the first char found from 'chars' array */
+	private int getIndexOfCharNotQuotted(String text, char[] chars, int start) {
+		int offset = start;
+		int pair = -1;
+		boolean inQuotes = false;
+		
+		while (offset < text.length()) {
+            int character = text.charAt(offset);
+            if (inQuotes) {
+            	if (character == pair) {
+            		inQuotes = false;
+            	} 
+            } else {
+            	if (character == '"' || character == '\'') {
+            		pair = character;
+            		inQuotes = true;
+            	} else {
+            		for (char ch : chars) {
+                		if (character == ch)
+                    		return offset;
+            		}
+            	}
+            }
+			offset++;
+		}
+		return -1;
+	}
+
 	
 	/**
 	 * 
