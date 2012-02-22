@@ -12,9 +12,12 @@ package org.jboss.tools.jst.web.ui.wizards.newfile;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,12 +30,20 @@ import org.apache.tools.ant.types.FilterSetCollection;
 import org.apache.tools.ant.types.resources.FileResource;
 import org.apache.tools.ant.types.resources.StringResource;
 import org.apache.tools.ant.util.ResourceUtils;
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.datatools.connectivity.ConnectionProfileException;
 import org.eclipse.datatools.connectivity.IConnectionProfile;
@@ -42,10 +53,18 @@ import org.eclipse.datatools.connectivity.db.generic.ui.NewConnectionProfileWiza
 import org.eclipse.datatools.connectivity.drivers.DriverManager;
 import org.eclipse.datatools.connectivity.internal.ui.wizards.NewCPWizard;
 import org.eclipse.datatools.connectivity.internal.ui.wizards.NewCPWizardCategoryFilter;
+import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.osgi.util.NLS;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -54,10 +73,15 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.ide.undo.CreateFileOperation;
+import org.eclipse.ui.ide.undo.WorkspaceUndoUtil;
 import org.eclipse.ui.internal.dialogs.DialogUtil;
 import org.eclipse.ui.internal.dialogs.PropertyDialog;
+import org.eclipse.ui.internal.ide.IDEWorkbenchMessages;
+import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
+import org.eclipse.ui.internal.ide.IIDEHelpContextIds;
 import org.eclipse.ui.internal.wizards.newresource.ResourceMessages;
 import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
 import org.eclipse.wst.common.frameworks.datamodel.AbstractDataModelProvider;
@@ -101,8 +125,8 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
         mainPage = new WizardNewDSXMLFileCreationPage("newFilePage1", getSelection()); //$NON-NLS-1$
         mainPage.setTitle(Messages.NewDSXMLWizard_TITLE);
         mainPage.setDescription(Messages.NewDSXMLWizard_DESCRIPTION);
-        
-        mainPage.setFileName("ds.xml");
+
+        mainPage.setFileName("ds.xml"); //$NON-NLS-1$
         
         addPage(mainPage);
     }
@@ -132,14 +156,73 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 		return true;
 	}
 
-	class WizardNewDSXMLFileCreationPage extends WizardNewFileCreationPage {
+	static String toDatasourceName(String connectionProfile) {
+		connectionProfile = connectionProfile.trim();
+		StringBuilder result = new StringBuilder();
+		StringBuilder special = new StringBuilder();
+		for (int i = 0; i < connectionProfile.length(); i++) {
+			char c = connectionProfile.charAt(i);
+			if(!Character.isJavaIdentifierPart(c)) {
+				special.append('_');
+			} else {
+				if(special.length() > 0) {
+					result.append(special.toString());
+					special.setLength(0);
+				}
+				result.append(c);
+			}
+		}
+		return result.toString();
+	}
+
+	IContainer getInitialContainer() {
+		ISelection s = getSelection();
+		if(s instanceof IStructuredSelection) {
+			Object o = ((IStructuredSelection)s).getFirstElement();
+			IResource r = null;
+			if(o instanceof IResource) {
+				r = (IResource) o;
+			} else if(o instanceof IAdaptable) {
+				 r = (IResource)((IAdaptable)o).getAdapter(IResource.class);
+			}
+			if(r instanceof IFile) {
+				return r.getParent();
+			} else if(r instanceof IContainer) {
+				return (IContainer)r;
+			}
+		}
+		return null;
+	
+	}	
+
+	class WizardNewDSXMLFileCreationPage extends WizardPage {
 		private IFieldEditor connProfileSelEditor;
 		private IFieldEditor templateSelEditor;
+		private IFieldEditor folderEditor;
+		private String initialFileName = "";
+		private IFieldEditor fileNameEditor;
+
+		IDataModel model;
+		
 
 		public WizardNewDSXMLFileCreationPage(String pageName, IStructuredSelection selection) {
-			super(pageName, selection);
+			super(pageName);
+			setPageComplete(false);
 		}
-	
+
+		public IPath getContainerFullPath() {
+			String path = folderEditor.getValueAsString();
+			return new Path(path).makeAbsolute();
+		}
+
+		public void setFileName(String value) {
+			if(fileNameEditor == null) {
+				initialFileName = value;
+			} else {
+				fileNameEditor.setValue(value);
+			}
+		}
+
 		protected InputStream getInitialContents() {
 			String connection = connProfileSelEditor.getValueAsString();
 			String templateName = templateSelEditor.getValueAsString();
@@ -147,10 +230,12 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 			try {
 				// 1. Find template. For Seam project it is done by its runtime.
 				IPath containerPath = getContainerFullPath();
-				IProject currentProject = ResourcesPlugin.getWorkspace().getRoot().getFolder(containerPath).getProject();
+				IProject currentProject = containerPath.segmentCount() == 1 
+						? ResourcesPlugin.getWorkspace().getRoot().getProject(containerPath.segment(0))
+						: ResourcesPlugin.getWorkspace().getRoot().getFolder(containerPath).getProject();
 
 				File homePath = DSDataModelProvider.getTemplatesFolder();
-				String templatePath = (NewDSXMLWizardFactory.TEMPLATE_LIST[1].equals(templateName))
+				String templatePath = (NewDSXMLWizardFactory.AS_7_TEMPLATE.equals(templateName))
 					? "/Datasource/datasource-ds-as7.xml" //$NON-NLS-1$
 					: "/Datasource/datasource-ds-default.xml"; //$NON-NLS-1$
 				File dataSourceDsFile = new File(homePath, templatePath);
@@ -159,9 +244,10 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 				FilterSetCollection viewFilterSetCollection = new FilterSetCollection();
 
 				// Do it by reusing data model provider.
-				IDataModel model = DataModelFactory.createDataModel(new DSDataModelProvider());
+				model = DataModelFactory.createDataModel(new DSDataModelProvider());
 				model.setProperty(IDSDataModelProperties.PROJECT_NAME, currentProject.getName());
 				model.setProperty(IDSDataModelProperties.CONNECTION_PROFILE, connection);
+				model.setProperty(IDSDataModelProperties.JDBC_CONNECTION_NAME, toDatasourceName(connection));
 				IConnectionProfile connProfile = ProfileManager.getInstance().getProfileByName(connection.toString());
 				if(connProfile == null) {
 					return null;
@@ -187,12 +273,61 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 			}
 		}
 
+		IFile getJarTarget() {
+			if(!NewDSXMLWizardFactory.AS_7_TEMPLATE.equals(templateSelEditor.getValueAsString())) {
+				return null;
+			}
+			String jarname = (String)model.getProperty(IDSDataModelProperties.JDBC_DRIVER_JAR_NAME);
+			if(jarname != null) {
+				IPath container = getContainerFullPath();
+				IPath target = container.append(jarname + ".jar"); //$NON-NLS-1$
+				IFile targetFile = ResourcesPlugin.getWorkspace().getRoot().getFile(target);
+				if(!targetFile.exists()) {
+					return targetFile;
+				}
+			}
+			return null;
+		}
+
+		InputStream getJarContents() {
+			String[] jars = (String[])model.getProperty(IDSDataModelProperties.JDBC_DRIVER_JAR_PATH);
+			String jarname = (String)model.getProperty(IDSDataModelProperties.JDBC_DRIVER_JAR_NAME);
+			if(jars != null && jarname != null) {
+				File jarSource = new File(jars[0]);
+				if(jarSource.isFile()) {
+					IPath container = getContainerFullPath();
+					IPath target = container.append(jarname + ".jar"); //$NON-NLS-1$
+					IFile targetFile = ResourcesPlugin.getWorkspace().getRoot().getFile(target);
+					if(!targetFile.exists()) {
+						try {
+							return new BufferedInputStream(new FileInputStream(jarSource));
+						} catch (IOException e) {
+							WebUiPlugin.getDefault().logError(e);
+						}
+					} 					
+				}
+			}
+			return null;
+		}
+
+		CreateFileOperation getJarFileOperation(IFile targetFile, InputStream jarContents) {
+			return new CreateFileOperation(targetFile, null, jarContents, "Copy driver jar file.");
+		}
+
 		public void createControl(Composite parent) {
-			super.createControl(parent);
-			Composite topLevel = (Composite)getControl();
+			initializeDialogUnits(parent);
+			// top level group
+			Composite topLevel = new Composite(parent, SWT.NONE);
+			topLevel.setLayout(new GridLayout());
+			topLevel.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_FILL
+					| GridData.HORIZONTAL_ALIGN_FILL));
+			topLevel.setFont(parent.getFont());
+			PlatformUI.getWorkbench().getHelpSystem().setHelp(topLevel,
+					IIDEHelpContextIds.NEW_FILE_WIZARD_PAGE);
+
 			connProfileSelEditor = NewDSXMLWizardFactory.createConnectionProfileSelectionFieldEditor(getConnectionProfileDefaultValue(), new IValidator() {
 				public Map<String, IStatus> validate(Object value, Object context) {
-					validatePage();
+					setPageComplete(validatePage());
 					return ValidatorFactory.NO_ERRORS;
 				}
 			}, false);
@@ -204,23 +339,149 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 			templateSelEditor.doFillIntoGrid(q);
 			connProfileSelEditor.addPropertyChangeListener(new PropertyChangeListener() {
 				public void propertyChange(PropertyChangeEvent evt) {
-					validatePage();
+					String prefix = toDatasourceName(connProfileSelEditor.getValueAsString());
+					setFileName(prefix + "-ds.xml"); //$NON-NLS-1$
+					setPageComplete(validatePage());
 				}
 			});
-			validatePage();
+
+			String defaultFolder = "";
+			IContainer c = getInitialContainer();
+			if(c != null) {
+				defaultFolder = c.getFullPath().toString();
+			}
+			folderEditor = IFieldEditorFactory.INSTANCE.createBrowseWorkspaceFolderEditor("folder", "Parent fold&er:", defaultFolder);
+			folderEditor.addPropertyChangeListener(new PropertyChangeListener() {
+				public void propertyChange(PropertyChangeEvent evt) {
+					setPageComplete(validatePage());
+				}
+			});
+			folderEditor.doFillIntoGrid(q);
+
+			String prefix = toDatasourceName(mainPage.connProfileSelEditor.getValueAsString());
+			String defaultFileName = prefix + "-ds.xml"; //$NON-NLS-1$
+
+			fileNameEditor = IFieldEditorFactory.INSTANCE.createTextEditor("name", "File na&me:", defaultFileName);
+			fileNameEditor.doFillIntoGrid(q);
+			fileNameEditor.addPropertyChangeListener(new PropertyChangeListener() {
+				public void propertyChange(PropertyChangeEvent evt) {
+					setPageComplete(validatePage());
+				}
+			});
+			
+			setControl(topLevel);
+			setPageComplete(validatePage());
 		}
     	
 		protected boolean validatePage() {
-			boolean valid = super.validatePage();
-			if(valid && connProfileSelEditor != null) {
-				String p = connProfileSelEditor.getValueAsString();
-				if(p == null || p.length() == 0) {
-					valid = false;
-					setErrorMessage("Connenction profile must be set.");
+			IPath path = getContainerFullPath();
+			String fileName = fileNameEditor.getValueAsString();
+			IWorkspace workspace = ResourcesPlugin.getWorkspace();
+			
+			IStatus result = workspace.validateName(fileName, IResource.FILE);
+			if (!result.isOK()) {
+				setErrorMessage(result.getMessage());
+				return false;
+			}
+			for (int i = 0; i < path.segmentCount(); i++) {
+				String s = path.segment(i);
+				result = workspace.validateName(s, IResource.FOLDER);
+				if (!result.isOK()) {
+					setErrorMessage(result.getMessage());
+					return false;
 				}
 			}
-			return valid;
+			IPath filePath = path.append(fileName);
+			if(workspace.getRoot().getFile(filePath).exists()) {
+				setErrorMessage("'" + fileName + "'" + " already exists.");
+				return false;
+			}
+			
+			if(connProfileSelEditor != null) {
+				String p = connProfileSelEditor.getValueAsString();
+				if(p == null || p.length() == 0) {
+					setErrorMessage("Connenction profile must be set.");
+					return false;
+				}
+			}
+			setErrorMessage(null);
+			return true;
 		}
+	
+		IFile newFile = null;
+
+		protected IFile createFileHandle(IPath filePath) {
+			return IDEWorkbenchPlugin.getPluginWorkspace().getRoot().getFile(
+					filePath);
+		}
+		public IFile createNewFile() {
+			if (newFile != null) {
+				return newFile;
+			}
+
+			// create the new file and cache it if successful
+
+			final IPath containerPath = getContainerFullPath();
+			IPath newFilePath = containerPath.append(fileNameEditor.getValueAsString());
+			final IFile newFileHandle = createFileHandle(newFilePath);
+			final InputStream initialContents = getInitialContents();
+
+			final IFile jarTarget = getJarTarget();
+			final InputStream jarContents = jarTarget == null ? null : getJarContents();
+
+			IRunnableWithProgress op = new IRunnableWithProgress() {
+				public void run(IProgressMonitor monitor) {
+					CreateFileOperation op = new CreateFileOperation(newFileHandle,
+							null, initialContents, IDEWorkbenchMessages.WizardNewFileCreationPage_title);
+					try {
+						op.execute(monitor, WorkspaceUndoUtil.getUIInfoAdapter(getShell()));
+						if(jarContents != null) {
+							CreateFileOperation jar = getJarFileOperation(jarTarget, jarContents);
+							jar.execute(monitor, WorkspaceUndoUtil.getUIInfoAdapter(getShell()));
+						}						
+					} catch (final ExecutionException e) {
+						getContainer().getShell().getDisplay().syncExec(
+							new Runnable() {
+								public void run() {
+									if (e.getCause() instanceof CoreException) {
+										ErrorDialog.openError(getContainer().getShell(), // Was
+														// Utilities.getFocusShell()
+														IDEWorkbenchMessages.WizardNewFileCreationPage_errorTitle,
+														null, // no special
+														// message
+														((CoreException) e.getCause()).getStatus());
+									} else {
+										IDEWorkbenchPlugin.log(getClass(), "createNewFile()", e.getCause()); //$NON-NLS-1$
+										MessageDialog.openError(getContainer().getShell(),
+														IDEWorkbenchMessages.WizardNewFileCreationPage_internalErrorTitle,
+														NLS.bind(IDEWorkbenchMessages.WizardNewFileCreationPage_internalErrorMessage,
+																		e.getCause().getMessage()));
+									}
+								}
+							});
+					}
+				}
+			};
+			try {
+				getContainer().run(true, true, op);
+			} catch (InterruptedException e) {
+				return null;
+			} catch (InvocationTargetException e) {
+				// Execution Exceptions are handled above but we may still get
+				// unexpected runtime errors.
+				IDEWorkbenchPlugin.log(getClass(),
+						"createNewFile()", e.getTargetException()); //$NON-NLS-1$
+				MessageDialog.open(MessageDialog.ERROR,
+								getContainer().getShell(),
+								IDEWorkbenchMessages.WizardNewFileCreationPage_internalErrorTitle,
+								NLS.bind(IDEWorkbenchMessages.WizardNewFileCreationPage_internalErrorMessage,
+												e.getTargetException().getMessage()), SWT.SHEET);
+				return null;
+			}
+			newFile = newFileHandle;
+			return newFile;
+		}
+
 
 	}
 
@@ -287,6 +548,9 @@ interface IDSDataModelProperties {
 	 */
 	String JDBC_DRIVER_JAR_PATH = "driver.file"; //$NON-NLS-1$
 	String DATATOOLS_JDBC_DRIVER_JAR_PATH = "org.eclipse.datatools.connectivity.driverDefinitionID"; //$NON-NLS-1$
+
+	String JDBC_CONNECTION_NAME = "datasource.name"; //$NON-NLS-1$
+	String JDBC_DRIVER_JAR_NAME = "driver.jar.name.without.dot.jar"; //$NON-NLS-1$
 }
 
 class DSDataModelProvider extends AbstractDataModelProvider implements IDSDataModelProperties {
@@ -320,6 +584,8 @@ class DSDataModelProvider extends AbstractDataModelProvider implements IDSDataMo
 //		names.add(RECREATE_TABLES_AND_DATA_ON_DEPLOY);
 
 		names.add(JDBC_DRIVER_JAR_PATH);
+		names.add(JDBC_CONNECTION_NAME);
+		names.add(JDBC_DRIVER_JAR_NAME);
 
 		return names;
 	}
@@ -406,6 +672,15 @@ class DSDataModelProvider extends AbstractDataModelProvider implements IDSDataMo
 									.getDriverInstanceByID(
 											props.get(DATATOOLS_JDBC_DRIVER_JAR_PATH).toString()).getJarListAsArray());
 				}
+			
+				String jarList = props.getProperty("jarList"); //$NON-NLS-1$
+				int q = jarList.indexOf(".jar"); //$NON-NLS-1$
+				if(q >= 0) {
+					String jar = jarList.substring(0, q);
+					int b = jar.replace('\\', '/').lastIndexOf('/');
+					String jarName = jar.substring(b + 1);
+					model.setProperty(JDBC_DRIVER_JAR_NAME, jarName);
+				}
 			}
 		}
 
@@ -427,9 +702,12 @@ class DSDataModelProvider extends AbstractDataModelProvider implements IDSDataMo
 
 class NewDSXMLWizardFactory {
 	static String EMPTY_PROFILE = "                            "; //$NON-NLS-1$
-	
+
+	static String AS_5_TEMPLATE = "Format: JBoss AS 5"; //$NON-NLS-1$
+	static String AS_7_TEMPLATE = "Format: JBoss AS 7"; //$NON-NLS-1$
+
 	public static String[] TEMPLATE_LIST = {
-		"Format: JBoss AS 5", "Format: JBoss AS 7" //$NON-NLS-1$ //$NON-NLS-2$
+		AS_5_TEMPLATE, AS_7_TEMPLATE
 	};
 
 	public static IFieldEditor createTemplateFieldEditor(Object defaultValue) {
@@ -684,6 +962,8 @@ class FilterSetFactory {
 		JDBC_TEMPLATE.addFilter("password","${hibernate.connection.password}"); //$NON-NLS-1$ //$NON-NLS-2$
 		JDBC_TEMPLATE.addFilter("catalogProperty","${catalog.property}"); //$NON-NLS-1$ //$NON-NLS-2$
 		JDBC_TEMPLATE.addFilter("schemaProperty","${schema.property}"); //$NON-NLS-1$ //$NON-NLS-2$
+		JDBC_TEMPLATE.addFilter("datasourcename","${datasource.name}"); //$NON-NLS-1$ //$NON-NLS-2$
+		JDBC_TEMPLATE.addFilter("driverjarnamewithoutdotjar","${driver.jar.name.without.dot.jar}"); //$NON-NLS-1$ //$NON-NLS-2$
 		
 		PROJECT_TEMPLATE = new FilterSet();
 		PROJECT_TEMPLATE.addFilter("projectName","${project.name}"); //$NON-NLS-1$ //$NON-NLS-2$
