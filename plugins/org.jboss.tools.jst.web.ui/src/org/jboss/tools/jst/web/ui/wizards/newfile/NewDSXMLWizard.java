@@ -123,7 +123,7 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
     public void addPages() {
         super.addPages();
         mainPage = new WizardNewDSXMLFileCreationPage("newFilePage1", getSelection()); //$NON-NLS-1$
-        mainPage.setTitle(Messages.NewDSXMLWizard_TITLE);
+        mainPage.setTitle(Messages.NewDSXMLWizard_SUBTITLE);
         mainPage.setDescription(Messages.NewDSXMLWizard_DESCRIPTION);
 
         mainPage.setFileName("ds.xml"); //$NON-NLS-1$
@@ -199,7 +199,7 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 		private IFieldEditor connProfileSelEditor;
 		private IFieldEditor templateSelEditor;
 		private IFieldEditor folderEditor;
-		private String initialFileName = "";
+		private String initialFileName = ""; //$NON-NLS-1$
 		private IFieldEditor fileNameEditor;
 
 		IDataModel model;
@@ -345,12 +345,12 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 				}
 			});
 
-			String defaultFolder = "";
+			String defaultFolder = ""; //$NON-NLS-1$
 			IContainer c = getInitialContainer();
 			if(c != null) {
 				defaultFolder = c.getFullPath().toString();
 			}
-			folderEditor = IFieldEditorFactory.INSTANCE.createBrowseWorkspaceFolderEditor("folder", "Parent fold&er:", defaultFolder);
+			folderEditor = IFieldEditorFactory.INSTANCE.createBrowseWorkspaceFolderEditor("folder", Messages.NewDSXMLWizard_PARENT_FOLDER_LABEL, defaultFolder); //$NON-NLS-1$
 			folderEditor.addPropertyChangeListener(new PropertyChangeListener() {
 				public void propertyChange(PropertyChangeEvent evt) {
 					setPageComplete(validatePage());
@@ -358,10 +358,10 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 			});
 			folderEditor.doFillIntoGrid(q);
 
-			String prefix = toDatasourceName(mainPage.connProfileSelEditor.getValueAsString());
+			String prefix = toDatasourceName(connProfileSelEditor.getValueAsString());
 			String defaultFileName = prefix + "-ds.xml"; //$NON-NLS-1$
 
-			fileNameEditor = IFieldEditorFactory.INSTANCE.createTextEditor("name", "File na&me:", defaultFileName);
+			fileNameEditor = IFieldEditorFactory.INSTANCE.createTextEditor("name", Messages.NewDSXMLWizard_FILE_NAME_LABEL, defaultFileName); //$NON-NLS-1$
 			fileNameEditor.doFillIntoGrid(q);
 			fileNameEditor.addPropertyChangeListener(new PropertyChangeListener() {
 				public void propertyChange(PropertyChangeEvent evt) {
@@ -375,6 +375,10 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
     	
 		protected boolean validatePage() {
 			IPath path = getContainerFullPath();
+			if(path.segmentCount() == 0) {
+				setErrorMessage(Messages.NewDSXMLWizard_FOLDER_NOT_SET);
+				return false;
+			}
 			String fileName = fileNameEditor.getValueAsString();
 			IWorkspace workspace = ResourcesPlugin.getWorkspace();
 			
@@ -393,14 +397,22 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 			}
 			IPath filePath = path.append(fileName);
 			if(workspace.getRoot().getFile(filePath).exists()) {
-				setErrorMessage("'" + fileName + "'" + " already exists.");
+				setErrorMessage(NLS.bind(Messages.NewDSXMLWizard_FILE_EXISTS, fileName));
 				return false;
 			}
-			
+			IProject selectedProject = workspace.getRoot().getProject(path.segment(0));
+			if(!selectedProject.exists()) {
+				setErrorMessage(Messages.NewDSXMLWizard_PROJECT_NOT_EXISTS);
+				return false;
+			} else if(!selectedProject.isAccessible()) {
+				setErrorMessage(Messages.NewDSXMLWizard_PROJECT_NOT_ACCESSIBLE);
+				return false;
+			}
+
 			if(connProfileSelEditor != null) {
 				String p = connProfileSelEditor.getValueAsString();
 				if(p == null || p.length() == 0) {
-					setErrorMessage("Connenction profile must be set.");
+					setErrorMessage(Messages.NewDSXMLWizard_PROFILE_NOT_SET);
 					return false;
 				}
 			}
@@ -411,8 +423,7 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 		IFile newFile = null;
 
 		protected IFile createFileHandle(IPath filePath) {
-			return IDEWorkbenchPlugin.getPluginWorkspace().getRoot().getFile(
-					filePath);
+			return ResourcesPlugin.getWorkspace().getRoot().getFile(filePath);
 		}
 		public IFile createNewFile() {
 			if (newFile != null) {
@@ -469,8 +480,7 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 			} catch (InvocationTargetException e) {
 				// Execution Exceptions are handled above but we may still get
 				// unexpected runtime errors.
-				IDEWorkbenchPlugin.log(getClass(),
-						"createNewFile()", e.getTargetException()); //$NON-NLS-1$
+				IDEWorkbenchPlugin.log(getClass(), "createNewFile()", e.getTargetException()); //$NON-NLS-1$
 				MessageDialog.open(MessageDialog.ERROR,
 								getContainer().getShell(),
 								IDEWorkbenchMessages.WizardNewFileCreationPage_internalErrorTitle,
@@ -481,8 +491,6 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 			newFile = newFileHandle;
 			return newFile;
 		}
-
-
 	}
 
 	/**

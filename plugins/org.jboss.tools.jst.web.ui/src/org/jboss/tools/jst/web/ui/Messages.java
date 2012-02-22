@@ -86,11 +86,19 @@ public class Messages extends NLS {
 	public static String NewXHTMLTemplatesWizardPage_7;
 
 	public static String NewDSXMLWizard_TITLE;
+	public static String NewDSXMLWizard_SUBTITLE;
 	public static String NewDSXMLWizard_DESCRIPTION;
 	public static String NewDSXMLWizard_CONNECTION_PROFILE_FIELD;
 	public static String NewDSXMLWizard_TEMPLATE_FIELD;
 	public static String NewDSXMLWizard_EDIT_BUTTON;
 	public static String NewDSXMLWizard_NEW_BUTTON;
+	public static String NewDSXMLWizard_FILE_EXISTS;
+	public static String NewDSXMLWizard_PROJECT_NOT_EXISTS;
+	public static String NewDSXMLWizard_PROJECT_NOT_ACCESSIBLE;
+	public static String NewDSXMLWizard_PROFILE_NOT_SET;
+	public static String NewDSXMLWizard_FOLDER_NOT_SET;
+	public static String NewDSXMLWizard_PARENT_FOLDER_LABEL;
+	public static String NewDSXMLWizard_FILE_NAME_LABEL;
 
 	static {
 		// initialize resource bundle

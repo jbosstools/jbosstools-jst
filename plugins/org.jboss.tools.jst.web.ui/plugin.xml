@@ -192,13 +192,13 @@
          </selection>
       </wizard>
       <wizard
-            name="New JBoss Datasource"
+            name="JBoss Datasource"
             icon="$nl$/images/xstudio/wizards/new_properties_file.gif"
             category="org.jboss.tools.jst.web"
             class="org.jboss.tools.jst.web.ui.wizards.newfile.NewDSXMLWizard"
             id="org.jboss.tools.jst.web.ui.wizards.newfile.NewDSXMLWizard">
          <description>
-            Creates New DS XML file
+            Creates New JBoss Datasource file
          </description>
          <selection
                class="org.eclipse.core.resources.IResource">
