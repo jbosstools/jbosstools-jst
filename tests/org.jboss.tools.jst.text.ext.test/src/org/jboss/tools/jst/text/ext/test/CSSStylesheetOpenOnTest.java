@@ -308,6 +308,7 @@ public class CSSStylesheetOpenOnTest extends TestCase {
 				".styleA {color: #FF0000}",
 				".styleA .styleB {color: #FF8000}",
 				"div.styleA {color: #FF0080}",
+				"div#div34.styleA {color: yellow}",
 				"div[title=\"x\"].styleA {color: #0000FF}",
 				"p input.styleA {color: #CCAA00}",
 				"div p input.styleA {color: #CC00FF}",

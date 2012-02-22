@@ -3,5 +3,6 @@
 div.styleA {color: #FF0080}
 div[title="x"].styleA {color: #0000FF}
 p input.styleA {color: #CCAA00}
-div p input.styleA {color: #CC00FF}
 [title="y"] p input.styleA {color: #00CCFF}
+div p input.styleA {color: #CC00FF}
+div#div34.styleA {color: yellow}
