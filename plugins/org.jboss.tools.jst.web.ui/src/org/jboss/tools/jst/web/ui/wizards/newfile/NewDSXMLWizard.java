@@ -711,17 +711,18 @@ class DSDataModelProvider extends AbstractDataModelProvider implements IDSDataMo
 class NewDSXMLWizardFactory {
 	static String EMPTY_PROFILE = "                            "; //$NON-NLS-1$
 
-	static String AS_5_TEMPLATE = "Format: JBoss AS 5"; //$NON-NLS-1$
-	static String AS_7_TEMPLATE = "Format: JBoss AS 7"; //$NON-NLS-1$
+	static String AS_5_TEMPLATE = "AS 5"; //$NON-NLS-1$
+	static String AS_7_TEMPLATE = "AS 7"; //$NON-NLS-1$
 
 	public static String[] TEMPLATE_LIST = {
 		AS_5_TEMPLATE, AS_7_TEMPLATE
 	};
 
 	public static IFieldEditor createTemplateFieldEditor(Object defaultValue) {
-		IFieldEditor result = IFieldEditorFactory.INSTANCE.createComboEditor(
+		IFieldEditor result = IFieldEditorFactory.INSTANCE.createRadioEditor(
 				IDSDataModelProperties.TEMPLATE, 
 				Messages.NewDSXMLWizard_TEMPLATE_FIELD, 
+				Arrays.asList(TEMPLATE_LIST), 
 				Arrays.asList(TEMPLATE_LIST), 
 				TEMPLATE_LIST[0]);
 		return result;
