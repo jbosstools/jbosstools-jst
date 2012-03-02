@@ -11,7 +11,7 @@
 	
 	<packaging>eclipse-test-plugin</packaging>
 	<properties>
-		<emma.filter>org.jboss.tools.jst.web*</emma.filter>
+		<coverage.filter>org.jboss.tools.jst.web*</coverage.filter>
 		<emma.instrument.bundles>org.jboss.tools.jst.web</emma.instrument.bundles>
 	</properties>
 </project>
