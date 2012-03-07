@@ -153,8 +153,8 @@
 		</attribute>
 		<attribute name="layout">
 			<proposal type="enumeration">
-				<param value="horizontal" />
-				<param value="vertical" />
+				<param value="list" />
+				<param value="table" />
 			</proposal>
 		</attribute>
 	</component>
