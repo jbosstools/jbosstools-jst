@@ -320,7 +320,7 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 			Composite topLevel = new Composite(parent, SWT.NONE);
 			topLevel.setLayout(new GridLayout());
 			topLevel.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_FILL
-					| GridData.HORIZONTAL_ALIGN_FILL));
+					| GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
 			topLevel.setFont(parent.getFont());
 			PlatformUI.getWorkbench().getHelpSystem().setHelp(topLevel,
 					IIDEHelpContextIds.NEW_FILE_WIZARD_PAGE);
@@ -333,6 +333,8 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 			}, false);
 			templateSelEditor = NewDSXMLWizardFactory.createTemplateFieldEditor(NewDSXMLWizardFactory.TEMPLATE_LIST[0]);
 			Composite q = new Composite(topLevel, 0);
+			q.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_FILL
+					| GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
 			GridLayout l = new GridLayout(4, false);
 			q.setLayout(l);
 			connProfileSelEditor.doFillIntoGrid(q);
