@@ -50,10 +50,12 @@ import org.eclipse.datatools.connectivity.IConnectionProfile;
 import org.eclipse.datatools.connectivity.IProfileListener;
 import org.eclipse.datatools.connectivity.ProfileManager;
 import org.eclipse.datatools.connectivity.db.generic.ui.NewConnectionProfileWizard;
+import org.eclipse.datatools.connectivity.drivers.DriverInstance;
 import org.eclipse.datatools.connectivity.drivers.DriverManager;
 import org.eclipse.datatools.connectivity.internal.ui.wizards.NewCPWizard;
 import org.eclipse.datatools.connectivity.internal.ui.wizards.NewCPWizardCategoryFilter;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
@@ -413,11 +415,33 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 
 			if(connProfileSelEditor != null) {
 				String p = connProfileSelEditor.getValueAsString();
-				if(p == null || p.length() == 0) {
+				if(p == null || p.trim().length() == 0) {
 					setErrorMessage(Messages.NewDSXMLWizard_PROFILE_NOT_SET);
 					return false;
 				}
+				String profileName = p.trim();
+				IConnectionProfile connProfile = ProfileManager.getInstance().getProfileByName(profileName);
+				if(connProfile == null) {
+					setErrorMessage(Messages.NewDSXMLWizard_PROFILE_NOT_FOUND);
+					return false;
+				}
+				Properties props = connProfile.getBaseProperties();
+				Object q = props.get(IDSDataModelProperties.DATATOOLS_JDBC_DRIVER_JAR_PATH);
+				if(q == null || DriverManager.getInstance().getDriverInstanceByID(q.toString()) == null) {
+					setMessage(Messages.NewDSXMLWizard_DRIVER_NOT_FOUND, IMessageProvider.WARNING);
+					setErrorMessage(null);
+					return true;
+				}
+			
+				String jarList = props.getProperty("jarList"); //$NON-NLS-1$
+				if(jarList == null) {
+					setMessage(Messages.NewDSXMLWizard_JAR_LIST_NOT_SET, IMessageProvider.WARNING);
+					setErrorMessage(null);
+					return true;
+				}
+				
 			}
+			setMessage(null, IMessageProvider.WARNING);
 			setErrorMessage(null);
 			return true;
 		}
@@ -675,21 +699,24 @@ class DSDataModelProvider extends AbstractDataModelProvider implements IDSDataMo
 						? EMPTY_STRING	: props.get(DATATOOLS_JDBC_URL_FOR_DB).toString());
 
 				if(props.get(DATATOOLS_JDBC_DRIVER_JAR_PATH) != null) {
-					model.setProperty(
+					DriverInstance driverInstance = DriverManager.getInstance()
+							.getDriverInstanceByID(props.get(DATATOOLS_JDBC_DRIVER_JAR_PATH).toString());
+					if(driverInstance != null) {
+						model.setProperty(
 							JDBC_DRIVER_JAR_PATH,
-							DriverManager
-									.getInstance()
-									.getDriverInstanceByID(
-											props.get(DATATOOLS_JDBC_DRIVER_JAR_PATH).toString()).getJarListAsArray());
+							driverInstance.getJarListAsArray());
+					}
 				}
 			
 				String jarList = props.getProperty("jarList"); //$NON-NLS-1$
-				int q = jarList.indexOf(".jar"); //$NON-NLS-1$
-				if(q >= 0) {
-					String jar = jarList.substring(0, q + 4);
-					int b = jar.replace('\\', '/').lastIndexOf('/');
-					String jarName = jar.substring(b + 1);
-					model.setProperty(JDBC_DRIVER_JAR_NAME, jarName);
+				if(jarList != null) {
+					int q = jarList.indexOf(".jar"); //$NON-NLS-1$
+					if(q >= 0) {
+						String jar = jarList.substring(0, q + 4);
+						int b = jar.replace('\\', '/').lastIndexOf('/');
+						String jarName = jar.substring(b + 1);
+						model.setProperty(JDBC_DRIVER_JAR_NAME, jarName);
+					}
 				}
 			}
 		}
