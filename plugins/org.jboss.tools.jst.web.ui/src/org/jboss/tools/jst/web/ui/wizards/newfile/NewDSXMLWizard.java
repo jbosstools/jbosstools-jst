@@ -110,7 +110,7 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 
 	WizardNewDSXMLFileCreationPage mainPage;
 
-	private boolean fOpenEditorOnFinish;
+	private boolean fOpenEditorOnFinish = true;
 
 	public NewDSXMLWizard() {		
 	}
