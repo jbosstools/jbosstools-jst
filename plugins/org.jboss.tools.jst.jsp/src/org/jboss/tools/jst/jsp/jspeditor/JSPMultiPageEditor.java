@@ -107,6 +107,17 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	private static final String VISUAL_EDITOR_IMPL_EXTENSION_POINT_NAME = "visulaEditorImplementations"; //$NON-NLS-1$
 
 	private IVisualEditor visualEditor;
+	/*
+	 * https://issues.jboss.org/browse/JBIDE-10711
+	 * Set the xulRunnerBrowser state.
+	 */
+	private boolean xulRunnerBrowserIsNotSupported = false;
+	/*
+	 * Flag that indicates that the editor 
+	 * is being creating for the first time, 
+	 * i.e. part is initializing.
+	 */
+	private boolean vpeIsCreating = true;
 
 	private int visualSourceIndex;
 	private int sourceIndex;
@@ -246,18 +257,64 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	public void pageChange(int newPageIndex) {
 		selectedPageIndex = newPageIndex;
 		if (visualEditor != null) {
-			if (newPageIndex == visualSourceIndex) {
+			if (selectedPageIndex == visualSourceIndex) {
 				if (visualEditor.getVisualEditor() == null) {
 					visualEditor.createVisualEditor();
+					/*
+					 * https://issues.jboss.org/browse/JBIDE-10711
+					 * XulRunnerBrowser could be not supported.
+					 * So there should be special handling when
+					 * VisualEditor is created for the first time.
+					 */
+					if (isXulRunnerBrowserNotSupported() && vpeIsCreating) {
+						/*
+						 * Set Source tab as default
+						 */
+						visualEditor.setVisualMode(IVisualEditor.SOURCE_MODE);
+						selectedPageIndex = IVisualEditor.SOURCE_MODE;
+						setActivePage(selectedPageIndex);
+					} else {
+						/*
+						 * Use default behavior for tab switching
+						 * when the JSPEditor has already been initialized,
+						 * but visual part is loaded for the first time.
+						 */
+						visualEditor.setVisualMode(IVisualEditor.VISUALSOURCE_MODE);
+					}
+				} else {
+					/*
+					 * https://issues.jboss.org/browse/JBIDE-10711
+					 * Use default behavior for tab switching
+					 * when visual editor is not null.
+					 */
+					visualEditor.setVisualMode(IVisualEditor.VISUALSOURCE_MODE);
 				}
-				visualEditor.setVisualMode(IVisualEditor.VISUALSOURCE_MODE);
-			} else if (newPageIndex == sourceIndex)
+			} else if (selectedPageIndex == sourceIndex)
 				visualEditor.setVisualMode(IVisualEditor.SOURCE_MODE);
-			else if (newPageIndex == getPreviewIndex()) {
+			else if (selectedPageIndex == getPreviewIndex()) {
 				if (visualEditor.getPreviewWebBrowser() == null) {
 					visualEditor.createPreviewBrowser();
+					/*
+					 * https://issues.jboss.org/browse/JBIDE-10711
+					 */
+					if (isXulRunnerBrowserNotSupported() && vpeIsCreating) {
+						/*
+						 * Set Source tab as default
+						 */
+						visualEditor.setVisualMode(IVisualEditor.SOURCE_MODE);
+						selectedPageIndex = IVisualEditor.SOURCE_MODE;
+						setActivePage(selectedPageIndex);
+					} else {
+						/*
+						 * Use default behavior for tab switching
+						 * when the JSPEditor has already been initialized,
+						 * but preview part is loaded for the first time.
+						 */
+						visualEditor.setVisualMode(IVisualEditor.PREVIEW_MODE);
+					}
+				} else {
+					visualEditor.setVisualMode(IVisualEditor.PREVIEW_MODE);
 				}
-				visualEditor.setVisualMode(IVisualEditor.PREVIEW_MODE);
 			}
 		}
 		
@@ -266,7 +323,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		commandService.refreshElements(SelectionBarHandler.COMMAND_ID, null);
 		getSelectionBar().refreshVisibility();
 		
-		superPageChange(newPageIndex);
+		superPageChange(selectedPageIndex);
 		JspEditorPlugin.getDefault().getPreferenceStore().
 			setValue(IVpePreferencesPage.DEFAULT_VPE_TAB, selectedPageIndex);
 	}
@@ -422,11 +479,9 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	}
 
 	protected void createPages() {
-
 		try {
 			createPagesForVPE();
 			loadSelectedTab();
-
 			switch (selectedPageIndex) {
 				case 0: {
 					// source/visual mode
@@ -460,6 +515,11 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 			}
 		} catch (PartInitException e) {
 			JspEditorPlugin.getPluginLog().logError(e);
+		} finally {
+			/*
+			 * Indicate that VPE pages have been created.
+			 */
+			vpeIsCreating = false;
 		}
 
 	}
@@ -854,6 +914,15 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 			pr = file.getProject();
 		}
 		return pr;
+	}
+
+	public boolean isXulRunnerBrowserNotSupported() {
+		return xulRunnerBrowserIsNotSupported;
+	}
+
+	public void setXulRunnerBrowserIsNotSupported(
+			boolean xulRunnerBrowserIsNotSupported) {
+		this.xulRunnerBrowserIsNotSupported = xulRunnerBrowserIsNotSupported;
 	}
 
 class ResourceChangeListener implements IResourceChangeListener {
