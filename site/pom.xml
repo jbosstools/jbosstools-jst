@@ -10,5 +10,5 @@
 	<artifactId>jst.site</artifactId> 
 	<name>jst.site</name>
 	
-	<packaging>eclipse-update-site</packaging>
+	<packaging>eclipse-repository</packaging>
 </project>
