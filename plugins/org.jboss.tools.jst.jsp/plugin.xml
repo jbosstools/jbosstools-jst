@@ -918,30 +918,35 @@
 				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
 				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
 				<partitionType id="org.eclipse.wst.css.STYLE" />
+				<partitionType id="org.eclipse.wst.html.SCRIPT.EVENTHANDLER"/>
        		</contentType>
        		<contentType id="org.jboss.tools.jst.jsp.phpsource">
 				<partitionType id="org.eclipse.wst.html.HTML_DEFAULT" />
 				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
 				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
 				<partitionType id="org.eclipse.wst.css.STYLE" />
+				<partitionType id="org.eclipse.wst.html.SCRIPT.EVENTHANDLER"/>
        		</contentType>
 			<contentType id="org.eclipse.php.core.phpsource">
 				<partitionType id="org.eclipse.wst.html.HTML_DEFAULT" />
 				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
 				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
 				<partitionType id="org.eclipse.wst.css.STYLE" />
+				<partitionType id="org.eclipse.wst.html.SCRIPT.EVENTHANDLER"/>
 			</contentType>
        		<contentType id="jsf.facelet">
 				<partitionType id="org.eclipse.wst.html.HTML_DEFAULT" />
 				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
 				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
 				<partitionType id="org.eclipse.wst.css.STYLE" />
+				<partitionType id="org.eclipse.wst.html.SCRIPT.EVENTHANDLER"/>
 			</contentType>
 			<contentType id="jsf.facelet.composite">
 				<partitionType id="org.eclipse.wst.html.HTML_DEFAULT" />
 				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
 				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
 				<partitionType id="org.eclipse.wst.css.STYLE" />
+				<partitionType id="org.eclipse.wst.html.SCRIPT.EVENTHANDLER"/>
 			</contentType>
 			
     </proposalComputer>
