@@ -16,14 +16,17 @@ import java.net.URL;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.browser.IWebBrowser;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import org.eclipse.wst.server.core.*;
+import org.eclipse.wst.server.core.IServer.IOperationListener;
 import org.eclipse.wst.server.core.internal.*;
 import org.eclipse.wst.server.core.util.*;
 
@@ -114,7 +117,7 @@ public class RunOnServerContext extends AbstractBrowserContext {
 
 	protected void doExecute(String lastRunUrl) throws XModelException {
 		ServiceDialog d = PreferenceModelUtilities.getPreferenceModel().getService();
-		IServer server = ServerManager.getInstance().getSelectedServer();
+		final IServer server = ServerManager.getInstance().getSelectedServer();
 		if(server == null) {
 			if(lastRunUrl != null && lastRunUrl.startsWith("%server%")) { //$NON-NLS-1$
 				String message = WebUIMessages.PLEASE_CREATE_A_SERVER_AND_SELECT_IT_ON_TOOLBAR;
@@ -128,11 +131,23 @@ public class RunOnServerContext extends AbstractBrowserContext {
 
 		server.getModules();
 		
-		String launchMode = ILaunchManager.DEBUG_MODE.equals(server.getMode()) ? ILaunchManager.DEBUG_MODE : ILaunchManager.RUN_MODE; 
+		final String launchMode = ILaunchManager.DEBUG_MODE.equals(server.getMode()) ? ILaunchManager.DEBUG_MODE : ILaunchManager.RUN_MODE; 
 		try {
-			Object launchable = new HttpLaunchable(new URL(lastRunUrl));
-			IClient[] clients = getClients(server, launchable, launchMode);
-			IClient client = clients[0];
+			final Object launchable = new HttpLaunchable(new URL(lastRunUrl));
+			final IClient[] clients = getClients(server, launchable, launchMode);
+			final IClient client = clients[0];
+			if(server.getLaunch() == null) {
+				server.start(launchMode, new IOperationListener() {					
+					public void done(IStatus result) {
+						Display.getDefault().asyncExec(new Runnable() {
+							public void run() {
+								client.launch(server, launchable, launchMode, server.getLaunch());		
+							}
+						});
+					}
+				});
+				return;
+			}
 			client.launch(server, launchable, launchMode, server.getLaunch());
 		} catch (MalformedURLException e) {
 			WebModelPlugin.getPluginLog().logError(e);
