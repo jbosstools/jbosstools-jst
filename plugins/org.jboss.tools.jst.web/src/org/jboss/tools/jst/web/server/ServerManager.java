@@ -15,7 +15,9 @@ import java.util.List;
 
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeLifecycleListener;
 import org.eclipse.wst.server.core.IServer;
@@ -23,6 +25,7 @@ import org.eclipse.wst.server.core.IServerLifecycleListener;
 import org.eclipse.wst.server.core.IServerListener;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.core.ServerEvent;
+import org.jboss.tools.jst.web.WebModelPlugin;
 
 public class ServerManager {
 	private static ServerManager instance;
@@ -51,6 +54,16 @@ public class ServerManager {
 		ServerResourceListenerImpl listener = new ServerResourceListenerImpl();
 		ServerCore.addRuntimeLifecycleListener(listener);
 		ServerCore.addServerLifecycleListener(listener);
+		IEclipsePreferences p = getInstancePreferences();
+		if(p != null) {
+			p.addPreferenceChangeListener(new IPreferenceChangeListener() {				
+				public void preferenceChange(PreferenceChangeEvent event) {
+					if(DEFAULT_WEB_SERVER.equals(event.getKey())) {
+						loadSelectedServer();
+					}					
+				}
+			});
+		}
 	}
 	
 	private void loadSelectedServer() {
@@ -167,11 +180,19 @@ public class ServerManager {
 	}
 
 	static IEclipsePreferences getInstancePreferences() {
-		return new InstanceScope().getNode("org.jboss.ide.eclipse.as.ui");
+		IEclipsePreferences result = InstanceScope.INSTANCE.getNode("org.jboss.ide.eclipse.as.ui");
+		if(result == null) {
+			result = InstanceScope.INSTANCE.getNode(WebModelPlugin.PLUGIN_ID);
+		}
+		return result;
 	}
 
 	static IEclipsePreferences getDefaultPreferences() {
-		return new DefaultScope().getNode("org.jboss.ide.eclipse.as.ui");
+		IEclipsePreferences result = DefaultScope.INSTANCE.getNode("org.jboss.ide.eclipse.as.ui");
+		if(result == null) {
+			result = DefaultScope.INSTANCE.getNode(WebModelPlugin.PLUGIN_ID);
+		}
+		return result;
 	}
 
 	static String getInstancePreference(String key) {
