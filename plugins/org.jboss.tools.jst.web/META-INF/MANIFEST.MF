@@ -11,7 +11,6 @@ Bundle-Localization: plugin
 Require-Bundle: org.jboss.tools.common.model;visibility:=reexport,
  org.jboss.tools.common.projecttemplates;visibility:=reexport,
  org.jboss.tools.common.validation,
- org.jboss.ide.eclipse.as.ui;visibility:=reexport,
  org.eclipse.ui;bundle-version="3.7.0",
  org.eclipse.jdt.launching;bundle-version="3.6.0",
  org.eclipse.debug.ui;bundle-version="3.7.0",

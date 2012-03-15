@@ -10,5 +10,6 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.server;
 
-public interface ServerManagerListener extends org.jboss.ide.eclipse.as.ui.actions.ServerManagerListener {
+public interface ServerManagerListener {
+	public void serverManagerChanged();
 }
