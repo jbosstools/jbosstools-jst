@@ -87,6 +87,7 @@ import org.jboss.tools.jst.web.project.list.IWebPromptingProvider;
 import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
 import org.jboss.tools.jst.web.tld.TaglibData;
 import org.jboss.tools.jst.web.tld.URIConstants;
+import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -135,6 +136,54 @@ public class ExternalizeStringsUtils {
 		return isSelectionCorrect;
 	}
 
+	/**
+	 * Check if the current selected text could be externalized
+	 * 
+	 * @param selection text selection
+	 * @return true, if i18n is possible
+	 */
+	public static boolean isExternalizeStringsCommandEnabled(ISelection selection) {
+		boolean enabled=false;
+		String stringToUpdate = ""; //$NON-NLS-1$
+		if (isSelectionCorrect(selection)) {
+			String text = ""; //$NON-NLS-1$
+			TextSelection textSelection = null;
+			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+			textSelection = (TextSelection) selection;
+			text = textSelection.getText();
+			Object selectedElement = structuredSelection.getFirstElement();
+			/*
+			 * When selected text is empty parse selected element and find a
+			 * string to replace..
+			 */
+			if ((text.trim().length() == 0)) {
+				if (selectedElement instanceof org.w3c.dom.Text) {
+					/*
+					 * ..it could be a plain text
+					 */
+					org.w3c.dom.Text textNode = (org.w3c.dom.Text) selectedElement;
+					if (textNode.getNodeValue().trim().length() > 0) {
+						stringToUpdate = textNode.getNodeValue();
+					}
+				} else if (selectedElement instanceof Attr) {
+					/*
+					 * ..or an attribute's value
+					 */
+					Attr attrNode = (Attr) selectedElement;
+					if (attrNode.getNodeValue().trim().length() > 0) {
+						stringToUpdate = attrNode.getNodeValue();
+					}
+				}
+			} else {
+				stringToUpdate = text;
+			}
+		}
+		if ((stringToUpdate.length() > 0)) {
+			enabled=true;
+		} 
+		return enabled;
+	}
+	
 	/**
 	 * Find faces config xml file using XModel.
 	 * 

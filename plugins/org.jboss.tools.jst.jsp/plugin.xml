@@ -323,34 +323,6 @@
                      </visibleWhen>
                </command>
          </menuContribution>
-         <menuContribution
-               locationURI="toolbar:org.eclipse.ui.workbench.navigate?after=forwardHistory">
-               <command
-                     commandId="org.jboss.tools.jst.jsp.commands.showSelectionBar"
-                     icon="icons/selbar.gif"
-                     id="org.jboss.tools.jst.jsp.toolbars.showSelectionBar"
-                     style="toggle"
-                     tooltip="%Toggle.Selection.Bar">
-                     <visibleWhen
-                           checkEnabled="false">
-                           <with
-                                 variable="activeEditorId">
-                                 <or>
-	                                 <equals
-	                                       value="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
-	                                 </equals>
-	                                 <equals
-	                                       value="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor">
-	                                 </equals>
-	                                 <equals
-	                                       value="org.jboss.tools.jst.jsp.jspeditor.DocBookEditor">
-	                                 </equals>
-                                 </or>
-                           </with>
-                     </visibleWhen>
-               </command>
-         </menuContribution>
-         
          <menuContribution 
 			locationURI="popup:org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor.source.EditorContext?after=org.jboss.tools.vpe.editor.menu.SetupTemplateContributionItem">
         	<dynamic
@@ -408,24 +380,20 @@
                     icon="icons/externalize.png"
                     id="org.jboss.tools.jst.jsp.toolbars.i18"
                     tooltip="%Externalize.Selected.Property">
-              <visibleWhen
-                           checkEnabled="false">
-                           <with
-                                 variable="activeEditorId">
-                                 <or>
-	                                 <equals
-	                                       value="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
-	                                 </equals>
-	                                 <equals
-	                                       value="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor">
-	                                 </equals>
-	                                 <equals
-	                                       value="org.jboss.tools.jst.jsp.jspeditor.DocBookEditor">
-	                                 </equals>
-                                 </or>
-                           </with>
-                    </visibleWhen>
+					 <visibleWhen checkEnabled="false">
+	            		<reference definitionId="org.jboss.tools.ui.vpe.editor"/>
+	            	</visibleWhen>
               </command>
+              <command
+                     commandId="org.jboss.tools.jst.jsp.commands.showSelectionBar"
+                     icon="icons/selbar.gif"
+                     id="org.jboss.tools.jst.jsp.toolbars.showSelectionBar"
+                     style="toggle"
+                     tooltip="%Toggle.Selection.Bar">
+                     <visibleWhen checkEnabled="false">
+	            		<reference definitionId="org.jboss.tools.ui.vpe.editor"/>
+	            	</visibleWhen>
+               </command>
            </toolbar>
         </menuContribution>
          

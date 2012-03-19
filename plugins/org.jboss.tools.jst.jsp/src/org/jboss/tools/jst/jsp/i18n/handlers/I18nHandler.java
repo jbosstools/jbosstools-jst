@@ -49,62 +49,12 @@ public class I18nHandler extends AbstractHandler implements IElementUpdater {
 			if(activeEditor instanceof ITextEditor){
 				ITextEditor txtEditor = (ITextEditor) activeEditor;
 				ISelection selection = txtEditor.getSelectionProvider().getSelection();
-				enabled = getExternalizeStringsCommandEnabled(selection);
+				enabled = ExternalizeStringsUtils.isExternalizeStringsCommandEnabled(selection);
 			} 
 		}
 		if (isEnabled() != enabled) {
 			setBaseEnabled(enabled);
 		}
-	}
-	
-//	public I18nHandler() {
-//		setBaseEnabled(true);
-//	}
-	/**
-	 * Calculates the state of ext command
-	 * @param selection
-	 * @return
-	 */
-	private static boolean getExternalizeStringsCommandEnabled(ISelection selection) {
-		boolean enabled=false;
-		String stringToUpdate = ""; //$NON-NLS-1$
-		if (ExternalizeStringsUtils.isSelectionCorrect(selection)) {
-			String text = ""; //$NON-NLS-1$
-			TextSelection textSelection = null;
-			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-			textSelection = (TextSelection) selection;
-			text = textSelection.getText();
-			Object selectedElement = structuredSelection.getFirstElement();
-			/*
-			 * When selected text is empty parse selected element and find a
-			 * string to replace..
-			 */
-			if ((text.trim().length() == 0)) {
-				if (selectedElement instanceof org.w3c.dom.Text) {
-					/*
-					 * ..it could be a plain text
-					 */
-					org.w3c.dom.Text textNode = (org.w3c.dom.Text) selectedElement;
-					if (textNode.getNodeValue().trim().length() > 0) {
-						stringToUpdate = textNode.getNodeValue();
-					}
-				} else if (selectedElement instanceof Attr) {
-					/*
-					 * ..or an attribute's value
-					 */
-					Attr attrNode = (Attr) selectedElement;
-					if (attrNode.getNodeValue().trim().length() > 0) {
-						stringToUpdate = attrNode.getNodeValue();
-					}
-				}
-			} else {
-				stringToUpdate = text;
-			}
-		}
-		if ((stringToUpdate.length() > 0)) {
-			enabled=true;
-		} 
-		return enabled;
 	}
 
 	/**
