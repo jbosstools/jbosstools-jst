@@ -64,9 +64,10 @@ import org.eclipse.ui.progress.UIJob;
 import org.eclipse.wst.sse.core.internal.provisional.INodeAdapter;
 import org.eclipse.wst.sse.core.internal.provisional.INodeNotifier;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
-import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditorPart;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
+import org.jboss.tools.jst.jsp.preferences.IVpePreferencesPage;
 import org.jboss.tools.jst.jsp.selection.SelectionHelper;
 import org.jboss.tools.jst.jsp.selection.SourceSelection;
 import org.jboss.tools.jst.jsp.selection.SourceSelectionBuilder;
@@ -135,9 +136,7 @@ public class SelectionBar extends Composite {
 		ICommandService commandService = (ICommandService) PlatformUI
 				.getWorkbench().getService(ICommandService.class);
 		this.toggleSelBarCommand = commandService.getCommand(SelectionBarHandler.COMMAND_ID);
-		toggleSelBarState = toggleSelBarCommand
-				.getState("org.eclipse.ui.commands.toggleState"); //$NON-NLS-1$
-		
+		toggleSelBarState = toggleSelBarCommand.getState("org.eclipse.ui.commands.toggleState"); //$NON-NLS-1$
 		toggleSelBarCommandListener = new ICommandListener() {
 			@Override
 			public void commandChanged(CommandEvent commandEvent) {
@@ -189,6 +188,8 @@ public class SelectionBar extends Composite {
 				 */
 				setVisible(false);
 				toggleSelBarState.setValue(false);
+				JspEditorPlugin.getDefault().getPreferenceStore().
+					setValue(IVpePreferencesPage.SHOW_SELECTION_TAG_BAR, false);
 			}
 		};
 
@@ -243,7 +244,6 @@ public class SelectionBar extends Composite {
 	
 	public void refreshVisibility() {
 		boolean visible = (Boolean) toggleSelBarState.getValue();
-
 		IEditorPart editorPart = textEditor.getEditorPart();
 		if(editorPart instanceof JSPMultiPageEditor){
 			JSPMultiPageEditor jspEditor = (JSPMultiPageEditor) editorPart;

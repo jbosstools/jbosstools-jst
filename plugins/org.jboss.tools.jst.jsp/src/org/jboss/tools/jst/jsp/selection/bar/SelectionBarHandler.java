@@ -22,7 +22,9 @@ import org.eclipse.ui.ISources;
 import org.eclipse.ui.commands.IElementUpdater;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.menus.UIElement;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
+import org.jboss.tools.jst.jsp.preferences.IVpePreferencesPage;
 
 /**
  * Selection bar handler
@@ -35,6 +37,11 @@ public class SelectionBarHandler extends AbstractHandler implements IElementUpda
 	 * The constructor.
 	 */
 	public SelectionBarHandler() {
+		/*
+		 * Init the item state
+		 */
+		setBaseEnabled(JspEditorPlugin.getDefault().getPreferenceStore().
+			getBoolean(IVpePreferencesPage.SHOW_SELECTION_TAG_BAR));
 	}
 	
 	@Override
@@ -62,7 +69,12 @@ public class SelectionBarHandler extends AbstractHandler implements IElementUpda
 	 * from the application context.
 	 */
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		HandlerUtil.toggleCommandState(event.getCommand());
+		/*
+		 * Change command state and save it to PreferenceStore
+		 */
+		JspEditorPlugin.getDefault().getPreferenceStore().setValue(
+				IVpePreferencesPage.SHOW_SELECTION_TAG_BAR,
+						!HandlerUtil.toggleCommandState(event.getCommand()));
 		return null;
 	}
 	

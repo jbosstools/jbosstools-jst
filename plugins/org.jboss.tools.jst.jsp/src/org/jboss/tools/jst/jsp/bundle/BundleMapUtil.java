@@ -22,7 +22,7 @@ import org.w3c.dom.Node;
  */
 public class BundleMapUtil {
 	
-	private static final String elPattern = "(?s:(.*)[#\\$]\\{(.+)\\}(.*))"; //$NON-NLS-1$
+	private static final String EL_PATTERN = "(?s:(.*)[#\\$]\\{(.+)\\}(.*))"; //$NON-NLS-1$
     /**
     * Checks if node contains text information from resource bundle
     * @param pageContext
@@ -85,6 +85,6 @@ public class BundleMapUtil {
 	 * @return
 	 */
 	public static boolean isContainsEl(final String value) {
-		return value.matches(elPattern);
+		return value.matches(EL_PATTERN);
 	}
 }

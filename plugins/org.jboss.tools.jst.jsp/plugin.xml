@@ -738,7 +738,7 @@
      <command
            categoryId="org.jboss.tools.jst.jsp.commands.category"
            id="org.jboss.tools.jst.jsp.commands.showSelectionBar"
-           name="Show Selection Bar">
+           name="%Toggle.Selection.Bar">
            <state
                  class="org.eclipse.ui.handlers.RegistryToggleState:true"
                  id="org.eclipse.ui.commands.toggleState">
