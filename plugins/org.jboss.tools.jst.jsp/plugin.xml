@@ -381,7 +381,30 @@
                     id="org.jboss.tools.jst.jsp.toolbars.i18"
                     tooltip="%Externalize.Selected.Property">
 					 <visibleWhen checkEnabled="false">
-	            		<reference definitionId="org.jboss.tools.ui.vpe.editor"/>
+					 <or>
+					 	<and>
+					 		<with variable="org.eclipse.core.runtime.Platform">
+					 			<test property="org.eclipse.core.runtime.isBundleInstalled" 
+					 				args="org.jboss.tools.vpe" forcePluginActivation="true"/>
+					 		</with>
+		            		<reference definitionId="org.jboss.tools.ui.vpe.editor"/>
+					 	</and>
+					 	<and>
+					 		<not>
+					 			<with variable="org.eclipse.core.runtime.Platform">
+					 				<test property="org.eclipse.core.runtime.isBundleInstalled" 
+					 					args="org.jboss.tools.vpe" forcePluginActivation="true"/>
+					 			</with>
+					 		</not>
+					 		<with variable="activeEditorId">
+                                 <or>
+	                                 <equals value="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor"/>
+	                                 <equals value="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor"/>
+	                                 <equals value="org.jboss.tools.jst.jsp.jspeditor.DocBookEditor"/>
+                                 </or>
+                           </with>
+					 	</and>
+					 </or>
 	            	</visibleWhen>
               </command>
               <command
@@ -391,7 +414,30 @@
                      style="toggle"
                      tooltip="%Toggle.Selection.Bar">
                      <visibleWhen checkEnabled="false">
-	            		<reference definitionId="org.jboss.tools.ui.vpe.editor"/>
+					 <or>
+					 	<and>
+					 		<with variable="org.eclipse.core.runtime.Platform">
+					 			<test property="org.eclipse.core.runtime.isBundleInstalled" 
+					 				args="org.jboss.tools.vpe" forcePluginActivation="true"/>
+					 		</with>
+		            		<reference definitionId="org.jboss.tools.ui.vpe.editor"/>
+					 	</and>
+					 	<and>
+					 		<not>
+					 			<with variable="org.eclipse.core.runtime.Platform">
+					 				<test property="org.eclipse.core.runtime.isBundleInstalled" 
+					 					args="org.jboss.tools.vpe" forcePluginActivation="true"/>
+					 			</with>
+					 		</not>
+					 		<with variable="activeEditorId">
+                                 <or>
+	                                 <equals value="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor"/>
+	                                 <equals value="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor"/>
+	                                 <equals value="org.jboss.tools.jst.jsp.jspeditor.DocBookEditor"/>
+                                 </or>
+                           </with>
+					 	</and>
+					 </or>
 	            	</visibleWhen>
                </command>
            </toolbar>
