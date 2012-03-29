@@ -44,6 +44,8 @@ import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetDataModel
 import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties;
 import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties.FacetDataModelMap;
 import org.eclipse.wst.common.componentcore.internal.operation.FacetProjectCreationOperation;
+import org.eclipse.wst.common.frameworks.datamodel.AbstractDataModelOperation;
+import org.eclipse.wst.common.frameworks.datamodel.AbstractDataModelProvider;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelFactory;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.internal.operations.IProjectCreationPropertiesNew;
@@ -387,9 +389,6 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 				projectLocation = createLinks(projectLocation);
 			}
 			
-			WebFacetProjectCreationDataModelProvider modelProvider = new WebFacetProjectCreationDataModelProvider();
-			IDataModel dataModel = DataModelFactory.createDataModel(modelProvider);
-
 			boolean hasJSTWebFacet = false;
 			if(exists) {
 				IFacetedProject fp0 = ProjectFacetsManager.create(getProject());
@@ -405,10 +404,11 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 				}
 			}
 
-			configFacets(dataModel, projectLocation);
+			AbstractDataModelProvider modelProvider = new WebFacetProjectCreationDataModelProvider();
+			IDataModel dataModel = DataModelFactory.createDataModel(modelProvider);
 
 			modelProvider.setDataModel(dataModel);
-			FacetProjectCreationOperation wcco = (FacetProjectCreationOperation)modelProvider.getDefaultOperation();
+			AbstractDataModelOperation wcco = (AbstractDataModelOperation)modelProvider.getDefaultOperation();
 	
 			wcco.setDataModel(dataModel);
 			dataModel.setProperty(IProjectCreationPropertiesNew.PROJECT_NAME, projectName);
@@ -436,6 +436,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 				}
 			}
 			if(!exists || !hasJSTWebFacet) {
+				configFacets(dataModel, projectLocation);
 				return wcco;
 			} else {
 				return null;
