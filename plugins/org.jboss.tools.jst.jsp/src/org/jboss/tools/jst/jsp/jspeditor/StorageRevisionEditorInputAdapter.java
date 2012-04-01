@@ -64,7 +64,7 @@ public class StorageRevisionEditorInputAdapter implements IStorageEditorInput {
 		}
 
 		public String getName() {			
-			return storage.getFullPath().toString();
+			return storage.getFullPath() != null ? storage.getFullPath().toString() : null;
 		}
 
 		public boolean isReadOnly() {
