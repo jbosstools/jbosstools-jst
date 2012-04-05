@@ -15,7 +15,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.osgi.util.NLS;
 import org.jboss.tools.common.log.LogHelper;
 import org.jboss.tools.common.meta.constraint.impl.XAttributeConstraintQClassName;
 import org.jboss.tools.common.model.XModelObject;
@@ -180,17 +179,17 @@ public class CheckClass extends Check {
 	}
 
 	protected void fireImplements(XModelObject object, String id, String value, String interfaceName) {
-		fireMessage(object, NLS.bind(WebXMLValidatorMessages.CLASS_NOT_IMPLEMENTS, new Object[] {visualAttr, value, interfaceName}));
+		fireMessage(object, WebXMLValidatorMessages.CLASS_NOT_IMPLEMENTS, visualAttr, value, interfaceName);
 	}
 
 	protected void fireExtends(XModelObject object, String id, String value, String superName) {
-		fireMessage(object, NLS.bind(WebXMLValidatorMessages.CLASS_NOT_EXTENDS, new Object[] {visualAttr, value, superName}));
+		fireMessage(object, WebXMLValidatorMessages.CLASS_NOT_EXTENDS, visualAttr, value, superName);
 	}
 	protected void fireInvalid(XModelObject object, String id, String value) {
-		fireMessage(object, NLS.bind(WebXMLValidatorMessages.CLASS_NOT_VALID, visualAttr, value));
+		fireMessage(object, WebXMLValidatorMessages.CLASS_NOT_VALID, visualAttr, value);
 	}
 	protected void fireNotExist(XModelObject object, String id, String value) {
-		fireMessage(object, NLS.bind(WebXMLValidatorMessages.CLASS_NOT_EXISTS, visualAttr, value));
+		fireMessage(object, WebXMLValidatorMessages.CLASS_NOT_EXISTS, visualAttr, value);
 	}
 
 	public static IType getValidType(String className, XModelObject o) {

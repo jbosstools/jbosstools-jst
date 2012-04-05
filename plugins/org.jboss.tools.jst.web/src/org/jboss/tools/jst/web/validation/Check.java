@@ -37,9 +37,16 @@ public class Check {
 	public void check(XModelObject object) {			
 	}
 
+	@Deprecated
 	protected void fireMessage(XModelObject object, String message) {
 		ITextSourceReference ref = getSourceReference(object, attr);
 		IMarker m = manager.addError(message, preference, ref, ref.getResource());
+		bindMarkerToPathAndAttribute(m, object, attr);
+	}
+
+	protected void fireMessage(XModelObject object, String message, String... messageArguments) {
+		ITextSourceReference ref = getSourceReference(object, attr);
+		IMarker m = manager.addError(message, preference, messageArguments, ref, ref.getResource());
 		bindMarkerToPathAndAttribute(m, object, attr);
 	}
 

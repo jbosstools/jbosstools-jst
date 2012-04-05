@@ -12,7 +12,6 @@ package org.jboss.tools.jst.web.validation;
 
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.osgi.util.NLS;
 import org.jboss.tools.common.model.*;
 import org.jboss.tools.common.validation.ValidationErrorManager;
 import org.jboss.tools.jst.web.WebModelPlugin;
@@ -37,7 +36,7 @@ public class CheckServletMappingName extends Check {
 		if(servletName == null) return;
 		if(servletName.length() == 0) {
 			if(acceptEmpty) return;
-			fireMessage(object, NLS.bind(WebXMLValidatorMessages.EMPTY, attr));
+			fireMessage(object, WebXMLValidatorMessages.EMPTY, attr);
 		} else if(findServlet(object, servletName) == null) {
 			//JAX-RS
 			if(servletName.equals(JAX_RS_APPLICATION)) {
@@ -51,7 +50,7 @@ public class CheckServletMappingName extends Check {
 					WebModelPlugin.getDefault().logError(e);
 				}
 			} else {
-				fireMessage(object, NLS.bind(WebXMLValidatorMessages.SERVLET_NOT_EXISTS, attr, servletName));
+				fireMessage(object, WebXMLValidatorMessages.SERVLET_NOT_EXISTS, attr, servletName);
 			}
 		}
 	}

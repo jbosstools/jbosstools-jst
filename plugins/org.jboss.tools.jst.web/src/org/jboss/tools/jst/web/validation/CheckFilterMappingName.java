@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.jboss.tools.jst.web.validation;
 
-import org.eclipse.osgi.util.NLS;
 import org.jboss.tools.common.model.*;
 import org.jboss.tools.common.validation.ValidationErrorManager;
 import org.jboss.tools.jst.web.model.helpers.WebAppHelper;
@@ -29,9 +28,9 @@ public class CheckFilterMappingName extends Check {
 		String filterName = object.getAttributeValue(ATTR);
 		if(filterName == null) return;
 		if(filterName.length() == 0) {
-			fireMessage(object, NLS.bind(WebXMLValidatorMessages.EMPTY, ATTR));
+			fireMessage(object, WebXMLValidatorMessages.EMPTY, ATTR);
 		} else if(findFilter(object, filterName) == null) {
-			fireMessage(object, NLS.bind(WebXMLValidatorMessages.FILTER_NOT_EXISTS, ATTR, filterName));
+			fireMessage(object, WebXMLValidatorMessages.FILTER_NOT_EXISTS, ATTR, filterName);
 		}
 	}
 	

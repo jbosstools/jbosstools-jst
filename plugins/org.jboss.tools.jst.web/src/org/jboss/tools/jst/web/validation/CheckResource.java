@@ -13,7 +13,6 @@ package org.jboss.tools.jst.web.validation;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.eclipse.osgi.util.NLS;
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.filesystems.FileSystemsHelper;
@@ -112,12 +111,12 @@ public class CheckResource extends Check {
 	}
 
 	protected void fireEmpty(XModelObject object, String id, String attr) {
-		fireMessage(object, NLS.bind(WebXMLValidatorMessages.PATH_EMPTY, attr));
+		fireMessage(object, WebXMLValidatorMessages.PATH_EMPTY, attr);
 	}
 	protected void fireExists(XModelObject object, String id, String attr, String value) {
-		fireMessage(object, NLS.bind(WebXMLValidatorMessages.PATH_NOT_EXISTS, attr, value));
+		fireMessage(object, WebXMLValidatorMessages.PATH_NOT_EXISTS, attr, value);
 	}
 	protected void fireExtension(XModelObject object, String id, String attr, String value) {
-		fireMessage(object, NLS.bind(extensionMessage, attr, value));
+		fireMessage(object, extensionMessage, attr, value);
 	}
 }

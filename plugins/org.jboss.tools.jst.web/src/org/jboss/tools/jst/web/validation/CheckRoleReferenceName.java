@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.jboss.tools.jst.web.validation;
 
-import org.eclipse.osgi.util.NLS;
 import org.jboss.tools.common.model.*;
 import org.jboss.tools.common.validation.ValidationErrorManager;
 import org.jboss.tools.jst.web.model.helpers.WebAppHelper;
@@ -29,9 +28,9 @@ public class CheckRoleReferenceName extends Check {
 		String roleName = object.getAttributeValue(attr);
 		if(roleName == null) return;
 		if(roleName.length() == 0) {
-			fireMessage(object, NLS.bind(WebXMLValidatorMessages.EMPTY, attr));
+			fireMessage(object, WebXMLValidatorMessages.EMPTY, attr);
 		} else if(!isRoleNameOk(object, roleName)) {
-			fireMessage(object, NLS.bind(WebXMLValidatorMessages.ROLE_NOT_EXISTS, attr, roleName));
+			fireMessage(object, WebXMLValidatorMessages.ROLE_NOT_EXISTS, attr, roleName);
 		}
 	}
 	
