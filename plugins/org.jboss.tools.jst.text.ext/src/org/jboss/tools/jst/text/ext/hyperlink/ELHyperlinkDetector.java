@@ -91,11 +91,14 @@ public class ELHyperlinkDetector extends AbstractHyperlinkDetector{
 	
 	private static ELInvocationExpression findInvocationExpressionByOffset(ELReference reference, ELExpression expression, int offset){
 		List<ELInvocationExpression> invocations = expression.getInvocations();
+		ELInvocationExpression result = null;
 		for(ELInvocationExpression invocation : invocations){
 			if(reference.getStartPosition()+invocation.getStartPosition() <= offset && reference.getStartPosition()+invocation.getEndPosition() > offset)
-				return invocation;
+				if(result == null || result.toString().length() > invocation.toString().length()) {
+					result = invocation;
+				}
 		}
-		return null;
+		return result;
 	}
 	
 	private IFile getFile(){
