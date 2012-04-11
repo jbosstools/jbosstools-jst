@@ -84,7 +84,7 @@ public class WebWizardsTest extends AbstractModelNewWizardTest {
 		try {
 			dialog.open();
 			IWizardPage htmlWizardNewFileCreationPage = dialog.getCurrentPage();
-			assertEquals("The Page should be","HTMLWizardNewFileCreationPage", htmlWizardNewFileCreationPage.getName());  //$NON-NLS-1$//$NON-NLS-2$
+			assertEquals("The Page should be","XHTMLWizardNewFileCreationPage", htmlWizardNewFileCreationPage.getName());  //$NON-NLS-1$//$NON-NLS-2$
 			IWizardPage newXHTMLTemplatesWizardPage=htmlWizardNewFileCreationPage.getNextPage();
 			assertEquals("The Page should be","NewXHTMLTemplatesWizardPage", newXHTMLTemplatesWizardPage.getName());  //$NON-NLS-1$//$NON-NLS-2$
 			if (newXHTMLTemplatesWizardPage.canFlipToNextPage()) {
