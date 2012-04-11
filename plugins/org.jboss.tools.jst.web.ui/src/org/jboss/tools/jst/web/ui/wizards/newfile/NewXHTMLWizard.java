@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.Preferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
@@ -34,7 +35,6 @@ import org.eclipse.wst.sse.core.internal.encoding.CommonEncodingPreferenceNames;
 import org.eclipse.wst.sse.core.utils.StringUtils;
 import org.jboss.tools.common.meta.action.impl.SpecialWizardSupport;
 import org.jboss.tools.common.model.XModelException;
-import org.jboss.tools.common.model.files.handlers.CreateFileSupport;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.model.ui.wizard.newfile.NewFileContextEx;
 import org.jboss.tools.common.model.ui.wizard.newfile.NewXHTMLFileWizard;
@@ -54,30 +54,33 @@ public class NewXHTMLWizard extends NewHTMLWizard{
 	private WizardNewFileCreationPage fNewFilePage;
 	private NewXHTMLTemplatesWizardPage fNewFileTemplatesPage;
 	private NewXHTMLFileWizard newXHTMLFileWizard;
-	private NewXHTMLWizardSelectTagLibrariesPage newXHTMLWizardSelectTagLibrariesPage;  
-	
-	
-	
+	private NewXHTMLWizardSelectTagLibrariesPage newXHTMLWizardSelectTagLibrariesPage;
+	private IStructuredSelection fSelection;
+
 	@Override
 	public void addPages() {
 		super.addPages();
 		
-		this.fNewFilePage = (WizardNewFileCreationPage) getPage(NewXHTMLWizard.HTMLWizardNewFileCreationPage);
+//		this.fNewFilePage = (WizardNewFileCreationPage) getPage(NewXHTMLWizard.HTMLWizardNewFileCreationPage);
+		this.fNewFilePage = new NewXHTMLFileWizardPage("XHTMLWizardNewFileCreationPage", new StructuredSelection(IDE.computeSelectedResources(fSelection))); //$NON-NLS-1$
 		this.fNewFilePage.setTitle(Messages.UI_WIZARD_XHTML_NEW_TITLE);
 		this.fNewFilePage.setDescription(Messages.UI_WIZARD_XHTML_NEW_Description);
-		
+		addPage(this.fNewFilePage);
+
 		NewFileContextEx newFileContext = newXHTMLFileWizard.getFileContext();
 		CreateJSPFileSupport jspFileSupport = (CreateJSPFileSupport)newFileContext.getSupport();		
 		this.fNewFileTemplatesPage = new NewXHTMLTemplatesWizardPage(jspFileSupport);
-		
+
 		addPage(this.fNewFileTemplatesPage);
 		this.newXHTMLWizardSelectTagLibrariesPage = getURISelectionPage();
 		if(jspFileSupport.getTaglibs()!=null&&jspFileSupport.getTaglibs().getDescriptions().length>0)
 		addPage(this.newXHTMLWizardSelectTagLibrariesPage);
 	}
+
 	@Override
 	public void init(IWorkbench aWorkbench, IStructuredSelection aSelection) {
 		super.init(aWorkbench, aSelection);
+		fSelection = aSelection;
 		setWindowTitle(Messages.UI_WIZARD_XHTML_NEW_TITLE);
 		setNewXHTMLFileWizard(new NewXHTMLFileWizard());
 		getNewXHTMLFileWizard().init(aWorkbench, aSelection);
@@ -87,7 +90,7 @@ public class NewXHTMLWizard extends NewHTMLWizard{
 	 */
 	@Override
 	public void addPage(IWizardPage page) {
-		if(!NewXHTMLWizard.NewHTMLTemplatesWizardPage.equalsIgnoreCase(page.getName())){
+		if(!NewXHTMLWizard.NewHTMLTemplatesWizardPage.equalsIgnoreCase(page.getName()) && !NewXHTMLWizard.HTMLWizardNewFileCreationPage.equalsIgnoreCase(page.getName())){
 			super.addPage(page);
 		}
 	}
