@@ -214,7 +214,7 @@
         type="new"
         wizardId="org.jboss.tools.jst.web.ui.wizards.newfile.NewXHTMLWizard">
 			<enablement>
-				<or>
+				<and>
 					<adapt type="org.eclipse.core.resources.IResource">
 						<or>
 							<test
@@ -225,7 +225,14 @@
 								value="jst.web"/>
 						</or>
 					</adapt>
-				</or>
+					<not>
+						<or>
+				           <instanceof value="org.eclipse.jdt.core.IPackageFragment"/>
+				           <instanceof value="org.eclipse.jdt.core.IPackageFragmentRoot"/>
+				           <instanceof value="org.eclipse.jdt.core.ICompilationUnit"/>
+				        </or>
+					</not>
+				</and>
 			</enablement>
 		</commonWizard>
 	</extension>
