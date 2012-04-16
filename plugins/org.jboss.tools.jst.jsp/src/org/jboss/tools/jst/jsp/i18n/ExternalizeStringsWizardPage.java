@@ -537,8 +537,11 @@ public class ExternalizeStringsWizardPage extends WizardPage {
 						for (int i = 0; i < ExternalizeStringsUtils.REPLACED_CHARACTERS.length; i++) {
 							/*
 							 * Entering of the forbidden characters will be prevented.
+							 * https://issues.jboss.org/browse/JBIDE-11551
+							 * Dot(.) should be supported.
 							 */
-							if (e.character == ExternalizeStringsUtils.REPLACED_CHARACTERS[i]) {
+							if ((e.character == ExternalizeStringsUtils.REPLACED_CHARACTERS[i]) 
+									&& (e.character != '.')) {
 								e.doit = false;
 								break;
 							}
