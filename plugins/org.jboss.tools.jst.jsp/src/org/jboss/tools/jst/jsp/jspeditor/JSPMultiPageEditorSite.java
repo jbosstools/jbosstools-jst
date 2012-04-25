@@ -33,18 +33,13 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.commands.ICommandService;
-import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.internal.KeyBindingService;
-import org.eclipse.ui.internal.PartSite;
 import org.eclipse.ui.internal.PopupMenuExtender;
 import org.eclipse.ui.internal.WorkbenchPlugin;
-import org.eclipse.ui.internal.handlers.HandlerProxy;
 import org.eclipse.ui.internal.services.IServiceLocatorCreator;
 import org.eclipse.ui.internal.services.IWorkbenchLocationService;
 import org.eclipse.ui.internal.services.ServiceLocator;
 import org.eclipse.ui.internal.services.WorkbenchLocationService;
-import org.eclipse.ui.services.IDisposable;
 import org.eclipse.ui.services.IServiceScopes;
 
 /**
@@ -75,19 +70,14 @@ public abstract class JSPMultiPageEditorSite implements IEditorSite {
 		this.fEditor = multiPageEditor;
 		this.fEditorPart = editor;
 		
+		/*
+		 * https://issues.jboss.org/browse/JBIDE-11578
+		 * IDisposable was removed to fix compilation error in Juno.
+		 */
 		this.serviceLocator = (ServiceLocator) ((IServiceLocatorCreator) multiPageEditor
 				.getSite().getService(IServiceLocatorCreator.class))
-				.createServiceLocator(multiPageEditor.getSite(), null,
-						new IDisposable() {
-							public void dispose() {
-								final Control control = ((PartSite) getMultiPageEditor()
-										.getSite()).getPane().getControl();
-								if (control != null && !control.isDisposed()) {
-									((PartSite) getMultiPageEditor().getSite())
-											.getPane().doHide();
-								}
-							}
-						});
+				.createServiceLocator(multiPageEditor.getSite(), null, null);
+	
 		serviceLocator.registerService(IWorkbenchLocationService.class,
 				new WorkbenchLocationService(IServiceScopes.MPESITE_SCOPE,
 						getWorkbenchWindow().getWorkbench(),
@@ -119,7 +109,6 @@ public abstract class JSPMultiPageEditorSite implements IEditorSite {
 			getSelectionProvider().removeSelectionChangedListener(fSelChangeListener);
 			fSelChangeListener = null;
 		}
-		
 		if (serviceLocator != null) {
 			serviceLocator.dispose();
 		}
