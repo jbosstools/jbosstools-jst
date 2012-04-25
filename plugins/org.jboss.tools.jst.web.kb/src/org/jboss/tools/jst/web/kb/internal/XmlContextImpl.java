@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
@@ -36,20 +35,13 @@ import org.jboss.tools.jst.web.kb.taglib.INameSpace;
  *
  */
 public class XmlContextImpl extends ELContextImpl implements IXmlContext {
-	protected IDocument document;
 
 	// Fix for JBIDE-5097: It must be a map of <IRegion to Map of <NS-Prefix to NS>> 
 	protected Map<IRegion, Map<String, INameSpace>> nameSpaces = new HashMap<IRegion, Map<String, INameSpace>>();
 	protected Set<String> uris = new HashSet<String>();
 
-	/**
-	 * Sets up the context resource and retrieves the document for the specified resource
-	 */
-	@Override
-	public void setResource(IFile resource) {
-		super.setResource(resource);
-
-		document = null;
+	public IDocument getDocument() {
+		IDocument document = null;
 		if (resource != null) {
 			FileEditorInput editorInput = null;
 			try {
@@ -59,24 +51,9 @@ public class XmlContextImpl extends ELContextImpl implements IXmlContext {
 				releaseConnectedDocument(editorInput);
 			}
 		}
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.PageContext#getDocument()
-	 */
-	public IDocument getDocument() {
 		return document;
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.PageContext#getDocument()
-	 */
-	public void setDocument(IDocument document) {
-		this.document = document;
-	}
-
+	
 	/* 
 	 * TODO: the visibility must differ between 'include'-like and 'template'-like inclusion
 	 * 

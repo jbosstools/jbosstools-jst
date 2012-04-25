@@ -386,9 +386,8 @@ public class PageContextFactory implements IResourceChangeListener {
 							if (context != null) {
 								IDOMDocument domDocument = domModel.getDocument();
 								context.setResource(file);
-								if (document != null && context instanceof XmlContextImpl) {
-									// Renew the document in context, since it might be cleared by context.setResource() call
-									((XmlContextImpl)context).setDocument(document);
+								if (document == null && context instanceof XmlContextImpl) {
+									document = model.getStructuredDocument();
 								}
 								
 								IProject project = file != null ? file.getProject() : getActiveProject();
@@ -396,7 +395,7 @@ public class PageContextFactory implements IResourceChangeListener {
 								context.setElResolvers(ELResolverFactoryManager.getInstance().getResolvers(project));
 								if (context instanceof JspContextImpl && !(context instanceof FaceletPageContextImpl)) {
 									// Fill JSP namespaces defined in TLDCMDocumentManager 
-									fillJSPNameSpaces((JspContextImpl)context);
+									fillJSPNameSpaces((JspContextImpl)context, document);
 								}
 								// The subsequently called functions may use the file and document
 								// already stored in context for their needs
@@ -520,9 +519,9 @@ public class PageContextFactory implements IResourceChangeListener {
 	 * @param context
 	 */
 	@SuppressWarnings("rawtypes")
-	private static void fillJSPNameSpaces(JspContextImpl context) {
-		TLDCMDocumentManager manager = TaglibController.getTLDCMDocumentManager(context.getDocument());
-		List trackers = (manager == null? null : manager.getCMDocumentTrackers(context.getDocument().getLength() - 1));
+	private static void fillJSPNameSpaces(JspContextImpl context, IDocument document) {
+		TLDCMDocumentManager manager = TaglibController.getTLDCMDocumentManager(document);
+		List trackers = (manager == null? null : manager.getCMDocumentTrackers(document.getLength() - 1));
 		for (int i = 0; trackers != null && i < trackers.size(); i++) {
 			TaglibTracker tt = (TaglibTracker)trackers.get(i);
 			final String prefix = tt.getPrefix() == null ? null : tt.getPrefix().trim();
@@ -530,7 +529,7 @@ public class PageContextFactory implements IResourceChangeListener {
 			if (prefix != null && prefix.length() > 0 &&
 					uri != null && uri.length() > 0) {
 					
-				IRegion region = new Region(0, context.getDocument().getLength());
+				IRegion region = new Region(0, document.getLength());
 				INameSpace nameSpace = new NameSpace(
 						uri, prefix,
 						TagLibraryManager.getLibraries(
