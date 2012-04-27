@@ -84,6 +84,7 @@ import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.ELContextImpl;
 import org.jboss.tools.common.el.core.resolver.ELResolverFactoryManager;
 import org.jboss.tools.common.el.core.resolver.ElVarSearcher;
+import org.jboss.tools.common.el.core.resolver.SimpleELContext;
 import org.jboss.tools.common.el.core.resolver.Var;
 import org.jboss.tools.common.resref.core.ResourceReference;
 import org.jboss.tools.common.text.ext.util.Utils;
@@ -118,6 +119,9 @@ public class PageContextFactory implements IResourceChangeListener {
 	public static final String JSP_PAGE_CONTEXT_TYPE = "JSP_PAGE_CONTEXT_TYPE"; //$NON-NLS-1$
 	public static final String FACELETS_PAGE_CONTEXT_TYPE = "FACELETS_PAGE_CONTEXT_TYPE"; //$NON-NLS-1$
 	private static final String JAVA_PROPERTIES_CONTENT_TYPE = "org.eclipse.jdt.core.javaProperties"; //$NON-NLS-1$
+
+	public static final String EL_START_1 = "#{"; //$NON-NLS-1$
+	public static final String EL_START_2 = "${"; //$NON-NLS-1$
 
 	public static final PageContextFactory getInstance() {
 		return fInstance;
@@ -284,7 +288,7 @@ public class PageContextFactory implements IResourceChangeListener {
 		context.setResource(file);
 		context.setElResolvers(ELResolverFactoryManager.getInstance().getResolvers(file));
 		String content = FileUtil.getContentFromEditorOrFile(file);
-		if(content.indexOf('{')>-1 && content.indexOf("#{") >-1 || content.indexOf("${")>-1 ) { //$NON-NLS-1$
+		if(content.indexOf('{')>-1 && content.indexOf(EL_START_1) >-1 || content.indexOf(EL_START_2)>-1 ) {
 			ELReference elReference = new ValidationELReference();
 			elReference.setResource(file);
 			elReference.setLength(content.length());
@@ -317,9 +321,9 @@ public class PageContextFactory implements IResourceChangeListener {
 					return null;
 				}
 				if(value.indexOf('{')>-1) {
-					int startEl = value.indexOf("#{"); //$NON-NLS-1$
+					int startEl = value.indexOf(EL_START_1);
 					if(startEl==-1) {
-						startEl = value.indexOf("${"); //$NON-NLS-1$
+						startEl = value.indexOf(EL_START_2);
 					}
 					if(startEl>-1) {
 						ELReference elReference = new ValidationELReference();
@@ -367,6 +371,11 @@ public class PageContextFactory implements IResourceChangeListener {
 				context = createJavaContext(file);
 			} else if(JAVA_PROPERTIES_CONTENT_TYPE.equalsIgnoreCase(typeId)) {
 				context = createPropertiesContext(file);
+			} else if(isXMLWithoutEL(file)) {
+				IProject project = file != null ? file.getProject() : getActiveProject();
+				context = new SimpleELContext();
+				context.setResource(file);
+				context.setElResolvers(ELResolverFactoryManager.getInstance().getResolvers(project));
 			} else {
 				IModelManager manager = StructuredModelManager.getModelManager();
 				// manager==null if plug-in org.eclipse.wst.sse.core 
@@ -419,6 +428,14 @@ public class PageContextFactory implements IResourceChangeListener {
 			}
 		}
 		return context;
+	}
+
+	boolean isXMLWithoutEL(IFile file) {
+		if(!file.getName().endsWith(".xml")) { //$NON-NLS-1$
+			return false;
+		}
+		String content = FileUtil.getContentFromEditorOrFile(file);
+		return content != null && content.indexOf(EL_START_1) < 0 && content.indexOf(EL_START_2) < 0;
 	}
 
 	private static IProject getActiveProject() {
@@ -627,7 +644,7 @@ public class PageContextFactory implements IResourceChangeListener {
 
 	private static void fillElReferencesForRegionNode(IDocument document, IDOMNode node, IStructuredDocumentRegion regionNode, ITextRegion region, XmlContextImpl context) {
 		String text = regionNode.getFullText(region);
-		if(text.indexOf('{')>-1 && (text.indexOf("#{") > -1 || text.indexOf("${") > -1)) { //$NON-NLS-1$
+		if(text.indexOf('{')>-1 && (text.indexOf(EL_START_1) > -1 || text.indexOf(EL_START_2) > -1)) {
 			int offset = regionNode.getStartOffset() + region.getStart();
 			if (context.getELReference(offset) != null) return; // prevent the duplication of EL references while iterating thru the regions 
 
