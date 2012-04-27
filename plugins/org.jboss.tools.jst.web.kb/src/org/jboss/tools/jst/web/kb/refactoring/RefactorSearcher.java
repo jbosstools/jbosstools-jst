@@ -292,6 +292,9 @@ public abstract class RefactorSearcher {
 	}
 	
 	protected void searchInCach(IFile file){
+		if(file == null || !file.isAccessible() || file.isDerived(IResource.CHECK_ANCESTORS)) {
+			return;
+		}
 		ELResolver[] resolvers = ELResolverFactoryManager.getInstance().getResolvers(file);
 		
 		ELContext context = PageContextFactory.createPageContext(file);
