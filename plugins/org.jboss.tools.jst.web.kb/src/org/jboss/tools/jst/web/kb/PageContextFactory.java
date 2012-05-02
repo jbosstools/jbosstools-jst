@@ -350,7 +350,8 @@ public class PageContextFactory implements IResourceChangeListener {
 //	long ctm = 0;
 
 	/**
-	 * Creates a page context for the specified context type
+	 * Creates a page context for the specified context type.
+	 * Either file or document can be null. File is always null for documents from jar files.
 	 *
 	 * @param file
 	 * @param contentType
@@ -371,7 +372,7 @@ public class PageContextFactory implements IResourceChangeListener {
 				context = createJavaContext(file);
 			} else if(JAVA_PROPERTIES_CONTENT_TYPE.equalsIgnoreCase(typeId)) {
 				context = createPropertiesContext(file);
-			} else if(isXMLWithoutEL(file)) {
+			} else if(file != null && isXMLWithoutEL(file)) {
 				IProject project = file != null ? file.getProject() : getActiveProject();
 				context = new SimpleELContext();
 				context.setResource(file);
