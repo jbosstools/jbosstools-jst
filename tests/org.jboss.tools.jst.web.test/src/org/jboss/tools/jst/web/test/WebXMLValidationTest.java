@@ -108,6 +108,9 @@ public class WebXMLValidationTest extends TestCase {
 		markers = webxml.findMarkers(WebXMLCoreValidator.PROBLEM_TYPE, false, IResource.DEPTH_ZERO);
 		assertTrue(hasMarkerOnLine(markers, 18));
 		assertFalse(hasMarkerOnLine(markers, 19));
+
+		String patho = "WebContent/WEB-INF/web.xml.original";
+		replaceFile(project, patho, path0);
 	}
 
 	static boolean hasMarkerOnLine(IMarker[] ms, int line) {
