@@ -56,7 +56,7 @@ public class ELReferencesQueryParticipant implements IQueryParticipant{
 					String name = element.getElementName();
 					searcher = new ELSearcher(requestor, element, file, name);
 					searcher.setSearchScope(querySpecification.getScope());
-					searcher.findELReferences();
+					searcher.findELReferences(monitor);
 				}
 			}
 		}

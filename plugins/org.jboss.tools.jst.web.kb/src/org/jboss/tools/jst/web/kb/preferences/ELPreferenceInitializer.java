@@ -47,5 +47,8 @@ public class ELPreferenceInitializer extends AbstractPreferenceInitializer {
 		//KB preferences
 		defaultPreferences.put(KBSeverityPreferences.REQUIRED_KB_CAPABILITIES_ARE_MISSING, SeverityPreferences.WARNING);
 		defaultPreferences.put(KBSeverityPreferences.KB_CAPABILITIES_ARE_NOT_ENABLED_IN_JAVA_MODULE, SeverityPreferences.WARNING);
+
+		//EL Search preferences
+		defaultPreferences.putInt(ELSearchPreferences.EL_SEARCH_TIME_LIMIT, 60); //60 sec
 	}
 }

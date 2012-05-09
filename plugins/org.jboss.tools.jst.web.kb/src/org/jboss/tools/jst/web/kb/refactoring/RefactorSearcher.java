@@ -1,5 +1,5 @@
 /*******************************************************************************
-  * Copyright (c) 2009 Red Hat, Inc.
+  * Copyright (c) 2012 Red Hat, Inc.
   * Distributed under license by Red Hat, Inc. All rights reserved.
   * This program is made available under the terms of the
   * Eclipse Public License v1.0 which accompanies this distribution,
@@ -22,11 +22,13 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.search.IJavaSearchScope;
+import org.jboss.tools.common.EclipseUtil;
 import org.jboss.tools.common.el.core.ELCorePlugin;
 import org.jboss.tools.common.el.core.ELReference;
 import org.jboss.tools.common.el.core.model.ELExpression;
@@ -34,7 +36,6 @@ import org.jboss.tools.common.el.core.model.ELInvocationExpression;
 import org.jboss.tools.common.el.core.model.ELMethodInvocation;
 import org.jboss.tools.common.el.core.model.ELObject;
 import org.jboss.tools.common.el.core.model.ELPropertyInvocation;
-import org.jboss.tools.common.el.core.resolver.ELCompletionEngine;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.ELResolution;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
@@ -44,11 +45,11 @@ import org.jboss.tools.common.el.core.resolver.ElVarSearcher;
 import org.jboss.tools.common.el.core.resolver.IRelevanceCheck;
 import org.jboss.tools.common.el.core.resolver.SimpleELContext;
 import org.jboss.tools.common.el.core.resolver.Var;
-import org.jboss.tools.common.model.project.ProjectHome;
-import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.util.BeanUtil;
 import org.jboss.tools.common.util.FileUtil;
+import org.jboss.tools.common.web.WebUtils;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
+import org.jboss.tools.jst.web.kb.preferences.ELSearchPreferences;
 
 public abstract class RefactorSearcher {
 	protected static final String JAVA_EXT = "java"; //$NON-NLS-1$
@@ -68,30 +69,40 @@ public abstract class RefactorSearcher {
 	protected String propertyName;
 	protected IJavaElement javaElement;
 	protected IJavaSearchScope searchScope;
+
+	private long timeLimit = 60000; //ms use preference
+	private long timeUsed = 0;
 	
 	public RefactorSearcher(IFile baseFile, String propertyName){
 		this.baseFile = baseFile;
 		this.propertyName = propertyName;
+		if(baseFile != null) {
+			timeLimit = ELSearchPreferences.getElSearchTimeLimit(baseFile.getProject());
+		}
 	}
 	
 	public RefactorSearcher(IFile baseFile, String propertyName, IJavaElement javaElement){
 		this(baseFile, propertyName);
 		this.javaElement = javaElement;
+		if(baseFile != null) {
+			timeLimit = ELSearchPreferences.getElSearchTimeLimit(baseFile.getProject());
+		}
 	}
 	
 	public void setSearchScope(IJavaSearchScope searchScope){
 		this.searchScope = searchScope;
 	}
 	
-	private void scanProject(IProject project){
+	private void scanProject(IProject project, IProgressMonitor monitor){
 		if(project == null || !project.exists()) return;
 		if(doneProjects.contains(project)) return;
+		if(monitor != null && monitor.isCanceled()) return;
 		
 		doneProjects.add(project);
 		
 		IProject[] referencingProject = project.getReferencingProjects();
 		for(IProject rProject: referencingProject){
-			scanProject(rProject);
+			scanProject(rProject, monitor);
 		}
 		
 		if(!containsInSearchScope(project))
@@ -99,18 +110,18 @@ public abstract class RefactorSearcher {
 		
 		updateEnvironment(project);
 		
-		IJavaProject javaProject = EclipseResourceUtil.getJavaProject(project);
+		IJavaProject javaProject = EclipseUtil.getJavaProject(project);
 		
 		// searching java, xml and property files in source folders
-		if(javaProject != null){
-			for(IResource resource : EclipseResourceUtil.getJavaSourceRoots(project)){
+		if(javaProject != null) {
+			for(IResource resource : EclipseUtil.getJavaSourceRoots(project)){
 				if(resource instanceof IFolder)
-					if(!scanForJava((IFolder) resource)){
+					if(!scan(monitor, (IFolder) resource, true)){
 						outOfSynch(((IFolder) resource).getProject());
 						return;
 					}
 				else if(resource instanceof IFile)
-					if(!scanForJava((IFile) resource)){
+					if(!scan(monitor, (IFile) resource, true)){
 						outOfSynch(((IFile) resource).getProject());
 						return;
 					}
@@ -120,12 +131,12 @@ public abstract class RefactorSearcher {
 		// searching jsp, xhtml and xml files in WebContent folders
 		
 		if(getViewFolder(project) != null){
-			if(!scan(getViewFolder(project))){
+			if(!scan(monitor, getViewFolder(project), false)){
 				outOfSynch(project);
 				return;
 			}
 		}else{
-			if(!scan(project)){
+			if(!scan(monitor, project, false)){
 				outOfSynch(project);
 				return;
 			}
@@ -134,7 +145,7 @@ public abstract class RefactorSearcher {
 	
 	private HashSet<IProject> doneProjects = new HashSet<IProject>();
 
-	public final void findELReferences(){
+	public final void findELReferences(IProgressMonitor monitor){
 		if(baseFile == null)
 			return;
 		
@@ -144,7 +155,7 @@ public abstract class RefactorSearcher {
 		
 		IProject[] projects = getProjects();
 		for (IProject project : projects) {
-			scanProject(project);
+			scanProject(project, monitor);
 		}
 		//stopStatistic();
 	}
@@ -156,7 +167,7 @@ public abstract class RefactorSearcher {
 	protected abstract IProject[] getProjects();
 	
 	protected IContainer getViewFolder(IProject project) {
-		IPath path = ProjectHome.getFirstWebContentPath(project);
+		IPath path = WebUtils.getFirstWebContentPath(project);
 		
 		if(path != null)
 			return path.segmentCount() > 1 ? project.getFolder(path.removeFirstSegments(1)) : project;
@@ -164,17 +175,26 @@ public abstract class RefactorSearcher {
 		return null;
 	}
 	
-	private boolean scanForJava(IContainer container){
+	private boolean scan(IProgressMonitor monitor, IContainer container, boolean addJava) {
+		if(monitor != null && monitor.isCanceled()) {
+			return true;
+		}
+		if(timeUsed > timeLimit) {
+			return true;
+		}
+		if(container.isDerived()) {
+			return true;
+		}
 		if(container.getName().startsWith(".")) //$NON-NLS-1$
 			return true;
 		
 		try{
 			for(IResource resource : container.members()){
 				if(resource instanceof IFolder){
-					if(!scanForJava((IFolder) resource))
+					if(!scan(monitor, (IFolder) resource, addJava))
 						return false;
 				}else if(resource instanceof IFile){
-					if(!scanForJava((IFile) resource))
+					if(!scan(monitor, (IFile) resource, addJava))
 						return false;
 				}
 			}
@@ -184,26 +204,6 @@ public abstract class RefactorSearcher {
 		return true;
 	}
 
-	private boolean scan(IContainer container){
-		if(container.getName().startsWith(".")) //$NON-NLS-1$
-			return true;
-
-		try{
-			for(IResource resource : container.members()){
-				if(resource instanceof IFolder){
-					if(!scan((IFolder) resource))
-						return false;
-				}else if(resource instanceof IFile){
-					if(!scan((IFile) resource))
-						return false;
-				}
-			}
-		}catch(CoreException ex){
-			ELCorePlugin.getDefault().logError(ex);
-		}
-		return true;
-	}
-	
 	private String getFileContent(IFile file){
 		try {
 			return FileUtil.readStream(file);
@@ -221,53 +221,42 @@ public abstract class RefactorSearcher {
 	 * true - in order to continue searching
 	 * false - in order to stop searching
 	 */
-	private boolean scanForJava(IFile file){
+	private boolean scan(IProgressMonitor monitor, IFile file, boolean addJava){
 		if(isFilePhantom(file))
 			return true;
 		
 		if(isFileOutOfSynch(file))
 			return false;
 		
-		if(PROPERTIES_EXT.equalsIgnoreCase(file.getFileExtension())){
+		if(timeUsed > timeLimit) {
+			return true;
+		}
+
+		if(monitor != null && monitor.isCanceled()) {
+			return true;
+		}
+
+		if(addJava && PROPERTIES_EXT.equalsIgnoreCase(file.getFileExtension())){
 			if(file.getName().equals(SEAM_PROPERTIES_FILE)){
 				String content = getFileContent(file);
 				scanProperties(file, content);
-			}else
+			} else {
+				long t = System.currentTimeMillis();
 				searchInCach(file);
-		} else if (JAVA_EXT.equalsIgnoreCase(file.getFileExtension())
+				timeUsed += System.currentTimeMillis() - t;
+			}
+		} else if ((addJava && JAVA_EXT.equalsIgnoreCase(file.getFileExtension()))
 				|| JSP_EXT.equalsIgnoreCase(file.getFileExtension())
 				|| JSPX_EXT.equalsIgnoreCase(file.getFileExtension())
 				|| XHTML_EXT.equalsIgnoreCase(file.getFileExtension())
 				|| XML_EXT.equalsIgnoreCase(file.getFileExtension())) {
+			long t = System.currentTimeMillis();
 			searchInCach(file);
+			timeUsed += System.currentTimeMillis() - t;
 		}
 		return true;
 	}
 
-	/**
-	 * 
-	 * @param file
-	 * @return
-	 * true - in order to continue searching
-	 * false - in order to stop searching
-	 */
-	private boolean scan(IFile file){
-		if(isFilePhantom(file))
-			return true;
-		
-		if(isFileOutOfSynch(file))
-			return false;
-
-		String ext = file.getFileExtension();			
-		if(XML_EXT.equalsIgnoreCase(ext) 
-			|| XHTML_EXT.equalsIgnoreCase(ext) 
-			|| JSP_EXT.equalsIgnoreCase(ext)
-			|| JSPX_EXT.equalsIgnoreCase(ext)) {
-			searchInCach(file);
-		}
-		return true;
-	}
-	
 	private void resolveByResolvers(ELExpression operand, ELResolver[] resolvers, ELContext context, IRelevanceCheck[] checks, int offset, List<MatchArea> areas, IFile file){
 		for (int i = 0; i < resolvers.length; i++) {
 			ELResolver resolver = resolvers[i];
