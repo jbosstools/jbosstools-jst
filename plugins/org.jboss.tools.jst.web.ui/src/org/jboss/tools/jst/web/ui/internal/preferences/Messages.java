@@ -21,6 +21,8 @@ public class Messages extends NLS {
 	public static String ImplementationsPreferencesPage_Project_Templates;
 	public static String ContentAssistPreferencePage_showGettersAndSetters;
 	public static String ContentAssistPreferencePage_showMethodsWithParenthesesOnly;
+	public static String ELSearchPreferencePage_searchTimeLimit;
+	public static String ELSearchPreferencePage_searchTimeLimit_invalid;
 	
 	private Messages() {
 	}

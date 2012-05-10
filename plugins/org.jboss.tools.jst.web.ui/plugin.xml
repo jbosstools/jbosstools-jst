@@ -66,6 +66,11 @@
          class="org.jboss.tools.jst.web.ui.internal.preferences.ELValidatorPreferencePage" 
          id="org.jboss.tools.jst.web.ui.preferences.ELValidatorPreferencePage" 
          name="%PreferencePage_Validator"/>
+      <page 
+         category="org.jboss.tools.el.ui" 
+         class="org.jboss.tools.jst.web.ui.internal.preferences.ELSearchPreferencePage" 
+         id="org.jboss.tools.jst.web.ui.internal.preferences.ELSearchPreferencePage" 
+         name="%PreferencePage_Search"/>
    </extension>
    <extension
          point="org.eclipse.ui.propertyPages">
