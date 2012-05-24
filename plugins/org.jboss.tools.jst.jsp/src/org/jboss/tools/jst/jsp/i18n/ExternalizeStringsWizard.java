@@ -153,8 +153,8 @@ public class ExternalizeStringsWizard extends Wizard {
 
 	@Override
 	public boolean performFinish() {
-		String var = page1.getBundlePrefix();
-		String key = page1.getKey();
+		String bundlePrefix = page1.getBundlePrefix();
+		String keyName = page1.getKey();
 		if (!page1.isDuplicatedKeyAndValue()) {
 			IFile bundleFile = null;
 			if (page1.isNewFile()) {
@@ -194,7 +194,7 @@ public class ExternalizeStringsWizard extends Wizard {
 			 * Register new resource bundle when new file is created. 
 			 */
 			if (page1.isNewFile() && !page3.isUserDefined()) {
-				var = page3.getBundleName();
+				bundlePrefix = page3.getBundleName();
 				IProject project = ExternalizeStringsUtils.getProject(editor);
 				if (project != null) {
 					String userDefinedPath = getUserDefinedPath().toString();
@@ -263,7 +263,7 @@ public class ExternalizeStringsWizard extends Wizard {
 						XModelObject application = facesConfig.getChildByPath("application"); //$NON-NLS-1$
 						XModelObject resourceBundle = facesConfig.getModel().createModelObject("JSFResourceBundle", null); //$NON-NLS-1$
 						resourceBundle.setAttributeValue("base-name", bundlePath); //$NON-NLS-1$
-						resourceBundle.setAttributeValue("var", var); //$NON-NLS-1$
+						resourceBundle.setAttributeValue("var", bundlePrefix); //$NON-NLS-1$
 						try {
 							DefaultCreateHandler.addCreatedObject(application, resourceBundle, 0);
 						} catch (XModelException e) {
@@ -292,7 +292,7 @@ public class ExternalizeStringsWizard extends Wizard {
 								 */
 								Element loadBundle = node.getOwnerDocument().createElement(
 										jsfCoreTaglibPrefix + Constants.COLON + "loadBundle"); //$NON-NLS-1$
-								loadBundle.setAttribute("var", var); //$NON-NLS-1$
+								loadBundle.setAttribute("var", bundlePrefix); //$NON-NLS-1$
 								loadBundle.setAttribute("basename", bundlePath); //$NON-NLS-1$
 								Node elementToInsertBefore = null;
 								Node refChild = null;
@@ -316,7 +316,17 @@ public class ExternalizeStringsWizard extends Wizard {
 		/*
 		 * Replace text in the editor
 		 */
-		String replacement = "#{" + var + Constants.DOT + key + "}"; //$NON-NLS-1$ //$NON-NLS-2$
+		String replacement = null;
+		if (keyName.indexOf(Constants.DOT) > -1) {
+			/*
+			 * https://issues.jboss.org/browse/JBIDE-11551
+			 * There is a dot(.) symbol in the key name.
+			 * Use different bundle message format.
+			 */
+			replacement = "#{" + bundlePrefix + "['" + keyName + "']}"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		} else {
+			replacement = "#{" + bundlePrefix + Constants.DOT + keyName + "}"; //$NON-NLS-1$ //$NON-NLS-2$
+		}
 		page1.replaceText(replacement);
 		return true;
 	}
