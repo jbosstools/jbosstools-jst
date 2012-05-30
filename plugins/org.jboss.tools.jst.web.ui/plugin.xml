@@ -793,4 +793,8 @@
          	<keywordReference id="org.eclipse.wst.html.ui.webcontent"/>
 		</page>
 	</extension>
+	
+	<extension point="org.jboss.tools.common.text.xml.quickFix">
+		<quick-fix-generator generator-class="org.jboss.tools.jst.web.ui.action.JSPProblemMarkerResolutionGenerator" id="org.jboss.tools.jst.web.ui.action.JSPProblemMarkerResolutionGenerator" />
+    </extension>
 </plugin>

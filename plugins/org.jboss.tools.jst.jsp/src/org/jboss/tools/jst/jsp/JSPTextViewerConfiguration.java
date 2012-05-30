@@ -176,7 +176,7 @@ public class JSPTextViewerConfiguration extends StructuredTextViewerConfiguratio
 			ISourceViewer sourceViewer, String partitionType) {
 		// TODO Auto-generated method stub
 //		return super.getContentAssistProcessors(sourceViewer, partitionType);
-		return new IContentAssistProcessor[0];
+		return null;
 	}
 	
 	/**

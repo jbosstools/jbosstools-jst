@@ -10,14 +10,20 @@
  ******************************************************************************/
 package org.jboss.tools.jst.web.ui.action;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
+import org.eclipse.jface.text.contentassist.ICompletionProposal;
+import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -26,7 +32,14 @@ import org.eclipse.ui.IMarkerResolutionGenerator2;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.DocumentProviderRegistry;
 import org.eclipse.ui.texteditor.IDocumentProvider;
+import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
+import org.eclipse.wst.sse.core.internal.provisional.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
+import org.eclipse.wst.sse.ui.internal.reconcile.TemporaryAnnotation;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
+import org.jboss.tools.common.text.xml.quickfix.IQuickFixGenerator;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.JSPPaletteInsertHelper;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.PaletteTaglibInserter;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
@@ -37,7 +50,7 @@ import org.jboss.tools.jst.web.ui.WebUiPlugin;
  * @author Daniel Azarov
  *
  */
-public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGenerator2 {
+public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGenerator2, IQuickFixGenerator {
 	
 	private static final String HTML_VALIDATOR_MARKER="org.eclipse.wst.html.core.validationMarker"; //$NON-NLS-1$
 	private static final String JSP_VALIDATOR_MARKER="org.eclipse.jst.jsp.core.validationMarker"; //$NON-NLS-1$
@@ -60,6 +73,7 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 	private Properties properties;
 	private String resolutionName;
 	
+	@Override
 	public IMarkerResolution[] getResolutions(IMarker marker) {
 		try{
 			if(isOurCase(marker)){
@@ -71,6 +85,48 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 			WebUiPlugin.getPluginLog().logError(ex);
 		}
 		return new IMarkerResolution[]{};
+	}
+	
+	private ICompletionProposal isOurCase(Annotation annotation){
+		if(!(annotation instanceof TemporaryAnnotation)){
+			return null;
+		}
+		TemporaryAnnotation ta = (TemporaryAnnotation)annotation;
+		
+		
+		String message = annotation.getText();
+		if(ta.getPosition() == null)
+			return null;
+		
+		final int start = ta.getPosition().getOffset();
+		
+		final int end = ta.getPosition().getOffset()+ta.getPosition().getLength();
+		
+		if(!message.startsWith(UNKNOWN_TAG))
+			return null;
+		
+		String prefix = getPrifix(message);
+		if(prefix == null)
+			return null;
+		
+		if(!libs.containsKey(prefix))
+			return null;
+		
+		Object additionalInfo = ta.getAdditionalFixInfo();
+		if(additionalInfo instanceof IDocument){
+			IStructuredModel model = StructuredModelManager.getModelManager().getModelForRead((IStructuredDocument)additionalInfo);
+			IDOMDocument xmlDocument = (model instanceof IDOMModel) ? ((IDOMModel) model).getDocument() : null;
+			if(xmlDocument != null && xmlDocument.isXMLType()){
+				resolutionName = "xmlns: "+prefix+" = \""+libs.get(prefix)+"\""; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			}else{
+				resolutionName = "<%@ taglib uri = \""+libs.get(prefix)+"\" prefix=\""+prefix+"\" %>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			}
+			
+		}
+		
+		
+		
+		return new AddTLDMarkerResolution(resolutionName, start, end, libs.get(prefix), prefix);
 	}
 	
 	private boolean isOurCase(IMarker marker) throws CoreException{
@@ -86,7 +142,7 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 			return false;
 		final int end = attribute.intValue();
 		
-		if(!message.startsWith(UNKNOWN_TAG)) //$NON-NLS-1$
+		if(!message.startsWith(UNKNOWN_TAG))
 			return false;
 		
 		String prefix = getPrifix(message);
@@ -115,17 +171,21 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		properties.put(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX, prefix);
 		properties.put(PaletteInsertHelper.PROPOPERTY_SELECTION_PROVIDER, new ISelectionProvider() {
 			
+			@Override
 			public void setSelection(ISelection selection) {
 			}
 			
+			@Override
 			public void removeSelectionChangedListener(
 					ISelectionChangedListener listener) {
 			}
 			
+			@Override
 			public ISelection getSelection() {
 				return new TextSelection(start, end-start);
 			}
 			
+			@Override
 			public void addSelectionChangedListener(ISelectionChangedListener listener) {
 			}
 		});
@@ -163,6 +223,7 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		return prefix;
 	}
 
+	@Override
 	public boolean hasResolutions(IMarker marker) {
 		try{
 			String message = (String)marker.getAttribute(IMarker.MESSAGE);
@@ -171,5 +232,21 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 			WebUiPlugin.getPluginLog().logError(ex);
 		}
 		return false;
+	}
+
+	@Override
+	public boolean hasProposals(Annotation annotation) {
+		String message = annotation.getText();
+		return message.startsWith(UNKNOWN_TAG);
+	}
+
+	@Override
+	public List<ICompletionProposal> getProposals(Annotation annotation) {
+		ArrayList<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
+		ICompletionProposal proposal = isOurCase(annotation); 
+		if(proposal != null){
+			proposals.add(proposal);
+		}
+		return proposals;
 	}
 }
