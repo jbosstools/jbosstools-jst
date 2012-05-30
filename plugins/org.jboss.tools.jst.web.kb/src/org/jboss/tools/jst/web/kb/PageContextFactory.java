@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.filebuffers.FileBuffers;
+import org.eclipse.core.filebuffers.ITextFileBuffer;
 import org.eclipse.core.internal.resources.ICoreConstants;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -31,6 +32,7 @@ import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IStorage;
 import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -503,6 +505,18 @@ public class PageContextFactory implements IResourceChangeListener {
 				sModel.releaseFromRead();
 			}
 		}
+
+		ITextFileBuffer buffer = FileBuffers.getTextFileBufferManager().getTextFileBuffer(document);
+		if (buffer != null && buffer.getLocation() != null) {
+			IPath path = buffer.getLocation();
+			if (path.segmentCount() > 1) {
+				IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
+				if (file.isAccessible()) {
+					return file;
+				}
+			}
+		}
+
 		return null;
 	}
 	
