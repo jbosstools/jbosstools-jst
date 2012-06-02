@@ -33,6 +33,7 @@ import org.apache.tools.ant.util.ResourceUtils;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
@@ -89,6 +90,7 @@ import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
 import org.eclipse.wst.common.frameworks.datamodel.AbstractDataModelProvider;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelFactory;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
+import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.ui.IValidator;
 import org.jboss.tools.common.ui.ValidatorFactory;
 import org.jboss.tools.common.ui.widget.editor.ButtonFieldEditor;
@@ -203,8 +205,10 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 		private IFieldEditor folderEditor;
 		private String initialFileName = ""; //$NON-NLS-1$
 		private IFieldEditor fileNameEditor;
+		private IFieldEditor registerEditor;
 
 		IDataModel model;
+		FilterSetCollection viewFilterSetCollection;
 		
 
 		public WizardNewDSXMLFileCreationPage(String pageName, IStructuredSelection selection) {
@@ -243,7 +247,7 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 				File dataSourceDsFile = new File(homePath, templatePath);
 
 				//2. Create filter set for Ant.
-				FilterSetCollection viewFilterSetCollection = new FilterSetCollection();
+				viewFilterSetCollection = new FilterSetCollection();
 
 				// Do it by reusing data model provider.
 				model = DataModelFactory.createDataModel(new DSDataModelProvider());
@@ -372,6 +376,9 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 					setPageComplete(validatePage());
 				}
 			});
+			
+			registerEditor = IFieldEditorFactory.INSTANCE.createCheckboxEditor("register", Messages.NewDSXMLWizard_REGISTER_FILE_LABEL, true); //$NON-NLS-1$
+			registerEditor.doFillIntoGrid(q);
 			
 			setControl(topLevel);
 			setPageComplete(validatePage());
@@ -515,8 +522,111 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 				return null;
 			}
 			newFile = newFileHandle;
+			
+			if("true".equals(registerEditor.getValueAsString())) { //$NON-NLS-1$
+				final IFile persistenceFile = findPersistenceXMLHandle();
+				if(persistenceFile != null) {
+					final InputStream content = getPersistanceXMLContent(persistenceFile);
+					
+					op = new IRunnableWithProgress() {
+						public void run(IProgressMonitor monitor) {
+							if(!persistenceFile.exists()) {
+								CreateFileOperation op = new CreateFileOperation(persistenceFile,
+										null, content, IDEWorkbenchMessages.WizardNewFileCreationPage_title);
+								try {
+									op.execute(monitor, WorkspaceUndoUtil.getUIInfoAdapter(getShell()));
+								} catch (final ExecutionException e) {
+									getContainer().getShell().getDisplay().syncExec(
+										new Runnable() {
+											public void run() {
+												if (e.getCause() instanceof CoreException) {
+													ErrorDialog.openError(getContainer().getShell(), // Was
+																	// Utilities.getFocusShell()
+																	IDEWorkbenchMessages.WizardNewFileCreationPage_errorTitle,
+																	null, // no special
+																	// message
+																	((CoreException) e.getCause()).getStatus());
+												} else {
+													IDEWorkbenchPlugin.log(getClass(), "createNewFile()", e.getCause()); //$NON-NLS-1$
+													MessageDialog.openError(getContainer().getShell(),
+																	IDEWorkbenchMessages.WizardNewFileCreationPage_internalErrorTitle,
+																	NLS.bind(IDEWorkbenchMessages.WizardNewFileCreationPage_internalErrorMessage,
+																					e.getCause().getMessage()));
+												}
+											}
+										});
+								}
+							} else {
+								try {
+									persistenceFile.setContents(content, IResource.FORCE, monitor);
+								} catch (CoreException e) {
+									WebUiPlugin.getDefault().logError(e);
+								}
+							}
+						}
+					};
+					try {
+						getContainer().run(true, true, op);
+					} catch (InterruptedException e) {
+						return null;
+					} catch (InvocationTargetException e) {
+						// Execution Exceptions are handled above but we may still get
+						// unexpected runtime errors.
+						IDEWorkbenchPlugin.log(getClass(), "createNewFile()", e.getTargetException()); //$NON-NLS-1$
+						MessageDialog.open(MessageDialog.ERROR,
+										getContainer().getShell(),
+										IDEWorkbenchMessages.WizardNewFileCreationPage_internalErrorTitle,
+										NLS.bind(IDEWorkbenchMessages.WizardNewFileCreationPage_internalErrorMessage,
+														e.getTargetException().getMessage()), SWT.SHEET);
+					}
+				}
+			}
 			return newFile;
 		}
+
+		private IFile findPersistenceXMLHandle() {
+			IPath containerPath = getContainerFullPath();
+			IFolder folder = ResourcesPlugin.getWorkspace().getRoot().getFolder(containerPath);
+			Set<IFolder> srcs = EclipseResourceUtil.getSourceFolders(folder.getProject());
+			IFolder src = (IFolder)EclipseResourceUtil.getJavaSourceRoot(folder.getProject());
+			if(src != null) {
+				IFile result = src.getFile("META-INF/persistence.xml"); //$NON-NLS-1$
+				if(!result.exists()) {
+					for (IFolder f: srcs) {
+						IFile r = f.getFile("META-INF/persistence.xml"); //$NON-NLS-1$
+						if(r.exists()) {
+							return r;
+						}
+					}
+				}
+				//handle to be created
+				return result;
+			}
+			
+			return null;
+		}
+	
+		private InputStream getPersistanceXMLContent(IFile persistenceFile) {
+			try {
+				File homePath = DSDataModelProvider.getTemplatesFolder();
+				String templatePath = (NewDSXMLWizardFactory.AS_7_TEMPLATE.equals(templateSelEditor.getValueAsString()))
+					? "/Datasource/persistence-xml-as7.xml" //$NON-NLS-1$
+					: "/Datasource/persistence-xml-default.xml"; //$NON-NLS-1$
+				File persistenceFileTemplate = new File(homePath, templatePath);
+				StringResource sr = new StringResource();
+
+				ResourceUtils.copyResource(new FileResource(persistenceFileTemplate), sr, viewFilterSetCollection,
+						null, true, false, false, null, null, null, false);
+				
+				// 4. Return input stream for new ds file taken from StringResource.
+				return sr.getInputStream();
+			} catch (IOException e) {
+				WebUiPlugin.getDefault().logError(e);
+			}
+
+			return null;
+		}
+
 	}
 
 	/**

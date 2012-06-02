@@ -102,6 +102,7 @@ public class Messages extends NLS {
 	public static String NewDSXMLWizard_PROFILE_NOT_FOUND;
 	public static String NewDSXMLWizard_DRIVER_NOT_FOUND;
 	public static String NewDSXMLWizard_JAR_LIST_NOT_SET;
+	public static String NewDSXMLWizard_REGISTER_FILE_LABEL;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
