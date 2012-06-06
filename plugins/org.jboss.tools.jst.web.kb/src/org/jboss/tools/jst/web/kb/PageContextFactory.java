@@ -285,11 +285,16 @@ public class PageContextFactory implements IResourceChangeListener {
 		}
 	}
 
-	private ELContext createPropertiesContext(IFile file) {
+	private ELContext createPropertiesContext(IFile file, IDocument document, boolean useLastSavedStateOfFile) {
 		ELContextImpl context = new ELContextImpl();
 		context.setResource(file);
 		context.setElResolvers(ELResolverFactoryManager.getInstance().getResolvers(file));
-		String content = FileUtil.getContentFromEditorOrFile(file);
+		String content = null;
+		if(document==null || useLastSavedStateOfFile) {
+			content = FileUtil.getContentFromEditorOrFile(file);
+		} else {
+			content = document.get();
+		}
 		if(content.indexOf('{')>-1 && content.indexOf(EL_START_1) >-1 || content.indexOf(EL_START_2)>-1 ) {
 			ELReference elReference = new ValidationELReference();
 			elReference.setResource(file);
@@ -297,18 +302,19 @@ public class PageContextFactory implements IResourceChangeListener {
 			elReference.setStartPosition(0);
 			elReference.init(content);
 			context.addELReference(elReference);
-			
 		}
 		return context;
 	}
 
-	private static ELContext createJavaContext(IFile file) {
+	private static ELContext createJavaContext(IFile file, IDocument document, boolean useLastSavedStateOfFile) {
 		ELContextImpl context = new ELContextImpl();
 		context.setResource(file);
 		context.setElResolvers(ELResolverFactoryManager.getInstance().getResolvers(file));
-		String content = FileUtil.getContentFromEditorOrFile(file);
 		FastJavaPartitionScanner scaner = new FastJavaPartitionScanner();
-		Document document = new Document(content);
+		if(document==null || useLastSavedStateOfFile) {
+			String content = FileUtil.getContentFromEditorOrFile(file);
+			document = new Document(content);
+		}
 		scaner.setRange(document, 0, document.getLength());
 		IToken token = scaner.nextToken();
 		while(token!=null && token!=Token.EOF) {
@@ -371,9 +377,9 @@ public class PageContextFactory implements IResourceChangeListener {
 			String typeId = getContentTypeIdentifier(file == null ? document : file);
 
 			if(JavaCore.JAVA_SOURCE_CONTENT_TYPE.equalsIgnoreCase(typeId)) {
-				context = createJavaContext(file);
+				context = createJavaContext(file, document, !dontUseCache);
 			} else if(JAVA_PROPERTIES_CONTENT_TYPE.equalsIgnoreCase(typeId)) {
-				context = createPropertiesContext(file);
+				context = createPropertiesContext(file, document, !dontUseCache);
 			} else if(file != null && isXMLWithoutEL(file)) {
 				IProject project = file != null ? file.getProject() : getActiveProject();
 				context = new SimpleELContext();
@@ -405,7 +411,7 @@ public class PageContextFactory implements IResourceChangeListener {
 								IProject project = file != null ? file.getProject() : getActiveProject();
 								
 								context.setElResolvers(ELResolverFactoryManager.getInstance().getResolvers(project));
-								if (context instanceof JspContextImpl && !(context instanceof FaceletPageContextImpl)) {
+								if (document!=null && context instanceof JspContextImpl && !(context instanceof FaceletPageContextImpl)) {
 									// Fill JSP namespaces defined in TLDCMDocumentManager 
 									fillJSPNameSpaces((JspContextImpl)context, document);
 								}
