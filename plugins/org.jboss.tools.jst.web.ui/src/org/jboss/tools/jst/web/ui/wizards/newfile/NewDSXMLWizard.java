@@ -99,6 +99,7 @@ import org.jboss.tools.common.ui.widget.editor.CompositeEditor;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditorFactory;
 import org.jboss.tools.common.ui.widget.editor.ITaggedFieldEditor;
+import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.common.zip.UnzipOperation;
 import org.jboss.tools.jst.web.ui.Messages;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
@@ -526,7 +527,7 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 			if("true".equals(registerEditor.getValueAsString())) { //$NON-NLS-1$
 				final IFile persistenceFile = findPersistenceXMLHandle();
 				if(persistenceFile != null) {
-					final InputStream content = getPersistanceXMLContent(persistenceFile);
+					final InputStream content = getPersistanceXMLContent(persistenceFile, newFile);
 					
 					op = new IRunnableWithProgress() {
 						public void run(IProgressMonitor monitor) {
@@ -606,8 +607,13 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 			return null;
 		}
 	
-		private InputStream getPersistanceXMLContent(IFile persistenceFile) {
+		private InputStream getPersistanceXMLContent(IFile persistenceFile, IFile newFile) {
 			try {
+				FilterSet contentFilter = new FilterSet();
+				contentFilter.addFilter("content", getOldPersistenceContent(persistenceFile)); //$NON-NLS-1$
+				contentFilter.addFilter("dsSourceLocation", newFile.getFullPath().removeFirstSegments(1).toString()); //$NON-NLS-1$
+				viewFilterSetCollection.addFilterSet(contentFilter);
+				
 				File homePath = DSDataModelProvider.getTemplatesFolder();
 				String templatePath = (NewDSXMLWizardFactory.AS_7_TEMPLATE.equals(templateSelEditor.getValueAsString()))
 					? "/Datasource/persistence-xml-as7.xml" //$NON-NLS-1$
@@ -622,11 +628,39 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 				return sr.getInputStream();
 			} catch (IOException e) {
 				WebUiPlugin.getDefault().logError(e);
+			} catch (CoreException e) {
+				WebUiPlugin.getDefault().logError(e);
 			}
 
 			return null;
 		}
 
+	}
+
+	private String getOldPersistenceContent(IFile persistenceFile) throws IOException, CoreException {
+		String content = ""; //$NON-NLS-1$
+		if(!persistenceFile.exists()) {
+			return content;
+		}
+		String start = "<persistence-unit"; //$NON-NLS-1$
+		String end = "</persistence-unit>"; //$NON-NLS-1$
+		String cc = FileUtil.readStream(persistenceFile);
+		int b = cc.indexOf(start);
+		int e = cc.lastIndexOf(end);
+		if(b > 0 && e > b) {
+			while(b > 0 && Character.isWhitespace(cc.charAt(b - 1))) {
+				b--;
+			}
+			content = cc.substring(b, e + end.length());
+		}		
+		int i = content.indexOf("\"primary\""); //$NON-NLS-1$
+		if(i > 0) {
+			int k = 1;
+			while(content.indexOf("\"primary_" + k + "\"") > 0) k++; //$NON-NLS-1$ //$NON-NLS-2$
+			content = content.substring(0, i + 8) + "_" + k + content.substring(i + 8); //$NON-NLS-1$
+		}
+
+		return content;
 	}
 
 	/**
@@ -636,7 +670,7 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 		List<String> values = getConnectionProfileNameList();
 		String defaultDs = NewDSXMLWizardFactory.EMPTY_PROFILE; // Use preference, or dialog settings?
 		return values.contains(defaultDs) ? defaultDs
-				: !values.isEmpty() ? values.get(0) : NewDSXMLWizardFactory.EMPTY_PROFILE; //$NON-NLS-1$
+				: !values.isEmpty() ? values.get(0) : NewDSXMLWizardFactory.EMPTY_PROFILE;
 	}
 
 	private static List<String> getConnectionProfileNameList() {

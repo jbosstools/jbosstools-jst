@@ -8,7 +8,7 @@
       <!-- If you are running in a production environment, add a managed 
          data source, this example data source is just for development and testing! -->
       <!-- The datasource is deployed as ${ds-deployment-location}, you
-         can find it in the source at ${ds-source-location} -->
+         can find it in the source at @dsSourceLocation@ -->
       <jta-data-source>@projectName@Datasource</jta-data-source>
       <properties>
          <!-- Properties for Hibernate -->
@@ -18,5 +18,5 @@
          <!-- Print's out the SQL statement Hibernate is using to the console, useful for debugging -->
          <property name="hibernate.show_sql" value="false" />
       </properties>
-   </persistence-unit>
+   </persistence-unit>@content@
 </persistence>
