@@ -245,6 +245,9 @@ public class WebXMLCoreValidator extends ValidationErrorManager implements IVali
 		displaySubtask(WebXMLValidatorMessages.VALIDATING_PROJECT, new String[]{projectName});
 
 		IPath webContentPath = WebUtils.getFirstWebContentPath(project);
+		if(webContentPath == null) {
+			return OK_STATUS;
+		}
 		IFolder webInf = null;
 		try {
 			
