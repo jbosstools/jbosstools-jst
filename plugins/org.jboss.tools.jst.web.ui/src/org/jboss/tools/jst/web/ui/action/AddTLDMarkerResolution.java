@@ -31,6 +31,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.DocumentProviderRegistry;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
+import org.jboss.tools.common.text.xml.quickfix.IBaseMarkerResolution;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.JSPPaletteInsertHelper;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.PaletteTaglibInserter;
 import org.jboss.tools.jst.web.ui.Messages;
@@ -42,7 +43,7 @@ import org.jboss.tools.jst.web.ui.WebUiPlugin;
  * @author Daniel Azarov
  *
  */
-public class AddTLDMarkerResolution implements IMarkerResolution2, ICompletionProposal{
+public class AddTLDMarkerResolution implements IBaseMarkerResolution, ICompletionProposal{
 	private IFile file;
 	private Properties properties;
 	
@@ -75,15 +76,20 @@ public class AddTLDMarkerResolution implements IMarkerResolution2, ICompletionPr
 		IDocumentProvider provider = DocumentProviderRegistry.getDefault().getDocumentProvider(input);
 		try {
 			provider.connect(input);
+			
+			boolean dirty = provider.canSaveDocument(input);
 		
 			IDocument document = provider.getDocument(input);
 			
 			PaletteTaglibInserter inserter = new PaletteTaglibInserter();
 			inserter.inserTaglib(document, properties);
 			
-			provider.aboutToChange(input);
-			provider.saveDocument(new NullProgressMonitor(), input, document, true);
-			provider.changed(input);
+			if(!dirty){
+				provider.aboutToChange(input);
+				provider.saveDocument(new NullProgressMonitor(), input, document, true);
+				provider.changed(input);
+			}
+			
 			provider.disconnect(input);
 		}catch(CoreException ex){
 			WebUiPlugin.getPluginLog().logError(ex);
