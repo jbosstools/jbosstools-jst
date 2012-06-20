@@ -148,6 +148,7 @@ public class ELValidator extends WebValidator implements IAsYouTypeValidator {
 	@Override
 	public void init(IProject project, ContextValidationHelper validationHelper, IProjectValidationContext context, org.eclipse.wst.validation.internal.provisional.core.IValidator manager, IReporter reporter) {
 		super.init(project, validationHelper, context, manager, reporter);
+		setAsYouTypeValidation(false);
 		resolvers = ELResolverFactoryManager.getInstance().getResolvers(project);
 		mainFactory = ELParserUtil.getJbossFactory();
 		validateVars = ELSeverityPreferences.ENABLE.equals(ELSeverityPreferences.getInstance().getProjectPreference(validatingProject, ELSeverityPreferences.CHECK_VARS));
@@ -251,6 +252,7 @@ public class ELValidator extends WebValidator implements IAsYouTypeValidator {
 	@Override
 	public void validate(IValidator validatorManager, IProject rootProject, IRegion dirtyRegion, IValidationContext helper, IReporter reporter, EditorValidationContext validationContext, IProjectValidationContext projectContext, IFile file) {
 		init(rootProject, null, projectContext, validatorManager, reporter);
+		setAsYouTypeValidation(true);
 		this.document = validationContext.getDocument();
 		ELContext elContext = PageContextFactory.createPageContext(validationContext.getDocument(), true);
 		Set<ELReference> references = elContext.getELReferences(dirtyRegion);
