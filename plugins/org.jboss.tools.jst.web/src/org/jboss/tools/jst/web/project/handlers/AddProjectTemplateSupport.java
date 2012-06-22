@@ -19,6 +19,9 @@ import org.jboss.tools.common.meta.action.XActionInvoker;
 import org.jboss.tools.common.meta.action.impl.*;
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelException;
+import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.filesystems.FileSystemsHelper;
+import org.jboss.tools.common.model.filesystems.impl.FileSystemsLoader;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.project.IModelNature;
@@ -167,6 +170,13 @@ public class AddProjectTemplateSupport extends MultistepWizardSupport {
 		resourcesStep.copyProjectToTemplate(target, source, model);
 		velocityStep.createPreprocessingFile(target);
 		propertiesStep.createPropertiesFile(target);
+
+		File settings = new File(target, IModelNature.PROJECT_FILE);
+		if(!settings.isFile()) {
+			settings.getParentFile().mkdirs();
+			XModelObject fs = FileSystemsHelper.getFileSystems(model);
+			new FileSystemsLoader().saveTo(settings, fs);
+		}
 
     	getProperties().setProperty("name", name); //$NON-NLS-1$
 	}
