@@ -584,17 +584,19 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 			}
 			return newFile;
 		}
+	
+		static final String PERSISTENCE_XML_PATH = "META-INF/persistence.xml"; //$NON-NLS-1$
 
 		private IFile findPersistenceXMLHandle() {
 			IPath containerPath = getContainerFullPath();
-			IFolder folder = ResourcesPlugin.getWorkspace().getRoot().getFolder(containerPath);
-			Set<IFolder> srcs = EclipseResourceUtil.getSourceFolders(folder.getProject());
-			IFolder src = (IFolder)EclipseResourceUtil.getJavaSourceRoot(folder.getProject());
+			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(containerPath.segment(0));
+			Set<IFolder> srcs = EclipseResourceUtil.getSourceFolders(project);
+			IFolder src = (IFolder)EclipseResourceUtil.getJavaSourceRoot(project);
 			if(src != null) {
-				IFile result = src.getFile("META-INF/persistence.xml"); //$NON-NLS-1$
+				IFile result = src.getFile(PERSISTENCE_XML_PATH);
 				if(!result.exists()) {
 					for (IFolder f: srcs) {
-						IFile r = f.getFile("META-INF/persistence.xml"); //$NON-NLS-1$
+						IFile r = f.getFile(PERSISTENCE_XML_PATH);
 						if(r.exists()) {
 							return r;
 						}
