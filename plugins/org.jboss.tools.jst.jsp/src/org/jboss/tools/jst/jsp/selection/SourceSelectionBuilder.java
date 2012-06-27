@@ -32,6 +32,9 @@ public class SourceSelectionBuilder {
 	}
 
 	public SourceSelection getSelection() {
+		if(sourceEditor == null || sourceEditor.getTextViewer() == null){
+			return null;
+		}
 		Point range = sourceEditor.getTextViewer().getSelectedRange();
 		int anchorPosition = range.x;
 		int focusPosition = range.x + range.y;
