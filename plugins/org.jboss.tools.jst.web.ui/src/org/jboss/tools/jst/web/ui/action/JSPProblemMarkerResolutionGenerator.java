@@ -20,6 +20,7 @@ import java.util.Set;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
@@ -87,7 +88,7 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		return new IMarkerResolution[]{};
 	}
 	
-	private ICompletionProposal isOurCase(Annotation annotation){
+	private IJavaCompletionProposal isOurCase(Annotation annotation){
 		if(!(annotation instanceof TemporaryAnnotation)){
 			return null;
 		}
@@ -241,9 +242,9 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 	}
 
 	@Override
-	public List<ICompletionProposal> getProposals(Annotation annotation) {
-		ArrayList<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
-		ICompletionProposal proposal = isOurCase(annotation); 
+	public List<IJavaCompletionProposal> getProposals(Annotation annotation) {
+		ArrayList<IJavaCompletionProposal> proposals = new ArrayList<IJavaCompletionProposal>();
+		IJavaCompletionProposal proposal = isOurCase(annotation); 
 		if(proposal != null){
 			proposals.add(proposal);
 		}

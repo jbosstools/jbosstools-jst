@@ -16,9 +16,9 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
-import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -26,7 +26,6 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.ui.IMarkerResolution2;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.DocumentProviderRegistry;
 import org.eclipse.ui.texteditor.IDocumentProvider;
@@ -43,7 +42,7 @@ import org.jboss.tools.jst.web.ui.WebUiPlugin;
  * @author Daniel Azarov
  *
  */
-public class AddTLDMarkerResolution implements IBaseMarkerResolution, ICompletionProposal{
+public class AddTLDMarkerResolution implements IBaseMarkerResolution, IJavaCompletionProposal{
 	private IFile file;
 	private Properties properties;
 	
@@ -159,5 +158,10 @@ public class AddTLDMarkerResolution implements IBaseMarkerResolution, ICompletio
 	@Override
 	public IContextInformation getContextInformation() {
 		return null;
+	}
+
+	@Override
+	public int getRelevance() {
+		return 0;
 	}
 }
