@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 Exadel, Inc. and Red Hat, Inc.
+ * Copyright (c) 2007-2012 Exadel, Inc. and Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -453,22 +453,29 @@ public class BundleMap {
 	}
 	
 	public String getBundleValue(String name) {
-//		System.out.println("\n1 BM -> getBundleValue -> " + name);
-//		System.out.println("2 BM -> showBundleUsageAsEL = "
-//				+ showBundleUsageAsEL);
 		String bundleValue = name;
 		if (!showBundleUsageAsEL) {
 			List<ELInstance> is = parseJSFExpression(name);
 			if (is != null) {
 				StringBuffer sb = new StringBuffer();
 				int index = 0;
+				boolean parsingErrors = false;
 				for (ELInstance i : is) {
+					/*
+					 * https://issues.jboss.org/browse/JBIDE-10531
+					 * Getting the bundle value should not succeed 
+					 * if the EL is missing any required token.
+					 */
+					if (!i.getErrors().isEmpty()) {
+						parsingErrors = true;
+						break;
+					}
 					int start = i.getStartPosition();
 					sb.append(name.substring(index, start));
 					index = start;
 					if (i.getExpression() instanceof ELInvocationExpression) {
-						ELInvocationExpression expr = (ELInvocationExpression) i
-								.getExpression();
+						ELInvocationExpression expr = 
+								(ELInvocationExpression) i.getExpression();
 						String[] values = getCall(expr);
 						if (values != null) {
 							String value = getBundleValue(values[0], values[1]);
@@ -476,12 +483,13 @@ public class BundleMap {
 								sb.append(value);
 								index = i.getEndPosition();
 							}
-
 						}
 					}
 					if (index < i.getEndPosition()) {
-						// fix has been added by Maksim Areshkau
-						// https://jira.jboss.org/jira/browse/JBIDE-6064
+						/*
+						 * https://jira.jboss.org/jira/browse/JBIDE-6064
+						 * CA out of range error occurs sometimes
+						 */
 						if (name.length() > i.getEndPosition()) {
 							sb.append(name.substring(index, i.getEndPosition()));
 							index = i.getEndPosition();
@@ -491,10 +499,11 @@ public class BundleMap {
 						}
 					}
 				}
-				bundleValue = sb.append(name.substring(index)).toString();
+				if (!parsingErrors) {
+					bundleValue = sb.append(name.substring(index)).toString();
+				}
 			}
 		}
-//		System.out.println("3 BM -> getBundleValue -> " + bundleValue);
 		return bundleValue;
 	}
 	
