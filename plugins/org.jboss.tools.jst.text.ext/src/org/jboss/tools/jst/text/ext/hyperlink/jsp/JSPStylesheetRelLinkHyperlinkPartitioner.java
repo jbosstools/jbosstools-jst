@@ -42,6 +42,9 @@ public class JSPStylesheetRelLinkHyperlinkPartitioner extends AbstractHyperlinkP
 	private static final String URL_METHODSTART = "url("; //$NON-NLS-1$
 	private static final String URL_METHODEND = ")"; //$NON-NLS-1$
 	private static final String URL_METHODEND_2 = ";"; //$NON-NLS-1$
+	private static final String EL_DOLLAR_PREFIX = "${"; //$NON-NLS-1$
+	private static final String EL_SUFFIX = "}"; //$NON-NLS-1$
+	private static final String EL_SHARP_PREFIX = "#{"; //$NON-NLS-1$
 	
 	/**
 	 * @see com.ibm.sse.editor.hyperlink.AbstractHyperlinkPartitioner#parse(org.eclipse.jface.text.IDocument, com.ibm.sse.editor.extensions.hyperlink.IHyperlinkRegion)
@@ -151,7 +154,6 @@ public class JSPStylesheetRelLinkHyperlinkPartitioner extends AbstractHyperlinkP
 	protected IRegion getRegion (IDocument document, int offset) {
 		StructuredModelWrapper smw = new StructuredModelWrapper();
 		smw.init(document);
-		smw.init(document);
 		try {
 			Document xmlDocument = smw.getDocument();
 			if (xmlDocument == null) return null;
@@ -161,30 +163,53 @@ public class JSPStylesheetRelLinkHyperlinkPartitioner extends AbstractHyperlinkP
 			if (n == null || !(n instanceof Text || n instanceof Attr)) return null;
 			
 			String text = null;
-			int bStart = 0;
-			int bEnd = 0;
-			
+			int start = 0;
+			int end = 0;
 			if (n instanceof Text) {
-				int start = Utils.getValueStart(n);
-				int end = Utils.getValueEnd(n);
+				start = Utils.getValueStart(n);
+				end = Utils.getValueEnd(n);
 
 				if (start < 0 || start > offset) return null;
 	
 				text = document.get(start, end - start);
-				bStart = offset - start;
-				bEnd = offset - start;
+//				bStart = offset - start;
+//				bEnd = offset - start;
 			} else if (n instanceof Attr) {
 				Attr attr = (Attr)n;
 				if (!HREF_ATTRNAME.equalsIgnoreCase(attr.getName())) return null;
-				int start = Utils.getValueStart(n);
-				int end = Utils.getValueEnd(n);
+				start = Utils.getValueStart(n);
+				end = Utils.getValueEnd(n);
 				if(start < 0) return null;
 				
 				text = document.get(start, end - start);
-				bStart = offset - start;
-				bEnd = offset - start;
+//				bStart = offset - start;
+//				bEnd = offset - start;
 			}
+			
 			StringBuffer sb = new StringBuffer(text);
+			int bStart = 0; 
+			int bEnd = sb.length();
+
+			// In case of attribute value we need to skip leading and ending quotes && whitespaces
+			while (bStart < bEnd && (sb.charAt(bStart) == '"' || sb.charAt(bStart) == '\'' ||
+					sb.charAt(bStart) == 0x09 || sb.charAt(bStart) == 0x0A ||
+					sb.charAt(bStart) == 0x0D || sb.charAt(bStart) == 0x20)) {
+				bStart++;
+			}
+			
+			while (bEnd - 1 > bStart && (sb.charAt(bEnd - 1) == '"' || sb.charAt(bEnd - 1) == '\'' ||
+					sb.charAt(bEnd - 1) == 0x09 || sb.charAt(bEnd - 1) == 0x0A ||
+					sb.charAt(bEnd - 1) == 0x0D || sb.charAt(bEnd - 1) == 0x20)) {
+				bEnd--;
+			}
+			if (start + bStart > offset || start + bEnd - 1 < offset) return null;
+
+			int elStart = sb.indexOf(EL_SHARP_PREFIX) == -1 ? sb.indexOf(EL_DOLLAR_PREFIX) : sb.indexOf(EL_SHARP_PREFIX);
+			if (elStart != -1  && elStart >= bStart && elStart < bEnd) {
+				int elEnd = sb.indexOf(EL_SUFFIX, elStart);
+				bStart = (elEnd == -1 || elEnd > bEnd) ? bEnd : elEnd + 1;
+			}
+			
 			//find start of bean property
 			while (bStart >= 0) { 
 				if (!Character.isJavaIdentifierPart(sb.charAt(bStart)) &&
