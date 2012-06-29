@@ -63,6 +63,8 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.jst.j2ee.project.JavaEEProjectUtilities;
+import org.eclipse.jst.j2ee.project.WebUtilities;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -87,6 +89,9 @@ import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.ui.internal.ide.IIDEHelpContextIds;
 import org.eclipse.ui.internal.wizards.newresource.ResourceMessages;
 import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
+import org.eclipse.wst.common.componentcore.ComponentCore;
+import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
+import org.eclipse.wst.common.componentcore.resources.IVirtualReference;
 import org.eclipse.wst.common.frameworks.datamodel.AbstractDataModelProvider;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelFactory;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
@@ -588,8 +593,10 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 		static final String PERSISTENCE_XML_PATH = "META-INF/persistence.xml"; //$NON-NLS-1$
 
 		private IFile findPersistenceXMLHandle() {
-			IPath containerPath = getContainerFullPath();
-			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(containerPath.segment(0));
+			IProject project = findJavaProject();
+			if(project == null) {
+				return null;
+			}
 			Set<IFolder> srcs = EclipseResourceUtil.getSourceFolders(project);
 			IFolder src = (IFolder)EclipseResourceUtil.getJavaSourceRoot(project);
 			if(src != null) {
@@ -604,6 +611,37 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 				}
 				//handle to be created
 				return result;
+			}
+			
+			return null;
+		}
+
+		/**
+		 * If current project is a Java project, returns it.
+		 * If current project is a EAR project, returns a component EJB project, if it is available.
+		 * Otherwise, returns null.
+		 * @return
+		 */
+		private IProject findJavaProject() {
+			IPath containerPath = getContainerFullPath();
+			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(containerPath.segment(0));
+			if(EclipseResourceUtil.getJavaProject(project) != null) {
+				return project;
+			}
+			if(JavaEEProjectUtilities.isEARProject(project)) {
+				IVirtualComponent comp = ComponentCore.createComponent(project);
+				if(comp != null) {
+					IVirtualReference[] refComponents = comp.getReferences();
+					for (IVirtualReference virtualReference : refComponents) {
+						IVirtualComponent component = virtualReference.getReferencedComponent();
+						if(component != null && !component.isBinary() && !WebUtilities.isDynamicWebComponent(component)) {
+							IProject p = component.getProject();
+							if(JavaEEProjectUtilities.isEJBProject(p)) {
+								return p;
+							}
+						}
+					}
+				}
 			}
 			
 			return null;
