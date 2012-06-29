@@ -514,16 +514,36 @@ public class BundleMap {
 		String name = expr.getMemberName();
 		if(name == null || name.length() == 0) return null;
 		if(expr instanceof ELPropertyInvocation) {
+			/*
+			 * Simple EL like #{bundle.key} goes here
+			 */
 			return new String[]{left.getText(), name};
 		} else if(expr instanceof ELArgumentInvocation) {
+			/*
+			 * EL like #{bundle['compound.key']} goes here
+			 */
 			if(name.startsWith("\"") || name.startsWith("'")) { //$NON-NLS-1$ //$NON-NLS-2$
 				name = name.substring(1);
+			} else {
+				/*
+				 * https://issues.jboss.org/browse/JBIDE-10531
+				 * EL with no quotes cannot be used to determine the bundle value.
+				 */
+				return null;
 			}
 			if(name.endsWith("\"") || name.endsWith("'")) { //$NON-NLS-1$ //$NON-NLS-2$
 				name = name.substring(0, name.length() - 1);
+			} else {
+				/*
+				 * https://issues.jboss.org/browse/JBIDE-10531
+				 * EL with no quotes cannot be used to determine the bundle value.
+				 */
+				return null;
 			}
-			if(name.length() == 0) return null;
-			return new String[]{left.getText(), name};
+			if (name.length() == 0) {
+				return null;
+			}
+			return new String[] { left.getText(), name };
 		}
 		return null;
 	}
