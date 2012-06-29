@@ -382,7 +382,7 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 		if (query == null)
 			query = ""; //$NON-NLS-1$
 
-		StringBuffer stringQuery = new StringBuffer();
+		StringBuilder stringQuery = new StringBuilder();
 		if (query.indexOf(':') == -1 && prefix != null && prefix.length() > 0) {
 			stringQuery.append(prefix).append(':');
 		}
