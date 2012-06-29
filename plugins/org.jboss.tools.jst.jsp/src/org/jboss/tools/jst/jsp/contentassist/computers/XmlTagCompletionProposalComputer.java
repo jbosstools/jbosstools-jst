@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Red Hat, Inc.
+ * Copyright (c) 2010-2012 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -359,9 +359,11 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 						continue;	// Don't query proposals for the default value here
 					
 					String possibleURI = namespace.getURI();
-					String possibleQuery = namespace.getPrefix() + ":" + query; //$NON-NLS-1$
+					if (possibleURI == null || possibleURI.length() == 0)
+						continue;
+					
 					addTagNameProposalsForPrefix(contentAssistRequest, childPosition, 
-							possibleQuery, possiblePrefix, possibleURI, 
+							query, possiblePrefix, possibleURI, 
 							TextProposal.R_TAG_INSERTION - 1, 
 							insertTagOpenningCharacter);
 				}
@@ -379,9 +381,14 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 			boolean insertTagOpenningCharacter) {
 		if (query == null)
 			query = ""; //$NON-NLS-1$
-		String stringQuery = "<" + query; //$NON-NLS-1$
-				
-		KbQuery kbQuery = createKbQuery(Type.TAG_NAME, query, stringQuery, prefix, uri);
+
+		StringBuilder stringQuery = new StringBuilder();
+		if (query.indexOf(':') == -1 && prefix != null && prefix.length() > 0) {
+			stringQuery.append(prefix).append(':');
+		}
+		stringQuery.append(query);
+		
+		KbQuery kbQuery = createKbQuery(Type.TAG_NAME, stringQuery.toString(), '<' + stringQuery.toString(), prefix, uri);
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext(), true);
 		
 		for (int i = 0; proposals != null && i < proposals.length; i++) {
