@@ -1,0 +1,22 @@
+<html>
+    <head>
+    <link href="styleParentToChildRestrictions.css" rel="stylesheet" type="text/css"></link>
+    </head>
+    
+    <body>
+
+	<div title="a" class="bc">
+		1. This matches ([title="a"].bc). 
+		<i> 2. This matches (.bc i).</i> 
+		<i class="bc"> 3. This matches ([title="a"] .bc).</i> 
+	</div>
+	
+	<div> <p class="s1"> 
+	   4. This should not match (div * .s1).  
+	   <b class="s1"> 5. This matches (div * .s1).</b> </p></div>
+	   
+	<div> <p class="s2">
+		6. This matches (div p.s2).
+	</p></div>
+    </body>
+</html>

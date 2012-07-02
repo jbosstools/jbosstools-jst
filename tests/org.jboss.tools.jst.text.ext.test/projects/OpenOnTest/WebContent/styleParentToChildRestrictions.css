@@ -1,0 +1,11 @@
+.bb {background-color: red;}
+
+[title="a"].bc {background-color: aqua;}
+
+[title="a"] .bc {background-color: green;}
+
+.bc i {background-color: blue;}
+
+div * .s1 {background-color: yellow;}
+
+div p.s2 {background-color: brown;}

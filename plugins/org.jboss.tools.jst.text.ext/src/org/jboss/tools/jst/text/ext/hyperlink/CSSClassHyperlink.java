@@ -394,13 +394,13 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 						attrFound = allValuesAreOK;
 					}
 
+					// proceed with parent node
+					node = node.getParentNode();
+
 					if (classFound && nodeFound && attrFound) {
 						// Proceed with next Axis
 						break;
 					}
-					
-					// proceed with parent node
-					node = node.getParentNode();
 				} while (node instanceof Element);
 
 				
