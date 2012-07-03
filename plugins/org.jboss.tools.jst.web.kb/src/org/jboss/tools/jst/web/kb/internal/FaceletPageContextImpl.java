@@ -10,9 +10,12 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal;
 
+import java.util.List;
 import java.util.Map;
 
+import org.jboss.tools.common.el.core.resolver.Var;
 import org.jboss.tools.jst.web.kb.IFaceletPageContext;
+import org.jboss.tools.jst.web.kb.include.IncludeModel;
 
 /**
  * Facelet page context
@@ -22,6 +25,11 @@ public class FaceletPageContextImpl extends JspContextImpl implements IFaceletPa
 
 	private IFaceletPageContext parentContext;
 	private Map<String, String> params;
+
+	public List<Var> getExternalVars() {
+		List<Var> res = IncludeModel.getInstance().getVars(getResource().getFullPath());
+		return res == null ? super.getExternalVars() : res;
+	}
 
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.IFaceletPageContext#getParams()

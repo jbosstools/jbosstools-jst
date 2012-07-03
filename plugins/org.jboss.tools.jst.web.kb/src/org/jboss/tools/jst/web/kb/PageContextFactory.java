@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import java.util.Set;
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.ITextFileBuffer;
 import org.eclipse.core.internal.resources.ICoreConstants;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -74,6 +76,7 @@ import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegionList;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
@@ -93,7 +96,10 @@ import org.jboss.tools.common.text.ext.util.Utils;
 import org.jboss.tools.common.util.EclipseUIUtil;
 import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.common.validation.ValidationELReference;
+import org.jboss.tools.jst.web.WebUtils;
 import org.jboss.tools.jst.web.kb.include.IncludeContextBuilder;
+import org.jboss.tools.jst.web.kb.include.IncludeModel;
+import org.jboss.tools.jst.web.kb.include.PageInclude;
 import org.jboss.tools.jst.web.kb.internal.FaceletPageContextImpl;
 import org.jboss.tools.jst.web.kb.internal.JspContextImpl;
 import org.jboss.tools.jst.web.kb.internal.ResourceBundle;
@@ -415,6 +421,10 @@ public class PageContextFactory implements IResourceChangeListener {
 									// Fill JSP namespaces defined in TLDCMDocumentManager 
 									fillJSPNameSpaces((JspContextImpl)context, document);
 								}
+								
+								if(file != null) {
+									IncludeModel.getInstance().clean(file.getFullPath());
+								}
 								// The subsequently called functions may use the file and document
 								// already stored in context for their needs
 								fillContextForChildNodes(model.getStructuredDocument(), domDocument, context, parents);
@@ -604,6 +614,9 @@ public class PageContextFactory implements IResourceChangeListener {
 		}
 
 		if (context instanceof FaceletPageContextImpl) {
+			if(node instanceof IDOMElement && context.getResource() != null && context.getResource().exists()) {
+				fillUIParamsForNode((IDOMElement)node, (ELContextImpl)context);
+			}
 			// Insert here the initialization code for FaceletPage context elements which may exist in Text nodes
 		}
 
@@ -631,6 +644,88 @@ public class PageContextFactory implements IResourceChangeListener {
 
 			context.addVar(new Region(start, length), var);
 		}
+	}
+
+	private static void fillUIParamsForNode(IDOMElement node, ELContextImpl context) {
+		String ATTR_SRC = "src"; //$NON-NLS-1$
+		String NODE_PARAM = "param"; //$NON-NLS-1$
+		String ATTR_NAME = "name"; //$NON-NLS-1$
+		String ATTR_VALUE = "value"; //$NON-NLS-1$
+		if(IncludeContextBuilder.TAG_INCLUDE.equals(node.getLocalName()) && CustomTagLibManager.FACELETS_UI_TAG_LIB_URI.equals(node.getNamespaceURI())) {
+			String src = node.getAttribute(ATTR_SRC);
+			if(src == null || src.trim().length() == 0) {
+				return;
+			}
+			IFile includedFile = getFile(src, context.getResource());
+			if(includedFile == null) return;
+			NodeList list = node.getElementsByTagNameNS (CustomTagLibManager.FACELETS_UI_TAG_LIB_URI, NODE_PARAM);
+			List<Var> vars = null;
+			for (int i = 0; i < list.getLength(); i++) {
+				Node n = list.item(i);
+				if(n instanceof IDOMElement) {
+					IDOMElement element = (IDOMElement)n;
+					synchronized (element) {
+						if(element.hasAttribute(ATTR_NAME)) {
+							String var = element.getAttribute(ATTR_NAME);
+							int declOffset = 0;
+							int declLength = 0;
+							Node varAttr = element.getAttributeNode(ATTR_NAME); 
+							if (varAttr instanceof IDOMAttr) {
+								int varNameStart = ((IDOMAttr)varAttr).getNameRegionStartOffset();
+								int varNameEnd = ((IDOMAttr)varAttr).getNameRegionEndOffset();
+								declOffset = varNameStart;
+								declLength = varNameEnd - varNameStart;
+							}
+							var = var.trim();
+							if(!"".equals(var)) { //$NON-NLS-1$					
+								if(element.hasAttribute(ATTR_VALUE)) {
+									String value = element.getAttribute(ATTR_VALUE);
+									value = value.trim();
+									Var newVar = new Var(ELParserUtil.getJbossFactory(), var, value, declOffset, declLength);
+									if(newVar.getElToken()!=null) {
+										if(vars == null) {
+											vars = new ArrayList<Var>();
+										}
+										vars.add(newVar);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if(!vars.isEmpty()) {
+				PageInclude include = new PageInclude(context.getResource().getFullPath(), includedFile.getFullPath(), vars);
+				IncludeModel.getInstance().addInclude(context.getResource().getFullPath(), include);
+			}
+		}	
+	}
+
+	public static IFile getFile(String fileName, IFile includeFile) {
+		IFile file = null;
+		if (fileName.startsWith("/")) { //$NON-NLS-1$
+			IContainer[] webRootFolders = WebUtils.getWebRootFolders(includeFile.getProject());
+			if (webRootFolders.length > 0) {
+				for (IContainer webRootFolder : webRootFolders) {
+					IFile handle = webRootFolder.getFile(new Path(fileName));
+					if (handle.exists()) {
+						file = handle;
+						break;
+					}
+				}
+			} else {
+				file = resolveRelatedPath(includeFile, fileName); // ?
+			}
+		} else {
+			file = resolveRelatedPath(includeFile, fileName);
+		}
+		return file;
+	}	
+	private static IFile resolveRelatedPath(IFile baseFile,
+			String relatedFilePath) {
+		IPath currentFolder = baseFile.getParent().getFullPath();
+		IPath path = currentFolder.append(relatedFilePath);
+		return ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 	}
 
 	private static void fillElReferencesForNode(IDocument document, IDOMNode node, XmlContextImpl context) {
