@@ -615,8 +615,8 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 						break;
 					sb.append(ch);
 				}
+				rest = rest.substring(0, index) + rest.substring(index + sb.length() + 1);
 				if (sb.length() > 0) {
-					rest = rest.substring(0, index) + rest.substring(index + sb.length() + 1);
 					String idAttributeValue = sb.toString().trim();
 					if (idAttributeValue.length() > 0) {
 						idAttributeValues.add(idAttributeValue);
@@ -633,8 +633,8 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 						break;
 					sb.append(ch);
 				}
+				rest = rest.substring(0, index) + rest.substring(index + sb.length() + 1);
 				if (sb.length() > 0) {
-					rest = rest.substring(0, index) + rest.substring(index + sb.length() + 1);
 					String className = sb.toString().trim();
 					if (className.length() > 0) {
 						classNames.add(className);
@@ -656,8 +656,8 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 						break;
 					sb.append(ch);
 				}
+				rest = rest.substring(0, index) + rest.substring(index + sb.length() + 1);
 				if (sb.length() > 0) {
-					rest = rest.substring(0, index) + rest.substring(index + sb.length() + 1);
 					String pseudo = sb.toString().trim();
 					if (isValidPseudo(pseudo, VALID_PSEUDO_CLASSES)) {
 						pseudoClasses.add(pseudo);
