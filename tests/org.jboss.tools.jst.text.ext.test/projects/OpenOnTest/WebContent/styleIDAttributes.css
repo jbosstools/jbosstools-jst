@@ -1,0 +1,11 @@
+.bc {background-color: aqua;}
+
+.bc .cd {background-color: green;}
+
+#Header .bc {background-color: yellow;}
+
+#Header .bc .cd {background-color: black;}
+
+#Footer .bc {background-color: blue;}
+
+#Footer .bc .cd {background-color: brown;}

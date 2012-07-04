@@ -388,7 +388,8 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 							}
 						}
 						if (currentAxis.idAttributeValues.size() > 0) {
-							allValuesAreOK &= currentAxis.idAttributeValues.contains(Utils.trimQuotes(getNodeAttributeValue(node, "id"))); //$NON-NLS-1$
+							String nodeIDAttributeValue = Utils.trimQuotes(getNodeAttributeValue(node, "id"));  //$NON-NLS-1$
+							allValuesAreOK &= currentAxis.idAttributeValues.contains(nodeIDAttributeValue == null ? null : nodeIDAttributeValue.toLowerCase());
 						}
 
 						attrFound = allValuesAreOK;
