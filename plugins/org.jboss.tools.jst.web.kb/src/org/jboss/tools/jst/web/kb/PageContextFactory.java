@@ -10,7 +10,6 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -98,7 +97,6 @@ import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.common.validation.ValidationELReference;
 import org.jboss.tools.jst.web.WebUtils;
 import org.jboss.tools.jst.web.kb.include.IncludeContextBuilder;
-import org.jboss.tools.jst.web.kb.include.IncludeModel;
 import org.jboss.tools.jst.web.kb.include.PageInclude;
 import org.jboss.tools.jst.web.kb.internal.FaceletPageContextImpl;
 import org.jboss.tools.jst.web.kb.internal.JspContextImpl;
@@ -649,63 +647,77 @@ public class PageContextFactory implements IResourceChangeListener {
 		}
 	}
 
+	static String TAG_COMPOSITION = "composition"; //$NON-NLS-1$
+	static String TAG_DECORATE = "decorate"; //$NON-NLS-1$
+	static String ATTR_TEMPLATE = "template"; //$NON-NLS-1$
 	static String ATTR_SRC = "src"; //$NON-NLS-1$
 	static String NODE_PARAM = "param"; //$NON-NLS-1$
 	static String ATTR_NAME = "name"; //$NON-NLS-1$
 	static String ATTR_VALUE = "value"; //$NON-NLS-1$
+	static Map<String, String> PATH_ATTRIBUTES = new HashMap<String, String>();
+	static {
+		PATH_ATTRIBUTES.put(TAG_COMPOSITION, ATTR_TEMPLATE);
+		PATH_ATTRIBUTES.put(TAG_DECORATE, ATTR_TEMPLATE);
+		PATH_ATTRIBUTES.put(IncludeContextBuilder.TAG_INCLUDE, ATTR_SRC);
+	}
 
 	private static void fillUIParamsForNode(IDOMElement node, ELContextImpl context) {
-		if(IncludeContextBuilder.TAG_INCLUDE.equals(node.getLocalName()) && CustomTagLibManager.FACELETS_UI_TAG_LIB_URI.equals(node.getNamespaceURI())) {
-			String src = node.getAttribute(ATTR_SRC);
-			if(src == null || src.trim().length() == 0) {
-				return;
-			}
-			IFile includedFile = getFile(src, context.getResource());
-			if(includedFile == null) return;
-			NodeList list = node.getElementsByTagNameNS (CustomTagLibManager.FACELETS_UI_TAG_LIB_URI, NODE_PARAM);
-			List<Var> vars = null;
-			for (int i = 0; i < list.getLength(); i++) {
-				Node n = list.item(i);
-				if(n instanceof IDOMElement) {
-					IDOMElement element = (IDOMElement)n;
-					synchronized (element) {
-						if(element.hasAttribute(ATTR_NAME)) {
-							String var = element.getAttribute(ATTR_NAME);
-							int declOffset = 0;
-							int declLength = 0;
-							Node varAttr = element.getAttributeNode(ATTR_NAME); 
-							if (varAttr instanceof IDOMAttr) {
-								int varNameStart = ((IDOMAttr)varAttr).getNameRegionStartOffset();
-								int varNameEnd = ((IDOMAttr)varAttr).getNameRegionEndOffset();
-								declOffset = varNameStart;
-								declLength = varNameEnd - varNameStart;
-							}
-							var = var.trim();
-							if(!"".equals(var)) { //$NON-NLS-1$					
-								if(element.hasAttribute(ATTR_VALUE)) {
-									String value = element.getAttribute(ATTR_VALUE);
-									value = value.trim();
-									Var newVar = new Var(ELParserUtil.getJbossFactory(), var, value, declOffset, declLength);
-									if(newVar.getElToken()!=null) {
-										if(vars == null) {
-											vars = new ArrayList<Var>();
-										}
-										vars.add(newVar);
+		if(!CustomTagLibManager.FACELETS_UI_TAG_LIB_URI.equals(node.getNamespaceURI())) {
+			return;
+		}
+		String pathAttr = PATH_ATTRIBUTES.get(node.getLocalName());
+		if(pathAttr == null) {
+			return;
+		}
+		String src = node.getAttribute(pathAttr);
+		if(src == null || src.trim().length() == 0) {
+			return;
+		}
+		IFile includedFile = getFile(src, context.getResource());
+		if(includedFile == null) return;
+		NodeList list = node.getElementsByTagNameNS (CustomTagLibManager.FACELETS_UI_TAG_LIB_URI, NODE_PARAM);
+		List<Var> vars = null;
+		for (int i = 0; i < list.getLength(); i++) {
+			Node n = list.item(i);
+			if(n instanceof IDOMElement) {
+				IDOMElement element = (IDOMElement)n;
+				synchronized (element) {
+					if(element.hasAttribute(ATTR_NAME)) {
+						String var = element.getAttribute(ATTR_NAME);
+						int declOffset = 0;
+						int declLength = 0;
+						Node varAttr = element.getAttributeNode(ATTR_NAME); 
+						if (varAttr instanceof IDOMAttr) {
+							int varNameStart = ((IDOMAttr)varAttr).getNameRegionStartOffset();
+							int varNameEnd = ((IDOMAttr)varAttr).getNameRegionEndOffset();
+							declOffset = varNameStart;
+							declLength = varNameEnd - varNameStart;
+						}
+						var = var.trim();
+						if(!"".equals(var)) { //$NON-NLS-1$					
+							if(element.hasAttribute(ATTR_VALUE)) {
+								String value = element.getAttribute(ATTR_VALUE);
+								value = value.trim();
+								Var newVar = new Var(ELParserUtil.getJbossFactory(), var, value, declOffset, declLength);
+								if(newVar.getElToken()!=null) {
+									if(vars == null) {
+										vars = new ArrayList<Var>();
 									}
+									vars.add(newVar);
 								}
 							}
 						}
 					}
 				}
 			}
-			if(vars != null && !vars.isEmpty()) {
-				IKbProject kbProject = KbProjectFactory.getKbProject(context.getResource().getProject(), true);
-				if(kbProject != null) {
-					PageInclude include = new PageInclude(context.getResource().getFullPath(), includedFile.getFullPath(), vars);
-					kbProject.getIncludeModel().addInclude(context.getResource().getFullPath(), include);
-				}
+		}
+		if(vars != null && !vars.isEmpty()) {
+			IKbProject kbProject = KbProjectFactory.getKbProject(context.getResource().getProject(), true);
+			if(kbProject != null) {
+				PageInclude include = new PageInclude(context.getResource().getFullPath(), includedFile.getFullPath(), vars);
+				kbProject.getIncludeModel().addInclude(context.getResource().getFullPath(), include);
 			}
-		}	
+		}
 	}
 
 	public static IFile getFile(String fileName, IFile includeFile) {

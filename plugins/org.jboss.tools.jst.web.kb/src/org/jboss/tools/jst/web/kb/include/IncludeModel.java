@@ -90,7 +90,7 @@ public class IncludeModel implements IIncludeModel {
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#store(org.w3c.dom.Element)
 	 */
-	public void store(Element root) {
+	public synchronized void store(Element root) {
 		Map<String, String> pathAliases = loadAliases(root);
 		Element includes = XMLUtilities.createElement(root, STORE_ELEMENT_INCLUDES);
 		for (IPath path : directReferences.keySet()) {
@@ -127,7 +127,7 @@ public class IncludeModel implements IIncludeModel {
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#load(org.w3c.dom.Element)
 	 */
-	public void load(Element root) {
+	public synchronized void load(Element root) {
 		Map<String, String> pathAliases = loadAliases(root);
 
 		Element includes = XMLUtilities.getUniqueChild(root, STORE_ELEMENT_INCLUDES);

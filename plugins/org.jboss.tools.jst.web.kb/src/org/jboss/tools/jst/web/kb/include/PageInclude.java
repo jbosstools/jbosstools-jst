@@ -16,6 +16,7 @@ import org.eclipse.core.runtime.IPath;
 import org.jboss.tools.common.el.core.resolver.Var;
 
 /**
+ * Parameters defined within elements <ui:include>, <ui:composition>, <ui:decorate>
  * 
  * @author Viacheslav Kabanovich
  *
