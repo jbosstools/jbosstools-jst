@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.kb;
 import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.runtime.IPath;
 import org.jboss.tools.common.validation.IProjectValidationContext;
+import org.jboss.tools.jst.web.kb.include.IIncludeModel;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 
 /**
@@ -50,4 +51,9 @@ public interface IKbProject extends IProjectNature {
 	 * @return validation context which is associated with this KB project.
 	 */
 	IProjectValidationContext getValidationContext();
+
+	/**
+	 * @return model object that collects <ui:include> elements from pages
+	 */
+	IIncludeModel getIncludeModel();
 }

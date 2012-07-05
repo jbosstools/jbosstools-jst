@@ -45,6 +45,8 @@ import org.jboss.tools.jst.web.kb.IKbProject;
 import org.jboss.tools.jst.web.kb.KbMessages;
 import org.jboss.tools.jst.web.kb.KbProjectFactory;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
+import org.jboss.tools.jst.web.kb.include.IIncludeModel;
+import org.jboss.tools.jst.web.kb.include.IncludeModel;
 import org.jboss.tools.jst.web.kb.internal.scanner.ClassPathMonitor;
 import org.jboss.tools.jst.web.kb.internal.scanner.LibraryProxy;
 import org.jboss.tools.jst.web.kb.internal.scanner.LoadedDeclarations;
@@ -91,6 +93,8 @@ public class KbProject extends KbObject implements IKbProject {
 
 	Map<String, Object> extensionModels = new HashMap<String, Object>();
 
+	IncludeModel includeModel = new IncludeModel();
+
 	public KbProject() {}
 
 	public void setMock() {
@@ -122,6 +126,10 @@ public class KbProject extends KbObject implements IKbProject {
 	 */
 	public ITagLibrary[] getTagLibraries(IPath path) {
 		return libraries.getLibrariesArray(path);
+	}
+
+	public IIncludeModel getIncludeModel() {
+		return includeModel;
 	}
 
 	/*
@@ -333,6 +341,7 @@ public class KbProject extends KbObject implements IKbProject {
 			
 			if(root != null) {
 				getValidationContext().load(root);
+				includeModel.load(root);
 			}
 
 		} finally {
@@ -438,6 +447,7 @@ public class KbProject extends KbObject implements IKbProject {
 			storeSourcePaths2(root);
 
 			if(validationContext != null) validationContext.store(root);
+			includeModel.store(root);
 		
 			XMLUtilities.serialize(root, file.getAbsolutePath());
 		

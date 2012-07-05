@@ -423,7 +423,10 @@ public class PageContextFactory implements IResourceChangeListener {
 								}
 								
 								if(file != null) {
-									IncludeModel.getInstance().clean(file.getFullPath());
+									IKbProject kbProject = KbProjectFactory.getKbProject(project, true);
+									if(kbProject != null) {
+										kbProject.getIncludeModel().clean(file.getFullPath());
+									}
 								}
 								// The subsequently called functions may use the file and document
 								// already stored in context for their needs
@@ -646,11 +649,12 @@ public class PageContextFactory implements IResourceChangeListener {
 		}
 	}
 
+	static String ATTR_SRC = "src"; //$NON-NLS-1$
+	static String NODE_PARAM = "param"; //$NON-NLS-1$
+	static String ATTR_NAME = "name"; //$NON-NLS-1$
+	static String ATTR_VALUE = "value"; //$NON-NLS-1$
+
 	private static void fillUIParamsForNode(IDOMElement node, ELContextImpl context) {
-		String ATTR_SRC = "src"; //$NON-NLS-1$
-		String NODE_PARAM = "param"; //$NON-NLS-1$
-		String ATTR_NAME = "name"; //$NON-NLS-1$
-		String ATTR_VALUE = "value"; //$NON-NLS-1$
 		if(IncludeContextBuilder.TAG_INCLUDE.equals(node.getLocalName()) && CustomTagLibManager.FACELETS_UI_TAG_LIB_URI.equals(node.getNamespaceURI())) {
 			String src = node.getAttribute(ATTR_SRC);
 			if(src == null || src.trim().length() == 0) {
@@ -695,8 +699,11 @@ public class PageContextFactory implements IResourceChangeListener {
 				}
 			}
 			if(vars != null && !vars.isEmpty()) {
-				PageInclude include = new PageInclude(context.getResource().getFullPath(), includedFile.getFullPath(), vars);
-				IncludeModel.getInstance().addInclude(context.getResource().getFullPath(), include);
+				IKbProject kbProject = KbProjectFactory.getKbProject(context.getResource().getProject(), true);
+				if(kbProject != null) {
+					PageInclude include = new PageInclude(context.getResource().getFullPath(), includedFile.getFullPath(), vars);
+					kbProject.getIncludeModel().addInclude(context.getResource().getFullPath(), include);
+				}
 			}
 		}	
 	}

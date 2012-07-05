@@ -15,6 +15,8 @@ import java.util.Map;
 
 import org.jboss.tools.common.el.core.resolver.Var;
 import org.jboss.tools.jst.web.kb.IFaceletPageContext;
+import org.jboss.tools.jst.web.kb.IKbProject;
+import org.jboss.tools.jst.web.kb.KbProjectFactory;
 import org.jboss.tools.jst.web.kb.include.IncludeModel;
 
 /**
@@ -27,7 +29,11 @@ public class FaceletPageContextImpl extends JspContextImpl implements IFaceletPa
 	private Map<String, String> params;
 
 	public List<Var> getExternalVars() {
-		List<Var> res = IncludeModel.getInstance().getVars(getResource().getFullPath());
+		List<Var> res = null;
+		IKbProject kbProject = KbProjectFactory.getKbProject(getResource().getProject(), true);
+		if(kbProject != null) {
+			res = kbProject.getIncludeModel().getVars(getResource().getFullPath());
+		}
 		return res == null ? super.getExternalVars() : res;
 	}
 
