@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
@@ -21,6 +22,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Preferences;
 import org.eclipse.core.runtime.content.IContentType;
@@ -29,6 +31,9 @@ import org.eclipse.jst.jsp.core.internal.util.FacetModuleCoreSupport;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
+import org.eclipse.wst.common.componentcore.ComponentCore;
+import org.eclipse.wst.common.componentcore.ModuleCoreNature;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
@@ -146,7 +151,14 @@ public class NewXHTMLFileWizardPage extends WizardNewFileCreationPage {
 			// if inside web project, check if inside webContent folder
 			if (project != null && isWebProject(project)) {
 				// check that the path is inside the webContent folder
-				IPath[] webContentPaths = FacetModuleCoreSupport.getAcceptableRootPaths(project);
+				IPath[] webContentPaths;
+				try {
+					webContentPaths = getAcceptableRootPaths(project);
+				}
+				catch (NoClassDefFoundError e) {
+					//ignore
+					webContentPaths = new IPath[]{project.getFullPath()};
+				}
 				boolean isPrefix = false;
 				for (int i = 0; !isPrefix && i < webContentPaths.length; i++) {
 					isPrefix |= webContentPaths[i].isPrefixOf(fullPath);
@@ -160,6 +172,26 @@ public class NewXHTMLFileWizardPage extends WizardNewFileCreationPage {
 		return true;
 	}
 
+	static IPath[] getAcceptableRootPaths(IProject project) {
+		if (!ModuleCoreNature.isFlexibleProject(project)) {
+			return new IPath[]{project.getFullPath()};
+		}
+
+		IPath[] paths = null;
+		IVirtualFolder componentFolder = ComponentCore.createFolder(project, Path.ROOT);
+		if (componentFolder != null && componentFolder.exists()) {
+			IContainer[] workspaceFolders = componentFolder.getUnderlyingFolders();
+			paths = new IPath[workspaceFolders.length];
+			for (int i = 0; i < workspaceFolders.length; i++) {
+				paths[i] = workspaceFolders[i].getFullPath();
+			}
+		}
+		else {
+			paths = new IPath[]{project.getFullPath()};
+		}
+		return paths;
+	}
+	
 	/**
 	 * Get content type associated with this new file wizard
 	 * 
