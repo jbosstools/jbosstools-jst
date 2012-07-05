@@ -694,7 +694,7 @@ public class PageContextFactory implements IResourceChangeListener {
 					}
 				}
 			}
-			if(!vars.isEmpty()) {
+			if(vars != null && !vars.isEmpty()) {
 				PageInclude include = new PageInclude(context.getResource().getFullPath(), includedFile.getFullPath(), vars);
 				IncludeModel.getInstance().addInclude(context.getResource().getFullPath(), include);
 			}
