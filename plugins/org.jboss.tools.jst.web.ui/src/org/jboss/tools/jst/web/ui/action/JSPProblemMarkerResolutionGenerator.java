@@ -40,7 +40,7 @@ import org.eclipse.wst.sse.ui.internal.reconcile.TemporaryAnnotation;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
-import org.jboss.tools.common.text.xml.quickfix.IQuickFixGenerator;
+import org.jboss.tools.common.quickfix.IQuickFixGenerator;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.JSPPaletteInsertHelper;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.PaletteTaglibInserter;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;

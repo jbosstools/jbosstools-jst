@@ -30,7 +30,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.DocumentProviderRegistry;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
-import org.jboss.tools.common.text.xml.quickfix.IBaseMarkerResolution;
+import org.jboss.tools.common.quickfix.IBaseMarkerResolution;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.JSPPaletteInsertHelper;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.PaletteTaglibInserter;
 import org.jboss.tools.jst.web.ui.Messages;
