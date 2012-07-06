@@ -34,10 +34,12 @@ import org.jboss.tools.jst.text.ext.JSTExtensionsPlugin;
 public class ELHyperlink extends AbstractHyperlink{
 	private ELReference reference;
 	private ELSegment segment;
+	IOpenableReference openable;
 	
-	public ELHyperlink(IDocument document, ELReference reference, ELSegment segment) {
+	public ELHyperlink(IDocument document, ELReference reference, ELSegment segment, IOpenableReference openable) {
 		this.reference = reference;
 		this.segment = segment;
+		this.openable = openable;
 		setDocument(document);
 	}
 
@@ -55,10 +57,9 @@ public class ELHyperlink extends AbstractHyperlink{
 
 	@Override
 	protected void doHyperlink(IRegion region) {
-		IOpenableReference[] openables = segment.getOpenable();
 		
-		if(openables.length > 0) {
-			if(!openables[0].open()) {
+		if(openable != null) {
+			if(!openable.open()) {
 				openFileFailed();
 			}
 			//If openables.length > 1 - show menu.
@@ -83,9 +84,8 @@ public class ELHyperlink extends AbstractHyperlink{
 	
 	@Override
 	public String getHyperlinkText() {
-		IOpenableReference[] openables = segment.getOpenable();
-		if(openables.length > 0) {
-			return openables[0].getLabel();
+		if(openable != null) {
+			return openable.getLabel();
 		}
 		if(segment instanceof JavaMemberELSegment){
 			return "Should not get here."; //$NON-NLS-1$

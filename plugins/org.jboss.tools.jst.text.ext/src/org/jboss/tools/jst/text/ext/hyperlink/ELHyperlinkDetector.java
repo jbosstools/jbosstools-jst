@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.jboss.tools.jst.text.ext.hyperlink;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,6 +31,7 @@ import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.ELResolution;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.ELSegment;
+import org.jboss.tools.common.el.core.resolver.IOpenableReference;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
 
 public class ELHyperlinkDetector extends AbstractHyperlinkDetector{
@@ -44,7 +46,7 @@ public class ELHyperlinkDetector extends AbstractHyperlinkDetector{
 		ELContext context = PageContextFactory.createPageContext(file);
 		if(context == null)
 			return null;
-		Set<IHyperlink> links = new HashSet<IHyperlink>();
+		List<IHyperlink> links = new ArrayList<IHyperlink>();
 		ELReference reference = context.getELReference(region.getOffset());
 		if(reference != null){
 			ELInvocationExpression expression = findInvocationExpressionByOffset(reference, region.getOffset());
@@ -56,8 +58,15 @@ public class ELHyperlinkDetector extends AbstractHyperlinkDetector{
 						ELSegment segment = resolution.findSegmentByOffset(region.getOffset()-reference.getStartPosition());
 	
 						if(segment != null && segment.isResolved()){
+							IOpenableReference[] openables = segment.getOpenable();
 //							return new IHyperlink[]{new ELHyperlink(textViewer.getDocument(), reference, segment)};
-							links.add(new ELHyperlink(textViewer.getDocument(), reference, segment));
+							if(openables.length == 0) {
+								links.add(new ELHyperlink(textViewer.getDocument(), reference, segment, null));
+							} else {
+								for (IOpenableReference openable: openables) {
+									links.add(new ELHyperlink(textViewer.getDocument(), reference, segment, openable));
+								}
+							}
 						}
 						
 					}
@@ -78,8 +87,7 @@ public class ELHyperlinkDetector extends AbstractHyperlinkDetector{
 	 * @return
 	 */
 	public static ELInvocationExpression findInvocationExpressionByOffset(ELReference reference, int offset){
-		ELExpression[] expressions = reference.getEl();
-		for(ELExpression expression : expressions){
+		for(ELExpression expression : reference.getEl()){
 			if(reference.getStartPosition()+expression.getStartPosition() <= offset && reference.getStartPosition()+expression.getEndPosition() > offset){
 				ELInvocationExpression invocation = findInvocationExpressionByOffset(reference, expression, offset);
 				if(invocation != null)
