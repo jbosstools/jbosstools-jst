@@ -90,29 +90,35 @@ public class JspELCompletionProposalComputer extends XmlELCompletionProposalComp
 	protected void setVars(ELContextImpl context, IFile file) {
 		ELCompletionEngine fakeEngine = new ELCompletionEngine() {
 
-			public ELResolution resolveELOperand(IFile file,
+			@Override
+			public ELResolution resolveELOperand(IFile file, ELContext context,
 					ELExpression operand, boolean returnEqualedVariablesOnly,
 					List<Var> vars, ElVarSearcher varSearcher, int offset)
 					throws BadLocationException, StringIndexOutOfBoundsException {
 				return new ELResolutionImpl(operand);
 			}
 
+			@Override
 			public ELParserFactory getParserFactory() {
 				return ELParserUtil.getJbossFactory();
 			}
 
+			@Override
 			public List<TextProposal> getProposals(ELContext context, String el, int offset) {
 				return Collections.emptyList();
 			}
 
+			@Override
 			public ELResolution resolve(ELContext context, ELExpression operand, int offset) {
 				return new ELResolutionImpl(operand);
 			}
 
+			@Override
 			public List<TextProposal> getProposals(ELContext context, int offset) {
 				return Collections.emptyList();
 			}
 
+			@Override
 			public IRelevanceCheck createRelevanceCheck(IJavaElement element) {
 				return null;
 			}
@@ -131,6 +137,4 @@ public class JspELCompletionProposalComputer extends XmlELCompletionProposalComp
 	protected int getTagInsertionBaseRelevance() {
 		return TextProposal.R_TAG_INSERTION;
 	}
-
-	
 }

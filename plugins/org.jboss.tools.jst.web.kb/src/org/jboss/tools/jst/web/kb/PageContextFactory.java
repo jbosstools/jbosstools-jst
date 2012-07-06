@@ -153,15 +153,15 @@ public class PageContextFactory implements IResourceChangeListener {
 	 * The cache to store the created contexts
 	 * The key is IFile.getFullPath().toString() of the resource of the context 
 	 */
-	private Map<IFile, ELContext> cache = new HashMap<IFile, ELContext>();
+	private Map<IFile, SimpleELContext> cache = new HashMap<IFile, SimpleELContext>();
 
-	private ELContext getSavedContext(IFile resource) {
+	private SimpleELContext getSavedContext(IFile resource) {
 		synchronized (cache) {
 			return cache.get(resource);
 		}
 	}
 
-	private void saveConvext(ELContext context) {
+	private void saveConvext(SimpleELContext context) {
 		if (context.getResource() != null) {
 			synchronized (cache) {
 				cache.put(context.getResource(), context);
@@ -289,7 +289,7 @@ public class PageContextFactory implements IResourceChangeListener {
 		}
 	}
 
-	private ELContext createPropertiesContext(IFile file, IDocument document, boolean useLastSavedStateOfFile) {
+	private SimpleELContext createPropertiesContext(IFile file, IDocument document, boolean useLastSavedStateOfFile) {
 		ELContextImpl context = new ELContextImpl();
 		context.setResource(file);
 		context.setElResolvers(ELResolverFactoryManager.getInstance().getResolvers(file));
@@ -310,7 +310,7 @@ public class PageContextFactory implements IResourceChangeListener {
 		return context;
 	}
 
-	private static ELContext createJavaContext(IFile file, IDocument document, boolean useLastSavedStateOfFile) {
+	private static SimpleELContext createJavaContext(IFile file, IDocument document, boolean useLastSavedStateOfFile) {
 		ELContextImpl context = new ELContextImpl();
 		context.setResource(file);
 		context.setElResolvers(ELResolverFactoryManager.getInstance().getResolvers(file));
@@ -375,8 +375,9 @@ public class PageContextFactory implements IResourceChangeListener {
 			file = getResource(document);
 		}
 
-		boolean isContextCachingAllowed = !dontUseCache && !EclipseUIUtil.isOpenInActiveEditor(file);
-		ELContext context = isContextCachingAllowed ? getSavedContext(file) : null;
+		boolean modified = EclipseUIUtil.isOpenInActiveEditor(file);
+		boolean isContextCachingAllowed = !dontUseCache && !modified;
+		SimpleELContext context = isContextCachingAllowed ? getSavedContext(file) : null;
 		if (context == null) {
 			String typeId = getContentTypeIdentifier(file == null ? document : file);
 
@@ -444,6 +445,7 @@ public class PageContextFactory implements IResourceChangeListener {
 			}
 
 			if (context != null) { // && isContextCachingAllowed) {  <- Save context even for modified files to prevent multiple initialization when invoked from NON-UI thread.
+				context.setDirty(modified);
 				saveConvext(context);
 			}
 		}
@@ -537,7 +539,7 @@ public class PageContextFactory implements IResourceChangeListener {
 		return null;
 	}
 	
-	private static ELContext createPageContextInstance(String contentType) {
+	private static SimpleELContext createPageContextInstance(String contentType) {
 		String contextType = IncludeContextBuilder.getContextType(contentType);
 		if (contextType == null && contentType != null) {
 			IContentType baseContentType = Platform.getContentTypeManager().getContentType(contentType);
@@ -552,7 +554,7 @@ public class PageContextFactory implements IResourceChangeListener {
 		return createContextInstanceOfType(contextType);
 	}
 
-	private static ELContext createContextInstanceOfType(String contextType) {
+	private static SimpleELContext createContextInstanceOfType(String contextType) {
 		if (JSP_PAGE_CONTEXT_TYPE.equals(contextType)) {
 			return new JspContextImpl();
 		} else if (FACELETS_PAGE_CONTEXT_TYPE.equals(contextType)) {

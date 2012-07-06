@@ -61,9 +61,9 @@ import org.jboss.tools.common.el.core.resolver.Var;
 import org.jboss.tools.common.java.IJavaSourceReference;
 import org.jboss.tools.common.validation.ContextValidationHelper;
 import org.jboss.tools.common.validation.EditorValidationContext;
-import org.jboss.tools.common.validation.IAsYouTypeValidator;
 import org.jboss.tools.common.validation.IELValidationDelegate;
 import org.jboss.tools.common.validation.IProjectValidationContext;
+import org.jboss.tools.common.validation.IStringValidator;
 import org.jboss.tools.common.validation.IValidatingProjectTree;
 import org.jboss.tools.common.validation.ValidatorManager;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
@@ -75,7 +75,7 @@ import org.jboss.tools.jst.web.kb.preferences.ELSeverityPreferences;
  * EL Validator
  * @author Alexey Kazakov
  */
-public class ELValidator extends WebValidator implements IAsYouTypeValidator {
+public class ELValidator extends WebValidator implements IStringValidator {
 
 	public static final String ID = "org.jboss.tools.jst.web.kb.ELValidator"; //$NON-NLS-1$
 	public static final String PROBLEM_TYPE = "org.jboss.tools.jst.web.kb.elproblem"; //$NON-NLS-1$
@@ -255,6 +255,7 @@ public class ELValidator extends WebValidator implements IAsYouTypeValidator {
 		setAsYouTypeValidation(true);
 		this.document = validationContext.getDocument();
 		ELContext elContext = PageContextFactory.createPageContext(validationContext.getDocument(), true);
+		elContext.setDirty(true);
 		Set<ELReference> references = elContext.getELReferences(dirtyRegion);
 
 		for (ELReference elReference : references) {
