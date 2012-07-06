@@ -643,6 +643,7 @@ public class PageContextFactory implements IResourceChangeListener {
 			start = node.getStartOffset();
 			length = node.getEndOffset() - start;
 
+			var.setFile(context.getResource());
 			context.addVar(new Region(start, length), var);
 		}
 	}
@@ -685,21 +686,21 @@ public class PageContextFactory implements IResourceChangeListener {
 					if(element.hasAttribute(ATTR_NAME)) {
 						String var = element.getAttribute(ATTR_NAME);
 						int declOffset = 0;
-						int declLength = 0;
+						int length = 0;
 						Node varAttr = element.getAttributeNode(ATTR_NAME); 
 						if (varAttr instanceof IDOMAttr) {
-							int varNameStart = ((IDOMAttr)varAttr).getNameRegionStartOffset();
-							int varNameEnd = ((IDOMAttr)varAttr).getNameRegionEndOffset();
-							declOffset = varNameStart;
-							declLength = varNameEnd - varNameStart;
+							int varStart = ((IDOMAttr)varAttr).getValueRegionStartOffset() + 1;
+							declOffset = varStart;
+							length = var.length();
 						}
 						var = var.trim();
 						if(!"".equals(var)) { //$NON-NLS-1$					
 							if(element.hasAttribute(ATTR_VALUE)) {
 								String value = element.getAttribute(ATTR_VALUE);
 								value = value.trim();
-								Var newVar = new Var(ELParserUtil.getJbossFactory(), var, value, declOffset, declLength);
+								Var newVar = new Var(ELParserUtil.getJbossFactory(), var, value, declOffset, length);
 								if(newVar.getElToken()!=null) {
+									newVar.setFile(context.getResource());
 									if(vars == null) {
 										vars = new ArrayList<Var>();
 									}

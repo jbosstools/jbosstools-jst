@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.jboss.tools.common.el.core.ELReference;
@@ -149,6 +150,9 @@ public class IncludeModel implements IIncludeModel {
 					String name = v.getAttribute(STORE_ATTR_NAME);
 					String value = v.getAttribute(STORE_ATTR_VALUE);
 					Var var = new Var(ELParserUtil.getJbossFactory(), name, value, 0, 0);  //TODO
+					if(path.segmentCount() > 1) {
+						var.setFile(ResourcesPlugin.getWorkspace().getRoot().getFile(path));
+					}
 					vars.add(var);
 				}
 				path1 = ELReference.getPath(pathAliases, path1);
