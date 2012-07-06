@@ -35,6 +35,7 @@ public class JstWebKbAllTests {
 		suiteAll.addTest(testSetup);
 		suite = new TestSuite(JstWebKbAllTests.class.getName());
 		suite.addTestSuite(KbModelTest.class);
+		suite.addTestSuite(IncludeModelTest.class);
 		suite.addTestSuite(MyFacesKbModelTest.class);
 		suite.addTestSuite(KbMockModelTest.class);
 		suite.addTestSuite(MyFacesKbModelWithMetadataInSourcesTest.class);
