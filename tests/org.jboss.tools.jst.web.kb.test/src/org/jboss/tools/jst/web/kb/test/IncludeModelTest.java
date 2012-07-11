@@ -18,6 +18,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
+import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.Var;
 import org.jboss.tools.jst.web.kb.IKbProject;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
@@ -66,6 +67,12 @@ public class IncludeModelTest extends TestCase {
 
 		List<Var> vars = kbProject.getIncludeModel().getVars(new Path("/TestKbModel/WebContent/pages/params/template.xhtml"));
 		assertEquals(6, vars.size());
+		
+		IFile f1 = project.getFile("WebContent/pages/params/template.xhtml");
+		ELContext context = PageContextFactory.createPageContext(f1);
+		Var[] vars1 = context.getVars(0);
+		assertEquals(6, vars1.length);
+		
 	}
 
 }
