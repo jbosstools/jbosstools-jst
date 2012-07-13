@@ -14,7 +14,11 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.TrayItem;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.views.properties.PropertySheet;
+import org.eclipse.ui.views.properties.PropertySheetEntry;
 import org.eclipse.wst.css.core.internal.document.CSSStructuredDocumentRegionContainer;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSModel;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleSheet;
@@ -32,6 +36,10 @@ import org.w3c.dom.css.CSSRule;
  */
 public class SelectionLosingByPropertySheet_JBIDE4791 extends
 		AbstractCSSViewTest {
+
+	private static final String FIRST_CSS_PROPERTY_VALUE = "red";
+
+	private static final String FIRST_CSS_PROPERTY_NAME = "color";
 
 	public static final String TEST_PAGE_NAME = "JBIDE/4791/propertyViewTest.css"; //$NON-NLS-1$
 
@@ -65,34 +73,39 @@ public class SelectionLosingByPropertySheet_JBIDE4791 extends
 		assertNotNull(document);
 
 		CSSRule cssRule = document.getCssRules().item(0);
-
 		assertNotNull(cssRule);
 
-		int offset = ((CSSStructuredDocumentRegionContainer) cssRule)
-				.getStartOffset();
-
-		setSelection(editor, offset, 0);
-
-		ISelection selection = (ISelection) getFieldValue(propertySheet,
-				SELECTION_FIELD_NAME);
-
-		assertTrue(selection instanceof IStructuredSelection);
-
-		assertEquals(cssRule, ((IStructuredSelection) selection)
-				.getFirstElement());
-
+		int cssRuleOffset = ((CSSStructuredDocumentRegionContainer) cssRule).getStartOffset();
+		setSelection(editor, cssRuleOffset, 0);
+		
+		Tree propertySheetTree = (Tree) propertySheet.getCurrentPage().getControl();
+		String colorValue = getPropertyValue(propertySheetTree.getItems(), FIRST_CSS_PROPERTY_NAME);
+		assertEquals(FIRST_CSS_PROPERTY_VALUE, colorValue);
+		
 		CSSEditorView view = (CSSEditorView) openView(CSS_EDITOR_VIEW);
-
 		JobUtils.delay(1000);
 
-		selection = (ISelection) getFieldValue(propertySheet,
-				SELECTION_FIELD_NAME);
-
-		assertTrue(selection instanceof IStructuredSelection);
-
-		assertEquals(cssRule, ((IStructuredSelection) selection)
-				.getFirstElement());
-
+		propertySheetTree = (Tree) propertySheet.getCurrentPage().getControl();
+		colorValue = getPropertyValue(propertySheetTree.getItems(), FIRST_CSS_PROPERTY_NAME);
+		assertEquals(FIRST_CSS_PROPERTY_VALUE, colorValue);
+	}
+	
+	private String getPropertyValue(TreeItem[] treeItems, String propertyName) {
+		for (TreeItem treeItem : treeItems) {
+			Object data = treeItem.getData();
+			if (data instanceof PropertySheetEntry) {
+				PropertySheetEntry propertySheetEntry = (PropertySheetEntry) data;
+				if (propertyName.equals(propertySheetEntry.getDisplayName())) {
+					return propertySheetEntry.getValueAsString();
+				}
+			}
+			String descendantsValue = getPropertyValue(treeItem.getItems(), propertyName);
+			if (descendantsValue != null) {
+				return descendantsValue;
+			}
+		}
+		
+		return null;
 	}
 
 }
