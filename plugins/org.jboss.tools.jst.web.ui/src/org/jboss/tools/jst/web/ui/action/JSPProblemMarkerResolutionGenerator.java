@@ -12,10 +12,7 @@ package org.jboss.tools.jst.web.ui.action;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -23,7 +20,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextSelection;
-import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -242,12 +238,12 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 	}
 
 	@Override
-	public List<IJavaCompletionProposal> getProposals(Annotation annotation) {
+	public IJavaCompletionProposal[] getProposals(Annotation annotation) {
 		ArrayList<IJavaCompletionProposal> proposals = new ArrayList<IJavaCompletionProposal>();
 		IJavaCompletionProposal proposal = isOurCase(annotation); 
 		if(proposal != null){
 			proposals.add(proposal);
 		}
-		return proposals;
+		return proposals.toArray(new IJavaCompletionProposal[]{});
 	}
 }

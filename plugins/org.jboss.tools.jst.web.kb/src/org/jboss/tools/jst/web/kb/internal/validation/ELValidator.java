@@ -299,13 +299,13 @@ public class ELValidator extends WebValidator implements IStringValidator {
 					IJavaSourceReference reference = getJavaReference(el.getResource(), el.getStartPosition() + error.getPosition(), 1);
 					if(reference == null) {
 						if(asYouType) {
-							addMesssage(el.getResource(), el.getStartPosition() + error.getPosition(), 1, ELSeverityPreferences.EL_SYNTAX_ERROR, ELValidationMessages.EL_SYNTAX_ERROR, new String[]{error.getProblem()});
+							addMessage(el.getResource(), el.getStartPosition() + error.getPosition(), 1, ELSeverityPreferences.EL_SYNTAX_ERROR, ELValidationMessages.EL_SYNTAX_ERROR, new String[]{error.getProblem()});
 						} else {
 							addError(ELValidationMessages.EL_SYNTAX_ERROR, ELSeverityPreferences.EL_SYNTAX_ERROR, new String[]{error.getProblem()}, el.getLineNumber(), 1, el.getStartPosition() + error.getPosition(), context.getResource());
 						}
 					} else {
 						if(asYouType) {
-							addMesssage(el.getResource(), reference, ELSeverityPreferences.EL_SYNTAX_ERROR, ELValidationMessages.EL_SYNTAX_ERROR, new String[]{error.getProblem()});
+							addMessage(el.getResource(), reference, ELSeverityPreferences.EL_SYNTAX_ERROR, ELValidationMessages.EL_SYNTAX_ERROR, new String[]{error.getProblem()});
 						} else {
 							addError(ELValidationMessages.EL_SYNTAX_ERROR, ELSeverityPreferences.EL_SYNTAX_ERROR, new String[]{error.getProblem()}, reference, context.getResource());
 						}
@@ -425,14 +425,14 @@ public class ELValidator extends WebValidator implements IStringValidator {
 					IMarker marker = null;
 					if(reference != null) {
 						if(asYouType) {
-							addMesssage(file, reference, ELSeverityPreferences.UNPAIRED_GETTER_OR_SETTER, ELValidationMessages.UNPAIRED_GETTER_OR_SETTER, new String[]{propertyName, existedMethodName, missingMethodName});
+							addMessage(file, reference, ELSeverityPreferences.UNPAIRED_GETTER_OR_SETTER, ELValidationMessages.UNPAIRED_GETTER_OR_SETTER, new String[]{propertyName, existedMethodName, missingMethodName});
 						} else {
 							marker = addError(ELValidationMessages.UNPAIRED_GETTER_OR_SETTER, ELSeverityPreferences.UNPAIRED_GETTER_OR_SETTER, new String[]{propertyName, existedMethodName, missingMethodName}, reference, file);
 							elReference.addMarker(marker);
 						}
 					} else {
 						if(asYouType) {
-							addMesssage(file, startPosition, length, ELSeverityPreferences.UNPAIRED_GETTER_OR_SETTER, ELValidationMessages.UNPAIRED_GETTER_OR_SETTER, new String[]{propertyName, existedMethodName, missingMethodName});
+							addMessage(file, startPosition, length, ELSeverityPreferences.UNPAIRED_GETTER_OR_SETTER, ELValidationMessages.UNPAIRED_GETTER_OR_SETTER, new String[]{propertyName, existedMethodName, missingMethodName});
 						} else {
 							marker = addError(ELValidationMessages.UNPAIRED_GETTER_OR_SETTER, ELSeverityPreferences.UNPAIRED_GETTER_OR_SETTER, new String[]{propertyName, existedMethodName, missingMethodName}, elReference.getLineNumber(), length, startPosition, file);
 							elReference.addMarker(marker);
@@ -485,13 +485,13 @@ public class ELValidator extends WebValidator implements IStringValidator {
 		}
 		if(javaReference == null) {
 			if(asYouType) {
-				addMesssage(file, offsetOfVarName, lengthOfVarName, preference, message, new String[]{varName});
+				addMessage(file, offsetOfVarName, lengthOfVarName, preference, message, new String[]{varName});
 			} else {
 				marker = addError(message, preference, new String[]{varName}, elReference.getLineNumber(), lengthOfVarName, offsetOfVarName, file);
 			}
 		} else {
 			if(asYouType) {
-				addMesssage(file, javaReference, preference, message, new String[]{varName});
+				addMessage(file, javaReference, preference, message, new String[]{varName});
 			} else {
 				marker = addError(message, preference, new String[]{varName}, javaReference, file);
 			}
