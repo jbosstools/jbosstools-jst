@@ -18,6 +18,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.HandlerEvent;
 import org.eclipse.core.expressions.IEvaluationContext;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.commands.IElementUpdater;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -72,9 +73,19 @@ public class SelectionBarHandler extends AbstractHandler implements IElementUpda
 		/*
 		 * Change command state and save it to PreferenceStore
 		 */
+		boolean visible = !HandlerUtil.toggleCommandState(event.getCommand()); 
 		JspEditorPlugin.getDefault().getPreferenceStore().setValue(
 				IVpePreferencesPage.SHOW_SELECTION_TAG_BAR,
-						!HandlerUtil.toggleCommandState(event.getCommand()));
+				visible);
+		/*
+		 * https://issues.jboss.org/browse/JBIDE-12330
+		 * Explicitly change the selection bar visibility,
+		 * because listeners do not catch this event in eclipse 4.2. 
+		 */
+		IEditorPart activeEditor = HandlerUtil.getActiveEditorChecked(event);
+		if(activeEditor instanceof JSPMultiPageEditor) {
+			((JSPMultiPageEditor) activeEditor).getSelectionBar().setVisible(visible);
+		}
 		return null;
 	}
 	
