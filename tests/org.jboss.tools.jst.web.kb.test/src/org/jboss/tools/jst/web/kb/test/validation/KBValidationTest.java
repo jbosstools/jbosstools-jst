@@ -102,13 +102,13 @@ public class KBValidationTest extends TestCase {
 			}
 			public void clearValidatedProjectsList() {
 			}
-			public void setValidationResourceRegister(
-					ValidationResourceRegister validationResourceRegister) {
-			}
 			public void init(IProject project) {
 			}
 			public boolean isObsolete() {
 				return false;
+			}
+			public void setValidationResourceRegisters(
+					Set<ValidationResourceRegister> validationResourceRegisters) {
 			}
 		});
 		helper.cleanup();
