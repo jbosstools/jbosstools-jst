@@ -701,6 +701,10 @@ public class PageContextFactory implements IResourceChangeListener {
 								String value = element.getAttribute(ATTR_VALUE);
 								value = value.trim();
 								Var newVar = new Var(ELParserUtil.getJbossFactory(), var, value, declOffset, length);
+								if(newVar.getElToken() == null) {
+									//Value can be string, so if it is not a valid EL, treat it as a string.
+									newVar = new Var(ELParserUtil.getJbossFactory(), var, "#{\"" + value + "\".toString()}", declOffset, length);
+								}
 								if(newVar.getElToken()!=null) {
 									newVar.setFile(context.getResource());
 									if(vars == null) {
