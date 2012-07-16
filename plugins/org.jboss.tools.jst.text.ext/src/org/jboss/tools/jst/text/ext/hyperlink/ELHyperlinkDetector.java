@@ -31,6 +31,7 @@ import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.ELResolution;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.ELSegment;
+import org.jboss.tools.common.el.core.resolver.ELSegmentImpl;
 import org.jboss.tools.common.el.core.resolver.IOpenableReference;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
 
@@ -52,6 +53,7 @@ public class ELHyperlinkDetector extends AbstractHyperlinkDetector{
 			ELInvocationExpression expression = findInvocationExpressionByOffset(reference, region.getOffset());
 			if(expression != null){
 				ELResolver[] resolvers = context.getElResolvers();
+				ELSegment unresolved = null;
 				for(ELResolver resolver : resolvers){
 					ELResolution resolution = resolver.resolve(context, expression, region.getOffset());
 					if(resolution != null){
@@ -67,8 +69,20 @@ public class ELHyperlinkDetector extends AbstractHyperlinkDetector{
 									links.add(new ELHyperlink(textViewer.getDocument(), reference, segment, openable));
 								}
 							}
+						} else if(segment != null && ((ELSegmentImpl)segment).getVar() != null && unresolved == null && segment.getOpenable().length > 0) {
+							unresolved = segment;
 						}
-						
+					}
+				}
+				if(links.isEmpty() && unresolved != null) {
+					//This is a case when a reference to var is resolved, but its value is not resolved.
+					//More than one resolver can see that var, we may use any one of them.
+					//Available openable is to the var definition. 
+					IOpenableReference[] openables = unresolved.getOpenable();
+					if(openables.length > 0) {
+						for (IOpenableReference openable: openables) {
+							links.add(new ELHyperlink(textViewer.getDocument(), reference, unresolved, openable));
+						}
 					}
 				}
 			}
