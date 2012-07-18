@@ -23,6 +23,7 @@ import org.jboss.tools.common.el.core.ELReference;
 import org.jboss.tools.common.el.core.parser.ELParserUtil;
 import org.jboss.tools.common.el.core.resolver.Var;
 import org.jboss.tools.common.xml.XMLUtilities;
+import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.w3c.dom.Element;
 
 /**
@@ -95,6 +96,9 @@ public class IncludeModel implements IIncludeModel {
 		Map<String, String> pathAliases = loadAliases(root);
 		Element includes = XMLUtilities.createElement(root, STORE_ELEMENT_INCLUDES);
 		for (IPath path : directReferences.keySet()) {
+			if(!ResourcesPlugin.getWorkspace().getRoot().getFile(path).exists()) {
+				continue;
+			}
 			Element page = XMLUtilities.createElement(includes, STORE_ELEMENT_PAGE);
 			String pathAlias = ELReference.getAlias(pathAliases, path.toString());
 			page.setAttribute(STORE_ATTR_PATH, pathAlias);
@@ -108,6 +112,8 @@ public class IncludeModel implements IIncludeModel {
 					Element varElement = XMLUtilities.createElement(includeElement, STORE_ELEMENT_VAR);
 					varElement.setAttribute(STORE_ATTR_NAME, var.getName());
 					varElement.setAttribute(STORE_ATTR_VALUE, var.getValue());
+					varElement.setAttribute("off", "" + var.getDeclarationOffset());
+					varElement.setAttribute("len", "" + var.getDeclarationLength());
 				}
 			}
 		}
@@ -149,7 +155,23 @@ public class IncludeModel implements IIncludeModel {
 				for (Element v: vs) {
 					String name = v.getAttribute(STORE_ATTR_NAME);
 					String value = v.getAttribute(STORE_ATTR_VALUE);
-					Var var = new Var(ELParserUtil.getJbossFactory(), name, value, 0, 0);  //TODO
+					int offset = 0;
+					int length = 0;
+					if(v.hasAttribute("off")) {
+						try {
+							offset = Integer.parseInt(v.getAttribute("off"));
+						} catch (NumberFormatException e) {
+							WebKbPlugin.getDefault().logError(e);
+						}
+					}
+					if(v.hasAttribute("len")) {
+						try {
+							length = Integer.parseInt(v.getAttribute("len"));
+						} catch (NumberFormatException e) {
+							WebKbPlugin.getDefault().logError(e);
+						}
+					}
+					Var var = new Var(ELParserUtil.getJbossFactory(), name, value, offset, length);
 					if(path.segmentCount() > 1) {
 						var.setFile(ResourcesPlugin.getWorkspace().getRoot().getFile(path));
 					}
