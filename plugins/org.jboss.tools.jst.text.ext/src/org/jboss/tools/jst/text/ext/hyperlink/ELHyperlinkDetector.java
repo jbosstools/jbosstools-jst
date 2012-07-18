@@ -33,6 +33,7 @@ import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.ELSegment;
 import org.jboss.tools.common.el.core.resolver.ELSegmentImpl;
 import org.jboss.tools.common.el.core.resolver.IOpenableReference;
+import org.jboss.tools.common.el.core.resolver.ELSegmentImpl.VarOpenable;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
 
 public class ELHyperlinkDetector extends AbstractHyperlinkDetector{
@@ -65,8 +66,21 @@ public class ELHyperlinkDetector extends AbstractHyperlinkDetector{
 							if(openables.length == 0) {
 								links.add(new ELHyperlink(textViewer.getDocument(), reference, segment, null));
 							} else {
+								List<ELHyperlink> vars = new ArrayList<ELHyperlink>();
 								for (IOpenableReference openable: openables) {
-									links.add(new ELHyperlink(textViewer.getDocument(), reference, segment, openable));
+									ELHyperlink link = new ELHyperlink(textViewer.getDocument(), reference, segment, openable);
+									if(openable instanceof VarOpenable) {
+										vars.add(link);
+									} else {
+										links.add(link);
+									}
+								}
+								if(vars.isEmpty()) {
+									// do nothing
+								} else if(vars.size() == 1) {
+									links.add(0, vars.get(0));
+								} else {
+									links.add(0, new ELVarListHyperlink(textViewer, reference, segment, vars.toArray(new ELHyperlink[0])));
 								}
 							}
 						} else if(segment != null && ((ELSegmentImpl)segment).getVar() != null && unresolved == null && segment.getOpenable().length > 0) {
