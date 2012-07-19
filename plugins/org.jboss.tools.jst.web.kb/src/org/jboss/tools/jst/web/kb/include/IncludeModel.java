@@ -87,6 +87,11 @@ public class IncludeModel implements IIncludeModel {
 	static final String STORE_ATTR_PATH = "path"; //$NON-NLS-1$
 	static final String STORE_ATTR_NAME = "name"; //$NON-NLS-1$
 	static final String STORE_ATTR_VALUE = "value"; //$NON-NLS-1$
+	static final String STORE_ATTR_OFFSET = "off"; //$NON-NLS-1$
+	static final String STORE_ATTR_LENGTH = "len"; //$NON-NLS-1$
+
+	static final String STORE_ELEMENT_ALIASES = "aliases"; //$NON-NLS-1$
+	static final String STORE_ELEMENT_ALIAS = "alias"; //$NON-NLS-1$
 
 	/*
 	 * (non-Javadoc)
@@ -112,19 +117,19 @@ public class IncludeModel implements IIncludeModel {
 					Element varElement = XMLUtilities.createElement(includeElement, STORE_ELEMENT_VAR);
 					varElement.setAttribute(STORE_ATTR_NAME, var.getName());
 					varElement.setAttribute(STORE_ATTR_VALUE, var.getValue());
-					varElement.setAttribute("off", "" + var.getDeclarationOffset());
-					varElement.setAttribute("len", "" + var.getDeclarationLength());
+					varElement.setAttribute(STORE_ATTR_OFFSET, "" + var.getDeclarationOffset());
+					varElement.setAttribute(STORE_ATTR_LENGTH, "" + var.getDeclarationLength());
 				}
 			}
 		}
 		
-		Element aliases = XMLUtilities.getUniqueChild(root, "aliases"); //$NON-NLS-1$
+		Element aliases = XMLUtilities.getUniqueChild(root, STORE_ELEMENT_ALIASES);
 		if(aliases == null) {
-			aliases = XMLUtilities.createElement(root, "aliases"); //$NON-NLS-1$
+			aliases = XMLUtilities.createElement(root, STORE_ELEMENT_ALIASES);
 		}
 		for (String path: pathAliases.keySet()) {
 			String value = pathAliases.get(path);
-			Element alias = XMLUtilities.createElement(aliases, "alias"); //$NON-NLS-1$
+			Element alias = XMLUtilities.createElement(aliases, STORE_ELEMENT_ALIAS);
 			alias.setAttribute(STORE_ATTR_PATH, path);
 			alias.setAttribute(STORE_ATTR_VALUE, value);
 		}
@@ -157,16 +162,16 @@ public class IncludeModel implements IIncludeModel {
 					String value = v.getAttribute(STORE_ATTR_VALUE);
 					int offset = 0;
 					int length = 0;
-					if(v.hasAttribute("off")) {
+					if(v.hasAttribute(STORE_ATTR_OFFSET)) {
 						try {
-							offset = Integer.parseInt(v.getAttribute("off"));
+							offset = Integer.parseInt(v.getAttribute(STORE_ATTR_OFFSET));
 						} catch (NumberFormatException e) {
 							WebKbPlugin.getDefault().logError(e);
 						}
 					}
-					if(v.hasAttribute("len")) {
+					if(v.hasAttribute(STORE_ATTR_LENGTH)) {
 						try {
-							length = Integer.parseInt(v.getAttribute("len"));
+							length = Integer.parseInt(v.getAttribute(STORE_ATTR_LENGTH));
 						} catch (NumberFormatException e) {
 							WebKbPlugin.getDefault().logError(e);
 						}
@@ -185,9 +190,9 @@ public class IncludeModel implements IIncludeModel {
 
 	Map<String, String> loadAliases(Element root) {
 		Map<String, String> pathAliases = new HashMap<String, String>();
-		Element aliases = XMLUtilities.getUniqueChild(root, "aliases"); //$NON-NLS-1$
+		Element aliases = XMLUtilities.getUniqueChild(root, STORE_ELEMENT_ALIASES);
 		if(aliases != null) {
-			Element[] aliasArray = XMLUtilities.getChildren(aliases, "alias"); //$NON-NLS-1$
+			Element[] aliasArray = XMLUtilities.getChildren(aliases, STORE_ELEMENT_ALIAS);
 			for (Element alias: aliasArray) {
 				String path = alias.getAttribute(STORE_ATTR_PATH);
 				String value = alias.getAttribute(STORE_ATTR_VALUE);
