@@ -68,6 +68,10 @@ public class ELVarListHyperlink extends AbstractHyperlink {
 		return "Open Var Declaration"; //$NON-NLS-1$
 	}
 
+	public ELHyperlink[] getHyperlinks() {
+		return hyperlinks;
+	}
+	
 }
 
 class VarInformationControlManager extends InformationControlManager {
@@ -125,6 +129,5 @@ class VarHierarchyInformationControl extends HierarchyInformationControl {
 		}
 
 	}
-	
-	
+
 }
