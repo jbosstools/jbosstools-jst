@@ -49,6 +49,7 @@ public class CheckResource extends Check {
 
 	public void check(XModelObject object) {
 		String value = object.getAttributeValue(attr);
+		String actualValue = value;
 		XModel model = object.getModel();
 		XModelObject webRoot = model == null ? null : FileSystemsHelper.getWebRoot(model);
 		if(webRoot == null) return;
@@ -63,7 +64,7 @@ public class CheckResource extends Check {
 		}
 		
 		List<Object> list = WebPromptingProvider.getInstance().getList(model, IWebPromptingProvider.JSF_CONVERT_URL_TO_PATH, value, null);
-		if(list != null && list.size() > 0) {
+		if(list != null && !list.isEmpty()) {
 			value = list.get(0).toString();
 		}
 		
@@ -79,12 +80,28 @@ public class CheckResource extends Check {
 			String valuei = v.toString();
 			String value2 = valuei.startsWith("/") ? valuei.substring(1) : valuei; //$NON-NLS-1$
 			o = webRoot.getChildByPath(value2);
-			if(o != null) break;
+			if(o != null) {
+				value = "/" + value2; //$NON-NLS-1$
+				break;
+			}
 		}
 		if(o == null) {
-			fireExists(object, preference, attr, value);
-		} else if(!checkExtensions(value)) {
-			fireExtension(object, preference, attr, value);
+			String v = value;
+			if(list.size() > 1) {
+				v = actualValue;
+			}
+			fireExists(object, preference, attr, v);
+		} else {
+			boolean ok = checkExtensions(value);
+			if(!ok && list != null) {
+				for (Object v: list) {
+					ok = checkExtensions(v.toString());
+					if(ok) break;
+				}				
+			}
+			if(!ok) {
+				fireExtension(object, preference, attr, value);
+			}
 		}			
 	}
 

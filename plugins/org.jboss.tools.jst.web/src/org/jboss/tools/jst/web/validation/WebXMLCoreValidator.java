@@ -111,7 +111,7 @@ public class WebXMLCoreValidator extends ValidationErrorManager implements IVali
 
 		addCheck(new CheckResource(this, WebXMLPreferences.INVALID_TAGLIB_REF, "taglib-location", false, ".tld", WebXMLValidatorMessages.PATH_NOT_TAGLIB), 
 				WebAppHelper.TAGLIB_ENTITY);
-		addCheck(new CheckResource(this, WebXMLPreferences.INVALID_WELCOME_FILE_REF, "file name", false, ".jsp .html .htm .jspx", WebXMLValidatorMessages.PATH_NOT_PAGE), 
+		addCheck(new CheckResource(this, WebXMLPreferences.INVALID_WELCOME_FILE_REF, "file name", false, ".jsp .html .htm .jspx .xhtml", WebXMLValidatorMessages.PATH_NOT_PAGE), 
 				"WebAppWelcomFile");
 		addCheck(new CheckResource(this, WebXMLPreferences.INVALID_ERROR_PAGE_REF, "location", false, null, null).acceptServlet(), 
 				"WebAppErrorPage");
