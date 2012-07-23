@@ -18,7 +18,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.Image;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
@@ -33,7 +32,7 @@ import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
  */
 public class ActionProposalType extends ModelProposalType {
 
-	private static final String IMAGE_NAME = "JSFActionProposal.gif"; //$NON-NLS-1$
+	private static final ImageDescriptor IMAGE = WebKbPlugin.getImageDescriptor(WebKbPlugin.class, "JSFActionProposal.gif"); //$NON-NLS-1$
 
 	/*
 	 * (non-Javadoc)
@@ -68,7 +67,7 @@ public class ActionProposalType extends ModelProposalType {
 					proposal.setLabel(text);
 					proposal.setReplacementString(text);
 					proposal.setPosition(text.length());
-					proposal.setImage(WebKbPlugin.getImage(WebKbPlugin.class, IMAGE_NAME));
+					proposal.setImageDescriptor(IMAGE);
 					proposals.add(proposal);
 				}
 			}

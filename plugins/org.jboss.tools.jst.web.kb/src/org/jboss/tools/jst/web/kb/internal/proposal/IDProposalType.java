@@ -17,7 +17,6 @@ import java.util.TreeSet;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
@@ -32,7 +31,7 @@ import org.w3c.dom.NodeList;
 
 @SuppressWarnings("restriction")
 public class IDProposalType extends CustomProposalType {
-	private static final String IMAGE_NAME = "EnumerationProposal.gif"; //$NON-NLS-1$
+	private static final ImageDescriptor IMAGE = WebKbPlugin.getImageDescriptor(WebKbPlugin.class, "EnumerationProposal.gif"); //$NON-NLS-1$
 
 	static String ID = "id"; //$NON-NLS-1$
 	static String QUOTE_1 = "'"; //$NON-NLS-1$
@@ -92,7 +91,7 @@ public class IDProposalType extends CustomProposalType {
 				proposal.setPosition(b + text.length());
 				proposal.setStart(b);
 				proposal.setEnd(e);
-				proposal.setImage(WebKbPlugin.getImage(WebKbPlugin.class, IMAGE_NAME));
+				proposal.setImageDescriptor(IMAGE);
 				
 				proposals.add(proposal);
 			}

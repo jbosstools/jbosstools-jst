@@ -17,7 +17,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.Image;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
@@ -28,7 +27,7 @@ import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
  */
 public class ResourceBundleNameProposalType extends ModelProposalType {
 
-	private static final String IMAGE_NAME = "MessageBundleProposal.gif"; //$NON-NLS-1$
+	private static final ImageDescriptor IMAGE = WebKbPlugin.getImageDescriptor(WebKbPlugin.class, "MessageBundleProposal.gif"); //$NON-NLS-1$
 
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.internal.taglib.CustomProposalType#getProposals(org.jboss.tools.jst.web.kb.KbQuery)
@@ -52,7 +51,7 @@ public class ResourceBundleNameProposalType extends ModelProposalType {
 					proposal.setLabel(text);
 					proposal.setReplacementString(text);
 					proposal.setPosition(text.length());
-					proposal.setImage(WebKbPlugin.getImage(WebKbPlugin.class, IMAGE_NAME));
+					proposal.setImageDescriptor(IMAGE);
 					proposals.add(proposal);
 				}
 			}

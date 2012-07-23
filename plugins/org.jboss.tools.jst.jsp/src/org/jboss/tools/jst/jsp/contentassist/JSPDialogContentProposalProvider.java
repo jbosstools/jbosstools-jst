@@ -18,11 +18,6 @@ import java.util.Properties;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.fieldassist.IContentProposal;
 import org.eclipse.jface.fieldassist.IContentProposalProvider;
-import org.eclipse.jface.text.ITextViewer;
-import org.eclipse.jface.text.contentassist.ICompletionProposal;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.wst.sse.ui.internal.contentassist.IRelevanceCompletionProposal;
 import org.eclipse.wst.sse.ui.internal.util.Sorter;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.jboss.tools.common.el.core.model.ELInstance;
@@ -33,18 +28,16 @@ import org.jboss.tools.common.el.core.parser.ELParser;
 import org.jboss.tools.common.el.core.parser.ELParserUtil;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.ELResolverFactoryManager;
-import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.jsp.contentassist.computers.AbstractXmlCompletionProposalComputer.TextRegion;
 import org.jboss.tools.jst.jsp.contentassist.computers.JspELCompletionProposalComputer;
-import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.ValueHelper;
 import org.jboss.tools.jst.jsp.util.Constants;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
-import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
+import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.w3c.dom.Node;
 
 /**
@@ -115,8 +108,6 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 			if(proposals != null) for (TextProposal textProposal: proposals) {
 				String displayString = textProposal.getReplacementString();
 				int cursorPosition = /*replacementOffset + */ textProposal.getReplacementString().length();
-
-				Image image = textProposal.getImage();
 				String relacementString = textProposal.getReplacementString();
 				if(textProposal.getStart() >= 0 && textProposal.getEnd() >= 0) {
 					int b = textProposal.getStart();
@@ -145,8 +136,6 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 		}
 		String matchString = "#{" + prefix.getText(); //$NON-NLS-1$
 		String query = matchString;
-		if (query == null)
-			query = ""; //$NON-NLS-1$
 		String stringQuery = matchString;
 
 		int beginChangeOffset = prefix.getStartOffset() + prefix.getOffset();
@@ -155,7 +144,6 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, pageContext);
 
 		if(proposals != null) for (TextProposal textProposal: proposals) {
-			int replacementOffset = beginChangeOffset;
 			int replacementLength = prefix.getLength();
 			String displayString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString();
 			int cursorPosition = /*replacementOffset + */ textProposal.getReplacementString().length();
@@ -163,8 +151,6 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 			if(!prefix.isELClosed()) {
 				textProposal.setReplacementString(textProposal.getReplacementString() + "}"); //$NON-NLS-1$
 			}
-
-			Image image = textProposal.getImage();
 
 //			IContextInformation contextInformation = null;
 //			String additionalProposalInfo = textProposal.getContextInfo();
@@ -285,8 +271,6 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 				return null;
 			}
 			
-			String matchString = text.substring(0, inValueOffset);
-			
 			ELParser p = ELParserUtil.getJbossFactory().createParser();
 			ELModel model = p.parse(text);
 			
@@ -348,5 +332,4 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 		result1[result.length] = v;
 		return result1;
 	}
-
 }

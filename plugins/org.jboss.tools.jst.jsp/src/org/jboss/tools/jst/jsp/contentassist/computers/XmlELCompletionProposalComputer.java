@@ -53,6 +53,7 @@ import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.ELResolverFactoryManager;
 import org.jboss.tools.common.text.TextProposal;
+import org.jboss.tools.common.ui.CommonUIPlugin;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.contentassist.AutoContentAssistantProposal;
 import org.jboss.tools.jst.jsp.contentassist.AutoELContentAssistantProposal;
@@ -275,7 +276,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 				replacementString += String.valueOf(quoteChar);
 			}
 									
-			Image image = textProposal.getImage();
+			Image image = CommonUIPlugin.getImageDescriptorRegistry().get(textProposal.getImageDescriptor());
 			
 			// JBIDE-512, JBIDE-2541 related changes ===>>>
 //				String displayString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString();
@@ -416,7 +417,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 				}
 			}
 
-			Image image = textProposal.getImage();
+			Image image = CommonUIPlugin.getImageDescriptorRegistry().get(textProposal.getImageDescriptor());
 
 			// JBIDE-512, JBIDE-2541 related changes ===>>>
 //			String displayString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString();
@@ -510,7 +511,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 				replacementString += String.valueOf(quoteChar);
 			}
 									
-			Image image = textProposal.getImage();
+			Image image = CommonUIPlugin.getImageDescriptorRegistry().get(textProposal.getImageDescriptor());
 			
 			// JBIDE-512, JBIDE-2541 related changes ===>>>
 //				String displayString = prefix.getText().substring(0, replacementLength) + textProposal.getReplacementString();

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.ICSSContainerSupport;
 import org.jboss.tools.jst.web.kb.IPageContext;
@@ -34,7 +35,7 @@ import org.w3c.dom.css.CSSStyleRule;
  *
  */
 public class CSSClassProposalType extends CustomProposalType {
-	private static final String IMAGE_NAME = "EnumerationProposal.gif"; //$NON-NLS-1$
+	private static final ImageDescriptor IMAGE = WebKbPlugin.getImageDescriptor(WebKbPlugin.class, "EnumerationProposal.gif"); //$NON-NLS-1$
 
 	static String ID = "cssclass"; //$NON-NLS-1$
 	static String QUOTE_1 = "'"; //$NON-NLS-1$
@@ -120,7 +121,7 @@ public class CSSClassProposalType extends CustomProposalType {
 		}
 		return styleNames;
 	}
-	
+
 	@Override
 	public TextProposal[] getProposals(KbQuery query) {
 		// Do not use getValue() because it trims the string and removes opening quote char, but all the characters 
@@ -134,7 +135,7 @@ public class CSSClassProposalType extends CustomProposalType {
 		b = (b == -1 ? v.lastIndexOf('\t') : b);
 		b = (b == -1 ? predicateLength : b + 1);
 		int e = v.length(); 
-		
+
 		String prefix = v.substring(b);
 
 		List<TextProposal> proposals = new ArrayList<TextProposal>();
@@ -146,7 +147,7 @@ public class CSSClassProposalType extends CustomProposalType {
 				proposal.setPosition(b + text.length() - predicateLength);
 				proposal.setStart(b - predicateLength);
 				proposal.setEnd(e - predicateLength);
-				proposal.setImage(WebKbPlugin.getImage(WebKbPlugin.class, IMAGE_NAME));
+				proposal.setImageDescriptor(IMAGE);
 				
 				proposals.add(proposal);
 			}
@@ -154,5 +155,4 @@ public class CSSClassProposalType extends CustomProposalType {
 
 		return proposals.toArray(new TextProposal[0]);
 	}
-
 }

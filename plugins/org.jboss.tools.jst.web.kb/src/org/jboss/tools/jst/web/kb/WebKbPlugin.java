@@ -183,6 +183,10 @@ public class WebKbPlugin extends BaseUIPlugin {
 		}
 	}
 
+	public static ImageDescriptor getImageDescriptor(Class<?> baseClass, String imageName) {
+		return ImageDescriptor.createFromFile(baseClass, imageName);
+	}
+
 	public static Image getImage(Class<?> baseClass, String imageName) {
 		ImageRegistry registry = getDefault().getImageRegistry();
 		Image result = registry.get(imageName);

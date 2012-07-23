@@ -44,6 +44,7 @@ import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.ELResolverFactoryManager;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.common.text.ext.util.Utils;
+import org.jboss.tools.common.ui.CommonUIPlugin;
 import org.jboss.tools.jst.jsp.contentassist.AutoContentAssistantProposal;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
@@ -139,7 +140,7 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 			int replacementOffset = contentAssistRequest.getReplacementBeginPosition();
 			int replacementLength = contentAssistRequest.getReplacementLength();
 			int cursorPosition = getCursorPositionForProposedText(replacementString);
-			Image image = textProposal.getImage();
+			Image image = CommonUIPlugin.getImageDescriptorRegistry().get(textProposal.getImageDescriptor());
 			if (image == null) {
 				image = XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_ATTRIBUTE);
 			}
@@ -285,7 +286,7 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 				replacementString = textProposal.getReplacementString();
 			}
 			int cursorPosition = getCursorPositionForProposedText(replacementString);
-			Image image = textProposal.getImage();
+			Image image = CommonUIPlugin.getImageDescriptorRegistry().get(textProposal.getImageDescriptor());
 			String displayString = textProposal.getLabel() == null ? 
 					replacementString : 
 						textProposal.getLabel();
@@ -414,7 +415,7 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 			int replacementOffset = getOffset() - query.length();
 			int replacementLength = query.length();
 			int cursorPosition = getCursorPositionForProposedText(replacementString);
-			Image image = textProposal.getImage();
+			Image image = CommonUIPlugin.getImageDescriptorRegistry().get(textProposal.getImageDescriptor());
 			if (image == null) {
 				image = XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_TAG_GENERIC);
 			}

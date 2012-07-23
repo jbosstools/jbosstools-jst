@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.Image;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
@@ -34,7 +33,7 @@ import org.jboss.tools.jst.web.kb.taglib.TagLibraryManager;
 public class FacetNameProposalType extends CustomProposalType {
 
 	private static final String IMAGE_NAME = "EnumerationProposal.gif"; //$NON-NLS-1$
-	private static Image ICON;
+	private static ImageDescriptor ICON;
 
 	private IPageContext context;
 
@@ -87,9 +86,9 @@ public class FacetNameProposalType extends CustomProposalType {
 				proposal.setReplacementString(facetName);
 				proposal.setPosition(facetName.length());
 				if(ICON==null) {
-					ICON = ImageDescriptor.createFromFile(WebKbPlugin.class, IMAGE_NAME).createImage();
+					ICON = ImageDescriptor.createFromFile(WebKbPlugin.class, IMAGE_NAME);
 				}
-				proposal.setImage(ICON);
+				proposal.setImageDescriptor(ICON);
 				proposals.add(proposal);
 			}
 		}

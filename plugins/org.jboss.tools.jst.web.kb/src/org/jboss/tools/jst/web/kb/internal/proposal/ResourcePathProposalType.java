@@ -23,7 +23,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.Image;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.filesystems.FileSystemsHelper;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
@@ -37,7 +36,7 @@ import org.jboss.tools.jst.web.kb.WebKbPlugin;
  */
 public class ResourcePathProposalType extends ModelProposalType {
 
-	private static final String IMAGE_NAME = "ResourcePathProposal.gif"; //$NON-NLS-1$
+	private static final ImageDescriptor IMAGE = WebKbPlugin.getImageDescriptor(WebKbPlugin.class, "ResourcePathProposal.gif"); //$NON-NLS-1$
 	private static Set<String> GRAPHIC_FILE_EXTENSIONS = new HashSet<String>();
 	private static Set<String> PAGE_FILE_EXTENSIONS = new HashSet<String>();
 	private static Set<String> CSS_FILE_EXTENSIONS = new HashSet<String>();
@@ -126,7 +125,7 @@ public class ResourcePathProposalType extends ModelProposalType {
 			}
 			proposal.setReplacementString(replacementString);
 			proposal.setPosition(replacementString.length());
-			proposal.setImage(WebKbPlugin.getImage(WebKbPlugin.class, IMAGE_NAME));
+			proposal.setImageDescriptor(IMAGE);
 			if(newValue == value) {
 				proposals.add(proposal);
 			}
@@ -149,7 +148,7 @@ public class ResourcePathProposalType extends ModelProposalType {
 			proposal.setAutoActivationContentAssistantAfterApplication(false);
 			proposal.setReplacementString(replacementString);
 			proposal.setPosition(replacementString.length());
-			proposal.setImage(WebKbPlugin.getImage(WebKbPlugin.class, IMAGE_NAME));
+			proposal.setImageDescriptor(IMAGE);
 			proposals.add(proposal);
 		}
 		return proposals.toArray(new TextProposal[0]);
@@ -202,6 +201,7 @@ public class ResourcePathProposalType extends ModelProposalType {
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.internal.taglib.ModelProposalType#isReadyToUse()
 	 */
+	@Override
 	protected boolean isReadyToUse() {
 		return webRootResource!=null;
 	}
@@ -315,6 +315,7 @@ public class ResourcePathProposalType extends ModelProposalType {
 			return extensions == null || extensions.isEmpty() || extensions.contains(ext);
 		}
 
+		@Override
 		public boolean visit(IResource resource) throws CoreException {
 			if(resource instanceof IFile) {
 				IFile file = (IFile)resource;
