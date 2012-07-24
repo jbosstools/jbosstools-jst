@@ -258,7 +258,7 @@ public class JavaStringELInfoHover extends JavadocHover {
 				continue;
 			
 			ELSegment segment = resolution.getLastSegment();
-			if (!segment.isResolved()) continue;
+			if (segment==null || !segment.isResolved()) continue;
 			
 			if(segment instanceof JavaMemberELSegmentImpl) {
 				JavaMemberELSegmentImpl jmSegment = (JavaMemberELSegmentImpl)segment;
