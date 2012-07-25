@@ -17,6 +17,8 @@ public interface IVpePreferencesPage {
 	static final String SHOW_SELECTION_TAG_BAR = "Show Selection Tag Bar"; //$NON-NLS-1$
 	static final String SHOW_TEXT_FORMATTING = "Show Text Formatting bar"; //$NON-NLS-1$
 	static final String SHOW_RESOURCE_BUNDLES_USAGE_AS_EL = "Show Resource Bundles Usage as EL Expressions"; //$NON-NLS-1$
+	static final String SELECTION_VISIBLE_BORDER_COLOR = "Selection border color for visible element"; //$NON-NLS-1$
+	static final String SELECTION_HIDDEN_BORDER_COLOR = "Selection border color for hidden element"; //$NON-NLS-1$
 	static final String ASK_TAG_ATTRIBUTES_ON_TAG_INSERT = "Ask for tag attributes during tag insert"; //$NON-NLS-1$
 	static final String INFORM_WHEN_PROJECT_MIGHT_NOT_BE_CONFIGURED_PROPERLY_FOR_VPE = "Inform when a project might not be configured properly for Visual Page Editor"; //$NON-NLS-1$
 	static final String DEFAULT_VPE_TAB = "Default VPE Tab"; //$NON-NLS-1$

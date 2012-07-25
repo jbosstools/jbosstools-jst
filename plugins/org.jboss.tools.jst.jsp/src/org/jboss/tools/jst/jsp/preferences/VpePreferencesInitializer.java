@@ -14,6 +14,8 @@ import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.jface.resource.StringConverter;
+import org.eclipse.swt.graphics.RGB;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 
 public class VpePreferencesInitializer extends AbstractPreferenceInitializer {
@@ -27,6 +29,10 @@ public class VpePreferencesInitializer extends AbstractPreferenceInitializer {
 		defaultPreferences.putBoolean(IVpePreferencesPage.SHOW_SELECTION_TAG_BAR, true);
 		defaultPreferences.putBoolean(IVpePreferencesPage.SHOW_TEXT_FORMATTING, true);
 		defaultPreferences.putBoolean(IVpePreferencesPage.SHOW_RESOURCE_BUNDLES_USAGE_AS_EL, false);
+		defaultPreferences.put(IVpePreferencesPage.SELECTION_VISIBLE_BORDER_COLOR, 
+				StringConverter.asString(new RGB(0, 0, 255)));
+		defaultPreferences.put(IVpePreferencesPage.SELECTION_HIDDEN_BORDER_COLOR, 
+				StringConverter.asString(new RGB(255, 0, 0)));
 		defaultPreferences.putBoolean(IVpePreferencesPage.ASK_TAG_ATTRIBUTES_ON_TAG_INSERT, true);
 		defaultPreferences.putBoolean(IVpePreferencesPage.INFORM_WHEN_PROJECT_MIGHT_NOT_BE_CONFIGURED_PROPERLY_FOR_VPE, true);
 		defaultPreferences.put(IVpePreferencesPage.DEFAULT_VPE_TAB, IVpePreferencesPage.DEFAULT_VPE_TAB_VISUAL_SOURCE_VALUE);
