@@ -105,6 +105,7 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 			IKbProject kbProject = KbProjectFactory.getKbProject(file.getProject(), true);
 			
 			ITagLibrary[] libraries = kbProject.getTagLibraries();
+			ArrayList<String> names = new ArrayList<String>();
 			for(ITagLibrary l : libraries){
 				if(l instanceof TLDLibrary){
 					((TLDLibrary) l).createDefaultNameSpace();
@@ -113,8 +114,9 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 				if(ns != null && ns.getPrefix() != null && ns.getPrefix().equals(prefix)){
 					String uri = ns.getURI();
 					String resolutionName = getResolutionName(xmlDocument != null && xmlDocument.isXMLType(), true, prefix, uri);
-					if(resolutionName != null){
+					if(resolutionName != null && !names.contains(resolutionName)){
 						proposals.add(new AddTLDMarkerResolution(resolutionName, start, end, uri, prefix));
+						names.add(resolutionName);
 					}
 				}
 			}
@@ -167,6 +169,7 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		IKbProject kbProject = KbProjectFactory.getKbProject(file.getProject(), true);
 		
 		ITagLibrary[] libraries = kbProject.getTagLibraries();
+		ArrayList<String> names = new ArrayList<String>();
 		for(ITagLibrary l : libraries){
 			if(l instanceof TLDLibrary){
 				((TLDLibrary) l).createDefaultNameSpace();
@@ -175,8 +178,9 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 			if(ns != null && ns.getPrefix() != null && ns.getPrefix().equals(prefix)){
 				String uri = ns.getURI();
 				String resolutionName = getResolutionName(marker.getType().equals(HTML_VALIDATOR_MARKER) || marker.isSubtypeOf(HTML_VALIDATOR_MARKER), marker.getType().equals(JSP_VALIDATOR_MARKER) || marker.isSubtypeOf(JSP_VALIDATOR_MARKER), prefix, uri);
-				if(resolutionName != null){
+				if(resolutionName != null && !names.contains(resolutionName)){
 					resolutions.add(new AddTLDMarkerResolution(file, resolutionName, start, end, uri, prefix));
+					names.add(resolutionName);
 				}
 			}
 		}
