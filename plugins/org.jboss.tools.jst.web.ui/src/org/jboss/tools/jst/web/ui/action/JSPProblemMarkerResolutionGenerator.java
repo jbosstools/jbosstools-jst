@@ -12,6 +12,9 @@ package org.jboss.tools.jst.web.ui.action;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -27,10 +30,13 @@ import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.sse.ui.internal.reconcile.TemporaryAnnotation;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
+import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.quickfix.IQuickFixGenerator;
 import org.jboss.tools.common.refactoring.MarkerResolutionUtils;
 import org.jboss.tools.jst.web.kb.IKbProject;
 import org.jboss.tools.jst.web.kb.KbProjectFactory;
+import org.jboss.tools.jst.web.kb.PageContextFactory;
+import org.jboss.tools.jst.web.kb.internal.XmlContextImpl;
 import org.jboss.tools.jst.web.kb.internal.taglib.TLDLibrary;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
@@ -93,14 +99,28 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		if(prefix == null)
 			return new IJavaCompletionProposal[]{};
 		
+		IFile file = MarkerResolutionUtils.getFile();
+		if(file == null)
+			return new IJavaCompletionProposal[]{};
+		
+		ELContext context = PageContextFactory.createPageContext(file);
+		if(context instanceof XmlContextImpl){
+			 Map<String, List<INameSpace>> nameSpaces = ((XmlContextImpl) context).getNameSpaces(start);
+			 Iterator<List<INameSpace>> iterator = nameSpaces.values().iterator();
+			 while(iterator.hasNext()){
+				 List<INameSpace> list = iterator.next();
+				 for(INameSpace ns : list){
+					 if(prefix.equals(ns.getPrefix())){
+						 return new IJavaCompletionProposal[]{};
+					 }
+				 }
+			 }
+		}
+		
 		Object additionalInfo = ta.getAdditionalFixInfo();
 		if(additionalInfo instanceof IDocument){
 			IStructuredModel model = StructuredModelManager.getModelManager().getModelForRead((IStructuredDocument)additionalInfo);
 			IDOMDocument xmlDocument = (model instanceof IDOMModel) ? ((IDOMModel) model).getDocument() : null;
-			
-			IFile file = MarkerResolutionUtils.getFile();
-			if(file == null)
-				return new IJavaCompletionProposal[]{};
 			
 			IKbProject kbProject = KbProjectFactory.getKbProject(file.getProject(), true);
 			
@@ -163,8 +183,21 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		if(prefix == null)
 			return new IMarkerResolution[]{};
 		
-		
 		IFile file = (IFile)marker.getResource();
+		
+		ELContext context = PageContextFactory.createPageContext(file);
+		if(context instanceof XmlContextImpl){
+			 Map<String, List<INameSpace>> nameSpaces = ((XmlContextImpl) context).getNameSpaces(start);
+			 Iterator<List<INameSpace>> iterator = nameSpaces.values().iterator();
+			 while(iterator.hasNext()){
+				 List<INameSpace> list = iterator.next();
+				 for(INameSpace ns : list){
+					 if(prefix.equals(ns.getPrefix())){
+						 return new IMarkerResolution[]{};
+					 }
+				 }
+			 }
+		}
 		
 		IKbProject kbProject = KbProjectFactory.getKbProject(file.getProject(), true);
 		
