@@ -32,6 +32,7 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.jboss.tools.common.model.ui.ModelUIImages;
 import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
 import org.jboss.tools.common.quickfix.IBaseMarkerResolution;
+import org.jboss.tools.common.ui.CommonUIPlugin;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.JSPPaletteInsertHelper;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.PaletteTaglibInserter;
 import org.jboss.tools.jst.web.ui.Messages;
@@ -134,7 +135,7 @@ public class AddTLDMarkerResolution implements IBaseMarkerResolution, IJavaCompl
 
 	@Override
 	public Image getImage() {
-		return ModelUIImages.getImageDescriptor(ModelUIImages.TAGLIB_FILE).createImage();
+		return CommonUIPlugin.getImageDescriptorRegistry().get(ModelUIImages.getImageDescriptor(ModelUIImages.TAGLIB_FILE));
 	}
 
 	@Override
