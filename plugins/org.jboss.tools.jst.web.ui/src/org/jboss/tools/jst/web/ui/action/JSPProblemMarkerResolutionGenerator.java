@@ -12,33 +12,28 @@ package org.jboss.tools.jst.web.ui.action;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.source.Annotation;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.IMarkerResolutionGenerator2;
-import org.eclipse.ui.part.FileEditorInput;
-import org.eclipse.ui.texteditor.DocumentProviderRegistry;
-import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.sse.ui.internal.reconcile.TemporaryAnnotation;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
-import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
 import org.jboss.tools.common.quickfix.IQuickFixGenerator;
-import org.jboss.tools.jst.jsp.jspeditor.dnd.JSPPaletteInsertHelper;
-import org.jboss.tools.jst.jsp.jspeditor.dnd.PaletteTaglibInserter;
+import org.jboss.tools.common.refactoring.MarkerResolutionUtils;
+import org.jboss.tools.jst.web.kb.IKbProject;
+import org.jboss.tools.jst.web.kb.KbProjectFactory;
+import org.jboss.tools.jst.web.kb.internal.taglib.TLDLibrary;
+import org.jboss.tools.jst.web.kb.taglib.INameSpace;
+import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 /**
@@ -66,142 +61,134 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		libs.put("c", "http://java.sun.com/jstl/core"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	private IFile file;
-	private Properties properties;
-	private String resolutionName;
-	
 	@Override
 	public IMarkerResolution[] getResolutions(IMarker marker) {
 		try{
-			if(isOurCase(marker)){
-				return new IMarkerResolution[] {
-					new AddTLDMarkerResolution(file, resolutionName, properties)
-				};
-			}
+			return isOurCase(marker);
 		}catch(CoreException ex){
 			WebUiPlugin.getPluginLog().logError(ex);
 		}
 		return new IMarkerResolution[]{};
 	}
 	
-	private IJavaCompletionProposal isOurCase(Annotation annotation){
+	private IJavaCompletionProposal[] isOurCase(Annotation annotation){
+		ArrayList<IJavaCompletionProposal> proposals = new ArrayList<IJavaCompletionProposal>();
 		if(!(annotation instanceof TemporaryAnnotation)){
-			return null;
+			return new IJavaCompletionProposal[]{};
 		}
 		TemporaryAnnotation ta = (TemporaryAnnotation)annotation;
 		
-		
 		String message = annotation.getText();
 		if(ta.getPosition() == null)
-			return null;
+			return new IJavaCompletionProposal[]{};
 		
 		final int start = ta.getPosition().getOffset();
 		
 		final int end = ta.getPosition().getOffset()+ta.getPosition().getLength();
 		
 		if(!message.startsWith(UNKNOWN_TAG))
-			return null;
+			return new IJavaCompletionProposal[]{};
 		
 		String prefix = getPrifix(message);
 		if(prefix == null)
-			return null;
-		
-		if(!libs.containsKey(prefix))
-			return null;
+			return new IJavaCompletionProposal[]{};
 		
 		Object additionalInfo = ta.getAdditionalFixInfo();
 		if(additionalInfo instanceof IDocument){
 			IStructuredModel model = StructuredModelManager.getModelManager().getModelForRead((IStructuredDocument)additionalInfo);
 			IDOMDocument xmlDocument = (model instanceof IDOMModel) ? ((IDOMModel) model).getDocument() : null;
-			if(xmlDocument != null && xmlDocument.isXMLType()){
-				resolutionName = "xmlns: "+prefix+" = \""+libs.get(prefix)+"\""; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			}else{
-				resolutionName = "<%@ taglib uri = \""+libs.get(prefix)+"\" prefix=\""+prefix+"\" %>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			
+			IFile file = MarkerResolutionUtils.getFile();
+			if(file == null)
+				return new IJavaCompletionProposal[]{};
+			
+			IKbProject kbProject = KbProjectFactory.getKbProject(file.getProject(), true);
+			
+			ITagLibrary[] libraries = kbProject.getTagLibraries();
+			for(ITagLibrary l : libraries){
+				if(l instanceof TLDLibrary){
+					((TLDLibrary) l).createDefaultNameSpace();
+				}
+				INameSpace ns = l.getDefaultNameSpace();
+				if(ns != null && ns.getPrefix() != null && ns.getPrefix().equals(prefix)){
+					String uri = ns.getURI();
+					String resolutionName = getResolutionName(xmlDocument != null && xmlDocument.isXMLType(), true, prefix, uri);
+					if(resolutionName != null){
+						proposals.add(new AddTLDMarkerResolution(resolutionName, start, end, uri, prefix));
+					}
+				}
 			}
 			
+			if(proposals.size() == 0 && libs.containsKey(prefix)){
+				String uri = libs.get(prefix);
+				String resolutionName = getResolutionName(xmlDocument != null && xmlDocument.isXMLType(), true, prefix, uri);
+				if(resolutionName != null){
+					proposals.add(new AddTLDMarkerResolution(resolutionName, start, end, uri, prefix));
+				}
+			}
 		}
 		
-		
-		
-		return new AddTLDMarkerResolution(resolutionName, start, end, libs.get(prefix), prefix);
+		return proposals.toArray(new IJavaCompletionProposal[]{});
 	}
 	
-	private boolean isOurCase(IMarker marker) throws CoreException{
+	private String getResolutionName(boolean xml, boolean noXML, String prefix, String uri){
+		if(xml){
+			return "xmlns: "+prefix+" = \""+uri+"\""; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		}else if(noXML){
+			return "<%@ taglib uri = \""+uri+"\" prefix=\""+prefix+"\" %>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		}
+		return null;
+	}
+	
+	private IMarkerResolution[] isOurCase(IMarker marker) throws CoreException{
+		ArrayList<IMarkerResolution> resolutions = new ArrayList<IMarkerResolution>();
 		String message = (String)marker.getAttribute(IMarker.MESSAGE);
 		
 		Integer attribute =  ((Integer)marker.getAttribute(IMarker.CHAR_START));
 		if(attribute == null)
-			return false;
+			return new IMarkerResolution[]{};
 		final int start = attribute.intValue();
 		
 		attribute = ((Integer)marker.getAttribute(IMarker.CHAR_END));
 		if(attribute == null)
-			return false;
+			return new IMarkerResolution[]{};
 		final int end = attribute.intValue();
 		
 		if(!message.startsWith(UNKNOWN_TAG))
-			return false;
+			return new IMarkerResolution[]{};
 		
 		String prefix = getPrifix(message);
 		if(prefix == null)
-			return false;
+			return new IMarkerResolution[]{};
 		
-		if(!libs.containsKey(prefix))
-			return false;
 		
-		file = (IFile)marker.getResource();
+		IFile file = (IFile)marker.getResource();
 		
-		FileEditorInput input = new FileEditorInput(file);
-		IDocumentProvider provider = DocumentProviderRegistry.getDefault().getDocumentProvider(input);
-		try {
-			provider.connect(input);
-		} catch (CoreException e) {
-			WebUiPlugin.getPluginLog().logError(e);
+		IKbProject kbProject = KbProjectFactory.getKbProject(file.getProject(), true);
+		
+		ITagLibrary[] libraries = kbProject.getTagLibraries();
+		for(ITagLibrary l : libraries){
+			if(l instanceof TLDLibrary){
+				((TLDLibrary) l).createDefaultNameSpace();
+			}
+			INameSpace ns = l.getDefaultNameSpace();
+			if(ns != null && ns.getPrefix() != null && ns.getPrefix().equals(prefix)){
+				String uri = ns.getURI();
+				String resolutionName = getResolutionName(marker.getType().equals(HTML_VALIDATOR_MARKER) || marker.isSubtypeOf(HTML_VALIDATOR_MARKER), marker.getType().equals(JSP_VALIDATOR_MARKER) || marker.isSubtypeOf(JSP_VALIDATOR_MARKER), prefix, uri);
+				if(resolutionName != null){
+					resolutions.add(new AddTLDMarkerResolution(file, resolutionName, start, end, uri, prefix));
+				}
+			}
 		}
 		
-		IDocument document = provider.getDocument(input);
-
-		properties = new Properties();
-		properties.put(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB, "true"); //$NON-NLS-1$
-		properties.put(PaletteInsertHelper.PROPOPERTY_START_TEXT, ""); //$NON-NLS-1$
-		properties.put(JSPPaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI, libs.get(prefix));
-		properties.put(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX, prefix);
-		properties.put(PaletteInsertHelper.PROPOPERTY_SELECTION_PROVIDER, new ISelectionProvider() {
-			
-			@Override
-			public void setSelection(ISelection selection) {
+		if(resolutions.size() == 0 && libs.containsKey(prefix)){
+			String uri = libs.get(prefix);
+			String resolutionName = getResolutionName(marker.getType().equals(HTML_VALIDATOR_MARKER) || marker.isSubtypeOf(HTML_VALIDATOR_MARKER), marker.getType().equals(JSP_VALIDATOR_MARKER) || marker.isSubtypeOf(JSP_VALIDATOR_MARKER), prefix, uri);
+			if(resolutionName != null){
+				resolutions.add(new AddTLDMarkerResolution(file, resolutionName, start, end, uri, prefix));
 			}
-			
-			@Override
-			public void removeSelectionChangedListener(
-					ISelectionChangedListener listener) {
-			}
-			
-			@Override
-			public ISelection getSelection() {
-				return new TextSelection(start, end-start);
-			}
-			
-			@Override
-			public void addSelectionChangedListener(ISelectionChangedListener listener) {
-			}
-		});
-		
-		
-		Properties p = PaletteTaglibInserter.getPrefixes(document, properties);
-		
-		provider.disconnect(input);
-		
-		if(p.containsValue(prefix))
-			return false;
-		
-		if(marker.getType().equals(HTML_VALIDATOR_MARKER) || marker.isSubtypeOf(HTML_VALIDATOR_MARKER)){
-			resolutionName = "xmlns: "+prefix+" = \""+libs.get(prefix)+"\""; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		}else if(marker.getType().equals(JSP_VALIDATOR_MARKER) || marker.isSubtypeOf(JSP_VALIDATOR_MARKER)){
-			resolutionName = "<%@ taglib uri = \""+libs.get(prefix)+"\" prefix=\""+prefix+"\" %>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
-		
-		return true;
+		return resolutions.toArray(new IMarkerResolution[]{});
 	}
 	
 	public static String getPrifix(String message){
@@ -239,11 +226,6 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 
 	@Override
 	public IJavaCompletionProposal[] getProposals(Annotation annotation) {
-		ArrayList<IJavaCompletionProposal> proposals = new ArrayList<IJavaCompletionProposal>();
-		IJavaCompletionProposal proposal = isOurCase(annotation); 
-		if(proposal != null){
-			proposals.add(proposal);
-		}
-		return proposals.toArray(new IJavaCompletionProposal[]{});
+		return isOurCase(annotation); 
 	}
 }

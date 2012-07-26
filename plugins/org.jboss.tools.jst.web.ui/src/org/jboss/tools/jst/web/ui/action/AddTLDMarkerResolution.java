@@ -29,6 +29,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.DocumentProviderRegistry;
 import org.eclipse.ui.texteditor.IDocumentProvider;
+import org.jboss.tools.common.model.ui.ModelUIImages;
 import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
 import org.jboss.tools.common.quickfix.IBaseMarkerResolution;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.JSPPaletteInsertHelper;
@@ -44,16 +45,18 @@ import org.jboss.tools.jst.web.ui.WebUiPlugin;
  */
 public class AddTLDMarkerResolution implements IBaseMarkerResolution, IJavaCompletionProposal{
 	private IFile file;
-	private Properties properties;
 	
 	private String resolutionName;
 	private int start, end;
 	private String uri, prefix;
 	
-	public AddTLDMarkerResolution(IFile file, String name, Properties properties){
+	public AddTLDMarkerResolution(IFile file, String name, int start, int end, String uri, String prefix){
 		this.file = file;
-		this.properties = properties;
 		this.resolutionName = name;
+		this.start = start;
+		this.end = end;
+		this.uri = uri;
+		this.prefix = prefix;
 	}
 	
 	public AddTLDMarkerResolution(String name, int start, int end, String uri, String prefix){
@@ -63,51 +66,9 @@ public class AddTLDMarkerResolution implements IBaseMarkerResolution, IJavaCompl
 		this.uri = uri;
 		this.prefix = prefix;
 	}
-
-	@Override
-	public String getLabel() {
-		return NLS.bind(Messages.AddTLDMarkerResolution_Name, resolutionName);
-	}
-
-	@Override
-	public void run(IMarker marker) {
-		FileEditorInput input = new FileEditorInput(file);
-		IDocumentProvider provider = DocumentProviderRegistry.getDefault().getDocumentProvider(input);
-		try {
-			provider.connect(input);
-			
-			boolean dirty = provider.canSaveDocument(input);
-		
-			IDocument document = provider.getDocument(input);
-			
-			PaletteTaglibInserter inserter = new PaletteTaglibInserter();
-			inserter.inserTaglib(document, properties);
-			
-			if(!dirty){
-				provider.aboutToChange(input);
-				provider.saveDocument(new NullProgressMonitor(), input, document, true);
-				provider.changed(input);
-			}
-			
-			provider.disconnect(input);
-		}catch(CoreException ex){
-			WebUiPlugin.getPluginLog().logError(ex);
-		}
-	}
-
-	@Override
-	public String getDescription() {
-		return getLabel();
-	}
-
-	@Override
-	public Image getImage() {
-		return null;//ImageDescriptor.createFromFile(AddTLDMarkerResolution.class,	"images/xstudio/editors/taglibs_file.gif").createImage(); //$NON-NLS-1$
-	}
-
-	@Override
-	public void apply(IDocument document) {
-		properties = new Properties();
+	
+	private Properties getProperties(){
+		Properties properties = new Properties();
 		properties.put(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB, "true"); //$NON-NLS-1$
 		properties.put(PaletteInsertHelper.PROPOPERTY_START_TEXT, ""); //$NON-NLS-1$
 		properties.put(JSPPaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI, uri);
@@ -132,9 +93,56 @@ public class AddTLDMarkerResolution implements IBaseMarkerResolution, IJavaCompl
 			public void addSelectionChangedListener(ISelectionChangedListener listener) {
 			}
 		});
+		return properties;
+	}
+
+	@Override
+	public String getLabel() {
+		return NLS.bind(Messages.AddTLDMarkerResolution_Name, resolutionName);
+	}
+
+	@Override
+	public void run(IMarker marker) {
+		FileEditorInput input = new FileEditorInput(file);
+		IDocumentProvider provider = DocumentProviderRegistry.getDefault().getDocumentProvider(input);
+		try {
+			provider.connect(input);
+			
+			boolean dirty = provider.canSaveDocument(input);
 		
+			IDocument document = provider.getDocument(input);
+			
+			PaletteTaglibInserter inserter = new PaletteTaglibInserter();
+			inserter.inserTaglib(document, getProperties());
+			
+			if(!dirty){
+				provider.aboutToChange(input);
+				provider.saveDocument(new NullProgressMonitor(), input, document, true);
+				provider.changed(input);
+			}
+			
+			provider.disconnect(input);
+		}catch(CoreException ex){
+			WebUiPlugin.getPluginLog().logError(ex);
+		}
+	}
+
+	@Override
+	public String getDescription() {
+		return getLabel();
+	}
+
+	@Override
+	public Image getImage() {
+		return ModelUIImages.getImageDescriptor(ModelUIImages.TAGLIB_FILE).createImage();
+	}
+
+	@Override
+	public void apply(IDocument document) {
 		
-		Properties p = PaletteTaglibInserter.getPrefixes(document, properties);
+		Properties properties = getProperties();
+		
+		PaletteTaglibInserter.getPrefixes(document, properties);
 		
 		PaletteTaglibInserter inserter = new PaletteTaglibInserter();
 		inserter.inserTaglib(document, properties);
