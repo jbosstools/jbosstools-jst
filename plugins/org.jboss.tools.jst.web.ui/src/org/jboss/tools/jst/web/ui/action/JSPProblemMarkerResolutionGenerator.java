@@ -99,6 +99,10 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		if(prefix == null)
 			return new IJavaCompletionProposal[]{};
 		
+		String tagName = getTagName(message);
+		if(tagName == null)
+			return new IJavaCompletionProposal[]{};
+		
 		IFile file = MarkerResolutionUtils.getFile();
 		if(file == null)
 			return new IJavaCompletionProposal[]{};
@@ -126,22 +130,24 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 			
 			ITagLibrary[] libraries = kbProject.getTagLibraries();
 			ArrayList<String> names = new ArrayList<String>();
+			boolean worked = false;
 			for(ITagLibrary l : libraries){
 				if(l instanceof TLDLibrary){
 					((TLDLibrary) l).createDefaultNameSpace();
 				}
 				INameSpace ns = l.getDefaultNameSpace();
 				if(ns != null && ns.getPrefix() != null && ns.getPrefix().equals(prefix)){
+					worked = true;
 					String uri = ns.getURI();
 					String resolutionName = getResolutionName(xmlDocument != null && xmlDocument.isXMLType(), true, prefix, uri);
-					if(resolutionName != null && !names.contains(resolutionName)){
+					if(resolutionName != null && !names.contains(resolutionName) && l.getComponent(tagName) != null){
 						proposals.add(new AddTLDMarkerResolution(resolutionName, start, end, uri, prefix));
 						names.add(resolutionName);
 					}
 				}
 			}
 			
-			if(proposals.size() == 0 && libs.containsKey(prefix)){
+			if(proposals.size() == 0 && libs.containsKey(prefix) && !worked){
 				String uri = libs.get(prefix);
 				String resolutionName = getResolutionName(xmlDocument != null && xmlDocument.isXMLType(), true, prefix, uri);
 				if(resolutionName != null){
@@ -183,6 +189,10 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		if(prefix == null)
 			return new IMarkerResolution[]{};
 		
+		String tagName = getTagName(message);
+		if(tagName == null)
+			return new IMarkerResolution[]{};
+		
 		IFile file = (IFile)marker.getResource();
 		
 		ELContext context = PageContextFactory.createPageContext(file);
@@ -203,22 +213,24 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		
 		ITagLibrary[] libraries = kbProject.getTagLibraries();
 		ArrayList<String> names = new ArrayList<String>();
+		boolean worked = false;
 		for(ITagLibrary l : libraries){
 			if(l instanceof TLDLibrary){
 				((TLDLibrary) l).createDefaultNameSpace();
 			}
 			INameSpace ns = l.getDefaultNameSpace();
 			if(ns != null && ns.getPrefix() != null && ns.getPrefix().equals(prefix)){
+				worked = true;
 				String uri = ns.getURI();
 				String resolutionName = getResolutionName(marker.getType().equals(HTML_VALIDATOR_MARKER) || marker.isSubtypeOf(HTML_VALIDATOR_MARKER), marker.getType().equals(JSP_VALIDATOR_MARKER) || marker.isSubtypeOf(JSP_VALIDATOR_MARKER), prefix, uri);
-				if(resolutionName != null && !names.contains(resolutionName)){
+				if(resolutionName != null && !names.contains(resolutionName) && l.getComponent(tagName) != null){
 					resolutions.add(new AddTLDMarkerResolution(file, resolutionName, start, end, uri, prefix));
 					names.add(resolutionName);
 				}
 			}
 		}
 		
-		if(resolutions.size() == 0 && libs.containsKey(prefix)){
+		if(resolutions.size() == 0 && libs.containsKey(prefix) && !worked){
 			String uri = libs.get(prefix);
 			String resolutionName = getResolutionName(marker.getType().equals(HTML_VALIDATOR_MARKER) || marker.isSubtypeOf(HTML_VALIDATOR_MARKER), marker.getType().equals(JSP_VALIDATOR_MARKER) || marker.isSubtypeOf(JSP_VALIDATOR_MARKER), prefix, uri);
 			if(resolutionName != null){
@@ -242,6 +254,22 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		prefix = message.substring(start+1, end);
 		
 		return prefix;
+	}
+
+	public static String getTagName(String message){
+		String tagName=""; //$NON-NLS-1$
+		
+		int start = message.indexOf(":"); //$NON-NLS-1$
+		if(start < 0)
+			return null;
+		
+		int end = message.indexOf(")", start); //$NON-NLS-1$
+		if(end < 0)
+			return null;
+		
+		tagName = message.substring(start+1, end);
+		
+		return tagName;
 	}
 
 	@Override
