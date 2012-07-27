@@ -128,7 +128,7 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 			
 			IKbProject kbProject = KbProjectFactory.getKbProject(file.getProject(), true);
 			
-			ITagLibrary[] libraries = kbProject.getTagLibraries();
+			List<ITagLibrary> libraries = kbProject.getAllTagLibraries();
 			ArrayList<String> names = new ArrayList<String>();
 			boolean worked = false;
 			for(ITagLibrary l : libraries){
@@ -211,7 +211,7 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		
 		IKbProject kbProject = KbProjectFactory.getKbProject(file.getProject(), true);
 		
-		ITagLibrary[] libraries = kbProject.getTagLibraries();
+		List<ITagLibrary> libraries = kbProject.getAllTagLibraries();
 		ArrayList<String> names = new ArrayList<String>();
 		boolean worked = false;
 		for(ITagLibrary l : libraries){

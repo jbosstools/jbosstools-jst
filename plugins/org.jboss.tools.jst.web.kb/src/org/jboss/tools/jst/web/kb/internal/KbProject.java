@@ -116,7 +116,7 @@ public class KbProject extends KbObject implements IKbProject {
 	 */
 	@Override
 	public List<ITagLibrary> getAllTagLibraries() {
-		Set<ITagLibrary> libs =  libraries.getAllLibraries();
+		Collection<ITagLibrary> libs =  libraries.getAllLibraries();
 		List<ITagLibrary> result = StaticLibraries.instance.getAllTagLibraries();
 		result.addAll(libs);
 		return result;
