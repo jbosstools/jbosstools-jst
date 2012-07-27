@@ -41,6 +41,7 @@ import org.jboss.tools.common.CommonPlugin;
 import org.jboss.tools.common.EclipseUtil;
 import org.jboss.tools.common.el.core.ELReference;
 import org.jboss.tools.common.el.core.model.ELExpression;
+import org.jboss.tools.common.el.core.model.ELInstance;
 import org.jboss.tools.common.el.core.model.ELInvocationExpression;
 import org.jboss.tools.common.el.core.model.ELPropertyInvocation;
 import org.jboss.tools.common.el.core.parser.ELParserFactory;
@@ -293,7 +294,7 @@ public class ELValidator extends WebValidator implements IStringValidator {
 				disableProblemAnnotations(el);
 			}
 
-			if(context!=null && !el.getSyntaxErrors().isEmpty()) {
+			if(context!=null && !el.getSyntaxErrors().isEmpty() && !isDollarExpressionInXML(el)) {
 				for (SyntaxError error: el.getSyntaxErrors()) {
 					markers++;
 					IJavaSourceReference reference = getJavaReference(el.getResource(), el.getStartPosition() + error.getPosition(), 1);
@@ -316,6 +317,20 @@ public class ELValidator extends WebValidator implements IStringValidator {
 				validateELExpression(el, expresion, asYouType, context);
 			}
 		}
+	}
+
+	private boolean isDollarExpressionInXML(ELReference el) {
+		String ext = el.getResource().getFileExtension();
+		return ("xml".equals(ext) && isDollarExpression(el)); 
+	}
+	private boolean isDollarExpression(ELReference el) {
+		List<ELInstance> is = el.getELModel().getInstances();
+		for (ELInstance i:is) {
+			if(i.getFirstToken().getText().equals("${")) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void validateELExpression(ELReference elReference, ELExpression el, boolean asYouType, ELContext context) {
