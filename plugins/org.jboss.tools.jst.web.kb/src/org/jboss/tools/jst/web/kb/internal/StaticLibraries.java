@@ -66,7 +66,7 @@ public class StaticLibraries {
 				LoadedDeclarations ds = scanner.parse(fo, new Path(file.getAbsolutePath()), null);
 				List<ITagLibrary> ls = ds.getLibraries();
 				for (ITagLibrary l : ls) {
-					libraries.addLibrary(l);
+					libraries.addLibrary(l, new Path(file.getAbsolutePath()));
 				}
 			}
 		}

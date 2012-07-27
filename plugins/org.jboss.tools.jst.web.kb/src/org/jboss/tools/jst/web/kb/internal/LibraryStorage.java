@@ -10,6 +10,8 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -50,8 +52,10 @@ public class LibraryStorage {
 		return allLibrariesArray;
 	}
 
-	synchronized Set<ITagLibrary> getAllLibraries() {
-		return allLibraries;
+	synchronized Collection<ITagLibrary> getAllLibraries() {
+		Collection<ITagLibrary> collection = new ArrayList<ITagLibrary>();
+		collection.addAll(allLibraries);
+		return collection;
 	}
 
 	public synchronized ITagLibrary[] getLibrariesArray(String uri) {
@@ -82,15 +86,18 @@ public class LibraryStorage {
 		return result;
 	}
 
-	public synchronized void addLibrary(ITagLibrary f) {
+	public void addLibrary(ITagLibrary f) {
+		addLibrary(f, f.getSourcePath());
+	}
+
+	public synchronized void addLibrary(ITagLibrary f, IPath sourcePath) {
 		allLibraries.add(f);
 		allLibrariesArray = EMPTY_LIB_ARRAY;
-		IPath path = f.getSourcePath();
-		if(path != null) {
-			Set<ITagLibrary> fs = librariesBySource.get(path);
+		if(sourcePath != null) {
+			Set<ITagLibrary> fs = librariesBySource.get(sourcePath);
 			if(fs == null) {
 				fs = new HashSet<ITagLibrary>();
-				librariesBySource.put(path, fs);
+				librariesBySource.put(sourcePath, fs);
 			}
 			fs.add(f);
 		}
@@ -105,16 +112,19 @@ public class LibraryStorage {
 	}
 
 	public synchronized void removeLibrary(ITagLibrary f) {
+		removeLibrary(f, f.getSourcePath());
+	}
+
+	public synchronized void removeLibrary(ITagLibrary f, IPath sourcePath) {
 		allLibraries.remove(f);
 		allLibrariesArray = EMPTY_LIB_ARRAY;
-		IPath path = f.getSourcePath();
-		if(path != null) {
-			Set<ITagLibrary> fs = librariesBySource.get(path);
+		if(sourcePath != null) {
+			Set<ITagLibrary> fs = librariesBySource.get(sourcePath);
 			if(fs != null) {
 				fs.remove(f);
 			}
 			if(fs.isEmpty()) {
-				librariesBySource.remove(path);
+				librariesBySource.remove(sourcePath);
 			}
 		}
 		String uri = f.getURI();
