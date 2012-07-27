@@ -11,7 +11,6 @@
 package org.jboss.tools.jst.web.ui.action;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -55,18 +54,6 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 	
 	private static final String UNKNOWN_TAG = "Unknown tag"; //$NON-NLS-1$
 	
-	public static HashMap<String, String> libs = new HashMap<String, String>();
-	static{
-		libs.put("s", "http://jboss.com/products/seam/taglib");  //$NON-NLS-1$//$NON-NLS-2$
-		libs.put("ui", "http://java.sun.com/jsf/facelets"); //$NON-NLS-1$ //$NON-NLS-2$
-		libs.put("f", "http://java.sun.com/jsf/core"); //$NON-NLS-1$ //$NON-NLS-2$
-		libs.put("h", "http://java.sun.com/jsf/html"); //$NON-NLS-1$ //$NON-NLS-2$
-		libs.put("rich", "http://richfaces.org/rich"); //$NON-NLS-1$ //$NON-NLS-2$
-		libs.put("a4j", "http://richfaces.org/a4j"); //$NON-NLS-1$ //$NON-NLS-2$
-		libs.put("a", "http://richfaces.org/a4j"); //$NON-NLS-1$ //$NON-NLS-2$
-		libs.put("c", "http://java.sun.com/jstl/core"); //$NON-NLS-1$ //$NON-NLS-2$
-	}
-
 	@Override
 	public IMarkerResolution[] getResolutions(IMarker marker) {
 		try{
@@ -130,14 +117,12 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 			
 			List<ITagLibrary> libraries = kbProject.getAllTagLibraries();
 			ArrayList<String> names = new ArrayList<String>();
-			boolean worked = false;
 			for(ITagLibrary l : libraries){
 				if(l instanceof TLDLibrary){
 					((TLDLibrary) l).createDefaultNameSpace();
 				}
 				INameSpace ns = l.getDefaultNameSpace();
 				if(ns != null && ns.getPrefix() != null && ns.getPrefix().equals(prefix)){
-					worked = true;
 					String uri = ns.getURI();
 					String resolutionName = getResolutionName(xmlDocument != null && xmlDocument.isXMLType(), true, prefix, uri);
 					if(resolutionName != null && !names.contains(resolutionName) && l.getComponent(tagName) != null){
@@ -147,13 +132,19 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 				}
 			}
 			
-			if(proposals.size() == 0 && libs.containsKey(prefix) && !worked){
-				String uri = libs.get(prefix);
+			for(ITagLibrary l : libraries){
+				INameSpace ns = l.getDefaultNameSpace();
+				if(ns != null && ns.getPrefix() != null && ns.getPrefix().equals(prefix))
+					continue;
+				
+				String uri = l.getURI();
 				String resolutionName = getResolutionName(xmlDocument != null && xmlDocument.isXMLType(), true, prefix, uri);
-				if(resolutionName != null){
+				if(resolutionName != null && !names.contains(resolutionName) && l.getComponent(tagName) != null){
 					proposals.add(new AddTLDMarkerResolution(resolutionName, start, end, uri, prefix));
+					names.add(resolutionName);
 				}
 			}
+			
 		}
 		
 		return proposals.toArray(new IJavaCompletionProposal[]{});
@@ -213,14 +204,12 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		
 		List<ITagLibrary> libraries = kbProject.getAllTagLibraries();
 		ArrayList<String> names = new ArrayList<String>();
-		boolean worked = false;
 		for(ITagLibrary l : libraries){
 			if(l instanceof TLDLibrary){
 				((TLDLibrary) l).createDefaultNameSpace();
 			}
 			INameSpace ns = l.getDefaultNameSpace();
 			if(ns != null && ns.getPrefix() != null && ns.getPrefix().equals(prefix)){
-				worked = true;
 				String uri = ns.getURI();
 				String resolutionName = getResolutionName(marker.getType().equals(HTML_VALIDATOR_MARKER) || marker.isSubtypeOf(HTML_VALIDATOR_MARKER), marker.getType().equals(JSP_VALIDATOR_MARKER) || marker.isSubtypeOf(JSP_VALIDATOR_MARKER), prefix, uri);
 				if(resolutionName != null && !names.contains(resolutionName) && l.getComponent(tagName) != null){
@@ -229,14 +218,19 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 				}
 			}
 		}
-		
-		if(resolutions.size() == 0 && libs.containsKey(prefix) && !worked){
-			String uri = libs.get(prefix);
+		for(ITagLibrary l : libraries){
+			INameSpace ns = l.getDefaultNameSpace();
+			if(ns != null && ns.getPrefix() != null && ns.getPrefix().equals(prefix))
+				continue;
+			
+			String uri = l.getURI();
 			String resolutionName = getResolutionName(marker.getType().equals(HTML_VALIDATOR_MARKER) || marker.isSubtypeOf(HTML_VALIDATOR_MARKER), marker.getType().equals(JSP_VALIDATOR_MARKER) || marker.isSubtypeOf(JSP_VALIDATOR_MARKER), prefix, uri);
-			if(resolutionName != null){
+			if(resolutionName != null && !names.contains(resolutionName) && l.getComponent(tagName) != null){
 				resolutions.add(new AddTLDMarkerResolution(file, resolutionName, start, end, uri, prefix));
+				names.add(resolutionName);
 			}
 		}
+		
 		return resolutions.toArray(new IMarkerResolution[]{});
 	}
 	
