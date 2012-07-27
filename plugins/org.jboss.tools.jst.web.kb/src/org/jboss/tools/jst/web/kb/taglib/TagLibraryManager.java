@@ -19,7 +19,11 @@ import java.util.List;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.wst.xml.core.internal.XMLCorePlugin;
-import org.eclipse.wst.xml.core.internal.catalog.provisional.ICatalogEntry;
+import org.eclipse.wst.xml.core.internal.catalog.Catalog;
+import org.eclipse.wst.xml.core.internal.catalog.CatalogEntry;
+import org.eclipse.wst.xml.core.internal.catalog.provisional.ICatalog;
+import org.eclipse.wst.xml.core.internal.catalog.provisional.ICatalogElement;
+import org.eclipse.wst.xml.core.internal.catalog.provisional.INextCatalog;
 import org.jboss.tools.jst.web.kb.IKbProject;
 import org.jboss.tools.jst.web.kb.KbProjectFactory;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
@@ -106,14 +110,23 @@ public class TagLibraryManager {
 	public static List<File> getStaticTagLibs() {
 		List<File> files = new ArrayList<File>();
 		try {
-			ICatalogEntry[] entries = XMLCorePlugin.getDefault().getDefaultXMLCatalog().getCatalogEntries();
-			for (ICatalogEntry entry : entries) {
-				String uri = entry.getURI();
-				if(uri!=null && uri.endsWith(".tld") && uri.endsWith(".xml")) {
-	        		File file = new File(new URL(uri).getFile());
-	        		if(file.exists()) {
-	        			files.add(file);
-	        		}
+			INextCatalog[] catalogs = XMLCorePlugin.getDefault().getDefaultXMLCatalog().getNextCatalogs();
+			for (INextCatalog catalog : catalogs) {
+				ICatalog c = catalog.getReferencedCatalog();
+				if(c instanceof Catalog) {
+					ICatalogElement[] elements = ((Catalog)c).getCatalogElements();
+					for (ICatalogElement element : elements) {
+						if(element instanceof CatalogEntry) {
+							CatalogEntry entry = (CatalogEntry)element;
+							String uri = entry.getURI();
+							if(uri!=null && (uri.endsWith(".tld") || uri.endsWith(".xml")) && (uri.startsWith("file:") || uri.startsWith("jar:"))) {
+				        		File file = new File(new URL(uri).getFile());
+				        		if(file.exists()) {
+				        			files.add(file);
+				        		}
+							}
+						}
+					}
 				}
 			}
 		} catch (IOException e) {
