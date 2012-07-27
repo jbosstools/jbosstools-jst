@@ -141,7 +141,7 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 			int replacementLength = contentAssistRequest.getReplacementLength();
 			int cursorPosition = getCursorPositionForProposedText(replacementString);
 			Image image = CommonUIPlugin.getImageDescriptorRegistry().get(textProposal.getImageDescriptor());
-			if (image == null) {
+			if (textProposal.getImageDescriptor() == null) {
 				image = XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_ATTRIBUTE);
 			}
 
@@ -416,7 +416,7 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 			int replacementLength = query.length();
 			int cursorPosition = getCursorPositionForProposedText(replacementString);
 			Image image = CommonUIPlugin.getImageDescriptorRegistry().get(textProposal.getImageDescriptor());
-			if (image == null) {
+			if(textProposal.getImageDescriptor()==null) {
 				image = XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_TAG_GENERIC);
 			}
 
