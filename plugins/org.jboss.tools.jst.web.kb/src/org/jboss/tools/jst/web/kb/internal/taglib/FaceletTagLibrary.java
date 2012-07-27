@@ -22,12 +22,13 @@ public class FaceletTagLibrary extends FunctionTagLib implements
 	public FaceletTagLibrary() {		
 	}
 
+	@Override
 	public FaceletTagLibrary clone() throws CloneNotSupportedException {
 		return (FaceletTagLibrary)super.clone();
 	}
 
+	@Override
 	public String getXMLClass() {
 		return KbXMLStoreConstants.CLS_FACELET_LIBRARY;
 	}
-
 }

@@ -10,11 +10,12 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal;
 
-
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.runtime.Path;
 import org.jboss.tools.common.model.XModelObject;
@@ -35,7 +36,7 @@ public class StaticLibraries {
 	LibraryStorage libraries = new LibraryStorage();
 	Map<File, XModelObject> loadedFolders = new HashMap<File, XModelObject>();
 	Map<File, XModelObject> loadedFiles = new HashMap<File, XModelObject>();
-	
+
 	private StaticLibraries() {}
 
 	public ITagLibrary[] getLibraries(String uri) {
@@ -44,6 +45,11 @@ public class StaticLibraries {
 		if(loadedFiles.containsKey(file)) {
 			return libraries.getLibrariesArray(uri);
 		}
+		addLib(file);
+		return libraries.getLibrariesArray(uri);
+	}
+
+	private void addLib(File file) {
 		File folder = file.getParentFile();
 		if(!loadedFolders.containsKey(folder)) {
 			XModelObject o = EclipseResourceUtil.createObjectForLocation(file.getAbsolutePath());
@@ -64,8 +70,18 @@ public class StaticLibraries {
 				}
 			}
 		}
-		
-		return libraries.getLibrariesArray(uri);
 	}
 
+	public List<ITagLibrary> getAllTagLibraries() {
+		List<ITagLibrary> libs = new ArrayList<ITagLibrary>();
+		List<File> files = TagLibraryManager.getStaticTagLibs();
+		for (File file : files) {
+			if(!loadedFiles.containsKey(file)) {
+				addLib(file);
+			}
+			Set<ITagLibrary> ls = libraries.getLibrariesBySource(new Path(file.getAbsolutePath()));
+			libs.addAll(ls);
+		}
+		return libs;
+	}
 }

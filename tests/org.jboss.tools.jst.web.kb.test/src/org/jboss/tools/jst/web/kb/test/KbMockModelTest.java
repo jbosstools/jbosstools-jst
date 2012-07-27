@@ -64,7 +64,7 @@ public class KbMockModelTest extends TestCase {
 		kbProject = KbProjectFactory.getKbProject(project, true, false);
 		assertNotNull(kbProject);
 
-		ITagLibrary[] ls = kbProject.getTagLibraries();
+		ITagLibrary[] ls = kbProject.getProjectTagLibraries();
 		
 		assertTrue(ls.length > 0);
 	}

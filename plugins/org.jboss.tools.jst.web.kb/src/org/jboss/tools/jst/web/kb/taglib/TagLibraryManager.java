@@ -13,10 +13,13 @@ package org.jboss.tools.jst.web.kb.taglib;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.wst.xml.core.internal.XMLCorePlugin;
+import org.eclipse.wst.xml.core.internal.catalog.provisional.ICatalogEntry;
 import org.jboss.tools.jst.web.kb.IKbProject;
 import org.jboss.tools.jst.web.kb.KbProjectFactory;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
@@ -37,7 +40,7 @@ public class TagLibraryManager {
 		if(kbProject == null) {
 			return new ITagLibrary[0];
 		}
-		return uri==null?kbProject.getTagLibraries():kbProject.getTagLibraries(uri);
+		return uri==null?kbProject.getProjectTagLibraries():kbProject.getTagLibraries(uri);
 	}
 
 	/**
@@ -91,5 +94,31 @@ public class TagLibraryManager {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Returns all the tag libraries which are available for all the projects
+	 * even if the lib are not in the project classpath.
+	 * These libs should be registered in XML Catalog via plugin.xml.
+	 * @param uri
+	 * @return
+	 */
+	public static List<File> getStaticTagLibs() {
+		List<File> files = new ArrayList<File>();
+		try {
+			ICatalogEntry[] entries = XMLCorePlugin.getDefault().getDefaultXMLCatalog().getCatalogEntries();
+			for (ICatalogEntry entry : entries) {
+				String uri = entry.getURI();
+				if(uri!=null && uri.endsWith(".tld") && uri.endsWith(".xml")) {
+	        		File file = new File(new URL(uri).getFile());
+	        		if(file.exists()) {
+	        			files.add(file);
+	        		}
+				}
+			}
+		} catch (IOException e) {
+			WebKbPlugin.getDefault().logError(e);
+		}
+		return files;
 	}
 }

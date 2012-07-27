@@ -50,6 +50,10 @@ public class LibraryStorage {
 		return allLibrariesArray;
 	}
 
+	synchronized Set<ITagLibrary> getAllLibraries() {
+		return allLibraries;
+	}
+
 	public synchronized ITagLibrary[] getLibrariesArray(String uri) {
 		ITagLibrary[] result = librariesByUriArray.get(uri);
 		if(result == null) {

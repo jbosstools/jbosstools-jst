@@ -44,7 +44,6 @@ import org.w3c.dom.Element;
  * Abstract implementation of ITagLibrary
  * @author Alexey Kazakov
  */
-
 public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	public static String URI = "uri"; //$NON-NLS-1$
 
@@ -60,6 +59,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.TagLibrary#getAllComponents()
 	 */
+	@Override
 	public IComponent[] getComponents() {
 		if(componentsArray==null) {
 			synchronized (components) {
@@ -72,6 +72,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.TagLibrary#getComponent(java.lang.String)
 	 */
+	@Override
 	public IComponent getComponent(String name) {
 		if(ignoreCase) {
 			name = name.toLowerCase();
@@ -83,6 +84,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.ITagLibrary#getComponentByType(java.lang.String)
 	 */
+	@Override
 	public IComponent getComponentByType(String type) {
 		IComponent[] comps = getComponents();
 		for (int i = 0; i < comps.length; i++) {
@@ -96,6 +98,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.TagLibrary#getComponents(java.lang.String)
 	 */
+	@Override
 	public IComponent[] getComponents(String nameTemplate) {
 		return getComponents(nameTemplate, null);
 	}
@@ -121,6 +124,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.ITagLibrary#getComponents(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.PageContext)
 	 */
+	@Override
 	public IComponent[] getComponents(KbQuery query, IPageContext context) {
 		List<String> prefixes = getPrefixes(query, context);
 		return getComponentsByPrefixes(query, prefixes, context);
@@ -347,6 +351,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.TagLibrary#getResource()
 	 */
+	@Override
 	public IResource getResource() {
 		if(resource != null) return resource;
 		if(source != null) {
@@ -365,6 +370,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getNameSpace()
 	 */
+	@Override
 	public INameSpace getDefaultNameSpace() {
 		return nameSpace;
 	}
@@ -379,6 +385,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.TagLibrary#getURI()
 	 */
+	@Override
 	public String getURI() {
 		return uri;
 	}
@@ -399,6 +406,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.ITagLibrary#getVersion()
 	 */
+	@Override
 	public String getVersion() {
 		return version;
 	}
@@ -413,6 +421,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.ProposalProcessor#getProposals(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.PageContext)
 	 */
+	@Override
 	public TextProposal[] getProposals(KbQuery query, IPageContext context) {
 		List<String> prefixes = getPrefixes(query, context);
 		List<TextProposal> proposals = new ArrayList<TextProposal>();
@@ -548,6 +557,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	private void clearComponentArrays() {
 		componentsArray = null;
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.internal.KbObject#getXMLName()
@@ -621,5 +631,4 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	protected void loadAttributeValues(Element element) {
 		setURI(attributesInfo.get(URI));
 	}
-
 }

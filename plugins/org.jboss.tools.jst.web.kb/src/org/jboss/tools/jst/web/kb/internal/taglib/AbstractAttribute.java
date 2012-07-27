@@ -42,6 +42,7 @@ public abstract class AbstractAttribute extends KbObject implements IAttribute {
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IAttribute#getDescription()
 	 */
+	@Override
 	public String getDescription() {
 		return description;
 	}
@@ -61,6 +62,7 @@ public abstract class AbstractAttribute extends KbObject implements IAttribute {
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IAttribute#getName()
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -80,6 +82,7 @@ public abstract class AbstractAttribute extends KbObject implements IAttribute {
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IAttribute#isPreferable()
 	 */
+	@Override
 	public boolean isPreferable() {
 		return isRequired();
 	}
@@ -87,6 +90,7 @@ public abstract class AbstractAttribute extends KbObject implements IAttribute {
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IAttribute#isRequired()
 	 */
+	@Override
 	public boolean isRequired() {
 		return required;
 	}
@@ -107,6 +111,7 @@ public abstract class AbstractAttribute extends KbObject implements IAttribute {
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IAttribute#getComponent()
 	 */
+	@Override
 	public IComponent getComponent() {
 		return (IComponent)parent;
 	}
@@ -115,6 +120,7 @@ public abstract class AbstractAttribute extends KbObject implements IAttribute {
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.IProposalProcessor#getProposals(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.IPageContext)
 	 */
+	@Override
 	public TextProposal[] getProposals(KbQuery query, IPageContext context) {
 		return EMPTY_PROPOSAL_LIST;
 	}
@@ -176,7 +182,7 @@ public abstract class AbstractAttribute extends KbObject implements IAttribute {
 	@Override
 	public Element toXML(Element parent, Properties context) {
 		Element element = super.toXML(parent, context);
-		
+
 		if(attributesInfo.get(XMLStoreConstants.ATTR_NAME) == null && name != null) {
 			element.setAttribute(XMLStoreConstants.ATTR_NAME, name);
 		}
@@ -207,9 +213,7 @@ public abstract class AbstractAttribute extends KbObject implements IAttribute {
 	 */
 	@Override
 	protected void saveAttributesInfo(Element element, Properties context) {
-		if(context.get(XMLStoreConstants.KEY_MODEL_OBJECT) == getId()) {
-			
-		} else {
+		if(context.get(XMLStoreConstants.KEY_MODEL_OBJECT) != getId()) {
 			super.saveAttributesInfo(element, context);
 		}
 	}

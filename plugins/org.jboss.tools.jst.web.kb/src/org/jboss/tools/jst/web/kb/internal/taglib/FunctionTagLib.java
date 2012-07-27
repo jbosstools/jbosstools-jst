@@ -35,6 +35,7 @@ public abstract class FunctionTagLib extends AbstractTagLib implements IFunction
 
 	public FunctionTagLib() {}
 
+	@Override
 	public IELFunction[] getFunctions() {
 		if(functionArray == null) {
 			functionArray = functions.toArray(new ELFunction[0]);
@@ -42,6 +43,7 @@ public abstract class FunctionTagLib extends AbstractTagLib implements IFunction
 		return functionArray;
 	}
 
+	@Override
 	public FunctionTagLib clone() throws CloneNotSupportedException {
 		FunctionTagLib copy = (FunctionTagLib)super.clone();
 		copy.functions = new ArrayList<ELFunction>();
@@ -57,6 +59,7 @@ public abstract class FunctionTagLib extends AbstractTagLib implements IFunction
 		functionArray = null;
 	}
 
+	@Override
 	public List<Change> merge(KbObject s) {
 		List<Change> changes = super.merge(s);
 		FunctionTagLib t = (FunctionTagLib)s;
@@ -95,6 +98,7 @@ public abstract class FunctionTagLib extends AbstractTagLib implements IFunction
 		}
 	}
 
+	@Override
 	public Element toXML(Element parent, Properties context) {
 		Element element = super.toXML(parent, context);
 
@@ -105,9 +109,10 @@ public abstract class FunctionTagLib extends AbstractTagLib implements IFunction
 		return element;
 	}
 
+	@Override
 	public void loadXML(Element element, Properties context) {
 		super.loadXML(element, context);
-		
+
 		Element[] cs = XMLUtilities.getChildren(element, KbXMLStoreConstants.TAG_FUNCTION);
 		for (Element e: cs) {
 			ELFunction f = new ELFunction();
@@ -115,5 +120,4 @@ public abstract class FunctionTagLib extends AbstractTagLib implements IFunction
 			addFunction(f);
 		}
 	}
-
 }

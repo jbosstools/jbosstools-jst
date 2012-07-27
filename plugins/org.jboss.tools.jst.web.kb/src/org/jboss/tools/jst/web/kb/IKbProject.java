@@ -10,6 +10,8 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb;
 
+import java.util.List;
+
 import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.runtime.IPath;
 import org.jboss.tools.common.validation.IProjectValidationContext;
@@ -26,10 +28,18 @@ public interface IKbProject extends IProjectNature {
 	public static String NATURE_ID = WebKbPlugin.PLUGIN_ID + ".kbnature"; //$NON-NLS-1$
 
 	/**
-	 * Returns all available tag libraries.
+	 * Returns all available tag libraries of the project.
+	 * Doesn't returns libraries from XML Catalog.
+	 * The same as getTagLibraries(false);
 	 * @return
 	 */
-	ITagLibrary[] getTagLibraries();
+	ITagLibrary[] getProjectTagLibraries();
+
+	/**
+	 * Returns all available tag libraries including static libraries from XML Catalog.
+	 * @return
+	 */
+	List<ITagLibrary> getAllTagLibraries();
 
 	/**
 	 * Returns tag libraries by URI

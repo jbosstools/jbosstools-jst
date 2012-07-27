@@ -100,12 +100,26 @@ public class KbProject extends KbObject implements IKbProject {
 	public void setMock() {
 		isMock = true;
 	}
+
 	/*
 	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.IKbProject#getTagLibraries()
+	 * @see org.jboss.tools.jst.web.kb.IKbProject#getProjectTagLibraries()
 	 */
-	public ITagLibrary[] getTagLibraries() {
+	@Override
+	public ITagLibrary[] getProjectTagLibraries() {
 		return libraries.getAllLibrariesArray();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.IKbProject#getAllTagLibraries(boolean)
+	 */
+	@Override
+	public List<ITagLibrary> getAllTagLibraries() {
+		Set<ITagLibrary> libs =  libraries.getAllLibraries();
+		List<ITagLibrary> result = StaticLibraries.instance.getAllTagLibraries();
+		result.addAll(libs);
+		return result;
 	}
 
 	/*
@@ -664,7 +678,7 @@ public class KbProject extends KbObject implements IKbProject {
 	 */
 	Map<IPath, LoadedDeclarations> getAllDeclarations() throws CloneNotSupportedException {
 		Map<IPath, LoadedDeclarations> map = new HashMap<IPath, LoadedDeclarations>();
-		for (ITagLibrary f : getTagLibraries()) {
+		for (ITagLibrary f : getProjectTagLibraries()) {
 			IPath p = f.getSourcePath();
 			if(p == null || EclipseResourceUtil.isJar(p.toString())) continue;
 			LoadedDeclarations ds = map.get(p);
