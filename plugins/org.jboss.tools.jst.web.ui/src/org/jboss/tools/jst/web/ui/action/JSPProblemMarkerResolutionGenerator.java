@@ -64,6 +64,23 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		return new IMarkerResolution[]{};
 	}
 	
+	public static boolean validatePrefix(IFile file, int start, String prefix){
+		ELContext context = PageContextFactory.createPageContext(file);
+		if(context instanceof XmlContextImpl){
+			 Map<String, List<INameSpace>> nameSpaces = ((XmlContextImpl) context).getNameSpaces(start);
+			 Iterator<List<INameSpace>> iterator = nameSpaces.values().iterator();
+			 while(iterator.hasNext()){
+				 List<INameSpace> list = iterator.next();
+				 for(INameSpace ns : list){
+					 if(prefix.equals(ns.getPrefix())){
+						 return false;
+					 }
+				 }
+			 }
+		}
+		return true;
+	}
+	
 	private IJavaCompletionProposal[] isOurCase(Annotation annotation){
 		ArrayList<IJavaCompletionProposal> proposals = new ArrayList<IJavaCompletionProposal>();
 		if(!(annotation instanceof TemporaryAnnotation)){
@@ -94,18 +111,8 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		if(file == null)
 			return new IJavaCompletionProposal[]{};
 		
-		ELContext context = PageContextFactory.createPageContext(file);
-		if(context instanceof XmlContextImpl){
-			 Map<String, List<INameSpace>> nameSpaces = ((XmlContextImpl) context).getNameSpaces(start);
-			 Iterator<List<INameSpace>> iterator = nameSpaces.values().iterator();
-			 while(iterator.hasNext()){
-				 List<INameSpace> list = iterator.next();
-				 for(INameSpace ns : list){
-					 if(prefix.equals(ns.getPrefix())){
-						 return new IJavaCompletionProposal[]{};
-					 }
-				 }
-			 }
+		if(!validatePrefix(file, start, prefix)){
+			return new IJavaCompletionProposal[]{};
 		}
 		
 		Object additionalInfo = ta.getAdditionalFixInfo();
@@ -126,7 +133,7 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 					String uri = ns.getURI();
 					String resolutionName = getResolutionName(xmlDocument != null && xmlDocument.isXMLType(), true, prefix, uri);
 					if(resolutionName != null && !names.contains(resolutionName) && l.getComponent(tagName) != null){
-						proposals.add(new AddTLDMarkerResolution(resolutionName, start, end, uri, prefix));
+						proposals.add(new AddTLDMarkerResolution(file, resolutionName, start, end, uri, prefix));
 						names.add(resolutionName);
 					}
 				}
@@ -140,7 +147,7 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 				String uri = l.getURI();
 				String resolutionName = getResolutionName(xmlDocument != null && xmlDocument.isXMLType(), true, prefix, uri);
 				if(resolutionName != null && !names.contains(resolutionName) && l.getComponent(tagName) != null){
-					proposals.add(new AddTLDMarkerResolution(resolutionName, start, end, uri, prefix));
+					proposals.add(new AddTLDMarkerResolution(file, resolutionName, start, end, uri, prefix));
 					names.add(resolutionName);
 				}
 			}
@@ -186,18 +193,8 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		
 		IFile file = (IFile)marker.getResource();
 		
-		ELContext context = PageContextFactory.createPageContext(file);
-		if(context instanceof XmlContextImpl){
-			 Map<String, List<INameSpace>> nameSpaces = ((XmlContextImpl) context).getNameSpaces(start);
-			 Iterator<List<INameSpace>> iterator = nameSpaces.values().iterator();
-			 while(iterator.hasNext()){
-				 List<INameSpace> list = iterator.next();
-				 for(INameSpace ns : list){
-					 if(prefix.equals(ns.getPrefix())){
-						 return new IMarkerResolution[]{};
-					 }
-				 }
-			 }
+		if(!validatePrefix(file, start, prefix)){
+			return new IMarkerResolution[]{};
 		}
 		
 		IKbProject kbProject = KbProjectFactory.getKbProject(file.getProject(), true);

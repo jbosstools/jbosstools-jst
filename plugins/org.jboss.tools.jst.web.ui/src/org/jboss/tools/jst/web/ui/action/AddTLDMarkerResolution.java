@@ -60,14 +60,6 @@ public class AddTLDMarkerResolution implements IBaseMarkerResolution, IJavaCompl
 		this.prefix = prefix;
 	}
 	
-	public AddTLDMarkerResolution(String name, int start, int end, String uri, String prefix){
-		this.resolutionName = name;
-		this.start = start;
-		this.end = end;
-		this.uri = uri;
-		this.prefix = prefix;
-	}
-	
 	private Properties getProperties(){
 		Properties properties = new Properties();
 		properties.put(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB, "true"); //$NON-NLS-1$
@@ -101,9 +93,13 @@ public class AddTLDMarkerResolution implements IBaseMarkerResolution, IJavaCompl
 	public String getLabel() {
 		return NLS.bind(Messages.AddTLDMarkerResolution_Name, resolutionName);
 	}
-
+	
 	@Override
 	public void run(IMarker marker) {
+		if(!JSPProblemMarkerResolutionGenerator.validatePrefix(file, start, prefix)){
+			return;
+		}
+		
 		FileEditorInput input = new FileEditorInput(file);
 		IDocumentProvider provider = DocumentProviderRegistry.getDefault().getDocumentProvider(input);
 		try {
@@ -140,7 +136,10 @@ public class AddTLDMarkerResolution implements IBaseMarkerResolution, IJavaCompl
 
 	@Override
 	public void apply(IDocument document) {
-		
+		if(!JSPProblemMarkerResolutionGenerator.validatePrefix(file, start, prefix)){
+			return;
+		}
+
 		Properties properties = getProperties();
 		
 		PaletteTaglibInserter.getPrefixes(document, properties);
