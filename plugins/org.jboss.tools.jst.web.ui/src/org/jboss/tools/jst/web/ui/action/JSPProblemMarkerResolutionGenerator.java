@@ -82,19 +82,19 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 	}
 	
 	public static boolean validateURI(IFile file, int start, String uri){
-		ELContext context = PageContextFactory.createPageContext(file);
-		if(context instanceof XmlContextImpl){
-			 Map<String, List<INameSpace>> nameSpaces = ((XmlContextImpl) context).getNameSpaces(start);
-			 Iterator<List<INameSpace>> iterator = nameSpaces.values().iterator();
-			 while(iterator.hasNext()){
-				 List<INameSpace> list = iterator.next();
-				 for(INameSpace ns : list){
-					 if(uri.equals(ns.getURI())){
-						 return false;
-					 }
-				 }
-			 }
-		}
+//		ELContext context = PageContextFactory.createPageContext(file);
+//		if(context instanceof XmlContextImpl){
+//			 Map<String, List<INameSpace>> nameSpaces = ((XmlContextImpl) context).getNameSpaces(start);
+//			 Iterator<List<INameSpace>> iterator = nameSpaces.values().iterator();
+//			 while(iterator.hasNext()){
+//				 List<INameSpace> list = iterator.next();
+//				 for(INameSpace ns : list){
+//					 if(uri.equals(ns.getURI())){
+//						 return false;
+//					 }
+//				 }
+//			 }
+//		}
 		return true;
 	}
 	
