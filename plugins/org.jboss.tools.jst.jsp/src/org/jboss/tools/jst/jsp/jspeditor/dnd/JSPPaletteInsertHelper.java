@@ -14,6 +14,12 @@ public class JSPPaletteInsertHelper extends PaletteInsertHelper {
 	public static final String PROPOPERTY_TAGLIBRARY_URI = URIConstants.LIBRARY_URI;
 	public static final String PROPOPERTY_TAGLIBRARY_VERSION = URIConstants.LIBRARY_VERSION;
 	public static final String PROPOPERTY_DEFAULT_PREFIX = URIConstants.DEFAULT_PREFIX;
+	/**
+	 * If "true", enforces inserting prefix set by PROPOPERTY_DEFAULT_PREFIX,
+	 * even if there is another prefix on the page with the same uri.
+	 * Default value is "false".
+	 */
+	public static final String PROPOPERTY_FORCE_PREFIX = "force prefix"; //$NON-NLS-1$
 
 	static JSPPaletteInsertHelper instance = new JSPPaletteInsertHelper();
 

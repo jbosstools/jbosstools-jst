@@ -303,6 +303,7 @@ public class PaletteTaglibInserter {
 	private static Properties checkTL(Element root, Properties p, IDocument d) {
 		String uri_p = p.getProperty(JSPPaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI);
 		String defaultPrefix_p = p.getProperty(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX);
+		boolean forcePrefix = "true".equals( p.getProperty(JSPPaletteInsertHelper.PROPOPERTY_FORCE_PREFIX)); //$NON-NLS-1$
 
 		HashMap<String,String> map = new HashMap<String,String>();
 		NamedNodeMap attrs = root.getAttributes();
@@ -315,7 +316,7 @@ public class PaletteTaglibInserter {
 			}
 		}
 		
-		if (map.containsKey(uri_p) || checkSelectedElement(map, d, p)) {
+		if (!forcePrefix && (map.containsKey(uri_p) || checkSelectedElement(map, d, p))) {
 			if (!map.get(uri_p).equals(defaultPrefix_p)) {
 				p.setProperty(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX, (String) map.get(uri_p));
 			}
