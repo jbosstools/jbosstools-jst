@@ -66,6 +66,7 @@ public class AddTLDMarkerResolution implements IBaseMarkerResolution, IJavaCompl
 		properties.put(PaletteInsertHelper.PROPOPERTY_START_TEXT, ""); //$NON-NLS-1$
 		properties.put(JSPPaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI, uri);
 		properties.put(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX, prefix);
+		properties.put(JSPPaletteInsertHelper.PROPOPERTY_FORCE_PREFIX, "true");
 		properties.put(PaletteInsertHelper.PROPOPERTY_SELECTION_PROVIDER, new ISelectionProvider() {
 			
 			@Override
