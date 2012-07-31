@@ -81,6 +81,23 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		return true;
 	}
 	
+	public static boolean validateURI(IFile file, int start, String uri){
+		ELContext context = PageContextFactory.createPageContext(file);
+		if(context instanceof XmlContextImpl){
+			 Map<String, List<INameSpace>> nameSpaces = ((XmlContextImpl) context).getNameSpaces(start);
+			 Iterator<List<INameSpace>> iterator = nameSpaces.values().iterator();
+			 while(iterator.hasNext()){
+				 List<INameSpace> list = iterator.next();
+				 for(INameSpace ns : list){
+					 if(uri.equals(ns.getURI())){
+						 return false;
+					 }
+				 }
+			 }
+		}
+		return true;
+	}
+	
 	private IJavaCompletionProposal[] isOurCase(Annotation annotation){
 		ArrayList<IJavaCompletionProposal> proposals = new ArrayList<IJavaCompletionProposal>();
 		if(!(annotation instanceof TemporaryAnnotation)){
@@ -132,7 +149,7 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 				if(ns != null && ns.getPrefix() != null && ns.getPrefix().equals(prefix)){
 					String uri = ns.getURI();
 					String resolutionName = getResolutionName(xmlDocument != null && xmlDocument.isXMLType(), true, prefix, uri);
-					if(resolutionName != null && !names.contains(resolutionName) && l.getComponent(tagName) != null){
+					if(resolutionName != null && !names.contains(resolutionName) && l.getComponent(tagName) != null && validateURI(file, start, uri)){
 						proposals.add(new AddTLDMarkerResolution(file, resolutionName, start, end, uri, prefix));
 						names.add(resolutionName);
 					}
@@ -146,7 +163,7 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 				
 				String uri = l.getURI();
 				String resolutionName = getResolutionName(xmlDocument != null && xmlDocument.isXMLType(), true, prefix, uri);
-				if(resolutionName != null && !names.contains(resolutionName) && l.getComponent(tagName) != null){
+				if(resolutionName != null && !names.contains(resolutionName) && l.getComponent(tagName) != null && validateURI(file, start, uri)){
 					proposals.add(new AddTLDMarkerResolution(file, resolutionName, start, end, uri, prefix));
 					names.add(resolutionName);
 				}
@@ -209,7 +226,7 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 			if(ns != null && ns.getPrefix() != null && ns.getPrefix().equals(prefix)){
 				String uri = ns.getURI();
 				String resolutionName = getResolutionName(marker.getType().equals(HTML_VALIDATOR_MARKER) || marker.isSubtypeOf(HTML_VALIDATOR_MARKER), marker.getType().equals(JSP_VALIDATOR_MARKER) || marker.isSubtypeOf(JSP_VALIDATOR_MARKER), prefix, uri);
-				if(resolutionName != null && !names.contains(resolutionName) && l.getComponent(tagName) != null){
+				if(resolutionName != null && !names.contains(resolutionName) && l.getComponent(tagName) != null && validateURI(file, start, uri)){
 					resolutions.add(new AddTLDMarkerResolution(file, resolutionName, start, end, uri, prefix));
 					names.add(resolutionName);
 				}
@@ -222,7 +239,7 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 			
 			String uri = l.getURI();
 			String resolutionName = getResolutionName(marker.getType().equals(HTML_VALIDATOR_MARKER) || marker.isSubtypeOf(HTML_VALIDATOR_MARKER), marker.getType().equals(JSP_VALIDATOR_MARKER) || marker.isSubtypeOf(JSP_VALIDATOR_MARKER), prefix, uri);
-			if(resolutionName != null && !names.contains(resolutionName) && l.getComponent(tagName) != null){
+			if(resolutionName != null && !names.contains(resolutionName) && l.getComponent(tagName) != null && validateURI(file, start, uri)){
 				resolutions.add(new AddTLDMarkerResolution(file, resolutionName, start, end, uri, prefix));
 				names.add(resolutionName);
 			}

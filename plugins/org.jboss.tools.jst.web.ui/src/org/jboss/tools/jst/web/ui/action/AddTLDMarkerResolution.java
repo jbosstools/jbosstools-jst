@@ -99,6 +99,9 @@ public class AddTLDMarkerResolution implements IBaseMarkerResolution, IJavaCompl
 		if(!JSPProblemMarkerResolutionGenerator.validatePrefix(file, start, prefix)){
 			return;
 		}
+		if(!JSPProblemMarkerResolutionGenerator.validateURI(file, start, uri)){
+			return;
+		}
 		
 		FileEditorInput input = new FileEditorInput(file);
 		IDocumentProvider provider = DocumentProviderRegistry.getDefault().getDocumentProvider(input);
@@ -137,6 +140,9 @@ public class AddTLDMarkerResolution implements IBaseMarkerResolution, IJavaCompl
 	@Override
 	public void apply(IDocument document) {
 		if(!JSPProblemMarkerResolutionGenerator.validatePrefix(file, start, prefix)){
+			return;
+		}
+		if(!JSPProblemMarkerResolutionGenerator.validateURI(file, start, uri)){
 			return;
 		}
 
