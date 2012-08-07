@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.kb.internal.validation;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -248,17 +249,25 @@ public class ELValidator extends WebValidator implements IStringValidator {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.jboss.tools.common.validation.IAsYouTypeValidator#validate(org.eclipse.core.resources.IProject, org.eclipse.jface.text.IRegion, org.eclipse.wst.validation.internal.provisional.core.IValidationContext, org.eclipse.wst.validation.internal.provisional.core.IReporter, org.jboss.tools.common.validation.EditorValidationContext, org.eclipse.core.resources.IFile)
+	 * @see org.jboss.tools.common.validation.IAsYouTypeValidator#validate(org.eclipse.wst.validation.internal.provisional.core.IValidator, org.eclipse.core.resources.IProject, java.util.Collection, org.eclipse.wst.validation.internal.provisional.core.IValidationContext, org.eclipse.wst.validation.internal.provisional.core.IReporter, org.jboss.tools.common.validation.EditorValidationContext, org.jboss.tools.common.validation.IProjectValidationContext, org.eclipse.core.resources.IFile)
 	 */
 	@Override
-	public void validate(IValidator validatorManager, IProject rootProject, IRegion dirtyRegion, IValidationContext helper, IReporter reporter, EditorValidationContext validationContext, IProjectValidationContext projectContext, IFile file) {
+	public void validate(IValidator validatorManager, IProject rootProject, Collection<IRegion> dirtyRegions, IValidationContext helper, IReporter reporter, EditorValidationContext validationContext, IProjectValidationContext projectContext, IFile file) {
 		init(rootProject, null, projectContext, validatorManager, reporter);
 		setAsYouTypeValidation(true);
 		this.document = validationContext.getDocument();
 		ELContext elContext = PageContextFactory.createPageContext(validationContext.getDocument(), true);
 		elContext.setDirty(true);
-		Set<ELReference> references = elContext.getELReferences(dirtyRegion);
-
+		Set<ELReference> references = null;
+		if(dirtyRegions.size()==1) {
+			references = elContext.getELReferences(dirtyRegions.iterator().next());
+		} else {
+			ELReference[] ref = elContext.getELReferences();
+			references = new HashSet<ELReference>(ref.length);
+			for (ELReference elReference : ref) {
+				references.add(elReference);
+			}
+		}
 		for (ELReference elReference : references) {
 			validateEL(elReference, true, elContext);
 		}
