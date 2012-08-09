@@ -33,6 +33,7 @@ import org.eclipse.jst.jsp.ui.internal.style.jspel.LineStyleProviderForJSPEL;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
 import org.eclipse.wst.sse.ui.contentassist.CompletionProposalInvocationContext;
 import org.eclipse.wst.sse.ui.internal.ExtendedConfigurationBuilder;
 import org.eclipse.wst.sse.ui.internal.SSEUIPlugin;
@@ -153,6 +154,9 @@ public class JSPTextViewerConfiguration extends StructuredTextViewerConfiguratio
 	 * @since 3.1
 	 */
 	public IHyperlinkDetector[] getHyperlinkDetectors(ISourceViewer sourceViewer) {
+		if (!fPreferenceStore.getBoolean(AbstractDecoratedTextEditorPreferenceConstants.EDITOR_HYPERLINKS_ENABLED))
+			return null;
+
 		List<IHyperlinkDetector> allDetectors = new ArrayList<IHyperlinkDetector>();
 		
 		IHyperlinkDetector extHyperlinkDetector = HyperlinkDetector.getInstance(); 
@@ -160,9 +164,11 @@ public class JSPTextViewerConfiguration extends StructuredTextViewerConfiguratio
 		if (extHyperlinkDetector != null) allDetectors.add(extHyperlinkDetector);
 		
 		IHyperlinkDetector[] superDetectors = super.getHyperlinkDetectors(sourceViewer);
-		for (IHyperlinkDetector detector : superDetectors) {
-			if (!allDetectors.contains(detector)) {
-				allDetectors.add(detector);
+		if (superDetectors != null) {
+			for (IHyperlinkDetector detector : superDetectors) {
+				if (!allDetectors.contains(detector)) {
+					allDetectors.add(detector);
+				}
 			}
 		}
 		
