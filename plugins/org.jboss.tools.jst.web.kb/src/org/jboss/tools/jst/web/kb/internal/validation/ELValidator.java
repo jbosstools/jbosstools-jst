@@ -258,13 +258,10 @@ public class ELValidator extends WebValidator implements IStringValidator {
 		this.document = validationContext.getDocument();
 		ELContext elContext = PageContextFactory.createPageContext(validationContext.getDocument(), true);
 		elContext.setDirty(true);
-		Set<ELReference> references = null;
-		if(dirtyRegions.size()==1) {
-			references = elContext.getELReferences(dirtyRegions.iterator().next());
-		} else {
-			ELReference[] ref = elContext.getELReferences();
-			references = new HashSet<ELReference>(ref.length);
-			for (ELReference elReference : ref) {
+		Collection<ELReference> references = new ArrayList<ELReference>();
+		for (IRegion region : dirtyRegions) {
+			Collection<ELReference> regionReferences = elContext.getELReferences(region);
+			for (ELReference elReference : regionReferences) {
 				references.add(elReference);
 			}
 		}
