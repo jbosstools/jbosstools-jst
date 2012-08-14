@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
 
+import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.AbstractOperation;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -486,12 +487,13 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 	//https://bugs.eclipse.org/bugs/show_bug.cgi?id=119066
 	private void createWTPNature2(AbstractOperation wcco, IProgressMonitor monitor) {
 		try {
-			if(wcco != null) wcco.execute(monitor, null);
+			if(wcco != null) {
+				wcco.execute(monitor, null);
+			}
 			new RuntimeJob().schedule();
-		} catch (Exception e) {
+		} catch (ExecutionException e) {
 			WebUiPlugin.getPluginLog().logError(e);
 		}
-		
 	}
 
 	class RuntimeJob extends WorkspaceJob {
