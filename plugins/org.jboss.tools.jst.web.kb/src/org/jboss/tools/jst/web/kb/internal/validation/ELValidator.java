@@ -296,8 +296,6 @@ public class ELValidator extends WebValidator implements IStringValidator {
 			displaySubtask(ELValidationMessages.VALIDATING_EL_FILE, new String[]{el.getResource().getProject().getName(), el.getResource().getName()});
 			if(!asYouType) {
 				el.deleteMarkers();
-			} else {
-				disableProblemAnnotations(el);
 			}
 
 			if(context!=null && !el.getSyntaxErrors().isEmpty() && !isDollarExpressionInXML(el)) {
@@ -321,6 +319,9 @@ public class ELValidator extends WebValidator implements IStringValidator {
 			}
 			for (ELExpression expresion : el.getEl()) {
 				validateELExpression(el, expresion, asYouType, context);
+			}
+			if(asYouType) {
+				disableProblemAnnotations(el, reporter);
 			}
 		}
 	}
