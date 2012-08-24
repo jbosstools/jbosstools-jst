@@ -18,7 +18,7 @@
    </license>
 
    <requires>
-      <import feature="org.jboss.tools.common.feature" version="3.3.0" match="greaterOrEqual"/>
+      <import feature="org.jboss.tools.common.feature" version="3.4.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
