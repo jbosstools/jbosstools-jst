@@ -269,7 +269,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 				if (restOfValue.indexOf(']') != -1) {
 					cursorPosition += restOfValue.indexOf(']') + 1;
 				}
-			} else {
+			} else if (replacementString.lastIndexOf('.') < replacementString.lastIndexOf(']')) {
 				cursorPosition = replacementString.indexOf(']') + 1;
 			}
 			if (prefix.isAttributeValue() && prefix.hasOpenQuote() && !prefix.hasCloseQuote()) {
