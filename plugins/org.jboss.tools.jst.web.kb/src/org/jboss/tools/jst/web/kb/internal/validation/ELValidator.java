@@ -66,6 +66,7 @@ import org.jboss.tools.common.validation.EditorValidationContext;
 import org.jboss.tools.common.validation.IELValidationDelegate;
 import org.jboss.tools.common.validation.IProjectValidationContext;
 import org.jboss.tools.common.validation.IStringValidator;
+import org.jboss.tools.common.validation.ITypedReporter;
 import org.jboss.tools.common.validation.IValidatingProjectTree;
 import org.jboss.tools.common.validation.ValidatorManager;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
@@ -267,6 +268,9 @@ public class ELValidator extends WebValidator implements IStringValidator {
 		}
 		for (ELReference elReference : references) {
 			validateEL(elReference, true, elContext);
+		}
+		if(reporter instanceof ITypedReporter) {
+			((ITypedReporter)reporter).addTypeForRegion(getMarkerType());
 		}
 	}
 
