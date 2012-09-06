@@ -206,9 +206,12 @@ public class SelectionBar extends Composite {
 		closeItemComposite.setLayoutData(closeBarData);
 
 		/*
-		 *  Create tool bar that will contain nodes from the source editor 
+		 *  Create tool bar that will contain nodes from the source editor.
+		 *  
+		 *  https://issues.jboss.org/browse/JBIDE-12435 --
+		 *   Do not use SWT.NO_BACKGROUND style, it leads to a black color.
 		 */
-		toolbar = new ToolBar(realBar, SWT.HORIZONTAL | SWT.FLAT | SWT.NO_BACKGROUND);
+		toolbar = new ToolBar(realBar, SWT.HORIZONTAL | SWT.FLAT);
 		toolbarData = new FormData();
 		toolbarData.left = new FormAttachment(0);
 		toolbarData.right = new FormAttachment(closeItemComposite, 0, SWT.LEFT);
