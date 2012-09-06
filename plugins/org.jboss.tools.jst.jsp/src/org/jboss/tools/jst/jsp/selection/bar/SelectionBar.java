@@ -64,6 +64,7 @@ import org.eclipse.ui.progress.UIJob;
 import org.eclipse.wst.sse.core.internal.provisional.INodeAdapter;
 import org.eclipse.wst.sse.core.internal.provisional.INodeNotifier;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
+import org.eclipse.wst.xml.core.internal.document.AttrImpl;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
@@ -71,6 +72,8 @@ import org.jboss.tools.jst.jsp.preferences.IVpePreferencesPage;
 import org.jboss.tools.jst.jsp.selection.SelectionHelper;
 import org.jboss.tools.jst.jsp.selection.SourceSelection;
 import org.jboss.tools.jst.jsp.selection.SourceSelectionBuilder;
+import org.w3c.dom.Attr;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -261,8 +264,8 @@ public class SelectionBar extends Composite {
 	 * according to the source selection.
 	 */
     public void updateNodes(boolean forceUpdate) {
-		SourceSelectionBuilder sourceSelectionBuilder = new SourceSelectionBuilder(
-				textEditor);
+		SourceSelectionBuilder sourceSelectionBuilder = 
+				new SourceSelectionBuilder(textEditor);
 		SourceSelection selection = sourceSelectionBuilder.getSelection();
 		if (selection == null) {
 			return;
@@ -270,9 +273,18 @@ public class SelectionBar extends Composite {
 
 		// Node node = selection.getFocusNode();
 		Node node = selection.getStartNode();
-		if (node != null && node.getNodeType() == Node.TEXT_NODE) {
-			node = node.getParentNode();
+		/*
+		 * https://issues.jboss.org/browse/JBIDE-7692
+		 * Display selected attribute names and 
+		 * text nodes on the VPE selection bar
+		 */
+		Attr attr = selection.getFocusAttribute();
+		if (attr != null) {
+			node = attr;
 		}
+//		if (node != null && node.getNodeType() == Node.TEXT_NODE) {
+//			node = node.getParentNode();
+//		}
 
 		if (currentSelectedNode == node && !forceUpdate) {
 			return;
@@ -331,9 +343,12 @@ public class SelectionBar extends Composite {
 		// for now dropDownMenu = null
 
 		int elementCounter = 0;
+		boolean createDDLofAttributes = false;
 		while (node != null
 				&& (node.getNodeType() == Node.ELEMENT_NODE
-						|| node.getNodeType() == Node.COMMENT_NODE)) {
+						|| node.getNodeType() == Node.COMMENT_NODE
+						|| node.getNodeType() == Node.ATTRIBUTE_NODE
+						|| node.getNodeType() == Node.TEXT_NODE)) {
 			addNodeListenerTo(node);
 			
 			/*
@@ -344,32 +359,63 @@ public class SelectionBar extends Composite {
 				NodeList children = node.getChildNodes();
 				List<Node> list = new ArrayList<Node>();
 				for (int i = 0; i < children.getLength(); i++) {
-					if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
-						list.add(children.item(i));
+					Node child = children.item(i);
+					if ((child.getNodeType() == Node.ELEMENT_NODE) 
+							|| (child.getNodeType() == Node.TEXT_NODE)) {
+						list.add(child);
 					}
 				}
 				/*
 				 * for the last tag -- show check button
 				 */
-				if (elementCounter == 0 && list.size() == 0){
-					item = new ToolItem(toolbar, SWT.FLAT | SWT.CHECK, 1);
-					item.addSelectionListener(new SelectionListener() {
-						@Override
-						public void widgetSelected(SelectionEvent e) {
-							handleSelectionEvent(e);
+				if ((elementCounter == 0 && list.size() == 0) || createDDLofAttributes) {
+					/*
+					 * For the last element in Selection Bar add its attributes
+					 * to the DropDownMenu for this toolitem.
+					 */
+					NamedNodeMap attrsMap = node.getAttributes();
+					if (attrsMap != null && attrsMap.getLength() > 0) {
+						list.clear();
+						for (int i = 0; i < attrsMap.getLength(); i++) {
+							list.add(attrsMap.item(i));
 						}
-						@Override
-						public void widgetDefaultSelected(SelectionEvent e) {
-							handleSelectionEvent(e);
-						}
-					});
+						item = new ToolItem(toolbar, SWT.DROP_DOWN, 1);
+						final DropdownSelectionListener dropdownListener = 
+								new DropdownSelectionListener(item, list);
+						item.addSelectionListener(dropdownListener);
+						/*
+						 * Dispose the menu manually when the item is disposed.
+						 * Thus unnecessary memory will be released. 
+						 */
+						item.addDisposeListener(new DisposeListener() {
+							@Override
+							public void widgetDisposed(DisposeEvent e) {
+								dropdownListener.disposeMenu();
+							}
+						});
+					} else {
+						/*
+						 * If there is no attributes for the node -- leave it as flat button
+						 */
+						item = new ToolItem(toolbar, SWT.FLAT | SWT.CHECK, 1);
+						item.addSelectionListener(new SelectionListener() {
+							@Override
+							public void widgetSelected(SelectionEvent e) {
+								handleSelectionEvent(e);
+							}
+							@Override
+							public void widgetDefaultSelected(SelectionEvent e) {
+								handleSelectionEvent(e);
+							}
+						});
+					}
 				} else {
 					/*
 					 * Create DropDownMenu button
 					 */
 					item = new ToolItem(toolbar, SWT.DROP_DOWN, 1);
-					final DropdownSelectionListener dropdownListener = new DropdownSelectionListener(
-							item, list);
+					final DropdownSelectionListener dropdownListener = 
+							new DropdownSelectionListener(item, list);
 					item.addSelectionListener(dropdownListener);
 					/*
 					 * Dispose the menu manually when the item is disposed.
@@ -382,6 +428,9 @@ public class SelectionBar extends Composite {
 						}
 					});
 				}
+				/*
+				 * Set the text for the element in Selection Bar
+				 */
 				item.setData(node);
 				item.setText(node.getNodeName());
 				/*
@@ -392,14 +441,14 @@ public class SelectionBar extends Composite {
 					item.dispose();
 					dropDownMenu = new Menu(toolbar);
 				}
-			}
-
+			} 
+			
 			/*
 			 * After the DDM has been created
 			 * all other items will be added to the DDM
 			 * as they do not fit to the selection bar any more. 
 			 */
-			if (dropDownMenu != null) {
+			if (dropDownMenu != null)  {
 				MenuItem menuItem = new MenuItem(dropDownMenu, SWT.CHECK, 0);
 				menuItem.addSelectionListener(new SelectionListener() {
 					@Override
@@ -414,7 +463,6 @@ public class SelectionBar extends Composite {
 				menuItem.setText(node.getNodeName());
 				menuItem.setData(node);
 			}
-
 			/*
 			 * Count the elements
 			 */
@@ -422,7 +470,17 @@ public class SelectionBar extends Composite {
 			/*
 			 * Get the parent to put it to the bar
 			 */
-			node = node.getParentNode();
+			createDDLofAttributes = false;
+			if (node instanceof AttrImpl) {
+				node = ((AttrImpl) node).getOwnerElement();
+				/*
+				 * Create the list of attributes for the parent
+				 * during the next iteration.
+				 */
+				createDDLofAttributes = true;
+			} else {
+				node = node.getParentNode();
+			}
 		}
 		itemCount = elementCounter;
 		arrowButton.setEnabled(dropDownMenu != null);
