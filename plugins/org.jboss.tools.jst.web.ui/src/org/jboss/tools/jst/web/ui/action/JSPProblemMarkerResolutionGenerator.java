@@ -20,6 +20,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.IMarkerResolutionGenerator2;
@@ -98,7 +99,7 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		return true;
 	}
 	
-	private IJavaCompletionProposal[] isOurCase(Annotation annotation){
+	private IJavaCompletionProposal[] isOurCase(Annotation annotation, Position position){
 		ArrayList<IJavaCompletionProposal> proposals = new ArrayList<IJavaCompletionProposal>();
 		if(!(annotation instanceof TemporaryAnnotation)){
 			return new IJavaCompletionProposal[]{};
@@ -109,9 +110,9 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		if(ta.getPosition() == null)
 			return new IJavaCompletionProposal[]{};
 		
-		final int start = ta.getPosition().getOffset();
+		final int start = position.getOffset();
 		
-		final int end = ta.getPosition().getOffset()+ta.getPosition().getLength();
+		final int end = position.getOffset()+position.getLength();
 		
 		if(!message.startsWith(UNKNOWN_TAG))
 			return new IJavaCompletionProposal[]{};
@@ -292,13 +293,13 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 	}
 
 	@Override
-	public boolean hasProposals(Annotation annotation) {
+	public boolean hasProposals(Annotation annotation, Position position) {
 		String message = annotation.getText();
 		return message.startsWith(UNKNOWN_TAG);
 	}
 
 	@Override
-	public IJavaCompletionProposal[] getProposals(Annotation annotation) {
-		return isOurCase(annotation); 
+	public IJavaCompletionProposal[] getProposals(Annotation annotation, Position position) {
+		return isOurCase(annotation, position); 
 	}
 }
