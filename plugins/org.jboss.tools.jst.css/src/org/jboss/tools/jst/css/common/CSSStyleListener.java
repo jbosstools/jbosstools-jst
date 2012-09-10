@@ -90,7 +90,13 @@ public class CSSStyleListener implements ISelectionListener, INodeAdapter,
 	}
 
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-
+		// The following line is a workaround for: JBIDE-12318: Test is failing on Eclipse Juno 4.2: SelectionLosingByPropertySheet_JBIDE4791.testSelectionLosingByPropertySheet
+		// The essence of the issue is that the implementation of org.eclipse.ui.views.properties.PropertySheet imply
+		// that the partActivated event is fired before the selectionChanged event. But it is not guaranteed. 
+		// So to workaround this, we call partActivated before any selectionChanged processing.
+		partActivated(part);
+		
+		System.out.println(part);
 		StyleContainer newStyle = CSSStyleManager.recognizeCSSStyle(selection);
 
 		if (isImportant(part)

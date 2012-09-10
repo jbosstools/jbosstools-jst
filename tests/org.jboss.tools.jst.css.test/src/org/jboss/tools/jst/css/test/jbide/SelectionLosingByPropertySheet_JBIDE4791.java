@@ -83,11 +83,15 @@ public class SelectionLosingByPropertySheet_JBIDE4791 extends
 		assertEquals(FIRST_CSS_PROPERTY_VALUE, colorValue);
 		
 		CSSEditorView view = (CSSEditorView) openView(CSS_EDITOR_VIEW);
-		JobUtils.delay(1000);
-
-		propertySheetTree = (Tree) propertySheet.getCurrentPage().getControl();
-		colorValue = getPropertyValue(propertySheetTree.getItems(), FIRST_CSS_PROPERTY_NAME);
-		assertEquals(FIRST_CSS_PROPERTY_VALUE, colorValue);
+		int counter = 10;
+		do {
+			JobUtils.delay(2000);
+			propertySheetTree = (Tree) propertySheet.getCurrentPage().getControl();
+			colorValue = getPropertyValue(propertySheetTree.getItems(), FIRST_CSS_PROPERTY_NAME);
+			counter--;
+		} while (colorValue == null && counter > 0);
+		
+		assertEquals(FIRST_CSS_PROPERTY_VALUE, colorValue);// if after 20s it is still null - fail
 	}
 	
 	private String getPropertyValue(TreeItem[] treeItems, String propertyName) {
