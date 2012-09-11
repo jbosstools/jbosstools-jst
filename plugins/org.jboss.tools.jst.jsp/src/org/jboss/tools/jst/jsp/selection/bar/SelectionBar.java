@@ -351,9 +351,10 @@ public class SelectionBar extends Composite {
 				&& (node.getNodeType() == Node.ELEMENT_NODE
 						|| node.getNodeType() == Node.COMMENT_NODE
 						|| node.getNodeType() == Node.ATTRIBUTE_NODE
-						|| node.getNodeType() == Node.TEXT_NODE)) {
-			addNodeListenerTo(node);
+						|| (node.getNodeType() == Node.TEXT_NODE 
+									&& node.getNodeValue().trim().length() > 0))) {
 			
+			addNodeListenerTo(node);
 			/*
 			 * If there is no DDM -- item will be added to line
 			 */
@@ -364,7 +365,8 @@ public class SelectionBar extends Composite {
 				for (int i = 0; i < children.getLength(); i++) {
 					Node child = children.item(i);
 					if ((child.getNodeType() == Node.ELEMENT_NODE) 
-							|| (child.getNodeType() == Node.TEXT_NODE)) {
+							|| (child.getNodeType() == Node.TEXT_NODE
+									&& child.getNodeValue().trim().length() > 0)) {
 						list.add(child);
 					}
 				}
