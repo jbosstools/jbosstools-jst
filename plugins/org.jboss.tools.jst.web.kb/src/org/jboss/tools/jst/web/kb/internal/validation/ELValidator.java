@@ -487,7 +487,9 @@ public class ELValidator extends WebValidator implements IStringValidator {
 			return;
 		}
 		LexicalToken token = segment.getToken();
-
+		if(token==null) {
+			WebKbPlugin.getDefault().logError("The token from unresolved segment is null. EL: [" + operand + "]");
+		}
 		varName = token.getText();
 		if(varName == null) {
 			//This is syntax error case. Reported by parser.
@@ -539,8 +541,8 @@ public class ELValidator extends WebValidator implements IStringValidator {
 			if(u != null) {
 				try {
 					el = u.getElementAt(startPosition);
-				} catch (CoreException exc) {
-					CommonPlugin.getDefault().logError(exc);
+				} catch (CoreException e) {
+					WebKbPlugin.getDefault().logError(e);
 				}
 			}
 		}
