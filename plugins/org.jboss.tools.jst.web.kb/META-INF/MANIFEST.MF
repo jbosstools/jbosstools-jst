@@ -28,7 +28,8 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.jboss.tools.common.ui,
  org.eclipse.wst.common.project.facet.core;bundle-version="1.4.200",
  org.eclipse.jst.j2ee;bundle-version="1.1.500",
- org.jboss.tools.common.validation
+ org.jboss.tools.common.validation,
+ org.eclipse.core.expressions;bundle-version="3.4.400"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: %providerName

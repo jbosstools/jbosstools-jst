@@ -220,7 +220,16 @@
    <extension point="org.eclipse.jdt.ui.javaCompletionProposalComputer"
    		id="kb_el_proposals"
 			name="KB EL Proposals">
-	   	<proposalCategory icon="$nl$/icons/ca/el.png"/>
+	   	<proposalCategory
+           icon="$nl$/icons/ca/el.png">
+        <enablement>
+           <test
+                 forcePluginActivation="false"
+                 property="org.eclipse.core.resources.projectNature"
+                 value="org.jboss.tools.jst.web.kb.kbnature">
+           </test>
+        </enablement>
+     </proposalCategory>
  	</extension>
 
 	<extension point="org.eclipse.jdt.ui.javaCompletionProposalComputer"
@@ -333,5 +342,15 @@
            nature="org.eclipse.jdt.core.javanature">
      </queryParticipant>
   </extension>
+ <extension
+       point="org.eclipse.core.expressions.propertyTesters">
+    <propertyTester
+          class="org.jboss.tools.jst.web.kb.JavaProjectPropertyTester"
+          id="org.jboss.tools.jst.web.kb.propertyTester2"
+          namespace="org.eclipse.core.resources"
+          properties="projectNature"
+          type="org.eclipse.jdt.core.IJavaProject">
+    </propertyTester>
+ </extension>
  
 </plugin>
