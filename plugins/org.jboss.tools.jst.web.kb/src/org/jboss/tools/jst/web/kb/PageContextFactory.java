@@ -327,7 +327,8 @@ public class PageContextFactory implements IResourceChangeListener {
 				int offset = scaner.getTokenOffset();
 				String value = null;
 				try {
-					value = document.get(offset, length);
+					//Value will be kept in EL model, so it has to be separated from long char[] in document.
+					value = "" + document.get(offset, length);
 				} catch (BadLocationException e) {
 					WebKbPlugin.getDefault().logError(e);
 					return null;
