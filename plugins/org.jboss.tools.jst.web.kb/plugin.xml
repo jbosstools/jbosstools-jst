@@ -188,6 +188,21 @@
    </extension>
 
    <extension
+         id="FaceletValidatorExclude"
+         point="org.eclipse.wst.validation.exclude">
+         <validator
+               id="org.eclipse.jst.jsf.facelet.ui.FaceletHTMLValidator">
+            <exclude>
+               <rules>
+               		<projectNature
+                            id="org.jboss.tools.jst.web.kb.kbnature">
+                    </projectNature>
+               </rules>
+            </exclude>
+         </validator>
+   </extension>
+
+   <extension
    		 id="ELWarnings"
          point="org.jboss.tools.common.validation.warnings">
          <map
