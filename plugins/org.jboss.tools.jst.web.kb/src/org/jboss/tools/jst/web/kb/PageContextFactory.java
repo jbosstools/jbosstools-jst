@@ -304,7 +304,6 @@ public class PageContextFactory implements IResourceChangeListener {
 			elReference.setResource(file);
 			elReference.setLength(content.length());
 			elReference.setStartPosition(0);
-			elReference.init(content);
 			context.addELReference(elReference);
 		}
 		return context;
@@ -343,7 +342,6 @@ public class PageContextFactory implements IResourceChangeListener {
 						elReference.setResource(file);
 						elReference.setLength(value.length());
 						elReference.setStartPosition(offset);
-						elReference.init(value);
 
 						try {
 							elReference.setLineNumber(document.getLineOfOffset(startEl));
@@ -795,7 +793,6 @@ public class PageContextFactory implements IResourceChangeListener {
 			elReference.setResource(context.getResource());
 			elReference.setLength(text.length());
 			elReference.setStartPosition(offset);
-			elReference.init(text);
 			try {
 				if(Node.TEXT_NODE == node.getNodeType()) {
 					if(elReference.getEl().length == 1) {

@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -919,10 +918,8 @@ public class KbProject extends KbObject implements IKbProject {
 	 */
 	void libraryDeclarationsRemoved(Map<Object,ITagLibrary> removed) {
 		if(removed == null || removed.isEmpty()) return;
-		Iterator<ITagLibrary> iterator = removed.values().iterator();
 		List<Change> changes = null;
-		while(iterator.hasNext()) {
-			ITagLibrary c = iterator.next();
+		for(ITagLibrary c: removed.values()) {
 			libraries.removeLibrary(c);
 			changes = Change.addChange(changes, new Change(this, null, c, null));
 		}
