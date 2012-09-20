@@ -55,7 +55,7 @@ public class KbObject implements Cloneable {
 	protected KbObject parent;
 	
 	//locations of xml attributes
-	protected Map<String,IValueInfo> attributesInfo = new HashMap<String, IValueInfo>();
+	protected Map<String,IValueInfo> attributesInfo = new HashMap<String, IValueInfo>(8);
 
 	public KbObject() {}
 

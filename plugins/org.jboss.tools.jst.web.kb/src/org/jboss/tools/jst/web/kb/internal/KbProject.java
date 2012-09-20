@@ -36,6 +36,7 @@ import org.eclipse.core.runtime.Path;
 import org.jboss.tools.common.model.project.ext.event.Change;
 import org.jboss.tools.common.model.project.ext.store.XMLStoreConstants;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
+import org.jboss.tools.common.util.UniquePaths;
 import org.jboss.tools.common.validation.IProjectValidationContext;
 import org.jboss.tools.common.validation.internal.ProjectValidationContext;
 import org.jboss.tools.common.xml.XMLUtilities;
@@ -748,6 +749,7 @@ public class KbProject extends KbObject implements IKbProject {
 	 * @param source
 	 */	
 	public void registerComponents(LoadedDeclarations ds, IPath source) {
+		source = UniquePaths.getInstance().intern(source);
 		boolean isThisProject = pathCheck.isThisProject(source);
 		ITagLibrary[] libraries = ds.getLibraries().toArray(new ITagLibrary[0]);
 
