@@ -10,11 +10,9 @@
   ******************************************************************************/
 package org.jboss.tools.jst.web.model.project.ext.store;
 
-import java.io.File;
 import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.project.ext.IValueInfo;
 import org.jboss.tools.common.model.project.ext.store.XMLStoreConstants;
@@ -36,7 +34,7 @@ public class XMLValueInfo implements IValueInfo {
 	
 	public XMLValueInfo(XModelObject object, String attribute) {
 		this.object = object;
-		this.attribute = attribute;
+		this.attribute = attribute.intern();
 	}
 
 	public int getLength() {
