@@ -96,7 +96,6 @@ public class CSSStyleListener implements ISelectionListener, INodeAdapter,
 		// So to workaround this, we call partActivated before any selectionChanged processing.
 		partActivated(part);
 		
-		System.out.println(part);
 		StyleContainer newStyle = CSSStyleManager.recognizeCSSStyle(selection);
 
 		if (isImportant(part)
