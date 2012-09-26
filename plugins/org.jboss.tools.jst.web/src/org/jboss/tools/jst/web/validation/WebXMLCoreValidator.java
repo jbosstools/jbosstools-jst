@@ -32,10 +32,12 @@ import org.eclipse.wst.validation.internal.provisional.core.IReporter;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.validation.ContextValidationHelper;
+import org.jboss.tools.common.validation.IPreferenceInfo;
 import org.jboss.tools.common.validation.IProjectValidationContext;
 import org.jboss.tools.common.validation.IValidatingProjectSet;
 import org.jboss.tools.common.validation.IValidatingProjectTree;
 import org.jboss.tools.common.validation.IValidator;
+import org.jboss.tools.common.validation.PreferenceInfoManager;
 import org.jboss.tools.common.validation.ValidationErrorManager;
 import org.jboss.tools.common.validation.ValidatorManager;
 import org.jboss.tools.common.validation.internal.ProjectValidationContext;
@@ -52,6 +54,7 @@ public class WebXMLCoreValidator extends ValidationErrorManager implements IVali
 	public static final String ID = "org.jboss.tools.esb.validator.ESBCoreValidator"; //$NON-NLS-1$
 	public static final String PROBLEM_TYPE = "org.jboss.tools.jst.web.webxmlproblem"; //$NON-NLS-1$
 	public static final String PREFERENCE_PAGE_ID = "org.jboss.tools.jst.web.ui.WebXMLValidatorPreferencePage"; //$NON-NLS-1$
+	public static final String PROPERTY_PAGE_ID = "org.jboss.tools.jst.web.ui.propertyPages.WebXMLValidatorPreferencePage"; //$NON-NLS-1$
 
 	public static String SHORT_ID = "verification"; //$NON-NLS-1$
 
@@ -288,6 +291,32 @@ public class WebXMLCoreValidator extends ValidationErrorManager implements IVali
 	@Override
 	protected String getPreferencePageId() {
 		return PREFERENCE_PAGE_ID;
+	}
+
+	@Override
+	protected void registerPreferenceInfo() {
+		if(PreferenceInfoManager.getPreferenceInfo(PROBLEM_TYPE) == null){
+			PreferenceInfoManager.register(PROBLEM_TYPE, new WebXMLPreferenceInfo());
+		}
+	}
+	
+	class WebXMLPreferenceInfo implements IPreferenceInfo{
+
+		@Override
+		public String getPreferencePageId() {
+			return PREFERENCE_PAGE_ID;
+		}
+
+		@Override
+		public String getPropertyPageId() {
+			return PROPERTY_PAGE_ID;
+		}
+
+		@Override
+		public String getPluginId() {
+			return WebModelPlugin.PLUGIN_ID;
+		}
+		
 	}
 
 }

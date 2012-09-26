@@ -64,10 +64,12 @@ import org.jboss.tools.common.java.IJavaSourceReference;
 import org.jboss.tools.common.validation.ContextValidationHelper;
 import org.jboss.tools.common.validation.EditorValidationContext;
 import org.jboss.tools.common.validation.IELValidationDelegate;
+import org.jboss.tools.common.validation.IPreferenceInfo;
 import org.jboss.tools.common.validation.IProjectValidationContext;
 import org.jboss.tools.common.validation.IStringValidator;
 import org.jboss.tools.common.validation.ITypedReporter;
 import org.jboss.tools.common.validation.IValidatingProjectTree;
+import org.jboss.tools.common.validation.PreferenceInfoManager;
 import org.jboss.tools.common.validation.ValidatorManager;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
@@ -83,6 +85,8 @@ public class ELValidator extends WebValidator implements IStringValidator {
 	public static final String ID = "org.jboss.tools.jst.web.kb.ELValidator"; //$NON-NLS-1$
 	public static final String PROBLEM_TYPE = "org.jboss.tools.jst.web.kb.elproblem"; //$NON-NLS-1$
 	public static final String PREFERENCE_PAGE_ID = "org.jboss.tools.jst.web.ui.preferences.ELValidatorPreferencePage"; //$NON-NLS-1$
+	public static final String PROPERTY_PAGE_ID = "org.jboss.tools.jst.web.ui.properties.ELValidatorPreferencePage"; //$NON-NLS-1$
+	
 
 	private static final String EXTENSION_POINT_ID = "org.jboss.tools.jst.web.kb.elValidationDelegate"; //$NON-NLS-1$
 
@@ -675,5 +679,31 @@ public class ELValidator extends WebValidator implements IStringValidator {
 	@Override
 	protected String getMessageBundleName() {
 		return BUNDLE_NAME;
+	}
+
+	@Override
+	protected void registerPreferenceInfo() {
+		if(PreferenceInfoManager.getPreferenceInfo(PROBLEM_TYPE) == null){
+			PreferenceInfoManager.register(PROBLEM_TYPE, new ELPreferenceInfo());
+		}
+	}
+	
+	class ELPreferenceInfo implements IPreferenceInfo{
+
+		@Override
+		public String getPreferencePageId() {
+			return PREFERENCE_PAGE_ID;
+		}
+
+		@Override
+		public String getPropertyPageId() {
+			return PROPERTY_PAGE_ID;
+		}
+
+		@Override
+		public String getPluginId() {
+			return WebKbPlugin.PLUGIN_ID;
+		}
+		
 	}
 }
