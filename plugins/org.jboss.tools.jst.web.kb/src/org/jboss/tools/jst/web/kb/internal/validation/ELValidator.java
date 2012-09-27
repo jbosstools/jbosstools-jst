@@ -38,7 +38,6 @@ import org.eclipse.wst.validation.internal.core.ValidationException;
 import org.eclipse.wst.validation.internal.provisional.core.IReporter;
 import org.eclipse.wst.validation.internal.provisional.core.IValidationContext;
 import org.eclipse.wst.validation.internal.provisional.core.IValidator;
-import org.jboss.tools.common.CommonPlugin;
 import org.jboss.tools.common.EclipseUtil;
 import org.jboss.tools.common.el.core.ELReference;
 import org.jboss.tools.common.el.core.model.ELExpression;
@@ -659,15 +658,6 @@ public class ELValidator extends WebValidator implements IStringValidator {
 	@Override
 	protected boolean shouldValidateJavaSources() {
 		return true;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.common.validation.ValidationErrorManager#getPreferencePageId()
-	 */
-	@Override
-	protected String getPreferencePageId() {
-		return PREFERENCE_PAGE_ID;
 	}
 
 	private static final String BUNDLE_NAME = "org.jboss.tools.jst.web.kb.internal.validation.messages";
