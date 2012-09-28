@@ -15,25 +15,17 @@ import java.util.ArrayList;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.internal.ui.preferences.OptionsConfigurationBlock;
-import org.eclipse.jdt.internal.ui.preferences.ScrolledPageContent;
-import org.eclipse.jdt.internal.ui.preferences.OptionsConfigurationBlock.Key;
 import org.eclipse.jdt.internal.ui.wizards.IStatusChangeListener;
 import org.eclipse.jface.dialogs.IDialogSettings;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
 import org.jboss.tools.common.preferences.SeverityPreferences;
 import org.jboss.tools.common.ui.preferences.SeverityConfigurationBlock;
-import org.jboss.tools.common.ui.preferences.SeverityConfigurationBlock.OptionDescription;
-import org.jboss.tools.common.ui.preferences.SeverityConfigurationBlock.SectionDescription;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.preferences.ELSeverityPreferences;
 
@@ -68,6 +60,7 @@ public class ELValidatorConfigurationBlock extends SeverityConfigurationBlock {
 
 	private static Key[] getKeys() {
 		ArrayList<Key> keys = new ArrayList<Key>();
+		keys.add(ENABLE_BLOCK_KEY);
 		for (SectionDescription s: ALL_SECTIONS) {
 			s.collectKeys(keys);
 		}
@@ -76,6 +69,13 @@ public class ELValidatorConfigurationBlock extends SeverityConfigurationBlock {
 		keys.add(MAX_NUMBER_OF_PROBLEMS_KEY);
 		keys.add(WRONG_BUILDER_ORDER_KEY);
 		return keys.toArray(new Key[0]);
+	}
+
+	protected final static Key ENABLE_BLOCK_KEY = getKey(WebKbPlugin.PLUGIN_ID, SeverityPreferences.ENABLE_BLOCK_PREFERENCE_NAME);
+
+	@Override
+	protected Key getEnableBlockKey() {
+		return ENABLE_BLOCK_KEY;
 	}
 
 	private static final Key MAX_NUMBER_OF_PROBLEMS_KEY = getKey(WebKbPlugin.PLUGIN_ID, SeverityPreferences.MAX_NUMBER_OF_MARKERS_PREFERENCE_NAME);
