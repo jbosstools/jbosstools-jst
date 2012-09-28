@@ -106,4 +106,16 @@ public class TestValidator implements IValidator {
 		validated = true;
 		return OK_STATUS;
 	}
+
+	@Override
+	public void setProblemType(String problemType) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void registerPreferenceInfo() {
+		// TODO Auto-generated method stub
+		
+	}
 }

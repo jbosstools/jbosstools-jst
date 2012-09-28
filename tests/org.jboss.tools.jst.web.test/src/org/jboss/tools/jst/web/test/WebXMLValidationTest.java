@@ -22,7 +22,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.osgi.util.NLS;
 import org.jboss.tools.common.base.test.validation.TestUtil;
 import org.jboss.tools.common.validation.ValidatorManager;
-import org.jboss.tools.jst.web.validation.WebXMLCoreValidator;
 import org.jboss.tools.jst.web.validation.WebXMLValidatorMessages;
 import org.jboss.tools.jst.web.webapp.model.WebAppConstants;
 import org.jboss.tools.test.util.JobUtils;
@@ -34,7 +33,7 @@ import org.jboss.tools.tests.AbstractResourceMarkerTest;
  * @author Alexey Kazakov
  */
 public class WebXMLValidationTest extends TestCase {
-
+	public static final String PROBLEM_TYPE = "org.jboss.tools.jst.web.webxmlproblem";
 	private IProject project;
 
 	/* (non-Javadoc)
@@ -65,7 +64,7 @@ public class WebXMLValidationTest extends TestCase {
 		String path0 = "WebContent/WEB-INF/web.xml";
 		IFile webxml = project.getFile(path0);
 		assertTrue(webxml.exists());
-		IMarker[] markers = webxml.findMarkers(WebXMLCoreValidator.PROBLEM_TYPE, false, IResource.DEPTH_ZERO);
+		IMarker[] markers = webxml.findMarkers(PROBLEM_TYPE, false, IResource.DEPTH_ZERO);
 		assertTrue(markers.length > 0);
 		
 		//Now we will copy that original web.xml to different folders and check incremental validation.
@@ -74,7 +73,7 @@ public class WebXMLValidationTest extends TestCase {
 		String path1 = "aFolder/WEB-INF/web.xml";
 		IFile webxml1 = project.getFile(path1);
 		replaceFile(project, path0, path1);
-		markers = webxml1.findMarkers(WebXMLCoreValidator.PROBLEM_TYPE, false, IResource.DEPTH_ZERO);
+		markers = webxml1.findMarkers(PROBLEM_TYPE, false, IResource.DEPTH_ZERO);
 		assertTrue(markers.length > 0);
 		for (IMarker m: markers) {
 			System.out.println(m.getAttribute(IMarker.MESSAGE));
@@ -84,7 +83,7 @@ public class WebXMLValidationTest extends TestCase {
 		String path2 = "target/m2e-wtp/web-resources/WEB-INF/web.xml";
 		IFile webxml2 = project.getFile(path2);
 		replaceFile(project, path0, path2);
-		markers = webxml2.findMarkers(WebXMLCoreValidator.PROBLEM_TYPE, false, IResource.DEPTH_ZERO);
+		markers = webxml2.findMarkers(PROBLEM_TYPE, false, IResource.DEPTH_ZERO);
 		assertTrue(markers.length == 0);
 	}
 
@@ -99,13 +98,13 @@ public class WebXMLValidationTest extends TestCase {
 		
 		String path1 = "WebContent/WEB-INF/web.xml.loginconfigtest1";
 		replaceFile(project, path1, path0);
-		IMarker[] markers = webxml.findMarkers(WebXMLCoreValidator.PROBLEM_TYPE, false, IResource.DEPTH_ZERO);
+		IMarker[] markers = webxml.findMarkers(PROBLEM_TYPE, false, IResource.DEPTH_ZERO);
 		assertFalse(hasMarkerOnLine(markers, 18));
 		assertTrue(hasMarkerOnLine(markers, 19));
 
 		String path2 = "WebContent/WEB-INF/web.xml.loginconfigtest2";
 		replaceFile(project, path2, path0);
-		markers = webxml.findMarkers(WebXMLCoreValidator.PROBLEM_TYPE, false, IResource.DEPTH_ZERO);
+		markers = webxml.findMarkers(PROBLEM_TYPE, false, IResource.DEPTH_ZERO);
 		assertTrue(hasMarkerOnLine(markers, 18));
 		assertFalse(hasMarkerOnLine(markers, 19));
 
@@ -129,7 +128,7 @@ public class WebXMLValidationTest extends TestCase {
 
 	public void testServletMapping() throws CoreException {
 		IFile webxml = project.getFile("WebContent/WEB-INF/webJAXFX.xml");
-		IMarker[] markers = webxml.findMarkers(WebXMLCoreValidator.PROBLEM_TYPE, false, IResource.DEPTH_ZERO);
+		IMarker[] markers = webxml.findMarkers(PROBLEM_TYPE, false, IResource.DEPTH_ZERO);
 
 		//1. If servlet-mapping/servlet-name=javax.ws.rs.core.Application, it is ok.
 		assertFalse(hasMarkerOnLine(markers, 6));

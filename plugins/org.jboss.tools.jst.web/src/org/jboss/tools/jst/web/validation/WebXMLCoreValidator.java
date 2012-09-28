@@ -52,7 +52,6 @@ import org.jboss.tools.jst.web.model.helpers.WebAppHelper;
  */
 public class WebXMLCoreValidator extends ValidationErrorManager implements IValidator {
 	public static final String ID = "org.jboss.tools.esb.validator.ESBCoreValidator"; //$NON-NLS-1$
-	public static final String PROBLEM_TYPE = "org.jboss.tools.jst.web.webxmlproblem"; //$NON-NLS-1$
 	public static final String PREFERENCE_PAGE_ID = "org.jboss.tools.jst.web.ui.WebXMLValidatorPreferencePage"; //$NON-NLS-1$
 	public static final String PROPERTY_PAGE_ID = "org.jboss.tools.jst.web.ui.propertyPages.WebXMLValidatorPreferencePage"; //$NON-NLS-1$
 
@@ -139,15 +138,6 @@ public class WebXMLCoreValidator extends ValidationErrorManager implements IVali
 				"WebAppSecurityRoleRef");
 		addCheck(new CheckRoleReferenceName(this, WebXMLPreferences.INVALID_ROLE_REF, "role-name"), 
 				"WebAppRunAs", "WebAppRoleName");
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.internal.validation.ValidationErrorManager#getMarkerType()
-	 */
-	@Override
-	public String getMarkerType() {
-		return PROBLEM_TYPE;
 	}
 
 	public String getId() {
@@ -289,10 +279,8 @@ public class WebXMLCoreValidator extends ValidationErrorManager implements IVali
 	}
 
 	@Override
-	protected void registerPreferenceInfo() {
-		if(PreferenceInfoManager.getPreferenceInfo(PROBLEM_TYPE) == null){
-			PreferenceInfoManager.register(PROBLEM_TYPE, new WebXMLPreferenceInfo());
-		}
+	public void registerPreferenceInfo() {
+		PreferenceInfoManager.register(getProblemType(), new WebXMLPreferenceInfo());
 	}
 	
 	class WebXMLPreferenceInfo implements IPreferenceInfo{

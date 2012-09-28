@@ -8,7 +8,8 @@
                class="org.jboss.tools.jst.web.kb.test.validation.TestValidator"
                id="org.jboss.tools.jst.web.kb.test.TestValidator"
                name="Test Validator"
-               dependent="true">
+               dependent="true"
+               problemType="org.eclipse.wst.validation.problemmarker">
          </validator>
    </extension>
 

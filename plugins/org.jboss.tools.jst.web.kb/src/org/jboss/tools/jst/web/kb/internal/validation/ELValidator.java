@@ -82,7 +82,6 @@ import org.jboss.tools.jst.web.kb.preferences.ELSeverityPreferences;
 public class ELValidator extends WebValidator implements IStringValidator {
 
 	public static final String ID = "org.jboss.tools.jst.web.kb.ELValidator"; //$NON-NLS-1$
-	public static final String PROBLEM_TYPE = "org.jboss.tools.jst.web.kb.elproblem"; //$NON-NLS-1$
 	public static final String PREFERENCE_PAGE_ID = "org.jboss.tools.jst.web.ui.preferences.ELValidatorPreferencePage"; //$NON-NLS-1$
 	public static final String PROPERTY_PAGE_ID = "org.jboss.tools.jst.web.ui.properties.ELValidatorPreferencePage"; //$NON-NLS-1$
 	
@@ -119,15 +118,6 @@ public class ELValidator extends WebValidator implements IStringValidator {
 	private boolean validateVars = true;
 
 	public ELValidator() {
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.internal.validation.ValidationErrorManager#getMarkerType()
-	 */
-	@Override
-	public String getMarkerType() {
-		return PROBLEM_TYPE;
 	}
 
 	/*
@@ -273,7 +263,7 @@ public class ELValidator extends WebValidator implements IStringValidator {
 			validateEL(elReference, true, elContext);
 		}
 		if(reporter instanceof ITypedReporter) {
-			((ITypedReporter)reporter).addTypeForRegion(getMarkerType());
+			((ITypedReporter)reporter).addTypeForRegion(getProblemType());
 		}
 	}
 
@@ -672,10 +662,8 @@ public class ELValidator extends WebValidator implements IStringValidator {
 	}
 
 	@Override
-	protected void registerPreferenceInfo() {
-		if(PreferenceInfoManager.getPreferenceInfo(PROBLEM_TYPE) == null){
-			PreferenceInfoManager.register(PROBLEM_TYPE, new ELPreferenceInfo());
-		}
+	public void registerPreferenceInfo() {
+		PreferenceInfoManager.register(getProblemType(), new ELPreferenceInfo());
 	}
 	
 	class ELPreferenceInfo implements IPreferenceInfo{

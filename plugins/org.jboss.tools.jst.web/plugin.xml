@@ -339,7 +339,8 @@
          <validator
                class="org.jboss.tools.jst.web.validation.WebXMLCoreValidator"
                name="%WebXMLCoreValidator"
-               id="org.jboss.tools.jst.web.validation.WebXMLCoreValidator">
+               id="org.jboss.tools.jst.web.validation.WebXMLCoreValidator"
+               problemType="org.jboss.tools.jst.web.webxmlproblem">
          </validator>
    </extension>
 
