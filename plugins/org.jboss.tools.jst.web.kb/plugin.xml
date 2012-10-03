@@ -201,6 +201,16 @@
                </rules>
             </exclude>
          </validator>
+         <validator
+               id="org.eclipse.jst.jsf.ui.JSFNonELAttributeValueValidator">
+            <exclude>
+               <rules>
+               		<projectNature
+                            id="org.jboss.tools.jst.web.kb.kbnature">
+                    </projectNature>
+               </rules>
+            </exclude>
+         </validator>
    </extension>
 
    <extension
