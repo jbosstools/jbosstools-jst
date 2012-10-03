@@ -10,7 +10,6 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web;
 
-import java.util.Iterator;
 import java.util.Properties;
 
 import org.eclipse.core.resources.ICommand;
@@ -64,10 +63,7 @@ public class WebModelPlugin extends BaseUIPlugin {
 		p.setProperty("initialModel", "true"); //$NON-NLS-1$ //$NON-NLS-2$
 		XModel initialModel = PreferenceModelUtilities.createPreferenceModel(p);
 		if (initialModel != null) {
-			Iterator preferences = WebPreference.getPreferenceList().iterator();
-			
-			while(preferences.hasNext()) {
-				Object preference = preferences.next();
+			for (Object preference: WebPreference.getPreferenceList()) {
 				if(preference instanceof WebPreference) {
 					try {
 						PreferenceModelUtilities.initPreferenceValue(initialModel,(WebPreference)preference);

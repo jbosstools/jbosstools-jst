@@ -287,6 +287,9 @@
             <uri 
                 name="http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd" 
                 uri="platform:/plugin/org.jboss.tools.jst.web/catalog/web-facesconfig_2_0.xsd" />
+            <uri 
+                name="http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd" 
+                uri="platform:/plugin/org.jboss.tools.jst.web/catalog/web-facesconfig_2_1.xsd" />
             <uri
                 name="http://java.sun.com/xml/ns/javaee/"
                 uri="platform:/plugin/org.jboss.tools.jst.web/catalog/javaee_5.xsd" />
