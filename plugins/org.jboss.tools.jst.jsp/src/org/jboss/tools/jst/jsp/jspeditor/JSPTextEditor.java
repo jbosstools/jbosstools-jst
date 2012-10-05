@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2007 Exadel, Inc. and Red Hat, Inc.
+ * Copyright (c) 2007-2012 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
+ *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.jspeditor;
 
@@ -71,6 +71,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.editors.text.ILocationProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
@@ -168,6 +169,8 @@ import org.w3c.dom.Text;
 public class JSPTextEditor extends StructuredTextEditor implements
 		ITextListener, IJSPTextEditor, ITextFormatter,
 		IOccurrencePreferenceProvider {
+	private static final String TEXT_EDITOR_KEYBINDING_SCOPE_ID = "org.eclipse.ui.textEditorScope"; //$NON-NLS-1$
+
 	private IStructuredTextOccurrenceStructureProvider fOccurrenceModelUpdater;
 
 	TextEditorDrop dnd = new TextEditorDrop();
@@ -347,6 +350,10 @@ public class JSPTextEditor extends StructuredTextEditor implements
 
 	public void createPartControl(Composite parent) {
 		super.createPartControl(parent);
+
+		IContextService contextService = (IContextService) getSite().getService(IContextService.class);
+		if (contextService != null)
+			contextService.activateContext(TEXT_EDITOR_KEYBINDING_SCOPE_ID);
 
 		StructuredTextOccurrenceStructureProviderRegistry registry = XmlEditorPlugin
 				.getDefault().getOccurrenceStructureProviderRegistry(
