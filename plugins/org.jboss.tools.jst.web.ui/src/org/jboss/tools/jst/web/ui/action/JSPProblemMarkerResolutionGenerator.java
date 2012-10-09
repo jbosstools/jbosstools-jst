@@ -24,6 +24,9 @@ import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.IMarkerResolutionGenerator2;
+import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.texteditor.DocumentProviderRegistry;
+import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
@@ -33,6 +36,8 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.quickfix.IQuickFixGenerator;
 import org.jboss.tools.common.refactoring.MarkerResolutionUtils;
+import org.jboss.tools.common.text.ext.util.StructuredModelWrapper;
+import org.jboss.tools.common.text.ext.util.Utils;
 import org.jboss.tools.jst.web.kb.IKbProject;
 import org.jboss.tools.jst.web.kb.KbProjectFactory;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
@@ -41,6 +46,9 @@ import org.jboss.tools.jst.web.kb.internal.taglib.TLDLibrary;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 /**
  * Shows the Marker Resolutions for Unknown tag JSP Problem Marker
@@ -55,10 +63,12 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 	
 	private static final String UNKNOWN_TAG = "Unknown tag"; //$NON-NLS-1$
 	
+	private static final String MISSING_ATTRIBUTE = "Missing required attribute"; //$NON-NLS-1$
+	
 	@Override
 	public IMarkerResolution[] getResolutions(IMarker marker) {
 		try{
-			return isOurCase(marker);
+			return findResolutions(marker);
 		}catch(CoreException ex){
 			WebUiPlugin.getPluginLog().logError(ex);
 		}
@@ -99,38 +109,49 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		return true;
 	}
 	
-	private IJavaCompletionProposal[] isOurCase(Annotation annotation, Position position){
-		ArrayList<IJavaCompletionProposal> proposals = new ArrayList<IJavaCompletionProposal>();
-		if(!(annotation instanceof TemporaryAnnotation)){
-			return new IJavaCompletionProposal[]{};
-		}
-		TemporaryAnnotation ta = (TemporaryAnnotation)annotation;
+	private void getAddAttribute(ArrayList<IJavaCompletionProposal> proposals, TemporaryAnnotation ta, String message, int start, int end){
+		String attributeName = getAttributeName(message);
 		
-		String message = annotation.getText();
-		if(ta.getPosition() == null)
-			return new IJavaCompletionProposal[]{};
-		
-		final int start = position.getOffset();
-		
-		final int end = position.getOffset()+position.getLength();
-		
-		if(!message.startsWith(UNKNOWN_TAG))
-			return new IJavaCompletionProposal[]{};
-		
-		String prefix = getPrifix(message);
-		if(prefix == null)
-			return new IJavaCompletionProposal[]{};
-		
-		String tagName = getTagName(message);
-		if(tagName == null)
-			return new IJavaCompletionProposal[]{};
 		
 		IFile file = MarkerResolutionUtils.getFile();
 		if(file == null)
-			return new IJavaCompletionProposal[]{};
+			return;
+
+		Object additionalInfo = ta.getAdditionalFixInfo();
+		if(additionalInfo instanceof IDocument){
+			IStructuredModel model = StructuredModelManager.getModelManager().getModelForRead((IStructuredDocument)additionalInfo);
+			IDOMDocument xmlDocument = (model instanceof IDOMModel) ? ((IDOMModel) model).getDocument() : null;
+
+			Node n = Utils.findNodeForOffset(xmlDocument, start);
+
+			if (n == null || !(n instanceof Attr))
+				return;
+				
+			Node node = ((Attr)n).getOwnerElement();
+
+			String prefix = node.getPrefix();
+			String tagName = node.getNodeName();
+			
+			proposals.add(new AddAttributeMarkerResolution(file, node, attributeName, start, end));
+			
+		}
+	}
+	
+	private void getAddTLD(ArrayList<IJavaCompletionProposal> proposals, TemporaryAnnotation ta, String message, int start, int end){
+		String prefix = getPrifix(message);
+		if(prefix == null)
+			return;
+		
+		String tagName = getTagName(message);
+		if(tagName == null)
+			return;
+		
+		IFile file = MarkerResolutionUtils.getFile();
+		if(file == null)
+			return;
 		
 		if(!validatePrefix(file, start, prefix)){
-			return new IJavaCompletionProposal[]{};
+			return;
 		}
 		
 		Object additionalInfo = ta.getAdditionalFixInfo();
@@ -139,6 +160,9 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 			IDOMDocument xmlDocument = (model instanceof IDOMModel) ? ((IDOMModel) model).getDocument() : null;
 			
 			IKbProject kbProject = KbProjectFactory.getKbProject(file.getProject(), true);
+			if(kbProject == null){
+				return;
+			}
 			
 			List<ITagLibrary> libraries = kbProject.getAllTagLibraries();
 			ArrayList<String> names = new ArrayList<String>();
@@ -171,7 +195,28 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 			}
 			
 		}
+	}
+	
+	private IJavaCompletionProposal[] findProposals(Annotation annotation, Position position){
+		ArrayList<IJavaCompletionProposal> proposals = new ArrayList<IJavaCompletionProposal>();
+		if(!(annotation instanceof TemporaryAnnotation)){
+			return new IJavaCompletionProposal[]{};
+		}
+		TemporaryAnnotation ta = (TemporaryAnnotation)annotation;
 		
+		String message = annotation.getText();
+		if(ta.getPosition() == null)
+			return new IJavaCompletionProposal[]{};
+		
+		final int start = position.getOffset();
+		
+		final int end = position.getOffset()+position.getLength();
+		
+		if(message.startsWith(UNKNOWN_TAG)){
+			getAddTLD(proposals, ta, message, start, end);
+		}else if(message.startsWith(MISSING_ATTRIBUTE)){
+			getAddAttribute(proposals, ta, message, start, end);
+		}
 		return proposals.toArray(new IJavaCompletionProposal[]{});
 	}
 	
@@ -184,35 +229,45 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		return null;
 	}
 	
-	private IMarkerResolution[] isOurCase(IMarker marker) throws CoreException{
-		ArrayList<IMarkerResolution> resolutions = new ArrayList<IMarkerResolution>();
-		String message = (String)marker.getAttribute(IMarker.MESSAGE);
+	private void getAddAttribute(ArrayList<IMarkerResolution> resolutions, IMarker marker, String message, int start, int end) throws CoreException{
+		String attributeName = getAttributeName(message);
 		
-		Integer attribute =  ((Integer)marker.getAttribute(IMarker.CHAR_START));
-		if(attribute == null)
-			return new IMarkerResolution[]{};
-		final int start = attribute.intValue();
+		IFile file = (IFile)marker.getResource();
 		
-		attribute = ((Integer)marker.getAttribute(IMarker.CHAR_END));
-		if(attribute == null)
-			return new IMarkerResolution[]{};
-		final int end = attribute.intValue();
-		
-		if(!message.startsWith(UNKNOWN_TAG))
-			return new IMarkerResolution[]{};
-		
+		FileEditorInput input = new FileEditorInput(file);
+		IDocumentProvider provider = DocumentProviderRegistry.getDefault().getDocumentProvider(input);
+		IDocument document = provider.getDocument(input);
+		StructuredModelWrapper smw = new StructuredModelWrapper();
+		try {
+			smw.init(document);
+			Document xmlDocument = smw.getDocument();
+			if (xmlDocument == null) return;
+			
+			Node node = Utils.findNodeForOffset(xmlDocument, start);
+
+			if (node == null) return;
+			
+			String tagName = node.getNodeName();
+			
+			resolutions.add(new AddAttributeMarkerResolution(file, node, attributeName, start, end));
+		} finally {
+			smw.dispose();
+		}
+	}
+	
+	private void getAddTLD(ArrayList<IMarkerResolution> resolutions, IMarker marker, String message, int start, int end) throws CoreException{
 		String prefix = getPrifix(message);
 		if(prefix == null)
-			return new IMarkerResolution[]{};
+			return;
 		
 		String tagName = getTagName(message);
 		if(tagName == null)
-			return new IMarkerResolution[]{};
+			return;
 		
 		IFile file = (IFile)marker.getResource();
 		
 		if(!validatePrefix(file, start, prefix)){
-			return new IMarkerResolution[]{};
+			return;
 		}
 		
 		IKbProject kbProject = KbProjectFactory.getKbProject(file.getProject(), true);
@@ -245,7 +300,28 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 				names.add(resolutionName);
 			}
 		}
+	}
+	
+	private IMarkerResolution[] findResolutions(IMarker marker) throws CoreException{
+		ArrayList<IMarkerResolution> resolutions = new ArrayList<IMarkerResolution>();
+		String message = (String)marker.getAttribute(IMarker.MESSAGE);
 		
+		Integer attribute =  ((Integer)marker.getAttribute(IMarker.CHAR_START));
+		if(attribute == null)
+			return new IMarkerResolution[]{};
+		final int start = attribute.intValue();
+		
+		attribute = ((Integer)marker.getAttribute(IMarker.CHAR_END));
+		if(attribute == null)
+			return new IMarkerResolution[]{};
+		final int end = attribute.intValue();
+		
+		if(message.startsWith(UNKNOWN_TAG)){
+			getAddTLD(resolutions, marker, message, start, end);
+		}else if(message.startsWith(MISSING_ATTRIBUTE)){
+			getAddAttribute(resolutions, marker, message, start, end);
+		}
+
 		return resolutions.toArray(new IMarkerResolution[]{});
 	}
 	
@@ -280,6 +356,22 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		
 		return tagName;
 	}
+	
+	public static String getAttributeName(String message){
+		String attributeName=""; //$NON-NLS-1$
+		
+		int start = message.indexOf("\""); //$NON-NLS-1$
+		if(start < 0)
+			return null;
+		
+		int end = message.lastIndexOf("\""); //$NON-NLS-1$
+		if(end < 0)
+			return null;
+		
+		attributeName = message.substring(start+1, end);
+		
+		return attributeName;
+	}
 
 	@Override
 	public boolean hasResolutions(IMarker marker) {
@@ -300,6 +392,6 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 
 	@Override
 	public IJavaCompletionProposal[] getProposals(Annotation annotation, Position position) {
-		return isOurCase(annotation, position); 
+		return findProposals(annotation, position); 
 	}
 }

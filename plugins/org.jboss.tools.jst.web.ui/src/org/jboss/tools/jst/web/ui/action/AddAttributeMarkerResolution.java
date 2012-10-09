@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2010 Red Hat, Inc. 
+ * Copyright (c) 2012 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -10,18 +10,13 @@
  ******************************************************************************/
 package org.jboss.tools.jst.web.ui.action;
 
-import java.util.Properties;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.contentassist.IContextInformation;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -29,80 +24,41 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.DocumentProviderRegistry;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.jboss.tools.common.model.ui.ModelUIImages;
-import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
 import org.jboss.tools.common.quickfix.IQuickFix;
 import org.jboss.tools.common.ui.CommonUIPlugin;
-import org.jboss.tools.jst.jsp.jspeditor.dnd.JSPPaletteInsertHelper;
-import org.jboss.tools.jst.jsp.jspeditor.dnd.PaletteTaglibInserter;
 import org.jboss.tools.jst.web.ui.Messages;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 /**
- * The Marker Resolution that adds tag lib declaration to jsp or xhtml file
+ * The Marker Resolution that adds missing attribute to the tag in jsp or xhtml file
  * 
  * @author Daniel Azarov
  *
  */
-public class AddTLDMarkerResolution implements IQuickFix{
+public class AddAttributeMarkerResolution implements IQuickFix{
 	private IFile file;
 	
-	private String resolutionName;
 	private int start, end;
-	private String uri, prefix;
+	private String attributeName;
+	private Node node;
 	
-	public AddTLDMarkerResolution(IFile file, String name, int start, int end, String uri, String prefix){
+	public AddAttributeMarkerResolution(IFile file, Node node, String attributeName, int start, int end){
 		this.file = file;
-		this.resolutionName = name;
+		this.node = node;
+		this.attributeName = attributeName;
 		this.start = start;
 		this.end = end;
-		this.uri = uri;
-		this.prefix = prefix;
 	}
 	
-	private Properties getProperties(){
-		Properties properties = new Properties();
-		properties.put(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB, "true"); //$NON-NLS-1$
-		properties.put(PaletteInsertHelper.PROPOPERTY_START_TEXT, ""); //$NON-NLS-1$
-		properties.put(JSPPaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI, uri);
-		properties.put(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX, prefix);
-		properties.put(JSPPaletteInsertHelper.PROPOPERTY_FORCE_PREFIX, "true");
-		properties.put(PaletteInsertHelper.PROPOPERTY_SELECTION_PROVIDER, new ISelectionProvider() {
-			
-			@Override
-			public void setSelection(ISelection selection) {
-			}
-			
-			@Override
-			public void removeSelectionChangedListener(
-					ISelectionChangedListener listener) {
-			}
-			
-			@Override
-			public ISelection getSelection() {
-				return new TextSelection(start, end-start);
-			}
-			
-			@Override
-			public void addSelectionChangedListener(ISelectionChangedListener listener) {
-			}
-		});
-		return properties;
-	}
-
 	@Override
 	public String getLabel() {
-		return NLS.bind(Messages.AddTLDMarkerResolution_Name, resolutionName);
+		return NLS.bind(Messages.AddAttributeMarkerResolution_Name, attributeName, node.getNodeName());
 	}
 	
 	@Override
 	public void run(IMarker marker) {
-		if(!JSPProblemMarkerResolutionGenerator.validatePrefix(file, start, prefix)){
-			return;
-		}
-		if(!JSPProblemMarkerResolutionGenerator.validateURI(file, start, uri)){
-			return;
-		}
-		
 		FileEditorInput input = new FileEditorInput(file);
 		IDocumentProvider provider = DocumentProviderRegistry.getDefault().getDocumentProvider(input);
 		try {
@@ -112,8 +68,7 @@ public class AddTLDMarkerResolution implements IQuickFix{
 		
 			IDocument document = provider.getDocument(input);
 			
-			PaletteTaglibInserter inserter = new PaletteTaglibInserter();
-			inserter.inserTaglib(document, getProperties());
+			apply(document);
 			
 			if(!dirty){
 				provider.aboutToChange(input);
@@ -139,19 +94,20 @@ public class AddTLDMarkerResolution implements IQuickFix{
 
 	@Override
 	public void apply(IDocument document) {
-		if(!JSPProblemMarkerResolutionGenerator.validatePrefix(file, start, prefix)){
-			return;
-		}
-		if(!JSPProblemMarkerResolutionGenerator.validateURI(file, start, uri)){
-			return;
-		}
-
-		Properties properties = getProperties();
+		String text = "<"+node.getNodeName()+" ";
 		
-		PaletteTaglibInserter.getPrefixes(document, properties);
+		NamedNodeMap attributes = node.getAttributes();
+		for(int i = 0; i < attributes.getLength(); i++){
+			Node att = attributes.item(i);
+			text += att.getNodeName()+"=\""+att.getNodeValue()+"\" ";
+		}
 		
-		PaletteTaglibInserter inserter = new PaletteTaglibInserter();
-		inserter.inserTaglib(document, properties);
+		text += attributeName+"=\"\">";
+		try {
+			document.replace(start, end-start, text);
+		} catch (BadLocationException ex) {
+			WebUiPlugin.getPluginLog().logError(ex);
+		}
 	}
 
 	@Override
