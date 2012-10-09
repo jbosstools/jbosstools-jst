@@ -72,6 +72,7 @@ public class Messages extends NLS {
 	public static String WebCompoundEditor_WebXMLEditor;
 	public static String XActionProvider_CompanyName;
 	public static String AddTLDMarkerResolution_Name;
+	public static String AddAttributeMarkerResolution_Name;
 	public static String UI_WIZARD_XHTML_NEW_TITLE;
 	public static String UI_WIZARD_XHTML_NEW_Description;
 
