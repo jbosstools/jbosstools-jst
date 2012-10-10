@@ -89,7 +89,7 @@ public class AddAttributeMarkerResolution implements IQuickFix{
 
 	@Override
 	public Image getImage() {
-		return CommonUIPlugin.getImageDescriptorRegistry().get(ModelUIImages.getImageDescriptor(ModelUIImages.TAGLIB_FILE));
+		return CommonUIPlugin.getImageDescriptorRegistry().get(ModelUIImages.getImageDescriptor(ModelUIImages.TAGLIB_ATTRIBUTE));
 	}
 
 	@Override
