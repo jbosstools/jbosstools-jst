@@ -63,7 +63,7 @@ public abstract class NewWebProjectWizard extends Wizard implements INewWizard, 
 		IRunnableWithProgress runnable = createOperation();
 		IRunnableWithProgress op = new WorkspaceModifyDelegatingOperation(runnable);
 		try {
-			getContainer().run(false, true, op);
+			getContainer().run(true, false, op);
 			BasicNewProjectResourceWizard.updatePerspective(fConfigElement);
 			BasicNewResourceWizard.selectAndReveal(context.getProject(), ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow());
 			if(runnable instanceof WebNatureOperation && ((WebNatureOperation)runnable).isCancelled()) {

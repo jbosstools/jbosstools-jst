@@ -414,6 +414,13 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 			wcco.setDataModel(dataModel);
 			dataModel.setProperty(IProjectCreationPropertiesNew.PROJECT_NAME, projectName);
 			dataModel.setProperty(IFacetProjectCreationDataModelProperties.FACET_PROJECT_NAME, projectName);
+			String runtimeName = getProperty(WebNatureOperation.RUNTIME_NAME);
+			if(runtimeName != null && runtimeName.length() > 0) {
+				Object o = findFacetRuntime(null);
+				if(o != null) {
+					dataModel.setProperty(IFacetProjectCreationDataModelProperties.FACET_RUNTIME, o);
+				}
+			}
 			if(!isDefaultLocation(projectLocation, true)) {
 				dataModel.setProperty(IProjectCreationPropertiesNew.USE_DEFAULT_LOCATION, Boolean.FALSE);
 				dataModel.setProperty(IProjectCreationPropertiesNew.USER_DEFINED_LOCATION, projectLocation);
@@ -490,7 +497,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 			if(wcco != null) {
 				wcco.execute(monitor, null);
 			}
-			new RuntimeJob().schedule();
+//			new RuntimeJob().runInWorkspace(monitor);
 		} catch (ExecutionException e) {
 			WebUiPlugin.getPluginLog().logError(e);
 		}
@@ -593,11 +600,10 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 		String runtimeName = getProperty(WebNatureOperation.RUNTIME_NAME);
 		if(runtimeName == null) return null;
 		if(runtime != null) runtimeName = runtime.getName();
-		Set set = RuntimeManager.getRuntimes();
-		Iterator it = set.iterator();
-		while(it.hasNext()) {
-			org.eclipse.wst.common.project.facet.core.runtime.IRuntime r = (org.eclipse.wst.common.project.facet.core.runtime.IRuntime)it.next();
-			if(runtimeName.equals(r.getName())) return r;
+		for(org.eclipse.wst.common.project.facet.core.runtime.IRuntime r: RuntimeManager.getRuntimes()) {
+			if(runtimeName.equals(r.getName())) {
+				return r;
+			}
 		}
 		return null;
 	}
