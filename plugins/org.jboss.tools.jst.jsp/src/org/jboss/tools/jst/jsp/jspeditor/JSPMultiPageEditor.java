@@ -41,7 +41,6 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorInput;
@@ -227,6 +226,14 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		return true;
 	}
 
+
+	/*
+	 * The method is @Deprecated and is not consistent with a real 
+	 * MultiPageEditorPart.pageChange(int newPageIndex) method
+	 * 
+	 * So, this one is removed as of JBIDE-JBIDE-12534
+	 * 
+
 	public void superPageChange(int newPageIndex) {
 		Control control = getControl(visualSourceIndex);
 		if (control != null) {
@@ -252,7 +259,8 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 			}
 		}
 	}
-
+	 */
+	
 	@Override
 	public void pageChange(int newPageIndex) {
 		selectedPageIndex = newPageIndex;
@@ -323,7 +331,9 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		commandService.refreshElements(SelectionBarHandler.COMMAND_ID, null);
 		getSelectionBar().refreshVisibility();
 		
-		superPageChange(selectedPageIndex);
+		super.pageChange(selectedPageIndex); 	// The call to real super.pageChange(newPageIndex) 
+												// is returned back because of JBIDE-12534
+		
 		JspEditorPlugin.getDefault().getPreferenceStore().
 			setValue(IVpePreferencesPage.DEFAULT_VPE_TAB, selectedPageIndex);
 	}
@@ -486,22 +496,22 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 				case 0: {
 					// source/visual mode
 					setActivePage(selectedPageIndex);
-					pageChange(selectedPageIndex);
+//					pageChange(selectedPageIndex);
 					break;
 				} case 1: {
 					// source mode
 					setActivePage(selectedPageIndex);
-					pageChange(selectedPageIndex);
+//					pageChange(selectedPageIndex);
 					break;
 				} case 2: {
 					// preview mode
 					setActivePage(selectedPageIndex);
-					pageChange(selectedPageIndex);
+//					pageChange(selectedPageIndex);
 					break;
 				} default: {
 					// by default we sets source/visual mode
 					setActivePage(0);
-					pageChange(0);
+//					pageChange(0);
 					break;
 				}
 			}

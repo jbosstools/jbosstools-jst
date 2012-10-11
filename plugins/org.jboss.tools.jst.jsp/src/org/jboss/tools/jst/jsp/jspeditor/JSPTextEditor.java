@@ -71,7 +71,6 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.contexts.IContextService;
 import org.eclipse.ui.editors.text.ILocationProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
@@ -350,10 +349,6 @@ public class JSPTextEditor extends StructuredTextEditor implements
 
 	public void createPartControl(Composite parent) {
 		super.createPartControl(parent);
-
-		IContextService contextService = (IContextService) getSite().getService(IContextService.class);
-		if (contextService != null)
-			contextService.activateContext(TEXT_EDITOR_KEYBINDING_SCOPE_ID);
 
 		StructuredTextOccurrenceStructureProviderRegistry registry = XmlEditorPlugin
 				.getDefault().getOccurrenceStructureProviderRegistry(

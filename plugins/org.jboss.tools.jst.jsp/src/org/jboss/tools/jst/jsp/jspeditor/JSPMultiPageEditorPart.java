@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 Red Hat, Inc.
+ * Copyright (c) 2011-2012 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -150,8 +150,6 @@ public abstract class JSPMultiPageEditorPart extends MultiPageEditorPart {
 		setInput(XModelObjectEditorInput.checkInput(input));
 		site.setSelectionProvider(new JSPMultiPageSelectionProvider(this));
 	}
-
-	protected abstract void pageChange(int newPageIndex);
 
 	private void disposePart(final IWorkbenchPart part) {
 		SafeRunner.run(new SafeRunnable() {
