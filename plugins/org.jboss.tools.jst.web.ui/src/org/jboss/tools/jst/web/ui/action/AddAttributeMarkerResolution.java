@@ -14,12 +14,14 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jdt.ui.text.java.IJavaCompletionProposal;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.ui.IMarkerResolution2;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.DocumentProviderRegistry;
 import org.eclipse.ui.texteditor.IDocumentProvider;
@@ -37,7 +39,7 @@ import org.w3c.dom.Node;
  * @author Daniel Azarov
  *
  */
-public class AddAttributeMarkerResolution implements IQuickFix{
+public class AddAttributeMarkerResolution implements IMarkerResolution2, IJavaCompletionProposal{
 	private IFile file;
 	
 	private int start, end;
@@ -97,9 +99,11 @@ public class AddAttributeMarkerResolution implements IQuickFix{
 		String text = "<"+node.getNodeName()+" ";
 		
 		NamedNodeMap attributes = node.getAttributes();
-		for(int i = 0; i < attributes.getLength(); i++){
-			Node att = attributes.item(i);
-			text += att.getNodeName()+"=\""+att.getNodeValue()+"\" ";
+		if(attributes != null){
+			for(int i = 0; i < attributes.getLength(); i++){
+				Node att = attributes.item(i);
+				text += att.getNodeName()+"=\""+att.getNodeValue()+"\" ";
+			}
 		}
 		
 		text += attributeName+"=\"\">";

@@ -377,7 +377,7 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 	public boolean hasResolutions(IMarker marker) {
 		try{
 			String message = (String)marker.getAttribute(IMarker.MESSAGE);
-			return message.startsWith(UNKNOWN_TAG);
+			return message.startsWith(UNKNOWN_TAG) || message.startsWith(MISSING_ATTRIBUTE);
 		}catch(CoreException ex){
 			WebUiPlugin.getPluginLog().logError(ex);
 		}
@@ -387,7 +387,7 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 	@Override
 	public boolean hasProposals(Annotation annotation, Position position) {
 		String message = annotation.getText();
-		return message.startsWith(UNKNOWN_TAG);
+		return message.startsWith(UNKNOWN_TAG) || message.startsWith(MISSING_ATTRIBUTE);
 	}
 
 	@Override
