@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.jboss.tools.jst.web.ui.action;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -239,7 +240,7 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		IDocument document = provider.getDocument(input);
 		StructuredModelWrapper smw = new StructuredModelWrapper();
 		try {
-			smw.init(document);
+			smw.init(file);
 			Document xmlDocument = smw.getDocument();
 			if (xmlDocument == null) return;
 			
@@ -250,6 +251,8 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 			String tagName = node.getNodeName();
 			
 			resolutions.add(new AddAttributeMarkerResolution(file, node, attributeName, start, end));
+		} catch (IOException ex) {
+			WebUiPlugin.getPluginLog().logError(ex);
 		} finally {
 			smw.dispose();
 		}
