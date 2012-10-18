@@ -31,6 +31,8 @@ import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.gef.ui.views.palette.PalettePage;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.IPostSelectionProvider;
@@ -42,6 +44,8 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Item;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -189,6 +193,8 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		}
 	}
 
+	
+	
 	private void loadSelectedTab() {
 		String defaultVpeTab = JspEditorPlugin.getDefault()
 				.getPreferenceStore().getString(
@@ -496,22 +502,18 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 				case 0: {
 					// source/visual mode
 					setActivePage(selectedPageIndex);
-//					pageChange(selectedPageIndex);
 					break;
 				} case 1: {
 					// source mode
 					setActivePage(selectedPageIndex);
-//					pageChange(selectedPageIndex);
 					break;
 				} case 2: {
 					// preview mode
 					setActivePage(selectedPageIndex);
-//					pageChange(selectedPageIndex);
 					break;
 				} default: {
 					// by default we sets source/visual mode
 					setActivePage(0);
-//					pageChange(0);
 					break;
 				}
 			}
@@ -531,16 +533,44 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 			 */
 			vpeIsCreating = false;
 		}
-
 	}
 
+	/*
+	 * This Context Menu Listener fixes the 'empty menu items' issue
+	 * See JBIDE-12783. 
+	 */
+    private final class ZContextMenuListener implements IMenuListener 
+    {
+		@Override
+		public void menuAboutToShow(IMenuManager manager) {
+            Item[] mi = getMenuItems(manager);
+            for (int i = 0; i < mi.length; i++) {
+                mi[i].dispose();
+            }
+		}
+		
+		Item[] getMenuItems(IMenuManager manager) {
+			Menu menu = ((MenuManager)manager).getMenu();
+			return (menu == null) ? new Item[0] : menu.getItems();
+		}
+    }
+    
 	private void createPagesForVPE() throws PartInitException {
 		/*
 		 * Create Source Editor and BundleMap
 		 */
-		sourceEditor = new JSPTextEditor(this);
+		sourceEditor = new JSPTextEditor(this) {
+			public void createPartControl(Composite parent) {
+				super.createPartControl(parent);
+				Menu m = sourceEditor.getTextViewer().getTextWidget().getMenu();
+				Object data = m.getData("org.eclipse.jface.action.MenuManager.managerKey");
+				if (data instanceof IMenuManager) {
+					(((IMenuManager)data)).addMenuListener(new ZContextMenuListener());
+				}
+			}
+		};
 		sourceEditor.setEditorPart(this);
-		
+
 		/*
 		 * Create Bundle Map here but Initialize it  in the VpeController
 		 * or here if there is only the source part. 
