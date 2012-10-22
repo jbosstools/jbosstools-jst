@@ -1,5 +1,9 @@
 # The JST Tools project
 
+## Summary
+
+commont/jst/core
+
 ## Install
 
 _JST Tools_ is part of [JBoss Tools](http://jboss.org/tools) from
