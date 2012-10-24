@@ -21,6 +21,10 @@
 		<profile>
 			<id>bootstrap</id>
 			<modules>
+                                <!-- JST does not really depend on
+                                server, only base but done for now to
+                                enable bootstrap to work
+                                recursively -->
 				<module>../server</module>
 			</modules>
 		</profile>
