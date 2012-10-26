@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 Red Hat, Inc.
+ * Copyright (c) 2011-2012 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -10,14 +10,11 @@
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.test.ca;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.FindReplaceDocumentAdapter;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
-import org.jboss.tools.test.util.TestProjectProvider;
+import org.jboss.tools.test.util.ProjectImportTestSetup;
 
 /**
 * Test case testing http://jira.jboss.com/jira/browse/JBIDE-9092 issue.
@@ -28,23 +25,11 @@ import org.jboss.tools.test.util.TestProjectProvider;
 public class Jbide9092Test extends ContentAssistantTestCase {
    private static final String PROJECT_NAME = "JsfJbide1791Test"; //$NON-NLS-1$
    private static final String PAGE_NAME = "/WebContent/pages/jbide1791.xhtml"; //$NON-NLS-1$
-   private TestProjectProvider provider = null;
    
-   public static Test suite() {
-       return new TestSuite(Jbide9092Test.class);
-   }
-   
-   public void setUp() throws Exception {
-       provider = new TestProjectProvider("org.jboss.tools.jst.jsp.test", null, PROJECT_NAME,false);  //$NON-NLS-1$
-       project = provider.getProject();
-   }
+	public void setUp() throws Exception {
+		project = ProjectImportTestSetup.loadProject(PROJECT_NAME);
+	}
 
-   protected void tearDown() throws Exception {
-       if(provider != null) {
-           provider.dispose();
-       }
-   }
-   
    public void testJbide9092(){
 	   
 	   // Do not use dir-attribute here because there is dir-tag proposal (the correct proposal with the same name)
