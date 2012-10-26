@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 Red Hat, Inc.
+ * Copyright (c) 2011-2012 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -10,17 +10,14 @@
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.test.ca;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.FindReplaceDocumentAdapter;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
+import org.jboss.tools.test.util.ProjectImportTestSetup;
 
 /**
- * Test cast testing http://jira.jboss.com/jira/browse/JBIDE-6061 issue.
+ * Test case for JBIDE-6061 issue.
  * 
  * @author Victor V. Rubezhny
  *
@@ -42,13 +39,9 @@ public class Jbide6061Test extends ContentAssistantTestCase {
    private static final String[] STRINGS_TO_FIND_IN_XHTML = new String[] {"class=\"", "styleClass=\""};
    private static final String[] STRINGS_TO_FIND_IN_HTML = new String [] {"class=\""};
 
-   public static Test suite() {
-       return new TestSuite(Jbide6061Test.class);
-   }
-   
-   public void setUp() throws Exception {
-       project = ResourcesPlugin.getWorkspace().getRoot().getProject(PROJECT_NAME);
-   }
+	public void setUp() throws Exception {
+		project = ProjectImportTestSetup.loadProject(PROJECT_NAME);
+	}
 
    public void testJbide6061OnJspPage(){
 	   for (String textToFind : STRINGS_TO_FIND_IN_JSP) {

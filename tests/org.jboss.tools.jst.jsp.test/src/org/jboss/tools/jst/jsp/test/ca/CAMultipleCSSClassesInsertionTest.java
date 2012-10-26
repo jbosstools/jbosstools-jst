@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 Red Hat, Inc.
+ * Copyright (c) 2011-2012 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -15,7 +15,6 @@ import java.util.List;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.FindReplaceDocumentAdapter;
 import org.eclipse.jface.text.IRegion;
@@ -23,6 +22,7 @@ import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.jboss.tools.common.base.test.contentassist.CATestUtil;
 import org.jboss.tools.jst.jsp.contentassist.AutoContentAssistantProposal;
 import org.jboss.tools.test.util.JobUtils;
+import org.jboss.tools.test.util.ProjectImportTestSetup;
 
 /**
  * The JUnit test case for JBIDE-9752 issue
@@ -55,9 +55,9 @@ public class CAMultipleCSSClassesInsertionTest extends ContentAssistantTestCase 
        return new TestSuite(CAMultipleCSSClassesInsertionTest.class);
    }
    
-   public void setUp() throws Exception {
-       project = ResourcesPlugin.getWorkspace().getRoot().getProject(PROJECT_NAME);
-   }
+	public void setUp() throws Exception {
+		project = ProjectImportTestSetup.loadProject(PROJECT_NAME);
+	}
 
    public void testCAMultipleCSSClassesInsertion(){
 	   openEditor(PAGE_NAME);
