@@ -13,9 +13,15 @@ package org.jboss.tools.jst.web.ui.wizards.newfile;
 import org.jboss.tools.common.meta.action.impl.SpecialWizardSupport;
 import org.jboss.tools.common.model.ui.wizard.newfile.*;
 import org.jboss.tools.jst.web.tld.model.handlers.CreateTLDFileSupport;
+import org.jboss.tools.jst.web.ui.JSTWebUIImages;
 
 public class NewTLDFileWizard extends NewFileWizardEx {
-
+	
+	public NewTLDFileWizard(){
+		super();
+		setDefaultPageImageDescriptor(JSTWebUIImages.getInstance().getOrCreateImageDescriptor(JSTWebUIImages.TLD_FILE_IMAGE));
+	}
+	
 	protected NewFileContextEx createNewFileContext() {
 		return new NewWebFileContext();
 	}

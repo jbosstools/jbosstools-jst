@@ -29,6 +29,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.jboss.tools.jst.css.dialog.CSSClassDialog;
 import org.jboss.tools.jst.css.messages.CSSUIMessages;
+import org.jboss.tools.jst.web.ui.JSTWebUIImages;
 
 /**
  * New CSS class wizard.
@@ -51,6 +52,7 @@ public class NewCSSClassWizard extends Wizard implements INewWizard {
 	 */
 	public NewCSSClassWizard() {
 		setWindowTitle(CSSUIMessages.WIZARD_WINDOW_TITLE);
+		setDefaultPageImageDescriptor(JSTWebUIImages.getInstance().getOrCreateImageDescriptor(JSTWebUIImages.CSS_FILE_IMAGE));
 	}
 
 	/**

@@ -13,8 +13,14 @@ package org.jboss.tools.jst.web.tiles.ui.wizard.newfile;
 import org.jboss.tools.common.meta.action.impl.SpecialWizardSupport;
 import org.jboss.tools.common.model.ui.wizard.newfile.*;
 import org.jboss.tools.jst.web.tiles.model.handlers.CreateTilesSupport;
+import org.jboss.tools.jst.web.ui.JSTWebUIImages;
 
 public class NewTilesFileWizard extends NewFileWizardEx {
+	
+	public NewTilesFileWizard(){
+		super();
+		setDefaultPageImageDescriptor(JSTWebUIImages.getInstance().getOrCreateImageDescriptor(JSTWebUIImages.TILES_FILE_IMAGE));
+	}
 
 	protected NewFileContextEx createNewFileContext() {
 		return new NewTilesFileContext();
