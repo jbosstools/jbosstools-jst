@@ -106,6 +106,7 @@ import org.jboss.tools.common.ui.widget.editor.IFieldEditorFactory;
 import org.jboss.tools.common.ui.widget.editor.ITaggedFieldEditor;
 import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.common.zip.UnzipOperation;
+import org.jboss.tools.jst.web.ui.JSTWebUIImages;
 import org.jboss.tools.jst.web.ui.Messages;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.osgi.framework.Bundle;
@@ -122,7 +123,7 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 
 	private boolean fOpenEditorOnFinish = true;
 
-	public NewDSXMLWizard() {		
+	public NewDSXMLWizard() {
 	}
 
 	public void init(IWorkbench workbench, IStructuredSelection currentSelection) {
@@ -220,6 +221,7 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 		public WizardNewDSXMLFileCreationPage(String pageName, IStructuredSelection selection) {
 			super(pageName);
 			setPageComplete(false);
+			setDefaultPageImageDescriptor(JSTWebUIImages.getInstance().getOrCreateImageDescriptor(JSTWebUIImages.DATASOURCE_IMAGE));
 		}
 
 		public IPath getContainerFullPath() {

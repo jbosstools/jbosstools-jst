@@ -11,9 +11,15 @@
 package org.jboss.tools.jst.web.ui.wizards.newfile;
 
 import org.jboss.tools.common.model.ui.wizard.newfile.*;
+import org.jboss.tools.jst.web.ui.JSTWebUIImages;
 
 public class NewWebFileWizard extends NewFileWizardEx {
 
+	public NewWebFileWizard(){
+		super();
+		setDefaultPageImageDescriptor(JSTWebUIImages.getInstance().getOrCreateImageDescriptor(JSTWebUIImages.WEB_DESCRIPTOR_IMAGE));
+	}
+	
 	protected NewFileContextEx createNewFileContext() {
 		return new NewWebFileContext();
 	}
