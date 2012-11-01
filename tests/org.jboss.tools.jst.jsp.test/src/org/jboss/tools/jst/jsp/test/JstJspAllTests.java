@@ -19,6 +19,7 @@ import org.jboss.tools.jst.jsp.test.ca.Jbide6061Test;
 import org.jboss.tools.jst.jsp.test.ca.Jbide9092Test;
 import org.jboss.tools.jst.jsp.test.ca.JstJspJbide1585Test;
 import org.jboss.tools.jst.jsp.test.ca.JstJspJbide1641Test;
+import org.jboss.tools.jst.jsp.test.ca.JstJspNonAutomaticProposalInsertionTest;
 import org.jboss.tools.jst.jsp.test.commands.KeyBindingsTest;
 import org.jboss.tools.jst.jsp.test.selbar.SelectionBarTest;
 import org.jboss.tools.test.util.ProjectImportTestSetup;
@@ -35,7 +36,12 @@ public class JstJspAllTests {
 				"Jbide6061Test")); //$NON-NLS-1$
 
 		suite.addTestSuite(JstJspJbide1585Test.class);
-		suite.addTestSuite(JstJspJbide1641Test.class);
+
+		suite.addTest(new ProjectImportTestSetup(new TestSuite(
+				JstJspJbide1641Test.class,
+				JstJspNonAutomaticProposalInsertionTest.class),
+				"org.jboss.tools.jst.jsp.test", "projects/JsfJbide1641Test", //$NON-NLS-1$ //$NON-NLS-2$
+				"JsfJbide1641Test")); //$NON-NLS-1$
 
 		suite.addTest(new ProjectImportTestSetup(new TestSuite(
 				Jbide1791Test.class,
