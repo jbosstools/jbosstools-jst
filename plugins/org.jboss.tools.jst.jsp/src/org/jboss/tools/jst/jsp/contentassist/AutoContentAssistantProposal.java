@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2011 Red Hat, Inc.
+ * Copyright (c) 2007-2012 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -15,6 +15,7 @@ import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextOperationTarget;
 import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.jface.text.contentassist.ICompletionProposalExtension4;
 import org.eclipse.jface.text.contentassist.ICompletionProposalExtension6;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.jface.text.source.ISourceViewer;
@@ -32,7 +33,7 @@ import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
  * @author Igels
  */
 @SuppressWarnings("restriction")
-public class AutoContentAssistantProposal extends CustomCompletionProposal implements ICompletionProposalExtension6 {
+public class AutoContentAssistantProposal extends CustomCompletionProposal implements ICompletionProposalExtension4, ICompletionProposalExtension6 {
     private boolean autoContentAssistant = false;
 
 	public AutoContentAssistantProposal(String replacementString, int replacementOffset, int replacementLength, int cursorPosition, Image image, String displayString, IContextInformation contextInformation, String additionalProposalInfo) {
@@ -198,6 +199,8 @@ public class AutoContentAssistantProposal extends CustomCompletionProposal imple
 		return validated;
 	}
 	// Fix for JBIDE-5125 <<<
-	
-	
+
+	public boolean isAutoInsertable() {
+		return false;
+	}
 }

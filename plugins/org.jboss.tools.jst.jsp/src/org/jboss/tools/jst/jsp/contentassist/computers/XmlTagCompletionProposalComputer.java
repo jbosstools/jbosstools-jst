@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IResource;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.swt.graphics.Image;
@@ -402,18 +404,29 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 				closingTag = closingTag.substring(1);
 			}
 			
-			if (!insertTagOpenningCharacter && replacementString.startsWith("<")) { //$NON-NLS-1$
-				// Because the tag starting char is already in the text
-				replacementString = replacementString.substring(1);
-			}
-			if (!replacementString.endsWith("/>")) { //$NON-NLS-1$
-				replacementString += "</" + closingTag + ">"; //$NON-NLS-1$ //$NON-NLS-2$
-				useAutoActivation = false;	// JBIDE-6285: Don't invoke code assist automaticly if user inserts <tag></tag>.
-			}
-
-		
 			int replacementOffset = getOffset() - query.length();
 			int replacementLength = query.length();
+
+			if (!insertTagOpenningCharacter && replacementString.startsWith("<")) { //$NON-NLS-1$
+				replacementString = replacementString.substring(1);
+				// Because the tag starting char is already in the text
+				String replacementTagName = extractTagName(replacementString);
+				int start = getStartOfTagName();
+				int end = getEndOfTagName();
+				if (getDocumentText(getDocument(), start, end).equalsIgnoreCase(extractTagName(replacementString))) {
+					// Do no insert a new tag ending chars (and/or closing tag) with the same name 
+					// (just shift the cursor position to the end of the name)
+					
+					replacementString = replacementTagName; 
+					replacementLength += end - getOffset();
+				} else {
+					if (!replacementString.endsWith("/>")) { //$NON-NLS-1$
+						replacementString += "</" + closingTag + ">"; //$NON-NLS-1$ //$NON-NLS-2$
+						useAutoActivation = false;	// JBIDE-6285: Don't invoke code assist automaticly if user inserts <tag></tag>.
+					}
+				}
+			}
+		
 			int cursorPosition = getCursorPositionForProposedText(replacementString);
 			Image image = CommonUIPlugin.getImageDescriptorRegistry().get(textProposal.getImageDescriptor());
 			if(textProposal.getImageDescriptor()==null) {
@@ -435,7 +448,46 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 			contentAssistRequest.addProposal(proposal);
 		}
 	}
+	 
+	private String getDocumentText(IDocument document, int start, int end) {
+		try {
+			return document.get(start, end - start);
+		} catch (BadLocationException e) {
+			return ""; //$NON-NLS-1$
+		}
+	}
+	
+	private int getStartOfTagName () {
+		try {
+			int start = getOffset();
+			while (start > 0 && (Character.isJavaIdentifierPart(getDocument().getChar(start - 1)) || ':' == getDocument().getChar(start - 1)))
+				start--;
+			
+			return start;
+		} catch (BadLocationException e) {
+			return -1;
+		}
+	}
+	
+	private int getEndOfTagName() {
+		try {
+			int end = getOffset();
+			while (end < getDocument().getLength() && (Character.isJavaIdentifierPart(getDocument().getChar(end)) || ':' == getDocument().getChar(end)))
+				end++;
+			
+			return end;
+		} catch (BadLocationException e) {
+			return -1;
+		}
+	}
 
+	private String extractTagName(String tag) {
+		int offset = 0;
+		while (offset < tag.length() && !Character.isWhitespace(tag.charAt(offset)))
+			offset++;
+		return tag.substring(0, offset - 1);
+	}
+	
 	@Override
 	protected void addAttributeValueELProposals(ContentAssistRequest contentAssistRequest,
 			CompletionProposalInvocationContext context) {
