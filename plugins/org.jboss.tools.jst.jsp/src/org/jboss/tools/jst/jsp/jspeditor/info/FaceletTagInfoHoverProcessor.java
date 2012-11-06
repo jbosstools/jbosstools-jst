@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2010-2011 Red Hat, Inc. 
+ * Copyright (c) 2010-2012 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -103,7 +103,7 @@ public class FaceletTagInfoHoverProcessor extends XMLTagInfoHoverProcessor {
 		if (region != null) {
 			TextRegion elPrefix = getELPrefix(flatNode, region, fDocumentPosition);
 			ELInvocationExpression elOperand = getELExpression(flatNode, region, fDocumentPosition);
-			if (elPrefix != null && elPrefix.isELStarted()) {
+			if (elPrefix != null && elPrefix.isELStarted() && elOperand != null) {
 				IndexedRegion treeNode = ContentAssistUtils.getNodeAt(textViewer, fDocumentPosition);
 				if (treeNode == null) {
 					return null;
