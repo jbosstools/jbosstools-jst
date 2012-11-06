@@ -237,9 +237,6 @@
          <uri 
             name="http://richfaces.org/a4j" 
             uri="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/tld/a4j.taglib.xml"/>
-         <uri 
-            name="http://jboss.com/products/seam/taglib" 
-            uri="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/tld/s.tld"/>
       </catalogContribution>
    </extension>
 
