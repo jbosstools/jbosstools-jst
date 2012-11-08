@@ -365,6 +365,7 @@ public class ELValidator extends WebValidator implements IStringValidator {
 			context.setElResolvers(resolvers);
 		}
 		int maxNumberOfResolvedSegments = -1;
+		int maxNumberOfDetectedSegments = -1;
 		List<Var> vars = null;
 		ELContextImpl c = null;
 		if(!validateVars && context instanceof ELContextImpl) {
@@ -391,9 +392,16 @@ public class ELValidator extends WebValidator implements IStringValidator {
 				break;
 			}
 			int number = elResolution.getNumberOfResolvedSegments();
-			if(number>maxNumberOfResolvedSegments) {
+			if(number > maxNumberOfResolvedSegments) {
 				maxNumberOfResolvedSegments = number;
+				maxNumberOfDetectedSegments = elResolution.getSegments().size();
 				resolution = elResolution;
+			} else if(number == maxNumberOfResolvedSegments) {
+				int segmentsNumber = elResolution.getSegments().size();
+				if(segmentsNumber > maxNumberOfDetectedSegments) {
+					maxNumberOfDetectedSegments = segmentsNumber;
+					resolution = elResolution;
+				}
 			}
 		}
 
