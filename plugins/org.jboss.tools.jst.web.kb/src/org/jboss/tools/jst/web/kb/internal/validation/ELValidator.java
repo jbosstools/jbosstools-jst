@@ -1,5 +1,5 @@
  /*******************************************************************************
-  * Copyright (c) 2007 Red Hat, Inc.
+  * Copyright (c) 2007-2012 Red Hat, Inc.
   * Distributed under license by Red Hat, Inc. All rights reserved.
   * This program is made available under the terms of the
   * Eclipse Public License v1.0 which accompanies this distribution,
@@ -250,18 +250,18 @@ public class ELValidator extends WebValidator implements IStringValidator {
 		init(rootProject, null, projectContext, validatorManager, reporter);
 		setAsYouTypeValidation(true);
 		this.document = validationContext.getDocument();
-		ELContext elContext = PageContextFactory.createPageContext(validationContext.getDocument(), true);
+		ELContext elContext = PageContextFactory.createPageContext(this.document, true);
 		elContext.setDirty(true);
 		Collection<ELReference> references = new ArrayList<ELReference>();
+		
 		for (IRegion region : dirtyRegions) {
 			Collection<ELReference> regionReferences = elContext.getELReferences(region);
 			for (ELReference elReference : regionReferences) {
-				references.add(elReference);
+				validateEL(elReference, true, elContext);
 			}
+			disableProblemAnnotations(region, reporter);
 		}
-		for (ELReference elReference : references) {
-			validateEL(elReference, true, elContext);
-		}
+
 		if(reporter instanceof ITypedReporter) {
 			((ITypedReporter)reporter).addTypeForRegion(getProblemType());
 		}
@@ -316,9 +316,6 @@ public class ELValidator extends WebValidator implements IStringValidator {
 			}
 			for (ELExpression expresion : el.getEl()) {
 				validateELExpression(el, expresion, asYouType, context);
-			}
-			if(asYouType) {
-				disableProblemAnnotations(el, reporter);
 			}
 		}
 	}
