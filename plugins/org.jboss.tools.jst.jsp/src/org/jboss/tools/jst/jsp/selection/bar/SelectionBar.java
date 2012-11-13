@@ -89,6 +89,11 @@ import org.w3c.dom.NodeList;
 public class SelectionBar extends Composite {
 	private static final int SEL_ITEM_RIGHT_MARGIN = 5;
 	/*
+	 * https://issues.jboss.org/browse/JBIDE-12948
+	 * Selection bar visibility flag
+	 */
+	private boolean isBarVisible = false;
+	/*
 	 * The main composite that holds all other controls
 	 */
 	private Splitter splitter;
@@ -121,8 +126,8 @@ public class SelectionBar extends Composite {
     private ISelectionChangedListener selectionChangedListener;
     private ImageButton arrowButton;
     
-	public SelectionBar(StructuredTextEditor textEditor, Composite parent,
-			int style) {
+	public SelectionBar(StructuredTextEditor textEditor, 
+			Composite parent, int style) {
 		super(parent, style);
 		this.textEditor = textEditor;
 		
@@ -153,6 +158,16 @@ public class SelectionBar extends Composite {
 		 * Create the Selection Bar Composite in its constructor
 		 */
 		createToolBarComposite();
+		/*
+		 * https://issues.jboss.org/browse/JBIDE-12948
+		 * Get the visibility value, store the initial state.
+		 */
+		isBarVisible = JspEditorPlugin.getDefault().getPreferenceStore().
+				getBoolean(IVpePreferencesPage.SHOW_SELECTION_TAG_BAR);
+		/*
+		 * Init the size for the first time.
+		 */
+		showOneOfRealOrEmptyBar(isBarVisible);
 	}
 	
 	public Composite createToolBarComposite() {
@@ -228,14 +243,20 @@ public class SelectionBar extends Composite {
 	 */
 	@Override
 	public void setVisible(boolean visible) {
-		if (visible) {
+		if (visible != isBarVisible) {
+			isBarVisible = visible;
+			showOneOfRealOrEmptyBar(visible);
+		}
+	}
+
+	private void showOneOfRealOrEmptyBar(boolean realBarIsVisible) {
+		if (realBarIsVisible) {
 			splitter.setVisible(realBar, true);
 			splitter.setVisible(emptyBar, false);
 		} else {
 			splitter.setVisible(realBar, false);
 			splitter.setVisible(emptyBar, true);
 		}
-		
 		/* JBIDE-7387:
 		 * By default toolbar size is set to fit regular button ToolItems.
 		 * But drop-down items are a little bigger and do not
@@ -257,7 +278,6 @@ public class SelectionBar extends Composite {
 				visible = false;
 			}
 		}
-		
 		setVisible(visible);
 	}
 
