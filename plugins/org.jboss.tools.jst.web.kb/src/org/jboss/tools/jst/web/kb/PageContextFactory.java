@@ -570,6 +570,10 @@ public class PageContextFactory implements IResourceChangeListener {
 	 */
 	@SuppressWarnings("rawtypes")
 	private static void fillJSPNameSpaces(JspContextImpl context, IDocument document) {
+		IProject project = context.getResource() != null ? context.getResource().getProject() : getActiveProject();
+		if (project == null)
+			return;
+		
 		TLDCMDocumentManager manager = TaglibController.getTLDCMDocumentManager(document);
 		List trackers = (manager == null? null : manager.getCMDocumentTrackers(document.getLength() - 1));
 		for (int i = 0; trackers != null && i < trackers.size(); i++) {
@@ -578,12 +582,13 @@ public class PageContextFactory implements IResourceChangeListener {
 			final String uri = tt.getURI() == null ? null : tt.getURI().trim();
 			if (prefix != null && prefix.length() > 0 &&
 					uri != null && uri.length() > 0) {
-					
+				
+				
 				IRegion region = new Region(0, document.getLength());
 				INameSpace nameSpace = new NameSpace(
 						uri, prefix,
 						TagLibraryManager.getLibraries(
-								context.getResource().getProject(), uri));
+								project, uri));
 				context.addNameSpace(region, nameSpace);
 			}
 		}
@@ -754,6 +759,8 @@ public class PageContextFactory implements IResourceChangeListener {
 	}
 
 	private static void fillElReferencesForNode(IDocument document, IDOMNode node, XmlContextImpl context) {
+		if (context.getResource() == null)	// JBIDE-13060: do not deal with EL References if no resource available
+			return;
 		IStructuredDocumentRegion regionNode = node.getFirstStructuredDocumentRegion(); 
 		if (regionNode == null) return;
 		
@@ -784,6 +791,8 @@ public class PageContextFactory implements IResourceChangeListener {
 	}
 
 	private static void fillElReferencesForRegionNode(IDocument document, IDOMNode node, IStructuredDocumentRegion regionNode, ITextRegion region, XmlContextImpl context) {
+		if (context.getResource() == null)	// JBIDE-13060: do not deal with EL References if no resource available
+			return;
 		String text = regionNode.getFullText(region);
 		if(text.indexOf('{')>-1 && (text.indexOf(EL_START_1) > -1 || text.indexOf(EL_START_2) > -1)) {
 			int offset = regionNode.getStartOffset() + region.getStart();
@@ -809,6 +818,9 @@ public class PageContextFactory implements IResourceChangeListener {
 	}
 
 	private void fillAdditionalInfoForNode(IDOMElement node, IPageContext context, List<String> parents) {
+		if (context.getResource() == null)	// JBIDE-13060: do not deal with includes and/or CSS if no resource available
+			return;
+
 		String prefix = node.getPrefix() == null ? "" : node.getPrefix(); //$NON-NLS-1$
 		String tagName = node.getLocalName();
 		Map<String, List<INameSpace>> nsMap = context.getNameSpaces(node.getStartOffset());
@@ -872,6 +884,10 @@ public class PageContextFactory implements IResourceChangeListener {
 	 * @param context
 	 */
 	private static void fillXMLNamespacesForNode(Element node, XmlContextImpl context) {
+		IProject project = context.getResource() != null ? context.getResource().getProject() : getActiveProject();
+		if (project == null)
+			return;
+
 		NamedNodeMap attrs = node.getAttributes();
 		boolean mainNnIsRedefined = false;
 		for (int j = 0; attrs != null && j < attrs.getLength(); j++) {
@@ -905,8 +921,6 @@ public class PageContextFactory implements IResourceChangeListener {
 				}
 
 				Region region = new Region(start, length);
-				IProject project = context.getResource() != null ? context.getResource().getProject() : getActiveProject();
-
 				INameSpace nameSpace = new NameSpace(
 						uri, prefix,
 						TagLibraryManager.getLibraries(
