@@ -378,11 +378,13 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 
 	@Override
 	public boolean hasResolutions(IMarker marker) {
-		try{
-			String message = (String)marker.getAttribute(IMarker.MESSAGE);
-			return message.startsWith(UNKNOWN_TAG) || message.startsWith(MISSING_ATTRIBUTE);
-		}catch(CoreException ex){
-			WebUiPlugin.getPluginLog().logError(ex);
+		if(marker.exists()){
+			try{
+				String message = (String)marker.getAttribute(IMarker.MESSAGE);
+				return message.startsWith(UNKNOWN_TAG) || message.startsWith(MISSING_ATTRIBUTE);
+			}catch(CoreException ex){
+				WebUiPlugin.getPluginLog().logError(ex);
+			}
 		}
 		return false;
 	}
