@@ -25,7 +25,7 @@
                                 server, only base but done for now to
                                 enable bootstrap to work
                                 recursively -->
-				<module>../server</module>
+				<module>../jbosstools-server</module>
 			</modules>
 		</profile>
 	</profiles>
