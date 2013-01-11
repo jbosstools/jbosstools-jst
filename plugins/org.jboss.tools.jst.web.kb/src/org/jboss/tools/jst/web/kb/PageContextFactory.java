@@ -515,7 +515,11 @@ public class PageContextFactory implements IResourceChangeListener {
 			if (sModel != null) {
 				String baseLocation = sModel.getBaseLocation();
 				IPath location = new Path(baseLocation).makeAbsolute();
-				return FileBuffers.getWorkspaceFileAtLocation(location);
+				IFile result = FileBuffers.getWorkspaceFileAtLocation(location);
+				if(result != null) {
+					//JBIDE-13367 wtp may return wrong location.
+					return result;
+				}
 			}
 		}
 		finally {

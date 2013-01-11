@@ -50,7 +50,7 @@ public class JspTagCompletionProposalComputer extends XmlTagCompletionProposalCo
 	 */
 	@Override
 	protected ELContext createContext() {
-		return PageContextFactory.createPageContext(getDocument(), PageContextFactory.JSP_PAGE_CONTEXT_TYPE);
+		return createContext(PageContextFactory.JSP_PAGE_CONTEXT_TYPE);
 	}
 
 	/*
