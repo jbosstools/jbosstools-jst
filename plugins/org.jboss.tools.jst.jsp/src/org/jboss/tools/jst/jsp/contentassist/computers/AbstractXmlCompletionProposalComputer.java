@@ -33,8 +33,10 @@ import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 import org.eclipse.wst.xml.ui.internal.contentassist.AbstractXMLModelQueryCompletionProposalComputer;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
 import org.jboss.tools.common.el.core.resolver.ELContext;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.internal.KbProject;
 import org.w3c.dom.Attr;
@@ -113,6 +115,16 @@ abstract public class AbstractXmlCompletionProposalComputer extends AbstractXMLM
 	 */
 	abstract protected ELContext createContext();
 
+	protected final ELContext createContext(String contextType) {
+		IDocument document = getDocument();
+		IFile file = PageContextFactory.getResource(document);
+		if(file == null) {
+			//Report the illegal state and finish nicely without content assist crash.
+			JspEditorPlugin.getPluginLog().logError(new IllegalStateException("Cannot find existing file by its document."));
+			return null;
+		}
+		return PageContextFactory.createPageContext(document, file, contextType, false);
+	}
 	/**
 	 * Returns the <code>org.jboss.tools.jst.web.kb.KbQuery</code> instance. The prefix and URI for the tags 
 	 * are calculated from the current node

@@ -501,7 +501,7 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 	}
 
 	protected ELContext createContext() {
-		return PageContextFactory.createPageContext(getDocument(), PageContextFactory.XML_PAGE_CONTEXT_TYPE);
+		return createContext(PageContextFactory.XML_PAGE_CONTEXT_TYPE);
 	}
 	
 	protected KbQuery createKbQuery(Type type, String query, String stringQuery) {

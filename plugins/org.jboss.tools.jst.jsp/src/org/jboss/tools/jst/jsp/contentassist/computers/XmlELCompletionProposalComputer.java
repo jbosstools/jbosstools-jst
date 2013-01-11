@@ -550,12 +550,12 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 	 * @return
 	 */
 	protected boolean isELCAToBeShown() {
-		ELResolver[] resolvers =  getContext().getElResolvers();
+		ELResolver[] resolvers = getContext() == null ? null : getContext().getElResolvers();
 		return (resolvers != null && resolvers.length > 0);
 	}
 
 	protected ELContext createContext() {
-		return PageContextFactory.createPageContext(getDocument(), PageContextFactory.XML_PAGE_CONTEXT_TYPE);
+		return createContext(PageContextFactory.XML_PAGE_CONTEXT_TYPE);
 	}
 	
 	protected KbQuery createKbQuery(Type type, String query, String stringQuery) {
