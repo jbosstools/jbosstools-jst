@@ -16,6 +16,7 @@ import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.runtime.IPath;
 import org.jboss.tools.common.validation.IProjectValidationContext;
 import org.jboss.tools.jst.web.kb.include.IIncludeModel;
+import org.jboss.tools.jst.web.kb.taglib.INameSpaceStorage;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 
 /**
@@ -66,4 +67,10 @@ public interface IKbProject extends IProjectNature {
 	 * @return model object that collects <ui:include> elements from pages
 	 */
 	IIncludeModel getIncludeModel();
+	
+	/**
+	 * 
+	 * @return model object that collects data from xmlns:* attributes of pages.
+	 */
+	INameSpaceStorage getNameSpaceStorage();
 }

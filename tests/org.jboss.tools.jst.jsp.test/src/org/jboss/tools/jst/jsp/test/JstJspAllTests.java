@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2012 Red Hat, Inc.
+ * Copyright (c) 2007-2013 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -17,6 +17,7 @@ import org.jboss.tools.jst.jsp.test.ca.CAMultipleCSSClassesInsertionTest;
 import org.jboss.tools.jst.jsp.test.ca.Jbide1791Test;
 import org.jboss.tools.jst.jsp.test.ca.Jbide6061Test;
 import org.jboss.tools.jst.jsp.test.ca.Jbide9092Test;
+import org.jboss.tools.jst.jsp.test.ca.JstCAOnCustomPrefixesTest;
 import org.jboss.tools.jst.jsp.test.ca.JstJspJbide1585Test;
 import org.jboss.tools.jst.jsp.test.ca.JstJspJbide1641Test;
 import org.jboss.tools.jst.jsp.test.ca.JstJspNonAutomaticProposalInsertionTest;
@@ -31,7 +32,8 @@ public class JstJspAllTests {
 		suite.addTest(new ProjectImportTestSetup(new TestSuite(
 				KeyBindingsTest.class,
 				Jbide6061Test.class,
-				CAMultipleCSSClassesInsertionTest.class),
+				CAMultipleCSSClassesInsertionTest.class,
+				JstCAOnCustomPrefixesTest.class),
 				"org.jboss.tools.jst.jsp.test", "projects/Jbide6061Test", //$NON-NLS-1$ //$NON-NLS-2$
 				"Jbide6061Test")); //$NON-NLS-1$
 
