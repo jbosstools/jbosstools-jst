@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2012 Red Hat, Inc.
+ * Copyright (c) 2010-2013 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -10,12 +10,26 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.contentassist.computers;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.TreeSet;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IRegion;
+import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.swt.graphics.Image;
@@ -35,6 +49,7 @@ import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
 import org.eclipse.wst.xml.ui.internal.contentassist.XMLContentModelGenerator;
 import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImageHelper;
 import org.eclipse.wst.xml.ui.internal.editor.XMLEditorPluginImages;
+import org.jboss.tools.common.el.core.ELReference;
 import org.jboss.tools.common.el.core.model.ELInstance;
 import org.jboss.tools.common.el.core.model.ELInvocationExpression;
 import org.jboss.tools.common.el.core.model.ELModel;
@@ -44,16 +59,29 @@ import org.jboss.tools.common.el.core.parser.ELParserUtil;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.ELResolverFactoryManager;
+import org.jboss.tools.common.el.core.resolver.Var;
+import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.common.text.ext.util.Utils;
 import org.jboss.tools.common.ui.CommonUIPlugin;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.contentassist.AutoContentAssistantProposal;
+import org.jboss.tools.jst.jsp.jspeditor.dnd.JSPPaletteInsertHelper;
+import org.jboss.tools.jst.jsp.jspeditor.dnd.PaletteTaglibInserter;
+import org.jboss.tools.jst.web.kb.IKbProject;
 import org.jboss.tools.jst.web.kb.IPageContext;
+import org.jboss.tools.jst.web.kb.IResourceBundle;
+import org.jboss.tools.jst.web.kb.KbProjectFactory;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.PageProcessor;
+import org.jboss.tools.jst.web.kb.internal.taglib.NameSpace;
+import org.jboss.tools.jst.web.kb.internal.taglib.TLDLibrary;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
+import org.jboss.tools.jst.web.kb.taglib.INameSpaceExtended;
+import org.jboss.tools.jst.web.kb.taglib.INameSpaceStorage;
+import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -67,6 +95,9 @@ import org.w3c.dom.Node;
  */
 @SuppressWarnings("restriction")
 public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProposalComputer {
+	public static final String HTML_TAGNAME = "html"; //$NON-NLS-1$
+	public static final String XMLNS_ATTRIBUTE_NAME_PREFIX = "xmlns:"; //$NON-NLS-1$
+	public static final String EMPTY_ATTRIBUTE_VALUE = "=\"\""; //$NON-NLS-1$
 	protected static final ICompletionProposal[] EMPTY_PROPOSAL_LIST = new ICompletionProposal[0];
 	
 	@Override
@@ -83,7 +114,7 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 				DTDBaseAdapter dtd = (DTDBaseAdapter)content.getCMDocument();
 				//this maybe a little hacky, but it works, if you have a better idea go for it
 				String spec = dtd.getSpec();
-				isValid = spec.indexOf("html") != -1; //$NON-NLS-1$
+				isValid = spec.indexOf(HTML_TAGNAME) != -1; //$NON-NLS-1$
 			}
 		} else if(node instanceof HTMLPropertyDeclaration) {
 			HTMLPropertyDeclaration propDec = (HTMLPropertyDeclaration)node;
@@ -137,7 +168,7 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 			if (isExistingAttribute(textProposal.getLabel())) 
 				continue;
 
-			String replacementString = textProposal.getReplacementString() + "=\"\""; //$NON-NLS-1$
+			String replacementString = textProposal.getReplacementString() + EMPTY_ATTRIBUTE_VALUE; //$NON-NLS-1$
 
 			int replacementOffset = contentAssistRequest.getReplacementBeginPosition();
 			int replacementLength = contentAssistRequest.getReplacementLength();
@@ -160,8 +191,257 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 
 			contentAssistRequest.addProposal(proposal);
 		}
+		
+		addXmlnsPrefixProposals(contentAssistRequest, 
+			context);
+	}
+
+	/**
+	 * If the match string has the form of xmlns:* then we can suggest the possible namespace prefix/uri 
+	 * proposals
+	 * 
+	 * @param contentAssistRequest
+	 * @param context
+	 */
+	protected void addXmlnsPrefixProposals(ContentAssistRequest contentAssistRequest, 
+			CompletionProposalInvocationContext context) {
+		if (!(fContext instanceof IPageContext))
+			return;
+		
+		if (!(contentAssistRequest.getNode() instanceof Element))
+			return;
+		
+		String matchString = contentAssistRequest.getMatchString();
+
+		String attrName = matchString;
+		String prefixBeginning = "";
+		
+		if (attrName.startsWith(XMLNS_ATTRIBUTE_NAME_PREFIX)) {
+			// probably this is not finished prefix name
+			prefixBeginning = attrName.substring(XMLNS_ATTRIBUTE_NAME_PREFIX.length());
+		} else if (XMLNS_ATTRIBUTE_NAME_PREFIX.startsWith(attrName)){
+			prefixBeginning = "";
+		}
+		
+		IFile file = PageContextFactory.getResource(context.getDocument());
+		if (file != null && file.getProject() != null) {
+			Collection<INameSpace> namespaces = getPossibleNamespacesForPrefix(
+					file.getProject(), prefixBeginning, false,
+					((IPageContext)fContext).getNameSpaces(context.getInvocationOffset()));
+			
+			for (INameSpace ns : namespaces) {
+				String replacementString = XMLNS_ATTRIBUTE_NAME_PREFIX + ns.getPrefix() + "=\"" + ns.getURI() + "\"";
+	
+				int replacementOffset = contentAssistRequest.getReplacementBeginPosition();
+				int replacementLength = contentAssistRequest.getReplacementLength();
+				int cursorPosition = getCursorPositionForProposedText(replacementString);
+				Image image = XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_ATTRIBUTE);
+	
+				String displayString = replacementString;
+				IContextInformation contextInformation = null;
+				int relevance = TextProposal.R_XML_ATTRIBUTE_VALUE;
+	
+				AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(true, replacementString, 
+						replacementOffset, replacementLength, cursorPosition, image, displayString, 
+						contextInformation, null, relevance);
+	
+				contentAssistRequest.addProposal(proposal);
+			}
+		}
 	}
 	
+	/**
+	 * If the match string has the form of xmlns:* then we can suggest the possible namespace prefix/uri 
+	 * proposals
+	 * 
+	 * @param contentAssistRequest
+	 * @param context
+	 */
+	protected void addXmlnsUriProposals(ContentAssistRequest contentAssistRequest, 
+			CompletionProposalInvocationContext context) {
+		if (!(fContext instanceof IPageContext))
+			return;
+		
+		if (!(contentAssistRequest.getNode() instanceof Element))
+			return;
+
+		String prefix = getParent(true, true);
+		if (prefix == null || !prefix.startsWith(XMLNS_ATTRIBUTE_NAME_PREFIX))
+			return;
+		
+		prefix = prefix.substring(XMLNS_ATTRIBUTE_NAME_PREFIX.length());
+
+		String matchString = contentAssistRequest.getMatchString();
+
+		IFile file = PageContextFactory.getResource(context.getDocument());
+		if (file != null && file.getProject() != null) {
+			Collection<INameSpace> namespaces = getPossibleNamespacesForPrefix(
+					file.getProject(), prefix, true,
+					((IPageContext)fContext).getNameSpaces(context.getInvocationOffset()));
+			
+			for (INameSpace ns : namespaces) {
+				String replacementString = "\"" + ns.getURI() + "\"";
+	
+				int replacementOffset = contentAssistRequest.getReplacementBeginPosition();
+				// Replacement length is incorrectly calculated by the WTP's CA in case of attribute value has no closing quote in it.
+				// And in this case it kills the text right after the cursor position. 
+				// Probably we shell to correct the length of the replacement in such case.
+				int replacementLength = getCheckedAttributeValueReplacementLength(replacementOffset, contentAssistRequest.getReplacementLength());
+				
+				int cursorPosition = getCursorPositionForProposedText(replacementString);
+				Image image = XMLEditorPluginImageHelper.getInstance().getImage(XMLEditorPluginImages.IMG_OBJ_ATTRIBUTE);
+	
+				String displayString = replacementString;
+				IContextInformation contextInformation = null;
+				int relevance = TextProposal.R_XML_ATTRIBUTE_VALUE + 100;
+	
+				AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(true, replacementString, 
+						replacementOffset, replacementLength, cursorPosition, image, displayString, 
+						contextInformation, null, relevance);
+	
+				contentAssistRequest.addProposal(proposal);
+			}
+		}
+	}
+	
+	private int getCheckedAttributeValueReplacementLength(int offset, int length) {
+		try {
+			String existingValue = fCurrentContext.getViewer().getDocument().get(offset, length);
+
+			if (existingValue.indexOf('\n') != -1)
+				existingValue = existingValue.substring(0, existingValue.indexOf('\n'));
+			if (existingValue.indexOf('\r') != -1)
+					existingValue = existingValue.substring(0, existingValue.indexOf('\r'));
+			
+			while(existingValue.length() > 0 && Character.isWhitespace(existingValue.charAt(existingValue.length() - 1)))
+				existingValue = existingValue.substring(0, existingValue.length() - 1);
+
+			char quote = 0;
+			if (existingValue.charAt(0) == '"' || existingValue.charAt(0) == '\'')
+				quote = existingValue.charAt(0);
+			
+			if (quote == 0)
+				return 0;
+			
+			if (quote != existingValue.charAt(existingValue.length() - 1))
+				return 1;
+			
+			return existingValue.length();
+		} catch (BadLocationException e) {
+			JspEditorPlugin.getPluginLog().logError(e);
+		}
+		return length;
+	}
+	
+	private Map<String, TreeSet<String>> getProjectDefinedAndCustomNamespaces(
+			IKbProject kbProject, String prefixBeginning, boolean strictPrefix) {
+		Map<String, TreeSet<String>> result = new HashMap<String, TreeSet<String>>();
+
+		INameSpaceStorage nsStorage = kbProject.getNameSpaceStorage();
+		Set<String> prefixes = nsStorage.getPrefixes(prefixBeginning);
+		for (String prefix : prefixes) {
+			if (strictPrefix && !prefix.equalsIgnoreCase(prefixBeginning))
+				continue;
+			
+			Set<String> prefixUris = nsStorage.getURIs(prefix);
+			if (prefixUris.isEmpty())
+				continue;
+			
+			if (!result.containsKey(prefix)) {
+				TreeSet<String> sortedUris = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
+				sortedUris.addAll(prefixUris);
+				result.put(prefix, sortedUris);
+			} else {
+				TreeSet<String> sortedUris = result.get(prefix);
+				for (String uri : prefixUris) {
+					if (!sortedUris.contains(uri))
+						sortedUris.add(uri);
+				}				
+			}
+		}
+		return result;
+	}
+	
+	private Collection<INameSpace> getPossibleNamespacesForPrefix(IProject project, String prefixBeginning, boolean strictPrefix, Map<String, List<INameSpace>> existingNamespaces) {
+		Collection<INameSpace> namespaces = new ArrayList<INameSpace>();
+
+		IKbProject kbProject = KbProjectFactory.getKbProject(project, true);
+		if (kbProject == null)
+			return namespaces;
+			
+		prefixBeginning = prefixBeginning == null ? "" : prefixBeginning;
+
+		//
+		// Get the all the gathered custom prefixes/uris as well as the prefixes/uris defined on the pages
+		//
+		Map<String, TreeSet<String>> prefix2uris = getProjectDefinedAndCustomNamespaces(kbProject, prefixBeginning, strictPrefix);
+		
+		//
+		// Get all the prefixes/uris from the project libraries
+		//
+		List<ITagLibrary> libraries = kbProject.getAllTagLibraries();
+		for(ITagLibrary l : libraries){
+			if(l instanceof TLDLibrary){
+				((TLDLibrary) l).createDefaultNameSpace();
+			}
+			INameSpace ns = l.getDefaultNameSpace();
+			if(ns != null && ns.getPrefix() != null && 
+					((strictPrefix && ns.getPrefix().equals(prefixBeginning)) || 
+							(!strictPrefix && ns.getPrefix().startsWith(prefixBeginning) && 
+									!isExistingNamespace(ns, existingNamespaces)))) {
+				String prefix = ns.getPrefix();
+				String uri = ns.getURI();
+				
+				if (!prefix2uris.containsKey(prefix)) {
+					TreeSet<String> sortedUris = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
+					sortedUris.add(uri);
+					prefix2uris.put(prefix, sortedUris);
+				} else {
+					TreeSet<String> sortedUris = prefix2uris.get(prefix);
+					if (!sortedUris.contains(uri))
+						sortedUris.add(uri);
+				}
+			}
+		}
+		
+		// 
+		// Create a sorted set of gathered prefixes...
+		//
+		Set<String> prefixes = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
+		prefixes.addAll(prefix2uris.keySet());
+		
+		//
+		// And finally create a collection of namespaces
+		//
+		for (String prefix : prefixes) {
+			Set<String> uris = prefix2uris.get(prefix);
+			for (String uri : uris) {
+				ITagLibrary[] libs = kbProject.getTagLibraries(uri);
+				if (libs == null || libs.length == 0) {
+					namespaces.add(new NameSpace(uri, prefix));
+				} else {
+					namespaces.add(new NameSpace(uri, prefix, libs));
+				}
+			}
+		}
+
+		return namespaces;
+	}
+	
+	private boolean isExistingNamespace(INameSpace ns, Map<String, List<INameSpace>> existingNamespaces) {
+		if (existingNamespaces == null)
+			return false;
+
+		List<INameSpace> namespaces = existingNamespaces.get(ns.getURI());
+		if (namespaces == null)
+			return false;
+		for (INameSpace existingNS : namespaces) {
+			if (ns.getPrefix().equalsIgnoreCase(existingNS.getPrefix()))
+				return true;
+		}
+		return false;
+	}
+
 	protected String getMatchString(IStructuredDocumentRegion parent, ITextRegion aRegion, int offset) {
 		if ((aRegion == null) || isCloseRegion(aRegion)) {
 			return ""; //$NON-NLS-1$
@@ -278,7 +558,7 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 		for (int i = 0; proposals != null && i < proposals.length; i++) {
 			TextProposal textProposal = proposals[i];
 			int replacementOffset = contentAssistRequest.getReplacementBeginPosition();
-			int replacementLength = contentAssistRequest.getReplacementLength();
+			int replacementLength = getCheckedAttributeValueReplacementLength(replacementOffset, contentAssistRequest.getReplacementLength());
 			if(textProposal.getStart() >= 0 && textProposal.getEnd() >= 0) {
 				replacementOffset += textProposal.getStart() + 1;
 				replacementLength = textProposal.getEnd() - textProposal.getStart();
@@ -305,6 +585,9 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 
 			contentAssistRequest.addProposal(proposal);
 		}
+		
+		addXmlnsUriProposals(contentAssistRequest, 
+				context);
 	}
 
 	protected void addTagNameProposals(ContentAssistRequest contentAssistRequest, int childPosition,
@@ -343,19 +626,32 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 		String query = matchString;
 		addTagNameProposalsForPrefix(contentAssistRequest, childPosition, query, mainPrefix, mainURI, TextProposal.R_TAG_INSERTION, insertTagOpenningCharacter);
 
-		if (query == null || query.length() == 0 || query.contains(":")) //$NON-NLS-1$
+		if (query == null || query.length() == 0)
 			return;
 		
-		// Make an additional proposals to allow prefixed tags to be entered with no prefix typed
-		ELContext elContext = getContext();
-		if (elContext instanceof IPageContext) {
-			IPageContext pageContext = (IPageContext)elContext;
-			Map<String, List<INameSpace>> nsMap = pageContext.getNameSpaces(contentAssistRequest.getReplacementBeginPosition());
-			if (nsMap == null) return;
+		if (query.indexOf(':') != -1) {
+			// Make additional proposals to allow prefixed tags to be entered for namespaces that aren't defined on the page
+			// The complete prefix is to be typed in onto the page due to get these proposals
 			
-			for (List<INameSpace> namespaces : nsMap.values()) {
-				if (namespaces == null) continue;
-				
+			// Create a fake IPageContext fulfilled with all the project TagLibraries (excluding those are defined within the page)
+			String prefix = query.indexOf(':') != -1 ? query.substring(0, query.indexOf(':')) : query; 
+			IFile file = PageContextFactory.getResource(context.getDocument());
+			if (file != null && file.getProject() != null) {
+				Collection<INameSpace> namespaces = getPossibleNamespacesForPrefix(
+						file.getProject(), prefix, query.indexOf(':') != -1,
+						((IPageContext)fContext).getNameSpaces(context.getInvocationOffset()));
+	
+				Map<String, List<INameSpace>> nsMap = new HashMap<String, List<INameSpace>>();
+				for (INameSpace ns : namespaces) {
+					List<INameSpace> uNamespaces = nsMap.get(ns.getURI());
+					if (uNamespaces == null) {
+						uNamespaces = new ArrayList<INameSpace>(1);
+						nsMap.put(ns.getURI(), uNamespaces);
+					}
+					uNamespaces.add(ns);
+				}
+	
+				IPageContext fakeContext = createFakePageContext(nsMap, context.getDocument(), file);
 				for (INameSpace namespace : namespaces) {
 					String possiblePrefix = namespace.getPrefix(); 
 					if (possiblePrefix == null || possiblePrefix.length() == 0)
@@ -365,17 +661,184 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 					if (possibleURI == null || possibleURI.length() == 0)
 						continue;
 					
-					addTagNameProposalsForPrefix(contentAssistRequest, childPosition, 
+					addTagNameProposalsForPrefix(contentAssistRequest, 
+							fakeContext, 
+							childPosition, 
 							query, possiblePrefix, possibleURI, 
 							TextProposal.R_TAG_INSERTION - 1, 
 							insertTagOpenningCharacter);
+				}
+				
+			}
+		} else {
+			// Make an additional proposals to allow prefixed tags to be entered with no prefix typed
+			ELContext elContext = getContext();
+			if (elContext instanceof IPageContext) {
+				IPageContext pageContext = (IPageContext)elContext;
+				Map<String, List<INameSpace>> nsMap = pageContext.getNameSpaces(contentAssistRequest.getReplacementBeginPosition());
+				if (nsMap == null) return;
+				
+				for (List<INameSpace> namespaces : nsMap.values()) {
+					if (namespaces == null) continue;
+					
+					for (INameSpace namespace : namespaces) {
+						String possiblePrefix = namespace.getPrefix(); 
+						if (possiblePrefix == null || possiblePrefix.length() == 0)
+							continue;	// Don't query proposals for the default value here
+						
+						String possibleURI = namespace.getURI();
+						if (possibleURI == null || possibleURI.length() == 0)
+							continue;
+						
+						addTagNameProposalsForPrefix(contentAssistRequest, childPosition, 
+								query, possiblePrefix, possibleURI, 
+								TextProposal.R_TAG_INSERTION - 1, 
+								insertTagOpenningCharacter);
+					}
 				}
 			}
 		}
 	}
 
+	class NameSpaceInserter implements IRunnableWithProgress {
+		ITextViewer viewer;
+		String prefix;
+		String uri;
+		
+		public NameSpaceInserter(ITextViewer viewer, String prefix, String uri) {
+			this.viewer = viewer;
+			this.prefix = prefix;
+			this.uri = uri;
+		}
+
+		public void run(IProgressMonitor monitor)
+				throws InvocationTargetException, InterruptedException {
+			Properties properties = new Properties();
+			
+			properties.put(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB, "true"); //$NON-NLS-1$
+			properties.put(PaletteInsertHelper.PROPOPERTY_START_TEXT, ""); //$NON-NLS-1$
+			properties.put(JSPPaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI, uri);
+			properties.put(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX, prefix);
+			properties.put(JSPPaletteInsertHelper.PROPOPERTY_FORCE_PREFIX, "true");
+			properties.put("viewer", viewer);
+
+			PaletteTaglibInserter inserter = new PaletteTaglibInserter();
+			inserter.inserTaglib(viewer.getDocument(), properties);
+		}
+	}
+	
+	class FakePageContext implements IPageContext {
+		private IDocument document;
+		private IFile file;
+		private Map<String, List<INameSpace>> namespaces;
+		private ITagLibrary[] tagLibraries;
+		
+		
+		FakePageContext(Map<String, List<INameSpace>> namespaces, IDocument document, IFile file) {
+			this.namespaces = namespaces;
+			this.document = document;
+			this.file = file;
+			Set<ITagLibrary> libraries = new HashSet<ITagLibrary>();
+			for (List<INameSpace> nsValues : namespaces.values()) {
+				for (INameSpace ns : nsValues) {
+					if (ns instanceof INameSpaceExtended) {
+						ITagLibrary[] libs = ((INameSpaceExtended)ns).getTagLibraries();
+						if (libs != null) {
+							for (ITagLibrary lib : libs) {
+								libraries.add(lib);
+							}
+						}
+					}
+				}
+			}
+			tagLibraries = libraries.toArray(new ITagLibrary[0]);
+		}
+		
+		public void setVars(List<Var> vars) {
+			// Do nothing
+		}
+		
+		public void setResource(IFile file) {
+			// Do nothing (we'll use only a file passed as createFakePageContext() method argument
+		}
+		
+		public void setElResolvers(ELResolver[] resolvers) {
+			// Do nothing
+		}
+		
+		public void setDirty(boolean dirty) {
+			// Do nothing
+		}
+		
+		public boolean isDirty() {
+			return false;
+		}
+		
+		public Var[] getVars(int offset) {
+			return new Var[0];
+		}
+		
+		public IFile getResource() {
+			return file;
+		}
+		
+		public ELResolver[] getElResolvers() {
+			return new ELResolver[0];
+		}
+		
+		public Collection<ELReference> getELReferences(IRegion region) {
+			return new ArrayList<ELReference>();
+		}
+		
+		public ELReference[] getELReferences() {
+			return new ELReference[0];
+		}
+		
+		public ELReference getELReference(int offset) {
+			return null;
+		}
+		
+		public Set<String> getURIs() {
+			return namespaces.keySet();
+		}
+		
+		public IResourceBundle[] getResourceBundles() {
+			return new IResourceBundle[0];
+		}
+		
+		public Map<String, List<INameSpace>> getNameSpaces(int offset) {
+			return namespaces;
+		}
+		
+		public ITagLibrary[] getLibraries() {
+			return tagLibraries;
+		}
+		
+		public IDocument getDocument() {
+			return document;
+		}
+	}
+	
+	private IPageContext createFakePageContext(Map<String, List<INameSpace>> namespaces, IDocument document, IFile file) {
+		return new FakePageContext(namespaces, document, file);	
+	}
+	 
+	private void addTagNameProposalsForPrefix(
+			ContentAssistRequest contentAssistRequest,
+			int childPosition, 
+			String query,
+			String prefix,
+			String uri, 
+			int defaultRelevance,
+			boolean insertTagOpenningCharacter) {
+		addTagNameProposalsForPrefix(contentAssistRequest, getContext(), 
+				childPosition, query, prefix, uri, defaultRelevance, 
+				insertTagOpenningCharacter);
+	}
+	
 	private void addTagNameProposalsForPrefix(
 			ContentAssistRequest contentAssistRequest, 
+			ELContext context,
 			int childPosition, 
 			String query,
 			String prefix,
@@ -392,8 +855,15 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 		stringQuery.append(query);
 		
 		KbQuery kbQuery = createKbQuery(Type.TAG_NAME, stringQuery.toString(), '<' + stringQuery.toString(), prefix, uri);
-		TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext(), true);
-		
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, context, true);
+
+		ELContext originalContext = createContext();
+		Map<String, List<INameSpace>> namespaces = null;
+		IPageContext pageContext = null;
+		if (originalContext instanceof IPageContext) {
+			pageContext = (IPageContext)originalContext;
+			namespaces = pageContext.getNameSpaces(getOffset());
+		}
 		for (int i = 0; proposals != null && i < proposals.length; i++) {
 			TextProposal textProposal = proposals[i];
 			boolean useAutoActivation = true;
@@ -441,14 +911,37 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 				relevance = defaultRelevance == TextProposal.R_NONE? TextProposal.R_TAG_INSERTION : defaultRelevance;
 			}
 
-			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(useAutoActivation, replacementString, 
-					replacementOffset, replacementLength, cursorPosition, image, displayString, 
-					contextInformation, additionalProposalInfo, relevance);
-
+			// If the xmlns isn't defined for the page
+			// the proposal's apply method should add it 
+			//
+			NameSpaceInserter nameSpaceInserter = (namespaces != null && !isExistingNameSpace(namespaces, prefix, uri)) ? 
+					new NameSpaceInserter(fCurrentContext.getViewer(), prefix, uri) : null;
+						
+			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(
+						useAutoActivation, replacementString, replacementOffset,
+						replacementLength, cursorPosition, image, displayString,
+						contextInformation, additionalProposalInfo, relevance,
+						nameSpaceInserter);
+			
 			contentAssistRequest.addProposal(proposal);
 		}
 	}
 	 
+	boolean isExistingNameSpace(Map<String, List<INameSpace>> namespaces, String prefix, String uri) {
+		if (namespaces == null || prefix == null || uri == null)
+			return false;
+		
+		List<INameSpace> uriNamespaces = namespaces.get(uri);
+		if (uriNamespaces == null)
+			return false;
+		
+		for (INameSpace namespace : uriNamespaces) {
+			if (prefix.equals(namespace.getPrefix()) && uri.equals(namespace.getURI())) 
+				return true;
+		}
+		return false;
+	}
+	
 	private String getDocumentText(IDocument document, int start, int end) {
 		try {
 			return document.get(start, end - start);
@@ -727,6 +1220,4 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 	public static class ELXMLContentModelGenerator extends XMLContentModelGenerator {
 		
 	}
-
 }
-
