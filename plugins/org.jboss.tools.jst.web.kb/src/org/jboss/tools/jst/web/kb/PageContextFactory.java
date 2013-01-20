@@ -1039,7 +1039,7 @@ public class PageContextFactory implements IResourceChangeListener {
 		synchronized (notifier) {
 			IStyleSheetAdapter adapter = (IStyleSheetAdapter) notifier.getAdapterFor(IStyleSheetAdapter.class);
 
-			if (!(adapter instanceof ExtendedLinkElementAdapter)) {
+			if (adapter != null && !(adapter instanceof ExtendedLinkElementAdapter)) {
 				notifier.removeAdapter(adapter);
 				adapter = new ExtendedLinkElementAdapter(
 						(Element) stylesContainer, attribute, jsf2Source);
