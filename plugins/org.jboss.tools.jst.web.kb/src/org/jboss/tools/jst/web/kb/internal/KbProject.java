@@ -60,6 +60,7 @@ import org.jboss.tools.jst.web.kb.require.KbRequireBuilder;
 import org.jboss.tools.jst.web.kb.require.KbRequireDefinition;
 import org.jboss.tools.jst.web.kb.taglib.ICompositeTagLibrary;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibrary;
+import org.jboss.tools.jst.web.kb.taglib.INameSpaceStorage;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 import org.w3c.dom.Element;
 
@@ -94,6 +95,8 @@ public class KbProject extends KbObject implements IKbProject {
 	Map<String, Object> extensionModels = new HashMap<String, Object>();
 
 	IncludeModel includeModel = new IncludeModel();
+
+	NameSpaceStorage namespacesStorage = new NameSpaceStorage(this);
 
 	public KbProject() {}
 
@@ -144,6 +147,10 @@ public class KbProject extends KbObject implements IKbProject {
 
 	public IIncludeModel getIncludeModel() {
 		return includeModel;
+	}
+
+	public INameSpaceStorage getNameSpaceStorage() {
+		return namespacesStorage;
 	}
 
 	/*
@@ -356,6 +363,7 @@ public class KbProject extends KbObject implements IKbProject {
 			if(root != null) {
 				getValidationContext().load(root);
 				includeModel.load(root);
+				namespacesStorage.load(root);
 			}
 
 		} finally {
@@ -462,6 +470,7 @@ public class KbProject extends KbObject implements IKbProject {
 
 			if(validationContext != null) validationContext.store(root);
 			includeModel.store(root);
+			namespacesStorage.store(root);
 		
 			XMLUtilities.serialize(root, file.getAbsolutePath());
 		

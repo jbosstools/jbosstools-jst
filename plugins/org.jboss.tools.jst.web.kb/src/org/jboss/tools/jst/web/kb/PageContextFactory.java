@@ -417,7 +417,7 @@ public class PageContextFactory implements IResourceChangeListener {
 								context.setElResolvers(ELResolverFactoryManager.getInstance().getResolvers(project));
 								if (document!=null && context instanceof JspContextImpl && !(context instanceof FaceletPageContextImpl)) {
 									// Fill JSP namespaces defined in TLDCMDocumentManager 
-									fillJSPNameSpaces((JspContextImpl)context, document);
+									fillJSPNameSpaces((JspContextImpl)context, document, dontUseCache);
 								}
 								
 								if(file != null) {
@@ -428,7 +428,7 @@ public class PageContextFactory implements IResourceChangeListener {
 								}
 								// The subsequently called functions may use the file and document
 								// already stored in context for their needs
-								fillContextForChildNodes(model.getStructuredDocument(), domDocument, context, parents);
+								fillContextForChildNodes(model.getStructuredDocument(), domDocument, context, parents, dontUseCache);
 							}
 						}
 					} catch (CoreException e) {
@@ -573,7 +573,7 @@ public class PageContextFactory implements IResourceChangeListener {
 	 * @param context
 	 */
 	@SuppressWarnings("rawtypes")
-	private static void fillJSPNameSpaces(JspContextImpl context, IDocument document) {
+	private static void fillJSPNameSpaces(JspContextImpl context, IDocument document, boolean dontUseCache) {
 		IProject project = context.getResource() != null ? context.getResource().getProject() : getActiveProject();
 		if (project == null)
 			return;
@@ -594,27 +594,34 @@ public class PageContextFactory implements IResourceChangeListener {
 						TagLibraryManager.getLibraries(
 								project, uri));
 				context.addNameSpace(region, nameSpace);
+
+				if(!dontUseCache) {
+					IKbProject kbProject = KbProjectFactory.getKbProject(project, true);
+					if(kbProject != null) {
+						kbProject.getNameSpaceStorage().add(prefix, uri);
+					}
+				}
 			}
 		}
 	}
 
-	private void fillContextForChildNodes(IDocument document, IDOMNode parent, ELContext context, List<String> parents) {
+	private void fillContextForChildNodes(IDocument document, IDOMNode parent, ELContext context, List<String> parents, boolean dontUseCache) {
 		NodeList children = parent.getChildNodes();
 		for(int i = 0; children != null && i < children.getLength(); i++) {
 			Node child = children.item(i);
 			if (child instanceof IDOMNode) {
-				fillContextForNode(document, (IDOMNode)child, context, parents);
-				fillContextForChildNodes(document, (IDOMNode)child, context, parents);
+				fillContextForNode(document, (IDOMNode)child, context, parents, dontUseCache);
+				fillContextForChildNodes(document, (IDOMNode)child, context, parents, dontUseCache);
 			}
 		}
 	}
 
-	private void fillContextForNode(IDocument document, IDOMNode node, ELContext context, List<String> parents) {
+	private void fillContextForNode(IDocument document, IDOMNode node, ELContext context, List<String> parents, boolean dontUseCache) {
 		if (context instanceof XmlContextImpl) {
 			XmlContextImpl xmlContext = (XmlContextImpl)context;
 			fillElReferencesForNode(document, node, xmlContext);
 			if (node instanceof IDOMElement) {
-				fillXMLNamespacesForNode((IDOMElement)node, xmlContext);
+				fillXMLNamespacesForNode((IDOMElement)node, xmlContext, dontUseCache);
 			}
 		}
 
@@ -887,7 +894,7 @@ public class PageContextFactory implements IResourceChangeListener {
 	 * @param node
 	 * @param context
 	 */
-	private static void fillXMLNamespacesForNode(Element node, XmlContextImpl context) {
+	private static void fillXMLNamespacesForNode(Element node, XmlContextImpl context, boolean dontUseCache) {
 		IProject project = context.getResource() != null ? context.getResource().getProject() : getActiveProject();
 		if (project == null)
 			return;
@@ -931,6 +938,14 @@ public class PageContextFactory implements IResourceChangeListener {
 								project, uri));
 
 				context.addNameSpace(region, nameSpace);
+
+				if(!dontUseCache) {
+					IKbProject kbProject = KbProjectFactory.getKbProject(project, true);
+					if(kbProject != null) {
+						kbProject.getNameSpaceStorage().add(prefix, uri);
+					}
+				}
+
 				if (prefix.length() == 0)
 					mainNnIsRedefined = true;
 

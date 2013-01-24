@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2007 Exadel, Inc. and Red Hat, Inc.
+ * Copyright (c) 2007-2013 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
+ *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.jspeditor.dnd;
 
@@ -18,7 +18,6 @@ import java.util.Properties;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextSelection;
-import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.ui.IEditorPart;
@@ -28,7 +27,6 @@ import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.wst.sse.core.internal.provisional.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
-import org.eclipse.wst.sse.ui.internal.contentassist.ContentAssistUtils;
 import org.eclipse.wst.xml.core.internal.document.DocumentImpl;
 import org.eclipse.wst.xml.core.internal.document.ElementImpl;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
@@ -50,7 +48,7 @@ public class PaletteTaglibInserter {
 	private static final String JSP_SOURCE_ROOT_ELEMENT = "jsp:root"; //$NON-NLS-1$
 	public static final String JSP_URI = "http://java.sun.com/JSP/Page"; //$NON-NLS-1$
 	public static final String faceletUri = "http://java.sun.com/jsf/facelets"; //$NON-NLS-1$
-
+	
 	private static final String TAGLIB_START = "<%@ taglib";  //$NON-NLS-1$
 
 	public Properties inserTaglib(IDocument d, Properties p) {
@@ -89,12 +87,13 @@ public class PaletteTaglibInserter {
 
 			String uri_p = p.getProperty(JSPPaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI);
 			String defaultPrefix_p = p.getProperty(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX);
+			boolean forcePrefix = "true".equalsIgnoreCase(p.getProperty(JSPPaletteInsertHelper.PROPOPERTY_FORCE_PREFIX));
 			String lineDelimiter = PaletteInsertHelper.getLineDelimiter(d);
 			StringBuffer tg = new StringBuffer(TAGLIB_START).append(" uri=\"").append(uri_p).append("\"").append(" prefix=\"").append(defaultPrefix_p).append("\"%>").append(lineDelimiter); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
 			if (tl != null && !tl.isEmpty()) {
 				//If taglib already exist check the prefix if changed
-				if (tl.containsKey(uri_p)) {
+				if (!forcePrefix && tl.containsKey(uri_p)) {
 					if (!tl.get(uri_p).equals(defaultPrefix_p)) {
 						p.setProperty(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX, (String)tl.get(uri_p));
 					}

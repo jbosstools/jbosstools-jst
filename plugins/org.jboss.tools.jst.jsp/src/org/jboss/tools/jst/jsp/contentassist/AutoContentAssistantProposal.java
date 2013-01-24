@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2012 Red Hat, Inc.
+ * Copyright (c) 2007-2013 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -10,6 +10,9 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.contentassist;
 
+import java.lang.reflect.InvocationTargetException;
+
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
@@ -28,6 +31,7 @@ import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
 import org.eclipse.wst.sse.ui.internal.contentassist.CustomCompletionProposal;
 import org.eclipse.wst.sse.ui.internal.contentassist.IRelevanceConstants;
 import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
+import org.jboss.tools.jst.jsp.JspEditorPlugin;
 
 /**
  * @author Igels
@@ -35,6 +39,7 @@ import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 @SuppressWarnings("restriction")
 public class AutoContentAssistantProposal extends CustomCompletionProposal implements ICompletionProposalExtension4, ICompletionProposalExtension6 {
     private boolean autoContentAssistant = false;
+    private IRunnableWithProgress runnable = null;
 
 	public AutoContentAssistantProposal(String replacementString, int replacementOffset, int replacementLength, int cursorPosition, Image image, String displayString, IContextInformation contextInformation, String additionalProposalInfo) {
 		super(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString,  contextInformation, additionalProposalInfo, IRelevanceConstants.R_NONE);
@@ -57,8 +62,31 @@ public class AutoContentAssistantProposal extends CustomCompletionProposal imple
 		this.fOriginalReplacementLength = replacementLength;
 	}
 
+	public AutoContentAssistantProposal(boolean autoContentAssistant, String replacementString, int replacementOffset, int replacementLength, int cursorPosition, Image image, String displayString, IContextInformation contextInformation, String additionalProposalInfo, int relevance, IRunnableWithProgress runnable) {
+	    super(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, contextInformation, additionalProposalInfo, relevance);
+	    this.autoContentAssistant = autoContentAssistant;
+		this.fOriginalReplacementLength = replacementLength;
+		this.runnable = runnable;
+	}
+
 	public void apply(ITextViewer viewer, char trigger, int stateMask, int offset) {
-	    super.apply(viewer, trigger, stateMask, offset);
+		int diff = 0;
+		if (runnable != null) {
+			
+			
+			int length = viewer.getDocument().getLength();
+			try {
+				runnable.run(null);
+			} catch (InvocationTargetException e) {
+				JspEditorPlugin.getPluginLog().logError(e);
+			} catch (InterruptedException e) {
+				JspEditorPlugin.getPluginLog().logError(e);
+			}
+			diff = viewer.getDocument().getLength() - length;
+			setReplacementOffset(getReplacementOffset() + diff);
+		}
+		
+	    super.apply(viewer, trigger, stateMask, offset + diff);
 	    if(autoContentAssistant) {
 			Point selection = getSelection(viewer.getDocument());
 			viewer.setSelectedRange(selection.x, selection.y);
