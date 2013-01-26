@@ -392,6 +392,7 @@ public class KbProject extends KbObject implements IKbProject {
 		if(file != null && file.isFile()) {
 			file.delete();
 		}
+		namespacesStorage.clear();
 		classPath.clean();
 		postponeFiring();
 		IPath[] ps = null;
