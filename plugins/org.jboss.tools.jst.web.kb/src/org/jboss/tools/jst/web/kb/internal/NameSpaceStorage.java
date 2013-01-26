@@ -70,6 +70,10 @@ public class NameSpaceStorage implements INameSpaceStorage {
 		return result;
 	}
 
+	public synchronized void clear() {
+		urisByPrefix.clear();
+	}
+
 	static final String ELEMENT_URIS = "uris";
 	static final String ELEMENT_URI = "uri";
 	static final String ELEMENT_PREFIX = "prefix";
