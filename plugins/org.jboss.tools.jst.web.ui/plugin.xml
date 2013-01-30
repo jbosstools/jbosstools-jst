@@ -245,8 +245,6 @@
    <extension id="org.jboss.tools.jst.web.ui.views" name="JBoss Tools" point="org.eclipse.ui.views">
       <category id="web.views.category.id" name="%ViewCategory_JBossToolsWeb">
       </category>
-      <view category="web.views.category.id" class="org.jboss.tools.common.model.ui.views.palette.PaletteViewPart" icon="$nl$/images/xstudio/views/palette.gif" id="org.jboss.tools.common.model.ui.views.palette.PaletteView" name="%paletteViewPart.name">
-      </view>
       <view category="web.views.category.id" class="org.jboss.tools.jst.web.ui.navigator.WebProjectsNavigator" icon="$nl$/images/xstudio/views/web_project.gif" id="org.jboss.tools.jst.web.ui.navigator.WebProjectsView" name="%ViewName_WebProjects">
       </view>
    </extension>
@@ -384,8 +382,6 @@
          </viewShortcut-->
          <newWizardShortcut id="org.jboss.tools.common.model.ui.wizard.newfile.NewPropertiesFileWizard">
          </newWizardShortcut>
-         <!--viewShortcut id="org.jboss.tools.common.model.ui.views.palette.PaletteView">
-         </viewShortcut-->
          <viewShortcut id="org.eclipse.gef.ui.palette_view">
          </viewShortcut>
          <viewShortcut id="org.jboss.tools.jst.web.ui.navigator.WebProjectsView">
