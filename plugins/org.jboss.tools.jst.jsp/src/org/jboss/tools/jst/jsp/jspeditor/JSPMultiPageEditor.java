@@ -83,6 +83,7 @@ import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.model.ui.editor.EditorDescriptor;
 import org.jboss.tools.common.model.ui.editor.IModelObjectEditorInput;
+import org.jboss.tools.common.model.ui.views.palette.PaletteContents;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.util.XModelTreeListenerSWTASync;
 import org.jboss.tools.common.text.ext.IMultiPageEditor;
@@ -722,6 +723,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		if(PalettePage.class == adapter) {
 			if(palettePage == null) {
 				palettePage = new PalettePageImpl();
+				palettePage.setPaletteContents(new PaletteContents(this));
 			}
 			return palettePage;
 		}

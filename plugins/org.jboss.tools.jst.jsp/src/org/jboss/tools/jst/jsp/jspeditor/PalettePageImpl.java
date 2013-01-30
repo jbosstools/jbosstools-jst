@@ -20,6 +20,7 @@ import org.eclipse.ui.part.Page;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.ui.views.palette.IPaletteAdapter;
 import org.jboss.tools.common.model.ui.views.palette.IPalettePageAdapter;
+import org.jboss.tools.common.model.ui.views.palette.PaletteContents;
 import org.jboss.tools.common.model.ui.views.palette.PaletteCreator;
 
 /**
@@ -29,8 +30,16 @@ import org.jboss.tools.common.model.ui.views.palette.PaletteCreator;
  */
 public class PalettePageImpl extends Page implements PalettePage, IPalettePageAdapter {
 	PaletteCreator paletteCreator = new PaletteCreator(this);
+	PaletteContents contents;
 
 	public PalettePageImpl() {}
+
+	public PaletteContents getPaletteContents() {
+		return contents;
+	}
+	public void setPaletteContents(PaletteContents contents) {
+		this.contents = contents;		
+	}
 
     public void init(IPageSite pageSite) {
     	super.init(pageSite);
