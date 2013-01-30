@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.tld.model.handlers;
 
 import java.util.*;
 import org.jboss.tools.common.model.*;
+import org.jboss.tools.common.model.options.SharableConstants;
 import org.jboss.tools.common.meta.*;
 import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.tld.URIConstants;
@@ -112,7 +113,8 @@ public class JSPAdopt implements XAdoptManager {
         String addTaglib = macro.getParent().getAttributeValue(TLDToPaletteHelper.ADD_TAGLIB);
         if(addTaglib != null) p.setProperty(TLDToPaletteHelper.ADD_TAGLIB, addTaglib);
         String name = macro.getAttributeValue("name"); //$NON-NLS-1$
-        if(isTagName(startText, name)) {
+        p.setProperty(SharableConstants.PALETTE_PATH, macro.getPath());
+        if(isTagName(startText, name) && macro.getPath().indexOf("/Mobile/") < 0) {
         	p.setProperty("tag name", name); //$NON-NLS-1$
         }
 	}
