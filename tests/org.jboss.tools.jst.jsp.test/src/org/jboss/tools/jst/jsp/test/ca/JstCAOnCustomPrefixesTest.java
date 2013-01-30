@@ -45,6 +45,7 @@ public class JstCAOnCustomPrefixesTest  extends ContentAssistantTestCase {
 	private static final String TAG2_XNLNS_TO_FIND = "xmlns:custom2=\"http://java.sun.com/jsf/html\"";
 	private static final String TAG2_INSERTION_STRING = TAG_OPEN_STRING + PREFIX2_STRING;
 	private static final String XMLNS_ATTRIBUTE_INSERTION_STRING = "xmlns:"; //$NON-NLS-1$
+	private static final String XMLNS_ATTRIBUTE_INSERTION_STRING_2 = "xmln"; //$NON-NLS-1$
 	private static final String[] XMLNS_ATTRIBUTE_PROPOSALS_TO_FIND = {
 				"xmlns:custom1=\"http://java.sun.com/jsf/html\"", //$NON-NLS-1$
 				"xmlns:custom2=\"http://java.sun.com/jsf/html\"", //$NON-NLS-1$
@@ -53,7 +54,13 @@ public class JstCAOnCustomPrefixesTest  extends ContentAssistantTestCase {
 		};
 	private static final String CUSTOM_ATTRIBUTE_VALUE_INSERTION_STRING = "xmlns:custom3=\""; //$NON-NLS-1$
 	private static final String CUSTOM_ATTRIBUTE_VALUE_PROPOSAL_TO_FIND = "\"http://java.sun.com/jsf/html\""; //$NON-NLS-1$
-
+	private static final String WRONG_TAG_PREFIX = "ui:composition"; //$NON-NLS-1$
+	private static final String WRONG_TAG_INSERTION_STRING = TAG_OPEN_STRING + WRONG_TAG_PREFIX;
+	private static final String[] WRONG_TAG_ATTRIBUTE_PROPOSALS_TO_FIND = {
+				"xmlns", //$NON-NLS-1$
+				"xmlns:*", //$NON-NLS-1$
+		};
+	
 	public static Test suite() {
 		return new TestSuite(JstCAOnCustomPrefixesTest.class);
 	}
@@ -139,30 +146,127 @@ public class JstCAOnCustomPrefixesTest  extends ContentAssistantTestCase {
 		}
 	}
 
-	public void testCAOnCustomPrefixForXMLNSAttribute() {
+	public void testCAOnCustomPrefixForXMLNSAttributeOnRootTag() {
 		openEditor(PAGE_NAME);
 		
-		// Find start of <html> tag
-		String documentContent = document.get();
-		int start = (documentContent == null ? -1 : documentContent.indexOf("<html")); //$NON-NLS-1$
-		assertTrue("Cannot find the starting point in the test file  \"" + PAGE_NAME + "\"", (start != -1)); //$NON-NLS-1$ //$NON-NLS-2$
-		// Find end of <html> tag attributes
-		start = (documentContent == null ? -1 : documentContent.indexOf(">", start)); //$NON-NLS-1$
-		assertTrue("Cannot find the starting point in the test file  \"" + PAGE_NAME + "\"", (start != -1)); //$NON-NLS-1$ //$NON-NLS-2$
-		
-		int offsetToTest = start + 1 + XMLNS_ATTRIBUTE_INSERTION_STRING.length();
-		
-		String documentContentModified = documentContent.substring(0, start) + ' ' +
-			XMLNS_ATTRIBUTE_INSERTION_STRING + ' ' + documentContent.substring(start);
-		
-		jspTextEditor.setText(documentContentModified);
-		
-		try {
+		try {		
+			// Find start of <html> tag
+			String documentContent = document.get();
+			int start = (documentContent == null ? -1 : documentContent.indexOf("<html")); //$NON-NLS-1$
+			assertTrue("Cannot find the starting point in the test file  \"" + PAGE_NAME + "\"", (start != -1)); //$NON-NLS-1$ //$NON-NLS-2$
+			// Find end of <html> tag attributes
+			start = (documentContent == null ? -1 : documentContent.indexOf(">", start)); //$NON-NLS-1$
+			assertTrue("Cannot find the starting point in the test file  \"" + PAGE_NAME + "\"", (start != -1)); //$NON-NLS-1$ //$NON-NLS-2$
+
+			//
+			// On a Root Tags the "xmlns:" proposals should be shown for any prefix part (xmlns:...)
+			//
+			int offsetToTest = start + 1 + XMLNS_ATTRIBUTE_INSERTION_STRING.length();
+			
+			String documentContentModified = documentContent.substring(0, start) + ' ' +
+				XMLNS_ATTRIBUTE_INSERTION_STRING + ' ' + documentContent.substring(start);
+			
+			jspTextEditor.setText(documentContentModified);
+
 			List<ICompletionProposal> res = CATestUtil.collectProposals(contentAssistant, viewer, offsetToTest);
 	
 			assertTrue("Content Assistant returned no proposals", (res != null && res.size() > 0)); //$NON-NLS-1$
 			
 			checkResult(res.toArray(new ICompletionProposal[0]), XMLNS_ATTRIBUTE_PROPOSALS_TO_FIND);
+
+			//
+			// On a Root Tags the "xmlns:" proposals should be shown for any prefix part
+			//
+			offsetToTest = start + 1 + XMLNS_ATTRIBUTE_INSERTION_STRING_2.length();
+			documentContentModified = documentContent.substring(0, start) + ' ' +
+				XMLNS_ATTRIBUTE_INSERTION_STRING_2 + ' ' + documentContent.substring(start);
+			
+			jspTextEditor.setText(documentContentModified);
+			
+			res = CATestUtil.collectProposals(contentAssistant, viewer, offsetToTest);
+			
+			assertTrue("Content Assistant returned no proposals", (res != null && res.size() > 0)); //$NON-NLS-1$
+			
+			checkResult(res.toArray(new ICompletionProposal[0]), XMLNS_ATTRIBUTE_PROPOSALS_TO_FIND);
+		} finally {
+			closeEditor();
+		}
+	}
+
+	public void testCAOnCustomPrefixForXMLNSAttributeOnNotARootTag() {
+		openEditor(PAGE_NAME);
+		
+		try {		
+			// Find start of <h:inputText> tag
+			String documentContent = document.get();
+			int start = (documentContent == null ? -1 : documentContent.indexOf("<h:inputText")); //$NON-NLS-1$
+			assertTrue("Cannot find the starting point in the test file  \"" + PAGE_NAME + "\"", (start != -1)); //$NON-NLS-1$ //$NON-NLS-2$
+			// Find end of <h:inputText> tag attributes
+			start = (documentContent == null ? -1 : documentContent.indexOf(">", start)); //$NON-NLS-1$
+			assertTrue("Cannot find the starting point in the test file  \"" + PAGE_NAME + "\"", (start != -1)); //$NON-NLS-1$ //$NON-NLS-2$
+			
+			//
+			// On non-Root Tags the "xmlns:" proposals should be shown only is prefix has "xmlns:" beginning
+			//
+			int offsetToTest = start + 1 + XMLNS_ATTRIBUTE_INSERTION_STRING.length();
+			
+			String documentContentModified = documentContent.substring(0, start) + ' ' +
+				XMLNS_ATTRIBUTE_INSERTION_STRING + ' ' + documentContent.substring(start);
+			
+			jspTextEditor.setText(documentContentModified);
+
+			List<ICompletionProposal> res = CATestUtil.collectProposals(contentAssistant, viewer, offsetToTest);
+	
+			assertTrue("Content Assistant returned no proposals", (res != null && res.size() > 0)); //$NON-NLS-1$
+			
+			checkResult(res.toArray(new ICompletionProposal[0]), XMLNS_ATTRIBUTE_PROPOSALS_TO_FIND);
+
+			//
+			// On non-Root Tags the "xmlns:" proposals should be shown only is prefix has "xmlns:" beginning
+			// If there is no "xmlns:" prefix is typed in then no "xmlns:"-proposals should be shown
+			//
+			offsetToTest = start + 1 + XMLNS_ATTRIBUTE_INSERTION_STRING_2.length();
+			documentContentModified = documentContent.substring(0, start) + ' ' +
+				XMLNS_ATTRIBUTE_INSERTION_STRING_2 + ' ' + documentContent.substring(start);
+			
+			jspTextEditor.setText(documentContentModified);
+			
+			res = CATestUtil.collectProposals(contentAssistant, viewer, offsetToTest);
+			
+			assertTrue("Content Assistant returned no proposals", res != null); //$NON-NLS-1$
+			
+			if (res.size() > 0)
+				checkFalseResult(res.toArray(new ICompletionProposal[0]), XMLNS_ATTRIBUTE_PROPOSALS_TO_FIND);
+		} finally {
+			closeEditor();
+		}
+	}
+
+	public void testCAOnCustomPrefixForXMLNSWrongAttributes() {
+		openEditor(PAGE_NAME);
+		
+		try {		
+			// Find start of <h:inputText> tag
+			String documentContent = document.get();
+			int start = (documentContent == null ? -1 : documentContent.indexOf("<h:inputText")); //$NON-NLS-1$
+			assertTrue("Cannot find the starting point in the test file  \"" + PAGE_NAME + "\"", (start != -1)); //$NON-NLS-1$ //$NON-NLS-2$
+			
+			//
+			// There should be neither 'xmlns', nor 'xmlns:*' tag attribute proposals
+			//
+			int offsetToTest = start + WRONG_TAG_INSERTION_STRING.length() + 1;
+			
+			String documentContentModified = documentContent.substring(0, start) + 
+				WRONG_TAG_INSERTION_STRING + "  " + documentContent.substring(start);
+			
+			jspTextEditor.setText(documentContentModified);
+
+			List<ICompletionProposal> res = CATestUtil.collectProposals(contentAssistant, viewer, offsetToTest);
+	
+			assertTrue("Content Assistant returned no proposals", res != null); //$NON-NLS-1$
+			
+			if (res.size() > 0)
+				checkFalseResult(res.toArray(new ICompletionProposal[0]), WRONG_TAG_ATTRIBUTE_PROPOSALS_TO_FIND);
 		} finally {
 			closeEditor();
 		}
@@ -204,10 +308,19 @@ public class JstCAOnCustomPrefixesTest  extends ContentAssistantTestCase {
         
     }
 
+    private void checkFalseResult(ICompletionProposal[] rst, String[] proposals) {
+        for ( int i = 0 ; i < proposals.length ; i ++ ){
+           assertFalse("Should not be in proposals list",isInResultList(rst,proposals[i])); //$NON-NLS-1$
+        }
+        
+    }
+
     private boolean isInResultList(ICompletionProposal[] rst, String string) {
         boolean r = false;
-        
+
+        System.out.println("isInResultList: ");
         for(ICompletionProposal cp:rst){
+        	System.out.println(">>> " + cp.getDisplayString() + " =?= " + string);
             if(cp.getDisplayString().equals(string)){
                 r = true;
                 break;

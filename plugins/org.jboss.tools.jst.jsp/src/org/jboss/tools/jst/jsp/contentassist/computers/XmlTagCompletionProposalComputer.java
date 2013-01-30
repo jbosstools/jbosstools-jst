@@ -98,6 +98,8 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 	public static final String HTML_TAGNAME = "html"; //$NON-NLS-1$
 	public static final String XMLNS_ATTRIBUTE_NAME_PREFIX = "xmlns:"; //$NON-NLS-1$
 	public static final String EMPTY_ATTRIBUTE_VALUE = "=\"\""; //$NON-NLS-1$
+	private static final String XMLNS_ATTRIBUTE_NAME = "xmlns"; //$NON-NLS-1$
+	private static final String XMLNS_ATTRIBUTE_VALUE = "http://www.w3.org/1999/xhtml"; //$NON-NLS-1$
 	protected static final ICompletionProposal[] EMPTY_PROPOSAL_LIST = new ICompletionProposal[0];
 	
 	@Override
@@ -222,6 +224,9 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 		} else if (XMLNS_ATTRIBUTE_NAME_PREFIX.startsWith(attrName)){
 			prefixBeginning = "";
 		}
+		
+		if (!isExistingAttribute(XMLNS_ATTRIBUTE_NAME, XMLNS_ATTRIBUTE_VALUE) && !attrName.startsWith(XMLNS_ATTRIBUTE_NAME_PREFIX))
+			return;
 		
 		IFile file = PageContextFactory.getResource(context.getDocument());
 		if (file != null && file.getProject() != null) {
@@ -490,6 +495,16 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 	 * @param attrName Name of attribute to check
 	 */
 	protected boolean isExistingAttribute(String attrName) {
+		return isExistingAttribute(attrName, null);
+	}
+	
+	
+	/*
+	 * Checks if the specified attribute exists 
+	 * 
+	 * @param attrName Name of attribute to check
+	 */
+	protected boolean isExistingAttribute(String attrName, String value) {
 		IStructuredModel sModel = StructuredModelManager.getModelManager()
 				.getExistingModelForRead(getDocument());
 		try {
@@ -524,7 +539,16 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 			if (n == null)
 				return false;
 
-			return (((Element)n).getAttributeNode(attrName) != null);
+			Attr a = ((Element)n).getAttributeNode(attrName);
+			if (a == null)
+				return false;
+			
+			if (value == null)
+				return true;
+			
+			String v = Utils.trimQuotes(a.getNodeValue());
+			
+			return (v != null && v.equalsIgnoreCase(Utils.trimQuotes(value)));
 		} finally {
 			if (sModel != null) {
 				sModel.releaseFromRead();

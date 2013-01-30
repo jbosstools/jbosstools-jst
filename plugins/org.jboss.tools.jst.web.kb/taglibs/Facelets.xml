@@ -19,12 +19,6 @@
 				create an instance for you and set it on your JavaBean before
 				continuing with building the tree.</description>
 		</attribute>
-		<attribute extended="false" name="xmlns">
-			<proposal type="taglib" />
-		</attribute>
-		<attribute extended="false" name="xmlns:*">
-			<proposal type="taglib" />
-		</attribute>
 	</component>
 	<component name="composition" extended="false">
 		<attribute extended="false" name="template">
@@ -34,12 +28,6 @@
 			<proposal type="file">
 				<param name="extensions" value="%page%" />
 			</proposal>
-		</attribute>
-		<attribute extended="false" name="xmlns">
-			<proposal type="taglib" />
-		</attribute>
-		<attribute extended="false" name="xmlns:*">
-			<proposal type="taglib" />
 		</attribute>
 	</component>
 	<component closeTag="true" name="debug" extended="false">
@@ -83,12 +71,6 @@
 				<param name="extensions" value="%page%" />
 			</proposal>
 		</attribute>
-		<attribute extended="false" name="xmlns">
-			<proposal type="taglib" />
-		</attribute>
-		<attribute extended="false" name="xmlns:*">
-			<proposal type="taglib" />
-		</attribute>
 	</component>
 	<component name="define" extended="false">
 		<description>The define tag can be used within tags that allow
@@ -121,12 +103,6 @@
 				UIComponent instance assigned already, JavaServer Faces will lazily
 				create an instance for you and set it on your JavaBean before
 				continuing with building the tree.</description>
-		</attribute>
-		<attribute extended="false" name="xmlns">
-			<proposal type="taglib" />
-		</attribute>
-		<attribute extended="false" name="xmlns:*">
-			<proposal type="taglib" />
 		</attribute>
 	</component>
 	<component closeTag="true" name="include" extended="false">
