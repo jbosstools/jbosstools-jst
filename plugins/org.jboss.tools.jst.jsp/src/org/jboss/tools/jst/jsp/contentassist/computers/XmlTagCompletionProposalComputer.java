@@ -713,6 +713,9 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 
 		public void run(IProgressMonitor monitor)
 				throws InvocationTargetException, InterruptedException {
+			if (uri == null || prefix == null) // No need to add a namespace in case of no prefix/uri is specified
+				return;
+			
 			Properties properties = new Properties();
 			
 			properties.put(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB, "true"); //$NON-NLS-1$
