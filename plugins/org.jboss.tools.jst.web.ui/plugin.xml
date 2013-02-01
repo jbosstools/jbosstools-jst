@@ -574,6 +574,9 @@
 			class="org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData"/>
 		<xclass id="org.jboss.tools.jst.web.ui.wizards.links.HiddenLinksWizard"
 			class="org.jboss.tools.jst.web.ui.wizards.links.HiddenLinksWizard"/>
+
+		<xclass id="org.jboss.tools.jst.web.ui.palette.wizard.ImportTLDPage"
+			class="org.jboss.tools.jst.web.ui.palette.wizard.ImportTLDPage"/>
    </extension>
    
    <extension
