@@ -77,6 +77,12 @@
             location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/SeamMail.xml"
             name="Seam Mail"
             uri="http://jboss.com/products/seam/mail"/>
+
+      <tag-lib
+            location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/jQueryMobile.xml"
+            name="jQueryMobile"
+            uri="jQueryMobile"
+            recognizer="org.jboss.tools.jst.web.kb.internal.JQueryMobileRecognizer"/>
             
       <component-extension
             location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/componentExtension.xml"/>

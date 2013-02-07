@@ -10,10 +10,14 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal.taglib;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
+import org.jboss.tools.jst.web.kb.taglib.IAttributeProvider;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibComponent;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
@@ -25,6 +29,26 @@ public class CustomTagLibComponent extends AbstractComponent implements ICustomT
 
 	protected boolean extended = true;
 	protected CustomTagLibrary parentTagLib;
+	protected IAttributeProvider[] providers;
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.internal.taglib.AbstractComponent#getAttribute(java.lang.String)
+	 */
+	@Override
+	public IAttribute[] getAttributes(KbQuery query, String name) {
+		if(providers!=null) {
+			List<IAttribute> result = new ArrayList<IAttribute>();
+			for (IAttributeProvider provider : providers) {
+				IAttribute attribute = provider.getAttribute(query, name);
+				if(attribute!=null) {
+					result.add(attribute);
+				}
+			}
+			return result.toArray(new IAttribute[result.size()]);
+		}
+		return super.getAttributes(query, name);
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -69,11 +93,31 @@ public class CustomTagLibComponent extends AbstractComponent implements ICustomT
 		}
 		IComponent[] parentComponents = PageProcessor.getInstance().getComponents(query, context, false);
 		for (IComponent component : parentComponents) {
-			IAttribute at = component.getAttribute(attribute.getName());
-			if(at!=null && !at.isExtended()) {
-				return true;
+			IAttribute[] ats = component.getAttributes(query, attribute.getName());
+			for (IAttribute at : ats) {
+				if(!at.isExtended()) {
+					return true;
+				}
 			}
 		}
 		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.taglib.ICustomTagLibComponent#getProvider()
+	 */
+	@Override
+	public IAttributeProvider[] getProviders() {
+		return providers;
+	}
+
+	public void setProviders(IAttributeProvider[] providers) {
+		this.providers = providers;
+		if(providers!=null) {
+			for (IAttributeProvider provider : providers) {
+				provider.setComponent(this);
+			}
+		}
 	}
 }

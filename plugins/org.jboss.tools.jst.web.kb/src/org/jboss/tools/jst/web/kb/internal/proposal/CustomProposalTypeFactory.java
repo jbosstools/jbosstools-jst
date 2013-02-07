@@ -28,6 +28,7 @@ public class CustomProposalTypeFactory {
 	public static final String VALIDATOR_ID_TYPE = "validatorID"; //$NON-NLS-1$
 	public static final String CSSCLASS_TYPE = "cssclass"; //$NON-NLS-1$
 	public static final String FACET_NAME_TYPE = "facetName"; //$NON-NLS-1$
+	public static final String JQUERY_MOBILE_TYPE = "jQueryMobileData"; //$NON-NLS-1$
 
 	private CustomProposalTypeFactory() {
 	}
@@ -77,6 +78,9 @@ public class CustomProposalTypeFactory {
 		}
 		if(FACET_NAME_TYPE.equals(type)) {
 			return new FacetNameProposalType();
+		}
+		if(JQUERY_MOBILE_TYPE.equals(type)) {
+			return new JQueryMobileProposalType();
 		}
 
 		//WebKbPlugin.getDefault().logError("Unknown proposal type: " + type); //$NON-NLS-1$

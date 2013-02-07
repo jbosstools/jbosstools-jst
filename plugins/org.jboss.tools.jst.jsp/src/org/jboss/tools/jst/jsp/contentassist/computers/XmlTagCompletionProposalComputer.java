@@ -1031,20 +1031,21 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 	protected KbQuery createKbQuery(Type type, String query, String stringQuery, String prefix, String uri) {
 		KbQuery kbQuery = new KbQuery();
 
-		String[] parentTags = getParentTags(type == Type.ATTRIBUTE_NAME || type == Type.ATTRIBUTE_VALUE || type == Type.TAG_BODY);
+		KbQuery.Tag[] parentTags = getParentTagsWithAttributes(type == Type.ATTRIBUTE_NAME || type == Type.ATTRIBUTE_VALUE || type == Type.TAG_BODY);
 		String	parent = getParent(type == Type.ATTRIBUTE_VALUE, type == Type.ATTRIBUTE_NAME || type == Type.TAG_BODY);
 		String queryValue = query;
 		String queryStringValue = stringQuery;
 		
 		kbQuery.setPrefix(prefix);
 		kbQuery.setUri(uri);
-		kbQuery.setParentTags(parentTags);
+		kbQuery.setParentTagsWithAttributes(parentTags);
 		kbQuery.setParent(parent); 
 		kbQuery.setMask(true); 
 		kbQuery.setType(type);
 		kbQuery.setOffset(fCurrentContext.getInvocationOffset());
 		kbQuery.setValue(queryValue); 
 		kbQuery.setStringQuery(queryStringValue);
+		kbQuery.setAttributes(getAttributes());
 		
 		return kbQuery;
 	}

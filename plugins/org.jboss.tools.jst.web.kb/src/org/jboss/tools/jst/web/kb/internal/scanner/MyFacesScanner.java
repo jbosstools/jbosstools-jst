@@ -29,6 +29,7 @@ import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
 import org.jboss.tools.common.xml.XMLEntityResolver;
 import org.jboss.tools.common.xml.XMLUtilities;
 import org.jboss.tools.jst.web.kb.IKbProject;
+import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.internal.taglib.myfaces.MyFacesAttribute;
 import org.jboss.tools.jst.web.kb.internal.taglib.myfaces.MyFacesComponent;
 import org.jboss.tools.jst.web.kb.internal.taglib.myfaces.MyFacesTagLibrary;
@@ -208,7 +209,11 @@ public class MyFacesScanner implements IFileScanner {
 		if(isEmpty(name)) name = util.getAttribute(a, ATTR_NAME);
 		if(isEmpty(name)) return;
 		name = name.trim();
-		MyFacesAttribute attribute = (MyFacesAttribute)component.getAttribute(name);
+		IAttribute[] attrs = component.getAttributes(KbQuery.EMPTY, name);
+		MyFacesAttribute attribute = null;
+		if(attrs.length>0) {
+			attribute = (MyFacesAttribute)attrs[0];			
+		}
 		boolean isNew = false;
 		if(attribute == null) {
 			attribute = new MyFacesAttribute();
@@ -238,7 +243,7 @@ public class MyFacesScanner implements IFileScanner {
 		loadParents(parent, componentsByClass, processed);
 		IAttribute[] as = parent.getAttributes();
 		for (IAttribute a: as) {
-			if(current.getAttribute(a.getName()) == null) {
+			if(current.getAttributes(KbQuery.EMPTY, a.getName()).length==0) {
 				current.addAttribute(a);
 			}
 		}

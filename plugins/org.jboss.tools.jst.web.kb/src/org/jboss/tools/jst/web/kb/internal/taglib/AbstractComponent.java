@@ -31,6 +31,7 @@ import org.jboss.tools.jst.web.kb.internal.taglib.composite.CompositeAttribute;
 import org.jboss.tools.jst.web.kb.internal.taglib.myfaces.MyFacesAttribute;
 import org.jboss.tools.jst.web.kb.taglib.Facet;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
+import org.jboss.tools.jst.web.kb.taglib.IAttributeProvider;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 import org.w3c.dom.Element;
@@ -84,8 +85,21 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getAttribute(java.lang.String)
 	 */
+	@Override
 	public IAttribute getAttribute(String name) {
 		return attributes.get(name);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getAttribute(java.lang.String)
+	 */
+	@Override
+	public IAttribute[] getAttributes(KbQuery query, String name) {
+		IAttribute atr = attributes.get(name);
+		if(atr!=null) {
+			return new IAttribute[]{atr};
+		}
+		return new IAttribute[0];
 	}
 
 	/* (non-Javadoc)
@@ -100,6 +114,10 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		return attributesArray;
 	}
 
+	protected IAttributeProvider[] getProviders() {
+		return null;
+	}
+
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getAttributes(java.lang.String)
 	 */
@@ -109,16 +127,32 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 
 	public IAttribute[] getAttributes(String nameTemplate, IPageContext context, KbQuery query) {
 		List<IAttribute> list = new ArrayList<IAttribute>();
-		IAttribute[] atts = getAttributes();
-		for (int i = 0; i < atts.length; i++) {
-			if(ignoreCase) {
-				if(atts[i].getName().toLowerCase().startsWith(nameTemplate.toLowerCase()) && (context==null || checkExtended(atts[i], context, query))) {
-					list.add(atts[i]);
+		IAttributeProvider[] providers = getProviders();
+
+		List<IAttribute> atts = new ArrayList<IAttribute>();
+		if(providers==null) {
+			IAttribute[] atrs = getAttributes();
+			for (IAttribute a : atrs) {
+				atts.add(a);
+			}
+		} else {
+			for (IAttributeProvider provider : providers) {
+				IAttribute[] atrs = provider.getAttributes(query);
+				for (IAttribute a : atrs) {
+					atts.add(a);
 				}
-			} else if(atts[i].getName().startsWith(nameTemplate) && (context==null || checkExtended(atts[i], context, query))) {
-				list.add(atts[i]);
 			}
 		}
+		for (IAttribute attribute : atts) {
+			if(ignoreCase) {
+				if(attribute.getName().toLowerCase().startsWith(nameTemplate.toLowerCase()) && (context==null || checkExtended(attribute, context, query))) {
+					list.add(attribute);
+				}
+			} else if(attribute.getName().startsWith(nameTemplate) && (context==null || checkExtended(attribute, context, query))) {
+				list.add(attribute);
+			}
+		}
+
 		return list.toArray(new IAttribute[list.size()]);
 	}
 
@@ -161,11 +195,14 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		if(mask) {
 			return getAttributes(attrName, context, query);
 		}
-		IAttribute attr = getAttribute(attrName);
-		if(attr!=null && checkExtended(attr, context, query)) {
-			return new IAttribute[]{getAttribute(attrName)};
+		IAttribute[] attrs = getAttributes(query, attrName);
+		List<IAttribute> list = new ArrayList<IAttribute>();
+		for (IAttribute attr : attrs) {
+			if(checkExtended(attr, context, query)) {
+				list.add(attr);
+			}
 		}
-		return EMPTY_ARRAY;
+		return list.toArray(new IAttribute[list.size()]);
 	}
 
 	/* (non-Javadoc)

@@ -40,6 +40,7 @@ public class JstWebKbAllTests {
 		suite.addTestSuite(KbMockModelTest.class);
 		suite.addTestSuite(MyFacesKbModelWithMetadataInSourcesTest.class);
 		suite.addTestSuite(WebKbTest.class);
+		suite.addTestSuite(JQueryDataTest.class);
 		suite.addTestSuite(KbModelWithSeveralJarCopiesTest.class);
 		suite.addTestSuite(XMLCatalogTest.class);
 		suite.addTestSuite(CSSMediaRuleTest.class);

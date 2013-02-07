@@ -11,7 +11,9 @@
 package org.jboss.tools.jst.jsp.contentassist.computers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.resources.IFile;
@@ -36,8 +38,8 @@ import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
-import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
+import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.internal.KbProject;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -57,6 +59,7 @@ import org.w3c.dom.NodeList;
 abstract public class AbstractXmlCompletionProposalComputer extends AbstractXMLModelQueryCompletionProposalComputer {
 	protected static final ICompletionProposal[] EMPTY_PROPOSAL_LIST = new ICompletionProposal[0];
 	private static final String[] EMPTY_TAGS = new String[0];
+	private static final KbQuery.Tag[] EMPTY_TAGS_W_ATTRIBUTES = new KbQuery.Tag[0];
 	public static final String EL_DOLLAR_PREFIX = "${"; //$NON-NLS-1$
 	public static final String EL_NUMBER_PREFIX = "#{"; //$NON-NLS-1$
 	public static final String EL_SUFFIX = "}"; //$NON-NLS-1$
@@ -207,26 +210,68 @@ abstract public class AbstractXmlCompletionProposalComputer extends AbstractXMLM
 	}
 
 	/**
+	 * Returns the attributes of the current tag 
+	 * 
+	 * @return
+	 */
+	public Map<String, String> getAttributes() {
+		Map<String, String> attributes = new HashMap<String, String>();
+
+		IStructuredModel sModel = StructuredModelManager.getModelManager().getExistingModelForRead(getDocument());
+		try {
+			if(sModel != null) {
+				Document xmlDocument = (sModel instanceof IDOMModel) ? ((IDOMModel) sModel).getDocument() : null;
+				if(xmlDocument != null) {
+					Node n = findNodeForOffset(xmlDocument, getOffset());
+					Element currentElement = null;
+					if(n != null) {
+						// Find the first parent tag
+						if(n instanceof Element) {
+							currentElement = (Element)n;
+						} else if(n instanceof Attr) {
+							currentElement = ((Attr)n).getOwnerElement();
+						}
+						if(currentElement!=null) {
+							NamedNodeMap nodeMap = currentElement.getAttributes();
+							for (int i = 0; i < nodeMap.getLength(); i++) {
+								Node attr = nodeMap.item(i);
+								String name = attr.getNodeName();
+								String value = attr.getNodeValue();
+								attributes.put(name, value==null?"":value);
+							}
+						}
+					}
+				}
+			}
+		} finally {
+			if (sModel != null) {
+				sModel.releaseFromRead();
+			}
+		}
+		return attributes;
+	}
+
+	/**
 	 * Returns array of the parent tags 
 	 * 
 	 * @return
 	 */
-	public String[] getParentTags(boolean includeThisTag) {
-		List<String> parentTags = new ArrayList<String>();
-		
+	public KbQuery.Tag[] getParentTagsWithAttributes(boolean includeThisTag) {
+		List<KbQuery.Tag> parentTags = new ArrayList<KbQuery.Tag>();
+
 		IStructuredModel sModel = StructuredModelManager
 									.getModelManager()
 									.getExistingModelForRead(getDocument());
 		try {
 			if (sModel == null) 
-				return EMPTY_TAGS;
+				return EMPTY_TAGS_W_ATTRIBUTES;
 			
 			Document xmlDocument = (sModel instanceof IDOMModel) 
 					? ((IDOMModel) sModel).getDocument()
 							: null;
 
 			if (xmlDocument == null)
-				return EMPTY_TAGS;
+				return EMPTY_TAGS_W_ATTRIBUTES;
 			
 			
 			Node n = null;
@@ -236,12 +281,12 @@ abstract public class AbstractXmlCompletionProposalComputer extends AbstractXMLM
 				// Get Fixed Structured Document Region
 				IStructuredDocumentRegion sdFixedRegion = this.getStructuredDocumentRegion(getOffset());
 				if (sdFixedRegion == null)
-					return EMPTY_TAGS;
+					return EMPTY_TAGS_W_ATTRIBUTES;
 				
 				n = findNodeForOffset(xmlDocument, sdFixedRegion.getStartOffset());
 			}
 			if (n == null)
-				return EMPTY_TAGS;
+				return EMPTY_TAGS_W_ATTRIBUTES;
 
 			// Find the first parent tag 
 			if (!(n instanceof Element)) {
@@ -257,16 +302,42 @@ abstract public class AbstractXmlCompletionProposalComputer extends AbstractXMLM
 			// Store all the parents
 			while (n != null && n instanceof Element) {
 				String tagName = getTagName(n);
-				parentTags.add(0, tagName);
+				Map<String, String> attributes = new HashMap<String, String>();
+				NamedNodeMap nodeMap = n.getAttributes();
+				for (int i = 0; i < nodeMap.getLength(); i++) {
+					Node attr = nodeMap.item(i);
+					String name = attr.getNodeName();
+					String value = attr.getNodeValue();
+					attributes.put(name, value==null?"":value);
+				}
+				KbQuery.Tag newTag = new KbQuery.Tag(tagName, attributes);
+				parentTags.add(0, newTag);
 				n = n.getParentNode();
-			}	
+			}
 
-			return (String[])parentTags.toArray(new String[parentTags.size()]);
+			return (KbQuery.Tag[])parentTags.toArray(new KbQuery.Tag[parentTags.size()]);
 		} finally {
 			if (sModel != null) {
 				sModel.releaseFromRead();
 			}
 		}
+	}
+
+	/**
+	 * Returns array of the parent tags 
+	 * 
+	 * @deprecated Use getParentTagsWithAttributes() instead
+	 * 
+	 * @return
+	 */
+	public String[] getParentTags(boolean includeThisTag) {
+		KbQuery.Tag[] tags = getParentTagsWithAttributes(includeThisTag);
+		String[] parentTags = new String[tags.length];
+		for (int i = 0; i < parentTags.length; i++) {
+			parentTags[i] = tags[i].getName();
+		}
+
+		return parentTags;
 	}
 
 	protected String getTagName(Node tag) {

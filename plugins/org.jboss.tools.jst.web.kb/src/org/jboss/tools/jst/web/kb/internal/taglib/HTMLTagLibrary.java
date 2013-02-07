@@ -28,8 +28,8 @@ import org.w3c.dom.NodeList;
  */
 public class HTMLTagLibrary extends CustomTagLibrary {
 
-	public HTMLTagLibrary(InputStream inputStream, String uri, String version, String name) {
-		super(inputStream, uri, version, name);
+	public HTMLTagLibrary(String contributerName, InputStream inputStream, String uri, String version, String name) {
+		super(contributerName, inputStream, uri, version, name);
 	}
 
 	/*
