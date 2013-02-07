@@ -34,7 +34,11 @@ public class PaletteItem extends ToolEntry implements PaletteXModelObject {
 	
 	public void setXModelObject(XModelObject xobject) {
 		this.xobject = xobject;
-		setLabel("" + xobject.getModelEntity().getRenderer().getTitle(xobject)); //$NON-NLS-1$
+		String label = "" + xobject.getModelEntity().getRenderer().getTitle(xobject);
+		if(label.indexOf('.') >= 0) {
+			label = label.substring(label.indexOf('.') + 1);
+		}
+		setLabel(label); //$NON-NLS-1$
 		XModelObjectImageDescriptor icon = new XModelObjectImageDescriptor(xobject);
 		setSmallIcon(icon);
 		setLargeIcon(new LargeImageDescriptor(xobject));

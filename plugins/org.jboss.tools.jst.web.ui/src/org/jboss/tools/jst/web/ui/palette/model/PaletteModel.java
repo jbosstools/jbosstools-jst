@@ -17,6 +17,7 @@ import java.util.Map;
 
 import org.eclipse.gef.palette.PaletteContainer;
 import org.eclipse.gef.palette.PaletteEntry;
+import org.eclipse.gef.palette.PaletteSeparator;
 import org.eclipse.swt.widgets.Shell;
 import org.jboss.tools.common.meta.action.XActionInvoker;
 import org.jboss.tools.common.model.XModel;
@@ -152,6 +153,8 @@ public class PaletteModel {
 	}
 
 	private void loadCategory(XModelObject xcat, PaletteCategory cat) {
+			List list = new ArrayList(cat.getChildren());
+			for (Object o : list) cat.remove((PaletteEntry)o);
 		XModelObject[] xitems = xcat.getChildren();
 		int i = 0;
 		for (int l = 0; l < xitems.length; l++) {
@@ -162,6 +165,18 @@ public class PaletteModel {
 				} else {
 					item.setXModelObject(xitems[l]);
 				}
+			} else if(xitems[l].getAttributeValue("element type").equals("sub-group")) {
+				XModelObject[] xitems2 = xitems[l].getChildren();
+				for (int l2 = 0; l2 < xitems2.length; l2++) {
+					PaletteItem item = (PaletteItem)getEntry(cat, i++);
+					if (item == null) {
+						cat.add(new PaletteItem(xitems2[l2]));
+					} else {
+						item.setXModelObject(xitems2[l2]);
+					}
+				}
+				cat.add(new PaletteSeparator());
+				i++;
 			}
 		}
 		cutOff(cat, i);

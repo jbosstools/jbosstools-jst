@@ -74,7 +74,7 @@ public class PaletteDropCommand extends FileDropCommand {
 	}
 	
 	public void execute() {
-		if(getDefaultModel().getTagProposal() == IDropWizardModel.UNDEFINED_TAG_PROPOSAL) {
+		if(getDefaultModel().getTagProposal()==IDropWizardModel.UNDEFINED_TAG_PROPOSAL) {
 			if(startText == null && endText == null) return;
 			int pos = ((ITextSelection)getDefaultModel().getDropData().getSelectionProvider().getSelection()).getOffset();
 			getDefaultModel().getDropData().getSourceViewer().setSelectedRange(pos, 0);
@@ -189,6 +189,10 @@ public class PaletteDropCommand extends FileDropCommand {
 			String libraryVersion = properties.getProperty(URIConstants.LIBRARY_VERSION);
 			String defaultPrefix = properties.getProperty(URIConstants.DEFAULT_PREFIX);
 			String tagname = properties.getProperty("tag name"); //$NON-NLS-1$
+			if(tagname == null && getCustomWizardName() != null) {
+				tagname = "div";
+				properties.setProperty("tag name", tagname); //$NON-NLS-1$
+			}
 			
 			callPaletteWizard = PaletteInsertManager.getInstance().getWizardName(properties) != null;
 			
@@ -323,8 +327,12 @@ public class PaletteDropCommand extends FileDropCommand {
 		return reformat;
 	}
 
+	protected String getCustomWizardName() {
+		return PaletteInsertManager.getInstance().getWizardName(properties);
+	}
+
 	protected IDropWizard createDropWizard() {
-		String wizardName = PaletteInsertManager.getInstance().getWizardName(properties);
+		String wizardName = getCustomWizardName();
 		
 		IDropWizard wizard = null;
 		if(wizardName != null) {

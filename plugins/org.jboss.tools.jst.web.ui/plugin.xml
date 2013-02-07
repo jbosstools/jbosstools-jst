@@ -796,4 +796,10 @@
 	<extension point="org.jboss.tools.common.quickFix">
 		<quick-fix-generator generator-class="org.jboss.tools.jst.web.ui.action.JSPProblemMarkerResolutionGenerator" id="org.jboss.tools.jst.web.ui.action.JSPProblemMarkerResolutionGenerator" />
     </extension>
+
+
+   <extension
+         point="org.jboss.tools.common.model.ui.InsertTagWizard">
+      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/5.check_box" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCheckBoxWizard"/>
+   </extension>
 </plugin>
