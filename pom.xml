@@ -17,16 +17,4 @@
 		<module>features</module>
 		<module>site</module>
 	</modules>
-	<profiles>
-		<profile>
-			<id>bootstrap</id>
-			<modules>
-                                <!-- JST does not really depend on
-                                server, only base but done for now to
-                                enable bootstrap to work
-                                recursively -->
-				<module>../jbosstools-server</module>
-			</modules>
-		</profile>
-	</profiles>
 </project>
