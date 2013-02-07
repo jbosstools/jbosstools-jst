@@ -435,7 +435,7 @@ public class JavaStringELInfoHover extends JavadocHover {
 						reader= new StringReader(ELInfoHoverMessages.ELInfoHover_noInformation);
 
 				} else {
-					base= JavaDocLocations.getBaseURL(member);
+					base= JavaDocLocations.getBaseURL(member, member.isBinary());
 				}
 
 			} catch (JavaModelException ex) {
