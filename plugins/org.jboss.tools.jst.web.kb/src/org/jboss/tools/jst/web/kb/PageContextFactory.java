@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2011-2012 Red Hat, Inc. 
+ * Copyright (c) 2011-2013 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -983,53 +983,44 @@ public class PageContextFactory implements IResourceChangeListener {
 
 	private static void fillCSSStyleSheetFromAttribute(IDOMElement node,
 			String attribute, ICSSContainerSupport context, boolean jsf2Source) {
-		CSSStyleSheetDescriptor descr = getSheetForTagAttribute(node, attribute, jsf2Source);
-		if (descr != null) {
-			context.addCSSStyleSheetDescriptor(descr);
-		}
+		context.addCSSStyleSheetDescriptor(new CSSStyleSheetDescriptorForAttribute(node, attribute, jsf2Source));
 	}
 
 	private static void fillCSSStyleSheetFromElement(IDOMElement node,
 			ICSSContainerSupport context, boolean jsf2Source) {
-		CSSStyleSheet sheet = getSheetForTag(node);
-		if (sheet != null) {
-			String library = null;
-			if (jsf2Source) {
-				Attr libraryAttr = node.getAttributeNode("library"); //$NON-NLS-1$
-				if (libraryAttr != null && libraryAttr.getNodeValue() != null) {
-					library = libraryAttr.getNodeValue().trim();
-					library = library.length() == 0 ? null : library;
-				}
-			}
-
-			context.addCSSStyleSheetDescriptor(new CSSStyleSheetDescriptor(context.getResource().getFullPath().toString(), sheet, jsf2Source, library));
-		}
+		context.addCSSStyleSheetDescriptor(new CSSStyleSheetDescriptor(context.getResource().getFullPath().toString(), node, jsf2Source));
 	}
 
 	private static final String JSF2_RESOURCES_FOLDER = "/resources"; //$NON-NLS-1$
 
 	public static class CSSStyleSheetDescriptor {
-		public CSSStyleSheet sheet;
-		public String source;
-		public boolean jsf2Source;
-		public String jsf2Library;
+		protected Node stylesheetContainer;
+		protected String source;
+		protected boolean jsf2Source;
+		protected boolean initialized = false;
 
-		/*
-		CSSStyleSheetDescriptor (String source, CSSStyleSheet sheet) {
-			this(source, sheet, false);
-		}
-		*/
-		
-		CSSStyleSheetDescriptor (String source, CSSStyleSheet sheet, boolean jsf2Source, String jsf2Library) {
+		CSSStyleSheetDescriptor (String source, Node styleheetContainer, boolean jsf2Source) {
 			this.source = source;
-			this.sheet = sheet;
+			this.stylesheetContainer = styleheetContainer;
 			this.jsf2Source = jsf2Source;
-			this.jsf2Library  = jsf2Library;
 		}
-		
+
 		public String getFilePath() {
+			if (!initialized) {
+				getStylesheet();
+			}
+			
 			if (!jsf2Source)
 				return source;
+			
+			String jsf2Library = null;
+			if (jsf2Source && stylesheetContainer instanceof Element) {
+				Attr libraryAttr = ((Element)stylesheetContainer).getAttributeNode("library"); //$NON-NLS-1$
+				if (libraryAttr != null && libraryAttr.getNodeValue() != null) {
+					jsf2Library = libraryAttr.getNodeValue().trim();
+					jsf2Library = jsf2Library.length() == 0 ? null : jsf2Library;
+				}
+			}		
 			
 			if (jsf2Library != null) {
 				String library = jsf2Library.trim();
@@ -1039,71 +1030,96 @@ public class PageContextFactory implements IResourceChangeListener {
 			}
 			return JSF2_RESOURCES_FOLDER + '/' + source;
 		}
-	}
+		
+		public Node getContainerNode() {
+			return stylesheetContainer;
+		}
+		
+		public String getSource() {
+			if (!initialized) {
+				getStylesheet();
+			}
+			return source;
+		}
 
-	/**
-	 * 
-	 * @param stylesContainer
-	 * @return
-	 */
-	private static CSSStyleSheetDescriptor getSheetForTagAttribute(final Node stylesContainer, String attribute, boolean jsf2Source) {
-		INodeNotifier notifier = (INodeNotifier) stylesContainer;
-		CSSStyleSheet sheet = null;
-		String source = null;
+		/**
+		 * 
+		 * @param stylesContainer
+		 * @return
+		 */
+		public CSSStyleSheet getStylesheet() {
+			if (stylesheetContainer == null)
+				return null;
+			
+			INodeNotifier notifier = (INodeNotifier) stylesheetContainer;
+			CSSStyleSheet sheet = null;
 
-		synchronized (notifier) {
-			IStyleSheetAdapter adapter = (IStyleSheetAdapter) notifier.getAdapterFor(IStyleSheetAdapter.class);
+			synchronized (notifier) {
+				IStyleSheetAdapter adapter = (IStyleSheetAdapter) notifier.getAdapterFor(IStyleSheetAdapter.class);
 
-			if (adapter != null && !(adapter instanceof ExtendedLinkElementAdapter)) {
-				notifier.removeAdapter(adapter);
-				adapter = new ExtendedLinkElementAdapter(
-						(Element) stylesContainer, attribute, jsf2Source);
-				sheet = (CSSStyleSheet) adapter.getSheet();
-				source = ((ExtendedLinkElementAdapter)adapter).getSource();
-				if (sheet != null && source != null) {
-					notifier.addAdapter(adapter);
+				if (adapter != null) {
+					sheet = (CSSStyleSheet) adapter.getSheet();
 				}
 			}
+
+			initialized = true;
+			return sheet;
+		}
+	}
+
+	public static class CSSStyleSheetDescriptorForAttribute extends CSSStyleSheetDescriptor {
+		public String attribute;
 		
-			if (adapter != null) {
-				sheet = (CSSStyleSheet) adapter.getSheet();
-				source = ((ExtendedLinkElementAdapter)adapter).getSource();
-			}
+		public CSSStyleSheetDescriptorForAttribute(Node styleheetContainer, String attribute, boolean jsf2Source) {
+			super(null, styleheetContainer, jsf2Source);
+			this.attribute = attribute;
+		}
+		
+		/**
+		 * 
+		 * @param stylesContainer
+		 * @return
+		 */
+		public CSSStyleSheet getStylesheet() {
+			if (stylesheetContainer == null)
+				return null;
 			
-		}
+			INodeNotifier notifier = (INodeNotifier) stylesheetContainer;
+			CSSStyleSheet sheet = null;
 
-		String library = null;
-		if (jsf2Source && stylesContainer instanceof Element) {
-			Attr libraryAttr = ((Element)stylesContainer).getAttributeNode("library"); //$NON-NLS-1$
-			if (libraryAttr != null && libraryAttr.getNodeValue() != null) {
-				library = libraryAttr.getNodeValue().trim();
-				library = library.length() == 0 ? null : library;
+			synchronized (notifier) {
+				IStyleSheetAdapter originalAdapter = (IStyleSheetAdapter) notifier.getAdapterFor(IStyleSheetAdapter.class);
+				if (originalAdapter != null)
+					notifier.removeAdapter(originalAdapter);
+				
+				IStyleSheetAdapter tempAdapter = new ExtendedLinkElementAdapter(
+						(Element) stylesheetContainer, attribute, jsf2Source);
+				
+				// These getSheet()/getSource() calls are here just to ensure that the CSS Stylesheet exists
+				// But we can't use the sheet returned by getSheet() call because it's improperly initialized
+				// unless the adapter is registered on the node 
+				sheet = (CSSStyleSheet) tempAdapter.getSheet();
+				this.source = ((ExtendedLinkElementAdapter)tempAdapter).getSource();
+				if (sheet != null && source != null) {
+					// So, do register adapter
+					notifier.addAdapter(tempAdapter);
+				}
+
+				// Re-get the values
+				sheet = (CSSStyleSheet) tempAdapter.getSheet();
+				this.source = ((ExtendedLinkElementAdapter)tempAdapter).getSource();
+
+				// And restore the original adapter (if so)
+				notifier.removeAdapter(tempAdapter);
+				if (originalAdapter != null)
+					notifier.addAdapter(originalAdapter);
 			}
+
+			initialized = true;
+			return (CSSStyleSheet) sheet;
 		}
-
-		return sheet == null || source == null ? null : new CSSStyleSheetDescriptor(source, sheet, jsf2Source, library);
 	}
-
-	/**
-	 * 
-	 * @param stylesContainer
-	 * @return
-	 */
-	private static CSSStyleSheet getSheetForTag(final Node stylesContainer) {
-		INodeNotifier notifier = (INodeNotifier) stylesContainer;
-		CSSStyleSheet sheet = null;
-
-		synchronized (notifier) {
-			IStyleSheetAdapter adapter = (IStyleSheetAdapter) notifier.getAdapterFor(IStyleSheetAdapter.class);
-
-			if (adapter != null) {
-				sheet = (CSSStyleSheet) adapter.getSheet();
-			}
-		}
-
-		return sheet;
-	}
-
+	
 	private static boolean containsPrefix(Map<String, List<INameSpace>> ns, String prefix) {
 		for (List<INameSpace> n: ns.values()) {
 			for (INameSpace nameSpace : n) {

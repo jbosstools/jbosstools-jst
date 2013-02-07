@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2009-2011 Red Hat, Inc. 
+ * Copyright (c) 2009-2013 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -26,6 +26,7 @@ import org.w3c.dom.css.CSSMediaRule;
 import org.w3c.dom.css.CSSRule;
 import org.w3c.dom.css.CSSRuleList;
 import org.w3c.dom.css.CSSStyleRule;
+import org.w3c.dom.css.CSSStyleSheet;
 
 /**
  * The CSS Class proposal type. Is used to collect and return the proposals on
@@ -51,10 +52,13 @@ public class CSSClassProposalType extends CustomProposalType {
 			List<CSSStyleSheetDescriptor> descrs = cssSource.getCSSStyleSheetDescriptors();
 			if (descrs != null) {
 				for (CSSStyleSheetDescriptor descr : descrs) {
-					CSSRuleList rules = descr.sheet.getCssRules();
-					for (int i = 0; rules != null && i < rules.getLength(); i++) {
-						CSSRule rule = rules.item(i);
-						idList.addAll(getClassNamesFromCSSRule(rule));
+					CSSStyleSheet sheet = descr.getStylesheet();
+					if (sheet != null) {
+						CSSRuleList rules = sheet.getCssRules();
+						for (int i = 0; rules != null && i < rules.getLength(); i++) {
+							CSSRule rule = rules.item(i);
+							idList.addAll(getClassNamesFromCSSRule(rule));
+						}
 					}
 				}
 			}
