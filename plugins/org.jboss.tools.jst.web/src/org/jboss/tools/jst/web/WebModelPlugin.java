@@ -10,14 +10,19 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
 import java.util.Properties;
 
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationType;
@@ -31,7 +36,11 @@ import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
+import org.jboss.tools.common.projecttemplates.JarVersionObserver;
 import org.jboss.tools.common.projecttemplates.ProjectTemplatesPlugin;
+import org.jboss.tools.common.util.FileUtil;
+import org.jboss.tools.common.zip.UnzipOperation;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
 public class WebModelPlugin extends BaseUIPlugin {
@@ -223,4 +232,15 @@ public class WebModelPlugin extends BaseUIPlugin {
 	    System.arraycopy(commands, 0, cmds, 0, commands.length);
 	    return cmds;
     }
+
+	public static File getJSStateRoot() {
+		Bundle bundle = Platform.getBundle(PLUGIN_ID);
+		try {
+			return FileLocator.getBundleFile(bundle);
+		} catch (IOException e) {
+			WebModelPlugin.getDefault().logError(e);
+			return null;
+		}
+	}
+
 }
