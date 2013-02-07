@@ -10,17 +10,24 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Query object is used to get info from Page Processors.
  * @author Alexey Kazakov
  */
 public class KbQuery {
 
+	public static final KbQuery EMPTY = new KbQuery("", new String[0], new Tag[0], new HashMap<String, String>(), "", Type.TAG_NAME, "");
+
 	public static final String PREFIX_SEPARATOR = ":"; //$NON-NLS-1$
 
 	private int offset;
 	private String uri;
 	private String[] parentTags;
+	private Tag[] parentTagsWithAttributes;
+	private Map<String, String> attributes;
 	private String value;
 	private String stringQuery;
 	private boolean useAsMask;
@@ -40,7 +47,55 @@ public class KbQuery {
 		TAG_BODY
 	}
 
+	public static class Tag {
+		private String name;
+		private Map<String, String> attributes;
+
+		public Tag(String name, Map<String, String> attributes) {
+			this.setName(name);
+			this.setAttributes(attributes);
+		}
+
+		/**
+		 * @return the name
+		 */
+		public String getName() {
+			return name;
+		}
+
+		/**
+		 * @param name the name to set
+		 */
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		/**
+		 * @return the attributes
+		 */
+		public Map<String, String> getAttributes() {
+			return attributes;
+		}
+
+		/**
+		 * @param attributes the attributes to set
+		 */
+		public void setAttributes(Map<String, String> attributes) {
+			this.attributes = attributes;
+		}
+	}
+
 	public KbQuery() {
+	}
+
+	public KbQuery(String uri, String[] parentTags, Tag[] parentTagsWithAttributes, Map<String, String> attributes, String value, Type type, String parent) {
+		this.uri = uri;
+		this.parentTags = parentTags;
+		this.parentTagsWithAttributes = parentTagsWithAttributes;
+		this.attributes = attributes;
+		this.value = value;
+		this.type = type;
+		this.parent = parent;
 	}
 
 	/**
@@ -65,6 +120,7 @@ public class KbQuery {
 	}
 
 	/**
+	 * @deprecated Use setParentTagsWithAttributes() instead
 	 * @param parentTags the stack of parent tags
 	 */
 	public void setParentTags(String[] parentTags) {
@@ -82,6 +138,7 @@ public class KbQuery {
 	}
 
 	/**
+	 * @deprecated Use getParentTagsWithAttributes() instead
 	* @return the name of parent tag (type==TAG_NAME or type==ATTRIBUTE_NAME or type==TEXT) or attribute (type==ATTRIBUTE_VALE)
 	*/
 	public String getParent() {
@@ -173,5 +230,41 @@ public class KbQuery {
 	 */
 	public void setPrefix(String prefix) {
 		this.prefix = prefix;
+	}
+
+	/**
+	 * The existing attributes of the tag.
+	 * May be null.
+	 * @return the attributes
+	 */
+	public Map<String, String> getAttributes() {
+		return attributes;
+	}
+
+	/**
+	 * @param attributes the attributes to set
+	 */
+	public void setAttributes(Map<String, String> attributes) {
+		this.attributes = attributes;
+	}
+
+	/**
+	 * The stack of the parent tags with attributes.
+	 * May return null.
+	 * If null then use getParentTags() instead.
+	 * @return
+	 */
+	public Tag[] getParentTagsWithAttributes() {
+		return parentTagsWithAttributes;
+	}
+
+	public void setParentTagsWithAttributes(Tag[] tags) {
+		this.parentTagsWithAttributes = tags;
+		if(parentTags==null) {
+			parentTags = new String[tags.length];
+			for (int i = 0; i < tags.length; i++) {
+				parentTags[i] = tags[i].getName();
+			}
+		}
 	}
 }

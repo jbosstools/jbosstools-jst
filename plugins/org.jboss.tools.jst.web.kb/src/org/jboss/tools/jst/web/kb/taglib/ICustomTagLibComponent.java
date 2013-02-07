@@ -14,4 +14,11 @@ package org.jboss.tools.jst.web.kb.taglib;
  * @author Alexey Kazakov
  */
 public interface ICustomTagLibComponent extends IComponent {
+
+	/**
+	 * Returns the custom proposal providers for the attributes of this component.
+	 * May be null.
+	 * @return
+	 */
+	IAttributeProvider[] getProviders();
 }

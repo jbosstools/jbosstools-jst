@@ -34,13 +34,15 @@
 	Describes attribute of component.
 	Attributes:
 	name - Name of attribute type.
+        dataProvider - If name is not defined then dataProvider is responsible to provide the list of attributes for this component.
 	required - "true" - attribute of element is required. "false" by default.
 	defaultValue - default value of attribute.
 	extended - "true" - Attribute is relevant only if this attribute exists in other tag-libs (tld, faclets, ...). Set to "true" by default.
 -->
 <!ELEMENT attribute (description?, proposal*)>
 
-<!ATTLIST attribute name CDATA #REQUIRED>
+<!ATTLIST attribute name CDATA #IMPLIED>
+<!ATTLIST attribute dataProvider CDATA #IMPLIED>
 <!ATTLIST attribute required %Boolean; #REQUIRED>
 <!ATTLIST attribute defaultValue CDATA #IMPLIED>
 <!ATTLIST attribute extended %Boolean; #IMPLIED>

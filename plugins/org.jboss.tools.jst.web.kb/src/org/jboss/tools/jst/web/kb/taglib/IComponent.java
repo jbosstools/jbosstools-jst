@@ -67,10 +67,17 @@ public interface IComponent extends IProposalProcessor {
 	IAttribute[] getPreferableAttributes();
 
 	/**
+	 * @deprecated Use getAttributes(KbQuery query, String name) instead
 	 * @param name
 	 * @return attribute by name
 	 */
 	IAttribute getAttribute(String name);
+
+	/**
+	 * @param name
+	 * @return attribute by name
+	 */
+	IAttribute[] getAttributes(KbQuery query, String name);
 
 	/**
 	 * Return attributes

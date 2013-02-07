@@ -15,4 +15,10 @@ package org.jboss.tools.jst.web.kb.taglib;
  */
 public interface ICustomTagLibrary extends ITagLibrary {
 
+	/**
+	 * Returns ITagLibRecognizer if this library usage depends of the context of the file where this library is going to be used.
+	 * May return null. 
+	 * @return
+	 */
+	ITagLibRecognizer getRecognizer(); 
 }

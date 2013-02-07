@@ -88,6 +88,7 @@ public abstract class CustomProposalType implements IProposalProcessor {
 
 		private String name;
 		private String value;
+		private String description;
 
 		/**
 		 * @return the name
@@ -115,6 +116,20 @@ public abstract class CustomProposalType implements IProposalProcessor {
 		 */
 		public void setValue(String value) {
 			this.value = value;
+		}
+
+		/**
+		 * @return the description
+		 */
+		public String getDescription() {
+			return description;
+		}
+
+		/**
+		 * @param description the description to set
+		 */
+		public void setDescription(String description) {
+			this.description = description;
 		}
 	}
 }

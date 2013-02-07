@@ -28,6 +28,7 @@ import org.jboss.tools.jst.web.kb.taglib.IComponent;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibComponent;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibrary;
 import org.jboss.tools.jst.web.kb.taglib.IFacesConfigTagLibrary;
+import org.jboss.tools.jst.web.kb.taglib.ITagLibRecognizer;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 
 /**
@@ -147,9 +148,11 @@ public class PageProcessor {
 					}
 				}
 				for (int i = 0; customTagLibs != null && i < customTagLibs.length; i++) {
-					TextProposal[] libProposals = customTagLibs[i].getProposals(query, pageContext);
-					for (int j = 0; libProposals != null && j < libProposals.length; j++) {
-						proposals.add(libProposals[j]);
+					if(shouldLoadLib(customTagLibs[i], context)) {
+						TextProposal[] libProposals = customTagLibs[i].getProposals(query, pageContext);
+						for (int j = 0; libProposals != null && j < libProposals.length; j++) {
+							proposals.add(libProposals[j]);
+						}
 					}
 				}
 				if(preferCustomComponentExtensions && query.getType() == KbQuery.Type.TAG_NAME) {
@@ -168,6 +171,11 @@ public class PageProcessor {
 			}
 		}
 		return proposals.toArray(new TextProposal[proposals.size()]);
+	}
+
+	private boolean shouldLoadLib(ICustomTagLibrary lib, ELContext context) {
+		ITagLibRecognizer recognizer = lib.getRecognizer();
+		return recognizer==null || recognizer.shouldBeLoaded(lib, context);
 	}
 
 	private boolean isQueryForELProposals(KbQuery query, ELContext context) {
@@ -208,10 +216,12 @@ public class PageProcessor {
 			}
 		}
 		for (int i = 0; customTagLibs != null && i < customTagLibs.length; i++) {
-			IComponent[] libComponents = customTagLibs[i].getComponents(query, context);
-			for (int j = 0; j < libComponents.length; j++) {
-				if(includeComponentExtensions || !libComponents[j].isExtended()) {
-					components.add(libComponents[j]);
+			if(shouldLoadLib(customTagLibs[i], context)) {
+				IComponent[] libComponents = customTagLibs[i].getComponents(query, context);
+				for (int j = 0; j < libComponents.length; j++) {
+					if(includeComponentExtensions || !libComponents[j].isExtended()) {
+						components.add(libComponents[j]);
+					}
 				}
 			}
 		}
@@ -275,5 +285,4 @@ public class PageProcessor {
 		}
 		return map;
 	}
-
 }

@@ -43,6 +43,7 @@ public class EnumerationProposalType extends CustomProposalType {
 				proposal.setReplacementString(text);
 				proposal.setPosition(text.length());
 				proposal.setImageDescriptor(IMAGE);
+				proposal.setContextInfo(params[i].getDescription());
 				proposals.add(proposal);
 			}
 		}

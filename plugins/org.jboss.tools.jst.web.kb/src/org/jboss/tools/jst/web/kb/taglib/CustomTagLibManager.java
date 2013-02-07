@@ -19,6 +19,7 @@ import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -106,8 +107,23 @@ public class CustomTagLibManager {
 						String uri = elements[j].getAttribute("uri"); //$NON-NLS-1$
 						String version = elements[j].getAttribute("version"); //$NON-NLS-1$
 						String name = elements[j].getAttribute("name"); //$NON-NLS-1$
+						String recognizerClassName = elements[j].getAttribute("recognizer"); //$NON-NLS-1$
+						ITagLibRecognizer recognizer = null;
+						if(recognizerClassName!=null) {
+							try {
+								Object rec = elements[j].createExecutableExtension("recognizer");
+								if(rec instanceof ITagLibRecognizer) {
+									recognizer = (ITagLibRecognizer)rec;
+								} else {
+									WebKbPlugin.getDefault().logError("Custom Tag Lib recognizer (class name: " + recognizerClassName + ", contributer: " + elements[j].getContributor().getName() + ") must implement " + ITagLibRecognizer.class.getName());
+								}
+							} catch (CoreException e) {
+								WebKbPlugin.getDefault().logError(e);
+							}
+						}
 						InputStream schemaStream = getInputStream(elements[j]);
-						CustomTagLibrary lib = FACELETS_HTML_TAG_LIB_URI.equals(uri)?new HTMLTagLibrary(schemaStream, uri, version, name):new CustomTagLibrary(schemaStream, uri, version, name);
+						CustomTagLibrary lib = FACELETS_HTML_TAG_LIB_URI.equals(uri)?new HTMLTagLibrary(elements[j].getContributor().getName(), schemaStream, uri, version, name):new CustomTagLibrary(elements[j].getContributor().getName(), schemaStream, uri, version, name);
+						lib.setRecognizer(recognizer);
 						libSet.add(lib);
 					} else if(CustomTagLibrary.COMPONET_EXTENSION.equals(elementName)) {
 						InputStream schemaStream = getInputStream(elements[j]);

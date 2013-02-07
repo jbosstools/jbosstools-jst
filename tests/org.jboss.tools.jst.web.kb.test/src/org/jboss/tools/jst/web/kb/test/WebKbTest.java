@@ -32,8 +32,9 @@ import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 public class WebKbTest extends TestCase {
 
 	private IProject testProject;
-	private static final String[] CUSTOM_TAG_LIB_URIS = {"http://richfaces.org/a4j", "http://richfaces.org/rich", "http://java.sun.com/jsf/core", "http://java.sun.com/jsf/html", "http://java.sun.com/jsf/facelets", "http://www.w3.org/1999/xhtml/facelets", "http://jboss.com/products/seam/taglib", "http://java.sun.com/JSP/Page", "http://struts.apache.org/tags-html", "taglibs/componentExtension.xml", "http://jboss.com/products/seam/pdf", "http://jboss.com/products/seam/mail"};
+	private static final String[] CUSTOM_TAG_LIB_URIS = {"http://richfaces.org/a4j", "http://richfaces.org/rich", "http://java.sun.com/jsf/core", "http://java.sun.com/jsf/html", "http://java.sun.com/jsf/facelets", "http://www.w3.org/1999/xhtml/facelets", "http://jboss.com/products/seam/taglib", "http://java.sun.com/JSP/Page", "http://struts.apache.org/tags-html", "http://jboss.com/products/seam/pdf", "http://jboss.com/products/seam/mail", "jQueryMobile"};
 
+	@Override
 	protected void setUp() throws Exception {
 		if(testProject==null) {
 			testProject = ResourcesPlugin.getWorkspace().getRoot().getProject("TestKbModel");
@@ -43,15 +44,15 @@ public class WebKbTest extends TestCase {
 
 	public void testCustomTagLibs() {
 		ICustomTagLibrary[] libs = CustomTagLibManager.getInstance().getLibraries();
-		for (ICustomTagLibrary lib : libs) {
+		for (String uri : CUSTOM_TAG_LIB_URIS) {
 			boolean found = false;
-			for (String uri : CUSTOM_TAG_LIB_URIS) {
+			for (ICustomTagLibrary lib : libs) {
 				if(uri.equals(lib.getURI())) {
 					found = true;
 					break;
 				}
 			}
-			assertTrue("Custom tag lib " + lib.getURI() + " is not loaded.", found);
+			assertTrue("Custom tag lib " + uri + " is not loaded.", found);
 		}
 	}
 
@@ -85,10 +86,10 @@ public class WebKbTest extends TestCase {
 		IComponent link = facelets.getComponent("link");
 		assertNotNull(link);
 
-		IAttribute href = link.getAttribute("href");
-		assertNotNull(href);
+		IAttribute[] href = link.getAttributes(null, "href");
+		assertFalse(href.length == 0);
 
-		CustomProposalType[] proposals = ((CustomTagLibAttribute)href).getProposals();
+		CustomProposalType[] proposals = ((CustomTagLibAttribute)href[0]).getProposals();
 		boolean found = false;
 		for (CustomProposalType proposalType : proposals) {
 			found = found || "file".equals(proposalType.getType());
@@ -98,10 +99,10 @@ public class WebKbTest extends TestCase {
 		IComponent hLink = h.getComponent("link");
 		assertNotNull(hLink);
 
-		IAttribute value = hLink.getAttribute("value");
-		assertNotNull(value);
+		IAttribute[] value = hLink.getAttributes(null, "value");
+		assertFalse(value.length==0);
 
-		proposals = ((CustomTagLibAttribute)value).getProposals();
+		proposals = ((CustomTagLibAttribute)value[0]).getProposals();
 		found = false;
 		for (CustomProposalType proposalType : proposals) {
 			found = found || "file".equals(proposalType.getType());
@@ -111,10 +112,10 @@ public class WebKbTest extends TestCase {
 		IComponent aLoadStyle = a4j.getComponent("loadStyle");
 		assertNotNull(aLoadStyle);
 
-		IAttribute src = aLoadStyle.getAttribute("src");
-		assertNotNull(src);
+		IAttribute[] src = aLoadStyle.getAttributes(null, "src");
+		assertFalse(src.length==0);
 
-		proposals = ((CustomTagLibAttribute)src).getProposals();
+		proposals = ((CustomTagLibAttribute)src[0]).getProposals();
 		found = false;
 		for (CustomProposalType proposalType : proposals) {
 			found = found || "file".equals(proposalType.getType());

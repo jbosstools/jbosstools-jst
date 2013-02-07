@@ -13,19 +13,26 @@ package org.jboss.tools.jst.web.kb.internal.taglib;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.eclipse.core.runtime.Platform;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.internal.proposal.CustomProposalType;
 import org.jboss.tools.jst.web.kb.internal.proposal.CustomProposalTypeFactory;
+import org.jboss.tools.jst.web.kb.taglib.IAttributeProvider;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibrary;
+import org.jboss.tools.jst.web.kb.taglib.ITagLibRecognizer;
+import org.osgi.framework.Bundle;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -46,6 +53,7 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 	protected static final String CLOSE_TAG = "closeTag"; //$NON-NLS-1$
 	protected static final String TRUE = "true"; //$NON-NLS-1$
 	protected static final String NAME = "name"; //$NON-NLS-1$
+	protected static final String PROVIDER = "attributeProvider"; //$NON-NLS-1$
 	protected static final String ATTRIBUTE = "attribute"; //$NON-NLS-1$
 	protected static final String REQUIRED = "required"; //$NON-NLS-1$
 	protected static final String PROPOSAL = "proposal"; //$NON-NLS-1$
@@ -61,11 +69,14 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 
 	protected String name;
 	protected String defaultPrefix;
+	protected ITagLibRecognizer recognizer;
+	protected String contributerName;
 
-	public CustomTagLibrary(InputStream inputStream, String uri, String version, String name) {
+	public CustomTagLibrary(String contributer, InputStream inputStream, String uri, String version, String name) {
 		setURI(uri);
 		setVersion(version);
 		this.name = name;
+		this.contributerName = contributer;
 		Document document = null;
 		try {
 			DocumentBuilder builder = createDocumentBuilder(false);
@@ -100,8 +111,57 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.taglib.ICustomTagLibrary#getRecognizer()
+	 */
+	@Override
+	public ITagLibRecognizer getRecognizer() {
+		return recognizer;
+	}
+
+	public void setRecognizer(ITagLibRecognizer recognizer) {
+		this.recognizer = recognizer;
+	}
+
 	protected CustomTagLibComponent parseComponent(Element component) {
 		String name = component.getAttribute(NAME);
+		String providerClassNames = component.getAttribute(PROVIDER);
+		if(providerClassNames.isEmpty()) {
+			providerClassNames = null;
+		}
+		List<IAttributeProvider> providers = new ArrayList<IAttributeProvider>();
+		if(providerClassNames!=null) {
+			StringTokenizer st = new StringTokenizer(providerClassNames, " ,;", false);
+			while(st.hasMoreElements()) {
+				String className = st.nextToken();
+				try {
+					Bundle contributer = Platform.getBundle(contributerName);
+					Class<?> providerClass = contributer.loadClass(className);
+					Constructor<?> providerConstructor = providerClass.getConstructor(new Class[0]);
+					Object providerInstance = providerConstructor.newInstance(new Object[0]);
+					if(providerInstance instanceof IAttributeProvider) {
+						providers.add((IAttributeProvider)providerInstance);
+					} else {
+						WebKbPlugin.getDefault().logError(new Exception(className + " should be instance of " + IAttributeProvider.class));
+					}
+				} catch (ClassNotFoundException e) {
+					WebKbPlugin.getDefault().logError(e);
+				} catch (NoSuchMethodException e) {
+					WebKbPlugin.getDefault().logError(e);
+				} catch (SecurityException e) {
+					WebKbPlugin.getDefault().logError(e);
+				} catch (InstantiationException e) {
+					WebKbPlugin.getDefault().logError(e);
+				} catch (IllegalAccessException e) {
+					WebKbPlugin.getDefault().logError(e);
+				} catch (IllegalArgumentException e) {
+					WebKbPlugin.getDefault().logError(e);
+				} catch (InvocationTargetException e) {
+					WebKbPlugin.getDefault().logError(e);
+				}
+			}
+		}
 		boolean closeTag = TRUE.equalsIgnoreCase(component.getAttribute(CLOSE_TAG));
 		String description = getDescription(component);
 		String extendedStr = component.getAttribute(EXTENDED);
@@ -112,6 +172,9 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 		newComponent.setDescription(description);
 		newComponent.setExtended(extended);
 		newComponent.setParentTagLib(this);
+		if(!providers.isEmpty()) {
+			newComponent.setProviders(providers.toArray(new IAttributeProvider[providers.size()]));
+		}
 
 		// Extract attributes
 		CustomTagLibAttribute[] attributes = getAttributes(component, ignoreCase);
@@ -124,7 +187,7 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 	}
 
 	protected CustomTagLibComponent createComponent() {
-		return new CustomTagLibComponent();		
+		return new CustomTagLibComponent();
 	}
 
 	public static CustomTagLibAttribute[] getAttributes(Element component) {
