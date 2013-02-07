@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011-2012 Red Hat, Inc.
+ * Copyright (c) 2011-2013 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -53,6 +53,7 @@ import org.w3c.dom.css.CSSMediaRule;
 import org.w3c.dom.css.CSSRule;
 import org.w3c.dom.css.CSSRuleList;
 import org.w3c.dom.css.CSSStyleRule;
+import org.w3c.dom.css.CSSStyleSheet;
 
 /**
  * @author Jeremy
@@ -82,12 +83,15 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 		
 		for (int i = (descrs == null) ? -1 : descrs.size() - 1; descrs != null && i >= 0; i--) {
 			CSSStyleSheetDescriptor descr = descrs.get(i);
-			CSSRuleList rules = descr.sheet.getCssRules();
-			for (int r = 0; rules != null && r < rules.getLength(); r++) {
-				Set<CSSRuleDescriptor> matches = getMatchedRuleDescriptors(rules.item(r), getStyleName(region));
-				for (CSSRuleDescriptor match : matches) {
-					match.stylesheetDescriptor = descr;
-					bestMatchDescriptors.add(match);
+			CSSStyleSheet sheet = descr.getStylesheet();
+			if (sheet != null) {
+				CSSRuleList rules = sheet.getCssRules();
+				for (int r = 0; rules != null && r < rules.getLength(); r++) {
+					Set<CSSRuleDescriptor> matches = getMatchedRuleDescriptors(rules.item(r), getStyleName(region));
+					for (CSSRuleDescriptor match : matches) {
+						match.stylesheetDescriptor = descr;
+						bestMatchDescriptors.add(match);
+					}
 				}
 			}
 		}
@@ -100,16 +104,17 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 			IFile file = findFileForCSSStyleSheet(descr.getFilePath());
 			if (file != null) {
 				int startOffset = 0;
-				if (descr.sheet.getOwnerNode() != null) {
-					Node node = descr.sheet.getOwnerNode().getFirstChild();
+				CSSStyleSheet sheet = descr.getStylesheet();
+				if (sheet != null && descr.getContainerNode() != null) {
+					Node node = descr.getContainerNode().getFirstChild();
 					if (node instanceof IndexedRegion) {
 						startOffset = ((IndexedRegion)node).getStartOffset();
 					}
+					showRegion(
+							file, 
+							new Region(startOffset + ((IndexedRegion)d.rule).getStartOffset(), ((IndexedRegion)d.rule).getLength()));
+					return;
 				}
-				showRegion(
-						file, 
-						new Region(startOffset + ((IndexedRegion)d.rule).getStartOffset(), ((IndexedRegion)d.rule).getLength()));
-				return;
 			}
 		}
 
