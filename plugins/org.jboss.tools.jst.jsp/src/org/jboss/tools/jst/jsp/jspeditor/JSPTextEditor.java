@@ -769,7 +769,11 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		 * PlatformUI.getWorkbench().getDisplay().
 		 *  syncExec() can hang the JBDS thus asyncExec is used. 
 		 */
+		if("true".equals(System.getProperty(IDropCommand.TEST_FLAG))) {
+			runnable.run();
+		} else {
 			PlatformUI.getWorkbench().getDisplay().asyncExec(runnable);
+		}
 //		}
 	}
 
