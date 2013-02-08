@@ -26,7 +26,7 @@ public class NewJQueryWidgetWizard extends AbstractNewHTMLWidgetWizard implement
 	}
 
 	@Override
-	protected String getTextForBrowser() {
+	public String getTextForBrowser() {
 		ElementNode html = new ElementNode(TAG_HTML, false);
 		createHead(html);
 		createBodyForBrowser(html.addChild(TAG_BODY));

@@ -99,7 +99,7 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 	 * Should be overrided to provide required environment for widget. 
 	 * @return
 	 */
-	protected String getTextForBrowser() {
+	public String getTextForBrowser() {
 		ElementNode html = new ElementNode(TAG_HTML, false);
 		ElementNode body = html.addChild(TAG_BODY);
 		addContent(body);
@@ -108,7 +108,7 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 		return sb.getText();
 	}
 
-	protected String getTextForTextView() {
+	public String getTextForTextView() {
 		ElementNode root = createRoot();
 		addContent(root);
 		NodeWriter sb = new NodeWriter(false);

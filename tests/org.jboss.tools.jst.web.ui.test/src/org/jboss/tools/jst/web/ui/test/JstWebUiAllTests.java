@@ -24,6 +24,15 @@ public class JstWebUiAllTests {
 	
 	public static Test suite() {
 		TestSuite suite = new TestSuite(JstWebUiAllTests.class.getName());
+
+		TestSuite s = new TestSuite(NewCheckboxWizardTest.class.getName());
+		s.addTestSuite(NewCheckboxWizardTest.class);
+		suite.addTest(
+				new ProjectImportTestSetup(s,
+				"org.jboss.tools.jst.web.ui.test",
+				new String[] { "projects/SimpleProject", }, //$NON-NLS-1$
+				new String[] { "SimpleProject" })); //$NON-NLS-1$
+		
 		suite.addTestSuite(ConfigurationBlockTest.class);
 		suite.addTestSuite(WebViewsTest.class);
 		suite.addTestSuite(WebWizardsTest.class);
