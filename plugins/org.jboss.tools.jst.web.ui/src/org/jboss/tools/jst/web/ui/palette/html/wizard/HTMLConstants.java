@@ -26,6 +26,11 @@ public interface HTMLConstants {
 	public String TAG_BODY = "body";
 	public String TAG_DIV = "div";
 	public String TAG_FORM = "form";
+	public String TAG_OL = "ol";
+	public String TAG_UL = "ul";
+	public String TAG_LI = "li";
+	public String TAG_A = "a";
+
 	
 	public String TAG_INPUT = "input";
 	public String TAG_LABEL = "label";

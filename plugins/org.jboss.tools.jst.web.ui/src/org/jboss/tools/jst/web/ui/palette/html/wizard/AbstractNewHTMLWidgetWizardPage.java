@@ -106,7 +106,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		previewPanel.setLayoutData(d);
 		previewPanel.setLayout(new GridLayout());
 		
-		text = new Text(previewPanel, SWT.MULTI | SWT.READ_ONLY | SWT.BORDER);
+		text = new Text(previewPanel, SWT.MULTI | SWT.READ_ONLY | SWT.BORDER | SWT.V_SCROLL);
 		text.setLayoutData(new GridData(GridData.FILL_BOTH));
 			text.setText("<html><body>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</body></html>");
 		try {
@@ -122,6 +122,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		gridData.grabExcessVerticalSpace = true;
 		browser.setLayoutData(gridData);
 		browser.pack();
+		previewPanel.setWeights(new int[]{4,6});
 		
 		updatePreviewContent();
 
@@ -129,6 +130,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		setVisible(true);
 		runValidation();
 		flipPreview();
+//		parent.pack(true);
 	}
 
 	/**
@@ -140,6 +142,12 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 
 	public void addEditor(IFieldEditor editor) {
 		editors.put(editor.getName(), editor);
+	}
+
+	public void addEditor(IFieldEditor editor, Composite parent) {
+		editor.doFillIntoGrid(parent);
+		editor.addPropertyChangeListener(this);
+		addEditor(editor);
 	}
 
 	public IFieldEditor getEditor(String name) {

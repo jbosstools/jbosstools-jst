@@ -26,6 +26,7 @@ public class JstWebUiAllTests {
 		TestSuite suite = new TestSuite(JstWebUiAllTests.class.getName());
 
 		TestSuite s = new TestSuite(NewCheckboxWizardTest.class.getName());
+		s.addTestSuite(NewListviewWizardTest.class);
 		s.addTestSuite(NewCheckboxWizardTest.class);
 		suite.addTest(
 				new ProjectImportTestSetup(s,

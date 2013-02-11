@@ -11,6 +11,8 @@
 package org.jboss.tools.jst.web.ui.test;
 
 import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.ui.IEditorPart;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCheckBoxWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCheckBoxWizardPage;
@@ -25,7 +27,7 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest {
 	public NewCheckboxWizardTest() {}
 	
 	public void testNewCheckboxWizard() {
-		openEditor("a.html");
+		IEditorPart editor = openEditor("a.html");
 
 		IWizardPage currentPage = runToolEntry("jQuery Mobile", "check box", true);
 
@@ -47,9 +49,13 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest {
 		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_MINI) < 0);
 
 		wizard.performFinish();
+		WizardDialog dialog = (WizardDialog)wizard.getContainer();
+		dialog.close();
 
 		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
 		assertTrue(text.indexOf(label) > 0);
+		
+		editor.getSite().getPage().closeEditor(editor, false);
 	}
 
 }

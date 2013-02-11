@@ -21,13 +21,25 @@ public interface JQueryConstants extends HTMLConstants {
 	public String ATTR_DATA_THEME = "data-theme";
 	public String ATTR_DATA_MINI = "data-mini";
 	public String ATTR_DATA_ROLE = "data-role";
+	public String ATTR_DATA_AUTODIVIDERS = "data-autodividers";
+	public String ATTR_DATA_INSET = "data-inset";
+	public String ATTR_DATA_FILTER = "data-filter";
 
+	public String TRUE = "true";
 	public String TYPE_CHECKBOX = "checkbox";
 	public String CLASS_CUSTOM = "custom";
 	public String ROLE_PAGE = "page";
 	public String ROLE_CONTENT = "content";
+	public String ROLE_LISTVIEW = "listview";
 
 	public String EDITOR_ID_LABEL = "label";
 	public String EDITOR_ID_MINI = "mini";
 	public String EDITOR_ID_THEME = "theme";
+
+	public String EDITOR_ID_NUMBERED = "numbered";
+	public String EDITOR_ID_READ_ONLY = "read-only";
+	public String EDITOR_ID_AUTODIVIDERS = "autodividers";
+	public String EDITOR_ID_SEARCH_FILTER = "search-filter";
+	public String EDITOR_ID_INSET = "inset";
+
 }
