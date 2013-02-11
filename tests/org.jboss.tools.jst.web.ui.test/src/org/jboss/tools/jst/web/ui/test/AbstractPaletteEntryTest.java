@@ -56,7 +56,7 @@ public class AbstractPaletteEntryTest extends TestCase {
 		project = ResourcesPlugin.getWorkspace().getRoot().getProject("SimpleProject");
 	}
 
-	public void openEditor(String fileName) {
+	public IEditorPart openEditor(String fileName) {
 		IFile testfile = project.getFile(fileName);
 		assertTrue("Test file doesn't exist: " + project.getName() + "/" + fileName, 
 				(testfile.exists() && testfile.isAccessible()));
@@ -68,6 +68,7 @@ public class AbstractPaletteEntryTest extends TestCase {
 		String text = textEditor.getDocumentProvider().getDocument(editor.getEditorInput()).get();
 		int offset = text.indexOf("<body>", 0) + 7;
 		textEditor.getSelectionProvider().setSelection(new TextSelection(offset, 0));
+		return editorPart;
 	}
 
 	public IWizardPage runToolEntry(String category, String entry, boolean wizardExpected) {
@@ -138,6 +139,7 @@ public class AbstractPaletteEntryTest extends TestCase {
 				for (Object o2: l2) {
 					if(o2 instanceof ToolEntry) {
 						ToolEntry t = (ToolEntry)o2;
+						System.out.println("-->" + t.getLabel());
 						if(entry.equals(t.getLabel())) {
 							return t;
 						}
