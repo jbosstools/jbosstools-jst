@@ -61,7 +61,7 @@ public class PaletteAdapter implements IPaletteAdapter {
 
 	public Control createControl(Composite root) {
 		model = PaletteModel.getInstance(paletteContents);
-		viewer = new PaletteViewer(viewPart);
+		viewer = new PaletteViewer(viewPart, model);
 		palette = viewer.createControl(root);
 		
 		viewer.setPaletteViewerPreferences(new PaletteViewerPreferences());
