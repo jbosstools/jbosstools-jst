@@ -53,9 +53,13 @@ public class PaletteAdapter implements IPaletteAdapter {
 	public void initActionBars() {
 		IActionBars bars = viewPart.getActionBars();
 		if(bars != null) {
-			bars.getToolBarManager().add(new PaletteEditAction());
-			bars.getToolBarManager().add(new ShowHideTabsAction());
-			bars.getToolBarManager().add(new ImportTLDAction());
+			if(model.getType().equals(PaletteModel.TYPE_JSF)) {
+				bars.getToolBarManager().add(new PaletteEditAction());
+				bars.getToolBarManager().add(new ShowHideTabsAction());
+				bars.getToolBarManager().add(new ImportTLDAction());
+			} else if(model.getType().equals(PaletteModel.TYPE_MOBILE)) {
+				//TODO 
+			}
 		}
 	}
 
