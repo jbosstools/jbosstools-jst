@@ -10,8 +10,8 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
-import org.jboss.tools.common.model.ui.ModelUIImages;
 import org.jboss.tools.common.model.ui.editors.dnd.DropWizardMessages;
+import org.jboss.tools.jst.web.ui.JSTWebUIImages;
 
 /**
  * 
@@ -23,8 +23,8 @@ public class NewListviewWizard extends NewJQueryWidgetWizard implements JQueryCo
 
 	public NewListviewWizard() {
 		setWindowTitle(DropWizardMessages.Wizard_Window_Title);
-		setDefaultPageImageDescriptor(ModelUIImages
-				.getImageDescriptor(ModelUIImages.WIZARD_DEFAULT));
+		setDefaultPageImageDescriptor(JSTWebUIImages.getInstance()
+				.createImageDescriptor(JSTWebUIImages.LISTVIEW_IMAGE));
 	}
 
 	protected void doAddPages() {
