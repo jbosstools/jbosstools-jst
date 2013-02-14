@@ -24,7 +24,7 @@ public class NewListviewWizard extends NewJQueryWidgetWizard implements JQueryCo
 	public NewListviewWizard() {
 		setWindowTitle(DropWizardMessages.Wizard_Window_Title);
 		setDefaultPageImageDescriptor(JSTWebUIImages.getInstance()
-				.createImageDescriptor(JSTWebUIImages.LISTVIEW_IMAGE));
+				.getOrCreateImageDescriptor(JSTWebUIImages.LISTVIEW_IMAGE));
 	}
 
 	protected void doAddPages() {

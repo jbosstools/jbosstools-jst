@@ -17,6 +17,7 @@ import java.util.Map;
 
 import org.eclipse.compare.Splitter;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
 import org.eclipse.swt.browser.Browser;
@@ -31,6 +32,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.common.model.ui.editors.dnd.DefaultDropWizardPage;
+import org.jboss.tools.common.model.ui.editors.dnd.ValidationException;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 
 /**
@@ -55,6 +57,10 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 	public AbstractNewHTMLWidgetWizardPage(String pageName, String title, ImageDescriptor titleImage) {
 		super(pageName, title, titleImage);
 	}
+
+    public AbstractNewHTMLWidgetWizard getWizard() {
+        return (AbstractNewHTMLWidgetWizard)super.getWizard();
+    }
 
 	@Override
 	public void createControl(Composite parent) {
@@ -155,7 +161,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 	}
 
 	public String getEditorValue(String name) {
-		return getEditor(name).getValueAsString();
+		return !editors.containsKey(name) ? null : getEditor(name).getValueAsString();
 	}
 
 	boolean isUpdating = false;
@@ -257,9 +263,8 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 	}
 
 	protected void updatePreviewContent() {
-		AbstractNewHTMLWidgetWizard wizard = ((AbstractNewHTMLWidgetWizard)getWizard());
-		text.setText(formatText(wizard.getTextForTextView()));
-		browser.setText(wizard.getTextForBrowser());
+		text.setText(formatText(getWizard().getTextForTextView()));
+		browser.setText(getWizard().getTextForBrowser());
 	}
 
 	protected String formatText(String text) {

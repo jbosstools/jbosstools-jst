@@ -121,6 +121,10 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 		collectAllIDs();
 	}
 
+	public boolean isIDAvailable(String id) {
+		return !ids.contains(id);
+	}
+
 	@Override
 	public IDropWizardModel getWizardModel() {
 		return command.getDefaultModel();

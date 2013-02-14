@@ -13,8 +13,10 @@ package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jboss.tools.common.ui.widget.editor.CompositeEditor;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.SwtFieldEditorFactory;
+import org.jboss.tools.common.ui.widget.editor.TextFieldEditor;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -57,6 +59,28 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 
 	public static IFieldEditor createInsetEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_INSET, WizardMessages.insetLabel, false);
+	}
+
+	public static IFieldEditor createOffLabelEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_OFF, WizardMessages.offLabelLabel, "Off");
+	}
+
+	public static IFieldEditor createOnLabelEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_ON, WizardMessages.onLabelLabel, "On");
+	}
+
+	public static IFieldEditor createIDEditor() {
+		CompositeEditor editor = (CompositeEditor)SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_ID, WizardMessages.idLabel, "");
+		TextFieldEditor text = (TextFieldEditor)editor.getEditors().get(1);
+		text.setMessage("Generate");
+		return editor; 
+	}
+
+	public static IFieldEditor createLayoutEditor() {
+		String[] values = new String[]{LAYOUT_HORIZONTAL, LAYOUT_VERTICAL};
+		List<String> list = new ArrayList<String>();
+		for (String s: values) list.add(s);
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_LAYOUT, WizardMessages.layoutLabel, list, LAYOUT_HORIZONTAL, false);
 	}
 
 }

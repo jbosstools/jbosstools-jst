@@ -16,12 +16,19 @@ public class WizardMessages extends NLS {
 	public static String autodividersLabel;
 	public static String searchFilterLabel;
 	public static String insetLabel;
+	public static String offLabelLabel;
+	public static String onLabelLabel;
+	public static String idLabel;
+	public static String layoutLabel;
 
 	public static String newCheckboxWizardTitle;
 	public static String newCheckboxWizardDescription;
 	
 	public static String newListviewWizardTitle;
 	public static String newListviewWizardDescription;
+	
+	public static String newToggleWizardTitle;
+	public static String newToggleWizardDescription;
 	
 	static {
 		// initialize resource bundle
