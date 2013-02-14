@@ -10,9 +10,8 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
-import org.jboss.tools.common.model.ui.ModelUIImages;
 import org.jboss.tools.common.model.ui.editors.dnd.DropWizardMessages;
-import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizard.ElementNode;
+import org.jboss.tools.jst.web.ui.JSTWebUIImages;
 
 /**
  * 
@@ -26,8 +25,8 @@ public class NewCheckBoxWizard extends NewJQueryWidgetWizard implements JQueryCo
 
 	public NewCheckBoxWizard() {
 		setWindowTitle(DropWizardMessages.Wizard_Window_Title);
-		setDefaultPageImageDescriptor(ModelUIImages
-				.getImageDescriptor(ModelUIImages.WIZARD_DEFAULT));
+		setDefaultPageImageDescriptor(JSTWebUIImages.getInstance()
+				.createImageDescriptor(JSTWebUIImages.CHECKBOX_IMAGE));
 	}
 
 	protected void doAddPages() {
