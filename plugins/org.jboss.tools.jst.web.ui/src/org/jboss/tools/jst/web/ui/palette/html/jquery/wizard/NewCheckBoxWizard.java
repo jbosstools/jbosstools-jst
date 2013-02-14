@@ -26,7 +26,7 @@ public class NewCheckBoxWizard extends NewJQueryWidgetWizard implements JQueryCo
 	public NewCheckBoxWizard() {
 		setWindowTitle(DropWizardMessages.Wizard_Window_Title);
 		setDefaultPageImageDescriptor(JSTWebUIImages.getInstance()
-				.createImageDescriptor(JSTWebUIImages.CHECKBOX_IMAGE));
+				.getOrCreateImageDescriptor(JSTWebUIImages.CHECKBOX_IMAGE));
 	}
 
 	protected void doAddPages() {

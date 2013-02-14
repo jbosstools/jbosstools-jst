@@ -31,6 +31,9 @@ public interface JQueryConstants extends HTMLConstants {
 	public String ROLE_PAGE = "page";
 	public String ROLE_CONTENT = "content";
 	public String ROLE_LISTVIEW = "listview";
+	public String ROLE_SLIDER = "slider";
+	public String LAYOUT_HORIZONTAL = "Horizontal";
+	public String LAYOUT_VERTICAL = "Vertical";
 
 	public String EDITOR_ID_LABEL = "label";
 	public String EDITOR_ID_MINI = "mini";
@@ -42,4 +45,8 @@ public interface JQueryConstants extends HTMLConstants {
 	public String EDITOR_ID_SEARCH_FILTER = "search-filter";
 	public String EDITOR_ID_INSET = "inset";
 
+	public String EDITOR_ID_OFF = "off";
+	public String EDITOR_ID_ON = "on";
+	public String EDITOR_ID_ID = "id";
+	public String EDITOR_ID_LAYOUT = "layout";
 }
