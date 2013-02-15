@@ -18,8 +18,7 @@ import org.jboss.tools.jst.web.ui.JSTWebUIImages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewListviewWizard extends NewJQueryWidgetWizard implements JQueryConstants {
-	NewListviewWizardPage page;
+public class NewListviewWizard extends NewJQueryWidgetWizard<NewListviewWizardPage> implements JQueryConstants {
 
 	public NewListviewWizard() {
 		setWindowTitle(DropWizardMessages.Wizard_Window_Title);
@@ -27,13 +26,8 @@ public class NewListviewWizard extends NewJQueryWidgetWizard implements JQueryCo
 				.getOrCreateImageDescriptor(JSTWebUIImages.LISTVIEW_IMAGE));
 	}
 
-	protected void doAddPages() {
-		page = new NewListviewWizardPage();
-		addPage(page);
-	}
-
-	boolean isTrue(String editorID) {
-		return "true".equals(page.getEditorValue(editorID));
+	protected NewListviewWizardPage createPage() {
+		return new NewListviewWizardPage();
 	}
 
 	protected void addContent(ElementNode parent) {

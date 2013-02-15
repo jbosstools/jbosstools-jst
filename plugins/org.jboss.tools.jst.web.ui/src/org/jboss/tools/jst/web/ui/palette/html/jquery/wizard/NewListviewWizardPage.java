@@ -10,9 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
@@ -47,8 +45,7 @@ public class NewListviewWizardPage extends AbstractNewHTMLWidgetWizardPage imple
 
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
 		addEditor(theme, parent);
-		GridData d = new GridData(GridData.FILL_HORIZONTAL);
-		((Control) (theme.getEditorControls()[1])).setLayoutData(d);
+		expandCombo(theme);
 	}
 
 }

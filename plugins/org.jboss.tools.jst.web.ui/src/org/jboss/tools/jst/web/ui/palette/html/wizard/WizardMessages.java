@@ -8,6 +8,7 @@ public class WizardMessages extends NLS {
 	public static String showPreviewButtonText;
 	public static String hidePreviewButtonText;
 
+	public static String titleLabel;
 	public static String labelLabel;
 	public static String miniLabel;
 	public static String themeLabel;
@@ -20,6 +21,9 @@ public class WizardMessages extends NLS {
 	public static String onLabelLabel;
 	public static String idLabel;
 	public static String layoutLabel;
+	public static String urlLabel;
+	public static String transitionLabel;
+	public static String closeButtonPositionLabel;
 
 	public static String newCheckboxWizardTitle;
 	public static String newCheckboxWizardDescription;
@@ -29,6 +33,11 @@ public class WizardMessages extends NLS {
 	
 	public static String newToggleWizardTitle;
 	public static String newToggleWizardDescription;
+
+	public static String newDialogWizardTitle;
+	public static String newDialogWizardDescription;
+	
+	public static String errorIDisUsed;
 	
 	static {
 		// initialize resource bundle
