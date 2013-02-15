@@ -10,10 +10,11 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.events.ShellAdapter;
+import org.eclipse.swt.events.ShellEvent;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.jboss.tools.common.model.ui.editors.dnd.ValidationException;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
@@ -24,42 +25,35 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewToggleWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
+public class NewDialogWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
 
-	public NewToggleWizardPage() {
-		super("newToggle", WizardMessages.newToggleWizardTitle);
-		setDescription(WizardMessages.newToggleWizardDescription);
+	public NewDialogWizardPage() {
+		super("newDialog", WizardMessages.newDialogWizardTitle);
+		setDescription(WizardMessages.newDialogWizardDescription);
 	}
 
 	protected void createFieldPanel(Composite parent) {
-		IFieldEditor label = JQueryFieldEditorFactory.createLabelEditor();
-		label.setValue("Switch:");
-		addEditor(label, parent);
+		IFieldEditor title = JQueryFieldEditorFactory.createTitleEditor();
+		title.setValue("Dialog");
+		addEditor(title, parent);
 
-		IFieldEditor offLabel = JQueryFieldEditorFactory.createOffLabelEditor();
-		addEditor(offLabel, parent);
-		
-		IFieldEditor onLabel = JQueryFieldEditorFactory.createOnLabelEditor();
-		addEditor(onLabel, parent);
-		
 		IFieldEditor id = JQueryFieldEditorFactory.createIDEditor();
 		addEditor(id, parent);
-		
-		Label separator = new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL);
-		GridData sd = new GridData(GridData.FILL_HORIZONTAL);
-		sd.horizontalSpan = 3;
-		separator.setLayoutData(sd);
-		
-		IFieldEditor mini = JQueryFieldEditorFactory.createMiniEditor();
-		addEditor(mini, parent);
 
-		IFieldEditor layout = JQueryFieldEditorFactory.createLayoutEditor();
-		addEditor(layout, parent);
-		expandCombo(layout);
-
-		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
-		addEditor(theme, parent);
-		expandCombo(theme);
+		IFieldEditor close = JQueryFieldEditorFactory.createCloseButtonEditor();
+		addEditor(close, parent);
+		
+		final Shell shell = parent.getShell();
+		
+		shell.addShellListener(new ShellAdapter() {
+			public void shellActivated(ShellEvent e) {
+				Rectangle r = shell.getBounds();
+				r.height += 100;
+				shell.setBounds(r);
+				shell.removeShellListener(this);
+			}
+		});
+		
 	}
 
 	public void validate() throws ValidationException {

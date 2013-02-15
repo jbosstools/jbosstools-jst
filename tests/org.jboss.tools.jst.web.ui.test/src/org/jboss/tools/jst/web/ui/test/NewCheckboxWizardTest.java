@@ -16,6 +16,8 @@ import org.eclipse.ui.IEditorPart;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCheckBoxWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCheckBoxWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizardPage;
 
@@ -94,6 +96,30 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest {
 		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
 		assertTrue(text.indexOf(label) > 0);
 		
+		editor.getSite().getPage().closeEditor(editor, false);
+	}
+
+	public void testNewDialogWizard() {
+		IEditorPart editor = openEditor("a.html");
+
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "dialog", true);
+		assertTrue(currentPage instanceof NewDialogWizardPage);
+
+		NewDialogWizardPage wizardPage = (NewDialogWizardPage)currentPage;
+		NewDialogWizard wizard = (NewDialogWizard)wizardPage.getWizard(); 
+
+		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_CLOSE_BTN) < 0);
+		wizardPage.getEditor(JQueryConstants.EDITOR_ID_CLOSE_BUTTON).setValueAsString(JQueryConstants.CLOSE_RIGHT);
+		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_CLOSE_BTN + "=\"" + JQueryConstants.CLOSE_RIGHT + "\"") >= 0);
+
+		String title = wizardPage.getEditorValue(JQueryConstants.EDITOR_ID_TITLE);
+
+		wizard.performFinish();
+		WizardDialog dialog = (WizardDialog)wizard.getContainer();
+		dialog.close();
+
+		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
+		assertTrue(text.indexOf(title) > 0);
 		editor.getSite().getPage().closeEditor(editor, false);
 	}
 

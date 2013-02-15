@@ -298,6 +298,10 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 			empty = false;
 			return c;
 		}
+	
+		public List<ElementNode> getChildren() {
+			return children;
+		}
 		 
 		public void flush(NodeWriter sb, int indent) {
 			if(indent >= 0) {

@@ -10,9 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
@@ -31,21 +29,15 @@ public class NewCheckBoxWizardPage extends AbstractNewHTMLWidgetWizardPage imple
 
 	protected void createFieldPanel(Composite parent) {
 		IFieldEditor label = JQueryFieldEditorFactory.createLabelEditor();
-		label.doFillIntoGrid(parent);
-		label.addPropertyChangeListener(this);
-		addEditor(label);
+		label.setValue("I agree");
+		addEditor(label, parent);
 
 		IFieldEditor mini = JQueryFieldEditorFactory.createMiniEditor();
-		mini.doFillIntoGrid(parent);
-		mini.addPropertyChangeListener(this);
-		addEditor(mini);
+		addEditor(mini, parent);
 
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
-		theme.doFillIntoGrid(parent);
-		theme.addPropertyChangeListener(this);
-		addEditor(theme);
-		GridData d = new GridData(GridData.FILL_HORIZONTAL);
-		((Control) (theme.getEditorControls()[1])).setLayoutData(d);
+		addEditor(theme, parent);
+		expandCombo(theme);
 	}
 
 }

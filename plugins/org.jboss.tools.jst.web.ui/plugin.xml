@@ -800,6 +800,7 @@
 
    <extension
          point="org.jboss.tools.common.model.ui.InsertTagWizard">
+      <tag name="_Palette_/Mobile/jQuery_Mobile/1.page/2.dialog" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/2.lists/5.listview" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewListviewWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/5.check_box" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCheckBoxWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/3.flip_toggle_switch" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizard"/>
