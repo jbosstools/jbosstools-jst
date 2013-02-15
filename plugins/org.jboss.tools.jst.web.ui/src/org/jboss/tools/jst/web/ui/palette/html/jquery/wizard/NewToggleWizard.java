@@ -10,7 +10,6 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
-import org.jboss.tools.common.model.ui.ModelUIImages;
 import org.jboss.tools.common.model.ui.editors.dnd.DropWizardMessages;
 import org.jboss.tools.jst.web.ui.JSTWebUIImages;
 
@@ -19,10 +18,9 @@ import org.jboss.tools.jst.web.ui.JSTWebUIImages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewToggleWizard extends NewJQueryWidgetWizard implements JQueryConstants {
+public class NewToggleWizard extends NewJQueryWidgetWizard<NewToggleWizardPage> implements JQueryConstants {
 	static String prefixName = "flip-";
 	static String prefixMiniId = "flip-min";
-	NewToggleWizardPage page;
 
 	public NewToggleWizard() {
 		setWindowTitle(DropWizardMessages.Wizard_Window_Title);
@@ -30,13 +28,8 @@ public class NewToggleWizard extends NewJQueryWidgetWizard implements JQueryCons
 				.getOrCreateImageDescriptor(JSTWebUIImages.TOGGLE_IMAGE));
 	}
 
-	protected void doAddPages() {
-		page = new NewToggleWizardPage();
-		addPage(page);
-	}
-
-	boolean isMini() {
-		return "true".equals(page.getEditorValue(EDITOR_ID_MINI));
+	protected NewToggleWizardPage createPage() {
+		return new NewToggleWizardPage();
 	}
 
 	protected void addContent(ElementNode parent) {
