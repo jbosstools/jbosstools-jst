@@ -17,7 +17,6 @@ import java.util.Map;
 
 import org.eclipse.compare.Splitter;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
 import org.eclipse.swt.browser.Browser;
@@ -28,11 +27,11 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.common.model.ui.editors.dnd.DefaultDropWizardPage;
-import org.jboss.tools.common.model.ui.editors.dnd.ValidationException;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 
 /**
@@ -115,10 +114,28 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		text = new Text(previewPanel, SWT.MULTI | SWT.READ_ONLY | SWT.BORDER | SWT.V_SCROLL);
 		text.setLayoutData(new GridData(GridData.FILL_BOTH));
 			text.setText("<html><body>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</body></html>");
+
+		/*
+		//We can provide webkit in this way
+		String property = "org.eclipse.swt.browser.DefaultType";
+		String defaultBrowser = System.getProperty(property);
+		boolean hasDefaultBrowser = defaultBrowser != null;
+		System.getProperties().setProperty(property, "webkit");
+		*/
+
 		try {
-			browser = new Browser(previewPanel, SWT.READ_ONLY | SWT.BORDER | SWT.MOZILLA | SWT.NO_SCROLL);
-		} catch (SWTError e) {
-			browser = new Browser(previewPanel, SWT.READ_ONLY | SWT.BORDER | SWT.WEBKIT | SWT.NO_SCROLL);
+			try {
+				browser = new Browser(previewPanel, SWT.READ_ONLY | SWT.BORDER | SWT.MOZILLA | SWT.NO_SCROLL);
+			} catch (SWTError e) {
+				browser = new Browser(previewPanel, SWT.READ_ONLY | SWT.BORDER | SWT.WEBKIT | SWT.NO_SCROLL);
+			}
+		} finally {
+			/*
+			//Use if system property was modified
+			if(hasDefaultBrowser) {
+				System.getProperties().setProperty(property, defaultBrowser);
+			}
+			*/
 		}
 //		browser.setLayoutData(new GridData(GridData.FILL_BOTH));
 		GridData gridData = new GridData();
@@ -154,6 +171,19 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		editor.doFillIntoGrid(parent);
 		editor.addPropertyChangeListener(this);
 		addEditor(editor);
+	}
+
+	/**
+	 * Utility method expanding combo
+	 * @param name
+	 * @return
+	 */
+	protected void expandCombo(IFieldEditor editor) {
+		Control c = (Control) (editor.getEditorControls()[1]);
+		GridData d = (GridData)c.getLayoutData();
+		d.horizontalAlignment = SWT.FILL;
+		d.grabExcessHorizontalSpace = true;
+		c.setLayoutData(d);
 	}
 
 	public IFieldEditor getEditor(String name) {

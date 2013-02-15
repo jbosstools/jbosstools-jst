@@ -76,11 +76,47 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return editor; 
 	}
 
+	public static IFieldEditor createTitleEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_TITLE, WizardMessages.titleLabel, "");
+	}
+
+	static String[] LAYOUT_LIST = {LAYOUT_HORIZONTAL, LAYOUT_VERTICAL};
+
 	public static IFieldEditor createLayoutEditor() {
-		String[] values = new String[]{LAYOUT_HORIZONTAL, LAYOUT_VERTICAL};
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(
+				EDITOR_ID_LAYOUT, 
+				WizardMessages.layoutLabel, 
+				toList(LAYOUT_LIST), LAYOUT_HORIZONTAL, false);
+	}
+
+	public static IFieldEditor createURLEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_URL, WizardMessages.urlLabel, "");
+	}
+
+	static String[] TRANSITION_LIST = {"", TRANSITION_POP, TRANSITION_SLIDEDOWN, TRANSITION_FLIP};
+
+	//For Open dialog
+	public static IFieldEditor createTransitionEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(
+				EDITOR_ID_TRANSITION, 
+				WizardMessages.transitionLabel, 
+				toList(TRANSITION_LIST), "", false);
+	}
+
+	static String[] CLOSE_BUTTON_LIST = {"", CLOSE_RIGHT, CLOSE_NONE};
+
+	//For Dialog
+	public static IFieldEditor createCloseButtonEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(
+				EDITOR_ID_CLOSE_BUTTON, 
+				WizardMessages.closeButtonPositionLabel, 
+				toList(CLOSE_BUTTON_LIST), "", false);
+	}
+
+	static List<String> toList(String[] values) {
 		List<String> list = new ArrayList<String>();
 		for (String s: values) list.add(s);
-		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_LAYOUT, WizardMessages.layoutLabel, list, LAYOUT_HORIZONTAL, false);
+		return list;
 	}
 
 }

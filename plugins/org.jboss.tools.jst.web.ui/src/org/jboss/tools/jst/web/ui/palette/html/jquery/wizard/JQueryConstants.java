@@ -20,10 +20,13 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.HTMLConstants;
 public interface JQueryConstants extends HTMLConstants {
 	public String ATTR_DATA_THEME = "data-theme";
 	public String ATTR_DATA_MINI = "data-mini";
+	public String ATTR_DATA_REL = "data-rel";
 	public String ATTR_DATA_ROLE = "data-role";
 	public String ATTR_DATA_AUTODIVIDERS = "data-autodividers";
 	public String ATTR_DATA_INSET = "data-inset";
 	public String ATTR_DATA_FILTER = "data-filter";
+	public String ATTR_DATA_TRANSITION = "data-transition";
+	public String ATTR_DATA_CLOSE_BTN = "data-close-btn";
 
 	public String TRUE = "true";
 	public String TYPE_CHECKBOX = "checkbox";
@@ -32,9 +35,19 @@ public interface JQueryConstants extends HTMLConstants {
 	public String ROLE_CONTENT = "content";
 	public String ROLE_LISTVIEW = "listview";
 	public String ROLE_SLIDER = "slider";
+	public String ROLE_BUTTON = "button";
+	public String ROLE_DIALOG = "dialog";
+	public String ROLE_HEADER = "header";
 	public String LAYOUT_HORIZONTAL = "Horizontal";
 	public String LAYOUT_VERTICAL = "Vertical";
+	public String TRANSITION_POP = "pop";
+	public String TRANSITION_SLIDEDOWN = "slidedown";
+	public String TRANSITION_FLIP = "flip";
+	public String DATA_REL_DIALOG = "dialog";
+	public String CLOSE_RIGHT = "right";
+	public String CLOSE_NONE = "none";
 
+	public String EDITOR_ID_TITLE = "title";
 	public String EDITOR_ID_LABEL = "label";
 	public String EDITOR_ID_MINI = "mini";
 	public String EDITOR_ID_THEME = "theme";
@@ -49,4 +62,7 @@ public interface JQueryConstants extends HTMLConstants {
 	public String EDITOR_ID_ON = "on";
 	public String EDITOR_ID_ID = "id";
 	public String EDITOR_ID_LAYOUT = "layout";
+	public String EDITOR_ID_URL = "url";
+	public String EDITOR_ID_TRANSITION = "transition";
+	public String EDITOR_ID_CLOSE_BUTTON = "close";
 }

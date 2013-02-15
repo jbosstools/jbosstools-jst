@@ -18,10 +18,9 @@ import org.jboss.tools.jst.web.ui.JSTWebUIImages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewCheckBoxWizard extends NewJQueryWidgetWizard implements JQueryConstants {
+public class NewCheckBoxWizard extends NewJQueryWidgetWizard<NewCheckBoxWizardPage> implements JQueryConstants {
 	static String prefixName = "checkbox-";
 	static String prefixMiniId = "checkbox-mini-";
-	NewCheckBoxWizardPage page;
 
 	public NewCheckBoxWizard() {
 		setWindowTitle(DropWizardMessages.Wizard_Window_Title);
@@ -29,13 +28,8 @@ public class NewCheckBoxWizard extends NewJQueryWidgetWizard implements JQueryCo
 				.getOrCreateImageDescriptor(JSTWebUIImages.CHECKBOX_IMAGE));
 	}
 
-	protected void doAddPages() {
-		page = new NewCheckBoxWizardPage();
-		addPage(page);
-	}
-
-	boolean isMini() {
-		return "true".equals(page.getEditorValue(EDITOR_ID_MINI));
+	protected NewCheckBoxWizardPage createPage() {
+		return new NewCheckBoxWizardPage();
 	}
 
 	protected void addContent(ElementNode parent) {
