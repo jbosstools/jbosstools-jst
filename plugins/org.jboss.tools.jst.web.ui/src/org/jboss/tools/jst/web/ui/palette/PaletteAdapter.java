@@ -10,28 +10,39 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette;
 
-import java.net.URL;
 import java.net.MalformedURLException;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.IActionBars;
+import java.net.URL;
+import java.util.List;
+
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.gef.palette.PaletteContainer;
+import org.eclipse.gef.palette.PaletteEntry;
+import org.eclipse.gef.palette.PaletteSeparator;
+import org.eclipse.gef.palette.ToolEntry;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.core.runtime.Platform;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.dialogs.SearchPattern;
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.event.XModelTreeEvent;
 import org.jboss.tools.common.model.event.XModelTreeListener;
-import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.model.ui.views.palette.IPaletteAdapter;
 import org.jboss.tools.common.model.ui.views.palette.IPalettePageAdapter;
 import org.jboss.tools.common.model.ui.views.palette.PaletteContents;
-import org.jboss.tools.common.model.ui.views.palette.PaletteViewPart;
+import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteRoot;
-import org.jboss.tools.jst.web.ui.palette.PaletteUIMessages;
 
 public class PaletteAdapter implements IPaletteAdapter {
 	private static final URL BASE_URL = EclipseResourceUtil.getInstallURL(Platform.getBundle(ModelUIPlugin.PLUGIN_ID));
@@ -53,27 +64,81 @@ public class PaletteAdapter implements IPaletteAdapter {
 	public void initActionBars() {
 		IActionBars bars = viewPart.getActionBars();
 		if(bars != null) {
-			if(model.getType().equals(PaletteModel.TYPE_JSF)) {
+			if(isJSF()) {
 				bars.getToolBarManager().add(new PaletteEditAction());
 				bars.getToolBarManager().add(new ShowHideTabsAction());
 				bars.getToolBarManager().add(new ImportTLDAction());
-			} else if(model.getType().equals(PaletteModel.TYPE_MOBILE)) {
+			} else if(isMobile()) {
 				//TODO 
+			}
+		}
+	}
+	
+	private boolean isJSF(){
+		return model.getType().equals(PaletteModel.TYPE_JSF);
+	}
+	
+	private boolean isMobile(){
+		return model.getType().equals(PaletteModel.TYPE_MOBILE);
+	}
+	
+	private SearchPattern pattern = new SearchPattern();
+	
+	private void filter(String text){
+		if(text.isEmpty()){
+			pattern.setPattern("*");
+		}else{
+			pattern.setPattern(text);
+		}
+		filter(model.getPaletteRoot());
+	}
+	
+	private void filter(PaletteContainer container){
+		List children = container.getChildren();
+		for(Object child : children){
+			if(!(child instanceof PaletteContainer)){
+				if(child instanceof ToolEntry){
+					PaletteEntry entry = (PaletteEntry)child;
+					if(pattern.matches(entry.getLabel())){
+						entry.setVisible(true);
+					}else{
+						entry.setVisible(false);
+					}
+				}
+			} else {
+				filter((PaletteContainer)child);
 			}
 		}
 	}
 
 	public Control createControl(Composite root) {
+		Control result = null;
 		model = PaletteModel.getInstance(paletteContents);
 		viewer = new PaletteViewer(viewPart, model);
-		palette = viewer.createControl(root);
+		if(isMobile()) {
+			Composite container = new Composite(root, SWT.FILL);
+			container.setLayout(new GridLayout(1, false));
+			final Text text = new Text(container, SWT.SINGLE|SWT.BORDER|SWT.FILL|SWT.SEARCH|SWT.ICON_SEARCH);
+			GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL
+                | GridData.GRAB_HORIZONTAL);
+			text.setLayoutData(data);
+			text.addModifyListener(new ModifyListener(){
+				@Override
+				public void modifyText(ModifyEvent e) {
+					filter(text.getText());
+				}
+			});
+			palette = viewer.createControl(container);
+			palette.setLayoutData(new GridData(GridData.FILL_BOTH));
+			result = container;
+		}else{
+			result = palette = viewer.createControl(root);
+		}
 		
 		viewer.setPaletteViewerPreferences(new PaletteViewerPreferences());
 		PaletteRoot paletteRoot = model.getPaletteRoot();
 		viewer.setPaletteRoot(paletteRoot);
 
-//		initActionBars();
-		
 		descriptionManager = new DescriptionManager(viewer);
 		descriptionManager.install(palette);
 
@@ -85,7 +150,7 @@ public class PaletteAdapter implements IPaletteAdapter {
 
 		viewer.addDragStartSupport();
 
-		return palette;
+		return result;
 	}
 	
 	public void setEnabled(boolean enabled) {
