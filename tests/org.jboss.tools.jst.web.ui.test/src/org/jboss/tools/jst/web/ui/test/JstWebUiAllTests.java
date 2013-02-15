@@ -38,6 +38,7 @@ public class JstWebUiAllTests {
 		suite.addTestSuite(WebViewsTest.class);
 		suite.addTestSuite(WebWizardsTest.class);
 		suite.addTestSuite(JstWebUiPreferencesPagesTest.class);
+		suite.addTestSuite(PaletteFilterTest.class);
 		
 		return suite;
 	}
