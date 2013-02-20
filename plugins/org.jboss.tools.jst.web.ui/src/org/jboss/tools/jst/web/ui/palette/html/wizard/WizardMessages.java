@@ -24,6 +24,11 @@ public class WizardMessages extends NLS {
 	public static String urlLabel;
 	public static String transitionLabel;
 	public static String closeButtonPositionLabel;
+	public static String disabledLabel;
+	public static String inlineLabel;
+	public static String iconOnlyLabel;
+	public static String iconLabel;
+	public static String iconposLabel;
 
 	public static String newCheckboxWizardTitle;
 	public static String newCheckboxWizardDescription;
@@ -36,6 +41,9 @@ public class WizardMessages extends NLS {
 
 	public static String newDialogWizardTitle;
 	public static String newDialogWizardDescription;
+
+	public static String newButtonWizardTitle;
+	public static String newButtonWizardDescription;
 	
 	public static String errorIDisUsed;
 	

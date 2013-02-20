@@ -27,10 +27,14 @@ public interface JQueryConstants extends HTMLConstants {
 	public String ATTR_DATA_FILTER = "data-filter";
 	public String ATTR_DATA_TRANSITION = "data-transition";
 	public String ATTR_DATA_CLOSE_BTN = "data-close-btn";
+	public String ATTR_DATA_ICON = "data-icon";
+	public String ATTR_DATA_ICONPOS = "data-iconpos";
+	public String ATTR_DATA_INLINE = "data-inline";
 
 	public String TRUE = "true";
 	public String TYPE_CHECKBOX = "checkbox";
 	public String CLASS_CUSTOM = "custom";
+	public String CLASS_DISABLED = "ui-disabled";
 	public String ROLE_PAGE = "page";
 	public String ROLE_CONTENT = "content";
 	public String ROLE_LISTVIEW = "listview";
@@ -46,6 +50,8 @@ public interface JQueryConstants extends HTMLConstants {
 	public String DATA_REL_DIALOG = "dialog";
 	public String CLOSE_RIGHT = "right";
 	public String CLOSE_NONE = "none";
+
+	public String ICONPOS_NOTEXT = "notext";
 
 	public String EDITOR_ID_TITLE = "title";
 	public String EDITOR_ID_LABEL = "label";
@@ -65,4 +71,10 @@ public interface JQueryConstants extends HTMLConstants {
 	public String EDITOR_ID_URL = "url";
 	public String EDITOR_ID_TRANSITION = "transition";
 	public String EDITOR_ID_CLOSE_BUTTON = "close";
+
+	public String EDITOR_ID_DISABLED = "disabled";
+	public String EDITOR_ID_ICON = "icon";
+	public String EDITOR_ID_ICON_ONLY = "icon-only";
+	public String EDITOR_ID_ICON_POS = "icon-pos";
+	public String EDITOR_ID_INLINE = "inline";
 }

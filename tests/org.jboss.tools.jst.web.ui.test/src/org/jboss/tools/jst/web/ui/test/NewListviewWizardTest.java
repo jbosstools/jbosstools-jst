@@ -29,7 +29,7 @@ public class NewListviewWizardTest extends AbstractPaletteEntryTest {
 	public void testNewListviewWizard() {
 		IEditorPart editor = openEditor("a.html");
 
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "listview", true);
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Listview", true);
 
 		assertTrue(currentPage instanceof NewListviewWizardPage);
 

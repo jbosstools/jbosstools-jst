@@ -32,9 +32,7 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 
 	public static IFieldEditor createDataThemeEditor() {
 		String[] values = new String[]{"", "a", "b", "c", "d", "e"};
-		List<String> list = new ArrayList<String>();
-		for (String s: values) list.add(s);
-		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_THEME, WizardMessages.themeLabel, list, "", true);
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_THEME, WizardMessages.themeLabel, toList(values), "", true);
 	}
 
 	public static IFieldEditor createMiniEditor() {
@@ -92,6 +90,32 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 	public static IFieldEditor createURLEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_URL, WizardMessages.urlLabel, "");
 	}
+
+	public static IFieldEditor createDisabledEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_DISABLED, WizardMessages.disabledLabel, false);
+	}
+
+	public static IFieldEditor createInlineEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_INLINE, WizardMessages.inlineLabel, false);
+	}
+
+	public static IFieldEditor createIconOnlyEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_ICON_ONLY, WizardMessages.iconOnlyLabel, false);
+	}
+
+	public static IFieldEditor createIconEditor() {
+		String[] values = new String[]{"", "arrow-l", "arrow-r", "arrow-u", "arrow-d", 
+				"delete", "plus", "minus", "check", "gear", "refresh", 
+				"forward", "back", "grid", "star", "alert", "info",
+				"home", "search"};
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_ICON, WizardMessages.iconLabel, toList(values), "", true);
+	}
+
+	public static IFieldEditor createIconPositionEditor() {
+		String[] values = new String[]{"", "right", "top", "bottom"};
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_ICON_POS, WizardMessages.iconposLabel, toList(values), "", true);
+	}
+
 
 	static String[] TRANSITION_LIST = {"", TRANSITION_POP, TRANSITION_SLIDEDOWN, TRANSITION_FLIP};
 
