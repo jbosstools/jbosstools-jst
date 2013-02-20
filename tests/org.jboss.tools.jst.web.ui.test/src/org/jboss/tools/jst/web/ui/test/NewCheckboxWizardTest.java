@@ -14,6 +14,8 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IEditorPart;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCheckBoxWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCheckBoxWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizard;
@@ -33,7 +35,7 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest {
 	public void testNewCheckboxWizard() {
 		IEditorPart editor = openEditor("a.html");
 
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "check box", true);
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Checkbox", true);
 
 		assertTrue(currentPage instanceof NewCheckBoxWizardPage);
 
@@ -65,7 +67,7 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest {
 	public void testNewToggleWizard() {
 		IEditorPart editor = openEditor("a.html");
 
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "flip toggle switch", true);
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Flip Toggle Switch", true);
 
 		assertTrue(currentPage instanceof NewToggleWizardPage);
 
@@ -102,7 +104,7 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest {
 	public void testNewDialogWizard() {
 		IEditorPart editor = openEditor("a.html");
 
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "dialog", true);
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Dialog", true);
 		assertTrue(currentPage instanceof NewDialogWizardPage);
 
 		NewDialogWizardPage wizardPage = (NewDialogWizardPage)currentPage;
@@ -120,6 +122,49 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest {
 
 		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
 		assertTrue(text.indexOf(title) > 0);
+		editor.getSite().getPage().closeEditor(editor, false);
+	}
+
+	public void testNewButtonWizard() {
+		IEditorPart editor = openEditor("a.html");
+
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Button", true);
+		assertTrue(currentPage instanceof NewButtonWizardPage);
+
+		NewButtonWizardPage wizardPage = (NewButtonWizardPage)currentPage;
+		NewButtonWizard wizard = (NewButtonWizard)wizardPage.getWizard(); 
+
+		wizardPage.getEditor(JQueryConstants.EDITOR_ID_MINI).setValueAsString("true");
+		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_MINI + "=\"true\"") > 0);
+		wizardPage.getEditor(JQueryConstants.EDITOR_ID_MINI).setValueAsString("false");
+		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_MINI) < 0);
+
+		wizardPage.getEditor(JQueryConstants.EDITOR_ID_DISABLED).setValueAsString("true");
+		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_CLASS + "=\"ui-disabled\"") > 0);
+		wizardPage.getEditor(JQueryConstants.EDITOR_ID_DISABLED).setValueAsString("false");
+		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_CLASS) < 0);
+
+		wizardPage.getEditor(JQueryConstants.EDITOR_ID_INLINE).setValueAsString("true");
+		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_INLINE + "=\"true\"") > 0);
+		wizardPage.getEditor(JQueryConstants.EDITOR_ID_INLINE).setValueAsString("false");
+		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_INLINE) < 0);
+
+		wizardPage.getEditor(JQueryConstants.EDITOR_ID_ICON_ONLY).setValueAsString("true");
+		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_ICONPOS + "=\"notext\"") > 0);
+		wizardPage.getEditor(JQueryConstants.EDITOR_ID_ICON_POS).setValueAsString("arrow-r");
+		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_ICONPOS + "=\"notext\"") > 0);
+		wizardPage.getEditor(JQueryConstants.EDITOR_ID_ICON_ONLY).setValueAsString("false");
+		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_ICONPOS + "=\"arrow-r\"") > 0);
+
+		String label = wizardPage.getEditorValue(JQueryConstants.EDITOR_ID_LABEL);
+
+		wizard.performFinish();
+		WizardDialog dialog = (WizardDialog)wizard.getContainer();
+		dialog.close();
+
+		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
+		assertTrue(text.indexOf(label) > 0);
+
 		editor.getSite().getPage().closeEditor(editor, false);
 	}
 

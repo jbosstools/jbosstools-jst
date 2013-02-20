@@ -173,6 +173,13 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		addEditor(editor);
 	}
 
+	public void createSeparator(Composite parent) {
+		Label separator = new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL);
+		GridData sd = new GridData(GridData.FILL_HORIZONTAL);
+		sd.horizontalSpan = 3;
+		separator.setLayoutData(sd);
+	}
+
 	/**
 	 * Utility method expanding combo
 	 * @param name

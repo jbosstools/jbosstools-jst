@@ -10,10 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.jboss.tools.common.model.ui.editors.dnd.ValidationException;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
@@ -45,10 +42,7 @@ public class NewToggleWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 		IFieldEditor id = JQueryFieldEditorFactory.createIDEditor();
 		addEditor(id, parent);
 		
-		Label separator = new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL);
-		GridData sd = new GridData(GridData.FILL_HORIZONTAL);
-		sd.horizontalSpan = 3;
-		separator.setLayoutData(sd);
+		createSeparator(parent);
 		
 		IFieldEditor mini = JQueryFieldEditorFactory.createMiniEditor();
 		addEditor(mini, parent);
