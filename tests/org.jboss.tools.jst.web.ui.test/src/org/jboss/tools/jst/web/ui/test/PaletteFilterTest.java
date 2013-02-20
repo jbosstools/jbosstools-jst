@@ -49,7 +49,7 @@ public class PaletteFilterTest  extends TestCase {
 			if(!(child instanceof PaletteContainer)){
 				if(child instanceof ToolEntry){
 					PaletteEntry entry = (PaletteEntry)child;
-					if(entry.getLabel().equals(name)){
+					if(entry.getLabel().contains(name)){
 						if(!entry.isVisible()){
 							fail("Element - "+name+" must be visible!");
 						}
