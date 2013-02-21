@@ -22,6 +22,7 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
  * 
@@ -155,6 +156,11 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest {
 		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_ICONPOS + "=\"notext\"") > 0);
 		wizardPage.getEditor(JQueryConstants.EDITOR_ID_ICON_ONLY).setValueAsString("false");
 		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_ICONPOS + "=\"arrow-r\"") > 0);
+
+		wizardPage.getEditor(JQueryConstants.EDITOR_ID_ACTION).setValueAsString(WizardMessages.actionDialogLabel);
+		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_REL + "=\"" + JQueryConstants.DATA_REL_DIALOG + "\"") > 0);
+		wizardPage.getEditor(JQueryConstants.EDITOR_ID_ACTION).setValueAsString("");
+		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_REL) < 0);
 
 		String label = wizardPage.getEditorValue(JQueryConstants.EDITOR_ID_LABEL);
 

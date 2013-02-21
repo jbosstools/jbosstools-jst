@@ -116,6 +116,15 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_ICON_POS, WizardMessages.iconposLabel, toList(values), "", true);
 	}
 
+	public static IFieldEditor createActionEditor() {
+		String[] values = new String[]{"", 
+				WizardMessages.actionDialogLabel, 
+				WizardMessages.actionPopupLabel,
+				WizardMessages.actionBackLabel,
+				WizardMessages.actionExternalLabel};
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_ACTION, WizardMessages.actionLabel, toList(values), "", true);
+	}
+
 
 	static String[] TRANSITION_LIST = {"", TRANSITION_POP, TRANSITION_SLIDEDOWN, TRANSITION_FLIP};
 

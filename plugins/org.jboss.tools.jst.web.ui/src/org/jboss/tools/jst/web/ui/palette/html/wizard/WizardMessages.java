@@ -29,6 +29,11 @@ public class WizardMessages extends NLS {
 	public static String iconOnlyLabel;
 	public static String iconLabel;
 	public static String iconposLabel;
+	public static String actionLabel;
+	public static String actionDialogLabel;
+	public static String actionPopupLabel;
+	public static String actionBackLabel;
+	public static String actionExternalLabel;
 
 	public static String newCheckboxWizardTitle;
 	public static String newCheckboxWizardDescription;
