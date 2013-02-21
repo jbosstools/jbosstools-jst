@@ -48,6 +48,9 @@ public interface JQueryConstants extends HTMLConstants {
 	public String TRANSITION_SLIDEDOWN = "slidedown";
 	public String TRANSITION_FLIP = "flip";
 	public String DATA_REL_DIALOG = "dialog";
+	public String DATA_REL_POPUP = "popup";
+	public String DATA_REL_BACK = "back";
+	public String DATA_REL_EXTERNAL = "external";
 	public String CLOSE_RIGHT = "right";
 	public String CLOSE_NONE = "none";
 
@@ -72,6 +75,7 @@ public interface JQueryConstants extends HTMLConstants {
 	public String EDITOR_ID_TRANSITION = "transition";
 	public String EDITOR_ID_CLOSE_BUTTON = "close";
 
+	public String EDITOR_ID_ACTION = "action";
 	public String EDITOR_ID_DISABLED = "disabled";
 	public String EDITOR_ID_ICON = "icon";
 	public String EDITOR_ID_ICON_ONLY = "icon-only";

@@ -39,6 +39,10 @@ public class NewButtonWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 
 		IFieldEditor url = JQueryFieldEditorFactory.createURLEditor();
 		addEditor(url, parent);
+		
+		IFieldEditor action = JQueryFieldEditorFactory.createActionEditor();
+		addEditor(action, parent);
+		expandCombo(action);
 
 		IFieldEditor disabled = JQueryFieldEditorFactory.createDisabledEditor();
 		addEditor(disabled, parent);
@@ -75,7 +79,7 @@ public class NewButtonWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 		shell.addShellListener(new ShellAdapter() {
 			public void shellActivated(ShellEvent e) {
 				Rectangle r = shell.getBounds();
-				r.height += 60;
+				r.height += 90;
 				shell.setBounds(r);
 				shell.removeShellListener(this);
 			}
