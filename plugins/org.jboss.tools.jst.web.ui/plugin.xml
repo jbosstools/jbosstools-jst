@@ -803,7 +803,8 @@
       <tag name="_Palette_/Mobile/jQuery_Mobile/1.page/2.Dialog" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/2.lists/5.Listview" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewListviewWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/1.Button" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/3.Flip_Toggle_Switch" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/5.Checkbox" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCheckBoxWizard"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/3.Link" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizard"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/4.Flip_Toggle_Switch" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizard"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/6.Checkbox" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCheckBoxWizard"/>
    </extension>
 </plugin>

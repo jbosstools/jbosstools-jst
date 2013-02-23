@@ -36,6 +36,8 @@ public class JSTWebUIImages extends CommonUIImages{
 	public static String CHECKBOX_IMAGE    = WIZARDS_PATH + "CheckboxWizBan.png"; //$NON-NLS-1$
 	public static String GROUP_CHECKBOX_IMAGE    = WIZARDS_PATH + "GroupCheckboxWizBan.png"; //$NON-NLS-1$
 	public static String LISTVIEW_IMAGE    = WIZARDS_PATH + "ListviewWizBan.png"; //$NON-NLS-1$
+	public static String LINK_IMAGE    = WIZARDS_PATH + "LinkWizBan.png"; //$NON-NLS-1$
+	public static String RANGE_SLIDER_IMAGE    = WIZARDS_PATH + "RangeSliderWizBan.png"; //$NON-NLS-1$
 
 	private static JSTWebUIImages INSTANCE;
 	

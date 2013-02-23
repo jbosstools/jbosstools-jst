@@ -126,7 +126,10 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 	}
 
 
-	static String[] TRANSITION_LIST = {"", TRANSITION_POP, TRANSITION_SLIDEDOWN, TRANSITION_FLIP};
+	static String[] TRANSITION_LIST = {"", 
+		TRANSITION_FADE, TRANSITION_POP, TRANSITION_FLIP, TRANSITION_TURN, 
+		TRANSITION_FLOW, TRANSITION_SLIDEFADE, TRANSITION_SLIDEDOWN,
+		TRANSITION_SLIDE, TRANSITION_SLIDEUP, TRANSITION_NONE};
 
 	//For Open dialog
 	public static IFieldEditor createTransitionEditor() {
