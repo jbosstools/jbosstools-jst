@@ -44,9 +44,18 @@ public interface JQueryConstants extends HTMLConstants {
 	public String ROLE_HEADER = "header";
 	public String LAYOUT_HORIZONTAL = "Horizontal";
 	public String LAYOUT_VERTICAL = "Vertical";
+
+	public String TRANSITION_FADE = "fade"; //default
 	public String TRANSITION_POP = "pop";
-	public String TRANSITION_SLIDEDOWN = "slidedown";
 	public String TRANSITION_FLIP = "flip";
+	public String TRANSITION_TURN = "turn";
+	public String TRANSITION_FLOW = "flow";
+	public String TRANSITION_SLIDEFADE = "slidefade";
+	public String TRANSITION_SLIDEDOWN = "slidedown";
+	public String TRANSITION_SLIDE = "slide";
+	public String TRANSITION_SLIDEUP = "slideup";
+	public String TRANSITION_NONE = "none";
+
 	public String DATA_REL_DIALOG = "dialog";
 	public String DATA_REL_POPUP = "popup";
 	public String DATA_REL_BACK = "back";
@@ -81,4 +90,5 @@ public interface JQueryConstants extends HTMLConstants {
 	public String EDITOR_ID_ICON_ONLY = "icon-only";
 	public String EDITOR_ID_ICON_POS = "icon-pos";
 	public String EDITOR_ID_INLINE = "inline";
+
 }

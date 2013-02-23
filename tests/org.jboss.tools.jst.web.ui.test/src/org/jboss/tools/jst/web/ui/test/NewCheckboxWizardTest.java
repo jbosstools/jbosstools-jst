@@ -20,6 +20,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCheckBoxWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCheckBoxWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
@@ -174,4 +176,34 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest {
 		editor.getSite().getPage().closeEditor(editor, false);
 	}
 
+	public void testNewLinkWizard() {
+		IEditorPart editor = openEditor("a.html");
+
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Link", true);
+		assertTrue(currentPage instanceof NewLinkWizardPage);
+
+		NewLinkWizardPage wizardPage = (NewLinkWizardPage)currentPage;
+		NewLinkWizard wizard = (NewLinkWizard)wizardPage.getWizard(); 
+
+		String label = wizardPage.getEditorValue(JQueryConstants.EDITOR_ID_LABEL);
+
+		wizardPage.getEditor(JQueryConstants.EDITOR_ID_ACTION).setValueAsString(WizardMessages.actionPopupLabel);
+		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_REL + "=\"" + JQueryConstants.DATA_REL_POPUP + "\"") > 0);
+		wizardPage.getEditor(JQueryConstants.EDITOR_ID_ACTION).setValueAsString("");
+		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_REL) < 0);
+
+		wizardPage.getEditor(JQueryConstants.EDITOR_ID_TRANSITION).setValueAsString(JQueryConstants.TRANSITION_FLIP);
+		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_TRANSITION + "=\"" + JQueryConstants.TRANSITION_FLIP + "\"") > 0);
+		wizardPage.getEditor(JQueryConstants.EDITOR_ID_ACTION).setValueAsString("");
+		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_REL) < 0);
+
+		wizard.performFinish();
+		WizardDialog dialog = (WizardDialog)wizard.getContainer();
+		dialog.close();
+
+		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
+		assertTrue(text.indexOf(label) > 0);
+
+		editor.getSite().getPage().closeEditor(editor, false);
+	}
 }

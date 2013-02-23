@@ -50,6 +50,9 @@ public class WizardMessages extends NLS {
 	public static String newButtonWizardTitle;
 	public static String newButtonWizardDescription;
 	
+	public static String newLinkWizardTitle;
+	public static String newLinkWizardDescription;
+	
 	public static String errorIDisUsed;
 	
 	static {
