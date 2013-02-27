@@ -44,16 +44,34 @@ public class NewToggleWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 		
 		createSeparator(parent);
 		
+		Composite[] columns = NewRangeSliderWizardPage.createTwoColumns(parent);
+		Composite left = columns[0];
+		Composite right = columns[1];
+
 		IFieldEditor mini = JQueryFieldEditorFactory.createMiniEditor();
-		addEditor(mini, parent);
+		addEditor(mini, left);
+
+		IFieldEditor disabled = JQueryFieldEditorFactory.createDisabledEditor();
+		addEditor(disabled, right);
+
+		IFieldEditor hideLabel = JQueryFieldEditorFactory.createHideLabelEditor();
+		addEditor(hideLabel, left);
 
 		IFieldEditor layout = JQueryFieldEditorFactory.createLayoutEditor();
-		addEditor(layout, parent);
+		addEditor(layout, right);
 		expandCombo(layout);
+
+		createSeparator(parent);
 
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
 		addEditor(theme, parent);
 		expandCombo(theme);
+
+		IFieldEditor trackTheme = JQueryFieldEditorFactory.createDataTrackThemeEditor();
+		addEditor(trackTheme, parent);
+		expandCombo(trackTheme);
+
+		requestWindowHeight(parent.getShell(), 20);
 	}
 
 	public void validate() throws ValidationException {

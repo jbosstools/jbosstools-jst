@@ -22,6 +22,8 @@ import org.eclipse.swt.SWTError;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.ShellAdapter;
+import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -201,11 +203,29 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		return !editors.containsKey(name) ? null : getEditor(name).getValueAsString();
 	}
 
+	public void setEditorValue(String name, String value) {
+		if(editors.containsKey(name)) {
+			getEditor(name).setValueAsString(value);
+		}
+	}
+
 	boolean isUpdating = false;
 	int updateRequest = 0;
 	
 	private synchronized void setUpdating(boolean b) {
 		isUpdating = b;
+	}
+
+	protected void requestWindowHeight(final Shell shell, int delta) {		
+		shell.addShellListener(new ShellAdapter() {
+			public void shellActivated(ShellEvent e) {
+				Rectangle r = shell.getBounds();
+				r.height += 90;
+				shell.setBounds(r);
+				shell.removeShellListener(this);
+			}
+		});
+		
 	}
 
 	@Override

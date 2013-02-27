@@ -806,5 +806,6 @@
       <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/3.Link" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/4.Flip_Toggle_Switch" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/6.Checkbox" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCheckBoxWizard"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/8.Range_Slider" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRangeSliderWizard"/>
    </extension>
 </plugin>

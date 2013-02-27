@@ -12,6 +12,7 @@ public class WizardMessages extends NLS {
 	public static String labelLabel;
 	public static String miniLabel;
 	public static String themeLabel;
+	public static String trackThemeLabel;
 	public static String numberedLabel;
 	public static String readonlyLabel;
 	public static String autodividersLabel;
@@ -34,6 +35,14 @@ public class WizardMessages extends NLS {
 	public static String actionPopupLabel;
 	public static String actionBackLabel;
 	public static String actionExternalLabel;
+	public static String rangeLabel;
+	public static String minLabel;
+	public static String maxLabel;
+	public static String stepLabel;
+	public static String valueLabel;
+	public static String rightValueLabel;
+	public static String highlightLabel;
+	public static String hideLabelLabel;
 
 	public static String newCheckboxWizardTitle;
 	public static String newCheckboxWizardDescription;
@@ -52,6 +61,9 @@ public class WizardMessages extends NLS {
 	
 	public static String newLinkWizardTitle;
 	public static String newLinkWizardDescription;
+
+	public static String newRangeSliderWizardTitle;
+	public static String newRangeSliderWizardDescription;
 	
 	public static String errorIDisUsed;
 	

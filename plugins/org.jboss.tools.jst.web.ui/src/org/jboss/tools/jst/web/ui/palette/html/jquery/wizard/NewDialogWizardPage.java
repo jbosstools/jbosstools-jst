@@ -10,11 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
-import org.eclipse.swt.events.ShellAdapter;
-import org.eclipse.swt.events.ShellEvent;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Shell;
 import org.jboss.tools.common.model.ui.editors.dnd.ValidationException;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
@@ -43,17 +39,7 @@ public class NewDialogWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 		IFieldEditor close = JQueryFieldEditorFactory.createCloseButtonEditor();
 		addEditor(close, parent);
 		
-		final Shell shell = parent.getShell();
-		
-		shell.addShellListener(new ShellAdapter() {
-			public void shellActivated(ShellEvent e) {
-				Rectangle r = shell.getBounds();
-				r.height += 100;
-				shell.setBounds(r);
-				shell.removeShellListener(this);
-			}
-		});
-		
+		requestWindowHeight(parent.getShell(), 100);
 	}
 
 	public void validate() throws ValidationException {

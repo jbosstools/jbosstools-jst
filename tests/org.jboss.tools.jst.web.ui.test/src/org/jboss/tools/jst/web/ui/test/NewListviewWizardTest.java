@@ -36,17 +36,17 @@ public class NewListviewWizardTest extends AbstractPaletteEntryTest {
 		NewListviewWizardPage wizardPage = (NewListviewWizardPage)currentPage;
 		NewListviewWizard wizard = (NewListviewWizard)wizardPage.getWizard();
 		
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_AUTODIVIDERS).setValueAsString("true");
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_AUTODIVIDERS, "true");
 		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_AUTODIVIDERS + "=\"true\"") > 0);
 
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_INSET).setValueAsString("true");
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_INSET, "true");
 		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_INSET + "=\"true\"") > 0);
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_INSET).setValueAsString("false");
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_INSET, "false");
 		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_INSET) < 0);
 
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_SEARCH_FILTER).setValueAsString("true");
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_SEARCH_FILTER, "true");
 		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_FILTER + "=\"true\"") > 0);
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_SEARCH_FILTER).setValueAsString("false");
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_SEARCH_FILTER, "false");
 		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_FILTER) < 0);
 
 		wizard.performFinish();

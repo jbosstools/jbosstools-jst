@@ -48,6 +48,7 @@ public interface HTMLConstants {
 	public String ATTR_METHOD = "method";
 	public String ATTR_CONTENT = "content";
 	public String ATTR_VALUE = "value";
+	public String ATTR_DISABLED = "disabled";
 
 	public String METHOD_GET = "get";
 }
