@@ -33,7 +33,6 @@ public class NewToggleWizard extends NewJQueryWidgetWizard<NewToggleWizardPage> 
 	}
 
 	protected void addContent(ElementNode parent) {
-		String themeValue = page.getEditorValue(EDITOR_ID_THEME);
 		String name = page.getEditorValue(EDITOR_ID_ID);
 		if(name == null || name.length() == 0) {
 			name = prefixName + generateIndex(prefixName, "", 1);
@@ -46,10 +45,16 @@ public class NewToggleWizard extends NewJQueryWidgetWizard<NewToggleWizardPage> 
 		String id = name;
 		ElementNode label = parent.addChild(TAG_LABEL, page.getEditorValue(EDITOR_ID_LABEL));
 		label.addAttribute(ATTR_FOR, id);
+		if(isTrue(EDITOR_ID_HIDE_LABEL)) {
+			label.addAttribute(ATTR_CLASS, CLASS_HIDDEN_ACCESSIBLE);
+		}
 		ElementNode select = parent.addChild(TAG_SELECT);
 		select.addAttribute(ATTR_NAME, name);
 		select.addAttribute(ATTR_ID, id);
 		select.addAttribute(ATTR_DATA_ROLE, ROLE_SLIDER);
+		if(isTrue(EDITOR_ID_DISABLED)) {
+			select.addAttribute(ATTR_DISABLED, ATTR_DISABLED);
+		}
 		if(isMini()) {
 			select.addAttribute(ATTR_DATA_MINI, "true");
 		}
@@ -57,8 +62,13 @@ public class NewToggleWizard extends NewJQueryWidgetWizard<NewToggleWizardPage> 
 		optionOff.addAttribute(ATTR_VALUE, "off");
 		ElementNode optionOn = select.addChild(TAG_OPTION, page.getEditorValue(EDITOR_ID_ON));
 		optionOn.addAttribute(ATTR_VALUE, "on");
+		String themeValue = page.getEditorValue(EDITOR_ID_THEME);
 		if(themeValue.length() > 0) {
 			select.addAttribute(ATTR_DATA_THEME, themeValue);
+		}
+		String trackThemeValue = page.getEditorValue(EDITOR_ID_TRACK_THEME);
+		if(trackThemeValue.length() > 0) {
+			select.addAttribute(ATTR_DATA_TRACK_THEME, trackThemeValue);
 		}
 	}
 

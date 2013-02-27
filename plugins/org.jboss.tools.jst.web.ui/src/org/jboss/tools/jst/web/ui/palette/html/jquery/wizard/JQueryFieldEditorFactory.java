@@ -30,9 +30,14 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_LABEL, WizardMessages.labelLabel, "");
 	}
 
+	static String[] THEMES = {"", "a", "b", "c", "d", "e"};
+
 	public static IFieldEditor createDataThemeEditor() {
-		String[] values = new String[]{"", "a", "b", "c", "d", "e"};
-		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_THEME, WizardMessages.themeLabel, toList(values), "", true);
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_THEME, WizardMessages.themeLabel, toList(THEMES), "", true);
+	}
+
+	public static IFieldEditor createDataTrackThemeEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_TRACK_THEME, WizardMessages.trackThemeLabel, toList(THEMES), "", true);
 	}
 
 	public static IFieldEditor createMiniEditor() {
@@ -125,6 +130,9 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_ACTION, WizardMessages.actionLabel, toList(values), "", true);
 	}
 
+	public static IFieldEditor createRangeEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_RANGE, WizardMessages.rangeLabel, false);
+	}
 
 	static String[] TRANSITION_LIST = {"", 
 		TRANSITION_FADE, TRANSITION_POP, TRANSITION_FLIP, TRANSITION_TURN, 
@@ -147,6 +155,34 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 				EDITOR_ID_CLOSE_BUTTON, 
 				WizardMessages.closeButtonPositionLabel, 
 				toList(CLOSE_BUTTON_LIST), "", false);
+	}
+
+	public static IFieldEditor createMinEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_MIN, WizardMessages.minLabel, "0");
+	}
+
+	public static IFieldEditor createMaxEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_MAX, WizardMessages.maxLabel, "100");
+	}
+
+	public static IFieldEditor createStepEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_STEP, WizardMessages.stepLabel, "");
+	}
+
+	public static IFieldEditor createValueEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_VALUE, WizardMessages.valueLabel, "40");
+	}
+
+	public static IFieldEditor createRightValueEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_RVALUE, WizardMessages.rightValueLabel, "60");
+	}
+
+	public static IFieldEditor createHighlightEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_HIGHLIGHT, WizardMessages.highlightLabel, true);
+	}
+
+	public static IFieldEditor createHideLabelEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_HIDE_LABEL, WizardMessages.hideLabelLabel, false);
 	}
 
 	static List<String> toList(String[] values) {

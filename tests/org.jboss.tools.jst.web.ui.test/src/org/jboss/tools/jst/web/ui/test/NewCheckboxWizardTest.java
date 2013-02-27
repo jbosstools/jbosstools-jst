@@ -22,8 +22,11 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRangeSliderWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRangeSliderWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizard;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -31,7 +34,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewCheckboxWizardTest extends AbstractPaletteEntryTest {
+public class NewCheckboxWizardTest extends AbstractPaletteEntryTest implements JQueryConstants {
 	
 	public NewCheckboxWizardTest() {}
 	
@@ -46,16 +49,16 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest {
 		NewCheckBoxWizard wizard = (NewCheckBoxWizard)wizardPage.getWizard();
 		
 		String label = "My Favorite Checkbox";
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_LABEL).setValue(label);
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_THEME).setValue("b");
+		wizardPage.setEditorValue(EDITOR_ID_LABEL, label);
+		wizardPage.setEditorValue(EDITOR_ID_THEME, "b");
 	
 		assertTrue(wizard.getTextForBrowser().indexOf(label) > 0);
 		assertTrue(wizard.getTextForTextView().indexOf(label) > 0);
 
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_MINI).setValueAsString("true");
-		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_MINI + "=\"true\"") > 0);
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_MINI).setValueAsString("false");
-		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_MINI) < 0);
+		wizardPage.setEditorValue(EDITOR_ID_MINI, "true");
+		assertTextExists(wizard, ATTR_DATA_MINI + "=\"true\"");
+		wizardPage.setEditorValue(EDITOR_ID_MINI, "false");
+		assertTextDoesNotExist(wizard, ATTR_DATA_MINI);
 
 		wizard.performFinish();
 		WizardDialog dialog = (WizardDialog)wizard.getContainer();
@@ -78,21 +81,21 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest {
 		NewToggleWizard wizard = (NewToggleWizard)wizardPage.getWizard();
 		
 		String label = "My Switch:";
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_LABEL).setValue(label);
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_THEME).setValue("b");
-	
-		assertTrue(wizard.getTextForBrowser().indexOf(label) > 0);
-		assertTrue(wizard.getTextForTextView().indexOf(label) > 0);
+		wizardPage.setEditorValue(EDITOR_ID_LABEL, label);
+		wizardPage.setEditorValue(EDITOR_ID_THEME, "b");
 
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_MINI).setValueAsString("true");
-		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_MINI + "=\"true\"") > 0);
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_MINI).setValueAsString("false");
-		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_MINI) < 0);
+		assertTextExists(wizard, label);
+		assertTrue(wizard.getTextForBrowser().indexOf(label) > 0);
+
+		wizardPage.setEditorValue(EDITOR_ID_MINI, TRUE);
+		assertTextExists(wizard, ATTR_DATA_MINI + "=\"true\"");
+		wizardPage.setEditorValue(EDITOR_ID_MINI, "false");
+		assertTextDoesNotExist(wizard, ATTR_DATA_MINI);
 		
-		assertEquals("Off", wizardPage.getEditorValue(JQueryConstants.EDITOR_ID_OFF));
-		assertEquals("On", wizardPage.getEditorValue(JQueryConstants.EDITOR_ID_ON));
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_OFF).setValueAsString("Off-1");
-		assertTrue(wizard.getTextForTextView().indexOf("Off-1") > 0);
+		assertEquals("Off", wizardPage.getEditorValue(EDITOR_ID_OFF));
+		assertEquals("On", wizardPage.getEditorValue(EDITOR_ID_ON));
+		wizardPage.setEditorValue(EDITOR_ID_OFF, "Off-1");
+		assertTextExists(wizard, "Off-1");
 
 		wizard.performFinish();
 		WizardDialog dialog = (WizardDialog)wizard.getContainer();
@@ -113,11 +116,11 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest {
 		NewDialogWizardPage wizardPage = (NewDialogWizardPage)currentPage;
 		NewDialogWizard wizard = (NewDialogWizard)wizardPage.getWizard(); 
 
-		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_CLOSE_BTN) < 0);
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_CLOSE_BUTTON).setValueAsString(JQueryConstants.CLOSE_RIGHT);
-		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_CLOSE_BTN + "=\"" + JQueryConstants.CLOSE_RIGHT + "\"") >= 0);
+		assertTrue(wizard.getTextForTextView().indexOf(ATTR_DATA_CLOSE_BTN) < 0);
+		wizardPage.setEditorValue(EDITOR_ID_CLOSE_BUTTON, CLOSE_RIGHT);
+		assertTrue(wizard.getTextForTextView().indexOf(ATTR_DATA_CLOSE_BTN + "=\"" + CLOSE_RIGHT + "\"") >= 0);
 
-		String title = wizardPage.getEditorValue(JQueryConstants.EDITOR_ID_TITLE);
+		String title = wizardPage.getEditorValue(EDITOR_ID_TITLE);
 
 		wizard.performFinish();
 		WizardDialog dialog = (WizardDialog)wizard.getContainer();
@@ -137,34 +140,34 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest {
 		NewButtonWizardPage wizardPage = (NewButtonWizardPage)currentPage;
 		NewButtonWizard wizard = (NewButtonWizard)wizardPage.getWizard(); 
 
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_MINI).setValueAsString("true");
-		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_MINI + "=\"true\"") > 0);
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_MINI).setValueAsString("false");
-		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_MINI) < 0);
+		wizardPage.setEditorValue(EDITOR_ID_MINI, TRUE);
+		assertTrue(wizard.getTextForTextView().indexOf(ATTR_DATA_MINI + "=\"true\"") > 0);
+		wizardPage.setEditorValue(EDITOR_ID_MINI, "false");
+		assertTrue(wizard.getTextForTextView().indexOf(ATTR_DATA_MINI) < 0);
 
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_DISABLED).setValueAsString("true");
-		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_CLASS + "=\"ui-disabled\"") > 0);
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_DISABLED).setValueAsString("false");
-		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_CLASS) < 0);
+		wizardPage.setEditorValue(EDITOR_ID_DISABLED, TRUE);
+		assertTrue(wizard.getTextForTextView().indexOf(ATTR_CLASS + "=\"ui-disabled\"") > 0);
+		wizardPage.setEditorValue(EDITOR_ID_DISABLED, "false");
+		assertTrue(wizard.getTextForTextView().indexOf(ATTR_CLASS) < 0);
 
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_INLINE).setValueAsString("true");
-		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_INLINE + "=\"true\"") > 0);
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_INLINE).setValueAsString("false");
-		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_INLINE) < 0);
+		wizardPage.setEditorValue(EDITOR_ID_INLINE, TRUE);
+		assertTrue(wizard.getTextForTextView().indexOf(ATTR_DATA_INLINE + "=\"true\"") > 0);
+		wizardPage.setEditorValue(EDITOR_ID_INLINE, "false");
+		assertTrue(wizard.getTextForTextView().indexOf(ATTR_DATA_INLINE) < 0);
 
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_ICON_ONLY).setValueAsString("true");
-		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_ICONPOS + "=\"notext\"") > 0);
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_ICON_POS).setValueAsString("arrow-r");
-		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_ICONPOS + "=\"notext\"") > 0);
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_ICON_ONLY).setValueAsString("false");
-		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_ICONPOS + "=\"arrow-r\"") > 0);
+		wizardPage.setEditorValue(EDITOR_ID_ICON_ONLY, TRUE);
+		assertTrue(wizard.getTextForTextView().indexOf(ATTR_DATA_ICONPOS + "=\"notext\"") > 0);
+		wizardPage.setEditorValue(EDITOR_ID_ICON_POS, "arrow-r");
+		assertTrue(wizard.getTextForTextView().indexOf(ATTR_DATA_ICONPOS + "=\"notext\"") > 0);
+		wizardPage.setEditorValue(EDITOR_ID_ICON_ONLY, "false");
+		assertTrue(wizard.getTextForTextView().indexOf(ATTR_DATA_ICONPOS + "=\"arrow-r\"") > 0);
 
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_ACTION).setValueAsString(WizardMessages.actionDialogLabel);
-		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_REL + "=\"" + JQueryConstants.DATA_REL_DIALOG + "\"") > 0);
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_ACTION).setValueAsString("");
-		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_REL) < 0);
+		wizardPage.setEditorValue(EDITOR_ID_ACTION, WizardMessages.actionDialogLabel);
+		assertTrue(wizard.getTextForTextView().indexOf(ATTR_DATA_REL + "=\"" + DATA_REL_DIALOG + "\"") > 0);
+		wizardPage.setEditorValue(EDITOR_ID_ACTION, "");
+		assertTrue(wizard.getTextForTextView().indexOf(ATTR_DATA_REL) < 0);
 
-		String label = wizardPage.getEditorValue(JQueryConstants.EDITOR_ID_LABEL);
+		String label = wizardPage.getEditorValue(EDITOR_ID_LABEL);
 
 		wizard.performFinish();
 		WizardDialog dialog = (WizardDialog)wizard.getContainer();
@@ -185,17 +188,17 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest {
 		NewLinkWizardPage wizardPage = (NewLinkWizardPage)currentPage;
 		NewLinkWizard wizard = (NewLinkWizard)wizardPage.getWizard(); 
 
-		String label = wizardPage.getEditorValue(JQueryConstants.EDITOR_ID_LABEL);
+		String label = wizardPage.getEditorValue(EDITOR_ID_LABEL);
 
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_ACTION).setValueAsString(WizardMessages.actionPopupLabel);
-		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_REL + "=\"" + JQueryConstants.DATA_REL_POPUP + "\"") > 0);
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_ACTION).setValueAsString("");
-		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_REL) < 0);
+		wizardPage.setEditorValue(EDITOR_ID_ACTION, WizardMessages.actionPopupLabel);
+		assertTrue(wizard.getTextForTextView().indexOf(ATTR_DATA_REL + "=\"" + DATA_REL_POPUP + "\"") > 0);
+		wizardPage.setEditorValue(EDITOR_ID_ACTION, "");
+		assertTrue(wizard.getTextForTextView().indexOf(ATTR_DATA_REL) < 0);
 
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_TRANSITION).setValueAsString(JQueryConstants.TRANSITION_FLIP);
-		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_TRANSITION + "=\"" + JQueryConstants.TRANSITION_FLIP + "\"") > 0);
-		wizardPage.getEditor(JQueryConstants.EDITOR_ID_ACTION).setValueAsString("");
-		assertTrue(wizard.getTextForTextView().indexOf(JQueryConstants.ATTR_DATA_REL) < 0);
+		wizardPage.setEditorValue(EDITOR_ID_TRANSITION, TRANSITION_FLIP);
+		assertTrue(wizard.getTextForTextView().indexOf(ATTR_DATA_TRANSITION + "=\"" + TRANSITION_FLIP + "\"") > 0);
+		wizardPage.setEditorValue(EDITOR_ID_ACTION, "");
+		assertTrue(wizard.getTextForTextView().indexOf(ATTR_DATA_REL) < 0);
 
 		wizard.performFinish();
 		WizardDialog dialog = (WizardDialog)wizard.getContainer();
@@ -206,4 +209,73 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest {
 
 		editor.getSite().getPage().closeEditor(editor, false);
 	}
+
+	public void testNewRangeSliderWizard() {
+		IEditorPart editor = openEditor("a.html");
+
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Range Slider", true);
+
+		assertTrue(currentPage instanceof NewRangeSliderWizardPage);
+
+		NewRangeSliderWizardPage wizardPage = (NewRangeSliderWizardPage)currentPage;
+		NewRangeSliderWizard wizard = (NewRangeSliderWizard)wizardPage.getWizard();
+		
+		String label = "My Switch:";
+		wizardPage.setEditorValue(EDITOR_ID_LABEL, label);
+		wizardPage.setEditorValue(EDITOR_ID_THEME, "b");
+	
+		assertTrue(wizard.getTextForBrowser().indexOf(label) > 0);
+		assertTrue(wizard.getTextForTextView().indexOf(label) > 0);
+
+		wizardPage.setEditorValue(EDITOR_ID_MINI, TRUE);
+		assertTextExists(wizard, ATTR_DATA_MINI + "=\"true\"");
+		wizardPage.setEditorValue(EDITOR_ID_MINI, "false");
+		assertTextDoesNotExist(wizard, ATTR_DATA_MINI);
+
+		assertTextExists(wizard, ATTR_DATA_MIN + "=\"0\"");
+		wizardPage.setEditorValue(EDITOR_ID_MIN, "10");
+		assertTextExists(wizard, ATTR_DATA_MIN + "=\"10\"");
+
+		assertTextExists(wizard, ATTR_DATA_MAX + "=\"100\"");
+		wizardPage.setEditorValue(EDITOR_ID_MAX, "200");
+		assertTextExists(wizard, ATTR_DATA_MAX + "=\"200\"");
+
+		assertTextDoesNotExist(wizard, ATTR_DATA_STEP);
+		wizardPage.setEditorValue(EDITOR_ID_STEP, "2");
+		assertTextExists(wizard, ATTR_DATA_STEP + "=\"2\"");
+
+		assertTextExists(wizard, ATTR_DATA_VALUE + "=\"40\"");
+		wizardPage.setEditorValue(EDITOR_ID_VALUE, "50");
+		assertTextExists(wizard, ATTR_DATA_VALUE + "=\"50\"");
+
+		assertTextDoesNotExist(wizard, ATTR_DATA_VALUE + "=\"60\"");
+		wizardPage.setEditorValue(EDITOR_ID_RANGE, TRUE);
+		assertTextExists(wizard, ATTR_DATA_VALUE + "=\"60\"");
+
+		assertTrue(wizard.getTextForTextView().indexOf(ATTR_DISABLED) < 0);
+		wizardPage.setEditorValue(EDITOR_ID_DISABLED, TRUE);
+		assertTrue(wizard.getTextForTextView().indexOf(ATTR_DISABLED + "=\"disabled\"") > 0);
+
+		assertTrue(wizard.getTextForTextView().indexOf(CLASS_HIDDEN_ACCESSIBLE) < 0);
+		wizardPage.setEditorValue(EDITOR_ID_HIDE_LABEL, TRUE);
+		assertTrue(wizard.getTextForTextView().indexOf(CLASS_HIDDEN_ACCESSIBLE) > 0);
+
+		wizard.performFinish();
+		WizardDialog dialog = (WizardDialog)wizard.getContainer();
+		dialog.close();
+
+		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
+		assertTrue(text.indexOf(label) > 0);
+		
+		editor.getSite().getPage().closeEditor(editor, false);
+	}
+
+	void assertTextExists(AbstractNewHTMLWidgetWizard wizard, String text) {
+		assertTrue(wizard.getTextForTextView().indexOf(text) > 0);
+	}
+
+	void assertTextDoesNotExist(AbstractNewHTMLWidgetWizard wizard, String text) {
+		assertTrue(wizard.getTextForTextView().indexOf(text) < 0);
+	}
+
 }
