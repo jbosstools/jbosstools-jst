@@ -70,8 +70,10 @@ public class NewToggleWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 		IFieldEditor trackTheme = JQueryFieldEditorFactory.createDataTrackThemeEditor();
 		addEditor(trackTheme, parent);
 		expandCombo(trackTheme);
+	}
 
-		requestWindowHeight(parent.getShell(), 20);
+	protected int getAdditionalHeight() {
+		return 20;
 	}
 
 	public void validate() throws ValidationException {

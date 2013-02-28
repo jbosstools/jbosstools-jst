@@ -22,8 +22,6 @@ import org.eclipse.swt.SWTError;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.events.ShellAdapter;
-import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -96,7 +94,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		showPreviewButton.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				flipPreview();
+				flipPreview(false);
 			}
 			
 			@Override
@@ -154,7 +152,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		setControl(panel);
 		setVisible(true);
 		runValidation();
-		flipPreview();
+		flipPreview(true);
 //		parent.pack(true);
 	}
 
@@ -216,16 +214,8 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		isUpdating = b;
 	}
 
-	protected void requestWindowHeight(final Shell shell, int delta) {		
-		shell.addShellListener(new ShellAdapter() {
-			public void shellActivated(ShellEvent e) {
-				Rectangle r = shell.getBounds();
-				r.height += 90;
-				shell.setBounds(r);
-				shell.removeShellListener(this);
-			}
-		});
-		
+	protected int getAdditionalHeight() {
+		return 0;
 	}
 
 	@Override
@@ -272,7 +262,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		}
 	}
 
-	void flipPreview() {
+	void flipPreview(boolean first) {
 		if(previewPanel == null || previewPanel.isDisposed()) {
 			return;
 		}
@@ -284,7 +274,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 			previewPanel.setLayoutData(d);
 			d = new GridData(GridData.FILL_BOTH);
 			left.setLayoutData(d);
-			updatePreviewPanel(false);
+			updatePreviewPanel(false, first);
 		} else {
 			showPreviewButton.setText(WizardMessages.hidePreviewButtonText);
 			GridData d = new GridData(GridData.FILL_VERTICAL);
@@ -295,14 +285,14 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 			d.minimumWidth = delta;
 			previewPanel.setLayoutData(d);
 			previewPanel.setVisible(true);
-			updatePreviewPanel(true);
+			updatePreviewPanel(true, first);
 		}
 	}
 	
 	int lastHideShellWidth = -1;
 	int lastShowShellWidth = -1;
 
-	private void updatePreviewPanel(boolean show) {
+	private void updatePreviewPanel(boolean show, boolean first) {
 		previewPanel.update();
 		previewPanel.layout();
 		Shell shell = previewPanel.getShell();
@@ -314,7 +304,16 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		}
 		int width = (show) ? (lastShowShellWidth < 0 ? r.width + 300 : lastShowShellWidth) : 
 			(lastHideShellWidth < 0 ? r.width - 300 : lastHideShellWidth);
-		shell.setBounds(new Rectangle(r.x, r.y, width, r.height));
+		if(first) {
+			int dh = getAdditionalHeight();
+			if(dh > 0) {
+				r.y -= dh / 2;
+				r.height += dh;
+			}
+			r.x -= (width - r.width) / 2;
+		}
+		r.width = width;
+		shell.setBounds(r);
 		shell.update();
 		shell.layout();
 	}
