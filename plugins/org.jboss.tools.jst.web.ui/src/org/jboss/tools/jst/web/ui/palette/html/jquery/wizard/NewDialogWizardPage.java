@@ -38,8 +38,10 @@ public class NewDialogWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 
 		IFieldEditor close = JQueryFieldEditorFactory.createCloseButtonEditor();
 		addEditor(close, parent);
-		
-		requestWindowHeight(parent.getShell(), 100);
+	}
+
+	protected int getAdditionalHeight() {
+		return 100;
 	}
 
 	public void validate() throws ValidationException {

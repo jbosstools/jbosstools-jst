@@ -69,8 +69,10 @@ public class NewButtonWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
 		addEditor(theme, parent);
 		expandCombo(theme);
+	}
 
-		requestWindowHeight(parent.getShell(), 90);
+	protected int getAdditionalHeight() {
+		return 90;
 	}
 
 	public void validate() throws ValidationException {

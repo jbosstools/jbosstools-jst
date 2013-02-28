@@ -83,8 +83,10 @@ public class NewRangeSliderWizardPage extends AbstractNewHTMLWidgetWizardPage im
 		IFieldEditor trackTheme = JQueryFieldEditorFactory.createDataTrackThemeEditor();
 		addEditor(trackTheme, parent);
 		expandCombo(trackTheme);
+	}
 
-		requestWindowHeight(parent.getShell(), 60);
+	protected int getAdditionalHeight() {
+		return 60;
 	}
 
 	public void validate() throws ValidationException {
