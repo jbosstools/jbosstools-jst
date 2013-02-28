@@ -25,9 +25,10 @@ public class JstWebUiAllTests {
 	public static Test suite() {
 		TestSuite suite = new TestSuite(JstWebUiAllTests.class.getName());
 
-		TestSuite s = new TestSuite(NewCheckboxWizardTest.class.getName());
+		TestSuite s = new TestSuite("Palette content");
 		s.addTestSuite(NewListviewWizardTest.class);
 		s.addTestSuite(NewCheckboxWizardTest.class);
+		s.addTestSuite(PaletteContentsTest.class);
 		suite.addTest(
 				new ProjectImportTestSetup(s,
 				"org.jboss.tools.jst.web.ui.test",
