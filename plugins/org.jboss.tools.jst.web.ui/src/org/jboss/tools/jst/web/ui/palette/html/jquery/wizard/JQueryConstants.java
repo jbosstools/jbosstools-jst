@@ -38,6 +38,7 @@ public interface JQueryConstants extends HTMLConstants {
 	public String ATTR_DATA_VALUE = "value";
 
 	public String TRUE = "true";
+	public String FALSE = "false";
 	public String TYPE_CHECKBOX = "checkbox";
 	public String TYPE_RANGE = "range";
 
@@ -53,6 +54,7 @@ public interface JQueryConstants extends HTMLConstants {
 	public String ROLE_BUTTON = "button";
 	public String ROLE_DIALOG = "dialog";
 	public String ROLE_HEADER = "header";
+	public String ROLE_FOOTER = "footer";
 
 	public String LAYOUT_HORIZONTAL = "Horizontal";
 	public String LAYOUT_VERTICAL = "Vertical";
@@ -111,5 +113,9 @@ public interface JQueryConstants extends HTMLConstants {
 	public String EDITOR_ID_RVALUE = "right-value";
 	public String EDITOR_ID_HIGHLIGHT = "highlight";
 	public String EDITOR_ID_HIDE_LABEL = "hide-label";
+	public String EDITOR_ID_ADD_HEADER = "add-header";
+	public String EDITOR_ID_HEADER_TITLE = "header-title";
+	public String EDITOR_ID_ADD_FOOTER = "add-footer";
+	public String EDITOR_ID_FOOTER_TITLE = "footer-title";
 
 }
