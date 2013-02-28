@@ -148,8 +148,10 @@ public class PaletteAdapter implements IPaletteAdapter {
 		descriptionManager = new DescriptionManager(viewer);
 		descriptionManager.install(palette);
 
-		dropManager = new DropTargetManager(viewer, model); 
-		dropManager.install(palette);
+		if(isJSF()){
+			dropManager = new DropTargetManager(viewer, model); 
+			dropManager.install(palette);
+		}
 
 		modelListener = new PaletteModelListener();
 		model.addModelTreeListener(modelListener);
@@ -167,7 +169,9 @@ public class PaletteAdapter implements IPaletteAdapter {
 	
 	public void dispose() {
 		model.removeModelTreeListener(modelListener);
-		dropManager.dispose();
+		if(isJSF()){
+			dropManager.dispose();
+		}
 		descriptionManager.dispose();
 		viewPart.getActionBars().getToolBarManager().removeAll();
 		viewer = null;
