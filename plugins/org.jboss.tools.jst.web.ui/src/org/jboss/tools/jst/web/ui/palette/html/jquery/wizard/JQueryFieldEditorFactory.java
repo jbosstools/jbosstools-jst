@@ -13,6 +13,12 @@ package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Text;
+import org.jboss.tools.common.ui.widget.editor.CheckBoxFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.CompositeEditor;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.SwtFieldEditorFactory;
@@ -191,4 +197,47 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return list;
 	}
 
+	public static IFieldEditor createAddHeaderEditor() {
+		return createCheckboxEditor(EDITOR_ID_ADD_HEADER, WizardMessages.headerLabel, true, 1);
+	}
+
+	public static IFieldEditor createAddFooterEditor() {
+		return createCheckboxEditor(EDITOR_ID_ADD_FOOTER, WizardMessages.footerLabel, true, 1);
+	}
+
+	public static IFieldEditor createHeaderTitleEditor() {
+		return createTextEditor(EDITOR_ID_HEADER_TITLE, "Page Title", 2);
+	}
+
+	public static IFieldEditor createFooterTitleEditor() {
+		return createTextEditor(EDITOR_ID_FOOTER_TITLE, "Page Footer", 2);
+	}
+
+	public static IFieldEditor createCheckboxEditor(String name, final String label, boolean defaultValue, final int span) {
+		return new CheckBoxFieldEditor(name,label,Boolean.valueOf(defaultValue)){
+			public void doFillIntoGrid(Object parent) {
+				Composite c = (Composite) parent;
+				final Control[] controls = (Control[]) getEditorControls(c);
+				Button button = (Button)controls[0];
+				button.setText(label);
+				GridData d = new GridData();
+				d.horizontalSpan = span;
+				button.setLayoutData(d);
+			}
+		};
+	}
+
+	public static IFieldEditor createTextEditor(String name, String defaultValue, final int span) {
+		return new TextFieldEditor(name,"",defaultValue) {
+			public void doFillIntoGrid(Object parent) {
+				Composite c = (Composite) parent;
+				final Control[] controls = (Control[]) getEditorControls(c);
+				Text text = (Text)controls[0];
+				GridData d = new GridData(GridData.FILL_HORIZONTAL);
+				d.horizontalSpan = span;
+				text.setLayoutData(d);
+			}
+		};
+	}
 }
+

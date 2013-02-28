@@ -33,7 +33,7 @@ public class NewRangeSliderWizardPage extends AbstractNewHTMLWidgetWizardPage im
 
 	protected void createFieldPanel(Composite parent) {
 		IFieldEditor label = JQueryFieldEditorFactory.createLabelEditor();
-		label.setValue("Rangeslider:");
+		label.setValue("Slider:");
 		addEditor(label, parent);
 
 		IFieldEditor id = JQueryFieldEditorFactory.createIDEditor();
