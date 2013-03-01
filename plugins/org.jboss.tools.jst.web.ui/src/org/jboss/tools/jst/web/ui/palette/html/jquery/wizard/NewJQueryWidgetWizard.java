@@ -14,19 +14,36 @@ import java.io.File;
 
 import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizard;
+import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 
 /**
  * 
  * @author Viacheslav Kabanovich
  *
  */
-public class NewJQueryWidgetWizard extends AbstractNewHTMLWidgetWizard implements JQueryConstants {
+public abstract class NewJQueryWidgetWizard<P extends AbstractNewHTMLWidgetWizardPage> extends AbstractNewHTMLWidgetWizard implements JQueryConstants {
+	protected P page;
 
 	public NewJQueryWidgetWizard() {
 	}
 
+	protected void doAddPages() {
+		page = createPage();
+		addPage(page);
+	}
+
+	protected abstract P createPage(); 
+
+	protected boolean isTrue(String editorID) {
+		return "true".equals(page.getEditorValue(editorID));
+	}
+
+	protected boolean isMini() {
+		return isTrue(EDITOR_ID_MINI);
+	}
+
 	@Override
-	protected String getTextForBrowser() {
+	public String getTextForBrowser() {
 		ElementNode html = new ElementNode(TAG_HTML, false);
 		createHead(html);
 		createBodyForBrowser(html.addChild(TAG_BODY));
@@ -36,6 +53,7 @@ public class NewJQueryWidgetWizard extends AbstractNewHTMLWidgetWizard implement
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(DOCTYPE).append("\n").append(w.getText());
+
 		return sb.toString();
 	}
 
@@ -52,7 +70,7 @@ public class NewJQueryWidgetWizard extends AbstractNewHTMLWidgetWizard implement
 		page.addAttribute(ATTR_DATA_ROLE, ROLE_PAGE);
 		page.addAttribute(ATTR_ID, "jbt");
 		ElementNode content = page.addChild(TAG_DIV);
-		page.addAttribute(ATTR_DATA_ROLE, ROLE_CONTENT);
+		content.addAttribute(ATTR_DATA_ROLE, ROLE_CONTENT);
 		return content;
 	}
 

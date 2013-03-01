@@ -93,10 +93,12 @@ public class PaletteDragSourceListener extends DragSourceAdapter {
 	}
 	
 	XModelObject getObject(Object part) {
-		if(part instanceof ToolEntryEditPart) {
+		if(part instanceof PaletteEditPart) {
 			PaletteEditPart entry = (PaletteEditPart)part;
-			PaletteItem item = (PaletteItem)entry.getModel();
-			return item.getXModelObject();
+			Object item = entry.getModel();
+			if(item instanceof PaletteItem) {
+				return ((PaletteItem)item).getXModelObject();
+			}
 		} else {
 			if(ModelPlugin.isDebugEnabled()){
 				// TODO Should be replaced with trace in future

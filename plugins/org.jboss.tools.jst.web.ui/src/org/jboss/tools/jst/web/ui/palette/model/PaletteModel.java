@@ -29,8 +29,8 @@ import org.jboss.tools.common.model.ui.views.palette.PaletteContents;
 import org.jboss.tools.common.model.ui.views.palette.editor.PaletteEditor;
 
 public class PaletteModel {
-	static String TYPE_MOBILE = "mobile"; //$NON-NLS-1$
-	static String TYPE_JSF = "jsf"; //$NON-NLS-1$
+	public static String TYPE_MOBILE = "mobile"; //$NON-NLS-1$
+	public static String TYPE_JSF = "jsf"; //$NON-NLS-1$
 	
 	private static Map<String, PaletteModel> instances = new HashMap<String, PaletteModel>();
 	private static Object monitor = new Object();
@@ -40,6 +40,10 @@ public class PaletteModel {
 	private String type = TYPE_MOBILE;
 
 	private PaletteModel() {
+	}
+	
+	public String getType(){
+		return type;
 	}
 
 	public static final PaletteModel getInstance(PaletteContents contents) {

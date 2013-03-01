@@ -10,33 +10,26 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
-import org.jboss.tools.common.model.ui.ModelUIImages;
 import org.jboss.tools.common.model.ui.editors.dnd.DropWizardMessages;
-import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizard.ElementNode;
+import org.jboss.tools.jst.web.ui.JSTWebUIImages;
 
 /**
  * 
  * @author Viacheslav Kabanovich
  *
  */
-public class NewCheckBoxWizard extends NewJQueryWidgetWizard implements JQueryConstants {
+public class NewCheckBoxWizard extends NewJQueryWidgetWizard<NewCheckBoxWizardPage> implements JQueryConstants {
 	static String prefixName = "checkbox-";
 	static String prefixMiniId = "checkbox-mini-";
-	NewCheckBoxWizardPage page;
 
 	public NewCheckBoxWizard() {
 		setWindowTitle(DropWizardMessages.Wizard_Window_Title);
-		setDefaultPageImageDescriptor(ModelUIImages
-				.getImageDescriptor(ModelUIImages.WIZARD_DEFAULT));
+		setDefaultPageImageDescriptor(JSTWebUIImages.getInstance()
+				.getOrCreateImageDescriptor(JSTWebUIImages.CHECKBOX_IMAGE));
 	}
 
-	protected void doAddPages() {
-		page = new NewCheckBoxWizardPage();
-		addPage(page);
-	}
-
-	boolean isMini() {
-		return "true".equals(page.getEditorValue(EDITOR_ID_MINI));
+	protected NewCheckBoxWizardPage createPage() {
+		return new NewCheckBoxWizardPage();
 	}
 
 	protected void addContent(ElementNode parent) {

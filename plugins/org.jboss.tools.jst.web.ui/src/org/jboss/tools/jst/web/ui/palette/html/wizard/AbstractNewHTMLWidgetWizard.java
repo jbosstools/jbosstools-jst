@@ -99,7 +99,7 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 	 * Should be overrided to provide required environment for widget. 
 	 * @return
 	 */
-	protected String getTextForBrowser() {
+	public String getTextForBrowser() {
 		ElementNode html = new ElementNode(TAG_HTML, false);
 		ElementNode body = html.addChild(TAG_BODY);
 		addContent(body);
@@ -108,7 +108,7 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 		return sb.getText();
 	}
 
-	protected String getTextForTextView() {
+	public String getTextForTextView() {
 		ElementNode root = createRoot();
 		addContent(root);
 		NodeWriter sb = new NodeWriter(false);
@@ -119,6 +119,10 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 	public void setCommand(IDropCommand command) {
 		this.command = command;
 		collectAllIDs();
+	}
+
+	public boolean isIDAvailable(String id) {
+		return !ids.contains(id);
 	}
 
 	@Override
@@ -293,6 +297,10 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 			children.add(c);
 			empty = false;
 			return c;
+		}
+	
+		public List<ElementNode> getChildren() {
+			return children;
 		}
 		 
 		public void flush(NodeWriter sb, int indent) {

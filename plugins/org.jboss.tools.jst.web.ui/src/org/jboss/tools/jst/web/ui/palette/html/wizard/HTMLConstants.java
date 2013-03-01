@@ -26,9 +26,14 @@ public interface HTMLConstants {
 	public String TAG_BODY = "body";
 	public String TAG_DIV = "div";
 	public String TAG_FORM = "form";
-	
+	public String TAG_OL = "ol";
+	public String TAG_UL = "ul";
+	public String TAG_LI = "li";
+	public String TAG_A = "a";
 	public String TAG_INPUT = "input";
 	public String TAG_LABEL = "label";
+	public String TAG_SELECT = "select";
+	public String TAG_OPTION = "option";
 
 	public String ATTR_TYPE = "type";
 	public String ATTR_NAME = "name";
@@ -42,6 +47,8 @@ public interface HTMLConstants {
 	public String ATTR_ACTION = "action";
 	public String ATTR_METHOD = "method";
 	public String ATTR_CONTENT = "content";
+	public String ATTR_VALUE = "value";
+	public String ATTR_DISABLED = "disabled";
 
 	public String METHOD_GET = "get";
 }

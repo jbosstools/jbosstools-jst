@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2007-2010 Exadel, Inc. and Red Hat, Inc.
+ * Copyright (c) 2007-2013 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
+ *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 package org.jboss.tools.jst.css.dialog.selector.model;
 
@@ -68,8 +68,11 @@ public class CSSJSPRecognizer {
 		java.util.List<CSSRuleList> cssRuleLists = new ArrayList<CSSRuleList>(0);
 		styleSheets = new ArrayList<CSSStyleSheet>(0);
 		for (int i = 0; i < descrs.size(); i++) {
-			styleSheets.add(descrs.get(i).sheet);
-			cssRuleLists.add(descrs.get(i).sheet.getCssRules());
+			CSSStyleSheet sheet = descrs.get(i).getStylesheet();
+			if (sheet != null) {
+				styleSheets.add(sheet);
+				cssRuleLists.add(sheet.getCssRules());
+			}
 		}
 		if (cssRuleLists.size() == 0) {
 			return null;

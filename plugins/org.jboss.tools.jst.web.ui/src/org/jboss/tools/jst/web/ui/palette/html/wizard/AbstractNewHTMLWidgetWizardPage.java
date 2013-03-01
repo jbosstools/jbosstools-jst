@@ -22,11 +22,14 @@ import org.eclipse.swt.SWTError;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.ShellAdapter;
+import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -55,6 +58,10 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 	public AbstractNewHTMLWidgetWizardPage(String pageName, String title, ImageDescriptor titleImage) {
 		super(pageName, title, titleImage);
 	}
+
+    public AbstractNewHTMLWidgetWizard getWizard() {
+        return (AbstractNewHTMLWidgetWizard)super.getWizard();
+    }
 
 	@Override
 	public void createControl(Composite parent) {
@@ -106,13 +113,31 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		previewPanel.setLayoutData(d);
 		previewPanel.setLayout(new GridLayout());
 		
-		text = new Text(previewPanel, SWT.MULTI | SWT.READ_ONLY | SWT.BORDER);
+		text = new Text(previewPanel, SWT.MULTI | SWT.READ_ONLY | SWT.BORDER | SWT.V_SCROLL);
 		text.setLayoutData(new GridData(GridData.FILL_BOTH));
 			text.setText("<html><body>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</body></html>");
+
+		/*
+		//We can provide webkit in this way
+		String property = "org.eclipse.swt.browser.DefaultType";
+		String defaultBrowser = System.getProperty(property);
+		boolean hasDefaultBrowser = defaultBrowser != null;
+		System.getProperties().setProperty(property, "webkit");
+		*/
+
 		try {
-			browser = new Browser(previewPanel, SWT.READ_ONLY | SWT.BORDER | SWT.MOZILLA | SWT.NO_SCROLL);
-		} catch (SWTError e) {
-			browser = new Browser(previewPanel, SWT.READ_ONLY | SWT.BORDER | SWT.WEBKIT | SWT.NO_SCROLL);
+			try {
+				browser = new Browser(previewPanel, SWT.READ_ONLY | SWT.BORDER | SWT.MOZILLA | SWT.NO_SCROLL);
+			} catch (SWTError e) {
+				browser = new Browser(previewPanel, SWT.READ_ONLY | SWT.BORDER | SWT.WEBKIT | SWT.NO_SCROLL);
+			}
+		} finally {
+			/*
+			//Use if system property was modified
+			if(hasDefaultBrowser) {
+				System.getProperties().setProperty(property, defaultBrowser);
+			}
+			*/
 		}
 //		browser.setLayoutData(new GridData(GridData.FILL_BOTH));
 		GridData gridData = new GridData();
@@ -122,6 +147,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		gridData.grabExcessVerticalSpace = true;
 		browser.setLayoutData(gridData);
 		browser.pack();
+		previewPanel.setWeights(new int[]{4,6});
 		
 		updatePreviewContent();
 
@@ -129,6 +155,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		setVisible(true);
 		runValidation();
 		flipPreview();
+//		parent.pack(true);
 	}
 
 	/**
@@ -142,12 +169,44 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		editors.put(editor.getName(), editor);
 	}
 
+	public void addEditor(IFieldEditor editor, Composite parent) {
+		editor.doFillIntoGrid(parent);
+		editor.addPropertyChangeListener(this);
+		addEditor(editor);
+	}
+
+	public void createSeparator(Composite parent) {
+		Label separator = new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL);
+		GridData sd = new GridData(GridData.FILL_HORIZONTAL);
+		sd.horizontalSpan = 3;
+		separator.setLayoutData(sd);
+	}
+
+	/**
+	 * Utility method expanding combo
+	 * @param name
+	 * @return
+	 */
+	protected void expandCombo(IFieldEditor editor) {
+		Control c = (Control) (editor.getEditorControls()[1]);
+		GridData d = (GridData)c.getLayoutData();
+		d.horizontalAlignment = SWT.FILL;
+		d.grabExcessHorizontalSpace = true;
+		c.setLayoutData(d);
+	}
+
 	public IFieldEditor getEditor(String name) {
 		return editors.get(name);
 	}
 
 	public String getEditorValue(String name) {
-		return getEditor(name).getValueAsString();
+		return !editors.containsKey(name) ? null : getEditor(name).getValueAsString();
+	}
+
+	public void setEditorValue(String name, String value) {
+		if(editors.containsKey(name)) {
+			getEditor(name).setValueAsString(value);
+		}
 	}
 
 	boolean isUpdating = false;
@@ -155,6 +214,18 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 	
 	private synchronized void setUpdating(boolean b) {
 		isUpdating = b;
+	}
+
+	protected void requestWindowHeight(final Shell shell, int delta) {		
+		shell.addShellListener(new ShellAdapter() {
+			public void shellActivated(ShellEvent e) {
+				Rectangle r = shell.getBounds();
+				r.height += 90;
+				shell.setBounds(r);
+				shell.removeShellListener(this);
+			}
+		});
+		
 	}
 
 	@Override
@@ -249,9 +320,8 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 	}
 
 	protected void updatePreviewContent() {
-		AbstractNewHTMLWidgetWizard wizard = ((AbstractNewHTMLWidgetWizard)getWizard());
-		text.setText(formatText(wizard.getTextForTextView()));
-		browser.setText(wizard.getTextForBrowser());
+		text.setText(formatText(getWizard().getTextForTextView()));
+		browser.setText(getWizard().getTextForBrowser());
 	}
 
 	protected String formatText(String text) {

@@ -12,9 +12,8 @@ package org.jboss.tools.jst.web.ui.palette;
 
 import java.util.List;
 
-import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Clickable;
-import org.jboss.tools.common.model.ui.dnd.ModelTransfer;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.palette.ToolEntry;
@@ -22,22 +21,26 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
-
+import org.jboss.tools.common.model.ui.dnd.ModelTransfer;
 import org.jboss.tools.common.model.ui.views.palette.IPalettePageAdapter;
-import org.jboss.tools.common.model.ui.views.palette.PaletteViewPart;
-
 import org.jboss.tools.jst.web.ui.palette.model.PaletteItem;
+import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
 
 public class PaletteViewer extends org.eclipse.gef.ui.palette.PaletteViewer {
+
 	private IPalettePageAdapter viewPart;
 	PaletteDragSourceListener listener;
 
     static Transfer[] transferTypes = new Transfer[] {
             TextTransfer.getInstance(),ModelTransfer.getInstance() };
 
-	public PaletteViewer(IPalettePageAdapter viewPart) {
+	public PaletteViewer(IPalettePageAdapter viewPart, PaletteModel model) {
 		this.viewPart = viewPart;
-		setEditPartFactory(new CustomPaletteEditPartFactory());
+		if(model.getType().equals(PaletteModel.TYPE_MOBILE)){
+			setEditPartFactory(new MobilePaletteEditPartFactory());
+		}else{
+			setEditPartFactory(new CustomPaletteEditPartFactory());
+		}
 	}
 	
 	void addDragStartSupport() {

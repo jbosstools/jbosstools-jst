@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2007-2010 Exadel, Inc. and Red Hat, Inc.
+ * Copyright (c) 2007-2013 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
+ *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 
 package org.jboss.tools.jst.css.dialog.selector.model;
@@ -39,25 +39,27 @@ public class CSSSelectorTreeModel {
 
 	private void initModel(CSSStyleSheetDescriptor[] cssStyleSheets) {
 		for (int i = 0; i < cssStyleSheets.length; i++) {
-			CSSStyleSheet styleSheet = cssStyleSheets[i].sheet;
-			CSSTreeNode parentSheet = new CSSTreeNode(cssStyleSheets[i].source);
-			parentSheet.setStyleSheetSource(parentSheet.toString());
-			invisibleRoot.addChild(parentSheet);
-			parentSheet.setCSSContainer(new CSSStyleSheetContainer(styleSheet,
-					cssStyleSheets[i].source));
-			CSSRuleList cssRuleList = styleSheet.getCssRules();
-			for (int j = 0; j < cssRuleList.getLength(); j++) {
-				CSSRule cssRule = cssRuleList.item(j);
-				if (cssRule.getType() == CSSRule.STYLE_RULE) {
-					String[] selectors = CSSSelectorUtils
-						.parseSelectorName(((ICSSStyleRule) cssRule)
-								.getSelectorText());
-					for (int k = 0; k < selectors.length; k++) {
-						CSSTreeNode ruleNode = new CSSTreeNode(selectors[k]);
-						ruleNode.setCSSContainer(new CSSRuleContainer(selectors[k],
-							cssRule, cssStyleSheets[i].source));
-						ruleNode.setStyleSheetSource(cssStyleSheets[i].source);
-						parentSheet.addChild(ruleNode);
+			CSSStyleSheet styleSheet = cssStyleSheets[i].getStylesheet();
+			if (styleSheet != null) {
+				CSSTreeNode parentSheet = new CSSTreeNode(cssStyleSheets[i].getSource());
+				parentSheet.setStyleSheetSource(parentSheet.toString());
+				invisibleRoot.addChild(parentSheet);
+				parentSheet.setCSSContainer(new CSSStyleSheetContainer(styleSheet,
+						cssStyleSheets[i].getSource()));
+				CSSRuleList cssRuleList = styleSheet.getCssRules();
+				for (int j = 0; j < cssRuleList.getLength(); j++) {
+					CSSRule cssRule = cssRuleList.item(j);
+					if (cssRule.getType() == CSSRule.STYLE_RULE) {
+						String[] selectors = CSSSelectorUtils
+							.parseSelectorName(((ICSSStyleRule) cssRule)
+									.getSelectorText());
+						for (int k = 0; k < selectors.length; k++) {
+							CSSTreeNode ruleNode = new CSSTreeNode(selectors[k]);
+							ruleNode.setCSSContainer(new CSSRuleContainer(selectors[k],
+								cssRule, cssStyleSheets[i].getSource()));
+							ruleNode.setStyleSheetSource(cssStyleSheets[i].getSource());
+							parentSheet.addChild(ruleNode);
+						}
 					}
 				}
 			}
