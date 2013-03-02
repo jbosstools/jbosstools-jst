@@ -103,7 +103,7 @@ public class NewRangeSliderWizard extends NewJQueryWidgetWizard<NewRangeSliderWi
 			}
 		} else {
 			if(isRange()) {
-				input.addAttribute(ATTR_DATA_HIGHLIGHT, "false");
+				input.addAttribute(ATTR_DATA_HIGHLIGHT, FALSE);
 			}
 		}
 		String themeValue = page.getEditorValue(EDITOR_ID_THEME);
@@ -119,7 +119,7 @@ public class NewRangeSliderWizard extends NewJQueryWidgetWizard<NewRangeSliderWi
 	protected void createBodyForBrowser(ElementNode body) {
 		ElementNode form = getFormNode(body);
 		ElementNode div = form.addChild(TAG_DIV);
-		div.addAttribute(ATTR_STYLE, "padding: 50px 20px 50px 20px;");
+		div.addAttribute(ATTR_STYLE, "padding: 20px 20px 20px 20px;");
 		if(isRange()) {
 			div.addChild(TAG_DIV, "Preview is not implemented for this element.");
 		} else {

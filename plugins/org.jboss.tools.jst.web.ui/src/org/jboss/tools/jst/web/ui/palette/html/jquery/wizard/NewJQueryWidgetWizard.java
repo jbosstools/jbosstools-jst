@@ -15,6 +15,7 @@ import java.io.File;
 import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizard;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
  * 
@@ -35,18 +36,26 @@ public abstract class NewJQueryWidgetWizard<P extends AbstractNewHTMLWidgetWizar
 	protected abstract P createPage(); 
 
 	protected boolean isTrue(String editorID) {
-		return "true".equals(page.getEditorValue(editorID));
+		return TRUE.equals(page.getEditorValue(editorID));
 	}
 
 	protected boolean isMini() {
 		return isTrue(EDITOR_ID_MINI);
 	}
 
+	protected boolean isLayoutHorizontal() {
+		return LAYOUT_HORIZONTAL.equals(page.getEditorValue(EDITOR_ID_LAYOUT));
+	}
+
 	@Override
 	public String getTextForBrowser() {
 		ElementNode html = new ElementNode(TAG_HTML, false);
 		createHead(html);
-		createBodyForBrowser(html.addChild(TAG_BODY));
+		ElementNode body = html.addChild(TAG_BODY);
+		ElementNode i = body.addChild("p", WizardMessages.previewDisclaimer);
+		i.addAttribute("align", "center");
+		i.addAttribute(ATTR_STYLE, "font-style: italic; font-size: small;");
+		createBodyForBrowser(body);
 
 		NodeWriter w = new NodeWriter(false);
 		html.flush(w, 0);

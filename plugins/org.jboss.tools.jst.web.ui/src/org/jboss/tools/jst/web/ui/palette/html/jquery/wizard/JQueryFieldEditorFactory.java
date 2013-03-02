@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.common.ui.widget.editor.CheckBoxFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.CompositeEditor;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
+import org.jboss.tools.common.ui.widget.editor.LabelFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.SwtFieldEditorFactory;
 import org.jboss.tools.common.ui.widget.editor.TextFieldEditor;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
@@ -92,10 +93,16 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 	static String[] LAYOUT_LIST = {LAYOUT_HORIZONTAL, LAYOUT_VERTICAL};
 
 	public static IFieldEditor createLayoutEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createComboEditor(
+		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(
 				EDITOR_ID_LAYOUT, 
 				WizardMessages.layoutLabel, 
-				toList(LAYOUT_LIST), LAYOUT_HORIZONTAL, false);
+				toList(LAYOUT_LIST), 
+				toList(LAYOUT_LIST), 
+				LAYOUT_HORIZONTAL);
+//		return SwtFieldEditorFactory.INSTANCE.createComboEditor(
+//				EDITOR_ID_LAYOUT, 
+//				WizardMessages.layoutLabel, 
+//				toList(LAYOUT_LIST), LAYOUT_HORIZONTAL, false);
 	}
 
 	public static IFieldEditor createURLEditor() {
@@ -176,7 +183,7 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 	}
 
 	public static IFieldEditor createValueEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_VALUE, WizardMessages.valueLabel, "40");
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_VALUE, WizardMessages.valueLabel, "");
 	}
 
 	public static IFieldEditor createRightValueEditor() {
@@ -213,6 +220,16 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return createTextEditor(EDITOR_ID_FOOTER_TITLE, "Page Footer", 2);
 	}
 
+	/**
+	 * Creates checkbox editor with label as text at checkbox.
+	 * This can serve as enabling label for a text editor.
+	 * 
+	 * @param name
+	 * @param label
+	 * @param defaultValue
+	 * @param span
+	 * @return
+	 */
 	public static IFieldEditor createCheckboxEditor(String name, final String label, boolean defaultValue, final int span) {
 		return new CheckBoxFieldEditor(name,label,Boolean.valueOf(defaultValue)){
 			public void doFillIntoGrid(Object parent) {
@@ -227,6 +244,14 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		};
 	}
 
+	/**
+	 * Creates text editor without label.
+	 * 
+	 * @param name
+	 * @param defaultValue
+	 * @param span
+	 * @return
+	 */
 	public static IFieldEditor createTextEditor(String name, String defaultValue, final int span) {
 		return new TextFieldEditor(name,"",defaultValue) {
 			public void doFillIntoGrid(Object parent) {
@@ -239,5 +264,49 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 			}
 		};
 	}
+
+	/**
+	 * Creates an invisible placeholder.
+	 * 
+	 * @param name
+	 * @param span
+	 * @return
+	 */
+	public static IFieldEditor createSpan(String name, final int span) {
+		return new LabelFieldEditor(name, "X") {
+			public void doFillIntoGrid(Object parent) {
+				Composite c = (Composite) parent;
+				Control[] controls = (Control[]) getEditorControls(c);
+				Control text = controls[0];
+				GridData d = new GridData();
+				controls[0].setVisible(false);
+				d.horizontalSpan = span;
+				text.setLayoutData(d);
+			}
+		};
+	}
+
+	public static IFieldEditor createClearInputEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_CLEAR_INPUT, WizardMessages.clearInputLabel, true);
+	}
+
+	static String[] TEXT_TYPES = {
+		TYPE_TEXT, TYPE_TEXTAREA, TYPE_SEARCH, TYPE_PASSWORD, TYPE_NUMBER,
+		TYPE_FILE, TYPE_URL, TYPE_EMAIL, TYPE_TEL,
+		TYPE_DATE, TYPE_TIME, TYPE_DATETIME, TYPE_MONTH, TYPE_WEEK,
+		TYPE_COLOR
+	};
+
+	public static IFieldEditor createTextTypeEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(
+				EDITOR_ID_TEXT_TYPE, 
+				WizardMessages.textTypeLabel, 
+				toList(TEXT_TYPES), TYPE_TEXT, false);
+	}
+
+	public static IFieldEditor createPlaceholderEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_PLACEHOLDER, WizardMessages.placeholderLabel, "");
+	}
+
 }
 

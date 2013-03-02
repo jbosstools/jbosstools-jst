@@ -76,7 +76,7 @@ public class NewButtonWizard extends NewJQueryWidgetWizard<NewButtonWizardPage> 
 	protected void createBodyForBrowser(ElementNode body) {
 		ElementNode form = getFormNode(body);
 		ElementNode div = form.addChild(TAG_DIV);
-		div.addAttribute(ATTR_STYLE, "padding: 50px 20px 50px 20px;");
+		div.addAttribute(ATTR_STYLE, "padding: 20px 20px 20px 20px;");
 		addContent(div);
 	}
 	
