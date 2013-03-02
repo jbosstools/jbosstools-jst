@@ -21,62 +21,60 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewToggleWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
+public class NewTextInputWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
 
-	public NewToggleWizardPage() {
-		super("newToggle", WizardMessages.newToggleWizardTitle);
-		setDescription(WizardMessages.newToggleWizardDescription);
+	public NewTextInputWizardPage() {
+		super("newText", WizardMessages.newTextInputWizardTitle);
+		setDescription(WizardMessages.newTextInputWizardDescription);
 	}
 
 	protected void createFieldPanel(Composite parent) {
+		IFieldEditor type = JQueryFieldEditorFactory.createTextTypeEditor();
+		addEditor(type, parent);
+
 		IFieldEditor label = JQueryFieldEditorFactory.createLabelEditor();
-		label.setValue("Switch:");
+		label.setValue("Input:");
 		addEditor(label, parent);
 
-		IFieldEditor offLabel = JQueryFieldEditorFactory.createOffLabelEditor();
-		addEditor(offLabel, parent);
-		
-		IFieldEditor onLabel = JQueryFieldEditorFactory.createOnLabelEditor();
-		addEditor(onLabel, parent);
-		
 		IFieldEditor id = JQueryFieldEditorFactory.createIDEditor();
 		addEditor(id, parent);
-		
+
+		IFieldEditor value = JQueryFieldEditorFactory.createValueEditor();
+		addEditor(value, parent);
+
+		IFieldEditor placeholder = JQueryFieldEditorFactory.createPlaceholderEditor();
+		addEditor(placeholder, parent);
+
 		createSeparator(parent);
-		
+
 		Composite[] columns = NewRangeSliderWizardPage.createTwoColumns(parent);
 		Composite left = columns[0];
 		Composite right = columns[1];
 
+		IFieldEditor clear = JQueryFieldEditorFactory.createClearInputEditor();
+		addEditor(clear, left);
+
 		IFieldEditor mini = JQueryFieldEditorFactory.createMiniEditor();
-		addEditor(mini, left);
+		addEditor(mini, right);
+
+		IFieldEditor hideLabel = JQueryFieldEditorFactory.createHideLabelEditor();
+		addEditor(hideLabel, left);
 
 		IFieldEditor disabled = JQueryFieldEditorFactory.createDisabledEditor();
 		addEditor(disabled, right);
 
-		IFieldEditor hideLabel = JQueryFieldEditorFactory.createHideLabelEditor();
-		addEditor(hideLabel, left);
-		
-		IFieldEditor span = JQueryFieldEditorFactory.createSpan("span", 3);
-		addEditor(span, right);
-
 		IFieldEditor layout = JQueryFieldEditorFactory.createLayoutEditor();
 		addEditor(layout, parent);
-		expandCombo(layout);
 
 		createSeparator(parent);
-
+		
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
 		addEditor(theme, parent);
 		expandCombo(theme);
-
-		IFieldEditor trackTheme = JQueryFieldEditorFactory.createDataTrackThemeEditor();
-		addEditor(trackTheme, parent);
-		expandCombo(trackTheme);
 	}
 
 	protected int getAdditionalHeight() {
-		return 30;
+		return 60;
 	}
 
 	public void validate() throws ValidationException {
@@ -85,4 +83,5 @@ public class NewToggleWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 			throw new ValidationException(WizardMessages.errorIDisUsed);
 		}
 	}
+
 }
