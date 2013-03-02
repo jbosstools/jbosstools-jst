@@ -38,6 +38,7 @@ public class JSTWebUIImages extends CommonUIImages{
 	public static String LISTVIEW_IMAGE    = WIZARDS_PATH + "ListviewWizBan.png"; //$NON-NLS-1$
 	public static String LINK_IMAGE    = WIZARDS_PATH + "LinkWizBan.png"; //$NON-NLS-1$
 	public static String RANGE_SLIDER_IMAGE    = WIZARDS_PATH + "RangeSliderWizBan.png"; //$NON-NLS-1$
+	public static String TEXT_INPUT_IMAGE    = WIZARDS_PATH + "TextInputWizBan.png"; //$NON-NLS-1$
 
 	private static JSTWebUIImages INSTANCE;
 	

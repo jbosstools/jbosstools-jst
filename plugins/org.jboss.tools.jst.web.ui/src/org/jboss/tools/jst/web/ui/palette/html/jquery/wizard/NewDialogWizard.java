@@ -70,10 +70,10 @@ public class NewDialogWizard extends NewJQueryWidgetWizard<NewDialogWizardPage> 
 					a.addAttribute(ATTR_CLASS, "ui-btn-left");
 				}
 				a.addAttribute(ATTR_DATA_ROLE, ROLE_BUTTON);
-				a.addAttribute("data-icon", "delete");
-				a.addAttribute("data-iconpos", "notext");
+				a.addAttribute(ATTR_DATA_ICON, "delete");
+				a.addAttribute(ATTR_DATA_ICONPOS, ICONPOS_NOTEXT);
 				a.addAttribute(ATTR_DATA_MINI, TRUE);
-				a.addAttribute("data-inline", TRUE);
+				a.addAttribute(ATTR_DATA_INLINE, TRUE);
 			}
 		}
 		ElementNode content = dialogDiv.addChild(TAG_DIV);
@@ -83,7 +83,7 @@ public class NewDialogWizard extends NewJQueryWidgetWizard<NewDialogWizardPage> 
 		a1.addAttribute(ATTR_HREF, "#" + id);
 		a1.addAttribute(ATTR_DATA_ROLE, ROLE_BUTTON);
 		if(!browser) {
-			a1.addAttribute(ATTR_DATA_REL, "back");
+			a1.addAttribute(ATTR_DATA_REL, DATA_REL_BACK);
 		}
 	}
 

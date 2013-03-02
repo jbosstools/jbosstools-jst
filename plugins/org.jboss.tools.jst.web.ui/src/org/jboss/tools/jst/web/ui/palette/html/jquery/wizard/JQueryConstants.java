@@ -36,15 +36,33 @@ public interface JQueryConstants extends HTMLConstants {
 	public String ATTR_DATA_MAX = "max";
 	public String ATTR_DATA_STEP = "step";
 	public String ATTR_DATA_VALUE = "value";
+	public String ATTR_DATA_CLEAR_BTN = "data-clear-btn";
+	public String ATTR_PLACEHOLDER = "placeholder";
 
 	public String TRUE = "true";
 	public String FALSE = "false";
 	public String TYPE_CHECKBOX = "checkbox";
 	public String TYPE_RANGE = "range";
+	public String TYPE_TEXT = "text";
+	public String TYPE_TEXTAREA = "textarea";
+	public String TYPE_SEARCH = "search";
+	public String TYPE_PASSWORD = "password";
+	public String TYPE_FILE = "file";
+	public String TYPE_NUMBER = "number";
+	public String TYPE_URL = "url";
+	public String TYPE_COLOR = "color";
+	public String TYPE_EMAIL = "email";
+	public String TYPE_TEL = "tel";
+	public String TYPE_DATE = "date";
+	public String TYPE_MONTH = "month";
+	public String TYPE_WEEK = "week";
+	public String TYPE_TIME = "time";
+	public String TYPE_DATETIME = "datetime";
 
 	public String CLASS_CUSTOM = "custom";
 	public String CLASS_DISABLED = "ui-disabled";
 	public String CLASS_HIDDEN_ACCESSIBLE = "ui-hidden-accessible";
+	public String CLASS_HIDE_LABEL = "ui-hide-label";
 
 	public String ROLE_PAGE = "page";
 	public String ROLE_CONTENT = "content";
@@ -55,6 +73,7 @@ public interface JQueryConstants extends HTMLConstants {
 	public String ROLE_DIALOG = "dialog";
 	public String ROLE_HEADER = "header";
 	public String ROLE_FOOTER = "footer";
+	public String ROLE_FIELDCONTAIN = "fieldcontain";
 
 	public String LAYOUT_HORIZONTAL = "Horizontal";
 	public String LAYOUT_VERTICAL = "Vertical";
@@ -117,5 +136,8 @@ public interface JQueryConstants extends HTMLConstants {
 	public String EDITOR_ID_HEADER_TITLE = "header-title";
 	public String EDITOR_ID_ADD_FOOTER = "add-footer";
 	public String EDITOR_ID_FOOTER_TITLE = "footer-title";
+	public String EDITOR_ID_TEXT_TYPE = "text-type";
+	public String EDITOR_ID_CLEAR_INPUT = "clear-input";
+	public String EDITOR_ID_PLACEHOLDER = "placeholder";
 
 }

@@ -26,6 +26,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPageWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPageWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRangeSliderWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRangeSliderWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTextInputWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTextInputWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizard;
@@ -296,6 +298,51 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest implements J
 
 		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
 		assertTrue(text.indexOf(label) > 0);
+	}
+
+	public void testNewTextInputWizard() {
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Text Input", true);
+
+		assertTrue(currentPage instanceof NewTextInputWizardPage);
+
+		NewTextInputWizardPage wizardPage = (NewTextInputWizardPage)currentPage;
+		NewTextInputWizard wizard = (NewTextInputWizard)wizardPage.getWizard();
+		
+		wizardPage.setEditorValue(EDITOR_ID_MINI, TRUE);
+		assertAttrExists(wizard, ATTR_DATA_MINI, TRUE);
+		wizardPage.setEditorValue(EDITOR_ID_MINI, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_DATA_MINI);
+
+		assertAttrExists(wizard, ATTR_TYPE, TYPE_TEXT);
+		wizardPage.setEditorValue(EDITOR_ID_TEXT_TYPE, TYPE_COLOR);
+		assertAttrExists(wizard, ATTR_TYPE, TYPE_COLOR);
+		wizardPage.setEditorValue(EDITOR_ID_TEXT_TYPE, TYPE_TEXTAREA);
+		assertTextDoesNotExist(wizard, ATTR_TYPE);
+		wizardPage.setEditorValue(EDITOR_ID_TEXT_TYPE, TYPE_SEARCH);
+		assertAttrExists(wizard, ATTR_TYPE, TYPE_SEARCH);
+		
+		assertAttrExists(wizard, ATTR_DATA_CLEAR_BTN, TRUE);
+		wizardPage.setEditorValue(EDITOR_ID_CLEAR_INPUT, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_DATA_CLEAR_BTN);
+		wizardPage.setEditorValue(EDITOR_ID_CLEAR_INPUT, TRUE);
+		assertAttrExists(wizard, ATTR_DATA_CLEAR_BTN, TRUE);
+
+		wizardPage.setEditorValue(EDITOR_ID_VALUE, "777");
+		assertAttrExists(wizard, ATTR_DATA_VALUE, "777");
+
+		wizardPage.setEditorValue(EDITOR_ID_PLACEHOLDER, "abcdef");
+		assertAttrExists(wizard, ATTR_PLACEHOLDER, "abcdef");
+
+		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_FIELDCONTAIN);
+		wizardPage.setEditorValue(EDITOR_ID_LAYOUT, LAYOUT_VERTICAL);
+		assertTextDoesNotExist(wizard, ROLE_FIELDCONTAIN);
+
+		wizard.performFinish();
+		WizardDialog dialog = (WizardDialog)wizard.getContainer();
+		dialog.close();
+
+		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
+		assertTrue(text.indexOf(wizardPage.getEditorValue(EDITOR_ID_LABEL)) > 0);
 	}
 
 	void assertAttrExists(AbstractNewHTMLWidgetWizard wizard, String attr, String value) {

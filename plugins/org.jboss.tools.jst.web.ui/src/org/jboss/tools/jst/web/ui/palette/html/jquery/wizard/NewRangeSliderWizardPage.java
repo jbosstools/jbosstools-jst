@@ -54,6 +54,7 @@ public class NewRangeSliderWizardPage extends AbstractNewHTMLWidgetWizardPage im
 		addEditor(step, right);
 
 		IFieldEditor value = JQueryFieldEditorFactory.createValueEditor();
+		value.setValue("40");
 		addEditor(value, right);
 
 		IFieldEditor rightValue = JQueryFieldEditorFactory.createRightValueEditor();
