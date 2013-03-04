@@ -117,12 +117,12 @@ public abstract class RefactorSearcher {
 			for(IResource resource : EclipseUtil.getJavaSourceRoots(project)){
 				if(resource instanceof IFolder)
 					if(!scan(monitor, (IFolder) resource, true)){
-						outOfSynch(((IFolder) resource).getProject());
+						outOfSynch(resource);
 						return;
 					}
 				else if(resource instanceof IFile)
 					if(!scan(monitor, (IFile) resource, true)){
-						outOfSynch(((IFile) resource).getProject());
+						outOfSynch(resource);
 						return;
 					}
 			}
@@ -442,7 +442,7 @@ public abstract class RefactorSearcher {
 		return file.isReadOnly();
 	}
 	
-	protected abstract void outOfSynch(IProject file);
+	protected abstract void outOfSynch(IResource file);
 	
 	protected abstract void match(IFile file, int offset, int length);
 	

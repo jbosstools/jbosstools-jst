@@ -13,8 +13,8 @@ package org.jboss.tools.jst.web.kb.refactoring;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
@@ -27,10 +27,6 @@ import org.eclipse.jdt.ui.search.IQueryParticipant;
 import org.eclipse.jdt.ui.search.ISearchRequestor;
 import org.eclipse.jdt.ui.search.QuerySpecification;
 import org.eclipse.search.ui.text.Match;
-import org.jboss.tools.common.model.project.ProjectHome;
-import org.jboss.tools.jst.web.kb.refactoring.ELProjectSetExtension;
-import org.jboss.tools.jst.web.kb.refactoring.IProjectsSet;
-import org.jboss.tools.jst.web.kb.refactoring.RefactorSearcher;
 
 public class ELReferencesQueryParticipant implements IQueryParticipant{
 	private ELSearcher searcher;
@@ -83,7 +79,7 @@ public class ELReferencesQueryParticipant implements IQueryParticipant{
 			}
 		}
 		
-		protected void outOfSynch(IProject file){
+		protected void outOfSynch(IResource resource){
 			// do nothing
 		}
 
