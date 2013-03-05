@@ -34,8 +34,13 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 public class JQueryFieldEditorFactory implements JQueryConstants {
 
 	public static IFieldEditor createLabelEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_LABEL, WizardMessages.labelLabel, "");
+		return createLabelEditor(EDITOR_ID_LABEL);
 	}
+
+	public static IFieldEditor createLabelEditor(String editorID) {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(editorID, WizardMessages.labelLabel, "");
+	}
+
 
 	static String[] THEMES = {"", "a", "b", "c", "d", "e"};
 
@@ -106,7 +111,11 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 	}
 
 	public static IFieldEditor createURLEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_URL, WizardMessages.urlLabel, "");
+		return createURLEditor(EDITOR_ID_URL);
+	}
+
+	public static IFieldEditor createURLEditor(String editorID) {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(editorID, WizardMessages.urlLabel, "");
 	}
 
 	public static IFieldEditor createDisabledEditor() {
@@ -121,12 +130,17 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_ICON_ONLY, WizardMessages.iconOnlyLabel, false);
 	}
 
+	static String[] ICON_VALUES = {"", "arrow-l", "arrow-r", "arrow-u", "arrow-d", 
+		"delete", "plus", "minus", "check", "gear", "refresh", 
+		"forward", "back", "grid", "star", "alert", "info",
+		"home", "search"};
+
 	public static IFieldEditor createIconEditor() {
-		String[] values = new String[]{"", "arrow-l", "arrow-r", "arrow-u", "arrow-d", 
-				"delete", "plus", "minus", "check", "gear", "refresh", 
-				"forward", "back", "grid", "star", "alert", "info",
-				"home", "search"};
-		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_ICON, WizardMessages.iconLabel, toList(values), "", true);
+		return createIconEditor(EDITOR_ID_ICON);
+	}
+
+	public static IFieldEditor createIconEditor(String editorID) {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(editorID, WizardMessages.iconLabel, toList(ICON_VALUES), "", true);
 	}
 
 	public static IFieldEditor createIconPositionEditor() {
@@ -306,6 +320,22 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 
 	public static IFieldEditor createPlaceholderEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_PLACEHOLDER, WizardMessages.placeholderLabel, "");
+	}
+
+	public static IFieldEditor createFixedPositionEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_FIXED_POSITION, WizardMessages.fixedPositionLabel, false);
+	}
+
+	public static IFieldEditor createFullScreenEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_FULL_SCREEN, WizardMessages.fullScreenLabel, false);
+	}
+
+	public static IFieldEditor createLeftButtonEditor() {
+		return createCheckboxEditor(EDITOR_ID_LEFT_BUTTON, WizardMessages.leftButtonLabel, true, 3);
+	}
+
+	public static IFieldEditor createRightButtonEditor() {
+		return createCheckboxEditor(EDITOR_ID_RIGHT_BUTTON, WizardMessages.rightButtonLabel, true, 3);
 	}
 
 }

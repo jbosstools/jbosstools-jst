@@ -18,25 +18,27 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.HTMLConstants;
  *
  */
 public interface JQueryConstants extends HTMLConstants {
-	public String ATTR_DATA_THEME = "data-theme";
-	public String ATTR_DATA_TRACK_THEME = "data-track-theme";
-	public String ATTR_DATA_MINI = "data-mini";
-	public String ATTR_DATA_REL = "data-rel";
-	public String ATTR_DATA_ROLE = "data-role";
 	public String ATTR_DATA_AUTODIVIDERS = "data-autodividers";
-	public String ATTR_DATA_INSET = "data-inset";
-	public String ATTR_DATA_FILTER = "data-filter";
-	public String ATTR_DATA_TRANSITION = "data-transition";
+	public String ATTR_DATA_CLEAR_BTN = "data-clear-btn";
 	public String ATTR_DATA_CLOSE_BTN = "data-close-btn";
+	public String ATTR_DATA_FILTER = "data-filter";
+	public String ATTR_DATA_FULL_SCREEN = "data-fullscreen";
+	public String ATTR_DATA_HIGHLIGHT = "data-highlight";
 	public String ATTR_DATA_ICON = "data-icon";
 	public String ATTR_DATA_ICONPOS = "data-iconpos";
 	public String ATTR_DATA_INLINE = "data-inline";
-	public String ATTR_DATA_HIGHLIGHT = "data-highlight";
+	public String ATTR_DATA_INSET = "data-inset";
+	public String ATTR_DATA_MINI = "data-mini";
+	public String ATTR_DATA_POSITION = "data-position";
+	public String ATTR_DATA_REL = "data-rel";
+	public String ATTR_DATA_ROLE = "data-role";
+	public String ATTR_DATA_THEME = "data-theme";
+	public String ATTR_DATA_TRACK_THEME = "data-track-theme";
+	public String ATTR_DATA_TRANSITION = "data-transition";
 	public String ATTR_DATA_MIN = "min";
 	public String ATTR_DATA_MAX = "max";
 	public String ATTR_DATA_STEP = "step";
 	public String ATTR_DATA_VALUE = "value";
-	public String ATTR_DATA_CLEAR_BTN = "data-clear-btn";
 	public String ATTR_PLACEHOLDER = "placeholder";
 
 	public String TRUE = "true";
@@ -63,6 +65,9 @@ public interface JQueryConstants extends HTMLConstants {
 	public String CLASS_DISABLED = "ui-disabled";
 	public String CLASS_HIDDEN_ACCESSIBLE = "ui-hidden-accessible";
 	public String CLASS_HIDE_LABEL = "ui-hide-label";
+	public String CLASS_BUTTON_RIGHT = "ui-btn-right";
+
+	public String POSITION_FIXED = "fixed";
 
 	public String ROLE_PAGE = "page";
 	public String ROLE_CONTENT = "content";
@@ -139,5 +144,15 @@ public interface JQueryConstants extends HTMLConstants {
 	public String EDITOR_ID_TEXT_TYPE = "text-type";
 	public String EDITOR_ID_CLEAR_INPUT = "clear-input";
 	public String EDITOR_ID_PLACEHOLDER = "placeholder";
+	public String EDITOR_ID_FIXED_POSITION = "fixed";
+	public String EDITOR_ID_FULL_SCREEN = "full-screen";
+	public String EDITOR_ID_LEFT_BUTTON = "left-button";
+	public String EDITOR_ID_RIGHT_BUTTON = "right-button";
+	public String EDITOR_ID_LEFT_BUTTON_LABEL = "left-button-label";
+	public String EDITOR_ID_LEFT_BUTTON_URL = "left-button-uri";
+	public String EDITOR_ID_LEFT_BUTTON_ICON = "left-button-icon";
+	public String EDITOR_ID_RIGHT_BUTTON_LABEL = "right-button-label";
+	public String EDITOR_ID_RIGHT_BUTTON_URL = "right-button-uri";
+	public String EDITOR_ID_RIGHT_BUTTON_ICON = "right-button-icon";
 
 }
