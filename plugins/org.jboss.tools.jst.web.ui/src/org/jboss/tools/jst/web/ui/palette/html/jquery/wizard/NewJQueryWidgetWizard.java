@@ -15,7 +15,6 @@ import java.io.File;
 import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizard;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
-import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
  * 
@@ -52,9 +51,6 @@ public abstract class NewJQueryWidgetWizard<P extends AbstractNewHTMLWidgetWizar
 		ElementNode html = new ElementNode(TAG_HTML, false);
 		createHead(html);
 		ElementNode body = html.addChild(TAG_BODY);
-		ElementNode i = body.addChild("p", WizardMessages.previewDisclaimer);
-		i.addAttribute("align", "center");
-		i.addAttribute(ATTR_STYLE, "font-style: italic; font-size: small;");
 		createBodyForBrowser(body);
 
 		NodeWriter w = new NodeWriter(false);

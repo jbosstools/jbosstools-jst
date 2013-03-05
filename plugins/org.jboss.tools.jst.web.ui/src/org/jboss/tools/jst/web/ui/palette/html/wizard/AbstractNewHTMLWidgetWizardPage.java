@@ -22,6 +22,8 @@ import org.eclipse.swt.SWTError;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -33,6 +35,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.common.model.ui.editors.dnd.DefaultDropWizardPage;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
+import org.jboss.tools.common.util.SwtUtil;
 
 /**
  * 
@@ -123,11 +126,13 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		System.getProperties().setProperty(property, "webkit");
 		*/
 
+		Composite browserPanel = createBrowserPanel(previewPanel);
+
 		try {
 			try {
-				browser = new Browser(previewPanel, SWT.READ_ONLY | SWT.BORDER | SWT.MOZILLA | SWT.NO_SCROLL);
+				browser = new Browser(browserPanel, SWT.READ_ONLY | SWT.MOZILLA | SWT.NO_SCROLL);
 			} catch (SWTError e) {
-				browser = new Browser(previewPanel, SWT.READ_ONLY | SWT.BORDER | SWT.WEBKIT | SWT.NO_SCROLL);
+				browser = new Browser(browserPanel, SWT.READ_ONLY | SWT.WEBKIT | SWT.NO_SCROLL);
 			}
 		} finally {
 			/*
@@ -145,6 +150,9 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		gridData.grabExcessVerticalSpace = true;
 		browser.setLayoutData(gridData);
 		browser.pack();
+
+		createDisclaimer(browserPanel);
+
 		previewPanel.setWeights(new int[]{4,6});
 		
 		updatePreviewContent();
@@ -154,6 +162,36 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		runValidation();
 		flipPreview(true);
 //		parent.pack(true);
+	}
+
+	private Composite createBrowserPanel(Composite previewPanel) {
+		Composite browserPanel = new Composite(previewPanel, SWT.BORDER);
+		GridData g = new GridData();
+		g.horizontalAlignment = SWT.FILL;
+		g.verticalAlignment = SWT.FILL;
+		g.grabExcessHorizontalSpace = true;
+		g.grabExcessVerticalSpace = true;
+		browserPanel.setLayoutData(g);
+		GridLayout l = new GridLayout();
+		l.verticalSpacing = 0;
+		l.marginWidth = 0;
+		l.marginHeight = 0;
+		browserPanel.setLayout(l);
+		return browserPanel;
+	}
+
+	private void createDisclaimer(Composite browserPanel) {
+		Label disclaimer = new Label(browserPanel, SWT.NONE);
+		disclaimer.setText(WizardMessages.previewDisclaimer);
+		GridData disclaimerData = new GridData();
+		disclaimerData.horizontalAlignment = SWT.CENTER;
+		disclaimer.setLayoutData(disclaimerData);
+		FontData fd = disclaimer.getFont().getFontData()[0];
+		fd.setStyle(SWT.ITALIC);
+		fd.setHeight(8);
+		Font font = new Font(null, fd);
+		disclaimer.setFont(font);
+		SwtUtil.bindDisposal(font, disclaimer);
 	}
 
 	/**
