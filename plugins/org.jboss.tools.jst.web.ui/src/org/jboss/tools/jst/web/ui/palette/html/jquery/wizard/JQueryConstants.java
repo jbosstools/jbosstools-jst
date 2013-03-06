@@ -78,6 +78,7 @@ public interface JQueryConstants extends HTMLConstants {
 	public String ROLE_DIALOG = "dialog";
 	public String ROLE_HEADER = "header";
 	public String ROLE_FOOTER = "footer";
+	public String ROLE_NAVBAR = "navbar";
 	public String ROLE_FIELDCONTAIN = "fieldcontain";
 
 	public String LAYOUT_HORIZONTAL = "Horizontal";
@@ -154,5 +155,6 @@ public interface JQueryConstants extends HTMLConstants {
 	public String EDITOR_ID_RIGHT_BUTTON_LABEL = "right-button-label";
 	public String EDITOR_ID_RIGHT_BUTTON_URL = "right-button-uri";
 	public String EDITOR_ID_RIGHT_BUTTON_ICON = "right-button-icon";
+	public String EDITOR_ID_NUMBER_OF_ITEMS = "number-of-items";
 
 }

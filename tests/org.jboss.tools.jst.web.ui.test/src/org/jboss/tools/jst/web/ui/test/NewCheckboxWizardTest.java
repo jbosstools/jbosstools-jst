@@ -12,7 +12,10 @@ package org.jboss.tools.jst.web.ui.test;
 
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
+import org.jboss.tools.common.ui.widget.editor.CompositeEditor;
+import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizardPage;
@@ -24,6 +27,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewNavbarWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewNavbarWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPageWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPageWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRangeSliderWizard;
@@ -375,6 +380,35 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest implements J
 
 		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
 		assertTrue(text.indexOf(wizardPage.getEditorValue(EDITOR_ID_TITLE)) > 0);
+	}
+
+	public void testNewNavbarWizard() {
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Navbar", true);
+
+		assertTrue(currentPage instanceof NewNavbarWizardPage);
+
+		NewNavbarWizardPage wizardPage = (NewNavbarWizardPage)currentPage;
+		NewNavbarWizard wizard = (NewNavbarWizard)wizardPage.getWizard();
+		Display.getCurrent().readAndDispatch();
+		
+		assertEquals("3", wizardPage.getEditorValue(EDITOR_ID_NUMBER_OF_ITEMS));
+
+		IFieldEditor iconPos = ((CompositeEditor)wizardPage.getEditor(EDITOR_ID_ICON_POS)).getEditors().get(0);
+		assertFalse(iconPos.isEnabled());
+		wizardPage.setEditorValue(EDITOR_ID_ICON, "delete");
+		assertTrue(iconPos.isEnabled());
+		assertTextDoesNotExist(wizard, ATTR_DATA_ICONPOS);
+		wizardPage.setEditorValue(EDITOR_ID_ICON_POS, "left");
+		assertAttrExists(wizard, ATTR_DATA_ICONPOS, "left");
+
+		wizardPage.setEditorValue(EDITOR_ID_LABEL, "Run Test");
+
+		wizard.performFinish();
+		WizardDialog dialog = (WizardDialog)wizard.getContainer();
+		dialog.close();
+
+		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
+		assertTrue(text.indexOf("Run Test") > 0);
 	}
 
 	void assertAttrExists(AbstractNewHTMLWidgetWizard wizard, String attr, String value) {
