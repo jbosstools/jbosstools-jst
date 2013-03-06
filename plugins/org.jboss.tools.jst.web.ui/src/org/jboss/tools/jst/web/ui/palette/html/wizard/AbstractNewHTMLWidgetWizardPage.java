@@ -241,7 +241,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 
 	public void setEditorValue(String name, String value) {
 		if(editors.containsKey(name)) {
-			getEditor(name).setValueAsString(value);
+			getEditor(name).setValue(value);
 		}
 	}
 

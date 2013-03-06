@@ -803,6 +803,7 @@
       <tag name="_Palette_/Mobile/jQuery_Mobile/1.page/1.Page" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPageWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/1.page/2.Dialog" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/2.lists/1.Header_Bar" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizard"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/2.lists/3.Navbar" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewNavbarWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/2.lists/5.Listview" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewListviewWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/1.Button" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/3.Link" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizard"/>

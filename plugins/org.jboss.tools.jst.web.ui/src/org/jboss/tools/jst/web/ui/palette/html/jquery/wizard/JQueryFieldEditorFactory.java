@@ -41,7 +41,6 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return SwtFieldEditorFactory.INSTANCE.createTextEditor(editorID, WizardMessages.labelLabel, "");
 	}
 
-
 	static String[] THEMES = {"", "a", "b", "c", "d", "e"};
 
 	public static IFieldEditor createDataThemeEditor() {
@@ -144,7 +143,7 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 	}
 
 	public static IFieldEditor createIconPositionEditor() {
-		String[] values = new String[]{"", "right", "top", "bottom"};
+		String[] values = new String[]{"", "left", "right", "top", "bottom"};
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_ICON_POS, WizardMessages.iconposLabel, toList(values), "", true);
 	}
 
@@ -336,6 +335,12 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 
 	public static IFieldEditor createRightButtonEditor() {
 		return createCheckboxEditor(EDITOR_ID_RIGHT_BUTTON, WizardMessages.rightButtonLabel, true, 3);
+	}
+
+
+	public static IFieldEditor createItemsNumberEditor() {
+		String[] numbers = {"1", "2", "3", "4", "5", "6", "7", "8"};
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_NUMBER_OF_ITEMS, WizardMessages.numberOfItemsLabel, toList(numbers), "1", false);
 	}
 
 }
