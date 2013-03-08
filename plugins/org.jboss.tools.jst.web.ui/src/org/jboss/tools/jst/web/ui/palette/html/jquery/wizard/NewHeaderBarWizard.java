@@ -38,10 +38,9 @@ public class NewHeaderBarWizard extends NewJQueryWidgetWizard<NewHeaderBarWizard
 
 		if(isTrue(EDITOR_ID_FIXED_POSITION)) {
 			header.addAttribute(ATTR_DATA_POSITION, POSITION_FIXED);
-		}
-
-		if(isTrue(EDITOR_ID_FULL_SCREEN)) {
-			header.addAttribute(ATTR_DATA_FULL_SCREEN, TRUE);			
+			if(isTrue(EDITOR_ID_FULL_SCREEN)) {
+				header.addAttribute(ATTR_DATA_FULL_SCREEN, TRUE);			
+			}
 		}
 
 		if(themeValue.length() > 0) {

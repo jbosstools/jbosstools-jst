@@ -26,22 +26,49 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewNavbarWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
+public class NewFooterWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
 	ButtonsEditor buttons = new ButtonsEditor(this);
 
-	public NewNavbarWizardPage() {
-		super("newNavbar", WizardMessages.newNavbarWizardTitle);
-		setDescription(WizardMessages.newNavbarWizardDescription);
+	public NewFooterWizardPage() {
+		super("newFooter", WizardMessages.newFooterWizardTitle);
+		setDescription(WizardMessages.newFooterWizardDescription);
 	}
 
 	protected void createFieldPanel(Composite parent) {
-		IFieldEditor number = JQueryFieldEditorFactory.createItemsNumberEditor(WizardMessages.numberOfItemsLabel, 1, 8);
+		buttons.buttons[0].label = "Add";
+		buttons.buttons[1].label = "Up";
+		buttons.buttons[2].label = "Down";
+		buttons.buttons[3].label = "Remove";
+		buttons.buttons[0].icon = "plus";
+		buttons.buttons[1].icon = "arrow-u";
+		buttons.buttons[2].icon = "arrow-d";
+		buttons.buttons[3].icon = "delete";
+		IFieldEditor title = JQueryFieldEditorFactory.createTitleEditor();
+		title.setValue("");
+		addEditor(title, parent);
+
+		Composite[] columns = NewRangeSliderWizardPage.createTwoColumns(parent);
+		Composite left = columns[0];
+		Composite right = columns[1];
+
+		IFieldEditor fixed = JQueryFieldEditorFactory.createFixedPositionEditor();
+		addEditor(fixed, left);
+		
+		IFieldEditor fullScreen = JQueryFieldEditorFactory.createFullScreenEditor();
+		addEditor(fullScreen, right);
+		
+		IFieldEditor number = JQueryFieldEditorFactory.createItemsNumberEditor(WizardMessages.numberOfItemsLabel, 0, 4);
 		addEditor(number); //Control is created by buttons editor.
+		
+		IFieldEditor arrangement = JQueryFieldEditorFactory.createArragementEditor();
+		addEditor(arrangement); //Control is created by buttons editor.
 
 		IFieldEditor iconpos = JQueryFieldEditorFactory.createIconPositionEditor();
 		addEditor(iconpos); //Control is created by buttons editor.
+		IFieldEditor icononly = JQueryFieldEditorFactory.createIconOnlyEditor();
+		addEditor(icononly); //Control is created by buttons editor.
 
-		TabFolder tab = buttons.createItemsFolder(parent, "Items");
+		TabFolder tab = buttons.createItemsFolder(parent, "Buttons");
 		
 		Composite p1 = new Composite(tab, SWT.NONE);
 		buttons.control = p1;
@@ -59,8 +86,6 @@ public class NewNavbarWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 		addEditor(icon, p1);
 
 		getEditor(EDITOR_ID_NUMBER_OF_ITEMS).setValue("3");
-
-		iconpos.setEnabled(false);
 
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
 		addEditor(theme, parent);
@@ -83,15 +108,27 @@ public class NewNavbarWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 			getEditor(EDITOR_ID_ICON_POS).setEnabled(buttons.hasIcons());
 		} else if(EDITOR_ID_NUMBER_OF_ITEMS.equals(name)) {
 			buttons.setNumber(Integer.parseInt(value));
-			if(getEditor(EDITOR_ID_ICON_POS) != null) {
-				getEditor(EDITOR_ID_ICON_POS).setEnabled(buttons.hasIcons());
-			}
 		}
+
+		boolean hasIcons = buttons.hasIcons();
+		boolean icononly = TRUE.equals(getEditorValue(EDITOR_ID_ICON_ONLY));
+		if(getEditor(EDITOR_ID_ICON_POS) != null) {
+			getEditor(EDITOR_ID_ICON_POS).setEnabled(hasIcons && !icononly);
+		}
+		if(getEditor(EDITOR_ID_ICON_ONLY) != null) {
+			getEditor(EDITOR_ID_ICON_ONLY).setEnabled(hasIcons);
+		}
+
+		boolean isFixed = TRUE.equals(getEditorValue(EDITOR_ID_FIXED_POSITION));
+		if(getEditor(EDITOR_ID_FULL_SCREEN) != null) {
+			getEditor(EDITOR_ID_FULL_SCREEN).setEnabled(isFixed);
+		}
+		
 		super.propertyChange(evt);
 	}
 
 	protected int getAdditionalHeight() {
-		return 100;
+		return 125;
 	}
 
 }

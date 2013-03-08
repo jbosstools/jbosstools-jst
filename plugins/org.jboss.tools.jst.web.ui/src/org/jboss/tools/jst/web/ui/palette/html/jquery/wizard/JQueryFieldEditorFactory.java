@@ -338,9 +338,18 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 	}
 
 
-	public static IFieldEditor createItemsNumberEditor() {
-		String[] numbers = {"1", "2", "3", "4", "5", "6", "7", "8"};
+	public static IFieldEditor createItemsNumberEditor(String label, int min, int max) {
+		String[] numbers = new String[max - min + 1];
+		for (int i = min; i <= max; i++) {
+			numbers[i - min] = "" + i;
+		}
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_NUMBER_OF_ITEMS, WizardMessages.numberOfItemsLabel, toList(numbers), "1", false);
+	}
+
+	public static IFieldEditor createArragementEditor() {
+		String[] values = new String[]{ARRAGEMENT_DEFAULT, ARRAGEMENT_GROUPED, ARRAGEMENT_NAVBAR};
+		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(EDITOR_ID_ARRAGEMENT, WizardMessages.arragementLabel, 
+				toList(values), toList(values), values[0]);
 	}
 
 }

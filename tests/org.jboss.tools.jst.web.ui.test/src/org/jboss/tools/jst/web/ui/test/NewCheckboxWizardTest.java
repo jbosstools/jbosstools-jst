@@ -23,6 +23,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCheckBoxWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCheckBoxWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFooterWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFooterWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizard;
@@ -409,6 +411,34 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest implements J
 
 		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
 		assertTrue(text.indexOf("Run Test") > 0);
+	}
+
+	public void testNewFooterBarWizard() {
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Footer Bar", true);
+
+		assertTrue(currentPage instanceof NewFooterWizardPage);
+
+		NewFooterWizardPage wizardPage = (NewFooterWizardPage)currentPage;
+		NewFooterWizard wizard = (NewFooterWizard)wizardPage.getWizard();
+		Display.getCurrent().readAndDispatch();
+		
+		assertTextDoesNotExist(wizard, ATTR_DATA_POSITION);
+		wizardPage.setEditorValue(EDITOR_ID_FIXED_POSITION, TRUE);
+		assertAttrExists(wizard, ATTR_DATA_POSITION, POSITION_FIXED);
+
+		assertTextDoesNotExist(wizard, ATTR_DATA_FULL_SCREEN);
+		wizardPage.setEditorValue(EDITOR_ID_FULL_SCREEN, TRUE);
+		assertAttrExists(wizard, ATTR_DATA_FULL_SCREEN, TRUE);
+
+		String label = "Run Footer Bar Test";
+		wizardPage.setEditorValue(EDITOR_ID_TITLE, label);
+
+		wizard.performFinish();
+		WizardDialog dialog = (WizardDialog)wizard.getContainer();
+		dialog.close();
+
+		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
+		assertTrue(text.indexOf(label) > 0);
 	}
 
 	void assertAttrExists(AbstractNewHTMLWidgetWizard wizard, String attr, String value) {
