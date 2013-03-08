@@ -223,7 +223,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 	 * @param name
 	 * @return
 	 */
-	protected void expandCombo(IFieldEditor editor) {
+	public void expandCombo(IFieldEditor editor) {
 		Control c = (Control) (editor.getEditorControls()[1]);
 		GridData d = (GridData)c.getLayoutData();
 		d.horizontalAlignment = SWT.FILL;

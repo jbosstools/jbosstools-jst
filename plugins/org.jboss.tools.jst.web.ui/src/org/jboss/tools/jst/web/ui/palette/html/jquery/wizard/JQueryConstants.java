@@ -40,6 +40,7 @@ public interface JQueryConstants extends HTMLConstants {
 	public String ATTR_DATA_STEP = "step";
 	public String ATTR_DATA_VALUE = "value";
 	public String ATTR_PLACEHOLDER = "placeholder";
+	public String ATTR_DATA_TYPE = "data-type";
 
 	public String TRUE = "true";
 	public String FALSE = "false";
@@ -66,6 +67,7 @@ public interface JQueryConstants extends HTMLConstants {
 	public String CLASS_HIDDEN_ACCESSIBLE = "ui-hidden-accessible";
 	public String CLASS_HIDE_LABEL = "ui-hide-label";
 	public String CLASS_BUTTON_RIGHT = "ui-btn-right";
+	public String CLASS_BAR = "ui-bar";
 
 	public String POSITION_FIXED = "fixed";
 
@@ -80,6 +82,9 @@ public interface JQueryConstants extends HTMLConstants {
 	public String ROLE_FOOTER = "footer";
 	public String ROLE_NAVBAR = "navbar";
 	public String ROLE_FIELDCONTAIN = "fieldcontain";
+	public String ROLE_GROUP = "controlgroup";
+
+	public String DATA_TYPE_HORIZONTAL = "horizontal";
 
 	public String LAYOUT_HORIZONTAL = "Horizontal";
 	public String LAYOUT_VERTICAL = "Vertical";
@@ -101,6 +106,10 @@ public interface JQueryConstants extends HTMLConstants {
 	public String DATA_REL_EXTERNAL = "external";
 	public String CLOSE_RIGHT = "right";
 	public String CLOSE_NONE = "none";
+
+	public String ARRAGEMENT_DEFAULT = "Default";
+	public String ARRAGEMENT_GROUPED = "Grouped";
+	public String ARRAGEMENT_NAVBAR = "Navbar";
 
 	public String ICONPOS_NOTEXT = "notext";
 
@@ -156,5 +165,6 @@ public interface JQueryConstants extends HTMLConstants {
 	public String EDITOR_ID_RIGHT_BUTTON_URL = "right-button-uri";
 	public String EDITOR_ID_RIGHT_BUTTON_ICON = "right-button-icon";
 	public String EDITOR_ID_NUMBER_OF_ITEMS = "number-of-items";
+	public String EDITOR_ID_ARRAGEMENT = "arragement";
 
 }

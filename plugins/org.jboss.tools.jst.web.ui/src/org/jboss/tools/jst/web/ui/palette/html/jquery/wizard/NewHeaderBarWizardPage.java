@@ -109,6 +109,11 @@ public class NewHeaderBarWizardPage extends AbstractNewHTMLWidgetWizardPage impl
 		rightButtonURL.setEnabled(rightButtonEnabled);
 		IFieldEditor rightButtonIcon = getEditor(EDITOR_ID_RIGHT_BUTTON_ICON);
 		rightButtonIcon.setEnabled(rightButtonEnabled);
+
+		boolean isFixed = TRUE.equals(getEditorValue(EDITOR_ID_FIXED_POSITION));
+		if(getEditor(EDITOR_ID_FULL_SCREEN) != null) {
+			getEditor(EDITOR_ID_FULL_SCREEN).setEnabled(isFixed);
+		}
 	}
 
 	protected int getAdditionalHeight() {
