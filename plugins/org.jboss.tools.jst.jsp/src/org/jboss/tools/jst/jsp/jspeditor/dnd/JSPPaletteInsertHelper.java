@@ -32,22 +32,24 @@ public class JSPPaletteInsertHelper extends PaletteInsertHelper {
     public JSPPaletteInsertHelper() {}
 
 	protected void modify(ISourceViewer v, Properties p, String[] texts) {
-		p.put("viewer", v);
-		String tagname = p.getProperty(PROPOPERTY_TAG_NAME);
-		String uri = p.getProperty(PROPOPERTY_TAGLIBRARY_URI);
-		String startText = texts[0];
-		if(startText != null && startText.startsWith("<%@ taglib")) { //$NON-NLS-1$
-			if(PaletteTaglibInserter.inserTaglibInXml(v.getDocument(), p)) {
-				texts[0] = "";
-				return;
+		if(!MobilePaletteInsertHelper.getInstance().isMobile(v, p, texts)){
+			p.put("viewer", v);
+			String tagname = p.getProperty(PROPOPERTY_TAG_NAME);
+			String uri = p.getProperty(PROPOPERTY_TAGLIBRARY_URI);
+			String startText = texts[0];
+			if(startText != null && startText.startsWith("<%@ taglib")) { //$NON-NLS-1$
+				if(PaletteTaglibInserter.inserTaglibInXml(v.getDocument(), p)) {
+					texts[0] = "";
+					return;
+				}
+			} else {
+				p = PaletteTaglibInserter.inserTaglib(v.getDocument(), p);
 			}
-		} else {
-			p = PaletteTaglibInserter.inserTaglib(v.getDocument(), p);
+		
+			String defaultPrefix = p.getProperty(PROPOPERTY_DEFAULT_PREFIX);
+			IDocument d = v.getDocument();
+			applyPrefix(texts, d, tagname, uri, defaultPrefix);
 		}
-	
-		String defaultPrefix = p.getProperty(PROPOPERTY_DEFAULT_PREFIX);
-		IDocument d = v.getDocument();
-		applyPrefix(texts, d, tagname, uri, defaultPrefix);						
 	}
 
 
