@@ -25,6 +25,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFooterWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFooterWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGridWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGridWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizard;
@@ -439,6 +441,27 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest implements J
 
 		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
 		assertTrue(text.indexOf(label) > 0);
+	}
+
+	public void testNewGridWizard() {
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Grid", true);
+
+		assertTrue(currentPage instanceof NewGridWizardPage);
+
+		NewGridWizardPage wizardPage = (NewGridWizardPage)currentPage;
+		NewGridWizard wizard = (NewGridWizard)wizardPage.getWizard();
+		Display.getCurrent().readAndDispatch();
+
+		assertTextDoesNotExist(wizard, "ui-block-d");
+		wizardPage.setEditorValue(EDITOR_ID_GRID_COLUMNS, "5");
+		assertTextExists(wizard, "ui-block-d");
+
+		wizard.performFinish();
+		WizardDialog dialog = (WizardDialog)wizard.getContainer();
+		dialog.close();
+
+		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
+		assertTrue(text.indexOf("ui-block-d") > 0);
 	}
 
 	void assertAttrExists(AbstractNewHTMLWidgetWizard wizard, String attr, String value) {

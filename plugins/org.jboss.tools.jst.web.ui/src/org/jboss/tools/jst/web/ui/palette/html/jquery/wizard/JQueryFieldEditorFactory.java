@@ -352,5 +352,17 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 				toList(values), toList(values), values[0]);
 	}
 
+	public static IFieldEditor createGridColumnsEditor() {
+		String[] values = new String[]{"1", "2", "3", "4", "5"};
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_GRID_COLUMNS, WizardMessages.gridColumnsLabel, 
+				toList(values), "3", false);
+	}
+
+	public static IFieldEditor createGridRowsEditor() {
+		String[] values = new String[]{"1", "2", "3", "4", "5"};
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_GRID_ROWS, WizardMessages.gridRowsLabel, 
+				toList(values), "3", false);
+	}
+
 }
 
