@@ -166,5 +166,7 @@ public interface JQueryConstants extends HTMLConstants {
 	public String EDITOR_ID_RIGHT_BUTTON_ICON = "right-button-icon";
 	public String EDITOR_ID_NUMBER_OF_ITEMS = "number-of-items";
 	public String EDITOR_ID_ARRAGEMENT = "arragement";
+	public String EDITOR_ID_GRID_COLUMNS = "grid-columns";
+	public String EDITOR_ID_GRID_ROWS = "grid-rows";
 
 }
