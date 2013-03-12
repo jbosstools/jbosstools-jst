@@ -117,7 +117,7 @@ public class NewHeaderBarWizardPage extends AbstractNewHTMLWidgetWizardPage impl
 	}
 
 	protected int getAdditionalHeight() {
-		return 130;
+		return 135;
 	}
 
 }

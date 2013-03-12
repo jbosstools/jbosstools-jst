@@ -67,6 +67,23 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest implements J
 		super.tearDown();
 	}
 
+	public void testAddJSCSSCheckbox() {
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Page", true);
+
+		assertTrue(currentPage instanceof NewPageWizardPage);
+
+		NewPageWizardPage wizardPage = (NewPageWizardPage)currentPage;
+		NewPageWizard wizard = (NewPageWizard)wizardPage.getWizard();
+
+		assertEquals(TRUE, wizardPage.getEditorValue(NewPageWizardPage.ADD_JS_CSS_SETTING_NAME));
+		wizardPage.setEditorValue(NewPageWizardPage.ADD_JS_CSS_SETTING_NAME, FALSE);
+		assertEquals(FALSE, wizardPage.getEditorValue(NewPageWizardPage.ADD_JS_CSS_SETTING_NAME));
+		
+		wizard.performFinish();
+		WizardDialog dialog = (WizardDialog)wizard.getContainer();
+		dialog.close();
+	}
+
 	public void testNewPageWizard() {
 		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Page", true);
 
