@@ -72,7 +72,7 @@ public class NewButtonWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 	}
 
 	protected int getAdditionalHeight() {
-		return 90;
+		return 100;
 	}
 
 	public void validate() throws ValidationException {

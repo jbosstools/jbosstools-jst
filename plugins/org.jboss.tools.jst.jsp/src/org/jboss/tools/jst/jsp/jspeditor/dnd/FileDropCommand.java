@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import org.jboss.tools.common.meta.action.XActionInvoker;
 import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.options.SharableConstants;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.ui.dnd.ModelTransfer;
 import org.jboss.tools.common.model.ui.editors.dnd.DefaultDropCommand;
@@ -60,11 +61,15 @@ public class FileDropCommand extends DefaultDropCommand {
 		properties.put(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX,getDefaultModel().getTagProposal().getPrefix());
 		properties.put(PaletteInsertHelper.PROPOPERTY_SELECTION_PROVIDER, getDefaultModel().getDropData().getSelectionProvider());
 		properties.put(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB, "true"); //$NON-NLS-1$
+		fillPropertiesForRun(properties);
 		addCustomProperties(properties);
 		JSPPaletteInsertHelper.getInstance().insertIntoEditor(
 				getDefaultModel().getDropData().getSourceViewer(),
 				properties
 		);
+	}
+
+	protected void fillPropertiesForRun(Properties properties) {		
 	}
 
 	protected void executeUnknownTag() {

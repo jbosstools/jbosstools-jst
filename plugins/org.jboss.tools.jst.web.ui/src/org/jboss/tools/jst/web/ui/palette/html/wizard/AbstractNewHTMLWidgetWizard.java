@@ -15,6 +15,7 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 import org.eclipse.jface.wizard.IWizardPage;
@@ -80,12 +81,16 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 		String[] result = w.getResult();
 		String startText = result[0];
 		if(startText.length() > 0) {
-			((PaletteDropCommand)command).getProperties().setProperty("start text", startText);
+			getCommandProperties().setProperty("start text", startText);
 		}
 		String endText = result.length < 2 ? "" : result[1];
 		if(endText.length() > 0) {
-			((PaletteDropCommand)command).getProperties().setProperty("end text", startText);
+			getCommandProperties().setProperty("end text", startText);
 		}
+	}
+
+	protected Properties getCommandProperties() {
+		return ((PaletteDropCommand)command).getProperties();
 	}
 
 	/**

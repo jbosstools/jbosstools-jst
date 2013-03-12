@@ -128,7 +128,7 @@ public class NewFooterWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 	}
 
 	protected int getAdditionalHeight() {
-		return 125;
+		return 135;
 	}
 
 }

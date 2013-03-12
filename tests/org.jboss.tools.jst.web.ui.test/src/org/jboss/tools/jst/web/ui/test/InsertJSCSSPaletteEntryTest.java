@@ -2,9 +2,14 @@ package org.jboss.tools.jst.web.ui.test;
 
 import java.util.StringTokenizer;
 
+import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IEditorPart;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPageWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPageWizardPage;
 
-public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest {
+public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implements JQueryConstants {
 	private String[] test_result_1={
 			"<!DOCTYPE html>",
 			"<html>",
@@ -67,110 +72,91 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest {
 			"</html>"
 	};
 
+	IEditorPart editor = null;
+
 	public InsertJSCSSPaletteEntryTest() {}
+
+	public void tearDown() {
+		if(editor != null){
+			editor.getSite().getPage().closeEditor(editor, false);
+		}
+	}
 	
 	public void testInsertIntoEmptyFile() {
-		IEditorPart editor=null;
-		try{
-			editor = openEditor("empty.html");
-
-			runToolEntry("jQuery Mobile", "JS/CSS", false);
-
-			String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
-			
-			compare(text, test_result_1);
-		}finally{
-			if(editor != null){
-				editor.getSite().getPage().closeEditor(editor, false);
-			}
-		}
+		editor = openEditor("empty.html");
+		runToolEntry("jQuery Mobile", "JS/CSS", false);
+		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
+		compare(text, test_result_1);
 	}
 	
 	public void testInsertAround(){
-		IEditorPart editor=null;
-		try{
-			editor = openEditor("insert_around.html");
-
-			runToolEntry("jQuery Mobile", "JS/CSS", false);
-
-			String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
-			
-			compare(text, test_result_2);
-		}finally{
-			if(editor != null){
-				editor.getSite().getPage().closeEditor(editor, false);
-			}
-		}
+		editor = openEditor("insert_around.html");
+		runToolEntry("jQuery Mobile", "JS/CSS", false);
+		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
+		compare(text, test_result_2);
 	}
 	
 	public void testInsertIntoNotClosedTags(){
-		IEditorPart editor=null;
-		try{
-			editor = openEditor("not_closed_tag.html");
-
-			runToolEntry("jQuery Mobile", "JS/CSS", false);
-
-			String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
-			
-			compare(text, test_result_3);
-		}finally{
-			if(editor != null){
-				editor.getSite().getPage().closeEditor(editor, false);
-			}
-		}
+		editor = openEditor("not_closed_tag.html");
+		runToolEntry("jQuery Mobile", "JS/CSS", false);
+		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
+		compare(text, test_result_3);
 	}
 
 	public void testInsertIntoNormal(){
-		IEditorPart editor=null;
-		try{
-			editor = openEditor("normal.html");
-
-			runToolEntry("jQuery Mobile", "JS/CSS", false);
-
-			String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
-			
-			compare(text, test_result_2);
-		}finally{
-			if(editor != null){
-				editor.getSite().getPage().closeEditor(editor, false);
-			}
-		}
+		editor = openEditor("normal.html");
+		runToolEntry("jQuery Mobile", "JS/CSS", false);
+		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
+		compare(text, test_result_2);
 	}
 	
 	public void testInsertIntoDifferentVersion(){
-		IEditorPart editor=null;
-		try{
-			editor = openEditor("different_version.html");
-
-			runToolEntry("jQuery Mobile", "JS/CSS", false);
-
-			String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
-			
-			compare(text, test_result_4);
-		}finally{
-			if(editor != null){
-				editor.getSite().getPage().closeEditor(editor, false);
-			}
-		}
+		editor = openEditor("different_version.html");
+		runToolEntry("jQuery Mobile", "JS/CSS", false);
+		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
+		compare(text, test_result_4);
 	}
 
 	public void testInsertIntoBody(){
-		IEditorPart editor=null;
-		try{
-			editor = openEditor("body_only.html");
-
-			runToolEntry("jQuery Mobile", "JS/CSS", false);
-
-			String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
-			
-			compare(text, test_result_2);
-		}finally{
-			if(editor != null){
-				editor.getSite().getPage().closeEditor(editor, false);
-			}
-		}
+		editor = openEditor("body_only.html");
+		runToolEntry("jQuery Mobile", "JS/CSS", false);
+		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
+		compare(text, test_result_2);
 	}
 	
+	public void testAddJSCSSCheckboxSetFalse() {
+		doTestAddJSCSSCheckbox(false);
+	}
+
+	public void testAddJSCSSCheckboxSetTrue() {
+		doTestAddJSCSSCheckbox(true);
+	}
+
+	void doTestAddJSCSSCheckbox(boolean value) {
+		editor = openEditor("body_only.html");
+
+		String sValue = value ? TRUE : FALSE;
+		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
+		assertFalse(text.indexOf("<head>") > 0);
+
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Page", true);
+
+		assertTrue(currentPage instanceof NewPageWizardPage);
+
+		NewPageWizardPage wizardPage = (NewPageWizardPage)currentPage;
+		NewPageWizard wizard = (NewPageWizard)wizardPage.getWizard();
+
+		wizardPage.setEditorValue(NewPageWizardPage.ADD_JS_CSS_SETTING_NAME, sValue);
+		assertEquals(sValue, wizardPage.getEditorValue(NewPageWizardPage.ADD_JS_CSS_SETTING_NAME));
+		
+		wizard.performFinish();
+		WizardDialog dialog = (WizardDialog)wizard.getContainer();
+		dialog.close();
+
+		text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
+		assertEquals(value, text.indexOf("<head>") > 0);
+	}
+
 	private void compare(String test, String[] result){
 		StringTokenizer tokenizer = new StringTokenizer(test, "\n");
 		assertEquals("Unexpected number of lines",result.length, tokenizer.countTokens());
