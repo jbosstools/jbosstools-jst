@@ -47,6 +47,14 @@ public abstract class NewJQueryWidgetWizard<P extends AbstractNewHTMLWidgetWizar
 	}
 
 	@Override
+	public boolean performFinish() {
+		if(isTrue(AbstractNewHTMLWidgetWizardPage.ADD_JS_CSS_SETTING_NAME)) {
+			getCommandProperties().setProperty("insert jquery mobile js css", "true");
+		}
+		return super.performFinish();
+	}
+
+	@Override
 	public String getTextForBrowser() {
 		ElementNode html = new ElementNode(TAG_HTML, false);
 		createHead(html);

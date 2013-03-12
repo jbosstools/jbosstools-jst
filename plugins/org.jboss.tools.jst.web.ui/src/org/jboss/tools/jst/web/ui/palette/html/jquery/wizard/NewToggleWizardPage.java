@@ -76,7 +76,7 @@ public class NewToggleWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 	}
 
 	protected int getAdditionalHeight() {
-		return 30;
+		return 70;
 	}
 
 	public void validate() throws ValidationException {
