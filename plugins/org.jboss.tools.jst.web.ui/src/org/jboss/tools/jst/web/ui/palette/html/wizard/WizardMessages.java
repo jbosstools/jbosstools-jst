@@ -10,6 +10,8 @@ public class WizardMessages extends NLS {
 
 	public static String previewDisclaimer;
 
+	public static String addReferencesToJSCSSLabel;
+	public static String addReferencesToJSCSSTooltip;
 	public static String titleLabel;
 	public static String labelLabel;
 	public static String miniLabel;

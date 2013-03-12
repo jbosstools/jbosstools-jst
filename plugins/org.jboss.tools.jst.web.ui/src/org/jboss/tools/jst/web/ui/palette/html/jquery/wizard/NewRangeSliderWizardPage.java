@@ -87,7 +87,7 @@ public class NewRangeSliderWizardPage extends AbstractNewHTMLWidgetWizardPage im
 	}
 
 	protected int getAdditionalHeight() {
-		return 60;
+		return 70;
 	}
 
 	public void validate() throws ValidationException {

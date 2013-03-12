@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import java.io.File;
 
+import org.jboss.tools.jst.jsp.jspeditor.dnd.MobilePaletteInsertHelper;
 import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizard;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
@@ -44,6 +45,14 @@ public abstract class NewJQueryWidgetWizard<P extends AbstractNewHTMLWidgetWizar
 
 	protected boolean isLayoutHorizontal() {
 		return LAYOUT_HORIZONTAL.equals(page.getEditorValue(EDITOR_ID_LAYOUT));
+	}
+
+	@Override
+	public boolean performFinish() {
+		if(isTrue(AbstractNewHTMLWidgetWizardPage.ADD_JS_CSS_SETTING_NAME)) {
+			getCommandProperties().setProperty(MobilePaletteInsertHelper.PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS, TRUE);
+		}
+		return super.performFinish();
 	}
 
 	@Override
