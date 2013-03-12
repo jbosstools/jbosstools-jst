@@ -26,6 +26,7 @@ import org.eclipse.wst.xml.core.internal.document.ElementImpl;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
+import org.jboss.tools.common.model.options.SharableConstants;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.model.ui.dnd.DnDUtil;
 import org.jboss.tools.common.model.ui.editor.IModelObjectEditorInput;
@@ -113,6 +114,15 @@ public class PaletteDropCommand extends FileDropCommand {
 				}
 			}		
 			super.execute();
+		}
+	}
+
+	protected void fillPropertiesForRun(Properties properties) {
+		if(this.properties.containsKey(SharableConstants.PALETTE_PATH)) {
+			properties.put(SharableConstants.PALETTE_PATH, this.properties.getProperty(SharableConstants.PALETTE_PATH));
+		}
+		if(this.properties.containsKey(MobilePaletteInsertHelper.PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS)) {
+			properties.put(MobilePaletteInsertHelper.PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS, this.properties.get(MobilePaletteInsertHelper.PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS));
 		}
 	}
 

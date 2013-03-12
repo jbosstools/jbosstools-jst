@@ -74,7 +74,7 @@ public class NewTextInputWizardPage extends AbstractNewHTMLWidgetWizardPage impl
 	}
 
 	protected int getAdditionalHeight() {
-		return 60;
+		return 70;
 	}
 
 	public void validate() throws ValidationException {
