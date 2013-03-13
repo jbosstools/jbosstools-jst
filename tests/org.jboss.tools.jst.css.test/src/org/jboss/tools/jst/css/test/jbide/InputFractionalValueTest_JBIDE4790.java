@@ -30,6 +30,7 @@ import org.w3c.dom.css.CSSStyleRule;
  * @author Sergey Dzmitrovich
  * 
  */
+@SuppressWarnings("restriction")
 public class InputFractionalValueTest_JBIDE4790 extends AbstractCSSViewTest {
 
 	public static final String TEST_PAGE_NAME = "JBIDE/4790/inputFractional.css"; //$NON-NLS-1$
@@ -97,39 +98,27 @@ public class InputFractionalValueTest_JBIDE4790 extends AbstractCSSViewTest {
 
 		assertNotNull(testedValue);
 
-		/*
-		 * this test is negative for JBIDE-13380
-		 * TODO: after wtp team will fix their issue, test will fail
-		 * To fix it, uncomment assertion below.
-		 */
-		assertEquals(removeWhitespaces("1em 1.em 1.em"),
+		assertEquals(removeWhitespaces(newTestedValue),
 				removeWhitespaces(testedValue));
-		
-//		assertEquals(removeWhitespaces(newTestedValue),
-//				removeWhitespaces(testedValue));
 
 		parsedTestValue = Util.convertExtString(testedValue);
 
 		assertEquals(parsedTestValue.length, 2);
 
-		/*
-		 * https://jira.jboss.org/jira/browse/JBIDE-4790
-		 * TODO: JUnit should be updated after JBIDE-4790 fixing.
-		 */
-//		newTestedValue = parsedTestValue[0] + "3" + parsedTestValue[1]; //$NON-NLS-1$
-//		try {
-//			styleAttributes.put(TEST_CSS_ATTRIBUTE_NAME,
-//					newTestedValue);
-//		} catch (DOMException e) {
-//			fail("Changing of attribute's value leads to DOMException. Probably it is problem concerned with of JBIDE-4790 "); //$NON-NLS-1$
-//		}
-//		
-//		testedValue = declaration.getPropertyValue(TEST_CSS_ATTRIBUTE_NAME);
-//
-//		assertNotNull(testedValue);
-//
-//		assertEquals(removeWhitespaces(testedValue),
-//				removeWhitespaces(newTestedValue));
+		newTestedValue = removeWhitespaces(parsedTestValue[0]) + "3" + parsedTestValue[1]; //$NON-NLS-1$
+		try {
+			styleAttributes.put(TEST_CSS_ATTRIBUTE_NAME,
+					newTestedValue);
+		} catch (DOMException e) {
+			fail("Changing of attribute's value leads to DOMException. Probably it is problem concerned with of JBIDE-4790 "); //$NON-NLS-1$
+		}
+		
+		testedValue = declaration.getPropertyValue(TEST_CSS_ATTRIBUTE_NAME);
+
+		assertNotNull(testedValue);
+
+		assertEquals(removeWhitespaces(testedValue),
+				removeWhitespaces(newTestedValue));
 
 	}
 
