@@ -274,17 +274,26 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 	 * 
 	 */
 	private void clearProjectRoot(IProgressMonitor monitor) throws CoreException {
-		IProject project = getProject();
-		IPath projectLocation = new Path(getProperty(PROJECT_LOCATION_ID)); // project.getLocation();
-		isCancelled = false;
-		if(!checkOverwrite()) {
-			isCancelled = true;
+		if(!monitor.isCanceled() && !clearProjectRoot()) {
 			monitor.setCanceled(true);
-			return;
 		}
-		if (!project.exists()) {
-			removeDotFiles(projectLocation);
-		} 
+	}
+
+	boolean isProjectRootCleared = false;
+	/**
+	 * Returns false if dialog was shown that cancelled operation.
+	 */
+	public boolean clearProjectRoot() {
+		if(!isProjectRootCleared) {
+			isProjectRootCleared = true;
+			IProject project = getProject();
+			IPath projectLocation = new Path(getProperty(PROJECT_LOCATION_ID)); // project.getLocation();
+			isCancelled = !checkOverwrite();
+			if (!isCancelled && !project.exists()) {
+				removeDotFiles(projectLocation);
+			}
+		}
+		return !isCancelled;
 	}
 	
 	protected void removeDotFiles(IPath projectLocation) {

@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.ui.wizards.project;
 import java.lang.reflect.InvocationTargetException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -60,13 +61,23 @@ public abstract class NewWebProjectWizard extends Wizard implements INewWizard, 
 
 	public boolean performFinish() {
 		boolean result = true;
-		IRunnableWithProgress runnable = createOperation();
+		final WebNatureOperation runnable = (WebNatureOperation)createOperation();
+		IRunnableWithProgress op1 = new WorkspaceModifyDelegatingOperation(new IRunnableWithProgress() {
+			@Override
+			public void run(IProgressMonitor monitor) throws InvocationTargetException,
+					InterruptedException {
+				((WebNatureOperation)runnable).clearProjectRoot();
+			}
+		});
 		IRunnableWithProgress op = new WorkspaceModifyDelegatingOperation(runnable);
 		try {
-			getContainer().run(true, false, op);
-			BasicNewProjectResourceWizard.updatePerspective(fConfigElement);
-			BasicNewResourceWizard.selectAndReveal(context.getProject(), ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow());
-			if(runnable instanceof WebNatureOperation && ((WebNatureOperation)runnable).isCancelled()) {
+			getContainer().run(false, false, op1);
+			if(!runnable.isCancelled()) {
+				getContainer().run(true, false, op);
+				BasicNewProjectResourceWizard.updatePerspective(fConfigElement);
+				BasicNewResourceWizard.selectAndReveal(context.getProject(), ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow());
+			}
+			if(runnable.isCancelled()) {
 				result = false;
 			}
 		} catch (InvocationTargetException e) {
