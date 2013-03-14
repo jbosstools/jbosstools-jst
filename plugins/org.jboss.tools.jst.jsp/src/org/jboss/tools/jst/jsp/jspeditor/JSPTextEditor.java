@@ -968,9 +968,13 @@ public class JSPTextEditor extends StructuredTextEditor implements
 				event.detail = lastdetail;
 				return;
 			}
+			
+			// show current cursor position during the drag JBIDE-13791
+			selectAndReveal(pos, 0);
+			getTextViewer().getTextWidget().forceFocus();
+			
 			lastpos = pos;
 			dropContext.clean();
-			getSourceViewer().getDocument();
 			IndexedRegion region = getModel().getIndexedRegion(pos);
 			if (region instanceof ElementImpl) {
 				ElementImpl jspElement = (ElementImpl) region;
