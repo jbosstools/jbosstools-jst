@@ -12,7 +12,6 @@ package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import org.jboss.tools.common.model.ui.editors.dnd.DropWizardMessages;
 import org.jboss.tools.jst.web.ui.JSTWebUIImages;
-import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.ButtonsEditor.ButtonData;
 
 /**
  * 
@@ -84,12 +83,14 @@ public class NewFooterWizard extends NewJQueryWidgetWizard<NewFooterWizardPage> 
 			ElementNode ul = !isNavbar ? div : div.addChild(TAG_UL);
 		
 			for (int i = 0; i < n; i++) {
-				ButtonData data = page.buttons.buttons[i];
+				String label = page.buttons.getLabel(i);
+				String url = page.buttons.getURL(i);
+				String icon = page.buttons.getIcon(i);
 				ElementNode item = !isNavbar ? div : ul.addChild(TAG_LI, "");
-				ElementNode a = item.addChild(TAG_A, data.label);
-				a.addAttribute(ATTR_HREF, data.url);
-				if(data.icon.length() > 0) {
-					a.addAttribute(ATTR_DATA_ICON, data.icon);
+				ElementNode a = item.addChild(TAG_A, label);
+				a.addAttribute(ATTR_HREF, url);
+				if(icon.length() > 0) {
+					a.addAttribute(ATTR_DATA_ICON, icon);
 				}			
 				if(iconpos.length() > 0 && !isNavbar && hasIcons) {
 					a.addAttribute(ATTR_DATA_ICONPOS, iconpos);

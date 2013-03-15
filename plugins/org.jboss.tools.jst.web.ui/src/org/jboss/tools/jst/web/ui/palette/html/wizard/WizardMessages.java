@@ -14,7 +14,9 @@ public class WizardMessages extends NLS {
 	public static String addReferencesToJSCSSTooltip;
 	public static String titleLabel;
 	public static String labelLabel;
+	public static String legendLabel;
 	public static String miniLabel;
+	public static String checkedLabel;
 	public static String themeLabel;
 	public static String trackThemeLabel;
 	public static String numberedLabel;
@@ -99,6 +101,9 @@ public class WizardMessages extends NLS {
 
 	public static String newGridWizardTitle;
 	public static String newGridWizardDescription;
+
+	public static String newGroupedCheckboxesTitle;
+	public static String newGroupedCheckboxesDescription;
 
 	public static String errorIDisUsed;
 	
