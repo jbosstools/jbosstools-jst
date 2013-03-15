@@ -17,49 +17,26 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizar
  * @author Viacheslav Kabanovich
  *
  */
-public class ButtonsEditor extends ItemsEditor {
+public class CheckboxesEditor extends ItemsEditor {
 
-	public ButtonsEditor(AbstractNewHTMLWidgetWizardPage page, int minNumber, int maxNumber) {
+	public CheckboxesEditor(AbstractNewHTMLWidgetWizardPage page, int minNumber, int maxNumber) {
 		super(page, minNumber, maxNumber);
 		for (int i = 0; i < maxNumber; i++) {
-			setLabel(i, "" + (char)(65 + i));
-			items[i].setValue(EDITOR_ID_URL, "#");
-			setIcon(i, "");
+			items[i].setValue(EDITOR_ID_LABEL, "" + (char)(65 + i));
+			items[i].setValue(EDITOR_ID_CHECKED, FALSE);
 		}
 	}
 
 	protected void createItemEditors() {
 		addItemEditor(JQueryFieldEditorFactory.createLabelEditor());
-		addItemEditor(JQueryFieldEditorFactory.createURLEditor());
-		addItemEditor(JQueryFieldEditorFactory.createIconEditor());
+		addItemEditor(JQueryFieldEditorFactory.createCheckedEditor());
 	}
 
 	public String getLabel(int i) {
 		return items[i].getValue(EDITOR_ID_LABEL);
 	}
 
-	public void setLabel(int i, String value) {
-		items[i].setValue(EDITOR_ID_LABEL, value);
-	}
-
-	public String getURL(int i) {
-		return items[i].getValue(EDITOR_ID_URL);
-	}
-
-	public String getIcon(int i) {
-		return items[i].getValue(EDITOR_ID_ICON);
-	}
-
-	public void setIcon(int i, String value) {
-		items[i].setValue(EDITOR_ID_ICON, value);
-	}
-
-	public boolean hasIcons() {
-		for (int i = 0; i < getNumber(); i++) {
-			if(getIcon(i).length() > 0) {
-				return true;
-			}
-		}
-		return false;
+	public boolean isChecked(int i) {
+		return TRUE.equals(items[i].getValue(EDITOR_ID_CHECKED));
 	}
 }

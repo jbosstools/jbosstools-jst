@@ -34,29 +34,31 @@ public class NewCheckBoxWizard extends NewJQueryWidgetWizard<NewCheckBoxWizardPa
 
 	protected void addContent(ElementNode parent) {
 		String themeValue = page.getEditorValue(EDITOR_ID_THEME);
+		ElementNode input = null;
 		if(isMini()) {
 			String name = prefixName + generateIndex(prefixName, "", 1);
 			String id = prefixMiniId + generateIndex(prefixMiniId, "", 1);
-			ElementNode input = parent.addChild(TAG_INPUT);
+			input = parent.addChild(TAG_INPUT);
 			input.addAttribute(ATTR_TYPE, TYPE_CHECKBOX);
 			input.addAttribute(ATTR_NAME, name);
 			input.addAttribute(ATTR_ID, id);
 			input.addAttribute(ATTR_CLASS, CLASS_CUSTOM);
 			input.addAttribute(ATTR_DATA_MINI, TRUE);
-			if(themeValue.length() > 0) {
-				input.addAttribute(ATTR_DATA_THEME, themeValue);
-			}
 			ElementNode label = parent.addChild(TAG_LABEL, page.getEditorValue(EDITOR_ID_LABEL));
 			label.addAttribute(ATTR_FOR, id);
 		} else {
 			ElementNode label = parent.addChild(TAG_LABEL, page.getEditorValue(EDITOR_ID_LABEL));
 			String name = prefixName + generateIndex(prefixName, "", 1);
-			ElementNode input = label.addChild(TAG_INPUT);
+			input = label.addChild(TAG_INPUT);
 			input.addAttribute(ATTR_TYPE, TYPE_CHECKBOX);
 			input.addAttribute(ATTR_NAME, name);
-			if(themeValue.length() > 0) {
-				input.addAttribute(ATTR_DATA_THEME, themeValue);
-			}
+		}
+		String iconpos = page.getEditorValue(EDITOR_ID_ICON_POS);
+		if(iconpos.length() > 0) {
+			input.addAttribute(ATTR_DATA_ICONPOS, iconpos);
+		}
+		if(themeValue.length() > 0) {
+			input.addAttribute(ATTR_DATA_THEME, themeValue);
 		}
 	}
 

@@ -115,7 +115,9 @@ public interface JQueryConstants extends HTMLConstants {
 
 	public String EDITOR_ID_TITLE = "title";
 	public String EDITOR_ID_LABEL = "label";
+	public String EDITOR_ID_LEGEND = "legend";
 	public String EDITOR_ID_MINI = "mini";
+	public String EDITOR_ID_CHECKED = "checked";
 	public String EDITOR_ID_THEME = "theme";
 	public String EDITOR_ID_TRACK_THEME = "track-theme";
 

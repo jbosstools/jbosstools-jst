@@ -22,28 +22,39 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewNavbarWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
-	ButtonsEditor buttons = new ButtonsEditor(this, 1, 8);
+public class NewGroupedCheckboxesWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
+	CheckboxesEditor buttons = new CheckboxesEditor(this, 1, 8);
 
-	public NewNavbarWizardPage() {
-		super("newNavbar", WizardMessages.newNavbarWizardTitle);
-		setDescription(WizardMessages.newNavbarWizardDescription);
+	public NewGroupedCheckboxesWizardPage() {
+		super("newGroupedCheckboxes", WizardMessages.newGroupedCheckboxesTitle);
+		setDescription(WizardMessages.newGroupedCheckboxesDescription);
 	}
 
 	protected void createFieldPanel(Composite parent) {
-		buttons.createControl(parent, "Items");
+		IFieldEditor legend = JQueryFieldEditorFactory.createLegendEditor();
+		addEditor(legend, parent);
+
+		IFieldEditor layoutEditor = JQueryFieldEditorFactory.createLayoutEditor();
+		layoutEditor.setValue(LAYOUT_VERTICAL);
+		addEditor(layoutEditor, parent);
+		expandCombo(layoutEditor);
+
+		Composite panel = buttons.createControl(parent, "Items");
+
+		IFieldEditor mini = JQueryFieldEditorFactory.createMiniEditor();
+		addEditor(mini, panel);
 
 		IFieldEditor iconpos = JQueryFieldEditorFactory.createIconPositionEditor();
-		addEditor(iconpos, buttons.tab.getParent());
+		addEditor(iconpos, panel);
 		expandCombo(iconpos);
 
 		getEditor(EDITOR_ID_NUMBER_OF_ITEMS).setValue("3");
 
-		iconpos.setEnabled(false);
-
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
 		addEditor(theme, parent);
 		expandCombo(theme);
+
+		iconpos.setEnabled(false);
 	}
 
 	@Override
@@ -53,11 +64,14 @@ public class NewNavbarWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 		}
 		String name = evt.getPropertyName();
 		String value = evt.getNewValue().toString();
-		if(buttons.onPropertyChange(name, value)) {
-			if(getEditor(EDITOR_ID_ICON_POS) != null) {
-				getEditor(EDITOR_ID_ICON_POS).setEnabled(buttons.hasIcons());
-			}
-		}
+		buttons.onPropertyChange(name, value);
+
+		IFieldEditor iconpos = getEditor(EDITOR_ID_ICON_POS);
+		if(iconpos != null) {
+			boolean h = (LAYOUT_HORIZONTAL.equals(getEditorValue(EDITOR_ID_LAYOUT)));
+			iconpos.setEnabled(!h);
+		}		
+
 		super.propertyChange(evt);
 	}
 

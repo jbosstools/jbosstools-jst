@@ -34,6 +34,8 @@ public interface HTMLConstants {
 	public String TAG_LABEL = "label";
 	public String TAG_SELECT = "select";
 	public String TAG_OPTION = "option";
+	public String TAG_FIELDSET = "fieldset";
+	public String TAG_LEGEND = "legend";
 
 	public String ATTR_TYPE = "type";
 	public String ATTR_NAME = "name";
@@ -49,6 +51,7 @@ public interface HTMLConstants {
 	public String ATTR_CONTENT = "content";
 	public String ATTR_VALUE = "value";
 	public String ATTR_DISABLED = "disabled";
+	public String CHECKED = "checked";
 
 	public String METHOD_GET = "get";
 }

@@ -27,6 +27,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFooterWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFooterWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGridWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGridWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedCheckboxesWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedCheckboxesWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizard;
@@ -462,6 +464,28 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest implements J
 
 		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
 		assertTrue(text.indexOf("ui-block-d") > 0);
+	}
+
+	public void testNewGroupedCheckboxesWizard() {
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Grouped Checkboxes", true);
+
+		assertTrue(currentPage instanceof NewGroupedCheckboxesWizardPage);
+
+		NewGroupedCheckboxesWizardPage wizardPage = (NewGroupedCheckboxesWizardPage)currentPage;
+		NewGroupedCheckboxesWizard wizard = (NewGroupedCheckboxesWizard)wizardPage.getWizard();
+		Display.getCurrent().readAndDispatch();
+
+		assertTextDoesNotExist(wizard, DATA_TYPE_HORIZONTAL);
+		wizardPage.setEditorValue(EDITOR_ID_LAYOUT, LAYOUT_HORIZONTAL);
+		assertAttrExists(wizard, ATTR_DATA_TYPE, DATA_TYPE_HORIZONTAL);
+		wizardPage.setEditorValue(EDITOR_ID_LAYOUT, LAYOUT_VERTICAL);
+		assertTextDoesNotExist(wizard, DATA_TYPE_HORIZONTAL);
+
+		wizard.performFinish();
+		WizardDialog dialog = (WizardDialog)wizard.getContainer();
+		dialog.close();
+
+		
 	}
 
 	void assertAttrExists(AbstractNewHTMLWidgetWizard wizard, String attr, String value) {
