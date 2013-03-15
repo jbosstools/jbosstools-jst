@@ -12,11 +12,8 @@ package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import java.beans.PropertyChangeEvent;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.TabFolder;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
@@ -27,7 +24,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  *
  */
 public class NewFooterWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
-	ButtonsEditor buttons = new ButtonsEditor(this);
+	ButtonsEditor buttons = new ButtonsEditor(this, 0, 4);
 
 	public NewFooterWizardPage() {
 		super("newFooter", WizardMessages.newFooterWizardTitle);
@@ -35,14 +32,14 @@ public class NewFooterWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 	}
 
 	protected void createFieldPanel(Composite parent) {
-		buttons.buttons[0].label = "Add";
-		buttons.buttons[1].label = "Up";
-		buttons.buttons[2].label = "Down";
-		buttons.buttons[3].label = "Remove";
-		buttons.buttons[0].icon = "plus";
-		buttons.buttons[1].icon = "arrow-u";
-		buttons.buttons[2].icon = "arrow-d";
-		buttons.buttons[3].icon = "delete";
+		buttons.setLabel(0, "Add");
+		buttons.setLabel(1, "Up");
+		buttons.setLabel(2, "Down");
+		buttons.setLabel(3, "Remove");
+		buttons.setIcon(0, "plus");
+		buttons.setIcon(1, "arrow-u");
+		buttons.setIcon(2, "arrow-d");
+		buttons.setIcon(3, "delete");
 		IFieldEditor title = JQueryFieldEditorFactory.createTitleEditor();
 		title.setValue("");
 		addEditor(title, parent);
@@ -56,34 +53,25 @@ public class NewFooterWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 		
 		IFieldEditor fullScreen = JQueryFieldEditorFactory.createFullScreenEditor();
 		addEditor(fullScreen, right);
-		
-		IFieldEditor number = JQueryFieldEditorFactory.createItemsNumberEditor(WizardMessages.numberOfItemsLabel, 0, 4);
-		addEditor(number); //Control is created by buttons editor.
-		
+
+		Composite panel = buttons.createControl(parent, "Buttons");
+
 		IFieldEditor arrangement = JQueryFieldEditorFactory.createArragementEditor();
-		addEditor(arrangement); //Control is created by buttons editor.
+		addEditor(arrangement, panel);
+
+		columns = NewRangeSliderWizardPage.createTwoColumns(panel);
+		GridLayout l = (GridLayout)columns[0].getLayout();
+		l.marginBottom = 2;
+		columns[0].setLayout(l);
+		left = columns[0];
+		right = columns[1];
 
 		IFieldEditor iconpos = JQueryFieldEditorFactory.createIconPositionEditor();
-		addEditor(iconpos); //Control is created by buttons editor.
+		addEditor(iconpos, left);
+		expandCombo(iconpos);
+
 		IFieldEditor icononly = JQueryFieldEditorFactory.createIconOnlyEditor();
-		addEditor(icononly); //Control is created by buttons editor.
-
-		TabFolder tab = buttons.createItemsFolder(parent, "Buttons");
-		
-		Composite p1 = new Composite(tab, SWT.NONE);
-		buttons.control = p1;
-		p1.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		GridLayout layout = new GridLayout(3, false);
-		p1.setLayout(layout);
-
-		IFieldEditor label = JQueryFieldEditorFactory.createLabelEditor();
-		addEditor(label, p1);
-
-		IFieldEditor url = JQueryFieldEditorFactory.createURLEditor();
-		addEditor(url, p1);
-
-		IFieldEditor icon = JQueryFieldEditorFactory.createIconEditor();
-		addEditor(icon, p1);
+		addEditor(icononly, right);
 
 		getEditor(EDITOR_ID_NUMBER_OF_ITEMS).setValue("3");
 
@@ -99,16 +87,7 @@ public class NewFooterWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 		}
 		String name = evt.getPropertyName();
 		String value = evt.getNewValue().toString();
-		if(EDITOR_ID_LABEL.equals(name)) {
-			buttons.getSelected().label = value;
-		} else if(EDITOR_ID_URL.equals(name)) {
-			buttons.getSelected().url = value;
-		} else if(EDITOR_ID_ICON.equals(name)) {
-			buttons.getSelected().icon = value;
-			getEditor(EDITOR_ID_ICON_POS).setEnabled(buttons.hasIcons());
-		} else if(EDITOR_ID_NUMBER_OF_ITEMS.equals(name)) {
-			buttons.setNumber(Integer.parseInt(value));
-		}
+		buttons.onPropertyChange(name, value);
 
 		boolean hasIcons = buttons.hasIcons();
 		boolean icononly = TRUE.equals(getEditorValue(EDITOR_ID_ICON_ONLY));

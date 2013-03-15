@@ -41,6 +41,10 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return SwtFieldEditorFactory.INSTANCE.createTextEditor(editorID, WizardMessages.labelLabel, "");
 	}
 
+	public static IFieldEditor createLegendEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_LEGEND, WizardMessages.legendLabel, "");
+	}
+
 	static String[] THEMES = {"", "a", "b", "c", "d", "e"};
 
 	public static IFieldEditor createDataThemeEditor() {
@@ -53,6 +57,10 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 
 	public static IFieldEditor createMiniEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_MINI, WizardMessages.miniLabel, false);
+	}
+
+	public static IFieldEditor createCheckedEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_CHECKED, WizardMessages.checkedLabel, false);
 	}
 
 	public static IFieldEditor createNumberedEditor() {
