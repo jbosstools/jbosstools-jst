@@ -35,6 +35,10 @@ public class NewCheckBoxWizardPage extends AbstractNewHTMLWidgetWizardPage imple
 		IFieldEditor mini = JQueryFieldEditorFactory.createMiniEditor();
 		addEditor(mini, parent);
 
+		IFieldEditor iconpos = JQueryFieldEditorFactory.createIconPositionEditor();
+		addEditor(iconpos, parent);
+		expandCombo(iconpos);
+
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
 		addEditor(theme, parent);
 		expandCombo(theme);
