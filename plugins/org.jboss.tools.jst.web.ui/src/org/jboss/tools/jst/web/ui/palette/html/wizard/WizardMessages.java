@@ -63,6 +63,8 @@ public class WizardMessages extends NLS {
 	public static String gridColumnsLabel;
 	public static String gridRowsLabel;
 
+	public static String itemsLabel;
+
 	public static String newCheckboxWizardTitle;
 	public static String newCheckboxWizardDescription;
 	
@@ -104,6 +106,9 @@ public class WizardMessages extends NLS {
 
 	public static String newGroupedCheckboxesTitle;
 	public static String newGroupedCheckboxesDescription;
+
+	public static String newRadioTitle;
+	public static String newRadioDescription;
 
 	public static String errorIDisUsed;
 	
