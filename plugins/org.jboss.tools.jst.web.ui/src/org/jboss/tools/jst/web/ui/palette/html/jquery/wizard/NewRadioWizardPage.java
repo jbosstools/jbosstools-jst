@@ -22,12 +22,12 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewGroupedCheckboxesWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
-	CheckboxesEditor buttons = new CheckboxesEditor(this, 1, 8);
+public class NewRadioWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
+	RadioEditor buttons = new RadioEditor(this, 1, 8);
 
-	public NewGroupedCheckboxesWizardPage() {
-		super("newGroupedCheckboxes", WizardMessages.newGroupedCheckboxesTitle);
-		setDescription(WizardMessages.newGroupedCheckboxesDescription);
+	public NewRadioWizardPage() {
+		super("newRadio", WizardMessages.newRadioTitle);
+		setDescription(WizardMessages.newRadioDescription);
 	}
 
 	protected void createFieldPanel(Composite parent) {
@@ -64,7 +64,11 @@ public class NewGroupedCheckboxesWizardPage extends AbstractNewHTMLWidgetWizardP
 		}
 		String name = evt.getPropertyName();
 		String value = evt.getNewValue().toString();
-		buttons.onPropertyChange(name, value);
+		if(buttons.onPropertyChange(name, value)) {
+			if(EDITOR_ID_CHECKED.equals(name)) {
+				buttons.onCheckedModified();
+			}
+		}
 
 		IFieldEditor iconpos = getEditor(EDITOR_ID_ICON_POS);
 		if(iconpos != null) {
@@ -76,7 +80,7 @@ public class NewGroupedCheckboxesWizardPage extends AbstractNewHTMLWidgetWizardP
 	}
 
 	protected int getAdditionalHeight() {
-		return 100;
+		return 130;
 	}
 
 }

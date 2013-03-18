@@ -45,6 +45,7 @@ public interface JQueryConstants extends HTMLConstants {
 	public String TRUE = "true";
 	public String FALSE = "false";
 	public String TYPE_CHECKBOX = "checkbox";
+	public String TYPE_RADIO = "radio";
 	public String TYPE_RANGE = "range";
 	public String TYPE_TEXT = "text";
 	public String TYPE_TEXTAREA = "textarea";

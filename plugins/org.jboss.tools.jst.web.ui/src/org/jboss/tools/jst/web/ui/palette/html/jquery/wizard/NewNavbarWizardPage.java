@@ -31,7 +31,7 @@ public class NewNavbarWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 	}
 
 	protected void createFieldPanel(Composite parent) {
-		buttons.createControl(parent, "Items");
+		buttons.createControl(parent, WizardMessages.itemsLabel);
 
 		IFieldEditor iconpos = JQueryFieldEditorFactory.createIconPositionEditor();
 		addEditor(iconpos, buttons.tab.getParent());

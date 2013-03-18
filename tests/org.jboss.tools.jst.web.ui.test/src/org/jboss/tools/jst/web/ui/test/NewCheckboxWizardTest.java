@@ -37,6 +37,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewNavbarWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewNavbarWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPageWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPageWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRadioWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRadioWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRangeSliderWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRangeSliderWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTextInputWizard;
@@ -484,8 +486,26 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest implements J
 		wizard.performFinish();
 		WizardDialog dialog = (WizardDialog)wizard.getContainer();
 		dialog.close();
+	}
 
-		
+	public void testNewRadioWizard() {
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Radio Button", true);
+
+		assertTrue(currentPage instanceof NewRadioWizardPage);
+
+		NewRadioWizardPage wizardPage = (NewRadioWizardPage)currentPage;
+		NewRadioWizard wizard = (NewRadioWizard)wizardPage.getWizard();
+		Display.getCurrent().readAndDispatch();
+
+		assertTextDoesNotExist(wizard, DATA_TYPE_HORIZONTAL);
+		wizardPage.setEditorValue(EDITOR_ID_LAYOUT, LAYOUT_HORIZONTAL);
+		assertAttrExists(wizard, ATTR_DATA_TYPE, DATA_TYPE_HORIZONTAL);
+		wizardPage.setEditorValue(EDITOR_ID_LAYOUT, LAYOUT_VERTICAL);
+		assertTextDoesNotExist(wizard, DATA_TYPE_HORIZONTAL);
+
+		wizard.performFinish();
+		WizardDialog dialog = (WizardDialog)wizard.getContainer();
+		dialog.close();
 	}
 
 	void assertAttrExists(AbstractNewHTMLWidgetWizard wizard, String attr, String value) {
