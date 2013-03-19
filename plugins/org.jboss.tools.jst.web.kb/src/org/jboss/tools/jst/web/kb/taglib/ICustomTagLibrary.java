@@ -21,4 +21,6 @@ public interface ICustomTagLibrary extends ITagLibrary {
 	 * @return
 	 */
 	ITagLibRecognizer getRecognizer(); 
+
+	void setRecognizer(ITagLibRecognizer recognizer);
 }
