@@ -80,12 +80,11 @@ public class CustomTagLibManager {
 		return extensions;
 	}
 	
-	private InputStream getInputStream(IConfigurationElement element){
-		String location = element.getAttribute("location"); //$NON-NLS-1$
-		try{
+	private InputStream getInputStream(String location) {
+		try {
 			URL url = FileLocator.resolve(new URL(location));
 			return url.openConnection().getInputStream();
-		}catch(IOException ex){
+		} catch(IOException ex) {
 			WebKbPlugin.getDefault().logError(ex);
 			return null;
 		}
@@ -103,6 +102,7 @@ public class CustomTagLibManager {
 				IConfigurationElement[] elements = extension.getConfigurationElements();
 				for(int j=0; j<elements.length; j++) {
 					String elementName = elements[j].getName();
+					String location = elements[j].getAttribute("location");
 					if(CustomTagLibrary.TAG_LIB.equals(elementName)) {
 						String uri = elements[j].getAttribute("uri"); //$NON-NLS-1$
 						String version = elements[j].getAttribute("version"); //$NON-NLS-1$
@@ -121,12 +121,26 @@ public class CustomTagLibManager {
 								WebKbPlugin.getDefault().logError(e);
 							}
 						}
-						InputStream schemaStream = getInputStream(elements[j]);
-						CustomTagLibrary lib = FACELETS_HTML_TAG_LIB_URI.equals(uri)?new HTMLTagLibrary(elements[j].getContributor().getName(), schemaStream, uri, version, name):new CustomTagLibrary(elements[j].getContributor().getName(), schemaStream, uri, version, name);
+						ICustomTagLibrary lib = null;
+						if(location!=null) {
+							InputStream schemaStream = getInputStream(location);
+							lib = FACELETS_HTML_TAG_LIB_URI.equals(uri)?new HTMLTagLibrary(elements[j].getContributor().getName(), schemaStream, uri, version, name):new CustomTagLibrary(elements[j].getContributor().getName(), schemaStream, uri, version, name);
+						} else {
+							try {
+								Object cls = elements[j].createExecutableExtension("class");
+								if(cls instanceof ICustomTagLibrary) {
+									lib = (ICustomTagLibrary)cls;
+								} else {
+									WebKbPlugin.getDefault().logError("Custom Tag Lib (class name: " + cls + " registred in plugin.xml, contributer: " + elements[j].getContributor().getName() + ") must implement " + ICustomTagLibrary.class.getName());
+								}
+							} catch (CoreException e) {
+								WebKbPlugin.getDefault().logError(e);
+							}
+						}
 						lib.setRecognizer(recognizer);
 						libSet.add(lib);
 					} else if(CustomTagLibrary.COMPONET_EXTENSION.equals(elementName)) {
-						InputStream schemaStream = getInputStream(elements[j]);
+						InputStream schemaStream = getInputStream(location);
 						Document document = null;
 						try {
 							DocumentBuilder builder = CustomTagLibrary.createDocumentBuilder(false);

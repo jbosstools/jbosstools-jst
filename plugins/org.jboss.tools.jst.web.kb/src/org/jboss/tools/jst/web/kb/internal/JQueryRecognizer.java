@@ -15,11 +15,11 @@ import org.eclipse.core.resources.IFile;
 /**
  * @author Alexey Kazakov
  */
-public class JQueryMobileRecognizer extends JSRecognizer {
+public class JQueryRecognizer extends JSRecognizer {
 
-	public static final String JQUERY_MOBILE_JS_PATTERN = ".*(jquery.mobile-).*(.js)";
+	public static final String JQUERY_MOBILE_JS_PATTERN = ".*(jquery-).*(.js)";
 
-	public static boolean containsJQueryMobileJSReference(IFile file) {
+	public static boolean containsJQueryJSReference(IFile file) {
 		return containsJSReference(file, JQUERY_MOBILE_JS_PATTERN);
 	}
 
