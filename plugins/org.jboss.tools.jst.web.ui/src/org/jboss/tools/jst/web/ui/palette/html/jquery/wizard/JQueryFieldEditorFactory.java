@@ -55,6 +55,10 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_TRACK_THEME, WizardMessages.trackThemeLabel, toList(THEMES), "", true);
 	}
 
+	public static IFieldEditor createDataContentThemeEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_CONTENT_THEME, WizardMessages.contentThemeLabel, toList(THEMES), "", true);
+	}
+
 	public static IFieldEditor createMiniEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_MINI, WizardMessages.miniLabel, false);
 	}
@@ -102,6 +106,10 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_TITLE, WizardMessages.titleLabel, "");
 	}
 
+	public static IFieldEditor createCollapsibleHeaderEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_HEADER, WizardMessages.headerLabel, "");
+	}
+
 	static String[] LAYOUT_LIST = {LAYOUT_HORIZONTAL, LAYOUT_VERTICAL};
 
 	public static IFieldEditor createLayoutEditor() {
@@ -129,6 +137,14 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_INLINE, WizardMessages.inlineLabel, false);
 	}
 
+	public static IFieldEditor createCollapsedEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_COLLAPSED, WizardMessages.collapsedLabel, true);
+	}
+
+	public static IFieldEditor createFieldSetEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_FIELD_SET, WizardMessages.fieldSetLabel, false);
+	}
+
 	public static IFieldEditor createIconOnlyEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_ICON_ONLY, WizardMessages.iconOnlyLabel, false);
 	}
@@ -144,6 +160,14 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 
 	public static IFieldEditor createIconEditor(String editorID) {
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(editorID, WizardMessages.iconLabel, toList(ICON_VALUES), "", true);
+	}
+
+	public static IFieldEditor createCollapsedIconEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_COLLAPSED_ICON, WizardMessages.collapsedIconLabel, toList(ICON_VALUES), "", true);
+	}
+
+	public static IFieldEditor createExpandedIconEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_EXPANDED_ICON, WizardMessages.expandedIconLabel, toList(ICON_VALUES), "", true);
 	}
 
 	public static IFieldEditor createIconPositionEditor() {

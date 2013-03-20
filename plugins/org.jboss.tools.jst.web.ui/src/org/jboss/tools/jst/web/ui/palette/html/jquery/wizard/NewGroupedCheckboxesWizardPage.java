@@ -36,8 +36,7 @@ public class NewGroupedCheckboxesWizardPage extends AbstractNewHTMLWidgetWizardP
 
 		IFieldEditor layoutEditor = JQueryFieldEditorFactory.createLayoutEditor();
 		layoutEditor.setValue(LAYOUT_VERTICAL);
-		addEditor(layoutEditor, parent);
-		expandCombo(layoutEditor);
+		addEditor(layoutEditor, parent, true);
 
 		Composite panel = buttons.createControl(parent, WizardMessages.itemsLabel);
 
@@ -45,14 +44,12 @@ public class NewGroupedCheckboxesWizardPage extends AbstractNewHTMLWidgetWizardP
 		addEditor(mini, panel);
 
 		IFieldEditor iconpos = JQueryFieldEditorFactory.createIconPositionEditor();
-		addEditor(iconpos, panel);
-		expandCombo(iconpos);
+		addEditor(iconpos, panel, true);
 
 		getEditor(EDITOR_ID_NUMBER_OF_ITEMS).setValue("3");
 
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
-		addEditor(theme, parent);
-		expandCombo(theme);
+		addEditor(theme, parent, true);
 
 		iconpos.setEnabled(false);
 	}

@@ -54,13 +54,10 @@ public class NewGridWizardPage extends AbstractNewHTMLWidgetWizardPage implement
 		right.setLayout(layout);
 
 		IFieldEditor columns = JQueryFieldEditorFactory.createGridColumnsEditor();
-		addEditor(columns, left);
-		expandCombo(columns);
+		addEditor(columns, left, true);
 
 		IFieldEditor rows = JQueryFieldEditorFactory.createGridRowsEditor();
-		addEditor(rows, right);
-		expandCombo(rows);
-
+		addEditor(rows, right, true);
 	}
 
 }

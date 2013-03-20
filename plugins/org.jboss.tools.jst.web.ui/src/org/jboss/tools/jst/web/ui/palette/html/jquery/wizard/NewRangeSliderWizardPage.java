@@ -78,12 +78,10 @@ public class NewRangeSliderWizardPage extends AbstractNewHTMLWidgetWizardPage im
 		createSeparator(parent);
 		
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
-		addEditor(theme, parent);
-		expandCombo(theme);
+		addEditor(theme, parent, true);
 
 		IFieldEditor trackTheme = JQueryFieldEditorFactory.createDataTrackThemeEditor();
-		addEditor(trackTheme, parent);
-		expandCombo(trackTheme);
+		addEditor(trackTheme, parent, true);
 	}
 
 	protected int getAdditionalHeight() {

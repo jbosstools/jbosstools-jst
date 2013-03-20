@@ -21,6 +21,10 @@ public interface JQueryConstants extends HTMLConstants {
 	public String ATTR_DATA_AUTODIVIDERS = "data-autodividers";
 	public String ATTR_DATA_CLEAR_BTN = "data-clear-btn";
 	public String ATTR_DATA_CLOSE_BTN = "data-close-btn";
+	public String ATTR_DATA_COLLAPSED = "data-collapsed";
+	public String ATTR_DATA_COLLAPSED_ICON = "data-collapsed-icon";
+	public String ATTR_DATA_CONTENT_THEME = "data-content-theme";
+	public String ATTR_DATA_EXPANDED_ICON = "data-expanded-icon";
 	public String ATTR_DATA_FILTER = "data-filter";
 	public String ATTR_DATA_FULL_SCREEN = "data-fullscreen";
 	public String ATTR_DATA_HIGHLIGHT = "data-highlight";
@@ -35,12 +39,13 @@ public interface JQueryConstants extends HTMLConstants {
 	public String ATTR_DATA_THEME = "data-theme";
 	public String ATTR_DATA_TRACK_THEME = "data-track-theme";
 	public String ATTR_DATA_TRANSITION = "data-transition";
+	public String ATTR_DATA_TYPE = "data-type";
+
 	public String ATTR_DATA_MIN = "min";
 	public String ATTR_DATA_MAX = "max";
 	public String ATTR_DATA_STEP = "step";
 	public String ATTR_DATA_VALUE = "value";
 	public String ATTR_PLACEHOLDER = "placeholder";
-	public String ATTR_DATA_TYPE = "data-type";
 
 	public String TRUE = "true";
 	public String FALSE = "false";
@@ -72,18 +77,19 @@ public interface JQueryConstants extends HTMLConstants {
 
 	public String POSITION_FIXED = "fixed";
 
-	public String ROLE_PAGE = "page";
-	public String ROLE_CONTENT = "content";
-	public String ROLE_LISTVIEW = "listview";
-	public String ROLE_SLIDER = "slider";
-	public String ROLE_RANGE_SLIDER = "rangeslider";
 	public String ROLE_BUTTON = "button";
+	public String ROLE_COLLAPSIBLE = "collapsible";
+	public String ROLE_CONTENT = "content";
 	public String ROLE_DIALOG = "dialog";
-	public String ROLE_HEADER = "header";
-	public String ROLE_FOOTER = "footer";
-	public String ROLE_NAVBAR = "navbar";
 	public String ROLE_FIELDCONTAIN = "fieldcontain";
+	public String ROLE_FOOTER = "footer";
 	public String ROLE_GROUP = "controlgroup";
+	public String ROLE_HEADER = "header";
+	public String ROLE_LISTVIEW = "listview";
+	public String ROLE_NAVBAR = "navbar";
+	public String ROLE_PAGE = "page";
+	public String ROLE_RANGE_SLIDER = "rangeslider";
+	public String ROLE_SLIDER = "slider";
 
 	public String DATA_TYPE_HORIZONTAL = "horizontal";
 
@@ -121,6 +127,7 @@ public interface JQueryConstants extends HTMLConstants {
 	public String EDITOR_ID_CHECKED = "checked";
 	public String EDITOR_ID_THEME = "theme";
 	public String EDITOR_ID_TRACK_THEME = "track-theme";
+	public String EDITOR_ID_CONTENT_THEME = "content-theme";
 
 	public String EDITOR_ID_NUMBERED = "numbered";
 	public String EDITOR_ID_READ_ONLY = "read-only";
@@ -141,6 +148,8 @@ public interface JQueryConstants extends HTMLConstants {
 	public String EDITOR_ID_ICON = "icon";
 	public String EDITOR_ID_ICON_ONLY = "icon-only";
 	public String EDITOR_ID_ICON_POS = "icon-pos";
+	public String EDITOR_ID_COLLAPSED_ICON = "collapsed-icon";
+	public String EDITOR_ID_EXPANDED_ICON = "expanded-icon";
 	public String EDITOR_ID_INLINE = "inline";
 	public String EDITOR_ID_RANGE = "range";
 	public String EDITOR_ID_MIN = "min";
@@ -171,5 +180,9 @@ public interface JQueryConstants extends HTMLConstants {
 	public String EDITOR_ID_ARRAGEMENT = "arragement";
 	public String EDITOR_ID_GRID_COLUMNS = "grid-columns";
 	public String EDITOR_ID_GRID_ROWS = "grid-rows";
+
+	public String EDITOR_ID_HEADER = "header";
+	public String EDITOR_ID_COLLAPSED = "collapsed";
+	public String EDITOR_ID_FIELD_SET = "field-set";
 
 }

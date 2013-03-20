@@ -36,15 +36,12 @@ public class NewLinkWizardPage extends AbstractNewHTMLWidgetWizardPage implement
 		addEditor(url, parent);
 		
 		IFieldEditor action = JQueryFieldEditorFactory.createActionEditor();
-		addEditor(action, parent);
-		expandCombo(action);
+		addEditor(action, parent, true);
 
 		createSeparator(parent);
 
 		IFieldEditor transition = JQueryFieldEditorFactory.createTransitionEditor();
-		addEditor(transition, parent);
-		expandCombo(transition);
-
+		addEditor(transition, parent, true);
 	}
 
 }
