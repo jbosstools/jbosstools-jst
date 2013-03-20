@@ -85,7 +85,7 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 		}
 		String endText = result.length < 2 ? "" : result[1];
 		if(endText.length() > 0) {
-			getCommandProperties().setProperty("end text", startText);
+			getCommandProperties().setProperty("end text", endText);
 		}
 	}
 
@@ -239,6 +239,10 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 		
 		public void next() {
 			if(separate) {
+				while(current != null && current.length() > 0 && (current.charAt(current.length() - 1) == '\r'
+						|| current.charAt(current.length() - 1) == '\n')) {
+					current.setLength(current.length() - 1);
+				}
 				current = new StringBuilder();
 				builders.add(current);
 			}

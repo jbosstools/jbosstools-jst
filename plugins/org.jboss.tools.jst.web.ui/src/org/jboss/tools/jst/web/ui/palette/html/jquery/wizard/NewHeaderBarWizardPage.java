@@ -89,8 +89,7 @@ public class NewHeaderBarWizardPage extends AbstractNewHTMLWidgetWizardPage impl
 		addEditor(rightButtonIcon, rightParent);
 
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
-		addEditor(theme, parent);
-		expandCombo(theme);
+		addEditor(theme, parent, true);
 	}
 
 	public void validate() throws ValidationException {

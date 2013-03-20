@@ -78,7 +78,8 @@ public class NewDialogWizard extends NewJQueryWidgetWizard<NewDialogWizardPage> 
 		}
 		ElementNode content = dialogDiv.addChild(TAG_DIV);
 		content.addAttribute(ATTR_DATA_ROLE, ROLE_CONTENT);
-		content.addChild("h6", "Dialog content.");
+		content.addChild(TAG_H6, "Dialog content.");
+		content.getChildren().add(SEPARATOR);
 		ElementNode a1 = content.addChild(TAG_A, "OK");
 		a1.addAttribute(ATTR_HREF, "#" + id);
 		a1.addAttribute(ATTR_DATA_ROLE, ROLE_BUTTON);

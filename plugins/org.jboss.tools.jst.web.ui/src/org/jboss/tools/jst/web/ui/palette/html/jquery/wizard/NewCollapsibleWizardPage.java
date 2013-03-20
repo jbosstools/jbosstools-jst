@@ -11,7 +11,6 @@
 package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import org.eclipse.swt.widgets.Composite;
-import org.jboss.tools.common.model.ui.editors.dnd.ValidationException;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
@@ -21,59 +20,58 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewButtonWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
+public class NewCollapsibleWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
 
-	public NewButtonWizardPage() {
-		super("newButton", WizardMessages.newButtonWizardTitle);
-		setDescription(WizardMessages.newButtonWizardDescription);
+	public NewCollapsibleWizardPage() {
+		super("newCollapsible", WizardMessages.newCollapsibleWizardTitle);
+		setDescription(WizardMessages.newCollapsibleWizardDescription);
 	}
 
 	protected void createFieldPanel(Composite parent) {
-		IFieldEditor label = JQueryFieldEditorFactory.createLabelEditor();
-		label.setValue("Link button");
-		addEditor(label, parent);
+		IFieldEditor header = JQueryFieldEditorFactory.createCollapsibleHeaderEditor();
+		header.setValue("Header");
+		addEditor(header, parent);
 
-		IFieldEditor url = JQueryFieldEditorFactory.createURLEditor();
-		addEditor(url, parent);
-		
-		IFieldEditor action = JQueryFieldEditorFactory.createActionEditor();
-		addEditor(action, parent, true);
+		Composite[] columns = NewRangeSliderWizardPage.createTwoColumns(parent);
+		Composite left = columns[0];
+		Composite right = columns[1];
 
-		IFieldEditor disabled = JQueryFieldEditorFactory.createDisabledEditor();
-		addEditor(disabled, parent);
+		IFieldEditor fieldSet = JQueryFieldEditorFactory.createFieldSetEditor();
+		addEditor(fieldSet, left);
 
-		createSeparator(parent);
+		IFieldEditor collapsed = JQueryFieldEditorFactory.createCollapsedEditor();
+		addEditor(collapsed, right);
 
 		IFieldEditor mini = JQueryFieldEditorFactory.createMiniEditor();
-		addEditor(mini, parent);
+		addEditor(mini, left);
 
-		IFieldEditor inline = JQueryFieldEditorFactory.createInlineEditor();
-		addEditor(inline, parent);
+		IFieldEditor inset = JQueryFieldEditorFactory.createInsetEditor();
+		addEditor(inset, right);
 
 		createSeparator(parent);
 	
-		IFieldEditor icon = JQueryFieldEditorFactory.createIconEditor();
-		addEditor(icon, parent, true);
+		IFieldEditor collapsedIcon = JQueryFieldEditorFactory.createCollapsedIconEditor();
+		addEditor(collapsedIcon, parent, true);
+
+		IFieldEditor expandedIcon = JQueryFieldEditorFactory.createExpandedIconEditor();
+		addEditor(expandedIcon, parent, true);
 
 		IFieldEditor iconpos = JQueryFieldEditorFactory.createIconPositionEditor();
 		addEditor(iconpos, parent, true);
-
-		IFieldEditor icononly = JQueryFieldEditorFactory.createIconOnlyEditor();
-		addEditor(icononly, parent);
 
 		createSeparator(parent);
 	
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
 		addEditor(theme, parent, true);
+
+		IFieldEditor contentTheme = JQueryFieldEditorFactory.createDataContentThemeEditor();
+		addEditor(contentTheme, parent, true);
+
+		inset.setValue(TRUE);
 	}
 
 	protected int getAdditionalHeight() {
-		return 100;
+		return 120;
 	}
 
-	public void validate() throws ValidationException {
-		boolean icononly = TRUE.equals(getEditorValue(EDITOR_ID_ICON_ONLY));
-		IFieldEditor iconpos = getEditor(EDITOR_ID_ICON_POS);
-		iconpos.setEnabled(!icononly);
-	}
 }

@@ -18,11 +18,13 @@ package org.jboss.tools.jst.web.ui.palette.html.wizard;
 public interface HTMLConstants {
 	public String DOCTYPE = "<!DOCTYPE html>";
 	public String TAG_HTML = "html";
+
 	public String TAG_HEAD = "head";
 	public String TAG_TITLE = "title";
 	public String TAG_SCRIPT = "script";
 	public String TAG_LINK = "link";
 	public String TAG_META = "meta";
+	
 	public String TAG_BODY = "body";
 	public String TAG_DIV = "div";
 	public String TAG_FORM = "form";
@@ -35,7 +37,10 @@ public interface HTMLConstants {
 	public String TAG_SELECT = "select";
 	public String TAG_OPTION = "option";
 	public String TAG_FIELDSET = "fieldset";
+	public String TAG_H4 = "h4";
+	public String TAG_H6 = "h6";
 	public String TAG_LEGEND = "legend";
+	public String TAG_P = "p";
 
 	public String ATTR_TYPE = "type";
 	public String ATTR_NAME = "name";

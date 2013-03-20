@@ -67,8 +67,7 @@ public class NewFooterWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 		right = columns[1];
 
 		IFieldEditor iconpos = JQueryFieldEditorFactory.createIconPositionEditor();
-		addEditor(iconpos, left);
-		expandCombo(iconpos);
+		addEditor(iconpos, left, true);
 
 		IFieldEditor icononly = JQueryFieldEditorFactory.createIconOnlyEditor();
 		addEditor(icononly, right);
@@ -76,8 +75,7 @@ public class NewFooterWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 		getEditor(EDITOR_ID_NUMBER_OF_ITEMS).setValue("3");
 
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
-		addEditor(theme, parent);
-		expandCombo(theme);
+		addEditor(theme, parent, true);
 	}
 
 	@Override
