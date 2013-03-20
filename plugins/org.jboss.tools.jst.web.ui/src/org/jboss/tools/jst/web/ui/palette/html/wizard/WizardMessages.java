@@ -1,7 +1,22 @@
+/******************************************************************************* 
+ * Copyright (c) 2013 Red Hat, Inc. 
+ * Distributed under license by Red Hat, Inc. All rights reserved. 
+ * This program is made available under the terms of the 
+ * Eclipse Public License v1.0 which accompanies this distribution, 
+ * and is available at http://www.eclipse.org/legal/epl-v10.html 
+ * 
+ * Contributors: 
+ * Red Hat, Inc. - initial API and implementation 
+ ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette.html.wizard;
 
 import org.eclipse.osgi.util.NLS;
 
+/**
+ * 
+ * @author Viacheslav Kabanovich
+ *
+ */
 public class WizardMessages extends NLS {
 	private static final String BUNDLE_NAME = "org.jboss.tools.jst.web.ui.palette.html.wizard.messages"; //$NON-NLS-1$
 
@@ -19,6 +34,7 @@ public class WizardMessages extends NLS {
 	public static String checkedLabel;
 	public static String themeLabel;
 	public static String trackThemeLabel;
+	public static String contentThemeLabel;
 	public static String numberedLabel;
 	public static String readonlyLabel;
 	public static String autodividersLabel;
@@ -36,6 +52,8 @@ public class WizardMessages extends NLS {
 	public static String iconOnlyLabel;
 	public static String iconLabel;
 	public static String iconposLabel;
+	public static String collapsedIconLabel;
+	public static String expandedIconLabel;
 	public static String actionLabel;
 	public static String actionDialogLabel;
 	public static String actionPopupLabel;
@@ -62,6 +80,8 @@ public class WizardMessages extends NLS {
 	public static String arragementLabel;
 	public static String gridColumnsLabel;
 	public static String gridRowsLabel;
+	public static String collapsedLabel;
+	public static String fieldSetLabel;
 
 	public static String itemsLabel;
 
@@ -109,6 +129,9 @@ public class WizardMessages extends NLS {
 
 	public static String newRadioTitle;
 	public static String newRadioDescription;
+
+	public static String newCollapsibleWizardTitle;
+	public static String newCollapsibleWizardDescription;
 
 	public static String errorIDisUsed;
 	

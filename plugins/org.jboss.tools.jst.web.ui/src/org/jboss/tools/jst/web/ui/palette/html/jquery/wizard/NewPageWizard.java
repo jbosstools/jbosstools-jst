@@ -55,6 +55,7 @@ public class NewPageWizard extends NewJQueryWidgetWizard<NewPageWizardPage> impl
 		ElementNode content = pg.addChild(TAG_DIV);
 		content.addAttribute(ATTR_DATA_ROLE, ROLE_CONTENT);
 		content.addChild("p", "Page content goes here.");
+		content.getChildren().add(SEPARATOR);
 
 		if(isTrue(EDITOR_ID_ADD_FOOTER)) {
 			ElementNode footer = pg.addChild(TAG_DIV);

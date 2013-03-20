@@ -44,8 +44,7 @@ public class NewListviewWizardPage extends AbstractNewHTMLWidgetWizardPage imple
 		addEditor(inset, parent);
 
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
-		addEditor(theme, parent);
-		expandCombo(theme);
+		addEditor(theme, parent, true);
 	}
 
 }

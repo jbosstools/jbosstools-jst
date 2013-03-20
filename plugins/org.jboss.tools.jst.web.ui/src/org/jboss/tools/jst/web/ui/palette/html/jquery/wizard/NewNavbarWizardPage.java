@@ -31,19 +31,17 @@ public class NewNavbarWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 	}
 
 	protected void createFieldPanel(Composite parent) {
-		buttons.createControl(parent, WizardMessages.itemsLabel);
+		Composite panel = buttons.createControl(parent, WizardMessages.itemsLabel);
 
 		IFieldEditor iconpos = JQueryFieldEditorFactory.createIconPositionEditor();
-		addEditor(iconpos, buttons.tab.getParent());
-		expandCombo(iconpos);
+		addEditor(iconpos, panel, true);
 
 		getEditor(EDITOR_ID_NUMBER_OF_ITEMS).setValue("3");
 
 		iconpos.setEnabled(false);
 
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
-		addEditor(theme, parent);
-		expandCombo(theme);
+		addEditor(theme, parent, true);
 	}
 
 	@Override

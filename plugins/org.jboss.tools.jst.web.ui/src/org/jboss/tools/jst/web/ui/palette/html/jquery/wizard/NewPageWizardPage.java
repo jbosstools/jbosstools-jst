@@ -45,9 +45,7 @@ public class NewPageWizardPage extends AbstractNewHTMLWidgetWizardPage implement
 		addEditor(id, parent);
 
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
-		addEditor(theme, parent);
-		expandCombo(theme);
-
+		addEditor(theme, parent, true);
 	}
 
 	public void validate() throws ValidationException {

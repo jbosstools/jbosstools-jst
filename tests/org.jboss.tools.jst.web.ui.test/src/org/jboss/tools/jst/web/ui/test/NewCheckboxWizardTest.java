@@ -21,6 +21,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCheckBoxWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCheckBoxWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCollapsibleWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCollapsibleWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFooterWizard;
@@ -33,6 +35,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewListviewWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewListviewWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewNavbarWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewNavbarWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPageWizard;
@@ -163,9 +167,37 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest implements J
 		WizardDialog dialog = (WizardDialog)wizard.getContainer();
 		dialog.close();
 
-		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
-		assertTrue(text.indexOf(label) > 0);
+		assertTextIsInserted(label);
 	}
+
+	public void testNewListviewWizard() {
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Listview", true);
+
+		assertTrue(currentPage instanceof NewListviewWizardPage);
+
+		NewListviewWizardPage wizardPage = (NewListviewWizardPage)currentPage;
+		NewListviewWizard wizard = (NewListviewWizard)wizardPage.getWizard();
+		
+		wizardPage.setEditorValue(EDITOR_ID_AUTODIVIDERS, TRUE);
+		assertAttrExists(wizard, ATTR_DATA_AUTODIVIDERS, TRUE);
+
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_INSET, TRUE);
+		assertAttrExists(wizard, ATTR_DATA_INSET, TRUE);
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_INSET, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_DATA_INSET);
+
+		wizardPage.setEditorValue(EDITOR_ID_SEARCH_FILTER, TRUE);
+		assertAttrExists(wizard, ATTR_DATA_FILTER, TRUE);
+		wizardPage.setEditorValue(EDITOR_ID_SEARCH_FILTER, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_DATA_FILTER);
+
+		wizard.performFinish();
+		WizardDialog dialog = (WizardDialog)wizard.getContainer();
+		dialog.close();
+
+		assertAttrIsInserted(ATTR_DATA_AUTODIVIDERS, TRUE);
+	}
+
 
 	public void testNewDialogWizard() {
 		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Dialog", true);
@@ -184,8 +216,7 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest implements J
 		WizardDialog dialog = (WizardDialog)wizard.getContainer();
 		dialog.close();
 
-		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
-		assertTrue(text.indexOf(title) > 0);
+		assertTextIsInserted(title);
 	}
 
 	public void testNewButtonWizard() {
@@ -228,8 +259,7 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest implements J
 		WizardDialog dialog = (WizardDialog)wizard.getContainer();
 		dialog.close();
 
-		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
-		assertTrue(text.indexOf(label) > 0);
+		assertTextIsInserted(label);
 	}
 
 	public void testNewLinkWizard() {
@@ -255,8 +285,7 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest implements J
 		WizardDialog dialog = (WizardDialog)wizard.getContainer();
 		dialog.close();
 
-		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
-		assertTrue(text.indexOf(label) > 0);
+		assertTextIsInserted(label);
 	}
 
 	public void testNewRangeSliderWizard() {
@@ -311,8 +340,7 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest implements J
 		WizardDialog dialog = (WizardDialog)wizard.getContainer();
 		dialog.close();
 
-		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
-		assertTrue(text.indexOf(label) > 0);
+		assertTextIsInserted(label);
 	}
 
 	public void testNewTextInputWizard() {
@@ -356,8 +384,7 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest implements J
 		WizardDialog dialog = (WizardDialog)wizard.getContainer();
 		dialog.close();
 
-		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
-		assertTrue(text.indexOf(wizardPage.getEditorValue(EDITOR_ID_LABEL)) > 0);
+		assertTextIsInserted(wizardPage.getEditorValue(EDITOR_ID_LABEL));
 	}
 
 	public void testNewHeaderBarWizard() {
@@ -386,8 +413,7 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest implements J
 		WizardDialog dialog = (WizardDialog)wizard.getContainer();
 		dialog.close();
 
-		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
-		assertTrue(text.indexOf(wizardPage.getEditorValue(EDITOR_ID_TITLE)) > 0);
+		assertTextIsInserted(wizardPage.getEditorValue(EDITOR_ID_TITLE));
 	}
 
 	public void testNewNavbarWizard() {
@@ -415,8 +441,7 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest implements J
 		WizardDialog dialog = (WizardDialog)wizard.getContainer();
 		dialog.close();
 
-		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
-		assertTrue(text.indexOf("Run Test") > 0);
+		assertTextIsInserted("Run Test");
 	}
 
 	public void testNewFooterBarWizard() {
@@ -443,8 +468,7 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest implements J
 		WizardDialog dialog = (WizardDialog)wizard.getContainer();
 		dialog.close();
 
-		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
-		assertTrue(text.indexOf(label) > 0);
+		assertTextIsInserted(label);
 	}
 
 	public void testNewGridWizard() {
@@ -464,8 +488,7 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest implements J
 		WizardDialog dialog = (WizardDialog)wizard.getContainer();
 		dialog.close();
 
-		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
-		assertTrue(text.indexOf("ui-block-d") > 0);
+		assertTextIsInserted("ui-block-d");
 	}
 
 	public void testNewGroupedCheckboxesWizard() {
@@ -508,6 +531,50 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest implements J
 		dialog.close();
 	}
 
+	public void testNewCollapsibleContentBlockWizard() {
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Collapsible Content Block", true);
+		assertTrue(currentPage instanceof NewCollapsibleWizardPage);
+
+		NewCollapsibleWizardPage wizardPage = (NewCollapsibleWizardPage)currentPage;
+		NewCollapsibleWizard wizard = (NewCollapsibleWizard)wizardPage.getWizard(); 
+
+		wizardPage.setEditorValue(EDITOR_ID_MINI, TRUE);
+		assertAttrExists(wizard, ATTR_DATA_MINI, TRUE);
+		wizardPage.setEditorValue(EDITOR_ID_MINI, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_DATA_MINI);
+
+		assertTextDoesNotExist(wizard, ATTR_DATA_INSET);
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_INSET, FALSE);
+		assertAttrExists(wizard, ATTR_DATA_INSET, FALSE);
+
+		assertTextDoesNotExist(wizard, ATTR_DATA_COLLAPSED_ICON);
+		wizardPage.setEditorValue(EDITOR_ID_COLLAPSED_ICON, "arrow-r");
+		assertAttrExists(wizard, ATTR_DATA_COLLAPSED_ICON, "arrow-r");
+
+		assertTextDoesNotExist(wizard, ATTR_DATA_EXPANDED_ICON);
+		wizardPage.setEditorValue(EDITOR_ID_EXPANDED_ICON, "arrow-u");
+		assertAttrExists(wizard, ATTR_DATA_EXPANDED_ICON, "arrow-u");
+
+		assertTextDoesNotExist(wizard, TAG_DIV);
+		assertTextExists(wizard, TAG_FIELDSET);
+		wizardPage.setEditorValue(EDITOR_ID_FIELD_SET, FALSE);
+		assertTextDoesNotExist(wizard, TAG_FIELDSET);
+		assertTextExists(wizard, TAG_DIV);
+
+		String defaultHeader = "Header";
+		String header = "My Collapsible";
+		assertTextExists(wizard, defaultHeader);
+		wizardPage.setEditorValue(EDITOR_ID_HEADER, header);
+		assertTextExists(wizard, header);
+		assertTextDoesNotExist(wizard, defaultHeader);
+
+		wizard.performFinish();
+		WizardDialog dialog = (WizardDialog)wizard.getContainer();
+		dialog.close();
+
+		assertTextIsInserted(header);
+	}
+
 	void assertAttrExists(AbstractNewHTMLWidgetWizard wizard, String attr, String value) {
 		assertTextExists(wizard, attr + "=\"" + value + "\"");
 	}
@@ -518,6 +585,15 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest implements J
 
 	void assertTextDoesNotExist(AbstractNewHTMLWidgetWizard wizard, String text) {
 		assertTrue(wizard.getTextForTextView().indexOf(text) < 0);
+	}
+
+	void assertTextIsInserted(String text) {
+		String content = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
+		assertTrue(content.indexOf(text) > 0);
+	}
+
+	void assertAttrIsInserted(String attr, String value) {
+		assertTextIsInserted(attr + "=\"" + value + "\"");
 	}
 
 }
