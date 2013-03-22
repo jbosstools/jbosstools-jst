@@ -272,4 +272,46 @@ public class JQueryDataTest extends HTML5Test {
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
 		assertProposal("data-clear-btn-text", proposals);
 	}
+
+	public void testTableAttributeProvider() {
+		assertDataRole(JQueryMobileAttrProvider.TABLE, JQueryMobileAttrProvider.TABLE);
+
+		KbQuery query = createKbQuery(new KbQuery.Tag[]{createTag(JQueryMobileAttrProvider.TABLE, JQueryMobileAttrProvider.TABLE)}, "data-");
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
+		assertProposals(proposals, "data-mode", "data-column-btn-text", "data-column-btn-theme", "data-column-popup-theme");
+	}
+
+	public void testDataMode() {
+		KbQuery query = createKbQuery(KbQuery.Type.ATTRIBUTE_VALUE, new KbQuery.Tag[]{createTag(JQueryMobileAttrProvider.TABLE, JQueryMobileAttrProvider.TABLE)}, "data-mode", "");
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
+		assertProposals(proposals, JQueryMobileAttrProvider.DATA_MODE_ENUM);
+	}
+
+	public void testDataColumnBtnTheme() {
+		KbQuery query = createKbQuery(KbQuery.Type.ATTRIBUTE_VALUE, new KbQuery.Tag[]{createTag(JQueryMobileAttrProvider.TABLE, JQueryMobileAttrProvider.TABLE)}, "data-column-btn-theme", "");
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
+		assertProposals(proposals, JQueryMobileAttrProvider.ENUM_THEME);
+	}
+
+	public void testDataColumnPopupTheme() {
+		KbQuery query = createKbQuery(KbQuery.Type.ATTRIBUTE_VALUE, new KbQuery.Tag[]{createTag(JQueryMobileAttrProvider.TABLE, JQueryMobileAttrProvider.TABLE)}, "data-column-popup-theme", "");
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
+		assertProposals(proposals, JQueryMobileAttrProvider.ENUM_THEME);
+	}
+
+	public void testThAttributeProvider() {
+		KbQuery query = createKbQuery(new KbQuery.Tag[]{createTag(JQueryMobileAttrProvider.TABLE, JQueryMobileAttrProvider.TABLE), createTag("th")}, "data-");
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
+		assertProposal("data-priority", proposals);
+
+		query = createKbQuery(new KbQuery.Tag[]{createTag(JQueryMobileAttrProvider.TABLE), createTag("th")}, "data-");
+		proposals = PageProcessor.getInstance().getProposals(query, context);
+		assertTrue(proposals.length==0);
+	}
+
+	public void testDataPriotity() {
+		KbQuery query = createKbQuery(KbQuery.Type.ATTRIBUTE_VALUE, new KbQuery.Tag[]{createTag(JQueryMobileAttrProvider.TABLE, JQueryMobileAttrProvider.TABLE), createTag("th")}, "data-priority", "");
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
+		assertProposals(proposals, JQueryMobileAttrProvider.DATA_PRIORITY_ENUM);
+	}
 }

@@ -11,7 +11,9 @@
 package org.jboss.tools.jst.web.kb.test;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import junit.framework.TestCase;
 
@@ -43,10 +45,14 @@ public class HTML5Test extends TestCase {
 
 	protected void assertProposals(TextProposal[] proposals, String... enums) {
 		assertTrue(proposals.length>0);
+		Set<String> uniqueProposals = new HashSet<String>();
 		for (String enumItem : enums) {
 			StringBuffer sb = new StringBuffer("There is no proposal \"" + enumItem + "\" among found proposals: [");
 			for (TextProposal proposal : proposals) {
-				sb.append(proposal.getLabel()).append(",");
+				if(!uniqueProposals.contains(proposal.getLabel())) {
+					sb.append(proposal.getLabel()).append(",");
+				}
+				uniqueProposals.add(proposal.getLabel());
 				if(enumItem.equals(proposal.getLabel())) {
 					return;
 				}

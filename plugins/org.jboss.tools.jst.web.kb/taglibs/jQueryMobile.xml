@@ -16,4 +16,7 @@
 	<component extended="false" name="ol" attributeProvider="org.jboss.tools.jst.web.kb.internal.taglib.jq.ListViewAttributeProvider"/>
 	<component extended="false" name="ul" attributeProvider="org.jboss.tools.jst.web.kb.internal.taglib.jq.ListViewAttributeProvider"/>
 	<component extended="false" name="li" attributeProvider="org.jboss.tools.jst.web.kb.internal.taglib.jq.ListviewItemAttributeProvider"/>
+
+	<component extended="false" name="table" attributeProvider="org.jboss.tools.jst.web.kb.internal.taglib.jq.TableAttributeProvider"/>
+	<component extended="false" name="th" attributeProvider="org.jboss.tools.jst.web.kb.internal.taglib.jq.ThAttributeProvider"/>
 </tag-lib>
