@@ -451,9 +451,7 @@ public class MobileToolEntryEditPart extends PaletteEditPart {
 	 * @return whether the name needs to be included in the tooltip
 	 */
 	protected boolean nameNeededInToolTip() {
-		DetailedLabelFigure label = (DetailedLabelFigure) getFigure()
-				.getChildren().get(0);
-		return label.isNameTruncated() || super.nameNeededInToolTip();
+		return false;
 	}
 
 	/**
