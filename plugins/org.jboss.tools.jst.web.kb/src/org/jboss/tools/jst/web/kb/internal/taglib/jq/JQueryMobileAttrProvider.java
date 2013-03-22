@@ -40,6 +40,7 @@ public abstract class JQueryMobileAttrProvider extends AbstractAttributeProvider
 	public static final String SLIDER = "slider";
 	public static final String LISTVIEW = "listview";
 	public static final String PAGE = "page";
+	public static final String TABLE = "table";
 	public static final String POPUP = "popup";
 	public static final String RADIO = "radio";
 	public static final String RANGE = "range";
@@ -63,16 +64,20 @@ public abstract class JQueryMobileAttrProvider extends AbstractAttributeProvider
 
 	protected static final AttributeData DATA_REL_POPUP = new AttributeData("data-rel", "popup");
 
+	protected static final AttributeData DATA_ROLE_TABLE = new AttributeData(DATA_ROLE, TABLE);
+	
 	public static final String[] ENUM_TRUE_FALSE = new String[] { "true",
 			"false" };
 	public static final String[] ENUM_ICON_VALUES = new String[] { "home",
 			"delete", "plus", "arrow-u", "arrow-d", "check", "gear", "grid",
 			"star", "custom", "arrow-r", "arrow-l", "minus", "refresh",
 			"forward", "back", "alert", "info", "search" };
-	protected static final String[] ENUM_THEME = new String[] { "a", "b",
+	public static final String[] ENUM_THEME = new String[] { "a", "b",
 			"c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o",
 			"p", "r", "s", "t", "u", "v", "w", "x", "y", "z" };
 	public static final String[] DATA_REL_ENUM = new String[]{"back", "dialog", "external", "popup"};
+	public static final String[] DATA_MODE_ENUM = new String[]{"columntoggle", "reflow"};
+	public static final String[] DATA_PRIORITY_ENUM = new String[]{"1", "2", "3", "4", "5", "6"};
 
 	protected static final JQueryMobileAttribute DATA_CORNERS_ATTRIBUTE = new JQueryMobileAttribute("data-corners", "", ENUM_TRUE_FALSE);
 	protected static final JQueryMobileAttribute DATA_ICON_ATTRIBUTE = new JQueryMobileAttribute("data-icon", "", ENUM_ICON_VALUES);
@@ -137,6 +142,11 @@ public abstract class JQueryMobileAttrProvider extends AbstractAttributeProvider
 	protected static final JQueryMobileAttribute DATA_HIGHLIGHT_ATTRIBUTE = new JQueryMobileAttribute("data-highlight", "Adds an active state fill on track to handle", ENUM_TRUE_FALSE);
 	protected static final JQueryMobileAttribute DATA_CLEAR_BTN_ATTRIBUTE = new JQueryMobileAttribute("data-clear-btn", "Adds a clear button", ENUM_TRUE_FALSE);
 	protected static final JQueryMobileAttribute DATA_CLEAR_BTN_TEXT_ATTRIBUTE = new JQueryMobileAttribute("data-clear-btn-text", "Text for the close button. Default: <b>\"clear text\"</b>", new String[]{});
+	protected static final JQueryMobileAttribute DATA_MODE_ATTRIBUTE = new JQueryMobileAttribute("data-mode", "Column chooser mode", DATA_MODE_ENUM);
+	protected static final JQueryMobileAttribute DATA_COLUMN_BTN_TEXT_ATTRIBUTE = new JQueryMobileAttribute("data-column-btn-text", "The color chooser button's text. \"Columns...\" is used by default", new String[]{});
+	protected static final JQueryMobileAttribute DATA_COLUMN_BTN_THEME_ATTRIBUTE = new JQueryMobileAttribute("data-column-btn-theme", "The color chooser button's theme", ENUM_THEME);
+	protected static final JQueryMobileAttribute DATA_COLUMN_POPUP_THEME_ATTRIBUTE = new JQueryMobileAttribute("data-column-popup-theme", "", ENUM_THEME);
+	protected static final JQueryMobileAttribute DATA_PRIORITY_ATTRIBUTE = new JQueryMobileAttribute("data-priority", "Makes the column available in the column chooser menu", DATA_PRIORITY_ENUM);
 
 	protected boolean checkDataRole(String role) {
 		Map<String, String> attributes = query.getAttributes();
