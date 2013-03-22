@@ -92,51 +92,61 @@
      <GroupHTML HIDDEN="no" ICON="" NAME="1.page"
       SCOPE="project" add_taglib="true" model-entity="SharableGroupHTML">
 
-      <MacroHTML DESCRIPTION="Add references to &lt;b>jQuery&lt;/b>, &lt;b>jQuery Mobile&lt;/b> JS and CSS to the &lt;i>head&lt;/i>" ENDTEXT="" ICON="%Icons%/Mobile/jQuery/js-css"
+      <MacroHTML DESCRIPTION="Add references to &lt;b>jQuery&lt;/b>, &lt;b>jQuery Mobile&lt;/b> JS and CSS to &lt;code>&amp;lt;head>&lt;/code>"
+                 ENDTEXT="" ICON="%Icons%/Mobile/jQuery/js-css"
                  NAME="0.JS/CSS" REFORMAT="no" SCOPE="project"
                  STARTTEXT="&lt;jquery.mobile.js.css>" large-icon="" model-entity="SharableMacroHTML"/>
 
-      <MacroHTML DESCRIPTION="" ENDTEXT="" ICON="%Icons%/Mobile/jQuery/page" 
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Page:&lt;/b>&lt;br>\n&lt;code>&amp;lt;div data-role=&quot;page&quot;>&lt;/code>\n&lt;br>\n\t...&lt;br>\n&lt;code>&amp;lt;/div>&lt;/code>\n&lt;/html>"
+                 ENDTEXT="" ICON="%Icons%/Mobile/jQuery/page" 
                  NAME="1.Page" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;div data-role=&quot;page&quot;>\n\n\t&lt;div data-role=&quot;header&quot;>\n\t\t&lt;h1>Page Title&lt;/h1>\n\t&lt;/div>&lt;!-- /header -->\n\n\t&lt;div data-role=&quot;content&quot;>\t\n\t\t&lt;p>Page content goes here.&lt;/p>\t\t\n\t&lt;/div>&lt;!-- /content -->\n\n\t&lt;div data-role=&quot;footer&quot;>\n\t\t&lt;h4>Page Footer&lt;/h4>\n\t&lt;/div>&lt;!-- /footer -->\n&lt;/div>&lt;!-- /page -->"
                  model-entity="SharableMacroHTML"/>
 
-      <MacroHTML DESCRIPTION="" ICON="%Icons%/Mobile/jQuery/dialog" 
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Dialog:&lt;/b>&lt;br>\n&lt;code>&amp;lt;div data-role=&quot;dialog&quot;>&lt;/code>&lt;br>\n\t...&lt;br>\n&lt;code>&amp;lt;/div>&lt;/code>\n&lt;/html>"
+                 ICON="%Icons%/Mobile/jQuery/dialog" 
                  NAME="2.Dialog" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;a href=&quot;foo.html&quot; data-rel=&quot;dialog&quot; data-transition=&quot;pop&quot; data-close-btn=&quot;none&quot;>Open dialog&lt;/a>"
                  model-entity="SharableMacroHTML"/>
 
-      <MacroHTML DESCRIPTION="" ENDTEXT="" ICON="%Icons%/Mobile/jQuery/popup" 
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Popup:&lt;/b>&lt;br>\n&lt;code>&amp;lt;a href=&quot;#popupBasic&quot; data-rel=&quot;popup&quot;>...&amp;lt;/a>&lt;/code>&lt;br>\n&lt;code>&amp;lt;div data-role=&quot;popup&quot; id=&quot;popupBasic&quot;>&lt;/code>&lt;br>\n\t...&lt;br>\n&lt;code>&amp;lt;/div>&lt;/code>\n&lt;/html>"
+                 ENDTEXT="" ICON="%Icons%/Mobile/jQuery/popup" 
                  NAME="3.Popup" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;a href=&quot;#popupBasic&quot; data-rel=&quot;popup&quot;>Open Popup&lt;/a>\n\n&lt;div data-role=&quot;popup&quot; id=&quot;popupBasic&quot;>\n\t&lt;p>This is a completely basic popup, no options set.&lt;p>\n&lt;/div>"
                  model-entity="SharableMacroHTML"/>
 
-      <MacroHTML DESCRIPTION="" ENDTEXT="" ICON="%Icons%/Mobile/jQuery/grid" 
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Grid:&lt;/b>&lt;br>\n&lt;code>&amp;lt;div class=&quot;ui-grid-b&quot;>&lt;/code>&lt;br>\n  ...&lt;br>\n&lt;code>&amp;lt;/div>&lt;/code>\n&lt;/html>"
+                 ENDTEXT="" ICON="%Icons%/Mobile/jQuery/grid" 
                  NAME="4.Grid" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;div class=&quot;ui-grid-a&quot;>\n\t&lt;div class=&quot;ui-block-a&quot;>&lt;/div>\n\t&lt;div class=&quot;ui-block-b&quot;>&lt;/div>\n&lt;/div>&lt;!-- /grid-a -->"
                  model-entity="SharableMacroHTML"/>
 
-      <MacroHTML DESCRIPTION="" ENDTEXT="&lt;/div>" ICON="%Icons%/Mobile/jQuery/field-container"
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Field Container:&lt;/b>&lt;br>\n&lt;code>&amp;lt;div data-role=&quot;fieldcontain&quot;>&lt;/code>&lt;br>\n...&lt;br>\n&lt;code>&amp;lt;/div>&lt;/code>\n&lt;/html>"
+                 ENDTEXT="&lt;/div>" ICON="%Icons%/Mobile/jQuery/field-container"
                  NAME="5.Field Container" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;div data-role=&quot;fieldcontain&quot;>"
                  model-entity="SharableMacroHTML"/>
 
-      <MacroHTML DESCRIPTION="" ENDTEXT="&lt;/div>&lt;!-- /panel -->" ICON="%Icons%/Mobile/jQuery/panel" 
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Panel:&lt;/b>&lt;br>\n&lt;code>&amp;lt;div data-role=&quot;panel&quot;>&lt;/code>&lt;br>\n...&lt;br>\n&lt;code>&amp;lt;/div>&lt;/code>\n&lt;/html>"
+                 ENDTEXT="&lt;/div>&lt;!-- /panel -->" ICON="%Icons%/Mobile/jQuery/panel" 
                  NAME="6.Panel" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;div data-role=&quot;panel&quot; id=&quot;mypanel&quot;>\n    &lt;!-- panel content goes here -->"
                  model-entity="SharableMacroHTML"/>
 
-      <MacroHTML DESCRIPTION="" ENDTEXT="" ICON="%Icons%/Mobile/jQuery/table"
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Table:&lt;/b>&lt;br>\n&lt;code>&amp;lt;table data-role=&quot;table&quot;>&lt;/code>&lt;br>\n...&lt;br>\n&lt;code>&amp;lt;/table>&lt;/code>\n&lt;/html>"
+                 ENDTEXT="" ICON="%Icons%/Mobile/jQuery/table"
                  NAME="7.Table" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;table data-role=&quot;table&quot; id=&quot;my-table&quot; data-mode=&quot;reflow&quot;>\n  &lt;thead>\n    &lt;tr>\n      &lt;th>Header 1&lt;/th>\n      &lt;th>Header 2&lt;/th>\n    &lt;/tr>\n  &lt;/thead>\n  &lt;tbody>\n    &lt;tr>\n      &lt;th>1&lt;/th>\n      &lt;td>Item 1&lt;/td>\n      &lt;td>Item 2&lt;/td>\n    &lt;/tr>\n    &lt;/tbody>\n&lt;/table>"
                  model-entity="SharableMacroHTML"/>
 
-      <MacroHTML DESCRIPTION="" ENDTEXT="&lt;/div>" ICON="%Icons%/Mobile/jQuery/collapsible"
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Collapsible:&lt;/b>&lt;br>\n&lt;code>&amp;lt;div data-role=&quot;collapsible&quot;>&lt;/code>&lt;br>\n...&lt;br>\n&lt;code>&amp;lt;/div>&lt;/code>\n&lt;/html>"
+                 ENDTEXT="&lt;/div>" ICON="%Icons%/Mobile/jQuery/collapsible"
                  NAME="8.Collapsible Content Block" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;div data-role=&quot;collapsible&quot;>\n   &lt;h3>I'm a header&lt;/h3>\n   &lt;p>I'm the collapsible content.&lt;/p>"
                  model-entity="SharableMacroHTML"/>
 
-      <MacroHTML DESCRIPTION="" ENDTEXT="&lt;/div>" ICON="%Icons%/Mobile/jQuery/collapsible-set"
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Collapsible Set:&lt;/b>&lt;br>\n&lt;code>&amp;lt;div data-role=&quot;collapsible-set&quot;>&lt;/code>&lt;br>\n...&lt;br>\n&lt;code>&amp;lt;/div>&lt;/code>\n&lt;/html>"
+                 ENDTEXT="&lt;/div>" ICON="%Icons%/Mobile/jQuery/collapsible-set"
                  NAME="9.Collapsible Set" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;div data-role=&quot;collapsible-set&quot;>"
                  model-entity="SharableMacroHTML"/>
@@ -146,26 +156,31 @@
      <GroupHTML HIDDEN="no" ICON="" NAME="2.lists"
       SCOPE="project" add_taglib="true" model-entity="SharableGroupHTML">
 
-      <MacroHTML DESCRIPTION="" ENDTEXT="" ICON="%Icons%/Mobile/jQuery/header" 
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Header Bar:&lt;/b>&lt;br>\n&lt;code>&amp;lt;div data-role=&quot;header&quot;>&lt;/code>&lt;br>\n...&lt;br>\n&lt;code>&amp;lt;/div>&lt;/code>\n&lt;/html>"
+                 ENDTEXT="" ICON="%Icons%/Mobile/jQuery/header" 
                  NAME="1.Header Bar" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;div data-role=&quot;header&quot;>\n\t&lt;a href=&quot;index.html&quot; data-icon=&quot;delete&quot;>Cancel&lt;/a>\n\t&lt;h1>Edit Contact&lt;/h1>\n\t&lt;a href=&quot;index.html&quot; data-icon=&quot;check&quot; data-theme=&quot;b&quot;>Save&lt;/a>\n&lt;/div>"
                  model-entity="SharableMacroHTML"/>
 
-      <MacroHTML DESCRIPTION="" ENDTEXT="&lt;/div>" ICON="%Icons%/Mobile/jQuery/footer"
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Footer Bar:&lt;/b>&lt;br>\n&lt;code>&amp;lt;div data-role=&quot;footer&quot;>&lt;/code>&lt;br>\n...&lt;br>\n&lt;code>&amp;lt;/div>&lt;/code>\n&lt;/html>"
+                 ENDTEXT="&lt;/div>" ICON="%Icons%/Mobile/jQuery/footer"
                  NAME="2.Footer Bar" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;div data-role=&quot;footer&quot; class=&quot;ui-bar&quot;>"
                  model-entity="SharableMacroHTML"/>
 
-      <MacroHTML DESCRIPTION="" ENDTEXT="" ICON="%Icons%/Mobile/jQuery/navbar" 
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Navbar:&lt;/b>&lt;br>\n&lt;code>&amp;lt;div data-role=&quot;navbar&quot;>&lt;/code>&lt;br>\n...&lt;br>\n&lt;code>&amp;lt;/div>&lt;/code>\n&lt;/html>"
+ 		 ENDTEXT="" ICON="%Icons%/Mobile/jQuery/navbar" 
                  NAME="3.Navbar" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;div data-role=&quot;navbar&quot;>\n\t&lt;ul>\n\t\t&lt;li>&lt;a href=&quot;a.html&quot;>One&lt;/a>&lt;/li>\n\t\t&lt;li>&lt;a href=&quot;b.html&quot;>Two&lt;/a>&lt;/li>\n\t&lt;/ul>\n&lt;/div>&lt;!-- /navbar -->"
                  model-entity="SharableMacroHTML"/>
 
-     <MacroHTML DESCRIPTION="" ENDTEXT="" ICON="%Icons%/Mobile/jQuery/select" 
+     <MacroHTML  DESCRIPTION="&lt;html>\n&lt;b>Select menu:&lt;/b>&lt;br>\n&lt;code>&amp;lt;label for=&quot;select-choice-0&quot; class=&quot;select&quot;>...&amp;lt;/label>&lt;/code>&lt;br>\n&lt;code>&amp;lt;select name=&quot;select-choice-0&quot;>&lt;/code>&lt;br>\n...&lt;br>\n&lt;code>&amp;lt;/select>&lt;/code>\n&lt;/html>"
+                 ENDTEXT="" ICON="%Icons%/Mobile/jQuery/select" 
                  NAME="4.Select Menu" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;label for=&quot;select-choice-0&quot; class=&quot;select&quot;>Shipping method:&lt;/label>\n&lt;select name=&quot;select-choice-0&quot; id=&quot;select-choice-0&quot;>\n   &lt;option value=&quot;standard&quot;>Standard: 7 day&lt;/option>\n   &lt;option value=&quot;rush&quot;>Rush: 3 days&lt;/option>\n   &lt;option value=&quot;express&quot;>Express: next day&lt;/option>\n   &lt;option value=&quot;overnight&quot;>Overnight&lt;/option>\n&lt;/select>"
                  model-entity="SharableMacroHTML"/>
-      <MacroHTML DESCRIPTION="" ENDTEXT="" ICON="%Icons%/Mobile/jQuery/listview" 
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Listview:&lt;/b>&lt;br>\n&lt;code>&amp;lt;ul data-role=&quot;listview&quot;>&lt;/code>&lt;br>\n...&lt;br>\n&lt;code>&amp;lt;/ul>&lt;/code>\n&lt;/html>"
+ 		 ENDTEXT="" ICON="%Icons%/Mobile/jQuery/listview" 
                  NAME="5.Listview" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;ul data-role=&quot;listview&quot;>\n\t&lt;li>&lt;a href=&quot;item1.html&quot;>Item 1&lt;/a>&lt;/li>\n\t&lt;li>&lt;a href=&quot;item2.html&quot;>Item 2&lt;/a>&lt;/li>\n\t&lt;li>&lt;a href=&quot;item3.html&quot;>Item 3&lt;/a>&lt;/li>\n&lt;/ul>"
                  model-entity="SharableMacroHTML"/>
@@ -175,47 +190,55 @@
      <GroupHTML HIDDEN="no" ICON="" NAME="3.buttons"
       SCOPE="project" add_taglib="true" model-entity="SharableGroupHTML">
      
-      <MacroHTML DESCRIPTION="" ENDTEXT="" ICON="%Icons%/Mobile/jQuery/button" 
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Button:&lt;/b>&lt;br>\n&lt;code>&amp;lt;a href=&quot;...&quot; data-role=&quot;button&quot;>...&amp;lt;/a>&lt;/code>\n&lt;/html>"
+                 ENDTEXT="" ICON="%Icons%/Mobile/jQuery/button" 
                  NAME="1.Button" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;a href=&quot;index.html&quot; data-role=&quot;button&quot; data-mini=&quot;true&quot;>Link button&lt;/a>"
                  model-entity="SharableMacroHTML"/>
 
-      <MacroHTML DESCRIPTION="" ENDTEXT="" ICON="%Icons%/Mobile/jQuery/group-buttons" 
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Grouped buttons:&lt;/b>&lt;br>\n&lt;code>&amp;lt;div data-role=&quot;controlgroup&quot;>&lt;/code>&lt;br>\n...&lt;br>\n&lt;code>&amp;lt;/div>&lt;/code>\n&lt;/html>"
+                 ENDTEXT="" ICON="%Icons%/Mobile/jQuery/group-buttons" 
                  NAME="2.Grouped Buttons" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;div data-role=&quot;controlgroup&quot;>\n    &lt;a href=&quot;index.html&quot; data-role=&quot;button&quot;>Yes&lt;/a>\n    &lt;a href=&quot;index.html&quot; data-role=&quot;button&quot;>No&lt;/a>\n    &lt;a href=&quot;index.html&quot; data-role=&quot;button&quot;>Maybe&lt;/a>\n&lt;/div>"
                  model-entity="SharableMacroHTML"/>
 
-      <MacroHTML DESCRIPTION="" ENDTEXT="" ICON="%Icons%/Mobile/jQuery/link" 
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Link:&lt;/b>&lt;br>\n&lt;code>&amp;lt;a href=&quot;...&quot;>...&amp;lt;/a>&lt;/code>\n&lt;/html>"
+                 ENDTEXT="" ICON="%Icons%/Mobile/jQuery/link" 
                  NAME="3.Link" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;a href=&quot;foo.html&quot;>Open link&lt;/a>"
                  model-entity="SharableMacroHTML"/>
 
-      <MacroHTML DESCRIPTION="" ENDTEXT="" ICON="%Icons%/Mobile/jQuery/toggle"
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Flip toggle switch:&lt;/b>&lt;br>\n&lt;code>&amp;lt;div data-role=&quot;fieldcontain&quot;>&lt;/code>&lt;br>\n&amp;#09;&lt;code>&amp;lt;label for=&quot;flip-1&quot;>...&amp;lt;/label>&lt;/code>&lt;br>\n&amp;#09;&lt;code>&amp;lt;select name=&quot;flip-1&quot; id=&quot;flip-1&quot; data-role=&quot;slider&quot;>&lt;/code>&lt;br>\n&amp;#09;&amp;#09;&lt;code>&amp;lt;option value=&quot;off&quot;>Off&amp;lt;/option>&lt;/code>&lt;br>\n&amp;#09;&amp;#09;&lt;code>&amp;lt;option value=&quot;on&quot;>On&amp;lt;/option>&lt;/code>&lt;br>\n&amp;#09;&lt;code>&amp;lt;/select>&lt;/code>&lt;br>\n&lt;code>&amp;lt;/div>&lt;/code>\n&lt;/html>"
+                 ENDTEXT="" ICON="%Icons%/Mobile/jQuery/toggle"
                  NAME="4.Flip Toggle Switch" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;label for=&quot;flip-1&quot;>Flip switch:&lt;/label>\n&lt;select name=&quot;flip-1&quot; id=&quot;flip-1&quot; data-role=&quot;slider&quot;>\n\t&lt;option value=&quot;off&quot;>Off&lt;/option>\n\t&lt;option value=&quot;on&quot;>On&lt;/option>\n&lt;/select>"
                  model-entity="SharableMacroHTML"/>
 
-      <MacroHTML DESCRIPTION="" ENDTEXT="" ICON="%Icons%/Mobile/jQuery/radio" 
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Radio button:&lt;/b>&lt;br>\n&lt;code>&amp;lt;fieldset data-role=&quot;controlgroup&quot;>&lt;/code>&lt;br>\n&amp;#09;&lt;code>&amp;lt;legend>&amp;lt;/legend>&lt;/code>&lt;br>\n&amp;#09;&lt;code>&amp;lt;input name=&quot;radio-choice-1&quot; id=&quot;radio-choice-1a&quot; value=&quot;A&quot; type=&quot;radio&quot;/>&lt;/code>&lt;br>\n&amp;#09;&lt;code>&amp;lt;label for=&quot;radio-choice-1a&quot;>...&amp;lt;/label>&lt;/code>&lt;br>\n&lt;code>&amp;lt;/fieldset>&lt;/code>\n&lt;/html>"
+                 ENDTEXT="" ICON="%Icons%/Mobile/jQuery/radio" 
                  NAME="5.Radio Button" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;fieldset data-role=&quot;controlgroup&quot;>\n\t&lt;legend>Choose a pet:&lt;/legend>\n     \t&lt;input type=&quot;radio&quot; name=&quot;radio-choice&quot; id=&quot;radio-choice-1&quot; value=&quot;choice-1&quot; checked=&quot;checked&quot; />\n     \t&lt;label for=&quot;radio-choice-1&quot;>Cat&lt;/label>\n\n     \t&lt;input type=&quot;radio&quot; name=&quot;radio-choice&quot; id=&quot;radio-choice-2&quot; value=&quot;choice-2&quot;  />\n     \t&lt;label for=&quot;radio-choice-2&quot;>Dog&lt;/label>\n\n     \t&lt;input type=&quot;radio&quot; name=&quot;radio-choice&quot; id=&quot;radio-choice-3&quot; value=&quot;choice-3&quot;  />\n     \t&lt;label for=&quot;radio-choice-3&quot;>Hamster&lt;/label>\n&lt;/fieldset>"
                  model-entity="SharableMacroHTML"/>
 
-      <MacroHTML ICON="%Icons%/Mobile/jQuery/checkbox" 
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Checkbox:&lt;/b>&lt;br>\n&lt;code>&amp;lt;label>&lt;/code>&lt;br>\n&amp;#09;&lt;code>&amp;lt;input type=&quot;checkbox&quot; name=&quot;checkbox-1&quot;/>&lt;/code>&lt;br>\n&amp;#09;...&lt;br>\n&lt;code>&amp;lt;/label>&lt;/code>\n&lt;/html>"
+                 ICON="%Icons%/Mobile/jQuery/checkbox" 
                  NAME="6.Checkbox" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;label>&lt;input type=&quot;checkbox&quot; name=&quot;checkbox-0&quot; /> I agree &lt;/label>"
                  model-entity="SharableMacroHTML"/>
 
-      <MacroHTML DESCRIPTION="" ENDTEXT="" ICON="%Icons%/Mobile/jQuery/group-checkbox" 
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Grouped checkboxes:&lt;/b>&lt;br>\n&lt;code>&amp;lt;fieldset data-role=&quot;controlgroup&quot;>&lt;/code>&lt;br>\n&amp;#09;&lt;code>&amp;lt;legend>&amp;lt;/legend>&lt;/code>&lt;br>\n&amp;#09;&lt;code>&amp;lt;input name=&quot;checkbox-1a&quot; id=&quot;checkbox-1a&quot; type=&quot;checkbox&quot;/>&lt;/code>&lt;br>\n&amp;#09;&lt;code>&amp;lt;label for=&quot;checkbox-1a&quot;>...&amp;lt;/label>&lt;/code>&lt;br>\n&lt;code>&amp;lt;/fieldset>&lt;/code>\n&lt;/html>"
+                 ENDTEXT="" ICON="%Icons%/Mobile/jQuery/group-checkbox" 
                  NAME="7.Grouped Checkboxes" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;div  data-role=&quot;fieldcontain&quot;>\n\t&lt;fieldset data-role=&quot;controlgroup&quot;>\n\t\t&lt;legend>Choose as many snacks as you'd like:&lt;/legend>\n\t\t&lt;input type=&quot;checkbox&quot; name=&quot;checkbox-1a&quot; id=&quot;checkbox-1a&quot; class=&quot;custom&quot; />\n\t\t&lt;label for=&quot;checkbox-1a&quot;>Cheetos&lt;/label>\n\n\t\t&lt;input type=&quot;checkbox&quot; name=&quot;checkbox-2a&quot; id=&quot;checkbox-2a&quot; class=&quot;custom&quot; />\n\t\t&lt;label for=&quot;checkbox-2a&quot;>Doritos&lt;/label>\n\t\t\t\t\t\n\t\t&lt;input type=&quot;checkbox&quot; name=&quot;checkbox-3a&quot; id=&quot;checkbox-3a&quot; class=&quot;custom&quot; />\n\t\t&lt;label for=&quot;checkbox-3a&quot;>Fritos&lt;/label>\n\t&lt;/fieldset>\n&lt;/div>"
                  model-entity="SharableMacroHTML"/>
 
-      <MacroHTML DESCRIPTION="" ENDTEXT="" ICON="%Icons%/Mobile/jQuery/range-slider" 
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Slider/Range slider:&lt;/b>&lt;br>\n&lt;code>&amp;lt;label for=&quot;range-1&quot;>...&amp;lt;/label>&lt;/code>&lt;br>\n&lt;code>&amp;lt;input name=&quot;range-1&quot; data-highlight=&quot;true&quot; type=&quot;range&quot;/>&lt;/code>\n&lt;/html>"
+                 ENDTEXT="" ICON="%Icons%/Mobile/jQuery/range-slider" 
                  NAME="8.Range Slider" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;div data-role=&quot;rangeslider&quot;>\n    &lt;label for=&quot;range-1a&quot;>Rangeslider:&lt;/label>\n     &lt;input name=&quot;range-1a&quot; id=&quot;range-1a&quot; min=&quot;0&quot; max=&quot;100&quot; value=&quot;40&quot; type=&quot;range&quot;>\n     &lt;label for=&quot;range-1b&quot;>Rangeslider:&lt;/label>\n     &lt;input name=&quot;range-1b&quot; id=&quot;range-1b&quot; min=&quot;0&quot; max=&quot;100&quot; value=&quot;80&quot; type=&quot;range&quot;>\n&lt;/div>"
                  model-entity="SharableMacroHTML"/>
 
-      <MacroHTML DESCRIPTION="&lt;code>&lt;br>Text Input&lt;/code>    &lt;br>\n&lt;b>Variants:&lt;/b> &lt;br>\nText &lt;br>\nSearch &lt;br>\nTextarea &lt;br>\nPassword &lt;br>\nFile &lt;br>\nNumber &lt;br>\nDate &lt;br>\nColor &lt;br>"
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Text Input:&lt;/b>&lt;br>\n&lt;code>&amp;lt;div data-role=&quot;fieldcontain&quot;>&lt;/code>&lt;br>\n&amp;#09;&lt;code>&amp;lt;label for=&quot;text-1&quot;>...&amp;lt;/label>&lt;/code>&lt;br>\n&amp;#09;&lt;code>&amp;lt;input name=&quot;text-1&quot; id=&quot;text-1&quot; type=&quot;text&quot;/>&lt;/code>&lt;br>\n&lt;code>&amp;lt;/div>&lt;/code>\n&lt;/html>"
                  ENDTEXT="" ICON="%Icons%/Mobile/jQuery/text"
                  NAME="9.Text Input" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;label for=&quot;text-1&quot;>Text input: data-clear-btn=&quot;true&quot;&lt;/label>\n&lt;input data-clear-btn=&quot;true&quot; name=&quot;text-1&quot; id=&quot;text-1&quot; value=&quot;&quot; type=&quot;text&quot;>"
