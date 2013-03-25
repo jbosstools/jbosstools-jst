@@ -107,11 +107,12 @@ public class LibraryScanner implements IFileScanner {
 				}
 			}
 		}
-		XModelObject[] ps = o.getChildren();
-		for (int i = 0; i < ps.length; i++) {
-			if(ps[i] == metaInf || ps[i].getFileType() != XModelObject.FOLDER) continue;
-			LoadedDeclarations ds1 = parseInPackages(ps[i], path, sp);
-			if(ds1 != null) ds.add(ds1);
+		if(o.getAttributeValue(XModelObjectConstants.ATTR_NAME).indexOf("jsf-impl") >= 0) {
+			XModelObject p = o.getChildByPath("com/sun/faces/metadata");
+			if(p != null && p.getFileType() == XModelObject.FOLDER) {
+				LoadedDeclarations ds1 = parseInPackages(p, path, sp);
+				if(ds1 != null) ds.add(ds1);
+			}
 		}
 
 		return ds;
