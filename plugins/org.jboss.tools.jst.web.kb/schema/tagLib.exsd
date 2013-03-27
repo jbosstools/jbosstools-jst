@@ -71,7 +71,7 @@
                </documentation>
             </annotation>
          </attribute>
-         <attribute name="location" type="string" use="required">
+         <attribute name="location" type="string">
             <annotation>
                <documentation>
                   
@@ -88,6 +88,16 @@
                </documentation>
                <appInfo>
                   <meta.attribute kind="java" basedOn=":org.jboss.tools.jst.web.kb.taglib.ITagLibRecognizer"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="class" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.jboss.tools.jst.web.kb.taglib.ICustomTagLibrary"/>
                </appInfo>
             </annotation>
          </attribute>
@@ -111,6 +121,15 @@
 
    <annotation>
       <appInfo>
+         <meta.section type="apiInfo"/>
+      </appInfo>
+      <documentation>
+         [Enter API information here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
          <meta.section type="since"/>
       </appInfo>
       <documentation>
@@ -124,15 +143,6 @@
       </appInfo>
       <documentation>
          [Enter extension point usage example here.]
-      </documentation>
-   </annotation>
-
-   <annotation>
-      <appInfo>
-         <meta.section type="apiInfo"/>
-      </appInfo>
-      <documentation>
-         [Enter API information here.]
       </documentation>
    </annotation>
 

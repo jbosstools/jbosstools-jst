@@ -120,6 +120,7 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 		return recognizer;
 	}
 
+	@Override
 	public void setRecognizer(ITagLibRecognizer recognizer) {
 		this.recognizer = recognizer;
 	}
