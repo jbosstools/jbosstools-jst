@@ -807,6 +807,7 @@
       <tag name="_Palette_/Mobile/jQuery_Mobile/2.lists/1.Header_Bar" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/2.lists/2.Footer_Bar" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFooterWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/2.lists/3.Navbar" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewNavbarWizard"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/2.lists/4.Select_Menu" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewSelectMenuWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/2.lists/5.Listview" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewListviewWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/1.Button" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/3.Link" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizard"/>

@@ -67,6 +67,14 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_CHECKED, WizardMessages.checkedLabel, false);
 	}
 
+	public static IFieldEditor createSelectedEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_SELECTED, WizardMessages.selectedLabel, false);
+	}
+
+	public static IFieldEditor createCornersEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_CORNERS, WizardMessages.cornersLabel, true);
+	}
+
 	public static IFieldEditor createNumberedEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_NUMBERED, WizardMessages.numberedLabel, false);
 	}

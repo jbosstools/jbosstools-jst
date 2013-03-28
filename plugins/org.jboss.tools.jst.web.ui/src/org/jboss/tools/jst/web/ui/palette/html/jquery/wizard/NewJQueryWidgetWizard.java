@@ -96,7 +96,7 @@ public abstract class NewJQueryWidgetWizard<P extends AbstractNewHTMLWidgetWizar
 	}
 	
 	private void createHead(ElementNode html) {
-		ResourceConstants c = new ResourceConstants120();
+		ResourceConstants c = new ResourceConstants121();
 		
 		String styleSheetURI = c.getCSSPath();
 		String jQueryScriptURI = c.getScriptPath();
@@ -174,6 +174,25 @@ public abstract class NewJQueryWidgetWizard<P extends AbstractNewHTMLWidgetWizar
 		@Override
 		public String getMobileScriptName() {
 			return "jquery.mobile-1.2.0.min.js";
+		}
+	}
+
+	class ResourceConstants121 extends ResourceConstants {
+		@Override
+		public String getVerionFolder() {
+			return "1.2.1/";
+		}
+		@Override
+		public String getCSSName() {
+			return "jquery.mobile-1.2.1.css";
+		}
+		@Override
+		public String getScriptName() {
+			return "jquery-1.8.3.min.js";
+		}
+		@Override
+		public String getMobileScriptName() {
+			return "jquery.mobile-1.2.1.js";
 		}
 	}
 

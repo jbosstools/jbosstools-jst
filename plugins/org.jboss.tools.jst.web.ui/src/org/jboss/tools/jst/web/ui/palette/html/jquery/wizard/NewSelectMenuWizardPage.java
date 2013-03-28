@@ -10,8 +10,9 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
+import java.beans.PropertyChangeEvent;
+
 import org.eclipse.swt.widgets.Composite;
-import org.jboss.tools.common.model.ui.editors.dnd.ValidationException;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
@@ -21,28 +22,21 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewButtonWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
+public class NewSelectMenuWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
+	SelectMenuEditor items = new SelectMenuEditor(this, 1, 8);
 
-	public NewButtonWizardPage() {
-		super("newButton", WizardMessages.newButtonWizardTitle);
-		setDescription(WizardMessages.newButtonWizardDescription);
+	public NewSelectMenuWizardPage() {
+		super("newSelectMenu", WizardMessages.newSelectMenuWizardTitle);
+		setDescription(WizardMessages.newSelectMenuWizardDescription);
 	}
 
 	protected void createFieldPanel(Composite parent) {
 		IFieldEditor label = JQueryFieldEditorFactory.createLabelEditor();
-		label.setValue("Link button");
+		label.setValue("Select:");
 		addEditor(label, parent);
 
-		IFieldEditor url = JQueryFieldEditorFactory.createURLEditor();
-		addEditor(url, parent);
-		
-		IFieldEditor action = JQueryFieldEditorFactory.createActionEditor();
-		addEditor(action, parent, true);
-
-		IFieldEditor disabled = JQueryFieldEditorFactory.createDisabledEditor();
-		addEditor(disabled, parent);
-
-		createSeparator(parent);
+		IFieldEditor layout = JQueryFieldEditorFactory.createLayoutEditor();
+		addEditor(layout, parent);
 
 		Composite[] columns = NewRangeSliderWizardPage.createTwoColumns(parent);
 		Composite left = columns[0];
@@ -54,36 +48,43 @@ public class NewButtonWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 		IFieldEditor corners = JQueryFieldEditorFactory.createCornersEditor();
 		addEditor(corners, right);
 
+		IFieldEditor hideLabel = JQueryFieldEditorFactory.createHideLabelEditor();
+		addEditor(hideLabel, left);
+		
 		IFieldEditor inline = JQueryFieldEditorFactory.createInlineEditor();
-		addEditor(inline, left);
+		addEditor(inline, right);
 
-		IFieldEditor span = JQueryFieldEditorFactory.createSpan("span", 3);
-		addEditor(span, right);
-
-		createSeparator(parent);
-	
-		IFieldEditor icon = JQueryFieldEditorFactory.createIconEditor();
-		addEditor(icon, parent, true);
+//		IFieldEditor span = JQueryFieldEditorFactory.createSpan("span", 3);
+//		addEditor(span, right);
 
 		IFieldEditor iconpos = JQueryFieldEditorFactory.createIconPositionEditor();
 		addEditor(iconpos, parent, true);
 
-		IFieldEditor icononly = JQueryFieldEditorFactory.createIconOnlyEditor();
-		addEditor(icononly, parent);
+		items.createControl(parent, WizardMessages.itemsLabel);
 
-		createSeparator(parent);
-	
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
 		addEditor(theme, parent, true);
+
+		getEditor(EDITOR_ID_NUMBER_OF_ITEMS).setValue("3");
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if(items.isSwitching) {
+			return;
+		}
+		String name = evt.getPropertyName();
+		String value = evt.getNewValue().toString();
+		if(items.onPropertyChange(name, value)) {
+			if(EDITOR_ID_SELECTED.equals(name)) {
+				items.onSelectedModified();
+			}
+		}
+		super.propertyChange(evt);
 	}
 
 	protected int getAdditionalHeight() {
-		return 100;
+		return 160;
 	}
 
-	public void validate() throws ValidationException {
-		boolean icononly = TRUE.equals(getEditorValue(EDITOR_ID_ICON_ONLY));
-		IFieldEditor iconpos = getEditor(EDITOR_ID_ICON_POS);
-		iconpos.setEnabled(!icononly);
-	}
 }

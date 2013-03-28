@@ -40,6 +40,7 @@ public interface JQueryConstants extends HTMLConstants {
 	public String ATTR_DATA_TRACK_THEME = "data-track-theme";
 	public String ATTR_DATA_TRANSITION = "data-transition";
 	public String ATTR_DATA_TYPE = "data-type";
+	public String ATTR_DATA_CORNERS = "data-corners";
 
 	public String ATTR_DATA_MIN = "min";
 	public String ATTR_DATA_MAX = "max";
@@ -123,8 +124,10 @@ public interface JQueryConstants extends HTMLConstants {
 	public String EDITOR_ID_TITLE = "title";
 	public String EDITOR_ID_LABEL = "label";
 	public String EDITOR_ID_LEGEND = "legend";
+	public String EDITOR_ID_OPTION = "option";
 	public String EDITOR_ID_MINI = "mini";
 	public String EDITOR_ID_CHECKED = "checked";
+	public String EDITOR_ID_SELECTED = "selected";
 	public String EDITOR_ID_THEME = "theme";
 	public String EDITOR_ID_TRACK_THEME = "track-theme";
 	public String EDITOR_ID_CONTENT_THEME = "content-theme";
@@ -148,6 +151,7 @@ public interface JQueryConstants extends HTMLConstants {
 	public String EDITOR_ID_ICON = "icon";
 	public String EDITOR_ID_ICON_ONLY = "icon-only";
 	public String EDITOR_ID_ICON_POS = "icon-pos";
+	public String EDITOR_ID_CORNERS = "corners";
 	public String EDITOR_ID_COLLAPSED_ICON = "collapsed-icon";
 	public String EDITOR_ID_EXPANDED_ICON = "expanded-icon";
 	public String EDITOR_ID_INLINE = "inline";

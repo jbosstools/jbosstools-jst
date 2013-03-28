@@ -32,6 +32,8 @@ public class WizardMessages extends NLS {
 	public static String legendLabel;
 	public static String miniLabel;
 	public static String checkedLabel;
+	public static String selectedLabel;
+	public static String cornersLabel;
 	public static String themeLabel;
 	public static String trackThemeLabel;
 	public static String contentThemeLabel;
@@ -132,6 +134,9 @@ public class WizardMessages extends NLS {
 
 	public static String newCollapsibleWizardTitle;
 	public static String newCollapsibleWizardDescription;
+
+	public static String newSelectMenuWizardTitle;
+	public static String newSelectMenuWizardDescription;
 
 	public static String errorIDisUsed;
 	

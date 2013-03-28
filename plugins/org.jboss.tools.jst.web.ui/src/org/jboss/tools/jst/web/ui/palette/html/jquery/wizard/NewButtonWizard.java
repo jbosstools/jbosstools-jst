@@ -67,6 +67,10 @@ public class NewButtonWizard extends NewJQueryWidgetWizard<NewButtonWizardPage> 
 		if(TRUE.equals(page.getEditorValue(EDITOR_ID_INLINE))) {
 			a.addAttribute(ATTR_DATA_INLINE, TRUE);
 		}
+		if(!isTrue(EDITOR_ID_CORNERS)) {
+			a.addAttribute(ATTR_DATA_CORNERS, FALSE);
+		}
+
 		String themeValue = page.getEditorValue(EDITOR_ID_THEME);
 		if(themeValue.length() > 0) {
 			a.addAttribute(ATTR_DATA_THEME, themeValue);
