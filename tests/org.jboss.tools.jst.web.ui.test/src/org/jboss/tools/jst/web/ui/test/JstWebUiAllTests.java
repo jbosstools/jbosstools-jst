@@ -27,8 +27,7 @@ public class JstWebUiAllTests {
 
 		TestSuite s = new TestSuite("Palette content");
 		s.addTestSuite(InsertJSCSSPaletteEntryTest.class);
-		s.addTestSuite(NewListviewWizardTest.class);
-		s.addTestSuite(NewCheckboxWizardTest.class);
+		s.addTestSuite(NewJQueryMobilePaletteWizardTest.class);
 		s.addTestSuite(PaletteContentsTest.class);
 		suite.addTest(
 				new ProjectImportTestSetup(s,

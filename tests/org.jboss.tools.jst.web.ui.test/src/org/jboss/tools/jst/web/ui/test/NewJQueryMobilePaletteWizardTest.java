@@ -45,6 +45,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRadioWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRadioWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRangeSliderWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRangeSliderWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewSelectMenuWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewSelectMenuWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTextInputWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTextInputWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizard;
@@ -57,10 +59,10 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewCheckboxWizardTest extends AbstractPaletteEntryTest implements JQueryConstants {
+public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest implements JQueryConstants {
 	IEditorPart editor = null;
 	
-	public NewCheckboxWizardTest() {}
+	public NewJQueryMobilePaletteWizardTest() {}
 
 	public void setUp() {
 		super.setUp();
@@ -573,6 +575,43 @@ public class NewCheckboxWizardTest extends AbstractPaletteEntryTest implements J
 		dialog.close();
 
 		assertTextIsInserted(header);
+	}
+
+	public void testNewSelectMenuWizard() {
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Select Menu", true);
+
+		assertTrue(currentPage instanceof NewSelectMenuWizardPage);
+
+		NewSelectMenuWizardPage wizardPage = (NewSelectMenuWizardPage)currentPage;
+		NewSelectMenuWizard wizard = (NewSelectMenuWizard)wizardPage.getWizard();
+		Display.getCurrent().readAndDispatch();
+
+		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_FIELDCONTAIN);
+		wizardPage.setEditorValue(EDITOR_ID_LAYOUT, LAYOUT_VERTICAL);
+		assertTextDoesNotExist(wizard, ROLE_FIELDCONTAIN);
+		wizardPage.setEditorValue(EDITOR_ID_LAYOUT, LAYOUT_HORIZONTAL);
+		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_FIELDCONTAIN);
+
+		wizardPage.setEditorValue(EDITOR_ID_MINI, TRUE);
+		assertAttrExists(wizard, ATTR_DATA_MINI, TRUE);
+		wizardPage.setEditorValue(EDITOR_ID_MINI, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_DATA_MINI);
+
+		assertTextDoesNotExist(wizard, CLASS_HIDDEN_ACCESSIBLE);
+		wizardPage.setEditorValue(EDITOR_ID_HIDE_LABEL, TRUE);
+		assertAttrExists(wizard, ATTR_CLASS, CLASS_HIDDEN_ACCESSIBLE);
+		wizardPage.setEditorValue(EDITOR_ID_HIDE_LABEL, FALSE);
+		assertTextDoesNotExist(wizard, CLASS_HIDDEN_ACCESSIBLE);
+
+		assertTextDoesNotExist(wizard, ATTR_DATA_CORNERS);
+		wizardPage.setEditorValue(EDITOR_ID_CORNERS, FALSE);
+		assertAttrExists(wizard, ATTR_DATA_CORNERS, FALSE);
+		wizardPage.setEditorValue(EDITOR_ID_CORNERS, TRUE);
+		assertTextDoesNotExist(wizard, ATTR_DATA_CORNERS);
+
+		wizard.performFinish();
+		WizardDialog dialog = (WizardDialog)wizard.getContainer();
+		dialog.close();
 	}
 
 	void assertAttrExists(AbstractNewHTMLWidgetWizard wizard, String attr, String value) {

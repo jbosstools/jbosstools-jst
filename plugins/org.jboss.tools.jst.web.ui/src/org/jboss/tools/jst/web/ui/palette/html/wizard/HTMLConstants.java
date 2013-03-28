@@ -57,6 +57,7 @@ public interface HTMLConstants {
 	public String ATTR_VALUE = "value";
 	public String ATTR_DISABLED = "disabled";
 	public String CHECKED = "checked";
+	public String SELECTED = "selected";
 
 	public String METHOD_GET = "get";
 }
