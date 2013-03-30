@@ -41,6 +41,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewNavbarWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewNavbarWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPageWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPageWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPopupWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPopupWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRadioWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRadioWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRangeSliderWizard;
@@ -608,6 +610,44 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		assertAttrExists(wizard, ATTR_DATA_CORNERS, FALSE);
 		wizardPage.setEditorValue(EDITOR_ID_CORNERS, TRUE);
 		assertTextDoesNotExist(wizard, ATTR_DATA_CORNERS);
+
+		wizard.performFinish();
+		WizardDialog dialog = (WizardDialog)wizard.getContainer();
+		dialog.close();
+	}
+
+	public void testNewPopupWizard() {
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Popup", true);
+
+		assertTrue(currentPage instanceof NewPopupWizardPage);
+		NewPopupWizardPage wizardPage = (NewPopupWizardPage)currentPage;
+		NewPopupWizard wizard = (NewPopupWizard)wizardPage.getWizard();
+		Display.getCurrent().readAndDispatch();
+
+		assertTextDoesNotExist(wizard, "\"info\"");
+		wizardPage.setEditorValue(EDITOR_ID_INFO_STYLED, TRUE);
+		assertAttrExists(wizard, ATTR_DATA_ICON, "info");
+		wizardPage.setEditorValue(EDITOR_ID_INFO_STYLED, FALSE);
+		assertTextDoesNotExist(wizard, "\"info\"");
+
+		assertTextDoesNotExist(wizard, ATTR_DATA_TRANSITION);
+		wizardPage.setEditorValue(EDITOR_ID_TRANSITION, TRANSITION_POP);
+		assertAttrExists(wizard, ATTR_DATA_TRANSITION, TRANSITION_POP);
+		wizardPage.setEditorValue(EDITOR_ID_TRANSITION, "");
+		assertTextDoesNotExist(wizard, ATTR_DATA_TRANSITION);
+
+		assertTextDoesNotExist(wizard, ATTR_DATA_POSITION_TO);
+		wizardPage.setEditorValue(EDITOR_ID_POSITION_TO, POSITION_TO_WINDOW);
+		assertAttrExists(wizard, ATTR_DATA_POSITION_TO, POSITION_TO_WINDOW);
+		wizardPage.setEditorValue(EDITOR_ID_POSITION_TO, "");
+		assertTextDoesNotExist(wizard, ATTR_DATA_POSITION_TO);
+
+		assertTextDoesNotExist(wizard, CLASS_BUTTON_LEFT);
+		wizardPage.setEditorValue(EDITOR_ID_CLOSE_BUTTON, CLOSE_LEFT);
+		assertAttrExists(wizard, ATTR_DATA_REL, DATA_REL_BACK);
+		assertAttrExists(wizard, ATTR_CLASS, CLASS_BUTTON_LEFT);
+		wizardPage.setEditorValue(EDITOR_ID_CLOSE_BUTTON, CLOSE_NONE);
+		assertTextDoesNotExist(wizard, CLASS_BUTTON_LEFT);
 
 		wizard.performFinish();
 		WizardDialog dialog = (WizardDialog)wizard.getContainer();

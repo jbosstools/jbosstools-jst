@@ -33,6 +33,7 @@ public interface JQueryConstants extends HTMLConstants {
 	public String ATTR_DATA_INLINE = "data-inline";
 	public String ATTR_DATA_INSET = "data-inset";
 	public String ATTR_DATA_MINI = "data-mini";
+	public String ATTR_DATA_OVERLAY_THEME = "data-overlay-theme";
 	public String ATTR_DATA_POSITION = "data-position";
 	public String ATTR_DATA_REL = "data-rel";
 	public String ATTR_DATA_ROLE = "data-role";
@@ -41,12 +42,15 @@ public interface JQueryConstants extends HTMLConstants {
 	public String ATTR_DATA_TRANSITION = "data-transition";
 	public String ATTR_DATA_TYPE = "data-type";
 	public String ATTR_DATA_CORNERS = "data-corners";
+	public String ATTR_DATA_POSITION_TO = "data-position-to";
 
 	public String ATTR_DATA_MIN = "min";
 	public String ATTR_DATA_MAX = "max";
 	public String ATTR_DATA_STEP = "step";
 	public String ATTR_DATA_VALUE = "value";
 	public String ATTR_PLACEHOLDER = "placeholder";
+	public String ATTR_DATA_DISMISSABLE = "data-dismissible";
+	public String ATTR_DATA_SHADOW = "data-shadow";
 
 	public String TRUE = "true";
 	public String FALSE = "false";
@@ -74,9 +78,13 @@ public interface JQueryConstants extends HTMLConstants {
 	public String CLASS_HIDDEN_ACCESSIBLE = "ui-hidden-accessible";
 	public String CLASS_HIDE_LABEL = "ui-hide-label";
 	public String CLASS_BUTTON_RIGHT = "ui-btn-right";
+	public String CLASS_BUTTON_LEFT = "ui-btn-left";
 	public String CLASS_BAR = "ui-bar";
+	public String CLASS_CONTENT = "ui-content";
 
 	public String POSITION_FIXED = "fixed";
+	public String POSITION_TO_WINDOW = "window";
+	public String POSITION_TO_ORIGIN = "origin";
 
 	public String ROLE_BUTTON = "button";
 	public String ROLE_COLLAPSIBLE = "collapsible";
@@ -89,6 +97,7 @@ public interface JQueryConstants extends HTMLConstants {
 	public String ROLE_LISTVIEW = "listview";
 	public String ROLE_NAVBAR = "navbar";
 	public String ROLE_PAGE = "page";
+	public String ROLE_POPUP = "popup";
 	public String ROLE_RANGE_SLIDER = "rangeslider";
 	public String ROLE_SLIDER = "slider";
 
@@ -112,6 +121,7 @@ public interface JQueryConstants extends HTMLConstants {
 	public String DATA_REL_POPUP = "popup";
 	public String DATA_REL_BACK = "back";
 	public String DATA_REL_EXTERNAL = "external";
+	public String CLOSE_LEFT = "left";
 	public String CLOSE_RIGHT = "right";
 	public String CLOSE_NONE = "none";
 
@@ -184,6 +194,12 @@ public interface JQueryConstants extends HTMLConstants {
 	public String EDITOR_ID_ARRAGEMENT = "arragement";
 	public String EDITOR_ID_GRID_COLUMNS = "grid-columns";
 	public String EDITOR_ID_GRID_ROWS = "grid-rows";
+	public String EDITOR_ID_DISMISSABLE = "dismissable";
+	public String EDITOR_ID_SHADOW = "shadow";
+	public String EDITOR_ID_PADDING = "padding";
+	public String EDITOR_ID_OVERLAY = "overlay";
+	public String EDITOR_ID_POSITION_TO = "position-to";
+	public String EDITOR_ID_INFO_STYLED = "info-styled";
 
 	public String EDITOR_ID_HEADER = "header";
 	public String EDITOR_ID_COLLAPSED = "collapsed";

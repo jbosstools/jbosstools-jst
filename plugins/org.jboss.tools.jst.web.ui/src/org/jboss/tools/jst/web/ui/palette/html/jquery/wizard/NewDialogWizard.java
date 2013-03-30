@@ -49,7 +49,7 @@ public class NewDialogWizard extends NewJQueryWidgetWizard<NewDialogWizardPage> 
 		}
 		dialogDiv.addAttribute(ATTR_ID, id);
 		String dataClose = page.getEditorValue(EDITOR_ID_CLOSE_BUTTON);
-		if(dataClose.length() > 0) {
+		if(dataClose.length() > 0 && !CLOSE_LEFT.equals(dataClose)) {
 			dialogDiv.addAttribute(ATTR_DATA_CLOSE_BTN, dataClose);
 		}
 		
@@ -65,9 +65,9 @@ public class NewDialogWizard extends NewJQueryWidgetWizard<NewDialogWizardPage> 
 				ElementNode a = header.addChild(TAG_A, "Close");
 				a.addAttribute(ATTR_ID, "#");
 				if(dataClose.equals(CLOSE_RIGHT)) {
-					a.addAttribute(ATTR_CLASS, "ui-btn-right");
+					a.addAttribute(ATTR_CLASS, CLASS_BUTTON_RIGHT);
 				} else {
-					a.addAttribute(ATTR_CLASS, "ui-btn-left");
+					a.addAttribute(ATTR_CLASS, CLASS_BUTTON_LEFT);
 				}
 				a.addAttribute(ATTR_DATA_ROLE, ROLE_BUTTON);
 				a.addAttribute(ATTR_DATA_ICON, "delete");
