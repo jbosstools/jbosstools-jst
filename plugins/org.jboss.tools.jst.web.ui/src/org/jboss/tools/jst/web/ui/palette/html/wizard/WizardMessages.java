@@ -84,6 +84,12 @@ public class WizardMessages extends NLS {
 	public static String gridRowsLabel;
 	public static String collapsedLabel;
 	public static String fieldSetLabel;
+	public static String dismissableLabel;
+	public static String shadowLabel;
+	public static String paddingLabel;
+	public static String overlayLabel;
+	public static String positionToLabel;
+	public static String infoStyledLabel;
 
 	public static String itemsLabel;
 
@@ -138,6 +144,9 @@ public class WizardMessages extends NLS {
 	public static String newSelectMenuWizardTitle;
 	public static String newSelectMenuWizardDescription;
 
+	public static String newPopupWizardTitle;
+	public static String newPopupWizardDescription;
+	
 	public static String errorIDisUsed;
 	
 	static {

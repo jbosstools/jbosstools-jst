@@ -209,14 +209,23 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 				toList(TRANSITION_LIST), "", false);
 	}
 
-	static String[] CLOSE_BUTTON_LIST = {"", CLOSE_RIGHT, CLOSE_NONE};
+	static String[] CLOSE_BUTTON_LIST = {CLOSE_LEFT, CLOSE_RIGHT, CLOSE_NONE};
 
 	//For Dialog
 	public static IFieldEditor createCloseButtonEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(
 				EDITOR_ID_CLOSE_BUTTON, 
 				WizardMessages.closeButtonPositionLabel, 
-				toList(CLOSE_BUTTON_LIST), "", false);
+				toList(CLOSE_BUTTON_LIST), CLOSE_LEFT, false);
+	}
+
+	static String[] CLOSE_POPUP_BUTTON_LIST = {CLOSE_NONE, CLOSE_LEFT, CLOSE_RIGHT};
+
+	public static IFieldEditor createClosePopupButtonEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(
+				EDITOR_ID_CLOSE_BUTTON, 
+				WizardMessages.closeButtonPositionLabel, 
+				toList(CLOSE_POPUP_BUTTON_LIST), CLOSE_NONE, false);
 	}
 
 	public static IFieldEditor createMinEditor() {
@@ -373,7 +382,6 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return createCheckboxEditor(EDITOR_ID_RIGHT_BUTTON, WizardMessages.rightButtonLabel, true, 3);
 	}
 
-
 	public static IFieldEditor createItemsNumberEditor(String label, int min, int max) {
 		String[] numbers = new String[max - min + 1];
 		for (int i = min; i <= max; i++) {
@@ -398,6 +406,32 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		String[] values = new String[]{"1", "2", "3", "4", "5"};
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_GRID_ROWS, WizardMessages.gridRowsLabel, 
 				toList(values), "3", false);
+	}
+
+	public static IFieldEditor createDismissableEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_DISMISSABLE, WizardMessages.dismissableLabel, true);
+	}
+
+	public static IFieldEditor createShadowEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_SHADOW, WizardMessages.shadowLabel, true);
+	}
+
+	public static IFieldEditor createPaddingEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_PADDING, WizardMessages.paddingLabel, true);
+	}
+
+	public static IFieldEditor createOverlayEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_OVERLAY, WizardMessages.overlayLabel, false);
+	}
+
+	public static IFieldEditor createInfoStyledEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_INFO_STYLED, WizardMessages.infoStyledLabel, false);
+	}
+
+	public static IFieldEditor createPositionToEditor() {
+		String[] values = new String[]{"", POSITION_TO_WINDOW, POSITION_TO_ORIGIN};
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_POSITION_TO, WizardMessages.positionToLabel, 
+				toList(values), "", true);
 	}
 
 }
