@@ -181,7 +181,15 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 
 		NewListviewWizardPage wizardPage = (NewListviewWizardPage)currentPage;
 		NewListviewWizard wizard = (NewListviewWizard)wizardPage.getWizard();
+		Display.getCurrent().readAndDispatch();
 		
+		assertEquals("3", wizardPage.getEditorValue(EDITOR_ID_NUMBER_OF_ITEMS));
+
+		assertTextDoesNotExist(wizard, "Item 4");
+		wizardPage.setEditorValue(EDITOR_ID_NUMBER_OF_ITEMS, "4");
+		assertEquals("4", wizardPage.getEditorValue(EDITOR_ID_NUMBER_OF_ITEMS));
+		assertTextExists(wizard, "Item 4");		
+	
 		wizardPage.setEditorValue(EDITOR_ID_AUTODIVIDERS, TRUE);
 		assertAttrExists(wizard, ATTR_DATA_AUTODIVIDERS, TRUE);
 

@@ -55,6 +55,10 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_TRACK_THEME, WizardMessages.trackThemeLabel, toList(THEMES), "", true);
 	}
 
+	public static IFieldEditor createDividerThemeEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_DIVIDER_THEME, WizardMessages.dividerThemeLabel, toList(THEMES), "", true);
+	}
+
 	public static IFieldEditor createDataContentThemeEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_CONTENT_THEME, WizardMessages.contentThemeLabel, toList(THEMES), "", true);
 	}
@@ -81,6 +85,10 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 
 	public static IFieldEditor createReadonlyEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_READ_ONLY, WizardMessages.readonlyLabel, false);
+	}
+
+	public static IFieldEditor createDividerEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_DIVIDER, WizardMessages.dividerLabel, false);
 	}
 
 	public static IFieldEditor createAutodividersEditor() {

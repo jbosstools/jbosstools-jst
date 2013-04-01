@@ -175,6 +175,7 @@ public class ItemsEditor implements SelectionListener, JQueryConstants {
 		for (String editorID: s.values.keySet()) {
 			page.getEditor(editorID).setValue(s.getValue(editorID));
 		}
+		updateEnablement();
 	}
 
 	/**
@@ -194,6 +195,10 @@ public class ItemsEditor implements SelectionListener, JQueryConstants {
 			return true;
 		}
 		return false;
+	}
+
+	public void updateEnablement() {
+		
 	}
 
 	@Override

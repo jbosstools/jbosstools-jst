@@ -36,9 +36,11 @@ public class WizardMessages extends NLS {
 	public static String cornersLabel;
 	public static String themeLabel;
 	public static String trackThemeLabel;
+	public static String dividerThemeLabel;
 	public static String contentThemeLabel;
 	public static String numberedLabel;
 	public static String readonlyLabel;
+	public static String dividerLabel;
 	public static String autodividersLabel;
 	public static String searchFilterLabel;
 	public static String insetLabel;

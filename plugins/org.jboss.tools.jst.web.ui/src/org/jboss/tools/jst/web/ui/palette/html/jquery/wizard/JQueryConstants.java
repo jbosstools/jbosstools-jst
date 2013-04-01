@@ -39,6 +39,7 @@ public interface JQueryConstants extends HTMLConstants {
 	public String ATTR_DATA_ROLE = "data-role";
 	public String ATTR_DATA_THEME = "data-theme";
 	public String ATTR_DATA_TRACK_THEME = "data-track-theme";
+	public String ATTR_DATA_DIVIDER_THEME = "data-divider-theme";
 	public String ATTR_DATA_TRANSITION = "data-transition";
 	public String ATTR_DATA_TYPE = "data-type";
 	public String ATTR_DATA_CORNERS = "data-corners";
@@ -95,6 +96,7 @@ public interface JQueryConstants extends HTMLConstants {
 	public String ROLE_GROUP = "controlgroup";
 	public String ROLE_HEADER = "header";
 	public String ROLE_LISTVIEW = "listview";
+	public String ROLE_DIVIDER = "list-divider";
 	public String ROLE_NAVBAR = "navbar";
 	public String ROLE_PAGE = "page";
 	public String ROLE_POPUP = "popup";
@@ -141,6 +143,7 @@ public interface JQueryConstants extends HTMLConstants {
 	public String EDITOR_ID_THEME = "theme";
 	public String EDITOR_ID_TRACK_THEME = "track-theme";
 	public String EDITOR_ID_CONTENT_THEME = "content-theme";
+	public String EDITOR_ID_DIVIDER_THEME = "divider-theme";
 
 	public String EDITOR_ID_NUMBERED = "numbered";
 	public String EDITOR_ID_READ_ONLY = "read-only";
@@ -158,6 +161,7 @@ public interface JQueryConstants extends HTMLConstants {
 
 	public String EDITOR_ID_ACTION = "action";
 	public String EDITOR_ID_DISABLED = "disabled";
+	public String EDITOR_ID_DIVIDER = "divider";
 	public String EDITOR_ID_ICON = "icon";
 	public String EDITOR_ID_ICON_ONLY = "icon-only";
 	public String EDITOR_ID_ICON_POS = "icon-pos";
