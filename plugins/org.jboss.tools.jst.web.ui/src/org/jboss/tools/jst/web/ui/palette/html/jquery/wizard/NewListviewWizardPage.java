@@ -10,6 +10,8 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
+import java.beans.PropertyChangeEvent;
+
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
@@ -21,6 +23,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  *
  */
 public class NewListviewWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
+	ListEditor items = new ListEditor(this, 1, 8);
 
 	public NewListviewWizardPage() {
 		super("newListview", WizardMessages.newListviewWizardTitle);
@@ -28,23 +31,56 @@ public class NewListviewWizardPage extends AbstractNewHTMLWidgetWizardPage imple
 	}
 
 	protected void createFieldPanel(Composite parent) {
+		Composite[] columns = NewRangeSliderWizardPage.createTwoColumns(parent);
+		Composite left = columns[0];
+		Composite right = columns[1];
+
 		IFieldEditor numbered = JQueryFieldEditorFactory.createNumberedEditor();
-		addEditor(numbered, parent);
+		addEditor(numbered, left);
 		
 		IFieldEditor readonly = JQueryFieldEditorFactory.createReadonlyEditor();
-		addEditor(readonly, parent);
+		addEditor(readonly, right);
 
 		IFieldEditor autodividers = JQueryFieldEditorFactory.createAutodividersEditor();
-		addEditor(autodividers, parent);
+		addEditor(autodividers, left);
 
 		IFieldEditor searchFilter = JQueryFieldEditorFactory.createSearchFilterEditor();
-		addEditor(searchFilter, parent);
+		addEditor(searchFilter, right);
 
 		IFieldEditor inset = JQueryFieldEditorFactory.createInsetEditor();
-		addEditor(inset, parent);
+		addEditor(inset, left);
+
+		IFieldEditor span = JQueryFieldEditorFactory.createSpan("span", 3);
+		addEditor(span, right);
+
+		items.createControl(parent, WizardMessages.itemsLabel);
+
+		getEditor(EDITOR_ID_NUMBER_OF_ITEMS).setValue("3");
 
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
 		addEditor(theme, parent, true);
+
+		IFieldEditor dividerTheme = JQueryFieldEditorFactory.createDividerThemeEditor();
+		addEditor(dividerTheme, parent, true);
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if(items.isSwitching) {
+			return;
+		}
+		String name = evt.getPropertyName();
+		String value = evt.getNewValue().toString();
+		if(items.onPropertyChange(name, value)) {
+		}
+		
+		items.updateEnablement();
+
+		super.propertyChange(evt);
+	}
+
+	protected int getAdditionalHeight() {
+		return 130;
 	}
 
 }

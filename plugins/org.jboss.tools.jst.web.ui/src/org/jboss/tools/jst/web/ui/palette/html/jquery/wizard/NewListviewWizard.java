@@ -31,10 +31,10 @@ public class NewListviewWizard extends NewJQueryWidgetWizard<NewListviewWizardPa
 	}
 
 	protected void addContent(ElementNode parent) {
-		String themeValue = page.getEditorValue(EDITOR_ID_THEME);
 		String listTagName = isTrue(EDITOR_ID_NUMBERED) ? TAG_OL : TAG_UL;
 		ElementNode listRoot = parent.addChild(listTagName);
 		listRoot.addAttribute(ATTR_DATA_ROLE, ROLE_LISTVIEW);
+//		listRoot.addAttribute("data-filter-reveal", TRUE);
 		if(isTrue(EDITOR_ID_AUTODIVIDERS)) {
 			listRoot.addAttribute(ATTR_DATA_AUTODIVIDERS, TRUE);
 		}
@@ -44,17 +44,25 @@ public class NewListviewWizard extends NewJQueryWidgetWizard<NewListviewWizardPa
 		if(isTrue(EDITOR_ID_INSET)) {
 			listRoot.addAttribute(ATTR_DATA_INSET, TRUE);
 		}
+		String themeValue = page.getEditorValue(EDITOR_ID_THEME);
 		if(themeValue.length() > 0) {
 			listRoot.addAttribute(ATTR_DATA_THEME, themeValue);
 		}
-		for (int i = 1; i < 3; i++) {
-			String text = "Item " + i;
-			if(!isTrue(EDITOR_ID_READ_ONLY)) {
+		String dividerThemeValue = page.getEditorValue(EDITOR_ID_DIVIDER_THEME);
+		if(dividerThemeValue.length() > 0) {
+			listRoot.addAttribute(ATTR_DATA_DIVIDER_THEME, dividerThemeValue);
+		}
+		for (int i = 0; i < page.items.getNumber(); i++) {
+			String text = page.items.getLabel(i);
+			if(!isTrue(EDITOR_ID_READ_ONLY) && !page.items.isDivider(i)) {
 				ElementNode li = listRoot.addChild(TAG_LI, "");
 				ElementNode a = li.addChild(TAG_A, text);
-				a.addAttribute(ATTR_HREF, "item" + i + ".html");
+				a.addAttribute(ATTR_HREF, page.items.getURL(i));
 			} else {
-				listRoot.addChild(TAG_LI, text);
+				ElementNode li = listRoot.addChild(TAG_LI, text);
+				if(page.items.isDivider(i)) {
+					li.addAttribute(ATTR_DATA_ROLE, ROLE_DIVIDER);
+				}
 			}
 		}
 	}
