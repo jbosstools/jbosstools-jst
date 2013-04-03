@@ -96,7 +96,9 @@ public abstract class NewJQueryWidgetWizard<P extends AbstractNewHTMLWidgetWizar
 	}
 	
 	private void createHead(ElementNode html) {
-		ResourceConstants c = new ResourceConstants121();
+		String browserType = page.getBrowserType();
+		ResourceConstants c = ("mozilla".equals(browserType) || this instanceof NewDialogWizard) ? 
+				new ResourceConstants120() : new ResourceConstants130();
 		
 		String styleSheetURI = c.getCSSPath();
 		String jQueryScriptURI = c.getScriptPath();

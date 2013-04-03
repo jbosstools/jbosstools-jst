@@ -120,7 +120,7 @@ public class NewRangeSliderWizard extends NewJQueryWidgetWizard<NewRangeSliderWi
 		ElementNode form = getFormNode(body);
 		ElementNode div = form.addChild(TAG_DIV);
 		div.addAttribute(ATTR_STYLE, "padding: 20px 20px 20px 20px;");
-		if(isRange()) {
+		if(isRange() && "mozilla".equals(page.getBrowserType())) {
 			div.addChild(TAG_DIV, "Preview is not implemented for this element.");
 		} else {
 			addContent(div);
