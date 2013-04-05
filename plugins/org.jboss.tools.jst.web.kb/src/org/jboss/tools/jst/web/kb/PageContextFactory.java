@@ -78,6 +78,7 @@ import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegionList;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMEntity;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
@@ -449,6 +450,80 @@ public class PageContextFactory implements IResourceChangeListener {
 			}
 		}
 		return context;
+	}
+
+	/**
+	 * Method performs on-demand loading for CSS StyleSheet Descriptors for the 
+	 * specified context.
+	 * 
+	 * @param context
+	 */
+	public static void updateContextWithCSSInfo(IPageContext context) {
+		if (!(context instanceof ICSSContainerSupport))
+			return;
+
+		IFile file = context.getResource();
+		if (file == null)
+			return;
+		
+		IModelManager manager = StructuredModelManager.getModelManager();
+		if(manager == null) 
+			return;
+		
+		IStructuredModel model = null;
+		try {
+			model = manager.getModelForRead(file);
+			if (!(model instanceof IDOMModel))
+				return;
+
+			fillCSSStyleSheetDescriptorsForChildNodes(((IDOMModel)model).getDocument(), context);
+		} catch (CoreException e) {
+			WebKbPlugin.getDefault().logError(e);
+		} catch (IOException e) {
+			WebKbPlugin.getDefault().logError(e);
+		} finally {
+			if (model != null) {
+				model.releaseFromRead();
+			}
+		}
+	}
+
+	private static void fillCSSStyleSheetDescriptorsForChildNodes(IDOMNode parent, IPageContext context) {
+		NodeList children = parent.getChildNodes();
+		for(int i = 0; children != null && i < children.getLength(); i++) {
+			Node child = children.item(i);
+			if (child instanceof IDOMNode) {
+				fillCSSStyleSheetDescriptorForNode((IDOMNode)child, context);
+				fillCSSStyleSheetDescriptorsForChildNodes((IDOMNode)child, context);
+			}
+		}
+	}
+	
+	private static void fillCSSStyleSheetDescriptorForNode(IDOMNode node, IPageContext context) {
+		if (!(context instanceof ICSSContainerSupport) || !(node instanceof IDOMElement))
+			return;
+		
+		String prefix = node.getPrefix() == null ? "" : node.getPrefix(); //$NON-NLS-1$
+		String tagName = node.getLocalName();
+		Map<String, List<INameSpace>> nsMap = context.getNameSpaces(node.getStartOffset());
+		String[] uris = getUrisByPrefix(nsMap, prefix);
+
+		for (String uri : uris) {
+			if(IncludeContextBuilder.isCSSStyleSheetContainer(uri, tagName)) {
+				fillCSSStyleSheetFromElement(((IDOMElement)node), (ICSSContainerSupport)context, false);
+			} else if(IncludeContextBuilder.isJSF2CSSStyleSheetContainer(uri, tagName)) {
+				fillCSSStyleSheetFromElement(((IDOMElement)node), (ICSSContainerSupport)context, true);
+			} else {
+				String[] cssAttributes = IncludeContextBuilder.getCSSStyleSheetAttributes(uri, tagName);
+				for (String attr : cssAttributes) {
+					fillCSSStyleSheetFromAttribute(((IDOMElement)node), attr, (ICSSContainerSupport)context, false);
+				}
+				cssAttributes = IncludeContextBuilder.getJSF2CSSStyleSheetAttributes(uri, tagName);
+				for (String attr : cssAttributes) {
+					fillCSSStyleSheetFromAttribute(((IDOMElement)node), attr, (ICSSContainerSupport)context, true);
+				}
+			}
+		}
 	}
 
 	boolean isXMLWithoutEL(IFile file) {
@@ -854,23 +929,6 @@ public class PageContextFactory implements IResourceChangeListener {
 							}
 						}
 					}
-				}
-			}
-			if (context instanceof ICSSContainerSupport) {
-				if(IncludeContextBuilder.isCSSStyleSheetContainer(uri, tagName)) {
-					fillCSSStyleSheetFromElement(node, (ICSSContainerSupport)context, false);
-				} else if(IncludeContextBuilder.isJSF2CSSStyleSheetContainer(uri, tagName)) {
-						fillCSSStyleSheetFromElement(node, (ICSSContainerSupport)context, true);
-				} else {
-					String[] cssAttributes = IncludeContextBuilder.getCSSStyleSheetAttributes(uri, tagName);
-					for (String attr : cssAttributes) {
-						fillCSSStyleSheetFromAttribute(node, attr, (ICSSContainerSupport)context, false);
-					}
-					cssAttributes = IncludeContextBuilder.getJSF2CSSStyleSheetAttributes(uri, tagName);
-					for (String attr : cssAttributes) {
-						fillCSSStyleSheetFromAttribute(node, attr, (ICSSContainerSupport)context, true);
-					}
-					
 				}
 			}
 		}
