@@ -16,46 +16,53 @@
 		<contentOutlineConfiguration
 			class="org.eclipse.jst.jsp.ui.views.contentoutline.JSPContentOutlineConfiguration"
 			target="org.eclipse.jst.jsp.core.jspsource"/>
+		<quickOutlineConfiguration
+			class="org.eclipse.wst.xml.ui.internal.quickoutline.XMLQuickOutlineConfiguration"
+			target="org.eclipse.jst.jsp.core.jspsource" />
 		<propertySheetConfiguration
 			class="org.eclipse.wst.xml.ui.views.properties.XMLPropertySheetConfiguration"
-			target="org.eclipse.jst.jsp.core.jspsource"/>
-		<provisionalConfiguration 
-      		type="sourceeditingtexttools"
+			target="org.eclipse.jst.jsp.core.jspsource" />
+		<documentationTextHover
+        	class="org.eclipse.jst.jsp.ui.internal.taginfo.JSPTagInfoHoverProcessor"
+        	target="org.eclipse.jst.jsp.DEFAULT_JSP, org.eclipse.jst.jsp.JSP_DIRECTIVE">
+  		</documentationTextHover>
+  		<documentationTextHover
+        	class="org.eclipse.jst.jsp.ui.internal.taginfo.JSPJavaJavadocHoverProcessor"
+        	target="org.eclipse.jst.jsp.SCRIPT.JAVA">
+  		</documentationTextHover>
+  		<provisionalConfiguration
+			type="sourceeditingtexttools"
 			class="org.eclipse.jst.jsp.ui.internal.editor.JSPSourceEditingTextTools"
-			target="org.eclipse.jst.jsp.core.jspsource"/>
+			target="org.eclipse.jst.jsp.core.jspsource" />
 		<provisionalConfiguration
-      		type="characterpairmatcher"
+			type="characterpairmatcher"
 			class="org.eclipse.jst.jsp.ui.internal.text.JSPDocumentRegionEdgeMatcher"
-			target="org.eclipse.jst.jsp.core.jspsource"/>
-	    <provisionalConfiguration
-      		type="structuredtextfoldingprovider"
-            class="org.eclipse.wst.xml.ui.internal.projection.StructuredTextFoldingProviderJSP"
-            target="org.eclipse.jst.jsp.core.jspsource"/>
-		<provisionalDefinition 
-      		type="preferencepages"
-            value="org.eclipse.wst.sse.ui.preferences.jsp"
-			target="org.eclipse.jst.jsp.core.jspsource"/>
+			target="org.eclipse.jst.jsp.core.jspsource" />
+		<provisionalConfiguration
+			type="foldingstrategy"
+			class="org.eclipse.wst.xml.ui.internal.projection.XMLFoldingStrategy"
+			target="org.eclipse.jst.jsp.core.jspsource" />
 		<provisionalDefinition
-      		type="preferencepages"
-            value="org.eclipse.wst.sse.ui.preferences.jsp.source"
-			target="org.eclipse.jst.jsp.core.jspsource"/>
-		<provisionalDefinition
-      		type="preferencepages"
-            value="org.eclipse.wst.sse.ui.preferences.jsp.templates"
-			target="org.eclipse.jst.jsp.core.jspsource"/>
-		<provisionalDefinition
-      		type="preferencepages"
-            value="org.eclipse.wst.sse.ui.preferences.jsp.styles"
-			target="org.eclipse.jst.jsp.core.jspsource"/>
+			type="preferencepages"
+			value="org.eclipse.jst.jsp.ui.preferences.jsp, org.eclipse.wst.sse.ui.preferences.jsp.source, org.eclipse.wst.sse.ui.preferences.jsp.templates, org.eclipse.wst.sse.ui.preferences.jsp.styles,,org.eclipse.jst.jsp.ui.preferences.validation, org.eclipse.wst.sse.ui.preferences.jsp.contentassist"
+			target="org.eclipse.jst.jsp.core.jspsource" />
 		<provisionalDefinition
       		type="showintarget"
             value="org.eclipse.jdt.ui.PackageExplorer"
-			target="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor"/>
+			target="org.eclipse.jst.jsp.core.jspsource" />
 		<provisionalDefinition
       		type="showintarget"
             value="org.jboss.tools.jst.web.ui.navigator.WebProjectsView"
-			target="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor"/>
-      <provisionalDefinition
+			target="org.eclipse.jst.jsp.core.jspsource" />
+		<provisionalDefinition
+			type="spellingregions"
+			value="XML_COMMENT_TEXT, JSP_COMMENT_TEXT, XML_CONTENT, HTML_CONTENT"
+			target="org.eclipse.jst.jsp.core.jspsource" />
+		<provisionalDefinition
+			type="activecontexts"
+			value="org.eclipse.jst.jsp.core.jspsource, org.eclipse.jst.jsp.ui.structured.text.editor.jsp.scope, org.eclipse.wst.html.core.htmlsource, org.eclipse.core.runtime.xml, org.eclipse.wst.xml.navigation, org.eclipse.wst.xml.selection, org.eclipse.wst.sse.comments"
+        	target="org.eclipse.jst.jsp.core.jspsource" />
+		<provisionalDefinition
       		type="preferencepages"
             value="org.eclipse.wst.sse.ui.preferences.jsp.occurrences"
 			target="org.eclipse.jst.jsp.core.jspsource"/>
@@ -66,137 +73,183 @@
 		<contentOutlineConfiguration
 			class="org.eclipse.jst.jsp.ui.views.contentoutline.JSPContentOutlineConfiguration"
 			target="org.jboss.tools.jst.jsp.jspincludesource"/>
+		<quickOutlineConfiguration
+			class="org.eclipse.wst.xml.ui.internal.quickoutline.XMLQuickOutlineConfiguration"
+			target="org.jboss.tools.jst.jsp.jspincludesource"/>
 		<propertySheetConfiguration
 			class="org.eclipse.wst.xml.ui.views.properties.XMLPropertySheetConfiguration"
 			target="org.jboss.tools.jst.jsp.jspincludesource"/>
-		<provisionalConfiguration 
-      		type="sourceeditingtexttools"
+  		<provisionalConfiguration
+			type="sourceeditingtexttools"
 			class="org.eclipse.jst.jsp.ui.internal.editor.JSPSourceEditingTextTools"
 			target="org.jboss.tools.jst.jsp.jspincludesource"/>
 		<provisionalConfiguration
-      		type="characterpairmatcher"
+			type="characterpairmatcher"
 			class="org.eclipse.jst.jsp.ui.internal.text.JSPDocumentRegionEdgeMatcher"
 			target="org.jboss.tools.jst.jsp.jspincludesource"/>
-	    <provisionalConfiguration
-      		type="structuredtextfoldingprovider"
-            class="org.eclipse.wst.xml.ui.internal.projection.StructuredTextFoldingProviderJSP"
-            target="org.jboss.tools.jst.jsp.jspincludesource"/>
-		<provisionalDefinition 
-      		type="preferencepages"
-            value="org.eclipse.wst.sse.ui.preferences.jsp"
+		<provisionalConfiguration
+			type="foldingstrategy"
+			class="org.eclipse.wst.xml.ui.internal.projection.XMLFoldingStrategy"
 			target="org.jboss.tools.jst.jsp.jspincludesource"/>
 		<provisionalDefinition
-      		type="preferencepages"
-            value="org.eclipse.wst.sse.ui.preferences.jsp.source"
+			type="preferencepages"
+			value="org.eclipse.jst.jsp.ui.preferences.jsp, org.eclipse.wst.sse.ui.preferences.jsp.source, org.eclipse.wst.sse.ui.preferences.jsp.templates, org.eclipse.wst.sse.ui.preferences.jsp.styles,,org.eclipse.jst.jsp.ui.preferences.validation, org.eclipse.wst.sse.ui.preferences.jsp.contentassist"
 			target="org.jboss.tools.jst.jsp.jspincludesource"/>
 		<provisionalDefinition
-      		type="preferencepages"
-            value="org.eclipse.wst.sse.ui.preferences.jsp.templates"
+      		type="showintarget"
+            value="org.eclipse.jdt.ui.PackageExplorer"
+			target="org.jboss.tools.jst.jsp.jspincludesource" />
+		<provisionalDefinition
+      		type="showintarget"
+            value="org.jboss.tools.jst.web.ui.navigator.WebProjectsView"
+			target="org.jboss.tools.jst.jsp.jspincludesource" />
+		<provisionalDefinition
+			type="spellingregions"
+			value="XML_COMMENT_TEXT, JSP_COMMENT_TEXT, XML_CONTENT, HTML_CONTENT"
 			target="org.jboss.tools.jst.jsp.jspincludesource"/>
 		<provisionalDefinition
-      		type="preferencepages"
-            value="org.eclipse.wst.sse.ui.preferences.jsp.styles"
+			type="activecontexts"
+			value="org.eclipse.jst.jsp.core.jspsource, org.eclipse.jst.jsp.ui.structured.text.editor.jsp.scope, org.eclipse.wst.html.core.htmlsource, org.eclipse.core.runtime.xml, org.eclipse.wst.xml.navigation, org.eclipse.wst.xml.selection, org.eclipse.wst.sse.comments"
 			target="org.jboss.tools.jst.jsp.jspincludesource"/>
-      <provisionalDefinition
+		<provisionalDefinition
       		type="preferencepages"
             value="org.eclipse.wst.sse.ui.preferences.jsp.occurrences"
 			target="org.jboss.tools.jst.jsp.jspincludesource"/>
 			
-	      <sourceViewerConfiguration
-				class="org.jboss.tools.jst.jsp.HTMLTextViewerConfiguration"
-	            target="org.eclipse.wst.html.core.htmlsource"/>
-	      <contentOutlineConfiguration
-	            class="org.eclipse.wst.html.ui.views.contentoutline.HTMLContentOutlineConfiguration"
-	            target="org.eclipse.wst.html.core.htmlsource"/>
-	      <propertySheetConfiguration
-	            class="org.eclipse.wst.xml.ui.views.properties.XMLPropertySheetConfiguration"
-	            target="org.eclipse.wst.html.core.htmlsource"/>
-	      <provisionalConfiguration
-	      		type="sourceeditingtexttools"
-	            class="org.eclipse.wst.xml.ui.internal.provisional.XMLSourceEditingTextTools"
-	            target="org.eclipse.wst.html.core.htmlsource"/>
-	      <provisionalConfiguration
-	      		type="characterpairmatcher"
-	            class="org.eclipse.wst.html.ui.internal.text.HTMLDocumentRegionEdgeMatcher"
-	            target="org.eclipse.wst.html.core.htmlsource"/>
-	      <provisionalConfiguration
-	      		type="structuredtextfoldingprovider"
-	            class="org.eclipse.wst.html.ui.internal.projection.StructuredTextFoldingProviderHTML"
-	            target="org.eclipse.wst.html.core.htmlsource"/>
-	      <provisionalDefinition 
-	      		type="preferencepages"
-	            value="org.eclipse.wst.html.ui.preferences"
-	            target="org.eclipse.wst.html.core.htmlsource"/>
-	      <provisionalDefinition 
-	      		type="preferencepages"
-	            value="org.eclipse.wst.html.ui.preferences.source"
-	            target="org.eclipse.wst.html.core.htmlsource"/>
-	      <provisionalDefinition 
-	      		type="preferencepages"
-	            value="org.eclipse.wst.html.ui.preferences.templates"
-	            target="org.eclipse.wst.html.core.htmlsource"/>
-	      <provisionalDefinition 
-	      		type="preferencepages"
-	            value="org.eclipse.wst.html.ui.preferences.styles"
-	            target="org.eclipse.wst.html.core.htmlsource"/>
-      <provisionalDefinition
-      		type="preferencepages"
-            value="org.eclipse.wst.sse.ui.preferences.jsp.occurrences"
+	    <sourceViewerConfiguration
+			class="org.jboss.tools.jst.jsp.HTMLTextViewerConfiguration"
+	        target="org.eclipse.wst.html.core.htmlsource"/>
+	    <contentOutlineConfiguration
+	        class="org.eclipse.wst.html.ui.views.contentoutline.HTMLContentOutlineConfiguration"
+	        target="org.eclipse.wst.html.core.htmlsource"/>
+	    <quickOutlineConfiguration
+			class="org.eclipse.wst.xml.ui.internal.quickoutline.XMLQuickOutlineConfiguration"
+			target="org.eclipse.wst.html.core.htmlsource"/>
+	    <propertySheetConfiguration
+            class="org.eclipse.wst.xml.ui.views.properties.XMLPropertySheetConfiguration"
             target="org.eclipse.wst.html.core.htmlsource"/>
-
-	      <sourceViewerConfiguration
-				class="org.jboss.tools.jst.jsp.HTMLTextViewerConfiguration"
-	            target="jsf.facelet"/>
-	      <contentOutlineConfiguration
-	            class="org.eclipse.wst.html.ui.views.contentoutline.HTMLContentOutlineConfiguration"
-	            target="jsf.facelet"/>
-	      <propertySheetConfiguration
-	            class="org.eclipse.wst.xml.ui.views.properties.XMLPropertySheetConfiguration"
-	            target="jsf.facelet"/>
-	      <provisionalConfiguration
-	      		type="sourceeditingtexttools"
-	            class="org.eclipse.wst.xml.ui.internal.provisional.XMLSourceEditingTextTools"
-	            target="jsf.facelet"/>
-	      <provisionalConfiguration
-	      		type="characterpairmatcher"
-	            class="org.eclipse.wst.html.ui.internal.text.HTMLDocumentRegionEdgeMatcher"
-	            target="jsf.facelet"/>
-	      <provisionalConfiguration
-	      		type="structuredtextfoldingprovider"
-	            class="org.eclipse.wst.html.ui.internal.projection.StructuredTextFoldingProviderHTML"
-	            target="jsf.facelet"/>
-	      <provisionalDefinition 
-	      		type="preferencepages"
-	            value="org.eclipse.wst.html.ui.preferences"
-	            target="jsf.facelet"/>
-	      <provisionalDefinition 
-	      		type="preferencepages"
-	            value="org.eclipse.wst.html.ui.preferences.source"
-	            target="jsf.facelet"/>
-	      <provisionalDefinition 
-	      		type="preferencepages"
-	            value="org.eclipse.wst.html.ui.preferences.templates"
-	            target="jsf.facelet"/>
-	      <provisionalDefinition 
-	      		type="preferencepages"
-	            value="org.eclipse.wst.html.ui.preferences.styles"
-	            target="jsf.facelet"/>
-      <provisionalDefinition
+		<documentationTextHover
+        	class="org.eclipse.wst.html.ui.internal.taginfo.HTMLTagInfoHoverProcessor"
+        	target="org.eclipse.wst.html.HTML_DEFAULT">
+  		</documentationTextHover>
+	    <provisionalConfiguration
+	    	type="sourceeditingtexttools"
+	        class="org.eclipse.wst.xml.ui.internal.provisional.XMLSourceEditingTextTools"
+	        target="org.eclipse.wst.html.core.htmlsource"/>
+	    <provisionalConfiguration
+	    	type="characterpairmatcher"
+	        class="org.eclipse.wst.html.ui.internal.text.HTMLDocumentRegionEdgeMatcher"
+	        target="org.eclipse.wst.html.core.htmlsource"/>
+	    <provisionalConfiguration
+			type="foldingstrategy"
+			class="org.eclipse.wst.xml.ui.internal.projection.XMLFoldingStrategy"
+			target="org.eclipse.wst.html.core.htmlsource" />
+		<provisionalConfiguration
+			type="org.eclipse.jface.text.quickassist.IQuickAssistProcessor"
+			class="org.eclipse.wst.xml.ui.internal.correction.XMLQuickAssistProcessor"
+			target="org.eclipse.wst.html.HTML_DEFAULT" />
+		<provisionalConfiguration
+			type="autoeditstrategy"
+			class="org.eclipse.wst.html.ui.internal.autoedit.StructuredAutoEditStrategyHTML"
+			target="org.eclipse.wst.html.HTML_DEFAULT, org.eclipse.wst.html.HTML_DECLARATION" />
+	    <provisionalDefinition
+			type="preferencepages"
+			value="org.eclipse.wst.html.ui.preferences.html, org.eclipse.wst.html.ui.preferences.source, org.eclipse.wst.html.ui.preferences.templates, org.eclipse.wst.html.ui.preferences.styles,org.eclipse.wst.html.ui.preferences.validation, org.eclipse.wst.html.ui.preferences.contentassist"
+			target="org.eclipse.wst.html.core.htmlsource" />
+		<provisionalDefinition
+      		type="showintarget"
+            value="org.eclipse.jdt.ui.PackageExplorer"
+			target="org.eclipse.wst.html.core.htmlsource" />
+		<provisionalDefinition
+      		type="showintarget"
+            value="org.jboss.tools.jst.web.ui.navigator.WebProjectsView"
+			target="org.eclipse.wst.html.core.htmlsource" />
+		<provisionalDefinition
+			type="spellingregions"
+			value="XML_COMMENT_TEXT, XML_CONTENT"
+			target="org.eclipse.wst.html.core.htmlsource" />
+		<provisionalDefinition
+			type="activecontexts"
+			value="org.eclipse.wst.html.core.htmlsource, org.eclipse.wst.html.occurrences, org.eclipse.core.runtime.xml, org.eclipse.wst.xml.navigation, org.eclipse.wst.xml.selection, org.eclipse.wst.sse.comments"
+        	target="org.eclipse.wst.html.core.htmlsource" />
+		<provisionalDefinition
       		type="preferencepages"
-            value="org.eclipse.wst.sse.ui.preferences.jsp.occurrences"
-            target="jsf.facelet"/>
+           	value="org.eclipse.wst.sse.ui.preferences.jsp.occurrences"
+           	target="org.eclipse.wst.html.core.htmlsource" />
 
-      <provisionalConfiguration
-            class="org.eclipse.wst.xml.ui.internal.projection.StructuredTextFoldingProviderXML"
-            target="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor"
-            type="structuredtextfoldingprovider">
-      </provisionalConfiguration>
-      <provisionalConfiguration
-            class="org.eclipse.wst.xml.ui.internal.projection.StructuredTextFoldingProviderXML"
-            target="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor"
-            type="structuredtextfoldingprovider">
-      </provisionalConfiguration>
-	
+	    <sourceViewerConfiguration
+			class="org.jboss.tools.jst.jsp.HTMLTextViewerConfiguration"
+	        target="jsf.facelet" />
+	    <contentOutlineConfiguration
+	        class="org.eclipse.wst.html.ui.views.contentoutline.HTMLContentOutlineConfiguration"
+	        target="jsf.facelet" />
+	    <quickOutlineConfiguration
+			class="org.eclipse.wst.xml.ui.internal.quickoutline.XMLQuickOutlineConfiguration"
+            target="jsf.facelet" />
+	    <propertySheetConfiguration
+	        class="org.eclipse.wst.xml.ui.views.properties.XMLPropertySheetConfiguration"
+	        target="jsf.facelet" />
+	    <provisionalConfiguration
+	    	type="sourceeditingtexttools"
+	        class="org.eclipse.wst.xml.ui.internal.provisional.XMLSourceEditingTextTools"
+	        target="jsf.facelet"/>
+	    <provisionalConfiguration
+	    	type="characterpairmatcher"
+	        class="org.eclipse.wst.html.ui.internal.text.HTMLDocumentRegionEdgeMatcher"
+	        target="jsf.facelet"/>
+		<provisionalConfiguration
+			type="foldingstrategy"
+			class="org.eclipse.wst.xml.ui.internal.projection.XMLFoldingStrategy"
+			target="jsf.facelet" />
+	    <provisionalDefinition
+			type="preferencepages"
+		 	value="org.eclipse.wst.html.ui.preferences.html, org.eclipse.wst.html.ui.preferences.source, org.eclipse.wst.html.ui.preferences.templates, org.eclipse.wst.html.ui.preferences.styles,org.eclipse.wst.html.ui.preferences.validation, org.eclipse.wst.html.ui.preferences.contentassist"
+			target="jsf.facelet" />
+		<provisionalDefinition
+      		type="showintarget"
+            value="org.eclipse.jdt.ui.PackageExplorer"
+			target="jsf.facelet" />
+		<provisionalDefinition
+      		type="showintarget"
+            value="org.jboss.tools.jst.web.ui.navigator.WebProjectsView"
+			target="jsf.facelet" />
+		<provisionalDefinition
+			type="spellingregions"
+			value="XML_COMMENT_TEXT, XML_CONTENT"
+			target="jsf.facelet" />
+		<provisionalDefinition
+			type="activecontexts"
+			value="org.eclipse.wst.html.core.htmlsource, org.eclipse.wst.html.occurrences, org.eclipse.core.runtime.xml, org.eclipse.wst.xml.navigation, org.eclipse.wst.xml.selection, org.eclipse.wst.sse.comments"
+        	target="jsf.facelet" />
+      	<provisionalDefinition
+      		type="preferencepages"
+           	value="org.eclipse.wst.sse.ui.preferences.jsp.occurrences"
+           	target="jsf.facelet"/>
+
+		  <provisionalDefinition
+      			type="showintarget"
+            	value="org.eclipse.jdt.ui.PackageExplorer"
+				target="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor" />
+		  <provisionalDefinition
+      			type="showintarget"
+            	value="org.jboss.tools.jst.web.ui.navigator.WebProjectsView"
+				target="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor" />
+		  <provisionalDefinition
+      			type="showintarget"
+            	value="org.eclipse.jdt.ui.PackageExplorer"
+				target="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor" />
+		  <provisionalDefinition
+      			type="showintarget"
+            	value="org.jboss.tools.jst.web.ui.navigator.WebProjectsView"
+				target="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor" />
+		  <provisionalConfiguration
+				type="foldingstrategy"
+				class="org.eclipse.wst.xml.ui.internal.projection.XMLFoldingStrategy"
+				target="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor" />
+		  <provisionalConfiguration
+				type="foldingstrategy"
+				class="org.eclipse.wst.xml.ui.internal.projection.XMLFoldingStrategy"
+				target="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor" />
 	
 	  <documentationTextHover class="org.jboss.tools.jst.jsp.jspeditor.info.FaceletTagInfoHoverProcessor" target="org.eclipse.wst.html.HTML_DEFAULT" /> 
 	  <documentationTextHover class="org.jboss.tools.jst.jsp.jspeditor.info.FaceletTagInfoHoverProcessor" target="org.eclipse.wst.xml.XML_DEFAULT" />
