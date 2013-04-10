@@ -177,4 +177,6 @@ public class WebUIMessages extends NLS {
 	public static String WEB_RESOURCES;
 	public static String INCORRECT_URI;
 	public static String INCORRECT_PREFIX;
+	public static String OpenWithBrowserSim;
+	public static String OpenWithBrowser;
 }
