@@ -463,6 +463,13 @@
 	          name="EL Hyperlink Detector"
 	          targetId="org.eclipse.ui.DefaultTextEditor">
 	    </hyperlinkDetector>
+	    <hyperlinkDetector
+	          activate="true"
+	          class="org.jboss.tools.jst.text.ext.hyperlink.JQueryMobileHyperlinkDetector"
+	          id="org.jboss.tools.jst.text.ext.hyperlink.JQueryMobileHyperlinkDetector"
+	          name="jQuery Mobile Hyperlink Detector"
+	          targetId="org.eclipse.wst.html.core.htmlsource">
+	    </hyperlinkDetector>
 	 </extension>
 
 </plugin>
