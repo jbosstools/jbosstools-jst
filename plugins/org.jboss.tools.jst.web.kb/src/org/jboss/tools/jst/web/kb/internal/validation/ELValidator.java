@@ -251,19 +251,19 @@ public class ELValidator extends WebValidator implements IStringValidator {
 		setAsYouTypeValidation(true);
 		this.document = validationContext.getDocument();
 		ELContext elContext = PageContextFactory.createPageContext(this.document, true);
-		elContext.setDirty(true);
-		Collection<ELReference> references = new ArrayList<ELReference>();
-		
-		for (IRegion region : dirtyRegions) {
-			Collection<ELReference> regionReferences = elContext.getELReferences(region);
-			for (ELReference elReference : regionReferences) {
-				validateEL(elReference, true, elContext);
+		if(elContext!=null) {
+			elContext.setDirty(true);
+			for (IRegion region : dirtyRegions) {
+				Collection<ELReference> regionReferences = elContext.getELReferences(region);
+				for (ELReference elReference : regionReferences) {
+					validateEL(elReference, true, elContext);
+				}
+				disableProblemAnnotations(region, reporter);
 			}
-			disableProblemAnnotations(region, reporter);
-		}
 
-		if(reporter instanceof ITypedReporter) {
-			((ITypedReporter)reporter).addTypeForRegion(getProblemType());
+			if(reporter instanceof ITypedReporter) {
+				((ITypedReporter)reporter).addTypeForRegion(getProblemType());
+			}
 		}
 	}
 
