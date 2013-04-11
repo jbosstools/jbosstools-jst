@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2009 Red Hat, Inc. 
+ * Copyright (c) 2009-2013 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -21,6 +21,7 @@ import org.jboss.tools.jst.web.kb.ICSSContainerSupport;
 import org.jboss.tools.jst.web.kb.IIncludedContextSupport;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.IResourceBundle;
+import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.PageContextFactory.CSSStyleSheetDescriptor;
 import org.jboss.tools.jst.web.kb.internal.taglib.NameSpace;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
@@ -34,8 +35,11 @@ import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 public class JspContextImpl extends XmlContextImpl implements IPageContext, IIncludedContextSupport, ICSSContainerSupport {
 	protected List<IResourceBundle> bundles = new ArrayList<IResourceBundle>();
 
+	
 	protected List<ELContext> fIncludedContexts = new ArrayList<ELContext>();
-	protected List<CSSStyleSheetDescriptor> fCSSStyleSheetDescriptors = new ArrayList<CSSStyleSheetDescriptor>();;
+	// JBIDE-13864: the CSS StyleSheet descriptors are'n loaded at Context creation stage.
+	// The loading of CSS StyleSheet Descriptors is performed only if they are requested by CA or hyperlinking features.
+	protected List<CSSStyleSheetDescriptor> fCSSStyleSheetDescriptors;
 
 	public void addIncludedContext(ELContext includedContext) {
 		fIncludedContexts.add(includedContext);
@@ -154,8 +158,12 @@ public class JspContextImpl extends XmlContextImpl implements IPageContext, IInc
 	}
 
 	public List<CSSStyleSheetDescriptor> getCSSStyleSheetDescriptors() {
-		List<CSSStyleSheetDescriptor> descrs = new ArrayList<CSSStyleSheetDescriptor>();
+		if (fCSSStyleSheetDescriptors == null) {
+			fCSSStyleSheetDescriptors = new ArrayList<CSSStyleSheetDescriptor>();
+			PageContextFactory.updateContextWithCSSInfo(this);
+		}
 		
+		List<CSSStyleSheetDescriptor> descrs = new ArrayList<CSSStyleSheetDescriptor>();
 		descrs.addAll(fCSSStyleSheetDescriptors);
 		
 		for (ELContext includedContext : this.fIncludedContexts) {
