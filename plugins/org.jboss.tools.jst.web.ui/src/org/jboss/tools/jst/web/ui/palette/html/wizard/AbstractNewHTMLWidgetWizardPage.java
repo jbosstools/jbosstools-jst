@@ -24,10 +24,13 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
 import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -84,7 +87,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 
 		left = new Composite(panel, SWT.BORDER);
 		d = new GridData(GridData.FILL_BOTH);
-		d.minimumWidth = 400;
+//		d.minimumWidth = 400;
 		left.setLayoutData(d);
 		left.setLayout(new GridLayout(2, false));
 		
@@ -129,8 +132,14 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		
 		text = new Text(previewPanel, SWT.MULTI | SWT.READ_ONLY | SWT.BORDER | SWT.V_SCROLL);
 		text.setLayoutData(new GridData(GridData.FILL_BOTH));
-			text.setText("<html><body>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</body></html>");
-
+		/**
+		 * We set some initial content to the text widget to provide a reasonable default width
+		 * for that widget and for browser. We avoid setting width hint or other ways to 
+		 * provide the default width, because text widget and browser should be resizable 
+		 * and their content will be formatted to the available width. Also, initial width
+		 * is to depend on system font size so that initial content serves best to that purpose. 
+		 */
+		text.setText("<html><body>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</body></html>");
 		/*
 		//We can provide webkit in this way
 		String property = "org.eclipse.swt.browser.DefaultType";
@@ -187,6 +196,12 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 				updatePreviewContent();
 //				setVisible(true);
 				runValidation();
+				text.addControlListener(new ControlAdapter() {
+					public void controlResized(ControlEvent e) {
+						if(textLimit < 0 || textLimit == getTextLimit()) return;
+						text.setText(formatText(getWizard().getTextForTextView()));
+					}
+				});
 			}
 		});
 //		parent.pack(true);
@@ -394,11 +409,11 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		} else {
 			showPreviewButton.setText(WizardMessages.hidePreviewButtonText);
 			GridData d = new GridData(GridData.FILL_VERTICAL);
-			d.minimumWidth = 400;
+//			d.minimumWidth = 400;
 			left.setLayoutData(d);
 			d = new GridData(GridData.FILL_BOTH);
-			int delta = 400;
-			d.minimumWidth = delta;
+//			int delta = 400;
+//			d.minimumWidth = delta;
 			previewPanel.setLayoutData(d);
 			previewPanel.setVisible(true);
 			updatePreviewPanel(true, first);
@@ -472,16 +487,29 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 //		browser.setText(getWizard().getTextForBrowser());
 	}
 
+	int getTextLimit() {
+		int c = this.text.getSize().x - 2;
+		return c < 20 ? 20 : c;
+	}
+
+	int textLimit = -1;
+
 	protected String formatText(String text) {
-		int max = 40;
+		GC gc = new GC(this.text);
+		gc.setFont(this.text.getFont());
+		int max = textLimit = getTextLimit();
 		StringBuilder sb = new StringBuilder();
 		boolean inQuota = false;
 		boolean inTag = false;
 		int column = 0;
 		for (int i = 0; i < text.length(); i++) {
 			char ch = text.charAt(i);
+			if(ch == '<' && !inQuota && column + lookUp(gc, text, i) > max) {
+				sb.append("\n");
+				column = 0;
+			}
 			sb.append(ch);
-			column++;
+			column += gc.getCharWidth(ch);
 			if(ch == '"') {
 				inQuota = !inQuota;
 			} else if(ch == '<' && !inQuota) {
@@ -491,15 +519,39 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 			} else if(ch == '\n') {
 				column = 0;
 			}
-			if(column >= max && !inQuota && ch == ' ') {
-				sb.append("\n");
-				column = 0;
-				if (inTag) {
-					sb.append("        ");
+			if(column > 0 && !inQuota && (ch == ' ' || ch == '>')) {
+				int l = lookUp(gc, text, i + 1);
+				if(l > 1 && column + l > max) {
+					sb.append("\n");
+					column = 0;
+					if (inTag) {
+						String indent = "        ";
+						sb.append(indent);
+						column = gc.getCharWidth(' ') * indent.length();
+					}
 				}
 			}
 		}
+		gc.dispose();
 		return sb.toString();
+	}
+
+	protected int lookUp(GC gc, String text, int pos) {
+		int res = 0;
+		boolean inQuota = false;
+		for (int i = pos; i < text.length(); i++) {
+			char ch = text.charAt(i);
+			if(ch == '\n') return res;
+			if(ch == '"') {
+				inQuota = !inQuota;
+			}
+			if(!inQuota) {
+				if(ch == ' ' || (i > pos && ch == '<')) return res;
+				if(ch == '>') return res + gc.getCharWidth(ch);
+			}
+			res += gc.getCharWidth(ch);
+		}
+		return res;
 	}
 
 	public void dispose() {
