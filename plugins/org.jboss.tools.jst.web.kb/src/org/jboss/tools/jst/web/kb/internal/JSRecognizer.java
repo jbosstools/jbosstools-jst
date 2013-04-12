@@ -66,6 +66,10 @@ public abstract class JSRecognizer implements ITagLibRecognizer {
 	}
 
 	protected static boolean containsJSReference(IFile file, String pattern) {
+		return containsJSReference(file, pattern, false);
+	}
+
+	protected static boolean containsJSReference(IFile file, String pattern, boolean lookAtSrcAttributeOnly) {
 		IStructuredModel model = null;
 		try {
 			model = StructuredModelManager.getModelManager().getModelForRead(file);
@@ -77,8 +81,18 @@ public abstract class JSRecognizer implements ITagLibRecognizer {
 					if(headNode!=null) {
 						Element[] scriptNodes = findChildElements(headNode, "script");
 						for (Element script : scriptNodes) {
-							if(Pattern.matches(pattern, getAttribute(script, "src"))) {
+							String text = getAttribute(script, "src");
+							if(Pattern.matches(pattern, text)) {
 								return true;
+							}
+							if(!lookAtSrcAttributeOnly) {
+								text = script.getTextContent();
+								String[] lines = text.split("\n");
+								for (String line : lines) {
+									if(Pattern.matches(pattern, line)) {
+										return true;
+									}
+								}
 							}
 						}
 					}

@@ -17,7 +17,7 @@ import org.eclipse.core.resources.IFile;
  */
 public class JQueryRecognizer extends JSRecognizer {
 
-	public static final String JQUERY_MOBILE_JS_PATTERN = ".*(jquery-).*(.js)";
+	public static final String JQUERY_MOBILE_JS_PATTERN = ".*(jquery-).*(.js).*";
 
 	public static boolean containsJQueryJSReference(IFile file) {
 		return containsJSReference(file, JQUERY_MOBILE_JS_PATTERN);
