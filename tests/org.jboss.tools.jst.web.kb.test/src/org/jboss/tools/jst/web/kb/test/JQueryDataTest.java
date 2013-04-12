@@ -71,6 +71,19 @@ public class JQueryDataTest extends HTML5Test {
 		assertEquals(0, proposals.length);
 	}
 
+	public void testJQMLoadedViaJs() {
+		IFile file = testProject.getFile(new Path("WebContent/pages/jquery/jQueryMobileLoadedViaJS.html"));
+		ELContext context = PageContextFactory.createPageContext(file);
+		
+		KbQuery query = createKbQuery(KbQuery.Type.ATTRIBUTE_VALUE, new KbQuery.Tag[]{createTag("article")}, "data-role", "");
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
+		assertProposals(proposals, JQueryMobileAttrProvider.PAGE);
+
+		query = createKbQuery(new KbQuery.Tag[]{createTag("aside")}, "data-");
+		proposals = PageProcessor.getInstance().getProposals(query, context);
+		assertProposal("data-role", proposals);
+	}
+
 	public void testIcons() {
 		KbQuery query = createKbQuery(KbQuery.Type.ATTRIBUTE_VALUE, new KbQuery.Tag[]{createTag("a", "button")}, "data-icon", "");
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);

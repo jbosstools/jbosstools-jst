@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="js/libs/modernizr-2.5.3.min.js"></script>
+
+    <script type="text/javascript">
+        Modernizr.load([{
+            //Load CDN hosted jQuery or fall back to local file.
+            /*--------Note-----------
+            This approach should only be used if you trust the source of where the resource (JavaScript) is located.
+            In this case, use of the jquery CDN is much faster if your user's browser already has this file cached.
+            If they don't have it cached, try to load it from the CDN as this will be faster if the user is
+            located closer to a CDN than you currently hosted server.
+            */
+            load: [
+                "http://code.jquery.com/jquery-1.7.1.min.js",
+                "js/libs/underscore-min.js",
+                // Minification - See Readme for details
+                // For minification, comment out this file
+                "js/app.js"
+                // For minification, uncomment this file
+                // "js/app.min.js"
+            ],
+            complete: function() {
+                if ( !window.jQuery ) {
+                    //In production, you would want to fall back to a minified file.
+                    //We fall back to the full version because Eclipse reports false errors in some minified JavaScript files.
+                    yepnope( "js/libs/jquery-1.7.1.min.js" );
+                }
+            }
+        },{
+            //device detection and asynchronous script loading
+            /*--------Note-----------
+            Here we're using the yepnope framework which gives us the ability to load scripts dynamically, based on
+            Modernizr's results.
+            With Modernizr, we use media queries and touch detection to see if we are on a mobile, touch based device
+            or if we're at anything less than 480px.. this gives us a mobile ui on desktop browsers when resized to <480px
+            width for testing.
+            */
+            test: Modernizr.mq( "only all and (max-width: 640px)" ),
+            yep: {
+                //assign labeled callbacks for later execution after script loads.
+                //we are on mobile device so load appropriate CSS
+                "jqmcss": "css/jquery.mobile-1.1.0.min.css",
+                // For minification, uncomment this line
+                //"mcss": "css/m.screen.min.css"
+                // For minification, comment out this line
+                "mcss": "css/m.screen.css"
+            },
+            nope: {
+                //we are on desktop
+                // For minification, uncomment this line
+                //"scss": "css/d.screen.min.css"
+                // For minification, comment out this line
+            	"scss": "css/d.screen.css"
+            },
+            callback: {
+                //use the labeled callbacks from above, and load jQuery Mobile
+                "jqmcss": function( url, result, key ) {
+                    yepnope({
+                        load: "http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js",
+                        complete: function() {
+                            if ( !$.mobile ) {
+                                yepnope.injectJs( "js/libs/jquery.mobile-1.1.0.min.js" );
+                            }
+                        }
+                    });
+                },
+                "scss": function( url, result, key ) {
+                    $( document ).ready( function() {
+                        //here we are moving content around based on the browser/device.
+                        $( "aside" ).insertAfter( $( "section" ) );
+                    });
+                }
+            },
+            complete: function() {
+                $( document ).ready( function() {
+                    //setup the app after all scripts have loaded
+
+                    $( "#container" ).show();
+                    //Fetches the initial member data and populates the table using jquery templates
+                    getMemberTemplate();
+
+                    //Register an event listener on the sumbit action
+                    $('#reg').submit(function(event) {
+                        event.preventDefault();
+
+                        var memberData = $(this).serializeObject();
+
+                        registerMember(memberData);
+                    });
+
+                    //Register the cancel listener
+                    $('#cancel').click(function(event) {
+                        //clear input fields
+                        $('#reg')[0].reset();
+
+                        //clear existing msgs
+                        $('span.invalid').remove();
+                        $('span.success').remove();
+                    });
+
+                    $("#refreshButtonD, #refreshButtonM").click(function(event) {
+                        updateMemberTable();
+                    });
+
+                    //Clear member registration and error messages on page change
+                    $("#container").delegate("#register-art", "pagebeforeshow", function(event) {
+                        $("#formMsgs").empty();
+                        $('span.invalid').remove();
+                    });
+                });
+
+                $.fn.serializeObject = function() {
+                    var o = {};
+                    var a = this.serializeArray();
+                    $.each(a, function() {
+                        if (o[this.name]) {
+                            if (!o[this.name].push) {
+                                o[this.name] = [o[this.name]];
+                            }
+                            o[this.name].push(this.value || '');
+                        } else {
+                            o[this.name] = this.value || '';
+                        }
+                    });
+                    return o;
+                };
+            }
+        }]);
+    </script>
+</head>
+<body>
+
+</body>
+</html>
