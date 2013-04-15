@@ -29,6 +29,7 @@ public class JstWebUiAllTests {
 		s.addTestSuite(InsertJSCSSPaletteEntryTest.class);
 		s.addTestSuite(NewJQueryMobilePaletteWizardTest.class);
 		s.addTestSuite(PaletteContentsTest.class);
+		s.addTestSuite(SwitchPaletteTest.class);
 		suite.addTest(
 				new ProjectImportTestSetup(s,
 				"org.jboss.tools.jst.web.ui.test",

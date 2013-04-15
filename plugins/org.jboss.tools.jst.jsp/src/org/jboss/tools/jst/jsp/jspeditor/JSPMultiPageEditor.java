@@ -33,6 +33,7 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.IPostSelectionProvider;
@@ -721,9 +722,11 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 
 	public Object getAdapter(Class adapter) {
 		if(PalettePage.class == adapter) {
-			if(palettePage == null) {
+			if(palettePage == null || palettePage.isDisposed()) {
 				palettePage = new PalettePageImpl();
 				palettePage.setPaletteContents(new PaletteContents(this));
+				IDocument d = getDocumentProvider().getDocument(getEditorInput());
+				palettePage.attach(d);
 			}
 			return palettePage;
 		}

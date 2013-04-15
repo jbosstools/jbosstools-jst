@@ -32,7 +32,7 @@ public class PaletteContentsTest extends TestCase {
 		PaletteContents p = new PaletteContents(editor);
 		String[] x = p.getNatureTypes();
 		assertEquals(1, x.length);
-		assertEquals("mobile", x[0]);
+		assertEquals(PaletteContents.TYPE_MOBILE, x[0]);
 	}
 
 	public void testJSFPalette() {
@@ -40,7 +40,7 @@ public class PaletteContentsTest extends TestCase {
 		PaletteContents p = new PaletteContents(editor);
 		String[] x = p.getNatureTypes();
 		assertEquals(1, x.length);
-		assertEquals("jsf", x[0]);
+		assertEquals(PaletteContents.TYPE_JSF, x[0]);
 	}
 
 	public IEditorPart openEditor(String fileName) {
