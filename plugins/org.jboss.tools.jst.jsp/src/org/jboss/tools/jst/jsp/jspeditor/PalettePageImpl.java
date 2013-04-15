@@ -11,6 +11,9 @@
 package org.jboss.tools.jst.jsp.jspeditor;
 
 import org.eclipse.gef.ui.views.palette.PalettePage;
+import org.eclipse.jface.text.DocumentEvent;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IActionBars;
@@ -18,10 +21,12 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.Page;
 import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.model.ui.views.palette.IPaletteAdapter;
 import org.jboss.tools.common.model.ui.views.palette.IPalettePageAdapter;
 import org.jboss.tools.common.model.ui.views.palette.PaletteContents;
 import org.jboss.tools.common.model.ui.views.palette.PaletteCreator;
+import org.eclipse.ui.part.PageBookView;
 
 /**
  * 
@@ -31,6 +36,9 @@ import org.jboss.tools.common.model.ui.views.palette.PaletteCreator;
 public class PalettePageImpl extends Page implements PalettePage, IPalettePageAdapter {
 	PaletteCreator paletteCreator = new PaletteCreator(this);
 	PaletteContents contents;
+	IDocument document;
+	DocumentListener listener = null;
+	boolean disposed = false;
 
 	public PalettePageImpl() {}
 
@@ -50,6 +58,36 @@ public class PalettePageImpl extends Page implements PalettePage, IPalettePageAd
     	paletteCreator.createPartControlImpl(parent);
 	}
 
+    public void attach(IDocument document) {
+    	this.document = document;
+    	listener = new DocumentListener();
+    	document.addDocumentListener(listener);
+    }
+
+    class DocumentListener implements IDocumentListener {
+		@Override
+		public void documentChanged(DocumentEvent event) {
+			if(contents.update()) {
+		    	IWorkbenchPage page = ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		    	PageBookView view = (PageBookView)page.findView("org.eclipse.gef.ui.palette_view");
+		    	if(view != null) {
+		    		//Set 'disposed' flag. Page will be properly disposed 
+		    		//by view.partClosed() in a separate job.
+		    		//On view.partActivated(), editor will be requested
+		    		//for page, and due to 'disposed' set to true,
+		    		//new page object will be created.
+		    		disposed = true; 
+		    		view.partClosed(page.getActiveEditor());
+		    		view.partActivated(page.getActiveEditor());
+		    	}
+			}
+		}
+		
+		@Override
+		public void documentAboutToBeChanged(DocumentEvent event) {
+		}
+    }
+
 	public Control getControl() {
 		return paletteCreator.getControl();
 	}
@@ -63,8 +101,14 @@ public class PalettePageImpl extends Page implements PalettePage, IPalettePageAd
 	}
 
     public void dispose() {
+    	disposed = true;
     	super.dispose();
     	paletteCreator.dispose();
+    	if(document != null) {
+    		document.removeDocumentListener(listener);
+    		document = null;
+    		listener = null;
+    	}
     }
 
 	public IActionBars getActionBars() {
@@ -85,6 +129,10 @@ public class PalettePageImpl extends Page implements PalettePage, IPalettePageAd
 
 	public IPaletteAdapter getAdapter() {
 		return paletteCreator.getAdapter();
+	}
+
+	public boolean isDisposed() {
+		return disposed;
 	}
 
 }
