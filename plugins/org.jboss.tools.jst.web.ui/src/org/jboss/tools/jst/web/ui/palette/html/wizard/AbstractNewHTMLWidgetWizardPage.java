@@ -148,7 +148,9 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 				try {
 					browser = new Browser(browserPanel, SWT.READ_ONLY | SWT.NONE | SWT.NO_SCROLL);
 				} catch (SWTError e1) {
-					WebUiPlugin.getDefault().logError("Cannot create neither Mozilla nor default browser.", e1);
+					String message = "Cannot create neither Mozilla nor default browser";
+					Exception ex = new Exception(message, e1);
+					WebUiPlugin.getDefault().logError(message, ex);
 				}
 			}
 		} finally {
