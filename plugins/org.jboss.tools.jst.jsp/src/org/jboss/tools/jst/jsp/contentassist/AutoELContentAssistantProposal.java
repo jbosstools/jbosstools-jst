@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2010-2012 Red Hat, Inc. 
+ * Copyright (c) 2010-2013 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -12,6 +12,7 @@ package org.jboss.tools.jst.jsp.contentassist;
 
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.jdt.core.IJavaElement;
@@ -91,7 +92,7 @@ public class AutoELContentAssistantProposal extends
 		this.fJavaElements = null;
 		this.fProperySource = propertySource;
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -102,6 +103,7 @@ public class AutoELContentAssistantProposal extends
 	public String getAdditionalProposalInfo() {
 		if (fAdditionalProposalInfo == null) {
 			if (this.fJavaElements != null && this.fJavaElements.length > 0) {
+				Arrays.sort(fJavaElements, ELProposalProcessor.CASE_INSENSITIVE_ORDER);
 				this.fAdditionalProposalInfo = extractProposalContextInfo(fJavaElements);
 			} else if (fProperySource != null) {
 				this.fAdditionalProposalInfo = extractProposalContextInfo(fProperySource);
@@ -109,6 +111,7 @@ public class AutoELContentAssistantProposal extends
 		}
 		return fAdditionalProposalInfo;
 	}
+
 
 	/*
 	 * Extracts the additional proposal information based on Javadoc for the
