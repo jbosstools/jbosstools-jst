@@ -124,20 +124,37 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 		compare(text, test_result_2);
 	}
 	
+	public void testInsertJSCSS(){
+		editor = openEditor("body_only.html");
+		runToolEntry("jQuery Mobile", "JS/CSS", false);
+		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
+		compare(text, test_result_2);
+	}
+	
 	public void testAddJSCSSCheckboxSetFalse() {
-		doTestAddJSCSSCheckbox(false);
+		doTestAddJSCSSCheckbox("body_only.html", false, false);
 	}
 
 	public void testAddJSCSSCheckboxSetTrue() {
-		doTestAddJSCSSCheckbox(true);
+		doTestAddJSCSSCheckbox("body_only.html", true, true);
+	}
+	
+	private static final String LINK = "<link rel=\"stylesheet\" href=\"http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.css\" />";
+	
+	public void testAddJSCSSCheckboxSetFalseWithScript() {
+		doTestAddJSCSSCheckbox("script_load.html", false, false);
 	}
 
-	void doTestAddJSCSSCheckbox(boolean value) {
-		editor = openEditor("body_only.html");
+	public void testAddJSCSSCheckboxSetTrueWithScript() {
+		doTestAddJSCSSCheckbox("script_load.html", true, false);
+	}
+
+	void doTestAddJSCSSCheckbox(String fileName, boolean value, boolean expected) {
+		editor = openEditor(fileName);
 
 		String sValue = value ? TRUE : FALSE;
 		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
-		assertFalse(text.indexOf("<head>") > 0);
+		assertFalse(text.indexOf(LINK) > 0);
 
 		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Page", true);
 
@@ -154,7 +171,7 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 		dialog.close();
 
 		text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
-		assertEquals(value, text.indexOf("<head>") > 0);
+		assertEquals(expected, text.indexOf(LINK) > 0);
 	}
 
 	private void compare(String test, String[] result){

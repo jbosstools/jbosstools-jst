@@ -13,6 +13,7 @@ package org.jboss.tools.jst.jsp.jspeditor.dnd;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.source.ISourceViewer;
@@ -25,7 +26,9 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.jboss.tools.common.model.options.SharableConstants;
 import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
+import org.jboss.tools.common.refactoring.MarkerResolutionUtils;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
+import org.jboss.tools.jst.web.kb.internal.JQueryRecognizer;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -83,14 +86,14 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 	protected void modify(ISourceViewer v, Properties p, String[] texts) {
 		p.put("viewer", v);
 		String startText = texts[0];
-		boolean insertJS_CSS = false;
 		
-		if(startText != null && startText.startsWith(INSERT_JS_CSS_SIGNATURE)) {
-			insertJS_CSS = true;
-		}
-		if(p.containsKey(PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS) || insertJS_CSS) {
+		boolean insert  = startText != null && startText.startsWith(INSERT_JS_CSS_SIGNATURE);
+		
+		IFile file = MarkerResolutionUtils.getFile();
+		
+		if(insert || (p.containsKey(PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS) && !JQueryRecognizer.containsJQueryJSReference(file))) {
 			insertJS_CSS(v.getDocument());
-			if(insertJS_CSS){
+			if(insert){
 				texts[0] = "";	
 			}
 		}
