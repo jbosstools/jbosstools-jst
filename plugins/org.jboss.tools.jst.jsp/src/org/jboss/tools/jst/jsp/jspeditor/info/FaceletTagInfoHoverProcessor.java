@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2010-2012 Red Hat, Inc. 
+ * Copyright (c) 2010-2013 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -13,6 +13,7 @@ package org.jboss.tools.jst.jsp.jspeditor.info;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -213,6 +214,7 @@ public class FaceletTagInfoHoverProcessor extends XMLTagInfoHoverProcessor {
 				if (javaElements == null || javaElements.length == 0)
 					continue;
 				
+				Arrays.sort(javaElements, ELProposalProcessor.CASE_INSENSITIVE_ORDER);
 				ELInfoHoverBrowserInformationControlInput hover = JavaStringELInfoHover.getHoverInfo2Internal(javaElements, false);
 				return (hover == null ? null : hover.getHtml());
 			} else if (segment instanceof MessagePropertyELSegmentImpl) {

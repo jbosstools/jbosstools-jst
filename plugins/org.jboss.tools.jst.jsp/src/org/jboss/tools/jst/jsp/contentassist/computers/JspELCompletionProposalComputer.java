@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Red Hat, Inc.
+ * Copyright (c) 2010-2013 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -10,25 +10,10 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.contentassist.computers;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.jface.text.Region;
-import org.jboss.tools.common.el.core.model.ELExpression;
-import org.jboss.tools.common.el.core.parser.ELParserFactory;
-import org.jboss.tools.common.el.core.parser.ELParserUtil;
-import org.jboss.tools.common.el.core.resolver.ELCompletionEngine;
 import org.jboss.tools.common.el.core.resolver.ELContext;
-import org.jboss.tools.common.el.core.resolver.ELContextImpl;
-import org.jboss.tools.common.el.core.resolver.ELResolution;
-import org.jboss.tools.common.el.core.resolver.ELResolutionImpl;
-import org.jboss.tools.common.el.core.resolver.ElVarSearcher;
-import org.jboss.tools.common.el.core.resolver.IRelevanceCheck;
-import org.jboss.tools.common.el.core.resolver.Var;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
@@ -37,7 +22,7 @@ import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 /**
  * EL Proposal computer for JSP pages
  * 
- * @author Jeremy
+ * @author Victor Rubezhny
  *
  */
 public class JspELCompletionProposalComputer extends XmlELCompletionProposalComputer {
@@ -85,52 +70,6 @@ public class JspELCompletionProposalComputer extends XmlELCompletionProposalComp
 			}
 		}
 		return null;
-	}
-
-	protected void setVars(ELContextImpl context, IFile file) {
-		ELCompletionEngine fakeEngine = new ELCompletionEngine() {
-
-			@Override
-			public ELResolution resolveELOperand(IFile file, ELContext context,
-					ELExpression operand, boolean returnEqualedVariablesOnly,
-					List<Var> vars, ElVarSearcher varSearcher, int offset)
-					throws BadLocationException, StringIndexOutOfBoundsException {
-				return new ELResolutionImpl(operand);
-			}
-
-			@Override
-			public ELParserFactory getParserFactory() {
-				return ELParserUtil.getJbossFactory();
-			}
-
-			@Override
-			public List<TextProposal> getProposals(ELContext context, String el, int offset) {
-				return Collections.emptyList();
-			}
-
-			@Override
-			public ELResolution resolve(ELContext context, ELExpression operand, int offset) {
-				return new ELResolutionImpl(operand);
-			}
-
-			@Override
-			public List<TextProposal> getProposals(ELContext context, int offset) {
-				return Collections.emptyList();
-			}
-
-			@Override
-			public IRelevanceCheck createRelevanceCheck(IJavaElement element) {
-				return null;
-			}
-		};
-		ElVarSearcher varSearcher = new ElVarSearcher(file, fakeEngine);
-		List<Var> vars = varSearcher.findAllVars(file, getOffset());
-
-		if (vars != null) {
-			for (Var var : vars) {
-				context.addVar(new Region(getOffset(), 0), var);
-			}
-		}
 	}
 
 	@Override

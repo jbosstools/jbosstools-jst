@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2010-2011 Red Hat, Inc. 
+ * Copyright (c) 2010-2013 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -16,6 +16,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
@@ -273,6 +274,7 @@ public class JavaStringELInfoHover extends JavadocHover {
 				if (javaElements == null || javaElements.length == 0)
 					continue;
 				
+				Arrays.sort(javaElements, ELProposalProcessor.CASE_INSENSITIVE_ORDER);
 				return JavaStringELInfoHover.getHoverInfo2Internal(javaElements, true);
 			} else if (segment instanceof MessagePropertyELSegmentImpl) {
 				MessagePropertyELSegmentImpl mpSegment = (MessagePropertyELSegmentImpl)segment;
