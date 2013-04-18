@@ -395,7 +395,7 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		for (int i = min; i <= max; i++) {
 			numbers[i - min] = "" + i;
 		}
-		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_NUMBER_OF_ITEMS, WizardMessages.numberOfItemsLabel, toList(numbers), "1", false);
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_NUMBER_OF_ITEMS, WizardMessages.numberOfItemsLabel, toList(numbers), "3", false);
 	}
 
 	public static IFieldEditor createArragementEditor() {

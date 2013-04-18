@@ -64,8 +64,6 @@ public class NewSelectMenuWizardPage extends AbstractNewHTMLWidgetWizardPage imp
 
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
 		addEditor(theme, parent, true);
-
-		getEditor(EDITOR_ID_NUMBER_OF_ITEMS).setValue("3");
 	}
 
 	@Override

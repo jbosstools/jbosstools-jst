@@ -36,8 +36,6 @@ public class NewNavbarWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 		IFieldEditor iconpos = JQueryFieldEditorFactory.createIconPositionEditor();
 		addEditor(iconpos, panel, true);
 
-		getEditor(EDITOR_ID_NUMBER_OF_ITEMS).setValue("3");
-
 		iconpos.setEnabled(false);
 
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
