@@ -46,8 +46,6 @@ public class NewGroupedCheckboxesWizardPage extends AbstractNewHTMLWidgetWizardP
 		IFieldEditor iconpos = JQueryFieldEditorFactory.createIconPositionEditor();
 		addEditor(iconpos, panel, true);
 
-		getEditor(EDITOR_ID_NUMBER_OF_ITEMS).setValue("3");
-
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
 		addEditor(theme, parent, true);
 

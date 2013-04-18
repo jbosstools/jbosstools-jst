@@ -55,8 +55,6 @@ public class NewListviewWizardPage extends AbstractNewHTMLWidgetWizardPage imple
 
 		items.createControl(parent, WizardMessages.itemsLabel);
 
-		getEditor(EDITOR_ID_NUMBER_OF_ITEMS).setValue("3");
-
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
 		addEditor(theme, parent, true);
 

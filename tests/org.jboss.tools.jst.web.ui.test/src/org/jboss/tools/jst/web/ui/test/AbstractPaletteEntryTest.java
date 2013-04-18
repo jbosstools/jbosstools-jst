@@ -71,6 +71,8 @@ public class AbstractPaletteEntryTest extends TestCase {
 		return editorPart;
 	}
 
+	WizardDialog currentDialog = null;
+
 	public IWizardPage runToolEntry(String category, String entry, boolean wizardExpected) {
 		PaletteViewer viewer = getPaletteViewer();
 		ToolEntry toolEntry = findEntry(viewer, category, entry);
@@ -83,6 +85,7 @@ public class AbstractPaletteEntryTest extends TestCase {
 		if(wizardExpected) {
 			Object data = shell.getData();
 			assertTrue(data instanceof WizardDialog);
+			currentDialog = (WizardDialog)data;
 			return ((WizardDialog)data).getCurrentPage();
 		} else {
 			return null;
