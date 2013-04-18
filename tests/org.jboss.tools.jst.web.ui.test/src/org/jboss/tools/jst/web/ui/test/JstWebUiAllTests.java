@@ -26,6 +26,7 @@ public class JstWebUiAllTests {
 		TestSuite suite = new TestSuite(JstWebUiAllTests.class.getName());
 
 		TestSuite s = new TestSuite("Palette content");
+		s.addTestSuite(JBossToolsEditorTest.class);
 		s.addTestSuite(InsertJSCSSPaletteEntryTest.class);
 		s.addTestSuite(NewJQueryMobilePaletteWizardTest.class);
 		s.addTestSuite(PaletteContentsTest.class);
