@@ -72,8 +72,6 @@ public class NewFooterWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 		IFieldEditor icononly = JQueryFieldEditorFactory.createIconOnlyEditor();
 		addEditor(icononly, right);
 
-		getEditor(EDITOR_ID_NUMBER_OF_ITEMS).setValue("3");
-
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
 		addEditor(theme, parent, true);
 	}

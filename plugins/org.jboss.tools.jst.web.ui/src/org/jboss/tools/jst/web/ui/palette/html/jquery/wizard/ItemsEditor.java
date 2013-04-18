@@ -102,6 +102,9 @@ public class ItemsEditor implements SelectionListener, JQueryConstants {
 
 		createItemEditors();
 
+		setNumber(Integer.parseInt(number.getValueAsString()));
+		setSelected(0);
+
 		return panel;
 	}
 
