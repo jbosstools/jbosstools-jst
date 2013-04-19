@@ -772,7 +772,11 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		if("true".equals(System.getProperty(IDropCommand.TEST_FLAG))) {
 			runnable.run();
 		} else {
-			PlatformUI.getWorkbench().getDisplay().asyncExec(runnable);
+			if(Display.getCurrent() != null) {
+				runnable.run();
+			} else {
+				PlatformUI.getWorkbench().getDisplay().asyncExec(runnable);
+			}
 		}
 //		}
 	}

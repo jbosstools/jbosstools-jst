@@ -10,15 +10,11 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette;
 
-import org.eclipse.draw2d.ButtonModel;
-import org.eclipse.draw2d.ChangeEvent;
-import org.eclipse.draw2d.ChangeListener;
 import org.eclipse.draw2d.FocusEvent;
 import org.eclipse.draw2d.FocusListener;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.gef.internal.ui.palette.editparts.DrawerEditPart;
 import org.eclipse.gef.palette.PaletteDrawer;
-import org.jboss.tools.jst.web.ui.palette.xpl.DrawerAnimationController;
 
 
 /**
@@ -40,7 +36,6 @@ public class CustomDrawerEditPart extends DrawerEditPart {
 		};
 		fig.setExpanded(getDrawer().isInitiallyOpen());
 		fig.setPinned(getDrawer().isInitiallyPinned());
-		fig.getCollapseToggle().addChangeListener(new ToggleListener());	
 		fig.getCollapseToggle().setRequestFocusEnabled(true);
 		fig.getCollapseToggle().addFocusListener(new FocusListener() {
 			public void focusGained(FocusEvent fe) {
@@ -50,19 +45,5 @@ public class CustomDrawerEditPart extends DrawerEditPart {
 			}
 		});
 		return fig;
-	}
-	private class ToggleListener implements ChangeListener {
-		public boolean internalChange = false;
-		public void handleStateChanged(ChangeEvent event) {
-			if (event.getPropertyName().equals(ButtonModel.SELECTED_PROPERTY) 
-				&& !getAnimationController().isAnimationInProgress()) {
-					getAnimationController().animate(CustomDrawerEditPart.this);
-			}
-		}
-	}
-	private DrawerAnimationController getAnimationController() {
-		return (DrawerAnimationController)getViewer()
-				.getEditPartRegistry()
-				.get(DrawerAnimationController.class);
 	}
 }
