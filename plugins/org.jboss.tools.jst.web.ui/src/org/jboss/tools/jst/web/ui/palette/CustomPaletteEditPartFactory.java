@@ -12,7 +12,6 @@ package org.jboss.tools.jst.web.ui.palette;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.palette.PaletteDrawer;
-import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.ui.palette.PaletteEditPartFactory;
 
 
@@ -26,8 +25,4 @@ public class CustomPaletteEditPartFactory extends PaletteEditPartFactory {
 	protected EditPart createDrawerEditPart(EditPart parentEditPart, Object model) {
 		return new CustomDrawerEditPart((PaletteDrawer)model);
 	}
-	protected EditPart createMainPaletteEditPart(EditPart parentEditPart, Object model) {
-		return new CustomSliderPaletteEditPart((PaletteRoot)model);
-	}
-
 }
