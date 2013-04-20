@@ -30,6 +30,7 @@ public class JSTWebUIImages extends CommonUIImages{
 	public static String FOOTER_IMAGE    = WIZARDS_PATH + "FooterWizBan.png"; //$NON-NLS-1$
 	public static String NAVBAR_IMAGE    = WIZARDS_PATH + "NavbarWizBan.png"; //$NON-NLS-1$
 	public static String BUTTON_IMAGE    = WIZARDS_PATH + "ButtonWizBan.png"; //$NON-NLS-1$
+	public static String GROUP_BUTTON_IMAGE    = WIZARDS_PATH + "ButtonsWizBan.png"; //$NON-NLS-1$
 	public static String GRID_IMAGE    = WIZARDS_PATH + "GridWizBan.png"; //$NON-NLS-1$
 	public static String COLLAPSIBLE_IMAGE    = WIZARDS_PATH + "CollapsibleWizBan.png"; //$NON-NLS-1$
 	public static String TOGGLE_IMAGE    = WIZARDS_PATH + "ToggleWizBan.png"; //$NON-NLS-1$

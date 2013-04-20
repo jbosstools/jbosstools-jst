@@ -27,6 +27,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFooterWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFooterWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGridWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGridWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedButtonsWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedButtonsWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedCheckboxesWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedCheckboxesWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizard;
@@ -616,6 +618,45 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		assertAttrExists(wizard, ATTR_CLASS, CLASS_BUTTON_LEFT);
 		wizardPage.setEditorValue(EDITOR_ID_CLOSE_BUTTON, CLOSE_NONE);
 		assertTextDoesNotExist(wizard, CLASS_BUTTON_LEFT);
+
+		wizard.performFinish();
+	}
+
+	public void testNewGroupedButtonsBarWizard() {
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Grouped Buttons", true);
+
+		assertTrue(currentPage instanceof NewGroupedButtonsWizardPage);
+
+		NewGroupedButtonsWizardPage wizardPage = (NewGroupedButtonsWizardPage)currentPage;
+		NewGroupedButtonsWizard wizard = (NewGroupedButtonsWizard)wizardPage.getWizard();
+		
+		assertTextDoesNotExist(wizard, DATA_TYPE_HORIZONTAL);
+		wizardPage.setEditorValue(EDITOR_ID_LAYOUT, LAYOUT_HORIZONTAL);
+		assertAttrExists(wizard, ATTR_DATA_TYPE, DATA_TYPE_HORIZONTAL);
+		wizardPage.setEditorValue(EDITOR_ID_LAYOUT, LAYOUT_VERTICAL);
+		assertTextDoesNotExist(wizard, DATA_TYPE_HORIZONTAL);
+
+		assertEquals("3", wizardPage.getEditorValue(EDITOR_ID_NUMBER_OF_ITEMS));
+
+		wizardPage.setEditorValue(EDITOR_ID_NUMBER_OF_ITEMS, "4");
+		assertEquals("4", wizardPage.getEditorValue(EDITOR_ID_NUMBER_OF_ITEMS));
+		IFieldEditor iconPos = ((CompositeEditor)wizardPage.getEditor(EDITOR_ID_ICON_POS)).getEditors().get(0);
+		IFieldEditor icononly = ((CompositeEditor)wizardPage.getEditor(EDITOR_ID_ICON_ONLY)).getEditors().get(0);
+		assertFalse(iconPos.isEnabled());
+		assertFalse(icononly.isEnabled());
+		wizardPage.setEditorValue(EDITOR_ID_ICON, "delete");
+		assertTrue(iconPos.isEnabled());
+		assertTrue(icononly.isEnabled());
+		assertTextDoesNotExist(wizard, ATTR_DATA_ICONPOS);
+		wizardPage.setEditorValue(EDITOR_ID_ICON_POS, "right");
+		assertAttrExists(wizard, ATTR_DATA_ICONPOS, "right");
+		wizardPage.setEditorValue(EDITOR_ID_ICON_ONLY, TRUE);
+		assertAttrExists(wizard, ATTR_DATA_ICONPOS, ICONPOS_NOTEXT);
+
+		wizardPage.setEditorValue(EDITOR_ID_MINI, TRUE);
+		assertAttrExists(wizard, ATTR_DATA_MINI, TRUE);
+		wizardPage.setEditorValue(EDITOR_ID_MINI, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_DATA_MINI);
 
 		wizard.performFinish();
 	}
