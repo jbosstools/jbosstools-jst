@@ -86,8 +86,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		panel.setLayout(layout);
 
 		left = new Composite(panel, SWT.BORDER);
-		d = new GridData(GridData.FILL_BOTH);
-//		d.minimumWidth = 400;
+		d = new GridData(GridData.FILL_VERTICAL);
 		left.setLayoutData(d);
 		left.setLayout(new GridLayout(2, false));
 		
@@ -108,7 +107,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		showPreviewButton = new Button(left, SWT.PUSH);
 		d = new GridData();
 		d.minimumWidth = 100;
-		showPreviewButton.setText(WizardMessages.showPreviewButtonText);
+		showPreviewButton.setText(WizardMessages.hidePreviewButtonText);
 		showPreviewButton.setLayoutData(d);
 		showPreviewButton.addSelectionListener(new SelectionListener() {
 			@Override
@@ -123,10 +122,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		});
 	
 		previewPanel = new Splitter(panel, SWT.VERTICAL);
-		d = new GridData(GridData.FILL_VERTICAL);
-		d.horizontalSpan = 2;
-		d.widthHint = 0;
-		previewPanel.setVisible(false);
+		d = new GridData(GridData.FILL_BOTH);
 		previewPanel.setLayoutData(d);
 		previewPanel.setLayout(new GridLayout());
 		
@@ -185,8 +181,6 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 
 		previewPanel.setWeights(new int[]{4,6});
 		
-//		updatePreviewContent();
-
 		setControl(panel);
 		
 		Display.getCurrent().asyncExec(new Runnable() {
@@ -194,9 +188,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 				if(text == null || text.isDisposed()) {
 					return;
 				}
-				flipPreview(true);
 				updatePreviewContent();
-//				setVisible(true);
 				runValidation();
 				text.addControlListener(new ControlAdapter() {
 					public void controlResized(ControlEvent e) {
@@ -206,7 +198,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 				});
 			}
 		});
-//		parent.pack(true);
+		updatePreviewPanel(true, true);
 	}
 
 	public String getBrowserType() {
@@ -411,11 +403,8 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		} else {
 			showPreviewButton.setText(WizardMessages.hidePreviewButtonText);
 			GridData d = new GridData(GridData.FILL_VERTICAL);
-//			d.minimumWidth = 400;
 			left.setLayoutData(d);
 			d = new GridData(GridData.FILL_BOTH);
-//			int delta = 400;
-//			d.minimumWidth = delta;
 			previewPanel.setLayoutData(d);
 			previewPanel.setVisible(true);
 			updatePreviewPanel(true, first);

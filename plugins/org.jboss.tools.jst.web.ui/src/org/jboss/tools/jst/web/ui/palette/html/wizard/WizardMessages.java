@@ -148,6 +148,9 @@ public class WizardMessages extends NLS {
 
 	public static String newPopupWizardTitle;
 	public static String newPopupWizardDescription;
+
+	public static String newGroupedButtonsTitle;
+	public static String newGroupedButtonsDescription;
 	
 	public static String errorIDisUsed;
 	
