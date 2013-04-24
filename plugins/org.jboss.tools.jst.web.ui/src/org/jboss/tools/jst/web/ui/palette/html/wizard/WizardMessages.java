@@ -92,6 +92,9 @@ public class WizardMessages extends NLS {
 	public static String overlayLabel;
 	public static String positionToLabel;
 	public static String infoStyledLabel;
+	public static String panelPositionLabel;
+	public static String displayLabel;
+	public static String swipeCloseLabel;
 
 	public static String itemsLabel;
 
@@ -151,6 +154,9 @@ public class WizardMessages extends NLS {
 
 	public static String newGroupedButtonsTitle;
 	public static String newGroupedButtonsDescription;
+
+	public static String newPanelWizardTitle;
+	public static String newPanelWizardDescription;
 	
 	public static String errorIDisUsed;
 	

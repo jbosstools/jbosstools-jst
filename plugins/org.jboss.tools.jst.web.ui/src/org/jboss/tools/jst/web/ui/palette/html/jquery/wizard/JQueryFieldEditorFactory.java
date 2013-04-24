@@ -442,5 +442,31 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 				toList(values), "", true);
 	}
 
+	static String[] PANEL_POSITION_LIST = {POSITION_LEFT, POSITION_RIGHT};
+
+	public static IFieldEditor createPanelPositionEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(
+				EDITOR_ID_PANEL_POSITION, 
+				WizardMessages.panelPositionLabel, 
+				toList(PANEL_POSITION_LIST), 
+				toList(PANEL_POSITION_LIST), 
+				POSITION_LEFT);
+	}
+
+	static String[] PANEL_DISPLAY_LIST = {DISPLAY_OVERLAY, DISPLAY_REVEAL, DISPLAY_PUSH};
+
+	public static IFieldEditor createPanelDisplayEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(
+				EDITOR_ID_DISPLAY, 
+				WizardMessages.displayLabel, 
+				toList(PANEL_DISPLAY_LIST), 
+				toList(PANEL_DISPLAY_LIST), 
+				DISPLAY_REVEAL);
+	}
+
+	public static IFieldEditor createSwipeCloseEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_SWIPE_CLOSE, WizardMessages.swipeCloseLabel, true);
+	}
+
 }
 

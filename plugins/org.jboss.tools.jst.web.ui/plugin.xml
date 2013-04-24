@@ -804,6 +804,7 @@
       <tag name="_Palette_/Mobile/jQuery_Mobile/1.page/2.Dialog" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/1.page/3.Popup" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPopupWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/1.page/4.Grid" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGridWizard"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/1.page/6.Panel" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPanelWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/1.page/8.Collapsible_Content_Block" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCollapsibleWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/2.lists/1.Header_Bar" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/2.lists/2.Footer_Bar" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFooterWizard"/>
