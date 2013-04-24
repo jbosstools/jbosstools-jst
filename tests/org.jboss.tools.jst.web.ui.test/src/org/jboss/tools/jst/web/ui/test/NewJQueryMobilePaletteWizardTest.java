@@ -41,6 +41,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewNavbarWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewNavbarWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPageWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPageWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPanelWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPanelWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPopupWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPopupWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRadioWizard;
@@ -657,6 +659,48 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		assertAttrExists(wizard, ATTR_DATA_MINI, TRUE);
 		wizardPage.setEditorValue(EDITOR_ID_MINI, FALSE);
 		assertTextDoesNotExist(wizard, ATTR_DATA_MINI);
+
+		wizard.performFinish();
+	}
+
+	public void testNewPanelWizard() {
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Panel", true);
+
+		assertTrue(currentPage instanceof NewPanelWizardPage);
+		NewPanelWizardPage wizardPage = (NewPanelWizardPage)currentPage;
+		NewPanelWizard wizard = (NewPanelWizard)wizardPage.getWizard();
+
+		assertTextDoesNotExist(wizard, ATTR_DATA_DISPLAY);
+		wizardPage.setEditorValue(EDITOR_ID_DISPLAY, DISPLAY_OVERLAY);
+		assertAttrExists(wizard, ATTR_DATA_DISPLAY, DISPLAY_OVERLAY);
+		wizardPage.setEditorValue(EDITOR_ID_DISPLAY, DISPLAY_PUSH);
+		assertAttrExists(wizard, ATTR_DATA_DISPLAY, DISPLAY_PUSH);
+		wizardPage.setEditorValue(EDITOR_ID_DISPLAY, DISPLAY_REVEAL);
+		assertTextDoesNotExist(wizard, ATTR_DATA_DISPLAY);
+
+		assertTextDoesNotExist(wizard, ATTR_DATA_POSITION);
+		wizardPage.setEditorValue(EDITOR_ID_PANEL_POSITION, POSITION_RIGHT);
+		assertAttrExists(wizard, ATTR_DATA_POSITION, POSITION_RIGHT);
+		wizardPage.setEditorValue(EDITOR_ID_PANEL_POSITION, POSITION_LEFT);
+		assertTextDoesNotExist(wizard, ATTR_DATA_POSITION);
+
+		assertTextDoesNotExist(wizard, ATTR_DATA_DISMISSABLE);
+		wizardPage.setEditorValue(EDITOR_ID_DISMISSABLE, FALSE);
+		assertAttrExists(wizard, ATTR_DATA_DISMISSABLE, FALSE);
+		wizardPage.setEditorValue(EDITOR_ID_DISMISSABLE, TRUE);
+		assertTextDoesNotExist(wizard, ATTR_DATA_DISMISSABLE);
+
+		assertTextDoesNotExist(wizard, ATTR_DATA_SWIPE_CLOSE);
+		wizardPage.setEditorValue(EDITOR_ID_SWIPE_CLOSE, FALSE);
+		assertAttrExists(wizard, ATTR_DATA_SWIPE_CLOSE, FALSE);
+		wizardPage.setEditorValue(EDITOR_ID_SWIPE_CLOSE, TRUE);
+		assertTextDoesNotExist(wizard, ATTR_DATA_SWIPE_CLOSE);
+
+		assertTextDoesNotExist(wizard, ATTR_DATA_POSITION_FIXED);
+		wizardPage.setEditorValue(EDITOR_ID_FIXED_POSITION, TRUE);
+		assertAttrExists(wizard, ATTR_DATA_POSITION_FIXED, TRUE);
+		wizardPage.setEditorValue(EDITOR_ID_FIXED_POSITION, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_DATA_POSITION_FIXED);
 
 		wizard.performFinish();
 	}

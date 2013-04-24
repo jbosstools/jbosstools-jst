@@ -24,6 +24,7 @@ public interface JQueryConstants extends HTMLConstants {
 	public String ATTR_DATA_COLLAPSED = "data-collapsed";
 	public String ATTR_DATA_COLLAPSED_ICON = "data-collapsed-icon";
 	public String ATTR_DATA_CONTENT_THEME = "data-content-theme";
+	public String ATTR_DATA_DISPLAY = "data-display";
 	public String ATTR_DATA_EXPANDED_ICON = "data-expanded-icon";
 	public String ATTR_DATA_FILTER = "data-filter";
 	public String ATTR_DATA_FULL_SCREEN = "data-fullscreen";
@@ -35,8 +36,10 @@ public interface JQueryConstants extends HTMLConstants {
 	public String ATTR_DATA_MINI = "data-mini";
 	public String ATTR_DATA_OVERLAY_THEME = "data-overlay-theme";
 	public String ATTR_DATA_POSITION = "data-position";
+	public String ATTR_DATA_POSITION_FIXED = "data-position-fixed";
 	public String ATTR_DATA_REL = "data-rel";
 	public String ATTR_DATA_ROLE = "data-role";
+	public String ATTR_DATA_SWIPE_CLOSE = "data-swipe-close";
 	public String ATTR_DATA_THEME = "data-theme";
 	public String ATTR_DATA_TRACK_THEME = "data-track-theme";
 	public String ATTR_DATA_DIVIDER_THEME = "data-divider-theme";
@@ -86,6 +89,13 @@ public interface JQueryConstants extends HTMLConstants {
 	public String POSITION_FIXED = "fixed";
 	public String POSITION_TO_WINDOW = "window";
 	public String POSITION_TO_ORIGIN = "origin";
+
+	public String POSITION_LEFT = "left";
+	public String POSITION_RIGHT = "right";
+
+	public String DISPLAY_OVERLAY = "overlay";
+	public String DISPLAY_REVEAL = "reveal";
+	public String DISPLAY_PUSH = "push";
 
 	public String ROLE_BUTTON = "button";
 	public String ROLE_COLLAPSIBLE = "collapsible";
@@ -204,9 +214,13 @@ public interface JQueryConstants extends HTMLConstants {
 	public String EDITOR_ID_OVERLAY = "overlay";
 	public String EDITOR_ID_POSITION_TO = "position-to";
 	public String EDITOR_ID_INFO_STYLED = "info-styled";
+	public String EDITOR_ID_SWIPE_CLOSE = "swipe-close";
 
 	public String EDITOR_ID_HEADER = "header";
 	public String EDITOR_ID_COLLAPSED = "collapsed";
 	public String EDITOR_ID_FIELD_SET = "field-set";
+
+	public String EDITOR_ID_PANEL_POSITION = "panel-position";
+	public String EDITOR_ID_DISPLAY = "display";
 
 }
