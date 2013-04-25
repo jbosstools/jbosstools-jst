@@ -16,6 +16,7 @@ import java.util.Map;
 import org.eclipse.wst.sse.ui.contentassist.CompletionProposalInvocationContext;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
 import org.jboss.tools.common.el.core.resolver.ELContext;
+import org.jboss.tools.jst.jsp.contentassist.ELPrefixUtils.ELTextRegion;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
@@ -23,7 +24,7 @@ import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 /**
  * Tag Proposal computer for JSP pages
  * 
- * @author Jeremy
+ * @author Victor V. Rubezhny
  *
  */
 @SuppressWarnings("restriction")
@@ -88,7 +89,7 @@ public class JspTagCompletionProposalComputer extends XmlTagCompletionProposalCo
 		
 		// Need to check if an EL Expression is opened here.
 		// If it is true we don't need to start any new tag proposals
-		TextRegion prefix = getELPrefix(contentAssistRequest);
+		ELTextRegion prefix = getELPrefix(contentAssistRequest);
 		if (prefix != null && prefix.isELStarted()) {
 			return;
 		}

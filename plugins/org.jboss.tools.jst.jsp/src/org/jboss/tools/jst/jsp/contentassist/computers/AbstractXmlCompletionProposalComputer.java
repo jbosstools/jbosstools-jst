@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2010 Exadel, Inc. and Red Hat, Inc.
+ * Copyright (c) 2010-2013 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
+ *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.contentassist.computers;
 
@@ -58,7 +58,6 @@ import org.w3c.dom.NodeList;
 @SuppressWarnings("restriction")
 abstract public class AbstractXmlCompletionProposalComputer extends AbstractXMLModelQueryCompletionProposalComputer {
 	protected static final ICompletionProposal[] EMPTY_PROPOSAL_LIST = new ICompletionProposal[0];
-	private static final String[] EMPTY_TAGS = new String[0];
 	private static final KbQuery.Tag[] EMPTY_TAGS_W_ATTRIBUTES = new KbQuery.Tag[0];
 	public static final String EL_DOLLAR_PREFIX = "${"; //$NON-NLS-1$
 	public static final String EL_NUMBER_PREFIX = "#{"; //$NON-NLS-1$
@@ -816,88 +815,4 @@ abstract public class AbstractXmlCompletionProposalComputer extends AbstractXMLM
 	protected boolean endsWithELBeginning(String text) {
 		return (text != null && text.endsWith(EL_SUFFIX));
 	}
-	
-	public static class TextRegion {
-		private int startOffset;
-		private int offset;
-		private int length;
-		private String text;
-		private boolean isELStarted;
-		private boolean isInsideELStartToken;
-		private boolean isELClosed;
-		private boolean isAttributeValue;
-		private boolean hasOpenQuote;
-		private boolean hasCloseQuote;
-		private char quoteChar;
-		
-		public TextRegion(int startOffset, int offset, int length, String text, boolean isELStarted, boolean isELClosed) {
-			this(startOffset, offset, length, text, isELStarted, isELClosed, false, false, false, (char)0);
-		}
-
-		public TextRegion(int startOffset, int offset, int length, String text, boolean isELStarted, boolean isELClosed,
-				boolean isAttributeValue, boolean hasOpenQuote, boolean hasCloseQuote, char quoteChar) {
-			this.startOffset = startOffset;
-			this.offset = offset;
-			this.length = length;
-			this.text = text;
-			this.isELStarted = isELStarted;
-			this.isELClosed = isELClosed;
-			this.isAttributeValue = isAttributeValue;
-			this.hasOpenQuote = hasOpenQuote;
-			this.hasCloseQuote = hasCloseQuote;
-			this.quoteChar = quoteChar;
-		}
-		
-		public int getStartOffset() {
-			return startOffset;
-		}
-		
-		public int getOffset() {
-			return offset;
-		}
-		
-		public int getLength() {
-			return length;
-		}
-		
-		public String getText() {
-			StringBuffer sb = new StringBuffer(length);
-			sb = sb.append(text.substring(0, length));
-			sb.setLength(length);
-			return sb.toString();
-		}
-		
-		public boolean isELStarted() {
-			return isELStarted;
-		}
-	
-		public boolean isInsideELStartToken() {
-			return isInsideELStartToken;
-		}
-
-		void setInsideELStartToken(boolean b) {
-			isInsideELStartToken = b;
-		}
-
-		public boolean isELClosed() {
-			return isELClosed;
-		}
-
-		public boolean isAttributeValue() {
-			return isAttributeValue;
-		}
-
-		public char getQuoteChar() {
-			return quoteChar;
-		}
-
-		public boolean hasOpenQuote() {
-			return hasOpenQuote;
-		}
-
-		public boolean hasCloseQuote() {
-			return hasCloseQuote;
-		}
-	}
-
 }

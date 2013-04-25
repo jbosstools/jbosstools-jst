@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Red Hat, Inc.
+ * Copyright (c) 2010-2013 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -11,8 +11,6 @@
 package org.jboss.tools.jst.jsp.contentassist.computers;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.resources.IFile;
@@ -36,7 +34,6 @@ import org.eclipse.wst.sse.ui.contentassist.CompletionProposalInvocationContext;
 import org.eclipse.wst.sse.ui.internal.contentassist.ContentAssistUtils;
 import org.eclipse.wst.xml.core.internal.contentmodel.CMAttributeDeclaration;
 import org.eclipse.wst.xml.core.internal.contentmodel.CMNode;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
@@ -57,27 +54,24 @@ import org.jboss.tools.common.ui.CommonUIPlugin;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.contentassist.AutoContentAssistantProposal;
 import org.jboss.tools.jst.jsp.contentassist.AutoELContentAssistantProposal;
+import org.jboss.tools.jst.jsp.contentassist.ELPrefixUtils.ELTextRegion;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.PageProcessor;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 /**
  * EL Proposal computer for XML pages
  * 
- * @author Jeremy
+ * @author Victor V. Rubezhny
  *
  */
 @SuppressWarnings("restriction")
 public class XmlELCompletionProposalComputer extends AbstractXmlCompletionProposalComputer {
 	protected static final ICompletionProposal[] EMPTY_PROPOSAL_LIST = new ICompletionProposal[0];
-	private static final String[] EMPTY_TAGS = new String[0];
 	protected static final Image JSF_EL_PROPOSAL_IMAGE = JspEditorPlugin.getDefault().getImage(JspEditorPlugin.CA_JSF_EL_IMAGE_PATH);
 
 	/**
@@ -132,7 +126,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		
 		// Need to check if an EL Expression is opened here.
 		// If it is true we don't need to start any new tag proposals
-		TextRegion prefix = getELPrefix(contentAssistRequest);
+		ELTextRegion prefix = getELPrefix(contentAssistRequest);
 		if (prefix != null && prefix.isELStarted()) {
 			if(prefix.isInsideELStartToken()) {
 				// "#|{" - wrong place to suggest anything
@@ -153,7 +147,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		
 		// Need to check if an EL Expression is opened here.
 		// If it is true we don't need to start any new tag proposals
-		TextRegion prefix = getELPrefix(contentAssistRequest);
+		ELTextRegion prefix = getELPrefix(contentAssistRequest);
 		if (prefix != null && prefix.isELStarted()) {
 			if(prefix.isInsideELStartToken()) {
 				// "#|{" - wrong place to suggest anything
@@ -175,8 +169,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 			CompletionProposalInvocationContext context) {
 		if (!isELCAToBeShown())
 			return;
-		
-		TextRegion prefix = getELPrefix(contentAssistRequest);
+		ELTextRegion prefix = getELPrefix(contentAssistRequest);
 		if (prefix == null || prefix.isInsideELStartToken()) 
 			return; // Do not return any proposals here (predicate proposals may be created instead)
 
@@ -326,7 +319,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		if (!isELCAToBeShown())
 			return;
 		
-		TextRegion prefix = getELPrefix(contentAssistRequest);
+		ELTextRegion prefix = getELPrefix(contentAssistRequest);
 		if (prefix == null || !prefix.isELStarted()) {
 			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(true, getDefaultELPrefix()+ "}", //$NON-NLS-1$ 
 					contentAssistRequest.getReplacementBeginPosition(), 
@@ -474,7 +467,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		
 		// Need to check if the cursor is placed right after a word part.
 		// If there is no word part found then just quit
-		TextRegion prefix = getELPredicatePrefix(contentAssistRequest);
+		ELTextRegion prefix = getELPredicatePrefix(contentAssistRequest);
 		if (prefix == null || prefix.isELStarted()) {
 			return;
 		}
@@ -722,7 +715,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 	 * 
 	 * @return
 	 */
-	protected TextRegion getELPrefix(ContentAssistRequest request) {
+	protected ELTextRegion getELPrefix(ContentAssistRequest request) {
 		if (request == null || request.getRegion() == null)
 			return null;
 
@@ -782,7 +775,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		boolean isELClosed = (model != null && is != null && model.toString().endsWith("}")); //$NON-NLS-1$
 		
 //			boolean insideEL = startOffset + model.toString().length() 
-		TextRegion tr = new TextRegion(startOffset,  ie == null ? inValueOffset : ie.getStartPosition(), 
+		ELTextRegion tr = new ELTextRegion(startOffset,  ie == null ? inValueOffset : ie.getStartPosition(), 
 				ie == null ? 0 : inValueOffset - ie.getStartPosition(), ie == null ? "" : ie.getText(),  //$NON-NLS-1$ 
 				isELStarted, isELClosed,
 				isAttributeValue, hasOpenQuote, hasCloseQuote, quoteChar);
@@ -800,7 +793,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 	 * 
 	 * @return
 	 */
-	protected TextRegion getELPredicatePrefix(ContentAssistRequest request) {
+	protected ELTextRegion getELPredicatePrefix(ContentAssistRequest request) {
 		if (request == null || request.getRegion() == null)
 			return null;
 
@@ -857,7 +850,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		boolean isELStarted = (model != null && is != null && startsWithELBeginning(model.toString()));
 		boolean isELClosed = (model != null && is != null && model.toString().endsWith("}")); //$NON-NLS-1$
 
-		TextRegion tr = new TextRegion(startOffset, getOffset() - matchString.length() - startOffset, 
+		ELTextRegion tr = new ELTextRegion(startOffset, getOffset() - matchString.length() - startOffset, 
 				matchString.length(), matchString, isELStarted, isELClosed,
 				isAttributeValue, hasOpenQuote, hasCloseQuote, quoteChar);
 		
