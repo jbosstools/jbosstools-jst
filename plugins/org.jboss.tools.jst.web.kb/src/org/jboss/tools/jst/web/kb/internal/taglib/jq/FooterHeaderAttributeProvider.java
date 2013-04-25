@@ -17,7 +17,7 @@ import org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibAttribute;
  */
 public class FooterHeaderAttributeProvider extends JQueryMobileAttrProvider {
 
-	private static final JQueryMobileAttribute[] requiredAttributes = new JQueryMobileAttribute[] {new DataRoleAttribute("", FOOTER), new DataRoleAttribute("", HEADER)};
+	private static final JQueryMobileAttribute[] requiredAttributes = new JQueryMobileAttribute[] {new JQueryMobileAttribute(DATA_ROLE, "", new String[]{FOOTER, HEADER})};
 
 	private static final JQueryMobileAttribute[] conditionalAttributes = new JQueryMobileAttribute[] {DATA_ID_ATTRIBUTE,
 		DATA_POSITION_ATTRIBUTE,

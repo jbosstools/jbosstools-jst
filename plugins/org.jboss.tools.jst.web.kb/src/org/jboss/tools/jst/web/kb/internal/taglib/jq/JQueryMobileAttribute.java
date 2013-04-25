@@ -20,6 +20,8 @@ import org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibAttribute;
  */
 public class JQueryMobileAttribute extends CustomTagLibAttribute {
 
+	protected String[] values;
+
 	public JQueryMobileAttribute(String name, String description) {
 		this(name, description, new String[0]);
 	}
@@ -29,6 +31,7 @@ public class JQueryMobileAttribute extends CustomTagLibAttribute {
 	}
 
 	public JQueryMobileAttribute(String name, String description, String[] values, String[] valueDescriptions) {
+		this.values = values;
 		setDescription(description);
 		setExtended(false);
 		setIgnoreCase(true);
@@ -51,5 +54,17 @@ public class JQueryMobileAttribute extends CustomTagLibAttribute {
 		}
 		proposal.setParams(params);
 		setProposals(proposals);
+	}
+
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer("{Name: ").append(name).append("; Values: ");
+		for (int i = 0; i < values.length; i++) {
+			if(i>0) {
+				sb.append('|');
+			}
+			sb.append(values[i]);
+		}
+		return sb.append('}').toString();
 	}
 }

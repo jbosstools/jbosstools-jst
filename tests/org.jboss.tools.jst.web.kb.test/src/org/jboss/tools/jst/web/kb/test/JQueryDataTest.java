@@ -63,7 +63,7 @@ public class JQueryDataTest extends HTML5Test {
 		assertEquals(0, proposals.length);
 	}
 
-	public void testHtml5WOLibs() {
+	public void testHtml5WithoutLibs() {
 		IFile file = testProject.getFile(new Path("WebContent/pages/jquery/jQueryMobileWOLibs.html"));
 		ELContext context = PageContextFactory.createPageContext(file);
 		KbQuery query = createKbQuery(new KbQuery.Tag[]{createTag("a", JQueryMobileAttrProvider.BUTTON)}, "data-");
@@ -326,5 +326,49 @@ public class JQueryDataTest extends HTML5Test {
 		KbQuery query = createKbQuery(KbQuery.Type.ATTRIBUTE_VALUE, new KbQuery.Tag[]{createTag(JQueryMobileAttrProvider.TABLE, JQueryMobileAttrProvider.TABLE), createTag("th")}, "data-priority", "");
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
 		assertProposals(proposals, JQueryMobileAttrProvider.DATA_PRIORITY_ENUM);
+	}
+
+	public void testPanelAttributeProvider() {
+		assertDataRole(JQueryMobileAttrProvider.PANEL);
+
+		KbQuery query = createKbQuery(new KbQuery.Tag[]{createTag("div", JQueryMobileAttrProvider.PANEL)}, "data-");
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
+		assertProposals(proposals, "data-position", "data-display", "data-dismissible", "data-position-fixed", "data-swipe-close", "data-theme");
+	}
+
+	public void testPanelDataPosition() {
+		KbQuery query = createKbQuery(KbQuery.Type.ATTRIBUTE_VALUE, new KbQuery.Tag[]{createTag("div", JQueryMobileAttrProvider.PANEL)}, "data-position", "");
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
+		assertProposals(proposals, JQueryMobileAttrProvider.DATA_POSITION_ENUM);
+	}
+
+	public void testPanelDataDisplay() {
+		KbQuery query = createKbQuery(KbQuery.Type.ATTRIBUTE_VALUE, new KbQuery.Tag[]{createTag("div", JQueryMobileAttrProvider.PANEL)}, "data-display", "");
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
+		assertProposals(proposals, JQueryMobileAttrProvider.DATA_DISPLAY_ENUM);
+	}
+
+	public void testPanelDataDismissible() {
+		KbQuery query = createKbQuery(KbQuery.Type.ATTRIBUTE_VALUE, new KbQuery.Tag[]{createTag("div", JQueryMobileAttrProvider.PANEL)}, "data-dismissible", "");
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
+		assertProposals(proposals, JQueryMobileAttrProvider.ENUM_TRUE_FALSE);
+	}
+
+	public void testPanelDataPositionFixed() {
+		KbQuery query = createKbQuery(KbQuery.Type.ATTRIBUTE_VALUE, new KbQuery.Tag[]{createTag("div", JQueryMobileAttrProvider.PANEL)}, "data-position-fixed", "");
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
+		assertProposals(proposals, JQueryMobileAttrProvider.ENUM_TRUE_FALSE);
+	}
+
+	public void testPanelDataSwipeClose() {
+		KbQuery query = createKbQuery(KbQuery.Type.ATTRIBUTE_VALUE, new KbQuery.Tag[]{createTag("div", JQueryMobileAttrProvider.PANEL)}, "data-swipe-close", "");
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
+		assertProposals(proposals, JQueryMobileAttrProvider.ENUM_TRUE_FALSE);
+	}
+
+	public void testPanelDataTheme() {
+		KbQuery query = createKbQuery(KbQuery.Type.ATTRIBUTE_VALUE, new KbQuery.Tag[]{createTag("div", JQueryMobileAttrProvider.PANEL)}, "data-theme", "");
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
+		assertProposals(proposals, JQueryMobileAttrProvider.ENUM_THEME);
 	}
 }

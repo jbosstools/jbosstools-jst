@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.jboss.tools.jst.web.kb.KbQuery;
-import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 import org.jboss.tools.jst.web.kb.taglib.IAttributeProvider;
 
 /**
@@ -32,7 +31,7 @@ public abstract class AbstractAttributeProvider implements IAttributeProvider {
 	 * @see org.jboss.tools.jst.web.kb.taglib.IAttributeProvider#getAttributes(org.jboss.tools.jst.web.kb.KbQuery)
 	 */
 	@Override
-	public IAttribute[] getAttributes(KbQuery query) {
+	public CustomTagLibAttribute[] getAttributes(KbQuery query) {
 		this.query = query;
 		List<CustomTagLibAttribute> attributes = new ArrayList<CustomTagLibAttribute>();
 		CustomTagLibAttribute[] attrs = getRequiredAttributes();
@@ -83,7 +82,7 @@ public abstract class AbstractAttributeProvider implements IAttributeProvider {
 	@Override
 	public CustomTagLibAttribute getAttribute(KbQuery query, String name) {
 		this.query = query;
-		List<CustomTagLibAttribute> attrs = getAllAttributes();
+		CustomTagLibAttribute[] attrs = getAttributes(query);
 		for (CustomTagLibAttribute attr : attrs) {
 			if(attr.getName().equalsIgnoreCase(name)) {
 				if(attr.getComponent()==null) {
