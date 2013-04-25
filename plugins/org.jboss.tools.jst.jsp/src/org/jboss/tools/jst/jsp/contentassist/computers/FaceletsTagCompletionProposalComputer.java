@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Red Hat, Inc.
+ * Copyright (c) 2010-2013 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -28,6 +28,7 @@ import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 import org.eclipse.wst.xml.core.internal.ssemodelquery.ModelQueryAdapter;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
 import org.jboss.tools.common.el.core.resolver.ELContext;
+import org.jboss.tools.jst.jsp.contentassist.ELPrefixUtils.ELTextRegion;
 import org.jboss.tools.jst.web.kb.IFaceletPageContext;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.w3c.dom.Attr;
@@ -40,7 +41,7 @@ import org.w3c.dom.Node;
 /**
  * Tag Proposal computer for XHTML pages
  * 
- * @author Jeremy
+ * @author Victor V. Rubezhny
  *
  */
 @SuppressWarnings("restriction")
@@ -151,7 +152,7 @@ public class FaceletsTagCompletionProposalComputer extends JspTagCompletionPropo
 		
 		// Need to check if an EL Expression is opened here.
 		// If it is true we don't need to start any new tag proposals
-		TextRegion prefix = getELPrefix(contentAssistRequest);
+		ELTextRegion prefix = getELPrefix(contentAssistRequest);
 		if (prefix != null && prefix.isELStarted()) {
 			return;
 		}

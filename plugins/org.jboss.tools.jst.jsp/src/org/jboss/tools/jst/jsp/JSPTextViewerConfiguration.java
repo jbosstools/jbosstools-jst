@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2011 Red Hat, Inc.
+ * Copyright (c) 2007-2013 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -11,7 +11,6 @@
 package org.jboss.tools.jst.jsp;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -49,23 +48,20 @@ import org.jboss.tools.common.text.xml.contentassist.ProposalSorter;
 import org.jboss.tools.common.text.xml.info.ChainTextHover;
 import org.jboss.tools.common.text.xml.info.TextHoverInformationProvider;
 import org.jboss.tools.common.text.xml.xpl.MarkerProblemAnnotationHoverProcessor;
+import org.jboss.tools.jst.jsp.contentassist.ELPrefixUtils;
 
 /**
  * @author Igels
  */
 @SuppressWarnings("restriction")
-public class JSPTextViewerConfiguration extends StructuredTextViewerConfigurationJSP implements ITextViewerConfiguration {
+public class JSPTextViewerConfiguration extends StructuredTextViewerConfigurationJSP {
 	private static final char[] PROPOSAL_AUTO_ACTIVATION_CHARS = new char[] {
 		'<', '=', '"', '\'', '.', '{', '['
 	};
 
-	private TextViewerConfigurationDelegate configurationDelegate;
-
 	public JSPTextViewerConfiguration() {
 		super();
-		configurationDelegate = new TextViewerConfigurationDelegate(this);
 	}
-
 
 	/*
 	 * JBIDE-4390:  
@@ -108,18 +104,18 @@ public class JSPTextViewerConfiguration extends StructuredTextViewerConfiguratio
 		return providers;
 	}
 
+	
 	protected IContentAssistProcessor[] getContentAssistProcessors(ISourceViewer sourceViewer, String partitionType) {
-//		IContentAssistProcessor[] superProcessors = super.getContentAssistProcessors(
-//				sourceViewer, partitionType);
-		IContentAssistProcessor superProcessor = new JSPStructuredContentAssistProcessor(
-				this.getContentAssistant(), partitionType, sourceViewer) {
+		return new IContentAssistProcessor[] {
+				new JSPStructuredContentAssistProcessor(
+						this.getContentAssistant(), partitionType, sourceViewer) {
 
-					@SuppressWarnings({ "rawtypes", "unchecked" })
 					@Override
 					protected List filterAndSortProposals(List proposals,
 							IProgressMonitor monitor,
 							CompletionProposalInvocationContext context) {
-						return ProposalSorter.filterAndSortProposals(proposals, monitor, context);
+						return ProposalSorter.filterAndSortProposals(proposals, monitor, context, 
+								ELPrefixUtils.EL_PROPOSAL_FILTER);
 					}
 
 					@Override
@@ -136,17 +132,8 @@ public class JSPTextViewerConfiguration extends StructuredTextViewerConfiguratio
 						}
 						return chars.toCharArray();
 					}
-		};
-		
-		List<IContentAssistProcessor> processors = new ArrayList<IContentAssistProcessor>();
-		processors.addAll(
-				Arrays.asList(
-						configurationDelegate.getContentAssistProcessors(
-								sourceViewer,
-								partitionType)));
-//		processors.addAll(Arrays.asList(superProcessors));
-		processors.add(superProcessor);
-		return processors.toArray(new IContentAssistProcessor[0]);
+				}
+			};
 	}
 	
 	/*
@@ -175,16 +162,6 @@ public class JSPTextViewerConfiguration extends StructuredTextViewerConfiguratio
 		return allDetectors.toArray(new IHyperlinkDetector[0]); 
 	}
 
-	/**
-	 * @deprecated
-	 */
-	public IContentAssistProcessor[] getContentAssistProcessorsForPartitionType(
-			ISourceViewer sourceViewer, String partitionType) {
-		// TODO Auto-generated method stub
-//		return super.getContentAssistProcessors(sourceViewer, partitionType);
-		return null;
-	}
-	
 	/**
 	 * Create documentation hovers based on hovers contributed via
 	 * <code>org.eclipse.wst.sse.ui.editorConfiguration</code> extension point
@@ -235,7 +212,6 @@ public class JSPTextViewerConfiguration extends StructuredTextViewerConfiguratio
 					&& computeStateMask(hoverDescs[i].getModifierString()) == stateMask) {
 				String hoverType = hoverDescs[i].getId();
 				if (TextHoverManager.PROBLEM_HOVER.equalsIgnoreCase(hoverType))
-//					textHover = new ProblemAnnotationHoverProcessor();
 					textHover = new MarkerProblemAnnotationHoverProcessor();
 				else if (TextHoverManager.ANNOTATION_HOVER
 						.equalsIgnoreCase(hoverType))
@@ -256,7 +232,6 @@ public class JSPTextViewerConfiguration extends StructuredTextViewerConfiguratio
 		return textHover;
 	}
 
-	
 	private IQuickAssistAssistant fQuickAssistant = null;
 	
 	private Color getColor(String key) {
@@ -295,5 +270,4 @@ public class JSPTextViewerConfiguration extends StructuredTextViewerConfiguratio
 			}
 		};
 	}
-
 }

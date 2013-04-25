@@ -66,6 +66,7 @@ import org.jboss.tools.common.text.ext.util.Utils;
 import org.jboss.tools.common.ui.CommonUIPlugin;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.contentassist.AutoContentAssistantProposal;
+import org.jboss.tools.jst.jsp.contentassist.ELPrefixUtils.ELTextRegion;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.JSPPaletteInsertHelper;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.PaletteTaglibInserter;
 import org.jboss.tools.jst.web.kb.IKbProject;
@@ -90,7 +91,7 @@ import org.w3c.dom.Node;
 /**
  * Tag Proposal computer for XML pages
  * 
- * @author Jeremy
+ * @author Victor V. Rubezhny
  *
  */
 @SuppressWarnings("restriction")
@@ -126,7 +127,6 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 		}
 		return isValid;
 	}
-
 	
 	/**
 	 * Calculates and adds the tag proposals to the Content Assist Request object
@@ -141,7 +141,7 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 		
 		// Need to check if an EL Expression is opened here.
 		// If it is true we don't need to start any new tag proposals
-		TextRegion prefix = getELPrefix(contentAssistRequest);
+		ELTextRegion prefix = getELPrefix(contentAssistRequest);
 		if (prefix != null && prefix.isELStarted()) {
 			return;
 		}
@@ -565,7 +565,7 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 		
 		// Need to check if an EL Expression is opened here.
 		// If it is true we don't need to start any new tag proposals
-		TextRegion prefix = getELPrefix(contentAssistRequest);
+		ELTextRegion prefix = getELPrefix(contentAssistRequest);
 		if (prefix != null && prefix.isELStarted()) {
 			return;
 		}
@@ -1112,7 +1112,7 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 	 * 
 	 * @return
 	 */
-	protected TextRegion getELPrefix(ContentAssistRequest request) {
+	protected ELTextRegion getELPrefix(ContentAssistRequest request) {
 		if (!DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE.equals(request.getRegion().getType()) &&
 				!DOMRegionContext.XML_CONTENT.equals(request.getRegion().getType()) &&
 				!DOMRegionContext.BLOCK_TEXT.equals(request.getRegion().getType())) 
@@ -1155,7 +1155,7 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 		boolean isELClosed = (model != null && is != null && endsWithELBeginning(is.getFirstToken() == null ? null : is.getLastToken().getText())); 
 		
 //			boolean insideEL = startOffset + model.toString().length() 
-		TextRegion tr = new TextRegion(startOffset,  ie == null ? inValueOffset : ie.getStartPosition(), 
+		ELTextRegion tr = new ELTextRegion(startOffset,  ie == null ? inValueOffset : ie.getStartPosition(), 
 				ie == null ? 0 : inValueOffset - ie.getStartPosition(), ie == null ? "" : ie.getText(),  //$NON-NLS-1$ 
 				isELStarted, isELClosed,
 				isAttributeValue, hasOpenQuote, hasCloseQuote, quoteChar);
@@ -1169,7 +1169,7 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 	 * 
 	 * @return
 	 */
-	protected TextRegion getELPredicatePrefix(ContentAssistRequest request) {
+	protected ELTextRegion getELPredicatePrefix(ContentAssistRequest request) {
 		if (request == null || request.getRegion() == null)
 			return null;
 
@@ -1217,7 +1217,7 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 		if (matchString == null)
 			return null;
 		
-		TextRegion tr = new TextRegion(startOffset, getOffset() - matchString.length() - startOffset, 
+		ELTextRegion tr = new ELTextRegion(startOffset, getOffset() - matchString.length() - startOffset, 
 				matchString.length(), matchString, false, false,
 				isAttributeValue, hasOpenQuote, hasCloseQuote, quoteChar);
 		

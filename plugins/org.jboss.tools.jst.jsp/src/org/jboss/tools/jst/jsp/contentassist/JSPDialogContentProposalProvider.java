@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2009 Red Hat, Inc. 
+ * Copyright (c) 2009-2013 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -29,7 +29,7 @@ import org.jboss.tools.common.el.core.parser.ELParserUtil;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.ELResolverFactoryManager;
 import org.jboss.tools.common.text.TextProposal;
-import org.jboss.tools.jst.jsp.contentassist.computers.AbstractXmlCompletionProposalComputer.TextRegion;
+import org.jboss.tools.jst.jsp.contentassist.ELPrefixUtils.ELTextRegion;
 import org.jboss.tools.jst.jsp.contentassist.computers.JspELCompletionProposalComputer;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.outline.ValueHelper;
@@ -101,7 +101,7 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 
 	public IContentProposal[] getAttrProposals(String contents, int position) {
 		List<IContentProposal> result = new ArrayList<IContentProposal>();
-		TextRegion p = getELPrefix(contents, position);
+		ELTextRegion p = getELPrefix(contents, position);
 		if (p == null || !p.isELStarted()) {
 			KbQuery kbQuery = createKbQuery(Type.ATTRIBUTE_VALUE, contents.substring(0, position), contents, position, false);
 			TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, pageContext);
@@ -128,7 +128,7 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 
 	public IContentProposal[] getELProposals(String contents, int position) {
 		List<IContentProposal> result = new ArrayList<IContentProposal>();
-		TextRegion prefix = getELPrefix(contents, position);
+		ELTextRegion prefix = getELPrefix(contents, position);
 		if (prefix == null || !prefix.isELStarted()) {
 //			IContentProposal proposal = new ContentProposal("#{}", 0, "#{}", JstUIMessages.JSPDialogContentProposalProvider_NewELExpression); //$NON-NLS-1$ //$NON-NLS-2$
 //			result.add(proposal);
@@ -262,7 +262,7 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 		
 	}
 
-	protected TextRegion getELPrefix(String text, int pos) {
+	protected ELTextRegion getELPrefix(String text, int pos) {
 			int inValueOffset = pos;
 			if (text.length() < inValueOffset) { // probably, the attribute value ends before the document position
 				return null;
@@ -282,7 +282,7 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 			boolean isELClosed = (model != null && is != null && model.toString().endsWith("}")); //$NON-NLS-1$
 			
 //			boolean insideEL = startOffset + model.toString().length() 
-			TextRegion tr = new TextRegion(0,  ie == null ? inValueOffset : ie.getStartPosition(), ie == null ? 0 : inValueOffset - ie.getStartPosition(), ie == null ? "" : ie.getText(), isELStarted, isELClosed); //$NON-NLS-1$
+			ELTextRegion tr = new ELTextRegion(0,  ie == null ? inValueOffset : ie.getStartPosition(), ie == null ? 0 : inValueOffset - ie.getStartPosition(), ie == null ? "" : ie.getText(), isELStarted, isELClosed); //$NON-NLS-1$
 			
 			return tr;
 	}

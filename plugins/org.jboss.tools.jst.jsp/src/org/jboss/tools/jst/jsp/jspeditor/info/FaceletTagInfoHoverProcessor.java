@@ -58,8 +58,8 @@ import org.jboss.tools.common.el.ui.ca.ELProposalProcessor;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.common.util.StringUtil;
+import org.jboss.tools.jst.jsp.contentassist.ELPrefixUtils.ELTextRegion;
 import org.jboss.tools.jst.jsp.contentassist.Utils;
-import org.jboss.tools.jst.jsp.contentassist.computers.AbstractXmlCompletionProposalComputer.TextRegion;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
@@ -71,7 +71,7 @@ import org.w3c.dom.Node;
 
 /**
  * 
- * @author Victor Rubezhny
+ * @author Victor V. Rubezhny
  *
  */
 @SuppressWarnings("restriction")
@@ -102,7 +102,7 @@ public class FaceletTagInfoHoverProcessor extends XMLTagInfoHoverProcessor {
 		
 		String hoverHelp = null;
 		if (region != null) {
-			TextRegion elPrefix = getELPrefix(flatNode, region, fDocumentPosition);
+			ELTextRegion elPrefix = getELPrefix(flatNode, region, fDocumentPosition);
 			ELInvocationExpression elOperand = getELExpression(flatNode, region, fDocumentPosition);
 			if (elPrefix != null && elPrefix.isELStarted() && elOperand != null) {
 				IndexedRegion treeNode = ContentAssistUtils.getNodeAt(textViewer, fDocumentPosition);
@@ -187,7 +187,6 @@ public class FaceletTagInfoHoverProcessor extends XMLTagInfoHoverProcessor {
 		return null;
 	}
 	
-	
 	protected String computeELHelp(IDOMNode xmlnode, IDOMNode parentNode,
 			IStructuredDocumentRegion flatNode, ITextRegion region, ELInvocationExpression elOperand) {
 		if (fContext == null)
@@ -261,7 +260,7 @@ public class FaceletTagInfoHoverProcessor extends XMLTagInfoHoverProcessor {
 			if (DOMRegionContext.XML_CONTENT.equals(regionType) ||
 					DOMRegionContext.BLOCK_TEXT.equals(regionType) ||
 					DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE.equals(regionType)) {
-				TextRegion elPrefix = getELPrefix(flatNode, region, offset);
+				ELTextRegion elPrefix = getELPrefix(flatNode, region, offset);
 				if (elPrefix != null && elPrefix.isELStarted()) {
 					return new Region(elPrefix.getStartOffset() + elPrefix.getOffset() + elPrefix.getLength(), 0);
 				}
@@ -269,6 +268,7 @@ public class FaceletTagInfoHoverProcessor extends XMLTagInfoHoverProcessor {
 		}
 		return super.getHoverRegion(textViewer, offset);
 	}
+	
 	/**
 	 * Returns IFile resource of the document
 	 * 
@@ -290,7 +290,6 @@ public class FaceletTagInfoHoverProcessor extends XMLTagInfoHoverProcessor {
 		}
 		return null;
 	}
-
 	
 	private String getPrefix(String tagname) {
 		String prefix = null;
@@ -332,7 +331,7 @@ public class FaceletTagInfoHoverProcessor extends XMLTagInfoHoverProcessor {
 	 * 
 	 * @return
 	 */
-	private TextRegion getELPrefix(IStructuredDocumentRegion sdRegion, ITextRegion region, int offset) {
+	private ELTextRegion getELPrefix(IStructuredDocumentRegion sdRegion, ITextRegion region, int offset) {
 		if (sdRegion == null || region == null)
 			return null;
 
@@ -372,7 +371,7 @@ public class FaceletTagInfoHoverProcessor extends XMLTagInfoHoverProcessor {
 				model.toString().startsWith("${"))); //$NON-NLS-1$
 		boolean isELClosed = (model != null && is != null && model.toString().endsWith("}")); //$NON-NLS-1$
 		
-		TextRegion tr = new TextRegion(startOffset,  ie == null ? inValueOffset : ie.getStartPosition(), 
+		ELTextRegion tr = new ELTextRegion(startOffset,  ie == null ? inValueOffset : ie.getStartPosition(), 
 				ie == null ? 0 : ie.getLength(), ie == null ? "" : ie.getText(),  //$NON-NLS-1$ 
 				isELStarted, isELClosed,
 				isAttributeValue, hasOpenQuote, hasCloseQuote, quoteChar);
