@@ -658,7 +658,9 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 	}
 	
 	private Map<String, IAttribute> getAttributes() {
-		return PageProcessor.getInstance().getAttributesAsMap(kbQuery, pageContext);
+		return (kbQuery == null ? 
+				new HashMap<String, IAttribute>() : 
+					PageProcessor.getInstance().getAttributesAsMap(kbQuery, pageContext));
 	}
 	
 	//////// XMLPropertyDescriptor
