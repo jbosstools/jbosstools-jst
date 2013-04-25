@@ -15,14 +15,16 @@ import org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibAttribute;
 /**
  * @author Alexey Kazakov
  */
-public class FixedToolbarAttributeProvider extends JQueryMobileAttrProvider {
+public class PanelAttributeProvider extends JQueryMobileAttrProvider {
 
-	private static final JQueryMobileAttribute[] conditionalAttributes = new JQueryMobileAttribute[] {DATA_DISABLED_PAGE_ZOOM_ATTRIBUTE,
-		DATA_FULLSCREEN_ATTRIBUTE,
-		DATA_TAP_TOGGLE_ATTRIBUTE,
-		FIXED_TOOLBAR_DATA_TRANSITION_ATTRIBUTE,
-		DATA_UPDATE_PAGE_PADDING_ATTRIBUTE,
-		DATA_VISIBLE_ON_PAGE_SHOW_ATTRIBUTE};
+	private static final JQueryMobileAttribute[] requiredAttributes = new JQueryMobileAttribute[] {new DataRoleAttribute("", PANEL)};
+
+	private static final JQueryMobileAttribute[] conditionalAttributes = new JQueryMobileAttribute[] {PANEL_DATA_POSITION_ATTRIBUTE,
+		DATA_DISPLAY_ATTRIBUTE,
+		PANEL_DATA_DISMISSIBLE_ATTRIBUTE,
+		DATA_POSITION_FIXED_ATTRIBUTE,
+		DATA_SWIPE_CLOSE_ATTRIBUTE,
+		DATA_THEME_ATTRIBUTE};
 
 	/*
 	 * (non-Javadoc)
@@ -30,8 +32,7 @@ public class FixedToolbarAttributeProvider extends JQueryMobileAttrProvider {
 	 */
 	@Override
 	protected boolean checkComponent() {
-		return (checkDataRole(HEADER) || checkDataRole(FOOTER)) &&
-				checkAttribute(DATA_POSITION_FIXED);
+		return checkDataRole(PANEL);
 	}
 
 	/*
@@ -41,5 +42,10 @@ public class FixedToolbarAttributeProvider extends JQueryMobileAttrProvider {
 	@Override
 	protected CustomTagLibAttribute[] getConditionalAttributes() {
 		return conditionalAttributes;
+	}
+
+	@Override
+	protected CustomTagLibAttribute[] getRequiredAttributes() {
+		return requiredAttributes;
 	}
 }

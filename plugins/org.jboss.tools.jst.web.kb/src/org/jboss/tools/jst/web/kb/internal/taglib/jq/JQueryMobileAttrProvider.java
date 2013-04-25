@@ -46,6 +46,7 @@ public abstract class JQueryMobileAttrProvider extends AbstractAttributeProvider
 	public static final String RANGE = "range";
 	public static final String HIDEN = "hiden";
 	public static final String TEXTAREA = "textarea";
+	public static final String PANEL = "panel";
 
 	protected static final AttributeData TYPE_BUTTON = new AttributeData(TYPE, BUTTON);
 	protected static final AttributeData TYPE_SUBMIT = new AttributeData(TYPE, SUBMIT);
@@ -59,6 +60,7 @@ public abstract class JQueryMobileAttrProvider extends AbstractAttributeProvider
 	protected static final AttributeData DATA_ROLE_FOOTER = new AttributeData(DATA_ROLE, FOOTER);
 	protected static final AttributeData DATA_ROLE_NAVBAR = new AttributeData(DATA_ROLE, NAVBAR);
 	protected static final AttributeData DATA_ROLE_LISTVIEW = new AttributeData(DATA_ROLE, LISTVIEW);
+	protected static final AttributeData DATA_ROLE_PANEL = new AttributeData(DATA_ROLE, PANEL);
 
 	protected static final AttributeData DATA_POSITION_FIXED = new AttributeData("data-position", "fixed");
 
@@ -75,9 +77,12 @@ public abstract class JQueryMobileAttrProvider extends AbstractAttributeProvider
 	public static final String[] ENUM_THEME = new String[] { "a", "b",
 			"c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o",
 			"p", "r", "s", "t", "u", "v", "w", "x", "y", "z" };
-	public static final String[] DATA_REL_ENUM = new String[]{"back", "dialog", "external", "popup"};
+	public static final String[] DATA_REL_ENUM = new String[]{"back", "dialog", "external", "popup", "close"};
 	public static final String[] DATA_MODE_ENUM = new String[]{"columntoggle", "reflow"};
 	public static final String[] DATA_PRIORITY_ENUM = new String[]{"1", "2", "3", "4", "5", "6"};
+
+	public static final String[] DATA_POSITION_ENUM = new String[]{"left", "right"};
+	public static final String[] DATA_DISPLAY_ENUM = new String[]{"reveal", "overlay", "push"};
 
 	protected static final JQueryMobileAttribute DATA_CORNERS_ATTRIBUTE = new JQueryMobileAttribute("data-corners", "", ENUM_TRUE_FALSE);
 	protected static final JQueryMobileAttribute DATA_ICON_ATTRIBUTE = new JQueryMobileAttribute("data-icon", "", ENUM_ICON_VALUES);
@@ -113,9 +118,13 @@ public abstract class JQueryMobileAttrProvider extends AbstractAttributeProvider
 	protected static final JQueryMobileAttribute DATA_TRACK_THEME_ATTRIBUTE = new JQueryMobileAttribute("data-track-theme", "swatch letter (a-z) - Added to the form element", ENUM_THEME);
 	protected static final JQueryMobileAttribute DATA_ID_ATTRIBUTE = new JQueryMobileAttribute("data-id", "Unique ID. Required for persistent footers", new String[]{});
 	protected static final JQueryMobileAttribute DATA_POSITION_ATTRIBUTE = new JQueryMobileAttribute("data-position", "", new String[]{"fixed"});
+	protected static final JQueryMobileAttribute PANEL_DATA_POSITION_ATTRIBUTE = new JQueryMobileAttribute("data-position", "The position of the panel on the screen.  The default value of the attribute is left, meaning it will appear from the left edge of the screen. Specify data-position=\"right\" for it to appear from the right edge instead", DATA_POSITION_ENUM);
+	protected static final JQueryMobileAttribute DATA_DISPLAY_ATTRIBUTE = new JQueryMobileAttribute("data-display", "The display mode of the panel.  The value of the attribute defaults to reveal, meaning the panel will sit under the page and reveal as the page slides away. Specify data-display=\"overlay\" for the panel to appear on top of the page contents. A third mode, data-display=\"push\" animates both the panel and page at the same time.", DATA_DISPLAY_ENUM);
+	protected static final JQueryMobileAttribute DATA_POSITION_FIXED_ATTRIBUTE = new JQueryMobileAttribute("data-position-fixed", "\"false\" is the default value of this attribute", ENUM_TRUE_FALSE);
+	protected static final JQueryMobileAttribute DATA_SWIPE_CLOSE_ATTRIBUTE = new JQueryMobileAttribute("data-swipe-close", "Clicking the link that opened the panel, swiping left or right, or tapping the Esc key will close the panel. To turn off the swipe-to-close behavior, add the data-swipe-close=\"false\" attribute to the panel. \"right\" is the default value of this attribute", ENUM_TRUE_FALSE);
 	protected static final JQueryMobileAttribute DATA_DIRECTION_ATTRIBUTE = new JQueryMobileAttribute("data-direction", "Reverse transition animation (only for page or dialog)", new String[]{"reverse"});
 	protected static final JQueryMobileAttribute DATA_PREFETCH_ATTRIBUTE = new JQueryMobileAttribute("data-prefetch", "", ENUM_TRUE_FALSE);
-	protected static final JQueryMobileAttribute DATA_REL_ATTRIBUTE = new JQueryMobileAttribute("data-rel", "<b>back</b> - To move one step back in history<br/><b>dialog</b> - To open link styled as dialog, not tracked in history<br/><b>external</b> - For linking to another domain<br/><b>popup</b> - For opening a popup", DATA_REL_ENUM, new String[]{"To move one step back in history", "To open link styled as dialog, not tracked in history", "For linking to another domain", "For opening a popup"});
+	protected static final JQueryMobileAttribute DATA_REL_ATTRIBUTE = new JQueryMobileAttribute("data-rel", "<b>back</b> - To move one step back in history<br/><b>dialog</b> - To open link styled as dialog, not tracked in history<br/><b>external</b> - For linking to another domain<br/><b>popup</b> - For opening a popup", DATA_REL_ENUM, new String[]{"To move one step back in history", "To open link styled as dialog, not tracked in history", "For linking to another domain", "For opening a popup", "For closing a panel"});
 	protected static final JQueryMobileAttribute LINK_DATA_TRANSITION_ATTRIBUTE = new JQueryMobileAttribute("data-transition", "", new String[]{"fade", "flip", "flow", "pop", "slide", "slidedown", "slidefade", "slideup", "turn", "none"});
 	protected static final JQueryMobileAttribute DATA_POSITION_TO_ATTRIBUTE = new JQueryMobileAttribute("data-position-to", "<b>origin</b> - Centers the popup over the link that opens it jQuery<br/><b>JQuery selector</b> - Centers the popup over the specified element<br/><b>window</b> - Centers the popup in the window", new String[]{"origin", "window"}, new String[]{"Centers the popup over the link that opens it jQuery", "Centers the popup in the window"});
 	protected static final JQueryMobileAttribute DATA_AUTODIVIDERS_ATTRIBUTE = new JQueryMobileAttribute("data-autodividers", "", ENUM_TRUE_FALSE);
@@ -134,6 +143,7 @@ public abstract class JQueryMobileAttrProvider extends AbstractAttributeProvider
 	protected static final JQueryMobileAttribute DATA_BACK_BTN_THEME_ATTRIBUTE = new JQueryMobileAttribute("data-back-btn-theme", "", ENUM_THEME);
 	protected static final JQueryMobileAttribute DATA_URL_ATTRIBUTE = new JQueryMobileAttribute("data-url", "Value for updating the URL, instead of the url used to request the page", new String[]{});
 	protected static final JQueryMobileAttribute DATA_DISMISSIBLE_ATTRIBUTE = new JQueryMobileAttribute("data-dismissible", " If set to false prevents popup closing by clicking outside of the popup or pressing the Escape key", ENUM_TRUE_FALSE);
+	protected static final JQueryMobileAttribute PANEL_DATA_DISMISSIBLE_ATTRIBUTE = new JQueryMobileAttribute("data-dismissible", " If set to \"false\" prevents panel closing by clicking outside of the panel or pressing the Escape key. \"true\" is the default value of this attribute", ENUM_TRUE_FALSE);
 	protected static final JQueryMobileAttribute DATA_TOLERANCE_ATTRIBUTE = new JQueryMobileAttribute("data-tolerance", "Distance from the edges of the window (top, right, bottom, left)", new String[]{});
 	protected static final JQueryMobileAttribute POPUP_DATA_REL_ATTRIBUTE = new JQueryMobileAttribute("data-rel", "popup - For opening a popup", new String[]{"popup"});
 	protected static final JQueryMobileAttribute POPUP_DATA_TRANSITION_ATTRIBUTE = new JQueryMobileAttribute("data-transition", "", new String[]{"fade", "flip", "flow", "pop", "slide", "slidedown", "slidefade", "slideup", "turn", "none"});
