@@ -196,6 +196,7 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 				WizardMessages.actionDialogLabel, 
 				WizardMessages.actionPopupLabel,
 				WizardMessages.actionBackLabel,
+				WizardMessages.actionCloseLabel,
 				WizardMessages.actionExternalLabel};
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_ACTION, WizardMessages.actionLabel, toList(values), "", true);
 	}

@@ -62,6 +62,7 @@ public class WizardMessages extends NLS {
 	public static String actionDialogLabel;
 	public static String actionPopupLabel;
 	public static String actionBackLabel;
+	public static String actionCloseLabel;
 	public static String actionExternalLabel;
 	public static String rangeLabel;
 	public static String minLabel;

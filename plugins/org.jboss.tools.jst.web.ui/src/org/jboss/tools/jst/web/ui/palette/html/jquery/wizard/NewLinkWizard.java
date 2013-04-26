@@ -36,16 +36,7 @@ public class NewLinkWizard extends NewJQueryWidgetWizard<NewLinkWizardPage> impl
 
 		a.addAttribute(ATTR_HREF, page.getEditorValue(EDITOR_ID_URL));
 
-		String action = page.getEditorValue(EDITOR_ID_ACTION);
-		if(WizardMessages.actionDialogLabel.equals(action)) {
-			a.addAttribute(ATTR_DATA_REL, DATA_REL_DIALOG);
-		} else if(WizardMessages.actionPopupLabel.equals(action)) {
-			a.addAttribute(ATTR_DATA_REL, DATA_REL_POPUP);
-		} else if(WizardMessages.actionBackLabel.equals(action)) {
-			a.addAttribute(ATTR_DATA_REL, DATA_REL_BACK);
-		} else if(WizardMessages.actionExternalLabel.equals(action)) {
-			a.addAttribute(ATTR_DATA_REL, DATA_REL_EXTERNAL);
-		}
+		NewButtonWizard.applyAction(page, a);
 
 		String transition = page.getEditorValue(EDITOR_ID_TRANSITION);
 		if(transition.length() > 0) {

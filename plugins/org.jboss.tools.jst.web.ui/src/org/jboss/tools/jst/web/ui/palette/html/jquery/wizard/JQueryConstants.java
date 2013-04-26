@@ -132,6 +132,7 @@ public interface JQueryConstants extends HTMLConstants {
 	public String DATA_REL_DIALOG = "dialog";
 	public String DATA_REL_POPUP = "popup";
 	public String DATA_REL_BACK = "back";
+	public String DATA_REL_CLOSE = "close";
 	public String DATA_REL_EXTERNAL = "external";
 	public String CLOSE_LEFT = "left";
 	public String CLOSE_RIGHT = "right";
