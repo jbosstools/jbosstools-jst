@@ -256,6 +256,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 
 		wizardPage.setEditorValue(EDITOR_ID_ACTION, WizardMessages.actionDialogLabel);
 		assertAttrExists(wizard, ATTR_DATA_REL, DATA_REL_DIALOG);
+		wizardPage.setEditorValue(EDITOR_ID_ACTION, WizardMessages.actionCloseLabel);
+		assertAttrExists(wizard, ATTR_DATA_REL, DATA_REL_CLOSE);
 		wizardPage.setEditorValue(EDITOR_ID_ACTION, "");
 		assertTextDoesNotExist(wizard, ATTR_DATA_REL);
 
@@ -277,6 +279,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 
 		wizardPage.setEditorValue(EDITOR_ID_ACTION, WizardMessages.actionPopupLabel);
 		assertAttrExists(wizard, ATTR_DATA_REL, DATA_REL_POPUP);
+		wizardPage.setEditorValue(EDITOR_ID_ACTION, WizardMessages.actionCloseLabel);
+		assertAttrExists(wizard, ATTR_DATA_REL, DATA_REL_CLOSE);
 		wizardPage.setEditorValue(EDITOR_ID_ACTION, "");
 		assertTextDoesNotExist(wizard, ATTR_DATA_REL);
 
