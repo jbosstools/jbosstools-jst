@@ -286,7 +286,7 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 
 		public ElementNode(String name, String text) {
 			this.name = name;
-			this.text = text;
+			this.text = (text == null) ? null : escapeHtml(text, false);
 			this.empty = text == null;
 		}
 
@@ -352,7 +352,7 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 		String value;
 		public AttributeNode(String name, String value) {
 			this.name = name;
-			this.value = value;
+			this.value = escapeHtml(value, true);
 		}
 
 		public void flush(NodeWriter sb) {
@@ -360,5 +360,35 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 		}
 	}
 
+	public static String escapeHtml(String text, boolean isAttribute) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < text.length(); i++) {
+			char ch = text.charAt(i);
+			if(ch == '<') {
+				sb.append("&lt;");
+			} else if(ch == '>') {
+				sb.append("&gt;");
+			} else if(ch == '&' && !isEscapedSequence(text, i)) {
+				sb.append("&amp;");
+			} else if(isAttribute && ch == '"') {
+				sb.append("&quot;");
+			} else {
+				sb.append(ch);
+			}
+		}
+		return sb.toString();
+	}
+
+	static boolean isEscapedSequence(String text, int p) {
+		if(text.charAt(p) != '&') {
+			return false;
+		}
+		for (int i = p + 1; i < text.length(); i++) {
+			char ch = text.charAt(i);
+			if(ch == '&') return false;
+			if(ch == ';') return true;
+		}
+		return false;
+	}
 }
 

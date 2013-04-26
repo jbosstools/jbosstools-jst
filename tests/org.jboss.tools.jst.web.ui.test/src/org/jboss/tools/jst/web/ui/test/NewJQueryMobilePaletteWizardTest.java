@@ -110,11 +110,24 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_FOOTER);
 		assertTextExists(wizard, wizardPage.getEditorValue(EDITOR_ID_FOOTER_TITLE));
 
+		//Check " < > in attribute value.
+		assertTextDoesNotExist(wizard, ATTR_DATA_THEME);
+		wizardPage.setEditorValue(EDITOR_ID_THEME, "\"</div>");
+		assertAttrExists(wizard, ATTR_DATA_THEME, "&quot;&lt;/div&gt;");
+		wizardPage.setEditorValue(EDITOR_ID_THEME, "");
+		assertTextDoesNotExist(wizard, ATTR_DATA_THEME);
+
+		//Check < > in text.
+		String headerText = "<page title>";
+		String headerHtmlText = "&lt;page title&gt;";
+
+		wizardPage.setEditorValue(EDITOR_ID_HEADER_TITLE, headerText);
+
 		wizard.performFinish();
 
-		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
-		assertTrue(text.indexOf(ROLE_CONTENT) > 0);
-		assertTrue(text.indexOf(ROLE_PAGE) > 0);
+		assertTextIsInserted(ROLE_CONTENT);
+		assertTextIsInserted(ROLE_PAGE);
+		assertTextIsInserted(headerHtmlText);
 	}
 
 	public void testNewCheckboxWizard() {
@@ -139,8 +152,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 
 		wizard.performFinish();
 
-		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
-		assertTrue(text.indexOf(label) > 0);
+		assertTextIsInserted(label);
 	}
 
 	public void testNewToggleWizard() {
