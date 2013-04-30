@@ -77,8 +77,4 @@ public class NewListviewWizardPage extends AbstractNewHTMLWidgetWizardPage imple
 		super.propertyChange(evt);
 	}
 
-	protected int getAdditionalHeight() {
-		return 130;
-	}
-
 }

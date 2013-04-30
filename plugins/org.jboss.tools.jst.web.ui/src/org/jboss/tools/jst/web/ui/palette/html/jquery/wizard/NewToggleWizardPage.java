@@ -72,10 +72,6 @@ public class NewToggleWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 		addEditor(trackTheme, parent, true);
 	}
 
-	protected int getAdditionalHeight() {
-		return 70;
-	}
-
 	public void validate() throws ValidationException {
 		String id = getEditorValue(EDITOR_ID_ID);
 		if(id != null && !getWizard().isIDAvailable(id)) {

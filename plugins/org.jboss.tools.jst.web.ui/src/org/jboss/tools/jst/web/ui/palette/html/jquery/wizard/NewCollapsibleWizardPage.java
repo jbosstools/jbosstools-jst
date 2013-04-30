@@ -70,8 +70,4 @@ public class NewCollapsibleWizardPage extends AbstractNewHTMLWidgetWizardPage im
 		inset.setValue(TRUE);
 	}
 
-	protected int getAdditionalHeight() {
-		return 120;
-	}
-
 }

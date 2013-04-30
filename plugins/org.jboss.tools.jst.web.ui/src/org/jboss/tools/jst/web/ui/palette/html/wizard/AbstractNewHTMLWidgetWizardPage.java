@@ -339,10 +339,6 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		isUpdating = b;
 	}
 
-	protected int getAdditionalHeight() {
-		return 0;
-	}
-
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		runValidation();

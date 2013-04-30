@@ -77,10 +77,6 @@ public class NewButtonWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 		addEditor(theme, parent, true);
 	}
 
-	protected int getAdditionalHeight() {
-		return 100;
-	}
-
 	public void validate() throws ValidationException {
 		boolean icononly = TRUE.equals(getEditorValue(EDITOR_ID_ICON_ONLY));
 		IFieldEditor iconpos = getEditor(EDITOR_ID_ICON_POS);

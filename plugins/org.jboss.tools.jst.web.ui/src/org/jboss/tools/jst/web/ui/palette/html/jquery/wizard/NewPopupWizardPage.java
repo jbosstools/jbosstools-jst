@@ -91,10 +91,6 @@ public class NewPopupWizardPage extends AbstractNewHTMLWidgetWizardPage implemen
 		addEditor(theme, windowPanel, true);
 	}
 
-	protected int getAdditionalHeight() {
-		return 150;
-	}
-
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		boolean shadow = TRUE.equals(getEditorValue(EDITOR_ID_SHADOW));

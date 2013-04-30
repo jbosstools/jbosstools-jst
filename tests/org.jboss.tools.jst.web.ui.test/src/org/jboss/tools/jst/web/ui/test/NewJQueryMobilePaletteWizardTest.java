@@ -51,6 +51,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRangeSliderWizar
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRangeSliderWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewSelectMenuWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewSelectMenuWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTableWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTableWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTextInputWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTextInputWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizard;
@@ -717,6 +719,30 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		assertAttrExists(wizard, ATTR_DATA_POSITION_FIXED, TRUE);
 		wizardPage.setEditorValue(EDITOR_ID_FIXED_POSITION, FALSE);
 		assertTextDoesNotExist(wizard, ATTR_DATA_POSITION_FIXED);
+
+		wizard.performFinish();
+	}
+
+	public void testNewTableWizard() {
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Table", true);
+
+		assertTrue(currentPage instanceof NewTableWizardPage);
+		NewTableWizardPage wizardPage = (NewTableWizardPage)currentPage;
+		NewTableWizard wizard = (NewTableWizard)wizardPage.getWizard();
+
+		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_TABLE);
+
+		assertTextExists(wizard, CLASS_RESPONSIVE);
+		wizardPage.setEditorValue(EDITOR_ID_RESPONSIVE, FALSE);
+		assertTextDoesNotExist(wizard, CLASS_RESPONSIVE);
+		wizardPage.setEditorValue(EDITOR_ID_RESPONSIVE, TRUE);
+		assertTextExists(wizard, CLASS_RESPONSIVE);
+
+		assertTextDoesNotExist(wizard, CLASS_TABLE_STRIPE);
+		wizardPage.setEditorValue(EDITOR_ID_STRIPES, TRUE);
+		assertTextExists(wizard, CLASS_TABLE_STRIPE);
+		wizardPage.setEditorValue(EDITOR_ID_STRIPES, FALSE);
+		assertTextDoesNotExist(wizard, CLASS_TABLE_STRIPE);
 
 		wizard.performFinish();
 	}

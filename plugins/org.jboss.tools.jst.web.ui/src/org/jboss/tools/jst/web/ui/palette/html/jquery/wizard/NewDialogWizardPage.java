@@ -40,10 +40,6 @@ public class NewDialogWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 		addEditor(close, parent);
 	}
 
-	protected int getAdditionalHeight() {
-		return 100;
-	}
-
 	public void validate() throws ValidationException {
 		String id = getEditorValue(EDITOR_ID_ID);
 		if(id != null && !getWizard().isIDAvailable(id)) {

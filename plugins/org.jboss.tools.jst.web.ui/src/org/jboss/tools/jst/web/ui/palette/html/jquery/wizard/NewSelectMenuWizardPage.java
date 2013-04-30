@@ -81,8 +81,4 @@ public class NewSelectMenuWizardPage extends AbstractNewHTMLWidgetWizardPage imp
 		super.propertyChange(evt);
 	}
 
-	protected int getAdditionalHeight() {
-		return 160;
-	}
-
 }
