@@ -84,10 +84,6 @@ public class NewRangeSliderWizardPage extends AbstractNewHTMLWidgetWizardPage im
 		addEditor(trackTheme, parent, true);
 	}
 
-	protected int getAdditionalHeight() {
-		return 70;
-	}
-
 	public void validate() throws ValidationException {
 		IFieldEditor rightValue = getEditor(EDITOR_ID_RVALUE);
 		rightValue.setEnabled(TRUE.equals(getEditorValue(EDITOR_ID_RANGE)));

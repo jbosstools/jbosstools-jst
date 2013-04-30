@@ -34,9 +34,11 @@ public interface JQueryConstants extends HTMLConstants {
 	public String ATTR_DATA_INLINE = "data-inline";
 	public String ATTR_DATA_INSET = "data-inset";
 	public String ATTR_DATA_MINI = "data-mini";
+	public String ATTR_DATA_MODE = "data-mode";
 	public String ATTR_DATA_OVERLAY_THEME = "data-overlay-theme";
 	public String ATTR_DATA_POSITION = "data-position";
 	public String ATTR_DATA_POSITION_FIXED = "data-position-fixed";
+	public String ATTR_DATA_PRIORITY = "data-priority";
 	public String ATTR_DATA_REL = "data-rel";
 	public String ATTR_DATA_ROLE = "data-role";
 	public String ATTR_DATA_SWIPE_CLOSE = "data-swipe-close";
@@ -85,6 +87,8 @@ public interface JQueryConstants extends HTMLConstants {
 	public String CLASS_BUTTON_LEFT = "ui-btn-left";
 	public String CLASS_BAR = "ui-bar";
 	public String CLASS_CONTENT = "ui-content";
+	public String CLASS_RESPONSIVE = "ui-responsive";
+	public String CLASS_TABLE_STRIPE = "table-stripe";
 
 	public String POSITION_FIXED = "fixed";
 	public String POSITION_TO_WINDOW = "window";
@@ -96,6 +100,9 @@ public interface JQueryConstants extends HTMLConstants {
 	public String DISPLAY_OVERLAY = "overlay";
 	public String DISPLAY_REVEAL = "reveal";
 	public String DISPLAY_PUSH = "push";
+
+	public String MODE_COLUMNTOGGLE = "columntoggle";
+	public String MODE_REFLOW = "reflow";
 
 	public String ROLE_BUTTON = "button";
 	public String ROLE_COLLAPSIBLE = "collapsible";
@@ -112,6 +119,7 @@ public interface JQueryConstants extends HTMLConstants {
 	public String ROLE_POPUP = "popup";
 	public String ROLE_RANGE_SLIDER = "rangeslider";
 	public String ROLE_SLIDER = "slider";
+	public String ROLE_TABLE = "table";
 
 	public String DATA_TYPE_HORIZONTAL = "horizontal";
 
@@ -224,4 +232,10 @@ public interface JQueryConstants extends HTMLConstants {
 	public String EDITOR_ID_PANEL_POSITION = "panel-position";
 	public String EDITOR_ID_DISPLAY = "display";
 
+	public String EDITOR_ID_MODE = "mode";
+	public String EDITOR_ID_COLUMN_NAME = "column-name";
+	public String EDITOR_ID_PRIORITY = "priority";
+	public String EDITOR_ID_CONTENT = "content";
+	public String EDITOR_ID_RESPONSIVE = "responsive";
+	public String EDITOR_ID_STRIPES = "stripes";
 }

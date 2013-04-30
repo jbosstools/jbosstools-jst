@@ -22,29 +22,32 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewRadioWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
-	RadioEditor buttons = new RadioEditor(this, 1, 8);
+public class NewTableWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
+	ColumnEditor columns = new ColumnEditor(this, 1, 6);
 
-	public NewRadioWizardPage() {
-		super("newRadio", WizardMessages.newRadioTitle);
-		setDescription(WizardMessages.newRadioDescription);
+	public NewTableWizardPage() {
+		super("newTable", WizardMessages.newTableTitle);
+		setDescription(WizardMessages.newTableDescription);
 	}
 
 	protected void createFieldPanel(Composite parent) {
-		IFieldEditor legend = JQueryFieldEditorFactory.createLegendEditor();
-		addEditor(legend, parent);
+		IFieldEditor modeEditor = JQueryFieldEditorFactory.createTableModeEditor();
+		addEditor(modeEditor, parent);
 
-		IFieldEditor layoutEditor = JQueryFieldEditorFactory.createLayoutEditor();
-		layoutEditor.setValue(LAYOUT_VERTICAL);
-		addEditor(layoutEditor, parent, true);
+		IFieldEditor id = JQueryFieldEditorFactory.createIDEditor();
+		addEditor(id, parent);
 
-		Composite panel = buttons.createControl(parent, WizardMessages.itemsLabel);
+		columns.createControl(parent, WizardMessages.columnsLabel);
 
-		IFieldEditor mini = JQueryFieldEditorFactory.createMiniEditor();
-		addEditor(mini, panel);
+		Composite[] columns = NewRangeSliderWizardPage.createTwoColumns(parent);
+		Composite left = columns[0];
+		Composite right = columns[1];
 
-		IFieldEditor iconpos = JQueryFieldEditorFactory.createIconPositionEditor();
-		addEditor(iconpos, panel, true);
+		IFieldEditor responsive = JQueryFieldEditorFactory.createResponsiveEditor();
+		addEditor(responsive, left);
+
+		IFieldEditor stripes = JQueryFieldEditorFactory.createStripesEditor();
+		addEditor(stripes, right);
 
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
 		addEditor(theme, parent, true);
@@ -52,22 +55,12 @@ public class NewRadioWizardPage extends AbstractNewHTMLWidgetWizardPage implemen
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if(buttons.isSwitching) {
+		if(columns.isSwitching) {
 			return;
 		}
 		String name = evt.getPropertyName();
 		String value = evt.getNewValue().toString();
-		if(buttons.onPropertyChange(name, value)) {
-			if(EDITOR_ID_CHECKED.equals(name)) {
-				buttons.onCheckedModified();
-			}
-		}
-
-		IFieldEditor iconpos = getEditor(EDITOR_ID_ICON_POS);
-		if(iconpos != null) {
-			boolean h = (LAYOUT_HORIZONTAL.equals(getEditorValue(EDITOR_ID_LAYOUT)));
-			iconpos.setEnabled(!h);
-		}		
+		columns.onPropertyChange(name, value);
 
 		super.propertyChange(evt);
 	}

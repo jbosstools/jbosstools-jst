@@ -70,8 +70,4 @@ public class NewGroupedCheckboxesWizardPage extends AbstractNewHTMLWidgetWizardP
 		super.propertyChange(evt);
 	}
 
-	protected int getAdditionalHeight() {
-		return 100;
-	}
-
 }

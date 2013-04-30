@@ -41,6 +41,12 @@ public interface HTMLConstants {
 	public String TAG_H6 = "h6";
 	public String TAG_LEGEND = "legend";
 	public String TAG_P = "p";
+	public String TAG_TABLE = "table";
+	public String TAG_THEAD = "thead";
+	public String TAG_TBODY = "tbody";
+	public String TAG_TR = "tr";
+	public String TAG_TH = "th";
+	public String TAG_TD = "td";
 
 	public String ATTR_TYPE = "type";
 	public String ATTR_NAME = "name";

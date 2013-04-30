@@ -73,8 +73,4 @@ public class NewGroupedButtonsWizardPage extends AbstractNewHTMLWidgetWizardPage
 		super.propertyChange(evt);
 	}
 
-	protected int getAdditionalHeight() {
-		return 100;
-	}
-
 }

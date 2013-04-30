@@ -469,5 +469,39 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_SWIPE_CLOSE, WizardMessages.swipeCloseLabel, true);
 	}
 
+	static String[] TABLE_MODE_LIST = {MODE_COLUMNTOGGLE, MODE_REFLOW};
+	static String[] TABLE_MODE_LABEL_LIST = {WizardMessages.modeColumntoggleLabel, WizardMessages.modeReflowLabel};
+
+	public static IFieldEditor createTableModeEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(
+				EDITOR_ID_MODE, 
+				WizardMessages.modeLabel, 
+				toList(TABLE_MODE_LABEL_LIST), 
+				toList(TABLE_MODE_LIST), 
+				MODE_REFLOW);
+	}
+
+	public static IFieldEditor createColumnNameEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_COLUMN_NAME, WizardMessages.headLabel, "");
+	}
+
+	public static IFieldEditor createPriorityEditor() {
+		String[] values = new String[]{"", "1", "2", "3", "4", "5", "6"};
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_PRIORITY, WizardMessages.priorityLabel, 
+				toList(values), "", true);
+	}
+
+	public static IFieldEditor createColumnContentEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_CONTENT, WizardMessages.contentLabel, "");
+	}
+
+	public static IFieldEditor createResponsiveEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_RESPONSIVE, WizardMessages.responsiveLabel, true);
+	}
+
+	public static IFieldEditor createStripesEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_STRIPES, WizardMessages.stripesLabel, false);
+	}
+
 }
 

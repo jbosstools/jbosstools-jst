@@ -57,8 +57,4 @@ public class NewNavbarWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 		super.propertyChange(evt);
 	}
 
-	protected int getAdditionalHeight() {
-		return 100;
-	}
-
 }
