@@ -31,14 +31,18 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.common.model.ui.editors.dnd.DefaultDropWizardPage;
@@ -188,6 +192,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 				if(text == null || text.isDisposed()) {
 					return;
 				}
+				updatePreviewPanel(true, true);
 				updatePreviewContent();
 				runValidation();
 				text.addControlListener(new ControlAdapter() {
@@ -199,6 +204,8 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 			}
 		});
 		updatePreviewPanel(true, true);
+		Display.getDefault().addFilter(SWT.FocusOut, focusReturn);
+		Display.getDefault().addFilter(SWT.MouseDown, focusReturn);
 	}
 
 	public String getBrowserType() {
@@ -457,21 +464,86 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		}
 		File f = getFile();
 		FileUtil.writeFile(f, getWizard().getTextForBrowser());
-		final Control c = Display.getCurrent().getFocusControl();
+
+		focusReturn.init();
+
 		if(browser.getUrl() == null || !browser.getUrl().endsWith(f.getName())
 				||"mozilla".equals(getBrowserType())) {
 			browser.setUrl(sourceURL);
 		} else {
 			browser.refresh();
 		}
-		if(c != null) {
+//		browser.setText(getWizard().getTextForBrowser());
+	}
+
+	boolean isFocusInBrowser() {
+		Control c = Display.getDefault().getFocusControl();
+		while(c != null && c != browser) {
+			c = c.getParent();
+		}
+		return c == browser;
+	}
+
+	FocusReturn focusReturn = new FocusReturn();
+
+	class FocusReturn implements Listener {
+		Control c;
+		long t;
+		Point s;
+	
+		void clear() {
+			c = null;
+			s = null;
+			t = 0;
+		}
+		
+		void init() {
+			clear();
+			c = Display.getDefault().getFocusControl();
+			if(c != null) {
+				t = System.currentTimeMillis();
+				if(c instanceof Combo) {
+					s = ((Combo)c).getSelection();
+				}
+			}
+		}
+	
+		boolean isReady() {
+			if(c == null) {
+				return false;
+			}
+			if(System.currentTimeMillis() - t > 1000) {
+				clear();
+				return false;
+			}
+			return true;
+		}
+
+		void apply() {
+			if(!isReady()) {
+				return;
+			}
 			Display.getCurrent().asyncExec(new Runnable() {
 				public void run() {
-					c.forceFocus();
+					if(c != null && c != Display.getCurrent().getFocusControl() && isFocusInBrowser()) {
+						c.forceFocus();
+						if(s != null && c instanceof Combo) {
+							((Combo)c).setSelection(s);
+						}
+					}
+					clear();
 				}
 			});
 		}
-//		browser.setText(getWizard().getTextForBrowser());
+
+		@Override
+		public void handleEvent(Event event) {
+			if(event.type == SWT.MouseDown) {
+				clear();
+			} else if(event.type == SWT.FocusOut) {
+				apply();
+			}
+		}
 	}
 
 	int getTextLimit() {
@@ -546,6 +618,8 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 			sourceFile.delete();
 			sourceFile = null;
 		}
+		Display.getDefault().removeFilter(SWT.FocusOut, focusReturn);
+		Display.getDefault().removeFilter(SWT.MouseDown, focusReturn);
 		super.dispose();
 	}
 
