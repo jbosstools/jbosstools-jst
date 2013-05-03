@@ -5,19 +5,23 @@ import java.util.StringTokenizer;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IEditorPart;
+import org.jboss.tools.jst.jsp.jspeditor.dnd.MobilePaletteInsertHelper;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPageWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPageWizardPage;
 
 public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implements JQueryConstants {
+
+	private static final String CSS_LINK = MobilePaletteInsertHelper.CSS_LINK + ">";
+
 	private String[] test_result_1={
 			"<!DOCTYPE html>",
 			"<html>",
 		    "<head>",
 			"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-			"<link rel=\"stylesheet\" href=\"http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.css\" />",
-			"<script src=\"http://code.jquery.com/jquery-1.9.1.min.js\"></script>",
-			"<script src=\"http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.js\"></script>",
+			CSS_LINK,
+			MobilePaletteInsertHelper.JQUERY_SCRIPT + ">",
+			MobilePaletteInsertHelper.JQUERY_MOBILE_SCRIPT + ">",
 			"</head>",
 			"<body>",
 			"",
@@ -29,9 +33,9 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			"<html>",
 		    "<head>",
 			"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-			"<link rel=\"stylesheet\" href=\"http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.css\" />",
-			"<script src=\"http://code.jquery.com/jquery-1.9.1.min.js\"></script>",
-			"<script src=\"http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.js\"></script>",
+			CSS_LINK,
+			MobilePaletteInsertHelper.JQUERY_SCRIPT + ">",
+			MobilePaletteInsertHelper.JQUERY_MOBILE_SCRIPT + ">",
 			"</head>",
 			"<body>",
 			"<div data-role=\"collapsible-set\">",
@@ -49,9 +53,9 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			"<html>",
 		    "<head>",
 			"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-			"<link rel=\"stylesheet\" href=\"http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.css\" />",
-			"<script src=\"http://code.jquery.com/jquery-1.9.1.min.js\"></script>",
-			"<script src=\"http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.js\"></script>",
+			CSS_LINK,
+			MobilePaletteInsertHelper.JQUERY_SCRIPT + ">",
+			MobilePaletteInsertHelper.JQUERY_MOBILE_SCRIPT + ">",
 			"</head>",
 			"<body>",
 			"</body>",
@@ -139,8 +143,6 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 		doTestAddJSCSSCheckbox("body_only.html", true, true);
 	}
 	
-	private static final String LINK = "<link rel=\"stylesheet\" href=\"http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.css\" />";
-	
 	public void testAddJSCSSCheckboxSetFalseWithScript() {
 		doTestAddJSCSSCheckbox("script_load.html", false, false);
 	}
@@ -154,7 +156,7 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 
 		String sValue = value ? TRUE : FALSE;
 		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
-		assertFalse(text.indexOf(LINK) > 0);
+		assertFalse(text.indexOf(CSS_LINK) > 0);
 
 		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Page", true);
 
@@ -171,7 +173,7 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 		dialog.close();
 
 		text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
-		assertEquals(expected, text.indexOf(LINK) > 0);
+		assertEquals(expected, text.indexOf(CSS_LINK) > 0);
 	}
 
 	private void compare(String test, String[] result){
@@ -182,5 +184,4 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			assertEquals("Unexpected line", result[i], token);
 		}
 	}
-	
 }

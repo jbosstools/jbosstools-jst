@@ -49,9 +49,9 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 	private static final String MOBILE_PATH = "/Mobile/jQuery Mobile/"; //$NON-NLS-1$
 	
 	private static final String META = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"";
-	private static final String LINK = "<link rel=\"stylesheet\" href=\"http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css\" /";
-	private static final String FIRST_SCRIPT = "<script src=\"http://code.jquery.com/jquery-1.9.1.min.js\"></script";
-	private static final String SECOND_SCRIPT = "<script src=\"http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js\"></script";
+	public static final String CSS_LINK = "<link rel=\"stylesheet\" href=\"http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css\" /";
+	public static final String JQUERY_SCRIPT = "<script src=\"http://code.jquery.com/jquery-1.9.1.min.js\"></script";
+	public static final String JQUERY_MOBILE_SCRIPT = "<script src=\"http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js\"></script";
 	
 	private static final int INSERT_AFTER_OPEN_NODE = 1;
 	private static final int INSERT_AFTER_CLOSE_NODE = 2;
@@ -248,13 +248,13 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 					insertNode(document, headNode, null, "\n    ", META, INSERT_AFTER_OPEN_NODE, false);
 				}
 				if(!linkExists){
-					insertNode(document, headNode, null, "\n    ", LINK, INSERT_AFTER_OPEN_NODE, false);
+					insertNode(document, headNode, null, "\n    ", CSS_LINK, INSERT_AFTER_OPEN_NODE, false);
 				}
 				if(!firstScriptExists){
-					insertNode(document, headNode, null, "\n    ", FIRST_SCRIPT, INSERT_AFTER_OPEN_NODE, false);
+					insertNode(document, headNode, null, "\n    ", JQUERY_SCRIPT, INSERT_AFTER_OPEN_NODE, false);
 				}
 				if(!secondScriptExists){
-					insertNode(document, headNode, null, "\n    ", SECOND_SCRIPT, INSERT_AFTER_OPEN_NODE, false);
+					insertNode(document, headNode, null, "\n    ", JQUERY_MOBILE_SCRIPT, INSERT_AFTER_OPEN_NODE, false);
 				}
 				
 				insertNode(document, bodyNode, headNode, "\n  ", "</head", INSERT_BEFORE_OPEN_NODE, false);
