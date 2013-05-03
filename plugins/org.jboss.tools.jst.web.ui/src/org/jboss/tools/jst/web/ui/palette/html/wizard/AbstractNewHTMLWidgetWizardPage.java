@@ -547,7 +547,13 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 	}
 
 	int getTextLimit() {
-		int c = this.text.getSize().x - 2;
+		int c = text.getSize().x - 2;
+		if(text.getVerticalBar() != null) {
+			int w = text.getVerticalBar().getSize().x;
+			if(w > 0) {
+				c -= w + 5;
+			}
+		}
 		return c < 20 ? 20 : c;
 	}
 
@@ -560,15 +566,18 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		StringBuilder sb = new StringBuilder();
 		boolean inQuota = false;
 		boolean inTag = false;
-		int column = 0;
+		int offset = 0;
 		for (int i = 0; i < text.length(); i++) {
 			char ch = text.charAt(i);
-			if(ch == '<' && !inQuota && column + lookUp(gc, text, i) > max) {
-				sb.append("\n");
-				column = 0;
+			if(ch == '<' && !inQuota) {
+				int n = lookUp(gc, text, i);
+				int w = gc.stringExtent(sb.substring(offset, sb.length()) + text.substring(i, n)).x;
+				if(w > max) {
+					sb.append("\n");
+					offset = sb.length();
+				}
 			}
 			sb.append(ch);
-			column += gc.getCharWidth(ch);
 			if(ch == '"') {
 				inQuota = !inQuota;
 			} else if(ch == '<' && !inQuota) {
@@ -576,17 +585,17 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 			} else if(ch == '>' && !inQuota) {
 				inTag = false;
 			} else if(ch == '\n') {
-				column = 0;
+				offset = sb.length();
 			}
-			if(column > 0 && !inQuota && (ch == ' ' || ch == '>')) {
+			if(sb.length() > offset && !inQuota && (ch == ' ' || ch == '>')) {
 				int l = lookUp(gc, text, i + 1);
-				if(l > 1 && column + l > max) {
+				int w = gc.stringExtent(sb.substring(offset, sb.length()) + text.substring(i, l)).x;
+				if(l > i + 1 && w > max) {
 					sb.append("\n");
-					column = 0;
+					offset = sb.length();
 					if (inTag) {
 						String indent = "        ";
 						sb.append(indent);
-						column = gc.getCharWidth(' ') * indent.length();
 					}
 				}
 			}
@@ -596,19 +605,19 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 	}
 
 	protected int lookUp(GC gc, String text, int pos) {
-		int res = 0;
+		int res = pos;
 		boolean inQuota = false;
 		for (int i = pos; i < text.length(); i++) {
 			char ch = text.charAt(i);
-			if(ch == '\n') return res;
+			if(ch == '\n') return i;
 			if(ch == '"') {
 				inQuota = !inQuota;
 			}
 			if(!inQuota) {
-				if(ch == ' ' || (i > pos && ch == '<')) return res;
-				if(ch == '>') return res + gc.getCharWidth(ch);
+				if(ch == ' ' || (i > pos && ch == '<')) return i;
+				if(ch == '>') return i + 1;
 			}
-			res += gc.getCharWidth(ch);
+			res = i;
 		}
 		return res;
 	}
