@@ -106,6 +106,7 @@ public interface JQueryConstants extends HTMLConstants {
 
 	public String ROLE_BUTTON = "button";
 	public String ROLE_COLLAPSIBLE = "collapsible";
+	public String ROLE_COLLAPSIBLE_SET = "collapsible-set";
 	public String ROLE_CONTENT = "content";
 	public String ROLE_DIALOG = "dialog";
 	public String ROLE_FIELDCONTAIN = "fieldcontain";

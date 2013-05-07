@@ -13,7 +13,6 @@ package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 import java.beans.PropertyChangeEvent;
 
 import org.eclipse.swt.widgets.Composite;
-import org.jboss.tools.common.model.ui.editors.dnd.ValidationException;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
@@ -23,54 +22,58 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewTableWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
-	ColumnEditor columns = new ColumnEditor(this, 1, 6);
+public class NewCollapsibleSetWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
+	CollapsiblesEditor items = new CollapsiblesEditor(this, 1, 8);
 
-	public NewTableWizardPage() {
-		super("newTable", WizardMessages.newTableTitle);
-		setDescription(WizardMessages.newTableDescription);
+	public NewCollapsibleSetWizardPage() {
+		super("newCollapsibleSet", WizardMessages.newCollapsibleSetWizardTitle);
+		setDescription(WizardMessages.newCollapsibleSetWizardDescription);
 	}
 
 	protected void createFieldPanel(Composite parent) {
-		IFieldEditor modeEditor = JQueryFieldEditorFactory.createTableModeEditor();
-		addEditor(modeEditor, parent);
-
-		IFieldEditor id = JQueryFieldEditorFactory.createIDEditor();
-		addEditor(id, parent);
-
-		columns.createControl(parent, WizardMessages.columnsLabel);
-
 		Composite[] columns = NewRangeSliderWizardPage.createTwoColumns(parent);
 		Composite left = columns[0];
 		Composite right = columns[1];
 
-		IFieldEditor responsive = JQueryFieldEditorFactory.createResponsiveEditor();
-		addEditor(responsive, left);
+		IFieldEditor mini = JQueryFieldEditorFactory.createMiniEditor();
+		addEditor(mini, left);
 
-		IFieldEditor stripes = JQueryFieldEditorFactory.createStripesEditor();
-		addEditor(stripes, right);
+		IFieldEditor inset = JQueryFieldEditorFactory.createInsetEditor();
+		addEditor(inset, right);
+
+		Composite panel = items.createControl(parent, WizardMessages.itemsLabel);
+
+		IFieldEditor collapsedIcon = JQueryFieldEditorFactory.createCollapsedIconEditor();
+		addEditor(collapsedIcon, panel, true);
+
+		IFieldEditor expandedIcon = JQueryFieldEditorFactory.createExpandedIconEditor();
+		addEditor(expandedIcon, panel, true);
+
+		IFieldEditor iconpos = JQueryFieldEditorFactory.createIconPositionEditor();
+		addEditor(iconpos, panel, true);
 
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
 		addEditor(theme, parent, true);
+
+		IFieldEditor contentTheme = JQueryFieldEditorFactory.createDataContentThemeEditor();
+		addEditor(contentTheme, parent, true);
+
+		inset.setValue(TRUE);
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if(columns.isSwitching) {
+		if(items.isSwitching) {
 			return;
 		}
 		String name = evt.getPropertyName();
 		String value = evt.getNewValue().toString();
-		columns.onPropertyChange(name, value);
-
-		super.propertyChange(evt);
-	}
-
-	public void validate() throws ValidationException {
-		String id = getEditorValue(EDITOR_ID_ID);
-		if(id != null && !getWizard().isIDAvailable(id)) {
-			throw new ValidationException(WizardMessages.errorIDisUsed);
+		if(items.onPropertyChange(name, value)) {
+			if(EDITOR_ID_COLLAPSED.equals(name)) {
+				items.onCollapsedModified();
+			}
 		}
+		super.propertyChange(evt);
 	}
 
 }

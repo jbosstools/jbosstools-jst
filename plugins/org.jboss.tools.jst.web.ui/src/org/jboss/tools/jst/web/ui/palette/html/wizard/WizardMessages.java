@@ -156,6 +156,9 @@ public class WizardMessages extends NLS {
 	public static String newCollapsibleWizardTitle;
 	public static String newCollapsibleWizardDescription;
 
+	public static String newCollapsibleSetWizardTitle;
+	public static String newCollapsibleSetWizardDescription;
+
 	public static String newSelectMenuWizardTitle;
 	public static String newSelectMenuWizardDescription;
 
