@@ -139,7 +139,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		 * and their content will be formatted to the available width. Also, initial width
 		 * is to depend on system font size so that initial content serves best to that purpose. 
 		 */
-		text.setText("<html><body>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</body></html>");
+		text.setText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<html><body>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</body></html>");
 		/*
 		//We can provide webkit in this way
 		String property = "org.eclipse.swt.browser.DefaultType";
@@ -394,7 +394,10 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		if(previewPanel == null || previewPanel.isDisposed()) {
 			return;
 		}
-		if(previewPanel.isVisible()) {			
+		if(previewPanel.isVisible()) {
+			if(lastHideShellWidth < 0) {
+				lastHideShellWidth = previewPanel.getShell().getSize().x - previewPanel.getSize().x;
+			}
 			previewPanel.setVisible(false);
 			showPreviewButton.setText(WizardMessages.showPreviewButtonText);
 			GridData d = new GridData(GridData.FILL_VERTICAL);
@@ -424,7 +427,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 
 		Rectangle r = shell.getBounds();
 		if(show) {
-			lastHideShellWidth = r.width;
+			if(!first) lastHideShellWidth = r.width;
 		} else {
 			lastShowShellWidth = r.width;
 		}

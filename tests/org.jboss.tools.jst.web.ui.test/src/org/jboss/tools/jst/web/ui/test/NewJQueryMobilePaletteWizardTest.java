@@ -19,6 +19,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCheckBoxWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCheckBoxWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCollapsibleSetWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCollapsibleSetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCollapsibleWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCollapsibleWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizard;
@@ -743,6 +745,37 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		assertTextExists(wizard, CLASS_TABLE_STRIPE);
 		wizardPage.setEditorValue(EDITOR_ID_STRIPES, FALSE);
 		assertTextDoesNotExist(wizard, CLASS_TABLE_STRIPE);
+
+		wizard.performFinish();
+	}
+
+	public void testNewCollapsibleSetBarWizard() {
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Collapsible Set", true);
+
+		assertTrue(currentPage instanceof NewCollapsibleSetWizardPage);
+
+		NewCollapsibleSetWizardPage wizardPage = (NewCollapsibleSetWizardPage)currentPage;
+		NewCollapsibleSetWizard wizard = (NewCollapsibleSetWizard)wizardPage.getWizard();
+		
+		assertEquals("3", wizardPage.getEditorValue(EDITOR_ID_NUMBER_OF_ITEMS));
+
+		wizardPage.setEditorValue(EDITOR_ID_NUMBER_OF_ITEMS, "4");
+		assertEquals("4", wizardPage.getEditorValue(EDITOR_ID_NUMBER_OF_ITEMS));
+
+		assertTextDoesNotExist(wizard, ATTR_DATA_EXPANDED_ICON);
+		wizardPage.setEditorValue(EDITOR_ID_EXPANDED_ICON, "delete");
+		assertAttrExists(wizard, ATTR_DATA_EXPANDED_ICON, "delete");
+		wizardPage.setEditorValue(EDITOR_ID_EXPANDED_ICON, "");
+		assertTextDoesNotExist(wizard, ATTR_DATA_EXPANDED_ICON);
+	
+		assertTextDoesNotExist(wizard, ATTR_DATA_ICONPOS);
+		wizardPage.setEditorValue(EDITOR_ID_ICON_POS, "right");
+		assertAttrExists(wizard, ATTR_DATA_ICONPOS, "right");
+
+		wizardPage.setEditorValue(EDITOR_ID_MINI, TRUE);
+		assertAttrExists(wizard, ATTR_DATA_MINI, TRUE);
+		wizardPage.setEditorValue(EDITOR_ID_MINI, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_DATA_MINI);
 
 		wizard.performFinish();
 	}
