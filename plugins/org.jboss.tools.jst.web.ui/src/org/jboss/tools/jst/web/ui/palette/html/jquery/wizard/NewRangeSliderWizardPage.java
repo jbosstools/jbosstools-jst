@@ -121,4 +121,9 @@ public class NewRangeSliderWizardPage extends AbstractNewHTMLWidgetWizardPage im
 		
 		return new Composite[]{left, right};
 	}
+
+	protected int getPreferredBrowser() {
+		return SWT.WEBKIT;
+	}
+
 }
