@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import java.beans.PropertyChangeEvent;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.model.ui.editors.dnd.ValidationException;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
@@ -71,6 +72,10 @@ public class NewTableWizardPage extends AbstractNewHTMLWidgetWizardPage implemen
 		if(id != null && !getWizard().isIDAvailable(id)) {
 			throw new ValidationException(WizardMessages.errorIDisUsed);
 		}
+	}
+
+	protected int getPreferredBrowser() {
+		return SWT.WEBKIT;
 	}
 
 }
