@@ -173,6 +173,8 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		updatePreviewPanel(true, true);
 		Display.getDefault().addFilter(SWT.FocusOut, focusReturn);
 		Display.getDefault().addFilter(SWT.MouseDown, focusReturn);
+		Display.getDefault().addFilter(SWT.KeyDown, focusReturn);
+		Display.getDefault().addFilter(SWT.Modify, focusReturn);
 	}
 
 	public String getBrowserType() {
@@ -486,7 +488,6 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		} else {
 			browser.refresh();
 		}
-//		browser.setText(getWizard().getTextForBrowser());
 	}
 
 	boolean isFocusInBrowser() {
@@ -503,11 +504,41 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		Control c;
 		long t;
 		Point s;
+		StringBuilder missed = new StringBuilder();
 	
 		void clear() {
 			c = null;
 			s = null;
 			t = 0;
+			missed.setLength(0);
+		}
+
+		private Point getSelection() {
+			return (c instanceof Combo) ? ((Combo)c).getSelection()
+				: (c instanceof Text) ? ((Text)c).getSelection()
+				: null;
+		}
+		
+		private String getText() {
+			return (c instanceof Combo) ? ((Combo)c).getText()
+				: (c instanceof Text) ? ((Text)c).getText()
+				: null;
+		}
+
+		private void setText(String t) {
+			if(c instanceof Combo) {
+				((Combo)c).setText(t);
+			} else if(c instanceof Text) {
+				((Text)c).setText(t);
+			}
+		}
+		
+		private void setSelection() {
+			if(c instanceof Combo) {
+				((Combo)c).setSelection(s);
+			} else if(c instanceof Text) {
+				((Text)c).setSelection(s);
+			}
 		}
 		
 		void init() {
@@ -515,9 +546,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 			c = Display.getDefault().getFocusControl();
 			if(c != null) {
 				t = System.currentTimeMillis();
-				if(c instanceof Combo) {
-					s = ((Combo)c).getSelection();
-				}
+				s = getSelection();
 			}
 		}
 	
@@ -525,7 +554,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 			if(c == null) {
 				return false;
 			}
-			if(System.currentTimeMillis() - t > 1000) {
+			if(System.currentTimeMillis() - t > 2000) {
 				clear();
 				return false;
 			}
@@ -539,9 +568,16 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 			Display.getCurrent().asyncExec(new Runnable() {
 				public void run() {
 					if(c != null && c != Display.getCurrent().getFocusControl() && isFocusInBrowser()) {
+						if(s != null && missed.length() > 0) {
+							String t = getText();
+							t = t.substring(0, s.x) + missed.toString() + t.substring(s.y);
+							s.x += missed.length();
+							s.y = s.x;
+							setText(t);
+						}
 						c.forceFocus();
-						if(s != null && c instanceof Combo) {
-							((Combo)c).setSelection(s);
+						if(s != null) {
+							setSelection();
 						}
 					}
 					clear();
@@ -553,6 +589,20 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		public void handleEvent(Event event) {
 			if(event.type == SWT.MouseDown) {
 				clear();
+			} else if(event.type == SWT.Modify) {
+				if(isReady() && c == Display.getDefault().getFocusControl() && c == event.widget) {
+					s = getSelection();
+				}
+			} else if(event.type == SWT.KeyDown) {
+				if(isReady() && c == Display.getDefault().getFocusControl()) {
+					t = System.currentTimeMillis();
+				}
+				if(isReady() && event.widget == browser) {
+					char ch = event.character;
+					if((int)ch >= 32 && (int)ch <= 128) {
+						missed.append(ch);
+					}
+				}
 			} else if(event.type == SWT.FocusOut) {
 				apply();
 			}
@@ -641,6 +691,8 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		}
 		Display.getDefault().removeFilter(SWT.FocusOut, focusReturn);
 		Display.getDefault().removeFilter(SWT.MouseDown, focusReturn);
+		Display.getDefault().removeFilter(SWT.KeyDown, focusReturn);
+		Display.getDefault().removeFilter(SWT.Modify, focusReturn);
 		super.dispose();
 	}
 
