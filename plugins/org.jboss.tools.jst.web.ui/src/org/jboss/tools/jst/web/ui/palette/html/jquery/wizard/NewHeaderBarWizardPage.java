@@ -62,6 +62,7 @@ public class NewHeaderBarWizardPage extends AbstractNewHTMLWidgetWizardPage impl
 		IFieldEditor leftButtonURL = JQueryFieldEditorFactory.createURLEditor(EDITOR_ID_LEFT_BUTTON_URL);
 		leftButtonURL.setValue("#");
 		addEditor(leftButtonURL, leftParent);
+		new IDContentProposalProvider(getWizard().getIDs(), leftButtonURL);
 
 		IFieldEditor leftButtonIcon = JQueryFieldEditorFactory.createIconEditor(EDITOR_ID_LEFT_BUTTON_ICON);
 		leftButtonIcon.setValue("delete");
@@ -83,6 +84,7 @@ public class NewHeaderBarWizardPage extends AbstractNewHTMLWidgetWizardPage impl
 		IFieldEditor rightButtonURL = JQueryFieldEditorFactory.createURLEditor(EDITOR_ID_RIGHT_BUTTON_URL);
 		rightButtonURL.setValue("#");
 		addEditor(rightButtonURL, rightParent);
+		new IDContentProposalProvider(getWizard().getIDs(), rightButtonURL);
 
 		IFieldEditor rightButtonIcon = JQueryFieldEditorFactory.createIconEditor(EDITOR_ID_RIGHT_BUTTON_ICON);
 		rightButtonIcon.setValue("check");

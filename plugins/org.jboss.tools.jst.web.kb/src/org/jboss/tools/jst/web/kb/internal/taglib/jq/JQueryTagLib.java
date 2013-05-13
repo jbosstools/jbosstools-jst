@@ -105,32 +105,32 @@ public class JQueryTagLib implements ICustomTagLibrary {
 	 * @return
 	 */
 	public static ElementID[] findAllIds(IPageContext context) {
-		List<ElementID> ids = new ArrayList<ElementID>();
-
 		IFile file = context.getResource();
-		if(file!=null) {
-			IStructuredModel model = null;
-			try {
-				model = StructuredModelManager.getModelManager().getModelForRead(file);
-				IDOMDocument xmlDocument = (model instanceof IDOMModel) ? ((IDOMModel) model).getDocument() : null;
-				if(xmlDocument != null) {
-					findIdsInChildElements(ids, xmlDocument);
-				}
-			} catch (IOException e) {
-				WebKbPlugin.getDefault().logError(e);
-			} catch (CoreException e) {
-				WebKbPlugin.getDefault().logError(e);
-			} finally {
-				if (model != null) {
-					model.releaseFromRead();
-				}
+		return (file!=null) ? findAllIds(file, true) : new ElementID[0];		
+	}
+
+	public static ElementID[] findAllIds(IFile file, boolean escapeHTML) {
+		List<ElementID> ids = new ArrayList<ElementID>();
+		IStructuredModel model = null;
+		try {
+			model = StructuredModelManager.getModelManager().getModelForRead(file);
+			IDOMDocument xmlDocument = (model instanceof IDOMModel) ? ((IDOMModel) model).getDocument() : null;
+			if(xmlDocument != null) {
+				findIdsInChildElements(ids, xmlDocument, escapeHTML);
+			}
+		} catch (IOException e) {
+			WebKbPlugin.getDefault().logError(e);
+		} catch (CoreException e) {
+			WebKbPlugin.getDefault().logError(e);
+		} finally {
+			if (model != null) {
+				model.releaseFromRead();
 			}
 		}
-
 		return ids.toArray(new ElementID[ids.size()]);
 	}
 
-	private static void findIdsInChildElements(List<ElementID> ids, Node parentNode) {
+	private static void findIdsInChildElements(List<ElementID> ids, Node parentNode, boolean escapeHTML) {
 		NodeList list = parentNode.getChildNodes();
 		for(int i = 0; i < list.getLength(); i++) {
 			Node child = list.item(i);
@@ -147,11 +147,11 @@ public class JQueryTagLib implements ICustomTagLibrary {
 								IStructuredDocumentRegion s = ((IDOMNode)child).getStartStructuredDocumentRegion();
 								nodeString = s.getText();
 							}
-							ids.add(new ElementID(id, offset, nodeString));
+							ids.add(new ElementID(id, offset, nodeString, escapeHTML));
 						}
 					}
 				}
-				findIdsInChildElements(ids, child);
+				findIdsInChildElements(ids, child, escapeHTML);
 			}
 		}
 	}
@@ -249,10 +249,10 @@ public class JQueryTagLib implements ICustomTagLibrary {
 		private int offset;
 		private String description;
 
-		public ElementID(String id, int offset, String description) {
+		public ElementID(String id, int offset, String description, boolean escapeHTML) {
 			this.id = id;
 			this.offset = offset;
-			if(description!=null) {
+			if(escapeHTML && description != null) {
 				description = description.replace("<", "&lt;").replace(">", "&gt;");
 			}
 			this.description = description;

@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
+import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 
 /**
@@ -30,7 +31,9 @@ public class ButtonsEditor extends ItemsEditor {
 
 	protected void createItemEditors() {
 		addItemEditor(JQueryFieldEditorFactory.createLabelEditor());
-		addItemEditor(JQueryFieldEditorFactory.createURLEditor());
+		IFieldEditor url = JQueryFieldEditorFactory.createURLEditor();
+		addItemEditor(url);
+		new IDContentProposalProvider(page.getWizard().getIDs(), url);
 		addItemEditor(JQueryFieldEditorFactory.createIconEditor());
 	}
 
