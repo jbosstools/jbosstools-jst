@@ -14,6 +14,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,13 +22,17 @@ import org.eclipse.compare.Splitter;
 import org.eclipse.jface.dialogs.DialogSettings;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
 import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.custom.StyleRange;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
@@ -64,7 +69,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 	protected Map<String, IFieldEditor> editors = new HashMap<String, IFieldEditor>();
 
 	protected Splitter previewPanel = null;
-	protected Text text;
+	protected StyledText text;
 	protected Browser browser;
 	protected File sourceFile = null;
 	protected String sourceURL = null;	
@@ -130,7 +135,8 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		previewPanel.setLayoutData(d);
 		previewPanel.setLayout(new GridLayout());
 		
-		text = new Text(previewPanel, SWT.MULTI | SWT.READ_ONLY | SWT.BORDER | SWT.V_SCROLL);
+		text = new StyledText(previewPanel, SWT.MULTI | SWT.READ_ONLY | SWT.BORDER | SWT.V_SCROLL);
+		text.setFont(JFaceResources.getTextFont());
 		text.setLayoutData(new GridData(GridData.FILL_BOTH));
 		/**
 		 * We set some initial content to the text widget to provide a reasonable default width
@@ -165,7 +171,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 				text.addControlListener(new ControlAdapter() {
 					public void controlResized(ControlEvent e) {
 						if(textLimit < 0 || textLimit == getTextLimit()) return;
-						text.setText(formatText(getWizard().getTextForTextView()));
+						resetText();
 					}
 				});
 			}
@@ -486,7 +492,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 	}
 
 	protected void updatePreviewContent() {
-		text.setText(formatText(getWizard().getTextForTextView()));
+		resetText();
 		if(browser == null) {
 			return;
 		}
@@ -646,7 +652,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		for (int i = 0; i < text.length(); i++) {
 			char ch = text.charAt(i);
 			if(ch == '<' && !inQuota) {
-				int n = lookUp(text, i);
+				int n = lookUp(text, i, inTag);
 				int w = gc.stringExtent(sb.substring(offset, sb.length()) + text.substring(i, n)).x;
 				if(w > max) {
 					sb.append("\n");
@@ -654,7 +660,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 				}
 			}
 			sb.append(ch);
-			if(ch == '"') {
+			if(inTag && ch == '"') {
 				inQuota = !inQuota;
 			} else if(ch == '<' && !inQuota) {
 				inTag = true;
@@ -664,7 +670,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 				offset = sb.length();
 			}
 			if(sb.length() > offset && !inQuota && (ch == ' ' || ch == '>')) {
-				int l = lookUp(text, i + 1);
+				int l = lookUp(text, i + 1, inTag);
 				int w = gc.stringExtent(sb.substring(offset, sb.length()) + text.substring(i, l)).x;
 				if(l > i + 1 && w > max) {
 					sb.append("\n");
@@ -680,13 +686,13 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		return sb.toString();
 	}
 
-	protected int lookUp(String text, int pos) {
+	protected int lookUp(String text, int pos, boolean inTag) {
 		int res = pos;
 		boolean inQuota = false;
 		for (; res < text.length(); res++) {
 			char ch = text.charAt(res);
 			if(ch == '\n') return res;
-			if(ch == '"') {
+			if(ch == '"' && inTag) {
 				inQuota = !inQuota;
 			}
 			if(!inQuota) {
@@ -706,7 +712,74 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		Display.getDefault().removeFilter(SWT.MouseDown, focusReturn);
 		Display.getDefault().removeFilter(SWT.KeyDown, focusReturn);
 		Display.getDefault().removeFilter(SWT.Modify, focusReturn);
+		valueColor.dispose();
+		tagColor.dispose();
+		attrColor.dispose();
 		super.dispose();
 	}
 
+	private void resetText() {
+		String text = formatText(getWizard().getTextForTextView());
+		this.text.setStyleRanges(new StyleRange[0]);
+		this.text.setText(text);
+		this.text.setStyleRanges(getRanges(text));
+		this.text.update();
+		this.text.layout();
+	}
+
+	Color valueColor = new Color(null, 42, 0, 255);
+	Color tagColor = new Color(null, 63, 127, 127);
+	Color attrColor = new Color(null, 127, 0, 127);
+
+	private StyleRange[] getRanges(String text) {
+		ArrayList<StyleRange> regionList = new ArrayList<StyleRange>();
+		boolean inQuota = false;
+		boolean inTag = false;
+		int offset = 0;
+		StringBuilder name = new StringBuilder();
+		for (int i = 0; i < text.length(); i++) {
+			char ch = text.charAt(i);
+			if(inTag && ch == '"') {
+				inQuota = !inQuota;
+				if(!inQuota) {
+					addRange(offset, 1, valueColor, false, regionList);
+					if(i - offset > 1) {
+						addRange(offset + 1, i - offset - 1, valueColor, true, regionList);
+					}
+					addRange(i, 1, valueColor, false, regionList);
+				} else {
+					offset = i;
+				}
+			} else if(ch == '>' && !inQuota) {
+				inTag = false;
+				if(name.length() > 0) {
+					addRange(offset, name.length(), tagColor, false, regionList);
+					name.setLength(0);
+				}
+				addRange(i, 1, tagColor, false, regionList);
+			} else if(ch == '<' && !inQuota) {
+				inTag = true;
+				name.setLength(0);
+				name.append(ch);
+				offset = i;
+			} else if(!inQuota && inTag && (Character.isLetterOrDigit(ch) || ch == '-' || ch == '/')) {
+				if(name.length() == 0) {
+					offset = i;
+				}
+				name.append(ch);
+			} else if(name.length() > 0) {
+				Color c = name.charAt(0) == '<' ? tagColor : attrColor;
+				addRange(offset, name.length(), c, false, regionList);
+				name.setLength(0);
+			}
+
+		}
+		return (StyleRange[])regionList.toArray(new StyleRange[0]);
+	}
+
+	void addRange(int offset, int length, Color c, boolean italic, ArrayList<StyleRange> regionList) {
+		StyleRange region = new StyleRange(offset,length, c, null);
+		if(italic) region.fontStyle = SWT.ITALIC;
+		regionList.add(region);
+	}
 }
