@@ -303,6 +303,19 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		editor.doFillIntoGrid(parent);
 		editor.addPropertyChangeListener(this);
 		addEditor(editor);
+		Combo c = findCombo(editor);
+		if(c != null) {
+			new ComboContentProposalProvider(c);
+		}
+	}
+
+	private Combo findCombo(IFieldEditor editor) {
+		for (Object o: editor.getEditorControls()) {
+			if(o instanceof Combo) {
+				return (Combo)o; 
+			}
+		}
+		return null;
 	}
 
 	public void addEditor(IFieldEditor editor, Composite parent, boolean expandCombo) {

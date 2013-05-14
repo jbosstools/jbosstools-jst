@@ -24,6 +24,7 @@ import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.LabelFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.SwtFieldEditorFactory;
 import org.jboss.tools.common.ui.widget.editor.TextFieldEditor;
+import org.jboss.tools.jst.web.kb.internal.taglib.jq.JQueryMobileAttrProvider;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -165,10 +166,11 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_ICON_ONLY, WizardMessages.iconOnlyLabel, false);
 	}
 
-	static String[] ICON_VALUES = {"", "arrow-l", "arrow-r", "arrow-u", "arrow-d", 
-		"delete", "plus", "minus", "check", "gear", "refresh", 
-		"forward", "back", "grid", "star", "alert", "info",
-		"home", "search"};
+	static String[] ICON_VALUES = new String[JQueryMobileAttrProvider.ENUM_ICON_VALUES.length + 1];
+	static {
+		ICON_VALUES[0] = "";
+		System.arraycopy(JQueryMobileAttrProvider.ENUM_ICON_VALUES, 0, ICON_VALUES, 1, ICON_VALUES.length - 1);
+	}
 
 	public static IFieldEditor createIconEditor() {
 		return createIconEditor(EDITOR_ID_ICON);
