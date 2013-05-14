@@ -70,10 +70,10 @@ public abstract class JQueryMobileAttrProvider extends AbstractAttributeProvider
 	
 	public static final String[] ENUM_TRUE_FALSE = new String[] { "true",
 			"false" };
-	public static final String[] ENUM_ICON_VALUES = new String[] { "home",
-			"delete", "plus", "arrow-u", "arrow-d", "check", "gear", "grid",
-			"star", "custom", "arrow-r", "arrow-l", "minus", "refresh",
-			"forward", "back", "alert", "info", "search" };
+	public static final String[] ENUM_ICON_VALUES = new String[] { 
+			"alert", "arrow-d", "arrow-l", "arrow-r", "arrow-u", "back", "bars",
+			"check", "custom", "delete", "forward", "gear", "grid", "home", 
+			"info", "minus", "plus", "refresh", "search", "star"};
 	public static final String[] ENUM_THEME = new String[] { "a", "b",
 			"c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o",
 			"p", "r", "s", "t", "u", "v", "w", "x", "y", "z" };
