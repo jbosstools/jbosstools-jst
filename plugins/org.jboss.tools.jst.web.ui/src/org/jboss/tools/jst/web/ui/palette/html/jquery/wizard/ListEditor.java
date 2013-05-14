@@ -32,7 +32,9 @@ public class ListEditor extends ItemsEditor {
 	protected void createItemEditors() {
 		addItemEditor(JQueryFieldEditorFactory.createLabelEditor());
 		addItemEditor(JQueryFieldEditorFactory.createDividerEditor());
-		addItemEditor(JQueryFieldEditorFactory.createURLEditor());
+		IFieldEditor url = JQueryFieldEditorFactory.createURLEditor();
+		addItemEditor(url);
+		new IDContentProposalProvider(page.getWizard().getIDs(), url);
 	}
 
 	public String getLabel(int i) {

@@ -18,13 +18,17 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.ui.IEditorInput;
 import org.jboss.tools.common.model.ui.editors.dnd.DefaultDropWizardPage;
 import org.jboss.tools.common.model.ui.editors.dnd.IDropCommand;
 import org.jboss.tools.common.model.ui.editors.dnd.IDropWizard;
 import org.jboss.tools.common.model.ui.editors.dnd.IDropWizardModel;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.PaletteDropCommand;
+import org.jboss.tools.jst.web.kb.internal.taglib.jq.JQueryTagLib;
+import org.jboss.tools.jst.web.kb.internal.taglib.jq.JQueryTagLib.ElementID;
 
 /**
  * 
@@ -169,6 +173,12 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 			if(index < 0) return;
 			readValue(text, index);
 		}
+	}
+
+	public ElementID[] getIDs() {
+		IEditorInput input = command.getDefaultModel().getDropData().getEditorInput();
+		IFile file = (IFile)input.getAdapter(IFile.class);
+		return (file != null) ? JQueryTagLib.findAllIds(file, false) : new ElementID[0];
 	}
 
 	private int next(String text, String attrName, int from) {
