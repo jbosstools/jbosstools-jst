@@ -76,8 +76,13 @@ public class JQueryTagLib implements ICustomTagLibrary {
 
 		if(query.getType()==KbQuery.Type.ATTRIBUTE_VALUE) {
 			String mask = query.getValue();
-			if(mask.startsWith("#")) {
-				String idMask = mask.substring(1);
+			String idMask = null;
+		    if(mask.startsWith("#")) {
+		    	idMask = mask.substring(1);
+		    } else if(mask.length()==0) {
+				idMask = mask;
+			}
+			if(idMask!=null) {
 				ElementID[] ids = findAllIds(context);
 				for (ElementID id : ids) {
 					String idText = id.getId();
@@ -89,7 +94,7 @@ public class JQueryTagLib implements ICustomTagLibrary {
 						proposal.setPosition(proposaltext.length());
 						proposal.setImageDescriptor(IMAGE);
 						proposal.setContextInfo(id.getDescription());
-	
+
 						proposals.add(proposal);
 					}
 				}
