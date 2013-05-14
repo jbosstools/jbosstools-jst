@@ -57,4 +57,16 @@ public class JQueryIDTest extends HTML5Test {
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
 		assertProposals(proposals, "#newUserDialog", "#nextPage");
 	}
+
+	public void testIDWithEmptyHref() {
+		KbQuery query = createKbQuery(KbQuery.Type.ATTRIBUTE_VALUE, new KbQuery.Tag[]{createTag("a", "button")}, "href", "");
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
+		assertProposals(proposals, "#mainPage", "#confiramtionDialog", "#newUserDialog", "#nextPage");
+	}
+
+	public void testEmptyResult() {
+		KbQuery query = createKbQuery(KbQuery.Type.ATTRIBUTE_VALUE, new KbQuery.Tag[]{createTag("a", "button")}, "href", "n");
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
+		assertEquals(0, proposals.length);
+	}
 }
