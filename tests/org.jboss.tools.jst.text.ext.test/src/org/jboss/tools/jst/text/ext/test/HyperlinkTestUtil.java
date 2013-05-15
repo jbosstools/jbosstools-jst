@@ -41,6 +41,10 @@ import org.jboss.tools.jst.web.ui.editors.WebCompoundEditor;
 public class HyperlinkTestUtil extends TestCase{
 	
 	public static void checkRegions(IProject project, String fileName, List<TestRegion> regionList, AbstractHyperlinkDetector elDetector) throws Exception {
+		checkRegions(project, fileName, regionList, elDetector, false);
+	}
+	
+	public static void checkRegions(IProject project, String fileName, List<TestRegion> regionList, AbstractHyperlinkDetector elDetector, boolean testOnlyExisting) throws Exception {
 		IFile file = project.getFile(fileName);
 
 		assertNotNull("The file \"" + fileName + "\" is not found", file);
@@ -117,7 +121,7 @@ public class HyperlinkTestUtil extends TestCase{
 					String information = findRegionInformation(document, i, regionList);
 					fail("Wrong detection for offset - "+i+" (line - "+lineNumber+" position - "+position+") "+information);
 				}else{
-					checkTestRegion(links, testRegion);
+					checkTestRegion(links, testRegion, testOnlyExisting);
 				}
 			} 
 			else {
@@ -134,18 +138,20 @@ public class HyperlinkTestUtil extends TestCase{
 		documentProvider.disconnect(editorInput);
 	}
 	
-	private static void checkTestRegion(IHyperlink[] links, TestRegion testRegion){
+	private static void checkTestRegion(IHyperlink[] links, TestRegion testRegion, boolean testOnlyExisting){
 		for(IHyperlink link : links){
 			TestHyperlink testLink = findTestHyperlink(testRegion.hyperlinks, link);
-			assertNotNull("Unexpected hyperlink - "+link.getHyperlinkText(), testLink);
-			assertEquals("Unexpected hyperlink type", testLink.hyperlink, link.getClass());
-			if(testLink.fileName != null){
-				assertTrue("HyperLink must be inherited from AbstractHyperlink", link instanceof AbstractHyperlink);
-				
-				IFile f = ((AbstractHyperlink)link).getReadyToOpenFile();
-				assertNotNull("HyperLink must return not null file", f);
-				assertEquals(testLink.fileName, f.getName());
-				
+			if(!testOnlyExisting){
+				assertNotNull("Unexpected hyperlink - "+link.getHyperlinkText(), testLink);
+				assertEquals("Unexpected hyperlink type", testLink.hyperlink, link.getClass());
+				if(testLink.fileName != null){
+					assertTrue("HyperLink must be inherited from AbstractHyperlink", link instanceof AbstractHyperlink);
+					
+					IFile f = ((AbstractHyperlink)link).getReadyToOpenFile();
+					assertNotNull("HyperLink must return not null file", f);
+					assertEquals(testLink.fileName, f.getName());
+					
+				}
 			}
 		}
 		

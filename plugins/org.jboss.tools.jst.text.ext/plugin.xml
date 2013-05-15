@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.0"?>
 <plugin>
-
+	<extension-point id="openWithEditorExtension" name="Open With Editor Extension" schema="schema/openWithEditorExtension.exsd"/>
+	
 	<extension 
 		point="org.jboss.tools.common.text.ext.hyperlinkPartitioner"
 		id="org.jboss.tools.common.text.ext.hyperlinkPartitioner"
@@ -471,5 +472,13 @@
 	          targetId="org.eclipse.wst.html.core.htmlsource">
 	    </hyperlinkDetector>
 	 </extension>
+  <extension
+        point="org.jboss.tools.jst.text.ext.openWithEditorExtension">
+     <editor-launcher
+           class="org.jboss.tools.jst.text.ext.hyperlink.OpenWithBrowserLauncher"
+           editor-name="Browser"
+           id="org.jboss.tools.jst.text.ext.OpenWithBrowser">
+     </editor-launcher>
+  </extension>
 
 </plugin>

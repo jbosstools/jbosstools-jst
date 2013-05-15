@@ -18,8 +18,8 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.ui.PlatformUI;
 import org.jboss.tools.jst.text.ext.hyperlink.JQueryMobileHyperlinkDetector;
-import org.jboss.tools.jst.text.ext.hyperlink.OpenWithBrowserHyperlink;
-import org.jboss.tools.jst.text.ext.hyperlink.OpenWithBrowserSimHyperlink;
+import org.jboss.tools.jst.text.ext.hyperlink.OpenWithEditorHyperlink;
+import org.jboss.tools.jst.text.ext.test.HyperlinkTestUtil;
 import org.jboss.tools.jst.text.ext.test.HyperlinkTestUtil.TestHyperlink;
 import org.jboss.tools.jst.text.ext.test.HyperlinkTestUtil.TestRegion;
 
@@ -46,33 +46,27 @@ public class JQueryMobileHyperlinkDetectorTest extends TestCase {
 	public void testHyperlinkDetector() throws Exception{
 		ArrayList<TestRegion> regionList = new ArrayList<TestRegion>();
 		regionList.add(new TestRegion("<div data-role=\"page\" id=\"home\"", new TestHyperlink[]{
-			new TestHyperlink(OpenWithBrowserSimHyperlink.class, "Open 'jquery.html#home' With BrowserSim"),
-			new TestHyperlink(OpenWithBrowserHyperlink.class, "Open 'jquery.html#home' With Browser")
+			new TestHyperlink(OpenWithEditorHyperlink.class, "Open 'jquery.html#home' With Browser")
 		}));
 		regionList.add(new TestRegion("</div", new TestHyperlink[]{
-			new TestHyperlink(OpenWithBrowserSimHyperlink.class, "Open 'jquery.html#home' With BrowserSim"),
-			new TestHyperlink(OpenWithBrowserHyperlink.class, "Open 'jquery.html#home' With Browser")
+			new TestHyperlink(OpenWithEditorHyperlink.class, "Open 'jquery.html#home' With Browser")
 		}));
 
 		regionList.add(new TestRegion("<div data-role=\"page\" id=\"gallery\"", new TestHyperlink[]{
-			new TestHyperlink(OpenWithBrowserSimHyperlink.class, "Open 'jquery.html#gallery' With BrowserSim"),
-			new TestHyperlink(OpenWithBrowserHyperlink.class, "Open 'jquery.html#gallery' With Browser")
+			new TestHyperlink(OpenWithEditorHyperlink.class, "Open 'jquery.html#gallery' With Browser")
 		}));
 		regionList.add(new TestRegion("</div", new TestHyperlink[]{
-			new TestHyperlink(OpenWithBrowserSimHyperlink.class, "Open 'jquery.html#gallery' With BrowserSim"),
-			new TestHyperlink(OpenWithBrowserHyperlink.class, "Open 'jquery.html#gallery' With Browser")
+			new TestHyperlink(OpenWithEditorHyperlink.class, "Open 'jquery.html#gallery' With Browser")
 		}));
 
 		regionList.add(new TestRegion("<div data-role=\"page\" id=\"index\"", new TestHyperlink[]{
-			new TestHyperlink(OpenWithBrowserSimHyperlink.class, "Open 'jquery.html#index' With BrowserSim"),
-			new TestHyperlink(OpenWithBrowserHyperlink.class, "Open 'jquery.html#index' With Browser")
+			new TestHyperlink(OpenWithEditorHyperlink.class, "Open 'jquery.html#index' With Browser")
 		}));
 		regionList.add(new TestRegion("</div", new TestHyperlink[]{
-			new TestHyperlink(OpenWithBrowserSimHyperlink.class, "Open 'jquery.html#index' With BrowserSim"),
-			new TestHyperlink(OpenWithBrowserHyperlink.class, "Open 'jquery.html#index' With Browser")
+			new TestHyperlink(OpenWithEditorHyperlink.class, "Open 'jquery.html#index' With Browser")
 		}));
 
 		
-		HyperlinkTestUtil.checkRegions(project, PAGE_NAME, regionList, new JQueryMobileHyperlinkDetector());
+		HyperlinkTestUtil.checkRegions(project, PAGE_NAME, regionList, new JQueryMobileHyperlinkDetector(), true);
 	}
 }
