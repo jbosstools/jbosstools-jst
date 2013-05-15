@@ -10,48 +10,53 @@
 
 <body>
 	<div data-role="page" id="mainPage">
-  <div data-role="header">
-  	<a href="#" data-rel="dialog" data-role="button">Link button</a>
-    <h1>Page Title</h1>
-  </div>
-  <div data-role="content">
-    <p>Page content goes here.</p>
-  </div>
-  <div data-role="footer">
-    <h4>Page Footer</h4>
-  </div>
-</div>
+	  <div data-role="header">
+	  	<a href="#" data-rel="dialog" data-role="button">Link button</a>
+	    <h1>Page Title</h1>
+	  </div>
+	  <div data-role="content">
+	    <p>Page content goes here.</p>
+	  </div>
+	  <div data-role="footer">
+	    <h4>Page Footer</h4>
+	  </div>
+	</div>
 
-<div data-role="dialog" id="confiramtionDialog">
-  <div data-role="header">
-    <h1>Dialog</h1>
-  </div>
-  <div data-role="content">
-    <h6>Dialog content.</h6>
-    <a href="#confirmationDialog" data-role="button" data-rel="back">OK</a>
-  </div>
-</div>
+	<div data-role="dialog" id="confiramtionDialog">
+	  <div data-role="header">
+	    <h1>Dialog</h1>
+	  </div>
+	  <div data-role="content">
+	    <h6>Dialog content.</h6>
+	    <a href="#confirmationDialog" data-role="button" data-rel="back">OK</a>
+	  </div>
+	</div>
 
-<div data-role="dialog" id="newUserDialog">
-  <div data-role="header">
-    <h1>Dialog</h1>
-  </div>
-  <div data-role="content">
-    <h6>Dialog content.</h6>
-    <a href="#confirmationDialog" data-role="button" data-rel="back">OK</a>
-  </div>
-</div>
+	<div data-role="dialog" id="newUserDialog">
+	  <div data-role="header">
+	    <h1>Dialog</h1>
+	  </div>
+	  <div data-role="content">
+	    <h6>Dialog content.</h6>
+	    <a href="#confirmationDialog" data-role="button" data-rel="back">OK</a>
+	  </div>
+	</div>
 
-<div data-role="page" id="nextPage">
-  <div data-role="header">
-    <h1>Page Title</h1>
-  </div>
-  <div data-role="content">
-    <p>Page content goes here.</p>
-  </div>
-  <div data-role="footer">
-    <h4>Page Footer</h4>
-  </div>
-</div>
+	<div data-role="page" id="nextPage">
+	  <div data-role="header">
+	    <h1>Page Title</h1>
+	  </div>
+	  <div data-role="content">
+		<a href="#popup-1" id="openPopUpLink" data-role="button" data-inline="true" data-rel="popup">Popup</a>
+		<div data-role="popup" id="popup-1" class="ui-content">
+		  <p>This is a popup</p>
+		</div>
+	  </div>
+	  <div data-role="panel" id="panel-1">
+	  </div>
+	  <div data-role="footer">
+	    <h4>Page Footer</h4>
+	  </div>
+	</div>
 </body>
 </html>

@@ -77,7 +77,7 @@ public class JQueryDataTest extends HTML5Test {
 		
 		KbQuery query = createKbQuery(KbQuery.Type.ATTRIBUTE_VALUE, new KbQuery.Tag[]{createTag("article")}, "data-role", "");
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
-		assertProposals(proposals, JQueryMobileAttrProvider.PAGE);
+		assertProposals(false, proposals, JQueryMobileAttrProvider.PAGE);
 
 		query = createKbQuery(new KbQuery.Tag[]{createTag("aside")}, "data-");
 		proposals = PageProcessor.getInstance().getProposals(query, context);
@@ -136,11 +136,11 @@ public class JQueryDataTest extends HTML5Test {
 
 		query = createKbQuery(KbQuery.Type.ATTRIBUTE_VALUE, new KbQuery.Tag[]{createTag("div")}, "data-role", "");
 		proposals = PageProcessor.getInstance().getProposals(query, context);
-		assertProposals(proposals, "content");
+		assertProposals(false, proposals, "content");
 	}
 
 	public void testControlgroupAttributeProvider() {
-		assertDataRole(JQueryMobileAttrProvider.CONTROLGROUP);
+		assertDataRole(false, JQueryMobileAttrProvider.CONTROLGROUP);
 
 		KbQuery query = createKbQuery(new KbQuery.Tag[]{createTag("div", JQueryMobileAttrProvider.CONTROLGROUP)}, "");
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
@@ -149,7 +149,7 @@ public class JQueryDataTest extends HTML5Test {
 	}
 
 	public void testDialogAttributeProvider() {
-		assertDataRole(JQueryMobileAttrProvider.DIALOG);
+		assertDataRole(false, JQueryMobileAttrProvider.DIALOG);
 
 		KbQuery query = createKbQuery(new KbQuery.Tag[]{createTag("div", JQueryMobileAttrProvider.DIALOG)}, "");
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
@@ -178,7 +178,7 @@ public class JQueryDataTest extends HTML5Test {
 	}
 
 	public void testFieldcontainAttributeProvider() {
-		assertDataRole(JQueryMobileAttrProvider.FIELDCONTENT);
+		assertDataRole(false, JQueryMobileAttrProvider.FIELDCONTENT);
 	}
 
 	public void testFixedToolbarAttributeProvider() {
@@ -196,8 +196,8 @@ public class JQueryDataTest extends HTML5Test {
 	}
 
 	public void testFooterHeaderAttributeProvider() {
-		assertDataRole(JQueryMobileAttrProvider.HEADER);
-		assertDataRole(JQueryMobileAttrProvider.FOOTER);
+		assertDataRole(false, JQueryMobileAttrProvider.HEADER);
+		assertDataRole(false, JQueryMobileAttrProvider.FOOTER);
 
 		KbQuery query = createKbQuery(new KbQuery.Tag[]{createTag("div", JQueryMobileAttrProvider.HEADER)}, "data-");
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
@@ -226,7 +226,7 @@ public class JQueryDataTest extends HTML5Test {
 	}
 
 	public void testNavbarAttributeProvider() {
-		assertDataRole("div", JQueryMobileAttrProvider.NAVBAR);
+		assertDataRole(false, "div", JQueryMobileAttrProvider.NAVBAR);
 
 		KbQuery query = createKbQuery(new KbQuery.Tag[]{createTag("div", JQueryMobileAttrProvider.NAVBAR)}, "data-");
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
@@ -234,7 +234,7 @@ public class JQueryDataTest extends HTML5Test {
 	}
 
 	public void testPageAttributeProvider() {
-		assertDataRole(JQueryMobileAttrProvider.PAGE);
+		assertDataRole(false, JQueryMobileAttrProvider.PAGE);
 
 		KbQuery query = createKbQuery(new KbQuery.Tag[]{createTag("div", JQueryMobileAttrProvider.PAGE)}, "data-");
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
@@ -254,7 +254,7 @@ public class JQueryDataTest extends HTML5Test {
 	}
 
 	public void testPopupAttributeProvider() {
-		assertDataRole(JQueryMobileAttrProvider.POPUP);
+		assertDataRole(false, JQueryMobileAttrProvider.POPUP);
 
 		KbQuery query = createKbQuery(new KbQuery.Tag[]{createTag("div", JQueryMobileAttrProvider.POPUP)}, "data-");
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
@@ -291,7 +291,7 @@ public class JQueryDataTest extends HTML5Test {
 
 		KbQuery query = createKbQuery(new KbQuery.Tag[]{createTag(JQueryMobileAttrProvider.TABLE, JQueryMobileAttrProvider.TABLE)}, "data-");
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
-		assertProposals(proposals, "data-mode", "data-column-btn-text", "data-column-btn-theme", "data-column-popup-theme");
+		assertProposals(proposals, "data-role", "data-mode", "data-column-btn-text", "data-column-btn-theme", "data-column-popup-theme");
 	}
 
 	public void testDataMode() {
@@ -329,11 +329,11 @@ public class JQueryDataTest extends HTML5Test {
 	}
 
 	public void testPanelAttributeProvider() {
-		assertDataRole(JQueryMobileAttrProvider.PANEL);
+		assertDataRole(false, JQueryMobileAttrProvider.PANEL);
 
 		KbQuery query = createKbQuery(new KbQuery.Tag[]{createTag("div", JQueryMobileAttrProvider.PANEL)}, "data-");
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
-		assertProposals(proposals, "data-position", "data-display", "data-dismissible", "data-position-fixed", "data-swipe-close", "data-theme");
+		assertProposals(false, proposals, "data-position", "data-display", "data-dismissible", "data-position-fixed", "data-swipe-close", "data-theme");
 	}
 
 	public void testPanelDataPosition() {
