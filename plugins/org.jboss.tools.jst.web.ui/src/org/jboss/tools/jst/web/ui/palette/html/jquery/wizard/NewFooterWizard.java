@@ -40,6 +40,8 @@ public class NewFooterWizard extends NewJQueryWidgetWizard<NewFooterWizardPage> 
 		ElementNode footer = parent.addChild(TAG_DIV);
 		footer.addAttribute(ATTR_DATA_ROLE, ROLE_FOOTER);
 
+		addID("footer-", footer);
+
 		if(isTrue(EDITOR_ID_FIXED_POSITION)) {
 			footer.addAttribute(ATTR_DATA_POSITION, POSITION_FIXED);
 			if(isTrue(EDITOR_ID_FULL_SCREEN)) {

@@ -32,10 +32,8 @@ public class NewPopupWizard extends NewJQueryWidgetWizard<NewPopupWizardPage> im
 	}
 
 	protected void addContent(ElementNode parent) {
-		String id = page.getEditorValue(EDITOR_ID_ID);
-		if(id.length() == 0) {
-			id = prefixId + generateIndex(prefixId, "", 1);
-		}
+		String id = getID(prefixId);
+
 		ElementNode a = parent.addChild(TAG_A, page.getEditorValue(EDITOR_ID_LABEL));
 		a.addAttribute(ATTR_HREF, "#" + id);
 		a.addAttribute(ATTR_DATA_ROLE, ROLE_BUTTON);

@@ -38,6 +38,9 @@ public class NewGroupedButtonsWizard extends NewJQueryWidgetWizard<NewGroupedBut
 
 		ElementNode group = parent.addChild(TAG_DIV);
 		group.addAttribute(ATTR_DATA_ROLE, ROLE_GROUP);
+
+		addID("buttons-", group);
+
 		if(LAYOUT_HORIZONTAL.equals(page.getEditorValue(EDITOR_ID_LAYOUT))) {
 			group.addAttribute(ATTR_DATA_TYPE, DATA_TYPE_HORIZONTAL);
 		} else {

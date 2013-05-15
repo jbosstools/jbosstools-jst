@@ -33,10 +33,7 @@ public class NewToggleWizard extends NewJQueryWidgetWizard<NewToggleWizardPage> 
 	}
 
 	protected void addContent(ElementNode parent) {
-		String name = page.getEditorValue(EDITOR_ID_ID);
-		if(name == null || name.length() == 0) {
-			name = prefixName + generateIndex(prefixName, "", 1);
-		}
+		String name = getID(prefixName);
 		if(LAYOUT_HORIZONTAL.equals(page.getEditorValue(EDITOR_ID_LAYOUT))) {
 			ElementNode div = parent.addChild(TAG_DIV);
 			div.addAttribute(ATTR_DATA_ROLE, ROLE_FIELDCONTAIN);

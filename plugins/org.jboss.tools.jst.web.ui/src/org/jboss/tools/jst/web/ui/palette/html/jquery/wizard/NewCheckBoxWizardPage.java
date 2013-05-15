@@ -12,7 +12,6 @@ package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
-import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -20,7 +19,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewCheckBoxWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
+public class NewCheckBoxWizardPage extends NewJQueryWidgetWizardPage {
 
 	public NewCheckBoxWizardPage() {
 		super("newCheckBox", WizardMessages.newCheckboxWizardTitle);
@@ -31,6 +30,8 @@ public class NewCheckBoxWizardPage extends AbstractNewHTMLWidgetWizardPage imple
 		IFieldEditor label = JQueryFieldEditorFactory.createLabelEditor();
 		label.setValue("I agree");
 		addEditor(label, parent);
+
+		createIDEditor(parent, false);
 
 		IFieldEditor mini = JQueryFieldEditorFactory.createMiniEditor();
 		addEditor(mini, parent);

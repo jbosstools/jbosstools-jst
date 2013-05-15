@@ -13,7 +13,6 @@ package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.model.ui.editors.dnd.ValidationException;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
-import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -21,7 +20,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewButtonWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
+public class NewButtonWizardPage extends NewJQueryWidgetWizardPage {
 
 	public NewButtonWizardPage() {
 		super("newButton", WizardMessages.newButtonWizardTitle);
@@ -43,6 +42,7 @@ public class NewButtonWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 		IFieldEditor disabled = JQueryFieldEditorFactory.createDisabledEditor();
 		addEditor(disabled, parent);
 
+		createIDEditor(parent, true);
 		createSeparator(parent);
 
 		Composite[] columns = NewRangeSliderWizardPage.createTwoColumns(parent);
@@ -79,8 +79,7 @@ public class NewButtonWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 	}
 
 	public void validate() throws ValidationException {
-		boolean icononly = TRUE.equals(getEditorValue(EDITOR_ID_ICON_ONLY));
-		IFieldEditor iconpos = getEditor(EDITOR_ID_ICON_POS);
-		iconpos.setEnabled(!icononly);
+		setEnabled(EDITOR_ID_ICON_POS, !isTrue(EDITOR_ID_ICON_ONLY));
+		super.validate();
 	}
 }

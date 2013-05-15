@@ -33,6 +33,9 @@ public class NewRadioWizard extends NewJQueryWidgetWizard<NewRadioWizardPage> im
 	protected void addContent(ElementNode parent) {
 		ElementNode group = parent.addChild(TAG_FIELDSET);
 		group.addAttribute(ATTR_DATA_ROLE, ROLE_GROUP);
+
+		addID("radio-", group);
+
 		if(LAYOUT_HORIZONTAL.equals(page.getEditorValue(EDITOR_ID_LAYOUT))) {
 			group.addAttribute(ATTR_DATA_TYPE, DATA_TYPE_HORIZONTAL);
 		} else {

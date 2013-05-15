@@ -16,7 +16,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.model.ui.editors.dnd.ValidationException;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
-import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -24,7 +23,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewHeaderBarWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
+public class NewHeaderBarWizardPage extends NewJQueryWidgetWizardPage {
 
 	public NewHeaderBarWizardPage() {
 		super("newHeaderBar", WizardMessages.newHeaderWizardTitle);
@@ -36,6 +35,8 @@ public class NewHeaderBarWizardPage extends AbstractNewHTMLWidgetWizardPage impl
 		title.setValue("Edit Contact");
 		addEditor(title, parent);
 
+		createIDEditor(parent, true);
+
 		Composite[] columns = NewRangeSliderWizardPage.createTwoColumns(parent);
 		Composite left = columns[0];
 		Composite right = columns[1];
@@ -45,11 +46,17 @@ public class NewHeaderBarWizardPage extends AbstractNewHTMLWidgetWizardPage impl
 		
 		IFieldEditor fullScreen = JQueryFieldEditorFactory.createFullScreenEditor();
 		addEditor(fullScreen, right);
-		
-		IFieldEditor leftButton = JQueryFieldEditorFactory.createLeftButtonEditor();
-		addEditor(leftButton, parent);
 
-		Composite leftParent = new Composite(parent, SWT.BORDER);
+		createSeparator(parent);
+
+		columns = NewRangeSliderWizardPage.createTwoColumns(parent);
+		left = columns[0];
+		right = columns[1];
+
+		IFieldEditor leftButton = JQueryFieldEditorFactory.createLeftButtonEditor();
+		addEditor(leftButton, left);
+
+		Composite leftParent = new Composite(left, SWT.BORDER);
 		GridData d = new GridData(GridData.FILL_HORIZONTAL);
 		d.horizontalSpan = 3;
 		leftParent.setLayoutData(d);
@@ -69,9 +76,9 @@ public class NewHeaderBarWizardPage extends AbstractNewHTMLWidgetWizardPage impl
 		addEditor(leftButtonIcon, leftParent);
 
 		IFieldEditor rightButton = JQueryFieldEditorFactory.createRightButtonEditor();
-		addEditor(rightButton, parent);
+		addEditor(rightButton, right);
 		
-		Composite rightParent = new Composite(parent, SWT.BORDER);
+		Composite rightParent = new Composite(right, SWT.BORDER);
 		d = new GridData(GridData.FILL_HORIZONTAL);
 		d.horizontalSpan = 3;
 		rightParent.setLayoutData(d);
@@ -95,26 +102,20 @@ public class NewHeaderBarWizardPage extends AbstractNewHTMLWidgetWizardPage impl
 	}
 
 	public void validate() throws ValidationException {
-		boolean leftButtonEnabled = TRUE.equals(getEditorValue(EDITOR_ID_LEFT_BUTTON));
-		IFieldEditor leftButtonLabel = getEditor(EDITOR_ID_LEFT_BUTTON_LABEL);
-		leftButtonLabel.setEnabled(leftButtonEnabled);
-		IFieldEditor leftButtonURL = getEditor(EDITOR_ID_LEFT_BUTTON_URL);
-		leftButtonURL.setEnabled(leftButtonEnabled);
-		IFieldEditor leftButtonIcon = getEditor(EDITOR_ID_LEFT_BUTTON_ICON);
-		leftButtonIcon.setEnabled(leftButtonEnabled);
+		boolean leftButtonEnabled = isTrue(EDITOR_ID_LEFT_BUTTON);
+		setEnabled(EDITOR_ID_LEFT_BUTTON_LABEL, leftButtonEnabled);
+		setEnabled(EDITOR_ID_LEFT_BUTTON_URL, leftButtonEnabled);
+		setEnabled(EDITOR_ID_LEFT_BUTTON_ICON, leftButtonEnabled);
 
-		boolean rightButtonEnabled = TRUE.equals(getEditorValue(EDITOR_ID_RIGHT_BUTTON));
-		IFieldEditor rightButtonLabel = getEditor(EDITOR_ID_RIGHT_BUTTON_LABEL);
-		rightButtonLabel.setEnabled(rightButtonEnabled);
-		IFieldEditor rightButtonURL = getEditor(EDITOR_ID_RIGHT_BUTTON_URL);
-		rightButtonURL.setEnabled(rightButtonEnabled);
-		IFieldEditor rightButtonIcon = getEditor(EDITOR_ID_RIGHT_BUTTON_ICON);
-		rightButtonIcon.setEnabled(rightButtonEnabled);
+		boolean rightButtonEnabled = isTrue(EDITOR_ID_RIGHT_BUTTON);
+		setEnabled(EDITOR_ID_RIGHT_BUTTON_LABEL, rightButtonEnabled);
+		setEnabled(EDITOR_ID_RIGHT_BUTTON_URL, rightButtonEnabled);
+		setEnabled(EDITOR_ID_RIGHT_BUTTON_ICON, rightButtonEnabled);
 
-		boolean isFixed = TRUE.equals(getEditorValue(EDITOR_ID_FIXED_POSITION));
-		if(getEditor(EDITOR_ID_FULL_SCREEN) != null) {
-			getEditor(EDITOR_ID_FULL_SCREEN).setEnabled(isFixed);
-		}
+		boolean isFixed = isTrue(EDITOR_ID_FIXED_POSITION);
+		setEnabled(EDITOR_ID_FULL_SCREEN, isFixed);
+
+		super.validate();
 	}
 
 }

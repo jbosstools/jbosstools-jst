@@ -14,9 +14,7 @@ import java.beans.PropertyChangeEvent;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.jboss.tools.common.model.ui.editors.dnd.ValidationException;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
-import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -24,7 +22,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewTableWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
+public class NewTableWizardPage extends NewJQueryWidgetWizardPage {
 	ColumnEditor columns = new ColumnEditor(this, 1, 6);
 
 	public NewTableWizardPage() {
@@ -36,8 +34,7 @@ public class NewTableWizardPage extends AbstractNewHTMLWidgetWizardPage implemen
 		IFieldEditor modeEditor = JQueryFieldEditorFactory.createTableModeEditor();
 		addEditor(modeEditor, parent);
 
-		IFieldEditor id = JQueryFieldEditorFactory.createIDEditor();
-		addEditor(id, parent);
+		createIDEditor(parent, false);
 
 		columns.createControl(parent, WizardMessages.columnsLabel);
 
@@ -65,13 +62,6 @@ public class NewTableWizardPage extends AbstractNewHTMLWidgetWizardPage implemen
 		columns.onPropertyChange(name, value);
 
 		super.propertyChange(evt);
-	}
-
-	public void validate() throws ValidationException {
-		String id = getEditorValue(EDITOR_ID_ID);
-		if(id != null && !getWizard().isIDAvailable(id)) {
-			throw new ValidationException(WizardMessages.errorIDisUsed);
-		}
 	}
 
 	protected int getPreferredBrowser() {

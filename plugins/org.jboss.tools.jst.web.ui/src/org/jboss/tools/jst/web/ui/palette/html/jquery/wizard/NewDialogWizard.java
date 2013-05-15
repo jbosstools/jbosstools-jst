@@ -35,12 +35,8 @@ public class NewDialogWizard extends NewJQueryWidgetWizard<NewDialogWizardPage> 
 	}
 
 	protected void addContent(ElementNode parent, boolean browser) {
-		String id = page.getEditorValue(EDITOR_ID_ID);
+		String id = getID("dialog-");
 		
-		if(id.length() == 0) {
-			id = "dialog-" + generateIndex("dialog-", "", 1);
-		}
-
 		ElementNode dialogDiv = parent.addChild(TAG_DIV);
 		if(browser) {
 			dialogDiv.addAttribute(ATTR_DATA_ROLE, ROLE_DIALOG);
@@ -89,11 +85,7 @@ public class NewDialogWizard extends NewJQueryWidgetWizard<NewDialogWizardPage> 
 	}
 
 	protected void createBodyForBrowser(ElementNode body) {
-		String id = page.getEditorValue(EDITOR_ID_ID);
-		
-		if(id.length() == 0) {
-			id = "dialog-" + generateIndex("dialog-", "", 1);
-		}
+		String id = getID("dialog-");
 		
 		String click = "$('#xxx').trigger('click');";
 		

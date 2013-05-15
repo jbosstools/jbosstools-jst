@@ -42,6 +42,8 @@ public class NewGroupedCheckboxesWizard extends NewJQueryWidgetWizard<NewGrouped
 			}
 		}
 
+		addID("checkboxes-", group);
+
 		group.addChild(TAG_LEGEND, page.getEditorValue(EDITOR_ID_LEGEND));
 
 		String themeValue = page.getEditorValue(EDITOR_ID_THEME);

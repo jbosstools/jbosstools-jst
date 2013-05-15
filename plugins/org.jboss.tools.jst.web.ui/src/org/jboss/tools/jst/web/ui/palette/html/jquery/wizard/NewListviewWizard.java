@@ -34,7 +34,11 @@ public class NewListviewWizard extends NewJQueryWidgetWizard<NewListviewWizardPa
 		String listTagName = isTrue(EDITOR_ID_NUMBERED) ? TAG_OL : TAG_UL;
 		ElementNode listRoot = parent.addChild(listTagName);
 		listRoot.addAttribute(ATTR_DATA_ROLE, ROLE_LISTVIEW);
+
 //		listRoot.addAttribute("data-filter-reveal", TRUE);
+
+		addID("listview-", listRoot);
+
 		if(isTrue(EDITOR_ID_AUTODIVIDERS)) {
 			listRoot.addAttribute(ATTR_DATA_AUTODIVIDERS, TRUE);
 		}

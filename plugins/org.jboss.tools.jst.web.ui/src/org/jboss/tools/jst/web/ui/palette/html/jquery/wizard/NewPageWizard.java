@@ -31,15 +31,9 @@ public class NewPageWizard extends NewJQueryWidgetWizard<NewPageWizardPage> impl
 	}
 
 	protected void addContent(ElementNode parent) {
-		String id = page.getEditorValue(EDITOR_ID_ID);
-		
-		if(id.length() == 0) {
-			id = "page-" + generateIndex("page-", "", 1);
-		}
-
 		ElementNode pg = parent.addChild(TAG_DIV);
 		pg.addAttribute(ATTR_DATA_ROLE, ROLE_PAGE);
-		pg.addAttribute(ATTR_ID, id);
+		addID("page-", pg);
 		
 		String themeValue = page.getEditorValue(EDITOR_ID_THEME);
 

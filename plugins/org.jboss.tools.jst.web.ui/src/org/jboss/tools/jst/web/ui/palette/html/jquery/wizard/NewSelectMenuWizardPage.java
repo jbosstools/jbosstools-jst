@@ -14,7 +14,6 @@ import java.beans.PropertyChangeEvent;
 
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
-import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -22,7 +21,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewSelectMenuWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
+public class NewSelectMenuWizardPage extends NewJQueryWidgetWizardPage {
 	SelectMenuEditor items = new SelectMenuEditor(this, 1, 8);
 
 	public NewSelectMenuWizardPage() {
@@ -34,6 +33,8 @@ public class NewSelectMenuWizardPage extends AbstractNewHTMLWidgetWizardPage imp
 		IFieldEditor label = JQueryFieldEditorFactory.createLabelEditor();
 		label.setValue("Select:");
 		addEditor(label, parent);
+
+		createIDEditor(parent, false);
 
 		IFieldEditor layout = JQueryFieldEditorFactory.createLayoutEditor();
 		addEditor(layout, parent);

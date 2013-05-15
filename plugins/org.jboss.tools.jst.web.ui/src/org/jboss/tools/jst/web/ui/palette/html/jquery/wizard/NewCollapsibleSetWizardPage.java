@@ -14,7 +14,6 @@ import java.beans.PropertyChangeEvent;
 
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
-import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -22,7 +21,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewCollapsibleSetWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
+public class NewCollapsibleSetWizardPage extends NewJQueryWidgetWizardPage {
 	CollapsiblesEditor items = new CollapsiblesEditor(this, 1, 8);
 
 	public NewCollapsibleSetWizardPage() {
@@ -40,6 +39,8 @@ public class NewCollapsibleSetWizardPage extends AbstractNewHTMLWidgetWizardPage
 
 		IFieldEditor inset = JQueryFieldEditorFactory.createInsetEditor();
 		addEditor(inset, right);
+
+		createIDEditor(parent, true);
 
 		Composite panel = items.createControl(parent, WizardMessages.itemsLabel);
 

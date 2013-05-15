@@ -34,6 +34,8 @@ public class NewCollapsibleSetWizard extends NewJQueryWidgetWizard<NewCollapsibl
 		ElementNode group = parent.addChild(TAG_DIV);
 		group.addAttribute(ATTR_DATA_ROLE, ROLE_COLLAPSIBLE_SET);
 
+		addID("collapsible-set-", group);
+
 		String themeValue = page.getEditorValue(EDITOR_ID_THEME);
 		if(themeValue.length() > 0) {
 			group.addAttribute(ATTR_DATA_THEME, themeValue);

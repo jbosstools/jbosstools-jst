@@ -22,7 +22,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizar
  * @author Viacheslav Kabanovich
  *
  */
-public abstract class NewJQueryWidgetWizard<P extends AbstractNewHTMLWidgetWizardPage> extends AbstractNewHTMLWidgetWizard implements JQueryConstants {
+public abstract class NewJQueryWidgetWizard<P extends NewJQueryWidgetWizardPage> extends AbstractNewHTMLWidgetWizard implements JQueryConstants {
 	protected P page;
 
 	public NewJQueryWidgetWizard() {
@@ -41,6 +41,26 @@ public abstract class NewJQueryWidgetWizard<P extends AbstractNewHTMLWidgetWizar
 
 	protected boolean isMini() {
 		return isTrue(EDITOR_ID_MINI);
+	}
+
+	protected String getID(String prefix) {
+		if(!page.isIDEnabled()) {
+			return null;
+		}
+		String id = page.getEditorValue(EDITOR_ID_ID);
+		if(id.length() == 0) {
+			int i = generateIndex(prefix, "", 1);
+			id = prefix + i;
+		}
+		return id;
+	}
+
+	protected String addID(String prefix, ElementNode node) {
+		String id = getID(prefix);
+		if(id != null) {
+			node.addAttribute(ATTR_ID, id);
+		}
+		return id;
 	}
 
 	protected boolean isLayoutHorizontal() {

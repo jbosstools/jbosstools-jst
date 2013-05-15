@@ -16,7 +16,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
-import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -24,7 +23,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewGridWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
+public class NewGridWizardPage extends NewJQueryWidgetWizardPage {
 
 	public NewGridWizardPage() {
 		super("newGrid", WizardMessages.newGridWizardTitle);

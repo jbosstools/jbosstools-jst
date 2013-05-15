@@ -34,7 +34,7 @@ public class NewPanelWizard extends NewJQueryWidgetWizard<NewPanelWizardPage> im
 	protected void addContent(ElementNode parent) {
 		ElementNode div = parent.addChild(TAG_DIV, "");
 		div.addAttribute(ATTR_DATA_ROLE, "panel");
-		div.addAttribute(ATTR_ID, getId());
+		addID(prefixName, div);
 		if(POSITION_RIGHT.equals(page.getEditorValue(EDITOR_ID_PANEL_POSITION))) {
 			div.addAttribute(ATTR_DATA_POSITION, POSITION_RIGHT);
 		}
@@ -77,16 +77,8 @@ public class NewPanelWizard extends NewJQueryWidgetWizard<NewPanelWizardPage> im
 			content.addAttribute(ATTR_DATA_ROLE, ROLE_CONTENT);
 			ElementNode a = content.addChild(TAG_A, "Open Panel");
 			a.addAttribute(ATTR_DATA_ROLE, ROLE_BUTTON);
-			a.addAttribute(ATTR_HREF, "#" + getId());
+			a.addAttribute(ATTR_HREF, "#" + getID(prefixName));
 		}
 	}
 
-	private String getId() {
-		String id = page.getEditorValue(EDITOR_ID_ID);
-		if(id.length() == 0) {
-			id = prefixName + generateIndex(prefixName, "", 1);
-		}
-		return id;
-	}
-	
 }

@@ -17,9 +17,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.jboss.tools.common.model.ui.editors.dnd.ValidationException;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
-import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -27,7 +25,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewPopupWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
+public class NewPopupWizardPage extends NewJQueryWidgetWizardPage {
 
 	public NewPopupWizardPage() {
 		super("newPopup", WizardMessages.newPopupWizardTitle);
@@ -62,8 +60,7 @@ public class NewPopupWizardPage extends AbstractNewHTMLWidgetWizardPage implemen
 		windowPanel.setLayoutData(d);
 		windowPanel.setLayout(new GridLayout(3, false));		
 
-		IFieldEditor id = JQueryFieldEditorFactory.createIDEditor();
-		addEditor(id, windowPanel);
+		createIDEditor(windowPanel, false);
 
 		IFieldEditor close = JQueryFieldEditorFactory.createClosePopupButtonEditor();
 		addEditor(close, windowPanel);
@@ -94,18 +91,8 @@ public class NewPopupWizardPage extends AbstractNewHTMLWidgetWizardPage implemen
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		boolean shadow = TRUE.equals(getEditorValue(EDITOR_ID_SHADOW));
-		IFieldEditor theme = getEditor(EDITOR_ID_THEME);
-		if(theme != null) {
-			theme.setEnabled(shadow);
-		}
-		
+		setEnabled(EDITOR_ID_THEME, shadow);
 		super.propertyChange(evt);
 	}
 
-	public void validate() throws ValidationException {
-		String id = getEditorValue(EDITOR_ID_ID);
-		if(id != null && !getWizard().isIDAvailable(id)) {
-			throw new ValidationException(WizardMessages.errorIDisUsed);
-		}
-	}
 }

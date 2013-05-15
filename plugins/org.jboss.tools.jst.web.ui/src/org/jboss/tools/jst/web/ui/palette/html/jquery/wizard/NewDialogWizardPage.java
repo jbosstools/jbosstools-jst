@@ -11,9 +11,7 @@
 package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import org.eclipse.swt.widgets.Composite;
-import org.jboss.tools.common.model.ui.editors.dnd.ValidationException;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
-import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -21,7 +19,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewDialogWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
+public class NewDialogWizardPage extends NewJQueryWidgetWizardPage {
 
 	public NewDialogWizardPage() {
 		super("newDialog", WizardMessages.newDialogWizardTitle);
@@ -33,17 +31,10 @@ public class NewDialogWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 		title.setValue("Dialog");
 		addEditor(title, parent);
 
-		IFieldEditor id = JQueryFieldEditorFactory.createIDEditor();
-		addEditor(id, parent);
+		createIDEditor(parent, false);
 
 		IFieldEditor close = JQueryFieldEditorFactory.createCloseButtonEditor();
 		addEditor(close, parent);
 	}
 
-	public void validate() throws ValidationException {
-		String id = getEditorValue(EDITOR_ID_ID);
-		if(id != null && !getWizard().isIDAvailable(id)) {
-			throw new ValidationException(WizardMessages.errorIDisUsed);
-		}
-	}
 }

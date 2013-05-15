@@ -36,11 +36,7 @@ public class NewTableWizard extends NewJQueryWidgetWizard<NewTableWizardPage> im
 		ElementNode table = parent.addChild(TAG_TABLE);
 		table.addAttribute(ATTR_DATA_ROLE, ROLE_TABLE);
 
-		String id = page.getEditorValue(EDITOR_ID_ID);		
-		if(id.length() == 0) {
-			id = "table-" + generateIndex("table-", "", 1);
-		}
-		table.addAttribute(ATTR_ID, id);
+		addID("table-", table);
 		
 		String mode = page.getEditorValue(EDITOR_ID_MODE);
 		if(MODE_COLUMNTOGGLE.equals(mode)) {
