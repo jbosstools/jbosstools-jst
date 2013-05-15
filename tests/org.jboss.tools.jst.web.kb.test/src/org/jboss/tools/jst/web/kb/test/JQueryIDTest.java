@@ -49,7 +49,7 @@ public class JQueryIDTest extends HTML5Test {
 	public void testIDs() {
 		KbQuery query = createKbQuery(KbQuery.Type.ATTRIBUTE_VALUE, new KbQuery.Tag[]{createTag("a", "button")}, "href", "#");
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
-		assertProposals(proposals, "#mainPage", "#confiramtionDialog", "#newUserDialog", "#nextPage");
+		assertProposals(proposals, "#mainPage", "#confiramtionDialog", "#newUserDialog", "#nextPage", "#popup-1", "#panel-1");
 	}
 
 	public void testIDWithMask() {
@@ -61,7 +61,7 @@ public class JQueryIDTest extends HTML5Test {
 	public void testIDWithEmptyHref() {
 		KbQuery query = createKbQuery(KbQuery.Type.ATTRIBUTE_VALUE, new KbQuery.Tag[]{createTag("a", "button")}, "href", "");
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
-		assertProposals(proposals, "#mainPage", "#confiramtionDialog", "#newUserDialog", "#nextPage");
+		assertProposals(proposals, "#mainPage", "#confiramtionDialog", "#newUserDialog", "#nextPage", "#popup-1", "#panel-1");
 	}
 
 	public void testEmptyResult() {

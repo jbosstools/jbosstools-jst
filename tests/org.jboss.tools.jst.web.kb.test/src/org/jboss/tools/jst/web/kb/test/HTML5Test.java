@@ -31,34 +31,60 @@ public class HTML5Test extends TestCase {
 	protected ELContext context;
 
 	protected void assertDataRole(String dateRoleName) {
-		assertDataRole(null, dateRoleName);
+		assertDataRole(true, dateRoleName);
+	}
+
+	protected void assertDataRole(boolean strict, String dateRoleName) {
+		assertDataRole(strict, null, dateRoleName);
 	}
 
 	protected void assertDataRole(String tagName, String dateRoleName) {
+		assertDataRole(true, tagName, dateRoleName);
+	}
+
+	protected void assertDataRole(boolean strict, String tagName, String dateRoleName) {
 		if(tagName==null) {
 			tagName = "div";
 		}
 		KbQuery query = createKbQuery(KbQuery.Type.ATTRIBUTE_VALUE, new KbQuery.Tag[]{createTag(tagName)}, "data-role", "");
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
-		assertProposals(proposals, dateRoleName);
+		assertProposals(strict, proposals, dateRoleName);
 	}
 
 	protected void assertProposals(TextProposal[] proposals, String... enums) {
+		assertProposals(true, proposals, enums);
+	}
+
+	protected void assertProposals(boolean strict, TextProposal[] proposals, String... enums) {
 		assertTrue(proposals.length>0);
 		Set<String> uniqueProposals = new HashSet<String>();
-		for (String enumItem : enums) {
-			StringBuffer sb = new StringBuffer("There is no proposal \"" + enumItem + "\" among found proposals: [");
-			for (TextProposal proposal : proposals) {
-				if(!uniqueProposals.contains(proposal.getLabel())) {
-					sb.append(proposal.getLabel()).append(",");
-				}
+
+		StringBuilder prp = new StringBuilder("[");
+		for (TextProposal proposal : proposals) {
+			if(!uniqueProposals.contains(proposal.getLabel())) {
+				prp.append(proposal.getLabel()).append(",");
 				uniqueProposals.add(proposal.getLabel());
-				if(enumItem.equals(proposal.getLabel())) {
+			}
+		}
+		prp.replace(prp.length()-1, prp.length(), "]");
+
+		StringBuilder enm = new StringBuilder("[");
+		for (String e : enums) {
+			enm.append(e).append(", ");
+		}
+		enm.replace(enm.length()-2, enm.length(), "]");
+
+		if(strict) {
+			assertEquals("The number of expected proposals (" + enm + ") doesn't match the actual (" + prp +"). ", enums.length, uniqueProposals.size());
+		}
+
+		for (String enumItem : enums) {
+			for (String proposal : uniqueProposals) {
+				if(enumItem.equals(proposal)) {
 					return;
 				}
 			}
-			sb.replace(sb.length()-1, sb.length(), "]");
-			fail(sb.toString());
+			fail("There is no proposal \"" + enumItem + "\" among the found proposals: " + prp);
 		}
 	}
 

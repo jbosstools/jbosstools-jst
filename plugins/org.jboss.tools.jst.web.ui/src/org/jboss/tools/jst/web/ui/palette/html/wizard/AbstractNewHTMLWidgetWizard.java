@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.ui.palette.html.wizard;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
@@ -27,8 +28,8 @@ import org.jboss.tools.common.model.ui.editors.dnd.IDropCommand;
 import org.jboss.tools.common.model.ui.editors.dnd.IDropWizard;
 import org.jboss.tools.common.model.ui.editors.dnd.IDropWizardModel;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.PaletteDropCommand;
-import org.jboss.tools.jst.web.kb.internal.taglib.jq.JQueryTagLib;
-import org.jboss.tools.jst.web.kb.internal.taglib.jq.JQueryTagLib.ElementID;
+import org.jboss.tools.jst.web.kb.internal.taglib.jq.LinkAttributeProvider;
+import org.jboss.tools.jst.web.kb.internal.taglib.jq.LinkAttributeProvider.ElementID;
 
 /**
  * 
@@ -175,10 +176,13 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 		}
 	}
 
-	public ElementID[] getIDs() {
+	public List<ElementID> getIDs() {
 		IEditorInput input = command.getDefaultModel().getDropData().getEditorInput();
 		IFile file = (IFile)input.getAdapter(IFile.class);
-		return (file != null) ? JQueryTagLib.findAllIds(file, false) : new ElementID[0];
+		if(file==null) {
+			return Collections.emptyList();
+		}
+		return LinkAttributeProvider.findAllIds(file, false);
 	}
 
 	private int next(String text, String attrName, int from) {

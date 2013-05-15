@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.internal.taglib.jq.JQueryMobileAttribute;
 import org.jboss.tools.jst.web.kb.taglib.IAttributeProvider;
 
 /**
