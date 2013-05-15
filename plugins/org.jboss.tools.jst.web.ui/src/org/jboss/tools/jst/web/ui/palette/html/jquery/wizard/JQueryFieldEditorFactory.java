@@ -393,6 +393,10 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return createCheckboxEditor(EDITOR_ID_RIGHT_BUTTON, WizardMessages.rightButtonLabel, true, 3);
 	}
 
+	public static IFieldEditor createBackButtonEditor() {
+		return createCheckboxEditor(EDITOR_ID_BACK_BUTTON, WizardMessages.backButtonLabel, false, 3);
+	}
+
 	public static IFieldEditor createItemsNumberEditor(String label, int min, int max) {
 		String[] numbers = new String[max - min + 1];
 		for (int i = min; i <= max; i++) {

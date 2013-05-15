@@ -114,6 +114,10 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_FOOTER);
 		assertTextExists(wizard, wizardPage.getEditorValue(EDITOR_ID_FOOTER_TITLE));
 
+		assertTextDoesNotExist(wizard, ATTR_DATA_REL);
+		wizardPage.setEditorValue(EDITOR_ID_BACK_BUTTON, TRUE);
+		assertAttrExists(wizard, ATTR_DATA_REL, DATA_REL_BACK);
+
 		//Check " < > in attribute value.
 		assertTextDoesNotExist(wizard, ATTR_DATA_THEME);
 		wizardPage.setEditorValue(EDITOR_ID_THEME, "\"</div>");
