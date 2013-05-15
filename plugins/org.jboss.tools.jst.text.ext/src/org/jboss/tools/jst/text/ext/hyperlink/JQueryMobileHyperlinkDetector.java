@@ -23,6 +23,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
 import org.eclipse.wst.xml.core.internal.document.ElementImpl;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
@@ -30,7 +31,6 @@ import org.jboss.tools.common.text.ext.util.StructuredModelWrapper;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 public class JQueryMobileHyperlinkDetector extends AbstractHyperlinkDetector{
 
@@ -61,8 +61,10 @@ public class JQueryMobileHyperlinkDetector extends AbstractHyperlinkDetector{
 					if(id != null){
 						String url = file.getLocation().toFile().toURI()+"#"+id; //$NON-NLS-1$
 						String shortName = file.getName()+"#"+id; //$NON-NLS-1$
-						links.add(new OpenWithBrowserSimHyperlink(textViewer.getDocument(), nodeRegion, shortName, url));
-						links.add(new OpenWithBrowserHyperlink(textViewer.getDocument(), nodeRegion, shortName, url));
+						OpenWithEditorExtension[] extensions = OpenWithEditorExtensionManager.INSTANCES;
+						for(OpenWithEditorExtension extension : extensions){
+							links.add(new OpenWithEditorHyperlink(textViewer.getDocument(), nodeRegion, shortName, url, extension));
+						}
 					}
 				}
 			}
@@ -80,22 +82,11 @@ public class JQueryMobileHyperlinkDetector extends AbstractHyperlinkDetector{
 	}
 
 	static public Node findNodeForOffset(IDOMNode node, int offset) {
-		if(node == null) return null;
-		if (!node.contains(offset)) return null;
-			
-		if (node.hasChildNodes()) {
-			// Try to find the node in children
-			NodeList children = node.getChildNodes();
-			for (int i = 0; children != null && i < children.getLength(); i++) {
-				IDOMNode child = (IDOMNode)children.item(i);
-				if (child.contains(offset)) {
-					return findNodeForOffset(child, offset);
-				}
-			}
+		IndexedRegion region = node.getModel().getIndexedRegion(offset);
+		if(region instanceof Node){
+			return (Node)region;
 		}
-		
-		// Return the node itself
-		return node;
+		return null;
 	}
 	
 	private String findID(Node node){
