@@ -14,7 +14,6 @@ import java.beans.PropertyChangeEvent;
 
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
-import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -22,7 +21,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewNavbarWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
+public class NewNavbarWizardPage extends NewJQueryWidgetWizardPage {
 	ButtonsEditor buttons = new ButtonsEditor(this, 1, 8);
 
 	public NewNavbarWizardPage() {
@@ -31,6 +30,8 @@ public class NewNavbarWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 	}
 
 	protected void createFieldPanel(Composite parent) {
+		createIDEditor(parent,true);
+
 		Composite panel = buttons.createControl(parent, WizardMessages.itemsLabel);
 
 		IFieldEditor iconpos = JQueryFieldEditorFactory.createIconPositionEditor();
@@ -50,9 +51,7 @@ public class NewNavbarWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 		String name = evt.getPropertyName();
 		String value = evt.getNewValue().toString();
 		if(buttons.onPropertyChange(name, value)) {
-			if(getEditor(EDITOR_ID_ICON_POS) != null) {
-				getEditor(EDITOR_ID_ICON_POS).setEnabled(buttons.hasIcons());
-			}
+			setEnabled(EDITOR_ID_ICON_POS, buttons.hasIcons());
 		}
 		super.propertyChange(evt);
 	}

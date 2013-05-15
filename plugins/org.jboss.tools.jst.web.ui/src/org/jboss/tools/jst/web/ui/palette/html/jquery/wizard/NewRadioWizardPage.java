@@ -14,7 +14,6 @@ import java.beans.PropertyChangeEvent;
 
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
-import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -22,7 +21,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewRadioWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
+public class NewRadioWizardPage extends NewJQueryWidgetWizardPage {
 	RadioEditor buttons = new RadioEditor(this, 1, 8);
 
 	public NewRadioWizardPage() {
@@ -33,6 +32,8 @@ public class NewRadioWizardPage extends AbstractNewHTMLWidgetWizardPage implemen
 	protected void createFieldPanel(Composite parent) {
 		IFieldEditor legend = JQueryFieldEditorFactory.createLegendEditor();
 		addEditor(legend, parent);
+
+		createIDEditor(parent, true);
 
 		IFieldEditor layoutEditor = JQueryFieldEditorFactory.createLayoutEditor();
 		layoutEditor.setValue(LAYOUT_VERTICAL);
@@ -63,11 +64,8 @@ public class NewRadioWizardPage extends AbstractNewHTMLWidgetWizardPage implemen
 			}
 		}
 
-		IFieldEditor iconpos = getEditor(EDITOR_ID_ICON_POS);
-		if(iconpos != null) {
-			boolean h = (LAYOUT_HORIZONTAL.equals(getEditorValue(EDITOR_ID_LAYOUT)));
-			iconpos.setEnabled(!h);
-		}		
+		boolean h = (LAYOUT_HORIZONTAL.equals(getEditorValue(EDITOR_ID_LAYOUT)));
+		setEnabled(EDITOR_ID_ICON_POS, !h);
 
 		super.propertyChange(evt);
 	}

@@ -40,6 +40,7 @@ public class NewButtonWizard extends NewJQueryWidgetWizard<NewButtonWizardPage> 
 			a.addAttribute(ATTR_CLASS, CLASS_DISABLED);
 		}
 
+		addID("button-", a);
 		applyAction(page, a);
 
 		a.addAttribute(ATTR_DATA_ROLE, ROLE_BUTTON);

@@ -16,9 +16,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.jboss.tools.common.model.ui.editors.dnd.ValidationException;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
-import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -26,7 +24,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewPageWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
+public class NewPageWizardPage extends NewJQueryWidgetWizardPage {
 
 	public NewPageWizardPage() {
 		super("newPage", WizardMessages.newPageWizardTitle);
@@ -46,8 +44,7 @@ public class NewPageWizardPage extends AbstractNewHTMLWidgetWizardPage implement
 		IFieldEditor footerTitle = JQueryFieldEditorFactory.createFooterTitleEditor();
 		addEditor(footerTitle, parent);
 
-		IFieldEditor id = JQueryFieldEditorFactory.createIDEditor();
-		addEditor(id, parent);
+		createIDEditor(parent, false);
 
 		createSeparator(parent);
 
@@ -77,29 +74,22 @@ public class NewPageWizardPage extends AbstractNewHTMLWidgetWizardPage implement
 		updateBackButtonEnablement();
 	}
 
-	public void validate() throws ValidationException {
-		String id = getEditorValue(EDITOR_ID_ID);
-		if(id != null && !getWizard().isIDAvailable(id)) {
-			throw new ValidationException(WizardMessages.errorIDisUsed);
-		}
-	}
-
 	public void propertyChange(PropertyChangeEvent evt) {
 		String name = evt.getPropertyName();
 		if(EDITOR_ID_BACK_BUTTON.equals(name)) {
 			updateBackButtonEnablement();
 		} else if(EDITOR_ID_ADD_HEADER.equals(name)) {
-			getEditor(EDITOR_ID_HEADER_TITLE).setEnabled(TRUE.equals(getEditorValue(EDITOR_ID_ADD_HEADER)));
+			setEnabled(EDITOR_ID_HEADER_TITLE, TRUE.equals(getEditorValue(EDITOR_ID_ADD_HEADER)));
 		} else if(EDITOR_ID_ADD_FOOTER.equals(name)) {
-			getEditor(EDITOR_ID_FOOTER_TITLE).setEnabled(TRUE.equals(getEditorValue(EDITOR_ID_ADD_FOOTER)));
+			setEnabled(EDITOR_ID_FOOTER_TITLE, TRUE.equals(getEditorValue(EDITOR_ID_ADD_FOOTER)));
 		}
 		super.propertyChange(evt);
 	}
 
 	private void updateBackButtonEnablement() {
-		boolean backButtonEnabled = TRUE.equals(getEditorValue(EDITOR_ID_BACK_BUTTON));
-		getEditor(EDITOR_ID_LABEL).setEnabled(backButtonEnabled);
-		getEditor(EDITOR_ID_ICON).setEnabled(backButtonEnabled);
-		getEditor(EDITOR_ID_ICON_ONLY).setEnabled(backButtonEnabled);
+		boolean backButtonEnabled = isTrue(EDITOR_ID_BACK_BUTTON);
+		setEnabled(EDITOR_ID_LABEL, backButtonEnabled);
+		setEnabled(EDITOR_ID_ICON, backButtonEnabled);
+		setEnabled(EDITOR_ID_ICON_ONLY, backButtonEnabled);
 	}
 }

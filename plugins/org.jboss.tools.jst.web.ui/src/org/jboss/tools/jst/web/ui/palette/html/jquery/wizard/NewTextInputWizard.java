@@ -43,10 +43,7 @@ public class NewTextInputWizard extends NewJQueryWidgetWizard<NewTextInputWizard
 		String type = page.getEditorValue(EDITOR_ID_TEXT_TYPE);
 		boolean isTextArea = TYPE_TEXTAREA.equals(type);
 		
-		String id = page.getEditorValue(EDITOR_ID_ID);
-		if(id.length() == 0) {
-			id = type + "-" + generateIndex(type + "-", "", 1);
-		}
+		String id = getID(type + "-");
 		ElementNode label = parent.addChild(TAG_LABEL, page.getEditorValue(EDITOR_ID_LABEL));
 		ElementNode input = isTextArea ? parent.addChild(TYPE_TEXTAREA, page.getEditorValue(EDITOR_ID_VALUE)) : parent.addChild(TAG_INPUT);
 

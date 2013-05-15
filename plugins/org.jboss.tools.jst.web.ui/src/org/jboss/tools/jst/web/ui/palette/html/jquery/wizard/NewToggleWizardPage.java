@@ -11,9 +11,7 @@
 package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import org.eclipse.swt.widgets.Composite;
-import org.jboss.tools.common.model.ui.editors.dnd.ValidationException;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
-import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -21,7 +19,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewToggleWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
+public class NewToggleWizardPage extends NewJQueryWidgetWizardPage {
 
 	public NewToggleWizardPage() {
 		super("newToggle", WizardMessages.newToggleWizardTitle);
@@ -39,8 +37,7 @@ public class NewToggleWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 		IFieldEditor onLabel = JQueryFieldEditorFactory.createOnLabelEditor();
 		addEditor(onLabel, parent);
 		
-		IFieldEditor id = JQueryFieldEditorFactory.createIDEditor();
-		addEditor(id, parent);
+		createIDEditor(parent, false);
 		
 		createSeparator(parent);
 		
@@ -72,10 +69,4 @@ public class NewToggleWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 		addEditor(trackTheme, parent, true);
 	}
 
-	public void validate() throws ValidationException {
-		String id = getEditorValue(EDITOR_ID_ID);
-		if(id != null && !getWizard().isIDAvailable(id)) {
-			throw new ValidationException(WizardMessages.errorIDisUsed);
-		}
-	}
 }

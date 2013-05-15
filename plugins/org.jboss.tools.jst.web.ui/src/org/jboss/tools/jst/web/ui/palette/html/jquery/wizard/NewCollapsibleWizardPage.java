@@ -12,7 +12,6 @@ package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
-import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -20,7 +19,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewCollapsibleWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
+public class NewCollapsibleWizardPage extends NewJQueryWidgetWizardPage {
 
 	public NewCollapsibleWizardPage() {
 		super("newCollapsible", WizardMessages.newCollapsibleWizardTitle);
@@ -31,6 +30,8 @@ public class NewCollapsibleWizardPage extends AbstractNewHTMLWidgetWizardPage im
 		IFieldEditor header = JQueryFieldEditorFactory.createCollapsibleHeaderEditor();
 		header.setValue("Header");
 		addEditor(header, parent);
+
+		createIDEditor(parent, true);
 
 		Composite[] columns = NewRangeSliderWizardPage.createTwoColumns(parent);
 		Composite left = columns[0];

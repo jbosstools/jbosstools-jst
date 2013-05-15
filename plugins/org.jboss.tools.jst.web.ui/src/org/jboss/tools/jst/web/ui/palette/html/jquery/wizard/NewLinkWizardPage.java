@@ -12,7 +12,6 @@ package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
-import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -20,7 +19,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewLinkWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
+public class NewLinkWizardPage extends NewJQueryWidgetWizardPage {
 
 	public NewLinkWizardPage() {
 		super("newLink", WizardMessages.newLinkWizardTitle);
@@ -38,6 +37,8 @@ public class NewLinkWizardPage extends AbstractNewHTMLWidgetWizardPage implement
 		
 		IFieldEditor action = JQueryFieldEditorFactory.createActionEditor();
 		addEditor(action, parent, true);
+
+		createIDEditor(parent, true);
 
 		createSeparator(parent);
 

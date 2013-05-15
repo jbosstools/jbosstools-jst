@@ -14,7 +14,6 @@ import java.beans.PropertyChangeEvent;
 
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
-import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -22,7 +21,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewListviewWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
+public class NewListviewWizardPage extends NewJQueryWidgetWizardPage {
 	ListEditor items = new ListEditor(this, 1, 8);
 
 	public NewListviewWizardPage() {
@@ -52,6 +51,8 @@ public class NewListviewWizardPage extends AbstractNewHTMLWidgetWizardPage imple
 
 		IFieldEditor span = JQueryFieldEditorFactory.createSpan("span", 3);
 		addEditor(span, right);
+
+		createIDEditor(parent, false);
 
 		items.createControl(parent, WizardMessages.itemsLabel);
 

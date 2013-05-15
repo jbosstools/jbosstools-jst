@@ -36,6 +36,8 @@ public class NewHeaderBarWizard extends NewJQueryWidgetWizard<NewHeaderBarWizard
 		ElementNode header = parent.addChild(TAG_DIV);
 		header.addAttribute(ATTR_DATA_ROLE, ROLE_HEADER);
 
+		addID("header-", header);
+
 		if(isTrue(EDITOR_ID_FIXED_POSITION)) {
 			header.addAttribute(ATTR_DATA_POSITION, POSITION_FIXED);
 			if(isTrue(EDITOR_ID_FULL_SCREEN)) {

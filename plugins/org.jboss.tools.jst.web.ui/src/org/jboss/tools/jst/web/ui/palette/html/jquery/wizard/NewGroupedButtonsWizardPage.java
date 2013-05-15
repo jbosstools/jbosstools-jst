@@ -14,7 +14,6 @@ import java.beans.PropertyChangeEvent;
 
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
-import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -22,7 +21,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewGroupedButtonsWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
+public class NewGroupedButtonsWizardPage extends NewJQueryWidgetWizardPage {
 	ButtonsEditor buttons = new ButtonsEditor(this, 1, 6);
 
 	public NewGroupedButtonsWizardPage() {
@@ -34,6 +33,8 @@ public class NewGroupedButtonsWizardPage extends AbstractNewHTMLWidgetWizardPage
 		IFieldEditor layoutEditor = JQueryFieldEditorFactory.createLayoutEditor();
 		layoutEditor.setValue(LAYOUT_VERTICAL);
 		addEditor(layoutEditor, parent, true);
+
+		createIDEditor(parent, true);
 
 		Composite panel = buttons.createControl(parent, WizardMessages.itemsLabel);
 
@@ -62,13 +63,9 @@ public class NewGroupedButtonsWizardPage extends AbstractNewHTMLWidgetWizardPage
 		String value = evt.getNewValue().toString();
 		buttons.onPropertyChange(name, value);
 
-		IFieldEditor iconpos = getEditor(EDITOR_ID_ICON_POS);
-		IFieldEditor icononly = getEditor(EDITOR_ID_ICON_ONLY);
-		if(iconpos != null && icononly != null) {
-			boolean hasIcons = buttons.hasIcons();
-			icononly.setEnabled(hasIcons);
-			iconpos.setEnabled(hasIcons && !TRUE.equals(getEditorValue(EDITOR_ID_ICON_ONLY)));
-		}		
+		boolean hasIcons = buttons.hasIcons();
+		setEnabled(EDITOR_ID_ICON_ONLY, hasIcons);
+		setEnabled(EDITOR_ID_ICON_POS, hasIcons && !isTrue(EDITOR_ID_ICON_ONLY));
 
 		super.propertyChange(evt);
 	}

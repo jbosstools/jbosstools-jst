@@ -119,6 +119,16 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return editor; 
 	}
 
+	public static IFieldEditor createAddIDEditor() {
+		return createCheckboxEditor(EDITOR_ID_ADD_ID, WizardMessages.idLabel, true, 1);
+	}
+
+	public static IFieldEditor createIDEditor2() {
+		TextFieldEditor text = (TextFieldEditor)createTextEditor(EDITOR_ID_ID, "", 2);
+		text.setMessage("Generate");
+		return text;
+	}
+
 	public static IFieldEditor createTitleEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_TITLE, WizardMessages.titleLabel, "");
 	}

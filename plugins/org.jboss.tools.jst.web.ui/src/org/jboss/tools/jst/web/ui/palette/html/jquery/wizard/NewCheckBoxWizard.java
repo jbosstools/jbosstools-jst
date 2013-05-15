@@ -20,7 +20,7 @@ import org.jboss.tools.jst.web.ui.JSTWebUIImages;
  */
 public class NewCheckBoxWizard extends NewJQueryWidgetWizard<NewCheckBoxWizardPage> implements JQueryConstants {
 	static String prefixName = "checkbox-";
-	static String prefixMiniId = "checkbox-mini-";
+	static String prefixId = "checkbox-";
 
 	public NewCheckBoxWizard() {
 		setWindowTitle(DropWizardMessages.Wizard_Window_Title);
@@ -37,11 +37,10 @@ public class NewCheckBoxWizard extends NewJQueryWidgetWizard<NewCheckBoxWizardPa
 		ElementNode input = null;
 		if(isMini()) {
 			String name = prefixName + generateIndex(prefixName, "", 1);
-			String id = prefixMiniId + generateIndex(prefixMiniId, "", 1);
 			input = parent.addChild(TAG_INPUT);
 			input.addAttribute(ATTR_TYPE, TYPE_CHECKBOX);
 			input.addAttribute(ATTR_NAME, name);
-			input.addAttribute(ATTR_ID, id);
+			String id = addID(prefixId, input);
 			input.addAttribute(ATTR_CLASS, CLASS_CUSTOM);
 			input.addAttribute(ATTR_DATA_MINI, TRUE);
 			ElementNode label = parent.addChild(TAG_LABEL, page.getEditorValue(EDITOR_ID_LABEL));
@@ -52,6 +51,7 @@ public class NewCheckBoxWizard extends NewJQueryWidgetWizard<NewCheckBoxWizardPa
 			input = label.addChild(TAG_INPUT);
 			input.addAttribute(ATTR_TYPE, TYPE_CHECKBOX);
 			input.addAttribute(ATTR_NAME, name);
+			addID(prefixId, input);
 		}
 		String iconpos = page.getEditorValue(EDITOR_ID_ICON_POS);
 		if(iconpos.length() > 0) {

@@ -178,6 +178,7 @@ public interface JQueryConstants extends HTMLConstants {
 	public String EDITOR_ID_URL = "url";
 	public String EDITOR_ID_TRANSITION = "transition";
 	public String EDITOR_ID_CLOSE_BUTTON = "close";
+	public String EDITOR_ID_ADD_ID = "add-id";
 
 	public String EDITOR_ID_ACTION = "action";
 	public String EDITOR_ID_DISABLED = "disabled";

@@ -35,6 +35,8 @@ public class NewCollapsibleWizard extends NewJQueryWidgetWizard<NewCollapsibleWi
 
 		ElementNode root = parent.addChild(!isFieldSet ? TAG_DIV : TAG_FIELDSET);
 		root.addAttribute(ATTR_DATA_ROLE, ROLE_COLLAPSIBLE);
+
+		addID("collapsible-", root);
 		
 		root.addChild(!isFieldSet ? TAG_H4 : TAG_LEGEND, page.getEditorValue(EDITOR_ID_HEADER));
 		root.addChild(TAG_P, "Collapsible content.");

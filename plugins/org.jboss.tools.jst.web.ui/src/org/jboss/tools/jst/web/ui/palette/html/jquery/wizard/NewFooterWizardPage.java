@@ -15,7 +15,6 @@ import java.beans.PropertyChangeEvent;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
-import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -23,7 +22,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewFooterWizardPage extends AbstractNewHTMLWidgetWizardPage implements JQueryConstants {
+public class NewFooterWizardPage extends NewJQueryWidgetWizardPage {
 	ButtonsEditor buttons = new ButtonsEditor(this, 0, 4);
 
 	public NewFooterWizardPage() {
@@ -43,6 +42,8 @@ public class NewFooterWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 		IFieldEditor title = JQueryFieldEditorFactory.createTitleEditor();
 		title.setValue("");
 		addEditor(title, parent);
+
+		createIDEditor(parent, true);
 
 		Composite[] columns = NewRangeSliderWizardPage.createTwoColumns(parent);
 		Composite left = columns[0];
@@ -86,18 +87,12 @@ public class NewFooterWizardPage extends AbstractNewHTMLWidgetWizardPage impleme
 		buttons.onPropertyChange(name, value);
 
 		boolean hasIcons = buttons.hasIcons();
-		boolean icononly = TRUE.equals(getEditorValue(EDITOR_ID_ICON_ONLY));
-		if(getEditor(EDITOR_ID_ICON_POS) != null) {
-			getEditor(EDITOR_ID_ICON_POS).setEnabled(hasIcons && !icononly);
-		}
-		if(getEditor(EDITOR_ID_ICON_ONLY) != null) {
-			getEditor(EDITOR_ID_ICON_ONLY).setEnabled(hasIcons);
-		}
+		boolean icononly = isTrue(EDITOR_ID_ICON_ONLY);
+		setEnabled(EDITOR_ID_ICON_POS, hasIcons && !icononly);
+		setEnabled(EDITOR_ID_ICON_ONLY, hasIcons);
 
 		boolean isFixed = TRUE.equals(getEditorValue(EDITOR_ID_FIXED_POSITION));
-		if(getEditor(EDITOR_ID_FULL_SCREEN) != null) {
-			getEditor(EDITOR_ID_FULL_SCREEN).setEnabled(isFixed);
-		}
+		setEnabled(EDITOR_ID_FULL_SCREEN, isFixed);
 		
 		super.propertyChange(evt);
 	}

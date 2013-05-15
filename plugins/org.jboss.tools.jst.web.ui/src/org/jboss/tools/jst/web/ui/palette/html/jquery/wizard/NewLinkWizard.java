@@ -37,6 +37,8 @@ public class NewLinkWizard extends NewJQueryWidgetWizard<NewLinkWizardPage> impl
 
 		NewButtonWizard.applyAction(page, a);
 
+		addID("link-", a);
+
 		String transition = page.getEditorValue(EDITOR_ID_TRANSITION);
 		if(transition.length() > 0) {
 			a.addAttribute(ATTR_DATA_TRANSITION, transition);

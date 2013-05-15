@@ -42,6 +42,8 @@ public class NewNavbarWizard extends NewJQueryWidgetWizard<NewNavbarWizardPage> 
 		ElementNode navbar = parent.addChild(TAG_DIV);
 		navbar.addAttribute(ATTR_DATA_ROLE, ROLE_NAVBAR);
 
+		addID("navbar-", navbar);
+
 		String iconpos = page.getEditorValue(EDITOR_ID_ICON_POS);
 		if(iconpos.length() > 0) {
 			navbar.addAttribute(ATTR_DATA_ICONPOS, iconpos);

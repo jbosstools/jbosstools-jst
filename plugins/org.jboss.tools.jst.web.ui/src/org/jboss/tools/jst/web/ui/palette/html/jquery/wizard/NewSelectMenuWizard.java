@@ -37,9 +37,7 @@ public class NewSelectMenuWizard extends NewJQueryWidgetWizard<NewSelectMenuWiza
 			parent = div;
 		}
 		
-		String prefixName = "select-";
-		String suffixName = "";
-		String name = prefixName + generateIndex(prefixName, suffixName, 1) + suffixName;
+		String name = getID("select-");
 
 		ElementNode label = parent.addChild(TAG_LABEL, page.getEditorValue(EDITOR_ID_LABEL));
 		label.addAttribute(ATTR_FOR, name);
