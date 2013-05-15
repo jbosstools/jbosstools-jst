@@ -208,6 +208,7 @@ public interface JQueryConstants extends HTMLConstants {
 	public String EDITOR_ID_FULL_SCREEN = "full-screen";
 	public String EDITOR_ID_LEFT_BUTTON = "left-button";
 	public String EDITOR_ID_RIGHT_BUTTON = "right-button";
+	public String EDITOR_ID_BACK_BUTTON = "back-button";
 	public String EDITOR_ID_LEFT_BUTTON_LABEL = "left-button-label";
 	public String EDITOR_ID_LEFT_BUTTON_URL = "left-button-uri";
 	public String EDITOR_ID_LEFT_BUTTON_ICON = "left-button-icon";

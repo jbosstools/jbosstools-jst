@@ -37,7 +37,7 @@ public class NewPageWizard extends NewJQueryWidgetWizard<NewPageWizardPage> impl
 			id = "page-" + generateIndex("page-", "", 1);
 		}
 
-		ElementNode pg = parent.addChild(TAG_DIV, page.getEditorValue(EDITOR_ID_LABEL));
+		ElementNode pg = parent.addChild(TAG_DIV);
 		pg.addAttribute(ATTR_DATA_ROLE, ROLE_PAGE);
 		pg.addAttribute(ATTR_ID, id);
 		
@@ -46,6 +46,7 @@ public class NewPageWizard extends NewJQueryWidgetWizard<NewPageWizardPage> impl
 		if(isTrue(EDITOR_ID_ADD_HEADER)) {
 			ElementNode header = pg.addChild(TAG_DIV);
 			header.addAttribute(ATTR_DATA_ROLE, ROLE_HEADER);
+			addBackButton(header);
 			header.addChild("h1", page.getEditorValue(EDITOR_ID_HEADER_TITLE));
 			if(themeValue.length() > 0) {
 				header.addAttribute(ATTR_DATA_THEME, themeValue);
@@ -55,6 +56,9 @@ public class NewPageWizard extends NewJQueryWidgetWizard<NewPageWizardPage> impl
 		ElementNode content = pg.addChild(TAG_DIV);
 		content.addAttribute(ATTR_DATA_ROLE, ROLE_CONTENT);
 		content.addChild("p", "Page content goes here.");
+		if(!isTrue(EDITOR_ID_ADD_HEADER)) {
+			addBackButton(content);
+		}
 		content.getChildren().add(SEPARATOR);
 
 		if(isTrue(EDITOR_ID_ADD_FOOTER)) {
@@ -68,6 +72,22 @@ public class NewPageWizard extends NewJQueryWidgetWizard<NewPageWizardPage> impl
 		
 		if(themeValue.length() > 0) {
 			pg.addAttribute(ATTR_DATA_THEME, themeValue);
+		}
+	}
+
+	void addBackButton(ElementNode parent) {
+		if(isTrue(EDITOR_ID_BACK_BUTTON)) {
+			ElementNode a = parent.addChild(TAG_A, page.getEditorValue(EDITOR_ID_LABEL));
+			a.addAttribute(ATTR_HREF, "#");
+			a.addAttribute(ATTR_DATA_ROLE, ROLE_BUTTON);
+			a.addAttribute(ATTR_DATA_REL, DATA_REL_BACK);
+			String icon = page.getEditorValue(EDITOR_ID_ICON);
+			if(icon.length() > 0) {
+				a.addAttribute(ATTR_DATA_ICON, icon);
+			}
+			if(isTrue(EDITOR_ID_ICON_ONLY)) {
+				a.addAttribute(ATTR_DATA_ICONPOS, ICONPOS_NOTEXT);
+			}				
 		}
 	}
 
