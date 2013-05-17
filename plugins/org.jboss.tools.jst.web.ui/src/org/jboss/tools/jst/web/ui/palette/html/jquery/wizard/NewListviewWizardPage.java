@@ -30,27 +30,25 @@ public class NewListviewWizardPage extends NewJQueryWidgetWizardPage {
 	}
 
 	protected void createFieldPanel(Composite parent) {
-		Composite[] columns = NewRangeSliderWizardPage.createTwoColumns(parent);
-		Composite left = columns[0];
-		Composite right = columns[1];
+		TwoColumns columns = createTwoColumns(parent);
 
 		IFieldEditor numbered = JQueryFieldEditorFactory.createNumberedEditor();
-		addEditor(numbered, left);
+		addEditor(numbered, columns.left());
 		
 		IFieldEditor readonly = JQueryFieldEditorFactory.createReadonlyEditor();
-		addEditor(readonly, right);
+		addEditor(readonly, columns.right());
 
 		IFieldEditor autodividers = JQueryFieldEditorFactory.createAutodividersEditor();
-		addEditor(autodividers, left);
+		addEditor(autodividers, columns.left());
 
 		IFieldEditor searchFilter = JQueryFieldEditorFactory.createSearchFilterEditor();
-		addEditor(searchFilter, right);
+		addEditor(searchFilter, columns.right());
 
 		IFieldEditor inset = JQueryFieldEditorFactory.createInsetEditor();
-		addEditor(inset, left);
+		addEditor(inset, columns.left());
 
 		IFieldEditor span = JQueryFieldEditorFactory.createSpan("span", 3);
-		addEditor(span, right);
+		addEditor(span, columns.right());
 
 		createIDEditor(parent, false);
 

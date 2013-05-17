@@ -65,21 +65,19 @@ public class NewPopupWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor close = JQueryFieldEditorFactory.createClosePopupButtonEditor();
 		addEditor(close, windowPanel);
 		
-		Composite[] columns = NewRangeSliderWizardPage.createTwoColumns(windowPanel);
-		Composite left = columns[0];
-		Composite right = columns[1];
+		TwoColumns columns = createTwoColumns(windowPanel);
 
 		IFieldEditor dismissable = JQueryFieldEditorFactory.createDismissableEditor();
-		addEditor(dismissable, left);
+		addEditor(dismissable, columns.left());
 
 		IFieldEditor shadow = JQueryFieldEditorFactory.createShadowEditor();
-		addEditor(shadow, right);
+		addEditor(shadow, columns.right());
 
 		IFieldEditor padding = JQueryFieldEditorFactory.createPaddingEditor();
-		addEditor(padding, left);
+		addEditor(padding, columns.left());
 
 		IFieldEditor overlay = JQueryFieldEditorFactory.createOverlayEditor();
-		addEditor(overlay, right);
+		addEditor(overlay, columns.right());
 
 		IFieldEditor corners = JQueryFieldEditorFactory.createCornersEditor();
 		addEditor(corners, windowPanel);

@@ -11,8 +11,6 @@
 package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.model.ui.editors.dnd.ValidationException;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
@@ -38,40 +36,38 @@ public class NewRangeSliderWizardPage extends NewJQueryWidgetWizardPage {
 		createIDEditor(parent, false);
 		createSeparator(parent);
 
-		Composite[] columns = createTwoColumns(parent);
-		Composite left = columns[0];
-		Composite right = columns[1];
+		TwoColumns columns = createTwoColumns(parent);
 
 		IFieldEditor min = JQueryFieldEditorFactory.createMinEditor();
-		addEditor(min, right);
+		addEditor(min, columns.right());
 
 		IFieldEditor max = JQueryFieldEditorFactory.createMaxEditor();
-		addEditor(max, right);
+		addEditor(max, columns.right());
 
 		IFieldEditor step = JQueryFieldEditorFactory.createStepEditor();
-		addEditor(step, right);
+		addEditor(step, columns.right());
 
 		IFieldEditor value = JQueryFieldEditorFactory.createValueEditor();
 		value.setValue("40");
-		addEditor(value, right);
+		addEditor(value, columns.right());
 
 		IFieldEditor rightValue = JQueryFieldEditorFactory.createRightValueEditor();
-		addEditor(rightValue, right);
+		addEditor(rightValue, columns.right());
 
 		IFieldEditor mini = JQueryFieldEditorFactory.createMiniEditor();
-		addEditor(mini, left);
+		addEditor(mini, columns.left());
 
 		IFieldEditor highlight = JQueryFieldEditorFactory.createHighlightEditor();
-		addEditor(highlight, left);
+		addEditor(highlight, columns.left());
 
 		IFieldEditor disabled = JQueryFieldEditorFactory.createDisabledEditor();
-		addEditor(disabled, left);
+		addEditor(disabled, columns.left());
 
 		IFieldEditor hideLabel = JQueryFieldEditorFactory.createHideLabelEditor();
-		addEditor(hideLabel, left);
+		addEditor(hideLabel, columns.left());
 
 		IFieldEditor range = JQueryFieldEditorFactory.createRangeEditor();
-		addEditor(range, left);
+		addEditor(range, columns.left());
 
 		createSeparator(parent);
 		
@@ -85,34 +81,6 @@ public class NewRangeSliderWizardPage extends NewJQueryWidgetWizardPage {
 	public void validate() throws ValidationException {
 		setEnabled(EDITOR_ID_RVALUE, isTrue(EDITOR_ID_RANGE));
 		super.validate();
-	}
-
-	public static Composite[] createTwoColumns(Composite parent) {
-		Composite all = new Composite(parent, SWT.NONE);
-		GridData d = new GridData(GridData.FILL_HORIZONTAL);
-		d.horizontalSpan = 3;
-		all.setLayoutData(d);
-		GridLayout layout = new GridLayout(2, false);
-		layout.marginWidth = 0;
-		layout.marginHeight = 0;
-		layout.horizontalSpacing = 20;
-		all.setLayout(layout);
-		
-		Composite left = new Composite(all, SWT.NONE);
-		left.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		layout = new GridLayout(3, false);
-		layout.marginWidth = 0;
-		layout.marginHeight = 0;
-		left.setLayout(layout);
-
-		Composite right = new Composite(all, SWT.NONE);
-		right.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		layout = new GridLayout(3, false);
-		layout.marginWidth = 0;
-		layout.marginHeight = 0;
-		right.setLayout(layout);
-		
-		return new Composite[]{left, right};
 	}
 
 	protected int getPreferredBrowser() {

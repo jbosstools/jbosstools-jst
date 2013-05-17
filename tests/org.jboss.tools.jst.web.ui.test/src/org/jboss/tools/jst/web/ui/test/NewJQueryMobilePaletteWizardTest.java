@@ -404,6 +404,34 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		wizardPage.setEditorValue(EDITOR_ID_LAYOUT, LAYOUT_VERTICAL);
 		assertTextDoesNotExist(wizard, ROLE_FIELDCONTAIN);
 
+		IFieldEditor min = ((CompositeEditor)wizardPage.getEditor(EDITOR_ID_MIN)).getEditors().get(1);
+		assertFalse(min.isEnabled());
+		wizardPage.setEditorValue(EDITOR_ID_TEXT_TYPE, "number");
+		assertTrue(min.isEnabled());
+
+		assertTextDoesNotExist(wizard, ATTR_AUTOFOCUS);
+		wizardPage.setEditorValue(EDITOR_ID_AUTOFOCUS, TRUE);
+		assertAttrExists(wizard, ATTR_AUTOFOCUS, TRUE);
+		wizardPage.setEditorValue(EDITOR_ID_AUTOFOCUS, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_AUTOFOCUS);
+
+		assertTextDoesNotExist(wizard, ATTR_REQUIRED);
+		wizardPage.setEditorValue(EDITOR_ID_REQUIRED, TRUE);
+		assertAttrExists(wizard, ATTR_REQUIRED, TRUE);
+		wizardPage.setEditorValue(EDITOR_ID_REQUIRED, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_REQUIRED);
+
+		assertTextDoesNotExist(wizard, ATTR_PATTERN);
+		wizardPage.setEditorValue(EDITOR_ID_PATTERN, "(");
+		assertAttrExists(wizard, ATTR_PATTERN, "(");
+		assertNotNull(wizardPage.getMessage());
+		assertTrue(wizardPage.getMessage().toLowerCase().indexOf("unclosed") >= 0);
+		wizardPage.setEditorValue(EDITOR_ID_PATTERN, ".*");
+		assertAttrExists(wizard, ATTR_PATTERN, ".*");
+		assertNull(wizardPage.getMessage());
+		wizardPage.setEditorValue(EDITOR_ID_PATTERN, "");
+		assertTextDoesNotExist(wizard, ATTR_PATTERN);
+
 		wizard.performFinish();
 
 		assertTextIsInserted(wizardPage.getEditorValue(EDITOR_ID_LABEL));

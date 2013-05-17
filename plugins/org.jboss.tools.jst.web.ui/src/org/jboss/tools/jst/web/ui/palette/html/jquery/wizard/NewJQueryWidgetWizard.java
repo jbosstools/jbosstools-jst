@@ -154,6 +154,13 @@ public abstract class NewJQueryWidgetWizard<P extends NewJQueryWidgetWizardPage>
 		script.addAttribute(ATTR_SRC, jQueryMobileScriptURI);
 	}
 
+	protected void addAttributeIfNotEmpty(ElementNode n, String attrName, String editorID) {
+		String value = page.getEditorValue(editorID);
+		if(value != null && value.length() > 0) {
+			n.addAttribute(attrName, value);
+		}
+	}
+
 	abstract class ResourceConstants {
 		public String getSite() {
 			return "http://code.jquery.com/";

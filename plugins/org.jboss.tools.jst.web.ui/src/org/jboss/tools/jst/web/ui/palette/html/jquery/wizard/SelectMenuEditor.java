@@ -10,7 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
-import org.eclipse.swt.widgets.Composite;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewJQueryWidgetWizardPage.TwoColumns;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 
 /**
@@ -33,11 +33,9 @@ public class SelectMenuEditor extends ItemsEditor {
 	protected void createItemEditors() {
 		addItemEditor(JQueryFieldEditorFactory.createLabelEditor(EDITOR_ID_OPTION));
 		addItemEditor(JQueryFieldEditorFactory.createValueEditor());
-		Composite[] columns = NewRangeSliderWizardPage.createTwoColumns(control);
-		Composite left = columns[0];
-		Composite right = columns[1];
-		page.addEditor(JQueryFieldEditorFactory.createSelectedEditor(), left);
-		page.addEditor(JQueryFieldEditorFactory.createDisabledEditor(), right);
+		TwoColumns columns = NewJQueryWidgetWizardPage.createTwoColumns(control);
+		page.addEditor(JQueryFieldEditorFactory.createSelectedEditor(), columns.left());
+		page.addEditor(JQueryFieldEditorFactory.createDisabledEditor(), columns.right());
 	}
 
 	public String getLabel(int i) {

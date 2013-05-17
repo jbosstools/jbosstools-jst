@@ -74,9 +74,21 @@ public class NewTextInputWizard extends NewJQueryWidgetWizard<NewTextInputWizard
 			input.addAttribute(ATTR_DATA_VALUE, page.getEditorValue(EDITOR_ID_VALUE));
 		}
 		
-		String placeholder = page.getEditorValue(EDITOR_ID_PLACEHOLDER);
-		if(placeholder.length() > 0) {
-			input.addAttribute(ATTR_PLACEHOLDER, placeholder);
+		addAttributeIfNotEmpty(input, ATTR_PLACEHOLDER, EDITOR_ID_PLACEHOLDER);
+	
+		if(TYPE_NUMBER.equals(type)) {
+			addAttributeIfNotEmpty(input, ATTR_DATA_MIN, EDITOR_ID_MIN);
+			addAttributeIfNotEmpty(input, ATTR_DATA_MAX, EDITOR_ID_MAX);
+			addAttributeIfNotEmpty(input, ATTR_DATA_STEP, EDITOR_ID_STEP);
+		}
+
+		addAttributeIfNotEmpty(input, ATTR_PATTERN, EDITOR_ID_PATTERN);
+		addAttributeIfNotEmpty(input, ATTR_MAXLENGTH, EDITOR_ID_MAXLENGTH);
+		if(isTrue(EDITOR_ID_AUTOFOCUS)) {
+			input.addAttribute(ATTR_AUTOFOCUS, TRUE);
+		}
+		if(isTrue(EDITOR_ID_REQUIRED)) {
+			input.addAttribute(ATTR_REQUIRED, TRUE);
 		}
 
 		String themeValue = page.getEditorValue(EDITOR_ID_THEME);

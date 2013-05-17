@@ -45,33 +45,31 @@ public class NewFooterWizardPage extends NewJQueryWidgetWizardPage {
 
 		createIDEditor(parent, true);
 
-		Composite[] columns = NewRangeSliderWizardPage.createTwoColumns(parent);
-		Composite left = columns[0];
-		Composite right = columns[1];
+		TwoColumns columns = createTwoColumns(parent);
 
 		IFieldEditor fixed = JQueryFieldEditorFactory.createFixedPositionEditor();
-		addEditor(fixed, left);
+		addEditor(fixed, columns.left());
 		
 		IFieldEditor fullScreen = JQueryFieldEditorFactory.createFullScreenEditor();
-		addEditor(fullScreen, right);
+		addEditor(fullScreen, columns.right());
+
+		setEnabled(EDITOR_ID_FULL_SCREEN, false);
 
 		Composite panel = buttons.createControl(parent, "Buttons");
 
 		IFieldEditor arrangement = JQueryFieldEditorFactory.createArragementEditor();
 		addEditor(arrangement, panel);
 
-		columns = NewRangeSliderWizardPage.createTwoColumns(panel);
-		GridLayout l = (GridLayout)columns[0].getLayout();
+		columns = createTwoColumns(panel);
+		GridLayout l = (GridLayout)columns.left().getLayout();
 		l.marginBottom = 2;
-		columns[0].setLayout(l);
-		left = columns[0];
-		right = columns[1];
+		columns.left().setLayout(l);
 
 		IFieldEditor iconpos = JQueryFieldEditorFactory.createIconPositionEditor();
-		addEditor(iconpos, left, true);
+		addEditor(iconpos, columns.left(), true);
 
 		IFieldEditor icononly = JQueryFieldEditorFactory.createIconOnlyEditor();
-		addEditor(icononly, right);
+		addEditor(icononly, columns.right());
 
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
 		addEditor(theme, parent, true);
