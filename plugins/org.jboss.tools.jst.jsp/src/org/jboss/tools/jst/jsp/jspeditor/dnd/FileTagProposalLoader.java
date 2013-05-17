@@ -197,7 +197,7 @@ public class FileTagProposalLoader implements ITagProposalLoader {
 			IFile f = ((IFileEditorInput)dropData.getEditorInput()).getFile();
 			List<TagProposal> result = new ArrayList<TagProposal>();
 			for (int i = 0; i < tagProposals.length; i++) {
-				dropData.getValueProvider().setProposal(tagProposals[i]);
+				dropData.getValueProvider().setProposal(tagProposals[i], true);
 				TagAttributesComposite.AttributeDescriptorValue[] values = dropData.getValueProvider().getValues();
 				if(values == null || values.length == 0) continue;
 				Set<String> as = new HashSet<String>();

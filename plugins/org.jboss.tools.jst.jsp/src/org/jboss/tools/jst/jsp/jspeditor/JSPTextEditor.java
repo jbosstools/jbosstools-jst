@@ -791,7 +791,13 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		JspELCompletionProposalComputer processor;
 		IPageContext pageContext;
 
+		@Override
 		public void setProposal(ITagProposal proposal) {
+			setProposal(proposal, false);
+		}
+
+		@Override
+		public void setProposal(ITagProposal proposal, boolean useDeclaredLibsOnly) {
 			if(this.proposal == proposal) return;
 			this.proposal = (TagProposal)proposal;
 			
@@ -810,7 +816,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 
 			query = createQuery(this.proposal, prefix);
 
-			if(n == null && pageContext instanceof JspContextImpl) {
+			if(n == null && pageContext instanceof JspContextImpl && !useDeclaredLibsOnly) {
 				IRegion r = new Region(query.getOffset(), 0);
 				((JspContextImpl)pageContext).addNameSpace(r, new NameSpace(query.getUri(), query.getPrefix(),
 						pageContext.getResource() == null ? new ITagLibrary[0] :
