@@ -38,15 +38,13 @@ public class NewTableWizardPage extends NewJQueryWidgetWizardPage {
 
 		columns.createControl(parent, WizardMessages.columnsLabel);
 
-		Composite[] columns = NewRangeSliderWizardPage.createTwoColumns(parent);
-		Composite left = columns[0];
-		Composite right = columns[1];
+		TwoColumns columns = createTwoColumns(parent);
 
 		IFieldEditor responsive = JQueryFieldEditorFactory.createResponsiveEditor();
-		addEditor(responsive, left);
+		addEditor(responsive, columns.left());
 
 		IFieldEditor stripes = JQueryFieldEditorFactory.createStripesEditor();
-		addEditor(stripes, right);
+		addEditor(stripes, columns.right());
 
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
 		addEditor(theme, parent, true);

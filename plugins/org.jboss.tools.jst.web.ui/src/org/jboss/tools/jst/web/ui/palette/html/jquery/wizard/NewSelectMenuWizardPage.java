@@ -39,21 +39,19 @@ public class NewSelectMenuWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor layout = JQueryFieldEditorFactory.createLayoutEditor();
 		addEditor(layout, parent);
 
-		Composite[] columns = NewRangeSliderWizardPage.createTwoColumns(parent);
-		Composite left = columns[0];
-		Composite right = columns[1];
+		TwoColumns columns = createTwoColumns(parent);
 
 		IFieldEditor mini = JQueryFieldEditorFactory.createMiniEditor();
-		addEditor(mini, left);
+		addEditor(mini, columns.left());
 
 		IFieldEditor corners = JQueryFieldEditorFactory.createCornersEditor();
-		addEditor(corners, right);
+		addEditor(corners, columns.right());
 
 		IFieldEditor hideLabel = JQueryFieldEditorFactory.createHideLabelEditor();
-		addEditor(hideLabel, left);
+		addEditor(hideLabel, columns.left());
 		
 		IFieldEditor inline = JQueryFieldEditorFactory.createInlineEditor();
-		addEditor(inline, right);
+		addEditor(inline, columns.right());
 
 //		IFieldEditor span = JQueryFieldEditorFactory.createSpan("span", 3);
 //		addEditor(span, right);

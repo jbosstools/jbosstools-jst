@@ -45,21 +45,19 @@ public class NewButtonWizardPage extends NewJQueryWidgetWizardPage {
 		createIDEditor(parent, true);
 		createSeparator(parent);
 
-		Composite[] columns = NewRangeSliderWizardPage.createTwoColumns(parent);
-		Composite left = columns[0];
-		Composite right = columns[1];
+		TwoColumns columns = createTwoColumns(parent);
 
 		IFieldEditor mini = JQueryFieldEditorFactory.createMiniEditor();
-		addEditor(mini, left);
+		addEditor(mini, columns.left());
 
 		IFieldEditor corners = JQueryFieldEditorFactory.createCornersEditor();
-		addEditor(corners, right);
+		addEditor(corners, columns.right());
 
 		IFieldEditor inline = JQueryFieldEditorFactory.createInlineEditor();
-		addEditor(inline, left);
+		addEditor(inline, columns.left());
 
 		IFieldEditor span = JQueryFieldEditorFactory.createSpan("span", 3);
-		addEditor(span, right);
+		addEditor(span, columns.right());
 
 		createSeparator(parent);
 	

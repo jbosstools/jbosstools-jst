@@ -55,8 +55,12 @@ public interface JQueryConstants extends HTMLConstants {
 	public String ATTR_DATA_STEP = "step";
 	public String ATTR_DATA_VALUE = "value";
 	public String ATTR_PLACEHOLDER = "placeholder";
+	public String ATTR_PATTERN = "pattern";
 	public String ATTR_DATA_DISMISSABLE = "data-dismissible";
 	public String ATTR_DATA_SHADOW = "data-shadow";
+	public String ATTR_AUTOFOCUS = "autofocus";
+	public String ATTR_REQUIRED = "required";
+	public String ATTR_MAXLENGTH = "maxlength";
 
 	public String TRUE = "true";
 	public String FALSE = "false";
@@ -205,6 +209,10 @@ public interface JQueryConstants extends HTMLConstants {
 	public String EDITOR_ID_TEXT_TYPE = "text-type";
 	public String EDITOR_ID_CLEAR_INPUT = "clear-input";
 	public String EDITOR_ID_PLACEHOLDER = "placeholder";
+	public String EDITOR_ID_PATTERN = "pattern";
+	public String EDITOR_ID_AUTOFOCUS = "autofocus";
+	public String EDITOR_ID_REQUIRED = "required";
+	public String EDITOR_ID_MAXLENGTH = "maxlength";
 	public String EDITOR_ID_FIXED_POSITION = "fixed";
 	public String EDITOR_ID_FULL_SCREEN = "full-screen";
 	public String EDITOR_ID_LEFT_BUTTON = "left-button";

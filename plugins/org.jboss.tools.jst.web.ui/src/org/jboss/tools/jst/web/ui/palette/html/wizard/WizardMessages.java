@@ -77,6 +77,10 @@ public class WizardMessages extends NLS {
 	public static String clearInputLabel;
 	public static String textTypeLabel;
 	public static String placeholderLabel;
+	public static String patternLabel;
+	public static String maxlengthLabel;
+	public static String requiredLabel;
+	public static String autofocusLabel;
 	public static String fixedPositionLabel;
 	public static String fullScreenLabel;
 	public static String leftButtonLabel;

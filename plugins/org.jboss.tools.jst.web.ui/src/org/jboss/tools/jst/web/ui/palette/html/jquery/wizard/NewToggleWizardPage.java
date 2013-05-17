@@ -41,21 +41,19 @@ public class NewToggleWizardPage extends NewJQueryWidgetWizardPage {
 		
 		createSeparator(parent);
 		
-		Composite[] columns = NewRangeSliderWizardPage.createTwoColumns(parent);
-		Composite left = columns[0];
-		Composite right = columns[1];
+		TwoColumns columns = createTwoColumns(parent);
 
 		IFieldEditor mini = JQueryFieldEditorFactory.createMiniEditor();
-		addEditor(mini, left);
+		addEditor(mini, columns.left());
 
 		IFieldEditor disabled = JQueryFieldEditorFactory.createDisabledEditor();
-		addEditor(disabled, right);
+		addEditor(disabled, columns.right());
 
 		IFieldEditor hideLabel = JQueryFieldEditorFactory.createHideLabelEditor();
-		addEditor(hideLabel, left);
+		addEditor(hideLabel, columns.left());
 		
 		IFieldEditor span = JQueryFieldEditorFactory.createSpan("span", 3);
-		addEditor(span, right);
+		addEditor(span, columns.right());
 
 		IFieldEditor layout = JQueryFieldEditorFactory.createLayoutEditor();
 		addEditor(layout, parent, true);

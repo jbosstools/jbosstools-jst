@@ -37,26 +37,22 @@ public class NewHeaderBarWizardPage extends NewJQueryWidgetWizardPage {
 
 		createIDEditor(parent, true);
 
-		Composite[] columns = NewRangeSliderWizardPage.createTwoColumns(parent);
-		Composite left = columns[0];
-		Composite right = columns[1];
+		TwoColumns columns = createTwoColumns(parent);
 
 		IFieldEditor fixed = JQueryFieldEditorFactory.createFixedPositionEditor();
-		addEditor(fixed, left);
+		addEditor(fixed, columns.left());
 		
 		IFieldEditor fullScreen = JQueryFieldEditorFactory.createFullScreenEditor();
-		addEditor(fullScreen, right);
+		addEditor(fullScreen, columns.right());
 
 		createSeparator(parent);
 
-		columns = NewRangeSliderWizardPage.createTwoColumns(parent);
-		left = columns[0];
-		right = columns[1];
+		columns = createTwoColumns(parent);
 
 		IFieldEditor leftButton = JQueryFieldEditorFactory.createLeftButtonEditor();
-		addEditor(leftButton, left);
+		addEditor(leftButton, columns.left());
 
-		Composite leftParent = new Composite(left, SWT.BORDER);
+		Composite leftParent = new Composite(columns.left(), SWT.BORDER);
 		GridData d = new GridData(GridData.FILL_HORIZONTAL);
 		d.horizontalSpan = 3;
 		leftParent.setLayoutData(d);
@@ -76,9 +72,9 @@ public class NewHeaderBarWizardPage extends NewJQueryWidgetWizardPage {
 		addEditor(leftButtonIcon, leftParent);
 
 		IFieldEditor rightButton = JQueryFieldEditorFactory.createRightButtonEditor();
-		addEditor(rightButton, right);
+		addEditor(rightButton, columns.right());
 		
-		Composite rightParent = new Composite(right, SWT.BORDER);
+		Composite rightParent = new Composite(columns.right(), SWT.BORDER);
 		d = new GridData(GridData.FILL_HORIZONTAL);
 		d.horizontalSpan = 3;
 		rightParent.setLayoutData(d);

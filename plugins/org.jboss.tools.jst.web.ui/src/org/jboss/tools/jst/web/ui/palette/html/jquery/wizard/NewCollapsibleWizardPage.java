@@ -33,21 +33,19 @@ public class NewCollapsibleWizardPage extends NewJQueryWidgetWizardPage {
 
 		createIDEditor(parent, true);
 
-		Composite[] columns = NewRangeSliderWizardPage.createTwoColumns(parent);
-		Composite left = columns[0];
-		Composite right = columns[1];
+		TwoColumns columns = createTwoColumns(parent);
 
 		IFieldEditor fieldSet = JQueryFieldEditorFactory.createFieldSetEditor();
-		addEditor(fieldSet, left);
+		addEditor(fieldSet, columns.left());
 
 		IFieldEditor collapsed = JQueryFieldEditorFactory.createCollapsedEditor();
-		addEditor(collapsed, right);
+		addEditor(collapsed, columns.right());
 
 		IFieldEditor mini = JQueryFieldEditorFactory.createMiniEditor();
-		addEditor(mini, left);
+		addEditor(mini, columns.left());
 
 		IFieldEditor inset = JQueryFieldEditorFactory.createInsetEditor();
-		addEditor(inset, right);
+		addEditor(inset, columns.right());
 
 		createSeparator(parent);
 	

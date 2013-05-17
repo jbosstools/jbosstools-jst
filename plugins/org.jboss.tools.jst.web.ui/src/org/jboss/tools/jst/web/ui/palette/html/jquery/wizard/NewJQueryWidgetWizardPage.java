@@ -12,6 +12,9 @@ package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import java.beans.PropertyChangeEvent;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.model.ui.editors.dnd.ValidationException;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
@@ -78,6 +81,55 @@ public class NewJQueryWidgetWizardPage extends AbstractNewHTMLWidgetWizardPage i
 		IFieldEditor editor = getEditor(editorName);
 		if(editor != null) {
 			editor.setEnabled(value);
+		}
+	}
+
+	public static Composite[] createColumns(Composite parent, int k) {
+		Composite all = new Composite(parent, SWT.NONE);
+		GridData d = new GridData(GridData.FILL_HORIZONTAL);
+		d.horizontalSpan = 3;
+		all.setLayoutData(d);
+		GridLayout layout = new GridLayout(k, false);
+		layout.marginWidth = 0;
+		layout.marginHeight = 0;
+		layout.horizontalSpacing = 20;
+		all.setLayout(layout);
+
+		Composite[] result = new Composite[k];
+
+		for (int i = 0; i < k; i++) {
+			Composite c = new Composite(all, SWT.NONE);
+			c.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			layout = new GridLayout(3, false);
+			layout.marginWidth = 0;
+			layout.marginHeight = 0;
+			c.setLayout(layout);
+			result[i] = c;
+		}
+
+		return result;
+	}
+
+	public static TwoColumns createTwoColumns(Composite parent) {
+		Composite[] columns = createColumns(parent, 2);
+		return new TwoColumns(columns[0], columns[1]);
+	}
+
+	public static class TwoColumns {
+		private Composite left;
+		private Composite right;
+		
+		public TwoColumns(Composite left, Composite right) {
+			this.left = left;
+			this.right = right;
+		}
+
+		public Composite left() {
+			return left;
+		}
+	
+		public Composite right() {
+			return right;
 		}
 	}
 

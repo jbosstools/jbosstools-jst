@@ -387,6 +387,22 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_PLACEHOLDER, WizardMessages.placeholderLabel, "");
 	}
 
+	public static IFieldEditor createPatternEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_PATTERN, WizardMessages.patternLabel, "");
+	}
+
+	public static IFieldEditor createMaxlengthEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_MAXLENGTH, WizardMessages.maxlengthLabel, "");
+	}
+
+	public static IFieldEditor createAutofocusEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_AUTOFOCUS, WizardMessages.autofocusLabel, false);
+	}
+
+	public static IFieldEditor createRequiredEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_REQUIRED, WizardMessages.requiredLabel, false);
+	}
+
 	public static IFieldEditor createFixedPositionEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_FIXED_POSITION, WizardMessages.fixedPositionLabel, false);
 	}

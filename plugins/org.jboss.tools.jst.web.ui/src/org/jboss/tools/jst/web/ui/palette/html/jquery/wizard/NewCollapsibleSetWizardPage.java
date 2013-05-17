@@ -30,15 +30,13 @@ public class NewCollapsibleSetWizardPage extends NewJQueryWidgetWizardPage {
 	}
 
 	protected void createFieldPanel(Composite parent) {
-		Composite[] columns = NewRangeSliderWizardPage.createTwoColumns(parent);
-		Composite left = columns[0];
-		Composite right = columns[1];
+		TwoColumns columns = createTwoColumns(parent);
 
 		IFieldEditor mini = JQueryFieldEditorFactory.createMiniEditor();
-		addEditor(mini, left);
+		addEditor(mini, columns.left());
 
 		IFieldEditor inset = JQueryFieldEditorFactory.createInsetEditor();
-		addEditor(inset, right);
+		addEditor(inset, columns.right());
 
 		createIDEditor(parent, true);
 
