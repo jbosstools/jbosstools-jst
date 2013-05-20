@@ -27,6 +27,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFooterWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFooterWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGridWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGridWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedButtonsWizard;
@@ -810,6 +812,38 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		assertTextDoesNotExist(wizard, ATTR_DATA_MINI);
 
 		wizard.performFinish();
+	}
+
+	public void testNewFormWizard() {
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Form", true);
+
+		assertTrue(currentPage instanceof NewFormWizardPage);
+
+		NewFormWizardPage wizardPage = (NewFormWizardPage)currentPage;
+		NewFormWizard wizard = (NewFormWizard)wizardPage.getWizard();
+
+		assertTextDoesNotExist(wizard, ATTR_NAME);
+		wizardPage.setEditorValue(EDITOR_ID_NAME, "myForm");
+		assertAttrExists(wizard, ATTR_NAME, "myForm");
+
+		assertTextDoesNotExist(wizard, ATTR_METHOD);
+		wizardPage.setEditorValue(EDITOR_ID_FORM_METHOD, METHOD_POST);
+		assertAttrExists(wizard, ATTR_METHOD, METHOD_POST);
+		wizardPage.setEditorValue(EDITOR_ID_FORM_METHOD, METHOD_GET);
+		assertTextDoesNotExist(wizard, ATTR_METHOD);
+
+		assertTextDoesNotExist(wizard, ATTR_NOVALIDATE);
+		wizardPage.setEditorValue(EDITOR_ID_VALIDATE, FALSE);
+		assertAttrExists(wizard, ATTR_NOVALIDATE, ATTR_NOVALIDATE);
+		wizardPage.setEditorValue(EDITOR_ID_VALIDATE, TRUE);
+		assertTextDoesNotExist(wizard, ATTR_NOVALIDATE);
+
+		assertTextDoesNotExist(wizard, ATTR_AUTOCOMPLETE);
+		wizardPage.setEditorValue(EDITOR_ID_AUTOCOMPLETE, FALSE);
+		assertAttrExists(wizard, ATTR_AUTOCOMPLETE, AUTOCOMPLETE_OFF);
+		wizardPage.setEditorValue(EDITOR_ID_AUTOCOMPLETE, TRUE);
+		assertTextDoesNotExist(wizard, ATTR_AUTOCOMPLETE);
+
 	}
 
 	void assertAttrExists(AbstractNewHTMLWidgetWizard wizard, String attr, String value) {

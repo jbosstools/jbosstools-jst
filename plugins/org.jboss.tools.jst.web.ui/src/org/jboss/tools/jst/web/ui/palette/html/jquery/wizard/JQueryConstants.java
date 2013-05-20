@@ -61,6 +61,8 @@ public interface JQueryConstants extends HTMLConstants {
 	public String ATTR_AUTOFOCUS = "autofocus";
 	public String ATTR_REQUIRED = "required";
 	public String ATTR_MAXLENGTH = "maxlength";
+	public String ATTR_AUTOCOMPLETE = "autocomplete";
+	public String ATTR_NOVALIDATE = "novalidate";
 
 	public String TRUE = "true";
 	public String FALSE = "false";
@@ -157,8 +159,11 @@ public interface JQueryConstants extends HTMLConstants {
 
 	public String ICONPOS_NOTEXT = "notext";
 
+	public String AUTOCOMPLETE_OFF = "off";
+
 	public String EDITOR_ID_TITLE = "title";
 	public String EDITOR_ID_LABEL = "label";
+	public String EDITOR_ID_NAME = "name";
 	public String EDITOR_ID_LEGEND = "legend";
 	public String EDITOR_ID_OPTION = "option";
 	public String EDITOR_ID_MINI = "mini";
@@ -185,6 +190,10 @@ public interface JQueryConstants extends HTMLConstants {
 	public String EDITOR_ID_ADD_ID = "add-id";
 
 	public String EDITOR_ID_ACTION = "action";
+	public String EDITOR_ID_FORM_ACTION = "action";
+	public String EDITOR_ID_FORM_METHOD = "method";
+	public String EDITOR_ID_AUTOCOMPLETE = "autocomplete";
+	public String EDITOR_ID_VALIDATE = "validate";
 	public String EDITOR_ID_DISABLED = "disabled";
 	public String EDITOR_ID_DIVIDER = "divider";
 	public String EDITOR_ID_ICON = "icon";

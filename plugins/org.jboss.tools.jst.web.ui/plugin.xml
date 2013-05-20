@@ -813,14 +813,15 @@
       <tag name="_Palette_/Mobile/jQuery_Mobile/2.lists/3.Navbar" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewNavbarWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/2.lists/4.Select_Menu" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewSelectMenuWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/2.lists/5.Listview" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewListviewWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/1.Button" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/2.Grouped_Buttons" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedButtonsWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/3.Link" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/4.Flip_Toggle_Switch" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/5.Radio_Button" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRadioWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/6.Checkbox" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCheckBoxWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/7.Grouped_Checkboxes" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedCheckboxesWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/8.Range_Slider" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRangeSliderWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/9.Text_Input" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTextInputWizard"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/01.Button" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizard"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/02.Grouped_Buttons" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedButtonsWizard"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/03.Link" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizard"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/04.Flip_Toggle_Switch" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizard"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/05.Radio_Button" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRadioWizard"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/06.Checkbox" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCheckBoxWizard"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/07.Grouped_Checkboxes" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedCheckboxesWizard"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/08.Range_Slider" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRangeSliderWizard"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/09.Text_Input" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTextInputWizard"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/10.Form" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormWizard"/>
    </extension>
 </plugin>

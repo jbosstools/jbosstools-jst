@@ -45,6 +45,7 @@ public class JSTWebUIImages extends CommonUIImages{
 	public static String SELECT_MENU_IMAGE    = WIZARDS_PATH + "SelectWizBan.png"; //$NON-NLS-1$
 	public static String PANEL_IMAGE    = WIZARDS_PATH + "PanelWizBan.png"; //$NON-NLS-1$
 	public static String TABLE_IMAGE    = WIZARDS_PATH + "TableWizBan.png"; //$NON-NLS-1$
+	public static String FORM_IMAGE    = WIZARDS_PATH + "FormWizBan.png"; //$NON-NLS-1$
 
 	private static JSTWebUIImages INSTANCE;
 	

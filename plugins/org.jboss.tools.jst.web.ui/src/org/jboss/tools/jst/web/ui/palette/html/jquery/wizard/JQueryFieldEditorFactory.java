@@ -34,6 +34,10 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  */
 public class JQueryFieldEditorFactory implements JQueryConstants {
 
+	public static IFieldEditor createNameEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_NAME, WizardMessages.nameLabel, "");
+	}
+
 	public static IFieldEditor createLabelEditor() {
 		return createLabelEditor(EDITOR_ID_LABEL);
 	}
@@ -156,6 +160,21 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return SwtFieldEditorFactory.INSTANCE.createTextEditor(editorID, WizardMessages.urlLabel, "");
 	}
 
+	public static IFieldEditor createFormActionEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_FORM_ACTION, WizardMessages.actionLabel, "");
+	}
+
+	static String[] METHOD_LIST = {METHOD_GET, METHOD_POST};
+
+	public static IFieldEditor createFormMethodEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(
+				EDITOR_ID_FORM_METHOD, 
+				WizardMessages.methodLabel, 
+				toList(METHOD_LIST), 
+				toList(METHOD_LIST), 
+				METHOD_GET);
+	}
+
 	public static IFieldEditor createDisabledEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_DISABLED, WizardMessages.disabledLabel, false);
 	}
@@ -174,6 +193,14 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 
 	public static IFieldEditor createIconOnlyEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_ICON_ONLY, WizardMessages.iconOnlyLabel, false);
+	}
+
+	public static IFieldEditor createAutocompleteEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_AUTOCOMPLETE, WizardMessages.autocompleteLabel, true);
+	}
+
+	public static IFieldEditor createValidateEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_VALIDATE, WizardMessages.validateLabel, true);
 	}
 
 	static String[] ICON_VALUES = new String[JQueryMobileAttrProvider.ENUM_ICON_VALUES.length + 1];
