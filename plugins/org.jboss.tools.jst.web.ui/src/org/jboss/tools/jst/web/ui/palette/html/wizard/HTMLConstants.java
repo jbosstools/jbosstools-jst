@@ -66,4 +66,5 @@ public interface HTMLConstants {
 	public String SELECTED = "selected";
 
 	public String METHOD_GET = "get";
+	public String METHOD_POST = "post";
 }

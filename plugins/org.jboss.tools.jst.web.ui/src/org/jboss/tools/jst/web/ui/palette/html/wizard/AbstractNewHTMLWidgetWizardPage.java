@@ -68,7 +68,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 	protected Composite left = null;
 	protected Map<String, IFieldEditor> editors = new HashMap<String, IFieldEditor>();
 
-	protected Splitter previewPanel = null;
+	protected Composite previewPanel = null;
 	protected StyledText text;
 	protected Browser browser;
 	protected File sourceFile = null;
@@ -130,33 +130,29 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 			}
 		});
 	
-		previewPanel = new Splitter(panel, SWT.VERTICAL);
-		d = new GridData(GridData.FILL_BOTH);
-		previewPanel.setLayoutData(d);
-		previewPanel.setLayout(new GridLayout());
+		if(hasVisualPreview()) {
+			Splitter previewPanel = new Splitter(panel, SWT.VERTICAL);
+			d = new GridData(GridData.FILL_BOTH);
+			previewPanel.setLayoutData(d);
+			previewPanel.setLayout(new GridLayout());
+
+			createTextPreview(previewPanel);
 		
-		text = new StyledText(previewPanel, SWT.MULTI | SWT.READ_ONLY | SWT.BORDER | SWT.V_SCROLL);
-		text.setFont(JFaceResources.getTextFont());
-		text.setLayoutData(new GridData(GridData.FILL_BOTH));
-		/**
-		 * We set some initial content to the text widget to provide a reasonable default width
-		 * for that widget and for browser. We avoid setting width hint or other ways to 
-		 * provide the default width, because text widget and browser should be resizable 
-		 * and their content will be formatted to the available width. Also, initial width
-		 * is to depend on system font size so that initial content serves best to that purpose. 
-		 */
-		text.setText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<html><body>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</body></html>");
+			Composite browserPanel = createBrowserPanel(previewPanel);
+			browser = createBrowser(browserPanel);
 
-		Composite browserPanel = createBrowserPanel(previewPanel);
-		browser = createBrowser(browserPanel);
-
-		if(browser != null) {
-			browser.setLayoutData(new GridData(GridData.FILL_BOTH));
-			browser.pack();
+			if(browser != null) {
+				browser.setLayoutData(new GridData(GridData.FILL_BOTH));
+				browser.pack();
+			}
+			createDisclaimer(browserPanel);
+			previewPanel.setWeights(new int[]{4,6});
+			this.previewPanel = previewPanel;
+		} else {
+			createTextPreview(panel);
+			previewPanel = text;
 		}
-		createDisclaimer(browserPanel);
 
-		previewPanel.setWeights(new int[]{4,6});
 		
 		setControl(panel);
 		
@@ -183,6 +179,24 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		Display.getDefault().addFilter(SWT.Modify, focusReturn);
 	}
 
+	void createTextPreview(Composite parent) {
+		text = new StyledText(parent, SWT.MULTI | SWT.READ_ONLY | SWT.BORDER | SWT.V_SCROLL);
+		text.setFont(JFaceResources.getTextFont());
+		text.setLayoutData(new GridData(GridData.FILL_BOTH));
+		/**
+		 * We set some initial content to the text widget to provide a reasonable default width
+		 * for that widget and for browser. We avoid setting width hint or other ways to 
+		 * provide the default width, because text widget and browser should be resizable 
+		 * and their content will be formatted to the available width. Also, initial width
+		 * is to depend on system font size so that initial content serves best to that purpose. 
+		 */
+		text.setText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<html><body>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</body></html>");
+	}
+
+	protected boolean hasVisualPreview() {
+		return true;
+	}
+	
 	public String getBrowserType() {
 		return browser == null ? null : browser.getBrowserType();
 	}

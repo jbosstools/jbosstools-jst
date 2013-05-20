@@ -29,6 +29,7 @@ public class WizardMessages extends NLS {
 	public static String addReferencesToJSCSSTooltip;
 	public static String titleLabel;
 	public static String labelLabel;
+	public static String nameLabel;
 	public static String legendLabel;
 	public static String miniLabel;
 	public static String checkedLabel;
@@ -64,6 +65,9 @@ public class WizardMessages extends NLS {
 	public static String actionBackLabel;
 	public static String actionCloseLabel;
 	public static String actionExternalLabel;
+	public static String methodLabel;
+	public static String autocompleteLabel;
+	public static String validateLabel;
 	public static String rangeLabel;
 	public static String minLabel;
 	public static String maxLabel;
@@ -178,6 +182,9 @@ public class WizardMessages extends NLS {
 
 	public static String newTableTitle;
 	public static String newTableDescription;
+
+	public static String newFormWizardTitle;
+	public static String newFormWizardDescription;
 	
 	public static String errorIDisUsed;
 	
