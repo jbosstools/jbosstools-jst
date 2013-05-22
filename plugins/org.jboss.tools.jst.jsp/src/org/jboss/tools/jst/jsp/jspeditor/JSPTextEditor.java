@@ -51,9 +51,7 @@ import org.eclipse.jst.jsp.ui.internal.JSPUIPlugin;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.dnd.DND;
-import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.DropTarget;
-import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.DropTargetListener;
 import org.eclipse.swt.dnd.FileTransfer;
@@ -363,61 +361,6 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		setModified(false);
 		getSourceViewer().removeTextListener(this);
 		getSourceViewer().addTextListener(this);
-
-		Object dtid = getSourceViewer().getTextWidget().getData("DropTarget"); //$NON-NLS-1$
-		if (dtid != null) {
-			if (dtid instanceof DropTarget) {
-				DropTarget dropTarget = (DropTarget) dtid;
-				dropTarget.addDropListener(new DropTargetAdapter() {
-					private FreeCaretStyledText getFreeCaretControl(
-							Object sourceOrTarget) {
-						if (sourceOrTarget == null)
-							return null;
-
-						Object control = null;
-
-						if (sourceOrTarget instanceof DropTarget) {
-							control = ((DropTarget) sourceOrTarget)
-									.getControl();
-						} else if (sourceOrTarget instanceof DragSource) {
-							control = ((DragSource) sourceOrTarget)
-									.getControl();
-						} else
-							return null;
-
-						if (control instanceof FreeCaretStyledText)
-							return (FreeCaretStyledText) control;
-						return null;
-					}
-
-					public void dragEnter(DropTargetEvent event) {
-						getFreeCaretControl(event.widget).enableFreeCaret(true);
-					}
-
-					public void dragLeave(DropTargetEvent event) {
-						getFreeCaretControl(event.widget)
-								.enableFreeCaret(false);
-					}
-
-					public void dragOperationChanged(DropTargetEvent event) {
-						getFreeCaretControl(event.widget)
-								.enableFreeCaret(false);
-					}
-
-					public void dragOver(DropTargetEvent event) {
-						FreeCaretStyledText fcst = getFreeCaretControl(event.widget);
-						int pos = getPosition(fcst, event.x, event.y);
-						Point p = fcst.getLocationAtOffset(pos);
-						fcst.myRedraw(p.x, p.y);
-					}
-
-					public void drop(DropTargetEvent event) {
-						getFreeCaretControl(event.widget)
-								.enableFreeCaret(false);
-					}
-				});
-			}
-		}
 	}
 
 	protected ISourceViewer createSourceViewer(Composite parent,
@@ -979,9 +922,8 @@ public class JSPTextEditor extends StructuredTextEditor implements
 				return;
 			}
 			
-			// show current cursor position during the drag JBIDE-13791
-			selectAndReveal(pos, 0);
-			getTextViewer().getTextWidget().forceFocus();
+			// show current cursor position during the drag JBIDE-13791 & JBIDE-14562
+			event.feedback = DND.FEEDBACK_SCROLL | DND.FEEDBACK_SELECT;
 			
 			lastpos = pos;
 			dropContext.clean();
