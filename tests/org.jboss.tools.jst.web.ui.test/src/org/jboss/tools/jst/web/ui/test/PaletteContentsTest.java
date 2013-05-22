@@ -5,6 +5,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.ui.IEditorPart;
 import org.jboss.tools.common.model.ui.views.palette.PaletteContents;
+import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.test.util.WorkbenchUtils;
 
 import junit.framework.TestCase;
@@ -41,6 +42,13 @@ public class PaletteContentsTest extends TestCase {
 		String[] x = p.getNatureTypes();
 		assertEquals(1, x.length);
 		assertEquals(PaletteContents.TYPE_JSF, x[0]);
+	}
+
+	public void testFirstPaletteOpening() {
+		JSPMultiPageEditor.resetPaletteOpened();
+		assertFalse(JSPMultiPageEditor.wasPaletteOpened());
+		openEditor("a.html");
+		assertTrue(JSPMultiPageEditor.wasPaletteOpened());		
 	}
 
 	public IEditorPart openEditor(String fileName) {
