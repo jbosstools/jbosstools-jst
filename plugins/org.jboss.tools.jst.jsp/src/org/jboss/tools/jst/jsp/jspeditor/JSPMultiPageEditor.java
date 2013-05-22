@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -56,6 +57,9 @@ import org.eclipse.ui.INavigationLocation;
 import org.eclipse.ui.INavigationLocationProvider;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.IReusableEditor;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
@@ -535,6 +539,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 			 */
 			vpeIsCreating = false;
 		}
+		checkPalette();
 	}
 
 	/*
@@ -1093,4 +1098,66 @@ class ResourceChangeListener implements IResourceChangeListener {
 		}
 		return null;
 	}
-}}
+}
+
+	public static final QualifiedName PALETTE = new QualifiedName(JspEditorPlugin.PLUGIN_ID, "PaletteWasOpened");
+	public static final String PALETTE_VALUE = "true";
+	public static final String VIEW_ID = "org.eclipse.gef.ui.palette_view";
+
+	private void checkPalette() {
+		if(!wasPaletteOpened()) {
+			Display.getDefault().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					openPalette();
+				}
+			});
+			setPaletteOpened();
+		}
+	}
+
+	public static boolean wasPaletteOpened() {
+		try {
+			return PALETTE_VALUE.equals(ResourcesPlugin.getWorkspace().getRoot().getPersistentProperty(PALETTE));
+		} catch (CoreException e) {
+			JspEditorPlugin.getDefault().logError(e);
+			return true;
+		}
+	}
+
+	public static void resetPaletteOpened() {
+		try {
+			ResourcesPlugin.getWorkspace().getRoot().setPersistentProperty(PALETTE, null);
+		} catch (CoreException e) {
+			JspEditorPlugin.getDefault().logError(e);
+		}
+	}
+
+	private void openPalette() {
+		IWorkbenchWindow window = JspEditorPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow();
+		if(window != null) {
+			IWorkbenchPage page = window.getActivePage();
+			if(page != null) {
+				IViewPart part = page.findView(VIEW_ID);
+				if(part == null) {
+					try {
+						part = page.showView(VIEW_ID, null, IWorkbenchPage.VIEW_VISIBLE);
+					} catch (PartInitException e) {
+						JspEditorPlugin.getDefault().logError(e);
+					}
+				} else {
+					page.bringToTop(part);
+				}
+			}
+		}
+	}
+
+	private static void setPaletteOpened() {
+		try {
+			ResourcesPlugin.getWorkspace().getRoot().setPersistentProperty(PALETTE, PALETTE_VALUE);
+		} catch (CoreException e) {
+			JspEditorPlugin.getDefault().logError(e);
+		}
+	}
+
+}
