@@ -27,6 +27,7 @@ public class PaletteUIMessages extends NLS {
 	public static String SHOW_HIDE;
 	public static String IMPORT_TLD;
 	public static String IMPORT;
+	public static String PALETTE_FILTER_MESSAGE;
 	
 	private PaletteUIMessages() {
 	}
