@@ -17,7 +17,6 @@ import java.util.List;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.gef.palette.PaletteContainer;
 import org.eclipse.gef.palette.PaletteEntry;
-import org.eclipse.gef.palette.PaletteSeparator;
 import org.eclipse.gef.palette.ToolEntry;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -124,10 +123,11 @@ public class PaletteAdapter implements IPaletteAdapter {
 		if(isMobile()) {
 			Composite container = new Composite(root, SWT.FILL);
 			container.setLayout(new GridLayout(1, false));
-			final Text text = new Text(container, SWT.SINGLE|SWT.BORDER|SWT.FILL|SWT.SEARCH|SWT.ICON_SEARCH);
+			final Text text = new Text(container, SWT.SINGLE|SWT.BORDER|SWT.FILL|SWT.SEARCH|SWT.ICON_SEARCH|SWT.ICON_CANCEL);
 			GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL
                 | GridData.GRAB_HORIZONTAL);
 			text.setLayoutData(data);
+			text.setMessage(PaletteUIMessages.PALETTE_FILTER_MESSAGE);
 			text.addModifyListener(new ModifyListener(){
 				@Override
 				public void modifyText(ModifyEvent e) {
