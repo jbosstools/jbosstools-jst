@@ -28,6 +28,7 @@ public interface HTMLConstants {
 	public String TAG_BODY = "body";
 	public String TAG_DIV = "div";
 	public String TAG_FORM = "form";
+	public String TAG_IMG = "img";
 	public String TAG_OL = "ol";
 	public String TAG_UL = "ul";
 	public String TAG_LI = "li";
@@ -64,7 +65,16 @@ public interface HTMLConstants {
 	public String ATTR_DISABLED = "disabled";
 	public String CHECKED = "checked";
 	public String SELECTED = "selected";
+	public String ATTR_ALT = "alt";
+	public String ATTR_WIDTH = "width";
+	public String ATTR_HEIGHT = "height";
+	public String ATTR_ISMAP = "ismap";
+	public String ATTR_USEMAP = "usemap";
+	public String ATTR_CROSSORIGIN = "crossorigin";
 
 	public String METHOD_GET = "get";
 	public String METHOD_POST = "post";
+
+	public String CROSSORIGIN_ANONIMOUS = "anonymous";
+	public String CROSSORIGIN_USE_CREDENTIALS = "use-credentials";
 }

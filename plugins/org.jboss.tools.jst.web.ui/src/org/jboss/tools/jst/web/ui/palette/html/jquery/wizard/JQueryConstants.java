@@ -161,14 +161,14 @@ public interface JQueryConstants extends HTMLConstants {
 
 	public String AUTOCOMPLETE_OFF = "off";
 
-	public String EDITOR_ID_TITLE = "title";
-	public String EDITOR_ID_LABEL = "label";
-	public String EDITOR_ID_NAME = "name";
-	public String EDITOR_ID_LEGEND = "legend";
-	public String EDITOR_ID_OPTION = "option";
+	public String EDITOR_ID_TITLE = TAG_TITLE;
+	public String EDITOR_ID_LABEL = TAG_LABEL;
+	public String EDITOR_ID_NAME = ATTR_NAME;
+	public String EDITOR_ID_LEGEND = TAG_LEGEND;
+	public String EDITOR_ID_OPTION = TAG_OPTION;
 	public String EDITOR_ID_MINI = "mini";
-	public String EDITOR_ID_CHECKED = "checked";
-	public String EDITOR_ID_SELECTED = "selected";
+	public String EDITOR_ID_CHECKED = CHECKED;
+	public String EDITOR_ID_SELECTED = SELECTED;
 	public String EDITOR_ID_THEME = "theme";
 	public String EDITOR_ID_TRACK_THEME = "track-theme";
 	public String EDITOR_ID_CONTENT_THEME = "content-theme";
@@ -176,40 +176,41 @@ public interface JQueryConstants extends HTMLConstants {
 
 	public String EDITOR_ID_NUMBERED = "numbered";
 	public String EDITOR_ID_READ_ONLY = "read-only";
-	public String EDITOR_ID_AUTODIVIDERS = "autodividers";
+	public String EDITOR_ID_AUTODIVIDERS = ATTR_DATA_AUTODIVIDERS;
 	public String EDITOR_ID_SEARCH_FILTER = "search-filter";
-	public String EDITOR_ID_INSET = "inset";
+	public String EDITOR_ID_INSET = ATTR_DATA_INSET;
 
 	public String EDITOR_ID_OFF = "off";
 	public String EDITOR_ID_ON = "on";
 	public String EDITOR_ID_ID = "id";
 	public String EDITOR_ID_LAYOUT = "layout";
 	public String EDITOR_ID_URL = "url";
-	public String EDITOR_ID_TRANSITION = "transition";
+	public String EDITOR_ID_SRC = ATTR_SRC;
+	public String EDITOR_ID_TRANSITION = ATTR_DATA_TRANSITION;
 	public String EDITOR_ID_CLOSE_BUTTON = "close";
 	public String EDITOR_ID_ADD_ID = "add-id";
 
 	public String EDITOR_ID_ACTION = "action";
-	public String EDITOR_ID_FORM_ACTION = "action";
-	public String EDITOR_ID_FORM_METHOD = "method";
-	public String EDITOR_ID_AUTOCOMPLETE = "autocomplete";
+	public String EDITOR_ID_FORM_ACTION = ATTR_ACTION;
+	public String EDITOR_ID_FORM_METHOD = ATTR_METHOD;
+	public String EDITOR_ID_AUTOCOMPLETE = ATTR_AUTOCOMPLETE;
 	public String EDITOR_ID_VALIDATE = "validate";
-	public String EDITOR_ID_DISABLED = "disabled";
+	public String EDITOR_ID_DISABLED = ATTR_DISABLED;
 	public String EDITOR_ID_DIVIDER = "divider";
-	public String EDITOR_ID_ICON = "icon";
+	public String EDITOR_ID_ICON = ATTR_DATA_ICON;
 	public String EDITOR_ID_ICON_ONLY = "icon-only";
-	public String EDITOR_ID_ICON_POS = "icon-pos";
-	public String EDITOR_ID_CORNERS = "corners";
-	public String EDITOR_ID_COLLAPSED_ICON = "collapsed-icon";
-	public String EDITOR_ID_EXPANDED_ICON = "expanded-icon";
-	public String EDITOR_ID_INLINE = "inline";
+	public String EDITOR_ID_ICON_POS = ATTR_DATA_ICONPOS;
+	public String EDITOR_ID_CORNERS = ATTR_DATA_CORNERS;
+	public String EDITOR_ID_COLLAPSED_ICON = ATTR_DATA_COLLAPSED_ICON;
+	public String EDITOR_ID_EXPANDED_ICON = ATTR_DATA_EXPANDED_ICON;
+	public String EDITOR_ID_INLINE = ATTR_DATA_INLINE;
 	public String EDITOR_ID_RANGE = "range";
-	public String EDITOR_ID_MIN = "min";
-	public String EDITOR_ID_MAX = "max";
-	public String EDITOR_ID_STEP = "step";
-	public String EDITOR_ID_VALUE = "value";
+	public String EDITOR_ID_MIN = ATTR_DATA_MIN;
+	public String EDITOR_ID_MAX = ATTR_DATA_MAX;
+	public String EDITOR_ID_STEP = ATTR_DATA_STEP;
+	public String EDITOR_ID_VALUE = ATTR_VALUE;
 	public String EDITOR_ID_RVALUE = "right-value";
-	public String EDITOR_ID_HIGHLIGHT = "highlight";
+	public String EDITOR_ID_HIGHLIGHT = ATTR_DATA_HIGHLIGHT;
 	public String EDITOR_ID_HIDE_LABEL = "hide-label";
 	public String EDITOR_ID_ADD_HEADER = "add-header";
 	public String EDITOR_ID_HEADER_TITLE = "header-title";
@@ -217,13 +218,13 @@ public interface JQueryConstants extends HTMLConstants {
 	public String EDITOR_ID_FOOTER_TITLE = "footer-title";
 	public String EDITOR_ID_TEXT_TYPE = "text-type";
 	public String EDITOR_ID_CLEAR_INPUT = "clear-input";
-	public String EDITOR_ID_PLACEHOLDER = "placeholder";
-	public String EDITOR_ID_PATTERN = "pattern";
-	public String EDITOR_ID_AUTOFOCUS = "autofocus";
-	public String EDITOR_ID_REQUIRED = "required";
-	public String EDITOR_ID_MAXLENGTH = "maxlength";
+	public String EDITOR_ID_PLACEHOLDER = ATTR_PLACEHOLDER;
+	public String EDITOR_ID_PATTERN = ATTR_PATTERN;
+	public String EDITOR_ID_AUTOFOCUS = ATTR_AUTOFOCUS;
+	public String EDITOR_ID_REQUIRED = ATTR_REQUIRED;
+	public String EDITOR_ID_MAXLENGTH = ATTR_MAXLENGTH;
 	public String EDITOR_ID_FIXED_POSITION = "fixed";
-	public String EDITOR_ID_FULL_SCREEN = "full-screen";
+	public String EDITOR_ID_FULL_SCREEN = ATTR_DATA_FULL_SCREEN;
 	public String EDITOR_ID_LEFT_BUTTON = "left-button";
 	public String EDITOR_ID_RIGHT_BUTTON = "right-button";
 	public String EDITOR_ID_BACK_BUTTON = "back-button";
@@ -241,7 +242,7 @@ public interface JQueryConstants extends HTMLConstants {
 	public String EDITOR_ID_SHADOW = "shadow";
 	public String EDITOR_ID_PADDING = "padding";
 	public String EDITOR_ID_OVERLAY = "overlay";
-	public String EDITOR_ID_POSITION_TO = "position-to";
+	public String EDITOR_ID_POSITION_TO = ATTR_DATA_POSITION_TO;
 	public String EDITOR_ID_INFO_STYLED = "info-styled";
 	public String EDITOR_ID_SWIPE_CLOSE = "swipe-close";
 
@@ -250,12 +251,20 @@ public interface JQueryConstants extends HTMLConstants {
 	public String EDITOR_ID_FIELD_SET = "field-set";
 
 	public String EDITOR_ID_PANEL_POSITION = "panel-position";
-	public String EDITOR_ID_DISPLAY = "display";
+	public String EDITOR_ID_DISPLAY = ATTR_DATA_DISPLAY;
 
-	public String EDITOR_ID_MODE = "mode";
+	public String EDITOR_ID_MODE = ATTR_DATA_MODE;
 	public String EDITOR_ID_COLUMN_NAME = "column-name";
-	public String EDITOR_ID_PRIORITY = "priority";
+	public String EDITOR_ID_PRIORITY = ATTR_DATA_PRIORITY;
 	public String EDITOR_ID_CONTENT = "content";
-	public String EDITOR_ID_RESPONSIVE = "responsive";
+	public String EDITOR_ID_RESPONSIVE = CLASS_RESPONSIVE;
 	public String EDITOR_ID_STRIPES = "stripes";
+
+	public String EDITOR_ID_ALT = ATTR_ALT;
+	public String EDITOR_ID_WIDTH = ATTR_WIDTH;
+	public String EDITOR_ID_HEIGHT = ATTR_HEIGHT;
+	public String EDITOR_ID_ISMAP = ATTR_ISMAP;
+	public String EDITOR_ID_USEMAP = ATTR_USEMAP;
+	public String EDITOR_ID_CROSSORIGIN = ATTR_CROSSORIGIN;
+	
 }

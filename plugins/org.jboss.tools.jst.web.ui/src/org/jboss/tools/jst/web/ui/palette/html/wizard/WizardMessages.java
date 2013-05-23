@@ -50,6 +50,7 @@ public class WizardMessages extends NLS {
 	public static String idLabel;
 	public static String layoutLabel;
 	public static String urlLabel;
+	public static String srcLabel;
 	public static String transitionLabel;
 	public static String closeButtonPositionLabel;
 	public static String disabledLabel;
@@ -113,6 +114,15 @@ public class WizardMessages extends NLS {
 	public static String contentLabel;
 	public static String responsiveLabel;
 	public static String stripesLabel;
+	public static String altLabel;
+	public static String widthLabel;
+	public static String heightLabel;
+	public static String ismapLabel;
+	public static String usemapLabel;
+	public static String crossoriginLabel;
+
+	public static String selectImageDialogTitle;
+	public static String selectImageDialogMessage;
 
 	public static String itemsLabel;
 	public static String columnsLabel;
@@ -185,7 +195,10 @@ public class WizardMessages extends NLS {
 
 	public static String newFormWizardTitle;
 	public static String newFormWizardDescription;
-	
+
+	public static String newImageWizardTitle;
+	public static String newImageWizardDescription;
+
 	public static String errorIDisUsed;
 	
 	static {
