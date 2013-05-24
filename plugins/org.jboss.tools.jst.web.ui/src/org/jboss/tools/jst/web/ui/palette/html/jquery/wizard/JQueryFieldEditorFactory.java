@@ -13,11 +13,28 @@ package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
+import org.eclipse.ui.dialogs.ISelectionStatusValidator;
+import org.eclipse.ui.model.WorkbenchContentProvider;
+import org.eclipse.ui.model.WorkbenchLabelProvider;
+import org.jboss.tools.common.ui.CommonUIMessages;
+import org.jboss.tools.common.ui.widget.editor.ButtonFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.CheckBoxFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.CompositeEditor;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
@@ -25,6 +42,7 @@ import org.jboss.tools.common.ui.widget.editor.LabelFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.SwtFieldEditorFactory;
 import org.jboss.tools.common.ui.widget.editor.TextFieldEditor;
 import org.jboss.tools.jst.web.kb.internal.taglib.jq.JQueryMobileAttrProvider;
+import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -158,6 +176,65 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 
 	public static IFieldEditor createURLEditor(String editorID) {
 		return SwtFieldEditorFactory.INSTANCE.createTextEditor(editorID, WizardMessages.urlLabel, "");
+	}
+
+	public static IFieldEditor createSrcEditor(IFile context) {
+		return createBrowseWorkspaceImageEditor(EDITOR_ID_SRC, WizardMessages.srcLabel, context);
+	}
+
+	public static IFieldEditor createBrowseWorkspaceImageEditor(String name, String label, IFile context) {
+		ButtonFieldEditor.ButtonPressedAction action = createSelectWorkspaceImageAction(CommonUIMessages.SWT_FIELD_EDITOR_FACTORY_BROWS, context);
+		CompositeEditor editor = new CompositeEditor(name, label, "");
+		editor.addFieldEditors(new IFieldEditor[]{new LabelFieldEditor(name,label),
+				new TextFieldEditor(name,label, ""),
+				new ButtonFieldEditor(name, action, "")});
+		action.setFieldEditor(editor);
+		return editor;
+	}
+
+	public static ButtonFieldEditor.ButtonPressedAction createSelectWorkspaceImageAction(String buttonName, final IFile context) {
+		ButtonFieldEditor.ButtonPressedAction action = new ButtonFieldEditor.ButtonPressedAction(buttonName) {
+			private String inerInitPath;
+
+			@Override
+			public void run() {
+				ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(
+						Display.getCurrent().getActiveShell(),
+						new WorkbenchLabelProvider(), new WorkbenchContentProvider());
+				dialog.setInput(ResourcesPlugin.getWorkspace());
+				String path = inerInitPath != null ? inerInitPath : 
+					context != null ? context.getParent().getFullPath().toString() : "";
+				IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(path);
+				if (resource != null && resource.exists()) {
+					dialog.setInitialSelection(resource);
+				}
+				dialog.addFilter(new ViewerFilter() {
+					public boolean select(Viewer viewer, Object parentElement, Object element) {
+						return (element instanceof IFolder 
+								|| (element instanceof IProject
+									&& element == context.getProject())
+								|| (element instanceof IFile 
+									&& SRCUtil.isImageFile(((IFile)element).getName())));
+					}
+				});
+				dialog.setValidator(new ISelectionStatusValidator() {
+					public IStatus validate(Object[] selection) {
+						return (selection.length == 1 && (selection[0] instanceof IFile))
+								? new Status(IStatus.OK, WebUiPlugin.PLUGIN_ID, "") :  new Status(IStatus.ERROR, WebUiPlugin.PLUGIN_ID, "");  //$NON-NLS-1$
+					}
+				});
+				dialog.setAllowMultiple(false);
+				dialog.setTitle(WizardMessages.selectImageDialogTitle); 
+				dialog.setMessage(WizardMessages.selectImageDialogMessage); 
+				if (dialog.open() == Window.OK) {
+					IResource res = (IResource) dialog.getFirstResult();
+					String value = SRCUtil.getRelativePath(res, context.getParent());
+					inerInitPath = res.getFullPath().toString();
+					getFieldEditor().setValue(value);
+				}
+			}
+		};
+		return action;
 	}
 
 	public static IFieldEditor createFormActionEditor() {
@@ -560,6 +637,32 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 
 	public static IFieldEditor createStripesEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_STRIPES, WizardMessages.stripesLabel, false);
+	}
+
+	public static IFieldEditor createAltEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_ALT, WizardMessages.altLabel, "");
+	}
+
+	public static IFieldEditor createWidthEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_WIDTH, WizardMessages.widthLabel, "");
+	}
+
+	public static IFieldEditor createHeightEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_HEIGHT, WizardMessages.heightLabel, "");
+	}
+
+	public static IFieldEditor createIsmapEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_ISMAP, WizardMessages.ismapLabel, false);
+	}
+
+	public static IFieldEditor createUsemapEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_USEMAP, WizardMessages.usemapLabel, "");
+	}
+
+	public static IFieldEditor createCrossoriginEditor() {
+		String[] values = new String[]{"", CROSSORIGIN_ANONIMOUS, CROSSORIGIN_USE_CREDENTIALS};
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_CROSSORIGIN, WizardMessages.crossoriginLabel, 
+				toList(values), "", true);
 	}
 
 }

@@ -37,6 +37,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedCheckboxe
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedCheckboxesWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewImageWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewImageWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewListviewWizard;
@@ -844,7 +846,58 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		wizardPage.setEditorValue(EDITOR_ID_AUTOCOMPLETE, TRUE);
 		assertTextDoesNotExist(wizard, ATTR_AUTOCOMPLETE);
 
+		wizard.performFinish();
 	}
+
+	public void testNewImageWizard() {
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Image", true);
+
+		assertTrue(currentPage instanceof NewImageWizardPage);
+
+		NewImageWizardPage wizardPage = (NewImageWizardPage)currentPage;
+		NewImageWizard wizard = (NewImageWizard)wizardPage.getWizard();
+
+		assertAttrExists(wizard, ATTR_ALT, "");
+		wizardPage.setEditorValue(EDITOR_ID_ALT, "myalt");
+		assertAttrExists(wizard, ATTR_ALT, "myalt");
+
+		assertAttrExists(wizard, ATTR_SRC, "");
+		wizardPage.setEditorValue(EDITOR_ID_SRC, "mysrc.gif");
+		assertAttrExists(wizard, ATTR_SRC, "mysrc.gif");
+
+		assertTextDoesNotExist(wizard, ATTR_WIDTH);
+		wizardPage.setEditorValue(EDITOR_ID_WIDTH, "20");
+		assertAttrExists(wizard, ATTR_WIDTH, "20");
+		wizardPage.setEditorValue(EDITOR_ID_WIDTH, "");
+		assertTextDoesNotExist(wizard, ATTR_WIDTH);
+
+		assertTextDoesNotExist(wizard, ATTR_HEIGHT);
+		wizardPage.setEditorValue(EDITOR_ID_HEIGHT, "30");
+		assertAttrExists(wizard, ATTR_HEIGHT, "30");
+		wizardPage.setEditorValue(EDITOR_ID_HEIGHT, "");
+		assertTextDoesNotExist(wizard, ATTR_HEIGHT);
+
+		assertTextDoesNotExist(wizard, ATTR_CROSSORIGIN);
+		wizardPage.setEditorValue(EDITOR_ID_CROSSORIGIN, CROSSORIGIN_ANONIMOUS);
+		assertAttrExists(wizard, ATTR_CROSSORIGIN, CROSSORIGIN_ANONIMOUS);
+		wizardPage.setEditorValue(EDITOR_ID_CROSSORIGIN, "");
+		assertTextDoesNotExist(wizard, ATTR_CROSSORIGIN);
+
+		assertTextDoesNotExist(wizard, ATTR_ISMAP);
+		wizardPage.setEditorValue(EDITOR_ID_ISMAP, TRUE);
+		assertAttrExists(wizard, ATTR_ISMAP, ATTR_ISMAP);
+		wizardPage.setEditorValue(EDITOR_ID_ISMAP, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_ISMAP);
+
+		assertTextDoesNotExist(wizard, ATTR_USEMAP);
+		wizardPage.setEditorValue(EDITOR_ID_USEMAP, "#map");
+		assertAttrExists(wizard, ATTR_USEMAP, "#map");
+		wizardPage.setEditorValue(EDITOR_ID_USEMAP, "");
+		assertTextDoesNotExist(wizard, ATTR_USEMAP);
+
+		wizard.performFinish();
+	}
+
 
 	void assertAttrExists(AbstractNewHTMLWidgetWizard wizard, String attr, String value) {
 		assertTextExists(wizard, attr + "=\"" + value + "\"");

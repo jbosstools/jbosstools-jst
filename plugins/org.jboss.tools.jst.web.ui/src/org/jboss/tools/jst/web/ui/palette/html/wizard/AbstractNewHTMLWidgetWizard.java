@@ -185,6 +185,11 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 		return LinkAttributeProvider.findAllIds(file, false);
 	}
 
+	public IFile getFile() {
+		IEditorInput input = command.getDefaultModel().getDropData().getEditorInput();
+		return (IFile)input.getAdapter(IFile.class);
+	}
+
 	private int next(String text, String attrName, int from) {
 		int i = text.indexOf(attrName, from);
 		while(i >= 0) {

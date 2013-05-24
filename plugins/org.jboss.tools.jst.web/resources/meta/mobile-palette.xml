@@ -81,6 +81,9 @@
     <Icon
      IMAGE="ajnamomhinikjkikiaiaiainmjmimenciaiaiameiaiaiakliiigiaiaiaebdbkolniaiaiaigocmlmhmeiafhiagciahefckakkhniaiaiaijpaminjpdiaiailjdiaiailjdibiabkbmjiiaiaiaihpemjmnmfihfnifjbjcickkdejoegbbiaiaicpgmjmembneoifognbkmpmijenbjmehlpdpfjpbkjamdaodjckikgnkacbnlkigmffaeblamiokhpoigbcjhanapiiikccckmijlkpeakiicbiombmfdgglookbmbkepganioabmlaegfbpnfgkcchjchadojmfdfdkgppfpaaeebedagiddkgoeohlealaopjogpdnbjfpoppogphnfophjilajipckbnolkgnajegkldedgjkicokcbohkipjogoodjkopbnemdpglejogoepfjdhljcjhdojhamikmbefdogflelcacfodhdbdlpolpgbmnfdchniapadkkgfmddnpalheokhegbhpljcdhhngmdnokdcaajceeogfjeelelcacjneflbckiffakpadclgbkoijgmljoacgomkehecoplhmlkepiefhcjmpklnfbmpnkpbnfbakhmapagbehfmbfdfaeogfbljieiacnihjakmaekpndkpflpojhedccgkfjkbpfcbeojckmclmloljoiijmfmjlmnjmfpmmalghagllkeolfhnnieacppchppbnidgookbbfllljlgpopknhekjgdgjcbclkdhbkkflikpmnenjpfkcbnaiheffdhpebhknckgajiccgpaneeecjnafbmpginigadebbagpkmddlljkflofglmaodladajijppmpkgkllmaonlepbimeihincfmejhmdhnjekpgnoeooemlekabollfcbehbfkaepdfcibakpeffnpinpplmgeifojamlfkglnldkelkmplmlihlabaaomfnohipgchnkbkboppcedfboencibclljknkkncfkohjnkfmcfnconmleapfjbojmfhdpklijbpjgdolpbihlajkjpaklldchhfjognllmhdkdhpgjnmlgnkdekojgenoaopgeenmgockbojecailladeboalajiimigadobgncmhhlgngibbpnnfhffpophhijpbpcjnnmpjmibagabkbgabandhhiogiicngpochhiiakeabmjcajnpiifmmialhillnmcjelagolkiaigabikcaikpigpfeknibhlnmhndcmakfnaiokmlkgndhibldeflioffmmgmnllghcpclfkmmdjekbdcohceepklpdabnihkhenliopjpoafgjfmjcmakbajflghehlmjlojmpcibgiphlcfmpjbdgiinagacggjplngcgflekcnmjolliaiaiaiamjmfmomecomcoaac"
      NAME="form" SCOPE="project" model-entity="SharableIcon"/>
+    <Icon
+     IMAGE="ajnamomhinikjkikiaiaiainmjmimenciaiaiameiaiaiakliiigiaiaiaebdbkolniaiaiaigocmlmhmeiahpiahpiahpcadnchbdiaiaiaijpaminjpdiaiailjdiaiailjdibiabkbmjiiaiaiaihpemjmnmfihfnifjbipleijalbljgdfiaiaiclmmjmembneoifognbkepmljlmbjeehlpfleghgjahbneipnbnkhhbihoiblnfklpmaeeblihapnojfhmilpkmjefalkhcbihplckmhalgcebkahoidljpjakebaabbhgjalbjcmkkjackijekecebhdhpgjcbcpfnmhgehameoadkfkpllopkhhdlohdbnlhblomeabjldoheoccbljhmhkhefaffncoijejledgghlnkdcibkiakecolbgegcjmnedhflenieamghpjdbkjgdafcljkioaiidgcaalmmfkaanalnljkjhdhcjppookoeniealophdnkpbobgpibcnpoamifcckgcehkhnmjlnmginobhnjiijmekhljnflblkhbenhglfiapoobkmlceimmaamebjojjnlahnkacmnilcedjcikogphniockkbikmikojgkdlamnpjidllpicmaibkejfbgoogbdfioaibkpajicakilfkbcmnpodalokbcgllngjnkbcedmcfllklipfmahkkbbeklmnggcgpnddabheippkpbhgpngejjjnpecnikkbijjiajklmejhmedjfcdmhhadmeihnnbljeaefeaagieklkanmeldflpgelbfogepamglkkedjealnnkbpdfdpoipbembmjclakiifkihcjkecmenckkfcdbleamdpbedfkbdieofgfpnmibcakajjfeihkfcihipelknlgkacglmdnpdggemmoklibjngabdmdhbfphofkligideboelfeaanngajcniibioabjgdakggnkleaipgajmhikmghngkfgolhhajfeiidjpablkpaigemficmbaiogaidjdeajnlaifamicdpcepnnmkgghdfmamdmadmneociackeallajcpflimcecnhibhakfpbcfhofcakbkkdjbdpdfpaalpeacgjcppidhmbegdemogkacnihhmklbjhflhmahacdokjofichhhnpmonfoanchmnhlgffbajclahcainnogihlijgnfiemlobnchkliibiogefmjcdaihjmibjleponbhckkjgkmionpjbihmgfcoicpmbhmchleffnefoeoehpiajgpjffbcjobdjhjkiaiaiaiamjmfmomecomcoaac"
+     NAME="image" SCOPE="project" model-entity="SharableIcon"/>
    </Icons>
   </Icons>
 	</XStudioIcons>
@@ -251,6 +254,17 @@
                  ENDTEXT="" ICON="%Icons%/Mobile/jQuery/form"
                  NAME="10.Form" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;form>&lt;/form>"
+                 model-entity="SharableMacroHTML"/>
+
+     </GroupHTML>
+
+     <GroupHTML HIDDEN="no" ICON="" NAME="4.multimedia"
+      SCOPE="project" add_taglib="true" model-entity="SharableGroupHTML">
+
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Image:&lt;/b>&lt;br>\n&lt;code>&amp;lt;img alt=&quot;&quot; src=&quot;&quot;>&lt;/code>&lt;br>\n&lt;/html>"
+                 ENDTEXT="" ICON="%Icons%/Mobile/jQuery/image"
+                 NAME="1.Image" REFORMAT="yes" SCOPE="project"
+                 STARTTEXT="&lt;img alt=&quot;&quot; src=&quot;&quot;>"
                  model-entity="SharableMacroHTML"/>
 
      </GroupHTML>

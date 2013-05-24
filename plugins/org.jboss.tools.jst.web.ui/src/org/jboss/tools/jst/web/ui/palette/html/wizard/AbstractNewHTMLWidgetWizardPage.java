@@ -94,7 +94,20 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		GridLayout layout = new GridLayout(3, false);
 		panel.setLayout(layout);
 
-		left = new Composite(panel, SWT.BORDER);
+		left = new Composite(panel, SWT.BORDER) {
+			int initialDefaultWidth = -1;
+			public Point computeSize(int wHint, int hHint, boolean changed) {
+				Point result = super.computeSize(wHint, hHint, changed);
+				if(hHint < 0) {
+					if(initialDefaultWidth < 0) {
+						initialDefaultWidth = result.x;
+					} else if(result.x > initialDefaultWidth) {
+						result.x = initialDefaultWidth;
+					}
+				}
+				return result;
+			}
+		};
 		d = new GridData(GridData.FILL_VERTICAL);
 		left.setLayoutData(d);
 		left.setLayout(new GridLayout(2, false));
@@ -436,7 +449,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		}
 		if(previewPanel.isVisible()) {
 			if(lastHideShellWidth < 0) {
-				lastHideShellWidth = previewPanel.getShell().getSize().x - previewPanel.getSize().x;
+				lastHideShellWidth = previewPanel.getShell().getSize().x - previewPanel.getSize().x + 5;
 			}
 			previewPanel.setVisible(false);
 			flipPreviewButton(WizardMessages.showPreviewButtonText);
@@ -472,11 +485,12 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		} else {
 			lastShowShellWidth = r.width;
 		}
-		int width = (first) ? shell.computeSize(-1, -1).x : 
+		int defaultWidth = (first) ? shell.computeSize(-1, -1).x : 0;
+		int width = (first) ? defaultWidth : 
 			(show) ? (lastShowShellWidth < 0 ? r.width + 300 : lastShowShellWidth) : 
 			(lastHideShellWidth < 0 ? r.width - 300 : lastHideShellWidth);
 		if(!show && !first) {
-			int dw = shell.computeSize(-1, -1).x;
+			int dw = defaultWidth;
 			if(width < dw) width = dw;
 		}
 		if(first) {
