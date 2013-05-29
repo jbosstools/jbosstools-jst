@@ -10,10 +10,13 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.test;
 
+import java.io.File;
+
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.ui.IEditorPart;
 import org.jboss.tools.common.ui.widget.editor.CompositeEditor;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
+import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizardPage;
@@ -86,6 +89,12 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 			editor = null;
 		}
 		super.tearDown();
+	}
+
+	public void testScriptsAreCopied() {
+		File f = WebModelPlugin.getJSStateRoot();
+		assertTrue(new File(f, "js").isDirectory());
+		assertTrue(new File(f, "js/jquery.mobile.structure-1.2.0.min.css").isFile());
 	}
 
 	public void testNewPageWizard() {
