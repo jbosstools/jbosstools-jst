@@ -233,14 +233,40 @@ public class WebModelPlugin extends BaseUIPlugin {
 	    return cmds;
     }
 
+    static boolean copiedJS = false;
+
 	public static File getJSStateRoot() {
-		Bundle bundle = Platform.getBundle(PLUGIN_ID);
-		try {
-			return FileLocator.getBundleFile(bundle);
-		} catch (IOException e) {
-			WebModelPlugin.getDefault().logError(e);
-			return null;
+		if(!copiedJS) {
+			copiedJS = true;
+			try {
+				copyJS();
+			} catch (IOException e) {
+				getDefault().logError(e);
+			}
 		}
+		Bundle bundle = Platform.getBundle(PLUGIN_ID);
+		return Platform.getStateLocation(bundle).toFile();
 	}
 
+	static void copyJS() throws IOException {
+		Bundle bundle = Platform.getBundle(PLUGIN_ID);
+		File location = Platform.getStateLocation(bundle).toFile();
+		File install = FileLocator.getBundleFile(bundle);
+		JarVersionObserver jarVersionObserver = new JarVersionObserver(location);
+		if(install.isDirectory()) {
+			copy(location, install, "js"); //$NON-NLS-1$
+		} else {
+			UnzipOperation unzip = new UnzipOperation(install);
+			unzip.execute(location, "js.*"); //$NON-NLS-1$
+		}
+		jarVersionObserver.execute();
+	}
+	
+	static private void copy(File location, File install, String name) {
+		location = new File(location, name);
+		install = new File(install, name);
+		location.mkdirs();
+		FileUtil.copyDir(install, location, true, true, true, null);
+	}
+	
 }
