@@ -182,6 +182,14 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return createBrowseWorkspaceImageEditor(EDITOR_ID_SRC, WizardMessages.srcLabel, context);
 	}
 
+	public static IFieldEditor createPosterEditor(IFile context) {
+		return createBrowseWorkspaceImageEditor(EDITOR_ID_POSTER, WizardMessages.posterLabel, context);
+	}
+
+	public static IFieldEditor createVideoSrcEditor(IFile context) {
+		return createBrowseWorkspaceVideoEditor(EDITOR_ID_SRC, WizardMessages.srcLabel, context);
+	}
+
 	public static IFieldEditor createBrowseWorkspaceImageEditor(String name, String label, IFile context) {
 		ButtonFieldEditor.ButtonPressedAction action = createSelectWorkspaceImageAction(CommonUIMessages.SWT_FIELD_EDITOR_FACTORY_BROWS, context);
 		CompositeEditor editor = new CompositeEditor(name, label, "");
@@ -193,6 +201,43 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 	}
 
 	public static ButtonFieldEditor.ButtonPressedAction createSelectWorkspaceImageAction(String buttonName, final IFile context) {
+		ViewerFilter filter = new ViewerFilter() {
+			public boolean select(Viewer viewer, Object parentElement, Object element) {
+				return (element instanceof IFolder 
+						|| (element instanceof IProject
+							&& element == context.getProject())
+						|| (element instanceof IFile 
+							&& SRCUtil.isImageFile(((IFile)element).getName())));
+			}
+		};
+		return createSelectWorkspaceFileAction(buttonName, context, WizardMessages.selectImageDialogTitle, WizardMessages.selectImageDialogMessage, filter);
+	}
+
+	public static IFieldEditor createBrowseWorkspaceVideoEditor(String name, String label, IFile context) {
+		ButtonFieldEditor.ButtonPressedAction action = createSelectWorkspaceVideoAction(CommonUIMessages.SWT_FIELD_EDITOR_FACTORY_BROWS, context);
+		CompositeEditor editor = new CompositeEditor(name, label, "");
+		editor.addFieldEditors(new IFieldEditor[]{new LabelFieldEditor(name,label),
+				new TextFieldEditor(name,label, ""),
+				new ButtonFieldEditor(name, action, "")});
+		action.setFieldEditor(editor);
+		return editor;
+	}
+
+	public static ButtonFieldEditor.ButtonPressedAction createSelectWorkspaceVideoAction(String buttonName, final IFile context) {
+		ViewerFilter filter = new ViewerFilter() {
+			public boolean select(Viewer viewer, Object parentElement, Object element) {
+				return (element instanceof IFolder 
+						|| (element instanceof IProject
+							&& element == context.getProject())
+						|| (element instanceof IFile 
+							&& SRCUtil.isVideoFile(((IFile)element).getName())));
+			}
+		};
+		return createSelectWorkspaceFileAction(buttonName, context, WizardMessages.selectVideoDialogTitle, WizardMessages.selectVideoDialogMessage, filter);
+	}
+
+	public static ButtonFieldEditor.ButtonPressedAction createSelectWorkspaceFileAction(String buttonName, final IFile context, 
+			final String title, final String message, final ViewerFilter filter) {
 		ButtonFieldEditor.ButtonPressedAction action = new ButtonFieldEditor.ButtonPressedAction(buttonName) {
 			private String inerInitPath;
 
@@ -208,15 +253,7 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 				if (resource != null && resource.exists()) {
 					dialog.setInitialSelection(resource);
 				}
-				dialog.addFilter(new ViewerFilter() {
-					public boolean select(Viewer viewer, Object parentElement, Object element) {
-						return (element instanceof IFolder 
-								|| (element instanceof IProject
-									&& element == context.getProject())
-								|| (element instanceof IFile 
-									&& SRCUtil.isImageFile(((IFile)element).getName())));
-					}
-				});
+				dialog.addFilter(filter);
 				dialog.setValidator(new ISelectionStatusValidator() {
 					public IStatus validate(Object[] selection) {
 						return (selection.length == 1 && (selection[0] instanceof IFile))
@@ -224,8 +261,8 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 					}
 				});
 				dialog.setAllowMultiple(false);
-				dialog.setTitle(WizardMessages.selectImageDialogTitle); 
-				dialog.setMessage(WizardMessages.selectImageDialogMessage); 
+				dialog.setTitle(title); 
+				dialog.setMessage(message); 
 				if (dialog.open() == Window.OK) {
 					IResource res = (IResource) dialog.getFirstResult();
 					String value = SRCUtil.getRelativePath(res, context.getParent());
@@ -527,12 +564,12 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return createCheckboxEditor(EDITOR_ID_BACK_BUTTON, WizardMessages.backButtonLabel, false, 3);
 	}
 
-	public static IFieldEditor createItemsNumberEditor(String label, int min, int max) {
+	public static IFieldEditor createItemsNumberEditor(String label, int min, int max, int value) {
 		String[] numbers = new String[max - min + 1];
 		for (int i = min; i <= max; i++) {
 			numbers[i - min] = "" + i;
 		}
-		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_NUMBER_OF_ITEMS, WizardMessages.numberOfItemsLabel, toList(numbers), "3", false);
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_NUMBER_OF_ITEMS, WizardMessages.numberOfItemsLabel, toList(numbers), "" + value, false);
 	}
 
 	public static IFieldEditor createArragementEditor() {
@@ -662,6 +699,40 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 	public static IFieldEditor createCrossoriginEditor() {
 		String[] values = new String[]{"", CROSSORIGIN_ANONIMOUS, CROSSORIGIN_USE_CREDENTIALS};
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_CROSSORIGIN, WizardMessages.crossoriginLabel, 
+				toList(values), "", true);
+	}
+
+	public static IFieldEditor createAutoplayEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_AUTOPLAY, WizardMessages.autoplayLabel, false);
+	}
+
+	public static IFieldEditor createControlsEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_CONTROLS, WizardMessages.controlsLabel, true);
+	}
+
+	public static IFieldEditor createLoopEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_LOOP, WizardMessages.loopLabel, false);
+	}
+
+	public static IFieldEditor createMutedEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_MUTED, WizardMessages.mutedLabel, false);
+	}
+
+	static String[] PRELOAD_LIST = {AUTO, METADATA, NONE};
+	static String[] PRELOAD_LABEL_LIST = {WizardMessages.preloadAutoLabel, WizardMessages.preloadMetadataLabel, WizardMessages.preloadNoneLabel};
+
+	public static IFieldEditor createPreloadEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(
+				EDITOR_ID_PRELOAD, 
+				WizardMessages.modeLabel, 
+				toList(PRELOAD_LABEL_LIST), 
+				toList(PRELOAD_LIST), 
+				AUTO);
+	}
+
+	public static IFieldEditor createVideoTypeEditor() {
+		String[] values = new String[]{"", VIDEO_TYPE_MP4, VIDEO_TYPE_OGG, VIDEO_TYPE_WEBM};
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_VIDEO_TYPE, WizardMessages.typeLabel, 
 				toList(values), "", true);
 	}
 

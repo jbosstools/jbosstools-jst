@@ -60,11 +60,17 @@ public class ItemsEditor implements SelectionListener, JQueryConstants {
 	protected ItemData[] items = new ItemData[8];
 	protected int minNumber = 0;
 	protected int maxNumber = 8;
+	protected int initValue = 3;
 
 	public ItemsEditor(AbstractNewHTMLWidgetWizardPage page, int minNumber, int maxNumber) {
+		this(page, minNumber, maxNumber, 3);
+	}
+
+	public ItemsEditor(AbstractNewHTMLWidgetWizardPage page, int minNumber, int maxNumber, int initValue) {
 		this.page = page;
 		this.minNumber = minNumber;
 		this.maxNumber = maxNumber;
+		this.initValue = initValue;
 		for (int i = 0; i < maxNumber; i++) {
 			items[i] = new ItemData();
 		}
@@ -87,7 +93,7 @@ public class ItemsEditor implements SelectionListener, JQueryConstants {
 		GridLayout layout = new GridLayout(3, false);
 		panel.setLayout(layout);
 
-		IFieldEditor number = JQueryFieldEditorFactory.createItemsNumberEditor(WizardMessages.numberOfItemsLabel, minNumber, maxNumber);
+		IFieldEditor number = JQueryFieldEditorFactory.createItemsNumberEditor(WizardMessages.numberOfItemsLabel, minNumber, maxNumber, initValue);
 		page.addEditor(number, panel);
 
 		tab = new TabFolder(panel, SWT.NULL);

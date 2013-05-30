@@ -66,6 +66,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTextInputWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTextInputWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewVideoWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewVideoWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizard;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
@@ -907,6 +909,46 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		wizard.performFinish();
 	}
 
+	public void testNewVideoWizard() {
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Video", true);
+
+		assertTrue(currentPage instanceof NewVideoWizardPage);
+
+		NewVideoWizardPage wizardPage = (NewVideoWizardPage)currentPage;
+		NewVideoWizard wizard = (NewVideoWizard)wizardPage.getWizard();
+
+		assertEquals("1", wizardPage.getEditorValue(EDITOR_ID_NUMBER_OF_ITEMS));
+
+		assertTextDoesNotExist(wizard, ATTR_AUTOPLAY);
+		wizardPage.setEditorValue(EDITOR_ID_AUTOPLAY, TRUE);
+		assertAttrExists(wizard, ATTR_AUTOPLAY, ATTR_AUTOPLAY);
+		wizardPage.setEditorValue(EDITOR_ID_AUTOPLAY, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_AUTOPLAY);
+
+		assertTextDoesNotExist(wizard, ATTR_LOOP);
+		wizardPage.setEditorValue(EDITOR_ID_LOOP, TRUE);
+		assertAttrExists(wizard, ATTR_LOOP, ATTR_LOOP);
+		wizardPage.setEditorValue(EDITOR_ID_LOOP, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_LOOP);
+
+		assertTextDoesNotExist(wizard, ATTR_MUTED);
+		wizardPage.setEditorValue(EDITOR_ID_MUTED, TRUE);
+		assertAttrExists(wizard, ATTR_MUTED, ATTR_MUTED);
+		wizardPage.setEditorValue(EDITOR_ID_MUTED, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_MUTED);
+
+		assertAttrExists(wizard, ATTR_CONTROLS, ATTR_CONTROLS);
+		wizardPage.setEditorValue(EDITOR_ID_CONTROLS, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_CONTROLS);
+		wizardPage.setEditorValue(EDITOR_ID_CONTROLS, TRUE);
+		assertAttrExists(wizard, ATTR_CONTROLS, ATTR_CONTROLS);
+
+		assertTextExists(wizard, TAG_SOURCE);
+		wizardPage.setEditorValue(EDITOR_ID_NUMBER_OF_ITEMS, "2");
+		assertEquals("2", wizardPage.getEditorValue(EDITOR_ID_NUMBER_OF_ITEMS));
+
+		wizard.performFinish();
+	}
 
 	void assertAttrExists(AbstractNewHTMLWidgetWizard wizard, String attr, String value) {
 		assertTextExists(wizard, attr + "=\"" + value + "\"");

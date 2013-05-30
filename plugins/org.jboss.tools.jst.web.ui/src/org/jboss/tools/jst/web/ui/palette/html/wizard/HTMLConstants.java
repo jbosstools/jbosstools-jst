@@ -48,6 +48,8 @@ public interface HTMLConstants {
 	public String TAG_TR = "tr";
 	public String TAG_TH = "th";
 	public String TAG_TD = "td";
+	public String TAG_VIDEO = "video";
+	public String TAG_SOURCE = "source";
 
 	public String ATTR_TYPE = "type";
 	public String ATTR_NAME = "name";
@@ -71,10 +73,24 @@ public interface HTMLConstants {
 	public String ATTR_ISMAP = "ismap";
 	public String ATTR_USEMAP = "usemap";
 	public String ATTR_CROSSORIGIN = "crossorigin";
+	public String ATTR_POSTER = "poster";
+	public String ATTR_AUTOPLAY = "autoplay";
+	public String ATTR_CONTROLS = "controls";
+	public String ATTR_LOOP = "loop";
+	public String ATTR_MUTED = "muted";
+	public String ATTR_PRELOAD = "preload";
 
 	public String METHOD_GET = "get";
 	public String METHOD_POST = "post";
 
 	public String CROSSORIGIN_ANONIMOUS = "anonymous";
 	public String CROSSORIGIN_USE_CREDENTIALS = "use-credentials";
+	
+	public String AUTO = "auto";
+	public String NONE = "none";
+	public String METADATA = "metadata";
+	
+	public String VIDEO_TYPE_MP4 = "video/mp4";
+	public String VIDEO_TYPE_OGG = "video/ogg";
+	public String VIDEO_TYPE_WEBM = "video/webbm";
 }
