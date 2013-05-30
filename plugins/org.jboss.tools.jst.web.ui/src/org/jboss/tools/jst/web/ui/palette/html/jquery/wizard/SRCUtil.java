@@ -130,4 +130,9 @@ public class SRCUtil {
 		for (String ext: exts) IMAGE_EXTENSIONS.add(ext);
 	}
 
+	public static boolean isVideoFile(String fileName) {
+		//Should we try to filter.
+		return true;
+	}
+
 }

@@ -824,5 +824,6 @@
       <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/09.Text_Input" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTextInputWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/10.Form" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/4.multimedia/1.Image" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewImageWizard"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/4.multimedia/2.Video" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewVideoWizard"/>
    </extension>
 </plugin>
