@@ -35,7 +35,7 @@ public class NewCollapsibleSetWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor mini = JQueryFieldEditorFactory.createMiniEditor();
 		addEditor(mini, columns.left());
 
-		IFieldEditor inset = JQueryFieldEditorFactory.createInsetEditor();
+		IFieldEditor inset = JQueryFieldEditorFactory.createInsetEditor(WizardDescriptions.collapsibleInset);
 		addEditor(inset, columns.right());
 
 		createIDEditor(parent, true);

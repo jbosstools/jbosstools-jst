@@ -70,15 +70,15 @@ public class NewTextInputWizardPage extends NewJQueryWidgetWizardPage {
 
 		Composite[] columns3 = createColumns(panel, 3);
 		
-		IFieldEditor min = JQueryFieldEditorFactory.createMinEditor();
+		IFieldEditor min = JQueryFieldEditorFactory.createMinEditor(WizardDescriptions.textInputMin);
 		min.setValue("");
 		addEditor(min, columns3[0]);
 
-		IFieldEditor max = JQueryFieldEditorFactory.createMaxEditor();
+		IFieldEditor max = JQueryFieldEditorFactory.createMaxEditor(WizardDescriptions.textInputMax);
 		max.setValue("");
 		addEditor(max, columns3[1]);
 
-		IFieldEditor step = JQueryFieldEditorFactory.createStepEditor();
+		IFieldEditor step = JQueryFieldEditorFactory.createStepEditor(WizardDescriptions.textInputStep);
 		addEditor(step, columns3[2]);
 
 		createSeparator(parent);

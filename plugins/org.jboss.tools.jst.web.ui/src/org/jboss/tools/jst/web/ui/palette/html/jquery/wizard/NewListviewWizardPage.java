@@ -44,7 +44,7 @@ public class NewListviewWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor searchFilter = JQueryFieldEditorFactory.createSearchFilterEditor();
 		addEditor(searchFilter, columns.right());
 
-		IFieldEditor inset = JQueryFieldEditorFactory.createInsetEditor();
+		IFieldEditor inset = JQueryFieldEditorFactory.createInsetEditor(WizardDescriptions.listviewInset);
 		addEditor(inset, columns.left());
 
 		IFieldEditor span = JQueryFieldEditorFactory.createSpan("span", 3);

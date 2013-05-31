@@ -39,7 +39,7 @@ public class NewFooterWizardPage extends NewJQueryWidgetWizardPage {
 		buttons.setIcon(1, "arrow-u");
 		buttons.setIcon(2, "arrow-d");
 		buttons.setIcon(3, "delete");
-		IFieldEditor title = JQueryFieldEditorFactory.createTitleEditor();
+		IFieldEditor title = JQueryFieldEditorFactory.createTitleEditor(WizardDescriptions.footerTitle);
 		title.setValue("");
 		addEditor(title, parent);
 
@@ -47,10 +47,10 @@ public class NewFooterWizardPage extends NewJQueryWidgetWizardPage {
 
 		TwoColumns columns = createTwoColumns(parent);
 
-		IFieldEditor fixed = JQueryFieldEditorFactory.createFixedPositionEditor();
+		IFieldEditor fixed = JQueryFieldEditorFactory.createFixedPositionEditor(WizardDescriptions.footerFixedPosition);
 		addEditor(fixed, columns.left());
 		
-		IFieldEditor fullScreen = JQueryFieldEditorFactory.createFullScreenEditor();
+		IFieldEditor fullScreen = JQueryFieldEditorFactory.createFullScreenEditor(WizardDescriptions.footerFullScreen);
 		addEditor(fullScreen, columns.right());
 
 		setEnabled(EDITOR_ID_FULL_SCREEN, false);

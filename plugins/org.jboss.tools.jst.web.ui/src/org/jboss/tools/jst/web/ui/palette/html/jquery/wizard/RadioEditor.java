@@ -31,7 +31,7 @@ public class RadioEditor extends ItemsEditor {
 	protected void createItemEditors() {
 		addItemEditor(JQueryFieldEditorFactory.createLabelEditor());
 		addItemEditor(JQueryFieldEditorFactory.createValueEditor());
-		addItemEditor(JQueryFieldEditorFactory.createCheckedEditor());
+		addItemEditor(JQueryFieldEditorFactory.createCheckedEditor(WizardDescriptions.radioIsSelected));
 	}
 
 	public String getLabel(int i) {

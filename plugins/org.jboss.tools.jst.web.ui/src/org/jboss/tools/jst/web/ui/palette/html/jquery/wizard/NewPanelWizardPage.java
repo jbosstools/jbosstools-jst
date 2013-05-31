@@ -36,10 +36,10 @@ public class NewPanelWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor position = JQueryFieldEditorFactory.createPanelPositionEditor();
 		addEditor(position, parent);
 
-		IFieldEditor fixed = JQueryFieldEditorFactory.createFixedPositionEditor();
+		IFieldEditor fixed = JQueryFieldEditorFactory.createFixedPositionEditor(WizardDescriptions.panelFixedPosition);
 		addEditor(fixed, parent);
 
-		IFieldEditor dismissable = JQueryFieldEditorFactory.createDismissableEditor();
+		IFieldEditor dismissable = JQueryFieldEditorFactory.createDismissableEditor(WizardDescriptions.panelDismissable);
 		addEditor(dismissable, parent);
 
 		IFieldEditor swipe = JQueryFieldEditorFactory.createSwipeCloseEditor();

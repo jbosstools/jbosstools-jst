@@ -29,7 +29,7 @@ public class CheckboxesEditor extends ItemsEditor {
 
 	protected void createItemEditors() {
 		addItemEditor(JQueryFieldEditorFactory.createLabelEditor());
-		addItemEditor(JQueryFieldEditorFactory.createCheckedEditor());
+		addItemEditor(JQueryFieldEditorFactory.createCheckedEditor(WizardDescriptions.checkboxIsSelected));
 	}
 
 	public String getLabel(int i) {

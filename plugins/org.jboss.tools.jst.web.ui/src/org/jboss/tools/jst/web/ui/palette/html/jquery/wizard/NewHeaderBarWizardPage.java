@@ -31,7 +31,7 @@ public class NewHeaderBarWizardPage extends NewJQueryWidgetWizardPage {
 	}
 
 	protected void createFieldPanel(Composite parent) {
-		IFieldEditor title = JQueryFieldEditorFactory.createTitleEditor();
+		IFieldEditor title = JQueryFieldEditorFactory.createTitleEditor(WizardDescriptions.headerTitle);
 		title.setValue("Edit Contact");
 		addEditor(title, parent);
 
@@ -39,10 +39,10 @@ public class NewHeaderBarWizardPage extends NewJQueryWidgetWizardPage {
 
 		TwoColumns columns = createTwoColumns(parent);
 
-		IFieldEditor fixed = JQueryFieldEditorFactory.createFixedPositionEditor();
+		IFieldEditor fixed = JQueryFieldEditorFactory.createFixedPositionEditor(WizardDescriptions.headerFixedPosition);
 		addEditor(fixed, columns.left());
 		
-		IFieldEditor fullScreen = JQueryFieldEditorFactory.createFullScreenEditor();
+		IFieldEditor fullScreen = JQueryFieldEditorFactory.createFullScreenEditor(WizardDescriptions.headerFullScreen);
 		addEditor(fullScreen, columns.right());
 
 		createSeparator(parent);
