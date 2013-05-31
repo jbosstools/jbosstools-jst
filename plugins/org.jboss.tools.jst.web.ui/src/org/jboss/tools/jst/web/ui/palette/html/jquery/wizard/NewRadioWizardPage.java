@@ -30,7 +30,7 @@ public class NewRadioWizardPage extends NewJQueryWidgetWizardPage {
 	}
 
 	protected void createFieldPanel(Composite parent) {
-		IFieldEditor legend = JQueryFieldEditorFactory.createLegendEditor();
+		IFieldEditor legend = JQueryFieldEditorFactory.createLegendEditor(WizardDescriptions.radioLegend);
 		addEditor(legend, parent);
 
 		createIDEditor(parent, true);

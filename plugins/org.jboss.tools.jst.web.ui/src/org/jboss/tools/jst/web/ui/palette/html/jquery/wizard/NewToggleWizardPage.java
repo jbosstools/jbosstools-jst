@@ -63,7 +63,7 @@ public class NewToggleWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
 		addEditor(theme, parent, true);
 
-		IFieldEditor trackTheme = JQueryFieldEditorFactory.createDataTrackThemeEditor();
+		IFieldEditor trackTheme = JQueryFieldEditorFactory.createDataTrackThemeEditor(WizardDescriptions.toggleTrackTheme);
 		addEditor(trackTheme, parent, true);
 	}
 

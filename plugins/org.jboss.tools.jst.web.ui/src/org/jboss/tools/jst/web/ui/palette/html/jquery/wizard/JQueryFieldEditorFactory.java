@@ -52,97 +52,203 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  */
 public class JQueryFieldEditorFactory implements JQueryConstants {
 
+	/**
+	 * Used in New Form wizard.
+	 * @return
+	 */
 	public static IFieldEditor createNameEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_NAME, WizardMessages.nameLabel, "");
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_NAME, WizardMessages.nameLabel, "",
+				WizardDescriptions.formName);
 	}
 
+	/**
+	 * Used in many jQuery Mobile wizards.
+	 * @return
+	 */
 	public static IFieldEditor createLabelEditor() {
 		return createLabelEditor(EDITOR_ID_LABEL);
 	}
 
 	public static IFieldEditor createLabelEditor(String editorID) {
-		return SwtFieldEditorFactory.INSTANCE.createTextEditor(editorID, WizardMessages.labelLabel, "");
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(editorID, WizardMessages.labelLabel, "",
+				WizardDescriptions.widgetLabel);
 	}
 
-	public static IFieldEditor createLegendEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_LEGEND, WizardMessages.legendLabel, "");
+	/**
+	 * Used in New Grouped Checkboxes Slider wizard and New Radio wizard.
+	 * @return
+	 */
+	public static IFieldEditor createLegendEditor(String description) {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_LEGEND, WizardMessages.legendLabel, "",
+				description);
 	}
 
 	static String[] THEMES = {"", "a", "b", "c", "d", "e"};
 
+	/**
+	 * Used in all jQuery Mobile wizards.
+	 * @return
+	 */
 	public static IFieldEditor createDataThemeEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_THEME, WizardMessages.themeLabel, toList(THEMES), "", true);
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_THEME, WizardMessages.themeLabel, toList(THEMES), "", true,
+				WizardDescriptions.widgetTheme);
 	}
 
-	public static IFieldEditor createDataTrackThemeEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_TRACK_THEME, WizardMessages.trackThemeLabel, toList(THEMES), "", true);
+	/**
+	 * Used in New Range Slider wizard and New Toggle wizard.
+	 * @return
+	 */
+	public static IFieldEditor createDataTrackThemeEditor(String description) {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_TRACK_THEME, WizardMessages.trackThemeLabel, toList(THEMES), "", true,
+				description);
 	}
 
+	/**
+	 * Used in New Listview wizard.
+	 * @return
+	 */
 	public static IFieldEditor createDividerThemeEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_DIVIDER_THEME, WizardMessages.dividerThemeLabel, toList(THEMES), "", true);
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_DIVIDER_THEME, WizardMessages.dividerThemeLabel, toList(THEMES), "", true,
+				WizardDescriptions.listviewDividerTheme);
 	}
 
+
+	/**
+	 * Used in New Collapsible wizard.
+	 * @return
+	 */
 	public static IFieldEditor createDataContentThemeEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_CONTENT_THEME, WizardMessages.contentThemeLabel, toList(THEMES), "", true);
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_CONTENT_THEME, WizardMessages.contentThemeLabel, toList(THEMES), "", true,
+				WizardDescriptions.collapsibleContentTheme);
 	}
 
+	/**
+	 * Used in New in many wizards.
+	 * @return
+	 */
 	public static IFieldEditor createMiniEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_MINI, WizardMessages.miniLabel, false);
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_MINI, WizardMessages.miniLabel, false,
+				WizardDescriptions.widgetMini);
 	}
 
-	public static IFieldEditor createCheckedEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_CHECKED, WizardMessages.checkedLabel, false);
+	/**
+	 * Used in New Checkboxes wizard and New RadioEditor.
+	 * @return
+	 */
+	public static IFieldEditor createCheckedEditor(String description) {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_CHECKED, WizardMessages.checkedLabel, false,
+				description);
 	}
 
+	/**
+	 * Used in New Select Menu wizard.
+	 * @return
+	 */
 	public static IFieldEditor createSelectedEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_SELECTED, WizardMessages.selectedLabel, false);
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_SELECTED, WizardMessages.selectedLabel, false,
+				WizardDescriptions.selectMenuSelected);
 	}
 
+	/**
+	 * Used in New Button wizard, New Popup wizard and New Select Menu wizard.
+	 * @return
+	 */
 	public static IFieldEditor createCornersEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_CORNERS, WizardMessages.cornersLabel, true);
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_CORNERS, WizardMessages.cornersLabel, true,
+				WizardDescriptions.widgetCorners);
 	}
 
+	/**
+	 * Used in New Listview wizard.
+	 * @return
+	 */
 	public static IFieldEditor createNumberedEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_NUMBERED, WizardMessages.numberedLabel, false);
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_NUMBERED, WizardMessages.numberedLabel, false,
+				WizardDescriptions.listviewNumbered);
 	}
 
+	/**
+	 * Used in New Listview wizard.
+	 * @return
+	 */
 	public static IFieldEditor createReadonlyEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_READ_ONLY, WizardMessages.readonlyLabel, false);
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_READ_ONLY, WizardMessages.readonlyLabel, false,
+				WizardDescriptions.listviewReadonly);
 	}
 
+	/**
+	 * Used in New Listview wizard.
+	 * @return
+	 */
 	public static IFieldEditor createDividerEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_DIVIDER, WizardMessages.dividerLabel, false);
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_DIVIDER, WizardMessages.dividerLabel, false,
+				WizardDescriptions.listviewDivider);
 	}
 
+	/**
+	 * Used in New Collapsible wizard and New Listview wizard.
+	 * @return
+	 */
 	public static IFieldEditor createAutodividersEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_AUTODIVIDERS, WizardMessages.autodividersLabel, false);
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_AUTODIVIDERS, WizardMessages.autodividersLabel, false,
+				WizardDescriptions.listviewAutodividers);
 	}
 
+	/**
+	 * Used in New Collapsible wizard and New listview wizard.
+	 * @return
+	 */
 	public static IFieldEditor createSearchFilterEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_SEARCH_FILTER, WizardMessages.searchFilterLabel, false);
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_SEARCH_FILTER, WizardMessages.searchFilterLabel, false,
+				WizardDescriptions.listviewSearchFilter);
 	}
 
-	public static IFieldEditor createInsetEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_INSET, WizardMessages.insetLabel, false);
+	/**
+	 * Used in New Collapsible wizard and New listview wizard.
+	 * @return
+	 */
+	public static IFieldEditor createInsetEditor(String description) {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_INSET, WizardMessages.insetLabel, false,
+				description);
 	}
 
+	/**
+	 * Used in New Toggle wizard.
+	 * @return
+	 */
 	public static IFieldEditor createOffLabelEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_OFF, WizardMessages.offLabelLabel, "Off");
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_OFF, WizardMessages.offLabelLabel, "Off",
+				WizardDescriptions.toggleOffLabel);
 	}
 
+	/**
+	 * Used in New Toggle wizard.
+	 * @return
+	 */
 	public static IFieldEditor createOnLabelEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_ON, WizardMessages.onLabelLabel, "On");
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_ON, WizardMessages.onLabelLabel, "On",
+				WizardDescriptions.toggleOnLabel);
 	}
 
+	/**
+	 * Used in wizards creating elements that require id.
+	 * @return
+	 */
 	public static IFieldEditor createIDEditor() {
-		CompositeEditor editor = (CompositeEditor)SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_ID, WizardMessages.idLabel, "");
+		CompositeEditor editor = (CompositeEditor)SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_ID, WizardMessages.idLabel, "",
+				WizardDescriptions.elementId);
 		TextFieldEditor text = (TextFieldEditor)editor.getEditors().get(1);
 		text.setMessage("Generate");
 		return editor; 
 	}
 
+	/**
+	 * Used in wizards creating elements that do not require id.
+	 * @return
+	 */
 	public static IFieldEditor createAddIDEditor() {
-		return createCheckboxEditor(EDITOR_ID_ADD_ID, WizardMessages.idLabel, true, 1);
+		return createCheckboxEditor(EDITOR_ID_ADD_ID, WizardMessages.idLabel, true, 1,
+				WizardDescriptions.elementId);
 	}
 
 	public static IFieldEditor createIDEditor2() {
@@ -151,49 +257,90 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return text;
 	}
 
-	public static IFieldEditor createTitleEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_TITLE, WizardMessages.titleLabel, "");
+	/**
+	 * Used in New Dialog wizard, New Header wizard, New Footer wizard.
+	 * @return
+	 */
+	public static IFieldEditor createTitleEditor(String description) {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_TITLE, WizardMessages.titleLabel, "",
+				description);
 	}
 
+	/**
+	 * Used in New Collapsible wizard.
+	 * @return
+	 */
 	public static IFieldEditor createCollapsibleHeaderEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_HEADER, WizardMessages.headerLabel, "");
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_HEADER, WizardMessages.headerLabel, "",
+				WizardDescriptions.collapsibleHeader);
 	}
 
 	static String[] LAYOUT_LIST = {LAYOUT_HORIZONTAL, LAYOUT_VERTICAL};
 
+	/**
+	 * Used in New Grouped Buttons wizard, New Grouped Checkboxes wizard,
+	 * New Radio wizard, New Select Menu wizard, New Text Input wizard,
+	 * New Toggle wizard.
+	 * @return
+	 */
 	public static IFieldEditor createLayoutEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(
 				EDITOR_ID_LAYOUT, 
 				WizardMessages.layoutLabel, 
 				toList(LAYOUT_LIST), 
 				toList(LAYOUT_LIST), 
-				LAYOUT_HORIZONTAL);
+				LAYOUT_HORIZONTAL,
+				WizardDescriptions.widgetLayout);
 	}
 
+	
+	/**
+	 * Used in New Button wizard, New Link wizard, ButtonsEditor, ListEditor.
+	 * @return
+	 */
 	public static IFieldEditor createURLEditor() {
 		return createURLEditor(EDITOR_ID_URL);
 	}
 
+	/**
+	 * Used in New Header wizard and createURLEditor().
+	 * @return
+	 */
 	public static IFieldEditor createURLEditor(String editorID) {
-		return SwtFieldEditorFactory.INSTANCE.createTextEditor(editorID, WizardMessages.urlLabel, "");
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(editorID, WizardMessages.urlLabel, "",
+			WizardDescriptions.href);
 	}
 
+	/**
+	 * Used in New Image wizard.
+	 * @return
+	 */
 	public static IFieldEditor createSrcEditor(IFile context) {
-		return createBrowseWorkspaceImageEditor(EDITOR_ID_SRC, WizardMessages.srcLabel, context);
+		return createBrowseWorkspaceImageEditor(EDITOR_ID_SRC, WizardMessages.srcLabel, context,
+				WizardDescriptions.imageSrc);
 	}
 
+	/**
+	 * Used in New Video wizard.
+	 * @return
+	 */
 	public static IFieldEditor createPosterEditor(IFile context) {
-		return createBrowseWorkspaceImageEditor(EDITOR_ID_POSTER, WizardMessages.posterLabel, context);
+		return createBrowseWorkspaceImageEditor(EDITOR_ID_POSTER, WizardMessages.posterLabel, context,
+				WizardDescriptions.videoPoster);
 	}
 
+	/**
+	 * Used in New Video wizard.
+	 * @return
+	 */
 	public static IFieldEditor createVideoSrcEditor(IFile context) {
 		return createBrowseWorkspaceVideoEditor(EDITOR_ID_SRC, WizardMessages.srcLabel, context);
 	}
 
-	public static IFieldEditor createBrowseWorkspaceImageEditor(String name, String label, IFile context) {
+	private static IFieldEditor createBrowseWorkspaceImageEditor(String name, String label, IFile context, String description) {
 		ButtonFieldEditor.ButtonPressedAction action = createSelectWorkspaceImageAction(CommonUIMessages.SWT_FIELD_EDITOR_FACTORY_BROWS, context);
 		CompositeEditor editor = new CompositeEditor(name, label, "");
-		editor.addFieldEditors(new IFieldEditor[]{new LabelFieldEditor(name,label),
+		editor.addFieldEditors(new IFieldEditor[]{new LabelFieldEditor(name,label, description),
 				new TextFieldEditor(name,label, ""),
 				new ButtonFieldEditor(name, action, "")});
 		action.setFieldEditor(editor);
@@ -213,10 +360,10 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return createSelectWorkspaceFileAction(buttonName, context, WizardMessages.selectImageDialogTitle, WizardMessages.selectImageDialogMessage, filter);
 	}
 
-	public static IFieldEditor createBrowseWorkspaceVideoEditor(String name, String label, IFile context) {
+	private static IFieldEditor createBrowseWorkspaceVideoEditor(String name, String label, IFile context) {
 		ButtonFieldEditor.ButtonPressedAction action = createSelectWorkspaceVideoAction(CommonUIMessages.SWT_FIELD_EDITOR_FACTORY_BROWS, context);
 		CompositeEditor editor = new CompositeEditor(name, label, "");
-		editor.addFieldEditors(new IFieldEditor[]{new LabelFieldEditor(name,label),
+		editor.addFieldEditors(new IFieldEditor[]{new LabelFieldEditor(name,label, WizardDescriptions.videoSrc),
 				new TextFieldEditor(name,label, ""),
 				new ButtonFieldEditor(name, action, "")});
 		action.setFieldEditor(editor);
@@ -274,47 +421,93 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return action;
 	}
 
+	/**
+	 * Used in New Form wizard.
+	 * @return
+	 */
 	public static IFieldEditor createFormActionEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_FORM_ACTION, WizardMessages.actionLabel, "");
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_FORM_ACTION, WizardMessages.actionLabel, "",
+				WizardDescriptions.formAction);
 	}
 
 	static String[] METHOD_LIST = {METHOD_GET, METHOD_POST};
 
+	/**
+	 * Used in New Form wizard.
+	 * @return
+	 */
 	public static IFieldEditor createFormMethodEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(
 				EDITOR_ID_FORM_METHOD, 
 				WizardMessages.methodLabel, 
 				toList(METHOD_LIST), 
 				toList(METHOD_LIST), 
-				METHOD_GET);
+				METHOD_GET,
+				WizardDescriptions.formMethod);
 	}
 
+	/**
+	 * Used in New Button wizard, and New Range Slider wizard,
+	 * New Text Input wizard and New Toggle wizard.
+	 * @return
+	 */
 	public static IFieldEditor createDisabledEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_DISABLED, WizardMessages.disabledLabel, false);
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_DISABLED, WizardMessages.disabledLabel, false,
+				WizardDescriptions.widgetDisabled);
 	}
 
+	/**
+	 * Used in New Button wizard and New Select Menu wizard.
+	 * @return
+	 */
 	public static IFieldEditor createInlineEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_INLINE, WizardMessages.inlineLabel, false);
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_INLINE, WizardMessages.inlineLabel, false,
+				WizardDescriptions.widgetInline);
 	}
 
+	/**
+	 * Used in New Collapsible wizard.
+	 * @return
+	 */
 	public static IFieldEditor createCollapsedEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_COLLAPSED, WizardMessages.collapsedLabel, true);
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_COLLAPSED, WizardMessages.collapsedLabel, true,
+				WizardDescriptions.collapsibleCollapsed);
 	}
 
+	/**
+	 * Used in New Collapsible wizard.
+	 * @return
+	 */
 	public static IFieldEditor createFieldSetEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_FIELD_SET, WizardMessages.fieldSetLabel, true);
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_FIELD_SET, WizardMessages.fieldSetLabel, true,
+				WizardDescriptions.collapsibleFieldSet);
 	}
 
+	/**
+	 * Used in New Button wizard and in wizards that specify a button.
+	 * @return
+	 */
 	public static IFieldEditor createIconOnlyEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_ICON_ONLY, WizardMessages.iconOnlyLabel, false);
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_ICON_ONLY, WizardMessages.iconOnlyLabel, false,
+				WizardDescriptions.buttonIconOnly);
 	}
 
+	/**
+	 * Used in New Form wizard.
+	 * @return
+	 */
 	public static IFieldEditor createAutocompleteEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_AUTOCOMPLETE, WizardMessages.autocompleteLabel, true);
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_AUTOCOMPLETE, WizardMessages.autocompleteLabel, true,
+				WizardDescriptions.formAutocomplete);
 	}
 
+	/**
+	 * Used in New Form wizard.
+	 * @return
+	 */
 	public static IFieldEditor createValidateEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_VALIDATE, WizardMessages.validateLabel, true);
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_VALIDATE, WizardMessages.validateLabel, true,
+				WizardDescriptions.formValidate);
 	}
 
 	static String[] ICON_VALUES = new String[JQueryMobileAttrProvider.ENUM_ICON_VALUES.length + 1];
@@ -323,27 +516,51 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		System.arraycopy(JQueryMobileAttrProvider.ENUM_ICON_VALUES, 0, ICON_VALUES, 1, ICON_VALUES.length - 1);
 	}
 
+	/**
+	 * Used in New Button wizard and in ButtonsEditor.
+	 * @return
+	 */
 	public static IFieldEditor createIconEditor() {
 		return createIconEditor(EDITOR_ID_ICON);
 	}
 
 	public static IFieldEditor createIconEditor(String editorID) {
-		return SwtFieldEditorFactory.INSTANCE.createComboEditor(editorID, WizardMessages.iconLabel, toList(ICON_VALUES), "", true);
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(editorID, WizardMessages.iconLabel, toList(ICON_VALUES), "", true,
+				WizardDescriptions.buttonIcon);
 	}
 
+	/**
+	 * Used in New Collapsible wizard.
+	 * @return
+	 */
 	public static IFieldEditor createCollapsedIconEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_COLLAPSED_ICON, WizardMessages.collapsedIconLabel, toList(ICON_VALUES), "", true);
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_COLLAPSED_ICON, WizardMessages.collapsedIconLabel, toList(ICON_VALUES), "", true,
+				WizardDescriptions.collapsibleCollapsedIcon);
 	}
 
+	/**
+	 * Used in New Collapsible wizard.
+	 * @return
+	 */
 	public static IFieldEditor createExpandedIconEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_EXPANDED_ICON, WizardMessages.expandedIconLabel, toList(ICON_VALUES), "", true);
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_EXPANDED_ICON, WizardMessages.expandedIconLabel, toList(ICON_VALUES), "", true,
+				WizardDescriptions.collapsibleExpandedIcon);
 	}
 
+	/**
+	 * Used in many wizards where a button may be decorated with icon.
+	 * @return
+	 */
 	public static IFieldEditor createIconPositionEditor() {
 		String[] values = new String[]{"", "left", "right", "top", "bottom"};
-		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_ICON_POS, WizardMessages.iconposLabel, toList(values), "", true);
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_ICON_POS, WizardMessages.iconposLabel, toList(values), "", true,
+				WizardDescriptions.iconPosition);
 	}
 
+	/**
+	 * Used in New Button wizard and New Link wizard.
+	 * @return
+	 */
 	public static IFieldEditor createActionEditor() {
 		String[] values = new String[]{"", 
 				WizardMessages.actionDialogLabel, 
@@ -351,11 +568,17 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 				WizardMessages.actionBackLabel,
 				WizardMessages.actionCloseLabel,
 				WizardMessages.actionExternalLabel};
-		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_ACTION, WizardMessages.actionLabel, toList(values), "", false);
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_ACTION, WizardMessages.actionLabel, toList(values), "", false,
+				WizardDescriptions.linkAction);
 	}
 
+	/**
+	 * Used in New Range Slider wizard.
+	 * @return
+	 */
 	public static IFieldEditor createRangeEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_RANGE, WizardMessages.rangeLabel, false);
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_RANGE, WizardMessages.rangeLabel, false,
+				WizardDescriptions.sliderIsRange);
 	}
 
 	static String[] TRANSITION_LIST = {"", 
@@ -363,59 +586,108 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		TRANSITION_FLOW, TRANSITION_SLIDEFADE, TRANSITION_SLIDEDOWN,
 		TRANSITION_SLIDE, TRANSITION_SLIDEUP, TRANSITION_NONE};
 
-	//For Open dialog
+	/**
+	 * Used in New Link wizard and New Popup wizard for opening button.
+	 * @return
+	 */
 	public static IFieldEditor createTransitionEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(
 				EDITOR_ID_TRANSITION, 
 				WizardMessages.transitionLabel, 
-				toList(TRANSITION_LIST), "", false);
+				toList(TRANSITION_LIST), "", false,
+				WizardDescriptions.transition);
 	}
 
 	static String[] CLOSE_BUTTON_LIST = {CLOSE_LEFT, CLOSE_RIGHT, CLOSE_NONE};
 
-	//For Dialog
+	/**
+	 * Used in New Dialog wizard.
+	 * @return
+	 */
 	public static IFieldEditor createCloseButtonEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(
 				EDITOR_ID_CLOSE_BUTTON, 
 				WizardMessages.closeButtonPositionLabel, 
-				toList(CLOSE_BUTTON_LIST), CLOSE_LEFT, false);
+				toList(CLOSE_BUTTON_LIST), CLOSE_LEFT, false,
+				WizardDescriptions.dialogCloseButton);
 	}
 
 	static String[] CLOSE_POPUP_BUTTON_LIST = {CLOSE_NONE, CLOSE_LEFT, CLOSE_RIGHT};
 
+	/**
+	 * Used in New Popup wizard.
+	 * @return
+	 */
 	public static IFieldEditor createClosePopupButtonEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(
 				EDITOR_ID_CLOSE_BUTTON, 
 				WizardMessages.closeButtonPositionLabel, 
-				toList(CLOSE_POPUP_BUTTON_LIST), CLOSE_NONE, false);
+				toList(CLOSE_POPUP_BUTTON_LIST), CLOSE_NONE, false,
+				WizardDescriptions.popupCloseButton);
 	}
 
-	public static IFieldEditor createMinEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_MIN, WizardMessages.minLabel, "0");
+	/**
+	 * Used in New Range Slider wizard and New Text Input wizard.
+	 * @return
+	 */
+	public static IFieldEditor createMinEditor(String description) {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_MIN, WizardMessages.minLabel, "0",
+				description);
 	}
 
-	public static IFieldEditor createMaxEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_MAX, WizardMessages.maxLabel, "100");
+	/**
+	 * Used in New Range Slider wizard and New Text Input wizard.
+	 * @return
+	 */
+	public static IFieldEditor createMaxEditor(String description) {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_MAX, WizardMessages.maxLabel, "100",
+				description);
 	}
 
-	public static IFieldEditor createStepEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_STEP, WizardMessages.stepLabel, "");
+	/**
+	 * Used in New Range Slider wizard and New Text Input wizard.
+	 * @return
+	 */
+	public static IFieldEditor createStepEditor(String description) {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_STEP, WizardMessages.stepLabel, "",
+				description);
 	}
 
+	/**
+	 * Used in New Range Slider wizard.
+	 * @return
+	 */
 	public static IFieldEditor createValueEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_VALUE, WizardMessages.valueLabel, "");
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_VALUE, WizardMessages.valueLabel, "",
+				WizardDescriptions.rangeSliderValue);
 	}
 
+	/**
+	 * Used in New Range Slider wizard.
+	 * @return
+	 */
 	public static IFieldEditor createRightValueEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_RVALUE, WizardMessages.rightValueLabel, "60");
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_RVALUE, WizardMessages.rightValueLabel, "60",
+				WizardDescriptions.rangeSliderRightValue);
 	}
 
+	/**
+	 * Used in New Range Slider wizard.
+	 * @return
+	 */
 	public static IFieldEditor createHighlightEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_HIGHLIGHT, WizardMessages.highlightLabel, true);
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_HIGHLIGHT, WizardMessages.highlightLabel, true,
+				WizardDescriptions.rangeSliderHighlight);
 	}
 
+	/**
+	 * Used in New Range Slider wizard, New Select Menu wizard, 
+	 * New Text Input wizard, New Toggle wizard.
+	 * @return
+	 */
 	public static IFieldEditor createHideLabelEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_HIDE_LABEL, WizardMessages.hideLabelLabel, false);
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_HIDE_LABEL, WizardMessages.hideLabelLabel, false,
+				WizardDescriptions.hideLabel);
 	}
 
 	static List<String> toList(String[] values) {
@@ -424,18 +696,38 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return list;
 	}
 
+	/**
+	 * Used in New Page wizard.
+	 * @return
+	 */
 	public static IFieldEditor createAddHeaderEditor() {
-		return createCheckboxEditor(EDITOR_ID_ADD_HEADER, WizardMessages.headerLabel, true, 1);
+		return createCheckboxEditor(EDITOR_ID_ADD_HEADER, WizardMessages.headerLabel, true, 1,
+				WizardDescriptions.pageHeader);
 	}
 
+	/**
+	 * Used in New Page wizard.
+	 * @return
+	 */
 	public static IFieldEditor createAddFooterEditor() {
-		return createCheckboxEditor(EDITOR_ID_ADD_FOOTER, WizardMessages.footerLabel, true, 1);
+		return createCheckboxEditor(EDITOR_ID_ADD_FOOTER, WizardMessages.footerLabel, true, 1,
+				WizardDescriptions.pageFooter);
 	}
 
+	/**
+	 * Used in New Page wizard.
+	 * Goes together with enabling label that provides description.
+	 * @return
+	 */
 	public static IFieldEditor createHeaderTitleEditor() {
 		return createTextEditor(EDITOR_ID_HEADER_TITLE, "Page Title", 2);
 	}
 
+	/**
+	 * Used in New Page wizard.
+	 * Goes together with enabling label that provides description.
+	 * @return
+	 */
 	public static IFieldEditor createFooterTitleEditor() {
 		return createTextEditor(EDITOR_ID_FOOTER_TITLE, "Page Footer", 2);
 	}
@@ -450,13 +742,14 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 	 * @param span
 	 * @return
 	 */
-	public static IFieldEditor createCheckboxEditor(String name, final String label, boolean defaultValue, final int span) {
+	public static IFieldEditor createCheckboxEditor(String name, final String label, boolean defaultValue, final int span, final String description) {
 		return new CheckBoxFieldEditor(name,label,Boolean.valueOf(defaultValue)){
 			public void doFillIntoGrid(Object parent) {
 				Composite c = (Composite) parent;
 				final Control[] controls = (Control[]) getEditorControls(c);
 				Button button = (Button)controls[0];
 				button.setText(label);
+				button.setToolTipText(description);
 				GridData d = new GridData();
 				d.horizontalSpan = span;
 				button.setLayoutData(d);
@@ -506,8 +799,13 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		};
 	}
 
+	/**
+	 * Used in New Text Input wizard.
+	 * @return
+	 */
 	public static IFieldEditor createClearInputEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_CLEAR_INPUT, WizardMessages.clearInputLabel, true);
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_CLEAR_INPUT, WizardMessages.clearInputLabel, true,
+				WizardDescriptions.textInputClear);
 	}
 
 	static String[] TEXT_TYPES = {
@@ -517,51 +815,106 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		TYPE_COLOR
 	};
 
+	/**
+	 * Used in New Text Input wizard.
+	 * @return
+	 */
 	public static IFieldEditor createTextTypeEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(
 				EDITOR_ID_TEXT_TYPE, 
 				WizardMessages.textTypeLabel, 
-				toList(TEXT_TYPES), TYPE_TEXT, false);
+				toList(TEXT_TYPES), TYPE_TEXT, false,
+				WizardDescriptions.textInputType);
 	}
 
+	/**
+	 * Used in New Text Input wizard.
+	 * @return
+	 */
 	public static IFieldEditor createPlaceholderEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_PLACEHOLDER, WizardMessages.placeholderLabel, "");
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_PLACEHOLDER, WizardMessages.placeholderLabel, "",
+				WizardDescriptions.textInputPlaceholder);
 	}
 
+	/**
+	 * Used in New Text Input wizard.
+	 * @return
+	 */
 	public static IFieldEditor createPatternEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_PATTERN, WizardMessages.patternLabel, "");
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_PATTERN, WizardMessages.patternLabel, "",
+				WizardDescriptions.textInputPattern);
 	}
 
+	/**
+	 * Used in New Text Input wizard.
+	 * @return
+	 */
 	public static IFieldEditor createMaxlengthEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_MAXLENGTH, WizardMessages.maxlengthLabel, "");
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_MAXLENGTH, WizardMessages.maxlengthLabel, "",
+				WizardDescriptions.textInputMaxlength);
 	}
 
+	/**
+	 * Used in New Text Input wizard.
+	 * @return
+	 */
 	public static IFieldEditor createAutofocusEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_AUTOFOCUS, WizardMessages.autofocusLabel, false);
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_AUTOFOCUS, WizardMessages.autofocusLabel, false,
+				WizardDescriptions.textInputAutofocus);
 	}
 
+	/**
+	 * Used in New Text Input wizard.
+	 * @return
+	 */
 	public static IFieldEditor createRequiredEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_REQUIRED, WizardMessages.requiredLabel, false);
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_REQUIRED, WizardMessages.requiredLabel, false,
+				WizardDescriptions.textInputRequired);
 	}
 
-	public static IFieldEditor createFixedPositionEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_FIXED_POSITION, WizardMessages.fixedPositionLabel, false);
+	/**
+	 * Used in New Header wizard, New Footer wizard and New Panel wizard.
+	 * @return
+	 */
+	public static IFieldEditor createFixedPositionEditor(String description) {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_FIXED_POSITION, WizardMessages.fixedPositionLabel, false,
+				description);
 	}
 
-	public static IFieldEditor createFullScreenEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_FULL_SCREEN, WizardMessages.fullScreenLabel, false);
+	/**
+	 * Used in New Header wizard and New Footer wizard.
+	 * @return
+	 */
+	public static IFieldEditor createFullScreenEditor(String description) {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_FULL_SCREEN, WizardMessages.fullScreenLabel, false,
+				description);
 	}
 
+	/**
+	 * Used in New Header wizard.
+	 * @return
+	 */
 	public static IFieldEditor createLeftButtonEditor() {
-		return createCheckboxEditor(EDITOR_ID_LEFT_BUTTON, WizardMessages.leftButtonLabel, true, 3);
+		return createCheckboxEditor(EDITOR_ID_LEFT_BUTTON, WizardMessages.leftButtonLabel, true, 3,
+				WizardDescriptions.headerLeftButton);
 	}
 
+	/**
+	 * Used in New Header wizard.
+	 * @return
+	 */
 	public static IFieldEditor createRightButtonEditor() {
-		return createCheckboxEditor(EDITOR_ID_RIGHT_BUTTON, WizardMessages.rightButtonLabel, true, 3);
+		return createCheckboxEditor(EDITOR_ID_RIGHT_BUTTON, WizardMessages.rightButtonLabel, true, 3,
+				WizardDescriptions.headerRightButton);
 	}
 
+	/**
+	 * Used in New Page wizard.
+	 * @return
+	 */
 	public static IFieldEditor createBackButtonEditor() {
-		return createCheckboxEditor(EDITOR_ID_BACK_BUTTON, WizardMessages.backButtonLabel, false, 3);
+		return createCheckboxEditor(EDITOR_ID_BACK_BUTTON, WizardMessages.backButtonLabel, false, 3,
+			WizardDescriptions.pageBackButton);
 	}
 
 	public static IFieldEditor createItemsNumberEditor(String label, int min, int max, int value) {
@@ -572,168 +925,310 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_NUMBER_OF_ITEMS, WizardMessages.numberOfItemsLabel, toList(numbers), "" + value, false);
 	}
 
+	/**
+	 * Used in New Footer wizard.
+	 * @return
+	 */
 	public static IFieldEditor createArragementEditor() {
 		String[] values = new String[]{ARRAGEMENT_DEFAULT, ARRAGEMENT_GROUPED, ARRAGEMENT_NAVBAR};
 		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(EDITOR_ID_ARRAGEMENT, WizardMessages.arragementLabel, 
-				toList(values), toList(values), values[0]);
+				toList(values), toList(values), values[0], WizardDescriptions.footerArrangement);
 	}
 
+	/**
+	 * Used in New Grid wizard.
+	 * @return
+	 */
 	public static IFieldEditor createGridColumnsEditor() {
 		String[] values = new String[]{"1", "2", "3", "4", "5"};
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_GRID_COLUMNS, WizardMessages.gridColumnsLabel, 
-				toList(values), "3", false);
+				toList(values), "3", false, WizardDescriptions.gridColumns);
 	}
 
+	/**
+	 * Used in New Grid wizard.
+	 * @return
+	 */
 	public static IFieldEditor createGridRowsEditor() {
 		String[] values = new String[]{"1", "2", "3", "4", "5"};
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_GRID_ROWS, WizardMessages.gridRowsLabel, 
-				toList(values), "3", false);
+				toList(values), "3", false, WizardDescriptions.gridRows);
 	}
 
-	public static IFieldEditor createDismissableEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_DISMISSABLE, WizardMessages.dismissableLabel, true);
+	/**
+	 * Used in New Panel wizard and New Popup wizard.
+	 * @return
+	 */
+	public static IFieldEditor createDismissableEditor(String description) {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_DISMISSABLE, WizardMessages.dismissableLabel, true,
+				description);
 	}
 
+	/**
+	 * Used in New Popup wizard.
+	 * @return
+	 */
 	public static IFieldEditor createShadowEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_SHADOW, WizardMessages.shadowLabel, true);
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_SHADOW, WizardMessages.shadowLabel, true,
+				WizardDescriptions.popupShadow);
 	}
 
+	/**
+	 * Used in New Popup wizard.
+	 * @return
+	 */
 	public static IFieldEditor createPaddingEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_PADDING, WizardMessages.paddingLabel, true);
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_PADDING, WizardMessages.paddingLabel, true,
+				WizardDescriptions.popupPadding);
 	}
 
+	/**
+	 * Used in New Popup wizard.
+	 * @return
+	 */
 	public static IFieldEditor createOverlayEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_OVERLAY, WizardMessages.overlayLabel, false);
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_OVERLAY, WizardMessages.overlayLabel, false,
+				WizardDescriptions.popupOverlay);
 	}
 
+	/**
+	 * Used in New Popup wizard.
+	 * @return
+	 */
 	public static IFieldEditor createInfoStyledEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_INFO_STYLED, WizardMessages.infoStyledLabel, false);
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_INFO_STYLED, WizardMessages.infoStyledLabel, false,
+				WizardDescriptions.popupInfoStyled);
 	}
 
+	/**
+	 * Used in New Popup wizard.
+	 * @return
+	 */
 	public static IFieldEditor createPositionToEditor() {
 		String[] values = new String[]{"", POSITION_TO_WINDOW, POSITION_TO_ORIGIN};
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_POSITION_TO, WizardMessages.positionToLabel, 
-				toList(values), "", true);
+				toList(values), "", true, WizardDescriptions.popupPositionTo);
 	}
 
 	static String[] PANEL_POSITION_LIST = {POSITION_LEFT, POSITION_RIGHT};
 
+	/**
+	 * Used in New Panel wizard.
+	 * @return
+	 */
 	public static IFieldEditor createPanelPositionEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(
 				EDITOR_ID_PANEL_POSITION, 
 				WizardMessages.panelPositionLabel, 
 				toList(PANEL_POSITION_LIST), 
 				toList(PANEL_POSITION_LIST), 
-				POSITION_LEFT);
+				POSITION_LEFT,
+				WizardDescriptions.panelPosition);
 	}
 
 	static String[] PANEL_DISPLAY_LIST = {DISPLAY_OVERLAY, DISPLAY_REVEAL, DISPLAY_PUSH};
 
+	/**
+	 * Used in New Panel wizard.
+	 * @return
+	 */
 	public static IFieldEditor createPanelDisplayEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(
 				EDITOR_ID_DISPLAY, 
 				WizardMessages.displayLabel, 
 				toList(PANEL_DISPLAY_LIST), 
 				toList(PANEL_DISPLAY_LIST), 
-				DISPLAY_REVEAL);
+				DISPLAY_REVEAL,
+				WizardDescriptions.panelDisplay);
 	}
 
+	/**
+	 * Used in New Panel wizard.
+	 * @return
+	 */
 	public static IFieldEditor createSwipeCloseEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_SWIPE_CLOSE, WizardMessages.swipeCloseLabel, true);
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_SWIPE_CLOSE, WizardMessages.swipeCloseLabel, true,
+				WizardDescriptions.panelSwipeClose);
 	}
 
 	static String[] TABLE_MODE_LIST = {MODE_COLUMNTOGGLE, MODE_REFLOW};
 	static String[] TABLE_MODE_LABEL_LIST = {WizardMessages.modeColumntoggleLabel, WizardMessages.modeReflowLabel};
 
+	/**
+	 * Used in New Table wizard.
+	 * @return
+	 */
 	public static IFieldEditor createTableModeEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(
 				EDITOR_ID_MODE, 
 				WizardMessages.modeLabel, 
 				toList(TABLE_MODE_LABEL_LIST), 
 				toList(TABLE_MODE_LIST), 
-				MODE_REFLOW);
+				MODE_REFLOW,
+				WizardDescriptions.tableMode);
 	}
 
+	/**
+	 * Used in New Table wizard.
+	 * @return
+	 */
 	public static IFieldEditor createColumnNameEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_COLUMN_NAME, WizardMessages.headLabel, "");
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_COLUMN_NAME, WizardMessages.headLabel, "",
+				WizardDescriptions.tableColumnName);
 	}
 
+	/**
+	 * Used in New Table wizard.
+	 * @return
+	 */
 	public static IFieldEditor createPriorityEditor() {
 		String[] values = new String[]{"", "1", "2", "3", "4", "5", "6"};
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_PRIORITY, WizardMessages.priorityLabel, 
-				toList(values), "", true);
+				toList(values), "", true, WizardDescriptions.tableColumnPriority);
 	}
 
+	/**
+	 * Used in New Table wizard.
+	 * @return
+	 */
 	public static IFieldEditor createColumnContentEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_CONTENT, WizardMessages.contentLabel, "");
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_CONTENT, WizardMessages.contentLabel, "",
+				WizardDescriptions.tableColumnContent);
 	}
 
+	/**
+	 * Used in New Table wizard.
+	 * @return
+	 */
 	public static IFieldEditor createResponsiveEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_RESPONSIVE, WizardMessages.responsiveLabel, true);
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_RESPONSIVE, WizardMessages.responsiveLabel, true,
+				WizardDescriptions.tableResponsive);
 	}
 
+	/**
+	 * Used in New Table wizard.
+	 * @return
+	 */
 	public static IFieldEditor createStripesEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_STRIPES, WizardMessages.stripesLabel, false);
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_STRIPES, WizardMessages.stripesLabel, false,
+				WizardDescriptions.tableStripes);
 	}
 
+	/**
+	 * Used in New Image wizard.
+	 * @return
+	 */
 	public static IFieldEditor createAltEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_ALT, WizardMessages.altLabel, "");
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_ALT, WizardMessages.altLabel, "",
+				WizardDescriptions.imageAlt);
 	}
 
-	public static IFieldEditor createWidthEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_WIDTH, WizardMessages.widthLabel, "");
+	/**
+	 * Used in New Image wizard and New Video wizard.
+	 * @return
+	 */
+	public static IFieldEditor createWidthEditor(String description) {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_WIDTH, WizardMessages.widthLabel, "",
+				description);
 	}
 
-	public static IFieldEditor createHeightEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_HEIGHT, WizardMessages.heightLabel, "");
+	/**
+	 * Used in New Image wizard and New Video wizard.
+	 * @return
+	 */
+	public static IFieldEditor createHeightEditor(String description) {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_HEIGHT, WizardMessages.heightLabel, "",
+				description);
 	}
 
+	/**
+	 * Used in New Image wizard.
+	 * @return
+	 */
 	public static IFieldEditor createIsmapEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_ISMAP, WizardMessages.ismapLabel, false);
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_ISMAP, WizardMessages.ismapLabel, false,
+				WizardDescriptions.imageIsmap);
 	}
 
+	/**
+	 * Used in New Image wizard.
+	 * @return
+	 */
 	public static IFieldEditor createUsemapEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_USEMAP, WizardMessages.usemapLabel, "");
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_USEMAP, WizardMessages.usemapLabel, "",
+				WizardDescriptions.imageUsemap);
 	}
 
+	/**
+	 * Used in New Image wizard.
+	 * @return
+	 */
 	public static IFieldEditor createCrossoriginEditor() {
 		String[] values = new String[]{"", CROSSORIGIN_ANONIMOUS, CROSSORIGIN_USE_CREDENTIALS};
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_CROSSORIGIN, WizardMessages.crossoriginLabel, 
-				toList(values), "", true);
+				toList(values), "", true, WizardDescriptions.imageCrossorigin);
 	}
 
-	public static IFieldEditor createAutoplayEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_AUTOPLAY, WizardMessages.autoplayLabel, false);
+	/**
+	 * Used in New Video wizard and New Audio wizard.
+	 * @return
+	 */
+	public static IFieldEditor createAutoplayEditor(String description) {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_AUTOPLAY, WizardMessages.autoplayLabel, false,
+				description);
 	}
 
-	public static IFieldEditor createControlsEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_CONTROLS, WizardMessages.controlsLabel, true);
+	/**
+	 * Used in New Video wizard and New Audio wizard.
+	 * @return
+	 */
+	public static IFieldEditor createControlsEditor(String description) {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_CONTROLS, WizardMessages.controlsLabel, true,
+				description);
 	}
 
-	public static IFieldEditor createLoopEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_LOOP, WizardMessages.loopLabel, false);
+	/**
+	 * Used in New Video wizard and New Audio wizard.
+	 * @return
+	 */
+	public static IFieldEditor createLoopEditor(String description) {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_LOOP, WizardMessages.loopLabel, false,
+				description);
 	}
 
-	public static IFieldEditor createMutedEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_MUTED, WizardMessages.mutedLabel, false);
+	/**
+	 * Used in New Video wizard and New Audio wizard.
+	 * @return
+	 */
+	public static IFieldEditor createMutedEditor(String description) {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_MUTED, WizardMessages.mutedLabel, false,
+				description);
 	}
 
 	static String[] PRELOAD_LIST = {AUTO, METADATA, NONE};
 	static String[] PRELOAD_LABEL_LIST = {WizardMessages.preloadAutoLabel, WizardMessages.preloadMetadataLabel, WizardMessages.preloadNoneLabel};
 
-	public static IFieldEditor createPreloadEditor() {
+	/**
+	 * Used in New Video wizard and New Audio wizard.
+	 * @return
+	 */
+	public static IFieldEditor createPreloadEditor(String description) {
 		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(
 				EDITOR_ID_PRELOAD, 
 				WizardMessages.modeLabel, 
 				toList(PRELOAD_LABEL_LIST), 
 				toList(PRELOAD_LIST), 
-				AUTO);
+				AUTO, description);
 	}
 
+	/**
+	 * Used in New Video wizard.
+	 * @return
+	 */
 	public static IFieldEditor createVideoTypeEditor() {
 		String[] values = new String[]{"", VIDEO_TYPE_MP4, VIDEO_TYPE_OGG, VIDEO_TYPE_WEBM};
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_VIDEO_TYPE, WizardMessages.typeLabel, 
-				toList(values), "", true);
+				toList(values), "", true, WizardDescriptions.videoType);
 	}
 
 }

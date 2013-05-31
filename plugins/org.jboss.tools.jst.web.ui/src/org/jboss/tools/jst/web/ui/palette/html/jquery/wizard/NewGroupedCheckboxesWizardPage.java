@@ -30,7 +30,7 @@ public class NewGroupedCheckboxesWizardPage extends NewJQueryWidgetWizardPage {
 	}
 
 	protected void createFieldPanel(Composite parent) {
-		IFieldEditor legend = JQueryFieldEditorFactory.createLegendEditor();
+		IFieldEditor legend = JQueryFieldEditorFactory.createLegendEditor(WizardDescriptions.checkboxesLegend);
 		addEditor(legend, parent);
 
 		createIDEditor(parent, true);

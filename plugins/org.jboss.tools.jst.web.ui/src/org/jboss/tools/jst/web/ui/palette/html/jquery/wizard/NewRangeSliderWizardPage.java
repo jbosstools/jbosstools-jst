@@ -38,13 +38,13 @@ public class NewRangeSliderWizardPage extends NewJQueryWidgetWizardPage {
 
 		TwoColumns columns = createTwoColumns(parent);
 
-		IFieldEditor min = JQueryFieldEditorFactory.createMinEditor();
+		IFieldEditor min = JQueryFieldEditorFactory.createMinEditor(WizardDescriptions.rangeSliderMin);
 		addEditor(min, columns.right());
 
-		IFieldEditor max = JQueryFieldEditorFactory.createMaxEditor();
+		IFieldEditor max = JQueryFieldEditorFactory.createMaxEditor(WizardDescriptions.rangeSliderMax);
 		addEditor(max, columns.right());
 
-		IFieldEditor step = JQueryFieldEditorFactory.createStepEditor();
+		IFieldEditor step = JQueryFieldEditorFactory.createStepEditor(WizardDescriptions.rangeSliderStep);
 		addEditor(step, columns.right());
 
 		IFieldEditor value = JQueryFieldEditorFactory.createValueEditor();
@@ -74,7 +74,7 @@ public class NewRangeSliderWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
 		addEditor(theme, parent, true);
 
-		IFieldEditor trackTheme = JQueryFieldEditorFactory.createDataTrackThemeEditor();
+		IFieldEditor trackTheme = JQueryFieldEditorFactory.createDataTrackThemeEditor(WizardDescriptions.rangeSliderTrackTheme);
 		addEditor(trackTheme, parent, true);
 	}
 

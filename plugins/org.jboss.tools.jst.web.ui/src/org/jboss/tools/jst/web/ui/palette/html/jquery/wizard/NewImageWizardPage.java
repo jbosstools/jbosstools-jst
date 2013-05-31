@@ -30,8 +30,8 @@ public class NewImageWizardPage extends NewJQueryWidgetWizardPage {
 		createIDEditor(parent, true);
 		addEditor(JQueryFieldEditorFactory.createAltEditor(), parent);
 		TwoColumns columns = createTwoColumns(parent);
-		addEditor(JQueryFieldEditorFactory.createWidthEditor(), columns.left());
-		addEditor(JQueryFieldEditorFactory.createHeightEditor(), columns.right());
+		addEditor(JQueryFieldEditorFactory.createWidthEditor(WizardDescriptions.imageWidth), columns.left());
+		addEditor(JQueryFieldEditorFactory.createHeightEditor(WizardDescriptions.imageHeight), columns.right());
 		addEditor(JQueryFieldEditorFactory.createIsmapEditor(), parent);
 		addEditor(JQueryFieldEditorFactory.createUsemapEditor(), parent);
 		addEditor(JQueryFieldEditorFactory.createCrossoriginEditor(), parent);

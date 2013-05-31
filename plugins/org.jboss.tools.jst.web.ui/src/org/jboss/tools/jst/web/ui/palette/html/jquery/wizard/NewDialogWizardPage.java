@@ -27,7 +27,7 @@ public class NewDialogWizardPage extends NewJQueryWidgetWizardPage {
 	}
 
 	protected void createFieldPanel(Composite parent) {
-		IFieldEditor title = JQueryFieldEditorFactory.createTitleEditor();
+		IFieldEditor title = JQueryFieldEditorFactory.createTitleEditor(WizardDescriptions.dialogTitle);
 		title.setValue("Dialog");
 		addEditor(title, parent);
 

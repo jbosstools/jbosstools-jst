@@ -34,13 +34,13 @@ public class NewVideoWizardPage extends NewJQueryWidgetWizardPage {
 
 		addEditor(JQueryFieldEditorFactory.createPosterEditor(getWizard().getFile()), parent);
 		TwoColumns columns = createTwoColumns(parent);
-		addEditor(JQueryFieldEditorFactory.createWidthEditor(), columns.left());
-		addEditor(JQueryFieldEditorFactory.createHeightEditor(), columns.right());
-		addEditor(JQueryFieldEditorFactory.createAutoplayEditor(), columns.left());
-		addEditor(JQueryFieldEditorFactory.createControlsEditor(), columns.right());
-		addEditor(JQueryFieldEditorFactory.createLoopEditor(), columns.left());
-		addEditor(JQueryFieldEditorFactory.createMutedEditor(), columns.right());
-		addEditor(JQueryFieldEditorFactory.createPreloadEditor(), parent);
+		addEditor(JQueryFieldEditorFactory.createWidthEditor(WizardDescriptions.videoWidth), columns.left());
+		addEditor(JQueryFieldEditorFactory.createHeightEditor(WizardDescriptions.videoHeight), columns.right());
+		addEditor(JQueryFieldEditorFactory.createAutoplayEditor(WizardDescriptions.videoAutoplay), columns.left());
+		addEditor(JQueryFieldEditorFactory.createControlsEditor(WizardDescriptions.videoControls), columns.right());
+		addEditor(JQueryFieldEditorFactory.createLoopEditor(WizardDescriptions.videoLoop), columns.left());
+		addEditor(JQueryFieldEditorFactory.createMutedEditor(WizardDescriptions.videoMuted), columns.right());
+		addEditor(JQueryFieldEditorFactory.createPreloadEditor(WizardDescriptions.videoPreload), parent);
 	}
 
 	@Override

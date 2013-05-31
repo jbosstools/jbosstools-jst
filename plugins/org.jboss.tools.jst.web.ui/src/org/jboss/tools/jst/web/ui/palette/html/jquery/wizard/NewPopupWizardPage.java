@@ -67,7 +67,7 @@ public class NewPopupWizardPage extends NewJQueryWidgetWizardPage {
 		
 		TwoColumns columns = createTwoColumns(windowPanel);
 
-		IFieldEditor dismissable = JQueryFieldEditorFactory.createDismissableEditor();
+		IFieldEditor dismissable = JQueryFieldEditorFactory.createDismissableEditor(WizardDescriptions.popupDismissable);
 		addEditor(dismissable, columns.left());
 
 		IFieldEditor shadow = JQueryFieldEditorFactory.createShadowEditor();
