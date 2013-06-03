@@ -728,9 +728,12 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 	public Object getAdapter(Class adapter) {
 		if(PalettePage.class == adapter) {
 			if(palettePage == null || palettePage.isDisposed()) {
+				IDocument d = getDocumentProvider().getDocument(getEditorInput());
+				if(d == null) {
+					return null;
+				}
 				palettePage = new PalettePageImpl();
 				palettePage.setPaletteContents(new PaletteContents(this));
-				IDocument d = getDocumentProvider().getDocument(getEditorInput());
 				palettePage.attach(d);
 			}
 			return palettePage;

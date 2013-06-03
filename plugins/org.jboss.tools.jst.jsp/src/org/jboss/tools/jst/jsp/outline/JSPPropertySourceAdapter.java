@@ -19,8 +19,10 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.Stack;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySheetEntry;
@@ -127,7 +129,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 			// of Text Viewer is not accessible anymore (f.i. in case of closing editor, 
 			// since ITexViewer is acquired from Active Page of Active Workbench Window)
 			//
-			if (viewer != null) {  
+			if (viewer != null && hasFile()) {  
 				processor = valueHelper.isFacetets() ? new FaceletsELCompletionProposalComputer() : new JspELCompletionProposalComputer();
 	//			processor.createContext(getTextViewer(), offset);
 				processor.setKeepState(true);
@@ -149,6 +151,18 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 			return jsp.getSourceEditor().getTextViewer();
 		}
 		return null;
+	}
+
+	protected boolean hasFile() {
+		IEditorPart editor = ModelUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		if(editor == null) return false;
+		if (editor instanceof JSPMultiPageEditor) {
+			JSPMultiPageEditor jsp = (JSPMultiPageEditor)editor;
+			IEditorInput input = jsp.getEditorInput();
+			IFile f = (IFile)input.getAdapter(IFile.class);
+			return f != null && f.exists();
+		}
+		return false;
 	}
 
 	public void setSorter(AttributeSorter sorter) {
@@ -658,7 +672,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 	}
 	
 	private Map<String, IAttribute> getAttributes() {
-		return (kbQuery == null ? 
+		return (kbQuery == null || pageContext == null ? 
 				new HashMap<String, IAttribute>() : 
 					PageProcessor.getInstance().getAttributesAsMap(kbQuery, pageContext));
 	}
