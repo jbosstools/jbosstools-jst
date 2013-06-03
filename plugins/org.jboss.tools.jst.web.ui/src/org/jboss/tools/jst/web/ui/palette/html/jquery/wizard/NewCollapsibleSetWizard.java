@@ -72,6 +72,9 @@ public class NewCollapsibleSetWizard extends NewJQueryWidgetWizard<NewCollapsibl
 			}
 			item.addChild(TAG_H4, page.items.getLabel(i));
 			item.addChild(TAG_P, "Collapsible content.");
+			if(i == 0) {
+				item.getChildren().add(SEPARATOR);
+			}
 		}
 	}
 
