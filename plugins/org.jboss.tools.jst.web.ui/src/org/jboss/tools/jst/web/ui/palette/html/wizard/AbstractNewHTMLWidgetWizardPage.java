@@ -269,6 +269,13 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		return browserPanel;
 	}
 
+	private static boolean errorLoged;
+	private static Map<Integer, String> browserNames = new HashMap<Integer, String>();
+	static {
+		browserNames.put(SWT.WEBKIT, "Webkit");
+		browserNames.put(SWT.MOZILLA, "Mozilla");
+	}
+
 	protected Browser createBrowser(Composite browserPanel) {
 		/*
 		//We can provide webkit in this way
@@ -281,13 +288,18 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		try {
 			try {
 				return new Browser(browserPanel, SWT.READ_ONLY | browserIndex | SWT.NO_SCROLL);
-			} catch (SWTError e) {
+			} catch (Error e) {
+				if(!(e instanceof SWTError) && !errorLoged) {
+					logProblem(e, browserNames.get(browserIndex), true);
+				}
+				Control[] children = browserPanel.getChildren();
+				for (Control child : children) {
+					child.dispose();
+				}
 				try {
 					return new Browser(browserPanel, SWT.READ_ONLY | SWT.NONE | SWT.NO_SCROLL);
-				} catch (SWTError e1) {
-					String message = "Cannot create neither Mozilla nor default browser";
-					Exception ex = new HTMLWizardVisualPreviewInitializationException(message, e1);
-					WebUiPlugin.getDefault().logError(message, ex);
+				} catch (Error e1) {
+					logProblem(e1, null, false);
 				}
 			}
 		} finally {
@@ -299,6 +311,20 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 			*/
 		}
 		return null;
+	}
+
+	private void logProblem(Error e, String browserName, boolean warning) {
+		if(browserName==null) {
+			browserName = "default";
+		}
+		String message = "Cannot create " + browserName + " browser";
+		Exception ex = new HTMLWizardVisualPreviewInitializationException(message, e);
+		if(warning) {
+			WebUiPlugin.getDefault().logWarning(message, ex);
+		} else {
+			WebUiPlugin.getDefault().logError(message, ex);
+		}
+		errorLoged = true;
 	}
 
 	protected static final boolean isMacOS = "Mac OS X".equals(System.getProperty("os.name"));
