@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import org.jboss.tools.common.model.ui.editors.dnd.DropWizardMessages;
 import org.jboss.tools.jst.web.ui.JSTWebUIImages;
+import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizard.ElementNode;
 
 /**
  * 
@@ -80,7 +81,13 @@ public class NewHeaderBarWizard extends NewJQueryWidgetWizard<NewHeaderBarWizard
 		ElementNode form = getFormNode(body);
 		ElementNode div = form.addChild(TAG_DIV);
 		div.addAttribute(ATTR_STYLE, "padding: 20px 20px 20px 20px;");
-		addContent(div);
+		ElementNode pg = div.addChild(TAG_DIV);
+		pg.addAttribute(ATTR_DATA_ROLE, ROLE_PAGE);
+		addID("page-", pg);
+		addContent(pg);
+		ElementNode content = pg.addChild(TAG_DIV);
+		content.addAttribute(ATTR_DATA_ROLE, ROLE_CONTENT);
+		content.addChild("p", "Page content goes here.");
 	}
 	
 }
