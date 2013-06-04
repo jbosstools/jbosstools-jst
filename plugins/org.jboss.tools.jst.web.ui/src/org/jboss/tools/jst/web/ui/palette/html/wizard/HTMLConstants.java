@@ -48,6 +48,7 @@ public interface HTMLConstants {
 	public String TAG_TR = "tr";
 	public String TAG_TH = "th";
 	public String TAG_TD = "td";
+	public String TAG_AUDIO = "audio";
 	public String TAG_VIDEO = "video";
 	public String TAG_SOURCE = "source";
 
@@ -93,4 +94,7 @@ public interface HTMLConstants {
 	public String VIDEO_TYPE_MP4 = "video/mp4";
 	public String VIDEO_TYPE_OGG = "video/ogg";
 	public String VIDEO_TYPE_WEBM = "video/webbm";
+
+	public String AUDIO_TYPE_MPEG = "audio/mpeg";
+	public String AUDIO_TYPE_OGG = "audio/ogg";
 }

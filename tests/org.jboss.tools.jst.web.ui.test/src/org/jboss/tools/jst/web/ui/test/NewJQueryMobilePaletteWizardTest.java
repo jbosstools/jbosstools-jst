@@ -18,6 +18,8 @@ import org.jboss.tools.common.ui.widget.editor.CompositeEditor;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewAudioWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewAudioWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCheckBoxWizard;
@@ -916,6 +918,47 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 
 		NewVideoWizardPage wizardPage = (NewVideoWizardPage)currentPage;
 		NewVideoWizard wizard = (NewVideoWizard)wizardPage.getWizard();
+
+		assertEquals("1", wizardPage.getEditorValue(EDITOR_ID_NUMBER_OF_ITEMS));
+
+		assertTextDoesNotExist(wizard, ATTR_AUTOPLAY);
+		wizardPage.setEditorValue(EDITOR_ID_AUTOPLAY, TRUE);
+		assertAttrExists(wizard, ATTR_AUTOPLAY, ATTR_AUTOPLAY);
+		wizardPage.setEditorValue(EDITOR_ID_AUTOPLAY, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_AUTOPLAY);
+
+		assertTextDoesNotExist(wizard, ATTR_LOOP);
+		wizardPage.setEditorValue(EDITOR_ID_LOOP, TRUE);
+		assertAttrExists(wizard, ATTR_LOOP, ATTR_LOOP);
+		wizardPage.setEditorValue(EDITOR_ID_LOOP, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_LOOP);
+
+		assertTextDoesNotExist(wizard, ATTR_MUTED);
+		wizardPage.setEditorValue(EDITOR_ID_MUTED, TRUE);
+		assertAttrExists(wizard, ATTR_MUTED, ATTR_MUTED);
+		wizardPage.setEditorValue(EDITOR_ID_MUTED, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_MUTED);
+
+		assertAttrExists(wizard, ATTR_CONTROLS, ATTR_CONTROLS);
+		wizardPage.setEditorValue(EDITOR_ID_CONTROLS, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_CONTROLS);
+		wizardPage.setEditorValue(EDITOR_ID_CONTROLS, TRUE);
+		assertAttrExists(wizard, ATTR_CONTROLS, ATTR_CONTROLS);
+
+		assertTextExists(wizard, TAG_SOURCE);
+		wizardPage.setEditorValue(EDITOR_ID_NUMBER_OF_ITEMS, "2");
+		assertEquals("2", wizardPage.getEditorValue(EDITOR_ID_NUMBER_OF_ITEMS));
+
+		wizard.performFinish();
+	}
+
+	public void testNewAudioWizard() {
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Audio", true);
+
+		assertTrue(currentPage instanceof NewAudioWizardPage);
+
+		NewAudioWizardPage wizardPage = (NewAudioWizardPage)currentPage;
+		NewAudioWizard wizard = (NewAudioWizard)wizardPage.getWizard();
 
 		assertEquals("1", wizardPage.getEditorValue(EDITOR_ID_NUMBER_OF_ITEMS));
 

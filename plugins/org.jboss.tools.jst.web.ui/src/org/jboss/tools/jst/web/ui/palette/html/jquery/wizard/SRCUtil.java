@@ -135,4 +135,9 @@ public class SRCUtil {
 		return true;
 	}
 
+	public static boolean isAudioFile(String fileName) {
+		//Should we try to filter.
+		return true;
+	}
+
 }

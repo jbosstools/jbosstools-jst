@@ -10,6 +10,11 @@ public class WizardDescriptions extends NLS {
 	public static String audioLoop;
 	public static String audioMuted;
 	public static String audioPreload;
+	public static String audioSrc;
+	public static String audioType;
+	public static String audioPreloadAuto;
+	public static String audioPreloadMetadata;
+	public static String audioPreloadNone;
 
 	public static String buttonIcon;
 	public static String buttonIconOnly;
@@ -141,6 +146,9 @@ public class WizardDescriptions extends NLS {
 	public static String videoSrc;
 	public static String videoType;
 	public static String videoWidth;
+	public static String videoPreloadAuto;
+	public static String videoPreloadMetadata;
+	public static String videoPreloadNone;
 
 	public static String widgetCorners;
 	public static String widgetDisabled;

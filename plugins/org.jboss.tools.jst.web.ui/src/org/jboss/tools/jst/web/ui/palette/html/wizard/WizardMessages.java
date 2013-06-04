@@ -125,6 +125,7 @@ public class WizardMessages extends NLS {
 	public static String controlsLabel;
 	public static String loopLabel;
 	public static String mutedLabel;
+	public static String preloadLabel;
 	public static String preloadAutoLabel;
 	public static String preloadMetadataLabel;
 	public static String preloadNoneLabel;
@@ -135,6 +136,9 @@ public class WizardMessages extends NLS {
 
 	public static String selectVideoDialogTitle;
 	public static String selectVideoDialogMessage;
+
+	public static String selectAudioDialogTitle;
+	public static String selectAudioDialogMessage;
 
 	public static String itemsLabel;
 	public static String columnsLabel;
@@ -214,6 +218,9 @@ public class WizardMessages extends NLS {
 
 	public static String newVideoWizardTitle;
 	public static String newVideoWizardDescription;
+
+	public static String newAudioWizardTitle;
+	public static String newAudioWizardDescription;
 
 	public static String errorIDisUsed;
 	

@@ -337,6 +337,14 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return createBrowseWorkspaceVideoEditor(EDITOR_ID_SRC, WizardMessages.srcLabel, context);
 	}
 
+	/**
+	 * Used in New Audio wizard.
+	 * @return
+	 */
+	public static IFieldEditor createAudioSrcEditor(IFile context) {
+		return createBrowseWorkspaceAudioEditor(EDITOR_ID_SRC, WizardMessages.srcLabel, context);
+	}
+
 	private static IFieldEditor createBrowseWorkspaceImageEditor(String name, String label, IFile context, String description) {
 		ButtonFieldEditor.ButtonPressedAction action = createSelectWorkspaceImageAction(CommonUIMessages.SWT_FIELD_EDITOR_FACTORY_BROWS, context);
 		CompositeEditor editor = new CompositeEditor(name, label, "");
@@ -381,6 +389,29 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 			}
 		};
 		return createSelectWorkspaceFileAction(buttonName, context, WizardMessages.selectVideoDialogTitle, WizardMessages.selectVideoDialogMessage, filter);
+	}
+
+	private static IFieldEditor createBrowseWorkspaceAudioEditor(String name, String label, IFile context) {
+		ButtonFieldEditor.ButtonPressedAction action = createSelectWorkspaceAudioAction(CommonUIMessages.SWT_FIELD_EDITOR_FACTORY_BROWS, context);
+		CompositeEditor editor = new CompositeEditor(name, label, "");
+		editor.addFieldEditors(new IFieldEditor[]{new LabelFieldEditor(name,label, WizardDescriptions.audioSrc),
+				new TextFieldEditor(name,label, ""),
+				new ButtonFieldEditor(name, action, "")});
+		action.setFieldEditor(editor);
+		return editor;
+	}
+
+	public static ButtonFieldEditor.ButtonPressedAction createSelectWorkspaceAudioAction(String buttonName, final IFile context) {
+		ViewerFilter filter = new ViewerFilter() {
+			public boolean select(Viewer viewer, Object parentElement, Object element) {
+				return (element instanceof IFolder 
+						|| (element instanceof IProject
+							&& element == context.getProject())
+						|| (element instanceof IFile 
+							&& SRCUtil.isAudioFile(((IFile)element).getName())));
+			}
+		};
+		return createSelectWorkspaceFileAction(buttonName, context, WizardMessages.selectAudioDialogTitle, WizardMessages.selectAudioDialogMessage, filter);
 	}
 
 	public static ButtonFieldEditor.ButtonPressedAction createSelectWorkspaceFileAction(String buttonName, final IFile context, 
@@ -1208,17 +1239,42 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 	static String[] PRELOAD_LIST = {AUTO, METADATA, NONE};
 	static String[] PRELOAD_LABEL_LIST = {WizardMessages.preloadAutoLabel, WizardMessages.preloadMetadataLabel, WizardMessages.preloadNoneLabel};
 
+	static String[] VIDEO_PRELOAD_VALUE_DESCRIPTIONS = {
+		WizardDescriptions.videoPreloadAuto,
+		WizardDescriptions.videoPreloadMetadata,
+		WizardDescriptions.videoPreloadNone
+	};
+
 	/**
-	 * Used in New Video wizard and New Audio wizard.
+	 * Used in New Video wizard.
 	 * @return
 	 */
-	public static IFieldEditor createPreloadEditor(String description) {
+	public static IFieldEditor createPreloadVideoEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(
 				EDITOR_ID_PRELOAD, 
-				WizardMessages.modeLabel, 
+				WizardMessages.preloadLabel, 
 				toList(PRELOAD_LABEL_LIST), 
 				toList(PRELOAD_LIST), 
-				AUTO, description);
+				AUTO, WizardDescriptions.videoPreload, toList(VIDEO_PRELOAD_VALUE_DESCRIPTIONS));
+	}
+
+	static String[] PRELOAD_VALUE_DESCRIPTIONS = {
+		WizardDescriptions.audioPreloadAuto,
+		WizardDescriptions.audioPreloadMetadata,
+		WizardDescriptions.audioPreloadNone
+	};
+
+	/**
+	 * Used in New Audio wizard.
+	 * @return
+	 */
+	public static IFieldEditor createPreloadAudioEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(
+				EDITOR_ID_PRELOAD, 
+				WizardMessages.preloadLabel, 
+				toList(PRELOAD_LABEL_LIST), 
+				toList(PRELOAD_LIST), 
+				AUTO, WizardDescriptions.audioPreload, toList(PRELOAD_VALUE_DESCRIPTIONS));
 	}
 
 	/**
@@ -1229,6 +1285,16 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		String[] values = new String[]{"", VIDEO_TYPE_MP4, VIDEO_TYPE_OGG, VIDEO_TYPE_WEBM};
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_VIDEO_TYPE, WizardMessages.typeLabel, 
 				toList(values), "", true, WizardDescriptions.videoType);
+	}
+
+	/**
+	 * Used in New Audio wizard.
+	 * @return
+	 */
+	public static IFieldEditor createAudioTypeEditor() {
+		String[] values = new String[]{"", AUDIO_TYPE_MPEG, AUDIO_TYPE_OGG};
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_AUDIO_TYPE, WizardMessages.typeLabel, 
+				toList(values), "", true, WizardDescriptions.audioType);
 	}
 
 }
