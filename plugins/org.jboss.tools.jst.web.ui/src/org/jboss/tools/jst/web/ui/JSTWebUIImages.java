@@ -48,6 +48,7 @@ public class JSTWebUIImages extends CommonUIImages{
 	public static String FORM_IMAGE    = WIZARDS_PATH + "FormWizBan.png"; //$NON-NLS-1$
 	public static String IMG_IMAGE    = WIZARDS_PATH + "ImageWizBan.png"; //$NON-NLS-1$
 	public static String VIDEO_IMAGE    = WIZARDS_PATH + "VideoWizBan.png"; //$NON-NLS-1$
+	public static String AUDIO_IMAGE    = WIZARDS_PATH + "AudioWizBan.png"; //$NON-NLS-1$
 
 	private static JSTWebUIImages INSTANCE;
 	

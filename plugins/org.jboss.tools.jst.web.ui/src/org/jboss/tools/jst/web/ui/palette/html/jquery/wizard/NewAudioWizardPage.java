@@ -20,27 +20,23 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewVideoWizardPage extends NewJQueryWidgetWizardPage {
-	VideoSourceEditor items = new VideoSourceEditor(this, 1, 3);
+public class NewAudioWizardPage extends NewJQueryWidgetWizardPage {
+	AudioSourceEditor items = new AudioSourceEditor(this, 1, 3);
 
-	public NewVideoWizardPage() {
-		super("newVideo", WizardMessages.newVideoWizardTitle);
-		setDescription(WizardMessages.newVideoWizardDescription);
+	public NewAudioWizardPage() {
+		super("newAudio", WizardMessages.newAudioWizardTitle);
+		setDescription(WizardMessages.newAudioWizardDescription);
 	}
 
 	protected void createFieldPanel(Composite parent) {
 		createIDEditor(parent, true);
 		items.createControl(parent, WizardMessages.sourcesLabel);
-
-		addEditor(JQueryFieldEditorFactory.createPosterEditor(getWizard().getFile()), parent);
 		TwoColumns columns = createTwoColumns(parent);
-		addEditor(JQueryFieldEditorFactory.createWidthEditor(WizardDescriptions.videoWidth), columns.left());
-		addEditor(JQueryFieldEditorFactory.createHeightEditor(WizardDescriptions.videoHeight), columns.right());
-		addEditor(JQueryFieldEditorFactory.createAutoplayEditor(WizardDescriptions.videoAutoplay), columns.left());
-		addEditor(JQueryFieldEditorFactory.createControlsEditor(WizardDescriptions.videoControls), columns.right());
-		addEditor(JQueryFieldEditorFactory.createLoopEditor(WizardDescriptions.videoLoop), columns.left());
-		addEditor(JQueryFieldEditorFactory.createMutedEditor(WizardDescriptions.videoMuted), columns.right());
-		addEditor(JQueryFieldEditorFactory.createPreloadVideoEditor(), parent);
+		addEditor(JQueryFieldEditorFactory.createAutoplayEditor(WizardDescriptions.audioAutoplay), columns.left());
+		addEditor(JQueryFieldEditorFactory.createControlsEditor(WizardDescriptions.audioControls), columns.right());
+		addEditor(JQueryFieldEditorFactory.createLoopEditor(WizardDescriptions.audioLoop), columns.left());
+		addEditor(JQueryFieldEditorFactory.createMutedEditor(WizardDescriptions.audioMuted), columns.right());
+		addEditor(JQueryFieldEditorFactory.createPreloadAudioEditor(), parent);
 	}
 
 	@Override
