@@ -70,10 +70,20 @@ public class NewTableWizard extends NewJQueryWidgetWizard<NewTableWizardPage> im
 		}
 
 		ElementNode tbody = table.addChild(TAG_TBODY);
-		tr = tbody.addChild(TAG_TR);		
-		for (int i = 0; i < page.columns.getNumber(); i++) {
-			String firstRowContent = page.columns.getContent(i);
-			tr.addChild(TAG_TD, firstRowContent);
+		if(MODE_COLUMNTOGGLE.equals(mode)) {
+			for(int j=0; j<3; j++) {
+				tr = tbody.addChild(TAG_TR);		
+				for (int i = 0; i < page.columns.getNumber(); i++) {
+					String firstRowContent = page.columns.getContent(i);
+					tr.addChild(TAG_TD, firstRowContent + j);
+				}
+			}
+		} else {
+			tr = tbody.addChild(TAG_TR);		
+			for (int i = 0; i < page.columns.getNumber(); i++) {
+				String firstRowContent = page.columns.getContent(i);
+				tr.addChild(TAG_TD, firstRowContent);
+			}
 		}
 	}
 
