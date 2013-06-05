@@ -44,6 +44,7 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewImageWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewImageWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewJQueryWidgetWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewListviewWizard;
@@ -148,7 +149,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 
 		wizardPage.setEditorValue(EDITOR_ID_HEADER_TITLE, headerText);
 
-		wizard.performFinish();
+		compareGeneratedAndInsertedText(wizard);
 
 		assertTextIsInserted(ROLE_CONTENT);
 		assertTextIsInserted(ROLE_PAGE);
@@ -175,7 +176,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		wizardPage.setEditorValue(EDITOR_ID_MINI, FALSE);
 		assertTextDoesNotExist(wizard, ATTR_DATA_MINI);
 
-		wizard.performFinish();
+		compareGeneratedAndInsertedText(wizard);
 
 		assertTextIsInserted(label);
 	}
@@ -205,7 +206,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		wizardPage.setEditorValue(EDITOR_ID_OFF, "Off-1");
 		assertTextExists(wizard, "Off-1");
 
-		wizard.performFinish();
+		compareGeneratedAndInsertedText(wizard);
 
 		assertTextIsInserted(label);
 	}
@@ -238,7 +239,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		wizardPage.setEditorValue(EDITOR_ID_SEARCH_FILTER, FALSE);
 		assertTextDoesNotExist(wizard, ATTR_DATA_FILTER);
 
-		wizard.performFinish();
+		compareGeneratedAndInsertedText(wizard);
 
 		assertAttrIsInserted(ATTR_DATA_AUTODIVIDERS, TRUE);
 	}
@@ -257,7 +258,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 
 		String title = wizardPage.getEditorValue(EDITOR_ID_TITLE);
 
-		wizard.performFinish();
+		compareGeneratedAndInsertedText(wizard);
 
 		assertTextIsInserted(title);
 	}
@@ -300,7 +301,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 
 		String label = wizardPage.getEditorValue(EDITOR_ID_LABEL);
 
-		wizard.performFinish();
+		compareGeneratedAndInsertedText(wizard);
 
 		assertTextIsInserted(label);
 	}
@@ -326,7 +327,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		wizardPage.setEditorValue(EDITOR_ID_TRANSITION, "");
 		assertTextDoesNotExist(wizard, ATTR_DATA_TRANSITION);
 
-		wizard.performFinish();
+		compareGeneratedAndInsertedText(wizard);
 
 		assertTextIsInserted(label);
 	}
@@ -379,7 +380,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		wizardPage.setEditorValue(EDITOR_ID_HIDE_LABEL, TRUE);
 		assertTextExists(wizard, CLASS_HIDDEN_ACCESSIBLE);
 
-		wizard.performFinish();
+		compareGeneratedAndInsertedText(wizard);
 
 		assertTextIsInserted(label);
 	}
@@ -449,7 +450,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		wizardPage.setEditorValue(EDITOR_ID_PATTERN, "");
 		assertTextDoesNotExist(wizard, ATTR_PATTERN);
 
-		wizard.performFinish();
+		compareGeneratedAndInsertedText(wizard);
 
 		assertTextIsInserted(wizardPage.getEditorValue(EDITOR_ID_LABEL));
 	}
@@ -475,7 +476,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		assertTextExists(wizard, CLASS_BUTTON_RIGHT);
 		wizardPage.setEditorValue(EDITOR_ID_LEFT_BUTTON, TRUE);
 		assertTextDoesNotExist(wizard, CLASS_BUTTON_RIGHT);
-		wizard.performFinish();
+
+		compareGeneratedAndInsertedText(wizard);
 
 		assertTextIsInserted(wizardPage.getEditorValue(EDITOR_ID_TITLE));
 	}
@@ -502,7 +504,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 
 		wizardPage.setEditorValue(EDITOR_ID_LABEL, "Run Test");
 
-		wizard.performFinish();
+		compareGeneratedAndInsertedText(wizard);
 
 		assertTextIsInserted("Run Test");
 	}
@@ -526,7 +528,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		String label = "Run Footer Bar Test";
 		wizardPage.setEditorValue(EDITOR_ID_TITLE, label);
 
-		wizard.performFinish();
+		compareGeneratedAndInsertedText(wizard);
 
 		assertTextIsInserted(label);
 	}
@@ -543,7 +545,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		wizardPage.setEditorValue(EDITOR_ID_GRID_COLUMNS, "5");
 		assertTextExists(wizard, "ui-block-d");
 
-		wizard.performFinish();
+		compareGeneratedAndInsertedText(wizard);
 
 		assertTextIsInserted("ui-block-d");
 	}
@@ -562,7 +564,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		wizardPage.setEditorValue(EDITOR_ID_LAYOUT, LAYOUT_VERTICAL);
 		assertTextDoesNotExist(wizard, DATA_TYPE_HORIZONTAL);
 
-		wizard.performFinish();
+		compareGeneratedAndInsertedText(wizard);
 	}
 
 	public void testNewRadioWizard() {
@@ -579,7 +581,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		wizardPage.setEditorValue(EDITOR_ID_LAYOUT, LAYOUT_VERTICAL);
 		assertTextDoesNotExist(wizard, DATA_TYPE_HORIZONTAL);
 
-		wizard.performFinish();
+		compareGeneratedAndInsertedText(wizard);
 	}
 
 	public void testNewCollapsibleContentBlockWizard() {
@@ -619,7 +621,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		assertTextExists(wizard, header);
 		assertTextDoesNotExist(wizard, defaultHeader);
 
-		wizard.performFinish();
+		compareGeneratedAndInsertedText(wizard);
 
 		assertTextIsInserted(header);
 	}
@@ -655,7 +657,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		wizardPage.setEditorValue(EDITOR_ID_CORNERS, TRUE);
 		assertTextDoesNotExist(wizard, ATTR_DATA_CORNERS);
 
-		wizard.performFinish();
+		compareGeneratedAndInsertedText(wizard);
 	}
 
 	public void testNewPopupWizard() {
@@ -690,7 +692,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		wizardPage.setEditorValue(EDITOR_ID_CLOSE_BUTTON, CLOSE_NONE);
 		assertTextDoesNotExist(wizard, CLASS_BUTTON_LEFT);
 
-		wizard.performFinish();
+		compareGeneratedAndInsertedText(wizard);
 	}
 
 	public void testNewGroupedButtonsBarWizard() {
@@ -729,7 +731,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		wizardPage.setEditorValue(EDITOR_ID_MINI, FALSE);
 		assertTextDoesNotExist(wizard, ATTR_DATA_MINI);
 
-		wizard.performFinish();
+		compareGeneratedAndInsertedText(wizard);
 	}
 
 	public void testNewPanelWizard() {
@@ -771,7 +773,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		wizardPage.setEditorValue(EDITOR_ID_FIXED_POSITION, FALSE);
 		assertTextDoesNotExist(wizard, ATTR_DATA_POSITION_FIXED);
 
-		wizard.performFinish();
+		compareGeneratedAndInsertedText(wizard);
 	}
 
 	public void testNewTableWizard() {
@@ -795,7 +797,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		wizardPage.setEditorValue(EDITOR_ID_STRIPES, FALSE);
 		assertTextDoesNotExist(wizard, CLASS_TABLE_STRIPE);
 
-		wizard.performFinish();
+		compareGeneratedAndInsertedText(wizard);
 	}
 
 	public void testNewCollapsibleSetBarWizard() {
@@ -826,7 +828,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		wizardPage.setEditorValue(EDITOR_ID_MINI, FALSE);
 		assertTextDoesNotExist(wizard, ATTR_DATA_MINI);
 
-		wizard.performFinish();
+		compareGeneratedAndInsertedText(wizard);
 	}
 
 	public void testNewFormWizard() {
@@ -859,7 +861,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		wizardPage.setEditorValue(EDITOR_ID_AUTOCOMPLETE, TRUE);
 		assertTextDoesNotExist(wizard, ATTR_AUTOCOMPLETE);
 
-		wizard.performFinish();
+		compareGeneratedAndInsertedText(wizard);
 	}
 
 	public void testNewImageWizard() {
@@ -908,7 +910,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		wizardPage.setEditorValue(EDITOR_ID_USEMAP, "");
 		assertTextDoesNotExist(wizard, ATTR_USEMAP);
 
-		wizard.performFinish();
+		compareGeneratedAndInsertedText(wizard);
 	}
 
 	public void testNewVideoWizard() {
@@ -949,7 +951,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		wizardPage.setEditorValue(EDITOR_ID_NUMBER_OF_ITEMS, "2");
 		assertEquals("2", wizardPage.getEditorValue(EDITOR_ID_NUMBER_OF_ITEMS));
 
-		wizard.performFinish();
+		compareGeneratedAndInsertedText(wizard);
 	}
 
 	public void testNewAudioWizard() {
@@ -990,7 +992,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		wizardPage.setEditorValue(EDITOR_ID_NUMBER_OF_ITEMS, "2");
 		assertEquals("2", wizardPage.getEditorValue(EDITOR_ID_NUMBER_OF_ITEMS));
 
-		wizard.performFinish();
+		compareGeneratedAndInsertedText(wizard);
 	}
 
 	void assertAttrExists(AbstractNewHTMLWidgetWizard wizard, String attr, String value) {
@@ -1014,4 +1016,60 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		assertTextIsInserted(attr + "=\"" + value + "\"");
 	}
 
+	boolean isSameHTML(String s1, String s2) {
+		return removeWhiteSpaces(s1).equals(removeWhiteSpaces(s2));
+	}
+
+	void compareGeneratedAndInsertedText(NewJQueryWidgetWizard<?> wizard) {
+		String generatedText = wizard.getTextForTextView();
+
+		wizard.performFinish();
+
+		String content = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
+		int b = content.indexOf("<body>") + 6;
+		int e = content.indexOf("</body>");
+		String insertedText = content.substring(b, e);
+		assertTrue(isSameHTML(generatedText, insertedText));
+	}
+
+	String removeWhiteSpaces(String s) {
+		boolean insideTag = false;
+		boolean quota = false;
+		int whitespaces = 0;
+		boolean beginning = true;
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if(!quota && Character.isWhitespace(c)) {
+				if(!beginning) {
+					whitespaces++;
+				}
+				continue;
+			}
+			if(!quota && c == '=' && insideTag) {
+				whitespaces = 0;
+				beginning = true;
+			}
+			if(!quota && c == '<') {
+				insideTag = true;
+				whitespaces = 0;
+			}
+			if(!quota && c == '>') {
+				insideTag = false;
+				beginning = true;
+			} else if(!Character.isWhitespace(c)) {
+				beginning = false;
+			}
+			if(insideTag) {
+				if(c == '"') quota = !quota;
+				if(quota) whitespaces = 0;
+			}
+			if(!quota && !Character.isWhitespace(c) && whitespaces > 0) {
+				sb.append(' ');
+				whitespaces = 0;
+			}
+			sb.append(c);
+		}
+		return sb.toString();
+	}
 }

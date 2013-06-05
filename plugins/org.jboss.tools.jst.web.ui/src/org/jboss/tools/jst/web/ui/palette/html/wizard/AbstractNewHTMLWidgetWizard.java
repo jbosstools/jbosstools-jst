@@ -89,9 +89,7 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 			getCommandProperties().setProperty("start text", startText);
 		}
 		String endText = result.length < 2 ? "" : result[1];
-		if(endText.length() > 0) {
-			getCommandProperties().setProperty("end text", endText);
-		}
+		getCommandProperties().setProperty("end text", endText);
 	}
 
 	protected Properties getCommandProperties() {
