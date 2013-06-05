@@ -29,6 +29,7 @@ public class WizardMessages extends NLS {
 	public static String addReferencesToJSCSSTooltip;
 	public static String titleLabel;
 	public static String labelLabel;
+	public static String textLabel;
 	public static String nameLabel;
 	public static String legendLabel;
 	public static String miniLabel;
@@ -130,6 +131,8 @@ public class WizardMessages extends NLS {
 	public static String preloadMetadataLabel;
 	public static String preloadNoneLabel;
 	public static String typeLabel;
+	public static String formLabel;
+	public static String forLabel;
 
 	public static String selectImageDialogTitle;
 	public static String selectImageDialogMessage;
@@ -221,6 +224,9 @@ public class WizardMessages extends NLS {
 
 	public static String newAudioWizardTitle;
 	public static String newAudioWizardDescription;
+
+	public static String newLabelWizardTitle;
+	public static String newLabelWizardDescription;
 
 	public static String errorIDisUsed;
 	

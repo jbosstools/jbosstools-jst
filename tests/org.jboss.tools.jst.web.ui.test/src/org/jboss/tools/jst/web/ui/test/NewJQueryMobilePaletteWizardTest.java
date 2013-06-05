@@ -45,6 +45,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizardP
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewImageWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewImageWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewJQueryWidgetWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLabelWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLabelWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewListviewWizard;
@@ -992,6 +994,26 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		wizardPage.setEditorValue(EDITOR_ID_NUMBER_OF_ITEMS, "2");
 		assertEquals("2", wizardPage.getEditorValue(EDITOR_ID_NUMBER_OF_ITEMS));
 
+		compareGeneratedAndInsertedText(wizard);
+	}
+
+	public void testNewLabelWizard() {
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Label", true);
+
+		assertTrue(currentPage instanceof NewLabelWizardPage);
+
+		NewLabelWizardPage wizardPage = (NewLabelWizardPage)currentPage;
+		NewLabelWizard wizard = (NewLabelWizard)wizardPage.getWizard();
+
+		wizardPage.setEditorValue(EDITOR_ID_LABEL, "Address:");
+		assertTextExists(wizard, ">Address:<");
+
+		wizardPage.setEditorValue(EDITOR_ID_FOR, "inputID");
+		assertAttrExists(wizard, ATTR_FOR, "inputID");
+
+		wizardPage.setEditorValue(EDITOR_ID_FORM, "formID");
+		assertAttrExists(wizard, ATTR_FORM, "formID");
+		
 		compareGeneratedAndInsertedText(wizard);
 	}
 
