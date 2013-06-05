@@ -1297,5 +1297,32 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 				toList(values), "", true, WizardDescriptions.audioType);
 	}
 
+	/**
+	 * Used in New Label wizard.
+	 * @return
+	 */
+	public static IFieldEditor createLabelTextEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_LABEL, WizardMessages.textLabel, "",
+				WizardDescriptions.labelText);
+	}
+
+	/**
+	 * Used in New Label wizard.
+	 * @return
+	 */
+	public static IFieldEditor createForEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_FOR, WizardMessages.forLabel, "",
+				WizardDescriptions.labelFor);
+	}
+
+	/**
+	 * Used in New Label wizard.
+	 * @return
+	 */
+	public static IFieldEditor createFormReferenceEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_FORM, WizardMessages.formLabel, "",
+				WizardDescriptions.labelForm);
+	}
+
 }
 

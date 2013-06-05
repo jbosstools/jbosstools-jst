@@ -52,6 +52,7 @@ public interface HTMLConstants {
 	public String TAG_VIDEO = "video";
 	public String TAG_SOURCE = "source";
 
+	public String ATTR_FORM = "form";
 	public String ATTR_TYPE = "type";
 	public String ATTR_NAME = "name";
 	public String ATTR_ID = "id";

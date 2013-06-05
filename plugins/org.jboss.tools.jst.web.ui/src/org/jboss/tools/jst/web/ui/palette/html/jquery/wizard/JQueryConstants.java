@@ -274,5 +274,7 @@ public interface JQueryConstants extends HTMLConstants {
 	public String EDITOR_ID_PRELOAD = ATTR_PRELOAD;
 	public String EDITOR_ID_VIDEO_TYPE = ATTR_TYPE;
 	public String EDITOR_ID_AUDIO_TYPE = ATTR_TYPE;
+	public String EDITOR_ID_FORM = TAG_FORM;
+	public String EDITOR_ID_FOR = ATTR_FOR;
 	
 }

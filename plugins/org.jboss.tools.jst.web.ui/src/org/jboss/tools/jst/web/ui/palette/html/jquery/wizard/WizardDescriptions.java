@@ -69,6 +69,10 @@ public class WizardDescriptions extends NLS {
 
 	public static String iconPosition;
 
+	public static String labelText;
+	public static String labelFor;
+	public static String labelForm;
+
 	public static String linkAction;
 
 	public static String listviewAutodividers;
