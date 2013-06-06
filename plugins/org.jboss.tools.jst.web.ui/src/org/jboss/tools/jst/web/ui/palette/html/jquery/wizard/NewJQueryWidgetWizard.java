@@ -68,11 +68,11 @@ public abstract class NewJQueryWidgetWizard<P extends NewJQueryWidgetWizardPage>
 	}
 
 	@Override
-	public boolean performFinish() {
+	protected void doPerformFinish() {
 		if(isTrue(AbstractNewHTMLWidgetWizardPage.ADD_JS_CSS_SETTING_NAME)) {
 			getCommandProperties().setProperty(MobilePaletteInsertHelper.PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS, TRUE);
 		}
-		return super.performFinish();
+		super.doPerformFinish();
 	}
 
 	@Override

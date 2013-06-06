@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.ui.palette.html.wizard;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -20,6 +21,8 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IEditorInput;
@@ -30,6 +33,7 @@ import org.jboss.tools.common.model.ui.editors.dnd.IDropWizardModel;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.PaletteDropCommand;
 import org.jboss.tools.jst.web.kb.internal.taglib.jq.LinkAttributeProvider;
 import org.jboss.tools.jst.web.kb.internal.taglib.jq.LinkAttributeProvider.ElementID;
+import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 /**
  * 
@@ -62,10 +66,29 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 	}
 	
 	@Override
-	public boolean performFinish() {
+	public final boolean performFinish() {
+		IRunnableWithProgress runnable = new IRunnableWithProgress() {			
+			@Override
+			public void run(IProgressMonitor monitor) throws InvocationTargetException,
+					InterruptedException {
+				doPerformFinish();
+			}
+		};
+		try {
+			getContainer().run(false, false, runnable);
+		} catch (InterruptedException e) {
+			WebUiPlugin.getDefault().logError(e);
+			return false;
+		} catch (InvocationTargetException e) {
+			WebUiPlugin.getDefault().logError(e.getCause());
+			return false;
+		}
+		return true;
+	}
+
+	protected void doPerformFinish() {
 		generateData();
 		command.execute();		
-		return true;
 	}
 
 	/**
