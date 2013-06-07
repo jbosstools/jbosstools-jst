@@ -621,12 +621,12 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 	 * Used in New Link wizard and New Popup wizard for opening button.
 	 * @return
 	 */
-	public static IFieldEditor createTransitionEditor() {
+	public static IFieldEditor createTransitionEditor(String description) {
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(
 				EDITOR_ID_TRANSITION, 
 				WizardMessages.transitionLabel, 
 				toList(TRANSITION_LIST), "", false,
-				WizardDescriptions.transition);
+				description);
 	}
 
 	static String[] CLOSE_BUTTON_LIST = {CLOSE_LEFT, CLOSE_RIGHT, CLOSE_NONE};
@@ -999,6 +999,15 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 	 * Used in New Popup wizard.
 	 * @return
 	 */
+	public static IFieldEditor createPopupButtonEditor() {
+		return createCheckboxEditor(EDITOR_ID_POPUP_BUTTON, WizardMessages.popupButtonLabel, true, 3,
+			WizardDescriptions.popupOpenButton);
+	}
+
+	/**
+	 * Used in New Popup wizard.
+	 * @return
+	 */
 	public static IFieldEditor createShadowEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_SHADOW, WizardMessages.shadowLabel, true,
 				WizardDescriptions.popupShadow);
@@ -1018,8 +1027,19 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 	 * @return
 	 */
 	public static IFieldEditor createOverlayEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_OVERLAY, WizardMessages.overlayLabel, false,
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_OVERLAY, WizardMessages.overlayLabel, toList(THEMES), "", true,
 				WizardDescriptions.popupOverlay);
+	}
+
+	static String[] POPUP_THEMES = {"", "none", "a", "b", "c", "d", "e"};
+
+	/**
+	 * Used in New Popup wizard.
+	 * @return
+	 */
+	public static IFieldEditor createPopupThemeEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_THEME, WizardMessages.themeLabel, toList(POPUP_THEMES), "", true,
+				WizardDescriptions.widgetTheme);
 	}
 
 	/**
@@ -1042,6 +1062,11 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 	}
 
 	static String[] PANEL_POSITION_LIST = {POSITION_LEFT, POSITION_RIGHT};
+	
+	static String[] PANEL_POSITION_DESCRIPTIONS = {
+		WizardDescriptions.panelPositionLeft,
+		WizardDescriptions.panelPositionRight
+	};
 
 	/**
 	 * Used in New Panel wizard.
@@ -1054,11 +1079,17 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 				toList(PANEL_POSITION_LIST), 
 				toList(PANEL_POSITION_LIST), 
 				POSITION_LEFT,
-				WizardDescriptions.panelPosition);
+				WizardDescriptions.panelPosition,
+				toList(PANEL_POSITION_DESCRIPTIONS));
 	}
 
 	static String[] PANEL_DISPLAY_LIST = {DISPLAY_OVERLAY, DISPLAY_REVEAL, DISPLAY_PUSH};
 
+	static String[] PANEL_DISPLAY_DESCRIPTIONS = {
+		WizardDescriptions.panelDisplayOverlay,
+		WizardDescriptions.panelDisplayReveal,
+		WizardDescriptions.panelDisplayPush
+	};
 	/**
 	 * Used in New Panel wizard.
 	 * @return
@@ -1070,7 +1101,8 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 				toList(PANEL_DISPLAY_LIST), 
 				toList(PANEL_DISPLAY_LIST), 
 				DISPLAY_REVEAL,
-				WizardDescriptions.panelDisplay);
+				WizardDescriptions.panelDisplay,
+				toList(PANEL_DISPLAY_DESCRIPTIONS));
 	}
 
 	/**

@@ -89,17 +89,24 @@ public class WizardDescriptions extends NLS {
 
 	public static String panelDismissable;
 	public static String panelDisplay;
+	public static String panelDisplayOverlay;
+	public static String panelDisplayPush;
+	public static String panelDisplayReveal;
 	public static String panelFixedPosition;
 	public static String panelPosition;
+	public static String panelPositionLeft;
+	public static String panelPositionRight;
 	public static String panelSwipeClose;
 
 	public static String popupCloseButton;
 	public static String popupDismissable;
 	public static String popupInfoStyled;
+	public static String popupOpenButton;
 	public static String popupOverlay;
 	public static String popupPadding;
 	public static String popupPositionTo;
 	public static String popupShadow;
+	public static String popupTransition;
 
 	public static String radioIsSelected;
 	public static String radioLegend;

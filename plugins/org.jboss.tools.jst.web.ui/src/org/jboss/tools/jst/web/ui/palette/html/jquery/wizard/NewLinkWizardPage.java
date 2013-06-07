@@ -42,7 +42,7 @@ public class NewLinkWizardPage extends NewJQueryWidgetWizardPage {
 
 		createSeparator(parent);
 
-		IFieldEditor transition = JQueryFieldEditorFactory.createTransitionEditor();
+		IFieldEditor transition = JQueryFieldEditorFactory.createTransitionEditor(WizardDescriptions.transition);
 		addEditor(transition, parent, true);
 	}
 

@@ -93,6 +93,7 @@ public class WizardMessages extends NLS {
 	public static String leftButtonLabel;
 	public static String rightButtonLabel;
 	public static String backButtonLabel;
+	public static String popupButtonLabel;
 	public static String numberOfItemsLabel;
 	public static String arragementLabel;
 	public static String gridColumnsLabel;
