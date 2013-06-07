@@ -33,29 +33,9 @@ public class NewPopupWizardPage extends NewJQueryWidgetWizardPage {
 	}
 
 	protected void createFieldPanel(Composite parent) {
-		Group buttonPanel = new Group(parent,SWT.BORDER);
-		buttonPanel.setText("Open Popup Button");
-		GridData d = new GridData(GridData.FILL_HORIZONTAL);
-		d.horizontalSpan = 3;
-		buttonPanel.setLayoutData(d);
-		buttonPanel.setLayout(new GridLayout(3, false));		
-
-		IFieldEditor label = JQueryFieldEditorFactory.createLabelEditor();
-		label.setValue("Popup");
-		addEditor(label, buttonPanel);
-
-		IFieldEditor info = JQueryFieldEditorFactory.createInfoStyledEditor();
-		addEditor(info, buttonPanel);
-
-		IFieldEditor transition = JQueryFieldEditorFactory.createTransitionEditor();
-		addEditor(transition, buttonPanel, true);
-
-		IFieldEditor positionTo = JQueryFieldEditorFactory.createPositionToEditor();
-		addEditor(positionTo, buttonPanel, true);
-
 		Group windowPanel = new Group(parent,SWT.BORDER);
 		windowPanel.setText("Popup Window");
-		d = new GridData(GridData.FILL_HORIZONTAL);
+		GridData d = new GridData(GridData.FILL_HORIZONTAL);
 		d.horizontalSpan = 3;
 		windowPanel.setLayoutData(d);
 		windowPanel.setLayout(new GridLayout(3, false));		
@@ -63,7 +43,7 @@ public class NewPopupWizardPage extends NewJQueryWidgetWizardPage {
 		createIDEditor(windowPanel, false);
 
 		IFieldEditor close = JQueryFieldEditorFactory.createClosePopupButtonEditor();
-		addEditor(close, windowPanel);
+		addEditor(close, windowPanel, true);
 		
 		TwoColumns columns = createTwoColumns(windowPanel);
 
@@ -76,21 +56,55 @@ public class NewPopupWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor padding = JQueryFieldEditorFactory.createPaddingEditor();
 		addEditor(padding, columns.left());
 
-		IFieldEditor overlay = JQueryFieldEditorFactory.createOverlayEditor();
-		addEditor(overlay, columns.right());
-
 		IFieldEditor corners = JQueryFieldEditorFactory.createCornersEditor();
-		addEditor(corners, windowPanel);
+		addEditor(corners, columns.right());
 		
-		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
+		IFieldEditor theme = JQueryFieldEditorFactory.createPopupThemeEditor();
 		addEditor(theme, windowPanel, true);
+
+		IFieldEditor overlay = JQueryFieldEditorFactory.createOverlayEditor();
+		addEditor(overlay, windowPanel, true);
+
+		IFieldEditor popupButton = JQueryFieldEditorFactory.createPopupButtonEditor();
+		addEditor(popupButton, parent);
+
+		Composite buttonPanel = new Composite(parent, SWT.BORDER);
+		d = new GridData(GridData.FILL_HORIZONTAL);
+		d.horizontalSpan = 3;
+		buttonPanel.setLayoutData(d);
+		buttonPanel.setLayout(new GridLayout(3, false));		
+
+		IFieldEditor label = JQueryFieldEditorFactory.createLabelEditor();
+		label.setValue("Popup");
+		addEditor(label, buttonPanel);
+
+		IFieldEditor info = JQueryFieldEditorFactory.createInfoStyledEditor();
+		addEditor(info, buttonPanel);
+
+		IFieldEditor transition = JQueryFieldEditorFactory.createTransitionEditor(WizardDescriptions.popupTransition);
+		addEditor(transition, buttonPanel, true);
+
+		IFieldEditor positionTo = JQueryFieldEditorFactory.createPositionToEditor();
+		addEditor(positionTo, buttonPanel, true);
+
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		boolean shadow = TRUE.equals(getEditorValue(EDITOR_ID_SHADOW));
-		setEnabled(EDITOR_ID_THEME, shadow);
+		if(EDITOR_ID_POPUP_BUTTON.equals(evt.getPropertyName())) {
+			boolean enabled = isTrue(EDITOR_ID_POPUP_BUTTON);
+			setEnabled(EDITOR_ID_LABEL, enabled);
+			setEnabled(EDITOR_ID_INFO_STYLED, enabled);
+			setEnabled(EDITOR_ID_TRANSITION, enabled);
+			setEnabled(EDITOR_ID_POSITION_TO, enabled);
+		}
 		super.propertyChange(evt);
+		if(EDITOR_ID_SHADOW.equals(evt.getPropertyName()) 
+				&& !isTrue(EDITOR_ID_SHADOW)
+				&& getEditorValue(EDITOR_ID_THEME).length() == 0
+				) {
+			setEditorValue(EDITOR_ID_THEME, "none");
+		}
 	}
 
 }

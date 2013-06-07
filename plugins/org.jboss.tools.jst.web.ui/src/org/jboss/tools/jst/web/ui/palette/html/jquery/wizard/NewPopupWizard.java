@@ -34,37 +34,32 @@ public class NewPopupWizard extends NewJQueryWidgetWizard<NewPopupWizardPage> im
 	protected void addContent(ElementNode parent) {
 		String id = getID(prefixId);
 
-		ElementNode a = parent.addChild(TAG_A, page.getEditorValue(EDITOR_ID_LABEL));
-		a.addAttribute(ATTR_HREF, "#" + id);
-		a.addAttribute(ATTR_DATA_ROLE, ROLE_BUTTON);
-		a.addAttribute(ATTR_DATA_INLINE, TRUE);
-		String transition = page.getEditorValue(EDITOR_ID_TRANSITION);
-		if(transition.length() > 0) {
-			a.addAttribute(ATTR_DATA_TRANSITION, transition);
-		}
-		String positionTo = page.getEditorValue(EDITOR_ID_POSITION_TO);
-		if(positionTo.length() > 0) {
-			a.addAttribute(ATTR_DATA_POSITION_TO, positionTo);
-		}
-		a.addAttribute(ATTR_DATA_REL, DATA_REL_POPUP);
-		if(isTrue(EDITOR_ID_INFO_STYLED)) {
-			a.addAttribute(ATTR_DATA_ICON, "info");
-			a.addAttribute(ATTR_DATA_ICONPOS, ICONPOS_NOTEXT);
-			a.addAttribute(ATTR_DATA_THEME, "e");
-//			a.addAttribute(ATTR_CLASS, "ui-icon-alt");
+		if(isTrue(EDITOR_ID_POPUP_BUTTON)) {
+			ElementNode a = parent.addChild(TAG_A, page.getEditorValue(EDITOR_ID_LABEL));
+			a.addAttribute(ATTR_HREF, "#" + id);
+			a.addAttribute(ATTR_DATA_ROLE, ROLE_BUTTON);
+			a.addAttribute(ATTR_DATA_INLINE, TRUE);
+			String transition = page.getEditorValue(EDITOR_ID_TRANSITION);
+			if(transition.length() > 0) {
+				a.addAttribute(ATTR_DATA_TRANSITION, transition);
+			}
+			String positionTo = page.getEditorValue(EDITOR_ID_POSITION_TO);
+			if(positionTo.length() > 0) {
+				a.addAttribute(ATTR_DATA_POSITION_TO, positionTo);
+			}
+			a.addAttribute(ATTR_DATA_REL, DATA_REL_POPUP);
+			if(isTrue(EDITOR_ID_INFO_STYLED)) {
+				a.addAttribute(ATTR_DATA_ICON, "info");
+				a.addAttribute(ATTR_DATA_ICONPOS, ICONPOS_NOTEXT);
+				a.addAttribute(ATTR_DATA_THEME, "e");
+//				a.addAttribute(ATTR_CLASS, "ui-icon-alt");
+			}
 		}
 			
 		ElementNode div = parent.addChild(TAG_DIV);
 		div.addAttribute(ATTR_DATA_ROLE, ROLE_POPUP);
 		div.addAttribute(ATTR_ID, id);
-
-		String themeValue = page.getEditorValue(EDITOR_ID_THEME);
-		if(!isTrue(EDITOR_ID_SHADOW)) {
-			themeValue = "none";
-		}
-		if(themeValue.length() > 0) {
-			div.addAttribute(ATTR_DATA_THEME, themeValue);
-		}
+		addAttributeIfNotEmpty(div, ATTR_DATA_THEME, EDITOR_ID_THEME);
 		if(!isTrue(EDITOR_ID_CORNERS)) {
 			div.addAttribute(ATTR_DATA_CORNERS, FALSE);
 		}
@@ -77,9 +72,7 @@ public class NewPopupWizard extends NewJQueryWidgetWizard<NewPopupWizardPage> im
 		if(isTrue(EDITOR_ID_PADDING)) {
 			div.addAttribute(ATTR_CLASS, CLASS_CONTENT);
 		}
-		if(isTrue(EDITOR_ID_OVERLAY)) {
-			div.addAttribute(ATTR_DATA_OVERLAY_THEME, "a");
-		}
+		addAttributeIfNotEmpty(div, ATTR_DATA_OVERLAY_THEME, EDITOR_ID_OVERLAY);
 
 		String dataClose = page.getEditorValue(EDITOR_ID_CLOSE_BUTTON);
 		if(dataClose.length() > 0 && !CLOSE_NONE.equals(dataClose)) {
