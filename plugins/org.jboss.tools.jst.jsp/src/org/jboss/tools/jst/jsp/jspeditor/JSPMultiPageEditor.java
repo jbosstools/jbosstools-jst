@@ -762,7 +762,6 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 
 	public void nodeChanged(XModelTreeEvent event) {
 		if (event.getModelObject() == getModelObject()) {
-			setContentDescription(getEditorInput().getName());
 			if (sourceEditor != null)
 				sourceEditor.updateModification();
 		}
