@@ -24,6 +24,7 @@ import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.XModelObjectConstants;
 import org.jboss.tools.common.model.event.XModelTreeListener;
+import org.jboss.tools.common.model.options.SharableConstants;
 import org.jboss.tools.common.model.ui.util.ModelUtilities;
 import org.jboss.tools.common.model.ui.views.palette.PaletteContents;
 import org.jboss.tools.common.model.ui.views.palette.editor.PaletteEditor;
@@ -95,13 +96,18 @@ public class PaletteModel {
 		XModelObject[] cs = o.getChildren();
 		for (int i = 0; i < cs.length; i++) {
 			XModelObject c = cs[i];
+			boolean isHidden = XModelObjectConstants.YES.equals(c.getAttributeValue(SharableConstants.ATTR_HIDDEN));
 			if(isRoot) {
 				String name = c.getAttributeValue(XModelObjectConstants.ATTR_NAME);
 				boolean m1 = name.toLowerCase().equals(TYPE_MOBILE);
 				boolean m2 = type.equals(TYPE_MOBILE);
 				if(m1 != m2) continue;
+				if(isHidden && !m1) {
+					continue;
+				}
+			} else if(isHidden) {
+				continue;
 			}
-			if("yes".equals(c.getAttributeValue("hidden"))) continue; //$NON-NLS-1$ //$NON-NLS-2$
 			if(PaletteModelHelper.isSubGroup(c)) {
 				list.add(c);
 			} else if (PaletteModelHelper.isGroup(c)) {
@@ -128,7 +134,7 @@ public class PaletteModel {
 		if (xcats == null) return;
 		int i = 0; 
 		for (int l = 0; l < xcats.length; l++) {
-			if ("yes".equals(xcats[l].getAttributeValue("hidden"))) continue; //$NON-NLS-1$ //$NON-NLS-2$
+			if (XModelObjectConstants.YES.equals(xcats[l].getAttributeValue(SharableConstants.ATTR_HIDDEN))) continue;
 			int j = indexOf(paletteRoot, xcats[l], i);
 			if (j == -1) {
 				paletteRoot.add(i, createCategory(xcats[l], lastAddedXCat ==xcats[l]));

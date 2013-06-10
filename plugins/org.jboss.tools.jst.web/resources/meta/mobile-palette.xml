@@ -99,7 +99,7 @@
 
 	<Palette NAME="Palette" SCOPE="project" model-entity="SharablePalette">
 
-  <PageTabHTML DESCRIPTION="" EDITOR_TYPE="" HIDDEN="no" NAME="Mobile"
+  <PageTabHTML DESCRIPTION="" EDITOR_TYPE="" HIDDEN="yes" NAME="Mobile"
    NATURE_TYPE="" SCOPE="project" TABTYPE="HTML" model-entity="SharablePageTabHTML">
    <GroupHTML HIDDEN="no" ICON="" NAME="jQuery Mobile" PREFIX=""
     SCOPE="project" URI="" add_taglib="true" library-version="" model-entity="SharableGroupHTML">

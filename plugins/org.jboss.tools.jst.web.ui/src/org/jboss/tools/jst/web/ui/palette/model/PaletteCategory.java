@@ -10,14 +10,11 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
-
 import org.eclipse.gef.palette.PaletteEntry;
 import org.eclipse.gef.palette.PaletteDrawer;
-
 import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.XModelObjectConstants;
+import org.jboss.tools.common.model.options.SharableConstants;
 
 public class PaletteCategory extends PaletteDrawer implements PaletteXModelObject {
 	private XModelObject xobject;
@@ -38,12 +35,12 @@ public class PaletteCategory extends PaletteDrawer implements PaletteXModelObjec
 	
 	public void setXModelObject(XModelObject xobject) {
 		this.xobject = xobject;
-		String label = xobject.getAttributeValue("name"); //$NON-NLS-1$
+		String label = xobject.getAttributeValue(XModelObjectConstants.ATTR_NAME);
 		XModelObject p = xobject.getParent();
 		while(p != null && (PaletteModelHelper.isGroup(p) || PaletteModelHelper.isSubGroup(p))) {
-			String parentName = p.getAttributeValue("name");
-			if(!"Mobile".equals(parentName)) { //$NON-NLS-1$
-				label = parentName + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+			String parentName = p.getAttributeValue(XModelObjectConstants.ATTR_NAME);
+			if(!SharableConstants.MOBILE_PALETTE_ROOT.equals(parentName)) {
+				label = parentName + " " + label; //$NON-NLS-1$
 			}
 			p = p.getParent();
 		}

@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.tld.model.handlers;
 
 import java.util.*;
+
 import org.jboss.tools.common.model.*;
 import org.jboss.tools.common.model.options.SharableConstants;
 import org.jboss.tools.common.meta.*;
@@ -112,11 +113,25 @@ public class JSPAdopt implements XAdoptManager {
         p.setProperty(TLDToPaletteHelper.DEFAULT_PREFIX, macro.getParent().getAttributeValue(TLDToPaletteHelper.DEFAULT_PREFIX));
         String addTaglib = macro.getParent().getAttributeValue(TLDToPaletteHelper.ADD_TAGLIB);
         if(addTaglib != null) p.setProperty(TLDToPaletteHelper.ADD_TAGLIB, addTaglib);
-        String name = macro.getAttributeValue("name"); //$NON-NLS-1$
+        String name = macro.getAttributeValue(XModelObjectConstants.ATTR_NAME);
         p.setProperty(SharableConstants.PALETTE_PATH, macro.getPath());
-        if(isTagName(startText, name) && macro.getPath().indexOf("/Mobile/") < 0) {
+        if(isTagName(startText, name) && !isMobile(macro)) {
         	p.setProperty("tag name", name); //$NON-NLS-1$
         }
+	}
+
+	private boolean isMobile(XModelObject macro) {
+		XModelObject o = macro;
+        while(o != null) {
+        	String kind = o.getAttributeValue(XModelObjectConstants.ATTR_ELEMENT_TYPE);
+        	String name = o.getAttributeValue(XModelObjectConstants.ATTR_NAME);
+        	if(SharableConstants.PALETTE_GROUP.equals(kind)
+        		&& SharableConstants.MOBILE_PALETTE_ROOT.equals(name)) {
+        		return true;
+        	}
+        	o = o.getParent();
+        }
+		return false;
 	}
 	
 	private boolean isTagName(String s, String n) {
