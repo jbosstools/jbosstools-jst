@@ -99,11 +99,7 @@ public class KbBuilder extends IncrementalProjectBuilder {
 		
 			sp.resolveStorage(kind != FULL_BUILD);
 			
-			if(sp.getClassPath().update()) {
-				sp.getClassPath().process();
-			} else if(sp.getClassPath().hasToUpdateProjectDependencies()) {
-				sp.getClassPath().validateProjectDependencies();
-			}
+			sp.getClassPath().build();
 			new UsedJavaProjectCheck().check(sp);
 
 			TypeInfoCollector.cleanCache();
