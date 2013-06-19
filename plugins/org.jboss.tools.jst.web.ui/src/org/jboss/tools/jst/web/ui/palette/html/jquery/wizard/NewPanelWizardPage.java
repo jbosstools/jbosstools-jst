@@ -27,6 +27,7 @@ public class NewPanelWizardPage extends NewJQueryWidgetWizardPage {
 		setDescription(WizardMessages.newPanelWizardDescription);
 	}
 
+	@Override
 	protected void createFieldPanel(Composite parent) {
 		createIDEditor(parent, false);
 
@@ -49,6 +50,7 @@ public class NewPanelWizardPage extends NewJQueryWidgetWizardPage {
 		addEditor(theme, parent, true);
 	}
 
+	@Override
 	protected int getPreferredBrowser() {
 		return SWT.WEBKIT;
 	}

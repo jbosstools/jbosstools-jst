@@ -30,6 +30,7 @@ public class NewTableWizardPage extends NewJQueryWidgetWizardPage {
 		setDescription(WizardMessages.newTableDescription);
 	}
 
+	@Override
 	protected void createFieldPanel(Composite parent) {
 		IFieldEditor modeEditor = JQueryFieldEditorFactory.createTableModeEditor();
 		addEditor(modeEditor, parent);
@@ -62,6 +63,7 @@ public class NewTableWizardPage extends NewJQueryWidgetWizardPage {
 		super.propertyChange(evt);
 	}
 
+	@Override
 	protected int getPreferredBrowser() {
 		return SWT.WEBKIT;
 	}

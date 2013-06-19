@@ -24,7 +24,6 @@ import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.SWTError;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
@@ -82,6 +81,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		super(pageName, title, titleImage);
 	}
 
+	@Override
     public AbstractNewHTMLWidgetWizard getWizard() {
         return (AbstractNewHTMLWidgetWizard)super.getWizard();
     }
@@ -96,6 +96,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 
 		left = new Composite(panel, SWT.BORDER) {
 			int initialDefaultWidth = -1;
+			@Override
 			public Point computeSize(int wHint, int hHint, boolean changed) {
 				Point result = super.computeSize(wHint, hHint, changed);
 				if(hHint < 0) {
@@ -152,7 +153,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 			createTextPreview(previewPanel);
 		
 			Composite browserPanel = createBrowserPanel(previewPanel);
-			browser = createBrowser(browserPanel);
+			browser = WebUiPlugin.createBrowser(browserPanel, getPreferredBrowser());
 
 			if(browser != null) {
 				browser.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -178,6 +179,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 				updatePreviewContent();
 				runValidation();
 				text.addControlListener(new ControlAdapter() {
+					@Override
 					public void controlResized(ControlEvent e) {
 						if(textLimit < 0 || textLimit == getTextLimit()) return;
 						resetText();
@@ -206,6 +208,10 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		text.setText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<html><body>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</body></html>");
 	}
 
+	protected int getPreferredBrowser() {
+		return WebUiPlugin.getPreferredBrowser();
+	}
+
 	protected boolean hasVisualPreview() {
 		return true;
 	}
@@ -228,6 +234,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 			insertTagSettings.put(ADD_JS_CSS_SETTING_NAME, true);
 		}
 		final IFieldEditor addLibs = new CheckBoxFieldEditor(ADD_JS_CSS_SETTING_NAME, WizardMessages.addReferencesToJSCSSLabel, Boolean.valueOf(addJSCSS)){
+			@Override
 			public void doFillIntoGrid(Object parent) {
 				Composite c = (Composite) parent;
 				final Control[] controls = (Control[]) getEditorControls(c);
@@ -243,6 +250,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		addLibs.doFillIntoGrid(parent);
 		addEditor(addLibs);
 		addLibs.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				IDialogSettings settings = WebUiPlugin.getDefault().getDialogSettings();
 				IDialogSettings insertTagSettings = settings.getSection(SECTION_NAME);
@@ -267,70 +275,6 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		l.marginHeight = 0;
 		browserPanel.setLayout(l);
 		return browserPanel;
-	}
-
-	private static boolean errorLoged;
-	private static Map<Integer, String> browserNames = new HashMap<Integer, String>();
-	static {
-		browserNames.put(SWT.WEBKIT, "Webkit");
-		browserNames.put(SWT.MOZILLA, "Mozilla");
-	}
-
-	protected Browser createBrowser(Composite browserPanel) {
-		/*
-		//We can provide webkit in this way
-		String property = "org.eclipse.swt.browser.DefaultType";
-		String defaultBrowser = System.getProperty(property);
-		boolean hasDefaultBrowser = defaultBrowser != null;
-		System.getProperties().setProperty(property, "webkit");
-		*/
-		int browserIndex = getPreferredBrowser();
-		try {
-			try {
-				return new Browser(browserPanel, SWT.READ_ONLY | browserIndex | SWT.NO_SCROLL);
-			} catch (Error e) {
-				if(!(e instanceof SWTError) && !errorLoged) {
-					logProblem(e, browserNames.get(browserIndex), true);
-				}
-				Control[] children = browserPanel.getChildren();
-				for (Control child : children) {
-					child.dispose();
-				}
-				try {
-					return new Browser(browserPanel, SWT.READ_ONLY | SWT.NONE | SWT.NO_SCROLL);
-				} catch (Error e1) {
-					logProblem(e1, null, false);
-				}
-			}
-		} finally {
-			/*
-			//Use if system property was modified
-			if(hasDefaultBrowser) {
-				System.getProperties().setProperty(property, defaultBrowser);
-			}
-			*/
-		}
-		return null;
-	}
-
-	private void logProblem(Error e, String browserName, boolean warning) {
-		if(browserName==null) {
-			browserName = "default";
-		}
-		String message = "Cannot create " + browserName + " browser";
-		Exception ex = new HTMLWizardVisualPreviewInitializationException(message, e);
-		if(warning) {
-			WebUiPlugin.getDefault().logWarning(message, ex);
-		} else {
-			WebUiPlugin.getDefault().logError(message, ex);
-		}
-		errorLoged = true;
-	}
-
-	protected static final boolean isMacOS = "Mac OS X".equals(System.getProperty("os.name"));
-
-	protected int getPreferredBrowser() {
-		return isMacOS ? SWT.WEBKIT : SWT.MOZILLA;
 	}
 
 	private void createDisclaimer(Composite browserPanel) {
@@ -757,6 +701,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		return res;
 	}
 
+	@Override
 	public void dispose() {
 		if(sourceFile != null) {
 			sourceFile.delete();
