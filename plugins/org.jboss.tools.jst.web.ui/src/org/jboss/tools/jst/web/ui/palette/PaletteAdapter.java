@@ -137,6 +137,7 @@ public class PaletteAdapter implements IPaletteAdapter {
 			palette = viewer.createControl(container);
 			palette.setLayoutData(new GridData(GridData.FILL_BOTH));
 			result = container;
+			filter("");
 		}else{
 			result = palette = viewer.createControl(root);
 		}
