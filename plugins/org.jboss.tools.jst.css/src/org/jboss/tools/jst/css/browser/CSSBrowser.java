@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2010 Red Hat, Inc.
+ * Copyright (c) 2007-2011 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -12,7 +12,6 @@ package org.jboss.tools.jst.css.browser;
 
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.SWTError;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.TypedEvent;
@@ -20,8 +19,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
-import org.jboss.tools.jst.css.CSSPlugin;
+import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 /**
  * @author mareshkau
@@ -46,9 +44,8 @@ public class CSSBrowser extends Composite implements CSSBrowserInterface {
 	public static CSSBrowser createCSSBrowser(Composite parent, int style){
 		CSSBrowser cssBrowser = new CSSBrowser(parent,style);
 		cssBrowser.setLayout(new GridLayout());
-		Browser browser=null;
-		try {
-			browser = new Browser(cssBrowser, SWT.BORDER | SWT.MOZILLA);
+		Browser browser = WebUiPlugin.createBrowser(cssBrowser, SWT.BORDER);
+		if(browser!=null) {
 			GridData gridData = new GridData();
 			gridData.horizontalAlignment = SWT.FILL;
 			gridData.verticalAlignment = SWT.FILL;
@@ -56,11 +53,6 @@ public class CSSBrowser extends Composite implements CSSBrowserInterface {
 			gridData.grabExcessVerticalSpace = true;
 			browser.setLayoutData(gridData);
 			browser.pack();
-		} catch(SWTError er){
-			CSSPlugin.getDefault().logWarning("Xulrunner implementation hasn't been founded, so browser based preview " +
-					"will be not available");
-		}
-		if(browser!=null) {
 			cssBrowser.setBrowser(new CSSBrowserMozillaImplementation(browser));
 		} else {
 			Label label = new Label(cssBrowser,SWT.CENTER);

@@ -28,6 +28,7 @@ public class NewRangeSliderWizardPage extends NewJQueryWidgetWizardPage {
 		setDescription(WizardMessages.newRangeSliderWizardDescription);
 	}
 
+	@Override
 	protected void createFieldPanel(Composite parent) {
 		IFieldEditor label = JQueryFieldEditorFactory.createLabelEditor();
 		label.setValue("Slider:");
@@ -78,11 +79,13 @@ public class NewRangeSliderWizardPage extends NewJQueryWidgetWizardPage {
 		addEditor(trackTheme, parent, true);
 	}
 
+	@Override
 	public void validate() throws ValidationException {
 		setEnabled(EDITOR_ID_RVALUE, isTrue(EDITOR_ID_RANGE));
 		super.validate();
 	}
 
+	@Override
 	protected int getPreferredBrowser() {
 		return SWT.WEBKIT;
 	}
