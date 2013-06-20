@@ -19,7 +19,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import org.jboss.tools.common.meta.action.XActionInvoker;
 import org.jboss.tools.common.model.XModelObject;
-import org.jboss.tools.common.model.options.SharableConstants;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.ui.dnd.ModelTransfer;
 import org.jboss.tools.common.model.ui.editors.dnd.DefaultDropCommand;
@@ -46,9 +45,11 @@ public class FileDropCommand extends DefaultDropCommand {
 
 	public void run(IProgressMonitor monitor) throws CoreException {
 		String uri = ((TagProposal)getDefaultModel().getTagProposal()).getUri();
-
-		generator = ElementGeneratorFactory.getInstance().getElementGenerator(uri);
-		generator.setDataModel(getDefaultModel());
+		generator = getDefaultModel().getElementGenerator();
+		if(generator == null) {
+			generator = ElementGeneratorFactory.getInstance().getElementGenerator(uri);
+			generator.setDataModel(getDefaultModel());
+		}
 
 		Properties properties = new Properties();
 		properties.put(PaletteInsertHelper.PROPOPERTY_TAG_NAME,getDefaultModel().getTagProposal().getName());
