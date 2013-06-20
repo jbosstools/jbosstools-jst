@@ -25,6 +25,7 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.wst.xml.core.internal.document.ElementImpl;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.XModelObjectConstants;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.common.model.options.SharableConstants;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
@@ -108,7 +109,7 @@ public class PaletteDropCommand extends FileDropCommand {
 								document.replace(containerOffset+slashPosition, containerString.length()-slashPosition, text);
 							}
 						}catch(BadLocationException ex){
-							ModelUIPlugin.getPluginLog().logError(ex);
+							ModelUIPlugin.getDefault().logError(ex);
 						}
 					}
 				}
@@ -184,13 +185,13 @@ public class PaletteDropCommand extends FileDropCommand {
 				} else {
 					XModelObject s = PreferenceModelUtilities.getPreferenceModel().getModelBuffer().source();
 					if(s != null) {
-						properties.setProperty("start text", "" + getDefaultText(s)); //$NON-NLS-1$ //$NON-NLS-2$
-						properties.setProperty("end text", ""); //$NON-NLS-1$ //$NON-NLS-2$
+						properties.setProperty(XModelObjectConstants.START_TEXT, "" + getDefaultText(s)); //$NON-NLS-1$
+						properties.setProperty(XModelObjectConstants.END_TEXT, ""); //$NON-NLS-1$
 						properties.setProperty("new line", "newLine"); //$NON-NLS-1$ //$NON-NLS-2$
 					}
 				}
 			} catch (CoreException e) {
-				ModelUIPlugin.getPluginLog().logError(e);
+				ModelUIPlugin.getDefault().logError(e);
 			}
 			startText = properties.getProperty(TLDToPaletteHelper.START_TEXT);
 			endText = properties.getProperty(TLDToPaletteHelper.END_TEXT);
@@ -228,8 +229,8 @@ public class PaletteDropCommand extends FileDropCommand {
 		String libraryVersion = (parent == null) ? "" : parent.getAttributeValue(URIConstants.LIBRARY_VERSION); //$NON-NLS-1$
 		String defaultPrefix = (parent == null) ? "" : parent.getAttributeValue(URIConstants.DEFAULT_PREFIX); //$NON-NLS-1$
 		this.getDefaultModel().setTagProposal(new TagProposal(uri, libraryVersion,defaultPrefix,tagname));
-		startText = object.getAttributeValue("start text"); //$NON-NLS-1$
-		endText = object.getAttributeValue("end text"); //$NON-NLS-1$
+		startText = object.getAttributeValue(XModelObjectConstants.START_TEXT);
+		endText = object.getAttributeValue(XModelObjectConstants.END_TEXT);
 	}
 	
 	private void insertInitialValues() {
@@ -301,36 +302,18 @@ public class PaletteDropCommand extends FileDropCommand {
 	}	
 
 	protected String generateStartText() {
-		startText = properties.getProperty("start text"); //$NON-NLS-1$
-		if(getDefaultModel().getTagProposal()==IDropWizardModel.UNDEFINED_TAG_PROPOSAL
-			|| getDefaultModel().getTagProposal().getDetails().length() == 0) {
-			return startText;
+		if(getDefaultModel().getTagProposal()==IDropWizardModel.UNDEFINED_TAG_PROPOSAL) {
+			return startText = properties.getProperty(XModelObjectConstants.START_TEXT);
 		}
-		String s1 = super.generateStartText();
-		String s2 = startText;
-		if(s2 == null) return s1;
-		if(s1.indexOf('=') < 0) return s2; // no input
-		int bi1 = s1.indexOf('<');
-		int bi2 = s2.indexOf('<');
-		if(bi2 < 0 || bi1 < 0) return s2;
-		int ei1 = s1.indexOf('>', bi1);
-		int ei2 = s2.indexOf('>', bi2);
-		if(ei1 < 0 || ei2 < 0) return s1;
-		boolean slash1 = s1.charAt(ei1 - 1) == '/';
-		boolean slash2 = s2.charAt(ei2 - 1) == '/';
-		if(slash1 && !slash2) {
-			s2 = s2.substring(0, bi2) + s1.substring(bi1, ei1 - 1) + s2.substring(ei2);
-		} else if(!slash1 && slash2) {
-			s2 = s2.substring(0, bi2) + s1.substring(bi1, ei1) + s2.substring(ei2 - 1);
-		} else {
-			s2 = s2.substring(0, bi2) + s1.substring(bi1, ei1) + s2.substring(ei2);
-		}
-		return s2;
+		return super.generateStartText();
 	}
 
 	protected String generateEndText() {
-		endText = properties.getProperty("end text"); //$NON-NLS-1$
-		return (endText != null) ? endText : ""; //$NON-NLS-1$
+		if(getDefaultModel().getTagProposal()==IDropWizardModel.UNDEFINED_TAG_PROPOSAL) {
+			endText = properties.getProperty(XModelObjectConstants.END_TEXT);
+			return (endText != null) ? endText : ""; //$NON-NLS-1$
+		}
+		return super.generateEndText();
 	}
 
 	protected String getReformatBodyProperty() {

@@ -104,12 +104,9 @@ public class JSPPaletteInsertHelper extends PaletteInsertHelper {
 
 		int k = text.toLowerCase().indexOf(":" + tagname.toLowerCase()); //$NON-NLS-1$
 		if(k >= 0) {
-			int g = text.indexOf("</"); //$NON-NLS-1$
-			if(g >= 0 && g < k) {
-				return text.substring(0, g + 2) + prefix + text.substring(k);
-			}
-			g = text.indexOf("<"); //$NON-NLS-1$
-			if(g >= 0 && g < k) {
+			int g = k - 1;
+			while(g >= 0 && text.charAt(g) != '/' && text.charAt(g) != '<') g--;
+			if(g >= 0) {
 				return text.substring(0, g + 1) + prefix + text.substring(k);
 			}
 		}

@@ -36,6 +36,7 @@ import org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor;
 import org.jboss.tools.jst.jsp.jspeditor.PalettePageImpl;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.palette.PaletteAdapter;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewJQueryWidgetWizard;
 import org.jboss.tools.test.util.WorkbenchUtils;
 
 import junit.framework.TestCase;
@@ -66,12 +67,20 @@ public class AbstractPaletteEntryTest extends TestCase {
 		JSPMultiPageEditor editor = (JSPMultiPageEditor)editorPart;
 		textEditor = editor.getJspEditor();
 		String text = textEditor.getDocumentProvider().getDocument(editor.getEditorInput()).get();
-		int offset = text.indexOf("<body>", 0) + 7;
+		int offset = text.indexOf(getInsertAfterText(), 0) + getInsertAfterText().length() + 1;
 		textEditor.getSelectionProvider().setSelection(new TextSelection(offset, 0));
 		return editorPart;
 	}
 
-	WizardDialog currentDialog = null;
+	protected String getInsertAfterText() {
+		return "<body>";
+	}
+
+	protected String getInsertBeforeText() {
+		return "</body>";
+	}
+
+	protected WizardDialog currentDialog = null;
 
 	public IWizardPage runToolEntry(String category, String entry, boolean wizardExpected) {
 		PaletteViewer viewer = getPaletteViewer();
@@ -151,5 +160,57 @@ public class AbstractPaletteEntryTest extends TestCase {
 			}
 		}
 		return null;
+	}
+
+	protected String getInsertedText() {
+		String content = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
+		int b = content.indexOf(getInsertAfterText()) + getInsertAfterText().length();
+		int e = content.indexOf(getInsertBeforeText());
+		return content.substring(b, e);
+	}
+
+	protected boolean isSameHTML(String s1, String s2) {
+		return removeWhiteSpaces(s1).equals(removeWhiteSpaces(s2));
+	}
+
+	protected String removeWhiteSpaces(String s) {
+		boolean insideTag = false;
+		boolean quota = false;
+		int whitespaces = 0;
+		boolean beginning = true;
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if(!quota && Character.isWhitespace(c)) {
+				if(!beginning) {
+					whitespaces++;
+				}
+				continue;
+			}
+			if(!quota && c == '=' && insideTag) {
+				whitespaces = 0;
+				beginning = true;
+			}
+			if(!quota && c == '<') {
+				insideTag = true;
+				whitespaces = 0;
+			}
+			if(!quota && c == '>') {
+				insideTag = false;
+				beginning = true;
+			} else if(!Character.isWhitespace(c)) {
+				beginning = false;
+			}
+			if(insideTag) {
+				if(c == '"') quota = !quota;
+				if(quota) whitespaces = 0;
+			}
+			if(!quota && !Character.isWhitespace(c) && whitespaces > 0) {
+				sb.append(' ');
+				whitespaces = 0;
+			}
+			sb.append(c);
+		}
+		return sb.toString();
 	}
 }

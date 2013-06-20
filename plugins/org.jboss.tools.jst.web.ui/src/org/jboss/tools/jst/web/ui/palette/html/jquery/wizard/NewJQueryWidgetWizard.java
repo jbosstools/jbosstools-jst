@@ -12,6 +12,8 @@ package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import java.io.File;
 
+import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.ElementNode;
+import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.NodeWriter;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.MobilePaletteInsertHelper;
 import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizard;

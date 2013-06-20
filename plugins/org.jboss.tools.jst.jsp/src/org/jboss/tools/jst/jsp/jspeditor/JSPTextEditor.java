@@ -770,6 +770,16 @@ public class JSPTextEditor extends StructuredTextEditor implements
 
 		}
 
+		public String getPrefix(String uri, String defaultPrefix) {
+			int offset = JSPTextEditor.this.getTextViewer().getTextWidget().getCaretOffset();
+			Map<String, List<INameSpace>> ns = pageContext.getNameSpaces(offset);
+			List<INameSpace> n = ns.get(uri);
+			if(n != null && !n.isEmpty()) {
+				return n.get(0).getPrefix();
+			}
+			return defaultPrefix;
+		}
+
 		public void initContext(Properties context) {
 			if(context != null && processor != null) {
 				context.put("processor", processor); //$NON-NLS-1$
@@ -784,10 +794,10 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			String result = null;
 			IComponent c = findComponent(query);
 			if(c != null) {
-				result = c.getName();
+				result = "*".equals(c.getName()) ? proposal.getName() : c.getName();
 				String prefix = getPrefix(query);
 				if(prefix != null && prefix.length() > 0) {
-					result = prefix + ":" + c.getName(); //$NON-NLS-1$
+					result = prefix + ":" + ("*".equals(c.getName()) ? proposal.getName() : c.getName()); //$NON-NLS-1$
 				}
 			}
 			return result;

@@ -1017,6 +1017,15 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		compareGeneratedAndInsertedText(wizard);
 	}
 
+	protected void compareGeneratedAndInsertedText(NewJQueryWidgetWizard<?> wizard) {
+		String generatedText = wizard.getTextForTextView();
+
+		wizard.performFinish();
+
+		String insertedText = getInsertedText();
+		assertTrue(isSameHTML(generatedText, insertedText));
+	}
+
 	void assertAttrExists(AbstractNewHTMLWidgetWizard wizard, String attr, String value) {
 		assertTextExists(wizard, attr + "=\"" + value + "\"");
 	}
@@ -1038,60 +1047,4 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		assertTextIsInserted(attr + "=\"" + value + "\"");
 	}
 
-	boolean isSameHTML(String s1, String s2) {
-		return removeWhiteSpaces(s1).equals(removeWhiteSpaces(s2));
-	}
-
-	void compareGeneratedAndInsertedText(NewJQueryWidgetWizard<?> wizard) {
-		String generatedText = wizard.getTextForTextView();
-
-		wizard.performFinish();
-
-		String content = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
-		int b = content.indexOf("<body>") + 6;
-		int e = content.indexOf("</body>");
-		String insertedText = content.substring(b, e);
-		assertTrue(isSameHTML(generatedText, insertedText));
-	}
-
-	String removeWhiteSpaces(String s) {
-		boolean insideTag = false;
-		boolean quota = false;
-		int whitespaces = 0;
-		boolean beginning = true;
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < s.length(); i++) {
-			char c = s.charAt(i);
-			if(!quota && Character.isWhitespace(c)) {
-				if(!beginning) {
-					whitespaces++;
-				}
-				continue;
-			}
-			if(!quota && c == '=' && insideTag) {
-				whitespaces = 0;
-				beginning = true;
-			}
-			if(!quota && c == '<') {
-				insideTag = true;
-				whitespaces = 0;
-			}
-			if(!quota && c == '>') {
-				insideTag = false;
-				beginning = true;
-			} else if(!Character.isWhitespace(c)) {
-				beginning = false;
-			}
-			if(insideTag) {
-				if(c == '"') quota = !quota;
-				if(quota) whitespaces = 0;
-			}
-			if(!quota && !Character.isWhitespace(c) && whitespaces > 0) {
-				sb.append(' ');
-				whitespaces = 0;
-			}
-			sb.append(c);
-		}
-		return sb.toString();
-	}
 }
