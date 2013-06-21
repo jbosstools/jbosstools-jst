@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2007-2010 Exadel, Inc. and Red Hat, Inc.
+ * Copyright (c) 2007-2013 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
+ *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.i18n;
 
@@ -682,8 +682,8 @@ public class ExternalizeStringsUtils {
 							p.setProperty(URIConstants.LIBRARY_VERSION, ""); //$NON-NLS-1$
 							p.setProperty(URIConstants.DEFAULT_PREFIX, jsfCoreTaglibPrefix);
 							p.setProperty(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB, "true"); //$NON-NLS-1$
-							p.setProperty(JSPPaletteInsertHelper.PROPOPERTY_REFORMAT_BODY, "yes"); //$NON-NLS-1$
-							p.setProperty(PaletteInsertHelper.PROPOPERTY_START_TEXT, 
+							p.setProperty(JSPPaletteInsertHelper.PROPERTY_REFORMAT_BODY, "yes"); //$NON-NLS-1$
+							p.setProperty(PaletteInsertHelper.PROPERTY_START_TEXT, 
 									"<%@ taglib uri=\"http://java.sun.com/jsf/core\" prefix=\"f\" %>\\n"); //$NON-NLS-1$
 							PaletteTaglibInserter.inserTaglib(ed.getTextViewer().getDocument(), p);
 						}

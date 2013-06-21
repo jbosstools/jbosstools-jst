@@ -1,7 +1,5 @@
 package org.jboss.tools.jst.web.ui.test;
 
-import java.util.StringTokenizer;
-
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IEditorPart;
@@ -36,6 +34,28 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			CSS_LINK,
 			MobilePaletteInsertHelper.JQUERY_SCRIPT + ">",
 			MobilePaletteInsertHelper.JQUERY_MOBILE_SCRIPT + ">",
+			"",
+			"</head>",
+			"<body>",
+			"<div data-role=\"collapsible-set\">",
+			"<div data-role=\"collapsible\">",
+			"<h3>I'm a header</h3>",
+			"<p>I'm the collapsible content.</p>",
+			"",
+			"</div>",
+		    "</div>",
+		    "</body>",
+		    "",
+			"</html>"
+	};
+	private String[] test_result_2_1={
+			"<!DOCTYPE html>",
+			"<html>",
+		    "<head>",
+			"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
+			CSS_LINK,
+			MobilePaletteInsertHelper.JQUERY_SCRIPT + ">",
+			MobilePaletteInsertHelper.JQUERY_MOBILE_SCRIPT + ">",
 			"</head>",
 			"<body>",
 			"<div data-role=\"collapsible-set\">",
@@ -56,6 +76,7 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			CSS_LINK,
 			MobilePaletteInsertHelper.JQUERY_SCRIPT + ">",
 			MobilePaletteInsertHelper.JQUERY_MOBILE_SCRIPT + ">",
+			"",
 			"</head>",
 			"<body>",
 			"</body>",
@@ -97,7 +118,7 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 		editor = openEditor("insert_around.html");
 		runToolEntry("jQuery Mobile", "JS/CSS", false);
 		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
-		compare(text, test_result_2);
+		compare(text, test_result_2_1);
 	}
 	
 	public void testInsertIntoNotClosedTags(){
@@ -111,7 +132,7 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 		editor = openEditor("normal.html");
 		runToolEntry("jQuery Mobile", "JS/CSS", false);
 		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
-		compare(text, test_result_2);
+		compare(text, test_result_2_1);
 	}
 	
 	public void testInsertIntoDifferentVersion(){
@@ -177,10 +198,10 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 	}
 
 	private void compare(String test, String[] result){
-		StringTokenizer tokenizer = new StringTokenizer(test, "\n");
-		assertEquals("Unexpected number of lines",result.length, tokenizer.countTokens());
+		String[] spl = test.split("\n");
+		assertEquals("Unexpected number of lines",result.length, spl.length);
 		for(int i = 0; i < result.length; i++){
-			String token = tokenizer.nextToken().trim();
+			String token = spl[i].trim();
 			assertEquals("Unexpected line", result[i], token);
 		}
 	}

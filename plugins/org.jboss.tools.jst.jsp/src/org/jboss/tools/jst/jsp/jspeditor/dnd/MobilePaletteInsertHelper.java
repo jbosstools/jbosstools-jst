@@ -178,7 +178,7 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 				if(globalPosition == -1){
 					globalPosition = relatedNode.getStartStructuredDocumentRegion().getStartOffset()-1;
 					goobalLength = 0;
-					newLineBefore = false;
+					newLineBefore = true;
 					newLineAfter = true;
 				}
 			}
