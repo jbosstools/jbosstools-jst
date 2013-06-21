@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2007 Exadel, Inc. and Red Hat, Inc.
+ * Copyright (c) 2007-2013 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
+ *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.jspeditor.dnd;
 
@@ -67,9 +67,9 @@ public class PaletteDropCommand extends FileDropCommand {
 	}
 
 	protected void addCustomProperties(Properties runningProperties) {		
-		newLine = properties.getProperty(PaletteInsertHelper.PROPOPERTY_NEW_LINE);
+		newLine = properties.getProperty(PaletteInsertHelper.PROPERTY_NEW_LINE);
 		if (newLine == null) newLine="true"; //$NON-NLS-1$
-		runningProperties.setProperty(PaletteInsertHelper.PROPOPERTY_NEW_LINE, newLine);
+		runningProperties.setProperty(PaletteInsertHelper.PROPERTY_NEW_LINE, newLine);
 		String addTaglib = properties.getProperty(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB);
 		if(addTaglib == null) addTaglib = "true"; //$NON-NLS-1$
 		runningProperties.setProperty(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB, addTaglib);
@@ -80,10 +80,10 @@ public class PaletteDropCommand extends FileDropCommand {
 			if(startText == null && endText == null) return;
 			int pos = ((ITextSelection)getDefaultModel().getDropData().getSelectionProvider().getSelection()).getOffset();
 			getDefaultModel().getDropData().getSourceViewer().setSelectedRange(pos, 0);
-			if(startText != null) properties.setProperty(PaletteInsertHelper.PROPOPERTY_START_TEXT, startText);
-			if(endText != null) properties.setProperty(PaletteInsertHelper.PROPOPERTY_END_TEXT, endText);
-			if(reformat != null) properties.setProperty(PaletteInsertHelper.PROPOPERTY_REFORMAT_BODY, reformat);
-			if(newLine != null) properties.setProperty(PaletteInsertHelper.PROPOPERTY_NEW_LINE, newLine);
+			if(startText != null) properties.setProperty(PaletteInsertHelper.PROPERTY_START_TEXT, startText);
+			if(endText != null) properties.setProperty(PaletteInsertHelper.PROPERTY_END_TEXT, endText);
+			if(reformat != null) properties.setProperty(PaletteInsertHelper.PROPERTY_REFORMAT_BODY, reformat);
+			if(newLine != null) properties.setProperty(PaletteInsertHelper.PROPERTY_NEW_LINE, newLine);
 			JSPPaletteInsertHelper.getInstance().insertIntoEditor(
 					getDefaultModel().getDropData().getSourceViewer(),
 					properties

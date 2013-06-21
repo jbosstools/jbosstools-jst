@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2007-2013 Red Hat, Inc.
+ * Distributed under license by Red Hat, Inc. All rights reserved.
+ * This program is made available under the terms of the
+ * Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Red Hat, Inc. - initial API and implementation
+ ******************************************************************************/
 package org.jboss.tools.jst.jsp.jspeditor.dnd;
 
 import java.util.Properties;
@@ -34,7 +44,7 @@ public class JSPPaletteInsertHelper extends PaletteInsertHelper {
 	protected void modify(ISourceViewer v, Properties p, String[] texts) {
 		if(!MobilePaletteInsertHelper.getInstance().isMobile(v, p, texts)){
 			p.put("viewer", v);
-			String tagname = p.getProperty(PROPOPERTY_TAG_NAME);
+			String tagname = p.getProperty(PROPERTY_TAG_NAME);
 			String uri = p.getProperty(PROPOPERTY_TAGLIBRARY_URI);
 			String startText = texts[0];
 			if(startText != null && startText.startsWith("<%@ taglib")) { //$NON-NLS-1$

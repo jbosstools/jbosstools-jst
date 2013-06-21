@@ -743,7 +743,7 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 			Properties properties = new Properties();
 			
 			properties.put(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB, "true"); //$NON-NLS-1$
-			properties.put(PaletteInsertHelper.PROPOPERTY_START_TEXT, ""); //$NON-NLS-1$
+			properties.put(PaletteInsertHelper.PROPERTY_START_TEXT, ""); //$NON-NLS-1$
 			properties.put(JSPPaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI, uri);
 			properties.put(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX, prefix);
 			properties.put(JSPPaletteInsertHelper.PROPOPERTY_FORCE_PREFIX, "true");

@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2007 Exadel, Inc. and Red Hat, Inc.
+ * Copyright (c) 2007-2013 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
+ *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.jspeditor.dnd;
 
@@ -52,15 +52,15 @@ public class FileDropCommand extends DefaultDropCommand {
 		}
 
 		Properties properties = new Properties();
-		properties.put(PaletteInsertHelper.PROPOPERTY_TAG_NAME,getDefaultModel().getTagProposal().getName());
-		properties.put(PaletteInsertHelper.PROPOPERTY_START_TEXT, generateStartText());
-		properties.put(PaletteInsertHelper.PROPOPERTY_END_TEXT, generateEndText());
-		properties.put(PaletteInsertHelper.PROPOPERTY_REFORMAT_BODY, getReformatBodyProperty());
+		properties.put(PaletteInsertHelper.PROPERTY_TAG_NAME,getDefaultModel().getTagProposal().getName());
+		properties.put(PaletteInsertHelper.PROPERTY_START_TEXT, generateStartText());
+		properties.put(PaletteInsertHelper.PROPERTY_END_TEXT, generateEndText());
+		properties.put(PaletteInsertHelper.PROPERTY_REFORMAT_BODY, getReformatBodyProperty());
 		properties.put(JSPPaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI, uri);
 		String version = ((TagProposal)getDefaultModel().getTagProposal()).getLibraryVersion();
 		properties.put(JSPPaletteInsertHelper.PROPOPERTY_TAGLIBRARY_VERSION, version);
 		properties.put(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX,getDefaultModel().getTagProposal().getPrefix());
-		properties.put(PaletteInsertHelper.PROPOPERTY_SELECTION_PROVIDER, getDefaultModel().getDropData().getSelectionProvider());
+		properties.put(PaletteInsertHelper.PROPERTY_SELECTION_PROVIDER, getDefaultModel().getDropData().getSelectionProvider());
 		properties.put(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB, "true"); //$NON-NLS-1$
 		fillPropertiesForRun(properties);
 		addCustomProperties(properties);

@@ -65,7 +65,7 @@ public class PaletteTaglibInserter {
 				!p.getProperty(JSPPaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI).equals(JSP_URI) &&
 				p.getProperty(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX) != null &&
 				p.getProperty(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX).length() > 0 &&
-				p.getProperty(PaletteInsertHelper.PROPOPERTY_START_TEXT) != null;
+				p.getProperty(PaletteInsertHelper.PROPERTY_START_TEXT) != null;
 	}
 
 	public boolean inserTaglibInOldJsp(IDocument d, Properties p) {
@@ -155,7 +155,7 @@ public class PaletteTaglibInserter {
 	}
 	
 	private static Node getSelectedNode(IDocument d, Properties p){
-		ISelectionProvider selProvider = (ISelectionProvider)p.get(PaletteInsertHelper.PROPOPERTY_SELECTION_PROVIDER);
+		ISelectionProvider selProvider = (ISelectionProvider)p.get(PaletteInsertHelper.PROPERTY_SELECTION_PROVIDER);
 		if(selProvider == null) return null;
 		
 		ITextSelection selection = null;
@@ -361,7 +361,7 @@ public class PaletteTaglibInserter {
 
 	private static void mouveFocusOnPage(Properties p, int length, int pos){
 		ISourceViewer v = getViewer(p);
-		ISelectionProvider selProvider = (ISelectionProvider)p.get(PaletteInsertHelper.PROPOPERTY_SELECTION_PROVIDER);
+		ISelectionProvider selProvider = (ISelectionProvider)p.get(PaletteInsertHelper.PROPERTY_SELECTION_PROVIDER);
 		IDocument doc = v.getDocument();
 
 		if (doc== null || selProvider == null) return;
@@ -369,12 +369,12 @@ public class PaletteTaglibInserter {
 		ITextSelection selection = (ITextSelection)selProvider.getSelection();
 		if (selection.getOffset() == 0) {			
 			 v.setSelectedRange(length,0);
-			 p.put(PaletteInsertHelper.PROPOPERTY_SELECTION_PROVIDER,v.getSelectionProvider());
+			 p.put(PaletteInsertHelper.PROPERTY_SELECTION_PROVIDER,v.getSelectionProvider());
 		}
 		else 
 		if (selection.getOffset() == pos ){
 			v.setSelectedRange(length, 0);
-			p.put(PaletteInsertHelper.PROPOPERTY_SELECTION_PROVIDER,v.getSelectionProvider());
+			p.put(PaletteInsertHelper.PROPERTY_SELECTION_PROVIDER,v.getSelectionProvider());
 		}
 	}
 
