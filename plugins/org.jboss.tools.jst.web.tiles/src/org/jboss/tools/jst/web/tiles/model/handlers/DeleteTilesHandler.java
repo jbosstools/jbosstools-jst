@@ -31,7 +31,8 @@ public class DeleteTilesHandler extends DeleteFileHandler {
 			if(nature != null && nature.indexOf("jsf") >= 0) {  //$NON-NLS-1$
 				checkboxMessage = WebUIMessages.DELETE_REFERENCE_FROM_WEBDESCRIPTOR;
 			} else {
-				checkboxMessage = WebUIMessages.DELETE_REFERENCE_FROM_STRUTS_CONFIGURATION_FILE;
+				//should not happen. File is not registered
+				return;
 			}
 			ServiceDialog d = object.getModel().getService();
 			Properties pd = new Properties();

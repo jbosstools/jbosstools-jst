@@ -111,7 +111,6 @@ public class WebUIMessages extends NLS {
 	public static String ENTER_NEW_FILTER;
 	public static String ExpandTLDHandler_Collapse;
 	public static String ExpandTLDHandler_Expand;
-	public static String DELETE_REFERENCE_FROM_STRUTS_CONFIGURATION_FILE;
 	public static String YOU_WANT_TO_DELETE_LINK_TO;
 	public static String TILES_EDITOR;
 	public static String DIAGRAM;
@@ -128,7 +127,7 @@ public class WebUIMessages extends NLS {
 	public static String BEAN;
 	public static String SET_PROPERTIES;
 	public static String SET_PROPERTY;
-	public static String STRUTS_MODEL;
+	public static String TILES_MODEL;
 	public static String PRINT;
 	public static String ZOOM;
 	public static String ALL;

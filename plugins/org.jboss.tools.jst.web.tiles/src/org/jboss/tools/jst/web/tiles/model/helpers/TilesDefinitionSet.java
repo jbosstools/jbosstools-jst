@@ -19,7 +19,7 @@ import org.jboss.tools.jst.web.tiles.model.TilesConstants;
 
 public class TilesDefinitionSet implements XModelTreeListener {
 	static String[] CONTRIBUTORS = new String[]{
-		"org.jboss.tools.struts.model.helpers.TilesContributor" //$NON-NLS-1$
+		//implementations of ITilesDefinitionSetContributor by full class name
 	};
 	static ITilesDefinitionSetContributor[] contributors;
 	

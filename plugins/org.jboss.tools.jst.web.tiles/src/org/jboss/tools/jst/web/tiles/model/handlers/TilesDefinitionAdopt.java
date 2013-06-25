@@ -20,22 +20,12 @@ public class TilesDefinitionAdopt implements XAdoptManager {
     public boolean isAdoptable(XModelObject target, XModelObject object) {
         String entity = object.getModelEntity().getName();
         return target != null && target.isObjectEditable() &&
-               (entity.startsWith("StrutsAction") || //$NON-NLS-1$
-               (entity.equals("FileJSP") || entity.startsWith("FileHTML"))); //$NON-NLS-1$ //$NON-NLS-2$
+               ((entity.equals("FileJSP") || entity.startsWith("FileHTML"))); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     public void adopt(XModelObject target, XModelObject object, java.util.Properties p) throws XModelException {
         String entity = object.getModelEntity().getName();
-        if(entity.startsWith("StrutsAction")) adoptAction(target, object); //$NON-NLS-1$
         if(entity.equals("FileJSP") || entity.startsWith("FileHTML")) adoptPage(target, object); //$NON-NLS-1$ //$NON-NLS-2$
-    }
-
-    private void adoptAction(XModelObject target, XModelObject object) throws XModelException {
-        String path = object.getAttributeValue("path"); //$NON-NLS-1$
-        XModelObject cg = object;
-        while(cg != null && !cg.getModelEntity().getName().startsWith("StrutsConfig")) cg = cg.getParent(); //$NON-NLS-1$
-        path = getModuleForConfig(cg) + path;
-        target.getModel().changeObjectAttribute(target, "controllerUrl", path); //$NON-NLS-1$
     }
 
     private void adoptPage(XModelObject target, XModelObject object) throws XModelException {

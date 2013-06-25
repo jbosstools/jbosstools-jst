@@ -20,7 +20,6 @@ import org.jboss.tools.jst.web.project.WebProject;
 
 public class TilesRegistrationHelper {
 	static Registrator[] registrators = new Registrator[]{
-		new Registrator(WebProject.STRUTS_NATURE_ID, "org.jboss.tools.struts.plugins.model.handlers.TilesFileRegistration"), //$NON-NLS-1$
 		new Registrator(WebProject.JSF_NATURE_ID, "org.jboss.tools.jsf.model.handlers.tile.TilesFileRegistration") //$NON-NLS-1$
 	};
 	

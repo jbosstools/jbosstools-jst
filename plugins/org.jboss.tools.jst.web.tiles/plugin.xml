@@ -55,12 +55,15 @@
 			class="org.jboss.tools.jst.web.tiles.model.TilesDefinitionImpl"/>
 		<xclass id="org.jboss.tools.jst.web.tiles.model.TilesItemImpl"
 			class="org.jboss.tools.jst.web.tiles.model.TilesItemImpl"/>
+		<xclass id="org.jboss.tools.jst.web.tiles.model.SetPropertyObjectImpl"
+			class="org.jboss.tools.jst.web.tiles.model.SetPropertyObjectImpl"/>
 		<xclass id="org.jboss.tools.jst.web.tiles.model.TilesProcessImpl"
 			class="org.jboss.tools.jst.web.tiles.model.TilesProcessImpl"/>
 		<xclass id="org.jboss.tools.jst.web.tiles.model.TilesProcessItemImpl"
 			class="org.jboss.tools.jst.web.tiles.model.TilesProcessItemImpl"/>
 		<xclass id="org.jboss.tools.jst.web.tiles.model.TilesProcessItemOutputImpl"
 			class="org.jboss.tools.jst.web.tiles.model.TilesProcessItemOutputImpl"/>
+			
 		<xclass id="org.jboss.tools.jst.web.tiles.model.handlers.DeleteDefinitionLinkHandler"
 			class="org.jboss.tools.jst.web.tiles.model.handlers.DeleteDefinitionLinkHandler"/>
 		<xclass id="org.jboss.tools.jst.web.tiles.model.handlers.DeleteTilesHandler"

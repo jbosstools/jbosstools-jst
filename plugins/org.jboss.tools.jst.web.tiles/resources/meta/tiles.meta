@@ -11,7 +11,7 @@
    <PAIR name="FileSystems$138" value="org.jboss.tools.jst.web.tiles.model.TilesConfigFilteredTreeConstraint"/>
   </MAPPING>
   <MAPPING name="ObjectEditor">
-   <PAIR name="STRUTS_TILES" value="org.jboss.tools.jst.web.tiles.ui.editor.TilesCompoundEditor"/>
+   <PAIR name="TILES" value="org.jboss.tools.jst.web.tiles.ui.editor.TilesCompoundEditor"/>
   </MAPPING>
   <MAPPING name="Recognizers">
    <PAIR name="xml$30" value="org.jboss.tools.jst.web.tiles.model.FileTilesRecognizer"/>
@@ -29,6 +29,7 @@
       <ICON name="item" path="images/struts/pro/new_tiles_item.gif"/>
       <ICON name="list" path="images/struts/pro/new_tiles_putlist.gif"/>
       <ICON name="put" path="images/struts/pro/new_tiles_put.gif"/>
+      <ICON name="set-property" path="images/struts/new_properties.gif"/>
      </GROUP>
     </GROUP>
    </GROUP>
@@ -43,6 +44,7 @@
      <ICON name="item" path="images/struts/pro/tiles_item.gif"/>
      <ICON name="list" path="images/struts/pro/tiles_putlist.gif"/>
      <ICON name="put" path="images/struts/pro/tiles_put.gif"/>
+     <ICON name="set-property" path="images/struts/properties.gif"/>
     </GROUP>
    </GROUP>
   </GROUP>
@@ -357,7 +359,7 @@
   PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.tiles.ui.editor.form.TilesFormLayoutData"
   XMLSUBPATH="bean" name="TilesBean">
   <XChildrenEntities>
-   <XChildEntity name="StrutsSetProperty"/>
+   <XChildEntity name="TilesSetProperty"/>
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
@@ -374,10 +376,10 @@
   <XActionItem kind="list">
    <XActionItem kind="list" name="CreateActions">
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.struts.set-property"
+     ICON="action.new.web.tiles.set-property"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Create Set Property..." kind="action" name="CreateSetProperty">
-     <EntityData EntityName="StrutsSetProperty">
+     <EntityData EntityName="TilesSetProperty">
       <AttributeData AttributeName="property"/>
       <AttributeData AttributeName="value"/>
      </EntityData>
@@ -514,13 +516,6 @@
     <XActionItem HIDE="always" HandlerClassName="%Move%"
      ICON="action.move" displayName="Move" kind="action" name="Move"/>
    </XActionItem>
-   <XActionItem HIDE="always"
-    HandlerClassName="org.jboss.tools.struts.model.handlers.JumpByForwardPathHandler"
-    ICON="action.empty" displayName="Jump by Path" kind="action" name="JumpByPath"/>
-   <XActionItem HIDE="always"
-    HandlerClassName="org.jboss.tools.struts.model.handlers.JumpByForwardPathHandler"
-    ICON="action.empty" PROPERTIES="linkAttr=controllerUrl"
-    displayName="Jump by ControllerUrl" kind="action" name="JumpByUrl"/>
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
@@ -924,6 +919,66 @@
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
+ <XModelEntity
+  ImplementingClass="org.jboss.tools.jst.web.tiles.model.SetPropertyObjectImpl"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.tiles.ui.editor.form.TilesFormLayoutData"
+  XMLSUBPATH="set-property" name="TilesSetProperty">
+  <XChildrenEntities/>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.web.tiles.set-property" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="set-property" loader="ElementType" name="element type">
+    <Constraint/>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="id" xmlname="id">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="id=true;save=always" name="property" xmlname="property">
+    <Constraint loader="JavaName"/>
+    <Editor name="Name"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="save=always" name="value" xmlname="value">
+    <Constraint/>
+    <Editor/>
+   </XModelAttribute>
+   <XModelAttribute TRIM="no" name="comment" xmlname="#comment">
+    <Constraint/>
+    <Editor name="Note"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem ICON="action.copy" displayName="Copy" kind="list" name="CopyActions">
+    <XActionItem BaseActionName="Copy" HandlerClassName="%Copy%"
+     ICON="action.copy" displayName="Copy" kind="action" name="Copy"/>
+    <XActionItem BaseActionName="Cut" HandlerClassName="%Cut%"
+     ICON="action.cut" displayName="Cut" kind="action" name="Cut"/>
+   </XActionItem>
+   <XActionItem ICON="action.delete" displayName="Delete" kind="list" name="DeleteActions">
+    <XActionItem BaseActionName="Delete" HandlerClassName="%Delete%"
+     ICON="action.delete" displayName="Delete" kind="action" name="Delete"/>
+   </XActionItem>
+   <XActionItem ICON="action.empty" kind="list" name="Properties">
+    <XActionItem HandlerClassName="%Properties%" ICON="action.empty"
+     displayName="Properties..." kind="action" name="Properties"/>
+   </XActionItem>
+   <XActionItem HIDE="always" HandlerClassName="%Edit%"
+    ICON="action.empty" WizardClassName="%Default%"
+    displayName="Edit..." kind="action" name="Edit">
+    <EntityData EntityName="TilesSetProperty">
+     <AttributeData AttributeName="property"/>
+     <AttributeData AttributeName="value"/>
+     <AttributeData AttributeName="comment" Mandatory="no"/>
+     <AttributeData AttributeName="id" Mandatory="no"/>
+    </EntityData>
+   </XActionItem>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
  <XEntityExtension name="FileFolder">
   <XChildrenEntities>
    <XChildEntity name="FileTiles"/>
@@ -931,7 +986,7 @@
   <XActionItem kind="list">
    <XActionItem displayName="New" group="1" kind="list" name="CreateActions">
     <XActionItem displayName="File" group="1" kind="list" name="CreateFiles">
-     <XActionItem displayName="Struts" kind="list" name="Struts">
+     <XActionItem displayName="Tiles" kind="list" name="Tiles">
       <XActionItem HIDE="always" HandlerClassName="%SpecialWizard%"
        ICON="action.new.web.tiles.file"
        PROPERTIES="support=org.jboss.tools.jst.web.tiles.model.handlers.CreateTilesSupport;entity=FileTiles;extension=xml;validator.addfile=true"
@@ -959,7 +1014,7 @@
   <XActionItem kind="list">
    <XActionItem displayName="New" group="1" kind="list" name="CreateActions">
     <XActionItem displayName="File" group="1" kind="list" name="CreateFiles">
-     <XActionItem displayName="Struts" kind="list" name="Struts">
+     <XActionItem displayName="Tiles" kind="list" name="Tiles">
       <XActionItem HIDE="always" HandlerClassName="%SpecialWizard%"
        ICON="action.new.web.tiles.file"
        PROPERTIES="support=org.jboss.tools.jst.web.tiles.model.handlers.CreateTilesSupport;entity=FileTiles;extension=xml;validator.addfile=true"

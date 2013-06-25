@@ -264,7 +264,7 @@ public class TilesFormLayoutData implements IFormLayoutData {
 						WebUIMessages.SET_PROPERTIES,
 						EMPTY_DESCRIPTION, 
 						new FormAttributeData[]{new FormAttributeData("id", 33), new FormAttributeData("property", 33), new FormAttributeData("value", 33)}, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-						new String[]{"StrutsSetProperty"}, //$NON-NLS-1$
+						new String[]{"TilesSetProperty"}, //$NON-NLS-1$
 //						DEFAULT_TABLE_ACTION_TYPE
 					new IFormActionData[] {
 							new FormActionData(TableStructuredEditor.ADD_ACTION, "CreateActions.CreateSetProperty"), //$NON-NLS-1$
@@ -302,9 +302,9 @@ public class TilesFormLayoutData implements IFormLayoutData {
 				}
 			),
 			new FormData(
-				"StrutsSetProperty", //$NON-NLS-1$
+				"TilesSetProperty", //$NON-NLS-1$
 				new IFormData[] {
-					// Tiles StrutsSetProperty Form
+					// Tiles TilesSetProperty Form
 					new FormData(
 						WebUIMessages.SET_PROPERTY,
 						"", //$NON-NLS-1$

@@ -61,7 +61,7 @@ public class TilesModel extends TilesElement implements ITilesModel, PropertyCha
 		fireDefinitionAdd(definition);
 	}
 
-	protected List<ITilesModelListener> strutsModelListeners = new Vector<ITilesModelListener>();
+	protected List<ITilesModelListener> tilesModelListeners = new Vector<ITilesModelListener>();
 	protected TilesHashtable map = new TilesHashtable();
 	protected TilesElementList definitionList = new DefinitionList();
 	protected TilesStructureHelper helper = TilesStructureHelper.instance;
@@ -74,7 +74,7 @@ public class TilesModel extends TilesElement implements ITilesModel, PropertyCha
 
 	public TilesModel() {
 		try {
-			setName(WebUIMessages.STRUTS_MODEL);
+			setName(WebUIMessages.TILES_MODEL);
 		} catch (PropertyVetoException ex) {
 			TilesUIPlugin.getPluginLog().logError(ex);
 		}
@@ -85,9 +85,9 @@ public class TilesModel extends TilesElement implements ITilesModel, PropertyCha
 		if (map != null)
 			map.dispose();
 		map = null;
-		if (strutsModelListeners != null)
-			strutsModelListeners.clear();
-		strutsModelListeners = null;
+		if (tilesModelListeners != null)
+			tilesModelListeners.clear();
+		tilesModelListeners = null;
 		if (definitionList != null)
 			definitionList.dispose();
 		definitionList = null;
@@ -226,10 +226,10 @@ public class TilesModel extends TilesElement implements ITilesModel, PropertyCha
 	// -----------------------------------------------------------------------
 
 	public void fireProcessChanged() {
-		if (strutsModelListeners == null)
+		if (tilesModelListeners == null)
 			return;
 		List<ITilesModelListener> targets = new ArrayList<ITilesModelListener>();
-		targets.addAll(strutsModelListeners);
+		targets.addAll(tilesModelListeners);
 		for (int i = 0; i < targets.size(); i++) {
 			ITilesModelListener listener = (ITilesModelListener) targets.get(i);
 			if (listener != null) {
@@ -241,7 +241,7 @@ public class TilesModel extends TilesElement implements ITilesModel, PropertyCha
 
 	public void fireDefinitionAdd(IDefinition newDefinition) {
 		List<ITilesModelListener> targets = new ArrayList<ITilesModelListener>();
-		targets.addAll(strutsModelListeners);
+		targets.addAll(tilesModelListeners);
 		for (int i = 0; i < targets.size(); i++) {
 			ITilesModelListener listener = (ITilesModelListener) targets.get(i);
 			if (listener != null) {
@@ -253,7 +253,7 @@ public class TilesModel extends TilesElement implements ITilesModel, PropertyCha
 
 	public void fireDefinitionRemove(IDefinition newDefinition, int index) {
 		List<ITilesModelListener> targets = new ArrayList<ITilesModelListener>();
-		targets.addAll(strutsModelListeners);
+		targets.addAll(tilesModelListeners);
 		for (int i = 0; i < targets.size(); i++) {
 			ITilesModelListener listener = (ITilesModelListener) targets.get(i);
 			if (listener != null) {
@@ -265,7 +265,7 @@ public class TilesModel extends TilesElement implements ITilesModel, PropertyCha
 
 	public void fireLinkAdd(ILink newLink) {
 		List<ITilesModelListener> targets = new ArrayList<ITilesModelListener>();
-		targets.addAll(strutsModelListeners);
+		targets.addAll(tilesModelListeners);
 		for (int i = 0; i < targets.size(); i++) {
 			ITilesModelListener listener = (ITilesModelListener) targets.get(i);
 			if (listener != null) {
@@ -277,7 +277,7 @@ public class TilesModel extends TilesElement implements ITilesModel, PropertyCha
 
 	public void fireLinkRemove(ILink newLink) {
 		List<ITilesModelListener> targets = new ArrayList<ITilesModelListener>();
-		targets.addAll(strutsModelListeners);
+		targets.addAll(tilesModelListeners);
 		for (int i = 0; i < targets.size(); i++) {
 			ITilesModelListener listener = (ITilesModelListener) targets.get(i);
 			if (listener != null) {
@@ -288,12 +288,12 @@ public class TilesModel extends TilesElement implements ITilesModel, PropertyCha
 	}
 
 	public void addTilesModelListener(ITilesModelListener listener) {
-		strutsModelListeners.add(listener);
+		tilesModelListeners.add(listener);
 	}
 
 	public void removeTilesModelListener(ITilesModelListener listener) {
-		if (strutsModelListeners != null)
-			strutsModelListeners.remove(listener);
+		if (tilesModelListeners != null)
+			tilesModelListeners.remove(listener);
 	}
 
 	public void remove() {

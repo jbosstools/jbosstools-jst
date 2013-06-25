@@ -24,8 +24,6 @@ public class WebProjectTemplateFactory {
 		Class cls = null;
 		if(EclipseResourceUtil.hasNature(object.getModel(), WebProject.JSF_NATURE_ID)) {
 			cls = ModelFeatureFactory.getInstance().getFeatureClass("org.jboss.tools.jsf.web.JSFTemplate"); //$NON-NLS-1$
-		} else if(EclipseResourceUtil.hasNature(object.getModel(), WebProject.STRUTS_NATURE_ID)) {
-			cls = ModelFeatureFactory.getInstance().getFeatureClass("org.jboss.tools.struts.StrutsUtils"); //$NON-NLS-1$
 		}
 		if(cls == null) return null;
 		try {
