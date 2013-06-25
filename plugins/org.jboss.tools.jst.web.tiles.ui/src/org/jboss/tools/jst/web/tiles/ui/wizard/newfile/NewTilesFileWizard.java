@@ -32,7 +32,7 @@ public class NewTilesFileWizard extends NewFileWizardEx {
 			return support;
 		}
 		protected String getActionPath() {
-			return "CreateActions.CreateFiles.Struts.CreateTiles"; //$NON-NLS-1$
+			return "CreateActions.CreateFiles.Tiles.CreateTiles"; //$NON-NLS-1$
 		}
 	}
 

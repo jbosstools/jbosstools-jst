@@ -349,11 +349,6 @@
          </newWizardShortcut>
          <newWizardShortcut id="org.eclipse.ui.wizards.new.file">
          </newWizardShortcut>
-         <newWizardShortcut id="org.jboss.tools.struts.ui.wizard.newfile.NewStrutsConfigFileWizard">
-         </newWizardShortcut>
-         <!--newWizardShortcut 
-             id="org.jboss.tools.struts.ui.wizard.newfile.NewStrutsConfigFile10Wizard">
-         </newWizardShortcut-->
          <newWizardShortcut id="org.jboss.tools.jsf.ui.wizard.newfile.NewFacesConfigFileWizard">
          </newWizardShortcut>
          <!--newWizardShortcut id="org.jboss.tools.orm.wizard.newfile.NewHibernateFileWizard">
@@ -361,11 +356,9 @@
          <newWizardShortcut 
              id="org.jboss.tools.jst.web.tiles.ui.wizard.newfile.NewTilesFileWizard">
          </newWizardShortcut>
-         <newWizardShortcut id="org.jboss.tools.struts.ui.wizard.newfile.NewTilesFileWizard">
+         <newWizardShortcut id="org.jboss.tools.jst.web.tiles.ui.wizard.newfile.NewTilesFileWizard">
          </newWizardShortcut>
-         <newWizardShortcut id="org.jboss.tools.struts.ui.wizard.newfile.NewValidationFileWizard">
-         </newWizardShortcut>
-         <newWizardShortcut id="org.jboss.tools.jst.web.ui.wizard.newfile.NewTLDFileWizard">
+         <newWizardShortcut id="org.jboss.tools.jst.web.ui.wizards.newfile.NewTLDFileWizard">
          </newWizardShortcut>
          <newWizardShortcut id="org.eclipse.jst.jsp.ui.internal.wizard.NewJSPWizard">
          </newWizardShortcut>
@@ -402,10 +395,6 @@
          </viewShortcut>
          <viewShortcut id="org.eclipse.ui.views.ResourceNavigator">
          </viewShortcut>
-         <!--actionSet id="org.jboss.tools.struts.actionSet">
-         </actionSet>
-         <actionSet id="org.jboss.tools.jsf.actionSet">
-         </actionSet-->
          <perspectiveShortcut id="org.eclipse.debug.ui.DebugPerspective">
          </perspectiveShortcut>
       </perspectiveExtension>
