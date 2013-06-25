@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2012 Red Hat, Inc.
+ * Copyright (c) 2007-2013 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -92,6 +92,7 @@ import org.jboss.tools.common.model.ui.views.palette.PaletteContents;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.util.XModelTreeListenerSWTASync;
 import org.jboss.tools.common.text.ext.IMultiPageEditor;
+import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.bundle.BundleMap;
 import org.jboss.tools.jst.jsp.editor.IVisualEditor;
@@ -583,8 +584,10 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		 * or here if there is only the source part. 
 		 */
 		bundleMap = new BundleMap();
+		boolean doCreateVisualPages = getEditorInput() instanceof IFileEditorInput ? 
+				!FileUtil.isDoctypeHTML(((IFileEditorInput)getEditorInput()).getFile()) : true; // Fix for JBDS-2530
 		String sourceTabLabel = JSPEditorMessages.JSPMultiPageEditor_TabLabel_Source;
-		if (visualEditorFactory != null) {
+		if (visualEditorFactory != null && doCreateVisualPages) {
 			visualEditor = visualEditorFactory.createVisualEditor(this,sourceEditor, IVisualEditor.VISUALSOURCE_MODE, bundleMap);
 
 			visualSourceIndex = addPage(visualEditor, getEditorInput(),sourceEditor);
