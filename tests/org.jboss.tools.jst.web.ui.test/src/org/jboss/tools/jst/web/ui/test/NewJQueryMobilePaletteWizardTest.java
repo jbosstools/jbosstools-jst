@@ -12,8 +12,11 @@ package org.jboss.tools.jst.web.ui.test;
 
 import java.io.File;
 
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.internal.editors.text.EditorsPlugin;
+import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
 import org.jboss.tools.common.ui.widget.editor.CompositeEditor;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.jst.web.WebModelPlugin;
@@ -115,6 +118,18 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 
 		NewPageWizardPage wizardPage = (NewPageWizardPage)currentPage;
 		NewPageWizard wizard = (NewPageWizard)wizardPage.getWizard();
+
+		assertTextExists(wizard, "\t");
+		IPreferenceStore s = EditorsPlugin.getDefault().getPreferenceStore();
+		s.setValue(AbstractDecoratedTextEditorPreferenceConstants.EDITOR_SPACES_FOR_TABS, true);
+		assertTextDoesNotExist(wizard, "\t");
+		s.setValue(AbstractDecoratedTextEditorPreferenceConstants.EDITOR_TAB_WIDTH, 12);
+		assertTextExists(wizard, "            <");
+		s.setValue(AbstractDecoratedTextEditorPreferenceConstants.EDITOR_TAB_WIDTH, 4);
+		assertTextDoesNotExist(wizard, "            <");
+		assertTextExists(wizard, "    <");
+		s.setValue(AbstractDecoratedTextEditorPreferenceConstants.EDITOR_SPACES_FOR_TABS, false);
+		assertTextExists(wizard, "\t");
 
 		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_HEADER);
 		assertTextExists(wizard, wizardPage.getEditorValue(EDITOR_ID_HEADER_TITLE));
