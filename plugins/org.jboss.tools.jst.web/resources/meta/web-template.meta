@@ -143,38 +143,6 @@
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
- <XModelEntity ImplementingClass="%Regular%" name="PageTemplateStruts">
-  <XChildrenEntities/>
-  <XEntityRenderer>
-   <ICONS>
-    <ICON info="action.empty" type="main"/>
-   </ICONS>
-  </XEntityRenderer>
-  <XModelAttributes>
-   <XModelAttribute default="page template" loader="ElementType" name="element type">
-    <Constraint/>
-    <Editor name="Uneditable"/>
-   </XModelAttribute>
-   <XModelAttribute name="name">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute name="page path">
-    <Constraint loader="Tree">
-     <value name="AllWebPages"/>
-     <value name="extensions=jsp,htm,html"/>
-     <value name="nature=org.jboss.tools.struts.strutsnature"/>
-     <value name="hideRoot=true"/>
-    </Constraint>
-    <Editor name="TreeChooser"/>
-   </XModelAttribute>
-  </XModelAttributes>
-  <XActionItem kind="list">
-   <XActionItem kind="list" name="CreateActions">
-   </XActionItem>
-  </XActionItem>
-  <XDependencies/>
- </XModelEntity>
  <XModelEntity ImplementingClass="%Regular%" name="ProjectTemplateJSF">
   <XChildrenEntities/>
   <XEntityRenderer>
@@ -379,54 +347,6 @@
      PROPERTIES="support=org.jboss.tools.jst.web.project.handlers.AddVersionSupport"
      displayName="Add JSF Project Version" kind="action" name="CreateProjectVersion">
      <EntityData EntityName="ProjectVersionJSF">
-      <AttributeData AttributeName="name"/>
-      <AttributeData AttributeName="templates location"/>
-      <AttributeData AttributeName="core library"/>
-     </EntityData>
-    </XActionItem>
-   </XActionItem>
-  </XActionItem>
-  <XDependencies/>
- </XModelEntity>
- <XModelEntity ImplementingClass="%Regular%" name="ProjectVersionStruts">
-  <XChildrenEntities/>
-  <XEntityRenderer>
-   <ICONS>
-    <ICON info="action.empty" type="main"/>
-   </ICONS>
-  </XEntityRenderer>
-  <XModelAttributes>
-   <XModelAttribute default="project template" loader="ElementType" name="element type">
-    <Constraint/>
-    <Editor name="Uneditable"/>
-   </XModelAttribute>
-   <XModelAttribute name="name">
-    <Constraint/>
-    <Editor/>
-   </XModelAttribute>
-   <XModelAttribute name="templates location">
-    <Constraint loader="FileFilter">
-     <value name="allFiles=false"/>
-     <value name="mode=DIRECTORIES_ONLY"/>
-     <value name="description=Project Version Location"/>
-    </Constraint>
-    <Editor name="FolderChooser"/>
-   </XModelAttribute>
-   <XModelAttribute name="core library">
-    <Constraint loader="List"/>
-    <Editor name="List"/>
-   </XModelAttribute>
-   <XModelAttribute name="common library">
-    <Constraint loader="List"/>
-    <Editor name="List"/>
-   </XModelAttribute>
-  </XModelAttributes>
-  <XActionItem kind="list">
-   <XActionItem kind="list" name="CreateActions">
-    <XActionItem HandlerClassName="%SpecialWizard%" ICON="action.empty"
-     PROPERTIES="support=org.jboss.tools.jst.web.project.handlers.AddVersionSupport"
-     displayName="Add Struts Project Version" kind="action" name="CreateProjectVersion">
-     <EntityData EntityName="ProjectVersionStruts">
       <AttributeData AttributeName="name"/>
       <AttributeData AttributeName="templates location"/>
       <AttributeData AttributeName="core library"/>

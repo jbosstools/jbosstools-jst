@@ -49,7 +49,7 @@ public class RegisterInServerXmlHandler extends AbstractHandler {
 		String nature = object.getModel().getProperties().getProperty("nature"); //$NON-NLS-1$
 		String natureIndex = (nature == null) ? null
 		  : (nature.indexOf("jsf") >= 0) ? "jsf"  //$NON-NLS-1$ //$NON-NLS-2$
-          : (nature.indexOf("struts") >= 0) ? "struts" : null; //$NON-NLS-1$ //$NON-NLS-2$
+          : null;
 		if(natureIndex != null) {
 			p.setProperty("natureIndex", natureIndex); //$NON-NLS-1$
 		}

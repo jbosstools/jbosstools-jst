@@ -18,12 +18,10 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.FileLocator;
 import org.w3c.dom.Document;
@@ -40,7 +38,6 @@ import org.jboss.tools.common.model.impl.XModelImpl;
 import org.jboss.tools.common.model.util.XMLUtil;
 import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
 import org.jboss.tools.common.model.util.XModelObjectUtil;
-import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.common.xml.XMLEntityResolver;
 import org.jboss.tools.common.model.project.Watcher;
 import org.jboss.tools.jst.web.WebModelPlugin;
@@ -59,7 +56,6 @@ public class NewWebProjectHelper {
         XModelObject webxml = WebAppHelper.getWebApp(model);
         
         if(webxml == null) throw new XModelException("Cannot find web.xml");
-		String location = ((IFile)webxml.getAdapter(IFile.class)).getLocation().toString();
 
 		XModelObject webinf = model.getByPath("FileSystems/WEB-INF"); //$NON-NLS-1$
 
@@ -67,21 +63,7 @@ public class NewWebProjectHelper {
         fss.setAttributeValue("application name", p.getProperty("name")); //$NON-NLS-1$ //$NON-NLS-2$
 
 		File webInfDir = ((IResource)webinf.getAdapter(IResource.class)).getLocation().toFile();
-        Map<String,String> modules = getModules(location);
-        Iterator<Map.Entry<String,String>> it = modules.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<String,String> entry = it.next();
-            String module = (String)entry.getKey();
-            String config = (String)entry.getValue();
-            String fileName = config.substring(config.indexOf('/', 1) + 1);
-            File configFile = new File(location, fileName);
-            if (configFile.isFile() && fileName.toLowerCase().endsWith(".xml")) { //$NON-NLS-1$
-            	//starts with a dot
-                File layoutFile = new File(location, "." + fileName.substring(0, fileName.length())+".strutsdia"); //$NON-NLS-1$ //$NON-NLS-2$
-  				if (!layoutFile.exists())
-                	FileUtil.writeFile(layoutFile, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<PROCESS ENTITY=\"StrutsProcess\" MODULE=\""+module+"\"/>"); //$NON-NLS-1$ //$NON-NLS-2$
-            }
-        }
+
 		String libName = getLibLocation(model);
         if (libName != null && libName.length() > 0) {
             File libDir = new File(libName);
@@ -156,30 +138,6 @@ public class NewWebProjectHelper {
         if(fs != null) fs.updateOverlapped();
     }
 
-    public static Map<String,String> getModules(String location) {
-        Map<String,String> modules = new HashMap<String,String>();
-        File webXML = new File(location, "web.xml"); //$NON-NLS-1$
-        if(!webXML.isFile()) return modules;
-        try {
-	        WebAppConfig config = new WebAppConfig(webXML);
-	        Element[] servlets = config.getServletsByClass("org.apache.struts.action.ActionServlet"); //$NON-NLS-1$
-	        for (int i = 0; i < servlets.length; i++) {
-	            Map<String,String> params = config.getInitParamsAsMap(servlets[i]);
-	            Iterator<String> it = params.keySet().iterator();
-	            while (it.hasNext()) {
-	                String name = it.next();
-	                if (!name.startsWith("config/") && !name.equals("config")) continue; //$NON-NLS-1$ //$NON-NLS-2$
-	                String value = params.get(name);
-	                modules.put(name.substring(6), value);
-	            }
-	        }
-	    } catch (FileNotFoundException e) {
-	    	WebModelPlugin.getPluginLog().logError(e);
-	    }
-
-        return modules;
-    }
-    
     private void registerTLDs(XModel model, Properties p) {
     	String tlds = p.getProperty("TLDs"); //$NON-NLS-1$
     	XModelObject webxml = WebAppHelper.getWebApp(model);

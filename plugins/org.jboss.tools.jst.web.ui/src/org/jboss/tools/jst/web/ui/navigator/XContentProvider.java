@@ -163,9 +163,7 @@ public class XContentProvider implements ITreeContentProvider {
 			nature = n.getID();
 			model.getProperties().setProperty("nature", nature); //$NON-NLS-1$
 		}
-		if(nature != null && nature.indexOf("struts") >= 0) { //$NON-NLS-1$
-			return "StrutsProjects"; //$NON-NLS-1$
-		} else if(nature != null && nature.indexOf("jsf") >= 0) { //$NON-NLS-1$
+		if(nature != null && nature.indexOf("jsf") >= 0) { //$NON-NLS-1$
 			return "JSFProjects"; //$NON-NLS-1$
 		} else {
 			return null;

@@ -105,7 +105,6 @@ public class WebUIMessages extends NLS {
 	public static String REMOVE_JSP_BREAKPOINT;
 	public static String NOT_RESOLVED;
 	public static String VALUE_NOT_RESOLVED;
-	public static String STRUTS;
 	public static String EDIT_FILTER;
 	public static String EditProjectTemplateSupport_Save;
 	public static String ENTER_NEW_FILTER;

@@ -116,14 +116,11 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 	public static final String TEMPLATE_VERSION_ID = "WebNatureOperation.TEMPLATE_VERSION_ID"; //$NON-NLS-1$
 	public static final String RUNTIME_NAME = "WebNatureOperation.RUNTIME_NAME"; //$NON-NLS-1$
 	
-	// for STRUTS
-	public static final String TLDS_ID = "WebNatureOperation.TLDS_ID"; //$NON-NLS-1$
-	
 	private static final String PROJECT_ID = "WebNatureOperation.PROJECT_ID"; //$NON-NLS-1$
 
 	protected XModel model;
-	private HashMap propertyValue = new HashMap();
-	private HashMap wizardPropertiesForVelocity = new HashMap();
+	private HashMap<String,Object> propertyValue = new HashMap<String,Object>();
+	private HashMap<String,Object> wizardPropertiesForVelocity = new HashMap<String,Object>();
 	private Properties wizardPropertiesAsIs;
 	RegisterServerContext registry;
 	
@@ -165,7 +162,7 @@ public abstract class WebNatureOperation implements IRunnableWithProgress {
 	 */
 	protected void initWizardPropertiesForVelocity(Properties properties){
 		wizardPropertiesForVelocity.clear();
-		Iterator it = properties.keySet().iterator();
+		Iterator<Object> it = properties.keySet().iterator();
 		while(it.hasNext()) {
 			String key = it.next().toString();
 			Object o = properties.get(key);

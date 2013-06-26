@@ -31,7 +31,7 @@ public class LayuotConstants {
 	
 	public void update() {
 		XModel model = PreferenceModelUtilities.getPreferenceModel();
-		XModelObject o = model.getByPath(Preference.EDITOR_PATH + "/Web Flow Diagram"); //$NON-NLS-1$
+		XModelObject o = model.getByPath(Preference.EDITOR_PATH + "/JSF Flow Diagram"); //$NON-NLS-1$
 		String g = o.getAttributeValue("Grid Step"); //$NON-NLS-1$
 		int step = Integer.parseInt(g);
 		indentX = (step < 24) ? 24 : step;

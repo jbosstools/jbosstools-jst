@@ -42,7 +42,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.file" type="main"/>
+    <ICON info="main.webapp.file" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -120,44 +120,44 @@
    <XActionItem ICON="action.empty" displayName="New" group="1"
     kind="list" name="CreateActions">
     <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.mime_mapping"
+     ICON="action.new.webapp.mime_mapping"
      PROPERTIES="validator.add=true;sourcepath=Absolute Orderings;actionpath=CreateActions/CreateAbsoluteOrdering"
      WizardClassName="%Default%" displayName="Absolute Ordering..."
      kind="action" name="CreateAbsoluteOrdering"/>
     <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.param"
+     ICON="action.new.webapp.param"
      PROPERTIES="validator.add=true;sourcepath=Context Params;actionpath=CreateActions/CreateContextParam"
      WizardClassName="%Default%" displayName="Context Param..."
      kind="action" name="CreateContextParam"/>
     <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.param"
+     ICON="action.new.webapp.param"
      PROPERTIES="validator.add=true;sourcepath=Data Sources;actionpath=CreateActions/CreateDataSource"
      WizardClassName="%Default%" displayName="Data Source..."
      kind="action" name="CreateDataSource"/>
     <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.filter"
+     ICON="action.new.webapp.filter"
      PROPERTIES="validator.add=true;sourcepath=Filters;actionpath=CreateActions/CreateFilter"
      WizardClassName="%Default%" displayName="Filter..." kind="action" name="CreateFilter"/>
     <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.filter_mapping"
+     ICON="action.new.webapp.filter_mapping"
      PROPERTIES="validator.add=true;sourcepath=Filters;actionpath=CreateActions/CreateFilterMapping"
      WizardClassName="%Default%" displayName="Filter Mapping..."
      kind="action" name="CreateFilterMapping"/>
     <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.listener"
+     ICON="action.new.webapp.listener"
      PROPERTIES="validator.add=true;sourcepath=Listeners;actionpath=CreateActions/CreateListener"
      WizardClassName="%Default%" displayName="Listener..." kind="action" name="CreateListener"/>
     <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.servlet"
+     ICON="action.new.webapp.servlet"
      PROPERTIES="validator.add=true;sourcepath=Servlets;actionpath=CreateActions/CreateServlet"
      WizardClassName="%Default%" displayName="Servlet..." kind="action" name="CreateServlet"/>
     <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.servlet_mapping"
+     ICON="action.new.webapp.servlet_mapping"
      PROPERTIES="validator.add=true;sourcepath=Servlets;actionpath=CreateActions/CreateServletMapping"
      WizardClassName="%Default%" displayName="Servlet Mapping..."
      kind="action" name="CreateServletMapping"/>
     <XActionItem HIDE="always" HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.session"
+     ICON="action.new.webapp.session"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Session Config..." kind="action" name="CreateSessionConfig">
      <EntityData EntityName="WebAppSessionConfig">
@@ -165,32 +165,32 @@
      </EntityData>
     </XActionItem>
     <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.mime_mapping"
+     ICON="action.new.webapp.mime_mapping"
      PROPERTIES="validator.add=true;sourcepath=Mime Mappings;actionpath=CreateActions/CreateMimeMapping"
      WizardClassName="%Default%" displayName="Mime Mapping..."
      kind="action" name="CreateMimeMapping"/>
     <XActionItem HIDE="always" HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.welcom_list"
+     ICON="action.new.webapp.welcom_list"
      displayName="Welcome File List" kind="action" name="CreateWelcomeFileList">
      <EntityData EntityName="WebAppWelcomFileList"/>
     </XActionItem>
     <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.error"
+     ICON="action.new.webapp.error"
      PROPERTIES="validator.add=true;sourcepath=Error Pages;actionpath=CreateActions/CreateErrorPage"
      displayName="Error Page..." kind="action" name="CreateErrorPage"/>
     <XActionItem HIDE="always" HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.taglib"
+     ICON="action.new.webapp.taglib"
      PROPERTIES="validator.add=true" displayName="JSP Config..."
      kind="action" name="CreateJspConfig">
      <EntityData EntityName="WebAppJspConfig"/>
     </XActionItem>
     <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.security_constraint"
+     ICON="action.new.webapp.security_constraint"
      PROPERTIES="validator.add=true;sourcepath=Security Constraints;actionpath=CreateActions/CreateSecurityConstraint"
      WizardClassName="%Default%" displayName="Security Constraint..."
      kind="action" name="CreateSecurityConstraint"/>
     <XActionItem HIDE="always" HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.login_config"
+     ICON="action.new.webapp.login_config"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Login Config..." kind="action" name="CreateLoginConfig">
      <EntityData EntityName="WebAppLoginConfig">
@@ -201,51 +201,51 @@
      </EntityData>
     </XActionItem>
     <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.security_role"
+     ICON="action.new.webapp.security_role"
      PROPERTIES="validator.add=true;sourcepath=Security Roles;actionpath=CreateActions/CreateSecurityRole"
      WizardClassName="%Default%" displayName="Security Role..."
      kind="action" name="CreateSecurityRole"/>
     <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.env_entry"
+     ICON="action.new.webapp.env_entry"
      PROPERTIES="validator.add=true;sourcepath=Env Entries;actionpath=CreateActions/CreateEnvEntry"
      WizardClassName="%Default%" displayName="Env Entry..."
      kind="action" name="CreateEnvEntry"/>
     <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.ejb_reference"
+     ICON="action.new.webapp.ejb_reference"
      PROPERTIES="validator.add=true;sourcepath=EJB;actionpath=CreateActions/CreateEjbRef"
      WizardClassName="%Default%" displayName="Ejb Ref..." kind="action" name="CreateEjbRef"/>
     <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.ejb_local_reference"
+     ICON="action.new.webapp.ejb_local_reference"
      PROPERTIES="validator.add=true;sourcepath=EJB;actionpath=CreateActions/CreateEjbLocalRef"
      WizardClassName="%Default%" displayName="Ejb Local Ref..."
      kind="action" name="CreateEjbLocalRef"/>
     <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.res_env_ref"
+     ICON="action.new.webapp.res_env_ref"
      PROPERTIES="validator.add=true;sourcepath=Resources;actionpath=CreateActions/CreateResourceEnvRef"
      WizardClassName="%Default%" displayName="Resource Env Ref..."
      kind="action" name="CreateResourceEnvRef"/>
     <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.res_ref"
+     ICON="action.new.webapp.res_ref"
      PROPERTIES="validator.add=true;sourcepath=Resources;actionpath=CreateActions/CreateResourceRef"
      WizardClassName="%Default%" displayName="Resource Ref..."
      kind="action" name="CreateResourceRef"/>
     <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.message"
+     ICON="action.new.webapp.message"
      PROPERTIES="validator.add=true;sourcepath=Message Destinations;actionpath=CreateActions/CreateServiceMessageDestinationRef"
      WizardClassName="%Default%"
      displayName="Message Destination Ref..." kind="action" name="CreateServiceMessageDestinationRef"/>
     <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.message"
+     ICON="action.new.webapp.message"
      PROPERTIES="validator.add=true;sourcepath=Message Destinations;actionpath=CreateActions/CreateServiceMessageDestination"
      WizardClassName="%Default%" displayName="Message Destination..."
      kind="action" name="CreateServiceMessageDestination"/>
     <XActionItem HandlerClassName="%Redirect%"
-     ICON="action.new.struts.webapp.service"
+     ICON="action.new.webapp.service"
      PROPERTIES="validator.add=true;sourcepath=Services;actionpath=CreateActions/CreateServiceRef"
      WizardClassName="%Default%" displayName="Service Ref..."
      kind="action" name="CreateServiceRef"/>
     <XActionItem HIDE="always" HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.taglib"
+     ICON="action.new.webapp.taglib"
      PROPERTIES="validator.add=true"
      displayName="Locale Encoding Mapping List..." kind="action" name="CreateLocaleEncodingMappingList">
      <EntityData EntityName="WebAppLocaleEncodingMappingList"/>
@@ -300,7 +300,7 @@
   <XChildrenEntities/>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.mime_mapping" type="main"/>
+    <ICON info="main.webapp.mime_mapping" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -333,7 +333,7 @@
   <XChildrenEntities/>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.mime_mapping" type="main"/>
+    <ICON info="main.webapp.mime_mapping" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -383,7 +383,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.env_entry" type="main"/>
+    <ICON info="main.webapp.env_entry" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -467,7 +467,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.ejb_local_reference" type="main"/>
+    <ICON info="main.webapp.ejb_local_reference" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -525,7 +525,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.ejb_reference" type="main"/>
+    <ICON info="main.webapp.ejb_reference" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -583,7 +583,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.env_entry" type="main"/>
+    <ICON info="main.webapp.env_entry" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -641,7 +641,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.filter" type="main"/>
+    <ICON info="main.webapp.filter" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -674,7 +674,7 @@
   <XActionItem kind="list">
    <XActionItem ICON="action.empty" displayName="Create" kind="list" name="CreateActions">
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.param"
+     ICON="action.new.webapp.param"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Add Init Param..." kind="action" name="CreateInitParam">
      <EntityData EntityName="WebAppInitParam">
@@ -697,7 +697,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.folder" type="main"/>
+    <ICON info="main.webapp.folder" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -713,7 +713,7 @@
    <XActionItem ICON="action.empty" displayName="New" group="1"
     kind="list" name="CreateActions">
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.mime_mapping"
+     ICON="action.new.webapp.mime_mapping"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Absolute Ordering..." kind="action" name="CreateAbsoluteOrdering">
      <EntityData EntityName="WebAppAbsoluteOrdering">
@@ -735,7 +735,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.folder" type="main"/>
+    <ICON info="main.webapp.folder" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -751,7 +751,7 @@
    <XActionItem ICON="action.empty" displayName="New" group="1"
     kind="list" name="CreateActions">
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.env_entry"
+     ICON="action.new.webapp.env_entry"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Data Source..." kind="action" name="CreateDataSource">
      <EntityData EntityName="WebAppDataSource30">
@@ -773,7 +773,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.folder" type="main"/>
+    <ICON info="main.webapp.folder" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -788,7 +788,7 @@
    <XActionItem ICON="action.empty" displayName="New" group="1"
     kind="list" name="CreateActions">
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.ejb_reference"
+     ICON="action.new.webapp.ejb_reference"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Ejb Ref..." kind="action" name="CreateEjbRef">
      <EntityData EntityName="WebAppEjbRef30">
@@ -800,7 +800,7 @@
      </EntityData>
     </XActionItem>
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.ejb_local_reference"
+     ICON="action.new.webapp.ejb_local_reference"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Ejb Local Ref..." kind="action" name="CreateEjbLocalRef">
      <EntityData EntityName="WebAppEjbLocalRef30">
@@ -825,7 +825,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.folder" type="main"/>
+    <ICON info="main.webapp.folder" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -841,7 +841,7 @@
    <XActionItem ICON="action.empty" displayName="New" group="1"
     kind="list" name="CreateActions">
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.env_entry"
+     ICON="action.new.webapp.env_entry"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Env Entry..." kind="action" name="CreateEnvEntry">
      <EntityData EntityName="WebAppEnvEntry30">
@@ -865,7 +865,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.folder" type="main"/>
+    <ICON info="main.webapp.folder" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -880,7 +880,7 @@
    <XActionItem ICON="action.empty" displayName="New" group="1"
     kind="list" name="CreateActions">
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.filter"
+     ICON="action.new.webapp.filter"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Filter..." kind="action" name="CreateFilter">
      <EntityData EntityName="WebAppFilter30">
@@ -891,7 +891,7 @@
      </EntityData>
     </XActionItem>
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.filter_mapping"
+     ICON="action.new.webapp.filter_mapping"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Filter Mapping..." kind="action" name="CreateFilterMapping">
      <EntityData EntityName="WebAppFilterMapping24">
@@ -916,7 +916,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.folder" type="main"/>
+    <ICON info="main.webapp.folder" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -932,7 +932,7 @@
    <XActionItem ICON="action.empty" displayName="New" group="1"
     kind="list" name="CreateActions">
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.message"
+     ICON="action.new.webapp.message"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Message Destination Ref..." kind="action" name="CreateServiceMessageDestinationRef">
      <EntityData EntityName="WebAppMessageDestinationRef30">
@@ -942,7 +942,7 @@
      </EntityData>
     </XActionItem>
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.message"
+     ICON="action.new.webapp.message"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Message Destination..." kind="action" name="CreateServiceMessageDestination">
      <EntityData EntityName="WebAppMessageDestination30">
@@ -964,7 +964,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.folder" type="main"/>
+    <ICON info="main.webapp.folder" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -980,7 +980,7 @@
    <XActionItem ICON="action.empty" displayName="New" group="1"
     kind="list" name="CreateActions">
     <XActionItem HandlerClassName="%CreateForWeb23%"
-     ICON="action.new.struts.webapp.res_env_ref"
+     ICON="action.new.webapp.res_env_ref"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Resource Env Ref..." kind="action" name="CreateResourceEnvRef">
      <EntityData EntityName="WebAppResourceEnvRef30">
@@ -989,7 +989,7 @@
      </EntityData>
     </XActionItem>
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.res_ref"
+     ICON="action.new.webapp.res_ref"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Resource Ref..." kind="action" name="CreateResourceRef">
      <EntityData EntityName="WebAppResourceRef30">
@@ -1012,7 +1012,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.folder" type="main"/>
+    <ICON info="main.webapp.folder" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -1028,7 +1028,7 @@
    <XActionItem ICON="action.empty" displayName="New" group="1"
     kind="list" name="CreateActions">
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.security_constraint"
+     ICON="action.new.webapp.security_constraint"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Security Constraint..." kind="action" name="CreateSecurityConstraint">
      <EntityData EntityName="WebAppSecurityConstraint30">
@@ -1049,7 +1049,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.folder" type="main"/>
+    <ICON info="main.webapp.folder" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -1064,7 +1064,7 @@
    <XActionItem ICON="action.empty" displayName="New" group="1"
     kind="list" name="CreateActions">
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.service"
+     ICON="action.new.webapp.service"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Service Ref..." kind="action" name="CreateServiceRef">
      <EntityData EntityName="WebAppServiceRef30">
@@ -1087,7 +1087,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.folder" type="main"/>
+    <ICON info="main.webapp.folder" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -1102,7 +1102,7 @@
    <XActionItem ICON="action.empty" displayName="New" group="1"
     kind="list" name="CreateActions">
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.servlet"
+     ICON="action.new.webapp.servlet"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Servlet..." kind="action" name="CreateServlet">
      <EntityData EntityName="WebAppServlet30">
@@ -1113,7 +1113,7 @@
      </EntityData>
     </XActionItem>
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.servlet_mapping"
+     ICON="action.new.webapp.servlet_mapping"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Servlet Mapping..." kind="action" name="CreateServletMapping">
      <EntityData EntityName="WebAppServletMapping">
@@ -1139,7 +1139,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.service" type="main"/>
+    <ICON info="main.webapp.service" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -1164,7 +1164,7 @@
   <XActionItem kind="list">
    <XActionItem ICON="action.empty" displayName="Create" kind="list" name="CreateActions">
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.param"
+     ICON="action.new.webapp.param"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Add Init Param..." kind="action" name="CreateInitParam">
      <EntityData EntityName="WebAppInitParam">
@@ -1173,7 +1173,7 @@
      </EntityData>
     </XActionItem>
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.param"
+     ICON="action.new.webapp.param"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Add Soap Header..." kind="action" name="CreateSoapHeader">
      <EntityData EntityName="WebAppSoapHeader30">
@@ -1181,7 +1181,7 @@
      </EntityData>
     </XActionItem>
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.param"
+     ICON="action.new.webapp.param"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Add Soap Role..." kind="action" name="CreateSoapRole">
      <EntityData EntityName="WebAppSoapRole30">
@@ -1189,7 +1189,7 @@
      </EntityData>
     </XActionItem>
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.param"
+     ICON="action.new.webapp.param"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Add Port Name..." kind="action" name="CreatePortName">
      <EntityData EntityName="WebAppPortName30">
@@ -1210,7 +1210,7 @@
   <XChildrenEntities/>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.param" type="main"/>
+    <ICON info="main.webapp.param" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -1298,7 +1298,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.param" type="main"/>
+    <ICON info="main.webapp.param" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -1316,7 +1316,7 @@
   <XActionItem kind="list">
    <XActionItem kind="list" name="CreateActions">
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.taglib"
+     ICON="action.new.webapp.taglib"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Add Taglib..." kind="action" name="CreateTaglib">
      <EntityData EntityName="WebAppTaglib">
@@ -1345,7 +1345,7 @@
   <XChildrenEntities/>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.message" type="main"/>
+    <ICON info="main.webapp.message" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -1380,7 +1380,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.message" type="main"/>
+    <ICON info="main.webapp.message" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -1438,7 +1438,7 @@
   <XChildrenEntities/>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.security_role" type="main"/>
+    <ICON info="main.webapp.security_role" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -1468,7 +1468,7 @@
   <XChildrenEntities/>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.param" type="main"/>
+    <ICON info="main.webapp.param" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -1544,7 +1544,7 @@
   <XChildrenEntities/>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.param" type="main"/>
+    <ICON info="main.webapp.param" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -1572,7 +1572,7 @@
   <XChildrenEntities/>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.param" type="main"/>
+    <ICON info="main.webapp.param" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -1603,7 +1603,7 @@
   <XChildrenEntities/>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.web_resource_col" type="main"/>
+    <ICON info="main.webapp.web_resource_col" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -1660,7 +1660,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.res_env_ref" type="main"/>
+    <ICON info="main.webapp.res_env_ref" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -1710,7 +1710,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.res_ref" type="main"/>
+    <ICON info="main.webapp.res_ref" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -1778,7 +1778,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.security_constraint" type="main"/>
+    <ICON info="main.webapp.security_constraint" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -1795,7 +1795,7 @@
   <XActionItem kind="list">
    <XActionItem ICON="action.empty" displayName="Create" kind="list" name="CreateActions">
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.web_resource_col"
+     ICON="action.new.webapp.web_resource_col"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Add Web Resource Collection..." kind="action" name="CreateResourceCollection">
      <EntityData EntityName="WebAppResourceCollection30">
@@ -1803,7 +1803,7 @@
      </EntityData>
     </XActionItem>
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.auth_constraint"
+     ICON="action.new.webapp.auth_constraint"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Add Auth Constraint..." kind="action" name="CreateAuthConstraint">
      <EntityData EntityName="WebAppAuthConstraint">
@@ -1811,7 +1811,7 @@
      </EntityData>
     </XActionItem>
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.user_constraint"
+     ICON="action.new.webapp.user_constraint"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Add User Data Constraint..." kind="action" name="CreateUserConstraint">
      <EntityData EntityName="WebAppUserConstraint">
@@ -1836,7 +1836,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.service" type="main"/>
+    <ICON info="main.webapp.service" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -1909,7 +1909,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.servlet" type="main"/>
+    <ICON info="main.webapp.servlet" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -1961,7 +1961,7 @@
   <XActionItem kind="list">
    <XActionItem ICON="action.empty" displayName="Create" kind="list" name="CreateActions">
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.param"
+     ICON="action.new.webapp.param"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Add Init Param..." kind="action" name="CreateInitParam">
      <EntityData EntityName="WebAppInitParam">
@@ -1970,7 +1970,7 @@
      </EntityData>
     </XActionItem>
     <XActionItem HandlerClassName="%CreateForWeb23%"
-     ICON="action.new.struts.webapp.run_as"
+     ICON="action.new.webapp.run_as"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Run As..." kind="action" name="CreateRunAs">
      <EntityData EntityName="WebAppRunAs">
@@ -1978,7 +1978,7 @@
      </EntityData>
     </XActionItem>
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.security_role"
+     ICON="action.new.webapp.security_role"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Add Security Role Ref..." kind="action" name="CreateSecurityRoleRef">
      <EntityData EntityName="WebAppSecurityRoleRef">
@@ -1987,7 +1987,7 @@
      </EntityData>
     </XActionItem>
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.security_role"
+     ICON="action.new.webapp.security_role"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Add Multipart Config..." kind="action" name="CreateMultipartConfig">
      <EntityData EntityName="WebAppMultipartConfig">
@@ -2010,7 +2010,7 @@
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.session" type="main"/>
+    <ICON info="main.webapp.session" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -2038,7 +2038,7 @@
   <XActionItem kind="list">
    <XActionItem ICON="action.empty" displayName="Create" kind="list" name="CreateActions">
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.struts.webapp.param"
+     ICON="action.new.webapp.param"
      PROPERTIES="validator.add=true" WizardClassName="%Default%"
      displayName="Add Cookie Config..." kind="action" name="CreateCookieConfig">
      <EntityData EntityName="WebAppCookieConfig">
@@ -2059,7 +2059,7 @@
   <XChildrenEntities/>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.param" type="main"/>
+    <ICON info="main.webapp.param" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>
@@ -2087,7 +2087,7 @@
   <XChildrenEntities/>
   <XEntityRenderer>
    <ICONS>
-    <ICON info="main.struts.webapp.param" type="main"/>
+    <ICON info="main.webapp.param" type="main"/>
    </ICONS>
   </XEntityRenderer>
   <XModelAttributes>

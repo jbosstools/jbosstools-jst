@@ -44,22 +44,6 @@ public interface IWebPromptingProvider extends IPromptingProvider {
 
 	static String JSF_CONVERT_URL_TO_PATH = "jsf.url.to.path"; //$NON-NLS-1$
 
-	static String STRUTS_OPEN_PARAMETER = "struts.open.parameter"; //$NON-NLS-1$
-	static String STRUTS_OPEN_BUNDLE = "struts.open.bundle"; //$NON-NLS-1$
-	static String STRUTS_OPEN_KEY = "struts.open.key"; //$NON-NLS-1$
-	static String STRUTS_OPEN_LINK_FORWARD = "struts.open.link.forward"; //$NON-NLS-1$
-	static String STRUTS_OPEN_LINK_PAGE = "struts.open.link.page"; //$NON-NLS-1$
-	static String STRUTS_OPEN_LINK_ACTION = "struts.open.link.action"; //$NON-NLS-1$
-	static String STRUTS_OPEN_PROPERTY = "struts.open.property"; //$NON-NLS-1$
-	static String STRUTS_OPEN_ACTION_MAPPING = "struts.open.action.mapping"; //$NON-NLS-1$
-	static String STRUTS_OPEN_FORM_BEAN = "struts.open.form.bean"; //$NON-NLS-1$
-	static String STRUTS_OPEN_FORWARD_PATH = "struts.open.forward.path"; //$NON-NLS-1$
-	static String STRUTS_OPEN_OBJECT_BY_PATH = "struts.open.object.by.path"; //$NON-NLS-1$
-	static String STRUTS_OPEN_FILE_IN_WEB_ROOT = "struts.open.file.in.web.root"; //$NON-NLS-1$
-	static String STRUTS_OPEN_VALIDATOR = "struts.open.validator"; //$NON-NLS-1$
-	static String STRUTS_OPEN_TAG_LIBRARY = "struts.open.taglibrary"; //$NON-NLS-1$
-	static String STRUTS_OPEN_METHOD = "struts.open.method"; //$NON-NLS-1$
-
 	static String PROPERTY_TYPE = "propertyType"; //$NON-NLS-1$
 	static String PROPERTY_BEAN_ONLY = "bean-only"; //$NON-NLS-1$
 	static String PARAMETER_TYPES = "parameterTypes";  // String[] //$NON-NLS-1$

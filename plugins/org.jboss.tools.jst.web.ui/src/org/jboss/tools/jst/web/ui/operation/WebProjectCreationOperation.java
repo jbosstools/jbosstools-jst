@@ -97,8 +97,8 @@ public abstract class WebProjectCreationOperation extends WebNatureOperation {
 //		}
 //		copyProjectFile(properties);
 		EclipseResourceUtil.addNatureToProject(getProject(), getNatureID());
-		IModelNature strutsProject = (IModelNature)getProject().getNature(getNatureID());
-		model = strutsProject.getModel();
+		IModelNature project = (IModelNature)getProject().getNature(getNatureID());
+		model = project.getModel();
 		XModelObject fso = FileSystemsHelper.getFileSystems(model);
 		properties.setProperty("skipWizard", "yes");  //$NON-NLS-1$//$NON-NLS-2$
 		properties.setProperty("name", getProject().getName()); //$NON-NLS-1$
