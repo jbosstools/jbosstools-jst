@@ -102,7 +102,7 @@ public class NewWebProjectWizardPage extends WizardPage {
 		useDefaultPathEditor.setLabelText(getString(getKey() + "_"+NewWebProjectContext.ATTR_USE_DEFAULT_LOCATION)+"*"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		versionEditor = new DropDownEditor(settings);
-		versionAdapter = new StrutsVersionAdapter();
+		versionAdapter = new VersionAdapter();
 		versionEditor.setInput(versionAdapter);
 		versionEditor.setLabelText(getString(getKey() + "_"+NewWebProjectContext.ATTR_VERSION)+"*"); //$NON-NLS-1$ //$NON-NLS-2$
 
@@ -381,11 +381,11 @@ public class NewWebProjectWizardPage extends WizardPage {
 		return template.getVersionList();
 	}
 	
-	class StrutsVersionAdapter extends LocalValueProvider {
+	class VersionAdapter extends LocalValueProvider {
 		private ILabelProvider labelProvider;
 		private IListContentProvider listContentProvider;
 		
-		public StrutsVersionAdapter() {
+		public VersionAdapter() {
 			super();
 			labelProvider = new LabelProvider(); 
 			listContentProvider = 

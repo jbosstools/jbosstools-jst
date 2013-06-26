@@ -449,7 +449,7 @@
      <value name="allFiles=false"/>
      <value name="extensions=xml"/>
      <value name="mode=FILES_ONLY"/>
-     <value name="description=Struts configuration file"/>
+     <value name="description=Web configuration file"/>
     </Constraint>
     <Editor name="FileChooser"/>
    </XModelAttribute>
@@ -704,7 +704,7 @@
    <XModelAttribute name="web.xml location" visibility="false" xmlname="location">
     <Constraint loader="FileFilter">
      <value name="allFiles=false"/>
-     <value name="description=Select folder where Struts configuration file is located"/>
+     <value name="description=Select folder where Web configuration file is located"/>
      <value name="filenames=web.xml"/>
     </Constraint>
     <Editor name="FileChooser"/>
@@ -948,7 +948,7 @@
     <Constraint loader="FileFilter">
      <value name="allFiles=false"/>
      <value name="extensions=xml"/>
-     <value name="description=Select folder where Struts configuration file is located"/>
+     <value name="description=Select folder where Web configuration file is located"/>
     </Constraint>
     <Editor name="FileChooser"/>
    </XModelAttribute>
@@ -1137,7 +1137,7 @@
      <value name="allFiles=false"/>
      <value name="description=WEB-INF Folder"/>
      <value name="mode=DIRECTORIES_ONLY"/>
-     <value name="infoText=Select folder where Struts configuration file is located"/>
+     <value name="infoText=Select folder where Web configuration file is located"/>
      <value name="infoIcon=images/struts/folder_ico.jpg"/>
      <value name="title=Import"/>
     </Constraint>
@@ -1281,14 +1281,6 @@
     HandlerClassName="org.jboss.tools.jsf.ui.action.handler.ImportJSFProjectHandler"
     ICON="action.new.importProject"
     displayName="Import Existing JSF Project..." kind="action" name="ImportExistingJSFProject"/>
-   <XActionItem
-    HandlerClassName="org.jboss.tools.struts.ui.internal.action.CreateStrutsProjectHandler"
-    ICON="action.new.struts.create_project"
-    displayName="Create New Struts Project..." kind="action" name="CreateNewStrutsProject"/>
-   <XActionItem
-    HandlerClassName="org.jboss.tools.struts.ui.internal.action.ImportStrutsProjectHandler"
-    ICON="action.new.struts.import_project"
-    displayName="Import Existing Struts Project..." kind="action" name="ImportExistingStrutsProject"/>
    <XActionItem HIDE="always" displayName="Help" kind="action" name="Help"/>
    <XActionItem HIDE="always"
     HandlerClassName="org.jboss.tools.jst.web.project.handlers.CreateTemplateFromProjectHandler"
@@ -1534,9 +1526,6 @@
     HandlerClassName="org.jboss.tools.jst.web.project.handlers.CreateWebPrjHandler"
     ICON="main.projects.new" SAVE_REQUIRED="yes"
     displayName="Create New Project..." kind="action" name="CreateStrutsProject"/>
-   <XActionItem HandlerClassName="%SpecialWizard%" ICON="action.empty"
-    PROPERTIES="support=org.jboss.tools.struts.webprj.model.helpers.sync.SyncProjectSupport"
-    displayName="Modules Configuration" kind="action" name="SynchronizeModules"/>
    <XActionItem kind="list" name="Registration">
     <XActionItem HIDE="disabled"
      HandlerClassName="org.jboss.tools.jst.web.model.handlers.UnregisterInServerXmlHandler"

@@ -81,14 +81,11 @@ public class CreateJSPFileSupport extends CreateFileSupport {
 		if(nature == null) {
 		} else if(nature.indexOf("jsf") >= 0) { //$NON-NLS-1$
 			getTemplates(templateDir, "jsf");  //$NON-NLS-1$
-		}  else if(nature.indexOf("struts") >= 0) { //$NON-NLS-1$
-			getTemplates(templateDir, "struts"); //$NON-NLS-1$
 		}
 		return (String[])templates.keySet().toArray(new String[0]); 
 	}
 	
 	private static final String NewJSFProjectPath = "%Options%/JSF Studio/Project/New Project"; //$NON-NLS-1$
-	private static final String NewStrutsProjectPath = "%Options%/Struts Studio/Project/New Project"; //$NON-NLS-1$
 	protected String getDefaultPageTemplate() {
 		String defaultPageTemplate = null;
 		String nature = getTarget().getModel().getProperties().getProperty("nature"); //$NON-NLS-1$
@@ -96,7 +93,6 @@ public class CreateJSPFileSupport extends CreateFileSupport {
 			return null;
 		}
 		String prefPath = (nature.indexOf("jsf") >= 0) ? NewJSFProjectPath : //$NON-NLS-1$
-			(nature.indexOf("struts") >= 0) ? NewStrutsProjectPath : //$NON-NLS-1$
 			null;
 		if(prefPath == null) return null;
 		XModelObject pref = PreferenceModelUtilities.getPreferenceModel().getByPath(prefPath);

@@ -673,7 +673,6 @@
   <XChildrenEntities>
    <XChildEntity maxCount="1" name="SharableNewProject" required="yes"/>
    <XChildEntity maxCount="1" name="SharableImportProject" required="yes"/>
-   <XChildEntity maxCount="1" name="SharableStrutsSupport" required="yes"/>
   </XChildrenEntities>
   <XEntityRenderer>
    <ICONS>
@@ -889,210 +888,6 @@
   <XActionItem kind="list"/>
   <XDependencies/>
  </XModelEntity>
- <XModelEntity ImplementingClass="%Options%" name="SharableStruts10Support">
-  <XChildrenEntities/>
-  <XEntityRenderer>
-   <ICONS>
-    <ICON info="main.xstudio.options.root" type="main"/>
-   </ICONS>
-  </XEntityRenderer>
-  <XModelAttributes>
-   <XModelAttribute default="options" loader="ElementType"
-    name="element type" visibility="false">
-    <Editor name="Uneditable"/>
-   </XModelAttribute>
-   <XModelAttribute default="Struts Support 1.0" name="name"
-    visibility="false" xmlname="NAME">
-    <Editor name="Uneditable"/>
-   </XModelAttribute>
-   <XModelAttribute default="org.apache.struts.action.ActionServlet"
-    name="servlet class" xmlname="servlet_class">
-    <Editor name="EclipseClassChooser"/>
-   </XModelAttribute>
-   <XModelAttribute default="*.do" name="url pattern" xmlname="url_pattern"/>
-   <XModelAttribute name="tld files" xmlname="tld_files">
-    <Editor name="ListAdd"/>
-   </XModelAttribute>
-  </XModelAttributes>
-  <XActionItem kind="list"/>
-  <XDependencies/>
- </XModelEntity>
- <XModelEntity ImplementingClass="%Options%" name="SharableStruts11Support">
-  <XChildrenEntities/>
-  <XEntityRenderer>
-   <ICONS>
-    <ICON info="main.xstudio.options.root" type="main"/>
-   </ICONS>
-  </XEntityRenderer>
-  <XModelAttributes>
-   <XModelAttribute default="options" loader="ElementType"
-    name="element type" visibility="false">
-    <Editor name="Uneditable"/>
-   </XModelAttribute>
-   <XModelAttribute default="Struts Support 1.1" name="name"
-    visibility="false" xmlname="NAME">
-    <Editor name="Uneditable"/>
-   </XModelAttribute>
-   <XModelAttribute default="org.apache.struts.action.ActionServlet"
-    name="servlet class" xmlname="servlet_class">
-    <Editor name="EclipseClassChooser"/>
-   </XModelAttribute>
-   <XModelAttribute default="*.do" name="url pattern" xmlname="url_pattern"/>
-   <XModelAttribute name="tld files" xmlname="tld_files">
-    <Editor name="ListAdd"/>
-   </XModelAttribute>
-  </XModelAttributes>
-  <XActionItem kind="list"/>
-  <XDependencies/>
- </XModelEntity>
- <XModelEntity ImplementingClass="%Options%" name="SharableStruts12Support">
-  <XChildrenEntities/>
-  <XEntityRenderer>
-   <ICONS>
-    <ICON info="main.xstudio.options.root" type="main"/>
-   </ICONS>
-  </XEntityRenderer>
-  <XModelAttributes>
-   <XModelAttribute default="options" loader="ElementType"
-    name="element type" visibility="false">
-    <Editor name="Uneditable"/>
-   </XModelAttribute>
-   <XModelAttribute default="Struts Support 1.2" name="name"
-    visibility="false" xmlname="NAME">
-    <Editor name="Uneditable"/>
-   </XModelAttribute>
-   <XModelAttribute default="org.apache.struts.action.ActionServlet"
-    name="servlet class" xmlname="servlet_class">
-    <Editor name="EclipseClassChooser"/>
-   </XModelAttribute>
-   <XModelAttribute default="*.do" name="url pattern" xmlname="url_pattern"/>
-   <XModelAttribute name="tld files" xmlname="tld_files">
-    <Editor name="ListAdd"/>
-   </XModelAttribute>
-  </XModelAttributes>
-  <XActionItem kind="list"/>
-  <XDependencies/>
- </XModelEntity>
- <XModelEntity ImplementingClass="%Options%" name="SharableStrutsAddPage">
-  <XChildrenEntities/>
-  <XEntityRenderer>
-   <ICONS>
-    <ICON info="main.xstudio.options.root" type="main"/>
-   </ICONS>
-  </XEntityRenderer>
-  <XModelAttributes>
-   <XModelAttribute default="options" loader="ElementType"
-    name="element type" visibility="false">
-    <Editor name="Uneditable"/>
-   </XModelAttribute>
-   <XModelAttribute default="Add Page" name="name" visibility="false" xmlname="NAME">
-    <Editor name="Uneditable"/>
-   </XModelAttribute>
-   <XModelAttribute default="StrutsForm" name="Page Template" xmlname="page-template">
-    <Constraint loader="ListString"/>
-    <Editor name="ListString"/>
-   </XModelAttribute>
-   <XModelAttribute default="jsp" name="Extension" xmlname="extension">
-    <Constraint loader="ListString">
-     <value name="htm"/>
-     <value name="html"/>
-     <value name="jsp"/>
-    </Constraint>
-    <Editor name="ListString"/>
-   </XModelAttribute>
-  </XModelAttributes>
-  <XActionItem kind="list"/>
-  <XDependencies/>
- </XModelEntity>
- <XModelEntity ImplementingClass="%Options%" name="SharableStrutsEditor">
-  <XChildrenEntities>
-   <XChildEntity maxCount="1" name="SharableStrutsAddPage" required="yes"/>
-  </XChildrenEntities>
-  <XEntityRenderer>
-   <ICONS>
-    <ICON info="main.xstudio.options.root" type="main"/>
-   </ICONS>
-  </XEntityRenderer>
-  <XModelAttributes>
-   <XModelAttribute default="options" loader="ElementType"
-    name="element type" visibility="false">
-    <Editor name="Uneditable"/>
-   </XModelAttribute>
-   <XModelAttribute default="Web Flow Diagram" name="name"
-    visibility="false" xmlname="NAME">
-    <Editor name="Uneditable"/>
-   </XModelAttribute>
-   <XModelAttribute default="no" name="doNotShowDiagram" xmlname="doNotShowDiagram">
-    <Constraint loader="List">
-     <value name="yes"/>
-     <value name="no"/>
-    </Constraint>
-    <Editor name="CheckBox"/>
-   </XModelAttribute>
-   <XModelAttribute default="yes" name="Show Grid" xmlname="show_grid">
-    <Constraint loader="List">
-     <value name="yes"/>
-     <value name="no"/>
-    </Constraint>
-    <Editor name="CheckBox"/>
-   </XModelAttribute>
-   <XModelAttribute default="16" name="Grid Step" xmlname="grid_step">
-    <Constraint loader="List">
-     <value name="8"/>
-     <value name="16"/>
-     <value name="24"/>
-     <value name="32"/>
-     <value name="40"/>
-    </Constraint>
-    <Editor name="List"/>
-   </XModelAttribute>
-   <XModelAttribute default="default,size=8,style=1" name="Action Font" xmlname="action_font">
-    <Editor name="FontChooser"/>
-   </XModelAttribute>
-   <XModelAttribute default="default,size=7,style=1" name="Forward Font" xmlname="forward_font">
-    <Editor name="FontChooser"/>
-   </XModelAttribute>
-   <XModelAttribute default="default,size=8,style=1" name="Path Font" xmlname="path_font">
-    <Editor name="FontChooser"/>
-   </XModelAttribute>
-   <XModelAttribute default="default,size=10,style=0"
-    name="Comment Font" xmlname="comment_font">
-    <Editor name="FontChooser"/>
-   </XModelAttribute>
-   <XModelAttribute default="yes"
-    name="enableControlModeOnTransitionCompleted" xmlname="enableControlModeOnTransitionCompleted">
-    <Constraint loader="List">
-     <value name="yes"/>
-     <value name="no"/>
-    </Constraint>
-    <Editor name="CheckBox"/>
-   </XModelAttribute>
-   <XModelAttribute default="yes" name="showShortcutIcon" xmlname="showShortcutIcon">
-    <Constraint loader="List">
-     <value name="yes"/>
-     <value name="no"/>
-    </Constraint>
-    <Editor name="CheckBox"/>
-   </XModelAttribute>
-   <XModelAttribute default="yes" name="showShortcutPath" xmlname="showShortcutPath">
-    <Constraint loader="List">
-     <value name="yes"/>
-     <value name="no"/>
-    </Constraint>
-    <Editor name="CheckBox"/>
-   </XModelAttribute>
-   <XModelAttribute default="yes" name="removePageWithFile"
-    visibility="false" xmlname="removePageWithFile">
-    <Constraint loader="List">
-     <value name="yes"/>
-     <value name="no"/>
-    </Constraint>
-    <Editor name="CheckBox"/>
-   </XModelAttribute>
-  </XModelAttributes>
-  <XActionItem kind="list"/>
-  <XDependencies/>
- </XModelEntity>
  <XModelEntity ImplementingClass="%Options%" name="SharableStrutsStudio">
   <XChildrenEntities>
    <XChildEntity maxCount="1" name="SharableRunning" required="yes"/>
@@ -1113,30 +908,6 @@
     <Editor name="Uneditable"/>
    </XModelAttribute>
    <XModelAttribute default="Struts Studio" name="name"
-    visibility="false" xmlname="NAME">
-    <Editor name="Uneditable"/>
-   </XModelAttribute>
-  </XModelAttributes>
-  <XActionItem kind="list"/>
-  <XDependencies/>
- </XModelEntity>
- <XModelEntity ImplementingClass="%Options%" name="SharableStrutsSupport">
-  <XChildrenEntities>
-   <XChildEntity maxCount="1" name="SharableStruts10Support" required="yes"/>
-   <XChildEntity maxCount="1" name="SharableStruts11Support" required="yes"/>
-   <XChildEntity maxCount="1" name="SharableStruts12Support" required="yes"/>
-  </XChildrenEntities>
-  <XEntityRenderer>
-   <ICONS>
-    <ICON info="main.xstudio.options.root" type="main"/>
-   </ICONS>
-  </XEntityRenderer>
-  <XModelAttributes>
-   <XModelAttribute default="options" loader="ElementType"
-    name="element type" visibility="false">
-    <Editor name="Uneditable"/>
-   </XModelAttribute>
-   <XModelAttribute default="Struts Support" name="name"
     visibility="false" xmlname="NAME">
     <Editor name="Uneditable"/>
    </XModelAttribute>
@@ -1332,7 +1103,6 @@
  </XModelEntity>
  <XEntityExtension name="SharableEditors">
   <XChildrenEntities>
-   <XChildEntity maxCount="1" name="SharableStrutsEditor" required="yes"/>
    <XChildEntity maxCount="1" name="SharableJSFEditor" required="yes"/>
    <XChildEntity maxCount="1" name="SharableTilesEditor" required="yes"/>
    <XChildEntity maxCount="1" name="SharableVPEEditor" required="yes"/>

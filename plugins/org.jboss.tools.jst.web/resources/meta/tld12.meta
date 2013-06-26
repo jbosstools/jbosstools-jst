@@ -709,7 +709,7 @@
    </XActionItem>
    <XActionItem kind="list" name="EditActions">
     <XActionItem HandlerClassName="%SpecialWizard%"
-     ICON="action.new.struts.webapp.error"
+     ICON="action.new.webapp.error"
      PROPERTIES="validator.edit=true;support=org.jboss.tools.jst.web.tld.model.handlers.CreateTLDVariableSupport"
      displayName="Edit..." kind="action" name="Edit">
      <EntityData EntityName="TLDVariable">

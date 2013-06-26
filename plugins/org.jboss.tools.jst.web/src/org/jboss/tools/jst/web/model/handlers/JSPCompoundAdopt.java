@@ -17,8 +17,6 @@ public class JSPCompoundAdopt extends CompoundAdoptManager {
 	/*
 	 * see extension point org.jboss.tools.common.model.jspAdopt
     private static String[] MANAGERS = {"org.jboss.tools.jst.web.tld.model.handlers.JSPAdopt",
-                                        "org.jboss.tools.struts.tiles.model.handlers.JSPAdopt",
-                                        "org.jboss.tools.struts.model.handlers.JSPAdopt",
                                         "org.jboss.tools.jsf.model.handlers.JSPAdopt",
                                         "org.jboss.tools.jsf.ui.adopt.JSPAdopt",
                                         "org.jboss.tools.jst.web.model.handlers.JSPAdopt",

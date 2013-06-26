@@ -44,16 +44,10 @@ public class WebProjectsNavigator extends NavigatorViewPart {
 		viewer.setContentProvider(contentProvider);
 	}
 
-	static String STRUTS_UI = "org.jboss.tools.struts.ui"; //$NON-NLS-1$
-
 	protected String[] getActionClasses() {
 		List<String> actions = new ArrayList<String>();
 		actions.add("org.jboss.tools.jsf.ui.action.CreateProjectAction"); //$NON-NLS-1$
 		actions.add("org.jboss.tools.jsf.ui.action.ImportProjectAction"); //$NON-NLS-1$
-		if(Platform.getBundle(STRUTS_UI) != null) {
-			actions.add("org.jboss.tools.struts.ui.internal.action.CreateProjectAction"); //$NON-NLS-1$
-			actions.add("org.jboss.tools.struts.ui.internal.action.ImportProjectAction"); //$NON-NLS-1$
-		}
 		return actions.toArray(new String[0]);
 	}
 	

@@ -49,7 +49,6 @@ public class RunOnServerContext extends AbstractBrowserContext {
 	@SuppressWarnings("nls")
 	static String[][] pathSources = new String[][]{
 		{"org.jboss.tools.jst.web.model.handlers.RunOnServerHandler", "org.jboss.tools.jst.web"},
-		{"org.jboss.tools.struts.model.handlers.page.RunOnServerHandler", "org.jboss.tools.struts"},
 		{"org.jboss.tools.jsf.model.handlers.run.RunOnServerHandler", "org.jboss.tools.jsf"}
 	};
 
