@@ -18,31 +18,26 @@ import org.eclipse.swt.events.TypedEvent;
  * @author mareshkau
  *
  */
-class CSSBrowserMozillaImplementation implements CSSBrowserInterface {
+class CSSBrowserImplementation implements CSSBrowserInterface {
 	final private Browser browser;
 
-	public CSSBrowserMozillaImplementation(Browser browser) {
+	public CSSBrowserImplementation(Browser browser) {
 		super();
 		this.browser = browser;
 	}
 	public boolean setFocus() {
-		return getBrowser().setFocus();
+		return browser.setFocus();
 	}
 	public void setText(String generateBrowserPage) {
-		getBrowser().setText(generateBrowserPage);
+		browser.setText(generateBrowserPage);
 	}
 	public void setEnabled(boolean isEnabled) {
-		getBrowser().setEnabled(isEnabled);
+		browser.setEnabled(isEnabled);
 	}
 	public void addMouseListener(MouseAdapter mouseAdapter) {
-		getBrowser().addMouseListener(mouseAdapter);
+		browser.addMouseListener(mouseAdapter);
 	}
 	public boolean isBrowserEvent(TypedEvent e){
-		return e.widget==getBrowser();
+		return e.widget == browser;
 	}
-	
-	private Browser getBrowser() {
-		return this.browser;
-	}
-	
 }

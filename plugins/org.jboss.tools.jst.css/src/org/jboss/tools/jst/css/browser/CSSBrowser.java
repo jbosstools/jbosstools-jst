@@ -53,7 +53,7 @@ public class CSSBrowser extends Composite implements CSSBrowserInterface {
 			gridData.grabExcessVerticalSpace = true;
 			browser.setLayoutData(gridData);
 			browser.pack();
-			cssBrowser.setBrowser(new CSSBrowserMozillaImplementation(browser));
+			cssBrowser.setBrowser(new CSSBrowserImplementation(browser));
 		} else {
 			Label label = new Label(cssBrowser,SWT.CENTER);
 			label.setText("Browser based preview not availabe,"+System.getProperty("line.separator")+" see log for more details");
