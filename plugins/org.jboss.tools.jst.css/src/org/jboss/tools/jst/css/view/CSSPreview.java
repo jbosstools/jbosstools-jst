@@ -80,7 +80,7 @@ public class CSSPreview extends ViewPart implements ICSSViewListner {
 		GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		previewComposite.setLayoutData(gridData);
 
-		browser = CSSBrowser.createCSSBrowser(previewComposite, SWT.BORDER | SWT.MOZILLA);
+		browser = CSSBrowser.createCSSBrowser(previewComposite, SWT.BORDER);
 		browser.setLayoutData(gridData);
 		browser.addMouseListener(new MouseAdapter() {
 			public void mouseDoubleClick(MouseEvent e) {
@@ -133,8 +133,7 @@ public class CSSPreview extends ViewPart implements ICSSViewListner {
 	 * @return String html text representation
 	 */
 	public String generateBrowserPage() {
-		return Constants.OPEN_DIV_TAG + getCurrentStyle()
-				+ "\">" + getPreviewContent() + Constants.CLOSE_DIV_TAG; //$NON-NLS-1$
+		return CSSPreviewPageCreator.createPreviewHtml(getCurrentStyle(), getPreviewContent());
 	}
 
 	public String getPreviewContent() {
