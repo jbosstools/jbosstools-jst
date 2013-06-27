@@ -38,6 +38,7 @@ import org.jboss.tools.common.model.ui.ModelUIImages;
 import org.jboss.tools.common.model.ui.widgets.Split;
 import org.jboss.tools.jst.css.browser.CSSBrowser;
 import org.jboss.tools.jst.css.dialog.common.StyleAttributes;
+import org.jboss.tools.jst.css.view.CSSPreviewPageCreator;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
 import org.jboss.tools.jst.jsp.util.Constants;
 
@@ -161,7 +162,7 @@ public abstract class AbstractCSSDialog extends TitleAreaDialog {
 				true);
 		previewComposite.setLayoutData(gridData);
 
-		browser = CSSBrowser.createCSSBrowser(previewComposite, SWT.BORDER | SWT.MOZILLA);
+		browser = CSSBrowser.createCSSBrowser(previewComposite, SWT.BORDER);
 		browser.setText(generateBrowserPage());
 		browser.setLayoutData(gridData);
 		
@@ -230,23 +231,19 @@ public abstract class AbstractCSSDialog extends TitleAreaDialog {
 	}
 
 	/**
-	 * /** Method is used to build html body that is appropriate to browse.
+	 * Method is used to build html body that is appropriate to browse.
 	 * 
 	 * @return String html text representation
 	 */
 	public String generateBrowserPage() {
-		StringBuffer html = new StringBuffer("<style>span{"); //$NON-NLS-1$
+		StringBuffer style = new StringBuffer();
 
-		for (Map.Entry<String, String> styleItem : getStyleAttributes()
-				.entrySet()) {
-
-			html.append(styleItem.getKey() + Constants.COLON
+		for (Map.Entry<String, String> styleItem : getStyleAttributes().entrySet()) {
+			style.append(styleItem.getKey() + Constants.COLON
 					+ styleItem.getValue() + Constants.SEMICOLON);
 		}
 
-		html.append("}</style><span>" + getPreviewContent() + "</span>"); //$NON-NLS-1$ //$NON-NLS-2$
-
-		return html.toString();
+		return CSSPreviewPageCreator.createPreviewHtml(style.toString(), getPreviewContent());
 	}
 	
 	public void releaseResources() {

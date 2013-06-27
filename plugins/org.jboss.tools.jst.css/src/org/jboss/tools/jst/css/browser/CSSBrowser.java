@@ -48,7 +48,7 @@ public class CSSBrowser extends Composite implements CSSBrowserInterface {
 		cssBrowser.setLayout(new GridLayout());
 		Browser browser=null;
 		try {
-			browser = new Browser(cssBrowser, SWT.BORDER | SWT.MOZILLA);
+			browser = new Browser(cssBrowser, SWT.NONE);
 			GridData gridData = new GridData();
 			gridData.horizontalAlignment = SWT.FILL;
 			gridData.verticalAlignment = SWT.FILL;
@@ -56,15 +56,16 @@ public class CSSBrowser extends Composite implements CSSBrowserInterface {
 			gridData.grabExcessVerticalSpace = true;
 			browser.setLayoutData(gridData);
 			browser.pack();
-		} catch(SWTError er){
-			CSSPlugin.getDefault().logWarning("Xulrunner implementation hasn't been founded, so browser based preview " +
-					"will be not available");
+		} catch(SWTError e){
+			CSSPlugin.getDefault().logWarning("Cannot create Browser. Browser-based preview " +
+					"will not be available.", e);
 		}
 		if(browser!=null) {
-			cssBrowser.setBrowser(new CSSBrowserMozillaImplementation(browser));
+			cssBrowser.setBrowser(new CSSBrowserImplementation(browser));
 		} else {
 			Label label = new Label(cssBrowser,SWT.CENTER);
-			label.setText("Browser based preview not availabe,"+System.getProperty("line.separator")+" see log for more details");
+			label.setText("Browser based preview not availabe,\n"
+					+ "see log for more details");
 			label.setBounds(cssBrowser.getClientArea());
 			cssBrowser.setBrowser(new CSSBrowserEmptyImplementation());
 		}
