@@ -25,6 +25,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocumentType;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.jboss.tools.common.model.options.SharableConstants;
+import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator;
 import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
 import org.jboss.tools.common.refactoring.MarkerResolutionUtils;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
@@ -62,7 +63,8 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 	private StringBuffer globalBuffer = new StringBuffer();
 	private int globalPosition = -1, goobalLength = 0;
 
-	private IDOMNode doctypeNode = null, htmlNode = null, headNode = null, bodyNode = null;;
+	private IDOMNode doctypeNode = null, htmlNode = null, headNode = null, bodyNode = null;
+	private String baseNodeIndent = "";
 	
 	static MobilePaletteInsertHelper instance = new MobilePaletteInsertHelper();
 	
@@ -92,15 +94,11 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 		IFile file = MarkerResolutionUtils.getFile();
 		
 		if(insert || (p.containsKey(PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS) && !JQueryRecognizer.containsJQueryJSReference(file))) {
-			insertJS_CSS(v.getDocument());
+			insertJsCss(v);
 			if(insert){
 				texts[0] = "";	
 			}
 		}
-	}
-	
-	public void test_insert_JS_CSS(IDocument document){
-		insertJS_CSS(document);
 	}
 	
 	private void writeBuffer(IDocument document) throws BadLocationException{
@@ -122,10 +120,14 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 		}
 	}
 	
-	private void insertNode(IDocument document, IDOMNode relatedNode, IDOMNode node, String spaces, String text, int mode, boolean forceWrite) throws BadLocationException{
+	private void insertNode(IDocument document, IDOMNode relatedNode, IDOMNode node, int indentWidth, String text, int mode, boolean forceWrite) throws BadLocationException{
 		boolean newLineBefore = true;
 		boolean newLineAfter = false;
 		boolean copyAttributes = false;
+		
+		String lineDelimiter = getLineDelimiter(document);
+		int tabWidth = IElementGenerator.NodeWriter.getTabWidth();
+		
 		if(node != null){
 			writeBuffer(document);
 			if(node.getEndStructuredDocumentRegion() == null && !(node instanceof IDOMDocumentType)){
@@ -165,7 +167,8 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 			writeBuffer(document);
 			if(globalPosition == -1){
 				if(relatedNode != null){
-					globalPosition = relatedNode.getEndStructuredDocumentRegion().getStartOffset()-1;
+					globalPosition = relatedNode.getEndStructuredDocumentRegion().getStartOffset();
+					globalPosition -= countSpacesBeforeIncludingNewLine(document, globalPosition);
 					goobalLength = 0;
 				}else{
 					globalPosition = document.getLength();
@@ -176,16 +179,22 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 			if(relatedNode != null){
 				writeBuffer(document);
 				if(globalPosition == -1){
-					globalPosition = relatedNode.getStartStructuredDocumentRegion().getStartOffset()-1;
+					globalPosition = relatedNode.getStartStructuredDocumentRegion().getStartOffset();
+					if(!checkForNewLine(document, globalPosition)){
+						newLineAfter = true;
+					}
+					globalPosition -= countSpacesBeforeIncludingNewLine(document, globalPosition);
 					goobalLength = 0;
 					newLineBefore = true;
-					newLineAfter = true;
 				}
 			}
 		}
 		
 		if(newLineBefore){
-			globalBuffer.append(spaces);
+			globalBuffer.append(lineDelimiter);
+			globalBuffer.append(baseNodeIndent);
+			String indent = createIndent(indentWidth*tabWidth);
+			globalBuffer.append(indent);
 		}
 		
 		globalBuffer.append(text);
@@ -204,7 +213,7 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 		globalBuffer.append(">");
 		
 		if(newLineAfter){
-			globalBuffer.append("\n");
+			globalBuffer.append(lineDelimiter);
 		}
 		
 		if(forceWrite){
@@ -212,23 +221,111 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 		}
 	}
 	
-	private void insertJS_CSS(IDocument document){
+	private String getNodeIndent(IDocument document, IDOMNode node){
+		if(node.getStartStructuredDocumentRegion() != null){
+			int offset = node.getStartStructuredDocumentRegion().getStartOffset();
+			int number = countSpacesBefore(document, offset);
+			int position = offset - number;
+			if(position < offset && position >= 0){
+				try{
+					String spaces = document.get(position, number);
+					return spaces;
+				}catch(BadLocationException ex){
+					JspEditorPlugin.getDefault().logError(ex);
+				}
+			}
+		}
+		return "";
+	}
+	
+	private int countSpacesBefore(IDocument document, int offset){
+		int position = offset -1;
+		int number = 0;
+		try{
+			while(position >= 0){
+				String text = document.get(position, 1);
+				if(!text.equals(" ") && !text.equals("\t")){
+					return number;
+				}
+				number++;
+				position--;
+			}
+		}catch(BadLocationException ex){
+			JspEditorPlugin.getDefault().logError(ex);
+		}
+		
+		return number;
+	}
+	
+	private boolean checkForNewLine(IDocument document, int offset){
+		int position = offset -1;
+		try{
+			while(position >= 0){
+				String text = document.get(position, 1);
+				if(text.equals("\n")){
+					return true;
+				}
+				if(!text.trim().equals("")){
+					return false;
+				}
+				position--;
+			}
+		}catch(BadLocationException ex){
+			JspEditorPlugin.getDefault().logError(ex);
+		}
+		
+		return false;
+	}
+	
+	private int countSpacesBeforeIncludingNewLine(IDocument document, int offset){
+		int position = offset -1;
+		int number = 0;
+		try{
+			while(position >= 0){
+				String text = document.get(position, 1);
+				if(!text.trim().equals("")){
+					return number;
+				}
+				number++;
+				position--;
+				if(text.equals("\n")){
+					return number;
+				}
+			}
+		}catch(BadLocationException ex){
+			JspEditorPlugin.getDefault().logError(ex);
+		}
+		return number;
+	}
+	
+	private void insertJsCss(ISourceViewer viewer){
+		IDocument document = viewer.getDocument();
+		
 		IStructuredModel model = null;
 		try{
 			model = StructuredModelManager.getModelManager().getExistingModelForRead((IStructuredDocument)document);
 			IDOMDocument xmlDocument = (model instanceof IDOMModel) ? ((IDOMModel) model).getDocument() : null;
 			if(xmlDocument != null){
+				
 				// analyze xml document
 				doctypeNode = findDocumentType(xmlDocument, "html");
 				
 				htmlNode = findNode(xmlDocument, "html");
+				
+				baseNodeIndent = "";
 				
 				if(htmlNode == null){
 					bodyNode = findNode(xmlDocument, "body");
 					headNode = findNode(xmlDocument, "head");
 				}else{
 					bodyNode = findNode(htmlNode, "body");
+					
 					headNode = findNode(htmlNode, "head");
+					if(headNode != null){
+						baseNodeIndent = getNodeIndent(document, headNode);
+					}else{
+						baseNodeIndent = getNodeIndent(document, htmlNode);
+					}
 				}
 				
 				boolean metaExists = checkNode(headNode, "meta", "name", "(viewport)");
@@ -240,30 +337,30 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 				boolean secondScriptExists = checkNode(headNode, "script", "src", ".*(jquery.mobile-).*(.js)");
 				
 				// insert tags if needed
-				insertNode(document, doctypeNode, htmlNode, "\n", "<html", INSERT_AFTER_OPEN_NODE, false);
+				insertNode(document, doctypeNode, htmlNode, 0, "<html", INSERT_AFTER_OPEN_NODE, false);
 				
-				insertNode(document, htmlNode, headNode, "\n  ", "<head", INSERT_AFTER_OPEN_NODE, false);
+				insertNode(document, htmlNode, headNode, 0, "<head", INSERT_AFTER_OPEN_NODE, false);
 				
 				if(!metaExists){
-					insertNode(document, headNode, null, "\n    ", META, INSERT_AFTER_OPEN_NODE, false);
+					insertNode(document, headNode, null, 1, META, INSERT_AFTER_OPEN_NODE, false);
 				}
 				if(!linkExists){
-					insertNode(document, headNode, null, "\n    ", CSS_LINK, INSERT_AFTER_OPEN_NODE, false);
+					insertNode(document, headNode, null, 1, CSS_LINK, INSERT_AFTER_OPEN_NODE, false);
 				}
 				if(!firstScriptExists){
-					insertNode(document, headNode, null, "\n    ", JQUERY_SCRIPT, INSERT_AFTER_OPEN_NODE, false);
+					insertNode(document, headNode, null, 1, JQUERY_SCRIPT, INSERT_AFTER_OPEN_NODE, false);
 				}
 				if(!secondScriptExists){
-					insertNode(document, headNode, null, "\n    ", JQUERY_MOBILE_SCRIPT, INSERT_AFTER_OPEN_NODE, false);
+					insertNode(document, headNode, null, 1, JQUERY_MOBILE_SCRIPT, INSERT_AFTER_OPEN_NODE, false);
 				}
 				
-				insertNode(document, bodyNode, headNode, "\n  ", "</head", INSERT_BEFORE_OPEN_NODE, false);
+				insertNode(document, bodyNode, headNode, 0, "</head", INSERT_BEFORE_OPEN_NODE, false);
 
-				insertNode(document, headNode, bodyNode, "\n  ", "<body", INSERT_AFTER_CLOSE_NODE, false);
+				insertNode(document, headNode, bodyNode, 0, "<body", INSERT_AFTER_CLOSE_NODE, false);
 
-				insertNode(document, htmlNode, bodyNode, "\n  ", "</body", INSERT_BEFORE_CLOSE_NODE, false);
+				insertNode(document, htmlNode, bodyNode, 0, "</body", INSERT_BEFORE_CLOSE_NODE, false);
 
-				insertNode(document, null, htmlNode, "\n", "</html", INSERT_AFTER_ALL, true);
+				insertNode(document, null, htmlNode, 0, "</html", INSERT_AFTER_ALL, true);
 			}
 		} catch (BadLocationException e) {
 			JspEditorPlugin.getDefault().logError(e);
