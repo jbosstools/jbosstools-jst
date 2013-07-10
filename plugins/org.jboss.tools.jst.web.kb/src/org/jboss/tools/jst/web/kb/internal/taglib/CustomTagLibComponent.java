@@ -11,7 +11,9 @@
 package org.jboss.tools.jst.web.kb.internal.taglib;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
@@ -50,6 +52,20 @@ public class CustomTagLibComponent extends AbstractComponent implements ICustomT
 		return super.getAttributes(query, name);
 	}
 
+	@Override
+	public IAttribute[] getAttributes(KbQuery query) {
+		if(providers!=null) {
+			List<IAttribute> result = new ArrayList<IAttribute>();
+			for (IAttributeProvider provider : providers) {
+				IAttribute[] attributes = provider.getAttributes(query);
+				for (IAttribute attribute: attributes) {
+					result.add(attribute);
+				}
+			}
+			return result.toArray(new IAttribute[result.size()]);
+		}
+		return super.getAttributes(query);
+	}
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#isExtended()
@@ -91,16 +107,21 @@ public class CustomTagLibComponent extends AbstractComponent implements ICustomT
 		if(!attribute.isExtended()) {
 			return true;
 		}
-		IComponent[] parentComponents = PageProcessor.getInstance().getComponents(query, context, false);
-		for (IComponent component : parentComponents) {
-			IAttribute[] ats = component.getAttributes(query, attribute.getName());
-			for (IAttribute at : ats) {
-				if(!at.isExtended()) {
-					return true;
+		Set<String> cachedAttributes = query.getCachedAttributes();
+		if(cachedAttributes == null) {
+			cachedAttributes = new HashSet<String>();
+			query.setCachedAttributes(cachedAttributes);
+			IComponent[] parentComponents = PageProcessor.getInstance().getComponents(query, context, false);
+			for (IComponent component : parentComponents) {
+				IAttribute[] ats = component.getAttributes(query);
+				for (IAttribute at : ats) {
+					if(!at.isExtended()) {
+						cachedAttributes.add(at.getName());
+					}
 				}
 			}
 		}
-		return false;
+		return cachedAttributes.contains(attribute.getName());
 	}
 
 	/*
