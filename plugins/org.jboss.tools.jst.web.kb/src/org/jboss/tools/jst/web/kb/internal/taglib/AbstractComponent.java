@@ -91,7 +91,7 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getAttribute(java.lang.String)
+	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getAttribute(KbQuery, java.lang.String)
 	 */
 	@Override
 	public IAttribute[] getAttributes(KbQuery query, String name) {
@@ -100,6 +100,14 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 			return new IAttribute[]{atr};
 		}
 		return new IAttribute[0];
+	}
+
+	/* (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getAttribute(KbQuery)
+	 */
+	@Override
+	public IAttribute[] getAttributes(KbQuery query) {
+		return getAttributes();
 	}
 
 	/* (non-Javadoc)
