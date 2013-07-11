@@ -624,12 +624,24 @@ public class ELValidator extends WebValidator implements IStringValidator {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.validation.IValidator#shouldValidate(org.eclipse.core.resources.IProject)
+	 * 
+	 * @see
+	 * org.jboss.tools.jst.web.kb.validation.IValidator#shouldValidate(org.eclipse
+	 * .core.resources.IProject)
 	 */
 	public boolean shouldValidate(IProject project) {
+		return shouldValidate(project, false);
+	}
+
+	@Override
+	public boolean shouldValidateAsYouType(IProject project) {
+		return shouldValidate(project, true);
+	}
+
+	public boolean shouldValidate(IProject project, boolean asYouType) {
 		boolean result = false;
 		try {
-			if(project.isAccessible() && validateBuilderOrder(project) && isEnabled(project)) {
+			if(project.isAccessible() && isEnabled(project) && (asYouType || validateBuilderOrder(project))) {
 				for (IELValidationDelegate delegate : DELEGATES) {
 					if(delegate.shouldValidate(project)) {
 						result = true;
