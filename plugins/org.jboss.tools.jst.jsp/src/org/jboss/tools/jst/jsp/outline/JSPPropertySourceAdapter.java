@@ -28,6 +28,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySheetEntry;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySource2;
+import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 import org.eclipse.wst.sse.core.internal.provisional.INodeAdapter;
 import org.eclipse.wst.sse.core.internal.provisional.INodeNotifier;
@@ -51,10 +52,12 @@ import org.jboss.tools.jst.jsp.editor.IVisualController;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.KbQuery.Tag;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 import org.w3c.dom.Attr;
+import org.w3c.dom.Comment;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -98,14 +101,16 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 	JspELCompletionProposalComputer processor;
 	int offset = 0;
 	KbQuery kbQuery, kbQueryAttr;
-	private Set attributeNames = new HashSet();
+	private Set<String> attributeNames = new HashSet<String>();
+
+		ICategoryProvider[] categoryProviders = new ICategoryProvider[0];
 
 	public JSPPropertySourceAdapter(INodeNotifier target) {
 		setTarget(target);
 	}
 	
-	Map getWeights() {
-		return sorter == null ? new HashMap() : sorter.weights;
+	Map<String,Integer> getWeights() {
+		return sorter == null ? new HashMap<String,Integer>() : sorter.weights;
 	}
 	
 	public void setTarget(INodeNotifier target) {
@@ -123,7 +128,10 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 			offset = ((IDOMNode)fNode).getStartOffset() + ("" + fNode.getNodeName()).length(); //$NON-NLS-1$
 		}
 
-		if(fNode instanceof Node) {
+		categoryProviders = new ICategoryProvider[0];
+		if(fNode instanceof Comment) {
+			//do nothing
+		} else if(fNode instanceof Node) {
 			ITextViewer viewer = getTextViewer();
 			// Jeremy: JBIDE-9949: This prevents invocation of CA Proposals Computation in case 
 			// of Text Viewer is not accessible anymore (f.i. in case of closing editor, 
@@ -139,7 +147,10 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 				kbQuery.setMask(true); 
 				kbQueryAttr = createKbQuery(processor);
 			}
+			
+			categoryProviders = CategoryProviderFactory.getInstance().getProviders(viewer.getDocument(), kbQuery);
 		}
+		
 	}
 	
 	//TODO move to helper
@@ -182,9 +193,19 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 		} else if (fDescriptors == null || fDescriptors.length == 0) {
 			attributeNamesChanged();
 			fDescriptors = createPropertyDescriptors();
+			if(categoryProviders.length > 0 && sorter != null) {
+				for (ICategoryProvider p: categoryProviders) {
+					p.fillAttributeWeights(getWeights());
+				}
+			}
 		} else {
 			if(attributeNamesChanged()) {
 				updatePropertyDescriptors();
+				if(categoryProviders.length > 0 && sorter != null) {
+					for (ICategoryProvider p: categoryProviders) {
+						p.fillAttributeWeights(getWeights());
+					}
+				}
 			}
 //			return fDescriptors;
 		}
@@ -319,40 +340,57 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 	protected KbQuery createKbQuery(JspELCompletionProposalComputer processor) {
 		KbQuery kbQuery = new KbQuery();
 
-		String[] parentTags = processor.getParentTags(false);
-		parentTags = add(parentTags, fNode.getNodeName());
+		KbQuery.Tag[] parentTags = processor.getParentTagsWithAttributes(true);
 		kbQuery.setPrefix(getPrefix());
 		kbQuery.setUri(processor.getUri(getPrefix()));
-		kbQuery.setParentTags(parentTags);
+		kbQuery.setParentTagsWithAttributes(parentTags);
 		kbQuery.setParent(fNode.getNodeName());
 		kbQuery.setMask(false); 
 		kbQuery.setType(Type.ATTRIBUTE_NAME);
 		kbQuery.setOffset(offset);
 		kbQuery.setValue("");  //$NON-NLS-1$
 		kbQuery.setStringQuery(""); //$NON-NLS-1$
+
+		if(parentTags.length > 0) {
+			kbQuery.setAttributes(parentTags[parentTags.length - 1].getAttributes());
+		}
 		
 		return kbQuery;
 	}
 
-	private String[] add(String[] result, String v) {
-		String[] result1 = new String[result.length + 1];
-		System.arraycopy(result, 0, result1, 0, result.length);
-		result1[result.length] = v;
-		return result1;
-	}
 	private String getPrefix() {
 		int i = fNode.getNodeName().indexOf(':');
 		return i < 0 ? null : fNode.getNodeName().substring(0, i);
 	}
 
-
-	private String getCategory(CMAttributeDeclaration attrDecl) {
+	private String getCategory(String attrName, CMAttributeDeclaration attrDecl) {
+		String result = getCategoryByName(attrName);
+		if(result != null) {
+			return result;
+		}
 		if (attrDecl != null) {
 			if (attrDecl.supports("category")) { //$NON-NLS-1$
 				return (String) attrDecl.getProperty("category"); //$NON-NLS-1$
 			}
 		}
 		return CATEGORY_ATTRIBUTES;
+	}
+
+	private String getCategoryByName(String attrName) {
+		String category = null;
+		if(categoryProviders.length > 0 && kbQuery != null && kbQuery.getParentTagsWithAttributes().length > 0) {
+			for (ICategoryProvider categoryProvider: categoryProviders) {
+				String c = categoryProvider.getCategory(attrName);
+				if(c != null && categoryProvider.isExpert(c)) {
+					return c;
+				}
+				if(category == null) {
+					category = c;
+				}
+			}
+			
+		}
+		return category;
 	}
 
 	private CMElementDeclaration getDeclaration() {
@@ -367,7 +405,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 	}
 
 	private IPropertyDescriptor createJSPPropertyDescriptor(IAttribute d, String attributeName, boolean hideOnFilter) {
-		if(d != null && sorter != null) {
+		if(d != null && sorter != null && categoryProviders.length == 0) {
 			if(d.isRequired()) sorter.setWeight(attributeName, 2);
 			else if(d.isPreferable()) sorter.setWeight(attributeName, 1);
 			else sorter.setWeight(attributeName, 0);
@@ -381,16 +419,38 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 		context.put("processor", processor); //$NON-NLS-1$
 		context.put("queryFactory", queryFactory); //$NON-NLS-1$
 		JSPPropertyDescriptor descriptor = new JSPPropertyDescriptor(context, attributeName, attributeName);
-		descriptor.setCategory(getCategory(null));
+		
+		setCategory(descriptor, attributeName, null);
+		
 		descriptor.setDescription(attributeName);
 		return descriptor;
+	}
+
+	
+	private void setCategory(PropertyDescriptor descriptor, String attributeName, CMAttributeDeclaration attrDecl) {
+		String category = getCategory(attributeName, attrDecl);
+		descriptor.setCategory(category);
+		if(SET_EXPERT_FILTER && isExpertCategory(category)) {
+			descriptor.setFilterFlags(new String[]{IPropertySheetEntry.FILTER_ID_EXPERT});
+		}
+	}
+
+	private boolean isExpertCategory(String category) {
+		for (ICategoryProvider categoryProvider: categoryProviders) {
+			if(categoryProvider.isExpert(category)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private IPropertyDescriptor createDefaultPropertyDescriptor(String attributeName, boolean hideOnFilter) {
 		// The descriptor class used here is also used in
 		// updatePropertyDescriptors()
 		TextPropertyDescriptor descriptor = new TextPropertyDescriptor(attributeName, attributeName);
-		descriptor.setCategory(getCategory(null));
+
+		setCategory(descriptor, attributeName, null);
+
 		descriptor.setDescription(attributeName);
 //		if (hideOnFilter && SET_EXPERT_FILTER)
 //			descriptor.setFilterFlags(new String[]{IPropertySheetEntry.FILTER_ID_EXPERT});
@@ -817,33 +877,36 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 	}
 
 	private IPropertyDescriptor createTextPropertyDescriptor(CMAttributeDeclaration attrDecl) {
-		return createTextPropertyDescriptor(attrDecl.getAttrName(), getCategory(attrDecl), attrDecl.getUsage());
-	}
+		String name = attrDecl.getAttrName();
 
-	private IPropertyDescriptor createTextPropertyDescriptor(String name, String category, int usage) {
 		TextPropertyDescriptor descriptor = new TextPropertyDescriptor(name, name);
-		descriptor.setCategory(category);
+		
+		setCategory(descriptor, name, attrDecl);
+//		int usage = attrDecl.getUsage();
+//		if (usage != CMAttributeDeclaration.REQUIRED && SET_EXPERT_FILTER)
+//			descriptor.setFilterFlags(new String[]{IPropertySheetEntry.FILTER_ID_EXPERT});
 		descriptor.setDescription(name);
-		if (usage != CMAttributeDeclaration.REQUIRED && SET_EXPERT_FILTER)
-			descriptor.setFilterFlags(new String[]{IPropertySheetEntry.FILTER_ID_EXPERT});
 		return descriptor;
 	}
 
 	private IPropertyDescriptor createEnumeratedPropertyDescriptor(CMAttributeDeclaration attrDecl, CMDataType valuesHelper) {
 		// the displayName MUST be set
-	    	EnumeratedStringPropertyDescriptor descriptor = new EnumeratedStringPropertyDescriptor(attrDecl.getAttrName(), attrDecl.getAttrName(), _getValidStrings(attrDecl, valuesHelper));
-		descriptor.setCategory(getCategory(attrDecl));
-		descriptor.setDescription(attrDecl.getAttrName());
-		if (attrDecl.getUsage() != CMAttributeDeclaration.REQUIRED && SET_EXPERT_FILTER)
-			descriptor.setFilterFlags(new String[]{IPropertySheetEntry.FILTER_ID_EXPERT});
+	    EnumeratedStringPropertyDescriptor descriptor = new EnumeratedStringPropertyDescriptor(attrDecl.getAttrName(), attrDecl.getAttrName(), _getValidStrings(attrDecl, valuesHelper));
+	    String name = attrDecl.getAttrName();
+	    setCategory(descriptor, name, attrDecl);
+//	    int usage = attrDecl.getUsage();
+//		if (attrDecl.getUsage() != CMAttributeDeclaration.REQUIRED && SET_EXPERT_FILTER)
+//			descriptor.setFilterFlags(new String[]{IPropertySheetEntry.FILTER_ID_EXPERT});
+		descriptor.setDescription(name);
 		return descriptor;
 	}
 
 	private IPropertyDescriptor createFixedPropertyDescriptor(CMAttributeDeclaration attrDecl, CMDataType helper) {
 		// the displayName MUST be set
 		EnumeratedStringPropertyDescriptor descriptor = new EnumeratedStringPropertyDescriptor(attrDecl.getNodeName(), attrDecl.getNodeName(), _getValidFixedStrings(attrDecl, helper));
-		descriptor.setCategory(getCategory(attrDecl));
-		descriptor.setDescription(attrDecl.getAttrName());
+		String name = attrDecl.getAttrName();
+		setCategory(descriptor, name, attrDecl);
+		descriptor.setDescription(name);
 		return descriptor;
 	}
 
@@ -863,7 +926,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 
 	private String[] _getValidStrings(CMAttributeDeclaration attrDecl, CMDataType valuesHelper) {
 		String attributeName = attrDecl.getAttrName();
-		List values = new ArrayList(1);
+		List<String> values = new ArrayList<String>(1);
 		boolean currentValueKnown = false;
 		boolean checkIfCurrentValueIsKnown = (fNode.getAttributes() != null && fNode.getAttributes().getNamedItem(attributeName) != null && fNode.getAttributes().getNamedItem(attributeName).getNodeValue() != null);
 		String currentValue = null;
@@ -903,13 +966,13 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 		if (checkIfCurrentValueIsKnown && !currentValueKnown && currentValue != null && currentValue.length() > 0)
 			values.add(currentValue);
 		String[] validStrings = new String[values.size()];
-		validStrings = (String[]) values.toArray(validStrings);
+		validStrings = values.toArray(validStrings);
 		return validStrings;
 	}
 
 	private String[] _getValidFixedStrings(CMAttributeDeclaration attrDecl, CMDataType helper) {
 		String attributeName = attrDecl.getAttrName();
-		List values = new ArrayList(1);
+		List<String> values = new ArrayList<String>(1);
 		String impliedValue = helper.getImpliedValue();
 		if (impliedValue != null)
 			values.add(impliedValue);

@@ -8,12 +8,21 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.jboss.tools.jst.web.ui.palette.html.wizard;
+package org.jboss.tools.jst.jsp.outline;
+
+import java.util.Map;
+
+import org.eclipse.jface.text.IDocument;
+import org.jboss.tools.jst.web.kb.KbQuery;
 
 /**
  * 
  * @author Viacheslav Kabanovich
  *
  */
-public interface HTMLConstants extends org.jboss.tools.jst.web.html.HTMLConstants {
+public interface ICategoryProvider {
+	public boolean init(IDocument document, KbQuery query);
+	public String getCategory(String attributeName);
+	public boolean isExpert(String category);
+	public void fillAttributeWeights(Map<String, Integer> weights);
 }

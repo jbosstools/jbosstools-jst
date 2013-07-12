@@ -53,7 +53,9 @@ public class JSPPropertySheetConfiguration extends XMLPropertySheetConfiguration
 
 			if (object instanceof INodeNotifier) {
 				fSource = (INodeNotifier) object;
-				fPropertySource = new JSPPropertySourceAdapter((INodeNotifier) object);
+				JSPPropertySourceAdapter adapter = new JSPPropertySourceAdapter((INodeNotifier) object);
+				adapter.setSorter(sorter);
+				fPropertySource = adapter;
 			}
 			else {
 				fSource = null;
