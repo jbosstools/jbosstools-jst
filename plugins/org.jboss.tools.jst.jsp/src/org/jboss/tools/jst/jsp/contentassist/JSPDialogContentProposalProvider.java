@@ -38,6 +38,7 @@ import org.jboss.tools.jst.jsp.outline.ValueHelper;
 import org.jboss.tools.jst.jsp.util.Constants;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.KbQuery.Tag;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.w3c.dom.Node;
@@ -300,14 +301,10 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 	protected KbQuery createKbQuery(Type type, String query, String text, int pos, boolean addAttr) {
 		KbQuery kbQuery = new KbQuery();
 
-		String[] parentTags = processor.getParentTags(false);
-		parentTags = add(parentTags, nodeName);
-		if(addAttr) {
-			parentTags = add(parentTags, attributeName);
-		}
+		Tag[] parentTags = processor.getParentTagsWithAttributes(true);
 		kbQuery.setPrefix(getPrefix());
 		kbQuery.setUri(processor.getUri(getPrefix()));
-		kbQuery.setParentTags(parentTags);
+		kbQuery.setParentTagsWithAttributes(parentTags);
 		kbQuery.setParent(attributeName);
 		kbQuery.setMask(true); 
 		kbQuery.setType(type);
@@ -315,6 +312,10 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 		kbQuery.setOffset(offset);
 		kbQuery.setValue(query); 
 		kbQuery.setStringQuery(query);
+		
+		if(parentTags.length > 0) {
+			kbQuery.setAttributes(parentTags[parentTags.length - 1].getAttributes());
+		}
 		
 		return kbQuery;
 	}
@@ -325,16 +326,4 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 		return i < 0 ? null : nodeName.substring(0, i);
 	}
 
-	protected String[] getParentTags(JspELCompletionProposalComputer processor) {
-		String[] result = processor.getParentTags(true);
-		String[] result1 = add(result, attributeName);
-		return result1;
-	}
-
-	private String[] add(String[] result, String v) {
-		String[] result1 = new String[result.length + 1];
-		System.arraycopy(result, 0, result1, 0, result.length);
-		result1[result.length] = v;
-		return result1;
-	}
 }

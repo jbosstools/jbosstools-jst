@@ -34,7 +34,7 @@ public class NewPanelWizard extends NewJQueryWidgetWizard<NewPanelWizardPage> im
 
 	protected void addContent(ElementNode parent) {
 		ElementNode div = parent.addChild(TAG_DIV, "");
-		div.addAttribute(ATTR_DATA_ROLE, "panel");
+		div.addAttribute(ATTR_DATA_ROLE, ROLE_PANEL);
 		addID(prefixName, div);
 		if(POSITION_RIGHT.equals(page.getEditorValue(EDITOR_ID_PANEL_POSITION))) {
 			div.addAttribute(ATTR_DATA_POSITION, POSITION_RIGHT);
