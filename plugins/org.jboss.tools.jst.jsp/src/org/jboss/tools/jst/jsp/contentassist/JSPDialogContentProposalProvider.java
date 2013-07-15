@@ -18,6 +18,7 @@ import java.util.Properties;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.fieldassist.IContentProposal;
 import org.eclipse.jface.fieldassist.IContentProposalProvider;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.wst.sse.ui.internal.util.Sorter;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.jboss.tools.common.el.core.model.ELInstance;
@@ -29,6 +30,7 @@ import org.jboss.tools.common.el.core.parser.ELParserUtil;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.ELResolverFactoryManager;
 import org.jboss.tools.common.text.TextProposal;
+import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.jsp.contentassist.ELPrefixUtils.ELTextRegion;
 import org.jboss.tools.jst.jsp.contentassist.computers.JspELCompletionProposalComputer;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
@@ -120,8 +122,11 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 					new ContentProposal(relacementString, cursorPosition, displayString, displayString);
 				result.add(proposal);
 			}
-			IContentProposal proposal = new ContentProposal(contents.substring(0, position) + "#{}" + contents.substring(position), position, "#{}", JstUIMessages.JSPDialogContentProposalProvider_NewELExpression); //$NON-NLS-1$ //$NON-NLS-2$
-			result.add(proposal);
+			IDocument document = pageContext.getDocument();
+			if(document!=null && !FileUtil.isDoctypeHTML(document.get())) {
+				IContentProposal proposal = new ContentProposal(contents.substring(0, position) + "#{}" + contents.substring(position), position, "#{}", JstUIMessages.JSPDialogContentProposalProvider_NewELExpression); //$NON-NLS-1$ //$NON-NLS-2$
+				result.add(proposal);
+			}
 		}
 		return toSortedUniqueArray(result);
 	}
