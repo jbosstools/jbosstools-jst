@@ -66,10 +66,12 @@ public class InnerModelHelper {
 		webroot.setAttributeValue("location", webRootLocation); //$NON-NLS-1$ 
 		fs.addChild(webroot);
 		
-		XModelObject lib = model.createModelObject("FileSystemFolder", null); //$NON-NLS-1$
-		lib.setAttributeValue("name", "lib"); //$NON-NLS-1$ //$NON-NLS-2$
-		lib.setAttributeValue("location", XModelConstants.WORKSPACE_REF + "/lib"); //$NON-NLS-1$ //$NON-NLS-2$
-		fs.addChild(lib);		
+		if(webInfFolder.getFolder("lib").exists()) {
+			XModelObject lib = model.createModelObject("FileSystemFolder", null); //$NON-NLS-1$
+			lib.setAttributeValue("name", "lib"); //$NON-NLS-1$ //$NON-NLS-2$
+			lib.setAttributeValue("location", XModelConstants.WORKSPACE_REF + "/lib"); //$NON-NLS-1$ //$NON-NLS-2$
+			fs.addChild(lib);
+		}
 		
 		return model;
 	}
