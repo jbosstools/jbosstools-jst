@@ -924,6 +924,8 @@ public class JSPTextEditor extends StructuredTextEditor implements
 //				return;
 //			}
 			
+			// show current cursor position during the drag JBIDE-13791 & JBIDE-14562
+			event.feedback = DND.FEEDBACK_SCROLL | DND.FEEDBACK_SELECT;
 			
 			int pos = getPosition(event.x, event.y);
 			if (lastpos == pos && pos >= 0) {
@@ -931,9 +933,6 @@ public class JSPTextEditor extends StructuredTextEditor implements
 				event.detail = lastdetail;
 				return;
 			}
-			
-			// show current cursor position during the drag JBIDE-13791 & JBIDE-14562
-			event.feedback = DND.FEEDBACK_SCROLL | DND.FEEDBACK_SELECT;
 			
 			lastpos = pos;
 			dropContext.clean();
