@@ -17,7 +17,6 @@ import org.eclipse.compare.Splitter;
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.CommandEvent;
 import org.eclipse.core.commands.ICommandListener;
-import org.eclipse.core.commands.IStateListener;
 import org.eclipse.core.commands.State;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -53,18 +52,15 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.internal.IWorkbenchGraphicConstants;
 import org.eclipse.ui.internal.WorkbenchImages;
-import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.progress.UIJob;
 import org.eclipse.wst.sse.core.internal.provisional.INodeAdapter;
 import org.eclipse.wst.sse.core.internal.provisional.INodeNotifier;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
-import org.eclipse.wst.xml.core.internal.document.AttrImpl;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
@@ -135,7 +131,7 @@ public class SelectionBar extends Composite {
 			selectionChangedListener = new ISelectionChangedListener() {
 				@Override
 				public void selectionChanged(SelectionChangedEvent event) {
-					updateNodes(true);
+					runUpdateJob(true);
 				}
 			};
 			this.textEditor.getTextViewer().addSelectionChangedListener(selectionChangedListener);
@@ -496,8 +492,8 @@ public class SelectionBar extends Composite {
 			 * Get the parent to put it to the bar
 			 */
 			createDDLofAttributes = false;
-			if (node instanceof AttrImpl) {
-				node = ((AttrImpl) node).getOwnerElement();
+			if (node instanceof Attr) {
+				node = ((Attr) node).getOwnerElement();
 				/*
 				 * Create the list of attributes for the parent
 				 * during the next iteration.
@@ -518,7 +514,7 @@ public class SelectionBar extends Composite {
 			realBar.addListener(SWT.Resize, new Listener() {
 				@Override
 				public void handleEvent(Event event) {
-					updateNodes(true);
+					runUpdateJob(true);
 				}
 			});
 			resizeListenerAdded = true;
@@ -803,6 +799,25 @@ public class SelectionBar extends Composite {
 			}
 		}
 	}
+
+
+    SelectionBarUpdateJob updateJob = null;
+
+    public void runUpdateJob(boolean forceUpdate) {
+    	if(updateJob == null) {
+    		updateJob = new SelectionBarUpdateJob(this);
+    		if(forceUpdate) {
+    			updateJob.forceUpdate = true;
+    		}
+    		updateJob.schedule(100);
+    	} else if(forceUpdate) {
+    		synchronized(this) {
+    			if(updateJob != null) {
+    				updateJob.forceUpdate = true;
+    			}
+    		}
+    	}
+    }
 }
 
 /**
@@ -931,25 +946,28 @@ class NodeListener implements INodeAdapter {
     	 * https://issues.jboss.org/browse/JBIDE-10881
     	 * Fixing selection bar listeners calls.
     	 */
-    	if(updateJob == null) {
-    		updateJob = new SelectionBarUpdateJob();
-    		updateJob.schedule(100);
-    	}
+    	selectionBar.runUpdateJob(false);
     }
     
-    SelectionBarUpdateJob updateJob = null;
-    class SelectionBarUpdateJob extends UIJob {
-		public SelectionBarUpdateJob() {
-			super("Selection Bar update job"); //$NON-NLS-1$
-		}
-		@Override
-		public IStatus runInUIThread(IProgressMonitor monitor) {
-			try {
-				selectionBar.updateNodes(false);
-			} finally {
-				updateJob = null;
+}
+
+class SelectionBarUpdateJob extends UIJob {
+	private SelectionBar selectionBar;
+	boolean forceUpdate;
+
+	public SelectionBarUpdateJob(SelectionBar selectionBar) {
+		super("Selection Bar update job"); //$NON-NLS-1$
+		this.selectionBar = selectionBar;
+	}
+	@Override
+	public IStatus runInUIThread(IProgressMonitor monitor) {
+		try {
+			selectionBar.updateNodes(forceUpdate);
+		} finally {
+			synchronized(selectionBar) {
+				selectionBar.updateJob = null;
 			}
-			return Status.OK_STATUS;
 		}
-    }
+		return Status.OK_STATUS;
+	}
 }
