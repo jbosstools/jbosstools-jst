@@ -52,17 +52,17 @@ public class JQueryMobileHyperlinkDetectorTest extends TestCase {
 			new TestHyperlink(OpenWithEditorHyperlink.class, "Open 'jquery.html#home' With Browser")
 		}));
 
-		regionList.add(new TestRegion("<div data-role=\"page\" id=\"gallery\"", new TestHyperlink[]{
+		regionList.add(new TestRegion("<article data-role=\"page\" id=\"gallery\"", new TestHyperlink[]{
 			new TestHyperlink(OpenWithEditorHyperlink.class, "Open 'jquery.html#gallery' With Browser")
 		}));
-		regionList.add(new TestRegion("</div", new TestHyperlink[]{
+		regionList.add(new TestRegion("</article", new TestHyperlink[]{
 			new TestHyperlink(OpenWithEditorHyperlink.class, "Open 'jquery.html#gallery' With Browser")
 		}));
 
-		regionList.add(new TestRegion("<div data-role=\"page\" id=\"index\"", new TestHyperlink[]{
+		regionList.add(new TestRegion("<aside data-role=\"page\" id=\"index\"", new TestHyperlink[]{
 			new TestHyperlink(OpenWithEditorHyperlink.class, "Open 'jquery.html#index' With Browser")
 		}));
-		regionList.add(new TestRegion("</div", new TestHyperlink[]{
+		regionList.add(new TestRegion("</aside", new TestHyperlink[]{
 			new TestHyperlink(OpenWithEditorHyperlink.class, "Open 'jquery.html#index' With Browser")
 		}));
 
