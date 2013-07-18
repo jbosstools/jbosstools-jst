@@ -90,10 +90,8 @@ public class JQueryMobileHyperlinkDetector extends AbstractHyperlinkDetector{
 	}
 	
 	private String findID(Node node){
-		if(node.getNodeName().equalsIgnoreCase("div")){ //$NON-NLS-1$
-			if(checkAttribute(node, "data-role", "page")){ //$NON-NLS-1$ //$NON-NLS-2$ 
-				return getAttributeValue(node, "id"); //$NON-NLS-1$
-			}
+		if(checkAttribute(node, "data-role", "page")){ //$NON-NLS-1$ //$NON-NLS-2$ 
+			return getAttributeValue(node, "id"); //$NON-NLS-1$
 		}
 		return null;
 	}
