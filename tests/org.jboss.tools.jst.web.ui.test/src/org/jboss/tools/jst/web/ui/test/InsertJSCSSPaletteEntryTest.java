@@ -212,7 +212,8 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			"<div data-role=\"footer\">",
 			"<h4>Page Footer</h4>",
 			"</div>",
-			"</div>|abcde|",
+			"</div>",
+			"|abcde|",
 			"</body>",
 			"</html>"
 	};
@@ -229,7 +230,8 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			"<div data-role=\"footer\">",
 			"<h4>Page Footer</h4>",
 			"</div>",
-			"</div>|abcde|"
+			"</div>",
+			"|abcde|"
 	};
 
 	private String[] test_result_16={
@@ -245,7 +247,8 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			"<div data-role=\"footer\">",
 			"<h4>Page Footer</h4>",
 			"</div>",
-			"</div>|abcde|",
+			"</div>",
+			"|abcde|",
 			"</html>"
 	};
 
@@ -264,7 +267,8 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			"<div data-role=\"footer\">",
 			"<h4>Page Footer</h4>",
 			"</div>",
-			"</div>|abcde|",
+			"</div>",
+			"|abcde|",
 			"</html>"
 	};
 
@@ -284,7 +288,8 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			"<div data-role=\"footer\">",
 			"<h4>Page Footer</h4>",
 			"</div>",
-			"</div>|abcde|",
+			"</div>",
+			"|abcde|",
 			"</body>",
 			"</html>"
 	};
