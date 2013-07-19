@@ -964,7 +964,31 @@ public class KbProject extends KbObject implements IKbProject {
 			postponedChanges.addAll(changes);
 			return;
 		}
+		Set<String> compositeNames = collectChangedCompositeTagLibraries(changes);
+		if(!compositeNames.isEmpty()) {
+			libraries.onCompositeTagLibrariesChange(compositeNames);
+		}
 		//TODO Implement if it will be needed events and listeners. and fire events to them.
+	}
+
+	private Set<String> collectChangedCompositeTagLibraries(List<Change> changes) {
+		Set<String> result = new HashSet<String>();
+		for (Change c: changes) {
+			Object o = c.getTarget();
+			if(o == this) {
+				if(c.getOldValue() != null) o = c.getOldValue();
+				if(c.getNewValue() != null) o = c.getNewValue();
+			}
+			if(o instanceof CompositeTagLibrary) {
+				CompositeTagLibrary l = (CompositeTagLibrary)o;
+				String uri = l.getURI();
+				if(uri != null) {
+					int i = uri.lastIndexOf('/');
+					if(i > 0) result.add(uri.substring(i + 1));
+				}
+			}
+		}
+		return result;
 	}
 
 	private static String[] getKBBuilderRequiredNatureDescriptions(IProject project) {
