@@ -61,6 +61,10 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	 */
 	@Override
 	public IComponent[] getComponents() {
+		return getDeclaredComponents();
+	}
+
+	IComponent[] getDeclaredComponents() {
 		if(componentsArray==null) {
 			synchronized (components) {
 				componentsArray = components.values().toArray(new IComponent[components.size()]);
@@ -526,8 +530,8 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 
 	public void mergeComponents(AbstractTagLib c, Change children) {
 		Map<Object,AbstractComponent> componentMap = new HashMap<Object, AbstractComponent>();
-		for (IComponent a: getComponents()) componentMap.put(((KbObject)a).getId(), (AbstractComponent)a);
-		for (IComponent a: c.getComponents()) {
+		for (IComponent a: getDeclaredComponents()) componentMap.put(((KbObject)a).getId(), (AbstractComponent)a);
+		for (IComponent a: c.getDeclaredComponents()) {
 			AbstractComponent loaded = (AbstractComponent)a;
 			AbstractComponent current = componentMap.remove(loaded.getId());
 			if(current == null) {

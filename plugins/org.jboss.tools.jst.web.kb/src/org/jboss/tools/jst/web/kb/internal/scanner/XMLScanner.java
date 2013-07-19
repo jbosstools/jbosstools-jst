@@ -197,6 +197,7 @@ public class XMLScanner implements IFileScanner {
 		FaceletTagLibrary library = new FaceletTagLibrary();
 		library.setId(o);
 		library.setURI(new XMLValueInfo(o, AbstractTagLib.URI));
+		library.setCompositeLibraryName(new XMLValueInfo(o, FaceletTagLibrary.COMPOSITE_LIBRARY_NAME));
 
 		ds.getLibraries().add(library);
 
