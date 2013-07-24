@@ -661,10 +661,21 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 			String prefix = query.indexOf(':') != -1 ? query.substring(0, query.indexOf(':')) : query; 
 			IFile file = PageContextFactory.getResource(context.getDocument());
 			if (file != null && file.getProject() != null) {
-				Collection<INameSpace> namespaces = getPossibleNamespacesForPrefix(
+				Collection<INameSpace> namespaces = new ArrayList<INameSpace>();
+				Map<String, List<INameSpace>> existing = ((IPageContext)fContext).getNameSpaces(context.getInvocationOffset());
+				for (String uri: existing.keySet()) {
+					List<INameSpace> ns = existing.get(uri);
+					for (INameSpace n: ns) {
+						if(prefix.equals(n.getPrefix())) {
+							namespaces.add(n);
+						}
+					}
+				}
+				if(namespaces.isEmpty()) {
+					namespaces = getPossibleNamespacesForPrefix(
 						file.getProject(), prefix, query.indexOf(':') != -1,
-						((IPageContext)fContext).getNameSpaces(context.getInvocationOffset()));
-	
+						existing);
+				}
 				Map<String, List<INameSpace>> nsMap = new HashMap<String, List<INameSpace>>();
 				for (INameSpace ns : namespaces) {
 					List<INameSpace> uNamespaces = nsMap.get(ns.getURI());
