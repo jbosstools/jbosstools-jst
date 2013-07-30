@@ -139,6 +139,10 @@
       <category name="%NewWizardCat_JBossToolsWeb" 
                 id="org.jboss.tools.jst.web">
       </category>
+    <category
+            name="%JBoss_Tools_category"
+            id="org.jboss.ide.eclipse.ui.wizards">
+      </category>
       <wizard
             category="org.jboss.tools.jst.web"
             class="org.jboss.tools.jst.web.ui.wizards.newfile.NewXHTMLWizard"
@@ -199,7 +203,7 @@
       <wizard
             name="JBoss Datasource (-ds.xml)"
             icon="$nl$/images/xstudio/wizards/new_properties_file.gif"
-            category="org.jboss.tools.jst.web"
+            category="org.jboss.ide.eclipse.ui.wizards"
             class="org.jboss.tools.jst.web.ui.wizards.newfile.NewDSXMLWizard"
             id="org.jboss.tools.jst.web.ui.wizards.newfile.NewDSXMLWizard">
          <description>
