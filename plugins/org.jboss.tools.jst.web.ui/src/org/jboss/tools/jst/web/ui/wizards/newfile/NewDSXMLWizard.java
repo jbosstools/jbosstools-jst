@@ -385,7 +385,7 @@ public class NewDSXMLWizard extends BasicNewResourceWizard {
 				}
 			});
 			
-			registerEditor = IFieldEditorFactory.INSTANCE.createCheckboxEditor("register", Messages.NewDSXMLWizard_REGISTER_FILE_LABEL, true); //$NON-NLS-1$
+			registerEditor = IFieldEditorFactory.INSTANCE.createCheckboxEditor("register", Messages.NewDSXMLWizard_REGISTER_FILE_LABEL, false); //$NON-NLS-1$
 			registerEditor.doFillIntoGrid(q);
 			
 			setControl(topLevel);
@@ -926,8 +926,8 @@ class DSDataModelProvider extends AbstractDataModelProvider implements IDSDataMo
 class NewDSXMLWizardFactory {
 	static String EMPTY_PROFILE = "                            "; //$NON-NLS-1$
 
-	static String AS_5_TEMPLATE = "AS 5"; //$NON-NLS-1$
-	static String AS_7_TEMPLATE = "AS 7"; //$NON-NLS-1$
+	static String AS_5_TEMPLATE = "AS 5      "; //$NON-NLS-1$
+	static String AS_7_TEMPLATE = "EAP 6/AS 7"; //$NON-NLS-1$
 
 	public static String[] TEMPLATE_LIST = {
 		AS_5_TEMPLATE, AS_7_TEMPLATE
@@ -939,7 +939,7 @@ class NewDSXMLWizardFactory {
 				Messages.NewDSXMLWizard_TEMPLATE_FIELD, 
 				Arrays.asList(TEMPLATE_LIST), 
 				Arrays.asList(TEMPLATE_LIST), 
-				TEMPLATE_LIST[0]);
+				TEMPLATE_LIST[1]);
 		return result;
 	}
 	/**
