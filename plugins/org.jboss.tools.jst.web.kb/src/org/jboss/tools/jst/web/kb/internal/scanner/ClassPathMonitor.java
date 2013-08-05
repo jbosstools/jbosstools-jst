@@ -160,25 +160,17 @@ public class ClassPathMonitor extends AbstractClassPathMonitor<KbProject> {
 	}
 
 	public boolean hasToUpdateProjectDependencies() {
-		List<KbProject> ps = null;
-		
 		try {
-			ps = getKbProjects(project.getProject());
+			List<KbProject> ps = getKbProjects(project.getProject());
+			Set<KbProject> set = project.getKbProjects();
+			if(set.size() != ps.size()) {
+				return true;
+			}
+			for (KbProject p: ps) {
+				if(!set.contains(p)) return true;
+			}
 		} catch (CoreException e) {
 			WebModelPlugin.getDefault().logError(e);
-		}
-		if(ps != null) {
-			Set<KbProject> set = project.getKbProjects();
-			Set<KbProject> removable = new HashSet<KbProject>();
-			removable.addAll(set);
-			removable.removeAll(ps);
-			ps.removeAll(set);
-			for (KbProject p : ps) {
-				return true;
-			}
-			for (KbProject p : removable) {
-				return true;
-			}
 		}
 		return false;
 	}
