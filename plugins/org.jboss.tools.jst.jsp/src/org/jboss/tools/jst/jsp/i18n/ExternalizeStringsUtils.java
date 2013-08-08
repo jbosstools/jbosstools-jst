@@ -156,7 +156,7 @@ public class ExternalizeStringsUtils {
 			 * When selected text is empty parse selected element and find a
 			 * string to replace..
 			 */
-			if ((text.trim().length() == 0)) {
+			if (text == null || text.trim().length() == 0) {
 				if (selectedElement instanceof org.w3c.dom.Text) {
 					/*
 					 * ..it could be a plain text
