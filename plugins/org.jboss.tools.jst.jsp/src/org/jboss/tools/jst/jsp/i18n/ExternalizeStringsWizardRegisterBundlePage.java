@@ -24,7 +24,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.jboss.tools.common.EclipseUtil;
 import org.jboss.tools.common.model.ui.ModelUIImages;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
@@ -94,8 +93,6 @@ public class ExternalizeStringsWizardRegisterBundlePage extends WizardPage
 			if (pos != -1) {
 				fileName = fileName.substring(0, pos);
 			}
-		} else if (getWizard() instanceof ExternalizeAllStringsWizard) {
-			fileName = ((ExternalizeAllStringsWizard) getWizard()).findBundlePrefix();
 		}
 		bundleName.setText(fileName);
 		
@@ -235,12 +232,6 @@ public class ExternalizeStringsWizardRegisterBundlePage extends WizardPage
 			project = wiz.getProject();
 			if (project != null) {
 				userDefinedPath = wiz.getUserDefinedPath().toString();
-			}
-		} else if (getWizard() instanceof ExternalizeAllStringsWizard) {
-			ExternalizeAllStringsWizard wiz = (ExternalizeAllStringsWizard) getWizard();
-			project = wiz.getProject();
-			if (project != null) {
-				userDefinedPath = wiz.getUserDefinedFile().getAbsolutePath().toString();
 			}
 		}
 		if ((project != null)
