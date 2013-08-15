@@ -51,6 +51,7 @@ import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.ELResolverFactoryManager;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.common.ui.CommonUIPlugin;
+import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.jsp.JspEditorPlugin;
 import org.jboss.tools.jst.jsp.contentassist.AutoContentAssistantProposal;
 import org.jboss.tools.jst.jsp.contentassist.AutoELContentAssistantProposal;
@@ -543,6 +544,8 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 	 * @return
 	 */
 	protected boolean isELCAToBeShown() {
+		if (FileUtil.isDoctypeHTML(getResource()))
+				return false;
 		ELResolver[] resolvers = getContext() == null ? null : getContext().getElResolvers();
 		return (resolvers != null && resolvers.length > 0);
 	}
