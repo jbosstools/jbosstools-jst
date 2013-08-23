@@ -41,7 +41,7 @@ import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.LabelFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.SwtFieldEditorFactory;
 import org.jboss.tools.common.ui.widget.editor.TextFieldEditor;
-import org.jboss.tools.jst.web.kb.internal.taglib.jq.JQueryMobileAttrProvider;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileAttrProvider;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 

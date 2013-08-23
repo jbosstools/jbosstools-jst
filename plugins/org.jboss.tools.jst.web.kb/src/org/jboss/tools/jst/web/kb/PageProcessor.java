@@ -25,6 +25,7 @@ import org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibAttribute;
 import org.jboss.tools.jst.web.kb.taglib.CustomTagLibManager;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
+import org.jboss.tools.jst.web.kb.taglib.IContextComponent;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibComponent;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibrary;
 import org.jboss.tools.jst.web.kb.taglib.IFacesConfigTagLibrary;
@@ -246,7 +247,14 @@ public class PageProcessor {
 			Map<String, IAttribute> attrbMap = new HashMap<String, IAttribute>();
 			IComponent[] components  = getComponents(query, context, includeComponentExtensions);
 			for (int i = 0; i < components.length; i++) {
-				IAttribute[] libAttributess = components[i].getAttributes(query, context);
+				IComponent component = components[i];
+				IAttribute[] libAttributess;
+				if(component instanceof IContextComponent) {
+					libAttributess = ((IContextComponent)component).getAttributes(context, query, true);
+				} else {
+					libAttributess = component.getAttributes(query, context);
+				}
+
 				if(libAttributess!=null) {
 					for (int j = 0; j < libAttributess.length; j++) {
 						attributes.add(libAttributess[j]);

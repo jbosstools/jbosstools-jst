@@ -19,8 +19,10 @@ import org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibComponent;
 public interface IAttributeProvider {
 
 	/**
+	 * @deprecated Use IContextAttributeProvider.getAttributes(IPageContext context, KbQuery query) instead
 	 * @return all the available attributes for the query
 	 */
+	@Deprecated
 	IAttribute[] getAttributes(KbQuery query);
 
 	/**
@@ -37,9 +39,11 @@ public interface IAttributeProvider {
 
 	/**
 	 * Returns attributes of the component
+	 * @deprecated Use IContextAttributeProvider.getAttribute(IPageContext context, KbQuery query, String name) instead
 	 * @param query
 	 * @param name
 	 * @return
 	 */
+	@Deprecated
 	IAttribute getAttribute(KbQuery query, String name);
 }

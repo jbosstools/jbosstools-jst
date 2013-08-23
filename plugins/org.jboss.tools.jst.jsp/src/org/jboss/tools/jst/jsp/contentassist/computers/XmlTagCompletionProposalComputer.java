@@ -588,8 +588,13 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 				replacementLength = textProposal.getEnd() - textProposal.getStart();
 			}
 			String replacementString = "\"" + textProposal.getReplacementString() + "\""; //$NON-NLS-1$ //$NON-NLS-2$
+			String alternativeMatch = textProposal.getAlternateMatch();
+			if(alternativeMatch!=null) {
+				alternativeMatch = "\"" + textProposal.getAlternateMatch() + "\""; //$NON-NLS-1$ //$NON-NLS-2$
+			}
 			if(textProposal.getStart() >= 0 && textProposal.getEnd() >= 0) {
 				replacementString = textProposal.getReplacementString();
+				alternativeMatch = textProposal.getAlternateMatch();
 			}
 			int cursorPosition = getCursorPositionForProposedText(replacementString);
 			Image image = CommonUIPlugin.getImageDescriptorRegistry().get(textProposal.getImageDescriptor());
@@ -604,7 +609,7 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 			}
 
 			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(replacementString, 
-					replacementOffset, replacementLength, cursorPosition, image, displayString, 
+					replacementOffset, replacementLength, cursorPosition, image, displayString, alternativeMatch, 
 					contextInformation, additionalProposalInfo, relevance);
 
 			contentAssistRequest.addProposal(proposal);
