@@ -209,7 +209,7 @@ public class MyFacesScanner implements IFileScanner {
 		if(isEmpty(name)) name = util.getAttribute(a, ATTR_NAME);
 		if(isEmpty(name)) return;
 		name = name.trim();
-		IAttribute[] attrs = component.getAttributes(KbQuery.EMPTY, name);
+		IAttribute[] attrs = component.getAttributes(null, KbQuery.EMPTY, name);
 		MyFacesAttribute attribute = null;
 		if(attrs.length>0) {
 			attribute = (MyFacesAttribute)attrs[0];			
@@ -243,7 +243,7 @@ public class MyFacesScanner implements IFileScanner {
 		loadParents(parent, componentsByClass, processed);
 		IAttribute[] as = parent.getAttributes();
 		for (IAttribute a: as) {
-			if(current.getAttributes(KbQuery.EMPTY, a.getName()).length==0) {
+			if(current.getAttributes(null, KbQuery.EMPTY, a.getName()).length==0) {
 				current.addAttribute(a);
 			}
 		}

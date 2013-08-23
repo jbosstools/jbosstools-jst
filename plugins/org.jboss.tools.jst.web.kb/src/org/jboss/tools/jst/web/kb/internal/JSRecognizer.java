@@ -16,16 +16,13 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.jboss.tools.common.el.core.resolver.ELContext;
-import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
-import org.jboss.tools.jst.web.kb.taglib.ITagLibRecognizer;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -35,34 +32,13 @@ import org.w3c.dom.NodeList;
 /**
  * @author Alexey Kazakov
  */
-public abstract class JSRecognizer implements ITagLibRecognizer {
-
-	private ELContext lastUsedContext;
-	private boolean lastResult;
+public abstract class JSRecognizer extends HTML5Recognizer {
 
 	protected abstract String getJSPattern();
 
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.taglib.ITagLibRecognizer#shouldBeLoaded(org.jboss.tools.jst.web.kb.taglib.ITagLibrary, org.eclipse.core.resources.IResource)
-	 */
 	@Override
-	public boolean shouldBeLoaded(ITagLibrary lib, ELContext context) {
-		if(lastUsedContext!=null) {
-			if(lastUsedContext==context) {
-				// The context didn't change so we don'y need to recalculate the result.
-				return lastResult;
-			}
-		}
-		lastUsedContext = context;
-		IResource resource = context.getResource();
-		lastResult = false;
-		if(resource instanceof IFile) {
-			IFile file = (IFile) resource;
-			if(FileUtil.isDoctypeHTML(file)) {
-				lastResult = containsJSReference(file, getJSPattern());
-			}
-		}
-		return lastResult;
+	protected boolean recalculateResult(ITagLibrary lib, ELContext context, IFile file) {
+		return super.recalculateResult(lib, context, file) && containsJSReference(file, getJSPattern());
 	}
 
 	protected static boolean containsJSReference(IFile file, String pattern) {

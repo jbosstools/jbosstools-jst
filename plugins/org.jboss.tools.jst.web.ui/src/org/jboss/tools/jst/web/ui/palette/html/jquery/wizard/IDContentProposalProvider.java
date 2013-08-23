@@ -17,7 +17,7 @@ import org.eclipse.jface.fieldassist.IContentProposal;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.common.model.ui.attribute.AttributeContentProposalProviderFactory;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
-import org.jboss.tools.jst.web.kb.internal.taglib.jq.LinkAttributeProvider.ElementID;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.LinkAttributeProvider.ElementID;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractContentProposalProvider;
 
 /**

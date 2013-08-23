@@ -46,11 +46,19 @@ public interface IComponent extends IProposalProcessor {
 	String getComponentClass();
 
 	/**
+	 * Returns all attributes declared in current tag library
+	 * for this component. Extension attributes are not excluded.
+	 * For custom tag libraries that declare attribute providers,
+	 * method getAttributes(KbQuery) should be rather used
+	 * since attribute providers should be accessed with query.
 	 * @return all attributes of this component
 	 */
 	IAttribute[] getAttributes();
 
 	/**
+	 * Returns a list of attributes matching nameTemplate,
+	 * with extension attributes excluded if they do not 
+	 * extend a 'normal' attribute definition.
 	 * @param nameTemplate
 	 * @return attributes with names which start with given template.
 	 */
@@ -71,20 +79,34 @@ public interface IComponent extends IProposalProcessor {
 	 * @param name
 	 * @return attribute by name
 	 */
+	@Deprecated
 	IAttribute getAttribute(String name);
 
 	/**
+	 * Returns all attributes with the given name declared 
+	 * for the component in current tag library.
+	 * Extension attributes are not excluded.
+	 * Default implementation returns same result as getAttributes().
+	 * For custom custom tag library that defines attribute 
+	 * providers, they are queried, while getAttributes() 
+	 * in that case may return empty list.
+	 * @deprecated Use IContextComponent.getAttributes(IPageContext context, KbQuery query, String name) instead
+	 * @param query
 	 * @param name
-	 * @return attribute by name
+	 * @return attributes by name
 	 */
+	@Deprecated
 	IAttribute[] getAttributes(KbQuery query, String name);
 
 	/**
-	 * Return attributes
+	 * Return list of attributes with extension attributes 
+	 * excluded if they do not extend a 'normal' attribute definition.
+	 * @deprecated Use IContextComponent.getAttributes(IPageContext context, KbQuery query, boolean includeExtensions) instead
 	 * @param query
 	 * @param context
 	 * @return
 	 */
+	@Deprecated
 	public IAttribute[] getAttributes(KbQuery query, IPageContext context);
 
 	/**

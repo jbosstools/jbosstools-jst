@@ -22,7 +22,7 @@ import org.jboss.tools.jst.web.kb.internal.proposal.CustomProposalType;
 import org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibAttribute;
 import org.jboss.tools.jst.web.kb.taglib.CustomTagLibManager;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
-import org.jboss.tools.jst.web.kb.taglib.IComponent;
+import org.jboss.tools.jst.web.kb.taglib.IContextComponent;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibrary;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 
@@ -83,10 +83,10 @@ public class WebKbTest extends TestCase {
 		assertNotNull(h);
 		assertNotNull(a4j);
 
-		IComponent link = facelets.getComponent("link");
+		IContextComponent link = (IContextComponent)facelets.getComponent("link");
 		assertNotNull(link);
 
-		IAttribute[] href = link.getAttributes(null, "href");
+		IAttribute[] href = link.getAttributes(null, null, "href");
 		assertFalse(href.length == 0);
 
 		CustomProposalType[] proposals = ((CustomTagLibAttribute)href[0]).getProposals();
@@ -96,10 +96,10 @@ public class WebKbTest extends TestCase {
 		}
 		assertTrue(found);
 
-		IComponent hLink = h.getComponent("link");
+		IContextComponent hLink = (IContextComponent)h.getComponent("link");
 		assertNotNull(hLink);
 
-		IAttribute[] value = hLink.getAttributes(null, "value");
+		IAttribute[] value = hLink.getAttributes(null, null, "value");
 		assertFalse(value.length==0);
 
 		proposals = ((CustomTagLibAttribute)value[0]).getProposals();
@@ -109,10 +109,10 @@ public class WebKbTest extends TestCase {
 		}
 		assertTrue(found);
 
-		IComponent aLoadStyle = a4j.getComponent("loadStyle");
+		IContextComponent aLoadStyle = (IContextComponent)a4j.getComponent("loadStyle");
 		assertNotNull(aLoadStyle);
 
-		IAttribute[] src = aLoadStyle.getAttributes(null, "src");
+		IAttribute[] src = aLoadStyle.getAttributes(null, null, "src");
 		assertFalse(src.length==0);
 
 		proposals = ((CustomTagLibAttribute)src[0]).getProposals();
