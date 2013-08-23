@@ -12,11 +12,12 @@ package org.jboss.tools.jst.jsp.outline;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.eclipse.ui.views.properties.IPropertySheetEntry;
 import org.eclipse.ui.views.properties.PropertySheetSorter;
 
 public class AttributeSorter extends PropertySheetSorter {
-	Map weights = new HashMap();
+	Map<String,Integer> weights = new HashMap<String,Integer>();
 
 	public int compare(IPropertySheetEntry entryA, IPropertySheetEntry entryB) {
 		String displayNameA = entryA.getDisplayName();
@@ -27,12 +28,19 @@ public class AttributeSorter extends PropertySheetSorter {
 		return getCollator().compare(displayNameA, displayNameB);
 	}
 	
+	public int compareCategories(String categoryA, String categoryB) {
+		int weightA = getWeight(categoryA);
+		int weightB = getWeight(categoryB);
+		if(weightA != weightB) return weightB - weightA;
+		return getCollator().compare(categoryA, categoryB);
+	}
+
 	public void setWeight(String displayName, int weight) {
 		weights.put(displayName, Integer.valueOf(weight));
 	}
 	
 	public int getWeight(String displayName) {
-		Integer i = (Integer)weights.get(displayName);
+		Integer i = weights.get(displayName);
 		return (i == null) ? 0 : i.intValue();
 	}
 	
