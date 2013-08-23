@@ -79,6 +79,7 @@ public interface IComponent extends IProposalProcessor {
 	 * @param name
 	 * @return attribute by name
 	 */
+	@Deprecated
 	IAttribute getAttribute(String name);
 
 	/**
@@ -89,10 +90,12 @@ public interface IComponent extends IProposalProcessor {
 	 * For custom custom tag library that defines attribute 
 	 * providers, they are queried, while getAttributes() 
 	 * in that case may return empty list.
+	 * @deprecated Use IContextComponent.getAttributes(IPageContext context, KbQuery query, String name) instead
 	 * @param query
 	 * @param name
 	 * @return attributes by name
 	 */
+	@Deprecated
 	IAttribute[] getAttributes(KbQuery query, String name);
 
 	/**
@@ -102,18 +105,22 @@ public interface IComponent extends IProposalProcessor {
 	 * For custom custom tag library that defines attribute 
 	 * providers, they are queried, while getAttributes() 
 	 * in that case may return empty list.
+	 * @deprecated Use IContextComponent.getAttributes(IPageContext context, KbQuery query) instead
 	 * @param query
 	 * @return
 	 */
+	@Deprecated
 	IAttribute[] getAttributes(KbQuery query);
 
 	/**
 	 * Return list of attributes with extension attributes 
 	 * excluded if they do not extend a 'normal' attribute definition.
+	 * @deprecated Use IContextComponent.getAttributes(IPageContext context, KbQuery query, boolean includeExtensions) instead
 	 * @param query
 	 * @param context
 	 * @return
 	 */
+	@Deprecated
 	public IAttribute[] getAttributes(KbQuery query, IPageContext context);
 
 	/**

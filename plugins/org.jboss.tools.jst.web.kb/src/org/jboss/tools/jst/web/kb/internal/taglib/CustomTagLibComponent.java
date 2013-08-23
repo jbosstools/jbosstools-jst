@@ -21,6 +21,8 @@ import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 import org.jboss.tools.jst.web.kb.taglib.IAttributeProvider;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
+import org.jboss.tools.jst.web.kb.taglib.IContextAttributeProvider;
+import org.jboss.tools.jst.web.kb.taglib.IContextComponent;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibComponent;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 
@@ -38,34 +40,45 @@ public class CustomTagLibComponent extends AbstractComponent implements ICustomT
 	 * @see org.jboss.tools.jst.web.kb.internal.taglib.AbstractComponent#getAttribute(java.lang.String)
 	 */
 	@Override
-	public IAttribute[] getAttributes(KbQuery query, String name) {
+	public IAttribute[] getAttributes(IPageContext context, KbQuery query, String name) {
 		if(providers!=null) {
 			List<IAttribute> result = new ArrayList<IAttribute>();
 			for (IAttributeProvider provider : providers) {
-				IAttribute attribute = provider.getAttribute(query, name);
+				IAttribute attribute;
+				if(provider instanceof IContextAttributeProvider) {
+					attribute = ((IContextAttributeProvider)provider).getAttribute(context, query, name);
+				} else {
+					attribute = provider.getAttribute(query, name);
+				}
 				if(attribute!=null) {
 					result.add(attribute);
 				}
 			}
 			return result.toArray(new IAttribute[result.size()]);
 		}
-		return super.getAttributes(query, name);
+		return super.getAttributes(context, query, name);
 	}
 
 	@Override
-	public IAttribute[] getAttributes(KbQuery query) {
+	public IAttribute[] getAttributes(IPageContext context, KbQuery query) {
 		if(providers!=null) {
 			List<IAttribute> result = new ArrayList<IAttribute>();
 			for (IAttributeProvider provider : providers) {
-				IAttribute[] attributes = provider.getAttributes(query);
+				IAttribute[] attributes;
+				if(provider instanceof IContextAttributeProvider) {
+					attributes = ((IContextAttributeProvider)provider).getAttributes(context, query);
+				} else {
+					attributes = provider.getAttributes(query);
+				}
 				for (IAttribute attribute: attributes) {
 					result.add(attribute);
 				}
 			}
 			return result.toArray(new IAttribute[result.size()]);
 		}
-		return super.getAttributes(query);
+		return super.getAttributes(context, query);
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#isExtended()
@@ -113,7 +126,12 @@ public class CustomTagLibComponent extends AbstractComponent implements ICustomT
 			query.setCachedAttributes(cachedAttributes);
 			IComponent[] parentComponents = PageProcessor.getInstance().getComponents(query, context, false);
 			for (IComponent component : parentComponents) {
-				IAttribute[] ats = component.getAttributes(query);
+				IAttribute[] ats;
+				if(component instanceof IContextComponent) {
+					ats = ((IContextComponent)component).getAttributes(context, query);
+				} else {
+					ats = component.getAttributes(query);
+				}
 				for (IAttribute at : ats) {
 					if(!at.isExtended()) {
 						cachedAttributes.add(at.getName());

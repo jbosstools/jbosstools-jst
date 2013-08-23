@@ -32,7 +32,8 @@ import org.jboss.tools.jst.web.kb.internal.taglib.myfaces.MyFacesAttribute;
 import org.jboss.tools.jst.web.kb.taglib.Facet;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 import org.jboss.tools.jst.web.kb.taglib.IAttributeProvider;
-import org.jboss.tools.jst.web.kb.taglib.IComponent;
+import org.jboss.tools.jst.web.kb.taglib.IContextAttributeProvider;
+import org.jboss.tools.jst.web.kb.taglib.IContextComponent;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 import org.w3c.dom.Element;
 
@@ -40,7 +41,7 @@ import org.w3c.dom.Element;
  * Abstract implementation of IComponent
  * @author Alexey Kazakov
  */
-public abstract class AbstractComponent extends KbObject implements IComponent {
+public abstract class AbstractComponent extends KbObject implements IContextComponent {
 	public static final String DESCRIPTION = "description"; //$NON-NLS-1$
 	public static final String COMPONENT_CLASS = "component-class"; //$NON-NLS-1$
 	public static final String COMPONENT_TYPE = "component-type"; //$NON-NLS-1$
@@ -63,6 +64,7 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#canHaveBody()
 	 */
+	@Override
 	public boolean canHaveBody() {
 		return canHaveBody;
 	}
@@ -94,7 +96,7 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getAttribute(KbQuery, java.lang.String)
 	 */
 	@Override
-	public IAttribute[] getAttributes(KbQuery query, String name) {
+	public IAttribute[] getAttributes(IPageContext context, KbQuery query, String name) {
 		IAttribute atr = attributes.get(name);
 		if(atr!=null) {
 			return new IAttribute[]{atr};
@@ -103,16 +105,9 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getAttribute(KbQuery)
-	 */
-	@Override
-	public IAttribute[] getAttributes(KbQuery query) {
-		return getAttributes();
-	}
-
-	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getAttributes()
 	 */
+	@Override
 	public IAttribute[] getAttributes() {
 		if(attributesArray==null) {
 			synchronized (attributes) {
@@ -129,6 +124,7 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getAttributes(java.lang.String)
 	 */
+	@Override
 	public IAttribute[] getAttributes(String nameTemplate) {
 		return getAttributes(nameTemplate, null, null);
 	}
@@ -145,7 +141,12 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 			}
 		} else {
 			for (IAttributeProvider provider : providers) {
-				IAttribute[] atrs = provider.getAttributes(query);
+				IAttribute[] atrs;
+				if (provider instanceof IContextAttributeProvider) {
+					atrs = ((IContextAttributeProvider)provider).getAttributes(context, query);
+				} else {
+					atrs = provider.getAttributes(query);
+				}
 				for (IAttribute a : atrs) {
 					atts.add(a);
 				}
@@ -162,6 +163,21 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		}
 
 		return list.toArray(new IAttribute[list.size()]);
+	}
+
+	@Override
+	public IAttribute[] getAttributes(KbQuery query, String name) {
+		return getAttributes(null, query, name);
+	}
+
+	@Override
+	public IAttribute[] getAttributes(KbQuery query) {
+		return getAttributes(null, query);
+	}
+
+	@Override
+	public IAttribute[] getAttributes(KbQuery query, IPageContext context) {
+		return getAttributes(context, query, false);
 	}
 
 	protected IAttribute[] getExtendedAttributes(IPageContext context, KbQuery query) {
@@ -185,10 +201,19 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 
 	private static final IAttribute[] EMPTY_ARRAY = new IAttribute[0];
 
+	@Override
+	public IAttribute[] getAttributes(IPageContext context, KbQuery query) {
+		return getAttributes(context, query, false);
+	}
+
 	/* (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getAttributes(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.IPageContext)
+	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getAttribute(KbQuery)
 	 */
-	public IAttribute[] getAttributes(KbQuery query, IPageContext context) {
+	@Override
+	public IAttribute[] getAttributes(IPageContext context, KbQuery query, boolean includeExtensions) {
+		if(!includeExtensions) {
+			return getAttributes();
+		}
 		String attrName = null;
 		boolean mask = false;
 		if(query.getType()==KbQuery.Type.ATTRIBUTE_NAME) {
@@ -203,7 +228,7 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 		if(mask) {
 			return getAttributes(attrName, context, query);
 		}
-		IAttribute[] attrs = getAttributes(query, attrName);
+		IAttribute[] attrs = getAttributes(context, query, attrName);
 		List<IAttribute> list = new ArrayList<IAttribute>();
 		for (IAttribute attr : attrs) {
 			if(checkExtended(attr, context, query)) {
@@ -216,6 +241,7 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getComponentClass()
 	 */
+	@Override
 	public String getComponentClass() {
 		return componentClass;
 	}
@@ -235,6 +261,7 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getComponentType()
 	 */
+	@Override
 	public String getComponentType() {
 		return componentType;
 	}
@@ -258,6 +285,7 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getDescription()
 	 */
+	@Override
 	public String getDescription() {
 		return description;
 	}
@@ -280,6 +308,7 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getName()
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -302,6 +331,7 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getPreferableAttributes()
 	 */
+	@Override
 	public IAttribute[] getPreferableAttributes() {
 		if(preferableAttributesArray==null) {
 			synchronized (preferableAttributes) {
@@ -314,6 +344,7 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getRequiredAttributes()
 	 */
+	@Override
 	public IAttribute[] getRequiredAttributes() {
 		if(requiredAttributesArray==null) {
 			synchronized (requiredAttributes) {
@@ -328,6 +359,7 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	 * the base interface and implementation
 	 * for the sake of common approach.
 	 */
+	@Override
 	public Facet getFacet(String name) {
 		return null;
 	}
@@ -338,6 +370,7 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getFacets()
 	 */
+	@Override
 	public Facet[] getFacets() {
 		return EMPTY_FACET_SET;
 	}
@@ -346,6 +379,7 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IComponent#getFacets(java.lang.String)
 	 */
+	@Override
 	public Facet[] getFacets(String nameTemplate) {
 		return EMPTY_FACET_SET;
 	}
@@ -353,8 +387,9 @@ public abstract class AbstractComponent extends KbObject implements IComponent {
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.IProposalProcessor#getProposals(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.IPageContext)
 	 */
+	@Override
 	public TextProposal[] getProposals(KbQuery query, IPageContext context) {
-		IAttribute[] attributes = getAttributes(query, context);
+		IAttribute[] attributes = getAttributes(context, query, true);
 		if(attributes == null || attributes.length == 0) {
 			return EMPTY_PROPOSAL_LIST;
 		}
