@@ -18,6 +18,7 @@ import java.util.Properties;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.fieldassist.IContentProposal;
 import org.eclipse.jface.fieldassist.IContentProposalProvider;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.wst.sse.ui.internal.util.Sorter;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.jboss.tools.common.el.core.model.ELInstance;
@@ -29,6 +30,7 @@ import org.jboss.tools.common.el.core.parser.ELParserUtil;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.ELResolverFactoryManager;
 import org.jboss.tools.common.text.TextProposal;
+import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.jsp.contentassist.ELPrefixUtils.ELTextRegion;
 import org.jboss.tools.jst.jsp.contentassist.computers.JspELCompletionProposalComputer;
 import org.jboss.tools.jst.jsp.messages.JstUIMessages;
@@ -36,6 +38,7 @@ import org.jboss.tools.jst.jsp.outline.ValueHelper;
 import org.jboss.tools.jst.jsp.util.Constants;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.KbQuery.Tag;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.w3c.dom.Node;
@@ -120,8 +123,11 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 					new ContentProposal(relacementString, cursorPosition, displayString, displayString);
 				result.add(proposal);
 			}
-			IContentProposal proposal = new ContentProposal(contents.substring(0, position) + "#{}" + contents.substring(position), position, "#{}", JstUIMessages.JSPDialogContentProposalProvider_NewELExpression); //$NON-NLS-1$ //$NON-NLS-2$
-			result.add(proposal);
+			IDocument document = pageContext.getDocument();
+			if(document!=null && !FileUtil.isDoctypeHTML(document.get())) {
+				IContentProposal proposal = new ContentProposal(contents.substring(0, position) + "#{}" + contents.substring(position), position, "#{}", JstUIMessages.JSPDialogContentProposalProvider_NewELExpression); //$NON-NLS-1$ //$NON-NLS-2$
+				result.add(proposal);
+			}
 		}
 		return toSortedUniqueArray(result);
 	}
@@ -295,14 +301,10 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 	protected KbQuery createKbQuery(Type type, String query, String text, int pos, boolean addAttr) {
 		KbQuery kbQuery = new KbQuery();
 
-		String[] parentTags = processor.getParentTags(false);
-		parentTags = add(parentTags, nodeName);
-		if(addAttr) {
-			parentTags = add(parentTags, attributeName);
-		}
+		Tag[] parentTags = processor.getParentTagsWithAttributes(true);
 		kbQuery.setPrefix(getPrefix());
 		kbQuery.setUri(processor.getUri(getPrefix()));
-		kbQuery.setParentTags(parentTags);
+		kbQuery.setParentTagsWithAttributes(parentTags);
 		kbQuery.setParent(attributeName);
 		kbQuery.setMask(true); 
 		kbQuery.setType(type);
@@ -310,6 +312,10 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 		kbQuery.setOffset(offset);
 		kbQuery.setValue(query); 
 		kbQuery.setStringQuery(query);
+		
+		if(parentTags.length > 0) {
+			kbQuery.setAttributes(parentTags[parentTags.length - 1].getAttributes());
+		}
 		
 		return kbQuery;
 	}
@@ -320,6 +326,7 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 		return i < 0 ? null : nodeName.substring(0, i);
 	}
 
+	@Deprecated
 	protected String[] getParentTags(JspELCompletionProposalComputer processor) {
 		String[] result = processor.getParentTags(true);
 		String[] result1 = add(result, attributeName);
@@ -331,5 +338,5 @@ public class JSPDialogContentProposalProvider implements IContentProposalProvide
 		System.arraycopy(result, 0, result1, 0, result.length);
 		result1[result.length] = v;
 		return result1;
-	}
+	} 
 }
