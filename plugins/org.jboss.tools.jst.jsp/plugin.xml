@@ -593,7 +593,7 @@
    	</extension>
    
 	
-    <extension point="org.eclipse.core.runtime.contentTypes">
+    <extension point="org.eclipse.core.contenttype.contentTypes">
       	<content-type 
 	      	id="org.jboss.tools.jst.jsp.jspincludesource"
 	       	name="%ContentType_JBossToolsINC"
