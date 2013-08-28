@@ -58,51 +58,6 @@ public class CSSStylesheetOpenOnTest extends TestCase {
 		super("HTML OpenOn on CSS Stylesheets test");
 	}
 
-	public void testCSSStylesheetOpenOn() throws PartInitException, BadLocationException {
-		final String editorName = "style.css";
-		final String tagName = "link";  
-		final String valueToFind = "style.css";
-		HashSet<IEditorPart> openedEditors = new HashSet<IEditorPart>();
-
-		IEditorPart editor = WorkbenchUtils.openEditor(PAGE_NAME);
-		if (editor != null) openedEditors.add(editor);
-		assertTrue(editor instanceof JSPMultiPageEditor);
-		try {
-			JSPMultiPageEditor jspMultyPageEditor = (JSPMultiPageEditor) editor;
-			ISourceViewer viewer = jspMultyPageEditor.getSourceEditor().getTextViewer(); 
-				
-			IDocument document = viewer.getDocument();
-			IRegion reg = new FindReplaceDocumentAdapter(document).find(0,
-					tagName, true, true, false, false);
-			assertNotNull("Tag:"+tagName+" not found",reg);
-			
-			reg = new FindReplaceDocumentAdapter(document).find(reg.getOffset(),
-					valueToFind, true, true, false, false);
-			assertNotNull("Value to find:"+valueToFind+" not found",reg);
-			
-			IHyperlink[] links = HyperlinkDetector.getInstance().detectHyperlinks(viewer, reg, true); // new Region(reg.getOffset() + reg.getLength(), 0)
-			
-			assertTrue("Hyperlinks for value '"+valueToFind+"' are not found",(links != null && links.length > 0));
-			
-			boolean found = false;
-			for(IHyperlink link : links){
-				assertNotNull(link.toString());
-				
-				link.open();
-				
-				IEditorPart resultEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-				if (resultEditor != null) openedEditors.add(resultEditor);
-				if(editorName.equals(resultEditor.getTitle())){
-					found = true;
-					return;
-				}
-			}
-			assertTrue("OpenOn have not opened "+editorName+" editor",found);
-		} finally {
-			closeEditors(openedEditors);
-		}
-	}
-
 	public void testCSSClassOpenOn() throws PartInitException, BadLocationException {
 		final String editorName = "style.css";
 		final String tagName = "div";  

@@ -184,39 +184,6 @@
 		</hyperlinkPartitioner>
 		
 		<hyperlinkPartitioner
-         	id="org.jboss.tools.common.text.ext.hyperlink.jsp.JSPStylesheetRelLinkHyperlinkPartitioner"
-         	class="org.jboss.tools.jst.text.ext.hyperlink.jsp.JSPStylesheetRelLinkHyperlinkPartitioner">
-         	<contentType id="org.eclipse.jst.jsp.core.jspsource">
-         		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ATTRIBUTE_VALUE">
-         			<axis path="*/link/*" ignoreCase="true"/>
-         		</partitionType>
-         		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ELEMENT">
-         			<axis path="*/link/*" ignoreCase="true"/>
-         		</partitionType>
-         		<partitionType id="com.ibm.sse.STYLE">
-         			<!--axis path="*/style/" /-->
-         		</partitionType>
-         		<partitionType id="org.jboss.tools.common.text.ext.jsp.JSP_LINK">
-         			<axis path="*/link/*" ignoreCase="true"/>
-         		</partitionType>
-         	</contentType>
-         	<contentType id="org.eclipse.wst.html.core.htmlsource">
-         		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ATTRIBUTE_VALUE">
-         			<axis path="*/link/*" ignoreCase="true"/>
-         		</partitionType>
-         		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ELEMENT">
-         			<axis path="*/link/*" ignoreCase="true"/>
-         		</partitionType>
-         		<partitionType id="com.ibm.sse.STYLE">
-         			<!--axis path="*/style/" /-->
-         		</partitionType>
-         		<partitionType id="org.jboss.tools.common.text.ext.jsp.JSP_LINK">
-         			<axis path="*/link/*" ignoreCase="true"/>
-         		</partitionType>
-         	</contentType>
-		</hyperlinkPartitioner>
-
-		<hyperlinkPartitioner
          	id="org.jboss.tools.common.text.ext.hyperlink.jsp.JSPLinkHyperlinkPartitioner"
          	class="org.jboss.tools.jst.text.ext.hyperlink.jsp.JSPLinkHyperlinkPartitioner">
          	<contentType id="org.eclipse.jst.jsp.core.jspsource">
@@ -290,26 +257,6 @@
       	</contenttypeidentifier>
 			<contenttypeidentifier id="org.jboss.tools.common.model.ui.xml">
 				<partitiontype id="org.jboss.tools.common.text.ext.xml.XML_FILTER_NAME" />
-			</contenttypeidentifier>
-		</hyperlink>
-
-		<hyperlink 
-			class="org.jboss.tools.jst.text.ext.hyperlink.JSPStylesheetRelLinkHyperlink" 
-      		id="org.jboss.tools.common.text.ext.hyperlink.JSPStylesheetRelLinkHyperlink">
-			<contenttypeidentifier id="org.eclipse.jst.jsp.core.jspsource">
-				<partitiontype id="org.jboss.tools.common.text.ext.jsp.JSP_STYLESHEET_REL_LINK" />
-			</contenttypeidentifier>
-			<contenttypeidentifier id="org.eclipse.wst.html.core.htmlsource">
-				<partitiontype id="org.jboss.tools.common.text.ext.jsp.JSP_STYLESHEET_REL_LINK" />
-			</contenttypeidentifier>
-			<contenttypeidentifier id="jsf.facelet">
-				<partitiontype id="org.jboss.tools.common.text.ext.jsp.JSP_STYLESHEET_REL_LINK" />
-			</contenttypeidentifier>
-			<contenttypeidentifier id="jsf.facelet.composite">
-				<partitiontype id="org.jboss.tools.common.text.ext.jsp.JSP_STYLESHEET_REL_LINK" />
-			</contenttypeidentifier>
-			<contenttypeidentifier id="org.jboss.tools.jst.jsp.jspincludesource">
-				<partitiontype id="org.jboss.tools.common.text.ext.jsp.JSP_STYLESHEET_REL_LINK" />
 			</contenttypeidentifier>
 		</hyperlink>
 		
