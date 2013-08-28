@@ -11,14 +11,13 @@
 package org.jboss.tools.jst.text.ext.hyperlink.jsp;
 
 import org.eclipse.jface.text.IDocument;
-import org.jboss.tools.common.text.ext.hyperlink.IExclusiblePartitionerRecognition;
 import org.jboss.tools.common.text.ext.hyperlink.IHyperlinkRegion;
 import org.jboss.tools.common.text.ext.hyperlink.xml.XMLLinkHyperlinkPartitioner;
 
 /**
  * @author Jeremy
  */
-public class JSPLinkHyperlinkPartitioner extends XMLLinkHyperlinkPartitioner implements IExclusiblePartitionerRecognition {
+public class JSPLinkHyperlinkPartitioner extends XMLLinkHyperlinkPartitioner {
 	public static final String JSP_LINK_PARTITION = "org.jboss.tools.common.text.ext.jsp.JSP_LINK"; //$NON-NLS-1$
 	
 	/* (non-Javadoc)
@@ -37,14 +36,5 @@ public class JSPLinkHyperlinkPartitioner extends XMLLinkHyperlinkPartitioner imp
 
 	protected String getAxis(IDocument document, int offset) {
 		return JSPRootHyperlinkPartitioner.computeAxis(document, offset) + "/"; //$NON-NLS-1$
-	}
-
-	public String getExclusionPartitionType() {
-		return JSPStylesheetRelLinkHyperlinkPartitioner.JSP_STYLESHEET_REL_LINK_PARTITION;
-	}
-
-	public boolean excludes(String partitionType, IDocument document, int offset,
-			IHyperlinkRegion superRegion) {
-		return false;
 	}
 }
