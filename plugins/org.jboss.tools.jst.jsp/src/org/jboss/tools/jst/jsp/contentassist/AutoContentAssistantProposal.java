@@ -194,7 +194,7 @@ public class AutoContentAssistantProposal extends CustomCompletionProposal imple
 	@Override
 	public boolean validate(IDocument document, int offset, DocumentEvent event) {
 		int fReplacementOffset = getReplacementOffset();
-			
+
 		if (offset < fReplacementOffset)
 			return false;
 		boolean validated = startsWith(document, offset, getReplacementString());

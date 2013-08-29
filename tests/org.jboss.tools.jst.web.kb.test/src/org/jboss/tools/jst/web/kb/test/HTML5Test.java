@@ -56,7 +56,7 @@ public class HTML5Test extends TestCase {
 	}
 
 	protected void assertProposals(boolean strict, TextProposal[] proposals, String... enums) {
-		assertTrue(proposals.length>0);
+		assertTrue("No proposals found", proposals.length>0);
 		Set<String> uniqueProposals = new HashSet<String>();
 
 		StringBuilder prp = new StringBuilder("[");

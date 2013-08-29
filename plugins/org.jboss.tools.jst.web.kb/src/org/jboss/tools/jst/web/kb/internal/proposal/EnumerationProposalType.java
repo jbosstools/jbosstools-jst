@@ -24,7 +24,7 @@ import org.jboss.tools.jst.web.kb.WebKbPlugin;
  */
 public class EnumerationProposalType extends CustomProposalType {
 
-	private static final ImageDescriptor IMAGE = WebKbPlugin.getImageDescriptor(WebKbPlugin.class, "EnumerationProposal.gif"); //$NON-NLS-1$
+	protected static final ImageDescriptor IMAGE = WebKbPlugin.getImageDescriptor(WebKbPlugin.class, "EnumerationProposal.gif"); //$NON-NLS-1$
 
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.internal.taglib.CustomProposalType#getProposals(org.jboss.tools.jst.web.kb.KbQuery)

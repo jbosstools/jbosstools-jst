@@ -19,7 +19,7 @@ import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.PageProcessor;
-import org.jboss.tools.jst.web.kb.internal.taglib.jq.JQueryMobileAttrProvider;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileAttrProvider;
 import org.jboss.tools.jst.web.kb.taglib.CustomTagLibManager;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibrary;
 

@@ -83,6 +83,11 @@
             name="jQueryMobile"
             uri="jQueryMobile"
             recognizer="org.jboss.tools.jst.web.kb.internal.JQueryMobileRecognizer"/>
+      <tag-lib
+            location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/Html.xml"
+            name="HTML"
+            uri="htmlFile"
+            recognizer="org.jboss.tools.jst.web.kb.internal.HTMLRecognizer"/>
             
       <component-extension
             location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/componentExtension.xml"/>

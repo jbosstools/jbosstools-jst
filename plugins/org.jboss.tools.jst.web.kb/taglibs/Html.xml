@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tag-lib PUBLIC "-//Red Hat, Inc//DTD Knowledge Base 2.0//EN" "http://anonsvn.jboss.org/repos/jbosstools/trunk/jst/plugins/org.jboss.tools.jst.web.kb/resources/kbCustomTagLibSchema-1.0.dtd">
+<tag-lib defaultPrefix="htmlFile" ignoreCase="true">
+	<component extended="false" name="script" attributeProvider="org.jboss.tools.jst.web.kb.internal.taglib.html.ScriptAttributeProvider"/>
+	<component extended="false" name="link" attributeProvider="org.jboss.tools.jst.web.kb.internal.taglib.html.LinkAttributeProvider"/>
+	<component extended="false" name="img" attributeProvider="org.jboss.tools.jst.web.kb.internal.taglib.html.ImageAttributeProvider"/>
+	<component extended="false" name="video" attributeProvider="org.jboss.tools.jst.web.kb.internal.taglib.html.VideoAttributeProvider"/>
+	<component extended="false" name="audio" attributeProvider="org.jboss.tools.jst.web.kb.internal.taglib.html.AudioAttributeProvider"/>
+	<component extended="false" name="source" attributeProvider="org.jboss.tools.jst.web.kb.internal.taglib.html.VideoAttributeProvider, org.jboss.tools.jst.web.kb.internal.taglib.html.AudioAttributeProvider"/>
+	<component extended="false" name="a" attributeProvider="org.jboss.tools.jst.web.kb.internal.taglib.html.AAttributeProvider"/>
+</tag-lib>

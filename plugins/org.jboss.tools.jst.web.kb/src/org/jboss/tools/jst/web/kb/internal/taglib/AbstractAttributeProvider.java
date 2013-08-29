@@ -14,26 +14,30 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
-import org.jboss.tools.jst.web.kb.internal.taglib.jq.JQueryMobileAttribute;
-import org.jboss.tools.jst.web.kb.taglib.IAttributeProvider;
+import org.jboss.tools.jst.web.kb.taglib.IAttribute;
+import org.jboss.tools.jst.web.kb.taglib.IContextAttributeProvider;
 
 /**
  * @author Alexey Kazakov
  */
-public abstract class AbstractAttributeProvider implements IAttributeProvider {
+public abstract class AbstractAttributeProvider implements IContextAttributeProvider {
 
 	protected static final CustomTagLibAttribute[] EMPTY = new CustomTagLibAttribute[0];
 
 	protected CustomTagLibComponent parentComponent;
 	protected KbQuery query;
+	protected IPageContext context;
 
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IAttributeProvider#getAttributes(org.jboss.tools.jst.web.kb.KbQuery)
 	 */
 	@Override
-	public CustomTagLibAttribute[] getAttributes(KbQuery query) {
+	public CustomTagLibAttribute[] getAttributes(IPageContext context, KbQuery query) {
 		this.query = query;
+		this.context = context;
+
 		List<CustomTagLibAttribute> attributes = new ArrayList<CustomTagLibAttribute>();
 		CustomTagLibAttribute[] attrs = getRequiredAttributes();
 		for (CustomTagLibAttribute attr : attrs) {
@@ -55,6 +59,22 @@ public abstract class AbstractAttributeProvider implements IAttributeProvider {
 		return attributes.toArray(new CustomTagLibAttribute[attributes.size()]);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.taglib.IAttributeProvider#getAttributes(org.jboss.tools.jst.web.kb.KbQuery)
+	 */
+	@Override
+	public IAttribute[] getAttributes(KbQuery query) {
+		return getAttributes(null, query);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.taglib.IAttributeProvider#getAttribute(org.jboss.tools.jst.web.kb.KbQuery, java.lang.String)
+	 */
+	@Override
+	public IAttribute getAttribute(KbQuery query, String name) {
+		return getAttribute(null, query, name);
+	}
+
 	abstract protected boolean checkComponent();
 
 	abstract protected CustomTagLibAttribute[] getConditionalAttributes();
@@ -63,27 +83,14 @@ public abstract class AbstractAttributeProvider implements IAttributeProvider {
 		return EMPTY;
 	}
 
-	private List<CustomTagLibAttribute> getAllAttributes() {
-		List<CustomTagLibAttribute> attributes = new ArrayList<CustomTagLibAttribute>();
-		CustomTagLibAttribute[] attrs = getRequiredAttributes();
-		for (CustomTagLibAttribute attr : attrs) {
-			attributes.add(attr);
-		}
-		attrs = getConditionalAttributes();
-		for (CustomTagLibAttribute attr : attrs) {
-			attributes.add(attr);
-		}
-		return attributes;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IAttributeProvider#getAttribute(java.lang.String)
 	 */
 	@Override
-	public CustomTagLibAttribute getAttribute(KbQuery query, String name) {
+	public CustomTagLibAttribute getAttribute(IPageContext context, KbQuery query, String name) {
 		this.query = query;
-		CustomTagLibAttribute[] attrs = getAttributes(query);
+		CustomTagLibAttribute[] attrs = getAttributes(context, query);
 		for (CustomTagLibAttribute attr : attrs) {
 			if(attr.getName().equalsIgnoreCase(name)) {
 				if(attr.getComponent()==null) {
@@ -111,6 +118,14 @@ public abstract class AbstractAttributeProvider implements IAttributeProvider {
 	@Override
 	public CustomTagLibComponent getComponent() {
 		return parentComponent;
+	}
+
+	protected boolean checkAttribute(String attributeName) {
+		Map<String, String> attributes = query.getAttributes();
+		if(attributes==null) {
+			return false;
+		}
+		return attributes.get(attributeName)!=null;
 	}
 
 	protected boolean checkAttribute(AttributeData attribute) {
@@ -152,6 +167,18 @@ public abstract class AbstractAttributeProvider implements IAttributeProvider {
 		return false;
 	}
 
+	protected boolean checkParentTag(String tagName, boolean directParentOnly) {
+		String[] parents = query.getParentTags();
+		if(parents!=null && parents.length>1) {
+			for (int i = parents.length-2; i > -1 && (!directParentOnly || i == parents.length-2); i--) {
+				if(tagName.equalsIgnoreCase(parents[i])) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	protected boolean checkCurrentTag(String tagName) {
 		return tagName.equalsIgnoreCase(query.getLastParentTag());
 	}
@@ -163,6 +190,20 @@ public abstract class AbstractAttributeProvider implements IAttributeProvider {
 		public AttributeData(String name, String value) {
 			this.name = name;
 			this.value = value;
+		}
+
+		/**
+		 * @return the name
+		 */
+		public String getName() {
+			return name;
+		}
+
+		/**
+		 * @return the value
+		 */
+		public String getValue() {
+			return value;
 		}
 
 		/* (non-Javadoc)
