@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component id="org.jboss.tools.jst.jsp" version="2">
+    <resource path="src/org/jboss/tools/jst/jsp/jspeditor/dnd/MobilePaletteInsertHelper.java" type="org.jboss.tools.jst.jsp.jspeditor.dnd.MobilePaletteInsertHelper">
+        <filter comment="test method was removed that never intended to use by clients" id="338792546">
+            <message_arguments>
+                <message_argument value="org.jboss.tools.jst.jsp.jspeditor.dnd.MobilePaletteInsertHelper"/>
+                <message_argument value="test_insert_JS_CSS(IDocument)"/>
+            </message_arguments>
+        </filter>
+    </resource>
+</component>

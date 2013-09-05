@@ -15,5 +15,6 @@ package org.jboss.tools.jst.web.ui.palette.html.wizard;
  * @author Viacheslav Kabanovich
  *
  */
+@Deprecated
 public interface HTMLConstants extends org.jboss.tools.jst.web.html.HTMLConstants {
 }

@@ -31,7 +31,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class ItemsEditor implements SelectionListener, JQueryConstants {
+public class ItemsEditor implements SelectionListener, JQueryConstants, org.jboss.tools.jst.web.ui.palette.html.wizard.HTMLConstants {
 
 	public static class ItemData {
 		/**

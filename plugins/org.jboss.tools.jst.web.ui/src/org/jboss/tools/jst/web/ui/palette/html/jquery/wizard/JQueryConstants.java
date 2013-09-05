@@ -17,7 +17,7 @@ import org.jboss.tools.jst.web.html.JQueryHTMLConstants;
  * @author Viacheslav Kabanovich
  *
  */
-public interface JQueryConstants extends JQueryHTMLConstants {
+public interface JQueryConstants extends JQueryHTMLConstants, org.jboss.tools.jst.web.ui.palette.html.wizard.HTMLConstants {
 	public String EDITOR_ID_TITLE = TAG_TITLE;
 	public String EDITOR_ID_LABEL = TAG_LABEL;
 	public String EDITOR_ID_NAME = ATTR_NAME;
