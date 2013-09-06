@@ -18,7 +18,7 @@ import org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttribute;
  */
 public class SelectAttributeProvider extends JQueryMobileAttrProvider {
 
-	private static final HtmlAttribute[] requiredAttributes = new HtmlAttribute[] {
+	static final HtmlAttribute[] ATTRIBUTES = new HtmlAttribute[] {
 		DATA_SELECT_DIVIDER_THEME_ATTRIBUTE,
 		DATA_ICON_ATTRIBUTE,
 		DATA_ICONPOS_ATTRIBUTE,
@@ -50,6 +50,6 @@ public class SelectAttributeProvider extends JQueryMobileAttrProvider {
 
 	@Override
 	protected CustomTagLibAttribute[] getRequiredAttributes() {
-		return requiredAttributes;
+		return ATTRIBUTES;
 	}
 }

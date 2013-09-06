@@ -18,9 +18,9 @@ import org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttribute;
  */
 public class FooterHeaderAttributeProvider extends JQueryMobileAttrProvider {
 
-	private static final HtmlAttribute[] requiredAttributes = new HtmlAttribute[] {new HtmlAttribute(DATA_ROLE, "", new String[]{FOOTER, HEADER})};
+	static final HtmlAttribute[] REQUIRED_ATTRIBUTES = new HtmlAttribute[] {new HtmlAttribute(DATA_ROLE, "", new String[]{FOOTER, HEADER})};
 
-	private static final HtmlAttribute[] conditionalAttributes = new HtmlAttribute[] {DATA_ID_ATTRIBUTE,
+	static final HtmlAttribute[] CONDITIONAL_ATTRIBUTES = new HtmlAttribute[] {DATA_ID_ATTRIBUTE,
 		DATA_POSITION_ATTRIBUTE,
 		DATA_FULLSCREEN_ATTRIBUTE,
 		DATA_THEME_ATTRIBUTE};
@@ -40,11 +40,11 @@ public class FooterHeaderAttributeProvider extends JQueryMobileAttrProvider {
 	 */
 	@Override
 	protected CustomTagLibAttribute[] getConditionalAttributes() {
-		return conditionalAttributes;
+		return CONDITIONAL_ATTRIBUTES;
 	}
 
 	@Override
 	protected CustomTagLibAttribute[] getRequiredAttributes() {
-		return requiredAttributes;
+		return REQUIRED_ATTRIBUTES;
 	}
 }

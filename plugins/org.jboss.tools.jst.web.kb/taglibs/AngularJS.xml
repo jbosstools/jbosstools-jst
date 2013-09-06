@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tag-lib PUBLIC "-//Red Hat, Inc//DTD Knowledge Base 2.0//EN" "http://anonsvn.jboss.org/repos/jbosstools/trunk/jst/plugins/org.jboss.tools.jst.web.kb/resources/kbCustomTagLibSchema-1.0.dtd">
+<tag-lib defaultPrefix="angularJS" ignoreCase="true">
+	<component-extension>
+		<attribute name="ng-click" extended="false"/>
+		<attribute name="data-ng-click" extended="false"/>
+		<attribute name="ng-bind" extended="false">
+		</attribute>
+		<attribute name="data-ng-bind" extended="false">
+		</attribute>
+		<attribute name="ng-bind-html" extended="false">
+		</attribute>
+		<attribute name="data-ng-bind-html" extended="false">
+		</attribute>
+		<attribute name="ng-bind-template" extended="false">
+		</attribute>
+		<attribute name="data-ng-bind-template" extended="false">
+		</attribute>
+		<attribute name="ng-class" extended="false">
+		</attribute>
+		<attribute name="data-ng-class" extended="false">
+		</attribute>
+		<attribute name="ng-class-even" extended="false">
+		</attribute>
+		<attribute name="data-ng-class-even" extended="false">
+		</attribute>
+		<attribute name="ng-class-odd" extended="false">
+		</attribute>
+		<attribute name="data-ng-class-odd" extended="false">
+		</attribute>
+		<attribute name="ng-cloak" extended="false">
+		</attribute>
+		<attribute name="data-ng-cloak" extended="false">
+		</attribute>
+		<attribute name="ng-controller" extended="false">
+		</attribute>
+		<attribute name="data-ng-controller" extended="false">
+		</attribute>
+		<attribute name="ng-dblclick" extended="false">
+		</attribute>
+		<attribute name="data-ng-dblclick" extended="false">
+		</attribute>
+		<attribute name="ng-form" extended="false">
+		</attribute>
+		<attribute name="data-ng-form" extended="false">
+		</attribute>
+		<attribute name="ng-hide" extended="false">
+		</attribute>
+		<attribute name="data-ng-hide" extended="false">
+		</attribute>
+		<attribute name="ng-if" extended="false">
+		</attribute>
+		<attribute name="data-ng-if" extended="false">
+		</attribute>
+		<attribute name="ng-include" extended="false">
+		</attribute>
+		<attribute name="data-ng-include" extended="false">
+		</attribute>
+		<attribute name="ng-init" extended="false">
+		</attribute>
+		<attribute name="data-ng-init" extended="false">
+		</attribute>
+		<attribute name="ng-keydown" extended="false">
+		</attribute>
+		<attribute name="data-ng-keydown" extended="false">
+		</attribute>
+		<attribute name="ng-keypress" extended="false">
+		</attribute>
+		<attribute name="data-ng-keypress" extended="false">
+		</attribute>
+		<attribute name="ng-keyup" extended="false">
+		</attribute>
+		<attribute name="data-ng-keyup" extended="false">
+		</attribute>
+		<attribute name="ng-mousedown" extended="false">
+		</attribute>
+		<attribute name="data-ng-mousedown" extended="false">
+		</attribute>
+		<attribute name="ng-mouseenter" extended="false">
+		</attribute>
+		<attribute name="data-ng-mouseenter" extended="false">
+		</attribute>
+		<attribute name="ng-mouseleave" extended="false">
+		</attribute>
+		<attribute name="data-ng-mouseleave" extended="false">
+		</attribute>
+		<attribute name="ng-mousemove" extended="false">
+		</attribute>
+		<attribute name="data-ng-mousemove" extended="false">
+		</attribute>
+		<attribute name="ng-mouseover" extended="false">
+		</attribute>
+		<attribute name="data-ng-mouseover" extended="false">
+		</attribute>
+		<attribute name="ng-mouseup" extended="false">
+		</attribute>
+		<attribute name="data-ng-mouseup" extended="false">
+		</attribute>
+		<attribute name="ng-non-bindable" extended="false">
+		</attribute>
+		<attribute name="data-ng-non-bindable" extended="false">
+		</attribute>
+		<attribute name="ng-repeat" extended="false">
+		</attribute>
+		<attribute name="data-ng-repeat" extended="false">
+		</attribute>
+		<attribute name="ng-repeat-start" extended="false"/>
+		<attribute name="data-ng-repeat-start" extended="false"/>
+		<attribute name="ng-repeat-end" extended="false"/>
+		<attribute name="data-ng-repeat-end" extended="false"/>
+		<attribute name="ng-selected" extended="false">
+		</attribute>
+		<attribute name="data-ng-selected" extended="false">
+		</attribute>
+		<attribute name="ng-show" extended="false">
+		</attribute>
+		<attribute name="data-ng-show" extended="false">
+		</attribute>
+		<attribute name="ng-style" extended="false">
+		</attribute>
+		<attribute name="data-ng-style" extended="false">
+		</attribute>
+		<attribute name="ng-transclude" extended="false">
+		</attribute>
+		<attribute name="data-ng-transclude" extended="false">
+		</attribute>
+	</component-extension>
+	<component-extension attributeProvider="org.jboss.tools.jst.web.kb.internal.taglib.html.angular.NgAppAttributeProvider"/>
+	<component-extension attributeProvider="org.jboss.tools.jst.web.kb.internal.taglib.html.angular.NgClassAttributeProvider"/>
+	<component-extension attributeProvider="org.jboss.tools.jst.web.kb.internal.taglib.html.angular.NameAttributeProvider"/>
+	<component-extension attributeProvider="org.jboss.tools.jst.web.kb.internal.taglib.html.angular.NgPluralizeAttributeProvider"/>
+	<component-extension attributeProvider="org.jboss.tools.jst.web.kb.internal.taglib.html.angular.NgSwitchAttributeProvider"/>
+
+	<component extended="false" name="html">
+		<attribute name="ng-csp" extended="false">
+		</attribute>
+		<attribute name="data-ng-csp" extended="false">
+		</attribute>
+	</component>
+	<component extended="false" name="details">
+		<attribute name="ng-open" extended="false">
+		</attribute>
+		<attribute name="data-ng-open" extended="false">
+		</attribute>
+	</component>
+	<component name="script" extended="false">
+		<attribute name="type" extended="false">
+			<proposal type="enumeration">
+				<param value="text/ng-template" />
+			</proposal>
+		</attribute>
+	</component>
+
+    <component extended="false" name="form" attributeProvider="org.jboss.tools.jst.web.kb.internal.taglib.html.angular.NgSubmitAttributeProvider"/>
+	<component extended="false" name="input" attributeProvider="org.jboss.tools.jst.web.kb.internal.taglib.html.angular.NgModelAttributeProvider,org.jboss.tools.jst.web.kb.internal.taglib.html.angular.NgDisabledAttributeProvider,org.jboss.tools.jst.web.kb.internal.taglib.html.angular.NgAnyInputAttributeProvider, org.jboss.tools.jst.web.kb.internal.taglib.html.angular.NgBlurAttributeProvider, org.jboss.tools.jst.web.kb.internal.taglib.html.angular.NgInputAttributeProvider, org.jboss.tools.jst.web.kb.internal.taglib.html.angular.NgInputCheckboxAttributeProvider, org.jboss.tools.jst.web.kb.internal.taglib.html.angular.NgInputDefaultAttributeProvider, org.jboss.tools.jst.web.kb.internal.taglib.html.angular.NgInputRadioAttributeProvider, org.jboss.tools.jst.web.kb.internal.taglib.html.angular.NgInputTextAttributeProvider"/>
+	<component extended="false" name="window" attributeProvider="org.jboss.tools.jst.web.kb.internal.taglib.html.angular.NgBlurAttributeProvider"/>
+	<component extended="false" name="select" attributeProvider="org.jboss.tools.jst.web.kb.internal.taglib.html.angular.NgSelectAttributeProvider,org.jboss.tools.jst.web.kb.internal.taglib.html.angular.NgModelAttributeProvider,org.jboss.tools.jst.web.kb.internal.taglib.html.angular.NgBlurAttributeProvider"/>
+	<component extended="false" name="textarea" attributeProvider="org.jboss.tools.jst.web.kb.internal.taglib.html.angular.NgTextareaAttributeProvider,org.jboss.tools.jst.web.kb.internal.taglib.html.angular.NgModelAttributeProvider,org.jboss.tools.jst.web.kb.internal.taglib.html.angular.NgBlurAttributeProvider"/>
+	<component extended="false" name="a" attributeProvider="org.jboss.tools.jst.web.kb.internal.taglib.html.angular.NgLinkAttributeProvider,org.jboss.tools.jst.web.kb.internal.taglib.html.angular.NgBlurAttributeProvider"/>
+	<component extended="false" name="button" attributeProvider="org.jboss.tools.jst.web.kb.internal.taglib.html.angular.NgDisabledAttributeProvider"/>
+	<component extended="false" name="img" attributeProvider="org.jboss.tools.jst.web.kb.internal.taglib.html.angular.NgImageAttributeProvider"/>
+	
+</tag-lib>

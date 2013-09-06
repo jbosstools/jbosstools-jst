@@ -18,7 +18,7 @@ import org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttribute;
  */
 public class TextInputAndTextareaAttributeProvider extends JQueryMobileAttrProvider {
 
-	private static final HtmlAttribute[] conditionalAttributes = new HtmlAttribute[] {
+	static final HtmlAttribute[] ATTRIBUTES = new HtmlAttribute[] {
 		DATA_CLEAR_BTN_ATTRIBUTE,
 		DATA_CLEAR_BTN_TEXT_ATTRIBUTE,
 		DATA_MINI_ATTRIBUTE,
@@ -48,6 +48,6 @@ public class TextInputAndTextareaAttributeProvider extends JQueryMobileAttrProvi
 	 */
 	@Override
 	protected CustomTagLibAttribute[] getConditionalAttributes() {
-		return conditionalAttributes;
+		return ATTRIBUTES;
 	}
 }

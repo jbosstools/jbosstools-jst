@@ -18,7 +18,7 @@ import org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttribute;
  */
 public class ButtonAttributeProvider extends JQueryMobileAttrProvider {
 
-	private static final HtmlAttribute[] conditionalAttributes = new HtmlAttribute[] {DATA_CORNERS_ATTRIBUTE,
+	static final HtmlAttribute[] ATTRIBUTES = new HtmlAttribute[] {DATA_CORNERS_ATTRIBUTE,
 		DATA_ICON_ATTRIBUTE,
 		DATA_ICONPOS_ATTRIBUTE,
 		DATA_ICONSHADOW_ATTRIBUTE,
@@ -48,6 +48,6 @@ public class ButtonAttributeProvider extends JQueryMobileAttrProvider {
 	 */
 	@Override
 	protected CustomTagLibAttribute[] getConditionalAttributes() {
-		return conditionalAttributes;
+		return ATTRIBUTES;
 	}
 }

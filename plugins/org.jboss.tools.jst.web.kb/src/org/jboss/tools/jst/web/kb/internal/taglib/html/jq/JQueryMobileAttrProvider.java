@@ -10,52 +10,20 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal.taglib.html.jq;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
-import org.jboss.tools.jst.web.kb.internal.taglib.AbstractAttributeProvider;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttribute;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttributeProvider;
 
 /**
  * @author Alexey Kazakov
  */
-public abstract class JQueryMobileAttrProvider extends AbstractAttributeProvider {
+public abstract class JQueryMobileAttrProvider extends HtmlAttributeProvider {
 
 	protected static final String DATA_ROLE = "data-role";
-
-	public static final String BUTTON = "button";
-	public static final String COLLAPSIBLE = "collapsible";
-	public static final String COLLAPSIBLE_SET = "collapsible-set";
-	public static final String CONTROLGROUP = "controlgroup";
-	public static final String DIALOG = "dialog";
-	public static final String CONTENT = "content";
-	public static final String FIELDCONTENT = "fieldcontain";
-	public static final String SUBMIT = "submit";
-	public static final String RESET = "reset";
-	public static final String TYPE = "type";
-	public static final String INPUT = "input";
-	public static final String CHECKBOX = "checkbox";
-	public static final String DIV = "div";
-	public static final String HEADER = "header";
-	public static final String FOOTER = "footer";
-	public static final String NAVBAR = "navbar";
-	public static final String SLIDER = "slider";
-	public static final String LISTVIEW = "listview";
-	public static final String PAGE = "page";
-	public static final String TABLE = "table";
-	public static final String POPUP = "popup";
-	public static final String RADIO = "radio";
-	public static final String RANGE = "range";
-	public static final String HIDEN = "hiden";
-	public static final String TEXTAREA = "textarea";
-	public static final String PANEL = "panel";
-
-	protected static final AttributeData TYPE_BUTTON = new AttributeData(TYPE, BUTTON);
-	protected static final AttributeData TYPE_SUBMIT = new AttributeData(TYPE, SUBMIT);
-	protected static final AttributeData TYPE_RESET = new AttributeData(TYPE, RESET);
-	protected static final AttributeData TYPE_CHECKBOX = new AttributeData(TYPE, CHECKBOX);
-	protected static final AttributeData TYPE_RADIO = new AttributeData(TYPE, RADIO);
-	protected static final AttributeData TYPE_RANGE = new AttributeData(TYPE, RANGE);
-	protected static final AttributeData TYPE_HIDEN = new AttributeData(TYPE, HIDEN);
 
 	protected static final AttributeData DATA_ROLE_HEADER = new AttributeData(DATA_ROLE, HEADER);
 	protected static final AttributeData DATA_ROLE_FOOTER = new AttributeData(DATA_ROLE, FOOTER);
@@ -69,8 +37,6 @@ public abstract class JQueryMobileAttrProvider extends AbstractAttributeProvider
 
 	protected static final AttributeData DATA_ROLE_TABLE = new AttributeData(DATA_ROLE, TABLE);
 	
-	public static final String[] ENUM_TRUE_FALSE = new String[] { "true",
-			"false" };
 	public static final String[] ENUM_ICON_VALUES = new String[] { 
 			"alert", "arrow-d", "arrow-l", "arrow-r", "arrow-u", "back", "bars",
 			"check", "custom", "delete", "forward", "gear", "grid", "home", 
@@ -158,6 +124,62 @@ public abstract class JQueryMobileAttrProvider extends AbstractAttributeProvider
 	protected static final HtmlAttribute DATA_COLUMN_BTN_THEME_ATTRIBUTE = new HtmlAttribute("data-column-btn-theme", "The color chooser button's theme", ENUM_THEME);
 	protected static final HtmlAttribute DATA_COLUMN_POPUP_THEME_ATTRIBUTE = new HtmlAttribute("data-column-popup-theme", "", ENUM_THEME);
 	protected static final HtmlAttribute DATA_PRIORITY_ATTRIBUTE = new HtmlAttribute("data-priority", "Makes the column available in the column chooser menu", DATA_PRIORITY_ENUM);
+
+	private static Set<String> ALL_ATTRIBUTES;
+
+	private static void addAttributes(Set<String> result, HtmlAttribute... attributes) {
+		for (HtmlAttribute attribute : attributes) {
+			result.add(attribute.getName());
+		}
+	}
+
+	public static Set<String> getAllAttributes() {
+		if(ALL_ATTRIBUTES==null) {
+			Set<String> attributes = new HashSet<String>();
+			addAttributes(attributes, AButtonAttributeProvider.ATTRIBUTES);
+			addAttributes(attributes, ButtonAttributeProvider.ATTRIBUTES);
+			addAttributes(attributes, CheckboxAttributeProvider.ATTRIBUTES);
+			addAttributes(attributes, CollapsibleAttributeProvider.REQUIRED_ATTRIBUTES);
+			addAttributes(attributes, CollapsibleAttributeProvider.CONDITIONAL_ATTRIBUTES);
+			addAttributes(attributes, CollapsibleSetAttributeProvider.REQUIRED_ATTRIBUTES);
+			addAttributes(attributes, CollapsibleSetAttributeProvider.CONDITIONAL_ATTRIBUTES);
+			addAttributes(attributes, ContentAttributeProvider.ATTRIBUTES);
+			addAttributes(attributes, ControlgroupAttributeProvider.REQUIRED_ATTRIBUTES);
+			addAttributes(attributes, ControlgroupAttributeProvider.CONDITIONAL_ATTRIBUTES);
+			addAttributes(attributes, DialogAttributeProvider.REQUIRED_ATTRIBUTES);
+			addAttributes(attributes, DialogAttributeProvider.CONDITIONAL_ATTRIBUTES);
+			addAttributes(attributes, EnhancementAttributeProvider.ATTRIBUTES);
+			addAttributes(attributes, FieldcontainAttributeProvider.ATTRIBUTES);
+			addAttributes(attributes, FixedToolbarAttributeProvider.ATTRIBUTES);
+			addAttributes(attributes, FlipToggleSwitchAttributeProvider.REQUIRED_ATTRIBUTES);
+			addAttributes(attributes, FlipToggleSwitchAttributeProvider.CONDITIONAL_ATTRIBUTES);
+			addAttributes(attributes, FooterHeaderAttributeProvider.REQUIRED_ATTRIBUTES);
+			addAttributes(attributes, FooterHeaderAttributeProvider.CONDITIONAL_ATTRIBUTES);
+			addAttributes(attributes, LinkAttributeProvider.DATA_ATTRIBUTES);
+			addAttributes(attributes, ListViewAttributeProvider.REQUIRED_ATTRIBUTES);
+			addAttributes(attributes, ListViewAttributeProvider.CONDITIONAL_ATTRIBUTES);
+			addAttributes(attributes, ListviewItemAttributeProvider.ATTRIBUTES);
+			addAttributes(attributes, NavbarAttributeProvider.REQUIRED_ATTRIBUTES);
+			addAttributes(attributes, NavbarAttributeProvider.CONDITIONAL_ATTRIBUTES);
+			addAttributes(attributes, PageAttributeProvider.REQUIRED_ATTRIBUTES);
+			addAttributes(attributes, PageAttributeProvider.CONDITIONAL_ATTRIBUTES);
+			addAttributes(attributes, PanelAttributeProvider.REQUIRED_ATTRIBUTES);
+			addAttributes(attributes, PanelAttributeProvider.CONDITIONAL_ATTRIBUTES);
+			addAttributes(attributes, PopupAnchorAttributeProvider.REQUIRED_ATTRIBUTES);
+			addAttributes(attributes, PopupAnchorAttributeProvider.CONDITIONAL_ATTRIBUTES);
+			addAttributes(attributes, PopupAttributeProvider.REQUIRED_ATTRIBUTES);
+			addAttributes(attributes, PopupAttributeProvider.CONDITIONAL_ATTRIBUTES);
+			addAttributes(attributes, RadioButtonAttributeProvider.ATTRIBUTES);
+			addAttributes(attributes, SelectAttributeProvider.ATTRIBUTES);
+			addAttributes(attributes, SliderAttributeProvider.ATTRIBUTES);
+			addAttributes(attributes, TableAttributeProvider.CONDITIONAL_ATTRIBUTES);
+			addAttributes(attributes, TableAttributeProvider.REQUIRED_ATTRIBUTES);
+			addAttributes(attributes, TextInputAndTextareaAttributeProvider.ATTRIBUTES);
+			addAttributes(attributes, ThAttributeProvider.ATTRIBUTES);
+			ALL_ATTRIBUTES = Collections.unmodifiableSet(attributes);
+		}
+		return ALL_ATTRIBUTES;
+	}
 
 	protected boolean checkDataRole(String role) {
 		Map<String, String> attributes = query.getAttributes();

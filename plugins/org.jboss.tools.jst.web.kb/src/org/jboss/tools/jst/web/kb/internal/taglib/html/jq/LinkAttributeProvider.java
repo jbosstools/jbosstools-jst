@@ -31,6 +31,7 @@ import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibAttribute;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttribute;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -41,7 +42,15 @@ public class LinkAttributeProvider extends JQueryMobileAttrProvider {
 
 	private static final ImageDescriptor IMAGE = WebKbPlugin.getImageDescriptor(WebKbPlugin.class, "EnumerationProposal.gif"); //$NON-NLS-1$
 
-	private static final CustomTagLibAttribute[] requiredAttributes = new CustomTagLibAttribute[] {DATA_AJAX_ATTRIBUTE,
+	static final HtmlAttribute[] DATA_ATTRIBUTES = new HtmlAttribute[] {DATA_AJAX_ATTRIBUTE,
+		DATA_DIRECTION_ATTRIBUTE,
+		DATA_DOM_CACHE_ATTRIBUTE,
+		DATA_PREFETCH_ATTRIBUTE,
+		DATA_REL_ATTRIBUTE,
+		LINK_DATA_TRANSITION_ATTRIBUTE,
+		DATA_POSITION_TO_ATTRIBUTE};
+
+	static final CustomTagLibAttribute[] ATTRIBUTES = new CustomTagLibAttribute[] {DATA_AJAX_ATTRIBUTE,
 		DATA_DIRECTION_ATTRIBUTE,
 		DATA_DOM_CACHE_ATTRIBUTE,
 		DATA_PREFETCH_ATTRIBUTE,
@@ -70,7 +79,7 @@ public class LinkAttributeProvider extends JQueryMobileAttrProvider {
 
 	@Override
 	protected CustomTagLibAttribute[] getRequiredAttributes() {
-		return requiredAttributes;
+		return ATTRIBUTES;
 	}
 	/**
 	 * Returns an array of all ID of pages, dialogs and popups (<tagname id="..."/>) defined in the page

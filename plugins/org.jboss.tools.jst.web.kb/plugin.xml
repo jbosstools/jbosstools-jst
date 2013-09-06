@@ -88,6 +88,11 @@
             name="HTML"
             uri="htmlFile"
             recognizer="org.jboss.tools.jst.web.kb.internal.HTMLRecognizer"/>
+      <tag-lib
+            location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/AngularJS.xml"
+            name="AngularJS"
+            uri="angularJS"
+            recognizer="org.jboss.tools.jst.web.kb.internal.AngularJSRecognizer"/>
             
       <component-extension
             location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/componentExtension.xml"/>
