@@ -89,23 +89,7 @@ public class InputFractionalValueTest_JBIDE4790 extends AbstractCSSViewTest {
 
 		assertEquals(parsedTestValue.length, 2);
 
-		String newTestedValue = parsedTestValue[0] + "." + parsedTestValue[1]; //$NON-NLS-1$
-
-		styleAttributes.put(TEST_CSS_ATTRIBUTE_NAME,
-				newTestedValue);
-
-		testedValue = declaration.getPropertyValue(TEST_CSS_ATTRIBUTE_NAME);
-
-		assertNotNull(testedValue);
-
-		assertEquals(removeWhitespaces(newTestedValue),
-				removeWhitespaces(testedValue));
-
-		parsedTestValue = Util.convertExtString(testedValue);
-
-		assertEquals(parsedTestValue.length, 2);
-
-		newTestedValue = removeWhitespaces(parsedTestValue[0]) + "3" + parsedTestValue[1]; //$NON-NLS-1$
+		String newTestedValue = removeWhitespaces(parsedTestValue[0]) + "3" + parsedTestValue[1]; //$NON-NLS-1$
 		try {
 			styleAttributes.put(TEST_CSS_ATTRIBUTE_NAME,
 					newTestedValue);
