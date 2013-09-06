@@ -11,8 +11,6 @@
 package org.jboss.tools.jst.web.kb.test;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.text.TextProposal;
@@ -20,39 +18,36 @@ import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileAttrProvider;
-import org.jboss.tools.jst.web.kb.taglib.CustomTagLibManager;
-import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibrary;
 
 /**
  * @author Alexey Kazakov
  */
-public class JQueryDataTest extends HTML5Test {
-
-	private static final String JQUERY_MOBILE_URI = "jQueryMobile";
-
-	private IProject testProject;
+public class JQueryDataTest extends JQueryLibTest {
 
 	@Override
-	protected void setUp() throws Exception {
-		if(testProject==null) {
-			testProject = ResourcesPlugin.getWorkspace().getRoot().getProject("TestKbModel");
-			assertNotNull("Can't load TestKbModel", testProject); //$NON-NLS-1$
-			IFile file = testProject.getFile(new Path("WebContent/pages/jquery/jQueryMobile.html"));
-			context = PageContextFactory.createPageContext(file);
-			assertNotNull(context);
-		}
+	protected String getFilePath() {
+		return "WebContent/pages/jquery/jQueryMobile.html";
 	}
 
-	public void testCustomTagLibs() {
-		ICustomTagLibrary[] libs = CustomTagLibManager.getInstance().getLibraries();
-		boolean found = false;
-		for (ICustomTagLibrary lib : libs) {
-			if(JQUERY_MOBILE_URI.equals(lib.getURI())) {
-				found = true;
-				break;
-			}
+	protected void assertDataRole(String dateRoleName) {
+		assertDataRole(true, dateRoleName);
+	}
+
+	protected void assertDataRole(boolean strict, String dateRoleName) {
+		assertDataRole(strict, null, dateRoleName);
+	}
+
+	protected void assertDataRole(String tagName, String dateRoleName) {
+		assertDataRole(true, tagName, dateRoleName);
+	}
+
+	protected void assertDataRole(boolean strict, String tagName, String dateRoleName) {
+		if(tagName==null) {
+			tagName = "div";
 		}
-		assertTrue("Custom tag jQueryMobile is not loaded.", found);
+		KbQuery query = createKbQuery(KbQuery.Type.ATTRIBUTE_VALUE, new KbQuery.Tag[]{createTag(tagName)}, "data-role", "");
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
+		assertProposals(strict, proposals, dateRoleName);
 	}
 
 	public void testHtml4() {

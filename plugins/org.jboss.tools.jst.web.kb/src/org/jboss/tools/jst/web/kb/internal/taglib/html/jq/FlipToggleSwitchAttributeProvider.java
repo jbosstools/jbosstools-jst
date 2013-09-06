@@ -18,9 +18,9 @@ import org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttribute;
  */
 public class FlipToggleSwitchAttributeProvider extends JQueryMobileAttrProvider {
 
-	private static final HtmlAttribute[] requiredAttributes = new HtmlAttribute[] {new DataRoleAttribute("", SLIDER)};
+	static final HtmlAttribute[] REQUIRED_ATTRIBUTES = new HtmlAttribute[] {new DataRoleAttribute("", SLIDER)};
 
-	private static final HtmlAttribute[] conditionalAttributes = new HtmlAttribute[] {DATA_MINI_ATTRIBUTE,
+	static final HtmlAttribute[] CONDITIONAL_ATTRIBUTES = new HtmlAttribute[] {DATA_MINI_ATTRIBUTE,
 		DATA_ROLE_NONE_ATTRIBUTE,
 		DATA_INPUT_THEME_ATTRIBUTE,
 		DATA_TRACK_THEME_ATTRIBUTE};
@@ -40,11 +40,11 @@ public class FlipToggleSwitchAttributeProvider extends JQueryMobileAttrProvider 
 	 */
 	@Override
 	protected CustomTagLibAttribute[] getConditionalAttributes() {
-		return conditionalAttributes;
+		return CONDITIONAL_ATTRIBUTES;
 	}
 
 	@Override
 	protected CustomTagLibAttribute[] getRequiredAttributes() {
-		return requiredAttributes;
+		return REQUIRED_ATTRIBUTES;
 	}
 }

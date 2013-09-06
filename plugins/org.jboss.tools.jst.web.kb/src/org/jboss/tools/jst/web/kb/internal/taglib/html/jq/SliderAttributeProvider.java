@@ -18,7 +18,7 @@ import org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttribute;
  */
 public class SliderAttributeProvider extends JQueryMobileAttrProvider {
 
-	private static final HtmlAttribute[] conditionalAttributes = new HtmlAttribute[] {
+	static final HtmlAttribute[] ATTRIBUTES = new HtmlAttribute[] {
 		DATA_HIGHLIGHT_ATTRIBUTE,
 		DATA_MINI_ATTRIBUTE,
 		DATA_ROLE_NONE_ATTRIBUTE,
@@ -40,6 +40,6 @@ public class SliderAttributeProvider extends JQueryMobileAttrProvider {
 	 */
 	@Override
 	protected CustomTagLibAttribute[] getConditionalAttributes() {
-		return conditionalAttributes;
+		return ATTRIBUTES;
 	}
 }

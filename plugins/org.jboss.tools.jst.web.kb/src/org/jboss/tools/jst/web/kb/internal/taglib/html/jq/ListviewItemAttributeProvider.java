@@ -18,7 +18,7 @@ import org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttribute;
  */
 public class ListviewItemAttributeProvider extends JQueryMobileAttrProvider {
 	
-	private static final HtmlAttribute[] conditionalAttributes = new HtmlAttribute[] {
+	static final HtmlAttribute[] ATTRIBUTES = new HtmlAttribute[] {
 		DATA_FILTERTEXT_ATTRIBUTE,
 		DATA_ICON_ATTRIBUTE,
 		DATA_ROLE_LIST_ATTRIBUTE,
@@ -39,6 +39,6 @@ public class ListviewItemAttributeProvider extends JQueryMobileAttrProvider {
 	 */
 	@Override
 	protected CustomTagLibAttribute[] getConditionalAttributes() {
-		return conditionalAttributes;
+		return ATTRIBUTES;
 	}
 }

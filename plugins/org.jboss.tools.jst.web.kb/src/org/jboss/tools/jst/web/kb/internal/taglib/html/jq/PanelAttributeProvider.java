@@ -18,9 +18,9 @@ import org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttribute;
  */
 public class PanelAttributeProvider extends JQueryMobileAttrProvider {
 
-	private static final HtmlAttribute[] requiredAttributes = new HtmlAttribute[] {new DataRoleAttribute("", PANEL)};
+	static final HtmlAttribute[] REQUIRED_ATTRIBUTES = new HtmlAttribute[] {new DataRoleAttribute("", PANEL)};
 
-	private static final HtmlAttribute[] conditionalAttributes = new HtmlAttribute[] {PANEL_DATA_POSITION_ATTRIBUTE,
+	static final HtmlAttribute[] CONDITIONAL_ATTRIBUTES = new HtmlAttribute[] {PANEL_DATA_POSITION_ATTRIBUTE,
 		DATA_DISPLAY_ATTRIBUTE,
 		PANEL_DATA_DISMISSIBLE_ATTRIBUTE,
 		DATA_POSITION_FIXED_ATTRIBUTE,
@@ -42,11 +42,11 @@ public class PanelAttributeProvider extends JQueryMobileAttrProvider {
 	 */
 	@Override
 	protected CustomTagLibAttribute[] getConditionalAttributes() {
-		return conditionalAttributes;
+		return CONDITIONAL_ATTRIBUTES;
 	}
 
 	@Override
 	protected CustomTagLibAttribute[] getRequiredAttributes() {
-		return requiredAttributes;
+		return REQUIRED_ATTRIBUTES;
 	}
 }

@@ -18,9 +18,9 @@ import org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttribute;
  */
 public class PopupAnchorAttributeProvider extends JQueryMobileAttrProvider {
 
-	private static final HtmlAttribute[] requiredAttributes = new HtmlAttribute[] {POPUP_DATA_REL_ATTRIBUTE};
+	static final HtmlAttribute[] REQUIRED_ATTRIBUTES = new HtmlAttribute[] {POPUP_DATA_REL_ATTRIBUTE};
 
-	private static final HtmlAttribute[] conditionalAttributes = new HtmlAttribute[] {
+	static final HtmlAttribute[] CONDITIONAL_ATTRIBUTES = new HtmlAttribute[] {
 		DATA_POSITION_TO_ATTRIBUTE,
 		POPUP_DATA_TRANSITION_ATTRIBUTE};
 
@@ -39,11 +39,11 @@ public class PopupAnchorAttributeProvider extends JQueryMobileAttrProvider {
 	 */
 	@Override
 	protected CustomTagLibAttribute[] getConditionalAttributes() {
-		return conditionalAttributes;
+		return CONDITIONAL_ATTRIBUTES;
 	}
 
 	@Override
 	protected CustomTagLibAttribute[] getRequiredAttributes() {
-		return requiredAttributes;
+		return REQUIRED_ATTRIBUTES;
 	}
 }

@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jboss.tools.common.text.TextProposal;
-import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.internal.proposal.CustomProposalType;
 import org.jboss.tools.jst.web.kb.internal.proposal.EnumerationProposalType;
@@ -71,13 +70,5 @@ public class FileNameAttribute extends HtmlAttribute {
 				return proposals.toArray(new TextProposal[0]);
 			}
 		};
-	}
-
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibAttribute#getProposals(org.jboss.tools.jst.web.kb.KbQuery, org.jboss.tools.jst.web.kb.IPageContext)
-	 */
-	@Override
-	public TextProposal[] getProposals(KbQuery query, IPageContext context) {
-		return super.getProposals(query, context);
 	}
 }
