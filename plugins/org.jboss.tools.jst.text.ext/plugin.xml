@@ -427,5 +427,14 @@
            id="org.jboss.tools.jst.text.ext.OpenWithBrowser">
      </editor-launcher>
   </extension>
+	<extension
+         point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectors">
+      <hyperlinkDetector
+            class="org.jboss.tools.jst.text.ext.hyperlink.internal.CreateNewFileHyperlinkDetector"
+            id="org.jboss.tools.jst.text.ext.hyperlink.CreateNewFileHyperlinkDetector"
+            name="Create Nonexisting File Hyperlink"
+            targetId="org.eclipse.ui.DefaultTextEditor">
+      </hyperlinkDetector>
+   	</extension>
 
 </plugin>
