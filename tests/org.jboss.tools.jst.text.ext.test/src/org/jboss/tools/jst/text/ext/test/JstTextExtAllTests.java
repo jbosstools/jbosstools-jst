@@ -34,7 +34,10 @@ public class JstTextExtAllTests {
 				"org.jboss.tools.jst.text.ext.test",
 				new String[]{"projects/stopka-ui-test"},
 				new String[]{"stopka-ui-test"}));
-
+		suite.addTest(new ProjectImportTestSetup(new TestSuite(CreateNewFileHyperlinkTest.class),
+				"org.jboss.tools.jst.text.ext.test",
+				new String[]{"projects/Test"},
+				new String[]{"Test"}));
 		//$JUnit-END$
 		return suite;
 	}
