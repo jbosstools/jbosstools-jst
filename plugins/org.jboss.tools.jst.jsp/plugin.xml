@@ -317,37 +317,6 @@
       </editor>
    </extension>
 
-   <extension point="org.eclipse.ui.editorActions">
-   <!-- necessary menu items -->
-   <!--<editorContribution id="formatJSPActionContribution" targetID="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
-           <action actionID="formatJSPAction" class="org.jboss.tools.jst.jsp.ui.action.FormatJSPActionDelegate" id="formatJSPAction" label="Format" menubarPath="edit/additions">
-           </action>
-      </editorContribution>
-
-      <editorContribution 
-         id="ARenameElement" 
-         targetID="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
-           <action
-                 actionID="org.eclipse.jst.jsp.ui.refactor.rename"
-                 class="org.eclipse.jst.jsp.ui.internal.java.refactoring.JSPRenameElementActionDelegate"
-                 definitionId="org.eclipse.jst.jsp.ui.refactor.rename"
-                 id="RenameElement"
-                 label="Rename">
-           </action>
-      </editorContribution>
-      <editorContribution 
-         id="AMoveElement" 
-         targetID="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
-           <action
-                 actionID="org.eclipse.jst.jsp.ui.refactor.move"
-                 class="org.eclipse.jst.jsp.ui.internal.java.refactoring.JSPMoveElementActionDelegate"
-                 definitionId="org.eclipse.jst.jsp.ui.refactor.move"
-                 id="MoveElement"
-                 label="Move">
-           </action>
-      </editorContribution>-->
-      
-   </extension>
    <extension
          point="org.eclipse.ui.menus">
          <menuContribution 
@@ -990,22 +959,5 @@
 	           </iterate>
             </with>
 		</definition>
-	</extension>
-	
-	<extension point="org.eclipse.ui.menus">
-	    <menuContribution locationURI="menu:refactorMenuId">
-	       <separator name="jspRefactorBegin" visible="false"></separator>
-	       <command commandId="org.eclipse.jst.jsp.ui.refactor.rename" id="RenameElement" label="%command.jsp.refactor.rename.name" style="push">
-			   <visibleWhen checkEnabled="false">
-					<reference definitionId="org.eclipse.wst.jsp.ui.jspSourceContributions.definition"></reference>
-				</visibleWhen>
-	       </command>
-	       <command commandId="org.eclipse.jst.jsp.ui.refactor.move" id="MoveElement" label="%command.jsp.refactor.move.name" style="push">
-			   <visibleWhen checkEnabled="false">
-					<reference definitionId="org.eclipse.wst.jsp.ui.jspSourceContributions.definition"></reference>
-				</visibleWhen>
-	       </command>
-	       <separator name="jspRefactorBegin" visible="false"></separator>
-		</menuContribution>
 	</extension>
 </plugin>
