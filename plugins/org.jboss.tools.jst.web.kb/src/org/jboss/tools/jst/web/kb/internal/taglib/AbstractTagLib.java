@@ -53,7 +53,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	protected boolean hasExtendedComponents = false;
 	private Map<String, IComponent> components = new HashMap<String, IComponent>();
 	private IComponent[] componentsArray;
-	protected CustomComponentExtension componentExtension;
+	protected Set<CustomComponentExtension> componentExtensions;
 	protected boolean ignoreCase;
 
 	/* (non-Javadoc)
@@ -262,8 +262,8 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		if(comp != null && checkExtended(comp, context)) {
 			result.add(comp);
 		}
-		if(componentExtension!=null) {
-			result.add(componentExtension);
+		if(componentExtensions!=null) {
+			result.addAll(componentExtensions);
 		}
 		return result.isEmpty()?EMPTY_ARRAY:result.toArray(new IComponent[0]);
 	}

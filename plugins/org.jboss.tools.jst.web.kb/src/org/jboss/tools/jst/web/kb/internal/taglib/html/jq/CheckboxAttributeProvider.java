@@ -18,7 +18,7 @@ import org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttribute;
  */
 public class CheckboxAttributeProvider extends JQueryMobileAttrProvider {
 
-	private static final HtmlAttribute[] conditionalAttributes = new HtmlAttribute[] {DATA_MINI_ATTRIBUTE,
+	static final HtmlAttribute[] ATTRIBUTES = new HtmlAttribute[] {DATA_MINI_ATTRIBUTE,
 		DATA_INPUT_THEME_ATTRIBUTE,
 		DATA_ROLE_NONE_ATTRIBUTE};
 
@@ -37,6 +37,6 @@ public class CheckboxAttributeProvider extends JQueryMobileAttrProvider {
 	 */
 	@Override
 	protected CustomTagLibAttribute[] getConditionalAttributes() {
-		return conditionalAttributes;
+		return ATTRIBUTES;
 	}
 }

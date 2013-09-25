@@ -18,7 +18,7 @@ import org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttribute;
  */
 public class FixedToolbarAttributeProvider extends JQueryMobileAttrProvider {
 
-	private static final HtmlAttribute[] conditionalAttributes = new HtmlAttribute[] {DATA_DISABLED_PAGE_ZOOM_ATTRIBUTE,
+	static final HtmlAttribute[] ATTRIBUTES = new HtmlAttribute[] {DATA_DISABLED_PAGE_ZOOM_ATTRIBUTE,
 		DATA_FULLSCREEN_ATTRIBUTE,
 		DATA_TAP_TOGGLE_ATTRIBUTE,
 		FIXED_TOOLBAR_DATA_TRANSITION_ATTRIBUTE,
@@ -41,6 +41,6 @@ public class FixedToolbarAttributeProvider extends JQueryMobileAttrProvider {
 	 */
 	@Override
 	protected CustomTagLibAttribute[] getConditionalAttributes() {
-		return conditionalAttributes;
+		return ATTRIBUTES;
 	}
 }

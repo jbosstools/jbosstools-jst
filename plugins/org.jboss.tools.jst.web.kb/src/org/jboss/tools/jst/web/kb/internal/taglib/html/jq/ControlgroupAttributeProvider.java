@@ -18,9 +18,9 @@ import org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttribute;
  */
 public class ControlgroupAttributeProvider extends JQueryMobileAttrProvider {
 
-	private static final HtmlAttribute[] requiredAttributes = new HtmlAttribute[] {new DataRoleAttribute("Visually integrate multiple button-styled inputs of a single type (checkboxes, link-based buttons, radio buttons, selects) into a group. For grouping form checkboxes and radio buttons, the fieldset container is recommended inside a div container with the data-role=\"fieldcontain\", to improve label styling", CONTROLGROUP)};
+	static final HtmlAttribute[] REQUIRED_ATTRIBUTES = new HtmlAttribute[] {new DataRoleAttribute("Visually integrate multiple button-styled inputs of a single type (checkboxes, link-based buttons, radio buttons, selects) into a group. For grouping form checkboxes and radio buttons, the fieldset container is recommended inside a div container with the data-role=\"fieldcontain\", to improve label styling", CONTROLGROUP)};
 
-	private static final HtmlAttribute[] conditionalAttributes = new HtmlAttribute[] {DATA_MINI_ATTRIBUTE, DATA_TYPE_ATTRIBUTE};
+	static final HtmlAttribute[] CONDITIONAL_ATTRIBUTES = new HtmlAttribute[] {DATA_MINI_ATTRIBUTE, DATA_TYPE_ATTRIBUTE};
 
 	/*
 	 * (non-Javadoc)
@@ -37,11 +37,11 @@ public class ControlgroupAttributeProvider extends JQueryMobileAttrProvider {
 	 */
 	@Override
 	protected CustomTagLibAttribute[] getConditionalAttributes() {
-		return conditionalAttributes;
+		return CONDITIONAL_ATTRIBUTES;
 	}
 
 	@Override
 	protected CustomTagLibAttribute[] getRequiredAttributes() {
-		return requiredAttributes;
+		return REQUIRED_ATTRIBUTES;
 	}
 }
