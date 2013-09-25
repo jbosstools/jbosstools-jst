@@ -18,9 +18,9 @@ import org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttribute;
  */
 public class NavbarAttributeProvider extends JQueryMobileAttrProvider {
 
-	private static final HtmlAttribute[] requiredAttributes = new HtmlAttribute[] {new DataRoleAttribute("", NAVBAR)};
+	static final HtmlAttribute[] REQUIRED_ATTRIBUTES = new HtmlAttribute[] {new DataRoleAttribute("", NAVBAR)};
 
-	private static final HtmlAttribute[] conditionalAttributes = new HtmlAttribute[] {
+	static final HtmlAttribute[] CONDITIONAL_ATTRIBUTES = new HtmlAttribute[] {
 		DATA_ICONPOS_ATTRIBUTE};
 
 	/*
@@ -38,11 +38,11 @@ public class NavbarAttributeProvider extends JQueryMobileAttrProvider {
 	 */
 	@Override
 	protected CustomTagLibAttribute[] getConditionalAttributes() {
-		return conditionalAttributes;
+		return CONDITIONAL_ATTRIBUTES;
 	}
 
 	@Override
 	protected CustomTagLibAttribute[] getRequiredAttributes() {
-		return requiredAttributes;
+		return REQUIRED_ATTRIBUTES;
 	}
 }

@@ -18,9 +18,9 @@ import org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttribute;
  */
 public class DialogAttributeProvider extends JQueryMobileAttrProvider {
 
-	private static final HtmlAttribute[] requiredAttributes = new HtmlAttribute[] {new DataRoleAttribute("", DIALOG)};
+	static final HtmlAttribute[] REQUIRED_ATTRIBUTES = new HtmlAttribute[] {new DataRoleAttribute("", DIALOG)};
 
-	private static final HtmlAttribute[] conditionalAttributes = new HtmlAttribute[] {DATA_CLOSE_BTN_ATTRIBUTE,
+	static final HtmlAttribute[] CONDITIONAL_ATTRIBUTES = new HtmlAttribute[] {DATA_CLOSE_BTN_ATTRIBUTE,
 		DATA_CLOSE_BTN_TEXT_ATTRIBUTE,
 		DATA_CORNERS_ATTRIBUTE,
 		DATA_DOM_CACHE_ATTRIBUTE,
@@ -43,11 +43,11 @@ public class DialogAttributeProvider extends JQueryMobileAttrProvider {
 	 */
 	@Override
 	protected CustomTagLibAttribute[] getConditionalAttributes() {
-		return conditionalAttributes;
+		return CONDITIONAL_ATTRIBUTES;
 	}
 
 	@Override
 	protected CustomTagLibAttribute[] getRequiredAttributes() {
-		return requiredAttributes;
+		return REQUIRED_ATTRIBUTES;
 	}
 }

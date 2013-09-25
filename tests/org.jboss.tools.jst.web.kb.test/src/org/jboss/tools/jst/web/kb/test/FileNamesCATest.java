@@ -10,13 +10,8 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.test;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.Path;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.KbQuery;
-import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.PageProcessor;
 
 /**
@@ -24,17 +19,16 @@ import org.jboss.tools.jst.web.kb.PageProcessor;
  */
 public class FileNamesCATest extends HTML5Test {
 
-	private IProject testProject;
+	private static final String TAGLIB_URI = "htmlFile";
 
 	@Override
-	protected void setUp() throws Exception {
-		if(testProject==null) {
-			testProject = ResourcesPlugin.getWorkspace().getRoot().getProject("TestKbModel");
-			assertNotNull("Can't load TestKbModel", testProject); //$NON-NLS-1$
-			IFile file = testProject.getFile(new Path("WebContent/pages/filenamesCA.html"));
-			context = PageContextFactory.createPageContext(file);
-			assertNotNull(context);
-		}
+	protected String getFilePath() {
+		return "WebContent/pages/filenamesCA.html";
+	}
+
+	@Override
+	protected String getTaglibUri() {
+		return TAGLIB_URI;
 	}
 
 	public void testScriptFullPaths() {

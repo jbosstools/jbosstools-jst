@@ -19,6 +19,7 @@ import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.web.html.JQueryHTMLConstants;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.KbQuery.Tag;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileAttrProvider;
 
 /**
  * 
@@ -133,7 +134,7 @@ public class JQueryCategoryProvider implements ICategoryProvider, JQueryHTMLCons
 		if(oftenUsed.contains(attributeName)) {
 			return CATEGORY_OFTEN_USED;
 		}
-		if(attributeName.startsWith("data-")) {
+		if(JQueryMobileAttrProvider.getAllAttributes().contains(attributeName)) {
 			return CATEGORY_JQM;
 		}
 		return CATEGORY_OTHER;

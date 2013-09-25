@@ -18,12 +18,12 @@ import org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttribute;
  */
 public class AButtonAttributeProvider extends ButtonAttributeProvider {
 
-	private static final HtmlAttribute[] requiredAttributes = new HtmlAttribute[] {new DataRoleAttribute("", "button")};
+	static final HtmlAttribute[] ATTRIBUTES = new HtmlAttribute[] {new DataRoleAttribute("", "button")};
 
 	@Override
 	protected CustomTagLibAttribute[] getRequiredAttributes() {
 		if(!checkAttributeForTag(DATA_ROLE_HEADER, null, true) && !checkAttributeForTag(DATA_ROLE_FOOTER, null, true)) {
-			return requiredAttributes;
+			return ATTRIBUTES;
 		}
 		return EMPTY;
 	}

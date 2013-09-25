@@ -18,7 +18,7 @@ import org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttribute;
  */
 public class FieldcontainAttributeProvider extends JQueryMobileAttrProvider {
 
-	private static final HtmlAttribute[] requiredAttributes = new HtmlAttribute[] {new DataRoleAttribute("", FIELDCONTENT)};
+	static final HtmlAttribute[] ATTRIBUTES = new HtmlAttribute[] {new DataRoleAttribute("", FIELDCONTENT)};
 
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.internal.taglib.AbstractAttributeProvider#checkComponent()
@@ -38,6 +38,6 @@ public class FieldcontainAttributeProvider extends JQueryMobileAttrProvider {
 
 	@Override
 	protected CustomTagLibAttribute[] getRequiredAttributes() {
-		return requiredAttributes;
+		return ATTRIBUTES;
 	}
 }

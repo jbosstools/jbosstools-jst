@@ -26,6 +26,8 @@ public abstract class AbstractAttributeProvider implements IContextAttributeProv
 
 	protected static final CustomTagLibAttribute[] EMPTY = new CustomTagLibAttribute[0];
 
+	public static final String[] ENUM_TRUE_FALSE = new String[]{"true", "false"};
+
 	protected CustomTagLibComponent parentComponent;
 	protected KbQuery query;
 	protected IPageContext context;
@@ -129,12 +131,16 @@ public abstract class AbstractAttributeProvider implements IContextAttributeProv
 	}
 
 	protected boolean checkAttribute(AttributeData attribute) {
+		return checkAttribute(attribute.name, attribute.value);
+	}
+
+	protected boolean checkAttribute(String attributeName, String attributeValue) {
 		Map<String, String> attributes = query.getAttributes();
 		if(attributes==null) {
 			return false;
 		}
-		String attr = attributes.get(attribute.name);
-		return attribute.value.equalsIgnoreCase(attr);
+		String attr = attributes.get(attributeName);
+		return attributeValue.equalsIgnoreCase(attr);
 	}
 
 	protected boolean checkAttributeForTag(AttributeData attribute, String tagName) {
@@ -167,6 +173,23 @@ public abstract class AbstractAttributeProvider implements IContextAttributeProv
 		return false;
 	}
 
+	protected boolean checkAttributesInParrents(String[] attributeNames) {
+		KbQuery.Tag[] parents = query.getParentTagsWithAttributes();
+		if(parents!=null) {
+			for (KbQuery.Tag tag : parents) {
+				Map<String, String> attrs = tag.getAttributes();
+				if(!attrs.isEmpty()) {
+					for (String att : attributeNames) {
+						if(attrs.get(att)!=null) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+
 	protected boolean checkParentTag(String tagName, boolean directParentOnly) {
 		String[] parents = query.getParentTags();
 		if(parents!=null && parents.length>1) {
@@ -183,7 +206,7 @@ public abstract class AbstractAttributeProvider implements IContextAttributeProv
 		return tagName.equalsIgnoreCase(query.getLastParentTag());
 	}
 
-	protected static class AttributeData {
+	public static class AttributeData {
 		String name;
 		String value;
 

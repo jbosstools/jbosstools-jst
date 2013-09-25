@@ -575,6 +575,7 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 		if (query == null)
 			query = ""; //$NON-NLS-1$
 		String stringQuery = matchString;
+//		query = matchString.endsWith(" ")?query + " ":query;
 
 		KbQuery kbQuery = createKbQuery(Type.ATTRIBUTE_VALUE, query, stringQuery);
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext());
@@ -1081,6 +1082,9 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 		// otherwise, after the first tag
 		if (cursorAdjustment == 0) {
 			cursorAdjustment = proposedText.indexOf('>') + 1;
+		}
+		if (cursorAdjustment == 0) {
+			cursorAdjustment = proposedText.lastIndexOf("{}") + 1; //$NON-NLS-1$			
 		}
 		if (cursorAdjustment == 0) {
 			cursorAdjustment = proposedText.length();

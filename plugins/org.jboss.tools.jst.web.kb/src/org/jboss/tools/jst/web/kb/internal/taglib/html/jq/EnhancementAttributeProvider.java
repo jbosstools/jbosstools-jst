@@ -18,7 +18,7 @@ import org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttribute;
  */
 public class EnhancementAttributeProvider extends JQueryMobileAttrProvider {
 
-	private static final HtmlAttribute[] requiredAttributes = new HtmlAttribute[] {DATA_ENHANCE_ATTRIBUTE, DATA_AJAX_ATTRIBUTE};
+	static final HtmlAttribute[] ATTRIBUTES = new HtmlAttribute[] {DATA_ENHANCE_ATTRIBUTE, DATA_AJAX_ATTRIBUTE};
 
 	/*
 	 * (non-Javadoc)
@@ -40,6 +40,6 @@ public class EnhancementAttributeProvider extends JQueryMobileAttrProvider {
 
 	@Override
 	protected CustomTagLibAttribute[] getRequiredAttributes() {
-		return requiredAttributes;
+		return ATTRIBUTES;
 	}
 }
