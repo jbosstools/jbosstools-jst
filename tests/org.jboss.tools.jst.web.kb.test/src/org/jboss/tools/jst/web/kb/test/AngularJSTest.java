@@ -204,6 +204,13 @@ public class AngularJSTest extends HTML5Test {
 		assertDirectiveProposals("click");
 	}
 
+	public void testNgAttributeDescription() {
+		KbQuery.Tag[] tags = new KbQuery.Tag[]{createTag("a")};
+		KbQuery query = createKbQuery(tags, "ng-clic");
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
+		assertEqualDescription(proposals, "ng-click", "The <b>ngClick</b> allows you to specify custom behavior when element is clicked.");
+	}
+
 	public void testNgSubmit() {
 		assertDirectiveProposals("form", "submit");
 
@@ -277,6 +284,12 @@ public class AngularJSTest extends HTML5Test {
 
 	public void testNgBindClass() {
 		assertClassDirective("bind");
+	}
+
+	public void testNgClassDescription() {
+		KbQuery query = createKbQuery("a", "class", "ng-bin");
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
+		assertEqualDescription(proposals, "ng-bind: {};", "The <b>ngBind</b> directive tells Angular to replace the text content of the specified HTML element with the value of a given expression, and to update the text content when the value of that expression changes.");
 	}
 
 	public void testNgBindHtml() {
