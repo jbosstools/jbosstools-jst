@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2009 Red Hat, Inc. 
+ * Copyright (c) 2009-2013 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -17,6 +17,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.jboss.tools.common.el.core.model.ELInstance;
+import org.jboss.tools.common.el.core.model.ELModel;
+import org.jboss.tools.common.el.core.model.ELUtil;
+import org.jboss.tools.common.el.core.parser.ELParser;
+import org.jboss.tools.common.el.core.parser.ELParserUtil;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.text.TextProposal;
@@ -184,11 +189,26 @@ public class PageProcessor {
 				(query.getType() == KbQuery.Type.TEXT &&
 						(context instanceof IFaceletPageContext ||
 								context instanceof XmlContextImpl))) {
-			return (query.getValue() != null && 
-					(query.getValue().startsWith("#{") || //$NON-NLS-1$
-						query.getValue().startsWith("${"))); //$NON-NLS-1$
 
+			String text = query.getValue();
+			if (text == null) return false;
+			
+			int inValueOffset = text.length();
+			if (text.length() < inValueOffset) return false;
+			if (inValueOffset<0) return false;
+			
+			ELParser p = ELParserUtil.getJbossFactory().createParser();
+			ELModel model = p.parse(text);
+			
+			ELInstance is = ELUtil.findInstance(model, inValueOffset);// ELInstance
+			boolean isELStarted = (model != null && is != null && (model.toString().startsWith("#{") ||  //$NON-NLS-1$
+					model.toString().startsWith("${"))); //$NON-NLS-1$
+			if (!isELStarted) return false;
+			
+			boolean isELClosed = (model != null && is != null && model.toString().endsWith("}")); //$NON-NLS-1$
+			return !isELClosed;
 		}
+		
 		return false;
 	}
 	
