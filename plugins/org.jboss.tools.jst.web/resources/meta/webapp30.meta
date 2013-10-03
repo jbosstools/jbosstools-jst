@@ -6,6 +6,7 @@
  <MAPPINGS>
   <MAPPING name="FileVersions">
    <PAIR name="WebApp3.0" value="FileWebApp30"/>
+   <PAIR name="WebApp3.1" value="FileWebApp31"/>
   </MAPPING>
  </MAPPINGS>
  <ICONS/>
@@ -157,9 +158,9 @@
      WizardClassName="%Default%" displayName="Servlet Mapping..."
      kind="action" name="CreateServletMapping"/>
     <XActionItem HIDE="always" HandlerClassName="%Create%"
-     ICON="action.new.webapp.session"
-     PROPERTIES="validator.add=true" WizardClassName="%Default%"
-     displayName="Session Config..." kind="action" name="CreateSessionConfig">
+     ICON="action.new.webapp.session" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%" displayName="Session Config..."
+     kind="action" name="CreateSessionConfig">
      <EntityData EntityName="WebAppSessionConfig">
       <AttributeData AttributeName="session-timeout" Mandatory="no"/>
      </EntityData>
@@ -179,9 +180,8 @@
      PROPERTIES="validator.add=true;sourcepath=Error Pages;actionpath=CreateActions/CreateErrorPage"
      displayName="Error Page..." kind="action" name="CreateErrorPage"/>
     <XActionItem HIDE="always" HandlerClassName="%Create%"
-     ICON="action.new.webapp.taglib"
-     PROPERTIES="validator.add=true" displayName="JSP Config..."
-     kind="action" name="CreateJspConfig">
+     ICON="action.new.webapp.taglib" PROPERTIES="validator.add=true"
+     displayName="JSP Config..." kind="action" name="CreateJspConfig">
      <EntityData EntityName="WebAppJspConfig"/>
     </XActionItem>
     <XActionItem HandlerClassName="%Redirect%"
@@ -245,8 +245,7 @@
      WizardClassName="%Default%" displayName="Service Ref..."
      kind="action" name="CreateServiceRef"/>
     <XActionItem HIDE="always" HandlerClassName="%Create%"
-     ICON="action.new.webapp.taglib"
-     PROPERTIES="validator.add=true"
+     ICON="action.new.webapp.taglib" PROPERTIES="validator.add=true"
      displayName="Locale Encoding Mapping List..." kind="action" name="CreateLocaleEncodingMappingList">
      <EntityData EntityName="WebAppLocaleEncodingMappingList"/>
     </XActionItem>
@@ -295,6 +294,208 @@
   </XActionItem>
   <XDependencies/>
  </XModelEntity>
+ <XModelEntity
+  ImplementationLoadingClass="org.jboss.tools.jst.web.webapp.model.FileWebApp24Loader"
+  ImplementingClass="org.jboss.tools.jst.web.webapp.model.FileWebAppImpl"
+  ObjectEditorClass="%XML%"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;editorTreeConstraint=org.jboss.tools.jst.web.webapp.model.FileWebAppFilteredTreeConstraint"
+  XMLSUBPATH="web-app" name="FileWebApp31">
+  <XChildrenEntities>
+   <XChildEntity maxCount="1" name="WebAppFolderAbsoluteOrderings" required="yes"/>
+   <XChildEntity maxCount="1" name="WebAppFolderAdministeredObjects31" required="yes"/>
+   <XChildEntity maxCount="1" name="WebAppFolderConnectionFactories31" required="yes"/>
+   <XChildEntity maxCount="1" name="WebAppFolderContextParams" required="yes"/>
+   <XChildEntity maxCount="1" name="WebAppFolderDataSources30" required="yes"/>
+   <XChildEntity maxCount="1" name="WebAppFolderFilters30" required="yes"/>
+   <XChildEntity maxCount="1" name="WebAppFolderJMSDestinations31" required="yes"/>
+   <XChildEntity maxCount="1" name="WebAppFolderListeners24" required="yes"/>
+   <XChildEntity maxCount="1" name="WebAppFolderMailSessions31" required="yes"/>
+   <XChildEntity maxCount="1" name="WebAppFolderServlets30" required="yes"/>
+   <XChildEntity maxCount="1" name="WebAppSessionConfig30" required="yes"/>
+   <XChildEntity maxCount="1" name="WebAppFolderMimeMappings" required="yes"/>
+   <XChildEntity maxCount="1" name="WebAppWelcomFileList" required="yes"/>
+   <XChildEntity maxCount="1" name="WebAppFolderErrorPages" required="yes"/>
+   <XChildEntity maxCount="1" name="WebAppJspConfig30" required="yes"/>
+   <XChildEntity maxCount="1" name="WebAppFolderSecurityConstraints30" required="yes"/>
+   <XChildEntity maxCount="1" name="WebAppLoginConfig" required="yes"/>
+   <XChildEntity maxCount="1" name="WebAppFolderSecurityRoles" required="yes"/>
+   <XChildEntity maxCount="1" name="WebAppFolderEnvEntries30" required="yes"/>
+   <XChildEntity maxCount="1" name="WebAppFolderEJB30" required="yes"/>
+   <XChildEntity maxCount="1" name="WebAppFolderServices30" required="yes"/>
+   <XChildEntity maxCount="1" name="WebAppFolderResources30" required="yes"/>
+   <XChildEntity maxCount="1" name="WebAppFolderMessageDestinations30" required="yes"/>
+   <XChildEntity maxCount="1" name="WebAppLocaleEncodingMappingList" required="yes"/>
+   <XChildEntity maxCount="1" name="WebAppFolderPersistence25" required="yes"/>
+   <XChildEntity maxCount="1" name="WebAppFolderLifecycles25" required="yes"/>
+  </XChildrenEntities>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.webapp.file" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="deployment descriptor" loader="ElementType" name="element type">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general" name="name" xmlname="NAME"/>
+   <XModelAttribute default="xml" name="extension" xmlname="EXTENSION">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute loader="ElementType" name="_lateload" visibility="false">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute default="no" name="isIncorrect" visibility="false">
+    <Constraint loader="List">
+     <value name="yes"/>
+     <value name="no"/>
+    </Constraint>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute name="incorrectBody" visibility="false"/>
+   <XModelAttribute default="false" name="expanded" visibility="false">
+    <Constraint loader="List">
+     <value name="false"/>
+     <value name="true"/>
+    </Constraint>
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="save=always"
+    default="http://xmlns.jcp.org/xml/ns/javaee" name="xmlns" xmlname="xmlns"/>
+   <XModelAttribute PROPERTIES="save=always"
+    default="http://www.w3.org/2001/XMLSchema-instance" name="xmlns:xsi" xmlname="xmlns:xsi"/>
+   <XModelAttribute PROPERTIES="save=always"
+    default="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+    name="xsi:schemaLocation" xmlname="xsi:schemaLocation"/>
+   <XModelAttribute PROPERTIES="save=always" default="3.1"
+    name="version" visibility="false" xmlname="version"/>
+   <XModelAttribute PROPERTIES="category=general" name="description" xmlname="description.#text">
+    <Editor name="Note"/>
+   </XModelAttribute>
+   <XModelAttributeReference
+    attributes="display-name,small-icon,large-icon"
+    entity="WebAppFilter" name="display"/>
+   <XModelAttribute PROPERTIES="category=advanced" default="no"
+    name="distributable" xmlname="distributable">
+    <Constraint loader="List">
+     <value name="yes"/>
+     <value name="no"/>
+    </Constraint>
+    <Editor name="List"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=advanced" default="no"
+    name="deny-uncovered-http-methods" xmlname="deny-uncovered-http-methods">
+    <Constraint loader="List">
+     <value name="yes"/>
+     <value name="no"/>
+    </Constraint>
+    <Editor name="List"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=advanced" name="module-name" xmlname="module-name.#text"/>
+   <XModelAttribute PROPERTIES="category=advanced"
+    name="metadata-complete" xmlname="metadata-complete">
+    <Constraint loader="List">
+     <value/>
+     <value name="true"/>
+     <value name="false"/>
+    </Constraint>
+    <Editor name="List"/>
+   </XModelAttribute>
+   <XModelAttribute name="id" visibility="false" xmlname="id"/>
+   <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
+    <Editor name="Note"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=advanced" default="UTF-8" name="encoding">
+    <Constraint loader="ListString">
+     <value name="ISO-8859-1"/>
+     <value name="UTF-8"/>
+    </Constraint>
+    <Editor name="ListString"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem ICON="action.empty" displayName="New" group="1"
+    kind="list" name="CreateActions">
+    <XActionItem HandlerClassName="%Redirect%"
+     ICON="action.new.webapp.param"
+     PROPERTIES="validator.add=true;sourcepath=Administered Objects;actionpath=CreateActions/CreateAdministeredObject"
+     WizardClassName="%Default%" displayName="Administered Object..."
+     kind="action" name="CreateAdministeredObject"/>
+    <XActionItemReference entity="FileWebApp30" name="CreateAbsoluteOrdering"/>
+    <XActionItem HandlerClassName="%Redirect%"
+     ICON="action.new.webapp.param"
+     PROPERTIES="validator.add=true;sourcepath=Connection Factories;actionpath=CreateActions/CreateConnectionFactory"
+     WizardClassName="%Default%" displayName="Connection Factory..."
+     kind="action" name="CreateConnectionFactory"/>
+    <XActionItemReference entity="FileWebApp30" name="CreateContextParam"/>
+    <XActionItemReference entity="FileWebApp30" name="CreateDataSource"/>
+    <XActionItemReference entity="FileWebApp30" name="CreateFilter"/>
+    <XActionItemReference entity="FileWebApp30" name="CreateFilterMapping"/>
+    <XActionItem HandlerClassName="%Redirect%"
+     ICON="action.new.webapp.param"
+     PROPERTIES="validator.add=true;sourcepath=Connection Factories;actionpath=CreateActions/CreateJMSConnectionFactory"
+     WizardClassName="%Default%" displayName="JMS Connection Factory..."
+     kind="action" name="CreateJMSConnectionFactory"/>
+    <XActionItem HandlerClassName="%Redirect%"
+     ICON="action.new.webapp.param"
+     PROPERTIES="validator.add=true;sourcepath=JMS Destinations;actionpath=CreateActions/CreateJMSDestination"
+     WizardClassName="%Default%" displayName="JMS Destination..."
+     kind="action" name="CreateJMSDestination"/>
+    <XActionItemReference entity="FileWebApp30" name="CreateListener"/>
+    <XActionItem HandlerClassName="%Redirect%"
+     ICON="action.new.webapp.param"
+     PROPERTIES="validator.add=true;sourcepath=Mail Sessions;actionpath=CreateActions/CreateMailSession"
+     WizardClassName="%Default%" displayName="Mail Session..."
+     kind="action" name="CreateMailSession"/>
+    <XActionItemReference entity="FileWebApp30" name="CreateServlet"/>
+    <XActionItemReference entity="FileWebApp30" name="CreateServletMapping"/>
+    <XActionItemReference entity="FileWebApp30" name="CreateSessionConfig"/>
+    <XActionItemReference entity="FileWebApp30" name="CreateMimeMapping"/>
+    <XActionItemReference entity="FileWebApp30" name="WebAppWelcomFileList"/>
+    <XActionItemReference entity="FileWebApp30" name="CreateErrorPage"/>
+    <XActionItemReference entity="FileWebApp30" name="CreateJspConfig"/>
+    <XActionItemReference entity="FileWebApp30" name="CreateSecurityConstraint"/>
+    <XActionItemReference entity="FileWebApp30" name="CreateLoginConfig"/>
+    <XActionItemReference entity="FileWebApp30" name="CreateSecurityRole"/>
+    <XActionItemReference entity="FileWebApp30" name="CreateEnvEntry"/>
+    <XActionItemReference entity="FileWebApp30" name="CreateEjbRef"/>
+    <XActionItemReference entity="FileWebApp30" name="CreateEjbLocalRef"/>
+    <XActionItemReference entity="FileWebApp30" name="CreateResourceEnvRef"/>
+    <XActionItemReference entity="FileWebApp30" name="CreateResourceRef"/>
+    <XActionItemReference entity="FileWebApp30" name="CreateServiceMessageDestinationRef"/>
+    <XActionItemReference entity="FileWebApp30" name="CreateServiceMessageDestination"/>
+    <XActionItemReference entity="FileWebApp30" name="CreateServiceRef"/>
+    <XActionItemReference entity="FileWebApp30" name="WebAppLocaleEncodingMappingList"/>
+   </XActionItem>
+   <XActionItem HIDE="disabled"
+    HandlerClassName="org.jboss.tools.jst.web.tld.model.handlers.ValidateTLDHandler"
+    ICON="action.empty" displayName="Report Problem" kind="action" name="Validate"/>
+   <XActionItem BaseActionName="Open" HandlerClassName="%Open%"
+    ICON="action.edit" displayName="Open" kind="action" name="Open"/>
+   <XActionItem displayName="Open With" group="1" kind="list" name="OpenWith">
+    <XActionItem HIDE="always"
+     HandlerClassName="org.jboss.tools.common.meta.action.impl.handlers.OpenWithExternalHandler"
+     ICON="main.file.java_file" PROPERTIES="extension=tiles-definitions"
+     displayName="Open with External Program" kind="action" name="OpenWithSelected"/>
+    <XActionItem HIDE="always"
+     HandlerClassName="org.jboss.tools.common.meta.action.impl.handlers.OpenWithChoiceHandler"
+     ICON="main.file.java_file" displayName="Choose Program..."
+     kind="action" name="OpenWithChoice">
+     <EntityData EntityName="OpenWithHelper">
+      <AttributeData AttributeName="name"/>
+      <AttributeData AttributeName="default"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+   <XActionItemReference entity="FileWebApp" name="EditActions"/>
+   <XActionItemReference entity="FileWebApp" name="SaveActions"/>
+   <XActionItemReference entity="FileWebApp" name="SetExpanded"/>
+   <XActionItemReference entity="FileWebApp" name="CopyActions"/>
+   <XActionItemReference entity="FileWebApp" name="DeleteActions"/>
+   <XActionItemReference entity="FileWebApp" name="Properties"/>
+   <XActionItemReference entity="FileWebApp" name="DiscardActions"/>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
  <XModelEntity ImplementingClass="%Custom%"
   XMLSUBPATH="absolute-ordering" name="WebAppAbsoluteOrdering">
   <XChildrenEntities/>
@@ -320,6 +521,109 @@
    </XModelAttribute>
   </XModelAttributes>
   <XActionItem kind="list">
+   <XActionItemReference entity="WebAppFilter" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFilter" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFilter" name="Properties"/>
+   <XActionItemReference entity="WebAppFilter" name="MoveActions"/>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%Custom%"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%"
+  XMLSUBPATH="administered-object" name="WebAppAdministeredObject31">
+  <XChildrenEntities>
+   <XChildEntity name="WebAppProperty30"/>
+  </XChildrenEntities>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.webapp.env_entry" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="administered object" loader="ElementType" name="element type">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general" name="description" xmlname="description.#text">
+    <Editor name="Note"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="id=true;save=always;category=general"
+    name="name" xmlname="name.#text"/>
+   <XModelAttribute PROPERTIES="category=general" name="interface-name" xmlname="interface-name.#text">
+    <Editor name="AccessibleJava"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general" name="class-name" xmlname="class-name.#text">
+    <Constraint>
+     <value name="java.lang.Boolean"/>
+     <value name="java.lang.String"/>
+     <value name="java.lang.Integer"/>
+     <value name="java.lang.Double"/>
+     <value name="java.lang.Float"/>
+    </Constraint>
+    <Editor name="AccessibleJava"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general"
+    name="resource-adapter" xmlname="resource-adapter.#text"/>
+   <XModelAttribute PROPERTIES="category=advanced" name="id"
+    visibility="false" xmlname="id"/>
+   <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
+    <Editor name="Note"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItemReference entity="WebAppDataSource30" name="CreateActions"/>
+   <XActionItemReference entity="WebAppFilter" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFilter" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFilter" name="Properties"/>
+   <XActionItemReference entity="WebAppFilter" name="MoveActions"/>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%Custom%"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%"
+  XMLSUBPATH="connection-factory" name="WebAppConnectionFactory31">
+  <XChildrenEntities>
+   <XChildEntity name="WebAppProperty30"/>
+  </XChildrenEntities>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.webapp.env_entry" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="connection factory" loader="ElementType" name="element type">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general" name="description" xmlname="description.#text">
+    <Editor name="Note"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="id=true;save=always;category=general"
+    name="name" xmlname="name.#text"/>
+   <XModelAttribute PROPERTIES="category=general;save=always"
+    name="interface-name" xmlname="interface-name.#text">
+    <Editor name="AccessibleJava"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general;save=always"
+    name="resource-adapter" xmlname="resource-adapter.#text"/>
+   <XModelAttribute PROPERTIES="category=advanced" name="max-pool-size" xmlname="max-pool-size.#text"/>
+   <XModelAttribute PROPERTIES="category=advanced" name="min-pool-size" xmlname="min-pool-size.#text"/>
+   <XModelAttribute PROPERTIES="category=advanced"
+    name="transaction-support" xmlname="transaction-support.#text">
+    <Constraint loader="ListString">
+     <value/>
+     <value name="LocalTransaction"/>
+     <value name="NoTransaction"/>
+     <value name="XATransaction"/>
+    </Constraint>
+    <Editor name="ListString"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=advanced" name="id"
+    visibility="false" xmlname="id"/>
+   <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
+    <Editor name="Note"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItemReference entity="WebAppDataSource30" name="CreateActions"/>
    <XActionItemReference entity="WebAppFilter" name="CopyActions"/>
    <XActionItemReference entity="WebAppFilter" name="DeleteActions"/>
    <XActionItemReference entity="WebAppFilter" name="Properties"/>
@@ -674,9 +978,9 @@
   <XActionItem kind="list">
    <XActionItem ICON="action.empty" displayName="Create" kind="list" name="CreateActions">
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.webapp.param"
-     PROPERTIES="validator.add=true" WizardClassName="%Default%"
-     displayName="Add Init Param..." kind="action" name="CreateInitParam">
+     ICON="action.new.webapp.param" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%" displayName="Add Init Param..."
+     kind="action" name="CreateInitParam">
      <EntityData EntityName="WebAppInitParam">
       <AttributeData AttributeName="param-name"/>
       <AttributeData AttributeName="param-value"/>
@@ -729,6 +1033,91 @@
   <XDependencies/>
  </XModelEntity>
  <XModelEntity ImplementingClass="%WebAppAuxFolder%"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%" name="WebAppFolderAdministeredObjects31">
+  <XChildrenEntities>
+   <XChildEntity name="WebAppAdministeredObject31"/>
+  </XChildrenEntities>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.webapp.folder" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="administered objects" loader="ElementType" name="element type">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="id=true;" default="Administered Objects"
+    name="name" xmlname="NAME">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem ICON="action.empty" displayName="New" group="1"
+    kind="list" name="CreateActions">
+    <XActionItem HandlerClassName="%Create%"
+     ICON="action.new.webapp.env_entry" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%" displayName="Administered Object..."
+     kind="action" name="CreateAdministeredObject">
+     <EntityData EntityName="WebAppAdministeredObject31">
+      <AttributeData AttributeName="name"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+   <XActionItemReference entity="WebAppFolderContextParams" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="Properties"/>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%WebAppAuxFolder%"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%" name="WebAppFolderConnectionFactories31">
+  <XChildrenEntities>
+   <XChildEntity name="WebAppConnectionFactory31"/>
+   <XChildEntity name="WebAppJMSConnectionFactory31"/>
+  </XChildrenEntities>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.webapp.folder" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="connection factories" loader="ElementType" name="element type">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="id=true;" default="Connection Factories"
+    name="name" xmlname="NAME">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem ICON="action.empty" displayName="New" group="1"
+    kind="list" name="CreateActions">
+    <XActionItem HandlerClassName="%Create%"
+     ICON="action.new.webapp.env_entry" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%" displayName="Connection Factory..."
+     kind="action" name="CreateConnectionFactory">
+     <EntityData EntityName="WebAppConnectionFactory31">
+      <AttributeData AttributeName="name"/>
+      <AttributeData AttributeName="interface-name"/>
+      <AttributeData AttributeName="resource-adapter"/>
+     </EntityData>
+    </XActionItem>
+    <XActionItem HandlerClassName="%Create%"
+     ICON="action.new.webapp.env_entry" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%" displayName="JMS Connection Factory..."
+     kind="action" name="CreateJMSConnectionFactory">
+     <EntityData EntityName="WebAppJMSConnectionFactory31">
+      <AttributeData AttributeName="name"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+   <XActionItemReference entity="WebAppFolderContextParams" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="Properties"/>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%WebAppAuxFolder%"
   PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%" name="WebAppFolderDataSources30">
   <XChildrenEntities>
    <XChildEntity name="WebAppDataSource30"/>
@@ -751,9 +1140,9 @@
    <XActionItem ICON="action.empty" displayName="New" group="1"
     kind="list" name="CreateActions">
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.webapp.env_entry"
-     PROPERTIES="validator.add=true" WizardClassName="%Default%"
-     displayName="Data Source..." kind="action" name="CreateDataSource">
+     ICON="action.new.webapp.env_entry" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%" displayName="Data Source..."
+     kind="action" name="CreateDataSource">
      <EntityData EntityName="WebAppDataSource30">
       <AttributeData AttributeName="name"/>
      </EntityData>
@@ -841,9 +1230,9 @@
    <XActionItem ICON="action.empty" displayName="New" group="1"
     kind="list" name="CreateActions">
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.webapp.env_entry"
-     PROPERTIES="validator.add=true" WizardClassName="%Default%"
-     displayName="Env Entry..." kind="action" name="CreateEnvEntry">
+     ICON="action.new.webapp.env_entry" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%" displayName="Env Entry..."
+     kind="action" name="CreateEnvEntry">
      <EntityData EntityName="WebAppEnvEntry30">
       <AttributeData AttributeName="env-entry-name"/>
       <AttributeData AttributeName="env-entry-type"/>
@@ -880,9 +1269,8 @@
    <XActionItem ICON="action.empty" displayName="New" group="1"
     kind="list" name="CreateActions">
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.webapp.filter"
-     PROPERTIES="validator.add=true" WizardClassName="%Default%"
-     displayName="Filter..." kind="action" name="CreateFilter">
+     ICON="action.new.webapp.filter" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%" displayName="Filter..." kind="action" name="CreateFilter">
      <EntityData EntityName="WebAppFilter30">
       <AttributeData AttributeName="filter-name"/>
       <AttributeData AttributeName="display-name" Mandatory="no"/>
@@ -899,6 +1287,81 @@
       <AttributeData AttributeName="url-pattern" Mandatory="no"/>
       <AttributeData AttributeName="servlet-name" Mandatory="no"/>
       <AttributeData AttributeName="dispatchers" Mandatory="no"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+   <XActionItemReference entity="WebAppFolderContextParams" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="Properties"/>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%WebAppAuxFolder%"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%" name="WebAppFolderJMSDestinations31">
+  <XChildrenEntities>
+   <XChildEntity name="WebAppJMSDestination31"/>
+  </XChildrenEntities>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.webapp.folder" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="jms destinations" loader="ElementType" name="element type">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="id=true;" default="JMS Destinations"
+    name="name" xmlname="NAME">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem ICON="action.empty" displayName="New" group="1"
+    kind="list" name="CreateActions">
+    <XActionItem HandlerClassName="%Create%"
+     ICON="action.new.webapp.env_entry" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%" displayName="JMS Destination..."
+     kind="action" name="CreateJMSDestination">
+     <EntityData EntityName="WebAppJMSDestination31">
+      <AttributeData AttributeName="name"/>
+      <AttributeData AttributeName="interface-name"/>
+     </EntityData>
+    </XActionItem>
+   </XActionItem>
+   <XActionItemReference entity="WebAppFolderContextParams" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFolderContextParams" name="Properties"/>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%WebAppAuxFolder%"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%" name="WebAppFolderMailSessions31">
+  <XChildrenEntities>
+   <XChildEntity name="WebAppMailSession31"/>
+  </XChildrenEntities>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.webapp.folder" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="mail sessions" loader="ElementType" name="element type">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="id=true;" default="Mail Sessions"
+    name="name" xmlname="NAME">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItem ICON="action.empty" displayName="New" group="1"
+    kind="list" name="CreateActions">
+    <XActionItem HandlerClassName="%Create%"
+     ICON="action.new.webapp.env_entry" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%" displayName="Mail Session..."
+     kind="action" name="CreateMailSession">
+     <EntityData EntityName="WebAppMailSession31">
+      <AttributeData AttributeName="name"/>
      </EntityData>
     </XActionItem>
    </XActionItem>
@@ -932,8 +1395,8 @@
    <XActionItem ICON="action.empty" displayName="New" group="1"
     kind="list" name="CreateActions">
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.webapp.message"
-     PROPERTIES="validator.add=true" WizardClassName="%Default%"
+     ICON="action.new.webapp.message" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%"
      displayName="Message Destination Ref..." kind="action" name="CreateServiceMessageDestinationRef">
      <EntityData EntityName="WebAppMessageDestinationRef30">
       <AttributeData AttributeName="message-destination-ref-name"/>
@@ -942,9 +1405,9 @@
      </EntityData>
     </XActionItem>
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.webapp.message"
-     PROPERTIES="validator.add=true" WizardClassName="%Default%"
-     displayName="Message Destination..." kind="action" name="CreateServiceMessageDestination">
+     ICON="action.new.webapp.message" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%" displayName="Message Destination..."
+     kind="action" name="CreateServiceMessageDestination">
      <EntityData EntityName="WebAppMessageDestination30">
       <AttributeData AttributeName="message-destination-name"/>
      </EntityData>
@@ -989,9 +1452,9 @@
      </EntityData>
     </XActionItem>
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.webapp.res_ref"
-     PROPERTIES="validator.add=true" WizardClassName="%Default%"
-     displayName="Resource Ref..." kind="action" name="CreateResourceRef">
+     ICON="action.new.webapp.res_ref" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%" displayName="Resource Ref..."
+     kind="action" name="CreateResourceRef">
      <EntityData EntityName="WebAppResourceRef30">
       <AttributeData AttributeName="res-ref-name"/>
       <AttributeData AttributeName="res-type"/>
@@ -1064,9 +1527,9 @@
    <XActionItem ICON="action.empty" displayName="New" group="1"
     kind="list" name="CreateActions">
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.webapp.service"
-     PROPERTIES="validator.add=true" WizardClassName="%Default%"
-     displayName="Service Ref..." kind="action" name="CreateServiceRef">
+     ICON="action.new.webapp.service" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%" displayName="Service Ref..."
+     kind="action" name="CreateServiceRef">
      <EntityData EntityName="WebAppServiceRef30">
       <AttributeData AttributeName="service-ref-name"/>
       <AttributeData AttributeName="service-interface"/>
@@ -1102,9 +1565,8 @@
    <XActionItem ICON="action.empty" displayName="New" group="1"
     kind="list" name="CreateActions">
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.webapp.servlet"
-     PROPERTIES="validator.add=true" WizardClassName="%Default%"
-     displayName="Servlet..." kind="action" name="CreateServlet">
+     ICON="action.new.webapp.servlet" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%" displayName="Servlet..." kind="action" name="CreateServlet">
      <EntityData EntityName="WebAppServlet30">
       <AttributeData AttributeName="servlet-name"/>
       <AttributeData AttributeName="display-name" Mandatory="no"/>
@@ -1164,39 +1626,156 @@
   <XActionItem kind="list">
    <XActionItem ICON="action.empty" displayName="Create" kind="list" name="CreateActions">
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.webapp.param"
-     PROPERTIES="validator.add=true" WizardClassName="%Default%"
-     displayName="Add Init Param..." kind="action" name="CreateInitParam">
+     ICON="action.new.webapp.param" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%" displayName="Add Init Param..."
+     kind="action" name="CreateInitParam">
      <EntityData EntityName="WebAppInitParam">
       <AttributeData AttributeName="param-name"/>
       <AttributeData AttributeName="param-value"/>
      </EntityData>
     </XActionItem>
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.webapp.param"
-     PROPERTIES="validator.add=true" WizardClassName="%Default%"
-     displayName="Add Soap Header..." kind="action" name="CreateSoapHeader">
+     ICON="action.new.webapp.param" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%" displayName="Add Soap Header..."
+     kind="action" name="CreateSoapHeader">
      <EntityData EntityName="WebAppSoapHeader30">
       <AttributeData AttributeName="header"/>
      </EntityData>
     </XActionItem>
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.webapp.param"
-     PROPERTIES="validator.add=true" WizardClassName="%Default%"
-     displayName="Add Soap Role..." kind="action" name="CreateSoapRole">
+     ICON="action.new.webapp.param" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%" displayName="Add Soap Role..."
+     kind="action" name="CreateSoapRole">
      <EntityData EntityName="WebAppSoapRole30">
       <AttributeData AttributeName="role"/>
      </EntityData>
     </XActionItem>
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.webapp.param"
-     PROPERTIES="validator.add=true" WizardClassName="%Default%"
-     displayName="Add Port Name..." kind="action" name="CreatePortName">
+     ICON="action.new.webapp.param" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%" displayName="Add Port Name..."
+     kind="action" name="CreatePortName">
      <EntityData EntityName="WebAppPortName30">
       <AttributeData AttributeName="name"/>
      </EntityData>
     </XActionItem>
    </XActionItem>
+   <XActionItemReference entity="WebAppFilter" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFilter" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFilter" name="Properties"/>
+   <XActionItemReference entity="WebAppFilter" name="MoveActions"/>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%Custom%"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%"
+  XMLSUBPATH="jms-connection-factory" name="WebAppJMSConnectionFactory31">
+  <XChildrenEntities>
+   <XChildEntity name="WebAppProperty30"/>
+  </XChildrenEntities>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.webapp.env_entry" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="jms connection factory"
+    loader="ElementType" name="element type">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general" name="description" xmlname="description.#text">
+    <Editor name="Note"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="id=true;save=always;category=general"
+    name="name" xmlname="name.#text"/>
+   <XModelAttribute PROPERTIES="category=general" name="interface-name" xmlname="interface-name.#text">
+    <Editor name="AccessibleJava"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general" name="class-name" xmlname="class-name.#text">
+    <Constraint>
+     <value name="java.lang.Boolean"/>
+     <value name="java.lang.String"/>
+     <value name="java.lang.Integer"/>
+     <value name="java.lang.Double"/>
+     <value name="java.lang.Float"/>
+    </Constraint>
+    <Editor name="AccessibleJava"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general"
+    name="resource-adapter" xmlname="resource-adapter.#text"/>
+   <XModelAttribute PROPERTIES="category=general" name="user" xmlname="user.#text"/>
+   <XModelAttribute PROPERTIES="category=general" name="password" xmlname="password.#text"/>
+   <XModelAttribute PROPERTIES="category=general" name="client-id" xmlname="client-id.#text"/>
+   <XModelAttribute PROPERTIES="category=advanced" name="transactional" xmlname="transactional.#text">
+    <Constraint loader="ListString">
+     <value/>
+     <value name="true"/>
+     <value name="false"/>
+    </Constraint>
+    <Editor name="ListString"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=advanced" name="max-pool-size" xmlname="max-pool-size.#text"/>
+   <XModelAttribute PROPERTIES="category=advanced" name="min-pool-size" xmlname="min-pool-size.#text"/>
+   <XModelAttribute PROPERTIES="category=advanced" name="id"
+    visibility="false" xmlname="id"/>
+   <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
+    <Editor name="Note"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItemReference entity="WebAppDataSource30" name="CreateActions"/>
+   <XActionItemReference entity="WebAppFilter" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFilter" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFilter" name="Properties"/>
+   <XActionItemReference entity="WebAppFilter" name="MoveActions"/>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%Custom%"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%"
+  XMLSUBPATH="jms-destination" name="WebAppJMSDestination31">
+  <XChildrenEntities>
+   <XChildEntity name="WebAppProperty30"/>
+  </XChildrenEntities>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.webapp.env_entry" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="jms destination" loader="ElementType" name="element type">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general" name="description" xmlname="description.#text">
+    <Editor name="Note"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="id=true;save=always;category=general"
+    name="name" xmlname="name.#text"/>
+   <XModelAttribute PROPERTIES="category=general;save=always"
+    name="interface-name" xmlname="interface-name.#text">
+    <Editor name="AccessibleJava"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general" name="class-name" xmlname="class-name.#text">
+    <Constraint>
+     <value name="java.lang.Boolean"/>
+     <value name="java.lang.String"/>
+     <value name="java.lang.Integer"/>
+     <value name="java.lang.Double"/>
+     <value name="java.lang.Float"/>
+    </Constraint>
+    <Editor name="AccessibleJava"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general"
+    name="resource-adapter" xmlname="resource-adapter.#text"/>
+   <XModelAttribute PROPERTIES="category=general"
+    name="destination-name" xmlname="destination-name.#text"/>
+   <XModelAttribute PROPERTIES="category=advanced" name="id"
+    visibility="false" xmlname="id"/>
+   <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
+    <Editor name="Note"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItemReference entity="WebAppDataSource30" name="CreateActions"/>
    <XActionItemReference entity="WebAppFilter" name="CopyActions"/>
    <XActionItemReference entity="WebAppFilter" name="DeleteActions"/>
    <XActionItemReference entity="WebAppFilter" name="Properties"/>
@@ -1316,9 +1895,9 @@
   <XActionItem kind="list">
    <XActionItem kind="list" name="CreateActions">
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.webapp.taglib"
-     PROPERTIES="validator.add=true" WizardClassName="%Default%"
-     displayName="Add Taglib..." kind="action" name="CreateTaglib">
+     ICON="action.new.webapp.taglib" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%" displayName="Add Taglib..."
+     kind="action" name="CreateTaglib">
      <EntityData EntityName="WebAppTaglib">
       <AttributeData AttributeName="taglib-uri"/>
       <AttributeData AttributeName="taglib-location"/>
@@ -1334,6 +1913,56 @@
    </XActionItem>
    <XActionItemReference entity="WebAppFolderContextParams" name="CopyActions"/>
    <XActionItemReference entity="WebAppFolderContextParams" name="DeleteActions"/>
+   <XActionItemReference entity="WebAppFilter" name="Properties"/>
+   <XActionItemReference entity="WebAppFilter" name="MoveActions"/>
+  </XActionItem>
+  <XDependencies/>
+ </XModelEntity>
+ <XModelEntity ImplementingClass="%Custom%"
+  PROPERTIES="formFactory=%Default%;formLayout=org.jboss.tools.jst.web.ui.editors.webapp.form.WebAppFormLayoutData;children=%Ordered%"
+  XMLSUBPATH="mail-session" name="WebAppMailSession31">
+  <XChildrenEntities>
+   <XChildEntity name="WebAppProperty30"/>
+  </XChildrenEntities>
+  <XEntityRenderer>
+   <ICONS>
+    <ICON info="main.webapp.env_entry" type="main"/>
+   </ICONS>
+  </XEntityRenderer>
+  <XModelAttributes>
+   <XModelAttribute default="mail session" loader="ElementType" name="element type">
+    <Editor name="Uneditable"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general" name="description" xmlname="description.#text">
+    <Editor name="Note"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="id=true;save=always;category=general"
+    name="name" xmlname="name.#text"/>
+   <XModelAttribute PROPERTIES="category=general" name="store-protocol" xmlname="store-protocol.#text"/>
+   <XModelAttribute PROPERTIES="category=general"
+    name="store-protocol-class" xmlname="store-protocol-class.#text">
+    <Editor name="AccessibleJava"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general"
+    name="transport-protocol" xmlname="transport-protocol.#text"/>
+   <XModelAttribute PROPERTIES="category=general"
+    name="transport-protocol-class" xmlname="transport-protocol-class.#text">
+    <Editor name="AccessibleJava"/>
+   </XModelAttribute>
+   <XModelAttribute PROPERTIES="category=general" name="host" xmlname="host.#text"/>
+   <XModelAttribute PROPERTIES="category=general" name="user" xmlname="user.#text"/>
+   <XModelAttribute PROPERTIES="category=general" name="password" xmlname="password.#text"/>
+   <XModelAttribute PROPERTIES="category=general" name="from" xmlname="from.#text"/>
+   <XModelAttribute PROPERTIES="category=advanced" name="id"
+    visibility="false" xmlname="id"/>
+   <XModelAttribute TRIM="no" name="comment" visibility="false" xmlname="#comment">
+    <Editor name="Note"/>
+   </XModelAttribute>
+  </XModelAttributes>
+  <XActionItem kind="list">
+   <XActionItemReference entity="WebAppDataSource30" name="CreateActions"/>
+   <XActionItemReference entity="WebAppFilter" name="CopyActions"/>
+   <XActionItemReference entity="WebAppFilter" name="DeleteActions"/>
    <XActionItemReference entity="WebAppFilter" name="Properties"/>
    <XActionItemReference entity="WebAppFilter" name="MoveActions"/>
   </XActionItem>
@@ -1961,18 +2590,17 @@
   <XActionItem kind="list">
    <XActionItem ICON="action.empty" displayName="Create" kind="list" name="CreateActions">
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.webapp.param"
-     PROPERTIES="validator.add=true" WizardClassName="%Default%"
-     displayName="Add Init Param..." kind="action" name="CreateInitParam">
+     ICON="action.new.webapp.param" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%" displayName="Add Init Param..."
+     kind="action" name="CreateInitParam">
      <EntityData EntityName="WebAppInitParam">
       <AttributeData AttributeName="param-name"/>
       <AttributeData AttributeName="param-value"/>
      </EntityData>
     </XActionItem>
     <XActionItem HandlerClassName="%CreateForWeb23%"
-     ICON="action.new.webapp.run_as"
-     PROPERTIES="validator.add=true" WizardClassName="%Default%"
-     displayName="Run As..." kind="action" name="CreateRunAs">
+     ICON="action.new.webapp.run_as" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%" displayName="Run As..." kind="action" name="CreateRunAs">
      <EntityData EntityName="WebAppRunAs">
       <AttributeData AttributeName="role-name"/>
      </EntityData>
@@ -2038,9 +2666,9 @@
   <XActionItem kind="list">
    <XActionItem ICON="action.empty" displayName="Create" kind="list" name="CreateActions">
     <XActionItem HandlerClassName="%Create%"
-     ICON="action.new.webapp.param"
-     PROPERTIES="validator.add=true" WizardClassName="%Default%"
-     displayName="Add Cookie Config..." kind="action" name="CreateCookieConfig">
+     ICON="action.new.webapp.param" PROPERTIES="validator.add=true"
+     WizardClassName="%Default%" displayName="Add Cookie Config..."
+     kind="action" name="CreateCookieConfig">
      <EntityData EntityName="WebAppCookieConfig">
       <AttributeData AttributeName="name"/>
      </EntityData>
@@ -2112,24 +2740,28 @@
  <XEntityExtension name="FileFolder">
   <XChildrenEntities>
    <XChildEntity name="FileWebApp30"/>
+   <XChildEntity name="FileWebApp31"/>
   </XChildrenEntities>
   <XActionItem kind="list"/>
  </XEntityExtension>
  <XEntityExtension name="FileSystemFolder">
   <XChildrenEntities>
    <XChildEntity name="FileWebApp30"/>
+   <XChildEntity name="FileWebApp31"/>
   </XChildrenEntities>
   <XActionItem kind="list"/>
  </XEntityExtension>
  <XEntityExtension name="FileSystemJar">
   <XChildrenEntities>
    <XChildEntity name="FileWebApp30"/>
+   <XChildEntity name="FileWebApp31"/>
   </XChildrenEntities>
   <XActionItem kind="list"/>
  </XEntityExtension>
  <XEntityExtension name="JarFolder">
   <XChildrenEntities>
    <XChildEntity name="FileWebApp30"/>
+   <XChildEntity name="FileWebApp31"/>
   </XChildrenEntities>
   <XActionItem kind="list"/>
  </XEntityExtension>

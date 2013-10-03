@@ -49,8 +49,11 @@ public class FileWebAppRecognizer implements EntityRecognizer {
 					return "FileWebApp25"; //$NON-NLS-1$
 				} else if(body.indexOf("version=\"3.0\"") > 0) { //$NON-NLS-1$
 					return "FileWebApp30"; //$NON-NLS-1$
+				}				
+			} else if(body.indexOf("http://xmlns.jcp.org/xml/ns/javaee") > 0) {
+				if(body.indexOf("version=\"3.1\"") > 0) { //$NON-NLS-1$
+					return "FileWebApp31"; //$NON-NLS-1$
 				}
-				
 			}
 		}
 		
