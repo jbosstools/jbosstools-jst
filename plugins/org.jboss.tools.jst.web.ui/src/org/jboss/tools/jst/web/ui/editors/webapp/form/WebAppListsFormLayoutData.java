@@ -90,6 +90,25 @@ public class WebAppListsFormLayoutData {
 			Messages.WebAppFileFormLayoutData_ContextParams, "param-name", 40, "param-value", WebAppHelper.CONTEXT_PARAM_ENTITY, "CreateActions.CreateContextParam" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		);
 
+		createOneAttributeSingleChildList(
+			"JMS Destinations", "name", "WebAppJMSDestination31", "CreateActions.CreateJMSDestination" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		);
+
+		createOneAttributeSingleChildList(
+			"Administered Objects", "name", "WebAppAdministeredObject31", "CreateActions.CreateAdministeredObject" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		);
+
+		createOneAttributeSingleChildList(
+			"Connection Factories", "name", "WebAppConnectionFactory31", "CreateActions.CreateConnectionFactory" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		);
+
+		createOneAttributeSingleChildList(
+			"JMS Connection Factories", "name", "WebAppJMSConnectionFactory31", "CreateActions.CreateJMSConnectionFactory" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		);
+
+		createOneAttributeSingleChildList(
+			"Mail Sessions", "name", "WebAppMailSession31", "CreateActions.CreateMailSession" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		);
 	}
 
 
