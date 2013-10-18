@@ -83,6 +83,7 @@ public class WizardMessages extends NLS {
 	public static String footerLabel;
 	public static String clearInputLabel;
 	public static String textTypeLabel;
+	public static String buttonTypeLabel;
 	public static String placeholderLabel;
 	public static String patternLabel;
 	public static String maxlengthLabel;
@@ -134,6 +135,10 @@ public class WizardMessages extends NLS {
 	public static String typeLabel;
 	public static String formLabel;
 	public static String forLabel;
+
+	public static String buttonTypeButtonLabel;
+	public static String buttonTypeResetLabel;
+	public static String buttonTypeSubmitLabel;
 
 	public static String selectImageDialogTitle;
 	public static String selectImageDialogMessage;
@@ -216,6 +221,9 @@ public class WizardMessages extends NLS {
 
 	public static String newFormWizardTitle;
 	public static String newFormWizardDescription;
+
+	public static String newFormButtonWizardTitle;
+	public static String newFormButtonWizardDescription;
 
 	public static String newImageWizardTitle;
 	public static String newImageWizardDescription;

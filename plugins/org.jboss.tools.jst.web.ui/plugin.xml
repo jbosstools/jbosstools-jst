@@ -808,6 +808,7 @@
       <tag name="_Palette_/Mobile/jQuery_Mobile/2.lists/5.Listview" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewListviewWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/01.Button" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/02.Grouped_Buttons" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedButtonsWizard"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/021.Form_Button" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormButtonWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/03.Link" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/04.Flip_Toggle_Switch" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/05.Radio_Button" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRadioWizard"/>

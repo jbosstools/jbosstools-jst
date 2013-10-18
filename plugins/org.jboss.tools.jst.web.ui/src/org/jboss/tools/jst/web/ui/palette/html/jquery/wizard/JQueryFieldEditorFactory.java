@@ -158,6 +158,40 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 				WizardDescriptions.widgetCorners);
 	}
 
+	static String[] FORM_BUTTON_TYPE_LIST = {BUTTON_TYPE_BUTTON, BUTTON_TYPE_RESET, BUTTON_TYPE_SUBMIT};
+	static String[] FORM_BUTTON_TYPE_LABEL_LIST = {WizardMessages.buttonTypeButtonLabel, WizardMessages.buttonTypeResetLabel, WizardMessages.buttonTypeSubmitLabel};
+
+	static String[] FORM_BUTTON_TYPE_DESCRIPTIONS = {
+		WizardDescriptions.formButtonTypeButton,
+		WizardDescriptions.formButtonTypeReset,
+		WizardDescriptions.formButtonTypeSubmit
+	};
+
+	/**
+	 * Used in New Form Button wizard.
+	 * @return
+	 */
+	public static IFieldEditor createFormButtonTypeEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(
+				EDITOR_ID_FORM_BUTTON_TYPE, 
+				WizardMessages.buttonTypeLabel, 
+				toList(FORM_BUTTON_TYPE_LABEL_LIST), 
+				toList(FORM_BUTTON_TYPE_LIST), 
+				BUTTON_TYPE_SUBMIT, WizardDescriptions.formButtonType, toList(FORM_BUTTON_TYPE_DESCRIPTIONS));
+	}
+
+	/**
+	 * Used in New Form Button wizard.
+	 * @return
+	 */
+	public static IFieldEditor createFormButtonValueEditor() {
+		CompositeEditor editor = (CompositeEditor)SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_VALUE, WizardMessages.valueLabel, "",
+				WizardDescriptions.formButtonValue);
+		TextFieldEditor text = (TextFieldEditor)editor.getEditors().get(1);
+		text.setMessage("Default");
+		return editor;
+	}
+
 	/**
 	 * Used in New Listview wizard.
 	 * @return

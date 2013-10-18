@@ -35,6 +35,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFooterWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFooterWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormButtonWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormButtonWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGridWizard;
@@ -321,6 +323,47 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		compareGeneratedAndInsertedText(wizard);
 
 		assertTextIsInserted(label);
+	}
+
+	public void testNewFormButtonWizard() {
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Form Button", true);
+		assertTrue(currentPage instanceof NewFormButtonWizardPage);
+
+		NewFormButtonWizardPage wizardPage = (NewFormButtonWizardPage)currentPage;
+		NewFormButtonWizard wizard = (NewFormButtonWizard)wizardPage.getWizard(); 
+
+		assertAttrExists(wizard, ATTR_VALUE, WizardMessages.buttonTypeSubmitLabel);
+		assertAttrExists(wizard, ATTR_TYPE, BUTTON_TYPE_SUBMIT);
+		wizardPage.setEditorValue(EDITOR_ID_FORM_BUTTON_TYPE, BUTTON_TYPE_RESET);
+		assertAttrExists(wizard, ATTR_TYPE, BUTTON_TYPE_RESET);
+		assertAttrExists(wizard, ATTR_VALUE, WizardMessages.buttonTypeResetLabel);
+		wizardPage.setEditorValue(EDITOR_ID_FORM_BUTTON_TYPE, BUTTON_TYPE_BUTTON);
+		assertAttrExists(wizard, ATTR_VALUE, "Input");
+		assertAttrExists(wizard, ATTR_TYPE, BUTTON_TYPE_BUTTON);
+
+		wizardPage.setEditorValue(EDITOR_ID_MINI, TRUE);
+		assertAttrExists(wizard, ATTR_DATA_MINI, TRUE);
+		wizardPage.setEditorValue(EDITOR_ID_MINI, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_DATA_MINI);
+
+		wizardPage.setEditorValue(EDITOR_ID_DISABLED, TRUE);
+		assertAttrExists(wizard, ATTR_DISABLED, ATTR_DISABLED);
+		wizardPage.setEditorValue(EDITOR_ID_DISABLED, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_DISABLED);
+
+		wizardPage.setEditorValue(EDITOR_ID_INLINE, TRUE);
+		assertAttrExists(wizard, ATTR_DATA_INLINE, TRUE);
+		wizardPage.setEditorValue(EDITOR_ID_INLINE, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_DATA_INLINE);
+
+		wizardPage.setEditorValue(EDITOR_ID_ICON_ONLY, TRUE);
+		assertAttrExists(wizard, ATTR_DATA_ICONPOS, "notext");
+		wizardPage.setEditorValue(EDITOR_ID_ICON_POS, "arrow-r");
+		assertAttrExists(wizard, ATTR_DATA_ICONPOS, "notext");
+		wizardPage.setEditorValue(EDITOR_ID_ICON_ONLY, FALSE);
+		assertAttrExists(wizard, ATTR_DATA_ICONPOS, "arrow-r");
+
+		compareGeneratedAndInsertedText(wizard);
 	}
 
 	public void testNewLinkWizard() {

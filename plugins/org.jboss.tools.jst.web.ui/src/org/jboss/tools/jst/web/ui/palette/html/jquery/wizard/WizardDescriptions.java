@@ -45,6 +45,12 @@ public class WizardDescriptions extends NLS {
 	public static String formMethod;
 	public static String formName;
 	public static String formValidate;
+
+	public static String formButtonType;
+	public static String formButtonValue;
+	public static String formButtonTypeButton;
+	public static String formButtonTypeReset;
+	public static String formButtonTypeSubmit;
 	
 	public static String gridColumns;
 	public static String gridRows;
