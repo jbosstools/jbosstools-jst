@@ -98,4 +98,8 @@ public interface HTMLConstants {
 
 	public String AUDIO_TYPE_MPEG = "audio/mpeg";
 	public String AUDIO_TYPE_OGG = "audio/ogg";
+
+	public String BUTTON_TYPE_SUBMIT = "submit";
+	public String BUTTON_TYPE_RESET = "reset";
+	public String BUTTON_TYPE_BUTTON = "button";
 }
