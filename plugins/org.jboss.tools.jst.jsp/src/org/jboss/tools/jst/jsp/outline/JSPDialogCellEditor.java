@@ -18,6 +18,7 @@ import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.fieldassist.IContentProposal;
+import org.eclipse.jface.fieldassist.IContentProposalListener2;
 import org.eclipse.jface.fieldassist.IControlContentAdapter;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.jface.window.Window;
@@ -219,6 +220,58 @@ public class JSPDialogCellEditor extends DialogCellEditorEx implements ExtendedC
 
 		int bits = SWT.TOP | SWT.LEFT;
 		ControlDecoration controlDecoration = new ControlDecoration(getTextControl(), bits) {
+			public Image getImage() {
+				return super.getImage();
+			}
+		};
+		// Configure text widget decoration
+		// No margin
+		controlDecoration.setMarginWidth(0);
+		// Custom hover tip text
+		controlDecoration.setDescriptionText(JstUIMessages.JSPDialogCellEditor_CodeAssist /*PDEUIMessages.PDEJavaHelper_msgContentAssistAvailable*/);
+		// Custom hover properties
+		controlDecoration.setShowHover(true);
+		controlDecoration.setShowOnlyOnFocus(true);
+		// Hover image to use
+		FieldDecoration contentProposalImage = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_CONTENT_PROPOSAL);
+		controlDecoration.setImage(contentProposalImage.getImage());
+	}
+
+	public static void addContentAssist(Text text, Properties context, IContentProposalListener2 popup) {
+		IControlContentAdapter controlAdapter = new TextContentAdapter();
+		JSPDialogContentProposalProvider cppEL = new JSPDialogContentProposalProvider();
+		cppEL.setContext(context);
+
+		ContentProposalAdapter adapter = new ContentProposalAdapter(
+				text, 
+				controlAdapter, 
+				cppEL,
+				AttributeContentProposalProviderFactory.getCtrlSpaceKeyStroke(), 
+				null);
+		adapter.setPropagateKeys(true);
+		adapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_INSERT);
+		if(popup != null) {
+			adapter.addContentProposalListener(popup);
+		}		
+
+		JSPDialogContentProposalProvider cppAttr = new JSPDialogContentProposalProvider();
+		cppAttr.setAttrMode();
+		cppAttr.setContext(context);
+
+		adapter = new ContentProposalAdapter(
+				text, 
+				controlAdapter, 
+				cppAttr,
+				AttributeContentProposalProviderFactory.getCtrlSpaceKeyStroke(), 
+				null);
+		adapter.setPropagateKeys(true);
+		adapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
+		if(popup != null) {
+			adapter.addContentProposalListener(popup);
+		}		
+
+		int bits = SWT.TOP | SWT.LEFT;
+		ControlDecoration controlDecoration = new ControlDecoration(text, bits) {
 			public Image getImage() {
 				return super.getImage();
 			}

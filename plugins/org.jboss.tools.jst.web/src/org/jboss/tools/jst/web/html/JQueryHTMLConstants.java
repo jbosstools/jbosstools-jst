@@ -16,37 +16,65 @@ package org.jboss.tools.jst.web.html;
  *
  */
 public interface JQueryHTMLConstants extends HTMLConstants {
+	public String ATTR_DATA_AJAX = "data-ajax";
 	public String ATTR_DATA_AUTODIVIDERS = "data-autodividers";
+	public String ATTR_DATA_ADD_BACK_BUTTON = "data-add-back-btn";
+	public String ATTR_DATA_BACK_BUTTON_TEXT = "data-back-btn-text";
+	public String ATTR_DATA_BACK_BUTTON_THEME = "data-back-btn-theme";
 	public String ATTR_DATA_CLEAR_BTN = "data-clear-btn";
+	public String ATTR_DATA_CLEAR_BTN_TEXT = "data-clear-btn-text";
 	public String ATTR_DATA_CLOSE_BTN = "data-close-btn";
+	public String ATTR_DATA_CLOSE_BTN_TEXT = "data-close-btn-text";
 	public String ATTR_DATA_COLLAPSED = "data-collapsed";
 	public String ATTR_DATA_COLLAPSED_ICON = "data-collapsed-icon";
+	public String ATTR_DATA_COLUMN_BUTTON_TEXT = "data-column-btn-text";
+	public String ATTR_DATA_COLUMN_BUTTON_THEME = "data-column-btn-theme";
+	public String ATTR_DATA_COLUMN_POPUP_THEME = "data-column-popup-theme";
 	public String ATTR_DATA_CONTENT_THEME = "data-content-theme";
+	public String ATTR_DATA_COUNT_THEME = "data-count-theme";
+	public String ATTR_DATA_CORNERS = "data-corners";
+	public String ATTR_DATA_DIRECTION = "data-direction";
+	public String ATTR_DATA_DISMISSABLE = "data-dismissible";
 	public String ATTR_DATA_DISPLAY = "data-display";
+	public String ATTR_DATA_DIVIDER_THEME = "data-divider-theme";
+	public String ATTR_DATA_DOM_CACHE = "data-dom-cache";
+	public String ATTR_DATA_ENHANCE = "data-enhance";
 	public String ATTR_DATA_EXPANDED_ICON = "data-expanded-icon";
 	public String ATTR_DATA_FILTER = "data-filter";
+	public String ATTR_DATA_FILTER_PLACEHOLDER = "data-filter-placeholder";
+	public String ATTR_DATA_FILTER_THEME = "data-filter-theme";
 	public String ATTR_DATA_FULL_SCREEN = "data-fullscreen";
+	public String ATTR_DATA_HEADER_THEME = "data-header-theme";
 	public String ATTR_DATA_HIGHLIGHT = "data-highlight";
 	public String ATTR_DATA_ICON = "data-icon";
 	public String ATTR_DATA_ICONPOS = "data-iconpos";
+	public String ATTR_DATA_ICON_SHADOW = "data-iconshadow";
+	public String ATTR_DATA_ID = "data-id";
 	public String ATTR_DATA_INLINE = "data-inline";
 	public String ATTR_DATA_INSET = "data-inset";
 	public String ATTR_DATA_MINI = "data-mini";
 	public String ATTR_DATA_MODE = "data-mode";
+	public String ATTR_DATA_NATIVE_MENU = "data-native-menu";
 	public String ATTR_DATA_OVERLAY_THEME = "data-overlay-theme";
+	public String ATTR_DATA_PLACEHOLDER = "data-placeholder";
 	public String ATTR_DATA_POSITION = "data-position";
 	public String ATTR_DATA_POSITION_FIXED = "data-position-fixed";
+	public String ATTR_DATA_POSITION_TO = "data-position-to";
+	public String ATTR_DATA_PREFETCH = "data-prefetch";
 	public String ATTR_DATA_PRIORITY = "data-priority";
 	public String ATTR_DATA_REL = "data-rel";
 	public String ATTR_DATA_ROLE = "data-role";
+	public String ATTR_DATA_SHADOW = "data-shadow";
+	public String ATTR_DATA_SPLIT_ICON = "data-split-icon";
+	public String ATTR_DATA_SPLIT_THEME = "data-split-theme";
 	public String ATTR_DATA_SWIPE_CLOSE = "data-swipe-close";
 	public String ATTR_DATA_THEME = "data-theme";
+	public String ATTR_DATA_TITLE = "data-title";
+	public String ATTR_DATA_TOLERANCE = "data-tolerance";
 	public String ATTR_DATA_TRACK_THEME = "data-track-theme";
-	public String ATTR_DATA_DIVIDER_THEME = "data-divider-theme";
 	public String ATTR_DATA_TRANSITION = "data-transition";
 	public String ATTR_DATA_TYPE = "data-type";
-	public String ATTR_DATA_CORNERS = "data-corners";
-	public String ATTR_DATA_POSITION_TO = "data-position-to";
+	public String ATTR_DATA_URL = "data-url";
 
 	public String ATTR_DATA_MIN = "min";
 	public String ATTR_DATA_MAX = "max";
@@ -54,8 +82,6 @@ public interface JQueryHTMLConstants extends HTMLConstants {
 	public String ATTR_DATA_VALUE = "value";
 	public String ATTR_PLACEHOLDER = "placeholder";
 	public String ATTR_PATTERN = "pattern";
-	public String ATTR_DATA_DISMISSABLE = "data-dismissible";
-	public String ATTR_DATA_SHADOW = "data-shadow";
 	public String ATTR_AUTOFOCUS = "autofocus";
 	public String ATTR_REQUIRED = "required";
 	public String ATTR_MAXLENGTH = "maxlength";
@@ -82,6 +108,7 @@ public interface JQueryHTMLConstants extends HTMLConstants {
 	public String TYPE_WEEK = "week";
 	public String TYPE_TIME = "time";
 	public String TYPE_DATETIME = "datetime";
+
 
 	public String CLASS_CUSTOM = "custom";
 	public String CLASS_DISABLED = "ui-disabled";
@@ -121,6 +148,7 @@ public interface JQueryHTMLConstants extends HTMLConstants {
 	public String ROLE_LISTVIEW = "listview";
 	public String ROLE_DIVIDER = "list-divider";
 	public String ROLE_NAVBAR = "navbar";
+	public String ROLE_NONE = "none";
 	public String ROLE_PAGE = "page";
 	public String ROLE_PANEL = "panel";
 	public String ROLE_POPUP = "popup";
@@ -129,6 +157,7 @@ public interface JQueryHTMLConstants extends HTMLConstants {
 	public String ROLE_TABLE = "table";
 
 	public String DATA_TYPE_HORIZONTAL = "horizontal";
+	public String DATA_TYPE_VERTICAL = "vertical";
 
 	public String TRANSITION_FADE = "fade"; //default
 	public String TRANSITION_POP = "pop";
@@ -148,6 +177,10 @@ public interface JQueryHTMLConstants extends HTMLConstants {
 	public String DATA_REL_EXTERNAL = "external";
 
 	public String ICONPOS_NOTEXT = "notext";
+
+	public String REVERSE = "reverse";
+
+	public String FIXED = "fixed";
 
 	public String AUTOCOMPLETE_OFF = "off";
 

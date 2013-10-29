@@ -10,20 +10,19 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.outline;
 
-import java.util.Map;
-
-import org.eclipse.jface.text.IDocument;
-import org.jboss.tools.jst.web.kb.KbQuery;
+import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.eclipse.wst.sse.ui.views.properties.PropertySheetConfiguration;
 
 /**
  * 
  * @author Viacheslav Kabanovich
  *
  */
-@Deprecated
-public interface ICategoryProvider {
-	public boolean init(IDocument document, KbQuery query);
-	public String getCategory(String attributeName);
-	public boolean isExpert(String category);
-	public void fillAttributeWeights(Map<String, Integer> weights);
+public interface IFormPropertySheetPage extends IPropertySheetPage, IAdaptable {
+
+	public void setConfiguration(PropertySheetConfiguration configuration);
+
+	public void refresh();
+
 }

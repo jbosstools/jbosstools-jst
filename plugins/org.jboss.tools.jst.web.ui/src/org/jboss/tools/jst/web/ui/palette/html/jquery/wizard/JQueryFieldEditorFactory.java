@@ -448,6 +448,18 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		return createSelectWorkspaceFileAction(buttonName, context, WizardMessages.selectAudioDialogTitle, WizardMessages.selectAudioDialogMessage, filter);
 	}
 
+	public static ButtonFieldEditor.ButtonPressedAction createSelectWorkspaceSourceAction(String buttonName, final IFile context) {
+		ViewerFilter filter = new ViewerFilter() {
+			public boolean select(Viewer viewer, Object parentElement, Object element) {
+				return (element instanceof IFolder 
+						|| (element instanceof IProject
+							&& element == context.getProject())
+						|| (element instanceof IFile));
+			}
+		};
+		return createSelectWorkspaceFileAction(buttonName, context, WizardMessages.selectSourceDialogTitle, WizardMessages.selectSourceDialogMessage, filter);
+	}
+
 	public static ButtonFieldEditor.ButtonPressedAction createSelectWorkspaceFileAction(String buttonName, final IFile context, 
 			final String title, final String message, final ViewerFilter filter) {
 		ButtonFieldEditor.ButtonPressedAction action = new ButtonFieldEditor.ButtonPressedAction(buttonName) {

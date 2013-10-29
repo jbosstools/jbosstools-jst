@@ -22,10 +22,10 @@ import java.util.Stack;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import org.eclipse.ui.views.properties.IPropertySheetEntry;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySource2;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
@@ -52,7 +52,6 @@ import org.jboss.tools.jst.jsp.editor.IVisualController;
 import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
-import org.jboss.tools.jst.web.kb.KbQuery.Tag;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
@@ -71,7 +70,7 @@ import org.w3c.dom.Node;
  */
 
 @SuppressWarnings("restriction")
-public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, IPropertySourceExtension, IPropertySource2 {//extends XMLPropertySourceAdapter {
+public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, IPropertySourceExtension, IPropertySource2, IFormPropertySource {//extends XMLPropertySourceAdapter {
 	protected final static String CATEGORY_ATTRIBUTES = XMLUIMessages.XMLPropertySourceAdapter_0;
 	private static final boolean SET_EXPERT_FILTER = false;
 
@@ -79,6 +78,11 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 		public boolean isAvailable(String attributeName);
 	}
 
+	static interface ICategoryFilter {
+		public void setAttributes(IAttribute[] attributes);
+		public String getCategory(String attributeName);
+	}
+	
 	class QueryFactory implements IQueryFactory {
 		public boolean isAvailable(String attributeName) {
 			if(attributeName.equals("style") //$NON-NLS-1$
@@ -103,7 +107,8 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 	KbQuery kbQuery, kbQueryAttr;
 	private Set<String> attributeNames = new HashSet<String>();
 
-		ICategoryProvider[] categoryProviders = new ICategoryProvider[0];
+		IFormCategoryDescriptor[] categoryDescriptors = new IFormCategoryDescriptor[0];
+		ICategoryFilter[] categoryFilters = new ICategoryFilter[0];
 
 	public JSPPropertySourceAdapter(INodeNotifier target) {
 		setTarget(target);
@@ -128,10 +133,19 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 			offset = ((IDOMNode)fNode).getStartOffset() + ("" + fNode.getNodeName()).length(); //$NON-NLS-1$
 		}
 
-		categoryProviders = new ICategoryProvider[0];
+		categoryFilters = new ICategoryFilter[0];
 		if(fNode instanceof Comment) {
 			//do nothing
 		} else if(fNode instanceof Node) {
+			//moved processor update because it has to be rebuilt at updatePropertyDescriptors()
+			updateCategoryDescriptors();
+		}
+		
+	}
+
+	private void updateCategoryDescriptors() {
+		if(fNode instanceof Node && getTextViewer() != null) {
+
 			ITextViewer viewer = getTextViewer();
 			// Jeremy: JBIDE-9949: This prevents invocation of CA Proposals Computation in case 
 			// of Text Viewer is not accessible anymore (f.i. in case of closing editor, 
@@ -147,10 +161,32 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 				kbQuery.setMask(true); 
 				kbQueryAttr = createKbQuery(processor);
 			}
-			
-			categoryProviders = CategoryProviderFactory.getInstance().getProviders(viewer.getDocument(), kbQuery);
+
+			CategoryDescriptor[] ds = CategoryProviderFactory.getInstance().getCategoryDescriptors(pageContext);
+
+			List<IFormCategoryDescriptor> ds1 = new ArrayList<IFormCategoryDescriptor>();
+			List<ICategoryFilter> fs1 = new ArrayList<ICategoryFilter>();
+			IAttribute[] attrs = null;
+			if(kbQuery != null && pageContext != null) {
+				attrs = PageProcessor.getInstance().getAttributes(kbQuery, pageContext);
+			} else {
+				attrs = new IAttribute[0];
+			}
+			for (CategoryDescriptor c: ds) {
+				ds1.add(c);
+				ICategoryFilter f = c.createCategoryFilter();
+				if(f != null) {
+					f.setAttributes(attrs);
+					fs1.add(f);
+				}
+			}
+			categoryDescriptors = ds1.toArray(new IFormCategoryDescriptor[0]);
+			categoryFilters = fs1.toArray(new ICategoryFilter[0]);
 		}
-		
+	}
+
+	public IFormCategoryDescriptor[] getCategoryDescriptors() {
+		return categoryDescriptors;
 	}
 	
 	//TODO move to helper
@@ -193,19 +229,19 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 		} else if (fDescriptors == null || fDescriptors.length == 0) {
 			attributeNamesChanged();
 			fDescriptors = createPropertyDescriptors();
-			if(categoryProviders.length > 0 && sorter != null) {
-				for (ICategoryProvider p: categoryProviders) {
-					p.fillAttributeWeights(getWeights());
-				}
-			}
+//			if(categoryProviders.length > 0 && sorter != null) {
+//				for (ICategoryProvider p: categoryProviders) {
+//					p.fillAttributeWeights(getWeights());
+//				}
+//			}
 		} else {
 			if(attributeNamesChanged()) {
 				updatePropertyDescriptors();
-				if(categoryProviders.length > 0 && sorter != null) {
-					for (ICategoryProvider p: categoryProviders) {
-						p.fillAttributeWeights(getWeights());
-					}
-				}
+//				if(categoryProviders.length > 0 && sorter != null) {
+//					for (ICategoryProvider p: categoryProviders) {
+//						p.fillAttributeWeights(getWeights());
+//					}
+//				}
 			}
 //			return fDescriptors;
 		}
@@ -378,10 +414,10 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 
 	private String getCategoryByName(String attrName) {
 		String category = null;
-		if(categoryProviders.length > 0 && kbQuery != null && kbQuery.getParentTagsWithAttributes().length > 0) {
-			for (ICategoryProvider categoryProvider: categoryProviders) {
-				String c = categoryProvider.getCategory(attrName);
-				if(c != null && categoryProvider.isExpert(c)) {
+		if(categoryFilters.length > 0 && kbQuery != null && kbQuery.getParentTagsWithAttributes().length > 0) {
+			for (ICategoryFilter f: categoryFilters) {
+				String c = f.getCategory(attrName);
+				if(c != null /*&& f.isExpert(c)*/) {
 					return c;
 				}
 				if(category == null) {
@@ -405,7 +441,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 	}
 
 	private IPropertyDescriptor createJSPPropertyDescriptor(IAttribute d, String attributeName, boolean hideOnFilter) {
-		if(d != null && sorter != null && categoryProviders.length == 0) {
+		if(d != null && sorter != null /*&& categoryProviders.length == 0*/) {
 			if(d.isRequired()) sorter.setWeight(attributeName, 2);
 			else if(d.isPreferable()) sorter.setWeight(attributeName, 1);
 			else sorter.setWeight(attributeName, 0);
@@ -422,7 +458,11 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 		
 		setCategory(descriptor, attributeName, null);
 		
-		descriptor.setDescription(attributeName);
+		if(d.getDescription() != null && d.getDescription().length() > 0) {
+			descriptor.setDescription(d.getDescription());
+		} else {
+			descriptor.setDescription(attributeName);
+		}
 		return descriptor;
 	}
 
@@ -430,18 +470,9 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 	private void setCategory(PropertyDescriptor descriptor, String attributeName, CMAttributeDeclaration attrDecl) {
 		String category = getCategory(attributeName, attrDecl);
 		descriptor.setCategory(category);
-		if(SET_EXPERT_FILTER && isExpertCategory(category)) {
-			descriptor.setFilterFlags(new String[]{IPropertySheetEntry.FILTER_ID_EXPERT});
-		}
-	}
-
-	private boolean isExpertCategory(String category) {
-		for (ICategoryProvider categoryProvider: categoryProviders) {
-			if(categoryProvider.isExpert(category)) {
-				return true;
-			}
-		}
-		return false;
+//		if(SET_EXPERT_FILTER && isExpertCategory(category)) {
+//			descriptor.setFilterFlags(new String[]{IPropertySheetEntry.FILTER_ID_EXPERT});
+//		}
 	}
 
 	private IPropertyDescriptor createDefaultPropertyDescriptor(String attributeName, boolean hideOnFilter) {
@@ -483,8 +514,9 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 	protected void updatePropertyDescriptors() {
 		if (fDescriptors == null || fDescriptors.length == 0) return;
 
-		Map<String, IAttribute> as = getAttributes();
+		updateCategoryDescriptors();
 
+		Map<String, IAttribute> as = getAttributes();
 
 		// List of all names encountered in the tag and defined by the element
 		List<String> declaredNames = new ArrayList<String>();
@@ -986,6 +1018,15 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 		String[] validStrings = new String[values.size()];
 		validStrings = (String[]) values.toArray(validStrings);
 		return validStrings;
+	}
+
+	@Override
+	public void addContentAssist(Text text, IPropertyDescriptor d) {
+		if(d instanceof JSPPropertyDescriptor) {
+			JSPPropertyDescriptor d1 = (JSPPropertyDescriptor)d;
+			JSPDialogCellEditor.addContentAssist(text, d1.context, null);
+		}
+		
 	}
 
 }

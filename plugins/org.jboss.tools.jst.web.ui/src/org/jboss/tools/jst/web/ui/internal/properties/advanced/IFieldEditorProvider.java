@@ -8,22 +8,17 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.jboss.tools.jst.jsp.outline;
+package org.jboss.tools.jst.web.ui.internal.properties.advanced;
 
-import java.util.Map;
+import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 
-import org.eclipse.jface.text.IDocument;
-import org.jboss.tools.jst.web.kb.KbQuery;
 
 /**
+ * Lightweight object created with viewer for creating field editor as needed.
  * 
  * @author Viacheslav Kabanovich
  *
  */
-@Deprecated
-public interface ICategoryProvider {
-	public boolean init(IDocument document, KbQuery query);
-	public String getCategory(String attributeName);
-	public boolean isExpert(String category);
-	public void fillAttributeWeights(Map<String, Integer> weights);
+public interface IFieldEditorProvider {
+	public IFieldEditor createEditor();
 }
