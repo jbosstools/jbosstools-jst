@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2012 Red Hat, Inc.
+ * Copyright (c) 2007-2013 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -1016,11 +1016,11 @@ class ResourceChangeListener implements IResourceChangeListener {
 		}
 		f = ModelPlugin.getWorkspace().getRoot().getFile(path);
 		XModelObject p = f == null ? null : EclipseResourceUtil
-				.getObjectByResource(f.getParent());
+				.createObjectForResource(f.getParent());
 		if (p instanceof FolderImpl) {
 			((FolderImpl) p).update();
 		}
-		final XModelObject o = EclipseResourceUtil.getObjectByResource(f);
+		final XModelObject o = EclipseResourceUtil.createObjectForResource(f);
 		if (f != null && f.exists() && o != null) {
 			if (editorPart instanceof JSPMultiPageEditor) {
 				final JSPMultiPageEditor e = (JSPMultiPageEditor) editorPart;
