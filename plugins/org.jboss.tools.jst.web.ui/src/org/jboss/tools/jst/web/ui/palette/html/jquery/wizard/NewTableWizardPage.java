@@ -65,7 +65,7 @@ public class NewTableWizardPage extends NewJQueryWidgetWizardPage {
 
 	@Override
 	protected int getPreferredBrowser() {
-		return SWT.WEBKIT;
+		return isLinux ? super.getPreferredBrowser() : SWT.WEBKIT;
 	}
 
 }
