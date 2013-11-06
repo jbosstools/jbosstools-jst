@@ -120,7 +120,7 @@ public abstract class NewJQueryWidgetWizard<P extends NewJQueryWidgetWizardPage>
 	private void createHead(ElementNode html) {
 		String browserType = page.getBrowserType();
 		ResourceConstants c = ("mozilla".equals(browserType) || this instanceof NewDialogWizard) ? 
-				new ResourceConstants120() : new ResourceConstants130();
+				new ResourceConstants130() : new ResourceConstants130();
 		
 		String styleSheetURI = c.getCSSPath();
 		String jQueryScriptURI = c.getScriptPath();
@@ -143,6 +143,21 @@ public abstract class NewJQueryWidgetWizard<P extends NewJQueryWidgetWizardPage>
 		}
 
 		ElementNode head = html.addChild(TAG_HEAD);
+		if("mozilla".equals(browserType)) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("\n(function() {\n")
+			  .append("  var originalGetComputedStyle = window.getComputedStyle;\n")
+			  .append("  window.getComputedStyle = function() {\n")
+			  .append("    if (arguments.length == 1) {\n")
+			  .append("      // workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=567350 (getComputedStyle requires both arguments to be supplied)\n")
+			  .append("      return originalGetComputedStyle.call(this, arguments[0], null);\n")
+			  .append("    } else {\n")
+			  .append("      return originalGetComputedStyle.apply(this, arguments);\n")
+			  .append("    }\n")
+			  .append("  };\n")
+			  .append("}());\n");
+			head.addChild(TAG_SCRIPT, sb.toString());
+		}
 		head.addChild(TAG_TITLE, "Page Title");
 		ElementNode meta = head.addChild(TAG_META);
 		meta.addAttribute(ATTR_NAME, "viewport");

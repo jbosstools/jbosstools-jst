@@ -66,11 +66,11 @@ public class NewPanelWizard extends NewJQueryWidgetWizard<NewPanelWizardPage> im
 		ElementNode page = body.addChild(TAG_DIV);
 		page.addAttribute(ATTR_DATA_ROLE, ROLE_PAGE);
 		page.addAttribute(ATTR_ID, "jbt");
-		if("mozilla".equals(this.page.getBrowserType())) {
-			ElementNode div = page.addChild(TAG_DIV);
-			div.addAttribute(ATTR_STYLE, "padding: 20px 20px 20px 20px;");
-			div.addChild(TAG_DIV, "Preview is not implemented for this element.");
-		} else {
+//		if("mozilla".equals(this.page.getBrowserType())) {
+//			ElementNode div = page.addChild(TAG_DIV);
+//			div.addAttribute(ATTR_STYLE, "padding: 20px 20px 20px 20px;");
+//			div.addChild(TAG_DIV, "Preview is not implemented for this element.");
+//		} else {
 			addContent(page);
 			ElementNode panel = page.getChildren().get(0);
 			panel.addChild(TAG_P, "Panel Content");
@@ -79,7 +79,7 @@ public class NewPanelWizard extends NewJQueryWidgetWizard<NewPanelWizardPage> im
 			ElementNode a = content.addChild(TAG_A, "Open Panel");
 			a.addAttribute(ATTR_DATA_ROLE, ROLE_BUTTON);
 			a.addAttribute(ATTR_HREF, "#" + getID(prefixName));
-		}
+//		}
 	}
 
 }
