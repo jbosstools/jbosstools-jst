@@ -10,6 +10,8 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.text.ext.hyperlink.internal;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -132,7 +134,13 @@ public class CreateNewFileHyperlinkDetector extends AbstractHyperlinkDetector {
 				nameLc.endsWith(".html") || //$NON-NLS-1$
 				nameLc.endsWith(".xhtml")  //$NON-NLS-1$
 			){
-			return true;
+				try{
+					new URL(name);
+				}catch(MalformedURLException ex){
+					// local file, not remote one
+					return true;
+				}
+				
 		}
 		return false;
 	}

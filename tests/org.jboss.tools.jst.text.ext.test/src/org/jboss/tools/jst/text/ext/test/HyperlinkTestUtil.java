@@ -304,6 +304,9 @@ public class HyperlinkTestUtil extends TestCase{
 	}
 	
 	private static String findRegionInformation(IDocument document, int offset, List<TestRegion> regionList) throws BadLocationException{
+		if(regionList.size() == 0){
+			return "empty list";
+		}
 		int index = 0;
 		for(int i = 0; i < regionList.size(); i++){
 			TestRegion testRegion = regionList.get(i);
@@ -496,8 +499,9 @@ public class HyperlinkTestUtil extends TestCase{
 				
 				assertNotNull("The document for the file \"" + fileName + "\" is not loaded", document);
 				
-				if(regionList.get(0).region == null)
+				if(regionList.size() > 0 && regionList.get(0).region == null){
 					loadRegions(regionList, document);
+				}
 		
 		
 				TestTextEditor part = openFileInTestTextEditor(file);

@@ -90,6 +90,16 @@ public class CreateNewFileHyperlinkTest extends TestCase{
 		
 		HyperlinkTestUtil.checkRegionsInTextEditor(project, pageName, regionList, new CreateNewFileHyperlinkDetector());
 	}
+	
+	public void testRemoteFiles() throws Exception{
+		checkHyperlinkDetectorEmptyList("/src/test/test_remote.jsp"); //$NON-NLS-1$
+	}
+	
+	private void checkHyperlinkDetectorEmptyList(String pageName) throws Exception{
+		ArrayList<TestRegion> regionList = new ArrayList<TestRegion>();
+		
+		HyperlinkTestUtil.checkRegionsInTextEditor(project, pageName, regionList, new CreateNewFileHyperlinkDetector());
+	}
 
 	public void testHyperlinksForXML() throws Exception{
 		checkHyperlinks("/src/test/test.xml"); //$NON-NLS-1$
