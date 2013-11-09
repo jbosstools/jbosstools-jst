@@ -109,17 +109,6 @@ public class CSSModel implements ICSSDialogModel {
 				partitioner.connect(model.getStructuredDocument());
 
 			}
-			// workaround for JBIDE-4407
-			oldText = model.getStructuredDocument().get();
-
-			if (model instanceof ICSSModel) {
-				ICSSModel cssModel = (ICSSModel) model;
-
-				if (cssModel.getDocument() instanceof CSSStyleSheet) {
-					styleSheet = (CSSStyleSheet) cssModel.getDocument();
-					prepareModel(styleSheet);
-				}
-			}
 		} catch (IOException e) {
 			CSSPlugin.getDefault().logError(e.getMessage());
 		} catch (CoreException e) {
