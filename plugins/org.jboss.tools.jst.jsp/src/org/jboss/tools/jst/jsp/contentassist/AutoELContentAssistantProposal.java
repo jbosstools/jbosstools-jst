@@ -15,10 +15,12 @@ import java.io.StringReader;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.internal.ui.JavaPlugin;
+import org.eclipse.jdt.internal.ui.text.java.hover.JavadocHover;
 import org.eclipse.jdt.internal.ui.text.javadoc.JavadocContentAccess2;
 import org.eclipse.jdt.internal.ui.viewsupport.JavaElementLinks;
 import org.eclipse.jdt.ui.JavaElementLabels;
@@ -94,13 +96,9 @@ public class AutoELContentAssistantProposal extends
 	}
 	
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.wst.sse.ui.internal.contentassist.CustomCompletionProposal
-	 * #getAdditionalProposalInfo()
+	 * @see org.eclipse.jface.text.contentassist.ICompletionProposalExtension5#getAdditionalProposalInfo(org.eclipse.core.runtime.IProgressMonitor)
 	 */
-	public String getAdditionalProposalInfo() {
+	public Object getAdditionalProposalInfo(IProgressMonitor monitor) {
 		if (fAdditionalProposalInfo == null) {
 			if (this.fJavaElements != null && this.fJavaElements.length > 0) {
 				Arrays.sort(fJavaElements, ELProposalProcessor.CASE_INSENSITIVE_ORDER);
@@ -109,10 +107,10 @@ public class AutoELContentAssistantProposal extends
 				this.fAdditionalProposalInfo = extractProposalContextInfo(fProperySource);
 			}
 		}
-		return fAdditionalProposalInfo;
+		return new ELBrowserInformationControlInput(null, fJavaElements, processLinks(fAdditionalProposalInfo), 0);
 	}
-
-
+	
+	
 	/*
 	 * Extracts the additional proposal information based on Javadoc for the
 	 * stored IJavaElement objects
@@ -139,7 +137,7 @@ public class AutoELContentAssistantProposal extends
 				if (elements[i] instanceof IMember
 						|| elements[i].getElementType() == IJavaElement.LOCAL_VARIABLE
 						|| elements[i].getElementType() == IJavaElement.TYPE_PARAMETER) {
-					buffer.append('\uE467').append(' ');
+//					buffer.append('\uE467').append(' ');
 					addFullInfo(buffer, elements[i]);
 					buffer.append("<br/>"); //$NON-NLS-1$
 					hasContents = true;
@@ -158,7 +156,7 @@ public class AutoELContentAssistantProposal extends
 		if (!hasContents || buffer.length() == 0)
 			return null;
 
-		HTMLPrinter.insertPageProlog(buffer, 0, (String) null);
+		HTMLPrinter.insertPageProlog(buffer, 0, getCSSStyles());
 		HTMLPrinter.addPageEpilog(buffer);
 		return buffer.toString();
 	}
@@ -177,7 +175,7 @@ public class AutoELContentAssistantProposal extends
 		if (buffer.length() == 0)
 			return null;
 
-		HTMLPrinter.insertPageProlog(buffer, 0, (String) null);
+		HTMLPrinter.insertPageProlog(buffer, 0, getCSSStyles());
 		HTMLPrinter.addPageEpilog(buffer);
 		return buffer.toString();
 	}
@@ -213,19 +211,8 @@ public class AutoELContentAssistantProposal extends
 			flags = LABEL_FLAGS;
 			break;
 		}
-		StringBuffer label = new StringBuffer(JavaElementLinks.getElementLabel(
-				element, flags));
 
-		// The following lines were commented out because of JBIDE-8923 faced in
-		// Eclipse 3.7
-		//
-		// StringBuffer buf= new StringBuffer();
-		//		buf.append("<span style='word-wrap:break-word;'>"); //$NON-NLS-1$
-		// buf.append(label);
-		//		buf.append("</span>"); //$NON-NLS-1$
-
-		// return buf.toString();
-		return label.toString();
+		return JavadocHover.getImageAndLabel(element, true, JavaElementLinks.getElementLabel(element, flags, true));
 	}
 
 	/*

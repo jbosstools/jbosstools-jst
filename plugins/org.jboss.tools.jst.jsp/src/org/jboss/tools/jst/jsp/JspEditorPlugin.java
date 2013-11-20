@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2007 Exadel, Inc. and Red Hat, Inc.
+ * Copyright (c) 2007-2013 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Exadel, Inc. and Red Hat, Inc. - initial API and implementation
+ *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp;
 
@@ -28,6 +28,9 @@ import org.eclipse.jst.jsp.ui.internal.JSPUIPlugin;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.jboss.tools.common.log.BaseUIPlugin;
@@ -115,24 +118,28 @@ public class JspEditorPlugin extends BaseUIPlugin {
 			else
 				s = s1 + File.separator;
 			return new Path(s);
-		}	catch(IOException exception)	{
+		}	catch(IOException exception) {
 			getDefault().logError(exception);
 		}
 		return null;
 	}
 
-	public static Shell getActiveShell()
-	{
-		if(plugin == null)
-			return null;
-		IWorkbench workBench = plugin.getWorkbench();
-		if(workBench == null)
-			return null;
-		IWorkbenchWindow workBenchWindow = workBench.getActiveWorkbenchWindow();
-		if(workBenchWindow == null)
-			return null;
-		else
-			return workBenchWindow.getShell();
+	public static Shell getActiveWorkbenchShell() {
+		IWorkbench workBench = plugin == null ? null : plugin.getWorkbench();
+		IWorkbenchWindow workBenchWindow = workBench == null ? null : workBench.getActiveWorkbenchWindow();
+		return workBenchWindow == null ? null : workBenchWindow.getShell();
+	}
+	
+	public static IWorkbenchPage getActivePage() {
+		IWorkbench workBench = plugin == null ? null : plugin.getWorkbench();
+		IWorkbenchWindow window = workBench == null ? null : workBench.getActiveWorkbenchWindow();
+		return window == null ? null : window.getActivePage();
+	}
+
+	public static IWorkbenchSite getSite() {
+		IWorkbenchPage page = getActivePage();
+		IWorkbenchPart part = page == null ? null : page.getActivePart();
+		return part == null ? null : part.getSite();
 	}
 
 	public static JspEditorPlugin getDefault() {
