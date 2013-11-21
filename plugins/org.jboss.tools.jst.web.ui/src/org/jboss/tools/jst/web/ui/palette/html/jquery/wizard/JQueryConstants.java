@@ -38,14 +38,14 @@ public interface JQueryConstants extends JQueryHTMLConstants {
 	public String EDITOR_ID_CHECKED = CHECKED;
 	public String EDITOR_ID_SELECTED = SELECTED;
 	public String EDITOR_ID_THEME = "theme";
-	public String EDITOR_ID_TRACK_THEME = "track-theme";
-	public String EDITOR_ID_CONTENT_THEME = "content-theme";
-	public String EDITOR_ID_DIVIDER_THEME = "divider-theme";
+	public String EDITOR_ID_TRACK_THEME = ATTR_DATA_TRACK_THEME;
+	public String EDITOR_ID_CONTENT_THEME = ATTR_DATA_CONTENT_THEME;
+	public String EDITOR_ID_DIVIDER_THEME = ATTR_DATA_DIVIDER_THEME;
 
 	public String EDITOR_ID_NUMBERED = "numbered";
-	public String EDITOR_ID_READ_ONLY = "read-only";
+	public String EDITOR_ID_READ_ONLY = ATTR_READONLY;
 	public String EDITOR_ID_AUTODIVIDERS = ATTR_DATA_AUTODIVIDERS;
-	public String EDITOR_ID_SEARCH_FILTER = "search-filter";
+	public String EDITOR_ID_SEARCH_FILTER = ATTR_DATA_FILTER;
 	public String EDITOR_ID_INSET = ATTR_DATA_INSET;
 
 	public String EDITOR_ID_OFF = "off";
@@ -55,7 +55,7 @@ public interface JQueryConstants extends JQueryHTMLConstants {
 	public String EDITOR_ID_URL = "url";
 	public String EDITOR_ID_SRC = ATTR_SRC;
 	public String EDITOR_ID_TRANSITION = ATTR_DATA_TRANSITION;
-	public String EDITOR_ID_CLOSE_BUTTON = "close";
+	public String EDITOR_ID_CLOSE_BUTTON = ATTR_DATA_CLOSE_BTN;
 	public String EDITOR_ID_ADD_ID = "add-id";
 	public String EDITOR_ID_POSTER = ATTR_POSTER;
 
@@ -86,7 +86,7 @@ public interface JQueryConstants extends JQueryHTMLConstants {
 	public String EDITOR_ID_ADD_FOOTER = "add-footer";
 	public String EDITOR_ID_FOOTER_TITLE = "footer-title";
 	public String EDITOR_ID_TEXT_TYPE = "text-type";
-	public String EDITOR_ID_CLEAR_INPUT = "clear-input";
+	public String EDITOR_ID_CLEAR_INPUT = ATTR_DATA_CLEAR_BTN;
 	public String EDITOR_ID_PLACEHOLDER = ATTR_PLACEHOLDER;
 	public String EDITOR_ID_PATTERN = ATTR_PATTERN;
 	public String EDITOR_ID_AUTOFOCUS = ATTR_AUTOFOCUS;
@@ -96,7 +96,7 @@ public interface JQueryConstants extends JQueryHTMLConstants {
 	public String EDITOR_ID_FULL_SCREEN = ATTR_DATA_FULL_SCREEN;
 	public String EDITOR_ID_LEFT_BUTTON = "left-button";
 	public String EDITOR_ID_RIGHT_BUTTON = "right-button";
-	public String EDITOR_ID_BACK_BUTTON = "back-button";
+	public String EDITOR_ID_BACK_BUTTON = ATTR_DATA_ADD_BACK_BUTTON;
 	public String EDITOR_ID_POPUP_BUTTON = "popup-button";
 	public String EDITOR_ID_LEFT_BUTTON_LABEL = "left-button-label";
 	public String EDITOR_ID_LEFT_BUTTON_URL = "left-button-uri";
@@ -114,13 +114,13 @@ public interface JQueryConstants extends JQueryHTMLConstants {
 	public String EDITOR_ID_OVERLAY = "overlay";
 	public String EDITOR_ID_POSITION_TO = ATTR_DATA_POSITION_TO;
 	public String EDITOR_ID_INFO_STYLED = "info-styled";
-	public String EDITOR_ID_SWIPE_CLOSE = "swipe-close";
+	public String EDITOR_ID_SWIPE_CLOSE = ATTR_DATA_SWIPE_CLOSE;
 
 	public String EDITOR_ID_HEADER = "header";
-	public String EDITOR_ID_COLLAPSED = "collapsed";
+	public String EDITOR_ID_COLLAPSED = ATTR_DATA_COLLAPSED;
 	public String EDITOR_ID_FIELD_SET = "field-set";
 
-	public String EDITOR_ID_PANEL_POSITION = "panel-position";
+	public String EDITOR_ID_PANEL_POSITION = ATTR_DATA_POSITION;
 	public String EDITOR_ID_DISPLAY = ATTR_DATA_DISPLAY;
 
 	public String EDITOR_ID_MODE = ATTR_DATA_MODE;

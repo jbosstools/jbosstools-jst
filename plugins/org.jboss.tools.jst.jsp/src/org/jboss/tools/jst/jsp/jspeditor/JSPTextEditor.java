@@ -22,6 +22,7 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextListener;
@@ -67,6 +68,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.editors.text.ILocationProvider;
@@ -131,6 +133,8 @@ import org.jboss.tools.jst.jsp.jspeditor.dnd.FileTagProposalLoader;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.JSPPaletteInsertHelper;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.JSPTagProposalFactory;
 import org.jboss.tools.jst.jsp.jspeditor.dnd.TagProposal;
+import org.jboss.tools.jst.jsp.messages.JstUIMessages;
+import org.jboss.tools.jst.jsp.outline.IFormPropertySheetPage;
 import org.jboss.tools.jst.jsp.outline.JSPContentOutlineConfiguration;
 import org.jboss.tools.jst.jsp.outline.JSPPropertySheetConfiguration;
 import org.jboss.tools.jst.jsp.outline.ValueHelper;
@@ -154,6 +158,7 @@ import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 import org.jboss.tools.jst.web.kb.taglib.TagLibraryManager;
 import org.jboss.tools.jst.web.tld.VpeTaglibManager;
 import org.jboss.tools.jst.web.tld.VpeTaglibManagerProvider;
+import org.osgi.framework.Bundle;
 import org.w3c.dom.DocumentType;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -294,6 +299,20 @@ public class JSPTextEditor extends StructuredTextEditor implements
 					|| fPropertySheetPage.getControl().isDisposed()) {
 				JSPPropertySheetConfiguration cfg = new JSPPropertySheetConfiguration();
 				if (cfg != null) {
+					boolean isHtml = false;
+					if(getEditorInput() instanceof IFileEditorInput) {
+						IFileEditorInput f = (IFileEditorInput)getEditorInput();
+						isHtml = "html".equals(f.getFile().getFileExtension());
+					}
+					if(isHtml) {
+						IFormPropertySheetPage propertySheetPage = createVisualPropertySheetPage();
+						if(propertySheetPage != null) {
+							propertySheetPage.setConfiguration(cfg);
+							propertySheetPage.selectionChanged(parentEditor, null);
+							fPropertySheetPage = propertySheetPage;
+							return fPropertySheetPage;
+						}
+					}
 					ConfigurablePropertySheetPage propertySheetPage = new ConfigurablePropertySheetPage() {
 						@Override
 						public void setActionBars(IActionBars actionBars) {
@@ -315,6 +334,24 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			return fPropertySheetPage;
 		}
 		return super.getAdapter(adapter);
+	}
+
+	static final String FORM_PROPERTY_SHEET_PAGE_CLASS = "org.jboss.tools.jst.web.ui.internal.properties.FormPropertySheetPage";
+
+	private IFormPropertySheetPage createVisualPropertySheetPage() {
+		Bundle b = Platform.getBundle("org.jboss.tools.jst.web.ui");
+		if(b != null) {
+			try {
+				return (IFormPropertySheetPage) b.loadClass(FORM_PROPERTY_SHEET_PAGE_CLASS).newInstance();
+			} catch (ClassNotFoundException e) {
+				JspEditorPlugin.getDefault().logError(e);
+			} catch (InstantiationException e) {
+				JspEditorPlugin.getDefault().logError(e);
+			} catch (IllegalAccessException e) {
+				JspEditorPlugin.getDefault().logError(e);
+			}
+		}
+		return null;
 	}
 
 	private void setSorter(PropertySheetSorter sorter,

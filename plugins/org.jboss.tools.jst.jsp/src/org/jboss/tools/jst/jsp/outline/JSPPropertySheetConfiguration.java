@@ -10,9 +10,11 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.jsp.outline;
 
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
+import org.eclipse.ui.views.properties.PropertySheetPage;
 import org.eclipse.wst.sse.core.internal.provisional.INodeNotifier;
 import org.eclipse.wst.xml.ui.views.properties.XMLPropertySheetConfiguration;
 
@@ -25,11 +27,26 @@ import org.eclipse.wst.xml.ui.views.properties.XMLPropertySheetConfiguration;
 public class JSPPropertySheetConfiguration extends XMLPropertySheetConfiguration {
 	private AttributeSorter sorter = new AttributeSorter();
 	private IPropertySheetPage fPropertySheetPage = null;
+	private PropertySheetPage page2 = null;
 	private JSPPropertySourceProvider0 fPropertySourceProvider = null;
 
 	public IPropertySourceProvider getPropertySourceProvider(IPropertySheetPage page) {
 		if (fPropertySourceProvider == null) {
-			super.getPropertySourceProvider(page);
+			if(page instanceof PropertySheetPage) {
+				page2 = (PropertySheetPage)page;
+			} else if(page instanceof IFormPropertySheetPage) {
+				page2 = new PropertySheetPage() {
+					public void refresh() {
+						if(fPropertySheetPage instanceof IFormPropertySheetPage) {
+							((IFormPropertySheetPage)fPropertySheetPage).refresh();
+						}
+					}
+					public Control getControl() {
+						return fPropertySheetPage == null ? null : fPropertySheetPage.getControl();
+					}
+				};
+			}
+			super.getPropertySourceProvider(page2);
 			fPropertySheetPage = page;
 			fPropertySourceProvider = new JSPPropertySourceProvider0();
 			fPropertySourceProvider.setSorter(sorter);
