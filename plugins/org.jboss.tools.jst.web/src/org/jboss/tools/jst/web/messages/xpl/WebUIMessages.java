@@ -176,4 +176,10 @@ public class WebUIMessages extends NLS {
 	public static String INCORRECT_URI;
 	public static String INCORRECT_PREFIX;
 	public static String OpenWithBrowser;
+	
+	public static String FileDoesNotExistClickToCreate;
+	public static String FileDoesNotExistDoYouWantToCreate;
+	public static String Question;
+	public static String UseWizard;
+	public static String WizardNotFound;
 }
