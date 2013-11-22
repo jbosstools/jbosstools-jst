@@ -15,24 +15,42 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.text.hyperlink.IHyperlinkDetector;
 import org.eclipse.jface.text.templates.ContextTypeRegistry;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
+import org.eclipse.jst.jsp.ui.internal.JSPUIPlugin;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchSite;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.editors.text.templates.ContributionContextTypeRegistry;
 import org.eclipse.ui.editors.text.templates.ContributionTemplateStore;
 import org.jboss.tools.common.log.BaseUIPlugin;
 import org.jboss.tools.common.log.IPluginLog;
+import org.jboss.tools.common.text.ext.hyperlink.HyperlinkDetector;
 import org.jboss.tools.jst.web.ui.editor.pref.template.TemplateContextTypeIdsXHTML;
+import org.jboss.tools.jst.web.ui.internal.editor.preferences.JSPOccurrencePreferenceConstants;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.HTMLWizardVisualPreviewInitializationException;
 import org.osgi.framework.BundleContext;
 
 public class WebUiPlugin extends BaseUIPlugin {
 	public static final String PLUGIN_ID = "org.jboss.tools.jst.web.ui"; //$NON-NLS-1$
+	public static final String EXTESION_POINT_LOCALE_PROVIDER = "org.jboss.tools.jst.web.ui.localeProvider"; //$NON-NLS-1$
+
+	public static final String CA_JSF_ACTION_IMAGE_PATH = "images/ca/icons_JSF_Actions.gif"; //$NON-NLS-1$
+	public static final String CA_JSF_EL_IMAGE_PATH = "images/ca/icons_JSF_EL.gif"; //$NON-NLS-1$
+	public static final String CA_RESOURCES_IMAGE_PATH = "images/ca/icons_Resource_path.gif"; //$NON-NLS-1$
+	public static final String CA_JSF_MESSAGES_IMAGE_PATH = "images/ca/icons_Message_Bundles.gif"; //$NON-NLS-1$
+
 	static WebUiPlugin INSTANCE;
 	/**
 	 * The template store for the html editor.
@@ -194,4 +212,61 @@ public class WebUiPlugin extends BaseUIPlugin {
 	public static int getPreferredBrowser() {
 		return isMacOS ? SWT.WEBKIT : SWT.MOZILLA;
 	}
+
+
+	public static Shell getActiveWorkbenchShell() {
+		IWorkbench workBench = INSTANCE == null ? null : INSTANCE.getWorkbench();
+		IWorkbenchWindow workBenchWindow = workBench == null ? null : workBench.getActiveWorkbenchWindow();
+		return workBenchWindow == null ? null : workBenchWindow.getShell();
+	}
+	
+	public static IWorkbenchPage getActivePage() {
+		IWorkbench workBench = INSTANCE == null ? null : INSTANCE.getWorkbench();
+		IWorkbenchWindow window = workBench == null ? null : workBench.getActiveWorkbenchWindow();
+		return window == null ? null : window.getActivePage();
+	}
+
+	public static IWorkbenchSite getSite() {
+		IWorkbenchPage page = getActivePage();
+		IWorkbenchPart part = page == null ? null : page.getActivePart();
+		return part == null ? null : part.getSite();
+	}
+
+	protected void initializeDefaultPluginPreferences() {
+		IPreferenceStore store = getPreferenceStore();
+		JSPOccurrencePreferenceConstants.initializeDefaultValues(store);
+
+	}
+
+	public void initDefaultPluginPreferences() {
+		IPreferenceStore store = JSPUIPlugin.getDefault().getPreferenceStore();
+
+		JSPOccurrencePreferenceConstants.initializeDefaultValues(store);
+
+	}
+
+	/**
+	 * Returns an image descriptor for the image file at the given plug-in
+	 * relative path
+	 * 
+	 * @param path
+	 *            the path
+	 * @return the image descriptor
+	 */
+	public static ImageDescriptor getImageDescriptor(String path) {
+		return imageDescriptorFromPlugin(PLUGIN_ID, path);
+	}
+
+	/**
+	 * TODO If we need it, add implements IAdaptable, if not remove this method
+	 * @param adapter
+	 * @return
+	 */
+	public Object getAdapter(Class adapter) {
+		if (adapter == IHyperlinkDetector.class) {
+			return HyperlinkDetector.getInstance();
+		}
+		return null;
+	}
+
 }

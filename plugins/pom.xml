@@ -12,16 +12,9 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	<version>3.6.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<modules>
-		<module>org.jboss.tools.jst.css</module>
-		<module>org.jboss.tools.jst.firstrun</module>
-		<module>org.jboss.tools.jst.jsp</module>
-		<module>org.jboss.tools.jst.text.ext</module>
 		<module>org.jboss.tools.jst.web</module>
 		<module>org.jboss.tools.jst.web.kb</module>
-		<module>org.jboss.tools.jst.web.tiles</module>
-		<module>org.jboss.tools.jst.web.tiles.ui</module>
 		<module>org.jboss.tools.jst.web.ui</module>
-		<module>org.jboss.tools.jst.web.verification</module>
 	</modules>
 </project>
 	

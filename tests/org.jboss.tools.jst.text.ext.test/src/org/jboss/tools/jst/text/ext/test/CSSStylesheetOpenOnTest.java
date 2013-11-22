@@ -30,7 +30,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.jboss.tools.common.text.ext.hyperlink.HyperlinkDetector;
-import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.test.util.WorkbenchUtils;
 
 public class CSSStylesheetOpenOnTest extends TestCase {

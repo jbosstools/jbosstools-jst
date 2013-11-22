@@ -23,7 +23,7 @@ import org.eclipse.ui.texteditor.MarkerAnnotation;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.eclipse.wst.sse.ui.internal.reconcile.TemporaryAnnotation;
 import org.jboss.tools.common.base.test.validation.AbstractAsYouTypeValidationTest;
-import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.tests.AbstractResourceMarkerTest;
 
 /**

@@ -13,7 +13,7 @@ package org.jboss.tools.jst.css.test.jbide;
 
 import junit.framework.TestCase;
 
-import org.jboss.tools.jst.css.dialog.CSSStyleDialog;
+import org.jboss.tools.jst.web.ui.internal.css.dialog.CSSStyleDialog;
 import org.jboss.tools.test.util.WorkbenchUtils;
 
 /**
