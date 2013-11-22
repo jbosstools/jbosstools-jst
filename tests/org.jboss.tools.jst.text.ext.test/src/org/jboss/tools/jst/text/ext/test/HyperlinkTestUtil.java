@@ -47,8 +47,8 @@ import org.jboss.tools.common.model.ui.texteditors.XMLTextEditorStandAlone;
 import org.jboss.tools.common.text.ext.hyperlink.AbstractHyperlink;
 import org.jboss.tools.common.text.ext.hyperlink.IHyperlinkRegion;
 import org.jboss.tools.common.text.ext.util.AxisUtil;
-import org.jboss.tools.jst.jsp.jspeditor.JSPMultiPageEditor;
-import org.jboss.tools.jst.text.ext.hyperlink.internal.CreateNewFileHyperlink;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPMultiPageEditor;
+import org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.internal.CreateNewFileHyperlink;
 import org.jboss.tools.jst.web.ui.editors.WebCompoundEditor;
 
 public class HyperlinkTestUtil extends TestCase{

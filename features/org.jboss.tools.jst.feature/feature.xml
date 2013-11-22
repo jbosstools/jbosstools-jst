@@ -49,28 +49,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.jboss.tools.jst.jsp"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.jboss.tools.jst.firstrun"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.jboss.tools.jst.text.ext"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.jboss.tools.jst.css"
          download-size="0"
          install-size="0"
          version="0.0.0"

@@ -23,7 +23,7 @@ import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.XModelTransferBuffer;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
-import org.jboss.tools.jst.jsp.jspeditor.dnd.JSPPaletteInsertHelper;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.JSPPaletteInsertHelper;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteItem;
 

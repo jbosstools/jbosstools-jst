@@ -15,9 +15,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.part.IPage;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
-import org.jboss.tools.jst.css.properties.CSSPropertyPage;
+import org.jboss.tools.jst.web.ui.internal.css.properties.CSSPropertyPage;
 import org.jboss.tools.jst.css.test.AbstractCSSViewTest;
-import org.jboss.tools.jst.css.view.CSSEditorView;
+import org.jboss.tools.jst.web.ui.internal.css.view.CSSEditorView;
 import org.jboss.tools.test.util.JobUtils;
 
 /**
