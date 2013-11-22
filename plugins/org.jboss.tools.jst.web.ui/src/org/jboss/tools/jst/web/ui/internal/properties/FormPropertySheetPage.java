@@ -30,7 +30,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
 import org.eclipse.wst.sse.ui.views.properties.PropertySheetConfiguration;
-import org.jboss.tools.jst.jsp.outline.IFormPropertySheetPage;
+import org.jboss.tools.jst.web.ui.internal.editor.outline.IFormPropertySheetPage;
 
 /**
  * 

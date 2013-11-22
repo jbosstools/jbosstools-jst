@@ -6,7 +6,6 @@ Bundle-Version: 3.6.0.qualifier
 Bundle-Vendor: %Bundle-Vendor.0
 Require-Bundle: org.jboss.tools.jst.web.ui,
  org.jboss.tools.jst.web,
- org.jboss.tools.jst.jsp,
  org.eclipse.ui,
  org.eclipse.gef,
  org.eclipse.jface.text,

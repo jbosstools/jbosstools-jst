@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.test;
 
-import org.jboss.tools.jst.jsp.preferences.JSPOccurrencesPreferencePage;
+import org.jboss.tools.jst.web.ui.internal.editor.preferences.JSPOccurrencesPreferencePage;
 import org.jboss.tools.tests.PreferencePageTest;
 
 /**

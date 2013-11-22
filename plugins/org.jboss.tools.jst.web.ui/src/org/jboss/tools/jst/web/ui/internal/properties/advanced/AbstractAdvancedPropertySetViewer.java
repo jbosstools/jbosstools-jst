@@ -43,7 +43,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.jboss.tools.common.ui.widget.editor.CompositeEditor;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.SwtFieldEditorFactory;
-import org.jboss.tools.jst.jsp.outline.IFormPropertySource;
+import org.jboss.tools.jst.web.ui.internal.editor.outline.IFormPropertySource;
 import org.jboss.tools.jst.web.ui.internal.properties.AbstractPropertySetViewer;
 import org.jboss.tools.jst.web.ui.internal.properties.IPropertySheetModelListener;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.ComboContentProposalProvider;
