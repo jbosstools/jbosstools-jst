@@ -46,13 +46,25 @@
             name="JSF Core"
             uri="http://java.sun.com/jsf/core"/>
       <tag-lib
+            location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/JsfCore.xml"
+            name="JSF Core"
+            uri="http://xmlns.jcp.org/jsf/core"/>
+      <tag-lib
             location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/JsfHtmlBasic.xml"
             name="JSF HTML Basic"
             uri="http://java.sun.com/jsf/html"/>
       <tag-lib
+            location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/JsfHtmlBasic.xml"
+            name="JSF HTML Basic"
+            uri="http://xmlns.jcp.org/jsf/html"/>
+      <tag-lib
             location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/Facelets.xml"
             name="Facelets UI"
             uri="http://java.sun.com/jsf/facelets"/>
+      <tag-lib
+            location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/Facelets.xml"
+            name="Facelets UI"
+            uri="http://xmlns.jcp.org/jsf/facelets"/>
       <tag-lib
             location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/FaceletsHtml.xml"
             name="Facelets Html"
