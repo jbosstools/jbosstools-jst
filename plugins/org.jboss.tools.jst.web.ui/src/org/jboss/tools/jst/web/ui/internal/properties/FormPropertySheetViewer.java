@@ -32,8 +32,8 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
-import org.jboss.tools.jst.jsp.outline.IFormCategoryDescriptor;
-import org.jboss.tools.jst.jsp.outline.IFormPropertySource;
+import org.jboss.tools.jst.web.ui.internal.editor.outline.IFormCategoryDescriptor;
+import org.jboss.tools.jst.web.ui.internal.editor.outline.IFormPropertySource;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 /**
