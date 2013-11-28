@@ -90,6 +90,7 @@ public class WebUiPlugin extends BaseUIPlugin {
 	public static IPluginLog getPluginLog() {
 		return getDefault();
 	}
+	
 	public TemplateStore getTemplateStore() {
 		if (this.fTemplateStore == null) {
 			this.fTemplateStore = new ContributionTemplateStore(getTemplateContextRegistry(), getPreferenceStore(), "org.jboss.tools.jsf.ui.custom_templates");
@@ -212,7 +213,6 @@ public class WebUiPlugin extends BaseUIPlugin {
 	public static int getPreferredBrowser() {
 		return isMacOS ? SWT.WEBKIT : SWT.MOZILLA;
 	}
-
 
 	public static Shell getActiveWorkbenchShell() {
 		IWorkbench workBench = INSTANCE == null ? null : INSTANCE.getWorkbench();

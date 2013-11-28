@@ -10,26 +10,12 @@
  ******************************************************************************/
 package org.jboss.tools.jst.web.ui.internal.editor.contentassist;
 
-import java.io.Reader;
-import java.io.StringReader;
-import java.util.Arrays;
-import java.util.List;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.IMember;
-import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.internal.ui.JavaPlugin;
-import org.eclipse.jdt.internal.ui.text.java.hover.JavadocHover;
-import org.eclipse.jdt.internal.ui.text.javadoc.JavadocContentAccess2;
-import org.eclipse.jdt.internal.ui.viewsupport.JavaElementLinks;
-import org.eclipse.jdt.ui.JavaElementLabels;
-import org.eclipse.jface.internal.text.html.HTMLPrinter;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.swt.graphics.Image;
 import org.jboss.tools.common.el.core.ca.MessagesELTextProposal;
-import org.jboss.tools.common.el.ui.ca.ELProposalProcessor;
-import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.el.ui.internal.info.ELInfoHover;
 
 /**
  * Class to provide EL proposals to Content Assistant. The main purpose is to
@@ -42,8 +28,8 @@ import org.jboss.tools.common.model.XModelObject;
 public class AutoELContentAssistantProposal extends
 		AutoContentAssistantProposal {
 	private IJavaElement[] fJavaElements;
-	private MessagesELTextProposal fProperySource;
-	private String fAdditionalProposalInfo;
+	private MessagesELTextProposal fPropertySource;
+	private Object fAdditionalProposalInfo;
 
 	/**
 	 * Constructs the proposal object
@@ -67,7 +53,7 @@ public class AutoELContentAssistantProposal extends
 				cursorPosition, image, displayString, alternateMatch,
 				contextInformation, null, relevance);
 		this.fJavaElements = elements;
-		this.fProperySource = null;
+		this.fPropertySource = null;
 	}
 
 	/**
@@ -92,165 +78,26 @@ public class AutoELContentAssistantProposal extends
 				cursorPosition, image, displayString, alternateMatch,
 				contextInformation, null, relevance);
 		this.fJavaElements = null;
-		this.fProperySource = propertySource;
+		this.fPropertySource = propertySource;
 	}
 	
+	private static final String EMPTY_ADDITIONAL_INFO = new String();
 	/*
 	 * @see org.eclipse.jface.text.contentassist.ICompletionProposalExtension5#getAdditionalProposalInfo(org.eclipse.core.runtime.IProgressMonitor)
 	 */
 	public Object getAdditionalProposalInfo(IProgressMonitor monitor) {
 		if (fAdditionalProposalInfo == null) {
 			if (this.fJavaElements != null && this.fJavaElements.length > 0) {
-				Arrays.sort(fJavaElements, ELProposalProcessor.CASE_INSENSITIVE_ORDER);
-				this.fAdditionalProposalInfo = extractProposalContextInfo(fJavaElements);
-			} else if (fProperySource != null) {
-				this.fAdditionalProposalInfo = extractProposalContextInfo(fProperySource);
+				fAdditionalProposalInfo = ELInfoHover.getHoverInfo(fJavaElements, monitor);
+			} else if (fPropertySource != null) {
+				fAdditionalProposalInfo = ELInfoHover.getHoverInfo(
+						fPropertySource.getBaseName(), fPropertySource.getPropertyName(), 
+						fPropertySource.getAllObjects(), monitor);
 			}
 		}
-		return new ELBrowserInformationControlInput(null, fJavaElements, processLinks(fAdditionalProposalInfo), 0);
-	}
-	
-	
-	/*
-	 * Extracts the additional proposal information based on Javadoc for the
-	 * stored IJavaElement objects
-	 */
-	private String extractProposalContextInfo(IJavaElement[] elements) {
-		int nResults = elements.length;
-		StringBuffer buffer = new StringBuffer();
-		boolean hasContents = false;
-		IJavaElement element = null;
-
-		if (nResults > 1) {
-			/*
-			 * for (int i= 0; i < elements.length; i++) { if (elements[i] ==
-			 * null) continue; if (elements[i] instanceof IMember ||
-			 * elements[i].getElementType() == IJavaElement.LOCAL_VARIABLE ||
-			 * elements[i].getElementType() == IJavaElement.TYPE_PARAMETER) {
-			 * buffer
-			 * .append('\uE467').append(' ').append(getInfoText(elements[i]));
-			 * hasContents= true; } buffer.append("<br/>"); //$NON-NLS-1$ }
-			 */
-			for (int i = 0; i < elements.length; i++) {
-				if (elements[i] == null)
-					continue;
-				if (elements[i] instanceof IMember
-						|| elements[i].getElementType() == IJavaElement.LOCAL_VARIABLE
-						|| elements[i].getElementType() == IJavaElement.TYPE_PARAMETER) {
-//					buffer.append('\uE467').append(' ');
-					addFullInfo(buffer, elements[i]);
-					buffer.append("<br/>"); //$NON-NLS-1$
-					hasContents = true;
-				}
-			}
-		} else {
-			element = elements[0];
-			if (element instanceof IMember
-					|| element.getElementType() == IJavaElement.LOCAL_VARIABLE
-					|| element.getElementType() == IJavaElement.TYPE_PARAMETER) {
-				addFullInfo(buffer, element);
-				hasContents = true;
-			}
-		}
-
-		if (!hasContents || buffer.length() == 0)
-			return null;
-
-		HTMLPrinter.insertPageProlog(buffer, 0, getCSSStyles());
-		HTMLPrinter.addPageEpilog(buffer);
-		return buffer.toString();
-	}
-
-	/*
-	 * Extracts the additional proposal information based on Javadoc for the
-	 * stored IJavaElement objects
-	 */
-	private String extractProposalContextInfo(
-			MessagesELTextProposal propertySource) {
-		StringBuffer buffer = new StringBuffer();
-		buffer.append(ELProposalProcessor.getELMessagesHoverInternal(
-				propertySource.getBaseName(), propertySource.getPropertyName(),
-				(List<XModelObject>) propertySource.getAllObjects()));
-
-		if (buffer.length() == 0)
-			return null;
-
-		HTMLPrinter.insertPageProlog(buffer, 0, getCSSStyles());
-		HTMLPrinter.addPageEpilog(buffer);
-		return buffer.toString();
-	}
-
-	private static final long LABEL_FLAGS = JavaElementLabels.ALL_FULLY_QUALIFIED
-			| JavaElementLabels.M_PRE_RETURNTYPE
-			| JavaElementLabels.M_PARAMETER_TYPES
-			| JavaElementLabels.M_PARAMETER_NAMES
-			| JavaElementLabels.M_EXCEPTIONS
-			| JavaElementLabels.F_PRE_TYPE_SIGNATURE
-			| JavaElementLabels.M_PRE_TYPE_PARAMETERS
-			| JavaElementLabels.T_TYPE_PARAMETERS
-			| JavaElementLabels.USE_RESOLVED;
-	private static final long LOCAL_VARIABLE_FLAGS = LABEL_FLAGS
-			& ~JavaElementLabels.F_FULLY_QUALIFIED
-			| JavaElementLabels.F_POST_QUALIFIED;
-	private static final long TYPE_PARAMETER_FLAGS = LABEL_FLAGS
-			| JavaElementLabels.TP_POST_QUALIFIED;
-
-	/*
-	 * Returns the label for the IJavaElement objects
-	 */
-	private String getInfoText(IJavaElement element) {
-		long flags;
-		switch (element.getElementType()) {
-		case IJavaElement.LOCAL_VARIABLE:
-			flags = LOCAL_VARIABLE_FLAGS;
-			break;
-		case IJavaElement.TYPE_PARAMETER:
-			flags = TYPE_PARAMETER_FLAGS;
-			break;
-		default:
-			flags = LABEL_FLAGS;
-			break;
-		}
-
-		return JavadocHover.getImageAndLabel(element, true, JavaElementLinks.getElementLabel(element, flags, true));
-	}
-
-	/*
-	 * Adds full information to the additional proposal information
-	 * 
-	 * @param buffer
-	 * 
-	 * @param element
-	 * 
-	 * @return
-	 */
-	private void addFullInfo(StringBuffer buffer, IJavaElement element) {
-		if (element instanceof IMember) {
-			IMember member = (IMember) element;
-			HTMLPrinter.addSmallHeader(buffer, getInfoText(member));
-			Reader reader = null;
-			try {
-				String content = JavadocContentAccess2.getHTMLContent(member,
-						true);
-				reader = content == null ? null : new StringReader(content);
-			} catch (JavaModelException ex) {
-				JavaPlugin.log(ex);
-			}
-
-			if (reader == null) {
-				reader = new StringReader(Messages.NO_JAVADOC);
-			}
-
-			if (reader != null) {
-				buffer.append("<br/>"); //$NON-NLS-1$
-				buffer.append(HTMLPrinter.read(reader));
-				// HTMLPrinter.addParagraph(buffer, reader);
-			}
-
-		} else if (element.getElementType() == IJavaElement.LOCAL_VARIABLE
-				|| element.getElementType() == IJavaElement.TYPE_PARAMETER) {
-			HTMLPrinter.addSmallHeader(buffer, getInfoText(element));
-		}
+		if (fAdditionalProposalInfo == null) 
+			fAdditionalProposalInfo = EMPTY_ADDITIONAL_INFO;
+		return fAdditionalProposalInfo;
 	}
 
 	/**
