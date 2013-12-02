@@ -1096,7 +1096,7 @@
       <hover
             label="%javaStringELHover"
             description="%javaStringELHoverDescription"
-            class="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.info.JavaStringELInfoHover"
+            class="org.jboss.tools.jst.web.ui.internal.editor.info.JavaStringELInfoHover"
             id="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.info.JavaStringELInfoHover"
             activate="true">
       </hover>

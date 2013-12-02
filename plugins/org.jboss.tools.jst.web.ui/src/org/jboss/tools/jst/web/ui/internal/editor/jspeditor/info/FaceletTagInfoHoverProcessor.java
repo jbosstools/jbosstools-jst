@@ -55,11 +55,11 @@ import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.ELSegment;
 import org.jboss.tools.common.el.core.resolver.JavaMemberELSegmentImpl;
 import org.jboss.tools.common.el.ui.ca.ELProposalProcessor;
+import org.jboss.tools.common.el.ui.internal.info.ELBrowserInformationControlInput;
+import org.jboss.tools.common.el.ui.internal.info.ELInfoHover;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.common.util.StringUtil;
-import org.jboss.tools.jst.web.ui.internal.editor.contentassist.ELPrefixUtils.ELTextRegion;
-import org.jboss.tools.jst.web.ui.internal.editor.contentassist.Utils;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
@@ -67,6 +67,8 @@ import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.el.MessagePropertyELSegmentImpl;
 import org.jboss.tools.jst.web.kb.taglib.INameSpace;
+import org.jboss.tools.jst.web.ui.internal.editor.contentassist.ELPrefixUtils.ELTextRegion;
+import org.jboss.tools.jst.web.ui.internal.editor.contentassist.Utils;
 import org.w3c.dom.Node;
 
 /**
@@ -75,7 +77,7 @@ import org.w3c.dom.Node;
  *
  */
 @SuppressWarnings("restriction")
-public class FaceletTagInfoHoverProcessor extends XMLTagInfoHoverProcessor {
+public class FaceletTagInfoHoverProcessor extends ELInfoHover {
 	private ELContext fContext;
 	private int fDocumentPosition;
 
@@ -214,14 +216,14 @@ public class FaceletTagInfoHoverProcessor extends XMLTagInfoHoverProcessor {
 					continue;
 				
 				Arrays.sort(javaElements, ELProposalProcessor.CASE_INSENSITIVE_ORDER);
-				ELInfoHoverBrowserInformationControlInput hover = JavaStringELInfoHover.getHoverInfo2Internal(javaElements, false);
+				ELBrowserInformationControlInput hover = (ELBrowserInformationControlInput)ELInfoHover.getHoverInfo(javaElements, null);
 				return (hover == null ? null : hover.getHtml());
 			} else if (segment instanceof MessagePropertyELSegmentImpl) {
 				MessagePropertyELSegmentImpl mpSegment = (MessagePropertyELSegmentImpl)segment;
 				String baseName = mpSegment.getBaseName();
 				String propertyName = mpSegment.isBundle() ? null : StringUtil.trimQuotes(segment.getToken().getText());
-				
-				return ELProposalProcessor.getELMessagesHoverInternal(baseName, propertyName, (List<XModelObject>)mpSegment.getObjects());
+				ELBrowserInformationControlInput hover = (ELBrowserInformationControlInput)ELInfoHover.getHoverInfo(baseName, propertyName, (List<XModelObject>)mpSegment.getObjects(), null);
+				return (hover == null ? null : hover.getHtml());
 			}
 		}
 		
@@ -414,7 +416,7 @@ public class FaceletTagInfoHoverProcessor extends XMLTagInfoHoverProcessor {
 	 * 
 	 * @see org.eclipse.jface.text.ITextHoverExtension#getHoverControlCreator()
 	 */
-	public IInformationControlCreator getHoverControlCreator() {
+	public IInformationControlCreator getHoverControlCreator1() {
 		return new IInformationControlCreator() {
 			public IInformationControl createInformationControl(Shell parent) {
 				return new DefaultInformationControl(parent, new HTMLTextPresenter(true) {
