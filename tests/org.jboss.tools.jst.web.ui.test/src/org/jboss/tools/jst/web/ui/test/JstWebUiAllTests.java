@@ -13,6 +13,9 @@ package org.jboss.tools.jst.web.ui.test;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.jboss.tools.jst.web.ui.css.test.CSSAllTests;
+import org.jboss.tools.jst.web.ui.editor.test.JstJspAllTests;
+import org.jboss.tools.jst.web.ui.openon.test.JstTextExtAllTests;
 import org.jboss.tools.test.util.ProjectImportTestSetup;
 
 
@@ -24,6 +27,12 @@ public class JstWebUiAllTests {
 	
 	public static Test suite() {
 		TestSuite suite = new TestSuite(JstWebUiAllTests.class.getName());
+
+		suite.addTest(JstJspAllTests.suite());
+
+		suite.addTest(CSSAllTests.suite());
+
+		suite.addTest(JstTextExtAllTests.suite());
 
 		TestSuite s = new TestSuite("Palette content");
 		s.addTestSuite(JBossToolsEditorTest.class);
