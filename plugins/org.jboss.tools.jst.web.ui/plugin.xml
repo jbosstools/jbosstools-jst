@@ -1187,6 +1187,13 @@
               <command
          		commandId="org.jboss.tools.jst.jsp.commands.i18" />
         </menuContribution>
+        <menuContribution 
+			locationURI="popup:org.eclipse.wst.css.core.csssource.source.EditorContext?after=additions">
+			<command
+         commandId="org.jboss.tools.jst.jsp.commands.openCSSDialog"
+         icon="$nl$/images/cssdialog/color_large.gif"
+         label="%OpenCSSDialogName"/>
+        </menuContribution>
         <menuContribution
               locationURI="menu:sourceMenuId?after=OccurencesFile">
               <command label="%Externalize.Selected.Property"
@@ -1280,6 +1287,15 @@
 					 </or>
 	            	</visibleWhen>
                </command>
+               <command
+                    commandId="org.jboss.tools.jst.jsp.commands.openCSSDialog"
+                    icon="$nl$/images/cssdialog/color_large.gif"
+                    id="org.jboss.tools.jst.jsp.commands.openCSSDialog"
+                    label="%OpenCSSDialogName"
+                    style="toggle"
+                    tooltip="%OpenCSSDialogDescription">
+                     <visibleWhen checkEnabled="true" />
+               </command>
            </toolbar>
         </menuContribution>
          
@@ -1355,7 +1371,16 @@
              class="org.jboss.tools.jst.web.ui.internal.editor.i18n.handlers.I18nHandler"
              commandId="org.jboss.tools.jst.jsp.commands.i18">
        </handler>
-       </extension>
+       <handler
+             class="org.jboss.tools.jst.web.ui.internal.css.dialog.OpenCSSDialogHandler"
+             commandId="org.jboss.tools.jst.jsp.commands.openCSSDialog">
+             <activeWhen> 
+                <with variable="activeEditorId">
+                     <equals value="org.eclipse.wst.css.core.csssource.source" />
+                </with>
+             </activeWhen>
+       </handler>
+    </extension>
 
 	<extension point="org.eclipse.core.expressions.definitions">
 			<definition id="org.jboss.tools.ui.structuredEditor">
@@ -1472,7 +1497,7 @@
            categoryId="org.jboss.tools.jst.jsp.commands"
            description="Open active or selected CSS Dialog"
            id="org.jboss.tools.jst.jsp.commands.openCSSDialog"
-           name="Open CSS Dialog">
+           name="%OpenCSSDialogName">
      </command>
      <category
            id="org.jboss.tools.jst.jsp.commands.category"
@@ -1955,63 +1980,6 @@
        </perspectiveShortcut>
     </perspectiveExtension>
  </extension>
- <extension point="org.eclipse.ui.editorActions">
-       <editorContribution
-            id="org.jboss.tools.jst.jsp.cssClassDialogEditorContribution"
-            targetID="org.eclipse.wst.css.core.csssource.source">
-         <menu
-               id="org.jboss.tools.jst.jsp.cssClassDialogSubMenu"
-               label="CSS"
-               path="additions">
-            <groupMarker
-                  name="content">
-            </groupMarker>
-            <separator
-                  name="additions">
-            </separator>
-         </menu>
-         <action
-               class="org.jboss.tools.jst.web.ui.internal.css.dialog.OpenCSSDialogActionDelegate"
-               definitionId="org.jboss.tools.jst.jsp.commands.openCSSDialog"
-               hoverIcon="$nl$/images/cssdialog/color_large.gif"
-               icon="$nl$/images/cssdialog/color_large.gif"
-               id="org.jboss.tools.jst.jsp.openCSSDialogEditor"
-               label="Open edit dialog"
-               menubarPath="org.jboss.tools.jst.jsp.cssClassDialogSubMenu/content"
-               style="push"
-               toolbarPath="Normal/additions"
-               tooltip="Open CSS Dialog based on the active CSS file">
-               <!--<selection
-                     class="org.eclipse.core.resources.IFile">
-               </selection>-->
-         </action>
-      </editorContribution>
-      </extension>
-        <extension
-        point="org.eclipse.ui.popupMenus">
-     <objectContribution
-           adaptable="true"
-           id="org.jboss.tools.jst.jsp.cssDialogPopupMenu"
-           nameFilter="*.css"
-           objectClass="org.eclipse.core.resources.IResource">
-        <action
-              class="org.jboss.tools.jst.web.ui.internal.css.dialog.OpenCSSDialogActionDelegate"
-              definitionId="org.jboss.tools.jst.jsp.commands.openCSSDialog"
-              icon="$nl$/images/cssdialog/color_large.gif"
-              id="org.jboss.tools.jst.jsp.openCSSDialogPopupMenu"
-              label="Open CSS Dialog"
-              menubarPath="additions"
-              tooltip="Open CSS Dialog based on the active CSS file">
-        </action>
-        <menu
-               id="org.jboss.tools.jst.jsp.popupSubMenu"
-               label="Open CSS Dialog"
-               path="additions">
-            <groupMarker name="content"/>
-            <separator name="additions"/>
-         </menu>
-     </objectContribution>
-  </extension>
         <extension
               point="org.jboss.tools.jst.web.ui.cssDialog" id="org.jboss.tools.jst.css.dialog.CSSStyleDialog"   >
            <css-dialogs-builder
