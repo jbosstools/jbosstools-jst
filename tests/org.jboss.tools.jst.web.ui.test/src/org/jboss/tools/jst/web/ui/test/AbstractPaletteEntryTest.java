@@ -36,7 +36,6 @@ import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.PalettePageImpl;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.palette.PaletteAdapter;
-import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewJQueryWidgetWizard;
 import org.jboss.tools.test.util.WorkbenchUtils;
 
 import junit.framework.TestCase;
