@@ -17,10 +17,11 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.wizards.NewWizardRegistry;
 import org.eclipse.ui.wizards.IWizardDescriptor;
+import org.jboss.tools.jst.jsp.test.openon.HyperlinkTestUtil;
+import org.jboss.tools.jst.jsp.test.openon.HyperlinkTestUtil.TestHyperlink;
+import org.jboss.tools.jst.jsp.test.openon.HyperlinkTestUtil.TestRegion;
 import org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.internal.CreateNewFileHyperlink;
 import org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.internal.CreateNewFileHyperlinkDetector;
-import org.jboss.tools.jst.web.ui.openon.test.HyperlinkTestUtil.TestHyperlink;
-import org.jboss.tools.jst.web.ui.openon.test.HyperlinkTestUtil.TestRegion;
 
 import junit.framework.TestCase;
 

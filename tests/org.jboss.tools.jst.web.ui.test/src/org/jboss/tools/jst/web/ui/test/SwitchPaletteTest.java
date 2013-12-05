@@ -14,6 +14,7 @@ import org.eclipse.gef.palette.ToolEntry;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.IEditorPart;
+import org.jboss.tools.jst.jsp.test.palette.AbstractPaletteEntryTest;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
 
 /**

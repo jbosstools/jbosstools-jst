@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.jboss.tools.jst.web.ui.test;
+package org.jboss.tools.jst.jsp.test.palette;
 
 import java.util.List;
 

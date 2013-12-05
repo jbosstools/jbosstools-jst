@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension
-         point="org.eclipse.ui.editors">
-      <editor
-            class="org.jboss.tools.jst.web.ui.openon.test.TestTextEditor"
-            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
-            extensions=""
-            id="org.jboss.tools.jst.text.ext.test.TestTextEditor"
-            name="Test Text Editor">
-      </editor>
-   </extension>
 
 </plugin>
