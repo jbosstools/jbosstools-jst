@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/
-package org.jboss.tools.jst.web.ui.openon.test;
+package org.jboss.tools.jst.jsp.test.openon;
 
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
