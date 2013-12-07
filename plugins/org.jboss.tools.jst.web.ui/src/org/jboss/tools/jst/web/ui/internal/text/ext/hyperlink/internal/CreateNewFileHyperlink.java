@@ -106,7 +106,7 @@ public class CreateNewFileHyperlink extends AbstractHyperlink{
 			boolean runWizard = false;
 			if(test){
 				confirm = true;
-				runWizard = true;
+				runWizard = false;
 			}else{
 				int result = mDialog.open();
 				if ((result == CheckboxMessageDialog.CHECKBOX_SELECTED) || (result == MessageDialog.OK)) {
@@ -121,7 +121,7 @@ public class CreateNewFileHyperlink extends AbstractHyperlink{
 				createFolders();
 				
 				if(runWizard){
-					int returnCode = runWizard(descriptor, test);
+					int returnCode = runWizard(descriptor);
 					if(returnCode != WizardDialog.OK){
 						// user pressed Cancel, so we delete folders which we created before
 						deleteFolders();
@@ -182,7 +182,7 @@ public class CreateNewFileHyperlink extends AbstractHyperlink{
 		}
 	}
 	
-	private int runWizard(IWizardDescriptor descriptor, boolean test){
+	private int runWizard(IWizardDescriptor descriptor){
 		try {
 			IWorkbenchWizard wizard = descriptor.createWizard();
 			
@@ -198,11 +198,6 @@ public class CreateNewFileHyperlink extends AbstractHyperlink{
 				if(page instanceof WizardNewFileCreationPage){
 					((WizardNewFileCreationPage)page).setFileName(file.getName());
 				}
-			}
-			
-			if(test){
-				wizard.performFinish();
-				return Window.OK;
 			}
 			
 			wDialog.setBlockOnOpen(true);
