@@ -10,6 +10,8 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal.taglib.html.jq;
 
+import static org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileAttrConstants13.*;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

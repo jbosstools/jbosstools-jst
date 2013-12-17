@@ -10,13 +10,15 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal.taglib.html.angular;
 
+import static org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttributeConstants.ENUM_TRUE_FALSE;
+
+import org.jboss.tools.jst.web.kb.internal.taglib.AbstractAttributeProvider;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttribute;
-import org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttributeProvider;
 
 /**
  * @author Alexey Kazakov
  */
-public abstract class AngularAttributeProvider extends HtmlAttributeProvider {
+public abstract class AngularAttributeProvider extends AbstractAttributeProvider {
 
 	protected static final String[] ATTRIBUTE_PREFIXES = new String[]{"data-ng-", "ng-"}; //$NON-NLS-1$ //$NON-NLS-2$
 	protected static final String CLICK = "click"; //$NON-NLS-1$

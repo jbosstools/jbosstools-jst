@@ -42,7 +42,9 @@ public class JstWebKbAllTests {
 		suite.addTestSuite(MyFacesKbModelWithMetadataInSourcesTest.class);
 		suite.addTestSuite(WebKbTest.class);
 		suite.addTestSuite(JQueryDataTest.class);
+		suite.addTestSuite(JQueryDataTest14.class);
 		suite.addTestSuite(JQueryIDTest.class);
+		suite.addTestSuite(JQueryRecognizerTest.class);
 		suite.addTestSuite(FileNamesCATest.class);
 		suite.addTestSuite(AngularJSTest.class);
 		suite.addTestSuite(KbModelWithSeveralJarCopiesTest.class);

@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.kb.internal.taglib;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
@@ -25,8 +26,6 @@ import org.jboss.tools.jst.web.kb.taglib.IContextAttributeProvider;
 public abstract class AbstractAttributeProvider implements IContextAttributeProvider {
 
 	protected static final CustomTagLibAttribute[] EMPTY = new CustomTagLibAttribute[0];
-
-	public static final String[] ENUM_TRUE_FALSE = new String[]{"true", "false"};
 
 	protected CustomTagLibComponent parentComponent;
 	protected KbQuery query;
@@ -120,6 +119,18 @@ public abstract class AbstractAttributeProvider implements IContextAttributeProv
 	@Override
 	public CustomTagLibComponent getComponent() {
 		return parentComponent;
+	}
+
+	protected boolean checkClassAttribute(String styleClassName) {
+		boolean result = false;
+		Map<String, String> attributes = query.getAttributes();
+		if(attributes!=null) {
+			String attr = attributes.get("class");
+			if(attr!=null) {
+				result = Pattern.matches(".*(^|\\s)(" + styleClassName + ")($|\\s).*", attr.toLowerCase());
+			}
+		}
+		return result;
 	}
 
 	protected boolean checkAttribute(String attributeName) {

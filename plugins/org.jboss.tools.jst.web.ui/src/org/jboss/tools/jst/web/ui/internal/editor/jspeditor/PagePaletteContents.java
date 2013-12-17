@@ -18,7 +18,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.jboss.tools.common.model.ui.views.palette.PaletteContents;
-import org.jboss.tools.common.util.FileUtil;
+import org.jboss.tools.jst.web.kb.internal.JQueryMobileRecognizer;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
 
 /**
@@ -148,28 +148,29 @@ interface VersionComputer {
 class JQueryVersionComputer implements VersionComputer {
 	static String prefix = "jquery.mobile-";
 
+	@Override
 	public String computeVersion(IFile file) {
-		String content = FileUtil.getContentFromEditorOrFile(file);
-		int i = 0;
-		while(i >= 0) {
-			int j = content.indexOf(prefix, i);
-			if(j < 0 || content.length() < j + prefix.length() + 3) {
-				return null;
-			}
-			String delta = content.substring(i, j);
-			int k = delta.lastIndexOf("<");
-			if(k >= 0 && k + 6 < delta.length() && delta.substring(k, k + 7).toLowerCase().equals("<script")) {
-				int u = delta.indexOf(">", k);
-				if(u < 0) {
-					i = j + prefix.length();
-					return content.substring(i, i + 3);
-				}
-			}
-			
-			i = j + prefix.length();
-		}
-		
-		return null;
+		return JQueryMobileRecognizer.getVersion(file);
+//		String content = FileUtil.getContentFromEditorOrFile(file);
+//		int i = 0;
+//		while(i >= 0) {
+//			int j = content.indexOf(prefix, i);
+//			if(j < 0 || content.length() < j + prefix.length() + 3) {
+//				return null;
+//			}
+//			String delta = content.substring(i, j);
+//			int k = delta.lastIndexOf("<");
+//			if(k >= 0 && k + 6 < delta.length() && delta.substring(k, k + 7).toLowerCase().equals("<script")) {
+//				int u = delta.indexOf(">", k);
+//				if(u < 0) {
+//					i = j + prefix.length();
+//					return content.substring(i, i + 3);
+//				}
+//			}
+//			
+//			i = j + prefix.length();
+//		}
+//		
+//		return null;
 	}
-
 }
