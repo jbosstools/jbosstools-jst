@@ -4,8 +4,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.ui.IEditorPart;
-import org.jboss.tools.common.model.ui.views.palette.PaletteContents;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPMultiPageEditor;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.PagePaletteContents;
 import org.jboss.tools.test.util.WorkbenchUtils;
 
 import junit.framework.TestCase;
@@ -30,18 +30,18 @@ public class PaletteContentsTest extends TestCase {
 
 	public void testMobilePalette() {
 		openEditor("a.html");
-		PaletteContents p = new PaletteContents(editor);
+		PagePaletteContents p = new PagePaletteContents(editor);
 		String[] x = p.getNatureTypes();
 		assertEquals(1, x.length);
-		assertEquals(PaletteContents.TYPE_MOBILE, x[0]);
+		assertEquals(PagePaletteContents.TYPE_MOBILE, x[0]);
 	}
 
 	public void testJSFPalette() {
 		openEditor("c.html");
-		PaletteContents p = new PaletteContents(editor);
+		PagePaletteContents p = new PagePaletteContents(editor);
 		String[] x = p.getNatureTypes();
 		assertEquals(1, x.length);
-		assertEquals(PaletteContents.TYPE_JSF, x[0]);
+		assertEquals(PagePaletteContents.TYPE_JSF, x[0]);
 	}
 
 	public void testFirstPaletteOpening() {

@@ -47,7 +47,7 @@ public class NewTableWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor stripes = JQueryFieldEditorFactory.createStripesEditor();
 		addEditor(stripes, columns.right());
 
-		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
+		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor(getVersion());
 		addEditor(theme, parent, true);
 	}
 

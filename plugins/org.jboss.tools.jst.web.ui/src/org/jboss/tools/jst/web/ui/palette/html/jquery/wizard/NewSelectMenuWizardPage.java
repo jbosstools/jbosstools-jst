@@ -61,7 +61,7 @@ public class NewSelectMenuWizardPage extends NewJQueryWidgetWizardPage {
 
 		items.createControl(parent, WizardMessages.itemsLabel);
 
-		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
+		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor(getVersion());
 		addEditor(theme, parent, true);
 	}
 

@@ -42,6 +42,7 @@ import org.jboss.tools.common.ui.widget.editor.LabelFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.SwtFieldEditorFactory;
 import org.jboss.tools.common.ui.widget.editor.TextFieldEditor;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileAttrProvider;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
@@ -83,14 +84,17 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 				description);
 	}
 
-	static String[] THEMES = {"", "a", "b", "c", "d", "e"};
+	public final static String[] THEMES = {"", "a", "b", "c", "d", "e"};
+
+	public final static String[] THEMES_1_4 = {"", "a", "b"};
 
 	/**
 	 * Used in all jQuery Mobile wizards.
 	 * @return
 	 */
-	public static IFieldEditor createDataThemeEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_THEME, WizardMessages.themeLabel, toList(THEMES), "", true,
+	public static IFieldEditor createDataThemeEditor(JQueryMobileVersion version) {
+		String[] themes = version == JQueryMobileVersion.JQM_1_3 ? THEMES : THEMES_1_4;
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_THEME, WizardMessages.themeLabel, toList(themes), "", true,
 				WizardDescriptions.widgetTheme);
 	}
 
@@ -98,8 +102,9 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 	 * Used in New Range Slider wizard and New Toggle wizard.
 	 * @return
 	 */
-	public static IFieldEditor createDataTrackThemeEditor(String description) {
-		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_TRACK_THEME, WizardMessages.trackThemeLabel, toList(THEMES), "", true,
+	public static IFieldEditor createDataTrackThemeEditor(JQueryMobileVersion version, String description) {
+		String[] themes = version == JQueryMobileVersion.JQM_1_3 ? THEMES : THEMES_1_4;
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_TRACK_THEME, WizardMessages.trackThemeLabel, toList(themes), "", true,
 				description);
 	}
 
@@ -107,8 +112,9 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 	 * Used in New Listview wizard.
 	 * @return
 	 */
-	public static IFieldEditor createDividerThemeEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_DIVIDER_THEME, WizardMessages.dividerThemeLabel, toList(THEMES), "", true,
+	public static IFieldEditor createDividerThemeEditor(JQueryMobileVersion version) {
+		String[] themes = version == JQueryMobileVersion.JQM_1_3 ? THEMES : THEMES_1_4;
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_DIVIDER_THEME, WizardMessages.dividerThemeLabel, toList(themes), "", true,
 				WizardDescriptions.listviewDividerTheme);
 	}
 
@@ -1077,14 +1083,16 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 				WizardDescriptions.popupOverlay);
 	}
 
-	static String[] POPUP_THEMES = {"", "none", "a", "b", "c", "d", "e"};
+	public final static String[] POPUP_THEMES = {"", "none", "a", "b", "c", "d", "e"};
+	public final static String[] POPUP_THEMES_1_4 = {"", "none", "a", "b"};
 
 	/**
 	 * Used in New Popup wizard.
 	 * @return
 	 */
-	public static IFieldEditor createPopupThemeEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_THEME, WizardMessages.themeLabel, toList(POPUP_THEMES), "", true,
+	public static IFieldEditor createPopupThemeEditor(JQueryMobileVersion version) {
+		String[] themes = version == JQueryMobileVersion.JQM_1_3 ? POPUP_THEMES : POPUP_THEMES_1_4;
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_THEME, WizardMessages.themeLabel, toList(themes), "", true,
 				WizardDescriptions.widgetTheme);
 	}
 

@@ -14,11 +14,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.gef.palette.PaletteContainer;
 import org.eclipse.gef.palette.PaletteEntry;
 import org.eclipse.gef.palette.PaletteSeparator;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchListener;
+import org.eclipse.ui.IWorkbenchPart;
 import org.jboss.tools.common.meta.action.XActionInvoker;
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelObject;
@@ -28,6 +38,7 @@ import org.jboss.tools.common.model.options.SharableConstants;
 import org.jboss.tools.common.model.ui.util.ModelUtilities;
 import org.jboss.tools.common.model.ui.views.palette.PaletteContents;
 import org.jboss.tools.common.model.ui.views.palette.editor.PaletteEditor;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.PagePaletteContents;
 
 public class PaletteModel {
 	public static String TYPE_MOBILE = PaletteContents.TYPE_MOBILE;
@@ -36,9 +47,13 @@ public class PaletteModel {
 	private static Map<String, PaletteModel> instances = new HashMap<String, PaletteModel>();
 	private static Object monitor = new Object();
 
+	static String VERSION_PREFIX = "version:";
+
 	private PaletteEditor editor = new PaletteEditor();
 	private PaletteRoot paletteRoot = null;
 	private String type = TYPE_MOBILE;
+
+	PagePaletteContents contents = null;
 
 	private PaletteModel() {
 	}
@@ -47,25 +62,49 @@ public class PaletteModel {
 		return type;
 	}
 
-	public static final PaletteModel getInstance(PaletteContents contents) {
+	public static final PaletteModel getInstance(PagePaletteContents contents) {
 		String[] natures = contents.getNatureTypes();
 		boolean jsf = natures != null && natures.length > 0 && natures[0].equals(TYPE_JSF);
 		String type = jsf ? TYPE_JSF : TYPE_MOBILE;
-		PaletteModel instance = instances.get(type);
+		String code = type;
+		IFile file = contents.getFile();
+		if(!jsf && file != null) {
+			code = file.getFullPath().toString();
+		}
+		PaletteModel instance = instances.get(code);
 		if (instance != null) {
+			if(file != null) {
+				instance.setPaletteContents(contents);
+				instance.load(null);
+			}
 			return instance;
 		} else {
 			synchronized (monitor) {
 				if (instance == null) {
 					PaletteModel inst = new PaletteModel();
+					if(file != null) {
+						inst.setPaletteContents(contents);
+					}
 					inst.type = type;
 					inst.createModel();
 					instance = inst;
-					instances.put(type, instance);
+					instances.put(code, instance);
 				}
 			}
 			return instance;
 		}
+	}
+
+	public static void disposeInstance(PagePaletteContents contents) {
+		IFile file = contents.getFile();
+		if(file != null) {
+			String code = file.getFullPath().toString();
+			PaletteModel instance = instances.remove(code);
+			if(instance != null) {
+				System.out.println("Cleared palette model: " + code);
+			}
+		}
+
 	}
 
 	public XModel getXModel() {
@@ -128,6 +167,7 @@ public class PaletteModel {
 		XModelObject xpalette = getXPaletteRoot();
 		if (paletteRoot == null) {
 			paletteRoot = new PaletteRoot(xpalette);
+			paletteRoot.setPaletteModel(this);
 		}
 		if (xpalette == null) return;
 		XModelObject[] xcats = getGroups(xpalette);
@@ -151,6 +191,10 @@ public class PaletteModel {
 		}
 		cutOff(paletteRoot, i);
 	}
+
+	public void reloadCategory(PaletteCategory cat) {
+		loadCategory(cat.getXModelObject(), cat);
+	}
 	
 	private PaletteCategory createCategory(XModelObject xcat, boolean open) {
 		PaletteCategory cat = new PaletteCategory(xcat, open);
@@ -165,7 +209,14 @@ public class PaletteModel {
 	private void loadCategory(XModelObject xcat, PaletteCategory cat) {
 			List list = new ArrayList(cat.getChildren());
 			for (Object o : list) cat.remove((PaletteEntry)o);
+
 		XModelObject[] xitems = xcat.getChildren();
+
+		if(xitems.length > 0 && xitems[0].getAttributeValue(XModelObjectConstants.ATTR_NAME).startsWith(VERSION_PREFIX)) {
+			xcat = findSelectedVersion(xcat, cat);
+			xitems = xcat.getChildren();
+		}
+
 		int i = 0;
 		for (int l = 0; l < xitems.length; l++) {
 			if (xitems[l].getAttributeValue("element type").equals("macro")) { //$NON-NLS-1$ //$NON-NLS-2$
@@ -190,6 +241,37 @@ public class PaletteModel {
 			}
 		}
 		cutOff(cat, i);
+	}
+
+	private XModelObject findSelectedVersion(XModelObject xcat, PaletteCategory cat) {
+		String name = xcat.getAttributeValue(XModelObjectConstants.ATTR_NAME);
+		XModelObject[] os = xcat.getChildren();
+		Set<String> versions = new TreeSet<String>();
+		for (XModelObject c: os) {
+			String n = c.getAttributeValue(XModelObjectConstants.ATTR_NAME);
+			if(n.startsWith(VERSION_PREFIX)) {
+				n = n.substring(VERSION_PREFIX.length());
+				versions.add(n);
+			}
+		}
+		String[] availableVersions = versions.toArray(new String[0]);
+
+		String selectedVersion = getSelectedVersion(name);
+		
+		if(selectedVersion == null || xcat.getChildByPath(VERSION_PREFIX + selectedVersion) == null) {
+			selectedVersion = availableVersions[availableVersions.length - 1];
+		}
+		
+		XModelObject selected = xcat.getChildByPath(VERSION_PREFIX + selectedVersion);
+		
+		cat.setAvailableVersions(availableVersions);
+		cat.setVersion(selectedVersion);
+		
+		return selected;
+	}
+
+	private String getSelectedVersion(String categoryName) {
+		return contents == null ? null : contents.getVersion(categoryName);
 	}
 	
 	private int indexOf(PaletteContainer container, XModelObject xobject, int startIndex) {
@@ -257,6 +339,12 @@ public class PaletteModel {
 		return true; ///paletteContents.contains(cat.getNatureTypes(), cat.getEditorTypes()); 
 	}
 
-	public void setPaletteContents(PaletteContents contents) {
+	public void setPaletteContents(PagePaletteContents contents) {
+		this.contents = contents;
 	}
+
+	public PagePaletteContents getPaletteContents() {
+		return contents;
+	}
+
 }

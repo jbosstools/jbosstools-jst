@@ -71,7 +71,7 @@ public class NewFooterWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor icononly = JQueryFieldEditorFactory.createIconOnlyEditor();
 		addEditor(icononly, columns.right());
 
-		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
+		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor(getVersion());
 		addEditor(theme, parent, true);
 	}
 

@@ -17,9 +17,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.jst.web.html.JQueryHTMLConstants;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.PagePaletteContents;
 import org.jboss.tools.jst.web.ui.internal.properties.advanced.AbstractAdvancedPropertySetViewer;
 import org.jboss.tools.jst.web.ui.internal.properties.advanced.IFieldEditorProvider;
 import org.jboss.tools.jst.web.ui.internal.properties.advanced.LayoutUtil;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryFieldEditorFactory;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.WizardDescriptions;
 
@@ -39,6 +42,20 @@ public class JQueryPropertySetViewer extends AbstractAdvancedPropertySetViewer i
 	public String getCategoryDisplayName() {
 		return "jQuery";
 	}
+
+	protected JQueryMobileVersion getVersion() {
+		PagePaletteContents contents = (PagePaletteContents)model.getWorkbenchPart().getAdapter(PagePaletteContents.class);
+		if(contents != null) {
+			String version = contents.getVersion(JQueryConstants.JQM_CATEGORY);
+			for (JQueryMobileVersion v: JQueryMobileVersion.ALL_VERSIONS) {
+				if(v.toString().equals(version)) {
+					return v;
+				}
+			}
+		}
+		return JQueryMobileVersion.getLatestDefaultVersion();
+	}
+
 
 	@Override
 	protected boolean isStructureChanged(List<IPropertyDescriptor> descriptors) {
@@ -159,7 +176,7 @@ public class JQueryPropertySetViewer extends AbstractAdvancedPropertySetViewer i
 
 		editorProviders.put(ATTR_DATA_BACK_BUTTON_THEME, new IFieldEditorProvider() {
 			public IFieldEditor createEditor() {
-				return JQueryPropertiesFieldEditorFactory.createBackButtonThemeEditor();
+				return JQueryPropertiesFieldEditorFactory.createBackButtonThemeEditor(getVersion());
 			}
 		});
 
@@ -207,13 +224,13 @@ public class JQueryPropertySetViewer extends AbstractAdvancedPropertySetViewer i
 
 		editorProviders.put(ATTR_DATA_COLUMN_BUTTON_THEME, new IFieldEditorProvider() {
 			public IFieldEditor createEditor() {
-				return JQueryPropertiesFieldEditorFactory.createColumnButtonThemeEditor();
+				return JQueryPropertiesFieldEditorFactory.createColumnButtonThemeEditor(getVersion());
 			}
 		});
 
 		editorProviders.put(ATTR_DATA_COLUMN_POPUP_THEME, new IFieldEditorProvider() {
 			public IFieldEditor createEditor() {
-				return JQueryPropertiesFieldEditorFactory.createColumnPopupThemeEditor();
+				return JQueryPropertiesFieldEditorFactory.createColumnPopupThemeEditor(getVersion());
 			}
 		});
 
@@ -255,7 +272,7 @@ public class JQueryPropertySetViewer extends AbstractAdvancedPropertySetViewer i
 
 		editorProviders.put(ATTR_DATA_DIVIDER_THEME, new IFieldEditorProvider() {
 			public IFieldEditor createEditor() {
-				return JQueryFieldEditorFactory.createDividerThemeEditor();
+				return JQueryFieldEditorFactory.createDividerThemeEditor(getVersion());
 			}
 		});
 
@@ -374,7 +391,7 @@ public class JQueryPropertySetViewer extends AbstractAdvancedPropertySetViewer i
 
 		editorProviders.put(ATTR_DATA_OVERLAY_THEME, new IFieldEditorProvider() {
 			public IFieldEditor createEditor() {
-				return JQueryPropertiesFieldEditorFactory.createOverlayThemeEditor();
+				return JQueryPropertiesFieldEditorFactory.createOverlayThemeEditor(getVersion());
 			}
 		});
 
@@ -459,7 +476,7 @@ public class JQueryPropertySetViewer extends AbstractAdvancedPropertySetViewer i
 
 		editorProviders.put(ATTR_DATA_THEME, new IFieldEditorProvider() {
 			public IFieldEditor createEditor() {
-				return JQueryPropertiesFieldEditorFactory.createDataThemeEditor(context.getRoleName());
+				return JQueryPropertiesFieldEditorFactory.createDataThemeEditor(getVersion(), context.getRoleName());
 			}
 		});
 
@@ -477,7 +494,7 @@ public class JQueryPropertySetViewer extends AbstractAdvancedPropertySetViewer i
 
 		editorProviders.put(ATTR_DATA_TRACK_THEME, new IFieldEditorProvider() {
 			public IFieldEditor createEditor() {
-				return JQueryFieldEditorFactory.createDataTrackThemeEditor(WizardDescriptions.rangeSliderTrackTheme);
+				return JQueryFieldEditorFactory.createDataTrackThemeEditor(getVersion(), WizardDescriptions.rangeSliderTrackTheme);
 			}
 		});
 

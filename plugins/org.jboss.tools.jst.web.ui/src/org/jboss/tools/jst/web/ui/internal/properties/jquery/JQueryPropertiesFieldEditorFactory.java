@@ -6,6 +6,7 @@ import java.util.List;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.SwtFieldEditorFactory;
 import org.jboss.tools.jst.web.html.JQueryHTMLConstants;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.internal.properties.html.HTMLFieldEditorFactory;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryFieldEditorFactory;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.WizardDescriptions;
@@ -55,15 +56,25 @@ public class JQueryPropertiesFieldEditorFactory extends HTMLFieldEditorFactory i
 		"");
 	}
 
-	static String[] THEMES = {"", "a", "b", "c", "d", "e"};
-	static String[] POPUP_THEMES = {"", "none", "a", "b", "c", "d", "e"};
+	static String[] THEMES = JQueryFieldEditorFactory.THEMES;
+	static String[] THEMES_1_4 = JQueryFieldEditorFactory.THEMES_1_4;
+	static String[] POPUP_THEMES = JQueryFieldEditorFactory.POPUP_THEMES;
+	static String[] POPUP_THEMES_1_4 = JQueryFieldEditorFactory.POPUP_THEMES_1_4;
+
+	static String[] getThemes(JQueryMobileVersion version) {
+		return (version == JQueryMobileVersion.JQM_1_3) ? THEMES : THEMES_1_4;
+	}
+
+	static String[] getPopupThemes(JQueryMobileVersion version) {
+		return (version == JQueryMobileVersion.JQM_1_3) ? POPUP_THEMES : POPUP_THEMES_1_4;
+	}
 
 	/**
 	 * Used in all jQuery Mobile widgets.
 	 * @return
 	 */
-	public static IFieldEditor createDataThemeEditor(String role) {
-		String[] values = ROLE_POPUP.equals(role) ? POPUP_THEMES : THEMES;
+	public static IFieldEditor createDataThemeEditor(JQueryMobileVersion version, String role) {
+		String[] values = ROLE_POPUP.equals(role) ? getPopupThemes(version) : getThemes(version);
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(
 				ATTR_DATA_THEME, WizardMessages.themeLabel, toList(values), "", true, 
 				"");
@@ -74,9 +85,9 @@ public class JQueryPropertiesFieldEditorFactory extends HTMLFieldEditorFactory i
 	 * @param description
 	 * @return
 	 */
-	public static IFieldEditor createOverlayThemeEditor() {
+	public static IFieldEditor createOverlayThemeEditor(JQueryMobileVersion version) {
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(
-				ATTR_DATA_OVERLAY_THEME, WizardMessages.overlayLabel, toList(THEMES), "", true, 
+				ATTR_DATA_OVERLAY_THEME, WizardMessages.overlayLabel, toList(getThemes(version)), "", true, 
 				WizardDescriptions.popupOverlay);
 	}
 
@@ -85,9 +96,9 @@ public class JQueryPropertiesFieldEditorFactory extends HTMLFieldEditorFactory i
 	 * @param description
 	 * @return
 	 */
-	public static IFieldEditor createColumnButtonThemeEditor() {
+	public static IFieldEditor createColumnButtonThemeEditor(JQueryMobileVersion version) {
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(
-				ATTR_DATA_COLUMN_BUTTON_THEME, WizardMessages.columnButtonThemeLabel, toList(THEMES), "", true, 
+				ATTR_DATA_COLUMN_BUTTON_THEME, WizardMessages.columnButtonThemeLabel, toList(getThemes(version)), "", true, 
 				"");
 	}
 
@@ -96,9 +107,9 @@ public class JQueryPropertiesFieldEditorFactory extends HTMLFieldEditorFactory i
 	 * @param description
 	 * @return
 	 */
-	public static IFieldEditor createColumnPopupThemeEditor() {
+	public static IFieldEditor createColumnPopupThemeEditor(JQueryMobileVersion version) {
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(
-				ATTR_DATA_COLUMN_POPUP_THEME, WizardMessages.columnPopupThemeLabel, toList(POPUP_THEMES), "", true, 
+				ATTR_DATA_COLUMN_POPUP_THEME, WizardMessages.columnPopupThemeLabel, toList(getPopupThemes(version)), "", true, 
 				"");
 	}
 
@@ -219,9 +230,9 @@ public class JQueryPropertiesFieldEditorFactory extends HTMLFieldEditorFactory i
 	 * Used in Page.
 	 * @return
 	 */
-	public static IFieldEditor createBackButtonThemeEditor() {
+	public static IFieldEditor createBackButtonThemeEditor(JQueryMobileVersion version) {
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(
-				ATTR_DATA_BACK_BUTTON_THEME, WizardMessages.themeLabel, toList(THEMES), "", true, 
+				ATTR_DATA_BACK_BUTTON_THEME, WizardMessages.themeLabel, toList(getThemes(version)), "", true, 
 				"");
 	}
 

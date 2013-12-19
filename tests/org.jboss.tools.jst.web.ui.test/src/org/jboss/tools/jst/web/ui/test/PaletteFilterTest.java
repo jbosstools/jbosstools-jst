@@ -6,7 +6,7 @@ import java.util.List;
 import org.eclipse.gef.palette.PaletteContainer;
 import org.eclipse.gef.palette.PaletteEntry;
 import org.eclipse.gef.palette.ToolEntry;
-import org.jboss.tools.common.model.ui.views.palette.PaletteContents;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.PagePaletteContents;
 import org.jboss.tools.jst.web.ui.palette.PaletteAdapter;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
 
@@ -14,7 +14,7 @@ import junit.framework.TestCase;
 
 public class PaletteFilterTest  extends TestCase {
 	public void testFilter(){
-		PaletteModel model = PaletteModel.getInstance(new PaletteContents(null));
+		PaletteModel model = PaletteModel.getInstance(new PagePaletteContents(null));
 		
 		PaletteAdapter adapter = new PaletteAdapter();
 		

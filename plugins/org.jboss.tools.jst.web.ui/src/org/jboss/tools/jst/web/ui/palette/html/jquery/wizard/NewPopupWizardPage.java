@@ -59,7 +59,7 @@ public class NewPopupWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor corners = JQueryFieldEditorFactory.createCornersEditor();
 		addEditor(corners, columns.right());
 		
-		IFieldEditor theme = JQueryFieldEditorFactory.createPopupThemeEditor();
+		IFieldEditor theme = JQueryFieldEditorFactory.createPopupThemeEditor(getVersion());
 		addEditor(theme, windowPanel, true);
 
 		IFieldEditor overlay = JQueryFieldEditorFactory.createOverlayEditor();

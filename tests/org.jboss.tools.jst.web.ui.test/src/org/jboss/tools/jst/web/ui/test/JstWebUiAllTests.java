@@ -37,7 +37,10 @@ public class JstWebUiAllTests {
 		TestSuite s = new TestSuite("Palette content");
 		s.addTestSuite(JBossToolsEditorTest.class);
 		s.addTestSuite(InsertJSCSSPaletteEntryTest.class);
+		s.addTestSuite(InsertJSCSS14PaletteEntryTest.class);
 		s.addTestSuite(NewJQueryMobilePaletteWizardTest.class);
+		s.addTestSuite(NewJQueryMobile13PaletteWizardTest.class);
+		s.addTestSuite(JQueryMobileVersionSwitchPaletteTest.class);
 		s.addTestSuite(PaletteContentsTest.class);
 		s.addTestSuite(FormPropertySheetPageTest.class);
 		s.addTestSuite(SwitchPaletteTest.class);

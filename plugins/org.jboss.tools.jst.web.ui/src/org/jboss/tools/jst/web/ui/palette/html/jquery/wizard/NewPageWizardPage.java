@@ -68,7 +68,7 @@ public class NewPageWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor backButtonIconOnly = JQueryFieldEditorFactory.createIconOnlyEditor();
 		addEditor(backButtonIconOnly, backParent);
 		
-		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
+		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor(getVersion());
 		addEditor(theme, parent, true);
 
 		updateBackButtonEnablement();

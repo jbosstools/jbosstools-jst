@@ -47,7 +47,7 @@ public class NewGroupedButtonsWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor icononly = JQueryFieldEditorFactory.createIconOnlyEditor();
 		addEditor(icononly, panel);
 
-		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
+		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor(getVersion());
 		addEditor(theme, parent, true);
 
 		iconpos.setEnabled(false);

@@ -60,7 +60,7 @@ public class NewCollapsibleWizardPage extends NewJQueryWidgetWizardPage {
 
 		createSeparator(parent);
 	
-		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
+		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor(getVersion());
 		addEditor(theme, parent, true);
 
 		IFieldEditor contentTheme = JQueryFieldEditorFactory.createDataContentThemeEditor();

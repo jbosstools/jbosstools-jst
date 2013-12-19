@@ -16,6 +16,7 @@ import org.jboss.tools.common.model.XModelObject;
 
 public class PaletteRoot extends org.eclipse.gef.palette.PaletteRoot implements PaletteXModelObject {
 	private XModelObject xobject;
+	private PaletteModel model;
 
 	public PaletteRoot(XModelObject xobject) {
 		this.xobject = xobject;
@@ -38,5 +39,13 @@ public class PaletteRoot extends org.eclipse.gef.palette.PaletteRoot implements 
 			}
 		}
 		return null;
+	}
+
+	public void setPaletteModel(PaletteModel model) {
+		this.model = model;
+	}
+
+	public PaletteModel getPaletteModel() {
+		return model;
 	}
 }

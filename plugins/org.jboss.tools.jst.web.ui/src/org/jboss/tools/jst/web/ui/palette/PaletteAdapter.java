@@ -40,6 +40,7 @@ import org.jboss.tools.common.model.ui.views.palette.IPalettePageAdapter;
 import org.jboss.tools.common.model.ui.views.palette.PaletteContents;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.PagePaletteContents;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteRoot;
 
@@ -54,7 +55,7 @@ public class PaletteAdapter implements IPaletteAdapter {
 	private DescriptionManager descriptionManager = null;
 	private DropTargetManager dropManager = null;
 	private PaletteModelListener modelListener = null;
-	private PaletteContents paletteContents;
+	private PagePaletteContents paletteContents;
 	
 	public void setPaletteViewPart(IPalettePageAdapter viewPart) {
 		this.viewPart = viewPart;
@@ -180,9 +181,9 @@ public class PaletteAdapter implements IPaletteAdapter {
 	}
 
 	public void setPaletteContents(PaletteContents contents) {
-		paletteContents = contents;
+		paletteContents = (PagePaletteContents)contents;
 		if (model != null) {
-			model.setPaletteContents(contents);
+			model.setPaletteContents(paletteContents);
 		}
 	}
 
