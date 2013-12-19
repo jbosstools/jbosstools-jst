@@ -29,6 +29,7 @@ import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator;
 import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
 import org.jboss.tools.common.refactoring.MarkerResolutionUtils;
 import org.jboss.tools.jst.web.kb.internal.JQueryRecognizer;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -48,12 +49,17 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 	private static final String INSERT_JS_CSS_SIGNATURE = "<jquery.mobile.js.css>"; //$NON-NLS-1$
 	
 	private static final String MOBILE_PATH = "/Mobile/jQuery Mobile/"; //$NON-NLS-1$
-	
+
+	private static String link(String href) {
+		return "<link rel=\"stylesheet\" href=\"" + href + "\" /";
+	}
+
+	private static String script(String src) {
+		return "<script src=\"" + src + "\"></script";
+	}
+
 	private static final String META = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"";
-	public static final String CSS_LINK = "<link rel=\"stylesheet\" href=\"http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css\" /";
-	public static final String JQUERY_SCRIPT = "<script src=\"http://code.jquery.com/jquery-1.9.1.min.js\"></script";
-	public static final String JQUERY_MOBILE_SCRIPT = "<script src=\"http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js\"></script";
-	
+
 	private static final int INSERT_AFTER_OPEN_NODE = 1;
 	private static final int INSERT_AFTER_CLOSE_NODE = 2;
 	private static final int INSERT_BEFORE_OPEN_NODE = 3;
@@ -94,11 +100,23 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 		IFile file = MarkerResolutionUtils.getFile();
 		
 		if(insert || (p.containsKey(PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS) && !JQueryRecognizer.containsJQueryJSReference(file))) {
-			insertJsCss(v);
+			insertJsCss(v, getJQueryMobileVersion(p));
 			if(insert){
 				texts[0] = "";	
 			}
 		}
+	}
+
+	private JQueryMobileVersion getJQueryMobileVersion(Properties p) {
+		if(p.containsKey(SharableConstants.PALETTE_PATH)) {
+			String path = p.getProperty(SharableConstants.PALETTE_PATH);
+			for (JQueryMobileVersion v: JQueryMobileVersion.ALL_VERSIONS) {
+				if(path.indexOf("version:" + v.toString()) > 0) {
+					return v;
+				}
+			}
+		}
+		return JQueryMobileVersion.getLatestDefaultVersion();
 	}
 	
 	private void writeBuffer(IDocument document) throws BadLocationException{
@@ -298,7 +316,7 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 		return number;
 	}
 	
-	private void insertJsCss(ISourceViewer viewer){
+	private void insertJsCss(ISourceViewer viewer, JQueryMobileVersion version) {
 		IDocument document = viewer.getDocument();
 		
 		IStructuredModel model = null;
@@ -345,13 +363,13 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 					insertNode(document, headNode, null, 1, META, INSERT_AFTER_OPEN_NODE, false);
 				}
 				if(!linkExists){
-					insertNode(document, headNode, null, 1, CSS_LINK, INSERT_AFTER_OPEN_NODE, false);
+					insertNode(document, headNode, null, 1, link(version.getCSS()), INSERT_AFTER_OPEN_NODE, false);
 				}
 				if(!firstScriptExists){
-					insertNode(document, headNode, null, 1, JQUERY_SCRIPT, INSERT_AFTER_OPEN_NODE, false);
+					insertNode(document, headNode, null, 1, script(version.getJQueryJS()), INSERT_AFTER_OPEN_NODE, false);
 				}
 				if(!secondScriptExists){
-					insertNode(document, headNode, null, 1, JQUERY_MOBILE_SCRIPT, INSERT_AFTER_OPEN_NODE, false);
+					insertNode(document, headNode, null, 1, script(version.getJQueryMobileJS()), INSERT_AFTER_OPEN_NODE, false);
 				}
 				
 				insertNode(document, bodyNode, headNode, 0, "</head", INSERT_BEFORE_OPEN_NODE, false);

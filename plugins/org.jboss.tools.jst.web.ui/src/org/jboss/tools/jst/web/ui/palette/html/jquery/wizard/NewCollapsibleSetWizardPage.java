@@ -51,7 +51,7 @@ public class NewCollapsibleSetWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor iconpos = JQueryFieldEditorFactory.createIconPositionEditor();
 		addEditor(iconpos, panel, true);
 
-		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
+		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor(getVersion());
 		addEditor(theme, parent, true);
 
 		IFieldEditor contentTheme = JQueryFieldEditorFactory.createDataContentThemeEditor();

@@ -72,7 +72,7 @@ public class NewButtonWizardPage extends NewJQueryWidgetWizardPage {
 
 		createSeparator(parent);
 	
-		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
+		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor(getVersion());
 		addEditor(theme, parent, true);
 	}
 

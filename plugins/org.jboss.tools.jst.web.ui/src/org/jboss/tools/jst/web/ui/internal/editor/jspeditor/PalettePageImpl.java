@@ -24,7 +24,6 @@ import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.model.ui.views.palette.IPaletteAdapter;
 import org.jboss.tools.common.model.ui.views.palette.IPalettePageAdapter;
-import org.jboss.tools.common.model.ui.views.palette.PaletteContents;
 import org.jboss.tools.common.model.ui.views.palette.PaletteCreator;
 import org.eclipse.ui.part.PageBookView;
 
@@ -35,17 +34,17 @@ import org.eclipse.ui.part.PageBookView;
  */
 public class PalettePageImpl extends Page implements PalettePage, IPalettePageAdapter {
 	PaletteCreator paletteCreator = new PaletteCreator(this);
-	PaletteContents contents;
+	PagePaletteContents contents;
 	IDocument document;
 	DocumentListener listener = null;
 	boolean disposed = false;
 
 	public PalettePageImpl() {}
 
-	public PaletteContents getPaletteContents() {
+	public PagePaletteContents getPaletteContents() {
 		return contents;
 	}
-	public void setPaletteContents(PaletteContents contents) {
+	public void setPaletteContents(PagePaletteContents contents) {
 		this.contents = contents;		
 	}
 

@@ -93,7 +93,7 @@ public class NewHeaderBarWizardPage extends NewJQueryWidgetWizardPage {
 		rightButtonIcon.setValue("check");
 		addEditor(rightButtonIcon, rightParent);
 
-		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
+		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor(getVersion());
 		addEditor(theme, parent, true);
 	}
 

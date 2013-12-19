@@ -46,7 +46,7 @@ public class NewPanelWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor swipe = JQueryFieldEditorFactory.createSwipeCloseEditor();
 		addEditor(swipe, parent);
 
-		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
+		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor(getVersion());
 		addEditor(theme, parent, true);
 	}
 

@@ -31,12 +31,15 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.IPage;
 import org.jboss.tools.common.model.ui.editors.dnd.DropWizardMessages;
 import org.jboss.tools.common.model.ui.editors.dnd.IDropCommand;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.PalettePageImpl;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.palette.PaletteAdapter;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewJQueryWidgetWizard;
+import org.jboss.tools.jst.web.ui.palette.model.PaletteCategory;
 import org.jboss.tools.test.util.WorkbenchUtils;
 
 import junit.framework.TestCase;
@@ -102,6 +105,14 @@ public class AbstractPaletteEntryTest extends TestCase {
 		
 	}
 
+	public void switchVersion(String version) {
+		PaletteViewer viewer = getPaletteViewer();
+		org.jboss.tools.jst.web.ui.palette.model.PaletteRoot root = (org.jboss.tools.jst.web.ui.palette.model.PaletteRoot)viewer.getPaletteRoot();
+		root.getPaletteModel().getPaletteContents().setPreferredVersion(JQueryConstants.JQM_CATEGORY, version);
+		ToolEntry page = findEntry(viewer, JQueryConstants.JQM_CATEGORY, "Page");
+		root.getPaletteModel().reloadCategory((PaletteCategory)page.getParent());
+	}
+
 	public Shell findShell() {
 		for (Shell sh : WebUiPlugin.getDefault().getWorkbench().getDisplay().getShells()) {
 			if (getWizardWindowTitle()
@@ -151,7 +162,7 @@ public class AbstractPaletteEntryTest extends TestCase {
 				for (Object o2: l2) {
 					if(o2 instanceof ToolEntry) {
 						ToolEntry t = (ToolEntry)o2;
-						System.out.println("-->" + t.getLabel());
+//						System.out.println("-->" + t.getLabel());
 						if(entry.equals(t.getLabel())) {
 							return t;
 						}

@@ -720,10 +720,15 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		}
 		IContextService contextService = (IContextService) getSite()
 		  .getService(IContextService.class);
+		if(paletteContents != null) {
+			paletteContents.dispose();
+			paletteContents = null;
+		}
 		super.dispose();
 	}
 	
 	PalettePageImpl palettePage;
+	PagePaletteContents paletteContents;
 
 	public Object getAdapter(Class adapter) {
 		if(PalettePage.class == adapter) {
@@ -733,10 +738,18 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 					return null;
 				}
 				palettePage = new PalettePageImpl();
-				palettePage.setPaletteContents(new PaletteContents(this));
+				if(paletteContents == null) {
+					paletteContents = new PagePaletteContents(this);
+				}
+				palettePage.setPaletteContents(paletteContents);
 				palettePage.attach(d);
 			}
 			return palettePage;
+		} else if(PagePaletteContents.class == adapter) {
+			if(paletteContents == null) {
+				paletteContents = new PagePaletteContents(this);
+			}
+			return paletteContents;
 		}
 		if (IContentOutlinePage.class.equals(adapter)) {
 

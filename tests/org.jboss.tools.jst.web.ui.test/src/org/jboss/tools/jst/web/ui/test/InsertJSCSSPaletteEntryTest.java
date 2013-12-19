@@ -5,7 +5,7 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IEditorPart;
 import org.jboss.tools.jst.jsp.test.palette.AbstractPaletteEntryTest;
-import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.MobilePaletteInsertHelper;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewJQueryWidgetWizard;
@@ -15,16 +15,22 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizar
 
 public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implements JQueryConstants {
 
-	private static final String CSS_LINK = MobilePaletteInsertHelper.CSS_LINK + ">";
+	private static String link(String href) {
+		return "<link rel=\"stylesheet\" href=\"" + href + "\" /";
+	}
+
+	private static String script(String src) {
+		return "<script src=\"" + src + "\"></script";
+	}
 
 	private String[] test_result_1={
 			"<!DOCTYPE html>",
 			"<html>",
 		    "<head>",
 			"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-			CSS_LINK,
-			MobilePaletteInsertHelper.JQUERY_SCRIPT + ">",
-			MobilePaletteInsertHelper.JQUERY_MOBILE_SCRIPT + ">",
+			link(getVersion().getCSS()) + ">",
+			script(getVersion().getJQueryJS()) + ">",
+			script(getVersion().getJQueryMobileJS()) + ">",
 			"</head>",
 			"<body>",
 			"",
@@ -36,9 +42,9 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			"<html>",
 		    "<head>",
 			"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-			CSS_LINK,
-			MobilePaletteInsertHelper.JQUERY_SCRIPT + ">",
-			MobilePaletteInsertHelper.JQUERY_MOBILE_SCRIPT + ">",
+			link(getVersion().getCSS()) + ">",
+			script(getVersion().getJQueryJS()) + ">",
+			script(getVersion().getJQueryMobileJS()) + ">",
 			"</head>",
 			"<body>",
 			"<div data-role=\"collapsible-set\">",
@@ -57,9 +63,9 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			"<html>",
 		    "<head>",
 			"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-			CSS_LINK,
-			MobilePaletteInsertHelper.JQUERY_SCRIPT + ">",
-			MobilePaletteInsertHelper.JQUERY_MOBILE_SCRIPT + ">",
+			link(getVersion().getCSS()) + ">",
+			script(getVersion().getJQueryJS()) + ">",
+			script(getVersion().getJQueryMobileJS()) + ">",
 			"</head>",
 			"<body>",
 			"<div data-role=\"collapsible-set\">",
@@ -76,9 +82,9 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			"<html>",
 		    "<head>",
 			"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-			CSS_LINK,
-			MobilePaletteInsertHelper.JQUERY_SCRIPT + ">",
-			MobilePaletteInsertHelper.JQUERY_MOBILE_SCRIPT + ">",
+			link(getVersion().getCSS()) + ">",
+			script(getVersion().getJQueryJS()) + ">",
+			script(getVersion().getJQueryMobileJS()) + ">",
 			"</head>",
 			"<body>",
 			"</body>",
@@ -104,9 +110,9 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			"<html>",
 		    "<head>",
 		    "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-			CSS_LINK,
-			MobilePaletteInsertHelper.JQUERY_SCRIPT + ">",
-			MobilePaletteInsertHelper.JQUERY_MOBILE_SCRIPT + ">",
+			link(getVersion().getCSS()) + ">",
+			script(getVersion().getJQueryJS()) + ">",
+			script(getVersion().getJQueryMobileJS()) + ">",
 			"</head>",
 			"<body>",
 			"<a href=\"\" id=\"button-1\" data-role=\"button\">Link button</a>|abcde|",
@@ -183,9 +189,9 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			"<html>",
 		    "<head>",
 		    "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-			CSS_LINK,
-			MobilePaletteInsertHelper.JQUERY_SCRIPT + ">",
-			MobilePaletteInsertHelper.JQUERY_MOBILE_SCRIPT + ">",
+			link(getVersion().getCSS()) + ">",
+			script(getVersion().getJQueryJS()) + ">",
+			script(getVersion().getJQueryMobileJS()) + ">",
 			"</head>",
 			"<body>",
 			"<a href=\"\" id=\"button-1\" data-role=\"button\">Link button</a>abcde|",
@@ -198,9 +204,9 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			"<html>",
 		    "<head>",
 		    "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-			CSS_LINK,
-			MobilePaletteInsertHelper.JQUERY_SCRIPT + ">",
-			MobilePaletteInsertHelper.JQUERY_MOBILE_SCRIPT + ">",
+			link(getVersion().getCSS()) + ">",
+			script(getVersion().getJQueryJS()) + ">",
+			script(getVersion().getJQueryMobileJS()) + ">",
 			"</head>",
 			"<body>",
 			"<div data-role=\"page\" id=\"page-1\">",
@@ -376,9 +382,9 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			"<html>",
 		    "<head>",
 		    "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-			CSS_LINK,
-			MobilePaletteInsertHelper.JQUERY_SCRIPT + ">",
-			MobilePaletteInsertHelper.JQUERY_MOBILE_SCRIPT + ">",
+			link(getVersion().getCSS()) + ">",
+			script(getVersion().getJQueryJS()) + ">",
+			script(getVersion().getJQueryMobileJS()) + ">",
 			"</head>",
 			"<body>",
 			"<div data-role=\"page\" id=\"page-1\">",
@@ -401,6 +407,18 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 
 	public InsertJSCSSPaletteEntryTest() {}
 
+	protected JQueryMobileVersion getVersion() {
+		return JQueryMobileVersion.JQM_1_3;
+	}
+
+	public IEditorPart openEditor(String fileName) {
+		IEditorPart result = super.openEditor(fileName);
+		if(getVersion() != JQueryMobileVersion.getLatestDefaultVersion()) {
+			switchVersion(getVersion().toString());
+		}
+		return result;
+	}
+	
 	public void tearDown() {
 		if(editor != null){
 			editor.getSite().getPage().closeEditor(editor, false);
@@ -613,7 +631,7 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 
 		String sValue = value ? TRUE : FALSE;
 		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
-		assertFalse(text.indexOf(CSS_LINK) > 0);
+		assertFalse(text.indexOf(link(getVersion().getCSS()) + ">") > 0);
 
 		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Page", true);
 
@@ -630,7 +648,7 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 		dialog.close();
 
 		text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
-		assertEquals(expected, text.indexOf(CSS_LINK) > 0);
+		assertEquals(expected, text.indexOf(link(getVersion().getCSS()) + ">") > 0);
 	}
 
 	private void compare(String test, String[] result){

@@ -18,6 +18,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.model.ui.editors.dnd.ValidationException;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
+import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizard;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
@@ -32,6 +34,15 @@ public class NewJQueryWidgetWizardPage extends AbstractNewHTMLWidgetWizardPage i
 
 	public NewJQueryWidgetWizardPage(String pageName, String title) {
 		super(pageName, title);
+	}
+
+	@Override
+    public NewJQueryWidgetWizard<?> getWizard() {
+        return (NewJQueryWidgetWizard<?>)super.getWizard();
+    }
+
+	protected JQueryMobileVersion getVersion() {
+		return getWizard().getVersion();
 	}
 
 	protected void createIDEditor(Composite parent, boolean enabling) {

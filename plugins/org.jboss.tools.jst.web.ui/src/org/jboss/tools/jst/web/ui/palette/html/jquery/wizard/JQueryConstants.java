@@ -29,6 +29,11 @@ public interface JQueryConstants extends JQueryHTMLConstants {
 	public String ARRAGEMENT_GROUPED = "Grouped";
 	public String ARRAGEMENT_NAVBAR = "Navbar";
 
+	/**
+	 * Palette category id.
+	 */
+	public String JQM_CATEGORY = "jQuery Mobile";
+
 	public String EDITOR_ID_TITLE = TAG_TITLE;
 	public String EDITOR_ID_LABEL = TAG_LABEL;
 	public String EDITOR_ID_NAME = ATTR_NAME;

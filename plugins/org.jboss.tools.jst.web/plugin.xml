@@ -37,6 +37,9 @@
     <contribution
           resource="meta/mobile-palette.xml" priority="4">
     </contribution>
+    <contribution
+          resource="meta/jquery-mobile-1.4-palette.xml" priority="4">
+    </contribution>
  </extension>
 
    <extension point="org.jboss.tools.common.model.specialwizard">

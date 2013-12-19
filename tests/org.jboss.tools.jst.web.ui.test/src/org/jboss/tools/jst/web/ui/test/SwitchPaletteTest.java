@@ -36,16 +36,16 @@ public class SwitchPaletteTest extends AbstractPaletteEntryTest implements JQuer
 	public void testPaletteSwitch() throws Exception {
 		editor = openEditor("d.html");
 		PaletteViewer viewer = getPaletteViewer();
-		ToolEntry toolEntry = findEntry(viewer, "jQuery Mobile", "Page");
+		ToolEntry toolEntry = findEntry(viewer, JQueryConstants.JQM_CATEGORY, "Page");
 		assertNotNull(toolEntry);
 		IDocument document = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput());
 		document.replace(13, 1, "x");
 		viewer = getPaletteViewer();
-		toolEntry = findEntry(viewer, "jQuery Mobile", "Page");
+		toolEntry = findEntry(viewer, JQueryConstants.JQM_CATEGORY, "Page");
 		assertNull(toolEntry);
 		document.replace(13, 1, "l");
 		viewer = getPaletteViewer();
-		toolEntry = findEntry(viewer, "jQuery Mobile", "Page");
+		toolEntry = findEntry(viewer, JQueryConstants.JQM_CATEGORY, "Page");
 		assertNotNull(toolEntry);
 	}
 	

@@ -21,6 +21,7 @@ import org.jboss.tools.common.ui.widget.editor.CompositeEditor;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.jst.jsp.test.palette.AbstractPaletteEntryTest;
 import org.jboss.tools.jst.web.WebModelPlugin;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewAudioWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewAudioWizardPage;
@@ -34,8 +35,6 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCollapsibleWizar
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCollapsibleWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizardPage;
-import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFooterWizard;
-import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFooterWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormButtonWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormButtonWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormWizard;
@@ -46,11 +45,10 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedButtonsWi
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedButtonsWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedCheckboxesWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedCheckboxesWizardPage;
-import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizard;
-import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewImageWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewImageWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewJQueryWidgetWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewJQueryWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLabelWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLabelWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizard;
@@ -94,7 +92,11 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 
 	public void setUp() {
 		super.setUp();
-		editor = openEditor("a.html");
+		editor = openEditor(getFileName());
+	}
+
+	protected String getFileName() {
+		return "a14.html";
 	}
 
 	protected void tearDown() throws Exception {
@@ -108,6 +110,20 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		super.tearDown();
 	}
 
+	public IWizardPage runToolEntry(String entry, boolean wizardExpected) {
+		IWizardPage result = runToolEntry(JQueryConstants.JQM_CATEGORY, entry, wizardExpected);
+		if(wizardExpected) {
+			assertTrue(result instanceof NewJQueryWidgetWizardPage);
+			NewJQueryWidgetWizardPage page = (NewJQueryWidgetWizardPage)result;
+			assertEquals(getVersion(), page.getWizard().getVersion());
+		}
+		return result;
+	}
+
+	protected JQueryMobileVersion getVersion() {
+		return JQueryMobileVersion.JQM_1_4;
+	}
+
 	public void testScriptsAreCopied() {
 		File f = WebModelPlugin.getJSStateRoot();
 		assertTrue(new File(f, "js").isDirectory());
@@ -115,7 +131,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewPageWizard() {
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Page", true);
+		IWizardPage currentPage = runToolEntry("Page", true);
 
 		assertTrue(currentPage instanceof NewPageWizardPage);
 
@@ -177,7 +193,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewCheckboxWizard() {
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Checkbox", true);
+		IWizardPage currentPage = runToolEntry("Checkbox", true);
 
 		assertTrue(currentPage instanceof NewCheckBoxWizardPage);
 
@@ -202,7 +218,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewToggleWizard() {
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Flip Toggle Switch", true);
+		IWizardPage currentPage = runToolEntry("Flip Toggle Switch", true);
 
 		assertTrue(currentPage instanceof NewToggleWizardPage);
 
@@ -232,7 +248,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewListviewWizard() {
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Listview", true);
+		IWizardPage currentPage = runToolEntry("Listview", true);
 
 		assertTrue(currentPage instanceof NewListviewWizardPage);
 
@@ -266,7 +282,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 
 
 	public void testNewDialogWizard() {
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Dialog", true);
+		IWizardPage currentPage = runToolEntry("Dialog", true);
 		assertTrue(currentPage instanceof NewDialogWizardPage);
 
 		NewDialogWizardPage wizardPage = (NewDialogWizardPage)currentPage;
@@ -284,7 +300,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewButtonWizard() {
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Button", true);
+		IWizardPage currentPage = runToolEntry("Button", true);
 		assertTrue(currentPage instanceof NewButtonWizardPage);
 
 		NewButtonWizardPage wizardPage = (NewButtonWizardPage)currentPage;
@@ -327,7 +343,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewFormButtonWizard() {
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Form Button", true);
+		IWizardPage currentPage = runToolEntry("Form Button", true);
 		assertTrue(currentPage instanceof NewFormButtonWizardPage);
 
 		NewFormButtonWizardPage wizardPage = (NewFormButtonWizardPage)currentPage;
@@ -368,7 +384,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewLinkWizard() {
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Link", true);
+		IWizardPage currentPage = runToolEntry("Link", true);
 		assertTrue(currentPage instanceof NewLinkWizardPage);
 
 		NewLinkWizardPage wizardPage = (NewLinkWizardPage)currentPage;
@@ -394,7 +410,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewRangeSliderWizard() {
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Range Slider", true);
+		IWizardPage currentPage = runToolEntry("Range Slider", true);
 
 		assertTrue(currentPage instanceof NewRangeSliderWizardPage);
 
@@ -447,7 +463,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewTextInputWizard() {
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Text Input", true);
+		IWizardPage currentPage = runToolEntry("Text Input", true);
 
 		assertTrue(currentPage instanceof NewTextInputWizardPage);
 
@@ -516,35 +532,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		assertTextIsInserted(wizardPage.getEditorValue(EDITOR_ID_LABEL));
 	}
 
-	public void testNewHeaderBarWizard() {
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Header Bar", true);
-
-		assertTrue(currentPage instanceof NewHeaderBarWizardPage);
-
-		NewHeaderBarWizardPage wizardPage = (NewHeaderBarWizardPage)currentPage;
-		NewHeaderBarWizard wizard = (NewHeaderBarWizard)wizardPage.getWizard();
-		
-		assertTextDoesNotExist(wizard, ATTR_DATA_POSITION);
-		wizardPage.setEditorValue(EDITOR_ID_FIXED_POSITION, TRUE);
-		assertAttrExists(wizard, ATTR_DATA_POSITION, POSITION_FIXED);
-
-		assertTextDoesNotExist(wizard, ATTR_DATA_FULL_SCREEN);
-		wizardPage.setEditorValue(EDITOR_ID_FULL_SCREEN, TRUE);
-		assertAttrExists(wizard, ATTR_DATA_FULL_SCREEN, TRUE);
-
-		assertTextDoesNotExist(wizard, CLASS_BUTTON_RIGHT);
-		wizardPage.setEditorValue(EDITOR_ID_LEFT_BUTTON, FALSE);
-		assertTextExists(wizard, CLASS_BUTTON_RIGHT);
-		wizardPage.setEditorValue(EDITOR_ID_LEFT_BUTTON, TRUE);
-		assertTextDoesNotExist(wizard, CLASS_BUTTON_RIGHT);
-
-		compareGeneratedAndInsertedText(wizard);
-
-		assertTextIsInserted(wizardPage.getEditorValue(EDITOR_ID_TITLE));
-	}
-
 	public void testNewNavbarWizard() {
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Navbar", true);
+		IWizardPage currentPage = runToolEntry("Navbar", true);
 
 		assertTrue(currentPage instanceof NewNavbarWizardPage);
 
@@ -570,32 +559,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		assertTextIsInserted("Run Test");
 	}
 
-	public void testNewFooterBarWizard() {
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Footer Bar", true);
-
-		assertTrue(currentPage instanceof NewFooterWizardPage);
-
-		NewFooterWizardPage wizardPage = (NewFooterWizardPage)currentPage;
-		NewFooterWizard wizard = (NewFooterWizard)wizardPage.getWizard();
-		
-		assertTextDoesNotExist(wizard, ATTR_DATA_POSITION);
-		wizardPage.setEditorValue(EDITOR_ID_FIXED_POSITION, TRUE);
-		assertAttrExists(wizard, ATTR_DATA_POSITION, POSITION_FIXED);
-
-		assertTextDoesNotExist(wizard, ATTR_DATA_FULL_SCREEN);
-		wizardPage.setEditorValue(EDITOR_ID_FULL_SCREEN, TRUE);
-		assertAttrExists(wizard, ATTR_DATA_FULL_SCREEN, TRUE);
-
-		String label = "Run Footer Bar Test";
-		wizardPage.setEditorValue(EDITOR_ID_TITLE, label);
-
-		compareGeneratedAndInsertedText(wizard);
-
-		assertTextIsInserted(label);
-	}
-
 	public void testNewGridWizard() {
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Grid", true);
+		IWizardPage currentPage = runToolEntry("Grid", true);
 
 		assertTrue(currentPage instanceof NewGridWizardPage);
 
@@ -612,7 +577,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewGroupedCheckboxesWizard() {
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Grouped Checkboxes", true);
+		IWizardPage currentPage = runToolEntry("Grouped Checkboxes", true);
 
 		assertTrue(currentPage instanceof NewGroupedCheckboxesWizardPage);
 
@@ -629,7 +594,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewRadioWizard() {
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Radio Button", true);
+		IWizardPage currentPage = runToolEntry("Radio Button", true);
 
 		assertTrue(currentPage instanceof NewRadioWizardPage);
 
@@ -646,7 +611,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewCollapsibleContentBlockWizard() {
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Collapsible Content Block", true);
+		IWizardPage currentPage = runToolEntry("Collapsible Content Block", true);
 		assertTrue(currentPage instanceof NewCollapsibleWizardPage);
 
 		NewCollapsibleWizardPage wizardPage = (NewCollapsibleWizardPage)currentPage;
@@ -688,7 +653,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewSelectMenuWizard() {
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Select Menu", true);
+		IWizardPage currentPage = runToolEntry("Select Menu", true);
 
 		assertTrue(currentPage instanceof NewSelectMenuWizardPage);
 
@@ -722,7 +687,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewPopupWizard() {
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Popup", true);
+		IWizardPage currentPage = runToolEntry("Popup", true);
 
 		assertTrue(currentPage instanceof NewPopupWizardPage);
 		NewPopupWizardPage wizardPage = (NewPopupWizardPage)currentPage;
@@ -757,7 +722,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewGroupedButtonsBarWizard() {
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Grouped Buttons", true);
+		IWizardPage currentPage = runToolEntry("Grouped Buttons", true);
 
 		assertTrue(currentPage instanceof NewGroupedButtonsWizardPage);
 
@@ -796,7 +761,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewPanelWizard() {
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Panel", true);
+		IWizardPage currentPage = runToolEntry("Panel", true);
 
 		assertTrue(currentPage instanceof NewPanelWizardPage);
 		NewPanelWizardPage wizardPage = (NewPanelWizardPage)currentPage;
@@ -838,7 +803,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewTableWizard() {
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Table", true);
+		IWizardPage currentPage = runToolEntry("Table", true);
 
 		assertTrue(currentPage instanceof NewTableWizardPage);
 		NewTableWizardPage wizardPage = (NewTableWizardPage)currentPage;
@@ -862,7 +827,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewCollapsibleSetBarWizard() {
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Collapsible Set", true);
+		IWizardPage currentPage = runToolEntry("Collapsible Set", true);
 
 		assertTrue(currentPage instanceof NewCollapsibleSetWizardPage);
 
@@ -893,7 +858,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewFormWizard() {
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Form", true);
+		IWizardPage currentPage = runToolEntry("Form", true);
 
 		assertTrue(currentPage instanceof NewFormWizardPage);
 
@@ -926,7 +891,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewImageWizard() {
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Image", true);
+		IWizardPage currentPage = runToolEntry("Image", true);
 
 		assertTrue(currentPage instanceof NewImageWizardPage);
 
@@ -975,7 +940,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewVideoWizard() {
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Video", true);
+		IWizardPage currentPage = runToolEntry("Video", true);
 
 		assertTrue(currentPage instanceof NewVideoWizardPage);
 
@@ -1016,7 +981,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewAudioWizard() {
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Audio", true);
+		IWizardPage currentPage = runToolEntry("Audio", true);
 
 		assertTrue(currentPage instanceof NewAudioWizardPage);
 
@@ -1057,7 +1022,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewLabelWizard() {
-		IWizardPage currentPage = runToolEntry("jQuery Mobile", "Label", true);
+		IWizardPage currentPage = runToolEntry("Label", true);
 
 		assertTrue(currentPage instanceof NewLabelWizardPage);
 

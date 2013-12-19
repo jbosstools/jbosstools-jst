@@ -107,6 +107,9 @@
    <GroupHTML HIDDEN="no" ICON="" NAME="jQuery Mobile" PREFIX=""
     SCOPE="project" URI="" add_taglib="true" library-version="" model-entity="SharableGroupHTML">
     
+    <GroupHTML HIDDEN="no" ICON="" NAME="version:1.3"
+      SCOPE="project" add_taglib="true" model-entity="SharableGroupHTML">
+      
      <GroupHTML HIDDEN="no" ICON="" NAME="1.page"
       SCOPE="project" add_taglib="true" model-entity="SharableGroupHTML">
 
@@ -304,6 +307,8 @@
                  model-entity="SharableMacroHTML"/>
 
      </GroupHTML>
+    
+    </GroupHTML>
 
    </GroupHTML>
   </PageTabHTML>

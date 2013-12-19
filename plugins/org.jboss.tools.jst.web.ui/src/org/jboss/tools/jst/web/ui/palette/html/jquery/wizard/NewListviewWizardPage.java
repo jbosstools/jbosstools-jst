@@ -54,10 +54,10 @@ public class NewListviewWizardPage extends NewJQueryWidgetWizardPage {
 
 		items.createControl(parent, WizardMessages.itemsLabel);
 
-		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
+		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor(getVersion());
 		addEditor(theme, parent, true);
 
-		IFieldEditor dividerTheme = JQueryFieldEditorFactory.createDividerThemeEditor();
+		IFieldEditor dividerTheme = JQueryFieldEditorFactory.createDividerThemeEditor(getVersion());
 		addEditor(dividerTheme, parent, true);
 	}
 

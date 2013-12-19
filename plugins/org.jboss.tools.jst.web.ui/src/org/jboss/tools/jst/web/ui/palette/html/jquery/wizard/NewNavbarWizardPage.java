@@ -39,7 +39,7 @@ public class NewNavbarWizardPage extends NewJQueryWidgetWizardPage {
 
 		iconpos.setEnabled(false);
 
-		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
+		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor(getVersion());
 		addEditor(theme, parent, true);
 	}
 
