@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import org.jboss.tools.common.model.ui.editors.dnd.DropWizardMessages;
 import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.ElementNode;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.JSTWebUIImages;
 
 /**
@@ -33,7 +34,7 @@ public class NewGroupedButtonsWizard extends NewJQueryWidgetWizard<NewGroupedBut
 
 	protected void addContent(ElementNode parent) {
 		String iconpos = page.getEditorValue(EDITOR_ID_ICON_POS);
-		if(TRUE.equals(page.getEditorValue(EDITOR_ID_ICON_ONLY))) {
+		if(isTrue(EDITOR_ID_ICON_ONLY)) {
 			iconpos = ICONPOS_NOTEXT;
 		}
 
@@ -58,18 +59,43 @@ public class NewGroupedButtonsWizard extends NewJQueryWidgetWizard<NewGroupedBut
 			String icon = page.buttons.getIcon(i);
 			ElementNode a = group.addChild(TAG_A, label);
 			a.addAttribute(ATTR_HREF, url);
-			a.addAttribute(ATTR_DATA_ROLE, ROLE_BUTTON);
-			if(icon.length() > 0) {
-				a.addAttribute(ATTR_DATA_ICON, icon);
-				if(iconpos.length() > 0) {
-					a.addAttribute(ATTR_DATA_ICONPOS, iconpos);
-				}
-			}			
-			if(themeValue.length() > 0) {
-				a.addAttribute(ATTR_DATA_THEME, themeValue);
+			if(getVersion() == JQueryMobileVersion.JQM_1_3) {
+				addContent13(a, icon, iconpos, themeValue);
+			} else {
+				addContent14(a, icon, iconpos, themeValue);
 			}
 		}
 
+	}
+
+	private void addContent13(ElementNode a, String icon, String iconpos, String themeValue) {
+		a.addAttribute(ATTR_DATA_ROLE, ROLE_BUTTON);
+		if(icon.length() > 0) {
+			a.addAttribute(ATTR_DATA_ICON, icon);
+			if(iconpos.length() > 0) {
+				a.addAttribute(ATTR_DATA_ICONPOS, iconpos);
+			}
+		}			
+		if(themeValue.length() > 0) {
+			a.addAttribute(ATTR_DATA_THEME, themeValue);
+		}
+	}
+
+	private void addContent14(ElementNode a, String icon, String iconpos, String themeValue) {
+		StringBuilder cls = new StringBuilder();
+
+		cls.append(CLASS_UI_BTN).append(' ').append(CLASS_UI_CORNER_ALL);
+		
+		if(icon.length() > 0) {
+			cls.append(' ').append(CLASS_UI_ICON_PREFIX + icon);
+			if(iconpos.length() == 0) iconpos = "left";
+			cls.append(' ').append(CLASS_UI_BTN_ICON_PREFIX + iconpos);
+		}
+		if(themeValue.length() > 0) {
+			cls.append(' ').append(CLASS_UI_BTN_PREFIX + themeValue);
+		}
+
+		a.addAttribute(ATTR_CLASS, cls.toString());
 	}
 
 	protected void createBodyForBrowser(ElementNode body) {

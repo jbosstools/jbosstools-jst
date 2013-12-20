@@ -121,6 +121,17 @@ public interface JQueryHTMLConstants extends HTMLConstants {
 	public String CLASS_RESPONSIVE = "ui-responsive";
 	public String CLASS_TABLE_STRIPE = "table-stripe";
 
+	public String CLASS_UI_MINI = "ui-mini";
+	public String CLASS_UI_BTN = "ui-btn";
+	public String CLASS_UI_INPUT_BTN = "ui-input-btn";
+	public String CLASS_UI_BTN_INLINE = "ui-btn-inline";
+	public String CLASS_UI_CORNER_ALL = "ui-corner-all";
+	public String CLASS_UI_STATE_DISABLED = "ui-state-disabled";
+	public String CLASS_UI_BTN_ICON_NOTEXT = "ui-btn-icon-notext";
+	public String CLASS_UI_BTN_PREFIX = "ui-btn-";
+	public String CLASS_UI_BTN_ICON_PREFIX = "ui-btn-icon-";
+	public String CLASS_UI_ICON_PREFIX = "ui-icon-";
+
 	public String POSITION_FIXED = "fixed";
 	public String POSITION_TO_WINDOW = "window";
 	public String POSITION_TO_ORIGIN = "origin";

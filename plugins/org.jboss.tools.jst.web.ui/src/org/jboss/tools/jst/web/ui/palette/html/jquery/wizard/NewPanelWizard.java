@@ -72,7 +72,7 @@ public class NewPanelWizard extends NewJQueryWidgetWizard<NewPanelWizardPage> im
 //			div.addChild(TAG_DIV, "Preview is not implemented for this element.");
 //		} else {
 			addContent(page);
-			ElementNode panel = page.getChildren().get(0);
+			ElementNode panel = (ElementNode)page.getChildren().get(0);
 			panel.addChild(TAG_P, "Panel Content");
 			ElementNode content = page.addChild(TAG_DIV);
 			content.addAttribute(ATTR_DATA_ROLE, ROLE_CONTENT);
