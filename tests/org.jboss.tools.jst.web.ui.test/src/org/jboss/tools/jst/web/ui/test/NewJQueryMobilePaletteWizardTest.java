@@ -307,26 +307,29 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		NewButtonWizard wizard = (NewButtonWizard)wizardPage.getWizard(); 
 
 		wizardPage.setEditorValue(EDITOR_ID_MINI, TRUE);
-		assertAttrExists(wizard, ATTR_DATA_MINI, TRUE);
+		assertTextExists(wizard, "ui-mini");
 		wizardPage.setEditorValue(EDITOR_ID_MINI, FALSE);
-		assertTextDoesNotExist(wizard, ATTR_DATA_MINI);
+		assertTextDoesNotExist(wizard, "ui-mini");
 
 		wizardPage.setEditorValue(EDITOR_ID_DISABLED, TRUE);
-		assertAttrExists(wizard, ATTR_CLASS, CLASS_DISABLED);
+		assertTextExists(wizard, "ui-state-disabled");
 		wizardPage.setEditorValue(EDITOR_ID_DISABLED, FALSE);
-		assertTextDoesNotExist(wizard, ATTR_CLASS);
+		assertTextDoesNotExist(wizard, "ui-state-disabled");
 
 		wizardPage.setEditorValue(EDITOR_ID_INLINE, TRUE);
-		assertAttrExists(wizard, ATTR_DATA_INLINE, TRUE);
+		assertTextExists(wizard, "ui-btn-inline");
 		wizardPage.setEditorValue(EDITOR_ID_INLINE, FALSE);
-		assertTextDoesNotExist(wizard, ATTR_DATA_INLINE);
+		assertTextDoesNotExist(wizard, "ui-btn-inline");
 
 		wizardPage.setEditorValue(EDITOR_ID_ICON_ONLY, TRUE);
-		assertAttrExists(wizard, ATTR_DATA_ICONPOS, "notext");
-		wizardPage.setEditorValue(EDITOR_ID_ICON_POS, "arrow-r");
-		assertAttrExists(wizard, ATTR_DATA_ICONPOS, "notext");
+		assertTextExists(wizard, "ui-btn-icon-notext");
+		wizardPage.setEditorValue(EDITOR_ID_ICON, "alert");
+		assertTextExists(wizard, "ui-icon-alert");
+		wizardPage.setEditorValue(EDITOR_ID_ICON_POS, "right");
+		assertTextExists(wizard, "ui-btn-icon-notext");
 		wizardPage.setEditorValue(EDITOR_ID_ICON_ONLY, FALSE);
-		assertAttrExists(wizard, ATTR_DATA_ICONPOS, "arrow-r");
+		System.out.println(wizard.getTextForBrowser());
+		assertTextExists(wizard, "ui-btn-icon-right");
 
 		wizardPage.setEditorValue(EDITOR_ID_ACTION, WizardMessages.actionDialogLabel);
 		assertAttrExists(wizard, ATTR_DATA_REL, DATA_REL_DIALOG);
@@ -359,26 +362,28 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		assertAttrExists(wizard, ATTR_TYPE, BUTTON_TYPE_BUTTON);
 
 		wizardPage.setEditorValue(EDITOR_ID_MINI, TRUE);
-		assertAttrExists(wizard, ATTR_DATA_MINI, TRUE);
+		assertTextExists(wizard, "ui-mini");
 		wizardPage.setEditorValue(EDITOR_ID_MINI, FALSE);
-		assertTextDoesNotExist(wizard, ATTR_DATA_MINI);
+		assertTextDoesNotExist(wizard, "ui-mini");
 
 		wizardPage.setEditorValue(EDITOR_ID_DISABLED, TRUE);
-		assertAttrExists(wizard, ATTR_DISABLED, ATTR_DISABLED);
+		assertTextExists(wizard, "ui-state-disabled");
 		wizardPage.setEditorValue(EDITOR_ID_DISABLED, FALSE);
-		assertTextDoesNotExist(wizard, ATTR_DISABLED);
+		assertTextDoesNotExist(wizard, "ui-state-disabled");
 
 		wizardPage.setEditorValue(EDITOR_ID_INLINE, TRUE);
-		assertAttrExists(wizard, ATTR_DATA_INLINE, TRUE);
+		assertTextExists(wizard, "ui-btn-inline");
 		wizardPage.setEditorValue(EDITOR_ID_INLINE, FALSE);
-		assertTextDoesNotExist(wizard, ATTR_DATA_INLINE);
+		assertTextDoesNotExist(wizard, "ui-btn-inline");
 
 		wizardPage.setEditorValue(EDITOR_ID_ICON_ONLY, TRUE);
-		assertAttrExists(wizard, ATTR_DATA_ICONPOS, "notext");
-		wizardPage.setEditorValue(EDITOR_ID_ICON_POS, "arrow-r");
-		assertAttrExists(wizard, ATTR_DATA_ICONPOS, "notext");
+		assertTextExists(wizard, "ui-btn-icon-notext");
+		wizardPage.setEditorValue(EDITOR_ID_ICON, "alert");
+		assertTextExists(wizard, "ui-icon-alert");
+		wizardPage.setEditorValue(EDITOR_ID_ICON_POS, "right");
+		assertTextExists(wizard, "ui-btn-icon-notext");
 		wizardPage.setEditorValue(EDITOR_ID_ICON_ONLY, FALSE);
-		assertAttrExists(wizard, ATTR_DATA_ICONPOS, "arrow-r");
+		assertTextExists(wizard, "ui-btn-icon-right");
 
 		compareGeneratedAndInsertedText(wizard);
 	}
@@ -748,9 +753,9 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		assertTrue(icononly.isEnabled());
 		assertTextDoesNotExist(wizard, ATTR_DATA_ICONPOS);
 		wizardPage.setEditorValue(EDITOR_ID_ICON_POS, "right");
-		assertAttrExists(wizard, ATTR_DATA_ICONPOS, "right");
+		assertTextExists(wizard, "ui-btn-icon-right");
 		wizardPage.setEditorValue(EDITOR_ID_ICON_ONLY, TRUE);
-		assertAttrExists(wizard, ATTR_DATA_ICONPOS, ICONPOS_NOTEXT);
+		assertTextExists(wizard, "ui-btn-icon-notext");
 
 		wizardPage.setEditorValue(EDITOR_ID_MINI, TRUE);
 		assertAttrExists(wizard, ATTR_DATA_MINI, TRUE);

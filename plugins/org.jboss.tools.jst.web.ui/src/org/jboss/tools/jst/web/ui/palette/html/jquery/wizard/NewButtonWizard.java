@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import org.jboss.tools.common.model.ui.editors.dnd.DropWizardMessages;
 import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.ElementNode;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.JSTWebUIImages;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
@@ -37,12 +38,20 @@ public class NewButtonWizard extends NewJQueryWidgetWizard<NewButtonWizardPage> 
 		ElementNode a = parent.addChild(TAG_A, page.getEditorValue(EDITOR_ID_LABEL));
 
 		a.addAttribute(ATTR_HREF, page.getEditorValue(EDITOR_ID_URL));
-		if(TRUE.equals(page.getEditorValue(EDITOR_ID_DISABLED))) {
-			a.addAttribute(ATTR_CLASS, CLASS_DISABLED);
-		}
-
 		addID("button-", a);
 		applyAction(page, a);
+
+		if(getVersion() == JQueryMobileVersion.JQM_1_3) {
+			addContent13(a);
+		} else {
+			addContent14(a);
+		}
+	}
+
+	private void addContent13(ElementNode a) {
+		if(isTrue(EDITOR_ID_DISABLED)) {
+			a.addAttribute(ATTR_CLASS, CLASS_DISABLED);
+		}
 
 		a.addAttribute(ATTR_DATA_ROLE, ROLE_BUTTON);
 		String icon = page.getEditorValue(EDITOR_ID_ICON);
@@ -60,7 +69,7 @@ public class NewButtonWizard extends NewJQueryWidgetWizard<NewButtonWizardPage> 
 		if(isMini()) {
 			a.addAttribute(ATTR_DATA_MINI, TRUE);
 		}
-		if(TRUE.equals(page.getEditorValue(EDITOR_ID_INLINE))) {
+		if(isTrue(EDITOR_ID_INLINE)) {
 			a.addAttribute(ATTR_DATA_INLINE, TRUE);
 		}
 		if(!isTrue(EDITOR_ID_CORNERS)) {
@@ -71,6 +80,43 @@ public class NewButtonWizard extends NewJQueryWidgetWizard<NewButtonWizardPage> 
 		if(themeValue.length() > 0) {
 			a.addAttribute(ATTR_DATA_THEME, themeValue);
 		}
+
+	}
+
+	private void addContent14(ElementNode a) {
+		StringBuilder cls = new StringBuilder();
+		cls.append(CLASS_UI_BTN);
+		String icon = page.getEditorValue(EDITOR_ID_ICON);
+		if(icon.length() > 0) {
+			cls.append(' ').append(CLASS_UI_ICON_PREFIX + icon);
+		}
+		if(isTrue(EDITOR_ID_ICON_ONLY)) {
+			cls.append(' ').append(CLASS_UI_BTN_ICON_NOTEXT);
+		} else if(icon.length() > 0) {
+			String iconpos = page.getEditorValue(EDITOR_ID_ICON_POS);
+			if(iconpos.length() == 0) iconpos = "left";
+			cls.append(' ').append(CLASS_UI_BTN_ICON_PREFIX + iconpos);
+		}
+		if(isMini()) {
+			cls.append(' ').append(CLASS_UI_MINI);
+		}
+		if(isTrue(EDITOR_ID_INLINE)) {
+			cls.append(' ').append(CLASS_UI_BTN_INLINE);
+		}
+		if(isTrue(EDITOR_ID_CORNERS)) {
+			cls.append(' ').append(CLASS_UI_CORNER_ALL);
+		}
+
+		String themeValue = page.getEditorValue(EDITOR_ID_THEME);
+		if(themeValue.length() > 0) {
+			cls.append(' ').append(CLASS_UI_BTN_PREFIX + themeValue);
+		}
+		
+		if(isTrue(EDITOR_ID_DISABLED)) {
+			cls.append(' ').append(CLASS_UI_STATE_DISABLED);
+		}
+
+		a.addAttribute(ATTR_CLASS, cls.toString());
 	}
 
 	public static <P extends AbstractNewHTMLWidgetWizardPage> void applyAction(P page, ElementNode a) {

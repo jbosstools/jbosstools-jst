@@ -15,11 +15,11 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizar
 
 public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implements JQueryConstants {
 
-	private static String link(String href) {
+	static String link(String href) {
 		return "<link rel=\"stylesheet\" href=\"" + href + "\" /";
 	}
 
-	private static String script(String src) {
+	static String script(String src) {
 		return "<script src=\"" + src + "\"></script";
 	}
 
@@ -660,7 +660,7 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 		}
 	}
 	
-	private void doTestWithMultipleParameters(String fileName, boolean singleInsertion, boolean singleSelection, boolean insertJsCss, String[] result){
+	void doTestWithMultipleParameters(String fileName, boolean singleInsertion, boolean singleSelection, boolean insertJsCss, String[] result){
 		editor = openEditor(fileName);
 		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
 		String sValue = insertJsCss ? TRUE : FALSE;
