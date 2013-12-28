@@ -24,6 +24,12 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedButtonsWi
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedButtonsWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewListviewWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewListviewWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewSelectMenuWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewSelectMenuWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTextInputWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTextInputWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 public class NewJQueryMobile13PaletteWizardTest extends NewJQueryMobilePaletteWizardTest {
@@ -34,6 +40,27 @@ public class NewJQueryMobile13PaletteWizardTest extends NewJQueryMobilePaletteWi
 
 	protected JQueryMobileVersion getVersion() {
 		return JQueryMobileVersion.JQM_1_3;
+	}
+
+	protected void doVersionSpecificTest(NewListviewWizardPage wizardPage, NewListviewWizard wizard) {
+		wizardPage.setEditorValue(EDITOR_ID_SEARCH_FILTER, TRUE);
+		assertAttrExists(wizard, ATTR_DATA_FILTER, TRUE);
+		wizardPage.setEditorValue(EDITOR_ID_SEARCH_FILTER, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_DATA_FILTER);
+	}
+
+	protected void doVersionSpecificTest(NewSelectMenuWizardPage wizardPage, NewSelectMenuWizard wizard) {
+		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_FIELDCONTAIN);
+		wizardPage.setEditorValue(EDITOR_ID_LAYOUT, LAYOUT_VERTICAL);
+		assertTextDoesNotExist(wizard, ROLE_FIELDCONTAIN);
+		wizardPage.setEditorValue(EDITOR_ID_LAYOUT, LAYOUT_HORIZONTAL);
+		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_FIELDCONTAIN);
+	}
+
+	protected void doVersionSpecificTest(NewTextInputWizardPage wizardPage, NewTextInputWizard wizard) {
+		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_FIELDCONTAIN);
+		wizardPage.setEditorValue(EDITOR_ID_LAYOUT, LAYOUT_VERTICAL);
+		assertTextDoesNotExist(wizard, ROLE_FIELDCONTAIN);
 	}
 
 	public void testNewHeaderBarWizard() {
@@ -94,10 +121,7 @@ public class NewJQueryMobile13PaletteWizardTest extends NewJQueryMobilePaletteWi
 		NewButtonWizardPage wizardPage = (NewButtonWizardPage)currentPage;
 		NewButtonWizard wizard = (NewButtonWizard)wizardPage.getWizard(); 
 
-		wizardPage.setEditorValue(EDITOR_ID_MINI, TRUE);
-		assertAttrExists(wizard, ATTR_DATA_MINI, TRUE);
-		wizardPage.setEditorValue(EDITOR_ID_MINI, FALSE);
-		assertTextDoesNotExist(wizard, ATTR_DATA_MINI);
+		doTestMini(wizardPage, wizard);
 
 		wizardPage.setEditorValue(EDITOR_ID_DISABLED, TRUE);
 		assertAttrExists(wizard, ATTR_CLASS, CLASS_DISABLED);
@@ -146,10 +170,7 @@ public class NewJQueryMobile13PaletteWizardTest extends NewJQueryMobilePaletteWi
 		assertAttrExists(wizard, ATTR_VALUE, "Input");
 		assertAttrExists(wizard, ATTR_TYPE, BUTTON_TYPE_BUTTON);
 
-		wizardPage.setEditorValue(EDITOR_ID_MINI, TRUE);
-		assertAttrExists(wizard, ATTR_DATA_MINI, TRUE);
-		wizardPage.setEditorValue(EDITOR_ID_MINI, FALSE);
-		assertTextDoesNotExist(wizard, ATTR_DATA_MINI);
+		doTestMini(wizardPage, wizard);
 
 		wizardPage.setEditorValue(EDITOR_ID_DISABLED, TRUE);
 		assertAttrExists(wizard, ATTR_DISABLED, ATTR_DISABLED);
@@ -202,10 +223,7 @@ public class NewJQueryMobile13PaletteWizardTest extends NewJQueryMobilePaletteWi
 		wizardPage.setEditorValue(EDITOR_ID_ICON_ONLY, TRUE);
 		assertAttrExists(wizard, ATTR_DATA_ICONPOS, ICONPOS_NOTEXT);
 
-		wizardPage.setEditorValue(EDITOR_ID_MINI, TRUE);
-		assertAttrExists(wizard, ATTR_DATA_MINI, TRUE);
-		wizardPage.setEditorValue(EDITOR_ID_MINI, FALSE);
-		assertTextDoesNotExist(wizard, ATTR_DATA_MINI);
+		doTestMini(wizardPage, wizard);
 
 		compareGeneratedAndInsertedText(wizard);
 	}
