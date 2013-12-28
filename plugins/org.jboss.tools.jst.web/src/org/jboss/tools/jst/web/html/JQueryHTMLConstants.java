@@ -131,6 +131,8 @@ public interface JQueryHTMLConstants extends HTMLConstants {
 	public String CLASS_UI_BTN_PREFIX = "ui-btn-";
 	public String CLASS_UI_BTN_ICON_PREFIX = "ui-btn-icon-";
 	public String CLASS_UI_ICON_PREFIX = "ui-icon-";
+	public String CLASS_UI_FIELD_CONTAIN = "ui-field-contain";
+	public String CLASS_UI_FILTERABLE = "ui-filterable";
 
 	public String POSITION_FIXED = "fixed";
 	public String POSITION_TO_WINDOW = "window";

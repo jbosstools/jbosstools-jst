@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import org.jboss.tools.common.model.ui.editors.dnd.DropWizardMessages;
 import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.ElementNode;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.JSTWebUIImages;
 
 /**
@@ -38,7 +39,11 @@ public class NewTextInputWizard extends NewJQueryWidgetWizard<NewTextInputWizard
 	protected void addContent(ElementNode parent) {
 		if(isLayoutHorizontal()) {
 			ElementNode div = parent.addChild(TAG_DIV);
-			div.addAttribute(ATTR_DATA_ROLE, ROLE_FIELDCONTAIN);
+			if(getVersion() == JQueryMobileVersion.JQM_1_3) {
+				div.addAttribute(ATTR_DATA_ROLE, ROLE_FIELDCONTAIN);
+			} else {
+				div.addAttribute(ATTR_CLASS, CLASS_UI_FIELD_CONTAIN);
+			}
 			parent = div;
 		}
 		String type = page.getEditorValue(EDITOR_ID_TEXT_TYPE);
