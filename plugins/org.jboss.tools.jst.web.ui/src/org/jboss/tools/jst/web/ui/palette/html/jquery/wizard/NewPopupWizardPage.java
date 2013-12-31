@@ -18,6 +18,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -59,10 +60,16 @@ public class NewPopupWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor corners = JQueryFieldEditorFactory.createCornersEditor();
 		addEditor(corners, columns.right());
 		
+		if(getVersion() != JQueryMobileVersion.JQM_1_3) {
+			IFieldEditor arrow = JQueryFieldEditorFactory.createArrowEditor();
+			addEditor(arrow, columns.left());
+			addEditor(JQueryFieldEditorFactory.createSpan("popup-arrow", 3), columns.right());
+		}
+		
 		IFieldEditor theme = JQueryFieldEditorFactory.createPopupThemeEditor(getVersion());
 		addEditor(theme, windowPanel, true);
 
-		IFieldEditor overlay = JQueryFieldEditorFactory.createOverlayEditor();
+		IFieldEditor overlay = JQueryFieldEditorFactory.createOverlayEditor(getVersion());
 		addEditor(overlay, windowPanel, true);
 
 		IFieldEditor popupButton = JQueryFieldEditorFactory.createPopupButtonEditor();

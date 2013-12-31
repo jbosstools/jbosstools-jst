@@ -17,6 +17,7 @@ package org.jboss.tools.jst.web.html;
  */
 public interface JQueryHTMLConstants extends HTMLConstants {
 	public String ATTR_DATA_AJAX = "data-ajax";
+	public String ATTR_DATA_ARROW = "data-arrow";
 	public String ATTR_DATA_AUTODIVIDERS = "data-autodividers";
 	public String ATTR_DATA_ADD_BACK_BUTTON = "data-add-back-btn";
 	public String ATTR_DATA_BACK_BUTTON_TEXT = "data-back-btn-text";
@@ -122,17 +123,19 @@ public interface JQueryHTMLConstants extends HTMLConstants {
 	public String CLASS_TABLE_STRIPE = "table-stripe";
 
 	public String CLASS_UI_MINI = "ui-mini";
+	public String CLASS_UI_ALT_ICON = "ui-alt-icon";
 	public String CLASS_UI_BTN = "ui-btn";
-	public String CLASS_UI_INPUT_BTN = "ui-input-btn";
-	public String CLASS_UI_BTN_INLINE = "ui-btn-inline";
-	public String CLASS_UI_CORNER_ALL = "ui-corner-all";
-	public String CLASS_UI_STATE_DISABLED = "ui-state-disabled";
 	public String CLASS_UI_BTN_ICON_NOTEXT = "ui-btn-icon-notext";
+	public String CLASS_UI_BTN_INLINE = "ui-btn-inline";
 	public String CLASS_UI_BTN_PREFIX = "ui-btn-";
 	public String CLASS_UI_BTN_ICON_PREFIX = "ui-btn-icon-";
-	public String CLASS_UI_ICON_PREFIX = "ui-icon-";
+	public String CLASS_UI_INPUT_BTN = "ui-input-btn";
+	public String CLASS_UI_CORNER_ALL = "ui-corner-all";
 	public String CLASS_UI_FIELD_CONTAIN = "ui-field-contain";
 	public String CLASS_UI_FILTERABLE = "ui-filterable";
+	public String CLASS_UI_ICON_PREFIX = "ui-icon-";
+	public String CLASS_UI_SHADOW = "ui-shadow";
+	public String CLASS_UI_STATE_DISABLED = "ui-state-disabled";
 
 	public String POSITION_FIXED = "fixed";
 	public String POSITION_TO_WINDOW = "window";
