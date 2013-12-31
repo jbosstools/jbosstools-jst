@@ -702,11 +702,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		NewPopupWizardPage wizardPage = (NewPopupWizardPage)currentPage;
 		NewPopupWizard wizard = (NewPopupWizard)wizardPage.getWizard();
 
-		assertTextDoesNotExist(wizard, "\"info\"");
-		wizardPage.setEditorValue(EDITOR_ID_INFO_STYLED, TRUE);
-		assertAttrExists(wizard, ATTR_DATA_ICON, "info");
-		wizardPage.setEditorValue(EDITOR_ID_INFO_STYLED, FALSE);
-		assertTextDoesNotExist(wizard, "\"info\"");
+		doVersionSpecificTest(wizardPage, wizard);
 
 		assertTextDoesNotExist(wizard, ATTR_DATA_TRANSITION);
 		wizardPage.setEditorValue(EDITOR_ID_TRANSITION, TRANSITION_POP);
@@ -723,11 +719,25 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		assertTextDoesNotExist(wizard, CLASS_BUTTON_LEFT);
 		wizardPage.setEditorValue(EDITOR_ID_CLOSE_BUTTON, CLOSE_LEFT);
 		assertAttrExists(wizard, ATTR_DATA_REL, DATA_REL_BACK);
-		assertAttrExists(wizard, ATTR_CLASS, CLASS_BUTTON_LEFT);
+		assertTextExists(wizard, CLASS_BUTTON_LEFT);
 		wizardPage.setEditorValue(EDITOR_ID_CLOSE_BUTTON, CLOSE_NONE);
 		assertTextDoesNotExist(wizard, CLASS_BUTTON_LEFT);
 
 		compareGeneratedAndInsertedText(wizard);
+	}
+
+	protected void doVersionSpecificTest(NewPopupWizardPage wizardPage, NewPopupWizard wizard) {
+		assertTextDoesNotExist(wizard, "\"info\"");
+		wizardPage.setEditorValue(EDITOR_ID_INFO_STYLED, TRUE);
+		assertTextExists(wizard, CLASS_UI_ICON_PREFIX + "info");
+		wizardPage.setEditorValue(EDITOR_ID_INFO_STYLED, FALSE);
+		assertTextDoesNotExist(wizard, "\"info\"");
+	
+		assertTextDoesNotExist(wizard, ATTR_DATA_ARROW);
+		wizardPage.setEditorValue(ATTR_DATA_ARROW, TRUE);
+		assertAttrExists(wizard, ATTR_DATA_ARROW, TRUE);
+		wizardPage.setEditorValue(ATTR_DATA_ARROW, "");
+		assertTextDoesNotExist(wizard, ATTR_DATA_ARROW);
 	}
 
 	public void testNewGroupedButtonsBarWizard() {

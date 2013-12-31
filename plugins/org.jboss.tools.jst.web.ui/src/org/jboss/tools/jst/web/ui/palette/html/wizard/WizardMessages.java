@@ -143,6 +143,7 @@ public class WizardMessages extends NLS {
 	public static String panelPositionLabel;
 	public static String patternLabel;
 	public static String placeholderLabel;
+	public static String popupArrowLabel;
 	public static String popupButtonLabel;
 	public static String prefetchLabel;
 	public static String preloadLabel;

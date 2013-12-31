@@ -182,6 +182,7 @@ public class WizardDescriptions extends NLS {
 	public static String popupPositionTo;
 	public static String popupShadow;
 	public static String popupTransition;
+	public static String popupArrow;
 
 	public static String prefetch;
 

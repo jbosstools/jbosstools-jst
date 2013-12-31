@@ -26,6 +26,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewListviewWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewListviewWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPopupWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPopupWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewSelectMenuWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewSelectMenuWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTextInputWizard;
@@ -61,6 +63,14 @@ public class NewJQueryMobile13PaletteWizardTest extends NewJQueryMobilePaletteWi
 		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_FIELDCONTAIN);
 		wizardPage.setEditorValue(EDITOR_ID_LAYOUT, LAYOUT_VERTICAL);
 		assertTextDoesNotExist(wizard, ROLE_FIELDCONTAIN);
+	}
+
+	protected void doVersionSpecificTest(NewPopupWizardPage wizardPage, NewPopupWizard wizard) {
+		assertTextDoesNotExist(wizard, "\"info\"");
+		wizardPage.setEditorValue(EDITOR_ID_INFO_STYLED, TRUE);
+		assertAttrExists(wizard, ATTR_DATA_ICON, "info");
+		wizardPage.setEditorValue(EDITOR_ID_INFO_STYLED, FALSE);
+		assertTextDoesNotExist(wizard, "\"info\"");
 	}
 
 	public void testNewHeaderBarWizard() {

@@ -1078,8 +1078,9 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 	 * Used in New Popup wizard.
 	 * @return
 	 */
-	public static IFieldEditor createOverlayEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_OVERLAY, WizardMessages.overlayLabel, toList(THEMES), "", true,
+	public static IFieldEditor createOverlayEditor(JQueryMobileVersion version) {
+		String[] themes = version == JQueryMobileVersion.JQM_1_3 ? THEMES : THEMES_1_4;
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_OVERLAY, WizardMessages.overlayLabel, toList(themes), "", true,
 				WizardDescriptions.popupOverlay);
 	}
 
@@ -1113,6 +1114,10 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 		String[] values = new String[]{"", POSITION_TO_WINDOW, POSITION_TO_ORIGIN};
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_POSITION_TO, WizardMessages.positionToLabel, 
 				toList(values), "", true, WizardDescriptions.popupPositionTo);
+	}
+
+	public static IFieldEditor createArrowEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(ATTR_DATA_ARROW, WizardMessages.popupArrowLabel, false, WizardDescriptions.popupArrow);
 	}
 
 	static String[] PANEL_POSITION_LIST = {POSITION_LEFT, POSITION_RIGHT};
