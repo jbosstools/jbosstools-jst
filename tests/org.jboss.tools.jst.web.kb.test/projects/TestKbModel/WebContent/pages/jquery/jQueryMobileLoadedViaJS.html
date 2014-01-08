@@ -58,10 +58,10 @@
                 //use the labeled callbacks from above, and load jQuery Mobile
                 "jqmcss": function( url, result, key ) {
                     yepnope({
-                        load: "http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js",
+                        load: "http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.3.0.min.js",
                         complete: function() {
                             if ( !$.mobile ) {
-                                yepnope.injectJs( "js/libs/jquery.mobile-1.1.0.min.js" );
+                                yepnope.injectJs( "js/libs/jquery.mobile-1.3.0.min.js" );
                             }
                         }
                     });

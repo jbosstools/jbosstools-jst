@@ -25,12 +25,14 @@ public class HTMLRecognizer implements ITagLibRecognizer {
 
 	protected ELContext lastUsedContext;
 	protected boolean lastResult;
+	protected ITagLibrary lib;
 
 	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.ITagLibRecognizer#shouldBeLoaded(org.jboss.tools.jst.web.kb.taglib.ITagLibrary, org.eclipse.core.resources.IResource)
 	 */
 	@Override
 	public boolean shouldBeLoaded(ITagLibrary lib, ELContext context) {
+		this.lib = lib;
 		if(lastUsedContext!=null && lastUsedContext==context) {
 			// The context has not been changed so we do not need to recalculate the result.
 			return lastResult;

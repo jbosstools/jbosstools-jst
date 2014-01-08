@@ -10,6 +10,8 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal.taglib.html.jq;
 
+import static org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileAttrConstants13.*;
+
 import org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibAttribute;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttribute;
 
@@ -17,7 +19,7 @@ import org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttribute;
  * @author Alexey Kazakov, Daniel Azarov
  */
 public class ListviewItemAttributeProvider extends JQueryMobileAttrProvider {
-	
+
 	static final HtmlAttribute[] ATTRIBUTES = new HtmlAttribute[] {
 		DATA_FILTERTEXT_ATTRIBUTE,
 		DATA_ICON_ATTRIBUTE,

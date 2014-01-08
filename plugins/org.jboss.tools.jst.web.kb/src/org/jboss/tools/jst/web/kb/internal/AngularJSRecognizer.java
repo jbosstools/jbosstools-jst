@@ -28,13 +28,14 @@ import org.w3c.dom.NodeList;
  * @author Alexey Kazakov
  */
 public class AngularJSRecognizer extends HTMLRecognizer {
-	private static final String ANGULAR_JS_PATTERN = ".*(angular).*(.js).*";
+	private static final String ANGULAR_JS_LIB_NAME = "angular";
+	private static final String ANGULAR_JS_PATTERN = ".*(" + ANGULAR_JS_LIB_NAME + ").*(.js).*";
 	private static final String ANGULAR_NG_ATTRIBUTE_PATTERN = "//*/@*[starts-with(name(), 'ng-')]|//*/@*[starts-with(name(), 'data-ng-')]";
 
 	@Override
 	protected boolean recalculateResult(ITagLibrary lib, ELContext context, IFile file) {
 		if(super.recalculateResult(lib, context, file)) {
-			final Boolean[] result = new Boolean[] {JSRecognizer.containsJSReference(file, ANGULAR_JS_PATTERN)};
+			final Boolean[] result = new Boolean[] {JSRecognizer.getJSReferenceVersion(file, ANGULAR_JS_LIB_NAME)!=null};
 			if(!result[0]) {
 				StructuredModelWrapper.execute(file, new ICommand() {
 					public void execute(IDOMDocument xmlDocument) {

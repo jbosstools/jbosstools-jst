@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.kb.internal;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
@@ -22,7 +23,9 @@ import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.jboss.tools.common.el.core.resolver.ELContext;
+import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
+import org.jboss.tools.jst.web.kb.taglib.ITagLibVersionRecognizer;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -32,20 +35,38 @@ import org.w3c.dom.NodeList;
 /**
  * @author Alexey Kazakov
  */
-public abstract class JSRecognizer extends HTML5Recognizer {
+public abstract class JSRecognizer extends HTML5Recognizer implements ITagLibVersionRecognizer {
 
 	protected abstract String getJSPattern();
+	protected abstract String getJSLibName();
 
 	@Override
 	protected boolean recalculateResult(ITagLibrary lib, ELContext context, IFile file) {
-		return super.recalculateResult(lib, context, file) && containsJSReference(file, getJSPattern());
+		return getJSReferenceVersion(file, getJSLibName())!=null;
 	}
 
-	protected static boolean containsJSReference(IFile file, String pattern) {
-		return containsJSReference(file, pattern, false);
+	protected static String getJSReferenceVersion(IFile file, String jsLibName) {
+		return getJSReferenceVersion(file, jsLibName, false);
 	}
 
-	protected static boolean containsJSReference(IFile file, String pattern, boolean lookAtSrcAttributeOnly) {
+	@Override
+	public String getVersion(ELContext context) {
+		return getJSReferenceVersion(context.getResource(), getJSLibName());
+	}
+
+	/**
+	 * Return the version number of the JS library.
+	 * If the link to the JS file is found but no version defined then return an empty string.
+	 * If no link found or if not an HTML5 document then return null.
+	 * @param file
+	 * @param jsLibName
+	 * @param lookAtSrcAttributeOnly
+	 * @return
+	 */
+	protected static String getJSReferenceVersion(IFile file, String jsLibName, boolean lookAtSrcAttributeOnly) {
+		if(!FileUtil.isDoctypeHTML(file)) {
+			return null;
+		}
 		IStructuredModel model = null;
 		try {
 			model = StructuredModelManager.getModelManager().getModelForRead(file);
@@ -57,18 +78,22 @@ public abstract class JSRecognizer extends HTML5Recognizer {
 					if(headNode!=null) {
 						Element[] scriptNodes = findChildElements(headNode, "script");
 						for (Element script : scriptNodes) {
-							String text = getAttribute(script, "src");
-							if(Pattern.matches(pattern, text)) {
-								return true;
-							}
+							String srcAttributeValue = getAttribute(script, "src");
+							String text = srcAttributeValue;
 							if(!lookAtSrcAttributeOnly) {
-								text = script.getTextContent();
-								String[] lines = text.split("\n");
-								for (String line : lines) {
-									if(Pattern.matches(pattern, line)) {
-										return true;
-									}
-								}
+								String textContent = script.getTextContent();
+								text = new StringBuilder(srcAttributeValue).append("\n").append(textContent).toString();
+							}
+							String[] lines = text.split("\n");
+							for (String line : lines) {
+								String scriptText = find(line, ".*(" + jsLibName + ")(.*)(.js).*", 2);
+						        if(scriptText!=null) {
+						        	String version = find(scriptText, ".*?(\\d.\\d).*", 1);
+						        	if(version!=null) {
+						        		return version;
+						        	}
+									return "";
+						        }
 							}
 						}
 					}
@@ -83,7 +108,17 @@ public abstract class JSRecognizer extends HTML5Recognizer {
 				model.releaseFromRead();
 			}
 		}
-		return false;
+		return null;
+	}
+
+	private static String find(String text, String pattern, int group) {
+        String result = null;
+		Pattern p = Pattern.compile(pattern);
+        Matcher m = p.matcher(text);
+        if(m.matches()) {
+        	result = m.group(group);
+        }
+        return result;
 	}
 
 	public static String getAttribute(Element element, String attributeName) {

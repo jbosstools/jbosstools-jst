@@ -41,7 +41,7 @@ import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.LabelFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.SwtFieldEditorFactory;
 import org.jboss.tools.common.ui.widget.editor.TextFieldEditor;
-import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileAttrProvider;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileAttrConstants13;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
@@ -593,10 +593,10 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 				WizardDescriptions.formValidate);
 	}
 
-	static String[] ICON_VALUES = new String[JQueryMobileAttrProvider.ENUM_ICON_VALUES.length + 1];
+	static String[] ICON_VALUES = new String[JQueryMobileAttrConstants13.ENUM_ICON_VALUES.length + 1];
 	static {
 		ICON_VALUES[0] = "";
-		System.arraycopy(JQueryMobileAttrProvider.ENUM_ICON_VALUES, 0, ICON_VALUES, 1, ICON_VALUES.length - 1);
+		System.arraycopy(JQueryMobileAttrConstants13.ENUM_ICON_VALUES, 0, ICON_VALUES, 1, ICON_VALUES.length - 1);
 	}
 
 	/**

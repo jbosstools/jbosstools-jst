@@ -82,6 +82,13 @@
             location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/jQueryMobile.xml"
             name="jQueryMobile"
             uri="jQueryMobile"
+            version="1.3"
+            recognizer="org.jboss.tools.jst.web.kb.internal.JQueryMobileRecognizer"/>
+      <tag-lib
+            location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/jQueryMobile14.xml"
+            name="jQueryMobile"
+            uri="jQueryMobile"
+            version="1.4"
             recognizer="org.jboss.tools.jst.web.kb.internal.JQueryMobileRecognizer"/>
       <tag-lib
             location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/Html.xml"

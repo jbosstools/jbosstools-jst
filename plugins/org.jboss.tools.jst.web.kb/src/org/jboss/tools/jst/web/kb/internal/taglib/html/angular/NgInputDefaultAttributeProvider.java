@@ -10,6 +10,8 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal.taglib.html.angular;
 
+import static org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttributeConstants.*;
+
 import org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibAttribute;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttribute;
 

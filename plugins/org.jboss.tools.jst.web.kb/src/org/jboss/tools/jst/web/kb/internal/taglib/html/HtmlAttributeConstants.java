@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2013 Red Hat, Inc. 
+ * Copyright (c) 2014 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -10,12 +10,14 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal.taglib.html;
 
-import org.jboss.tools.jst.web.kb.internal.taglib.AbstractAttributeProvider;
+import org.jboss.tools.jst.web.kb.internal.taglib.AbstractAttributeProvider.AttributeData;
 
 /**
  * @author Alexey Kazakov
  */
-public abstract class HtmlAttributeProvider extends AbstractAttributeProvider {
+public class HtmlAttributeConstants {
+
+	public static final String[] ENUM_TRUE_FALSE = new String[]{"true", "false"};
 
 	public static final String BUTTON = "button";
 	public static final String COLLAPSIBLE = "collapsible";
@@ -48,15 +50,18 @@ public abstract class HtmlAttributeProvider extends AbstractAttributeProvider {
 	public static final String TEXT = "text";
 	public static final String URL = "url";
 
-	protected static final AttributeData TYPE_BUTTON = new AttributeData(TYPE, BUTTON);
-	protected static final AttributeData TYPE_SUBMIT = new AttributeData(TYPE, SUBMIT);
-	protected static final AttributeData TYPE_RESET = new AttributeData(TYPE, RESET);
-	protected static final AttributeData TYPE_CHECKBOX = new AttributeData(TYPE, CHECKBOX);
-	protected static final AttributeData TYPE_RADIO = new AttributeData(TYPE, RADIO);
-	protected static final AttributeData TYPE_RANGE = new AttributeData(TYPE, RANGE);
-	protected static final AttributeData TYPE_HIDEN = new AttributeData(TYPE, HIDEN);
-	protected static final AttributeData TYPE_EMAIL = new AttributeData(TYPE, EMAIL);
-	protected static final AttributeData TYPE_NUMBER = new AttributeData(TYPE, NUMBER);
-	protected static final AttributeData TYPE_TEXT = new AttributeData(TYPE, TEXT);
-	protected static final AttributeData TYPE_URL = new AttributeData(TYPE, URL);
+	public static final AttributeData TYPE_BUTTON = new AttributeData(TYPE, BUTTON);
+	public static final AttributeData TYPE_SUBMIT = new AttributeData(TYPE, SUBMIT);
+	public static final AttributeData TYPE_RESET = new AttributeData(TYPE, RESET);
+	public static final AttributeData TYPE_CHECKBOX = new AttributeData(TYPE, CHECKBOX);
+	public static final AttributeData TYPE_RADIO = new AttributeData(TYPE, RADIO);
+	public static final AttributeData TYPE_RANGE = new AttributeData(TYPE, RANGE);
+	public static final AttributeData TYPE_HIDEN = new AttributeData(TYPE, HIDEN);
+	public static final AttributeData TYPE_EMAIL = new AttributeData(TYPE, EMAIL);
+	public static final AttributeData TYPE_NUMBER = new AttributeData(TYPE, NUMBER);
+	public static final AttributeData TYPE_TEXT = new AttributeData(TYPE, TEXT);
+	public static final AttributeData TYPE_URL = new AttributeData(TYPE, URL);
+
+	protected HtmlAttributeConstants() {
+	}
 }

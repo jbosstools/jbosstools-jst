@@ -162,7 +162,7 @@ public abstract class HTML5Test extends TestCase {
 	}
 
 	protected void assertProposal(String label, TextProposal[] proposals) {
-		assertTrue(proposals.length>0);
+		assertTrue("No proposals found", proposals.length>0);
 		StringBuffer sb = new StringBuffer("There is no proposal \"" + label + "\" among found proposals: [");
 		for (TextProposal proposal : proposals) {
 			sb.append(proposal.getLabel()).append(",");
