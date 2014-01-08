@@ -16,6 +16,8 @@ import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFooterWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFooterWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormButtonWizard;
@@ -71,6 +73,10 @@ public class NewJQueryMobile13PaletteWizardTest extends NewJQueryMobilePaletteWi
 		assertAttrExists(wizard, ATTR_DATA_ICON, "info");
 		wizardPage.setEditorValue(EDITOR_ID_INFO_STYLED, FALSE);
 		assertTextDoesNotExist(wizard, "\"info\"");
+	}
+
+	protected void doVersionSpecificTest(NewDialogWizardPage wizardPage, NewDialogWizard wizard) {
+//		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_DIALOG);
 	}
 
 	public void testNewHeaderBarWizard() {

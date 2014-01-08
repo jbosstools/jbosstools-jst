@@ -33,7 +33,9 @@ public class NewPanelWizard extends NewJQueryWidgetWizard<NewPanelWizardPage> im
 	}
 
 	protected void addContent(ElementNode parent) {
-		ElementNode div = parent.addChild(TAG_DIV, "");
+		boolean addList = isTrue(EDITOR_ID_ADD_LIST);
+
+		ElementNode div = addList ? parent.addChild(TAG_DIV) : parent.addChild(TAG_DIV, ""); 
 		div.addAttribute(ATTR_DATA_ROLE, ROLE_PANEL);
 		addID(prefixName, div);
 		if(POSITION_RIGHT.equals(page.getEditorValue(EDITOR_ID_PANEL_POSITION))) {
@@ -59,7 +61,26 @@ public class NewPanelWizard extends NewJQueryWidgetWizard<NewPanelWizardPage> im
 		if(themeValue.length() > 0) {
 			div.addAttribute(ATTR_DATA_THEME, themeValue);
 		}
-		div.getChildren().add(SEPARATOR);
+		if(addList) {
+			ElementNode listRoot = div.addChild(TAG_UL);
+			listRoot.addAttribute(ATTR_DATA_ROLE, ROLE_LISTVIEW);
+			addID("listview-", listRoot);
+			for (int i = 0; i < page.items.getNumber(); i++) {
+				String text = page.items.getLabel(i);
+				if(!isTrue(EDITOR_ID_READ_ONLY) && !page.items.isDivider(i)) {
+					ElementNode li = listRoot.addChild(TAG_LI, "");
+					ElementNode a = li.addChild(TAG_A, text);
+					a.addAttribute(ATTR_HREF, page.items.getURL(i));
+				} else {
+					ElementNode li = listRoot.addChild(TAG_LI, text);
+					if(page.items.isDivider(i)) {
+						li.addAttribute(ATTR_DATA_ROLE, ROLE_DIVIDER);
+					}
+				}
+			}
+		} else {
+			div.getChildren().add(SEPARATOR);
+		}
 	}
 
 	protected void createBodyForBrowser(ElementNode body) {
@@ -72,8 +93,10 @@ public class NewPanelWizard extends NewJQueryWidgetWizard<NewPanelWizardPage> im
 //			div.addChild(TAG_DIV, "Preview is not implemented for this element.");
 //		} else {
 			addContent(page);
-			ElementNode panel = (ElementNode)page.getChildren().get(0);
-			panel.addChild(TAG_P, "Panel Content");
+			if(!isTrue(EDITOR_ID_ADD_LIST)) {
+				ElementNode panel = (ElementNode)page.getChildren().get(0);
+				panel.addChild(TAG_P, "Panel Content");
+			}
 			ElementNode content = page.addChild(TAG_DIV);
 			content.addAttribute(ATTR_DATA_ROLE, ROLE_CONTENT);
 			ElementNode a = content.addChild(TAG_A, "Open Panel");

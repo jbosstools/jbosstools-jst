@@ -34,6 +34,7 @@ public interface JQueryHTMLConstants extends HTMLConstants {
 	public String ATTR_DATA_CONTENT_THEME = "data-content-theme";
 	public String ATTR_DATA_COUNT_THEME = "data-count-theme";
 	public String ATTR_DATA_CORNERS = "data-corners";
+	public String ATTR_DATA_DIALOG = "data-dialog";
 	public String ATTR_DATA_DIRECTION = "data-direction";
 	public String ATTR_DATA_DISMISSABLE = "data-dismissible";
 	public String ATTR_DATA_DISPLAY = "data-display";
