@@ -31,6 +31,7 @@ public class WizardMessages extends NLS {
 	public static String actionBackLabel;
 	public static String actionCloseLabel;
 	public static String actionExternalLabel;
+	public static String addList;
 	public static String addReferencesToJSCSSLabel;
 	public static String addReferencesToJSCSSTooltip;
 	public static String ajaxLabel;

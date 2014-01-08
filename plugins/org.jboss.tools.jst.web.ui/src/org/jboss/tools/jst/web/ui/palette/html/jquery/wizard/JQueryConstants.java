@@ -152,5 +152,7 @@ public interface JQueryConstants extends JQueryHTMLConstants {
 	public String EDITOR_ID_FOR = ATTR_FOR;
 
 	public String EDITOR_ID_FORM_BUTTON_TYPE = ATTR_TYPE;
+
+	public String EDITOR_ID_ADD_LIST = "add-list";
 	
 }

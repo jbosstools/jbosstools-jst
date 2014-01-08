@@ -1173,6 +1173,15 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 				WizardDescriptions.panelSwipeClose);
 	}
 
+	/**
+	 * Used in New Panel wizard.
+	 * @return
+	 */
+	public static IFieldEditor createAddListEditor() {
+		return createCheckboxEditor(EDITOR_ID_ADD_LIST, WizardMessages.addList, true, 3,
+			WizardDescriptions.pageBackButton);
+	}
+
 	static String[] TABLE_MODE_LIST = {MODE_COLUMNTOGGLE, MODE_REFLOW};
 	static String[] TABLE_MODE_LABEL_LIST = {WizardMessages.modeColumntoggleLabel, WizardMessages.modeReflowLabel};
 

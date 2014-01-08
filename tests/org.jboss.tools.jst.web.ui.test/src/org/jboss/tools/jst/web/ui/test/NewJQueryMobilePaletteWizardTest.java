@@ -296,6 +296,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		NewDialogWizardPage wizardPage = (NewDialogWizardPage)currentPage;
 		NewDialogWizard wizard = (NewDialogWizard)wizardPage.getWizard(); 
 
+		doVersionSpecificTest(wizardPage, wizard);
+
 		assertTextDoesNotExist(wizard, ATTR_DATA_CLOSE_BTN);
 		wizardPage.setEditorValue(EDITOR_ID_CLOSE_BUTTON, CLOSE_RIGHT);
 		assertAttrExists(wizard, ATTR_DATA_CLOSE_BTN, CLOSE_RIGHT);
@@ -307,6 +309,12 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		assertTextIsInserted(title);
 	}
 
+	protected void doVersionSpecificTest(NewDialogWizardPage wizardPage, NewDialogWizard wizard) {
+//		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_PAGE);
+//		assertAttrExists(wizard,  ATTR_DATA_DIALOG, TRUE);
+//		assertTextExists(wizard, CLASS_UI_BTN);
+	}
+			
 	public void testNewButtonWizard() {
 		IWizardPage currentPage = runToolEntry("Button", true);
 		assertTrue(currentPage instanceof NewButtonWizardPage);
@@ -814,6 +822,12 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		assertAttrExists(wizard, ATTR_DATA_POSITION_FIXED, TRUE);
 		wizardPage.setEditorValue(EDITOR_ID_FIXED_POSITION, FALSE);
 		assertTextDoesNotExist(wizard, ATTR_DATA_POSITION_FIXED);
+
+		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_LISTVIEW);
+		wizardPage.setEditorValue(EDITOR_ID_ADD_LIST, FALSE);
+		assertTextDoesNotExist(wizard, ROLE_LISTVIEW);
+		wizardPage.setEditorValue(EDITOR_ID_ADD_LIST, TRUE);
+		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_LISTVIEW);
 
 		compareGeneratedAndInsertedText(wizard);
 	}
