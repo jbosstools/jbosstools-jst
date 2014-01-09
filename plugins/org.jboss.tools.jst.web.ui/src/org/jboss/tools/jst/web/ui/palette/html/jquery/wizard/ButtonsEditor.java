@@ -34,7 +34,7 @@ public class ButtonsEditor extends ItemsEditor {
 		IFieldEditor url = JQueryFieldEditorFactory.createURLEditor();
 		addItemEditor(url);
 		new IDContentProposalProvider(page.getWizard().getIDs(), url);
-		addItemEditor(JQueryFieldEditorFactory.createIconEditor());
+		addItemEditor(JQueryFieldEditorFactory.createIconEditor(((NewJQueryWidgetWizardPage)page).getVersion()));
 	}
 
 	public String getLabel(int i) {

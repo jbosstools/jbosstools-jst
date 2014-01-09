@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
+import org.jboss.tools.jst.web.ui.internal.properties.advanced.LayoutUtil.TwoColumns;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**

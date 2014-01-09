@@ -14,6 +14,7 @@ import java.beans.PropertyChangeEvent;
 
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
+import org.jboss.tools.jst.web.ui.internal.properties.advanced.LayoutUtil.TwoColumns;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -42,10 +43,10 @@ public class NewCollapsibleSetWizardPage extends NewJQueryWidgetWizardPage {
 
 		Composite panel = items.createControl(parent, WizardMessages.itemsLabel);
 
-		IFieldEditor collapsedIcon = JQueryFieldEditorFactory.createCollapsedIconEditor();
+		IFieldEditor collapsedIcon = JQueryFieldEditorFactory.createCollapsedIconEditor(getVersion());
 		addEditor(collapsedIcon, panel, true);
 
-		IFieldEditor expandedIcon = JQueryFieldEditorFactory.createExpandedIconEditor();
+		IFieldEditor expandedIcon = JQueryFieldEditorFactory.createExpandedIconEditor(getVersion());
 		addEditor(expandedIcon, panel, true);
 
 		IFieldEditor iconpos = JQueryFieldEditorFactory.createIconPositionEditor();

@@ -42,6 +42,7 @@ import org.jboss.tools.common.ui.widget.editor.LabelFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.SwtFieldEditorFactory;
 import org.jboss.tools.common.ui.widget.editor.TextFieldEditor;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileAttrConstants13;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileAttrConstants14;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
@@ -593,22 +594,32 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 				WizardDescriptions.formValidate);
 	}
 
-	static String[] ICON_VALUES = new String[JQueryMobileAttrConstants13.ENUM_ICON_VALUES.length + 1];
+	static String[] ICON_VALUES_13 = new String[JQueryMobileAttrConstants13.ENUM_ICON_VALUES.length + 1];
 	static {
-		ICON_VALUES[0] = "";
-		System.arraycopy(JQueryMobileAttrConstants13.ENUM_ICON_VALUES, 0, ICON_VALUES, 1, ICON_VALUES.length - 1);
+		ICON_VALUES_13[0] = "";
+		System.arraycopy(JQueryMobileAttrConstants13.ENUM_ICON_VALUES, 0, ICON_VALUES_13, 1, ICON_VALUES_13.length - 1);
+	}
+
+	static String[] ICON_VALUES_14 = new String[JQueryMobileAttrConstants14.ENUM_ICON_VALUES.length + 1];
+	static {
+		ICON_VALUES_14[0] = "";
+		System.arraycopy(JQueryMobileAttrConstants14.ENUM_ICON_VALUES, 0, ICON_VALUES_14, 1, ICON_VALUES_14.length - 1);
+	}
+
+	static List<String> getIconValues(JQueryMobileVersion version) {
+		return version == JQueryMobileVersion.JQM_1_3 ? toList(ICON_VALUES_13) : toList(ICON_VALUES_14);
 	}
 
 	/**
 	 * Used in New Button wizard and in ButtonsEditor.
 	 * @return
 	 */
-	public static IFieldEditor createIconEditor() {
-		return createIconEditor(EDITOR_ID_ICON);
+	public static IFieldEditor createIconEditor(JQueryMobileVersion version) {
+		return createIconEditor(version, EDITOR_ID_ICON);
 	}
 
-	public static IFieldEditor createIconEditor(String editorID) {
-		return SwtFieldEditorFactory.INSTANCE.createComboEditor(editorID, WizardMessages.iconLabel, toList(ICON_VALUES), "", true,
+	public static IFieldEditor createIconEditor(JQueryMobileVersion version, String editorID) {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(editorID, WizardMessages.iconLabel, getIconValues(version), "", true,
 				WizardDescriptions.buttonIcon);
 	}
 
@@ -616,8 +627,8 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 	 * Used in New Collapsible wizard.
 	 * @return
 	 */
-	public static IFieldEditor createCollapsedIconEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_COLLAPSED_ICON, WizardMessages.collapsedIconLabel, toList(ICON_VALUES), "", true,
+	public static IFieldEditor createCollapsedIconEditor(JQueryMobileVersion version) {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_COLLAPSED_ICON, WizardMessages.collapsedIconLabel, getIconValues(version), "", true,
 				WizardDescriptions.collapsibleCollapsedIcon);
 	}
 
@@ -625,8 +636,8 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 	 * Used in New Collapsible wizard.
 	 * @return
 	 */
-	public static IFieldEditor createExpandedIconEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_EXPANDED_ICON, WizardMessages.expandedIconLabel, toList(ICON_VALUES), "", true,
+	public static IFieldEditor createExpandedIconEditor(JQueryMobileVersion version) {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_EXPANDED_ICON, WizardMessages.expandedIconLabel, getIconValues(version), "", true,
 				WizardDescriptions.collapsibleExpandedIcon);
 	}
 

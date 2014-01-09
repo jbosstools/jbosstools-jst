@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
+import org.jboss.tools.jst.web.ui.internal.properties.advanced.LayoutUtil.TwoColumns;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**

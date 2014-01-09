@@ -310,9 +310,9 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	protected void doVersionSpecificTest(NewDialogWizardPage wizardPage, NewDialogWizard wizard) {
-//		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_PAGE);
-//		assertAttrExists(wizard,  ATTR_DATA_DIALOG, TRUE);
-//		assertTextExists(wizard, CLASS_UI_BTN);
+		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_PAGE);
+		assertAttrExists(wizard,  ATTR_DATA_DIALOG, TRUE);
+		assertTextExists(wizard, CLASS_UI_BTN);
 	}
 			
 	public void testNewButtonWizard() {

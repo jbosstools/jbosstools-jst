@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 import java.beans.PropertyChangeEvent;
 
 import org.eclipse.swt.widgets.Composite;
+import org.jboss.tools.jst.web.ui.internal.properties.advanced.LayoutUtil.TwoColumns;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**

@@ -16,6 +16,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.model.ui.editors.dnd.ValidationException;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
+import org.jboss.tools.jst.web.ui.internal.properties.advanced.LayoutUtil.TwoColumns;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -67,7 +68,7 @@ public class NewHeaderBarWizardPage extends NewJQueryWidgetWizardPage {
 		addEditor(leftButtonURL, leftParent);
 		new IDContentProposalProvider(getWizard().getIDs(), leftButtonURL);
 
-		IFieldEditor leftButtonIcon = JQueryFieldEditorFactory.createIconEditor(EDITOR_ID_LEFT_BUTTON_ICON);
+		IFieldEditor leftButtonIcon = JQueryFieldEditorFactory.createIconEditor(getVersion(), EDITOR_ID_LEFT_BUTTON_ICON);
 		leftButtonIcon.setValue("delete");
 		addEditor(leftButtonIcon, leftParent);
 
@@ -89,7 +90,7 @@ public class NewHeaderBarWizardPage extends NewJQueryWidgetWizardPage {
 		addEditor(rightButtonURL, rightParent);
 		new IDContentProposalProvider(getWizard().getIDs(), rightButtonURL);
 
-		IFieldEditor rightButtonIcon = JQueryFieldEditorFactory.createIconEditor(EDITOR_ID_RIGHT_BUTTON_ICON);
+		IFieldEditor rightButtonIcon = JQueryFieldEditorFactory.createIconEditor(getVersion(), EDITOR_ID_RIGHT_BUTTON_ICON);
 		rightButtonIcon.setValue("check");
 		addEditor(rightButtonIcon, rightParent);
 
