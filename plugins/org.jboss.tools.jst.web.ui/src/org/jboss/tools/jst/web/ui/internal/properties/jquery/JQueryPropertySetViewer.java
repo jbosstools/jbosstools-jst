@@ -212,7 +212,7 @@ public class JQueryPropertySetViewer extends AbstractAdvancedPropertySetViewer i
 
 		editorProviders.put(ATTR_DATA_COLLAPSED_ICON, new IFieldEditorProvider() {
 			public IFieldEditor createEditor() {
-				return JQueryFieldEditorFactory.createCollapsedIconEditor();
+				return JQueryFieldEditorFactory.createCollapsedIconEditor(getVersion());
 			}
 		});
 
@@ -290,7 +290,7 @@ public class JQueryPropertySetViewer extends AbstractAdvancedPropertySetViewer i
 
 		editorProviders.put(ATTR_DATA_EXPANDED_ICON, new IFieldEditorProvider() {
 			public IFieldEditor createEditor() {
-				return JQueryFieldEditorFactory.createExpandedIconEditor();
+				return JQueryFieldEditorFactory.createExpandedIconEditor(getVersion());
 			}
 		});
 
@@ -334,7 +334,7 @@ public class JQueryPropertySetViewer extends AbstractAdvancedPropertySetViewer i
 
 		editorProviders.put(ATTR_DATA_ICON, new IFieldEditorProvider() {
 			public IFieldEditor createEditor() {
-				return JQueryFieldEditorFactory.createIconEditor();
+				return JQueryFieldEditorFactory.createIconEditor(getVersion());
 			}
 		});
 
@@ -458,7 +458,7 @@ public class JQueryPropertySetViewer extends AbstractAdvancedPropertySetViewer i
 
 		editorProviders.put(ATTR_DATA_SPLIT_ICON, new IFieldEditorProvider() {
 			public IFieldEditor createEditor() {
-				return JQueryFieldEditorFactory.createIconEditor(ATTR_DATA_SPLIT_ICON);
+				return JQueryFieldEditorFactory.createIconEditor(getVersion(), ATTR_DATA_SPLIT_ICON);
 			}
 		});
 

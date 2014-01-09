@@ -61,7 +61,7 @@ public class NewPageWizardPage extends NewJQueryWidgetWizardPage {
 		backButtonLabel.setValue("Back");
 		addEditor(backButtonLabel, backParent);
 
-		IFieldEditor backButtonIcon = JQueryFieldEditorFactory.createIconEditor(EDITOR_ID_ICON);
+		IFieldEditor backButtonIcon = JQueryFieldEditorFactory.createIconEditor(getVersion(), EDITOR_ID_ICON);
 		backButtonIcon.setValue("back");
 		addEditor(backButtonIcon, backParent);
 

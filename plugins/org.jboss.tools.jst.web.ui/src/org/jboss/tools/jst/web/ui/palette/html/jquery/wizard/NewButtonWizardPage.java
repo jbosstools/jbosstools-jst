@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.model.ui.editors.dnd.ValidationException;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
+import org.jboss.tools.jst.web.ui.internal.properties.advanced.LayoutUtil.TwoColumns;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -62,7 +63,7 @@ public class NewButtonWizardPage extends NewJQueryWidgetWizardPage {
 
 		createSeparator(parent);
 	
-		IFieldEditor icon = JQueryFieldEditorFactory.createIconEditor();
+		IFieldEditor icon = JQueryFieldEditorFactory.createIconEditor(getVersion());
 		addEditor(icon, parent, true);
 
 		IFieldEditor iconpos = JQueryFieldEditorFactory.createIconPositionEditor();

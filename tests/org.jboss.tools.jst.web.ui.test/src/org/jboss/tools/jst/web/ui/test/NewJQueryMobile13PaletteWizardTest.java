@@ -76,7 +76,7 @@ public class NewJQueryMobile13PaletteWizardTest extends NewJQueryMobilePaletteWi
 	}
 
 	protected void doVersionSpecificTest(NewDialogWizardPage wizardPage, NewDialogWizard wizard) {
-//		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_DIALOG);
+		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_DIALOG);
 	}
 
 	public void testNewHeaderBarWizard() {
