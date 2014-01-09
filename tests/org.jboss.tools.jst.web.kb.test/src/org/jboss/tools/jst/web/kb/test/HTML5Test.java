@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.Path;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.PageProcessor;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttribute;
@@ -142,6 +143,13 @@ public abstract class HTML5Test extends TestCase {
 			}
 			fail("There is no proposal \"" + enumItem + "\" among the found proposals: " + prp);
 		}
+	}
+
+	protected void assertNoAttributeProposal(String attributeName) {
+		String tagName = "div";
+		KbQuery query = createKbQuery(new KbQuery.Tag[]{createTag(tagName)}, "");
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
+		assertNoProposal(false, proposals, attributeName);
 	}
 
 	protected void assertEqualDescription(TextProposal[] proposals, String proposalText, String descriptionText) {

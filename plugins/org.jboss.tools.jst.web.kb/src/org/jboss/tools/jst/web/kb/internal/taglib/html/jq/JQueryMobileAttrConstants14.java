@@ -25,6 +25,7 @@ public class JQueryMobileAttrConstants14 extends JQueryMobileAttrConstants {
 	public static final HtmlAttribute DATA_COLLAPSED_ICON_ATTRIBUTE = new HtmlAttribute("data-collapsed-icon", "", ENUM_ICON_VALUES);
 	public static final HtmlAttribute DATA_EXPANDED_ICON_ATTRIBUTE = new HtmlAttribute("data-expanded-icon", "", ENUM_ICON_VALUES);
 	public static final HtmlAttribute DATA_SPLIT_ICON_ATTRIBUTE = new HtmlAttribute("data-split-icon", "", ENUM_ICON_VALUES);
+	public static final HtmlAttribute DATA_DIALOG_ATTRIBUTE = new HtmlAttribute("data-dialog", "", new String[]{"true"});
 
 	public static final HtmlAttribute DATA_EXCLUDE_INVISIBLE_ATTRIBUTE = new HtmlAttribute("data-exclude-invisible", "Sets whether to exclude invisible children in the assignment of rounded corners", ENUM_TRUE_FALSE);
 

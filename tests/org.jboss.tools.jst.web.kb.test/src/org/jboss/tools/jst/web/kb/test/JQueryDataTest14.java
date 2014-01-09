@@ -165,4 +165,14 @@ public class JQueryDataTest14 extends JQueryDataTest {
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
 		assertProposals(proposals, ENUM_ICON_VALUES);
 	}
+
+	@Override
+	public void testDialogAttributeProvider() {
+		assertNoDataRole(DIALOG);
+		assertNoAttributeProposal("data-dialog");
+
+		KbQuery query = createKbQuery(KbQuery.Type.ATTRIBUTE_VALUE, new KbQuery.Tag[]{createTag("div", "page")}, "data-dialog", "");
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
+		assertProposal("true", proposals);
+	}
 }
