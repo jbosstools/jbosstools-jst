@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2009-2011 Red Hat, Inc.
+ * Copyright (c) 2009-2014 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -50,6 +50,7 @@ public class JstWebKbAllTests {
 		suite.addTestSuite(KbModelWithSeveralJarCopiesTest.class);
 		suite.addTestSuite(XMLCatalogTest.class);
 		suite.addTestSuite(CSSMediaRuleTest.class);
+		suite.addTestSuite(RemoteFileManagerTest.class);
 		testSetup = new XProjectImportTestSetUp(suite,
 				"org.jboss.tools.jst.web.kb.test",
 				new String[]{"projects/TestKbModel", "projects/MyFaces", "projects/MyFaces2", "projects/TestKbModel3", "projects/TestKbModel4"},

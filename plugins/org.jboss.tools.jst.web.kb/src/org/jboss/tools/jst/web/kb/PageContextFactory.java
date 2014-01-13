@@ -65,6 +65,7 @@ import org.eclipse.wst.common.componentcore.internal.WorkbenchComponent;
 import org.eclipse.wst.css.core.internal.provisional.adapters.IModelProvideAdapter;
 import org.eclipse.wst.css.core.internal.provisional.adapters.IStyleSheetAdapter;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSModel;
+import org.eclipse.wst.html.core.internal.document.ElementStyleImpl;
 import org.eclipse.wst.html.core.internal.htmlcss.LinkElementAdapter;
 import org.eclipse.wst.html.core.internal.htmlcss.URLModelProvider;
 import org.eclipse.wst.sse.core.StructuredModelManager;
@@ -101,6 +102,7 @@ import org.jboss.tools.jst.web.kb.include.IncludeContextBuilder;
 import org.jboss.tools.jst.web.kb.include.PageInclude;
 import org.jboss.tools.jst.web.kb.internal.FaceletPageContextImpl;
 import org.jboss.tools.jst.web.kb.internal.JspContextImpl;
+import org.jboss.tools.jst.web.kb.internal.RemoteFileManager;
 import org.jboss.tools.jst.web.kb.internal.ResourceBundle;
 import org.jboss.tools.jst.web.kb.internal.XmlContextImpl;
 import org.jboss.tools.jst.web.kb.internal.taglib.NameSpace;
@@ -1444,8 +1446,16 @@ public class PageContextFactory implements IResourceChangeListener {
 		/**
 		 */
 		private ICSSModel retrieveModel() {
-			if (!isValidAttribute() || source == null) {
+			if (!isValidAttribute() || source==null) {
 				return null;
+			}
+
+			//If source starts with http(s):// then look at the workspace local cache. If not found then start a separate process to download the file and put it to the cache.
+			if(source.startsWith("http://") || source.startsWith("https://")) {
+				RemoteFileManager.Result result = RemoteFileManager.getInstance().getFile(source);
+				if(result.isReady()) {
+					source = result.getLocalPath();
+				}
 			}
 
 			// null,attr check is done in isValidAttribute()
