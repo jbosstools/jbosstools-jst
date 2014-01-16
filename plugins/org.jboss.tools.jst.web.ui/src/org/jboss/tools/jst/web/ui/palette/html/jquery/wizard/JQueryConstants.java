@@ -29,6 +29,9 @@ public interface JQueryConstants extends JQueryHTMLConstants {
 	public String ARRAGEMENT_GROUPED = "Grouped";
 	public String ARRAGEMENT_NAVBAR = "Navbar";
 
+	public String TOGGLE_KIND_CHECKBOX = "checkbox";
+	public String TOGGLE_KIND_SELECT = "select";
+
 	/**
 	 * Palette category id.
 	 */
@@ -154,5 +157,6 @@ public interface JQueryConstants extends JQueryHTMLConstants {
 	public String EDITOR_ID_FORM_BUTTON_TYPE = ATTR_TYPE;
 
 	public String EDITOR_ID_ADD_LIST = "add-list";
+	public String EDITOR_ID_TOGGLE_KIND = "toggle-kind";
 	
 }

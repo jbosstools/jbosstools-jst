@@ -57,6 +57,8 @@ public interface JQueryHTMLConstants extends HTMLConstants {
 	public String ATTR_DATA_MINI = "data-mini";
 	public String ATTR_DATA_MODE = "data-mode";
 	public String ATTR_DATA_NATIVE_MENU = "data-native-menu";
+	public String ATTR_DATA_OFF_TEXT = "data-off-text";
+	public String ATTR_DATA_ON_TEXT = "data-on-text";
 	public String ATTR_DATA_OVERLAY_THEME = "data-overlay-theme";
 	public String ATTR_DATA_PLACEHOLDER = "data-placeholder";
 	public String ATTR_DATA_POSITION = "data-position";
@@ -164,6 +166,7 @@ public interface JQueryHTMLConstants extends HTMLConstants {
 	public String ROLE_HEADER = "header";
 	public String ROLE_LISTVIEW = "listview";
 	public String ROLE_DIVIDER = "list-divider";
+	public String ROLE_FLIPSWITCH = "flipswitch";
 	public String ROLE_NAVBAR = "navbar";
 	public String ROLE_NONE = "none";
 	public String ROLE_PAGE = "page";

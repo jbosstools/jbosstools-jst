@@ -784,6 +784,22 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 				WizardDescriptions.hideLabel);
 	}
 
+	static String[] TOGGLE_KIND_LABEL_LIST = {WizardMessages.toggleKindCheckboxLabel, WizardMessages.toggleKindSelectLabel};
+	static String[] TOGGLE_KIND_LIST = {TOGGLE_KIND_CHECKBOX, TOGGLE_KIND_SELECT};
+	static String[] TOGGLE_KIND_DESCRIPTIONS = {WizardDescriptions.toggleKindCheckbox, WizardDescriptions.toggleKindSelect};
+	/**
+	 * Used in New New Toggle wizard.
+	 * @return
+	 */
+	public static IFieldEditor createToggleKindEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(
+				EDITOR_ID_TOGGLE_KIND, 
+				WizardMessages.toggleKindLable, 
+				toList(TOGGLE_KIND_LABEL_LIST), 
+				toList(TOGGLE_KIND_LIST), 
+				TOGGLE_KIND_CHECKBOX, WizardDescriptions.toggleKind, toList(TOGGLE_KIND_DESCRIPTIONS));
+	}
+
 	static List<String> toList(String[] values) {
 		List<String> list = new ArrayList<String>();
 		for (String s: values) list.add(s);

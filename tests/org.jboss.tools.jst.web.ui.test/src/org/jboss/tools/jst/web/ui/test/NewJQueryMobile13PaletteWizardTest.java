@@ -34,6 +34,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewSelectMenuWizard
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewSelectMenuWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTextInputWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTextInputWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 public class NewJQueryMobile13PaletteWizardTest extends NewJQueryMobilePaletteWizardTest {
@@ -77,6 +79,14 @@ public class NewJQueryMobile13PaletteWizardTest extends NewJQueryMobilePaletteWi
 
 	protected void doVersionSpecificTest(NewDialogWizardPage wizardPage, NewDialogWizard wizard) {
 		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_DIALOG);
+	}
+
+	protected void doVersionSpecificTest(NewToggleWizardPage wizardPage, NewToggleWizard wizard) {
+		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_SLIDER);
+		wizardPage.setEditorValue(EDITOR_ID_SELECTED, TRUE);
+		assertAttrExists(wizard, SELECTED, SELECTED);
+		wizardPage.setEditorValue(EDITOR_ID_SELECTED, FALSE);
+		assertTextDoesNotExist(wizard, SELECTED);
 	}
 
 	public void testNewHeaderBarWizard() {

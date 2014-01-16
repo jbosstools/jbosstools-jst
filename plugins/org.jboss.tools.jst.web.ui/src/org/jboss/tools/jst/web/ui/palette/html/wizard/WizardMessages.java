@@ -182,6 +182,9 @@ public class WizardMessages extends NLS {
 	public static String textTypeLabel;
 	public static String themeLabel;
 	public static String titleLabel;
+	public static String toggleKindLable;
+	public static String toggleKindCheckboxLabel;
+	public static String toggleKindSelectLabel;
 	public static String toleranceLabel;
 	public static String trackThemeLabel;
 	public static String transitionLabel;
