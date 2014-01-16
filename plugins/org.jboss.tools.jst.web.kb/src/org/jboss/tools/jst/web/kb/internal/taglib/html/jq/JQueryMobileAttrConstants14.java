@@ -10,7 +10,6 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal.taglib.html.jq;
 
-import org.jboss.tools.jst.web.kb.internal.taglib.AbstractAttributeProvider.AttributeData;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttribute;
 
 /**

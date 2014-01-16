@@ -89,4 +89,8 @@ public abstract class JQueryMobileAttrProvider extends AbstractAttributeProvider
 		String dataRole = attributes.get(DATA_ROLE);
 		return role.equalsIgnoreCase(dataRole);
 	}
+
+	protected boolean checkDataRole(DataRoleAttribute role) {
+		return checkDataRole(role.getValue());
+	}
 }
