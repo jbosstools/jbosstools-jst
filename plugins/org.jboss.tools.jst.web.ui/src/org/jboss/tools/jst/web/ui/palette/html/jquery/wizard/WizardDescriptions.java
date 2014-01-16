@@ -242,6 +242,9 @@ public class WizardDescriptions extends NLS {
 
 	public static String thScope;
 
+	public static String toggleKind;
+	public static String toggleKindCheckbox;
+	public static String toggleKindSelect;
 	public static String toggleOffLabel;
 	public static String toggleOnLabel;
 	public static String toggleTrackTheme;

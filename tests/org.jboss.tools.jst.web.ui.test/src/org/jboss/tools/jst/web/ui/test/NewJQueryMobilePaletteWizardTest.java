@@ -228,7 +228,9 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 
 		NewToggleWizardPage wizardPage = (NewToggleWizardPage)currentPage;
 		NewToggleWizard wizard = (NewToggleWizard)wizardPage.getWizard();
-		
+
+		doVersionSpecificTest(wizardPage, wizard);
+
 		String label = "My Switch:";
 		wizardPage.setEditorValue(EDITOR_ID_LABEL, label);
 		wizardPage.setEditorValue(EDITOR_ID_THEME, "b");
@@ -246,6 +248,47 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		compareGeneratedAndInsertedText(wizard);
 
 		assertTextIsInserted(label);
+	}
+
+	protected void doVersionSpecificTest(NewToggleWizardPage wizardPage, NewToggleWizard wizard) {
+		//checkbox is default
+		assertTextExists(wizard, TAG_INPUT);
+		assertAttrExists(wizard, ATTR_TYPE, TYPE_CHECKBOX);
+		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_FLIPSWITCH);
+
+		wizardPage.setEditorValue(EDITOR_ID_OFF, "Off-1");
+		assertAttrExists(wizard, ATTR_DATA_OFF_TEXT, "Off-1");
+		wizardPage.setEditorValue(EDITOR_ID_OFF, "Off");
+		assertTextDoesNotExist(wizard, ATTR_DATA_OFF_TEXT);
+
+		wizardPage.setEditorValue(EDITOR_ID_ON, "On-1");
+		assertAttrExists(wizard, ATTR_DATA_ON_TEXT, "On-1");
+		wizardPage.setEditorValue(EDITOR_ID_ON, "On");
+		assertTextDoesNotExist(wizard, ATTR_DATA_ON_TEXT);
+
+		wizardPage.setEditorValue(EDITOR_ID_SELECTED, TRUE);
+		assertAttrExists(wizard, CHECKED, CHECKED);
+		wizardPage.setEditorValue(EDITOR_ID_SELECTED, FALSE);
+		assertTextDoesNotExist(wizard, CHECKED);
+		
+		//change to select
+		wizardPage.setEditorValue(EDITOR_ID_TOGGLE_KIND, TOGGLE_KIND_SELECT);
+		assertTextExists(wizard, TAG_SELECT);
+		assertTextDoesNotExist(wizard, TYPE_CHECKBOX);
+		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_FLIPSWITCH);
+
+		wizardPage.setEditorValue(EDITOR_ID_SELECTED, TRUE);
+		assertAttrExists(wizard, SELECTED, SELECTED);
+		wizardPage.setEditorValue(EDITOR_ID_SELECTED, FALSE);
+		assertTextDoesNotExist(wizard, SELECTED);
+
+		//change back to checkbox
+		wizardPage.setEditorValue(EDITOR_ID_TOGGLE_KIND, TOGGLE_KIND_CHECKBOX);
+		assertTextExists(wizard, TAG_INPUT);
+		assertAttrExists(wizard, ATTR_TYPE, TYPE_CHECKBOX);
+		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_FLIPSWITCH);
+
+		
 	}
 
 	public void testNewListviewWizard() {
