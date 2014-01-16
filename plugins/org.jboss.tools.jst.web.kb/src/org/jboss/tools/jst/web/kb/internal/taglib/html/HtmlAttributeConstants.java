@@ -30,6 +30,7 @@ public class HtmlAttributeConstants {
 	public static final String RESET = "reset";
 	public static final String TYPE = "type";
 	public static final String INPUT = "input";
+	public static final String SELECT = "select";
 	public static final String CHECKBOX = "checkbox";
 	public static final String DIV = "div";
 	public static final String HEADER = "header";

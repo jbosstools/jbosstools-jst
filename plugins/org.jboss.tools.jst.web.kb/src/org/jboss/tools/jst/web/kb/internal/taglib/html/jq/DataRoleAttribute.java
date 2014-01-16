@@ -33,4 +33,8 @@ public class DataRoleAttribute extends HtmlAttribute {
 	public DataRoleAttribute(String description, String value) {
 		super("data-role", "", new String[]{value}, new String[]{description});
 	}
+
+	public String getValue() {
+		return values[0];
+	}
 }

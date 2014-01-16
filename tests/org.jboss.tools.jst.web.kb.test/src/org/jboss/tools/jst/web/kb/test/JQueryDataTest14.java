@@ -10,17 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.test;
 
-import static org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttributeConstants.COLLAPSIBLE;
-import static org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttributeConstants.COLLAPSIBLE_SET;
-import static org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttributeConstants.CONTROLGROUP;
-import static org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttributeConstants.DIALOG;
-import static org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttributeConstants.ENUM_TRUE_FALSE;
-import static org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttributeConstants.FIELDCONTENT;
-import static org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttributeConstants.FOOTER;
-import static org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttributeConstants.HEADER;
-import static org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttributeConstants.LISTVIEW;
-import static org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttributeConstants.PAGE;
-import static org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileAttrConstants14.ENUM_ICON_VALUES;
+import static org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileAttrConstants14.*;
 
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.jst.web.kb.KbQuery;
@@ -188,5 +178,23 @@ public class JQueryDataTest14 extends JQueryDataTest {
 
 	public void testTabsAttributeProvider() {
 		assertDataRole(false, "tabs");
+	}
+
+	@Override
+	public void testFlipToggleSwitchAttributeProvider() {
+		assertDataRole("select", "flipswitch");
+		KbQuery query = createKbQuery(new KbQuery.Tag[]{createTag("select", "flipswitch")}, "data-");
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
+		assertProposals(false, proposals, "data-mini", "data-theme");
+		assertNoProposal(false, proposals, "data-track-theme", "data-off-text", "data-on-text");
+
+		query = createKbQuery(KbQuery.Type.ATTRIBUTE_VALUE, new KbQuery.Tag[]{createTag("input", "type", "checkbox")}, "data-role", "");
+		proposals = PageProcessor.getInstance().getProposals(query, context);
+		assertProposal("flipswitch", proposals);
+
+		query = createKbQuery(new KbQuery.Tag[]{createTag("input", "flipswitch")}, "data-");
+		proposals = PageProcessor.getInstance().getProposals(query, context);
+		assertProposals(false, proposals, "data-mini", "data-theme", "data-off-text", "data-on-text");
+		assertNoProposal(false, proposals, "data-track-theme");
 	}
 }

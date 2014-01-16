@@ -190,6 +190,8 @@ public class JQueryDataTest extends JQueryLibTest {
 		KbQuery query = createKbQuery(new KbQuery.Tag[]{createTag("select", SLIDER)}, "data-");
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
 		assertProposal("data-mini", proposals);
+		assertProposal("data-theme", proposals);
+		assertProposal("data-track-theme", proposals);
 	}
 
 	public void testFooterHeaderAttributeProvider() {
