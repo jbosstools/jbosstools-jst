@@ -115,20 +115,23 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			script(getVersion().getJQueryMobileJS()) + ">",
 			"</head>",
 			"<body>",
-			"<a href=\"\" id=\"button-1\" data-role=\"button\">Link button</a>|abcde|",
+			"<a href=\"\" id=\"button-1\" data-role=\"button\">Link button</a>",
+			"|abcde|",
 			"</body>",
 			"</html>"
 	};
 	
 	private String[] test_result_02={
 			"<!DOCTYPE html>",
-			"<a href=\"\" id=\"button-1\" data-role=\"button\">Link button</a>|abcde|"
+			"<a href=\"\" id=\"button-1\" data-role=\"button\">Link button</a>",
+			"|abcde|"
 	};
 
 	private String[] test_result_12={
 			"<!DOCTYPE html>",
 			"<html>",
-			"<a href=\"\" id=\"button-1\" data-role=\"button\">Link button</a>|abcde|",
+			"<a href=\"\" id=\"button-1\" data-role=\"button\">Link button</a>",
+			"|abcde|",
 			"</html>"
 	};
 
@@ -137,7 +140,8 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			"<html>",
 			"<head>",
 			"</head>",
-			"<a href=\"\" id=\"button-1\" data-role=\"button\">Link button</a>|abcde|",
+			"<a href=\"\" id=\"button-1\" data-role=\"button\">Link button</a>",
+			"|abcde|",
 			"</html>"
 	};
 
@@ -147,7 +151,8 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			"<head>",
 			"</head>",
 			"<body>",
-			"<a href=\"\" id=\"button-1\" data-role=\"button\">Link button</a>|abcde|",
+			"<a href=\"\" id=\"button-1\" data-role=\"button\">Link button</a>",
+			"|abcde|",
 			"</body>",
 			"</html>"
 	};

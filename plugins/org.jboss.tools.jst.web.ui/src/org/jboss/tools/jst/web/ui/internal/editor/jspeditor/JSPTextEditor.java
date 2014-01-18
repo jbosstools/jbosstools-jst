@@ -53,6 +53,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
+import org.eclipse.swt.dnd.DropTargetEffect;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.DropTargetListener;
 import org.eclipse.swt.dnd.FileTransfer;
@@ -117,6 +118,7 @@ import org.jboss.tools.common.model.ui.texteditors.TextMerge;
 import org.jboss.tools.common.model.ui.texteditors.dnd.TextEditorDrop;
 import org.jboss.tools.common.model.ui.texteditors.dnd.TextEditorDropProvider;
 import org.jboss.tools.common.model.ui.views.palette.IIgnoreSelection;
+import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
 import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
 import org.jboss.tools.common.text.xml.IOccurrencePreferenceProvider;
 import org.jboss.tools.common.text.xml.XmlEditorPlugin;
@@ -133,6 +135,7 @@ import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.FileTagProposalL
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.JSPPaletteInsertHelper;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.JSPTagProposalFactory;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.TagProposal;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.xpl.StyledTextDropTargetEffect;
 import org.jboss.tools.jst.web.ui.internal.editor.messages.JstUIMessages;
 import org.jboss.tools.jst.web.ui.internal.editor.outline.IFormPropertySheetPage;
 import org.jboss.tools.jst.web.ui.internal.editor.outline.JSPContentOutlineConfiguration;
@@ -908,6 +911,8 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			return attributesValues.toArray(new AttributeDescriptorValue[attributesValues.size()]);
 		}
 	}
+	
+	StyledTextDropTargetEffect dropEffect;
 
 	private void createDrop() {
 		DropTarget target = new DropTarget(getSourceViewer().getTextWidget(),
@@ -917,6 +922,8 @@ public class JSPTextEditor extends StructuredTextEditor implements
 				FileTransfer.getInstance() };
 		target.setTransfer(types);
 		target.addDropListener(new DTL());
+		dropEffect = new StyledTextDropTargetEffect(getSourceViewer().getTextWidget());
+		target.setDropTargetEffect(dropEffect);
 	}
 
 	DropContext dropContext = new DropContext();
@@ -965,6 +972,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			event.feedback = DND.FEEDBACK_SCROLL | DND.FEEDBACK_SELECT;
 			
 			int pos = getPosition(event.x, event.y);
+			dropEffect.setNewOffset(pos);
 			if (lastpos == pos && pos >= 0) {
 				pos = lastpos;
 				event.detail = lastdetail;
@@ -1043,6 +1051,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			    }
 			}
 		}
+		result = PaletteInsertHelper.getInstance().correctOffset(getModel().getStructuredDocument(), result);
 		return result;
 	}
 
