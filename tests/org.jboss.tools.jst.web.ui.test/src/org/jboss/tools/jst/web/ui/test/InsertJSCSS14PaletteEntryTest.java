@@ -14,14 +14,16 @@ public class InsertJSCSS14PaletteEntryTest extends InsertJSCSSPaletteEntryTest {
 			script(getVersion().getJQueryMobileJS()) + ">",
 			"</head>",
 			"<body>",
-			"<a href=\"\" id=\"button-1\" class=\"ui-btn ui-corner-all\">Link button</a>|abcde|",
+			"<a href=\"\" id=\"button-1\" class=\"ui-btn ui-corner-all\">Link button</a>",
+			"|abcde|",
 			"</body>",
 			"</html>"
 	};
 	
 	private String[] test_result_02={
 			"<!DOCTYPE html>",
-			"<a href=\"\" id=\"button-1\" class=\"ui-btn ui-corner-all\">Link button</a>|abcde|"
+			"<a href=\"\" id=\"button-1\" class=\"ui-btn ui-corner-all\">Link button</a>",
+			"|abcde|"
 	};
 
 	private String[] test_result_03={
@@ -32,7 +34,8 @@ public class InsertJSCSS14PaletteEntryTest extends InsertJSCSSPaletteEntryTest {
 	private String[] test_result_12={
 			"<!DOCTYPE html>",
 			"<html>",
-			"<a href=\"\" id=\"button-1\" class=\"ui-btn ui-corner-all\">Link button</a>|abcde|",
+			"<a href=\"\" id=\"button-1\" class=\"ui-btn ui-corner-all\">Link button</a>",
+			"|abcde|",
 			"</html>"
 	};
 
@@ -48,7 +51,8 @@ public class InsertJSCSS14PaletteEntryTest extends InsertJSCSSPaletteEntryTest {
 			"<html>",
 			"<head>",
 			"</head>",
-			"<a href=\"\" id=\"button-1\" class=\"ui-btn ui-corner-all\">Link button</a>|abcde|",
+			"<a href=\"\" id=\"button-1\" class=\"ui-btn ui-corner-all\">Link button</a>",
+			"|abcde|",
 			"</html>"
 	};
 
@@ -67,7 +71,8 @@ public class InsertJSCSS14PaletteEntryTest extends InsertJSCSSPaletteEntryTest {
 			"<head>",
 			"</head>",
 			"<body>",
-			"<a href=\"\" id=\"button-1\" class=\"ui-btn ui-corner-all\">Link button</a>|abcde|",
+			"<a href=\"\" id=\"button-1\" class=\"ui-btn ui-corner-all\">Link button</a>",
+			"|abcde|",
 			"</body>",
 			"</html>"
 	};
