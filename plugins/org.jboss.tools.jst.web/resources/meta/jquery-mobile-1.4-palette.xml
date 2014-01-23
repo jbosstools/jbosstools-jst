@@ -74,6 +74,12 @@
                  STARTTEXT="&lt;div data-role=&quot;collapsible-set&quot;>"
                  model-entity="SharableMacroHTML"/>
 
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Table:&lt;/b>&lt;br>\n&lt;code>&amp;lt;table data-role=&quot;table&quot;>&lt;/code>&lt;br>\n...&lt;br>\n&lt;code>&amp;lt;/table>&lt;/code>\n&lt;/html>"
+                 ENDTEXT="" ICON="%Icons%/Mobile/jQuery/tabs"
+                 NAME="91.Tabs" REFORMAT="yes" SCOPE="project"
+                 STARTTEXT="&lt;div data-role=&quot;tabs&quot; id=&quot;my-tabs&quot;>\n &lt;/div>"
+                 model-entity="SharableMacroHTML"/>
+
      </GroupHTML>
      
      <GroupHTML HIDDEN="no" ICON="" NAME="2.lists"

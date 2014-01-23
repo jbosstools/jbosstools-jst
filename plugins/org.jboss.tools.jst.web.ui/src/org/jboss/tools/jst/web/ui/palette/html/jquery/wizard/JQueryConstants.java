@@ -32,6 +32,9 @@ public interface JQueryConstants extends JQueryHTMLConstants {
 	public String TOGGLE_KIND_CHECKBOX = "checkbox";
 	public String TOGGLE_KIND_SELECT = "select";
 
+	public String CLICK = "click";
+	public String MOUSEOVER = "mouseover";
+
 	/**
 	 * Palette category id.
 	 */
@@ -158,5 +161,10 @@ public interface JQueryConstants extends JQueryHTMLConstants {
 
 	public String EDITOR_ID_ADD_LIST = "add-list";
 	public String EDITOR_ID_TOGGLE_KIND = "toggle-kind";
-	
+
+	public String EDITOR_ID_TABS_ANIMATED = "tabs-animated";
+	public String EDITOR_ID_TABS_LAYOUT = "tabs-layout";
+	public String EDITOR_ID_TABS_COLLAPSIBLE = "tabs-collapsible";
+	public String EDITOR_ID_TABS_ACTIVE = "tabs-active";
+	public String EDITOR_ID_TABS_ACTIVATION = "tabs-activation";
 }

@@ -254,4 +254,8 @@ public class NewJQueryMobile13PaletteWizardTest extends NewJQueryMobilePaletteWi
 		compareGeneratedAndInsertedText(wizard);
 	}
 
+	public void testNewTabsWizard() {
+		//do nothing, no wizard in JQM 1.3.
+	}
+
 }

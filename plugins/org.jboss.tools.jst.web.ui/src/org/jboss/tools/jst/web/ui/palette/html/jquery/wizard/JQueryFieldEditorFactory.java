@@ -1272,6 +1272,76 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 				WizardDescriptions.tableStripes);
 	}
 
+	static String[] TABS_LAYOUT_LIST = {ROLE_NAVBAR, ROLE_LISTVIEW};
+	static String[] TABS_LAYOUT_LABEL_LIST = {WizardMessages.tabsLayoutNavbarLable, WizardMessages.tabsLayoutListviewLable};
+
+	/**
+	 * Used in New Tabs wizard.
+	 * @return
+	 */
+	public static IFieldEditor createTabsLayoutEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(
+				EDITOR_ID_TABS_LAYOUT, 
+				WizardMessages.tabsLayoutLable, 
+				toList(TABS_LAYOUT_LABEL_LIST), 
+				toList(TABS_LAYOUT_LIST), 
+				ROLE_NAVBAR,
+				WizardDescriptions.tabsLayout);
+	}
+
+	/**
+	 * Used in New Tabs wizard.
+	 * @return
+	 */
+	public static IFieldEditor createTabsCollapsibleEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_TABS_COLLAPSIBLE, WizardMessages.collapsibleLabel, false,
+				WizardDescriptions.tabsCollapsible);
+	}
+
+	/**
+	 * Used in New Tabs wizard.
+	 * @return
+	 */
+	public static IFieldEditor createTabsCollapsedEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_COLLAPSED, WizardMessages.collapsedLabel, false,
+				WizardDescriptions.tabsCollapsed);
+	}
+
+	/**
+	 * Used in New Tabs wizard.
+	 * @return
+	 */
+	public static IFieldEditor createTabsAnimatedEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_TABS_ANIMATED, WizardMessages.tabsAnimatedLabel, false,
+				WizardDescriptions.tabsAnimated);
+	}
+
+	/**
+	 * Used in New Tabs wizard.
+	 * @return
+	 */
+	public static IFieldEditor createTabsActiveEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_TABS_ACTIVE, WizardMessages.tabsActiveLabel, false,
+				WizardDescriptions.tabsCollapsed);
+	}
+
+	static String[] TABS_ACTIVATION_LIST = {CLICK, MOUSEOVER};
+	static String[] TABS_ACTIVATION_LABEL_LIST = {WizardMessages.tabsActivationClickLabel, WizardMessages.tabsActivationHoverLabel};
+
+	/**
+	 * Used in New Tabs wizard.
+	 * @return
+	 */
+	public static IFieldEditor createTabsActivationEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(
+				EDITOR_ID_TABS_ACTIVATION, 
+				WizardMessages.tabsActivationLabel, 
+				toList(TABS_ACTIVATION_LABEL_LIST), 
+				toList(TABS_ACTIVATION_LIST), 
+				CLICK,
+				WizardDescriptions.tabsActivation);
+	}
+
 	/**
 	 * Used in New Image wizard.
 	 * @return
