@@ -71,6 +71,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewSelectMenuWizard
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewSelectMenuWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTableWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTableWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTabsWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTabsWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTextInputWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTextInputWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizard;
@@ -1109,6 +1111,44 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		assertAttrExists(wizard, ATTR_FORM, "formID");
 		
 		compareGeneratedAndInsertedText(wizard);
+	}
+
+	public void testNewTabsWizard() {
+		IWizardPage currentPage = runToolEntry("Tabs", true);
+
+		assertTrue(currentPage instanceof NewTabsWizardPage);
+
+		NewTabsWizardPage wizardPage = (NewTabsWizardPage)currentPage;
+		NewTabsWizard wizard = (NewTabsWizard)wizardPage.getWizard();
+		
+		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_NAVBAR);
+		wizardPage.setEditorValue(EDITOR_ID_TABS_LAYOUT, ROLE_LISTVIEW);
+		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_LISTVIEW);
+		wizardPage.setEditorValue(EDITOR_ID_TABS_LAYOUT, ROLE_NAVBAR);
+		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_NAVBAR);
+
+		assertTextDoesNotExist(wizard, "collapsible");
+		wizardPage.setEditorValue(EDITOR_ID_TABS_COLLAPSIBLE, TRUE);
+		assertTextExists(wizard, "collapsible: true");
+		assertTextDoesNotExist(wizard, "active");
+		wizardPage.setEditorValue(EDITOR_ID_COLLAPSED, TRUE);
+		assertTextExists(wizard, "active: false");
+		wizardPage.setEditorValue(EDITOR_ID_TABS_COLLAPSIBLE, FALSE);
+		assertTextDoesNotExist(wizard, "collapsible");
+		assertTextDoesNotExist(wizard, "active");
+
+		assertTextDoesNotExist(wizard, "event");
+		wizardPage.setEditorValue(EDITOR_ID_TABS_ACTIVATION, MOUSEOVER);
+		assertTextExists(wizard, "event: \"mouseover\"");
+		wizardPage.setEditorValue(EDITOR_ID_TABS_ACTIVATION, CLICK);
+		assertTextDoesNotExist(wizard, "event");
+		
+		assertTextDoesNotExist(wizard, "show");
+		wizardPage.setEditorValue(EDITOR_ID_TABS_ANIMATED, TRUE);
+		assertTextExists(wizard, "show: true");
+		wizardPage.setEditorValue(EDITOR_ID_TABS_ANIMATED, FALSE);
+		assertTextDoesNotExist(wizard, "show");
+		
 	}
 
 	protected void compareGeneratedAndInsertedText(NewJQueryWidgetWizard<?> wizard) {

@@ -175,6 +175,7 @@ public interface JQueryHTMLConstants extends HTMLConstants {
 	public String ROLE_RANGE_SLIDER = "rangeslider";
 	public String ROLE_SLIDER = "slider";
 	public String ROLE_TABLE = "table";
+	public String ROLE_TABS = "tabs";
 
 	public String DATA_TYPE_HORIZONTAL = "horizontal";
 	public String DATA_TYPE_VERTICAL = "vertical";

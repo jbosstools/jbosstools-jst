@@ -54,6 +54,7 @@ public class WizardMessages extends NLS {
 	public static String closeButtonPositionLabel;
 	public static String collapsedLabel;
 	public static String collapsedIconLabel;
+	public static String collapsibleLabel;
 	public static String columnButtonTextLabel;
 	public static String columnButtonThemeLabel;
 	public static String columnPopupThemeLabel;
@@ -178,6 +179,14 @@ public class WizardMessages extends NLS {
 	public static String stepLabel;
 	public static String stripesLabel;
 	public static String swipeCloseLabel;
+	public static String tabsActivationLabel;
+	public static String tabsActivationClickLabel;
+	public static String tabsActivationHoverLabel;
+	public static String tabsActiveLabel;
+	public static String tabsAnimatedLabel;
+	public static String tabsLayoutLable;
+	public static String tabsLayoutNavbarLable;
+	public static String tabsLayoutListviewLable;
 	public static String textLabel;
 	public static String textTypeLabel;
 	public static String themeLabel;
@@ -282,6 +291,9 @@ public class WizardMessages extends NLS {
 
 	public static String newTableTitle;
 	public static String newTableDescription;
+
+	public static String newTabsTitle;
+	public static String newTabsDescription;
 
 	public static String newFormWizardTitle;
 	public static String newFormWizardDescription;

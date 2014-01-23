@@ -221,6 +221,12 @@ public class WizardDescriptions extends NLS {
 	public static String tableResponsive;
 	public static String tableStripes;
 
+	public static String tabsActivation;
+	public static String tabsAnimated;
+	public static String tabsCollapsed;
+	public static String tabsCollapsible;
+	public static String tabsLayout;
+
 	public static String tdColspan;
 	public static String tdHeaders;
 	public static String tdRowspan;
