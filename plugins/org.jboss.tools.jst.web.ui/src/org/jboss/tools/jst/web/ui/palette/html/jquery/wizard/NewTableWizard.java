@@ -88,13 +88,6 @@ public class NewTableWizard extends NewJQueryWidgetWizard<NewTableWizardPage> im
 		}
 	}
 
-	private void addClass(StringBuilder cls, String add) {
-		if(cls.length() > 0) {
-			cls.append(" ");
-		}
-		cls.append(add);
-	}
-
 	protected void createBodyForBrowser(ElementNode body) {
 		ElementNode form = getFormNode(body);
 		ElementNode div = form.addChild(TAG_DIV);

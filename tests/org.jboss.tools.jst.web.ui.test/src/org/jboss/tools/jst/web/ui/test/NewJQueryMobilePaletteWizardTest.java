@@ -35,6 +35,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCollapsibleWizar
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCollapsibleWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFooterWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFooterWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormButtonWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormButtonWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormWizard;
@@ -45,6 +47,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedButtonsWi
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedButtonsWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedCheckboxesWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedCheckboxesWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewImageWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewImageWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewJQueryWidgetWizard;
@@ -192,6 +196,43 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		assertTextIsInserted(ROLE_CONTENT);
 		assertTextIsInserted(ROLE_PAGE);
 		assertTextIsInserted(headerHtmlText);
+	}
+
+
+	public void testNewHeaderBarWizard() {
+		IWizardPage currentPage = runToolEntry("Header Bar", true);
+
+		assertTrue(currentPage instanceof NewHeaderBarWizardPage);
+
+		NewHeaderBarWizardPage wizardPage = (NewHeaderBarWizardPage)currentPage;
+		NewHeaderBarWizard wizard = (NewHeaderBarWizard)wizardPage.getWizard();
+		
+		assertTextDoesNotExist(wizard, ATTR_DATA_POSITION);
+		wizardPage.setEditorValue(EDITOR_ID_FIXED_POSITION, TRUE);
+		assertAttrExists(wizard, ATTR_DATA_POSITION, POSITION_FIXED);
+
+		assertTextDoesNotExist(wizard, ATTR_DATA_FULL_SCREEN);
+		wizardPage.setEditorValue(EDITOR_ID_FULL_SCREEN, TRUE);
+		assertAttrExists(wizard, ATTR_DATA_FULL_SCREEN, TRUE);
+
+		doVersionSpecificTest(wizardPage, wizard);
+
+		compareGeneratedAndInsertedText(wizard);
+
+		assertTextIsInserted(wizardPage.getEditorValue(EDITOR_ID_TITLE));
+	}
+
+	public void doVersionSpecificTest(NewHeaderBarWizardPage wizardPage, NewHeaderBarWizard wizard) {
+		assertTextExists(wizard, CLASS_BUTTON_LEFT);
+		assertTextExists(wizard, CLASS_BUTTON_RIGHT);
+		wizardPage.setEditorValue(EDITOR_ID_LEFT_BUTTON, FALSE);
+		assertTextDoesNotExist(wizard, CLASS_BUTTON_LEFT);
+		wizardPage.setEditorValue(EDITOR_ID_RIGHT_BUTTON, FALSE);
+		assertTextDoesNotExist(wizard, CLASS_BUTTON_RIGHT);
+		wizardPage.setEditorValue(EDITOR_ID_LEFT_BUTTON, TRUE);
+		assertTextExists(wizard, CLASS_BUTTON_LEFT);
+		wizardPage.setEditorValue(EDITOR_ID_RIGHT_BUTTON, TRUE);
+		assertTextExists(wizard, CLASS_BUTTON_RIGHT);
 	}
 
 	public void testNewCheckboxWizard() {
