@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import org.jboss.tools.common.model.ui.editors.dnd.DropWizardMessages;
 import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.ElementNode;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.JSTWebUIImages;
 
 /**
@@ -32,6 +33,7 @@ public class NewHeaderBarWizard extends NewJQueryWidgetWizard<NewHeaderBarWizard
 	}
 
 	protected void addContent(ElementNode parent) {
+		boolean is13 = JQueryMobileVersion.JQM_1_3.equals(getVersion());
 		String themeValue = page.getEditorValue(EDITOR_ID_THEME);
 		
 		ElementNode header = parent.addChild(TAG_DIV);
@@ -55,23 +57,56 @@ public class NewHeaderBarWizard extends NewJQueryWidgetWizard<NewHeaderBarWizard
 			ElementNode a = header.addChild(TAG_A, label);
 			a.addAttribute(ATTR_HREF, page.getEditorValue(EDITOR_ID_LEFT_BUTTON_URL));
 			String icon = page.getEditorValue(EDITOR_ID_LEFT_BUTTON_ICON);
-			if(icon.length() > 0) {
-				a.addAttribute(ATTR_DATA_ICON, icon);
+			if(is13) {
+				if(icon.length() > 0) {
+					a.addAttribute(ATTR_DATA_ICON, icon);
+				}
+			} else {
+				StringBuilder cls = new StringBuilder();
+				cls.append(CLASS_UI_BTN);
+				addClass(cls, CLASS_UI_MINI);
+				addClass(cls, CLASS_UI_BTN_INLINE);
+				addClass(cls, CLASS_UI_BTN_PREFIX + "left");
+				addClass(cls, CLASS_UI_CORNER_ALL);
+				if(icon.length() > 0) {
+					addClass(cls, CLASS_UI_ICON_PREFIX + icon);
+					addClass(cls, CLASS_UI_BTN_ICON_PREFIX + "left");
+				}
+				a.addAttribute(ATTR_CLASS, cls.toString());
 			}
 		}
 
-		header.addChild("h1", page.getEditorValue(EDITOR_ID_TITLE));
+		String title = page.getEditorValue(EDITOR_ID_TITLE);
+		if(title.length() == 0) {
+			ElementNode titleNode = header.addChild("span", title);
+			titleNode.addAttribute(ATTR_CLASS, "ui-title");
+		} else {
+			header.addChild("h1", title);		}
 	
 		if(isTrue(EDITOR_ID_RIGHT_BUTTON)) {
 			String label = page.getEditorValue(EDITOR_ID_RIGHT_BUTTON_LABEL);
 			ElementNode a = header.addChild(TAG_A, label);
 			a.addAttribute(ATTR_HREF, page.getEditorValue(EDITOR_ID_RIGHT_BUTTON_URL));
 			String icon = page.getEditorValue(EDITOR_ID_RIGHT_BUTTON_ICON);
-			if(icon.length() > 0) {
-				a.addAttribute(ATTR_DATA_ICON, icon);
-			}
-			if(!isTrue(EDITOR_ID_LEFT_BUTTON)) {
-				a.addAttribute(ATTR_CLASS, CLASS_BUTTON_RIGHT);
+			if(is13) {
+				if(icon.length() > 0) {
+					a.addAttribute(ATTR_DATA_ICON, icon);
+				}
+				if(!isTrue(EDITOR_ID_LEFT_BUTTON)) {
+					a.addAttribute(ATTR_CLASS, CLASS_BUTTON_RIGHT);
+				}
+			} else {
+				StringBuilder cls = new StringBuilder();
+				cls.append(CLASS_UI_BTN);
+				addClass(cls, CLASS_UI_MINI);
+				addClass(cls, CLASS_UI_BTN_INLINE);
+				addClass(cls, CLASS_UI_BTN_PREFIX + "right");
+				addClass(cls, CLASS_UI_CORNER_ALL);
+				if(icon.length() > 0) {
+					addClass(cls, CLASS_UI_ICON_PREFIX + icon);
+					addClass(cls, CLASS_UI_BTN_ICON_PREFIX + "left");
+				}
+				a.addAttribute(ATTR_CLASS, cls.toString());
 			}
 		}
 

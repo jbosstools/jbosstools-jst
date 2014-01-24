@@ -88,32 +88,32 @@ public class NewButtonWizard extends NewJQueryWidgetWizard<NewButtonWizardPage> 
 		cls.append(CLASS_UI_BTN);
 		String icon = page.getEditorValue(EDITOR_ID_ICON);
 		if(icon.length() > 0) {
-			cls.append(' ').append(CLASS_UI_ICON_PREFIX + icon);
+			addClass(cls, CLASS_UI_ICON_PREFIX + icon);
 		}
 		if(isTrue(EDITOR_ID_ICON_ONLY)) {
-			cls.append(' ').append(CLASS_UI_BTN_ICON_NOTEXT);
+			addClass(cls, CLASS_UI_BTN_ICON_NOTEXT);
 		} else if(icon.length() > 0) {
 			String iconpos = page.getEditorValue(EDITOR_ID_ICON_POS);
 			if(iconpos.length() == 0) iconpos = "left";
-			cls.append(' ').append(CLASS_UI_BTN_ICON_PREFIX + iconpos);
+			addClass(cls, CLASS_UI_BTN_ICON_PREFIX + iconpos);
 		}
 		if(isMini()) {
-			cls.append(' ').append(CLASS_UI_MINI);
+			addClass(cls, CLASS_UI_MINI);
 		}
 		if(isTrue(EDITOR_ID_INLINE)) {
-			cls.append(' ').append(CLASS_UI_BTN_INLINE);
+			addClass(cls, CLASS_UI_BTN_INLINE);
 		}
 		if(isTrue(EDITOR_ID_CORNERS)) {
-			cls.append(' ').append(CLASS_UI_CORNER_ALL);
+			addClass(cls, CLASS_UI_CORNER_ALL);
 		}
 
 		String themeValue = page.getEditorValue(EDITOR_ID_THEME);
 		if(themeValue.length() > 0) {
-			cls.append(' ').append(CLASS_UI_BTN_PREFIX + themeValue);
+			addClass(cls, CLASS_UI_BTN_PREFIX + themeValue);
 		}
 		
 		if(isTrue(EDITOR_ID_DISABLED)) {
-			cls.append(' ').append(CLASS_UI_STATE_DISABLED);
+			addClass(cls, CLASS_UI_STATE_DISABLED);
 		}
 
 		a.addAttribute(ATTR_CLASS, cls.toString());

@@ -91,6 +91,13 @@ public abstract class NewJQueryWidgetWizard<P extends NewJQueryWidgetWizardPage>
 		return LAYOUT_HORIZONTAL.equals(page.getEditorValue(EDITOR_ID_LAYOUT));
 	}
 
+	protected static void addClass(StringBuilder cls, String add) {
+		if(cls.length() > 0) {
+			cls.append(" ");
+		}
+		cls.append(add);
+	}
+
 	@Override
 	protected void doPerformFinish() {
 		if(isTrue(AbstractNewHTMLWidgetWizardPage.ADD_JS_CSS_SETTING_NAME)) {

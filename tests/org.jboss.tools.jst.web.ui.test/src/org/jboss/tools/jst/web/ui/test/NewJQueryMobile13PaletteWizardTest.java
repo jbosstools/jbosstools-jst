@@ -89,31 +89,12 @@ public class NewJQueryMobile13PaletteWizardTest extends NewJQueryMobilePaletteWi
 		assertTextDoesNotExist(wizard, SELECTED);
 	}
 
-	public void testNewHeaderBarWizard() {
-		IWizardPage currentPage = runToolEntry("Header Bar", true);
-
-		assertTrue(currentPage instanceof NewHeaderBarWizardPage);
-
-		NewHeaderBarWizardPage wizardPage = (NewHeaderBarWizardPage)currentPage;
-		NewHeaderBarWizard wizard = (NewHeaderBarWizard)wizardPage.getWizard();
-		
-		assertTextDoesNotExist(wizard, ATTR_DATA_POSITION);
-		wizardPage.setEditorValue(EDITOR_ID_FIXED_POSITION, TRUE);
-		assertAttrExists(wizard, ATTR_DATA_POSITION, POSITION_FIXED);
-
-		assertTextDoesNotExist(wizard, ATTR_DATA_FULL_SCREEN);
-		wizardPage.setEditorValue(EDITOR_ID_FULL_SCREEN, TRUE);
-		assertAttrExists(wizard, ATTR_DATA_FULL_SCREEN, TRUE);
-
+	public void doVersionSpecificTest(NewHeaderBarWizardPage wizardPage, NewHeaderBarWizard wizard) {
 		assertTextDoesNotExist(wizard, CLASS_BUTTON_RIGHT);
 		wizardPage.setEditorValue(EDITOR_ID_LEFT_BUTTON, FALSE);
 		assertTextExists(wizard, CLASS_BUTTON_RIGHT);
 		wizardPage.setEditorValue(EDITOR_ID_LEFT_BUTTON, TRUE);
 		assertTextDoesNotExist(wizard, CLASS_BUTTON_RIGHT);
-
-		compareGeneratedAndInsertedText(wizard);
-
-		assertTextIsInserted(wizardPage.getEditorValue(EDITOR_ID_TITLE));
 	}
 
 	public void testNewFooterBarWizard() {
