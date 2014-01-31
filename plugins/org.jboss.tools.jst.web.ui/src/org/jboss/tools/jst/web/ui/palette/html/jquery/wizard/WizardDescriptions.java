@@ -255,6 +255,8 @@ public class WizardDescriptions extends NLS {
 	public static String toggleOnLabel;
 	public static String toggleTrackTheme;
 
+	public static String toolbarBarPosition;
+
 	public static String trackDefault;
 	public static String trackKind;
 

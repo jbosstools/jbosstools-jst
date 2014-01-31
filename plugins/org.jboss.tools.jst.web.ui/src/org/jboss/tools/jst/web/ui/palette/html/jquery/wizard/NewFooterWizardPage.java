@@ -61,6 +61,9 @@ public class NewFooterWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor arrangement = JQueryFieldEditorFactory.createArragementEditor();
 		addEditor(arrangement, panel);
 
+		IFieldEditor barpos = JQueryFieldEditorFactory.createBarPositionEditor();
+		addEditor(barpos, panel);
+
 		columns = createTwoColumns(panel);
 		GridLayout l = (GridLayout)columns.left().getLayout();
 		l.marginBottom = 2;
@@ -74,6 +77,8 @@ public class NewFooterWizardPage extends NewJQueryWidgetWizardPage {
 
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor(getVersion());
 		addEditor(theme, parent, true);
+
+		updateBarEnablement();
 	}
 
 	@Override
@@ -92,8 +97,19 @@ public class NewFooterWizardPage extends NewJQueryWidgetWizardPage {
 
 		boolean isFixed = TRUE.equals(getEditorValue(EDITOR_ID_FIXED_POSITION));
 		setEnabled(EDITOR_ID_FULL_SCREEN, isFixed);
-		
+
+		updateBarEnablement();
 		super.propertyChange(evt);
+	}
+
+	void updateBarEnablement() {
+		boolean isArrangementEnabled = buttons.getNumber() > 0;
+		setEnabled(EDITOR_ID_ARRAGEMENT, isArrangementEnabled);
+		boolean isBarPosEnabled = isArrangementEnabled &&
+				(ARRAGEMENT_GROUPED.equals(getEditorValue(EDITOR_ID_ARRAGEMENT))
+					|| (!ARRAGEMENT_NAVBAR.equals(getEditorValue(EDITOR_ID_ARRAGEMENT)) && buttons.getNumber() == 1));
+		setEnabled(EDITOR_ID_BAR_POSITION, isBarPosEnabled);
+		
 	}
 
 }

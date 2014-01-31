@@ -32,6 +32,8 @@ public interface JQueryConstants extends JQueryHTMLConstants {
 	public String TOGGLE_KIND_CHECKBOX = "checkbox";
 	public String TOGGLE_KIND_SELECT = "select";
 
+	public String BAR_POSITION_DEFAULT = "default";
+
 	public String CLICK = "click";
 	public String MOUSEOVER = "mouseover";
 
@@ -167,4 +169,6 @@ public interface JQueryConstants extends JQueryHTMLConstants {
 	public String EDITOR_ID_TABS_COLLAPSIBLE = "tabs-collapsible";
 	public String EDITOR_ID_TABS_ACTIVE = "tabs-active";
 	public String EDITOR_ID_TABS_ACTIVATION = "tabs-activation";
+
+	public String EDITOR_ID_BAR_POSITION = "bar-position";
 }
