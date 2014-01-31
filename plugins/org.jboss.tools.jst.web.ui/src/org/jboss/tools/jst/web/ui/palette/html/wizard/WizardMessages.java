@@ -43,6 +43,7 @@ public class WizardMessages extends NLS {
 	public static String autofocusLabel;
 	public static String autoplayLabel;
 	public static String backButtonLabel;
+	public static String barPositionLabel;
 	public static String borderLabel;
 	public static String buttonTypeLabel;
 	public static String challengeLabel;

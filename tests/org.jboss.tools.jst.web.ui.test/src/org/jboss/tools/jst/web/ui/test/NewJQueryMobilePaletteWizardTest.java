@@ -222,6 +222,49 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		assertTextIsInserted(wizardPage.getEditorValue(EDITOR_ID_TITLE));
 	}
 
+	public void testNewFooterBarWizard() {
+		IWizardPage currentPage = runToolEntry("Footer Bar", true);
+
+		assertTrue(currentPage instanceof NewFooterWizardPage);
+
+		NewFooterWizardPage wizardPage = (NewFooterWizardPage)currentPage;
+		NewFooterWizard wizard = (NewFooterWizard)wizardPage.getWizard();
+		
+		IFieldEditor barpos = ((CompositeEditor)wizardPage.getEditor(EDITOR_ID_BAR_POSITION)).getEditors().get(0);
+		assertTextDoesNotExist(wizard, ATTR_DATA_POSITION);
+		wizardPage.setEditorValue(EDITOR_ID_FIXED_POSITION, TRUE);
+		assertAttrExists(wizard, ATTR_DATA_POSITION, POSITION_FIXED);
+
+		assertTextDoesNotExist(wizard, ATTR_DATA_FULL_SCREEN);
+		wizardPage.setEditorValue(EDITOR_ID_FULL_SCREEN, TRUE);
+		assertAttrExists(wizard, ATTR_DATA_FULL_SCREEN, TRUE);
+	
+		assertFalse("Bar position editor should be disabled for default arrangement if button number is not 1.",
+				barpos.isEnabled());
+		assertTextDoesNotExist(wizard, ROLE_CONTROLGROUP);
+		wizardPage.setEditorValue(EDITOR_ID_ARRAGEMENT, ARRAGEMENT_GROUPED);
+		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_CONTROLGROUP);
+		assertTrue("Bar position editor should be enabled for grouped arrangement.",
+				barpos.isEnabled());
+		wizardPage.setEditorValue(EDITOR_ID_BAR_POSITION, "right");
+		assertTextExists(wizard, CLASS_UI_BTN_PREFIX + "right");
+		wizardPage.setEditorValue(EDITOR_ID_ARRAGEMENT, ARRAGEMENT_NAVBAR);
+		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_NAVBAR);
+		assertFalse("Bar position editor should be disabled for navbar arrangement.",
+				barpos.isEnabled());
+		assertTextDoesNotExist(wizard, CLASS_UI_BTN_PREFIX + "right");
+		wizardPage.setEditorValue(EDITOR_ID_ARRAGEMENT, ARRAGEMENT_DEFAULT);
+		assertFalse(barpos.isEnabled());
+		assertTextDoesNotExist(wizard, CLASS_UI_BTN_PREFIX + "right");
+
+		String label = "Run Footer Bar Test";
+		wizardPage.setEditorValue(EDITOR_ID_TITLE, label);
+
+		compareGeneratedAndInsertedText(wizard);
+
+		assertTextIsInserted(label);
+	}
+
 	public void doVersionSpecificTest(NewHeaderBarWizardPage wizardPage, NewHeaderBarWizard wizard) {
 		assertTextExists(wizard, CLASS_BUTTON_LEFT);
 		assertTextExists(wizard, CLASS_BUTTON_RIGHT);

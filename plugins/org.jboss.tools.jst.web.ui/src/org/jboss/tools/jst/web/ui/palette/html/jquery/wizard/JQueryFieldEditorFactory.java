@@ -651,6 +651,22 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 				WizardDescriptions.iconPosition);
 	}
 
+	static String[] BAR_POSITION_LABEL_LIST = {"Default", "Left", "Right"};
+	static String[] BAR_POSITION_LIST = {"default", "left", "right"};
+	static String[] BAR_POSITION_DESCRIPTIONS = {"", "", ""};
+	/**
+	 * Used in Footer wizard.
+	 * @return
+	 */
+	public static IFieldEditor createBarPositionEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(
+				EDITOR_ID_BAR_POSITION, 
+				WizardMessages.barPositionLabel, 
+				toList(BAR_POSITION_LABEL_LIST), 
+				toList(BAR_POSITION_LIST), 
+				BAR_POSITION_DEFAULT, WizardDescriptions.toolbarBarPosition, toList(BAR_POSITION_DESCRIPTIONS));
+	}
+
 	/**
 	 * Used in New Button wizard and New Link wizard.
 	 * @return

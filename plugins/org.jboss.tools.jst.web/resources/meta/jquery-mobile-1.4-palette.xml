@@ -91,6 +91,12 @@
                  STARTTEXT="&lt;div data-role=&quot;header&quot;>\n\t&lt;a href=&quot;index.html&quot; data-icon=&quot;delete&quot;>Cancel&lt;/a>\n\t&lt;h1>Edit Contact&lt;/h1>\n\t&lt;a href=&quot;index.html&quot; data-icon=&quot;check&quot; data-theme=&quot;b&quot;>Save&lt;/a>\n&lt;/div>"
                  model-entity="SharableMacroHTML"/>
 
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Footer Bar:&lt;/b>&lt;br>\n&lt;code>&amp;lt;div data-role=&quot;footer&quot;>&lt;/code>&lt;br>\n...&lt;br>\n&lt;code>&amp;lt;/div>&lt;/code>\n&lt;/html>"
+                 ENDTEXT="&lt;/div>" ICON="%Icons%/Mobile/jQuery/footer"
+                 NAME="2.Footer Bar" REFORMAT="yes" SCOPE="project"
+                 STARTTEXT="&lt;div data-role=&quot;footer&quot; class=&quot;ui-bar&quot;>"
+                 model-entity="SharableMacroHTML"/>
+
       <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Navbar:&lt;/b>&lt;br>\n&lt;code>&amp;lt;div data-role=&quot;navbar&quot;>&lt;/code>&lt;br>\n...&lt;br>\n&lt;code>&amp;lt;/div>&lt;/code>\n&lt;/html>"
  		 ENDTEXT="" ICON="%Icons%/Mobile/jQuery/navbar" 
                  NAME="3.Navbar" REFORMAT="yes" SCOPE="project"
