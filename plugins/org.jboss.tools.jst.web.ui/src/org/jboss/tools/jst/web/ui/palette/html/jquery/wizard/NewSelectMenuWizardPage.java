@@ -14,6 +14,7 @@ import java.beans.PropertyChangeEvent;
 
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.internal.properties.advanced.LayoutUtil.TwoColumns;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
@@ -39,6 +40,11 @@ public class NewSelectMenuWizardPage extends NewJQueryWidgetWizardPage {
 
 		IFieldEditor layout = JQueryFieldEditorFactory.createLayoutEditor();
 		addEditor(layout, parent);
+
+		if(getVersion() != JQueryMobileVersion.JQM_1_3) {
+			IFieldEditor searchFilter = JQueryFieldEditorFactory.createSearchFilterEditor();
+			addEditor(searchFilter, parent);
+		}
 
 		TwoColumns columns = createTwoColumns(parent);
 

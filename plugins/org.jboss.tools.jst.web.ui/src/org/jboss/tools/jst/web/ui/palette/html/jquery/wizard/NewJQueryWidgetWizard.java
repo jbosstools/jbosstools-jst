@@ -311,4 +311,38 @@ public abstract class NewJQueryWidgetWizard<P extends NewJQueryWidgetWizardPage>
 			return "jquery.mobile-1.4.0-rc.1.min.js";
 		}
 	}
+
+	protected class SearchCapability {
+		protected String searchInputID = null;
+		protected ElementNode form;
+
+		public SearchCapability(ElementNode parent, String filterInputPrefix) {
+			boolean is13 = getVersion() == JQueryMobileVersion.JQM_1_3;
+			if(!is13 && isTrue(EDITOR_ID_SEARCH_FILTER)) {
+				form = parent.addChild(TAG_FORM);
+				ElementNode input = form.addChild(TAG_INPUT);
+				input.addAttribute(ATTR_DATA_TYPE, TYPE_SEARCH);
+				int k = generateIndex(filterInputPrefix, "", 1);
+				searchInputID = filterInputPrefix + k;
+				input.addAttribute(ATTR_ID, searchInputID);
+			}			
+		}
+
+		public void addClassFilterable() {
+			if(form != null) {
+				form.addAttribute(ATTR_CLASS, CLASS_UI_FILTERABLE);
+			}
+		}
+
+		public void addDataFilter(ElementNode filterable) {
+			if(isTrue(EDITOR_ID_SEARCH_FILTER)) {
+				filterable.addAttribute(ATTR_DATA_FILTER, TRUE);
+				if(searchInputID != null) {
+					filterable.addAttribute(ATTR_DATA_INPUT, "#" + searchInputID);
+				}
+			}			
+		}
+		
+	}
+
 }

@@ -32,11 +32,15 @@ public class NewGroupedButtonsWizard extends NewJQueryWidgetWizard<NewGroupedBut
 		return new NewGroupedButtonsWizardPage();
 	}
 
+	static String FILTER_INPUT_PREFIX = "filter-input-";
+
 	protected void addContent(ElementNode parent) {
 		String iconpos = page.getEditorValue(EDITOR_ID_ICON_POS);
 		if(isTrue(EDITOR_ID_ICON_ONLY)) {
 			iconpos = ICONPOS_NOTEXT;
 		}
+		
+		SearchCapability sc = new SearchCapability(parent, "searchForControlgroup-");
 
 		ElementNode group = parent.addChild(TAG_DIV);
 		group.addAttribute(ATTR_DATA_ROLE, ROLE_GROUP);
@@ -50,6 +54,7 @@ public class NewGroupedButtonsWizard extends NewJQueryWidgetWizard<NewGroupedBut
 		if(isMini()) {
 			group.addAttribute(ATTR_DATA_MINI, TRUE);
 		}
+		sc.addDataFilter(group);
 
 		String themeValue = page.getEditorValue(EDITOR_ID_THEME);
 

@@ -32,6 +32,8 @@ public class NewTableWizard extends NewJQueryWidgetWizard<NewTableWizardPage> im
 	}
 
 	protected void addContent(ElementNode parent) {
+		SearchCapability sc = new SearchCapability(parent, "searchForTable-");
+
 		String themeValue = page.getEditorValue(EDITOR_ID_THEME);
 
 		ElementNode table = parent.addChild(TAG_TABLE);
@@ -43,6 +45,8 @@ public class NewTableWizard extends NewJQueryWidgetWizard<NewTableWizardPage> im
 		if(MODE_COLUMNTOGGLE.equals(mode)) {
 			table.addAttribute(ATTR_DATA_MODE, MODE_COLUMNTOGGLE);
 		}
+
+		sc.addDataFilter(table);
 
 		StringBuilder cls = new StringBuilder();
 		if(themeValue.length() > 0) {

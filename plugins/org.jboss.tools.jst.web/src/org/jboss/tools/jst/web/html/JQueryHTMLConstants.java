@@ -53,6 +53,7 @@ public interface JQueryHTMLConstants extends HTMLConstants {
 	public String ATTR_DATA_ICON_SHADOW = "data-iconshadow";
 	public String ATTR_DATA_ID = "data-id";
 	public String ATTR_DATA_INLINE = "data-inline";
+	public String ATTR_DATA_INPUT = "data-input";
 	public String ATTR_DATA_INSET = "data-inset";
 	public String ATTR_DATA_MINI = "data-mini";
 	public String ATTR_DATA_MODE = "data-mode";

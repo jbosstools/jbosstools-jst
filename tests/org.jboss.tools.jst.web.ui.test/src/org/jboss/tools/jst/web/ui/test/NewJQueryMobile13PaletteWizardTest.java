@@ -26,6 +26,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedButtonsWi
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedButtonsWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewJQueryWidgetWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewJQueryWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewListviewWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewListviewWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPopupWizard;
@@ -237,6 +239,11 @@ public class NewJQueryMobile13PaletteWizardTest extends NewJQueryMobilePaletteWi
 
 	public void testNewTabsWizard() {
 		//do nothing, no wizard in JQM 1.3.
+	}
+
+	protected void doTestSearchFilter(NewJQueryWidgetWizardPage wizardPage, NewJQueryWidgetWizard<?> wizard) {
+		//no common search filter in JQM 1.3. 
+		//Search filter in Listview is tested separately.
 	}
 
 }
