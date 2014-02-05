@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2010 Red Hat, Inc. 
+ * Copyright (c) 2010-2014 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -274,7 +274,10 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		}
 		
 		IKbProject kbProject = KbProjectFactory.getKbProject(file.getProject(), true);
-		
+		if (kbProject == null) {
+			return;
+		}
+			
 		List<ITagLibrary> libraries = kbProject.getAllTagLibraries();
 		ArrayList<String> names = new ArrayList<String>();
 		for(ITagLibrary l : libraries){
