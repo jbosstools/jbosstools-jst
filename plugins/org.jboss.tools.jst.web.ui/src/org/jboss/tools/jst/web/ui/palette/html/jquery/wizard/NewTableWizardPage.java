@@ -15,6 +15,7 @@ import java.beans.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.internal.properties.advanced.LayoutUtil.TwoColumns;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
@@ -37,6 +38,11 @@ public class NewTableWizardPage extends NewJQueryWidgetWizardPage {
 		addEditor(modeEditor, parent);
 
 		createIDEditor(parent, false);
+
+		if(getVersion() != JQueryMobileVersion.JQM_1_3) {
+			IFieldEditor searchFilter = JQueryFieldEditorFactory.createSearchFilterEditor();
+			addEditor(searchFilter, parent);
+		}
 
 		columns.createControl(parent, WizardMessages.columnsLabel);
 

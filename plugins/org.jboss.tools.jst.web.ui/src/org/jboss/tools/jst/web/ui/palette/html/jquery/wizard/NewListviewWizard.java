@@ -12,7 +12,6 @@ package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import org.jboss.tools.common.model.ui.editors.dnd.DropWizardMessages;
 import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.ElementNode;
-import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.JSTWebUIImages;
 
 /**
@@ -34,15 +33,10 @@ public class NewListviewWizard extends NewJQueryWidgetWizard<NewListviewWizardPa
 
 	protected void addContent(ElementNode parent) {
 		String listTagName = isTrue(EDITOR_ID_NUMBERED) ? TAG_OL : TAG_UL;
-		String dataInputId = null;
-		if(isTrue(EDITOR_ID_SEARCH_FILTER) && getVersion() != JQueryMobileVersion.JQM_1_3) {
-			ElementNode form = parent.addChild(TAG_FORM);
-			form.addAttribute(ATTR_CLASS, CLASS_UI_FILTERABLE);
-			ElementNode input = form.addChild(TAG_INPUT);
-			dataInputId = getID("listview-") + "-input";
-			input.addAttribute(ATTR_ID, dataInputId);
-			input.addAttribute(ATTR_DATA_TYPE, TYPE_SEARCH);
-		}
+
+		SearchCapability sc = new SearchCapability(parent, "searchForListview-");
+		sc.addClassFilterable();
+
 		ElementNode listRoot = parent.addChild(listTagName);
 		listRoot.addAttribute(ATTR_DATA_ROLE, ROLE_LISTVIEW);
 
@@ -53,10 +47,7 @@ public class NewListviewWizard extends NewJQueryWidgetWizard<NewListviewWizardPa
 		if(isTrue(EDITOR_ID_AUTODIVIDERS)) {
 			listRoot.addAttribute(ATTR_DATA_AUTODIVIDERS, TRUE);
 		}
-		if(isTrue(EDITOR_ID_SEARCH_FILTER)) {
-			listRoot.addAttribute(ATTR_DATA_FILTER, TRUE);
-			listRoot.addAttribute("data-input", "#" + dataInputId);
-		}
+		sc.addDataFilter(listRoot);
 		if(isTrue(EDITOR_ID_INSET)) {
 			listRoot.addAttribute(ATTR_DATA_INSET, TRUE);
 		}

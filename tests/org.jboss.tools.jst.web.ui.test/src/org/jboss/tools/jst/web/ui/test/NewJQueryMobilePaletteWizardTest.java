@@ -409,13 +409,10 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 
 	protected void doVersionSpecificTest(NewListviewWizardPage wizardPage, NewListviewWizard wizard) {
 		wizardPage.setEditorValue(EDITOR_ID_SEARCH_FILTER, TRUE);
-		assertAttrExists(wizard, ATTR_DATA_FILTER, TRUE);
 		assertAttrExists(wizard, ATTR_CLASS, CLASS_UI_FILTERABLE);
-		assertAttrExists(wizard, ATTR_DATA_TYPE, TYPE_SEARCH);
 		wizardPage.setEditorValue(EDITOR_ID_SEARCH_FILTER, FALSE);
-		assertTextDoesNotExist(wizard, ATTR_DATA_FILTER);
 		assertTextDoesNotExist(wizard, CLASS_UI_FILTERABLE);
-		assertTextDoesNotExist(wizard, TYPE_SEARCH);
+		doTestSearchFilter(wizardPage, wizard);
 	}
 
 	public void testNewDialogWizard() {
@@ -821,6 +818,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		wizardPage.setEditorValue(EDITOR_ID_CORNERS, TRUE);
 		assertTextDoesNotExist(wizard, ATTR_DATA_CORNERS);
 
+		doTestSearchFilter(wizardPage, wizard);
+
 		compareGeneratedAndInsertedText(wizard);
 	}
 
@@ -830,6 +829,20 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		assertTextDoesNotExist(wizard, CLASS_UI_FIELD_CONTAIN);
 		wizardPage.setEditorValue(EDITOR_ID_LAYOUT, LAYOUT_HORIZONTAL);
 		assertAttrExists(wizard, ATTR_CLASS, CLASS_UI_FIELD_CONTAIN);
+
+		doTestSearchFilter(wizardPage, wizard);
+	}
+
+	protected void doTestSearchFilter(NewJQueryWidgetWizardPage wizardPage, NewJQueryWidgetWizard<?> wizard) {
+		assertTextDoesNotExist(wizard, ATTR_DATA_TYPE);
+		assertTextDoesNotExist(wizard, ATTR_DATA_FILTER);
+		wizardPage.setEditorValue(EDITOR_ID_SEARCH_FILTER, TRUE);
+		assertAttrExists(wizard, ATTR_DATA_TYPE, TYPE_SEARCH);		
+		assertAttrExists(wizard, ATTR_DATA_FILTER, TRUE);		
+		wizardPage.setEditorValue(EDITOR_ID_SEARCH_FILTER, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_DATA_TYPE);
+		assertTextDoesNotExist(wizard, ATTR_DATA_FILTER);
+		assertTextDoesNotExist(wizard, TYPE_SEARCH);
 	}
 
 	public void testNewPopupWizard() {
@@ -910,6 +923,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 
 		doTestMini(wizardPage, wizard);
 
+		doTestSearchFilter(wizardPage, wizard);
+
 		compareGeneratedAndInsertedText(wizard);
 	}
 
@@ -982,6 +997,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		wizardPage.setEditorValue(EDITOR_ID_STRIPES, FALSE);
 		assertTextDoesNotExist(wizard, CLASS_TABLE_STRIPE);
 
+		doTestSearchFilter(wizardPage, wizard);
+
 		compareGeneratedAndInsertedText(wizard);
 	}
 
@@ -1009,6 +1026,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		assertAttrExists(wizard, ATTR_DATA_ICONPOS, "right");
 
 		doTestMini(wizardPage, wizard);
+
+		doTestSearchFilter(wizardPage, wizard);
 
 		compareGeneratedAndInsertedText(wizard);
 	}

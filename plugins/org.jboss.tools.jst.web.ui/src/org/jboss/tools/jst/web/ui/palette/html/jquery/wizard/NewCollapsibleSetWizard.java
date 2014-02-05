@@ -32,10 +32,14 @@ public class NewCollapsibleSetWizard extends NewJQueryWidgetWizard<NewCollapsibl
 	}
 
 	protected void addContent(ElementNode parent) {
+		SearchCapability sc = new SearchCapability(parent, "searchForCollapsibleSet-");
+
 		ElementNode group = parent.addChild(TAG_DIV);
 		group.addAttribute(ATTR_DATA_ROLE, ROLE_COLLAPSIBLE_SET);
 
 		addID("collapsible-set-", group);
+
+		sc.addDataFilter(group);
 
 		String themeValue = page.getEditorValue(EDITOR_ID_THEME);
 		if(themeValue.length() > 0) {
