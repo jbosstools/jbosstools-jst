@@ -115,7 +115,7 @@
       		type="preferencepages"
             value="org.eclipse.wst.sse.ui.preferences.jsp.occurrences"
 			target="org.jboss.tools.jst.jsp.jspincludesource"/>
-			
+
 	    <sourceViewerConfiguration
 			class="org.jboss.tools.jst.jsp.HTMLTextViewerConfiguration"
 	        target="org.eclipse.wst.html.core.htmlsource"/>
@@ -145,16 +145,12 @@
 			class="org.eclipse.wst.xml.ui.internal.projection.XMLFoldingStrategy"
 			target="org.eclipse.wst.html.core.htmlsource" />
 		<provisionalConfiguration
-			type="org.eclipse.jface.text.quickassist.IQuickAssistProcessor"
-			class="org.eclipse.wst.xml.ui.internal.correction.XMLQuickAssistProcessor"
-			target="org.eclipse.wst.html.HTML_DEFAULT" />
-		<provisionalConfiguration
 			type="autoeditstrategy"
 			class="org.eclipse.wst.html.ui.internal.autoedit.StructuredAutoEditStrategyHTML"
 			target="org.eclipse.wst.html.HTML_DEFAULT, org.eclipse.wst.html.HTML_DECLARATION" />
 	    <provisionalDefinition
 			type="preferencepages"
-			value="org.eclipse.wst.html.ui.preferences.html, org.eclipse.wst.html.ui.preferences.source, org.eclipse.wst.html.ui.preferences.templates, org.eclipse.wst.html.ui.preferences.styles,org.eclipse.wst.html.ui.preferences.validation, org.eclipse.wst.html.ui.preferences.contentassist"
+			value="org.eclipse.wst.html.ui.preferences.html, org.eclipse.wst.html.ui.preferences.source, org.eclipse.wst.html.ui.preferences.templates, org.eclipse.wst.html.ui.preferences.styles,org.eclipse.wst.html.ui.preferences.validation,org.jboss.tools.jst.jsp.internal.html.ui.preferences.attribute.validation,org.eclipse.wst.html.ui.preferences.contentassist"
 			target="org.eclipse.wst.html.core.htmlsource" />
 		<provisionalDefinition
       		type="showintarget"
@@ -250,13 +246,26 @@
 				type="foldingstrategy"
 				class="org.eclipse.wst.xml.ui.internal.projection.XMLFoldingStrategy"
 				target="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor" />
+
+  		<provisionalConfiguration
+			type="org.eclipse.jface.text.quickassist.IQuickAssistProcessor"
+			class="org.jboss.tools.jst.jsp.internal.html.text.correction.HTMLAttributeValidationQuickFixProcessor"
+			target="org.eclipse.wst.html.HTML_DEFAULT" />
 	
 	  <documentationTextHover class="org.jboss.tools.jst.jsp.jspeditor.info.FaceletTagInfoHoverProcessor" target="org.eclipse.wst.html.HTML_DEFAULT" /> 
 	  <documentationTextHover class="org.jboss.tools.jst.jsp.jspeditor.info.FaceletTagInfoHoverProcessor" target="org.eclipse.wst.xml.XML_DEFAULT" />
 	  <documentationTextHover class="org.jboss.tools.jst.jsp.jspeditor.info.FaceletTagInfoHoverProcessor" target="org.eclipse.wst.sse.ST_DEFAULT" />
 	  <documentationTextHover class="org.jboss.tools.jst.jsp.jspeditor.info.FaceletTagInfoHoverProcessor" target="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
 	  <documentationTextHover class="org.jboss.tools.jst.jsp.jspeditor.info.FaceletTagInfoHoverProcessor" target="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
-	  
+	</extension>
+
+	<extension point="org.eclipse.ui.preferencePages">
+		<page
+			name="%HTML_AttributeValidation"
+			category="org.eclipse.wst.html.ui.preferences.html"
+			class="org.jboss.tools.jst.jsp.internal.html.preferences.HTMLAttributeValidationPreferencePage"
+			id="org.jboss.tools.jst.jsp.internal.html.ui.preferences.attribute.validation">
+		</page>
 	</extension>
 
    <extension
@@ -277,6 +286,20 @@
 			category="org.eclipse.jst.jsp.ui.preferences.jsp"
 			class="org.jboss.tools.jst.jsp.preferences.JSPOccurrencesPreferencePage"
 			id="org.eclipse.wst.sse.ui.preferences.jsp.occurrences">
+		</page>
+	</extension>
+
+	<extension point="org.eclipse.ui.propertyPages">
+		<page
+			name="%HTML_Property_AttributeValidation"
+			class="org.jboss.tools.jst.jsp.internal.html.preferences.HTMLAttributeValidationPreferencePage"
+			id="org.jboss.tools.jst.jsp.internal.html.ui.propertyPage.project.attribute.validation"
+			category="ValidationPropertiesPage">
+			<enabledWhen>
+				<adapt type="org.eclipse.core.resources.IProject">
+					
+				</adapt>
+			</enabledWhen>
 		</page>
 	</extension>
 
