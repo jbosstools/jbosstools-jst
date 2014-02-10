@@ -30,6 +30,7 @@ import org.eclipse.jface.text.IDocumentPartitioner;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSDocument;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSModel;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSNode;
+import org.eclipse.wst.css.core.internal.provisional.document.ICSSNodeList;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSStyleSheet;
 import org.eclipse.wst.css.core.internal.text.StructuredTextPartitionerForCSS;
 import org.eclipse.wst.sse.core.StructuredModelManager;
@@ -45,6 +46,8 @@ import org.w3c.dom.css.CSSRuleList;
 import org.w3c.dom.css.CSSStyleDeclaration;
 import org.w3c.dom.css.CSSStyleRule;
 import org.w3c.dom.css.CSSStyleSheet;
+import org.eclipse.wst.css.core.internal.document.CSSModelImpl;
+import org.eclipse.wst.css.core.internal.document.CSSNodeImpl;
 
 /**
  * CSS class model.
@@ -107,7 +110,8 @@ public class CSSModel implements ICSSDialogModel {
 								IStructuredPartitioning.DEFAULT_STRUCTURED_PARTITIONING,
 								partitioner);
 				partitioner.connect(model.getStructuredDocument());
-
+				initStyleSheet();
+				oldText = model.getStructuredDocument().get();
 			}
 		} catch (IOException e) {
 			WebUiPlugin.getDefault().logError(e.getMessage());
@@ -165,6 +169,25 @@ public class CSSModel implements ICSSDialogModel {
 				if (rule instanceof IndexedRegion)
 					return (IndexedRegion) rule;
 
+		}
+		return null;
+	}
+	
+	private void initStyleSheet(){
+		styleSheet = findStyleSheet((ICSSNode)((CSSModelImpl)model).getDocument());
+	}
+	
+	private CSSStyleSheet findStyleSheet(ICSSNode node){
+		if(node.getNodeType() == ICSSNode.STYLESHEET_NODE){
+			return (CSSStyleSheet)node;
+		}
+		ICSSNodeList list = node.getChildNodes();
+		for(int index = 0; index < list.getLength(); index++){
+			ICSSNode child = list.item(index);
+			CSSStyleSheet result = findStyleSheet(child);
+			if(result != null){
+				return result;
+			}
 		}
 		return null;
 	}
