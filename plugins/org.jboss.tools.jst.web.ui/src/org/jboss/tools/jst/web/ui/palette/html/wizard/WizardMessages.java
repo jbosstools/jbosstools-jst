@@ -97,6 +97,11 @@ public class WizardMessages extends NLS {
 	public static String headLabel;
 	public static String headerLabel;
 	public static String headersLabel;
+	public static String headingLayoutLable;
+	public static String headingLayoutDefaultLabel;
+	public static String headingLayoutCombinedLabel;
+	public static String headingLayoutAttachedLabel;
+	public static String headingSizeLabel;
 	public static String heightLabel;
 	public static String hideLabelLabel;
 	public static String highLabel;
@@ -295,6 +300,9 @@ public class WizardMessages extends NLS {
 
 	public static String newTabsTitle;
 	public static String newTabsDescription;
+
+	public static String newHeadingTitle;
+	public static String newHeadingDescription;
 
 	public static String newFormWizardTitle;
 	public static String newFormWizardDescription;

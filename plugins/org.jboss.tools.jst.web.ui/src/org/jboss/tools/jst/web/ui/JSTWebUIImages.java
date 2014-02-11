@@ -47,6 +47,7 @@ public class JSTWebUIImages extends CommonUIImages{
 	public static String PANEL_IMAGE    = WIZARDS_PATH + "PanelWizBan.png"; //$NON-NLS-1$
 	public static String TABLE_IMAGE    = WIZARDS_PATH + "TableWizBan.png"; //$NON-NLS-1$
 	public static String TABS_IMAGE    = WIZARDS_PATH + "TabsWizBan.png"; //$NON-NLS-1$
+	public static String HEADING_IMAGE    = WIZARDS_PATH + "HeadingWizBan.png"; //$NON-NLS-1$
 	public static String FORM_IMAGE    = WIZARDS_PATH + "FormWizBan.png"; //$NON-NLS-1$
 	public static String IMG_IMAGE    = WIZARDS_PATH + "ImageWizBan.png"; //$NON-NLS-1$
 	public static String VIDEO_IMAGE    = WIZARDS_PATH + "VideoWizBan.png"; //$NON-NLS-1$

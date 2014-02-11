@@ -1305,6 +1305,44 @@ public class JQueryFieldEditorFactory implements JQueryConstants {
 				WizardDescriptions.tabsLayout);
 	}
 
+	static String[] HEADING_LAYOUT_LIST = {HEADING_LAYOUT_DEFAULT, HEADING_LAYOUT_COMBINED, HEADING_LAYOUT_ATTACHED};
+	static String[] HEADING_LAYOUT_LABEL_LIST = {WizardMessages.headingLayoutDefaultLabel, WizardMessages.headingLayoutCombinedLabel,  WizardMessages.headingLayoutAttachedLabel};
+
+	/**
+	 * Used in New Heading wizard.
+	 * @return
+	 */
+	public static IFieldEditor createHeadingLayoutEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(
+				EDITOR_ID_HEADING_LAYOUT, 
+				WizardMessages.headingLayoutLable, 
+				toList(HEADING_LAYOUT_LABEL_LIST), 
+				toList(HEADING_LAYOUT_LIST), 
+				HEADING_LAYOUT_DEFAULT,
+				WizardDescriptions.headingLayout);
+	}
+
+	/**
+	 * Used in New Heading wizard.
+	 * @return
+	 */
+	public static IFieldEditor createHeadingSizeEditor() {
+		String[] values = new String[]{"h1", "h2", "h3", "h4", "h5", "h6"};
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_HEADING_SIZE, WizardMessages.headingSizeLabel, 
+				toList(values), "h3", false, "");
+	}
+
+	public static IFieldEditor createHeadingContentThemeEditor() {
+		String[] themes = THEMES_1_4;
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_HEADING_CONTENT_THEME, WizardMessages.themeLabel, toList(themes), "", true,
+				WizardDescriptions.widgetTheme);
+	}
+
+	public static IFieldEditor createHeadingContentCornersEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_HEADING_CONTENT_CORNERS, WizardMessages.cornersLabel, true,
+				WizardDescriptions.widgetCorners);
+	}
+
 	/**
 	 * Used in New Tabs wizard.
 	 * @return

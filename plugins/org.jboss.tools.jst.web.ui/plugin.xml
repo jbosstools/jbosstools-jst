@@ -831,6 +831,7 @@
       <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/1.page/8.Collapsible_Content_Block" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCollapsibleWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/1.page/9.Collapsible_Set" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCollapsibleSetWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/1.page/91.Tabs" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTabsWizard"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/1.page/92.Heading" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeadingWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/2.lists/1.Header_Bar" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/2.lists/2.Footer_Bar" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFooterWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/2.lists/3.Navbar" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewNavbarWizard"/>

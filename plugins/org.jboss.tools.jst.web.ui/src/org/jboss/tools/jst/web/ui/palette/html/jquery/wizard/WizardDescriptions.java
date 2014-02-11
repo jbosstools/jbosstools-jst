@@ -93,6 +93,8 @@ public class WizardDescriptions extends NLS {
 	public static String headerRightButton;
 	public static String headerTitle;
 
+	public static String headingLayout;
+
 	public static String hideLabel;
 
 	public static String href;

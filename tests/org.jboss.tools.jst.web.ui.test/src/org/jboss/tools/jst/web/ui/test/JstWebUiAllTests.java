@@ -28,16 +28,16 @@ public class JstWebUiAllTests {
 	public static Test suite() {
 		TestSuite suite = new TestSuite(JstWebUiAllTests.class.getName());
 
-//		suite.addTest(JstJspAllTests.suite());
-//
-//		suite.addTest(JstTextExtAllTests.suite());
-//
-//		suite.addTest(CSSAllTests.suite());
+		suite.addTest(JstJspAllTests.suite());
+
+		suite.addTest(JstTextExtAllTests.suite());
+
+		suite.addTest(CSSAllTests.suite());
 
 		TestSuite s = new TestSuite("Palette content");
-//		s.addTestSuite(JBossToolsEditorTest.class);
-//		s.addTestSuite(InsertJSCSSPaletteEntryTest.class);
-//		s.addTestSuite(InsertJSCSS14PaletteEntryTest.class);
+		s.addTestSuite(JBossToolsEditorTest.class);
+		s.addTestSuite(InsertJSCSSPaletteEntryTest.class);
+		s.addTestSuite(InsertJSCSS14PaletteEntryTest.class);
 		s.addTestSuite(NewJQueryMobilePaletteWizardTest.class);
 		s.addTestSuite(NewJQueryMobile13PaletteWizardTest.class);
 		s.addTestSuite(JQueryMobileVersionSwitchPaletteTest.class);

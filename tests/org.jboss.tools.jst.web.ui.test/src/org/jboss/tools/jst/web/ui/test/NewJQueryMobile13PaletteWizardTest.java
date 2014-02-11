@@ -241,6 +241,10 @@ public class NewJQueryMobile13PaletteWizardTest extends NewJQueryMobilePaletteWi
 		//do nothing, no wizard in JQM 1.3.
 	}
 
+	public void testNewHeadingWizard() {
+		//do nothing, no wizard in JQM 1.3.
+	}
+
 	protected void doTestSearchFilter(NewJQueryWidgetWizardPage wizardPage, NewJQueryWidgetWizard<?> wizard) {
 		//no common search filter in JQM 1.3. 
 		//Search filter in Listview is tested separately.
