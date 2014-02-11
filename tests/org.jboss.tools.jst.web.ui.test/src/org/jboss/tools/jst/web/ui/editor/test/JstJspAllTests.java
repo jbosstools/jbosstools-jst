@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2013 Red Hat, Inc.
+ * Copyright (c) 2007-2014 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -23,6 +23,7 @@ import org.jboss.tools.jst.web.ui.editor.test.ca.JstJspJbide1585Test;
 import org.jboss.tools.jst.web.ui.editor.test.ca.JstJspJbide1641Test;
 import org.jboss.tools.jst.web.ui.editor.test.ca.JstJspNonAutomaticProposalInsertionTest;
 import org.jboss.tools.jst.web.ui.editor.test.commands.KeyBindingsTest;
+import org.jboss.tools.jst.web.ui.editor.test.quickassist.JstJspQuickAssistTest;
 import org.jboss.tools.jst.web.ui.editor.test.selbar.SelectionBarTest;
 import org.jboss.tools.test.util.ProjectImportTestSetup;
 
@@ -30,6 +31,7 @@ public class JstJspAllTests {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for org.jboss.tools.jst.web.ui.editor.test"); //$NON-NLS-1$
+
 		suite.addTest(new ProjectImportTestSetup(new TestSuite(
 				KeyBindingsTest.class,
 				Jbide6061Test.class,
@@ -55,6 +57,11 @@ public class JstJspAllTests {
 				"JsfJbide1791Test")); //$NON-NLS-1$
 
 		suite.addTestSuite(JspPreferencesPageTest.class);
+
+		suite.addTest(new ProjectImportTestSetup(new TestSuite(
+				JstJspQuickAssistTest.class),
+				"org.jboss.tools.jst.web.ui.test", "projects/StaticWebProject", //$NON-NLS-1$ //$NON-NLS-2$
+				"StaticWebProject")); //$NON-NLS-1$
 
 		return suite;
 	}
