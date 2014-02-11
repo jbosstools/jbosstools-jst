@@ -80,6 +80,12 @@
                  STARTTEXT="&lt;div data-role=&quot;tabs&quot; id=&quot;my-tabs&quot;>\n &lt;/div>"
                  model-entity="SharableMacroHTML"/>
 
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Heading:&lt;/b>&lt;br>\n&lt;code>&amp;lt;h3 >&lt;/code>&lt;br>\n...&lt;br>\n&lt;code>&amp;lt;/h3>&lt;/code>\n&lt;/html>"
+                 ENDTEXT="" ICON="%Icons%/Mobile/jQuery/heading"
+                 NAME="92.Heading" REFORMAT="yes" SCOPE="project"
+                 STARTTEXT="&lt;h3>\n &lt;/h3>"
+                 model-entity="SharableMacroHTML"/>
+
      </GroupHTML>
      
      <GroupHTML HIDDEN="no" ICON="" NAME="2.lists"

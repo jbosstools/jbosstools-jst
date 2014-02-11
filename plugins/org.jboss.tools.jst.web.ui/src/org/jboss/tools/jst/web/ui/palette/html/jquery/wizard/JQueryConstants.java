@@ -37,6 +37,10 @@ public interface JQueryConstants extends JQueryHTMLConstants {
 	public String CLICK = "click";
 	public String MOUSEOVER = "mouseover";
 
+	public String HEADING_LAYOUT_DEFAULT = "Default";
+	public String HEADING_LAYOUT_COMBINED = "Combined";
+	public String HEADING_LAYOUT_ATTACHED = "Attached";
+
 	/**
 	 * Palette category id.
 	 */
@@ -171,4 +175,8 @@ public interface JQueryConstants extends JQueryHTMLConstants {
 	public String EDITOR_ID_TABS_ACTIVATION = "tabs-activation";
 
 	public String EDITOR_ID_BAR_POSITION = "bar-position";
+	public String EDITOR_ID_HEADING_LAYOUT = "heading-layout";
+	public String EDITOR_ID_HEADING_SIZE = "heading-size";
+	public String EDITOR_ID_HEADING_CONTENT_THEME = "heading-content-theme";
+	public String EDITOR_ID_HEADING_CONTENT_CORNERS = "heading-content-corners";
 }

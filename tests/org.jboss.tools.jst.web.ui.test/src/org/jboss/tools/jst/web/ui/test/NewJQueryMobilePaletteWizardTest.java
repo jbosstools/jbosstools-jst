@@ -49,6 +49,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedCheckboxe
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedCheckboxesWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeadingWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeadingWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewImageWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewImageWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewJQueryWidgetWizard;
@@ -1252,6 +1254,35 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		wizardPage.setEditorValue(EDITOR_ID_TABS_ANIMATED, FALSE);
 		assertTextDoesNotExist(wizard, "show");
 		
+		compareGeneratedAndInsertedText(wizard);
+	}
+
+	public void testNewHeadingWizard() {
+		IWizardPage currentPage = runToolEntry("Heading", true);
+
+		assertTrue(currentPage instanceof NewHeadingWizardPage);
+
+		NewHeadingWizardPage wizardPage = (NewHeadingWizardPage)currentPage;
+		NewHeadingWizard wizard = (NewHeadingWizard)wizardPage.getWizard();
+
+		assertTextExists(wizard, "<h3 id=\"heading-1\" class=\"ui-bar ui-bar-a ui-corner-all\">");
+		assertTextExists(wizard, "<div class=\"ui-body ui-body-a ui-corner-all\">");
+		wizardPage.setEditorValue(EDITOR_ID_HEADING_SIZE, "h5");
+		assertTextExists(wizard, "<h5");
+		wizardPage.setEditorValue(EDITOR_ID_HEADING_SIZE, "h3");
+		assertTextExists(wizard, "<h3");
+		wizardPage.setEditorValue(EDITOR_ID_CORNERS, FALSE);
+		assertAttrExists(wizard, ATTR_CLASS, "ui-bar ui-bar-a");
+		wizardPage.setEditorValue(EDITOR_ID_CORNERS, TRUE);
+		assertAttrExists(wizard, ATTR_CLASS, "ui-bar ui-bar-a ui-corner-all");
+
+		wizardPage.setEditorValue(EDITOR_ID_HEADING_LAYOUT, HEADING_LAYOUT_COMBINED);
+		assertTextExists(wizard, "<div id=\"heading-1\" class=\"ui-body ui-body-a ui-corner-all\">");
+
+		wizardPage.setEditorValue(EDITOR_ID_HEADING_LAYOUT, HEADING_LAYOUT_ATTACHED);
+		assertTextExists(wizard, "<div id=\"heading-1\" class=\"ui-corner-all custom-corners\">");
+
+		compareGeneratedAndInsertedText(wizard);
 	}
 
 	protected void compareGeneratedAndInsertedText(NewJQueryWidgetWizard<?> wizard) {
@@ -1268,7 +1299,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	void assertTextExists(AbstractNewHTMLWidgetWizard wizard, String text) {
-		assertTrue(wizard.getTextForTextView().indexOf(text) > 0);
+		assertTrue(wizard.getTextForTextView().indexOf(text) >= 0);
 	}
 
 	void assertTextDoesNotExist(AbstractNewHTMLWidgetWizard wizard, String text) {

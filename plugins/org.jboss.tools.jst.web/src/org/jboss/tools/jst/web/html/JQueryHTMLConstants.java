@@ -128,6 +128,10 @@ public interface JQueryHTMLConstants extends HTMLConstants {
 
 	public String CLASS_UI_MINI = "ui-mini";
 	public String CLASS_UI_ALT_ICON = "ui-alt-icon";
+	public String CLASS_UI_BAR = "ui-bar";
+	public String CLASS_UI_BODY = "ui-body";
+	public String CLASS_UI_BAR_PREFIX = "ui-bar-";
+	public String CLASS_UI_BODY_PREFIX = "ui-body-";
 	public String CLASS_UI_BTN = "ui-btn";
 	public String CLASS_UI_BTN_ICON_NOTEXT = "ui-btn-icon-notext";
 	public String CLASS_UI_BTN_INLINE = "ui-btn-inline";
