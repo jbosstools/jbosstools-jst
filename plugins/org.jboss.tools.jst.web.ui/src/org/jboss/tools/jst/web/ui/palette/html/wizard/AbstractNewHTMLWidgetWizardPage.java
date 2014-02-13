@@ -653,7 +653,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		for (int i = 0; i < text.length(); i++) {
 			char ch = text.charAt(i);
 			if(ch == '<' && !inQuota) {
-				int n = lookUp(text, i, inTag);
+				int n = lookUp(text, i, inTag, false);
 				int w = gc.stringExtent(sb.substring(offset, sb.length()) + text.substring(i, n)).x;
 				if(w > max) {
 					sb.append("\n");
@@ -670,16 +670,18 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 			} else if(ch == '\n') {
 				offset = sb.length();
 			}
-			if(sb.length() > offset && !inQuota && (ch == ' ' || ch == '>')) {
-				int l = lookUp(text, i + 1, inTag);
+			if(sb.length() > offset /*&& !inQuota*/ && (ch == ' ' || ch == '>')) {
+				int l = lookUp(text, i + 1, inTag, inQuota);
 				int w = gc.stringExtent(sb.substring(offset, sb.length()) + text.substring(i, l)).x;
 				if(l > i + 1 && w > max) {
 					sb.append("\n");
 					offset = sb.length();
 					if (inTag) {
 						String indent = "        ";
+						if(inQuota) indent += "    ";
 						sb.append(indent);
 					}
+					
 				}
 			}
 		}
@@ -687,9 +689,8 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		return sb.toString();
 	}
 
-	protected int lookUp(String text, int pos, boolean inTag) {
+	protected int lookUp(String text, int pos, boolean inTag, boolean inQuota) {
 		int res = pos;
-		boolean inQuota = false;
 		for (; res < text.length(); res++) {
 			char ch = text.charAt(res);
 			if(ch == '\n') return res;
@@ -699,6 +700,8 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 			if(!inQuota) {
 				if(ch == ' ' || (res > pos && ch == '<')) return res;
 				if(ch == '>') return res + 1;
+			} else {
+				if(ch == ' ' && res > pos + 1) return res;
 			}
 		}
 		return res;
