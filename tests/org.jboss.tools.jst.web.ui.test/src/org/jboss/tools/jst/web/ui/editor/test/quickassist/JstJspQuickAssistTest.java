@@ -10,35 +10,29 @@
  ******************************************************************************/
 package org.jboss.tools.jst.web.ui.editor.test.quickassist;
 
-import java.text.MessageFormat;
-
 import junit.framework.TestCase;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.quickassist.IQuickAssistAssistant;
-import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewer;
 import org.eclipse.jface.text.source.TextInvocationContext;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.Workbench;
 import org.eclipse.ui.part.FileEditorInput;
-import org.eclipse.wst.html.core.internal.HTMLCoreMessages;
-import org.eclipse.wst.sse.ui.internal.reconcile.TemporaryAnnotation;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor;
+import org.jboss.tools.test.util.JobUtils;
 import org.jboss.tools.test.util.ProjectImportTestSetup;
 
 public class JstJspQuickAssistTest extends TestCase {
-	public static final String PROBLEM_TYPE = "org.jboss.tools.cdi.core.cdiproblem"; //$NON-NLS-1$
 	private static final String PROJECT_NAME = "StaticWebProject";
 	private static final String PAGE_NAME = "WebContent/quickassist/html5.html";
 	private static final String TEST_STRING = "ng-tro-lo-lo";
@@ -61,7 +55,6 @@ public class JstJspQuickAssistTest extends TestCase {
 				TEST_QUICKQIX_CLASSNAME);
 	}
 	
-	
 	private void checkProposalExistance(IProject project, String fileName, String str, int id, 
 					String proposalClassName) throws CoreException {
 		IFile file = project.getFile(fileName);
@@ -69,26 +62,31 @@ public class JstJspQuickAssistTest extends TestCase {
 
 		IEditorInput input = new FileEditorInput(file);
 		IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().openEditor(input,	"org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor", true);
-		ISourceViewer viewer = getViewer(editor);
+		final ISourceViewer viewer = getViewer(editor);
 		
 		try{
 			IDocument document = viewer.getDocument();
 			
 			String text = document.get();
-
-			
-			int offset = text.indexOf(str);
-			
+			final int offset = text.indexOf(str);
+			final int length = str.length();
 			assertTrue("String - "+str+" not found", offset > 0);
-			
-			int length = str.length();
-			Annotation annotation = createAnnotation(document, id, offset, length);
-			
-			Position position = new Position(offset, length);
-			
-			IQuickAssistAssistant assiatant = ((SourceViewer)viewer).getQuickAssistAssistant();
-			TextInvocationContext ctx = new TextInvocationContext(viewer, offset, length);
-			ICompletionProposal[] proposals = assiatant.getQuickAssistProcessor().computeQuickAssistProposals(ctx);
+			final Object[] result = new Object[1]; 
+			document.set(text); // To make a change in editor
+			JobUtils.waitForIdle();
+		
+			Display.getDefault().syncExec(new Runnable() {
+				@Override
+				public void run() {
+					IQuickAssistAssistant assiatant = ((SourceViewer)viewer).getQuickAssistAssistant();
+					TextInvocationContext ctx = new TextInvocationContext(viewer, offset, length);
+					ICompletionProposal[] proposals = assiatant.getQuickAssistProcessor().computeQuickAssistProposals(ctx);
+					result[0] = proposals;
+				}
+			});
+			assertNotNull(result[0]);
+			assertTrue(result[0] instanceof ICompletionProposal[]);
+			ICompletionProposal[] proposals = (ICompletionProposal[])result[0];
 			
 			for(ICompletionProposal proposal : proposals){
 				if (proposal.getClass().getName().equals(proposalClassName)) {
@@ -115,23 +113,5 @@ public class JstJspQuickAssistTest extends TestCase {
 			fail("editor must be instanceof EditorPartWrapper, but was "+editor.getClass());
 		}
 		return null;
-	}
-
-	protected Annotation createAnnotation(IDocument doc, int quickFixId, int offset, int length){
-		String text = "";
-		try {
-			text = MessageFormat.format(HTMLCoreMessages.Undefined_attribute_name___ERROR_, doc.get(offset, length));
-		} catch (BadLocationException e) {
-			fail(e.getMessage());
-		}
-		@SuppressWarnings("restriction")
-		TemporaryAnnotation annotation = new TemporaryAnnotation(
-				new Position(offset, length), 
-				TemporaryAnnotation.ANNOT_WARNING, 
-				text, 
-				null, 
-				quickFixId);
-		
-		return annotation;
 	}
 }
