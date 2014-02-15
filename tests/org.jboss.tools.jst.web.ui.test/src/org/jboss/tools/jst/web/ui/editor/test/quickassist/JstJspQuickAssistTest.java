@@ -21,7 +21,6 @@ import org.eclipse.jface.text.quickassist.IQuickAssistAssistant;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewer;
 import org.eclipse.jface.text.source.TextInvocationContext;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
@@ -29,7 +28,6 @@ import org.eclipse.ui.internal.Workbench;
 import org.eclipse.ui.part.FileEditorInput;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor;
-import org.jboss.tools.test.util.JobUtils;
 import org.jboss.tools.test.util.ProjectImportTestSetup;
 
 public class JstJspQuickAssistTest extends TestCase {
@@ -71,22 +69,10 @@ public class JstJspQuickAssistTest extends TestCase {
 			final int offset = text.indexOf(str);
 			final int length = str.length();
 			assertTrue("String - "+str+" not found", offset > 0);
-			final Object[] result = new Object[1]; 
-			document.set(text); // To make a change in editor
-			JobUtils.waitForIdle();
-		
-			Display.getDefault().syncExec(new Runnable() {
-				@Override
-				public void run() {
-					IQuickAssistAssistant assiatant = ((SourceViewer)viewer).getQuickAssistAssistant();
-					TextInvocationContext ctx = new TextInvocationContext(viewer, offset, length);
-					ICompletionProposal[] proposals = assiatant.getQuickAssistProcessor().computeQuickAssistProposals(ctx);
-					result[0] = proposals;
-				}
-			});
-			assertNotNull(result[0]);
-			assertTrue(result[0] instanceof ICompletionProposal[]);
-			ICompletionProposal[] proposals = (ICompletionProposal[])result[0];
+
+			IQuickAssistAssistant assiatant = ((SourceViewer)viewer).getQuickAssistAssistant();
+			TextInvocationContext ctx = new TextInvocationContext(viewer, offset, length);
+			ICompletionProposal[] proposals = assiatant.getQuickAssistProcessor().computeQuickAssistProposals(ctx);
 			
 			for(ICompletionProposal proposal : proposals){
 				if (proposal.getClass().getName().equals(proposalClassName)) {
