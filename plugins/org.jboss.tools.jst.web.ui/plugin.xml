@@ -1181,7 +1181,7 @@
          <menuContribution 
                locationURI="menu:navigate?endof=show.ext">
                <command label="%Toggle.Selection.Bar"
-                     commandId="org.jboss.tools.jst.jsp.commands.showSelectionBar"
+                     commandId="org.jboss.tools.jst.web.ui.internal.editor.commands.showSelectionBar"
                      id="org.jboss.tools.jst.jsp.menus.showSelectionBar"
                      style="toggle"
                      mnemonic="S">
@@ -1282,7 +1282,7 @@
 	            	</visibleWhen>
               </command>
               <command
-                     commandId="org.jboss.tools.jst.jsp.commands.showSelectionBar"
+                     commandId="org.jboss.tools.jst.web.ui.internal.editor.commands.showSelectionBar"
                      icon="icons/selbar.gif"
                      id="org.jboss.tools.jst.jsp.toolbars.showSelectionBar"
                      style="toggle"
@@ -1392,7 +1392,7 @@
        </handler>
        <handler
              class="org.jboss.tools.jst.web.ui.internal.editor.selection.bar.SelectionBarHandler"
-             commandId="org.jboss.tools.jst.jsp.commands.showSelectionBar">
+             commandId="org.jboss.tools.jst.web.ui.internal.editor.commands.showSelectionBar">
        </handler>
        <handler
              class="org.jboss.tools.jst.web.ui.internal.editor.i18n.handlers.I18nHandler"
@@ -1532,7 +1532,7 @@
      </category>
      <command
            categoryId="org.jboss.tools.jst.jsp.commands.category"
-           id="org.jboss.tools.jst.jsp.commands.showSelectionBar"
+           id="org.jboss.tools.jst.web.ui.internal.editor.commands.showSelectionBar"
            name="%Toggle.Selection.Bar">
            <state
                  class="org.eclipse.ui.handlers.RegistryToggleState:true"
@@ -1554,7 +1554,7 @@
            sequence="Ctrl+Shift+C">
      </key>
      <key
-           commandId="org.jboss.tools.jst.jsp.commands.showSelectionBar"
+           commandId="org.jboss.tools.jst.web.ui.internal.editor.commands.showSelectionBar"
            contextId="org.eclipse.ui.contexts.window"
            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
            sequence="M1+6">
