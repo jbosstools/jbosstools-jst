@@ -1532,7 +1532,7 @@
      </category>
      <command
            categoryId="org.jboss.tools.jst.jsp.commands.category"
-           id="org.jboss.tools.jst.jsp.commands.showSelectionBar"
+           id="org.jboss.tools.jst.web.ui.internal.editor.commands.showSelectionBar"
            name="%Toggle.Selection.Bar">
            <state
                  class="org.eclipse.ui.handlers.RegistryToggleState:true"
