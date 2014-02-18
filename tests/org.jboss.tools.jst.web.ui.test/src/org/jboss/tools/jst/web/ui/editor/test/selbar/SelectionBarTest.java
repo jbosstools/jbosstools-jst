@@ -20,6 +20,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPMultiPageEditor;
+import org.jboss.tools.jst.web.ui.internal.editor.selection.bar.SelectionBarHandler;
 import org.jboss.tools.test.util.JobUtils;
 import org.jboss.tools.test.util.ProjectImportTestSetup;
 import org.jboss.tools.test.util.WorkbenchUtils;
@@ -39,8 +40,7 @@ public class SelectionBarTest extends TestCase{
 		ICommandService commandService =
 			(ICommandService) PlatformUI.getWorkbench()
 				.getService(ICommandService.class);
-		toggleSelBarCommand = commandService.getCommand(
-		"org.jboss.tools.jst.jsp.commands.showSelectionBar"); //$NON-NLS-1$
+		toggleSelBarCommand = commandService.getCommand(SelectionBarHandler.COMMAND_ID); //$NON-NLS-1$
 		toggleSelBarState= toggleSelBarCommand
 		.getState("org.eclipse.ui.commands.toggleState"); //$NON-NLS-1$
     }
