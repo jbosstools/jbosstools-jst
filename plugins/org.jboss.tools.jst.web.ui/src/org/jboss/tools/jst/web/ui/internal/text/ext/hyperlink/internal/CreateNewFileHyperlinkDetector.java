@@ -68,7 +68,9 @@ public class CreateNewFileHyperlinkDetector extends AbstractHyperlinkDetector {
 				if(pair != null){
 					if(pair.getAttribute() != null){
 						ITextRegion textRegion = pair.getAttribute().getValueRegion();
-						if(region.getOffset() >= (pair.getNode().getStartOffset() + textRegion.getStart()) && region.getOffset() <= (pair.getNode().getStartOffset() + textRegion.getEnd())){
+						if(textRegion != null && 
+								region.getOffset() >= (pair.getNode().getStartOffset() + textRegion.getStart()) && 
+								region.getOffset() <= (pair.getNode().getStartOffset() + textRegion.getEnd())){
 							Region nodeRegion = new Region(pair.getNode().getStartOffset() +textRegion.getStart()+1, textRegion.getLength()-2);
 							String attrValue = pair.getAttribute().getNodeValue();
 							if(validateName(attrValue)){

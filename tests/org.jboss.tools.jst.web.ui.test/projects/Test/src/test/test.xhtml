@@ -3,7 +3,7 @@ anyfile.js
 </AnyTag>
 
 <anytag>anyfolder/anyfile.jsp</anytag>
-
+<anytag no-value-attribute />
 <anytag attribute="./anyfile.htm">
 /anyfolder/anyfile.xhtml
 </anytag>
