@@ -49,8 +49,6 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.jboss.tools.jst.jsp.internal.html.text.HTMLCoreNewPreferences;
 import org.jboss.tools.jst.jsp.internal.html.text.HTMLUIMessages;
 import org.jboss.tools.jst.jsp.internal.html.text.StringMatcher;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.Version;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 
@@ -154,6 +152,10 @@ public class HTMLAttributeValidationQuickFixProcessor implements IQuickAssistPro
 							fLookupOrder = new IScopeContext[] {projectScope, new InstanceScope(), new DefaultScope()};
 					}
 					
+					boolean ignore = fPreferenceService.getBoolean(
+							getPreferenceNodeQualifier(), HTMLCoreNewPreferences.IGNORE_ATTRIBUTE_NAMES, 
+							HTMLCoreNewPreferences.IGNORE_ATTRIBUTE_NAMES_DEFAULT, fLookupOrder);
+
 					String ignoreList = fPreferenceService.getString(
 							getPreferenceNodeQualifier(), HTMLCoreNewPreferences.ATTRIBUTE_NAMES_TO_IGNORE, 
 							HTMLCoreNewPreferences.ATTRIBUTE_NAMES_TO_IGNORE_DEFAULT, fLookupOrder);
@@ -171,7 +173,8 @@ public class HTMLAttributeValidationQuickFixProcessor implements IQuickAssistPro
 					String name = getAttributeName(node, offset);
 					if (name == null) continue;
 					
-					if (!result.contains(name.toLowerCase())) {
+					name = name.toLowerCase();
+					if (canBeIgnored(ignore, result, name)) {
 						IgnoreAttributeNameCompletionProposal p = new IgnoreAttributeNameCompletionProposal(
 								name, offset, 
 								hasRequiredAPI ? 
@@ -190,20 +193,19 @@ public class HTMLAttributeValidationQuickFixProcessor implements IQuickAssistPro
 						
 						// Do not continue creating proposals for the rest of patterns if 
 						// a more common pattern is already created
-						if (result.contains(namePattern.toString().toLowerCase())) 
+						if (ignore && result.contains(namePattern.toString().toLowerCase())) 
 							break;
 						
-						if (!result.contains(namePattern.toString().toLowerCase())) {
-							IgnoreAttributeNameCompletionProposal p = new IgnoreAttributeNameCompletionProposal(
-									namePattern.toString(), offset, 
-									hasRequiredAPI ? NLS.bind(HTMLUIMessages.DoNotValidateAllAttributes, namePattern.toString()) :
-										NLS.bind(HTMLUIMessages.DoNotValidateAllAttributesNeedWTPSR2, namePattern.toString()), 
-									hasRequiredAPI ? HTMLUIMessages.DoNotValidateAllAttributesAddInfo :
-										HTMLUIMessages.DoNotValidateAllAttributesAddInfoNeedWTPSR2, 
-									node); 
-							if (!proposals.contains(p))
-								proposals.add(p);  
-						}
+						IgnoreAttributeNameCompletionProposal p = new IgnoreAttributeNameCompletionProposal(
+								namePattern.toString(), offset, 
+								hasRequiredAPI ? NLS.bind(HTMLUIMessages.DoNotValidateAllAttributes, namePattern.toString()) :
+									NLS.bind(HTMLUIMessages.DoNotValidateAllAttributesNeedWTPSR2, namePattern.toString()), 
+								hasRequiredAPI ? HTMLUIMessages.DoNotValidateAllAttributesAddInfo :
+									HTMLUIMessages.DoNotValidateAllAttributesAddInfoNeedWTPSR2, 
+								node); 
+						if (!proposals.contains(p))
+							proposals.add(p);  
+
 						dashIndex = name.indexOf('-', dashIndex + 1);
 					}
 				}
@@ -243,6 +245,22 @@ public class HTMLAttributeValidationQuickFixProcessor implements IQuickAssistPro
 		return null;
 	}
 	
+	private boolean canBeIgnored(boolean doIgnore, Set lcIgnoredPatterns, String attrName) {
+		if (!doIgnore)
+			return true; // Show a quick fix anyway (due to allow to turn 'ignore' option on
+		
+		// Check the attribute name absence in ignore list
+		String [] lcPannerns = (String[])lcIgnoredPatterns.toArray(new String[0]);
+		for (int i = 0; i < lcPannerns.length; i++) {
+			StringMatcher strMatcher = new StringMatcher(lcPannerns[i]);
+			if (strMatcher.match(attrName.toLowerCase())) {
+				return false; // The attribute name is already ignored, no need to show a quickfix
+			}
+		}
+		// The attribute name is not ignored yet, need to show a quickfix
+		return true;
+	}
+
 	private String getPreferenceNodeQualifier() {
 		return HTMLCorePlugin.getDefault().getBundle().getSymbolicName();
 	}
