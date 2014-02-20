@@ -267,13 +267,18 @@ public class HTMLAttributeValidationPreferencePage extends AbstractValidationSet
 		if (text.length() == 0)
 			return true;
 
+		String[] names = text.split(","); //$NON-NLS-1$
 		boolean valid = true;
-		for (int i = 0; valid && i < text.length(); i++) {
-			if (!Character.isJavaIdentifierPart(text.charAt(i)) &&
-					'-' != text.charAt(i) && '_' != text.charAt(i) &&
-					'*' != text.charAt(i) && '?' != text.charAt(i) &&
-					',' != text.charAt(i))
-				valid = false;
+		for (int i = 0; names != null && i < names.length; i++) {
+			String name = names[i] == null ? null : names[i].trim();
+			if (name != null && name.length() > 0) { 
+				for (int j = 0; valid && j < name.length(); j++) {
+					if (!Character.isJavaIdentifierPart(name.charAt(j)) &&
+							'-' != name.charAt(j) && '_' != name.charAt(j) &&
+							'*' != name.charAt(j) && '?' != name.charAt(j))
+						valid = false;
+				}
+			}
 		}
 		
 		if (!valid) {

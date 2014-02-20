@@ -10,6 +10,9 @@
  *******************************************************************************/
 package org.jboss.tools.jst.jsp.internal.html.text.correction;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ProjectScope;
@@ -98,10 +101,12 @@ public class IgnoreAttributeNameCompletionProposal implements ICompletionProposa
 		if (fHasRequiredAPI) {
 			StringBuffer ignoreList = new StringBuffer(originalAttributeNames);
 		
-			if (ignoreList.length() > 0)
-				ignoreList.append(',');
-			
-			ignoreList.append(fPattern);
+			if (!containsPattern(originalAttributeNames, fPattern)) { 
+				if (ignoreList.length() > 0)
+					ignoreList.append(',');
+				
+				ignoreList.append(fPattern.toLowerCase());
+			}
 	
 			fLookupOrder[0].getNode(getPreferenceNodeQualifier())
 				.putBoolean(HTMLCoreNewPreferences.IGNORE_ATTRIBUTE_NAMES, true); 
@@ -140,6 +145,19 @@ public class IgnoreAttributeNameCompletionProposal implements ICompletionProposa
 		}
 	}
 	
+	private boolean containsPattern(String ignoreList, String pattern) {
+		Set<String> result = new HashSet<String>();
+		if (ignoreList.trim().length() > 0) {
+			String[] names = ignoreList.split(","); //$NON-NLS-1$
+			for (int i = 0; names != null && i < names.length; i++) {
+				String name = names[i] == null ? null : names[i].trim();
+				if (name != null && name.length() > 0) 
+					result.add(name.toLowerCase());
+			}
+		}
+		return result.contains(pattern.toLowerCase());
+	}
+
 	/*
 	 * @see ICompletionProposal#getDisplayString()
 	 */
