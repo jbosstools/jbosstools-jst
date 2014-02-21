@@ -725,8 +725,12 @@
 			translations="$nl$/templates/xhtmldefault-templates.properties">
 		</include>
 		<include
-			file="templates/htmldefault-templates.xml"
-			translations="$nl$/templates/htmldefault-templates.properties">
+			file="templates/htmldefault-templates-jqm1.3.xml"
+			translations="$nl$/templates/htmldefault-templates-jqm1.3.properties">
+		</include>
+		<include
+			file="templates/htmldefault-templates-jqm1.4.xml"
+			translations="$nl$/templates/htmldefault-templates-jqm1.4.properties">
 		</include>
 	</extension>
 
