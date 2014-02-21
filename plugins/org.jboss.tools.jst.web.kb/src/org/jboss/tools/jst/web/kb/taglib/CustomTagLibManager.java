@@ -40,6 +40,7 @@ import org.xml.sax.SAXException;
 public class CustomTagLibManager {
 
 	public static final String FACELETS_UI_TAG_LIB_URI = "http://java.sun.com/jsf/facelets"; //$NON-NLS-1$
+	public static final String FACELETS_22_UI_TAG_LIB_URI = "http://xmlns.jcp.org/jsf/facelets"; //$NON-NLS-1$
 	public static final String FACELETS_HTML_TAG_LIB_URI = "http://www.w3.org/1999/xhtml/facelets"; //$NON-NLS-1$
 
 	private static final CustomTagLibManager INSTANCE = new CustomTagLibManager();

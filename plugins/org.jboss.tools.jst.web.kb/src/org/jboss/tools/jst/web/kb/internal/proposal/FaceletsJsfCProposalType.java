@@ -82,7 +82,9 @@ public class FaceletsJsfCProposalType extends CustomProposalType {
 	}
 
 	private boolean ignoreTagLib(ITagLibrary lib) {
-		return CustomTagLibManager.FACELETS_UI_TAG_LIB_URI.equals(lib.getURI()) || CustomTagLibManager.FACELETS_HTML_TAG_LIB_URI.equals(lib.getURI());
+		return CustomTagLibManager.FACELETS_UI_TAG_LIB_URI.equals(lib.getURI())
+				|| CustomTagLibManager.FACELETS_22_UI_TAG_LIB_URI.equals(lib.getURI())
+				|| CustomTagLibManager.FACELETS_HTML_TAG_LIB_URI.equals(lib.getURI());
 	}
 
 	private TextProposal getProposal(String prefix, IComponent component) {

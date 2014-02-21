@@ -28,8 +28,10 @@ import org.jboss.tools.jst.web.model.project.ext.store.XMLValueInfo;
 public class JSF2ResourcesScanner implements IFileScanner {
 	public static String ATTR_SHORT_DESCRIPTION = "shortDescription"; //$NON-NLS-1$
 	public static String URI_PREFIX = "http://java.sun.com/jsf/composite"; //$NON-NLS-1$
+	public static String URI_PREFIX_22 = "http://xmlns.jcp.org/jsf/composite"; //$NON-NLS-1$
 
 	public static String ENT_COMPOSITE_COMPONENT = "FileJSF2Component"; //$NON-NLS-1$
+	public static String ENT_COMPOSITE_COMPONENT_22 = "FileJSF2Component22"; //$NON-NLS-1$
 
 	public JSF2ResourcesScanner() {}
 
@@ -81,7 +83,8 @@ public class JSF2ResourcesScanner implements IFileScanner {
 			ds = new LoadedDeclarations();
 			result.put(source, ds);
 		}
-		CompositeTagLibrary library = null;
+		CompositeTagLibrary library20 = null;
+		CompositeTagLibrary library22 = null;
 		XModelObject[] cs = o.getChildren();
 		for (XModelObject c: cs) {
 			if(c.getFileType() == XModelObject.FOLDER) {
@@ -90,12 +93,22 @@ public class JSF2ResourcesScanner implements IFileScanner {
 				processFolder(c, result, source1, uriPrefix + "/" + n, lib); //$NON-NLS-1$
 			}
 			String entity = c.getModelEntity().getName();
-			if(ENT_COMPOSITE_COMPONENT.equals(entity)) {
-				if(library == null) {
-					library = new CompositeTagLibrary();
-					library.setId(o);
-					library.setURI(createValueInfo(uriPrefix));
-					ds.getLibraries().add(library);
+			if(entity.startsWith(ENT_COMPOSITE_COMPONENT)) {
+				boolean is22 = entity.equals(ENT_COMPOSITE_COMPONENT_22);				
+				if(!is22 && library20 == null) {
+					library20 = new CompositeTagLibrary();
+					library20.setId(o);
+					library20.setURI(createValueInfo(uriPrefix));
+					System.out.println("Create " + uriPrefix);
+					ds.getLibraries().add(library20);
+				} else if(is22 && library22 == null) {
+					library22 = new CompositeTagLibrary();
+					library22.setId(o);
+					String uri = uriPrefix;
+					uri = URI_PREFIX_22 + uri.substring(URI_PREFIX.length());
+					System.out.println("Create " + uri);
+					library22.setURI(createValueInfo(uri));
+					ds.getLibraries().add(library22);
 				}
 				
 				CompositeComponent component = new CompositeComponent();
@@ -112,7 +125,11 @@ public class JSF2ResourcesScanner implements IFileScanner {
 					//
 				}
 				component.setName(createValueInfo(c.getAttributeValue(XModelObjectConstants.ATTR_NAME)));
-				library.addComponent(component);
+				if(!is22) {
+					library20.addComponent(component);
+				} else {
+					library22.addComponent(component);
+				}
 				
 				XModelObject is = c.getChildByPath("Interface"); //$NON-NLS-1$
 				if(is == null) continue;

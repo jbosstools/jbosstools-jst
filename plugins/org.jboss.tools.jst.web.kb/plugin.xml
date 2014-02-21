@@ -46,13 +46,25 @@
             name="JSF Core"
             uri="http://java.sun.com/jsf/core"/>
       <tag-lib
+            location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/JsfCore.xml"
+            name="JSF Core"
+            uri="http://xmlns.jcp.org/jsf/core"/>
+      <tag-lib
             location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/JsfHtmlBasic.xml"
             name="JSF HTML Basic"
             uri="http://java.sun.com/jsf/html"/>
       <tag-lib
+            location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/JsfHtmlBasic.xml"
+            name="JSF HTML Basic"
+            uri="http://xmlns.jcp.org/jsf/html"/>
+      <tag-lib
             location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/Facelets.xml"
             name="Facelets UI"
             uri="http://java.sun.com/jsf/facelets"/>
+      <tag-lib
+            location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/Facelets.xml"
+            name="Facelets UI"
+            uri="http://xmlns.jcp.org/jsf/facelets"/>
       <tag-lib
             location="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/FaceletsHtml.xml"
             name="Facelets Html"
@@ -252,8 +264,14 @@
             name="http://java.sun.com/jsf/html" 
             uri="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/tld/html_basic.taglib.xml"/>
          <uri 
+            name="http://xmlns.jcp.org/jsf/html" 
+            uri="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/tld/html_basic_22.taglib.xml"/>
+         <uri 
             name="http://java.sun.com/jsf/core" 
             uri="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/tld/facelets_jsf_core.taglib.xml"/>
+         <uri 
+            name="http://xmlns.jcp.org/jsf/core" 
+            uri="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/tld/facelets_jsf_core_22.taglib.xml"/>
          <uri 
             name="http://richfaces.org/rich" 
             uri="platform:/plugin/org.jboss.tools.jst.web.kb/taglibs/tld/rich.taglib.xml"/>

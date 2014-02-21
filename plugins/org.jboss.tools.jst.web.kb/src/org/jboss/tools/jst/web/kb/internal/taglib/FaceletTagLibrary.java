@@ -81,11 +81,22 @@ public class FaceletTagLibrary extends FunctionTagLib implements
 	}
 
 	public ITagLibrary[] getCompositeLibraries() {
+		List<ITagLibrary> result = new ArrayList<ITagLibrary>();
 		if(compositeLibraryName != null && compositeLibraryName.length() > 0) {
 			String uri = JSF2ResourcesScanner.URI_PREFIX + "/" + compositeLibraryName;
-			return getKbProject() == null ? new ITagLibrary[0] : getKbProject().getTagLibraries(uri);
+			ITagLibrary[] list = getKbProject() == null ? new ITagLibrary[0] : getKbProject().getTagLibraries(uri);
+			if(list.length > 0) {
+				for (ITagLibrary l: list) result.add(l);
+			}
 		}
-		return new ITagLibrary[0];
+		if(compositeLibraryName != null && compositeLibraryName.length() > 0) {
+			String uri = JSF2ResourcesScanner.URI_PREFIX_22 + "/" + compositeLibraryName;
+			ITagLibrary[] list = getKbProject() == null ? new ITagLibrary[0] : getKbProject().getTagLibraries(uri);
+			if(list.length > 0) {
+				for (ITagLibrary l: list) result.add(l);
+			}
+		}
+		return result.toArray(new ITagLibrary[0]);
 	}
 	
 	public void setCompositeLibraryName(IValueInfo s) {

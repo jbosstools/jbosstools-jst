@@ -757,7 +757,9 @@ public class PageContextFactory implements IResourceChangeListener {
 	}
 
 	private static void fillUIParamsForNode(IDOMElement node, ELContextImpl context) {
-		if(!CustomTagLibManager.FACELETS_UI_TAG_LIB_URI.equals(node.getNamespaceURI())) {
+		String namespaceURI = node.getNamespaceURI();
+		if(!CustomTagLibManager.FACELETS_UI_TAG_LIB_URI.equals(namespaceURI)
+			&& !CustomTagLibManager.FACELETS_22_UI_TAG_LIB_URI.equals(namespaceURI)) {
 			return;
 		}
 		String pathAttr = PATH_ATTRIBUTES.get(node.getLocalName());
@@ -770,7 +772,7 @@ public class PageContextFactory implements IResourceChangeListener {
 		}
 		IFile includedFile = getFile(src, context.getResource());
 		if(includedFile == null) return;
-		NodeList list = node.getElementsByTagNameNS (CustomTagLibManager.FACELETS_UI_TAG_LIB_URI, NODE_PARAM);
+		NodeList list = node.getElementsByTagNameNS (namespaceURI, NODE_PARAM);
 		List<Var> vars = null;
 		for (int i = 0; i < list.getLength(); i++) {
 			Node n = list.item(i);
@@ -1010,7 +1012,9 @@ public class PageContextFactory implements IResourceChangeListener {
 					mainNnIsRedefined = true;
 
 				if (context instanceof FaceletPageContextImpl && 
-						CustomTagLibManager.FACELETS_UI_TAG_LIB_URI.equals(uri) &&
+						(CustomTagLibManager.FACELETS_UI_TAG_LIB_URI.equals(uri) 
+							|| CustomTagLibManager.FACELETS_22_UI_TAG_LIB_URI.equals(uri))
+						&&
 						!mainNnIsRedefined) {
 					nameSpace = new NameSpace(
 							CustomTagLibManager.FACELETS_HTML_TAG_LIB_URI, "", //$NON-NLS-1$
