@@ -35,12 +35,8 @@ public class JstWebKbAllTests {
 				new String[]{"TestKbModel2"});
 		suiteAll.addTest(testSetup);
 		suite = new TestSuite(JstWebKbAllTests.class.getName());
-		suite.addTestSuite(KbModelTest.class);
 		suite.addTestSuite(IncludeModelTest.class);
-		suite.addTestSuite(MyFacesKbModelTest.class);
 		suite.addTestSuite(KbMockModelTest.class);
-		suite.addTestSuite(MyFacesKbModelWithMetadataInSourcesTest.class);
-		suite.addTestSuite(WebKbTest.class);
 		suite.addTestSuite(JQueryDataTest.class);
 		suite.addTestSuite(JQueryDataTest14.class);
 		suite.addTestSuite(JQueryIDTest.class);
@@ -48,7 +44,6 @@ public class JstWebKbAllTests {
 		suite.addTestSuite(FileNamesCATest.class);
 		suite.addTestSuite(AngularJSTest.class);
 		suite.addTestSuite(KbModelWithSeveralJarCopiesTest.class);
-		suite.addTestSuite(XMLCatalogTest.class);
 		suite.addTestSuite(CSSMediaRuleTest.class);
 		suite.addTestSuite(RemoteFileManagerTest.class);
 		testSetup = new XProjectImportTestSetUp(suite,
@@ -70,13 +65,6 @@ public class JstWebKbAllTests {
 				"org.jboss.tools.jst.web.kb.test",
 				new String[]{"projects/TestBrokenBuilderOrder"},
 				new String[]{"TestBrokenBuilderOrder"});
-		suiteAll.addTest(testSetup);
-		suite = new TestSuite(WebWithModuleTest.class.getName());
-		suite.addTestSuite(WebWithModuleTest.class);
-		testSetup = new XProjectImportTestSetUp(suite,
-				"org.jboss.tools.jst.web.kb.test",
-				new String[]{"projects/utility", "projects/webapp"},
-				new String[]{"utility", "webapp"});
 		suiteAll.addTest(testSetup);
 		return suiteAll;
 	}
