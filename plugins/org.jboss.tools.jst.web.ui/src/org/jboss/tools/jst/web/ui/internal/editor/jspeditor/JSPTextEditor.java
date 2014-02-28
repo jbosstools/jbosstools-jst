@@ -62,6 +62,9 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -384,7 +387,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 	public IStructuredTextOccurrenceStructureProvider getOccurrencePreferenceProvider() {
 		return fOccurrenceModelUpdater;
 	}
-
+	
 	public void createPartControl(Composite parent) {
 		super.createPartControl(parent);
 
@@ -932,9 +935,12 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		int lastpos = -1;
 
 		int lastdetail = -1;
+		
+		private int operation;
 
 		public void dragEnter(DropTargetEvent event) {
 			lastpos = -1;
+			operation = event.detail;
 		}
 
 		public void dragLeave(DropTargetEvent event) {
@@ -942,6 +948,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		}
 
 		public void dragOperationChanged(DropTargetEvent event) {
+			lastdetail = operation = event.detail;
 		}
 
 		public void dragOver(DropTargetEvent event) {
@@ -987,7 +994,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 				NamedNodeMap attributes = jspElement.getAttributes();
 				if (pos == jspElement.getStartOffset()
 						|| pos == jspElement.getEndStartOffset()) {
-					event.detail = lastdetail = DND.DROP_MOVE;
+					event.detail = lastdetail = operation;
 					return;
 				}
 				for (int i = 0; i < attributes.getLength(); i++) {
@@ -1006,7 +1013,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 						if (pos > startPos && pos < endPos) {
 							dropContext.setOverAttributeValue(true);
 							dropContext.setAttributeName(jspAttr.getNodeName());
-							event.detail = lastdetail = DND.DROP_MOVE;
+							event.detail = lastdetail = operation;
 							return;
 						}
 					}
@@ -1016,20 +1023,25 @@ public class JSPTextEditor extends StructuredTextEditor implements
 					&& isInsideResponseRedirect((Text) region, pos
 							- region.getStartOffset())) {
 				dropContext.setOverAttributeValue(true);
-				event.detail = lastdetail = DND.DROP_MOVE;
+				event.detail = lastdetail = operation;
 			} else if (region instanceof Text) {
-				event.detail = lastdetail = DND.DROP_MOVE;
+				event.detail = lastdetail = operation;
 			} else if (region instanceof DocumentType) {
 				event.detail = lastdetail = DND.DROP_NONE;
 			} else if (region == null) {
 				// new place
-				event.detail = lastdetail = DND.DROP_MOVE;
+				event.detail = lastdetail = operation;
 			}
 		}
 
 		public void drop(DropTargetEvent event) {
             int offset = getPosition(event.x, event.y);
             selectAndReveal(offset, 0);
+            if(event.detail == DND.DROP_COPY){
+            	XModelTransferBuffer.getInstance().setCtrlPressed(true);
+            }else{
+            	XModelTransferBuffer.getInstance().setCtrlPressed(false);
+            }
             dropContext.runDropCommand(JSPTextEditor.this, event);
         }
 
