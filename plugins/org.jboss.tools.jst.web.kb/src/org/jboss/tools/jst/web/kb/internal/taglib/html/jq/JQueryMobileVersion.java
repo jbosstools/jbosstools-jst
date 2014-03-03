@@ -30,9 +30,9 @@ public enum JQueryMobileVersion {
 			"http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"), //$NON-NLS-1$
 
 	JQM_1_4("1.4", //$NON-NLS-1$
-			"http://code.jquery.com/mobile/1.4.1/jquery.mobile-1.4.1.min.css", //$NON-NLS-1$
+			"http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css", //$NON-NLS-1$
 			"http://code.jquery.com/jquery-1.10.2.min.js", //$NON-NLS-1$
-			"http://code.jquery.com/mobile/1.4.1/jquery.mobile-1.4.1.min.js"); //$NON-NLS-1$
+			"http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"); //$NON-NLS-1$
 
 	public static final JQueryMobileVersion[] ALL_VERSIONS = {JQM_1_3, JQM_1_4};
 
