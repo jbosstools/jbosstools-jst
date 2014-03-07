@@ -3,106 +3,10 @@ package org.jboss.tools.jst.web.ui.test;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 
 public class InsertJSCSS14PaletteEntryTest extends InsertJSCSSPaletteEntryTest {
+	protected String button(){
+		return "<a href=\"\" id=\"button-1\" class=\"ui-btn ui-corner-all\">Link button</a>";
+	}
 
-	private String[] test_result_01={
-			"<!DOCTYPE html>",
-			"<html>",
-		    "<head>",
-		    "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-			link(getVersion().getCSS()) + ">",
-			script(getVersion().getJQueryJS()) + ">",
-			script(getVersion().getJQueryMobileJS()) + ">",
-			"</head>",
-			"<body>",
-			"<a href=\"\" id=\"button-1\" class=\"ui-btn ui-corner-all\">Link button</a>",
-			"|abcde|",
-			"</body>",
-			"</html>"
-	};
-	
-	private String[] test_result_02={
-			"<!DOCTYPE html>",
-			"<a href=\"\" id=\"button-1\" class=\"ui-btn ui-corner-all\">Link button</a>",
-			"|abcde|"
-	};
-
-	private String[] test_result_03={
-			"<!DOCTYPE html>",
-			"<a href=\"\" id=\"button-1\" class=\"ui-btn ui-corner-all\">Link button</a>abcde|"
-	};
-
-	private String[] test_result_12={
-			"<!DOCTYPE html>",
-			"<html>",
-			"<a href=\"\" id=\"button-1\" class=\"ui-btn ui-corner-all\">Link button</a>",
-			"|abcde|",
-			"</html>"
-	};
-
-	private String[] test_result_13={
-			"<!DOCTYPE html>",
-			"<html>",
-			"<a href=\"\" id=\"button-1\" class=\"ui-btn ui-corner-all\">Link button</a>abcde|",
-			"</html>"
-	};
-
-	private String[] test_result_22={
-			"<!DOCTYPE html>",
-			"<html>",
-			"<head>",
-			"</head>",
-			"<a href=\"\" id=\"button-1\" class=\"ui-btn ui-corner-all\">Link button</a>",
-			"|abcde|",
-			"</html>"
-	};
-
-	private String[] test_result_23={
-			"<!DOCTYPE html>",
-			"<html>",
-			"<head>",
-			"</head>",
-			"<a href=\"\" id=\"button-1\" class=\"ui-btn ui-corner-all\">Link button</a>abcde|",
-			"</html>"
-	};
-
-	private String[] test_result_32={
-			"<!DOCTYPE html>",
-			"<html>",
-			"<head>",
-			"</head>",
-			"<body>",
-			"<a href=\"\" id=\"button-1\" class=\"ui-btn ui-corner-all\">Link button</a>",
-			"|abcde|",
-			"</body>",
-			"</html>"
-	};
-
-	private String[] test_result_33={
-			"<!DOCTYPE html>",
-			"<html>",
-			"<head>",
-			"</head>",
-			"<body>",
-			"<a href=\"\" id=\"button-1\" class=\"ui-btn ui-corner-all\">Link button</a>abcde|",
-			"</body>",
-			"</html>"
-	};
-
-	private String[] test_result_04={
-			"<!DOCTYPE html>",
-			"<html>",
-		    "<head>",
-		    "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-			link(getVersion().getCSS()) + ">",
-			script(getVersion().getJQueryJS()) + ">",
-			script(getVersion().getJQueryMobileJS()) + ">",
-			"</head>",
-			"<body>",
-			"<a href=\"\" id=\"button-1\" class=\"ui-btn ui-corner-all\">Link button</a>abcde|",
-			"</body>",
-			"</html>"
-	};
-	
 	protected JQueryMobileVersion getVersion() {
 		return JQueryMobileVersion.JQM_1_4;
 	}

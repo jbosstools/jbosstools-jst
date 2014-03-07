@@ -22,388 +22,392 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 	static String script(String src) {
 		return "<script src=\"" + src + "\"></script";
 	}
+	
+	protected String button(){
+		return "<a href=\"\" id=\"button-1\" data-role=\"button\">Link button</a>";
+	}
 
-	private String[] test_result_1={
+	protected String[] test_result_1={
 			"<!DOCTYPE html>",
 			"<html>",
 		    "<head>",
-			"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-			link(getVersion().getCSS()) + ">",
-			script(getVersion().getJQueryJS()) + ">",
-			script(getVersion().getJQueryMobileJS()) + ">",
+			"\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
+			"\t"+link(getVersion().getCSS()) + ">",
+			"\t"+script(getVersion().getJQueryJS()) + ">",
+			"\t"+script(getVersion().getJQueryMobileJS()) + ">",
 			"</head>",
 			"<body>",
-			"",
+			" ",
 			"</body>",
 			"</html>"
 	};
-	private String[] test_result_2={
+	protected String[] test_result_2={
 			"<!DOCTYPE html>",
 			"<html>",
 		    "<head>",
-			"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-			link(getVersion().getCSS()) + ">",
-			script(getVersion().getJQueryJS()) + ">",
-			script(getVersion().getJQueryMobileJS()) + ">",
+			"\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
+			"\t"+link(getVersion().getCSS()) + ">",
+			"\t"+script(getVersion().getJQueryJS()) + ">",
+			"\t"+script(getVersion().getJQueryMobileJS()) + ">",
 			"</head>",
 			"<body>",
-			"<div data-role=\"collapsible-set\">",
-			"<div data-role=\"collapsible\">",
-			"<h3>I'm a header</h3>",
-			"<p>I'm the collapsible content.</p>",
+			"\t<div data-role=\"collapsible-set\">",
+			"\t\t<div data-role=\"collapsible\">",
+			"\t\t\t<h3>I'm a header</h3>",
+			"\t\t\t<p>I'm the collapsible content.</p>",
 			"",
-			"</div>",
-		    "</div>",
+			"\t\t</div>",
+		    "\t</div>",
 		    "</body>",
 		    "",
 			"</html>"
 	};
-	private String[] test_result_2_1={
+	protected String[] test_result_2_1={
 			"<!DOCTYPE html>",
 			"<html>",
 		    "<head>",
-			"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-			link(getVersion().getCSS()) + ">",
-			script(getVersion().getJQueryJS()) + ">",
-			script(getVersion().getJQueryMobileJS()) + ">",
+			"\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
+			"\t"+link(getVersion().getCSS()) + ">",
+			"\t"+script(getVersion().getJQueryJS()) + ">",
+			"\t"+script(getVersion().getJQueryMobileJS()) + ">",
 			"</head>",
 			"<body>",
-			"<div data-role=\"collapsible-set\">",
-			"<div data-role=\"collapsible\">",
-			"<h3>I'm a header</h3>",
-			"<p>I'm the collapsible content.</p>",
-			"</div>",
-		    "</div>",
+			"\t<div data-role=\"collapsible-set\">",
+			"\t\t<div data-role=\"collapsible\">",
+			"\t\t\t<h3>I'm a header</h3>",
+			"\t\t\t<p>I'm the collapsible content.</p>",
+			"\t\t</div>",
+		    "\t</div>",
 		    "</body>",
 			"</html>"
 	};
-	private String[] test_result_3={
+	protected String[] test_result_3={
 			"<!DOCTYPE html>",
 			"<html>",
 		    "<head>",
-			"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-			link(getVersion().getCSS()) + ">",
-			script(getVersion().getJQueryJS()) + ">",
-			script(getVersion().getJQueryMobileJS()) + ">",
+			"\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
+			"\t"+link(getVersion().getCSS()) + ">",
+			"\t"+script(getVersion().getJQueryJS()) + ">",
+			"\t"+script(getVersion().getJQueryMobileJS()) + ">",
 			"</head>",
 			"<body>",
 			"</body>",
 			"</html>"
 	};
 
-	private String[] test_result_4={
+	protected String[] test_result_4={
 			"<!DOCTYPE html>",
 			"<html>",
 		    "<head>",
-		    "<meta name=\"viewport\">",
-		    "<link rel=\"stylesheet\" href=\"jquery.mobile-1.7.6.css\" />",
-		    "<script src=\"a:/jquery-2.7.1.min.js\"></script>",
-		    "<script src=\"b:/jquery.mobile-1.9.0.min.js\"></script>",
+		    "\t<meta name=\"viewport\">",
+		    "\t<link rel=\"stylesheet\" href=\"jquery.mobile-1.7.6.css\" />",
+		    "\t<script src=\"a:/jquery-2.7.1.min.js\"></script>",
+		    "\t<script src=\"b:/jquery.mobile-1.9.0.min.js\"></script>",
 			"</head>",
 			"<body>",
 			"</body>",
 			"</html>"
 	};
 	
-	private String[] test_result_01={
+	protected String[] test_result_01={
 			"<!DOCTYPE html>",
 			"<html>",
 		    "<head>",
-		    "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-			link(getVersion().getCSS()) + ">",
-			script(getVersion().getJQueryJS()) + ">",
-			script(getVersion().getJQueryMobileJS()) + ">",
+		    "\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
+		    "\t"+link(getVersion().getCSS()) + ">",
+		    "\t"+script(getVersion().getJQueryJS()) + ">",
+		    "\t"+script(getVersion().getJQueryMobileJS()) + ">",
 			"</head>",
 			"<body>",
-			"<a href=\"\" id=\"button-1\" data-role=\"button\">Link button</a>",
+			"\t"+button(),
 			"|abcde|",
 			"</body>",
 			"</html>"
 	};
 	
-	private String[] test_result_02={
+	protected String[] test_result_02={
 			"<!DOCTYPE html>",
-			"<a href=\"\" id=\"button-1\" data-role=\"button\">Link button</a>",
+			"\t"+button(),
 			"|abcde|"
 	};
 
-	private String[] test_result_12={
+	protected String[] test_result_12={
 			"<!DOCTYPE html>",
 			"<html>",
-			"<a href=\"\" id=\"button-1\" data-role=\"button\">Link button</a>",
+			"\t"+button(),
 			"|abcde|",
 			"</html>"
 	};
 
-	private String[] test_result_22={
+	protected String[] test_result_22={
 			"<!DOCTYPE html>",
 			"<html>",
 			"<head>",
 			"</head>",
-			"<a href=\"\" id=\"button-1\" data-role=\"button\">Link button</a>",
+			""+button(),
 			"|abcde|",
 			"</html>"
 	};
 
-	private String[] test_result_32={
+	protected String[] test_result_32={
 			"<!DOCTYPE html>",
 			"<html>",
 			"<head>",
 			"</head>",
 			"<body>",
-			"<a href=\"\" id=\"button-1\" data-role=\"button\">Link button</a>",
+			"\t"+button(),
 			"|abcde|",
 			"</body>",
 			"</html>"
 	};
 
-	private String[] test_result_03={
+	protected String[] test_result_03={
 			"<!DOCTYPE html>",
-			"<a href=\"\" id=\"button-1\" data-role=\"button\">Link button</a>abcde|"
+			"\t"+button()+"abcde|"
 	};
 
-	private String[] test_result_13={
+	protected String[] test_result_13={
 			"<!DOCTYPE html>",
 			"<html>",
-			"<a href=\"\" id=\"button-1\" data-role=\"button\">Link button</a>abcde|",
+			"\t"+button()+"abcde|",
 			"</html>"
 	};
 
-	private String[] test_result_23={
+	protected String[] test_result_23={
 			"<!DOCTYPE html>",
 			"<html>",
 			"<head>",
 			"</head>",
-			"<a href=\"\" id=\"button-1\" data-role=\"button\">Link button</a>abcde|",
+			button()+"abcde|",
 			"</html>"
 	};
 
-	private String[] test_result_33={
+	protected String[] test_result_33={
 			"<!DOCTYPE html>",
 			"<html>",
 			"<head>",
 			"</head>",
 			"<body>",
-			"<a href=\"\" id=\"button-1\" data-role=\"button\">Link button</a>abcde|",
+			"\t"+button()+"abcde|",
 			"</body>",
 			"</html>"
 	};
 
-	private String[] test_result_04={
+	protected String[] test_result_04={
 			"<!DOCTYPE html>",
 			"<html>",
 		    "<head>",
-		    "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-			link(getVersion().getCSS()) + ">",
-			script(getVersion().getJQueryJS()) + ">",
-			script(getVersion().getJQueryMobileJS()) + ">",
+		    "\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
+		    "\t"+link(getVersion().getCSS()) + ">",
+		    "\t"+script(getVersion().getJQueryJS()) + ">",
+		    "\t"+script(getVersion().getJQueryMobileJS()) + ">",
 			"</head>",
 			"<body>",
-			"<a href=\"\" id=\"button-1\" data-role=\"button\">Link button</a>abcde|",
+			"\t"+button()+"abcde|",
 			"</body>",
 			"</html>"
 	};
 	
-	private String[] test_result_05={
+	protected String[] test_result_05={
 			"<!DOCTYPE html>",
 			"<html>",
 		    "<head>",
-		    "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-			link(getVersion().getCSS()) + ">",
-			script(getVersion().getJQueryJS()) + ">",
-			script(getVersion().getJQueryMobileJS()) + ">",
+		    "\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
+		    "\t"+link(getVersion().getCSS()) + ">",
+		    "\t"+script(getVersion().getJQueryJS()) + ">",
+		    "\t"+script(getVersion().getJQueryMobileJS()) + ">",
 			"</head>",
 			"<body>",
-			"<div data-role=\"page\" id=\"page-1\">",
-			"<div data-role=\"header\">",
-			"<h1>Page Title</h1>",
-			"</div>",
-			"<div data-role=\"content\">",
-			"<p>Page content goes here.</p>",
-			"</div>",
-			"<div data-role=\"footer\">",
-			"<h4>Page Footer</h4>",
-			"</div>",
-			"</div>",
+			"\t<div data-role=\"page\" id=\"page-1\">",
+			"\t\t<div data-role=\"header\">",
+			"\t\t\t<h1>Page Title</h1>",
+			"\t\t</div>",
+			"\t\t<div data-role=\"content\">",
+			"\t\t\t<p>Page content goes here.</p>",
+			"\t\t</div>",
+			"\t\t<div data-role=\"footer\">",
+			"\t\t\t<h4>Page Footer</h4>",
+			"\t\t</div>",
+			"\t</div>",
 			"|abcde|",
 			"</body>",
 			"</html>"
 	};
 	
-	private String[] test_result_06={
+	protected String[] test_result_06={
 			"<!DOCTYPE html>",
-			"<div data-role=\"page\" id=\"page-1\">",
-			"<div data-role=\"header\">",
-			"<h1>Page Title</h1>",
-			"</div>",
-			"<div data-role=\"content\">",
-			"<p>Page content goes here.</p>",
-			"</div>",
-			"<div data-role=\"footer\">",
-			"<h4>Page Footer</h4>",
-			"</div>",
-			"</div>",
+			"\t<div data-role=\"page\" id=\"page-1\">",
+			"\t\t<div data-role=\"header\">",
+			"\t\t\t<h1>Page Title</h1>",
+			"\t\t</div>",
+			"\t\t<div data-role=\"content\">",
+			"\t\t\t<p>Page content goes here.</p>",
+			"\t\t</div>",
+			"\t\t<div data-role=\"footer\">",
+			"\t\t\t<h4>Page Footer</h4>",
+			"\t\t</div>",
+			"\t</div>",
 			"|abcde|"
 	};
 
-	private String[] test_result_16={
+	protected String[] test_result_16={
 			"<!DOCTYPE html>",
 			"<html>",
-			"<div data-role=\"page\" id=\"page-1\">",
-			"<div data-role=\"header\">",
-			"<h1>Page Title</h1>",
-			"</div>",
-			"<div data-role=\"content\">",
-			"<p>Page content goes here.</p>",
-			"</div>",
-			"<div data-role=\"footer\">",
-			"<h4>Page Footer</h4>",
-			"</div>",
-			"</div>",
+			"\t<div data-role=\"page\" id=\"page-1\">",
+			"\t\t<div data-role=\"header\">",
+			"\t\t\t<h1>Page Title</h1>",
+			"\t\t</div>",
+			"\t\t<div data-role=\"content\">",
+			"\t\t\t<p>Page content goes here.</p>",
+			"\t\t</div>",
+			"\t\t<div data-role=\"footer\">",
+			"\t\t\t<h4>Page Footer</h4>",
+			"\t\t</div>",
+			"\t</div>",
 			"|abcde|",
 			"</html>"
 	};
 
-	private String[] test_result_26={
+	protected String[] test_result_26={
 			"<!DOCTYPE html>",
 			"<html>",
 			"<head>",
 			"</head>",
 			"<div data-role=\"page\" id=\"page-1\">",
-			"<div data-role=\"header\">",
-			"<h1>Page Title</h1>",
-			"</div>",
-			"<div data-role=\"content\">",
-			"<p>Page content goes here.</p>",
-			"</div>",
-			"<div data-role=\"footer\">",
-			"<h4>Page Footer</h4>",
-			"</div>",
+			"\t<div data-role=\"header\">",
+			"\t\t<h1>Page Title</h1>",
+			"\t</div>",
+			"\t<div data-role=\"content\">",
+			"\t\t<p>Page content goes here.</p>",
+			"\t</div>",
+			"\t<div data-role=\"footer\">",
+			"\t\t<h4>Page Footer</h4>",
+			"\t</div>",
 			"</div>",
 			"|abcde|",
 			"</html>"
 	};
 
-	private String[] test_result_36={
+	protected String[] test_result_36={
 			"<!DOCTYPE html>",
 			"<html>",
 			"<head>",
 			"</head>",
 			"<body>",
-			"<div data-role=\"page\" id=\"page-1\">",
-			"<div data-role=\"header\">",
-			"<h1>Page Title</h1>",
-			"</div>",
-			"<div data-role=\"content\">",
-			"<p>Page content goes here.</p>",
-			"</div>",
-			"<div data-role=\"footer\">",
-			"<h4>Page Footer</h4>",
-			"</div>",
-			"</div>",
+			"\t<div data-role=\"page\" id=\"page-1\">",
+			"\t\t<div data-role=\"header\">",
+			"\t\t\t<h1>Page Title</h1>",
+			"\t\t</div>",
+			"\t\t<div data-role=\"content\">",
+			"\t\t\t<p>Page content goes here.</p>",
+			"\t\t</div>",
+			"\t\t<div data-role=\"footer\">",
+			"\t\t\t<h4>Page Footer</h4>",
+			"\t\t</div>",
+			"\t</div>",
 			"|abcde|",
 			"</body>",
 			"</html>"
 	};
 
-	private String[] test_result_07={
+	protected String[] test_result_07={
 			"<!DOCTYPE html>",
-			"<div data-role=\"page\" id=\"page-1\">",
-			"<div data-role=\"header\">",
-			"<h1>Page Title</h1>",
-			"</div>",
-			"<div data-role=\"content\">",
-			"<p>Page content goes here.</p>",
-			"abcde|",
-			"</div>",
-			"<div data-role=\"footer\">",
-			"<h4>Page Footer</h4>",
-			"</div>",
-			"</div>"
+			"\t<div data-role=\"page\" id=\"page-1\">",
+			"\t\t<div data-role=\"header\">",
+			"\t\t\t<h1>Page Title</h1>",
+			"\t\t</div>",
+			"\t\t<div data-role=\"content\">",
+			"\t\t\t<p>Page content goes here.</p>",
+			"\t\t\tabcde|",
+			"\t\t</div>",
+			"\t\t<div data-role=\"footer\">",
+			"\t\t\t<h4>Page Footer</h4>",
+			"\t\t</div>",
+			"\t</div>"
 	};
 
-	private String[] test_result_17={
+	protected String[] test_result_17={
 			"<!DOCTYPE html>",
 			"<html>",
-			"<div data-role=\"page\" id=\"page-1\">",
-			"<div data-role=\"header\">",
-			"<h1>Page Title</h1>",
-			"</div>",
-			"<div data-role=\"content\">",
-			"<p>Page content goes here.</p>",
-			"abcde|",
-			"</div>",
-			"<div data-role=\"footer\">",
-			"<h4>Page Footer</h4>",
-			"</div>",
-			"</div>",
+			"\t<div data-role=\"page\" id=\"page-1\">",
+			"\t\t<div data-role=\"header\">",
+			"\t\t\t<h1>Page Title</h1>",
+			"\t\t</div>",
+			"\t\t<div data-role=\"content\">",
+			"\t\t\t<p>Page content goes here.</p>",
+			"\t\t\tabcde|",
+			"\t\t</div>",
+			"\t\t<div data-role=\"footer\">",
+			"\t\t\t<h4>Page Footer</h4>",
+			"\t\t</div>",
+			"\t</div>",
 			"</html>"
 	};
 
-	private String[] test_result_27={
+	protected String[] test_result_27={
 			"<!DOCTYPE html>",
 			"<html>",
 			"<head>",
 			"</head>",
 			"<div data-role=\"page\" id=\"page-1\">",
-			"<div data-role=\"header\">",
-			"<h1>Page Title</h1>",
-			"</div>",
-			"<div data-role=\"content\">",
-			"<p>Page content goes here.</p>",
-			"abcde|",
-			"</div>",
-			"<div data-role=\"footer\">",
-			"<h4>Page Footer</h4>",
-			"</div>",
+			"\t<div data-role=\"header\">",
+			"\t\t<h1>Page Title</h1>",
+			"\t</div>",
+			"\t<div data-role=\"content\">",
+			"\t\t<p>Page content goes here.</p>",
+			"\t\tabcde|",
+			"\t</div>",
+			"\t<div data-role=\"footer\">",
+			"\t\t<h4>Page Footer</h4>",
+			"\t</div>",
 			"</div>",
 			"</html>"
 	};
 
-	private String[] test_result_37={
+	protected String[] test_result_37={
 			"<!DOCTYPE html>",
 			"<html>",
 			"<head>",
 			"</head>",
 			"<body>",
-			"<div data-role=\"page\" id=\"page-1\">",
-			"<div data-role=\"header\">",
-			"<h1>Page Title</h1>",
-			"</div>",
-			"<div data-role=\"content\">",
-			"<p>Page content goes here.</p>",
-			"abcde|",
-			"</div>",
-			"<div data-role=\"footer\">",
-			"<h4>Page Footer</h4>",
-			"</div>",
-			"</div>",
+			"\t<div data-role=\"page\" id=\"page-1\">",
+			"\t\t<div data-role=\"header\">",
+			"\t\t\t<h1>Page Title</h1>",
+			"\t\t</div>",
+			"\t\t<div data-role=\"content\">",
+			"\t\t\t<p>Page content goes here.</p>",
+			"\t\t\tabcde|",
+			"\t\t</div>",
+			"\t\t<div data-role=\"footer\">",
+			"\t\t\t<h4>Page Footer</h4>",
+			"\t\t</div>",
+			"\t</div>",
 			"</body>",
 			"</html>"
 	};
 
-	private String[] test_result_08={
+	protected String[] test_result_08={
 			"<!DOCTYPE html>",
 			"<html>",
 		    "<head>",
-		    "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-			link(getVersion().getCSS()) + ">",
-			script(getVersion().getJQueryJS()) + ">",
-			script(getVersion().getJQueryMobileJS()) + ">",
+		    "\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
+			"\t"+link(getVersion().getCSS()) + ">",
+			"\t"+script(getVersion().getJQueryJS()) + ">",
+			"\t"+script(getVersion().getJQueryMobileJS()) + ">",
 			"</head>",
 			"<body>",
-			"<div data-role=\"page\" id=\"page-1\">",
-			"<div data-role=\"header\">",
-			"<h1>Page Title</h1>",
-			"</div>",
-			"<div data-role=\"content\">",
-			"<p>Page content goes here.</p>",
-			"abcde|",
-			"</div>",
-			"<div data-role=\"footer\">",
-			"<h4>Page Footer</h4>",
-			"</div>",
-			"</div>",
+			"\t<div data-role=\"page\" id=\"page-1\">",
+			"\t\t<div data-role=\"header\">",
+			"\t\t\t<h1>Page Title</h1>",
+			"\t\t</div>",
+			"\t\t<div data-role=\"content\">",
+			"\t\t\t<p>Page content goes here.</p>",
+			"\t\t\tabcde|",
+			"\t\t</div>",
+			"\t\t<div data-role=\"footer\">",
+			"\t\t\t<h4>Page Footer</h4>",
+			"\t\t</div>",
+			"\t</div>",
 			"</body>",
 			"</html>"
 	};
@@ -660,7 +664,7 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 		String[] spl = test.split("\n");
 		assertEquals("Unexpected number of lines",result.length, spl.length);
 		for(int i = 0; i < result.length; i++){
-			String token = spl[i].trim();
+			String token = spl[i];
 			assertEquals("Unexpected line", result[i], token);
 		}
 	}
