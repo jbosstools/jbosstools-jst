@@ -19,6 +19,7 @@ import org.jboss.tools.jst.web.ui.editor.test.ca.Jbide6061Test;
 import org.jboss.tools.jst.web.ui.editor.test.ca.Jbide9092Test;
 import org.jboss.tools.jst.web.ui.editor.test.ca.JstCAOnCustomPrefixesTest;
 import org.jboss.tools.jst.web.ui.editor.test.ca.JstCAURIChangeTest;
+import org.jboss.tools.jst.web.ui.editor.test.ca.JstJspCANamespacesInLastChar;
 import org.jboss.tools.jst.web.ui.editor.test.ca.JstJspJbide1585Test;
 import org.jboss.tools.jst.web.ui.editor.test.ca.JstJspJbide1641Test;
 import org.jboss.tools.jst.web.ui.editor.test.ca.JstJspNonAutomaticProposalInsertionTest;
@@ -45,7 +46,8 @@ public class JstJspAllTests {
 
 		suite.addTest(new ProjectImportTestSetup(new TestSuite(
 				JstJspJbide1641Test.class,
-				JstJspNonAutomaticProposalInsertionTest.class),
+				JstJspNonAutomaticProposalInsertionTest.class,
+				JstJspCANamespacesInLastChar.class),
 				"org.jboss.tools.jst.web.ui.test", "projects/JsfJbide1641Test", //$NON-NLS-1$ //$NON-NLS-2$
 				"JsfJbide1641Test")); //$NON-NLS-1$
 
