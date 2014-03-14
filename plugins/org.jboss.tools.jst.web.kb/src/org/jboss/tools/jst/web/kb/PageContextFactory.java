@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2011-2013 Red Hat, Inc. 
+ * Copyright (c) 2011-2014 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -65,7 +65,6 @@ import org.eclipse.wst.common.componentcore.internal.WorkbenchComponent;
 import org.eclipse.wst.css.core.internal.provisional.adapters.IModelProvideAdapter;
 import org.eclipse.wst.css.core.internal.provisional.adapters.IStyleSheetAdapter;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSModel;
-import org.eclipse.wst.html.core.internal.document.ElementStyleImpl;
 import org.eclipse.wst.html.core.internal.htmlcss.LinkElementAdapter;
 import org.eclipse.wst.html.core.internal.htmlcss.URLModelProvider;
 import org.eclipse.wst.sse.core.StructuredModelManager;
@@ -79,7 +78,6 @@ import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegionList;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMEntity;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
@@ -988,9 +986,9 @@ public class PageContextFactory implements IResourceChangeListener {
 						: null);
 				if (domElement != null) {
 					start = domElement.getStartOffset();
-					length = (domElement.hasEndTag() ? domElement
-							.getEndStructuredDocumentRegion()
-							.getEnd() : ((IDOMNode) node.getOwnerDocument()).getEndOffset() - 1 - start);
+					length = (domElement.hasEndTag() ? 
+							domElement.getEndStructuredDocumentRegion().getEnd() : 
+								((IDOMNode) node.getOwnerDocument()).getEndOffset() - start);
 				}
 
 				Region region = new Region(start, length);
