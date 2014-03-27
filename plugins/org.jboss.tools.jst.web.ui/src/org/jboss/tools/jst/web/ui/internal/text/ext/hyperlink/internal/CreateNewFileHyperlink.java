@@ -28,6 +28,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchWizard;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.internal.Workbench;
 import org.eclipse.ui.internal.wizards.NewWizardRegistry;
@@ -187,7 +188,7 @@ public class CreateNewFileHyperlink extends AbstractHyperlink{
 			IWorkbenchWizard wizard = descriptor.createWizard();
 			
 			StructuredSelection selection = new StructuredSelection(file);
-			wizard.init(Workbench.getInstance(), selection);
+			wizard.init(PlatformUI.getWorkbench(), selection);
 			WizardDialog wDialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
 			
 			wDialog.setBlockOnOpen(false);
