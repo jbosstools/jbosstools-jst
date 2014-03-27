@@ -82,7 +82,7 @@ public class JstJspQuickAssistTest extends TestCase {
 			
 			fail("Quick fix: "+proposalClassName+" not found");
 		}finally{
-			Workbench.getInstance().getActiveWorkbenchWindow().getActivePage().closeEditor(editor, false);
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().closeEditor(editor, false);
 		}
 	}
 
