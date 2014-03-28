@@ -52,12 +52,14 @@ import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
+import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.eclipse.wst.sse.ui.internal.provisional.extensions.ISourceEditingTextTools;
 import org.eclipse.wst.xml.core.internal.document.AttrImpl;
 import org.eclipse.wst.xml.core.internal.document.ElementImpl;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMText;
 import org.eclipse.wst.xml.ui.internal.provisional.IDOMSourceEditingTextTools;
 import org.jboss.tools.common.meta.action.XActionInvoker;
 import org.jboss.tools.common.meta.action.impl.handlers.DefaultCreateHandler;
@@ -165,17 +167,41 @@ public class ExternalizeStringsUtils {
 					if (textNode.getNodeValue().trim().length() > 0) {
 						stringToUpdate = textNode.getNodeValue();
 					}
-				} else if (selectedElement instanceof Attr) {
+				} else if (selectedElement instanceof AttrImpl) {
 					/*
 					 * ..or an attribute's value
 					 */
-					Attr attrNode = (Attr) selectedElement;
-					if (attrNode.getNodeValue().trim().length() > 0) {
-						stringToUpdate = attrNode.getNodeValue();
+					AttrImpl attrNode = (AttrImpl) selectedElement;
+					ITextRegion textRegion = attrNode.getValueRegion();
+					if(textRegion != null && ((ElementImpl)attrNode.getOwnerElement()).getStartOffset()+textRegion.getStart()<= textSelection.getOffset() && ((ElementImpl)attrNode.getOwnerElement()).getStartOffset()+textRegion.getEnd()>textSelection.getOffset()){
+						if (attrNode.getNodeValue().trim().length() > 0) {
+							stringToUpdate = attrNode.getNodeValue();
+						}
 					}
 				}
 			} else {
-				stringToUpdate = text;
+				if (selectedElement instanceof IDOMText) {
+					/*
+					 * ..it could be a plain text
+					 */
+					IDOMText textNode = (IDOMText) selectedElement;
+					if(textNode.getStartOffset()<=textSelection.getOffset()&&textNode.getEndOffset()>=textSelection.getOffset()+textSelection.getLength()){
+						if (textNode.getNodeValue().trim().length() > 0) {
+							stringToUpdate = text;
+						}
+					}
+				} else if (selectedElement instanceof AttrImpl) {
+					/*
+					 * ..or an attribute's value
+					 */
+					AttrImpl attrNode = (AttrImpl) selectedElement;
+					ITextRegion textRegion = attrNode.getValueRegion();
+					if(textRegion != null && ((ElementImpl)attrNode.getOwnerElement()).getStartOffset()+textRegion.getStart()<= textSelection.getOffset() && ((ElementImpl)attrNode.getOwnerElement()).getStartOffset()+textRegion.getEnd()>=textSelection.getOffset()+textSelection.getLength()){
+						if (attrNode.getNodeValue().trim().length() > 0) {
+							stringToUpdate = text;
+						}
+					}
+				}
 			}
 		}
 		if ((stringToUpdate.length() > 0)) {
