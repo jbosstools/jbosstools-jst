@@ -11,13 +11,23 @@
 package org.jboss.tools.jst.web.kb.taglib;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.JarURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
+import org.codehaus.plexus.util.IOUtil;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.wst.xml.core.internal.XMLCorePlugin;
 import org.eclipse.wst.xml.core.internal.catalog.Catalog;
 import org.eclipse.wst.xml.core.internal.catalog.CatalogEntry;
@@ -87,7 +97,7 @@ public class TagLibraryManager {
 	        		id = XMLCorePlugin.getDefault().getDefaultXMLCatalog().resolvePublic(uri, uri);
 	        	}
 	        	if(id!=null) {
-	        		File file = new File(new URL(id).getFile());
+	        		File file = convertUriToFile(id);
 	        		if(file.exists()) {
 	        			return file;
 	        		}
@@ -119,9 +129,9 @@ public class TagLibraryManager {
 						if(element instanceof CatalogEntry) {
 							CatalogEntry entry = (CatalogEntry)element;
 							String uri = entry.getURI();
-							if(uri!=null && (uri.endsWith(".tld") || uri.endsWith(".xml")) && (uri.startsWith("file:") || uri.startsWith("jar:"))) {
-				        		File file = new File(new URL(uri).getFile());
-				        		if(file.exists()) {
+							if(uri!=null && (uri.endsWith(".tld") || (uri.endsWith(".xml") && uri.indexOf("taglib")>0)) && (uri.startsWith("file:") || uri.startsWith("jar:"))) {
+				        		File file = convertUriToFile(uri);
+				        		if(file!=null) {
 				        			files.add(file);
 				        		}
 							}
@@ -133,5 +143,61 @@ public class TagLibraryManager {
 			WebKbPlugin.getDefault().logError(e);
 		}
 		return files;
+	}
+
+	private static Map<String, File> tempFiles = new ConcurrentHashMap<String, File>();
+
+	private static File convertUriToFile(String uri) throws IOException {
+		File file = tempFiles.get(uri);
+		if(file!=null && file.exists()) {
+			return file;
+		}
+
+		URL url = new URL(uri);
+		String filePath = url.getFile();
+		file = new File(filePath);
+		if(!file.exists()) {
+			URLConnection c = url.openConnection();
+			if(c instanceof JarURLConnection) {
+				JarURLConnection connection = (JarURLConnection)c;
+				JarFile jar = connection.getJarFile();
+				JarEntry entry = connection.getJarEntry();
+
+				File entryFile = new File(entry.getName());
+				String name = entryFile.getName();
+				String prefix = name;
+				String sufix = null;
+				int i = name.lastIndexOf('.');
+				if(i>0 && i<name.length()) {
+					prefix = name.substring(0, i);
+					sufix = name.substring(i);
+				}
+
+				WebKbPlugin plugin = WebKbPlugin.getDefault();
+				if(plugin != null) {
+					//The plug-in instance can be null at shutdown, when the plug-in is stopped. 
+					IPath path = plugin.getStateLocation();
+					File tmp = new File(path.toFile(), "tmp"); //$NON-NLS-1$
+					tmp.mkdirs();
+					file = File.createTempFile(prefix, sufix, tmp);
+					file.deleteOnExit();
+
+					InputStream in = null;
+					try {
+						in = jar.getInputStream(entry);
+						FileOutputStream out = new FileOutputStream(file);
+						IOUtil.copy(in, out);
+					} finally {
+						IOUtil.close(in);
+					}
+				}
+			}
+		}
+		if(file.exists()) {
+			tempFiles.put(uri, file);
+		} else {
+			file = null;
+		}
+		return file;
 	}
 }
