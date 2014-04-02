@@ -17,9 +17,13 @@ import org.jboss.tools.jst.web.kb.internal.taglib.html.HtmlAttribute;
  */
 public class JQueryMobileAttrConstants14 extends JQueryMobileAttrConstants {
 
-	public static final String[] ENUM_ICON_VALUES = new String[] { 
-		"alert", "arrow-d", "arrow-l", "arrow-r", "arrow-u", "home", "delete", "plus", "carat-l", "carat-t",
-		"carat-r", "carat-b", "check", "gear", "grid", "star", "custom", "minus", "refresh", "forward", "info", "search"};
+	public static final String[] ENUM_ICON_VALUES = new String[] {
+		"action", "alert", "arrow-d", "arrow-d-l", "arrow-d-r", "arrow-l", "arrow-r", "arrow-u", "arrow-u-l", "arrow-u-r",
+		"audio", "back", "bars", "bullets", "calendar", "camera", "carat-d", "carat-l", "carat-r",  "carat-u", 
+		"check", "clock", "cloud", "comment", "custom", "delete", "edit", "eye", "forbidden", "forward", 
+		"gear", "grid", "heart", "home", "info", "location", "lock", "mail", "minus", "navigation", 
+		"phone", "plus", "power", "recycle", "refresh", "search", "shop", "star", "tag", "user", "video"
+	};
 
 	public static final HtmlAttribute DATA_ICON_ATTRIBUTE = new HtmlAttribute("data-icon", "", ENUM_ICON_VALUES);
 	public static final HtmlAttribute DATA_COLLAPSED_ICON_ATTRIBUTE = new HtmlAttribute("data-collapsed-icon", "", ENUM_ICON_VALUES);
