@@ -24,6 +24,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.jboss.tools.jst.web.ui.JSTWebUIImages;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteCategory;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteRoot;
@@ -56,22 +57,24 @@ class MobileDrawerFigure extends CustomDrawerFigure {
 			title.add(pinFigure);
 		}
 	}
+	
+	private static Label label = new Label("", JSTWebUIImages.getImage(JSTWebUIImages.getInstance().createImageDescriptor(JSTWebUIImages.DROP_DOWN_LIST_IMAGE)));
 
 	public class VersionFigure extends Clickable{
 		private Color backColor = Display.getDefault().getSystemColor(SWT.COLOR_WHITE);
 		private Color foreColor = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 
 		public VersionFigure(String text){
-			super(new Label(text));
+			super(label);
+			label.setText(text);
+			label.setTextPlacement(Label.WEST);
 			setRolloverEnabled(true);
 			setBorder(new MarginBorder(2));
 			addActionListener(new ActionListener(){
 				@Override
 				public void actionPerformed(ActionEvent event) {
-					//if(popup == null || popup.isShowing()){
 					popup = new JQueryMobileVersionPopUp(control, VersionFigure.this);
 					popup.show(category.getAvailableVersions());
-					//}
 				}
 			});
 		}
