@@ -17,6 +17,7 @@ import org.jboss.tools.common.ui.CommonUIImages;
 
 public class JSTWebUIImages extends CommonUIImages{
 	private static String WIZARDS_PATH         = "wizards/"; //$NON-NLS-1$
+	private static String VIEWS_PATH         = "views/"; //$NON-NLS-1$
 	
 	public static String CSS_FILE_IMAGE    = WIZARDS_PATH + "CSSFileWizBan.png"; //$NON-NLS-1$
 	public static String DATASOURCE_IMAGE    = WIZARDS_PATH + "DatasourceWizBan.png"; //$NON-NLS-1$
@@ -53,6 +54,8 @@ public class JSTWebUIImages extends CommonUIImages{
 	public static String VIDEO_IMAGE    = WIZARDS_PATH + "VideoWizBan.png"; //$NON-NLS-1$
 	public static String AUDIO_IMAGE    = WIZARDS_PATH + "AudioWizBan.png"; //$NON-NLS-1$
 	public static String LABEL_IMAGE    = WIZARDS_PATH + "LabelWizBan.png"; //$NON-NLS-1$
+	
+	public static String DROP_DOWN_LIST_IMAGE    = VIEWS_PATH + "list.png"; //$NON-NLS-1$
 
 	private static JSTWebUIImages INSTANCE;
 	
