@@ -279,7 +279,7 @@ public class FormPropertySheetViewer extends Viewer implements SelectionListener
 		int i = tab.getSelectionIndex();
 		if(i >= 0) {
 			TabItem item = tab.getItem(i);
-			if(item != null) {
+			if(item != null && item.getData() != null) {
 				String category = item.getData().toString();
 				selectedViewer = setViewersByCategory.get(category);
 			}
