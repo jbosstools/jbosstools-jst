@@ -58,7 +58,7 @@ class MobileDrawerFigure extends CustomDrawerFigure {
 		}
 	}
 	
-	private static Label label = new Label("", JSTWebUIImages.getImage(JSTWebUIImages.getInstance().createImageDescriptor(JSTWebUIImages.DROP_DOWN_LIST_IMAGE)));
+	private Label label = new Label("", JSTWebUIImages.getImage(JSTWebUIImages.getInstance().createImageDescriptor(JSTWebUIImages.DROP_DOWN_LIST_IMAGE)));
 
 	public class VersionFigure extends Clickable{
 		private Color backColor = Display.getDefault().getSystemColor(SWT.COLOR_WHITE);

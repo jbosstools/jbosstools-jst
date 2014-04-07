@@ -28,6 +28,7 @@ public class JstWebUiAllTests {
 		s.addTestSuite(JBossToolsEditorTest.class);
 		s.addTestSuite(InsertJSCSSPaletteEntryTest.class);
 		s.addTestSuite(InsertJSCSS14PaletteEntryTest.class);
+		s.addTestSuite(HTML5PaletteWizardTest.class);
 		s.addTestSuite(NewJQueryMobilePaletteWizardTest.class);
 		s.addTestSuite(NewJQueryMobile13PaletteWizardTest.class);
 		s.addTestSuite(JQueryMobileVersionSwitchPaletteTest.class);

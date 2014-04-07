@@ -185,21 +185,36 @@
                  STARTTEXT="&lt;label for=&quot;text-1&quot;>Text input: data-clear-btn=&quot;true&quot;&lt;/label>\n&lt;input data-clear-btn=&quot;true&quot; name=&quot;text-1&quot; id=&quot;text-1&quot; value=&quot;&quot; type=&quot;text&quot;>"
                  model-entity="SharableMacroHTML"/>
 
+     </GroupHTML>
+
+    </GroupHTML>
+
+   </GroupHTML>
+   
+   <GroupHTML HIDDEN="no" ICON="" NAME="z.HTML" PREFIX=""
+    SCOPE="project" URI="" add_taglib="true" library-version="" model-entity="SharableGroupHTML">
+
+    <GroupHTML HIDDEN="no" ICON="" NAME="version:5.0"
+      SCOPE="project" add_taglib="true" model-entity="SharableGroupHTML">
+
+     <GroupHTML HIDDEN="no" ICON="" NAME="1.form"
+      SCOPE="project" add_taglib="true" model-entity="SharableGroupHTML">
+
       <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Form:&lt;/b>&lt;br>\n&lt;code>&amp;lt;form>&lt;/code>&lt;br>\n...&lt;br>\n&lt;code>&amp;lt;/form>&lt;/code>\n&lt;/html>"
                  ENDTEXT="" ICON="%Icons%/Mobile/jQuery/form"
-                 NAME="10.Form" REFORMAT="yes" SCOPE="project"
+                 NAME="1.Form" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;form>&lt;/form>"
                  model-entity="SharableMacroHTML"/>
 
       <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Label:&lt;/b>&lt;br>\n&lt;code>&amp;lt;label>&lt;/code>&lt;br>\n...&lt;br>\n&lt;code>&amp;lt;/label>&lt;/code>\n&lt;/html>"
                  ENDTEXT="" ICON="%Icons%/Mobile/jQuery/label"
-                 NAME="11.Label" REFORMAT="yes" SCOPE="project"
+                 NAME="2.Label" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;label>&lt;/label>"
                  model-entity="SharableMacroHTML"/>
 
      </GroupHTML>
-
-     <GroupHTML HIDDEN="no" ICON="" NAME="4.multimedia"
+    
+     <GroupHTML HIDDEN="no" ICON="" NAME="2.multimedia"
       SCOPE="project" add_taglib="true" model-entity="SharableGroupHTML">
 
       <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Image:&lt;/b>&lt;br>\n&lt;code>&amp;lt;img alt=&quot;&quot; src=&quot;&quot;>&lt;/code>&lt;br>\n&lt;/html>"
@@ -221,10 +236,10 @@
                  model-entity="SharableMacroHTML"/>
 
      </GroupHTML>
-    
-    </GroupHTML>
+   </GroupHTML>
 
    </GroupHTML>
+   
   </PageTabHTML>
 	</Palette>
 </XStudio>
