@@ -45,6 +45,9 @@ public class PaletteCategory extends PaletteDrawer implements PaletteXModelObjec
 			label = p.getAttributeValue(XModelObjectConstants.ATTR_NAME);
 			p = p.getParent();
 		}
+		if(label.indexOf('.') >= 0) {
+			label = label.substring(label.indexOf('.') + 1);
+		}
 		while(p != null && (PaletteModelHelper.isGroup(p) || PaletteModelHelper.isSubGroup(p))) {
 			String parentName = p.getAttributeValue(XModelObjectConstants.ATTR_NAME);
 			if(!SharableConstants.MOBILE_PALETTE_ROOT.equals(parentName)) {

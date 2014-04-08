@@ -856,6 +856,12 @@
       <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/4.multimedia/1.Image" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewImageWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/4.multimedia/2.Video" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewVideoWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/4.multimedia/3.Audio" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewAudioWizard"/>
+
+      <tag name="_Palette_/Mobile/z.HTML/version:5.0/1.form/1.Form" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormWizard"/>
+      <tag name="_Palette_/Mobile/z.HTML/version:5.0/1.form/2.Label" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLabelWizard"/>
+      <tag name="_Palette_/Mobile/z.HTML/version:5.0/2.multimedia/1.Image" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewImageWizard"/>
+      <tag name="_Palette_/Mobile/z.HTML/version:5.0/2.multimedia/2.Video" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewVideoWizard"/>
+      <tag name="_Palette_/Mobile/z.HTML/version:5.0/2.multimedia/3.Audio" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewAudioWizard"/>
    </extension>
 
 
