@@ -978,22 +978,30 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			// show current cursor position during the drag JBIDE-13791 & JBIDE-14562
 			event.feedback = DND.FEEDBACK_SCROLL | DND.FEEDBACK_SELECT;
 			
-			int pos = getPosition(event.x, event.y);
-			dropEffect.setNewOffset(pos);
-			if (lastpos == pos && pos >= 0) {
-				pos = lastpos;
+			int position = getPosition(event.x, event.y);
+			int effectPosition = position;
+			if (getSourceViewer() instanceof ITextViewerExtension5) {
+			    ITextViewerExtension5 ext = (ITextViewerExtension5) getSourceViewer();
+			    int off = ext.modelOffset2WidgetOffset(position);
+			    if (off >= 0) {
+			    	effectPosition = off;
+			    }
+			}
+			dropEffect.setNewOffset(effectPosition);
+			if (lastpos == position && position >= 0) {
+				position = lastpos;
 				event.detail = lastdetail;
 				return;
 			}
 			
-			lastpos = pos;
+			lastpos = position;
 			dropContext.clean();
-			IndexedRegion region = getModel().getIndexedRegion(pos);
+			IndexedRegion region = getModel().getIndexedRegion(position);
 			if (region instanceof ElementImpl) {
 				ElementImpl jspElement = (ElementImpl) region;
 				NamedNodeMap attributes = jspElement.getAttributes();
-				if (pos == jspElement.getStartOffset()
-						|| pos == jspElement.getEndStartOffset()) {
+				if (position == jspElement.getStartOffset()
+						|| position == jspElement.getEndStartOffset()) {
 					event.detail = lastdetail = operation;
 					return;
 				}
@@ -1010,7 +1018,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 								+ valueRegion.getStart();
 						int endPos = jspElement.getStartOffset()
 								+ valueRegion.getTextEnd();
-						if (pos > startPos && pos < endPos) {
+						if (position > startPos && position < endPos) {
 							dropContext.setOverAttributeValue(true);
 							dropContext.setAttributeName(jspAttr.getNodeName());
 							event.detail = lastdetail = operation;
@@ -1020,7 +1028,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 				}
 				event.detail = lastdetail = DND.DROP_NONE;
 			} else if (region instanceof Text
-					&& isInsideResponseRedirect((Text) region, pos
+					&& isInsideResponseRedirect((Text) region, position
 							- region.getStartOffset())) {
 				dropContext.setOverAttributeValue(true);
 				event.detail = lastdetail = operation;
@@ -1062,8 +1070,9 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			    	result = off;
 			    }
 			}
+			result = PaletteInsertHelper.getInstance().correctOffset(getModel().getStructuredDocument(), result);
 		}
-		result = PaletteInsertHelper.getInstance().correctOffset(getModel().getStructuredDocument(), result);
+		
 		return result;
 	}
 
