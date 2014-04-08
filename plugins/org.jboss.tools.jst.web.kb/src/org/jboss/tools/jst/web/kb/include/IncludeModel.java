@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
@@ -98,7 +99,11 @@ public class IncludeModel implements IIncludeModel {
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#store(org.w3c.dom.Element)
 	 */
 	public synchronized void store(Element root) {
-		Map<String, String> pathAliases = loadAliases(root);
+		Map<String, String> pathAliases = new HashMap<>();
+		Map<String, String> available = loadAliases(root);
+		for (Entry<String, String> e: available.entrySet()) {
+			pathAliases.put(e.getValue(), e.getKey());
+		}
 		Element includes = XMLUtilities.createElement(root, STORE_ELEMENT_INCLUDES);
 		for (IPath path : directReferences.keySet()) {
 			if(!ResourcesPlugin.getWorkspace().getRoot().getFile(path).exists()) {
@@ -126,6 +131,11 @@ public class IncludeModel implements IIncludeModel {
 		Element aliases = XMLUtilities.getUniqueChild(root, STORE_ELEMENT_ALIASES);
 		if(aliases == null) {
 			aliases = XMLUtilities.createElement(root, STORE_ELEMENT_ALIASES);
+		} else {
+			for (Entry<String, String> e: available.entrySet()) {
+				pathAliases.remove(e.getValue());
+			}
+
 		}
 		for (String path: pathAliases.keySet()) {
 			String value = pathAliases.get(path);
