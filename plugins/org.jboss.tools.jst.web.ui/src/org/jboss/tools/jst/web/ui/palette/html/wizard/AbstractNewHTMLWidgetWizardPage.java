@@ -167,7 +167,6 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 			createTextPreview(panel);
 			previewPanel = text;
 		}
-
 		
 		setControl(panel);
 		
@@ -193,6 +192,10 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		Display.getDefault().addFilter(SWT.MouseDown, focusReturn);
 		Display.getDefault().addFilter(SWT.KeyDown, focusReturn);
 		Display.getDefault().addFilter(SWT.Modify, focusReturn);
+	}
+
+	public Composite getLeftPanel() {
+		return left;
 	}
 
 	void createTextPreview(Composite parent) {
@@ -301,15 +304,19 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 	protected void createFieldPanel(Composite parent) {		
 	}
 
+	public void createFields() {
+		createFieldPanel(null);
+	}
+
 	public void addEditor(IFieldEditor editor) {
 		editors.put(editor.getName(), editor);
 	}
 
 	public void addEditor(IFieldEditor editor, Composite parent) {
-		editor.doFillIntoGrid(parent);
+		if(parent != null) editor.doFillIntoGrid(parent);
 		editor.addPropertyChangeListener(this);
 		addEditor(editor);
-		Combo c = findCombo(editor);
+		Combo c = (parent != null) ? findCombo(editor) : null;
 		if(c != null) {
 			new ComboContentProposalProvider(c);
 		}
@@ -326,12 +333,13 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 
 	public void addEditor(IFieldEditor editor, Composite parent, boolean expandCombo) {
 		addEditor(editor, parent);
-		if(expandCombo) {
+		if(expandCombo && parent != null) {
 			expandCombo(editor);
 		}
 	}
 
 	public void createSeparator(Composite parent) {
+		if(parent == null) return;
 		Label separator = new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL);
 		GridData sd = new GridData(GridData.FILL_HORIZONTAL);
 		sd.horizontalSpan = 3;
@@ -344,6 +352,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 	 * @return
 	 */
 	public void expandCombo(IFieldEditor editor) {
+		if(left == null) return;
 		Control c = (Control) (editor.getEditorControls()[1]);
 		GridData d = (GridData)c.getLayoutData();
 		d.horizontalAlignment = SWT.FILL;

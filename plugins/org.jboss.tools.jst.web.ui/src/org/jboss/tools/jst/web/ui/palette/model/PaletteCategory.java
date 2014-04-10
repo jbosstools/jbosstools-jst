@@ -41,7 +41,7 @@ public class PaletteCategory extends PaletteDrawer implements PaletteXModelObjec
 		this.xobject = xobject;
 		String label = xobject.getAttributeValue(XModelObjectConstants.ATTR_NAME);
 		XModelObject p = xobject.getParent();
-		if(label.startsWith("version:")) {
+		if(label.startsWith(PaletteModel.VERSION_PREFIX)) {
 			label = p.getAttributeValue(XModelObjectConstants.ATTR_NAME);
 			p = p.getParent();
 		}

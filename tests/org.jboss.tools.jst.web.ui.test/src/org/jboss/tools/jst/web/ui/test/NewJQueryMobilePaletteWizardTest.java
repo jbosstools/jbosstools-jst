@@ -17,14 +17,13 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.internal.editors.text.EditorsPlugin;
 import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
+import org.jboss.tools.common.model.ui.internal.editors.PaletteItemResult;
 import org.jboss.tools.common.ui.widget.editor.CompositeEditor;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.jst.jsp.test.palette.AbstractPaletteEntryTest;
 import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
-import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewAudioWizard;
-import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewAudioWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCheckBoxWizard;
@@ -39,8 +38,6 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFooterWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFooterWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormButtonWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormButtonWizardPage;
-import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormWizard;
-import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGridWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGridWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedButtonsWizard;
@@ -51,12 +48,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeadingWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeadingWizardPage;
-import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewImageWizard;
-import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewImageWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewJQueryWidgetWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewJQueryWidgetWizardPage;
-import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLabelWizard;
-import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLabelWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewListviewWizard;
@@ -83,8 +76,6 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTextInputWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTextInputWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizardPage;
-import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewVideoWizard;
-import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewVideoWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizard;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
@@ -487,6 +478,10 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		compareGeneratedAndInsertedText(wizard);
 
 		assertTextIsInserted(label);
+
+		PaletteItemResult result = NewJQueryWidgetWizard.runWithoutUi(textEditor, getVersion(), "Button");
+		assertNotNull(result);
+		System.out.println(result.getStartText());
 	}
 
 	public void testNewFormButtonWizard() {
@@ -530,6 +525,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		assertTextExists(wizard, CLASS_UI_BTN_ICON_PREFIX + "right");
 
 		compareGeneratedAndInsertedText(wizard);
+
+		NewJQueryWidgetWizard.runWithoutUi(textEditor, getVersion(), "Form Button");
 	}
 
 	public void testNewLinkWizard() {
@@ -556,6 +553,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		compareGeneratedAndInsertedText(wizard);
 
 		assertTextIsInserted(label);
+
+		NewJQueryWidgetWizard.runWithoutUi(textEditor, getVersion(), "Link");
 	}
 
 	public void testNewRangeSliderWizard() {
@@ -606,6 +605,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		compareGeneratedAndInsertedText(wizard);
 
 		assertTextIsInserted(label);
+
+		NewJQueryWidgetWizard.runWithoutUi(textEditor, getVersion(), "Range Slider");
 	}
 
 	public void testNewTextInputWizard() {
@@ -671,6 +672,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		compareGeneratedAndInsertedText(wizard);
 
 		assertTextIsInserted(wizardPage.getEditorValue(EDITOR_ID_LABEL));
+
+		NewJQueryWidgetWizard.runWithoutUi(textEditor, getVersion(), "Text Input");
 	}
 
 	protected void doVersionSpecificTest(NewTextInputWizardPage wizardPage, NewTextInputWizard wizard) {

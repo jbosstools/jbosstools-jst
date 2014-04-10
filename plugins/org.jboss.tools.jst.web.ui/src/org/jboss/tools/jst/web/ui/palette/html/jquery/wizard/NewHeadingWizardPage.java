@@ -39,12 +39,15 @@ public class NewHeadingWizardPage extends NewJQueryWidgetWizardPage {
 
 		createIDEditor(parent, true);
 
-		Group headingPanel = new Group(parent,SWT.BORDER);
-		headingPanel.setText("Heading");
-		GridData d = new GridData(GridData.FILL_HORIZONTAL);
-		d.horizontalSpan = 3;
-		headingPanel.setLayoutData(d);
-		headingPanel.setLayout(new GridLayout(3, false));		
+		Group headingPanel = null;
+		if(parent != null) {
+			headingPanel = new Group(parent,SWT.BORDER);
+			headingPanel.setText("Heading");
+			GridData d = new GridData(GridData.FILL_HORIZONTAL);
+			d.horizontalSpan = 3;
+			headingPanel.setLayoutData(d);
+			headingPanel.setLayout(new GridLayout(3, false));
+		}
 
 		IFieldEditor title = JQueryFieldEditorFactory.createTitleEditor("");
 		addEditor(title, headingPanel);
@@ -58,12 +61,15 @@ public class NewHeadingWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor(getVersion());
 		addEditor(theme, headingPanel, true);
 
-		Group contentPanel = new Group(parent,SWT.BORDER);
-		contentPanel.setText("Content");
-		d = new GridData(GridData.FILL_HORIZONTAL);
-		d.horizontalSpan = 3;
-		contentPanel.setLayoutData(d);
-		contentPanel.setLayout(new GridLayout(3, false));		
+		Group contentPanel = null;
+		if(parent != null) {
+			contentPanel = new Group(parent,SWT.BORDER);
+			contentPanel.setText("Content");
+			GridData d = new GridData(GridData.FILL_HORIZONTAL);
+			d.horizontalSpan = 3;
+			contentPanel.setLayoutData(d);
+			contentPanel.setLayout(new GridLayout(3, false));	
+		}
 
 		IFieldEditor contentCorners = JQueryFieldEditorFactory.createHeadingContentCornersEditor();
 		addEditor(contentCorners, contentPanel, true);
@@ -87,6 +93,7 @@ public class NewHeadingWizardPage extends NewJQueryWidgetWizardPage {
 	}
 
 	protected void updateEnablement() {
+		if(left == null) return;
 		String layout = getEditorValue(EDITOR_ID_HEADING_LAYOUT);
 		boolean isAttached = HEADING_LAYOUT_ATTACHED.equals(layout);
 		getEditor(EDITOR_ID_HEADING_SIZE).setEnabled(!isAttached);

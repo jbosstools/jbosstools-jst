@@ -35,12 +35,15 @@ public class NewPopupWizardPage extends NewJQueryWidgetWizardPage {
 	}
 
 	protected void createFieldPanel(Composite parent) {
-		Group windowPanel = new Group(parent,SWT.BORDER);
+		Group windowPanel = null;
+		if(parent !=null) {
+		windowPanel = new Group(parent,SWT.BORDER);
 		windowPanel.setText("Popup Window");
 		GridData d = new GridData(GridData.FILL_HORIZONTAL);
 		d.horizontalSpan = 3;
 		windowPanel.setLayoutData(d);
-		windowPanel.setLayout(new GridLayout(3, false));		
+		windowPanel.setLayout(new GridLayout(3, false));
+		}
 
 		createIDEditor(windowPanel, false);
 
@@ -76,11 +79,14 @@ public class NewPopupWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor popupButton = JQueryFieldEditorFactory.createPopupButtonEditor();
 		addEditor(popupButton, parent);
 
-		Composite buttonPanel = new Composite(parent, SWT.BORDER);
-		d = new GridData(GridData.FILL_HORIZONTAL);
-		d.horizontalSpan = 3;
-		buttonPanel.setLayoutData(d);
-		buttonPanel.setLayout(new GridLayout(3, false));		
+		Composite buttonPanel = null;
+		if(parent != null) {
+			buttonPanel = new Composite(parent, SWT.BORDER);
+			GridData d = new GridData(GridData.FILL_HORIZONTAL);
+			d.horizontalSpan = 3;
+			buttonPanel.setLayoutData(d);
+			buttonPanel.setLayout(new GridLayout(3, false));		
+		}
 
 		IFieldEditor label = JQueryFieldEditorFactory.createLabelEditor();
 		label.setValue("Popup");

@@ -33,7 +33,9 @@ public class NewLinkWizardPage extends NewJQueryWidgetWizardPage {
 
 		IFieldEditor url = JQueryFieldEditorFactory.createURLEditor();
 		addEditor(url, parent);
-		new IDContentProposalProvider(getWizard().getIDs(), url);
+		if(parent != null) {
+			new IDContentProposalProvider(getWizard().getIDs(), url);
+		}
 		
 		IFieldEditor action = JQueryFieldEditorFactory.createActionEditor();
 		addEditor(action, parent, true);

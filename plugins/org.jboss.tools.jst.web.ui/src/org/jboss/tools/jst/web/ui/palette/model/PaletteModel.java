@@ -47,7 +47,16 @@ public class PaletteModel {
 	private static Map<String, PaletteModel> instances = new HashMap<String, PaletteModel>();
 	private static Object monitor = new Object();
 
-	static String VERSION_PREFIX = "version:";
+	/**
+	 * Path to mobile palette items in internal model.
+	 */
+	public static String MOBILE_PATH = "%Palette%/Mobile";
+	
+	/**
+	 * Prefix used in a group name under category to set its version,
+	 * for example 'version:1.4'.
+	 */
+	public static String VERSION_PREFIX = "version:";
 
 	private PaletteEditor editor = new PaletteEditor();
 	private PaletteRoot paletteRoot = null;

@@ -65,9 +65,11 @@ public class NewFooterWizardPage extends NewJQueryWidgetWizardPage {
 		addEditor(barpos, panel);
 
 		columns = createTwoColumns(panel);
-		GridLayout l = (GridLayout)columns.left().getLayout();
-		l.marginBottom = 2;
-		columns.left().setLayout(l);
+		if(parent != null) {
+			GridLayout l = (GridLayout)columns.left().getLayout();
+			l.marginBottom = 2;
+			columns.left().setLayout(l);
+		}
 
 		IFieldEditor iconpos = JQueryFieldEditorFactory.createIconPositionEditor();
 		addEditor(iconpos, columns.left(), true);

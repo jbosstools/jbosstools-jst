@@ -31,26 +31,31 @@ public class NewGridWizardPage extends NewJQueryWidgetWizardPage {
 	}
 
 	protected void createFieldPanel(Composite parent) {
-		Composite left = new Composite(parent, SWT.NONE);
-		left.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		GridLayout layout = new GridLayout(3, false);
-		layout.marginWidth = 0;
-		layout.marginHeight = 0;
-		layout.marginRight = 20;
-		left.setLayout(layout);
-		
-		Label center = new Label(parent, SWT.NONE);
-		center.setText("x");
-		GridData d = new GridData();
-		center.setLayoutData(d);
+		Composite left = null;
+		Composite right = null;
 
-		Composite right = new Composite(parent, SWT.NONE);
-		right.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		layout = new GridLayout(3, false);
-		layout.marginWidth = 0;
-		layout.marginHeight = 0;
-		layout.marginLeft = 20;
-		right.setLayout(layout);
+		if(parent != null) {
+			left = new Composite(parent, SWT.NONE);
+			left.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			GridLayout layout = new GridLayout(3, false);
+			layout.marginWidth = 0;
+			layout.marginHeight = 0;
+			layout.marginRight = 20;
+			left.setLayout(layout);
+
+			Label center = new Label(parent, SWT.NONE);
+			center.setText("x");
+			GridData d = new GridData();
+			center.setLayoutData(d);
+
+			right = new Composite(parent, SWT.NONE);
+			right.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			layout = new GridLayout(3, false);
+			layout.marginWidth = 0;
+			layout.marginHeight = 0;
+			layout.marginLeft = 20;
+			right.setLayout(layout);
+		}
 
 		IFieldEditor columns = JQueryFieldEditorFactory.createGridColumnsEditor();
 		addEditor(columns, left, true);

@@ -81,24 +81,25 @@ public class NewJQueryWidgetWizardPage extends AbstractNewHTMLWidgetWizardPage i
 	}
 
 	protected void updateIDEnablement() {
-		if(addID != null && id != null) {
+		if(addID != null && id != null && getLeftPanel() != null) {
 			id.setEnabled(isIDEnabled());
 		}
 	}
 
 	protected void setEnabled(String editorName, boolean value) {
 		IFieldEditor editor = getEditor(editorName);
-		if(editor != null) {
+		if(editor != null && getLeftPanel() != null) {
 			editor.setEnabled(value);
 		}
 	}
 
 	public static Composite[] createColumns(Composite parent, int k) {
+		if(parent == null) return new Composite[k];
 		return LayoutUtil.createColumns(parent, k);
 	}
 
 	public static TwoColumns createTwoColumns(Composite parent) {
-		return LayoutUtil.createTwoColumns(parent);
+		return parent == null ? new TwoColumns(null, null) : LayoutUtil.createTwoColumns(parent);
 	}
 
 }
