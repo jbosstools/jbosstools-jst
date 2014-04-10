@@ -99,7 +99,7 @@ public class IncludeModel implements IIncludeModel {
 	 * @see org.jboss.tools.jst.web.kb.validation.IValidationContext#store(org.w3c.dom.Element)
 	 */
 	public synchronized void store(Element root) {
-		Map<String, String> pathAliases = new HashMap<>();
+		Map<String, String> pathAliases = new HashMap<String, String>();
 		Map<String, String> available = loadAliases(root);
 		for (Entry<String, String> e: available.entrySet()) {
 			pathAliases.put(e.getValue(), e.getKey());
