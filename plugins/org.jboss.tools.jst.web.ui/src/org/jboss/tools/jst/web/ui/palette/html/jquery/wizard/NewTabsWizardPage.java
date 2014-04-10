@@ -39,7 +39,7 @@ public class NewTabsWizardPage extends NewJQueryWidgetWizardPage {
 
 		createIDEditor(parent, false);
 
-		TwoColumns columns = LayoutUtil.createTwoColumns(parent);
+		TwoColumns columns = parent == null ? new TwoColumns(null, null) : LayoutUtil.createTwoColumns(parent);
 		IFieldEditor collapsible = JQueryFieldEditorFactory.createTabsCollapsibleEditor();
 		addEditor(collapsible, columns.left());
 
@@ -87,6 +87,7 @@ public class NewTabsWizardPage extends NewJQueryWidgetWizardPage {
 	}
 
 	protected void updateEnablement() {
+		if(left == null) return;
 		boolean isCollapsible = isTrue(EDITOR_ID_TABS_COLLAPSIBLE);
 		getEditor(EDITOR_ID_COLLAPSED).setEnabled(isCollapsible);
 		boolean isCollapsed = isCollapsible && isTrue(EDITOR_ID_COLLAPSED);

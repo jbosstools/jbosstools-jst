@@ -10,9 +10,17 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.ui.IEditorPart;
+import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.XModelObjectConstants;
+import org.jboss.tools.common.model.options.PreferenceModelUtilities;
+import org.jboss.tools.common.model.ui.internal.editors.PaletteItemResult;
 import org.jboss.tools.jst.jsp.test.palette.AbstractPaletteEntryTest;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewAudioWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewAudioWizardPage;
@@ -27,6 +35,7 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLabelWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewVideoWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewVideoWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizard;
+import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
 
 /**
  * 
@@ -284,6 +293,51 @@ public class HTML5PaletteWizardTest extends AbstractPaletteEntryTest implements 
 
 	void assertAttrIsInserted(String attr, String value) {
 		assertTextIsInserted(attr + "=\"" + value + "\"");
+	}
+
+	public void testPaletteItemsWithoutUI() {
+		XModelObject g = PreferenceModelUtilities.getPreferenceModel().getByPath(PaletteModel.MOBILE_PATH);
+		List<String> failures = new ArrayList<String>(); 
+		XModelObject[] cs = g.getChildren();
+		for (XModelObject c: cs) {
+			String name = c.getAttributeValue(XModelObjectConstants.ATTR_NAME);
+			if(name.indexOf('.') >= 0) name = name.substring(name.indexOf('.') + 1);
+			runPaletteItemsWithoutUI(failures, textEditor, c, name);
+		}
+		if(!failures.isEmpty()) {
+			StringBuilder text = new StringBuilder();
+			text.append("The following Palette wizards failed:\n");
+			for (String s: failures) {
+				text.append(s).append("\n");
+			}
+			fail(text.toString());
+		}
+	}
+
+	private void runPaletteItemsWithoutUI(List<String> failures, JSPTextEditor textEditor, XModelObject group, String category) {
+		XModelObject[] cs = group.getChildren();
+		if(cs.length == 0) {
+			try {
+				long t = System.currentTimeMillis();
+				String path = group.getPath();
+				int i = path.indexOf(PaletteModel.VERSION_PREFIX);
+				if(i < 0) return;
+				String v = path.substring(i + 8);
+				int j = v.indexOf("/");
+				v = v.substring(0, j);
+				String name = group.getAttributeValue(XModelObjectConstants.ATTR_NAME);
+				if(name.indexOf('.') >= 0) name = name.substring(name.indexOf('.') + 1);
+				PaletteItemResult r = AbstractNewHTMLWidgetWizard.runWithoutUi(textEditor, category, v, name);
+				long dt = System.currentTimeMillis() - t;
+				System.out.println("success " + group.getPath() + " in " + dt);
+			} catch (Exception e) {
+				failures.add(group.getPath());
+			}
+		} else {
+			for (XModelObject c: cs) {
+				runPaletteItemsWithoutUI(failures, textEditor, c, category);
+			}
+		}
 	}
 
 }

@@ -98,7 +98,9 @@ public class LayoutUtil {
 	}
 
 	public static Composite[] createColumns(Composite parent, int k) {
-		Composite all = new Composite(parent, SWT.NONE);
+		Composite all = null;
+		if(parent != null) {
+		all = new Composite(parent, SWT.NONE);
 		GridData d = new GridData(GridData.FILL_HORIZONTAL);
 		d.horizontalSpan = 3;
 		all.setLayoutData(d);
@@ -107,13 +109,14 @@ public class LayoutUtil {
 		layout.marginHeight = 0;
 		layout.horizontalSpacing = 20;
 		all.setLayout(layout);
+		}
 
 		Composite[] result = new Composite[k];
 
 		for (int i = 0; i < k; i++) {
 			Composite c = new Composite(all, SWT.NONE);
 			c.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-			layout = new GridLayout(3, false);
+			GridLayout layout = new GridLayout(3, false);
 			layout.marginWidth = 0;
 			layout.marginHeight = 0;
 			c.setLayout(layout);

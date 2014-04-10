@@ -10,10 +10,30 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.test;
 
+import java.util.Properties;
+
+import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.ui.dialogs.PreferencesUtil;
+import org.eclipse.ui.part.FileEditorInput;
+import org.jboss.tools.common.meta.action.XActionInvoker;
+import org.jboss.tools.common.model.XModel;
+import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.XModelObjectConstants;
+import org.jboss.tools.common.model.options.PreferenceModelUtilities;
+import org.jboss.tools.common.model.options.SharableConstants;
+import org.jboss.tools.common.model.ui.editors.dnd.DropCommandFactory;
+import org.jboss.tools.common.model.ui.editors.dnd.DropData;
+import org.jboss.tools.common.model.ui.editors.dnd.IDropCommand;
+import org.jboss.tools.common.model.ui.editors.dnd.IDropWizard;
+import org.jboss.tools.common.model.ui.internal.editors.PaletteItemResult;
+import org.jboss.tools.common.model.ui.views.palette.PaletteInsertManager;
 import org.jboss.tools.common.ui.widget.editor.CompositeEditor;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.JSPTagProposalFactory;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.PaletteDropCommand;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizard;
@@ -38,6 +58,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTextInputWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTextInputWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizard;
+import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 public class NewJQueryMobile13PaletteWizardTest extends NewJQueryMobilePaletteWizardTest {

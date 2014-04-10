@@ -17,6 +17,9 @@ package org.jboss.tools.jst.web.html;
  */
 public interface HTMLConstants {
 	public String DOCTYPE = "<!DOCTYPE html>";
+
+	public String HTML_CATEGORY = "HTML";	
+	
 	public String TAG_HTML = "html";
 
 	public String TAG_HEAD = "head";

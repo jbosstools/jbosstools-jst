@@ -51,11 +51,14 @@ public class NewPageWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor backButton = JQueryFieldEditorFactory.createBackButtonEditor();
 		addEditor(backButton, parent);
 
-		Composite backParent = new Composite(parent, SWT.BORDER);
-		GridData d = new GridData(GridData.FILL_HORIZONTAL);
-		d.horizontalSpan = 3;
-		backParent.setLayoutData(d);
-		backParent.setLayout(new GridLayout(3, false));
+		Composite backParent = null;
+		if(parent != null) {
+			backParent = new Composite(parent, SWT.BORDER);
+			GridData d = new GridData(GridData.FILL_HORIZONTAL);
+			d.horizontalSpan = 3;
+			backParent.setLayoutData(d);
+			backParent.setLayout(new GridLayout(3, false));
+		}
 		
 		IFieldEditor backButtonLabel = JQueryFieldEditorFactory.createLabelEditor(EDITOR_ID_LABEL);
 		backButtonLabel.setValue("Back");

@@ -31,6 +31,7 @@ import org.jboss.tools.common.refactoring.MarkerResolutionUtils;
 import org.jboss.tools.jst.web.kb.internal.JQueryRecognizer;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
+import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -111,7 +112,7 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 		if(p.containsKey(SharableConstants.PALETTE_PATH)) {
 			String path = p.getProperty(SharableConstants.PALETTE_PATH);
 			for (JQueryMobileVersion v: JQueryMobileVersion.ALL_VERSIONS) {
-				if(path.indexOf("version:" + v.toString()) > 0) {
+				if(path.indexOf(PaletteModel.VERSION_PREFIX + v.toString()) > 0) {
 					return v;
 				}
 			}
