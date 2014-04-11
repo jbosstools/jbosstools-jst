@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2013 Red Hat, Inc.
+ * Copyright (c) 2010-2014 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -187,10 +187,11 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 			String additionalProposalInfo = textProposal.getContextInfo();
 			int relevance = textProposal.getRelevance();
 
-			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(true, replacementString, 
+			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(
+					textProposal, true, replacementString, 
 					replacementOffset, replacementLength, cursorPosition, image, displayString, 
 					contextInformation, additionalProposalInfo, relevance);
-
+			
 			contentAssistRequest.addProposal(proposal);
 		}
 		
@@ -246,7 +247,8 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 				IContextInformation contextInformation = null;
 				int relevance = TextProposal.R_XML_ATTRIBUTE_VALUE;
 	
-				AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(true, replacementString, 
+				AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(
+						null, true, replacementString, 
 						replacementOffset, replacementLength, cursorPosition, image, displayString, 
 						contextInformation, null, relevance);
 	
@@ -300,7 +302,8 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 				IContextInformation contextInformation = null;
 				int relevance = TextProposal.R_XML_ATTRIBUTE_VALUE + 100;
 	
-				AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(true, replacementString, 
+				AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(
+						null, true, replacementString, 
 						replacementOffset, replacementLength, cursorPosition, image, displayString, 
 						contextInformation, null, relevance);
 	
@@ -609,7 +612,8 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 				relevance = TextProposal.R_JSP_ATTRIBUTE_VALUE;
 			}
 
-			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(replacementString, 
+			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(
+					textProposal, replacementString, 
 					replacementOffset, replacementLength, cursorPosition, image, displayString, alternativeMatch, 
 					contextInformation, additionalProposalInfo, relevance);
 
@@ -918,25 +922,23 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 				closingTag = closingTag.substring(1);
 			}
 			
-			int replacementOffset = getOffset() - query.length();
-			int replacementLength = query.length();
+			int replacementOffset = getOffset() - query.length() - (insertTagOpenningCharacter?0:1);
+			int replacementLength = query.length() + (insertTagOpenningCharacter?0:1);
 
 			if (!insertTagOpenningCharacter && replacementString.startsWith("<")) { //$NON-NLS-1$
-				replacementString = replacementString.substring(1);
-				// Because the tag starting char is already in the text
-				String replacementTagName = extractTagName(replacementString);
+				String replacementTagName = extractTagName(replacementString.substring(1));
 				int start = getStartOfTagName();
 				int end = getEndOfTagName();
 				if (getDocumentText(getDocument(), start, end).equalsIgnoreCase(extractTagName(replacementString))) {
 					// Do no insert a new tag ending chars (and/or closing tag) with the same name 
 					// (just shift the cursor position to the end of the name)
 					
-					replacementString = replacementTagName; 
+					replacementString = '<' + replacementTagName; 
 					replacementLength += end - getOffset();
 				} else {
 					if (!replacementString.endsWith("/>")) { //$NON-NLS-1$
 						replacementString += "</" + closingTag + ">"; //$NON-NLS-1$ //$NON-NLS-2$
-						useAutoActivation = false;	// JBIDE-6285: Don't invoke code assist automaticly if user inserts <tag></tag>.
+						useAutoActivation = false;	// JBIDE-6285: Don't invoke code assist automatically if user inserts <tag></tag>.
 					}
 				}
 			}
@@ -962,7 +964,7 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 					new NameSpaceInserter(fCurrentContext.getViewer(), prefix, uri) : null;
 						
 			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(
-						useAutoActivation, replacementString, replacementOffset,
+						textProposal, useAutoActivation, replacementString, replacementOffset,
 						replacementLength, cursorPosition, image, displayString,
 						contextInformation, additionalProposalInfo, relevance,
 						nameSpaceInserter);
@@ -1019,10 +1021,12 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 	}
 
 	private String extractTagName(String tag) {
-		int offset = 0;
-		while (offset < tag.length() && !Character.isWhitespace(tag.charAt(offset)))
+		int start = tag.startsWith("<") ? 1 : 0;
+		int offset = start;
+		while (offset < tag.length() && !Character.isWhitespace(tag.charAt(offset)) &&
+				'>' != tag.charAt(offset) && '<' != tag.charAt(offset))
 			offset++;
-		return tag.substring(0, offset - 1);
+		return tag.substring(start, offset);
 	}
 	
 	@Override

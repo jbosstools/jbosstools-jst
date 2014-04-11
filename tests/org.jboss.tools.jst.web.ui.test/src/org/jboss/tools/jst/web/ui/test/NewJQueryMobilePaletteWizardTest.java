@@ -11,8 +11,10 @@
 package org.jboss.tools.jst.web.ui.test;
 
 import java.io.File;
+import java.util.Collection;
 
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.internal.editors.text.EditorsPlugin;
@@ -24,6 +26,7 @@ import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.jst.jsp.test.palette.AbstractPaletteEntryTest;
 import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizardPage;
@@ -79,6 +82,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizard;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
+import org.jboss.tools.jst.web.ui.palette.internal.PaletteManager;
+import org.jboss.tools.jst.web.ui.palette.internal.RunnablePaletteItem;
 
 /**
  * 
@@ -194,6 +199,17 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		assertTextIsInserted(headerHtmlText);
 	}
 
+	public void testApplyWithoutUI() {
+		Collection<RunnablePaletteItem> items = PaletteManager.getInstance().getItems(JQueryConstants.JQM_CATEGORY, getVersion().toString());
+		ITextSelection s = (ITextSelection)textEditor.getSelectionProvider().getSelection();
+		for (RunnablePaletteItem item: items) {
+			if("Button".equals(item.getName())) {
+				item.apply(textEditor, s.getOffset(), s.getOffset());
+				break;
+			}
+		}
+		assertTextIsInserted("button-1");
+	}
 
 	public void testNewHeaderBarWizard() {
 		IWizardPage currentPage = runToolEntry("Header Bar", true);

@@ -10,7 +10,13 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette.internal;
 
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.ui.texteditor.ITextEditor;
 import org.jboss.tools.common.model.ui.internal.editors.PaletteItemResult;
+import org.jboss.tools.common.text.IExecutableTextProposal;
+import org.jboss.tools.jst.web.ui.WebUiPlugin;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizard;
 
@@ -22,7 +28,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizar
  * @author Viacheslav Kabanovich
  *
  */
-public class RunnablePaletteItem {
+public class RunnablePaletteItem implements IExecutableTextProposal {
 	String category;
 	String version;
 	String name;
@@ -64,6 +70,30 @@ public class RunnablePaletteItem {
 	 */
 	public PaletteItemResult getResult(JSPTextEditor textEditor) {
 		return AbstractNewHTMLWidgetWizard.runWithoutUi(textEditor, category, version, name);
+	}
+
+	@Override
+	public void apply(ITextEditor textEditor, int startOffset, int endOffset) {
+		JSPTextEditor jsp = null;
+		if(textEditor instanceof JSPTextEditor) {
+			jsp = (JSPTextEditor)textEditor;
+		} else if(textEditor instanceof JSPMultiPageEditor) {
+			jsp = ((JSPMultiPageEditor)textEditor).getJspEditor();
+		} else {
+			return;
+		}
+		IDocument document = jsp.getTextViewer().getDocument();
+		try {
+			if(endOffset > startOffset) {
+				document.replace(startOffset, endOffset - startOffset, "");
+			}
+		} catch (BadLocationException e) {
+			WebUiPlugin.getDefault().logError(e);
+		} catch (StringIndexOutOfBoundsException e) {
+			WebUiPlugin.getDefault().logError(e);
+		}
+
+		AbstractNewHTMLWidgetWizard.applyWithoutUi(jsp, this);
 	}
 
 }

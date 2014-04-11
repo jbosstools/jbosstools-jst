@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.kb.test;
 
 import org.jboss.tools.common.text.TextProposal;
+import org.jboss.tools.jst.jsp.test.ca.HTML5Test;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.PageProcessor;
 

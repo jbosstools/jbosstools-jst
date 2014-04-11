@@ -114,6 +114,9 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 		}
 	}
 
+	public CustomTagLibrary() {
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.ICustomTagLibrary#getRecognizer()

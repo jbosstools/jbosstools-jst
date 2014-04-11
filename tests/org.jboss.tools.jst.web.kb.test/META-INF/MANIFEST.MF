@@ -21,7 +21,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.search;bundle-version="3.7.0",
  org.jboss.tools.common.validation,
  org.jboss.tools.common.base.test,
- org.eclipse.jface.text;bundle-version="3.7.0"
+ org.eclipse.jface.text;bundle-version="3.7.0",
+ org.jboss.tools.jst.jsp.base.test
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: %Bundle-Vendor.0

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2013 Red Hat, Inc.
+ * Copyright (c) 2010-2014 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -174,7 +174,8 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 			return; // Do not return any proposals here (predicate proposals may be created instead)
 
 		if(!prefix.isELStarted()) {
-			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(true, 
+			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(
+					null, true, 
 					getDefaultELPrefix() + "}" + (prefix.isAttributeValue() && prefix.hasOpenQuote() && !prefix.hasCloseQuote() ? String.valueOf(prefix.getQuoteChar()) : ""), //$NON-NLS-1$ //$NON-NLS-2$
 					getOffset(), 0, 2, JSF_EL_PROPOSAL_IMAGE, MessageFormat.format(JstUIMessages.JspContentAssistProcessor_NewELExpression, getDefaultELPrefix()), 
 					null, MessageFormat.format(JstUIMessages.JspContentAssistProcessor_NewELExpressionAttrInfo, getDefaultELPrefix()), TextProposal.R_XML_ATTRIBUTE_VALUE_TEMPLATE);
@@ -287,17 +288,18 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 			if (textProposal instanceof ELTextProposal) {
 				IJavaElement[] javaElements = ((ELTextProposal)textProposal).getAllJavaElements();
 	
-				proposal = new AutoELContentAssistantProposal(replacementString, 
+				proposal = new AutoELContentAssistantProposal(
+						textProposal, replacementString, 
 						replacementOffset, replacementLength, cursorPosition, image, displayString, null,
 						null, javaElements, relevance);
 			} else if (textProposal instanceof MessagesELTextProposal) {
-				proposal = new AutoELContentAssistantProposal(replacementString, 
+				proposal = new AutoELContentAssistantProposal(textProposal, replacementString, 
 						replacementOffset, replacementLength, cursorPosition, image, displayString, alternateMatch,
 						null, (MessagesELTextProposal)textProposal, relevance);
 			} else {
 				String additionalProposalInfo = (textProposal.getContextInfo() == null ? "" : textProposal.getContextInfo()); //$NON-NLS-1$
 
-				proposal = new AutoContentAssistantProposal(replacementString, 
+				proposal = new AutoContentAssistantProposal(textProposal, replacementString, 
 						replacementOffset, replacementLength, cursorPosition, image, displayString, null,
 						null, additionalProposalInfo, relevance);
 			}
@@ -305,7 +307,8 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		}
 
 		if (prefix.isELStarted() && !prefix.isELClosed()) {
-			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(
+			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal( 
+					null,
 					"}" + (prefix.isAttributeValue() && prefix.hasOpenQuote() && !prefix.hasCloseQuote() ? String.valueOf(prefix.getQuoteChar()) : ""), //$NON-NLS-1$ //$NON-NLS-2$
 					getOffset(), 0, 0, JSF_EL_PROPOSAL_IMAGE, JstUIMessages.JspContentAssistProcessor_CloseELExpression, 
 					null, JstUIMessages.JspContentAssistProcessor_CloseELExpressionInfo, TextProposal.R_XML_ATTRIBUTE_VALUE + 1); //
@@ -321,7 +324,8 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		
 		ELTextRegion prefix = getELPrefix(contentAssistRequest);
 		if (prefix == null || !prefix.isELStarted()) {
-			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(true, getDefaultELPrefix()+ "}", //$NON-NLS-1$ 
+			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(
+					null, true, getDefaultELPrefix()+ "}", //$NON-NLS-1$ 
 					contentAssistRequest.getReplacementBeginPosition(), 
 					0, 2, JSF_EL_PROPOSAL_IMAGE, MessageFormat.format(JstUIMessages.JspContentAssistProcessor_NewELExpression, getDefaultELPrefix()), null, 
 					MessageFormat.format(JstUIMessages.FaceletPageContectAssistProcessor_NewELExpressionTextInfo, getDefaultELPrefix()), TextProposal.R_TAG_INSERTION + 1);
@@ -428,17 +432,17 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 			if (textProposal instanceof ELTextProposal) {
 				IJavaElement[] javaElements = ((ELTextProposal)textProposal).getAllJavaElements();
 	
-				proposal = new AutoELContentAssistantProposal(replacementString, 
+				proposal = new AutoELContentAssistantProposal(textProposal, replacementString, 
 						replacementOffset, replacementLength, cursorPosition, image, displayString, null,
 						null, javaElements, relevance);
 			} else if (textProposal instanceof MessagesELTextProposal) {
-				proposal = new AutoELContentAssistantProposal(replacementString, 
+				proposal = new AutoELContentAssistantProposal(textProposal, replacementString, 
 						replacementOffset, replacementLength, cursorPosition, image, displayString, alternateMatch,
 						null, (MessagesELTextProposal)textProposal, relevance);
 			} else {
 				String additionalProposalInfo = (textProposal.getContextInfo() == null ? "" : textProposal.getContextInfo()); //$NON-NLS-1$
 
-				proposal = new AutoContentAssistantProposal(replacementString, 
+				proposal = new AutoContentAssistantProposal(textProposal, replacementString, 
 						replacementOffset, replacementLength, cursorPosition, image, displayString, null,
 						null, additionalProposalInfo, relevance);
 			}
@@ -447,7 +451,8 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 		}
 
 		if (prefix.isELStarted() && !prefix.isELClosed()) {
-			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal("}", //$NON-NLS-1$
+			AutoContentAssistantProposal proposal = new AutoContentAssistantProposal(
+					null, "}", //$NON-NLS-1$
 					getOffset(), 0, 1, JSF_EL_PROPOSAL_IMAGE, JstUIMessages.JspContentAssistProcessor_CloseELExpression, null, 
 					null, JstUIMessages.JspContentAssistProcessor_CloseELExpressionInfo, TextProposal.R_XML_ATTRIBUTE_VALUE_TEMPLATE);
 
@@ -523,13 +528,13 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 			if (textProposal instanceof ELTextProposal) {
 				IJavaElement[] javaElements = ((ELTextProposal)textProposal).getAllJavaElements();
 	
-				proposal = new AutoELContentAssistantProposal(replacementString, 
+				proposal = new AutoELContentAssistantProposal(textProposal, replacementString, 
 						replacementOffset, replacementLength, cursorPosition, image, displayString, null,
 						null, javaElements, relevance);
 			} else {
 				String additionalProposalInfo = (textProposal.getContextInfo() == null ? "" : textProposal.getContextInfo()); //$NON-NLS-1$
 
-				proposal = new AutoContentAssistantProposal(replacementString, 
+				proposal = new AutoContentAssistantProposal(textProposal, replacementString, 
 						replacementOffset, replacementLength, cursorPosition, image, displayString, null,
 						null, additionalProposalInfo, relevance);
 			}

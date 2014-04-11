@@ -23,7 +23,8 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.jboss.tools.jst.web.kb,
  org.eclipse.wst.validation;bundle-version="1.2.300",
  org.eclipse.wst.common.frameworks;bundle-version="1.2.100",
- org.jboss.tools.common.validation
+ org.jboss.tools.common.validation,
+ org.jboss.tools.common.el.core
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.jboss.tools.jst.jsp.test.ca,

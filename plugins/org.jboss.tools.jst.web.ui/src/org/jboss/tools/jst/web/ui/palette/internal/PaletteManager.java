@@ -17,6 +17,7 @@ import java.util.List;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.XModelObjectConstants;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.MobilePaletteInsertHelper;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
 
 /**
@@ -107,6 +108,10 @@ public class PaletteManager {
 		XModelObject[] cs = g.getChildren();
 		if(cs.length == 0) {
 			String name = g.getAttributeValue(XModelObjectConstants.ATTR_NAME);
+			String startText = g.getAttributeValue(XModelObjectConstants.START_TEXT);
+			if(MobilePaletteInsertHelper.INSERT_JS_CSS_SIGNATURE.equals(startText)) {
+				return;
+			}
 			if(name.indexOf('.') >= 0) {
 				name = name.substring(name.indexOf('.') + 1);
 			}
