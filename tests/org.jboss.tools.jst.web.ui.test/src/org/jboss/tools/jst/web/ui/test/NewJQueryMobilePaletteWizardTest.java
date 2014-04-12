@@ -17,6 +17,7 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.internal.editors.text.EditorsPlugin;
 import org.eclipse.ui.texteditor.AbstractDecoratedTextEditorPreferenceConstants;
+import org.jboss.tools.common.model.ui.editors.dnd.IDropWizard;
 import org.jboss.tools.common.model.ui.internal.editors.PaletteItemResult;
 import org.jboss.tools.common.ui.widget.editor.CompositeEditor;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
@@ -137,6 +138,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		NewPageWizardPage wizardPage = (NewPageWizardPage)currentPage;
 		NewPageWizard wizard = (NewPageWizard)wizardPage.getWizard();
 
+		compareUIAndNonUIWizards(wizard, "Page");
+
 		assertTextExists(wizard, "\t");
 		IPreferenceStore s = EditorsPlugin.getDefault().getPreferenceStore();
 		s.setValue(AbstractDecoratedTextEditorPreferenceConstants.EDITOR_SPACES_FOR_TABS, true);
@@ -200,6 +203,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		NewHeaderBarWizardPage wizardPage = (NewHeaderBarWizardPage)currentPage;
 		NewHeaderBarWizard wizard = (NewHeaderBarWizard)wizardPage.getWizard();
 		
+		compareUIAndNonUIWizards(wizard, "Header Bar");
+
 		assertTextDoesNotExist(wizard, ATTR_DATA_POSITION);
 		wizardPage.setEditorValue(EDITOR_ID_FIXED_POSITION, TRUE);
 		assertAttrExists(wizard, ATTR_DATA_POSITION, POSITION_FIXED);
@@ -223,6 +228,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		NewFooterWizardPage wizardPage = (NewFooterWizardPage)currentPage;
 		NewFooterWizard wizard = (NewFooterWizard)wizardPage.getWizard();
 		
+		compareUIAndNonUIWizards(wizard, "Footer Bar");
+
 		IFieldEditor barpos = ((CompositeEditor)wizardPage.getEditor(EDITOR_ID_BAR_POSITION)).getEditors().get(0);
 		assertTextDoesNotExist(wizard, ATTR_DATA_POSITION);
 		wizardPage.setEditorValue(EDITOR_ID_FIXED_POSITION, TRUE);
@@ -279,6 +286,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		NewCheckBoxWizardPage wizardPage = (NewCheckBoxWizardPage)currentPage;
 		NewCheckBoxWizard wizard = (NewCheckBoxWizard)wizardPage.getWizard();
 		
+		compareUIAndNonUIWizards(wizard, "Checkbox");
+
 		String label = "My Favorite Checkbox";
 		wizardPage.setEditorValue(EDITOR_ID_LABEL, label);
 		wizardPage.setEditorValue(EDITOR_ID_THEME, "b");
@@ -307,6 +316,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 
 		NewToggleWizardPage wizardPage = (NewToggleWizardPage)currentPage;
 		NewToggleWizard wizard = (NewToggleWizard)wizardPage.getWizard();
+
+		compareUIAndNonUIWizards(wizard, "Flip Toggle Switch");
 
 		doVersionSpecificTest(wizardPage, wizard);
 
@@ -378,6 +389,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		NewListviewWizardPage wizardPage = (NewListviewWizardPage)currentPage;
 		NewListviewWizard wizard = (NewListviewWizard)wizardPage.getWizard();
 		
+		compareUIAndNonUIWizards(wizard, "Listview");
+
 		assertEquals("3", wizardPage.getEditorValue(EDITOR_ID_NUMBER_OF_ITEMS));
 
 		assertTextDoesNotExist(wizard, "Item 4");
@@ -415,6 +428,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		NewDialogWizardPage wizardPage = (NewDialogWizardPage)currentPage;
 		NewDialogWizard wizard = (NewDialogWizard)wizardPage.getWizard(); 
 
+		compareUIAndNonUIWizards(wizard, "Dialog");
+
 		doVersionSpecificTest(wizardPage, wizard);
 
 		assertTextDoesNotExist(wizard, ATTR_DATA_CLOSE_BTN);
@@ -440,6 +455,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 
 		NewButtonWizardPage wizardPage = (NewButtonWizardPage)currentPage;
 		NewButtonWizard wizard = (NewButtonWizard)wizardPage.getWizard(); 
+
+		compareUIAndNonUIWizards(wizard, "Button");
 
 		wizardPage.setEditorValue(EDITOR_ID_MINI, TRUE);
 		assertTextExists(wizard, CLASS_UI_MINI);
@@ -478,10 +495,15 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		compareGeneratedAndInsertedText(wizard);
 
 		assertTextIsInserted(label);
+	}
 
-		PaletteItemResult result = NewJQueryWidgetWizard.runWithoutUi(textEditor, getVersion(), "Button");
+	private void compareUIAndNonUIWizards(IDropWizard wizard, String itemName) {
+		String startText = wizard.getWizardModel().getElementGenerator().generateStartTag();
+		String endText = wizard.getWizardModel().getElementGenerator().generateEndTag();
+		PaletteItemResult result = NewJQueryWidgetWizard.runWithoutUi(textEditor, getVersion(), itemName);
 		assertNotNull(result);
-		System.out.println(result.getStartText());
+		assertEquals(startText, result.getStartText());
+		assertEquals(endText, result.getEndText());
 	}
 
 	public void testNewFormButtonWizard() {
@@ -490,6 +512,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 
 		NewFormButtonWizardPage wizardPage = (NewFormButtonWizardPage)currentPage;
 		NewFormButtonWizard wizard = (NewFormButtonWizard)wizardPage.getWizard(); 
+
+		compareUIAndNonUIWizards(wizard, "Form Button");
 
 		assertAttrExists(wizard, ATTR_VALUE, WizardMessages.buttonTypeSubmitLabel);
 		assertAttrExists(wizard, ATTR_TYPE, BUTTON_TYPE_SUBMIT);
@@ -525,8 +549,6 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		assertTextExists(wizard, CLASS_UI_BTN_ICON_PREFIX + "right");
 
 		compareGeneratedAndInsertedText(wizard);
-
-		NewJQueryWidgetWizard.runWithoutUi(textEditor, getVersion(), "Form Button");
 	}
 
 	public void testNewLinkWizard() {
@@ -535,6 +557,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 
 		NewLinkWizardPage wizardPage = (NewLinkWizardPage)currentPage;
 		NewLinkWizard wizard = (NewLinkWizard)wizardPage.getWizard(); 
+
+		compareUIAndNonUIWizards(wizard, "Link");
 
 		String label = wizardPage.getEditorValue(EDITOR_ID_LABEL);
 
@@ -553,8 +577,6 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		compareGeneratedAndInsertedText(wizard);
 
 		assertTextIsInserted(label);
-
-		NewJQueryWidgetWizard.runWithoutUi(textEditor, getVersion(), "Link");
 	}
 
 	public void testNewRangeSliderWizard() {
@@ -565,6 +587,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		NewRangeSliderWizardPage wizardPage = (NewRangeSliderWizardPage)currentPage;
 		NewRangeSliderWizard wizard = (NewRangeSliderWizard)wizardPage.getWizard();
 		
+		compareUIAndNonUIWizards(wizard, "Range Slider");
+
 		String label = "My Switch:";
 		wizardPage.setEditorValue(EDITOR_ID_LABEL, label);
 		wizardPage.setEditorValue(EDITOR_ID_THEME, "b");
@@ -605,8 +629,6 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		compareGeneratedAndInsertedText(wizard);
 
 		assertTextIsInserted(label);
-
-		NewJQueryWidgetWizard.runWithoutUi(textEditor, getVersion(), "Range Slider");
 	}
 
 	public void testNewTextInputWizard() {
@@ -617,6 +639,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		NewTextInputWizardPage wizardPage = (NewTextInputWizardPage)currentPage;
 		NewTextInputWizard wizard = (NewTextInputWizard)wizardPage.getWizard();
 		
+		compareUIAndNonUIWizards(wizard, "Text Input");
+
 		doTestMini(wizardPage, wizard);
 
 		assertAttrExists(wizard, ATTR_TYPE, TYPE_TEXT);
@@ -672,8 +696,6 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		compareGeneratedAndInsertedText(wizard);
 
 		assertTextIsInserted(wizardPage.getEditorValue(EDITOR_ID_LABEL));
-
-		NewJQueryWidgetWizard.runWithoutUi(textEditor, getVersion(), "Text Input");
 	}
 
 	protected void doVersionSpecificTest(NewTextInputWizardPage wizardPage, NewTextInputWizard wizard) {
@@ -690,6 +712,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		NewNavbarWizardPage wizardPage = (NewNavbarWizardPage)currentPage;
 		NewNavbarWizard wizard = (NewNavbarWizard)wizardPage.getWizard();
 		
+		compareUIAndNonUIWizards(wizard, "Navbar");
+
 		assertEquals("3", wizardPage.getEditorValue(EDITOR_ID_NUMBER_OF_ITEMS));
 
 		wizardPage.setEditorValue(EDITOR_ID_NUMBER_OF_ITEMS, "4");
@@ -717,6 +741,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		NewGridWizardPage wizardPage = (NewGridWizardPage)currentPage;
 		NewGridWizard wizard = (NewGridWizard)wizardPage.getWizard();
 
+		compareUIAndNonUIWizards(wizard, "Grid");
+
 		assertTextDoesNotExist(wizard, "ui-block-d");
 		wizardPage.setEditorValue(EDITOR_ID_GRID_COLUMNS, "5");
 		assertTextExists(wizard, "ui-block-d");
@@ -733,6 +759,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 
 		NewGroupedCheckboxesWizardPage wizardPage = (NewGroupedCheckboxesWizardPage)currentPage;
 		NewGroupedCheckboxesWizard wizard = (NewGroupedCheckboxesWizard)wizardPage.getWizard();
+
+		compareUIAndNonUIWizards(wizard, "Grouped Checkboxes");
 
 		assertTextDoesNotExist(wizard, DATA_TYPE_HORIZONTAL);
 		wizardPage.setEditorValue(EDITOR_ID_LAYOUT, LAYOUT_HORIZONTAL);
@@ -751,6 +779,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		NewRadioWizardPage wizardPage = (NewRadioWizardPage)currentPage;
 		NewRadioWizard wizard = (NewRadioWizard)wizardPage.getWizard();
 
+		compareUIAndNonUIWizards(wizard, "Radio Button");
+
 		assertTextDoesNotExist(wizard, DATA_TYPE_HORIZONTAL);
 		wizardPage.setEditorValue(EDITOR_ID_LAYOUT, LAYOUT_HORIZONTAL);
 		assertAttrExists(wizard, ATTR_DATA_TYPE, DATA_TYPE_HORIZONTAL);
@@ -766,6 +796,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 
 		NewCollapsibleWizardPage wizardPage = (NewCollapsibleWizardPage)currentPage;
 		NewCollapsibleWizard wizard = (NewCollapsibleWizard)wizardPage.getWizard(); 
+
+		compareUIAndNonUIWizards(wizard, "Collapsible Content Block");
 
 		doTestMini(wizardPage, wizard);
 
@@ -806,6 +838,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 
 		NewSelectMenuWizardPage wizardPage = (NewSelectMenuWizardPage)currentPage;
 		NewSelectMenuWizard wizard = (NewSelectMenuWizard)wizardPage.getWizard();
+
+		compareUIAndNonUIWizards(wizard, "Select Menu");
 
 		doVersionSpecificTest(wizardPage, wizard);
 
@@ -857,6 +891,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		NewPopupWizardPage wizardPage = (NewPopupWizardPage)currentPage;
 		NewPopupWizard wizard = (NewPopupWizard)wizardPage.getWizard();
 
+		compareUIAndNonUIWizards(wizard, "Popup");
+
 		doVersionSpecificTest(wizardPage, wizard);
 
 		assertTextDoesNotExist(wizard, ATTR_DATA_TRANSITION);
@@ -903,6 +939,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		NewGroupedButtonsWizardPage wizardPage = (NewGroupedButtonsWizardPage)currentPage;
 		NewGroupedButtonsWizard wizard = (NewGroupedButtonsWizard)wizardPage.getWizard();
 		
+		compareUIAndNonUIWizards(wizard, "Grouped Buttons");
+
 		assertTextDoesNotExist(wizard, DATA_TYPE_HORIZONTAL);
 		wizardPage.setEditorValue(EDITOR_ID_LAYOUT, LAYOUT_HORIZONTAL);
 		assertAttrExists(wizard, ATTR_DATA_TYPE, DATA_TYPE_HORIZONTAL);
@@ -939,6 +977,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		assertTrue(currentPage instanceof NewPanelWizardPage);
 		NewPanelWizardPage wizardPage = (NewPanelWizardPage)currentPage;
 		NewPanelWizard wizard = (NewPanelWizard)wizardPage.getWizard();
+
+		compareUIAndNonUIWizards(wizard, "Panel");
 
 		assertTextDoesNotExist(wizard, ATTR_DATA_DISPLAY);
 		wizardPage.setEditorValue(EDITOR_ID_DISPLAY, DISPLAY_OVERLAY);
@@ -988,6 +1028,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		NewTableWizardPage wizardPage = (NewTableWizardPage)currentPage;
 		NewTableWizard wizard = (NewTableWizard)wizardPage.getWizard();
 
+		compareUIAndNonUIWizards(wizard, "Table");
+
 		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_TABLE);
 
 		assertTextExists(wizard, CLASS_RESPONSIVE);
@@ -1015,6 +1057,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		NewCollapsibleSetWizardPage wizardPage = (NewCollapsibleSetWizardPage)currentPage;
 		NewCollapsibleSetWizard wizard = (NewCollapsibleSetWizard)wizardPage.getWizard();
 		
+		compareUIAndNonUIWizards(wizard, "Collapsible Set");
+
 		assertEquals("3", wizardPage.getEditorValue(EDITOR_ID_NUMBER_OF_ITEMS));
 
 		wizardPage.setEditorValue(EDITOR_ID_NUMBER_OF_ITEMS, "4");
@@ -1037,190 +1081,6 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		compareGeneratedAndInsertedText(wizard);
 	}
 
-//	public void testNewFormWizard() {
-//		IWizardPage currentPage = runToolEntry("Form", true);
-//
-//		assertTrue(currentPage instanceof NewFormWizardPage);
-//
-//		NewFormWizardPage wizardPage = (NewFormWizardPage)currentPage;
-//		NewFormWizard wizard = (NewFormWizard)wizardPage.getWizard();
-//
-//		assertTextDoesNotExist(wizard, ATTR_NAME);
-//		wizardPage.setEditorValue(EDITOR_ID_NAME, "myForm");
-//		assertAttrExists(wizard, ATTR_NAME, "myForm");
-//
-//		assertTextDoesNotExist(wizard, ATTR_METHOD);
-//		wizardPage.setEditorValue(EDITOR_ID_FORM_METHOD, METHOD_POST);
-//		assertAttrExists(wizard, ATTR_METHOD, METHOD_POST);
-//		wizardPage.setEditorValue(EDITOR_ID_FORM_METHOD, METHOD_GET);
-//		assertTextDoesNotExist(wizard, ATTR_METHOD);
-//
-//		assertTextDoesNotExist(wizard, ATTR_NOVALIDATE);
-//		wizardPage.setEditorValue(EDITOR_ID_VALIDATE, FALSE);
-//		assertAttrExists(wizard, ATTR_NOVALIDATE, ATTR_NOVALIDATE);
-//		wizardPage.setEditorValue(EDITOR_ID_VALIDATE, TRUE);
-//		assertTextDoesNotExist(wizard, ATTR_NOVALIDATE);
-//
-//		assertTextDoesNotExist(wizard, ATTR_AUTOCOMPLETE);
-//		wizardPage.setEditorValue(EDITOR_ID_AUTOCOMPLETE, FALSE);
-//		assertAttrExists(wizard, ATTR_AUTOCOMPLETE, AUTOCOMPLETE_OFF);
-//		wizardPage.setEditorValue(EDITOR_ID_AUTOCOMPLETE, TRUE);
-//		assertTextDoesNotExist(wizard, ATTR_AUTOCOMPLETE);
-//
-//		compareGeneratedAndInsertedText(wizard);
-//	}
-//
-//	public void testNewImageWizard() {
-//		IWizardPage currentPage = runToolEntry("Image", true);
-//
-//		assertTrue(currentPage instanceof NewImageWizardPage);
-//
-//		NewImageWizardPage wizardPage = (NewImageWizardPage)currentPage;
-//		NewImageWizard wizard = (NewImageWizard)wizardPage.getWizard();
-//
-//		assertAttrExists(wizard, ATTR_ALT, "");
-//		wizardPage.setEditorValue(EDITOR_ID_ALT, "myalt");
-//		assertAttrExists(wizard, ATTR_ALT, "myalt");
-//
-//		assertAttrExists(wizard, ATTR_SRC, "");
-//		wizardPage.setEditorValue(EDITOR_ID_SRC, "mysrc.gif");
-//		assertAttrExists(wizard, ATTR_SRC, "mysrc.gif");
-//
-//		assertTextDoesNotExist(wizard, ATTR_WIDTH);
-//		wizardPage.setEditorValue(EDITOR_ID_WIDTH, "20");
-//		assertAttrExists(wizard, ATTR_WIDTH, "20");
-//		wizardPage.setEditorValue(EDITOR_ID_WIDTH, "");
-//		assertTextDoesNotExist(wizard, ATTR_WIDTH);
-//
-//		assertTextDoesNotExist(wizard, ATTR_HEIGHT);
-//		wizardPage.setEditorValue(EDITOR_ID_HEIGHT, "30");
-//		assertAttrExists(wizard, ATTR_HEIGHT, "30");
-//		wizardPage.setEditorValue(EDITOR_ID_HEIGHT, "");
-//		assertTextDoesNotExist(wizard, ATTR_HEIGHT);
-//
-//		assertTextDoesNotExist(wizard, ATTR_CROSSORIGIN);
-//		wizardPage.setEditorValue(EDITOR_ID_CROSSORIGIN, CROSSORIGIN_ANONIMOUS);
-//		assertAttrExists(wizard, ATTR_CROSSORIGIN, CROSSORIGIN_ANONIMOUS);
-//		wizardPage.setEditorValue(EDITOR_ID_CROSSORIGIN, "");
-//		assertTextDoesNotExist(wizard, ATTR_CROSSORIGIN);
-//
-//		assertTextDoesNotExist(wizard, ATTR_ISMAP);
-//		wizardPage.setEditorValue(EDITOR_ID_ISMAP, TRUE);
-//		assertAttrExists(wizard, ATTR_ISMAP, ATTR_ISMAP);
-//		wizardPage.setEditorValue(EDITOR_ID_ISMAP, FALSE);
-//		assertTextDoesNotExist(wizard, ATTR_ISMAP);
-//
-//		assertTextDoesNotExist(wizard, ATTR_USEMAP);
-//		wizardPage.setEditorValue(EDITOR_ID_USEMAP, "#map");
-//		assertAttrExists(wizard, ATTR_USEMAP, "#map");
-//		wizardPage.setEditorValue(EDITOR_ID_USEMAP, "");
-//		assertTextDoesNotExist(wizard, ATTR_USEMAP);
-//
-//		compareGeneratedAndInsertedText(wizard);
-//	}
-//
-//	public void testNewVideoWizard() {
-//		IWizardPage currentPage = runToolEntry("Video", true);
-//
-//		assertTrue(currentPage instanceof NewVideoWizardPage);
-//
-//		NewVideoWizardPage wizardPage = (NewVideoWizardPage)currentPage;
-//		NewVideoWizard wizard = (NewVideoWizard)wizardPage.getWizard();
-//
-//		assertEquals("1", wizardPage.getEditorValue(EDITOR_ID_NUMBER_OF_ITEMS));
-//
-//		assertTextDoesNotExist(wizard, ATTR_AUTOPLAY);
-//		wizardPage.setEditorValue(EDITOR_ID_AUTOPLAY, TRUE);
-//		assertAttrExists(wizard, ATTR_AUTOPLAY, ATTR_AUTOPLAY);
-//		wizardPage.setEditorValue(EDITOR_ID_AUTOPLAY, FALSE);
-//		assertTextDoesNotExist(wizard, ATTR_AUTOPLAY);
-//
-//		assertTextDoesNotExist(wizard, ATTR_LOOP);
-//		wizardPage.setEditorValue(EDITOR_ID_LOOP, TRUE);
-//		assertAttrExists(wizard, ATTR_LOOP, ATTR_LOOP);
-//		wizardPage.setEditorValue(EDITOR_ID_LOOP, FALSE);
-//		assertTextDoesNotExist(wizard, ATTR_LOOP);
-//
-//		assertTextDoesNotExist(wizard, ATTR_MUTED);
-//		wizardPage.setEditorValue(EDITOR_ID_MUTED, TRUE);
-//		assertAttrExists(wizard, ATTR_MUTED, ATTR_MUTED);
-//		wizardPage.setEditorValue(EDITOR_ID_MUTED, FALSE);
-//		assertTextDoesNotExist(wizard, ATTR_MUTED);
-//
-//		assertAttrExists(wizard, ATTR_CONTROLS, ATTR_CONTROLS);
-//		wizardPage.setEditorValue(EDITOR_ID_CONTROLS, FALSE);
-//		assertTextDoesNotExist(wizard, ATTR_CONTROLS);
-//		wizardPage.setEditorValue(EDITOR_ID_CONTROLS, TRUE);
-//		assertAttrExists(wizard, ATTR_CONTROLS, ATTR_CONTROLS);
-//
-//		assertTextExists(wizard, TAG_SOURCE);
-//		wizardPage.setEditorValue(EDITOR_ID_NUMBER_OF_ITEMS, "2");
-//		assertEquals("2", wizardPage.getEditorValue(EDITOR_ID_NUMBER_OF_ITEMS));
-//
-//		compareGeneratedAndInsertedText(wizard);
-//	}
-//
-//	public void testNewAudioWizard() {
-//		IWizardPage currentPage = runToolEntry("Audio", true);
-//
-//		assertTrue(currentPage instanceof NewAudioWizardPage);
-//
-//		NewAudioWizardPage wizardPage = (NewAudioWizardPage)currentPage;
-//		NewAudioWizard wizard = (NewAudioWizard)wizardPage.getWizard();
-//
-//		assertEquals("1", wizardPage.getEditorValue(EDITOR_ID_NUMBER_OF_ITEMS));
-//
-//		assertTextDoesNotExist(wizard, ATTR_AUTOPLAY);
-//		wizardPage.setEditorValue(EDITOR_ID_AUTOPLAY, TRUE);
-//		assertAttrExists(wizard, ATTR_AUTOPLAY, ATTR_AUTOPLAY);
-//		wizardPage.setEditorValue(EDITOR_ID_AUTOPLAY, FALSE);
-//		assertTextDoesNotExist(wizard, ATTR_AUTOPLAY);
-//
-//		assertTextDoesNotExist(wizard, ATTR_LOOP);
-//		wizardPage.setEditorValue(EDITOR_ID_LOOP, TRUE);
-//		assertAttrExists(wizard, ATTR_LOOP, ATTR_LOOP);
-//		wizardPage.setEditorValue(EDITOR_ID_LOOP, FALSE);
-//		assertTextDoesNotExist(wizard, ATTR_LOOP);
-//
-//		assertTextDoesNotExist(wizard, ATTR_MUTED);
-//		wizardPage.setEditorValue(EDITOR_ID_MUTED, TRUE);
-//		assertAttrExists(wizard, ATTR_MUTED, ATTR_MUTED);
-//		wizardPage.setEditorValue(EDITOR_ID_MUTED, FALSE);
-//		assertTextDoesNotExist(wizard, ATTR_MUTED);
-//
-//		assertAttrExists(wizard, ATTR_CONTROLS, ATTR_CONTROLS);
-//		wizardPage.setEditorValue(EDITOR_ID_CONTROLS, FALSE);
-//		assertTextDoesNotExist(wizard, ATTR_CONTROLS);
-//		wizardPage.setEditorValue(EDITOR_ID_CONTROLS, TRUE);
-//		assertAttrExists(wizard, ATTR_CONTROLS, ATTR_CONTROLS);
-//
-//		assertTextExists(wizard, TAG_SOURCE);
-//		wizardPage.setEditorValue(EDITOR_ID_NUMBER_OF_ITEMS, "2");
-//		assertEquals("2", wizardPage.getEditorValue(EDITOR_ID_NUMBER_OF_ITEMS));
-//
-//		compareGeneratedAndInsertedText(wizard);
-//	}
-//
-//	public void testNewLabelWizard() {
-//		IWizardPage currentPage = runToolEntry("Label", true);
-//
-//		assertTrue(currentPage instanceof NewLabelWizardPage);
-//
-//		NewLabelWizardPage wizardPage = (NewLabelWizardPage)currentPage;
-//		NewLabelWizard wizard = (NewLabelWizard)wizardPage.getWizard();
-//
-//		wizardPage.setEditorValue(EDITOR_ID_LABEL, "Address:");
-//		assertTextExists(wizard, ">Address:<");
-//
-//		wizardPage.setEditorValue(EDITOR_ID_FOR, "inputID");
-//		assertAttrExists(wizard, ATTR_FOR, "inputID");
-//
-//		wizardPage.setEditorValue(EDITOR_ID_FORM, "formID");
-//		assertAttrExists(wizard, ATTR_FORM, "formID");
-//		
-//		compareGeneratedAndInsertedText(wizard);
-//	}
-//
 	public void testNewTabsWizard() {
 		IWizardPage currentPage = runToolEntry("Tabs", true);
 
@@ -1229,6 +1089,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		NewTabsWizardPage wizardPage = (NewTabsWizardPage)currentPage;
 		NewTabsWizard wizard = (NewTabsWizard)wizardPage.getWizard();
 		
+		compareUIAndNonUIWizards(wizard, "Tabs");
+
 		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_NAVBAR);
 		wizardPage.setEditorValue(EDITOR_ID_TABS_LAYOUT, ROLE_LISTVIEW);
 		assertAttrExists(wizard, ATTR_DATA_ROLE, ROLE_LISTVIEW);
@@ -1267,6 +1129,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 
 		NewHeadingWizardPage wizardPage = (NewHeadingWizardPage)currentPage;
 		NewHeadingWizard wizard = (NewHeadingWizard)wizardPage.getWizard();
+
+		compareUIAndNonUIWizards(wizard, "Heading");
 
 		assertTextExists(wizard, "<h3 id=\"heading-1\" class=\"ui-bar ui-bar-a ui-corner-all\">");
 		assertTextExists(wizard, "<div class=\"ui-body ui-body-a ui-corner-all\">");
