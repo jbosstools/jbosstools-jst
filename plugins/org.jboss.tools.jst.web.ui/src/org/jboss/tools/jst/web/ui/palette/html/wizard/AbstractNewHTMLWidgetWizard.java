@@ -35,6 +35,7 @@ import org.jboss.tools.common.model.ui.editors.dnd.DropCommandFactory;
 import org.jboss.tools.common.model.ui.editors.dnd.DropData;
 import org.jboss.tools.common.model.ui.editors.dnd.IDropCommand;
 import org.jboss.tools.common.model.ui.editors.dnd.IDropWizard;
+import org.jboss.tools.common.model.ui.editors.dnd.IDropWizardExtension;
 import org.jboss.tools.common.model.ui.editors.dnd.IDropWizardModel;
 import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator;
 import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.ElementNode;
@@ -55,12 +56,18 @@ import org.jboss.tools.jst.web.ui.WebUiPlugin;
  * @author Viacheslav Kabanovich
  *
  */
-public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChangeListener, IDropWizard, HTMLConstants {
+public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChangeListener, IDropWizard, IDropWizardExtension, HTMLConstants {
 	protected IDropCommand command;
 	Set<String> ids = new HashSet<String>();
 
 	public AbstractNewHTMLWidgetWizard() {}
 
+	@Override
+	public void initWithoutUI() {
+		addPages();
+		((AbstractNewHTMLWidgetWizardPage)getPages()[0]).createFields();
+	}
+	
 	@Override
 	public final void addPages() {
 		doAddPages();
@@ -83,6 +90,11 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 	
 	@Override
 	public final boolean performFinish() {
+		if(getContainer() == null) {
+			//no UI
+			doPerformFinish();
+			return true;
+		}
 		IRunnableWithProgress runnable = new IRunnableWithProgress() {			
 			@Override
 			public void run(IProgressMonitor monitor) throws InvocationTargetException,
@@ -376,11 +388,10 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 		properties.setProperty(SharableConstants.PALETTE_PATH, macro.getPath());
 		String wizardName = PaletteInsertManager.getInstance().getWizardName(properties);
 		if(wizardName != null) {
-			IDropWizard wizard = (IDropWizard)PaletteInsertManager.getInstance().createWizardInstance(properties);
+			AbstractNewHTMLWidgetWizard wizard = (AbstractNewHTMLWidgetWizard)PaletteInsertManager.getInstance().createWizardInstance(properties);
 			wizard.setCommand(dropCommand);
-			wizard.addPages();
-			((AbstractNewHTMLWidgetWizardPage)(wizard.getPages()[0])).createFields();
-			return (AbstractNewHTMLWidgetWizard)wizard;
+			wizard.initWithoutUI();
+			return wizard;
 		} else {
 			return null;
 		}
