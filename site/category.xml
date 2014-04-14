@@ -8,6 +8,10 @@
 	<feature url="features/org.jboss.tools.jst.feature_0.0.0.jar" id="org.jboss.tools.jst.feature" version="0.0.0">
 		<category name="JBoss Tools jst Nightly Build Update Site"/>
 	</feature>
+        <feature url="features/org.jboss.tools.jst.jsdt.feature_0.0.0.jar" id="org.jboss.tools.jst.jsdt.feature" version="0.0.0">
+                <category name="JBoss Tools jst Nightly Build Update Site"/>
+        </feature>
+
 	<feature url="features/org.jboss.tools.jst.test.feature_0.0.0.jar" id="org.jboss.tools.jst.test.feature" version="0.0.0">
 		<category name="JBoss Tools JST Tests Nightly Build Update Site"/>
 	</feature>
@@ -15,6 +19,9 @@
 	<feature url="features/org.jboss.tools.jst.feature.source_0.0.0.jar" id="org.jboss.tools.jst.feature.source" version="0.0.0">
 		<category name="JBoss Tools jst Nightly Build Update Site"/>
 	</feature>
+        <feature url="features/org.jboss.tools.jst.jsdt.feature.source_0.0.0.jar" id="org.jboss.tools.jst.jsdt.feature.source" version="0.0.0">
+                <category name="JBoss Tools jst Nightly Build Update Site"/>
+        </feature>
 	<feature url="features/org.jboss.tools.jst.test.feature.source_0.0.0.jar" id="org.jboss.tools.jst.test.feature.source" version="0.0.0">
 		<category name="JBoss Tools JST Tests Nightly Build Update Site"/>
 	</feature>
