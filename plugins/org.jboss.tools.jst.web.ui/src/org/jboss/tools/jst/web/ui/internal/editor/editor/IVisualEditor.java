@@ -11,7 +11,6 @@
 package org.jboss.tools.jst.web.ui.internal.editor.editor;
 
 import org.eclipse.ui.IReusableEditor;
-import org.eclipse.ui.texteditor.ITextEditor;
 
 public interface IVisualEditor extends IReusableEditor {
 	/*
@@ -29,4 +28,5 @@ public interface IVisualEditor extends IReusableEditor {
 	public void createVisualEditor();
 	public void maximizeSource();
 	public void maximizeVisual();
+	public void updatePartAccordingToPreferences();
 }

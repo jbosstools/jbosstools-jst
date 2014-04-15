@@ -25,4 +25,5 @@ public interface IVisualController extends SelectionListener {
 	public void selectionChanged(SelectionChangedEvent event);
 	public void refreshExternalLinks();
 	public void visualRefresh();
+	public boolean isVisualEditorVisible();
 }
