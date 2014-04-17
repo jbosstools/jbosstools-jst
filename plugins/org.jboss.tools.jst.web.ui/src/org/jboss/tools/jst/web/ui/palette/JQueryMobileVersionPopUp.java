@@ -21,6 +21,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.Panel;
 import org.eclipse.draw2d.PopUpHelper;
+import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
@@ -67,12 +68,29 @@ class JQueryMobileVersionPopUp extends PopUpHelper {
                 return false;
         }
         
+        private Viewport getViewport(IFigure figure){
+        	IFigure parent = figure;
+        	while(parent != null){
+        		if(parent instanceof Viewport){
+        			return (Viewport) parent;
+        		}
+        		parent = parent.getParent();
+        	}
+        	return null;
+        }
+        
         public void displayToolTip(IFigure hoverSource, IFigure tip) {
                 getLightweightSystem().setContents(tip);
                 Dimension shellSize = getLightweightSystem().getRootFigure()
                                 .getPreferredSize().getExpanded(getShellTrimSize());
                 org.eclipse.draw2d.geometry.Rectangle rect = hoverSource.getClientArea();
-                Point displayPoint = new Point(rect.x-5/*(shellSize.width-hoverSource.getBounds().width/2)*/, rect.y+10+rect.height);
+                
+                Viewport vp = getViewport(hoverSource);
+                
+                Point viewportLocation = vp.getViewLocation().getSWTPoint();
+                
+                Point displayPoint = new Point(rect.x-5, rect.y+10+rect.height-viewportLocation.y);
+                
                 org.eclipse.swt.graphics.Point absolute;
                 absolute = control.toDisplay(new org.eclipse.swt.graphics.Point(
                                 displayPoint.x, displayPoint.y));
@@ -82,8 +100,6 @@ class JQueryMobileVersionPopUp extends PopUpHelper {
                 show();
                 getShell().forceFocus();
         }
-
-        
         
         public void show(String[] versions){
                 String currentVersion = figureToShowNear.getVersion();
