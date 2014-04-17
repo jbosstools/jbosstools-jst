@@ -20,6 +20,7 @@ import org.jboss.tools.common.model.XModelObjectConstants;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.common.model.ui.internal.editors.PaletteItemResult;
 import org.jboss.tools.jst.jsp.test.palette.AbstractPaletteEntryTest;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.HTMLVersion;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewAudioWizard;
@@ -28,13 +29,14 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewImageWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewImageWizardPage;
-import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewJQueryWidgetWizard;
-import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewJQueryWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLabelWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLabelWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewVideoWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewVideoWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizard;
+import org.jboss.tools.jst.web.ui.palette.html.wizard.HTMLConstants;
+import org.jboss.tools.jst.web.ui.palette.html.wizard.NewHTMLWidgetWizard;
+import org.jboss.tools.jst.web.ui.palette.html.wizard.NewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
 
 /**
@@ -42,7 +44,7 @@ import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
  * @author Viacheslav Kabanovich
  *
  */
-public class HTML5PaletteWizardTest extends AbstractPaletteEntryTest implements JQueryConstants {
+public class HTML5PaletteWizardTest extends AbstractPaletteEntryTest implements JQueryConstants, HTMLConstants {
 	IEditorPart editor = null;
 	
 	public HTML5PaletteWizardTest() {}
@@ -70,16 +72,16 @@ public class HTML5PaletteWizardTest extends AbstractPaletteEntryTest implements 
 	public IWizardPage runToolEntry(String entry, boolean wizardExpected) {
 		IWizardPage result = runToolEntry("HTML", entry, wizardExpected);
 		if(wizardExpected) {
-			assertTrue(result instanceof NewJQueryWidgetWizardPage);
-			NewJQueryWidgetWizardPage page = (NewJQueryWidgetWizardPage)result;
-//			assertEquals(getVersion(), page.getWizard().getVersion());
+			assertTrue(result instanceof NewHTMLWidgetWizardPage);
+			NewHTMLWidgetWizardPage page = (NewHTMLWidgetWizardPage)result;
+			assertEquals(getVersion(), page.getWizard().getVersion());
 		}
 		return result;
 	}
 
-//	protected JQueryMobileVersion getVersion() {
-//		return JQueryMobileVersion.JQM_1_4;
-//	}
+	protected HTMLVersion getVersion() {
+		return HTMLVersion.HTML_5_0;
+	}
 
 	public void testNewFormWizard() {
 		IWizardPage currentPage = runToolEntry("Form", true);
@@ -265,7 +267,7 @@ public class HTML5PaletteWizardTest extends AbstractPaletteEntryTest implements 
 		compareGeneratedAndInsertedText(wizard);
 	}
 
-	protected void compareGeneratedAndInsertedText(NewJQueryWidgetWizard<?> wizard) {
+	protected void compareGeneratedAndInsertedText(NewHTMLWidgetWizard<?> wizard) {
 		String generatedText = wizard.getTextForTextView();
 
 		wizard.performFinish();

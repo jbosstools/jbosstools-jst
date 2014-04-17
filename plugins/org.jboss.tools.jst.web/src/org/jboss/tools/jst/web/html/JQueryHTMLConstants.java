@@ -93,8 +93,6 @@ public interface JQueryHTMLConstants extends HTMLConstants {
 	public String ATTR_AUTOCOMPLETE = "autocomplete";
 	public String ATTR_NOVALIDATE = "novalidate";
 
-	public String TRUE = "true";
-	public String FALSE = "false";
 	public String TYPE_CHECKBOX = "checkbox";
 	public String TYPE_RADIO = "radio";
 	public String TYPE_RANGE = "range";

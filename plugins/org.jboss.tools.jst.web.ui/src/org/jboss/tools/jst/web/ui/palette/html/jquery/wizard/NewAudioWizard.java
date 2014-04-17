@@ -14,13 +14,14 @@ import org.jboss.tools.common.model.ui.editors.dnd.DropWizardMessages;
 import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.ElementNode;
 import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.NodeWriter;
 import org.jboss.tools.jst.web.ui.JSTWebUIImages;
+import org.jboss.tools.jst.web.ui.palette.html.wizard.NewHTMLWidgetWizard;
 
 /**
  * 
  * @author Viacheslav Kabanovich
  *
  */
-public class NewAudioWizard extends NewJQueryWidgetWizard<NewAudioWizardPage> implements JQueryConstants {
+public class NewAudioWizard extends NewHTMLWidgetWizard<NewAudioWizardPage> implements JQueryConstants {
 	static String prefixId = "audio-";
 
 	public NewAudioWizard() {

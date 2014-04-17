@@ -45,6 +45,7 @@ import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileAttrConsta
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileAttrConstants14;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
+import org.jboss.tools.jst.web.ui.palette.html.wizard.HTMLConstants;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -52,7 +53,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class JQueryFieldEditorFactory implements JQueryConstants {
+public class JQueryFieldEditorFactory implements JQueryConstants, HTMLConstants {
 
 	/**
 	 * Used in New Form wizard.

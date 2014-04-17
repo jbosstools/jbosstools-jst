@@ -206,4 +206,7 @@ public interface HTMLConstants {
 
 	public String SOFT_WRAP = "soft";
 	public String HARD_WRAP = "hard";
+
+	public String TRUE = "true";
+	public String FALSE = "false";
 }
