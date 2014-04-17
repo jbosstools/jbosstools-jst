@@ -20,8 +20,6 @@ import java.util.Map;
 
 import org.apache.commons.lang.SystemUtils;
 import org.eclipse.compare.Splitter;
-import org.eclipse.jface.dialogs.DialogSettings;
-import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
@@ -51,7 +49,6 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.common.model.ui.editors.dnd.DefaultDropWizardPage;
-import org.jboss.tools.common.ui.widget.editor.CheckBoxFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.common.util.SwtUtil;
@@ -226,45 +223,11 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		return browser == null ? null : browser.getBrowserType();
 	}
 
-	static final String SECTION_NAME = "InsertTag";
+	protected static final String SECTION_NAME = "InsertTag";
 	public static final String ADD_JS_CSS_SETTING_NAME = "addJSCSS";
 
-	IFieldEditor createAddLibsEditor(Composite parent) {
-		boolean addJSCSS = true; 
-		IDialogSettings settings = WebUiPlugin.getDefault().getDialogSettings();
-		IDialogSettings insertTagSettings = settings.getSection(SECTION_NAME);
-		if(insertTagSettings != null) {
-			addJSCSS = insertTagSettings.getBoolean(ADD_JS_CSS_SETTING_NAME);
-		} else {
-			insertTagSettings = DialogSettings.getOrCreateSection(settings, SECTION_NAME);
-			insertTagSettings.put(ADD_JS_CSS_SETTING_NAME, true);
-		}
-		final IFieldEditor addLibs = new CheckBoxFieldEditor(ADD_JS_CSS_SETTING_NAME, WizardMessages.addReferencesToJSCSSLabel, Boolean.valueOf(addJSCSS)){
-			@Override
-			public void doFillIntoGrid(Object parent) {
-				Composite c = (Composite) parent;
-				final Control[] controls = (Control[]) getEditorControls(c);
-				Button button = (Button)controls[0];
-				button.setText(WizardMessages.addReferencesToJSCSSLabel);
-				button.setToolTipText(WizardMessages.addReferencesToJSCSSTooltip);
-				GridData d = new GridData(GridData.FILL_HORIZONTAL);
-				d.horizontalSpan = 1;
-				d.minimumWidth = 200;
-				button.setLayoutData(d);
-			}
-		};
-		addLibs.doFillIntoGrid(parent);
-		addEditor(addLibs);
-		addLibs.addPropertyChangeListener(new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				IDialogSettings settings = WebUiPlugin.getDefault().getDialogSettings();
-				IDialogSettings insertTagSettings = settings.getSection(SECTION_NAME);
-				insertTagSettings.put(ADD_JS_CSS_SETTING_NAME, Boolean.parseBoolean(addLibs.getValue().toString()));
-			}
-		});
-		
-		return addLibs;
+	protected IFieldEditor createAddLibsEditor(Composite parent) {
+		return null;
 	}
 
 	private Composite createBrowserPanel(Composite previewPanel) {

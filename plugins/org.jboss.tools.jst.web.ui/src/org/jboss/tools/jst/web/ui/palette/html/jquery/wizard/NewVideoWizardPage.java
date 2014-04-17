@@ -14,6 +14,7 @@ import java.beans.PropertyChangeEvent;
 
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.jst.web.ui.internal.properties.advanced.LayoutUtil.TwoColumns;
+import org.jboss.tools.jst.web.ui.palette.html.wizard.NewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -21,7 +22,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewVideoWizardPage extends NewJQueryWidgetWizardPage {
+public class NewVideoWizardPage extends NewHTMLWidgetWizardPage {
 	VideoSourceEditor items = new VideoSourceEditor(this, 1, 3);
 
 	public NewVideoWizardPage() {

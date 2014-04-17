@@ -67,13 +67,13 @@ public interface JQueryConstants extends JQueryHTMLConstants {
 
 	public String EDITOR_ID_OFF = "off";
 	public String EDITOR_ID_ON = "on";
-	public String EDITOR_ID_ID = "id";
+//	public String EDITOR_ID_ID = "id";
 	public String EDITOR_ID_LAYOUT = "layout";
 	public String EDITOR_ID_URL = "url";
 	public String EDITOR_ID_SRC = ATTR_SRC;
 	public String EDITOR_ID_TRANSITION = ATTR_DATA_TRANSITION;
 	public String EDITOR_ID_CLOSE_BUTTON = ATTR_DATA_CLOSE_BTN;
-	public String EDITOR_ID_ADD_ID = "add-id";
+//	public String EDITOR_ID_ADD_ID = "add-id";
 	public String EDITOR_ID_POSTER = ATTR_POSTER;
 
 	public String EDITOR_ID_ACTION = "action";
@@ -153,11 +153,9 @@ public interface JQueryConstants extends JQueryHTMLConstants {
 	public String EDITOR_ID_ISMAP = ATTR_ISMAP;
 	public String EDITOR_ID_USEMAP = ATTR_USEMAP;
 	public String EDITOR_ID_CROSSORIGIN = ATTR_CROSSORIGIN;
-	public String EDITOR_ID_AUTOPLAY = ATTR_AUTOPLAY;
 	public String EDITOR_ID_CONTROLS = ATTR_CONTROLS;
 	public String EDITOR_ID_LOOP = ATTR_LOOP;
 	public String EDITOR_ID_MUTED = ATTR_MUTED;
-	public String EDITOR_ID_PRELOAD = ATTR_PRELOAD;
 	public String EDITOR_ID_VIDEO_TYPE = ATTR_TYPE;
 	public String EDITOR_ID_AUDIO_TYPE = ATTR_TYPE;
 	public String EDITOR_ID_FORM = TAG_FORM;

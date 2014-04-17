@@ -15,14 +15,13 @@ import java.io.File;
 import org.jboss.tools.common.model.options.SharableConstants;
 import org.jboss.tools.common.model.ui.editors.dnd.IDropCommand;
 import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.ElementNode;
-import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.NodeWriter;
 import org.jboss.tools.common.model.ui.internal.editors.PaletteItemResult;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.MobilePaletteInsertHelper;
 import org.jboss.tools.jst.web.WebModelPlugin;
-import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizard;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.wizard.VersionedNewHTMLWidgetWizard;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
 
 /**
@@ -30,12 +29,10 @@ import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
  * @author Viacheslav Kabanovich
  *
  */
-public abstract class NewJQueryWidgetWizard<P extends NewJQueryWidgetWizardPage> extends AbstractNewHTMLWidgetWizard implements JQueryConstants {
-	protected P page;
-
-	protected JQueryMobileVersion version = JQueryMobileVersion.JQM_1_4;
+public abstract class NewJQueryWidgetWizard<P extends NewJQueryWidgetWizardPage> extends VersionedNewHTMLWidgetWizard<JQueryMobileVersion,P> implements JQueryConstants {
 
 	public NewJQueryWidgetWizard() {
+		super(JQueryMobileVersion.getLatestDefaultVersion());
 	}
 
 	@Override
@@ -51,54 +48,12 @@ public abstract class NewJQueryWidgetWizard<P extends NewJQueryWidgetWizardPage>
 		}
 	}
 
-	public JQueryMobileVersion getVersion() {
-		return version;
-	}
-
-	protected void doAddPages() {
-		page = createPage();
-		addPage(page);
-	}
-
-	protected abstract P createPage(); 
-
-	protected boolean isTrue(String editorID) {
-		return TRUE.equals(page.getEditorValue(editorID));
-	}
-
 	protected boolean isMini() {
 		return isTrue(EDITOR_ID_MINI);
 	}
 
-	protected String getID(String prefix) {
-		if(!page.isIDEnabled()) {
-			return null;
-		}
-		String id = page.getEditorValue(EDITOR_ID_ID);
-		if(id.length() == 0) {
-			int i = generateIndex(prefix, "", 1);
-			id = prefix + i;
-		}
-		return id;
-	}
-
-	protected String addID(String prefix, ElementNode node) {
-		String id = getID(prefix);
-		if(id != null) {
-			node.addAttribute(ATTR_ID, id);
-		}
-		return id;
-	}
-
 	protected boolean isLayoutHorizontal() {
 		return LAYOUT_HORIZONTAL.equals(page.getEditorValue(EDITOR_ID_LAYOUT));
-	}
-
-	protected static void addClass(StringBuilder cls, String add) {
-		if(cls.length() > 0) {
-			cls.append(" ");
-		}
-		cls.append(add);
 	}
 
 	@Override
@@ -107,30 +62,6 @@ public abstract class NewJQueryWidgetWizard<P extends NewJQueryWidgetWizardPage>
 			getCommandProperties().setProperty(MobilePaletteInsertHelper.PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS, TRUE);
 		}
 		super.doPerformFinish();
-	}
-
-	@Override
-	public String getTextForBrowser() {
-		ElementNode html = new ElementNode(TAG_HTML, false);
-		createHead(html);
-		ElementNode body = html.addChild(TAG_BODY);
-		createBodyForBrowser(body);
-
-		NodeWriter w = new NodeWriter(false);
-		html.flush(w, 0);
-
-		StringBuilder sb = new StringBuilder();
-		sb.append(DOCTYPE).append("\n").append(w.getText());
-
-		return sb.toString();
-	}
-
-	/**
-	 * Override to wrap content.
-	 * @param body
-	 */
-	protected void createBodyForBrowser(ElementNode body) {
-		addContent(body);
 	}
 
 	protected ElementNode getPageContentNode(ElementNode parent) {
@@ -142,14 +73,8 @@ public abstract class NewJQueryWidgetWizard<P extends NewJQueryWidgetWizardPage>
 		return content;
 	}
 
-	protected ElementNode getFormNode(ElementNode parent) {
-		ElementNode form = parent.addChild(TAG_FORM);
-		form.addAttribute(ATTR_ACTION, "#");
-		form.addAttribute(ATTR_METHOD, METHOD_GET);
-		return form;
-	}
-	
-	private void createHead(ElementNode html) {
+	@Override
+	protected void createHead(ElementNode html) {
 		String browserType = page.getBrowserType();
 		ResourceConstants c = ("mozilla".equals(browserType) || this instanceof NewDialogWizard) ? 
 				new ResourceConstants130() : new ResourceConstants130();
@@ -204,13 +129,6 @@ public abstract class NewJQueryWidgetWizard<P extends NewJQueryWidgetWizardPage>
 		script.addAttribute(ATTR_SRC, jQueryScriptURI);
 		script = head.addChild(TAG_SCRIPT, "");
 		script.addAttribute(ATTR_SRC, jQueryMobileScriptURI);
-	}
-
-	protected void addAttributeIfNotEmpty(ElementNode n, String attrName, String editorID) {
-		String value = page.getEditorValue(editorID);
-		if(value != null && value.length() > 0) {
-			n.addAttribute(attrName, value);
-		}
 	}
 
 	abstract class ResourceConstants {

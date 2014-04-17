@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2013 Red Hat, Inc. 
+ * Copyright (c) 2014 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -10,15 +10,17 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette.html.wizard;
 
+import org.jboss.tools.jst.web.kb.internal.taglib.html.HTMLVersion;
+
 /**
  * 
  * @author Viacheslav Kabanovich
  *
  */
-public interface HTMLConstants extends org.jboss.tools.jst.web.html.HTMLConstants {
-	public String EDITOR_ID_ID = "id";
-	public String EDITOR_ID_ADD_ID = "add-id";
+public abstract class NewHTMLWidgetWizard <P extends NewHTMLWidgetWizardPage> extends VersionedNewHTMLWidgetWizard<HTMLVersion,P> {
 
-	public String EDITOR_ID_AUTOPLAY = ATTR_AUTOPLAY;
-	public String EDITOR_ID_PRELOAD = ATTR_PRELOAD;
+	public NewHTMLWidgetWizard() {
+		super(HTMLVersion.HTML_5_0);
+	}
+
 }
