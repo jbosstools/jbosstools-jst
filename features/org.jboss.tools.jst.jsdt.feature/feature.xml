@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.jboss.tools.jst.jsdt.tern.feature"
+      id="org.jboss.tools.jst.jsdt.feature"
       label="%featureName"
       version="3.6.0.qualifier"
       provider-name="%providerName">
@@ -18,7 +18,7 @@
    </license>
 
    <plugin
-         id="org.jboss.tools.jst.jsdt.tern"
+         id="org.jboss.tools.jst.jsdt"
          download-size="0"
          install-size="0"
          version="0.0.0"

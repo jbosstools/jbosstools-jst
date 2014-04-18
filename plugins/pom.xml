@@ -15,7 +15,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<module>org.jboss.tools.jst.web</module>
 		<module>org.jboss.tools.jst.web.kb</module>
 		<module>org.jboss.tools.jst.web.ui</module>
-		<module>org.jboss.tools.jst.jsdt.tern</module>
+		<module>org.jboss.tools.jst.jsdt</module>
 	</modules>
 </project>
 	
