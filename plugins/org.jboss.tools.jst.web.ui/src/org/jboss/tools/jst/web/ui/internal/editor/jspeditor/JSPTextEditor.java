@@ -149,6 +149,7 @@ import org.jboss.tools.jst.jsp.text.xpl.IStructuredTextOccurrenceStructureProvid
 import org.jboss.tools.jst.jsp.text.xpl.StructuredTextOccurrenceStructureProviderRegistry;
 import org.jboss.tools.jst.web.ui.internal.editor.ui.action.ExtendedFormatAction;
 import org.jboss.tools.jst.web.ui.internal.editor.ui.action.IExtendedAction;
+import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
@@ -727,7 +728,9 @@ public class JSPTextEditor extends StructuredTextEditor implements
 					DropData dropData = new DropData(flavor, data,
 							getEditorInput(), getSourceViewer(),
 							getSelectionProvider());
-					dropData.setValueProvider(createAttributeDescriptorValueProvider());
+					if(o == null || !o.getPath().startsWith(PaletteModel.MOBILE_PATH)) {
+						dropData.setValueProvider(createAttributeDescriptorValueProvider());
+					}
 					
 					dropData.setAttributeName(dropContext.getAttributeName());
 					IDropCommand dropCommand = DropCommandFactory.getInstance()

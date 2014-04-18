@@ -138,7 +138,9 @@ public class CustomTagLibManager {
 								WebKbPlugin.getDefault().logError(e);
 							}
 						}
-						lib.setRecognizer(recognizer);
+						if(recognizer!=null) {
+							lib.setRecognizer(recognizer);
+						}
 						libSet.add(lib);
 					} else if(CustomTagLibrary.COMPONET_EXTENSION.equals(elementName)) {
 						InputStream schemaStream = getInputStream(location);

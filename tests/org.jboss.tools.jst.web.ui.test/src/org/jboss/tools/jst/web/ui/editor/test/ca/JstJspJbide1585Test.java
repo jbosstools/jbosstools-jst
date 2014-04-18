@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2010 Red Hat, Inc.
+ * Copyright (c) 2007-2014 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -77,9 +77,9 @@ public class JstJspJbide1585Test extends ContentAssistantTestCase {
 				int proposalReplacementOffset = proposal.getReplacementOffset();
 				int proposalReplacementLength = proposal.getReplacementLength();
 	
-				assertTrue("The proposal replacement Offset is not correct.", proposalReplacementOffset == start + TAG_OPEN_STRING.length()); //$NON-NLS-1$
-				assertTrue("The proposal replacement Length is not correct.", proposalReplacementLength == PREFIX_STRING.length()); //$NON-NLS-1$
-				assertTrue("The proposal isn\'t filtered properly in the Content Assistant.", proposalString.startsWith(PREFIX_STRING)); //$NON-NLS-1$
+				assertTrue("The proposal replacement Offset is not correct.", proposalReplacementOffset == start); //$NON-NLS-1$
+				assertTrue("The proposal replacement Length is not correct.", proposalReplacementLength == TAG_OPEN_STRING.length() + PREFIX_STRING.length()); //$NON-NLS-1$
+				assertTrue("The proposal isn\'t filtered properly in the Content Assistant.", proposalString.startsWith(TAG_OPEN_STRING + PREFIX_STRING)); //$NON-NLS-1$
 			}
 		} finally {
 			closeEditor();

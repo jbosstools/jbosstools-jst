@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2013 Red Hat, Inc.
+ * Copyright (c) 2007-2014 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -41,49 +41,82 @@ import org.eclipse.wst.sse.ui.internal.contentassist.IRelevanceConstants;
 import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 import org.jboss.tools.common.el.ui.internal.info.ELInfoHover;
 import org.jboss.tools.common.el.ui.internal.info.Messages;
+import org.jboss.tools.common.text.IExecutableTextProposal;
+import org.jboss.tools.common.text.ITextProposalProvider;
+import org.jboss.tools.common.text.TextProposal;
+import org.jboss.tools.common.util.EclipseUIUtil;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 /**
  * @author Igels
  */
 @SuppressWarnings("restriction")
-public class AutoContentAssistantProposal extends CustomCompletionProposal implements ICompletionProposalExtension3, ICompletionProposalExtension4, ICompletionProposalExtension5, ICompletionProposalExtension6 {
+public class AutoContentAssistantProposal extends 
+		CustomCompletionProposal implements ICompletionProposalExtension3, 
+		ICompletionProposalExtension4, ICompletionProposalExtension5, 
+		ICompletionProposalExtension6, ITextProposalProvider {
     private boolean autoContentAssistant = false;
     private IRunnableWithProgress runnable = null;
+    TextProposal originalProposal = null;
+    
 	/**
 	 * The control creator.
 	 */
 	private IInformationControlCreator fCreator;
 
-	public AutoContentAssistantProposal(String replacementString, int replacementOffset, int replacementLength, int cursorPosition, Image image, String displayString, IContextInformation contextInformation, String additionalProposalInfo) {
+	public AutoContentAssistantProposal(TextProposal originalProposal, String replacementString, int replacementOffset, int replacementLength, int cursorPosition, 
+			Image image, String displayString, IContextInformation contextInformation, String additionalProposalInfo) {
 		super(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString,  contextInformation, additionalProposalInfo, IRelevanceConstants.R_NONE);
+	    this.originalProposal = originalProposal;
 		this.fOriginalReplacementLength = replacementLength;
 	}
 
-	public AutoContentAssistantProposal(String replacementString, int replacementOffset, int replacementLength, int cursorPosition, Image image, String displayString, String alternateMatch, IContextInformation contextInformation, String additionalProposalInfo, int relevance) {
+	public AutoContentAssistantProposal(TextProposal originalProposal, String replacementString, int replacementOffset, int replacementLength, int cursorPosition, 
+			Image image, String displayString, String alternateMatch, IContextInformation contextInformation, String additionalProposalInfo, int relevance) {
 	    super(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, alternateMatch, contextInformation, additionalProposalInfo, relevance, true);
+	    this.originalProposal = originalProposal;
 		this.fOriginalReplacementLength = replacementLength;
 	}
 
-	public AutoContentAssistantProposal(String replacementString, int replacementOffset, int replacementLength, int cursorPosition, Image image, String displayString, IContextInformation contextInformation, String additionalProposalInfo, int relevance) {
+	public AutoContentAssistantProposal(TextProposal originalProposal, String replacementString, int replacementOffset, int replacementLength, int cursorPosition, 
+			Image image, String displayString, IContextInformation contextInformation, String additionalProposalInfo, int relevance) {
 	    super(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, contextInformation, additionalProposalInfo, relevance);
+	    this.originalProposal = originalProposal;
 		this.fOriginalReplacementLength = replacementLength;
 	}
 
-	public AutoContentAssistantProposal(boolean autoContentAssistant, String replacementString, int replacementOffset, int replacementLength, int cursorPosition, Image image, String displayString, IContextInformation contextInformation, String additionalProposalInfo, int relevance) {
+	public AutoContentAssistantProposal(TextProposal originalProposal, boolean autoContentAssistant, String replacementString, int replacementOffset, int replacementLength, int cursorPosition, 
+			Image image, String displayString, IContextInformation contextInformation, String additionalProposalInfo, int relevance) {
 	    super(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, contextInformation, additionalProposalInfo, relevance);
+	    this.originalProposal = originalProposal;
 	    this.autoContentAssistant = autoContentAssistant;
 		this.fOriginalReplacementLength = replacementLength;
 	}
 
-	public AutoContentAssistantProposal(boolean autoContentAssistant, String replacementString, int replacementOffset, int replacementLength, int cursorPosition, Image image, String displayString, IContextInformation contextInformation, String additionalProposalInfo, int relevance, IRunnableWithProgress runnable) {
+	public AutoContentAssistantProposal(TextProposal originalProposal, boolean autoContentAssistant, String replacementString, int replacementOffset, int replacementLength, int cursorPosition, 
+			Image image, String displayString, IContextInformation contextInformation, String additionalProposalInfo, int relevance, IRunnableWithProgress runnable) {
 	    super(replacementString, replacementOffset, replacementLength, cursorPosition, image, displayString, contextInformation, additionalProposalInfo, relevance);
+	    this.originalProposal = originalProposal;
 	    this.autoContentAssistant = autoContentAssistant;
 		this.fOriginalReplacementLength = replacementLength;
 		this.runnable = runnable;
 	}
 
+	@Override
+	public TextProposal getTextProposal() {
+		return this.originalProposal;
+	}
+	
 	public void apply(ITextViewer viewer, char trigger, int stateMask, int offset) {
+		if (this.originalProposal != null) {
+			IExecutableTextProposal execProposal = this.originalProposal.getExecutable();
+			if (execProposal != null) {
+				execProposal.apply(EclipseUIUtil.getActiveEditor(), 
+						getReplacementOffset(), 
+						getReplacementOffset() + getReplacementLength());
+				return;
+			}
+		}
 		int diff = 0;
 		if (runnable != null) {
 			

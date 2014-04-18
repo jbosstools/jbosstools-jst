@@ -2494,6 +2494,17 @@
       </hyperlinkDetector>
    	</extension>
 
-
+   <extension
+         point="org.jboss.tools.jst.web.kb.tagLib">
+      <tag-lib
+            uri="jQueryMobile"
+            class="org.jboss.tools.jst.web.ui.palette.internal.JQMPaletteTagLib13"/>
+      <tag-lib
+            uri="jQueryMobile"
+            class="org.jboss.tools.jst.web.ui.palette.internal.JQMPaletteTagLib14"/>
+      <tag-lib
+            uri="html50"
+            class="org.jboss.tools.jst.web.ui.palette.internal.HtmlPaletteTagLib"/>
+   	</extension>
 
 </plugin>

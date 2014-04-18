@@ -44,6 +44,7 @@ import org.jboss.tools.jst.web.tld.IWebProject;
 import org.jboss.tools.jst.web.tld.URIConstants;
 import org.jboss.tools.jst.web.tld.WebProjectFactory;
 import org.jboss.tools.jst.web.tld.model.helpers.TLDToPaletteHelper;
+import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
 
 /**
  * 
@@ -201,6 +202,9 @@ public class PaletteDropCommand extends FileDropCommand {
 			String defaultPrefix = properties.getProperty(URIConstants.DEFAULT_PREFIX);
 			String tagname = properties.getProperty("tag name"); //$NON-NLS-1$
 			if(tagname == null && getCustomWizardName() != null) {
+				if (properties.getProperty(SharableConstants.PALETTE_PATH, "").startsWith(PaletteModel.MOBILE_PATH)) {
+					data.setValueProvider(null);
+				}
 				tagname = "div";
 				properties.setProperty("tag name", tagname); //$NON-NLS-1$
 			}

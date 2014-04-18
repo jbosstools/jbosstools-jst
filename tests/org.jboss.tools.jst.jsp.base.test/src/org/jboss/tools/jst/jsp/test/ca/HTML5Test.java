@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.jboss.tools.jst.web.kb.test;
+package org.jboss.tools.jst.jsp.test.ca;
 
 import java.util.HashMap;
 import java.util.HashSet;

@@ -34,10 +34,14 @@ import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.editors.text.templates.ContributionContextTypeRegistry;
 import org.eclipse.ui.editors.text.templates.ContributionTemplateStore;
+import org.eclipse.ui.texteditor.ITextEditor;
 import org.jboss.tools.common.log.BaseUIPlugin;
 import org.jboss.tools.common.log.IPluginLog;
 import org.jboss.tools.common.text.ext.hyperlink.HyperlinkDetector;
+import org.jboss.tools.common.util.EclipseUIUtil;
 import org.jboss.tools.jst.web.ui.editor.pref.template.TemplateContextTypeIdsXHTML;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPMultiPageEditor;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor;
 import org.jboss.tools.jst.web.ui.internal.editor.preferences.JSPOccurrencePreferenceConstants;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.HTMLWizardVisualPreviewInitializationException;
 import org.osgi.framework.BundleContext;
@@ -243,6 +247,17 @@ public class WebUiPlugin extends BaseUIPlugin {
 
 		JSPOccurrencePreferenceConstants.initializeDefaultValues(store);
 
+	}
+
+	public static JSPTextEditor getActiveEditor() {
+		ITextEditor textEditor = EclipseUIUtil.getActiveEditor();
+		JSPTextEditor editor = null;
+		if(textEditor instanceof JSPTextEditor) {
+			editor = (JSPTextEditor)textEditor;
+		} else if(textEditor instanceof JSPMultiPageEditor) {
+			editor = ((JSPMultiPageEditor)textEditor).getJspEditor();
+		}
+		return editor;
 	}
 
 	/**

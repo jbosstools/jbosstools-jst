@@ -17,6 +17,7 @@ import org.jboss.tools.jst.web.ui.editor.test.ca.CAMultipleCSSClassesInsertionTe
 import org.jboss.tools.jst.web.ui.editor.test.ca.Jbide1791Test;
 import org.jboss.tools.jst.web.ui.editor.test.ca.Jbide6061Test;
 import org.jboss.tools.jst.web.ui.editor.test.ca.Jbide9092Test;
+import org.jboss.tools.jst.web.ui.editor.test.ca.JstCAJQMFromPaletteTest;
 import org.jboss.tools.jst.web.ui.editor.test.ca.JstCAOnCustomPrefixesTest;
 import org.jboss.tools.jst.web.ui.editor.test.ca.JstCAURIChangeTest;
 import org.jboss.tools.jst.web.ui.editor.test.ca.JstJspCANamespacesInLastChar;
@@ -61,7 +62,8 @@ public class JstJspAllTests {
 		suite.addTestSuite(JspPreferencesPageTest.class);
 
 		suite.addTest(new ProjectImportTestSetup(new TestSuite(
-				JstJspQuickAssistTest.class),
+				JstJspQuickAssistTest.class,
+				JstCAJQMFromPaletteTest.class),
 				"org.jboss.tools.jst.web.ui.test", "projects/StaticWebProject", //$NON-NLS-1$ //$NON-NLS-2$
 				"StaticWebProject")); //$NON-NLS-1$
 

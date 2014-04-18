@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012 Red Hat, Inc.
+ * Copyright (c) 2012-2014 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -31,10 +31,10 @@ public class JstJspNonAutomaticProposalInsertionTest extends ContentAssistantTes
 	private static final String PAGE_NAME = "/WebContent/pages/greeting.xhtml"; //$NON-NLS-1$
 	private static final String MULTIPLE_PROPOSAL_PREFIX = "<ui:c"; //$NON-NLS-1$
 	private static final String SINGLE_PROPOSAL_PREFIX = "<ui:composition"; //$NON-NLS-1$
-	private static final String PROPOSAL_TO_APPLY_STRING = "ui:composition"; //$NON-NLS-1$
+	private static final String PROPOSAL_TO_APPLY_STRING = "<ui:composition"; //$NON-NLS-1$
 	private static final String TAG_TO_INSERT = "<ui:component />"; //$NON-NLS-1$
 	private static final String SINGLE_PROPOSAL_IN_LIST_PREFIX = "<ui:componen"; //$NON-NLS-1$
-	private static final String SINGLE_PROPOSAL_CHECK_STRING = "ui:component"; //$NON-NLS-1$
+	private static final String SINGLE_PROPOSAL_CHECK_STRING = "<ui:component"; //$NON-NLS-1$
 	
 	public void setUp() throws Exception {
 		project = ProjectImportTestSetup.loadProject(PROJECT_NAME);
@@ -102,7 +102,7 @@ public class JstJspNonAutomaticProposalInsertionTest extends ContentAssistantTes
 				AutoContentAssistantProposal proposal = (AutoContentAssistantProposal)p;
 				String proposalString = proposal.getReplacementString();
 				
-				if (SINGLE_PROPOSAL_CHECK_STRING.equals(proposalString)) {
+				if (proposalString != null && proposalString.startsWith(SINGLE_PROPOSAL_CHECK_STRING)) {
 					bProposalToCheckFound = true;
 					break;
 				}
@@ -148,7 +148,7 @@ public class JstJspNonAutomaticProposalInsertionTest extends ContentAssistantTes
 				AutoContentAssistantProposal proposal = (AutoContentAssistantProposal)p;
 				String proposalString = proposal.getReplacementString();
 				
-				if (PROPOSAL_TO_APPLY_STRING.equals(proposalString)) {
+				if (proposalString != null && proposalString.startsWith(PROPOSAL_TO_APPLY_STRING)) {
 					bProposalToApplyFound = true;
 					proposal.apply(document);
 					break;

@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.ui.test;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.jboss.tools.common.base.test.model.XProjectImportTestSetUp;
 import org.jboss.tools.test.util.ProjectImportTestSetup;
 
 /**
@@ -20,7 +21,7 @@ import org.jboss.tools.test.util.ProjectImportTestSetup;
  *
  */
 public class JstWebUiAllTests {
-	
+
 	public static Test suite() {
 		TestSuite suite = new TestSuite(JstWebUiAllTests.class.getName());
 
@@ -55,7 +56,15 @@ public class JstWebUiAllTests {
 		suite.addTestSuite(WebWizardsTest.class);
 		suite.addTestSuite(JstWebUiPreferencesPagesTest.class);
 		suite.addTestSuite(PaletteFilterTest.class);
-	
+
+		s = new TestSuite("Palette CA templates");
+		s.addTestSuite(HTML5PaletteCATest.class);
+		s.addTestSuite(JQueryPaletteCATest.class);
+		s.addTestSuite(JQuery14PaletteCATest.class);
+		suite.addTest(new XProjectImportTestSetUp(s,
+				"org.jboss.tools.jst.jsp.base.test",
+				new String[]{"projects/TestKbModel"},
+				new String[]{"TestKbModel"}));
 		return suite;
 	}
 }

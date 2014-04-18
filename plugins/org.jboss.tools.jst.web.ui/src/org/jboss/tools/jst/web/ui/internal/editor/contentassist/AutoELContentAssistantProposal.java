@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2010-2013 Red Hat, Inc. 
+ * Copyright (c) 2010-2014 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -16,6 +16,7 @@ import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.swt.graphics.Image;
 import org.jboss.tools.common.el.core.ca.MessagesELTextProposal;
 import org.jboss.tools.common.el.ui.internal.info.ELInfoHover;
+import org.jboss.tools.common.text.TextProposal;
 
 /**
  * Class to provide EL proposals to Content Assistant. The main purpose is to
@@ -44,12 +45,12 @@ public class AutoELContentAssistantProposal extends
 	 * @param elements
 	 * @param relevance
 	 */
-	public AutoELContentAssistantProposal(String replacementString,
+	public AutoELContentAssistantProposal(TextProposal originalProposal, String replacementString,
 			int replacementOffset, int replacementLength, int cursorPosition,
 			Image image, String displayString, String alternateMatch,
 			IContextInformation contextInformation, IJavaElement[] elements,
 			int relevance) {
-		super(replacementString, replacementOffset, replacementLength,
+		super(originalProposal, replacementString, replacementOffset, replacementLength,
 				cursorPosition, image, displayString, alternateMatch,
 				contextInformation, null, relevance);
 		this.fJavaElements = elements;
@@ -69,12 +70,12 @@ public class AutoELContentAssistantProposal extends
 	 * @param properySource
 	 * @param relevance
 	 */
-	public AutoELContentAssistantProposal(String replacementString,
+	public AutoELContentAssistantProposal(TextProposal originalProposal, String replacementString,
 			int replacementOffset, int replacementLength, int cursorPosition,
 			Image image, String displayString, String alternateMatch,
 			IContextInformation contextInformation,
 			MessagesELTextProposal propertySource, int relevance) {
-		super(replacementString, replacementOffset, replacementLength,
+		super(originalProposal, replacementString, replacementOffset, replacementLength,
 				cursorPosition, image, displayString, alternateMatch,
 				contextInformation, null, relevance);
 		this.fJavaElements = null;
