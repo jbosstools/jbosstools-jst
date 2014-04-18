@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Adapter
-Bundle-SymbolicName: org.jboss.tools.jst.jsdt.tern;singleton:=true
+Bundle-SymbolicName: org.jboss.tools.jst.jsdt;singleton:=true
 Bundle-Version: 3.6.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 
