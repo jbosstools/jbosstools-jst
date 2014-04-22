@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.jboss.tools.jst.web.ui.internal.editor.outline.JSPPropertySourceAdapter.ICategoryFilter;
+import org.jboss.tools.jst.web.html.HTMLConstants;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 
 /**
@@ -24,6 +25,11 @@ import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 public class AngularCategoryFilter implements ICategoryFilter {
 	static final String CATEGORY_ANGULAR = "AngularJS";
 	Set<String> angularAttrs = new HashSet<String>();
+
+	static final Set<String> STRUCTURAL_ATTRIBUTES = new HashSet<String>();
+	static {
+		STRUCTURAL_ATTRIBUTES.add(HTMLConstants.ATTR_TYPE);
+	}
 
 	public AngularCategoryFilter() {}
 
@@ -47,4 +53,8 @@ public class AngularCategoryFilter implements ICategoryFilter {
 				|| (!angularAttrs.isEmpty() && "ng-app".equals(attributeName))) ? CATEGORY_ANGULAR : null;
 	}
 
+	@Override
+	public Set<String> getStructuralAttributes(String nodeName) {
+		return STRUCTURAL_ATTRIBUTES;
+	}
 }

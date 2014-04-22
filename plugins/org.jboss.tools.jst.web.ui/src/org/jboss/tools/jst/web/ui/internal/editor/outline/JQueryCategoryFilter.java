@@ -14,6 +14,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.jboss.tools.jst.web.ui.internal.editor.outline.JSPPropertySourceAdapter.ICategoryFilter;
+import org.jboss.tools.jst.web.html.HTMLConstants;
+import org.jboss.tools.jst.web.html.JQueryHTMLConstants;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileAttrProvider;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 
@@ -25,6 +27,13 @@ import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 public class JQueryCategoryFilter implements ICategoryFilter {
 	static final String CATEGORY_JQM = "jQuery";
 	Set<String> jQueryAttrs = new HashSet<String>();
+
+	static final Set<String> STRUCTURAL_ATTRIBUTES = new HashSet<String>();
+	static {
+		STRUCTURAL_ATTRIBUTES.add(HTMLConstants.ATTR_TYPE);
+		STRUCTURAL_ATTRIBUTES.add(JQueryHTMLConstants.ATTR_DATA_ROLE);
+		STRUCTURAL_ATTRIBUTES.add(HTMLConstants.ATTR_CLASS);
+	}
 
 	public JQueryCategoryFilter() {
 	}
@@ -45,4 +54,8 @@ public class JQueryCategoryFilter implements ICategoryFilter {
 		return (jQueryAttrs.contains(attributeName)) ? CATEGORY_JQM : null;
 	}
 
+	@Override
+	public Set<String> getStructuralAttributes(String nodeName) {
+		return STRUCTURAL_ATTRIBUTES;
+	}
 }
