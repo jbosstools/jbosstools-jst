@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.ui.internal.editor.outline;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -80,7 +81,23 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 
 	static interface ICategoryFilter {
 		public void setAttributes(IAttribute[] attributes);
+
 		public String getCategory(String attributeName);
+		/**
+		 * Returns collection of attribute names, values of which may 
+		 * define the set of attributes at the node.
+		 * Though the collection of structural attributes may 
+		 * depend on the node name, it is better to return 
+		 * all structural attributes for the category, when 
+		 * there are only a few of them. Value check is fast,
+		 * while listing structural attributes for each node 
+		 * would require support in each version and be a potential
+		 * source of errors.
+		 *  
+		 * @param nodeName
+		 * @return
+		 */
+		public Collection<String> getStructuralAttributes(String nodeName);
 	}
 	
 	class QueryFactory implements IQueryFactory {
@@ -105,7 +122,11 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 	JspELCompletionProposalComputer processor;
 	int offset = 0;
 	KbQuery kbQuery, kbQueryAttr;
+
 	private Set<String> attributeNames = new HashSet<String>();
+
+	private Set<String> structuralAttributeNames = new HashSet<String>();
+	private Map<String, String> structuralAttributes = new HashMap<String, String>();
 
 		IFormCategoryDescriptor[] categoryDescriptors = new IFormCategoryDescriptor[0];
 		ICategoryFilter[] categoryFilters = new ICategoryFilter[0];
@@ -182,6 +203,10 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 			}
 			categoryDescriptors = ds1.toArray(new IFormCategoryDescriptor[0]);
 			categoryFilters = fs1.toArray(new ICategoryFilter[0]);
+			structuralAttributeNames.clear();
+			for (ICategoryFilter f: categoryFilters) {
+				structuralAttributeNames.addAll(f.getStructuralAttributes(fNode.getNodeName()));
+			}
 		}
 	}
 
@@ -508,7 +533,27 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 			changed = true;
 		}
 		if(changed) attributeNames = as;
-		return changed;		
+
+		boolean changed2 = false;
+		Map<String, String> sas = new HashMap<String, String>();
+		if(attributes != null) {
+			for (String a: structuralAttributeNames) {
+				Node n = attributes.getNamedItem(a);
+				if(n instanceof Attr) {
+					String v = ((Attr) n).getValue();
+					sas.put(a, v);
+					if(!structuralAttributes.containsKey(a)
+						|| !structuralAttributes.get(a).equals(v)) {
+						changed2 = true;
+					}
+				}
+			}
+		}
+		if(!changed2 && structuralAttributes.size() != sas.size()) {
+			changed2 = true;
+		}
+		if(changed2) structuralAttributes = sas;
+		return changed || changed2;		
 	}
 
 	protected void updatePropertyDescriptors() {
