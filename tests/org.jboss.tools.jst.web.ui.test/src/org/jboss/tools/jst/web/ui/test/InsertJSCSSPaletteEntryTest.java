@@ -55,11 +55,9 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			"\t\t<div data-role=\"collapsible\">",
 			"\t\t\t<h3>I'm a header</h3>",
 			"\t\t\t<p>I'm the collapsible content.</p>",
-			"",
 			"\t\t</div>",
 		    "\t</div>",
 		    "</body>",
-		    "",
 			"</html>"
 	};
 	protected String[] test_result_2_1={
@@ -661,7 +659,7 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 	}
 
 	private void compare(String test, String[] result){
-		String[] spl = test.split("\n");
+		String[] spl = test.split("[\r\n]+");
 		assertEquals("Unexpected number of lines",result.length, spl.length);
 		for(int i = 0; i < result.length; i++){
 			String token = spl[i];
