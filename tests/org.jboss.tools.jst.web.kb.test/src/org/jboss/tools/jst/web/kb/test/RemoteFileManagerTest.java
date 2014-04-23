@@ -13,6 +13,8 @@ package org.jboss.tools.jst.web.kb.test;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashSet;
+import java.util.Set;
 
 import junit.framework.TestCase;
 
@@ -26,12 +28,13 @@ import org.jboss.tools.jst.web.kb.internal.RemoteFileManager;
  */
 public class RemoteFileManagerTest extends TestCase {
 
-	private static final String GOOD_URL = "http://test.domain.com/good.css";
+	private static final String BASE_GOOD_URL = "http://test.domain.com/good.css";
 	private static final String UNAVAILABLE_URL = "http://test.domain.com/unavailable.css";
 	private static final String IO_EXCEPTION_URL = "http://test.domain.com/error.css";
 
 	private RemoteFileManager manager;
 	private boolean slow_connection;
+	private Set<String> goodUrls = new HashSet<String>();
 
 	@Override
 	protected void setUp() throws Exception {
@@ -48,7 +51,7 @@ public class RemoteFileManagerTest extends TestCase {
 			IEclipsePreferences preferences = DefaultScope.INSTANCE.getNode(WebKbPlugin.PLUGIN_ID);
 			preferences.putInt(RemoteFileManager.DOWNLOADING_TIMEOUT_PREFERENCE, 10000);
 
-			RemoteFileManager.Result result = manager.getFile(GOOD_URL);
+			RemoteFileManager.Result result = manager.getFile(generateGoodUrl(BASE_GOOD_URL));
 			assertTrue(result.isReady());
 			assertNotNull(result.getLocalPath());
 			file = new File(result.getLocalPath());
@@ -67,7 +70,7 @@ public class RemoteFileManagerTest extends TestCase {
 			IEclipsePreferences preferences = DefaultScope.INSTANCE.getNode(WebKbPlugin.PLUGIN_ID);
 			preferences.putInt(RemoteFileManager.DOWNLOADING_TIMEOUT_PREFERENCE, 1);
 
-			RemoteFileManager.Result result = manager.getFile(GOOD_URL);
+			RemoteFileManager.Result result = manager.getFile(generateGoodUrl(BASE_GOOD_URL));
 			assertFalse(result.isReady());
 			if(result.getLocalPath()!=null) {
 				file = new File(result.getLocalPath());
@@ -105,7 +108,8 @@ public class RemoteFileManagerTest extends TestCase {
 			IEclipsePreferences preferences = DefaultScope.INSTANCE.getNode(WebKbPlugin.PLUGIN_ID);
 			preferences.putInt(RemoteFileManager.DOWNLOADING_TIMEOUT_PREFERENCE, 10);
 
-			RemoteFileManager.Result result = manager.getFile(GOOD_URL);
+			String goodUrl = generateGoodUrl(BASE_GOOD_URL);
+			RemoteFileManager.Result result = manager.getFile(goodUrl);
 			assertFalse(result.isReady());
 			if(result.getLocalPath()!=null) {
 				file = new File(result.getLocalPath());
@@ -114,7 +118,7 @@ public class RemoteFileManagerTest extends TestCase {
 			assertEquals(RemoteFileManager.DownloadingStatus.DOWNLOADING, result.getStatus());
 
 			Thread.sleep(200);
-			result = manager.getFile(GOOD_URL);
+			result = manager.getFile(goodUrl);
 			assertTrue(result.isReady());
 			file = new File(result.getLocalPath());
 			assertNotNull(file);
@@ -126,6 +130,14 @@ public class RemoteFileManagerTest extends TestCase {
 				file.delete();
 			}
 		}
+	}
+
+	private static int COUNT;
+
+	private String generateGoodUrl(String baseUrl) {
+		String url = baseUrl + (COUNT++) + ".css";
+		goodUrls.add(url);
+		return url;
 	}
 
 	private class TestRemoteFileManager extends RemoteFileManager {
@@ -142,7 +154,7 @@ public class RemoteFileManagerTest extends TestCase {
 						} catch (InterruptedException e) {
 						}
 					}
-					if(GOOD_URL.equals(url)) {
+					if(goodUrls.contains(url)) {
 						in = new InputStream() {
 							@Override
 							public int read() throws IOException {

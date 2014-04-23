@@ -84,7 +84,7 @@ public abstract class JSRecognizer extends HTML5Recognizer implements ITagLibVer
 								String textContent = script.getTextContent();
 								text = new StringBuilder(srcAttributeValue).append("\n").append(textContent).toString();
 							}
-							String[] lines = text.split("\n");
+							String[] lines = text.split("[\r\n]+");
 							for (String line : lines) {
 								String scriptText = find(line, ".*(" + jsLibName + ")(.*)(.js).*", 2);
 						        if(scriptText!=null) {
