@@ -70,7 +70,7 @@ public class KbModelWithSeveralJarCopiesTest extends TestCase {
 		Set<String> paths = new HashSet<String>();
 		
 		for (ITagLibrary l: ls) {
-			String path = l.getSourcePath().toString();
+			String path = l.getSourcePath().toOSString();
 			paths.add(path);
 			XModelObject o = (XModelObject)((KbObject)l).getId();
 			XModelObject fs = FileSystemsHelper.getLibs(o.getModel()).getLibrary(path);
