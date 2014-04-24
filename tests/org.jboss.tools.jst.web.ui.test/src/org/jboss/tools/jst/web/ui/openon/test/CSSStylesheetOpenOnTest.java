@@ -112,10 +112,20 @@ public class CSSStylesheetOpenOnTest extends TestCase {
 		final String[] editorNames = {
 				"styleWithMediaRules.css", "styleWithMediaRules.css", "styleWithMediaRules.css", "styleWithMediaRules.css",
 				"indexWithMediaRules.html", "indexWithMediaRules.html", "indexWithMediaRules.html", "indexWithMediaRules.html"};
-		final int[] editorSelectionOffsets = {
-				0, 81, 167, 253, 22, 106, 194, 282};
-		final int[] editorSelectionLengths = {
-				57, 58, 51, 39, 63, 64, 57, 45};
+		final String[] editorSelectionTexts = {
+				"p.common {font-family:verdana,sans-serif;font-size:14px;}",
+				"p.display {font-family:verdana,sans-serif;font-size:14px;}",
+				"p.printer {font-family:times,serif;font-size:10px;}",
+				"p.displayAndPrinter {font-weight:bold;}",
+				"p.inpageCommon {font-family:verdana,sans-serif;font-size:14px;}",
+				"p.inpageDisplay {font-family:verdana,sans-serif;font-size:14px;}",
+				"p.inpagePrinter {font-family:times,serif;font-size:10px;}",
+				"p.inpageDisplayAndPrinter {font-weight:bold;}"
+				};
+//		final int[] editorSelectionOffsets = {
+//				0, 81, 167, 253, 22, 106, 194, 282};
+//		final int[] editorSelectionLengths = {
+//				57, 58, 51, 39, 63, 64, 57, 45};
 		
 		IEditorPart editor = WorkbenchUtils.openEditor(MEDIA_PAGE_NAME);
 		if (editor != null) openedEditors.add(editor);
@@ -158,8 +168,7 @@ public class CSSStylesheetOpenOnTest extends TestCase {
 						assertFalse("Required CSS Rule is not selected", selection.isEmpty());
 						if (selection instanceof TextSelection) {
 							TextSelection textSelection = (TextSelection)selection;
-							assertTrue("Required CSS Rule is not selected", 
-									(textSelection.getOffset() == editorSelectionOffsets[i] && textSelection.getLength() == editorSelectionLengths[i]));
+							assertEquals("Required CSS Rule is not selected", editorSelectionTexts[i], textSelection.getText());
 							found = true;
 							break;
 						}
