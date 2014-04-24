@@ -697,8 +697,10 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		if (visualEditor != null) {
 			visualEditor.dispose();
 		}
-		site.dispose();
-		site = null;
+		if (site != null) {
+			site.dispose();
+			site = null;
+		}
 		outlinePage = null;
 		XModelObject o = getModelObject();
 		if (o != null) {
