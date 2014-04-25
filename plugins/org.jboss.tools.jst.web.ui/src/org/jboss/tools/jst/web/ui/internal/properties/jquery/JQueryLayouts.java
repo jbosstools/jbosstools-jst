@@ -116,14 +116,14 @@ public class JQueryLayouts implements JQueryHTMLConstants {
 		v.layoutEditor(ATTR_DATA_ROLE, fields);
 		v.layoutEditor(ATTR_DATA_TITLE, fields);
 		LayoutUtil.createSeparator(fields);
-		v.layoutEditor(ATTR_DATA_CORNERS, fields);
-		v.layoutEditor(ATTR_DATA_CLOSE_BTN, fields);
-		v.layoutEditor(ATTR_DATA_CLOSE_BTN_TEXT, fields);
-		LayoutUtil.createSeparator(fields);
-		v.layoutEditor(ATTR_DATA_THEME, fields);
-		v.layoutEditor(ATTR_DATA_OVERLAY_THEME, fields);
-		LayoutUtil.createSeparator(fields);
-		layoutAjaxEnhanceDom(fields, true);
+		int count = v.layoutEditor(ATTR_DATA_CORNERS, fields)
+					+ v.layoutEditor(ATTR_DATA_CLOSE_BTN, fields)
+					+ v.layoutEditor(ATTR_DATA_CLOSE_BTN_TEXT, fields);
+		if(count > 0) LayoutUtil.createSeparator(fields);
+		count = v.layoutEditor(ATTR_DATA_THEME, fields)
+				+ v.layoutEditor(ATTR_DATA_OVERLAY_THEME, fields);
+		if(count > 0) LayoutUtil.createSeparator(fields);
+		layoutAjaxEnhanceDom(fields, false);
 	}
 
 	public void layoutPage(Composite fields, List<Entry> entries) {
@@ -131,18 +131,21 @@ public class JQueryLayouts implements JQueryHTMLConstants {
 		v.layoutEditor(ATTR_DATA_TITLE, fields);
 		LayoutUtil.createSeparator(fields);
 
-		v.layoutEditor(ATTR_DATA_CLOSE_BTN_TEXT, fields);
-		v.layoutEditor(ATTR_DATA_ADD_BACK_BUTTON, fields);
-		Composite backParent = LayoutUtil.createPanel(fields);
-		v.layoutEditor(ATTR_DATA_BACK_BUTTON_TEXT, backParent);
-		v.layoutEditor(ATTR_DATA_BACK_BUTTON_THEME, backParent);
+		int count = v.layoutEditor(ATTR_DATA_CLOSE_BTN_TEXT, fields)
+					+ v.layoutEditor(ATTR_DATA_ADD_BACK_BUTTON, fields);
+		if(v.hasEditor(ATTR_DATA_BACK_BUTTON_TEXT) || v.hasEditor(ATTR_DATA_BACK_BUTTON_THEME)) {
+			Composite backParent = LayoutUtil.createPanel(fields);
+			v.layoutEditor(ATTR_DATA_BACK_BUTTON_TEXT, backParent);
+			v.layoutEditor(ATTR_DATA_BACK_BUTTON_THEME, backParent);
+			count++;
+		}
 
-		LayoutUtil.createSeparator(fields);
+		if(count > 0) LayoutUtil.createSeparator(fields);
 
-		v.layoutEditor(ATTR_DATA_THEME, fields);
-		v.layoutEditor(ATTR_DATA_OVERLAY_THEME, fields);
+		count = v.layoutEditor(ATTR_DATA_THEME, fields)
+				+ v.layoutEditor(ATTR_DATA_OVERLAY_THEME, fields);
 
-		layoutAjaxEnhanceDom(fields, true);
+		layoutAjaxEnhanceDom(fields, count > 0);
 	}
 
 	public void layoutPanel(Composite fields, List<Entry> entries) {

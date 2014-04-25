@@ -317,13 +317,16 @@ public abstract class AbstractAdvancedPropertySetViewer extends AbstractProperty
 
 	/**
 	 * Adds editor to assigned parent composite.
+	 * Returns 1 if editor is available, otherwise returns 0.
 	 * @param editor
 	 * @param parent
 	 */
-	public void layoutEditor(String id, Composite parent) {
+	public int layoutEditor(String id, Composite parent) {
 		if(getEditor(id) != null) {
 			layoutEditor(getEditor(id), parent, true);
+			return 1;
 		}
+		return 0;
 	}
 
 	/**
