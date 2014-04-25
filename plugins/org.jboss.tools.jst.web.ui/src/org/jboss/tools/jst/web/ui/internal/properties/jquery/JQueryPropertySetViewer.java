@@ -105,7 +105,7 @@ public class JQueryPropertySetViewer extends AbstractAdvancedPropertySetViewer i
 			layouts.layoutToolbar(fields, entries);
 		} else {
 			if(hasEditor(ATTR_DATA_ROLE)) {
-				layoutEditor(getEditor(ATTR_DATA_ROLE), fields);
+				layoutEditor(getEditor(ATTR_DATA_ROLE), fields, true);
 				if(entries.size() > 1) {
 					LayoutUtil.createSeparator(fields);
 				}
