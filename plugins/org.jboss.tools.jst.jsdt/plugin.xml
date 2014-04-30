@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+	<extension 
+		point="tern.eclipse.ide.core.ternNatureAdapters"
+		id="org.jboss.tools.jst.jsdt.ternNatureAdapters"
+		name="org.jboss.tools.jst.jsdt.ternNatureAdapters">
+		
+		<ternAdaptToNature 
+			id = "org.eclipse.wst.jsdt.core.jsNature"
+			name = "JavaScript" />
+	</extension>
+	
+	<extension 
+		point="org.eclipse.angularjs.core.angularNatureAdapters"
+		id="org.jboss.tools.jst.jsdt.angularNatureAdapters"
+		name="org.jboss.tools.jst.jsdt.angularNatureAdapters">
+		
+		<angularAdaptToNature 
+			id = "org.eclipse.wst.jsdt.core.jsNature"
+			name = "JavaScript" />
+	</extension>
+</plugin>
