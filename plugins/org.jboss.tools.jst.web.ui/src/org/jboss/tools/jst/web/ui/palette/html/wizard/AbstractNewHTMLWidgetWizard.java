@@ -22,9 +22,13 @@ import java.util.Set;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchWizard;
 import org.jboss.tools.common.meta.action.XActionInvoker;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.XModelObjectConstants;
@@ -57,7 +61,7 @@ import org.jboss.tools.jst.web.ui.WebUiPlugin;
  * @author Viacheslav Kabanovich
  *
  */
-public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChangeListener, IDropWizard, IDropWizardExtension, HTMLConstants {
+public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChangeListener, IDropWizard, IDropWizardExtension, IWorkbenchWizard, HTMLConstants {
 	protected IDropCommand command;
 	Set<String> ids = new HashSet<String>();
 
@@ -87,6 +91,7 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 			DefaultDropWizardPage page = (DefaultDropWizardPage)pages[i];
 			page.runValidation();
 		}
+		((WizardDialog)getContainer()).updateButtons();
 	}
 	
 	@Override
@@ -436,6 +441,10 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 		dropCommand.getDefaultModel().setDropData(dropData);
 		dropCommand.initialize();
 		return dropCommand;
+	}
+
+	@Override
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
 	}
 }
 

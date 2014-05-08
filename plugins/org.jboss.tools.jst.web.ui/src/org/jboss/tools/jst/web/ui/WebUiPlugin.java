@@ -55,6 +55,10 @@ public class WebUiPlugin extends BaseUIPlugin {
 	public static final String CA_RESOURCES_IMAGE_PATH = "images/ca/icons_Resource_path.gif"; //$NON-NLS-1$
 	public static final String CA_JSF_MESSAGES_IMAGE_PATH = "images/ca/icons_Message_Bundles.gif"; //$NON-NLS-1$
 
+	public static final String JS_LIB_IMAGE_PATH = "images/xstudio/js/lib.png"; //$NON-NLS-1$
+	public static final String JS_LIB_JS_IMAGE_PATH = "images/xstudio/js/js.png"; //$NON-NLS-1$
+	public static final String JS_LIB_CSS_IMAGE_PATH = "images/xstudio/js/css.gif"; //$NON-NLS-1$
+
 	static WebUiPlugin INSTANCE;
 	/**
 	 * The template store for the html editor.

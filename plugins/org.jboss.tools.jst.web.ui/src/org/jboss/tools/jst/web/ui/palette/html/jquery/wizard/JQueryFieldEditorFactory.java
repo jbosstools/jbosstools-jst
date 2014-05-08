@@ -23,8 +23,10 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -36,6 +38,7 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.jboss.tools.common.ui.CommonUIMessages;
 import org.jboss.tools.common.ui.widget.editor.ButtonFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.CheckBoxFieldEditor;
+import org.jboss.tools.common.ui.widget.editor.ComboFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.CompositeEditor;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.LabelFieldEditor;
@@ -906,6 +909,28 @@ public class JQueryFieldEditorFactory implements JQueryConstants, HTMLConstants 
 	}
 
 	/**
+	 * Creates combo editor without label.
+	 * 
+	 * @param name
+	 * @param defaultValue
+	 * @param span
+	 * @return
+	 */
+	public static IFieldEditor createComboEditor(String name, List<String> values, String defaultValue, final int span, final int widthHint) {
+		return new ComboFieldEditor(name, "", values, defaultValue, false) {
+			public void doFillIntoGrid(Object parent) {
+				Composite c = (Composite) parent;
+				final Control[] controls = (Control[]) getEditorControls(c);
+				Combo combo = (Combo)controls[0];
+				GridData d = widthHint != SWT.DEFAULT ? new GridData() : new GridData(GridData.FILL_HORIZONTAL);
+				d.horizontalSpan = span;
+				if(widthHint != SWT.DEFAULT) d.widthHint = widthHint;
+				combo.setLayoutData(d);
+			}
+		};
+	}
+
+	/**
 	 * Creates an invisible placeholder.
 	 * 
 	 * @param name
@@ -1574,6 +1599,24 @@ public class JQueryFieldEditorFactory implements JQueryConstants, HTMLConstants 
 	public static IFieldEditor createFormReferenceEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_FORM, WizardMessages.formLabel, "",
 				WizardDescriptions.labelForm);
+	}
+
+	/**
+	 * Used in 'Add References to JS/CSS' page of new jQuery widget wizards.
+	 * @return
+	 */
+	public static IFieldEditor createAddJSLibEditor(String id, String label, boolean selected) {
+		return createCheckboxEditor(id, label, selected, 1,
+				"");
+	}
+
+	/**
+	 * Used in 'Add References to JS/CSS' page of new jQuery widget wizards.
+	 * Goes together with enabling label that provides description.
+	 * @return
+	 */
+	public static IFieldEditor createJSLibVersionEditor(String id, List<String> values, String defaultValue) {
+		return createComboEditor(id, values, defaultValue, 2, 100);
 	}
 
 }

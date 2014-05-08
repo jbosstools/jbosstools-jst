@@ -19,6 +19,7 @@ import org.jboss.tools.common.model.ui.internal.editors.PaletteItemResult;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.MobilePaletteInsertHelper;
+import org.jboss.tools.jst.web.ui.internal.preferences.js.PreferredJSLibVersions;
 import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.VersionedNewHTMLWidgetWizard;
@@ -30,14 +31,37 @@ import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
  *
  */
 public abstract class NewJQueryWidgetWizard<P extends NewJQueryWidgetWizardPage> extends VersionedNewHTMLWidgetWizard<JQueryMobileVersion,P> implements JQueryConstants {
+	private JQueryVersionPage versionPage;
+	
+	PreferredJSLibVersions preferredVersions = null;
 
 	public NewJQueryWidgetWizard() {
 		super(JQueryMobileVersion.getLatestDefaultVersion());
 	}
 
 	@Override
+	public void initWithoutUI() {
+		addPages();
+		if(page != null) {
+			page.createFields();
+		}
+		versionPage.createFields();
+	}
+
+	protected void doAddPages() {
+		super.doAddPages();
+		versionPage = new JQueryVersionPage("jQueryVersion", "Add References to JS/CSS");
+		addPage(versionPage);
+	}
+
+	public PreferredJSLibVersions getPreferredVersions() {
+		return preferredVersions;
+	}
+
+	@Override
 	public void setCommand(IDropCommand command) {
 		super.setCommand(command);
+		
 		String path = getCommandProperties().getProperty(SharableConstants.PALETTE_PATH);
 		if(path != null) {
 			for (JQueryMobileVersion v: JQueryMobileVersion.ALL_VERSIONS) {
@@ -46,6 +70,9 @@ public abstract class NewJQueryWidgetWizard<P extends NewJQueryWidgetWizardPage>
 				}
 			}
 		}
+
+		preferredVersions =new PreferredJSLibVersions(getFile(), getVersion());
+		preferredVersions.updateLibEnablementAndSelection();		
 	}
 
 	protected boolean isMini() {
@@ -58,7 +85,9 @@ public abstract class NewJQueryWidgetWizard<P extends NewJQueryWidgetWizardPage>
 
 	@Override
 	protected void doPerformFinish() {
-		if(isTrue(AbstractNewHTMLWidgetWizardPage.ADD_JS_CSS_SETTING_NAME)) {
+		preferredVersions.applyLibPreference(versionPage);
+		preferredVersions.saveLibPreference();
+		if(page == null || isTrue(AbstractNewHTMLWidgetWizardPage.ADD_JS_CSS_SETTING_NAME)) {
 			getCommandProperties().setProperty(MobilePaletteInsertHelper.PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS, TRUE);
 		}
 		super.doPerformFinish();

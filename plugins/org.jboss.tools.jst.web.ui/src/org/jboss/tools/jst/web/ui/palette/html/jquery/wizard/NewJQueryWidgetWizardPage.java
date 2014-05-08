@@ -23,6 +23,7 @@ import org.jboss.tools.common.ui.widget.editor.CheckBoxFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
+import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.VersionedNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
@@ -46,6 +47,14 @@ public class NewJQueryWidgetWizardPage extends VersionedNewHTMLWidgetWizardPage 
 		return getWizard().getVersion();
 	}
 
+	public boolean canFlipToNextPage() {
+		if(!isTrue(AbstractNewHTMLWidgetWizardPage.ADD_JS_CSS_SETTING_NAME)) {
+			return false;
+		}
+
+		return super.canFlipToNextPage();
+	}
+
 	protected IFieldEditor createAddLibsEditor(Composite parent) {
 		boolean addJSCSS = true; 
 		IDialogSettings settings = WebUiPlugin.getDefault().getDialogSettings();
@@ -55,6 +64,9 @@ public class NewJQueryWidgetWizardPage extends VersionedNewHTMLWidgetWizardPage 
 		} else {
 			insertTagSettings = DialogSettings.getOrCreateSection(settings, SECTION_NAME);
 			insertTagSettings.put(ADD_JS_CSS_SETTING_NAME, true);
+		}
+		if(getWizard().getPreferredVersions().areAllLibsDisabled()) {
+			addJSCSS = false;
 		}
 		final IFieldEditor addLibs = new CheckBoxFieldEditor(ADD_JS_CSS_SETTING_NAME, WizardMessages.addReferencesToJSCSSLabel, Boolean.valueOf(addJSCSS)){
 			@Override
@@ -72,6 +84,9 @@ public class NewJQueryWidgetWizardPage extends VersionedNewHTMLWidgetWizardPage 
 		};
 		addLibs.doFillIntoGrid(parent);
 		addEditor(addLibs);
+		if(getWizard().getPreferredVersions().areAllLibsDisabled()) {
+			addLibs.setEnabled(false);
+		}
 		addLibs.addPropertyChangeListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -80,6 +95,7 @@ public class NewJQueryWidgetWizardPage extends VersionedNewHTMLWidgetWizardPage 
 				insertTagSettings.put(ADD_JS_CSS_SETTING_NAME, Boolean.parseBoolean(addLibs.getValue().toString()));
 			}
 		});
+		addLibs.addPropertyChangeListener(this);
 		
 		return addLibs;
 	}

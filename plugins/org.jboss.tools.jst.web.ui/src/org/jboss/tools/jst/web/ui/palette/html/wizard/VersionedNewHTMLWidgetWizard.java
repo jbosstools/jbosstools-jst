@@ -31,11 +31,21 @@ public abstract class VersionedNewHTMLWidgetWizard<V, P extends VersionedNewHTML
 		return version;
 	}
 
-	protected abstract P createPage(); 
+	/**
+	 * Override to add page. By default, page is not added,
+	 * so that other pages can be used instead.
+	 * 
+	 * @return
+	 */
+	protected P createPage() {
+		return null;
+	}
 
 	protected void doAddPages() {
 		page = createPage();
-		addPage(page);
+		if(page != null) {
+			addPage(page);
+		}
 	}
 
 	protected boolean isTrue(String editorID) {

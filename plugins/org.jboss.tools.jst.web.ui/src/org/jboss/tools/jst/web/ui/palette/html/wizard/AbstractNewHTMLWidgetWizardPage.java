@@ -10,8 +10,6 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette.html.wizard;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,17 +26,13 @@ import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -46,9 +40,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.jboss.tools.common.model.ui.editors.dnd.DefaultDropWizardPage;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.common.util.SwtUtil;
@@ -59,13 +51,9 @@ import org.jboss.tools.jst.web.ui.WebUiPlugin;
  * @author Viacheslav Kabanovich
  *
  */
-public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage implements PropertyChangeListener {
-	protected Button showPreviewButton = null;
-
-	protected Composite left = null;
+public class AbstractNewHTMLWidgetWizardPage extends AbstractWizardPageWithPreview {
 	protected Map<String, IFieldEditor> editors = new HashMap<String, IFieldEditor>();
 
-	protected Composite previewPanel = null;
 	protected StyledText text;
 	protected Browser browser;
 	protected File sourceFile = null;
@@ -85,66 +73,10 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
     }
 
 	@Override
-	public void createControl(Composite parent) {
-		Composite panel = new Composite(parent, SWT.NONE);
-		GridData d = new GridData(GridData.FILL_BOTH);
-		panel.setLayoutData(d);
-		GridLayout layout = new GridLayout(3, false);
-		panel.setLayout(layout);
-
-		left = new Composite(panel, SWT.BORDER) {
-			int initialDefaultWidth = -1;
-			@Override
-			public Point computeSize(int wHint, int hHint, boolean changed) {
-				Point result = super.computeSize(wHint, hHint, changed);
-				if(hHint < 0) {
-					if(initialDefaultWidth < 0) {
-						initialDefaultWidth = result.x;
-					} else if(result.x > initialDefaultWidth) {
-						result.x = initialDefaultWidth;
-					}
-				}
-				return result;
-			}
-		};
-		d = new GridData(GridData.FILL_VERTICAL);
-		left.setLayoutData(d);
-		left.setLayout(new GridLayout(2, false));
-		
-		Composite fields = new Composite(left, SWT.NONE);
-		d = new GridData(GridData.FILL_BOTH);
-		d.horizontalSpan = 2;
-		fields.setLayoutData(d);
-		fields.setLayout(new GridLayout(3, false));
-
-		setUpdating(true);
-		createFieldPanel(fields);
-		setUpdating(false);
-		
-		createSeparator(left);
-		
-		createAddLibsEditor(left);
-
-		showPreviewButton = new Button(left, SWT.PUSH);
-		d = new GridData();
-		d.minimumWidth = 100;
-		showPreviewButton.setText(WizardMessages.hidePreviewButtonText);
-		showPreviewButton.setLayoutData(d);
-		showPreviewButton.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				flipPreview(false);
-			}
-			
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				widgetSelected(e);
-			}
-		});
-	
+	protected void createPreview() {
 		if(hasVisualPreview()) {
 			Splitter previewPanel = new Splitter(panel, SWT.VERTICAL);
-			d = new GridData(GridData.FILL_BOTH);
+			GridData d = new GridData(GridData.FILL_BOTH);
 			previewPanel.setLayoutData(d);
 			previewPanel.setLayout(new GridLayout());
 
@@ -165,8 +97,9 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 			previewPanel = text;
 		}
 		
-		setControl(panel);
-		
+	}
+
+	protected void startPreview() {
 		Display.getCurrent().asyncExec(new Runnable() {
 			public void run() {
 				if(text == null || text.isDisposed()) {
@@ -184,15 +117,13 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 				});
 			}
 		});
-		updatePreviewPanel(true, true);
+	}
+
+	protected void onCreateControl() {
 		Display.getDefault().addFilter(SWT.FocusOut, focusReturn);
 		Display.getDefault().addFilter(SWT.MouseDown, focusReturn);
 		Display.getDefault().addFilter(SWT.KeyDown, focusReturn);
 		Display.getDefault().addFilter(SWT.Modify, focusReturn);
-	}
-
-	public Composite getLeftPanel() {
-		return left;
 	}
 
 	void createTextPreview(Composite parent) {
@@ -226,10 +157,6 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 	protected static final String SECTION_NAME = "InsertTag";
 	public static final String ADD_JS_CSS_SETTING_NAME = "addJSCSS";
 
-	protected IFieldEditor createAddLibsEditor(Composite parent) {
-		return null;
-	}
-
 	private Composite createBrowserPanel(Composite previewPanel) {
 		Composite browserPanel = new Composite(previewPanel, SWT.BORDER);
 		GridData g = new GridData();
@@ -258,17 +185,6 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		Font font = new Font(null, fd);
 		disclaimer.setFont(font);
 		SwtUtil.bindDisposal(font, disclaimer);
-	}
-
-	/**
-	 * override it
-	 * @param parent
-	 */
-	protected void createFieldPanel(Composite parent) {		
-	}
-
-	public void createFields() {
-		createFieldPanel(null);
 	}
 
 	public void addEditor(IFieldEditor editor) {
@@ -301,14 +217,6 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		}
 	}
 
-	public void createSeparator(Composite parent) {
-		if(parent == null) return;
-		Label separator = new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL);
-		GridData sd = new GridData(GridData.FILL_HORIZONTAL);
-		sd.horizontalSpan = 3;
-		separator.setLayoutData(sd);
-	}
-
 	/**
 	 * Utility method expanding combo
 	 * @param name
@@ -337,121 +245,6 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		}
 	}
 
-	boolean isUpdating = false;
-	int updateRequest = 0;
-	
-	private synchronized void setUpdating(boolean b) {
-		isUpdating = b;
-	}
-
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		runValidation();
-		if(!isUpdating) {
-			setUpdating(true);
-			Thread t = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					updateRequest++;
-					while(true) {
-						int u = updateRequest;
-						try {
-							Thread.sleep(300);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-						if(u == updateRequest) break;
-					}
-					if(getShell() == null || getShell().isDisposed()) {
-						return;
-					}
-					getShell().getDisplay().asyncExec(new Runnable() {
-						public void run() {
-							try {
-								while(updateRequest > 0) {
-									updateRequest = 0;
-									if(getShell() == null || getShell().isDisposed()) {
-										return;
-									}
-									updatePreviewContent();
-								}
-							} finally {
-								setUpdating(false);
-							}
-						}
-					});
-				}
-			});
-			t.start();
-		} else {
-			updateRequest++;
-		}
-	}
-
-	void flipPreview(boolean first) {
-		if(previewPanel == null || previewPanel.isDisposed()) {
-			return;
-		}
-		if(previewPanel.isVisible()) {
-			if(lastHideShellWidth < 0) {
-				lastHideShellWidth = previewPanel.getShell().getSize().x - previewPanel.getSize().x + 5;
-			}
-			previewPanel.setVisible(false);
-			flipPreviewButton(WizardMessages.showPreviewButtonText);
-			GridData d = new GridData(GridData.FILL_VERTICAL);
-			d.widthHint = 0;
-			previewPanel.setLayoutData(d);
-			left.setLayoutData(new GridData(GridData.FILL_BOTH));
-		} else {
-			flipPreviewButton(WizardMessages.hidePreviewButtonText);
-			left.setLayoutData(new GridData(GridData.FILL_VERTICAL));
-			previewPanel.setLayoutData(new GridData(GridData.FILL_BOTH));
-			previewPanel.setVisible(true);
-		}
-		updatePreviewPanel(previewPanel.isVisible(), first);
-	}
-
-	private void flipPreviewButton(String text) {
-		showPreviewButton.setText(text);
-		showPreviewButton.getParent().layout(true);
-	}
-	
-	int lastHideShellWidth = -1;
-	int lastShowShellWidth = -1;
-
-	private void updatePreviewPanel(boolean show, boolean first) {
-		Shell shell = previewPanel.getShell();
-		shell.update();
-		shell.layout();
-
-		Rectangle r = shell.getBounds();
-		if(show) {
-			if(!first) lastHideShellWidth = r.width;
-		} else {
-			lastShowShellWidth = r.width;
-		}
-		int defaultWidth = (first) ? shell.computeSize(-1, -1).x : 0;
-		int width = (first) ? defaultWidth : 
-			(show) ? (lastShowShellWidth < 0 ? r.width + 300 : lastShowShellWidth) : 
-			(lastHideShellWidth < 0 ? r.width - 300 : lastHideShellWidth);
-		if(!show && !first) {
-			int dw = defaultWidth;
-			if(width < dw) width = dw;
-		}
-		if(first) {
-			int dh =  left.computeSize(-1, -1).y - left.getSize().y;
-			if(dh > 0) {
-				r.y -= dh / 2;
-				r.height += dh;
-			}
-			r.x -= (width - r.width) / 2;
-		}
-		r.width = width;
-		shell.setBounds(r);
-		shell.update();
-		shell.layout();
-	}
-
 	File getFile() {
 		if(sourceFile == null) {
 			try {
@@ -464,6 +257,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		return sourceFile;
 	}
 
+	@Override
 	protected void updatePreviewContent() {
 		resetText();
 		if(browser == null) {
@@ -615,9 +409,19 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 	int textLimit = -1;
 
 	protected String formatText(String text) {
-		GC gc = new GC(this.text);
-		gc.setFont(this.text.getFont());
-		int max = textLimit = getTextLimit();
+		return formatText(text, this.text, textLimit = getTextLimit());
+	}
+
+	/**
+	 * Formats xml text for styled text widget with given maximum symbols in line.
+	 * @param text
+	 * @param styledText
+	 * @param max
+	 * @return
+	 */
+	public static String formatText(String text, StyledText styledText, int max) {
+		GC gc = new GC(styledText);
+		gc.setFont(styledText.getFont());
 		StringBuilder sb = new StringBuilder();
 		boolean inQuota = false;
 		boolean inTag = false;
@@ -661,7 +465,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		return sb.toString();
 	}
 
-	protected int lookUp(String text, int pos, boolean inTag, boolean inQuota) {
+	protected static int lookUp(String text, int pos, boolean inTag, boolean inQuota) {
 		int res = pos;
 		for (; res < text.length(); res++) {
 			char ch = text.charAt(res);
@@ -689,9 +493,9 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		Display.getDefault().removeFilter(SWT.MouseDown, focusReturn);
 		Display.getDefault().removeFilter(SWT.KeyDown, focusReturn);
 		Display.getDefault().removeFilter(SWT.Modify, focusReturn);
-		valueColor.dispose();
-		tagColor.dispose();
-		attrColor.dispose();
+//		valueColor.dispose();
+//		tagColor.dispose();
+//		attrColor.dispose();
 		super.dispose();
 	}
 
@@ -704,11 +508,16 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		this.text.layout();
 	}
 
-	Color valueColor = new Color(null, 42, 0, 255);
-	Color tagColor = new Color(null, 63, 127, 127);
-	Color attrColor = new Color(null, 127, 0, 127);
+	static Color valueColor = new Color(null, 42, 0, 255);
+	static Color tagColor = new Color(null, 63, 127, 127);
+	static Color attrColor = new Color(null, 127, 0, 127);
 
-	private StyleRange[] getRanges(String text) {
+	/**
+	 * Creates elementary coloring of xml.
+	 * @param text
+	 * @return
+	 */
+	public static StyleRange[] getRanges(String text) {
 		ArrayList<StyleRange> regionList = new ArrayList<StyleRange>();
 		boolean inQuota = false;
 		boolean inTag = false;
@@ -754,7 +563,7 @@ public class AbstractNewHTMLWidgetWizardPage extends DefaultDropWizardPage imple
 		return (StyleRange[])regionList.toArray(new StyleRange[0]);
 	}
 
-	void addRange(int offset, int length, Color c, boolean italic, ArrayList<StyleRange> regionList) {
+	static void addRange(int offset, int length, Color c, boolean italic, ArrayList<StyleRange> regionList) {
 		StyleRange region = new StyleRange(offset,length, c, null);
 		if(italic) region.fontStyle = SWT.ITALIC;
 		regionList.add(region);

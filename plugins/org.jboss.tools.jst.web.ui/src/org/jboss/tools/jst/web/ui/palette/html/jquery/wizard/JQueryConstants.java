@@ -177,4 +177,9 @@ public interface JQueryConstants extends JQueryHTMLConstants {
 	public String EDITOR_ID_HEADING_SIZE = "heading-size";
 	public String EDITOR_ID_HEADING_CONTENT_THEME = "heading-content-theme";
 	public String EDITOR_ID_HEADING_CONTENT_CORNERS = "heading-content-corners";
+
+	public String EDITOR_ID_ADD_JQUERY_JS = "add-jquery-js";
+	public String EDITOR_ID_JQUERY_JS_VERSION = "jquery-js-version";
+	public String EDITOR_ID_ADD_JQUERY_MOBILE_JS = "add-jquery-mobile-js";
+	public String EDITOR_ID_JQUERY_MOBILE_JS_VERSION = "jquery-mobile-js-version";
 }
