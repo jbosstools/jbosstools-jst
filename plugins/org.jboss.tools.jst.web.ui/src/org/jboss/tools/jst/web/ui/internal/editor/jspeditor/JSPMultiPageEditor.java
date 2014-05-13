@@ -111,7 +111,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 
 	public static final String EDITOR_ID = "org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor"; //$NON-NLS-1$
 
-	private static final String VPE_VISUAL_EDITOR_IMPL_ID = "org.jboss.tools.vpe.org.jboss.tools.vpe.editor.VpeEditorPartFactory"; //$NON-NLS-1$
+	private static final String VPE_VISUAL_EDITOR_IMPL_ID = "org.jboss.tools.vpe.preview.editor.VpeEditorPartFactory"; //$NON-NLS-1$
 
 	private static final String VISUAL_EDITOR_IMPL_EXTENSION_POINT_NAME = "visulaEditorImplementations"; //$NON-NLS-1$
 
@@ -170,6 +170,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 					.getExtension(WebUiPlugin.PLUGIN_ID,
 							VISUAL_EDITOR_IMPL_EXTENSION_POINT_NAME,
 							VPE_VISUAL_EDITOR_IMPL_ID);
+
 			if (visualEditorExtension != null) {
 				IConfigurationElement[] configurationElements = visualEditorExtension
 						.getConfigurationElements();
