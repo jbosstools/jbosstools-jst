@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd;
 
+import java.util.List;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
@@ -31,6 +32,7 @@ import org.jboss.tools.common.refactoring.MarkerResolutionUtils;
 import org.jboss.tools.jst.web.kb.internal.JQueryRecognizer;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
+import org.jboss.tools.jst.web.ui.internal.preferences.js.PreferredJSLibVersions;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -100,7 +102,7 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 		
 		IFile file = MarkerResolutionUtils.getFile();
 		
-		if(insert || (p.containsKey(PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS) && !JQueryRecognizer.containsJQueryJSReference(file))) {
+		if(insert || (p.containsKey(PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS)/* && !JQueryRecognizer.containsJQueryJSReference(file)*/)) {
 			insertJsCss(v, getJQueryMobileVersion(p));
 			if(insert){
 				texts[0] = "";	
@@ -349,11 +351,15 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 				
 				boolean metaExists = checkNode(headNode, "meta", "name", "(viewport)");
 				
-				boolean linkExists = checkNode(headNode, "link", "href", ".*(jquery.mobile-).*(.css)");
+				PreferredJSLibVersions preferredVersions = new PreferredJSLibVersions(MarkerResolutionUtils.getFile(), version);
+				preferredVersions.updateLibEnablementAndSelection();
+				String[][] urls = preferredVersions.getURLs(headNode);
 				
-				boolean firstScriptExists = checkNode(headNode, "script", "src", ".*(jquery-).*(.js)");
-				
-				boolean secondScriptExists = checkNode(headNode, "script", "src", ".*(jquery.mobile-).*(.js)");
+//				boolean linkExists = checkNode(headNode, "link", "href", ".*(jquery\\.mobile-).*(.css)");
+//				
+//				boolean firstScriptExists = checkNode(headNode, "script", "src", ".*(jquery-).*(.js)");
+//				
+//				boolean secondScriptExists = checkNode(headNode, "script", "src", ".*(jquery.mobile-).*(.js)");
 				
 				// insert tags if needed
 				insertNode(document, doctypeNode, htmlNode, 0, "<html", INSERT_AFTER_OPEN_NODE, false);
@@ -363,15 +369,22 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 				if(!metaExists){
 					insertNode(document, headNode, null, 1, META, INSERT_AFTER_OPEN_NODE, false);
 				}
-				if(!linkExists){
-					insertNode(document, headNode, null, 1, link(version.getCSS()), INSERT_AFTER_OPEN_NODE, false);
+				
+				for (String css: urls[0]) {
+					insertNode(document, headNode, null, 1, link(css), INSERT_AFTER_OPEN_NODE, false);
 				}
-				if(!firstScriptExists){
-					insertNode(document, headNode, null, 1, script(version.getJQueryJS()), INSERT_AFTER_OPEN_NODE, false);
+				for (String js: urls[1]) {
+					insertNode(document, headNode, null, 1, script(js), INSERT_AFTER_OPEN_NODE, false);
 				}
-				if(!secondScriptExists){
-					insertNode(document, headNode, null, 1, script(version.getJQueryMobileJS()), INSERT_AFTER_OPEN_NODE, false);
-				}
+//				if(!linkExists){
+//					insertNode(document, headNode, null, 1, link(version.getCSS()), INSERT_AFTER_OPEN_NODE, false);
+//				}
+//				if(!firstScriptExists){
+//					insertNode(document, headNode, null, 1, script(version.getJQueryJS()), INSERT_AFTER_OPEN_NODE, false);
+//				}
+//				if(!secondScriptExists){
+//					insertNode(document, headNode, null, 1, script(version.getJQueryMobileJS()), INSERT_AFTER_OPEN_NODE, false);
+//				}
 				
 				insertNode(document, bodyNode, headNode, 0, "</head", INSERT_BEFORE_OPEN_NODE, false);
 

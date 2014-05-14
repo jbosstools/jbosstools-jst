@@ -326,6 +326,20 @@ public class WizardMessages extends NLS {
 
 	public static String removeActionLabel;
 
+	public static String configureJSCSSLabel;
+	public static String configureJSCSSDescription;
+	public static String descriptionLabel;
+	public static String JSCSSReferencesLabel;
+	public static String newButtonLabel;
+	public static String editButtonLabel;
+	public static String addJSCSSButtonLabel;
+	public static String newJSCSSLibTitle;
+	public static String editJSCSSLibTitle;
+	public static String jsLibVersionLabel;
+	public static String jsFileReferenceLabel;
+	public static String addJSCSSReferenceTitle;
+	public static String editJSCSSReferenceTitle;
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, WizardMessages.class);

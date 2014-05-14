@@ -1,12 +1,15 @@
 package org.jboss.tools.jst.web.ui.test;
 
 import org.eclipse.jface.text.TextSelection;
+import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IEditorPart;
 import org.jboss.tools.jst.jsp.test.palette.AbstractPaletteEntryTest;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
+import org.jboss.tools.jst.web.ui.internal.preferences.js.PreferredJSLibVersions;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryVersionPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewJQueryWidgetWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPageWizard;
@@ -23,6 +26,8 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 		return "<script src=\"" + src + "\"></script";
 	}
 	
+	String[] references = getReferences();
+
 	protected String button(){
 		return "<a href=\"\" id=\"button-1\" data-role=\"button\">Link button</a>";
 	}
@@ -32,9 +37,23 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			"<html>",
 		    "<head>",
 			"\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-			"\t"+link(getVersion().getCSS()) + ">",
-			"\t"+script(getVersion().getJQueryJS()) + ">",
-			"\t"+script(getVersion().getJQueryMobileJS()) + ">",
+			"\t"+references[0],
+			"\t"+references[1],
+			"\t"+references[2],
+			"</head>",
+			"<body>",
+			" ",
+			"</body>",
+			"</html>"
+	};
+	protected String[] test_result_1jQuery={
+			"<!DOCTYPE html>",
+			"<html>",
+		    "<head>",
+			"\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
+			"\t"+references[0],
+//			"\t"+references[1],
+			"\t"+references[2],
 			"</head>",
 			"<body>",
 			" ",
@@ -46,9 +65,9 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			"<html>",
 		    "<head>",
 			"\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-			"\t"+link(getVersion().getCSS()) + ">",
-			"\t"+script(getVersion().getJQueryJS()) + ">",
-			"\t"+script(getVersion().getJQueryMobileJS()) + ">",
+			"\t"+references[0],
+			"\t"+references[1],
+			"\t"+references[2],
 			"</head>",
 			"<body>",
 			"\t<div data-role=\"collapsible-set\">",
@@ -65,9 +84,9 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			"<html>",
 		    "<head>",
 			"\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-			"\t"+link(getVersion().getCSS()) + ">",
-			"\t"+script(getVersion().getJQueryJS()) + ">",
-			"\t"+script(getVersion().getJQueryMobileJS()) + ">",
+			"\t"+references[0],
+			"\t"+references[1],
+			"\t"+references[2],
 			"</head>",
 			"<body>",
 			"\t<div data-role=\"collapsible-set\">",
@@ -84,9 +103,9 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			"<html>",
 		    "<head>",
 			"\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-			"\t"+link(getVersion().getCSS()) + ">",
-			"\t"+script(getVersion().getJQueryJS()) + ">",
-			"\t"+script(getVersion().getJQueryMobileJS()) + ">",
+			"\t"+references[0],
+			"\t"+references[1],
+			"\t"+references[2],
 			"</head>",
 			"<body>",
 			"</body>",
@@ -112,9 +131,9 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			"<html>",
 		    "<head>",
 		    "\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-		    "\t"+link(getVersion().getCSS()) + ">",
-		    "\t"+script(getVersion().getJQueryJS()) + ">",
-		    "\t"+script(getVersion().getJQueryMobileJS()) + ">",
+			"\t"+references[0],
+			"\t"+references[1],
+			"\t"+references[2],
 			"</head>",
 			"<body>",
 			"\t"+button(),
@@ -196,9 +215,9 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			"<html>",
 		    "<head>",
 		    "\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-		    "\t"+link(getVersion().getCSS()) + ">",
-		    "\t"+script(getVersion().getJQueryJS()) + ">",
-		    "\t"+script(getVersion().getJQueryMobileJS()) + ">",
+			"\t"+references[0],
+			"\t"+references[1],
+			"\t"+references[2],
 			"</head>",
 			"<body>",
 			"\t"+button()+"abcde|",
@@ -211,9 +230,9 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			"<html>",
 		    "<head>",
 		    "\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-		    "\t"+link(getVersion().getCSS()) + ">",
-		    "\t"+script(getVersion().getJQueryJS()) + ">",
-		    "\t"+script(getVersion().getJQueryMobileJS()) + ">",
+			"\t"+references[0],
+			"\t"+references[1],
+			"\t"+references[2],
 			"</head>",
 			"<body>",
 			"\t<div data-role=\"page\" id=\"page-1\">",
@@ -389,9 +408,9 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			"<html>",
 		    "<head>",
 		    "\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
-			"\t"+link(getVersion().getCSS()) + ">",
-			"\t"+script(getVersion().getJQueryJS()) + ">",
-			"\t"+script(getVersion().getJQueryMobileJS()) + ">",
+			"\t"+references[0],
+			"\t"+references[1],
+			"\t"+references[2],
 			"</head>",
 			"<body>",
 			"\t<div data-role=\"page\" id=\"page-1\">",
@@ -412,7 +431,23 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 
 	IEditorPart editor = null;
 
-	public InsertJSCSSPaletteEntryTest() {}
+	public InsertJSCSSPaletteEntryTest() {
+	}
+
+	String[] getReferences() {
+		PreferredJSLibVersions preferredVersions = new PreferredJSLibVersions(null, getVersion());
+		preferredVersions.updateLibEnablementAndSelection();
+		String[][] urls = preferredVersions.getURLs(null);
+		String[] references = new String[urls[0].length + urls[1].length];
+		int i = 0;
+		for (String s: urls[0]) {
+			references[i++] = link(s) + ">";
+		}
+		for (String s: urls[1]) {
+			references[i++] = script(s) + ">";
+		}
+		return references;
+	}
 
 	protected JQueryMobileVersion getVersion() {
 		return JQueryMobileVersion.JQM_1_3;
@@ -434,42 +469,67 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 	
 	public void testInsertIntoEmptyFile() {
 		editor = openEditor("empty.html");
-		runToolEntry("jQuery Mobile", "JS/CSS", false);
+		runJSCSS();
 		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
 		compare(text, test_result_1);
 	}
+
+	void runJSCSS() {
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "JS/CSS", true);
+		if(currentPage instanceof JQueryVersionPage) {
+			IWizard wizard = currentPage.getWizard();
+			wizard.performFinish();
+			WizardDialog dialog = (WizardDialog)wizard.getContainer();
+			dialog.close();
+		}
+	}
 	
+	public void testInsertIntoEmptyFile2() {
+		editor = openEditor("empty.html");
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "JS/CSS", true);
+		if(currentPage instanceof JQueryVersionPage) {
+			JQueryVersionPage versionPage = (JQueryVersionPage)currentPage;
+			versionPage.getEditor("add jQuery").setValue("false");
+			IWizard wizard = currentPage.getWizard();
+			wizard.performFinish();
+			WizardDialog dialog = (WizardDialog)wizard.getContainer();
+			dialog.close();
+		}
+		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
+		compare(text, test_result_1jQuery);
+	}
+
 	public void testInsertAround(){
 		editor = openEditor("insert_around.html");
-		runToolEntry("jQuery Mobile", "JS/CSS", false);
+		runJSCSS();
 		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
 		compare(text, test_result_2_1);
 	}
 	
 	public void testInsertIntoNotClosedTags(){
 		editor = openEditor("not_closed_tag.html");
-		runToolEntry("jQuery Mobile", "JS/CSS", false);
+		runJSCSS();
 		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
 		compare(text, test_result_3);
 	}
 
 	public void testInsertIntoNormal(){
 		editor = openEditor("normal.html");
-		runToolEntry("jQuery Mobile", "JS/CSS", false);
+		runJSCSS();
 		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
 		compare(text, test_result_2_1);
 	}
 	
 	public void testInsertIntoDifferentVersion(){
 		editor = openEditor("different_version.html");
-		runToolEntry("jQuery Mobile", "JS/CSS", false);
+		runJSCSS();
 		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
 		compare(text, test_result_4);
 	}
 
 	public void testInsertIntoBody(){
 		editor = openEditor("body_only.html");
-		runToolEntry("jQuery Mobile", "JS/CSS", false);
+		runJSCSS();
 		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
 		compare(text, test_result_2);
 	}

@@ -3,6 +3,7 @@ package org.jboss.tools.jst.web.ui.test;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 
 public class InsertJSCSS14PaletteEntryTest extends InsertJSCSSPaletteEntryTest {
+
 	protected String button(){
 		return "<a href=\"\" id=\"button-1\" class=\"ui-btn ui-corner-all\">Link button</a>";
 	}

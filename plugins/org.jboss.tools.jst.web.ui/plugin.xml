@@ -770,6 +770,13 @@
          id="org.jboss.tools.jst.web.ui.WebXMLValidatorPreferencePage" 
          name="%PreferencePage_WebXML_Validator">
       </page>
+
+      <page 
+         category="org.jboss.tools.common.model.ui" 
+         class="org.jboss.tools.jst.web.ui.internal.preferences.js.JSCSSPreferencePage" 
+         id="org.jboss.tools.jst.web.ui.JSCSSPreferencePage" 
+         name="%PreferencePage_JS_CSS">
+      </page>
    </extension>
 
 	<extension point="org.eclipse.ui.propertyPages">
@@ -797,6 +804,7 @@
 
    <extension
          point="org.jboss.tools.common.model.ui.InsertTagWizard">
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/1.page/0.JS#CSS" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.AddJSCSSREferencesWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/1.page/1.Page" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPageWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/1.page/2.Dialog" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/1.page/3.Popup" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPopupWizard"/>
@@ -826,6 +834,7 @@
       <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/4.multimedia/2.Video" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewVideoWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/4.multimedia/3.Audio" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewAudioWizard"/>
 
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/1.page/0.JS#CSS" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.AddJSCSSREferencesWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/1.page/1.Page" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPageWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/1.page/2.Dialog" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizard"/>
       <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/1.page/3.Popup" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPopupWizard"/>
