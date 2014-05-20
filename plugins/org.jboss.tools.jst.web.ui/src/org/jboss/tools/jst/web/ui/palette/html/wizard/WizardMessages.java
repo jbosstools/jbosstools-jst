@@ -325,6 +325,10 @@ public class WizardMessages extends NLS {
 	public static String errorIDisUsed;
 
 	public static String removeActionLabel;
+	
+	public static String noPlaceForHeaderWarning;
+	public static String noPlaceForFooterWarning;
+	public static String noPlaceForWidgetWarning;
 
 	public static String configureJSCSSLabel;
 	public static String configureJSCSSDescription;

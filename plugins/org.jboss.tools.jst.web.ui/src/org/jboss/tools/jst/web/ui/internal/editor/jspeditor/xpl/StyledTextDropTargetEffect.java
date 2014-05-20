@@ -153,7 +153,14 @@ public class StyledTextDropTargetEffect extends DropTargetEffect {
 		int effect = event.feedback;
 		StyledText text = (StyledText) getControl();
 		
-		Point pt = text.getDisplay().map(null, text, event.x, event.y);
+		Point mousePoint = text.getDisplay().map(null, text, event.x, event.y);
+		Point newOffsetPoint = text.getLocationAtOffset(newOffset);
+		Point pt = mousePoint;
+		Rectangle ca = text.getClientArea();
+		ca.height -= text.getLineHeight();
+		if(!ca.contains(newOffsetPoint)){
+			pt = newOffsetPoint;
+		}
 		if ((effect & DND.FEEDBACK_SCROLL) == 0) {
 			scrollBeginTime = 0;
 			scrollX = scrollY = -1;

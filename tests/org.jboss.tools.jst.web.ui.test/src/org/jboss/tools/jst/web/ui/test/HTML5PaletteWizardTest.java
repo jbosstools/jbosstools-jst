@@ -13,12 +13,18 @@ package org.jboss.tools.jst.web.ui.test;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.ITextSelection;
+import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.ui.IEditorPart;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.XModelObjectConstants;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.common.model.ui.internal.editors.PaletteItemResult;
+import org.jboss.tools.common.model.ui.views.palette.IPositionCorrector;
+import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
+import org.jboss.tools.common.model.ui.views.palette.PaletteInsertManager;
 import org.jboss.tools.jst.jsp.test.palette.AbstractPaletteEntryTest;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.HTMLVersion;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor;
@@ -338,6 +344,39 @@ public class HTML5PaletteWizardTest extends AbstractPaletteEntryTest implements 
 		} else {
 			for (XModelObject c: cs) {
 				runPaletteItemsWithoutUI(failures, textEditor, c, category);
+			}
+		}
+	}
+
+	public void testPositionCorrectors() throws Exception {
+		XModelObject g = PreferenceModelUtilities.getPreferenceModel().getByPath(PaletteModel.MOBILE_PATH + "/" + JQM_CATEGORY);
+		assertNotNull(g);
+		List<String> failures = new ArrayList<String>();
+		for (XModelObject c: g.getChildren()) {
+			doTestPositionCorrectors(failures, c);
+		}
+	}
+
+	private void doTestPositionCorrectors(List<String> failures, XModelObject group) throws Exception {
+		XModelObject[] cs = group.getChildren();
+		if(cs.length == 0) {
+			try {
+				String path = group.getPath();
+				if(path.endsWith("JS#CSS") || path.endsWith("Field Container")) {
+					//no corrector for libraries.
+					return;
+				}
+				IPositionCorrector corrector = PaletteInsertManager.getInstance().createCorrectorInstance(path);
+				assertNotNull(corrector);
+				IDocument doc = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput());
+				ITextSelection s = PaletteInsertHelper.getInstance().correctSelection(doc, new TextSelection(doc, 0, 0), path);
+				assertNotNull(s);
+			} catch (Exception e) {
+				failures.add(group.getPath());
+			}
+		} else {
+			for (XModelObject c: cs) {
+				doTestPositionCorrectors(failures, c);
 			}
 		}
 	}

@@ -20,6 +20,8 @@ import org.apache.commons.lang.SystemUtils;
 import org.eclipse.compare.Splitter;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.StyleRange;
@@ -41,6 +43,14 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
+import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
+import org.jboss.tools.common.model.options.SharableConstants;
+import org.jboss.tools.common.model.ui.editors.dnd.ValidationException;
+import org.jboss.tools.common.model.ui.views.palette.IPositionCorrector;
+import org.jboss.tools.common.model.ui.views.palette.PaletteInsertManager;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.common.util.SwtUtil;
@@ -71,6 +81,33 @@ public class AbstractNewHTMLWidgetWizardPage extends AbstractWizardPageWithPrevi
     public AbstractNewHTMLWidgetWizard getWizard() {
         return (AbstractNewHTMLWidgetWizard)super.getWizard();
     }
+
+	protected void createWarningMessage() {
+		String palettePath = getWizard().getCommandProperties().getProperty(SharableConstants.PALETTE_PATH);
+		IPositionCorrector corrector = PaletteInsertManager.getInstance().createCorrectorInstance(palettePath);
+		if(corrector != null) {
+			ITextSelection s = (ITextSelection)getWizard().getWizardModel().getDropData().getSelectionProvider().getSelection();
+			IDocument doc = getWizard().getWizardModel().getDropData().getSourceViewer().getDocument();
+			IStructuredModel model = null;
+			try{
+				model = StructuredModelManager.getModelManager().getExistingModelForRead((IStructuredDocument)doc);
+				if(model instanceof IDOMModel) {
+					warningMessage = corrector.getWarningMessage(((IDOMModel)model).getDocument(), s);
+				}
+			} finally {
+				if(model != null) {
+					model.releaseFromRead();
+				}
+			}
+		}
+	}
+
+	String warningMessage;
+	public void validate() throws ValidationException {
+		if(warningMessage != null) {
+			throw new ValidationException(warningMessage, true);
+		}
+	}
 
 	@Override
 	protected void createPreview() {
@@ -124,6 +161,7 @@ public class AbstractNewHTMLWidgetWizardPage extends AbstractWizardPageWithPrevi
 		Display.getDefault().addFilter(SWT.MouseDown, focusReturn);
 		Display.getDefault().addFilter(SWT.KeyDown, focusReturn);
 		Display.getDefault().addFilter(SWT.Modify, focusReturn);
+		createWarningMessage();
 	}
 
 	void createTextPreview(Composite parent) {
