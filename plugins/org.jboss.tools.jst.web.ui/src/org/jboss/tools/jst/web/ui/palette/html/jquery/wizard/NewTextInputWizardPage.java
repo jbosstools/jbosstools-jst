@@ -124,7 +124,6 @@ public class NewTextInputWizardPage extends NewJQueryWidgetWizardPage {
 	}
 
 	public void validate() throws ValidationException {
-		super.validate();
 		String pattern = getEditorValue(EDITOR_ID_PATTERN);
 		if(pattern.length() > 0) {
 			try {
@@ -133,5 +132,6 @@ public class NewTextInputWizardPage extends NewJQueryWidgetWizardPage {
 				throw new ValidationException(e.getMessage());
 			}
 		}
+		super.validate();
 	}
 }

@@ -705,7 +705,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		assertTrue(wizardPage.getMessage().toLowerCase().indexOf("unclosed") >= 0);
 		wizardPage.setEditorValue(EDITOR_ID_PATTERN, ".*");
 		assertAttrExists(wizard, ATTR_PATTERN, ".*");
-		assertNull(wizardPage.getMessage());
+		assertEquals(WizardMessages.noPlaceForWidgetWarning, wizardPage.getMessage());
+//		assertNull(wizardPage.getMessage());
 		wizardPage.setEditorValue(EDITOR_ID_PATTERN, "");
 		assertTextDoesNotExist(wizard, ATTR_PATTERN);
 

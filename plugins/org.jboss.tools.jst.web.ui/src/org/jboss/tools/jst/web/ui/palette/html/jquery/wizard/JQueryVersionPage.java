@@ -225,7 +225,7 @@ public class JQueryVersionPage extends AbstractWizardPageWithPreview implements 
 		text.addMouseListener(new MouseAdapter() {
 			public void mouseUp(MouseEvent e) {
 				PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(
-						Display.getDefault().getActiveShell(), JSCSSPreferencePage.ID, null, null);
+						Display.getDefault().getActiveShell(), JSCSSPreferencePage.ID, new String[]{JSCSSPreferencePage.ID}, null);
 			    int result = dialog.open();
 			    if(result == Window.OK) {
 			    	reloadFields();

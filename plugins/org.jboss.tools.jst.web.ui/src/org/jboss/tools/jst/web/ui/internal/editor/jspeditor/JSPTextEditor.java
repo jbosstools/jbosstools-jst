@@ -1073,7 +1073,12 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			    	result = off;
 			    }
 			}
-			result = PaletteInsertHelper.getInstance().correctOffset(getModel().getStructuredDocument(), result);
+			String path = null;
+			if(XModelTransferBuffer.getInstance().isEnabled()) {
+				XModelObject o = XModelTransferBuffer.getInstance().getBuffer().source();
+				if(o != null) path = o.getPath();
+			}
+			result = PaletteInsertHelper.getInstance().correctOffset(getModel().getStructuredDocument(), result, path);
 		}
 		
 		return result;

@@ -67,6 +67,7 @@ public abstract class VersionedNewHTMLWidgetWizardPage extends AbstractNewHTMLWi
 				throw new ValidationException(WizardMessages.errorIDisUsed);
 			}
 		}
+		super.validate();
 	}
 
 	protected void updateIDEnablement() {
