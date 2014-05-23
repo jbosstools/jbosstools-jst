@@ -10,6 +10,15 @@
 			id = "org.eclipse.wst.jsdt.core.jsNature"
 			name = "JavaScript" />
 	</extension>
+	<extension 
+		point="org.eclipse.angularjs.core.angularNatureAdapters"
+		id="org.jboss.tools.jst.jsdt.angularNatureAdapters"
+		name="org.jboss.tools.jst.jsdt.angularNatureAdapters">
+
+		<angularAdaptToNature 
+			id = "org.eclipse.wst.jsdt.core.jsNature"
+			name = "JavaScript" />
+	</extension>
 	<extension
 		point="org.eclipse.ui.activities">
 		<categoryActivityBinding
