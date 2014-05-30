@@ -32,18 +32,25 @@ import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContextInformation;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.wst.dtd.core.internal.contentmodel.DTDImpl.DTDBaseAdapter;
 import org.eclipse.wst.dtd.core.internal.contentmodel.DTDImpl.DTDElementReferenceContentAdapter;
 import org.eclipse.wst.html.core.internal.contentmodel.HTMLPropertyDeclaration;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
+import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
 import org.eclipse.wst.sse.ui.contentassist.CompletionProposalInvocationContext;
 import org.eclipse.wst.xml.core.internal.contentmodel.CMAttributeDeclaration;
 import org.eclipse.wst.xml.core.internal.contentmodel.CMNode;
+import org.eclipse.wst.xml.core.internal.document.TextImpl;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
 import org.eclipse.wst.xml.ui.internal.contentassist.XMLContentModelGenerator;
@@ -84,9 +91,11 @@ import org.jboss.tools.jst.web.kb.taglib.INameSpaceExtended;
 import org.jboss.tools.jst.web.kb.taglib.INameSpaceStorage;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 import org.w3c.dom.Attr;
+import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.Text;
 
 /**
  * Tag Proposal computer for XML pages
@@ -896,6 +905,8 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 		if (query == null)
 			query = ""; //$NON-NLS-1$
 
+		String template = getTemplate(contentAssistRequest, query);
+
 		StringBuilder stringQuery = new StringBuilder();
 		if (query.indexOf(':') == -1 && prefix != null && prefix.length() > 0) {
 			stringQuery.append(prefix).append(':');
@@ -956,6 +967,11 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 			if (relevance == TextProposal.R_NONE) {
 				relevance = defaultRelevance == TextProposal.R_NONE? TextProposal.R_TAG_INSERTION : defaultRelevance;
 			}
+			if(template.length() > 0 && textProposal.isAlternativeMatchStart(template)) {
+				relevance = TextProposal.R_TAG_TEMPLATE;
+				replacementOffset -= template.length();
+				replacementLength += template.length();
+			}
 
 			// If the xmlns isn't defined for the page
 			// the proposal's apply method should add it 
@@ -968,9 +984,51 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 						replacementLength, cursorPosition, image, displayString,
 						contextInformation, additionalProposalInfo, relevance,
 						nameSpaceInserter);
-			
+			proposal.setAlternativeMatches(textProposal.getAlternativeMatches());
+
 			contentAssistRequest.addProposal(proposal);
 		}
+	}
+
+	/**
+	 * Returns word before cursor as template name in case if query string is empty 
+	 * and cursor is in or near text region.
+	 * @param contentAssistRequest
+	 * @param query
+	 * @return
+	 */
+	private String getTemplate(ContentAssistRequest contentAssistRequest, String query) {
+		String template = "";
+		TextImpl textNode = null;
+		if(query.length() == 0 && contentAssistRequest.getNode() instanceof Text) {
+			textNode = (TextImpl)contentAssistRequest.getNode();
+		} else if(query.length() == 0 && contentAssistRequest.getNode() instanceof IDOMElement
+				&& (((IDOMElement)contentAssistRequest.getNode()).getStartOffset() == getOffset()
+				   || ((IDOMElement)contentAssistRequest.getNode()).getEndStartOffset() == getOffset())
+				&& getOffset() > 0 
+				&& ((IDOMElement)contentAssistRequest.getNode()).getModel().getIndexedRegion(getOffset() - 1) instanceof Text
+				) {
+			textNode = (TextImpl)((IDOMElement)contentAssistRequest.getNode()).getModel().getIndexedRegion(getOffset() - 1);
+		} else if(query.length() == 0 && contentAssistRequest.getNode() instanceof Comment
+				&& getOffset() > 0
+				&& ((IDOMNode)contentAssistRequest.getNode()).getModel().getIndexedRegion(getOffset() - 1) instanceof Text) {
+			textNode = (TextImpl)((IDOMElement)contentAssistRequest.getNode()).getModel().getIndexedRegion(getOffset() - 1);
+		}
+		if(textNode != null) {
+			String text = textNode.getTextContent();
+			int start = textNode.getStartOffset();
+			if(start < getOffset()) {
+				for (int i = getOffset() - 1; i >= start; i--) {
+					if(Character.isLetter(text.charAt(i - start))) {
+						template = "" + text.charAt(i - start) + template;
+					} else {
+						break;
+					}
+				}
+			}
+		}
+
+		return template;
 	}
 	 
 	boolean isExistingNameSpace(Map<String, List<INameSpace>> namespaces, String prefix, String uri) {

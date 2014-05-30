@@ -17,6 +17,7 @@ import java.util.List;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.XModelObjectConstants;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
+import org.jboss.tools.common.model.ui.views.palette.PaletteInsertManager;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.MobilePaletteInsertHelper;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
 
@@ -115,7 +116,12 @@ public class PaletteManager {
 			if(name.indexOf('.') >= 0) {
 				name = name.substring(name.indexOf('.') + 1);
 			}
-			result.add(new RunnablePaletteItem(category, version, name));
+			RunnablePaletteItem item = new RunnablePaletteItem(category, version, name);
+			List<String> ls = PaletteInsertManager.getInstance().getKeyWords(g.getPath());
+			if(ls != null && !ls.isEmpty()) {
+				item.getAlternatives().addAll(ls);
+			}
+			result.add(item);
 		} else {
 			for (int i = 0; i < cs.length; i++) {
 				collectItems(result, category, version, cs[i]);
