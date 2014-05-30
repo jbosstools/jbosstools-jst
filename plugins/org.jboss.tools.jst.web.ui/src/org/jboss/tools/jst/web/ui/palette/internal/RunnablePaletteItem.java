@@ -10,6 +10,9 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette.internal;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -32,6 +35,7 @@ public class RunnablePaletteItem implements IExecutableTextProposal {
 	String category;
 	String version;
 	String name;
+	List<String> alternatives = new ArrayList<String>();
 
 	public RunnablePaletteItem(String category, String version, String name) {
 		this.category = category;
@@ -61,6 +65,14 @@ public class RunnablePaletteItem implements IExecutableTextProposal {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 * List of logic names by which this item can be invoked.
+	 * @return
+	 */
+	public List<String> getAlternatives() {
+		return alternatives;
 	}
 
 	/**
