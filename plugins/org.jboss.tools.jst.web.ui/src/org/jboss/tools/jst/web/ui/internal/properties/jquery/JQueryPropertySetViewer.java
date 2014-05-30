@@ -110,6 +110,7 @@ public class JQueryPropertySetViewer extends AbstractAdvancedPropertySetViewer i
 					LayoutUtil.createSeparator(fields);
 				}
 			}
+			layouts.layoutAjaxEnhanceDom(fields, false);
 		}
 		for (Entry e: entries) {
 			if(!e.isLayout()) {
