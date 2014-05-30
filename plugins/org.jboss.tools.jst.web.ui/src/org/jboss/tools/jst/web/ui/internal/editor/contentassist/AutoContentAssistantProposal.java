@@ -11,6 +11,8 @@
 package org.jboss.tools.jst.web.ui.internal.editor.contentassist;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -58,6 +60,11 @@ public class AutoContentAssistantProposal extends
     private boolean autoContentAssistant = false;
     private IRunnableWithProgress runnable = null;
     TextProposal originalProposal = null;
+
+    /**
+     * Extention to CustomCompletionProposal.fAlternateMatch
+     */
+    List<String> alternativeMatches = new ArrayList<String>();
     
 	/**
 	 * The control creator.
@@ -319,5 +326,37 @@ public class AutoContentAssistantProposal extends
 	 */
 	public Object getAdditionalProposalInfo(IProgressMonitor monitor) {
 		return ELInfoHover.getHoverInfo(super.getAdditionalProposalInfo(), monitor);
+	}
+
+	public void setAlternativeMatches(List<String> list) {
+		alternativeMatches.addAll(list);
+	}
+
+	/**
+	 * Overrides CustomCompletionProposal.startsWith for the case with multiple
+	 * alternative matches.
+	 */
+	protected boolean startsWith(IDocument document, int offset, String word) {
+		if(super.startsWith(document, offset, word)) {
+			return true;
+		}
+		int wordLength = word == null ? 0 : word.length();
+		if (offset > getReplacementOffset() + wordLength)
+			return false;
+
+		try {
+			int length = offset - getReplacementOffset();
+			String start = document.get(getReplacementOffset(), length);
+
+			for (String alternative: alternativeMatches) {
+				if(alternative != null && length <= alternative.length() && alternative.substring(0, length).equalsIgnoreCase(start)) {
+					return true;
+				}
+			}
+			
+		}
+		catch (BadLocationException x) {
+		}
+		return false;
 	}
 }

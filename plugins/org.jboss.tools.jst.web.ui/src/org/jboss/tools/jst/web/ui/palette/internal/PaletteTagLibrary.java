@@ -88,6 +88,9 @@ public abstract class PaletteTagLibrary extends CustomTagLibrary {
 		proposal.setImageDescriptor(getImage());
 		proposal.setRelevance(getRelevance());
 		proposal.setAlternateMatch(trim(startText));
+		if(!item.getAlternatives().isEmpty()) {
+			proposal.getAlternativeMatches().addAll(item.getAlternatives());
+		}
 		proposal.setFilterable(false);
 		proposal.setExecutable(item);
 		return proposal;
