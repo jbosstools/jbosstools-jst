@@ -19,6 +19,7 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.Path;
 import org.jboss.tools.common.model.XModelObject;
+import org.jboss.tools.common.model.filesystems.impl.FolderImpl;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.jst.web.kb.internal.scanner.LoadedDeclarations;
 import org.jboss.tools.jst.web.kb.internal.scanner.XMLScanner;
@@ -60,6 +61,12 @@ public class StaticLibraries {
 		XModelObject o = loadedFolders.get(folder);
 		if(o != null) {
 			XModelObject fo = o.getChildByPath(file.getName());
+			if(fo == null) {
+				if (o instanceof FolderImpl) {
+					((FolderImpl)o).update();
+					fo = o.getChildByPath(file.getName());
+				}
+			}
 			if (fo != null) {
 				loadedFiles.put(file, fo);
 				XMLScanner scanner = new XMLScanner();

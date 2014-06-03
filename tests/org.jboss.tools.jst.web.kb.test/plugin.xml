@@ -28,6 +28,19 @@
 	        	<attribute name="template" />
 			</tag>
 		</include>
+
    </extension>
 
+  <extension point="org.eclipse.wst.xml.core.catalogContributions">
+    <catalogContribution id="default">
+         <uri 
+            name="http://jboss.tools.org/webkb/lib1" 
+            uri="platform:/plugin/org.jboss.tools.jst.web.kb.test/taglibs/lib1.taglib.xml"/>
+
+         <uri 
+            name="http://jboss.tools.org/webkb/lib2" 
+            uri="platform:/plugin/org.jboss.tools.jst.web.kb.test/taglibs/lib2.taglib.xml"/>
+	</catalogContribution>
+
+ </extension>
 </plugin>

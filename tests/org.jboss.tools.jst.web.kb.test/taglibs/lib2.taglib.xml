@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<facelet-taglib xmlns="http://java.sun.com/xml/ns/javaee"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd"
+                version="2.0">
+    <description>
+        This tag library contains JavaServer Faces component tags for all
+        UIComponent + HTML RenderKit Renderer combinations defined in the
+        JavaServer Faces Specification.
+    </description>
+    <namespace>http://jboss.tools.org/webkb/lib2</namespace>
+    <tag>
+        <description>
+            <![CDATA[description goes here]]>
+        </description>
+        <tag-name>
+            button
+        </tag-name>
+        <component>
+            <component-type>javax.faces.HtmlOutcomeTargetButton</component-type>
+            <renderer-type>javax.faces.Button</renderer-type>
+        </component>
+        <attribute>
+            <description>
+                <![CDATA[description goes here]]>
+            </description>
+            <name>
+                fragment
+            </name>
+            <required>
+                false
+            </required>
+            <type>
+                java.lang.String
+            </type>
+        </attribute>
+    </tag>
+</facelet-taglib>
