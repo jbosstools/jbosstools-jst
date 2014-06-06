@@ -64,19 +64,22 @@ public class Jbide6061Test extends ContentAssistantTestCase {
    
    protected void doTheCSSClassValuesTest(String pageName, String textToFind, String[] proposals) {
        openEditor(pageName);
-       IRegion reg=null;
-		try {
-			reg = new FindReplaceDocumentAdapter(this.document).find(0, textToFind, true, false, false, false); //$NON-NLS-1$
-		} catch (BadLocationException e) {
-			fail(e.getMessage());
-		}
-		
-		assertNotNull("Cannot find a text region to test", reg);
-		
-       final ICompletionProposal[] rst = checkProposals(pageName,reg.getOffset() + textToFind.length(), proposals, false);
-       
-       checkResult(rst,proposals);
-       closeEditor();
+       try {
+	       IRegion reg=null;
+			try {
+				reg = new FindReplaceDocumentAdapter(this.document).find(0, textToFind, true, false, false, false); //$NON-NLS-1$
+			} catch (BadLocationException e) {
+				fail(e.getMessage());
+			}
+			
+			assertNotNull("Cannot find a text region to test", reg);
+			
+	       final ICompletionProposal[] rst = checkProposals(pageName,reg.getOffset() + textToFind.length(), proposals, false);
+	       
+	       checkResult(rst,proposals);
+       } finally {
+    	   closeEditor();
+       }
    }
    
    /**
