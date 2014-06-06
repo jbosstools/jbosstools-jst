@@ -24,7 +24,6 @@ import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.test.util.ProjectImportTestSetup;
 import org.jboss.tools.test.util.TestProjectProvider;
 
-
 /**
 * Test case testing http://jira.jboss.com/jira/browse/JBIDE-12175 issue.
 * 
@@ -74,20 +73,19 @@ public class JstCAOnCustomPrefixesTest  extends ContentAssistantTestCase {
 	
 	public void testCAOnCustomPrefixForTag() {
 		openEditor(PAGE_NAME);
-		
-		// Find start of <f:view> tag
-		String documentContent = document.get();
-		int start = (documentContent == null ? -1 : documentContent.indexOf("<f:view")); //$NON-NLS-1$
-		int offsetToTest = start + TAG_INSERTION_STRING.length();
-		
-		assertTrue("Cannot find the starting point in the test file  \"" + PAGE_NAME + "\"", (start != -1)); //$NON-NLS-1$ //$NON-NLS-2$
-		
-		String documentContentModified = documentContent.substring(0, start) +
-			TAG_INSERTION_STRING + documentContent.substring(start);
-		
-		jspTextEditor.setText(documentContentModified);
-		
 		try {
+			// Find start of <f:view> tag
+			String documentContent = document.get();
+			int start = (documentContent == null ? -1 : documentContent.indexOf("<f:view")); //$NON-NLS-1$
+			int offsetToTest = start + TAG_INSERTION_STRING.length();
+			
+			assertTrue("Cannot find the starting point in the test file  \"" + PAGE_NAME + "\"", (start != -1)); //$NON-NLS-1$ //$NON-NLS-2$
+			
+			String documentContentModified = documentContent.substring(0, start) +
+				TAG_INSERTION_STRING + documentContent.substring(start);
+			
+			jspTextEditor.setText(documentContentModified);
+		
 			List<ICompletionProposal> res = CATestUtil.collectProposals(contentAssistant, viewer, offsetToTest);
 	
 			assertTrue("Content Assistant returned no proposals", (res != null && res.size() > 0)); //$NON-NLS-1$
@@ -100,20 +98,19 @@ public class JstCAOnCustomPrefixesTest  extends ContentAssistantTestCase {
 
 	public void testCAOnCustomPrefixForTagInsertion() {
 		openEditor(PAGE_NAME);
-		
-		// Find start of <f:view> tag
-		String documentContent = document.get();
-		int start = (documentContent == null ? -1 : documentContent.indexOf("<f:view")); //$NON-NLS-1$
-		int offsetToTest = start + TAG2_INSERTION_STRING.length();
-		
-		assertTrue("Cannot find the starting point in the test file  \"" + PAGE_NAME + "\"", (start != -1)); //$NON-NLS-1$ //$NON-NLS-2$
-		
-		String documentContentModified = documentContent.substring(0, start) +
-			TAG2_INSERTION_STRING + documentContent.substring(start);
-		
-		jspTextEditor.setText(documentContentModified);
-		
 		try {
+			// Find start of <f:view> tag
+			String documentContent = document.get();
+			int start = (documentContent == null ? -1 : documentContent.indexOf("<f:view")); //$NON-NLS-1$
+			int offsetToTest = start + TAG2_INSERTION_STRING.length();
+			
+			assertTrue("Cannot find the starting point in the test file  \"" + PAGE_NAME + "\"", (start != -1)); //$NON-NLS-1$ //$NON-NLS-2$
+			
+			String documentContentModified = documentContent.substring(0, start) +
+				TAG2_INSERTION_STRING + documentContent.substring(start);
+			
+			jspTextEditor.setText(documentContentModified);
+		
 			List<ICompletionProposal> res = CATestUtil.collectProposals(contentAssistant, viewer, offsetToTest);
 	
 			assertTrue("Content Assistant returned no proposals", (res != null && res.size() > 0)); //$NON-NLS-1$
@@ -149,7 +146,6 @@ public class JstCAOnCustomPrefixesTest  extends ContentAssistantTestCase {
 
 	public void testCAOnCustomPrefixForXMLNSAttributeOnRootTag() {
 		openEditor(PAGE_NAME);
-		
 		try {		
 			// Find start of <html> tag
 			String documentContent = document.get();
@@ -196,7 +192,6 @@ public class JstCAOnCustomPrefixesTest  extends ContentAssistantTestCase {
 
 	public void testCAOnCustomPrefixForXMLNSAttributeOnNotARootTag() {
 		openEditor(PAGE_NAME);
-		
 		try {		
 			// Find start of <h:inputText> tag
 			String documentContent = document.get();
@@ -245,7 +240,6 @@ public class JstCAOnCustomPrefixesTest  extends ContentAssistantTestCase {
 
 	public void testCAOnCustomPrefixForXMLNSWrongAttributes() {
 		openEditor(PAGE_NAME);
-		
 		try {		
 			// Find start of <h:inputText> tag
 			String documentContent = document.get();
@@ -275,23 +269,22 @@ public class JstCAOnCustomPrefixesTest  extends ContentAssistantTestCase {
 
 	public void testCAOnCustomPrefixForXMLNSAttributeValue() {
 		openEditor(PAGE_NAME);
-		
-		// Find start of <html> tag
-		String documentContent = document.get();
-		int start = (documentContent == null ? -1 : documentContent.indexOf("<html")); //$NON-NLS-1$
-		assertTrue("Cannot find the starting point in the test file  \"" + PAGE_NAME + "\"", (start != -1)); //$NON-NLS-1$ //$NON-NLS-2$
-		// Find end of <html> tag attributes
-		start = (documentContent == null ? -1 : documentContent.indexOf(">", start)); //$NON-NLS-1$
-		assertTrue("Cannot find the starting point in the test file  \"" + PAGE_NAME + "\"", (start != -1)); //$NON-NLS-1$ //$NON-NLS-2$
-		
-		int offsetToTest = start + 1 + CUSTOM_ATTRIBUTE_VALUE_INSERTION_STRING.length();
-		
-		String documentContentModified = documentContent.substring(0, start) + ' ' +
-			CUSTOM_ATTRIBUTE_VALUE_INSERTION_STRING + ' ' + documentContent.substring(start);
-		
-		jspTextEditor.setText(documentContentModified);
-		
 		try {
+			// Find start of <html> tag
+			String documentContent = document.get();
+			int start = (documentContent == null ? -1 : documentContent.indexOf("<html")); //$NON-NLS-1$
+			assertTrue("Cannot find the starting point in the test file  \"" + PAGE_NAME + "\"", (start != -1)); //$NON-NLS-1$ //$NON-NLS-2$
+			// Find end of <html> tag attributes
+			start = (documentContent == null ? -1 : documentContent.indexOf(">", start)); //$NON-NLS-1$
+			assertTrue("Cannot find the starting point in the test file  \"" + PAGE_NAME + "\"", (start != -1)); //$NON-NLS-1$ //$NON-NLS-2$
+			
+			int offsetToTest = start + 1 + CUSTOM_ATTRIBUTE_VALUE_INSERTION_STRING.length();
+			
+			String documentContentModified = documentContent.substring(0, start) + ' ' +
+				CUSTOM_ATTRIBUTE_VALUE_INSERTION_STRING + ' ' + documentContent.substring(start);
+			
+			jspTextEditor.setText(documentContentModified);
+		
 			List<ICompletionProposal> res = CATestUtil.collectProposals(contentAssistant, viewer, offsetToTest);
 	
 			assertTrue("Content Assistant returned no proposals", (res != null && res.size() > 0)); //$NON-NLS-1$
@@ -329,5 +322,4 @@ public class JstCAOnCustomPrefixesTest  extends ContentAssistantTestCase {
         }
         return r;
     }
-
 }

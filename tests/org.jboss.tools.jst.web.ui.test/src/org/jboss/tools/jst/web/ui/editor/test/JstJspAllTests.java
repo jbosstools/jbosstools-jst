@@ -35,11 +35,11 @@ public class JstJspAllTests {
 		TestSuite suite = new TestSuite("Test for org.jboss.tools.jst.web.ui.editor.test"); //$NON-NLS-1$
 
 		suite.addTest(new ProjectImportTestSetup(new TestSuite(
-				KeyBindingsTest.class,
 				Jbide6061Test.class,
 				CAMultipleCSSClassesInsertionTest.class,
 				JstCAOnCustomPrefixesTest.class,
-				JstCAURIChangeTest.class),
+				JstCAURIChangeTest.class,
+				KeyBindingsTest.class),
 				"org.jboss.tools.jst.web.ui.test", "projects/Jbide6061Test", //$NON-NLS-1$ //$NON-NLS-2$
 				"Jbide6061Test")); //$NON-NLS-1$
 

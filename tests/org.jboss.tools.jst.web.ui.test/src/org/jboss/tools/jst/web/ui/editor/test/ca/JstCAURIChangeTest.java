@@ -3,7 +3,6 @@ package org.jboss.tools.jst.web.ui.editor.test.ca;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.jboss.tools.common.base.test.contentassist.CATestUtil;
@@ -25,15 +24,14 @@ public class JstCAURIChangeTest extends ContentAssistantTestCase {
 	
 	public void testCAURIChange() {
 		openEditor(PAGE2_NAME);
-
-		String documentContent = document.get();
-		int start = documentContent.indexOf("<g:s"); //$NON-NLS-1$
-		assertTrue(start > 0);
-		int offsetToTest = start + 4;
-		
-		INameSpaceStorage storage = KbProjectFactory.getKbProject(project, false).getNameSpaceStorage();
-		
 		try {
+			String documentContent = document.get();
+			int start = documentContent.indexOf("<g:s"); //$NON-NLS-1$
+			assertTrue(start > 0);
+			int offsetToTest = start + 4;
+			
+			INameSpaceStorage storage = KbProjectFactory.getKbProject(project, false).getNameSpaceStorage();
+		
 			List<ICompletionProposal> res = CATestUtil.collectProposals(contentAssistant, viewer, offsetToTest);
 	
 			assertTrue("Content Assistant returned no proposals", (res != null && res.size() > 0)); //$NON-NLS-1$
@@ -75,7 +73,6 @@ public class JstCAURIChangeTest extends ContentAssistantTestCase {
         for ( int i = 0 ; i < proposals.length ; i ++ ){
            assertTrue("Should be in proposals list",isInResultList(rst,proposals[i])); //$NON-NLS-1$
         }
-        
     }
 
     private boolean isInResultList(ICompletionProposal[] rst, String string) {
@@ -91,5 +88,4 @@ public class JstCAURIChangeTest extends ContentAssistantTestCase {
         }
         return r;
     }
-
 }
