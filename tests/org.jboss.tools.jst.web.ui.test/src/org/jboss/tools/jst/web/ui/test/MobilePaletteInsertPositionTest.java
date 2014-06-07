@@ -92,6 +92,27 @@ public class MobilePaletteInsertPositionTest extends AbstractPaletteEntryTest im
 		assertPositionCorrection(paletteItem, document, offset, afterContent);
 	}
 
+	public void testInsertDropInsideComment() throws Exception {
+		IFile f = project.getFile("p14_3.html");
+		editor = openEditor("p14_3.html");
+		IDocument document = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput());
+		ToolEntry entry = findEntry(getPaletteViewer(), JQM_CATEGORY, "Text Input");
+		
+		assertNotNull(entry);
+		PaletteItem paletteItem = (PaletteItem)entry;
+		String content = FileUtil.getContentFromEditorOrFile(f);
+
+		int afterComment = content.indexOf("<!--after comment-->");
+		String ancor = "<!--before comment-->";
+		int beforeComment = content.indexOf(ancor) + ancor.length();
+		
+		int offset = content.indexOf("word1");
+		assertPositionCorrection(paletteItem, document, offset, beforeComment);
+
+		offset = content.indexOf("word2");
+		assertPositionCorrection(paletteItem, document, offset, afterComment);
+	}
+
 	void assertPositionCorrection(PaletteItem paletteItem, IDocument document, int offset, int expectedOffset) {
 		int newOffset = PaletteInsertHelper.getInstance().correctOffset(document, offset, paletteItem.getXModelObject().getPath());
 		assertEquals(expectedOffset, newOffset);
