@@ -428,6 +428,34 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			"</body>",
 			"</html>"
 	};
+	
+	protected String[] test_result_001={
+			"<!DOCTYPE html>",
+			"<html>",
+			"<head>",
+			"</head>",
+			"<body>",
+			"\t<div>",
+			"\t\t<!--comment|-->",
+			"\t\t"+button(),
+			"\t</div>",
+			"</body>",
+			"</html>"
+	};
+
+	protected String[] test_result_002={
+			"<!DOCTYPE html>",
+			"<html>",
+			"<head>",
+			"</head>",
+			"<body>",
+			"\t<div>",
+			"\t\t"+button(),
+			"\t\t|<!--comment-->",
+			"\t</div>",
+			"</body>",
+			"</html>"
+	};
 
 	IEditorPart editor = null;
 
@@ -691,6 +719,14 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 
 	public void testInsertMultiTagWithJcCssInHtmlHeadBodyFileWithSelection(){
 		doTestWithMultipleParameters("html_head_body_tags.html", false, false, true, test_result_08);
+	}
+
+	public void testInsertSingleTagAfterComment(){
+		doTestWithMultipleParameters("after_comment.html", true, true, false, test_result_001);
+	}
+
+	public void testInsertSingleTagBeforeComment(){
+		doTestWithMultipleParameters("before_comment.html", true, true, false, test_result_002);
 	}
 
 	void doTestAddJSCSSCheckbox(String fileName, boolean value, boolean expected) {
