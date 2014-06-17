@@ -42,4 +42,10 @@
 			pattern="tern\.eclipse\.ide\.ui/.*">
 		</activityPatternBinding>
 	</extension>
+	
+	<extension
+       name="Tern"
+       point="org.eclipse.ui.startup">
+    	<startup class="org.jboss.tools.jst.jsdt.utils.JstJsdtStartUp"></startup>
+	</extension>
 </plugin>
