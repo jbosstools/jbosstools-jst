@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IPath;
+import org.jboss.tools.jst.web.kb.internal.taglib.FaceletTagLibrary;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 
 /**
@@ -158,6 +159,18 @@ public class LibraryStorage {
 			librariesBySource.remove(path);
 		}
 		return fs;
+	}
+
+	public synchronized void onCompositeTagLibrariesChange(Set<String> names) {
+		for (ITagLibrary l: allLibraries) {
+			if(l instanceof FaceletTagLibrary) {
+				FaceletTagLibrary f = (FaceletTagLibrary)l;
+				String n = f.getCompositeLibraryName();
+				if(n != null && names.contains(n)) {
+					f.onCompositeLibraryChanged();
+				}
+			}
+		}
 	}
 
 }

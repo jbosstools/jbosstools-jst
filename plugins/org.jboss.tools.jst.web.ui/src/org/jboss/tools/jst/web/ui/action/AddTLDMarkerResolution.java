@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2010 Red Hat, Inc. 
+ * Copyright (c) 2010-2013 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -32,8 +32,8 @@ import org.jboss.tools.common.model.ui.ModelUIImages;
 import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
 import org.jboss.tools.common.quickfix.IQuickFix;
 import org.jboss.tools.common.ui.CommonUIPlugin;
-import org.jboss.tools.jst.jsp.jspeditor.dnd.JSPPaletteInsertHelper;
-import org.jboss.tools.jst.jsp.jspeditor.dnd.PaletteTaglibInserter;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.JSPPaletteInsertHelper;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.PaletteTaglibInserter;
 import org.jboss.tools.jst.web.ui.Messages;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
@@ -62,11 +62,11 @@ public class AddTLDMarkerResolution implements IQuickFix{
 	private Properties getProperties(){
 		Properties properties = new Properties();
 		properties.put(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB, "true"); //$NON-NLS-1$
-		properties.put(PaletteInsertHelper.PROPOPERTY_START_TEXT, ""); //$NON-NLS-1$
+		properties.put(PaletteInsertHelper.PROPERTY_START_TEXT, ""); //$NON-NLS-1$
 		properties.put(JSPPaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI, uri);
 		properties.put(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX, prefix);
 		properties.put(JSPPaletteInsertHelper.PROPOPERTY_FORCE_PREFIX, "true");
-		properties.put(PaletteInsertHelper.PROPOPERTY_SELECTION_PROVIDER, new ISelectionProvider() {
+		properties.put(PaletteInsertHelper.PROPERTY_SELECTION_PROVIDER, new ISelectionProvider() {
 			
 			@Override
 			public void setSelection(ISelection selection) {

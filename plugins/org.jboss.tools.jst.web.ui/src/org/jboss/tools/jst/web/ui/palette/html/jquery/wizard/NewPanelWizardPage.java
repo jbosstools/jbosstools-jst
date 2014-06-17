@@ -10,9 +10,12 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
+import java.beans.PropertyChangeEvent;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
+import org.jboss.tools.jst.web.ui.internal.properties.advanced.LayoutUtil.TwoColumns;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -21,12 +24,19 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  *
  */
 public class NewPanelWizardPage extends NewJQueryWidgetWizardPage {
+	ListEditor items = new ListEditor(this, 1, 8){
+		public void updateEnablement() {
+			boolean addList = isTrue(EDITOR_ID_ADD_LIST);
+			setEditorEnablement(addList);
+		}
+	};
 
 	public NewPanelWizardPage() {
 		super("newPanel", WizardMessages.newPanelWizardTitle);
 		setDescription(WizardMessages.newPanelWizardDescription);
 	}
 
+	@Override
 	protected void createFieldPanel(Composite parent) {
 		createIDEditor(parent, false);
 
@@ -36,21 +46,49 @@ public class NewPanelWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor position = JQueryFieldEditorFactory.createPanelPositionEditor();
 		addEditor(position, parent);
 
+		TwoColumns columns = createTwoColumns(parent);
+
 		IFieldEditor fixed = JQueryFieldEditorFactory.createFixedPositionEditor(WizardDescriptions.panelFixedPosition);
-		addEditor(fixed, parent);
+		addEditor(fixed, columns.left());
 
 		IFieldEditor dismissable = JQueryFieldEditorFactory.createDismissableEditor(WizardDescriptions.panelDismissable);
-		addEditor(dismissable, parent);
+		addEditor(dismissable, columns.right());
 
 		IFieldEditor swipe = JQueryFieldEditorFactory.createSwipeCloseEditor();
-		addEditor(swipe, parent);
+		addEditor(swipe, columns.left());
 
-		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
+		IFieldEditor span = JQueryFieldEditorFactory.createSpan("span", 3);
+		addEditor(span, columns.right());
+
+		createSeparator(parent);
+
+		IFieldEditor addList = JQueryFieldEditorFactory.createAddListEditor();
+		addEditor(addList, parent);
+
+		items.createControl(parent, WizardMessages.itemsLabel);
+
+		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor(getVersion());
 		addEditor(theme, parent, true);
 	}
 
+	@Override
 	protected int getPreferredBrowser() {
-		return SWT.WEBKIT;
+		return isLinux ? super.getPreferredBrowser() : SWT.WEBKIT;
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if(items.isSwitching) {
+			return;
+		}
+		String name = evt.getPropertyName();
+		String value = evt.getNewValue().toString();
+		if(items.onPropertyChange(name, value)) {
+		}
+		
+		items.updateEnablement();
+
+		super.propertyChange(evt);
 	}
 
 }

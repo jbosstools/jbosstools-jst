@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2009-2011 Red Hat, Inc.
+ * Copyright (c) 2009-2014 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -35,17 +35,17 @@ public class JstWebKbAllTests {
 				new String[]{"TestKbModel2"});
 		suiteAll.addTest(testSetup);
 		suite = new TestSuite(JstWebKbAllTests.class.getName());
-		suite.addTestSuite(KbModelTest.class);
 		suite.addTestSuite(IncludeModelTest.class);
-		suite.addTestSuite(MyFacesKbModelTest.class);
 		suite.addTestSuite(KbMockModelTest.class);
-		suite.addTestSuite(MyFacesKbModelWithMetadataInSourcesTest.class);
-		suite.addTestSuite(WebKbTest.class);
 		suite.addTestSuite(JQueryDataTest.class);
+		suite.addTestSuite(JQueryDataTest14.class);
 		suite.addTestSuite(JQueryIDTest.class);
+		suite.addTestSuite(JQueryRecognizerTest.class);
+		suite.addTestSuite(FileNamesCATest.class);
+		suite.addTestSuite(AngularJSTest.class);
 		suite.addTestSuite(KbModelWithSeveralJarCopiesTest.class);
-		suite.addTestSuite(XMLCatalogTest.class);
 		suite.addTestSuite(CSSMediaRuleTest.class);
+		suite.addTestSuite(RemoteFileManagerTest.class);
 		testSetup = new XProjectImportTestSetUp(suite,
 				"org.jboss.tools.jst.web.kb.test",
 				new String[]{"projects/TestKbModel", "projects/MyFaces", "projects/MyFaces2", "projects/TestKbModel3", "projects/TestKbModel4"},
@@ -65,13 +65,6 @@ public class JstWebKbAllTests {
 				"org.jboss.tools.jst.web.kb.test",
 				new String[]{"projects/TestBrokenBuilderOrder"},
 				new String[]{"TestBrokenBuilderOrder"});
-		suiteAll.addTest(testSetup);
-		suite = new TestSuite(WebWithModuleTest.class.getName());
-		suite.addTestSuite(WebWithModuleTest.class);
-		testSetup = new XProjectImportTestSetUp(suite,
-				"org.jboss.tools.jst.web.kb.test",
-				new String[]{"projects/utility", "projects/webapp"},
-				new String[]{"utility", "webapp"});
 		suiteAll.addTest(testSetup);
 		return suiteAll;
 	}

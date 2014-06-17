@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+
+<template name="%Templates.html.jQueryMobile" description="%Templates.html.jQueryMobile.desc" id="org.jboss.tools.jst.ui.html.jquery14" context="html_new" enabled="true">%Templates.html.jQueryMobile.content</template>
+
+</templates>

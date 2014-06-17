@@ -207,7 +207,9 @@ public class KbProject extends KbObject implements IKbProject {
 	 * @param p
 	 */
 	public void addKbProject(KbProject p) {
-		if(dependsOn.contains(p)) return;
+		synchronized(dependsOn) {
+			if(dependsOn.contains(p)) return;
+		}
 		addUsedKbProject(p);
 		p.addDependentKbProject(this);
 		if(!p.isStorageResolved) {
@@ -227,11 +229,15 @@ public class KbProject extends KbObject implements IKbProject {
 	}
 	
 	/**
-	 * 
+	 * Returns copy of the set of projects on which this project depends.
 	 * @return
 	 */
 	public Set<KbProject> getKbProjects() {
-		return dependsOn;
+		Set<KbProject> result = new HashSet<KbProject>();
+		synchronized (dependsOn) {
+			result.addAll(dependsOn);
+		}
+		return result;
 	}
 	
 	/**
@@ -268,18 +274,14 @@ public class KbProject extends KbObject implements IKbProject {
 		}
 	}
 	
-	KbProject[] getUsedKbProjects() {
-		synchronized (dependsOn) {
-			return dependsOn.toArray(new KbProject[0]);
-		}
-	}
-
 	/**
 	 * 
 	 * @param p
 	 */
 	public void removeKbProject(KbProject p) {
-		if(!dependsOn.contains(p)) return;
+		synchronized(dependsOn) {
+			if(!dependsOn.contains(p)) return;
+		}
 		modifications++;
 		p.removeDependentKbProject(this);
 		removeUsedKbProject(p);
@@ -666,8 +668,7 @@ public class KbProject extends KbObject implements IKbProject {
 	 */
 	private void storeProjectDependencies(Element root) {
 		Element dependsOnElement = XMLUtilities.createElement(root, "depends-on-projects"); //$NON-NLS-1$
-		KbProject[] ds = getUsedKbProjects();
-		for (IKbProject p : ds) {
+		for (IKbProject p : getKbProjects()) {
 			if(!p.getProject().isAccessible()) continue;
 			Element pathElement = XMLUtilities.createElement(dependsOnElement, "project"); //$NON-NLS-1$
 			pathElement.setAttribute("name", p.getProject().getName()); //$NON-NLS-1$
@@ -827,7 +828,9 @@ public class KbProject extends KbObject implements IKbProject {
 	 * @throws CloneNotSupportedException
 	 */
 	public void registerComponentsInDependentProjects(LoadedDeclarations ds, IPath source) throws CloneNotSupportedException {
-		if(usedBy.isEmpty()) return;
+		synchronized(usedBy) {
+			if(usedBy.isEmpty()) return;
+		}
 		if(EclipseResourceUtil.isJar(source.toString())) return;
 
 		if(sourcesInRegistering.contains(source)) {
@@ -899,7 +902,9 @@ public class KbProject extends KbObject implements IKbProject {
 	}
 
 	public void firePathRemovedToDependentProjects(IPath source) {
-		if(usedBy.isEmpty()) return;
+		synchronized(usedBy) {
+			if(usedBy.isEmpty()) return;
+		}
 		if(EclipseResourceUtil.isJar(source.toString())) return;
 		
 		KbProject[] ps = getDependentKbProjects();
@@ -964,7 +969,31 @@ public class KbProject extends KbObject implements IKbProject {
 			postponedChanges.addAll(changes);
 			return;
 		}
+		Set<String> compositeNames = collectChangedCompositeTagLibraries(changes);
+		if(!compositeNames.isEmpty()) {
+			libraries.onCompositeTagLibrariesChange(compositeNames);
+		}
 		//TODO Implement if it will be needed events and listeners. and fire events to them.
+	}
+
+	private Set<String> collectChangedCompositeTagLibraries(List<Change> changes) {
+		Set<String> result = new HashSet<String>();
+		for (Change c: changes) {
+			Object o = c.getTarget();
+			if(o == this) {
+				if(c.getOldValue() != null) o = c.getOldValue();
+				if(c.getNewValue() != null) o = c.getNewValue();
+			}
+			if(o instanceof CompositeTagLibrary) {
+				CompositeTagLibrary l = (CompositeTagLibrary)o;
+				String uri = l.getURI();
+				if(uri != null) {
+					int i = uri.lastIndexOf('/');
+					if(i > 0) result.add(uri.substring(i + 1));
+				}
+			}
+		}
+		return result;
 	}
 
 	private static String[] getKBBuilderRequiredNatureDescriptions(IProject project) {
@@ -1127,12 +1156,10 @@ public class KbProject extends KbObject implements IKbProject {
 	}
 
 	public void dispose() {
-		KbProject[] ds = dependsOn.toArray(new KbProject[0]);
-		for (KbProject p: ds) {
+		for (KbProject p: getKbProjects()) {
 			removeKbProject(p);
 		}
-		KbProject[] us = usedBy.toArray(new KbProject[0]);
-		for (KbProject p: us) {
+		for (KbProject p: getDependentKbProjects()) {
 			p.removeKbProject(this);
 		}
 		modifications++;

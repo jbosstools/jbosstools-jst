@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2011-2013 Red Hat, Inc. 
+ * Copyright (c) 2011-2014 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -78,7 +78,6 @@ import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegionList;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMEntity;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
@@ -101,6 +100,7 @@ import org.jboss.tools.jst.web.kb.include.IncludeContextBuilder;
 import org.jboss.tools.jst.web.kb.include.PageInclude;
 import org.jboss.tools.jst.web.kb.internal.FaceletPageContextImpl;
 import org.jboss.tools.jst.web.kb.internal.JspContextImpl;
+import org.jboss.tools.jst.web.kb.internal.RemoteFileManager;
 import org.jboss.tools.jst.web.kb.internal.ResourceBundle;
 import org.jboss.tools.jst.web.kb.internal.XmlContextImpl;
 import org.jboss.tools.jst.web.kb.internal.taglib.NameSpace;
@@ -755,7 +755,9 @@ public class PageContextFactory implements IResourceChangeListener {
 	}
 
 	private static void fillUIParamsForNode(IDOMElement node, ELContextImpl context) {
-		if(!CustomTagLibManager.FACELETS_UI_TAG_LIB_URI.equals(node.getNamespaceURI())) {
+		String namespaceURI = node.getNamespaceURI();
+		if(!CustomTagLibManager.FACELETS_UI_TAG_LIB_URI.equals(namespaceURI)
+			&& !CustomTagLibManager.FACELETS_22_UI_TAG_LIB_URI.equals(namespaceURI)) {
 			return;
 		}
 		String pathAttr = PATH_ATTRIBUTES.get(node.getLocalName());
@@ -768,7 +770,7 @@ public class PageContextFactory implements IResourceChangeListener {
 		}
 		IFile includedFile = getFile(src, context.getResource());
 		if(includedFile == null) return;
-		NodeList list = node.getElementsByTagNameNS (CustomTagLibManager.FACELETS_UI_TAG_LIB_URI, NODE_PARAM);
+		NodeList list = node.getElementsByTagNameNS (namespaceURI, NODE_PARAM);
 		List<Var> vars = null;
 		for (int i = 0; i < list.getLength(); i++) {
 			Node n = list.item(i);
@@ -984,9 +986,9 @@ public class PageContextFactory implements IResourceChangeListener {
 						: null);
 				if (domElement != null) {
 					start = domElement.getStartOffset();
-					length = (domElement.hasEndTag() ? domElement
-							.getEndStructuredDocumentRegion()
-							.getEnd() : ((IDOMNode) node.getOwnerDocument()).getEndOffset() - 1 - start);
+					length = (domElement.hasEndTag() ? 
+							domElement.getEndStructuredDocumentRegion().getEnd() : 
+								((IDOMNode) node.getOwnerDocument()).getEndOffset() - start);
 				}
 
 				Region region = new Region(start, length);
@@ -1008,7 +1010,9 @@ public class PageContextFactory implements IResourceChangeListener {
 					mainNnIsRedefined = true;
 
 				if (context instanceof FaceletPageContextImpl && 
-						CustomTagLibManager.FACELETS_UI_TAG_LIB_URI.equals(uri) &&
+						(CustomTagLibManager.FACELETS_UI_TAG_LIB_URI.equals(uri) 
+							|| CustomTagLibManager.FACELETS_22_UI_TAG_LIB_URI.equals(uri))
+						&&
 						!mainNnIsRedefined) {
 					nameSpace = new NameSpace(
 							CustomTagLibManager.FACELETS_HTML_TAG_LIB_URI, "", //$NON-NLS-1$
@@ -1444,8 +1448,16 @@ public class PageContextFactory implements IResourceChangeListener {
 		/**
 		 */
 		private ICSSModel retrieveModel() {
-			if (!isValidAttribute() || source == null) {
+			if (!isValidAttribute() || source==null) {
 				return null;
+			}
+
+			//If source starts with http(s):// then look at the workspace local cache. If not found then start a separate process to download the file and put it to the cache.
+			if(source.startsWith("http://") || source.startsWith("https://")) {
+				RemoteFileManager.Result result = RemoteFileManager.getInstance().getFile(source);
+				if(result.isReady()) {
+					source = result.getLocalPath();
+				}
 			}
 
 			// null,attr check is done in isValidAttribute()

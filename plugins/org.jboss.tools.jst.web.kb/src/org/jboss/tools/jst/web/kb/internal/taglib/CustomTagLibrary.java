@@ -100,15 +100,21 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 					component.setIgnoreCase(ignoreCase);
 					addComponent(component);
 				} else if (child.getNodeName().equals(COMPONET_EXTENSION)) {
-					if(componentExtension==null) {
-						componentExtension = new CustomComponentExtension();
-						addComponent(componentExtension);
-						componentExtension.setParentTagLib(this);
+					if(componentExtensions==null) {
+						componentExtensions = new HashSet<CustomComponentExtension>();
 					}
-					componentExtension.addAttributes(getAttributes((Element)child, ignoreCase));
+					CustomComponentExtension extension = new CustomComponentExtension();
+					addComponent(extension);
+					extension.setParentTagLib(this);
+					extension.addAttributes(getAttributes((Element)child, ignoreCase));
+					parseAttributeProviders((Element)child, extension);
+					componentExtensions.add(extension);
 				}
 			}
 		}
+	}
+
+	public CustomTagLibrary() {
 	}
 
 	/*
@@ -125,9 +131,8 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 		this.recognizer = recognizer;
 	}
 
-	protected CustomTagLibComponent parseComponent(Element component) {
-		String name = component.getAttribute(NAME);
-		String providerClassNames = component.getAttribute(PROVIDER);
+	private void parseAttributeProviders(Element element, CustomTagLibComponent component) {
+		String providerClassNames = element.getAttribute(PROVIDER);
 		if(providerClassNames.isEmpty()) {
 			providerClassNames = null;
 		}
@@ -163,6 +168,13 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 				}
 			}
 		}
+		if(!providers.isEmpty()) {
+			component.setProviders(providers.toArray(new IAttributeProvider[providers.size()]));
+		}
+	}
+
+	protected CustomTagLibComponent parseComponent(Element component) {
+		String name = component.getAttribute(NAME);
 		boolean closeTag = TRUE.equalsIgnoreCase(component.getAttribute(CLOSE_TAG));
 		String description = getDescription(component);
 		String extendedStr = component.getAttribute(EXTENDED);
@@ -173,9 +185,7 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 		newComponent.setDescription(description);
 		newComponent.setExtended(extended);
 		newComponent.setParentTagLib(this);
-		if(!providers.isEmpty()) {
-			newComponent.setProviders(providers.toArray(new IAttributeProvider[providers.size()]));
-		}
+		parseAttributeProviders(component, newComponent);
 
 		// Extract attributes
 		CustomTagLibAttribute[] attributes = getAttributes(component, ignoreCase);
@@ -236,7 +246,9 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 								Element param = (Element)params.item(c);
 								String paramName = param.getAttribute(NAME);
 								String paramValue = param.getAttribute(VALUE);
+								String description = getDescription(param);
 								CustomProposalType.Param newParam = new CustomProposalType.Param();
+								newParam.setDescription(description);
 								if(paramName!=null && paramName.length()>0) {
 									newParam.setName(paramName);
 								}
@@ -259,7 +271,9 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 			Node node = list.item(i);
 			if(node instanceof Element) {
 				if(DESCRIPTION.equals(node.getNodeName())) {
-					return getElementBody((Element)node);
+					String text = getElementBody((Element)node);
+					text = text.replace("[\\", "</").replace('[', '<').replace(']', '>');
+					return text;
 				}
 			}
 		}
@@ -313,9 +327,11 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 	}
 
 	/**
+	 * @deprecated
 	 * @return the extendedAttributes
 	 */
+	@Deprecated
 	public CustomComponentExtension getComponentExtension() {
-		return componentExtension;
+		return componentExtensions!=null?componentExtensions.iterator().next():null;
 	}
 }

@@ -12,6 +12,8 @@ package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
+import org.jboss.tools.jst.web.ui.internal.properties.advanced.LayoutUtil.TwoColumns;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -30,6 +32,11 @@ public class NewToggleWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor label = JQueryFieldEditorFactory.createLabelEditor();
 		label.setValue("Switch:");
 		addEditor(label, parent);
+
+		if(getVersion() != JQueryMobileVersion.JQM_1_3) {
+			IFieldEditor kind = JQueryFieldEditorFactory.createToggleKindEditor();
+			addEditor(kind, parent);
+		}
 
 		IFieldEditor offLabel = JQueryFieldEditorFactory.createOffLabelEditor();
 		addEditor(offLabel, parent);
@@ -52,19 +59,22 @@ public class NewToggleWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor hideLabel = JQueryFieldEditorFactory.createHideLabelEditor();
 		addEditor(hideLabel, columns.left());
 		
-		IFieldEditor span = JQueryFieldEditorFactory.createSpan("span", 3);
-		addEditor(span, columns.right());
+		IFieldEditor selected = JQueryFieldEditorFactory.createSelectedEditor();
+//		IFieldEditor span = JQueryFieldEditorFactory.createSpan("span", 3);
+		addEditor(selected, columns.right());
 
 		IFieldEditor layout = JQueryFieldEditorFactory.createLayoutEditor();
 		addEditor(layout, parent, true);
 
 		createSeparator(parent);
 
-		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
+		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor(getVersion());
 		addEditor(theme, parent, true);
 
-		IFieldEditor trackTheme = JQueryFieldEditorFactory.createDataTrackThemeEditor(WizardDescriptions.toggleTrackTheme);
-		addEditor(trackTheme, parent, true);
+		if(getVersion() == JQueryMobileVersion.JQM_1_3) {
+			IFieldEditor trackTheme = JQueryFieldEditorFactory.createDataTrackThemeEditor(getVersion(), WizardDescriptions.toggleTrackTheme);
+			addEditor(trackTheme, parent, true);
+		}
 	}
 
 }

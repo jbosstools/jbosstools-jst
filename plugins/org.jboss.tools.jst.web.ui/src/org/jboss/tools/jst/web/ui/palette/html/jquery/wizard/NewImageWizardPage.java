@@ -11,6 +11,8 @@
 package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import org.eclipse.swt.widgets.Composite;
+import org.jboss.tools.jst.web.ui.internal.properties.advanced.LayoutUtil.TwoColumns;
+import org.jboss.tools.jst.web.ui.palette.html.wizard.NewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -18,7 +20,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewImageWizardPage extends NewJQueryWidgetWizardPage {
+public class NewImageWizardPage extends NewHTMLWidgetWizardPage {
 
 	public NewImageWizardPage() {
 		super("newImage", WizardMessages.newImageWizardTitle);

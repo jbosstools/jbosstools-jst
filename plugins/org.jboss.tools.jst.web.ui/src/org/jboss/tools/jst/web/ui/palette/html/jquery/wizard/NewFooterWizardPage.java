@@ -15,6 +15,7 @@ import java.beans.PropertyChangeEvent;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
+import org.jboss.tools.jst.web.ui.internal.properties.advanced.LayoutUtil.TwoColumns;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -60,10 +61,15 @@ public class NewFooterWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor arrangement = JQueryFieldEditorFactory.createArragementEditor();
 		addEditor(arrangement, panel);
 
+		IFieldEditor barpos = JQueryFieldEditorFactory.createBarPositionEditor();
+		addEditor(barpos, panel);
+
 		columns = createTwoColumns(panel);
-		GridLayout l = (GridLayout)columns.left().getLayout();
-		l.marginBottom = 2;
-		columns.left().setLayout(l);
+		if(parent != null) {
+			GridLayout l = (GridLayout)columns.left().getLayout();
+			l.marginBottom = 2;
+			columns.left().setLayout(l);
+		}
 
 		IFieldEditor iconpos = JQueryFieldEditorFactory.createIconPositionEditor();
 		addEditor(iconpos, columns.left(), true);
@@ -71,8 +77,10 @@ public class NewFooterWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor icononly = JQueryFieldEditorFactory.createIconOnlyEditor();
 		addEditor(icononly, columns.right());
 
-		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
+		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor(getVersion());
 		addEditor(theme, parent, true);
+
+		updateBarEnablement();
 	}
 
 	@Override
@@ -91,8 +99,19 @@ public class NewFooterWizardPage extends NewJQueryWidgetWizardPage {
 
 		boolean isFixed = TRUE.equals(getEditorValue(EDITOR_ID_FIXED_POSITION));
 		setEnabled(EDITOR_ID_FULL_SCREEN, isFixed);
-		
+
+		updateBarEnablement();
 		super.propertyChange(evt);
+	}
+
+	void updateBarEnablement() {
+		boolean isArrangementEnabled = buttons.getNumber() > 0;
+		setEnabled(EDITOR_ID_ARRAGEMENT, isArrangementEnabled);
+		boolean isBarPosEnabled = isArrangementEnabled &&
+				(ARRAGEMENT_GROUPED.equals(getEditorValue(EDITOR_ID_ARRAGEMENT))
+					|| (!ARRAGEMENT_NAVBAR.equals(getEditorValue(EDITOR_ID_ARRAGEMENT)) && buttons.getNumber() == 1));
+		setEnabled(EDITOR_ID_BAR_POSITION, isBarPosEnabled);
+		
 	}
 
 }

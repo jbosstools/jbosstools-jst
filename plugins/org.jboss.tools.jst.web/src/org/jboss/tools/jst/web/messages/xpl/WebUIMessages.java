@@ -105,13 +105,11 @@ public class WebUIMessages extends NLS {
 	public static String REMOVE_JSP_BREAKPOINT;
 	public static String NOT_RESOLVED;
 	public static String VALUE_NOT_RESOLVED;
-	public static String STRUTS;
 	public static String EDIT_FILTER;
 	public static String EditProjectTemplateSupport_Save;
 	public static String ENTER_NEW_FILTER;
 	public static String ExpandTLDHandler_Collapse;
 	public static String ExpandTLDHandler_Expand;
-	public static String DELETE_REFERENCE_FROM_STRUTS_CONFIGURATION_FILE;
 	public static String YOU_WANT_TO_DELETE_LINK_TO;
 	public static String TILES_EDITOR;
 	public static String DIAGRAM;
@@ -128,7 +126,7 @@ public class WebUIMessages extends NLS {
 	public static String BEAN;
 	public static String SET_PROPERTIES;
 	public static String SET_PROPERTY;
-	public static String STRUTS_MODEL;
+	public static String TILES_MODEL;
 	public static String PRINT;
 	public static String ZOOM;
 	public static String ALL;
@@ -178,4 +176,10 @@ public class WebUIMessages extends NLS {
 	public static String INCORRECT_URI;
 	public static String INCORRECT_PREFIX;
 	public static String OpenWithBrowser;
+	
+	public static String FileDoesNotExistClickToCreate;
+	public static String FileDoesNotExistDoYouWantToCreate;
+	public static String Question;
+	public static String UseWizard;
+	public static String WizardNotFound;
 }

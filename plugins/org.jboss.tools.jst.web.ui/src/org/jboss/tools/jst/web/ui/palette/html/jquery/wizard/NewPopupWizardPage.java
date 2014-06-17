@@ -18,6 +18,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
+import org.jboss.tools.jst.web.ui.internal.properties.advanced.LayoutUtil.TwoColumns;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -33,12 +35,15 @@ public class NewPopupWizardPage extends NewJQueryWidgetWizardPage {
 	}
 
 	protected void createFieldPanel(Composite parent) {
-		Group windowPanel = new Group(parent,SWT.BORDER);
+		Group windowPanel = null;
+		if(parent !=null) {
+		windowPanel = new Group(parent,SWT.BORDER);
 		windowPanel.setText("Popup Window");
 		GridData d = new GridData(GridData.FILL_HORIZONTAL);
 		d.horizontalSpan = 3;
 		windowPanel.setLayoutData(d);
-		windowPanel.setLayout(new GridLayout(3, false));		
+		windowPanel.setLayout(new GridLayout(3, false));
+		}
 
 		createIDEditor(windowPanel, false);
 
@@ -59,20 +64,29 @@ public class NewPopupWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor corners = JQueryFieldEditorFactory.createCornersEditor();
 		addEditor(corners, columns.right());
 		
-		IFieldEditor theme = JQueryFieldEditorFactory.createPopupThemeEditor();
+		if(getVersion() != JQueryMobileVersion.JQM_1_3) {
+			IFieldEditor arrow = JQueryFieldEditorFactory.createArrowEditor();
+			addEditor(arrow, columns.left());
+			addEditor(JQueryFieldEditorFactory.createSpan("popup-arrow", 3), columns.right());
+		}
+		
+		IFieldEditor theme = JQueryFieldEditorFactory.createPopupThemeEditor(getVersion());
 		addEditor(theme, windowPanel, true);
 
-		IFieldEditor overlay = JQueryFieldEditorFactory.createOverlayEditor();
+		IFieldEditor overlay = JQueryFieldEditorFactory.createOverlayEditor(getVersion());
 		addEditor(overlay, windowPanel, true);
 
 		IFieldEditor popupButton = JQueryFieldEditorFactory.createPopupButtonEditor();
 		addEditor(popupButton, parent);
 
-		Composite buttonPanel = new Composite(parent, SWT.BORDER);
-		d = new GridData(GridData.FILL_HORIZONTAL);
-		d.horizontalSpan = 3;
-		buttonPanel.setLayoutData(d);
-		buttonPanel.setLayout(new GridLayout(3, false));		
+		Composite buttonPanel = null;
+		if(parent != null) {
+			buttonPanel = new Composite(parent, SWT.BORDER);
+			GridData d = new GridData(GridData.FILL_HORIZONTAL);
+			d.horizontalSpan = 3;
+			buttonPanel.setLayoutData(d);
+			buttonPanel.setLayout(new GridLayout(3, false));		
+		}
 
 		IFieldEditor label = JQueryFieldEditorFactory.createLabelEditor();
 		label.setValue("Popup");

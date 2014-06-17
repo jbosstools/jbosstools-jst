@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import org.jboss.tools.common.model.ui.editors.dnd.DropWizardMessages;
+import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.ElementNode;
 import org.jboss.tools.jst.web.ui.JSTWebUIImages;
 
 /**
@@ -40,6 +41,9 @@ public class NewPageWizard extends NewJQueryWidgetWizard<NewPageWizardPage> impl
 		if(isTrue(EDITOR_ID_ADD_HEADER)) {
 			ElementNode header = pg.addChild(TAG_DIV);
 			header.addAttribute(ATTR_DATA_ROLE, ROLE_HEADER);
+			if(isTrue(EDITOR_ID_BACK_BUTTON)) {
+//				pg.addAttribute(ATTR_DATA_ADD_BACK_BUTTON, TRUE);
+			}
 			addBackButton(header);
 			header.addChild("h1", page.getEditorValue(EDITOR_ID_HEADER_TITLE));
 			if(themeValue.length() > 0) {

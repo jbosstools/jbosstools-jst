@@ -94,4 +94,63 @@ public class WebAppHelperTest extends TestCase {
 		assertNotNull(o);
 		return o;
 	}
+
+	public void testAdministeredObjects() throws Exception {
+		XModelObject webxml = getWebXML31();
+		assertNotNull(webxml);
+		
+		XModelObject folder = webxml.getChildByPath("Administered Objects");
+		assertNotNull(folder);
+		
+		XModelObject o = folder.getChildByPath("n1");
+		assertNotNull(o);
+		assertEquals("i1", o.getAttributeValue("interface-name"));
+	}
+
+	public void testConnectionFactories() throws Exception {
+		XModelObject webxml = getWebXML31();
+		assertNotNull(webxml);
+		
+		XModelObject folder = webxml.getChildByPath("Connection Factories");
+		assertNotNull(folder);
+		
+		XModelObject o = folder.getChildByPath("n2");
+		assertNotNull(o);
+		assertEquals("i2", o.getAttributeValue("interface-name"));
+
+		o = folder.getChildByPath("j1");
+		assertNotNull(o);
+	}
+
+	public void testJMSDestinations() throws Exception {
+		XModelObject webxml = getWebXML31();
+		assertNotNull(webxml);
+		
+		XModelObject folder = webxml.getChildByPath("JMS Destinations");
+		assertNotNull(folder);
+		
+		XModelObject o = folder.getChildByPath("n4");
+		assertNotNull(o);
+		assertEquals("i3", o.getAttributeValue("interface-name"));
+	}
+
+	public void testMailSessions() throws Exception {
+		XModelObject webxml = getWebXML31();
+		assertNotNull(webxml);
+		
+		XModelObject folder = webxml.getChildByPath("Mail Sessions");
+		assertNotNull(folder);
+		
+		XModelObject o = folder.getChildByPath("n5");
+		assertNotNull(o);
+		assertEquals("u", o.getAttributeValue("user"));
+	}
+
+	private XModelObject getWebXML31() {
+		IFile f = project.getFile("WebContent/WEB-INF/web31.xml");
+		assertTrue(f.exists());
+		XModelObject o = EclipseResourceUtil.createObjectForResource(f);
+		assertNotNull(o);
+		return o;
+	}
 }

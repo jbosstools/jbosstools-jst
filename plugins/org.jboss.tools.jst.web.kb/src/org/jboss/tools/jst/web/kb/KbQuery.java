@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.kb;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Query object is used to get info from Page Processors.
@@ -34,6 +35,8 @@ public class KbQuery {
 	private String prefix;
 	private Type type;
 	private String parent;
+
+	private Set<String> cachedAttributes = null;
 
 	/**
 	 * Type of object for which we want to get info
@@ -266,5 +269,26 @@ public class KbQuery {
 				parentTags[i] = tags[i].getName();
 			}
 		}
+	}
+
+	/**
+	 * Returns set of names of attributes declared in tag libraries,
+	 * excluding extensions.
+	 * 
+	 * This method is used internally to optimize process of 
+	 * excluding extensions from retrieved arrays of attributes.  
+	 *  
+	 * @return
+	 */
+	public Set<String> getCachedAttributes() {
+		return cachedAttributes;
+	}
+
+	/**
+	 * @see getCachedAttributes()
+	 * @param s
+	 */
+	public void setCachedAttributes(Set<String> s) {
+		cachedAttributes = s;
 	}
 }

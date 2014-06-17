@@ -15,87 +15,10 @@ package org.jboss.tools.jst.web.ui.palette.html.wizard;
  * @author Viacheslav Kabanovich
  *
  */
-public interface HTMLConstants {
-	public String DOCTYPE = "<!DOCTYPE html>";
-	public String TAG_HTML = "html";
+public interface HTMLConstants extends org.jboss.tools.jst.web.html.HTMLConstants {
+	public String EDITOR_ID_ID = "id";
+	public String EDITOR_ID_ADD_ID = "add-id";
 
-	public String TAG_HEAD = "head";
-	public String TAG_TITLE = "title";
-	public String TAG_SCRIPT = "script";
-	public String TAG_LINK = "link";
-	public String TAG_META = "meta";
-	
-	public String TAG_BODY = "body";
-	public String TAG_DIV = "div";
-	public String TAG_FORM = "form";
-	public String TAG_IMG = "img";
-	public String TAG_OL = "ol";
-	public String TAG_UL = "ul";
-	public String TAG_LI = "li";
-	public String TAG_A = "a";
-	public String TAG_INPUT = "input";
-	public String TAG_LABEL = "label";
-	public String TAG_SELECT = "select";
-	public String TAG_OPTION = "option";
-	public String TAG_FIELDSET = "fieldset";
-	public String TAG_H4 = "h4";
-	public String TAG_H6 = "h6";
-	public String TAG_LEGEND = "legend";
-	public String TAG_P = "p";
-	public String TAG_TABLE = "table";
-	public String TAG_THEAD = "thead";
-	public String TAG_TBODY = "tbody";
-	public String TAG_TR = "tr";
-	public String TAG_TH = "th";
-	public String TAG_TD = "td";
-	public String TAG_AUDIO = "audio";
-	public String TAG_VIDEO = "video";
-	public String TAG_SOURCE = "source";
-
-	public String ATTR_FORM = "form";
-	public String ATTR_TYPE = "type";
-	public String ATTR_NAME = "name";
-	public String ATTR_ID = "id";
-	public String ATTR_CLASS = "class";
-	public String ATTR_STYLE = "style";
-	public String ATTR_FOR = "for";
-	public String ATTR_SRC = "src";
-	public String ATTR_REL = "rel";
-	public String ATTR_HREF = "href";
-	public String ATTR_ACTION = "action";
-	public String ATTR_METHOD = "method";
-	public String ATTR_CONTENT = "content";
-	public String ATTR_VALUE = "value";
-	public String ATTR_DISABLED = "disabled";
-	public String CHECKED = "checked";
-	public String SELECTED = "selected";
-	public String ATTR_ALT = "alt";
-	public String ATTR_WIDTH = "width";
-	public String ATTR_HEIGHT = "height";
-	public String ATTR_ISMAP = "ismap";
-	public String ATTR_USEMAP = "usemap";
-	public String ATTR_CROSSORIGIN = "crossorigin";
-	public String ATTR_POSTER = "poster";
-	public String ATTR_AUTOPLAY = "autoplay";
-	public String ATTR_CONTROLS = "controls";
-	public String ATTR_LOOP = "loop";
-	public String ATTR_MUTED = "muted";
-	public String ATTR_PRELOAD = "preload";
-
-	public String METHOD_GET = "get";
-	public String METHOD_POST = "post";
-
-	public String CROSSORIGIN_ANONIMOUS = "anonymous";
-	public String CROSSORIGIN_USE_CREDENTIALS = "use-credentials";
-	
-	public String AUTO = "auto";
-	public String NONE = "none";
-	public String METADATA = "metadata";
-	
-	public String VIDEO_TYPE_MP4 = "video/mp4";
-	public String VIDEO_TYPE_OGG = "video/ogg";
-	public String VIDEO_TYPE_WEBM = "video/webbm";
-
-	public String AUDIO_TYPE_MPEG = "audio/mpeg";
-	public String AUDIO_TYPE_OGG = "audio/ogg";
+	public String EDITOR_ID_AUTOPLAY = ATTR_AUTOPLAY;
+	public String EDITOR_ID_PRELOAD = ATTR_PRELOAD;
 }

@@ -34,7 +34,9 @@ public class ListEditor extends ItemsEditor {
 		addItemEditor(JQueryFieldEditorFactory.createDividerEditor());
 		IFieldEditor url = JQueryFieldEditorFactory.createURLEditor();
 		addItemEditor(url);
-		new IDContentProposalProvider(page.getWizard().getIDs(), url);
+		if(page.getLeftPanel() != null) {
+			new IDContentProposalProvider(page.getWizard().getIDs(), url);
+		}
 	}
 
 	public String getLabel(int i) {

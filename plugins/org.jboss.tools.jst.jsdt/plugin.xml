@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+	<extension 
+		point="tern.eclipse.ide.core.ternNatureAdapters"
+		id="org.jboss.tools.jst.jsdt.ternNatureAdapters"
+		name="org.jboss.tools.jst.jsdt.tern.ternNatureAdapters">
+		
+		<ternAdaptToNature 
+			id = "org.eclipse.wst.jsdt.core.jsNature"
+			name = "JavaScript" />
+	</extension>
+	<extension 
+		point="org.eclipse.angularjs.core.angularNatureAdapters"
+		id="org.jboss.tools.jst.jsdt.angularNatureAdapters"
+		name="org.jboss.tools.jst.jsdt.angularNatureAdapters">
+
+		<angularAdaptToNature 
+			id = "org.eclipse.wst.jsdt.core.jsNature"
+			name = "JavaScript" />
+	</extension>
+	<extension
+		point="org.eclipse.ui.activities">
+		<categoryActivityBinding
+			activityId="org.jboss.tools.jst.jsdt.development"
+			categoryId="org.jboss.tools.common.model.ui.experimental">
+		</categoryActivityBinding>
+		<activity
+			id="org.jboss.tools.jst.jsdt.development"
+			name="JavaScript Development">
+		</activity>
+		<activityPatternBinding
+			activityId="org.jboss.tools.jst.jsdt.development"
+			pattern="tern\.eclipse\.ide\.server\.nodejs\.ui/.*">
+		</activityPatternBinding>
+		<activityPatternBinding
+			activityId="org.jboss.tools.jst.jsdt.development"
+			pattern="tern\.eclipse\.ide\.tools\.ui/.*">
+		</activityPatternBinding>
+		<activityPatternBinding
+			activityId="org.jboss.tools.jst.jsdt.development"
+			pattern="tern\.eclipse\.ide\.ui/.*">
+		</activityPatternBinding>
+	</extension>
+	
+	<extension
+	      point="org.eclipse.ui.startup">
+    	<startup class="org.jboss.tools.jst.jsdt.utils.JstJsdtStartUp"></startup>
+	</extension>
+</plugin>

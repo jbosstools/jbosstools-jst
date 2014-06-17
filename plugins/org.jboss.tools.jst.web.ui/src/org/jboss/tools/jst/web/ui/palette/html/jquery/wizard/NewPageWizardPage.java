@@ -51,24 +51,27 @@ public class NewPageWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor backButton = JQueryFieldEditorFactory.createBackButtonEditor();
 		addEditor(backButton, parent);
 
-		Composite backParent = new Composite(parent, SWT.BORDER);
-		GridData d = new GridData(GridData.FILL_HORIZONTAL);
-		d.horizontalSpan = 3;
-		backParent.setLayoutData(d);
-		backParent.setLayout(new GridLayout(3, false));
+		Composite backParent = null;
+		if(parent != null) {
+			backParent = new Composite(parent, SWT.BORDER);
+			GridData d = new GridData(GridData.FILL_HORIZONTAL);
+			d.horizontalSpan = 3;
+			backParent.setLayoutData(d);
+			backParent.setLayout(new GridLayout(3, false));
+		}
 		
 		IFieldEditor backButtonLabel = JQueryFieldEditorFactory.createLabelEditor(EDITOR_ID_LABEL);
 		backButtonLabel.setValue("Back");
 		addEditor(backButtonLabel, backParent);
 
-		IFieldEditor backButtonIcon = JQueryFieldEditorFactory.createIconEditor(EDITOR_ID_ICON);
+		IFieldEditor backButtonIcon = JQueryFieldEditorFactory.createIconEditor(getVersion(), EDITOR_ID_ICON);
 		backButtonIcon.setValue("back");
 		addEditor(backButtonIcon, backParent);
 
 		IFieldEditor backButtonIconOnly = JQueryFieldEditorFactory.createIconOnlyEditor();
 		addEditor(backButtonIconOnly, backParent);
 		
-		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
+		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor(getVersion());
 		addEditor(theme, parent, true);
 
 		updateBackButtonEnablement();

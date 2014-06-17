@@ -12,55 +12,71 @@ package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import java.io.File;
 
-import org.jboss.tools.jst.jsp.jspeditor.dnd.MobilePaletteInsertHelper;
+import org.jboss.tools.common.model.options.SharableConstants;
+import org.jboss.tools.common.model.ui.editors.dnd.IDropCommand;
+import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.ElementNode;
+import org.jboss.tools.common.model.ui.internal.editors.PaletteItemResult;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.MobilePaletteInsertHelper;
+import org.jboss.tools.jst.web.ui.internal.preferences.js.PreferredJSLibVersions;
 import org.jboss.tools.jst.web.WebModelPlugin;
-import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizard;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.wizard.VersionedNewHTMLWidgetWizard;
+import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
 
 /**
  * 
  * @author Viacheslav Kabanovich
  *
  */
-public abstract class NewJQueryWidgetWizard<P extends NewJQueryWidgetWizardPage> extends AbstractNewHTMLWidgetWizard implements JQueryConstants {
-	protected P page;
+public abstract class NewJQueryWidgetWizard<P extends NewJQueryWidgetWizardPage> extends VersionedNewHTMLWidgetWizard<JQueryMobileVersion,P> implements JQueryConstants {
+	private JQueryVersionPage versionPage;
+	
+	PreferredJSLibVersions preferredVersions = null;
 
 	public NewJQueryWidgetWizard() {
+		super(JQueryMobileVersion.getLatestDefaultVersion());
+	}
+
+	@Override
+	public void initWithoutUI() {
+		addPages();
+		if(page != null) {
+			page.createFields();
+		}
+		versionPage.createFields();
 	}
 
 	protected void doAddPages() {
-		page = createPage();
-		addPage(page);
+		super.doAddPages();
+		versionPage = new JQueryVersionPage("jQueryVersion", "Add References to JS/CSS");
+		addPage(versionPage);
 	}
 
-	protected abstract P createPage(); 
+	public PreferredJSLibVersions getPreferredVersions() {
+		return preferredVersions;
+	}
 
-	protected boolean isTrue(String editorID) {
-		return TRUE.equals(page.getEditorValue(editorID));
+	@Override
+	public void setCommand(IDropCommand command) {
+		super.setCommand(command);
+		
+		String path = getCommandProperties().getProperty(SharableConstants.PALETTE_PATH);
+		if(path != null) {
+			for (JQueryMobileVersion v: JQueryMobileVersion.ALL_VERSIONS) {
+				if(path.indexOf(PaletteModel.VERSION_PREFIX + v.toString()) > 0) {
+					version = v;
+				}
+			}
+		}
+
+		preferredVersions =new PreferredJSLibVersions(getFile(), getVersion());
+		preferredVersions.updateLibEnablementAndSelection();		
 	}
 
 	protected boolean isMini() {
 		return isTrue(EDITOR_ID_MINI);
-	}
-
-	protected String getID(String prefix) {
-		if(!page.isIDEnabled()) {
-			return null;
-		}
-		String id = page.getEditorValue(EDITOR_ID_ID);
-		if(id.length() == 0) {
-			int i = generateIndex(prefix, "", 1);
-			id = prefix + i;
-		}
-		return id;
-	}
-
-	protected String addID(String prefix, ElementNode node) {
-		String id = getID(prefix);
-		if(id != null) {
-			node.addAttribute(ATTR_ID, id);
-		}
-		return id;
 	}
 
 	protected boolean isLayoutHorizontal() {
@@ -69,34 +85,12 @@ public abstract class NewJQueryWidgetWizard<P extends NewJQueryWidgetWizardPage>
 
 	@Override
 	protected void doPerformFinish() {
-		if(isTrue(AbstractNewHTMLWidgetWizardPage.ADD_JS_CSS_SETTING_NAME)) {
+		preferredVersions.applyLibPreference(versionPage);
+		preferredVersions.saveLibPreference();
+		if(page == null || isTrue(AbstractNewHTMLWidgetWizardPage.ADD_JS_CSS_SETTING_NAME)) {
 			getCommandProperties().setProperty(MobilePaletteInsertHelper.PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS, TRUE);
 		}
 		super.doPerformFinish();
-	}
-
-	@Override
-	public String getTextForBrowser() {
-		ElementNode html = new ElementNode(TAG_HTML, false);
-		createHead(html);
-		ElementNode body = html.addChild(TAG_BODY);
-		createBodyForBrowser(body);
-
-		NodeWriter w = new NodeWriter(false);
-		html.flush(w, 0);
-
-		StringBuilder sb = new StringBuilder();
-		sb.append(DOCTYPE).append("\n").append(w.getText());
-
-		return sb.toString();
-	}
-
-	/**
-	 * Override to wrap content.
-	 * @param body
-	 */
-	protected void createBodyForBrowser(ElementNode body) {
-		addContent(body);
 	}
 
 	protected ElementNode getPageContentNode(ElementNode parent) {
@@ -108,17 +102,14 @@ public abstract class NewJQueryWidgetWizard<P extends NewJQueryWidgetWizardPage>
 		return content;
 	}
 
-	protected ElementNode getFormNode(ElementNode parent) {
-		ElementNode form = parent.addChild(TAG_FORM);
-		form.addAttribute(ATTR_ACTION, "#");
-		form.addAttribute(ATTR_METHOD, METHOD_GET);
-		return form;
-	}
-	
-	private void createHead(ElementNode html) {
+	@Override
+	protected void createHead(ElementNode html) {
 		String browserType = page.getBrowserType();
 		ResourceConstants c = ("mozilla".equals(browserType) || this instanceof NewDialogWizard) ? 
-				new ResourceConstants120() : new ResourceConstants130();
+				new ResourceConstants130() : new ResourceConstants130();
+		if(version == JQueryMobileVersion.JQM_1_4) {
+			c = new ResourceConstants140();
+		}
 		
 		String styleSheetURI = c.getCSSPath();
 		String jQueryScriptURI = c.getScriptPath();
@@ -141,6 +132,21 @@ public abstract class NewJQueryWidgetWizard<P extends NewJQueryWidgetWizardPage>
 		}
 
 		ElementNode head = html.addChild(TAG_HEAD);
+		if("mozilla".equals(browserType)) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("\n(function() {\n")
+			  .append("  var originalGetComputedStyle = window.getComputedStyle;\n")
+			  .append("  window.getComputedStyle = function() {\n")
+			  .append("    if (arguments.length == 1) {\n")
+			  .append("      // workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=567350 (getComputedStyle requires both arguments to be supplied)\n")
+			  .append("      return originalGetComputedStyle.call(this, arguments[0], null);\n")
+			  .append("    } else {\n")
+			  .append("      return originalGetComputedStyle.apply(this, arguments);\n")
+			  .append("    }\n")
+			  .append("  };\n")
+			  .append("}());\n");
+			head.addChild(TAG_SCRIPT, sb.toString());
+		}
 		head.addChild(TAG_TITLE, "Page Title");
 		ElementNode meta = head.addChild(TAG_META);
 		meta.addAttribute(ATTR_NAME, "viewport");
@@ -152,13 +158,6 @@ public abstract class NewJQueryWidgetWizard<P extends NewJQueryWidgetWizardPage>
 		script.addAttribute(ATTR_SRC, jQueryScriptURI);
 		script = head.addChild(TAG_SCRIPT, "");
 		script.addAttribute(ATTR_SRC, jQueryMobileScriptURI);
-	}
-
-	protected void addAttributeIfNotEmpty(ElementNode n, String attrName, String editorID) {
-		String value = page.getEditorValue(editorID);
-		if(value != null && value.length() > 0) {
-			n.addAttribute(attrName, value);
-		}
 	}
 
 	abstract class ResourceConstants {
@@ -242,5 +241,71 @@ public abstract class NewJQueryWidgetWizard<P extends NewJQueryWidgetWizardPage>
 		public String getMobileScriptName() {
 			return "jquery.mobile-1.3.0-rc.1.min.js";
 		}
+	}
+
+	class ResourceConstants140 extends ResourceConstants {
+		@Override
+		public String getVerionFolder() {
+			return "1.4.0-rc.1/";
+		}
+		@Override
+		public String getCSSName() {
+			return "jquery.mobile-1.4.0-rc.1.min.css";
+		}
+		@Override
+		public String getScriptName() {
+			return "jquery-1.10.2.min.js";
+		}
+		@Override
+		public String getMobileScriptName() {
+			return "jquery.mobile-1.4.0-rc.1.min.js";
+		}
+	}
+
+	protected class SearchCapability {
+		protected String searchInputID = null;
+		protected ElementNode form;
+
+		public SearchCapability(ElementNode parent, String filterInputPrefix) {
+			boolean is13 = getVersion() == JQueryMobileVersion.JQM_1_3;
+			if(!is13 && isTrue(EDITOR_ID_SEARCH_FILTER)) {
+				form = parent.addChild(TAG_FORM);
+				ElementNode input = form.addChild(TAG_INPUT);
+				input.addAttribute(ATTR_DATA_TYPE, TYPE_SEARCH);
+				int k = generateIndex(filterInputPrefix, "", 1);
+				searchInputID = filterInputPrefix + k;
+				input.addAttribute(ATTR_ID, searchInputID);
+			}			
+		}
+
+		public void addClassFilterable() {
+			if(form != null) {
+				form.addAttribute(ATTR_CLASS, CLASS_UI_FILTERABLE);
+			}
+		}
+
+		public void addDataFilter(ElementNode filterable) {
+			if(isTrue(EDITOR_ID_SEARCH_FILTER)) {
+				filterable.addAttribute(ATTR_DATA_FILTER, TRUE);
+				if(searchInputID != null) {
+					filterable.addAttribute(ATTR_DATA_INPUT, "#" + searchInputID);
+				}
+			}			
+		}
+		
+	}
+
+	/**
+	 * Helper method that returns results generated 
+	 * by palette item wizard with default settings
+	 * for jQuery Mobile category.
+	 * 
+	 * @param textEditor
+	 * @param version
+	 * @param item
+	 * @return
+	 */
+	public static PaletteItemResult runWithoutUi(JSPTextEditor textEditor, JQueryMobileVersion version, String item) {
+		return runWithoutUi(textEditor, JQueryConstants.JQM_CATEGORY, version.toString(), item);
 	}
 }

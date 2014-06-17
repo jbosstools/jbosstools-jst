@@ -26,7 +26,6 @@ import org.jboss.tools.jst.web.project.handlers.*;
 public class LibrarySets {
 	static String[] installBundles = new String[]{
 		"org.jboss.tools.jsf", //$NON-NLS-1$
-		"org.jboss.tools.struts", //$NON-NLS-1$
 		"org.jboss.tools.common.model" //$NON-NLS-1$
 	};
 		

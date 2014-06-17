@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.common.model.ui.editors.dnd.ValidationException;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
+import org.jboss.tools.jst.web.ui.internal.properties.advanced.LayoutUtil.TwoColumns;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -56,17 +57,23 @@ public class NewTextInputWizardPage extends NewJQueryWidgetWizardPage {
 		addEditor(JQueryFieldEditorFactory.createPlaceholderEditor(), columns.left());
 		IFieldEditor maxlength = JQueryFieldEditorFactory.createMaxlengthEditor();
 		addEditor(maxlength, columns.right());
-		Object[] cs = maxlength.getEditorControls();
-		GridData d = (GridData)((Text)cs[1]).getLayoutData();
-		d.widthHint = 20;
-		((Text)cs[1]).setLayoutData(d);
 		
-		Group panel = new Group(parent,SWT.BORDER);
-		panel.setText("Number");
-		d = new GridData(GridData.FILL_HORIZONTAL);
-		d.horizontalSpan = 3;
-		panel.setLayoutData(d);		
-		panel.setLayout(new GridLayout(3, false));
+		if(parent != null) {
+			Object[] cs = maxlength.getEditorControls();
+			GridData d = (GridData)((Text)cs[1]).getLayoutData();
+			d.widthHint = 20;
+			((Text)cs[1]).setLayoutData(d);
+		}
+		
+		Group panel = null;
+		if(parent != null) {
+			panel = new Group(parent,SWT.BORDER);
+			panel.setText("Number");
+			GridData d = new GridData(GridData.FILL_HORIZONTAL);
+			d.horizontalSpan = 3;
+			panel.setLayoutData(d);		
+			panel.setLayout(new GridLayout(3, false));
+		}
 
 		Composite[] columns3 = createColumns(panel, 3);
 		
@@ -96,7 +103,7 @@ public class NewTextInputWizardPage extends NewJQueryWidgetWizardPage {
 
 		createSeparator(parent);
 
-		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
+		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor(getVersion());
 		addEditor(theme, parent, true);
 
 		updateNumberFieldsEnablement();
@@ -117,7 +124,6 @@ public class NewTextInputWizardPage extends NewJQueryWidgetWizardPage {
 	}
 
 	public void validate() throws ValidationException {
-		super.validate();
 		String pattern = getEditorValue(EDITOR_ID_PATTERN);
 		if(pattern.length() > 0) {
 			try {
@@ -126,5 +132,6 @@ public class NewTextInputWizardPage extends NewJQueryWidgetWizardPage {
 				throw new ValidationException(e.getMessage());
 			}
 		}
+		super.validate();
 	}
 }

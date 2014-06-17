@@ -16,6 +16,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.model.ui.editors.dnd.ValidationException;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
+import org.jboss.tools.jst.web.ui.internal.properties.advanced.LayoutUtil.TwoColumns;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -52,11 +53,14 @@ public class NewHeaderBarWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor leftButton = JQueryFieldEditorFactory.createLeftButtonEditor();
 		addEditor(leftButton, columns.left());
 
-		Composite leftParent = new Composite(columns.left(), SWT.BORDER);
-		GridData d = new GridData(GridData.FILL_HORIZONTAL);
-		d.horizontalSpan = 3;
-		leftParent.setLayoutData(d);
-		leftParent.setLayout(new GridLayout(3, false));
+		Composite leftParent = null;
+		if(parent != null) {
+			leftParent = new Composite(columns.left(), SWT.BORDER);
+			GridData d = new GridData(GridData.FILL_HORIZONTAL);
+			d.horizontalSpan = 3;
+			leftParent.setLayoutData(d);
+			leftParent.setLayout(new GridLayout(3, false));
+		}
 		
 		IFieldEditor leftButtonLabel = JQueryFieldEditorFactory.createLabelEditor(EDITOR_ID_LEFT_BUTTON_LABEL);
 		leftButtonLabel.setValue("Cancel");
@@ -65,20 +69,25 @@ public class NewHeaderBarWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor leftButtonURL = JQueryFieldEditorFactory.createURLEditor(EDITOR_ID_LEFT_BUTTON_URL);
 		leftButtonURL.setValue("#");
 		addEditor(leftButtonURL, leftParent);
-		new IDContentProposalProvider(getWizard().getIDs(), leftButtonURL);
+		if(parent != null) {
+			new IDContentProposalProvider(getWizard().getIDs(), leftButtonURL);
+		}
 
-		IFieldEditor leftButtonIcon = JQueryFieldEditorFactory.createIconEditor(EDITOR_ID_LEFT_BUTTON_ICON);
+		IFieldEditor leftButtonIcon = JQueryFieldEditorFactory.createIconEditor(getVersion(), EDITOR_ID_LEFT_BUTTON_ICON);
 		leftButtonIcon.setValue("delete");
 		addEditor(leftButtonIcon, leftParent);
 
 		IFieldEditor rightButton = JQueryFieldEditorFactory.createRightButtonEditor();
 		addEditor(rightButton, columns.right());
 		
-		Composite rightParent = new Composite(columns.right(), SWT.BORDER);
-		d = new GridData(GridData.FILL_HORIZONTAL);
-		d.horizontalSpan = 3;
-		rightParent.setLayoutData(d);
-		rightParent.setLayout(new GridLayout(3, false));
+		Composite rightParent = null;
+		if(parent != null) {
+			rightParent = new Composite(columns.right(), SWT.BORDER);
+			GridData d = new GridData(GridData.FILL_HORIZONTAL);
+			d.horizontalSpan = 3;
+			rightParent.setLayoutData(d);
+			rightParent.setLayout(new GridLayout(3, false));
+		}
 		
 		IFieldEditor rightButtonLabel = JQueryFieldEditorFactory.createLabelEditor(EDITOR_ID_RIGHT_BUTTON_LABEL);
 		rightButtonLabel.setValue("Save");
@@ -87,13 +96,15 @@ public class NewHeaderBarWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor rightButtonURL = JQueryFieldEditorFactory.createURLEditor(EDITOR_ID_RIGHT_BUTTON_URL);
 		rightButtonURL.setValue("#");
 		addEditor(rightButtonURL, rightParent);
-		new IDContentProposalProvider(getWizard().getIDs(), rightButtonURL);
+		if(parent != null) {
+			new IDContentProposalProvider(getWizard().getIDs(), rightButtonURL);
+		}
 
-		IFieldEditor rightButtonIcon = JQueryFieldEditorFactory.createIconEditor(EDITOR_ID_RIGHT_BUTTON_ICON);
+		IFieldEditor rightButtonIcon = JQueryFieldEditorFactory.createIconEditor(getVersion(), EDITOR_ID_RIGHT_BUTTON_ICON);
 		rightButtonIcon.setValue("check");
 		addEditor(rightButtonIcon, rightParent);
 
-		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
+		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor(getVersion());
 		addEditor(theme, parent, true);
 	}
 

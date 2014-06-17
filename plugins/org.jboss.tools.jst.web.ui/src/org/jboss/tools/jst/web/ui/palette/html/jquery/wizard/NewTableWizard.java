@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import org.jboss.tools.common.model.ui.editors.dnd.DropWizardMessages;
+import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.ElementNode;
 import org.jboss.tools.jst.web.ui.JSTWebUIImages;
 
 /**
@@ -31,6 +32,8 @@ public class NewTableWizard extends NewJQueryWidgetWizard<NewTableWizardPage> im
 	}
 
 	protected void addContent(ElementNode parent) {
+		SearchCapability sc = new SearchCapability(parent, "searchForTable-");
+
 		String themeValue = page.getEditorValue(EDITOR_ID_THEME);
 
 		ElementNode table = parent.addChild(TAG_TABLE);
@@ -42,6 +45,8 @@ public class NewTableWizard extends NewJQueryWidgetWizard<NewTableWizardPage> im
 		if(MODE_COLUMNTOGGLE.equals(mode)) {
 			table.addAttribute(ATTR_DATA_MODE, MODE_COLUMNTOGGLE);
 		}
+
+		sc.addDataFilter(table);
 
 		StringBuilder cls = new StringBuilder();
 		if(themeValue.length() > 0) {
@@ -85,13 +90,6 @@ public class NewTableWizard extends NewJQueryWidgetWizard<NewTableWizardPage> im
 				tr.addChild(TAG_TD, firstRowContent);
 			}
 		}
-	}
-
-	private void addClass(StringBuilder cls, String add) {
-		if(cls.length() > 0) {
-			cls.append(" ");
-		}
-		cls.append(add);
 	}
 
 	protected void createBodyForBrowser(ElementNode body) {

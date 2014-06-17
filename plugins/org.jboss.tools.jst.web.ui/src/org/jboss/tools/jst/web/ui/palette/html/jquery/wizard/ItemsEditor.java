@@ -84,7 +84,21 @@ public class ItemsEditor implements SelectionListener, JQueryConstants {
 		return selected < 0 ? null : items[selected];
 	}
 
+	public void createEditors() {
+		IFieldEditor number = JQueryFieldEditorFactory.createItemsNumberEditor(WizardMessages.numberOfItemsLabel, minNumber, maxNumber, initValue);
+		page.addEditor(number, null);
+		
+		createItemEditors();
+
+		setNumber(Integer.parseInt(number.getValueAsString()));
+		setSelected(0);
+	}
+
 	public Composite createControl(Composite parent, String folderName) {
+		if(parent == null) {
+			createEditors();
+			return null;
+		}
 		Group panel = new Group(parent,SWT.BORDER);
 		panel.setText(folderName);
 		GridData d = new GridData(GridData.FILL_HORIZONTAL);
@@ -136,6 +150,10 @@ public class ItemsEditor implements SelectionListener, JQueryConstants {
 			setEditorEnablement(n > 0);
 		}
 		number = n;
+		if(tab == null) {
+			setSelected(sel);
+			return;
+		}
 		while(tab.getItemCount() > n && tab.getItemCount() > 1) {
 			TabItem b = tab.getItem(tab.getItemCount() - 1);
 			b.getParent().setSelection(b);
@@ -169,6 +187,10 @@ public class ItemsEditor implements SelectionListener, JQueryConstants {
 	 * @param b
 	 */
 	protected void setEditorEnablement(boolean b) {
+		if(control == null) {
+			//cannot set enablement without ui
+			return;
+		}
 		ItemData s = items[0];
 		for (String editorID: s.values.keySet()) {
 			page.getEditor(editorID).setEnabled(b);
@@ -184,7 +206,9 @@ public class ItemsEditor implements SelectionListener, JQueryConstants {
 		for (String editorID: s.values.keySet()) {
 			page.getEditor(editorID).setValue(s.getValue(editorID));
 		}
-		updateEnablement();
+		if(page.getLeftPanel() != null) {
+			updateEnablement();
+		}
 	}
 
 	/**

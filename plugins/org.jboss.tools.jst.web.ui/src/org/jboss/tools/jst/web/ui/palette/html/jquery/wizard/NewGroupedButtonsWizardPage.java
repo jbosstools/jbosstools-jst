@@ -14,6 +14,7 @@ import java.beans.PropertyChangeEvent;
 
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -36,6 +37,11 @@ public class NewGroupedButtonsWizardPage extends NewJQueryWidgetWizardPage {
 
 		createIDEditor(parent, true);
 
+		if(getVersion() != JQueryMobileVersion.JQM_1_3) {
+			IFieldEditor searchFilter = JQueryFieldEditorFactory.createSearchFilterEditor();
+			addEditor(searchFilter, parent);
+		}
+
 		Composite panel = buttons.createControl(parent, WizardMessages.itemsLabel);
 
 		IFieldEditor mini = JQueryFieldEditorFactory.createMiniEditor();
@@ -47,11 +53,13 @@ public class NewGroupedButtonsWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor icononly = JQueryFieldEditorFactory.createIconOnlyEditor();
 		addEditor(icononly, panel);
 
-		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
+		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor(getVersion());
 		addEditor(theme, parent, true);
 
-		iconpos.setEnabled(false);
-		icononly.setEnabled(false);
+		if(parent != null) {
+			iconpos.setEnabled(false);
+			icononly.setEnabled(false);
+		}
 	}
 
 	@Override

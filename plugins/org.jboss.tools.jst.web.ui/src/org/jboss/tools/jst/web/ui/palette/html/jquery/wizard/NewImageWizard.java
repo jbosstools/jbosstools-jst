@@ -11,14 +11,16 @@
 package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import org.jboss.tools.common.model.ui.editors.dnd.DropWizardMessages;
+import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.ElementNode;
 import org.jboss.tools.jst.web.ui.JSTWebUIImages;
+import org.jboss.tools.jst.web.ui.palette.html.wizard.NewHTMLWidgetWizard;
 
 /**
  * 
  * @author Viacheslav Kabanovich
  *
  */
-public class NewImageWizard extends NewJQueryWidgetWizard<NewImageWizardPage> implements JQueryConstants {
+public class NewImageWizard extends NewHTMLWidgetWizard<NewImageWizardPage> implements JQueryConstants {
 	static String prefixId = "image-";
 
 	public NewImageWizard() {
@@ -58,7 +60,7 @@ public class NewImageWizard extends NewJQueryWidgetWizard<NewImageWizardPage> im
 	}
 
 	protected void createBodyForBrowser(ElementNode body) {
-		body = getPageContentNode(body);
+//		body = getPageContentNode(body);
 		ElementNode div = body.addChild(TAG_DIV);
 		div.addAttribute(ATTR_STYLE, "padding: 20px 20px 20px 20px;");
 		div.addAttribute("align", "center");

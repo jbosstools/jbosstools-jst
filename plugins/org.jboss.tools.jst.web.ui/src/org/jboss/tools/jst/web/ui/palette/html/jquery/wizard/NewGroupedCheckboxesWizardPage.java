@@ -47,10 +47,12 @@ public class NewGroupedCheckboxesWizardPage extends NewJQueryWidgetWizardPage {
 		IFieldEditor iconpos = JQueryFieldEditorFactory.createIconPositionEditor();
 		addEditor(iconpos, panel, true);
 
-		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
+		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor(getVersion());
 		addEditor(theme, parent, true);
 
-		iconpos.setEnabled(false);
+		if(parent != null) {
+			iconpos.setEnabled(false);
+		}
 	}
 
 	@Override

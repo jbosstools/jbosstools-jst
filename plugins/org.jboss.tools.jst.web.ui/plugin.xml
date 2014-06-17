@@ -37,7 +37,7 @@
       <xmlEditor 
          class="org.jboss.tools.jst.web.ui.editors.WebCompoundEditor" 
          contributorClass="org.jboss.tools.common.model.ui.texteditors.MultiPageContributor" 
-         entities="FileWebApp,FileWebApp24,FileWebApp25,FileWebApp30" 
+         entities="FileWebApp,FileWebApp24,FileWebApp25,FileWebApp30,FileWebApp31" 
          icon="$nl$/images/xstudio/editors/webapp_file.gif" 
          name="%editors.web.name">
       </xmlEditor>
@@ -139,6 +139,10 @@
       <category name="%NewWizardCat_JBossToolsWeb" 
                 id="org.jboss.tools.jst.web">
       </category>
+    <category
+            name="%JBoss_Tools_category"
+            id="org.jboss.ide.eclipse.ui.wizards">
+      </category>
       <wizard
             category="org.jboss.tools.jst.web"
             class="org.jboss.tools.jst.web.ui.wizards.newfile.NewXHTMLWizard"
@@ -199,7 +203,7 @@
       <wizard
             name="JBoss Datasource (-ds.xml)"
             icon="$nl$/images/xstudio/wizards/new_properties_file.gif"
-            category="org.jboss.tools.jst.web"
+            category="org.jboss.ide.eclipse.ui.wizards"
             class="org.jboss.tools.jst.web.ui.wizards.newfile.NewDSXMLWizard"
             id="org.jboss.tools.jst.web.ui.wizards.newfile.NewDSXMLWizard">
          <description>
@@ -349,11 +353,6 @@
          </newWizardShortcut>
          <newWizardShortcut id="org.eclipse.ui.wizards.new.file">
          </newWizardShortcut>
-         <newWizardShortcut id="org.jboss.tools.struts.ui.wizard.newfile.NewStrutsConfigFileWizard">
-         </newWizardShortcut>
-         <!--newWizardShortcut 
-             id="org.jboss.tools.struts.ui.wizard.newfile.NewStrutsConfigFile10Wizard">
-         </newWizardShortcut-->
          <newWizardShortcut id="org.jboss.tools.jsf.ui.wizard.newfile.NewFacesConfigFileWizard">
          </newWizardShortcut>
          <!--newWizardShortcut id="org.jboss.tools.orm.wizard.newfile.NewHibernateFileWizard">
@@ -361,11 +360,9 @@
          <newWizardShortcut 
              id="org.jboss.tools.jst.web.tiles.ui.wizard.newfile.NewTilesFileWizard">
          </newWizardShortcut>
-         <newWizardShortcut id="org.jboss.tools.struts.ui.wizard.newfile.NewTilesFileWizard">
+         <newWizardShortcut id="org.jboss.tools.jst.web.tiles.ui.wizard.newfile.NewTilesFileWizard">
          </newWizardShortcut>
-         <newWizardShortcut id="org.jboss.tools.struts.ui.wizard.newfile.NewValidationFileWizard">
-         </newWizardShortcut>
-         <newWizardShortcut id="org.jboss.tools.jst.web.ui.wizard.newfile.NewTLDFileWizard">
+         <newWizardShortcut id="org.jboss.tools.jst.web.ui.wizards.newfile.NewTLDFileWizard">
          </newWizardShortcut>
          <newWizardShortcut id="org.eclipse.jst.jsp.ui.internal.wizard.NewJSPWizard">
          </newWizardShortcut>
@@ -402,10 +399,6 @@
          </viewShortcut>
          <viewShortcut id="org.eclipse.ui.views.ResourceNavigator">
          </viewShortcut>
-         <!--actionSet id="org.jboss.tools.struts.actionSet">
-         </actionSet>
-         <actionSet id="org.jboss.tools.jsf.actionSet">
-         </actionSet-->
          <perspectiveShortcut id="org.eclipse.debug.ui.DebugPerspective">
          </perspectiveShortcut>
       </perspectiveExtension>
@@ -732,8 +725,12 @@
 			translations="$nl$/templates/xhtmldefault-templates.properties">
 		</include>
 		<include
-			file="templates/htmldefault-templates.xml"
-			translations="$nl$/templates/htmldefault-templates.properties">
+			file="templates/htmldefault-templates-jqm1.3.xml"
+			translations="$nl$/templates/htmldefault-templates-jqm1.3.properties">
+		</include>
+		<include
+			file="templates/htmldefault-templates-jqm1.4.xml"
+			translations="$nl$/templates/htmldefault-templates-jqm1.4.properties">
 		</include>
 	</extension>
 
@@ -773,6 +770,13 @@
          id="org.jboss.tools.jst.web.ui.WebXMLValidatorPreferencePage" 
          name="%PreferencePage_WebXML_Validator">
       </page>
+
+      <page 
+         category="org.jboss.tools.common.model.ui" 
+         class="org.jboss.tools.jst.web.ui.internal.preferences.js.JSCSSPreferencePage" 
+         id="org.jboss.tools.jst.web.ui.JSCSSPreferencePage" 
+         name="%PreferencePage_JS_CSS">
+      </page>
    </extension>
 
 	<extension point="org.eclipse.ui.propertyPages">
@@ -800,32 +804,1854 @@
 
    <extension
          point="org.jboss.tools.common.model.ui.InsertTagWizard">
-      <tag name="_Palette_/Mobile/jQuery_Mobile/1.page/1.Page" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPageWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/1.page/2.Dialog" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/1.page/3.Popup" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPopupWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/1.page/4.Grid" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGridWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/1.page/6.Panel" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPanelWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/1.page/7.Table" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTableWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/1.page/8.Collapsible_Content_Block" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCollapsibleWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/1.page/9.Collapsible_Set" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCollapsibleSetWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/2.lists/1.Header_Bar" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/2.lists/2.Footer_Bar" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFooterWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/2.lists/3.Navbar" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewNavbarWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/2.lists/4.Select_Menu" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewSelectMenuWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/2.lists/5.Listview" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewListviewWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/01.Button" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/02.Grouped_Buttons" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedButtonsWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/03.Link" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/04.Flip_Toggle_Switch" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/05.Radio_Button" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRadioWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/06.Checkbox" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCheckBoxWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/07.Grouped_Checkboxes" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedCheckboxesWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/08.Range_Slider" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRangeSliderWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/09.Text_Input" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTextInputWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/10.Form" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/3.buttons/11.Label" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLabelWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/4.multimedia/1.Image" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewImageWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/4.multimedia/2.Video" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewVideoWizard"/>
-      <tag name="_Palette_/Mobile/jQuery_Mobile/4.multimedia/3.Audio" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewAudioWizard"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/1.page/0.JS#CSS" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.AddJSCSSREferencesWizard"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/1.page/1.Page" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPageWizard" 
+      	keywords="page"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPagePositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/1.page/2.Dialog" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizard" 
+      	keywords="dialog"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPagePositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/1.page/3.Popup" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPopupWizard" 
+      	keywords="div,popup"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/1.page/4.Grid" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGridWizard" 
+      	keywords="div,grid"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/1.page/6.Panel" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPanelWizard" 
+      	keywords="div,panel"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPanelPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/1.page/7.Table" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTableWizard"
+      	keywords="table"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/1.page/8.Collapsible_Content_Block" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCollapsibleWizard" 
+      	keywords="fieldset,collapsible"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/1.page/9.Collapsible_Set" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCollapsibleSetWizard" 
+      	keywords="div,collapsible,set"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/2.lists/1.Header_Bar" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizard" 
+      	keywords="div,header,bar"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/2.lists/2.Footer_Bar" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFooterWizard" 
+      	keywords="div,footer,bar"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFooterPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/2.lists/3.Navbar" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewNavbarWizard" 
+      	keywords="div,navbar,bar"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/2.lists/4.Select_Menu" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewSelectMenuWizard" 
+      	keywords="div,select,menu"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/2.lists/5.Listview" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewListviewWizard" 
+      	keywords="ol,ul,listview,view"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/3.buttons/01.Button" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizard" 
+      	keywords="a,button"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/3.buttons/02.Grouped_Buttons" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedButtonsWizard"
+      	keywords="a,grouped,buttons" 
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/3.buttons/021.Form_Button" 
+      	keywords="input,form,button"
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormButtonWizard" 
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/3.buttons/03.Link" 
+      	keywords="a,link"
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizard" 
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/3.buttons/04.Flip_Toggle_Switch" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizard" 
+      	keywords="div,flip,toggle,switch,input"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/3.buttons/05.Radio_Button" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRadioWizard" 
+      	keywords="input,radio,button"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/3.buttons/06.Checkbox" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCheckBoxWizard" 
+      	keywords="input,checkbox"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/3.buttons/07.Grouped_Checkboxes" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedCheckboxesWizard"
+      	keywords="input,grouped,checkbox" 
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/3.buttons/08.Range_Slider" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRangeSliderWizard"
+      	keywords="input,range,slider" 
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.3/3.buttons/09.Text_Input" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTextInputWizard" 
+      	keywords="input,text"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/1.page/0.JS#CSS" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.AddJSCSSREferencesWizard"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/1.page/1.Page" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPageWizard" 
+      	keywords="div,page"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPagePositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/1.page/2.Dialog" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewDialogWizard" 
+      	keywords="div,dialog"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPagePositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/1.page/3.Popup" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPopupWizard" 
+      	keywords="div,popup"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/1.page/4.Grid" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGridWizard" 
+      	keywords="div,grid"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/1.page/6.Panel" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPanelWizard" 
+      	keywords="div,panel"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewPanelPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/1.page/7.Table" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTableWizard" 
+      	keywords="table"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/1.page/8.Collapsible_Content_Block" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCollapsibleWizard" 
+      	keywords="fieldset,collapsible"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/1.page/9.Collapsible_Set" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCollapsibleSetWizard" 
+      	keywords="div,collapsible,set"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/1.page/91.Tabs" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTabsWizard" 
+      	keywords="div,tabs"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/1.page/92.Heading" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeadingWizard" 
+      	keywords="div,heading"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/2.lists/1.Header_Bar" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderBarWizard" 
+      	keywords="div,header,bar"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewHeaderPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/2.lists/2.Footer_Bar" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFooterWizard" 
+      	keywords="div,footer,bar"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFooterPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/2.lists/3.Navbar" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewNavbarWizard" 
+      	keywords="div,navbar,bar"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/2.lists/4.Select_Menu" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewSelectMenuWizard"
+      	keywords="div,select,menu" 
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/2.lists/5.Listview" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewListviewWizard" 
+      	keywords="ol,ul,listview,view"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/3.buttons/01.Button" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewButtonWizard" 
+      	keywords="a,button"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/3.buttons/02.Grouped_Buttons" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedButtonsWizard" 
+      	keywords="div,grouped,buttons"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/3.buttons/021.Form_Button" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormButtonWizard" 
+      	keywords="input,form,button,submit"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/3.buttons/03.Link" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLinkWizard" 
+      	keywords="a,link"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/3.buttons/04.Flip_Toggle_Switch" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewToggleWizard" 
+      	keywords="div,flip,toggle,switch,input"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/3.buttons/05.Radio_Button" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRadioWizard" 
+      	keywords="input,radio,button"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/3.buttons/06.Checkbox" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewCheckBoxWizard" 
+      	keywords="input,checkbox"
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/3.buttons/07.Grouped_Checkboxes" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewGroupedCheckboxesWizard"
+      	keywords="input,grouped,checkbox" 
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/3.buttons/08.Range_Slider" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewRangeSliderWizard" 
+      	keywords="input,range,slider" 
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+      <tag name="_Palette_/Mobile/jQuery_Mobile/version:1.4/3.buttons/09.Text_Input" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewTextInputWizard"
+      	keywords="input,text" 
+      	corrector-class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector"/>
+
+      <tag name="_Palette_/Mobile/z.HTML/version:5.0/1.form/1.Form" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormWizard"/>
+      <tag name="_Palette_/Mobile/z.HTML/version:5.0/1.form/2.Label" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLabelWizard"/>
+      <tag name="_Palette_/Mobile/z.HTML/version:5.0/2.multimedia/1.Image" 
+      	keywords="img,image" 
+      	class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewImageWizard"/>
+      <tag name="_Palette_/Mobile/z.HTML/version:5.0/2.multimedia/2.Video" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewVideoWizard"/>
+      <tag name="_Palette_/Mobile/z.HTML/version:5.0/2.multimedia/3.Audio" class="org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewAudioWizard"/>
    </extension>
+
+
+
+
+
+
+
+
+
+
+
+
+  <extension-point id="occurrenceStructureProviders" 
+  		name="%occurrenceStructureProvidersExtensionPoint" />
+  <extension-point id="visulaEditorImplementations" name="Visual Editor Implementations" schema="schema/visulaEditorImplementations.exsd" />
+  <extension-point id="editorContentAssistent" name="editorContentAssistent" schema="schema/editorContentAssistent.exsd"/>
+  <extension-point id="localeProvider" name="Locale provider for an opened file" schema="schema/localeProvider.exsd"/>
+  <extension-point id="cssDialog" name="cssDialog" schema="schema/cssDialog.exsd"/> 
+
+	<extension point="org.eclipse.wst.sse.ui.editorConfiguration"> 
+		<sourceViewerConfiguration
+			class="org.jboss.tools.jst.web.ui.internal.editor.JSPTextViewerConfiguration"
+			target="org.eclipse.jst.jsp.core.jspsource"/>
+		<contentOutlineConfiguration
+			class="org.eclipse.jst.jsp.ui.views.contentoutline.JSPContentOutlineConfiguration"
+			target="org.eclipse.jst.jsp.core.jspsource"/>
+		<quickOutlineConfiguration
+			class="org.eclipse.wst.xml.ui.internal.quickoutline.XMLQuickOutlineConfiguration"
+			target="org.eclipse.jst.jsp.core.jspsource" />
+		<propertySheetConfiguration
+			class="org.eclipse.wst.xml.ui.views.properties.XMLPropertySheetConfiguration"
+			target="org.eclipse.jst.jsp.core.jspsource" />
+		<documentationTextHover
+        	class="org.eclipse.jst.jsp.ui.internal.taginfo.JSPTagInfoHoverProcessor"
+        	target="org.eclipse.jst.jsp.DEFAULT_JSP, org.eclipse.jst.jsp.JSP_DIRECTIVE">
+  		</documentationTextHover>
+  		<documentationTextHover
+        	class="org.eclipse.jst.jsp.ui.internal.taginfo.JSPJavaJavadocHoverProcessor"
+        	target="org.eclipse.jst.jsp.SCRIPT.JAVA">
+  		</documentationTextHover>
+  		<provisionalConfiguration
+			type="sourceeditingtexttools"
+			class="org.eclipse.jst.jsp.ui.internal.editor.JSPSourceEditingTextTools"
+			target="org.eclipse.jst.jsp.core.jspsource" />
+		<provisionalConfiguration
+			type="characterpairmatcher"
+			class="org.eclipse.jst.jsp.ui.internal.text.JSPDocumentRegionEdgeMatcher"
+			target="org.eclipse.jst.jsp.core.jspsource" />
+		<provisionalConfiguration
+			type="foldingstrategy"
+			class="org.eclipse.wst.xml.ui.internal.projection.XMLFoldingStrategy"
+			target="org.eclipse.jst.jsp.core.jspsource" />
+		<provisionalDefinition
+			type="preferencepages"
+			value="org.eclipse.jst.jsp.ui.preferences.jsp, org.eclipse.wst.sse.ui.preferences.jsp.source, org.eclipse.wst.sse.ui.preferences.jsp.templates, org.eclipse.wst.sse.ui.preferences.jsp.styles,,org.eclipse.jst.jsp.ui.preferences.validation, org.eclipse.wst.sse.ui.preferences.jsp.contentassist"
+			target="org.eclipse.jst.jsp.core.jspsource" />
+		<provisionalDefinition
+      		type="showintarget"
+            value="org.eclipse.jdt.ui.PackageExplorer"
+			target="org.eclipse.jst.jsp.core.jspsource" />
+		<provisionalDefinition
+      		type="showintarget"
+            value="org.jboss.tools.jst.web.ui.navigator.WebProjectsView"
+			target="org.eclipse.jst.jsp.core.jspsource" />
+		<provisionalDefinition
+			type="spellingregions"
+			value="XML_COMMENT_TEXT, JSP_COMMENT_TEXT, XML_CONTENT, HTML_CONTENT"
+			target="org.eclipse.jst.jsp.core.jspsource" />
+		<provisionalDefinition
+			type="activecontexts"
+			value="org.eclipse.jst.jsp.core.jspsource, org.eclipse.jst.jsp.ui.structured.text.editor.jsp.scope, org.eclipse.wst.html.core.htmlsource, org.eclipse.core.runtime.xml, org.eclipse.wst.xml.navigation, org.eclipse.wst.xml.selection, org.eclipse.wst.sse.comments"
+        	target="org.eclipse.jst.jsp.core.jspsource" />
+		<provisionalDefinition
+      		type="preferencepages"
+            value="org.eclipse.wst.sse.ui.preferences.jsp.occurrences"
+			target="org.eclipse.jst.jsp.core.jspsource"/>
+
+		<sourceViewerConfiguration
+			class="org.jboss.tools.jst.web.ui.internal.editor.JSPTextViewerConfiguration"
+			target="org.jboss.tools.jst.jsp.jspincludesource"/>
+		<contentOutlineConfiguration
+			class="org.eclipse.jst.jsp.ui.views.contentoutline.JSPContentOutlineConfiguration"
+			target="org.jboss.tools.jst.jsp.jspincludesource"/>
+		<quickOutlineConfiguration
+			class="org.eclipse.wst.xml.ui.internal.quickoutline.XMLQuickOutlineConfiguration"
+			target="org.jboss.tools.jst.jsp.jspincludesource"/>
+		<propertySheetConfiguration
+			class="org.eclipse.wst.xml.ui.views.properties.XMLPropertySheetConfiguration"
+			target="org.jboss.tools.jst.jsp.jspincludesource"/>
+  		<provisionalConfiguration
+			type="sourceeditingtexttools"
+			class="org.eclipse.jst.jsp.ui.internal.editor.JSPSourceEditingTextTools"
+			target="org.jboss.tools.jst.jsp.jspincludesource"/>
+		<provisionalConfiguration
+			type="characterpairmatcher"
+			class="org.eclipse.jst.jsp.ui.internal.text.JSPDocumentRegionEdgeMatcher"
+			target="org.jboss.tools.jst.jsp.jspincludesource"/>
+		<provisionalConfiguration
+			type="foldingstrategy"
+			class="org.eclipse.wst.xml.ui.internal.projection.XMLFoldingStrategy"
+			target="org.jboss.tools.jst.jsp.jspincludesource"/>
+		<provisionalDefinition
+			type="preferencepages"
+			value="org.eclipse.jst.jsp.ui.preferences.jsp, org.eclipse.wst.sse.ui.preferences.jsp.source, org.eclipse.wst.sse.ui.preferences.jsp.templates, org.eclipse.wst.sse.ui.preferences.jsp.styles,,org.eclipse.jst.jsp.ui.preferences.validation, org.eclipse.wst.sse.ui.preferences.jsp.contentassist"
+			target="org.jboss.tools.jst.jsp.jspincludesource"/>
+		<provisionalDefinition
+      		type="showintarget"
+            value="org.eclipse.jdt.ui.PackageExplorer"
+			target="org.jboss.tools.jst.jsp.jspincludesource" />
+		<provisionalDefinition
+      		type="showintarget"
+            value="org.jboss.tools.jst.web.ui.navigator.WebProjectsView"
+			target="org.jboss.tools.jst.jsp.jspincludesource" />
+		<provisionalDefinition
+			type="spellingregions"
+			value="XML_COMMENT_TEXT, JSP_COMMENT_TEXT, XML_CONTENT, HTML_CONTENT"
+			target="org.jboss.tools.jst.jsp.jspincludesource"/>
+		<provisionalDefinition
+			type="activecontexts"
+			value="org.eclipse.jst.jsp.core.jspsource, org.eclipse.jst.jsp.ui.structured.text.editor.jsp.scope, org.eclipse.wst.html.core.htmlsource, org.eclipse.core.runtime.xml, org.eclipse.wst.xml.navigation, org.eclipse.wst.xml.selection, org.eclipse.wst.sse.comments"
+			target="org.jboss.tools.jst.jsp.jspincludesource"/>
+		<provisionalDefinition
+      		type="preferencepages"
+            value="org.eclipse.wst.sse.ui.preferences.jsp.occurrences"
+			target="org.jboss.tools.jst.jsp.jspincludesource"/>
+			
+	    <sourceViewerConfiguration
+			class="org.jboss.tools.jst.web.ui.internal.editor.HTMLTextViewerConfiguration"
+	        target="org.eclipse.wst.html.core.htmlsource"/>
+	    <contentOutlineConfiguration
+	        class="org.eclipse.wst.html.ui.views.contentoutline.HTMLContentOutlineConfiguration"
+	        target="org.eclipse.wst.html.core.htmlsource"/>
+	    <quickOutlineConfiguration
+			class="org.eclipse.wst.xml.ui.internal.quickoutline.XMLQuickOutlineConfiguration"
+			target="org.eclipse.wst.html.core.htmlsource"/>
+	    <propertySheetConfiguration
+            class="org.eclipse.wst.xml.ui.views.properties.XMLPropertySheetConfiguration"
+            target="org.eclipse.wst.html.core.htmlsource"/>
+		<documentationTextHover
+        	class="org.eclipse.wst.html.ui.internal.taginfo.HTMLTagInfoHoverProcessor"
+        	target="org.eclipse.wst.html.HTML_DEFAULT">
+  		</documentationTextHover>
+	    <provisionalConfiguration
+	    	type="sourceeditingtexttools"
+	        class="org.eclipse.wst.xml.ui.internal.provisional.XMLSourceEditingTextTools"
+	        target="org.eclipse.wst.html.core.htmlsource"/>
+	    <provisionalConfiguration
+	    	type="characterpairmatcher"
+	        class="org.eclipse.wst.html.ui.internal.text.HTMLDocumentRegionEdgeMatcher"
+	        target="org.eclipse.wst.html.core.htmlsource"/>
+	    <provisionalConfiguration
+			type="foldingstrategy"
+			class="org.eclipse.wst.xml.ui.internal.projection.XMLFoldingStrategy"
+			target="org.eclipse.wst.html.core.htmlsource" />
+		<provisionalConfiguration
+			type="autoeditstrategy"
+			class="org.eclipse.wst.html.ui.internal.autoedit.StructuredAutoEditStrategyHTML"
+			target="org.eclipse.wst.html.HTML_DEFAULT, org.eclipse.wst.html.HTML_DECLARATION" />
+	    <provisionalDefinition
+			type="preferencepages"
+			value="org.eclipse.wst.html.ui.preferences.html, org.eclipse.wst.html.ui.preferences.source, org.eclipse.wst.html.ui.preferences.templates, org.eclipse.wst.html.ui.preferences.styles,org.eclipse.wst.html.ui.preferences.validation, org.eclipse.wst.html.ui.preferences.contentassist"
+			target="org.eclipse.wst.html.core.htmlsource" />
+		<provisionalDefinition
+      		type="showintarget"
+            value="org.eclipse.jdt.ui.PackageExplorer"
+			target="org.eclipse.wst.html.core.htmlsource" />
+		<provisionalDefinition
+      		type="showintarget"
+            value="org.jboss.tools.jst.web.ui.navigator.WebProjectsView"
+			target="org.eclipse.wst.html.core.htmlsource" />
+		<provisionalDefinition
+			type="spellingregions"
+			value="XML_COMMENT_TEXT, XML_CONTENT"
+			target="org.eclipse.wst.html.core.htmlsource" />
+		<provisionalDefinition
+			type="activecontexts"
+			value="org.eclipse.wst.html.core.htmlsource, org.eclipse.wst.html.occurrences, org.eclipse.core.runtime.xml, org.eclipse.wst.xml.navigation, org.eclipse.wst.xml.selection, org.eclipse.wst.sse.comments"
+        	target="org.eclipse.wst.html.core.htmlsource" />
+		<provisionalDefinition
+      		type="preferencepages"
+           	value="org.eclipse.wst.sse.ui.preferences.jsp.occurrences"
+           	target="org.eclipse.wst.html.core.htmlsource" />
+
+	    <sourceViewerConfiguration
+			class="org.jboss.tools.jst.web.ui.internal.editor.HTMLTextViewerConfiguration"
+	        target="jsf.facelet" />
+	    <contentOutlineConfiguration
+	        class="org.eclipse.wst.html.ui.views.contentoutline.HTMLContentOutlineConfiguration"
+	        target="jsf.facelet" />
+	    <quickOutlineConfiguration
+			class="org.eclipse.wst.xml.ui.internal.quickoutline.XMLQuickOutlineConfiguration"
+            target="jsf.facelet" />
+	    <propertySheetConfiguration
+	        class="org.eclipse.wst.xml.ui.views.properties.XMLPropertySheetConfiguration"
+	        target="jsf.facelet" />
+	    <provisionalConfiguration
+	    	type="sourceeditingtexttools"
+	        class="org.eclipse.wst.xml.ui.internal.provisional.XMLSourceEditingTextTools"
+	        target="jsf.facelet"/>
+	    <provisionalConfiguration
+	    	type="characterpairmatcher"
+	        class="org.eclipse.wst.html.ui.internal.text.HTMLDocumentRegionEdgeMatcher"
+	        target="jsf.facelet"/>
+		<provisionalConfiguration
+			type="foldingstrategy"
+			class="org.eclipse.wst.xml.ui.internal.projection.XMLFoldingStrategy"
+			target="jsf.facelet" />
+	    <provisionalDefinition
+			type="preferencepages"
+		 	value="org.eclipse.wst.html.ui.preferences.html, org.eclipse.wst.html.ui.preferences.source, org.eclipse.wst.html.ui.preferences.templates, org.eclipse.wst.html.ui.preferences.styles,org.eclipse.wst.html.ui.preferences.validation, org.eclipse.wst.html.ui.preferences.contentassist"
+			target="jsf.facelet" />
+		<provisionalDefinition
+      		type="showintarget"
+            value="org.eclipse.jdt.ui.PackageExplorer"
+			target="jsf.facelet" />
+		<provisionalDefinition
+      		type="showintarget"
+            value="org.jboss.tools.jst.web.ui.navigator.WebProjectsView"
+			target="jsf.facelet" />
+		<provisionalDefinition
+			type="spellingregions"
+			value="XML_COMMENT_TEXT, XML_CONTENT"
+			target="jsf.facelet" />
+		<provisionalDefinition
+			type="activecontexts"
+			value="org.eclipse.wst.html.core.htmlsource, org.eclipse.wst.html.occurrences, org.eclipse.core.runtime.xml, org.eclipse.wst.xml.navigation, org.eclipse.wst.xml.selection, org.eclipse.wst.sse.comments"
+        	target="jsf.facelet" />
+      	<provisionalDefinition
+      		type="preferencepages"
+           	value="org.eclipse.wst.sse.ui.preferences.jsp.occurrences"
+           	target="jsf.facelet"/>
+
+		  <provisionalDefinition
+      			type="showintarget"
+            	value="org.eclipse.jdt.ui.PackageExplorer"
+				target="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor" />
+		  <provisionalDefinition
+      			type="showintarget"
+            	value="org.jboss.tools.jst.web.ui.navigator.WebProjectsView"
+				target="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor" />
+		  <provisionalDefinition
+      			type="showintarget"
+            	value="org.eclipse.jdt.ui.PackageExplorer"
+				target="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.HTMLTextEditor" />
+		  <provisionalDefinition
+      			type="showintarget"
+            	value="org.jboss.tools.jst.web.ui.navigator.WebProjectsView"
+				target="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.HTMLTextEditor" />
+		  <provisionalConfiguration
+				type="foldingstrategy"
+				class="org.eclipse.wst.xml.ui.internal.projection.XMLFoldingStrategy"
+				target="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor" />
+		  <provisionalConfiguration
+				type="foldingstrategy"
+				class="org.eclipse.wst.xml.ui.internal.projection.XMLFoldingStrategy"
+				target="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.HTMLTextEditor" />
+	
+	  <documentationTextHover class="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.info.FaceletTagInfoHoverProcessor" target="org.eclipse.wst.html.HTML_DEFAULT" /> 
+	  <documentationTextHover class="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.info.FaceletTagInfoHoverProcessor" target="org.eclipse.wst.xml.XML_DEFAULT" />
+	  <documentationTextHover class="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.info.FaceletTagInfoHoverProcessor" target="org.eclipse.wst.sse.ST_DEFAULT" />
+	  <documentationTextHover class="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.info.FaceletTagInfoHoverProcessor" target="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
+	  <documentationTextHover class="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.info.FaceletTagInfoHoverProcessor" target="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
+	  
+	</extension>
+
+   <extension
+         point="org.eclipse.jdt.ui.javaEditorTextHovers">
+      <hover
+            label="%javaStringELHover"
+            description="%javaStringELHoverDescription"
+            class="org.jboss.tools.jst.web.ui.internal.editor.info.JavaStringELInfoHover"
+            id="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.info.JavaStringELInfoHover"
+            activate="true">
+      </hover>
+	</extension>
+
+	<extension point="org.eclipse.ui.preferencePages">
+		<!-- Additional JSP/HTML PREFERENCE PAGES -->
+		<page
+			name="%JSP_Occurrences.name"
+			category="org.eclipse.jst.jsp.ui.preferences.jsp"
+			class="org.jboss.tools.jst.web.ui.internal.editor.preferences.JSPOccurrencesPreferencePage"
+			id="org.eclipse.wst.sse.ui.preferences.jsp.occurrences">
+		</page>
+	</extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <editor
+            icon="$nl$/images/xstudio/editors/jsp.gif"
+            class="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPMultiPageEditor"
+            default="true"
+            name="%editors.jsp.name"
+            contributorClass="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPMultiPageContributor"
+            id="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor"
+            matchingStrategy = "org.jboss.tools.common.core.resources.MatchingStrategyImpl"
+            extensions="jsp, jspf, jspx, tag, tagf">
+         <contentTypeBinding contentTypeId="org.eclipse.jst.jsp.core.jspsource"/>
+         <contentTypeBinding contentTypeId="org.jboss.tools.jst.jsp.jspincludesource"/>
+      </editor>
+      <editor 
+            class="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPMultiPageEditor" 
+            contributorClass="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPMultiPageContributor" 
+            extensions="html, htm, jsf, xhtml" 
+            icon="$nl$/images/xstudio/editors/html_file.gif" 
+            id="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor" 
+            matchingStrategy = "org.jboss.tools.common.core.resources.MatchingStrategyImpl"
+            name="%editors.html.name" 
+            default="true">
+         <contentTypeBinding contentTypeId="org.eclipse.wst.html.core.htmlsource"/>
+         <contentTypeBinding contentTypeId="org.jboss.tools.jst.jsp.phpsource"/>
+         <contentTypeBinding contentTypeId="org.eclipse.php.core.phpsource"/>
+         <contentTypeBinding contentTypeId="jsf.facelet"/>
+      </editor>
+      <editor
+      		class="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPMultiPageEditor"
+      		contributorClass="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPMultiPageContributor"
+      		icon="$nl$/images/xstudio/editors/xmldoc.gif"
+      		id="org.jboss.tools.jst.jsp.jspeditor.DocBookEditor"
+      		name="%editors.docbook.name">
+      		<contentTypeBinding contentTypeId="org.jboss.tools.jst.jsp.editor.docbookFile"/> 
+      </editor>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.menus">
+         <menuContribution 
+               locationURI="menu:navigate?endof=show.ext">
+               <command label="%Toggle.Selection.Bar"
+                     commandId="org.jboss.tools.jst.web.ui.internal.editor.commands.showSelectionBar"
+                     id="org.jboss.tools.jst.jsp.menus.showSelectionBar"
+                     style="toggle"
+                     mnemonic="S">
+                     <visibleWhen
+                           checkEnabled="false">
+                           <with
+                                 variable="activeEditorId">
+                                 <or>
+	                                 <equals
+	                                       value="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor">
+	                                 </equals>
+	                                 <equals
+	                                       value="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor">
+	                                 </equals>
+	                                 <equals
+	                                       value="org.jboss.tools.jst.jsp.jspeditor.DocBookEditor">
+	                                 </equals>
+                                 </or>
+                           </with>
+                     </visibleWhen>
+               </command>
+         </menuContribution>
+         <menuContribution 
+			locationURI="popup:org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor.source.EditorContext?after=org.jboss.tools.vpe.editor.menu.SetupTemplateContributionItem">
+			<command
+         		commandId="org.jboss.tools.jst.jsp.commands.i18" />
+        </menuContribution>
+        <menuContribution
+              locationURI="popup:org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor.source.EditorContext?after=org.jboss.tools.vpe.editor.menu.SetupTemplateContributionItem">
+              <command
+         		commandId="org.jboss.tools.jst.jsp.commands.i18" />
+        </menuContribution>
+        <menuContribution 
+			locationURI="popup:org.eclipse.wst.css.core.csssource.source.EditorContext?after=additions">
+			<command
+         commandId="org.jboss.tools.jst.jsp.commands.openCSSDialog"
+         icon="$nl$/images/cssdialog/color_large.gif"
+         label="%OpenCSSDialogName"/>
+        </menuContribution>
+        <menuContribution
+              locationURI="menu:sourceMenuId?after=OccurencesFile">
+              <command label="%Externalize.Selected.Property"
+                    commandId="org.jboss.tools.jst.jsp.commands.i18"
+                    id="org.jboss.tools.jst.jsp.menus.i18"
+                    mnemonic="S">
+                    	<visibleWhen checkEnabled="false">
+							<and>
+								<with variable="activeContexts">
+									<iterate operator="or">
+										<equals value="org.eclipse.wst.sse.ui.structuredTextEditorScope"/>
+									</iterate>
+								</with>
+								<with variable="activeEditorId">
+                            	     <or>
+	                            	     <equals value="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor" />
+	                                	 <equals value="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor" />
+		                                 <equals value="org.jboss.tools.jst.jsp.jspeditor.DocBookEditor" />
+    	                             </or>
+        	                   </with>
+							</and>
+						</visibleWhen>
+              </command>
+        </menuContribution>
+        <menuContribution
+              locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+           <toolbar label="%vpe.toolbar.name"
+                 id="org.jboss.tools.jst.jsp.toolbars.sampleToolbar">
+              <command
+                    commandId="org.jboss.tools.jst.jsp.commands.i18"
+                    icon="icons/externalize.png"
+                    id="org.jboss.tools.jst.jsp.toolbars.i18"
+                    tooltip="%Externalize.Selected.Property">
+					 <visibleWhen checkEnabled="false">
+					 <or>
+					 	<and>
+					 		<with variable="org.eclipse.core.runtime.Platform">
+					 			<test property="org.eclipse.core.runtime.isBundleInstalled" 
+					 				args="org.jboss.tools.vpe" forcePluginActivation="true"/>
+					 		</with>
+		            		<reference definitionId="org.jboss.tools.ui.vpe.editor"/>
+					 	</and>
+					 	<and>
+					 		<not>
+					 			<with variable="org.eclipse.core.runtime.Platform">
+					 				<test property="org.eclipse.core.runtime.isBundleInstalled" 
+					 					args="org.jboss.tools.vpe" forcePluginActivation="true"/>
+					 			</with>
+					 		</not>
+					 		<with variable="activeEditorId">
+                                 <or>
+	                                 <equals value="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor"/>
+	                                 <equals value="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor"/>
+	                                 <equals value="org.jboss.tools.jst.jsp.jspeditor.DocBookEditor"/>
+                                 </or>
+                           </with>
+					 	</and>
+					 </or>
+	            	</visibleWhen>
+              </command>
+              <command
+                     commandId="org.jboss.tools.jst.web.ui.internal.editor.commands.showSelectionBar"
+                     icon="icons/selbar.gif"
+                     id="org.jboss.tools.jst.jsp.toolbars.showSelectionBar"
+                     style="toggle"
+                     tooltip="%Toggle.Selection.Bar">
+                     <visibleWhen checkEnabled="false">
+					 <or>
+					 	<and>
+					 		<with variable="org.eclipse.core.runtime.Platform">
+					 			<test property="org.eclipse.core.runtime.isBundleInstalled" 
+					 				args="org.jboss.tools.vpe" forcePluginActivation="true"/>
+					 		</with>
+		            		<reference definitionId="org.jboss.tools.ui.vpe.editor"/>
+					 	</and>
+					 	<and>
+					 		<not>
+					 			<with variable="org.eclipse.core.runtime.Platform">
+					 				<test property="org.eclipse.core.runtime.isBundleInstalled" 
+					 					args="org.jboss.tools.vpe" forcePluginActivation="true"/>
+					 			</with>
+					 		</not>
+					 		<with variable="activeEditorId">
+                                 <or>
+	                                 <equals value="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor"/>
+	                                 <equals value="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor"/>
+	                                 <equals value="org.jboss.tools.jst.jsp.jspeditor.DocBookEditor"/>
+                                 </or>
+                           </with>
+					 	</and>
+					 </or>
+	            	</visibleWhen>
+               </command>
+               <command
+                    commandId="org.jboss.tools.jst.jsp.commands.openCSSDialog"
+                    icon="$nl$/images/cssdialog/color_large.gif"
+                    id="org.jboss.tools.jst.jsp.commands.openCSSDialog"
+                    label="%OpenCSSDialogName"
+                    style="toggle"
+                    tooltip="%OpenCSSDialogDescription">
+                     <visibleWhen checkEnabled="true" />
+               </command>
+           </toolbar>
+        </menuContribution>
+         
+   </extension>
+   
+       <extension
+       point="org.eclipse.ui.handlers">
+       <handler
+             class="org.eclipse.jst.jsp.ui.internal.handlers.JSPFindOccurrencesHandler"
+             commandId="org.eclipse.wst.sse.ui.search.find.occurrences">
+             <activeWhen>
+              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
+          </activeWhen>
+          <enabledWhen>
+              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
+          </enabledWhen>
+       </handler>
+       <handler
+             class="org.eclipse.wst.html.ui.internal.edit.ui.CleanupDocumentHandler"
+             commandId="org.eclipse.wst.sse.ui.cleanup.document">
+             <activeWhen>
+                    <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
+             </activeWhen>
+             <enabledWhen>
+                    <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
+             </enabledWhen>
+       </handler>
+              <handler
+             class="org.eclipse.wst.xml.ui.internal.handlers.StructuredSelectEnclosingXMLHandler"
+             commandId="org.eclipse.wst.sse.ui.structure.select.enclosing">
+          <activeWhen>
+              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
+          </activeWhen>
+          <enabledWhen>
+              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
+          </enabledWhen>
+       </handler>
+       <handler
+             class="org.eclipse.wst.xml.ui.internal.handlers.StructuredSelectNextXMLHandler"
+             commandId="org.eclipse.wst.sse.ui.structure.select.next">
+          <activeWhen>
+              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
+          </activeWhen>
+          <enabledWhen>
+              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
+          </enabledWhen>
+       </handler>
+       <handler
+             class="org.eclipse.wst.xml.ui.internal.handlers.StructuredSelectPreviousXMLHandler"
+             commandId="org.eclipse.wst.sse.ui.structure.select.previous">
+          <activeWhen>
+              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
+          </activeWhen>
+          <enabledWhen>
+              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
+          </enabledWhen>
+       </handler>
+       <handler
+             class="org.eclipse.wst.sse.ui.internal.handlers.StructuredSelectHistoryHandler"
+             commandId="org.eclipse.wst.sse.ui.structure.select.last">
+          <activeWhen>
+              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
+          </activeWhen>
+          <enabledWhen>
+              <reference definitionId="org.jboss.tools.ui.structuredEditor"/>
+          </enabledWhen>
+       </handler>
+       <handler
+             class="org.jboss.tools.jst.web.ui.internal.editor.selection.bar.SelectionBarHandler"
+             commandId="org.jboss.tools.jst.web.ui.internal.editor.commands.showSelectionBar">
+       </handler>
+       <handler
+             class="org.jboss.tools.jst.web.ui.internal.editor.i18n.handlers.I18nHandler"
+             commandId="org.jboss.tools.jst.jsp.commands.i18">
+       </handler>
+       <handler
+             class="org.jboss.tools.jst.web.ui.internal.css.dialog.OpenCSSDialogHandler"
+             commandId="org.jboss.tools.jst.jsp.commands.openCSSDialog">
+             <activeWhen> 
+                <with variable="activeEditorId">
+                     <equals value="org.eclipse.wst.css.core.csssource.source" />
+                </with>
+             </activeWhen>
+       </handler>
+    </extension>
+
+	<extension point="org.eclipse.core.expressions.definitions">
+			<definition id="org.jboss.tools.ui.structuredEditor">
+				<and>
+					<with variable="activeContexts">
+						<iterate operator="or">
+							<equals value="org.eclipse.wst.sse.ui.structuredTextEditorScope"/>
+						</iterate>
+					</with>
+					<or>
+					<with variable="activeEditorId">
+							<equals value="org.jboss.tools.jst.jsp.jspeditor.JSPTextEditor"/>
+					</with>
+					<with variable="activeEditorId">
+							<equals value="org.jboss.tools.jst.jsp.jspeditor.HTMLTextEditor"/>
+					</with>
+					<with variable="activeEditorId">
+							<equals value="org.jboss.tools.jst.jsp.jspeditor.DocBookEditor"/>
+					</with>
+					</or>
+				</and>			
+			</definition>
+		</extension>
+   <!--extension point="org.jboss.tools.common.verification.rules">
+      <rule-set path="meta/.rule-sets.xml"/>
+   </extension-->
+   
+    <extension point="org.jboss.tools.jst.web.ui.occurrenceStructureProviders">
+	  	<provider 
+	  		class="org.jboss.tools.jst.jsp.text.JSPOccurrenceProvider" 
+	  		editorId="org.jboss.tools.jst.jsp" 
+	  		name="%defaultOccurrenceStructureProviderName" /> 
+	</extension>
+
+	<extension point="org.eclipse.core.contenttype.contentTypes"> 
+   	</extension>
+   
+	
+    <extension point="org.eclipse.core.contenttype.contentTypes">
+      	<content-type 
+	      	id="org.jboss.tools.jst.jsp.jspincludesource"
+	       	name="%ContentType_JBossToolsINC"
+	       	base-type="org.eclipse.jst.jsp.core.jspsource"
+	       	describer="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPIncludeContentDescriber"
+	       	file-extensions="inc"
+	       	priority="high"/>
+      	<content-type 
+	      	id="org.jboss.tools.jst.jsp.phpsource"
+	       	name="%ContentType_JBossPHPSource"
+	       	base-type="org.eclipse.wst.html.core.htmlsource"
+	       	describer="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPIncludeContentDescriber"
+	       	file-extensions="php"
+	       	priority="high"/>
+	       	
+       <file-association
+             content-type="org.eclipse.wst.html.core.htmlsource"
+             file-extensions="jsf"/>
+       <content-type id="org.jboss.tools.jst.jsp.editor.docbookFile"
+       		base-type="org.eclipse.core.runtime.xml"
+       		file-extensions="dbk, xml"
+       		priority="normal"
+       		name="Docbook File">
+       	<describer class="org.eclipse.core.runtime.content.XMLRootElementContentDescriber2">
+			<parameter name="element" value="book"/>
+			<parameter name="element" value="chapter"/>
+			<parameter name="element" value="section"/>
+			<parameter name="element" value="part"/>
+			<parameter name="element" value="article"/>
+			<parameter name="element" value="appendix"/>
+       	</describer>
+      </content-type> 
+      
+    </extension>
+   
+   <extension
+         point="org.jboss.tools.common.model.resourceMapping">
+      <mapping
+          loader="org.jboss.tools.jst.jsp"
+          priority="4"
+          kind="class"
+          paths=".texteditors.jsp.,org.jboss.tools.jst.jsp."
+      />
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors.templates">
+      <include
+            file="templates/facelets-templates.xml"
+            translations="$nl$/templates/facelets-templates.properties"/>
+   </extension>
+
+   <extension point="org.jboss.tools.common.model.classes">
+		<xclass id="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor"
+			class="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor"/>
+		<xclass id="org.jboss.tools.jst.web.ui.internal.editor.outline.JSPCellEditorProviderImpl"
+			class="org.jboss.tools.jst.web.ui.internal.editor.outline.JSPCellEditorProviderImpl"/>
+		<xclass id="org.jboss.tools.jst.web.ui.internal.editor.outline.VpeProperties"
+			class="org.jboss.tools.jst.web.ui.internal.editor.outline.VpeProperties"/>
+		<xclass id="org.jboss.tools.jst.web.ui.internal.editor.outline.DefaultDropCommandRunner"
+			class="org.jboss.tools.jst.web.ui.internal.editor.outline.DefaultDropCommandRunner"/>
+		<xclass id="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.PaletteDropCommand"
+			class="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.PaletteDropCommand"/>
+		<xclass id="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.FileDropCommand"
+			class="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.FileDropCommand"/>
+   </extension>
+
+  <extension
+        point="org.eclipse.ui.commands">
+     <category
+           description="CSSDialog"
+           id="org.jboss.tools.jst.jsp.commands"
+           name="CSS Dialog">
+     </category>
+     <command
+           categoryId="org.jboss.tools.jst.jsp.commands"
+           description="Open active or selected CSS Dialog"
+           id="org.jboss.tools.jst.jsp.commands.openCSSDialog"
+           name="%OpenCSSDialogName">
+     </command>
+     <category
+           id="org.jboss.tools.jst.jsp.commands.category"
+           name="Visual Page Editor Category">
+     </category>
+     <command
+           categoryId="org.jboss.tools.jst.jsp.commands.category"
+           id="org.jboss.tools.jst.web.ui.internal.editor.commands.showSelectionBar"
+           name="%Toggle.Selection.Bar">
+           <state
+                 class="org.eclipse.ui.handlers.RegistryToggleState:true"
+                 id="org.eclipse.ui.commands.toggleState">
+           </state>
+     </command>
+     <command
+           categoryId="org.jboss.tools.jst.jsp.commands.category"
+           id="org.jboss.tools.jst.jsp.commands.i18"
+           name="%Externalize.Selected.Property">
+     </command>
+  </extension>
+  <extension
+        point="org.eclipse.ui.bindings">
+     <key
+           commandId="org.jboss.tools.jst.jsp.commands.openCSSDialog"
+           contextId="org.eclipse.wst.css.core.csssource"
+           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+           sequence="Ctrl+Shift+C">
+     </key>
+     <key
+           commandId="org.jboss.tools.jst.web.ui.internal.editor.commands.showSelectionBar"
+           contextId="org.eclipse.ui.contexts.window"
+           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+           sequence="M1+6">
+     </key>
+     <key
+           commandId="org.jboss.tools.jst.jsp.commands.i18"
+           contextId="org.eclipse.ui.contexts.window"
+           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+           sequence="M1+7">
+     </key>
+  </extension>
+  
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+               <initializer class="org.jboss.tools.jst.web.ui.internal.editor.preferences.VpePreferencesInitializer"/>
+   </extension>
+   
+    <extension
+       point="org.eclipse.wst.sse.ui.completionProposal">
+    <proposalCategory
+          icon="images/ca/icons_JSF_EL.gif"
+          id="org.jboss.tools.jst.jsp.proposalCategory.xmlEL"
+          name="%proposalCategory.xmlEL">
+    </proposalCategory>
+    <proposalComputer
+          activate="false"
+          categoryId="org.jboss.tools.jst.jsp.proposalCategory.xmlEL"
+          class="org.jboss.tools.jst.web.ui.internal.editor.contentassist.computers.XmlELCompletionProposalComputer"
+          id="org.jboss.tools.jst.jsp.proposalComputer.xmlEL">
+          	<contentType id="org.eclipse.core.runtime.xml">
+				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
+				<partitionType id="org.eclipse.wst.xml.XML_CDATA" />
+				<partitionType id="org.eclipse.wst.xml.XML_PI" />
+				<partitionType id="org.eclipse.wst.xml.XML_DECL" />
+				<partitionType id="org.eclipse.wst.xml.XML_COMMENT" />
+				<partitionType id="org.eclipse.wst.xml.dtd.internal_subset" />
+				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT" />
+				<partitionType id="org.eclipse.wst.sse.UNKNOWN_PARTITION_TYPE" />
+			</contentType>
+			<contentType id="org.eclipse.wst.xml.core.xmlsource">
+				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
+				<partitionType id="org.eclipse.wst.xml.XML_CDATA" />
+				<partitionType id="org.eclipse.wst.xml.XML_PI" />
+				<partitionType id="org.eclipse.wst.xml.XML_DECL" />
+				<partitionType id="org.eclipse.wst.xml.XML_COMMENT" />
+				<partitionType id="org.eclipse.wst.xml.dtd.internal_subset" />
+				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT" />
+				<partitionType id="org.eclipse.wst.sse.UNKNOWN_PARTITION_TYPE" />
+			</contentType>
+			<contentType id="org.jboss.tools.seam.xml.ui.pages20xmlsource">
+				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
+				<partitionType id="org.eclipse.wst.xml.XML_CDATA" />
+				<partitionType id="org.eclipse.wst.xml.XML_PI" />
+				<partitionType id="org.eclipse.wst.xml.XML_DECL" />
+				<partitionType id="org.eclipse.wst.xml.XML_COMMENT" />
+				<partitionType id="org.eclipse.wst.xml.dtd.internal_subset" />
+				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT" />
+				<partitionType id="org.eclipse.wst.sse.UNKNOWN_PARTITION_TYPE" />
+			</contentType>
+			<contentType id="org.eclipse.jst.jsf.facesconfig.facesConfigFile">
+				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
+				<partitionType id="org.eclipse.wst.xml.XML_CDATA" />
+				<partitionType id="org.eclipse.wst.xml.XML_PI" />
+				<partitionType id="org.eclipse.wst.xml.XML_DECL" />
+				<partitionType id="org.eclipse.wst.xml.XML_COMMENT" />
+				<partitionType id="org.eclipse.wst.xml.dtd.internal_subset" />
+				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT" />
+				<partitionType id="org.eclipse.wst.sse.UNKNOWN_PARTITION_TYPE" />
+			</contentType>
+			<contentType id="org.jboss.tools.common.model.ui.xml">
+				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
+				<partitionType id="org.eclipse.wst.xml.XML_CDATA" />
+				<partitionType id="org.eclipse.wst.xml.XML_PI" />
+				<partitionType id="org.eclipse.wst.xml.XML_DECL" />
+				<partitionType id="org.eclipse.wst.xml.XML_COMMENT" />
+				<partitionType id="org.eclipse.wst.xml.dtd.internal_subset" />
+				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT" />
+				<partitionType id="org.eclipse.wst.sse.UNKNOWN_PARTITION_TYPE" />
+			</contentType>
+			<contentType id="org.eclipse.jst.jee.ee5webDD">
+				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
+				<partitionType id="org.eclipse.wst.xml.XML_CDATA" />
+				<partitionType id="org.eclipse.wst.xml.XML_PI" />
+				<partitionType id="org.eclipse.wst.xml.XML_DECL" />
+				<partitionType id="org.eclipse.wst.xml.XML_COMMENT" />
+				<partitionType id="org.eclipse.wst.xml.dtd.internal_subset" />
+				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT" />
+				<partitionType id="org.eclipse.wst.sse.UNKNOWN_PARTITION_TYPE" />
+			</contentType>
+    </proposalComputer>
+    <proposalComputer
+          activate="false"
+          categoryId="org.jboss.tools.jst.jsp.proposalCategory.xmlEL"
+          class="org.jboss.tools.jst.web.ui.internal.editor.contentassist.computers.JspELCompletionProposalComputer"
+          id="org.jboss.tools.jst.jsp.proposalComputer.jspEL">
+			<contentType id="org.eclipse.jst.jsp.core.jspsource">
+          		<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
+          		<partitionType id="org.eclipse.wst.html.HTML_DEFAULT" />
+          		<partitionType id="org.eclipse.jst.jsp.DEFAULT_JSP" />
+          		<partitionType id="org.eclipse.jst.jsp.JSP_DIRECTIVE" />
+          		<partitionType id="org.eclipse.jst.jsp.SCRIPT.DELIMITER" />
+          		<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
+          		<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
+          		<partitionType id="org.eclipse.wst.css.STYLE" />
+       		</contentType>
+			<contentType id="org.jboss.tools.jst.jsp.jspincludesource">
+          		<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
+          		<partitionType id="org.eclipse.wst.html.HTML_DEFAULT" />
+          		<partitionType id="org.eclipse.jst.jsp.DEFAULT_JSP" />
+          		<partitionType id="org.eclipse.jst.jsp.JSP_DIRECTIVE" />
+          		<partitionType id="org.eclipse.jst.jsp.SCRIPT.DELIMITER" />
+          		<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
+          		<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
+          		<partitionType id="org.eclipse.wst.css.STYLE" />
+       		</contentType>
+    </proposalComputer>
+    <proposalComputer
+          activate="false"
+          categoryId="org.jboss.tools.jst.jsp.proposalCategory.xmlEL"
+          class="org.jboss.tools.jst.web.ui.internal.editor.contentassist.computers.FaceletsELCompletionProposalComputer"
+          id="org.jboss.tools.jst.jsp.proposalComputer.xhtmlEL">
+			<contentType id="org.eclipse.wst.html.core.htmlsource">
+				<partitionType id="org.eclipse.wst.html.HTML_DEFAULT" />
+				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
+				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
+				<partitionType id="org.eclipse.wst.css.STYLE" />
+				<partitionType id="org.eclipse.wst.html.SCRIPT.EVENTHANDLER"/>
+       		</contentType>
+       		<contentType id="org.jboss.tools.jst.jsp.phpsource">
+				<partitionType id="org.eclipse.wst.html.HTML_DEFAULT" />
+				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
+				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
+				<partitionType id="org.eclipse.wst.css.STYLE" />
+				<partitionType id="org.eclipse.wst.html.SCRIPT.EVENTHANDLER"/>
+       		</contentType>
+			<contentType id="org.eclipse.php.core.phpsource">
+				<partitionType id="org.eclipse.wst.html.HTML_DEFAULT" />
+				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
+				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
+				<partitionType id="org.eclipse.wst.css.STYLE" />
+				<partitionType id="org.eclipse.wst.html.SCRIPT.EVENTHANDLER"/>
+			</contentType>
+       		<contentType id="jsf.facelet">
+				<partitionType id="org.eclipse.wst.html.HTML_DEFAULT" />
+				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
+				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
+				<partitionType id="org.eclipse.wst.css.STYLE" />
+				<partitionType id="org.eclipse.wst.html.SCRIPT.EVENTHANDLER"/>
+			</contentType>
+			<contentType id="jsf.facelet.composite">
+				<partitionType id="org.eclipse.wst.html.HTML_DEFAULT" />
+				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
+				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
+				<partitionType id="org.eclipse.wst.css.STYLE" />
+				<partitionType id="org.eclipse.wst.html.SCRIPT.EVENTHANDLER"/>
+			</contentType>
+			
+    </proposalComputer>
+
+    <proposalCategory
+          icon="images/ca/icons_JSF_EL.gif"
+          id="org.jboss.tools.jst.jsp.proposalCategory.xmlTag"
+          name="%proposalCategory.xmlTag">
+    </proposalCategory>
+    <proposalComputer
+          activate="false"
+          categoryId="org.jboss.tools.jst.jsp.proposalCategory.xmlTag"
+          class="org.jboss.tools.jst.web.ui.internal.editor.contentassist.computers.XmlTagCompletionProposalComputer"
+          id="org.jboss.tools.jst.jsp.proposalComputer.xmlTag">
+			<contentType id="org.eclipse.wst.xml.core.xmlsource">
+				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
+				<partitionType id="org.eclipse.wst.xml.XML_CDATA" />
+				<partitionType id="org.eclipse.wst.xml.XML_PI" />
+				<partitionType id="org.eclipse.wst.xml.XML_DECL" />
+				<partitionType id="org.eclipse.wst.xml.XML_COMMENT" />
+				<partitionType id="org.eclipse.wst.xml.dtd.internal_subset" />
+				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT" />
+				<partitionType id="org.eclipse.wst.sse.UNKNOWN_PARTITION_TYPE" />
+			</contentType>
+			<contentType id="org.jboss.tools.seam.xml.ui.pages20xmlsource">
+				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
+				<partitionType id="org.eclipse.wst.xml.XML_CDATA" />
+				<partitionType id="org.eclipse.wst.xml.XML_PI" />
+				<partitionType id="org.eclipse.wst.xml.XML_DECL" />
+				<partitionType id="org.eclipse.wst.xml.XML_COMMENT" />
+				<partitionType id="org.eclipse.wst.xml.dtd.internal_subset" />
+				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT" />
+				<partitionType id="org.eclipse.wst.sse.UNKNOWN_PARTITION_TYPE" />
+			</contentType>
+			<contentType id="org.eclipse.jst.jsf.facesconfig.facesConfigFile">
+				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
+				<partitionType id="org.eclipse.wst.xml.XML_CDATA" />
+				<partitionType id="org.eclipse.wst.xml.XML_PI" />
+				<partitionType id="org.eclipse.wst.xml.XML_DECL" />
+				<partitionType id="org.eclipse.wst.xml.XML_COMMENT" />
+				<partitionType id="org.eclipse.wst.xml.dtd.internal_subset" />
+				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT" />
+				<partitionType id="org.eclipse.wst.sse.UNKNOWN_PARTITION_TYPE" />
+			</contentType>
+			<contentType id="org.jboss.tools.common.model.ui.xml">
+				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
+				<partitionType id="org.eclipse.wst.xml.XML_CDATA" />
+				<partitionType id="org.eclipse.wst.xml.XML_PI" />
+				<partitionType id="org.eclipse.wst.xml.XML_DECL" />
+				<partitionType id="org.eclipse.wst.xml.XML_COMMENT" />
+				<partitionType id="org.eclipse.wst.xml.dtd.internal_subset" />
+				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT" />
+				<partitionType id="org.eclipse.wst.sse.UNKNOWN_PARTITION_TYPE" />
+			</contentType>
+			<contentType id="org.eclipse.jst.jee.ee5webDD">
+				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
+				<partitionType id="org.eclipse.wst.xml.XML_CDATA" />
+				<partitionType id="org.eclipse.wst.xml.XML_PI" />
+				<partitionType id="org.eclipse.wst.xml.XML_DECL" />
+				<partitionType id="org.eclipse.wst.xml.XML_COMMENT" />
+				<partitionType id="org.eclipse.wst.xml.dtd.internal_subset" />
+				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT" />
+				<partitionType id="org.eclipse.wst.sse.UNKNOWN_PARTITION_TYPE" />
+			</contentType>
+    </proposalComputer>
+    <proposalComputer
+          activate="false"
+          categoryId="org.jboss.tools.jst.jsp.proposalCategory.xmlTag"
+          class="org.jboss.tools.jst.web.ui.internal.editor.contentassist.computers.JspTagCompletionProposalComputer"
+          id="org.jboss.tools.jst.jsp.proposalComputer.jspTag">
+			<contentType id="org.eclipse.jst.jsp.core.jspsource">
+          		<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
+          		<partitionType id="org.eclipse.wst.html.HTML_DEFAULT" />
+          		<partitionType id="org.eclipse.jst.jsp.DEFAULT_JSP" />
+          		<partitionType id="org.eclipse.jst.jsp.JSP_DIRECTIVE" />
+          		<partitionType id="org.eclipse.jst.jsp.SCRIPT.DELIMITER" />
+          		<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
+          		<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
+          		<partitionType id="org.eclipse.wst.css.STYLE" />
+       		</contentType>
+       		<contentType id="org.jboss.tools.jst.jsp.jspincludesource">
+          		<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
+          		<partitionType id="org.eclipse.wst.html.HTML_DEFAULT" />
+          		<partitionType id="org.eclipse.jst.jsp.DEFAULT_JSP" />
+          		<partitionType id="org.eclipse.jst.jsp.JSP_DIRECTIVE" />
+          		<partitionType id="org.eclipse.jst.jsp.SCRIPT.DELIMITER" />
+          		<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
+          		<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
+          		<partitionType id="org.eclipse.wst.css.STYLE" />
+       		</contentType>
+    </proposalComputer>
+    <proposalComputer
+          activate="false"
+          categoryId="org.jboss.tools.jst.jsp.proposalCategory.xmlTag"
+          class="org.jboss.tools.jst.web.ui.internal.editor.contentassist.computers.FaceletsTagCompletionProposalComputer"
+          id="org.jboss.tools.jst.jsp.proposalComputer.xhtmltag">
+			<contentType id="org.eclipse.wst.html.core.htmlsource">
+				<partitionType id="org.eclipse.wst.html.HTML_DEFAULT" />
+				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
+				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
+				<partitionType id="org.eclipse.wst.css.STYLE" />
+       		</contentType>
+       		<contentType id="jsf.facelet">
+				<partitionType id="org.eclipse.wst.html.HTML_DEFAULT" />
+				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
+				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
+				<partitionType id="org.eclipse.wst.css.STYLE" />
+			</contentType>
+			<contentType id="jsf.facelet.composite">
+				<partitionType id="org.eclipse.wst.html.HTML_DEFAULT" />
+				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL" />
+				<partitionType id="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
+				<partitionType id="org.eclipse.wst.css.STYLE" />
+			</contentType>
+    </proposalComputer>
+   </extension>
+    <extension
+          point="org.eclipse.ui.contexts">
+       <context
+             description="Context to allow activate and deactivate selection bar"
+             id="org.jboss.tools.jst.jsp.selectionBar.context"
+             name="Selection Bar"
+             parentId="org.eclipse.ui.contexts.window">
+       </context>
+    </extension>
+   <extension point="org.eclipse.core.expressions.definitions">
+		<definition id="org.eclipse.wst.jsp.ui.jspSourceContributions.definition">
+            <with variable="activeContexts">
+	           <iterate operator="or">
+	              <equals value="org.eclipse.jst.jsp.core.jspsource"/>
+	           </iterate>
+            </with>
+		</definition>
+	</extension>
+
+
+	<extension point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
+		<propertyContributor contributorId="org.eclipse.wst.css.core.csssource.source"
+			>
+			<propertyCategory category="general">
+			</propertyCategory>
+		</propertyContributor>
+	</extension>
+	<extension point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+		<propertyTabs contributorId="org.eclipse.wst.css.core.csssource.source">
+			<propertyTab category="general"
+				id="org.jboss.tools.jst.css.textFontTab" label="%css.tabs.textFont.label">
+			</propertyTab>
+			<propertyTab category="general"
+				id="org.jboss.tools.jst.css.backgroundTab" label="%css.tabs.background.label"
+				afterTab="org.jboss.tools.jst.css.textFontTab">
+			</propertyTab>
+			<propertyTab category="general" id="org.jboss.tools.jst.css.boxesTab"
+				label="%css.tabs.boxes.label" afterTab="org.jboss.tools.jst.css.backgroundTab">
+			</propertyTab>
+			<propertyTab category="general"
+				id="org.jboss.tools.jst.css.propertyTab" label="%css.tabs.property.label"
+				afterTab="org.jboss.tools.jst.css.boxesTab">
+			</propertyTab>
+			<propertyTab category="general"
+				id="org.jboss.tools.jst.css.quickEditTab" label="%css.tabs.quickEdit.label"
+				afterTab="org.jboss.tools.jst.css.propertyTab">
+			</propertyTab>
+		</propertyTabs>
+	</extension>
+	<extension point="org.eclipse.ui.views.properties.tabbed.propertySections">
+		<propertySections contributorId="org.eclipse.wst.css.core.csssource.source">
+			<propertySection class="org.jboss.tools.jst.web.ui.internal.css.properties.TextSection"
+				id="org.jboss.tools.jst.css.textFontTab" tab="org.jboss.tools.jst.css.textFontTab">
+				<input
+					type="org.jboss.tools.jst.web.ui.internal.css.common.StyleContainer">
+				</input>
+			</propertySection>
+			<propertySection
+				class="org.jboss.tools.jst.web.ui.internal.css.properties.BackgroundSection" id="org.jboss.tools.jst.css.backgroundTab"
+				tab="org.jboss.tools.jst.css.backgroundTab" >
+				<input 
+					type="org.jboss.tools.jst.web.ui.internal.css.common.StyleContainer">
+				</input>
+			</propertySection>
+			<propertySection class="org.jboss.tools.jst.web.ui.internal.css.properties.BoxesSection"
+				id="org.jboss.tools.jst.css.boxesTab" tab="org.jboss.tools.jst.css.boxesTab">
+				<input
+					type="org.jboss.tools.jst.web.ui.internal.css.common.StyleContainer">
+				</input>
+			</propertySection>
+			<propertySection
+				class="org.jboss.tools.jst.web.ui.internal.css.properties.PropertiesSection" id="org.jboss.tools.jst.css.propertyTab"
+				tab="org.jboss.tools.jst.css.propertyTab">
+				<input
+					type="org.jboss.tools.jst.web.ui.internal.css.common.StyleContainer">
+				</input>
+			</propertySection>
+			<propertySection
+				class="org.jboss.tools.jst.web.ui.internal.css.properties.QuickEditSection" id="org.jboss.tools.jst.css.quickEditTab"
+				tab="org.jboss.tools.jst.css.quickEditTab">
+				<input
+					type="org.jboss.tools.jst.web.ui.internal.css.common.StyleContainer">
+				</input>
+			</propertySection>
+			<propertySection class="org.jboss.tools.jst.web.ui.internal.css.properties.MessageCSSSection"
+				id="org.jboss.tools.jst.web.ui.internal.css.messageSection" tab="org.jboss.tools.jst.css.textFontTab">
+				<input
+					type="org.jboss.tools.jst.web.ui.internal.css.common.StyleContainer">
+				</input>
+			</propertySection>
+			<propertySection class="org.jboss.tools.jst.web.ui.internal.css.properties.MessageCSSSection"
+				id="org.jboss.tools.jst.css.messageSection" tab="org.jboss.tools.jst.css.backgroundTab">
+				<input
+					type="org.jboss.tools.jst.web.ui.internal.css.common.StyleContainer">
+				</input>
+			</propertySection>
+			<propertySection class="org.jboss.tools.jst.web.ui.internal.css.properties.MessageCSSSection"
+				id="org.jboss.tools.jst.css.messageSection" tab="org.jboss.tools.jst.css.boxesTab">
+				<input
+					type="org.jboss.tools.jst.web.ui.internal.css.common.StyleContainer">
+				</input>
+			</propertySection>
+			<propertySection class="org.jboss.tools.jst.web.ui.internal.css.properties.MessageCSSSection"
+				id="org.jboss.tools.jst.css.messageSection" tab="org.jboss.tools.jst.css.quickEditTab">
+				<input
+					type="org.jboss.tools.jst.web.ui.internal.css.common.StyleContainer">
+				</input>
+			</propertySection>
+		</propertySections>
+
+	</extension>
+	<extension point="org.eclipse.ui.views">
+		<view class="org.jboss.tools.jst.web.ui.internal.css.view.CSSEditorView" id="org.jboss.tools.jst.css.view.editor"
+			name="%css.editor_name" restorable="true" category="web.views.category.id"
+			icon="resources/icons/jboss_css_properties_view_icon.gif">
+		</view>
+		<view
+	        class="org.jboss.tools.jst.web.ui.internal.css.view.CSSPreview"
+	        id="org.jboss.tools.jst.css.view.preview"
+	        icon="resources/icons/jboss_css_preview_view_icon.gif"
+	        name="%css.preview_name"
+	        restorable="true" category="web.views.category.id">
+		</view>
+	</extension>
+	<extension 
+        point="org.eclipse.ui.perspectives"> 
+        <perspective
+              class="org.jboss.tools.jst.web.ui.internal.css.CSSPerspective"
+              icon="resources/icons/css_prespective_icon.gif"
+              id="org.jboss.tools.jst.cssPerspective"
+              name="%css.perspective_name"> 
+        </perspective> 
+    </extension>
+ <extension
+       point="org.eclipse.ui.perspectiveExtensions">
+    <perspectiveExtension
+          targetID="org.jboss.tools.jst.cssPerspective">
+       <viewShortcut
+             id="org.eclipse.pde.runtime.LogView">
+       </viewShortcut>
+       <viewShortcut
+             id="org.eclipse.ui.views.TaskList">
+       </viewShortcut>
+       <viewShortcut
+             id="org.jboss.tools.seam.ui.views.SeamComponentsNavigator">
+       </viewShortcut>
+       <viewShortcut
+             id="org.eclipse.ui.views.PropertySheet">
+       </viewShortcut>
+       <viewShortcut
+             id="org.jboss.tools.jst.web.ui.navigator.WebProjectsView">
+       </viewShortcut>
+       <viewShortcut
+             id="org.jboss.ide.eclipse.archives.ui.ProjectArchivesView">
+       </viewShortcut>
+       <perspectiveShortcut
+             id="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective">
+       </perspectiveShortcut>
+       <perspectiveShortcut
+             id="org.eclipse.jdt.ui.JavaPerspective">
+       </perspectiveShortcut>
+       <perspectiveShortcut
+             id="org.eclipse.jst.j2ee.J2EEPerspective">
+       </perspectiveShortcut>
+       <perspectiveShortcut
+             id="org.jboss.tools.seam.ui.SeamPerspective">
+       </perspectiveShortcut>
+       <newWizardShortcut
+             id="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSClassWizard">
+       </newWizardShortcut>
+       <newWizardShortcut
+             id="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSFileWizard">
+       </newWizardShortcut>
+       <perspectiveShortcut
+             id="org.eclipse.debug.ui.DebugPerspective">
+       </perspectiveShortcut>
+       <perspectiveShortcut
+             id="org.eclipse.jdt.ui.JavaBrowsingPerspective">
+       </perspectiveShortcut>
+    </perspectiveExtension>
+ </extension>
+        <extension
+              point="org.jboss.tools.jst.web.ui.cssDialog" id="org.jboss.tools.jst.css.dialog.CSSStyleDialog"   >
+           <css-dialogs-builder
+                 class="org.jboss.tools.jst.web.ui.internal.css.dialog.builder.CSSDialogBuilder">
+           </css-dialogs-builder>
+        </extension>
+   <extension point="org.eclipse.ui.newWizards">
+         <wizard
+            category="org.jboss.tools.jst.web"
+            class="org.jboss.tools.jst.web.ui.internal.css.wizard.NewCSSClassWizard"
+            finalPerspective="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
+            icon="$nl$/images/wizards/new_css_class.gif"
+            id="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSClassWizard"
+            name="%NewWizard_CSSClass"
+            preferredPerspectives="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective"
+            project="false">
+         <description>
+            	%NewWizardDescription_CSSClass
+         </description>
+         <selection class="org.eclipse.core.resources.IResource">
+         </selection>
+      </wizard>      
+   </extension>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<extension-point id="openWithEditorExtension" name="Open With Editor Extension" schema="schema/openWithEditorExtension.exsd"/>
+	
+	<extension 
+		point="org.jboss.tools.common.text.ext.hyperlinkPartitioner"
+		id="org.jboss.tools.common.text.ext.hyperlinkPartitioner"
+		name="org.jboss.tools.common.text.ext.hyperlinkPartitioner">
+		
+		<hyperlinkPartitioner
+			class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.jsp.JSPRootHyperlinkPartitioner" 
+			id="org.jboss.tools.common.text.ext.hyperlink.jsp.JSPRootHyperlinkPartitioner">
+			<contentType id="org.eclipse.jst.jsp.core.jspsource">
+				<partitionType id="org.eclipse.jst.jsp.JSP_DIRECTIVE" />
+				<partitionType id="org.eclipse.wst.html.HTML_DEFAULT" />
+			</contentType>
+         	<contentType id="org.eclipse.wst.html.core.htmlsource">
+         		<partitionType id="org.eclipse.wst.html.HTML_DEFAULT" />
+         	</contentType>
+		</hyperlinkPartitioner>
+
+		<hyperlinkPartitioner 
+         	id="org.jboss.tools.common.text.ext.hyperlink.CSSClassHyperlinkPartitioner"
+         	class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.CSSClassHyperlinkPartitioner">
+         	<contentType id="org.eclipse.jst.jsp.core.jspsource">
+         		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ATTRIBUTE_VALUE" />
+         	</contentType>
+         	<contentType id="org.eclipse.wst.html.core.htmlsource">
+         		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ATTRIBUTE_VALUE" />
+         	</contentType>
+		</hyperlinkPartitioner>
+
+		<!--Maksim Areshkau, partitioner for *.taglib.xml files -->
+		<hyperlinkPartitioner
+        class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.TaglibDefinitionFilesHyperlinkPartitioner"
+        id="org.jboss.tools.common.text.ext.hyperlink.TaglibDefinitionFilesHyperlinkPartitioner">
+          	<contentType id="org.jboss.tools.common.model.ui.xml">
+          		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_TEXT">
+         			<axis path="/facelet-taglib/tag/source">
+	                 </axis> 
+	                <axis path="/facelet-taglib/function/function-class">
+                   	 </axis> 
+                     <axis path="/facelet-taglib/tag/component/handler-class">
+                     </axis>
+                     <axis path="/facelet-taglib/tag/handler-class">
+                     </axis>
+                     <axis path="/facelet-taglib/library-class">
+                     </axis>
+                     <axis path="/facelet-taglib/attribute/type" >
+                     </axis>
+                     <axis path="/taglib/tag-file/path" >
+                     </axis>
+          		</partitionType>
+          	</contentType>
+           	<contentType id="org.eclipse.jst.jsp.core.tldsource">
+          		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_TEXT">
+                     <axis path="/taglib/tag-file/path" >
+                     </axis>
+          		</partitionType>
+          	</contentType>
+		</hyperlinkPartitioner>
+		<!--End of partiotioner for *.taglib.xml files -->
+		
+		<!-- Common HTML and/or JSP hyperlink partitioners --> 
+		<hyperlinkPartitioner 
+			class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.jsp.JSPTaglibHyperlinkPartitioner" 
+			id="org.jboss.tools.common.text.ext.hyperlink.jsp.JSPTaglibHyperlinkPartitioner">
+         	<contentType id="org.eclipse.jst.jsp.core.jspsource">
+         		<partitionType id="org.jboss.tools.common.text.ext.jsp.JSP_ROOT"/>
+         		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ATTRIBUTE_VALUE">
+         			<axis path="*/jsp:directive.taglib/uri" />
+         			<axis path="*/jsp:directive.taglib/prefix" />
+         		</partitionType>
+         	</contentType>
+		</hyperlinkPartitioner>
+
+		<hyperlinkPartitioner 
+			class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.jsp.JSPTagAttributeHyperlinkPartitioner" 
+         	id="org.jboss.tools.common.text.ext.hyperlink.jsp.JSPTagAttributeHyperlinkPartitioner">
+         	<contentType id="org.eclipse.jst.jsp.core.jspsource">
+         		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ATTRIBUTE_VALUE">
+         			<axis path="*/jsp:attribute/name/"/>
+         		</partitionType>
+         	</contentType>
+		</hyperlinkPartitioner>
+
+		<hyperlinkPartitioner 
+			class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.jsp.JSPTextHyperlinkPartitioner" 
+			id="org.jboss.tools.common.text.ext.hyperlink.jsp.JSPTextHyperlinkPartitioner">
+         	<contentType id="org.eclipse.jst.jsp.core.jspsource">
+         		<partitionType id="org.jboss.tools.common.text.ext.jsp.JSP_ROOT">
+         			<axis path="*/title/" ignoreCase="true"/>
+         			<axis path="*/h1/" ignoreCase="true"/>
+         		</partitionType>
+         	</contentType>
+		</hyperlinkPartitioner>
+
+		<hyperlinkPartitioner 
+			class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.jsp.JSPElementHyperlinkPartitioner" 
+			id="org.jboss.tools.common.text.ext.hyperlink.jsp.JSPElementHyperlinkPartitioner">
+         	<contentType id="org.eclipse.jst.jsp.core.jspsource">
+         		<partitionType id="org.jboss.tools.common.text.ext.jsp.JSP_ROOT" />
+         	</contentType>
+         	<contentType id="org.eclipse.wst.html.core.htmlsource">
+         		<partitionType id="org.jboss.tools.common.text.ext.jsp.JSP_ROOT" />
+         	</contentType>
+		</hyperlinkPartitioner>
+
+		<hyperlinkPartitioner
+			class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.jsp.JSPElementNameHyperlinkPartitioner" 
+			id="org.jboss.tools.common.text.ext.hyperlink.jsp.JSPElementNameHyperlinkPartitioner">
+         	<contentType id="org.eclipse.jst.jsp.core.jspsource">
+         		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ELEMENT"/>
+         	</contentType>
+         	<contentType id="org.eclipse.wst.html.core.htmlsource">
+         		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ELEMENT"/>
+         	</contentType>
+		</hyperlinkPartitioner>
+         
+		<hyperlinkPartitioner
+			class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.jsp.JSPElementAttributeValueHyperlinkPartitioner" 
+			id="org.jboss.tools.common.text.ext.hyperlink.jsp.JSPElementAttributeValueHyperlinkPartitioner">
+         	<contentType id="org.eclipse.jst.jsp.core.jspsource">
+         		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ELEMENT" />
+         	</contentType>
+         	<contentType id="org.eclipse.wst.html.core.htmlsource">
+         		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ELEMENT" />
+         	</contentType>
+		</hyperlinkPartitioner> 
+
+		<hyperlinkPartitioner
+			class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.jsp.JSPXmlNsHyperlinkPartitioner" 
+			id="org.jboss.tools.common.text.ext.hyperlink.jsp.JSPXmlNsHyperlinkPartitioner">
+         	<contentType id="org.eclipse.jst.jsp.core.jspsource">
+         		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ATTRIBUTE_VALUE"/>
+         	</contentType>
+         	<contentType id="org.eclipse.wst.html.core.htmlsource">
+         		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ATTRIBUTE_VALUE"/>
+         	</contentType>
+		</hyperlinkPartitioner> 
+
+		<hyperlinkPartitioner
+			class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.jsp.JSPBeanGetPropertyHyperlinkPartitioner" 
+         	id="org.jboss.tools.common.text.ext.hyperlink.jsp.JSPBeanGetPropertyHyperlinkPartitioner">
+         	<contentType id="org.eclipse.jst.jsp.core.jspsource">
+         		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ATTRIBUTE_VALUE">
+         			<axis path="*/jsp:getProperty/property/" />
+         		</partitionType>
+         	</contentType>
+		</hyperlinkPartitioner> 
+
+		<hyperlinkPartitioner
+			class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.jsp.JSPBeanSetPropertyHyperlinkPartitioner" 
+         	id="org.jboss.tools.common.text.ext.hyperlink.jsp.JSPBeanSetPropertyHyperlinkPartitioner">
+         	<contentType id="org.eclipse.jst.jsp.core.jspsource">
+         		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ATTRIBUTE_VALUE">
+         			<axis path="*/jsp:setProperty/property/" />
+         		</partitionType>
+         	</contentType>
+		</hyperlinkPartitioner> 
+
+		<hyperlinkPartitioner 
+         	id="org.jboss.tools.common.text.ext.hyperlink.jsp.JSPForBeanIdHyperlinkPartitioner"
+         	class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.jsp.JSPForBeanIdHyperlinkPartitioner">
+         	<contentType id="org.eclipse.jst.jsp.core.jspsource">
+         		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ATTRIBUTE_VALUE">
+         			<axis path="*/jsp:setProperty/name/" />
+         			<axis path="*/jsp:getProperty/name/" />
+         		</partitionType>
+         	</contentType>
+		</hyperlinkPartitioner>
+
+		<hyperlinkPartitioner
+         	id="org.jboss.tools.common.text.ext.hyperlink.jsp.JSPClassHyperlinkPartitioner"
+         	class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.jsp.JSPClassHyperlinkPartitioner">
+         	<contentType id="org.eclipse.jst.jsp.core.jspsource">
+         		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ATTRIBUTE_VALUE">
+         			<axis path="*/jsp:directive.page/import/" />
+         			<axis path="*/jsp:useBean/class/" />
+         			<axis path="*/jsp:useBean/type/" />
+         		</partitionType>
+         	</contentType>
+		</hyperlinkPartitioner>
+		
+		<hyperlinkPartitioner
+         	id="org.jboss.tools.common.text.ext.hyperlink.jsp.JSPLinkHyperlinkPartitioner"
+         	class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.jsp.JSPLinkHyperlinkPartitioner">
+         	<contentType id="org.eclipse.jst.jsp.core.jspsource">
+         		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ATTRIBUTE_VALUE">
+         			<axis path="*/a/href/" ignoreCase="true"/>
+         			<axis path="*/link/href/" ignoreCase="true"/>
+         			<axis path="*/jsp:directive.include/file/" />
+         			<axis path="*/[http://java.sun.com/JSP/Page]:directive.include/file/" />
+         			<axis path="*/jsp:directive.page/errorPage/" />
+         			<axis path="*/[http://java.sun.com/JSP/Page]:directive.page/errorPage/" />
+         			<axis path="*/jsp:include/page/" />
+         			<axis path="*/[http://java.sun.com/JSP/Page]:include/page/" />
+         			<axis path="*/jsp:forward/page/" />
+         			<axis path="*/[http://java.sun.com/JSP/Page]:forward/page/" />
+         			<axis path="*/jsp:plugin/iepluginurl/" />
+         			<axis path="*/[http://java.sun.com/JSP/Page]:plugin/iepluginurl/" />
+         			<axis path="*/jsp:plugin/nspluginurl/" />
+         			<axis path="*/[http://java.sun.com/JSP/Page]:plugin/nspluginurl/" />
+         		</partitionType>
+         	</contentType>
+         	<contentType id="org.eclipse.wst.html.core.htmlsource">
+         		<partitionType id="org.jboss.tools.common.text.ext.xml.XML_ATTRIBUTE_VALUE">
+         			<axis path="*/a/href/" ignoreCase="true"/>
+         			<axis path="*/link/href/" ignoreCase="true"/>
+         		</partitionType>
+         	</contentType>
+		</hyperlinkPartitioner>
+		<!-- End of Common HTML and/or JSP hyperlink partitioners -->
+
+	</extension>
+	
+	<extension 
+		point="org.jboss.tools.common.text.ext.hyperlink"
+		id="org.jboss.tools.common.text.ext.hyperlink"
+		name="org.jboss.tools.common.text.ext.hyperlink">
+		
+		<hyperlink 
+			class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.CSSClassHyperlink" 
+			id="org.jboss.tools.common.text.ext.hyperlink.CSSClassHyperlink">
+			<contenttypeidentifier id="org.eclipse.jst.jsp.core.jspsource">
+				<partitiontype id="org.jboss.tools.common.text.ext.CSS_CLASS" />
+			</contenttypeidentifier>
+   			<contenttypeidentifier id="org.eclipse.wst.html.core.htmlsource">
+				<partitiontype id="org.jboss.tools.common.text.ext.CSS_CLASS" />
+			</contenttypeidentifier>
+   			<contenttypeidentifier id="jsf.facelet">
+				<partitiontype id="org.jboss.tools.common.text.ext.CSS_CLASS" />
+			</contenttypeidentifier>
+   			<contenttypeidentifier id="jsf.facelet.composite">
+				<partitiontype id="org.jboss.tools.common.text.ext.CSS_CLASS" />
+			</contenttypeidentifier>
+			<contenttypeidentifier id="org.jboss.tools.jst.jsp.jspincludesource">
+				<partitiontype id="org.jboss.tools.common.text.ext.CSS_CLASS" />
+			</contenttypeidentifier>
+		</hyperlink>
+
+		<hyperlink 
+			class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.FilterNameHyperlink" 
+      		id="org.jboss.tools.common.text.ext.hyperlink.FilterNameHyperlink">
+			<contenttypeidentifier id="org.eclipse.wst.xml.core.xmlsource">
+				<partitiontype id="org.jboss.tools.common.text.ext.xml.XML_FILTER_NAME" />
+			</contenttypeidentifier>
+			<contenttypeidentifier id="org.eclipse.core.runtime.xml">
+				<partitiontype id="org.jboss.tools.common.text.ext.xml.XML_FILTER_NAME" />
+			</contenttypeidentifier>
+        	<contenttypeidentifier id="org.eclipse.jst.j2ee.webDD">
+				<partitiontype id="org.jboss.tools.common.text.ext.xml.XML_FILTER_NAME" />
+        	</contenttypeidentifier>
+        	<contenttypeidentifier id="org.eclipse.jst.jee.ee5webDD">
+				<partitiontype id="org.jboss.tools.common.text.ext.xml.XML_FILTER_NAME" />
+      	</contenttypeidentifier>
+			<contenttypeidentifier id="org.jboss.tools.common.model.ui.xml">
+				<partitiontype id="org.jboss.tools.common.text.ext.xml.XML_FILTER_NAME" />
+			</contenttypeidentifier>
+		</hyperlink>
+		
+		<hyperlink 
+			class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.RoleNameHyperlink" 
+      		id="org.jboss.tools.common.text.ext.hyperlink.RoleNameHyperlink">
+			<contenttypeidentifier id="org.eclipse.wst.xml.core.xmlsource">
+				<partitiontype id="org.jboss.tools.common.text.ext.xml.XML_ROLE_NAME" />
+			</contenttypeidentifier>
+			<contenttypeidentifier id="org.eclipse.core.runtime.xml">
+				<partitiontype id="org.jboss.tools.common.text.ext.xml.XML_ROLE_NAME" />
+			</contenttypeidentifier>
+        	<contenttypeidentifier id="org.eclipse.jst.j2ee.webDD">
+				<partitiontype id="org.jboss.tools.common.text.ext.xml.XML_ROLE_NAME" />
+        	</contenttypeidentifier>
+        	<contenttypeidentifier id="org.eclipse.jst.jee.ee5webDD">
+				<partitiontype id="org.jboss.tools.common.text.ext.xml.XML_ROLE_NAME" />
+      	</contenttypeidentifier>
+			<contenttypeidentifier id="org.jboss.tools.common.model.ui.xml">
+				<partitiontype id="org.jboss.tools.common.text.ext.xml.XML_ROLE_NAME" />
+			</contenttypeidentifier>
+		</hyperlink>
+
+	<!-- Web.inf File -->
+ 
+		<hyperlink 
+			class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.ServletNameHyperlink" 
+      		id="org.jboss.tools.common.text.ext.hyperlink.ServletNameHyperlink">
+			<contenttypeidentifier id="org.eclipse.wst.xml.core.xmlsource">
+            	<partitiontype id="org.jboss.tools.common.text.ext.xml.XML_SERVLET_NAME" />
+			</contenttypeidentifier>
+			<contenttypeidentifier id="org.eclipse.core.runtime.xml">
+            	<partitiontype id="org.jboss.tools.common.text.ext.xml.XML_SERVLET_NAME" />
+			</contenttypeidentifier>
+        	<contenttypeidentifier id="org.eclipse.jst.j2ee.webDD">
+            	<partitiontype id="org.jboss.tools.common.text.ext.xml.XML_SERVLET_NAME" />
+        	</contenttypeidentifier>
+        	<contenttypeidentifier id="org.eclipse.jst.jee.ee5webDD">
+            	<partitiontype id="org.jboss.tools.common.text.ext.xml.XML_SERVLET_NAME" />
+      	</contenttypeidentifier>
+			<contenttypeidentifier id="org.jboss.tools.common.model.ui.xml">
+            	<partitiontype id="org.jboss.tools.common.text.ext.xml.XML_SERVLET_NAME" />
+			</contenttypeidentifier>
+		</hyperlink>
+	<!-- Web.inf File -->
+
+	<!-- TLD Files -->
+		<hyperlink 
+			class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.TLDAttributeNameHyperlink" 
+      		id="org.jboss.tools.common.text.ext.hyperlink.TLDAttributeNameHyperlink">
+			<contenttypeidentifier id="org.eclipse.wst.xml.core.xmlsource">
+				<partitiontype id="org.jboss.tools.common.text.ext.tld.TLD_ATTRIBUTE_NAME" />
+			</contenttypeidentifier>
+			<contenttypeidentifier id="org.eclipse.jst.jsp.core.tldsource">
+				<partitiontype id="org.jboss.tools.common.text.ext.tld.TLD_ATTRIBUTE_NAME" />
+			</contenttypeidentifier>
+			<contenttypeidentifier id="org.eclipse.core.runtime.xml">
+				<partitiontype id="org.jboss.tools.common.text.ext.tld.TLD_ATTRIBUTE_NAME" />
+			</contenttypeidentifier>
+			<contenttypeidentifier id="org.jboss.tools.common.model.ui.xml">
+				<partitiontype id="org.jboss.tools.common.text.ext.tld.TLD_ATTRIBUTE_NAME" />
+			</contenttypeidentifier>
+		</hyperlink>
+	<!-- TLD Files -->
+
+<!-- JSP -->
+<!-- add an open on action for jsp bean partitions -->
+		<hyperlink 
+			class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.jsp.JSPElementNameHyperlink" 
+			id="org.jboss.tools.common.text.ext.hyperlink.jsp.JSPElementNameHyperlink">
+			<contenttypeidentifier id="org.eclipse.jst.jsp.core.jspsource">
+				<partitiontype id="org.jboss.tools.common.text.ext.xml.XML_ELEMENT_NAME" />
+			</contenttypeidentifier>
+			<contenttypeidentifier id="org.jboss.tools.jst.jsp.jspincludesource">
+				<partitiontype id="org.jboss.tools.common.text.ext.xml.XML_ELEMENT_NAME" />
+			</contenttypeidentifier>
+		</hyperlink>
+
+		<hyperlink 
+			class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.jsp.JSPTaglibHyperlink" 
+			id="org.jboss.tools.common.text.ext.hyperlink.jsp.JSPTaglibHyperlink">
+			<contenttypeidentifier id="org.eclipse.jst.jsp.core.jspsource">
+				<partitiontype id="org.jboss.tools.common.text.ext.jsp.JSP_TAGLIB" />
+			</contenttypeidentifier>
+			<contenttypeidentifier id="org.jboss.tools.jst.jsp.jspincludesource">
+				<partitiontype id="org.jboss.tools.common.text.ext.jsp.JSP_TAGLIB" />
+			</contenttypeidentifier>
+		</hyperlink>
+
+		<hyperlink 
+      		class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.jsp.JSPXmlNsHyperlink" 
+      		id="org.jboss.tools.common.text.ext.hyperlink.jsp.JSPXmlNsHyperlink">
+			<contenttypeidentifier id="org.eclipse.jst.jsp.core.jspsource">
+				<partitiontype id="org.jboss.tools.common.text.ext.jsp.JSP_XMLNS" />
+			</contenttypeidentifier>
+			<contenttypeidentifier id="org.eclipse.wst.html.core.htmlsource">
+				<partitiontype id="org.jboss.tools.common.text.ext.jsp.JSP_XMLNS" />
+			</contenttypeidentifier>
+			<contenttypeidentifier id="jsf.facelet">
+				<partitiontype id="org.jboss.tools.common.text.ext.jsp.JSP_XMLNS" />
+			</contenttypeidentifier>
+			<contenttypeidentifier id="jsf.facelet.composite">
+				<partitiontype id="org.jboss.tools.common.text.ext.jsp.JSP_XMLNS" />
+			</contenttypeidentifier>
+			<contenttypeidentifier id="org.jboss.tools.jst.jsp.jspincludesource">
+				<partitiontype id="org.jboss.tools.common.text.ext.jsp.JSP_XMLNS" />
+			</contenttypeidentifier>
+		</hyperlink>
+
+		<hyperlink 
+			class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.jsp.JSPForBeanIdHyperlink" 
+			id="org.jboss.tools.common.text.ext.hyperlink.jsp.JSPForBeanIdHyperlink">
+			<contenttypeidentifier id="org.eclipse.jst.jsp.core.jspsource">
+				<partitiontype id="org.jboss.tools.common.text.ext.jsp.JSP_FOR_BEAN_ID" />
+			</contenttypeidentifier>
+			<contenttypeidentifier id="org.jboss.tools.jst.jsp.jspincludesource">
+				<partitiontype id="org.jboss.tools.common.text.ext.jsp.JSP_FOR_BEAN_ID" />
+			</contenttypeidentifier>
+		</hyperlink>
+
+		<hyperlink 
+			class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.jsp.JSPBeanGetPropertyHyperlink" 
+      		id="org.jboss.tools.common.text.ext.hyperlink.jsp.JSPBeanGetPropertyHyperlink">
+			<contenttypeidentifier id="org.eclipse.jst.jsp.core.jspsource">
+            	<partitiontype id="org.jboss.tools.common.text.ext.jsp.JSP_BEAN_GET_PROPERTY" />
+			</contenttypeidentifier>
+			<contenttypeidentifier id="org.jboss.tools.jst.jsp.jspincludesource">
+            	<partitiontype id="org.jboss.tools.common.text.ext.jsp.JSP_BEAN_GET_PROPERTY" />
+			</contenttypeidentifier>
+		</hyperlink>
+
+		<hyperlink 
+			class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.jsp.JSPBeanSetPropertyHyperlink" 
+      		id="org.jboss.tools.common.text.ext.hyperlink.jsp.JSPBeanSetPropertyHyperlink">
+			<contenttypeidentifier id="org.eclipse.jst.jsp.core.jspsource">
+				<partitiontype id="org.jboss.tools.common.text.ext.jsp.JSP_BEAN_SET_PROPERTY" />
+			</contenttypeidentifier>
+			<contenttypeidentifier id="org.jboss.tools.jst.jsp.jspincludesource">
+				<partitiontype id="org.jboss.tools.common.text.ext.jsp.JSP_BEAN_SET_PROPERTY" />
+			</contenttypeidentifier>
+		</hyperlink>
+
+<!-- JSP -->
+
+	</extension>
+	 <extension
+	       point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectors">
+	    <hyperlinkDetector
+	          activate="true"
+	          class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.ELHyperlinkDetector"
+	          id="org.jboss.tools.jst.text.ext.hyperlink.ELHyperlinkDetector"
+	          name="EL Hyperlink Detector"
+	          targetId="org.eclipse.ui.DefaultTextEditor">
+	    </hyperlinkDetector>
+	    <hyperlinkDetector
+	          activate="true"
+	          class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.JQueryMobileHyperlinkDetector"
+	          id="org.jboss.tools.jst.text.ext.hyperlink.JQueryMobileHyperlinkDetector"
+	          name="jQuery Mobile Hyperlink Detector"
+	          targetId="org.eclipse.wst.html.core.htmlsource">
+	    </hyperlinkDetector>
+	 </extension>
+  <extension
+        point="org.jboss.tools.jst.web.ui.openWithEditorExtension">
+     <editor-launcher
+           class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.OpenWithBrowserLauncher"
+           editor-name="Browser"
+           id="org.jboss.tools.jst.text.ext.OpenWithBrowser">
+     </editor-launcher>
+  </extension>
+	<extension
+         point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectors">
+      <hyperlinkDetector
+            class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.internal.CreateNewFileHyperlinkDetector"
+            id="org.jboss.tools.jst.text.ext.hyperlink.CreateNewFileHyperlinkDetector"
+            name="Create Nonexisting File Hyperlink"
+            targetId="org.eclipse.ui.DefaultTextEditor">
+      </hyperlinkDetector>
+   	</extension>
+
+   <extension
+         point="org.jboss.tools.jst.web.kb.tagLib">
+      <tag-lib
+            uri="jQueryMobile"
+            class="org.jboss.tools.jst.web.ui.palette.internal.JQMPaletteTagLib13"/>
+      <tag-lib
+            uri="jQueryMobile"
+            class="org.jboss.tools.jst.web.ui.palette.internal.JQMPaletteTagLib14"/>
+      <tag-lib
+            uri="html50"
+            class="org.jboss.tools.jst.web.ui.palette.internal.HtmlPaletteTagLib"/>
+   	</extension>
+
 </plugin>

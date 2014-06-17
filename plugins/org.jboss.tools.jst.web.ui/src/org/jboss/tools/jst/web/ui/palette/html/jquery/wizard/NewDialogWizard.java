@@ -11,6 +11,8 @@
 package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import org.jboss.tools.common.model.ui.editors.dnd.DropWizardMessages;
+import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.ElementNode;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.JSTWebUIImages;
 
 /**
@@ -36,12 +38,14 @@ public class NewDialogWizard extends NewJQueryWidgetWizard<NewDialogWizardPage> 
 
 	protected void addContent(ElementNode parent, boolean browser) {
 		String id = getID("dialog-");
+		boolean is13 = getVersion() == JQueryMobileVersion.JQM_1_3;
 		
 		ElementNode dialogDiv = parent.addChild(TAG_DIV);
-		if(browser) {
+		if(is13) {
 			dialogDiv.addAttribute(ATTR_DATA_ROLE, ROLE_DIALOG);
 		} else {
-			dialogDiv.addAttribute(ATTR_DATA_ROLE, ROLE_DIALOG);
+			dialogDiv.addAttribute(ATTR_DATA_ROLE, ROLE_PAGE);
+			dialogDiv.addAttribute(ATTR_DATA_DIALOG, TRUE);
 		}
 		dialogDiv.addAttribute(ATTR_ID, id);
 		String dataClose = page.getEditorValue(EDITOR_ID_CLOSE_BUTTON);
@@ -78,7 +82,14 @@ public class NewDialogWizard extends NewJQueryWidgetWizard<NewDialogWizardPage> 
 		content.getChildren().add(SEPARATOR);
 		ElementNode a1 = content.addChild(TAG_A, "OK");
 		a1.addAttribute(ATTR_HREF, "#" + id);
-		a1.addAttribute(ATTR_DATA_ROLE, ROLE_BUTTON);
+		if(is13) {
+			a1.addAttribute(ATTR_DATA_ROLE, ROLE_BUTTON);
+		} else {
+			StringBuilder cls = new StringBuilder();
+			cls.append(CLASS_UI_BTN);
+			cls.append(' ').append(CLASS_UI_CORNER_ALL);
+			a1.addAttribute(ATTR_CLASS, cls.toString());
+		}
 		if(!browser) {
 			a1.addAttribute(ATTR_DATA_REL, DATA_REL_BACK);
 		}
@@ -107,7 +118,10 @@ public class NewDialogWizard extends NewJQueryWidgetWizard<NewDialogWizardPage> 
 		ElementNode a = page.addChild(TAG_A, "open");
 		a.addAttribute(ATTR_ID, "xxx");
 		a.addAttribute(ATTR_HREF, "#" + id);
-		a.addAttribute(ATTR_DATA_REL, "dialog");
+		boolean is13 = getVersion() == JQueryMobileVersion.JQM_1_3;
+		if(is13) {
+			a.addAttribute(ATTR_DATA_REL, "dialog");
+		}
 
 		addContent(body, true);
 	}

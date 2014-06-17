@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2009 Red Hat, Inc. 
+ * Copyright (c) 2009-2013 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -17,6 +17,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.jboss.tools.common.el.core.model.ELInstance;
+import org.jboss.tools.common.el.core.model.ELModel;
+import org.jboss.tools.common.el.core.model.ELUtil;
+import org.jboss.tools.common.el.core.parser.ELParser;
+import org.jboss.tools.common.el.core.parser.ELParserUtil;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.text.TextProposal;
@@ -25,10 +30,12 @@ import org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibAttribute;
 import org.jboss.tools.jst.web.kb.taglib.CustomTagLibManager;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 import org.jboss.tools.jst.web.kb.taglib.IComponent;
+import org.jboss.tools.jst.web.kb.taglib.IContextComponent;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibComponent;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibrary;
 import org.jboss.tools.jst.web.kb.taglib.IFacesConfigTagLibrary;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibRecognizer;
+import org.jboss.tools.jst.web.kb.taglib.ITagLibVersionRecognizer;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 
 /**
@@ -38,6 +45,7 @@ public class PageProcessor {
 
 	private static final PageProcessor INSTANCE = new PageProcessor();
 	private ICustomTagLibrary[] customTagLibs;
+	private Map<String, Set<ICustomTagLibrary>> customTagLibsByUri;
 	private CustomTagLibAttribute[] componentExtensions;
 
 	/**
@@ -147,12 +155,11 @@ public class PageProcessor {
 						}
 					}
 				}
-				for (int i = 0; customTagLibs != null && i < customTagLibs.length; i++) {
-					if(shouldLoadLib(customTagLibs[i], context)) {
-						TextProposal[] libProposals = customTagLibs[i].getProposals(query, pageContext);
-						for (int j = 0; libProposals != null && j < libProposals.length; j++) {
-							proposals.add(libProposals[j]);
-						}
+				Set<ICustomTagLibrary> customTagLibSet = getCustomTagLibs(pageContext);
+				for (ICustomTagLibrary lib : customTagLibSet) {
+					TextProposal[] libProposals = lib.getProposals(query, pageContext);
+					for (int j = 0; libProposals != null && j < libProposals.length; j++) {
+						proposals.add(libProposals[j]);
 					}
 				}
 				if(preferCustomComponentExtensions && query.getType() == KbQuery.Type.TAG_NAME) {
@@ -173,6 +180,50 @@ public class PageProcessor {
 		return proposals.toArray(new TextProposal[proposals.size()]);
 	}
 
+	private Set<ICustomTagLibrary> getCustomTagLibs(ELContext context) {
+		Set<ICustomTagLibrary> result = new HashSet<ICustomTagLibrary>();
+		if(customTagLibsByUri==null) {
+			customTagLibsByUri = new HashMap<String, Set<ICustomTagLibrary>>();
+			for (int i = 0; customTagLibs != null && i < customTagLibs.length; i++) {
+				Set<ICustomTagLibrary> libs = customTagLibsByUri.get(customTagLibs[i].getURI());
+				if(libs==null) {
+					libs = new HashSet<ICustomTagLibrary>();
+					customTagLibsByUri.put(customTagLibs[i].getURI(), libs);
+				}
+				libs.add(customTagLibs[i]);
+			}
+		}
+		for (Set<ICustomTagLibrary> libs : customTagLibsByUri.values()) {
+			if(libs.size()==1) {
+				ICustomTagLibrary lib = libs.iterator().next();
+				if(shouldLoadLib(lib, context)) {
+					result.add(lib);
+				}
+			} else if(libs.size()>1) {
+				ICustomTagLibrary any = libs.iterator().next();
+				ITagLibRecognizer recognizer = any.getRecognizer();
+				String version = null;
+				if(recognizer!=null && recognizer instanceof ITagLibVersionRecognizer) {
+					version = ((ITagLibVersionRecognizer)recognizer).getVersion(context);
+					if(version == null) {
+						continue;
+					}
+				}
+				for (ICustomTagLibrary lib : libs) {
+					String v = lib.getVersion();
+					if(version==null || v==null || lib.getRecognizer()==null) {
+						if(shouldLoadLib(lib, context)) {
+							result.add(lib);
+						}
+					} else if(version.equals(v)) {
+						result.add(lib);
+					}
+				}
+			}
+		}
+		return result;
+	}
+
 	private boolean shouldLoadLib(ICustomTagLibrary lib, ELContext context) {
 		ITagLibRecognizer recognizer = lib.getRecognizer();
 		return recognizer==null || recognizer.shouldBeLoaded(lib, context);
@@ -183,11 +234,26 @@ public class PageProcessor {
 				(query.getType() == KbQuery.Type.TEXT &&
 						(context instanceof IFaceletPageContext ||
 								context instanceof XmlContextImpl))) {
-			return (query.getValue() != null && 
-					(query.getValue().startsWith("#{") || //$NON-NLS-1$
-						query.getValue().startsWith("${"))); //$NON-NLS-1$
 
+			String text = query.getValue();
+			if (text == null) return false;
+			
+			int inValueOffset = text.length();
+			if (text.length() < inValueOffset) return false;
+			if (inValueOffset<0) return false;
+			
+			ELParser p = ELParserUtil.getJbossFactory().createParser();
+			ELModel model = p.parse(text);
+			
+			ELInstance is = ELUtil.findInstance(model, inValueOffset);// ELInstance
+			boolean isELStarted = (model != null && is != null && (model.toString().startsWith("#{") ||  //$NON-NLS-1$
+					model.toString().startsWith("${"))); //$NON-NLS-1$
+			if (!isELStarted) return false;
+			
+			boolean isELClosed = (model != null && is != null && model.toString().endsWith("}")); //$NON-NLS-1$
+			return !isELClosed;
 		}
+		
 		return false;
 	}
 	
@@ -215,13 +281,12 @@ public class PageProcessor {
 				}
 			}
 		}
-		for (int i = 0; customTagLibs != null && i < customTagLibs.length; i++) {
-			if(shouldLoadLib(customTagLibs[i], context)) {
-				IComponent[] libComponents = customTagLibs[i].getComponents(query, context);
-				for (int j = 0; j < libComponents.length; j++) {
-					if(includeComponentExtensions || !libComponents[j].isExtended()) {
-						components.add(libComponents[j]);
-					}
+		Set<ICustomTagLibrary> customTagLibSet = getCustomTagLibs(context);
+		for (ICustomTagLibrary lib : customTagLibSet) {
+			IComponent[] libComponents = lib.getComponents(query, context);
+			for (int j = 0; j < libComponents.length; j++) {
+				if(includeComponentExtensions || !libComponents[j].isExtended()) {
+					components.add(libComponents[j]);
 				}
 			}
 		}
@@ -246,7 +311,14 @@ public class PageProcessor {
 			Map<String, IAttribute> attrbMap = new HashMap<String, IAttribute>();
 			IComponent[] components  = getComponents(query, context, includeComponentExtensions);
 			for (int i = 0; i < components.length; i++) {
-				IAttribute[] libAttributess = components[i].getAttributes(query, context);
+				IComponent component = components[i];
+				IAttribute[] libAttributess;
+				if(component instanceof IContextComponent) {
+					libAttributess = ((IContextComponent)component).getAttributes(context, query, true);
+				} else {
+					libAttributess = component.getAttributes(query, context);
+				}
+
 				if(libAttributess!=null) {
 					for (int j = 0; j < libAttributess.length; j++) {
 						attributes.add(libAttributess[j]);

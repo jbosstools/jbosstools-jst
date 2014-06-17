@@ -53,7 +53,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	protected boolean hasExtendedComponents = false;
 	private Map<String, IComponent> components = new HashMap<String, IComponent>();
 	private IComponent[] componentsArray;
-	protected CustomComponentExtension componentExtension;
+	protected Set<CustomComponentExtension> componentExtensions;
 	protected boolean ignoreCase;
 
 	/* (non-Javadoc)
@@ -61,6 +61,10 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 	 */
 	@Override
 	public IComponent[] getComponents() {
+		return getDeclaredComponents();
+	}
+
+	IComponent[] getDeclaredComponents() {
 		if(componentsArray==null) {
 			synchronized (components) {
 				componentsArray = components.values().toArray(new IComponent[components.size()]);
@@ -262,8 +266,8 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		if(comp != null && checkExtended(comp, context)) {
 			result.add(comp);
 		}
-		if(componentExtension!=null) {
-			result.add(componentExtension);
+		if(componentExtensions!=null) {
+			result.addAll(componentExtensions);
 		}
 		return result.isEmpty()?EMPTY_ARRAY:result.toArray(new IComponent[0]);
 	}
@@ -526,8 +530,8 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 
 	public void mergeComponents(AbstractTagLib c, Change children) {
 		Map<Object,AbstractComponent> componentMap = new HashMap<Object, AbstractComponent>();
-		for (IComponent a: getComponents()) componentMap.put(((KbObject)a).getId(), (AbstractComponent)a);
-		for (IComponent a: c.getComponents()) {
+		for (IComponent a: getDeclaredComponents()) componentMap.put(((KbObject)a).getId(), (AbstractComponent)a);
+		for (IComponent a: c.getDeclaredComponents()) {
 			AbstractComponent loaded = (AbstractComponent)a;
 			AbstractComponent current = componentMap.remove(loaded.getId());
 			if(current == null) {

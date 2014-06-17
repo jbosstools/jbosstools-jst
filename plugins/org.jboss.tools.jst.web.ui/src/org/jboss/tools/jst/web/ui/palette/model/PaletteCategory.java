@@ -18,6 +18,10 @@ import org.jboss.tools.common.model.options.SharableConstants;
 
 public class PaletteCategory extends PaletteDrawer implements PaletteXModelObject {
 	private XModelObject xobject;
+	
+	private String version = null;
+
+	private String[] availableVersions = new String[0];
 
 	public PaletteCategory(XModelObject xobject, boolean open) {
 		super(null);
@@ -37,6 +41,13 @@ public class PaletteCategory extends PaletteDrawer implements PaletteXModelObjec
 		this.xobject = xobject;
 		String label = xobject.getAttributeValue(XModelObjectConstants.ATTR_NAME);
 		XModelObject p = xobject.getParent();
+		if(label.startsWith(PaletteModel.VERSION_PREFIX)) {
+			label = p.getAttributeValue(XModelObjectConstants.ATTR_NAME);
+			p = p.getParent();
+		}
+		if(label.indexOf('.') >= 0) {
+			label = label.substring(label.indexOf('.') + 1);
+		}
 		while(p != null && (PaletteModelHelper.isGroup(p) || PaletteModelHelper.isSubGroup(p))) {
 			String parentName = p.getAttributeValue(XModelObjectConstants.ATTR_NAME);
 			if(!SharableConstants.MOBILE_PALETTE_ROOT.equals(parentName)) {
@@ -47,4 +58,19 @@ public class PaletteCategory extends PaletteDrawer implements PaletteXModelObjec
 		setLabel(label);
 	}
 
+	public String getVersion() {
+		return version;
+	}
+
+	public String[] getAvailableVersions() {
+		return availableVersions;
+	}
+
+	public void setVersion(String s) {
+		version = s;
+	}
+
+	public void setAvailableVersions(String[] vs) {
+		availableVersions = vs;
+	}
 }

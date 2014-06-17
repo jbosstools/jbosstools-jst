@@ -38,6 +38,13 @@ public class CustomTagLibAttribute extends AbstractAttribute {
 		return extended;
 	}
 
+	@Override
+	public CustomTagLibAttribute clone() throws CloneNotSupportedException {
+		AbstractAttribute clone = super.clone();
+		clone.setDescription(this.getDescription());
+		return (CustomTagLibAttribute)clone;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.IAttribute#setExtended(boolean)

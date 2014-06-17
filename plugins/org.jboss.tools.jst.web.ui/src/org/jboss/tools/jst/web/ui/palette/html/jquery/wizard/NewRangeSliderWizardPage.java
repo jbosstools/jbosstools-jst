@@ -14,6 +14,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.model.ui.editors.dnd.ValidationException;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
+import org.jboss.tools.jst.web.ui.internal.properties.advanced.LayoutUtil.TwoColumns;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -28,6 +29,7 @@ public class NewRangeSliderWizardPage extends NewJQueryWidgetWizardPage {
 		setDescription(WizardMessages.newRangeSliderWizardDescription);
 	}
 
+	@Override
 	protected void createFieldPanel(Composite parent) {
 		IFieldEditor label = JQueryFieldEditorFactory.createLabelEditor();
 		label.setValue("Slider:");
@@ -71,20 +73,22 @@ public class NewRangeSliderWizardPage extends NewJQueryWidgetWizardPage {
 
 		createSeparator(parent);
 		
-		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
+		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor(getVersion());
 		addEditor(theme, parent, true);
 
-		IFieldEditor trackTheme = JQueryFieldEditorFactory.createDataTrackThemeEditor(WizardDescriptions.rangeSliderTrackTheme);
+		IFieldEditor trackTheme = JQueryFieldEditorFactory.createDataTrackThemeEditor(getVersion(), WizardDescriptions.rangeSliderTrackTheme);
 		addEditor(trackTheme, parent, true);
 	}
 
+	@Override
 	public void validate() throws ValidationException {
 		setEnabled(EDITOR_ID_RVALUE, isTrue(EDITOR_ID_RANGE));
 		super.validate();
 	}
 
+	@Override
 	protected int getPreferredBrowser() {
-		return SWT.WEBKIT;
+		return isLinux ? super.getPreferredBrowser() : SWT.WEBKIT;
 	}
 
 }

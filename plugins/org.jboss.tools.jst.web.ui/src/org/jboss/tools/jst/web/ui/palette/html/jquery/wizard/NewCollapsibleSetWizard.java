@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import org.jboss.tools.common.model.ui.editors.dnd.DropWizardMessages;
+import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.ElementNode;
 import org.jboss.tools.jst.web.ui.JSTWebUIImages;
 
 /**
@@ -31,10 +32,14 @@ public class NewCollapsibleSetWizard extends NewJQueryWidgetWizard<NewCollapsibl
 	}
 
 	protected void addContent(ElementNode parent) {
+		SearchCapability sc = new SearchCapability(parent, "searchForCollapsibleSet-");
+
 		ElementNode group = parent.addChild(TAG_DIV);
 		group.addAttribute(ATTR_DATA_ROLE, ROLE_COLLAPSIBLE_SET);
 
 		addID("collapsible-set-", group);
+
+		sc.addDataFilter(group);
 
 		String themeValue = page.getEditorValue(EDITOR_ID_THEME);
 		if(themeValue.length() > 0) {

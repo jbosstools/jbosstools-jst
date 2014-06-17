@@ -13,23 +13,37 @@ package org.jboss.tools.jst.web.ui.test;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.jboss.tools.common.base.test.model.XProjectImportTestSetUp;
+import org.jboss.tools.jst.web.ui.editor.test.ca.CAMobilePaletteHTML5TemplatesTest;
+import org.jboss.tools.jst.web.ui.editor.test.ca.CAMobilePaletteJQM13TemplatesTest;
+import org.jboss.tools.jst.web.ui.editor.test.ca.CAMobilePaletteJQM14TemplatesTest;
+import org.jboss.tools.jst.web.ui.editor.test.ca.CAMobilePaletteTemplatesTest;
 import org.jboss.tools.test.util.ProjectImportTestSetup;
-
 
 /**
  * @author eskimo
  *
  */
 public class JstWebUiAllTests {
-	
+
 	public static Test suite() {
 		TestSuite suite = new TestSuite(JstWebUiAllTests.class.getName());
 
 		TestSuite s = new TestSuite("Palette content");
+		s.addTestSuite(CAMobilePaletteJQM14TemplatesTest.class);
+		s.addTestSuite(CAMobilePaletteJQM13TemplatesTest.class);
+		s.addTestSuite(CAMobilePaletteHTML5TemplatesTest.class);
 		s.addTestSuite(JBossToolsEditorTest.class);
+		s.addTestSuite(MobilePaletteInsertPositionTest.class);
 		s.addTestSuite(InsertJSCSSPaletteEntryTest.class);
+		s.addTestSuite(InsertJSCSS14PaletteEntryTest.class);
+		s.addTestSuite(PaletteManagerTest.class);
+		s.addTestSuite(HTML5PaletteWizardTest.class);
 		s.addTestSuite(NewJQueryMobilePaletteWizardTest.class);
+		s.addTestSuite(NewJQueryMobile13PaletteWizardTest.class);
+		s.addTestSuite(JQueryMobileVersionSwitchPaletteTest.class);
 		s.addTestSuite(PaletteContentsTest.class);
+		s.addTestSuite(FormPropertySheetPageTest.class);
 		s.addTestSuite(SwitchPaletteTest.class);
 		suite.addTest(
 				new ProjectImportTestSetup(s,
@@ -50,7 +64,15 @@ public class JstWebUiAllTests {
 		suite.addTestSuite(WebWizardsTest.class);
 		suite.addTestSuite(JstWebUiPreferencesPagesTest.class);
 		suite.addTestSuite(PaletteFilterTest.class);
-	
+
+		s = new TestSuite("Palette CA templates");
+		s.addTestSuite(HTML5PaletteCATest.class);
+		s.addTestSuite(JQueryPaletteCATest.class);
+		s.addTestSuite(JQuery14PaletteCATest.class);
+		suite.addTest(new XProjectImportTestSetUp(s,
+				"org.jboss.tools.jst.jsp.base.test",
+				new String[]{"projects/TestKbModel"},
+				new String[]{"TestKbModel"}));
 		return suite;
 	}
 }

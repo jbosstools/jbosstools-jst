@@ -79,7 +79,6 @@ public class ResourceLabelProvider extends LabelProvider {
 		if(ext.equals("xml")) { //$NON-NLS-1$
 			if(filename.equals("web.xml")) return "FileWebApp"; //$NON-NLS-1$ //$NON-NLS-2$
 			if(filename.startsWith("faces-")) return "FacesConfig11"; //$NON-NLS-1$ //$NON-NLS-2$
-			if(filename.startsWith("struts-")) return "StrutsConfig11"; //$NON-NLS-1$ //$NON-NLS-2$
 			return "FileXML"; //$NON-NLS-1$
 		}
         String entity = model.getEntityRecognizer().getEntityName(new EntityRecognizerContext(filename, ext, null));

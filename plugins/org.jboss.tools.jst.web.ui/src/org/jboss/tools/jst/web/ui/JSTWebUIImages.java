@@ -17,6 +17,7 @@ import org.jboss.tools.common.ui.CommonUIImages;
 
 public class JSTWebUIImages extends CommonUIImages{
 	private static String WIZARDS_PATH         = "wizards/"; //$NON-NLS-1$
+	private static String VIEWS_PATH         = "views/"; //$NON-NLS-1$
 	
 	public static String CSS_FILE_IMAGE    = WIZARDS_PATH + "CSSFileWizBan.png"; //$NON-NLS-1$
 	public static String DATASOURCE_IMAGE    = WIZARDS_PATH + "DatasourceWizBan.png"; //$NON-NLS-1$
@@ -30,6 +31,7 @@ public class JSTWebUIImages extends CommonUIImages{
 	public static String FOOTER_IMAGE    = WIZARDS_PATH + "FooterWizBan.png"; //$NON-NLS-1$
 	public static String NAVBAR_IMAGE    = WIZARDS_PATH + "NavbarWizBan.png"; //$NON-NLS-1$
 	public static String BUTTON_IMAGE    = WIZARDS_PATH + "ButtonWizBan.png"; //$NON-NLS-1$
+	public static String FORM_BUTTON_IMAGE    = WIZARDS_PATH + "FormButtonWizBan.png"; //$NON-NLS-1$
 	public static String GROUP_BUTTON_IMAGE    = WIZARDS_PATH + "ButtonsWizBan.png"; //$NON-NLS-1$
 	public static String GRID_IMAGE    = WIZARDS_PATH + "GridWizBan.png"; //$NON-NLS-1$
 	public static String COLLAPSIBLE_IMAGE    = WIZARDS_PATH + "CollapsibleWizBan.png"; //$NON-NLS-1$
@@ -45,11 +47,16 @@ public class JSTWebUIImages extends CommonUIImages{
 	public static String SELECT_MENU_IMAGE    = WIZARDS_PATH + "SelectWizBan.png"; //$NON-NLS-1$
 	public static String PANEL_IMAGE    = WIZARDS_PATH + "PanelWizBan.png"; //$NON-NLS-1$
 	public static String TABLE_IMAGE    = WIZARDS_PATH + "TableWizBan.png"; //$NON-NLS-1$
+	public static String TABS_IMAGE    = WIZARDS_PATH + "TabsWizBan.png"; //$NON-NLS-1$
+	public static String HEADING_IMAGE    = WIZARDS_PATH + "HeadingWizBan.png"; //$NON-NLS-1$
 	public static String FORM_IMAGE    = WIZARDS_PATH + "FormWizBan.png"; //$NON-NLS-1$
 	public static String IMG_IMAGE    = WIZARDS_PATH + "ImageWizBan.png"; //$NON-NLS-1$
 	public static String VIDEO_IMAGE    = WIZARDS_PATH + "VideoWizBan.png"; //$NON-NLS-1$
 	public static String AUDIO_IMAGE    = WIZARDS_PATH + "AudioWizBan.png"; //$NON-NLS-1$
 	public static String LABEL_IMAGE    = WIZARDS_PATH + "LabelWizBan.png"; //$NON-NLS-1$
+	public static String JS_CSS_IMAGE    = WIZARDS_PATH + "JS-CSSWizBan.png"; //$NON-NLS-1$
+	
+	public static String DROP_DOWN_LIST_IMAGE    = VIEWS_PATH + "list.png"; //$NON-NLS-1$
 
 	private static JSTWebUIImages INSTANCE;
 	

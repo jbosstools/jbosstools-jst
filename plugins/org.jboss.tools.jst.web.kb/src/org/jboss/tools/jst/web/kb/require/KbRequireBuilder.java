@@ -55,6 +55,10 @@ public class KbRequireBuilder extends RegistryReader {
 		}
 		return fInstance;
 	}
+
+	private KbRequireBuilder() {
+		readContributions(TAG_REQUIRE, PL_KB_REQUIRE);
+	}
 	
 	/* (non-Javadoc)
 	 * @see com.ibm.sse.editor.internal.extension.RegistryReader#readElement(org.eclipse.core.runtime.IConfigurationElement)
@@ -92,12 +96,6 @@ public class KbRequireBuilder extends RegistryReader {
 		return false;
 	}
 
-	private void initCache() {
-		if (fDefinitions == null) {
-			readContributions(TAG_REQUIRE, PL_KB_REQUIRE);
-		}
-	}
-
 	/**
 	 * Reads the contributions defined in the extension point
 	 * 
@@ -116,7 +114,6 @@ public class KbRequireBuilder extends RegistryReader {
 	 * @return
 	 */
 	public List<KbRequireDefinition> getKbRequireDefinitions() {
-		initCache();
 		return fDefinitions;
 	}
 

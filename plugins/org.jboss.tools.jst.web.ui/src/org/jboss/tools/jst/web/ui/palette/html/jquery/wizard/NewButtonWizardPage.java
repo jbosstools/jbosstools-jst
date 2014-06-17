@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.model.ui.editors.dnd.ValidationException;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
+import org.jboss.tools.jst.web.ui.internal.properties.advanced.LayoutUtil.TwoColumns;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -34,8 +35,10 @@ public class NewButtonWizardPage extends NewJQueryWidgetWizardPage {
 
 		IFieldEditor url = JQueryFieldEditorFactory.createURLEditor();
 		addEditor(url, parent);
-		new IDContentProposalProvider(getWizard().getIDs(), url);
-		
+		if(parent != null) {
+			new IDContentProposalProvider(getWizard().getIDs(), url);
+		}
+
 		IFieldEditor action = JQueryFieldEditorFactory.createActionEditor();
 		addEditor(action, parent, true);
 
@@ -61,7 +64,7 @@ public class NewButtonWizardPage extends NewJQueryWidgetWizardPage {
 
 		createSeparator(parent);
 	
-		IFieldEditor icon = JQueryFieldEditorFactory.createIconEditor();
+		IFieldEditor icon = JQueryFieldEditorFactory.createIconEditor(getVersion());
 		addEditor(icon, parent, true);
 
 		IFieldEditor iconpos = JQueryFieldEditorFactory.createIconPositionEditor();
@@ -72,7 +75,7 @@ public class NewButtonWizardPage extends NewJQueryWidgetWizardPage {
 
 		createSeparator(parent);
 	
-		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor();
+		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor(getVersion());
 		addEditor(theme, parent, true);
 	}
 

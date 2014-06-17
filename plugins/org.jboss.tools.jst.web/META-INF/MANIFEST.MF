@@ -25,13 +25,15 @@ Require-Bundle: org.jboss.tools.common.model;visibility:=reexport,
  org.eclipse.wst.common.project.facet.core;bundle-version="1.4.200",
  org.eclipse.wst.validation;bundle-version="1.2.300",
  org.eclipse.jst.j2ee.ejb;bundle-version="1.1.502",
- org.eclipse.jst.j2ee.web;bundle-version="1.1.500"
-Bundle-Version: 3.5.0.qualifier
+ org.eclipse.jst.j2ee.web;bundle-version="1.1.500",
+ org.eclipse.jst.jee.web;bundle-version="1.0.400"
+Bundle-Version: 3.6.0.qualifier
 Export-Package: 
  org.jboss.tools.jst.web,
  org.jboss.tools.jst.web.browser,
  org.jboss.tools.jst.web.browser.wtp,
  org.jboss.tools.jst.web.context,
+ org.jboss.tools.jst.web.html,
  org.jboss.tools.jst.web.launching.sourcelookup,
  org.jboss.tools.jst.web.launching.sourcelookup.xpl,
  org.jboss.tools.jst.web.messages.xpl,

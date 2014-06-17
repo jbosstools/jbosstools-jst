@@ -11,14 +11,16 @@
 package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import org.jboss.tools.common.model.ui.editors.dnd.DropWizardMessages;
+import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.ElementNode;
 import org.jboss.tools.jst.web.ui.JSTWebUIImages;
+import org.jboss.tools.jst.web.ui.palette.html.wizard.NewHTMLWidgetWizard;
 
 /**
  * 
  * @author Viacheslav Kabanovich
  *
  */
-public class NewLabelWizard extends NewJQueryWidgetWizard<NewLabelWizardPage> implements JQueryConstants {
+public class NewLabelWizard extends NewHTMLWidgetWizard<NewLabelWizardPage> implements JQueryConstants {
 	static String prefixId = "label-";
 
 	public NewLabelWizard() {

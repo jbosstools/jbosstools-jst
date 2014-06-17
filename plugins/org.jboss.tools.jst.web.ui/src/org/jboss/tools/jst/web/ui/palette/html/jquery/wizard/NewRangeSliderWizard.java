@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import org.jboss.tools.common.model.ui.editors.dnd.DropWizardMessages;
+import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.ElementNode;
 import org.jboss.tools.jst.web.ui.JSTWebUIImages;
 
 /**
@@ -120,11 +121,11 @@ public class NewRangeSliderWizard extends NewJQueryWidgetWizard<NewRangeSliderWi
 		ElementNode form = getFormNode(body);
 		ElementNode div = form.addChild(TAG_DIV);
 		div.addAttribute(ATTR_STYLE, "padding: 20px 20px 20px 20px;");
-		if(isRange() && "mozilla".equals(page.getBrowserType())) {
-			div.addChild(TAG_DIV, "Preview is not implemented for this element.");
-		} else {
+//		if(isRange() && "mozilla".equals(page.getBrowserType())) {
+//			div.addChild(TAG_DIV, "Preview is not implemented for this element.");
+//		} else {
 			addContent(div);
-		}
+//		}
 	}
 	
 }

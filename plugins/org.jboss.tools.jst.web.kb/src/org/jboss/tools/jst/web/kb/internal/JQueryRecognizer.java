@@ -17,14 +17,20 @@ import org.eclipse.core.resources.IFile;
  */
 public class JQueryRecognizer extends JSRecognizer {
 
-	public static final String JQUERY_MOBILE_JS_PATTERN = ".*(jquery-).*(.js).*";
+	private static final String JQUERY_JS_LIB_NAME = "jquery-";
+	private static final String JQUERY_JS_PATTERN = ".*(" + JQUERY_JS_LIB_NAME + ").*(.js).*";
 
 	public static boolean containsJQueryJSReference(IFile file) {
-		return containsJSReference(file, JQUERY_MOBILE_JS_PATTERN);
+		return getJSReferenceVersion(file, JQUERY_JS_LIB_NAME) != null;
 	}
 
 	@Override
 	protected String getJSPattern() {
-		return JQUERY_MOBILE_JS_PATTERN;
+		return JQUERY_JS_PATTERN;
+	}
+
+	@Override
+	protected String getJSLibName() {
+		return JQUERY_JS_LIB_NAME;
 	}
 }

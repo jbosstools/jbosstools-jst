@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import org.jboss.tools.common.model.ui.editors.dnd.DropWizardMessages;
+import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.ElementNode;
 import org.jboss.tools.jst.web.ui.JSTWebUIImages;
 
 /**
@@ -32,6 +33,10 @@ public class NewListviewWizard extends NewJQueryWidgetWizard<NewListviewWizardPa
 
 	protected void addContent(ElementNode parent) {
 		String listTagName = isTrue(EDITOR_ID_NUMBERED) ? TAG_OL : TAG_UL;
+
+		SearchCapability sc = new SearchCapability(parent, "searchForListview-");
+		sc.addClassFilterable();
+
 		ElementNode listRoot = parent.addChild(listTagName);
 		listRoot.addAttribute(ATTR_DATA_ROLE, ROLE_LISTVIEW);
 
@@ -42,9 +47,7 @@ public class NewListviewWizard extends NewJQueryWidgetWizard<NewListviewWizardPa
 		if(isTrue(EDITOR_ID_AUTODIVIDERS)) {
 			listRoot.addAttribute(ATTR_DATA_AUTODIVIDERS, TRUE);
 		}
-		if(isTrue(EDITOR_ID_SEARCH_FILTER)) {
-			listRoot.addAttribute(ATTR_DATA_FILTER, TRUE);
-		}
+		sc.addDataFilter(listRoot);
 		if(isTrue(EDITOR_ID_INSET)) {
 			listRoot.addAttribute(ATTR_DATA_INSET, TRUE);
 		}

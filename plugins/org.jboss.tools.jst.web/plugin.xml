@@ -6,13 +6,13 @@
    <extension point="org.jboss.tools.common.model.meta">
       <meta path="meta/studio_eclipse_option.meta">
       </meta>
-      <meta path="meta/strutstld.meta">
+      <meta path="meta/tld.meta">
       </meta>
-      <meta path="meta/strutstld12.meta">
+      <meta path="meta/tld12.meta">
       </meta>
       <meta path="meta/tld20.meta">
       </meta>
-      <meta path="meta/strutswebapp.meta">
+      <meta path="meta/webapp.meta">
       </meta>
       <meta path="meta/web.meta">
       </meta>
@@ -36,6 +36,9 @@
        point="org.jboss.tools.common.model.preferences">
     <contribution
           resource="meta/mobile-palette.xml" priority="4">
+    </contribution>
+    <contribution
+          resource="meta/jquery-mobile-1.4-palette.xml" priority="4">
     </contribution>
  </extension>
 

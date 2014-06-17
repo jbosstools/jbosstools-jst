@@ -38,7 +38,6 @@ public class WebProject implements IWebProject {
 	private XModel model;
 	private TaglibMapping taglibs;
     private String webRoot;
-	public static final String STRUTS_NATURE_ID = "org.jboss.tools.struts.strutsnature"; //$NON-NLS-1$
 	public static final String JSF_NATURE_ID = "org.jboss.tools.jsf.jsfnature"; //$NON-NLS-1$
 	
 	public XModel getModel() {

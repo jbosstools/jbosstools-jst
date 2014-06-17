@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
+import org.jboss.tools.jst.web.ui.palette.html.wizard.NewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
 /**
@@ -19,7 +20,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewLabelWizardPage extends NewJQueryWidgetWizardPage {
+public class NewLabelWizardPage extends NewHTMLWidgetWizardPage {
 
 	public NewLabelWizardPage() {
 		super("newLabel", WizardMessages.newLabelWizardTitle);

@@ -34,6 +34,7 @@ import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.kb.IKbProject;
 import org.jboss.tools.jst.web.kb.KbProjectFactory;
+import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.internal.KbProject;
 import org.jboss.tools.jst.web.model.helpers.InnerModelHelper;
 
@@ -63,11 +64,22 @@ public class ClassPathMonitor extends AbstractClassPathMonitor<KbProject> {
 	public IProject getProjectResource() {
 		return project.getProject();
 	}
-	
+
+	boolean isProcessed = false;
+
 	/**
 	 * Loads kb components from items recently added to class path. 
 	 */
 	public void process() {
+		isProcessed = true;
+		try {
+			doProcess();
+		} finally {
+			isProcessed = false;
+		}
+	}
+
+	protected void doProcess() {
 		if(paths == null) {
 			ModelPlugin.getDefault().logError("Failed to process class path in kb builder for project " + project);
 			return;
@@ -104,13 +116,33 @@ public class ClassPathMonitor extends AbstractClassPathMonitor<KbProject> {
 		validateProjectDependencies();
 	}
 	
+	public void waitProcess() {
+		int count = 0;
+		while(isProcessed) {
+			try {
+				synchronized (this) {
+					wait(100);
+				}
+				count++;
+				if(count >= 50) {
+					String message = "Failed to wait for class path build";
+					WebKbPlugin.getDefault().logWarning(message, new Exception(message));
+					break;
+				}
+			} catch (InterruptedException e) {
+				WebKbPlugin.getDefault().logError(e);
+				break;
+			}
+		}
+	}
+	
 	public void validateProjectDependencies() {
 		List<KbProject> ps = null;
 		
 		try {
 			ps = getKbProjects(project.getProject());
 		} catch (CoreException e) {
-			WebModelPlugin.getPluginLog().logError(e);
+			WebModelPlugin.getDefault().logError(e);
 		}
 		if(ps != null) {
 			Set<KbProject> set = project.getKbProjects();
@@ -128,25 +160,17 @@ public class ClassPathMonitor extends AbstractClassPathMonitor<KbProject> {
 	}
 
 	public boolean hasToUpdateProjectDependencies() {
-		List<KbProject> ps = null;
-		
 		try {
-			ps = getKbProjects(project.getProject());
-		} catch (CoreException e) {
-			WebModelPlugin.getPluginLog().logError(e);
-		}
-		if(ps != null) {
+			List<KbProject> ps = getKbProjects(project.getProject());
 			Set<KbProject> set = project.getKbProjects();
-			Set<KbProject> removable = new HashSet<KbProject>();
-			removable.addAll(set);
-			removable.removeAll(ps);
-			ps.removeAll(set);
-			for (KbProject p : ps) {
+			if(set.size() != ps.size()) {
 				return true;
 			}
-			for (KbProject p : removable) {
-				return true;
+			for (KbProject p: ps) {
+				if(!set.contains(p)) return true;
 			}
+		} catch (CoreException e) {
+			WebModelPlugin.getDefault().logError(e);
 		}
 		return false;
 	}
@@ -175,14 +199,23 @@ public class ClassPathMonitor extends AbstractClassPathMonitor<KbProject> {
 		return list;
 	}
 
+	public void build() {
+		waitProcess();
+		if(update()) {
+			process();
+		} else if(hasToUpdateProjectDependencies()) {
+			validateProjectDependencies();
+		}
+	}
+
 	public void pathsChanged(List<String> paths) {
 		super.pathsChanged(paths);
 		if(project.isStorageResolved()) {
 			XJob.addRunnableWithPriority(new XRunnable() {
 				
 				public void run() {
-					if(update()) {
-						System.out.println("Running " + getId());
+					if(!isProcessed && update()) {
+//						System.out.println("Running " + getId());
 						process();
 					}					
 				}

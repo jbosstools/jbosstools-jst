@@ -1,3 +1,13 @@
+/******************************************************************************* 
+ * Copyright (c) 2009-2014 Red Hat, Inc. 
+ * Distributed under license by Red Hat, Inc. All rights reserved. 
+ * This program is made available under the terms of the 
+ * Eclipse Public License v1.0 which accompanies this distribution, 
+ * and is available at http://www.eclipse.org/legal/epl-v10.html 
+ * 
+ * Contributors: 
+ * Red Hat, Inc. - initial API and implementation 
+ ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb;
 
 import java.io.File;
@@ -12,6 +22,7 @@ import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.ISaveContext;
 import org.eclipse.core.resources.ISaveParticipant;
+import org.eclipse.core.resources.ISavedState;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -24,6 +35,7 @@ import org.jboss.tools.common.log.BaseUIPlugin;
 import org.jboss.tools.jst.web.WebModelPlugin;
 import org.jboss.tools.jst.web.kb.internal.KbBuilder;
 import org.jboss.tools.jst.web.kb.internal.KbProject;
+import org.jboss.tools.jst.web.kb.internal.RemoteFileManager;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -54,8 +66,9 @@ public class WebKbPlugin extends BaseUIPlugin {
 		super.start(context);
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceChangeListener);
 
-		ResourcesPlugin.getWorkspace().addSaveParticipant(PLUGIN_ID, new ISaveParticipant() {
-			
+		final RemoteFileManager remoteFileManager = RemoteFileManager.getInstance();
+		ISavedState lastState = ResourcesPlugin.getWorkspace().addSaveParticipant(PLUGIN_ID, new ISaveParticipant() {
+
 			public void saving(ISaveContext context)
 					throws CoreException {
 				switch (context.getKind()) {
@@ -73,6 +86,7 @@ public class WebKbPlugin extends BaseUIPlugin {
 								}
 							}
 						}
+						remoteFileManager.savingState(context);
 						break;
 					case ISaveContext.PROJECT_SAVE:
 						KbProject sp = (KbProject)KbProjectFactory.getKbProject(context.getProject(), false, true);
@@ -85,20 +99,23 @@ public class WebKbPlugin extends BaseUIPlugin {
 						}
 						break;
 				}
-				
+
 				cleanObsoleteFiles();
 			}
 			
 			public void rollback(ISaveContext context) {
-
+				remoteFileManager.rollback(context);
 			}
 			
 			public void prepareToSave(ISaveContext context) throws CoreException {
 			}
 			
 			public void doneSaving(ISaveContext context) {
+				remoteFileManager.doneSaving(context);
 			}
 		});
+
+        remoteFileManager.setLastSavedState(lastState);
 	}
 
 	private void cleanObsoleteFiles() {
@@ -198,5 +215,4 @@ public class WebKbPlugin extends BaseUIPlugin {
 		}
 		return result;
 	}
-
 }
