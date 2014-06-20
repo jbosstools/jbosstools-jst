@@ -58,15 +58,15 @@ public abstract class AbstractWizardPageWithPreview extends DefaultDropWizardPag
 		panel.setLayout(layout);
 
 		left = new Composite(panel, SWT.BORDER) {
-			int initialDefaultWidth = -1;
 			@Override
 			public Point computeSize(int wHint, int hHint, boolean changed) {
 				Point result = super.computeSize(wHint, hHint, changed);
-				if(hHint < 0) {
-					if(initialDefaultWidth < 0) {
-						initialDefaultWidth = result.x;
-					} else if(result.x > initialDefaultWidth) {
-						result.x = initialDefaultWidth;
+				if(hHint < 0 && (getWizard() instanceof AbstractNewHTMLWidgetWizard)) {
+					AbstractNewHTMLWidgetWizard w = (AbstractNewHTMLWidgetWizard)getWizard();
+					if(w.getLeftPanelWidth() < 0) {
+						w.setLeftPanelWidth(result.x, false);
+					} else {
+						result.x = w.getLeftPanelWidth();
 					}
 				}
 				return result;
