@@ -65,6 +65,12 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 	protected IDropCommand command;
 	Set<String> ids = new HashSet<String>();
 
+	/**
+	 * Shared by all pages width of left panel, computed once and then used 
+	 * when preview is shown. 
+	 */
+	protected int leftPanelWidth = -1;
+
 	public AbstractNewHTMLWidgetWizard() {}
 
 	@Override
@@ -82,6 +88,16 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 
 	protected void doAddPages() {
 		
+	}
+
+	public int getLeftPanelWidth() {
+		return leftPanelWidth;
+	}
+
+	public void setLeftPanelWidth(int w, boolean force) {
+		if((force || leftPanelWidth < 0) && w > 0) {
+			leftPanelWidth = w;
+		}
 	}
 
 	@Override

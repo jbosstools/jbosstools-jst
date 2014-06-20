@@ -67,26 +67,7 @@ public class JQueryVersionPage extends AbstractWizardPageWithPreview implements 
 
 	public void setVisible(boolean b) {
 		if(b && getWizard().getPages()[0] != this) {
-			if(!isPreviewPanelVisible) {
-				GridData d = (GridData)scale.getLayoutData();
-				d.widthHint = -1;
-				panel.update();
-				panel.layout(true);
-			} else {
-				panel.update();
-				panel.layout(true);
-				Composite l = ((AbstractNewHTMLWidgetWizardPage)getWizard().getPages()[0]).getLeftPanel();
-				int delta = l.getSize().x - left.computeSize(-1, -1).x;
-				GridData d = (GridData)scale.getLayoutData();
-				int s = scale.getSize().x + delta;
-				if(s < 400) {
-					d.widthHint = s;
-				} else {
-					d.widthHint = -1;
-				}
-				panel.update();
-				panel.layout(true);
-			}
+			panel.getShell().layout(true, true);
 		}
 		super.setVisible(b);
 		if(b) {
