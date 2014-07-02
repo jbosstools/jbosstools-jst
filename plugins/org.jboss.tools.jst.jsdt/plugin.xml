@@ -8,7 +8,13 @@
 		
 		<ternAdaptToNature 
 			id = "org.eclipse.wst.jsdt.core.jsNature"
-			name = "JavaScript" />
+			name = "JavaScript">
+			<defaultModules>
+				<module name="browser" />
+				<module name="ecma5" />
+			</defaultModules>
+		</ternAdaptToNature>
+		
 	</extension>
 	<extension 
 		point="org.eclipse.angularjs.core.angularNatureAdapters"
