@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+ <extension
+       point="org.jboss.tools.common.model.preferences">
+    <contribution
+          resource="meta/ionic-1.0-palette.xml" priority="4">
+    </contribution>
+ </extension>
+
+   <extension
+         point="org.jboss.tools.common.model.ui.InsertTagWizard">
+      <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/0.JS#CSS" 
+      	class="org.jboss.tools.jst.angularjs.internal.palette.wizard.AddJSCSSREferencesWizard"/>
+      <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/1.Content" 
+      	class="org.jboss.tools.jst.angularjs.internal.palette.wizard.NewContentWizard" 
+      	keywords="page"
+      	corrector-class="org.jboss.tools.jst.angularjs.internal.palette.wizard.NewContentPositionCorrector"/>
+      <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/2.Header_Bar" 
+      	class="org.jboss.tools.jst.angularjs.internal.palette.wizard.NewHeaderBarWizard" 
+      	keywords="page"/>
+   </extension>
+
+</plugin>

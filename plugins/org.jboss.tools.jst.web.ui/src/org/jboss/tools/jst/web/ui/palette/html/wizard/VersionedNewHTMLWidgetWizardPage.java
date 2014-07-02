@@ -25,8 +25,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryFieldEditorFa
  *
  */
 public abstract class VersionedNewHTMLWidgetWizardPage extends AbstractNewHTMLWidgetWizardPage implements HTMLConstants {
-	IFieldEditor addID = null;
-	IFieldEditor id = null;
+	protected IFieldEditor addID = null;
+	protected IFieldEditor id = null;
 
 	public VersionedNewHTMLWidgetWizardPage(String pageName, String title) {
 		super(pageName, title);

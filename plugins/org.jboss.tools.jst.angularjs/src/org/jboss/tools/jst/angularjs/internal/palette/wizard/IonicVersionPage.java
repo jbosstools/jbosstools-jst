@@ -8,10 +8,11 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
+package org.jboss.tools.jst.angularjs.internal.palette.wizard;
 
 import org.jboss.tools.jst.web.ui.internal.preferences.js.IPreferredJSLibVersion;
 import org.jboss.tools.jst.web.ui.internal.preferences.js.PreferredJSLibVersions;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.VersionPage;
 
 /**
@@ -19,19 +20,19 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.VersionPage;
  * @author Viacheslav Kabanovich
  *
  */
-public class JQueryVersionPage extends VersionPage implements IPreferredJSLibVersion, JQueryConstants {
-	protected JQueryVersionPage(String pageName, String title) {
+public class IonicVersionPage extends VersionPage implements IPreferredJSLibVersion, JQueryConstants {
+
+	protected IonicVersionPage(String pageName, String title) {
 		super(pageName, title);
 	}
 
 	@Override
-    public NewJQueryWidgetWizard<?> getWizard() {
-        return (NewJQueryWidgetWizard<?>)super.getWizard();
+    public NewIonicWidgetWizard<?> getWizard() {
+        return (NewIonicWidgetWizard<?>)super.getWizard();
     }
 
 	@Override
 	protected PreferredJSLibVersions getPreferredVersions() {
 		return getWizard().getPreferredVersions();
 	}
-
 }

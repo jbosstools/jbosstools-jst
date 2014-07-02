@@ -103,24 +103,24 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 		IFile file = MarkerResolutionUtils.getFile();
 		
 		if(insert || (p.containsKey(PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS)/* && !JQueryRecognizer.containsJQueryJSReference(file)*/)) {
-			insertJsCss(v, getJQueryMobileVersion(p));
+			insertJsCss(v, p.get(PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS));
 			if(insert){
 				texts[0] = "";	
 			}
 		}
 	}
 
-	private JQueryMobileVersion getJQueryMobileVersion(Properties p) {
-		if(p.containsKey(SharableConstants.PALETTE_PATH)) {
-			String path = p.getProperty(SharableConstants.PALETTE_PATH);
-			for (JQueryMobileVersion v: JQueryMobileVersion.ALL_VERSIONS) {
-				if(path.indexOf(PaletteModel.VERSION_PREFIX + v.toString()) > 0) {
-					return v;
-				}
-			}
-		}
-		return JQueryMobileVersion.getLatestDefaultVersion();
-	}
+//	private Object getJQueryMobileVersion(Properties p) {
+//		if(p.containsKey(SharableConstants.PALETTE_PATH)) {
+//			String path = p.getProperty(SharableConstants.PALETTE_PATH);
+//			for (JQueryMobileVersion v: JQueryMobileVersion.ALL_VERSIONS) {
+//				if(path.indexOf(PaletteModel.VERSION_PREFIX + v.toString()) > 0) {
+//					return v;
+//				}
+//			}
+//		}
+//		return JQueryMobileVersion.getLatestDefaultVersion();
+//	}
 	
 	private void writeBuffer(IDocument document) throws BadLocationException{
 		if(globalBuffer.length() > 0 && globalPosition >= 0 && globalPosition <= document.getLength()){
@@ -319,7 +319,7 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 		return number;
 	}
 	
-	private void insertJsCss(ISourceViewer viewer, JQueryMobileVersion version) {
+	private void insertJsCss(ISourceViewer viewer, Object version) {
 		IDocument document = viewer.getDocument();
 		
 		IStructuredModel model = null;

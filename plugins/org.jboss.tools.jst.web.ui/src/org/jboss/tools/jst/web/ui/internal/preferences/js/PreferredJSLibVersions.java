@@ -41,7 +41,7 @@ import org.w3c.dom.Node;
  */
 public class PreferredJSLibVersions implements IPreferredJSLibVersion {
 	IFile f;
-	JQueryMobileVersion version;
+	Object version;
 
 	private Set<String> disabledLibs = new HashSet<String>();
 	private Set<String> enabledLibs = new HashSet<String>();
@@ -52,9 +52,9 @@ public class PreferredJSLibVersions implements IPreferredJSLibVersion {
 	/**
 	 * Variable to save/load library version selections in current project.
 	 */
-	static Map<JQueryMobileVersion, QualifiedName> PREFERRED_LIBS = new HashMap<JQueryMobileVersion, QualifiedName>(); 
+	static Map<Object, QualifiedName> PREFERRED_LIBS = new HashMap<Object, QualifiedName>(); 
 	
-	static QualifiedName getQualifiedName(JQueryMobileVersion v) {
+	static QualifiedName getQualifiedName(Object v) {
 		QualifiedName result = PREFERRED_LIBS.get(v);
 		if(result == null) {
 			result = new QualifiedName(WebUiPlugin.PLUGIN_ID, "preferred-js-libs-" + v.toString());
@@ -68,7 +68,7 @@ public class PreferredJSLibVersions implements IPreferredJSLibVersion {
 		}		
 	}
 
-	public PreferredJSLibVersions(IFile file, JQueryMobileVersion version) {
+	public PreferredJSLibVersions(IFile file, Object version) {
 		f = file;
 		this.version = version;
 	}
@@ -153,10 +153,10 @@ public class PreferredJSLibVersions implements IPreferredJSLibVersion {
 			String mask = null;
 			boolean add = false;
 			if(libName.equals(JQueryCategoryFilter.CATEGORY_JQM)) {
-				add = true;
+				if(version instanceof JQueryMobileVersion) add = true;
 				mask = version == JQueryMobileVersion.JQM_1_3 ? "1.9." : "2.0.";
 			} else if(libName.equals(JQueryConstants.JQM_CATEGORY)) {
-				add = true;
+				if(version instanceof JQueryMobileVersion) add = true;
 				mask = version == JQueryMobileVersion.JQM_1_3 ? "1.3." : "1.4.";
 			}
 			if(current == null) {
