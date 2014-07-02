@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.jboss.tools.jst.web.ui.editor.test.ca;
 
+import org.jboss.tools.jst.jsp.test.ca.CAMobilePaletteTemplatesTest;
+
 public class CAMobilePaletteJQM13TemplatesTest extends CAMobilePaletteTemplatesTest {
 	private static final String PAGE_NAME = "ca_13_templates.html"; //$NON-NLS-1$
 
@@ -119,12 +121,13 @@ public class CAMobilePaletteJQM13TemplatesTest extends CAMobilePaletteTemplatesT
 		doTestTemplate("", "input", decorateDisplay("Text Input"), 6);
 	}
 
+	@Override
 	protected String getPageName() {
 		return PAGE_NAME;
 	}
 
+	@Override
 	protected String decorateDisplay(String display) {
 		return display + " - jQuery Mobile 1.3";
 	}
-
 }

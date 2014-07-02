@@ -31,8 +31,8 @@ public class PaletteManagerTest extends AbstractPaletteEntryTest {
 
 	public void testCategories() {
 		String[] categories = PaletteManager.getInstance().getCategories();
-		assertEquals(JQueryConstants.JQM_CATEGORY, categories[0]);
-		assertEquals(HTMLConstants.HTML_CATEGORY, categories[1]);
+		assertEquals(JQueryConstants.JQM_CATEGORY, categories[categories.length - 2]);
+		assertEquals(HTMLConstants.HTML_CATEGORY, categories[categories.length - 1]);
 	}
 
 	public void testVersions() {
