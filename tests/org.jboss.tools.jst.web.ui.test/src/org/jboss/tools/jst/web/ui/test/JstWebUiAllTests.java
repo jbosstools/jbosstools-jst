@@ -17,7 +17,6 @@ import org.jboss.tools.common.base.test.model.XProjectImportTestSetUp;
 import org.jboss.tools.jst.web.ui.editor.test.ca.CAMobilePaletteHTML5TemplatesTest;
 import org.jboss.tools.jst.web.ui.editor.test.ca.CAMobilePaletteJQM13TemplatesTest;
 import org.jboss.tools.jst.web.ui.editor.test.ca.CAMobilePaletteJQM14TemplatesTest;
-import org.jboss.tools.jst.web.ui.editor.test.ca.CAMobilePaletteTemplatesTest;
 import org.jboss.tools.test.util.ProjectImportTestSetup;
 
 /**

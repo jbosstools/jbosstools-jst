@@ -322,7 +322,7 @@ public class HTML5PaletteWizardTest extends AbstractPaletteEntryTest implements 
 		}
 	}
 
-	private void runPaletteItemsWithoutUI(List<String> failures, JSPTextEditor textEditor, XModelObject group, String category) {
+	public static void runPaletteItemsWithoutUI(List<String> failures, JSPTextEditor textEditor, XModelObject group, String category) {
 		XModelObject[] cs = group.getChildren();
 		if(cs.length == 0) {
 			try {

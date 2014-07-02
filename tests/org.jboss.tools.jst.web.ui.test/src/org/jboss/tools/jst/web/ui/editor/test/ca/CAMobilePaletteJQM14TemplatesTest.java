@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.jboss.tools.jst.web.ui.editor.test.ca;
 
+import org.jboss.tools.jst.jsp.test.ca.CAMobilePaletteTemplatesTest;
+
 public class CAMobilePaletteJQM14TemplatesTest extends CAMobilePaletteTemplatesTest {
 	private static final String PAGE_NAME = "ca_14_templates.html"; //$NON-NLS-1$
 
