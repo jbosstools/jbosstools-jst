@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.ui.internal.preferences.js;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.internal.editor.outline.JQueryCategoryFilter;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
@@ -107,9 +108,9 @@ public class JSLibFactory {
 		for (String s: jQueryVersions) {
 			jQuery.getOrCreateVersion(s).getURLs().add("http://code.jquery.com/jquery-" + s + ".min.js");
 		}
-		
+
 		JSLib jQueryMobile = model.getOrCreateLib(JQueryConstants.JQM_CATEGORY);
-		String[] jQueryMobileVersions = {"1.3.1", "1.3.2", "1.4.2"};
+		String[] jQueryMobileVersions = {"1.3.1", JQueryMobileVersion.JQM_1_3.getFullDefaultVersion(), JQueryMobileVersion.JQM_1_4.getFullDefaultVersion()};
 		for (String s: jQueryMobileVersions) {
 			JSLibVersion v = jQueryMobile.getOrCreateVersion(s);
 			v.getURLs().add("http://code.jquery.com/mobile/" + s + "/jquery.mobile-" + s + ".min.js");

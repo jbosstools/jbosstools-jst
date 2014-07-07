@@ -25,24 +25,28 @@ package org.jboss.tools.jst.web.kb.internal.taglib.html.jq;
  */
 public enum JQueryMobileVersion {
 	JQM_1_3("1.3", //$NON-NLS-1$
+			"1.3.2", //$NON-NLS-1$
 			"http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css", //$NON-NLS-1$
 			"http://code.jquery.com/jquery-1.9.1.min.js", //$NON-NLS-1$
 			"http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"), //$NON-NLS-1$
 
 	JQM_1_4("1.4", //$NON-NLS-1$
-			"http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css", //$NON-NLS-1$
+			"1.4.3", //$NON-NLS-1$
+			"http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css", //$NON-NLS-1$
 			"http://code.jquery.com/jquery-1.10.2.min.js", //$NON-NLS-1$
-			"http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"); //$NON-NLS-1$
+			"http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"); //$NON-NLS-1$
 
 	public static final JQueryMobileVersion[] ALL_VERSIONS = {JQM_1_3, JQM_1_4};
 
 	String version;
+	String fullDefaultVersion;
 	String css;
 	String jqjs;
 	String jqmjs;
 
-	JQueryMobileVersion(String version, String css, String jqjs, String jqmjs) {
+	JQueryMobileVersion(String version, String fullDefaultVersion, String css, String jqjs, String jqmjs) {
 		this.version = version;
+		this.fullDefaultVersion = fullDefaultVersion;
 		this.css = css;
 		this.jqjs = jqjs;
 		this.jqmjs = jqmjs;
@@ -55,6 +59,10 @@ public enum JQueryMobileVersion {
 
 	public static JQueryMobileVersion getLatestDefaultVersion() {
 		return JQM_1_4;
+	}
+
+	public String getFullDefaultVersion() {
+		return fullDefaultVersion;
 	}
 
 	public String getCSS() {
