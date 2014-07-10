@@ -15,11 +15,13 @@
       	class="org.jboss.tools.jst.angularjs.internal.palette.wizard.AddJSCSSREferencesWizard"/>
       <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/1.Content" 
       	class="org.jboss.tools.jst.angularjs.internal.palette.wizard.NewContentWizard" 
-      	keywords="page"
-      	corrector-class="org.jboss.tools.jst.angularjs.internal.palette.wizard.NewContentPositionCorrector"/>
-      <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/2.Header_Bar" 
+      	keywords="content"/>
+      <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/2.Scroll" 
+      	class="org.jboss.tools.jst.angularjs.internal.palette.wizard.NewScrollWizard" 
+      	keywords="scroll"/>
+      <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/3.Header_Bar" 
       	class="org.jboss.tools.jst.angularjs.internal.palette.wizard.NewHeaderBarWizard" 
-      	keywords="page"/>
+      	keywords="header bar"/>
    </extension>
 
 </plugin>

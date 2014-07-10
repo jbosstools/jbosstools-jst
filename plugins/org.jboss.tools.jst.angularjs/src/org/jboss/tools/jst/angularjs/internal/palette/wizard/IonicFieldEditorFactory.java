@@ -31,7 +31,7 @@ public class IonicFieldEditorFactory implements IonicConstants {
 	}
 
 	/**
-	 * Used in New Header wizard wizard.
+	 * Used in New Header wizard.
 	 * @return
 	 */
 	public static IFieldEditor createSubheaderEditor() {
@@ -40,12 +40,12 @@ public class IonicFieldEditorFactory implements IonicConstants {
 	}
 
 	/**
-	 * Used in New Header wizard wizard.
+	 * Used in New Header wizard.
 	 * @return
 	 */
 	public static IFieldEditor createNoTapScrollEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(ATTR_NO_TAP_SCROLL, IonicWizardMessages.noTapScrollLabel, false,
-				"");
+				IonicWizardMessages.headerNoTapScrollDescription);
 	}
 
 	static String[] BAR_COLORS = {
@@ -55,7 +55,7 @@ public class IonicFieldEditorFactory implements IonicConstants {
 	static List<String> BAR_COLOR_LIST = Arrays.asList(BAR_COLORS);
 
 	/**
-	 * Used in New Header wizard wizard.
+	 * Used in New Header wizard.
 	 * @return
 	 */
 	public static IFieldEditor createBarColorEditor(String editorID) {
@@ -66,20 +66,171 @@ public class IonicFieldEditorFactory implements IonicConstants {
 	static List<String> ALIGN_TITLE_LIST = Arrays.asList(new String[]{"", "left", "center", "right"});
 
 	/**
-	 * Used in New Header wizard wizard.
+	 * Used in New Header wizard.
 	 * @return
 	 */
 	public static IFieldEditor createAlignTitleEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(ATTR_ALIGN_TITLE, IonicWizardMessages.alignTitleLabel, ALIGN_TITLE_LIST, "", true,
-				"");
+				IonicWizardMessages.headerAlignTitleDescription);
 	}
 
 	/**
-	 * Used in New Dialog wizard, New Header wizard, New Footer wizard.
+	 * Used in New Header wizard.
 	 * @return
 	 */
 	public static IFieldEditor createNgClickEditor(String editorID) {
 		return SwtFieldEditorFactory.INSTANCE.createTextEditor(editorID, IonicWizardMessages.ngClickLabel, "",
-				"");
+				IonicWizardMessages.ngClickDescription);
 	}
+
+	/**
+	 * Used in Content wizard.
+	 * @return
+	 */
+	public static IFieldEditor createDelegateHandleEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_DELEGATE_HANDLE, IonicWizardMessages.delegateHandleLabel, "",
+				IonicWizardMessages.contentDelegateHandleDescription);
+	}
+
+	static List<String> DIRECTIONS = Arrays.asList(new String[]{"", "x", "y", "xy"});
+
+	/**
+	 * Used in New Content wizard.
+	 * @return
+	 */
+	public static IFieldEditor createDirectionEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(
+				ATTR_DIRECTION, IonicWizardMessages.directionLabel, 
+				DIRECTIONS, "", false, IonicWizardMessages.contentDirectionDescription);
+	}
+
+	/**
+	 * Used in Content wizard.
+	 * @return
+	 */
+	public static IFieldEditor createPaddingEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(ATTR_PADDING, 
+				IonicWizardMessages.paddingLabel, Arrays.asList(new String[]{"", TRUE, FALSE}),
+				"", false, IonicWizardMessages.contentPaddingDescription);
+	}
+
+	/**
+	 * Used in Content wizard.
+	 * @return
+	 */
+	public static IFieldEditor createScrollEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(ATTR_SCROLL, IonicWizardMessages.scrollLabel, true,
+				IonicWizardMessages.contentScrollDescription);
+	}
+
+	/**
+	 * Used in Content wizard.
+	 * @return
+	 */
+	public static IFieldEditor createOverflowScrollEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(ATTR_OVERFLOW_SCROLL, IonicWizardMessages.overflowScrollLabel, false,
+				IonicWizardMessages.contentOverflowScrollDescription);
+	}
+
+	/**
+	 * Used in Content wizard.
+	 * @return
+	 */
+	public static IFieldEditor createScrollbarXEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(ATTR_SCROLLBAR_X, IonicWizardMessages.scrollbar_xLabel, true,
+				IonicWizardMessages.contentScrollbar_xDescription);
+	}
+
+	/**
+	 * Used in Content wizard.
+	 * @return
+	 */
+	public static IFieldEditor createScrollbarYEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(ATTR_SCROLLBAR_Y, IonicWizardMessages.scrollbar_yLabel, true,
+				IonicWizardMessages.contentScrollbar_yDescription);
+	}
+
+	/**
+	 * Used in Content wizard.
+	 * @return
+	 */
+	public static IFieldEditor createStartYEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_START_Y, IonicWizardMessages.startYLabel, "",
+				IonicWizardMessages.contentStartYDescription);
+	}
+
+	/**
+	 * Used in Content wizard.
+	 * @return
+	 */
+	public static IFieldEditor createOnScrollEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_ON_SCROLL, IonicWizardMessages.onscrollLabel, "",
+				IonicWizardMessages.contentScrollDescription);
+	}
+
+	/**
+	 * Used in Content wizard.
+	 * @return
+	 */
+	public static IFieldEditor createOnScrollCompleteEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_ON_SCROLL_COMPLETE, IonicWizardMessages.onscrollCompleteLabel, "",
+				IonicWizardMessages.contentOnscrollCompleteDescription);
+	}
+
+	/**
+	 * Used in Scroll wizard.
+	 * @return
+	 */
+	public static IFieldEditor createHasBouncingEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(ATTR_HAS_BOUNCING, 
+				IonicWizardMessages.hasBouncingLabel, Arrays.asList(new String[]{"", TRUE, FALSE}),
+				"", false, IonicWizardMessages.scrollHasBouncingDescription);
+	}
+
+	/**
+	 * Used in Scroll wizard.
+	 * @return
+	 */
+	public static IFieldEditor createPagingEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(ATTR_PAGING, IonicWizardMessages.pagingLabel, false,
+				IonicWizardMessages.scrollPagingDescription);
+	}
+
+	/**
+	 * Used in Scroll wizard.
+	 * @return
+	 */
+	public static IFieldEditor createZoomingEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(ATTR_ZOOMING, IonicWizardMessages.zoomingLabel, false,
+				IonicWizardMessages.scrollZoomingDescription);
+	}
+
+	/**
+	 * Used in Scroll wizard.
+	 * @return
+	 */
+	public static IFieldEditor createOnRefreshEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_ON_REFRESH, IonicWizardMessages.onrefreshLabel, "",
+				IonicWizardMessages.scrollRefreshDescription);
+	}
+
+	/**
+	 * Used in Scroll wizard.
+	 * @return
+	 */
+	public static IFieldEditor createMaxZoomEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_MAX_ZOOM, IonicWizardMessages.maxZoomLabel, "",
+				IonicWizardMessages.scrollMaxZoomDescription);
+	}
+
+	/**
+	 * Used in Scroll wizard.
+	 * @return
+	 */
+	public static IFieldEditor createMinZoomEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_MIN_ZOOM, IonicWizardMessages.minZoomLabel, "",
+				IonicWizardMessages.scrollMinZoomDescription);
+	}
+
 }
+
