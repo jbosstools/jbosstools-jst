@@ -145,7 +145,16 @@ public abstract class NewIonicWidgetWizard<P extends NewIonicWidgetWizardPage> e
 	@Override
 	protected void createBodyForBrowser(ElementNode body) {
 		body.addAttribute("ng-app", "starter");
-		addContent(body);
+		addContent(body, true);
+	}
+
+	@Override
+	protected final void addContent(ElementNode parent) {
+		addContent(parent, false);
+	}
+
+	protected void addContent(ElementNode parent, boolean browser) {
+		
 	}
 
 	/**

@@ -20,10 +20,27 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.HTMLConstants;
 public interface IonicConstants extends HTMLConstants {
 	public String TAG_ION_CONTENT = "ion-content";
 	public String TAG_ION_HEADER_BAR = "ion-header-bar";
+	public String TAG_ION_SCROLL = "ion-scroll";
 
 	public String ATTR_ALIGN_TITLE = "align-title";
+	public String ATTR_DELEGATE_HANDLE = "delegate-handle";
+	public String ATTR_DIRECTION = "direction";
+	public String ATTR_HAS_BOUNCING = "has-bouncing";
+	public String ATTR_MAX_ZOOM = "max-zoom";
+	public String ATTR_MIN_ZOOM = "min-zoom";
 	public String ATTR_NG_CLICK = "ng-click";
 	public String ATTR_NO_TAP_SCROLL= "no-tap-scroll";
+	public String ATTR_ON_REFRESH = "on-refresh";
+	public String ATTR_ON_SCROLL = "on-scroll";
+	public String ATTR_ON_SCROLL_COMPLETE = "on-scroll-complete";
+	public String ATTR_OVERFLOW_SCROLL = "overflow-scroll";
+	public String ATTR_PADDING = "padding";
+	public String ATTR_PAGING = "paging";
+	public String ATTR_SCROLL = "scroll";
+	public String ATTR_SCROLLBAR_X = "scrollbar-x";
+	public String ATTR_SCROLLBAR_Y = "scrollbar-y";
+	public String ATTR_START_Y = "start-y";
+	public String ATTR_ZOOMING = "zooming";
 
 	public String CLASS_BAR_POSITIVE = "bar-positive";
 	public String CLASS_BAR_SUBHEADER = "bar-subheader";
