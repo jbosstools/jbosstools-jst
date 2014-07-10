@@ -13,7 +13,10 @@ package org.jboss.tools.jst.angularjs.internal.palette.wizard;
 import java.beans.PropertyChangeEvent;
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Widget;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
+import org.jboss.tools.common.ui.widget.editor.SwtFieldEditorFactory;
 import org.jboss.tools.jst.web.ui.internal.properties.advanced.LayoutUtil.TwoColumns;
 
 /**
@@ -21,11 +24,11 @@ import org.jboss.tools.jst.web.ui.internal.properties.advanced.LayoutUtil.TwoCol
  * @author Viacheslav Kabanovich
  *
  */
-public class NewContentWizardPage extends NewIonicWidgetWizardPage {
+public class NewScrollWizardPage extends NewIonicWidgetWizardPage {
 
-	public NewContentWizardPage() {
-		super("newContent", IonicWizardMessages.newContentWizardTitle);
-		setDescription(IonicWizardMessages.newContentWizardDescription);
+	public NewScrollWizardPage() {
+		super("newScroll", IonicWizardMessages.newScrollWizardTitle);
+		setDescription(IonicWizardMessages.newScrollWizardDescription);
 	}
 
 	@Override
@@ -38,65 +41,79 @@ public class NewContentWizardPage extends NewIonicWidgetWizardPage {
 
 		createSeparator(parent);
 
-		IFieldEditor padding = IonicFieldEditorFactory.createPaddingEditor();
-		addEditor(padding, parent);
-
-		createSeparator(parent);
-
 		TwoColumns columns = createTwoColumns(parent);
-
-		IFieldEditor scroll = IonicFieldEditorFactory.createScrollEditor();
-		addEditor(scroll, columns.left());
-
-		IFieldEditor overflowScroll = IonicFieldEditorFactory.createOverflowScrollEditor();
-		addEditor(overflowScroll, columns.right());
 
 		IFieldEditor direction = IonicFieldEditorFactory.createDirectionEditor();
 		addEditor(direction, columns.left());
 
-		IFieldEditor starty = IonicFieldEditorFactory.createStartYEditor();
-		addEditor(starty, columns.right());
+		IFieldEditor hasBouncing = IonicFieldEditorFactory.createHasBouncingEditor();
+		addEditor(hasBouncing, columns.right());
 
 		IFieldEditor scrollbarx = IonicFieldEditorFactory.createScrollbarXEditor();
 		addEditor(scrollbarx, columns.left());
 
+		IFieldEditor paging = IonicFieldEditorFactory.createPagingEditor();
+		addEditor(paging, columns.right());
+
 		IFieldEditor scrollbary = IonicFieldEditorFactory.createScrollbarYEditor();
-		addEditor(scrollbary, columns.right());
+		addEditor(scrollbary, columns.left());
+
+		if(parent != null) {
+		IFieldEditor span = SwtFieldEditorFactory.INSTANCE.createCheckboxEditor("span1", "span1", false, "");
+		addEditor(span, columns.right());
+			for (Object o: span.getEditorControls()) {
+				if(o instanceof Control) {
+					((Control)o).setVisible(false);
+				}
+			}
+		}
+
+		createSeparator(parent);
+
+		IFieldEditor zooming = IonicFieldEditorFactory.createZoomingEditor();
+		addEditor(zooming, parent);
+
+		columns = createTwoColumns(parent);
+
+		IFieldEditor minzoom = IonicFieldEditorFactory.createMinZoomEditor();
+		addEditor(minzoom, columns.left());
+
+		IFieldEditor maxzoom = IonicFieldEditorFactory.createMaxZoomEditor();
+		addEditor(maxzoom, columns.right());
 
 		createSeparator(parent);
 
 		IFieldEditor onscroll = IonicFieldEditorFactory.createOnScrollEditor();
 		addEditor(onscroll, parent);
 
-		IFieldEditor onscrollcomplete = IonicFieldEditorFactory.createOnScrollCompleteEditor();
-		addEditor(onscrollcomplete, parent);
+		IFieldEditor onrefresh = IonicFieldEditorFactory.createOnRefreshEditor();
+		addEditor(onrefresh, parent);
 
 		updateScrollEnablement();
+		updateZoomingEnablement();
 	}
 
 	public void propertyChange(PropertyChangeEvent evt) {
 		String name = evt.getPropertyName();
-		if(ATTR_SCROLL.equals(name) 
-				|| ATTR_DIRECTION.equals(name)
-				|| ATTR_OVERFLOW_SCROLL.equals(name)) {
+		if(ATTR_DIRECTION.equals(name)) {
 			updateScrollEnablement();
+		} else if(ATTR_ZOOMING.equals(name)) {
+			updateZoomingEnablement();
 		}
 		super.propertyChange(evt);
 	}
 
 	void updateScrollEnablement() {
-		boolean scrollEnabled = isTrue(ATTR_SCROLL);
-		boolean ionicScrollEnabled = scrollEnabled && !isTrue(ATTR_OVERFLOW_SCROLL);
 		String direction = getEditorValue(ATTR_DIRECTION);
 		boolean xEnabled = direction.indexOf("x") >= 0;
 		boolean yEnabled = direction.indexOf("y") >= 0 || direction.length() == 0;
-		setEnabled(ATTR_DIRECTION, ionicScrollEnabled);
-		setEnabled(ATTR_OVERFLOW_SCROLL, scrollEnabled);
-		setEnabled(ATTR_SCROLLBAR_X, ionicScrollEnabled && xEnabled);
-		setEnabled(ATTR_SCROLLBAR_Y, ionicScrollEnabled && yEnabled);
-		setEnabled(ATTR_START_Y, ionicScrollEnabled);
-		setEnabled(ATTR_ON_SCROLL, scrollEnabled);
-		setEnabled(ATTR_ON_SCROLL_COMPLETE, scrollEnabled);
+		setEnabled(ATTR_SCROLLBAR_X, xEnabled);
+		setEnabled(ATTR_SCROLLBAR_Y, yEnabled);
 	}
 
+	void updateZoomingEnablement() {
+		boolean enabled = isTrue(ATTR_ZOOMING);
+		setEnabled(ATTR_MIN_ZOOM, enabled);
+		setEnabled(ATTR_MAX_ZOOM, enabled);
+	}
 }

@@ -19,67 +19,63 @@ import org.jboss.tools.jst.angularjs.internal.ui.AngularJsUIImages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewContentWizard extends NewIonicWidgetWizard<NewContentWizardPage> implements IonicConstants {
+public class NewScrollWizard extends NewIonicWidgetWizard<NewScrollWizardPage> implements IonicConstants {
 
-	public NewContentWizard() {
+	public NewScrollWizard() {
 		setWindowTitle(DropWizardMessages.Wizard_Window_Title);
 		setDefaultPageImageDescriptor(AngularJsUIImages.getInstance()
-				.getOrCreateImageDescriptor(AngularJsUIImages.CONTENT_IMAGE));
+				.getOrCreateImageDescriptor(AngularJsUIImages.SCROLL_IMAGE));
 	}
 
 	@Override
-	protected NewContentWizardPage createPage() {
-		return new NewContentWizardPage();
+	protected NewScrollWizardPage createPage() {
+		return new NewScrollWizardPage();
 	}
 
 	protected void addContent(ElementNode parent, boolean browser) {
-		ElementNode pg = parent.addChild(TAG_ION_CONTENT, "\n");
+		ElementNode pg = parent.addChild(TAG_ION_SCROLL, "\n");
 		if(browser) {
+			pg.addAttribute("style", "border-style: groove; height: 1.7in; background-color: #EEEEEE; margin: 3mm");
 			ElementNode table = pg.addChild(TAG_TABLE);
-			table.addAttribute(ATTR_WIDTH, "150%");
-			for (int i = 0; i < 10; i++) {
+			table.addAttribute(ATTR_WIDTH, "300%");
+			for (int i = 0; i < 20; i++) {
 				ElementNode tr = table.addChild(TAG_TR);
-				for (int j = 0; j < 6; j++) {
-					ElementNode td = tr.addChild(TAG_TD, "content");
+				for (int j = 0; j < 17; j++) {
+					ElementNode td = tr.addChild(TAG_TD, "" + ((char)(65 + j)) + (i + 1));
 					td.addAttribute(ATTR_HEIGHT, "30mm");
 				}
 			}
 		}
 		addAttributeIfNotEmpty(pg, ATTR_DELEGATE_HANDLE, ATTR_DELEGATE_HANDLE);
 
-		addID("content-", pg);
+		addID("scroll-", pg);
 
-		if(!isTrue(ATTR_SCROLL)) {
-			pg.addAttribute(ATTR_SCROLL, FALSE);
-		}
+		addAttributeIfNotEmpty(pg, ATTR_DIRECTION, ATTR_DIRECTION);
 
-		boolean scrollEnabled = isTrue(ATTR_SCROLL);
-		if(scrollEnabled) {
-			if(isTrue(ATTR_OVERFLOW_SCROLL)) {
-				pg.addAttribute(ATTR_OVERFLOW_SCROLL, TRUE);
-			}
-		}
-		boolean ionicScrollEnabled = scrollEnabled && !isTrue(ATTR_OVERFLOW_SCROLL);
-		if(ionicScrollEnabled) {
-			addAttributeIfNotEmpty(pg, ATTR_DIRECTION, ATTR_DIRECTION);
-		}
 		String direction = page.getEditorValue(ATTR_DIRECTION);
 		boolean xEnabled = direction.indexOf("x") >= 0;
 		boolean yEnabled = direction.indexOf("y") >= 0 || direction.length() == 0;
-		if(!isTrue(ATTR_SCROLLBAR_X) && ionicScrollEnabled && xEnabled) {
+		if(!isTrue(ATTR_SCROLLBAR_X) && xEnabled) {
 			pg.addAttribute(ATTR_SCROLLBAR_X, FALSE);
 		}
-		if(!isTrue(ATTR_SCROLLBAR_Y) && ionicScrollEnabled && yEnabled) {
+		if(!isTrue(ATTR_SCROLLBAR_Y) && yEnabled) {
 			pg.addAttribute(ATTR_SCROLLBAR_Y, FALSE);
 		}
-		if(ionicScrollEnabled) {
-			addAttributeIfNotEmpty(pg, ATTR_START_Y, ATTR_START_Y);
+
+		addAttributeIfNotEmpty(pg, ATTR_HAS_BOUNCING, ATTR_HAS_BOUNCING);
+
+		if(isTrue(ATTR_PAGING)) {
+			pg.addAttribute(ATTR_PAGING, TRUE);
 		}
-		addAttributeIfNotEmpty(pg, ATTR_PADDING, ATTR_PADDING);
-		if(scrollEnabled) {
-			addAttributeIfNotEmpty(pg, ATTR_ON_SCROLL, ATTR_ON_SCROLL);
-			addAttributeIfNotEmpty(pg, ATTR_ON_SCROLL_COMPLETE, ATTR_ON_SCROLL_COMPLETE);
+
+		if(isTrue(ATTR_ZOOMING)) {
+			pg.addAttribute(ATTR_ZOOMING, TRUE);
 		}
+
+		addAttributeIfNotEmpty(pg, ATTR_MIN_ZOOM, ATTR_MIN_ZOOM);
+		addAttributeIfNotEmpty(pg, ATTR_MAX_ZOOM, ATTR_MAX_ZOOM);
+		addAttributeIfNotEmpty(pg, ATTR_ON_SCROLL, ATTR_ON_SCROLL);
+		addAttributeIfNotEmpty(pg, ATTR_ON_REFRESH, ATTR_ON_REFRESH);
 
 	}
 }

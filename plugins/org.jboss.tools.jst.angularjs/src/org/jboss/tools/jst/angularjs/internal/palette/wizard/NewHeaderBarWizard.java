@@ -34,7 +34,7 @@ public class NewHeaderBarWizard extends NewIonicWidgetWizard<NewHeaderBarWizardP
 	}
 
 	@Override
-	protected void addContent(ElementNode parent) {
+	protected void addContent(ElementNode parent, boolean browser) {
 		ElementNode header = parent.addChild(TAG_ION_HEADER_BAR);
 
 		addAttributeIfNotEmpty(header, ATTR_ALIGN_TITLE, ATTR_ALIGN_TITLE);
