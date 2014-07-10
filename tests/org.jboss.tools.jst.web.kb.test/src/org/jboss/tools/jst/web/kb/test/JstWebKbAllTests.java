@@ -45,6 +45,7 @@ public class JstWebKbAllTests {
 		suite.addTestSuite(AngularJSTest.class);
 		suite.addTestSuite(KbModelWithSeveralJarCopiesTest.class);
 		suite.addTestSuite(CSSMediaRuleTest.class);
+		suite.addTestSuite(CSSClassNamesTest.class);
 		suite.addTestSuite(RemoteFileManagerTest.class);
 		testSetup = new XProjectImportTestSetUp(suite,
 				"org.jboss.tools.jst.web.kb.test",

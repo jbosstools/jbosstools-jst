@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011-2013 Red Hat, Inc.
+ * Copyright (c) 2011-2014 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -599,7 +599,7 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 					}
 				}
 				
-				attributes.put(attrName, attrValue);
+				attributes.put(attrName, attrValue == null ? CSS_ANY : attrValue);
 			}
 			
 			// After the attributes are picked up we can read all the other things with no any trick
