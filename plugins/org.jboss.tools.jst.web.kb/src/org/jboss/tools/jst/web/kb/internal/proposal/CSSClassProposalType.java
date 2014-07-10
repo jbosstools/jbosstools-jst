@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2009-2013 Red Hat, Inc. 
+ * Copyright (c) 2009-2014 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -98,7 +98,13 @@ public class CSSClassProposalType extends CustomProposalType {
 					for (String styleWord : styleWords) {
 						String[] anotherStyleWords = styleWord.split(":");
 						for (String name : anotherStyleWords) {
+							// this can be not a name but a function that takes another style name as an argument.
+							// We're not interrested in such functions/style names here
+							if (name.contains("("))
+								continue; // Skip this function
+							
 							String nameWithoutArgs = name;
+							
 							// Add (if exists) class name defined before args
 							if (name.indexOf('[') >= 0) { //$NON-NLS-1$
 								nameWithoutArgs = name.substring(0, name.indexOf("[")); //$NON-NLS-1$
@@ -106,7 +112,13 @@ public class CSSClassProposalType extends CustomProposalType {
 							
 							if (nameWithoutArgs != null && nameWithoutArgs.indexOf(".") >= 0) { //$NON-NLS-1$
 								nameWithoutArgs = nameWithoutArgs.substring(nameWithoutArgs.indexOf(".") + 1); //$NON-NLS-1$
-
+								
+								int ind = nameWithoutArgs.indexOf('+');
+								if (ind != -1) nameWithoutArgs = nameWithoutArgs.substring(0, ind);
+								
+								ind = nameWithoutArgs.indexOf('>');
+								if (ind != -1) nameWithoutArgs = nameWithoutArgs.substring(0, ind);
+								
 								styleNames.add(nameWithoutArgs);
 							}
 
@@ -114,6 +126,11 @@ public class CSSClassProposalType extends CustomProposalType {
 								nameWithoutArgs = name.substring(name.indexOf(']') + 1);
 								if (nameWithoutArgs != null && nameWithoutArgs.indexOf(".") >= 0) { //$NON-NLS-1$
 									nameWithoutArgs = nameWithoutArgs.substring(nameWithoutArgs.indexOf(".") + 1); //$NON-NLS-1$
+									int ind = nameWithoutArgs.indexOf('+');
+									if (ind != -1) nameWithoutArgs = nameWithoutArgs.substring(0, ind);
+									
+									ind = nameWithoutArgs.indexOf('>');
+									if (ind != -1) nameWithoutArgs = nameWithoutArgs.substring(0, ind);
 
 									styleNames.add(nameWithoutArgs);
 								}
