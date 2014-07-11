@@ -46,11 +46,6 @@ public class JQMPaletteTagLib13 extends PaletteTagLibrary {
 	}
 
 	@Override
-	public int getRelevance() {
-		return JQM_GROUP_RELEVANCE;
-	}
-
-	@Override
 	public ImageDescriptor getImage() {
 		return IMAGE;
 	}

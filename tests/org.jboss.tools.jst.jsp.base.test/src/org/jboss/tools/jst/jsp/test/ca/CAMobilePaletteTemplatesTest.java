@@ -8,7 +8,7 @@
  * Contributor:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.jboss.tools.jst.web.ui.editor.test.ca;
+package org.jboss.tools.jst.jsp.test.ca;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -21,7 +21,6 @@ import org.eclipse.jface.text.FindReplaceDocumentAdapter;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.jboss.tools.common.base.test.contentassist.CATestUtil;
-import org.jboss.tools.jst.jsp.test.ca.ContentAssistantTestCase;
 import org.jboss.tools.test.util.ProjectImportTestSetup;
 
 public abstract class CAMobilePaletteTemplatesTest extends ContentAssistantTestCase {
@@ -29,11 +28,12 @@ public abstract class CAMobilePaletteTemplatesTest extends ContentAssistantTestC
 
 	public CAMobilePaletteTemplatesTest() {}
 
-	
+	@Override
 	public void setUp() throws Exception {
 		project = ProjectImportTestSetup.loadProject(PROJECT_NAME);
 	}
 
+	@Override
 	public void tearDown() throws Exception {
 		closeEditor();
 		super.tearDown();

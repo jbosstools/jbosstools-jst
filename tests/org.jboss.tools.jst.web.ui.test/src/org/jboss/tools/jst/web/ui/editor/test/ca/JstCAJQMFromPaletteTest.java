@@ -40,7 +40,8 @@ public class JstCAJQMFromPaletteTest  extends ContentAssistantTestCase {
 		"</div>",
 		"</div>"
 	};
-	
+
+	@Override
 	public void setUp() throws Exception {
 		project = ProjectImportTestSetup.loadProject(PROJECT_NAME);
 	}

@@ -31,7 +31,7 @@ import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor;
 public abstract class PaletteTagLibrary extends CustomTagLibrary {
 
 	protected final static int HTML_GROUP_RELEVANCE = TextProposal.R_XML_ATTRIBUTE_VALUE_TEMPLATE + 1;
-	protected final static int JQM_GROUP_RELEVANCE = HTML_GROUP_RELEVANCE + 1;
+	protected final static int DEFAULT_GROUP_RELEVANCE = HTML_GROUP_RELEVANCE + 1;
 
 	public PaletteTagLibrary(String name, String uri, String version, String defaultPrefix, Boolean ignoreCase) {
 		setURI(uri);
@@ -100,7 +100,9 @@ public abstract class PaletteTagLibrary extends CustomTagLibrary {
 		return item.getName() + " - " + item.getCategory() + " " + item.getVersion();
 	}
 
-	public abstract int getRelevance();
+	protected int getRelevance() {
+		return DEFAULT_GROUP_RELEVANCE;
+	}
 
 	public abstract ImageDescriptor getImage();
 

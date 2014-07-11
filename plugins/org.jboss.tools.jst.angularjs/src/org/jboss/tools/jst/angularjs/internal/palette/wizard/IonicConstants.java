@@ -18,6 +18,12 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.HTMLConstants;
  *
  */
 public interface IonicConstants extends HTMLConstants {
+
+	/**
+	 * Palette category id.
+	 */
+	public String IONIC_CATEGORY = "Ionic";
+
 	public String TAG_ION_CONTENT = "ion-content";
 	public String TAG_ION_HEADER_BAR = "ion-header-bar";
 	public String TAG_ION_SCROLL = "ion-scroll";

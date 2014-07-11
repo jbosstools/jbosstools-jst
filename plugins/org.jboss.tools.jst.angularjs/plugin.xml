@@ -24,4 +24,11 @@
       	keywords="header bar"/>
    </extension>
 
+   <extension
+         point="org.jboss.tools.jst.web.kb.tagLib">
+      <tag-lib
+            uri="ionic"
+            class="org.jboss.tools.jst.angularjs.internal.ionic.palette.IonicTagLib"/>
+   	</extension>
+
 </plugin>
