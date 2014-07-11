@@ -45,7 +45,7 @@ public abstract class JSRecognizer extends HTML5Recognizer implements ITagLibVer
 		return getJSReferenceVersion(file, getJSLibName())!=null;
 	}
 
-	protected static String getJSReferenceVersion(IFile file, String jsLibName) {
+	public static String getJSReferenceVersion(IFile file, String jsLibName) {
 		return getJSReferenceVersion(file, jsLibName, false);
 	}
 
@@ -61,10 +61,11 @@ public abstract class JSRecognizer extends HTML5Recognizer implements ITagLibVer
 	 * @param file
 	 * @param jsLibName
 	 * @param lookAtSrcAttributeOnly
+	 * @param html5Only
 	 * @return
 	 */
-	protected static String getJSReferenceVersion(IFile file, String jsLibName, boolean lookAtSrcAttributeOnly) {
-		if(!FileUtil.isDoctypeHTML(file)) {
+	public static String getJSReferenceVersion(IFile file, String jsLibName, boolean lookAtSrcAttributeOnly, boolean html5Only) {
+		if(html5Only && !FileUtil.isDoctypeHTML(file)) {
 			return null;
 		}
 		IStructuredModel model = null;
@@ -109,6 +110,19 @@ public abstract class JSRecognizer extends HTML5Recognizer implements ITagLibVer
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Return the version number of the JS library.
+	 * If the link to the JS file is found but no version defined then return an empty string.
+	 * If no link found or if not an HTML5 document then return null.
+	 * @param file
+	 * @param jsLibName
+	 * @param lookAtSrcAttributeOnly
+	 * @return
+	 */
+	protected static String getJSReferenceVersion(IFile file, String jsLibName, boolean lookAtSrcAttributeOnly) {
+		return getJSReferenceVersion(file, jsLibName, lookAtSrcAttributeOnly, true);
 	}
 
 	private static String find(String text, String pattern, int group) {

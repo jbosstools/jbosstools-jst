@@ -33,6 +33,8 @@ public abstract class PaletteTagLibrary extends CustomTagLibrary {
 	protected final static int HTML_GROUP_RELEVANCE = TextProposal.R_XML_ATTRIBUTE_VALUE_TEMPLATE + 1;
 	protected final static int DEFAULT_GROUP_RELEVANCE = HTML_GROUP_RELEVANCE + 1;
 
+	private static int relevance = DEFAULT_GROUP_RELEVANCE;
+
 	public PaletteTagLibrary(String name, String uri, String version, String defaultPrefix, Boolean ignoreCase) {
 		setURI(uri);
 		setVersion(version);
@@ -102,6 +104,11 @@ public abstract class PaletteTagLibrary extends CustomTagLibrary {
 
 	protected int getRelevance() {
 		return DEFAULT_GROUP_RELEVANCE;
+	}
+
+	protected static synchronized int generateUniqueRelevance() {
+		relevance++;
+		return relevance;
 	}
 
 	public abstract ImageDescriptor getImage();

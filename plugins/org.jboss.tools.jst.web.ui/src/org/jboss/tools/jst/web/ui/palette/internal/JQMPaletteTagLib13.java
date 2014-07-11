@@ -25,6 +25,7 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
 public class JQMPaletteTagLib13 extends PaletteTagLibrary {
 
 	private static final ImageDescriptor IMAGE = ImageDescriptor.createFromFile(WebUiPlugin.class, "jqm.png");
+	private final static int RELEVANCE = generateUniqueRelevance();
 
 	public JQMPaletteTagLib13() {
 		super(null, "jQueryMobile", null, "jqmlpalette", true);
@@ -53,5 +54,10 @@ public class JQMPaletteTagLib13 extends PaletteTagLibrary {
 	@Override
 	public ITagLibRecognizer getTagLibRecognizer() {
 		return new JQueryMobileRecognizer();
+	}
+
+	@Override
+	protected int getRelevance() {
+		return RELEVANCE;
 	}
 }

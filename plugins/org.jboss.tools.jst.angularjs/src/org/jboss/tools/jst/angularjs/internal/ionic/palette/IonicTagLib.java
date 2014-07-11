@@ -29,6 +29,7 @@ import org.jboss.tools.jst.web.ui.palette.internal.RunnablePaletteItem;
 public class IonicTagLib extends PaletteTagLibrary {
 
 	private static final ImageDescriptor IMAGE = ImageDescriptor.createFromFile(AngularJsPlugin.class, "ionic.png");
+	private final static int RELEVANCE = generateUniqueRelevance();
 
 	public IonicTagLib() {
 		super(null, "ionic", null, "ionicpalette", true);
@@ -50,5 +51,10 @@ public class IonicTagLib extends PaletteTagLibrary {
 	@Override
 	public ITagLibRecognizer getTagLibRecognizer() {
 		return new IonicRecognizer();
+	}
+
+	@Override
+	protected int getRelevance() {
+		return RELEVANCE;
 	}
 }

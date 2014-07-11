@@ -63,7 +63,7 @@ public class PreferredJSLibVersions implements IPreferredJSLibVersion {
 		return result;
 	}
 	abstract static class DefaultJSRecognizer extends JSRecognizer {
-		protected static String getJSReferenceVersion(IFile file, String jsLibName) {
+		public static String getJSReferenceVersion(IFile file, String jsLibName) {
 			return JSRecognizer.getJSReferenceVersion(file, jsLibName);
 		}		
 	}
