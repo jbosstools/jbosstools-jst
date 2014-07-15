@@ -18,16 +18,18 @@ import org.eclipse.ui.IEditorPart;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.XModelObjectConstants;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
-import org.jboss.tools.jst.angularjs.internal.palette.wizard.IonicConstants;
-import org.jboss.tools.jst.angularjs.internal.palette.wizard.IonicVersion;
-import org.jboss.tools.jst.angularjs.internal.palette.wizard.NewContentWizard;
-import org.jboss.tools.jst.angularjs.internal.palette.wizard.NewContentWizardPage;
-import org.jboss.tools.jst.angularjs.internal.palette.wizard.NewHeaderBarWizard;
-import org.jboss.tools.jst.angularjs.internal.palette.wizard.NewHeaderBarWizardPage;
-import org.jboss.tools.jst.angularjs.internal.palette.wizard.NewIonicWidgetWizard;
-import org.jboss.tools.jst.angularjs.internal.palette.wizard.NewIonicWidgetWizardPage;
-import org.jboss.tools.jst.angularjs.internal.palette.wizard.NewScrollWizard;
-import org.jboss.tools.jst.angularjs.internal.palette.wizard.NewScrollWizardPage;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.IonicConstants;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.IonicVersion;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewContentWizard;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewContentWizardPage;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewFooterBarWizard;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewFooterBarWizardPage;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewHeaderBarWizard;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewHeaderBarWizardPage;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewIonicWidgetWizard;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewIonicWidgetWizardPage;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewScrollWizard;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewScrollWizardPage;
 import org.jboss.tools.jst.jsp.test.palette.AbstractPaletteEntryTest;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizard;
@@ -241,6 +243,60 @@ public class IonicPaletteTest extends AbstractPaletteEntryTest implements IonicC
 		assertAttrExists(wizard, ATTR_CLASS, "bar-calm");
 		wizardPage.setEditorValue(EDITOR_ID_BAR_COLOR, "");
 		
+		assertTextDoesNotExist(wizard, ATTR_ALIGN_TITLE);
+		wizardPage.setEditorValue(ATTR_ALIGN_TITLE, "left");
+		assertAttrExists(wizard, ATTR_ALIGN_TITLE, "left");
+		wizardPage.setEditorValue(ATTR_ALIGN_TITLE, "");
+		assertTextDoesNotExist(wizard, ATTR_ALIGN_TITLE);
+	
+		assertTextExists(wizard, "Left button");
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_LEFT_BUTTON, FALSE);
+		assertTextDoesNotExist(wizard, "Left button");
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_LEFT_BUTTON, TRUE);
+		assertTextExists(wizard, "Left button");
+
+		assertTextExists(wizard, "Right button");
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_RIGHT_BUTTON, FALSE);
+		assertTextDoesNotExist(wizard, "Right button");
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_RIGHT_BUTTON, TRUE);
+		assertTextExists(wizard, "Right button");
+
+		compareGeneratedAndInsertedText(wizard);
+	}
+
+	public void testNewFooterWizard() {
+		IWizardPage currentPage = runToolEntry("Footer Bar", true);
+		assertTrue(currentPage instanceof NewFooterBarWizardPage);
+
+		NewFooterBarWizardPage wizardPage = (NewFooterBarWizardPage)currentPage;
+		NewFooterBarWizard wizard = (NewFooterBarWizard)wizardPage.getWizard();
+
+		assertTextExists(wizard, ">Title<");
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_TITLE, "Title1");
+		assertTextExists(wizard, ">Title1<");
+
+		wizardPage.setEditorValue(EDITOR_ID_BAR_COLOR, "bar-calm");
+		assertAttrExists(wizard, ATTR_CLASS, "bar-calm");
+		wizardPage.setEditorValue(EDITOR_ID_BAR_COLOR, "");
+		
+		assertTextDoesNotExist(wizard, ATTR_ALIGN_TITLE);
+		wizardPage.setEditorValue(ATTR_ALIGN_TITLE, "left");
+		assertAttrExists(wizard, ATTR_ALIGN_TITLE, "left");
+		wizardPage.setEditorValue(ATTR_ALIGN_TITLE, "");
+		assertTextDoesNotExist(wizard, ATTR_ALIGN_TITLE);
+	
+		assertTextExists(wizard, "Left button");
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_LEFT_BUTTON, FALSE);
+		assertTextDoesNotExist(wizard, "Left button");
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_LEFT_BUTTON, TRUE);
+		assertTextExists(wizard, "Left button");
+
+		assertTextExists(wizard, "Right button");
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_RIGHT_BUTTON, FALSE);
+		assertTextDoesNotExist(wizard, "Right button");
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_RIGHT_BUTTON, TRUE);
+		assertTextExists(wizard, "Right button");
+
 		compareGeneratedAndInsertedText(wizard);
 	}
 

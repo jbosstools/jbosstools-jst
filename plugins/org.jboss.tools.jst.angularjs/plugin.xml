@@ -12,16 +12,19 @@
    <extension
          point="org.jboss.tools.common.model.ui.InsertTagWizard">
       <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/0.JS#CSS" 
-      	class="org.jboss.tools.jst.angularjs.internal.palette.wizard.AddJSCSSREferencesWizard"/>
+      	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.AddJSCSSREferencesWizard"/>
       <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/1.Content" 
-      	class="org.jboss.tools.jst.angularjs.internal.palette.wizard.NewContentWizard" 
+      	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewContentWizard" 
       	keywords="content"/>
       <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/2.Scroll" 
-      	class="org.jboss.tools.jst.angularjs.internal.palette.wizard.NewScrollWizard" 
+      	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewScrollWizard" 
       	keywords="scroll"/>
       <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/3.Header_Bar" 
-      	class="org.jboss.tools.jst.angularjs.internal.palette.wizard.NewHeaderBarWizard" 
+      	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewHeaderBarWizard" 
       	keywords="header bar"/>
+      <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/4.Footer_Bar" 
+      	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewFooterBarWizard" 
+      	keywords="footer bar"/>
    </extension>
 
    <extension

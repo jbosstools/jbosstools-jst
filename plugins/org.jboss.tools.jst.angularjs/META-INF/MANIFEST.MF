@@ -7,7 +7,7 @@ Bundle-Vendor: %providerName
 Bundle-SymbolicName: org.jboss.tools.jst.angularjs;singleton:=true
 Bundle-Localization: plugin
 Export-Package: org.jboss.tools.jst.angularjs,
- org.jboss.tools.jst.angularjs.internal.palette.wizard,
+ org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard,
  org.jboss.tools.jst.angularjs.internal.ui
 Require-Bundle: org.eclipse.ui.ide;bundle-version="3.7.0",
  org.jboss.tools.common.model.ui,

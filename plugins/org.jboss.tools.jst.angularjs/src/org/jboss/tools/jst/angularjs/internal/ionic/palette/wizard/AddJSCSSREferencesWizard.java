@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.jboss.tools.jst.angularjs.internal.palette.wizard;
+package org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard;
 
 import org.jboss.tools.common.model.XModelObjectConstants;
 import org.jboss.tools.common.model.ui.editors.dnd.DropWizardMessages;

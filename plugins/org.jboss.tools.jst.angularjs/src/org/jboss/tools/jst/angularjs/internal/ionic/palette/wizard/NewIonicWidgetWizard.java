@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.jboss.tools.jst.angularjs.internal.palette.wizard;
+package org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard;
 
 import java.io.File;
 

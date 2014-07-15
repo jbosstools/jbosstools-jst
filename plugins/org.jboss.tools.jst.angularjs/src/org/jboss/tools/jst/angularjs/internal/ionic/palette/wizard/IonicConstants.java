@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.jboss.tools.jst.angularjs.internal.palette.wizard;
+package org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard;
 
 import org.jboss.tools.jst.web.ui.palette.html.wizard.HTMLConstants;
 
@@ -25,6 +25,7 @@ public interface IonicConstants extends HTMLConstants {
 	public String IONIC_CATEGORY = "Ionic";
 
 	public String TAG_ION_CONTENT = "ion-content";
+	public String TAG_ION_FOOTER_BAR = "ion-footer-bar";
 	public String TAG_ION_HEADER_BAR = "ion-header-bar";
 	public String TAG_ION_SCROLL = "ion-scroll";
 
@@ -49,6 +50,7 @@ public interface IonicConstants extends HTMLConstants {
 	public String ATTR_ZOOMING = "zooming";
 
 	public String CLASS_BAR_POSITIVE = "bar-positive";
+	public String CLASS_BAR_SUBFOOTER = "bar-subfooter";
 	public String CLASS_BAR_SUBHEADER = "bar-subheader";
 	public String CLASS_BUTTON = "button";
 	public String CLASS_BUTTONS = "buttons";

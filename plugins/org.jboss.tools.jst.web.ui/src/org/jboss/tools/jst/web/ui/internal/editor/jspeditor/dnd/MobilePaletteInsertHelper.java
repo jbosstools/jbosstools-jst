@@ -51,7 +51,7 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 	// palettePath - %Palette%/Mobile/jQuery Mobile/1.page/0. JS#CSS
 	public static final String INSERT_JS_CSS_SIGNATURE = "<jquery.mobile.js.css>"; //$NON-NLS-1$
 	
-	private static final String MOBILE_PATH = "/Mobile/jQuery Mobile/"; //$NON-NLS-1$
+	private static final String MOBILE_PATH = "/Mobile/"; //$NON-NLS-1$
 
 	private static String link(String href) {
 		return "<link rel=\"stylesheet\" href=\"" + href + "\" /";

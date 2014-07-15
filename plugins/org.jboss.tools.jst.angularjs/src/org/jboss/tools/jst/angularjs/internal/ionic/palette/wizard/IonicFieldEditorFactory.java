@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.jboss.tools.jst.angularjs.internal.palette.wizard;
+package org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard;
 
 import java.util.Arrays;
 import java.util.List;
@@ -66,7 +66,7 @@ public class IonicFieldEditorFactory implements IonicConstants {
 	static List<String> ALIGN_TITLE_LIST = Arrays.asList(new String[]{"", "left", "center", "right"});
 
 	/**
-	 * Used in New Header wizard.
+	 * Used in New Footer and Header wizards.
 	 * @return
 	 */
 	public static IFieldEditor createAlignTitleEditor() {
@@ -75,7 +75,7 @@ public class IonicFieldEditorFactory implements IonicConstants {
 	}
 
 	/**
-	 * Used in New Header wizard.
+	 * Used in New Footer and Header wizard.
 	 * @return
 	 */
 	public static IFieldEditor createNgClickEditor(String editorID) {
@@ -230,6 +230,15 @@ public class IonicFieldEditorFactory implements IonicConstants {
 	public static IFieldEditor createMinZoomEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_MIN_ZOOM, IonicWizardMessages.minZoomLabel, "",
 				IonicWizardMessages.scrollMinZoomDescription);
+	}
+
+	/**
+	 * Used in New Footer wizard.
+	 * @return
+	 */
+	public static IFieldEditor createSubfooterEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(CLASS_BAR_SUBFOOTER, IonicWizardMessages.subfooterLabel, false,
+				"");
 	}
 
 }

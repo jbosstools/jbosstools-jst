@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.jboss.tools.jst.angularjs.internal.palette.wizard;
+package org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -27,11 +27,11 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  * @author Viacheslav Kabanovich
  *
  */
-public class NewHeaderBarWizardPage extends NewIonicWidgetWizardPage {
+public class NewFooterBarWizardPage extends NewIonicWidgetWizardPage {
 
-	public NewHeaderBarWizardPage() {
-		super("newHeaderBar", WizardMessages.newHeaderWizardTitle);
-		setDescription(WizardMessages.newHeaderWizardDescription);
+	public NewFooterBarWizardPage() {
+		super("newFooterBar", WizardMessages.newFooterWizardTitle);
+		setDescription(IonicWizardMessages.newFooterWizardDescription);
 	}
 
 	@Override
@@ -43,23 +43,18 @@ public class NewHeaderBarWizardPage extends NewIonicWidgetWizardPage {
 		createIDEditor(parent, true);
 		addID.setValue(Boolean.FALSE);
 
-		TwoColumns columns = createTwoColumns(parent);
-
 		IFieldEditor barColor = IonicFieldEditorFactory.createBarColorEditor(EDITOR_ID_BAR_COLOR);
-		addEditor(barColor, columns.left());
+		addEditor(barColor, parent);
 
 		IFieldEditor alignTitle = IonicFieldEditorFactory.createAlignTitleEditor();
-		addEditor(alignTitle, columns.right());
+		addEditor(alignTitle, parent);
 
-		IFieldEditor subheader = IonicFieldEditorFactory.createSubheaderEditor();
-		addEditor(subheader, columns.left());
-
-		IFieldEditor noTapScroll = IonicFieldEditorFactory.createNoTapScrollEditor();
-		addEditor(noTapScroll, columns.right());
+		IFieldEditor subfooter = IonicFieldEditorFactory.createSubfooterEditor();
+		addEditor(subfooter, parent);
 
 		createSeparator(parent);
 
-		columns = createTwoColumns(parent);
+		TwoColumns columns = createTwoColumns(parent);
 
 		IFieldEditor leftButton = JQueryFieldEditorFactory.createLeftButtonEditor();
 		addEditor(leftButton, columns.left());
@@ -113,10 +108,12 @@ public class NewHeaderBarWizardPage extends NewIonicWidgetWizardPage {
 		boolean leftButtonEnabled = isTrue(JQueryConstants.EDITOR_ID_LEFT_BUTTON);
 		setEnabled(JQueryConstants.EDITOR_ID_LEFT_BUTTON_LABEL, leftButtonEnabled);
 		setEnabled(JQueryConstants.EDITOR_ID_LEFT_BUTTON_ICON, leftButtonEnabled);
+		setEnabled(IonicConstants.EDITOR_ID_LEFT_BUTTON_CLICK, leftButtonEnabled);
 
 		boolean rightButtonEnabled = isTrue(JQueryConstants.EDITOR_ID_RIGHT_BUTTON);
 		setEnabled(JQueryConstants.EDITOR_ID_RIGHT_BUTTON_LABEL, rightButtonEnabled);
 		setEnabled(JQueryConstants.EDITOR_ID_RIGHT_BUTTON_ICON, rightButtonEnabled);
+		setEnabled(IonicConstants.EDITOR_ID_RIGHT_BUTTON_CLICK, rightButtonEnabled);
 
 		super.validate();
 	}
