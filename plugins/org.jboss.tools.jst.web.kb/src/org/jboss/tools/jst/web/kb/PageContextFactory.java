@@ -66,7 +66,6 @@ import org.eclipse.wst.css.core.internal.provisional.adapters.IModelProvideAdapt
 import org.eclipse.wst.css.core.internal.provisional.adapters.IStyleSheetAdapter;
 import org.eclipse.wst.css.core.internal.provisional.document.ICSSModel;
 import org.eclipse.wst.html.core.internal.htmlcss.LinkElementAdapter;
-import org.eclipse.wst.html.core.internal.htmlcss.URLModelProvider;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.INodeNotifier;
@@ -1374,7 +1373,7 @@ public class PageContextFactory implements IResourceChangeListener {
 
 		return sortedReferences;
 	}
-
+	
 	public static class ExtendedLinkElementAdapter extends LinkElementAdapter {
 
 		private Element element;
@@ -1473,7 +1472,7 @@ public class PageContextFactory implements IResourceChangeListener {
 			IModelProvideAdapter adapter = (IModelProvideAdapter) ((INodeNotifier) getElement())
 					.getAdapterFor(IModelProvideAdapter.class);
 
-			URLModelProvider provider = new URLModelProvider();
+			ProjectURLModelProvider provider = new ProjectURLModelProvider();
 			try {
 				IStructuredModel newModel = provider.getModelForRead(baseModel,
 						prefix == null ? source : prefix + source);
