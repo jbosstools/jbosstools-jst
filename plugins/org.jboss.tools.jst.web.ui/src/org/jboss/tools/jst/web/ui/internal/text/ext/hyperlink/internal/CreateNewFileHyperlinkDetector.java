@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 Red Hat, Inc.
+ * Copyright (c) 2013 - 2014 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -148,7 +148,7 @@ public class CreateNewFileHyperlinkDetector extends AbstractHyperlinkDetector {
 	}
 	
 	private static IFile getLinkFile(IFile baseFile, String name){
-		if(!fileExists(baseFile, name)){
+		if(WebUtils.findResource(baseFile, name) == null){
 			IProject project = baseFile.getProject();
 			if(name.startsWith("/")){ //$NON-NLS-1$
 				IPath webContentPath = WebUtils.getFirstWebContentPath(project);
@@ -163,24 +163,6 @@ public class CreateNewFileHyperlinkDetector extends AbstractHyperlinkDetector {
 		return null;
 	}
 	
-	private static boolean fileExists(IFile baseFile, String name){
-		IProject project = baseFile.getProject();
-		if(name.startsWith("/")){ //$NON-NLS-1$
-			IPath[] webContentPaths = WebUtils.getWebContentPaths(project);
-			for(IPath webContentPath : webContentPaths){
-				if(webContentPath != null){
-					IPath container = webContentPath.segmentCount() > 1 ? webContentPath.removeFirstSegments(1) : project.getFullPath();
-					if(project.getFile(container.append(name)).exists()){
-						return true;
-					}
-				}
-			}
-		}else{
-			return project.getFile(baseFile.getFullPath().removeFirstSegments(1).removeLastSegments(1).append(name)).exists();
-		}
-		return false;
-	}
-	
 	private static IFile getFile(){
 		IEditorPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		if(part != null){
@@ -190,7 +172,4 @@ public class CreateNewFileHyperlinkDetector extends AbstractHyperlinkDetector {
 		}
 		return null;
 	}
-	
-	
-
 }

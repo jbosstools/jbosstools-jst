@@ -21,6 +21,7 @@ import java.util.Set;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -40,6 +41,7 @@ import org.jboss.tools.common.text.ext.hyperlink.xpl.Messages;
 import org.jboss.tools.common.text.ext.util.StructuredModelWrapper;
 import org.jboss.tools.common.text.ext.util.StructuredSelectionHelper;
 import org.jboss.tools.common.text.ext.util.Utils;
+import org.jboss.tools.common.web.WebUtils;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.kb.ICSSContainerSupport;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
@@ -190,7 +192,14 @@ public class CSSClassHyperlink extends AbstractHyperlink {
 			}
 		}
 
-		return PageContextFactory.getFileFromProject(filePath, getFile());
+		file = PageContextFactory.getFileFromProject(filePath, getFile());
+		if (file != null)
+			return file;
+		
+		// For non-WTP projects we have no root defined, so, try to guess the CSS location
+		// based on page path.
+		IResource resource = WebUtils.findResource(getFile(), filePath); 
+		return (resource instanceof IFile ? (IFile)resource : null);
 	}
 	
 	/**
