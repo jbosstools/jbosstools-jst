@@ -30,11 +30,14 @@ public class IonicWizardMessages extends NLS {
 	public static String newScrollWizardTitle;
 	public static String newScrollWizardDescription;
 
+	public static String newTabsWizardDescription;
+
 	public static String alignTitleLabel;
 	public static String barColorLabel;
 	public static String delegateHandleLabel;
 	public static String directionLabel;
 	public static String hasBouncingLabel;
+	public static String hideTabbarLabel;
 	public static String minZoomLabel;
 	public static String maxZoomLabel;
 	public static String ngClickLabel;
@@ -72,6 +75,8 @@ public class IonicWizardMessages extends NLS {
 	public static String scrollPagingDescription;
 	public static String scrollRefreshDescription;
 	public static String scrollZoomingDescription;
+	public static String tabTitleDescription;
+	public static String tabsHideTabbarDescription;
 
 	static {
 		// initialize resource bundle

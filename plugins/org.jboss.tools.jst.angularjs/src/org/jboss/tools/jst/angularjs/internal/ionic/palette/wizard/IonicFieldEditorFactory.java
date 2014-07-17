@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.SwtFieldEditorFactory;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.WizardDescriptions;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
@@ -60,6 +61,21 @@ public class IonicFieldEditorFactory implements IonicConstants {
 	 */
 	public static IFieldEditor createBarColorEditor(String editorID) {
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(editorID, IonicWizardMessages.barColorLabel, BAR_COLOR_LIST, "", true,
+				"");
+	}
+
+	static String[] TABS_COLORS = {
+		"", "tabs-light", "tabs-stable", "tabs-positive", "tabs-calm", "tabs-balanced", "tabs-energized", "tabs-assertive", "tabs-royal", "tabs-dark",  
+	};
+
+	static List<String> TABS_COLOR_LIST = Arrays.asList(TABS_COLORS);
+
+	/**
+	 * Used in New Tabs wizard.
+	 * @return
+	 */
+	public static IFieldEditor createTabsColorEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_TABS_COLOR, IonicWizardMessages.barColorLabel, TABS_COLOR_LIST, "", true,
 				"");
 	}
 
@@ -239,6 +255,25 @@ public class IonicFieldEditorFactory implements IonicConstants {
 	public static IFieldEditor createSubfooterEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(CLASS_BAR_SUBFOOTER, IonicWizardMessages.subfooterLabel, false,
 				"");
+	}
+
+	/**
+	 * Used in New Tabs wizard.
+	 * @return
+	 */
+	public static IFieldEditor createTabsIconPositionEditor() {
+		String[] values = new String[]{"", "left", "top"};
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(JQueryConstants.EDITOR_ID_ICON_POS, WizardMessages.iconposLabel, Arrays.asList(values), "", true,
+				WizardDescriptions.iconPosition);
+	}
+
+	/**
+	 * Used in Tabs wizard.
+	 * @return
+	 */
+	public static IFieldEditor createHideTabsEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(CLASS_TABS_ITEM_HIDE, IonicWizardMessages.hideTabbarLabel, false,
+				IonicWizardMessages.tabsHideTabbarDescription);
 	}
 
 }

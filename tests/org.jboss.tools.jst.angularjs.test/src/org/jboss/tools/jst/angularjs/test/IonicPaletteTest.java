@@ -18,6 +18,8 @@ import org.eclipse.ui.IEditorPart;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.XModelObjectConstants;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
+import org.jboss.tools.common.model.ui.editors.dnd.IDropWizard;
+import org.jboss.tools.common.model.ui.internal.editors.PaletteItemResult;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.IonicConstants;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.IonicVersion;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewContentWizard;
@@ -30,8 +32,11 @@ import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewIonicWidge
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewIonicWidgetWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewScrollWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewScrollWizardPage;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTabsWizard;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTabsWizardPage;
 import org.jboss.tools.jst.jsp.test.palette.AbstractPaletteEntryTest;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewJQueryWidgetWizard;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizard;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
 import org.jboss.tools.jst.web.ui.test.HTML5PaletteWizardTest;
@@ -87,6 +92,8 @@ public class IonicPaletteTest extends AbstractPaletteEntryTest implements IonicC
 
 		NewContentWizardPage wizardPage = (NewContentWizardPage)currentPage;
 		NewContentWizard wizard = (NewContentWizard)wizardPage.getWizard();
+
+		compareUIAndNonUIWizards(wizard, "Content");
 
 		assertTextExists(wizard, TAG_ION_CONTENT);
 
@@ -157,6 +164,8 @@ public class IonicPaletteTest extends AbstractPaletteEntryTest implements IonicC
 
 		NewScrollWizardPage wizardPage = (NewScrollWizardPage)currentPage;
 		NewScrollWizard wizard = (NewScrollWizard)wizardPage.getWizard();
+
+		compareUIAndNonUIWizards(wizard, "Scroll");
 
 		assertTextExists(wizard, TAG_ION_SCROLL);
 
@@ -235,6 +244,8 @@ public class IonicPaletteTest extends AbstractPaletteEntryTest implements IonicC
 		NewHeaderBarWizardPage wizardPage = (NewHeaderBarWizardPage)currentPage;
 		NewHeaderBarWizard wizard = (NewHeaderBarWizard)wizardPage.getWizard();
 
+		compareUIAndNonUIWizards(wizard, "Header Bar");
+
 		assertTextExists(wizard, ">Title<");
 		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_TITLE, "Title1");
 		assertTextExists(wizard, ">Title1<");
@@ -271,6 +282,8 @@ public class IonicPaletteTest extends AbstractPaletteEntryTest implements IonicC
 		NewFooterBarWizardPage wizardPage = (NewFooterBarWizardPage)currentPage;
 		NewFooterBarWizard wizard = (NewFooterBarWizard)wizardPage.getWizard();
 
+		compareUIAndNonUIWizards(wizard, "Footer Bar");
+
 		assertTextExists(wizard, ">Title<");
 		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_TITLE, "Title1");
 		assertTextExists(wizard, ">Title1<");
@@ -298,6 +311,51 @@ public class IonicPaletteTest extends AbstractPaletteEntryTest implements IonicC
 		assertTextExists(wizard, "Right button");
 
 		compareGeneratedAndInsertedText(wizard);
+	}
+
+	public void testNewTabsWizard() {
+		IWizardPage currentPage = runToolEntry("Tabs", true);
+		assertTrue(currentPage instanceof NewTabsWizardPage);
+
+		NewTabsWizardPage wizardPage = (NewTabsWizardPage)currentPage;
+		NewTabsWizard wizard = (NewTabsWizard)wizardPage.getWizard();
+
+		compareUIAndNonUIWizards(wizard, "Tabs");
+
+		assertEquals("3", wizardPage.getEditorValue(JQueryConstants.EDITOR_ID_NUMBER_OF_ITEMS));
+
+		assertTextDoesNotExist(wizard, "Tab 4");
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_NUMBER_OF_ITEMS, "4");
+		assertEquals("4", wizardPage.getEditorValue(JQueryConstants.EDITOR_ID_NUMBER_OF_ITEMS));
+		assertTextExists(wizard, "Tab 4");		
+	
+		wizardPage.setEditorValue(EDITOR_ID_TABS_COLOR, "tabs-calm");
+		assertAttrExists(wizard, ATTR_CLASS, "tabs-calm");
+		wizardPage.setEditorValue(EDITOR_ID_TABS_COLOR, "");
+
+		String tabsIconLeft = "tabs-icon-left";
+		assertTextDoesNotExist(wizard, tabsIconLeft);
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_ICON_POS, "left");
+		assertAttrExists(wizard, ATTR_CLASS, tabsIconLeft);
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_ICON_POS, "");
+		assertTextDoesNotExist(wizard, tabsIconLeft);
+
+		assertTextDoesNotExist(wizard, CLASS_TABS_ITEM_HIDE);
+		wizardPage.setEditorValue(CLASS_TABS_ITEM_HIDE, TRUE);
+		assertAttrExists(wizard, ATTR_CLASS, CLASS_TABS_ITEM_HIDE);
+		wizardPage.setEditorValue(CLASS_TABS_ITEM_HIDE, FALSE);
+		assertTextDoesNotExist(wizard, CLASS_TABS_ITEM_HIDE);
+
+		compareGeneratedAndInsertedText(wizard);
+	}
+
+	private void compareUIAndNonUIWizards(IDropWizard wizard, String itemName) {
+		String startText = wizard.getWizardModel().getElementGenerator().generateStartTag();
+		String endText = wizard.getWizardModel().getElementGenerator().generateEndTag();
+		PaletteItemResult result = NewIonicWidgetWizard.runWithoutUi(textEditor, getVersion(), itemName);
+		assertNotNull(result);
+		assertEquals(startText, result.getStartText());
+		assertEquals(endText, result.getEndText());
 	}
 
 	public void testPaletteItemsWithoutUI() {

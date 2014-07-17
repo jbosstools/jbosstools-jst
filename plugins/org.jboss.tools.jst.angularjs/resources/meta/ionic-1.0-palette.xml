@@ -25,6 +25,9 @@
     <Icon
      IMAGE="ajnamomhinikjkikiaiaiainmjmimenciaiaiameiaiaiakliiigiaiaiaebdbkolniaiaiaigocmlmhmeiahpiahpiahpcadnchbdiaiaiaijpaminjpdiaiailjdiaiailjdibiabkbmjiiaiaiaihpemjmnmfihfoihidjfllkcdhmkolmgiaiaiafcmjmembneoifognbgcninecnajiiaipacobielgoaiabgmakcjacafjabieimbgaelnjaiikekddaicllnebamacipnbimhkiacfedeenmlplchfkfhcelpbhpofhachmfaclhlicgdefkjnepjdoflpbnogllnipbkdapofompklljepompncjhnnohlioajmcjebcnmmdbkbipncdgkeifijaafjinfcdokneonaimcamcknblfcklgmejeocneanckkdcdjaafjinfjbjbbbikiilopiccdchmlbmlneeighknfiicnjfmipafhffafgdbikkfglipoaifimdlfcbhlckbmlgaikfmabbnmcdommaanhfmeoabnbblafaelpankijoepaamnnmlliaepkoppbkmfjcgginhkdflpjoeijibaaiiaiaiaiamjmfmomecomcoaac"
      NAME="list" SCOPE="project" model-entity="SharableIcon"/>
+    <Icon
+     IMAGE="ajnamomhinikjkikiaiaiainmjmimenciaiaiameiaiaiakliiigiaiaiaebdbkolniaiaiaigocmlmhmeiahpiahpiahpcadnchbdiaiaiaijpaminjpdiaiailjdiaiailjdibiabkbmjiiaiaiaihpemjmnmfihfoihjajgkjjocallkblkiaiaiblkmjmembneoifognbjdnmoicmbjemgipjljkhakfkidblfhgpgkgbknabaoaibananafbcnanlfifibaoaecidhaienioiocgjkdnanincmaefilmiockemkidpbongokgedjkmdedholahjmodfplkhllllpdhgblmmlcilocadmcfckpcilgbpecnnhglhpndmmipeemeflecmdplmbmgncebphkgnolgcodindemikememckememckememckememckememckememckememckememckemelicepcaebiegfbbpjcdcepijibbiimjljlhhahcnohgagpibpebecghpgkmkaibgmmdggimhbfjckcaejahojdggofkaefimkgnkfahhfpboaafmkekeeimieoiplaidmobnpkiphiicegeabbffgoaaphplkgheljkbibpaicmmbmhglgnaiglkeablffjheajfnahcpfejfmnilcngngnlllgnfbceeleafcconleaiihiiagopnjehcijbmidihmaencjaheadfmjojllijajliigdopnfiofgcheabcbkfoajaolcliapdmlfaofmmgejmgiokopjckcphhmicilgcmbbepjcpnfdhiaiaiaiamjmfmomecomcoaac"
+     NAME="tabs" SCOPE="project" model-entity="SharableIcon"/>
    </Icons>
   </Icons>
 	</XStudioIcons>
@@ -68,6 +71,12 @@
       <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Footer Bar:&lt;/b>&lt;br>\n&lt;code>&amp;lt;ion-footer-bar class=&quot;bar-positive&quot;>&lt;/code>&lt;br>\n...&lt;br>\n&lt;code>&amp;lt;/ion-footer-bar>&lt;/code>\n&lt;/html>"
                  ENDTEXT="" ICON="%Icons%/Mobile/jQuery/footer" 
                  NAME="4.Footer Bar" REFORMAT="yes" SCOPE="project"
+                 STARTTEXT="&lt;ion-footer-bar class=&quot;bar-positive&quot;>\n\t&lt;button >Cancel&lt;/button>\n\t&lt;h1>Edit Contact&lt;/h1>\n\t&lt;a href=&quot;index.html&quot; >Save&lt;/a>\n&lt;/ion-footer-bar>"
+                 model-entity="SharableMacroHTML"/>
+
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Footer Bar:&lt;/b>&lt;br>\n&lt;code>&amp;lt;ion-footer-bar class=&quot;bar-positive&quot;>&lt;/code>&lt;br>\n...&lt;br>\n&lt;code>&amp;lt;/ion-footer-bar>&lt;/code>\n&lt;/html>"
+                 ENDTEXT="" ICON="%Icons%/Mobile/Ionic/tabs" 
+                 NAME="5.Tabs" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;ion-footer-bar class=&quot;bar-positive&quot;>\n\t&lt;button >Cancel&lt;/button>\n\t&lt;h1>Edit Contact&lt;/h1>\n\t&lt;a href=&quot;index.html&quot; >Save&lt;/a>\n&lt;/ion-footer-bar>"
                  model-entity="SharableMacroHTML"/>
      </GroupHTML>

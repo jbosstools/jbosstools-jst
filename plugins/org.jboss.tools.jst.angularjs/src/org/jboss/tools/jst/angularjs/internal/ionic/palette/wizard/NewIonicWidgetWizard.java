@@ -15,7 +15,9 @@ import java.io.File;
 import org.jboss.tools.common.model.options.SharableConstants;
 import org.jboss.tools.common.model.ui.editors.dnd.IDropCommand;
 import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.ElementNode;
+import org.jboss.tools.common.model.ui.internal.editors.PaletteItemResult;
 import org.jboss.tools.jst.angularjs.AngularJsPlugin;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.MobilePaletteInsertHelper;
 import org.jboss.tools.jst.web.ui.internal.preferences.js.PreferredJSLibVersions;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
@@ -167,7 +169,7 @@ public abstract class NewIonicWidgetWizard<P extends NewIonicWidgetWizardPage> e
 	 * @param item
 	 * @return
 	 */
-//	public static PaletteItemResult runWithoutUi(JSPTextEditor textEditor, JQueryMobileVersion version, String item) {
-//		return runWithoutUi(textEditor, JQueryConstants.JQM_CATEGORY, version.toString(), item);
-//	}
+	public static PaletteItemResult runWithoutUi(JSPTextEditor textEditor, IonicVersion version, String item) {
+		return runWithoutUi(textEditor, IonicConstants.IONIC_CATEGORY, version.toString(), item);
+	}
 }

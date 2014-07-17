@@ -28,11 +28,16 @@ public interface IonicConstants extends HTMLConstants {
 	public String TAG_ION_FOOTER_BAR = "ion-footer-bar";
 	public String TAG_ION_HEADER_BAR = "ion-header-bar";
 	public String TAG_ION_SCROLL = "ion-scroll";
+	public String TAG_ION_TABS = "ion-tabs";
+	public String TAG_ION_TAB = "ion-tab";
 
 	public String ATTR_ALIGN_TITLE = "align-title";
 	public String ATTR_DELEGATE_HANDLE = "delegate-handle";
 	public String ATTR_DIRECTION = "direction";
 	public String ATTR_HAS_BOUNCING = "has-bouncing";
+	public String ATTR_ICON = "icon";
+	public String ATTR_ICON_OFF = "icon-off";
+	public String ATTR_ICON_ON = "icon-on";
 	public String ATTR_MAX_ZOOM = "max-zoom";
 	public String ATTR_MIN_ZOOM = "min-zoom";
 	public String ATTR_NG_CLICK = "ng-click";
@@ -47,6 +52,7 @@ public interface IonicConstants extends HTMLConstants {
 	public String ATTR_SCROLLBAR_X = "scrollbar-x";
 	public String ATTR_SCROLLBAR_Y = "scrollbar-y";
 	public String ATTR_START_Y = "start-y";
+	public String ATTR_TITLE = TAG_TITLE;
 	public String ATTR_ZOOMING = "zooming";
 
 	public String CLASS_BAR_POSITIVE = "bar-positive";
@@ -55,9 +61,11 @@ public interface IonicConstants extends HTMLConstants {
 	public String CLASS_BUTTON = "button";
 	public String CLASS_BUTTONS = "buttons";
 	public String CLASS_ICON = "icon";
+	public String CLASS_TABS_ITEM_HIDE = "tabs-item-hide";
 	public String CLASS_TITLE = "title";
 
 	public String EDITOR_ID_BAR_COLOR = "bar-color";
 	public String EDITOR_ID_LEFT_BUTTON_CLICK = "left-button-click";
 	public String EDITOR_ID_RIGHT_BUTTON_CLICK = "right-button-click";
+	public String EDITOR_ID_TABS_COLOR = "tabs-color";
 }

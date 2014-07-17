@@ -25,6 +25,9 @@
       <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/4.Footer_Bar" 
       	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewFooterBarWizard" 
       	keywords="footer bar"/>
+      <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/5.Tabs" 
+      	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTabsWizard" 
+      	keywords="tab tabs"/>
    </extension>
 
    <extension
