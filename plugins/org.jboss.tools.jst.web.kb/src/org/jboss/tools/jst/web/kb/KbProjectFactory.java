@@ -18,7 +18,11 @@ import org.eclipse.core.internal.events.InternalBuilder;
 import org.eclipse.core.internal.resources.BuildConfiguration;
 import org.eclipse.core.resources.IBuildConfiguration;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.QualifiedName;
@@ -91,6 +95,9 @@ public class KbProjectFactory {
 		mock.setMock();
 		mock.setProject(project);
 		mockProjectStore.put(project, mock);
+		if(deleteProjectListener == null) {
+			ResourcesPlugin.getWorkspace().addResourceChangeListener(deleteProjectListener = new RCL());
+		}
 		class KbBuilderEx extends KbBuilder {
 			protected KbProject getKbProject() {
 				return mock;
@@ -133,5 +140,20 @@ public class KbProjectFactory {
 		} catch (Exception e) {
 			WebModelPlugin.getPluginLog().logError(e);
 		}
+	}
+
+	private static IResourceChangeListener deleteProjectListener = null;
+	private static class RCL implements IResourceChangeListener {
+
+		public void resourceChanged(IResourceChangeEvent event) {
+			if(event.getType() == IResourceChangeEvent.PRE_DELETE) {
+				IResource resource = event.getResource();
+				IProject project = (IProject)resource.getAdapter(IProject.class);
+				if(project != null) {
+					mockProjectStore.remove(project);
+				}
+			}
+		}
+		
 	}
 }
