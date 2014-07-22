@@ -61,6 +61,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMText;
 import org.eclipse.wst.xml.ui.internal.provisional.IDOMSourceEditingTextTools;
+import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.meta.action.XActionInvoker;
 import org.jboss.tools.common.meta.action.impl.handlers.DefaultCreateHandler;
 import org.jboss.tools.common.model.XModel;
@@ -84,6 +85,8 @@ import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.PaletteTaglibIns
 import org.jboss.tools.jst.web.ui.internal.editor.messages.JstUIMessages;
 import org.jboss.tools.jst.web.ui.internal.editor.util.Constants;
 import org.jboss.tools.jst.web.ui.internal.editor.util.FaceletsUtil;
+import org.jboss.tools.jst.web.kb.IXmlContext;
+import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.project.WebProject;
 import org.jboss.tools.jst.web.project.list.IWebPromptingProvider;
 import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
@@ -676,43 +679,37 @@ public class ExternalizeStringsUtils {
 	 * @return the jsf core taglib prefix
 	 */
 	public static String registerMessageTaglib(ITextEditor editor) {
-		List<TaglibData> taglibs = null;
+		Set<String> taglibs = null;
 		String jsfCoreTaglibPrefix = "f"; //$NON-NLS-1$
 		if (editor instanceof JSPMultiPageEditor) {
 			StructuredTextEditor ed = ((JSPMultiPageEditor) editor).getSourceEditor();
 			if (ed instanceof JSPTextEditor) {
-				IVisualContext context =  ((JSPTextEditor) ed).getPageContext();
-				if (context instanceof SourceEditorPageContext) {
-					SourceEditorPageContext sourcePageContext = (SourceEditorPageContext) context;
-					taglibs = sourcePageContext.getTagLibs();
-					if (null == taglibs) {
-						WebUiPlugin.getDefault().logError(
-								JstUIMessages.CANNOT_LOAD_TAGLIBS_FROM_PAGE_CONTEXT);
-					} else {
-						boolean isJsfCoreTaglibRegistered = false;
-						for (TaglibData tl : taglibs) {
-							if (DropURI.JSF_CORE_URI.equalsIgnoreCase(tl.getUri())) {
-								isJsfCoreTaglibRegistered = true;
-								jsfCoreTaglibPrefix = tl.getPrefix();
-								break;
-							}
+				ELContext context = PageContextFactory.getInstance().createPageContext(ed.getTextViewer().getDocument());
+				if (context instanceof IXmlContext) {
+					IXmlContext xmlPageContext = (IXmlContext) context;
+					taglibs = xmlPageContext.getURIs();
+					boolean isJsfCoreTaglibRegistered = false;
+					for (String tl : taglibs) {
+						if (DropURI.JSF_CORE_URI.equalsIgnoreCase(tl)) {
+							isJsfCoreTaglibRegistered = true;
+							break;
 						}
-						if (!isJsfCoreTaglibRegistered) {
-							/*
-							 * Register the required taglib
-							 */
-							PaletteTaglibInserter PaletteTaglibInserter = new PaletteTaglibInserter();
-							Properties p = new Properties();
-							p.put("selectionProvider", editor.getSelectionProvider()); //$NON-NLS-1$
-							p.setProperty(URIConstants.LIBRARY_URI, DropURI.JSF_CORE_URI);
-							p.setProperty(URIConstants.LIBRARY_VERSION, ""); //$NON-NLS-1$
-							p.setProperty(URIConstants.DEFAULT_PREFIX, jsfCoreTaglibPrefix);
-							p.setProperty(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB, "true"); //$NON-NLS-1$
-							p.setProperty(JSPPaletteInsertHelper.PROPERTY_REFORMAT_BODY, "yes"); //$NON-NLS-1$
-							p.setProperty(PaletteInsertHelper.PROPERTY_START_TEXT, 
-									"<%@ taglib uri=\"http://java.sun.com/jsf/core\" prefix=\"f\" %>\\n"); //$NON-NLS-1$
-							PaletteTaglibInserter.inserTaglib(ed.getTextViewer().getDocument(), p);
-						}
+					}
+					if (!isJsfCoreTaglibRegistered) {
+						/*
+						 * Register the required taglib
+						 */
+						PaletteTaglibInserter PaletteTaglibInserter = new PaletteTaglibInserter();
+						Properties p = new Properties();
+						p.put("selectionProvider", editor.getSelectionProvider()); //$NON-NLS-1$
+						p.setProperty(URIConstants.LIBRARY_URI, DropURI.JSF_CORE_URI);
+						p.setProperty(URIConstants.LIBRARY_VERSION, ""); //$NON-NLS-1$
+						p.setProperty(URIConstants.DEFAULT_PREFIX, jsfCoreTaglibPrefix);
+						p.setProperty(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB, "true"); //$NON-NLS-1$
+						p.setProperty(JSPPaletteInsertHelper.PROPERTY_REFORMAT_BODY, "yes"); //$NON-NLS-1$
+						p.setProperty(PaletteInsertHelper.PROPERTY_START_TEXT, 
+								"<%@ taglib uri=\"http://java.sun.com/jsf/core\" prefix=\"f\" %>\\n"); //$NON-NLS-1$
+						PaletteTaglibInserter.inserTaglib(ed.getTextViewer().getDocument(), p);
 					}
 				}
 			}
