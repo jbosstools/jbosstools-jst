@@ -125,7 +125,7 @@ public class PreferredJSLibVersions implements IPreferredJSLibVersion {
 			if(lib.getVersions().isEmpty()) continue;
 			String libName = lib.getName();
 			boolean enabled = true;
-			if(libName.equals(JQueryCategoryFilter.CATEGORY_JQM)) {
+			if(libName.equals(JQueryCategoryFilter.JQ_CATEGORY)) {
 				enabled = f == null || !JQueryRecognizer.containsJQueryJSReference(f);
 			} else if(libName.equals(JQueryConstants.JQM_CATEGORY)) {
 				enabled = f == null || JQueryMobileRecognizer.getVersion(f) == null;
@@ -152,7 +152,7 @@ public class PreferredJSLibVersions implements IPreferredJSLibVersion {
 			}
 			String mask = null;
 			boolean add = false;
-			if(libName.equals(JQueryCategoryFilter.CATEGORY_JQM)) {
+			if(libName.equals(JQueryCategoryFilter.JQ_CATEGORY)) {
 				if(version instanceof JQueryMobileVersion) add = true;
 				mask = version == JQueryMobileVersion.JQM_1_3 ? "1.9." : "2.0.";
 			} else if(libName.equals(JQueryConstants.JQM_CATEGORY)) {

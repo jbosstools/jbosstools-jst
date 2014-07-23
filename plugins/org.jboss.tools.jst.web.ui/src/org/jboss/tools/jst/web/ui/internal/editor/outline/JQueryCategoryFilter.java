@@ -25,7 +25,7 @@ import org.jboss.tools.jst.web.kb.taglib.IAttribute;
  *
  */
 public class JQueryCategoryFilter implements ICategoryFilter {
-	public static final String CATEGORY_JQM = "jQuery";
+	public static final String JQ_CATEGORY = "jQuery";
 	Set<String> jQueryAttrs = new HashSet<String>();
 
 	static final Set<String> STRUCTURAL_ATTRIBUTES = new HashSet<String>();
@@ -51,7 +51,7 @@ public class JQueryCategoryFilter implements ICategoryFilter {
 
 	@Override
 	public String getCategory(String attributeName) {
-		return (jQueryAttrs.contains(attributeName)) ? CATEGORY_JQM : null;
+		return (jQueryAttrs.contains(attributeName)) ? JQ_CATEGORY : null;
 	}
 
 	@Override

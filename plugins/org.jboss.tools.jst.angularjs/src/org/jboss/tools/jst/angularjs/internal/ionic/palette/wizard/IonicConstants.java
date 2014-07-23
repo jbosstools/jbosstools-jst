@@ -32,6 +32,8 @@ public interface IonicConstants extends HTMLConstants {
 	public String TAG_ION_TAB = "ion-tab";
 
 	public String ATTR_ALIGN_TITLE = "align-title";
+	public String ATTR_BADGE = "badge";
+	public String ATTR_BADGE_STYLE = "badge-style";
 	public String ATTR_DELEGATE_HANDLE = "delegate-handle";
 	public String ATTR_DIRECTION = "direction";
 	public String ATTR_HAS_BOUNCING = "has-bouncing";
@@ -45,6 +47,8 @@ public interface IonicConstants extends HTMLConstants {
 	public String ATTR_ON_REFRESH = "on-refresh";
 	public String ATTR_ON_SCROLL = "on-scroll";
 	public String ATTR_ON_SCROLL_COMPLETE = "on-scroll-complete";
+	public String ATTR_ON_SELECT = "on-select";
+	public String ATTR_ON_DESELECT = "on-deselect";
 	public String ATTR_OVERFLOW_SCROLL = "overflow-scroll";
 	public String ATTR_PADDING = "padding";
 	public String ATTR_PAGING = "paging";

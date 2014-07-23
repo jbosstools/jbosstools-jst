@@ -36,7 +36,7 @@ public class PaletteViewer extends org.eclipse.gef.ui.palette.PaletteViewer {
 
 	public PaletteViewer(IPalettePageAdapter viewPart, PaletteModel model) {
 		this.viewPart = viewPart;
-		if(model.getType().equals(PaletteModel.TYPE_MOBILE)){
+		if(model.getType().equals(PaletteModel.TYPE_HTML5)){
 			setEditPartFactory(new MobilePaletteEditPartFactory());
 		}else{
 			setEditPartFactory(new CustomPaletteEditPartFactory());

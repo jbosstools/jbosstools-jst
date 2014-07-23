@@ -32,19 +32,30 @@ public class IonicWizardMessages extends NLS {
 
 	public static String newTabsWizardDescription;
 
+	public static String newTabTitle;
+	public static String newTabDescription;
+
+	public static String versionPageDescription;
+
 	public static String alignTitleLabel;
+	public static String badgeLabel;
+	public static String badgeStyleLabel;
 	public static String barColorLabel;
 	public static String delegateHandleLabel;
 	public static String directionLabel;
 	public static String hasBouncingLabel;
 	public static String hideTabbarLabel;
+	public static String iconOffLabel;
+	public static String iconOnLabel;
 	public static String minZoomLabel;
 	public static String maxZoomLabel;
 	public static String ngClickLabel;
 	public static String noTapScrollLabel;
+	public static String ondeselectLabel;
 	public static String onrefreshLabel;
 	public static String onscrollLabel;
 	public static String onscrollCompleteLabel;
+	public static String onselectLabel;
 	public static String overflowScrollLabel;
 	public static String paddingLabel;
 	public static String pagingLabel;
@@ -75,6 +86,13 @@ public class IonicWizardMessages extends NLS {
 	public static String scrollPagingDescription;
 	public static String scrollRefreshDescription;
 	public static String scrollZoomingDescription;
+	public static String tabBadgeDescription;
+	public static String tabBadgeStyleDescription;
+	public static String tabIconDescription;
+	public static String tabIconOffDescription;
+	public static String tabIconOnDescription;
+	public static String tabOnDeselectDescription;
+	public static String tabOnSelectDescription;
 	public static String tabTitleDescription;
 	public static String tabsHideTabbarDescription;
 

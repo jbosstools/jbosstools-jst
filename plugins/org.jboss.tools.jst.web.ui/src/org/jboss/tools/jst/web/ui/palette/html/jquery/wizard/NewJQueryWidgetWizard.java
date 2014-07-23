@@ -51,6 +51,7 @@ public abstract class NewJQueryWidgetWizard<P extends NewJQueryWidgetWizardPage>
 	protected void doAddPages() {
 		super.doAddPages();
 		versionPage = new JQueryVersionPage("jQueryVersion", "Add References to JS/CSS");
+		versionPage.setDescription(WizardDescriptions.versionPage);
 		addPage(versionPage);
 	}
 

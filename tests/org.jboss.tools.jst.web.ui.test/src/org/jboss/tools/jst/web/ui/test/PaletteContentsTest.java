@@ -6,6 +6,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.ui.IEditorPart;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.PagePaletteContents;
+import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
 import org.jboss.tools.test.util.WorkbenchUtils;
 
 import junit.framework.TestCase;
@@ -33,7 +34,7 @@ public class PaletteContentsTest extends TestCase {
 		PagePaletteContents p = new PagePaletteContents(editor);
 		String[] x = p.getNatureTypes();
 		assertEquals(1, x.length);
-		assertEquals(PagePaletteContents.TYPE_MOBILE, x[0]);
+		assertEquals(PaletteModel.TYPE_HTML5, x[0]);
 	}
 
 	public void testJSFPalette() {

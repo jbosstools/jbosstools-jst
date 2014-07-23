@@ -103,7 +103,7 @@ public class JSLibFactory {
 		if(defaultModel != null) return;
 		JSLibModel model = new JSLibModel();
 
-		JSLib jQuery = model.getOrCreateLib(JQueryCategoryFilter.CATEGORY_JQM);
+		JSLib jQuery = model.getOrCreateLib(JQueryCategoryFilter.JQ_CATEGORY);
 		String[] jQueryVersions = {"1.9.1", "1.10.2", "1.11.1", "2.0.1", "2.0.3", "2.1.0", "2.1.1"};
 		for (String s: jQueryVersions) {
 			jQuery.getOrCreateVersion(s).getURLs().add("http://code.jquery.com/jquery-" + s + ".min.js");

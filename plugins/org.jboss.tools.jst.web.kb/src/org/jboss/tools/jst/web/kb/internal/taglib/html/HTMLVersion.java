@@ -9,7 +9,7 @@ n * List of HTML versions supported by Palette.
  * @author slava
  *
  */
-public enum HTMLVersion {
+public enum HTMLVersion implements IHTMLLibraryVersion {
 	HTML_5_0("5.0");
 
 	String version;
