@@ -10,6 +10,8 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard;
 
+import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
+
 /**
  * List of Ionic versions supported by Palette.
  * When adding a new version, we should create palette subcategory 
@@ -19,7 +21,7 @@ package org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard;
  * @author Viacheslav Kabanovich
  *
  */
-public enum IonicVersion {
+public enum IonicVersion implements IHTMLLibraryVersion {
 	IONIC_1_0("1.0");
 
 	public static final IonicVersion[] ALL_VERSIONS = {IONIC_1_0};

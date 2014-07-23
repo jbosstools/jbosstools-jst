@@ -30,6 +30,7 @@ import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator;
 import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
 import org.jboss.tools.common.refactoring.MarkerResolutionUtils;
 import org.jboss.tools.jst.web.kb.internal.JQueryRecognizer;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.internal.preferences.js.PreferredJSLibVersions;
@@ -103,7 +104,7 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 		IFile file = MarkerResolutionUtils.getFile();
 		
 		if(insert || (p.containsKey(PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS)/* && !JQueryRecognizer.containsJQueryJSReference(file)*/)) {
-			insertJsCss(v, p.get(PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS));
+			insertJsCss(v, (IHTMLLibraryVersion)p.get(PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS));
 			if(insert){
 				texts[0] = "";	
 			}
@@ -319,7 +320,7 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 		return number;
 	}
 	
-	private void insertJsCss(ISourceViewer viewer, Object version) {
+	private void insertJsCss(ISourceViewer viewer, IHTMLLibraryVersion version) {
 		IDocument document = viewer.getDocument();
 		
 		IStructuredModel model = null;

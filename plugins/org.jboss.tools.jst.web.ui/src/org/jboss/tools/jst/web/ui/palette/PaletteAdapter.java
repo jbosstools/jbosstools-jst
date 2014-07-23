@@ -79,7 +79,7 @@ public class PaletteAdapter implements IPaletteAdapter {
 	}
 	
 	private boolean isMobile(){
-		return model.getType().equals(PaletteModel.TYPE_MOBILE);
+		return model.getType().equals(PaletteModel.TYPE_HTML5);
 	}
 	
 	private SearchPattern pattern = new SearchPattern();

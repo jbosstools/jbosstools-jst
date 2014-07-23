@@ -70,7 +70,7 @@ public class PagePaletteContents extends PaletteContents {
 		boolean result = false;
 		IFile file = getFile();
 		String[] types = getNatureTypes();
-		if(types.length > 0 && TYPE_MOBILE.equals(types[0])) {
+		if(types.length > 0 && PaletteModel.TYPE_HTML5.equals(types[0])) {
 			if(file != null) {
 				for (String categoryName: categoryVersions.keySet()) {
 					CategoryVersion v = categoryVersions.get(categoryName);

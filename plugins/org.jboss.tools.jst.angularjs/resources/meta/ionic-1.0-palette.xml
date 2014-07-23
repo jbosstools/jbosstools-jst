@@ -28,6 +28,9 @@
     <Icon
      IMAGE="ajnamomhinikjkikiaiaiainmjmimenciaiaiameiaiaiakliiigiaiaiaebdbkolniaiaiaigocmlmhmeiahpiahpiahpcadnchbdiaiaiaijpaminjpdiaiailjdiaiailjdibiabkbmjiiaiaiaihpemjmnmfihfoihjajgkjjocallkblkiaiaiblkmjmembneoifognbjdnmoicmbjemgipjljkhakfkidblfhgpgkgbknabaoaibananafbcnanlfifibaoaecidhaienioiocgjkdnanincmaefilmiockemkidpbongokgedjkmdedholahjmodfplkhllllpdhgblmmlcilocadmcfckpcilgbpecnnhglhpndmmipeemeflecmdplmbmgncebphkgnolgcodindemikememckememckememckememckememckememckememckememckemelicepcaebiegfbbpjcdcepijibbiimjljlhhahcnohgagpibpebecghpgkmkaibgmmdggimhbfjckcaejahojdggofkaefimkgnkfahhfpboaafmkekeeimieoiplaidmobnpkiphiicegeabbffgoaaphplkgheljkbibpaicmmbmhglgnaiglkeablffjheajfnahcpfejfmnilcngngnlllgnfbceeleafcconleaiihiiagopnjehcijbmidihmaencjaheadfmjojllijajliigdopnfiofgcheabcbkfoajaolcliapdmlfaofmmgejmgiokopjckcphhmicilgcmbbepjcpnfdhiaiaiaiamjmfmomecomcoaac"
      NAME="tabs" SCOPE="project" model-entity="SharableIcon"/>
+    <Icon
+     IMAGE="ajnamomhinikjkikiaiaiainmjmimenciaiaiameiaiaiakliiigiaiaiaebdbkolniaiaiaigocmlmhmeiahpiahpiahpcadnchbdiaiaiaijpaminjpdiaiailjdiaiailjdibiabkbmjiiaiaiaihpemjmnmfihfoihjajgkijkdomnfeociaiaibimmjmembneoifognbilpioibmbjmmgbpenlgdiaebcfgifpejcjcafaeacmgalmegnikkeiogaiejekemkahnakkcibmmakdjbindbbkkjagieanfnjnfjgpnfdlldejhmpjhlenomhcidhbmekkgmijhccnmfhaelhbhghdogciolhgcddadojknhpolcmopndiiopncnboioajaemiaiaemiaiaemiaiaemiaiaemiaiaemiaiaemiaiaemiaiaeiialmimkainbbehohomkeikheckojkllkloelhollmdnjhfkmlfnkbdknepfcjdoehffkdccaeiikbmeicijgcbkfiphoacdkjpnhpgpijaiknkbbokdpcgoeaibkinlgnkdgaimomabocfcjcgcibkfoaohhfhhabimlaialgmjjbfcldejdibkdgblffbplgepjjgabcjekbkhcaikoeabbkffjoiannkdcfjpofmcgckojamnaabjmjeahecfkpihjmmnaclkhkipijgbkeippokekpdbmagihodpiaiaiaiamjmfmomecomcoaac"
+     NAME="tab" SCOPE="project" model-entity="SharableIcon"/>
    </Icons>
   </Icons>
 	</XStudioIcons>
@@ -78,6 +81,12 @@
                  ENDTEXT="" ICON="%Icons%/Mobile/Ionic/tabs" 
                  NAME="5.Tabs" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;ion-footer-bar class=&quot;bar-positive&quot;>\n\t&lt;button >Cancel&lt;/button>\n\t&lt;h1>Edit Contact&lt;/h1>\n\t&lt;a href=&quot;index.html&quot; >Save&lt;/a>\n&lt;/ion-footer-bar>"
+                 model-entity="SharableMacroHTML"/>
+
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Tab:&lt;/b>&lt;br>\n&lt;code>&amp;lt;ion-tab class=&quot;bar-positive&quot;>&lt;/code>&lt;br>\n...&lt;br>\n&lt;code>&amp;lt;/ion-tab>&lt;/code>\n&lt;/html>"
+                 ENDTEXT="" ICON="%Icons%/Mobile/Ionic/tab" 
+                 NAME="6.Tab" REFORMAT="yes" SCOPE="project"
+                 STARTTEXT="&lt;ion-tab class=&quot;bar-positive&quot;>\n&lt;/ion-tab>"
                  model-entity="SharableMacroHTML"/>
      </GroupHTML>
 

@@ -265,6 +265,8 @@ public class WizardDescriptions extends NLS {
 	public static String transition;
 	public static String transitionReverse;
 
+	public static String versionPage;
+
 	public static String videoAutoplay;
 	public static String videoControls;
 	public static String videoHeight;

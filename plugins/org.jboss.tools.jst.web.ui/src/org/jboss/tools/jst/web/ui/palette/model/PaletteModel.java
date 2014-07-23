@@ -41,7 +41,7 @@ import org.jboss.tools.common.model.ui.views.palette.editor.PaletteEditor;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.PagePaletteContents;
 
 public class PaletteModel {
-	public static String TYPE_MOBILE = PaletteContents.TYPE_MOBILE;
+	public static String TYPE_HTML5 = PaletteContents.TYPE_MOBILE;
 	public static String TYPE_JSF = PaletteContents.TYPE_JSF;
 	
 	private static Map<String, PaletteModel> instances = new HashMap<String, PaletteModel>();
@@ -60,7 +60,7 @@ public class PaletteModel {
 
 	private PaletteEditor editor = new PaletteEditor();
 	private PaletteRoot paletteRoot = null;
-	private String type = TYPE_MOBILE;
+	private String type = TYPE_HTML5;
 
 	PagePaletteContents contents = null;
 
@@ -74,7 +74,7 @@ public class PaletteModel {
 	public static final PaletteModel getInstance(PagePaletteContents contents) {
 		String[] natures = contents.getNatureTypes();
 		boolean jsf = natures != null && natures.length > 0 && natures[0].equals(TYPE_JSF);
-		String type = jsf ? TYPE_JSF : TYPE_MOBILE;
+		String type = jsf ? TYPE_JSF : TYPE_HTML5;
 		String code = type;
 		IFile file = contents.getFile();
 		if(!jsf && file != null) {
@@ -147,8 +147,8 @@ public class PaletteModel {
 			boolean isHidden = XModelObjectConstants.YES.equals(c.getAttributeValue(SharableConstants.ATTR_HIDDEN));
 			if(isRoot) {
 				String name = c.getAttributeValue(XModelObjectConstants.ATTR_NAME);
-				boolean m1 = name.toLowerCase().equals(TYPE_MOBILE);
-				boolean m2 = type.equals(TYPE_MOBILE);
+				boolean m1 = name.toLowerCase().equals(TYPE_HTML5);
+				boolean m2 = type.equals(TYPE_HTML5);
 				if(m1 != m2) continue;
 				if(isHidden && !m1) {
 					continue;

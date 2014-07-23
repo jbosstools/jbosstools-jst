@@ -51,6 +51,7 @@ public abstract class NewIonicWidgetWizard<P extends NewIonicWidgetWizardPage> e
 	protected void doAddPages() {
 		super.doAddPages();
 		versionPage = new IonicVersionPage("ionicVersion", "Add References to JS/CSS");
+		versionPage.setDescription(IonicWizardMessages.versionPageDescription);
 		addPage(versionPage);
 	}
 

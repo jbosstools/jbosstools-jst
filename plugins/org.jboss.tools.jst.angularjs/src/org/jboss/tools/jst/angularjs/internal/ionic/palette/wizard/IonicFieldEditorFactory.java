@@ -26,9 +26,31 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  */
 public class IonicFieldEditorFactory implements IonicConstants {
 
+	/**
+	 * Used in New Tabs and Tab wizard.
+	 * @return
+	 */
 	public static IFieldEditor createIconEditor(String editorID) {
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(editorID, WizardMessages.iconLabel, IonicIconFactory.getInstance().getIcons(), "", true,
-				WizardDescriptions.buttonIcon);
+				IonicWizardMessages.tabIconDescription);
+	}
+
+	/**
+	 * Used in New Tab wizard.
+	 * @return
+	 */
+	public static IFieldEditor createIconOffEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(ATTR_ICON_OFF, IonicWizardMessages.iconOffLabel, IonicIconFactory.getInstance().getIcons(), "", true,
+				IonicWizardMessages.tabIconOffDescription);
+	}
+
+	/**
+	 * Used in New Tab wizard.
+	 * @return
+	 */
+	public static IFieldEditor createIconOnEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(ATTR_ICON_ON, IonicWizardMessages.iconOnLabel, IonicIconFactory.getInstance().getIcons(), "", true,
+				IonicWizardMessages.tabIconOnDescription);
 	}
 
 	/**
@@ -274,6 +296,48 @@ public class IonicFieldEditorFactory implements IonicConstants {
 	public static IFieldEditor createHideTabsEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(CLASS_TABS_ITEM_HIDE, IonicWizardMessages.hideTabbarLabel, false,
 				IonicWizardMessages.tabsHideTabbarDescription);
+	}
+
+	/**
+	 * Used in New Tab wizard.
+	 * @return
+	 */
+	public static IFieldEditor createBadgeEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_BADGE, IonicWizardMessages.badgeLabel, "",
+				IonicWizardMessages.tabBadgeDescription);
+	}
+
+	static String[] BADGE_COLORS = {
+		"", "badge-light", "badge-stable", "badge-positive", "badge-calm", "badge-balanced", "badge-energized", "badge-assertive", "badge-royal", "badge-dark",  
+	};
+
+	static List<String> BADGE_COLOR_LIST = Arrays.asList(BADGE_COLORS);
+
+	/**
+	 * Used in New Tab wizard.
+	 * @return
+	 */
+	public static IFieldEditor createBadgeStyleEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(ATTR_BADGE_STYLE, IonicWizardMessages.badgeStyleLabel, BADGE_COLOR_LIST, "", true,
+				"");
+	}
+
+	/**
+	 * Used in New Tab wizard.
+	 * @return
+	 */
+	public static IFieldEditor createOnDeselectEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_ON_DESELECT, IonicWizardMessages.ondeselectLabel, "",
+				IonicWizardMessages.tabOnDeselectDescription);
+	}
+
+	/**
+	 * Used in New Tab wizard.
+	 * @return
+	 */
+	public static IFieldEditor createOnSelectEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_ON_SELECT, IonicWizardMessages.onselectLabel, "",
+				IonicWizardMessages.tabOnSelectDescription);
 	}
 
 }

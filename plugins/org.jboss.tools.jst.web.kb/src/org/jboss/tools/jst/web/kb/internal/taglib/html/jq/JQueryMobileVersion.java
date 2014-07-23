@@ -10,6 +10,8 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal.taglib.html.jq;
 
+import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
+
 /**
  * List of supported jQuery Mobile versions.
  * 
@@ -23,7 +25,7 @@ package org.jboss.tools.jst.web.kb.internal.taglib.html.jq;
  * 
  * @author Viacheslav Kabanovich
  */
-public enum JQueryMobileVersion {
+public enum JQueryMobileVersion implements IHTMLLibraryVersion {
 	JQM_1_3("1.3", //$NON-NLS-1$
 			"1.3.2", //$NON-NLS-1$
 			"http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css", //$NON-NLS-1$

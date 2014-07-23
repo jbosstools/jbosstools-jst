@@ -32,6 +32,8 @@ import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewIonicWidge
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewIonicWidgetWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewScrollWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewScrollWizardPage;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTabWizard;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTabWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTabsWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTabsWizardPage;
 import org.jboss.tools.jst.jsp.test.palette.AbstractPaletteEntryTest;
@@ -347,6 +349,77 @@ public class IonicPaletteTest extends AbstractPaletteEntryTest implements IonicC
 		assertTextDoesNotExist(wizard, CLASS_TABS_ITEM_HIDE);
 
 		compareGeneratedAndInsertedText(wizard);
+	}
+
+	public void testNewTabWizard() {
+		IWizardPage currentPage = runToolEntry("Tab", true);
+		assertTrue(currentPage instanceof NewTabWizardPage);
+
+		NewTabWizardPage wizardPage = (NewTabWizardPage)currentPage;
+		NewTabWizard wizard = (NewTabWizard)wizardPage.getWizard();
+
+		assertAttrExists(wizard, ATTR_TITLE, "Title");
+		wizardPage.setEditorValue(ATTR_TITLE, "x");
+		assertAttrExists(wizard, ATTR_TITLE, "x");
+		wizardPage.setEditorValue(ATTR_TITLE, "Title");
+
+		assertTextDoesNotExist(wizard, ATTR_HREF);
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_URL, "www");
+		assertAttrExists(wizard, ATTR_HREF, "www");
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_URL, "");
+		assertTextDoesNotExist(wizard, ATTR_HREF);
+
+		assertTextDoesNotExist(wizard, ATTR_ICON);
+		wizardPage.setEditorValue(ATTR_ICON, "ion-alert");
+		assertAttrExists(wizard, ATTR_ICON, "ion-alert");
+		wizardPage.setEditorValue(ATTR_ICON, "");
+		assertTextDoesNotExist(wizard, ATTR_ICON);
+
+		assertTextDoesNotExist(wizard, ATTR_ICON_ON);
+		wizardPage.setEditorValue(ATTR_ICON_ON, "ion-alert");
+		assertAttrExists(wizard, ATTR_ICON_ON, "ion-alert");
+		wizardPage.setEditorValue(ATTR_ICON_ON, "");
+		assertTextDoesNotExist(wizard, ATTR_ICON_ON);
+
+		assertTextDoesNotExist(wizard, ATTR_ICON_OFF);
+		wizardPage.setEditorValue(ATTR_ICON_OFF, "ion-alert");
+		assertAttrExists(wizard, ATTR_ICON_OFF, "ion-alert");
+		wizardPage.setEditorValue(ATTR_ICON_OFF, "");
+		assertTextDoesNotExist(wizard, ATTR_ICON_OFF);
+
+		assertTextDoesNotExist(wizard, ATTR_BADGE);
+		wizardPage.setEditorValue(ATTR_BADGE, "1");
+		assertAttrExists(wizard, ATTR_BADGE, "1");
+		wizardPage.setEditorValue(ATTR_BADGE, "");
+		assertTextDoesNotExist(wizard, ATTR_BADGE);
+
+		assertTextDoesNotExist(wizard, ATTR_BADGE_STYLE);
+		wizardPage.setEditorValue(ATTR_BADGE_STYLE, "tabs-positive");
+		assertAttrExists(wizard, ATTR_BADGE_STYLE, "tabs-positive");
+		wizardPage.setEditorValue(ATTR_BADGE_STYLE, "");
+		assertTextDoesNotExist(wizard, ATTR_BADGE_STYLE);
+
+		assertTextDoesNotExist(wizard, ATTR_ON_SELECT);
+		wizardPage.setEditorValue(ATTR_ON_SELECT, "x()");
+		assertAttrExists(wizard, ATTR_ON_SELECT, "x()");
+		wizardPage.setEditorValue(ATTR_ON_SELECT, "");
+		assertTextDoesNotExist(wizard, ATTR_ON_SELECT);
+
+		assertTextDoesNotExist(wizard, ATTR_ON_DESELECT);
+		wizardPage.setEditorValue(ATTR_ON_DESELECT, "x()");
+		assertAttrExists(wizard, ATTR_ON_DESELECT, "x()");
+		wizardPage.setEditorValue(ATTR_ON_DESELECT, "");
+		assertTextDoesNotExist(wizard, ATTR_ON_DESELECT);
+
+		assertTextDoesNotExist(wizard, ATTR_NG_CLICK);
+		wizardPage.setEditorValue(ATTR_NG_CLICK, "c()");
+		assertAttrExists(wizard, ATTR_NG_CLICK, "c()");
+		wizardPage.setEditorValue(ATTR_NG_CLICK, "");
+		assertTextDoesNotExist(wizard, ATTR_NG_CLICK);
+
+
+		compareUIAndNonUIWizards(wizard, "Tab");
+
 	}
 
 	private void compareUIAndNonUIWizards(IDropWizard wizard, String itemName) {
