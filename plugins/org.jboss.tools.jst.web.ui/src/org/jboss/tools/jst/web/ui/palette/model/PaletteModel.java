@@ -18,6 +18,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.gef.palette.PaletteContainer;
 import org.eclipse.gef.palette.PaletteEntry;
 import org.eclipse.gef.palette.PaletteSeparator;
@@ -26,8 +28,6 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IPartListener;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.jboss.tools.common.meta.action.XActionInvoker;
 import org.jboss.tools.common.model.XModel;
@@ -38,7 +38,9 @@ import org.jboss.tools.common.model.options.SharableConstants;
 import org.jboss.tools.common.model.ui.util.ModelUtilities;
 import org.jboss.tools.common.model.ui.views.palette.PaletteContents;
 import org.jboss.tools.common.model.ui.views.palette.editor.PaletteEditor;
+import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.PagePaletteContents;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
 
 public class PaletteModel {
 	public static String TYPE_HTML5 = PaletteContents.TYPE_MOBILE;
@@ -100,6 +102,9 @@ public class PaletteModel {
 					instances.put(code, instance);
 				}
 			}
+			if(partListener == null) {
+				WebUiPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getPartService().addPartListener(partListener = new PL());
+			}
 			return instance;
 		}
 	}
@@ -108,12 +113,40 @@ public class PaletteModel {
 		IFile file = contents.getFile();
 		if(file != null) {
 			String code = file.getFullPath().toString();
-			PaletteModel instance = instances.remove(code);
-			if(instance != null) {
-				System.out.println("Cleared palette model: " + code);
+			instances.remove(code);
+		}
+
+	}
+
+	static IPartListener partListener = null;
+	private static class PL implements IPartListener {
+
+		@Override
+		public void partActivated(IWorkbenchPart part) {
+			if(part instanceof IEditorPart) {
+				IEditorInput input = ((IEditorPart)part).getEditorInput();
+				if(input instanceof IFileEditorInput) {
+					IFile file = ((IFileEditorInput)input).getFile();
+					PaletteModel instance = instances.get(file.getFullPath().toString());
+					if(instance != null) {
+						instance.getPreferredExpandedCategory();
+					}
+				}
 			}
 		}
 
+		@Override
+		public void partBroughtToTop(IWorkbenchPart part) {}
+
+		@Override
+		public void partClosed(IWorkbenchPart part) {}
+
+		@Override
+		public void partDeactivated(IWorkbenchPart part) {}
+
+		@Override
+		public void partOpened(IWorkbenchPart part) {}
+		
 	}
 
 	public XModel getXModel() {
@@ -199,6 +232,19 @@ public class PaletteModel {
 			i++;
 		}
 		cutOff(paletteRoot, i);
+		if(lastAddedXCat == null) {
+			String preferred = getPreferredExpandedCategory();
+			if(preferred != null) {
+				for (Object c: paletteRoot.getChildren()) {
+					if(c instanceof PaletteCategory) {
+						PaletteCategory cat = (PaletteCategory)c;
+						if(preferred.equals(cat.getLabel())) {
+							cat.setInitialState(PaletteCategory.INITIAL_STATE_OPEN);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	public void reloadCategory(PaletteCategory cat) {
@@ -209,9 +255,6 @@ public class PaletteModel {
 		PaletteCategory cat = new PaletteCategory(xcat, open);
 		cat.setPaletteModel(this);
 		cat.setVisible(isCategoryVisible(cat));
-		if(xcat.getAttributeValue(XModelObjectConstants.ATTR_NAME).startsWith("jQuery")) { //$NON-NLS-1$
-			cat.setInitialState(PaletteCategory.INITIAL_STATE_OPEN);
-		}
 		loadCategory(xcat, cat);
 		return cat;
 	}
@@ -357,4 +400,42 @@ public class PaletteModel {
 		return contents;
 	}
 
+	static String HTML5_EXPANDED_CATEGORY = WebUiPlugin.PLUGIN_ID + ".HTML5_EXPANDED_CATEGORY";
+	static QualifiedName HTML5_EXPANDED_CATEGORY_NAME = new QualifiedName(WebUiPlugin.PLUGIN_ID, "HTML5_EXPANDED_CATEGORY");
+
+	public void onCategoryExpandChange(String name, boolean state) {
+		if(contents != null && type == TYPE_HTML5) {
+			IFile f = contents.getFile();
+			if(state) {
+				try {
+					f.setPersistentProperty(HTML5_EXPANDED_CATEGORY_NAME, name);
+				} catch (CoreException e) {
+					WebUiPlugin.getDefault().logError(e);
+				}
+				WebUiPlugin.getDefault().getPreferenceStore().setValue(HTML5_EXPANDED_CATEGORY, name);
+			}
+		}
+	}
+
+	private String getPreferredExpandedCategory() {
+		if(contents != null && type == TYPE_HTML5) {
+			IFile f = contents.getFile();
+			try {
+				String s = f.getPersistentProperty(HTML5_EXPANDED_CATEGORY_NAME);
+				if(s == null || s.length() == 0) {
+					s = WebUiPlugin.getDefault().getPreferenceStore().getString(HTML5_EXPANDED_CATEGORY);
+					if(s == null || s.length() == 0) {
+						s = JQueryConstants.JQM_CATEGORY;
+					}
+					f.setPersistentProperty(HTML5_EXPANDED_CATEGORY_NAME, s);
+				} else {
+					WebUiPlugin.getDefault().getPreferenceStore().setValue(HTML5_EXPANDED_CATEGORY, s);
+				}
+				return s; 
+			} catch (CoreException e) {
+				WebUiPlugin.getDefault().logError(e);
+			}
+		}
+		return null;
+	}
 }

@@ -58,6 +58,27 @@ class MobileDrawerFigure extends CustomDrawerFigure {
 		}
 	}
 
+	@Override
+	protected void handleExpandStateChanged() {
+		super.handleExpandStateChanged();
+		if(isCalledByButtonModel()) {
+			category.getPaletteModel().onCategoryExpandChange(category.getLabel(), isExpanded());
+		}
+	}
+
+	private boolean isCalledByButtonModel() {
+		boolean buttonModel = false;
+		for (StackTraceElement s: new Throwable().getStackTrace()) {
+			if(ButtonModel.class.getName().endsWith(s.getClassName())) {
+				buttonModel = true;
+			} else if(MobileDrawerEditPart.class.getName().equals(s.getClassName())) {
+				return false;
+			}
+		}
+		return buttonModel;
+		
+	}
+	
 	private Label label = new Label("", JSTWebUIImages.getImage(JSTWebUIImages.getInstance().createImageDescriptor(JSTWebUIImages.DROP_DOWN_LIST_IMAGE)));
 
 	public class VersionFigure extends Clickable{
