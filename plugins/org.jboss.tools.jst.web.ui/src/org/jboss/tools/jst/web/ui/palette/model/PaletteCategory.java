@@ -15,9 +15,11 @@ import org.eclipse.gef.palette.PaletteDrawer;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.XModelObjectConstants;
 import org.jboss.tools.common.model.options.SharableConstants;
+import org.jboss.tools.common.model.ui.image.XModelObjectImageDescriptor;
 
 public class PaletteCategory extends PaletteDrawer implements PaletteXModelObject {
 	private XModelObject xobject;
+	private PaletteModel paletteModel;
 	
 	private String version = null;
 
@@ -31,6 +33,20 @@ public class PaletteCategory extends PaletteDrawer implements PaletteXModelObjec
 		else
 			setInitialState(PaletteDrawer.INITIAL_STATE_CLOSED);
 		setDrawerType(PaletteEntry.PALETTE_TYPE_UNKNOWN);
+		
+
+		if(xobject.getAttributeValue("icon") !=null && xobject.getAttributeValue("icon").length() > 0) {
+			XModelObjectImageDescriptor icon = new XModelObjectImageDescriptor(xobject);
+			setSmallIcon(icon);
+		}
+	}
+
+	public PaletteModel getPaletteModel() {
+		return paletteModel;
+	}
+
+	public void setPaletteModel(PaletteModel paletteModel) {
+		this.paletteModel = paletteModel;
 	}
 	
 	public XModelObject getXModelObject() {

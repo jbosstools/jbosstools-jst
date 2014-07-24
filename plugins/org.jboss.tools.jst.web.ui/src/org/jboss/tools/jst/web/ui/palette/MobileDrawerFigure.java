@@ -57,6 +57,13 @@ class MobileDrawerFigure extends CustomDrawerFigure {
 			title.add(pinFigure);
 		}
 	}
+
+	public void setExpanded(boolean value) {
+		super.setExpanded(value);
+		if(value) {
+		//TODO
+		}
+	}
 	
 	private Label label = new Label("", JSTWebUIImages.getImage(JSTWebUIImages.getInstance().createImageDescriptor(JSTWebUIImages.DROP_DOWN_LIST_IMAGE)));
 
