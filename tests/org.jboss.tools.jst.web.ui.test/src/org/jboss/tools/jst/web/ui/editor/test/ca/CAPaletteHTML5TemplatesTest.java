@@ -10,12 +10,14 @@
  ******************************************************************************/
 package org.jboss.tools.jst.web.ui.editor.test.ca;
 
-import org.jboss.tools.jst.jsp.test.ca.CAMobilePaletteTemplatesTest;
+import org.jboss.tools.jst.jsp.test.ca.CAHtml5PaletteTemplatesTest;
+import org.jboss.tools.jst.web.ui.palette.internal.HtmlPaletteTagLib;
+import org.jboss.tools.jst.web.ui.palette.internal.PaletteTagLibrary;
 
-public class CAMobilePaletteHTML5TemplatesTest extends CAMobilePaletteTemplatesTest {
+public class CAPaletteHTML5TemplatesTest extends CAHtml5PaletteTemplatesTest {
 	private static final String PAGE_NAME = "ca_13_templates.html"; //$NON-NLS-1$
 
-	public CAMobilePaletteHTML5TemplatesTest() {}
+	public CAPaletteHTML5TemplatesTest() {}
 
 	public void testImageByImg() throws Exception {
 		doTestTemplate("", "img", decorateDisplay("Image"), 0);
@@ -38,12 +40,18 @@ public class CAMobilePaletteHTML5TemplatesTest extends CAMobilePaletteTemplatesT
 		doTestTemplate("", "video", decorateDisplay("Video"), 0);
 	}
 
+	@Override
 	protected String getPageName() {
 		return PAGE_NAME;
 	}
 
+	@Override
 	protected String decorateDisplay(String display) {
 		return display + " - HTML 5.0";
 	}
 
+	@Override
+	protected PaletteTagLibrary getTagLib() {
+		return new HtmlPaletteTagLib();
+	}
 }

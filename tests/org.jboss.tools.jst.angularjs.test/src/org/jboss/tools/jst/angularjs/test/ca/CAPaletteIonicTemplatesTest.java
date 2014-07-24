@@ -10,12 +10,14 @@
  ******************************************************************************/
 package org.jboss.tools.jst.angularjs.test.ca;
 
-import org.jboss.tools.jst.jsp.test.ca.CAMobilePaletteTemplatesTest;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.IonicTagLib;
+import org.jboss.tools.jst.jsp.test.ca.CAHtml5PaletteTemplatesTest;
+import org.jboss.tools.jst.web.ui.palette.internal.PaletteTagLibrary;
 
 /**
  * @author Alexey Kazakov
  */
-public class CAMobilePaletteIonicTemplatesTest extends CAMobilePaletteTemplatesTest {
+public class CAPaletteIonicTemplatesTest extends CAHtml5PaletteTemplatesTest {
 
 	@Override
 	protected String getPageName() {
@@ -32,6 +34,11 @@ public class CAMobilePaletteIonicTemplatesTest extends CAMobilePaletteTemplatesT
 
 	public void testScroll() throws Exception {
 		doTestTemplate("", "scroll", decorateDisplay("Scroll"), 0);
+	}
+
+	@Override
+	protected PaletteTagLibrary getTagLib() {
+		return new IonicTagLib();
 	}
 
 	@Override

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 Exadel, Inc. and Red Hat, Inc.
+ * Copyright (c) 2007-2014 Exadel, Inc. and Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -15,9 +15,14 @@ import org.eclipse.gef.palette.PaletteDrawer;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.XModelObjectConstants;
 import org.jboss.tools.common.model.options.SharableConstants;
+import org.jboss.tools.common.model.ui.image.XModelObjectImageDescriptor;
 
 public class PaletteCategory extends PaletteDrawer implements PaletteXModelObject {
+
+	final static String ICON_ATTRIBUTE = "icon"; 
+
 	private XModelObject xobject;
+	private PaletteModel paletteModel;
 	
 	private String version = null;
 
@@ -26,13 +31,28 @@ public class PaletteCategory extends PaletteDrawer implements PaletteXModelObjec
 	public PaletteCategory(XModelObject xobject, boolean open) {
 		super(null);
 		setXModelObject(xobject);
-		if (open)
+		if (open) {
 			setInitialState(PaletteDrawer.INITIAL_STATE_OPEN);
-		else
+		} else {
 			setInitialState(PaletteDrawer.INITIAL_STATE_CLOSED);
+		}
 		setDrawerType(PaletteEntry.PALETTE_TYPE_UNKNOWN);
+
+		if(xobject.getAttributeValue(ICON_ATTRIBUTE) !=null && xobject.getAttributeValue(ICON_ATTRIBUTE).length() > 0) {
+			XModelObjectImageDescriptor icon = new XModelObjectImageDescriptor(xobject);
+			setSmallIcon(icon);
+		}
 	}
-	
+
+	public PaletteModel getPaletteModel() {
+		return paletteModel;
+	}
+
+	public void setPaletteModel(PaletteModel paletteModel) {
+		this.paletteModel = paletteModel;
+	}
+
+	@Override
 	public XModelObject getXModelObject() {
 		return xobject;
 	}

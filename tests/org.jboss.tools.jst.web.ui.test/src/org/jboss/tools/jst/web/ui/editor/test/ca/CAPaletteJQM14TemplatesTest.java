@@ -10,12 +10,14 @@
  ******************************************************************************/
 package org.jboss.tools.jst.web.ui.editor.test.ca;
 
-import org.jboss.tools.jst.jsp.test.ca.CAMobilePaletteTemplatesTest;
+import org.jboss.tools.jst.jsp.test.ca.CAHtml5PaletteTemplatesTest;
+import org.jboss.tools.jst.web.ui.palette.internal.JQMPaletteTagLib14;
+import org.jboss.tools.jst.web.ui.palette.internal.PaletteTagLibrary;
 
-public class CAMobilePaletteJQM14TemplatesTest extends CAMobilePaletteTemplatesTest {
+public class CAPaletteJQM14TemplatesTest extends CAHtml5PaletteTemplatesTest {
 	private static final String PAGE_NAME = "ca_14_templates.html"; //$NON-NLS-1$
 
-	public CAMobilePaletteJQM14TemplatesTest() {}
+	public CAPaletteJQM14TemplatesTest() {}
 
 	public void testPage() throws Exception {
 		doTestTemplate("", "page", decorateDisplay("Page"), 0);
@@ -129,12 +131,18 @@ public class CAMobilePaletteJQM14TemplatesTest extends CAMobilePaletteTemplatesT
 		doTestTemplate("", "input", decorateDisplay("Text Input"), 6);
 	}
 
+	@Override
+	protected PaletteTagLibrary getTagLib() {
+		return new JQMPaletteTagLib14();
+	}
+
+	@Override
 	protected String getPageName() {
 		return PAGE_NAME;
 	}
 
+	@Override
 	protected String decorateDisplay(String display) {
 		return display + " - jQuery Mobile 1.4";
 	}
-
 }

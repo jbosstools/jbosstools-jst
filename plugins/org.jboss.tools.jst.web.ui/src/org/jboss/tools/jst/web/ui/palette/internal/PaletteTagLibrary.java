@@ -34,6 +34,7 @@ public abstract class PaletteTagLibrary extends CustomTagLibrary {
 	protected final static int DEFAULT_GROUP_RELEVANCE = HTML_GROUP_RELEVANCE + 1;
 
 	private static int relevance = DEFAULT_GROUP_RELEVANCE;
+	private ImageDescriptor image = null;
 
 	public PaletteTagLibrary(String name, String uri, String version, String defaultPrefix, Boolean ignoreCase) {
 		setURI(uri);
@@ -111,9 +112,18 @@ public abstract class PaletteTagLibrary extends CustomTagLibrary {
 		return relevance;
 	}
 
-	public abstract ImageDescriptor getImage();
+	public synchronized ImageDescriptor getImage() {
+		if(image==null) {
+			image = PaletteManager.getInstance().getImageDescriptor(getCategory());
+		}
+		return image;
+	}
 
-	public abstract Collection<RunnablePaletteItem> getItems();
+	public Collection<RunnablePaletteItem> getItems() {
+		return PaletteManager.getInstance().getItems(getCategory(), getVersion());
+	}
+
+	protected abstract String getCategory();
 
 	public abstract ITagLibRecognizer getTagLibRecognizer();
 }

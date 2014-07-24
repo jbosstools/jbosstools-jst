@@ -10,13 +10,9 @@
  ******************************************************************************/
 package org.jboss.tools.jst.web.ui.palette.internal;
 
-import java.util.Collection;
-
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.jboss.tools.jst.web.kb.internal.JQueryMobileRecognizer;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibRecognizer;
-import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
 
 /**
@@ -24,7 +20,6 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
  */
 public class JQMPaletteTagLib13 extends PaletteTagLibrary {
 
-	private static final ImageDescriptor IMAGE = ImageDescriptor.createFromFile(WebUiPlugin.class, "jqm.png");
 	private final static int RELEVANCE = generateUniqueRelevance();
 
 	public JQMPaletteTagLib13() {
@@ -34,21 +29,8 @@ public class JQMPaletteTagLib13 extends PaletteTagLibrary {
 		setVersion(version);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.ui.palette.internal.PaletteTagLibrary#getItems()
-	 */
-	@Override
-	public Collection<RunnablePaletteItem> getItems() {
-		return PaletteManager.getInstance().getItems(JQueryConstants.JQM_CATEGORY, getVersion());
-	}
-
 	protected String getJQMVersion() {
 		return JQueryMobileVersion.JQM_1_3.toString();
-	}
-
-	@Override
-	public ImageDescriptor getImage() {
-		return IMAGE;
 	}
 
 	@Override
@@ -59,5 +41,10 @@ public class JQMPaletteTagLib13 extends PaletteTagLibrary {
 	@Override
 	protected int getRelevance() {
 		return RELEVANCE;
+	}
+
+	@Override
+	protected String getCategory() {
+		return JQueryConstants.JQM_CATEGORY;
 	}
 }

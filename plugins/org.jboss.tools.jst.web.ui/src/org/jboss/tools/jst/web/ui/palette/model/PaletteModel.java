@@ -207,6 +207,7 @@ public class PaletteModel {
 	
 	private PaletteCategory createCategory(XModelObject xcat, boolean open) {
 		PaletteCategory cat = new PaletteCategory(xcat, open);
+		cat.setPaletteModel(this);
 		cat.setVisible(isCategoryVisible(cat));
 		if(xcat.getAttributeValue(XModelObjectConstants.ATTR_NAME).startsWith("jQuery")) { //$NON-NLS-1$
 			cat.setInitialState(PaletteCategory.INITIAL_STATE_OPEN);

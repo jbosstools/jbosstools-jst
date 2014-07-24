@@ -21,12 +21,13 @@ import org.eclipse.jface.text.FindReplaceDocumentAdapter;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.jboss.tools.common.base.test.contentassist.CATestUtil;
+import org.jboss.tools.jst.web.ui.palette.internal.PaletteTagLibrary;
 import org.jboss.tools.test.util.ProjectImportTestSetup;
 
-public abstract class CAMobilePaletteTemplatesTest extends ContentAssistantTestCase {
+public abstract class CAHtml5PaletteTemplatesTest extends ContentAssistantTestCase {
 	   private static final String PROJECT_NAME = "SimpleProject"; //$NON-NLS-1$
 
-	public CAMobilePaletteTemplatesTest() {}
+	public CAHtml5PaletteTemplatesTest() {}
 
 	@Override
 	public void setUp() throws Exception {
@@ -41,8 +42,15 @@ public abstract class CAMobilePaletteTemplatesTest extends ContentAssistantTestC
 
 	protected abstract String getPageName();
 
+	protected abstract PaletteTagLibrary getTagLib();
+
 	protected String decorateDisplay(String display) {
 		return display;
+	}
+
+	public void testIcon() {
+		PaletteTagLibrary lib = getTagLib();
+		assertNotNull(lib.getImage());
 	}
 
 	public void doTestTemplate(String prefix, String template, String expectedDisplayString, int expectedIndexInList) throws Exception {

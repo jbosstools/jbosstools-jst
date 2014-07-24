@@ -10,13 +10,9 @@
  ******************************************************************************/
 package org.jboss.tools.jst.web.ui.palette.internal;
 
-import java.util.Collection;
-
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.jboss.tools.jst.web.kb.internal.HTML5Recognizer;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.HTMLVersion;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibRecognizer;
-import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.HTMLConstants;
 
 /**
@@ -24,12 +20,10 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.HTMLConstants;
  */
 public class HtmlPaletteTagLib extends PaletteTagLibrary {
 
-	private static final ImageDescriptor IMAGE = ImageDescriptor.createFromFile(WebUiPlugin.class, "html5.png");
-
 	public HtmlPaletteTagLib() {
 		super(null, "html50", null, "html50palette", true);
 		String version = HTMLVersion.HTML_5_0.toString();
-		this.name = "jQuery Mobile " + version + " templates";
+		this.name = "HTML " + version + " templates";
 		setVersion(version);
 	}
 
@@ -39,26 +33,15 @@ public class HtmlPaletteTagLib extends PaletteTagLibrary {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.ui.palette.internal.PaletteTagLibrary#getImage()
-	 */
-	@Override
-	public ImageDescriptor getImage() {
-		return IMAGE;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.jboss.tools.jst.web.ui.palette.internal.PaletteTagLibrary#getItems()
-	 */
-	@Override
-	public Collection<RunnablePaletteItem> getItems() {
-		return PaletteManager.getInstance().getItems(HTMLConstants.HTML_CATEGORY, getVersion());
-	}
-
-	/* (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.ui.palette.internal.PaletteTagLibrary#getTagLibRecognizer()
 	 */
 	@Override
 	public ITagLibRecognizer getTagLibRecognizer() {
 		return new HTML5Recognizer();
+	}
+
+	@Override
+	protected String getCategory() {
+		return HTMLConstants.HTML_CATEGORY;
 	}
 }

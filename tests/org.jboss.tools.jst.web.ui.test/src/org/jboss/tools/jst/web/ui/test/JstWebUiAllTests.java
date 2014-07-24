@@ -14,9 +14,9 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.jboss.tools.common.base.test.model.XProjectImportTestSetUp;
-import org.jboss.tools.jst.web.ui.editor.test.ca.CAMobilePaletteHTML5TemplatesTest;
-import org.jboss.tools.jst.web.ui.editor.test.ca.CAMobilePaletteJQM13TemplatesTest;
-import org.jboss.tools.jst.web.ui.editor.test.ca.CAMobilePaletteJQM14TemplatesTest;
+import org.jboss.tools.jst.web.ui.editor.test.ca.CAPaletteHTML5TemplatesTest;
+import org.jboss.tools.jst.web.ui.editor.test.ca.CAPaletteJQM13TemplatesTest;
+import org.jboss.tools.jst.web.ui.editor.test.ca.CAPaletteJQM14TemplatesTest;
 import org.jboss.tools.test.util.ProjectImportTestSetup;
 
 /**
@@ -29,9 +29,9 @@ public class JstWebUiAllTests {
 		TestSuite suite = new TestSuite(JstWebUiAllTests.class.getName());
 
 		TestSuite s = new TestSuite("Palette content");
-		s.addTestSuite(CAMobilePaletteJQM14TemplatesTest.class);
-		s.addTestSuite(CAMobilePaletteJQM13TemplatesTest.class);
-		s.addTestSuite(CAMobilePaletteHTML5TemplatesTest.class);
+		s.addTestSuite(CAPaletteJQM14TemplatesTest.class);
+		s.addTestSuite(CAPaletteJQM13TemplatesTest.class);
+		s.addTestSuite(CAPaletteHTML5TemplatesTest.class);
 		s.addTestSuite(JBossToolsEditorTest.class);
 		s.addTestSuite(MobilePaletteInsertPositionTest.class);
 		s.addTestSuite(InsertJSCSSPaletteEntryTest.class);

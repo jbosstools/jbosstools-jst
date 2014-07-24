@@ -10,17 +10,11 @@
  ******************************************************************************/
 package org.jboss.tools.jst.angularjs.internal.ionic.palette;
 
-import java.util.Collection;
-
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.jboss.tools.jst.angularjs.AngularJsPlugin;
 import org.jboss.tools.jst.angularjs.internal.ionic.IonicRecognizer;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.IonicConstants;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.IonicVersion;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibRecognizer;
-import org.jboss.tools.jst.web.ui.palette.internal.PaletteManager;
 import org.jboss.tools.jst.web.ui.palette.internal.PaletteTagLibrary;
-import org.jboss.tools.jst.web.ui.palette.internal.RunnablePaletteItem;
 
 /**
  * @author Alexey Kazakov
@@ -28,7 +22,6 @@ import org.jboss.tools.jst.web.ui.palette.internal.RunnablePaletteItem;
 @SuppressWarnings("restriction")
 public class IonicTagLib extends PaletteTagLibrary {
 
-	private static final ImageDescriptor IMAGE = ImageDescriptor.createFromFile(AngularJsPlugin.class, "ionic.png");
 	private final static int RELEVANCE = generateUniqueRelevance();
 
 	public IonicTagLib() {
@@ -39,16 +32,6 @@ public class IonicTagLib extends PaletteTagLibrary {
 	}
 
 	@Override
-	public ImageDescriptor getImage() {
-		return IMAGE;
-	}
-
-	@Override
-	public Collection<RunnablePaletteItem> getItems() {
-		return PaletteManager.getInstance().getItems(IonicConstants.IONIC_CATEGORY, getVersion());
-	}
-
-	@Override
 	public ITagLibRecognizer getTagLibRecognizer() {
 		return new IonicRecognizer();
 	}
@@ -56,5 +39,10 @@ public class IonicTagLib extends PaletteTagLibrary {
 	@Override
 	protected int getRelevance() {
 		return RELEVANCE;
+	}
+
+	@Override
+	protected String getCategory() {
+		return IonicConstants.IONIC_CATEGORY;
 	}
 }

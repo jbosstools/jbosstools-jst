@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2013 Red Hat, Inc. 
+ * Copyright (c) 2013-2014 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -57,7 +57,7 @@ class MobileDrawerFigure extends CustomDrawerFigure {
 			title.add(pinFigure);
 		}
 	}
-	
+
 	private Label label = new Label("", JSTWebUIImages.getImage(JSTWebUIImages.getInstance().createImageDescriptor(JSTWebUIImages.DROP_DOWN_LIST_IMAGE)));
 
 	public class VersionFigure extends Clickable{
@@ -90,18 +90,18 @@ class MobileDrawerFigure extends CustomDrawerFigure {
 			return ((Label)getChildren().get(0)).getText();
 		}
 
+		@Override
 		protected void paintFigure(Graphics graphics) {
 			super.paintFigure(graphics);
 
 			ButtonModel model = getModel();
 			if (isRolloverEnabled() && model.isMouseOver()) {
 				graphics.setBackgroundColor(backColor);
-				graphics.fillRoundRectangle(getClientArea().getCopy().getExpanded(1, 1),        7, 7);
+				graphics.fillRoundRectangle(getClientArea().getCopy().getExpanded(1, 1), 7, 7);
 
 				graphics.setForegroundColor(foreColor);
-				graphics.drawRoundRectangle(getClientArea().getCopy().getExpanded(1, 1),        7, 7);
+				graphics.drawRoundRectangle(getClientArea().getCopy().getExpanded(1, 1), 7, 7);
 			}
 		}
 	}
 }
-

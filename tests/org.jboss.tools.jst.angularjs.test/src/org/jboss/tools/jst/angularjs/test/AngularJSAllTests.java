@@ -13,7 +13,7 @@ package org.jboss.tools.jst.angularjs.test;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.jboss.tools.jst.angularjs.test.ca.CAMobilePaletteIonicTemplatesTest;
+import org.jboss.tools.jst.angularjs.test.ca.CAPaletteIonicTemplatesTest;
 import org.jboss.tools.test.util.ProjectImportTestSetup;
 
 public class AngularJSAllTests {
@@ -23,7 +23,7 @@ public class AngularJSAllTests {
 
 		TestSuite s = new TestSuite("Ionic Palette content");
 		s.addTestSuite(IonicPaletteTest.class);
-		s.addTestSuite(CAMobilePaletteIonicTemplatesTest.class);
+		s.addTestSuite(CAPaletteIonicTemplatesTest.class);
 		suite.addTest(
 				new ProjectImportTestSetup(s,
 				"org.jboss.tools.jst.web.ui.test",

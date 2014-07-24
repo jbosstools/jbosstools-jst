@@ -10,12 +10,14 @@
  ******************************************************************************/
 package org.jboss.tools.jst.web.ui.editor.test.ca;
 
-import org.jboss.tools.jst.jsp.test.ca.CAMobilePaletteTemplatesTest;
+import org.jboss.tools.jst.jsp.test.ca.CAHtml5PaletteTemplatesTest;
+import org.jboss.tools.jst.web.ui.palette.internal.JQMPaletteTagLib13;
+import org.jboss.tools.jst.web.ui.palette.internal.PaletteTagLibrary;
 
-public class CAMobilePaletteJQM13TemplatesTest extends CAMobilePaletteTemplatesTest {
+public class CAPaletteJQM13TemplatesTest extends CAHtml5PaletteTemplatesTest {
 	private static final String PAGE_NAME = "ca_13_templates.html"; //$NON-NLS-1$
 
-	public CAMobilePaletteJQM13TemplatesTest() {}
+	public CAPaletteJQM13TemplatesTest() {}
 
 	public void testPage() throws Exception {
 		doTestTemplate("", "page", decorateDisplay("Page"), 0);
@@ -119,6 +121,11 @@ public class CAMobilePaletteJQM13TemplatesTest extends CAMobilePaletteTemplatesT
 
 	public void testInput() throws Exception {
 		doTestTemplate("", "input", decorateDisplay("Text Input"), 6);
+	}
+
+	@Override
+	protected PaletteTagLibrary getTagLib() {
+		return new JQMPaletteTagLib13();
 	}
 
 	@Override

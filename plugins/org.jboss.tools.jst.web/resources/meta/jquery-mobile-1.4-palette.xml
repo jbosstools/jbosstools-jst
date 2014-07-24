@@ -12,7 +12,7 @@
 
   <PageTabHTML DESCRIPTION="" EDITOR_TYPE="" HIDDEN="yes" NAME="Mobile"
    NATURE_TYPE="" SCOPE="project" TABTYPE="HTML" model-entity="SharablePageTabHTML">
-   <GroupHTML HIDDEN="no" ICON="" NAME="jQuery Mobile" PREFIX=""
+   <GroupHTML HIDDEN="no" ICON="%Icons%/Mobile/jQuery/jquery" NAME="jQuery Mobile" PREFIX=""
     SCOPE="project" URI="" add_taglib="true" library-version="" model-entity="SharableGroupHTML">
     
     <GroupHTML HIDDEN="no" ICON="" NAME="version:1.4"
@@ -191,7 +191,7 @@
 
    </GroupHTML>
    
-   <GroupHTML HIDDEN="no" ICON="" NAME="z.HTML" PREFIX=""
+   <GroupHTML HIDDEN="no" ICON="%Icons%/Mobile/HTML/html" NAME="z.HTML" PREFIX=""
     SCOPE="project" URI="" add_taglib="true" library-version="" model-entity="SharableGroupHTML">
 
     <GroupHTML HIDDEN="no" ICON="" NAME="version:5.0"

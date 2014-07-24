@@ -14,9 +14,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.XModelObjectConstants;
 import org.jboss.tools.common.model.options.PreferenceModelUtilities;
+import org.jboss.tools.common.model.ui.image.XModelObjectImageDescriptor;
 import org.jboss.tools.common.model.ui.views.palette.PaletteInsertManager;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.MobilePaletteInsertHelper;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
@@ -57,6 +59,19 @@ public class PaletteManager {
 			result[i] = category;
 		}
 		return result;
+	}
+
+	/**
+	 * Returns the default icon (16x16) of the category
+	 * @param category
+	 * @return
+	 */
+	public ImageDescriptor getImageDescriptor(String category) {
+		XModelObject c = findCategory(category);
+		if(c != null && c.getAttributeValue("icon") != null && c.getAttributeValue("icon").length() > 0) {
+			return new XModelObjectImageDescriptor(c);
+		}
+		return null;
 	}
 
 	/**
