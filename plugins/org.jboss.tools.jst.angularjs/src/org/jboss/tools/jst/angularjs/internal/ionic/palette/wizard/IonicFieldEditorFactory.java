@@ -340,5 +340,69 @@ public class IonicFieldEditorFactory implements IonicConstants {
 				IonicWizardMessages.tabOnSelectDescription);
 	}
 
+	/**
+	 * Used in Slidebox wizard.
+	 * @return
+	 */
+	public static IFieldEditor createDoesContinueEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(ATTR_DOES_CONTINUE, IonicWizardMessages.doesContinueLabel, false,
+				IonicWizardMessages.slideboxDoesContinueDescription);
+	}
+
+	/**
+	 * Used in Slidebox wizard.
+	 * @return
+	 */
+	public static IFieldEditor createAutoplayEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(ATTR_AUTO_PLAY, 
+				IonicWizardMessages.autoplayLabel, Arrays.asList(new String[]{"", TRUE, FALSE}),
+				"", false, IonicWizardMessages.slideboxAutoplayDescription);
+	}
+
+	/**
+	 * Used in New Slidebox wizard.
+	 * @return
+	 */
+	public static IFieldEditor createSlideIntervalEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_SLIDE_INTERVAL, IonicWizardMessages.slideInterval, "",
+				IonicWizardMessages.slideboxSlideIntervalDescription);
+	}
+
+	/**
+	 * Used in Slidebox wizard.
+	 * @return
+	 */
+	public static IFieldEditor createShowPagerEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(ATTR_SHOW_PAGER, IonicWizardMessages.showPagerLabel, true,
+				IonicWizardMessages.slideboxShowPagerDescription);
+	}
+
+	/**
+	 * Used in New Slidebox wizard.
+	 * @return
+	 */
+	public static IFieldEditor createPagerClickEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_PAGER_CLICK, IonicWizardMessages.pagerClickLabel, "",
+				IonicWizardMessages.slideboxPagerClickDescription);
+	}
+
+	/**
+	 * Used in New Slidebox wizard.
+	 * @return
+	 */
+	public static IFieldEditor createOnSlideChangedEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_ON_SLIDE_CHANGED, IonicWizardMessages.onslideChangedLabel, "",
+				IonicWizardMessages.slideboxOnSlideChangedDescription);
+	}
+
+	/**
+	 * Used in New Slidebox wizard.
+	 * @return
+	 */
+	public static IFieldEditor createActiveSlideEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_ACTIVE_SLIDE, IonicWizardMessages.activeSlideLabel, "",
+				IonicWizardMessages.slideboxActiveSlideDescription);
+	}
+
 }
 

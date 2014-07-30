@@ -19,22 +19,18 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizar
  * @author Viacheslav Kabanovich
  *
  */
-public class TabEditor extends ItemsEditor {
+public class SlideEditor extends ItemsEditor {
 
-	public TabEditor(AbstractNewHTMLWidgetWizardPage page, int minNumber, int maxNumber) {
+	public SlideEditor(AbstractNewHTMLWidgetWizardPage page, int minNumber, int maxNumber) {
 		super(page, minNumber, maxNumber);
 		for (int i = 0; i < maxNumber; i++) {
-			setTitle(i, "Tab " + (i + 1));
-			items[i].setValue(EDITOR_ID_URL, "");
-			items[i].setValue(ATTR_ICON, "");
+			setTitle(i, "Slide " + (i + 1));
 		}
 	}
 
 	@Override
 	protected void createItemEditors() {
 		addItemEditor(JQueryFieldEditorFactory.createTitleEditor(IonicWizardMessages.tabTitleDescription));
-		addItemEditor(JQueryFieldEditorFactory.createURLEditor());
-		addItemEditor(IonicFieldEditorFactory.createIconEditor(ATTR_ICON));
 	}
 
 	public String getTitle(int i) {
@@ -43,14 +39,6 @@ public class TabEditor extends ItemsEditor {
 
 	public void setTitle(int i, String value) {
 		items[i].setValue(EDITOR_ID_TITLE, value);
-	}
-
-	public String getURL(int i) {
-		return items[i].getValue(EDITOR_ID_URL);
-	}
-
-	public String getIcon(int i) {
-		return items[i].getValue(ATTR_ICON);
 	}
 
 	@Override

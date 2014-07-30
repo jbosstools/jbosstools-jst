@@ -32,13 +32,14 @@ import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewIonicWidge
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewIonicWidgetWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewScrollWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewScrollWizardPage;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewSlideboxWizard;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewSlideboxWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTabWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTabWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTabsWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTabsWizardPage;
 import org.jboss.tools.jst.jsp.test.palette.AbstractPaletteEntryTest;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
-import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewJQueryWidgetWizard;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizard;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
 import org.jboss.tools.jst.web.ui.test.HTML5PaletteWizardTest;
@@ -419,7 +420,71 @@ public class IonicPaletteTest extends AbstractPaletteEntryTest implements IonicC
 
 
 		compareUIAndNonUIWizards(wizard, "Tab");
+	}
 
+	public void testNewSlideboxWizard() {
+		IWizardPage currentPage = runToolEntry("Slidebox", true);
+		assertTrue(currentPage instanceof NewSlideboxWizardPage);
+
+		NewSlideboxWizardPage wizardPage = (NewSlideboxWizardPage)currentPage;
+		NewSlideboxWizard wizard = (NewSlideboxWizard)wizardPage.getWizard();
+
+		compareUIAndNonUIWizards(wizard, "Slidebox");
+
+		assertEquals("3", wizardPage.getEditorValue(JQueryConstants.EDITOR_ID_NUMBER_OF_ITEMS));
+
+		assertTextDoesNotExist(wizard, ATTR_DELEGATE_HANDLE);
+		wizardPage.setEditorValue(ATTR_DELEGATE_HANDLE, "mySlidebox");
+		assertAttrExists(wizard, ATTR_DELEGATE_HANDLE, "mySlidebox");
+		wizardPage.setEditorValue(ATTR_DELEGATE_HANDLE, "");
+		assertTextDoesNotExist(wizard, ATTR_DELEGATE_HANDLE);
+
+		assertTextDoesNotExist(wizard, ATTR_DOES_CONTINUE);
+		wizardPage.setEditorValue(ATTR_DOES_CONTINUE, TRUE);
+		assertAttrExists(wizard, ATTR_DOES_CONTINUE, TRUE);
+			assertTextDoesNotExist(wizard, ATTR_SLIDE_INTERVAL);
+			wizardPage.setEditorValue(ATTR_SLIDE_INTERVAL, "3333");
+			assertAttrExists(wizard, ATTR_SLIDE_INTERVAL, "3333");
+			wizardPage.setEditorValue(ATTR_SLIDE_INTERVAL, "");
+			assertTextDoesNotExist(wizard, ATTR_SLIDE_INTERVAL);
+		wizardPage.setEditorValue(ATTR_DOES_CONTINUE, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_DOES_CONTINUE);
+
+		assertTextDoesNotExist(wizard, ATTR_AUTO_PLAY);
+		wizardPage.setEditorValue(ATTR_AUTO_PLAY, TRUE);
+		assertAttrExists(wizard, ATTR_AUTO_PLAY, TRUE);
+		wizardPage.setEditorValue(ATTR_AUTO_PLAY, FALSE);
+		assertAttrExists(wizard, ATTR_AUTO_PLAY, FALSE);
+		wizardPage.setEditorValue(ATTR_AUTO_PLAY, "");
+		assertTextDoesNotExist(wizard, ATTR_AUTO_PLAY);
+
+		assertTextDoesNotExist(wizard, ATTR_SHOW_PAGER);
+		wizardPage.setEditorValue(ATTR_SHOW_PAGER, FALSE);
+		assertAttrExists(wizard, ATTR_SHOW_PAGER, FALSE);
+		wizardPage.setEditorValue(ATTR_SHOW_PAGER, TRUE);
+		assertTextDoesNotExist(wizard, ATTR_SHOW_PAGER);
+
+		assertTextDoesNotExist(wizard, ATTR_PAGER_CLICK);
+		wizardPage.setEditorValue(ATTR_PAGER_CLICK, "a($index)");
+		assertAttrExists(wizard, ATTR_PAGER_CLICK, "a($index)");
+		wizardPage.setEditorValue(ATTR_PAGER_CLICK, "");
+		assertTextDoesNotExist(wizard, ATTR_PAGER_CLICK);
+
+		assertTextDoesNotExist(wizard, ATTR_ON_SLIDE_CHANGED);
+		wizardPage.setEditorValue(ATTR_ON_SLIDE_CHANGED, "a($index)");
+		assertAttrExists(wizard, ATTR_ON_SLIDE_CHANGED, "a($index)");
+		wizardPage.setEditorValue(ATTR_ON_SLIDE_CHANGED, "");
+		assertTextDoesNotExist(wizard, ATTR_ON_SLIDE_CHANGED);
+
+		assertTextDoesNotExist(wizard, ATTR_ACTIVE_SLIDE);
+		wizardPage.setEditorValue(ATTR_ACTIVE_SLIDE, "slideModel");
+		assertAttrExists(wizard, ATTR_ACTIVE_SLIDE, "slideModel");
+		wizardPage.setEditorValue(ATTR_ACTIVE_SLIDE, "");
+		assertTextDoesNotExist(wizard, ATTR_ACTIVE_SLIDE);
+
+
+
+		compareUIAndNonUIWizards(wizard, "Slidebox");
 	}
 
 	private void compareUIAndNonUIWizards(IDropWizard wizard, String itemName) {
