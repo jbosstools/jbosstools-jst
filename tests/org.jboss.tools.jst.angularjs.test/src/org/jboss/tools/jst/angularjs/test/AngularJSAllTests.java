@@ -14,6 +14,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.jboss.tools.jst.angularjs.test.ca.CAPaletteIonicTemplatesTest;
+import org.jboss.tools.jst.angularjs.test.ca.IonicTagLibTest;
 import org.jboss.tools.test.util.ProjectImportTestSetup;
 
 public class AngularJSAllTests {
@@ -29,8 +30,17 @@ public class AngularJSAllTests {
 		suite.addTest(
 				new ProjectImportTestSetup(s,
 				"org.jboss.tools.jst.web.ui.test",
-				new String[] { "projects/SimpleProject", }, //$NON-NLS-1$
+				new String[] { "projects/SimpleProject" }, //$NON-NLS-1$
 				new String[] { "SimpleProject" })); //$NON-NLS-1$
+
+		s = new TestSuite("Ionic project tests");
+		s.addTestSuite(IonicRecognizerTest.class);
+		s.addTestSuite(IonicTagLibTest.class);
+		suite.addTest(
+				new ProjectImportTestSetup(s,
+				"org.jboss.tools.jst.angularjs.test",
+				new String[] { "projects/TestKbModel" }, //$NON-NLS-1$
+				new String[] { "TestKbModel" })); //$NON-NLS-1$
 
 		return suite;
 	}

@@ -1,0 +1,530 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tag-lib PUBLIC "-//Red Hat, Inc//DTD Knowledge Base 2.0//EN" "https://github.com/jbosstools/jbosstools-jst/tree/master/plugins/org.jboss.tools.jst.web.kb/resources/kbCustomTagLibSchema-1.0.dtd">
+<tag-lib defaultPrefix="" ignoreCase="true">
+
+	<component-extension>
+		<attribute name="class" extended="false"/>
+		<attribute name="on-hold" extended="false">
+			<description>Touch stays at the same location for 500ms.</description>
+		</attribute>
+		<attribute name="on-tap" extended="false">
+			<description>Quick touch at a location. If the duration of the touch goes longer than 250ms it is no longer a tap gesture.</description>
+		</attribute>
+		<attribute name="on-touch" extended="false">
+			<description>Called immediately when the user first begins a touch. This gesture does not wait for a touchend/mouseup.</description>
+		</attribute>
+		<attribute name="on-release" extended="false">
+			<description>Called when the user ends a touch.</description>
+		</attribute>
+		<attribute name="on-drag" extended="false">
+			<description>Move with one touch around on the page. Blocking the scrolling when moving left and right is a good practice. When all the drag events are blocking you disable scrolling on that area.</description>
+		</attribute>
+		<attribute name="on-drag-up" extended="false">
+			<description>Called when the element is dragged up.</description>
+		</attribute>
+		<attribute name="on-drag-right" extended="false">
+			<description>Called when the element is dragged to the right.</description>
+		</attribute>
+		<attribute name="on-drag-down" extended="false">
+			<description>Called when the element is dragged down.</description>
+		</attribute>
+		<attribute name="on-drag-left" extended="false">
+			<description>Called when the element is dragged to the left.</description>
+		</attribute>
+		<attribute name="on-swipe" extended="false">
+			<description>Called when a moving touch has a high velocity in any direction.</description>
+		</attribute>
+		<attribute name="on-swipe-up" extended="false">
+			<description>Called when a moving touch has a high velocity moving up.</description>
+		</attribute>
+		<attribute name="on-swipe-right" extended="false">
+			<description>Called when a moving touch has a high velocity moving to the right.</description>
+		</attribute>
+		<attribute name="on-swipe-down" extended="false">
+			<description>Called when a moving touch has a high velocity moving down.</description>
+		</attribute>
+		<attribute name="on-swipe-left" extended="false">
+			<description>Called when a moving touch has a high velocity moving to the left.</description>
+		</attribute>
+	</component-extension>
+
+	<component extended="false" name="ion-tabs">
+		<description>Powers a multi-tabbed interface with a Tab Bar and a set of "pages" that can be tabbed through.</description>
+	</component>
+	<component extended="false" name="ion-tab">
+		<description>Contains a tab's content. The content only exists while the given tab is selected.</description>
+		<attribute name="title" extended="false" required="true">
+			<description>The title of the tab.</description>
+		</attribute>
+		<attribute name="href" extended="false">
+			<description>The link that this tab will navigate to when tapped.</description>
+		</attribute>
+		<attribute name="icon" extended="false">
+			<description>The icon of the tab. If given, this will become the default for icon-on and icon-off.</description>
+		</attribute>
+		<attribute name="icon-on" extended="false">
+			<description>The icon of the tab while it is selected.</description>
+		</attribute>
+		<attribute name="icon-off" extended="false">
+			<description>The icon of the tab while it is not selected.</description>
+		</attribute>
+		<attribute name="badge" extended="false">
+			<description>The badge to put on this tab (usually a number).</description>
+		</attribute>
+		<attribute name="badge-style" extended="false">
+			<description>The style of badge to put on this tab (eg tabs-positive).</description>
+		</attribute>
+		<attribute name="on-select" extended="false">
+			<description>Called when this tab is selected.</description>
+		</attribute>
+		<attribute name="on-deselect" extended="false">
+			<description>Called when this tab is deselected.</description>
+		</attribute>
+		<attribute name="ng-click" extended="false">
+			<description>By default, the tab will be selected on click. If ngClick is set, it will not. You can explicitly switch tabs using [i]$ionicTabsDelegate.select()[/i].</description>
+		</attribute>
+	</component>
+	<component extended="false" name="ion-side-menus">
+		<description>A container element for side menu(s) and the main content. Allows the left and/or right side menu to be toggled by dragging the main content area side to side.</description>
+		<attribute name="delegate-handle" extended="false">
+			<description>The handle used to identify this side menu with [i]$ionicSideMenuDelegate[/i].</description>
+		</attribute>
+	</component>
+	<component extended="false" name="ion-side-menu-content">
+		<description>A container for the main visible content, sibling to one or more [i]ionSideMenu[/i] directives.</description>
+		<attribute name="drag-content" extended="false">
+			<description>Whether the content can be dragged. Default true.</description>
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="edge-drag-threshold" extended="false" required="true">
+			<description>Whether the content drag can only start if it is below a certain threshold distance from the edge of the screen. Default false. Accepts three types of values:
+				[ul]
+					[li]If a non-zero number is given, that many pixels is used as the maximum allowed distance from the edge that starts dragging the side menu.[/li]
+					[li]If true is given, the default number of pixels (25) is used as the maximum allowed distance.[/li]
+					[li]If false or 0 is given, the edge drag threshold is disabled, and dragging from anywhere on the content is allowed.[/li]
+				[/ul]
+			</description>
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+	<component extended="false" name="ion-side-menu">
+		<description>A container for a side menu, sibling to an [i]ionSideMenuContent[/i] directive.</description>
+		<attribute name="side" extended="false" required="true">
+			<description>Which side the side menu is currently on. Allowed values: 'left' or 'right'.</description>
+			<proposal type="enumeration">
+				<param value="left" />
+				<param value="right" />
+			</proposal>
+		</attribute>
+		<attribute name="is-enabled" extended="false">
+			<description>Whether this side menu is enabled.</description>
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="width" extended="false">
+			<description>How many pixels wide the side menu should be. Defaults to 275.</description>
+		</attribute>
+	</component>
+
+	<component extended="false" name="ion-nav-view">
+		<description>The [i]ionNavView[/i] directive is used to render templates in your application.</description>
+		<attribute name="animation" extended="false">
+			<proposal type="enumeration">
+				<param value="slide-left-right" />
+				<param value="slide-left-right-ios7" />
+				<param value="slide-in-up" />
+			</proposal>
+		</attribute>
+		<attribute name="name" extended="false">
+			<description>A view name. The name should be unique amongst the other views in the same state. You can have views of the same name that live in different states.</description>
+		</attribute>
+	</component>
+
+	<component extended="false" name="ion-view">
+		<description>A container for content, used to tell a parent [i]ionNavBar[/i] about the current view.</description>
+		<attribute name="title" extended="false">
+			<description>The title to display on the parent [i]ionNavBar[/i].</description>
+		</attribute>
+		<attribute name="hide-back-button" extended="false">
+			<description>Whether to hide the back button on the parent [i]ionNavBar[/i] by default.</description>
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="hide-nav-bar" extended="false">
+			<description>Whether to hide the parent [i]ionNavBar[/i] by default.</description>
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+
+	<component extended="false" name="ion-nav-bar">
+		<attribute name="animation" extended="false">
+			<proposal type="enumeration">
+				<param value="nav-title-slide-ios7" />
+			</proposal>
+		</attribute>
+		<attribute name="delegate-handle" extended="false">
+			<description>The handle used to identify this [i]navBar[/i] with [i]$ionicNavBarDelegate[/i].</description>
+		</attribute>
+		<attribute name="align-title" extended="false">
+			<description>Where to align the title of the navbar. Available: 'left', 'right', 'center'. Defaults to 'center'.</description>
+			<proposal type="enumeration">
+				<param value="left" />
+				<param value="right" />
+				<param value="center" />
+			</proposal>
+		</attribute>
+		<attribute name="no-tap-scroll" extended="false">
+			<description>By default, the navbar will scroll the content to the top when tapped. Set no-tap-scroll to true to disable this behavior.</description>
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+
+	<component extended="false" name="ion-nav-buttons">
+		<description>Use [i]ionNavButtons[/i] to set the buttons on your [i]ionNavBar[/i] from within an [i]ionView[/i].</description>
+		<attribute name="side" extended="false" required="true">
+			<description>The side to place the buttons on in the parent [i]ionNavBar[/i]. Allowed values: 'left' or 'right'.</description>
+			<proposal type="enumeration">
+				<param value="left" />
+				<param value="right" />
+			</proposal>
+		</attribute>
+	</component>
+
+	<component extended="false" name="ion-nav-back-button">
+		<description>Creates a back button inside an [i]ionNavBar[/i].</description>
+	</component>
+
+	<component extended="false" name="ion-header-bar">
+		<description>Adds a fixed header bar above some content.</description>
+		<attribute name="align-title" extended="false">
+			<description>Where to align the title. Available: 'left', 'right', or 'center'. Defaults to 'center'.</description>
+		</attribute>
+		<attribute name="no-tap-scroll" extended="false">
+			<description>By default, the header bar will scroll the content to the top when tapped. Set no-tap-scroll to true to disable this behavior. Available: true or false. Defaults to false.</description>
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+	<component extended="false" name="ion-footer-bar">
+		<description>Adds a fixed footer bar below some content.</description>
+		<attribute name="align-title" extended="false">
+			<description>Where to align the title. Available: 'left', 'right', or 'center'. Defaults to 'center'.</description>
+			<proposal type="enumeration">
+				<param value="left" />
+				<param value="right" />
+				<param value="center" />
+			</proposal>
+		</attribute>
+	</component>
+
+	<component extended="false" name="ion-content">
+		<description>The ionContent directive provides an easy to use content area that can be configured to use Ionic's custom Scroll View, or the built in overflow scrolling of the browser.</description>
+		<attribute name="delegate-handle" extended="false">
+			<description>The handle used to identify this scrollView with $ionicScrollDelegate.</description>
+		</attribute>
+		<attribute name="direction" extended="false">
+			<description>Which way to scroll. 'x' or 'y' or 'xy'. Default 'y'.</description>
+			<proposal type="enumeration">
+				<param value="x" />
+				<param value="y" />
+				<param value="xy" />
+			</proposal>
+		</attribute>
+		<attribute name="padding" extended="false">
+			<description>Whether to add padding to the content. of the content. Defaults to true on iOS, false on Android.</description>
+		</attribute>
+		<attribute name="scroll" extended="false">
+			<description>Whether to allow scrolling of content. Defaults to true.</description>
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="overflow-scroll" extended="false">
+			<description>Whether to use overflow-scrolling instead of Ionic scroll.</description>
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="scrollbar-x" extended="false">
+			<description>Whether to show the horizontal scrollbar. Default true.</description>
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="scrollbar-y" extended="false">
+			<description>Whether to show the vertical scrollbar. Default true.</description>
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="start-y" extended="false">
+			<description>Initial vertical scroll position. Default 0. of the content. Defaults to true on iOS, false on Android.</description>
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="on-scroll" extended="false">
+			<description>Expression to evaluate when the content is scrolled.</description>
+		</attribute>
+		<attribute name="on-scroll-complete" extended="false">
+			<description>Expression to evaluate when a scroll action completes.</description>
+		</attribute>
+		<attribute name="has-bouncing" extended="false">
+			<description>Whether to allow scrolling to bounce past the edges of the content. Defaults to true on iOS, false on Android.</description>
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+
+	<component extended="false" name="ion-refresher">
+		<description>Allows you to add pull-to-refresh to a scrollView.</description>
+		<attribute name="on-refresh" extended="false">
+			<description>Called when the user pulls down enough and lets go of the refresher.</description>
+		</attribute>
+		<attribute name="on-pulling" extended="false">
+			<description>Called when the user starts to pull down on the refresher.</description>
+		</attribute>
+		<attribute name="pulling-icon" extended="false">
+			<description>The icon to display while the user is pulling down. Default: 'ion-arrow-down-c'.</description>
+		</attribute>
+		<attribute name="pulling-text" extended="false">
+			<description>The text to display while the user is pulling down.</description>
+		</attribute>
+		<attribute name="refreshing-icon" extended="false">
+			<description>The icon to display after user lets go of the refresher.</description>
+		</attribute>
+		<attribute name="refreshing-text" extended="false">
+			<description>The text to display after the user lets go of the refresher.</description>
+		</attribute>
+	</component>
+	<component extended="false" name="ion-pane">
+		<description>A simple container that fits content, with no side effects. Adds the 'pane' class to the element.</description>
+	</component>
+
+	<component extended="false" name="ion-scroll">
+		<description>Creates a scrollable container for all content inside.</description>
+		<attribute name="delegate-handle" extended="false">
+			<description>The handle used to identify this scrollView with [i]$ionicScrollDelegate[/i].</description>
+		</attribute>
+		<attribute name="direction" extended="false">
+			<description>Which way to scroll. 'x' or 'y' or 'xy'. Default 'y'.</description>
+			<proposal type="enumeration">
+				<param value="x" />
+				<param value="y" />
+				<param value="xy" />
+			</proposal>
+		</attribute>
+		<attribute name="paging" extended="false">
+			<description>Whether to scroll with paging.</description>
+		</attribute>
+		<attribute name="on-refresh" extended="false">
+			<description>Called on pull-to-refresh, triggered by an [i]ionRefresher[/i].</description>
+		</attribute>
+		<attribute name="on-scroll" extended="false">
+			<description>Called whenever the user scrolls.</description>
+		</attribute>
+		<attribute name="scrollbar-x" extended="false">
+			<description>Whether to show the horizontal scrollbar. Default true.</description>
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="scrollbar-y" extended="false">
+			<description>Whether to show the vertical scrollbar. Default true.</description>
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="zooming" extended="false">
+			<description>Whether to support pinch-to-zoom</description>
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="min-zoom" extended="false">
+			<description>The smallest zoom amount allowed (default is 0.5)</description>
+		</attribute>
+		<attribute name="max-zoom" extended="false">
+			<description>The largest zoom amount allowed (default is 3)</description>
+		</attribute>
+		<attribute name="has-bouncing" extended="false">
+			<description>Whether to allow scrolling to bounce past the edges of the content. Defaults to true on iOS, false on Android.</description>
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+	<component extended="false" name="ion-infinite-scroll">
+		<description>The ionInfiniteScroll directive allows you to call a function whenever the user gets to the bottom of the page or near the bottom of the page.</description>
+		<attribute name="on-infinite" extended="false" required="true">
+			<description>What to call when the scroller reaches the bottom.</description>
+		</attribute>
+		<attribute name="distance" extended="false">
+			<description>The distance from the bottom that the scroll must reach to trigger the on-infinite expression. Default: 1%.</description>
+		</attribute>
+		<attribute name="icon" extended="false">
+			<description>The icon to show while loading. Default: 'ion-loading-d'.</description>
+		</attribute>
+	</component>
+
+	<component extended="false" name="ion-list">
+		<description>The List is a widely used interface element in almost any mobile app, and can include content ranging from basic text all the way to buttons, toggles, icons, and thumbnails.</description>
+		<attribute name="delegate-handle" extended="false">
+			<description>The handle used to identify this list with [i]$ionicListDelegate[/i].</description>
+		</attribute>
+		<attribute name="type" extended="false">
+			<description>The type of list to use (for example, list-inset for an inset list)</description>
+		</attribute>
+		<attribute name="show-delete" extended="false">
+			<description>Whether the delete buttons for the items in the list are currently shown or hidden.</description>
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="show-reorder" extended="false">
+			<description>Whether the reorder buttons for the items in the list are currently shown or hidden.</description>
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="can-swipe" extended="false">
+			<description>Whether the items in the list are allowed to be swiped to reveal option buttons. Default: true.</description>
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+	</component>
+	<component extended="false" name="ion-item "/>
+	<component extended="false" name="ion-delete-button"/>
+	<component extended="false" name="ion-reorder-button">
+		<attribute name="on-reorder" extended="false">
+			<description></description>
+		</attribute>
+	</component>
+	<component extended="false" name="ion-option-button"/>
+	<component extended="false" name="ion-option-button"/>
+
+	<component extended="false" name="ion-checkbox">
+		<description>The checkbox is no different than the HTML checkbox input, except it's styled differently.</description>
+		<attribute name="ng-model" extended="false"/>
+	</component>
+	<component extended="false" name="ion-radio">
+		<description>The radio directive is no different than the HTML radio input, except it's styled differently.</description>
+		<attribute name="ng-model" extended="false"/>
+		<attribute name="ng-value" extended="false"/>
+	</component>
+	<component extended="false" name="ion-toggle">
+		<description>A toggle is an animated switch which binds a given model to a boolean.</description>
+		<attribute name="ng-model" extended="false"/>
+		<attribute name="toggle-class" extended="false">
+			<description>Sets the CSS class on the inner [i]label.toggle[/i] element created by the directive.</description>
+		</attribute>
+	</component>
+
+	<component extended="false" name="ion-slide-box">
+		<description>The Slide Box is a multi-page container where each page can be swiped or dragged between.</description>
+		<attribute name="delegate-handle" extended="false">
+			<description>The handle used to identify this slideBox with [i]$ionicSlideBoxDelegate[/i].</description>
+		</attribute>
+		<attribute name="does-continue" extended="false">
+			<description>Whether the slide box should loop.</description>
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="auto-play" extended="false">
+			<description>Whether the slide box should automatically slide. Default true if does-continue is true.</description>
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="slide-interval" extended="false">
+			<description>How many milliseconds to wait to change slides (if does-continue is true). Defaults to 4000.</description>
+		</attribute>
+		<attribute name="show-pager" extended="false">
+			<description>Whether a pager should be shown for this slide box.</description>
+			<proposal type="enumeration">
+				<param value="true" />
+				<param value="false" />
+			</proposal>
+		</attribute>
+		<attribute name="pager-click" extended="false">
+			<description>Expression to call when a pager is clicked (if show-pager is true). Is passed the 'index' variable.</description>
+		</attribute>
+		<attribute name="on-slide-changed" extended="false">
+			<description>Expression called whenever the slide is changed. Is passed an '$index' variable.</description>
+		</attribute>
+		<attribute name="active-slide" extended="false">
+			<description>Model to bind the current slide to.</description>
+		</attribute>
+	</component>
+
+	<!--
+	<component name="button">
+		<attribute name="menu-toggle" extended="false">
+			<description>Toggle a side menu on the given side.</description>
+			<proposal type="enumeration">
+				<param value="left" />
+				<param value="right" />
+			</proposal>
+		</attribute>
+		<attribute name="menu-close" extended="false">
+			<description>Closes a side menu which is currently opened.</description>
+		</attribute>
+		<attribute name="nav-clear" extended="false">
+			<description>An attribute directive which should be used with an element that changes the view on click.</description>
+		</attribute>
+	</component>
+	<component extended="false" name="a">
+		<attribute name="menu-toggle" extended="false">
+			<description>Toggle a side menu on the given side.</description>
+			<proposal type="enumeration">
+				<param value="left" />
+				<param value="right" />
+			</proposal>
+		</attribute>
+		<attribute name="menu-close" extended="false">
+			<description>Closes a side menu which is currently opened.</description>
+		</attribute>
+		<attribute name="nav-clear" extended="false">
+			<description>An attribute directive which should be used with an element that changes the view on click.</description>
+		</attribute>
+	</component>
+	
+	-->
+
+</tag-lib>

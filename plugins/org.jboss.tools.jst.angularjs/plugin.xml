@@ -50,6 +50,11 @@
       <tag-lib
             uri="ionic"
             class="org.jboss.tools.jst.angularjs.internal.ionic.palette.IonicTagLib"/>
+      <tag-lib
+            location="platform:/plugin/org.jboss.tools.jst.angularjs/taglibs/Ionic.xml"
+            name="Ionic"
+            uri="ionic"
+            recognizer="org.jboss.tools.jst.angularjs.internal.ionic.IonicRecognizer"/>
    	</extension>
 
 	<extension point="org.jboss.tools.jst.web.ui.jscssLibs">

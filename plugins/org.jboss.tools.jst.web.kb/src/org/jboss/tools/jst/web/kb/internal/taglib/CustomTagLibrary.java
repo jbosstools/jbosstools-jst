@@ -26,6 +26,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.core.runtime.Platform;
+import org.jboss.tools.jst.web.kb.IPageContext;
+import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.internal.proposal.CustomProposalType;
 import org.jboss.tools.jst.web.kb.internal.proposal.CustomProposalTypeFactory;
@@ -129,6 +131,14 @@ public class CustomTagLibrary extends AbstractTagLib implements ICustomTagLibrar
 	@Override
 	public void setRecognizer(ITagLibRecognizer recognizer) {
 		this.recognizer = recognizer;
+	}
+
+	@Override
+	protected List<String> getPrefixes(KbQuery query, IPageContext context) {
+		if("".equals(defaultPrefix)) {
+			return null;
+		}
+		return super.getPrefixes(query, context);
 	}
 
 	private void parseAttributeProviders(Element element, CustomTagLibComponent component) {
