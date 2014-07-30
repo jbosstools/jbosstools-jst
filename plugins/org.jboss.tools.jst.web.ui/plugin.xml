@@ -1136,6 +1136,10 @@
             value="org.eclipse.wst.sse.ui.preferences.jsp.occurrences"
 			target="org.jboss.tools.jst.jsp.jspincludesource"/>
 			
+		<sourceViewerConfiguration
+			class="org.jboss.tools.jst.web.ui.internal.editor.HTMLTextViewerConfiguration"
+	        target="org.eclipse.angularjs.core.angularsource"/>
+
 	    <sourceViewerConfiguration
 			class="org.jboss.tools.jst.web.ui.internal.editor.HTMLTextViewerConfiguration"
 	        target="org.eclipse.wst.html.core.htmlsource"/>

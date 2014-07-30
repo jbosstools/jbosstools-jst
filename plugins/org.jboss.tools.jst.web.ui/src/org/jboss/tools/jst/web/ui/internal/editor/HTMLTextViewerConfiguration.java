@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2013 Red Hat, Inc.
+ * Copyright (c) 2007-2014 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -72,6 +72,15 @@ public class HTMLTextViewerConfiguration extends
 
 	public HTMLTextViewerConfiguration() {
 		super();
+	}
+
+	@Override
+	public String[] getConfiguredContentTypes(ISourceViewer sourceViewer) {
+		String[] contentTypes = super.getConfiguredContentTypes(sourceViewer);
+		String[] result = new String[contentTypes.length + 1];
+		System.arraycopy(contentTypes, 0, result, 0, contentTypes.length);
+		result[contentTypes.length] = "org.eclipse.angularjs.ANGULAR_DEFAULT";
+		return result;
 	}
 
 	protected IContentAssistProcessor[] getContentAssistProcessors(
