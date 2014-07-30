@@ -31,6 +31,9 @@
       <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/6.Tab" 
       	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTabWizard" 
       	keywords="tab tabs"/>
+      <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/7.Slidebox" 
+      	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewSlideboxWizard" 
+      	keywords="slide box"/>
    </extension>
 
    <extension

@@ -30,6 +30,9 @@ public class IonicWizardMessages extends NLS {
 	public static String newScrollWizardTitle;
 	public static String newScrollWizardDescription;
 
+	public static String newSlideboxWizardTitle;
+	public static String newSlideboxWizardDescription;
+
 	public static String newTabsWizardDescription;
 
 	public static String newTabTitle;
@@ -37,12 +40,15 @@ public class IonicWizardMessages extends NLS {
 
 	public static String versionPageDescription;
 
+	public static String activeSlideLabel;
 	public static String alignTitleLabel;
+	public static String autoplayLabel;
 	public static String badgeLabel;
 	public static String badgeStyleLabel;
 	public static String barColorLabel;
 	public static String delegateHandleLabel;
 	public static String directionLabel;
+	public static String doesContinueLabel;
 	public static String hasBouncingLabel;
 	public static String hideTabbarLabel;
 	public static String iconOffLabel;
@@ -56,12 +62,16 @@ public class IonicWizardMessages extends NLS {
 	public static String onscrollLabel;
 	public static String onscrollCompleteLabel;
 	public static String onselectLabel;
+	public static String onslideChangedLabel;
 	public static String overflowScrollLabel;
 	public static String paddingLabel;
+	public static String pagerClickLabel;
 	public static String pagingLabel;
 	public static String scrollbar_xLabel;
 	public static String scrollbar_yLabel;
 	public static String scrollLabel;
+	public static String showPagerLabel;
+	public static String slideInterval;
 	public static String startYLabel;
 	public static String subfooterLabel;
 	public static String subheaderLabel;
@@ -86,6 +96,13 @@ public class IonicWizardMessages extends NLS {
 	public static String scrollPagingDescription;
 	public static String scrollRefreshDescription;
 	public static String scrollZoomingDescription;
+	public static String slideboxActiveSlideDescription;
+	public static String slideboxAutoplayDescription;
+	public static String slideboxDoesContinueDescription;
+	public static String slideboxOnSlideChangedDescription;
+	public static String slideboxPagerClickDescription;
+	public static String slideboxShowPagerDescription;
+	public static String slideboxSlideIntervalDescription;
 	public static String tabBadgeDescription;
 	public static String tabBadgeStyleDescription;
 	public static String tabIconDescription;

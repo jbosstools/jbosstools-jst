@@ -28,14 +28,19 @@ public interface IonicConstants extends HTMLConstants {
 	public String TAG_ION_FOOTER_BAR = "ion-footer-bar";
 	public String TAG_ION_HEADER_BAR = "ion-header-bar";
 	public String TAG_ION_SCROLL = "ion-scroll";
+	public String TAG_ION_SLIDE_BOX = "ion-slide-box";
+	public String TAG_ION_SLIDE = "ion-slide";
 	public String TAG_ION_TABS = "ion-tabs";
 	public String TAG_ION_TAB = "ion-tab";
 
+	public String ATTR_ACTIVE_SLIDE = "active-slide";
 	public String ATTR_ALIGN_TITLE = "align-title";
+	public String ATTR_AUTO_PLAY = "auto-play";
 	public String ATTR_BADGE = "badge";
 	public String ATTR_BADGE_STYLE = "badge-style";
 	public String ATTR_DELEGATE_HANDLE = "delegate-handle";
 	public String ATTR_DIRECTION = "direction";
+	public String ATTR_DOES_CONTINUE = "does-continue";
 	public String ATTR_HAS_BOUNCING = "has-bouncing";
 	public String ATTR_ICON = "icon";
 	public String ATTR_ICON_OFF = "icon-off";
@@ -48,13 +53,17 @@ public interface IonicConstants extends HTMLConstants {
 	public String ATTR_ON_SCROLL = "on-scroll";
 	public String ATTR_ON_SCROLL_COMPLETE = "on-scroll-complete";
 	public String ATTR_ON_SELECT = "on-select";
+	public String ATTR_ON_SLIDE_CHANGED = "on-slide-changed";
 	public String ATTR_ON_DESELECT = "on-deselect";
 	public String ATTR_OVERFLOW_SCROLL = "overflow-scroll";
 	public String ATTR_PADDING = "padding";
+	public String ATTR_PAGER_CLICK = "pager-click";
 	public String ATTR_PAGING = "paging";
 	public String ATTR_SCROLL = "scroll";
 	public String ATTR_SCROLLBAR_X = "scrollbar-x";
 	public String ATTR_SCROLLBAR_Y = "scrollbar-y";
+	public String ATTR_SHOW_PAGER = "show-pager";
+	public String ATTR_SLIDE_INTERVAL = "slide-interval";
 	public String ATTR_START_Y = "start-y";
 	public String ATTR_TITLE = TAG_TITLE;
 	public String ATTR_ZOOMING = "zooming";

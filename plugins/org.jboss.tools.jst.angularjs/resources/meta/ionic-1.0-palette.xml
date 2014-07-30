@@ -91,6 +91,12 @@
                  NAME="6.Tab" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;ion-tab class=&quot;bar-positive&quot;>\n&lt;/ion-tab>"
                  model-entity="SharableMacroHTML"/>
+
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Slidebox:&lt;/b>&lt;br>\n&lt;code>&amp;lt;ion-slide-box class=&quot;bar-positive&quot;>&lt;/code>&lt;br>\n...&lt;br>\n&lt;code>&amp;lt;/ion-slide-box>&lt;/code>\n&lt;/html>"
+                 ENDTEXT="" ICON="%Icons%/Mobile/Ionic/slidebox" 
+                 NAME="7.Slidebox" REFORMAT="yes" SCOPE="project"
+                 STARTTEXT="&lt;ion-slide-box class=&quot;bar-positive&quot;>\n&lt;/ion-slide-box>"
+                 model-entity="SharableMacroHTML"/>
      </GroupHTML>
 
     </GroupHTML>

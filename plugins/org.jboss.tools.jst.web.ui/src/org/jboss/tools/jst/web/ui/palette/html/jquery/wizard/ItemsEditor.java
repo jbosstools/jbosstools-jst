@@ -211,6 +211,10 @@ public class ItemsEditor implements SelectionListener, JQueryConstants {
 		}
 	}
 
+	public boolean isSwitching() {
+		return isSwitching;
+	}
+
 	/**
 	 * Returns true if editor belongs to the set of editors.
 	 * In this case new value is set to the selected item.	 * 
