@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2012 Red Hat, Inc. 
+ * Copyright (c) 2012-2014 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -82,6 +82,7 @@ public class NewXHTMLFileWizardPage extends WizardNewFileCreationPage {
 	 * This method is overridden to set the selected folder to web contents 
 	 * folder if the current selection is outside the web contents folder. 
 	 */
+	@Override
 	protected void initialPopulateContainerNameField() {
 		super.initialPopulateContainerNameField();
 
@@ -95,7 +96,7 @@ public class NewXHTMLFileWizardPage extends WizardNewFileCreationPage {
 				break;
 			}
 		}
-		if(!withinWebContent && webContentPaths.length>0) {
+		if(withinWebContent && webContentPaths.length>0) {
 			setContainerFullPath(webContentPaths[0]);
 		}
 	}
@@ -104,6 +105,7 @@ public class NewXHTMLFileWizardPage extends WizardNewFileCreationPage {
 	 * This method is overridden to set additional validation specific to 
 	 * html files. 
 	 */
+	@Override
 	protected boolean validatePage() {
 		setMessage(null);
 		setErrorMessage(null);

@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import org.jboss.tools.jst.web.html.JQueryHTMLConstants;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 
 /**
  * 
@@ -44,7 +45,7 @@ public interface JQueryConstants extends JQueryHTMLConstants {
 	/**
 	 * Palette category id.
 	 */
-	public String JQM_CATEGORY = "jQuery Mobile";
+	public String JQM_CATEGORY = JQueryMobileVersion.JQM_CATEGORY;
 
 	public String EDITOR_ID_TITLE = TAG_TITLE;
 	public String EDITOR_ID_LABEL = TAG_LABEL;

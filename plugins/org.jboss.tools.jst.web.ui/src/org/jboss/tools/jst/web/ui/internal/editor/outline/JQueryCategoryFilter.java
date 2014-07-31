@@ -17,6 +17,7 @@ import org.jboss.tools.jst.web.ui.internal.editor.outline.JSPPropertySourceAdapt
 import org.jboss.tools.jst.web.html.HTMLConstants;
 import org.jboss.tools.jst.web.html.JQueryHTMLConstants;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileAttrProvider;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.kb.taglib.IAttribute;
 
 /**
@@ -25,7 +26,7 @@ import org.jboss.tools.jst.web.kb.taglib.IAttribute;
  *
  */
 public class JQueryCategoryFilter implements ICategoryFilter {
-	public static final String JQ_CATEGORY = "jQuery";
+	public static final String JQ_CATEGORY = JQueryMobileVersion.JQ_CATEGORY;
 	Set<String> jQueryAttrs = new HashSet<String>();
 
 	static final Set<String> STRUCTURAL_ATTRIBUTES = new HashSet<String>();

@@ -27,10 +27,9 @@ import org.jboss.tools.jst.web.html.HTMLConstants;
 import org.jboss.tools.jst.web.kb.internal.JQueryMobileRecognizer;
 import org.jboss.tools.jst.web.kb.internal.JQueryRecognizer;
 import org.jboss.tools.jst.web.kb.internal.JSRecognizer;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
-import org.jboss.tools.jst.web.ui.internal.editor.outline.JQueryCategoryFilter;
-import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -41,7 +40,7 @@ import org.w3c.dom.Node;
  */
 public class PreferredJSLibVersions implements IPreferredJSLibVersion {
 	IFile f;
-	Object version;
+	IHTMLLibraryVersion version;
 
 	private Set<String> disabledLibs = new HashSet<String>();
 	private Set<String> enabledLibs = new HashSet<String>();
@@ -68,7 +67,7 @@ public class PreferredJSLibVersions implements IPreferredJSLibVersion {
 		}		
 	}
 
-	public PreferredJSLibVersions(IFile file, Object version) {
+	public PreferredJSLibVersions(IFile file, IHTMLLibraryVersion version) {
 		f = file;
 		this.version = version;
 	}
@@ -125,14 +124,12 @@ public class PreferredJSLibVersions implements IPreferredJSLibVersion {
 			if(lib.getVersions().isEmpty()) continue;
 			String libName = lib.getName();
 			boolean enabled = true;
-			if(libName.equals(JQueryCategoryFilter.JQ_CATEGORY)) {
-				enabled = f == null || !JQueryRecognizer.containsJQueryJSReference(f);
-			} else if(libName.equals(JQueryConstants.JQM_CATEGORY)) {
-				enabled = f == null || JQueryMobileRecognizer.getVersion(f) == null;
+			if(version.isPreferredJSLib(null, libName)) {
+				enabled = f == null || !version.isReferencingJSLib(f, libName);
 			} else {
 				String libNameRoot = getLibNameRoot(lib);
 				if(libNameRoot != null) {
-					enabled = DefaultJSRecognizer.getJSReferenceVersion(f, libNameRoot) == null;
+					enabled = f == null || DefaultJSRecognizer.getJSReferenceVersion(f, libNameRoot) == null;
 				}
 			}
 			if(enabled) {
@@ -151,16 +148,19 @@ public class PreferredJSLibVersions implements IPreferredJSLibVersion {
 				currentVersion = null;
 			}
 			String mask = null;
-			boolean add = false;
-			if(libName.equals(JQueryCategoryFilter.JQ_CATEGORY)) {
-				if(version instanceof JQueryMobileVersion) add = true;
+			boolean add = version.isPreferredJSLib(f, libName);
+
+			if(libName.equals(JQueryMobileVersion.JQ_CATEGORY)) {
 				mask = version == JQueryMobileVersion.JQM_1_3 ? "1.9." : "2.0.";
-			} else if(libName.equals(JQueryConstants.JQM_CATEGORY)) {
-				if(version instanceof JQueryMobileVersion) add = true;
+			} else if(libName.equals(JQueryMobileVersion.JQM_CATEGORY)) {
 				mask = version == JQueryMobileVersion.JQM_1_3 ? "1.3." : "1.4.";
 			}
 			if(current == null) {
 				preferredLibs.put(libName, add);
+				if(!add && version.isPreferredJSLib(null, libName)) {
+					//as for Ionic to prevent default value for project.
+					availableLibs.add(libName);
+				}
 			}
 			if(currentVersion == null) {
 				String lastVersion = getLastVersion(lib, mask);

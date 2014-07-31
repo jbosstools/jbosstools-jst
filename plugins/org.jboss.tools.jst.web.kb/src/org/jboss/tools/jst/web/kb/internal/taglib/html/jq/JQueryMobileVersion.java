@@ -10,6 +10,9 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal.taglib.html.jq;
 
+import org.eclipse.core.resources.IFile;
+import org.jboss.tools.jst.web.kb.internal.JQueryMobileRecognizer;
+import org.jboss.tools.jst.web.kb.internal.JQueryRecognizer;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
 
 /**
@@ -39,6 +42,9 @@ public enum JQueryMobileVersion implements IHTMLLibraryVersion {
 			"http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"); //$NON-NLS-1$
 
 	public static final JQueryMobileVersion[] ALL_VERSIONS = {JQM_1_3, JQM_1_4};
+
+	public static final String JQ_CATEGORY = "jQuery";
+	public static final String JQM_CATEGORY = "jQuery Mobile";
 
 	String version;
 	String fullDefaultVersion;
@@ -78,4 +84,20 @@ public enum JQueryMobileVersion implements IHTMLLibraryVersion {
 	public String getJQueryMobileJS() {
 		return jqmjs;
 	}
+
+	@Override
+	public boolean isPreferredJSLib(IFile file, String libName) {
+		return JQ_CATEGORY.equals(libName) || JQM_CATEGORY.equals(libName);
+	}
+
+	@Override
+	public boolean isReferencingJSLib(IFile file, String libName) {
+		if(JQ_CATEGORY.equals(libName)) {
+			return JQueryRecognizer.containsJQueryJSReference(file);
+		} else if(JQM_CATEGORY.equals(libName)) {
+			return JQueryMobileRecognizer.getVersion(file) != null;
+		}
+		return false;
+	}
+
 }

@@ -65,8 +65,15 @@ public abstract class JSRecognizer extends HTML5Recognizer implements ITagLibVer
 	 * @return
 	 */
 	public static String getJSReferenceVersion(IFile file, String jsLibName, boolean lookAtSrcAttributeOnly, boolean html5Only) {
-		if(html5Only && !FileUtil.isDoctypeHTML(file)) {
-			return null;
+		if(html5Only) {
+			String doctype = FileUtil.getDoctype(FileUtil.getContentFromEditorOrFile(file));
+			if("html".equalsIgnoreCase(doctype) 
+					|| (doctype == null && file.getName().endsWith(".html"))
+						) {
+				//ok
+			} else {
+				return null;
+			}
 		}
 		IStructuredModel model = null;
 		try {
