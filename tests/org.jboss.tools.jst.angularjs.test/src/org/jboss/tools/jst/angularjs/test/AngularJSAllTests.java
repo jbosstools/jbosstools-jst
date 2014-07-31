@@ -22,6 +22,8 @@ public class AngularJSAllTests {
 		TestSuite suite = new TestSuite(AngularJSAllTests.class.getName());
 
 		TestSuite s = new TestSuite("Ionic Palette content");
+		s.addTestSuite(DefaultJSLibsText.class);
+		s.addTestSuite(InsertJSCSSPaletteEntryTest.class);
 		s.addTestSuite(IonicPaletteTest.class);
 		s.addTestSuite(CAPaletteIonicTemplatesTest.class);
 		suite.addTest(

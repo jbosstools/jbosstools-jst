@@ -10,13 +10,27 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.internal.preferences.js;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.jboss.tools.common.model.plugin.ModelPlugin;
+import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.ElementNode;
+import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.internal.editor.outline.JQueryCategoryFilter;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
+import org.osgi.framework.Bundle;
 import org.osgi.service.prefs.BackingStoreException;
 
 /**
@@ -103,18 +117,16 @@ public class JSLibFactory {
 		if(defaultModel != null) return;
 		JSLibModel model = new JSLibModel();
 
-		JSLib jQuery = model.getOrCreateLib(JQueryCategoryFilter.JQ_CATEGORY);
-		String[] jQueryVersions = {"1.9.1", "1.10.2", "1.11.1", "2.0.1", "2.0.3", "2.1.0", "2.1.1"};
-		for (String s: jQueryVersions) {
-			jQuery.getOrCreateVersion(s).getURLs().add("http://code.jquery.com/jquery-" + s + ".min.js");
-		}
-
-		JSLib jQueryMobile = model.getOrCreateLib(JQueryConstants.JQM_CATEGORY);
-		String[] jQueryMobileVersions = {"1.3.1", JQueryMobileVersion.JQM_1_3.getFullDefaultVersion(), JQueryMobileVersion.JQM_1_4.getFullDefaultVersion()};
-		for (String s: jQueryMobileVersions) {
-			JSLibVersion v = jQueryMobile.getOrCreateVersion(s);
-			v.getURLs().add("http://code.jquery.com/mobile/" + s + "/jquery.mobile-" + s + ".min.js");
-			v.getURLs().add("http://code.jquery.com/mobile/" + s + "/jquery.mobile-" + s + ".min.css");
+		List<URL> resources = getResources();
+		
+		for (URL url: resources) {
+			try {
+				String s = FileUtil.readStream(url.openStream());
+				JSLibModel m = JSLibXMLLoader.load(s);
+				model.applyWorkingCopy(m, false);
+			} catch (IOException e) {
+				WebUiPlugin.getDefault().logError(e);
+			}
 		}
 
 		defaultModel = model;
@@ -163,5 +175,32 @@ public class JSLibFactory {
 		}
 		return copy;
 	}		
-	
+
+	public static List<URL> getResources() {
+		List<URL> resources = new ArrayList<URL>();
+		IExtensionPoint point = Platform.getExtensionRegistry().getExtensionPoint("org.jboss.tools.jst.web.ui.jscssLibs"); //$NON-NLS-1$
+		IExtension[] es = point.getExtensions();
+		for (int i = 0; i < es.length; i++) {
+			Bundle bundle = Platform.getBundle(es[i].getNamespaceIdentifier());
+			IConfigurationElement[] elements = es[i].getConfigurationElements();
+			for (int j = 0; j < elements.length; j++) {
+				String path = elements[j].getAttribute("path"); //$NON-NLS-1$
+				if(path == null) continue;
+				try {
+					URL url = bundle.getResource(path);
+					if(url != null) {
+						resources.add(url);
+					} else {
+						if(WebUiPlugin.isDebugEnabled()) {
+							WebUiPlugin.getDefault().logInfo("Warning: meta resource " + path + " not found."); //$NON-NLS-1$ //$NON-NLS-2$
+						}
+					}
+				} catch (IllegalStateException e) {
+					ModelPlugin.getPluginLog().logError("MetaResourceLoader warning: meta resource " + path + " not found."); //$NON-NLS-1$ //$NON-NLS-2$
+				}
+			}
+		}
+		return resources;
+	}
+
 }

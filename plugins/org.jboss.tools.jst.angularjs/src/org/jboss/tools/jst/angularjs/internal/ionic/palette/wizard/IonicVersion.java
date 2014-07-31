@@ -10,6 +10,8 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard;
 
+import org.eclipse.core.resources.IFile;
+import org.jboss.tools.jst.angularjs.internal.ionic.IonicRecognizer;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
 
 /**
@@ -40,4 +42,21 @@ public enum IonicVersion implements IHTMLLibraryVersion {
 	public static IonicVersion getLatestDefaultVersion() {
 		return IONIC_1_0;
 	}
+
+	@Override
+	public boolean isPreferredJSLib(IFile file, String libName) {
+		if(IonicConstants.IONIC_CATEGORY.equals(libName)) {
+			return file == null || !IonicRecognizer.isAngularTemplate(file);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean isReferencingJSLib(IFile file, String libName) {
+		if(IonicConstants.IONIC_CATEGORY.equals(libName)) {
+			return IonicRecognizer.isReferencingIonicLib(file);
+		}
+		return false;
+	}
+
 }

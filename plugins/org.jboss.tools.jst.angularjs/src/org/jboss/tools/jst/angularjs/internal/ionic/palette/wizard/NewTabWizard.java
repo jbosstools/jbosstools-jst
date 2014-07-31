@@ -58,7 +58,7 @@ public class NewTabWizard extends NewIonicWidgetWizard<NewTabWizardPage> impleme
 		addAttributeIfNotEmpty(tab, ATTR_NG_CLICK, ATTR_NG_CLICK);
 		
 		addID("tab-", tab);
-
+		tab.getChildren().add(SEPARATOR);
 	}
 
 }

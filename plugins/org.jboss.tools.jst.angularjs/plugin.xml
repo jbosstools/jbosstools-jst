@@ -43,4 +43,8 @@
             class="org.jboss.tools.jst.angularjs.internal.ionic.palette.IonicTagLib"/>
    	</extension>
 
+	<extension point="org.jboss.tools.jst.web.ui.jscssLibs">
+		<libs path="meta/js-css.xml"/>
+	</extension> 
+
 </plugin>

@@ -31,8 +31,16 @@ public class JQueryDataTest extends JQueryLibTest {
 		return "WebContent/pages/jquery/jQueryMobile.html";
 	}
 
-	public void testHtml4() {
+	public void testFileWithNoDoctype() {
 		IFile file = testProject.getFile(new Path("WebContent/pages/jquery/jQueryMobileHTML4.html"));
+		ELContext context = PageContextFactory.createPageContext(file);
+		KbQuery query = createKbQuery(new KbQuery.Tag[]{createTag("a", BUTTON)}, "data-");
+		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);
+		assertTrue(proposals.length > 0);
+	}
+
+	public void testFileWithWrongDoctype() {
+		IFile file = testProject.getFile(new Path("WebContent/pages/jquery/jQueryMobileWithWrongDoctype.html"));
 		ELContext context = PageContextFactory.createPageContext(file);
 		KbQuery query = createKbQuery(new KbQuery.Tag[]{createTag("a", BUTTON)}, "data-");
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(query, context);

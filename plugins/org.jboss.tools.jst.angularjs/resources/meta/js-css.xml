@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<libs>
+ <lib name="Ionic">
+  <version name="1.0">
+   <url>lib/ionic/js/ionic.bundle.js</url>
+   <url>lib/ionic/css/ionic.css</url>
+  </version>
+ </lib>
+</libs>
