@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2012 Red Hat, Inc.
+ * Copyright (c) 2007-2014 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -14,15 +14,21 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.ISafeRunnable;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextListener;
@@ -98,6 +104,7 @@ import org.eclipse.wst.sse.ui.views.contentoutline.ContentOutlineConfiguration;
 import org.eclipse.wst.xml.core.internal.document.AttrImpl;
 import org.eclipse.wst.xml.core.internal.document.ElementImpl;
 import org.jboss.tools.common.core.resources.XModelObjectEditorInput;
+import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.meta.action.XActionInvoker;
 import org.jboss.tools.common.model.XModelBuffer;
 import org.jboss.tools.common.model.XModelException;
@@ -150,10 +157,14 @@ import org.jboss.tools.jst.jsp.text.xpl.StructuredTextOccurrenceStructureProvide
 import org.jboss.tools.jst.web.ui.internal.editor.ui.action.ExtendedFormatAction;
 import org.jboss.tools.jst.web.ui.internal.editor.ui.action.IExtendedAction;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
+import org.jboss.tools.jst.web.kb.IFacilityChecker;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.PageContextFactory;
+import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.PageProcessor;
+import org.jboss.tools.jst.web.kb.internal.FaceletPageContextImpl;
 import org.jboss.tools.jst.web.kb.internal.JspContextImpl;
 import org.jboss.tools.jst.web.kb.internal.taglib.HTMLTag;
 import org.jboss.tools.jst.web.kb.internal.taglib.NameSpace;
@@ -493,6 +504,11 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		XModelObject o = getModelObject();
 		if (o instanceof FileAnyImpl) {
 			listener = new BodyListenerImpl((FileAnyImpl) o);
+		}
+		
+		if (input instanceof IFileEditorInput) {
+			IFile file = ((IFileEditorInput)input).getFile();
+			checkFacilities(PageContextFactory.createPageContext(file), file);
 		}
 	}
 
@@ -1471,8 +1487,77 @@ public class JSPTextEditor extends StructuredTextEditor implements
 	 * @return HyperLinkDetectors for sourceRegion
 	 */
 	public IHyperlinkDetector[] getHyperlinkDetectors() {
-		
 		return getSourceViewerConfiguration().getHyperlinkDetectors(getSourceViewer());
 	}
 
+	Map<String, Set<IFacilityChecker>> facilityCheckers = null;
+	public static final String EXTENSION_FACILITY_CHECKERS = "facilityCheckers";
+
+	private void checkFacilities(ELContext context, final IFile file) {
+		loadFacilitiesCheckers();
+		
+		String contextType = "";
+		if (context instanceof FaceletPageContextImpl) {
+			contextType = "FACELETS_PAGE_CONTEXT_TYPE";
+		} else if (context instanceof JspContextImpl) {
+			contextType = "JSP_PAGE_CONTEXT_TYPE";
+		}
+		
+		Set<IFacilityChecker> checkers = facilityCheckers.get(contextType);
+		if (checkers == null) return;
+		
+		for (IFacilityChecker checker : checkers) {
+			final IFacilityChecker facilityChecker = checker;
+			SafeRunner.run(new ISafeRunnable() {
+				
+				@Override
+				public void run() throws Exception {
+					facilityChecker.checkFacilities(file);
+				}
+
+				@Override
+				public void handleException(Throwable exception) {
+					WebUiPlugin.getDefault().logError(exception);
+				}
+				
+			});
+		}
+	}
+	
+	private synchronized void loadFacilitiesCheckers() {
+		if (facilityCheckers != null)
+			return;
+
+		IExtensionRegistry registry = Platform.getExtensionRegistry();
+		IConfigurationElement[] cf = registry.getConfigurationElementsFor(
+				WebKbPlugin.PLUGIN_ID, EXTENSION_FACILITY_CHECKERS);
+		Map<String, Set<IFacilityChecker>> map = 
+				new HashMap<String, Set<IFacilityChecker>>(cf.length);
+		
+		for (IConfigurationElement ce : cf) {
+			String contextType = ce.getAttribute("contextType");
+			String className = ce.getAttribute("class");
+			
+			if (contextType == null || className == null || className.isEmpty())
+				continue;
+			
+			Object checker = null;
+			try {
+				checker = ce.createExecutableExtension("class");
+			} catch (CoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (checker instanceof IFacilityChecker) {
+				Set<IFacilityChecker> checkers = map.get(contextType);
+				if (checkers == null) {
+					checkers = new HashSet<IFacilityChecker>();
+					map.put(contextType, checkers);
+				}
+			
+				checkers.add((IFacilityChecker)checker);
+			}
+		}
+		facilityCheckers = map;
+	}
 }
