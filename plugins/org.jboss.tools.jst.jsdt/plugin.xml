@@ -15,6 +15,14 @@
 			</defaultModules>
 		</ternAdaptToNature>
 		
+		<ternAdaptToNature 
+			id = "org.eclipse.wst.jsdt.core.jsNature"
+			class="org.jboss.tools.jst.jsdt.configuration.AngularJSProjectCapability">
+			<defaultModules>
+				<module name="angular" />
+			</defaultModules>
+		</ternAdaptToNature>
+		
 	</extension>
 	<extension 
 		point="org.eclipse.angularjs.core.angularNatureAdapters"
@@ -54,4 +62,31 @@
        point="org.eclipse.ui.startup">
     	<startup class="org.jboss.tools.jst.jsdt.utils.JstJsdtStartUp"></startup>
 	</extension>
+	
+	<extension 
+		point="org.jboss.tools.jst.web.kb.facilityCheckers"
+		id="org.jboss.tools.jst.jsdt.angularFacilityCheckers"
+		name="org.jboss.tools.jst.jsdt.angularFacilityCheckers">
+
+		<facilityChecker 
+			contextType = "FACELETS_PAGE_CONTEXT_TYPE"
+			class = "org.jboss.tools.jst.jsdt.configuration.AngularJSProjectCapability" />
+	</extension>
+	
+	<extension
+         point="org.eclipse.ui.propertyPages">		      
+    
+      <page
+            name="Angular Module Configuration Dialog"
+            category="org.eclipse.angularjs.internal.ui.properties.AngularMainPropertyPage"       
+            class="org.jboss.tools.jst.jsdt.configuration.properties.AngularModuleConfigurationPropertyPage"
+            id="org.jboss.tools.jst.jsdt.configuration.properties.AngularModuleConfigurationPropertyPage">
+         <enabledWhen>
+		     <adapt type="org.eclipse.core.resources.IProject">
+                  <test property="tern.eclipse.ide.ui.isTernProject" />
+		     </adapt>         
+         </enabledWhen>
+      </page>      
+	</extension>		     
+	
 </plugin>
