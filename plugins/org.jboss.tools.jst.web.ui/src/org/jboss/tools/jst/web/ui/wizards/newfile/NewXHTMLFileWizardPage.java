@@ -22,7 +22,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Preferences;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jst.jsp.core.internal.util.FacetModuleCoreSupport;
@@ -32,10 +31,10 @@ import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
+import org.eclipse.wst.html.core.internal.provisional.contenttype.ContentTypeIdForHTML;
 import org.eclipse.wst.html.ui.internal.HTMLUIMessages;
 import org.jboss.tools.common.web.WebUtils;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
-import org.eclipse.wst.html.core.internal.provisional.contenttype.ContentTypeIdForHTML;
 
 /**
  * Copied from NewHTMLFileWizardPage because we can't extend it but we need to fix https://issues.jboss.org/browse/JBIDE-11472 (https://bugs.eclipse.org/bugs/show_bug.cgi?id=375605). 
@@ -88,7 +87,7 @@ public class NewXHTMLFileWizardPage extends WizardNewFileCreationPage {
 
 		IPath fullPath = getContainerFullPath();
 		IProject project = getProjectFromPath(fullPath);
-		IPath[] webContentPaths = WebUtils.getWebContentPaths(project);
+		IPath[] webContentPaths = project!=null?WebUtils.getWebContentPaths(project):null;
 		boolean withinWebContent = false;
 		for (int i = 0; webContentPaths != null && i < webContentPaths.length; i++) {
 			if (webContentPaths[i].isPrefixOf(fullPath)) {
