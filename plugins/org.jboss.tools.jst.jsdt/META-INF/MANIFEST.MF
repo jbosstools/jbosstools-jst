@@ -1,7 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: JBoss Tools Java Standard Tools - Tern Project Adapter
+Bundle-Name: %bundleName
 Bundle-SymbolicName: org.jboss.tools.jst.jsdt;singleton:=true
+Bundle-Vendor: %providerName
 Bundle-Version: 3.6.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: tern.core;bundle-version="[0.4.0.201407030911,0.4.0.201407030911]",
@@ -23,3 +24,4 @@ Require-Bundle: tern.core;bundle-version="[0.4.0.201407030911,0.4.0.201407030911
  org.eclipse.core.resources,
  org.eclipse.core.runtime
 Export-Package: org.jboss.tools.jst.jsdt.utils
+Bundle-Localization: plugin
