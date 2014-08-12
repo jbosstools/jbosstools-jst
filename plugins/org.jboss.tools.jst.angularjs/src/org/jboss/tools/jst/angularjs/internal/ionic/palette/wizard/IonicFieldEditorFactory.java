@@ -404,5 +404,65 @@ public class IonicFieldEditorFactory implements IonicConstants {
 				IonicWizardMessages.slideboxActiveSlideDescription);
 	}
 
+	/**
+	 * Used in New Checkbox, Toggle wizard.
+	 * @return
+	 */
+	public static IFieldEditor createNgTrueValueEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_NG_TRUE_VALUE, IonicWizardMessages.ngTrueValueLabel, "",
+				IonicWizardMessages.checkboxNgTrueValueDescription);
+	}
+
+	/**
+	 * Used in New Checkbox, Toggle wizard.
+	 * @return
+	 */
+	public static IFieldEditor createNgModelEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_NG_MODEL, IonicWizardMessages.ngModelLabel, "",
+				IonicWizardMessages.ngModelDescription);
+	}
+
+	/**
+	 * Used in New Checkbox, Toggle wizard.
+	 * @return
+	 */
+	public static IFieldEditor createNgFalseValueEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_NG_FALSE_VALUE, IonicWizardMessages.ngFalseValueLabel, "",
+				IonicWizardMessages.checkboxNgFalseValueDescription);
+	}
+
+	/**
+	 * Used in New Checkbox, Toggle wizard.
+	 * @return
+	 */
+	public static IFieldEditor createNgChangeEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_NG_CHANGE, IonicWizardMessages.ngChangeLabel, "",
+				IonicWizardMessages.checkboxNgChangeDescription);
+	}
+
+	static String[] TOGGLE_COLORS = {
+		"", "toggle-light", "toggle-stable", "toggle-positive", "toggle-calm", "toggle-balanced", "toggle-energized", "toggle-assertive", "toggle-royal", "toggle-dark",  
+	};
+
+	static List<String> TOGGLE_COLOR_LIST = Arrays.asList(TOGGLE_COLORS);
+
+	/**
+	 * Used in New Tabs wizard.
+	 * @return
+	 */
+	public static IFieldEditor createToggleColorEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(ATTR_TOGGLE_CLASS, IonicWizardMessages.toggleClassLabel, TOGGLE_COLOR_LIST, "", true,
+				"");
+	}
+
+	/**
+	 * Used in Radio wizard.
+	 * @return
+	 */
+	public static IFieldEditor createIsNgValueEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_IS_NG_VALUE, IonicWizardMessages.isNgValue, true,
+				IonicWizardMessages.ngValueDescription);
+	}
+
 }
 

@@ -22,6 +22,8 @@ import org.jboss.tools.common.model.ui.editors.dnd.IDropWizard;
 import org.jboss.tools.common.model.ui.internal.editors.PaletteItemResult;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.IonicConstants;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.IonicVersion;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewCheckBoxWizard;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewCheckBoxWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewContentWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewContentWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewFooterBarWizard;
@@ -30,6 +32,8 @@ import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewHeaderBarW
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewHeaderBarWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewIonicWidgetWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewIonicWidgetWizardPage;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewRadioWizard;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewRadioWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewScrollWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewScrollWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewSlideboxWizard;
@@ -38,6 +42,8 @@ import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTabWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTabWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTabsWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTabsWizardPage;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewToggleWizard;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewToggleWizardPage;
 import org.jboss.tools.jst.jsp.test.palette.AbstractPaletteEntryTest;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizard;
@@ -482,9 +488,152 @@ public class IonicPaletteTest extends AbstractPaletteEntryTest implements IonicC
 		wizardPage.setEditorValue(ATTR_ACTIVE_SLIDE, "");
 		assertTextDoesNotExist(wizard, ATTR_ACTIVE_SLIDE);
 
-
-
 		compareUIAndNonUIWizards(wizard, "Slidebox");
+	}
+
+	public void testNewCheckboxWizard() {
+		IWizardPage currentPage = runToolEntry("Checkbox", true);
+		assertTrue(currentPage instanceof NewCheckBoxWizardPage);
+
+		NewCheckBoxWizardPage wizardPage = (NewCheckBoxWizardPage)currentPage;
+		NewCheckBoxWizard wizard = (NewCheckBoxWizard)wizardPage.getWizard();
+
+		compareUIAndNonUIWizards(wizard, "Checkbox");
+
+		assertTextExists(wizard, "I agree");
+		wizardPage.setEditorValue(TAG_LABEL, "someLabel");
+		assertTextExists(wizard, "someLabel");
+		wizardPage.setEditorValue(TAG_LABEL, "I agree");
+		
+		assertTextDoesNotExist(wizard, ATTR_NG_MODEL);
+		wizardPage.setEditorValue(ATTR_NG_MODEL, "aModel");
+		assertAttrExists(wizard, ATTR_NG_MODEL, "aModel");
+		wizardPage.setEditorValue(ATTR_NG_MODEL, "");
+		assertTextDoesNotExist(wizard, ATTR_NG_MODEL);
+
+		assertTextDoesNotExist(wizard, ATTR_NAME);
+		wizardPage.setEditorValue(ATTR_NAME, "nn");
+		assertAttrExists(wizard, ATTR_NAME, "nn");
+		wizardPage.setEditorValue(ATTR_NAME, "");
+		assertTextDoesNotExist(wizard, ATTR_NAME);
+
+		assertTextDoesNotExist(wizard, ATTR_NG_CHECKED);
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_CHECKED, TRUE);
+		assertAttrExists(wizard, ATTR_NG_CHECKED, TRUE);
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_CHECKED, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_NG_CHECKED);
+
+		assertTextDoesNotExist(wizard, ATTR_NG_DISABLED);
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_DISABLED, TRUE);
+		assertAttrExists(wizard, ATTR_NG_DISABLED, TRUE);
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_DISABLED, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_NG_DISABLED);
+
+		assertTextDoesNotExist(wizard, ATTR_NG_TRUE_VALUE);
+		wizardPage.setEditorValue(ATTR_NG_TRUE_VALUE, "yes");
+		assertAttrExists(wizard, ATTR_NG_TRUE_VALUE, "yes");
+		wizardPage.setEditorValue(ATTR_NG_TRUE_VALUE, "");
+		assertTextDoesNotExist(wizard, ATTR_NG_TRUE_VALUE);
+
+		assertTextDoesNotExist(wizard, ATTR_NG_FALSE_VALUE);
+		wizardPage.setEditorValue(ATTR_NG_FALSE_VALUE, "no");
+		assertAttrExists(wizard, ATTR_NG_FALSE_VALUE, "no");
+		wizardPage.setEditorValue(ATTR_NG_FALSE_VALUE, "");
+		assertTextDoesNotExist(wizard, ATTR_NG_FALSE_VALUE);
+
+		assertTextDoesNotExist(wizard, ATTR_NG_CHANGE);
+		wizardPage.setEditorValue(ATTR_NG_CHANGE, "a()");
+		assertAttrExists(wizard, ATTR_NG_CHANGE, "a()");
+		wizardPage.setEditorValue(ATTR_NG_CHANGE, "");
+		assertTextDoesNotExist(wizard, ATTR_NG_CHANGE);
+
+		compareUIAndNonUIWizards(wizard, "Checkbox");
+	}
+
+	public void testNewToggleWizard() {
+		IWizardPage currentPage = runToolEntry("Toggle", true);
+		assertTrue(currentPage instanceof NewToggleWizardPage);
+
+		NewToggleWizardPage wizardPage = (NewToggleWizardPage)currentPage;
+		NewToggleWizard wizard = (NewToggleWizard)wizardPage.getWizard();
+
+		compareUIAndNonUIWizards(wizard, "Toggle");
+
+		assertTextExists(wizard, "Label");
+		wizardPage.setEditorValue(TAG_LABEL, "someLabel");
+		assertTextExists(wizard, "someLabel");
+		wizardPage.setEditorValue(TAG_LABEL, "Label");
+		
+		assertTextDoesNotExist(wizard, ATTR_NG_MODEL);
+		wizardPage.setEditorValue(ATTR_NG_MODEL, "aModel");
+		assertAttrExists(wizard, ATTR_NG_MODEL, "aModel");
+		wizardPage.setEditorValue(ATTR_NG_MODEL, "");
+		assertTextDoesNotExist(wizard, ATTR_NG_MODEL);
+
+		assertTextDoesNotExist(wizard, ATTR_NAME);
+		wizardPage.setEditorValue(ATTR_NAME, "nn");
+		assertAttrExists(wizard, ATTR_NAME, "nn");
+		wizardPage.setEditorValue(ATTR_NAME, "");
+		assertTextDoesNotExist(wizard, ATTR_NAME);
+
+		assertTextDoesNotExist(wizard, ATTR_NG_CHECKED);
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_CHECKED, TRUE);
+		assertAttrExists(wizard, ATTR_NG_CHECKED, TRUE);
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_CHECKED, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_NG_CHECKED);
+
+		assertTextDoesNotExist(wizard, ATTR_NG_DISABLED);
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_DISABLED, TRUE);
+		assertAttrExists(wizard, ATTR_NG_DISABLED, TRUE);
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_DISABLED, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_NG_DISABLED);
+
+		assertTextDoesNotExist(wizard, ATTR_NG_TRUE_VALUE);
+		wizardPage.setEditorValue(ATTR_NG_TRUE_VALUE, "yes");
+		assertAttrExists(wizard, ATTR_NG_TRUE_VALUE, "yes");
+		wizardPage.setEditorValue(ATTR_NG_TRUE_VALUE, "");
+		assertTextDoesNotExist(wizard, ATTR_NG_TRUE_VALUE);
+
+		assertTextDoesNotExist(wizard, ATTR_NG_FALSE_VALUE);
+		wizardPage.setEditorValue(ATTR_NG_FALSE_VALUE, "no");
+		assertAttrExists(wizard, ATTR_NG_FALSE_VALUE, "no");
+		wizardPage.setEditorValue(ATTR_NG_FALSE_VALUE, "");
+		assertTextDoesNotExist(wizard, ATTR_NG_FALSE_VALUE);
+
+		assertTextDoesNotExist(wizard, ATTR_NG_CHANGE);
+		wizardPage.setEditorValue(ATTR_NG_CHANGE, "a()");
+		assertAttrExists(wizard, ATTR_NG_CHANGE, "a()");
+		wizardPage.setEditorValue(ATTR_NG_CHANGE, "");
+		assertTextDoesNotExist(wizard, ATTR_NG_CHANGE);
+
+		compareUIAndNonUIWizards(wizard, "Toggle");
+	}
+
+	public void testNewRadioWizard() {
+		IWizardPage currentPage = runToolEntry("Radio", true);
+		assertTrue(currentPage instanceof NewRadioWizardPage);
+
+		NewRadioWizardPage wizardPage = (NewRadioWizardPage)currentPage;
+		NewRadioWizard wizard = (NewRadioWizard)wizardPage.getWizard();
+
+		compareUIAndNonUIWizards(wizard, "Radio");
+
+		assertEquals("3", wizardPage.getEditorValue(JQueryConstants.EDITOR_ID_NUMBER_OF_ITEMS));
+
+		assertTextDoesNotExist(wizard, ATTR_NG_MODEL);
+		wizardPage.setEditorValue(ATTR_NG_MODEL, "aModel");
+		assertAttrExists(wizard, ATTR_NG_MODEL, "aModel");
+		wizardPage.setEditorValue(ATTR_NG_MODEL, "");
+		assertTextDoesNotExist(wizard, ATTR_NG_MODEL);
+
+		assertTextDoesNotExist(wizard, ATTR_NAME);
+		wizardPage.setEditorValue(ATTR_NAME, "nn");
+		assertAttrExists(wizard, ATTR_NAME, "nn");
+		wizardPage.setEditorValue(ATTR_NAME, "");
+		assertTextDoesNotExist(wizard, ATTR_NAME);
+
+
+		compareUIAndNonUIWizards(wizard, "Radio");
 	}
 
 	private void compareUIAndNonUIWizards(IDropWizard wizard, String itemName) {

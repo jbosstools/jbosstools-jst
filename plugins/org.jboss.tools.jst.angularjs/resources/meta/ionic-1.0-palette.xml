@@ -97,6 +97,21 @@
                  NAME="7.Slidebox" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;ion-slide-box class=&quot;bar-positive&quot;>\n&lt;/ion-slide-box>"
                  model-entity="SharableMacroHTML"/>
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Checkbox:&lt;/b>&lt;br>\n&lt;code>&amp;lt;ion-checkbox>&lt;/code>&lt;br>\n...&lt;br>\n&lt;code>&amp;lt;/ion-checkbox>&lt;/code>\n&lt;/html>"
+                 ENDTEXT="" ICON="%Icons%/Mobile/Ionic/checkbox" 
+                 NAME="71.Checkbox" REFORMAT="yes" SCOPE="project"
+                 STARTTEXT="&lt;ion-checkbox >\n&lt;/ion-checkbox>"
+                 model-entity="SharableMacroHTML"/>
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Radio:&lt;/b>&lt;br>\n&lt;code>&amp;lt;ion-radio>&lt;/code>&lt;br>\n...&lt;br>\n&lt;code>&amp;lt;/ion-radio>&lt;/code>\n&lt;/html>"
+                 ENDTEXT="" ICON="%Icons%/Mobile/Ionic/radio" 
+                 NAME="72.Radio" REFORMAT="yes" SCOPE="project"
+                 STARTTEXT="&lt;ion-radio >\n&lt;/ion-radio>"
+                 model-entity="SharableMacroHTML"/>
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Toggle:&lt;/b>&lt;br>\n&lt;code>&amp;lt;ion-toggle>&lt;/code>&lt;br>\n...&lt;br>\n&lt;code>&amp;lt;/ion-toggle>&lt;/code>\n&lt;/html>"
+                 ENDTEXT="" ICON="%Icons%/Mobile/Ionic/toggle" 
+                 NAME="73.Toggle" REFORMAT="yes" SCOPE="project"
+                 STARTTEXT="&lt;ion-toggle >\n&lt;/ion-toggle>"
+                 model-entity="SharableMacroHTML"/>
      </GroupHTML>
 
     </GroupHTML>

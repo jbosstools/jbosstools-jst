@@ -20,12 +20,16 @@ import org.eclipse.osgi.util.NLS;
 public class IonicWizardMessages extends NLS {
 	private static final String BUNDLE_NAME = "org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.messages"; //$NON-NLS-1$
 
+	public static String newCheckboxWizardDescription;
+
 	public static String newContentWizardTitle;
 	public static String newContentWizardDescription;
 
 	public static String newFooterWizardDescription;
 
 	public static String newHeaderWizardDescription;
+
+	public static String newRadioWizardDescription;
 
 	public static String newScrollWizardTitle;
 	public static String newScrollWizardDescription;
@@ -37,6 +41,9 @@ public class IonicWizardMessages extends NLS {
 
 	public static String newTabTitle;
 	public static String newTabDescription;
+
+	public static String newToggleWizardTitle;
+	public static String newToggleWizardDescription;
 
 	public static String versionPageDescription;
 
@@ -53,9 +60,14 @@ public class IonicWizardMessages extends NLS {
 	public static String hideTabbarLabel;
 	public static String iconOffLabel;
 	public static String iconOnLabel;
+	public static String isNgValue;
 	public static String minZoomLabel;
 	public static String maxZoomLabel;
+	public static String ngChangeLabel;
 	public static String ngClickLabel;
+	public static String ngFalseValueLabel;
+	public static String ngModelLabel;
+	public static String ngTrueValueLabel;
 	public static String noTapScrollLabel;
 	public static String ondeselectLabel;
 	public static String onrefreshLabel;
@@ -75,8 +87,12 @@ public class IonicWizardMessages extends NLS {
 	public static String startYLabel;
 	public static String subfooterLabel;
 	public static String subheaderLabel;
+	public static String toggleClassLabel;
 	public static String zoomingLabel;
 
+	public static String checkboxNgChangeDescription;
+	public static String checkboxNgFalseValueDescription;
+	public static String checkboxNgTrueValueDescription;
 	public static String contentDelegateHandleDescription;
 	public static String contentDirectionDescription;
 	public static String contentOnscrollDescription;
@@ -90,6 +106,8 @@ public class IonicWizardMessages extends NLS {
 	public static String headerAlignTitleDescription;
 	public static String headerNoTapScrollDescription;
 	public static String ngClickDescription;
+	public static String ngModelDescription;
+	public static String ngValueDescription;
 	public static String scrollHasBouncingDescription;
 	public static String scrollMaxZoomDescription;
 	public static String scrollMinZoomDescription;

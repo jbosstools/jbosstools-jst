@@ -24,14 +24,17 @@ public interface IonicConstants extends HTMLConstants {
 	 */
 	public String IONIC_CATEGORY = "Ionic";
 
+	public String TAG_ION_CHECKBOX = "ion-checkbox";
 	public String TAG_ION_CONTENT = "ion-content";
 	public String TAG_ION_FOOTER_BAR = "ion-footer-bar";
 	public String TAG_ION_HEADER_BAR = "ion-header-bar";
+	public String TAG_ION_RADIO = "ion-radio";
 	public String TAG_ION_SCROLL = "ion-scroll";
 	public String TAG_ION_SLIDE_BOX = "ion-slide-box";
 	public String TAG_ION_SLIDE = "ion-slide";
 	public String TAG_ION_TABS = "ion-tabs";
 	public String TAG_ION_TAB = "ion-tab";
+	public String TAG_ION_TOGGLE = "ion-toggle";
 
 	public String ATTR_ACTIVE_SLIDE = "active-slide";
 	public String ATTR_ALIGN_TITLE = "align-title";
@@ -47,7 +50,14 @@ public interface IonicConstants extends HTMLConstants {
 	public String ATTR_ICON_ON = "icon-on";
 	public String ATTR_MAX_ZOOM = "max-zoom";
 	public String ATTR_MIN_ZOOM = "min-zoom";
+	public String ATTR_NG_CHANGE = "ng-change";
+	public String ATTR_NG_CHECKED = "ng-checked";
 	public String ATTR_NG_CLICK = "ng-click";
+	public String ATTR_NG_DISABLED = "ng-disabled";
+	public String ATTR_NG_FALSE_VALUE = "ng-false-value";
+	public String ATTR_NG_MODEL = "ng-model";
+	public String ATTR_NG_TRUE_VALUE = "ng-true-value";
+	public String ATTR_NG_VALUE = "ng-value";
 	public String ATTR_NO_TAP_SCROLL= "no-tap-scroll";
 	public String ATTR_ON_REFRESH = "on-refresh";
 	public String ATTR_ON_SCROLL = "on-scroll";
@@ -66,6 +76,7 @@ public interface IonicConstants extends HTMLConstants {
 	public String ATTR_SLIDE_INTERVAL = "slide-interval";
 	public String ATTR_START_Y = "start-y";
 	public String ATTR_TITLE = TAG_TITLE;
+	public String ATTR_TOGGLE_CLASS = "toggle-class";
 	public String ATTR_ZOOMING = "zooming";
 
 	public String CLASS_BAR_POSITIVE = "bar-positive";
@@ -81,4 +92,5 @@ public interface IonicConstants extends HTMLConstants {
 	public String EDITOR_ID_LEFT_BUTTON_CLICK = "left-button-click";
 	public String EDITOR_ID_RIGHT_BUTTON_CLICK = "right-button-click";
 	public String EDITOR_ID_TABS_COLOR = "tabs-color";
+	public String EDITOR_ID_IS_NG_VALUE = "is-ng-value";
 }
