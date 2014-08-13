@@ -17,9 +17,9 @@
       %license
    </license>
 
-   <includes
-         id="org.jboss.tools.jst.jsdt.feature"
-         version="0.0.0"/>
+   <requires>
+      <import feature="org.jboss.tools.jst.jsdt.feature" version="3.6.0" match="greaterOrEqual"/>
+   </requires>
 
    <plugin
          id="org.jboss.tools.jst.angularjs"

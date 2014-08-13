@@ -6,6 +6,7 @@
    <extension-point id="elValidationDelegate" name="EL Validation Delegate" schema="schema/elValidationDelegate.exsd"/>
    <extension-point id="KbRequire" name="KB Builder Requirement" schema="schema/KbRequire.exsd"/>
    <extension-point id="elProjectSet" name="EL Project Set" schema="schema/elProjectSet.exsd"/>
+   <extension-point id="facilityCheckers" name="External Facility Checkers" schema="schema/facilityCheckers.exsd"/>
  
    <extension
          id="kbbuilder"
