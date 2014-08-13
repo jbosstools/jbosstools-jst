@@ -10,14 +10,15 @@
  ******************************************************************************/
 package org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd;
 
-import java.util.List;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.ITextSelection;
+import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
@@ -29,12 +30,9 @@ import org.jboss.tools.common.model.options.SharableConstants;
 import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator;
 import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
 import org.jboss.tools.common.refactoring.MarkerResolutionUtils;
-import org.jboss.tools.jst.web.kb.internal.JQueryRecognizer;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
-import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.internal.preferences.js.PreferredJSLibVersions;
-import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -64,6 +62,7 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 
 	private static final String META = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"";
 
+	private static final int INSERT_BEFORE_ALL = 0;
 	private static final int INSERT_AFTER_OPEN_NODE = 1;
 	private static final int INSERT_AFTER_CLOSE_NODE = 2;
 	private static final int INSERT_BEFORE_OPEN_NODE = 3;
@@ -101,28 +100,37 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 		
 		boolean insert  = startText != null && startText.startsWith(INSERT_JS_CSS_SIGNATURE);
 		
-		IFile file = MarkerResolutionUtils.getFile();
+		ISelectionProvider selProvider = (ISelectionProvider)p.get(PROPERTY_SELECTION_PROVIDER);
+		ITextSelection selection = null;
+		String selectedText="";
 		
-		if(insert || (p.containsKey(PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS)/* && !JQueryRecognizer.containsJQueryJSReference(file)*/)) {
+		if(insert || (p.containsKey(PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS))) {
+			if(!insert){
+				selection = (ITextSelection)selProvider.getSelection();
+				if(selection.getLength() > 0){
+					try {
+						selectedText = v.getDocument().get(selection.getOffset(), selection.getLength());
+					} catch (BadLocationException e) {
+						WebUiPlugin.getDefault().logError(e);
+					}
+				}
+			}
 			insertJsCss(v, (IHTMLLibraryVersion)p.get(PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS));
 			if(insert){
 				texts[0] = "";	
+			}else{
+				if(selection.getOffset() == 0){
+					int offset = bodyNode.getStartStructuredDocumentRegion().getEndOffset();
+					if(selection.getLength() > 0 && !selectedText.isEmpty()){
+						offset = v.getDocument().get().indexOf(selectedText, offset);
+					}
+					TextSelection newSelection = new TextSelection(v.getDocument(), offset, selection.getLength());
+					selProvider.setSelection(newSelection);
+				}
 			}
 		}
 	}
 
-//	private Object getJQueryMobileVersion(Properties p) {
-//		if(p.containsKey(SharableConstants.PALETTE_PATH)) {
-//			String path = p.getProperty(SharableConstants.PALETTE_PATH);
-//			for (JQueryMobileVersion v: JQueryMobileVersion.ALL_VERSIONS) {
-//				if(path.indexOf(PaletteModel.VERSION_PREFIX + v.toString()) > 0) {
-//					return v;
-//				}
-//			}
-//		}
-//		return JQueryMobileVersion.getLatestDefaultVersion();
-//	}
-	
 	private void writeBuffer(IDocument document) throws BadLocationException{
 		if(globalBuffer.length() > 0 && globalPosition >= 0 && globalPosition <= document.getLength()){
 			document.replace(globalPosition, goobalLength, globalBuffer.toString());
@@ -133,12 +141,14 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 	
 	private void copyAttributes(IDOMNode node){
 		NamedNodeMap attributes = node.getAttributes();
-		for(int i = 0; i < attributes.getLength(); i++){
-			Node attribute = attributes.item(i);
-			if(i != 0){
-				globalBuffer.append(",");
+		if(attributes != null){
+			for(int i = 0; i < attributes.getLength(); i++){
+				Node attribute = attributes.item(i);
+				if(i != 0){
+					globalBuffer.append(",");
+				}
+				globalBuffer.append(" ").append(attribute.getNodeName()).append("=\"").append(attribute.getNodeValue()).append("\"");
 			}
-			globalBuffer.append(" ").append(attribute.getNodeName()).append("=\"").append(attribute.getNodeValue()).append("\"");
 		}
 	}
 	
@@ -162,7 +172,13 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 			}
 		}
 		
-		if(mode == INSERT_AFTER_OPEN_NODE){
+		if(mode == INSERT_BEFORE_ALL){
+			if(globalPosition == -1){
+				globalPosition = 0;
+				goobalLength = 0;
+				newLineBefore = false;
+			}
+		}else if(mode == INSERT_AFTER_OPEN_NODE){
 			if(globalPosition == -1 && relatedNode != null){
 				if(relatedNode.getStartStructuredDocumentRegion() != null){
 					if(relatedNode.getEndStructuredDocumentRegion() != null || relatedNode instanceof IDOMDocumentType){
@@ -236,8 +252,11 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 		
 		if(newLineAfter){
 			globalBuffer.append(lineDelimiter);
+			
 		}
-		
+		if(mode == INSERT_AFTER_CLOSE_NODE && globalPosition == 0){
+			globalBuffer.append(lineDelimiter);
+		}
 		if(forceWrite){
 			writeBuffer(document);
 		}
@@ -356,13 +375,9 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 				preferredVersions.updateLibEnablementAndSelection();
 				String[][] urls = preferredVersions.getURLs(headNode);
 				
-//				boolean linkExists = checkNode(headNode, "link", "href", ".*(jquery\\.mobile-).*(.css)");
-//				
-//				boolean firstScriptExists = checkNode(headNode, "script", "src", ".*(jquery-).*(.js)");
-//				
-//				boolean secondScriptExists = checkNode(headNode, "script", "src", ".*(jquery.mobile-).*(.js)");
-				
 				// insert tags if needed
+				insertNode(document, null, doctypeNode, 0, "<!DOCTYPE html", INSERT_BEFORE_ALL, false);
+				
 				insertNode(document, doctypeNode, htmlNode, 0, "<html", INSERT_AFTER_OPEN_NODE, false);
 				
 				insertNode(document, htmlNode, headNode, 0, "<head", INSERT_AFTER_OPEN_NODE, false);
@@ -377,15 +392,6 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 				for (String js: urls[1]) {
 					insertNode(document, headNode, null, 1, script(js), INSERT_AFTER_OPEN_NODE, false);
 				}
-//				if(!linkExists){
-//					insertNode(document, headNode, null, 1, link(version.getCSS()), INSERT_AFTER_OPEN_NODE, false);
-//				}
-//				if(!firstScriptExists){
-//					insertNode(document, headNode, null, 1, script(version.getJQueryJS()), INSERT_AFTER_OPEN_NODE, false);
-//				}
-//				if(!secondScriptExists){
-//					insertNode(document, headNode, null, 1, script(version.getJQueryMobileJS()), INSERT_AFTER_OPEN_NODE, false);
-//				}
 				
 				insertNode(document, bodyNode, headNode, 0, "</head", INSERT_BEFORE_OPEN_NODE, false);
 
@@ -394,6 +400,12 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 				insertNode(document, htmlNode, bodyNode, 0, "</body", INSERT_BEFORE_CLOSE_NODE, false);
 
 				insertNode(document, null, htmlNode, 0, "</html", INSERT_AFTER_ALL, true);
+				
+				// lets find body to correct selection
+				htmlNode = findNode(xmlDocument, "html");
+				
+				bodyNode = findNode(htmlNode, "body");
+				
 			}
 		} catch (BadLocationException e) {
 			WebUiPlugin.getDefault().logError(e);
