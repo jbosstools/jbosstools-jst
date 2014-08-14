@@ -46,6 +46,7 @@ import org.w3c.dom.NodeList;
 
 public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 	public static final String PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS   = "insert jquery mobile js css"; //$NON-NLS-1$
+	public static final String PROPOPERTY_PREFERRED_JS_LIB_VERSIONS = "preferred-js-lib-versions";
 	
 	// palettePath - %Palette%/Mobile/jQuery Mobile/1.page/0. JS#CSS
 	public static final String INSERT_JS_CSS_SIGNATURE = "<jquery.mobile.js.css>"; //$NON-NLS-1$
@@ -115,7 +116,7 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 					}
 				}
 			}
-			insertJsCss(v, (IHTMLLibraryVersion)p.get(PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS));
+			insertJsCss(v, (IHTMLLibraryVersion)p.get(PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS), (PreferredJSLibVersions)p.get(PROPOPERTY_PREFERRED_JS_LIB_VERSIONS));
 			if(insert){
 				texts[0] = "";	
 			}else{
@@ -339,7 +340,7 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 		return number;
 	}
 	
-	private void insertJsCss(ISourceViewer viewer, IHTMLLibraryVersion version) {
+	private void insertJsCss(ISourceViewer viewer, IHTMLLibraryVersion version, PreferredJSLibVersions preferredVersions) {
 		IDocument document = viewer.getDocument();
 		
 		IStructuredModel model = null;
@@ -371,8 +372,10 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 				
 				boolean metaExists = checkNode(headNode, "meta", "name", "(viewport)");
 				
-				PreferredJSLibVersions preferredVersions = new PreferredJSLibVersions(MarkerResolutionUtils.getFile(), version);
-				preferredVersions.updateLibEnablementAndSelection();
+				if(preferredVersions == null) {
+					preferredVersions = new PreferredJSLibVersions(MarkerResolutionUtils.getFile(), version);
+					preferredVersions.updateLibEnablementAndSelection();
+				}
 				String[][] urls = preferredVersions.getURLs(headNode);
 				
 				// insert tags if needed

@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.jboss.tools.jst.angularjs.test;
 
+import java.util.List;
+
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -23,6 +25,7 @@ import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewContentWiz
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewIonicWidgetWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTabWizardPage;
 import org.jboss.tools.jst.jsp.test.palette.AbstractPaletteEntryTest;
+import org.jboss.tools.jst.web.ui.internal.preferences.js.JSLibFactory;
 import org.jboss.tools.jst.web.ui.internal.preferences.js.PreferredJSLibVersions;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.HTMLConstants;
@@ -444,6 +447,30 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 		}
 		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
 		compare(text, test_result_1Ionic);
+	}
+
+	public void testInsertIntoTemplate() {
+		editor = openEditor("ionic.html");
+		IWizardPage currentPage = runToolEntry(IonicConstants.IONIC_CATEGORY, "JS/CSS", true);
+		if(currentPage instanceof IonicVersionPage) {
+			IonicVersionPage versionPage = (IonicVersionPage)currentPage;
+			assertEquals(Boolean.FALSE, versionPage.getEditor("add Ionic").getValue());
+			versionPage.getEditor("add Ionic").setValueAsString("true");
+			assertEquals("true", versionPage.getEditor("add Ionic").getValue().toString());
+			IWizard wizard = currentPage.getWizard();
+			wizard.performFinish();
+			WizardDialog dialog = (WizardDialog)wizard.getContainer();
+			dialog.close();
+		}
+		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
+		System.out.println(text);
+		List<String> urls = JSLibFactory.getInstance()
+				.getDefaultModel()
+				.getLib(IonicConstants.IONIC_CATEGORY).getVersion(IonicVersion.getLatestDefaultVersion().toString())
+				.getURLs();
+		for (String url: urls) {
+			assertTrue(text.indexOf(url) >= 0);
+		}
 	}
 
 	public void testInsertAround(){

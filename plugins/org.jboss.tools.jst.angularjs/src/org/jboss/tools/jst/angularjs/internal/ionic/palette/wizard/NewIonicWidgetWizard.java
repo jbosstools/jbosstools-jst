@@ -82,6 +82,7 @@ public abstract class NewIonicWidgetWizard<P extends NewIonicWidgetWizardPage> e
 		preferredVersions.saveLibPreference();
 		if(page == null || isTrue(AbstractNewHTMLWidgetWizardPage.ADD_JS_CSS_SETTING_NAME)) {
 			getCommandProperties().put(MobilePaletteInsertHelper.PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS, getVersion());
+			getCommandProperties().put(MobilePaletteInsertHelper.PROPOPERTY_PREFERRED_JS_LIB_VERSIONS, preferredVersions);
 		}
 		super.doPerformFinish();
 	}

@@ -24,8 +24,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
 import org.jboss.tools.common.xml.XMLUtilities;
 import org.jboss.tools.jst.web.html.HTMLConstants;
-import org.jboss.tools.jst.web.kb.internal.JQueryMobileRecognizer;
-import org.jboss.tools.jst.web.kb.internal.JQueryRecognizer;
 import org.jboss.tools.jst.web.kb.internal.JSRecognizer;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;

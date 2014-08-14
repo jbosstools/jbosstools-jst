@@ -119,12 +119,17 @@ public class PaletteDropCommand extends FileDropCommand {
 		}
 	}
 
+	static String[] PROPERTIES_FOR_RUN = new String[]{
+		SharableConstants.PALETTE_PATH,
+		MobilePaletteInsertHelper.PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS,
+		MobilePaletteInsertHelper.PROPOPERTY_PREFERRED_JS_LIB_VERSIONS
+	};
+
 	protected void fillPropertiesForRun(Properties properties) {
-		if(this.properties.containsKey(SharableConstants.PALETTE_PATH)) {
-			properties.put(SharableConstants.PALETTE_PATH, this.properties.getProperty(SharableConstants.PALETTE_PATH));
-		}
-		if(this.properties.containsKey(MobilePaletteInsertHelper.PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS)) {
-			properties.put(MobilePaletteInsertHelper.PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS, this.properties.get(MobilePaletteInsertHelper.PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS));
+		for (String name: PROPERTIES_FOR_RUN) {
+			if(this.properties.containsKey(name)) {
+				properties.put(name, this.properties.get(name));
+			}
 		}
 	}
 
