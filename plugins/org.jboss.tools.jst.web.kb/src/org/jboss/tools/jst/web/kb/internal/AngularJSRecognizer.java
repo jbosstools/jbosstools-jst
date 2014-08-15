@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2013 Red Hat, Inc. 
+ * Copyright (c) 2013-2014 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -28,9 +28,9 @@ import org.w3c.dom.NodeList;
  * @author Alexey Kazakov
  */
 public class AngularJSRecognizer extends HTMLRecognizer {
-	private static final String ANGULAR_JS_LIB_NAME = "angular";
+	public static final String ANGULAR_JS_LIB_NAME = "angular";
 	private static final String ANGULAR_JS_PATTERN = ".*(" + ANGULAR_JS_LIB_NAME + ").*(.js).*";
-	private static final String ANGULAR_NG_ATTRIBUTE_PATTERN = "//*/@*[starts-with(name(), 'ng-')]|//*/@*[starts-with(name(), 'data-ng-')]";
+	public static final String ANGULAR_NG_ATTRIBUTE_PATTERN = "//*/@*[starts-with(name(), 'ng-')]|//*/@*[starts-with(name(), 'data-ng-')]";
 
 	@Override
 	protected boolean recalculateResult(ITagLibrary lib, ELContext context, IFile file) {
