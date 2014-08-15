@@ -28,13 +28,18 @@ public interface IonicConstants extends HTMLConstants {
 	public String TAG_ION_CONTENT = "ion-content";
 	public String TAG_ION_FOOTER_BAR = "ion-footer-bar";
 	public String TAG_ION_HEADER_BAR = "ion-header-bar";
+	public String TAG_ION_NAV_BUTTONS = "ion-nav-buttons";
 	public String TAG_ION_RADIO = "ion-radio";
 	public String TAG_ION_SCROLL = "ion-scroll";
+	public String TAG_ION_SIDE_MENUS = "ion-side-menus";
+	public String TAG_ION_SIDE_MENU = "ion-side-menu";
+	public String TAG_ION_SIDE_MENU_CONTENT = "ion-side-menu-content";
 	public String TAG_ION_SLIDE_BOX = "ion-slide-box";
 	public String TAG_ION_SLIDE = "ion-slide";
 	public String TAG_ION_TABS = "ion-tabs";
 	public String TAG_ION_TAB = "ion-tab";
 	public String TAG_ION_TOGGLE = "ion-toggle";
+	public String TAG_ION_VIEW = "ion-view";
 
 	public String ATTR_ACTIVE_SLIDE = "active-slide";
 	public String ATTR_ALIGN_TITLE = "align-title";
@@ -44,11 +49,15 @@ public interface IonicConstants extends HTMLConstants {
 	public String ATTR_DELEGATE_HANDLE = "delegate-handle";
 	public String ATTR_DIRECTION = "direction";
 	public String ATTR_DOES_CONTINUE = "does-continue";
+	public String ATTR_DRAG_CONTENT = "drag-content";
+	public String ATTR_EDGE_DRAG_THRESHOLD = "edge-drag-threshold";
 	public String ATTR_HAS_BOUNCING = "has-bouncing";
 	public String ATTR_ICON = "icon";
 	public String ATTR_ICON_OFF = "icon-off";
 	public String ATTR_ICON_ON = "icon-on";
+	public String ATTR_IS_ENABLED = "is-enabled";
 	public String ATTR_MAX_ZOOM = "max-zoom";
+	public String ATTR_MENU_TOGGLE = "menu-toggle";
 	public String ATTR_MIN_ZOOM = "min-zoom";
 	public String ATTR_NG_CHANGE = "ng-change";
 	public String ATTR_NG_CHECKED = "ng-checked";
@@ -73,6 +82,7 @@ public interface IonicConstants extends HTMLConstants {
 	public String ATTR_SCROLLBAR_X = "scrollbar-x";
 	public String ATTR_SCROLLBAR_Y = "scrollbar-y";
 	public String ATTR_SHOW_PAGER = "show-pager";
+	public String ATTR_SIDE = "side";
 	public String ATTR_SLIDE_INTERVAL = "slide-interval";
 	public String ATTR_START_Y = "start-y";
 	public String ATTR_TITLE = TAG_TITLE;
@@ -88,9 +98,22 @@ public interface IonicConstants extends HTMLConstants {
 	public String CLASS_TABS_ITEM_HIDE = "tabs-item-hide";
 	public String CLASS_TITLE = "title";
 
+	public String SIDE_LEFT = "left";
+	public String SIDE_RIGHT = "right";
+
 	public String EDITOR_ID_BAR_COLOR = "bar-color";
 	public String EDITOR_ID_LEFT_BUTTON_CLICK = "left-button-click";
 	public String EDITOR_ID_RIGHT_BUTTON_CLICK = "right-button-click";
 	public String EDITOR_ID_TABS_COLOR = "tabs-color";
 	public String EDITOR_ID_IS_NG_VALUE = "is-ng-value";
+	public String EDITOR_ID_LEFT_MENU = "left-menu";
+	public String EDITOR_ID_RIGHT_MENU = "right-menu";
+	public String EDITOR_ID_LEFT_MENU_TITLE = "left-menu-title";
+	public String EDITOR_ID_LEFT_ADD_MENU_TOGGLE = "left-menu-toggle";
+	public String EDITOR_ID_LEFT_WIDTH = "left-menu-width";
+	public String EDITOR_ID_LEFT_IS_ENABLED = "left-menu-enabled";
+	public String EDITOR_ID_RIGHT_MENU_TITLE = "right-menu-title";
+	public String EDITOR_ID_RIGHT_ADD_MENU_TOGGLE = "right-menu-toggle";
+	public String EDITOR_ID_RIGHT_WIDTH = "right-menu-width";
+	public String EDITOR_ID_RIGHT_IS_ENABLED = "right-menu-enabled";
 }

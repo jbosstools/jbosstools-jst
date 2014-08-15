@@ -36,6 +36,8 @@ import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewRadioWizar
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewRadioWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewScrollWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewScrollWizardPage;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewSideMenuWizard;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewSideMenuWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewSlideboxWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewSlideboxWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTabWizard;
@@ -634,6 +636,56 @@ public class IonicPaletteTest extends AbstractPaletteEntryTest implements IonicC
 
 
 		compareUIAndNonUIWizards(wizard, "Radio");
+	}
+
+	public void testNewSideMenuWizard() {
+		IWizardPage currentPage = runToolEntry("Side Menu", true);
+		assertTrue(currentPage instanceof NewSideMenuWizardPage);
+
+		NewSideMenuWizardPage wizardPage = (NewSideMenuWizardPage)currentPage;
+		NewSideMenuWizard wizard = (NewSideMenuWizard)wizardPage.getWizard();
+
+		assertTextDoesNotExist(wizard, ATTR_DELEGATE_HANDLE);
+		wizardPage.setEditorValue(ATTR_DELEGATE_HANDLE, "mySidemenu");
+		assertAttrExists(wizard, ATTR_DELEGATE_HANDLE, "mySidemenu");
+		wizardPage.setEditorValue(ATTR_DELEGATE_HANDLE, "");
+		assertTextDoesNotExist(wizard, ATTR_DELEGATE_HANDLE);
+
+		assertTextDoesNotExist(wizard, ATTR_DRAG_CONTENT);
+		wizardPage.setEditorValue(ATTR_DRAG_CONTENT, FALSE);
+		assertAttrExists(wizard, ATTR_DRAG_CONTENT, FALSE);
+		wizardPage.setEditorValue(ATTR_DRAG_CONTENT, TRUE);
+		assertTextDoesNotExist(wizard, ATTR_DRAG_CONTENT);
+
+		assertTextDoesNotExist(wizard, ATTR_EDGE_DRAG_THRESHOLD);
+		wizardPage.setEditorValue(ATTR_EDGE_DRAG_THRESHOLD, "0");
+		assertAttrExists(wizard, ATTR_EDGE_DRAG_THRESHOLD, "0");
+		wizardPage.setEditorValue(ATTR_EDGE_DRAG_THRESHOLD, "");
+		assertTextDoesNotExist(wizard, ATTR_EDGE_DRAG_THRESHOLD);
+
+		assertEquals(TRUE, wizardPage.getEditorValue(EDITOR_ID_LEFT_MENU));
+
+		assertTextDoesNotExist(wizard, ATTR_IS_ENABLED);
+		wizardPage.setEditorValue(EDITOR_ID_LEFT_IS_ENABLED, FALSE);
+		assertAttrExists(wizard, ATTR_IS_ENABLED, FALSE);
+		wizardPage.setEditorValue(EDITOR_ID_LEFT_IS_ENABLED, TRUE);
+		assertTextDoesNotExist(wizard, ATTR_IS_ENABLED);
+
+		assertTextDoesNotExist(wizard, ATTR_WIDTH);
+		wizardPage.setEditorValue(EDITOR_ID_LEFT_WIDTH, "100");
+		assertAttrExists(wizard, ATTR_WIDTH, "100");
+		wizardPage.setEditorValue(EDITOR_ID_LEFT_WIDTH, "");
+		assertTextDoesNotExist(wizard, ATTR_WIDTH);
+
+		String rightMenuTitle = "<h4>Right</h4>";
+		assertTextDoesNotExist(wizard, rightMenuTitle);
+		assertEquals(FALSE, wizardPage.getEditorValue(EDITOR_ID_RIGHT_MENU));
+		wizardPage.setEditorValue(EDITOR_ID_RIGHT_MENU, TRUE);
+		assertTextExists(wizard, rightMenuTitle);
+		wizardPage.setEditorValue(EDITOR_ID_RIGHT_MENU, FALSE);
+		assertTextDoesNotExist(wizard, rightMenuTitle);
+
+		compareUIAndNonUIWizards(wizard, "Side Menu");
 	}
 
 	private void compareUIAndNonUIWizards(IDropWizard wizard, String itemName) {

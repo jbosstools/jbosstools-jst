@@ -34,15 +34,19 @@
       <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/7.Slidebox" 
       	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewSlideboxWizard" 
       	keywords="slide box"/>
-      <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/71.Checkbox" 
+      <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/8.Side_Menu" 
+      	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewSideMenuWizard" 
+      	keywords="side menu"/>
+
+      <tag name="_Palette_/Mobile/Ionic/version:1.0/2.form/1.Checkbox" 
       	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewCheckBoxWizard" 
-      	keywords="slide box"/>
-      <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/72.Radio" 
+      	keywords="check box"/>
+      <tag name="_Palette_/Mobile/Ionic/version:1.0/2.form/2.Radio" 
       	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewRadioWizard" 
-      	keywords="slide box"/>
-      <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/73.Toggle" 
+      	keywords="radio"/>
+      <tag name="_Palette_/Mobile/Ionic/version:1.0/2.form/3.Toggle" 
       	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewToggleWizard" 
-      	keywords="slide box"/>
+      	keywords="toggle"/>
    </extension>
 
    <extension

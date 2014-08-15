@@ -16,6 +16,7 @@ import java.util.List;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.SwtFieldEditorFactory;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryFieldEditorFactory;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.WizardDescriptions;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
@@ -462,6 +463,80 @@ public class IonicFieldEditorFactory implements IonicConstants {
 	public static IFieldEditor createIsNgValueEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_IS_NG_VALUE, IonicWizardMessages.isNgValue, true,
 				IonicWizardMessages.ngValueDescription);
+	}
+
+	/**
+	 * Used in New Side menus wizard.
+	 * @return
+	 */
+	public static IFieldEditor createDragContentEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(ATTR_DRAG_CONTENT, IonicWizardMessages.dragContentLabel, true,
+				IonicWizardMessages.sideMenusDragContentDescription);
+	}
+
+	static String[] THRESHOLDS = {"", TRUE, FALSE, "0", "5", "10", "15", "20", "25", "30", "35", "40", "45", "50"};
+
+	/**
+	 * Used in New Side menus wizard.
+	 * @return
+	 */
+	public static IFieldEditor createEdgeDragThresholdEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(ATTR_EDGE_DRAG_THRESHOLD, IonicWizardMessages.edgeDragThreshold, Arrays.asList(THRESHOLDS), "", true,
+				IonicWizardMessages.sideMenusEdgeDragThresholdDescription);
+	}
+
+	/**
+	 * Used in New Side menus wizard.
+	 * @return
+	 */
+	public static IFieldEditor createLeftMenuEditor() {
+		return JQueryFieldEditorFactory.createCheckboxEditor(EDITOR_ID_LEFT_MENU, IonicWizardMessages.leftMenuLabel, true, 3,
+				"");
+	}
+
+	/**
+	 * Used in New Side menus wizard.
+	 * @return
+	 */
+	public static IFieldEditor createRightMenuEditor() {
+		return JQueryFieldEditorFactory.createCheckboxEditor(EDITOR_ID_RIGHT_MENU, IonicWizardMessages.rightMenuLabel, true, 3,
+				"");
+	}
+
+	/**
+	 * Used in New Side menus wizard.
+	 * @return
+	 */
+	public static IFieldEditor createAddToggleEditor(String id) {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(id, IonicWizardMessages.addMenuToggleLable, true,
+				IonicWizardMessages.sideMenuAddMenuToggleDescription);
+	}
+
+	/**
+	 * Used in New Side menus wizard.
+	 * @return
+	 */
+	public static IFieldEditor createMenuWidthEditor(String id) {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(id, IonicWizardMessages.widthLabel, "",
+				IonicWizardMessages.sideMenuWidthDescription);
+	}
+
+	/**
+	 * Used in New Side menus wizard.
+	 * @return
+	 */
+	public static IFieldEditor createIsEnabledEditor(String id) {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(id, IonicWizardMessages.isEnabled, true,
+				IonicWizardMessages.sideMenuIsEnabledDescription);
+	}
+
+	/**
+	 * Used in New Side menus wizard.
+	 * @return
+	 */
+	public static IFieldEditor createMenuTitleEditor(String id) {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(id, WizardMessages.titleLabel, "",
+				"");
 	}
 
 }
