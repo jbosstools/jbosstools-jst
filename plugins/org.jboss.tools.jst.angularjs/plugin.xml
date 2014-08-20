@@ -37,6 +37,9 @@
       <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/8.Side_Menu" 
       	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewSideMenuWizard" 
       	keywords="side menu"/>
+      <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/9.List" 
+      	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewListWizard" 
+      	keywords="list"/>
 
       <tag name="_Palette_/Mobile/Ionic/version:1.0/2.form/1.Checkbox" 
       	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewCheckBoxWizard" 

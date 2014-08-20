@@ -29,6 +29,9 @@ public class IonicWizardMessages extends NLS {
 
 	public static String newHeaderWizardDescription;
 
+	public static String newListWizardTitle;
+	public static String newListWizardDescription;
+
 	public static String newRadioWizardDescription;
 
 	public static String newScrollWizardTitle;
@@ -57,7 +60,9 @@ public class IonicWizardMessages extends NLS {
 	public static String badgeLabel;
 	public static String badgeStyleLabel;
 	public static String barColorLabel;
+	public static String canSwipeLabel;
 	public static String delegateHandleLabel;
+	public static String deleteButtonLabel;
 	public static String directionLabel;
 	public static String doesContinueLabel;
 	public static String dragContentLabel;
@@ -68,6 +73,7 @@ public class IonicWizardMessages extends NLS {
 	public static String iconOnLabel;
 	public static String isEnabled;
 	public static String isNgValue;
+	public static String itemStyleLabel;
 	public static String leftMenuLabel;
 	public static String minZoomLabel;
 	public static String maxZoomLabel;
@@ -83,15 +89,19 @@ public class IonicWizardMessages extends NLS {
 	public static String onscrollCompleteLabel;
 	public static String onselectLabel;
 	public static String onslideChangedLabel;
+	public static String optionButtonLabel;
 	public static String overflowScrollLabel;
 	public static String paddingLabel;
 	public static String pagerClickLabel;
 	public static String pagingLabel;
+	public static String reorderButtonLabel;
 	public static String rightMenuLabel;
 	public static String scrollbar_xLabel;
 	public static String scrollbar_yLabel;
 	public static String scrollLabel;
+	public static String showDeleteLabel;
 	public static String showPagerLabel;
+	public static String showReorderLabel;
 	public static String slideInterval;
 	public static String startYLabel;
 	public static String subfooterLabel;
@@ -115,6 +125,12 @@ public class IonicWizardMessages extends NLS {
 	public static String contentStartYDescription;
 	public static String headerAlignTitleDescription;
 	public static String headerNoTapScrollDescription;
+	public static String listCanSwipeDescription;
+	public static String listDeleteButtonDescription;
+	public static String listReorderButtonDescription;
+	public static String listShowDeleteDescription;
+	public static String listShowReorderDescription;
+	public static String listTypeDescription;
 	public static String ngClickDescription;
 	public static String ngModelDescription;
 	public static String ngValueDescription;

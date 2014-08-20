@@ -539,5 +539,81 @@ public class IonicFieldEditorFactory implements IonicConstants {
 				"");
 	}
 
+	/**
+	 * Used in New List wizard.
+	 * @return
+	 */
+	public static IFieldEditor createShowDeleteEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(ATTR_SHOW_DELETE, IonicWizardMessages.showDeleteLabel, false,
+				IonicWizardMessages.listShowDeleteDescription);
+	}
+
+	/**
+	 * Used in New List wizard.
+	 * @return
+	 */
+	public static IFieldEditor createDeleteButtonEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_DELETE_BUTTON, IonicWizardMessages.deleteButtonLabel, true,
+				IonicWizardMessages.listDeleteButtonDescription);
+	}
+
+	/**
+	 * Used in New List wizard.
+	 * @return
+	 */
+	public static IFieldEditor createShowReorderEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(ATTR_SHOW_REORDER, IonicWizardMessages.showReorderLabel, false,
+				IonicWizardMessages.listShowReorderDescription);
+	}
+
+	/**
+	 * Used in New List wizard.
+	 * @return
+	 */
+	public static IFieldEditor createReorderButtonEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_REORDER_BUTTON, IonicWizardMessages.reorderButtonLabel, true,
+				IonicWizardMessages.listReorderButtonDescription);
+	}
+
+	/**
+	 * Used in New List wizard.
+	 * @return
+	 */
+	public static IFieldEditor createCanSwipeEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(ATTR_CAN_SWIPE, IonicWizardMessages.canSwipeLabel, true,
+				IonicWizardMessages.listCanSwipeDescription);
+	}
+
+	static String[] LIST_TYPES = {"", /*"card",*/ "list-inset"};
+
+	/**
+	 * Used in New List wizard.
+	 * @return
+	 */
+	public static IFieldEditor createListTypeEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(ATTR_TYPE, WizardMessages.typeLabel, Arrays.asList(LIST_TYPES), "", true,
+				IonicWizardMessages.listTypeDescription);
+	}
+
+	/**
+	 * Used in New List wizard.
+	 * @return
+	 */
+	public static IFieldEditor createOptionButtonEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_OPTION_BUTTON, IonicWizardMessages.optionButtonLabel, "",
+				"");
+	}
+
+	static String[] ITEM_STYLES = {"", CLASS_ITEM_AVATAR, CLASS_ITEM_BODY, CLASS_ITEM_PLACEHOLDER, 
+		CLASS_ITEM_THUMBNAIL_LEFT, CLASS_ITEM_THUMBNAIL_RIGHT};
+
+	/**
+	 * Used in New List wizard.
+	 * @return
+	 */
+	public static IFieldEditor createItemStyleEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_ITEM_STYLE, IonicWizardMessages.itemStyleLabel, Arrays.asList(ITEM_STYLES), "", true,
+				"");
+	}
 }
 

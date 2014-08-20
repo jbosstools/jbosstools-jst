@@ -32,6 +32,8 @@ import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewHeaderBarW
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewHeaderBarWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewIonicWidgetWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewIonicWidgetWizardPage;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewListWizard;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewListWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewRadioWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewRadioWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewScrollWizard;
@@ -367,6 +369,8 @@ public class IonicPaletteTest extends AbstractPaletteEntryTest implements IonicC
 		NewTabWizardPage wizardPage = (NewTabWizardPage)currentPage;
 		NewTabWizard wizard = (NewTabWizard)wizardPage.getWizard();
 
+		compareUIAndNonUIWizards(wizard, "Tab");
+
 		assertAttrExists(wizard, ATTR_TITLE, "Title");
 		wizardPage.setEditorValue(ATTR_TITLE, "x");
 		assertAttrExists(wizard, ATTR_TITLE, "x");
@@ -426,8 +430,7 @@ public class IonicPaletteTest extends AbstractPaletteEntryTest implements IonicC
 		wizardPage.setEditorValue(ATTR_NG_CLICK, "");
 		assertTextDoesNotExist(wizard, ATTR_NG_CLICK);
 
-
-		compareUIAndNonUIWizards(wizard, "Tab");
+		compareGeneratedAndInsertedText(wizard);
 	}
 
 	public void testNewSlideboxWizard() {
@@ -490,7 +493,7 @@ public class IonicPaletteTest extends AbstractPaletteEntryTest implements IonicC
 		wizardPage.setEditorValue(ATTR_ACTIVE_SLIDE, "");
 		assertTextDoesNotExist(wizard, ATTR_ACTIVE_SLIDE);
 
-		compareUIAndNonUIWizards(wizard, "Slidebox");
+		compareGeneratedAndInsertedText(wizard);
 	}
 
 	public void testNewCheckboxWizard() {
@@ -549,7 +552,7 @@ public class IonicPaletteTest extends AbstractPaletteEntryTest implements IonicC
 		wizardPage.setEditorValue(ATTR_NG_CHANGE, "");
 		assertTextDoesNotExist(wizard, ATTR_NG_CHANGE);
 
-		compareUIAndNonUIWizards(wizard, "Checkbox");
+		compareGeneratedAndInsertedText(wizard);
 	}
 
 	public void testNewToggleWizard() {
@@ -608,7 +611,7 @@ public class IonicPaletteTest extends AbstractPaletteEntryTest implements IonicC
 		wizardPage.setEditorValue(ATTR_NG_CHANGE, "");
 		assertTextDoesNotExist(wizard, ATTR_NG_CHANGE);
 
-		compareUIAndNonUIWizards(wizard, "Toggle");
+		compareGeneratedAndInsertedText(wizard);
 	}
 
 	public void testNewRadioWizard() {
@@ -634,8 +637,7 @@ public class IonicPaletteTest extends AbstractPaletteEntryTest implements IonicC
 		wizardPage.setEditorValue(ATTR_NAME, "");
 		assertTextDoesNotExist(wizard, ATTR_NAME);
 
-
-		compareUIAndNonUIWizards(wizard, "Radio");
+		compareGeneratedAndInsertedText(wizard);
 	}
 
 	public void testNewSideMenuWizard() {
@@ -644,6 +646,8 @@ public class IonicPaletteTest extends AbstractPaletteEntryTest implements IonicC
 
 		NewSideMenuWizardPage wizardPage = (NewSideMenuWizardPage)currentPage;
 		NewSideMenuWizard wizard = (NewSideMenuWizard)wizardPage.getWizard();
+
+		compareUIAndNonUIWizards(wizard, "Side Menu");
 
 		assertTextDoesNotExist(wizard, ATTR_DELEGATE_HANDLE);
 		wizardPage.setEditorValue(ATTR_DELEGATE_HANDLE, "mySidemenu");
@@ -685,7 +689,80 @@ public class IonicPaletteTest extends AbstractPaletteEntryTest implements IonicC
 		wizardPage.setEditorValue(EDITOR_ID_RIGHT_MENU, FALSE);
 		assertTextDoesNotExist(wizard, rightMenuTitle);
 
-		compareUIAndNonUIWizards(wizard, "Side Menu");
+		compareGeneratedAndInsertedText(wizard);
+	}
+
+	public void testNewListWizard() {
+		IWizardPage currentPage = runToolEntry("List", true);
+		assertTrue(currentPage instanceof NewListWizardPage);
+
+		NewListWizardPage wizardPage = (NewListWizardPage)currentPage;
+		NewListWizard wizard = (NewListWizard)wizardPage.getWizard();
+
+		compareUIAndNonUIWizards(wizard, "List");
+
+		assertEquals("3", wizardPage.getEditorValue(JQueryConstants.EDITOR_ID_NUMBER_OF_ITEMS));
+
+		assertTextDoesNotExist(wizard, ATTR_DELEGATE_HANDLE);
+		wizardPage.setEditorValue(ATTR_DELEGATE_HANDLE, "mySlidebox");
+		assertAttrExists(wizard, ATTR_DELEGATE_HANDLE, "mySlidebox");
+		wizardPage.setEditorValue(ATTR_DELEGATE_HANDLE, "");
+		assertTextDoesNotExist(wizard, ATTR_DELEGATE_HANDLE);
+
+		assertTextDoesNotExist(wizard, ATTR_SHOW_DELETE);
+		wizardPage.setEditorValue(ATTR_SHOW_DELETE, TRUE);
+		assertAttrExists(wizard, ATTR_SHOW_DELETE, TRUE);
+		wizardPage.setEditorValue(ATTR_SHOW_DELETE, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_SHOW_DELETE);
+
+		assertTextDoesNotExist(wizard, ATTR_SHOW_REORDER);
+		wizardPage.setEditorValue(ATTR_SHOW_REORDER, TRUE);
+		assertAttrExists(wizard, ATTR_SHOW_REORDER, TRUE);
+		wizardPage.setEditorValue(ATTR_SHOW_REORDER, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_SHOW_REORDER);
+
+		assertTextDoesNotExist(wizard, ATTR_CAN_SWIPE);
+		wizardPage.setEditorValue(ATTR_CAN_SWIPE, FALSE);
+		assertAttrExists(wizard, ATTR_CAN_SWIPE, FALSE);
+		wizardPage.setEditorValue(ATTR_CAN_SWIPE, TRUE);
+		assertTextDoesNotExist(wizard, ATTR_CAN_SWIPE);
+
+		assertTextDoesNotExist(wizard, "Item 4");
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_NUMBER_OF_ITEMS, "4");
+		assertEquals("4", wizardPage.getEditorValue(JQueryConstants.EDITOR_ID_NUMBER_OF_ITEMS));
+		assertTextExists(wizard, "Item 4");		
+	
+		assertTextDoesNotExist(wizard, CLASS_ITEM_DIVIDER);
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_DIVIDER, TRUE);
+		assertAttrExists(wizard, ATTR_CLASS, CLASS_ITEM_DIVIDER);
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_DIVIDER, FALSE);
+		assertTextDoesNotExist(wizard, CLASS_ITEM_DIVIDER);
+
+		assertTextDoesNotExist(wizard, "icon ion-alert");
+		wizardPage.setEditorValue(ATTR_ICON, "ion-alert");
+		assertAttrExists(wizard, ATTR_CLASS, "icon ion-alert");
+		wizardPage.setEditorValue(ATTR_ICON, "");
+		assertTextDoesNotExist(wizard, "icon ion-alert");
+
+		assertTextExists(wizard, TAG_ION_DELETE_BUTTON);
+		wizardPage.setEditorValue(EDITOR_ID_DELETE_BUTTON, FALSE);
+		assertTextDoesNotExist(wizard, TAG_ION_DELETE_BUTTON);
+		wizardPage.setEditorValue(EDITOR_ID_DELETE_BUTTON, TRUE);
+		assertTextExists(wizard, TAG_ION_DELETE_BUTTON);
+
+		assertTextExists(wizard, TAG_ION_REORDER_BUTTON);
+		wizardPage.setEditorValue(EDITOR_ID_REORDER_BUTTON, FALSE);
+		assertTextDoesNotExist(wizard, TAG_ION_REORDER_BUTTON);
+		wizardPage.setEditorValue(EDITOR_ID_REORDER_BUTTON, TRUE);
+		assertTextExists(wizard, TAG_ION_REORDER_BUTTON);
+
+		assertTextDoesNotExist(wizard, TAG_ION_OPTION_BUTTON);
+		wizardPage.setEditorValue(EDITOR_ID_OPTION_BUTTON, "abc");
+		assertTextExists(wizard, TAG_ION_OPTION_BUTTON);
+		wizardPage.setEditorValue(EDITOR_ID_OPTION_BUTTON, "");
+		assertTextDoesNotExist(wizard, TAG_ION_OPTION_BUTTON);
+
+		compareGeneratedAndInsertedText(wizard);
 	}
 
 	private void compareUIAndNonUIWizards(IDropWizard wizard, String itemName) {
