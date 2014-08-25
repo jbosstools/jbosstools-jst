@@ -37,6 +37,9 @@
     <Icon
      IMAGE="ajnamomhinikjkikiaiaiainmjmimenciaiaiameiaiaiakliiigiaiaiaebdbkolniaiaiaigocmlmhmeiahpiahpiahpcadnchbdiaiaiaijpaminjpdiaiailjdiaiailjdibiabkbmjiiaiaiaihpemjmnmfihfoihjajgkijkdomnfeociaiaibimmjmembneoifognbilpioibmbjmmgbpenlgdiaebcfgifpejcjcafaeacmgalmegnikkeiogaiejekemkahnakkcibmmakdjbindbbkkjagieanfnjnfjgpnfdlldejhmpjhlenomhcidhbmekkgmijhccnmfhaelhbhghdogciolhgcddadojknhpolcmopndiiopncnboioajaemiaiaemiaiaemiaiaemiaiaemiaiaemiaiaemiaiaemiaiaeiialmimkainbbehohomkeikheckojkllkloelhollmdnjhfkmlfnkbdknepfcjdoehffkdccaeiikbmeicijgcbkfiphoacdkjpnhpgpijaiknkbbokdpcgoeaibkinlgnkdgaimomabocfcjcgcibkfoaohhfhhabimlaialgmjjbfcldejdibkdgblffbplgepjjgabcjekbkhcaikoeabbkffjoiannkdcfjpofmcgckojamnaabjmjeahecfkpihjmmnaclkhkipijgbkeippokekpdbmagihodpiaiaiaiamjmfmomecomcoaac"
      NAME="tab" SCOPE="project" model-entity="SharableIcon"/>
+    <Icon
+     IMAGE="ajnamomhinikjkikiaiaiainmjmimenciaiaiameiaiaiakliiigiaiaiaebdbkolniaiaiaigocmlmhmeiahpiahpiahpcadnchbdiaiaiaijpaminjpdiaiailjdiaiailjdibiabkbmjiiaiaiaihpemjmnmfihfoihijjeipionaehpoibiaiaidmemjmembneoifognbinnminembjeehpponclglogcmofbccfifcfmcjpnkjjlnieccbfngbefabhbcbfhekanemcmehjjcoenejkniiemcmbmencjbikhfbccaofmjofmjjjjejiggadnadjpnbafgocokagfkcggjdkglehhgpchhpgnhnhphfdfffmpghopadjpdeoemnmoghoghbmllghimiiiiiiiiiidiinndbeecgcfekccllhbchahongakemadpkpaohmjooccnhbbbbbenjogkhclmebakaiijbaeiimckgbabaeblpkbcpkgeemgagldncbclcelgeohmpngljfjfhckoioigjjmjdgjjdofiiffoijhgjomabkfdjajbegekgncpakkboofjbabnmkmpmhnhppieipablphefokfdleloomajnnmamdelkpbhlmmahjjomjihoagjgnkhdpnempnkeondfcpcbobcnpckehfcflophhenmhkpincebpcloafhajehjmdlnmajcbdjpdomaedijcjokdcbflfmeledmkidjbhdicnmdcbaknlbdepjfipalkaagcaklkimfplkdjbajbedafamjidolephnahmcmfogopllfjpnlljplpalflhmpkhdaoknbjanhgpdmjnlnkbcoeggnpajgmpekkmodophgjdakkkgkfjdponajflfnhlpjmnkdgjflbhjclemdmlfaimknihdgmfhccccgejooemebcemiacidhnhbfdhidaodmnjihfmnjncdkheenbjkhplhdkbcfmmeikepomkepfodieifhhfpdlbnbahgioilebabnknjbojlcecfgnohapfnbibjlklpdjcnfbcidbheinhmfllmmegdclogfdgkhjpmoklaeklkbpcjkkemgglonjhofbfbldoibgcdjkpdcikonaghmlmldlmjbgblnlmnemikhablfmajbjfjfcmhpjhfnhmcoghleldkhanajnphbpfhfdodgogfnlpljhnhgofefkenfbhjolagjmfdaopepbfbcbnmdpchchffoiccffoikcdpnempnmhebmlbcnnhlnfonfcecpnkmfniaiaoambegfppgclkljakdmflopdihngmldibfdpnmiaoipchhkfnphdjlppjfnmcaoghdnceflfmkpahcdkdnnekhklaoolmhieafbmlbfiaeekobpedeoaepahhfoahpiodhjcpdmipjbdfamkigoiekbacjambaijlcbhgdghlioibibibibibipagnfpkhkablkkaefefljeookppapkgeebgfpomiafklmanbahbmoemfkbmomfmlkcionpffadhicpiifpeibnfmabeocmmjgoaiebkabfnbdljoecmaaiffigkackhlihdbaokgaiigakpdncljegdioidnkoaldfalibjmdogikdajghileemmgnfppmbmidhdeojkencdkjegdnegoiodfhbiobjbjakpgbdoemjknpamicblhibpdmhbaolableoajkdampbconjihabendogialaiapljepndlcfnilhickhjfjglnippeaokacpbeeccgnlpkcphaagfdmjmaeamdhajljboimdbmjpohhpmdiaiaiaiamjmfmomecomcoaac"
+     NAME="button" SCOPE="project" model-entity="SharableIcon"/>
    </Icons>
   </Icons>
 	</XStudioIcons>
@@ -131,6 +134,12 @@
                  ENDTEXT="" ICON="%Icons%/Mobile/Ionic/toggle" 
                  NAME="3.Toggle" REFORMAT="yes" SCOPE="project"
                  STARTTEXT="&lt;ion-toggle >\n&lt;/ion-toggle>"
+                 model-entity="SharableMacroHTML"/>
+
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Button:&lt;/b>&lt;br>\n&lt;code>&amp;lt;button>&lt;/code>&lt;br>\n...&lt;br>\n&lt;code>&amp;lt;/button>&lt;/code>\n&lt;/html>"
+                 ENDTEXT="" ICON="%Icons%/Mobile/Ionic/button" 
+                 NAME="4.Button" REFORMAT="yes" SCOPE="project"
+                 STARTTEXT="&lt;button >\n&lt;/button>"
                  model-entity="SharableMacroHTML"/>
      </GroupHTML>
 

@@ -32,8 +32,12 @@ public class IonicFieldEditorFactory implements IonicConstants {
 	 * @return
 	 */
 	public static IFieldEditor createIconEditor(String editorID) {
+		return createIconEditor(editorID, IonicWizardMessages.tabIconDescription);
+	}
+
+	public static IFieldEditor createIconEditor(String editorID, String description) {
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(editorID, WizardMessages.iconLabel, IonicIconFactory.getInstance().getIcons(), "", true,
-				IonicWizardMessages.tabIconDescription);
+				description);
 	}
 
 	/**
@@ -615,5 +619,80 @@ public class IonicFieldEditorFactory implements IonicConstants {
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_ITEM_STYLE, IonicWizardMessages.itemStyleLabel, Arrays.asList(ITEM_STYLES), "", true,
 				"");
 	}
+
+	/**
+	 * Used in New Button wizard.
+	 * @return
+	 */
+	public static IFieldEditor createButtonIconPositionEditor() {
+		String[] values = new String[]{"left", "right"};
+		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(JQueryConstants.EDITOR_ID_ICON_POS, WizardMessages.iconposLabel, Arrays.asList(values), Arrays.asList(values), "left", 
+				WizardDescriptions.iconPosition);
+	}
+
+	static String[] BUTTON_COLORS = {
+		"", "button-light", "button-stable", "button-positive", "button-calm", "button-balanced", "button-energized", "button-assertive", "button-royal", "button-dark",  
+	};
+
+	static List<String> BUTTON_COLOR_LIST = Arrays.asList(BUTTON_COLORS);
+
+	/**
+	 * Used in New Button wizard.
+	 * @return
+	 */
+	public static IFieldEditor createButtonColorEditor(String editorID) {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(editorID, IonicWizardMessages.barColorLabel, BUTTON_COLOR_LIST, "", true,
+				"");
+	}
+
+	/**
+	 * Used in New Button wizard.
+
+	 * @return
+	 */
+	public static IFieldEditor createButtonTypeEditor() {
+		String[] labels = new String[]{"button", "link"};
+		String[] values = new String[]{TAG_BUTTON, TAG_A};
+		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(EDITOR_ID_BUTTON_TYPE, IonicWizardMessages.buttonTypeLabel, 
+				Arrays.asList(labels), Arrays.asList(values), TAG_BUTTON, 
+				"");
+	}
+	/**
+	 * Used in New Button wizard.
+	 * @return
+	 */
+	public static IFieldEditor createButtonSizeEditor() {
+		String[] labels = new String[]{"normal", "small", "large"};
+		String[] values = new String[]{"none", "button-small", "button-large"};
+		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(EDITOR_ID_BUTTON_SIZE, IonicWizardMessages.buttonSizeLabel, 
+				Arrays.asList(labels), Arrays.asList(values), "none", 
+				"");
+	}
+
+	/**
+	 * Used in New Button wizard.
+	 * @return
+	 */
+	public static IFieldEditor createButtonWidthEditor() {
+		String[] labels = new String[]{"normal", "block", "full"};
+		String[] values = new String[]{"none", "button-block", "button-full"};
+		
+		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(EDITOR_ID_BUTTON_WIDTH, IonicWizardMessages.buttonWidthLabel, 
+				Arrays.asList(labels), Arrays.asList(values), "none", 
+				"");
+	}
+
+	/**
+	 * Used in New Button wizard.
+	 * @return
+	 */
+	public static IFieldEditor createButtonFillEditor() {
+		String[] labels = new String[]{"normal", "outline", "clear"};
+		String[] values = new String[]{"none", "button-outline", "button-clear"};
+		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(EDITOR_ID_BUTTON_FILL, IonicWizardMessages.buttonFillLabel, 
+				Arrays.asList(labels), Arrays.asList(values), "none", 
+				"");
+	}
+
 }
 

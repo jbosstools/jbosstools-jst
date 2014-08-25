@@ -50,6 +50,9 @@
       <tag name="_Palette_/Mobile/Ionic/version:1.0/2.form/3.Toggle" 
       	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewToggleWizard" 
       	keywords="toggle"/>
+      <tag name="_Palette_/Mobile/Ionic/version:1.0/2.form/4.Button" 
+      	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewButtonWizard" 
+      	keywords="button"/>
    </extension>
 
    <extension

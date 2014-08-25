@@ -22,6 +22,8 @@ import org.jboss.tools.common.model.ui.editors.dnd.IDropWizard;
 import org.jboss.tools.common.model.ui.internal.editors.PaletteItemResult;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.IonicConstants;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.IonicVersion;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewButtonWizard;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewButtonWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewCheckBoxWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewCheckBoxWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewContentWizard;
@@ -761,6 +763,61 @@ public class IonicPaletteTest extends AbstractPaletteEntryTest implements IonicC
 		assertTextExists(wizard, TAG_ION_OPTION_BUTTON);
 		wizardPage.setEditorValue(EDITOR_ID_OPTION_BUTTON, "");
 		assertTextDoesNotExist(wizard, TAG_ION_OPTION_BUTTON);
+
+		compareGeneratedAndInsertedText(wizard);
+	}
+
+	public void testNewButtonWizard() {
+		IWizardPage currentPage = runToolEntry("Button", true);
+		assertTrue(currentPage instanceof NewButtonWizardPage);
+
+		NewButtonWizardPage wizardPage = (NewButtonWizardPage)currentPage;
+		NewButtonWizard wizard = (NewButtonWizard)wizardPage.getWizard();
+
+		compareUIAndNonUIWizards(wizard, "Button");
+
+		assertTextExists(wizard, "Home");
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_LABEL, "Push it");
+		assertTextExists(wizard, "Push it");
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_LABEL, "Home");
+		assertTextExists(wizard, "Home");
+
+		assertTextExists(wizard, "<button ");
+		wizardPage.setEditorValue(EDITOR_ID_BUTTON_TYPE, "a");
+		assertTextExists(wizard, "<a ");
+		wizardPage.setEditorValue(EDITOR_ID_BUTTON_TYPE, "button");
+		assertTextExists(wizard, "<button ");
+
+		assertTextDoesNotExist(wizard, "button-block");
+		wizardPage.setEditorValue(EDITOR_ID_BUTTON_WIDTH, "button-block");
+		assertTextExists(wizard, "button-block");
+		wizardPage.setEditorValue(EDITOR_ID_BUTTON_WIDTH, "button-full");
+		assertTextExists(wizard, "button-full");
+		wizardPage.setEditorValue(EDITOR_ID_BUTTON_WIDTH, "normal");
+		assertTextDoesNotExist(wizard, "button-block");
+
+		assertTextDoesNotExist(wizard, "button-small");
+		wizardPage.setEditorValue(EDITOR_ID_BUTTON_SIZE, "button-small");
+		assertTextExists(wizard, "button-small");
+		wizardPage.setEditorValue(EDITOR_ID_BUTTON_SIZE, "button-large");
+		assertTextExists(wizard, "button-large");
+		wizardPage.setEditorValue(EDITOR_ID_BUTTON_SIZE, "normal");
+		assertTextDoesNotExist(wizard, "button-small");
+
+		assertTextDoesNotExist(wizard, "button-outline");
+		wizardPage.setEditorValue(EDITOR_ID_BUTTON_FILL, "button-outline");
+		assertTextExists(wizard, "button-outline");
+		wizardPage.setEditorValue(EDITOR_ID_BUTTON_FILL, "button-clear");
+		assertTextExists(wizard, "button-clear");
+		wizardPage.setEditorValue(EDITOR_ID_BUTTON_FILL, "normal");
+		assertTextDoesNotExist(wizard, "button-outline");
+
+		assertTextDoesNotExist(wizard, "icon-left");
+		wizardPage.setEditorValue(JQueryConstants.ATTR_ICON, "ion-waterdrop");
+		assertTextExists(wizard, "icon-left ion-waterdrop");
+		wizardPage.setEditorValue(JQueryConstants.ATTR_ICON, "");
+		assertTextDoesNotExist(wizard, "icon-left");
+
 
 		compareGeneratedAndInsertedText(wizard);
 	}

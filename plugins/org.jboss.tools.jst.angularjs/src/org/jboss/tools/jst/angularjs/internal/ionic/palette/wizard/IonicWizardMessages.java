@@ -60,6 +60,10 @@ public class IonicWizardMessages extends NLS {
 	public static String badgeLabel;
 	public static String badgeStyleLabel;
 	public static String barColorLabel;
+	public static String buttonFillLabel;
+	public static String buttonTypeLabel;
+	public static String buttonSizeLabel;
+	public static String buttonWidthLabel;
 	public static String canSwipeLabel;
 	public static String delegateHandleLabel;
 	public static String deleteButtonLabel;

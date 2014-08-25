@@ -137,5 +137,9 @@ public interface IonicConstants extends HTMLConstants {
 	public String EDITOR_ID_OPTION_BUTTON = "option-button";
 	public String EDITOR_ID_REORDER_BUTTON = "reorder-button";
 	public String EDITOR_ID_ITEM_STYLE = "item-style";
+	public String EDITOR_ID_BUTTON_SIZE = "button-size";
+	public String EDITOR_ID_BUTTON_TYPE = "button-type";
+	public String EDITOR_ID_BUTTON_WIDTH = "button-width";
+	public String EDITOR_ID_BUTTON_FILL = "button-fill";
 	
 }
