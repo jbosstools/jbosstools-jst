@@ -45,7 +45,11 @@
 		</activityPatternBinding>
 		<activityPatternBinding
 			activityId="org.jboss.tools.jst.jsdt.development"
-			pattern="tern\.eclipse\.ide\.ui/.*">
+			pattern="tern\.eclipse\.ide\.ui/tern\.eclipse\.ide\.internal\.ui\.properties\.TernScriptPathsPropertyPage">
+		</activityPatternBinding>
+		<activityPatternBinding
+			activityId="org.jboss.tools.jst.jsdt.development"
+			pattern="tern\.eclipse\.ide\.ui/tern\.eclipse\.ide\.internal\.ui\.properties\.TernConsolePropertyPage">
 		</activityPatternBinding>
 	</extension>
 	
