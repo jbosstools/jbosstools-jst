@@ -45,8 +45,8 @@ public class IonicRecognizer extends HTMLRecognizer {
 				// Has Ionic JS links
 				return true;
 			}
-		} else if(context instanceof JspContextImpl && JSRecognizer.getJSReferenceVersion(file, "", false, false)==null) {
-			// HTML without any JS links
+		} else if(context instanceof JspContextImpl && isAngularTemplate(file)) {
+			// AngularJS template
 			return true;
 		}
 		return false;
@@ -113,5 +113,4 @@ public class IonicRecognizer extends HTMLRecognizer {
 		}
 		return false;
 	}
-
 }

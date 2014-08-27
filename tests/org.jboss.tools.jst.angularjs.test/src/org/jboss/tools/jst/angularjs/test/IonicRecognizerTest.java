@@ -39,8 +39,12 @@ public class IonicRecognizerTest extends TestCase {
 		assertTagLib("ionic.html", true);
 	}
 
-	public void testIonicWOLibs() {
+	public void testHtml5WOLibs() {
 		assertTagLib("ionicWOLibs.html", false);
+	}
+
+	public void testHtml4WOLibs() {
+		assertTagLib("html4.html", false);
 	}
 
 	public void testOtherTagLib() {
