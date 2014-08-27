@@ -14,7 +14,9 @@ import java.text.MessageFormat;
 
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IJavaElement;
@@ -51,16 +53,16 @@ import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.ELResolverFactoryManager;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.common.ui.CommonUIPlugin;
-import org.jboss.tools.jst.web.ui.WebUiPlugin;
-import org.jboss.tools.jst.web.ui.internal.editor.contentassist.AutoContentAssistantProposal;
-import org.jboss.tools.jst.web.ui.internal.editor.contentassist.AutoELContentAssistantProposal;
-import org.jboss.tools.jst.web.ui.internal.editor.contentassist.ELPrefixUtils.ELTextRegion;
-import org.jboss.tools.jst.web.ui.internal.editor.messages.JstUIMessages;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.PageProcessor;
+import org.jboss.tools.jst.web.ui.WebUiPlugin;
+import org.jboss.tools.jst.web.ui.internal.editor.contentassist.AutoContentAssistantProposal;
+import org.jboss.tools.jst.web.ui.internal.editor.contentassist.AutoELContentAssistantProposal;
+import org.jboss.tools.jst.web.ui.internal.editor.contentassist.ELPrefixUtils.ELTextRegion;
+import org.jboss.tools.jst.web.ui.internal.editor.messages.JstUIMessages;
 import org.w3c.dom.Node;
 
 /**
@@ -549,17 +551,32 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 	 */
 	protected boolean isELCAToBeShown() {
 		ELResolver[] resolvers = getContext() == null ? null : getContext().getElResolvers();
-		return (resolvers != null && resolvers.length > 0);
+		if(resolvers!=null && resolvers.length > 0 & getContext() instanceof IPageContext) {
+			IResource resource = getContext().getResource();
+			IProject project = resource.getProject();
+			try {
+				if (project.getNature("org.jboss.tools.jsf.jsfnature") == null && resource.getFileExtension()!=null && resource.getFileExtension().toLowerCase().startsWith("htm")) {
+					return false;
+				}
+				return true;
+			} catch (CoreException e) {
+				WebUiPlugin.getDefault().logError(e);
+			}
+		}
+		return false;
 	}
 
+	@Override
 	protected ELContext createContext() {
 		return createContext(PageContextFactory.XML_PAGE_CONTEXT_TYPE);
 	}
-	
+
+	@Override
 	protected KbQuery createKbQuery(Type type, String query, String stringQuery) {
 		return createKbQuery(type, query, stringQuery, getTagPrefix(), getTagUri());
 	}
 
+	@Override
 	protected KbQuery createKbQuery(Type type, String query, String stringQuery, String prefix, String uri) {
 		KbQuery kbQuery = new KbQuery();
 
@@ -650,6 +667,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 	 * Returns URI for the current/parent tag
 	 * @return
 	 */
+	@Override
 	public String getTagUri() {
 		String nodePrefix = getTagPrefix();
 		return getUri(nodePrefix);
@@ -661,6 +679,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 	 * 
 	 * 	@Override org.jboss.tools.jst.web.ui.internal.editor.contentassist.AbstractXMLContentAssistProcessor#getUri(String)
 	 */
+	@Override
 	protected String getUri(String prefix) {
 		return null;
 	}
@@ -669,6 +688,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 	 * Returns the document position where the CA is invoked
 	 * @return
 	 */
+	@Override
 	protected int getOffset() {
 		return fCurrentContext.getInvocationOffset();
 	}
@@ -679,6 +699,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 	 * 
 	 * @return
 	 */
+	@Override
 	protected IDocument getDocument() {
 		return fCurrentContext.getDocument();
 	}
@@ -688,6 +709,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 	 * 
 	 * @return
 	 */
+	@Override
 	protected IFile getResource() {
 		IStructuredModel sModel = StructuredModelManager.getModelManager().getExistingModelForRead(getDocument());
 		try {
@@ -710,6 +732,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 	 * 
 	 * @return
 	 */
+	@Override
 	protected ELContext getContext() {
 		return this.fContext;
 	}
