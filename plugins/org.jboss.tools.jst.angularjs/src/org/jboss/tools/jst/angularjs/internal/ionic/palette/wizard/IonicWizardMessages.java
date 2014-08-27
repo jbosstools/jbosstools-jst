@@ -20,6 +20,8 @@ import org.eclipse.osgi.util.NLS;
 public class IonicWizardMessages extends NLS {
 	private static final String BUNDLE_NAME = "org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.messages"; //$NON-NLS-1$
 
+	public static String newButtonWizardDescription;
+
 	public static String newCheckboxWizardDescription;
 
 	public static String newContentWizardTitle;
@@ -47,6 +49,8 @@ public class IonicWizardMessages extends NLS {
 
 	public static String newTabTitle;
 	public static String newTabDescription;
+
+	public static String newTextInputWizardDescription;
 
 	public static String newToggleWizardTitle;
 	public static String newToggleWizardDescription;
@@ -77,6 +81,7 @@ public class IonicWizardMessages extends NLS {
 	public static String iconOnLabel;
 	public static String isEnabled;
 	public static String isNgValue;
+	public static String inputLabelStyleLabel;
 	public static String itemStyleLabel;
 	public static String leftMenuLabel;
 	public static String minZoomLabel;

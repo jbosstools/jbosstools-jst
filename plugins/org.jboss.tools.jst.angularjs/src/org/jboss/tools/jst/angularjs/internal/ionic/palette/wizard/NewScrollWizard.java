@@ -32,6 +32,7 @@ public class NewScrollWizard extends NewIonicWidgetWizard<NewScrollWizardPage> i
 		return new NewScrollWizardPage();
 	}
 
+	@Override
 	protected void addContent(ElementNode parent, boolean browser) {
 		ElementNode pg = parent.addChild(TAG_ION_SCROLL, "\n");
 		if(browser) {

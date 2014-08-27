@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2013 Red Hat, Inc. 
+ * Copyright (c) 2014 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -30,9 +30,10 @@ public class NewButtonWizardPage extends NewIonicWidgetWizardPage {
 
 	public NewButtonWizardPage() {
 		super("newButton", WizardMessages.newButtonWizardTitle);
-		setDescription(WizardMessages.newButtonWizardDescription);
+		setDescription(IonicWizardMessages.newButtonWizardDescription);
 	}
 
+	@Override
 	protected void createFieldPanel(Composite parent) {
 		IFieldEditor label = JQueryFieldEditorFactory.createLabelEditor();
 		label.setValue("Home");
@@ -56,7 +57,6 @@ public class NewButtonWizardPage extends NewIonicWidgetWizardPage {
 		addEditor(IonicFieldEditorFactory.createButtonSizeEditor(), stylePanel);
 		addEditor(IonicFieldEditorFactory.createButtonFillEditor(), stylePanel);
 
-
 		createSeparator(parent);
 	
 		IFieldEditor icon = IonicFieldEditorFactory.createIconEditor(JQueryConstants.ATTR_ICON);
@@ -74,6 +74,7 @@ public class NewButtonWizardPage extends NewIonicWidgetWizardPage {
 
 	}
 
+	@Override
 	public void validate() throws ValidationException {
 //		setEnabled(EDITOR_ID_ICON_POS, !isTrue(EDITOR_ID_ICON_ONLY));
 		super.validate();

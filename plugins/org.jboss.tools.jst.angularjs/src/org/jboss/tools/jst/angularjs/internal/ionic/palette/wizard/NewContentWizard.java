@@ -32,6 +32,7 @@ public class NewContentWizard extends NewIonicWidgetWizard<NewContentWizardPage>
 		return new NewContentWizardPage();
 	}
 
+	@Override
 	protected void addContent(ElementNode parent, boolean browser) {
 		ElementNode pg = parent.addChild(TAG_ION_CONTENT, "\n");
 		if(browser) {

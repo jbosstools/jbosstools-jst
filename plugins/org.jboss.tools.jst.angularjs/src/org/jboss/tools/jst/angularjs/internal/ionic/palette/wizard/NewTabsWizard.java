@@ -33,6 +33,7 @@ public class NewTabsWizard extends NewIonicWidgetWizard<NewTabsWizardPage> {
 		return new NewTabsWizardPage();
 	}
 
+	@Override
 	protected void addContent(ElementNode parent, boolean browser) {
 		ElementNode tabs = parent.addChild(TAG_ION_TABS);
 		addAttributeIfNotEmpty(tabs, ATTR_DELEGATE_HANDLE, ATTR_DELEGATE_HANDLE);

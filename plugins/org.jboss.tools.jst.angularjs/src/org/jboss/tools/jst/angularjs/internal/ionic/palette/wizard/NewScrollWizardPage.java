@@ -14,7 +14,6 @@ import java.beans.PropertyChangeEvent;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Widget;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.SwtFieldEditorFactory;
 import org.jboss.tools.jst.web.ui.internal.properties.advanced.LayoutUtil.TwoColumns;
@@ -93,6 +92,7 @@ public class NewScrollWizardPage extends NewIonicWidgetWizardPage {
 		updateZoomingEnablement();
 	}
 
+	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		String name = evt.getPropertyName();
 		if(ATTR_DIRECTION.equals(name)) {

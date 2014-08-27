@@ -32,6 +32,7 @@ public class NewSlideboxWizard extends NewIonicWidgetWizard<NewSlideboxWizardPag
 		return new NewSlideboxWizardPage();
 	}
 
+	@Override
 	protected void addContent(ElementNode parent, boolean browser) {
 		if(browser) {
 			ElementNode c = parent.addChild(TAG_ION_CONTENT);
