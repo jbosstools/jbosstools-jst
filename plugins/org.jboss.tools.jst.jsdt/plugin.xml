@@ -54,4 +54,13 @@
        point="org.eclipse.ui.startup">
     	<startup class="org.jboss.tools.jst.jsdt.utils.JstJsdtStartUp"></startup>
 	</extension>
+ <extension
+       point="org.eclipse.ui.propertyPages">
+    <page
+          category="org.eclipse.wst.jsdt.internal.ui.preferences.JavaScriptMainPage"
+          class="tern.eclipse.ide.ui.properties.TernModulesPropertyPage"
+          id="org.jboss.tools.jst.jsdt.modules"
+          name="Modules">
+    </page>
+ </extension>
 </plugin>
