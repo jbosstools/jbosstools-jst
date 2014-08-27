@@ -71,6 +71,7 @@ public interface IonicConstants extends HTMLConstants {
 	public String ATTR_NG_DISABLED = "ng-disabled";
 	public String ATTR_NG_FALSE_VALUE = "ng-false-value";
 	public String ATTR_NG_MODEL = "ng-model";
+	public String ATTR_NG_PATTERN = "ng-pattern";
 	public String ATTR_NG_TRUE_VALUE = "ng-true-value";
 	public String ATTR_NG_VALUE = "ng-value";
 	public String ATTR_NO_TAP_SCROLL= "no-tap-scroll";
@@ -141,5 +142,6 @@ public interface IonicConstants extends HTMLConstants {
 	public String EDITOR_ID_BUTTON_TYPE = "button-type";
 	public String EDITOR_ID_BUTTON_WIDTH = "button-width";
 	public String EDITOR_ID_BUTTON_FILL = "button-fill";
+	public String EDITOR_ID_INPUT_LABEL_STYLE = "input-label-style";
 	
 }

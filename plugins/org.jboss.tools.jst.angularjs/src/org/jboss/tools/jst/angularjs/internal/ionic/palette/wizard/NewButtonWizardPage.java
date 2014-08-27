@@ -30,7 +30,7 @@ public class NewButtonWizardPage extends NewIonicWidgetWizardPage {
 
 	public NewButtonWizardPage() {
 		super("newButton", WizardMessages.newButtonWizardTitle);
-		setDescription(WizardMessages.newButtonWizardDescription);
+		setDescription(IonicWizardMessages.newButtonWizardDescription);
 	}
 
 	protected void createFieldPanel(Composite parent) {
@@ -55,7 +55,6 @@ public class NewButtonWizardPage extends NewIonicWidgetWizardPage {
 		addEditor(IonicFieldEditorFactory.createButtonWidthEditor(), stylePanel);
 		addEditor(IonicFieldEditorFactory.createButtonSizeEditor(), stylePanel);
 		addEditor(IonicFieldEditorFactory.createButtonFillEditor(), stylePanel);
-
 
 		createSeparator(parent);
 	

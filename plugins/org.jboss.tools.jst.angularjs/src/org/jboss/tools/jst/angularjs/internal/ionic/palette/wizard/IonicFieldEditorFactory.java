@@ -694,5 +694,16 @@ public class IonicFieldEditorFactory implements IonicConstants {
 				"");
 	}
 
+	static String[] INPUT_LABEL_STYLES = {"", "inline", "stacked", "floating"};
+
+	/**
+	 * Used in New Text Input wizard.
+	 * @return
+	 */
+	public static IFieldEditor createInputLabelStyleEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_INPUT_LABEL_STYLE, IonicWizardMessages.inputLabelStyleLabel, Arrays.asList(INPUT_LABEL_STYLES), "inline", false,
+				"");
+	}
+
 }
 

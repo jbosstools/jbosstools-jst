@@ -48,6 +48,8 @@ import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTabWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTabWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTabsWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTabsWizardPage;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTextInputWizard;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTextInputWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewToggleWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewToggleWizardPage;
 import org.jboss.tools.jst.jsp.test.palette.AbstractPaletteEntryTest;
@@ -818,6 +820,73 @@ public class IonicPaletteTest extends AbstractPaletteEntryTest implements IonicC
 		wizardPage.setEditorValue(JQueryConstants.ATTR_ICON, "");
 		assertTextDoesNotExist(wizard, "icon-left");
 
+
+		compareGeneratedAndInsertedText(wizard);
+	}
+
+	public void testNewTextInputWizard() {
+		IWizardPage currentPage = runToolEntry("Text Input", true);
+		assertTrue(currentPage instanceof NewTextInputWizardPage);
+
+		NewTextInputWizardPage wizardPage = (NewTextInputWizardPage)currentPage;
+		NewTextInputWizard wizard = (NewTextInputWizard)wizardPage.getWizard();
+
+		compareUIAndNonUIWizards(wizard, "Text Input");
+
+		assertAttrExists(wizard, ATTR_TYPE, "text");
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_TEXT_TYPE, "number");
+		assertAttrExists(wizard, ATTR_TYPE, "number");
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_TEXT_TYPE, "text");
+		assertAttrExists(wizard, ATTR_TYPE, "text");
+
+		assertTextDoesNotExist(wizard, ATTR_NAME);
+		wizardPage.setEditorValue(ATTR_NAME, "myInput");
+		assertAttrExists(wizard, ATTR_NAME, "myInput");
+		wizardPage.setEditorValue(ATTR_NAME, "");
+		assertTextDoesNotExist(wizard, ATTR_NAME);
+
+		assertTextDoesNotExist(wizard, ATTR_NG_MODEL);
+		wizardPage.setEditorValue(ATTR_NG_MODEL, "model");
+		assertAttrExists(wizard, ATTR_NG_MODEL, "model");
+		wizardPage.setEditorValue(ATTR_NG_MODEL, "");
+		assertTextDoesNotExist(wizard, ATTR_NG_MODEL);
+
+		assertTextExists(wizard, "Input:");
+		assertAttrExists(wizard, ATTR_CLASS, "input-label");
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_LABEL, "Price");
+		assertTextExists(wizard, "Price");
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_LABEL, "");
+		assertTextDoesNotExist(wizard, "input-label");
+		wizardPage.setEditorValue(JQueryConstants.EDITOR_ID_LABEL, "Input:");
+		assertTextExists(wizard, "Input:");
+
+		assertAttrExists(wizard, ATTR_CLASS, "item item-input");
+		wizardPage.setEditorValue(EDITOR_ID_INPUT_LABEL_STYLE, "");
+		assertTextDoesNotExist(wizard, "item item-input");
+		wizardPage.setEditorValue(EDITOR_ID_INPUT_LABEL_STYLE, "stacked");
+		assertAttrExists(wizard, ATTR_CLASS, "item item-input item-stacked-label");
+		wizardPage.setEditorValue(EDITOR_ID_INPUT_LABEL_STYLE, "floating");
+		assertAttrExists(wizard, ATTR_CLASS, "item item-input item-floating-label");
+		wizardPage.setEditorValue(EDITOR_ID_INPUT_LABEL_STYLE, "inline");
+		assertAttrExists(wizard, ATTR_CLASS, "item item-input");
+
+		assertAttrExists(wizard, JQueryConstants.ATTR_PLACEHOLDER, "Text");
+		wizardPage.setEditorValue(JQueryConstants.ATTR_PLACEHOLDER, "xx");
+		assertAttrExists(wizard, JQueryConstants.ATTR_PLACEHOLDER, "xx");
+		wizardPage.setEditorValue(JQueryConstants.ATTR_PLACEHOLDER, "Text");
+		assertAttrExists(wizard, JQueryConstants.ATTR_PLACEHOLDER, "Text");
+
+		assertTextDoesNotExist(wizard, JQueryConstants.ATTR_REQUIRED);
+		wizardPage.setEditorValue(JQueryConstants.ATTR_REQUIRED, TRUE);
+		assertAttrExists(wizard, JQueryConstants.ATTR_REQUIRED, TRUE);
+		wizardPage.setEditorValue(JQueryConstants.ATTR_REQUIRED, FALSE);
+		assertTextDoesNotExist(wizard, JQueryConstants.ATTR_REQUIRED);
+
+		assertTextDoesNotExist(wizard, JQueryConstants.ATTR_DISABLED);
+		wizardPage.setEditorValue(JQueryConstants.ATTR_DISABLED, TRUE);
+		assertAttrExists(wizard, JQueryConstants.ATTR_DISABLED, JQueryConstants.ATTR_DISABLED);
+		wizardPage.setEditorValue(JQueryConstants.ATTR_DISABLED, FALSE);
+		assertTextDoesNotExist(wizard, JQueryConstants.ATTR_DISABLED);
 
 		compareGeneratedAndInsertedText(wizard);
 	}
