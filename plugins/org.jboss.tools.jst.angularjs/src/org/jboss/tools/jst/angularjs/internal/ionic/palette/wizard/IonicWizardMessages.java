@@ -31,6 +31,9 @@ public class IonicWizardMessages extends NLS {
 
 	public static String newHeaderWizardDescription;
 
+	public static String newNavigationWizardTitle;
+	public static String newNavigationWizardDescription;
+
 	public static String newListWizardTitle;
 	public static String newListWizardDescription;
 
@@ -61,8 +64,10 @@ public class IonicWizardMessages extends NLS {
 	public static String versionPageDescription;
 
 	public static String activeSlideLabel;
+	public static String addBackButton;
 	public static String addMenuToggleLable;
 	public static String alignTitleLabel;
+	public static String animationLabel;
 	public static String autoplayLabel;
 	public static String badgeLabel;
 	public static String badgeStyleLabel;
@@ -148,6 +153,8 @@ public class IonicWizardMessages extends NLS {
 	public static String listShowDeleteDescription;
 	public static String listShowReorderDescription;
 	public static String listTypeDescription;
+	public static String navbarAddBackButtonDescription;
+	public static String navviewNameDescription;
 	public static String ngClickDescription;
 	public static String ngModelDescription;
 	public static String ngValueDescription;

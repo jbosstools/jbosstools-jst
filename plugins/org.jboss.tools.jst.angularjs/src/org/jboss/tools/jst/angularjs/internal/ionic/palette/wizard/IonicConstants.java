@@ -31,7 +31,10 @@ public interface IonicConstants extends HTMLConstants {
 	public String TAG_ION_HEADER_BAR = "ion-header-bar";
 	public String TAG_ION_ITEM = "ion-item";
 	public String TAG_ION_LIST = "ion-list";
+	public String TAG_ION_NAV_BACK_BUTTON = "ion-nav-back-button";
+	public String TAG_ION_NAV_BAR = "ion-nav-bar";
 	public String TAG_ION_NAV_BUTTONS = "ion-nav-buttons";
+	public String TAG_ION_NAV_VIEW = "ion-nav-view";
 	public String TAG_ION_OPTION_BUTTON = "ion-option-button";
 	public String TAG_ION_RADIO = "ion-radio";
 	public String TAG_ION_REFRESHER = "ion-refresher";
@@ -49,6 +52,7 @@ public interface IonicConstants extends HTMLConstants {
 
 	public String ATTR_ACTIVE_SLIDE = "active-slide";
 	public String ATTR_ALIGN_TITLE = "align-title";
+	public String ATTR_ANIMATION = "animation";
 	public String ATTR_AUTO_PLAY = "auto-play";
 	public String ATTR_BADGE = "badge";
 	public String ATTR_BADGE_STYLE = "badge-style";
@@ -59,6 +63,7 @@ public interface IonicConstants extends HTMLConstants {
 	public String ATTR_DRAG_CONTENT = "drag-content";
 	public String ATTR_EDGE_DRAG_THRESHOLD = "edge-drag-threshold";
 	public String ATTR_HAS_BOUNCING = "has-bouncing";
+	public String ATTR_HIDE_BACK_BUTTON = "hide-back-button";
 	public String ATTR_ICON = "icon";
 	public String ATTR_ICON_OFF = "icon-off";
 	public String ATTR_ICON_ON = "icon-on";
@@ -149,5 +154,8 @@ public interface IonicConstants extends HTMLConstants {
 	public String EDITOR_ID_BUTTON_WIDTH = "button-width";
 	public String EDITOR_ID_BUTTON_FILL = "button-fill";
 	public String EDITOR_ID_INPUT_LABEL_STYLE = "input-label-style";
+	public String EDITOR_ID_NAV_BAR_ANIMATION = "nav-bar-animation";
+	public String EDITOR_ID_NAV_VIEW_ANIMATION = "nav-view-animation";
+			
 	
 }

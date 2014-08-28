@@ -758,5 +758,40 @@ public class IonicFieldEditorFactory implements IonicConstants {
 				IonicWizardMessages.refresherRefreshingTextDescription);
 	}
 
+	/**
+	 * Used in New Navigation wizard.
+	 * @return
+	 */
+	public static IFieldEditor createNavViewNameEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_NAME, WizardMessages.nameLabel, "",
+				IonicWizardMessages.navviewNameDescription);
+	}
+
+	static String[] ANIMATIONS = {
+		"", "fade-in", "nav-title-slide-ios7", "no-animation", "reverse",
+		"slide-in-left", "slide-in-right", "slide-in-up", "slide-left-right-ios7", 
+		"slide-left-right", "slide-out-left", "slide-out-right", "slide-right-left-ios7",
+		"slide-right-left"
+	};
+
+	static List<String> ANIMATION_LIST = Arrays.asList(ANIMATIONS);
+
+	/**
+	 * Used in New Button wizard.
+	 * @return
+	 */
+	public static IFieldEditor createAnimationEditor(String editorID) {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(editorID, IonicWizardMessages.animationLabel, ANIMATION_LIST, "", false,
+				"");
+	}
+
+	/**
+	 * Used in New List wizard.
+	 * @return
+	 */
+	public static IFieldEditor createAddBackButtonEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(TAG_ION_NAV_BACK_BUTTON, IonicWizardMessages.addBackButton, true,
+				IonicWizardMessages.navbarAddBackButtonDescription);
+	}
 }
 

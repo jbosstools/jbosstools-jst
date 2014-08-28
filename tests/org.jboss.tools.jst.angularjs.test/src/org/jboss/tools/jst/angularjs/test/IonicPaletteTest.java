@@ -36,6 +36,8 @@ import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewIonicWidge
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewIonicWidgetWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewListWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewListWizardPage;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewNavigationWizard;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewNavigationWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewRadioWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewRadioWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewRefresherWizard;
@@ -939,6 +941,65 @@ public class IonicPaletteTest extends AbstractPaletteEntryTest implements IonicC
 		assertTextDoesNotExist(wizard, ATTR_REFRESHING_TEXT);
 
 		assertTextDoesNotExist(wizard, JQueryConstants.ATTR_DISABLED);
+
+		compareGeneratedAndInsertedText(wizard);
+	}
+
+	public void testNewNavigationWizard() {
+		IWizardPage currentPage = runToolEntry("Navigation", true);
+		assertTrue(currentPage instanceof NewNavigationWizardPage);
+
+		NewNavigationWizardPage wizardPage = (NewNavigationWizardPage)currentPage;
+		NewNavigationWizard wizard = (NewNavigationWizard)wizardPage.getWizard();
+
+		compareUIAndNonUIWizards(wizard, "Navigation");
+
+		assertTextDoesNotExist(wizard, ATTR_DELEGATE_HANDLE);
+		wizardPage.setEditorValue(ATTR_DELEGATE_HANDLE, "myNavBar");
+		assertAttrExists(wizard, ATTR_DELEGATE_HANDLE, "myNavBar");
+		wizardPage.setEditorValue(ATTR_DELEGATE_HANDLE, "");
+		assertTextDoesNotExist(wizard, ATTR_DELEGATE_HANDLE);
+
+		assertTextExists(wizard, TAG_ION_NAV_BACK_BUTTON);
+		wizardPage.setEditorValue(TAG_ION_NAV_BACK_BUTTON, FALSE);
+		assertTextDoesNotExist(wizard, TAG_ION_NAV_BACK_BUTTON);
+		wizardPage.setEditorValue(TAG_ION_NAV_BACK_BUTTON, TRUE);
+		assertTextExists(wizard, TAG_ION_NAV_BACK_BUTTON);
+
+		assertTextDoesNotExist(wizard, ATTR_ALIGN_TITLE);
+		wizardPage.setEditorValue(ATTR_ALIGN_TITLE, "left");
+		assertAttrExists(wizard, ATTR_ALIGN_TITLE, "left");
+		wizardPage.setEditorValue(ATTR_ALIGN_TITLE, "");
+		assertTextDoesNotExist(wizard, ATTR_ALIGN_TITLE);
+	
+		assertTextDoesNotExist(wizard, ATTR_NO_TAP_SCROLL);
+		wizardPage.setEditorValue(ATTR_NO_TAP_SCROLL, TRUE);
+		assertAttrExists(wizard, ATTR_NO_TAP_SCROLL, TRUE);
+		wizardPage.setEditorValue(ATTR_NO_TAP_SCROLL, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_NO_TAP_SCROLL);
+	
+		assertTextDoesNotExist(wizard, ATTR_ANIMATION);
+		wizardPage.setEditorValue(EDITOR_ID_NAV_BAR_ANIMATION, "a");
+		assertAttrExists(wizard, ATTR_ANIMATION, "a");
+		wizardPage.setEditorValue(EDITOR_ID_NAV_BAR_ANIMATION, "");
+		assertTextDoesNotExist(wizard, ATTR_ANIMATION);
+
+		wizardPage.setEditorValue(EDITOR_ID_BAR_COLOR, "bar-calm");
+		assertAttrExists(wizard, ATTR_CLASS, "bar-calm");
+		wizardPage.setEditorValue(EDITOR_ID_BAR_COLOR, "");
+		
+		assertTextDoesNotExist(wizard, ATTR_NAME);
+		wizardPage.setEditorValue(ATTR_NAME, "n");
+		assertAttrExists(wizard, ATTR_NAME, "n");
+		wizardPage.setEditorValue(ATTR_NAME, "");
+		assertTextDoesNotExist(wizard, ATTR_NAME);
+	
+
+		assertTextDoesNotExist(wizard, ATTR_ANIMATION);
+		wizardPage.setEditorValue(EDITOR_ID_NAV_VIEW_ANIMATION, "b");
+		assertAttrExists(wizard, ATTR_ANIMATION, "b");
+		wizardPage.setEditorValue(EDITOR_ID_NAV_VIEW_ANIMATION, "");
+		assertTextDoesNotExist(wizard, ATTR_ANIMATION);
 
 		compareGeneratedAndInsertedText(wizard);
 	}

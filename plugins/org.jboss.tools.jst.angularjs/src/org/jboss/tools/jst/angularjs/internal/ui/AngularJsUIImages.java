@@ -21,6 +21,7 @@ public class AngularJsUIImages extends CommonUIImages {
 	
 	public static String CONTENT_IMAGE = WIZARDS_PATH + "ContentWizBan.png"; //$NON-NLS-1$
 	public static String CHECKBOX_IMAGE = WIZARDS_PATH + "IonicCheckboxWizBan.png"; //$NON-NLS-1$
+	public static String NAVIGATION_IMAGE = WIZARDS_PATH + "IonicNavigationWizBan.png"; //$NON-NLS-1$
 	public static String RADIO_IMAGE = WIZARDS_PATH + "IonicRadioWizBan.png"; //$NON-NLS-1$
 	public static String REFRESHER_IMAGE = WIZARDS_PATH + "IonicRefresherWizBan.png"; //$NON-NLS-1$
 	public static String TOGGLE_IMAGE = WIZARDS_PATH + "IonicToggleWizBan.png"; //$NON-NLS-1$

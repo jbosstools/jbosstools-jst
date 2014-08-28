@@ -19,6 +19,9 @@
       <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/101.Refresher" 
       	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewRefresherWizard" 
       	keywords="refresher"/>
+      <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/102.Navigation" 
+      	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewNavigationWizard" 
+      	keywords="nav bar view"/>
       <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/2.Scroll" 
       	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewScrollWizard" 
       	keywords="scroll"/>
