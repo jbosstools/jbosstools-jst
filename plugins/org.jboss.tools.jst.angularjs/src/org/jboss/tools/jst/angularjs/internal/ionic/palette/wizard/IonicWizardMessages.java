@@ -36,6 +36,9 @@ public class IonicWizardMessages extends NLS {
 
 	public static String newRadioWizardDescription;
 
+	public static String newRefresherWizardTitle;
+	public static String newRefresherWizardDescription;
+
 	public static String newScrollWizardTitle;
 	public static String newScrollWizardDescription;
 
@@ -93,6 +96,7 @@ public class IonicWizardMessages extends NLS {
 	public static String ngTrueValueLabel;
 	public static String noTapScrollLabel;
 	public static String ondeselectLabel;
+	public static String onpullingLabel;
 	public static String onrefreshLabel;
 	public static String onscrollLabel;
 	public static String onscrollCompleteLabel;
@@ -103,6 +107,10 @@ public class IonicWizardMessages extends NLS {
 	public static String paddingLabel;
 	public static String pagerClickLabel;
 	public static String pagingLabel;
+	public static String pullingIconLabel;
+	public static String pullingTextLabel;
+	public static String refreshingIconLabel;
+	public static String refreshingTextLabel;
 	public static String reorderButtonLabel;
 	public static String rightMenuLabel;
 	public static String scrollbar_xLabel;
@@ -143,7 +151,13 @@ public class IonicWizardMessages extends NLS {
 	public static String ngClickDescription;
 	public static String ngModelDescription;
 	public static String ngValueDescription;
+	public static String refresherOnpullingDescription;
+	public static String refresherOnrefreshDescription;
 	public static String scrollHasBouncingDescription;
+	public static String refresherPullingIconDescription;
+	public static String refresherPullingTextDescription;
+	public static String refresherRefreshingIconDescription;
+	public static String refresherRefreshingTextDescription;
 	public static String scrollMaxZoomDescription;
 	public static String scrollMinZoomDescription;
 	public static String scrollPagingDescription;

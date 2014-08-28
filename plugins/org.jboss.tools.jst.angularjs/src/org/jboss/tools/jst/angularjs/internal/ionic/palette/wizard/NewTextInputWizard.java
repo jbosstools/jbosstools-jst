@@ -12,7 +12,7 @@ package org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard;
 
 import org.jboss.tools.common.model.ui.editors.dnd.DropWizardMessages;
 import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.ElementNode;
-import org.jboss.tools.jst.web.ui.JSTWebUIImages;
+import org.jboss.tools.jst.angularjs.internal.ui.AngularJsUIImages;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
 
 /**
@@ -24,8 +24,8 @@ public class NewTextInputWizard extends NewIonicWidgetWizard<NewTextInputWizardP
 
 	public NewTextInputWizard() {
 		setWindowTitle(DropWizardMessages.Wizard_Window_Title);
-		setDefaultPageImageDescriptor(JSTWebUIImages.getInstance()
-				.getOrCreateImageDescriptor(JSTWebUIImages.TEXT_INPUT_IMAGE));
+		setDefaultPageImageDescriptor(AngularJsUIImages.getInstance()
+				.getOrCreateImageDescriptor(AngularJsUIImages.TEXT_INPUT_IMAGE));
 	}
 
 	@Override

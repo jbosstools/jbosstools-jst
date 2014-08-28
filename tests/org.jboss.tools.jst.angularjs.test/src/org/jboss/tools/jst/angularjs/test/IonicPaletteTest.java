@@ -38,6 +38,8 @@ import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewListWizard
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewListWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewRadioWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewRadioWizardPage;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewRefresherWizard;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewRefresherWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewScrollWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewScrollWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewSideMenuWizard;
@@ -886,6 +888,56 @@ public class IonicPaletteTest extends AbstractPaletteEntryTest implements IonicC
 		wizardPage.setEditorValue(JQueryConstants.ATTR_DISABLED, TRUE);
 		assertAttrExists(wizard, JQueryConstants.ATTR_DISABLED, JQueryConstants.ATTR_DISABLED);
 		wizardPage.setEditorValue(JQueryConstants.ATTR_DISABLED, FALSE);
+		assertTextDoesNotExist(wizard, JQueryConstants.ATTR_DISABLED);
+
+		compareGeneratedAndInsertedText(wizard);
+	}
+
+	public void testNewRefresherWizard() {
+		IWizardPage currentPage = runToolEntry("Refresher", true);
+		assertTrue(currentPage instanceof NewRefresherWizardPage);
+
+		NewRefresherWizardPage wizardPage = (NewRefresherWizardPage)currentPage;
+		NewRefresherWizard wizard = (NewRefresherWizard)wizardPage.getWizard();
+
+		compareUIAndNonUIWizards(wizard, "Refresher");
+
+		assertTextDoesNotExist(wizard, ATTR_ON_PULLING);
+		wizardPage.setEditorValue(ATTR_ON_PULLING, "doPull()");
+		assertAttrExists(wizard, ATTR_ON_PULLING, "doPull()");
+		wizardPage.setEditorValue(ATTR_ON_PULLING, "");
+		assertTextDoesNotExist(wizard, ATTR_ON_PULLING);
+
+		assertTextDoesNotExist(wizard, ATTR_ON_REFRESH + "=");
+		wizardPage.setEditorValue(ATTR_ON_REFRESH, "doRefresh()");
+		assertAttrExists(wizard, ATTR_ON_REFRESH, "doRefresh()");
+		wizardPage.setEditorValue(ATTR_ON_REFRESH, "");
+		assertTextDoesNotExist(wizard, ATTR_ON_REFRESH + "=");
+
+		assertTextDoesNotExist(wizard, ATTR_PULLING_ICON);
+		wizardPage.setEditorValue(ATTR_PULLING_ICON, "ion-a");
+		assertAttrExists(wizard, ATTR_PULLING_ICON, "ion-a");
+		wizardPage.setEditorValue(ATTR_PULLING_ICON, "");
+		assertTextDoesNotExist(wizard, ATTR_PULLING_ICON);
+
+		assertTextDoesNotExist(wizard, ATTR_PULLING_TEXT);
+		wizardPage.setEditorValue(ATTR_PULLING_TEXT, "pulling...");
+		assertAttrExists(wizard, ATTR_PULLING_TEXT, "pulling...");
+		wizardPage.setEditorValue(ATTR_PULLING_TEXT, "");
+		assertTextDoesNotExist(wizard, ATTR_PULLING_TEXT);
+
+		assertTextDoesNotExist(wizard, ATTR_REFRESHING_ICON);
+		wizardPage.setEditorValue(ATTR_REFRESHING_ICON, "ion-b");
+		assertAttrExists(wizard, ATTR_REFRESHING_ICON, "ion-b");
+		wizardPage.setEditorValue(ATTR_REFRESHING_ICON, "");
+		assertTextDoesNotExist(wizard, ATTR_REFRESHING_ICON);
+
+		assertTextDoesNotExist(wizard, ATTR_REFRESHING_TEXT);
+		wizardPage.setEditorValue(ATTR_REFRESHING_TEXT, "refrehing...");
+		assertAttrExists(wizard, ATTR_REFRESHING_TEXT, "refrehing...");
+		wizardPage.setEditorValue(ATTR_REFRESHING_TEXT, "");
+		assertTextDoesNotExist(wizard, ATTR_REFRESHING_TEXT);
+
 		assertTextDoesNotExist(wizard, JQueryConstants.ATTR_DISABLED);
 
 		compareGeneratedAndInsertedText(wizard);

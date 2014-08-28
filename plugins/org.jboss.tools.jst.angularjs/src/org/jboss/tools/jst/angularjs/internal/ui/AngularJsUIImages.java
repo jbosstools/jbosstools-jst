@@ -22,6 +22,7 @@ public class AngularJsUIImages extends CommonUIImages {
 	public static String CONTENT_IMAGE = WIZARDS_PATH + "ContentWizBan.png"; //$NON-NLS-1$
 	public static String CHECKBOX_IMAGE = WIZARDS_PATH + "IonicCheckboxWizBan.png"; //$NON-NLS-1$
 	public static String RADIO_IMAGE = WIZARDS_PATH + "IonicRadioWizBan.png"; //$NON-NLS-1$
+	public static String REFRESHER_IMAGE = WIZARDS_PATH + "IonicRefresherWizBan.png"; //$NON-NLS-1$
 	public static String TOGGLE_IMAGE = WIZARDS_PATH + "IonicToggleWizBan.png"; //$NON-NLS-1$
 	public static String LIST_IMAGE = WIZARDS_PATH + "ListWizBan.png"; //$NON-NLS-1$
 	public static String SCROLL_IMAGE = WIZARDS_PATH + "ScrollWizBan.png"; //$NON-NLS-1$
@@ -30,6 +31,7 @@ public class AngularJsUIImages extends CommonUIImages {
 	public static String TABS_IMAGE = WIZARDS_PATH + "IonicTabsWizBan.png"; //$NON-NLS-1$
 	public static String TAB_IMAGE = WIZARDS_PATH + "IonicTabWizBan.png"; //$NON-NLS-1$
 	public static String BUTTON_IMAGE = WIZARDS_PATH + "IonicButtonWizBan.png"; //$NON-NLS-1$
+	public static String TEXT_INPUT_IMAGE = WIZARDS_PATH + "IonicTextInputWizBan.png"; //$NON-NLS-1$
 
 
 	private static AngularJsUIImages INSTANCE;

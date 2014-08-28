@@ -34,6 +34,7 @@ public interface IonicConstants extends HTMLConstants {
 	public String TAG_ION_NAV_BUTTONS = "ion-nav-buttons";
 	public String TAG_ION_OPTION_BUTTON = "ion-option-button";
 	public String TAG_ION_RADIO = "ion-radio";
+	public String TAG_ION_REFRESHER = "ion-refresher";
 	public String TAG_ION_REORDER_BUTTON = "ion-reorder-button";
 	public String TAG_ION_SCROLL = "ion-scroll";
 	public String TAG_ION_SIDE_MENUS = "ion-side-menus";
@@ -74,7 +75,8 @@ public interface IonicConstants extends HTMLConstants {
 	public String ATTR_NG_PATTERN = "ng-pattern";
 	public String ATTR_NG_TRUE_VALUE = "ng-true-value";
 	public String ATTR_NG_VALUE = "ng-value";
-	public String ATTR_NO_TAP_SCROLL= "no-tap-scroll";
+	public String ATTR_NO_TAP_SCROLL = "no-tap-scroll";
+	public String ATTR_ON_PULLING = "on-pulling";
 	public String ATTR_ON_REFRESH = "on-refresh";
 	public String ATTR_ON_REORDER = "on-reorder";
 	public String ATTR_ON_SCROLL = "on-scroll";
@@ -86,6 +88,10 @@ public interface IonicConstants extends HTMLConstants {
 	public String ATTR_PADDING = "padding";
 	public String ATTR_PAGER_CLICK = "pager-click";
 	public String ATTR_PAGING = "paging";
+	public String ATTR_PULLING_ICON = "pulling-icon";
+	public String ATTR_PULLING_TEXT = "pulling-text";
+	public String ATTR_REFRESHING_ICON = "refreshing-icon";
+	public String ATTR_REFRESHING_TEXT = "refreshing-text";
 	public String ATTR_SCROLL = "scroll";
 	public String ATTR_SCROLLBAR_X = "scrollbar-x";
 	public String ATTR_SCROLLBAR_Y = "scrollbar-y";

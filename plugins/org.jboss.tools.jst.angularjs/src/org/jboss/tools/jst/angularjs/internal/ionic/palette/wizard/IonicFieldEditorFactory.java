@@ -253,8 +253,16 @@ public class IonicFieldEditorFactory implements IonicConstants {
 	 * @return
 	 */
 	public static IFieldEditor createOnRefreshEditor() {
+		return createOnRefreshEditor(IonicWizardMessages.scrollRefreshDescription);
+	}
+
+	/**
+	 * Used in Scroll and Refresher wizard.
+	 * @return
+	 */
+	public static IFieldEditor createOnRefreshEditor(String description) {
 		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_ON_REFRESH, IonicWizardMessages.onrefreshLabel, "",
-				IonicWizardMessages.scrollRefreshDescription);
+				description);
 	}
 
 	/**
@@ -703,6 +711,51 @@ public class IonicFieldEditorFactory implements IonicConstants {
 	public static IFieldEditor createInputLabelStyleEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_INPUT_LABEL_STYLE, IonicWizardMessages.inputLabelStyleLabel, Arrays.asList(INPUT_LABEL_STYLES), "inline", false,
 				"");
+	}
+
+	/**
+	 * Used in Refresher wizard.
+	 * @return
+	 */
+	public static IFieldEditor createOnPullingEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_ON_PULLING, IonicWizardMessages.onpullingLabel, "",
+				IonicWizardMessages.refresherOnpullingDescription);
+	}
+
+	/**
+	 * Used in New Refresher wizard.
+	 * @return
+	 */
+	public static IFieldEditor createPullingIconEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(ATTR_PULLING_ICON, IonicWizardMessages.pullingIconLabel, IonicIconFactory.getInstance().getIcons(), "", true,
+				IonicWizardMessages.refresherPullingIconDescription);
+	}
+
+	/**
+	 * Used in New Refresher wizard.
+	 * @return
+	 */
+	public static IFieldEditor createRefreshingIconEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(ATTR_REFRESHING_ICON, IonicWizardMessages.refreshingIconLabel, IonicIconFactory.getInstance().getIcons(), "", true,
+				IonicWizardMessages.refresherRefreshingIconDescription);
+	}
+
+	/**
+	 * Used in Refresher wizard.
+	 * @return
+	 */
+	public static IFieldEditor createPullingTextEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_PULLING_TEXT, IonicWizardMessages.pullingTextLabel, "",
+				IonicWizardMessages.refresherPullingTextDescription);
+	}
+
+	/**
+	 * Used in Refresher wizard.
+	 * @return
+	 */
+	public static IFieldEditor createRefreshingTextEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_REFRESHING_TEXT, IonicWizardMessages.refreshingTextLabel, "",
+				IonicWizardMessages.refresherRefreshingTextDescription);
 	}
 
 }
