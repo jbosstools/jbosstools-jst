@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2012 Red Hat, Inc.
+ * Copyright (c) 2007-2014 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -20,9 +20,14 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.ISafeRunnable;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextListener;
@@ -53,7 +58,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
-import org.eclipse.swt.dnd.DropTargetEffect;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.DropTargetListener;
 import org.eclipse.swt.dnd.FileTransfer;
@@ -62,9 +66,6 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -98,6 +99,7 @@ import org.eclipse.wst.sse.ui.views.contentoutline.ContentOutlineConfiguration;
 import org.eclipse.wst.xml.core.internal.document.AttrImpl;
 import org.eclipse.wst.xml.core.internal.document.ElementImpl;
 import org.jboss.tools.common.core.resources.XModelObjectEditorInput;
+import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.meta.action.XActionInvoker;
 import org.jboss.tools.common.model.XModelBuffer;
 import org.jboss.tools.common.model.XModelException;
@@ -126,6 +128,26 @@ import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
 import org.jboss.tools.common.text.xml.IOccurrencePreferenceProvider;
 import org.jboss.tools.common.text.xml.XmlEditorPlugin;
 import org.jboss.tools.common.text.xml.ui.FreeCaretStyledText;
+import org.jboss.tools.jst.jsp.text.xpl.IStructuredTextOccurrenceStructureProvider;
+import org.jboss.tools.jst.jsp.text.xpl.StructuredTextOccurrenceStructureProviderRegistry;
+import org.jboss.tools.jst.web.kb.IFacilityChecker;
+import org.jboss.tools.jst.web.kb.IPageContext;
+import org.jboss.tools.jst.web.kb.KbQuery;
+import org.jboss.tools.jst.web.kb.KbQuery.Type;
+import org.jboss.tools.jst.web.kb.PageContextFactory;
+import org.jboss.tools.jst.web.kb.PageProcessor;
+import org.jboss.tools.jst.web.kb.WebKbPlugin;
+import org.jboss.tools.jst.web.kb.internal.JspContextImpl;
+import org.jboss.tools.jst.web.kb.internal.taglib.HTMLTag;
+import org.jboss.tools.jst.web.kb.internal.taglib.NameSpace;
+import org.jboss.tools.jst.web.kb.internal.taglib.TLDTag;
+import org.jboss.tools.jst.web.kb.taglib.IAttribute;
+import org.jboss.tools.jst.web.kb.taglib.IComponent;
+import org.jboss.tools.jst.web.kb.taglib.INameSpace;
+import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
+import org.jboss.tools.jst.web.kb.taglib.TagLibraryManager;
+import org.jboss.tools.jst.web.tld.VpeTaglibManager;
+import org.jboss.tools.jst.web.tld.VpeTaglibManagerProvider;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.internal.editor.HTMLTextViewerConfiguration;
 import org.jboss.tools.jst.web.ui.internal.editor.JSPTextViewerConfiguration;
@@ -139,32 +161,14 @@ import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.JSPPaletteInsert
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.JSPTagProposalFactory;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.TagProposal;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.xpl.StyledTextDropTargetEffect;
-import org.jboss.tools.jst.web.ui.internal.editor.messages.JstUIMessages;
 import org.jboss.tools.jst.web.ui.internal.editor.outline.IFormPropertySheetPage;
 import org.jboss.tools.jst.web.ui.internal.editor.outline.JSPContentOutlineConfiguration;
 import org.jboss.tools.jst.web.ui.internal.editor.outline.JSPPropertySheetConfiguration;
 import org.jboss.tools.jst.web.ui.internal.editor.outline.ValueHelper;
 import org.jboss.tools.jst.web.ui.internal.editor.preferences.IVpePreferencesPage;
-import org.jboss.tools.jst.jsp.text.xpl.IStructuredTextOccurrenceStructureProvider;
-import org.jboss.tools.jst.jsp.text.xpl.StructuredTextOccurrenceStructureProviderRegistry;
 import org.jboss.tools.jst.web.ui.internal.editor.ui.action.ExtendedFormatAction;
 import org.jboss.tools.jst.web.ui.internal.editor.ui.action.IExtendedAction;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
-import org.jboss.tools.jst.web.kb.IPageContext;
-import org.jboss.tools.jst.web.kb.KbQuery;
-import org.jboss.tools.jst.web.kb.KbQuery.Type;
-import org.jboss.tools.jst.web.kb.PageProcessor;
-import org.jboss.tools.jst.web.kb.internal.JspContextImpl;
-import org.jboss.tools.jst.web.kb.internal.taglib.HTMLTag;
-import org.jboss.tools.jst.web.kb.internal.taglib.NameSpace;
-import org.jboss.tools.jst.web.kb.internal.taglib.TLDTag;
-import org.jboss.tools.jst.web.kb.taglib.IAttribute;
-import org.jboss.tools.jst.web.kb.taglib.IComponent;
-import org.jboss.tools.jst.web.kb.taglib.INameSpace;
-import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
-import org.jboss.tools.jst.web.kb.taglib.TagLibraryManager;
-import org.jboss.tools.jst.web.tld.VpeTaglibManager;
-import org.jboss.tools.jst.web.tld.VpeTaglibManagerProvider;
 import org.osgi.framework.Bundle;
 import org.w3c.dom.DocumentType;
 import org.w3c.dom.NamedNodeMap;
@@ -385,10 +389,12 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		return JSPUIPlugin.ID;
 	}
 
+	@Override
 	public IStructuredTextOccurrenceStructureProvider getOccurrencePreferenceProvider() {
 		return fOccurrenceModelUpdater;
 	}
-	
+
+	@Override
 	public void createPartControl(Composite parent) {
 		super.createPartControl(parent);
 
@@ -407,6 +413,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		getSourceViewer().addTextListener(this);
 	}
 
+	@Override
 	protected ISourceViewer createSourceViewer(Composite parent,
 			IVerticalRuler ruler, int styles) {
 		ISourceViewer sv = super.createSourceViewer(parent, ruler, styles);
@@ -426,6 +433,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 	}
 
 	class TextFocusListener extends FocusAdapter {
+		@Override
 		public void focusLost(FocusEvent e) {
 			if (JSPTextEditor.super.isDirty()) {
 						save();
@@ -480,6 +488,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		return modified;
 	}
 
+	@Override
 	protected void doSetInput(IEditorInput input) throws CoreException {
 		super.doSetInput(XModelObjectEditorInput.checkInput(input));
 		if (getSourceViewer() != null
@@ -494,10 +503,16 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		if (o instanceof FileAnyImpl) {
 			listener = new BodyListenerImpl((FileAnyImpl) o);
 		}
+		
+		if (input instanceof IFileEditorInput) {
+			IFile file = ((IFileEditorInput)input).getFile();
+			checkFacilities(PageContextFactory.createPageContext(file), file);
+		}
 	}
 
 	boolean lock = false;
 
+	@Override
 	public boolean isDirty() {
 		if (getEditorInput() instanceof IModelObjectEditorInput) {
 			XModelObject o = getModelObject();
@@ -511,6 +526,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		}
 	}
 
+	@Override
 	public void doSave(IProgressMonitor monitor) {
 		XModelObject o = getModelObject();
 		super.doSave(monitor);
@@ -548,26 +564,31 @@ public class JSPTextEditor extends StructuredTextEditor implements
 
 	class TextEditorDropProviderImpl implements TextEditorDropProvider {
 
+		@Override
 		public ISourceViewer getSourceViewer() {
 			return JSPTextEditor.this.getSourceViewer();
 		}
 
+		@Override
 		public XModelObject getModelObject() {
 			return JSPTextEditor.this.getModelObject();
 		}
 
+		@Override
 		public void insert(Properties p) {
 			JSPPaletteInsertHelper.getInstance().insertIntoEditor(getSourceViewer(), p);
 		}
 
 	}
 
+	@Override
 	public void textChanged(TextEvent event) {
 		if (event.getDocumentEvent() != null) {
 			setModified(true);
 		}
 	}
 
+	@Override
 	public void doRevertToSaved() {
 		save();
 		XModelObject o = getModelObject();
@@ -628,10 +649,12 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			this.editor = editor;
 		}
 
+		@Override
 		protected StyledText createTextWidget(Composite parent, int styles) {
 			return new FreeCaretStyledText(parent, styles);
 		}
 
+		@Override
 		public VpeTaglibManager getTaglibManager() {
 			// added by Max Areshkau
 			// Fix for JBIDE-788
@@ -643,14 +666,17 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			return null;
 		}
 
+		@Override
 		public boolean doesIgnore() {
 			return ignore;
 		}
 
+		@Override
 		public void setIgnore(boolean ignore) {
 			this.ignore = ignore;
 		}
 
+		@Override
 		public void doOperation(int operation) {
 			boolean isLongOperation = operation == UNDO 
 					|| operation == REDO
@@ -668,6 +694,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			}
 		}
 
+		@Override
 		protected void handleDispose() {
 			if (editor != null && editor.getSourceViewer() != null
 					&& editor.getSourceViewer().getTextWidget() != null
@@ -705,19 +732,23 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		return parentEditor;
 	}
 
+	@Override
 	public void setVPEController(IVisualController c) {
 		vpeController = c;
 	}
 
+	@Override
 	public IVisualController getVPEController() {
 		return vpeController;
 	}
 
+	@Override
 	public void runDropCommand(final String flavor, final String data) {
 		XModelBuffer b = XModelTransferBuffer.getInstance().getBuffer();
 		final XModelObject o = b == null ? null : b.source();
 		
 		Runnable runnable = new Runnable() {
+			@Override
 			public void run() {
 				if (o != null
 						&& !XModelTransferBuffer.getInstance().isEnabled()) {
@@ -816,6 +847,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 
 		}
 
+		@Override
 		public String getPrefix(String uri, String defaultPrefix) {
 			int offset = JSPTextEditor.this.getTextViewer().getTextWidget().getCaretOffset();
 			Map<String, List<INameSpace>> ns = pageContext.getNameSpaces(offset);
@@ -826,16 +858,19 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			return defaultPrefix;
 		}
 
+		@Override
 		public void initContext(Properties context) {
 			if(context != null && processor != null) {
 				context.put("processor", processor); //$NON-NLS-1$
 				context.put("pageContext", pageContext); //$NON-NLS-1$
 			}
 		}
+
 		public IPageContext getPageContext() {
 			return pageContext;
 		}
 	
+		@Override
 		public String getTag() {
 			String result = null;
 			IComponent c = findComponent(query);
@@ -849,11 +884,13 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			return result;
 		}
 
+		@Override
 		public boolean canHaveBody() {
 			IComponent c = findComponent(query);
 			return c != null && c.canHaveBody();
 		}
 
+		@Override
 		public AttributeDescriptorValue[] getValues() {
 			return createDescriptors(query);
 		}
@@ -941,19 +978,23 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		
 		private int operation;
 
+		@Override
 		public void dragEnter(DropTargetEvent event) {
 			lastpos = -1;
 			operation = event.detail;
 		}
 
+		@Override
 		public void dragLeave(DropTargetEvent event) {
 			lastpos = -1;
 		}
 
+		@Override
 		public void dragOperationChanged(DropTargetEvent event) {
 			lastdetail = operation = event.detail;
 		}
 
+		@Override
 		public void dragOver(DropTargetEvent event) {
 			if (!isEditable()
 					|| (getModelObject() != null && !getModelObject()
@@ -1045,6 +1086,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			}
 		}
 
+		@Override
 		public void drop(DropTargetEvent event) {
             int offset = getPosition(event.x, event.y);
             selectAndReveal(offset, 0);
@@ -1056,6 +1098,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
             dropContext.runDropCommand(JSPTextEditor.this, event);
         }
 
+		@Override
         public void dropAccept(DropTargetEvent event) {
         }
 
@@ -1113,6 +1156,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		}
 	}
 
+	@Override
 	public String[] getConfigurationPoints() {
 		String contentTypeIdentifierID = null;
 		if (getModel() != null)
@@ -1122,6 +1166,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 				StructuredTextEditor.class);
 	}
 
+	@Override
 	public void formatTextRegion(IDocument document, IRegion region) {
 		SourceViewerConfiguration conf = getSourceViewerConfiguration();
 
@@ -1134,6 +1179,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 
 	Point storedSelection = new Point(0, 0);
 
+	@Override
 	protected void handleCursorPositionChanged() {
 		super.handleCursorPositionChanged();
 		ISelection selection = getSelectionProvider().getSelection();
@@ -1158,6 +1204,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 
 	private class OutlinePageListener implements IDoubleClickListener,
 			ISelectionChangedListener {
+		@Override
 		public void doubleClick(DoubleClickEvent event) {
 			if (event.getSelection().isEmpty())
 				return;
@@ -1198,6 +1245,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			}
 		}
 
+		@Override
 		public void selectionChanged(SelectionChangedEvent event) {
 			if (event.getSelection().isEmpty() || isFiringSelection())
 				return;
@@ -1365,11 +1413,13 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		return null;
 	}
 
+	@Override
 	protected void initializeEditor() {
 		super.initializeEditor();
 		getPreferenceStore();
 	}
 
+	@Override
 	public void dispose() {
 		// some things in the configuration need to clean
 		// up after themselves
@@ -1425,6 +1475,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			file.addListener(this);
 		}
 
+		@Override
 		public void bodyChanged(String body) {
 			setText(body);
 		}
@@ -1471,8 +1522,49 @@ public class JSPTextEditor extends StructuredTextEditor implements
 	 * @return HyperLinkDetectors for sourceRegion
 	 */
 	public IHyperlinkDetector[] getHyperlinkDetectors() {
-		
 		return getSourceViewerConfiguration().getHyperlinkDetectors(getSourceViewer());
 	}
 
+	Set<IFacilityChecker> facilityCheckers = null;
+	public static final String EXTENSION_FACILITY_CHECKERS = "facilityCheckers";
+
+	private void checkFacilities(final ELContext context, final IFile file) {
+		loadFacilitiesCheckers();
+
+		for (IFacilityChecker checker : facilityCheckers) {
+			final IFacilityChecker facilityChecker = checker;
+			SafeRunner.run(new ISafeRunnable() {
+
+				@Override
+				public void run() throws Exception {
+					facilityChecker.checkFacilities(context, file);
+				}
+
+				@Override
+				public void handleException(Throwable exception) {
+					WebUiPlugin.getDefault().logError(exception);
+				}
+			});
+		}
+	}
+	
+	private synchronized void loadFacilitiesCheckers() {
+		if (facilityCheckers == null) {
+			IExtensionRegistry registry = Platform.getExtensionRegistry();
+			IConfigurationElement[] cf = registry.getConfigurationElementsFor(
+					WebKbPlugin.PLUGIN_ID, EXTENSION_FACILITY_CHECKERS);
+			facilityCheckers = new HashSet<IFacilityChecker>();
+
+			for (IConfigurationElement ce : cf) {
+				try {
+					Object checker = ce.createExecutableExtension("class");
+					if (checker instanceof IFacilityChecker) {
+						facilityCheckers.add((IFacilityChecker)checker);
+					}
+				} catch (CoreException e) {
+					WebUiPlugin.getDefault().logError(e);
+				}
+			}
+		}
+	}
 }
