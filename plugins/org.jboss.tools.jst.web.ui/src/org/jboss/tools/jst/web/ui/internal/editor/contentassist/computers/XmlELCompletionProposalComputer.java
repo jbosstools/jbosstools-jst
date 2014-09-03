@@ -555,10 +555,7 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 			IResource resource = getContext().getResource();
 			IProject project = resource.getProject();
 			try {
-				if (project.getNature("org.jboss.tools.jsf.jsfnature") == null && resource.getFileExtension()!=null && resource.getFileExtension().toLowerCase().startsWith("htm")) {
-					return false;
-				}
-				return true;
+				return project.hasNature("org.jboss.tools.jsf.jsfnature") || resource.getFileExtension()==null || !resource.getFileExtension().toLowerCase().startsWith("htm");
 			} catch (CoreException e) {
 				WebUiPlugin.getDefault().logError(e);
 			}
