@@ -27,6 +27,7 @@ public class JstWebUiAllTests {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite(JstWebUiAllTests.class.getName());
+		suite.addTestSuite(DefaultJSLibsText.class);
 
 		TestSuite s = new TestSuite("Palette content");
 		s.addTestSuite(CAPaletteJQM14TemplatesTest.class);

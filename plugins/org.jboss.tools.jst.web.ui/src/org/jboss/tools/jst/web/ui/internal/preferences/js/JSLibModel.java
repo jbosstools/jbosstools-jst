@@ -111,6 +111,19 @@ public class JSLibModel {
 		}
 	}
 
+	public boolean equals(JSLibModel other) {
+		if(libs.size() != other.libs.size()) {
+			return false;
+		}
+		for (JSLib lib: libs.values()) {
+			JSLib otherLib = other.libs.get(lib.getName());
+			if(otherLib == null || !lib.equals(otherLib)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	static LibComparator libComparator = new LibComparator();
 
 	static class LibComparator implements Comparator<JSLib> {
