@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.ui.internal.preferences.js;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -118,4 +119,14 @@ public class JSLibVersion {
 		}
 	}
 	
+	public boolean equals(JSLibVersion other) {
+		if(!version.equals(other.version) || urls.size() != other.urls.size()) {
+			return false;
+		}
+		HashSet<String> set = new HashSet<String>(urls);
+		set.removeAll(other.urls);
+
+		return set.isEmpty();
+	}
+
 }

@@ -10,12 +10,11 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.internal.preferences.js;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -23,13 +22,8 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.jboss.tools.common.model.plugin.ModelPlugin;
-import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.ElementNode;
 import org.jboss.tools.common.util.FileUtil;
-import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
-import org.jboss.tools.jst.web.ui.internal.editor.outline.JQueryCategoryFilter;
-import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
 import org.osgi.framework.Bundle;
 import org.osgi.service.prefs.BackingStoreException;
 
@@ -134,29 +128,36 @@ public class JSLibFactory {
 
 	synchronized void loadPreferenceModel() {
 		if(preferenceModel != null) return;
-		IEclipsePreferences node = (IEclipsePreferences)
-				Platform.getPreferencesService().getRootNode()
-					.node(InstanceScope.SCOPE).node(WebUiPlugin.PLUGIN_ID);
-		String s = node.get(JS_CSS_LIBS_PREFERENCE_NAME, null);
+		String s = getPreference(JS_CSS_LIBS_PREFERENCE_NAME);
+		JSLibModel prev = getPreviousDefaultModel();
 		if(s == null) {
-			s = JSLibXMLLoader.saveToString(getDefaultModel());
+			preferenceModel = createCopy(getDefaultModel());
+		} else {
+			preferenceModel = JSLibXMLLoader.load(s);
+			if(preferenceModel == null) {
+				preferenceModel = createCopy(getDefaultModel());
+			} else if(prev != null) {
+				List<String> diff = new ArrayList<String>();
+				mergeDefaultModel(diff, preferenceModel, prev, getDefaultModel());
+				if(!diff.isEmpty()) {
+					savePreferenceModel();
+				}
+			}
 		}
-		JSLibModel model = JSLibXMLLoader.load(s);
-		if(model == null) {
-			model = createCopy(getDefaultModel());
-		}
-		preferenceModel = model;
 	}
 
-	synchronized void savePreferenceModel() {
-		if(preferenceModel == null) return;
+	private String getPreference(String name) {
 		IEclipsePreferences node = (IEclipsePreferences)
 				Platform.getPreferencesService().getRootNode()
 					.node(InstanceScope.SCOPE).node(WebUiPlugin.PLUGIN_ID);
-		synchronized (preferenceModel) {
-			String s = JSLibXMLLoader.saveToString(preferenceModel);
-			node.put(JS_CSS_LIBS_PREFERENCE_NAME, s);
-		}
+		return node.get(name, null);
+	}
+
+	private void setPreference(String name, String value) {
+		IEclipsePreferences node = (IEclipsePreferences)
+				Platform.getPreferencesService().getRootNode()
+					.node(InstanceScope.SCOPE).node(WebUiPlugin.PLUGIN_ID);
+		node.put(name, value);
 		try {
 			node.flush();
 		} catch (BackingStoreException e) {
@@ -164,16 +165,49 @@ public class JSLibFactory {
 		}
 	}
 
+	private JSLibModel getPreviousDefaultModel() {
+		Bundle bundle = Platform.getBundle(WebUiPlugin.PLUGIN_ID);
+		File location = Platform.getStateLocation(bundle).toFile();
+		File f = new File(location, ".js-css.xml");
+		JSLibModel newDefaultModel = getDefaultModel();
+		String newText = JSLibXMLLoader.saveToString(getDefaultModel());
+		if(!f.exists()) {
+			FileUtil.writeFile(f, newText);
+			return null;
+		}
+		JSLibModel oldDefaultModel = JSLibXMLLoader.load(FileUtil.readFile(f));
+		if(newDefaultModel.equals(oldDefaultModel)) {
+			return null;
+		}
+		FileUtil.writeFile(f, newText);
+		return oldDefaultModel;
+	}
+
+	synchronized void savePreferenceModel() {
+		if(preferenceModel == null) return;
+		setPreference(JS_CSS_LIBS_PREFERENCE_NAME, JSLibXMLLoader.saveToString(preferenceModel));
+	}
+
 	synchronized JSLibModel createCopy(JSLibModel source) {
 		JSLibModel copy = new JSLibModel();
 		for (JSLib lib: source.getLibs()) {
-			JSLib libCopy = copy.getOrCreateLib(lib.getName());
-			for (JSLibVersion version: lib.getVersions()) {
-				JSLibVersion versionCopy = libCopy.getOrCreateVersion(version.getVersion());
-				versionCopy.getURLs().addAll(version.getURLs());
-			}
+			addLibCopy(copy, lib);
 		}
 		return copy;
+	}		
+
+	synchronized JSLib addLibCopy(JSLibModel copy, JSLib source) {
+		JSLib libCopy = copy.getOrCreateLib(source.getName());
+		for (JSLibVersion version: source.getVersions()) {
+			addVersionCopy(libCopy, version);
+		}
+		return libCopy;
+	}		
+
+	synchronized JSLibVersion addVersionCopy(JSLib copy, JSLibVersion source) {
+		JSLibVersion versionCopy = copy.getOrCreateVersion(source.getVersion());
+		versionCopy.getURLs().addAll(source.getURLs());
+		return versionCopy;
 	}		
 
 	public static List<URL> getResources() {
@@ -192,15 +226,85 @@ public class JSLibFactory {
 						resources.add(url);
 					} else {
 						if(WebUiPlugin.isDebugEnabled()) {
-							WebUiPlugin.getDefault().logInfo("Warning: meta resource " + path + " not found."); //$NON-NLS-1$ //$NON-NLS-2$
+							WebUiPlugin.getDefault().logInfo("Warning: js/css lib resource " + path + " not found."); //$NON-NLS-1$ //$NON-NLS-2$
 						}
 					}
 				} catch (IllegalStateException e) {
-					ModelPlugin.getPluginLog().logError("MetaResourceLoader warning: meta resource " + path + " not found."); //$NON-NLS-1$ //$NON-NLS-2$
+					WebUiPlugin.getDefault().logError("MetaResourceLoader warning: js/css lib resource " + path + " not found."); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 		}
 		return resources;
 	}
 
+	public void mergeDefaultModel(List<String> diff, JSLibModel model, JSLibModel oldDefaultModel, JSLibModel newDefaultModel) {
+		for (JSLib lib: newDefaultModel.getLibs()) {
+			JSLib currentLib = model.getLib(lib.getName());
+			JSLib oldDefaultLib = oldDefaultModel.getLib(lib.getName());
+			if(currentLib == null && (oldDefaultLib == null || !oldDefaultLib.equals(lib))) {
+				addLibCopy(model, lib);
+				diff.add("A " + lib.getName());
+			} else if(currentLib != null) {
+				if(oldDefaultLib == null) {
+					currentLib.applyWorkingCopy(lib, false);
+					diff.add("U " + lib.getName());
+				} else {
+					mergeDefaultLib(diff, currentLib, oldDefaultLib, lib);
+				}
+			}
+		}
+		for (JSLib lib: oldDefaultModel.getLibs()) {
+			JSLib currentLib = model.getLib(lib.getName());
+			JSLib newDefaultLib = newDefaultModel.getLib(lib.getName());
+			if(newDefaultLib == null && currentLib != null && lib.equals(currentLib)) {
+				model.removeLib(currentLib);
+				diff.add("R " + currentLib.getName());
+			}			
+		}
+	}
+
+	public void mergeDefaultLib(List<String> diff, JSLib lib, JSLib oldDefaultLib, JSLib newDefaultLib) {
+		for (JSLibVersion version: newDefaultLib.getVersions()) {
+			JSLibVersion currentVersion = lib.getVersion(version.getVersion());
+			JSLibVersion oldDefaultVersion = oldDefaultLib.getVersion(version.getVersion());
+			if(currentVersion == null && (oldDefaultVersion == null || !version.equals(oldDefaultVersion))) {
+				addVersionCopy(lib, version);
+				diff.add("A " + lib.getName() + ":" + version.getVersion());
+			} else if(currentVersion != null) {
+				if(oldDefaultVersion == null) {
+					currentVersion.applyWorkingCopy(version, false);
+					diff.add("U " + lib.getName() + ":" + version.getVersion());
+				} else {
+					mergeDefaultVersion(diff, currentVersion, oldDefaultVersion, version);
+				}
+			}
+		}
+		for (JSLibVersion version: oldDefaultLib.getVersions()) {
+			JSLibVersion currentVersion = lib.getVersion(version.getVersion());
+			JSLibVersion newDefaultVersion = newDefaultLib.getVersion(version.getVersion());
+			if(newDefaultVersion == null && currentVersion != null && version.equals(currentVersion)) {
+				lib.removeVersion(currentVersion);
+				diff.add("R " + lib.getName() + ":" + currentVersion.getVersion());
+			}
+		}
+	}
+
+	public void mergeDefaultVersion(List<String> diff, JSLibVersion version, JSLibVersion oldDefaultVersion, JSLibVersion newDefaultVersion) {
+		for (String url: newDefaultVersion.getURLs()) {
+			boolean currentHasUrl = version.getURLs().contains(url);
+			boolean oldDefaultHasUrl = oldDefaultVersion.getURLs().contains(url);
+			if(!currentHasUrl && !oldDefaultHasUrl) {
+				version.getURLs().add(url);
+				diff.add("A " + version.getLib().getName() + ":" + version.getVersion() + ":" + url);
+			}
+		}
+		for (String url: oldDefaultVersion.getURLs()) {
+			boolean currentHasUrl = version.getURLs().contains(url);
+			boolean newDefaultHasUrl = newDefaultVersion.getURLs().contains(url);
+			if(!newDefaultHasUrl && currentHasUrl) {
+				version.getURLs().remove(url);
+				diff.add("R " + version.getLib().getName() + ":" + version.getVersion() + ":" + url);
+			}
+		}
+	}
 }

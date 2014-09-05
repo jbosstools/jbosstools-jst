@@ -150,6 +150,19 @@ public class JSLib {
 		
 	}
 
+	public boolean equals(JSLib other) {
+		if(!name.equals(other.name) || versions.size() != other.versions.size()) {
+			return false;
+		}
+		for (JSLibVersion version: versions.values()) {
+			JSLibVersion otherVersion = other.versions.get(version.getVersion());
+			if(otherVersion == null || !version.equals(otherVersion)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	static VersionStringComparator versionStringComparator = new VersionStringComparator();
 
 	static class VersionStringComparator implements Comparator<String> {
