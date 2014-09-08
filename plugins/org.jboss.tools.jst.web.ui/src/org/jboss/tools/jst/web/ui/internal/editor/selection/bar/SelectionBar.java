@@ -134,7 +134,7 @@ public class SelectionBar extends Composite {
 					runUpdateJob(true);
 				}
 			};
-			this.textEditor.getTextViewer().addSelectionChangedListener(selectionChangedListener);
+			this.textEditor.getTextViewer().addPostSelectionChangedListener(selectionChangedListener);
 		}
 		
 		ICommandService commandService = (ICommandService) PlatformUI
@@ -266,7 +266,7 @@ public class SelectionBar extends Composite {
 	}
 	
 	public void refreshVisibility() {
-		boolean visible = toggleSelBarState != null && (Boolean) toggleSelBarState.getValue();
+		boolean visible = toggleSelBarState != null && WebUiPlugin.getDefault().getPreferenceStore().getBoolean(IVpePreferencesPage.SHOW_SELECTION_TAG_BAR);
 		IEditorPart editorPart = textEditor.getEditorPart();
 		if(editorPart instanceof JSPMultiPageEditor){
 			JSPMultiPageEditor jspEditor = (JSPMultiPageEditor) editorPart;
@@ -643,7 +643,7 @@ public class SelectionBar extends Composite {
     	removeNodeListenerFromAllNodes();
     	toggleSelBarCommand.removeCommandListener(toggleSelBarCommandListener);
     	if (textEditor.getTextViewer() != null) {
-			textEditor.getTextViewer().removeSelectionChangedListener(selectionChangedListener);
+			textEditor.getTextViewer().removePostSelectionChangedListener(selectionChangedListener);
 		}
 
 		if (splitter != null) {
