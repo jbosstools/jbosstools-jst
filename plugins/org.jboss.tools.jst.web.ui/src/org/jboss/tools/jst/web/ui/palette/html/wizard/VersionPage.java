@@ -242,6 +242,15 @@ public abstract class VersionPage extends AbstractWizardPageWithPreview implemen
 	void addContent(ElementNode root) {
 		ElementNode head = null;
 
+		if(getPreferredVersions().addMetaViewport()) {
+			if(head == null) {
+				head = root.addChild(TAG_HEAD, null);
+			}
+			ElementNode meta = head.addChild(TAG_META);
+			meta.addAttribute(ATTR_NAME, "viewport");
+			meta.addAttribute("content", "width=device-width, initial-scale=1");
+		}
+
 		Collection<JSLib> libs = JSLibFactory.getInstance().getPreferenceModel().getLibs();
 
 		for (JSLib lib: libs) {
