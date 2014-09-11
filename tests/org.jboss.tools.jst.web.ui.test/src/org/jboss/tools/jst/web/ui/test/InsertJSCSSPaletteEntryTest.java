@@ -536,6 +536,28 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			editor.getSite().getPage().closeEditor(editor, false);
 		}
 	}
+
+	public void testMetaInTextViewInEmptyFile() {
+		editor = openEditor("empty.html");
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "JS/CSS", true);
+		if(currentPage instanceof JQueryVersionPage) {
+			JQueryVersionPage versionPage = (JQueryVersionPage)currentPage;
+			String text = versionPage.getTextForTextView();
+			performAndClose(currentPage);
+			assertTrue(text.indexOf("viewport") >= 0);
+		}
+	}
+	
+	public void testMetaInTextViewInFileWithViewport() {
+		editor = openEditor("html_head_viewport.html");
+		IWizardPage currentPage = runToolEntry("jQuery Mobile", "JS/CSS", true);
+		if(currentPage instanceof JQueryVersionPage) {
+			JQueryVersionPage versionPage = (JQueryVersionPage)currentPage;
+			String text = versionPage.getTextForTextView();
+			performAndClose(currentPage);
+			assertFalse(text.indexOf("viewport") >= 0);
+		}
+	}
 	
 	public void testInsertIntoEmptyFile() {
 		editor = openEditor("empty.html");
@@ -547,11 +569,15 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 	void runJSCSS() {
 		IWizardPage currentPage = runToolEntry("jQuery Mobile", "JS/CSS", true);
 		if(currentPage instanceof JQueryVersionPage) {
-			IWizard wizard = currentPage.getWizard();
-			wizard.performFinish();
-			WizardDialog dialog = (WizardDialog)wizard.getContainer();
-			dialog.close();
+			performAndClose(currentPage);
 		}
+	}
+
+	private void performAndClose(IWizardPage currentPage) {
+		IWizard wizard = currentPage.getWizard();
+		wizard.performFinish();
+		WizardDialog dialog = (WizardDialog)wizard.getContainer();
+		dialog.close();
 	}
 	
 	public void testInsertIntoEmptyFile2() {
@@ -560,10 +586,7 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 		if(currentPage instanceof JQueryVersionPage) {
 			JQueryVersionPage versionPage = (JQueryVersionPage)currentPage;
 			versionPage.getEditor("add jQuery").setValue("false");
-			IWizard wizard = currentPage.getWizard();
-			wizard.performFinish();
-			WizardDialog dialog = (WizardDialog)wizard.getContainer();
-			dialog.close();
+			performAndClose(currentPage);
 		}
 		String text = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput()).get();
 		compare(text, test_result_1jQuery);

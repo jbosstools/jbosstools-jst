@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.internal.preferences.js;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,8 +23,13 @@ import java.util.TreeSet;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.jboss.tools.common.xml.XMLUtilities;
 import org.jboss.tools.jst.web.html.HTMLConstants;
+import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.internal.JSRecognizer;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
@@ -42,6 +48,8 @@ public class PreferredJSLibVersions implements IPreferredJSLibVersion {
 
 	private Set<String> disabledLibs = new HashSet<String>();
 	private Set<String> enabledLibs = new HashSet<String>();
+
+	private boolean addMetaViewport = true;
 
 	private Map<String, Boolean> preferredLibs = new HashMap<String, Boolean>();
 	private Map<String, String> preferredVersions = new HashMap<String, String>();
@@ -204,6 +212,8 @@ public class PreferredJSLibVersions implements IPreferredJSLibVersion {
 				}
 			}
 		}
+
+		addMetaViewport = !containsMetaViewport(f);
 	}
 
 	private String getLastVersion(JSLib lib, String mask) {
@@ -307,6 +317,44 @@ public class PreferredJSLibVersions implements IPreferredJSLibVersion {
 		result[0] = css.toArray(new String[0]);
 		result[1] = js.toArray(new String[0]);
 		return result;
+	}
+
+	public boolean addMetaViewport() {
+		return addMetaViewport;
+	}
+
+	static boolean containsMetaViewport(IFile file) {
+		if(file == null) return false;
+		IStructuredModel model = null;
+		try {
+			model = StructuredModelManager.getModelManager().getModelForRead(file);
+			IDOMDocument xmlDocument = (model instanceof IDOMModel) ? ((IDOMModel) model).getDocument() : null;
+			if(xmlDocument != null) {
+				Element htmlNode = JSRecognizer.findChildElement(xmlDocument, "html");
+				if(htmlNode != null) {
+					Element headNode = JSRecognizer.findChildElement(htmlNode, "head");
+					if(headNode != null) {
+						Element[] metaNodes = JSRecognizer.findChildElements(headNode, "meta");
+						for (Element meta : metaNodes) {
+							String name = JSRecognizer.getAttribute(meta, "name");
+							if("viewport".equals(name)) {
+								return true;
+							}
+						}
+					}
+				}
+			}
+		} catch (IOException e) {
+			WebKbPlugin.getDefault().logError(e);
+		} catch (CoreException e) {
+			WebKbPlugin.getDefault().logError(e);
+		} finally {
+			if (model != null) {
+				model.releaseFromRead();
+			}
+		}
+		
+		return false;
 	}
 
 }
