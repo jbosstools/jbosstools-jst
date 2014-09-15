@@ -72,15 +72,15 @@
      <GroupHTML HIDDEN="no" ICON="" NAME="1.page"
       SCOPE="project" add_taglib="true" model-entity="SharableGroupHTML">
 
-      <MacroHTML DESCRIPTION="Add references to &lt;b>jQuery&lt;/b>, &lt;b>jQuery Mobile&lt;/b> JS and CSS to &lt;code>&amp;lt;head>&lt;/code>"
+      <MacroHTML DESCRIPTION="Add references to &lt;b>Ionic&lt;/b> JS and CSS to &lt;code>&amp;lt;head>&lt;/code>"
                  ENDTEXT="" ICON="%Icons%/Mobile/jQuery/js-css"
                  NAME="0.JS/CSS" REFORMAT="no" SCOPE="project"
                  STARTTEXT="&lt;jquery.mobile.js.css>" large-icon="" model-entity="SharableMacroHTML"/>
 
-      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Page:&lt;/b>&lt;br>\n&lt;code>&amp;lt;div data-role=&quot;page&quot;>&lt;/code>\n&lt;br>\n\t...&lt;br>\n&lt;code>&amp;lt;/div>&lt;/code>\n&lt;/html>"
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Content:&lt;/b>&lt;br>\n&lt;code>&amp;lt;ion-content>&lt;/code>\n&lt;br>\n\t...&lt;br>\n&lt;code>&amp;lt;/ion-content>&lt;/code>\n&lt;/html>"
                  ENDTEXT="" ICON="%Icons%/Mobile/Ionic/content" 
                  NAME="1.Content" REFORMAT="yes" SCOPE="project"
-                 STARTTEXT="&lt;div data-role=&quot;page&quot;>\n\n\t&lt;div data-role=&quot;header&quot;>\n\t\t&lt;h1>Page Title&lt;/h1>\n\t&lt;/div>&lt;!-- /header -->\n\n\t&lt;div data-role=&quot;content&quot;>\t\n\t\t&lt;p>Page content goes here.&lt;/p>\t\t\n\t&lt;/div>&lt;!-- /content -->\n\n\t&lt;div data-role=&quot;footer&quot;>\n\t\t&lt;h4>Page Footer&lt;/h4>\n\t&lt;/div>&lt;!-- /footer -->\n&lt;/div>&lt;!-- /page -->"
+                 STARTTEXT="&lt;ion-content>lt;/ion-content>"
                  model-entity="SharableMacroHTML"/>
 
       <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Refresher:&lt;/b>&lt;br>\n&lt;code>&amp;lt;ion-refresher>&lt;/code>\n&lt;br>\n\t...&lt;br>\n&lt;code>&amp;lt;/ion-refresher>&lt;/code>\n&lt;/html>"
@@ -95,10 +95,10 @@
                  STARTTEXT="&lt;ion-nav-bar>&lt;/ion-nav-bar>"
                  model-entity="SharableMacroHTML"/>
 
-      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Page:&lt;/b>&lt;br>\n&lt;code>&amp;lt;div data-role=&quot;page&quot;>&lt;/code>\n&lt;br>\n\t...&lt;br>\n&lt;code>&amp;lt;/div>&lt;/code>\n&lt;/html>"
+      <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Scroll:&lt;/b>&lt;br>\n&lt;code>&amp;lt;ion-scroll>&lt;/code>\n&lt;br>\n\t...&lt;br>\n&lt;code>&amp;lt;/ion-scroll>&lt;/code>\n&lt;/html>"
                  ENDTEXT="" ICON="%Icons%/Mobile/Ionic/scroll" 
                  NAME="2.Scroll" REFORMAT="yes" SCOPE="project"
-                 STARTTEXT="&lt;div data-role=&quot;page&quot;>\n\n\t&lt;div data-role=&quot;header&quot;>\n\t\t&lt;h1>Page Title&lt;/h1>\n\t&lt;/div>&lt;!-- /header -->\n\n\t&lt;div data-role=&quot;content&quot;>\t\n\t\t&lt;p>Page content goes here.&lt;/p>\t\t\n\t&lt;/div>&lt;!-- /content -->\n\n\t&lt;div data-role=&quot;footer&quot;>\n\t\t&lt;h4>Page Footer&lt;/h4>\n\t&lt;/div>&lt;!-- /footer -->\n&lt;/div>&lt;!-- /page -->"
+                 STARTTEXT="&lt;ion-scroll>&lt;/ion-scroll>"
                  model-entity="SharableMacroHTML"/>
 
       <MacroHTML DESCRIPTION="&lt;html>\n&lt;b>Header Bar:&lt;/b>&lt;br>\n&lt;code>&amp;lt;ion-header-bar class=&quot;bar-positive&quot;>&lt;/code>&lt;br>\n...&lt;br>\n&lt;code>&amp;lt;/ion-header-bar>&lt;/code>\n&lt;/html>"
