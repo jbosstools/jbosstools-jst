@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2013 Red Hat, Inc. 
+ * Copyright (c) 2013-2014 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -36,10 +36,10 @@ public enum JQueryMobileVersion implements IHTMLLibraryVersion {
 			"http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"), //$NON-NLS-1$
 
 	JQM_1_4("1.4", //$NON-NLS-1$
-			"1.4.3", //$NON-NLS-1$
-			"http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css", //$NON-NLS-1$
+			"1.4.4", //$NON-NLS-1$
+			"http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css", //$NON-NLS-1$
 			"http://code.jquery.com/jquery-1.10.2.min.js", //$NON-NLS-1$
-			"http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"); //$NON-NLS-1$
+			"http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.js"); //$NON-NLS-1$
 
 	public static final JQueryMobileVersion[] ALL_VERSIONS = {JQM_1_3, JQM_1_4};
 
