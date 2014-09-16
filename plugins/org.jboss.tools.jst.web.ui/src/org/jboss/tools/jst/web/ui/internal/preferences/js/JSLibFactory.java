@@ -173,7 +173,11 @@ public class JSLibFactory {
 		String newText = JSLibXMLLoader.saveToString(getDefaultModel());
 		if(!f.exists()) {
 			FileUtil.writeFile(f, newText);
-			return null;
+			//Previous default model is unknown. The best way is to presume 
+			//that each artifact of the current default model is new 
+			//(so that it will be added), and each artifact in current 
+			//preferences is customized (so that it will be preserved).
+			return new JSLibModel();
 		}
 		JSLibModel oldDefaultModel = JSLibXMLLoader.load(FileUtil.readFile(f));
 		if(newDefaultModel.equals(oldDefaultModel)) {
