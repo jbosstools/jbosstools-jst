@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2009 Red Hat, Inc. 
+ * Copyright (c) 2009 - 2014 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import org.codehaus.plexus.util.IOUtil;
+import org.apache.commons.io.IOUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
@@ -186,9 +186,10 @@ public class TagLibraryManager {
 					try {
 						in = jar.getInputStream(entry);
 						FileOutputStream out = new FileOutputStream(file);
-						IOUtil.copy(in, out);
+						IOUtils.copy(in, out);
+						
 					} finally {
-						IOUtil.close(in);
+						IOUtils.closeQuietly(in);
 					}
 				}
 			}
