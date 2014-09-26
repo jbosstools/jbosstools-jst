@@ -31,7 +31,7 @@ import java.util.TreeSet;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.codehaus.plexus.util.IOUtil;
+import org.apache.commons.io.IOUtils;
 import org.eclipse.core.resources.ISaveContext;
 import org.eclipse.core.resources.ISavedState;
 import org.eclipse.core.runtime.IPath;
@@ -331,7 +331,7 @@ public class RemoteFileManager {
 					log = true;
 					file.getParentFile().mkdirs();
 					FileOutputStream out = new FileOutputStream(file);
-					IOUtil.copy(in, out);
+					IOUtils.copy(in, out);
 				}
 			} catch (IOException e) {
 				if(!monitor.update) {
@@ -341,7 +341,7 @@ public class RemoteFileManager {
 					WebKbPlugin.getDefault().logError(e);
 				}
 			} finally {
-				IOUtil.close(in);
+				IOUtils.closeQuietly(in);
 				synchronized (downloading) {
 					downloading.remove(url);
 				}
