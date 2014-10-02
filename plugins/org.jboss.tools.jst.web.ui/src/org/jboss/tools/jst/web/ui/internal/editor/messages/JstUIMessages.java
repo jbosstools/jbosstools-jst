@@ -120,9 +120,6 @@ public class JstUIMessages extends NLS {
 	public static String CSS_REMOVE_CSS_CLASS_TIP;
 	public static String CSS_MOVE_UP_CSS_CLASS_TIP;
 	public static String CSS_MOVE_DOWN_CSS_CLASS_TIP;
-	public static String INFORM_WHEN_PROJECT_MIGHT_NOT_BE_CONFIGURED_PROPERLY_FOR_VPE;
-	public static String DOCS_INFO_LINK;
-	public static String DOCS_INFO_LINK_TEXT;
 	public static String CONFIRM_SELECTION_BAR_DIALOG_TITLE;
 	public static String CONFIRM_SELECTION_BAR_DIALOG_MESSAGE;
 	public static String CONFIRM_SELECTION_BAR_DIALOG_TOGGLE_MESSAGE;
