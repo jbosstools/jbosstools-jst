@@ -224,7 +224,7 @@ public class NewJQueryMobile13PaletteWizardTest extends NewJQueryMobilePaletteWi
 	}
 
 	public void testNewGroupedButtonsBarWizard() {
-		IWizardPage currentPage = runToolEntry("Grouped Buttons", true);
+		IWizardPage currentPage = runToolEntry("Buttons", true);
 
 		assertTrue(currentPage instanceof NewGroupedButtonsWizardPage);
 

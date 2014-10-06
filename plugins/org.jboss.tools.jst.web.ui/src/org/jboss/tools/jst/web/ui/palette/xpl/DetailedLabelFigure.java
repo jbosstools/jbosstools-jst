@@ -240,7 +240,7 @@ public class DetailedLabelFigure extends Figure {
 			image.disposeShadedImage();
 		}
 	}
-
+	
 	private void updateFont(int layout) {
 		boolean layoutChanged = (layoutMode != layout);
 		boolean fontChanged = (cachedFont == null || cachedFont != getFont());

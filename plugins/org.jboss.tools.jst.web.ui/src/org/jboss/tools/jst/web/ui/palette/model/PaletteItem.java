@@ -10,11 +10,13 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette.model;
 
+import java.util.List;
+
 import org.eclipse.gef.Tool;
 import org.eclipse.gef.palette.ToolEntry;
-
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.ui.image.XModelObjectImageDescriptor;
+import org.jboss.tools.common.model.ui.views.palette.PaletteInsertManager;
 
 public class PaletteItem extends ToolEntry implements PaletteXModelObject {
 	private XModelObject xobject;
@@ -22,6 +24,7 @@ public class PaletteItem extends ToolEntry implements PaletteXModelObject {
 	private String startText;
 	private String endText;
 	private boolean reformat;
+	private String keywords=null;
 
 	public PaletteItem(XModelObject xobject) {
 		super(null, null, null, null);
@@ -68,5 +71,22 @@ public class PaletteItem extends ToolEntry implements PaletteXModelObject {
 
 	public Tool createTool() {
 		return null;
+	}
+	
+	public String getKeywordsAsString(){
+		if(keywords == null){
+			List<String> list = PaletteInsertManager.getInstance().getKeyWords(xobject.getPath());
+			
+			if(list != null){
+				StringBuilder buffer = new StringBuilder();
+				for(String word : list){
+					buffer.append(word + " ");
+				}
+				keywords = buffer.toString();
+			}else{
+				keywords = getLabel();
+			}
+		}
+		return keywords;
 	}
 }

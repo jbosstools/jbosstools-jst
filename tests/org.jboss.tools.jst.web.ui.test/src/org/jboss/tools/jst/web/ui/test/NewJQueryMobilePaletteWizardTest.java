@@ -326,14 +326,14 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewToggleWizard() {
-		IWizardPage currentPage = runToolEntry("Flip Toggle Switch", true);
+		IWizardPage currentPage = runToolEntry("Toggle", true);
 
 		assertTrue(currentPage instanceof NewToggleWizardPage);
 
 		NewToggleWizardPage wizardPage = (NewToggleWizardPage)currentPage;
 		NewToggleWizard wizard = (NewToggleWizard)wizardPage.getWizard();
 
-		compareUIAndNonUIWizards(wizard, "Flip Toggle Switch");
+		compareUIAndNonUIWizards(wizard, "Toggle");
 
 		doVersionSpecificTest(wizardPage, wizard);
 
@@ -596,14 +596,14 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewRangeSliderWizard() {
-		IWizardPage currentPage = runToolEntry("Range Slider", true);
+		IWizardPage currentPage = runToolEntry("Slider", true);
 
 		assertTrue(currentPage instanceof NewRangeSliderWizardPage);
 
 		NewRangeSliderWizardPage wizardPage = (NewRangeSliderWizardPage)currentPage;
 		NewRangeSliderWizard wizard = (NewRangeSliderWizard)wizardPage.getWizard();
 		
-		compareUIAndNonUIWizards(wizard, "Range Slider");
+		compareUIAndNonUIWizards(wizard, "Slider");
 
 		String label = "My Switch:";
 		wizardPage.setEditorValue(EDITOR_ID_LABEL, label);
@@ -770,14 +770,14 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewGroupedCheckboxesWizard() {
-		IWizardPage currentPage = runToolEntry("Grouped Checkboxes", true);
+		IWizardPage currentPage = runToolEntry("Checkboxes", true);
 
 		assertTrue(currentPage instanceof NewGroupedCheckboxesWizardPage);
 
 		NewGroupedCheckboxesWizardPage wizardPage = (NewGroupedCheckboxesWizardPage)currentPage;
 		NewGroupedCheckboxesWizard wizard = (NewGroupedCheckboxesWizard)wizardPage.getWizard();
 
-		compareUIAndNonUIWizards(wizard, "Grouped Checkboxes");
+		compareUIAndNonUIWizards(wizard, "Checkboxes");
 
 		assertTextDoesNotExist(wizard, DATA_TYPE_HORIZONTAL);
 		wizardPage.setEditorValue(EDITOR_ID_LAYOUT, LAYOUT_HORIZONTAL);
@@ -789,14 +789,14 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewRadioWizard() {
-		IWizardPage currentPage = runToolEntry("Radio Button", true);
+		IWizardPage currentPage = runToolEntry("Radio", true);
 
 		assertTrue(currentPage instanceof NewRadioWizardPage);
 
 		NewRadioWizardPage wizardPage = (NewRadioWizardPage)currentPage;
 		NewRadioWizard wizard = (NewRadioWizard)wizardPage.getWizard();
 
-		compareUIAndNonUIWizards(wizard, "Radio Button");
+		compareUIAndNonUIWizards(wizard, "Radio");
 
 		assertTextDoesNotExist(wizard, DATA_TYPE_HORIZONTAL);
 		wizardPage.setEditorValue(EDITOR_ID_LAYOUT, LAYOUT_HORIZONTAL);
@@ -808,13 +808,13 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewCollapsibleContentBlockWizard() {
-		IWizardPage currentPage = runToolEntry("Collapsible Content Block", true);
+		IWizardPage currentPage = runToolEntry("Collapsible", true);
 		assertTrue(currentPage instanceof NewCollapsibleWizardPage);
 
 		NewCollapsibleWizardPage wizardPage = (NewCollapsibleWizardPage)currentPage;
 		NewCollapsibleWizard wizard = (NewCollapsibleWizard)wizardPage.getWizard(); 
 
-		compareUIAndNonUIWizards(wizard, "Collapsible Content Block");
+		compareUIAndNonUIWizards(wizard, "Collapsible");
 
 		doTestMini(wizardPage, wizard);
 
@@ -849,14 +849,14 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewSelectMenuWizard() {
-		IWizardPage currentPage = runToolEntry("Select Menu", true);
+		IWizardPage currentPage = runToolEntry("Select", true);
 
 		assertTrue(currentPage instanceof NewSelectMenuWizardPage);
 
 		NewSelectMenuWizardPage wizardPage = (NewSelectMenuWizardPage)currentPage;
 		NewSelectMenuWizard wizard = (NewSelectMenuWizard)wizardPage.getWizard();
 
-		compareUIAndNonUIWizards(wizard, "Select Menu");
+		compareUIAndNonUIWizards(wizard, "Select");
 
 		doVersionSpecificTest(wizardPage, wizard);
 
@@ -949,14 +949,14 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testNewGroupedButtonsBarWizard() {
-		IWizardPage currentPage = runToolEntry("Grouped Buttons", true);
+		IWizardPage currentPage = runToolEntry("Buttons", true);
 
 		assertTrue(currentPage instanceof NewGroupedButtonsWizardPage);
 
 		NewGroupedButtonsWizardPage wizardPage = (NewGroupedButtonsWizardPage)currentPage;
 		NewGroupedButtonsWizard wizard = (NewGroupedButtonsWizard)wizardPage.getWizard();
 		
-		compareUIAndNonUIWizards(wizard, "Grouped Buttons");
+		compareUIAndNonUIWizards(wizard, "Buttons");
 
 		assertTextDoesNotExist(wizard, DATA_TYPE_HORIZONTAL);
 		wizardPage.setEditorValue(EDITOR_ID_LAYOUT, LAYOUT_HORIZONTAL);

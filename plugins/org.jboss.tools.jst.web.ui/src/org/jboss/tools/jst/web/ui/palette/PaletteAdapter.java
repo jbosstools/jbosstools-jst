@@ -38,9 +38,11 @@ import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.model.ui.views.palette.IPaletteAdapter;
 import org.jboss.tools.common.model.ui.views.palette.IPalettePageAdapter;
 import org.jboss.tools.common.model.ui.views.palette.PaletteContents;
+import org.jboss.tools.common.model.ui.views.palette.PaletteInsertManager;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.PagePaletteContents;
+import org.jboss.tools.jst.web.ui.palette.model.PaletteItem;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteRoot;
 
@@ -103,9 +105,9 @@ public class PaletteAdapter implements IPaletteAdapter {
 		List children = container.getChildren();
 		for(Object child : children){
 			if(!(child instanceof PaletteContainer)){
-				if(child instanceof ToolEntry){
-					PaletteEntry entry = (PaletteEntry)child;
-					if(pattern.matches(entry.getLabel())){
+				if(child instanceof PaletteItem){
+					PaletteItem entry = (PaletteItem)child;
+					if(pattern.matches(entry.getKeywordsAsString())){
 						entry.setVisible(true);
 					}else{
 						entry.setVisible(false);
