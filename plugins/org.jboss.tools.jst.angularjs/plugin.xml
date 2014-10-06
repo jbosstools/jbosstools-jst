@@ -52,16 +52,16 @@
       	keywords="check box"/>
       <tag name="_Palette_/Mobile/Ionic/version:1.0/2.form/2.Radio" 
       	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewRadioWizard" 
-      	keywords="radio"/>
+      	keywords="radio,button"/>
       <tag name="_Palette_/Mobile/Ionic/version:1.0/2.form/3.Toggle" 
       	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewToggleWizard" 
-      	keywords="toggle"/>
+      	keywords="flip,toggle,switch"/>
       <tag name="_Palette_/Mobile/Ionic/version:1.0/2.form/4.Button" 
       	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewButtonWizard" 
       	keywords="button"/>
       <tag name="_Palette_/Mobile/Ionic/version:1.0/2.form/5.Text_Input" 
       	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTextInputWizard" 
-      	keywords="button"/>
+      	keywords="text,input,button"/>
    </extension>
 
    <extension

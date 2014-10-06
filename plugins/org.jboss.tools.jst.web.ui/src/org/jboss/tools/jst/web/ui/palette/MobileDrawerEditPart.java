@@ -24,7 +24,7 @@ public class MobileDrawerEditPart extends CustomDrawerEditPart {
 
         @Override
         protected int getLayoutSetting() {
-                return PaletteViewerPreferences.LAYOUT_ICONS;
+                return PaletteViewerPreferences.LAYOUT_COLUMNS;
         }
         
         public IFigure createFigure() {

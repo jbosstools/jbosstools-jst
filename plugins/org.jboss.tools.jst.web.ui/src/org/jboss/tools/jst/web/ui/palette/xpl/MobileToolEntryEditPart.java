@@ -42,6 +42,7 @@ import org.eclipse.swt.accessibility.ACC;
 import org.eclipse.swt.accessibility.AccessibleControlEvent;
 import org.eclipse.swt.accessibility.AccessibleEvent;
 import org.eclipse.swt.dnd.DragSourceEvent;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IMemento;
@@ -373,20 +374,24 @@ public class MobileToolEntryEditPart extends PaletteEditPart {
 	// The following are the insets that the bounds of the label figure should
 	// be
 	// cropped to paint the blue/orange select and hover feedback rectangles.
-	static final Insets LIST_HIGHLIGHT_INSETS = new Insets(1, 5, 2, 0);
 	static final Insets ICON_HIGHLIGHT_INSETS = new Insets(2, 1, 2, 1);
+	static final Insets LIST_HIGHLIGHT_INSETS = ICON_HIGHLIGHT_INSETS;//new Insets(1, 5, 2, 0);
+	
 
 	// The following are the borders that go around the entire tool figure to
 	// provide room to draw the arrow and outline of the palette stack figure if
 	// this tool happens to appear as the active tool of a stack.
-	static final Border LIST_BORDER = new MarginBorder(3,
-			ARROW_WIDTH + 7, 4, 0);
-	static final Border ICON_BORDER = new MarginBorder(4, 4, 3,
-			ARROW_WIDTH +  4);
-
+	
+	static final Border ICON_BORDER = new MarginBorder(4, 4, 3,	ARROW_WIDTH +  4);
+	static final Border LIST_BORDER = ICON_BORDER;//new MarginBorder(3,
+			//ARROW_WIDTH + 7, 4, 0);
+	
+	private static final Font LABELFONT = new Font(null, "Arial", 8, SWT.NORMAL); //$NON-NLS-1$
+	
 	public IFigure createFigure() {
 
 		customLabel = new DetailedLabelFigure();
+		customLabel.setFont(LABELFONT);
 		Clickable button = new ToolEntryToggle(customLabel);
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {

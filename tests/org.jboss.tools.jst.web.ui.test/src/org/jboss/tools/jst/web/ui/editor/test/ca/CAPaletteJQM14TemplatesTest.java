@@ -40,7 +40,7 @@ public class CAPaletteJQM14TemplatesTest extends CAHtml5PaletteTemplatesTest {
 	}
 
 	public void testCollapsible() throws Exception {
-		doTestTemplate("", "collapsible", decorateDisplay("Collapsible Content Block"), 0);
+		doTestTemplate("", "collapsible", decorateDisplay("Collapsible"), 0);
 	}
 
 	public void testCollapsible1() throws Exception {
@@ -76,7 +76,7 @@ public class CAPaletteJQM14TemplatesTest extends CAHtml5PaletteTemplatesTest {
 	}
 
 	public void testSelect() throws Exception {
-		doTestTemplate("", "select", decorateDisplay("Select Menu"), 0);
+		doTestTemplate("", "select", decorateDisplay("Select"), 0);
 	}
 
 	public void testListview() throws Exception {
@@ -96,11 +96,11 @@ public class CAPaletteJQM14TemplatesTest extends CAHtml5PaletteTemplatesTest {
 	}
 
 	public void testToggle() throws Exception {
-		doTestTemplate("", "toggle", decorateDisplay("Flip Toggle Switch"), 0);
+		doTestTemplate("", "toggle", decorateDisplay("Toggle"), 0);
 	}
 
 	public void testRadio() throws Exception {
-		doTestTemplate("", "radio", decorateDisplay("Radio Button"), 0);
+		doTestTemplate("", "radio", decorateDisplay("Radio"), 0);
 	}
 
 	public void testCheckbox() throws Exception {
@@ -108,19 +108,19 @@ public class CAPaletteJQM14TemplatesTest extends CAHtml5PaletteTemplatesTest {
 	}
 
 	public void testCheckbox1() throws Exception {
-		doTestTemplate("", "checkbox", decorateDisplay("Grouped Checkboxes"), 1);
+		doTestTemplate("", "checkbox", decorateDisplay("Checkboxes"), 1);
 	}
 
 	public void testGrouped() throws Exception {
-		doTestTemplate("", "grouped", decorateDisplay("Grouped Buttons"), 0);
+		doTestTemplate("", "grouped", decorateDisplay("Buttons"), 0);
 	}
 
 	public void testGrouped1() throws Exception {
-		doTestTemplate("", "grouped", decorateDisplay("Grouped Checkboxes"), 1);
+		doTestTemplate("", "grouped", decorateDisplay("Checkboxes"), 1);
 	}
 
 	public void testSlider() throws Exception {
-		doTestTemplate("", "slider", decorateDisplay("Range Slider"), 0);
+		doTestTemplate("", "slider", decorateDisplay("Slider"), 0);
 	}
 
 	public void testText() throws Exception {
@@ -128,7 +128,7 @@ public class CAPaletteJQM14TemplatesTest extends CAHtml5PaletteTemplatesTest {
 	}
 
 	public void testInput() throws Exception {
-		doTestTemplate("", "input", decorateDisplay("Text Input"), 6);
+		doTestTemplate("", "input", decorateDisplay("Text Input"), 5);
 	}
 
 	@Override
