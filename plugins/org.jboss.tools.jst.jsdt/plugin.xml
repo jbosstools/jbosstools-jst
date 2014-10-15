@@ -68,4 +68,8 @@
        </enabledWhen>
     </page>
  </extension>
+ 
+    <extension point="org.eclipse.core.runtime.preferences">
+      <initializer class="org.jboss.tools.jst.jsdt.preferences.JSDTPreferenceInitializer"/>
+   </extension>
 </plugin>
