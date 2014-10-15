@@ -27,6 +27,7 @@ import org.jboss.tools.common.model.ui.editors.dnd.IDropWizardModel;
 import org.jboss.tools.common.model.ui.editors.dnd.ITagProposal;
 import org.jboss.tools.common.model.ui.editors.dnd.ITagProposalLoader;
 import org.jboss.tools.common.model.ui.editors.dnd.LoadBundleBaseNameAttributeValueLoader;
+import org.jboss.tools.common.model.ui.editors.dnd.RelativeFilePathAttributeValueLoader;
 import org.jboss.tools.common.model.ui.editors.dnd.composite.TagAttributesComposite;
 import org.jboss.tools.common.model.ui.editors.dnd.context.DropContext;
 
@@ -56,7 +57,7 @@ public class FileTagProposalLoader implements ITagProposalLoader {
 			FACELETS_URI,
 			ITagProposal.EMPTY_PREFIX,
 			"img", //$NON-NLS-1$
-			new AbsoluteFilePathAttributeValueLoader("src","","") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			new RelativeFilePathAttributeValueLoader("src","","") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		),
 		new TagProposal(
 			DropURI.STRUTS_HTML_URI,
