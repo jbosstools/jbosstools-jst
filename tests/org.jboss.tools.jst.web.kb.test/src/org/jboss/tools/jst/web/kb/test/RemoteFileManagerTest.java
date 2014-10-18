@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.kb.test;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -146,8 +147,8 @@ public class RemoteFileManagerTest extends TestCase {
 		protected IDownloader getDownloader(final File file, final String url) {
 			return new IDownloader() {
 				@Override
-				public InputStream getInputStream(boolean ifModified) throws IOException {
-					InputStream in = null;
+				public InputStreamReader getInputStream(boolean ifModified) throws IOException {
+					InputStreamReader in = null;
 					if(slow_connection) {
 						try {
 							Thread.sleep(100);
@@ -155,12 +156,12 @@ public class RemoteFileManagerTest extends TestCase {
 						}
 					}
 					if(goodUrls.contains(url)) {
-						in = new InputStream() {
+						in = new InputStreamReader(new InputStream() {
 							@Override
 							public int read() throws IOException {
 								return -1;
 							}
-						};
+						});
 					} else if(IO_EXCEPTION_URL.equals(url)) {
 						throw new IOException("Test IOException");
 					}
