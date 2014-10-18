@@ -13,24 +13,17 @@ package org.jboss.tools.jst.web.kb.internal;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.TimeZone;
 import java.util.TreeSet;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.core.resources.ISaveContext;
 import org.eclipse.core.resources.ISavedState;
@@ -321,7 +314,7 @@ public class RemoteFileManager {
 
 		@Override
 		protected IStatus run(IProgressMonitor progressMonitor) {
-			InputStream in = null;
+			InputStreamReader in = null;
 			boolean log = false;
 			try {
 				in = downloader.getInputStream(monitor.update);
@@ -340,6 +333,9 @@ public class RemoteFileManager {
 				if(log) {
 					WebKbPlugin.getDefault().logError(e);
 				}
+			} catch (Exception e) {
+				unavailableUrls.add(url);
+				WebKbPlugin.getDefault().logError(e);
 			} finally {
 				IOUtils.closeQuietly(in);
 				synchronized (downloading) {
@@ -352,11 +348,10 @@ public class RemoteFileManager {
 			}
 			return Status.OK_STATUS;
 		}
-
 	}
 
 	public static interface IDownloader {
-		InputStream getInputStream(boolean ifModified) throws IOException;
+		InputStreamReader getInputStream(boolean ifModified) throws IOException;
 	}
 
 	private static class DownloaderImpl implements IDownloader {
@@ -370,28 +365,24 @@ public class RemoteFileManager {
 			this.timeout = timeout;
 		}
 
-		public InputStream getInputStream(boolean ifModified) throws IOException {
-			InputStream in = null;
+		@Override
+		public InputStreamReader getInputStream(boolean ifModified) throws IOException {
+			InputStreamReader in = null;
 			if(ifModified) {
 				// Check if the file has been updated
-				String dd = (Calendar.getInstance().get(Calendar.DAY_OF_MONTH) < 10) ? "d": "dd";
-				SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM  " + dd + " HH:mm:ss yyyy", Locale.ENGLISH);
-				formatter.setTimeZone(TimeZone.getDefault());
-				Date date = new Date(file.lastModified());
-
-				GetMethod method = new GetMethod(url);
-				method.setRequestHeader("If-Modified-Since", formatter.format(date));
-				HttpClient httpClient = HttpUtil.createHttpClient(url, timeout);
-				httpClient.executeMethod(method);
-				if(method.getStatusCode()==HttpStatus.SC_OK) {
-					in = method.getResponseBodyAsStream();
-					file.delete();
-				} else {
-					file.setLastModified(System.currentTimeMillis());
+				HttpURLConnection connection = HttpUtil.createHttpURLConnection(url, timeout);
+				connection.setIfModifiedSince(file.lastModified());
+				if(connection!=null) {
+					in = HttpUtil.getInputStreamReader(connection);
+					if(in!=null) {
+						file.delete();
+					} else {
+						file.setLastModified(System.currentTimeMillis());
+					}
 				}
 			} else {
 				// Download the file
-				in = HttpUtil.getInputStreamFromUrlByGetMethod(url, true);
+				in = HttpUtil.getInputStreamReader(url, 2000);
 			}
 			return in;
 		}
