@@ -183,7 +183,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 				kbQueryAttr = createKbQuery(processor);
 			}
 
-			CategoryDescriptor[] ds = CategoryProviderFactory.getInstance().getCategoryDescriptors(pageContext);
+			CategoryDescriptor[] ds = pageContext == null ? new CategoryDescriptor[0] : CategoryProviderFactory.getInstance().getCategoryDescriptors(pageContext);
 
 			List<IFormCategoryDescriptor> ds1 = new ArrayList<IFormCategoryDescriptor>();
 			List<ICategoryFilter> fs1 = new ArrayList<ICategoryFilter>();

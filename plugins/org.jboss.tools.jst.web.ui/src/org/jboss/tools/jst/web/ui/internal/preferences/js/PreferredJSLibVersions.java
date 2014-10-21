@@ -267,7 +267,9 @@ public class PreferredJSLibVersions implements IPreferredJSLibVersion {
 			sb.append(libName).append(":").append(shouldAdd).append(":").append(version).append(";");
 		}
 		try {
-			f.getProject().setPersistentProperty(getQualifiedName(version), sb.toString());
+			if(f != null) {
+				f.getProject().setPersistentProperty(getQualifiedName(version), sb.toString());
+			}
 		} catch (CoreException e) {
 			WebUiPlugin.getDefault().logError(e);
 		}
